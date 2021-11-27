@@ -1,4 +1,7 @@
 {
   "version": 2,
-  "projects": {}
+  "projects": {
+    "pidp": "apps/pidp",
+    "pidp-e2e": "apps/pidp-e2e"
+  }
 }
