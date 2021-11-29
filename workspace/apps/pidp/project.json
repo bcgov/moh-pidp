@@ -13,9 +13,17 @@
         "main": "apps/pidp/src/main.ts",
         "polyfills": "apps/pidp/src/polyfills.ts",
         "tsConfig": "apps/pidp/tsconfig.app.json",
-        "assets": ["apps/pidp/src/favicon.ico", "apps/pidp/src/assets"],
-        "styles": ["apps/pidp/src/styles.css"],
-        "scripts": []
+        "assets": [
+          "apps/pidp/src/favicon.ico",
+          "apps/pidp/src/assets",
+          "src/robots.txt"
+        ],
+        "styles": ["src/scss/app.scss"],
+        "stylePreprocessorOptions": {
+          "includePaths": ["src/scss"]
+        },
+        "scripts": [],
+        "allowedCommonJsDependencies": ["keycloak-js"]
       },
       "configurations": {
         "production": {
