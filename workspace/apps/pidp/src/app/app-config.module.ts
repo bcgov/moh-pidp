@@ -7,9 +7,9 @@ import { AppRoutes } from './app.routes';
 
 export const APP_CONFIG = new InjectionToken<AppConfig>('app.config');
 
-// TODO build out configuration
 export interface AppConfig extends AppEnvironment {
   routes: {
+    auth: string;
     denied: string;
     maintenance: string;
   };
@@ -20,6 +20,7 @@ export interface AppConfig extends AppEnvironment {
 export const APP_DI_CONFIG: AppConfig = {
   ...environment,
   routes: {
+    auth: AppRoutes.AUTH,
     denied: AppRoutes.DENIED,
     maintenance: AppRoutes.MAINTENANCE,
   },
