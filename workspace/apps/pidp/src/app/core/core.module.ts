@@ -1,8 +1,8 @@
 import { NgModule, Optional, SkipSelf } from '@angular/core';
-import { maintenanceInterceptorProvider } from '../libs/data-access/interceptors/maintenance.interceptor';
 
-import { unauthorizedInterceptorProvider } from '../libs/data-access/interceptors/unauthorized.interceptor';
 import { EnsureModuleLoadedOnceGuard } from '../libs/utils/classes/ensure-module-loaded-once-guard.class';
+import { unauthorizedInterceptorProvider } from '../libs/data-access/interceptors/unauthorized.interceptor';
+import { maintenanceInterceptorProvider } from '../libs/data-access/interceptors/maintenance.interceptor';
 
 @NgModule({
   declarations: [],

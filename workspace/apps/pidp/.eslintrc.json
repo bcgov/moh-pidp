@@ -32,7 +32,30 @@
         "@typescript-eslint/explicit-function-return-type": ["error"],
         "@typescript-eslint/explicit-member-accessibility": ["error"],
         "@typescript-eslint/no-for-in-array": ["error"],
-        "@typescript-eslint/prefer-enum-initializers": ["error"]
+        "@typescript-eslint/prefer-enum-initializers": ["error"],
+        // TODO apply configure of import order as needt to accomplish:
+        //      @angular, rxjs, 3rd party, @lib, @core, @shared, local
+        // https://github.com/import-js/eslint-plugin-import
+        "import/order": [
+          "error",
+          {
+            "pathGroups": [
+              {
+                "pattern": "@angular/**",
+                "group": "builtin",
+                "position": "after"
+              },
+              {
+                "pattern": "rxjs/**",
+                "group": "builtin",
+                "position": "after"
+              }
+            ],
+            "pathGroupsExcludedImportTypes": ["builtin"],
+            "newlines-between": "always",
+            "alphabetize": { "order": "desc" }
+          }
+        ]
       }
     },
     {
@@ -40,5 +63,6 @@
       "extends": ["plugin:@nrwl/nx/angular-template"],
       "rules": {}
     }
-  ]
+  ],
+  "plugins": ["import"]
 }

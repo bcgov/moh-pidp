@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { Inject, Injectable, Provider } from '@angular/core';
 import {
   HttpRequest,
@@ -8,8 +9,9 @@ import {
   HttpStatusCode,
   HTTP_INTERCEPTORS,
 } from '@angular/common/http';
-import { Router } from '@angular/router';
+
 import { catchError, Observable, of } from 'rxjs';
+
 import { AppConfig, APP_DI_CONFIG } from '../../../app-config.module';
 
 @Injectable()

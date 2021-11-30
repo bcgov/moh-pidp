@@ -1,7 +1,7 @@
 import { InjectionToken, NgModule } from '@angular/core';
 
-import { environment } from '../environments/environment';
 import { AppEnvironment } from '../environments/environment.model';
+import { environment } from '../environments/environment';
 
 import { AppRoutes } from './app.routes';
 
