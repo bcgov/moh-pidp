@@ -16,9 +16,9 @@
         "assets": [
           "apps/pidp/src/favicon.ico",
           "apps/pidp/src/assets",
-          "src/robots.txt"
+          "apps/pidp/src/robots.txt"
         ],
-        "styles": ["src/scss/app.scss"],
+        "styles": ["apps/pidp/src/scss/app.scss"],
         "stylePreprocessorOptions": {
           "includePaths": ["src/scss"]
         },
