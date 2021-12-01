@@ -53,7 +53,10 @@
             ],
             "pathGroupsExcludedImportTypes": ["builtin"],
             "newlines-between": "always",
-            "alphabetize": { "order": "desc" }
+            "alphabetize": {
+              "order": "desc",
+              "caseInsensitive": true
+            }
           }
         ]
       }
