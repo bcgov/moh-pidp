@@ -29,7 +29,17 @@ namespace Pidp
                 .AddFluentValidation(options => options.RegisterValidatorsFromAssemblyContaining<Startup>())
                 .AddJsonOptions(options => options.JsonSerializerOptions.ConfigureForNodaTime(DateTimeZoneProviders.Tzdb));
 
-            services.AddSwaggerGen(options => options.SwaggerDoc("v1", new OpenApiInfo { Title = "PIdP Web API", Version = "v1" }));
+            services.AddSwaggerGen(options =>
+            {
+                options.SwaggerDoc("v1", new OpenApiInfo { Title = "PIdP Web API", Version = "v1" });
+                options.AddSecurityDefinition("OAuth2", new OpenApiSecurityScheme
+                {
+                    Description = "Standard Authorization header using the Bearer scheme. Example: \"bearer {token}\"",
+                    In = ParameterLocation.Header,
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.ApiKey
+                });
+            });
 
             services.AddDbContext<PidpDbContext>(options =>
             {

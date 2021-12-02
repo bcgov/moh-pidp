@@ -15,9 +15,7 @@ namespace Pidp
             try
             {
                 Log.Information("Starting web host");
-                Host.CreateDefaultBuilder(args)
-                    .ConfigureWebHostDefaults(webBuilder => webBuilder.UseStartup<Startup>())
-                    .UseSerilog()
+                CreateHostBuilder(args)
                     .Build()
                     .Run();
                 return 0;
@@ -33,6 +31,11 @@ namespace Pidp
                 Log.CloseAndFlush();
             }
         }
+
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args)
+                .ConfigureWebHostDefaults(webBuilder => webBuilder.UseStartup<Startup>())
+                .UseSerilog();
 
         private static void CreateLogger()
         {
