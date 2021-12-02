@@ -63,7 +63,7 @@
        * @description
        * Log unsupported browser information to the server.
        */
-      $.get('/assets/config-map.json')
+      $.get('/assets/environment.json')
         .then(
           function (configMap) {
             return configMap.apiEndpoint;

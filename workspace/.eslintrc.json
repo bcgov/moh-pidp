@@ -16,6 +16,15 @@
                 "sourceTag": "*",
                 "onlyDependOnLibsWithTags": ["*"]
               }
+              // TODO setup module boundaries
+              // {
+              //   "sourceTag": "scope:shared",
+              //   "onlyDependOnLibsWithTags": ["scope:shared"]
+              // },
+              // {
+              //   "sourceTag": "scope:pidp",
+              //   "onlyDependOnLibsWithTags": ["scope:pidp", "scope:shared"]
+              // }
             ]
           }
         ]

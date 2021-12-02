@@ -1,4 +1,4 @@
-import { environmentName } from './environment.model';
+import { AppEnvironment, EnvironmentName } from './environment.model';
 
 /**
  * @description
@@ -10,21 +10,18 @@ import { environmentName } from './environment.model';
  * pipeline. For pipeline config mapping see main.ts and
  * the AppConfigModule.
  */
-export const environment = {
+export const environment: AppEnvironment = {
   apiEndpoint: 'http://localhost:5000',
-  environmentName: 'local' as environmentName,
+  environmentName: EnvironmentName.LOCAL,
   production: true,
-  // TODO what should the config look like now?
   keycloakConfig: {
     config: {
       url: 'https://dev.oidc.gov.bc.ca/auth',
       realm: 'v4mbqqas',
       clientId: 'prime-application-local',
     },
-    // TODO why is this a typing error now?
-    // initOptions: {
-    //   onLoad: 'check-sso',
-    // },
+    initOptions: {
+      onLoad: 'check-sso',
+    },
   },
-  // TODO provide the defaults that are not configurable
 };
