@@ -1,3 +1,5 @@
+import { environmentName } from './environment.model';
+
 /**
  * @description
  * Production environment populated with the default
@@ -10,7 +12,7 @@
  */
 export const environment = {
   apiEndpoint: 'http://localhost:5000',
-  environmentName: 'local',
+  environmentName: 'local' as environmentName,
   production: true,
   // TODO what should the config look like now?
   keycloakConfig: {
