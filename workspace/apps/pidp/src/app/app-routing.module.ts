@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { AppRoutes } from './app.routes';
+// import { AppRoutes } from './app.routes';
 
 const routes: Routes = [
   // TODO turn on root routes

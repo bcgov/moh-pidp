@@ -1,0 +1,48 @@
+//
+// Colour Palettes
+//
+
+// Mapping of colours outside of Material that are used for
+// accents, notifications, or shading.
+
+// TODO re-evaluate the use of these colours
+
+$palettes: (
+  blue: (
+    lightest: #f8f9fb,
+    lighter: #d6ddec,
+    light: #0f48ae,
+    // BC Gov. Primary
+    base: map-get($bcgov-blue, 500),
+    dark: #001b4a,
+  ),
+  yellow: (
+    // BC Gov. Secondary
+    base: map-get($bcgov-yellow, 500),
+  ),
+  red: (
+    base: #ed202a,
+  ),
+  green: (
+    base: green,
+  ),
+  grey: (
+    lightest: #eeeeee,
+    lighter: #e1e1e1,
+    // divider colour
+    light: #bdbdbd,
+    // secondary text colour
+    base: #575757,
+    // primary text colour
+    dark: #212121,
+  ),
+);
+
+//
+// Palette Mapping Extractor
+// Gets the colour and tone from the theme palette.
+// @use theme-palette( colour, tone );
+//
+@function theme-palette($palette, $tone: 'base') {
+  @return map-get(map-get($palettes, $palette), $tone);
+}
