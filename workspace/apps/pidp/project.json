@@ -20,7 +20,7 @@
         ],
         "styles": ["apps/pidp/src/scss/app.scss"],
         "stylePreprocessorOptions": {
-          "includePaths": ["src/scss"]
+          "includePaths": ["apps/pidp/src/scss"]
         },
         "scripts": [],
         "allowedCommonJsDependencies": ["keycloak-js"]
