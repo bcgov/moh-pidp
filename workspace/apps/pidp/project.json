@@ -2,7 +2,7 @@
   "projectType": "application",
   "root": "apps/pidp",
   "sourceRoot": "apps/pidp/src",
-  "prefix": "workspace",
+  "prefix": "app",
   "targets": {
     "build": {
       "executor": "@angular-devkit/build-angular:browser",

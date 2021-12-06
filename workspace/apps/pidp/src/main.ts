@@ -1,8 +1,12 @@
 import { enableProdMode } from '@angular/core';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 
-import { APP_DI_CONFIG, AppConfig, APP_CONFIG } from './app/app-config.module';
 import { AppModule } from './app/app.module';
+import {
+  APP_DI_CONFIG,
+  APP_CONFIG,
+  AppConfig,
+} from './app/core/config/app.config';
 import { environment } from './environments/environment';
 import { EnvironmentConfig } from './environments/environment-config.model';
 
