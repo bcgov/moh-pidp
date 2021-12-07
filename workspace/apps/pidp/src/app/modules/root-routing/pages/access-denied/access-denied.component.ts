@@ -1,0 +1,32 @@
+import { Component } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+
+@Component({
+  selector: 'app-access-denied',
+  template: `
+    <app-root-route-container>
+      <div class="row justify-content-center">
+        <div class="col-sm-12 col-md-10 col-lg-8 text-center">
+          <h1 class="mb-5">
+            403
+            <span class="d-block d-lg-inline">
+              You don't appear to have the proper authorization.
+            </span>
+          </h1>
+
+          <button mat-flat-button (click)="routeToRoot()">
+            Let us help you find your way to your destination
+          </button>
+        </div>
+      </div>
+    </app-root-route-container>
+  `,
+  styleUrls: ['../../shared/root-route-page-styles.scss'],
+})
+export class AccessDeniedComponent {
+  public constructor(private route: ActivatedRoute, private router: Router) {}
+
+  public routeToRoot(): void {
+    // this.router.navigateByUrl(RouteUtils.currentModulePath(this.route));
+  }
+}

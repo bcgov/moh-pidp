@@ -1,0 +1,41 @@
+<app-dashboard-header
+  [headerConfig]="headerConfig"
+  [isMobile]="isMobile"
+  [username]="username"
+  (toggle)="sidenav.toggle()"
+  (logout)="onLogout()"></app-dashboard-header>
+
+<mat-sidenav-container class="prime-sidenav-container">
+  <mat-sidenav
+    #sidenav
+    [mode]="sideNavProps.mode"
+    [opened]="sideNavProps.opened"
+    [fixedInViewport]="sideNavProps.fixedInViewport"
+    [fixedTopGap]="0"
+    [fixedBottomGap]="0"
+    class="d-print-none">
+    <div class="logo" [class.hidden]="!showBrand">
+      <img
+        [src]="sideNavConfig.imgSrc"
+        [attr.alt]="sideNavConfig.imgAlt"
+        [class.fixed]="!responsiveMenuItems" />
+    </div>
+
+    <app-dashboard-menu
+      [menuItems]="menuItems"
+      [responsiveMenuItems]="responsiveMenuItems"
+      [showMenuItemIcons]="showMenuItemIcons"
+      (action)="onAction($event)">
+    </app-dashboard-menu>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col py-5">
+          <router-outlet></router-outlet>
+        </div>
+      </div>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

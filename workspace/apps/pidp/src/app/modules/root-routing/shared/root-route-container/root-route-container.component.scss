@@ -1,0 +1,20 @@
+@import 'bootstrap/bootstrap-imports';
+
+.wrapper {
+  min-height: 100vh;
+  background-color: $theme-primary-color;
+
+  @include media-breakpoint-up(sm) {
+    background-color: $theme-secondary-color;
+  }
+
+  .header {
+    min-height: 15vh;
+    background-color: $theme-primary-color;
+  }
+
+  .container-fluid {
+    min-height: 70vh;
+    background-color: $theme-primary-color;
+  }
+}

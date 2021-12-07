@@ -1,3 +1,4 @@
 export * from './lib/shared-utils.module';
-export * from './lib/mixins/pipe.mixins';
-export * from './lib/classes/ensure-module-loaded-once-guard.class';
+export * from './lib/classes';
+export * from './lib/mixins';
+export * from './lib/utils';
