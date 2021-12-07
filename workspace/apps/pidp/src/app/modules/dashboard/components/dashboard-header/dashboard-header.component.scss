@@ -1,5 +1,5 @@
 @import 'palette';
-@import 'variables';
+@import 'material/material-variables';
 
 @mixin dashboard-header-theme($bgColor, $color, $brandMarginTop) {
   background-color: $bgColor;
