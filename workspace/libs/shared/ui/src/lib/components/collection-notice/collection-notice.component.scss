@@ -1,0 +1,67 @@
+@use '@angular/material' as mat;
+@import 'palette';
+@import 'bootstrap/bootstrap-imports';
+
+$theme-typography: mat.define-typography-config();
+
+// TODO split out common alert styles
+// TODO create multiple alerts for info, warn, and danger
+mat-card {
+  max-width: 800px;
+  margin-bottom: 2rem;
+
+  // Flatten the edges of the mat-card
+  transition: none !important;
+  box-shadow: none !important;
+
+  // Copy Bootstrap default alert info colours
+  // TODO pull in Bootstrap variables
+  background-color: #cff4fc;
+  border-color: #b6effb;
+  border: 1px solid #b6effb;
+
+  // Enforce theme primary colour
+  color: theme-palette(blue);
+
+  padding-left: 1.2rem;
+  padding-right: 2rem;
+  padding-bottom: 1.5rem;
+
+  .mat-icon {
+    font-size: 3rem;
+  }
+
+  .mat-card-title {
+    margin-top: 0.5rem;
+    margin-bottom: 1rem;
+    color: theme-palette(blue);
+    @include mat.typography-level($theme-typography, 'title');
+  }
+
+  .mat-card-content,
+  .mat-card-actions {
+    margin-left: 5px;
+  }
+
+  .mat-card-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    span:last-child {
+      text-align: right;
+    }
+  }
+
+  @include media-breakpoint-up(md) {
+    .mat-card-content,
+    .mat-card-actions {
+      margin-left: 3.5rem;
+    }
+
+    .mat-card-actions {
+      flex-direction: row;
+      justify-content: space-between;
+    }
+  }
+}

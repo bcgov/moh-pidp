@@ -1,4 +1,11 @@
 <ui-page>
+  <ui-collection-notice [show]="showCollectionNotice">
+    The personal information you provide to the Provider Identity Portal
+    application is collected by the British Columbia Ministry of Health under
+    the authority of s. 26(a) and 26(c) of the Freedom of Information and
+    Protection of Privacy Act (FOIPPA).
+  </ui-collection-notice>
+
   <ui-page-header>PageHeader</ui-page-header>
   <ui-page-section>
     <ui-page-subheader>PageSubheader</ui-page-subheader>
@@ -9,30 +16,4 @@
       inventore nesciunt?
     </p>
   </ui-page-section>
-
-  <mat-card>
-    <mat-card-header>
-      <div mat-card-avatar>
-        <mat-icon color="primary">error_outline</mat-icon>
-      </div>
-      <mat-card-title color="primary">
-        Collection of Personal Information Notice
-      </mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
-      <!-- <ng-content></ng-content> -->
-      The personal information you provide to the Provider Identity Portal
-      application is collected by the British Columbia Ministry of Health under
-      the authority of s. 26(a) and 26(c) of the Freedom of Information and
-      Protection of Privacy Act (FOIPPA).
-    </mat-card-content>
-    <mat-card-actions>
-      <div class="d-flex justify-content-between">
-        <mat-checkbox color="primary"
-          >Do not show me this collection notice again</mat-checkbox
-        >
-        <button mat-flat-button type="button" color="primary">Close</button>
-      </div>
-    </mat-card-actions>
-  </mat-card>
 </ui-page>

@@ -1,37 +1,5 @@
 @use '@angular/material' as mat;
-@use 'palette';
+@import 'palette';
+@import 'bootstrap/bootstrap-imports';
 
 $theme-typography: mat.define-typography-config();
-
-// Make a mat-card look like a Bootstrap Alert
-// TODO pull in Bootstrap variables
-mat-card {
-  transition: none !important;
-  box-shadow: none !important;
-  color: #055160;
-  background-color: #cff4fc;
-  border-color: #b6effb;
-  border: 1px solid #b6effb;
-
-  padding-right: 35px;
-  padding-bottom: 20px;
-
-  .mat-icon {
-    font-size: 2.5rem;
-  }
-
-  .mat-card-title {
-    margin-top: 5px;
-    color: theme-palette(blue);
-    @include mat.typography-level($theme-typography, 'title');
-  }
-
-  .mat-card-actions,
-  .mat-card-content {
-    margin-left: 56px;
-  }
-
-  .mat-card-actions {
-    text-align: right;
-  }
-}

@@ -6,7 +6,11 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./portal.component.scss'],
 })
 export class PortalComponent implements OnInit {
-  public constructor() {}
+  public showCollectionNotice: boolean;
+
+  public constructor() {
+    this.showCollectionNotice = true;
+  }
 
   public ngOnInit(): void {}
 }

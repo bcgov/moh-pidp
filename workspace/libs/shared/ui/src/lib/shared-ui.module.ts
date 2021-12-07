@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { MaterialModule } from './material/material.module';
 
@@ -6,6 +7,7 @@ import { PageComponent } from './components/page/page.component';
 import { PageHeaderComponent } from './components/page-header/page-header.component';
 import { PageSectionComponent } from './components/page-section/page-section.component';
 import { PageSubheaderComponent } from './components/page-subheader/page-subheader.component';
+import { CollectionNoticeComponent } from './components/collection-notice/collection-notice.component';
 
 @NgModule({
   declarations: [
@@ -14,8 +16,9 @@ import { PageSubheaderComponent } from './components/page-subheader/page-subhead
     PageHeaderComponent,
     PageSectionComponent,
     PageSubheaderComponent,
+    CollectionNoticeComponent,
   ],
-  imports: [MaterialModule],
+  imports: [CommonModule, MaterialModule],
   exports: [
     MaterialModule,
     AlertComponent,
@@ -23,6 +26,7 @@ import { PageSubheaderComponent } from './components/page-subheader/page-subhead
     PageHeaderComponent,
     PageSectionComponent,
     PageSubheaderComponent,
+    CollectionNoticeComponent,
   ],
 })
 export class SharedUiModule {}
