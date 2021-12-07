@@ -1,32 +1,20 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-// import { AppRoutes } from './app.routes';
+import { ShellModule } from './features/shell/shell.module';
+import { ShellRoutes } from './features/shell/shell.routes';
 
 const routes: Routes = [
-  // TODO turn on root routes
-  // {
-  //   path: AppRoutes.MAINTENANCE,
-  //   component: MaintenanceComponent,
-  //   data: {
-  //     title: 'Under Scheduled Maintenance',
-  //   },
-  // },
-  // {
-  //   // Allow for direct routing to page not found
-  //   path: AppRoutes.PAGE_NOT_FOUND,
-  //   component: PageNotFoundComponent,
-  //   data: {
-  //     title: 'Page Not Found',
-  //   },
-  // },
-  // {
-  //   path: AppRoutes.DEFAULT,
-  //   component: PageNotFoundComponent,
-  //   data: {
-  //     title: 'Page Not Found',
-  //   },
-  // },
+  {
+    path: ShellRoutes.MODULE_PATH,
+    loadChildren: (): Promise<ShellModule> =>
+      import('./features/shell/shell.module').then((m) => m.ShellModule),
+  },
+  {
+    path: '',
+    redirectTo: ShellRoutes.MODULE_PATH,
+    pathMatch: 'full',
+  },
 ];
 
 @NgModule({

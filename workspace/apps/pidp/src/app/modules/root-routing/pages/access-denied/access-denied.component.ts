@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
+import { RouteUtils } from '@bcgov/shared/utils';
+
 @Component({
   selector: 'app-access-denied',
   template: `
@@ -27,6 +29,6 @@ export class AccessDeniedComponent {
   public constructor(private route: ActivatedRoute, private router: Router) {}
 
   public routeToRoot(): void {
-    // this.router.navigateByUrl(RouteUtils.currentModulePath(this.route));
+    this.router.navigateByUrl(RouteUtils.currentModulePath(this.route));
   }
 }

@@ -4,12 +4,17 @@
 // MATERIAL FORMS
 //
 
-.mat-input-element,
-.mat-select-value {
-  color: theme-palette(blue, light) !important;
+// .mat-input-element,
+// .mat-select-value {
+//   color: theme-palette(blue, light) !important;
+// }
+
+.mat-checkbox .mat-checkbox-inner-container {
+  // Enforce a white background to avoid transparency when
+  // placed inside components with coloured backgrounds
+  background-color: white;
 }
 
-
-.mat-slide-toggle-content {
-  color: theme-palette(blue, dark);
-}
+// .mat-slide-toggle-content {
+//   color: theme-palette(blue, dark);
+// }

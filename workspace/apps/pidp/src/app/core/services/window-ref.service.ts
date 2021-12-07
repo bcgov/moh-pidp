@@ -1,20 +1,18 @@
 import { Injectable } from '@angular/core';
 
-function getWindow(): any {
+function getWindow(): Window {
   return window;
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class WindowRefService {
-  constructor() { }
-
   /**
    * @description
    * Get a reference to the native window object.
    */
-  get nativeWindow(): Window {
+  public get nativeWindow(): Window {
     return getWindow();
   }
 }

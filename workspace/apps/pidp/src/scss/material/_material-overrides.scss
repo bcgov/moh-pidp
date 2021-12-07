@@ -30,9 +30,9 @@
 
 .mat-checkbox label,
 .mat-radio-button label {
-  color: $theme-primary-color;
+  color: theme-palette(blue);
 }
 
 .mat-drawer-container {
-  color: $theme-primary-color;
+  color: theme-palette(blue);
 }

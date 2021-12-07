@@ -12,7 +12,7 @@
 
 .mat-card {
   border-bottom: 4px solid transparent;
-  margin-bottom: .5rem;
+  margin-bottom: 0.5rem;
 
   // Apply .has-hover to mat-card container to add
   // a border underline to the mat-card container
@@ -52,9 +52,9 @@
   .mat-card-actions {
     button[mat-stroked-button]:first-child {
       // Provide spacing from edge of card to align with card title and subtitle
-      margin-left: .5rem;
+      margin-left: 0.5rem;
     }
-    
+
     // Responsiveness of mat-card component actions are not optimally
     // aligned, and forces an approach that is not mobile-first through
     // the use of media-breakpoint-down to patch
@@ -67,7 +67,7 @@
           margin-right: 1rem;
           // Create spacing between stacked buttons to provide gap so
           // buttons are not miss clicked
-          margin-bottom: .5rem;
+          margin-bottom: 0.5rem;
         }
       }
     }

@@ -27,6 +27,7 @@ export class ErrorHandlerService implements ErrorHandler {
 
     const { url } = router;
 
+    // TODO check the formatting of the error for readability
     logger.error(message, { url }, error);
   }
 }
