@@ -1,0 +1,35 @@
+<ng-container *ngIf="statusType; else card">
+  <div class="card-status" [class]="statusType">
+    <ng-container *ngTemplateOutlet="card"></ng-container>
+    <span>{{ status | titlecase }}</span>
+  </div>
+</ng-container>
+
+<ng-template #card>
+  <mat-card>
+    <mat-card-header>
+      <div mat-card-avatar>
+        <mat-icon color="primary" class="material-icons-outlined">
+          {{ icon }}
+        </mat-icon>
+      </div>
+      <mat-card-title color="primary">
+        {{ title }}
+      </mat-card-title>
+      <span *ngIf="hint" class="hint">
+        {{ hint }}
+      </span>
+    </mat-card-header>
+    <mat-card-actions>
+      <span>
+        <button
+          *ngIf="actionLabel"
+          mat-stroked-button
+          type="button"
+          color="primary">
+          {{ actionLabel }}
+        </button>
+      </span>
+    </mat-card-actions>
+  </mat-card>
+</ng-template>

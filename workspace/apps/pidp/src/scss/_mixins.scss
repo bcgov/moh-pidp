@@ -1,0 +1,138 @@
+@use '@angular/material' as mat;
+@use 'palette';
+
+// TODO convert @import to @use
+@import 'bootstrap/bootstrap-imports';
+
+$theme-typography: mat.define-typography-config();
+
+@mixin card-base($color, $max-width: 800px, $margin-bottom: 2rem) {
+  // Defaults set a sensible readable length and
+  // vertical spacing to cards
+  max-width: $max-width;
+  margin-bottom: $margin-bottom;
+
+  // Space out content from card boundaries for
+  // visual appeal
+  padding-left: 1.2rem;
+  padding-right: 1.75rem;
+  padding-bottom: 1.5rem;
+
+  color: $color;
+
+  .mat-icon {
+    font-size: 3rem;
+  }
+
+  // TODO split out to improve useability this is too strict for base
+  // but for now is an unnecessary optimization
+  .mat-card-header span {
+    font-size: 0.8rem;
+    font-style: italic;
+    line-height: 1rem;
+    // Reduce space between content and boundary to match actions
+    // and possible card status
+    margin-right: -0.75rem;
+    // Use flexbox rules to align span at the end of the container
+    margin-left: auto;
+  }
+
+  .mat-card-title {
+    margin-top: 0.5rem;
+    margin-bottom: 1rem;
+    color: $color;
+    @include mat.typography-level($theme-typography, 'title');
+  }
+
+  .mat-card-content,
+  .mat-card-actions {
+    margin-left: 5px;
+  }
+
+  // TODO split out to improve useability this is too strict for base
+  // but for now is an unnecessary optimization
+  .mat-card-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    // Force a minimum height for actions equal to the
+    // height of a button within the action container
+    min-height: 2.5rem;
+
+    // Assumed to contain a button for performing actions
+    span:last-child {
+      // Align span at the end of the container using
+      // Flexbox rules for spacing
+      margin-left: auto;
+    }
+  }
+}
+
+@mixin card-alert($textColor, $bgColor, $borderColor) {
+  @include card-base($textColor);
+
+  // Flatten the edges of the mat-card
+  transition: none !important;
+  box-shadow: none !important;
+
+  background-color: $bgColor;
+  border: 1px solid $borderColor;
+
+  @include media-breakpoint-up(md) {
+    // Align content and action containers with the
+    // card header title on medium viewports and up
+    .mat-card-content,
+    .mat-card-actions {
+      margin-left: 3.5rem;
+    }
+
+    // Align actions horizontally instead of stacked
+    .mat-card-actions {
+      flex-direction: row;
+      justify-content: space-between;
+    }
+  }
+}
+
+@mixin card-alert-info {
+  @include card-alert(
+    theme-palette(blue),
+    theme-palette(blue, info),
+    theme-palette(blue, info-border)
+  );
+}
+
+@mixin card-status {
+  display: flex;
+  flex-direction: column;
+
+  border-radius: 5px;
+  margin-bottom: 2rem;
+  padding-left: 0.3rem;
+
+  & > span {
+    font-size: 0.9rem;
+    font-style: italic;
+    // Apply padding to provide a bit of space
+    // between text and boundary
+    padding-right: 1rem;
+    // Hold open the span regardless of content to the
+    // height equivalent to the font-size
+    min-height: 1.75rem;
+    // Use flexbox rules to align span at the end of the container
+    margin-left: auto;
+  }
+
+  // Default background colour provided to avoid
+  // a transparent status on a card
+  background-color: theme-palette(grey, lighter);
+
+  &.info {
+    background-color: theme-palette(blue, info);
+  }
+
+  &.warn {
+    background-color: theme-palette(yellow);
+  }
+}
