@@ -1,9 +1,5 @@
 export class ShellRoutes {
-  public static LOGIN_PAGE = 'login';
-
   public static MODULE_PATH = 'pidp';
-
-  public static PORTAL_PAGE = 'portal';
 
   /**
    * @description

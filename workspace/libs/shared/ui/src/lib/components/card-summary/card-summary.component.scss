@@ -7,13 +7,22 @@
 // TODO need either a minimum height, or mat-card items need to be able to fill vertically
 
 mat-card {
-  @include mixins.card-base(theme-palette(blue));
+  @include mixins.card-base;
+
+  .mat-card-header {
+    margin-bottom: 0.5rem;
+  }
+
+  .mat-card-content {
+    font-weight: 300;
+  }
 }
 
 .card-status {
   @include mixins.card-status;
 
   mat-card {
-    @include mixins.card-base($color: theme-palette(blue), $margin-bottom: 0);
+    // TODO use less verbose way to remove margin bottom without duplicating styles
+    @include mixins.card-base($margin-bottom: 0);
   }
 }

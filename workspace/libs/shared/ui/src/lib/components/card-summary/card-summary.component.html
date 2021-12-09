@@ -1,4 +1,4 @@
-<ng-container *ngIf="statusType; else card">
+<ng-container *ngIf="statusType || status; else card">
   <div class="card-status" [class]="statusType">
     <ng-container *ngTemplateOutlet="card"></ng-container>
     <span>{{ status | titlecase }}</span>
@@ -9,9 +9,7 @@
   <mat-card>
     <mat-card-header>
       <div mat-card-avatar>
-        <mat-icon color="primary" class="material-icons-outlined">
-          {{ icon }}
-        </mat-icon>
+        <ui-icon color="primary" type="outlined" size="md">{{ icon }}</ui-icon>
       </div>
       <mat-card-title color="primary">
         {{ title }}
@@ -20,13 +18,18 @@
         {{ hint }}
       </span>
     </mat-card-header>
+    <mat-card-content>
+      {{ description }}
+    </mat-card-content>
     <mat-card-actions>
       <span>
         <button
           *ngIf="actionLabel"
           mat-stroked-button
           type="button"
-          color="primary">
+          color="primary"
+          [disabled]="disabled"
+          (click)="onAction()">
           {{ actionLabel }}
         </button>
       </span>

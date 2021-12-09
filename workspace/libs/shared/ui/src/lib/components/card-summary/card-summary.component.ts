@@ -1,4 +1,12 @@
-import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
+import {
+  Component,
+  ChangeDetectionStrategy,
+  Input,
+  Output,
+  EventEmitter,
+} from '@angular/core';
+
+import { AlertType } from '../alert/alert.component';
 
 @Component({
   selector: 'ui-card-summary',
@@ -10,7 +18,18 @@ export class CardSummaryComponent {
   @Input() public icon!: string;
   @Input() public title!: string;
   @Input() public hint?: string;
+  @Input() public description!: string;
   @Input() public actionLabel?: string;
-  @Input() public statusType?: 'info' | 'warn';
+  @Input() public statusType?: AlertType;
   @Input() public status?: string;
+  @Input() public disabled?: boolean;
+  @Output() public action: EventEmitter<void>;
+
+  public constructor() {
+    this.action = new EventEmitter<void>();
+  }
+
+  public onAction(): void {
+    this.action.emit();
+  }
 }

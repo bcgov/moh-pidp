@@ -1,5 +1,1 @@
 @use 'mixins' as mixins;
-
-mat-card {
-  @include mixins.card-alert-info;
-}

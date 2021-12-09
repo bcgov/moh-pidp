@@ -7,7 +7,7 @@ const routes: Routes = [
   {
     path: '',
     component: PortalComponent,
-    data: { title: 'Provider Identify Portal' },
+    data: { title: 'Provider Identity Portal' },
   },
 ];
 

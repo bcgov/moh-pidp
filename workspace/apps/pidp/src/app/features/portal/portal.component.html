@@ -24,9 +24,38 @@
           [icon]="section.icon"
           [title]="section.title"
           [hint]="section.hint"
+          [description]="section.description"
           [actionLabel]="section.actionLabel"
           [statusType]="section.statusType"
-          [status]="section.status"></ui-card-summary>
+          [status]="section.status"
+          [disabled]="section.disabled"
+          (action)="onAction(section?.route)"></ui-card-summary>
+      </div>
+    </div>
+  </ui-page-section>
+
+  <ui-page-section>
+    <ui-page-subheader icon="assignment">Access to Systems</ui-page-subheader>
+    <p>
+      Complete your profile to gain access to the systems you are eligible for.
+      Access to these applications will depend on your credentials, you will
+      automatically gain access to those you are eligible for.
+    </p>
+
+    <div class="row">
+      <div
+        *ngFor="let section of accessToSystemsSections"
+        class="col col-md-12 col-lg-6">
+        <ui-card-summary
+          [icon]="section.icon"
+          [title]="section.title"
+          [hint]="section.hint"
+          [description]="section.description"
+          [actionLabel]="section.actionLabel"
+          [statusType]="section.statusType"
+          [status]="section.status"
+          [disabled]="section.disabled"
+          (action)="onAction(section?.route)"></ui-card-summary>
       </div>
     </div>
   </ui-page-section>
@@ -43,28 +72,12 @@
           [icon]="section.icon"
           [title]="section.title"
           [hint]="section.hint"
+          [description]="section.description"
           [actionLabel]="section.actionLabel"
           [statusType]="section.statusType"
-          [status]="section.status"></ui-card-summary>
-      </div>
-    </div>
-  </ui-page-section>
-
-  <ui-page-section>
-    <ui-page-subheader icon="assignment">Access to Systems</ui-page-subheader>
-    <p>Complete these trainings.</p>
-
-    <div class="row">
-      <div
-        *ngFor="let section of accessToSystemsSections"
-        class="col col-md-12 col-lg-6">
-        <ui-card-summary
-          [icon]="section.icon"
-          [title]="section.title"
-          [hint]="section.hint"
-          [actionLabel]="section.actionLabel"
-          [statusType]="section.statusType"
-          [status]="section.status"></ui-card-summary>
+          [status]="section.status"
+          [disabled]="section.disabled"
+          (action)="onAction(section?.route)"></ui-card-summary>
       </div>
     </div>
   </ui-page-section>
@@ -83,7 +96,10 @@
         <ui-card-summary
           [icon]="section.icon"
           [title]="section.title"
-          [actionLabel]="section.actionLabel"></ui-card-summary>
+          [description]="section.description"
+          [actionLabel]="section.actionLabel"
+          [disabled]="section.disabled"
+          (action)="onAction(section?.route)"></ui-card-summary>
       </div>
     </div>
   </ui-page-section>

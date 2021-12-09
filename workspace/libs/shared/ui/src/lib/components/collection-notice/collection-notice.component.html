@@ -1,9 +1,10 @@
-<mat-card *ngIf="show">
+<mat-card *ngIf="show" class="alert-info">
   <mat-card-header>
     <div mat-card-avatar>
-      <mat-icon color="primary">error_outline</mat-icon>
+      <!-- Using <mat-icon> to maintain specificity and allow mixins to override -->
+      <mat-icon class="material-icons-outlined">error_outline</mat-icon>
     </div>
-    <mat-card-title color="primary"> Collection Notice </mat-card-title>
+    <mat-card-title color="primary">Collection Notice</mat-card-title>
   </mat-card-header>
   <mat-card-content>
     <ng-content></ng-content>
