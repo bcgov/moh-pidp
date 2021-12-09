@@ -1,6 +1,5 @@
-namespace Pidp.Features
+namespace Pidp.Features;
+
+public interface IRequestHandler
 {
-    public interface IRequestHandler
-    {
-    }
 }

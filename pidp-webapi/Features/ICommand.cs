@@ -1,10 +1,9 @@
-namespace Pidp.Features
-{
-    public interface ICommand
-    {
-    }
+namespace Pidp.Features;
 
-    public interface ICommand<TResponse>
-    {
-    }
+public interface ICommand
+{
+}
+
+public interface ICommand<TResponse>
+{
 }
