@@ -1,0 +1,65 @@
+<ui-page>
+  <ui-page-header>{{ title }}</ui-page-header>
+
+  <ui-page-section>
+    <ui-page-subheader icon="assignment_ind">
+      Personal Information
+    </ui-page-subheader>
+    <p>
+      Provide the next information to complete your provider identity portal.
+    </p>
+  </ui-page-section>
+
+  <ui-page-section>
+    <ui-page-subheader>Name</ui-page-subheader>
+    <p>
+      This information comes from the BC Services Card. If you use a different
+      name professionally, select "I have a preferred name".
+    </p>
+    <small>
+      Entering a preferred name will not change your BC Services Card name.
+    </small>
+
+    <ui-user-info [user]="bcscUser"></ui-user-info>
+
+    <ui-toggle-content label="I have a preferred name">
+      <ui-preferred-name-form [form]="form"></ui-preferred-name-form>
+    </ui-toggle-content>
+  </ui-page-section>
+
+  <ui-page-section>
+    <ui-page-subheader>Address</ui-page-subheader>
+    <p>
+      This information comes from your BC Services Card. If you would prefer to
+      receive mail at a professional or other address, select "I have a
+      preferred address".
+    </p>
+    <small>
+      Entering a preferred address will not change your BC Services Card
+      address.
+    </small>
+
+    <ui-address-info [address]="bcscUser?.verifiedAddress"></ui-address-info>
+
+    <ui-toggle-content label="I have a preferred address">
+      <ui-address-form [form]="form"></ui-address-form>
+    </ui-toggle-content>
+  </ui-page-section>
+
+  <ui-page-section>
+    <ui-page-subheader>Contact Information</ui-page-subheader>
+    <p class="content-spacer">
+      Provide your contact information to be used to correspond with you.
+    </p>
+    <ui-contact-info-form [form]="form"></ui-contact-info-form>
+  </ui-page-section>
+
+  <ui-page-footer>
+    <button mat-stroked-button color="primary" type="button" routerLink="../">
+      Back Home
+    </button>
+    <button mat-flat-button color="primary" type="submit" routerLink="../">
+      Save Information
+    </button>
+  </ui-page-footer>
+</ui-page>

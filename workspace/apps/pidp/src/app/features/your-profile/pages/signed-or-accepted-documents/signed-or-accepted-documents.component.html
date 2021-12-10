@@ -1,0 +1,30 @@
+<ui-page>
+  <ui-page-header>{{ title }}</ui-page-header>
+
+  <ui-page-section>
+    <ui-page-subheader icon="history">
+      View Signed or Accepted Documents
+    </ui-page-subheader>
+    <p>View the documents your have signed.</p>
+
+    <div class="row">
+      <div *ngFor="let document of documents" class="col col-md-12 col-lg-6">
+        <ui-card-summary
+          [icon]="document.icon"
+          [title]="document.title"
+          [actionLabel]="document.actionLabel"
+          [disabled]="document.disabled"></ui-card-summary>
+      </div>
+    </div>
+  </ui-page-section>
+
+  <ui-page-footer>
+    <button
+      mat-stroked-button
+      color="primary"
+      type="button"
+      routerLink="../../">
+      Back Home
+    </button>
+  </ui-page-footer>
+</ui-page>

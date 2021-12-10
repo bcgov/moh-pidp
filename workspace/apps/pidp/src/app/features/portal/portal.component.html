@@ -1,0 +1,106 @@
+<ui-page>
+  <ui-page-header>{{ title }}</ui-page-header>
+
+  <ui-collection-notice [show]="showCollectionNotice">
+    The personal information you provide to the Provider Identity Portal
+    application is collected by the British Columbia Ministry of Health under
+    the authority of s. 26(a) and 26(c) of the Freedom of Information and
+    Protection of Privacy Act (FOIPPA).
+  </ui-collection-notice>
+
+  <ui-page-section>
+    <ui-page-subheader icon="assignment_ind">Profile</ui-page-subheader>
+    <p>
+      Complete the information for each portion of your Provider Identity.<br />
+      This will allow the portal to identify systems for which you may request
+      acces.
+    </p>
+
+    <div class="row">
+      <div
+        *ngFor="let section of profileIdentitySections"
+        class="col col-sm-12 col-lg-6">
+        <ui-card-summary
+          [icon]="section.icon"
+          [title]="section.title"
+          [hint]="section.hint"
+          [description]="section.description"
+          [actionLabel]="section.actionLabel"
+          [statusType]="section.statusType"
+          [status]="section.status"
+          [disabled]="section.disabled"
+          (action)="onAction(section?.route)"></ui-card-summary>
+      </div>
+    </div>
+  </ui-page-section>
+
+  <ui-page-section>
+    <ui-page-subheader icon="assignment">Access to Systems</ui-page-subheader>
+    <p>
+      Complete your profile to gain access to the systems you are eligible for.
+      Access to these applications will depend on your credentials, you will
+      automatically gain access to those you are eligible for.
+    </p>
+
+    <div class="row">
+      <div
+        *ngFor="let section of accessToSystemsSections"
+        class="col col-md-12 col-lg-6">
+        <ui-card-summary
+          [icon]="section.icon"
+          [title]="section.title"
+          [hint]="section.hint"
+          [description]="section.description"
+          [actionLabel]="section.actionLabel"
+          [statusType]="section.statusType"
+          [status]="section.status"
+          [disabled]="section.disabled"
+          (action)="onAction(section?.route)"></ui-card-summary>
+      </div>
+    </div>
+  </ui-page-section>
+
+  <ui-page-section>
+    <ui-page-subheader icon="school">Training</ui-page-subheader>
+    <p>Complete these trainings.</p>
+
+    <div class="row">
+      <div
+        *ngFor="let section of trainingSections"
+        class="col col-md-12 col-lg-6">
+        <ui-card-summary
+          [icon]="section.icon"
+          [title]="section.title"
+          [hint]="section.hint"
+          [description]="section.description"
+          [actionLabel]="section.actionLabel"
+          [statusType]="section.statusType"
+          [status]="section.status"
+          [disabled]="section.disabled"
+          (action)="onAction(section?.route)"></ui-card-summary>
+      </div>
+    </div>
+  </ui-page-section>
+
+  <ui-page-section>
+    <ui-page-subheader icon="history">Your Profile</ui-page-subheader>
+    <p>
+      View information pertaining to your profile and interaction with the
+      systems you use for work.
+    </p>
+
+    <div class="row">
+      <div
+        *ngFor="let section of yourProfileSections"
+        class="col col-md-12 col-lg-6">
+        <ui-card-summary
+          [icon]="section.icon"
+          [title]="section.title"
+          [description]="section.description"
+          [actionLabel]="section.actionLabel"
+          [disabled]="section.disabled"
+          (action)="onAction(section?.route)"></ui-card-summary>
+      </div>
+    </div>
+  </ui-page-section>
+</ui-page>

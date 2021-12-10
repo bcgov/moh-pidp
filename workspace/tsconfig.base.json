@@ -14,7 +14,11 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@bcgov/shared/data-access": ["libs/shared/data-access/src/index.ts"],
+      "@bcgov/shared/ui": ["libs/shared/ui/src/index.ts"],
+      "@bcgov/shared/utils": ["libs/shared/utils/src/index.ts"]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }

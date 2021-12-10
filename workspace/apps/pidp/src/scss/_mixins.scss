@@ -1,0 +1,183 @@
+@use '@angular/material' as mat;
+@use 'palette';
+
+// TODO convert @import to @use
+@import 'bootstrap/bootstrap-imports';
+
+$theme-typography: mat.define-typography-config();
+
+@mixin card-base(
+  $color: theme-palette(blue),
+  $max-width: 800px,
+  $margin-bottom: 2rem
+) {
+  // Defaults to the theme colour until a different
+  // colour is chosen based on need
+  color: $color;
+
+  // Defaults set a sensible readable length and
+  // vertical spacing to cards
+  max-width: $max-width;
+  margin-bottom: $margin-bottom;
+
+  // Space out content from card boundaries for
+  // visual appeal
+  padding-left: 1.2rem;
+  padding-right: 1.75rem;
+  padding-bottom: 1.5rem;
+
+  .mat-card-header {
+    // Font size and position are adjusted to align vertically
+    // with a card header icon of a specific size
+    .mat-icon {
+      font-size: 3rem;
+    }
+    .mat-card-title {
+      margin-top: 0.5rem;
+      @include mat.typography-level($theme-typography, 'title');
+    }
+
+    // TODO split out to improve useability this is too strict for base
+    // but for now is an unnecessary optimization
+    span {
+      font-size: 0.8rem;
+      font-style: italic;
+      line-height: 1rem;
+      // Reduce space between content and boundary to match actions
+      // and possible card status
+      margin-right: -0.75rem;
+      // Use flexbox rules to align span at the end of the container
+      margin-left: auto;
+    }
+  }
+
+  .mat-card-content,
+  .mat-card-actions {
+    margin-left: 5px;
+  }
+
+  // TODO split out to improve useability this is too strict for base
+  // but for now is an unnecessary optimization
+  .mat-card-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    // Force a minimum height for actions equal to the
+    // height of a button within the action container
+    min-height: 2.75rem;
+
+    // Assumed to contain a button for performing actions
+    span:last-child {
+      // Align span at the end of the container using
+      // Flexbox rules for spacing
+      margin-left: auto;
+    }
+  }
+}
+
+@mixin card-alert($textColor, $bgColor, $borderColor) {
+  @include card-base($textColor);
+
+  // Flatten the edges of the mat-card
+  transition: none !important;
+  box-shadow: none !important;
+
+  background-color: $bgColor;
+  border: 1px solid $borderColor;
+
+  .mat-card-header {
+    // Provide vertical spacing between the header
+    // icon and content for aesthetics
+    margin-bottom: 0.75rem;
+  }
+
+  @include media-breakpoint-up(md) {
+    .mat-card-header {
+      // Reduce vertical spacing between the header
+      // and content to compress the alerts
+      margin-bottom: -0.5rem;
+    }
+
+    // Align content and action containers with the
+    // card header title on medium viewports and up
+    .mat-card-content,
+    .mat-card-actions {
+      margin-left: 3.5rem;
+    }
+
+    // Align actions horizontally instead of stacked
+    .mat-card-actions {
+      flex-direction: row;
+      justify-content: space-between;
+    }
+  }
+}
+
+// Generate reuseable classes based on different
+// types of alerts
+$types: success, info, warn, danger, muted;
+
+// TODO flatten out these styles so the only change between styles
+// is the colour using .alert and .alert-<type> classes, or push
+// up into alert mixin like care-status
+@each $type in $types {
+  .alert-#{$type} {
+    @include card-alert(
+      alert-palette($type, color),
+      alert-palette($type, backgroundColor),
+      alert-palette($type, borderColor)
+    );
+  }
+}
+
+/**
+ * @description
+ * Container for a <mat-card> that applies an alert-like
+ * status around a card that contains a bit of content.
+ */
+@mixin card-status {
+  display: flex;
+  flex-direction: column;
+
+  border-radius: 5px;
+  margin-bottom: 2rem;
+  padding-left: 0.3rem;
+
+  & > span {
+    font-size: 0.9rem;
+    font-style: italic;
+    // Apply padding to provide a bit of space
+    // between text and boundary
+    padding-right: 1rem;
+    // Hold open the span regardless of content to the
+    // height equivalent to the font-size
+    min-height: 1.75rem;
+    // Use flexbox rules to align span at the end of
+    // the container
+    margin-left: auto;
+  }
+
+  // Apply a border that could be used to provide a bit
+  // of depth to the card statuses
+  border-width: 1px;
+  border-style: solid;
+  border-color: transparent;
+
+  // Offset the addition of a border on the card so they
+  // are not shown outside top and right boundaries
+  mat-card {
+    margin-top: -1px;
+    margin-right: -1px;
+  }
+
+  // Colour applied share some colour with alert status colours
+  // to drive a similar feel between elements
+  @each $type in $types {
+    &.#{$type} {
+      background-color: alert-palette($type, backgroundColorSolid);
+      border-color: alert-palette($type, backgroundColorSolid);
+      color: alert-palette($type, color);
+    }
+  }
+}

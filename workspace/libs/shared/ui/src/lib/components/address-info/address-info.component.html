@@ -1,0 +1,20 @@
+<div>
+  <span>Country:</span>
+  <span>{{ address?.countryCode | configCode: 'countries' | default }}</span>
+</div>
+<div>
+  <span>Province:</span>
+  <span>{{ address?.provinceCode | configCode: 'provinces' | default }}</span>
+</div>
+<div>
+  <span>Street Address:</span>
+  <span>{{ address?.street | default }}</span>
+</div>
+<div>
+  <span>City:</span>
+  <span>{{ address?.city | default }}</span>
+</div>
+<div>
+  <span>Postal Code:</span>
+  <span>{{ address?.postal | postal | default }}</span>
+</div>

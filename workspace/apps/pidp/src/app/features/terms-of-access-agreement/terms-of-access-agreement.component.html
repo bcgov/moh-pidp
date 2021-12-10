@@ -1,0 +1,32 @@
+<ui-page>
+  <ui-page-header>{{ title }}</ui-page-header>
+
+  <ui-page-section>
+    <ui-page-subheader icon="assignment_ind">
+      Terms of Access Agreement
+    </ui-page-subheader>
+    <p>Agree to the following terms (the "Agreement"). Read them carefully.</p>
+
+    <p>TOA here</p>
+  </ui-page-section>
+
+  <div class="signature">
+    <mat-checkbox #checkbox color="primary">
+      I have read and accept the Terms of Access.
+    </mat-checkbox>
+  </div>
+
+  <ui-page-footer>
+    <button mat-stroked-button color="primary" type="button" routerLink="../">
+      Back Home
+    </button>
+    <button
+      mat-flat-button
+      color="primary"
+      type="submit"
+      routerLink="../"
+      [disabled]="!checkbox.checked">
+      Save Information
+    </button>
+  </ui-page-footer>
+</ui-page>
