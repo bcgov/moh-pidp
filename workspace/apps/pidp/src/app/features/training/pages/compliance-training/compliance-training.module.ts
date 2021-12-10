@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 
-import { SharedModule } from '../../../../shared/shared.module';
+import { SharedModule } from '@shared/shared.module';
 
 import { ComplianceTrainingRoutingModule } from './compliance-training-routing.module';
 import { ComplianceTrainingComponent } from './compliance-training.component';

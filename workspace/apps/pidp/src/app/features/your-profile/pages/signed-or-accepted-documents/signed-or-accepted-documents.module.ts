@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 
-import { SharedModule } from '../../../../shared/shared.module';
+import { SharedModule } from '@shared/shared.module';
 
 import { SignedOrAcceptedDocumentsRoutingModule } from './signed-or-accepted-documents-routing.module';
 import { SignedOrAcceptedDocumentsComponent } from './signed-or-accepted-documents.component';

@@ -3,8 +3,9 @@ import { MatSidenav } from '@angular/material/sidenav';
 
 import { startWith } from 'rxjs';
 
-import { DeviceResolution } from '../../../../core/enums/device-resolution.enum';
-import { ViewportService } from '../../../../core/services/viewport.service';
+import { DeviceResolution } from '@core/enums/device-resolution.enum';
+import { ViewportService } from '@core/services/viewport.service';
+
 import {
   DashboardMenuItem,
   DashboardRouteMenuItem,
@@ -12,7 +13,7 @@ import {
 import { DashboardSidenavProps } from '../../models/dashboard-sidenav-props.model';
 import { DashboardHeaderConfig } from '../dashboard-header/dashboard-header.component';
 
-// TODO make this fully presentational
+// TODO make this fully presentational and move out into libs
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',

@@ -6,7 +6,9 @@ import {
   Output,
 } from '@angular/core';
 
-import { ViewportService } from '../../../../core/services/viewport.service';
+// TODO get rid of this dependency and make it an input binding
+import { ViewportService } from '@core/services/viewport.service';
+
 import { DashboardRouteMenuItem } from '../../models/dashboard-menu-item.model';
 
 @Component({

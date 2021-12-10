@@ -4,9 +4,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { httpInterceptorProviders } from '@bcgov/shared/data-access';
+import { rootRouteConfigProvider } from '@bcgov/shared/ui';
 import { EnsureModuleLoadedOnceGuard } from '@bcgov/shared/utils';
-
-import { rootRouteConfigProvider } from '../modules/root-routing/root-route.config';
 
 const modules = [BrowserModule, BrowserAnimationsModule, HttpClientModule];
 
