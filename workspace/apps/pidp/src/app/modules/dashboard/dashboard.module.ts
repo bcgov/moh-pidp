@@ -6,7 +6,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { RouterModule } from '@angular/router';
 
-import { NgxProgressBarModule } from '../ngx-progress-bar/ngx-progress-bar.module';
+import { NgxProgressBarModule } from '@bcgov/shared/ui';
 
 import { DashboardHeaderComponent } from './components/dashboard-header/dashboard-header.component';
 import { DashboardMenuComponent } from './components/dashboard-menu/dashboard-menu.component';
