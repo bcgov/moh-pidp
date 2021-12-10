@@ -11,19 +11,20 @@ import {
 } from '@angular/material/form-field';
 import { MAT_PAGINATOR_DEFAULT_OPTIONS } from '@angular/material/paginator';
 
-const APP_DATE_FORMAT = 'D MMM YYYY';
-const APP_DATE_FORMATS = {
+export const APP_DATE_FORMAT = 'dd LLL yyyy';
+export const APP_DATE_FORMATS = {
   parse: {
     // Reformat entered date values to this format
     dateInput: APP_DATE_FORMAT,
   },
   display: {
     dateInput: APP_DATE_FORMAT,
-    monthYearLabel: 'MMM YYYY',
+    monthYearLabel: 'LLL yyyy',
     dateA11yLabel: APP_DATE_FORMAT,
-    monthYearA11yLabel: 'MMM YYYY',
+    monthYearA11yLabel: 'LLL yyyy',
   },
 };
+
 const appPaginatorCustomOptions = {
   pageSize: 100,
   hidePageSize: true,

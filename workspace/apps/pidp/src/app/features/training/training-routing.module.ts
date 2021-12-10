@@ -1,15 +1,16 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { ComplianceTrainingComponent } from './pages/compliance-training/compliance-training.component';
+import { ComplianceTrainingModule } from './pages/compliance-training/compliance-training.module';
+import { TrainingRoutes } from './training.routes';
 
 const routes: Routes = [
   {
-    path: '',
-    component: ComplianceTrainingComponent,
-    data: {
-      title: 'Provider Identity Portal',
-    },
+    path: TrainingRoutes.COMPLIANCE_TRAINING_PAGE,
+    loadChildren: (): Promise<ComplianceTrainingModule> =>
+      import('./pages/compliance-training/compliance-training.module').then(
+        (m) => m.ComplianceTrainingModule
+      ),
   },
 ];
 

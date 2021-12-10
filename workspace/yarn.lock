@@ -6564,6 +6564,13 @@ neo-async@^2.6.2:
   resolved "https://registry.yarnpkg.com/neo-async/-/neo-async-2.6.2.tgz#b4aafb93e3aeb2d8174ca53cf163ab7d7308305f"
   integrity sha512-Yd3UES5mWCSqR+qNT93S3UoYUkqAZ9lLg8a7g9rimsWmYGK8cVToA4/sF3RrshdyV3sAGMXVUmpMYOw+dLpOuw==
 
+ngx-mask@^13.0.0:
+  version "13.0.0"
+  resolved "https://registry.yarnpkg.com/ngx-mask/-/ngx-mask-13.0.0.tgz#03a3b0bb2f1d271141946a443d2af625216eacaf"
+  integrity sha512-LnYTE32ycBTl8tKwpgNaJ8yDPm1NS7zHMUMonNvZlXzEVCIW61pR2b3pT5apNgkPlSBNyM/AFDzBttoAvarJKA==
+  dependencies:
+    tslib "^2.3.0"
+
 ngx-progressbar@^6.1.1:
   version "6.1.1"
   resolved "https://registry.yarnpkg.com/ngx-progressbar/-/ngx-progressbar-6.1.1.tgz#77156c0fbbbd163e26c9501d74bc55b7cb6d70bc"

@@ -232,7 +232,9 @@ export class PortalComponent implements OnInit {
         hint: '15 mins',
         description: 'Description of what the video is here',
         actionLabel: 'Watch',
-        route: TrainingRoutes.MODULE_PATH,
+        route: TrainingRoutes.routePath(
+          TrainingRoutes.COMPLIANCE_TRAINING_PAGE
+        ),
         statusType: 'warn',
         status: 'incomplete',
         disabled: false,

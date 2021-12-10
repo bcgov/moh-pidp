@@ -1,41 +1,83 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from './material/material.module';
 
+import { NgxMaskModule } from 'ngx-mask';
+
+import { AddressFormComponent } from './components/address-form/address-form.component';
+import { AddressInfoComponent } from './components/address-info/address-info.component';
 import { AlertComponent } from './components/alert/alert.component';
 import { CardSummaryComponent } from './components/card-summary/card-summary.component';
 import { CollectionNoticeComponent } from './components/collection-notice/collection-notice.component';
+import { ContactFormComponent } from './components/contact-info-form/contact-info-form.component';
 import { IconComponent } from './components/icon/icon.component';
 import { PageComponent } from './components/page/page.component';
 import { PageFooterComponent } from './components/page-footer/page-footer.component';
 import { PageHeaderComponent } from './components/page-header/page-header.component';
 import { PageSectionComponent } from './components/page-section/page-section.component';
 import { PageSubheaderComponent } from './components/page-subheader/page-subheader.component';
+import { PreferredNameFormComponent } from './components/preferred-name-form/preferred-name-form.component';
+import { ToggleContentComponent } from './components/toggle-content/toggle-content.component';
+import { UserInfoComponent } from './components/user-info/user-info.component';
+import { DefaultPipe } from './pipes/default.pipe';
+import { ConfigCodePipe } from './pipes/config-code.pipe';
+import { FormatDatePipe } from './pipes/format-date.pipe';
+import { FullnamePipe } from './pipes/fullname.pipe';
+import { PostalPipe } from './pipes/postal.pipe';
 
 @NgModule({
   declarations: [
+    AddressFormComponent,
+    AddressInfoComponent,
     AlertComponent,
     CardSummaryComponent,
     CollectionNoticeComponent,
+    ContactFormComponent,
     IconComponent,
     PageComponent,
     PageFooterComponent,
     PageHeaderComponent,
     PageSectionComponent,
     PageSubheaderComponent,
+    PreferredNameFormComponent,
+    ToggleContentComponent,
+    UserInfoComponent,
+    DefaultPipe,
+    ConfigCodePipe,
+    FormatDatePipe,
+    FullnamePipe,
+    PostalPipe,
   ],
-  imports: [CommonModule, MaterialModule],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    MaterialModule,
+    NgxMaskModule.forRoot(),
+  ],
   exports: [
     MaterialModule,
+    ReactiveFormsModule,
+    AddressFormComponent,
+    AddressInfoComponent,
     AlertComponent,
     CardSummaryComponent,
     CollectionNoticeComponent,
+    ContactFormComponent,
     IconComponent,
     PageComponent,
     PageFooterComponent,
     PageHeaderComponent,
     PageSectionComponent,
     PageSubheaderComponent,
+    PreferredNameFormComponent,
+    ToggleContentComponent,
+    UserInfoComponent,
+    DefaultPipe,
+    ConfigCodePipe,
+    FormatDatePipe,
+    FullnamePipe,
+    PostalPipe,
   ],
 })
 export class SharedUiModule {}
