@@ -1,36 +1,33 @@
-using System.Diagnostics.CodeAnalysis;
+namespace Pidp.Data;
+
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Design;
 
 using Pidp.Models;
 
-namespace Pidp.Data
+public class PidpDbContext : DbContext
 {
-    public class PidpDbContext : DbContext
+    public PidpDbContext(DbContextOptions<PidpDbContext> options) : base(options) { }
+
+    public DbSet<Party> Parties { get; set; } = default!;
+
+    public override int SaveChanges()
     {
-        public PidpDbContext(DbContextOptions<PidpDbContext> options) : base(options) { }
+        //this.ApplyAudits();
 
-        public DbSet<Party> Parties => Set<Party>();
+        return base.SaveChanges();
+    }
 
-        public override int SaveChanges()
-        {
-            // ApplyAudits();
+    public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+    {
+        //this.ApplyAudits();
 
-            return base.SaveChanges();
-        }
+        return await base.SaveChangesAsync(cancellationToken);
+    }
 
-        public async override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
-        {
-            // ApplyAudits();
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
 
-            return await base.SaveChangesAsync(cancellationToken);
-        }
-
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            base.OnModelCreating(modelBuilder);
-
-            modelBuilder.ApplyConfigurationsFromAssembly(typeof(PidpDbContext).Assembly);
-        }
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(PidpDbContext).Assembly);
     }
 }

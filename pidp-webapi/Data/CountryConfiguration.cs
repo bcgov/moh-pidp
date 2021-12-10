@@ -1,8 +1,7 @@
+namespace Pidp.Data;
+
 using Pidp.Models.Lookups;
 
-namespace Pidp.Data
+public class CountryConfiguration : LookupTableConfiguration<Country, CountryDataGenerator>
 {
-    public class CountryConfiguration : LookupTableConfiguration<Country, CountryDataGenerator>
-    {
-    }
 }
