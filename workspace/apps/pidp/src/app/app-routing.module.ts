@@ -9,6 +9,11 @@ const routes: Routes = [
     loadChildren: () =>
       import('./features/shell/shell.module').then((m) => m.ShellModule),
   },
+  {
+    path: '',
+    redirectTo: ShellRoutes.MODULE_PATH,
+    pathMatch: 'full',
+  },
 ];
 
 @NgModule({
