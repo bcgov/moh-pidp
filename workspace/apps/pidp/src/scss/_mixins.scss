@@ -87,12 +87,18 @@ $theme-typography: mat.define-typography-config();
   border: 1px solid $borderColor;
 
   .mat-card-header {
-    // Reduce vertical spacing between teh header
-    // and content to compress the alerts
-    margin-bottom: -0.5rem;
+    // Provide vertical spacing between the header
+    // icon and content for aesthetics
+    margin-bottom: 0.75rem;
   }
 
   @include media-breakpoint-up(md) {
+    .mat-card-header {
+      // Reduce vertical spacing between the header
+      // and content to compress the alerts
+      margin-bottom: -0.5rem;
+    }
+
     // Align content and action containers with the
     // card header title on medium viewports and up
     .mat-card-content,
