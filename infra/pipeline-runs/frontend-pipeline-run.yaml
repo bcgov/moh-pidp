@@ -1,21 +1,24 @@
 apiVersion: tekton.dev/v1beta1
 kind: PipelineRun
 metadata:
-  generateName: frontend-build-pl-
+  generateName: frontend-pipeline-run-
 spec:
   pipelineRef:
-    name: fe-build
+    name: frontend-pipeline
   serviceAccountName: pipeline
   params:
     - name: git-url
       value: git@github.com:bcgov/moh-pidp.git
     - name: git-revision
-      value: develop
+      value: feature/cicd
     - name: dockerfile-path
       value: "."
     - name: image-name
-      value: test
+      value: image-registry.openshift-image-registry.svc:5000/d8a8f9-tools/pidp-frontend:test
   workspaces:
   - name: source
     persistentVolumeClaim:
       claimName: fe-pipeline-pvc
+  - name: dockerconfig
+    secret:
+      secretName: pipeline-dockercfg-w5mgt

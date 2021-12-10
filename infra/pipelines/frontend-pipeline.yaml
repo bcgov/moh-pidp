@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
-  name: fe-build
+  name: frontend-pipeline
   namespace: d8a8f9-tools
 spec:
   params:
@@ -67,6 +67,9 @@ spec:
         - name: CONTEXT
           value: moh-pidp/workspace/
         - name: DOCKERFILE
-          value: moh-pidp/workspace/fe.Dockerfile
+          value: moh-pidp/workspace/frontend.Dockerfile
+        - name: EXTRA_ARGS
+          value: 
+            - --skip-tls-verify
       runAfter: 
         - build-application
