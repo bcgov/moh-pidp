@@ -21,66 +21,6 @@ export class UtilsService {
 
   /**
    * @description
-   * Scroll to the top of the mat-sidenav container.
-   */
-  public scrollTop(): void {
-    const contentContainer =
-      this.document.querySelector('.mat-sidenav-content') || this.window;
-    contentContainer.scroll({ top: 0, left: 0, behavior: 'smooth' });
-  }
-
-  /**
-   * @description
-   * Scroll to have the element in view.
-   */
-  public scrollTo(el: Element): void {
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth' });
-    }
-  }
-
-  /**
-   * @description
-   * Scroll to a material form field that is invalid, and if contained
-   * within a <section> scroll to the section instead.
-   */
-  public scrollToErrorSection(): void {
-    const firstElementWithError = document.querySelector(
-      'mat-form-field.ng-invalid'
-    );
-
-    if (firstElementWithError) {
-      const element =
-        firstElementWithError.closest('section') === null
-          ? firstElementWithError
-          : firstElementWithError.closest('section');
-
-      if (!element) {
-        return;
-      }
-
-      this.scrollTo(element);
-    } else {
-      this.scrollTop();
-    }
-  }
-
-  /**
-   * @description
-   * Checks if the browser is Internet Explorer, or pre-Chromium
-   * Edge.
-   *
-   * The reversed attribute of ordered lists is not supported in IE or
-   * pre-Chromium Edge, but has been supported in all other browsers
-   * forevers!!!
-   * @see https://caniuse.com/?search=reversed
-   */
-  public isIEOrPreChromiumEdge(): boolean {
-    return !('reversed' in document.createElement('ol'));
-  }
-
-  /**
-   * @description
    * Generic sorting of a JSON object by key.
    */
   public sortByKey<T extends { [key: string]: any }>(
@@ -126,23 +66,6 @@ export class UtilsService {
 
   /**
    * @description
-   * Conversion of Base64 encoded document to a Blob.
-   */
-  public base64ToBlob(base64: string, type: string = 'application/pdf'): Blob {
-    const decoded = window.atob(base64.replace(/\s/g, ''));
-    const len = decoded.length;
-    const buffer = new ArrayBuffer(len);
-    const data = new Uint8Array(buffer);
-
-    for (let i = 0; i < len; i++) {
-      data[i] = decoded.charCodeAt(i);
-    }
-
-    return new Blob([data], { type });
-  }
-
-  /**
-   * @description
    * Download a document.
    */
   public downloadDocument(file: Blob, filename: string): void {
@@ -174,5 +97,36 @@ export class UtilsService {
     }
 
     this.downloadDocument(file, filename);
+  }
+
+  /**
+   * @description
+   * Checks if the browser is Internet Explorer, or pre-Chromium
+   * Edge.
+   *
+   * The reversed attribute of ordered lists is not supported in IE or
+   * pre-Chromium Edge, but has been supported in all other browsers
+   * forevers!!!
+   * @see https://caniuse.com/?search=reversed
+   */
+  public isIEOrPreChromiumEdge(): boolean {
+    return !('reversed' in document.createElement('ol'));
+  }
+
+  /**
+   * @description
+   * Conversion of Base64 encoded document to a Blob.
+   */
+  private base64ToBlob(base64: string, type: string = 'application/pdf'): Blob {
+    const decoded = window.atob(base64.replace(/\s/g, ''));
+    const len = decoded.length;
+    const buffer = new ArrayBuffer(len);
+    const data = new Uint8Array(buffer);
+
+    for (let i = 0; i < len; i++) {
+      data[i] = decoded.charCodeAt(i);
+    }
+
+    return new Blob([data], { type });
   }
 }

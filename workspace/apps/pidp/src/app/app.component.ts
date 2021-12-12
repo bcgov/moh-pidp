@@ -4,8 +4,7 @@ import { ActivatedRoute, Data, Event } from '@angular/router';
 
 import { Observable, map, mergeMap } from 'rxjs';
 
-import { RouteStateService } from './core/services/route-state.service';
-import { UtilsService } from './core/services/utils.service';
+import { RouteStateService } from '@core/services/route-state.service';
 
 @Component({
   selector: 'app-root',
@@ -18,15 +17,13 @@ export class AppComponent implements OnInit {
   public constructor(
     private activatedRoute: ActivatedRoute,
     private titleService: Title,
-    private routeStateService: RouteStateService,
-    private utilsService: UtilsService
+    private routeStateService: RouteStateService
   ) {}
 
   public ngOnInit(): void {
     const onNavEnd = this.routeStateService.onNavigationEnd();
 
     this.setPageTitle(onNavEnd);
-    this.scrollTop(onNavEnd);
   }
 
   /**
@@ -51,13 +48,5 @@ export class AppComponent implements OnInit {
       .subscribe((routeData: Data) =>
         this.titleService.setTitle(routeData.title)
       );
-  }
-
-  /**
-   * @description
-   * Scroll the page to the top on route event.
-   */
-  private scrollTop(routeEvent: Observable<Event>): void {
-    routeEvent.subscribe(() => this.utilsService.scrollTop());
   }
 }
