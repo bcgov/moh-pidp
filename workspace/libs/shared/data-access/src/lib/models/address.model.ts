@@ -1,4 +1,6 @@
 export type AddressLine = Exclude<keyof Address, 'id'>;
+export type AddressLineMap<T> = { [key in AddressLine]: T };
+
 export type AddressType =
   | 'verifiedAddress'
   | 'physicalAddress'
@@ -10,10 +12,7 @@ export const addressTypes: AddressType[] = [
   'physicalAddress',
 ];
 
-/**
- * @description
- * List of optional address line items.
- */
+export type AddressMap<T> = { [key in keyof Address]: T };
 export const optionalAddressLineItems: (keyof Address)[] = ['id'];
 
 export class Address {
