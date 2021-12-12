@@ -1,13 +1,11 @@
-import { HttpClient } from '@angular/common/http';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
 
 import { Observable } from 'rxjs';
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';
-import {
-  AbstractApiResource,
-  ApiHttpResponse,
-} from '@bcgov/shared/data-access';
+import { AbstractApiResource } from '@bcgov/shared/data-access';
 import { LoggerService } from '@core/services/logger.service';
 
 @Injectable({
@@ -24,13 +22,11 @@ export class ApiResource extends AbstractApiResource {
 
   public get<T>(
     path: string,
-    options: { [key: string]: unknown } = {}
-  ): Observable<ApiHttpResponse<T>> {
+    options?: { [key: string]: unknown }
+  ): Observable<HttpResponse<T>> {
     return this.http
       .get<T>(`${this.config.apiEndpoint}/${path}`, {
         ...options,
-        // TODO make body the default and account for change in typings using
-        //      overloads then allow this to be overwritten
         observe: 'response',
       })
       .pipe(this.handleResponsePipe<T>());
@@ -38,13 +34,11 @@ export class ApiResource extends AbstractApiResource {
 
   public head<T>(
     path: string,
-    options: { [key: string]: unknown } = {}
-  ): Observable<ApiHttpResponse<T>> {
+    options?: { [key: string]: unknown }
+  ): Observable<HttpResponse<T>> {
     return this.http
       .head<T>(`${this.config.apiEndpoint}/${path}`, {
         ...options,
-        // TODO make body the default and account for change in typings using
-        //      overloads then allow this to be overwritten
         observe: 'response',
       })
       .pipe(this.handleResponsePipe<T>());
@@ -52,14 +46,12 @@ export class ApiResource extends AbstractApiResource {
 
   public post<T>(
     path: string,
-    body: { [key: string]: unknown } = {},
-    options: { [key: string]: unknown } = {}
-  ): Observable<ApiHttpResponse<T>> {
+    body: { [key: string]: any } | null,
+    options?: { [key: string]: unknown }
+  ): Observable<HttpResponse<T>> {
     return this.http
       .post<T>(`${this.config.apiEndpoint}/${path}`, body, {
         ...options,
-        // TODO make body the default and account for change in typings using
-        //      overloads then allow this to be overwritten
         observe: 'response',
       })
       .pipe(this.handleResponsePipe<T>());
@@ -67,14 +59,12 @@ export class ApiResource extends AbstractApiResource {
 
   public put<T>(
     path: string,
-    body: { [key: string]: unknown } = {},
-    options: { [key: string]: unknown } = {}
-  ): Observable<ApiHttpResponse<T>> {
+    body: { [key: string]: any } | null,
+    options?: { [key: string]: unknown }
+  ): Observable<HttpResponse<T>> {
     return this.http
       .put<T>(`${this.config.apiEndpoint}/${path}`, body, {
         ...options,
-        // TODO make body the default and account for change in typings using
-        //      overloads then allow this to be overwritten
         observe: 'response',
       })
       .pipe(this.handleResponsePipe<T>());
@@ -82,13 +72,11 @@ export class ApiResource extends AbstractApiResource {
 
   public delete<T>(
     path: string,
-    options: { [key: string]: unknown } = {}
-  ): Observable<ApiHttpResponse<T>> {
+    options?: { [key: string]: unknown }
+  ): Observable<HttpResponse<T>> {
     return this.http
       .delete<T>(`${this.config.apiEndpoint}/${path}`, {
         ...options,
-        // TODO make body the default and account for change in typings using
-        //      overloads then allow this to be overwritten
         observe: 'response',
       })
       .pipe(this.handleResponsePipe<T>());
@@ -98,10 +86,8 @@ export class ApiResource extends AbstractApiResource {
    * @description
    * Handle a successful HTTP response.
    */
-  protected handleSuccess<T>(): (
-    response: ApiHttpResponse<T>
-  ) => ApiHttpResponse<T> {
-    return (response: ApiHttpResponse<T>): ApiHttpResponse<T> => {
+  protected handleSuccess<T>(): (response: HttpResponse<T>) => HttpResponse<T> {
+    return (response: HttpResponse<T>): HttpResponse<T> => {
       this.logger.info(`RESPONSE: ${response.status}`, response.body);
 
       return response;

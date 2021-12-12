@@ -1,3 +1,4 @@
+import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import {
   Observable,
   throwError,
@@ -7,8 +8,6 @@ import {
 } from 'rxjs';
 
 import { map, catchError } from 'rxjs/operators';
-
-import { ApiHttpErrorResponse, ApiHttpResponse } from '.';
 
 /**
  * @description
@@ -26,38 +25,38 @@ export const NoContentResponse = pipe(map(() => void 0));
 export abstract class AbstractApiResource {
   public abstract get<T>(
     path: string,
-    options: { [key: string]: unknown }
-  ): Observable<ApiHttpResponse<T>>;
+    options?: { [key: string]: unknown }
+  ): Observable<HttpResponse<T>>;
 
   public abstract head<T>(
     path: string,
-    options: { [key: string]: unknown }
-  ): Observable<ApiHttpResponse<T>>;
+    options?: { [key: string]: unknown }
+  ): Observable<HttpResponse<T>>;
 
   public abstract post<T>(
     path: string,
-    body: { [key: string]: unknown },
-    options: { [key: string]: unknown }
-  ): Observable<ApiHttpResponse<T>>;
+    body: { [key: string]: unknown } | null,
+    options?: { [key: string]: unknown }
+  ): Observable<HttpResponse<T>>;
 
   public abstract put<T>(
     path: string,
-    body: { [key: string]: unknown },
-    options: { [key: string]: unknown }
-  ): Observable<ApiHttpResponse<T>>;
+    body: { [key: string]: unknown } | null,
+    options?: { [key: string]: unknown }
+  ): Observable<HttpResponse<T>>;
 
   public abstract delete<T>(
     path: string,
-    options: { [key: string]: unknown }
-  ): Observable<ApiHttpResponse<T>>;
+    options?: { [key: string]: unknown }
+  ): Observable<HttpResponse<T>>;
 
   /**
    * @description
    * Handle an HTTP response.
    */
   protected handleResponsePipe<T>(): OperatorFunction<
-    ApiHttpResponse<T>,
-    ApiHttpResponse<T>
+    HttpResponse<T>,
+    HttpResponse<T>
   > {
     return pipe(map(this.handleSuccess<T>()), catchError(this.handleError));
   }
@@ -74,17 +73,15 @@ export abstract class AbstractApiResource {
    * @description
    * Handle a successful HTTP response.
    */
-  protected handleSuccess<T>(): (
-    response: ApiHttpResponse<T>
-  ) => ApiHttpResponse<T> {
-    return (response: ApiHttpResponse<T>): ApiHttpResponse<T> => response;
+  protected handleSuccess<T>(): (response: HttpResponse<T>) => HttpResponse<T> {
+    return (response: HttpResponse<T>): HttpResponse<T> => response;
   }
 
   /**
    * @description
    * Handle a erroneous HTTP response.
    */
-  protected handleError(error: ApiHttpErrorResponse): Observable<never> {
+  protected handleError(error: HttpErrorResponse): Observable<never> {
     if (error instanceof ErrorEvent) {
       // A client-side or network error occurred. Handle it accordingly.
       console.error('An error occurred:', error);
