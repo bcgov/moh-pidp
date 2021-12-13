@@ -2,10 +2,13 @@
   <ui-page-header>{{ title }}</ui-page-header>
 
   <ui-page-section>
-    <ui-page-subheader icon="history">
-      View Signed or Accepted Documents
-    </ui-page-subheader>
-    <p>View the documents your have signed.</p>
+    <ui-page-section-subheader
+      icon="history"
+      heading="View Signed or Accepted Documents">
+      <ng-container uiPageSectionSubheaderDesc>
+        View the documents you have signed.
+      </ng-container>
+    </ui-page-section-subheader>
 
     <div class="row">
       <div *ngFor="let document of documents" class="col col-md-12 col-lg-6">

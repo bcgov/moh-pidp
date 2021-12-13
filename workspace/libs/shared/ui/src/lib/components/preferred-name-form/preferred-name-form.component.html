@@ -1,5 +1,5 @@
-<div [formGroup]="form">
-  <div *ngFor="let control of formControlConfig" class="row">
+<div [formGroup]="form" class="row">
+  <ng-container *ngFor="let control of formControlConfig">
     <div [class.col-12]="mode === 'column'" [class.col-6]="mode === 'columns'">
       <mat-form-field class="w-100">
         <input
@@ -9,5 +9,5 @@
         <mat-error>Required</mat-error>
       </mat-form-field>
     </div>
-  </div>
+  </ng-container>
 </div>

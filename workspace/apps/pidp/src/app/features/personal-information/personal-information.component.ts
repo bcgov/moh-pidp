@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
 import { Address, BcscUser } from '@bcgov/shared/data-access';
-import { FormControlValidators } from '@bcgov/shared/ui';
+import { FormControlValidators, ToggleContentChange } from '@bcgov/shared/ui';
 
 @Component({
   selector: 'app-personal-information',
@@ -14,7 +14,7 @@ export class PersonalInformationComponent implements OnInit {
   public title: string;
   public bcscUser: BcscUser;
 
-  public form: FormGroup;
+  public form!: FormGroup;
 
   public constructor(private fb: FormBuilder, private route: ActivatedRoute) {
     this.title = this.route.snapshot.data.title;
@@ -24,14 +24,26 @@ export class PersonalInformationComponent implements OnInit {
       lastName: 'Dormaar',
       dateOfBirth: '1983-05-17T00:00:00',
       verifiedAddress: new Address(
-        'Canada',
-        'British Columbia',
+        'CA',
+        'BC',
         '140 Beach Dr.',
         'Victoria',
         'V8S 2L5'
       ),
     };
+  }
 
+  public get physicalAddress(): FormGroup {
+    return this.form.get('physicalAddress') as FormGroup;
+  }
+
+  public onSubmit(): void {}
+
+  public onPreferredNameToggle({ checked }: ToggleContentChange): void {}
+
+  public onAddressToggle({ checked }: ToggleContentChange): void {}
+
+  public ngOnInit(): void {
     this.form = this.fb.group({
       preferredFirstName: [null, []],
       preferredMiddleName: [null, []],
@@ -43,10 +55,8 @@ export class PersonalInformationComponent implements OnInit {
         city: [{ value: null, disabled: false }, []],
         postal: [{ value: null, disabled: false }, []],
       }),
-      email: [null, []],
       phone: [null, [Validators.required, FormControlValidators.phone]],
+      email: [null, [Validators.required, FormControlValidators.email]],
     });
   }
-
-  public ngOnInit(): void {}
 }

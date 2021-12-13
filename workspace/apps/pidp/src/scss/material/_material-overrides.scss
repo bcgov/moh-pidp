@@ -22,17 +22,6 @@
   white-space: normal !important;
 }
 
-.mat-form-field-wrapper {
-  // Provide a bit more spacing under form fields so error
-  // messages are not resting on underlying field labels
-  // margin-bottom: 0.5rem;
-}
-
-.mat-checkbox label,
-.mat-radio-button label {
-  color: theme-palette(blue);
-}
-
 .mat-drawer-container {
   color: theme-palette(blue);
 }

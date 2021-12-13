@@ -1,4 +1,6 @@
 export type AddressLine = Exclude<keyof Address, 'id'>;
+export type AddressLineMap<T> = { [key in AddressLine]: T };
+
 export type AddressType =
   | 'verifiedAddress'
   | 'physicalAddress'
@@ -10,10 +12,7 @@ export const addressTypes: AddressType[] = [
   'physicalAddress',
 ];
 
-/**
- * @description
- * List of optional address line items.
- */
+export type AddressMap<T> = { [key in keyof Address]: T };
 export const optionalAddressLineItems: (keyof Address)[] = ['id'];
 
 export class Address {
@@ -49,5 +48,31 @@ export class Address {
       postal = null,
     } = address;
     return new Address(countryCode, provinceCode, street, city, postal, id);
+  }
+
+  /**
+   * @description
+   * Check for an empty address.
+   */
+  public static isEmpty(
+    address: Address,
+    omitList: (keyof Address)[] = optionalAddressLineItems
+  ): boolean {
+    return address
+      ? (Object.keys(address) as AddressLine[])
+          .filter((key: keyof Address) => !omitList.includes(key))
+          .every((k) => !address[k])
+      : true;
+  }
+
+  /**
+   * @description
+   * Checks for a partial address.
+   */
+  public static isNotEmpty(
+    address: Address,
+    omitList?: (keyof Address)[]
+  ): boolean {
+    return address ? !this.isEmpty(address, omitList) : false;
   }
 }

@@ -7,7 +7,7 @@ import { environment as defaultEnvironment } from './environment.prod';
 
 export const environment: AppEnvironment = {
   ...defaultEnvironment,
-  apiEndpoint: 'http://localhost:5050/api',
+  apiEndpoint: 'api',
   environmentName: EnvironmentName.LOCAL,
   production: false,
 };

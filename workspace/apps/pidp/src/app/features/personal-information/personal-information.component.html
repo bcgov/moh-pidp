@@ -1,65 +1,78 @@
 <ui-page>
   <ui-page-header>{{ title }}</ui-page-header>
 
-  <ui-page-section>
-    <ui-page-subheader icon="assignment_ind">
-      Personal Information
-    </ui-page-subheader>
-    <p>
-      Provide the next information to complete your provider identity portal.
-    </p>
-  </ui-page-section>
+  <form [formGroup]="form" novalidate (ngSubmit)="onSubmit()">
+    <ui-page-section>
+      <ui-page-section-subheader
+        icon="assignment_ind"
+        heading="Personal Information">
+        <ng-container uiPageSectionSubheaderDesc>
+          Provide the next information to complete your provider identity
+          portal.
+        </ng-container>
+      </ui-page-section-subheader>
+    </ui-page-section>
 
-  <ui-page-section>
-    <ui-page-subheader>Name</ui-page-subheader>
-    <p>
-      This information comes from the BC Services Card. If you use a different
-      name professionally, select "I have a preferred name".
-    </p>
-    <small>
-      Entering a preferred name will not change your BC Services Card name.
-    </small>
+    <ui-page-section>
+      <ui-page-section-subheader heading="Name">
+        <ng-container uiPageSectionSubheaderDesc>
+          This information comes from the BC Services Card. If you use a
+          different name professionally, select "I have a preferred name".
+        </ng-container>
+        <ng-container uiPageSectionSubheaderHint>
+          Entering a preferred name will not change your BC Services Card name.
+        </ng-container>
+      </ui-page-section-subheader>
 
-    <ui-user-info [user]="bcscUser"></ui-user-info>
+      <ui-user-info [user]="bcscUser"></ui-user-info>
 
-    <ui-toggle-content label="I have a preferred name">
-      <ui-preferred-name-form [form]="form"></ui-preferred-name-form>
-    </ui-toggle-content>
-  </ui-page-section>
+      <ui-toggle-content
+        label="I have a preferred name"
+        (toggle)="onPreferredNameToggle($event)">
+        <ui-preferred-name-form [form]="form"></ui-preferred-name-form>
+      </ui-toggle-content>
+    </ui-page-section>
 
-  <ui-page-section>
-    <ui-page-subheader>Address</ui-page-subheader>
-    <p>
-      This information comes from your BC Services Card. If you would prefer to
-      receive mail at a professional or other address, select "I have a
-      preferred address".
-    </p>
-    <small>
-      Entering a preferred address will not change your BC Services Card
-      address.
-    </small>
+    <ui-page-section>
+      <ui-page-section-subheader heading="Address">
+        <ng-container uiPageSectionSubheaderDesc>
+          This information comes from your BC Services Card. If you would prefer
+          to receive mail at a professional or other address, select "I have a
+          preferred address".
+        </ng-container>
+        <ng-container uiPageSectionSubheaderHint>
+          Entering a preferred address will not change your BC Services Card
+          address.
+        </ng-container>
+      </ui-page-section-subheader>
 
-    <ui-address-info [address]="bcscUser?.verifiedAddress"></ui-address-info>
+      <app-address-info
+        [address]="bcscUser?.verifiedAddress"></app-address-info>
 
-    <ui-toggle-content label="I have a preferred address">
-      <ui-address-form [form]="form"></ui-address-form>
-    </ui-toggle-content>
-  </ui-page-section>
+      <ui-toggle-content
+        label="I have a preferred address"
+        (toggle)="onAddressToggle($event)">
+        <app-address-form [form]="physicalAddress"></app-address-form>
+      </ui-toggle-content>
+    </ui-page-section>
 
-  <ui-page-section>
-    <ui-page-subheader>Contact Information</ui-page-subheader>
-    <p class="content-spacer">
-      Provide your contact information to be used to correspond with you.
-    </p>
-    <ui-contact-info-form [form]="form"></ui-contact-info-form>
-  </ui-page-section>
+    <ui-page-section>
+      <ui-page-section-subheader heading="Contact Information">
+        <ng-container uiPageSectionSubheaderDesc>
+          Provide your contact information to be used to correspond with you.
+        </ng-container>
+      </ui-page-section-subheader>
 
-  <ui-page-footer>
-    <button mat-stroked-button color="primary" type="button" routerLink="../">
-      Back Home
-    </button>
-    <button mat-flat-button color="primary" type="submit" routerLink="../">
-      Save Information
-    </button>
-  </ui-page-footer>
+      <ui-contact-info-form [form]="form"></ui-contact-info-form>
+    </ui-page-section>
+
+    <ui-page-footer>
+      <button mat-stroked-button color="primary" type="button" routerLink="../">
+        Back Home
+      </button>
+      <button mat-flat-button color="primary" type="submit" routerLink="../">
+        Save Information
+      </button>
+    </ui-page-footer>
+  </form>
 </ui-page>

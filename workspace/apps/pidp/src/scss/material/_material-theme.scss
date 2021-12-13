@@ -19,7 +19,9 @@ $pidp-typography: mat.define-typography-config(
   // Native element: <body>
   $body-1: mat.define-typography-level(1rem, 1.75rem, 400),
   // Native element: None
-  $body-2: mat.define-typography-level(1rem, 1.75rem, 700)
+  $body-2: mat.define-typography-level(1rem, 1.75rem, 700),
+  // Native element: <button>
+  $button: mat.define-typography-level(0.875rem, 0.875rem, 400)
 );
 
 // Include the common styles for Angular Material. We include this here so that you only

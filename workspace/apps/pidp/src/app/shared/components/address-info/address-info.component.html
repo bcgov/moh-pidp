@@ -1,10 +1,10 @@
 <div>
   <span>Country:</span>
-  <span>{{ address?.countryCode | configCode: 'countries' | default }}</span>
+  <span>{{ address?.countryCode | lookupCode: 'countries' | default }}</span>
 </div>
 <div>
   <span>Province:</span>
-  <span>{{ address?.provinceCode | configCode: 'provinces' | default }}</span>
+  <span>{{ address?.provinceCode | lookupCode: 'provinces' | default }}</span>
 </div>
 <div>
   <span>Street Address:</span>

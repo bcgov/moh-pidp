@@ -2,8 +2,9 @@
   <ui-page-header>{{ title }}</ui-page-header>
 
   <ui-page-section>
-    <ui-page-subheader icon="assignment">PharmaNet</ui-page-subheader>
-    <p>Next Steps.</p>
+    <ui-page-section-subheader icon="assignment" heading="PharmaNet">
+      <ng-container uiPageSectionSubheaderDesc>Next Steps.</ng-container>
+    </ui-page-section-subheader>
   </ui-page-section>
 
   <ui-alert
@@ -14,11 +15,6 @@
     Follow the next steps to access PharmaNet
   </ui-alert>
 
-  <!-- <ui-page-section>
-    <ui-page-subheader></ui-page-subheader>
-    <p></p>
-  </ui-page-section> -->
-
   <ui-page-footer>
     <button
       mat-stroked-button
@@ -26,6 +22,9 @@
       type="button"
       routerLink="../../">
       Back Home
+    </button>
+    <button mat-flat-button color="primary" type="button" routerLink="../../">
+      Continue
     </button>
   </ui-page-footer>
 </ui-page>
