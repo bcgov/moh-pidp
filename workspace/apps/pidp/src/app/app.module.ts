@@ -1,15 +1,15 @@
 import { NgModule } from '@angular/core';
 
+import { AppRoutingModule } from '@app/app-routing.module';
+import { AppComponent } from '@app/app.component';
 import { RootRoutingModule } from '@bcgov/shared/ui';
+import { CoreModule } from '@core/core.module';
 
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
-import { CoreModule } from './core/core.module';
-import { ConfigModule } from './modules/lookup/lookup.module';
+import { LookupModule } from './modules/lookup/lookup.module';
 
 @NgModule({
   declarations: [AppComponent],
-  imports: [CoreModule, ConfigModule, AppRoutingModule, RootRoutingModule],
+  imports: [CoreModule, LookupModule, AppRoutingModule, RootRoutingModule],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

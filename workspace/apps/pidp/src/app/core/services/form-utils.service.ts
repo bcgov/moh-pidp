@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import {
+  AbstractControl,
   FormArray,
   FormBuilder,
   FormGroup,
@@ -19,12 +20,13 @@ import { LoggerService } from './logger.service';
 @Injectable({
   providedIn: 'root',
 })
-export class FormUtilsServiceService {
+export class FormUtilsService {
   public constructor(private fb: FormBuilder, private logger: LoggerService) {}
 
   /**
    * @description
-   * Checks the validity of a form, and triggers validation messages when invalid.
+   * Checks the validity of a form, and triggers validation
+   * messages when invalid.
    */
   public checkValidity(form: FormGroup | FormArray): boolean {
     if (form.valid) {
@@ -76,6 +78,30 @@ export class FormUtilsServiceService {
       return acc;
     }, {} as { [key: string]: unknown });
     return hasError ? result : null;
+  }
+
+  /**
+   * @description
+   * Check for the required validator applied to a FormControl,
+   * FormGroup, or FormArray.
+   *
+   * @example
+   * isRequired('controlName')
+   * isRequired('groupName')
+   * isRequired('groupName.controlName')
+   * isRequired('arrayName')
+   * isRequired('arrayName[#].groupName.controlName')
+   */
+  public isRequired(form: FormGroup, path: string): boolean {
+    const control = form.get(path);
+
+    if (control?.validator) {
+      const validator = control.validator({} as AbstractControl);
+      if (validator && validator.required) {
+        return true;
+      }
+    }
+    return false;
   }
 
   /**
