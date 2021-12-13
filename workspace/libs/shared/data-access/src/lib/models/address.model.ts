@@ -49,4 +49,30 @@ export class Address {
     } = address;
     return new Address(countryCode, provinceCode, street, city, postal, id);
   }
+
+  /**
+   * @description
+   * Check for an empty address.
+   */
+  public static isEmpty(
+    address: Address,
+    omitList: (keyof Address)[] = optionalAddressLineItems
+  ): boolean {
+    return address
+      ? (Object.keys(address) as AddressLine[])
+          .filter((key: keyof Address) => !omitList.includes(key))
+          .every((k) => !address[k])
+      : true;
+  }
+
+  /**
+   * @description
+   * Checks for a partial address.
+   */
+  public static isNotEmpty(
+    address: Address,
+    omitList?: (keyof Address)[]
+  ): boolean {
+    return address ? !this.isEmpty(address, omitList) : false;
+  }
 }
