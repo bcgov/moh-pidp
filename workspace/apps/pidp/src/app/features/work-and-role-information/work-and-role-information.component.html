@@ -2,17 +2,21 @@
   <ui-page-header>{{ title }}</ui-page-header>
 
   <ui-page-section>
-    <ui-page-subheader icon="assignment_ind">
-      Work and Role Information
-    </ui-page-subheader>
-    <p>
-      Provide your work and role information for every facility you work for.
-    </p>
+    <ui-page-section-subheader
+      icon="assignment_ind"
+      heading="Work and Role Information">
+      <ng-container uiPageSectionSubheaderDesc>
+        Provide your work and role information for every facility you work for.
+      </ng-container>
+    </ui-page-section-subheader>
   </ui-page-section>
 
   <ui-page-section>
-    <ui-page-subheader>Job Title</ui-page-subheader>
-    <p>Identify your job title(s).</p>
+    <ui-page-section-subheader heading="Job Title">
+      <ng-container uiPageSectionSubheaderDesc>
+        Identify your job title(s).
+      </ng-container>
+    </ui-page-section-subheader>
 
     <div class="row">
       <div class="col-12">
@@ -30,8 +34,11 @@
   </ui-page-section>
 
   <ui-page-section>
-    <ui-page-subheader>Facility Information</ui-page-subheader>
-    <p>Provide the following information.</p>
+    <ui-page-section-subheader heading="Facility Information">
+      <ng-container uiPageSectionSubheaderDesc>
+        Provide the following information.
+      </ng-container>
+    </ui-page-section-subheader>
 
     <div class="row">
       <div class="col-12">
@@ -53,15 +60,21 @@
   </ui-page-section>
 
   <ui-page-section>
-    <ui-page-subheader>Facility Address</ui-page-subheader>
-    <p>Provide your work address.</p>
+    <ui-page-section-subheader heading="Facility Address">
+      <ng-container uiPageSectionSubheaderDesc>
+        Provide your work address.
+      </ng-container>
+    </ui-page-section-subheader>
 
-    <ui-address-form [form]="form"></ui-address-form>
+    <app-address-form [form]="form"></app-address-form>
   </ui-page-section>
 
   <ui-page-section>
-    <ui-page-subheader>Care Type Setting</ui-page-subheader>
-    <p>Identify all of the work settings you work in.</p>
+    <ui-page-section-subheader heading="Care Type Setting">
+      <ng-container uiPageSectionSubheaderDesc>
+        Identify all of the work settings you work in.
+      </ng-container>
+    </ui-page-section-subheader>
 
     <mat-form-field class="w-100">
       <mat-select placeholder="Care Setting">

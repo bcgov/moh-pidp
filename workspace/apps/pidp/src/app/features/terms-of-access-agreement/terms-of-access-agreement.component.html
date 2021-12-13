@@ -2,10 +2,13 @@
   <ui-page-header>{{ title }}</ui-page-header>
 
   <ui-page-section>
-    <ui-page-subheader icon="assignment_ind">
-      Terms of Access Agreement
-    </ui-page-subheader>
-    <p>Agree to the following terms (the "Agreement"). Read them carefully.</p>
+    <ui-page-section-subheader
+      icon="assignment_ind"
+      heading="Terms of Access Agreement">
+      <ng-container uiPageSectionSubheaderDesc>
+        Agree to the following terms (the "Agreement"). Read them carefully.
+      </ng-container>
+    </ui-page-section-subheader>
 
     <p>TOA here</p>
   </ui-page-section>

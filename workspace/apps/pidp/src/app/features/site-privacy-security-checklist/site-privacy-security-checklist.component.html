@@ -2,16 +2,14 @@
   <ui-page-header>{{ title }}</ui-page-header>
 
   <ui-page-section>
-    <ui-page-subheader icon="assignment">
-      Site Privacy and Security Readiness Checklist
-    </ui-page-subheader>
-    <p>Answer the following questions.</p>
+    <ui-page-section-subheader
+      icon="assignment"
+      heading="Site Privacy and Security Readiness Checklist">
+      <ng-container uiPageSectionSubheaderDesc>
+        Answer the following questions.
+      </ng-container>
+    </ui-page-section-subheader>
   </ui-page-section>
-
-  <!-- <ui-page-section>
-    <ui-page-subheader></ui-page-subheader>
-    <p></p>
-  </ui-page-section> -->
 
   <ui-page-footer>
     <button mat-stroked-button color="primary" type="button" routerLink="../">

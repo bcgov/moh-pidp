@@ -10,7 +10,7 @@ export class LookupCodePipe implements PipeTransform {
   public constructor(private lookupService: LookupService) {}
 
   public transform<T extends string | number>(
-    lookupCode: T,
+    lookupCode: T | null | undefined,
     lookupKey: string,
     key: string = 'name'
   ): string | null {

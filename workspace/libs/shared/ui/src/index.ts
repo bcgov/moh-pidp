@@ -6,3 +6,4 @@ export * from './lib/modules';
 
 export { AlertType } from './lib/components/alert/alert.component';
 export { IconType } from './lib/components/icon/icon.component';
+export { ToggleContentChange } from './lib/components/toggle-content/toggle-content-change.model';

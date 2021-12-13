@@ -2,20 +2,24 @@
   <ui-page-header>{{ title }}</ui-page-header>
 
   <ui-page-section>
-    <ui-page-subheader icon="assignment_ind">
-      College Licence Information
-    </ui-page-subheader>
-    <p>
-      Provide the next information to complete your provider identity portal.
-    </p>
+    <ui-page-section-subheader
+      icon="assignment_ind"
+      heading="College Licence Information">
+      <ng-container uiPageSectionSubheaderDesc>
+        Provide the next information to complete your provider identity portal.
+      </ng-container>
+    </ui-page-section-subheader>
   </ui-page-section>
 
   <ui-page-section>
-    <ui-page-subheader>College Licence</ui-page-subheader>
-    <p>Provide details for all your active College licenses.</p>
-    <small>
-      Entering a preferred name will not change your BC Services Card name.
-    </small>
+    <ui-page-section-subheader heading="College Licence">
+      <ng-container uiPageSectionSubheaderDesc>
+        Provide details for all your active College licenses.
+      </ng-container>
+      <ng-container uiPageSectionSubheaderHint>
+        Entering a preferred name will not change your BC Services Card name.
+      </ng-container>
+    </ui-page-section-subheader>
 
     <mat-form-field class="w-100">
       <mat-select placeholder="College Licences">

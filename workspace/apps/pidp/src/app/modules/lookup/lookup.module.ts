@@ -28,4 +28,4 @@ function configFactory(
   ],
   exports: [LookupCodePipe],
 })
-export class ConfigModule {}
+export class LookupModule {}

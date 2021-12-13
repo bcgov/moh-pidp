@@ -9,8 +9,7 @@ import {
 import { ThemePalette } from '@angular/material/core';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 
-export interface ToggleContentChange
-  extends Pick<MatSlideToggleChange, 'checked'> {}
+import { ToggleContentChange } from './toggle-content-change.model';
 
 @Component({
   selector: 'ui-toggle-content',
@@ -29,7 +28,7 @@ export class ToggleContentComponent implements OnInit {
     this.toggle = new EventEmitter<ToggleContentChange>();
   }
 
-  public onChange({ checked }: ToggleContentChange): void {
+  public onToggleContent({ checked }: MatSlideToggleChange): void {
     this.checked = !this.checked;
     this.toggle.emit({ checked });
   }
