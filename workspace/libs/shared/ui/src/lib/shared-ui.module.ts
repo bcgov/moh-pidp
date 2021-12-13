@@ -21,6 +21,7 @@ import { PageSubheaderComponent } from './components/page-subheader/page-subhead
 import { PreferredNameFormComponent } from './components/preferred-name-form/preferred-name-form.component';
 import { ToggleContentComponent } from './components/toggle-content/toggle-content.component';
 import { UserInfoComponent } from './components/user-info/user-info.component';
+import { YesNoContentComponent } from './components/yes-no-content/yes-no-content.component';
 import { DefaultPipe } from './pipes/default.pipe';
 import { FormatDatePipe } from './pipes/format-date.pipe';
 import { FullnamePipe } from './pipes/fullname.pipe';
@@ -44,6 +45,7 @@ import { PostalPipe } from './pipes/postal.pipe';
     PreferredNameFormComponent,
     ToggleContentComponent,
     UserInfoComponent,
+    YesNoContentComponent,
     DefaultPipe,
     FormatDatePipe,
     FullnamePipe,
@@ -75,6 +77,7 @@ import { PostalPipe } from './pipes/postal.pipe';
     PreferredNameFormComponent,
     ToggleContentComponent,
     UserInfoComponent,
+    YesNoContentComponent,
     DefaultPipe,
     FormatDatePipe,
     FullnamePipe,
