@@ -15,6 +15,10 @@ export class WorkAndRoleInformationComponent implements OnInit {
     this.title = this.route.snapshot.data.title;
   }
 
+  public get physicalAddress(): FormGroup {
+    return this.form.get('physicalAddress') as FormGroup;
+  }
+
   public ngOnInit(): void {
     this.form = this.fb.group({
       physicalAddress: this.fb.group({
