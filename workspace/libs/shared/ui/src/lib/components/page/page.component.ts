@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
 
 @Component({
   selector: 'ui-page',
@@ -6,8 +6,15 @@ import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
   styleUrls: ['./page.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PageComponent implements OnInit {
-  public constructor() {}
+export class PageComponent {
+  /**
+   * @description
+   * Contraints applied to the maximum width of the
+   * view content container to improve reability.
+   */
+  @Input() public mode: 'page' | 'moderate' | 'full';
 
-  public ngOnInit(): void {}
+  public constructor() {
+    this.mode = 'page';
+  }
 }
