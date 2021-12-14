@@ -134,11 +134,9 @@ csharp_style_var_for_built_in_types = true:warning
 csharp_style_var_when_type_is_apparent = true:warning
 csharp_style_var_elsewhere = true:warning
 # Expression-bodied members
-# PIdP style divergence
-csharp_style_expression_bodied_methods = when_on_single_line:warning
-csharp_style_expression_bodied_constructors = when_on_single_line:warning
-# csharp_style_expression_bodied_methods = true:warning
-# csharp_style_expression_bodied_constructors = true:warning
+# ----PIdP style divergence----
+csharp_style_expression_bodied_methods = when_on_single_line:warning # true:warning
+csharp_style_expression_bodied_constructors = when_on_single_line:warning # true:warning
 csharp_style_expression_bodied_operators = true:warning
 csharp_style_expression_bodied_properties = true:warning
 csharp_style_expression_bodied_indexers = true:warning
@@ -185,7 +183,8 @@ dotnet_remove_unnecessary_suppression_exclusions = none:warning
 
 # C# Unnecessary code rules
 [*.{cs,csx,cake}]
-csharp_style_unused_value_expression_statement_preference = discard_variable:suggestion
+# ----PIdP style divergence----
+csharp_style_unused_value_expression_statement_preference = false:none # discard_variable:suggestion
 dotnet_diagnostic.IDE0058.severity = suggestion
 csharp_style_unused_value_assignment_preference = discard_variable:suggestion
 dotnet_diagnostic.IDE0059.severity = suggestion
