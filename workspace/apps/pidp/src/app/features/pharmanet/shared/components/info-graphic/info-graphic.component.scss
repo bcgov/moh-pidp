@@ -27,12 +27,6 @@
     padding-left: 3rem;
   }
 
-  @include media-breakpoint-up(md) {
-    h2 {
-      font-size: 1.5rem;
-    }
-  }
-
   @include media-breakpoint-up(lg) {
     background-size: auto;
     min-height: 11rem;
