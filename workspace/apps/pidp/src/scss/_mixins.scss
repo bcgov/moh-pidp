@@ -8,7 +8,7 @@ $theme-typography: mat.define-typography-config();
 
 @mixin card-base(
   $color: theme-palette(blue),
-  $max-width: 800px,
+  $max-width: 700px,
   $margin-bottom: 2rem
 ) {
   // Defaults to the theme colour until a different
