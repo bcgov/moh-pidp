@@ -6,37 +6,30 @@ using Pidp.Data;
 
 public class Index
 {
-    public class Query : IQuery<Response>
+    public class Query : IQuery<List<Model>>
     {
     }
 
-    public class Response
+    public class Model
     {
-        public List<Model> Results { get; set; } = new();
-
-        public class Model
-        {
-            public string FullName { get; set; } = string.Empty;
-        }
+        public string FullName { get; set; } = string.Empty;
     }
 
-    public class IndexQueryHandler : IQueryHandler<Query, Response>
+
+    public class QueryHandler : IQueryHandler<Query, List<Model>>
     {
         private readonly PidpDbContext context;
 
-        public IndexQueryHandler(PidpDbContext context) => this.context = context;
+        public QueryHandler(PidpDbContext context) => this.context = context;
 
-        public async Task<Response> HandleAsync(Query query)
+        public async Task<List<Model>> HandleAsync(Query query)
         {
-            return new Response
-            {
-                Results = await this.context.Parties
-                    .Select(party => new Response.Model
-                    {
-                        FullName = $"{party.FirstName} {party.LastName}"
-                    })
-                    .ToListAsync()
-            };
+            return await this.context.Parties
+                .Select(party => new Model
+                {
+                    FullName = $"{party.FirstName} {party.LastName}"
+                })
+                .ToListAsync();
         }
     }
 }

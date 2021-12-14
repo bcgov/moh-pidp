@@ -25,11 +25,11 @@ public class Create
         public LocalDate DateOfBirth { get; set; }
     }
 
-    public class CreateCommandHandler : ICommandHandler<Command, int>
+    public class CommandHandler : ICommandHandler<Command, int>
     {
         private readonly PidpDbContext context;
 
-        public CreateCommandHandler(PidpDbContext context) => this.context = context;
+        public CommandHandler(PidpDbContext context) => this.context = context;
 
         public async Task<int> HandleAsync(Command command)
         {
