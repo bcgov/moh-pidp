@@ -1,7 +1,13 @@
-.page {
-  max-width: 600px;
-}
+// Page Modes:
+// * Page provides readability for single columns of text within
+//   the view, and allows for 2 column form fields (default)
+// * Medium provides
+// *
 
-.moderate {
-  max-width: 1200px;
+$maxWidths: 'page' 600, 'medium' 750, 'large' 1200;
+
+@each $class, $width in $maxWidths {
+  .#{$class} {
+    max-width: $width;
+  }
 }
