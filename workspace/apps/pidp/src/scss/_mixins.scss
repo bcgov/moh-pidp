@@ -6,18 +6,8 @@
 
 $theme-typography: mat.define-typography-config();
 
-@mixin card-base(
-  $color: theme-palette(blue),
-  $max-width: 700px,
-  $margin-bottom: 2rem
-) {
-  // Defaults to the theme colour until a different
-  // colour is chosen based on need
+@mixin card-base($color: theme-palette(blue), $margin-bottom: 2rem) {
   color: $color;
-
-  // Defaults set a sensible readable length and
-  // vertical spacing to cards
-  max-width: $max-width;
   margin-bottom: $margin-bottom;
 
   // Space out content from card boundaries for
@@ -34,11 +24,12 @@ $theme-typography: mat.define-typography-config();
     }
     .mat-card-title {
       margin-top: 0.5rem;
+      // min-height: 4rem;
       @include mat.typography-level($theme-typography, 'title');
     }
 
     // TODO split out to improve useability this is too strict for base
-    // but for now is an unnecessary optimization
+    // but for now is an unnecessary optimization .mat-card-hint
     span {
       font-size: 0.8rem;
       font-style: italic;
@@ -49,6 +40,8 @@ $theme-typography: mat.define-typography-config();
       // Use flexbox rules to align span at the end of the container
       margin-left: auto;
     }
+
+    // TODO add in options for cards to have top right menu as alt to hint
   }
 
   .mat-card-content,
@@ -75,6 +68,10 @@ $theme-typography: mat.define-typography-config();
     }
   }
 }
+
+// Generate reuseable classes based on different
+// types of alerts
+$types: success, info, warn, danger, muted;
 
 @mixin card-alert($textColor, $bgColor, $borderColor) {
   @include card-base($textColor);
@@ -114,13 +111,9 @@ $theme-typography: mat.define-typography-config();
   }
 }
 
-// Generate reuseable classes based on different
-// types of alerts
-$types: success, info, warn, danger, muted;
-
 // TODO flatten out these styles so the only change between styles
-// is the colour using .alert and .alert-<type> classes, or push
-// up into alert mixin like care-status
+// is the colour using .alert and .alert-<type> classes to reduce
+// memory footprint
 @each $type in $types {
   .alert-#{$type} {
     @include card-alert(
@@ -134,7 +127,7 @@ $types: success, info, warn, danger, muted;
 /**
  * @description
  * Container for a <mat-card> that applies an alert-like
- * status around a card that contains a bit of content.
+ * status around a card that can contain a bit of content.
  */
 @mixin card-status {
   display: flex;

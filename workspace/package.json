@@ -6,6 +6,7 @@
     "start": "nx serve",
     "build": "nx build",
     "test": "nx test",
+    "analyze": "nx build pidp --stats-json && webpack-bundle-analyzer dist/apps/pidp/stats.json",
     "postinstall": "ngcc --properties es2015 browser module main"
   },
   "private": true,
@@ -60,6 +61,7 @@
     "jest-preset-angular": "11.0.0",
     "prettier": "^2.3.1",
     "ts-jest": "27.0.5",
-    "typescript": "~4.4.3"
+    "typescript": "~4.4.3",
+    "webpack-bundle-analyzer": "^4.5.0"
   }
 }
