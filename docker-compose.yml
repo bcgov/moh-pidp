@@ -64,6 +64,24 @@ services:
       dotnet watch run --urls=http://+:8080"
     ]
 
+  ###############################################################################
+  ###                                Keycloak                                 ###
+  ###############################################################################
+  keycloak:
+    container_name: keycloak
+    image: jboss/keycloak:latest
+    restart: always
+    volumes:
+      - ./realm-export.json:/tmp/realm-export.json
+    environment:
+      DB_VENDOR: h2
+      KEYCLOAK_USER: admin
+      KEYCLOAK_PASSWORD: admin
+      KEYCLOAK_IMPORT: /tmp/realm-export.json -Dkeycloak.profile.feature.upload_scripts=enabled
+    ports:
+      - 9090:8080
+    profiles: ["full", "keycloak"]
+
 ###############################################################################
 ###                           Networks Definition                           ###
 ###############################################################################
