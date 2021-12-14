@@ -6,6 +6,8 @@ import { Observable, map, mergeMap } from 'rxjs';
 
 import { RouteStateService } from '@core/services/route-state.service';
 
+import { UtilsService } from './core/services/utils.service';
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -17,13 +19,23 @@ export class AppComponent implements OnInit {
   public constructor(
     private activatedRoute: ActivatedRoute,
     private titleService: Title,
-    private routeStateService: RouteStateService
+    private routeStateService: RouteStateService,
+    private utilsService: UtilsService
   ) {}
 
   public ngOnInit(): void {
     const onNavEnd = this.routeStateService.onNavigationEnd();
 
+    this.scrollTop(onNavEnd);
     this.setPageTitle(onNavEnd);
+  }
+
+  /**
+   * @description
+   * Scroll the page to the top on route event.
+   */
+  private scrollTop(routeEvent: Observable<Event>): void {
+    routeEvent.subscribe(() => this.utilsService.scrollTop());
   }
 
   /**

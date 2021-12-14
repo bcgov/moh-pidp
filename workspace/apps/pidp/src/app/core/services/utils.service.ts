@@ -21,8 +21,19 @@ export class UtilsService {
 
   /**
    * @description
+   * Scroll to the top of the mat-sidenav container.
+   */
+  public scrollTop(): void {
+    const contentContainer =
+      this.document.querySelector('.mat-sidenav-content') || this.window;
+    contentContainer.scroll({ top: 0, left: 0, behavior: 'smooth' });
+  }
+
+  /**
+   * @description
    * Generic sorting of a JSON object by key.
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public sortByKey<T extends { [key: string]: any }>(
     key: keyof T
   ): (a: T, b: T) => SortWeight {
