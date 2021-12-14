@@ -1,0 +1,21 @@
+@import 'palette';
+
+.key-value-info {
+  margin-bottom: 0.75rem;
+
+  .key-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    & > span:first-child {
+      color: theme-palette(blue, dark);
+    }
+  }
+
+  .value-content {
+    margin-top: 0.4rem;
+    margin-left: 1.5rem;
+    color: theme-palette(blue, light);
+  }
+}
