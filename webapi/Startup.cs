@@ -22,6 +22,8 @@ public class Startup
     {
         var config = this.InitializeConfiguration(services);
 
+        services.AddSingleton<IClock>(SystemClock.Instance);
+
         services.AddControllers()
             .AddFluentValidation(options => options.RegisterValidatorsFromAssemblyContaining<Startup>())
             .AddJsonOptions(options => options.JsonSerializerOptions.ConfigureForNodaTime(DateTimeZoneProviders.Tzdb));

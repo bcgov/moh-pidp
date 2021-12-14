@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 [Table(nameof(Party))]
-public class Party
+public class Party : BaseAuditable
 {
     [Key]
     public int Id { get; set; }
