@@ -9,7 +9,9 @@ import { AlertComponent } from './components/alert/alert.component';
 import { CardSummaryComponent } from './components/card-summary/card-summary.component';
 import { CollectionNoticeComponent } from './components/collection-notice/collection-notice.component';
 import { ContactFormComponent } from './components/contact-info-form/contact-info-form.component';
+import { FormSectionComponent } from './components/form-section/form-section.component';
 import { IconComponent } from './components/icon/icon.component';
+import { KeyValueInfoComponent } from './components/key-value-info/key-value-info.component';
 import { PageComponent } from './components/page/page.component';
 import { PageFooterComponent } from './components/page-footer/page-footer.component';
 import { PageHeaderComponent } from './components/page-header/page-header.component';
@@ -22,6 +24,7 @@ import { PreferredNameFormComponent } from './components/preferred-name-form/pre
 import { ToggleContentComponent } from './components/toggle-content/toggle-content.component';
 import { UserInfoComponent } from './components/user-info/user-info.component';
 import { YesNoContentComponent } from './components/yes-no-content/yes-no-content.component';
+import { ContextHelpModule } from './modules/context-help/context-help.module';
 import { DefaultPipe } from './pipes/default.pipe';
 import { FormatDatePipe } from './pipes/format-date.pipe';
 import { FullnamePipe } from './pipes/fullname.pipe';
@@ -33,6 +36,8 @@ import { PostalPipe } from './pipes/postal.pipe';
     CardSummaryComponent,
     CollectionNoticeComponent,
     ContactFormComponent,
+    FormSectionComponent,
+    KeyValueInfoComponent,
     IconComponent,
     PageComponent,
     PageFooterComponent,
@@ -53,18 +58,22 @@ import { PostalPipe } from './pipes/postal.pipe';
   ],
   imports: [
     CommonModule,
-    ReactiveFormsModule,
+    ContextHelpModule,
     MaterialModule,
     NgxMaskModule.forRoot(),
+    ReactiveFormsModule,
   ],
   exports: [
-    ReactiveFormsModule,
+    ContextHelpModule,
     MaterialModule,
     NgxMaskModule,
+    ReactiveFormsModule,
     AlertComponent,
     CardSummaryComponent,
     CollectionNoticeComponent,
     ContactFormComponent,
+    FormSectionComponent,
+    KeyValueInfoComponent,
     IconComponent,
     PageComponent,
     PageFooterComponent,
