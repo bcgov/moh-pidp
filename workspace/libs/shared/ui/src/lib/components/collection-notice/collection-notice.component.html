@@ -1,15 +1,9 @@
-<mat-card *ngIf="show" class="alert-info">
-  <mat-card-header>
-    <div mat-card-avatar>
-      <!-- Using <mat-icon> to maintain specificity and allow mixins to override -->
-      <mat-icon class="material-icons-outlined">error_outline</mat-icon>
-    </div>
-    <mat-card-title color="primary">Collection Notice</mat-card-title>
-  </mat-card-header>
-  <mat-card-content>
+<ui-alert *ngIf="show" type="info" icon="error_outline">
+  <ng-container uiAlertTitle>Collection Notice</ng-container>
+  <ng-container uiAlertContent>
     <ng-content></ng-content>
-  </mat-card-content>
-  <mat-card-actions>
+  </ng-container>
+  <ng-container uiAlertActions>
     <span>
       <mat-checkbox #checkbox color="primary">
         Do not show me this collection notice again
@@ -19,10 +13,11 @@
       <button
         mat-flat-button
         type="button"
+        class="inherit"
         color="primary"
         (click)="onClose(checkbox.checked)">
         Close
       </button>
     </span>
-  </mat-card-actions>
-</mat-card>
+  </ng-container>
+</ui-alert>

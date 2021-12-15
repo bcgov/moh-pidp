@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { AlertType } from '@bcgov/shared/ui';
+import { PartyResource } from '@core/resources/party-resource.service';
 
 import { AccessRoutes } from '../access/access.routes';
 import { ProfileRoutes } from '../profile/profile.routes';
@@ -37,7 +38,11 @@ export class PortalComponent implements OnInit {
   public accessToSystemsSections: PortalSection[];
   public yourProfileSections: PortalSection[];
 
-  public constructor(private route: ActivatedRoute, private router: Router) {
+  public constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private partyResource: PartyResource
+  ) {
     this.title = this.route.snapshot.data.title;
     this.showCollectionNotice = true;
 
