@@ -1,7 +1,7 @@
 <ui-page>
   <ui-page-header>{{ title }}</ui-page-header>
 
-  <form [formGroup]="form" novalidate (ngSubmit)="onSubmit()">
+  <form [formGroup]="formState.form" novalidate (ngSubmit)="onSubmit()">
     <ui-page-section>
       <ui-page-section-subheader
         icon="assignment_ind"
@@ -29,7 +29,8 @@
       <ui-toggle-content
         label="I have a preferred name"
         (toggle)="onPreferredNameToggle($event)">
-        <ui-preferred-name-form [form]="form"></ui-preferred-name-form>
+        <ui-preferred-name-form
+          [form]="formState.form"></ui-preferred-name-form>
       </ui-toggle-content>
     </ui-page-section>
 
@@ -52,7 +53,7 @@
       <ui-toggle-content
         label="I have a preferred address"
         (toggle)="onAddressToggle($event)">
-        <app-address-form [form]="mailingAddress"></app-address-form>
+        <app-address-form [form]="formState.mailingAddress"></app-address-form>
       </ui-toggle-content>
     </ui-page-section>
 
@@ -63,7 +64,7 @@
         </ng-container>
       </ui-page-section-subheader>
 
-      <ui-contact-info-form [form]="form"></ui-contact-info-form>
+      <ui-contact-info-form [form]="formState.form"></ui-contact-info-form>
     </ui-page-section>
 
     <ui-page-footer>

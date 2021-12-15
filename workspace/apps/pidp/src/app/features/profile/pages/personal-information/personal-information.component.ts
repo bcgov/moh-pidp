@@ -1,12 +1,18 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 
+import { EMPTY, Observable, tap } from 'rxjs';
+
 import { Address, BcscUser } from '@bcgov/shared/data-access';
-import { AbstractFormPage, ToggleContentChange } from '@bcgov/shared/ui';
+import { ToggleContentChange } from '@bcgov/shared/ui';
+import { AbstractFormPage } from '@core/classes/abstract-form-page.class';
 import { FormUtilsService } from '@core/services/form-utils.service';
 
-import { ProfileInformationFormState } from './personal-information-form-state';
+import { PersonalInformationFormState } from './personal-information-form-state';
+import { PersonalInformationResource } from './personal-information-resource.service';
+import { PersonalInformationModel } from './personal-information.model';
 
 @Component({
   selector: 'app-personal-information',
@@ -20,18 +26,20 @@ export class PersonalInformationComponent
   public title: string;
   public bcscUser: BcscUser;
 
-  public formState: ProfileInformationFormState;
-  public form!: FormGroup;
+  public formState: PersonalInformationFormState;
+  public personalInformation$!: Observable<PersonalInformationModel | null>;
 
   public constructor(
-    private formUtilsService: FormUtilsService,
+    protected dialog: MatDialog,
+    protected formUtilsService: FormUtilsService,
     private route: ActivatedRoute,
+    private resource: PersonalInformationResource,
     fb: FormBuilder
   ) {
-    super();
+    super(dialog, formUtilsService);
 
     this.title = this.route.snapshot.data.title;
-    this.formState = new ProfileInformationFormState(fb, formUtilsService);
+    this.formState = new PersonalInformationFormState(fb);
 
     this.bcscUser = {
       hpdid: '00000000-0000-0000-0000-000000000000',
@@ -48,23 +56,29 @@ export class PersonalInformationComponent
     };
   }
 
-  public get mailingAddress(): FormGroup {
-    return this.form.get('mailingAddress') as FormGroup;
-  }
-
-  public onSubmit(): void {}
-
   public onPreferredNameToggle({ checked }: ToggleContentChange): void {}
 
   public onAddressToggle({ checked }: ToggleContentChange): void {}
 
   public ngOnInit(): void {
-    this.initForm();
+    // const partyId = +this.route.snapshot.params.pid;
+    // if (!partyId) {
+    //   throw new Error('No party ID was provided');
+    // }
+    // this.personalInformation$ = this.resource
+    //   .getProfileInformation(partyId)
+    //   .pipe(
+    //     tap((model: PersonalInformationModel | null) =>
+    //       this.formState.patchValue(model)
+    //     )
+    //   );
   }
 
-  private initForm(): void {
-    this.form = this.formState.form;
-  }
+  protected performSubmission(): Observable<void> {
+    const partyId = +this.route.snapshot.params.pid;
 
-  private patchForm(): void {}
+    return this.formState.json
+      ? this.resource.updatePersonalInformation(partyId, this.formState.json)
+      : EMPTY;
+  }
 }

@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { PartyResourceService } from './party-resource.service';
+import { PartyResource } from './party-resource.service';
 
-describe('PartyResourceService', () => {
-  let service: PartyResourceService;
+describe('PartyResource', () => {
+  let service: PartyResource;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(PartyResourceService);
+    service = TestBed.inject(PartyResource);
   });
 
   it('should be created', () => {
