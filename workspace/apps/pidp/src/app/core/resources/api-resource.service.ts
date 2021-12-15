@@ -2,7 +2,7 @@
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
 
-import { Observable } from 'rxjs';
+import { map, Observable, pipe, UnaryFunction } from 'rxjs';
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';
 import { AbstractApiResource } from '@bcgov/shared/data-access';
@@ -80,6 +80,17 @@ export class ApiResource extends AbstractApiResource {
         observe: 'response',
       })
       .pipe(this.handleResponsePipe<T>());
+  }
+
+  /**
+   * @description
+   * Handles getting the result from the response.
+   */
+  public unwrapResultPipe<T>(): UnaryFunction<
+    Observable<HttpResponse<T>>,
+    Observable<T | null>
+  > {
+    return pipe(map((response: HttpResponse<T>) => response.body));
   }
 
   /**
