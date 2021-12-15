@@ -1,23 +1,38 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
 import { Address, BcscUser } from '@bcgov/shared/data-access';
-import { FormControlValidators, ToggleContentChange } from '@bcgov/shared/ui';
+import { AbstractFormPage, ToggleContentChange } from '@bcgov/shared/ui';
+import { FormUtilsService } from '@core/services/form-utils.service';
+
+import { ProfileInformationFormState } from './personal-information-form-state';
 
 @Component({
   selector: 'app-personal-information',
   templateUrl: './personal-information.component.html',
   styleUrls: ['./personal-information.component.scss'],
 })
-export class PersonalInformationComponent implements OnInit {
+export class PersonalInformationComponent
+  extends AbstractFormPage
+  implements OnInit
+{
   public title: string;
   public bcscUser: BcscUser;
 
+  public formState: ProfileInformationFormState;
   public form!: FormGroup;
 
-  public constructor(private fb: FormBuilder, private route: ActivatedRoute) {
+  public constructor(
+    private formUtilsService: FormUtilsService,
+    private route: ActivatedRoute,
+    fb: FormBuilder
+  ) {
+    super();
+
     this.title = this.route.snapshot.data.title;
+    this.formState = new ProfileInformationFormState(fb, formUtilsService);
+
     this.bcscUser = {
       hpdid: '00000000-0000-0000-0000-000000000000',
       firstName: 'Jamie',
@@ -44,19 +59,12 @@ export class PersonalInformationComponent implements OnInit {
   public onAddressToggle({ checked }: ToggleContentChange): void {}
 
   public ngOnInit(): void {
-    this.form = this.fb.group({
-      preferredFirstName: [null, []],
-      preferredMiddleName: [null, []],
-      preferredLastName: [null, []],
-      mailingAddress: this.fb.group({
-        countryCode: [{ value: null, disabled: false }, []],
-        provinceCode: [{ value: null, disabled: false }, []],
-        street: [{ value: null, disabled: false }, []],
-        city: [{ value: null, disabled: false }, []],
-        postal: [{ value: null, disabled: false }, []],
-      }),
-      phone: [null, [Validators.required, FormControlValidators.phone]],
-      email: [null, [Validators.required, FormControlValidators.email]],
-    });
+    this.initForm();
   }
+
+  private initForm(): void {
+    this.form = this.formState.form;
+  }
+
+  private patchForm(): void {}
 }

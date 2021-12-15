@@ -12,8 +12,8 @@ export abstract class AbstractFormState<T> {
    * @description
    * Get the reactive form instance.
    */
-  public get form(): FormGroup | null {
-    return this.formInstance ?? null;
+  public get form(): FormGroup {
+    return this.formInstance;
   }
 
   /**
@@ -24,9 +24,13 @@ export abstract class AbstractFormState<T> {
 
   /**
    * @description
-   * Patch the reactive form with data.
+   * Patch the reactive form with model.
+   *
+   * NOTE: "options" is provided to allow for additional
+   * information to be passed into the method, but should
+   * only be used when absolutely necessary.
    */
-  public abstract patchValue(data: T, options?: unknown): void;
+  public abstract patchValue(model: T, options?: unknown): void;
 
   /**
    * @description
