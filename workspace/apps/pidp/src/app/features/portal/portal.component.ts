@@ -3,16 +3,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { AlertType } from '@bcgov/shared/ui';
 
-import { CollegeLicenceInformationRoutes } from '../college-licence-information/college-licence-information.routes';
-import { GisRoutes } from '../gis/gis.routes';
-import { PersonalInformationRoutes } from '../personal-information/personal-information.routes';
-import { PharmanetRoutes } from '../pharmanet/pharmanet.routes';
+import { AccessRoutes } from '../access/access.routes';
+import { ProfileRoutes } from '../profile/profile.routes';
 import { ShellRoutes } from '../shell/shell.routes';
-import { SitePrivacySecurityChecklistRoutes } from '../site-privacy-security-checklist/site-privacy-security-checklist.routes';
-import { SpecialAuthorityEformsRoutes } from '../special-authority-eforms/special-authority-eforms.routes';
-import { TermsOfAccessAgreementRoutes } from '../terms-of-access-agreement/terms-of-access-agreement.routes';
 import { TrainingRoutes } from '../training/training.routes';
-import { WorkAndRoleInformationRoutes } from '../work-and-role-information/work-and-role-information.routes';
 import { YourProfileRoutes } from '../your-profile/your-profile.routes';
 
 export interface PortalSection {
@@ -123,7 +117,7 @@ export class PortalComponent implements OnInit {
         hint: '1 min to complete',
         description: 'Name, address, and contact information',
         actionLabel: 'Update',
-        route: PersonalInformationRoutes.MODULE_PATH,
+        route: ProfileRoutes.routePath(ProfileRoutes.PERSONAL_INFO_PAGE),
         statusType: 'warn',
         status: 'incomplete',
         disabled: false,
@@ -137,7 +131,7 @@ export class PortalComponent implements OnInit {
         description:
           'College Licence number, practitioner ID, or on behalf user',
         actionLabel: 'Update',
-        route: CollegeLicenceInformationRoutes.MODULE_PATH,
+        route: ProfileRoutes.routePath(ProfileRoutes.COLLEGE_LICENCE_INFO_PAGE),
         statusType: 'warn',
         status: 'incomplete',
         disabled: false,
@@ -150,7 +144,7 @@ export class PortalComponent implements OnInit {
         hint: '2 min to complete',
         description: 'Job title and details of your work location',
         actionLabel: 'Update',
-        route: WorkAndRoleInformationRoutes.MODULE_PATH,
+        route: ProfileRoutes.routePath(ProfileRoutes.WORK_AND_ROLE_INFO_PAGE),
         statusType: 'warn',
         status: 'incomplete',
         disabled: false,
@@ -163,7 +157,9 @@ export class PortalComponent implements OnInit {
         hint: '13 mins to complete',
         description: 'Sign and agree to these terms of access',
         actionLabel: 'Sign',
-        route: TermsOfAccessAgreementRoutes.MODULE_PATH,
+        route: ProfileRoutes.routePath(
+          ProfileRoutes.TERMS_OF_ACCESS_AGREEMENT_PAGE
+        ),
         statusType: 'warn',
         status: 'incomplete',
         disabled: false,
@@ -179,7 +175,7 @@ export class PortalComponent implements OnInit {
         hint: 'Automatic if applicable',
         description: 'Description of what GIS is here',
         actionLabel: 'Request Manually',
-        route: GisRoutes.MODULE_PATH,
+        route: AccessRoutes.routePath(AccessRoutes.GIS_PAGE),
         statusType: 'info',
         disabled: false,
       },
@@ -191,7 +187,7 @@ export class PortalComponent implements OnInit {
         hint: 'Automatic if applicable',
         description: 'Description of what SA E-Forms is here',
         actionLabel: 'Request Manually',
-        route: SpecialAuthorityEformsRoutes.MODULE_PATH,
+        route: AccessRoutes.routePath(AccessRoutes.SPECIAL_AUTH_EFORMS_PAGE),
         statusType: 'info',
         disabled: false,
       },
@@ -203,7 +199,7 @@ export class PortalComponent implements OnInit {
         hint: '5 mins to complete',
         description: 'Request access to PharmaNet',
         actionLabel: 'Request',
-        route: PharmanetRoutes.MODULE_PATH,
+        route: AccessRoutes.routePath(AccessRoutes.PHARMANET_PAGE),
         statusType: 'warn',
         status: 'incomplete',
         disabled: false,
@@ -216,7 +212,9 @@ export class PortalComponent implements OnInit {
         hint: '10 mins to complete',
         description: 'Description of what the checklist is here',
         actionLabel: 'Request',
-        route: SitePrivacySecurityChecklistRoutes.MODULE_PATH,
+        route: AccessRoutes.routePath(
+          AccessRoutes.SITE_PRIVACY_SECURITY_CHECKLIST_PAGE
+        ),
         statusType: 'warn',
         status: 'incomplete',
         disabled: false,
