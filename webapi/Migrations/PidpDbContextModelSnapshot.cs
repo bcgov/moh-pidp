@@ -61,10 +61,6 @@ namespace Pidp.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("Street2")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.HasKey("Id");
 
                     b.HasIndex("CountryCode");
@@ -555,6 +551,9 @@ namespace Pidp.Migrations
                     b.Property<LocalDate>("DateOfBirth")
                         .HasColumnType("date");
 
+                    b.Property<string>("Email")
+                        .HasColumnType("text");
+
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasColumnType("text");
@@ -565,6 +564,18 @@ namespace Pidp.Migrations
 
                     b.Property<Instant>("Modified")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Phone")
+                        .HasColumnType("text");
+
+                    b.Property<string>("PreferredFirstName")
+                        .HasColumnType("text");
+
+                    b.Property<string>("PreferredLastName")
+                        .HasColumnType("text");
+
+                    b.Property<string>("PreferredMiddleName")
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -608,7 +619,7 @@ namespace Pidp.Migrations
             modelBuilder.Entity("Pidp.Models.PartyAddress", b =>
                 {
                     b.HasOne("Pidp.Models.Party", "Party")
-                        .WithOne("PhysicalAddress")
+                        .WithOne("MailingAddress")
                         .HasForeignKey("Pidp.Models.PartyAddress", "PartyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -618,7 +629,7 @@ namespace Pidp.Migrations
 
             modelBuilder.Entity("Pidp.Models.Party", b =>
                 {
-                    b.Navigation("PhysicalAddress");
+                    b.Navigation("MailingAddress");
                 });
 #pragma warning restore 612, 618
         }

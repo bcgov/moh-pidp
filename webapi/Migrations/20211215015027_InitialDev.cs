@@ -6,7 +6,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Pidp.Migrations
 {
-    public partial class Initial : Migration
+    public partial class InitialDev : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -30,7 +30,14 @@ namespace Pidp.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     FirstName = table.Column<string>(type: "text", nullable: false),
                     LastName = table.Column<string>(type: "text", nullable: false),
-                    DateOfBirth = table.Column<LocalDate>(type: "date", nullable: false)
+                    PreferredFirstName = table.Column<string>(type: "text", nullable: true),
+                    PreferredMiddleName = table.Column<string>(type: "text", nullable: true),
+                    PreferredLastName = table.Column<string>(type: "text", nullable: true),
+                    DateOfBirth = table.Column<LocalDate>(type: "date", nullable: false),
+                    Email = table.Column<string>(type: "text", nullable: true),
+                    Phone = table.Column<string>(type: "text", nullable: true),
+                    Created = table.Column<Instant>(type: "timestamp with time zone", nullable: false),
+                    Modified = table.Column<Instant>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -60,11 +67,12 @@ namespace Pidp.Migrations
                     CountryCode = table.Column<int>(type: "integer", nullable: false),
                     ProvinceCode = table.Column<int>(type: "integer", nullable: false),
                     Street = table.Column<string>(type: "text", nullable: false),
-                    Street2 = table.Column<string>(type: "text", nullable: false),
                     City = table.Column<string>(type: "text", nullable: false),
                     Postal = table.Column<string>(type: "text", nullable: false),
                     Discriminator = table.Column<string>(type: "text", nullable: false),
-                    PartyId = table.Column<int>(type: "integer", nullable: true)
+                    PartyId = table.Column<int>(type: "integer", nullable: true),
+                    Created = table.Column<Instant>(type: "timestamp with time zone", nullable: false),
+                    Modified = table.Column<Instant>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {

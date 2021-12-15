@@ -12,8 +12,8 @@ using Pidp.Data;
 namespace Pidp.Migrations
 {
     [DbContext(typeof(PidpDbContext))]
-    [Migration("20211202011529_Initial")]
-    partial class Initial
+    [Migration("20211215015027_InitialDev")]
+    partial class InitialDev
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -42,9 +42,15 @@ namespace Pidp.Migrations
                     b.Property<int>("CountryCode")
                         .HasColumnType("integer");
 
+                    b.Property<Instant>("Created")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<string>("Discriminator")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<Instant>("Modified")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Postal")
                         .IsRequired()
@@ -54,10 +60,6 @@ namespace Pidp.Migrations
                         .HasColumnType("integer");
 
                     b.Property<string>("Street")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Street2")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -545,8 +547,14 @@ namespace Pidp.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<Instant>("Created")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<LocalDate>("DateOfBirth")
                         .HasColumnType("date");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("text");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
@@ -554,6 +562,21 @@ namespace Pidp.Migrations
 
                     b.Property<string>("LastName")
                         .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<Instant>("Modified")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Phone")
+                        .HasColumnType("text");
+
+                    b.Property<string>("PreferredFirstName")
+                        .HasColumnType("text");
+
+                    b.Property<string>("PreferredLastName")
+                        .HasColumnType("text");
+
+                    b.Property<string>("PreferredMiddleName")
                         .HasColumnType("text");
 
                     b.HasKey("Id");
@@ -598,7 +621,7 @@ namespace Pidp.Migrations
             modelBuilder.Entity("Pidp.Models.PartyAddress", b =>
                 {
                     b.HasOne("Pidp.Models.Party", "Party")
-                        .WithOne("PhysicalAddress")
+                        .WithOne("MailingAddress")
                         .HasForeignKey("Pidp.Models.PartyAddress", "PartyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -608,7 +631,7 @@ namespace Pidp.Migrations
 
             modelBuilder.Entity("Pidp.Models.Party", b =>
                 {
-                    b.Navigation("PhysicalAddress");
+                    b.Navigation("MailingAddress");
                 });
 #pragma warning restore 612, 618
         }

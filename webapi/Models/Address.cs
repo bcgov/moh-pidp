@@ -22,17 +22,13 @@ public abstract class Address : BaseAuditable
 
     public CountryCode CountryCode { get; set; }
 
-    [Required]
     public Country? Country { get; set; }
 
     public ProvinceCode ProvinceCode { get; set; }
 
-    [Required]
     public Province? Province { get; set; }
 
     public string Street { get; set; } = string.Empty;
-
-    public string Street2 { get; set; } = string.Empty;
 
     public string City { get; set; } = string.Empty;
 
@@ -43,6 +39,5 @@ public class PartyAddress : Address
 {
     public int PartyId { get; set; }
 
-    [Required]
     public Party? Party { get; set; }
 }

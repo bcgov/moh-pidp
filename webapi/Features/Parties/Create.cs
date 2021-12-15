@@ -8,6 +8,13 @@ using Pidp.Models;
 
 public class Create
 {
+    public class Command : ICommand<int>
+    {
+        public string FirstName { get; set; } = string.Empty;
+        public string LastName { get; set; } = string.Empty;
+        public LocalDate DateOfBirth { get; set; }
+    }
+
     public class CommandValidator : AbstractValidator<Command>
     {
         public CommandValidator()
@@ -16,13 +23,6 @@ public class Create
             this.RuleFor(x => x.LastName).NotEmpty();
             this.RuleFor(x => x.DateOfBirth).NotEmpty();
         }
-    }
-
-    public class Command : ICommand<int>
-    {
-        public string FirstName { get; set; } = string.Empty;
-        public string LastName { get; set; } = string.Empty;
-        public LocalDate DateOfBirth { get; set; }
     }
 
     public class CommandHandler : ICommandHandler<Command, int>

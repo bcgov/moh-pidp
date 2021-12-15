@@ -1,4 +1,4 @@
-namespace Pidp.Data;
+namespace Pidp.Data.Lookups;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
