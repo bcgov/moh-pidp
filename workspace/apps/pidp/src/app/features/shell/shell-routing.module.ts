@@ -1,16 +1,17 @@
+import { PortalModule } from '@angular/cdk/portal';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { DashboardComponent } from '../../modules/dashboard/components/dashboard/dashboard.component';
-import { CollegeLicenceInformationRoutes } from '../college-licence-information/college-licence-information.routes';
-import { GisRoutes } from '../gis/gis.routes';
-import { PersonalInformationRoutes } from '../personal-information/personal-information.routes';
-import { PharmanetRoutes } from '../pharmanet/pharmanet.routes';
+import { AccessModule } from '../access/access.module';
+import { AccessRoutes } from '../access/access.routes';
 import { PortalRoutes } from '../portal/portal.routes';
-import { SitePrivacySecurityChecklistRoutes } from '../site-privacy-security-checklist/site-privacy-security-checklist.routes';
-import { SpecialAuthorityEformsRoutes } from '../special-authority-eforms/special-authority-eforms.routes';
-import { TermsOfAccessAgreementRoutes } from '../terms-of-access-agreement/terms-of-access-agreement.routes';
-import { WorkAndRoleInformationRoutes } from '../work-and-role-information/work-and-role-information.routes';
+import { ProfileModule } from '../profile/profile.module';
+import { ProfileRoutes } from '../profile/profile.routes';
+import { TrainingModule } from '../training/training.module';
+import { TrainingRoutes } from '../training/training.routes';
+import { YourProfileModule } from '../your-profile/your-profile.module';
+import { YourProfileRoutes } from '../your-profile/your-profile.routes';
 
 const routes: Routes = [
   {
@@ -21,71 +22,27 @@ const routes: Routes = [
     children: [
       {
         path: PortalRoutes.MODULE_PATH,
-        loadChildren: () =>
+        loadChildren: (): Promise<PortalModule> =>
           import('../portal/portal.module').then((m) => m.PortalModule),
       },
       {
-        path: PersonalInformationRoutes.MODULE_PATH,
-        loadChildren: () =>
-          import('../personal-information/personal-information.module').then(
-            (m) => m.PersonalInformationModule
-          ),
+        path: ProfileRoutes.MODULE_PATH,
+        loadChildren: (): Promise<ProfileModule> =>
+          import('../profile/profile.module').then((m) => m.ProfileModule),
       },
       {
-        path: CollegeLicenceInformationRoutes.MODULE_PATH,
-        loadChildren: () =>
-          import(
-            '../college-licence-information/college-licence-information.module'
-          ).then((m) => m.CollegeLicenceInformationModule),
+        path: AccessRoutes.MODULE_PATH,
+        loadChildren: (): Promise<AccessModule> =>
+          import('../access/access.module').then((m) => m.AccessModule),
       },
       {
-        path: WorkAndRoleInformationRoutes.MODULE_PATH,
-        loadChildren: () =>
-          import(
-            '../work-and-role-information/work-and-role-information.module'
-          ).then((m) => m.WorkAndRoleInformationModule),
-      },
-      {
-        path: TermsOfAccessAgreementRoutes.MODULE_PATH,
-        loadChildren: () =>
-          import(
-            '../terms-of-access-agreement/terms-of-access-agreement.module'
-          ).then((m) => m.TermsOfAccessAgreementModule),
-      },
-      {
-        path: GisRoutes.MODULE_PATH,
-        loadChildren: () =>
-          import('../gis/gis.module').then((m) => m.GisModule),
-      },
-      {
-        path: SpecialAuthorityEformsRoutes.MODULE_PATH,
-        loadChildren: () =>
-          import(
-            '../special-authority-eforms/special-authority-eforms.module'
-          ).then((m) => m.SpecialAuthorityEformsModule),
-      },
-      {
-        path: PharmanetRoutes.MODULE_PATH,
-        loadChildren: () =>
-          import('../pharmanet/pharmanet.module').then(
-            (m) => m.PharmanetModule
-          ),
-      },
-      {
-        path: SitePrivacySecurityChecklistRoutes.MODULE_PATH,
-        loadChildren: () =>
-          import(
-            '../site-privacy-security-checklist/site-privacy-security-checklist.module'
-          ).then((m) => m.SitePrivacySecurityChecklistModule),
-      },
-      {
-        path: 'training',
-        loadChildren: () =>
+        path: TrainingRoutes.MODULE_PATH,
+        loadChildren: (): Promise<TrainingModule> =>
           import('../training/training.module').then((m) => m.TrainingModule),
       },
       {
-        path: 'your-profile',
-        loadChildren: () =>
+        path: YourProfileRoutes.MODULE_PATH,
+        loadChildren: (): Promise<YourProfileModule> =>
           import('../your-profile/your-profile.module').then(
             (m) => m.YourProfileModule
           ),

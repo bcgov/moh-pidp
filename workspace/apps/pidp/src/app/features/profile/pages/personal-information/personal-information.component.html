@@ -52,7 +52,7 @@
       <ui-toggle-content
         label="I have a preferred address"
         (toggle)="onAddressToggle($event)">
-        <app-address-form [form]="physicalAddress"></app-address-form>
+        <app-address-form [form]="mailingAddress"></app-address-form>
       </ui-toggle-content>
     </ui-page-section>
 
@@ -67,10 +67,14 @@
     </ui-page-section>
 
     <ui-page-footer>
-      <button mat-stroked-button color="primary" type="button" routerLink="../">
+      <button
+        mat-stroked-button
+        color="primary"
+        type="button"
+        routerLink="../../">
         Back Home
       </button>
-      <button mat-flat-button color="primary" type="submit" routerLink="../">
+      <button mat-flat-button color="primary" type="submit" routerLink="../../">
         Save Information
       </button>
     </ui-page-footer>

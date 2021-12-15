@@ -1,5 +1,5 @@
 export class PortalRoutes {
-  public static MODULE_PATH = '';
+  public static MODULE_PATH = 'portal';
 
   /**
    * @description
