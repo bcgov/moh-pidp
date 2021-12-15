@@ -3,9 +3,10 @@
     "angular.ng-template",
     "coenraads.bracket-pair-colorizer",
     "dbaeumer.vscode-eslint",
+    "eamodio.gitlens",
     "editorconfig.editorconfig",
     "esbenp.prettier-vscode",
-    "nrwl.angular-console",
-    "firsttris.vscode-jest-runner"
+    "firsttris.vscode-jest-runner",
+    "nrwl.angular-console"
   ]
 }
