@@ -30,7 +30,7 @@
         "pipeArgs": [
           "exec",
           "-i",
-          "pip-webapi-backend"
+          "pip-webapi"
         ],
         "debuggerPath": "/vsdbg/vsdbg",
         "pipeCwd": "${workspaceRoot}",
@@ -48,7 +48,7 @@
       "netCore": {
         "appProject": "${workspaceFolder}/pidp.csproj"
       },
-      "containerName": "pidp-webapi-backend"
+      "containerName": "pidp-webapi"
     }
   ]
 }
