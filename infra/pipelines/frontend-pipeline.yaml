@@ -67,7 +67,7 @@ spec:
         - name: CONTEXT
           value: moh-pidp/workspace/
         - name: DOCKERFILE
-          value: moh-pidp/workspace/frontend.Dockerfile
+          value: moh-pidp/workspace/Dockerfile
         - name: EXTRA_ARGS
           value: 
             - --skip-tls-verify

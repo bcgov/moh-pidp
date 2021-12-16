@@ -10,11 +10,11 @@ spec:
     - name: git-url
       value: git@github.com:bcgov/moh-pidp.git
     - name: git-revision
-      value: feature/cicd
+      value: develop
     - name: dockerfile-path
       value: "."
     - name: image-name
-      value: image-registry.openshift-image-registry.svc:5000/d8a8f9-tools/pidp-frontend:test
+      value: image-registry.openshift-image-registry.svc:5000/d8a8f9-tools/pidp-frontend:dev
   workspaces:
   - name: source
     persistentVolumeClaim:
