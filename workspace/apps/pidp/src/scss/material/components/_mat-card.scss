@@ -13,6 +13,7 @@
 
 mat-card.ui-card {
   @include mixins.card-base;
+  @include mixins.card-hint;
 }
 
 // TODO use relative and absolute positioning to allow for hint and title to play nice

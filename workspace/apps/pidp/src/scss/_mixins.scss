@@ -108,6 +108,18 @@ $theme-typography: mat.define-typography-config();
   }
 }
 
+@mixin card-hint {
+  .mat-card-header {
+    position: relative;
+
+    span.hint {
+      position: absolute;
+      right: 0;
+      top: -0.35rem;
+    }
+  }
+}
+
 // Generate reuseable classes based on different
 // types of alerts
 $types: success, info, warn, danger, muted;
