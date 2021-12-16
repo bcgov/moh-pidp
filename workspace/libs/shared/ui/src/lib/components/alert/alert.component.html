@@ -12,11 +12,11 @@
     muted: type === 'muted'
   }">
   <!-- Work around for ngProjectAs not passing directive reference when applied to ng-content -->
-  <ng-container uiCardContent>
+  <ng-container *ngIf="alertContent.length" uiCardContent>
     <ng-content select="[uiAlertContent]"></ng-content>
   </ng-container>
   <!-- Work around for ngProjectAs not passing directive reference when applied to ng-content -->
-  <ng-container uiCardActions>
+  <ng-container *ngIf="alertActions.length" uiCardActions>
     <ng-content select="[uiAlertActions]"></ng-content>
   </ng-container>
 </ui-card>
