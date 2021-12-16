@@ -1,12 +1,12 @@
-<ng-container *ngIf="statusType || status; else card">
+<ng-container>
   <div class="card-status" [class]="statusType">
     <ng-container *ngTemplateOutlet="card"></ng-container>
-    <span>{{ status | titlecase }}</span>
+    <span *ngIf="status || statusType">{{ status | titlecase }}</span>
   </div>
 </ng-container>
 
 <ng-template #card>
-  <mat-card>
+  <mat-card class="ui-card">
     <mat-card-header>
       <div mat-card-avatar>
         <ui-icon color="primary" type="outlined" size="md">{{ icon }}</ui-icon>

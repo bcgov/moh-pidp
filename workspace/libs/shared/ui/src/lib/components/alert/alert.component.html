@@ -1,5 +1,7 @@
 <mat-card class="mat-alert" [class]="type">
-  <mat-card-header *ngIf="alertTitle.length">
+  <mat-card-header
+    *ngIf="icon || alertTitle.length"
+    [class]="{ 'icon-only': !alertTitle.length, 'title-only': !icon }">
     <div *ngIf="icon" mat-card-avatar>
       <!-- Using <mat-icon> to maintain specificity and allow mixins to override -->
       <mat-icon
@@ -11,7 +13,7 @@
         {{ icon }}
       </mat-icon>
     </div>
-    <mat-card-title>
+    <mat-card-title *ngIf="alertTitle.length">
       <ng-content select="[uiAlertTitle]"></ng-content>
     </mat-card-title>
   </mat-card-header>

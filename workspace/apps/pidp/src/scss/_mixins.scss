@@ -1,6 +1,7 @@
 @use '@angular/material' as mat;
 @use 'palette';
 
+// TODO review base card styles with alert styles for common attributes, and extract mobile base
 // TODO convert @import to @use
 @import 'bootstrap/bootstrap-imports';
 
@@ -14,17 +15,52 @@ $theme-typography: mat.define-typography-config();
   // visual appeal
   padding-left: 1.2rem;
   padding-right: 1.75rem;
-  padding-bottom: 1.5rem;
+  padding-bottom: 1.75rem;
 
   .mat-card-header {
-    // Font size and position are adjusted to align vertically
-    // with a card header icon of a specific size
-    .mat-icon {
-      font-size: 3rem;
+    // mobile version
+    // flex-direction: column;
+    margin-bottom: 0.5rem;
+
+    &.icon-only {
+      // Icon provided, but no title
+      margin-bottom: 1.25rem;
     }
+
+    &.title-only {
+      // Adjust margin slightly to align with content and headers
+      // when an icon is not used
+      margin-left: 5px;
+      margin-bottom: -0.25rem;
+    }
+
+    .mat-card-avatar {
+      // Control spacing between icon and title
+      margin-right: 1.25rem;
+      // mobile version
+      // margin-bottom: -0.5rem;
+
+      // Font size and position are adjusted to align vertically
+      // with a card header icon of a specific size
+      .mat-icon {
+        font-size: 3rem;
+        // Size container to the icon size to reduce
+        // possiblity of overlap with other containers
+        width: 48px;
+        height: 48px;
+        // mobile version
+        // font-size: 2rem;
+      }
+    }
+
+    .mat-card-header-text {
+      // Remove margin so the mat-card-avatar controls the
+      // spacing based on the existence of an icon
+      margin-left: 0;
+    }
+
     .mat-card-title {
       margin-top: 0.5rem;
-      // min-height: 4rem;
       @include mat.typography-level($theme-typography, 'title');
     }
 
@@ -46,11 +82,14 @@ $theme-typography: mat.define-typography-config();
 
   .mat-card-content,
   .mat-card-actions {
+    // Adjust margin slightly to align with edge of header
+    // icon instead of edge of the glyph
     margin-left: 5px;
   }
 
   // TODO split out to improve useability this is too strict for base
   // but for now is an unnecessary optimization
+  // TODO card alert has overriding styles where should they live?
   .mat-card-actions {
     display: flex;
     flex-direction: column;
@@ -72,57 +111,6 @@ $theme-typography: mat.define-typography-config();
 // Generate reuseable classes based on different
 // types of alerts
 $types: success, info, warn, danger, muted;
-
-@mixin card-alert($textColor, $bgColor, $borderColor) {
-  @include card-base($textColor);
-
-  // Flatten the edges of the mat-card
-  transition: none !important;
-  box-shadow: none !important;
-
-  background-color: $bgColor;
-  border: 1px solid $borderColor;
-
-  .mat-card-header {
-    // Provide vertical spacing between the header
-    // icon and content for aesthetics
-    margin-bottom: 0.75rem;
-  }
-
-  @include media-breakpoint-up(md) {
-    .mat-card-header {
-      // Reduce vertical spacing between the header
-      // and content to compress the alerts
-      margin-bottom: -0.5rem;
-    }
-
-    // Align content and action containers with the
-    // card header title on medium viewports and up
-    .mat-card-content,
-    .mat-card-actions {
-      margin-left: 3.5rem;
-    }
-
-    // Align actions horizontally instead of stacked
-    .mat-card-actions {
-      flex-direction: row;
-      justify-content: space-between;
-    }
-  }
-}
-
-// TODO flatten out these styles so the only change between styles
-// is the colour using .alert and .alert-<type> classes to reduce
-// memory footprint
-@each $type in $types {
-  .alert-#{$type} {
-    @include card-alert(
-      alert-palette($type, color),
-      alert-palette($type, backgroundColor),
-      alert-palette($type, borderColor)
-    );
-  }
-}
 
 /**
  * @description
@@ -171,6 +159,46 @@ $types: success, info, warn, danger, muted;
       background-color: alert-palette($type, backgroundColorSolid);
       border-color: alert-palette($type, backgroundColorSolid);
       color: alert-palette($type, color);
+    }
+  }
+}
+
+/**
+ * @description
+ * Apply Bootstrap-like alert theming to a <mat-card> to allow
+ * alerts to have card layouts with small adjustments.
+ */
+@mixin card-alert($textColor, $bgColor, $borderColor) {
+  @include card-base($textColor);
+
+  // Flatten the edges of the mat-card so alert styles
+  // are smooth and uninterrupted
+  transition: none !important;
+  box-shadow: none !important;
+
+  background-color: $bgColor;
+  border: 1px solid $borderColor;
+
+  @include media-breakpoint-up(md) {
+    .mat-card-header {
+      // Compress the alert a bit for aesthetics and to
+      // reduce its vertical footprint a bit
+      margin-bottom: -0.5rem;
+    }
+
+    // Align content and action containers with the card header
+    // title on medium viewports and up when an icon exists
+    .indent {
+      margin-left: 3.75rem;
+    }
+
+    // Align actions horizontally instead of stacked
+    .mat-card-actions {
+      flex-direction: row;
+      justify-content: space-between;
+      // Vertically align the actions to adjust for diffences in
+      // the height of content ie. text and buttons
+      align-items: center;
     }
   }
 }
