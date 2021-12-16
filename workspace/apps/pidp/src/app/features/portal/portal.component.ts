@@ -58,7 +58,5 @@ export class PortalComponent implements OnInit {
     this.router.navigate([ShellRoutes.routePath(routePath)]);
   }
 
-  public ngOnInit(): void {
-    this.
-  }
+  public ngOnInit(): void {}
 }
