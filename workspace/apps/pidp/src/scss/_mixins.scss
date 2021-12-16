@@ -108,6 +108,25 @@ $theme-typography: mat.define-typography-config();
   }
 }
 
+@mixin card-hint {
+  .mat-card-header {
+    position: relative;
+
+    span.hint {
+      position: absolute;
+      right: 0;
+      top: -0.35rem;
+
+      .mat-icon {
+        position: absolute;
+        left: -1.5rem;
+        top: 0;
+        font-size: 0.95rem;
+      }
+    }
+  }
+}
+
 // Generate reuseable classes based on different
 // types of alerts
 $types: success, info, warn, danger, muted;
@@ -169,7 +188,7 @@ $types: success, info, warn, danger, muted;
  * alerts to have card layouts with small adjustments.
  */
 @mixin card-alert($textColor, $bgColor, $borderColor) {
-  @include card-base($textColor);
+  color: $textColor;
 
   // Flatten the edges of the mat-card so alert styles
   // are smooth and uninterrupted
@@ -181,14 +200,15 @@ $types: success, info, warn, danger, muted;
 
   @include media-breakpoint-up(md) {
     .mat-card-header {
-      // Compress the alert a bit for aesthetics and to
-      // reduce its vertical footprint a bit
-      margin-bottom: -0.5rem;
+      // Compress the alert for aesthetics and to
+      // reduce its vertical footprint
+      margin-bottom: 0;
     }
 
     // Align content and action containers with the card header
     // title on medium viewports and up when an icon exists
-    .indent {
+    &.indent .mat-card-content,
+    &.indent .mat-card-actions {
       margin-left: 3.75rem;
     }
 

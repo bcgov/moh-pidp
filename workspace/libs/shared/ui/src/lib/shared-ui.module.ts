@@ -6,12 +6,15 @@ import { MaterialModule } from './material/material.module';
 import { NgxMaskModule } from 'ngx-mask';
 
 import { AlertComponent } from './components/alert/alert.component';
-import { AlertTitleDirective } from './components/alert/alert-title.directive';
-import { AlertContentDirective } from './components/alert/alert-content.directive';
 import { AlertActionsDirective } from './components/alert/alert-actions.directive';
+import { AlertContentDirective } from './components/alert/alert-content.directive';
+import { CardComponent } from './components/card/card.component';
 import { CardSummaryComponent } from './components/card-summary/card-summary.component';
 import { CollectionNoticeComponent } from './components/collection-notice/collection-notice.component';
 import { ContactFormComponent } from './components/contact-info-form/contact-info-form.component';
+import { CardHintDirective } from './components/card/card-hint.directive';
+import { CardContentDirective } from './components/card/card-content.directive';
+import { CardActionsDirective } from './components/card/card-actions.directive';
 import { FormSectionComponent } from './components/form-section/form-section.component';
 import { IconComponent } from './components/icon/icon.component';
 import { KeyValueInfoComponent } from './components/key-value-info/key-value-info.component';
@@ -36,9 +39,12 @@ import { PostalPipe } from './pipes/postal.pipe';
 @NgModule({
   declarations: [
     AlertComponent,
-    AlertTitleDirective,
     AlertContentDirective,
     AlertActionsDirective,
+    CardComponent,
+    CardHintDirective,
+    CardContentDirective,
+    CardActionsDirective,
     CardSummaryComponent,
     CollectionNoticeComponent,
     ContactFormComponent,
@@ -75,9 +81,12 @@ import { PostalPipe } from './pipes/postal.pipe';
     NgxMaskModule,
     ReactiveFormsModule,
     AlertComponent,
-    AlertTitleDirective,
     AlertContentDirective,
     AlertActionsDirective,
+    CardComponent,
+    CardHintDirective,
+    CardContentDirective,
+    CardActionsDirective,
     CardSummaryComponent,
     CollectionNoticeComponent,
     ContactFormComponent,

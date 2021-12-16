@@ -6,22 +6,16 @@
 </ng-container>
 
 <ng-template #card>
-  <mat-card class="ui-card">
-    <mat-card-header>
-      <div mat-card-avatar>
-        <ui-icon color="primary" type="outlined" size="md">{{ icon }}</ui-icon>
-      </div>
-      <mat-card-title color="primary">
-        {{ title }}
-      </mat-card-title>
-      <span *ngIf="hint" class="hint">
-        {{ hint }}
-      </span>
-    </mat-card-header>
-    <mat-card-content>
-      {{ description }}
-    </mat-card-content>
-    <mat-card-actions>
+  <ui-card [icon]="icon" [title]="title" [hint]="hint">
+    <!-- Work around for ngProjectAs not passing directive reference when applied to ng-content -->
+    <ng-container uiCardHint>
+      <ng-content select="[uiCardSummaryHint]"></ng-content>
+    </ng-container>
+    <!-- Work around for ngProjectAs not passing directive reference when applied to ng-content -->
+    <ng-container uiCardContent>
+      <ng-content select="[uiCardSummaryContent]"></ng-content>
+    </ng-container>
+    <ng-container uiCardActions>
       <span>
         <button
           *ngIf="actionLabel"
@@ -33,6 +27,6 @@
           {{ actionLabel }}
         </button>
       </span>
-    </mat-card-actions>
-  </mat-card>
+    </ng-container>
+  </ui-card>
 </ng-template>

@@ -1,26 +1,22 @@
-<mat-card class="mat-alert" [class]="type">
-  <mat-card-header
-    *ngIf="icon || alertTitle.length"
-    [class]="{ 'icon-only': !alertTitle.length, 'title-only': !icon }">
-    <div *ngIf="icon" mat-card-avatar>
-      <!-- Using <mat-icon> to maintain specificity and allow mixins to override -->
-      <mat-icon
-        [class]="{
-          'material-icons-outlined': iconType === 'outlined',
-          'material-icons-round': iconType === 'round',
-          'material-icons-sharp': iconType === 'sharp'
-        }">
-        {{ icon }}
-      </mat-icon>
-    </div>
-    <mat-card-title *ngIf="alertTitle.length">
-      <ng-content select="[uiAlertTitle]"></ng-content>
-    </mat-card-title>
-  </mat-card-header>
-  <mat-card-content *ngIf="alertContent.length" [class]="{ indent: icon }">
+<ui-card
+  [icon]="icon"
+  [iconType]="iconType"
+  [title]="title"
+  [class]="{
+    'ui-card-alert': true,
+    indent: true,
+    success: type === 'success',
+    info: type === 'info',
+    warn: type === 'warn',
+    danger: type === 'danger',
+    muted: type === 'muted'
+  }">
+  <!-- Work around for ngProjectAs not passing directive reference when applied to ng-content -->
+  <ng-container *ngIf="alertContent.length" uiCardContent>
     <ng-content select="[uiAlertContent]"></ng-content>
-  </mat-card-content>
-  <mat-card-actions *ngIf="alertActions.length" [class]="{ indent: icon }">
+  </ng-container>
+  <!-- Work around for ngProjectAs not passing directive reference when applied to ng-content -->
+  <ng-container *ngIf="alertActions.length" uiCardActions>
     <ng-content select="[uiAlertActions]"></ng-content>
-  </mat-card-actions>
-</mat-card>
+  </ng-container>
+</ui-card>

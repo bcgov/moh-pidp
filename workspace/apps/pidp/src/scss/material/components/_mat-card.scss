@@ -1,8 +1,5 @@
 @use '../../mixins' as mixins;
 
-@import 'palette';
-@import 'bootstrap/bootstrap-imports';
-
 //
 // MATERIAL CARD
 //
@@ -13,15 +10,14 @@
 
 mat-card.ui-card {
   @include mixins.card-base;
+  @include mixins.card-hint;
 }
-
-// TODO use relative and absolute positioning to allow for hint and title to play nice
-// TODO default min-height for actions when label not provided
-// TODO need either a minimum height, or mat-card items need to be able to fill vertically
 
 .card-status {
   @include mixins.card-status;
 
+  // Override base card styles to provide a bit of variety
+  // between default cards, and cards with statuses
   mat-card.ui-card {
     // Remove card margin which is handled by card-status
     margin-bottom: 0;
