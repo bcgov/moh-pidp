@@ -89,18 +89,6 @@ export class DemoService {
     return [
       {
         icon: 'fingerprint',
-        type: 'gis',
-        title: 'GIS',
-        process: 'automatic',
-        hint: 'Automatic if applicable',
-        description: 'Description of what GIS is here',
-        actionLabel: 'Request Manually',
-        route: AccessRoutes.routePath(AccessRoutes.GIS_PAGE),
-        statusType: 'info',
-        disabled: true,
-      },
-      {
-        icon: 'fingerprint',
         type: 'special-authority-eforms',
         title: 'Special Authority E-Forms',
         process: 'automatic',
