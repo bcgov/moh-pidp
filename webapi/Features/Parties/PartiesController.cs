@@ -18,4 +18,20 @@ public class PartiesController : ControllerBase
     public async Task<ActionResult<int>> CreateParty([FromServices] ICommandHandler<Create.Command, int> handler,
                                                      [FromBody] Create.Command command)
         => await handler.HandleAsync(command);
+
+    [HttpGet("{partyId}/demographics")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<ActionResult<Demographics.Command>> GetPartyDemographics([FromServices] IQueryHandler<Demographics.Query, Demographics.Command> handler,
+                                                                               [FromRoute] int partyId)
+        => await handler.HandleAsync(new Demographics.Query { Id = partyId });
+
+    [HttpPut("{partyId}/demographics")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    public async Task<ActionResult> UpdatePartyDemographics([FromServices] ICommandHandler<Demographics.Command> handler,
+                                                            [FromBody] Demographics.Command command)
+    {
+        // TODO use ID
+        await handler.HandleAsync(command);
+        return this.NoContent();
+    }
 }

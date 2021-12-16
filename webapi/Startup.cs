@@ -2,6 +2,7 @@ namespace Pidp;
 
 using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using NodaTime;
 using NodaTime.Serialization.SystemTextJson;
@@ -23,22 +24,11 @@ public class Startup
         var config = this.InitializeConfiguration(services);
 
         services.AddSingleton<IClock>(SystemClock.Instance);
+        services.AddAutoMapper(typeof(Startup));
 
         services.AddControllers()
             .AddFluentValidation(options => options.RegisterValidatorsFromAssemblyContaining<Startup>())
             .AddJsonOptions(options => options.JsonSerializerOptions.ConfigureForNodaTime(DateTimeZoneProviders.Tzdb));
-
-        services.AddSwaggerGen(options =>
-        {
-            options.SwaggerDoc("v1", new OpenApiInfo { Title = "PIdP Web API", Version = "v1" });
-            options.AddSecurityDefinition("OAuth2", new OpenApiSecurityScheme
-            {
-                Description = "Standard Authorization header using the Bearer scheme. Example: \"bearer {token}\"",
-                In = ParameterLocation.Header,
-                Name = "Authorization",
-                Type = SecuritySchemeType.ApiKey
-            });
-        });
 
         services.AddDbContext<PidpDbContext>(options => options
             .UseNpgsql(config.ConnectionStrings.PidpDatabase, npg => npg.UseNodaTime())
@@ -55,6 +45,18 @@ public class Startup
         //     .AddHealthChecks()
         //     .AddDbContextCheck<PidpDbContext>("DbContextHealthCheck")
         //     .AddNpgSql(connectionString);
+
+        services.AddSwaggerGen(options =>
+        {
+            options.SwaggerDoc("v1", new OpenApiInfo { Title = "PIdP Web API", Version = "v1" });
+            options.AddSecurityDefinition("OAuth2", new OpenApiSecurityScheme
+            {
+                Description = "Standard Authorization header using the Bearer scheme. Example: \"bearer {token}\"",
+                In = ParameterLocation.Header,
+                Name = "Authorization",
+                Type = SecuritySchemeType.ApiKey
+            });
+        });
     }
 
     private PidpConfiguration InitializeConfiguration(IServiceCollection services)
