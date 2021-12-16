@@ -72,7 +72,7 @@ services:
     image: jboss/keycloak:latest
     restart: always
     volumes:
-      - ./realm-export.json:/tmp/realm-export.json
+      - ./realm-export-local.json:/tmp/realm-export.json
     environment:
       DB_VENDOR: h2
       KEYCLOAK_USER: admin

@@ -495,19 +495,15 @@
   "webAuthnPolicyPasswordlessAcceptableAaguids": [],
   "users": [
     {
-      "id": "6c384423-c113-46c5-b23a-14680f4e7b78",
+      "id": "0a7fdda4-c8af-42f1-b1d0-18d58272b6a8",
       "createdTimestamp": 1600787542788,
-      "username": "sresfm",
+      "username": "user1",
       "enabled": true,
       "totp": false,
       "emailVerified": false,
-      "firstName": "SRES",
-      "lastName": "Financial Manager",
-      "email": "sresfm@test.com",
-      "attributes": {
-        "displayName": ["Financial Manager, SRES"],
-        "agencies": ["110"]
-      },
+      "firstName": "User",
+      "lastName": "One",
+      "email": "UserOne@email.com",
       "disableableCredentialTypes": [],
       "requiredActions": [],
       "realmRoles": ["offline_access", "uma_authorization"],
@@ -515,7 +511,26 @@
         "account": ["view-profile", "manage-account"]
       },
       "notBefore": 0,
-      "groups": ["/Real Estate Manager", "/SRES", "/SRES Financial Manager"]
+      "groups": []
+    },
+    {
+      "id": "6143c512-17c5-462c-93a5-ace36704f1c4",
+      "createdTimestamp": 1600787542788,
+      "username": "adjudicator1",
+      "enabled": true,
+      "totp": false,
+      "emailVerified": false,
+      "firstName": "Adjudicator",
+      "lastName": "Wone",
+      "email": "AdjudicatorWone@email.com",
+      "disableableCredentialTypes": [],
+      "requiredActions": [],
+      "realmRoles": ["offline_access", "uma_authorization"],
+      "clientRoles": {
+        "account": ["view-profile", "manage-account"]
+      },
+      "notBefore": 0,
+      "groups": ["/Adjudicator", "/App Maintenance"]
     }
   ],
   "scopeMappings": [
