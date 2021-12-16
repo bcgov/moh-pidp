@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: api-pipeline-pvc
+spec:
+  resources:
+    requests:
+      storage: 24Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
