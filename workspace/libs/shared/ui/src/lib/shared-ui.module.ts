@@ -6,8 +6,6 @@ import { MaterialModule } from './material/material.module';
 import { NgxMaskModule } from 'ngx-mask';
 
 import { AlertComponent } from './components/alert/alert.component';
-import { AlertContentDirective } from './components/alert/alert-content.directive';
-import { AlertActionsDirective } from './components/alert/alert-actions.directive';
 import { CardComponent } from './components/card/card.component';
 import { CardSummaryComponent } from './components/card-summary/card-summary.component';
 import { CollectionNoticeComponent } from './components/collection-notice/collection-notice.component';
@@ -39,8 +37,6 @@ import { PostalPipe } from './pipes/postal.pipe';
 @NgModule({
   declarations: [
     AlertComponent,
-    AlertContentDirective,
-    AlertActionsDirective,
     CardComponent,
     CardHintDirective,
     CardContentDirective,
@@ -81,8 +77,6 @@ import { PostalPipe } from './pipes/postal.pipe';
     NgxMaskModule,
     ReactiveFormsModule,
     AlertComponent,
-    AlertContentDirective,
-    AlertActionsDirective,
     CardComponent,
     CardHintDirective,
     CardContentDirective,

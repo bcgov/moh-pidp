@@ -23,6 +23,7 @@ export class CardComponent {
   @Input() public iconType?: IconType;
   @Input() public title!: string;
   @Input() public hint?: string;
+  @Input() public class?: string | string[] | Record<string, unknown>;
 
   @ContentChildren(CardHintDirective)
   public cardHint: QueryList<CardHintDirective>;

@@ -9,9 +9,6 @@
 // danger, and muted; but is not opinionated on content, which can be
 // enforced at the component-level.
 
-// TODO flatten out these styles so the only change between styles
-// is the colour using .alert and .alert-<type> classes to reduce
-// memory footprint
 @each $type in mixins.$types {
   mat-card.ui-card-alert.#{$type} {
     @include mixins.card-alert(

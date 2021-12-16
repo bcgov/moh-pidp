@@ -1,8 +1,5 @@
 @use '../../mixins' as mixins;
 
-@import 'palette';
-@import 'bootstrap/bootstrap-imports';
-
 //
 // MATERIAL CARD
 //
@@ -19,6 +16,8 @@ mat-card.ui-card {
 .card-status {
   @include mixins.card-status;
 
+  // Override base card styles to provide a bit of variety
+  // between default cards, and cards with statuses
   mat-card.ui-card {
     // Remove card margin which is handled by card-status
     margin-bottom: 0;

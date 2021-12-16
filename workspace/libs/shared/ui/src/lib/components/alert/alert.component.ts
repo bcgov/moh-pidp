@@ -1,14 +1,6 @@
-import {
-  Component,
-  ChangeDetectionStrategy,
-  Input,
-  ContentChildren,
-  QueryList,
-} from '@angular/core';
+import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
 
 import { IconType } from '../icon/icon.component';
-import { AlertActionsDirective } from './alert-actions.directive';
-import { AlertContentDirective } from './alert-content.directive';
 
 export type AlertType = 'success' | 'info' | 'warn' | 'danger' | 'muted';
 
@@ -24,15 +16,8 @@ export class AlertComponent {
   @Input() public icon?: string;
   @Input() public iconType?: IconType;
 
-  @ContentChildren(AlertContentDirective)
-  public alertContent: QueryList<AlertContentDirective>;
-  @ContentChildren(AlertActionsDirective)
-  public alertActions: QueryList<AlertActionsDirective>;
-
   public constructor() {
-    // TODO drop default and updates styles to apply structure without type theming
+    // TODO ensure structure and indent applies regardless of existence of type
     this.type = 'muted';
-    this.alertContent = new QueryList();
-    this.alertActions = new QueryList();
   }
 }
