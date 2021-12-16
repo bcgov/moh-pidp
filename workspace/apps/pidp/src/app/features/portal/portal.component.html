@@ -1,7 +1,9 @@
 <ui-page mode="large">
   <ui-page-header>{{ title }}</ui-page-header>
 
-  <ui-collection-notice [show]="showCollectionNotice">
+  <ui-collection-notice
+    [show]="showCollectionNotice"
+    (close)="onCloseCollectionNotice($event)">
     The personal information you provide to the Provider Identity Portal
     application is collected by the British Columbia Ministry of Health under
     the authority of s. 26(a) and 26(c) of the Freedom of Information and
@@ -9,6 +11,7 @@
   </ui-collection-notice>
 
   <ui-alert
+    *ngIf="this.profileComplete"
     type="success"
     icon="check_circle"
     iconType="outlined"
@@ -35,7 +38,7 @@
 
     <div class="row">
       <div
-        *ngFor="let section of profileIdentitySections"
+        *ngFor="let section of state.profileIdentitySections"
         class="col-12 col-xl-6">
         <ui-card-summary
           [icon]="section.icon"
@@ -70,7 +73,7 @@
 
     <div class="row">
       <div
-        *ngFor="let section of accessToSystemsSections"
+        *ngFor="let section of state.accessToSystemsSections"
         class="col-12 col-xl-6">
         <ui-card-summary
           [icon]="section.icon"
@@ -101,7 +104,9 @@
     </ui-page-section-subheader>
 
     <div class="row">
-      <div *ngFor="let section of trainingSections" class="col-12 col-xl-6">
+      <div
+        *ngFor="let section of state.trainingSections"
+        class="col-12 col-xl-6">
         <ui-card-summary
           [icon]="section.icon"
           [title]="section.title"
@@ -133,7 +138,9 @@
     </ui-page-section-subheader>
 
     <div class="row">
-      <div *ngFor="let section of yourProfileSections" class="col-12 col-xl-6">
+      <div
+        *ngFor="let section of state.yourProfileSections"
+        class="col-12 col-xl-6">
         <ui-card-summary
           [icon]="section.icon"
           [title]="section.title"

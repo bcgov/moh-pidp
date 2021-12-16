@@ -32,7 +32,8 @@
       color="primary"
       type="submit"
       routerLink="../../"
-      [disabled]="!checkbox.checked">
+      [disabled]="!checkbox.checked"
+      (click)="onSubmit()">
       Save Information
     </button>
   </ui-page-footer>
