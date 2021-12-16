@@ -116,6 +116,13 @@ $theme-typography: mat.define-typography-config();
       position: absolute;
       right: 0;
       top: -0.35rem;
+
+      .mat-icon {
+        position: absolute;
+        left: -1.5rem;
+        top: 0;
+        font-size: 0.95rem;
+      }
     }
   }
 }
@@ -193,9 +200,9 @@ $types: success, info, warn, danger, muted;
 
   @include media-breakpoint-up(md) {
     .mat-card-header {
-      // Compress the alert a bit for aesthetics and to
-      // reduce its vertical footprint a bit
-      margin-bottom: -0.5rem;
+      // Compress the alert for aesthetics and to
+      // reduce its vertical footprint
+      margin-bottom: 0;
     }
 
     // Align content and action containers with the card header

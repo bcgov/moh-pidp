@@ -8,10 +8,11 @@
     Protection of Privacy Act (FOIPPA).
   </ui-collection-notice>
 
-  <ui-alert type="success" icon="check_circle" iconType="outlined">
-    <ng-container uiAlertTitle>
-      You have completed the profile section of the Provider Identity Portal
-    </ng-container>
+  <ui-alert
+    type="success"
+    icon="check_circle"
+    iconType="outlined"
+    title="You have completed the profile section of the Provider Identity Portal">
     <ng-container uiAlertContent>
       Go to the Access to Systems section to view what systems you are eligible
       for, or if you need to apply to use one of the systems.
@@ -28,7 +29,7 @@
       <ng-container uiPageSectionSubheaderDesc>
         Complete the information for each portion of your Provider Identity.
         This will allow the portal to identify systems for which you may request
-        acces.
+        access.
       </ng-container>
     </ui-page-section-subheader>
 
@@ -45,7 +46,15 @@
           [statusType]="section.statusType"
           [status]="section.status"
           [disabled]="section.disabled"
-          (action)="onAction(section?.route)"></ui-card-summary>
+          (action)="onAction(section?.route)">
+          <ng-container uiCardSummaryHint>
+            <!-- <mat-icon>check_circle</mat-icon> -->
+            {{ section.hint }}
+          </ng-container>
+          <ng-container uiCardSummaryContent>
+            {{ section.description }}
+          </ng-container>
+        </ui-card-summary>
       </div>
     </div>
   </ui-page-section>
@@ -66,13 +75,20 @@
         <ui-card-summary
           [icon]="section.icon"
           [title]="section.title"
-          [hint]="section.hint"
           [description]="section.description"
           [actionLabel]="section.actionLabel"
           [statusType]="section.statusType"
           [status]="section.status"
           [disabled]="section.disabled"
-          (action)="onAction(section?.route)"></ui-card-summary>
+          (action)="onAction(section?.route)">
+          <ng-container uiCardSummaryHint>
+            <!-- <mat-icon>check_circle</mat-icon> -->
+            {{ section.hint }}
+          </ng-container>
+          <ng-container uiCardSummaryContent>
+            {{ section.description }}
+          </ng-container>
+        </ui-card-summary>
       </div>
     </div>
   </ui-page-section>
@@ -95,7 +111,15 @@
           [statusType]="section.statusType"
           [status]="section.status"
           [disabled]="section.disabled"
-          (action)="onAction(section?.route)"></ui-card-summary>
+          (action)="onAction(section?.route)">
+          <ng-container uiCardSummaryHint>
+            <!-- <mat-icon>check_circle</mat-icon> -->
+            {{ section.hint }}
+          </ng-container>
+          <ng-container uiCardSummaryContent>
+            {{ section.description }}
+          </ng-container>
+        </ui-card-summary>
       </div>
     </div>
   </ui-page-section>
@@ -116,7 +140,15 @@
           [description]="section.description"
           [actionLabel]="section.actionLabel"
           [disabled]="section.disabled"
-          (action)="onAction(section?.route)"></ui-card-summary>
+          (action)="onAction(section?.route)">
+          <ng-container uiCardSummaryHint>
+            <!-- <mat-icon>check_circle</mat-icon> -->
+            {{ section.hint }}
+          </ng-container>
+          <ng-container uiCardSummaryContent>
+            {{ section.description }}
+          </ng-container>
+        </ui-card-summary>
       </div>
     </div>
   </ui-page-section>
