@@ -59,57 +59,6 @@ export class PortalComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    this.getSummaries();
-  }
-
-  public fakeStatusUpdate(type: string): void {
-    if (type === 'personal-information') {
-      this.state.profileIdentitySections =
-        this.state.profileIdentitySections.map((section: PortalSection) => {
-          switch (section.type) {
-            case 'personal-information':
-              return {
-                ...section,
-                statusType: 'success',
-                status: 'completed',
-              };
-            case 'provider-checklist':
-              return {
-                ...section,
-                disabled: false,
-              };
-            case 'college-licence-information':
-              return {
-                ...section,
-                disabled: false,
-              };
-          }
-
-          return section;
-        });
-      this.state.trainingSections = this.state.trainingSections.map(
-        (section: PortalSection) => {
-          switch (section.type) {
-            case 'compliance-training':
-              return {
-                ...section,
-                disabled: false,
-              };
-          }
-
-          return section;
-        }
-      );
-    }
-    this.state.yourProfileSections = this.state.yourProfileSections.map(
-      (section: PortalSection) => ({
-        ...section,
-        disabled: false,
-      })
-    );
-  }
-
-  private getSummaries(): void {
-    this.state;
+    this.
   }
 }
