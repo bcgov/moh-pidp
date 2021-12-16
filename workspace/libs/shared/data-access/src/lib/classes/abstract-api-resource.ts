@@ -20,7 +20,7 @@ export type NoContent = Observable<void>;
  * Pipe to provide a proper return type of a
  * NoContent HTTP response.
  */
-export const NoContentResponse = pipe(map(() => {}));
+export const NoContentResponse = pipe(map(() => void 0));
 
 export abstract class AbstractApiResource {
   public abstract get<T>(

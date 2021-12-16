@@ -7,15 +7,12 @@ import {
 
 import { Address } from '@bcgov/shared/data-access';
 import { AbstractFormState, FormControlValidators } from '@bcgov/shared/ui';
-import { FormUtilsService } from '@core/services/form-utils.service';
 
 import { PersonalInformationModel } from './personal-information.model';
 
-export class ProfileInformationFormState extends AbstractFormState<PersonalInformationModel> {
-  public constructor(
-    private fb: FormBuilder,
-    private formUtilsService: FormUtilsService
-  ) {
+// TODO add in validation toggles for forms
+export class PersonalInformationFormState extends AbstractFormState<PersonalInformationModel> {
+  public constructor(private fb: FormBuilder) {
     super();
 
     this.buildForm();
@@ -58,8 +55,8 @@ export class ProfileInformationFormState extends AbstractFormState<PersonalInfor
     return this.formInstance.getRawValue();
   }
 
-  public patchValue(model: PersonalInformationModel): void {
-    if (!this.formInstance) {
+  public patchValue(model: PersonalInformationModel | null): void {
+    if (!this.formInstance || !model) {
       return;
     }
 

@@ -1,37 +1,32 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
-import { catchError, map, Observable } from 'rxjs';
+import { catchError, Observable } from 'rxjs';
 
-import {
-  ApiHttpErrorResponse,
-  ApiHttpResponse,
-  Party,
-} from '@bcgov/shared/data-access';
+import { Party } from '@bcgov/shared/data-access';
 
-import { ApiResourceUtilsService } from './api-resource-utils.service';
 import { ApiResource } from './api-resource.service';
 
 @Injectable({
   providedIn: 'root',
 })
-export class PartyResourceService {
-  public constructor(
-    private apiResource: ApiResource,
-    private apiResourceUtilsService: ApiResourceUtilsService
-  ) {}
-  public getParties(): Observable<ApiHttpResponse<Party[]>> {
+export class PartyResource {
+  public constructor(private apiResource: ApiResource) {}
+
+  // TODO reduce typing for results by wrapping HttpResponse
+  public getParties(): Observable<Party[] | null> {
     return this.apiResource.get<Party[]>('parties').pipe(
-      map((response: ApiHttpResponse<Party[]>) => response),
-      catchError((error: ApiHttpErrorResponse) => {
+      this.apiResource.unwrapResultPipe(),
+      catchError((error: HttpErrorResponse) => {
         throw error;
       })
     );
   }
 
-  public createParty(party: Party): Observable<ApiHttpResponse<Party>> {
+  public createParty(party: Party): Observable<Party | null> {
     return this.apiResource.post<Party>('parties', party).pipe(
-      map((response: ApiHttpResponse<Party>) => response),
-      catchError((error: ApiHttpErrorResponse) => {
+      this.apiResource.unwrapResultPipe(),
+      catchError((error: HttpErrorResponse) => {
         throw error;
       })
     );

@@ -8,15 +8,19 @@
     Protection of Privacy Act (FOIPPA).
   </ui-collection-notice>
 
-  <ui-alert
-    *ngIf="false"
-    type="success"
-    icon="check_circle"
-    iconType="outlined"
-    title="You have completed the profile section of the Provider Identity Portal">
-    Go to the Access to Systems section to view what systems you are eligible
-    for, or if you need to apply to use one of the systems.
-    <!-- <button mat-stroked-button type="button">View Systems</button> -->
+  <ui-alert type="success" icon="check_circle" iconType="outlined">
+    <ng-container uiAlertTitle>
+      You have completed the profile section of the Provider Identity Portal
+    </ng-container>
+    <ng-container uiAlertContent>
+      Go to the Access to Systems section to view what systems you are eligible
+      for, or if you need to apply to use one of the systems.
+    </ng-container>
+    <ng-container uiAlertActions>
+      <span>
+        <button mat-stroked-button type="button">View Systems</button>
+      </span>
+    </ng-container>
   </ui-alert>
 
   <ui-page-section>
@@ -58,7 +62,7 @@
     <div class="row">
       <div
         *ngFor="let section of accessToSystemsSections"
-        class="col col-md-12 col-xl-6">
+        class="col-12 col-xl-6">
         <ui-card-summary
           [icon]="section.icon"
           [title]="section.title"
@@ -81,9 +85,7 @@
     </ui-page-section-subheader>
 
     <div class="row">
-      <div
-        *ngFor="let section of trainingSections"
-        class="col col-md-12 col-xl-6">
+      <div *ngFor="let section of trainingSections" class="col-12 col-xl-6">
         <ui-card-summary
           [icon]="section.icon"
           [title]="section.title"
@@ -107,9 +109,7 @@
     </ui-page-section-subheader>
 
     <div class="row">
-      <div
-        *ngFor="let section of yourProfileSections"
-        class="col col-md-12 col-xl-6">
+      <div *ngFor="let section of yourProfileSections" class="col-12 col-xl-6">
         <ui-card-summary
           [icon]="section.icon"
           [title]="section.title"
