@@ -178,6 +178,10 @@ $types: success, info, warn, danger, muted;
       background-color: alert-palette($type, backgroundColorSolid);
       border-color: alert-palette($type, backgroundColorSolid);
       color: alert-palette($type, color);
+
+      @if ($type == 'success') {
+        color: white;
+      }
     }
   }
 }

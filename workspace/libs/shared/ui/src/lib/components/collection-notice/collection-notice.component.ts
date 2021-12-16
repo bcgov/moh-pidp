@@ -14,15 +14,15 @@ import {
 })
 export class CollectionNoticeComponent {
   @Input() public show!: boolean;
-  @Output() public remove: EventEmitter<boolean>;
+  @Output() public close: EventEmitter<boolean>;
 
   public constructor() {
-    this.remove = new EventEmitter<boolean>();
+    this.close = new EventEmitter<boolean>();
   }
 
   public onClose(checked: boolean): void {
     if (checked) {
-      this.remove.emit(checked);
+      this.close.emit(checked);
     }
 
     this.show = false;

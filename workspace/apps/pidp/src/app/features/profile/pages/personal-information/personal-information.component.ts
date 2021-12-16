@@ -8,6 +8,7 @@ import { EMPTY, Observable, tap } from 'rxjs';
 import { Address, BcscUser } from '@bcgov/shared/data-access';
 import { ToggleContentChange } from '@bcgov/shared/ui';
 import { AbstractFormPage } from '@core/classes/abstract-form-page.class';
+import { DemoService } from '@core/services/demo.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 
 import { PersonalInformationFormState } from './personal-information-form-state';
@@ -34,6 +35,7 @@ export class PersonalInformationComponent
     protected formUtilsService: FormUtilsService,
     private route: ActivatedRoute,
     private resource: PersonalInformationResource,
+    private demoService: DemoService,
     fb: FormBuilder
   ) {
     super(dialog, formUtilsService);
@@ -54,6 +56,26 @@ export class PersonalInformationComponent
         'V8S 2L5'
       ),
     };
+  }
+
+  public onSubmit(): void {
+    this.demoService.state.profileIdentitySections =
+      this.demoService.state.profileIdentitySections.map((section) => {
+        if (section.type === 'personal-information') {
+          return {
+            ...section,
+            statusType: 'success',
+            status: 'completed',
+          };
+        }
+        if (section.type === 'college-licence-information') {
+          return {
+            ...section,
+            disabled: false,
+          };
+        }
+        return section;
+      });
   }
 
   public onPreferredNameToggle({ checked }: ToggleContentChange): void {}
