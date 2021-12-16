@@ -4,6 +4,8 @@
   "editor.formatOnPaste": true,
   "editor.formatOnSave": true,
   "editor.renderWhitespace": "boundary",
+  "editor.guides.bracketPairs": "active",
+  "editor.bracketPairColorization.enabled": true,
   "files.autoSave": "onFocusChange",
   "files.trimTrailingWhitespace": true,
   "css.lint.important": "warning",
