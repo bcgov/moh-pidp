@@ -1,4 +1,4 @@
-<ui-page>
+<ui-page mode="large">
   <ui-page-header>{{ title }}</ui-page-header>
 
   <ui-page-section>
@@ -11,7 +11,7 @@
     </ui-page-section-subheader>
 
     <div class="row">
-      <div *ngFor="let document of documents" class="col col-md-12 col-lg-6">
+      <div *ngFor="let document of documents" class="col-12 col-xl-6">
         <ui-card-summary
           [icon]="document.icon"
           [title]="document.title"
