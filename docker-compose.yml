@@ -4,7 +4,7 @@ services:
   ###############################################################################
   ###                     PostgreSQL Database Definition                      ###
   ###############################################################################
-  pidp-postgres:
+  pidp-db:
     restart: always
     container_name: pidpdb
     image: postgres:10.6
@@ -25,9 +25,9 @@ services:
   pidp-webapi:
     container_name: pidp-webapi
     restart: always
-    image: pidp
+    image: pidp-webapi
     build:
-      context: pidp-webapi/
+      context: webapi/
       args:
         ASPNETCORE_HTTPS_PORT: "5001"
         ASPNETCORE_ENVIRONMENT: "Development"
@@ -40,7 +40,7 @@ services:
       DOTNET_CLI_HOME: "/tmp/DOTNET_CLI_HOME"
       ConnectionStrings__PidpDatabase: "host=pidpdb;port=5432;database=postgres;username=postgres;password=postgres"
     volumes:
-      - ./pidp-webapi/:/app
+      - ./webapi/:/app
       - pidp-webapi-bin:/app/bin
       - pidp-webapi-obj:/app/obj
       # - ${APPDATA}/Microsoft/UserSecrets/5c2dc965-00b4-4531-9ff0-9b37193ead9b:/root/.microsoft/usersecrets/5c2dc965-00b4-4531-9ff0-9b37193ead9b
@@ -52,17 +52,35 @@ services:
     networks:
       - pidp-net
     depends_on:
-      - pidp-postgres
+      - pidp-db
     entrypoint: /bin/bash
     command: [
       "-c",
       "echo Waiting for Database...;
-      sleep 15;
+      sleep 10;
       echo \"Running Database Migrations...\";
       dotnet ef database update;
       echo \"Starting API...\";
       dotnet watch run --urls=http://+:8080"
     ]
+
+  ###############################################################################
+  ###                                Keycloak                                 ###
+  ###############################################################################
+  keycloak:
+    container_name: keycloak
+    image: jboss/keycloak:latest
+    restart: always
+    volumes:
+      - ./realm-export-local.json:/tmp/realm-export.json
+    environment:
+      DB_VENDOR: h2
+      KEYCLOAK_USER: admin
+      KEYCLOAK_PASSWORD: admin
+      KEYCLOAK_IMPORT: /tmp/realm-export.json -Dkeycloak.profile.feature.upload_scripts=enabled
+    ports:
+      - 9090:8080
+    profiles: ["full", "keycloak"]
 
 ###############################################################################
 ###                           Networks Definition                           ###
