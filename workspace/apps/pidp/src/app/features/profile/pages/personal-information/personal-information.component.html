@@ -1,14 +1,14 @@
 <ui-page>
   <ui-page-header>{{ title }}</ui-page-header>
 
-  <form [formGroup]="formState.form" novalidate (ngSubmit)="onSubmit()">
+  <form novalidate [formGroup]="formState.form" (ngSubmit)="onSubmit()">
     <ui-page-section>
       <ui-page-section-subheader
         icon="assignment_ind"
         heading="Personal Information">
         <ng-container uiPageSectionSubheaderDesc>
-          Provide the next information to complete your provider identity
-          portal.
+          Provide the following information to complete your Provider Identity
+          Profile.
         </ng-container>
       </ui-page-section-subheader>
     </ui-page-section>
@@ -60,7 +60,7 @@
     <ui-page-section>
       <ui-page-section-subheader heading="Contact Information">
         <ng-container uiPageSectionSubheaderDesc>
-          Provide your contact information to be used to correspond with you.
+          Provide your contact information.
         </ng-container>
       </ui-page-section-subheader>
 

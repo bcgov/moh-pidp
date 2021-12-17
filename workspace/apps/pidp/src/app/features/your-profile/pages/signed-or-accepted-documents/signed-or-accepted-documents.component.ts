@@ -40,7 +40,7 @@ export class SignedOrAcceptedDocumentsComponent implements OnInit {
       {
         icon: 'fingerprint',
         type: 'terms-of-access',
-        title: 'Terms of Access',
+        title: 'User Access Agreement',
         actionLabel: 'View',
         disabled: false,
       },
