@@ -1,4 +1,14 @@
 {
   "singleQuote": true,
-  "bracketSameLine": true
+  "bracketSameLine": true,
+  "attributeGroups": [
+    "$ANGULAR_STRUCTURAL_DIRECTIVE",
+    "^(id|name)$",
+    "^class$",
+    "$DEFAULT",
+    "^aria-",
+    "$ANGULAR_INPUT",
+    "$ANGULAR_TWO_WAY_BINDING",
+    "$ANGULAR_OUTPUT"
+  ]
 }
