@@ -15,16 +15,16 @@
               {
                 "sourceTag": "*",
                 "onlyDependOnLibsWithTags": ["*"]
+              },
+              {
+                "sourceTag": "scope:shared",
+                "onlyDependOnLibsWithTags": ["scope:shared"]
+              },
+              {
+                "sourceTag": "scope:pidp",
+                "onlyDependOnLibsWithTags": ["scope:pidp", "scope:shared"]
               }
-              // TODO setup module boundaries
-              // {
-              //   "sourceTag": "scope:shared",
-              //   "onlyDependOnLibsWithTags": ["scope:shared"]
-              // },
-              // {
-              //   "sourceTag": "scope:pidp",
-              //   "onlyDependOnLibsWithTags": ["scope:pidp", "scope:shared"]
-              // }
+              // TODO setup more module boundaries between scopes and tags
             ]
           }
         ]
