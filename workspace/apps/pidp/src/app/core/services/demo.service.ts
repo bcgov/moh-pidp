@@ -70,11 +70,12 @@ export class DemoService {
       {
         icon: 'fingerprint',
         type: 'terms-of-access-agreement',
-        title: 'Terms of Access Agreement',
+        title: 'User Access Agreement(s)',
         process: 'manual',
         hint: '13 mins to complete',
-        description: 'Sign and agree to these terms of access',
-        actionLabel: 'Sign',
+        description:
+          'Read and agree to the applicable User Access Agreement(s)',
+        actionLabel: 'Open',
         route: ProfileRoutes.routePath(
           ProfileRoutes.TERMS_OF_ACCESS_AGREEMENT_PAGE
         ),
