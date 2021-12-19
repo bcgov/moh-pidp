@@ -1,11 +1,14 @@
 import { FormArray, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 
-import { Observable, Subscription } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 
+import { Observable, Subscription } from 'rxjs';
+
 import { AbstractFormState } from '@bcgov/shared/ui';
+
 import { FormUtilsService } from '@core/services/form-utils.service';
+
 // import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 
 export interface IFormPage {
@@ -129,6 +132,14 @@ export abstract class AbstractFormPage<
     } else {
       this.onSubmitFormIsInvalid();
     }
+  }
+
+  /**
+   * @description
+   * Handle routing back to previous view.
+   */
+  public onBack(): void {
+    // Optional back route event handler, otherwise NOOP
   }
 
   /**

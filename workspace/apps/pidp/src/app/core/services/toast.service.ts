@@ -10,35 +10,52 @@ import {
   providedIn: 'root',
 })
 export class ToastService {
-  private readonly duration: number;
+  private readonly defaultConfig: MatSnackBarConfig;
+  private readonly durationInMilliSecs: number;
   private readonly horizontalPosition: MatSnackBarHorizontalPosition;
   private readonly verticalPosition: MatSnackBarVerticalPosition;
 
   public constructor(private snackBar: MatSnackBar) {
-    this.duration = 3000; // ms
+    this.durationInMilliSecs = 3000;
     this.verticalPosition = 'top';
     this.horizontalPosition = 'end';
+    this.defaultConfig = {
+      duration: this.durationInMilliSecs,
+      horizontalPosition: this.horizontalPosition,
+      verticalPosition: this.verticalPosition,
+    };
   }
 
   /**
    * @description
-   * Opens a toast to display a success message.
+   * Opens a toast to display an information message.
    */
   public openSuccessToast(
     message: string,
     action?: string,
     config?: MatSnackBarConfig
   ): void {
-    const defaultConfig: MatSnackBarConfig = Object.assign(
-      {
-        duration: this.duration,
-        extraClasses: ['success'],
-        horizontalPosition: this.horizontalPosition,
-        verticalPosition: this.verticalPosition,
-      },
-      config
-    );
-    this.openToast(message, action, defaultConfig);
+    this.openToast(message, action, {
+      ...this.defaultConfig,
+      panelClass: ['success'],
+      ...config,
+    });
+  }
+
+  /**
+   * @description
+   * Opens a toast to display an error message.
+   */
+  public openInfoToast(
+    message: string,
+    action?: string,
+    config?: MatSnackBarConfig
+  ): void {
+    this.openToast(message, action, {
+      ...this.defaultConfig,
+      panelClass: ['info'],
+      ...config,
+    });
   }
 
   /**
@@ -50,16 +67,11 @@ export class ToastService {
     action?: string,
     config?: MatSnackBarConfig
   ): void {
-    const defaultConfig: MatSnackBarConfig = Object.assign(
-      {
-        duration: this.duration,
-        extraClasses: ['danger'],
-        horizontalPosition: this.horizontalPosition,
-        verticalPosition: this.verticalPosition,
-      },
-      config
-    );
-    this.openToast(message, action, defaultConfig);
+    this.openToast(message, action, {
+      ...this.defaultConfig,
+      panelClass: ['danger'],
+      ...config,
+    });
   }
 
   private openToast(
