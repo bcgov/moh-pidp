@@ -16,6 +16,7 @@
     "^rxjs/(.*)$",
     "<THIRD_PARTY_MODULES>",
     "^@bcgov/(.*)$",
+    "^@app/(.*)$",
     "^@core/(.*)$",
     "^@shared/(.*)$",
     "^[./]"
