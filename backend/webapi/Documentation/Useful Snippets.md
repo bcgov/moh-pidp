@@ -1,7 +1,20 @@
 # Useful VSCode Snippets
 
 ## C#
+
 ```json
+"Command Validator": {
+    "prefix": "cvalidator",
+    "body": [
+        "public class CommandValidator : AbstractValidator<Command>",
+        "{",
+        " public CommandValidator()",
+        " {",
+        "  this.RuleFor(x => x$1).NotEmpty();$0",
+        " }",
+        "}"
+    ]
+},
 "Command Handler": {
 	"prefix": "chandle",
 	"body": [
