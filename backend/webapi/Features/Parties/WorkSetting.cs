@@ -1,5 +1,7 @@
 namespace Pidp.Features.Parties;
 
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Pidp.Data;
@@ -11,16 +13,16 @@ public class WorkSetting
 {
     public class Query : IQuery<Command>
     {
-        public int Id { get; set; }
+        public int PartyId { get; set; }
     }
 
     public class Command : ICommand
     {
-        public int Id { get; set; }
+        public int PartyId { get; set; }
         public string JobTitle { get; set; } = string.Empty;
         public string FacilityName { get; set; } = string.Empty;
 
-        public Address? FacilityAddress { get; set; }
+        public Address? PhysicalAddress { get; set; }
 
         public class Address
         {
@@ -36,8 +38,8 @@ public class WorkSetting
     {
         public CommandValidator()
         {
-            this.RuleFor(x => x.Id).NotEmpty();
-            this.RuleFor(x => x.FacilityAddress).SetValidator(new AddressValidator()!);
+            this.RuleFor(x => x.PartyId).NotEmpty();
+            this.RuleFor(x => x.PhysicalAddress).SetValidator(new AddressValidator()!);
         }
     }
 
@@ -53,6 +55,26 @@ public class WorkSetting
         }
     }
 
+    public class QueryHandler : IQueryHandler<Query, Command>
+    {
+        private readonly PidpDbContext context;
+        private readonly IMapper mapper;
+
+        public QueryHandler(PidpDbContext context, IMapper mapper)
+        {
+            this.context = context;
+            this.mapper = mapper;
+        }
+
+        public async Task<Command> HandleAsync(Query query)
+        {
+            return await this.context.Parties
+                .Where(party => party.Id == query.PartyId)
+                .ProjectTo<Command>(this.mapper.ConfigurationProvider)
+                .SingleOrDefaultAsync();
+        }
+    }
+
     public class CommandHandler : ICommandHandler<Command>
     {
         private readonly PidpDbContext context;
@@ -63,7 +85,7 @@ public class WorkSetting
         {
             var party = await this.context.Parties
                 .Include(party => party.Facility)
-                .SingleOrDefaultAsync(party => party.Id == command.Id);
+                .SingleOrDefaultAsync(party => party.Id == command.PartyId);
 
             if (party == null)
             {
@@ -72,18 +94,33 @@ public class WorkSetting
 
             party.JobTitle = command.JobTitle;
 
-            // if (party.Facility == null)
-            // {
-            //     var partyCertification = new PartyCertification
-            //     {
-            //         Party = party,
-            //     };
-            //     this.context.PartyCertifications.Add(partyCertification);
-            // }
-            // else
-            // {
+            if (party.Facility == null)
+            {
+                party.Facility = new Facility
+                {
+                    PartyId = command.PartyId,
+                };
+                this.context.Facilities.Add(party.Facility);
+            }
 
-            // }
+            party.Facility.FacilityName = command.FacilityName;
+
+            if (command.PhysicalAddress == null)
+            {
+                party.Facility.PhysicalAddress = null;
+            }
+            else
+            {
+                party.Facility.PhysicalAddress = new FacilityAddress
+                {
+                    AddressType = AddressType.Physical,
+                    CountryCode = command.PhysicalAddress.CountryCode,
+                    ProvinceCode = command.PhysicalAddress.ProvinceCode,
+                    Street = command.PhysicalAddress.Street,
+                    City = command.PhysicalAddress.City,
+                    Postal = command.PhysicalAddress.Postal
+                };
+            }
 
             await this.context.SaveChangesAsync();
         }

@@ -53,8 +53,8 @@ public class PartiesController : ControllerBase
     [HttpGet("{partyId}/work-setting")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<WorkSetting.Command>> GetPartyWorkSetting([FromServices] IQueryHandler<WorkSetting.Query, WorkSetting.Command> handler,
-                                                                         [FromRoute] int partyId)
-    => await handler.HandleAsync(new WorkSetting.Query { Id = partyId });
+                                                                             [FromRoute] int partyId)
+        => await handler.HandleAsync(new WorkSetting.Query { PartyId = partyId });
 
     [HttpPut("{partyId}/work-setting")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]

@@ -15,5 +15,5 @@ public class Facility : BaseAuditable
 
     public string FacilityName { get; set; } = string.Empty;
 
-    public FacilityAddress? FacilityAddress { get; set; }
+    public FacilityAddress? PhysicalAddress { get; set; }
 }
