@@ -34,4 +34,19 @@ public class PartiesController : ControllerBase
         await handler.HandleAsync(command);
         return this.NoContent();
     }
+
+    [HttpGet("{partyId}/college-certification")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<ActionResult<CollegeCertification.Command>> GetPartyCollegeCertification([FromServices] IQueryHandler<CollegeCertification.Query, CollegeCertification.Command> handler,
+                                                                                               [FromRoute] int partyId)
+        => await handler.HandleAsync(new CollegeCertification.Query { Id = partyId });
+
+    [HttpPut("{partyId}/college-certification")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    public async Task<ActionResult> UpdatePartyCollegeCertification([FromServices] ICommandHandler<CollegeCertification.Command> handler,
+                                                                    [FromBody] CollegeCertification.Command command)
+    {
+        await handler.HandleAsync(command);
+        return this.NoContent();
+    }
 }
