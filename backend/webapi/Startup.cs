@@ -56,6 +56,7 @@ public class Startup
                 Name = "Authorization",
                 Type = SecuritySchemeType.ApiKey
             });
+            options.CustomSchemaIds(x => x.FullName);
         });
     }
 
