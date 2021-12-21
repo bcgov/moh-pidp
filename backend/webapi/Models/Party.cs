@@ -29,4 +29,8 @@ public class Party : BaseAuditable
     public PartyAddress? MailingAddress { get; set; }
 
     public PartyCertification? PartyCertification { get; set; }
+
+    public string? JobTitle { get; set; }
+
+    public Facility? Facility { get; set; }
 }

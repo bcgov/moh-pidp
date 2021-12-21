@@ -4,12 +4,12 @@ using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
-
 using Pidp.Data;
+using Pidp.Features;
 using Pidp.Models;
 using Pidp.Models.Lookups;
 
-public class Demographics
+public class WorkSetting
 {
     public class Query : IQuery<Command>
     {
@@ -19,15 +19,10 @@ public class Demographics
     public class Command : ICommand
     {
         public int PartyId { get; set; }
+        public string JobTitle { get; set; } = string.Empty;
+        public string FacilityName { get; set; } = string.Empty;
 
-        public string? PreferredFirstName { get; set; }
-        public string? PreferredMiddleName { get; set; }
-        public string? PreferredLastName { get; set; }
-
-        public string? Email { get; set; }
-        public string? Phone { get; set; }
-
-        public Address? MailingAddress { get; set; }
+        public Address? PhysicalAddress { get; set; }
 
         public class Address
         {
@@ -44,9 +39,7 @@ public class Demographics
         public CommandValidator()
         {
             this.RuleFor(x => x.PartyId).NotEmpty();
-            this.RuleFor(x => x.Email).NotEmpty().EmailAddress();
-            this.RuleFor(x => x.Phone).NotEmpty();
-            this.RuleFor(x => x.MailingAddress).SetValidator(new AddressValidator()!);
+            this.RuleFor(x => x.PhysicalAddress).SetValidator(new AddressValidator()!);
         }
     }
 
@@ -91,7 +84,7 @@ public class Demographics
         public async Task HandleAsync(Command command)
         {
             var party = await this.context.Parties
-                .Include(party => party.MailingAddress)
+                .Include(party => party.Facility)
                 .SingleOrDefaultAsync(party => party.Id == command.PartyId);
 
             if (party == null)
@@ -99,26 +92,33 @@ public class Demographics
                 return;
             }
 
-            party.PreferredFirstName = command.PreferredFirstName;
-            party.PreferredMiddleName = command.PreferredMiddleName;
-            party.PreferredLastName = command.PreferredLastName;
-            party.Email = command.Email;
-            party.Phone = command.Phone;
+            party.JobTitle = command.JobTitle;
 
-            if (command.MailingAddress == null)
+            if (party.Facility == null)
             {
-                party.MailingAddress = null;
+                party.Facility = new Facility
+                {
+                    PartyId = command.PartyId,
+                };
+                this.context.Facilities.Add(party.Facility);
+            }
+
+            party.Facility.FacilityName = command.FacilityName;
+
+            if (command.PhysicalAddress == null)
+            {
+                party.Facility.PhysicalAddress = null;
             }
             else
             {
-                party.MailingAddress = new PartyAddress
+                party.Facility.PhysicalAddress = new FacilityAddress
                 {
-                    AddressType = AddressType.Mailing,
-                    CountryCode = command.MailingAddress.CountryCode,
-                    ProvinceCode = command.MailingAddress.ProvinceCode,
-                    Street = command.MailingAddress.Street,
-                    City = command.MailingAddress.City,
-                    Postal = command.MailingAddress.Postal
+                    AddressType = AddressType.Physical,
+                    CountryCode = command.PhysicalAddress.CountryCode,
+                    ProvinceCode = command.PhysicalAddress.ProvinceCode,
+                    Street = command.PhysicalAddress.Street,
+                    City = command.PhysicalAddress.City,
+                    Postal = command.PhysicalAddress.Postal
                 };
             }
 

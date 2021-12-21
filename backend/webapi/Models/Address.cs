@@ -8,7 +8,7 @@ using Pidp.Models.Lookups;
 public enum AddressType
 {
     Physical = 1,
-    Mailng,
+    Mailing,
     Verified
 }
 
@@ -40,4 +40,11 @@ public class PartyAddress : Address
     public int PartyId { get; set; }
 
     public Party? Party { get; set; }
+}
+
+public class FacilityAddress : Address
+{
+    public int FacilityId { get; set; }
+
+    public Facility? Facility { get; set; }
 }
