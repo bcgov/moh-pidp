@@ -14,6 +14,7 @@ public class PidpDbContext : DbContext
 
     public DbSet<Party> Parties { get; set; } = default!;
     public DbSet<PartyCertification> PartyCertifications { get; set; } = default!;
+    public DbSet<Facility> Facilities { get; set; } = default!;
 
     public override int SaveChanges()
     {

@@ -41,3 +41,10 @@ public class PartyAddress : Address
 
     public Party? Party { get; set; }
 }
+
+public class FacilityAddress : Address
+{
+    public int FacilityId { get; set; }
+
+    public Facility? Facility { get; set; }
+}
