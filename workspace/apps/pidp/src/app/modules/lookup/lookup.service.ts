@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 
-import { MockLookup } from '@test/mock-lookup';
 import { Observable, map, of } from 'rxjs';
 
 import { UtilsService } from '@core/services/utils.service';
@@ -52,14 +51,14 @@ export class LookupService implements ILookupService {
    */
   public load(): Observable<LookupConfig | null> {
     if (!this.lookupConfig) {
-      return this.lookupResource.getLookups().pipe(
-        map(
-          (lookupConfig: LookupConfig | null) =>
-            (this.lookupConfig = lookupConfig)
-        ),
-        // TODO need lookup API then remove mock config
-        map((_) => (this.lookupConfig = MockLookup.get()))
-      );
+      return this.lookupResource
+        .getLookups()
+        .pipe(
+          map(
+            (lookupConfig: LookupConfig | null) =>
+              (this.lookupConfig = lookupConfig)
+          )
+        );
     }
 
     return of({ ...this.lookupConfig });

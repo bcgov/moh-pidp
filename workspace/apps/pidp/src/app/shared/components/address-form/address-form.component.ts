@@ -1,12 +1,14 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 
-import { startWith, pairwise, distinctUntilChanged } from 'rxjs';
+import { distinctUntilChanged, pairwise, startWith } from 'rxjs';
 
-import { FormUtilsService } from '@app/core/services/form-utils.service';
+import { Address, AddressLine, Country } from '@bcgov/shared/data-access';
+
 import { Lookup, ProvinceLookup } from '@app/modules/lookup/lookup.model';
 import { LookupService } from '@app/modules/lookup/lookup.service';
-import { Address, AddressLine, Country } from '@bcgov/shared/data-access';
+
+import { FormUtilsService } from '@core/services/form-utils.service';
 
 @Component({
   selector: 'app-address-form',
