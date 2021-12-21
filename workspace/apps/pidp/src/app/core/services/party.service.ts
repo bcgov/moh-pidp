@@ -15,9 +15,11 @@ import { DemoService } from './demo.service';
 })
 export class PartyService {
   private _party$: BehaviorSubject<Party | null>;
+  private _acceptedCollectionNotice: boolean;
 
   public constructor(private demoService: DemoService) {
     this._party$ = new BehaviorSubject<Party | null>(null);
+    this._acceptedCollectionNotice = true;
   }
 
   public get state(): Record<string, PortalSection[]> {
@@ -40,8 +42,12 @@ export class PartyService {
     };
   }
 
+  public set acceptedCollectionNotice(hasAccepted: boolean) {
+    this._acceptedCollectionNotice = hasAccepted;
+  }
+
   public get acceptedCollectionNotice(): boolean {
-    return false;
+    return this._acceptedCollectionNotice;
   }
 
   public get completedProfile(): boolean {

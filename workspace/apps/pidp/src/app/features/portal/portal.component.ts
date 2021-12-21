@@ -48,12 +48,11 @@ export class PortalComponent implements OnInit {
 
     this.acceptedCollectionNotice = this.partyService.acceptedCollectionNotice;
     this.completedProfile = this.partyService.completedProfile;
-    // TODO drop demo state when authentication is available
     this.state = this.partyService.state;
   }
 
-  public onAcceptCollectionNotice(disable: boolean): void {
-    // TODO implement sign document and permanently close collection notice
+  public onAcceptCollectionNotice(accepted: boolean): void {
+    this.partyService.acceptedCollectionNotice = accepted;
   }
 
   public onAction(routePath?: string): void {
