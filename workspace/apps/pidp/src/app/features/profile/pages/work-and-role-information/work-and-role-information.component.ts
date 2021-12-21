@@ -1,59 +1,77 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { FormBuilder } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
+import { ActivatedRoute, Router } from '@angular/router';
 
-import { DemoService } from '@core/services/demo.service';
+import { EMPTY, Observable, tap } from 'rxjs';
+
+import { LookupService } from '@app/modules/lookup/lookup.service';
+
+import { AbstractFormPage } from '@core/classes/abstract-form-page.class';
+import { FormUtilsService } from '@core/services/form-utils.service';
+import { PartyService } from '@core/services/party.service';
+
+import { WorkAndRoleInformationFormState } from './work-and-role-information-form-state';
+import { WorkAndRoleInformationResource } from './work-and-role-information-resource.service';
+import { WorkAndRoleInformationModel } from './work-and-role-information.model';
 
 @Component({
   selector: 'app-work-and-role-information',
   templateUrl: './work-and-role-information.component.html',
   styleUrls: ['./work-and-role-information.component.scss'],
 })
-export class WorkAndRoleInformationComponent implements OnInit {
+export class WorkAndRoleInformationComponent
+  extends AbstractFormPage<WorkAndRoleInformationFormState>
+  implements OnInit
+{
   public title: string;
-  public form!: FormGroup;
+  public formState: WorkAndRoleInformationFormState;
 
   public constructor(
-    private fb: FormBuilder,
+    protected dialog: MatDialog,
+    protected formUtilsService: FormUtilsService,
     private route: ActivatedRoute,
-    private demoService: DemoService
+    private router: Router,
+    private partyService: PartyService,
+    private resource: WorkAndRoleInformationResource,
+    lookupService: LookupService,
+    fb: FormBuilder
   ) {
+    super(dialog, formUtilsService);
+
     this.title = this.route.snapshot.data.title;
+    this.formState = new WorkAndRoleInformationFormState(fb);
   }
 
-  public get physicalAddress(): FormGroup {
-    return this.form.get('physicalAddress') as FormGroup;
-  }
-
-  public onSubmit(): void {
-    this.demoService.state.profileIdentitySections =
-      this.demoService.state.profileIdentitySections.map((section) => {
-        if (section.type === 'work-and-role-information') {
-          return {
-            ...section,
-            statusType: 'success',
-            status: 'completed',
-          };
-        }
-        if (section.type === 'terms-of-access-agreement') {
-          return {
-            ...section,
-            disabled: false,
-          };
-        }
-        return section;
-      });
+  public onBack(): void {
+    this.router.navigate(this.route.snapshot.data.route.root);
   }
 
   public ngOnInit(): void {
-    this.form = this.fb.group({
-      physicalAddress: this.fb.group({
-        countryCode: [{ value: null, disabled: false }, []],
-        provinceCode: [{ value: null, disabled: false }, []],
-        street: [{ value: null, disabled: false }, []],
-        city: [{ value: null, disabled: false }, []],
-        postal: [{ value: null, disabled: false }, []],
-      }),
-    });
+    const partyId = 1; // +this.route.snapshot.params.pid;
+    if (!partyId) {
+      throw new Error('No party ID was provided');
+    }
+
+    this.resource
+      .getWorkAndRoleInformation(partyId)
+      .pipe(
+        tap((model: WorkAndRoleInformationModel | null) =>
+          this.formState.patchValue(model)
+        )
+      )
+      .subscribe();
+  }
+
+  protected performSubmission(): Observable<void> {
+    const partyId = 1; // +this.route.snapshot.params.pid;
+
+    return this.formState.json
+      ? this.resource.updateWorkAndRoleInformation(partyId, this.formState.json)
+      : EMPTY;
+  }
+
+  protected afterSubmitIsSuccessful(): void {
+    this.router.navigate(this.route.snapshot.data.route.root);
   }
 }
