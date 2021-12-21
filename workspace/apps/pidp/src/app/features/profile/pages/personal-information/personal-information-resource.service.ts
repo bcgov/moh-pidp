@@ -1,17 +1,19 @@
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
-import { catchError, Observable, of } from 'rxjs';
+import { Observable, catchError, of } from 'rxjs';
 
 import { NoContent, NoContentResponse } from '@bcgov/shared/data-access';
+
 import { ApiResource } from '@core/resources/api-resource.service';
 import { LoggerService } from '@core/services/logger.service';
 import { ToastService } from '@core/services/toast.service';
 
 import { PersonalInformationModel } from './personal-information.model';
+import { PersonalInformationModule } from './personal-information.module';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: PersonalInformationModule,
 })
 export class PersonalInformationResource {
   public constructor(
