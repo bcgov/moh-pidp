@@ -27,4 +27,6 @@ public class Party : BaseAuditable
     public string? Phone { get; set; }
 
     public PartyAddress? MailingAddress { get; set; }
+
+    public PartyCertification? PartyCertification { get; set; }
 }

@@ -10,5 +10,6 @@ public class MappingProfile : Profile
     {
         this.CreateMap<Party, Demographics.Command>();
         this.CreateMap<PartyAddress, Demographics.Command.Address>();
+        this.CreateMap<PartyCertification, CollegeCertification.Command>();
     }
 }

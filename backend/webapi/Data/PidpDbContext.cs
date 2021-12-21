@@ -13,6 +13,7 @@ public class PidpDbContext : DbContext
         : base(options) => this.clock = clock;
 
     public DbSet<Party> Parties { get; set; } = default!;
+    public DbSet<PartyCertification> PartyCertifications { get; set; } = default!;
 
     public override int SaveChanges()
     {
