@@ -13,12 +13,12 @@ public class WorkSetting
 {
     public class Query : IQuery<Command>
     {
-        public int PartyId { get; set; }
+        public int Id { get; set; }
     }
 
     public class Command : ICommand
     {
-        public int PartyId { get; set; }
+        public int Id { get; set; }
         public string JobTitle { get; set; } = string.Empty;
         public string FacilityName { get; set; } = string.Empty;
 
@@ -38,7 +38,7 @@ public class WorkSetting
     {
         public CommandValidator()
         {
-            this.RuleFor(x => x.PartyId).NotEmpty();
+            this.RuleFor(x => x.Id).NotEmpty();
             this.RuleFor(x => x.PhysicalAddress).SetValidator(new AddressValidator()!);
         }
     }
@@ -69,7 +69,7 @@ public class WorkSetting
         public async Task<Command> HandleAsync(Query query)
         {
             return await this.context.Parties
-                .Where(party => party.Id == query.PartyId)
+                .Where(party => party.Id == query.Id)
                 .ProjectTo<Command>(this.mapper.ConfigurationProvider)
                 .SingleOrDefaultAsync();
         }
@@ -85,7 +85,7 @@ public class WorkSetting
         {
             var party = await this.context.Parties
                 .Include(party => party.Facility)
-                .SingleOrDefaultAsync(party => party.Id == command.PartyId);
+                .SingleOrDefaultAsync(party => party.Id == command.Id);
 
             if (party == null)
             {
@@ -98,7 +98,7 @@ public class WorkSetting
             {
                 party.Facility = new Facility
                 {
-                    PartyId = command.PartyId,
+                    Id = command.Id,
                 };
                 this.context.Facilities.Add(party.Facility);
             }

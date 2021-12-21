@@ -23,7 +23,7 @@ public class PartiesController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<Demographics.Command>> GetPartyDemographics([FromServices] IQueryHandler<Demographics.Query, Demographics.Command> handler,
                                                                                [FromRoute] int partyId)
-        => await handler.HandleAsync(new Demographics.Query { PartyId = partyId });
+        => await handler.HandleAsync(new Demographics.Query { Id = partyId });
 
     [HttpPut("{partyId}/demographics")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -54,7 +54,7 @@ public class PartiesController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<WorkSetting.Command>> GetPartyWorkSetting([FromServices] IQueryHandler<WorkSetting.Query, WorkSetting.Command> handler,
                                                                              [FromRoute] int partyId)
-        => await handler.HandleAsync(new WorkSetting.Query { PartyId = partyId });
+        => await handler.HandleAsync(new WorkSetting.Query { Id = partyId });
 
     [HttpPut("{partyId}/work-setting")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]

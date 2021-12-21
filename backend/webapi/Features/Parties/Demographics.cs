@@ -13,12 +13,12 @@ public class Demographics
 {
     public class Query : IQuery<Command>
     {
-        public int PartyId { get; set; }
+        public int Id { get; set; }
     }
 
     public class Command : ICommand
     {
-        public int PartyId { get; set; }
+        public int Id { get; set; }
 
         public string? PreferredFirstName { get; set; }
         public string? PreferredMiddleName { get; set; }
@@ -43,7 +43,7 @@ public class Demographics
     {
         public CommandValidator()
         {
-            this.RuleFor(x => x.PartyId).NotEmpty();
+            this.RuleFor(x => x.Id).NotEmpty();
             this.RuleFor(x => x.Email).NotEmpty().EmailAddress();
             this.RuleFor(x => x.Phone).NotEmpty();
             this.RuleFor(x => x.MailingAddress).SetValidator(new AddressValidator()!);
@@ -76,7 +76,7 @@ public class Demographics
         public async Task<Command> HandleAsync(Query query)
         {
             return await this.context.Parties
-                .Where(party => party.Id == query.PartyId)
+                .Where(party => party.Id == query.Id)
                 .ProjectTo<Command>(this.mapper.ConfigurationProvider)
                 .SingleOrDefaultAsync();
         }
@@ -92,7 +92,7 @@ public class Demographics
         {
             var party = await this.context.Parties
                 .Include(party => party.MailingAddress)
-                .SingleOrDefaultAsync(party => party.Id == command.PartyId);
+                .SingleOrDefaultAsync(party => party.Id == command.Id);
 
             if (party == null)
             {
