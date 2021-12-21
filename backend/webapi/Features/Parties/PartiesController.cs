@@ -23,7 +23,7 @@ public class PartiesController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<Demographics.Command>> GetPartyDemographics([FromServices] IQueryHandler<Demographics.Query, Demographics.Command> handler,
                                                                                [FromRoute] int partyId)
-        => await handler.HandleAsync(new Demographics.Query { Id = partyId });
+        => await handler.HandleAsync(new Demographics.Query { PartyId = partyId });
 
     [HttpPut("{partyId}/demographics")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -39,7 +39,7 @@ public class PartiesController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<CollegeCertification.Command>> GetPartyCollegeCertification([FromServices] IQueryHandler<CollegeCertification.Query, CollegeCertification.Command> handler,
                                                                                                [FromRoute] int partyId)
-        => await handler.HandleAsync(new CollegeCertification.Query { Id = partyId });
+        => await handler.HandleAsync(new CollegeCertification.Query { PartyId = partyId });
 
     [HttpPut("{partyId}/college-certification")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]

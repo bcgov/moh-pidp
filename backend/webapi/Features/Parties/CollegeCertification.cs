@@ -13,12 +13,12 @@ public class CollegeCertification
 {
     public class Query : IQuery<Command>
     {
-        public int Id { get; set; }
+        public int PartyId { get; set; }
     }
 
     public class Command : ICommand
     {
-        public int Id { get; set; }
+        public int PartyId { get; set; }
         public CollegeCode CollegeCode { get; set; }
         public string LicenceNumber { get; set; } = string.Empty;
     }
@@ -27,7 +27,7 @@ public class CollegeCertification
     {
         public CommandValidator()
         {
-            this.RuleFor(x => x.Id).NotEmpty();
+            this.RuleFor(x => x.PartyId).NotEmpty();
             this.RuleFor(x => x.CollegeCode).IsInEnum();
             this.RuleFor(x => x.LicenceNumber).NotEmpty();
         }
@@ -47,7 +47,7 @@ public class CollegeCertification
         public async Task<Command> HandleAsync(Query query)
         {
             return await this.context.PartyCertifications
-                .Where(certification => certification.Id == query.Id)
+                .Where(certification => certification.PartyId == query.PartyId)
                 .ProjectTo<Command>(this.mapper.ConfigurationProvider)
                 .SingleOrDefaultAsync();
         }
@@ -62,14 +62,13 @@ public class CollegeCertification
         public async Task HandleAsync(Command command)
         {
             var partyCertification = await this.context.PartyCertifications
-                .SingleOrDefaultAsync(certification => certification.PartyId == command.Id);
+                .SingleOrDefaultAsync(certification => certification.PartyId == command.PartyId);
 
             if (partyCertification == null)
             {
-                var party = await this.context.Parties.FindAsync(command.Id);
                 partyCertification = new PartyCertification
                 {
-                    Party = party,
+                    PartyId = command.PartyId,
                 };
                 this.context.PartyCertifications.Add(partyCertification);
             }
