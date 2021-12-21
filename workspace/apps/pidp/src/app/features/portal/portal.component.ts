@@ -1,8 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { DemoService } from '@app/core/services/demo.service';
+import { exhaustMap, map, of } from 'rxjs';
+
+import { Party } from '@bcgov/shared/data-access';
 import { AlertType } from '@bcgov/shared/ui';
+
+import { PartyService } from '@app/core/services/party.service';
+
 import { PartyResource } from '@core/resources/party-resource.service';
 
 import { ShellRoutes } from '../shell/shell.routes';
@@ -29,25 +34,26 @@ export interface PortalSection {
 })
 export class PortalComponent implements OnInit {
   public title: string;
-  public showCollectionNotice: boolean;
+  public acceptedCollectionNotice: boolean;
   public state: Record<string, PortalSection[]>;
-  public profileComplete: boolean;
+  public completedProfile: boolean;
 
   public constructor(
     private route: ActivatedRoute,
     private router: Router,
     private partyResource: PartyResource,
-    private demoService: DemoService
+    private partyService: PartyService
   ) {
     this.title = this.route.snapshot.data.title;
 
-    this.showCollectionNotice = this.demoService.showCollectionNotice;
-    this.state = this.demoService.state;
-    this.profileComplete = this.demoService.profileComplete;
+    this.acceptedCollectionNotice = this.partyService.acceptedCollectionNotice;
+    this.completedProfile = this.partyService.completedProfile;
+    // TODO drop demo state when authentication is available
+    this.state = this.partyService.state;
   }
 
-  public onCloseCollectionNotice(disable: boolean): void {
-    this.demoService.showCollectionNotice = !disable;
+  public onAcceptCollectionNotice(disable: boolean): void {
+    // TODO implement sign document and permanently close collection notice
   }
 
   public onAction(routePath?: string): void {
@@ -58,5 +64,17 @@ export class PortalComponent implements OnInit {
     this.router.navigate([ShellRoutes.routePath(routePath)]);
   }
 
-  public ngOnInit(): void {}
+  public ngOnInit(): void {
+    // TODO guarantee that at least party ID 1 exists until Keycloak is setup
+    const { firstName, lastName, dateOfBirth } = this.partyService.user;
+    this.partyResource
+      .createParty({ firstName, lastName, dateOfBirth })
+      .pipe(
+        exhaustMap((partyId: number | null) =>
+          partyId ? this.partyResource.getParty(partyId) : of(null)
+        ),
+        map((party: Party | null) => (this.partyService.party = party))
+      )
+      .subscribe();
+  }
 }

@@ -9,24 +9,26 @@ import { ApiResource } from '@core/resources/api-resource.service';
 import { LoggerService } from '@core/services/logger.service';
 import { ToastService } from '@core/services/toast.service';
 
-import { PersonalInformationModel } from './personal-information.model';
-import { PersonalInformationModule } from './personal-information.module';
+import { CollegeLicenceInformationModel } from './college-licence-information.model';
+import { CollegeLicenceInformationModule } from './college-licence-information.module';
 
 @Injectable({
-  providedIn: PersonalInformationModule,
+  providedIn: CollegeLicenceInformationModule,
 })
-export class PersonalInformationResource {
+export class CollegeLicenceInformationResource {
   public constructor(
     private apiResource: ApiResource,
     private toastService: ToastService,
     private logger: LoggerService
   ) {}
 
-  public getPersonalInformation(
+  public getCollegeLicenceInformation(
     partyId: number
-  ): Observable<PersonalInformationModel | null> {
+  ): Observable<CollegeLicenceInformationModel | null> {
     return this.apiResource
-      .get<PersonalInformationModel>(`parties/${partyId}/demographic`)
+      .get<CollegeLicenceInformationModel>(
+        `parties/${partyId}/college-certificate`
+      )
       .pipe(
         this.apiResource.unwrapResultPipe(),
         catchError((error: HttpErrorResponse) => {
@@ -39,12 +41,15 @@ export class PersonalInformationResource {
       );
   }
 
-  public updatePersonalInformation(
+  public updateCollegeLicenceInformation(
     partyId: number,
-    profileInformation: PersonalInformationModel
+    collegeLicenceInformationModel: CollegeLicenceInformationModel
   ): NoContent {
     return this.apiResource
-      .put<NoContent>(`parties/${partyId}/demographic`, profileInformation)
+      .put<NoContent>(
+        `parties/${partyId}/college-certificate`,
+        collegeLicenceInformationModel
+      )
       .pipe(NoContentResponse);
   }
 }

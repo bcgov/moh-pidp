@@ -1,4 +1,4 @@
-<ui-page>
+<ui-page [form]="formState.form" (submitted)="onSubmit()">
   <ui-page-header>{{ title }}</ui-page-header>
 
   <ui-page-section>
@@ -66,7 +66,7 @@
       </ng-container>
     </ui-page-section-subheader>
 
-    <app-address-form [form]="physicalAddress"></app-address-form>
+    <app-address-form [form]="formState.physicalAddress"></app-address-form>
   </ui-page-section>
 
   <ui-page-section>

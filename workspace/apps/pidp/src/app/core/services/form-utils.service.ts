@@ -3,6 +3,7 @@ import {
   AbstractControl,
   FormArray,
   FormBuilder,
+  FormControl,
   FormGroup,
   ValidatorFn,
   Validators,
@@ -78,6 +79,68 @@ export class FormUtilsService {
       return acc;
     }, {} as { [key: string]: unknown });
     return hasError ? result : null;
+  }
+
+  /**
+   * @description
+   * Sets control(s) validators.
+   */
+  public setValidators(
+    control: FormControl | FormGroup,
+    validators: ValidatorFn | ValidatorFn[] = [Validators.required],
+    blacklist: string[] = []
+  ): void {
+    if (control instanceof FormGroup) {
+      // Assumes that FormGroups will not be deeply nested
+      Object.keys(control.controls).forEach((key: string) => {
+        if (!blacklist.includes(key)) {
+          this.setValidators(
+            control.controls[key] as FormControl,
+            validators,
+            blacklist
+          );
+        }
+      });
+    } else {
+      control.setValidators(validators);
+      control.updateValueAndValidity();
+    }
+  }
+
+  /**
+   * @description
+   * Resets control(s) and clears associated validators.
+   */
+  public resetAndClearValidators(
+    control: FormControl | FormGroup,
+    blacklist: string[] = []
+  ): void {
+    if (control instanceof FormGroup) {
+      // Assumes that FormGroups will not be deeply nested
+      Object.keys(control.controls).forEach((key: string) => {
+        if (!blacklist.includes(key)) {
+          this.resetAndClearValidators(control.controls[key] as FormControl);
+        }
+      });
+    } else {
+      control.reset();
+      control.clearValidators();
+      control.updateValueAndValidity();
+    }
+  }
+
+  /**
+   * @description
+   * Set or reset control(s) validator
+   */
+  public setOrResetValidators(
+    setOrReset: boolean,
+    control: FormControl | FormGroup,
+    blacklist?: string[]
+  ): void {
+    setOrReset
+      ? this.setValidators(control, [Validators.required], blacklist)
+      : this.resetAndClearValidators(control, blacklist);
   }
 
   /**

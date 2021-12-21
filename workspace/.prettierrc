@@ -13,9 +13,10 @@
   ],
   "importOrder": [
     "^@angular/(.*)$",
-    "^rxjs/(.*)$",
+    "^rxjs(.*)$",
     "<THIRD_PARTY_MODULES>",
     "^@bcgov/(.*)$",
+    "^@app/(.*)$",
     "^@core/(.*)$",
     "^@shared/(.*)$",
     "^[./]"

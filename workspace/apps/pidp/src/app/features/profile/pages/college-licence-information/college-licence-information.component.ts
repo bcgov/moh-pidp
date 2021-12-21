@@ -1,50 +1,84 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { FormBuilder } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
+import { ActivatedRoute, Router } from '@angular/router';
 
-import { DemoService } from '@core/services/demo.service';
+import { EMPTY, Observable, tap } from 'rxjs';
+
+import { AbstractFormPage } from '@app/core/classes/abstract-form-page.class';
+import { FormUtilsService } from '@app/core/services/form-utils.service';
+import { PartyService } from '@app/core/services/party.service';
+import { Lookup } from '@app/modules/lookup/lookup.model';
+import { LookupService } from '@app/modules/lookup/lookup.service';
+
+import { CollegeLicenceInformationFormState } from './college-licence-information-form-state';
+import { CollegeLicenceInformationResource } from './college-licence-information-resource.service';
+import { CollegeLicenceInformationModel } from './college-licence-information.model';
 
 @Component({
   selector: 'app-college-licence-information',
   templateUrl: './college-licence-information.component.html',
   styleUrls: ['./college-licence-information.component.scss'],
 })
-export class CollegeLicenceInformationComponent implements OnInit {
+export class CollegeLicenceInformationComponent
+  extends AbstractFormPage<CollegeLicenceInformationFormState>
+  implements OnInit
+{
   public title: string;
-  // TODO temporary variable for demo
-  public showPlr: boolean;
+  public formState: CollegeLicenceInformationFormState;
+  public colleges: Lookup[];
+  public inGoodStanding: boolean;
 
   public constructor(
+    protected dialog: MatDialog,
+    protected formUtilsService: FormUtilsService,
     private route: ActivatedRoute,
-    private demoService: DemoService
+    private router: Router,
+    private partyService: PartyService,
+    private resource: CollegeLicenceInformationResource,
+    lookupService: LookupService,
+    fb: FormBuilder
   ) {
+    super(dialog, formUtilsService);
+
     this.title = this.route.snapshot.data.title;
-    this.showPlr = false;
+    this.formState = new CollegeLicenceInformationFormState(fb);
+    this.colleges = lookupService.colleges;
+    this.inGoodStanding = false;
   }
 
-  public onSubmit(): void {
-    this.demoService.state.profileIdentitySections =
-      this.demoService.state.profileIdentitySections.map((section) => {
-        if (section.type === 'college-licence-information') {
-          return {
-            ...section,
-            statusType: 'success',
-            status: 'completed',
-          };
-        }
-        if (section.type === 'work-and-role-information') {
-          return {
-            ...section,
-            disabled: false,
-          };
-        }
-        return section;
-      });
+  public onBack(): void {
+    this.router.navigate(this.route.snapshot.data.route.root);
   }
 
-  // TODO temporary even handler for demo
-  public onSelectCollegeLicence(): void {
-    this.showPlr = true;
+  public ngOnInit(): void {
+    const partyId = 1; // +this.route.snapshot.params.pid;
+    if (!partyId) {
+      throw new Error('No party ID was provided');
+    }
+
+    this.resource
+      .getCollegeLicenceInformation(partyId)
+      .pipe(
+        tap((model: CollegeLicenceInformationModel | null) =>
+          this.formState.patchValue(model)
+        )
+      )
+      .subscribe();
   }
 
-  public ngOnInit(): void {}
+  protected performSubmission(): Observable<void> {
+    const partyId = 1; // +this.route.snapshot.params.pid;
+
+    return this.formState.json
+      ? this.resource.updateCollegeLicenceInformation(
+          partyId,
+          this.formState.json
+        )
+      : EMPTY;
+  }
+
+  protected afterSubmitIsSuccessful(): void {
+    this.router.navigate(this.route.snapshot.data.route.root);
+  }
 }

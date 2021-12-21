@@ -1,7 +1,7 @@
-import { HttpErrorResponse } from '@angular/common/http';
+import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
-import { catchError, Observable } from 'rxjs';
+import { Observable, catchError, of } from 'rxjs';
 
 import { Party } from '@bcgov/shared/data-access';
 
@@ -23,10 +23,23 @@ export class PartyResource {
     );
   }
 
-  public createParty(party: Party): Observable<Party | null> {
-    return this.apiResource.post<Party>('parties', party).pipe(
+  public createParty(party: Party): Observable<number | null> {
+    return this.apiResource.post<number>('parties', party).pipe(
       this.apiResource.unwrapResultPipe(),
       catchError((error: HttpErrorResponse) => {
+        throw error;
+      })
+    );
+  }
+
+  public getParty(partyId: number): Observable<Party | null> {
+    return this.apiResource.get<Party>(`parties/${partyId}`).pipe(
+      this.apiResource.unwrapResultPipe(),
+      catchError((error: HttpErrorResponse) => {
+        if (error.status === HttpStatusCode.NotFound) {
+          return of(null);
+        }
+
         throw error;
       })
     );

@@ -10,7 +10,6 @@ import { AbstractFormState, FormControlValidators } from '@bcgov/shared/ui';
 
 import { PersonalInformationModel } from './personal-information.model';
 
-// TODO add in validation toggles for forms
 export class PersonalInformationFormState extends AbstractFormState<PersonalInformationModel> {
   public constructor(private fb: FormBuilder) {
     super();
@@ -52,7 +51,7 @@ export class PersonalInformationFormState extends AbstractFormState<PersonalInfo
       model.mailingAddress = null;
     }
 
-    return this.formInstance.getRawValue();
+    return model;
   }
 
   public patchValue(model: PersonalInformationModel | null): void {
