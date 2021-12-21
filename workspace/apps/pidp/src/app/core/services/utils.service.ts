@@ -1,5 +1,5 @@
 import { DOCUMENT } from '@angular/common';
-import { Injectable, Inject } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { SortDirection } from '@angular/material/sort';
 
 import { WindowRefService } from './window-ref.service';
