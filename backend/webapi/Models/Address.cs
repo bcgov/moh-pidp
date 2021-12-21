@@ -8,7 +8,7 @@ using Pidp.Models.Lookups;
 public enum AddressType
 {
     Physical = 1,
-    Mailng,
+    Mailing,
     Verified
 }
 
