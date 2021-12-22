@@ -12,7 +12,6 @@ public class Create
     {
         public string FirstName { get; set; } = string.Empty;
         public string LastName { get; set; } = string.Empty;
-        public LocalDate DateOfBirth { get; set; }
     }
 
     public class CommandValidator : AbstractValidator<Command>
@@ -21,7 +20,6 @@ public class Create
         {
             this.RuleFor(x => x.FirstName).NotEmpty();
             this.RuleFor(x => x.LastName).NotEmpty();
-            this.RuleFor(x => x.DateOfBirth).NotEmpty();
         }
     }
 
@@ -37,7 +35,6 @@ public class Create
             {
                 FirstName = command.FirstName,
                 LastName = command.LastName,
-                DateOfBirth = command.DateOfBirth
             };
 
             this.context.Parties.Add(party);
