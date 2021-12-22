@@ -27,12 +27,12 @@ export class LookupCodePipe implements PipeTransform {
     key: string
   ): unknown | null {
     const lookupConfig = this.lookupService[lookupKey as keyof LookupConfig];
-    const lookup = (lookupConfig as Lookup<T>[])?.find(
-      (l: Lookup<T>) => l.code === lookupCode
+    const lookup = (lookupConfig as Lookup[])?.find(
+      (l: Lookup) => l.code === lookupCode
     );
 
     return lookup && Object.prototype.hasOwnProperty.call(lookup, key)
-      ? lookup[key as keyof Lookup<T>]
+      ? lookup[key as keyof Lookup]
       : null;
   }
 }
