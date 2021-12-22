@@ -28,7 +28,8 @@ public class Startup
 
         services.AddControllers()
             .AddFluentValidation(options => options.RegisterValidatorsFromAssemblyContaining<Startup>())
-            .AddJsonOptions(options => options.JsonSerializerOptions.ConfigureForNodaTime(DateTimeZoneProviders.Tzdb));
+            .AddJsonOptions(options => options.JsonSerializerOptions.ConfigureForNodaTime(DateTimeZoneProviders.Tzdb))
+            .AddHybridModelBinder();
 
         services.AddDbContext<PidpDbContext>(options => options
             .UseNpgsql(config.ConnectionStrings.PidpDatabase, npg => npg.UseNodaTime())
