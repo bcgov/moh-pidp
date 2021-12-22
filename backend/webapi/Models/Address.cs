@@ -5,20 +5,11 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 using Pidp.Models.Lookups;
 
-public enum AddressType
-{
-    Physical = 1,
-    Mailing,
-    Verified
-}
-
 [Table(nameof(Address))]
 public abstract class Address : BaseAuditable
 {
     [Key]
     public int Id { get; set; }
-
-    public AddressType AddressType { get; set; }
 
     public CountryCode CountryCode { get; set; }
 
