@@ -113,7 +113,6 @@ public class Demographics
             {
                 party.MailingAddress = new PartyAddress
                 {
-                    AddressType = AddressType.Mailing,
                     CountryCode = command.MailingAddress.CountryCode,
                     ProvinceCode = command.MailingAddress.ProvinceCode,
                     Street = command.MailingAddress.Street,

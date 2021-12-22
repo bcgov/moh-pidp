@@ -113,7 +113,6 @@ public class WorkSetting
             {
                 party.Facility.PhysicalAddress = new FacilityAddress
                 {
-                    AddressType = AddressType.Physical,
                     CountryCode = command.PhysicalAddress.CountryCode,
                     ProvinceCode = command.PhysicalAddress.ProvinceCode,
                     Street = command.PhysicalAddress.Street,
