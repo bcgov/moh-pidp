@@ -1,19 +1,14 @@
 export interface LookupConfig {
   colleges: Lookup[];
-  countries: CountryLookup[];
+  countries: Lookup<string>[];
   provinces: ProvinceLookup[];
 }
 
-export interface Lookup {
-  code: number;
+export interface Lookup<T extends number | string = number> {
+  code: T;
   name: string;
 }
 
-export interface CountryLookup extends Lookup {
-  isoCode: string;
-}
-
-export interface ProvinceLookup extends Lookup {
-  isoCode: string;
-  countryCode: number;
+export interface ProvinceLookup extends Lookup<string> {
+  countryCode: string;
 }

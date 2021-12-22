@@ -6,9 +6,8 @@ import { exhaustMap, map, of } from 'rxjs';
 import { Party } from '@bcgov/shared/data-access';
 import { AlertType } from '@bcgov/shared/ui';
 
-import { PartyService } from '@app/core/services/party.service';
-
 import { PartyResource } from '@core/resources/party-resource.service';
+import { PartyService } from '@core/services/party.service';
 
 import { ShellRoutes } from '../shell/shell.routes';
 
@@ -65,9 +64,9 @@ export class PortalComponent implements OnInit {
 
   public ngOnInit(): void {
     // TODO guarantee that at least party ID 1 exists until Keycloak is setup
-    const { firstName, lastName, dateOfBirth } = this.partyService.user;
+    const { firstName, lastName } = this.partyService.user;
     this.partyResource
-      .createParty({ firstName, lastName, dateOfBirth })
+      .createParty({ firstName, lastName })
       .pipe(
         exhaustMap((partyId: number | null) =>
           partyId ? this.partyResource.getParty(partyId) : of(null)

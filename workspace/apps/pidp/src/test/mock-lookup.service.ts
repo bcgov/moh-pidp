@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { LookupResource } from '@app/modules/lookup/lookup-resource.service';
 import { LookupConfig } from '@app/modules/lookup/lookup.model';
 import { LookupService } from '@app/modules/lookup/lookup.service';
+
 import { UtilsService } from '@core/services/utils.service';
 
 import { MockLookup } from './mock-lookup';

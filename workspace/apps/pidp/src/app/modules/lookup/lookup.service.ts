@@ -7,12 +7,7 @@ import { MockLookup } from '@test/mock-lookup';
 import { UtilsService } from '@core/services/utils.service';
 
 import { LookupResource } from './lookup-resource.service';
-import {
-  CountryLookup,
-  Lookup,
-  LookupConfig,
-  ProvinceLookup,
-} from './lookup.model';
+import { Lookup, LookupConfig, ProvinceLookup } from './lookup.model';
 
 export interface ILookupService extends LookupConfig {
   load(): Observable<LookupConfig | null>;
@@ -36,10 +31,10 @@ export class LookupService implements ILookupService {
     return [...colleges].sort(this.utilsService.sortByKey<Lookup>('code'));
   }
 
-  public get countries(): CountryLookup[] {
+  public get countries(): Lookup<string>[] {
     const countries = this.lookupConfig?.countries ?? [];
     return countries.length
-      ? [...countries].sort(this.utilsService.sortByKey<Lookup>('name'))
+      ? [...countries].sort(this.utilsService.sortByKey<Lookup<string>>('name'))
       : [];
   }
 

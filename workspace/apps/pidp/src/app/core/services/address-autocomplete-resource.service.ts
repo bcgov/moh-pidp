@@ -1,13 +1,12 @@
 import { HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
-import { Observable, map, catchError, of } from 'rxjs';
+import { Observable, catchError, map, of } from 'rxjs';
 
 import { AddressAutocompleteFindResponse } from '@shared/components/address-autocomplete/address-autocomplete-find-response.model';
 import { AddressAutocompleteRetrieveResponse } from '@shared/components/address-autocomplete/address-autocomplete-retrieve-response.model';
 
 import { ApiResource } from '../resources/api-resource.service';
-
 import { LoggerService } from './logger.service';
 import { ToastService } from './toast.service';
 

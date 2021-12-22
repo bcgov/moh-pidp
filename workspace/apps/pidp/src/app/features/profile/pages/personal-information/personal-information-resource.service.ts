@@ -26,7 +26,7 @@ export class PersonalInformationResource {
     partyId: number
   ): Observable<PersonalInformationModel | null> {
     return this.apiResource
-      .get<PersonalInformationModel>(`parties/${partyId}/demographic`)
+      .get<PersonalInformationModel>(`parties/${partyId}/demographics`)
       .pipe(
         this.apiResource.unwrapResultPipe(),
         catchError((error: HttpErrorResponse) => {
@@ -44,7 +44,7 @@ export class PersonalInformationResource {
     profileInformation: PersonalInformationModel
   ): NoContent {
     return this.apiResource
-      .put<NoContent>(`parties/${partyId}/demographic`, profileInformation)
+      .put<NoContent>(`parties/${partyId}/demographics`, profileInformation)
       .pipe(NoContentResponse);
   }
 }

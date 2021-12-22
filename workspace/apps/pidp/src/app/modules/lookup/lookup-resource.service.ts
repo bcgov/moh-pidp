@@ -1,7 +1,7 @@
 import { HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
-import { catchError, map, Observable, of } from 'rxjs';
+import { Observable, catchError, map, of } from 'rxjs';
 
 import { ApiResource } from '@core/resources/api-resource.service';
 

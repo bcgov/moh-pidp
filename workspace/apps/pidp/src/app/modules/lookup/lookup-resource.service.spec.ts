@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { LookupResourceService } from './lookup-resource.service';
+import { LookupResource } from './lookup-resource.service';
 
-describe('LookupResourceService', () => {
-  let service: LookupResourceService;
+describe('LookupResource', () => {
+  let service: LookupResource;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(LookupResourceService);
+    service = TestBed.inject(LookupResource);
   });
 
   it('should be created', () => {
