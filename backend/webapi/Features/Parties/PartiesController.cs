@@ -1,5 +1,6 @@
 namespace Pidp.Features.Parties;
 
+using HybridModelBinding;
 using Microsoft.AspNetCore.Mvc;
 
 [Produces("application/json")]
@@ -19,18 +20,17 @@ public class PartiesController : ControllerBase
                                                      [FromBody] Create.Command command)
         => await handler.HandleAsync(command);
 
-    [HttpGet("{partyId}/demographics")]
+    [HttpGet("{id}/demographics")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<Demographics.Command>> GetPartyDemographics([FromServices] IQueryHandler<Demographics.Query, Demographics.Command> handler,
-                                                                               [FromRoute] int partyId)
-        => await handler.HandleAsync(new Demographics.Query { Id = partyId });
+                                                                               [FromRoute] Demographics.Query query)
+        => await handler.HandleAsync(query);
 
-    [HttpPut("{partyId}/demographics")]
+    [HttpPut("{id}/demographics")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<ActionResult> UpdatePartyDemographics([FromServices] ICommandHandler<Demographics.Command> handler,
-                                                            [FromBody] Demographics.Command command)
+                                                            [FromHybrid] Demographics.Command command)
     {
-        // TODO use ID
         await handler.HandleAsync(command);
         return this.NoContent();
     }

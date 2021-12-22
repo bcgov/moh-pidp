@@ -3,6 +3,7 @@ namespace Pidp.Features.Parties;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using FluentValidation;
+using HybridModelBinding;
 using Microsoft.EntityFrameworkCore;
 
 using Pidp.Data;
@@ -18,6 +19,7 @@ public class Demographics
 
     public class Command : ICommand
     {
+        [HybridBindProperty(Source.Route)]
         public int Id { get; set; }
 
         public string? PreferredFirstName { get; set; }
@@ -37,6 +39,11 @@ public class Demographics
             public string City { get; set; } = string.Empty;
             public string Postal { get; set; } = string.Empty;
         }
+    }
+
+    public class QueryValidator : AbstractValidator<Query>
+    {
+        public QueryValidator() => this.RuleFor(x => x.Id).NotEmpty();
     }
 
     public class CommandValidator : AbstractValidator<Command>
