@@ -20,21 +20,6 @@ public class PartiesController : ControllerBase
                                                      [FromBody] Create.Command command)
         => await handler.HandleAsync(command);
 
-    [HttpGet("{id}/demographics")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult<Demographics.Command>> GetPartyDemographics([FromServices] IQueryHandler<Demographics.Query, Demographics.Command> handler,
-                                                                               [FromRoute] Demographics.Query query)
-        => await handler.HandleAsync(query);
-
-    [HttpPut("{id}/demographics")]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
-    public async Task<ActionResult> UpdatePartyDemographics([FromServices] ICommandHandler<Demographics.Command> handler,
-                                                            [FromHybrid] Demographics.Command command)
-    {
-        await handler.HandleAsync(command);
-        return this.NoContent();
-    }
-
     [HttpGet("{partyId}/college-certification")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<CollegeCertification.Command>> GetPartyCollegeCertification([FromServices] IQueryHandler<CollegeCertification.Query, CollegeCertification.Command> handler,
@@ -50,16 +35,31 @@ public class PartiesController : ControllerBase
         return this.NoContent();
     }
 
-    [HttpGet("{partyId}/work-setting")]
+    [HttpGet("{id}/demographics")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<ActionResult<Demographics.Command>> GetPartyDemographics([FromServices] IQueryHandler<Demographics.Query, Demographics.Command> handler,
+                                                                               [FromRoute] Demographics.Query query)
+        => await handler.HandleAsync(query);
+
+    [HttpPut("{id}/demographics")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    public async Task<ActionResult> UpdatePartyDemographics([FromServices] ICommandHandler<Demographics.Command> handler,
+                                                            [FromHybrid] Demographics.Command command)
+    {
+        await handler.HandleAsync(command);
+        return this.NoContent();
+    }
+
+    [HttpGet("{id}/work-setting")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<WorkSetting.Command>> GetPartyWorkSetting([FromServices] IQueryHandler<WorkSetting.Query, WorkSetting.Command> handler,
-                                                                             [FromRoute] int partyId)
-        => await handler.HandleAsync(new WorkSetting.Query { Id = partyId });
+                                                                             [FromRoute] WorkSetting.Query query)
+        => await handler.HandleAsync(query);
 
-    [HttpPut("{partyId}/work-setting")]
+    [HttpPut("{id}/work-setting")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<ActionResult> UpdatePartyWorkSetting([FromServices] ICommandHandler<WorkSetting.Command> handler,
-                                                           [FromBody] WorkSetting.Command command)
+                                                           [FromHybrid] WorkSetting.Command command)
     {
         await handler.HandleAsync(command);
         return this.NoContent();
