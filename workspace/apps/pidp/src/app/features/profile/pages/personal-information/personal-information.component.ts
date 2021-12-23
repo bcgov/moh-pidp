@@ -8,10 +8,9 @@ import { EMPTY, Observable, tap } from 'rxjs';
 import { BcscUser } from '@bcgov/shared/data-access';
 import { ToggleContentChange } from '@bcgov/shared/ui';
 
-import { PartyService } from '@app/core/services/party.service';
-
 import { AbstractFormPage } from '@core/classes/abstract-form-page.class';
 import { FormUtilsService } from '@core/services/form-utils.service';
+import { PartyService } from '@core/services/party.service';
 
 import { PersonalInformationFormState } from './personal-information-form-state';
 import { PersonalInformationResource } from './personal-information-resource.service';
@@ -87,6 +86,6 @@ export class PersonalInformationComponent
   }
 
   protected afterSubmitIsSuccessful(): void {
-    this.router.navigate(this.route.snapshot.data.route.root);
+    this.router.navigate([this.route.snapshot.data.routes.root]);
   }
 }

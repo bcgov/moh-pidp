@@ -1,9 +1,8 @@
 import { FormArray, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 
-import { map, tap } from 'rxjs/operators';
-
-import { Observable, Subscription } from 'rxjs';
+import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 
 import { AbstractFormState } from '@bcgov/shared/ui';
 

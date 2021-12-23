@@ -1,13 +1,13 @@
 import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
+
 import {
   Observable,
-  throwError,
-  pipe,
-  UnaryFunction,
   OperatorFunction,
+  UnaryFunction,
+  pipe,
+  throwError,
 } from 'rxjs';
-
-import { map, catchError } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
 
 /**
  * @description
@@ -25,29 +25,29 @@ export const NoContentResponse = pipe(map(() => void 0));
 export abstract class AbstractApiResource {
   public abstract get<T>(
     path: string,
-    options?: { [key: string]: unknown }
+    options?: { [key: string]: any }
   ): Observable<HttpResponse<T>>;
 
   public abstract head<T>(
     path: string,
-    options?: { [key: string]: unknown }
+    options?: { [key: string]: any }
   ): Observable<HttpResponse<T>>;
 
   public abstract post<T>(
     path: string,
-    body: { [key: string]: unknown } | null,
-    options?: { [key: string]: unknown }
+    body: { [key: string]: any } | null,
+    options?: { [key: string]: any }
   ): Observable<HttpResponse<T>>;
 
   public abstract put<T>(
     path: string,
-    body: { [key: string]: unknown } | null,
-    options?: { [key: string]: unknown }
+    body: { [key: string]: any } | null,
+    options?: { [key: string]: any }
   ): Observable<HttpResponse<T>>;
 
   public abstract delete<T>(
     path: string,
-    options?: { [key: string]: unknown }
+    options?: { [key: string]: any }
   ): Observable<HttpResponse<T>>;
 
   /**
@@ -75,6 +75,18 @@ export abstract class AbstractApiResource {
    */
   protected handleSuccess<T>(): (response: HttpResponse<T>) => HttpResponse<T> {
     return (response: HttpResponse<T>): HttpResponse<T> => response;
+  }
+
+  /**
+   * @description
+   * Handles getting the result from the response.
+   */
+  // TODO simplify implementation to use observe
+  public unwrapResultPipe<T>(): UnaryFunction<
+    Observable<HttpResponse<T>>,
+    Observable<T | null>
+  > {
+    return pipe(map((response: HttpResponse<T>) => response.body));
   }
 
   /**
