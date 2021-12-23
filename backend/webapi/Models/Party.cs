@@ -20,13 +20,9 @@ public class Party : BaseAuditable
 
     public string? PreferredLastName { get; set; }
 
-    public LocalDate? DateOfBirth { get; set; }
-
     public string? Email { get; set; }
 
     public string? Phone { get; set; }
-
-    public PartyAddress? MailingAddress { get; set; }
 
     public PartyCertification? PartyCertification { get; set; }
 

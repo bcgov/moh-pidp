@@ -21,6 +21,7 @@ import { PersonalInformationModel } from './personal-information.model';
   selector: 'app-personal-information',
   templateUrl: './personal-information.component.html',
   styleUrls: ['./personal-information.component.scss'],
+  viewProviders: [PersonalInformationResource],
 })
 export class PersonalInformationComponent
   extends AbstractFormPage<PersonalInformationFormState>
@@ -29,7 +30,6 @@ export class PersonalInformationComponent
   public title: string;
   public formState: PersonalInformationFormState;
   public bcscUser: BcscUser;
-  public showAddressLineFields: boolean;
 
   public constructor(
     protected dialog: MatDialog,
@@ -44,7 +44,6 @@ export class PersonalInformationComponent
 
     this.title = this.route.snapshot.data.title;
     this.formState = new PersonalInformationFormState(fb);
-    this.showAddressLineFields = false;
     this.bcscUser = this.partyService.user;
   }
 
@@ -59,13 +58,6 @@ export class PersonalInformationComponent
     );
   }
 
-  public onAddressToggle({ checked }: ToggleContentChange): void {
-    this.formUtilsService.setOrResetValidators(
-      checked,
-      this.formState.mailingAddress
-    );
-  }
-
   public onBack(): void {
     this.router.navigate(this.route.snapshot.data.route.root);
   }
@@ -77,7 +69,7 @@ export class PersonalInformationComponent
     }
 
     this.resource
-      .getPersonalInformation(partyId)
+      .get(partyId)
       .pipe(
         tap((model: PersonalInformationModel | null) =>
           this.formState.patchValue(model)
@@ -86,15 +78,11 @@ export class PersonalInformationComponent
       .subscribe();
   }
 
-  protected onSubmitFormIsInvalid(): void {
-    this.showAddressLineFields = true;
-  }
-
   protected performSubmission(): Observable<void> {
     const partyId = 1; // +this.route.snapshot.params.pid;
 
     return this.formState.json
-      ? this.resource.updatePersonalInformation(partyId, this.formState.json)
+      ? this.resource.update(partyId, this.formState.json)
       : EMPTY;
   }
 

@@ -32,30 +32,6 @@
   </ui-page-section>
 
   <ui-page-section>
-    <ui-page-section-subheader heading="Address">
-      <ng-container uiPageSectionSubheaderDesc>
-        This information comes from your BC Services Card. If you would prefer
-        to receive mail at a professional or other address, select "I have a
-        preferred address".
-      </ng-container>
-      <ng-container uiPageSectionSubheaderHint>
-        Entering a preferred address will not change your BC Services Card
-        address.
-      </ng-container>
-    </ui-page-section-subheader>
-
-    <app-address-info [address]="bcscUser?.verifiedAddress"></app-address-info>
-
-    <ui-toggle-content
-      label="I have a preferred address"
-      (toggle)="onAddressToggle($event)">
-      <app-address-form
-        [form]="formState.mailingAddress"
-        [showAddressLineFields]="showAddressLineFields"></app-address-form>
-    </ui-toggle-content>
-  </ui-page-section>
-
-  <ui-page-section>
     <ui-page-section-subheader heading="Contact Information">
       <ng-container uiPageSectionSubheaderDesc>
         Provide your contact information.

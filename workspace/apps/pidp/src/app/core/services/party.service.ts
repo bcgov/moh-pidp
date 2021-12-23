@@ -2,9 +2,7 @@ import { Injectable } from '@angular/core';
 
 import { BehaviorSubject, Observable } from 'rxjs';
 
-import { DateTime } from 'luxon';
-
-import { Address, BcscUser, Party } from '@bcgov/shared/data-access';
+import { BcscUser, Party } from '@bcgov/shared/data-access';
 
 import { PortalSection } from '@app/features/portal/portal.component';
 
@@ -31,14 +29,6 @@ export class PartyService {
       hpdid: '00000000-0000-0000-0000-000000000000',
       firstName: 'Lucy',
       lastName: 'Pultz',
-      dateOfBirth: DateTime.now().minus({ years: 38 }).toISODate(),
-      verifiedAddress: new Address(
-        'CA',
-        'BC',
-        '524 Coral Dr.',
-        'Victoria',
-        'V9S 2L7'
-      ),
     };
   }
 
