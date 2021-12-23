@@ -3,7 +3,9 @@ namespace Pidp.Features.Parties;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using FluentValidation;
+using HybridModelBinding;
 using Microsoft.EntityFrameworkCore;
+
 using Pidp.Data;
 using Pidp.Features;
 using Pidp.Models;
@@ -18,6 +20,7 @@ public class WorkSetting
 
     public class Command : ICommand
     {
+        [HybridBindProperty(Source.Route)]
         public int Id { get; set; }
         public string JobTitle { get; set; } = string.Empty;
         public string FacilityName { get; set; } = string.Empty;
@@ -32,6 +35,11 @@ public class WorkSetting
             public string City { get; set; } = string.Empty;
             public string Postal { get; set; } = string.Empty;
         }
+    }
+
+    public class QueryValidator : AbstractValidator<Query>
+    {
+        public QueryValidator() => this.RuleFor(x => x.Id).NotEmpty();
     }
 
     public class CommandValidator : AbstractValidator<Command>
@@ -96,11 +104,7 @@ public class WorkSetting
 
             if (party.Facility == null)
             {
-                party.Facility = new Facility
-                {
-                    Id = command.Id,
-                };
-                this.context.Facilities.Add(party.Facility);
+                party.Facility = new Facility();
             }
 
             party.Facility.FacilityName = command.FacilityName;
