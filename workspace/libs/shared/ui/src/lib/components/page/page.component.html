@@ -2,7 +2,7 @@
   <ng-container *ngIf="form; else pageContent">
     <form
       novalidate
-      autocomplete="off"
+      [autocomplete]="autocomplete"
       [formGroup]="form"
       (ngSubmit)="onSubmit()">
       <ng-container *ngTemplateOutlet="pageContent"></ng-container>

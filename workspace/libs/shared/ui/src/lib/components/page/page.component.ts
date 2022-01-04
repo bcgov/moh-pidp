@@ -30,6 +30,7 @@ export class PageComponent {
    * Instance of a form.
    */
   @Input() public form?: FormGroup;
+  @Input() public autocomplete: 'on' | 'off';
   /**
    * @description
    * Handle submission event emitter.
@@ -38,6 +39,7 @@ export class PageComponent {
 
   public constructor() {
     this.mode = 'page';
+    this.autocomplete = 'off';
     this.submitted = new EventEmitter<void>();
   }
 
