@@ -179,7 +179,7 @@ export class FormUtilsService {
    */
   public buildAddressForm(
     options: {
-      areRequired?: AddressLine[];
+      areRequired?: AddressLine[] | boolean;
       areDisabled?: AddressLine[];
       useDefaults?: Extract<AddressLine, 'provinceCode' | 'countryCode'>[];
       exclude?: AddressLine[];
@@ -217,7 +217,11 @@ export class FormUtilsService {
           }
         }
 
-        if (options?.areRequired?.includes(key)) {
+        const areRequired = options?.areRequired;
+        if (
+          (typeof areRequired === 'boolean' && areRequired) ||
+          (typeof areRequired !== 'boolean' && areRequired?.includes(key))
+        ) {
           controlValidators.push(Validators.required);
         }
       });
