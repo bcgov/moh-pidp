@@ -5,6 +5,8 @@
         <mat-label>Address autocompleted by Canada Post</mat-label>
         <input
           matInput
+          role="presentation"
+          autocomplete="off"
           formControlName="autocomplete"
           [matAutocomplete]="auto" />
         <mat-autocomplete #auto="matAutocomplete" autocomplete="off">
