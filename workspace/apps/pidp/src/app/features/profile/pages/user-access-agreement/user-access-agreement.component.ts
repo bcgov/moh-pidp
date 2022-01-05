@@ -4,11 +4,11 @@ import { ActivatedRoute } from '@angular/router';
 import { DemoService } from '@core/services/demo.service';
 
 @Component({
-  selector: 'app-terms-of-access-agreement',
-  templateUrl: './terms-of-access-agreement.component.html',
-  styleUrls: ['./terms-of-access-agreement.component.scss'],
+  selector: 'app-user-access-agreement',
+  templateUrl: './user-access-agreement.component.html',
+  styleUrls: ['./user-access-agreement.component.scss'],
 })
-export class TermsOfAccessAgreementComponent implements OnInit {
+export class UserAccessAgreementComponent implements OnInit {
   public title: string;
 
   public constructor(
@@ -23,7 +23,7 @@ export class TermsOfAccessAgreementComponent implements OnInit {
 
     this.demoService.state.profileIdentitySections =
       this.demoService.state.profileIdentitySections.map((section) => {
-        if (section.type === 'terms-of-access-agreement') {
+        if (section.type === 'user-access-agreement') {
           return {
             ...section,
             statusType: 'success',

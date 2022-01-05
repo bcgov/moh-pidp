@@ -35,6 +35,7 @@ export class PersonalInformationComponent
     protected formUtilsService: FormUtilsService,
     private route: ActivatedRoute,
     private router: Router,
+    // TODO switch to RxJS state management using Elf
     private partyService: PartyService,
     private resource: PersonalInformationResource,
     fb: FormBuilder

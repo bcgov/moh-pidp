@@ -1,12 +1,12 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { TermsOfAccessAgreementComponent } from './terms-of-access-agreement.component';
+import { UserAccessAgreementComponent } from './user-access-agreement.component';
 
 const routes: Routes = [
   {
     path: '',
-    component: TermsOfAccessAgreementComponent,
+    component: UserAccessAgreementComponent,
     data: {
       title: 'Provider Identity Portal',
       routes: {
@@ -20,4 +20,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class TermsOfAccessAgreementRoutingModule {}
+export class UserAccessAgreementRoutingModule {}
