@@ -15,7 +15,6 @@ public class CollegeCertification
 {
     public class Query : IQuery<Command>
     {
-        [HybridBindProperty(Source.Route)]
         public int PartyId { get; set; }
     }
 
