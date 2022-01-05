@@ -5,8 +5,10 @@ import { Observable, catchError, of } from 'rxjs';
 import { AbstractApiResource, NoContent, NoContentResponse } from '.';
 
 export interface IAbstractPageResource<T> {
+  create(id: number, payload: T): Observable<T | null>;
   get(id: number): Observable<T | null>;
   update(id: number, payload: T): NoContent;
+  delete(id: number, payload: T): Observable<number | null>;
 }
 
 export abstract class CrudResource<T> implements IAbstractPageResource<T> {
