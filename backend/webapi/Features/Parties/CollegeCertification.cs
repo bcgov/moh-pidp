@@ -3,7 +3,9 @@ namespace Pidp.Features.Parties;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using FluentValidation;
+using HybridModelBinding;
 using Microsoft.EntityFrameworkCore;
+
 using Pidp.Data;
 using Pidp.Features;
 using Pidp.Models;
@@ -13,11 +15,19 @@ public class CollegeCertification
 {
     public class Query : IQuery<Command>
     {
+        [HybridBindProperty(Source.Route)]
         public int PartyId { get; set; }
+    }
+
+
+    public class QueryValidator : AbstractValidator<Query>
+    {
+        public QueryValidator() => this.RuleFor(x => x.PartyId).NotEmpty();
     }
 
     public class Command : ICommand
     {
+        [HybridBindProperty(Source.Route)]
         public int PartyId { get; set; }
         public CollegeCode CollegeCode { get; set; }
         public string LicenceNumber { get; set; } = string.Empty;

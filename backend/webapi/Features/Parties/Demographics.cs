@@ -7,8 +7,6 @@ using HybridModelBinding;
 using Microsoft.EntityFrameworkCore;
 
 using Pidp.Data;
-using Pidp.Models;
-using Pidp.Models.Lookups;
 
 public class Demographics
 {

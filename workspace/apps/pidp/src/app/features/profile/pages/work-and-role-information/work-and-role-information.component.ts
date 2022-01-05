@@ -5,8 +5,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { EMPTY, Observable, tap } from 'rxjs';
 
-import { LookupService } from '@app/modules/lookup/lookup.service';
-
 import { AbstractFormPage } from '@core/classes/abstract-form-page.class';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { PartyService } from '@core/services/party.service';
@@ -36,7 +34,6 @@ export class WorkAndRoleInformationComponent
     // TODO switch to RxJS state management using Elf
     private partyService: PartyService,
     private resource: WorkAndRoleInformationResource,
-    lookupService: LookupService,
     fb: FormBuilder
   ) {
     super(dialog, formUtilsService);

@@ -29,7 +29,7 @@ public class PartiesController : ControllerBase
     [HttpPut("{partyId}/college-certification")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<ActionResult> UpdatePartyCollegeCertification([FromServices] ICommandHandler<CollegeCertification.Command> handler,
-                                                                    [FromBody] CollegeCertification.Command command)
+                                                                    [FromHybrid] CollegeCertification.Command command)
     {
         await handler.HandleAsync(command);
         return this.NoContent();
