@@ -19,6 +19,7 @@ import { WorkAndRoleInformationModel } from './work-and-role-information.model';
   selector: 'app-work-and-role-information',
   templateUrl: './work-and-role-information.component.html',
   styleUrls: ['./work-and-role-information.component.scss'],
+  viewProviders: [WorkAndRoleInformationResource],
 })
 export class WorkAndRoleInformationComponent
   extends AbstractFormPage<WorkAndRoleInformationFormState>
@@ -44,17 +45,18 @@ export class WorkAndRoleInformationComponent
   }
 
   public onBack(): void {
-    this.router.navigate(this.route.snapshot.data.route.root);
+    this.router.navigate([this.route.snapshot.data.route.root]);
   }
 
   public ngOnInit(): void {
+    // TODO pull from state management or URI param
     const partyId = 1; // +this.route.snapshot.params.pid;
     if (!partyId) {
       throw new Error('No party ID was provided');
     }
 
     this.resource
-      .getWorkAndRoleInformation(partyId)
+      .get(partyId)
       .pipe(
         tap((model: WorkAndRoleInformationModel | null) =>
           this.formState.patchValue(model)
@@ -67,11 +69,11 @@ export class WorkAndRoleInformationComponent
     const partyId = 1; // +this.route.snapshot.params.pid;
 
     return this.formState.json
-      ? this.resource.updateWorkAndRoleInformation(partyId, this.formState.json)
+      ? this.resource.update(partyId, this.formState.json)
       : EMPTY;
   }
 
   protected afterSubmitIsSuccessful(): void {
-    this.router.navigate(this.route.snapshot.data.route.root);
+    this.router.navigate([this.route.snapshot.data.route.root]);
   }
 }

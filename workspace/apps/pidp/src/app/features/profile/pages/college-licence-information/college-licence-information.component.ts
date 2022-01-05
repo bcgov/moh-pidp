@@ -48,7 +48,7 @@ export class CollegeLicenceInformationComponent
   }
 
   public onBack(): void {
-    this.router.navigate(this.route.snapshot.data.route.root);
+    this.router.navigate([this.route.snapshot.data.routes.root]);
   }
 
   public ngOnInit(): void {

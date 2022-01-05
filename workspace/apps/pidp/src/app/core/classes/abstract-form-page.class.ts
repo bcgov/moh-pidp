@@ -184,14 +184,14 @@ export abstract class AbstractFormPage<
   //  */
   // protected abstract patchForm(model?: unknown): unknown;
 
-  // /**
-  //  * @description
-  //  * Setup form listeners.
-  //  */
-  // protected initForm(): void {
-  //   // Optional method for setting up form listeners, but
-  //   // when no listeners are required is NOOP
-  // }
+  /**
+   * @description
+   * Setup form listeners.
+   */
+  protected initForm(): void {
+    // Optional method for setting up form listeners, but
+    // when no listeners are required is NOOP
+  }
 
   /**
    * @description

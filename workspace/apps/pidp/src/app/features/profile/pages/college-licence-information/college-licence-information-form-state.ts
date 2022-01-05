@@ -15,8 +15,8 @@ export class CollegeLicenceInformationFormState extends AbstractFormState<Colleg
     return this.formInstance.get('collegeCode') as FormControl;
   }
 
-  public get collegeLicence(): FormControl {
-    return this.formInstance.get('collegeLicence') as FormControl;
+  public get licenceNumber(): FormControl {
+    return this.formInstance.get('licenceNumber') as FormControl;
   }
 
   public get json(): CollegeLicenceInformationModel | undefined {
@@ -37,8 +37,8 @@ export class CollegeLicenceInformationFormState extends AbstractFormState<Colleg
 
   public buildForm(): void {
     this.formInstance = this.fb.group({
-      collegeCode: ['', [Validators.required]],
-      collegeLicence: ['', []],
+      collegeCode: [0, [Validators.required]],
+      licenceNumber: ['', [Validators.required]],
     });
   }
 }

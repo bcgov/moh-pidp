@@ -58,10 +58,11 @@ export class PersonalInformationComponent
   }
 
   public onBack(): void {
-    this.router.navigate(this.route.snapshot.data.route.root);
+    this.router.navigate([this.route.snapshot.data.routes.root]);
   }
 
   public ngOnInit(): void {
+    // TODO pull from state management or URI param
     const partyId = 1; // +this.route.snapshot.params.pid;
     if (!partyId) {
       throw new Error('No party ID was provided');
