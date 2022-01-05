@@ -13,7 +13,8 @@ import { FormUtilsService } from '@core/services/form-utils.service';
 export interface IFormPage {
   /**
    * @description
-   * Instance of the form state providing access to its API.
+   * Instance of the form state which provides access to
+   * an API for the form.
    */
   formState: AbstractFormState<unknown>;
 
@@ -76,7 +77,8 @@ export abstract class AbstractFormPage<
   // public busy: Subscription;
   /**
    * @description
-   * Form state
+   * Instance of the form state which provides access to
+   * an API for the form.
    */
   public abstract formState: T;
   /**
