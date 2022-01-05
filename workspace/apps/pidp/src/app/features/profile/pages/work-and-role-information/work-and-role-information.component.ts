@@ -33,6 +33,7 @@ export class WorkAndRoleInformationComponent
     protected formUtilsService: FormUtilsService,
     private route: ActivatedRoute,
     private router: Router,
+    // TODO switch to RxJS state management using Elf
     private partyService: PartyService,
     private resource: WorkAndRoleInformationResource,
     lookupService: LookupService,
@@ -41,11 +42,11 @@ export class WorkAndRoleInformationComponent
     super(dialog, formUtilsService);
 
     this.title = this.route.snapshot.data.title;
-    this.formState = new WorkAndRoleInformationFormState(fb);
+    this.formState = new WorkAndRoleInformationFormState(fb, formUtilsService);
   }
 
   public onBack(): void {
-    this.router.navigate([this.route.snapshot.data.route.root]);
+    this.router.navigate([this.route.snapshot.data.routes.root]);
   }
 
   public ngOnInit(): void {
@@ -74,6 +75,8 @@ export class WorkAndRoleInformationComponent
   }
 
   protected afterSubmitIsSuccessful(): void {
-    this.router.navigate([this.route.snapshot.data.route.root]);
+    this.partyService.updateState('work-and-role-information');
+
+    this.router.navigate([this.route.snapshot.data.routes.root]);
   }
 }

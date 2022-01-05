@@ -11,102 +11,66 @@
     </ui-page-section-subheader>
   </ui-page-section>
 
-  <ui-page-section>
-    <ui-page-section-subheader heading="Job Title">
-      <ng-container uiPageSectionSubheaderDesc>
-        Identify your job title(s).
-      </ng-container>
-    </ui-page-section-subheader>
+  <ng-container [formGroup]="formState.form">
+    <ui-page-section>
+      <ui-page-section-subheader heading="Job Title">
+        <ng-container uiPageSectionSubheaderDesc>
+          Identify your job title(s).
+        </ng-container>
+      </ui-page-section-subheader>
 
-    <div class="row">
-      <div class="col-12">
-        <mat-form-field class="w-100">
-          <input matInput placeholder="Job Title" />
-          <mat-hint>Type in your job title</mat-hint>
-        </mat-form-field>
+      <div class="row">
+        <div class="col-12">
+          <mat-form-field class="w-100">
+            <input
+              matInput
+              placeholder="Job Title"
+              formControlName="jobTitle" />
+            <mat-hint>Type in your job title</mat-hint>
+          </mat-form-field>
+        </div>
       </div>
-    </div>
+    </ui-page-section>
 
-    <button mat-button type="button" color="primary">
-      <mat-icon>add</mat-icon>
-      Add Additional Job Title
-    </button>
-  </ui-page-section>
+    <ui-page-section>
+      <ui-page-section-subheader heading="Facility Information">
+        <ng-container uiPageSectionSubheaderDesc>
+          Provide the following information.
+        </ng-container>
+      </ui-page-section-subheader>
 
-  <ui-page-section>
-    <ui-page-section-subheader heading="Facility Information">
-      <ng-container uiPageSectionSubheaderDesc>
-        Provide the following information.
-      </ng-container>
-    </ui-page-section-subheader>
-
-    <div class="row">
-      <div class="col-12">
-        <mat-form-field class="w-100">
-          <input matInput placeholder="Facility Name" />
-          <mat-hint>Type your Facility Name</mat-hint>
-          <mat-error>Required</mat-error>
-        </mat-form-field>
+      <div class="row">
+        <div class="col-12">
+          <mat-form-field class="w-100">
+            <input
+              matInput
+              placeholder="Facility Name"
+              formControlName="facilityName" />
+            <mat-hint>Type your Facility Name</mat-hint>
+            <mat-error>Required</mat-error>
+          </mat-form-field>
+        </div>
       </div>
-      <div class="col-12">
-        <mat-form-field class="w-100">
-          <mat-select placeholder="Facility Type">
-            <mat-option value=""></mat-option>
-          </mat-select>
-          <mat-error>Required</mat-error>
-        </mat-form-field>
-      </div>
-    </div>
-  </ui-page-section>
+    </ui-page-section>
 
-  <ui-page-section>
-    <ui-page-section-subheader heading="Facility Address">
-      <ng-container uiPageSectionSubheaderDesc>
-        Provide your work address.
-      </ng-container>
-    </ui-page-section-subheader>
+    <ui-page-section>
+      <ui-page-section-subheader heading="Facility Address">
+        <ng-container uiPageSectionSubheaderDesc>
+          Provide your work address.
+        </ng-container>
+      </ui-page-section-subheader>
 
-    <app-address-form [form]="formState.physicalAddress"></app-address-form>
-  </ui-page-section>
-
-  <ui-page-section>
-    <ui-page-section-subheader heading="Care Type Setting">
-      <ng-container uiPageSectionSubheaderDesc>
-        Identify all of the work settings you work in.
-      </ng-container>
-    </ui-page-section-subheader>
-
-    <div class="row">
-      <div class="col-12">
-        <mat-form-field class="w-100">
-          <mat-select placeholder="Care Setting">
-            <mat-option value=""></mat-option>
-          </mat-select>
-          <mat-error>Required</mat-error>
-        </mat-form-field>
-      </div>
-    </div>
-
-    <button mat-button type="button" color="primary">
-      <mat-icon>add</mat-icon>
-      Add Additional Care Setting
-    </button>
-  </ui-page-section>
+      <app-address-form
+        [form]="formState.physicalAddress"
+        [showAddressLineFields]="hasAttemptedSubmission"></app-address-form>
+    </ui-page-section>
+  </ng-container>
 
   <ui-page-footer>
-    <button
-      mat-stroked-button
-      color="primary"
-      type="button"
-      routerLink="../../">
+    <button mat-stroked-button type="button" color="primary" (click)="onBack()">
       Back Home
     </button>
-    <button
-      mat-flat-button
-      color="primary"
-      type="submit"
-      routerLink="../../"
-      (click)="onSubmit()">
+    <button mat-flat-button type="submit" color="primary" (click)="onSubmit()">
       Save Information
     </button>
   </ui-page-footer>

@@ -1,11 +1,16 @@
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { AbstractFormState } from '@bcgov/shared/ui';
+
+import { FormUtilsService } from '@app/core/services/form-utils.service';
 
 import { WorkAndRoleInformationModel } from './work-and-role-information.model';
 
 export class WorkAndRoleInformationFormState extends AbstractFormState<WorkAndRoleInformationModel> {
-  public constructor(private fb: FormBuilder) {
+  public constructor(
+    private fb: FormBuilder,
+    private formUtilsService: FormUtilsService
+  ) {
     super();
 
     this.buildForm();
@@ -33,12 +38,10 @@ export class WorkAndRoleInformationFormState extends AbstractFormState<WorkAndRo
 
   public buildForm(): void {
     this.formInstance = this.fb.group({
-      physicalAddress: this.fb.group({
-        countryCode: [{ value: null, disabled: false }, []],
-        provinceCode: [{ value: null, disabled: false }, []],
-        street: [{ value: null, disabled: false }, []],
-        city: [{ value: null, disabled: false }, []],
-        postal: [{ value: null, disabled: false }, []],
+      jobTitle: ['', [Validators.required]],
+      facilityName: ['', [Validators.required]],
+      physicalAddress: this.formUtilsService.buildAddressForm({
+        areRequired: true,
       }),
     });
   }

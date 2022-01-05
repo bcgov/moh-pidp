@@ -18,6 +18,6 @@ export class WorkAndRoleInformationResource extends CrudResource<WorkAndRoleInfo
   }
 
   public getResourcePath(partyId: number): string {
-    return `parties/${partyId}/college-certification`;
+    return `parties/${partyId}/work-setting`;
   }
 }
