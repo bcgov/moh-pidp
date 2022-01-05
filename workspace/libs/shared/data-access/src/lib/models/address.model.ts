@@ -13,7 +13,7 @@ export const addressTypes: AddressType[] = [
 ];
 
 export type AddressMap<T> = { [key in keyof Address]: T };
-export const optionalAddressLineItems: (keyof Address)[] = ['id'];
+export const optionalAddressLineItems: (keyof Address)[] = [];
 
 export class Address {
   public constructor(
@@ -21,8 +21,7 @@ export class Address {
     public provinceCode: string | null = null,
     public street: string | null = null,
     public city: string | null = null,
-    public postal: string | null = null,
-    public id: number = 0
+    public postal: string | null = null
   ) {
     this.street = street;
     this.city = city;
@@ -40,14 +39,13 @@ export class Address {
    */
   public static instanceOf(address: Address): Address {
     const {
-      id = 0,
       street = null,
       city = null,
       provinceCode = null,
       countryCode = null,
       postal = null,
     } = address;
-    return new Address(countryCode, provinceCode, street, city, postal, id);
+    return new Address(countryCode, provinceCode, street, city, postal);
   }
 
   /**

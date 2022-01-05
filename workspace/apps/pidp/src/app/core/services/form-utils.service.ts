@@ -186,7 +186,6 @@ export class FormUtilsService {
     } | null = null
   ): FormGroup {
     const controlsConfig: AddressMap<unknown[]> = {
-      id: [0, []],
       street: [{ value: null, disabled: false }, []],
       city: [{ value: null, disabled: false }, []],
       provinceCode: [{ value: null, disabled: false }, []],
