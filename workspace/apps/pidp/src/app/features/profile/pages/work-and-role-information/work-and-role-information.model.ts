@@ -1,7 +1,7 @@
 import { Address } from '@bcgov/shared/data-access';
 
 export interface WorkAndRoleInformationModel {
-  id: number;
+  jobTitle: string;
   facilityName: string;
-  facilityAddress: Address;
+  physicalAddress: Address;
 }
