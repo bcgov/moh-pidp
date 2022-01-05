@@ -19,6 +19,7 @@ import { CollegeLicenceInformationModel } from './college-licence-information.mo
   selector: 'app-college-licence-information',
   templateUrl: './college-licence-information.component.html',
   styleUrls: ['./college-licence-information.component.scss'],
+  viewProviders: [CollegeLicenceInformationResource],
 })
 export class CollegeLicenceInformationComponent
   extends AbstractFormPage<CollegeLicenceInformationFormState>
@@ -34,6 +35,7 @@ export class CollegeLicenceInformationComponent
     protected formUtilsService: FormUtilsService,
     private route: ActivatedRoute,
     private router: Router,
+    // TODO switch to RxJS state management using Elf
     private partyService: PartyService,
     private resource: CollegeLicenceInformationResource,
     lookupService: LookupService,
@@ -52,13 +54,14 @@ export class CollegeLicenceInformationComponent
   }
 
   public ngOnInit(): void {
+    // TODO pull from state management or URI param
     const partyId = 1; // +this.route.snapshot.params.pid;
     if (!partyId) {
       throw new Error('No party ID was provided');
     }
 
     this.resource
-      .getCollegeLicenceInformation(partyId)
+      .get(partyId)
       .pipe(
         tap((model: CollegeLicenceInformationModel | null) =>
           this.formState.patchValue(model)
@@ -71,14 +74,13 @@ export class CollegeLicenceInformationComponent
     const partyId = 1; // +this.route.snapshot.params.pid;
 
     return this.formState.json
-      ? this.resource.updateCollegeLicenceInformation(
-          partyId,
-          this.formState.json
-        )
+      ? this.resource.update(partyId, this.formState.json)
       : EMPTY;
   }
 
   protected afterSubmitIsSuccessful(): void {
-    this.router.navigate(this.route.snapshot.data.route.root);
+    this.partyService.updateState('college-licence-information');
+
+    this.router.navigate([this.route.snapshot.data.routes.root]);
   }
 }

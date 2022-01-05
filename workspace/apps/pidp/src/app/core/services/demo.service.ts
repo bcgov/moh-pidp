@@ -69,7 +69,7 @@ export class DemoService {
       },
       {
         icon: 'fingerprint',
-        type: 'terms-of-access-agreement',
+        type: 'user-access-agreement',
         title: 'User Access Agreement(s)',
         process: 'manual',
         hint: '13 mins to complete',
@@ -77,7 +77,7 @@ export class DemoService {
           'Read and agree to the applicable User Access Agreement(s)',
         actionLabel: 'Open',
         route: ProfileRoutes.routePath(
-          ProfileRoutes.TERMS_OF_ACCESS_AGREEMENT_PAGE
+          ProfileRoutes.USER_ACCESS_AGREEMENT_PAGE
         ),
         statusType: 'warn',
         status: 'incomplete',
@@ -176,5 +176,33 @@ export class DemoService {
         disabled: true,
       },
     ];
+  }
+
+  public updateState(sectionType: string): void {
+    const enableMap: { [key: string]: string } = {
+      'personal-information': 'college-licence-information',
+      'college-licence-information': 'work-and-role-information',
+      'work-and-role-information': 'user-access-agreement',
+    };
+
+    this.state.profileIdentitySections = this.state.profileIdentitySections.map(
+      (section) => {
+        if (section.type === sectionType) {
+          return {
+            ...section,
+            statusType: 'success',
+            status: 'completed',
+          };
+        }
+        if (section.type === enableMap[sectionType]) {
+          return {
+            ...section,
+            disabled: false,
+          };
+        }
+
+        return section;
+      }
+    );
   }
 }

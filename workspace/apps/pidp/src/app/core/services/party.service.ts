@@ -20,6 +20,7 @@ export class PartyService {
     this._acceptedCollectionNotice = true;
   }
 
+  // TODO temporary state for demos
   public get state(): Record<string, PortalSection[]> {
     return this.demoService.state;
   }
@@ -30,6 +31,11 @@ export class PartyService {
       firstName: 'Lucy',
       lastName: 'Pultz',
     };
+  }
+
+  // TODO temporaty state modifier for demos
+  public updateState(sectionType: string): void {
+    this.demoService.updateState(sectionType);
   }
 
   public set acceptedCollectionNotice(hasAccepted: boolean) {

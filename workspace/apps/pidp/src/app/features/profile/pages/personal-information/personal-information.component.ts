@@ -88,6 +88,8 @@ export class PersonalInformationComponent
   }
 
   protected afterSubmitIsSuccessful(): void {
+    this.partyService.updateState('personal-information');
+
     this.router.navigate([this.route.snapshot.data.routes.root]);
   }
 }
