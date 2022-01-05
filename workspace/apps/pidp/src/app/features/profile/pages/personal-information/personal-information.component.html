@@ -26,6 +26,7 @@
 
     <ui-toggle-content
       label="I have a preferred name"
+      [checked]="hasPreferredName"
       (toggle)="onPreferredNameToggle($event)">
       <ui-preferred-name-form [form]="formState.form"></ui-preferred-name-form>
     </ui-toggle-content>

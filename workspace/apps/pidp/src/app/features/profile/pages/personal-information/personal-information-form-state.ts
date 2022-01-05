@@ -15,6 +15,10 @@ export class PersonalInformationFormState extends AbstractFormState<PersonalInfo
     return this.formInstance.get('preferredFirstName') as FormControl;
   }
 
+  public get preferredMiddleName(): FormControl {
+    return this.formInstance.get('preferredMiddleName') as FormControl;
+  }
+
   public get preferredLastName(): FormControl {
     return this.formInstance.get('preferredLastName') as FormControl;
   }

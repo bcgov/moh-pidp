@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, FormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -29,6 +29,7 @@ export class PersonalInformationComponent
   public title: string;
   public formState: PersonalInformationFormState;
   public bcscUser: BcscUser;
+  public hasPreferredName: boolean;
 
   public constructor(
     protected dialog: MatDialog,
@@ -45,17 +46,11 @@ export class PersonalInformationComponent
     this.title = this.route.snapshot.data.title;
     this.formState = new PersonalInformationFormState(fb);
     this.bcscUser = this.partyService.user;
+    this.hasPreferredName = false;
   }
 
   public onPreferredNameToggle({ checked }: ToggleContentChange): void {
-    this.formUtilsService.setOrResetValidators(
-      checked,
-      this.formState.preferredFirstName
-    );
-    this.formUtilsService.setOrResetValidators(
-      checked,
-      this.formState.preferredLastName
-    );
+    this.handlePreferredNameChanges(checked);
   }
 
   public onBack(): void {
@@ -76,7 +71,9 @@ export class PersonalInformationComponent
           this.formState.patchValue(model)
         )
       )
-      .subscribe();
+      .subscribe((model: PersonalInformationModel | null) =>
+        this.handlePreferredNameChanges(!!model?.preferredFirstName)
+      );
   }
 
   protected performSubmission(): Observable<void> {
@@ -91,5 +88,18 @@ export class PersonalInformationComponent
     this.partyService.updateState('personal-information');
 
     this.router.navigate([this.route.snapshot.data.routes.root]);
+  }
+
+  private handlePreferredNameChanges(checked: boolean): void {
+    this.hasPreferredName = checked;
+    [
+      this.formState.preferredFirstName,
+      this.formState.preferredLastName,
+    ].forEach((field: FormControl) => {
+      this.formUtilsService.setOrResetValidators(checked, field);
+    });
+    if (!checked) {
+      this.formState.preferredMiddleName.reset();
+    }
   }
 }
