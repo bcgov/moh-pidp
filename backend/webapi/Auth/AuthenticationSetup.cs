@@ -14,6 +14,8 @@ public static class AuthenticationSetup
 {
     public static IServiceCollection InitializeAuth(this IServiceCollection services, PidpConfiguration config)
     {
+        return services;
+
         services.ThrowIfNull(nameof(services));
         config.ThrowIfNull(nameof(config));
 
