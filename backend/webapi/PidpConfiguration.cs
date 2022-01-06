@@ -1,5 +1,7 @@
 namespace Pidp;
 
+using Pidp.Auth;
+
 public class PidpConfiguration
 {
     public static bool IsDevelopment() => EnvironmentName == Environments.Development;
@@ -7,10 +9,22 @@ public class PidpConfiguration
 
     public ConnectionStringConfiguration ConnectionStrings { get; set; } = new();
 
+    public KeycloakConfiguration Keycloak { get; set; } = new();
+
 
     // ------- Configuration Objects -------
     public class ConnectionStringConfiguration
     {
         public string PidpDatabase { get; set; } = string.Empty;
+    }
+
+    public class KeycloakConfiguration
+    {
+        public string RealmUrl { get; set; } = string.Empty;
+        public string WellKnownConfig => KeycloakUrls.WellKnownConfig(this.RealmUrl);
+        public string TokenUrl => KeycloakUrls.Token(this.RealmUrl);
+        public string AdministrationUrl { get; set; } = string.Empty;
+        public string AdministrationClientId { get; set; } = string.Empty;
+        public string AdministrationClientSecret { get; set; } = string.Empty;
     }
 }

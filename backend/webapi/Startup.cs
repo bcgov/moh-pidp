@@ -10,6 +10,7 @@ using Serilog;
 using System.Reflection;
 using System.Text.Json;
 
+using Pidp.Auth;
 using Pidp.Data;
 using Pidp.Features;
 
@@ -46,6 +47,8 @@ public class Startup
         //     .AddHealthChecks()
         //     .AddDbContextCheck<PidpDbContext>("DbContextHealthCheck")
         //     .AddNpgSql(connectionString);
+
+        services.InitializeAuth(config);
 
         services.AddSwaggerGen(options =>
         {
