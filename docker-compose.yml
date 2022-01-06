@@ -75,8 +75,8 @@ services:
       - ./realm-export-local.json:/tmp/realm-export.json
     environment:
       DB_VENDOR: h2
-      KEYCLOAK_USER: admin
-      KEYCLOAK_PASSWORD: admin
+      KEYCLOAK_USER: realm-admin
+      KEYCLOAK_PASSWORD: realm-admin
       KEYCLOAK_IMPORT: /tmp/realm-export.json -Dkeycloak.profile.feature.upload_scripts=enabled
     ports:
       - 9090:8080
