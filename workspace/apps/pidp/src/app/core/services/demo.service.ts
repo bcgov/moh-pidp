@@ -1,5 +1,9 @@
 import { Injectable } from '@angular/core';
 
+import { DateTime } from 'luxon';
+
+import { APP_DATE_FORMAT } from '@bcgov/shared/ui';
+
 import { AccessRoutes } from '@app/features/access/access.routes';
 import { PortalSection } from '@app/features/portal/portal.component';
 import { ProfileRoutes } from '@app/features/profile/profile.routes';
@@ -192,6 +196,7 @@ export class DemoService {
             ...section,
             statusType: 'success',
             status: 'completed',
+            hint: DateTime.now().toFormat(APP_DATE_FORMAT),
           };
         }
         if (section.type === enableMap[sectionType]) {

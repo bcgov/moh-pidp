@@ -25,7 +25,7 @@ export interface PortalSection {
   disabled: boolean;
 }
 
-// TODO find a clean way to type narrowing in the template
+// TODO find a clean way to type narrow in the template
 @Component({
   selector: 'app-portal',
   templateUrl: './portal.component.html',
