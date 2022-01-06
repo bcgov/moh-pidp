@@ -1,6 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
+import { DateTime } from 'luxon';
+
+import { APP_DATE_FORMAT } from '@bcgov/shared/ui';
+
 import { DemoService } from '@core/services/demo.service';
 
 @Component({
@@ -28,6 +32,7 @@ export class UserAccessAgreementComponent implements OnInit {
             ...section,
             statusType: 'success',
             status: 'completed',
+            hint: DateTime.now().toFormat(APP_DATE_FORMAT),
           };
         }
 

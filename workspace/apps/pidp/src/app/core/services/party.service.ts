@@ -47,7 +47,7 @@ export class PartyService {
   }
 
   public get completedProfile(): boolean {
-    return true;
+    return this.demoService.profileComplete;
   }
 
   public set party(party: Party | null) {

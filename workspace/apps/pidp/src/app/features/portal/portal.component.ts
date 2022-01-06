@@ -63,13 +63,21 @@ export class PortalComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    // TODO guarantee that at least party ID 1 exists until Keycloak is setup
+    // TODO allow creation of a single party with ID 1
     const { firstName, lastName } = this.partyService.user;
     this.partyResource
-      .createParty({ firstName, lastName })
+      .getParties()
       .pipe(
-        exhaustMap((partyId: number | null) =>
-          partyId ? this.partyResource.getParty(partyId) : of(null)
+        map((parties: Party[] | null) => (parties?.length ? parties[0] : null)),
+        exhaustMap((party: Party | null) =>
+          !party
+            ? this.partyResource.createParty({ firstName, lastName }).pipe(
+                exhaustMap(() => this.partyResource.getParties()),
+                map((parties: Party[] | null) =>
+                  parties?.length ? parties[0] : null
+                )
+              )
+            : of(party)
         ),
         map((party: Party | null) => (this.partyService.party = party))
       )
