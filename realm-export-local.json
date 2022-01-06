@@ -468,6 +468,15 @@
       "firstName": "User",
       "lastName": "One",
       "email": "UserOne@email.com",
+      "credentials": [
+        {
+          "id": "c157029c-6b83-4b67-bdf1-9bb85c567668",
+          "type": "password",
+          "createdDate": 1641454581891,
+          "secretData": "{\"value\":\"nN++aEuPWX70ItbDf1ppIJI3WoY3Grb08rUBlFL/fVhJm6Or8kPj1V5XF90KRHMgsCXBBx2vMy6eahC3upPf3w==\",\"salt\":\"srS6kfFalaUwyQU5t6+KIw==\",\"additionalParameters\":{}}",
+          "credentialData": "{\"hashIterations\":27500,\"algorithm\":\"pbkdf2-sha256\",\"additionalParameters\":{}}"
+        }
+      ],
       "disableableCredentialTypes": [],
       "requiredActions": [],
       "realmRoles": [
@@ -496,6 +505,15 @@
       "firstName": "Admin",
       "lastName": "Wone",
       "email": "AdminWone@email.com",
+      "credentials": [
+        {
+          "id": "44b0f9ad-4af3-4757-931b-8aa539ddb801",
+          "type": "password",
+          "createdDate": 1641454560206,
+          "secretData": "{\"value\":\"6X9+PVht9S+pMalRVqtw7gpMytNgPi1VMAMkn1TjXXnlj9tyjOqoL+ObUW/XVNxCtQkWH/Jikym66B+xLgxVbw==\",\"salt\":\"yJ9LmpOZjFt+f6b/+NTB9g==\",\"additionalParameters\":{}}",
+          "credentialData": "{\"hashIterations\":27500,\"algorithm\":\"pbkdf2-sha256\",\"additionalParameters\":{}}"
+        }
+      ],
       "disableableCredentialTypes": [],
       "requiredActions": [],
       "realmRoles": [
@@ -544,7 +562,9 @@
       "redirectUris": [
         "*"
       ],
-      "webOrigins": [],
+      "webOrigins": [
+        "*"
+      ],
       "notBefore": 0,
       "bearerOnly": false,
       "consentRequired": false,
