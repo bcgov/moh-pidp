@@ -25,6 +25,7 @@ export class WorkAndRoleInformationComponent
 {
   public title: string;
   public formState: WorkAndRoleInformationFormState;
+  public hasPhysicalAddress: boolean;
 
   public constructor(
     protected dialog: MatDialog,
@@ -40,6 +41,7 @@ export class WorkAndRoleInformationComponent
 
     this.title = this.route.snapshot.data.title;
     this.formState = new WorkAndRoleInformationFormState(fb, formUtilsService);
+    this.hasPhysicalAddress = false;
   }
 
   public onBack(): void {
@@ -60,7 +62,10 @@ export class WorkAndRoleInformationComponent
           this.formState.patchValue(model)
         )
       )
-      .subscribe();
+      .subscribe(
+        (model: WorkAndRoleInformationModel | null) =>
+          (this.hasPhysicalAddress = !!model?.physicalAddress)
+      );
   }
 
   protected performSubmission(): Observable<void> {

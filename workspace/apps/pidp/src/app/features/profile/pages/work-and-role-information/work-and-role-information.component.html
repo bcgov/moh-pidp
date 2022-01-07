@@ -62,7 +62,9 @@
 
       <app-address-form
         [form]="formState.physicalAddress"
-        [showAddressLineFields]="hasAttemptedSubmission"></app-address-form>
+        [showAddressLineFields]="
+          hasAttemptedSubmission || hasPhysicalAddress
+        "></app-address-form>
     </ui-page-section>
   </ng-container>
 

@@ -50,7 +50,7 @@ export class PersonalInformationComponent
   }
 
   public onPreferredNameToggle({ checked }: ToggleContentChange): void {
-    this.handlePreferredNameChanges(checked);
+    this.handlePreferredNameChange(checked);
   }
 
   public onBack(): void {
@@ -72,7 +72,7 @@ export class PersonalInformationComponent
         )
       )
       .subscribe((model: PersonalInformationModel | null) =>
-        this.handlePreferredNameChanges(!!model?.preferredFirstName)
+        this.handlePreferredNameChange(!!model?.preferredFirstName)
       );
   }
 
@@ -90,7 +90,7 @@ export class PersonalInformationComponent
     this.router.navigate([this.route.snapshot.data.routes.root]);
   }
 
-  private handlePreferredNameChanges(checked: boolean): void {
+  private handlePreferredNameChange(checked: boolean): void {
     this.hasPreferredName = checked;
     [
       this.formState.preferredFirstName,
