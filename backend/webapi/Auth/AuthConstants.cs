@@ -2,7 +2,7 @@ namespace Pidp.Auth;
 
 public static class AuthConstants
 {
-    public const string Audience = "PIDP-WEBAPP";
+    public const string Audience = "PIDP-SERVICE";
     public const string BCServicesCard = "bcsc";
 }
 
