@@ -1,40 +1,54 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { BreakpointState } from '@angular/cdk/layout';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import { MatSidenav } from '@angular/material/sidenav';
 
-import { startWith } from 'rxjs';
-
-import { DeviceResolution } from '@core/enums/device-resolution.enum';
-import { ViewportService } from '@core/services/viewport.service';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
 import {
   DashboardMenuItem,
   DashboardRouteMenuItem,
 } from '../../models/dashboard-menu-item.model';
 import { DashboardSidenavProps } from '../../models/dashboard-sidenav-props.model';
-import { DashboardHeaderConfig } from '../dashboard-header/dashboard-header.component';
+import {
+  BootstrapBreakpoints,
+  ViewportService,
+} from '../../services/viewport.service';
+import { DashboardHeaderTheme } from '../dashboard-header/dashboard-header.component';
 
-// TODO make this fully presentational and move out into libs
+@UntilDestroy()
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DashboardComponent implements OnInit {
   /**
    * @description
-   * Dashboard header configuration for theming.
+   * Dashboard header configuration.
    */
-  @Input() public headerConfig!: DashboardHeaderConfig;
+  @Input() public headerConfig: {
+    theme: DashboardHeaderTheme;
+    allowMobileToggle: boolean;
+  };
   /**
    * @description
-   * Dashboard sidenav configuration for theming.
+   * Username for the authenticated user.
    */
-  @Input() public sideNavConfig!: { imgSrc: string; imgAlt: string };
+  @Input() public username?: string;
   /**
    * @description
-   * Show the sidenav default branding.
+   * Branding configuration for the side navigation.
    */
-  @Input() public showBrand: boolean;
+  @Input() public brandConfig?: { imgSrc: string; imgAlt: string };
   /**
    * @description
    * List of dashboard details used to populate the side navigation
@@ -43,15 +57,15 @@ export class DashboardComponent implements OnInit {
   @Input() public menuItems!: DashboardMenuItem[];
   /**
    * @description
+   * Whether the dashboard menu items should display their icons.
+   */
+  @Input() public showMenuItemIcons: boolean;
+  /**
+   * @description
    * Whether the dashboard menu items are responsive, and collapse
    * on mobile viewports.
    */
   @Input() public responsiveMenuItems: boolean;
-  /**
-   * @description
-   * Whether the dashboard menu items should display their icons.
-   */
-  @Input() public showMenuItemIcons: boolean;
   /**
    * @description
    * Redirect URL after logout.
@@ -62,55 +76,40 @@ export class DashboardComponent implements OnInit {
    * Side navigation reference.
    */
   @ViewChild('sidenav') public sideNav!: MatSidenav;
+  /**
+   * @description
+   * Logout event handler.
+   */
+  @Output() public logout: EventEmitter<void>;
 
   public sideNavProps!: DashboardSidenavProps;
-  public username!: string;
 
-  public constructor(
-    // TODO make more generic and pass in authorized user so dependency can be dropped
-    // private authService: AuthService,
-    private viewportService: ViewportService
-  ) {
-    // TODO make this generic and remove defaults for config to for wrapping of the component
+  public constructor(private viewportService: ViewportService) {
     this.headerConfig = {
-      theme: 'blue',
-      showMobileToggle: true,
+      theme: 'dark',
+      allowMobileToggle: true,
     };
-    // TODO make this generic and remove defaults for config to for wrapping of the component
-    this.sideNavConfig = {
-      imgSrc: '',
-      imgAlt: '',
-    };
-
-    this.showBrand = false;
-    // TODO decouple these from controlling the default width of the sidenav based on list width
-    this.responsiveMenuItems = false;
     this.showMenuItemIcons = false;
+    this.responsiveMenuItems = false;
+    this.logout = new EventEmitter<void>();
   }
 
-  // TODO material might have a service now that makes this obsolete
-  public get isMobile(): boolean {
-    return this.viewportService.isMobile;
-  }
-
-  // TODO material might have a service now that makes this obsolete
-  public get isDesktop(): boolean {
-    return this.viewportService.isDesktop || this.viewportService.isWideDesktop;
-  }
-
-  public onAction(dashboardMenuItem: DashboardMenuItem): void {
-    // Close on mobile to prevent blocking the screen when routing
+  /**
+   * @description
+   * Handle menu item actions.
+   */
+  public onMenuItemAction(dashboardMenuItem: DashboardMenuItem): void {
     if (
       dashboardMenuItem instanceof DashboardRouteMenuItem &&
-      this.viewportService.isMobile
+      this.viewportService.isMobileBreakpoint
     ) {
+      // Close on mobile to prevent blocking the screen when routing
       this.sideNav.close();
     }
   }
 
   public onLogout(): void {
-    // const routePath = this.logoutRedirectUrl ?? this.config.loginRedirectUrl;
-    // this.authService.logout(routePath);
+    this.logout.emit();
   }
 
   public ngOnInit(): void {
@@ -119,37 +118,21 @@ export class DashboardComponent implements OnInit {
       this.responsiveMenuItems = false;
     }
 
-    // TODO make more generic and pass in authorized user
-    // Set the authenticated username for the application header
-    // this.authService
-    //   .getUser$()
-    //   .subscribe(
-    //     ({ firstName, lastName }: BcscUser) =>
-    //       (this.username = `${firstName} ${lastName}`)
-    //   );
-
-    // Initialize the side navigation properties, and listen for
-    // changes in viewport size
-    this.viewportService
-      .onResize()
-      .pipe(startWith(this.viewportService.device))
+    this.viewportService.breakpointObserver$
+      .pipe(untilDestroyed(this))
       .subscribe(
-        (device: DeviceResolution) =>
-          (this.sideNavProps = this.getDashboardNavProps(device))
+        (result: BreakpointState) =>
+          (this.sideNavProps = this.getSideNavProperties(result))
       );
   }
 
-  private getDashboardNavProps(
-    device: DeviceResolution
-  ): DashboardSidenavProps {
-    switch (device) {
-      case DeviceResolution.WIDE:
-      case DeviceResolution.DESKTOP:
-        return new DashboardSidenavProps('side', true, false);
-      case DeviceResolution.TABLET:
-        return new DashboardSidenavProps('side', true, false);
-      default:
-        return new DashboardSidenavProps('over', false, false);
+  private getSideNavProperties(result: BreakpointState): DashboardSidenavProps {
+    if (result.breakpoints[BootstrapBreakpoints.large]) {
+      return new DashboardSidenavProps('side', true, false);
+    } else if (result.breakpoints[BootstrapBreakpoints.medium]) {
+      return new DashboardSidenavProps('side', true, false);
+    } else {
+      return new DashboardSidenavProps('over', false, false);
     }
   }
 }

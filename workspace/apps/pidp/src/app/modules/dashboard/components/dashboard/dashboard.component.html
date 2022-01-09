@@ -1,23 +1,22 @@
 <app-dashboard-header
-  [headerConfig]="headerConfig"
-  [isMobile]="isMobile"
+  [theme]="headerConfig.theme"
+  [allowMobileToggle]="headerConfig.allowMobileToggle"
   [username]="username"
-  (toggle)="sidenav.toggle()"
+  (toggleMobileMenu)="sidenav.toggle()"
   (logout)="onLogout()"></app-dashboard-header>
 
-<mat-sidenav-container class="prime-sidenav-container">
+<mat-sidenav-container class="dashboard-sidenav-container">
   <mat-sidenav
     #sidenav
     [mode]="sideNavProps.mode"
     [opened]="sideNavProps.opened"
     [fixedInViewport]="sideNavProps.fixedInViewport"
     [fixedTopGap]="0"
-    [fixedBottomGap]="0"
-    class="d-print-none">
-    <div class="logo" [class.hidden]="!showBrand">
+    [fixedBottomGap]="0">
+    <div class="logo" [class.hidden]="!brandConfig">
       <img
-        [src]="sideNavConfig.imgSrc"
-        [attr.alt]="sideNavConfig.imgAlt"
+        [src]="brandConfig?.imgSrc"
+        [attr.alt]="brandConfig?.imgAlt"
         [class.fixed]="!responsiveMenuItems" />
     </div>
 
@@ -25,7 +24,7 @@
       [menuItems]="menuItems"
       [responsiveMenuItems]="responsiveMenuItems"
       [showMenuItemIcons]="showMenuItemIcons"
-      (action)="onAction($event)">
+      (action)="onMenuItemAction($event)">
     </app-dashboard-menu>
   </mat-sidenav>
 

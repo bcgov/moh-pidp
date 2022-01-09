@@ -1,20 +1,26 @@
-<mat-toolbar
-  [class.theme-white]="headerConfig.theme === 'white'"
-  [class.is-mobile]="isMobile">
-  <span *ngIf="headerConfig.showMobileToggle && isMobile">
-    <mat-icon (click)="toggleSidenav()">menu</mat-icon>
+<mat-toolbar [class.theme-light]="theme === 'light'">
+  <span *ngIf="allowMobileToggle && (mobileToggleBreakpoint$ | async)">
+    <button mat-icon-button aria-label="open" (click)="onOpenMenu()">
+      <mat-icon>menu</mat-icon>
+    </button>
   </span>
   <span>
-    <img [src]="brandImageSrc" alt="Government of BC Logo" />
+    <ui-bc-gov-logo [theme]="theme"></ui-bc-gov-logo>
   </span>
 
   <span class="flex-fill"></span>
 
-  <span *ngIf="username && !isMobile" class="username">
+  <span *ngIf="username && (usernameBreakpoint$ | async)">
     {{ username }}
   </span>
   <span *ngIf="username" class="logout">
-    <mat-icon (click)="onLogout()">logout</mat-icon>
+    <button
+      mat-icon-button
+      matTooltip="Logout"
+      aria-label="logout"
+      (click)="onLogout()">
+      <mat-icon>logout</mat-icon>
+    </button>
   </span>
 </mat-toolbar>
 

@@ -23,18 +23,18 @@ export class DashboardMenuComponent {
    * List of dashboard details used to populate the side navigation
    * links for routing within the application.
    */
-  @Input() public menuItems!: DashboardMenuItem[];
+  @Input() public menuItems?: DashboardMenuItem[];
   /**
    * @description
    * Whether the dashboard menu items are responsive, and collapse
-   * on mobile viewports.
+   * down to icons when on mobile viewports.
    */
-  @Input() public responsiveMenuItems!: boolean;
+  @Input() public responsiveMenuItems?: boolean;
   /**
    * @description
    * Whether the dashboard menu items should display their icons.
    */
-  @Input() public showMenuItemIcons!: boolean;
+  @Input() public showMenuItemIcons?: boolean;
   /**
    * @description
    * Dashboard menu item action emitter.
@@ -63,7 +63,7 @@ export class DashboardMenuComponent {
     return menuItem as DashboardRouteMenuItem;
   }
 
-  public onAction(dashboardMenuItem: DashboardMenuItem): void {
+  public onMenuItemRoute(dashboardMenuItem: DashboardMenuItem): void {
     this.action.emit(dashboardMenuItem);
   }
 }

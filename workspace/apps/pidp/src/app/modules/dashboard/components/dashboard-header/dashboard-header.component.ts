@@ -6,11 +6,11 @@ import {
   Output,
 } from '@angular/core';
 
-export interface DashboardHeaderConfig {
-  theme?: 'blue' | 'white';
-  // TODO change name to reflect a default that will show the toggle
-  showMobileToggle?: boolean;
-}
+import { Observable, combineLatest, distinctUntilChanged, map } from 'rxjs';
+
+import { ViewportService } from '../../services/viewport.service';
+
+export type DashboardHeaderTheme = 'dark' | 'light';
 
 @Component({
   selector: 'app-dashboard-header',
@@ -21,53 +21,50 @@ export interface DashboardHeaderConfig {
 export class DashboardHeaderComponent {
   /**
    * @description
-   * Dashboard header configuration for theming.
+   * Theme for the dashboard header.
    */
-  @Input() public headerConfig: DashboardHeaderConfig;
+  @Input() public theme: DashboardHeaderTheme;
+  /**
+   * @description
+   * Allow the mobile toggle to be displayed.
+   */
+  @Input() public allowMobileToggle?: boolean;
   /**
    * @description
    * Username displayed in the dashboard header.
    */
-  @Input() public username!: string;
+  @Input() public username?: string;
   /**
    * @description
-   * Indicator that viewport dimensions match a
-   * mobile device.
-   *
-   * NOTE: showMobileToggle will be displayed when the
-   * mobile device viewport dimension are provided.
+   * Event emission of mobile menu action.
    */
-  @Input() public isMobile!: boolean;
-  /**
-   * @description
-   * Event emission of toggling the dashboard sidenav
-   * drawer action.
-   */
-  @Output() public toggle: EventEmitter<void>;
+  @Output() public toggleMobileMenu: EventEmitter<void>;
   /**
    * @description
    * Event emission of logout action.
    */
   @Output() public logout: EventEmitter<void>;
 
-  public brandImageSrc: string;
+  public mobileToggleBreakpoint$: Observable<boolean>;
+  public usernameBreakpoint$: Observable<boolean>;
 
-  public constructor() {
-    this.headerConfig = {
-      theme: 'blue',
-      showMobileToggle: true,
-    };
-    this.toggle = new EventEmitter<void>();
+  public constructor(public viewportService: ViewportService) {
+    this.theme = 'dark';
+    this.toggleMobileMenu = new EventEmitter<void>();
     this.logout = new EventEmitter<void>();
 
-    this.brandImageSrc =
-      this.headerConfig.theme === 'white'
-        ? '/assets/images/gov_bc_logo_white.jpeg'
-        : '/assets/images/gov_bc_logo_blue.png';
+    this.mobileToggleBreakpoint$ = combineLatest([
+      viewportService.isMobileBreakpoint$,
+      viewportService.isTabletBreakpoint$,
+    ]).pipe(
+      map(([isMobile, isTablet]: [boolean, boolean]) => isMobile || isTablet),
+      distinctUntilChanged()
+    );
+    this.usernameBreakpoint$ = viewportService.isTabletAndUpBreakpoint$;
   }
 
-  public toggleSidenav(): void {
-    this.toggle.emit();
+  public onOpenMenu(): void {
+    this.toggleMobileMenu.emit();
   }
 
   public onLogout(): void {

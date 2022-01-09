@@ -5,7 +5,7 @@
 // NOTE: mat-sidenav is modified globally
 // @see ./scss/material/components/_mat-sidenav.scss
 
-.prime-sidenav-container {
+.dashboard-sidenav-container {
   position: absolute;
   // Compensate for the application header, and the
   // progress indicator for HTTP requests and routing
@@ -48,13 +48,12 @@
   }
 
   // Change visibility to hidden, but don't remove the effect the
-  // image has in the DOM and with adjacent elements
+  // image provides in the DOM with adjacent elements
   &.hidden {
     visibility: hidden;
   }
 }
 
-// TODO decouple dashboard component from directly controlling content
 .container-fluid {
   .col {
     padding-top: 3.5rem;

@@ -6,10 +6,10 @@ import {
   Output,
 } from '@angular/core';
 
-// TODO get rid of this dependency and make it an input binding
-import { ViewportService } from '@core/services/viewport.service';
+import { Observable } from 'rxjs';
 
 import { DashboardRouteMenuItem } from '../../models/dashboard-menu-item.model';
+import { ViewportService } from '../../services/viewport.service';
 
 @Component({
   selector: 'app-dashboard-route-menu-item',
@@ -26,30 +26,25 @@ export class DashboardRouteMenuItemComponent {
   /**
    * @description
    * Whether the dashboard menu items are responsive, and collapse
-   * on mobile viewports.
+   * down to icons when on mobile viewports.
    */
-  @Input() public responsiveMenuItems!: boolean;
+  @Input() public responsiveMenuItems?: boolean;
   /**
    * @description
    * Whether the dashboard menu items should display their icons.
    */
-  @Input() public showMenuItemIcons!: boolean;
+  @Input() public showMenuItemIcons?: boolean;
   /**
    * @description
-   * Dashboard menu item route emitter.
+   * Dashboard menu item emission of route action.
    */
   @Output() public route: EventEmitter<DashboardRouteMenuItem>;
 
-  public constructor(private viewportService: ViewportService) {
+  public isDesktopAndUpBreakpoint$: Observable<boolean>;
+
+  public constructor(viewportService: ViewportService) {
     this.route = new EventEmitter<DashboardRouteMenuItem>();
-  }
-
-  public get isMobile(): boolean {
-    return this.viewportService.isMobile;
-  }
-
-  public get isDesktop(): boolean {
-    return this.viewportService.isDesktop || this.viewportService.isWideDesktop;
+    this.isDesktopAndUpBreakpoint$ = viewportService.isDesktopAndUpBreakpoint$;
   }
 
   public onRoute(routeMenuItem: DashboardRouteMenuItem): void {
