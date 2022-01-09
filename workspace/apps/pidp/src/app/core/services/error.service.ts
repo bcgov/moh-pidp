@@ -1,16 +1,20 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
+
+import { NAVIGATOR } from '@bcgov/shared/utils';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ErrorService {
+  public constructor(@Inject(NAVIGATOR) private navigator: Navigator) {}
+
   /**
    * @description
    * Server-side or connection error message.
    */
   public getServerMessage(error: HttpErrorResponse): string {
-    return !navigator.onLine
+    return !this.navigator.onLine
       ? 'No Internet Connection'
       : `${error.status} - ${error.message}`;
   }
