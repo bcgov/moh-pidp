@@ -8,8 +8,8 @@ import {
 
 import { Observable } from 'rxjs';
 
+import { ViewportService } from '../../../../services/viewport.service';
 import { DashboardRouteMenuItem } from '../../models/dashboard-menu-item.model';
-import { ViewportService } from '../../services/viewport.service';
 
 @Component({
   selector: 'app-dashboard-route-menu-item',

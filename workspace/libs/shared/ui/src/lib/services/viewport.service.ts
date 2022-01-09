@@ -19,9 +19,7 @@ export const BootstrapBreakpoints = {
   desktop: '(min-width: 992px)',
 };
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class ViewportService {
   public breakpointObserver$: Observable<BreakpointState>;
 

@@ -13,14 +13,14 @@ import { MatSidenav } from '@angular/material/sidenav';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
 import {
+  BootstrapBreakpoints,
+  ViewportService,
+} from '../../../../services/viewport.service';
+import {
   DashboardMenuItem,
   DashboardRouteMenuItem,
 } from '../../models/dashboard-menu-item.model';
 import { DashboardSidenavProps } from '../../models/dashboard-sidenav-props.model';
-import {
-  BootstrapBreakpoints,
-  ViewportService,
-} from '../../services/viewport.service';
 import { DashboardHeaderTheme } from '../dashboard-header/dashboard-header.component';
 
 @UntilDestroy()

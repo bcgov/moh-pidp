@@ -8,7 +8,7 @@ import {
 
 import { Observable, combineLatest, distinctUntilChanged, map } from 'rxjs';
 
-import { ViewportService } from '../../services/viewport.service';
+import { ViewportService } from '../../../../services/viewport.service';
 
 export type DashboardHeaderTheme = 'dark' | 'light';
 
