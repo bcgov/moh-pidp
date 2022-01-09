@@ -7,8 +7,8 @@ import { AddressAutocompleteFindResponse } from '@shared/components/address-auto
 import { AddressAutocompleteRetrieveResponse } from '@shared/components/address-autocomplete/address-autocomplete-retrieve-response.model';
 
 import { ApiResource } from '../resources/api-resource.service';
-import { LoggerService } from './logger.service';
-import { ToastService } from './toast.service';
+import { LoggerService } from '../services/logger.service';
+import { ToastService } from '../services/toast.service';
 
 @Injectable({
   providedIn: 'root',

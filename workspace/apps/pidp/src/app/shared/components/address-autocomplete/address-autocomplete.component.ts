@@ -5,8 +5,8 @@ import { EMPTY, debounceTime, switchMap } from 'rxjs';
 
 import { Address, Province } from '@bcgov/shared/data-access';
 
-import { AddressAutocompleteResource } from '@app/core/services/address-autocomplete-resource.service';
-import { ToastService } from '@app/core/services/toast.service';
+import { AddressAutocompleteResource } from '@core/resources/address-autocomplete-resource.service';
+import { ToastService } from '@core/services/toast.service';
 
 import { AddressAutocompleteFindResponse } from './address-autocomplete-find-response.model';
 import { AddressAutocompleteRetrieveResponse } from './address-autocomplete-retrieve-response.model';
