@@ -2,9 +2,12 @@ import { PortalModule } from '@angular/cdk/portal';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { DashboardComponent } from '../../modules/dashboard/components/dashboard/dashboard.component';
+import { DashboardComponent } from '@bcgov/shared/ui';
+
 import { AccessModule } from '../access/access.module';
 import { AccessRoutes } from '../access/access.routes';
+import { AuthModule } from '../auth/auth.module';
+import { AuthRoutes } from '../auth/auth.routes';
 import { PortalRoutes } from '../portal/portal.routes';
 import { ProfileModule } from '../profile/profile.module';
 import { ProfileRoutes } from '../profile/profile.routes';
@@ -14,6 +17,11 @@ import { YourProfileModule } from '../your-profile/your-profile.module';
 import { YourProfileRoutes } from '../your-profile/your-profile.routes';
 
 const routes: Routes = [
+  {
+    path: AuthRoutes.MODULE_PATH,
+    loadChildren: (): Promise<AuthModule> =>
+      import('../auth/auth.module').then((m) => m.AuthModule),
+  },
   {
     path: '',
     component: DashboardComponent,

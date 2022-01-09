@@ -1692,6 +1692,13 @@
   resolved "https://registry.yarnpkg.com/@jridgewell/resolve-uri/-/resolve-uri-1.0.0.tgz#3fdf5798f0b49e90155896f6291df186eac06c83"
   integrity sha512-9oLAnygRMi8Q5QkYEU4XWK04B+nuoXoxjRvRxgjuChkLZFBja0YPSgdZ7dZtwhncLBcQe/I/E+fLuk5qxcYVJA==
 
+"@ngneat/until-destroy@^9.0.0":
+  version "9.0.0"
+  resolved "https://registry.yarnpkg.com/@ngneat/until-destroy/-/until-destroy-9.0.0.tgz#62f478beb625a051bb72ddb677e90593da575bbc"
+  integrity sha512-6NJNJJIIr9qo3fTDI6yeLAKmyvbS1gV0PynIT0ofktq5L4BehlGGxCextcfh2uIltx+fhj9TYpC7ndwnD/3RPA==
+  dependencies:
+    tslib "^2.3.0"
+
 "@ngtools/webpack@13.0.3":
   version "13.0.3"
   resolved "https://registry.yarnpkg.com/@ngtools/webpack/-/webpack-13.0.3.tgz#ec31dfa49dae79aeee68cc970fea6f5fd9ebc76d"

@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 
-import { DashboardModule } from '../../modules/dashboard/dashboard.module';
+import { DashboardModule } from '@bcgov/shared/ui';
 
 import { ShellRoutingModule } from './shell-routing.module';
 

@@ -1,0 +1,11 @@
+export class AuthRoutes {
+  public static MODULE_PATH = 'auth';
+
+  /**
+   * @description
+   * Useful for redirecting to module root-level routes.
+   */
+  public static routePath(route: string): string {
+    return `/${AuthRoutes.MODULE_PATH}/${route}`;
+  }
+}

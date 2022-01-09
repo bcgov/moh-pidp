@@ -69,7 +69,7 @@ export class Address {
    */
   public static isNotEmpty(
     address: Address,
-    omitList?: (keyof Address)[]
+    omitList: (keyof Address)[] = optionalAddressLineItems
   ): boolean {
     return address ? !this.isEmpty(address, omitList) : false;
   }
