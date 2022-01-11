@@ -9,7 +9,6 @@ using Microsoft.EntityFrameworkCore;
 using Pidp.Data;
 using Pidp.Features;
 using Pidp.Models;
-using Pidp.Models.Lookups;
 
 public class WorkSetting
 {
@@ -29,8 +28,8 @@ public class WorkSetting
 
         public class Address
         {
-            public CountryCode CountryCode { get; set; }
-            public ProvinceCode ProvinceCode { get; set; }
+            public string CountryCode { get; set; } = string.Empty;
+            public string ProvinceCode { get; set; } = string.Empty;
             public string Street { get; set; } = string.Empty;
             public string City { get; set; } = string.Empty;
             public string Postal { get; set; } = string.Empty;
@@ -55,8 +54,8 @@ public class WorkSetting
     {
         public AddressValidator()
         {
-            this.RuleFor(x => x.CountryCode).IsInEnum();
-            this.RuleFor(x => x.ProvinceCode).IsInEnum();
+            this.RuleFor(x => x.CountryCode).NotEmpty();
+            this.RuleFor(x => x.ProvinceCode).NotEmpty();
             this.RuleFor(x => x.Street).NotEmpty();
             this.RuleFor(x => x.City).NotEmpty();
             this.RuleFor(x => x.Postal).NotEmpty();
