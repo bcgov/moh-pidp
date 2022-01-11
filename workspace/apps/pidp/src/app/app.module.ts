@@ -1,12 +1,15 @@
 import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
 
-import { AppComponent } from './app.component';
+import { AppRoutingModule } from '@app/app-routing.module';
+import { AppComponent } from '@app/app.component';
+import { RootRoutingModule } from '@bcgov/shared/ui';
+import { CoreModule } from '@core/core.module';
+
+import { LookupModule } from './modules/lookup/lookup.module';
 
 @NgModule({
   declarations: [AppComponent],
-  imports: [BrowserModule],
-  providers: [],
+  imports: [CoreModule, LookupModule, AppRoutingModule, RootRoutingModule],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

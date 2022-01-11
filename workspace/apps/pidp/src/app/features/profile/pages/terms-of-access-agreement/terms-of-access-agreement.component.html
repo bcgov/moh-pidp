@@ -1,0 +1,40 @@
+<ui-page>
+  <ui-page-header>{{ title }}</ui-page-header>
+
+  <ui-page-section>
+    <ui-page-section-subheader
+      icon="assignment_ind"
+      heading="User Access Agreement">
+      <ng-container uiPageSectionSubheaderDesc>
+        Agree to the following agreement(s).
+      </ng-container>
+    </ui-page-section-subheader>
+
+    <p>UAA here</p>
+  </ui-page-section>
+
+  <div class="signature">
+    <mat-checkbox #checkbox color="primary">
+      I have read and accept the User Access Agreement(s).
+    </mat-checkbox>
+  </div>
+
+  <ui-page-footer>
+    <button
+      mat-stroked-button
+      color="primary"
+      type="button"
+      routerLink="../../">
+      Back Home
+    </button>
+    <button
+      mat-flat-button
+      color="primary"
+      type="submit"
+      routerLink="../../"
+      [disabled]="!checkbox.checked"
+      (click)="onSubmit()">
+      Save Information
+    </button>
+  </ui-page-footer>
+</ui-page>

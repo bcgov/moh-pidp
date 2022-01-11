@@ -1,0 +1,19 @@
+div {
+  margin-bottom: 1rem;
+
+  &:last-child {
+    margin-bottom: 2rem;
+  }
+
+  & > span {
+    margin-bottom: 0.75rem;
+
+    &:nth-child(odd) {
+      font-weight: 500;
+      margin-right: 0.6rem;
+    }
+    &:nth-child(even) {
+      font-weight: 300;
+    }
+  }
+}

@@ -16,7 +16,7 @@
           "error",
           {
             "type": "attribute",
-            "prefix": "workspace",
+            "prefix": "app",
             "style": "camelCase"
           }
         ],
@@ -24,7 +24,7 @@
           "error",
           {
             "type": "element",
-            "prefix": "workspace",
+            "prefix": "app",
             "style": "kebab-case"
           }
         ],
@@ -32,7 +32,15 @@
         "@typescript-eslint/explicit-function-return-type": ["error"],
         "@typescript-eslint/explicit-member-accessibility": ["error"],
         "@typescript-eslint/no-for-in-array": ["error"],
-        "@typescript-eslint/prefer-enum-initializers": ["error"]
+        "@typescript-eslint/no-unused-vars": [
+          "error",
+          {
+            "vars": "all",
+            "args": "after-used",
+            "ignoreRestSiblings": false,
+            "argsIgnorePattern": "_"
+          }
+        ]
       }
     },
     {

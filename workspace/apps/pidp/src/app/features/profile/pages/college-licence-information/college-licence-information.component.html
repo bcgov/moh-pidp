@@ -1,0 +1,79 @@
+<ui-page>
+  <ui-page-header>{{ title }}</ui-page-header>
+
+  <ui-page-section>
+    <ui-page-section-subheader
+      icon="assignment_ind"
+      heading="College Licence Information">
+      <ng-container uiPageSectionSubheaderDesc>
+        Provide the following information to complete your Provider Identity
+        Profile.
+      </ng-container>
+    </ui-page-section-subheader>
+  </ui-page-section>
+
+  <ui-page-section>
+    <ui-page-section-subheader heading="College Licence">
+      <ng-container uiPageSectionSubheaderDesc>
+        Provide details for all your active College licenses.
+      </ng-container>
+    </ui-page-section-subheader>
+
+    <ui-form-section [showAction]="false">
+      <mat-form-field class="w-100">
+        <mat-select
+          placeholder="College Licences"
+          (selectionChange)="onSelectCollegeLicence()">
+          <mat-option value="None">None</mat-option>
+          <mat-option value="College of Physicians and Surgeons of BC (CPSBBC)">
+            College of Physicians and Surgeons of BC (CPSBBC)
+          </mat-option>
+          <mat-option value="College of Pharmacists of BC (CPBC)">
+            College of Pharmacists of BC (CPBC)
+          </mat-option>
+          <mat-option value="BC College of Nurses and Midwives (BCCNM)">
+            BC College of Nurses and Midwives (BCCNM)
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </ui-form-section>
+
+    <button mat-button type="button" color="primary">
+      <mat-icon>add</mat-icon>
+      Add Additional Licences
+    </button>
+  </ui-page-section>
+
+  <ui-page-section *ngIf="showPlr">
+    <ui-page-section-subheader icon="assignment_ind" heading="PLR">
+      <ng-container uiPageSectionSubheaderDesc>
+        Confirm this information found by the system is correct.
+      </ng-container>
+    </ui-page-section-subheader>
+
+    <ui-page-subheader>Status</ui-page-subheader>
+
+    <ui-key-value-info key="Status Code">Pending</ui-key-value-info>
+    <ui-key-value-info key="Status Reason Code">SNTA</ui-key-value-info>
+    <ui-key-value-info key="Status Start Date">25 Dec 2021</ui-key-value-info>
+    <ui-key-value-info key="Expertise">Delivering Presents</ui-key-value-info>
+  </ui-page-section>
+
+  <ui-page-footer>
+    <button
+      mat-stroked-button
+      color="primary"
+      type="button"
+      routerLink="../../">
+      Back Home
+    </button>
+    <button
+      mat-flat-button
+      color="primary"
+      type="submit"
+      routerLink="../../"
+      (click)="onSubmit()">
+      Save Information
+    </button>
+  </ui-page-footer>
+</ui-page>

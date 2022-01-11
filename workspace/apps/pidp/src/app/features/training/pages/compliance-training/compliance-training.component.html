@@ -1,0 +1,39 @@
+<ui-page>
+  <ui-page-header>{{ title }}</ui-page-header>
+
+  <ui-page-section>
+    <ui-page-section-subheader icon="school" heading="Compliance Training">
+      <ng-container uiPageSectionSubheaderDesc>
+        Description of what the video is here.
+      </ng-container>
+    </ui-page-section-subheader>
+  </ui-page-section>
+
+  <ui-alert
+    type="success"
+    icon="check_circle"
+    iconType="outlined"
+    title="Watched Compliance Training">
+    <ng-container uiAlertContent>
+      You have completed Compliance Training.
+    </ng-container>
+  </ui-alert>
+
+  <ui-page-footer>
+    <button
+      mat-stroked-button
+      color="primary"
+      type="button"
+      routerLink="../../">
+      Back Home
+    </button>
+    <button
+      mat-flat-button
+      color="primary"
+      type="button"
+      routerLink="../../"
+      (click)="onSubmit()">
+      Continue
+    </button>
+  </ui-page-footer>
+</ui-page>

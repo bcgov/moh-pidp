@@ -1,0 +1,11 @@
+<mat-icon
+  [color]="color"
+  [class]="{
+    'material-icons-outlined': type === 'outlined',
+    'material-icons-round': type === 'round',
+    'material-icons-sharp': type === 'sharp',
+    md: size === 'md',
+    lg: size === 'lg'
+  }">
+  <ng-content></ng-content>
+</mat-icon>

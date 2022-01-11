@@ -1,0 +1,88 @@
+<ui-page>
+  <ui-page-header>{{ title }}</ui-page-header>
+
+  <form novalidate [formGroup]="formState.form" (ngSubmit)="onSubmit()">
+    <ui-page-section>
+      <ui-page-section-subheader
+        icon="assignment_ind"
+        heading="Personal Information">
+        <ng-container uiPageSectionSubheaderDesc>
+          Provide the following information to complete your Provider Identity
+          Profile.
+        </ng-container>
+      </ui-page-section-subheader>
+    </ui-page-section>
+
+    <ui-page-section>
+      <ui-page-section-subheader heading="Name">
+        <ng-container uiPageSectionSubheaderDesc>
+          This information comes from the BC Services Card. If you use a
+          different name professionally, select "I have a preferred name".
+        </ng-container>
+        <ng-container uiPageSectionSubheaderHint>
+          Entering a preferred name will not change your BC Services Card name.
+        </ng-container>
+      </ui-page-section-subheader>
+
+      <ui-user-info [user]="bcscUser"></ui-user-info>
+
+      <ui-toggle-content
+        label="I have a preferred name"
+        (toggle)="onPreferredNameToggle($event)">
+        <ui-preferred-name-form
+          [form]="formState.form"></ui-preferred-name-form>
+      </ui-toggle-content>
+    </ui-page-section>
+
+    <ui-page-section>
+      <ui-page-section-subheader heading="Address">
+        <ng-container uiPageSectionSubheaderDesc>
+          This information comes from your BC Services Card. If you would prefer
+          to receive mail at a professional or other address, select "I have a
+          preferred address".
+        </ng-container>
+        <ng-container uiPageSectionSubheaderHint>
+          Entering a preferred address will not change your BC Services Card
+          address.
+        </ng-container>
+      </ui-page-section-subheader>
+
+      <app-address-info
+        [address]="bcscUser?.verifiedAddress"></app-address-info>
+
+      <ui-toggle-content
+        label="I have a preferred address"
+        (toggle)="onAddressToggle($event)">
+        <app-address-form [form]="formState.mailingAddress"></app-address-form>
+      </ui-toggle-content>
+    </ui-page-section>
+
+    <ui-page-section>
+      <ui-page-section-subheader heading="Contact Information">
+        <ng-container uiPageSectionSubheaderDesc>
+          Provide your contact information.
+        </ng-container>
+      </ui-page-section-subheader>
+
+      <ui-contact-info-form [form]="formState.form"></ui-contact-info-form>
+    </ui-page-section>
+
+    <ui-page-footer>
+      <button
+        mat-stroked-button
+        color="primary"
+        type="button"
+        routerLink="../../">
+        Back Home
+      </button>
+      <button
+        mat-flat-button
+        color="primary"
+        type="submit"
+        routerLink="../../"
+        (click)="onSubmit()">
+        Save Information
+      </button>
+    </ui-page-footer>
+  </form>
+</ui-page>

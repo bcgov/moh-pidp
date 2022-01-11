@@ -2,7 +2,7 @@
   "projectType": "application",
   "root": "apps/pidp",
   "sourceRoot": "apps/pidp/src",
-  "prefix": "workspace",
+  "prefix": "app",
   "targets": {
     "build": {
       "executor": "@angular-devkit/build-angular:browser",
@@ -13,17 +13,25 @@
         "main": "apps/pidp/src/main.ts",
         "polyfills": "apps/pidp/src/polyfills.ts",
         "tsConfig": "apps/pidp/tsconfig.app.json",
-        "assets": ["apps/pidp/src/favicon.ico", "apps/pidp/src/assets"],
-        "styles": ["apps/pidp/src/styles.css"],
-        "scripts": []
+        "assets": [
+          "apps/pidp/src/favicon.ico",
+          "apps/pidp/src/assets",
+          "apps/pidp/src/robots.txt"
+        ],
+        "styles": ["apps/pidp/src/scss/app.scss"],
+        "stylePreprocessorOptions": {
+          "includePaths": ["apps/pidp/src/scss"]
+        },
+        "scripts": [],
+        "allowedCommonJsDependencies": ["keycloak-js"]
       },
       "configurations": {
         "production": {
           "budgets": [
             {
               "type": "initial",
-              "maximumWarning": "500kb",
-              "maximumError": "1mb"
+              "maximumWarning": "2mb",
+              "maximumError": "3mb"
             },
             {
               "type": "anyComponentStyle",

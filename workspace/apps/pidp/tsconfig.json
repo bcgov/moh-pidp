@@ -17,7 +17,17 @@
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+    "paths": {
+      "@env/*": ["apps/pidp/src/environment/*"],
+      "@test/*": ["apps/pidp/src/test/*"],
+      "@app/*": ["apps/pidp/src/app/*"],
+      "@core/*": ["apps/pidp/src/app/core/*"],
+      "@shared/*": ["apps/pidp/src/app/shared/*"],
+      "@bcgov/shared/data-access": ["libs/shared/data-access/src/index.ts"],
+      "@bcgov/shared/ui": ["libs/shared/ui/src/index.ts"],
+      "@bcgov/shared/utils": ["libs/shared/utils/src/index.ts"]
+    }
   },
   "angularCompilerOptions": {
     "strictInjectionParameters": true,

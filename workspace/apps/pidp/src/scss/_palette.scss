@@ -1,0 +1,95 @@
+@import './material/material-palette';
+
+//
+// Colour Palettes
+//
+
+// Mapping of colours outside of Material that are used for
+// accents, notifications, or shading.
+
+// TODO re-evaluate the use of these colours
+
+$palettes: (
+  blue: (
+    lightest: #f8f9fb,
+    lighter: #d6ddec,
+    light: #0f48ae,
+    // BC Gov. Primary
+    base: map-get($bcgov-blue, 500),
+    dark: #001b4a,
+  ),
+  yellow: (
+    // BC Gov. Secondary
+    base: map-get($bcgov-yellow, 500),
+  ),
+  red: (
+    base: #ed202a,
+  ),
+  green: (
+    base: #228338,
+  ),
+  grey: (
+    lightest: #eeeeee,
+    lighter: #e1e1e1,
+    // divider colour
+    light: #bdbdbd,
+    // secondary text colour
+    base: #575757,
+    // primary text colour
+    dark: #212121,
+  ),
+);
+
+//
+// Palette Mapping Extractor
+// Gets the colour and tone from the theme palette.
+// @use theme-palette( colour, tone );
+//
+@function theme-palette($palette, $tone: 'base') {
+  @return map-get(map-get($palettes, $palette), $tone);
+}
+
+$alerts: (
+  success: (
+    backgroundColor: #d1e7dd,
+    backgroundColorSolid: #228338,
+    borderColor: #badbcc,
+    color: #0f5132,
+  ),
+  info: (
+    backgroundColor: #cff4fc,
+    backgroundColorSolid: #00849b,
+    borderColor: #b6effb,
+    // Purposely overridden with primary theme colour to provide
+    // more contrast in the UI compared to #055160
+    color: theme-palette(blue),
+  ),
+  warn: (
+    backgroundColor: #fff3cd,
+    backgroundColorSolid: theme-palette(yellow),
+    borderColor: #ffecb5,
+    color: #664d03,
+  ),
+  danger: (
+    backgroundColor: #f8d7da,
+    backgroundColorSolid: #a11622,
+    borderColor: #f5c2c7,
+    color: #842029,
+  ),
+  muted: (
+    backgroundColor: #e2e3e5,
+    backgroundColorSolid: #575757,
+    borderColor: #d3d6d8,
+    color: #41464b,
+  ),
+);
+
+//
+// Alert Palette Mapping Extractor
+// Gets the attrib colour(s) for a type of alert from the palette.
+// @use alert-palette( type, attrib );
+//
+// TODO reduce palette by using a single colour to generate difference using a scaled ratio
+@function alert-palette($type, $attrib) {
+  @return map-get(map-get($alerts, $type), $attrib);
+}

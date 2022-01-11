@@ -1,0 +1,26 @@
+<ui-alert
+  *ngIf="show"
+  type="info"
+  icon="error_outline"
+  title="Collection Notice">
+  <ng-container uiAlertContent>
+    <ng-content></ng-content>
+  </ng-container>
+  <ng-container uiAlertActions>
+    <span>
+      <mat-checkbox #checkbox color="primary">
+        Do not show me this collection notice again
+      </mat-checkbox>
+    </span>
+    <span>
+      <button
+        mat-flat-button
+        type="button"
+        class="inherit"
+        color="primary"
+        (click)="onClose(checkbox.checked)">
+        Close
+      </button>
+    </span>
+  </ng-container>
+</ui-alert>
