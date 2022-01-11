@@ -23,7 +23,7 @@ spec:
         serviceAccountName: pipeline
         params:
           - name: git-url
-            value: $(tt.params.git-repository-url)
+            value: git@github.com:bcgov/moh-pidp.git
           - name: git-revision
             value: $(tt.params.git-revision)
           - name: dockerfile-path
