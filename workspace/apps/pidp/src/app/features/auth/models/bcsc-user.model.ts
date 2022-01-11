@@ -1,4 +1,4 @@
-import { User } from './user.model';
+import { User } from '@bcgov/shared/data-access';
 
 export interface BcscUser extends User {
   id?: number;

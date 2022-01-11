@@ -5,10 +5,10 @@ import { DashboardModule } from '@bcgov/shared/ui';
 import { SharedModule } from '@shared/shared.module';
 
 import { AuthRoutingModule } from './auth-routing.module';
-import { AuthComponent } from './auth.component';
+import { LoginComponent } from './pages/login/login.component';
 
 @NgModule({
-  declarations: [AuthComponent],
+  declarations: [LoginComponent],
   imports: [AuthRoutingModule, DashboardModule, SharedModule],
 })
 export class AuthModule {}

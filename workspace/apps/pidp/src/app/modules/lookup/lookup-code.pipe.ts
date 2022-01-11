@@ -14,11 +14,9 @@ export class LookupCodePipe implements PipeTransform {
     lookupKey: string,
     key: string = 'name'
   ): unknown | null {
-    if (!lookupCode || !lookupKey) {
-      return null;
-    }
-
-    return lookupCode ? this.lookupValue<T>(lookupCode, lookupKey, key) : '';
+    return lookupCode && lookupKey && key
+      ? this.lookupValue<T>(lookupCode, lookupKey, key)
+      : null;
   }
 
   private lookupValue<T extends number | string>(

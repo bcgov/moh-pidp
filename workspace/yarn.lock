@@ -266,6 +266,13 @@
   resolved "https://registry.yarnpkg.com/@assemblyscript/loader/-/loader-0.10.1.tgz#70e45678f06c72fa2e350e8553ec4a4d72b92e06"
   integrity sha512-H71nDOOL8Y7kWRLqf6Sums+01Q5msqBW2KhDUTemh1tvY04eSkSXrK0uj/4mmY0Xr16/3zyZmsrxN7CKuRbNRg==
 
+"@auth0/angular-jwt@^5.0.2":
+  version "5.0.2"
+  resolved "https://registry.yarnpkg.com/@auth0/angular-jwt/-/angular-jwt-5.0.2.tgz#0a23f240e8c6ed37c5c7a354ad79a755a217936e"
+  integrity sha512-rSamC9mu+gUxoR86AXcIo+KD7xRIro+/iu1F2Ld85YAZEVKlpB5vYG+g0yGaEOqjtQWP/i0H6fi6XMGPVHSYYQ==
+  dependencies:
+    tslib "^2.0.0"
+
 "@babel/code-frame@7.12.11":
   version "7.12.11"
   resolved "https://registry.yarnpkg.com/@babel/code-frame/-/code-frame-7.12.11.tgz#f4ad435aa263db935b8f10f2c552d23fb716a63f"
@@ -6268,10 +6275,10 @@ karma-source-map-support@1.4.0:
   dependencies:
     source-map-support "^0.5.5"
 
-keycloak-angular@^8.4.0:
-  version "8.4.0"
-  resolved "https://registry.yarnpkg.com/keycloak-angular/-/keycloak-angular-8.4.0.tgz#405cb93cae8f01f3612d98caa5967e2c03372d04"
-  integrity sha512-3zBKzPf+ZG+16EfOdp1uxa/XTGElTOQSq5UkfFJzFcJe1D6p696hKIUJHNJECcYNUtt4XhYwUEolMIR+VySqgA==
+keycloak-angular@^9.0.0:
+  version "9.0.0"
+  resolved "https://registry.yarnpkg.com/keycloak-angular/-/keycloak-angular-9.0.0.tgz#079934d826158db5b7327d15d5f6d8a8ee57db1a"
+  integrity sha512-47ugycwEuheoVmeyQMnkW+s3dHzx3ipJ+88iDxhP+gPjVtV2s7lyNtUCw3dErHVTSbhqEhZJ8CrWwPk1qyiE5w==
   dependencies:
     tslib "^2.0.0"
 

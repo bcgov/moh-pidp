@@ -11,14 +11,15 @@ import { AppEnvironment, EnvironmentName } from './environment.model';
  * the AppConfigModule.
  */
 export const environment: AppEnvironment = {
+  production: true,
   apiEndpoint: 'http://localhost:5000',
   environmentName: EnvironmentName.LOCAL,
-  production: true,
+  loginRedirectUrl: 'http://localhost:4200',
   keycloakConfig: {
     config: {
-      url: 'https://dev.oidc.gov.bc.ca/auth',
-      realm: 'v4mbqqas',
-      clientId: 'prime-application-local',
+      url: 'https://common-logon-dev.hlth.gov.bc.ca/auth',
+      realm: 'moh_applications',
+      clientId: 'PIDP-WEBAPP',
     },
     initOptions: {
       onLoad: 'check-sso',

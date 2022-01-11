@@ -2,8 +2,9 @@ import { Injectable } from '@angular/core';
 
 import { BehaviorSubject, Observable } from 'rxjs';
 
-import { BcscUser, Party } from '@bcgov/shared/data-access';
+import { Party } from '@bcgov/shared/data-access';
 
+import { BcscUser } from '@app/features/auth/models/bcsc-user.model';
 import { PortalSection } from '@app/features/portal/portal.component';
 
 import { DemoService } from './demo.service';

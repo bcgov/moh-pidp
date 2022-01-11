@@ -5,8 +5,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { EMPTY, Observable, tap } from 'rxjs';
 
-import { BcscUser } from '@bcgov/shared/data-access';
 import { ToggleContentChange } from '@bcgov/shared/ui';
+
+import { BcscUser } from '@app/features/auth/models/bcsc-user.model';
 
 import { AbstractFormPage } from '@core/classes/abstract-form-page.class';
 import { FormUtilsService } from '@core/services/form-utils.service';
