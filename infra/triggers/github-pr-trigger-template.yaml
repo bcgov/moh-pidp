@@ -1,0 +1,39 @@
+apiVersion: triggers.tekton.dev/v1alpha1
+kind: TriggerTemplate
+metadata:
+  name: github-pr-trigger-template
+  namespace: d8a8f9-tools
+spec: 
+  params:
+    - name: git-revision
+      description: The git revision (SHA)
+      default: develop
+    - name: git-repository-url
+      description: The git repository url
+    - name: git-repo-name
+      description: The name of the deployment to be created / patched
+  resourcetemplates:
+    - apiVersion: tekton.dev/v1beta1
+      kind: PipelineRun
+      metadata:
+        generateName: frontend-pipeline-run-$(tt.params.git-repo-name)-
+      spec:
+        pipelineRef:
+          name: frontend-pipeline
+        serviceAccountName: pipeline
+        params:
+          - name: git-url
+            value: $(tt.params.git-repository-url)
+          - name: git-revision
+            value: ${tt.params.git-revision}
+          - name: dockerfile-path
+            value: "."
+          - name: image-name
+            value: image-registry.openshift-image-registry.svc:5000/d8a8f9-tools/pidp-frontend:$(tt.params.git-repo-name)
+        workspaces:
+        - name: source
+          persistentVolumeClaim:
+            claimName: fe-pipeline-pvc
+        - name: dockerconfig
+          secret:
+            secretName: pipeline-dockercfg-w5mgt

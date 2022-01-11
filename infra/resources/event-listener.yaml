@@ -1,0 +1,31 @@
+apiVersion: triggers.tekton.dev/v1alpha1
+kind: EventListener
+metadata:
+  name: github-pr
+  namespace: d8a8f9-tools
+spec:
+  namespaceSelector: {}
+  podTemplate: {}
+  resources:
+    kubernetesResource:
+      spec:
+        template:
+          spec:
+            containers:
+            - name: ""
+              resources:
+                limits:
+                  cpu: 500m
+                  memory: 128Mi
+                requests:
+                  cpu: 250m
+                  memory: 64Mi
+            serviceAccountName: pipeline
+  serviceAccountName: ""
+  triggers:
+  - bindings:
+    - kind: TriggerBinding
+      ref: github-pr-binding
+    name: github-listener
+    template:
+      ref: github-pr-trigger-template

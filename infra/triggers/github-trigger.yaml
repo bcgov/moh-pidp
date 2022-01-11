@@ -1,0 +1,10 @@
+apiVersion: triggers.tekton.dev/v1alpha1
+kind: Trigger
+metadata:
+  name: github-push-trigger
+spec:
+  serviceAccountName: pipeline
+  bindings:
+    - ref: github-pr-binding
+  template:
+    ref: github-pr-trigger-template
