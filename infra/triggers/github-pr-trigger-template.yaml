@@ -25,7 +25,7 @@ spec:
           - name: git-url
             value: $(tt.params.git-repository-url)
           - name: git-revision
-            value: ${tt.params.git-revision}
+            value: $(tt.params.git-revision)
           - name: dockerfile-path
             value: "."
           - name: image-name
