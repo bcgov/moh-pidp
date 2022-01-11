@@ -32,10 +32,3 @@ public class FacilityAddress : Address
 
     public Facility? Facility { get; set; }
 }
-
-public class PartyAddress : Address
-{
-    public int PartyId { get; set; }
-
-    public Party? Party { get; set; }
-}
