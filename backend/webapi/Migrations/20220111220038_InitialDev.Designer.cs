@@ -12,8 +12,8 @@ using Pidp.Data;
 namespace Pidp.Migrations
 {
     [DbContext(typeof(PidpDbContext))]
-    [Migration("20211221062151_AddedCollegeLookup")]
-    partial class AddedCollegeLookup
+    [Migration("20220111220038_InitialDev")]
+    partial class InitialDev
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -32,15 +32,13 @@ namespace Pidp.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("AddressType")
-                        .HasColumnType("integer");
-
                     b.Property<string>("City")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("CountryCode")
-                        .HasColumnType("integer");
+                    b.Property<string>("CountryCode")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<Instant>("Created")
                         .HasColumnType("timestamp with time zone");
@@ -56,8 +54,9 @@ namespace Pidp.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("ProvinceCode")
-                        .HasColumnType("integer");
+                    b.Property<string>("ProvinceCode")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<string>("Street")
                         .IsRequired()
@@ -72,6 +71,35 @@ namespace Pidp.Migrations
                     b.ToTable("Address");
 
                     b.HasDiscriminator<string>("Discriminator").HasValue("Address");
+                });
+
+            modelBuilder.Entity("Pidp.Models.Facility", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<Instant>("Created")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("FacilityName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<Instant>("Modified")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("PartyId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PartyId")
+                        .IsUnique();
+
+                    b.ToTable("Facility");
                 });
 
             modelBuilder.Entity("Pidp.Models.Lookups.College", b =>
@@ -107,8 +135,8 @@ namespace Pidp.Migrations
 
             modelBuilder.Entity("Pidp.Models.Lookups.Country", b =>
                 {
-                    b.Property<int>("Code")
-                        .HasColumnType("integer");
+                    b.Property<string>("Code")
+                        .HasColumnType("text");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -121,23 +149,24 @@ namespace Pidp.Migrations
                     b.HasData(
                         new
                         {
-                            Code = 1,
+                            Code = "CA",
                             Name = "Canada"
                         },
                         new
                         {
-                            Code = 2,
+                            Code = "US",
                             Name = "United States"
                         });
                 });
 
             modelBuilder.Entity("Pidp.Models.Lookups.Province", b =>
                 {
-                    b.Property<int>("Code")
-                        .HasColumnType("integer");
+                    b.Property<string>("Code")
+                        .HasColumnType("text");
 
-                    b.Property<int>("CountryCode")
-                        .HasColumnType("integer");
+                    b.Property<string>("CountryCode")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -150,422 +179,422 @@ namespace Pidp.Migrations
                     b.HasData(
                         new
                         {
-                            Code = 1,
-                            CountryCode = 1,
+                            Code = "AB",
+                            CountryCode = "CA",
                             Name = "Alberta"
                         },
                         new
                         {
-                            Code = 2,
-                            CountryCode = 1,
+                            Code = "BC",
+                            CountryCode = "CA",
                             Name = "British Columbia"
                         },
                         new
                         {
-                            Code = 3,
-                            CountryCode = 1,
+                            Code = "MB",
+                            CountryCode = "CA",
                             Name = "Manitoba"
                         },
                         new
                         {
-                            Code = 4,
-                            CountryCode = 1,
+                            Code = "NB",
+                            CountryCode = "CA",
                             Name = "New Brunswick"
                         },
                         new
                         {
-                            Code = 5,
-                            CountryCode = 1,
+                            Code = "NL",
+                            CountryCode = "CA",
                             Name = "Newfoundland and Labrador"
                         },
                         new
                         {
-                            Code = 6,
-                            CountryCode = 1,
+                            Code = "NS",
+                            CountryCode = "CA",
                             Name = "Nova Scotia"
                         },
                         new
                         {
-                            Code = 7,
-                            CountryCode = 1,
+                            Code = "ON",
+                            CountryCode = "CA",
                             Name = "Ontario"
                         },
                         new
                         {
-                            Code = 8,
-                            CountryCode = 1,
+                            Code = "PE",
+                            CountryCode = "CA",
                             Name = "Prince Edward Island"
                         },
                         new
                         {
-                            Code = 9,
-                            CountryCode = 1,
+                            Code = "QC",
+                            CountryCode = "CA",
                             Name = "Quebec"
                         },
                         new
                         {
-                            Code = 10,
-                            CountryCode = 1,
+                            Code = "SK",
+                            CountryCode = "CA",
                             Name = "Saskatchewan"
                         },
                         new
                         {
-                            Code = 11,
-                            CountryCode = 1,
+                            Code = "NT",
+                            CountryCode = "CA",
                             Name = "Northwest Territories"
                         },
                         new
                         {
-                            Code = 12,
-                            CountryCode = 1,
+                            Code = "NU",
+                            CountryCode = "CA",
                             Name = "Nunavut"
                         },
                         new
                         {
-                            Code = 13,
-                            CountryCode = 1,
+                            Code = "YT",
+                            CountryCode = "CA",
                             Name = "Yukon"
                         },
                         new
                         {
-                            Code = 14,
-                            CountryCode = 2,
+                            Code = "AL",
+                            CountryCode = "US",
                             Name = "Alabama"
                         },
                         new
                         {
-                            Code = 15,
-                            CountryCode = 2,
+                            Code = "AK",
+                            CountryCode = "US",
                             Name = "Alaska"
                         },
                         new
                         {
-                            Code = 16,
-                            CountryCode = 2,
+                            Code = "AS",
+                            CountryCode = "US",
                             Name = "American Samoa"
                         },
                         new
                         {
-                            Code = 17,
-                            CountryCode = 2,
+                            Code = "AZ",
+                            CountryCode = "US",
                             Name = "Arizona"
                         },
                         new
                         {
-                            Code = 18,
-                            CountryCode = 2,
+                            Code = "AR",
+                            CountryCode = "US",
                             Name = "Arkansas"
                         },
                         new
                         {
-                            Code = 19,
-                            CountryCode = 2,
+                            Code = "CA",
+                            CountryCode = "US",
                             Name = "California"
                         },
                         new
                         {
-                            Code = 20,
-                            CountryCode = 2,
+                            Code = "CO",
+                            CountryCode = "US",
                             Name = "Colorado"
                         },
                         new
                         {
-                            Code = 21,
-                            CountryCode = 2,
+                            Code = "CT",
+                            CountryCode = "US",
                             Name = "Connecticut"
                         },
                         new
                         {
-                            Code = 22,
-                            CountryCode = 2,
+                            Code = "DE",
+                            CountryCode = "US",
                             Name = "Delaware"
                         },
                         new
                         {
-                            Code = 23,
-                            CountryCode = 2,
+                            Code = "DC",
+                            CountryCode = "US",
                             Name = "District of Columbia"
                         },
                         new
                         {
-                            Code = 24,
-                            CountryCode = 2,
+                            Code = "FL",
+                            CountryCode = "US",
                             Name = "Florida"
                         },
                         new
                         {
-                            Code = 25,
-                            CountryCode = 2,
+                            Code = "GA",
+                            CountryCode = "US",
                             Name = "Georgia"
                         },
                         new
                         {
-                            Code = 26,
-                            CountryCode = 2,
+                            Code = "GU",
+                            CountryCode = "US",
                             Name = "Guam"
                         },
                         new
                         {
-                            Code = 27,
-                            CountryCode = 2,
+                            Code = "HI",
+                            CountryCode = "US",
                             Name = "Hawaii"
                         },
                         new
                         {
-                            Code = 28,
-                            CountryCode = 2,
+                            Code = "ID",
+                            CountryCode = "US",
                             Name = "Idaho"
                         },
                         new
                         {
-                            Code = 29,
-                            CountryCode = 2,
+                            Code = "IL",
+                            CountryCode = "US",
                             Name = "Illinois"
                         },
                         new
                         {
-                            Code = 30,
-                            CountryCode = 2,
+                            Code = "IN",
+                            CountryCode = "US",
                             Name = "Indiana"
                         },
                         new
                         {
-                            Code = 31,
-                            CountryCode = 2,
+                            Code = "IA",
+                            CountryCode = "US",
                             Name = "Iowa"
                         },
                         new
                         {
-                            Code = 32,
-                            CountryCode = 2,
+                            Code = "KS",
+                            CountryCode = "US",
                             Name = "Kansas"
                         },
                         new
                         {
-                            Code = 33,
-                            CountryCode = 2,
+                            Code = "KY",
+                            CountryCode = "US",
                             Name = "Kentucky"
                         },
                         new
                         {
-                            Code = 34,
-                            CountryCode = 2,
+                            Code = "LA",
+                            CountryCode = "US",
                             Name = "Louisiana"
                         },
                         new
                         {
-                            Code = 35,
-                            CountryCode = 2,
+                            Code = "ME",
+                            CountryCode = "US",
                             Name = "Maine"
                         },
                         new
                         {
-                            Code = 36,
-                            CountryCode = 2,
+                            Code = "MD",
+                            CountryCode = "US",
                             Name = "Maryland"
                         },
                         new
                         {
-                            Code = 37,
-                            CountryCode = 2,
+                            Code = "MA",
+                            CountryCode = "US",
                             Name = "Massachusetts"
                         },
                         new
                         {
-                            Code = 38,
-                            CountryCode = 2,
+                            Code = "MI",
+                            CountryCode = "US",
                             Name = "Michigan"
                         },
                         new
                         {
-                            Code = 39,
-                            CountryCode = 2,
+                            Code = "MN",
+                            CountryCode = "US",
                             Name = "Minnesota"
                         },
                         new
                         {
-                            Code = 40,
-                            CountryCode = 2,
+                            Code = "MS",
+                            CountryCode = "US",
                             Name = "Mississippi"
                         },
                         new
                         {
-                            Code = 41,
-                            CountryCode = 2,
+                            Code = "MO",
+                            CountryCode = "US",
                             Name = "Missouri"
                         },
                         new
                         {
-                            Code = 42,
-                            CountryCode = 2,
+                            Code = "MT",
+                            CountryCode = "US",
                             Name = "Montana"
                         },
                         new
                         {
-                            Code = 43,
-                            CountryCode = 2,
+                            Code = "NE",
+                            CountryCode = "US",
                             Name = "Nebraska"
                         },
                         new
                         {
-                            Code = 44,
-                            CountryCode = 2,
+                            Code = "NV",
+                            CountryCode = "US",
                             Name = "Nevada"
                         },
                         new
                         {
-                            Code = 45,
-                            CountryCode = 2,
+                            Code = "NH",
+                            CountryCode = "US",
                             Name = "New Hampshire"
                         },
                         new
                         {
-                            Code = 46,
-                            CountryCode = 2,
+                            Code = "NJ",
+                            CountryCode = "US",
                             Name = "New Jersey"
                         },
                         new
                         {
-                            Code = 47,
-                            CountryCode = 2,
+                            Code = "NM",
+                            CountryCode = "US",
                             Name = "New Mexico"
                         },
                         new
                         {
-                            Code = 48,
-                            CountryCode = 2,
+                            Code = "NY",
+                            CountryCode = "US",
                             Name = "New York"
                         },
                         new
                         {
-                            Code = 49,
-                            CountryCode = 2,
+                            Code = "NC",
+                            CountryCode = "US",
                             Name = "North Carolina"
                         },
                         new
                         {
-                            Code = 50,
-                            CountryCode = 2,
+                            Code = "ND",
+                            CountryCode = "US",
                             Name = "North Dakota"
                         },
                         new
                         {
-                            Code = 51,
-                            CountryCode = 2,
+                            Code = "MP",
+                            CountryCode = "US",
                             Name = "Northern Mariana Islands"
                         },
                         new
                         {
-                            Code = 52,
-                            CountryCode = 2,
+                            Code = "OH",
+                            CountryCode = "US",
                             Name = "Ohio"
                         },
                         new
                         {
-                            Code = 53,
-                            CountryCode = 2,
+                            Code = "OK",
+                            CountryCode = "US",
                             Name = "Oklahoma"
                         },
                         new
                         {
-                            Code = 54,
-                            CountryCode = 2,
+                            Code = "OR",
+                            CountryCode = "US",
                             Name = "Oregon"
                         },
                         new
                         {
-                            Code = 55,
-                            CountryCode = 2,
+                            Code = "PA",
+                            CountryCode = "US",
                             Name = "Pennsylvania"
                         },
                         new
                         {
-                            Code = 56,
-                            CountryCode = 2,
+                            Code = "PR",
+                            CountryCode = "US",
                             Name = "Puerto Rico"
                         },
                         new
                         {
-                            Code = 57,
-                            CountryCode = 2,
+                            Code = "RI",
+                            CountryCode = "US",
                             Name = "Rhode Island"
                         },
                         new
                         {
-                            Code = 58,
-                            CountryCode = 2,
+                            Code = "SC",
+                            CountryCode = "US",
                             Name = "South Carolina"
                         },
                         new
                         {
-                            Code = 59,
-                            CountryCode = 2,
+                            Code = "SD",
+                            CountryCode = "US",
                             Name = "South Dakota"
                         },
                         new
                         {
-                            Code = 60,
-                            CountryCode = 2,
+                            Code = "TN",
+                            CountryCode = "US",
                             Name = "Tennessee"
                         },
                         new
                         {
-                            Code = 61,
-                            CountryCode = 2,
+                            Code = "TX",
+                            CountryCode = "US",
                             Name = "Texas"
                         },
                         new
                         {
-                            Code = 62,
-                            CountryCode = 2,
+                            Code = "UM",
+                            CountryCode = "US",
                             Name = "United States Minor Outlying Islands"
                         },
                         new
                         {
-                            Code = 63,
-                            CountryCode = 2,
+                            Code = "UT",
+                            CountryCode = "US",
                             Name = "Utah"
                         },
                         new
                         {
-                            Code = 64,
-                            CountryCode = 2,
+                            Code = "VT",
+                            CountryCode = "US",
                             Name = "Vermont"
                         },
                         new
                         {
-                            Code = 65,
-                            CountryCode = 2,
+                            Code = "VI",
+                            CountryCode = "US",
                             Name = "Virgin Islands, U.S."
                         },
                         new
                         {
-                            Code = 66,
-                            CountryCode = 2,
+                            Code = "VA",
+                            CountryCode = "US",
                             Name = "Virginia"
                         },
                         new
                         {
-                            Code = 67,
-                            CountryCode = 2,
+                            Code = "WA",
+                            CountryCode = "US",
                             Name = "Washington"
                         },
                         new
                         {
-                            Code = 68,
-                            CountryCode = 2,
+                            Code = "WV",
+                            CountryCode = "US",
                             Name = "West Virginia"
                         },
                         new
                         {
-                            Code = 69,
-                            CountryCode = 2,
+                            Code = "WI",
+                            CountryCode = "US",
                             Name = "Wisconsin"
                         },
                         new
                         {
-                            Code = 70,
-                            CountryCode = 2,
+                            Code = "WY",
+                            CountryCode = "US",
                             Name = "Wyoming"
                         });
                 });
@@ -581,14 +610,14 @@ namespace Pidp.Migrations
                     b.Property<Instant>("Created")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<LocalDate>("DateOfBirth")
-                        .HasColumnType("date");
-
                     b.Property<string>("Email")
                         .HasColumnType("text");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("JobTitle")
                         .HasColumnType("text");
 
                     b.Property<string>("LastName")
@@ -615,19 +644,53 @@ namespace Pidp.Migrations
                     b.ToTable("Party");
                 });
 
-            modelBuilder.Entity("Pidp.Models.PartyAddress", b =>
+            modelBuilder.Entity("Pidp.Models.PartyCertification", b =>
                 {
-                    b.HasBaseType("Pidp.Models.Address");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CollegeCode")
+                        .HasColumnType("integer");
+
+                    b.Property<Instant>("Created")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("LicenceNumber")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<Instant>("Modified")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<int>("PartyId")
                         .HasColumnType("integer");
 
+                    b.HasKey("Id");
+
+                    b.HasIndex("CollegeCode");
+
                     b.HasIndex("PartyId")
+                        .IsUnique();
+
+                    b.ToTable("PartyCertification");
+                });
+
+            modelBuilder.Entity("Pidp.Models.FacilityAddress", b =>
+                {
+                    b.HasBaseType("Pidp.Models.Address");
+
+                    b.Property<int>("FacilityId")
+                        .HasColumnType("integer");
+
+                    b.HasIndex("FacilityId")
                         .IsUnique();
 
                     b.ToTable("Address");
 
-                    b.HasDiscriminator().HasValue("PartyAddress");
+                    b.HasDiscriminator().HasValue("FacilityAddress");
                 });
 
             modelBuilder.Entity("Pidp.Models.Address", b =>
@@ -649,20 +712,57 @@ namespace Pidp.Migrations
                     b.Navigation("Province");
                 });
 
-            modelBuilder.Entity("Pidp.Models.PartyAddress", b =>
+            modelBuilder.Entity("Pidp.Models.Facility", b =>
                 {
                     b.HasOne("Pidp.Models.Party", "Party")
-                        .WithOne("MailingAddress")
-                        .HasForeignKey("Pidp.Models.PartyAddress", "PartyId")
+                        .WithOne("Facility")
+                        .HasForeignKey("Pidp.Models.Facility", "PartyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Party");
                 });
 
+            modelBuilder.Entity("Pidp.Models.PartyCertification", b =>
+                {
+                    b.HasOne("Pidp.Models.Lookups.College", "College")
+                        .WithMany()
+                        .HasForeignKey("CollegeCode")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Pidp.Models.Party", "Party")
+                        .WithOne("PartyCertification")
+                        .HasForeignKey("Pidp.Models.PartyCertification", "PartyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("College");
+
+                    b.Navigation("Party");
+                });
+
+            modelBuilder.Entity("Pidp.Models.FacilityAddress", b =>
+                {
+                    b.HasOne("Pidp.Models.Facility", "Facility")
+                        .WithOne("PhysicalAddress")
+                        .HasForeignKey("Pidp.Models.FacilityAddress", "FacilityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Facility");
+                });
+
+            modelBuilder.Entity("Pidp.Models.Facility", b =>
+                {
+                    b.Navigation("PhysicalAddress");
+                });
+
             modelBuilder.Entity("Pidp.Models.Party", b =>
                 {
-                    b.Navigation("MailingAddress");
+                    b.Navigation("Facility");
+
+                    b.Navigation("PartyCertification");
                 });
 #pragma warning restore 612, 618
         }
