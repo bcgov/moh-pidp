@@ -6,6 +6,8 @@ import { DashboardComponent } from '@bcgov/shared/ui';
 
 import { AccessModule } from '../access/access.module';
 import { AccessRoutes } from '../access/access.routes';
+import { AdminModule } from '../admin/admin.module';
+import { AdminRoutes } from '../admin/admin.routes';
 import { AuthModule } from '../auth/auth.module';
 import { AuthRoutes } from '../auth/auth.routes';
 import { PortalRoutes } from '../portal/portal.routes';
@@ -21,6 +23,11 @@ const routes: Routes = [
     path: AuthRoutes.MODULE_PATH,
     loadChildren: (): Promise<AuthModule> =>
       import('../auth/auth.module').then((m) => m.AuthModule),
+  },
+  {
+    path: AdminRoutes.MODULE_PATH,
+    loadChildren: (): Promise<AdminModule> =>
+      import('../admin/admin.module').then((m) => m.AdminModule),
   },
   {
     path: '',
