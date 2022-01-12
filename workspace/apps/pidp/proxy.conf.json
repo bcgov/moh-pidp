@@ -2,5 +2,13 @@
   "/api": {
     "target": "http://localhost:5050",
     "secure": false
+  },
+  "/userinfo": {
+    "target": "https://common-logon-dev.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/userinfo",
+    "secure": true,
+    "changeOrigin": true,
+    "pathRewrite": {
+      "^/userinfo": ""
+    }
   }
 }

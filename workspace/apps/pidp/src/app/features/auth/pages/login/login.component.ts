@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, Inject } from '@angular/core';
 
 import { DashboardHeaderTheme } from '@bcgov/shared/ui';
@@ -17,7 +18,8 @@ export class LoginComponent {
 
   public constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
-    private authService: AuthService
+    private authService: AuthService,
+    private http: HttpClient
   ) {
     this.theme = 'light';
   }
@@ -27,5 +29,11 @@ export class LoginComponent {
       idpHint: IdentityProviderEnum.BCSC,
       redirectUri: this.config.loginRedirectUrl,
     });
+  }
+
+  public onTest(): void {
+    this.http
+      .get('userinfo')
+      .subscribe((response) => console.log('RESPONSE', response));
   }
 }
