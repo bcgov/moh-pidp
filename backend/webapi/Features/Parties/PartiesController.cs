@@ -23,8 +23,8 @@ public class PartiesController : ControllerBase
     [HttpGet("{partyId}/college-certification")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<CollegeCertification.Command>> GetPartyCollegeCertification([FromServices] IQueryHandler<CollegeCertification.Query, CollegeCertification.Command> handler,
-                                                                                               [FromRoute] int partyId)
-        => await handler.HandleAsync(new CollegeCertification.Query { PartyId = partyId });
+                                                                                               [FromRoute] CollegeCertification.Query query)
+        => await handler.HandleAsync(query);
 
     [HttpPut("{partyId}/college-certification")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
