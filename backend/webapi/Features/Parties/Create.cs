@@ -4,6 +4,7 @@ using FluentValidation;
 
 using Pidp.Data;
 using Pidp.Extensions;
+using Pidp.Infrastructure.Auth;
 using Pidp.Models;
 
 public class Create
@@ -19,9 +20,9 @@ public class Create
     {
         public CommandValidator(IHttpContextAccessor accessor)
         {
-            this.RuleFor(x => x.UserId).MatchesCurrentUser(accessor);
-            this.RuleFor(x => x.FirstName).NotEmpty();
-            this.RuleFor(x => x.LastName).NotEmpty();
+            this.RuleFor(x => x.UserId).NotEmpty().MatchesCurrentUserId(accessor);
+            this.RuleFor(x => x.FirstName).NotEmpty().MatchesCurrentUserClaim(accessor, Claims.GivenName);
+            this.RuleFor(x => x.LastName).NotEmpty().MatchesCurrentUserClaim(accessor, Claims.FamilyName);
         }
     }
 
