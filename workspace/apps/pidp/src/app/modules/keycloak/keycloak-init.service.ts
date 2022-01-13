@@ -5,7 +5,7 @@ import { KeycloakOptions, KeycloakService } from 'keycloak-angular';
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';
 
-import { AuthRoutes } from '../../auth.routes';
+import { AuthRoutes } from '../../features/auth/auth.routes';
 
 @Injectable({
   providedIn: 'root',

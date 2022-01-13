@@ -9,7 +9,7 @@ import { httpInterceptorProviders } from '@bcgov/shared/data-access';
 import { rootRouteConfigProvider } from '@bcgov/shared/ui';
 import { EnsureModuleLoadedOnceGuard } from '@bcgov/shared/utils';
 
-import { KeycloakModule } from '@app/features/auth/modules/keycloak/keycloak.module';
+import { KeycloakModule } from '@app/modules/keycloak/keycloak.module';
 
 const modules = [
   BrowserModule,
