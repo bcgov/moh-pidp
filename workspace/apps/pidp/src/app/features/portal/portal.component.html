@@ -99,7 +99,7 @@
       </ng-container>
     </ui-page-section-subheader>
 
-    <div class="row">
+    <div *ngIf="state.trainingSections.length; else noTraining" class="row">
       <div
         *ngFor="let section of state.trainingSections"
         class="col-12 col-xl-6">
@@ -122,6 +122,9 @@
         </ui-card-summary>
       </div>
     </div>
+    <ng-template #noTraining>
+      <p class="lead">No training available at this time.</p>
+    </ng-template>
   </ui-page-section>
 
   <ui-page-section>

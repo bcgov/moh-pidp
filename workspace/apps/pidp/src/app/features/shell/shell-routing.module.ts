@@ -2,14 +2,13 @@ import { PortalModule } from '@angular/cdk/portal';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { DashboardComponent } from '@bcgov/shared/ui';
-
 import { AccessModule } from '../access/access.module';
 import { AccessRoutes } from '../access/access.routes';
 import { AdminModule } from '../admin/admin.module';
 import { AdminRoutes } from '../admin/admin.routes';
 import { AuthModule } from '../auth/auth.module';
 import { AuthRoutes } from '../auth/auth.routes';
+import { AuthenticationGuard } from '../auth/guards/authentication.guard';
 import { PortalRoutes } from '../portal/portal.routes';
 import { ProfileModule } from '../profile/profile.module';
 import { ProfileRoutes } from '../profile/profile.routes';
@@ -17,6 +16,7 @@ import { TrainingModule } from '../training/training.module';
 import { TrainingRoutes } from '../training/training.routes';
 import { YourProfileModule } from '../your-profile/your-profile.module';
 import { YourProfileRoutes } from '../your-profile/your-profile.routes';
+import { PortalDashboardComponent } from './components/portal-dashboard/portal-dashboard.component';
 
 const routes: Routes = [
   {
@@ -25,15 +25,18 @@ const routes: Routes = [
       import('../auth/auth.module').then((m) => m.AuthModule),
   },
   {
+    // TODO create dashboard wrapper for admin
     path: AdminRoutes.MODULE_PATH,
+    canLoad: [AuthenticationGuard],
     loadChildren: (): Promise<AdminModule> =>
       import('../admin/admin.module').then((m) => m.AdminModule),
   },
   {
     path: '',
-    component: DashboardComponent,
-    canActivate: [],
-    canActivateChild: [],
+    // TODO rearrange routes so portal is the parent module
+    // TODO create dashboard wrapper for portal to auth module out of dashboard
+    component: PortalDashboardComponent,
+    canActivateChild: [AuthenticationGuard],
     children: [
       {
         path: PortalRoutes.MODULE_PATH,
