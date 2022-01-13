@@ -1,4 +1,4 @@
-namespace Pidp.Auth;
+namespace Pidp.Infrastructure.Auth;
 
 public static class AuthConstants
 {

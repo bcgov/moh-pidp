@@ -6,7 +6,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text.Json;
 
-using Pidp.Auth;
+using Pidp.Infrastructure.Auth;
 using NodaTime.Text;
 
 public static class ClaimsPrincipalExtensions

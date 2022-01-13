@@ -1,4 +1,4 @@
-namespace Pidp.Auth;
+namespace Pidp.Infrastructure.Auth;
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.DependencyInjection;

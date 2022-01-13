@@ -1,6 +1,6 @@
 namespace Pidp;
 
-using Pidp.Auth;
+using Pidp.Infrastructure.Auth;
 
 public class PidpConfiguration
 {

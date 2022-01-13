@@ -10,7 +10,7 @@ using Serilog;
 using System.Reflection;
 using System.Text.Json;
 
-using Pidp.Auth;
+using Pidp.Infrastructure.Auth;
 using Pidp.Data;
 using Pidp.Features;
 
