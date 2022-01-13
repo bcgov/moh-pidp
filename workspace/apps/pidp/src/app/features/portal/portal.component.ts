@@ -9,6 +9,8 @@ import { AlertType } from '@bcgov/shared/ui';
 import { PartyResource } from '@core/resources/party-resource.service';
 import { PartyService } from '@core/services/party.service';
 
+import { collectionNotice } from '@shared/data/collection-notice.data';
+
 import { ShellRoutes } from '../shell/shell.routes';
 
 export interface PortalSection {
@@ -36,6 +38,7 @@ export class PortalComponent implements OnInit {
   public acceptedCollectionNotice: boolean;
   public state: Record<string, PortalSection[]>;
   public completedProfile: boolean;
+  public collectionNotice: string;
 
   public constructor(
     private route: ActivatedRoute,
@@ -48,6 +51,7 @@ export class PortalComponent implements OnInit {
     this.acceptedCollectionNotice = this.partyService.acceptedCollectionNotice;
     this.completedProfile = this.partyService.completedProfile;
     this.state = this.partyService.state;
+    this.collectionNotice = collectionNotice;
   }
 
   public onAcceptCollectionNotice(accepted: boolean): void {
