@@ -1,4 +1,4 @@
-namespace Pidp.Data.Lookups;
+namespace Pidp.Data.Configuration;
 
 using Pidp.Models.Lookups;
 
