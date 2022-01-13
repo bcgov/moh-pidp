@@ -1,7 +1,7 @@
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { Injectable } from '@angular/core';
 
-import { Observable, map } from 'rxjs';
+import { Observable, map, tap } from 'rxjs';
 
 /**
  * @description
@@ -16,7 +16,6 @@ export const BootstrapBreakpoints = {
   xxlarge: '(min-width: 1400px)',
   mobile: '(min-width: 0px) and (max-width: 767.98px)',
   tablet: '(min-width: 768px) and (max-width: 991.98px)',
-  desktop: '(min-width: 992px)',
 };
 
 @Injectable()
@@ -25,9 +24,10 @@ export class ViewportService {
 
   public constructor(private breakpointObserver: BreakpointObserver) {
     this.breakpointObserver$ = breakpointObserver.observe([
+      BootstrapBreakpoints.medium,
+      BootstrapBreakpoints.large,
       BootstrapBreakpoints.mobile,
       BootstrapBreakpoints.tablet,
-      BootstrapBreakpoints.desktop,
     ]);
   }
 
@@ -50,6 +50,7 @@ export class ViewportService {
 
   public get isTabletBreakpoint$(): Observable<boolean> {
     return this.breakpointObserver$.pipe(
+      tap((result) => console.log('RESULT', result)),
       map(
         (result: BreakpointState) =>
           result.matches && result.breakpoints[BootstrapBreakpoints.tablet]
@@ -66,19 +67,6 @@ export class ViewportService {
       map(
         (result: BreakpointState) =>
           result.matches && result.breakpoints[BootstrapBreakpoints.medium]
-      )
-    );
-  }
-
-  public get isDesktopBreakpoint(): boolean {
-    return this.breakpointObserver.isMatched(BootstrapBreakpoints.desktop);
-  }
-
-  public get isDesktopBreakpoint$(): Observable<boolean> {
-    return this.breakpointObserver$.pipe(
-      map(
-        (result: BreakpointState) =>
-          result.matches && result.breakpoints[BootstrapBreakpoints.desktop]
       )
     );
   }

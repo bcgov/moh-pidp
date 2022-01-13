@@ -13,7 +13,7 @@ import { ViewportService } from '../../../../services/viewport.service';
 export type DashboardHeaderTheme = 'dark' | 'light';
 
 @Component({
-  selector: 'app-dashboard-header',
+  selector: 'ui-dashboard-header',
   templateUrl: './dashboard-header.component.html',
   styleUrls: ['./dashboard-header.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -60,7 +60,12 @@ export class DashboardHeaderComponent {
       map(([isMobile, isTablet]: [boolean, boolean]) => isMobile || isTablet),
       distinctUntilChanged()
     );
-    this.usernameBreakpoint$ = viewportService.isTabletAndUpBreakpoint$;
+    this.usernameBreakpoint$ = viewportService.isTabletAndUpBreakpoint$.pipe(
+      map((value) => {
+        console.log('BREAKPOINT', value);
+        return value;
+      })
+    );
   }
 
   public onOpenMenu(): void {
