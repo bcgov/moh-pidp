@@ -1,4 +1,23 @@
 <app-dashboard-header [theme]="theme"></app-dashboard-header>
 
-<button mat-stroked-button color="primary" (click)="onLogin()">Login</button>
-<button mat-stroked-button color="primary" (click)="onTest()">Test</button>
+<ui-page>
+  <ui-alert
+    *ngIf="loginCancelled"
+    type="info"
+    icon="error_outline"
+    title="Login Cancelled">
+    <ng-container uiAlertContent>
+      <p>
+        You have cancelled your login to PIdP, for questions on PIdP contact:<br />
+        1-999-999-999 (1-999-999-9999) or pidpsupport@gov.bc.ca.
+      </p>
+      <p>
+        For help login using your BCSC contact:<br />
+        BCSC help info here.
+      </p>
+    </ng-container>
+  </ui-alert>
+
+  <button mat-stroked-button color="primary" (click)="onLogin()">Login</button>
+  <button mat-stroked-button color="primary" (click)="onTest()">Test</button>
+</ui-page>

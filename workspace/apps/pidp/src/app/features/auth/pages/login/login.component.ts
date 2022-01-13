@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, Inject } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 import { DashboardHeaderTheme } from '@bcgov/shared/ui';
 
@@ -15,13 +16,16 @@ import { AuthService } from '../../services/auth.service';
 })
 export class LoginComponent {
   public theme: DashboardHeaderTheme;
+  public loginCancelled: boolean;
 
   public constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
     private authService: AuthService,
-    private http: HttpClient
+    private route: ActivatedRoute,
   ) {
     this.theme = 'light';
+    this.loginCancelled =
+      this.route.snapshot.queryParams.action === 'cancelled';
   }
 
   public onLogin(): void {
