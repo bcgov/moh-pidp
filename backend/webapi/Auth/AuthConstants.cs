@@ -15,6 +15,7 @@ public static class Claims
     public const string Address = "address";
     public const string Birthdate = "birthdate";
     public const string Email = "email";
+    public const string Subject = "sub";
 
     public const string ResourceAccess = "resource_access";
     public const string AssuranceLevel = "identity_assurance_level";
@@ -24,6 +25,6 @@ public static class Claims
 public static class Roles
 {
     // Placeholders
-    public const string Admin = "admin";
-    public const string User = "user";
+    public const string Admin = "ADMIN";
+    public const string User = "USER";
 }

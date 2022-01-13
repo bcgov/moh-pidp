@@ -48,7 +48,7 @@ public class Startup
         //     .AddDbContextCheck<PidpDbContext>("DbContextHealthCheck")
         //     .AddNpgSql(connectionString);
 
-        services.InitializeAuth(config);
+        services.AddKeycloakAuth(config);
 
         services.AddSwaggerGen(options =>
         {
