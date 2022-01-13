@@ -1,4 +1,3 @@
-import { HttpClient } from '@angular/common/http';
 import { Component, Inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
@@ -23,7 +22,7 @@ export class LoginComponent {
   public constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
     private authService: AuthService,
-    private route: ActivatedRoute,
+    private route: ActivatedRoute
   ) {
     this.theme = 'light';
     this.loginCancelled =
@@ -37,11 +36,5 @@ export class LoginComponent {
       idpHint: IdentityProviderEnum.BCSC,
       redirectUri: this.config.loginRedirectUrl,
     });
-  }
-
-  public onTest(): void {
-    this.http
-      .get('userinfo')
-      .subscribe((response) => console.log('RESPONSE', response));
   }
 }
