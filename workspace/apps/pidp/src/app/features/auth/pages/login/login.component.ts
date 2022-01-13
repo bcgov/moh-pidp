@@ -17,6 +17,8 @@ import { AuthService } from '../../services/auth.service';
 export class LoginComponent {
   public theme: DashboardHeaderTheme;
   public loginCancelled: boolean;
+  public bcscSupportUrl: string;
+  public pidpSupportEmail: string;
 
   public constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
@@ -26,6 +28,8 @@ export class LoginComponent {
     this.theme = 'light';
     this.loginCancelled =
       this.route.snapshot.queryParams.action === 'cancelled';
+    this.bcscSupportUrl = this.config.urls.bcscSupport;
+    this.pidpSupportEmail = this.config.emails.support;
   }
 
   public onLogin(): void {

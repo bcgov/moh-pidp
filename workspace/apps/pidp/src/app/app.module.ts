@@ -1,8 +1,10 @@
 import { NgModule } from '@angular/core';
 
+import { RootRoutingModule } from '@bcgov/shared/ui';
+
 import { AppRoutingModule } from '@app/app-routing.module';
 import { AppComponent } from '@app/app.component';
-import { RootRoutingModule } from '@bcgov/shared/ui';
+
 import { CoreModule } from '@core/core.module';
 
 import { LookupModule } from './modules/lookup/lookup.module';

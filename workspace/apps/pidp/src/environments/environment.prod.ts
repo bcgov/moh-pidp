@@ -15,6 +15,13 @@ export const environment: AppEnvironment = {
   apiEndpoint: 'http://localhost:5000',
   environmentName: EnvironmentName.LOCAL,
   loginRedirectUrl: 'http://localhost:4200',
+  emails: {
+    support: 'provideridentityportal@gov.bc.ca',
+  },
+  urls: {
+    bcscSupport:
+      'https://www2.gov.bc.ca/gov/content/governments/government-id/bcservicescardapp/help',
+  },
   keycloakConfig: {
     config: {
       url: 'https://common-logon-dev.hlth.gov.bc.ca/auth',

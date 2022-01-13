@@ -1,20 +1,32 @@
 <app-dashboard-header [theme]="theme"></app-dashboard-header>
 
 <ui-page>
+  <br />
+
   <ui-alert
     *ngIf="loginCancelled"
     type="info"
     icon="error_outline"
     title="Login Cancelled">
     <ng-container uiAlertContent>
-      <p>
-        You have cancelled your login to PIdP, for questions on PIdP contact:<br />
-        1-999-999-999 (1-999-999-9999) or pidpsupport@gov.bc.ca.
-      </p>
-      <p>
-        For help login using your BCSC contact:<br />
-        BCSC help info here.
-      </p>
+      <p>You have canceled your login to the Provider Identity Portal.</p>
+      <ul>
+        <li>
+          For support with the provider identity portal, please contact
+          <a [attr.href]="'mailto:' + pidpSupportEmail">{{
+            pidpSupportEmail
+          }}</a>
+        </li>
+        <li>
+          For support with your BC Services Card, please click
+          <a
+            target="_blank"
+            rel="noopener noreferrer"
+            [attr.href]="bcscSupportUrl">
+            here</a
+          >.
+        </li>
+      </ul>
     </ng-container>
   </ui-alert>
 
