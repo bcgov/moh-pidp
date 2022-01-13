@@ -12,7 +12,7 @@ using NodaTime.Text;
 public static class ClaimsPrincipalExtensions
 {
     /// <summary>
-    /// Returns the Guid of the logged in user. If there is no logged in user, this will return Guid.Empty
+    /// Returns the UserId of the logged in user (from the 'sub' claim). If there is no logged in user, this will return Guid.Empty
     /// </summary>
     public static Guid GetUserId(this ClaimsPrincipal user)
     {

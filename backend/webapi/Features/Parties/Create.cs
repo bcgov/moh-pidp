@@ -1,23 +1,25 @@
 namespace Pidp.Features.Parties;
 
 using FluentValidation;
-using NodaTime;
 
 using Pidp.Data;
+using Pidp.Extensions;
 using Pidp.Models;
 
 public class Create
 {
     public class Command : ICommand<int>
     {
+        public Guid UserId { get; set; }
         public string FirstName { get; set; } = string.Empty;
         public string LastName { get; set; } = string.Empty;
     }
 
     public class CommandValidator : AbstractValidator<Command>
     {
-        public CommandValidator()
+        public CommandValidator(IHttpContextAccessor accessor)
         {
+            this.RuleFor(x => x.UserId).MatchesCurrentUser(accessor);
             this.RuleFor(x => x.FirstName).NotEmpty();
             this.RuleFor(x => x.LastName).NotEmpty();
         }
@@ -33,6 +35,7 @@ public class Create
         {
             var party = new Party
             {
+                UserId = command.UserId,
                 FirstName = command.FirstName,
                 LastName = command.LastName,
             };
