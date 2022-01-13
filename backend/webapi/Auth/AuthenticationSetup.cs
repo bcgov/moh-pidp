@@ -1,7 +1,6 @@
 namespace Pidp.Auth;
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
@@ -12,16 +11,14 @@ using Pidp.Extensions;
 
 public static class AuthenticationSetup
 {
-    public static IServiceCollection InitializeAuth(this IServiceCollection services, PidpConfiguration config)
+    public static IServiceCollection AddKeycloakAuth(this IServiceCollection services, PidpConfiguration config)
     {
-        return services;
-
         services.ThrowIfNull(nameof(services));
         config.ThrowIfNull(nameof(config));
 
         JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
-        services.AddAuthentication()
+        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         .AddJwtBearer(options =>
         {
             options.Authority = config.Keycloak.RealmUrl;
@@ -33,44 +30,20 @@ public static class AuthenticationSetup
             };
         });
 
-        // services.AddAuthorization(options => );
+        services.AddAuthorization();
 
         return services;
     }
 
     private static Task OnTokenValidatedAsync(TokenValidatedContext context)
     {
-        if (context.SecurityToken is JwtSecurityToken accessToken
-                && context.Principal?.Identity is ClaimsIdentity identity
-                && identity.IsAuthenticated)
+        if (context.Principal?.Identity is ClaimsIdentity identity
+            && identity.IsAuthenticated)
         {
-            identity.AddClaim(new Claim(ClaimTypes.Name, accessToken.Subject));
-
-            // FlattenRealmAccessRoles(identity);
+            // Flatten the Resource Access claim
+            identity.AddClaims(identity.GetResourceAccessRoles(AuthConstants.Audience).Select(role => new Claim(ClaimTypes.Role, role)));
         }
 
         return Task.CompletedTask;
     }
-
-    /// <summary>
-    /// Flattens the Realm Access claim, as Microsoft Identity Model doesn't support nested claims
-    /// </summary>
-    // private static void FlattenRealmAccessRoles(ClaimsIdentity identity)
-    // {
-    //     var realmAccessClaim = identity.Claims
-    //         .SingleOrDefault(claim => claim.Type == Claims.RealmAccess)
-    //         ?.Value;
-
-    //     if (realmAccessClaim != null)
-    //     {
-    //         var realmAccess = JsonConvert.DeserializeObject<RealmAccess>(realmAccessClaim);
-
-    //         identity.AddClaims(realmAccess.Roles.Select(role => new Claim(ClaimTypes.Role, role)));
-    //     }
-    // }
-
-    // private class RealmAccess
-    // {
-    //     public string[] Roles { get; set; }
-    // }
 }
