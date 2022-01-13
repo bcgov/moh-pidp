@@ -1,12 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
+import { ArrayUtils } from '@bcgov/shared/utils';
+
 export interface DocumentSection {
   icon: string;
   type: string;
   title: string;
   actionLabel?: string;
-  disabled: boolean;
+  disabled?: boolean;
 }
 
 @Component({
@@ -35,22 +37,24 @@ export class SignedOrAcceptedDocumentsComponent implements OnInit {
         type: 'collection-notice',
         title: 'Collection Notice',
         actionLabel: 'View',
-        disabled: false,
       },
-      {
-        icon: 'fingerprint',
-        type: 'terms-of-access',
-        title: 'User Access Agreement',
-        actionLabel: 'View',
-        disabled: false,
-      },
-      {
-        icon: 'fingerprint',
-        type: 'pharmanet-terms-of-access',
-        title: 'PharmaNet Terms of Access',
-        actionLabel: 'View',
-        disabled: false,
-      },
+      // TODO controlled through demo feature flag
+      ...ArrayUtils.insertIf<DocumentSection>(false, [
+        {
+          icon: 'fingerprint',
+          type: 'terms-of-access',
+          title: 'User Access Agreement',
+          actionLabel: 'View',
+          disabled: true,
+        },
+        {
+          icon: 'fingerprint',
+          type: 'pharmanet-terms-of-access',
+          title: 'PharmaNet Terms of Access',
+          actionLabel: 'View',
+          disabled: true,
+        },
+      ]),
     ];
   }
 }
