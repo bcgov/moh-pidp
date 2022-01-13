@@ -10,7 +10,7 @@
 
   <span class="flex-fill"></span>
 
-  <span *ngIf="username && (usernameBreakpoint$ | async)">
+  <span *ngIf="username && (usernameBreakpoint$ | async)" class="username">
     {{ username }}
   </span>
   <span *ngIf="username" class="logout">

@@ -25,7 +25,7 @@ import { DashboardHeaderTheme } from '../dashboard-header/dashboard-header.compo
 
 @UntilDestroy()
 @Component({
-  selector: 'app-dashboard',
+  selector: 'ui-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -54,7 +54,7 @@ export class DashboardComponent implements OnInit {
    * List of dashboard details used to populate the side navigation
    * links for routing within the application.
    */
-  @Input() public menuItems!: DashboardMenuItem[];
+  @Input() public menuItems: DashboardMenuItem[];
   /**
    * @description
    * Whether the dashboard menu items should display their icons.
@@ -89,6 +89,7 @@ export class DashboardComponent implements OnInit {
       theme: 'dark',
       allowMobileToggle: true,
     };
+    this.menuItems = [];
     this.showMenuItemIcons = false;
     this.responsiveMenuItems = false;
     this.logout = new EventEmitter<void>();

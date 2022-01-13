@@ -3,12 +3,15 @@ import { Injectable } from '@angular/core';
 import { DateTime } from 'luxon';
 
 import { APP_DATE_FORMAT } from '@bcgov/shared/ui';
+import { ArrayUtils } from '@bcgov/shared/utils';
 
 import { AccessRoutes } from '@app/features/access/access.routes';
 import { PortalSection } from '@app/features/portal/portal.component';
 import { ProfileRoutes } from '@app/features/profile/profile.routes';
 import { TrainingRoutes } from '@app/features/training/training.routes';
 import { YourProfileRoutes } from '@app/features/your-profile/your-profile.routes';
+import { FeatureFlagService } from '@app/modules/feature-flag/feature-flag.service';
+import { Role } from '@app/shared/enums/roles.enum';
 
 @Injectable({
   providedIn: 'root',
@@ -18,7 +21,7 @@ export class DemoService {
   public state: Record<string, PortalSection[]>;
   public profileComplete: boolean;
 
-  public constructor() {
+  public constructor(private featureFlagService: FeatureFlagService) {
     this.showCollectionNotice = true;
     this.state = {
       profileIdentitySections: this.profileIdentitySections,
@@ -37,6 +40,7 @@ export class DemoService {
         title: 'Personal Information',
         process: 'manual',
         hint: '1 min to complete',
+        // TODO ability to populate the card with user information
         description: 'Name, address, and contact information',
         actionLabel: 'Update',
         route: ProfileRoutes.routePath(ProfileRoutes.PERSONAL_INFO_PAGE),
@@ -50,13 +54,14 @@ export class DemoService {
         title: 'College Licence Information',
         process: 'manual',
         hint: '1 min to complete',
+        // TODO ability to populate the card with user information
         description:
           'College Licence number, practitioner ID, or on behalf user',
         actionLabel: 'Update',
         route: ProfileRoutes.routePath(ProfileRoutes.COLLEGE_LICENCE_INFO_PAGE),
         statusType: 'warn',
         status: 'incomplete',
-        disabled: true,
+        disabled: false,
       },
       {
         icon: 'fingerprint',
@@ -64,29 +69,36 @@ export class DemoService {
         title: 'Work and Role Information',
         process: 'manual',
         hint: '2 min to complete',
+        // TODO ability to populate the card with user information
         description: 'Job title and details of your work location',
         actionLabel: 'Update',
         route: ProfileRoutes.routePath(ProfileRoutes.WORK_AND_ROLE_INFO_PAGE),
         statusType: 'warn',
         status: 'incomplete',
-        disabled: true,
+        disabled: false,
       },
-      {
-        icon: 'fingerprint',
-        type: 'user-access-agreement',
-        title: 'User Access Agreement(s)',
-        process: 'manual',
-        hint: '13 mins to complete',
-        description:
-          'Read and agree to the applicable User Access Agreement(s)',
-        actionLabel: 'Open',
-        route: ProfileRoutes.routePath(
-          ProfileRoutes.USER_ACCESS_AGREEMENT_PAGE
-        ),
-        statusType: 'warn',
-        status: 'incomplete',
-        disabled: true,
-      },
+      // TODO controlled through demo feature flag
+      ...ArrayUtils.insertIf<PortalSection>(
+        this.featureFlagService.hasFlag(Role.FEATURE_PIDP_DEMO),
+        [
+          {
+            icon: 'fingerprint',
+            type: 'user-access-agreement',
+            title: 'User Access Agreement(s)',
+            process: 'manual',
+            hint: '13 mins to complete',
+            description:
+              'Read and agree to the applicable User Access Agreement(s)',
+            actionLabel: 'Open',
+            route: ProfileRoutes.routePath(
+              ProfileRoutes.USER_ACCESS_AGREEMENT_PAGE
+            ),
+            statusType: 'warn',
+            status: 'incomplete',
+            disabled: false,
+          },
+        ]
+      ),
     ];
   }
 
@@ -102,56 +114,68 @@ export class DemoService {
         actionLabel: 'Request Manually',
         route: AccessRoutes.routePath(AccessRoutes.SPECIAL_AUTH_EFORMS_PAGE),
         statusType: 'info',
-        disabled: true,
+        disabled: false,
       },
-      {
-        icon: 'fingerprint',
-        type: 'pharmanet',
-        title: 'PharmaNet',
-        process: 'manual',
-        hint: '5 mins to complete',
-        description: 'Request access to PharmaNet',
-        actionLabel: 'Request',
-        route: AccessRoutes.routePath(AccessRoutes.PHARMANET_PAGE),
-        statusType: 'warn',
-        status: 'incomplete',
-        disabled: true,
-      },
-      {
-        icon: 'fingerprint',
-        type: 'site-privacy-and-security-readiness-checklist',
-        title: 'Site Privacy and Security Readiness Checklist',
-        process: 'manual',
-        hint: '10 mins to complete',
-        description: 'Description of what the checklist is here',
-        actionLabel: 'Request',
-        route: AccessRoutes.routePath(
-          AccessRoutes.SITE_PRIVACY_SECURITY_CHECKLIST_PAGE
-        ),
-        statusType: 'warn',
-        status: 'incomplete',
-        disabled: true,
-      },
+      // TODO controlled through demo feature flag
+      ...ArrayUtils.insertIf<PortalSection>(
+        this.featureFlagService.hasFlag(Role.FEATURE_PIDP_DEMO),
+        [
+          {
+            icon: 'fingerprint',
+            type: 'pharmanet',
+            title: 'PharmaNet',
+            process: 'manual',
+            hint: '5 mins to complete',
+            description: 'Request access to PharmaNet',
+            actionLabel: 'Request',
+            route: AccessRoutes.routePath(AccessRoutes.PHARMANET_PAGE),
+            statusType: 'warn',
+            status: 'incomplete',
+            disabled: false,
+          },
+          {
+            icon: 'fingerprint',
+            type: 'site-privacy-and-security-readiness-checklist',
+            title: 'Site Privacy and Security Readiness Checklist',
+            process: 'manual',
+            hint: '10 mins to complete',
+            description: 'Description of what the checklist is here',
+            actionLabel: 'Request',
+            route: AccessRoutes.routePath(
+              AccessRoutes.SITE_PRIVACY_SECURITY_CHECKLIST_PAGE
+            ),
+            statusType: 'warn',
+            status: 'incomplete',
+            disabled: false,
+          },
+        ]
+      ),
     ];
   }
 
   public get trainingSections(): PortalSection[] {
     return [
-      {
-        icon: 'fingerprint',
-        type: 'compliance-training',
-        title: 'Compliance Training',
-        process: 'manual',
-        hint: '15 mins',
-        description: 'Description of what the video is here',
-        actionLabel: 'Watch',
-        route: TrainingRoutes.routePath(
-          TrainingRoutes.COMPLIANCE_TRAINING_PAGE
-        ),
-        statusType: 'warn',
-        status: 'incomplete',
-        disabled: true,
-      },
+      // TODO controlled through demo feature flag
+      ...ArrayUtils.insertIf<PortalSection>(
+        this.featureFlagService.hasFlag(Role.FEATURE_PIDP_DEMO),
+        [
+          {
+            icon: 'fingerprint',
+            type: 'compliance-training',
+            title: 'Compliance Training',
+            process: 'manual',
+            hint: '15 mins',
+            description: 'Description of what the video is here',
+            actionLabel: 'Watch',
+            route: TrainingRoutes.routePath(
+              TrainingRoutes.COMPLIANCE_TRAINING_PAGE
+            ),
+            statusType: 'warn',
+            status: 'incomplete',
+            disabled: false,
+          },
+        ]
+      ),
     ];
   }
 
@@ -165,7 +189,7 @@ export class DemoService {
         process: 'manual',
         actionLabel: 'View',
         route: YourProfileRoutes.routePath(YourProfileRoutes.TRANSACTIONS_PAGE),
-        disabled: true,
+        disabled: false,
       },
       {
         icon: 'fingerprint',
@@ -177,7 +201,7 @@ export class DemoService {
         route: YourProfileRoutes.routePath(
           YourProfileRoutes.SIGNED_ACCEPTED_DOCUMENTS_PAGE
         ),
-        disabled: true,
+        disabled: false,
       },
     ];
   }

@@ -1,9 +1,9 @@
-<app-dashboard-header
+<ui-dashboard-header
   [theme]="headerConfig.theme"
   [allowMobileToggle]="headerConfig.allowMobileToggle"
   [username]="username"
   (toggleMobileMenu)="sidenav.toggle()"
-  (logout)="onLogout()"></app-dashboard-header>
+  (logout)="onLogout()"></ui-dashboard-header>
 
 <mat-sidenav-container class="dashboard-sidenav-container">
   <mat-sidenav
@@ -20,12 +20,12 @@
         [class.fixed]="!responsiveMenuItems" />
     </div>
 
-    <app-dashboard-menu
+    <ui-dashboard-menu
       [menuItems]="menuItems"
       [responsiveMenuItems]="responsiveMenuItems"
       [showMenuItemIcons]="showMenuItemIcons"
       (action)="onMenuItemAction($event)">
-    </app-dashboard-menu>
+    </ui-dashboard-menu>
   </mat-sidenav>
 
   <mat-sidenav-content>

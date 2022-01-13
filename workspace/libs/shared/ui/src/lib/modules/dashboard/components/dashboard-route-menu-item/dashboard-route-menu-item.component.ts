@@ -12,7 +12,7 @@ import { ViewportService } from '../../../../services/viewport.service';
 import { DashboardRouteMenuItem } from '../../models/dashboard-menu-item.model';
 
 @Component({
-  selector: 'app-dashboard-route-menu-item',
+  selector: 'ui-dashboard-route-menu-item',
   templateUrl: './dashboard-route-menu-item.component.html',
   styleUrls: ['./dashboard-route-menu-item.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

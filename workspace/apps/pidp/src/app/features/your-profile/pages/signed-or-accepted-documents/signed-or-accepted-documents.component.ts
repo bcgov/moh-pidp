@@ -3,6 +3,9 @@ import { ActivatedRoute } from '@angular/router';
 
 import { ArrayUtils } from '@bcgov/shared/utils';
 
+import { FeatureFlagService } from '@app/modules/feature-flag/feature-flag.service';
+import { Role } from '@app/shared/enums/roles.enum';
+
 export interface DocumentSection {
   icon: string;
   type: string;
@@ -20,9 +23,11 @@ export class SignedOrAcceptedDocumentsComponent implements OnInit {
   public title: string;
   public documents: DocumentSection[];
 
-  public constructor(private route: ActivatedRoute) {
+  public constructor(
+    private route: ActivatedRoute,
+    private featureFlagService: FeatureFlagService
+  ) {
     this.title = this.route.snapshot.data.title;
-
     this.documents = [];
   }
 
@@ -39,22 +44,25 @@ export class SignedOrAcceptedDocumentsComponent implements OnInit {
         actionLabel: 'View',
       },
       // TODO controlled through demo feature flag
-      ...ArrayUtils.insertIf<DocumentSection>(false, [
-        {
-          icon: 'fingerprint',
-          type: 'terms-of-access',
-          title: 'User Access Agreement',
-          actionLabel: 'View',
-          disabled: true,
-        },
-        {
-          icon: 'fingerprint',
-          type: 'pharmanet-terms-of-access',
-          title: 'PharmaNet Terms of Access',
-          actionLabel: 'View',
-          disabled: true,
-        },
-      ]),
+      ...ArrayUtils.insertIf<DocumentSection>(
+        this.featureFlagService.hasFlag(Role.FEATURE_PIDP_DEMO),
+        [
+          {
+            icon: 'fingerprint',
+            type: 'terms-of-access',
+            title: 'User Access Agreement',
+            actionLabel: 'View',
+            disabled: true,
+          },
+          {
+            icon: 'fingerprint',
+            type: 'pharmanet-terms-of-access',
+            title: 'PharmaNet Terms of Access',
+            actionLabel: 'View',
+            disabled: true,
+          },
+        ]
+      ),
     ];
   }
 }

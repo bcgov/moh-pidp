@@ -1,6 +1,6 @@
-import { APP_INITIALIZER, NgModule } from '@angular/core';
+import { APP_INITIALIZER, ModuleWithProviders, NgModule } from '@angular/core';
 
-import { lastValueFrom } from 'rxjs';
+import { Observable } from 'rxjs';
 
 import { LookupCodePipe } from './lookup-code.pipe';
 import { LookupConfig } from './lookup.model';
@@ -8,24 +8,36 @@ import { LookupService } from './lookup.service';
 
 function configFactory(
   lookupService: LookupService
-): () => Promise<LookupConfig | null> {
+): () => Observable<LookupConfig | null> {
   // Ensure configuration is populated before the application
   // is fully initialized to prevent race conditions
-  return (): Promise<LookupConfig | null> =>
-    lastValueFrom(lookupService.load());
+  return (): Observable<LookupConfig | null> => lookupService.load();
 }
 
 @NgModule({
   declarations: [LookupCodePipe],
-  providers: [
-    {
-      provide: APP_INITIALIZER,
-      useFactory: configFactory,
-      multi: true,
-      deps: [LookupService],
-    },
-    LookupCodePipe,
-  ],
   exports: [LookupCodePipe],
 })
-export class LookupModule {}
+export class LookupModule {
+  public static forRoot(): ModuleWithProviders<LookupModule> {
+    return {
+      ngModule: LookupModule,
+      providers: [
+        {
+          provide: APP_INITIALIZER,
+          useFactory: configFactory,
+          multi: true,
+          deps: [LookupService],
+        },
+        LookupCodePipe,
+      ],
+    };
+  }
+
+  public static forChild(): ModuleWithProviders<LookupModule> {
+    return {
+      ngModule: LookupModule,
+      providers: [LookupCodePipe],
+    };
+  }
+}

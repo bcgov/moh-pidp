@@ -1,5 +1,5 @@
 export class ShellRoutes {
-  public static MODULE_PATH = 'pidp';
+  public static MODULE_PATH = '';
 
   /**
    * @description

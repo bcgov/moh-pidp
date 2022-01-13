@@ -12,7 +12,7 @@ import {
 } from '../../models/dashboard-menu-item.model';
 
 @Component({
-  selector: 'app-dashboard-menu',
+  selector: 'ui-dashboard-menu',
   templateUrl: './dashboard-menu.component.html',
   styleUrls: ['./dashboard-menu.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
