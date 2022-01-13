@@ -10,9 +10,10 @@ using Serilog;
 using System.Reflection;
 using System.Text.Json;
 
-using Pidp.Infrastructure.Auth;
 using Pidp.Data;
 using Pidp.Features;
+using Pidp.Infrastructure.Auth;
+using Pidp.Infrastructure.HttpClients;
 
 public class Startup
 {
@@ -24,8 +25,11 @@ public class Startup
     {
         var config = this.InitializeConfiguration(services);
 
-        services.AddSingleton<IClock>(SystemClock.Instance);
-        services.AddAutoMapper(typeof(Startup));
+        services
+            .AddAutoMapper(typeof(Startup))
+            .AddKeycloakAuth(config)
+            .AddHttpClients(config)
+            .AddSingleton<IClock>(SystemClock.Instance);
 
         services.AddControllers()
             .AddFluentValidation(options => options.RegisterValidatorsFromAssemblyContaining<Startup>())
@@ -47,8 +51,6 @@ public class Startup
         //     .AddHealthChecks()
         //     .AddDbContextCheck<PidpDbContext>("DbContextHealthCheck")
         //     .AddNpgSql(connectionString);
-
-        services.AddKeycloakAuth(config);
 
         services.AddSwaggerGen(options =>
         {
