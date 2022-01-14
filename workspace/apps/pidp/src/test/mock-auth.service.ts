@@ -1,9 +1,7 @@
-import { Observable, from } from 'rxjs';
+import { Observable, of } from 'rxjs';
 
 import { KeycloakLoginOptions } from 'keycloak-js';
 
-import { IdentityProviderEnum } from '@app/features/auth/enums/identity-provider.enum';
-import { BcscUser } from '@app/features/auth/models/bcsc-user.model';
 import { IAuthService } from '@app/features/auth/services/auth.service';
 
 export class MockAuthService implements IAuthService {
@@ -22,10 +20,8 @@ export class MockAuthService implements IAuthService {
     return Promise.resolve();
   }
 
-  public isLoggedIn(): Promise<boolean> {
-    return new Promise((resolve, reject) => {
-      this._loggedIn ? resolve(true) : reject(false);
-    });
+  public isLoggedIn(): Observable<boolean> {
+    return of(this._loggedIn);
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

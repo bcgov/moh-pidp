@@ -19,6 +19,7 @@ import { YourProfileRoutes } from '../your-profile/your-profile.routes';
 import { PortalDashboardComponent } from './components/portal-dashboard/portal-dashboard.component';
 
 const routes: Routes = [
+  // TODO move logins into their associated modules
   {
     path: AuthRoutes.MODULE_PATH,
     loadChildren: (): Promise<AuthModule> =>

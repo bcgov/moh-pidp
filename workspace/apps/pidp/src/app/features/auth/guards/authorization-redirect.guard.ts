@@ -10,15 +10,14 @@ import {
 import { Observable, catchError, map, of } from 'rxjs';
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';
-
-import { LoggerService } from '@core/services/logger.service';
+import { LoggerService } from '@app/core/services/logger.service';
 
 import { AuthService } from '../services/auth.service';
 
 @Injectable({
   providedIn: 'root',
 })
-export class AuthenticationGuard
+export class AuthorizationRedirectGuard
   implements CanActivate, CanActivateChild, CanLoad
 {
   public constructor(
@@ -57,12 +56,12 @@ export class AuthenticationGuard
     return this.authService.isLoggedIn().pipe(
       map((authenticated: boolean) =>
         authenticated
-          ? true
-          : this.router.createUrlTree([this.config.routes.auth])
+          ? this.router.createUrlTree([this.config.routes.portal])
+          : true
       ),
       catchError((error) => {
         this.logger.error('Error occurred during access validation: ', error);
-        return of(false);
+        return of(true);
       })
     );
   }
