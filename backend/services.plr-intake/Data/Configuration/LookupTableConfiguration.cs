@@ -1,4 +1,4 @@
-namespace PlrIntake.Data.Lookups;
+namespace PlrIntake.Data.Configuration;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;

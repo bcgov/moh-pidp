@@ -1,4 +1,4 @@
-namespace PlrIntake.Data.Lookups;
+namespace PlrIntake.Data.Configuration;
 
 using PlrIntake.Models.Lookups;
 
