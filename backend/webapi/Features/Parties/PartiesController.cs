@@ -10,8 +10,9 @@ public class PartiesController : ControllerBase
 {
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult<List<Index.Model>>> GetParties([FromServices] IQueryHandler<Index.Query, List<Index.Model>> handler)
-        => await handler.HandleAsync(new Index.Query());
+    public async Task<ActionResult<List<Index.Model>>> GetParties([FromServices] IQueryHandler<Index.Query, List<Index.Model>> handler,
+                                                                  [FromQuery] Index.Query query)
+        => await handler.HandleAsync(query);
 
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK)]
