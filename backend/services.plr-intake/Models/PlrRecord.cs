@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-/// <summary>We rely on PLR's database integrity checks rather than enforcing any in our system.</summary>
 [Table(nameof(PlrRecord))]
 public class PlrRecord : BaseAuditable
 {
@@ -13,10 +12,10 @@ public class PlrRecord : BaseAuditable
     public int Id { get; set; }
 
     /// <summary>PLR's internal identifier, Internal Party Code.</summary>
-    public string? Ipc { get; set; }
+    public string Ipc { get; set; } = string.Empty;
 
     /// <summary>A physical person in multiple roles will have a common CPN (PLR's Common Party Number) for each PLR record representing that role, e.g. a person who is both a MD and Pharmacist</summary>
-    public string? Cpn { get; set; }
+    public string Cpn { get; set; } = string.Empty;
 
     /// <summary>The type of identifier that <c>CollegeId</c> represents.</summary>
     public string? IdentifierType { get; set; }
@@ -52,7 +51,7 @@ public class PlrRecord : BaseAuditable
 
     public DateTime? StatusExpiryDate { get; set; }
 
-    public ICollection<string> Expertise { get; set; }
+    // public ICollection<string> Expertise { get; set; }
 
     public string? Address1Line1 { get; set; }
 
@@ -70,7 +69,7 @@ public class PlrRecord : BaseAuditable
 
     public DateTime? Address1StartDate { get; set; }
 
-    public ICollection<string> Credentials { get; set; }
+    // public ICollection<string> Credentials { get; set; }
 
     public string? TelephoneAreaCode { get; set; }
 

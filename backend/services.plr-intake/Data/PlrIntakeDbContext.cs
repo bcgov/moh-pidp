@@ -29,6 +29,11 @@ public class PlrDbContext : DbContext
         base.OnModelCreating(modelBuilder);
 
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(PlrDbContext).Assembly);
+
+        foreach (var entity in modelBuilder.Model.GetEntityTypes())
+        {
+            entity.SetTableName($"Plr_{entity.GetTableName()}");
+        }
     }
 
     private void ApplyAudits()
