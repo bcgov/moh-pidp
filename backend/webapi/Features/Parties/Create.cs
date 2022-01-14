@@ -20,9 +20,9 @@ public class Create
     {
         public CommandValidator(IHttpContextAccessor accessor)
         {
-            this.RuleFor(x => x.UserId).NotEmpty().MatchesCurrentUserId(accessor);
-            this.RuleFor(x => x.FirstName).NotEmpty().MatchesCurrentUserClaim(accessor, Claims.GivenName);
-            this.RuleFor(x => x.LastName).NotEmpty().MatchesCurrentUserClaim(accessor, Claims.FamilyName);
+            this.RuleFor(x => x.UserId).NotEmpty().MatchesUserId(accessor);
+            this.RuleFor(x => x.FirstName).NotEmpty().MatchesUserClaim(accessor, Claims.GivenName);
+            this.RuleFor(x => x.LastName).NotEmpty().MatchesUserClaim(accessor, Claims.FamilyName);
         }
     }
 

@@ -12,7 +12,7 @@ public static class FluentValidationExtensions
     /// <typeparam name="T"></typeparam>
     /// <param name="ruleBuilder"></param>
     /// <param name="httpContextAccessor"></param>
-    public static IRuleBuilderOptionsConditions<T, Guid> MatchesCurrentUserId<T>(this IRuleBuilder<T, Guid> ruleBuilder, IHttpContextAccessor httpContextAccessor)
+    public static IRuleBuilderOptionsConditions<T, Guid> MatchesUserId<T>(this IRuleBuilder<T, Guid> ruleBuilder, IHttpContextAccessor httpContextAccessor)
     {
         return ruleBuilder.Custom((userId, context) =>
         {
@@ -31,7 +31,7 @@ public static class FluentValidationExtensions
     /// <param name="ruleBuilder"></param>
     /// <param name="httpContextAccessor"></param>
     /// <param name="claimType"></param>
-    public static IRuleBuilderOptionsConditions<T, string> MatchesCurrentUserClaim<T>(this IRuleBuilder<T, string> ruleBuilder, IHttpContextAccessor httpContextAccessor, string claimType)
+    public static IRuleBuilderOptionsConditions<T, string> MatchesUserClaim<T>(this IRuleBuilder<T, string> ruleBuilder, IHttpContextAccessor httpContextAccessor, string claimType)
     {
         return ruleBuilder.Custom((property, context) =>
         {
