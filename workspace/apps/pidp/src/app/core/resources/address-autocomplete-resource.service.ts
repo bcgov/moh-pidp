@@ -1,4 +1,3 @@
-import { HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 import { Observable, catchError, map, of } from 'rxjs';
@@ -28,10 +27,7 @@ export class AddressAutocompleteResource {
         `AddressAutocomplete/find?searchTerm=${searchTerm}`
       )
       .pipe(
-        map(
-          (response: HttpResponse<AddressAutocompleteFindResponse[]>) =>
-            response.body ?? []
-        ),
+        map((response: AddressAutocompleteFindResponse[]) => response ?? []),
         catchError((error: unknown) => {
           this.toastService.openErrorToast('Address could not be found');
           this.logger.error(
@@ -53,8 +49,7 @@ export class AddressAutocompleteResource {
       )
       .pipe(
         map(
-          (response: HttpResponse<AddressAutocompleteRetrieveResponse[]>) =>
-            response.body ?? []
+          (response: AddressAutocompleteRetrieveResponse[]) => response ?? []
         ),
         catchError((error: unknown) => {
           this.toastService.openErrorToast('Address could not be retrieved');

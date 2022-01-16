@@ -2,17 +2,15 @@ import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 
 import { Observable, catchError, of } from 'rxjs';
 
-import { AbstractApiResource, NoContent, NoContentResponse } from '.';
+import { ICrudResource } from '../interfaces/crud-resource.interface';
+import {
+  AbstractResource,
+  NoContent,
+  NoContentResponse,
+} from './abstract-resource';
 
-export interface IAbstractPageResource<T> {
-  create(id: number, payload: T): Observable<T | null>;
-  get(id: number): Observable<T | null>;
-  update(id: number, payload: T): NoContent;
-  delete(id: number, payload: T): Observable<number | null>;
-}
-
-export abstract class CrudResource<T> implements IAbstractPageResource<T> {
-  protected constructor(protected apiResource: AbstractApiResource) {}
+export abstract class CrudResource<T> implements ICrudResource<T> {
+  protected constructor(protected resource: AbstractResource) {}
 
   /**
    * @description
@@ -25,9 +23,7 @@ export abstract class CrudResource<T> implements IAbstractPageResource<T> {
    * Create a new resource.
    */
   public create(id: number, payload: T): Observable<T | null> {
-    return this.apiResource.post<T>(this.getResourcePath(id), payload).pipe(
-      // TODO refactor to use observe
-      this.apiResource.unwrapResultPipe(),
+    return this.resource.post<T>(this.getResourcePath(id), payload).pipe(
       catchError((error: HttpErrorResponse) => {
         throw error;
       })
@@ -39,9 +35,7 @@ export abstract class CrudResource<T> implements IAbstractPageResource<T> {
    * Read a resource.
    */
   public get(id: number): Observable<T | null> {
-    return this.apiResource.get<T>(this.getResourcePath(id)).pipe(
-      // TODO refactor to use observe
-      this.apiResource.unwrapResultPipe(),
+    return this.resource.get<T>(this.getResourcePath(id)).pipe(
       catchError((error: HttpErrorResponse) => {
         if (error.status === HttpStatusCode.NotFound) {
           return of(null);
@@ -57,7 +51,7 @@ export abstract class CrudResource<T> implements IAbstractPageResource<T> {
    * Update a resource.
    */
   public update(id: number, payload: T): NoContent {
-    return this.apiResource
+    return this.resource
       .put<NoContent>(this.getResourcePath(id), payload)
       .pipe(NoContentResponse);
   }
@@ -66,19 +60,15 @@ export abstract class CrudResource<T> implements IAbstractPageResource<T> {
    * @description
    * Delete a resource.
    */
-  public delete(id: number, payload: T): Observable<number | null> {
-    return this.apiResource
-      .delete<number>(this.getResourcePath(id), payload)
-      .pipe(
-        // TODO refactor to use observe
-        this.apiResource.unwrapResultPipe(),
-        catchError((error: HttpErrorResponse) => {
-          if (error.status === HttpStatusCode.NotFound) {
-            return of(null);
-          }
+  public delete(id: number): Observable<number | null> {
+    return this.resource.delete<number>(this.getResourcePath(id)).pipe(
+      catchError((error: HttpErrorResponse) => {
+        if (error.status === HttpStatusCode.NotFound) {
+          return of(null);
+        }
 
-          throw error;
-        })
-      );
+        throw error;
+      })
+    );
   }
 }

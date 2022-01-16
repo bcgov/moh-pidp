@@ -1,98 +1,19 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { HttpClient, HttpResponse } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
 
-import { Observable } from 'rxjs';
-
-import { AbstractApiResource } from '@bcgov/shared/data-access';
+import { AbstractResource } from '@bcgov/shared/data-access';
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';
-
-import { LoggerService } from '@core/services/logger.service';
 
 @Injectable({
   providedIn: 'root',
 })
-export class ApiResource extends AbstractApiResource {
-  public constructor(
-    @Inject(APP_CONFIG) private config: AppConfig,
-    private http: HttpClient,
-    private logger: LoggerService
-  ) {
-    super();
-  }
+export class ApiResource extends AbstractResource {
+  public url: string;
 
-  public get<T>(
-    path: string,
-    options?: { [key: string]: unknown }
-  ): Observable<HttpResponse<T>> {
-    return this.http
-      .get<T>(`${this.config.apiEndpoint}/${path}`, {
-        ...options,
-        observe: 'response',
-      })
-      .pipe(this.handleResponsePipe<T>());
-  }
+  public constructor(@Inject(APP_CONFIG) config: AppConfig, http: HttpClient) {
+    super(http);
 
-  public head<T>(
-    path: string,
-    options?: { [key: string]: unknown }
-  ): Observable<HttpResponse<T>> {
-    return this.http
-      .head<T>(`${this.config.apiEndpoint}/${path}`, {
-        ...options,
-        observe: 'response',
-      })
-      .pipe(this.handleResponsePipe<T>());
-  }
-
-  public post<T>(
-    path: string,
-    body: { [key: string]: any } | null,
-    options?: { [key: string]: unknown }
-  ): Observable<HttpResponse<T>> {
-    return this.http
-      .post<T>(`${this.config.apiEndpoint}/${path}`, body, {
-        ...options,
-        observe: 'response',
-      })
-      .pipe(this.handleResponsePipe<T>());
-  }
-
-  public put<T>(
-    path: string,
-    body: { [key: string]: any } | null,
-    options?: { [key: string]: unknown }
-  ): Observable<HttpResponse<T>> {
-    return this.http
-      .put<T>(`${this.config.apiEndpoint}/${path}`, body, {
-        ...options,
-        observe: 'response',
-      })
-      .pipe(this.handleResponsePipe<T>());
-  }
-
-  public delete<T>(
-    path: string,
-    options?: { [key: string]: unknown }
-  ): Observable<HttpResponse<T>> {
-    return this.http
-      .delete<T>(`${this.config.apiEndpoint}/${path}`, {
-        ...options,
-        observe: 'response',
-      })
-      .pipe(this.handleResponsePipe<T>());
-  }
-
-  /**
-   * @description
-   * Handle a successful HTTP response.
-   */
-  protected handleSuccess<T>(): (response: HttpResponse<T>) => HttpResponse<T> {
-    return (response: HttpResponse<T>): HttpResponse<T> => {
-      this.logger.info(`RESPONSE: ${response.status}`, response.body);
-
-      return response;
-    };
+    this.url = config.apiEndpoint;
   }
 }

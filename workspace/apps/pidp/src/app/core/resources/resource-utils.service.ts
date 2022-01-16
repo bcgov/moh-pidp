@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 @Injectable({
   providedIn: 'root',
 })
-export class ApiResourceUtilsService {
+export class ResourceUtilsService {
   /**
    * @description
    * Make HttpParams from an object literal.
