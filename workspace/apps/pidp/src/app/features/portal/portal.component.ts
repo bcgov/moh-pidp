@@ -1,29 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import {
-  EMPTY,
-  Observable,
-  UnaryFunction,
-  exhaustMap,
-  map,
-  of,
-  pipe,
-  throwError,
-} from 'rxjs';
-
-import { Party } from '@bcgov/shared/data-access';
 import { AlertType } from '@bcgov/shared/ui';
-
-import { AuthorizedUserService } from '@app/core/services/authorized-user.service';
 
 import { PartyResource } from '@core/resources/party-resource.service';
 import { PartyService } from '@core/services/party.service';
 
 import { collectionNotice } from '@shared/data/collection-notice.data';
 
-import { BcscUser } from '../auth/models/bcsc-user.model';
-import { AccessTokenService } from '../auth/services/access-token.service';
 import { ShellRoutes } from '../shell/shell.routes';
 
 export interface PortalSection {

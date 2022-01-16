@@ -24,7 +24,7 @@ export class PartyResource {
   /**
    * @description
    * Discovery endpoint for checking the existence of a Party
-   * based on a UserId, and provides a PartyId in response.
+   * based on a UserId, which provides a PartyId in response.
    */
   // TODO simplify this discovery endpoint path and respond with ID or null
   public getParties(userId: string): Observable<number | null> {
@@ -67,6 +67,13 @@ export class PartyResource {
     );
   }
 
+  public getPartyStatus(partyId: number): Observable<PartyStatus | null> {}
+
+  /**
+   * @description
+   * Get a party based on access token user ID, or
+   * create a party if one does not already exist.
+   */
   public firstOrCreate(): Observable<Party | null> {
     return this.authorizedUserService.user$.pipe(
       exhaustMap((user: BcscUser | null) =>
