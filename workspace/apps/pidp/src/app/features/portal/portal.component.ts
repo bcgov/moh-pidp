@@ -1,16 +1,29 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { exhaustMap, map, of } from 'rxjs';
+import {
+  EMPTY,
+  Observable,
+  UnaryFunction,
+  exhaustMap,
+  map,
+  of,
+  pipe,
+  throwError,
+} from 'rxjs';
 
 import { Party } from '@bcgov/shared/data-access';
 import { AlertType } from '@bcgov/shared/ui';
+
+import { AuthorizedUserService } from '@app/core/services/authorized-user.service';
 
 import { PartyResource } from '@core/resources/party-resource.service';
 import { PartyService } from '@core/services/party.service';
 
 import { collectionNotice } from '@shared/data/collection-notice.data';
 
+import { BcscUser } from '../auth/models/bcsc-user.model';
+import { AccessTokenService } from '../auth/services/access-token.service';
 import { ShellRoutes } from '../shell/shell.routes';
 
 export interface PortalSection {
@@ -43,8 +56,8 @@ export class PortalComponent implements OnInit {
   public constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private partyResource: PartyResource,
-    private partyService: PartyService
+    private partyService: PartyService,
+    private partyResource: PartyResource
   ) {
     this.title = this.route.snapshot.data.title;
 
@@ -67,24 +80,6 @@ export class PortalComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    // TODO allow creation of a single party with ID 1
-    const { firstName, lastName } = this.partyService.user;
-    this.partyResource
-      .getParties()
-      .pipe(
-        map((parties: Party[] | null) => (parties?.length ? parties[0] : null)),
-        exhaustMap((party: Party | null) =>
-          !party
-            ? this.partyResource.createParty({ firstName, lastName }).pipe(
-                exhaustMap(() => this.partyResource.getParties()),
-                map((parties: Party[] | null) =>
-                  parties?.length ? parties[0] : null
-                )
-              )
-            : of(party)
-        ),
-        map((party: Party | null) => (this.partyService.party = party))
-      )
-      .subscribe();
+    this.partyResource.firstOrCreate().subscribe(console.log);
   }
 }

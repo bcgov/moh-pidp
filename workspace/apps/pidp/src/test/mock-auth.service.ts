@@ -16,8 +16,8 @@ export class MockAuthService implements IAuthService {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public login(options?: KeycloakLoginOptions): Promise<void> {
-    return Promise.resolve();
+  public login(options?: KeycloakLoginOptions): Observable<void> {
+    return of();
   }
 
   public isLoggedIn(): Observable<boolean> {
@@ -25,7 +25,7 @@ export class MockAuthService implements IAuthService {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public logout(redirectUri: string): Promise<void> {
-    return Promise.resolve();
+  public logout(redirectUri: string): Observable<void> {
+    return of();
   }
 }

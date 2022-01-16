@@ -1,4 +1,3 @@
-import { HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 import { Observable, catchError, map, of } from 'rxjs';
@@ -19,8 +18,7 @@ export class LookupResource {
    */
   public getLookups(): Observable<LookupConfig | null> {
     return this.apiResource.get<LookupConfig>('lookups').pipe(
-      // TODO refactor to allow observation of body or response
-      map((response: HttpResponse<LookupConfig>) => response.body),
+      map((lookupConfig: LookupConfig) => lookupConfig),
       // Catch and release to allow the application to render
       // views regardless of the presence of the lookups
       catchError((_) => of(null))

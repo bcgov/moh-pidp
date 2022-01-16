@@ -10,11 +10,13 @@ export interface AccessTokenParsed extends KeycloakTokenParsed {
   jti: string;
   scope: string;
   typ: string;
+  // TODO Is this still the userId?
+  sub: string;
   // User specific attributes:
   email_verified: boolean;
   family_name: string;
   given_name: string;
   name: string;
-  // Contains identity provider: example@bcsc or @idir
+  // TODO Is this still the HPDID? It has @bcsc and isn't a GUID
   preferred_username: string;
 }

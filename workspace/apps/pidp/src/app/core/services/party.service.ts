@@ -9,6 +9,7 @@ import { PortalSection } from '@app/features/portal/portal.component';
 
 import { DemoService } from './demo.service';
 
+// TODO create custom initializer that inits keycloak then gets partyId and stores in this service for easy replacement by state management
 @Injectable({
   providedIn: 'root',
 })
@@ -29,6 +30,7 @@ export class PartyService {
   public get user(): BcscUser {
     return {
       hpdid: '00000000-0000-0000-0000-000000000000',
+      userId: '00000000-0000-0000-0000-000000000000',
       firstName: 'Lucy',
       lastName: 'Pultz',
     };
