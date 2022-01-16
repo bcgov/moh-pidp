@@ -25,7 +25,7 @@ export class ObjectUtils {
    * Map an object's keys by value.
    */
   public static keyMappingImmutable(
-    object: { [key: string]: unknown },
+    object: { [key: string]: any },
     mapping: { [key: string]: string }
   ): { [key: string]: unknown } | null {
     if (!object || !mapping) {

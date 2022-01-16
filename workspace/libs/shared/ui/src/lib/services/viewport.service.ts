@@ -1,7 +1,7 @@
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { Injectable } from '@angular/core';
 
-import { Observable, map, tap } from 'rxjs';
+import { Observable, map } from 'rxjs';
 
 /**
  * @description
@@ -50,7 +50,6 @@ export class ViewportService {
 
   public get isTabletBreakpoint$(): Observable<boolean> {
     return this.breakpointObserver$.pipe(
-      tap((result) => console.log('RESULT', result)),
       map(
         (result: BreakpointState) =>
           result.matches && result.breakpoints[BootstrapBreakpoints.tablet]

@@ -60,12 +60,7 @@ export class DashboardHeaderComponent {
       map(([isMobile, isTablet]: [boolean, boolean]) => isMobile || isTablet),
       distinctUntilChanged()
     );
-    this.usernameBreakpoint$ = viewportService.isTabletAndUpBreakpoint$.pipe(
-      map((value) => {
-        console.log('BREAKPOINT', value);
-        return value;
-      })
-    );
+    this.usernameBreakpoint$ = viewportService.isTabletAndUpBreakpoint$;
   }
 
   public onOpenMenu(): void {
