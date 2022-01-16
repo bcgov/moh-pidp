@@ -6,9 +6,9 @@ import { KeycloakService } from 'keycloak-angular';
 import { KeycloakLoginOptions } from 'keycloak-js';
 
 export interface IAuthService {
-  login(options?: KeycloakLoginOptions): Promise<void>;
+  login(options?: KeycloakLoginOptions): Observable<void>;
   isLoggedIn(): Observable<boolean>;
-  logout(redirectUri: string): Promise<void>;
+  logout(redirectUri: string): Observable<void>;
 }
 
 @Injectable({
@@ -17,15 +17,15 @@ export interface IAuthService {
 export class AuthService implements IAuthService {
   public constructor(private keycloakService: KeycloakService) {}
 
-  public login(options?: KeycloakLoginOptions): Promise<void> {
-    return this.keycloakService.login(options);
+  public login(options?: KeycloakLoginOptions): Observable<void> {
+    return from(this.keycloakService.login(options));
   }
 
   public isLoggedIn(): Observable<boolean> {
     return from(this.keycloakService.isLoggedIn());
   }
 
-  public logout(redirectUri: string): Promise<void> {
-    return this.keycloakService.logout(redirectUri);
+  public logout(redirectUri: string): Observable<void> {
+    return from(this.keycloakService.logout(redirectUri));
   }
 }

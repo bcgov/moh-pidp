@@ -25,7 +25,7 @@ export class PortalDashboardComponent implements IDashboard {
   ) {
     this.logoutRedirectUrl = `${this.config.loginRedirectUrl}/${this.config.routes.auth}`;
     this.username = accessTokenService
-      .decodeToken$()
+      .decodeToken()
       .pipe(map((token) => token?.name ?? ''));
   }
 
