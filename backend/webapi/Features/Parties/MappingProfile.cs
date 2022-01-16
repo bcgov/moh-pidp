@@ -16,5 +16,8 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.PhysicalAddress, opt => opt.MapFrom(src => src.Facility!.PhysicalAddress));
         this.CreateMap<Facility, WorkSetting.Command>();
         this.CreateMap<FacilityAddress, WorkSetting.Command.Address>();
+
+        this.CreateMap<Party, ProfileStatus.Model>();
+        this.CreateMap<Party, EnrolmentStatus.Model>();
     }
 }

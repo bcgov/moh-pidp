@@ -1,0 +1,67 @@
+namespace Pidp.Features.Parties;
+
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using FluentValidation;
+using HybridModelBinding;
+using Microsoft.EntityFrameworkCore;
+
+using Pidp.Data;
+using Pidp.Models.Lookups;
+
+public class ProfileStatus
+{
+    public class Query : IQuery<Model>
+    {
+        public int Id { get; set; }
+    }
+
+    public class Model
+    {
+        [HybridBindProperty(Source.Route)]
+        public int Id { get; set; }
+        public string FirstName { get; set; } = string.Empty;
+        public string LastName { get; set; } = string.Empty;
+        public string? Email { get; set; }
+        public string? Phone { get; set; }
+        public CollegeCode? CollegeCode { get; set; }
+        public string? LicenceNumber { get; set; } = string.Empty;
+        public string JobTitle { get; set; } = string.Empty;
+        public string FacilityName { get; set; } = string.Empty;
+        public Address? PhysicalAddress { get; set; }
+
+        public class Address
+        {
+            public string CountryCode { get; set; } = string.Empty;
+            public string ProvinceCode { get; set; } = string.Empty;
+            public string Street { get; set; } = string.Empty;
+            public string City { get; set; } = string.Empty;
+            public string Postal { get; set; } = string.Empty;
+        }
+    }
+
+    public class QueryValidator : AbstractValidator<Query>
+    {
+        public QueryValidator() => this.RuleFor(x => x.Id).NotEmpty();
+    }
+
+    public class QueryHandler : IQueryHandler<Query, Model>
+    {
+        private readonly PidpDbContext context;
+        private readonly IMapper mapper;
+
+        public QueryHandler(PidpDbContext context, IMapper mapper)
+        {
+            this.context = context;
+            this.mapper = mapper;
+        }
+
+        public async Task<Model> HandleAsync(Query query)
+        {
+            return await this.context.Parties
+                .Where(party => party.Id == query.Id)
+                .ProjectTo<Model>(this.mapper.ConfigurationProvider)
+                .SingleOrDefaultAsync();
+        }
+    }
+}

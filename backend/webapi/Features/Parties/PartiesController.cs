@@ -65,4 +65,16 @@ public class PartiesController : ControllerBase
         await handler.HandleAsync(command);
         return this.NoContent();
     }
+
+    [HttpGet("{id}/profile-status")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<ActionResult<ProfileStatus.Model>> GetPartyProfileStatus([FromServices] IQueryHandler<ProfileStatus.Query, ProfileStatus.Model> handler,
+                                                                               [FromHybrid] ProfileStatus.Query query)
+        => await handler.HandleAsync(query);
+
+    [HttpGet("{id}/enrolment-status")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<ActionResult<EnrolmentStatus.Model>> GetPartyEnrolmentStatus([FromServices] IQueryHandler<EnrolmentStatus.Query, EnrolmentStatus.Model> handler,
+                                                                                   [FromHybrid] EnrolmentStatus.Query query)
+        => await handler.HandleAsync(query);
 }
