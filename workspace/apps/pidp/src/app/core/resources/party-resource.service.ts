@@ -3,13 +3,28 @@ import { Injectable } from '@angular/core';
 
 import { Observable, catchError, exhaustMap, map, of } from 'rxjs';
 
-import { Party, PartyCreate } from '@bcgov/shared/data-access';
+import { Address, Party, PartyCreate } from '@bcgov/shared/data-access';
 
 import { BcscUser } from '@app/features/auth/models/bcsc-user.model';
 
 import { AuthorizedUserService } from '../services/authorized-user.service';
 import { ApiResource } from './api-resource.service';
 import { ResourceUtilsService } from './resource-utils.service';
+
+// TODO move this to a different location
+export interface ProfileStatus {
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  collegeCode: number;
+  licenceNumber: string;
+  jobTitle: string;
+  facilityName: string;
+  physicalAddress: Address;
+}
+
+export interface EnrolmentStatus {}
 
 @Injectable({
   providedIn: 'root',
@@ -20,6 +35,28 @@ export class PartyResource {
     private resourceUtilsService: ResourceUtilsService,
     private authorizedUserService: AuthorizedUserService
   ) {}
+
+  /**
+   * @description
+   * Get a party ID based on access token user ID, and
+   * create a party if one does not already exist.
+   */
+  public firstOrCreate(): Observable<number | null> {
+    return this.authorizedUserService.user$.pipe(
+      exhaustMap((user: BcscUser | null) =>
+        user
+          ? this.getParties(user.userId).pipe(
+              map((partyId: number | null) => partyId ?? user)
+            )
+          : of(null)
+      ),
+      exhaustMap((partyIdOrUser: number | BcscUser | null) =>
+        !partyIdOrUser || typeof partyIdOrUser === 'number'
+          ? of(partyIdOrUser)
+          : this.createParty(partyIdOrUser)
+      )
+    );
+  }
 
   /**
    * @description
@@ -67,30 +104,35 @@ export class PartyResource {
     );
   }
 
-  public getPartyStatus(partyId: number): Observable<PartyStatus | null> {}
+  public getPartyProfileStatus(
+    partyId: number
+  ): Observable<ProfileStatus | null> {
+    return this.apiResource
+      .get<ProfileStatus>(`parties/${partyId}/profile-status`)
+      .pipe(
+        catchError((error: HttpErrorResponse) => {
+          if (error.status === HttpStatusCode.NotFound) {
+            return of(null);
+          }
 
-  /**
-   * @description
-   * Get a party based on access token user ID, or
-   * create a party if one does not already exist.
-   */
-  public firstOrCreate(): Observable<Party | null> {
-    return this.authorizedUserService.user$.pipe(
-      exhaustMap((user: BcscUser | null) =>
-        user
-          ? this.getParties(user.userId).pipe(
-              map((partyId: number | null) => partyId ?? user)
-            )
-          : of(null)
-      ),
-      exhaustMap((partyIdOrUser: number | BcscUser | null) =>
-        !partyIdOrUser || typeof partyIdOrUser === 'number'
-          ? of(partyIdOrUser)
-          : this.createParty(partyIdOrUser)
-      ),
-      exhaustMap((partyId: number | null) =>
-        partyId ? this.getParty(partyId) : of(null)
-      )
-    );
+          throw error;
+        })
+      );
+  }
+
+  public getPartyEnrolmentStatus(
+    partyId: number
+  ): Observable<EnrolmentStatus | null> {
+    return this.apiResource
+      .get<EnrolmentStatus>(`parties/${partyId}/enrolment-status`)
+      .pipe(
+        catchError((error: HttpErrorResponse) => {
+          if (error.status === HttpStatusCode.NotFound) {
+            return of(null);
+          }
+
+          throw error;
+        })
+      );
   }
 }

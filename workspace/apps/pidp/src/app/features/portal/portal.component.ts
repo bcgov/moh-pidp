@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
+import { exhaustMap, of } from 'rxjs';
+
 import { AlertType } from '@bcgov/shared/ui';
 
 import { PartyResource } from '@core/resources/party-resource.service';
@@ -64,6 +66,14 @@ export class PortalComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    this.partyResource.firstOrCreate().subscribe(console.log);
+    // TODO merge profile status into the default card statuses
+    this.partyResource
+      .firstOrCreate()
+      .pipe(
+        exhaustMap((partyId: number | null) =>
+          partyId ? this.partyResource.getPartyProfileStatus(partyId) : of(null)
+        )
+      )
+      .subscribe(console.log);
   }
 }
