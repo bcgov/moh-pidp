@@ -6,18 +6,27 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 import { KeycloakService } from 'keycloak-angular';
 
 import { AccessTokenParsed } from '../models/access-token-parsed.model';
+import { BrokerProfile } from '../models/broker-profile.model';
+
+export interface IAccessTokenService {
+  token(): Observable<string>;
+  isTokenExpired(): boolean;
+  decodeToken(): Observable<AccessTokenParsed | null>;
+  roles(): string[];
+  clearToken(): void;
+}
 
 @Injectable({
   providedIn: 'root',
 })
-export class AccessTokenService {
+export class AccessTokenService implements IAccessTokenService {
   private jwtHelper: JwtHelperService;
 
   public constructor(private keycloakService: KeycloakService) {
     this.jwtHelper = new JwtHelperService();
   }
 
-  public token$(): Observable<string> {
+  public token(): Observable<string> {
     return from(this.keycloakService.getToken());
   }
 
@@ -25,10 +34,14 @@ export class AccessTokenService {
     return this.keycloakService.isTokenExpired();
   }
 
-  public decodeToken$(): Observable<AccessTokenParsed | null> {
-    return this.token$().pipe(
+  public decodeToken(): Observable<AccessTokenParsed | null> {
+    return this.token().pipe(
       map((token: string) => (token ? this.jwtHelper.decodeToken(token) : null))
     );
+  }
+
+  public loadBrokerProfile(forceReload?: boolean): Observable<BrokerProfile> {
+    return from(this.keycloakService.loadUserProfile(forceReload));
   }
 
   public roles(): string[] {
