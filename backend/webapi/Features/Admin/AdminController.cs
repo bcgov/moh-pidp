@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 [ApiController]
 public class AdminController : ControllerBase
 {
-    [HttpGet]
+    [HttpGet("parties")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<List<Index.Model>>> GetParties([FromServices] IQueryHandler<Index.Query, List<Index.Model>> handler,
                                                                   [FromQuery] Index.Query query)
