@@ -35,7 +35,7 @@ public static class ClaimsPrincipalExtensions
     /// <summary>
     /// Returns the Birthdate of the User, parsed in ISO format (yyyy-MM-dd)
     /// </summary>
-    public static LocalDate? GetDateOfBirth(this ClaimsPrincipal user)
+    public static LocalDate? GetBirthdate(this ClaimsPrincipal user)
     {
         var birthdate = user.FindFirstValue(Claims.Birthdate);
 
