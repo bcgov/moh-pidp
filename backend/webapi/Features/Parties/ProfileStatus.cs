@@ -5,7 +5,7 @@ using AutoMapper.QueryableExtensions;
 using FluentValidation;
 using HybridModelBinding;
 using Microsoft.EntityFrameworkCore;
-
+using NodaTime;
 using Pidp.Data;
 using Pidp.Models.Lookups;
 
@@ -22,22 +22,18 @@ public class ProfileStatus
         public int Id { get; set; }
         public string FirstName { get; set; } = string.Empty;
         public string LastName { get; set; } = string.Empty;
+        public LocalDate Birthdate { get; set; }
         public string? Email { get; set; }
         public string? Phone { get; set; }
         public CollegeCode? CollegeCode { get; set; }
-        public string? LicenceNumber { get; set; } = string.Empty;
-        public string JobTitle { get; set; } = string.Empty;
-        public string FacilityName { get; set; } = string.Empty;
-        public Address? PhysicalAddress { get; set; }
+        public string? LicenceNumber { get; set; }
+        public string? JobTitle { get; set; }
+        public string? FacilityName { get; set; }
+        public string? FacilityStreet { get; set; }
 
-        public class Address
-        {
-            public string CountryCode { get; set; } = string.Empty;
-            public string ProvinceCode { get; set; } = string.Empty;
-            public string Street { get; set; } = string.Empty;
-            public string City { get; set; } = string.Empty;
-            public string Postal { get; set; } = string.Empty;
-        }
+        public bool DemographicsComplete => this.Email != null && this.Phone != null;
+        public bool CollegeCertificationComplete => this.Email != null && this.Phone != null;
+        public bool WorkSettingComplete => this.Email != null && this.Phone != null;
     }
 
     public class QueryValidator : AbstractValidator<Query>
