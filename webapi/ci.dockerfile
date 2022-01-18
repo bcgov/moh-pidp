@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/sdk:6.0 as build-env
+FROM mcr.microsoft.com/dotnet/sdk:6.0-alpine as build-env
 
 WORKDIR /app
 
@@ -17,7 +17,7 @@ RUN dotnet publish "pidp.csproj" -c Release -o out /p:MicrosoftNETPlatformLibrar
 RUN dotnet ef migrations script --idempotent --output /app/out/databaseMigrations.sql
 
 
-FROM mcr.microsoft.com/dotnet/aspnet:6.0
+FROM mcr.microsoft.com/dotnet/aspnet:6.0-alpine
 
 WORKDIR /app
 
