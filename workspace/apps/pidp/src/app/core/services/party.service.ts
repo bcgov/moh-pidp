@@ -33,10 +33,11 @@ export class PartyService {
       userId: '00000000-0000-0000-0000-000000000000',
       firstName: 'Lucy',
       lastName: 'Pultz',
+      birthdate: '2021-03-17',
     };
   }
 
-  // TODO temporaty state modifier for demos
+  // TODO temporary state modifier for demos
   public updateState(sectionType: string): void {
     this.demoService.updateState(sectionType);
   }
