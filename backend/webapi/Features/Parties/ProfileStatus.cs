@@ -5,7 +5,7 @@ using AutoMapper.QueryableExtensions;
 using FluentValidation;
 using HybridModelBinding;
 using Microsoft.EntityFrameworkCore;
-
+using NodaTime;
 using Pidp.Data;
 using Pidp.Models.Lookups;
 
@@ -22,6 +22,7 @@ public class ProfileStatus
         public int Id { get; set; }
         public string FirstName { get; set; } = string.Empty;
         public string LastName { get; set; } = string.Empty;
+        public LocalDate Birthdate { get; set; }
         public string? Email { get; set; }
         public string? Phone { get; set; }
         public CollegeCode? CollegeCode { get; set; }
