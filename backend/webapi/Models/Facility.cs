@@ -13,7 +13,7 @@ public class Facility : BaseAuditable
 
     public Party? Party { get; set; }
 
-    public string FacilityName { get; set; } = string.Empty;
+    public string Name { get; set; } = string.Empty;
 
     public FacilityAddress? PhysicalAddress { get; set; }
 }
