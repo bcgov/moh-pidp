@@ -2,7 +2,6 @@ FROM mcr.microsoft.com/dotnet/sdk:6.0 as build-env
 
 WORKDIR /app
 
-RUN apk add postgresql-client
 ENV DOTNET_CLI_HOME="/DOTNET_CLI_HOME"
 ENV ASPNETCORE_URLS="http://0.0.0.0:5000"
 
@@ -21,6 +20,8 @@ RUN dotnet ef migrations script --idempotent --output /app/out/databaseMigration
 FROM mcr.microsoft.com/dotnet/aspnet:6.0
 
 WORKDIR /app
+
+RUN apk add postgresql-client
 
 COPY --from=build-env /app/out .
 
