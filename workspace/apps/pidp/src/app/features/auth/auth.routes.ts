@@ -1,7 +1,8 @@
 export class AuthRoutes {
   public static MODULE_PATH = 'auth';
 
-  public static LOGIN = 'login';
+  public static PORTAL_LOGIN = 'login';
+  public static ADMIN_LOGIN = 'admin';
 
   /**
    * @description

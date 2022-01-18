@@ -5,7 +5,6 @@ import { DashboardHeaderTheme } from '@bcgov/shared/ui';
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';
 
-import { IdentityProviderEnum } from '../../enums/identity-provider.enum';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
@@ -18,6 +17,7 @@ export class LoginComponent {
   public loginCancelled: boolean;
   public bcscSupportUrl: string;
   public pidpSupportEmail: string;
+  public idpHint: string;
 
   public constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
@@ -29,11 +29,12 @@ export class LoginComponent {
       this.route.snapshot.queryParams.action === 'cancelled';
     this.bcscSupportUrl = this.config.urls.bcscSupport;
     this.pidpSupportEmail = this.config.emails.support;
+    this.idpHint = this.route.snapshot.data.idpHint;
   }
 
   public onLogin(): void {
     this.authService.login({
-      idpHint: IdentityProviderEnum.BCSC,
+      idpHint: this.route.snapshot.data.idpHint,
       redirectUri: this.config.loginRedirectUrl,
     });
   }

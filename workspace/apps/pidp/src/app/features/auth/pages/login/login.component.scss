@@ -1,0 +1,42 @@
+@use '@angular/material' as mat;
+@use 'material/material-variables' as var;
+
+@import 'palette';
+@import 'bootstrap/bootstrap-imports';
+
+.container {
+  margin-top: 3rem;
+}
+
+.content {
+  .row > div:nth-child(2) {
+    margin-bottom: 1.5rem;
+
+    @include media-breakpoint-up(sm) {
+      margin-bottom: 2rem;
+    }
+  }
+
+  img {
+    // margin-right: 0.5rem;
+    width: 100px;
+
+    @include media-breakpoint-up(sm) {
+      margin-right: 1.75rem;
+      width: 160px;
+    }
+  }
+
+  p {
+    max-width: 480px;
+  }
+}
+
+button {
+  width: 100%;
+
+  @include media-breakpoint-up(sm) {
+    width: auto;
+    float: right;
+  }
+}

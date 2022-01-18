@@ -1,32 +1,59 @@
 <ui-dashboard-header [theme]="theme"></ui-dashboard-header>
 
-<ui-page>
-  <ui-alert
-    *ngIf="loginCancelled"
-    type="info"
-    icon="error_outline"
-    title="Login Cancelled">
-    <ng-container uiAlertContent>
-      <p>You have canceled your login to the Provider Identity Portal.</p>
-      <ul>
-        <li>
-          For support with the provider identity portal, please contact
-          <a [attr.href]="'mailto:' + pidpSupportEmail">{{
-            pidpSupportEmail
-          }}</a>
-        </li>
-        <li>
-          For support with your BC Services Card, please click
-          <a
-            target="_blank"
-            rel="noopener noreferrer"
-            [attr.href]="bcscSupportUrl">
-            here</a
-          >.
-        </li>
-      </ul>
-    </ng-container>
-  </ui-alert>
+<div class="container">
+  <div class="row">
+    <div class="col">
+      <ui-alert
+        *ngIf="loginCancelled"
+        type="info"
+        icon="error_outline"
+        title="Login Cancelled">
+        <ng-container uiAlertContent>
+          <p>You have cancelled your login to the Provider Identity Portal.</p>
+          <ul>
+            <li>
+              For support with the provider identity portal, please contact
+              <a [attr.href]="'mailto:' + pidpSupportEmail">{{
+                pidpSupportEmail
+              }}</a>
+            </li>
+            <li>
+              For support with your BC Services Card, please click
+              <a
+                target="_blank"
+                rel="noopener noreferrer"
+                [attr.href]="bcscSupportUrl">
+                here</a
+              >.
+            </li>
+          </ul>
+        </ng-container>
+      </ui-alert>
 
-  <button mat-stroked-button color="primary" (click)="onLogin()">Login</button>
-</ui-page>
+      <ui-page-header>Provider Identity Portal</ui-page-header>
+
+      <div class="content">
+        <div class="row">
+          <div class="col-auto">
+            <img
+              src="/assets/images/pidp-logo-white.svg"
+              alt="Provider Identity Portal Logo" />
+          </div>
+          <div class="col col-md-6">
+            <p>
+              Lorem ipsum dolor sit amet consectetur, adipisicing elit. Aliquam
+              recusandae tempora eum ex quia, ea repellat doloribus nesciunt
+              maiores id blanditiis cupiditate placeat reiciendis, magnam
+              numquam atque cumque. Dolore, molestiae!
+            </p>
+          </div>
+          <div class="col-12">
+            <button mat-stroked-button color="primary" (click)="onLogin()">
+              {{ idpHint | uppercase }} Login
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
