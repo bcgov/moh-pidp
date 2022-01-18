@@ -106,7 +106,7 @@ public class WorkSetting
                 party.Facility = new Facility();
             }
 
-            party.Facility.FacilityName = command.FacilityName;
+            party.Facility.Name = command.FacilityName;
 
             if (command.PhysicalAddress == null)
             {
