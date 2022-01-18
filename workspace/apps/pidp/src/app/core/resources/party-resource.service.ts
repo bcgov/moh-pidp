@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 
 import { Observable, catchError, exhaustMap, map, of } from 'rxjs';
 
-import { Address, Party, PartyCreate } from '@bcgov/shared/data-access';
+import { Party, PartyCreate } from '@bcgov/shared/data-access';
 
 import { BcscUser } from '@app/features/auth/models/bcsc-user.model';
 
@@ -21,10 +21,16 @@ export interface ProfileStatus {
   licenceNumber: string;
   jobTitle: string;
   facilityName: string;
-  physicalAddress: Address;
+  facilityStreet: string;
+  demographicsCompleted: boolean;
+  collegeCertificationCompleted: boolean;
+  workSettingCompleted: boolean;
 }
 
-export interface EnrolmentStatus {}
+export interface EnrolmentStatus {
+  // TODO test placeholder that should be removed
+  specialAuthEformsCompleted: boolean;
+}
 
 @Injectable({
   providedIn: 'root',
