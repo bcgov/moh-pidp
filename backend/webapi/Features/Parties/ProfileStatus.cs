@@ -32,8 +32,8 @@ public class ProfileStatus
         public string? FacilityStreet { get; set; }
 
         public bool DemographicsComplete => this.Email != null && this.Phone != null;
-        public bool CollegeCertificationComplete => this.Email != null && this.Phone != null;
-        public bool WorkSettingComplete => this.Email != null && this.Phone != null;
+        public bool CollegeCertificationComplete => this.CollegeCode != null && this.LicenceNumber != null;
+        public bool WorkSettingComplete => this.JobTitle != null && this.FacilityName != null;
     }
 
     public class QueryValidator : AbstractValidator<Query>
