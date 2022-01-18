@@ -1,6 +1,7 @@
 // For more information: https://material.angular.io/guide/theming
 @use '@angular/material' as mat;
 // Plus imports for other components in your app.
+@use './material-variables' as var;
 
 // Define typography for headings and body found within the mat-typography class.
 // Available typography classes: https://material.angular.io/guide/typography#using-typography-styles-in-your-application
@@ -9,19 +10,38 @@
 // Reading typography from a config: https://material.angular.io/guide/typography#reading-typography-values-from-a-config
 $pidp-typography: mat.define-typography-config(
   // Native element: <h1>
-  $headline: mat.define-typography-level(2.25rem, 2.25rem, 500),
+  $headline:
+    mat.define-typography-level(
+      var.$mat-theme-headline-font-size,
+      2.25rem,
+      500
+    ),
   // Native element: <h2>
-  $title: mat.define-typography-level(1.5rem, 1.5rem, 500),
+  $title:
+    mat.define-typography-level(var.$mat-theme-title-font-size, 1.5rem, 500),
   // Native element: <h3>
-  $subheading-2: mat.define-typography-level(1rem, 1.5rem, 500),
+  $subheading-2:
+    mat.define-typography-level(
+      var.$mat-theme-subheading-2-font-size,
+      1.5rem,
+      500
+    ),
   // Native element: <h4>
-  $subheading-1: mat.define-typography-level(1rem, 1.5rem, 500),
+  $subheading-1:
+    mat.define-typography-level(
+      var.$mat-theme-subheading-1-font-size,
+      1.5rem,
+      500
+    ),
   // Native element: <body>
-  $body-1: mat.define-typography-level(1rem, 1.75rem, 400),
+  $body-1:
+    mat.define-typography-level(var.$mat-theme-body-1-font-size, 1.75rem, 400),
   // Native element: None
-  $body-2: mat.define-typography-level(1rem, 1.75rem, 700),
+  $body-2:
+    mat.define-typography-level(var.$mat-theme-body-2-font-size, 1.75rem, 700),
   // Native element: <button>
-  $button: mat.define-typography-level(0.875rem, 0.875rem, 400)
+  $button:
+    mat.define-typography-level(var.$mat-theme-button-font-size, 0.875rem, 400)
 );
 
 // Include the common styles for Angular Material. We include this here so that you only
