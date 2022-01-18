@@ -26,8 +26,13 @@ export class AuthorizedUserService extends AbstractAuthorizedUserService<BcscUse
         return null;
       }
 
-      const { firstName, lastName, birthdate } = brokerProfile;
-      const { preferred_username: hpdid, sub: userId } = accessTokenParsed;
+      const {
+        firstName,
+        lastName,
+        username: hpdid,
+        attributes: { birthdate },
+      } = brokerProfile;
+      const { sub: userId } = accessTokenParsed;
 
       return {
         hpdid,
