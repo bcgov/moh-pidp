@@ -115,7 +115,7 @@ export class DashboardComponent implements OnInit {
 
   public ngOnInit(): void {
     if (!this.showMenuItemIcons) {
-      // Cannot be responsive icons are not being shown
+      // Cannot be responsive when icons are not being shown
       this.responsiveMenuItems = false;
     }
 
