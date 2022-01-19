@@ -3,3 +3,7 @@
 @import 'bootstrap/bootstrap-imports';
 
 $theme-typography: mat.define-typography-config();
+
+p.lead {
+  margin-bottom: 3rem;
+}
