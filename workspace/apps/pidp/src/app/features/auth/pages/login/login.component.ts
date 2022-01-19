@@ -15,6 +15,8 @@ export class LoginComponent {
   public title: string;
   public loginCancelled: boolean;
   public bcscSupportUrl: string;
+  public bcscMobileSetupUrl: string;
+  public specialAuthorityUrl: string;
   public providerIdentitySupportEmail: string;
   public specialAuthoritySupportEmail: string;
   public idpHint: IdentityProviderEnum;
@@ -31,6 +33,8 @@ export class LoginComponent {
     this.title = routeSnapshot.data.title;
     this.loginCancelled = routeSnapshot.queryParams.action === 'cancelled';
     this.bcscSupportUrl = this.config.urls.bcscSupport;
+    this.bcscMobileSetupUrl = this.config.urls.bcscMobileSetup;
+    this.specialAuthorityUrl = this.config.urls.specialAuthority;
     this.providerIdentitySupportEmail =
       this.config.emails.providerIdentitySupport;
     this.specialAuthoritySupportEmail =
