@@ -2,6 +2,9 @@ import { PortalModule } from '@angular/cdk/portal';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
+import { FeatureFlagGuard } from '@app/modules/feature-flag/feature-flag.guard';
+import { Role } from '@app/shared/enums/roles.enum';
+
 import { AccessModule } from '../access/access.module';
 import { AccessRoutes } from '../access/access.routes';
 import { AdminModule } from '../admin/admin.module';
@@ -37,7 +40,15 @@ const routes: Routes = [
     // TODO rearrange routes so portal is the parent module
     // TODO create dashboard wrapper for portal to auth module out of dashboard
     component: PortalDashboardComponent,
+    canActivate: [AuthenticationGuard],
     canActivateChild: [AuthenticationGuard],
+    data: {
+      // TODO don't hardcode in the redirect URL but also don't want cross module dependencies,
+      // TODO refactor when modules become libs otherwise premature optimization
+      routes: {
+        auth: '/auth',
+      },
+    },
     children: [
       {
         path: PortalRoutes.MODULE_PATH,
@@ -56,6 +67,10 @@ const routes: Routes = [
       },
       {
         path: TrainingRoutes.MODULE_PATH,
+        canLoad: [FeatureFlagGuard],
+        data: {
+          features: [Role.FEATURE_PIDP_DEMO],
+        },
         loadChildren: (): Promise<TrainingModule> =>
           import('../training/training.module').then((m) => m.TrainingModule),
       },

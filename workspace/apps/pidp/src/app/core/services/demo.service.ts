@@ -63,24 +63,25 @@ export class DemoService {
         status: 'incomplete',
         disabled: false,
       },
-      {
-        icon: 'fingerprint',
-        type: 'work-and-role-information',
-        title: 'Work and Role Information',
-        process: 'manual',
-        hint: '2 min to complete',
-        // TODO ability to populate the card with user information
-        description: 'Job title and details of your work location',
-        actionLabel: 'Update',
-        route: ProfileRoutes.routePath(ProfileRoutes.WORK_AND_ROLE_INFO_PAGE),
-        statusType: 'warn',
-        status: 'incomplete',
-        disabled: false,
-      },
-      // TODO controlled through demo feature flag
       ...ArrayUtils.insertIf<PortalSection>(
-        this.featureFlagService.hasFlag(Role.FEATURE_PIDP_DEMO),
+        this.featureFlagService.hasFlags(Role.FEATURE_PIDP_DEMO),
         [
+          {
+            icon: 'fingerprint',
+            type: 'work-and-role-information',
+            title: 'Work and Role Information',
+            process: 'manual',
+            hint: '2 min to complete',
+            // TODO ability to populate the card with user information
+            description: 'Job title and details of your work location',
+            actionLabel: 'Update',
+            route: ProfileRoutes.routePath(
+              ProfileRoutes.WORK_AND_ROLE_INFO_PAGE
+            ),
+            statusType: 'warn',
+            status: 'incomplete',
+            disabled: false,
+          },
           {
             icon: 'fingerprint',
             type: 'user-access-agreement',
@@ -116,9 +117,8 @@ export class DemoService {
         statusType: 'info',
         disabled: false,
       },
-      // TODO controlled through demo feature flag
       ...ArrayUtils.insertIf<PortalSection>(
-        this.featureFlagService.hasFlag(Role.FEATURE_PIDP_DEMO),
+        this.featureFlagService.hasFlags(Role.FEATURE_PIDP_DEMO),
         [
           {
             icon: 'fingerprint',
@@ -155,9 +155,8 @@ export class DemoService {
 
   public get trainingSections(): PortalSection[] {
     return [
-      // TODO controlled through demo feature flag
       ...ArrayUtils.insertIf<PortalSection>(
-        this.featureFlagService.hasFlag(Role.FEATURE_PIDP_DEMO),
+        this.featureFlagService.hasFlags(Role.FEATURE_PIDP_DEMO),
         [
           {
             icon: 'fingerprint',
@@ -181,16 +180,23 @@ export class DemoService {
 
   public get yourProfileSections(): PortalSection[] {
     return [
-      {
-        icon: 'fingerprint',
-        type: 'transactions',
-        title: 'Transactions',
-        description: 'More information on what this is here',
-        process: 'manual',
-        actionLabel: 'View',
-        route: YourProfileRoutes.routePath(YourProfileRoutes.TRANSACTIONS_PAGE),
-        disabled: false,
-      },
+      ...ArrayUtils.insertIf<PortalSection>(
+        this.featureFlagService.hasFlags(Role.FEATURE_PIDP_DEMO),
+        [
+          {
+            icon: 'fingerprint',
+            type: 'transactions',
+            title: 'Transactions',
+            description: 'More information on what this is here',
+            process: 'manual',
+            actionLabel: 'View',
+            route: YourProfileRoutes.routePath(
+              YourProfileRoutes.TRANSACTIONS_PAGE
+            ),
+            disabled: false,
+          },
+        ]
+      ),
       {
         icon: 'fingerprint',
         type: 'view-signed-or-accepted-documents',
@@ -207,11 +213,17 @@ export class DemoService {
   }
 
   public updateState(sectionType: string): void {
-    const enableMap: { [key: string]: string } = {
+    let enableMap: { [key: string]: string } = {
       'personal-information': 'college-licence-information',
-      'college-licence-information': 'work-and-role-information',
-      'work-and-role-information': 'user-access-agreement',
     };
+
+    if (this.featureFlagService.hasFlags(Role.FEATURE_PIDP_DEMO)) {
+      enableMap = {
+        ...enableMap,
+        'college-licence-information': 'work-and-role-information',
+        'work-and-role-information': 'user-access-agreement',
+      };
+    }
 
     this.state.profileIdentitySections = this.state.profileIdentitySections.map(
       (section) => {
