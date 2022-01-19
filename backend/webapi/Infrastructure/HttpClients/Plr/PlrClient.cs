@@ -6,7 +6,7 @@ using Pidp.Models.Lookups;
 
 public class PlrClient : BaseClient, IPlrClient
 {
-    public PlrClient(HttpClient client) : base(client, PropertySerialization.CamelCase) { }
+    public PlrClient(HttpClient client, ILogger<PlrClient> logger) : base(client, logger) { }
 
     public async Task<PlrRecord?> GetPlrRecord(string licenceNumber, CollegeCode collegeCode)
     {
@@ -28,4 +28,6 @@ public class PlrRecord
     /// Internal Party Code, PLRs unique identifier for each record.
     /// </summary>
     public string Ipc { get; set; } = string.Empty;
+
+    public string
 }
