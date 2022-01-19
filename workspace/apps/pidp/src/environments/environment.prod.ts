@@ -17,7 +17,8 @@ export const environment: AppEnvironment = {
   // TODO should be changed to applicationUrl or equivalent
   loginRedirectUrl: 'http://localhost:4200',
   emails: {
-    support: 'provideridentityportal@gov.bc.ca',
+    providerIdentitySupport: 'provideridentityportal@gov.bc.ca',
+    specialAuthoritySupport: 'satransformation@gov.bc.ca',
   },
   urls: {
     bcscSupport:

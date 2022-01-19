@@ -14,7 +14,8 @@ export interface AppEnvironment extends EnvironmentConfig {
   // using --configuration=production
   production: boolean;
   emails: {
-    support: string;
+    providerIdentitySupport: string;
+    specialAuthoritySupport: string;
   };
   urls: {
     bcscSupport: string;
