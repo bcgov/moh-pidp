@@ -1,10 +1,9 @@
 import { Component, Inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { DashboardHeaderTheme } from '@bcgov/shared/ui';
-
 import { APP_CONFIG, AppConfig } from '@app/app.config';
 
+import { IdentityProviderEnum } from '../../enums/identity-provider.enum';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
@@ -13,23 +12,30 @@ import { AuthService } from '../../services/auth.service';
   styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent {
-  public theme: DashboardHeaderTheme;
+  public title: string;
   public loginCancelled: boolean;
   public bcscSupportUrl: string;
-  public pidpSupportEmail: string;
-  public idpHint: string;
+  public providerIdentitySupportEmail: string;
+  public specialAuthoritySupportEmail: string;
+  public idpHint: IdentityProviderEnum;
+
+  public IdentityProviderEnum = IdentityProviderEnum;
 
   public constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
     private authService: AuthService,
     private route: ActivatedRoute
   ) {
-    this.theme = 'light';
-    this.loginCancelled =
-      this.route.snapshot.queryParams.action === 'cancelled';
+    const routeSnapshot = this.route.snapshot;
+
+    this.title = routeSnapshot.data.title;
+    this.loginCancelled = routeSnapshot.queryParams.action === 'cancelled';
     this.bcscSupportUrl = this.config.urls.bcscSupport;
-    this.pidpSupportEmail = this.config.emails.support;
-    this.idpHint = this.route.snapshot.data.idpHint;
+    this.providerIdentitySupportEmail =
+      this.config.emails.providerIdentitySupport;
+    this.specialAuthoritySupportEmail =
+      this.config.emails.specialAuthoritySupport;
+    this.idpHint = routeSnapshot.data.idpHint;
   }
 
   public onLogin(): void {

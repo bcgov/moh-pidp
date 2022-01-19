@@ -1,7 +1,7 @@
-<ui-dashboard-header [theme]="theme"></ui-dashboard-header>
+<ui-dashboard-header></ui-dashboard-header>
 
 <div class="container">
-  <div class="row">
+  <ng-container *ngIf="idpHint === IdentityProviderEnum.BCSC; else IDIR">
     <div class="col">
       <ui-alert
         *ngIf="loginCancelled"
@@ -52,7 +52,18 @@
             </button>
           </div>
         </div>
+  <ng-template #IDIR>
+    <div class="row idir">
+      <div class="col-12">
+        <img
+          src="/assets/images/pidp-logo-white.svg"
+          alt="Provider Identity Portal Logo" />
+      </div>
+      <div class="col-12">
+        <button mat-flat-button color="primary" (click)="onLogin()">
+          {{ idpHint | uppercase }} Login
+        </button>
       </div>
     </div>
-  </div>
+  </ng-template>
 </div>

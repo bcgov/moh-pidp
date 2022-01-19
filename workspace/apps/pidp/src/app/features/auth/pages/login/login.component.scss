@@ -27,15 +27,12 @@
     }
   }
 
-  p {
-    max-width: 480px;
+.idir {
+  & > div {
+    text-align: center;
   }
-}
 
-button {
-  width: 100%;
-
-  @include media-breakpoint-up(sm) {
-    width: auto;
+  img {
+    margin-bottom: 3rem;
   }
 }
