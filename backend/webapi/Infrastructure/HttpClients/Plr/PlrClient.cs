@@ -8,9 +8,17 @@ public class PlrClient : BaseClient, IPlrClient
 {
     public PlrClient(HttpClient client) : base(client, PropertySerialization.CamelCase) { }
 
-    public async Task<PlrRecord> GetPlrRecord(string licenceNumber, CollegeCode collegeCode)
+    public async Task<PlrRecord?> GetPlrRecord(string licenceNumber, CollegeCode collegeCode)
     {
         throw new NotImplementedException();
+        var response = await this.Client.GetAsync("");
+        if (!response.IsSuccessStatusCode)
+        {
+            return null;
+        }
+
+        var records = await response.Content.ReadFromJsonAsync<IEnumerable<PlrIntake.Features.Records.Index.Model>>();
+
     }
 }
 
