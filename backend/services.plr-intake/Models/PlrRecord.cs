@@ -1,7 +1,5 @@
 namespace PlrIntake.Models;
 
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -15,7 +13,7 @@ public class PlrRecord : BaseAuditable
     public string Ipc { get; set; } = string.Empty;
 
     /// <summary>A physical person in multiple roles will have a common CPN (PLR's Common Party Number) for each PLR record representing that role, e.g. a person who is both a MD and Pharmacist</summary>
-    public string Cpn { get; set; } = string.Empty;
+    public string? Cpn { get; set; }
 
     /// <summary>The type of identifier that <c>CollegeId</c> represents.</summary>
     public string? IdentifierType { get; set; }
@@ -51,7 +49,7 @@ public class PlrRecord : BaseAuditable
 
     public DateTime? StatusExpiryDate { get; set; }
 
-    // public ICollection<string> Expertise { get; set; }
+    public ICollection<Expertise> Expertise { get; set; } = new List<Expertise>();
 
     public string? Address1Line1 { get; set; }
 
@@ -69,7 +67,7 @@ public class PlrRecord : BaseAuditable
 
     public DateTime? Address1StartDate { get; set; }
 
-    // public ICollection<string> Credentials { get; set; }
+    public ICollection<Credential> Credentials { get; set; } = new List<Credential>();
 
     public string? TelephoneAreaCode { get; set; }
 

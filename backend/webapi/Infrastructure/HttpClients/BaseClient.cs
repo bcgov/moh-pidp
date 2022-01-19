@@ -4,6 +4,7 @@ using System;
 using System.Text;
 using System.Text.Json;
 using System.Net.Http;
+
 using Pidp.Extensions;
 
 public enum PropertySerialization
@@ -17,10 +18,20 @@ public class BaseClient
 
     protected HttpClient Client { get; }
 
-    public BaseClient(HttpClient client, PropertySerialization option)
+    protected ILogger Logger { get; }
+
+    /// <summary>
+    /// A HttpClient with default serialization options (camelCase)
+    /// </summary>
+    /// <param name="client"></param>
+    /// <param name="logger"></param>
+    public BaseClient(HttpClient client, ILogger logger) : this(client, logger, PropertySerialization.CamelCase) { }
+
+    public BaseClient(HttpClient client, ILogger logger, PropertySerialization option)
     {
         client.ThrowIfNull(nameof(client));
         this.Client = client;
+        this.Logger = logger;
 
         this.serializationOptions = option switch
         {

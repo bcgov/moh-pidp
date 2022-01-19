@@ -1,5 +1,6 @@
 namespace PlrIntake;
 
+using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 using System.Reflection;
@@ -18,8 +19,10 @@ public class Startup
     {
         var config = this.InitializeConfiguration(services);
 
-        services.AddControllers();
+        services.AddControllers()
+            .AddFluentValidation(options => options.RegisterValidatorsFromAssemblyContaining<Startup>());
 
+        AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
         services.AddDbContext<PlrDbContext>(options => options
             .UseNpgsql(config.ConnectionStrings.PlrDatabase)
             .EnableSensitiveDataLogging(sensitiveDataLoggingEnabled: false));
@@ -56,9 +59,6 @@ public class Startup
         {
             app.UseDeveloperExceptionPage();
         }
-
-        app.UseSwagger();
-        app.UseSwaggerUI(options => options.SwaggerEndpoint("/swagger/v1/swagger.json", "PLR Intake API"));
 
         app.UseRouting();
         app.UseCors("CorsPolicy");
