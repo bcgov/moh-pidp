@@ -23,11 +23,10 @@
 
   h1 {
     margin-bottom: 0;
-    line-height: 2.5rem;
 
     @include media-breakpoint-up(md) {
+      // Only for login increase the font-size for <h1>
       font-size: 2.5rem;
-      line-height: 2.5rem;
     }
   }
 

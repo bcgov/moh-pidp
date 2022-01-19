@@ -11,14 +11,13 @@
 $pidp-typography: mat.define-typography-config(
   // Native element: <h1>
   $headline:
-    mat.define-typography-level(
-      var.$mat-theme-headline-font-size,
-      2.25rem,
+    mat.define-typography-level(var.$mat-theme-headline-font-size, 2.5rem, 500),
+  // Native element: <h2>
+  $title: mat.define-typography-level(
+      var.$mat-theme-title-font-size,
+      2rem,
       500
     ),
-  // Native element: <h2>
-  $title:
-    mat.define-typography-level(var.$mat-theme-title-font-size, 1.5rem, 500),
   // Native element: <h3>
   $subheading-2:
     mat.define-typography-level(
