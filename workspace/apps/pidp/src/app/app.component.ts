@@ -21,7 +21,9 @@ export class AppComponent implements OnInit {
     private titleService: Title,
     private routeStateService: RouteStateService,
     private utilsService: UtilsService
-  ) {}
+  ) {
+    console.log('FOR DEMO PURPOSES ONLY!');
+  }
 
   public ngOnInit(): void {
     const onNavEnd = this.routeStateService.onNavigationEnd();
