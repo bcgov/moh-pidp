@@ -23,6 +23,9 @@ export const environment: AppEnvironment = {
   urls: {
     bcscSupport:
       'https://www2.gov.bc.ca/gov/content/governments/government-id/bcservicescardapp/help',
+    bcscMobileSetup:
+      'https://www2.gov.bc.ca/gov/content?id=034E906146794F84A00535A3F9354913',
+    specialAuthority: 'https://www.gov.bc.ca/pharmacarespecialauthority',
   },
   keycloakConfig: {
     config: {

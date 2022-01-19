@@ -19,5 +19,7 @@ export interface AppEnvironment extends EnvironmentConfig {
   };
   urls: {
     bcscSupport: string;
+    bcscMobileSetup: string;
+    specialAuthority: string;
   };
 }
