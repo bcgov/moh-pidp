@@ -92,7 +92,7 @@
     </div>
   </ui-page-section>
 
-  <ui-page-section>
+  <ui-page-section *featureFlag="Role.FEATURE_PIDP_DEMO">
     <ui-page-section-subheader icon="school" heading="Training">
       <ng-container uiPageSectionSubheaderDesc>
         Complete these trainings.

@@ -5,6 +5,8 @@ import { exhaustMap, of } from 'rxjs';
 
 import { AlertType } from '@bcgov/shared/ui';
 
+import { Role } from '@app/shared/enums/roles.enum';
+
 import { PartyResource } from '@core/resources/party-resource.service';
 import { PartyService } from '@core/services/party.service';
 
@@ -38,6 +40,8 @@ export class PortalComponent implements OnInit {
   public state: Record<string, PortalSection[]>;
   public completedProfile: boolean;
   public collectionNotice: string;
+
+  public Role = Role;
 
   public constructor(
     private route: ActivatedRoute,
