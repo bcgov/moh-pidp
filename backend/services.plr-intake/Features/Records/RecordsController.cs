@@ -16,9 +16,16 @@ public class RecordsController : ControllerBase
         => await handler.HandleAsync(query);
 
     [HttpGet("{ipc}")]
-    public async Task<ActionResult<Details.Model?>> GetDetails([FromServices] IQueryHandler<Details.Query, Details.Model?> handler,
-                                                               [FromRoute] Details.Query query)
-        => await handler.HandleAsync(query);
+    public async Task<ActionResult<Details.Model>> GetDetails([FromServices] IQueryHandler<Details.Query, Details.Model?> handler,
+                                                              [FromRoute] Details.Query query)
+    {
+        var details = await handler.HandleAsync(query);
+        if (details == null)
+        {
+            return this.NotFound();
+        }
+        return details;
+    }
 
     [HttpPost]
     public async Task<ActionResult> CreateRecords([FromServices] PlrDbContext context)
