@@ -15,9 +15,11 @@ export abstract class AuthenticationGuard extends AuthGuard {
     super(authService);
   }
 
-  protected handleAccessCheck(): (authenticated: boolean) => boolean | UrlTree {
+  protected handleAccessCheck(
+    routeRedirect: string | undefined
+  ): (authenticated: boolean) => boolean | UrlTree {
     return (authenticated: boolean): boolean | UrlTree =>
-      authenticated ? true : this.router.createUrlTree([this.getRedirectUrl()]);
+      authenticated ? true : this.router.createUrlTree([routeRedirect ?? '/']);
   }
 
   protected handleAccessError(): boolean {

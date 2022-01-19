@@ -1,7 +1,9 @@
 import {
+  ActivatedRouteSnapshot,
   CanActivate,
   CanActivateChild,
   CanLoad,
+  Route,
   UrlTree,
 } from '@angular/router';
 
@@ -14,35 +16,41 @@ export abstract class AuthGuard
 {
   public constructor(protected authService: AuthService) {}
 
-  public canActivate():
+  public canActivate(
+    route: ActivatedRouteSnapshot
+  ):
     | Observable<boolean | UrlTree>
     | Promise<boolean | UrlTree>
     | boolean
     | UrlTree {
-    return this.checkAccess();
+    return this.checkAccess(route.data?.routes?.auth);
   }
 
-  public canActivateChild():
+  public canActivateChild(
+    childRoute: ActivatedRouteSnapshot
+  ):
     | Observable<boolean | UrlTree>
     | Promise<boolean | UrlTree>
     | boolean
     | UrlTree {
-    return this.checkAccess();
+    return this.checkAccess(childRoute.data?.routes?.auth);
   }
 
-  public canLoad():
+  public canLoad(
+    route: Route
+  ):
     | Observable<boolean | UrlTree>
     | Promise<boolean | UrlTree>
     | boolean
     | UrlTree {
-    return this.checkAccess();
+    return this.checkAccess(route.data?.routes?.auth);
   }
 
-  protected abstract getRedirectUrl(): string;
-
-  protected checkAccess(): Observable<boolean | UrlTree> {
+  protected checkAccess(
+    routeRedirect: string | undefined
+  ): Observable<boolean | UrlTree> {
     return this.authService.isLoggedIn().pipe(
-      map(this.handleAccessCheck()),
+      map(this.handleAccessCheck(routeRedirect)),
       catchError((error) => {
         console.error('Error occurred during access validation: ', error);
         return of(this.handleAccessError());
@@ -55,9 +63,9 @@ export abstract class AuthGuard
    * Hook for checking whether the user is authenticated and
    * should be provided access or redirected.
    */
-  protected abstract handleAccessCheck(): (
-    authenticated: boolean
-  ) => boolean | UrlTree;
+  protected abstract handleAccessCheck(
+    routeRedirect: string | undefined
+  ): (authenticated: boolean) => boolean | UrlTree;
 
   /**
    * @description
