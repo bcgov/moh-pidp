@@ -10,5 +10,8 @@ public class PlrRecordConfiguration : IEntityTypeConfiguration<PlrRecord>
     {
         builder.HasIndex(x => x.Ipc)
             .IsUnique();
+
+        builder.OwnsMany(x => x.Credentials, credential => credential.ToTable(nameof(Credential)));
+        builder.OwnsMany(x => x.Expertise, expertise => expertise.ToTable(nameof(Expertise)));
     }
 }

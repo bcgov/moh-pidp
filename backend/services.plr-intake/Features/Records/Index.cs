@@ -10,17 +10,22 @@ public class Index
     public class Query : IQuery<List<Model>>
     {
         public string CollegeId { get; set; } = string.Empty;
+        public DateTime Birthdate { get; set; }
     }
 
     public class Model
     {
         public string Ipc { get; set; } = string.Empty;
-        public string? ProviderRoleType { get; set; }
+        public string? IdentifierType { get; set; }
     }
 
     public class QueryValidator : AbstractValidator<Query>
     {
-        public QueryValidator() => this.RuleFor(x => x.CollegeId).NotEmpty();
+        public QueryValidator()
+        {
+            this.RuleFor(x => x.CollegeId).NotEmpty();
+            this.RuleFor(x => x.Birthdate).NotEmpty();
+        }
     }
 
     public class QueryHandler : IQueryHandler<Query, List<Model>>
@@ -32,11 +37,12 @@ public class Index
         public async Task<List<Model>> HandleAsync(Query query)
         {
             return await this.context.PlrRecords
-                .Where(record => record.CollegeId == query.CollegeId)
+                .Where(record => record.CollegeId == query.CollegeId
+                    && record.DateOfBirth!.Value.Date == query.Birthdate.Date)
                 .Select(record => new Model
                 {
                     Ipc = record.Ipc,
-                    ProviderRoleType = record.ProviderRoleType
+                    IdentifierType = record.IdentifierType
                 })
                 .ToListAsync();
         }

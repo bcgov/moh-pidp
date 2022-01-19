@@ -67,7 +67,7 @@ public class PlrRecord : BaseAuditable
 
     public DateTime? Address1StartDate { get; set; }
 
-    public ICollection<CredentialData> Credentials { get; set; } = new List<CredentialData>();
+    public ICollection<Credential> Credentials { get; set; } = new List<Credential>();
 
     public string? TelephoneAreaCode { get; set; }
 
