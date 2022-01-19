@@ -25,7 +25,10 @@ export class FeatureFlagDirective implements OnInit {
   }
 
   public ngOnInit(): void {
-    if (this.featureFlagService.hasFlag(this.featureFlag)) {
+    if (
+      this.featureFlagService.hasFlags(this.featureFlag) ||
+      this.featureFlagService.hasFlags(this.featureFlagOr)
+    ) {
       this.vcr.createEmbeddedView(this.tpl);
     }
   }
