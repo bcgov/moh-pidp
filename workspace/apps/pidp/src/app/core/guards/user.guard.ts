@@ -18,6 +18,7 @@ export class UserGuard implements CanActivate {
 
   // TODO add other guard methods
   // TODO make something generic and move into specific modules
+  // TODO abstract permissions guard
   public canActivate():
     | Observable<boolean | UrlTree>
     | Promise<boolean | UrlTree>
