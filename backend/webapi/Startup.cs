@@ -27,8 +27,8 @@ public class Startup
 
         services
             .AddAutoMapper(typeof(Startup))
-            .AddKeycloakAuth(config)
             .AddHttpClients(config)
+            .AddKeycloakAuth(config)
             .AddSingleton<IClock>(SystemClock.Instance);
 
         services.AddControllers()

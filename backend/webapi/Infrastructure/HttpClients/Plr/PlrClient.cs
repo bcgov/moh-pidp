@@ -5,6 +5,7 @@ using NodaTime;
 using System.Threading.Tasks;
 
 using Pidp.Models.Lookups;
+using Pidp.Extensions;
 
 public class PlrClient : BaseClient, IPlrClient
 {
@@ -12,14 +13,7 @@ public class PlrClient : BaseClient, IPlrClient
 
     public async Task<string?> GetPlrRecord(string licenceNumber, CollegeCode collegeCode, LocalDate birthdate)
     {
-        throw new NotImplementedException();
-        var url = "records".SetQueryParams(new
-        {
-            CollegeId = licenceNumber,
-            Birthdate = birthdate.ToString()
-        });
-
-        var response = await this.Client.GetAsync(url);
+        var response = await this.Client.GetWithQueryParamsAsync("records", new { CollegeId = licenceNumber, Birthdate = birthdate.ToString() });
         if (!response.IsSuccessStatusCode)
         {
             this.Logger.LogError($"Error when retrieving PLR Record with CollegeId = {licenceNumber} and Birthdate = {birthdate}.");
@@ -27,12 +21,37 @@ public class PlrClient : BaseClient, IPlrClient
         }
 
         var records = await response.Content.ReadFromJsonAsync<IEnumerable<PlrRecord>>();
+        if (records == null || !records.Any())
+        {
+            this.Logger.LogInformation($"No Records found in PLR with CollegeId = {licenceNumber} and Birthdate = {birthdate}.");
+            return null;
+        }
 
+        records = records
+            .Where(record => record.MapIdentifierTypeToCollegeCode() == collegeCode);
+        if (records.Count() > 1)
+        {
+            this.Logger.LogInformation($"Multiple matching Records found in PLR with CollegeId = {licenceNumber}, Birthdate = {birthdate}, and IdentifierType matching CollegeCode {collegeCode}.");
+            return null;
+        }
+
+        return records.Single().Ipc;
     }
 
     private class PlrRecord
     {
         public string Ipc { get; set; } = string.Empty;
         public string? IdentifierType { get; set; }
+
+        public CollegeCode? MapIdentifierTypeToCollegeCode()
+        {
+            return this.IdentifierType switch
+            {
+                "PHID" or "PHTID " => CollegeCode.Pharmacists,
+                "CPSID" => CollegeCode.PhysiciansAndSurgeons,
+                "RNID" or "RMID" => CollegeCode.NursesAndMidwives,
+                _ => null
+            };
+        }
     }
 }

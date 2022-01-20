@@ -14,7 +14,7 @@ public static class ClaimsPrincipalExtensions
     /// <summary>
     /// Returns the UserId of the logged in user (from the 'sub' claim). If there is no logged in user, this will return Guid.Empty
     /// </summary>
-    public static Guid GetUserId(this ClaimsPrincipal user)
+    public static Guid GetUserId(this ClaimsPrincipal? user)
     {
         var userId = user?.FindFirstValue(Claims.Subject);
 
@@ -33,7 +33,7 @@ public static class ClaimsPrincipalExtensions
     }
 
     /// <summary>
-    /// Returns the Birthdate of the User, parsed in ISO format (yyyy-MM-dd)
+    /// Returns the Birthdate Claim of the User, parsed in ISO format (yyyy-MM-dd)
     /// </summary>
     public static LocalDate? GetBirthdate(this ClaimsPrincipal user)
     {
@@ -51,7 +51,7 @@ public static class ClaimsPrincipalExtensions
     }
 
     /// <summary>
-    /// Parses the Resourse Access claim and returns the roles for the given resource
+    /// Parses the Resource Access claim and returns the roles for the given resource
     /// </summary>
     /// <param name="resourceName">The name of the resource to retrive the roles from</param>
     public static IEnumerable<string> GetResourceAccessRoles(this ClaimsIdentity identity, string resourceName)
