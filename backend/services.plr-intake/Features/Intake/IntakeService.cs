@@ -250,6 +250,8 @@ public class IntakeService : IIntakeService
 
     private async Task<int> CreateOrUpdateRecordAsync(PlrRecord record, bool expectExists)
     {
+        this.TranslateIdentifierTypeAsync(record);
+
         var existingRecord = await this.context.PlrRecords
             .SingleOrDefaultAsync(rec => rec.Ipc == record.Ipc);
 
@@ -288,5 +290,21 @@ public class IntakeService : IIntakeService
         return existingRecord == null
             ? record.Id
             : existingRecord.Id;
+    }
+
+    private async Task TranslateIdentifierTypeAsync(PlrRecord record)
+    {
+        var identifierType = await this.context.IdentifierTypes
+            .SingleOrDefaultAsync(identifier => identifier.Oid == record.IdentifierType);
+
+        if (identifierType != null)
+        {
+            // Translate from "2.16.840.1.113883.3.40.2.20" to "RNPID", for example
+            record.IdentifierType = identifierType.Name;
+        }
+        else
+        {
+            this.logger.LogError("PLR Provider with IPC of {ipc} had an Identifier OID of {oid} that could not be translated", record.Ipc, record.IdentifierType);
+        }
     }
 }
