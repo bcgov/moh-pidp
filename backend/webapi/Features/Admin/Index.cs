@@ -5,6 +5,7 @@ using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 
 using Pidp.Data;
+using Pidp.Models.Lookups;
 
 public class Index
 {
@@ -14,7 +15,8 @@ public class Index
     {
         public int Id { get; set; }
         public string? ProviderName { get; set; }
-        public string? ProviderCollege { get; set; }
+        public CollegeCode? ProviderCollegeCode { get; set; }
+        public bool SaEforms { get; set; }
     }
 
     public class QueryHandler : IQueryHandler<Query, List<Model>>
