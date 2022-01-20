@@ -4,7 +4,7 @@
   <ui-collection-notice
     [show]="acceptedCollectionNotice"
     (accepted)="onAcceptCollectionNotice($event)">
-    {{ collectionNotice }}
+    <p [innerHtml]="collectionNotice"></p>
   </ui-collection-notice>
 
   <ui-alert

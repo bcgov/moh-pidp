@@ -1,5 +1,6 @@
 import { Location } from '@angular/common';
 import { Component } from '@angular/core';
+import { SafeHtml } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { RouteUtils } from '@bcgov/shared/utils';
@@ -15,7 +16,7 @@ import { YourProfileRoutes } from '../../your-profile.routes';
 })
 export class ViewDocumentComponent {
   public title: string;
-  public collectionNotice: string;
+  public collectionNotice: SafeHtml;
   private routeUtils: RouteUtils;
 
   public constructor(

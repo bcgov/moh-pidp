@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { SafeHtml } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { exhaustMap, of } from 'rxjs';
@@ -38,7 +39,7 @@ export class PortalComponent implements OnInit {
   public acceptedCollectionNotice: boolean;
   public state: Record<string, PortalSection[]>;
   public completedProfile: boolean;
-  public collectionNotice: string;
+  public collectionNotice: SafeHtml;
 
   public Role = Role;
 
