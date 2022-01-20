@@ -2,6 +2,7 @@ import { PortalModule } from '@angular/cdk/portal';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
+import { UserGuard } from '@app/core/guards/user.guard';
 import { FeatureFlagGuard } from '@app/modules/feature-flag/feature-flag.guard';
 import { Role } from '@app/shared/enums/roles.enum';
 
@@ -40,7 +41,7 @@ const routes: Routes = [
     // TODO rearrange routes so portal is the parent module
     // TODO create dashboard wrapper for portal to auth module out of dashboard
     component: PortalDashboardComponent,
-    canActivate: [AuthenticationGuard],
+    canActivate: [AuthenticationGuard, UserGuard],
     canActivateChild: [AuthenticationGuard],
     data: {
       // TODO don't hardcode in the redirect URL but also don't want cross module dependencies,

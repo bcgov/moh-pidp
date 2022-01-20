@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
+import { AdminGuard } from '@app/core/guards/admin.guard';
+
 import { AuthenticationGuard } from '../auth/guards/authentication.guard';
 import { AdminRoutes } from './admin.routes';
 import { PartiesComponent } from './pages/parties/parties.component';
@@ -10,7 +12,7 @@ const routes: Routes = [
   {
     path: '',
     component: AdminDashboardComponent,
-    canActivate: [AuthenticationGuard],
+    canActivate: [AuthenticationGuard, AdminGuard],
     canActivateChild: [AuthenticationGuard],
     data: {
       // TODO don't hardcode in the redirect URL but also don't want cross module dependencies,

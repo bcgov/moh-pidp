@@ -27,6 +27,14 @@ export abstract class AbstractAuthorizedUserService<T> {
 
   /**
    * @description
+   * Get the user roles from the access token.
+   */
+  public get roles(): string[] {
+    return this.accessTokenService.roles();
+  }
+
+  /**
+   * @description
    * Get the claims (user identity) from the access token.
    */
   protected getUserIdentity(): Observable<UserIdentity> {
