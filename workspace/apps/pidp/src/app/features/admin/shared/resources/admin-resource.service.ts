@@ -4,7 +4,6 @@ import { Injectable } from '@angular/core';
 import { Observable, catchError, of } from 'rxjs';
 
 import { ApiResource } from '@app/core/resources/api-resource.service';
-import { ResourceUtilsService } from '@app/core/resources/resource-utils.service';
 
 export interface PartyList {
   id: number;
@@ -18,10 +17,7 @@ export interface PartyList {
   providedIn: 'root',
 })
 export class AdminResource {
-  public constructor(
-    private apiResource: ApiResource,
-    private resourceUtilsService: ResourceUtilsService
-  ) {}
+  public constructor(private apiResource: ApiResource) {}
 
   public getParties(): Observable<PartyList[]> {
     return this.apiResource.get<PartyList[]>('/admin/parties').pipe(
