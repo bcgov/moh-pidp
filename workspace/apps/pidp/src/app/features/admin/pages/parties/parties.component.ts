@@ -37,6 +37,9 @@ export class PartiesComponent implements OnInit {
   private getParties(): void {
     this.adminResource
       .getParties()
-      .subscribe((parties: PartyList[]) => (this.dataSource.data = parties));
+      .subscribe(
+        (parties: PartyList[]) =>
+          (this.dataSource.data = parties.sort((a, b) => a.id - b.id))
+      );
   }
 }
