@@ -62,7 +62,7 @@ export class PersonalInformationComponent
 
   public ngOnInit(): void {
     // TODO pull from state management or URI param
-    const partyId = this.partyService.profileStatus?.id; // +this.route.snapshot.params.pid;
+    const partyId = 1; // this.partyService.profileStatus?.id; // +this.route.snapshot.params.pid;
     if (!partyId) {
       throw new Error('No party ID was provided');
     }
