@@ -1,8 +1,8 @@
 import { DOCUMENT } from '@angular/common';
-import { Injectable, Inject } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { SortDirection } from '@angular/material/sort';
 
-import { WindowRefService } from './window-ref.service';
+import { WINDOW } from '@bcgov/shared/utils';
 
 export type SortWeight = -1 | 0 | 1;
 
@@ -10,14 +10,10 @@ export type SortWeight = -1 | 0 | 1;
   providedIn: 'root',
 })
 export class UtilsService {
-  private window: Window;
-
   public constructor(
-    @Inject(DOCUMENT) private document: Document,
-    private windowRef: WindowRefService
-  ) {
-    this.window = windowRef.nativeWindow;
-  }
+    @Inject(WINDOW) private window: Window,
+    @Inject(DOCUMENT) private document: Document
+  ) {}
 
   /**
    * @description

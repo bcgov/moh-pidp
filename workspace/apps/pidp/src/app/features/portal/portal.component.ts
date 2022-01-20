@@ -1,9 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { DemoService } from '@app/core/services/demo.service';
+import { exhaustMap, of } from 'rxjs';
+
 import { AlertType } from '@bcgov/shared/ui';
+
+import { Role } from '@app/shared/enums/roles.enum';
+
 import { PartyResource } from '@core/resources/party-resource.service';
+import { PartyService } from '@core/services/party.service';
+
+import { collectionNotice } from '@shared/data/collection-notice.data';
 
 import { ShellRoutes } from '../shell/shell.routes';
 
@@ -21,7 +28,7 @@ export interface PortalSection {
   disabled: boolean;
 }
 
-// TODO find a clean way to type narrowing in the template
+// TODO find a clean way to type narrow in the template
 @Component({
   selector: 'app-portal',
   templateUrl: './portal.component.html',
@@ -29,25 +36,29 @@ export interface PortalSection {
 })
 export class PortalComponent implements OnInit {
   public title: string;
-  public showCollectionNotice: boolean;
+  public acceptedCollectionNotice: boolean;
   public state: Record<string, PortalSection[]>;
-  public profileComplete: boolean;
+  public completedProfile: boolean;
+  public collectionNotice: string;
+
+  public Role = Role;
 
   public constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private partyResource: PartyResource,
-    private demoService: DemoService
+    private partyService: PartyService,
+    private partyResource: PartyResource
   ) {
     this.title = this.route.snapshot.data.title;
 
-    this.showCollectionNotice = this.demoService.showCollectionNotice;
-    this.state = this.demoService.state;
-    this.profileComplete = this.demoService.profileComplete;
+    this.acceptedCollectionNotice = this.partyService.acceptedCollectionNotice;
+    this.completedProfile = this.partyService.completedProfile;
+    this.state = this.partyService.state;
+    this.collectionNotice = collectionNotice;
   }
 
-  public onCloseCollectionNotice(disable: boolean): void {
-    this.demoService.showCollectionNotice = !disable;
+  public onAcceptCollectionNotice(accepted: boolean): void {
+    this.partyService.acceptedCollectionNotice = accepted;
   }
 
   public onAction(routePath?: string): void {
@@ -58,5 +69,15 @@ export class PortalComponent implements OnInit {
     this.router.navigate([ShellRoutes.routePath(routePath)]);
   }
 
-  public ngOnInit(): void {}
+  public ngOnInit(): void {
+    // TODO merge profile status into the default card statuses
+    this.partyResource
+      .firstOrCreate()
+      .pipe(
+        exhaustMap((partyId: number | null) =>
+          partyId ? this.partyResource.getPartyProfileStatus(partyId) : of(null)
+        )
+      )
+      .subscribe(console.log);
+  }
 }

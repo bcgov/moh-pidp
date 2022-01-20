@@ -1,20 +1,27 @@
 namespace Pidp.Features.Parties;
 
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 
 using Pidp.Data;
+using Pidp.Extensions;
 
 public class Index
 {
     public class Query : IQuery<List<Model>>
     {
+        public Guid UserId { get; set; }
     }
 
     public class Model
     {
-        public string FullName { get; set; } = string.Empty;
+        public int Id { get; set; }
     }
 
+    public class QueryValidator : AbstractValidator<Query>
+    {
+        public QueryValidator(IHttpContextAccessor accessor) => this.RuleFor(x => x.UserId).NotEmpty().MatchesUserId(accessor);
+    }
 
     public class QueryHandler : IQueryHandler<Query, List<Model>>
     {
@@ -25,9 +32,10 @@ public class Index
         public async Task<List<Model>> HandleAsync(Query query)
         {
             return await this.context.Parties
+                .Where(party => party.UserId == query.UserId)
                 .Select(party => new Model
                 {
-                    FullName = $"{party.FirstName} {party.LastName}"
+                    Id = party.Id
                 })
                 .ToListAsync();
         }

@@ -2,16 +2,13 @@
   <ui-page-header>{{ title }}</ui-page-header>
 
   <ui-collection-notice
-    [show]="showCollectionNotice"
-    (close)="onCloseCollectionNotice($event)">
-    The personal information you provide to the Provider Identity Portal
-    application is collected by the British Columbia Ministry of Health under
-    the authority of s. 26(a) and 26(c) of the Freedom of Information and
-    Protection of Privacy Act (FOIPPA).
+    [show]="acceptedCollectionNotice"
+    (accepted)="onAcceptCollectionNotice($event)">
+    {{ collectionNotice }}
   </ui-collection-notice>
 
   <ui-alert
-    *ngIf="this.profileComplete"
+    *ngIf="completedProfile"
     type="success"
     icon="check_circle"
     iconType="outlined"
@@ -51,7 +48,6 @@
           [disabled]="section.disabled"
           (action)="onAction(section?.route)">
           <ng-container uiCardSummaryHint>
-            <!-- <mat-icon>check_circle</mat-icon> -->
             {{ section.hint }}
           </ng-container>
           <ng-container uiCardSummaryContent>
@@ -86,7 +82,6 @@
           [disabled]="section.disabled"
           (action)="onAction(section?.route)">
           <ng-container uiCardSummaryHint>
-            <!-- <mat-icon>check_circle</mat-icon> -->
             {{ section.hint }}
           </ng-container>
           <ng-container uiCardSummaryContent>
@@ -97,14 +92,14 @@
     </div>
   </ui-page-section>
 
-  <ui-page-section>
+  <ui-page-section *featureFlag="Role.FEATURE_PIDP_DEMO">
     <ui-page-section-subheader icon="school" heading="Training">
       <ng-container uiPageSectionSubheaderDesc>
         Complete these trainings.
       </ng-container>
     </ui-page-section-subheader>
 
-    <div class="row">
+    <div *ngIf="state.trainingSections.length; else noTraining" class="row">
       <div
         *ngFor="let section of state.trainingSections"
         class="col-12 col-xl-6">
@@ -119,7 +114,6 @@
           [disabled]="section.disabled"
           (action)="onAction(section?.route)">
           <ng-container uiCardSummaryHint>
-            <!-- <mat-icon>check_circle</mat-icon> -->
             {{ section.hint }}
           </ng-container>
           <ng-container uiCardSummaryContent>
@@ -128,6 +122,9 @@
         </ui-card-summary>
       </div>
     </div>
+    <ng-template #noTraining>
+      <p class="lead">No training available at this time.</p>
+    </ng-template>
   </ui-page-section>
 
   <ui-page-section>
@@ -150,7 +147,6 @@
           [disabled]="section.disabled"
           (action)="onAction(section?.route)">
           <ng-container uiCardSummaryHint>
-            <!-- <mat-icon>check_circle</mat-icon> -->
             {{ section.hint }}
           </ng-container>
           <ng-container uiCardSummaryContent>

@@ -1,17 +1,20 @@
 import { FormArray, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 
-import { Observable, Subscription } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 
 import { AbstractFormState } from '@bcgov/shared/ui';
+
 import { FormUtilsService } from '@core/services/form-utils.service';
+
 // import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 
 export interface IFormPage {
   /**
    * @description
-   * Instance of the form state providing access to its API.
+   * Instance of the form state which provides access to
+   * an API for the form.
    */
   formState: AbstractFormState<unknown>;
 
@@ -74,7 +77,8 @@ export abstract class AbstractFormPage<
   // public busy: Subscription;
   /**
    * @description
-   * Form state
+   * Instance of the form state which provides access to
+   * an API for the form.
    */
   public abstract formState: T;
   /**
@@ -133,6 +137,14 @@ export abstract class AbstractFormPage<
 
   /**
    * @description
+   * Handle routing back to previous view.
+   */
+  public onBack(): void {
+    // Optional back route event handler, otherwise NOOP
+  }
+
+  /**
+   * @description
    * Deactivation guard handler.
    */
   // public canDeactivate(): Observable<boolean> | boolean {
@@ -174,14 +186,14 @@ export abstract class AbstractFormPage<
   //  */
   // protected abstract patchForm(model?: unknown): unknown;
 
-  // /**
-  //  * @description
-  //  * Setup form listeners.
-  //  */
-  // protected initForm(): void {
-  //   // Optional method for setting up form listeners, but
-  //   // when no listeners are required is NOOP
-  // }
+  /**
+   * @description
+   * Setup form listeners.
+   */
+  protected initForm(): void {
+    // Optional method for setting up form listeners, but
+    // when no listeners are required is NOOP
+  }
 
   /**
    * @description

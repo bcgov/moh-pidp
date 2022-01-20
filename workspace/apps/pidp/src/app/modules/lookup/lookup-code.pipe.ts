@@ -13,26 +13,21 @@ export class LookupCodePipe implements PipeTransform {
     lookupCode: T | null | undefined,
     lookupKey: string,
     key: string = 'name'
-  ): string | null {
-    if (!lookupCode || !lookupKey) {
-      return null;
-    }
-
-    return lookupCode ? this.lookupValue<T>(lookupCode, lookupKey, key) : '';
+  ): unknown | null {
+    return lookupCode && lookupKey && key
+      ? this.lookupValue<T>(lookupCode, lookupKey, key)
+      : null;
   }
 
-  private lookupValue<T extends string | number>(
+  private lookupValue<T extends number | string>(
     lookupCode: T,
     lookupKey: string,
     key: string
-  ): string | null {
+  ): unknown | null {
     const lookupConfig = this.lookupService[lookupKey as keyof LookupConfig];
-
-    if (!lookupConfig) {
-      throw Error('Lookup key does not exist');
-    }
-
-    const lookup = lookupConfig.find((l) => l.code === lookupCode);
+    const lookup = (lookupConfig as Lookup[])?.find(
+      (l: Lookup) => l.code === lookupCode
+    );
 
     return lookup && Object.prototype.hasOwnProperty.call(lookup, key)
       ? lookup[key as keyof Lookup]

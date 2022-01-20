@@ -1,16 +1,15 @@
 import { Injectable } from '@angular/core';
 import {
+  Event,
+  NavigationCancel,
+  NavigationEnd,
+  NavigationError,
+  NavigationStart,
   Router,
   RouterEvent,
-  Event,
-  NavigationStart,
-  NavigationEnd,
-  NavigationCancel,
-  NavigationError,
 } from '@angular/router';
 
 import { Observable } from 'rxjs';
-
 import { filter } from 'rxjs/operators';
 
 @Injectable({
@@ -23,7 +22,7 @@ export class RouteStateService {
    * @description
    * Listener for the route navigation start event.
    */
-  public onNavigationStart(): Observable<Event> {
+  public onNavigationStart(): Observable<RouterEvent> {
     return this.router.events.pipe(
       filter(
         (event: Event): event is RouterEvent => event instanceof NavigationStart
@@ -35,7 +34,7 @@ export class RouteStateService {
    * @description
    * Listener for the route navigation stop events.
    */
-  public onNavigationStop(): Observable<Event> {
+  public onNavigationStop(): Observable<RouterEvent> {
     return this.router.events.pipe(
       filter(
         (event: Event): event is RouterEvent =>
@@ -50,7 +49,7 @@ export class RouteStateService {
    * @description
    * Listener for the route navigation end event.
    */
-  public onNavigationEnd(): Observable<Event> {
+  public onNavigationEnd(): Observable<RouterEvent> {
     return this.router.events.pipe(
       filter(
         (event: Event): event is RouterEvent => event instanceof NavigationEnd

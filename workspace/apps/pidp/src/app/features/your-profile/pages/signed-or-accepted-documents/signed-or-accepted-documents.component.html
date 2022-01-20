@@ -16,7 +16,8 @@
           [icon]="document.icon"
           [title]="document.title"
           [actionLabel]="document.actionLabel"
-          [disabled]="document.disabled"></ui-card-summary>
+          [disabled]="document.disabled"
+          (action)="onViewDocument()"></ui-card-summary>
       </div>
     </div>
   </ui-page-section>

@@ -14,6 +14,7 @@ public class Index
 
     public class Model
     {
+        public List<College> Colleges { get; set; } = new();
         public List<Country> Countries { get; set; } = new();
         public List<Province> Provinces { get; set; } = new();
     }
@@ -28,6 +29,8 @@ public class Index
         {
             return new Model
             {
+                Colleges = await this.context.Set<College>()
+                    .ToListAsync(),
                 Countries = await this.context.Set<Country>()
                     .ToListAsync(),
                 Provinces = await this.context.Set<Province>()

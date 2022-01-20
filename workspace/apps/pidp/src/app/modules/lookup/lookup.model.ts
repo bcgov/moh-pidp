@@ -1,4 +1,5 @@
 export interface LookupConfig {
+  colleges: Lookup[];
   countries: Lookup<string>[];
   provinces: ProvinceLookup[];
 }

@@ -145,7 +145,7 @@ $types: success, info, warn, danger, muted;
   padding-left: 0.3rem;
 
   & > span {
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     font-style: italic;
     // Apply padding to provide a bit of space
     // between text and boundary
@@ -179,6 +179,7 @@ $types: success, info, warn, danger, muted;
       border-color: alert-palette($type, backgroundColorSolid);
       color: alert-palette($type, color);
 
+      // TODO temporary override that should be lifted out
       @if ($type == 'success') {
         color: white;
       }

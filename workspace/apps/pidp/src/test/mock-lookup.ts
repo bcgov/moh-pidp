@@ -5,6 +5,20 @@ export class MockLookup {
     /* eslint-disable */
     // Export of /lookups response copied from PostMan:
     return {
+      colleges: [
+        {
+          code: 1,
+          name: 'College of Physicians and Surgeons of BC (CPSBC)',
+        },
+        {
+          code: 2,
+          name: 'College of Pharmacists of BC (CPBC)',
+        },
+        {
+          code: 3,
+          name: 'BC College of Nurses and Midwives (BCCNM)',
+        },
+      ],
       countries: [
         {
           code: 'CA',

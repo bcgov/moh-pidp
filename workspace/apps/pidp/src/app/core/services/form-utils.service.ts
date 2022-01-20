@@ -3,6 +3,7 @@ import {
   AbstractControl,
   FormArray,
   FormBuilder,
+  FormControl,
   FormGroup,
   ValidatorFn,
   Validators,
@@ -82,6 +83,68 @@ export class FormUtilsService {
 
   /**
    * @description
+   * Sets control(s) validators.
+   */
+  public setValidators(
+    control: FormControl | FormGroup,
+    validators: ValidatorFn | ValidatorFn[] = [Validators.required],
+    blacklist: string[] = []
+  ): void {
+    if (control instanceof FormGroup) {
+      // Assumes that FormGroups will not be deeply nested
+      Object.keys(control.controls).forEach((key: string) => {
+        if (!blacklist.includes(key)) {
+          this.setValidators(
+            control.controls[key] as FormControl,
+            validators,
+            blacklist
+          );
+        }
+      });
+    } else {
+      control.setValidators(validators);
+      control.updateValueAndValidity();
+    }
+  }
+
+  /**
+   * @description
+   * Resets control(s) and clears associated validators.
+   */
+  public resetAndClearValidators(
+    control: FormControl | FormGroup,
+    blacklist: string[] = []
+  ): void {
+    if (control instanceof FormGroup) {
+      // Assumes that FormGroups will not be deeply nested
+      Object.keys(control.controls).forEach((key: string) => {
+        if (!blacklist.includes(key)) {
+          this.resetAndClearValidators(control.controls[key] as FormControl);
+        }
+      });
+    } else {
+      control.reset();
+      control.clearValidators();
+      control.updateValueAndValidity();
+    }
+  }
+
+  /**
+   * @description
+   * Set or reset control(s) validator
+   */
+  public setOrResetValidators(
+    setOrReset: boolean,
+    control: FormControl | FormGroup,
+    blacklist?: string[]
+  ): void {
+    setOrReset
+      ? this.setValidators(control, [Validators.required], blacklist)
+      : this.resetAndClearValidators(control, blacklist);
+  }
+
+  /**
+   * @description
    * Check for the required validator applied to a FormControl,
    * FormGroup, or FormArray.
    *
@@ -116,14 +179,13 @@ export class FormUtilsService {
    */
   public buildAddressForm(
     options: {
-      areRequired?: AddressLine[];
+      areRequired?: AddressLine[] | boolean;
       areDisabled?: AddressLine[];
       useDefaults?: Extract<AddressLine, 'provinceCode' | 'countryCode'>[];
       exclude?: AddressLine[];
     } | null = null
   ): FormGroup {
     const controlsConfig: AddressMap<unknown[]> = {
-      id: [0, []],
       street: [{ value: null, disabled: false }, []],
       city: [{ value: null, disabled: false }, []],
       provinceCode: [{ value: null, disabled: false }, []],
@@ -154,7 +216,11 @@ export class FormUtilsService {
           }
         }
 
-        if (options?.areRequired?.includes(key)) {
+        const areRequired = options?.areRequired;
+        if (
+          (typeof areRequired === 'boolean' && areRequired) ||
+          (typeof areRequired !== 'boolean' && areRequired?.includes(key))
+        ) {
           controlValidators.push(Validators.required);
         }
       });

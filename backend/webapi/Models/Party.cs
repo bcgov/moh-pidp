@@ -10,6 +10,12 @@ public class Party : BaseAuditable
     [Key]
     public int Id { get; set; }
 
+    public Guid UserId { get; set; }
+
+    public string Hpdid { get; set; } = string.Empty;
+
+    public LocalDate Birthdate { get; set; }
+
     public string FirstName { get; set; } = string.Empty;
 
     public string LastName { get; set; } = string.Empty;
@@ -20,11 +26,13 @@ public class Party : BaseAuditable
 
     public string? PreferredLastName { get; set; }
 
-    public LocalDate DateOfBirth { get; set; }
-
     public string? Email { get; set; }
 
     public string? Phone { get; set; }
 
-    public PartyAddress? MailingAddress { get; set; }
+    public PartyCertification? PartyCertification { get; set; }
+
+    public string? JobTitle { get; set; }
+
+    public Facility? Facility { get; set; }
 }
