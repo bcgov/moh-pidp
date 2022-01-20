@@ -2,14 +2,17 @@ import { Component, OnInit } from '@angular/core';
 import { SafeHtml } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { exhaustMap, of } from 'rxjs';
+import { Observable, exhaustMap, map, of } from 'rxjs';
 
 import { AlertType } from '@bcgov/shared/ui';
 
 import { DocumentService } from '@app/core/services/document.service';
 import { Role } from '@app/shared/enums/roles.enum';
 
-import { PartyResource } from '@core/resources/party-resource.service';
+import {
+  PartyResource,
+  ProfileStatus,
+} from '@core/resources/party-resource.service';
 import { PartyService } from '@core/services/party.service';
 
 import { ShellRoutes } from '../shell/shell.routes';
@@ -37,9 +40,9 @@ export interface PortalSection {
 export class PortalComponent implements OnInit {
   public title: string;
   public acceptedCollectionNotice: boolean;
-  public state: Record<string, PortalSection[]>;
-  public completedProfile: boolean;
   public collectionNotice: SafeHtml;
+  public state$: Observable<Record<string, PortalSection[]>>;
+  public completedProfile: boolean;
 
   public Role = Role;
 
@@ -51,11 +54,10 @@ export class PortalComponent implements OnInit {
     documentService: DocumentService
   ) {
     this.title = this.route.snapshot.data.title;
-
     this.acceptedCollectionNotice = this.partyService.acceptedCollectionNotice;
-    this.completedProfile = this.partyService.completedProfile;
-    this.state = this.partyService.state;
     this.collectionNotice = documentService.getCollectionNotice();
+    this.state$ = this.partyService.state$;
+    this.completedProfile = this.partyService.completedProfile;
   }
 
   public onAcceptCollectionNotice(accepted: boolean): void {
@@ -71,14 +73,16 @@ export class PortalComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    // TODO merge profile status into the default card statuses
     this.partyResource
       .firstOrCreate()
       .pipe(
         exhaustMap((partyId: number | null) =>
           partyId ? this.partyResource.getPartyProfileStatus(partyId) : of(null)
+        ),
+        map((profileStatus: ProfileStatus | null) =>
+          this.partyService.updateState(profileStatus)
         )
       )
-      .subscribe(console.log);
+      .subscribe();
   }
 }
