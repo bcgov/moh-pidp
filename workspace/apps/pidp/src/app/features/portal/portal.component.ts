@@ -5,12 +5,11 @@ import { exhaustMap, of } from 'rxjs';
 
 import { AlertType } from '@bcgov/shared/ui';
 
+import { DocumentService } from '@app/core/services/document.service';
 import { Role } from '@app/shared/enums/roles.enum';
 
 import { PartyResource } from '@core/resources/party-resource.service';
 import { PartyService } from '@core/services/party.service';
-
-import { collectionNotice } from '@shared/data/collection-notice.data';
 
 import { ShellRoutes } from '../shell/shell.routes';
 
@@ -47,14 +46,15 @@ export class PortalComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private partyService: PartyService,
-    private partyResource: PartyResource
+    private partyResource: PartyResource,
+    documentService: DocumentService
   ) {
     this.title = this.route.snapshot.data.title;
 
     this.acceptedCollectionNotice = this.partyService.acceptedCollectionNotice;
     this.completedProfile = this.partyService.completedProfile;
     this.state = this.partyService.state;
-    this.collectionNotice = collectionNotice;
+    this.collectionNotice = documentService.getCollectionNotice();
   }
 
   public onAcceptCollectionNotice(accepted: boolean): void {
