@@ -55,7 +55,7 @@ export class CollegeLicenceInformationComponent
 
   public ngOnInit(): void {
     // TODO pull from state management or URI param
-    const partyId = 1; // +this.route.snapshot.params.pid;
+    const partyId = this.partyService.profileStatus?.id; // +this.route.snapshot.params.pid;
     if (!partyId) {
       throw new Error('No party ID was provided');
     }
@@ -71,16 +71,14 @@ export class CollegeLicenceInformationComponent
   }
 
   protected performSubmission(): Observable<void> {
-    const partyId = 1; // +this.route.snapshot.params.pid;
+    const partyId = this.partyService.profileStatus?.id; // +this.route.snapshot.params.pid;
 
-    return this.formState.json
+    return partyId && this.formState.json
       ? this.resource.update(partyId, this.formState.json)
       : EMPTY;
   }
 
   protected afterSubmitIsSuccessful(): void {
-    this.partyService.updateState('college-licence-information');
-
     this.router.navigate([this.route.snapshot.data.routes.root]);
   }
 }

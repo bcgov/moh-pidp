@@ -22,7 +22,7 @@
       </ng-container>
     </ui-page-section-subheader>
 
-    <ui-user-info [user]="bcscUser"></ui-user-info>
+    <ui-user-info [user]="bcscUser | async"></ui-user-info>
 
     <ui-toggle-content
       label="I have a preferred name"
