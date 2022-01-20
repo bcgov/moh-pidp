@@ -1,1 +1,32 @@
-<ui-dashboard-header [theme]="theme"></ui-dashboard-header>
+<ui-page>
+  <ui-page-header>{{ title }}</ui-page-header>
+</ui-page>
+
+<table mat-table [dataSource]="dataSource">
+  <ng-container matColumnDef="id">
+    <th *matHeaderCellDef mat-header-cell>Reference ID</th>
+    <td *matCellDef="let element" mat-cell>{{ element.id }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="providerName">
+    <th *matHeaderCellDef mat-header-cell>Provider Name</th>
+    <td *matCellDef="let element" mat-cell>{{ element.providerName }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="providerCollegeCode">
+    <th *matHeaderCellDef mat-header-cell>Provider College</th>
+    <td *matCellDef="let element" mat-cell>
+      {{ element.providerCollegeCode | lookupCode: 'colleges' }}
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="saEforms">
+    <th *matHeaderCellDef mat-header-cell>SA E-Forms</th>
+    <td *matCellDef="let element" mat-cell>
+      <mat-icon>do_not_disturb</mat-icon>
+    </td>
+  </ng-container>
+
+  <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
+  <tr *matRowDef="let row; columns: displayedColumns" mat-row></tr>
+</table>
