@@ -1,0 +1,12 @@
+# General
+.DS_Store
+.AppleDouble
+.LSOverride
+
+tls/
+
+# Icon must end with two \r
+Icon
+
+# Thumbnails
+._*
