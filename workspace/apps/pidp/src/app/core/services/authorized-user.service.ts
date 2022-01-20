@@ -30,7 +30,9 @@ export class AuthorizedUserService extends AbstractAuthorizedUserService<BcscUse
         firstName,
         lastName,
         username: hpdid,
-        attributes: { birthdate },
+        attributes: {
+          birthdate: [birthdate],
+        },
       } = brokerProfile;
       const { sub: userId } = accessTokenParsed;
 
