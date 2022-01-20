@@ -65,10 +65,7 @@ public class IntakeService : IIntakeService
         this.logger.LogDebug("Id of row updated: " + recordId);
     }
 
-    public void LogWarning(string warningMessage)
-    {
-        this.logger.LogWarning(warningMessage);
-    }
+    public void LogWarning(string warningMessage) => this.logger.LogWarning(warningMessage);
 
     private PlrRecord ReadDistributionMessage(string messageContent)
     {
