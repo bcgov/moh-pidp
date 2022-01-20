@@ -8,8 +8,8 @@ public class PidpConfiguration
     private static readonly string? EnvironmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
 
     public ConnectionStringConfiguration ConnectionStrings { get; set; } = new();
-
     public KeycloakConfiguration Keycloak { get; set; } = new();
+    public PlrClientConfiguration PlrClient { get; set; } = new();
 
 
     // ------- Configuration Objects -------
@@ -26,5 +26,10 @@ public class PidpConfiguration
         public string AdministrationUrl { get; set; } = string.Empty;
         public string AdministrationClientId { get; set; } = string.Empty;
         public string AdministrationClientSecret { get; set; } = string.Empty;
+    }
+
+    public class PlrClientConfiguration
+    {
+        public string Url { get; set; } = string.Empty;
     }
 }
