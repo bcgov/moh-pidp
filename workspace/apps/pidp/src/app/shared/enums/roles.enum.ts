@@ -1,5 +1,5 @@
 export enum Role {
-  USER = 'user',
-  ADMIN = 'admin',
+  USER = 'USER',
+  ADMIN = 'ADMIN',
   FEATURE_PIDP_DEMO = 'feature_pidp_demo',
 }
