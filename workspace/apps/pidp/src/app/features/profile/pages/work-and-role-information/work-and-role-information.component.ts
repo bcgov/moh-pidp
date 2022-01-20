@@ -77,8 +77,6 @@ export class WorkAndRoleInformationComponent
   }
 
   protected afterSubmitIsSuccessful(): void {
-    this.partyService.updateState('work-and-role-information');
-
     this.router.navigate([this.route.snapshot.data.routes.root]);
   }
 }
