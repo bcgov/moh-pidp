@@ -122,7 +122,8 @@ public class IntakeService : IIntakeService
         result.Address1StartDate = ParseHL7v3DateTime(this.ReadNodeData($"//{Prefix}:healthCareProvider/{Prefix}:addr[{postalWorkplaceUseExpr}]/{Prefix}:useablePeriod/{Prefix}:low/@value", documentRoot, messageId));
 
         // According to PLR team, Credentials will have a `reference` child node (i.e. designation text) ...
-        var credentials = this.ReadMultiNodeData($"//{Prefix}:healthCareProvider/{Prefix}:relatedTo/{Prefix}:qualifiedEntity/{Prefix}:code[{Prefix}:originalText/{Prefix}:reference]/@code", documentRoot, messageId);
+        var credentials = this.ReadMultiNodeData($"//{Prefix}:healthCareProvider/{Prefix}:relatedTo/{Prefix}:qualifiedEntity/{Prefix}:code[{Prefix}:originalText/{Prefix}:reference]/@code", documentRoot, messageId)
+            ?? Enumerable.Empty<string>();
         result.Credentials = credentials.Select(x => new Credential(x)).ToList();
 
         var emailData = this.ReadNodeData($"//{Prefix}:healthCareProvider/{Prefix}:telecom[@use='WP' and starts-with(@value, 'mailto')]/@value", documentRoot, messageId);
@@ -132,7 +133,8 @@ public class IntakeService : IIntakeService
         }
 
         // ... but Expertises will never have a `reference` child node
-        var expertise = this.ReadMultiNodeData($"//{Prefix}:healthCareProvider/{Prefix}:relatedTo/{Prefix}:qualifiedEntity/{Prefix}:code[not({Prefix}:originalText/{Prefix}:reference)]/@code", documentRoot, messageId);
+        var expertise = this.ReadMultiNodeData($"//{Prefix}:healthCareProvider/{Prefix}:relatedTo/{Prefix}:qualifiedEntity/{Prefix}:code[not({Prefix}:originalText/{Prefix}:reference)]/@code", documentRoot, messageId)
+            ?? Enumerable.Empty<string>();
         result.Expertise = expertise.Select(x => new Expertise(x)).ToList();
 
         var faxNumberData = this.ReadNodeData($"//{Prefix}:healthCareProvider/{Prefix}:telecom[@use='WP' and starts-with(@value, 'fax')]/@value", documentRoot, messageId);
