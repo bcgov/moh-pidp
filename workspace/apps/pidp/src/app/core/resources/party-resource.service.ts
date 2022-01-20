@@ -13,6 +13,8 @@ import { ResourceUtilsService } from './resource-utils.service';
 
 // TODO move this to a different location
 export interface ProfileStatus {
+  // TODO drop the id or rename to partyId
+  id: number;
   firstName: string;
   lastName: string;
   email: string;
@@ -22,9 +24,9 @@ export interface ProfileStatus {
   jobTitle: string;
   facilityName: string;
   facilityStreet: string;
-  demographicsCompleted: boolean;
-  collegeCertificationCompleted: boolean;
-  workSettingCompleted: boolean;
+  demographicsComplete: boolean;
+  collegeCertificationComplete: boolean;
+  workSettingComplete: boolean;
 }
 
 export interface EnrolmentStatus {
