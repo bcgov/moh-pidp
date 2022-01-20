@@ -26,6 +26,6 @@ export class UserGuard implements CanActivate {
     | UrlTree {
     return this.authorizedUserService.roles.includes(Role.ADMIN)
       ? this.router.createUrlTree(['admin'])
-      : this.authorizedUserService.roles.includes(Role.USER);
+      : true;
   }
 }
