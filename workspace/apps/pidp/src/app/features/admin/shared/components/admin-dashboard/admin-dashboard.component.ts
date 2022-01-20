@@ -5,6 +5,7 @@ import { Observable, map } from 'rxjs';
 import { DashboardHeaderTheme, IDashboard } from '@bcgov/shared/ui';
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';
+import { AdminRoutes } from '@app/features/admin/admin.routes';
 import { AccessTokenService } from '@app/features/auth/services/access-token.service';
 import { AuthService } from '@app/features/auth/services/auth.service';
 
@@ -30,7 +31,7 @@ export class AdminDashboardComponent implements IDashboard {
     private authService: AuthService,
     accessTokenService: AccessTokenService
   ) {
-    this.logoutRedirectUrl = `${this.config.loginRedirectUrl}/${this.config.routes.auth}`;
+    this.logoutRedirectUrl = `${this.config.loginRedirectUrl}/${this.config.routes.auth}/${AdminRoutes.MODULE_PATH}`;
     this.username = accessTokenService
       .decodeToken()
       .pipe(map((token) => token?.name ?? ''));
