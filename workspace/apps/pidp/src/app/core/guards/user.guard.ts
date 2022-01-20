@@ -16,6 +16,7 @@ export class UserGuard implements CanActivate {
     private authorizedUserService: AuthorizedUserService
   ) {}
 
+  // TODO make something generic and move into specific modules
   public canActivate():
     | Observable<boolean | UrlTree>
     | Promise<boolean | UrlTree>
