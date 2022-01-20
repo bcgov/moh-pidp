@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 using Pidp.Data;
 using Pidp.Features;
+using Pidp.Infrastructure.HttpClients.Plr;
 using Pidp.Models;
 using Pidp.Models.Lookups;
 
@@ -64,26 +65,35 @@ public class CollegeCertification
 
     public class CommandHandler : ICommandHandler<Command>
     {
+        private readonly IPlrClient client;
         private readonly PidpDbContext context;
 
-        public CommandHandler(PidpDbContext context) => this.context = context;
+        public CommandHandler(IPlrClient client, PidpDbContext context)
+        {
+            this.client = client;
+            this.context = context;
+        }
 
         public async Task HandleAsync(Command command)
         {
-            var partyCertification = await this.context.PartyCertifications
-                .SingleOrDefaultAsync(certification => certification.PartyId == command.PartyId);
+            var party = await this.context.Parties
+                .Include(party => party.PartyCertification)
+                .SingleOrDefaultAsync(party => party.Id == command.PartyId);
 
-            if (partyCertification == null)
+            if (party == null)
             {
-                partyCertification = new PartyCertification
-                {
-                    PartyId = command.PartyId,
-                };
-                this.context.PartyCertifications.Add(partyCertification);
+                // TODO 404
+                return;
             }
 
-            partyCertification.CollegeCode = command.CollegeCode;
-            partyCertification.LicenceNumber = command.LicenceNumber;
+            if (party.PartyCertification == null)
+            {
+                party.PartyCertification = new PartyCertification();
+            }
+
+            party.PartyCertification.CollegeCode = command.CollegeCode;
+            party.PartyCertification.LicenceNumber = command.LicenceNumber;
+            party.PartyCertification.Ipc = await this.client.GetPlrRecord(command.LicenceNumber, command.CollegeCode, party.Birthdate);
 
             await this.context.SaveChangesAsync();
         }

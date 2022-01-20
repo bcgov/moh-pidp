@@ -23,7 +23,6 @@ public class Index
         public QueryValidator(IHttpContextAccessor accessor)
         {
             var user = accessor?.HttpContext?.User;
-
             this.RuleFor(x => x.UserId).NotEmpty().Equal(user.GetUserId());
         }
     }
