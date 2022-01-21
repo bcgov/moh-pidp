@@ -175,7 +175,7 @@ public class IntakeService : IIntakeService
         return result;
     }
 
-    public static DateTime? ParseHL7v3DateTime(string dateString)
+    public static DateTime? ParseHL7v3DateTime(string? dateString)
     {
         if (dateString != null)
         {
@@ -249,7 +249,7 @@ public class IntakeService : IIntakeService
 
     private async Task<int> CreateOrUpdateRecordAsync(PlrRecord record, bool expectExists)
     {
-        this.TranslateIdentifierTypeAsync(record);
+        await this.TranslateIdentifierTypeAsync(record);
 
         var existingRecord = await this.context.PlrRecords
             .SingleOrDefaultAsync(rec => rec.Ipc == record.Ipc);
