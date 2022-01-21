@@ -9,6 +9,7 @@ public class PlrDbContext : DbContext
     public PlrDbContext(DbContextOptions<PlrDbContext> options) : base(options) { }
 
     public DbSet<PlrRecord> PlrRecords { get; set; } = default!;
+    public DbSet<IdentifierType> IdentifierTypes { get; set; } = default!;
 
     public override int SaveChanges()
     {

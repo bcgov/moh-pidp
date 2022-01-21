@@ -2,9 +2,9 @@
   <ui-page-header>{{ title }}</ui-page-header>
 
   <ui-collection-notice
-    [show]="acceptedCollectionNotice"
+    [show]="!acceptedCollectionNotice"
     (accepted)="onAcceptCollectionNotice($event)">
-    {{ collectionNotice }}
+    <p [innerHtml]="collectionNotice"></p>
   </ui-collection-notice>
 
   <ui-alert
@@ -35,7 +35,7 @@
 
     <div class="row">
       <div
-        *ngFor="let section of state.profileIdentitySections"
+        *ngFor="let section of (state$ | async)?.profileIdentitySections"
         class="col-12 col-xl-6">
         <ui-card-summary
           [icon]="section.icon"
@@ -63,14 +63,14 @@
     <ui-page-section-subheader icon="assignment" heading="Access to Systems">
       <ng-container uiPageSectionSubheaderDesc>
         Complete your profile to gain access to the systems you are eligible
-        for. Access to these applications will depend on your credentials, you
-        will automatically gain access to those you are eligible for.
+        for. This will allow the portal to identify systems you may request
+        access for.
       </ng-container>
     </ui-page-section-subheader>
 
     <div class="row">
       <div
-        *ngFor="let section of state.accessToSystemsSections"
+        *ngFor="let section of (state$ | async)?.accessToSystemsSections"
         class="col-12 col-xl-6">
         <ui-card-summary
           [icon]="section.icon"
@@ -99,9 +99,11 @@
       </ng-container>
     </ui-page-section-subheader>
 
-    <div *ngIf="state.trainingSections.length; else noTraining" class="row">
+    <div
+      *ngIf="(state$ | async)?.trainingSections?.length; else noTraining"
+      class="row">
       <div
-        *ngFor="let section of state.trainingSections"
+        *ngFor="let section of (state$ | async)?.trainingSections"
         class="col-12 col-xl-6">
         <ui-card-summary
           [icon]="section.icon"
@@ -137,7 +139,7 @@
 
     <div class="row">
       <div
-        *ngFor="let section of state.yourProfileSections"
+        *ngFor="let section of (state$ | async)?.yourProfileSections"
         class="col-12 col-xl-6">
         <ui-card-summary
           [icon]="section.icon"

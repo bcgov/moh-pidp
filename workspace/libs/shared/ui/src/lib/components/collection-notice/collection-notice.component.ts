@@ -21,7 +21,7 @@ export class CollectionNoticeComponent {
   }
 
   public onAccept(): void {
-    this.accepted.emit();
+    this.accepted.emit(true);
 
     this.show = false;
   }

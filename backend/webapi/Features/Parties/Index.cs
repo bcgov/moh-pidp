@@ -20,7 +20,11 @@ public class Index
 
     public class QueryValidator : AbstractValidator<Query>
     {
-        public QueryValidator(IHttpContextAccessor accessor) => this.RuleFor(x => x.UserId).NotEmpty().MatchesUserId(accessor);
+        public QueryValidator(IHttpContextAccessor accessor)
+        {
+            var user = accessor?.HttpContext?.User;
+            this.RuleFor(x => x.UserId).NotEmpty().Equal(user.GetUserId());
+        }
     }
 
     public class QueryHandler : IQueryHandler<Query, List<Model>>

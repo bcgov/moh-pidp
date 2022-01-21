@@ -8,7 +8,6 @@ import { PortalRoutes } from './features/portal/portal.routes';
 
 export const APP_CONFIG = new InjectionToken<AppConfig>('app.config');
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface AppConfig extends AppEnvironment {
   routes: {
     auth: string;

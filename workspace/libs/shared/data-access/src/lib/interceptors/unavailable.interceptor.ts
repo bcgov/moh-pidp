@@ -1,16 +1,16 @@
 import {
-  HttpRequest,
-  HttpHandler,
-  HttpEvent,
-  HttpInterceptor,
-  HttpResponse,
   HTTP_INTERCEPTORS,
+  HttpEvent,
+  HttpHandler,
+  HttpInterceptor,
+  HttpRequest,
+  HttpResponse,
   HttpStatusCode,
 } from '@angular/common/http';
 import { Injectable, Provider } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { catchError, Observable, of, throwError } from 'rxjs';
+import { Observable, catchError, of, throwError } from 'rxjs';
 
 @Injectable()
 export class UnavailableInterceptor implements HttpInterceptor {
@@ -23,7 +23,7 @@ export class UnavailableInterceptor implements HttpInterceptor {
     return next.handle(request).pipe(
       catchError((error: HttpResponse<Record<string, string>>) => {
         if (error.status === HttpStatusCode.ServiceUnavailable) {
-          // TODO use root route config to populate redirect
+          // TODO use root route config to populate redirect or merge into config
           this.router.navigate(['maintenance']);
           return of(error);
         }

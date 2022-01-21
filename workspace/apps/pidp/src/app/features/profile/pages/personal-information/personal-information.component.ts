@@ -7,6 +7,7 @@ import { EMPTY, Observable, tap } from 'rxjs';
 
 import { ToggleContentChange } from '@bcgov/shared/ui';
 
+import { AuthorizedUserService } from '@app/core/services/authorized-user.service';
 import { BcscUser } from '@app/features/auth/models/bcsc-user.model';
 
 import { AbstractFormPage } from '@core/classes/abstract-form-page.class';
@@ -29,7 +30,7 @@ export class PersonalInformationComponent
 {
   public title: string;
   public formState: PersonalInformationFormState;
-  public bcscUser: BcscUser;
+  public bcscUser: Observable<BcscUser | null>;
   public hasPreferredName: boolean;
 
   public constructor(
@@ -40,13 +41,14 @@ export class PersonalInformationComponent
     // TODO switch to RxJS state management using Elf
     private partyService: PartyService,
     private resource: PersonalInformationResource,
+    private authorizedUserService: AuthorizedUserService,
     fb: FormBuilder
   ) {
     super(dialog, formUtilsService);
 
     this.title = this.route.snapshot.data.title;
     this.formState = new PersonalInformationFormState(fb);
-    this.bcscUser = this.partyService.user;
+    this.bcscUser = this.authorizedUserService.user$;
     this.hasPreferredName = false;
   }
 
@@ -60,9 +62,10 @@ export class PersonalInformationComponent
 
   public ngOnInit(): void {
     // TODO pull from state management or URI param
-    const partyId = 1; // +this.route.snapshot.params.pid;
+    const partyId = this.partyService.profileStatus?.id; // +this.route.snapshot.params.pid;
     if (!partyId) {
       throw new Error('No party ID was provided');
+      // TODO redirect to portal
     }
 
     this.resource
@@ -78,16 +81,14 @@ export class PersonalInformationComponent
   }
 
   protected performSubmission(): Observable<void> {
-    const partyId = 1; // +this.route.snapshot.params.pid;
+    const partyId = this.partyService.profileStatus?.id; // +this.route.snapshot.params.pid;
 
-    return this.formState.json
+    return partyId && this.formState.json
       ? this.resource.update(partyId, this.formState.json)
       : EMPTY;
   }
 
   protected afterSubmitIsSuccessful(): void {
-    this.partyService.updateState('personal-information');
-
     this.router.navigate([this.route.snapshot.data.routes.root]);
   }
 

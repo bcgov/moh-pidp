@@ -1,9 +1,9 @@
 import {
-  Component,
   ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
   Input,
   Output,
-  EventEmitter,
 } from '@angular/core';
 
 import { AlertType } from '../alert/alert.component';

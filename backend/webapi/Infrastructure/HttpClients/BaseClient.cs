@@ -21,7 +21,7 @@ public class BaseClient
     protected ILogger Logger { get; }
 
     /// <summary>
-    /// A HttpClient with default serialization options (camelCase)
+    /// An HttpClient with default serialization options (camelCase)
     /// </summary>
     /// <param name="client"></param>
     /// <param name="logger"></param>

@@ -1,10 +1,11 @@
 import { Location } from '@angular/common';
 import { Component } from '@angular/core';
+import { SafeHtml } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { RouteUtils } from '@bcgov/shared/utils';
 
-import { collectionNotice } from '@app/shared/data/collection-notice.data';
+import { DocumentService } from '@app/core/services/document.service';
 
 import { YourProfileRoutes } from '../../your-profile.routes';
 
@@ -15,16 +16,17 @@ import { YourProfileRoutes } from '../../your-profile.routes';
 })
 export class ViewDocumentComponent {
   public title: string;
-  public collectionNotice: string;
+  public collectionNotice: SafeHtml;
   private routeUtils: RouteUtils;
 
   public constructor(
     route: ActivatedRoute,
     router: Router,
-    location: Location
+    location: Location,
+    documentService: DocumentService
   ) {
     this.title = route.snapshot.data.title;
-    this.collectionNotice = collectionNotice;
+    this.collectionNotice = documentService.getCollectionNotice();
     // TODO move into provider for each module and DI into components to reduce redundant initialization
     this.routeUtils = new RouteUtils(
       route,

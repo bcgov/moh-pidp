@@ -23,11 +23,13 @@ public class Create
     {
         public CommandValidator(IHttpContextAccessor accessor)
         {
-            this.RuleFor(x => x.UserId).NotEmpty().MatchesUserId(accessor);
-            this.RuleFor(x => x.Hpdid).NotEmpty().MatchesUserClaim(accessor, Claims.PreferredUsername);
-            this.RuleFor(x => x.Birthdate).NotEmpty(); // TODO: Matches Birthday from User
-            this.RuleFor(x => x.FirstName).NotEmpty().MatchesUserClaim(accessor, Claims.GivenName);
-            this.RuleFor(x => x.LastName).NotEmpty().MatchesUserClaim(accessor, Claims.FamilyName);
+            var user = accessor?.HttpContext?.User;
+
+            this.RuleFor(x => x.UserId).NotEmpty().Equal(user.GetUserId());
+            this.RuleFor(x => x.Hpdid).NotEmpty().MatchesUserClaim(user, Claims.PreferredUsername);
+            this.RuleFor(x => x.Birthdate).NotEmpty().Equal(user.GetBirthdate() ?? LocalDate.MinIsoValue);
+            this.RuleFor(x => x.FirstName).NotEmpty().MatchesUserClaim(user, Claims.GivenName);
+            this.RuleFor(x => x.LastName).NotEmpty().MatchesUserClaim(user, Claims.FamilyName);
         }
     }
 

@@ -32,7 +32,42 @@ export class DemoService {
     this.profileComplete = false;
   }
 
-  public get profileIdentitySections(): PortalSection[] {
+  public updateState(sectionType: string): void {
+    let enableMap: { [key: string]: string } = {
+      'personal-information': 'college-licence-information',
+    };
+
+    if (this.featureFlagService.hasFlags(Role.FEATURE_PIDP_DEMO)) {
+      enableMap = {
+        ...enableMap,
+        'college-licence-information': 'work-and-role-information',
+        'work-and-role-information': 'user-access-agreement',
+      };
+    }
+
+    this.state.profileIdentitySections = this.state.profileIdentitySections.map(
+      (section) => {
+        if (section.type === sectionType) {
+          return {
+            ...section,
+            statusType: 'success',
+            status: 'completed',
+            hint: DateTime.now().toFormat(APP_DATE_FORMAT),
+          };
+        }
+        if (section.type === enableMap[sectionType]) {
+          return {
+            ...section,
+            disabled: false,
+          };
+        }
+
+        return section;
+      }
+    );
+  }
+
+  private get profileIdentitySections(): PortalSection[] {
     return [
       {
         icon: 'fingerprint',
@@ -41,7 +76,7 @@ export class DemoService {
         process: 'manual',
         hint: '1 min to complete',
         // TODO ability to populate the card with user information
-        description: 'Name, address, and contact information',
+        description: 'Personal and Contact Information',
         actionLabel: 'Update',
         route: ProfileRoutes.routePath(ProfileRoutes.PERSONAL_INFO_PAGE),
         statusType: 'warn',
@@ -55,8 +90,7 @@ export class DemoService {
         process: 'manual',
         hint: '1 min to complete',
         // TODO ability to populate the card with user information
-        description:
-          'College Licence number, practitioner ID, or on behalf user',
+        description: 'College Licence Information and Validation',
         actionLabel: 'Update',
         route: ProfileRoutes.routePath(ProfileRoutes.COLLEGE_LICENCE_INFO_PAGE),
         statusType: 'warn',
@@ -103,19 +137,18 @@ export class DemoService {
     ];
   }
 
-  public get accessToSystemsSections(): PortalSection[] {
+  private get accessToSystemsSections(): PortalSection[] {
     return [
       {
         icon: 'fingerprint',
         type: 'special-authority-eforms',
         title: 'Special Authority E-Forms',
         process: 'automatic',
-        hint: 'Automatic if applicable',
-        description: 'Description of what SA E-Forms is here',
-        actionLabel: 'Request Manually',
+        description: 'PharmaCare Special Authority eForms',
+        actionLabel: 'Request',
         route: AccessRoutes.routePath(AccessRoutes.SPECIAL_AUTH_EFORMS_PAGE),
         statusType: 'info',
-        disabled: false,
+        disabled: true,
       },
       ...ArrayUtils.insertIf<PortalSection>(
         this.featureFlagService.hasFlags(Role.FEATURE_PIDP_DEMO),
@@ -153,7 +186,7 @@ export class DemoService {
     ];
   }
 
-  public get trainingSections(): PortalSection[] {
+  private get trainingSections(): PortalSection[] {
     return [
       ...ArrayUtils.insertIf<PortalSection>(
         this.featureFlagService.hasFlags(Role.FEATURE_PIDP_DEMO),
@@ -178,7 +211,7 @@ export class DemoService {
     ];
   }
 
-  public get yourProfileSections(): PortalSection[] {
+  private get yourProfileSections(): PortalSection[] {
     return [
       ...ArrayUtils.insertIf<PortalSection>(
         this.featureFlagService.hasFlags(Role.FEATURE_PIDP_DEMO),
@@ -201,49 +234,14 @@ export class DemoService {
         icon: 'fingerprint',
         type: 'view-signed-or-accepted-documents',
         title: 'View Signed or Accepted Documents',
-        description: 'More information on what this is here',
+        description: 'View Agreement(s)',
         process: 'manual',
         actionLabel: 'View',
         route: YourProfileRoutes.routePath(
           YourProfileRoutes.SIGNED_ACCEPTED_DOCUMENTS_PAGE
         ),
-        disabled: false,
+        disabled: true,
       },
     ];
-  }
-
-  public updateState(sectionType: string): void {
-    let enableMap: { [key: string]: string } = {
-      'personal-information': 'college-licence-information',
-    };
-
-    if (this.featureFlagService.hasFlags(Role.FEATURE_PIDP_DEMO)) {
-      enableMap = {
-        ...enableMap,
-        'college-licence-information': 'work-and-role-information',
-        'work-and-role-information': 'user-access-agreement',
-      };
-    }
-
-    this.state.profileIdentitySections = this.state.profileIdentitySections.map(
-      (section) => {
-        if (section.type === sectionType) {
-          return {
-            ...section,
-            statusType: 'success',
-            status: 'completed',
-            hint: DateTime.now().toFormat(APP_DATE_FORMAT),
-          };
-        }
-        if (section.type === enableMap[sectionType]) {
-          return {
-            ...section,
-            disabled: false,
-          };
-        }
-
-        return section;
-      }
-    );
   }
 }

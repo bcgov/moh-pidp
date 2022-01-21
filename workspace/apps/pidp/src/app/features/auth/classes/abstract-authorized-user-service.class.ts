@@ -11,8 +11,9 @@ export interface UserIdentity {
 
 /**
  * @description
- * Abstract service for creating a type of authorized
- * user from access token claims (user identity).
+ * Abstract service for constructing a type of authorized user
+ * from access token claims (user identity), and surfacing
+ * low-level APIs.
  */
 export abstract class AbstractAuthorizedUserService<T> {
   public constructor(private accessTokenService: AccessTokenService) {}
@@ -23,6 +24,14 @@ export abstract class AbstractAuthorizedUserService<T> {
    */
   public get user$(): Observable<T | null> {
     return this.getUserIdentity().pipe(this.fromUserIdentity());
+  }
+
+  /**
+   * @description
+   * Get the user roles from the access token.
+   */
+  public get roles(): string[] {
+    return this.accessTokenService.roles();
   }
 
   /**
