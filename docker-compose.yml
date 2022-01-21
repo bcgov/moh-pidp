@@ -28,6 +28,7 @@ services:
     image: pidp-webapi
     build:
       context: backend/webapi/
+      dockerfile: Dockerfile.local
       args:
         ASPNETCORE_HTTPS_PORT: "5001"
         ASPNETCORE_ENVIRONMENT: "Development"
