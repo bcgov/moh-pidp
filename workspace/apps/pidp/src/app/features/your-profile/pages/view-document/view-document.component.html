@@ -5,7 +5,7 @@
     <ui-page-section-subheader heading="Collection Notice">
     </ui-page-section-subheader>
 
-    <p [innerHtml]="collectionNotice"></p>
+    <p [innerHtml]="collectionNotice | safe: 'html'"></p>
   </ui-page-section>
 
   <ui-page-footer>

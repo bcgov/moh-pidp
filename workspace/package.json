@@ -27,7 +27,7 @@
     "@ngneat/until-destroy": "^9.0.0",
     "bootstrap": "^5.1.3",
     "keycloak-angular": "^9.0.0",
-    "keycloak-js": "10.0.2",
+    "keycloak-js": "15.0.2",
     "luxon": "^2.1.1",
     "ngx-mask": "^13.0.0",
     "ngx-progressbar": "^6.1.1",

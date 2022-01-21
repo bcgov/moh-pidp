@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { SafeHtml } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { Observable, exhaustMap, map, of } from 'rxjs';
@@ -22,6 +21,7 @@ export interface PortalSection {
   type: string;
   title: string;
   description: string;
+  properties?: string[];
   process: 'manual' | 'automatic';
   hint?: string;
   actionLabel?: string;
@@ -40,7 +40,7 @@ export interface PortalSection {
 export class PortalComponent implements OnInit {
   public title: string;
   public acceptedCollectionNotice: boolean;
-  public collectionNotice: SafeHtml;
+  public collectionNotice: string;
   public state$: Observable<Record<string, PortalSection[]>>;
   public completedProfile: boolean;
 

@@ -4,7 +4,7 @@
   <ui-collection-notice
     [show]="!acceptedCollectionNotice"
     (accepted)="onAcceptCollectionNotice($event)">
-    <p [innerHtml]="collectionNotice"></p>
+    <p [innerHtml]="collectionNotice | safe: 'html'"></p>
   </ui-collection-notice>
 
   <ui-alert
@@ -51,7 +51,12 @@
             {{ section.hint }}
           </ng-container>
           <ng-container uiCardSummaryContent>
-            {{ section.description }}
+            <ng-container *ngIf="section.properties?.length; else desc">
+              <ng-container *ngFor="let prop of section.properties">
+                {{ prop }}<br />
+              </ng-container>
+            </ng-container>
+            <ng-template #desc>{{ section.description }}</ng-template>
           </ng-container>
         </ui-card-summary>
       </div>

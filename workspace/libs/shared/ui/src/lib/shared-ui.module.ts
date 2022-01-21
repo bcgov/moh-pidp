@@ -35,7 +35,9 @@ import { ContextHelpModule } from './modules/context-help/context-help.module';
 import { DefaultPipe } from './pipes/default.pipe';
 import { FormatDatePipe } from './pipes/format-date.pipe';
 import { FullnamePipe } from './pipes/fullname.pipe';
+import { PhonePipe } from './pipes/phone.pipe';
 import { PostalPipe } from './pipes/postal.pipe';
+import { SafePipe } from './pipes/safe.pipe';
 
 @NgModule({
   declarations: [
@@ -68,7 +70,9 @@ import { PostalPipe } from './pipes/postal.pipe';
     DefaultPipe,
     FormatDatePipe,
     FullnamePipe,
+    PhonePipe,
     PostalPipe,
+    SafePipe,
   ],
   imports: [
     CommonModule,
@@ -111,7 +115,9 @@ import { PostalPipe } from './pipes/postal.pipe';
     DefaultPipe,
     FormatDatePipe,
     FullnamePipe,
+    PhonePipe,
     PostalPipe,
+    SafePipe,
   ],
 })
 export class SharedUiModule {}

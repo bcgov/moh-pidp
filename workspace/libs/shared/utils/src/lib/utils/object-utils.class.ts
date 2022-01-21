@@ -57,7 +57,7 @@ export class ObjectUtils {
   /**
    * @description
    * Merge a key/value pair into an object if the key
-   * exists in the source object.
+   * exists in the reference (source) object.
    */
   public static mergeInto(
     key: string,
@@ -76,7 +76,7 @@ export class ObjectUtils {
   /**
    * @description
    * Merge a key/value pair into an object if the key
-   * exists in the source object.
+   * exists in the reference (source) object.
    */
   public static mergeIntoIf(
     condition: boolean,
