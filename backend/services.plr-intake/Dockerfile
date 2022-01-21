@@ -32,4 +32,4 @@ COPY --from=build-env /source/efbundle .
 
 EXPOSE 8080
 
-CMD ["./pidp"]
+CMD ["./plr-intake"]
