@@ -50,9 +50,10 @@ export class WorkAndRoleInformationComponent
 
   public ngOnInit(): void {
     // TODO pull from state management or URI param
-    const partyId = 1; // +this.route.snapshot.params.pid;
+    const partyId = this.partyService.profileStatus?.id; // +this.route.snapshot.params.pid;
     if (!partyId) {
       throw new Error('No party ID was provided');
+      // TODO redirect to portal
     }
 
     this.resource

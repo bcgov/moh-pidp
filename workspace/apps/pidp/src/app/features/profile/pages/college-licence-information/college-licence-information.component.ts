@@ -58,6 +58,7 @@ export class CollegeLicenceInformationComponent
     const partyId = this.partyService.profileStatus?.id; // +this.route.snapshot.params.pid;
     if (!partyId) {
       throw new Error('No party ID was provided');
+      // TODO redirect to portal
     }
 
     this.resource

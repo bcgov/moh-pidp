@@ -110,7 +110,7 @@ export class PartyService {
         type: 'special-authority-eforms',
         title: 'Special Authority E-Forms',
         process: 'automatic',
-        description: 'PharmaCare Special Authority eForms',
+        description: `Enrol here for access to PharmaCare's Special Authority eForms application.`,
         actionLabel: 'Request',
         route: AccessRoutes.routePath(AccessRoutes.SPECIAL_AUTH_EFORMS_PAGE),
         statusType: 'info',
