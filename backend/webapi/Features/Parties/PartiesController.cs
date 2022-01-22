@@ -71,9 +71,9 @@ public class PartiesController : ControllerBase
 
     [HttpGet("{id}/profile-status")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult<ProfileStatus.Model>> GetPartyProfileStatus([FromServices] IQueryHandler<ProfileStatus.Query, ProfileStatus.Model> handler,
+    public async Task<ActionResult<ProfileStatus.Model>> GetPartyProfileStatus([FromServices] IQueryHandler<ProfileStatus.Query, IDomainResult<ProfileStatus.Model>> handler,
                                                                                [FromHybrid] ProfileStatus.Query query)
-        => await handler.HandleAsync(query);
+        => await handler.HandleAsync(query).ToActionResultOfT();
 
     [HttpGet("{id}/enrolment-status")]
     [ProducesResponseType(StatusCodes.Status200OK)]

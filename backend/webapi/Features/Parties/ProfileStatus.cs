@@ -2,16 +2,18 @@ namespace Pidp.Features.Parties;
 
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using DomainResults.Common;
 using FluentValidation;
 using HybridModelBinding;
 using Microsoft.EntityFrameworkCore;
 using NodaTime;
+
 using Pidp.Data;
 using Pidp.Models.Lookups;
 
 public class ProfileStatus
 {
-    public class Query : IQuery<Model>
+    public class Query : IQuery<IDomainResult<Model>>
     {
         public int Id { get; set; }
     }
@@ -38,10 +40,10 @@ public class ProfileStatus
 
     public class QueryValidator : AbstractValidator<Query>
     {
-        public QueryValidator() => this.RuleFor(x => x.Id).NotEmpty();
+        public QueryValidator() => this.RuleFor(x => x.Id).GreaterThan(0);
     }
 
-    public class QueryHandler : IQueryHandler<Query, Model>
+    public class QueryHandler : IQueryHandler<Query, IDomainResult<Model>>
     {
         private readonly PidpDbContext context;
         private readonly IMapper mapper;
@@ -52,12 +54,19 @@ public class ProfileStatus
             this.mapper = mapper;
         }
 
-        public async Task<Model> HandleAsync(Query query)
+        public async Task<IDomainResult<Model>> HandleAsync(Query query)
         {
-            return await this.context.Parties
+            var model = await this.context.Parties
                 .Where(party => party.Id == query.Id)
                 .ProjectTo<Model>(this.mapper.ConfigurationProvider)
                 .SingleOrDefaultAsync();
+
+            if (model == null)
+            {
+                return DomainResult.NotFound<Model>();
+            }
+
+            return DomainResult.Success(model);
         }
     }
 }
