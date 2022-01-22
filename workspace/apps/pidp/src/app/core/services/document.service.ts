@@ -1,5 +1,4 @@
 import { Inject, Injectable } from '@angular/core';
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';
 
