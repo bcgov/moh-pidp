@@ -54,6 +54,18 @@ public class PartiesController : ControllerBase
         return this.NoContent();
     }
 
+    [HttpGet("{id}/enrolment-status")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<ActionResult<EnrolmentStatus.Model>> GetPartyEnrolmentStatus([FromServices] IQueryHandler<EnrolmentStatus.Query, EnrolmentStatus.Model> handler,
+                                                                                   [FromHybrid] EnrolmentStatus.Query query)
+        => await handler.HandleAsync(query);
+
+    [HttpGet("{id}/profile-status")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<ActionResult<ProfileStatus.Model>> GetPartyProfileStatus([FromServices] IQueryHandler<ProfileStatus.Query, IDomainResult<ProfileStatus.Model>> handler,
+                                                                               [FromHybrid] ProfileStatus.Query query)
+        => await handler.HandleAsync(query).ToActionResultOfT();
+
     [HttpGet("{id}/work-setting")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<WorkSetting.Command>> GetPartyWorkSetting([FromServices] IQueryHandler<WorkSetting.Query, WorkSetting.Command> handler,
@@ -68,16 +80,4 @@ public class PartiesController : ControllerBase
         await handler.HandleAsync(command);
         return this.NoContent();
     }
-
-    [HttpGet("{id}/profile-status")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult<ProfileStatus.Model>> GetPartyProfileStatus([FromServices] IQueryHandler<ProfileStatus.Query, IDomainResult<ProfileStatus.Model>> handler,
-                                                                               [FromHybrid] ProfileStatus.Query query)
-        => await handler.HandleAsync(query).ToActionResultOfT();
-
-    [HttpGet("{id}/enrolment-status")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult<EnrolmentStatus.Model>> GetPartyEnrolmentStatus([FromServices] IQueryHandler<EnrolmentStatus.Query, EnrolmentStatus.Model> handler,
-                                                                                   [FromHybrid] EnrolmentStatus.Query query)
-        => await handler.HandleAsync(query);
 }
