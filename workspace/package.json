@@ -30,7 +30,7 @@
     "keycloak-js": "15.0.2",
     "luxon": "^2.1.1",
     "ngx-mask": "^13.0.0",
-    "ngx-progressbar": "^6.1.1",
+    "ngx-progressbar": "^7.0.0",
     "rxjs": "~7.4.0",
     "tslib": "^2.0.0",
     "zone.js": "~0.11.4"

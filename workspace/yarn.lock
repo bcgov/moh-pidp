@@ -6762,10 +6762,10 @@ ngx-mask@^13.0.0:
   dependencies:
     tslib "^2.3.0"
 
-ngx-progressbar@^6.1.1:
-  version "6.1.1"
-  resolved "https://registry.yarnpkg.com/ngx-progressbar/-/ngx-progressbar-6.1.1.tgz#77156c0fbbbd163e26c9501d74bc55b7cb6d70bc"
-  integrity sha512-6FbCxbhy+lwX0hzfrr+pp4wAf0tX85664j1tnEdRd6LIfSTlUtXARiyUbGAEMyDS9MCbXhQhJyIylsJrB3gYOg==
+ngx-progressbar@^7.0.0:
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/ngx-progressbar/-/ngx-progressbar-7.0.0.tgz#c9ca11f67c0dd143789936008a2a0c9df15d38f4"
+  integrity sha512-bMijVbRLgVHkX+iQZzDyMi3ZZ2ClZKgDaZZQ6RF3f5o6iw7LvH1sM2SKnWk1IFzf+U3iOA59elvG7lDs1Wn9vQ==
   dependencies:
     tslib "^2.0.0"
 
