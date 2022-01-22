@@ -33,6 +33,9 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
     MatToolbarModule,
     MatTooltipModule,
     MatSidenavModule,
+    // TODO attempt to reduce the need to include this in the application by having a default CoreModule in lib
+    // NOTE: must be included in the application to allow for
+    // the NgProgressHttpModule to attach to the HttpClient
     NgxProgressBarModule,
   ],
   exports: [DashboardComponent, DashboardHeaderComponent],
