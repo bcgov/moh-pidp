@@ -1,5 +1,7 @@
 namespace Pidp.Features.Parties;
 
+using DomainResults.Common;
+using DomainResults.Mvc;
 using HybridModelBinding;
 using Microsoft.AspNetCore.Mvc;
 
@@ -39,9 +41,9 @@ public class PartiesController : ControllerBase
 
     [HttpGet("{id}/demographics")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult<Demographics.Command>> GetPartyDemographics([FromServices] IQueryHandler<Demographics.Query, Demographics.Command> handler,
+    public async Task<ActionResult<Demographics.Command>> GetPartyDemographics([FromServices] IQueryHandler<Demographics.Query, IDomainResult<Demographics.Command>> handler,
                                                                                [FromRoute] Demographics.Query query)
-        => await handler.HandleAsync(query);
+        => await handler.HandleAsync(query).ToActionResultOfT();
 
     [HttpPut("{id}/demographics")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
