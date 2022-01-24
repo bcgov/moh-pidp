@@ -6289,10 +6289,10 @@ keycloak-angular@^9.0.0:
   dependencies:
     tslib "^2.0.0"
 
-keycloak-js@10.0.2:
-  version "10.0.2"
-  resolved "https://registry.yarnpkg.com/keycloak-js/-/keycloak-js-10.0.2.tgz#f0cf5b942627c5221f1466552c40e4624503b77b"
-  integrity sha512-7nkg4Ob1khHGcNbuK36AMndKUEuIQFpNlWU9ygWs7nSBPCI9VZ8dJjjXfKJHm0ewgcqLFGPIJ6bxxRlfcQ6sLg==
+keycloak-js@15.0.2:
+  version "15.0.2"
+  resolved "https://registry.yarnpkg.com/keycloak-js/-/keycloak-js-15.0.2.tgz#9d12dd8860953a267b9b18f351ad2e76b8e94a9c"
+  integrity sha512-dv2a4NcPSH3AzGWG3ZtB+VrHpuQLdFBYXtQBj/+oBzm6XNwnVAMdL6LIC0OzCLQpn3rKTQJtNSATAGhbKJgewQ==
   dependencies:
     base64-js "1.3.1"
     js-sha256 "0.9.0"
@@ -6762,10 +6762,10 @@ ngx-mask@^13.0.0:
   dependencies:
     tslib "^2.3.0"
 
-ngx-progressbar@^6.1.1:
-  version "6.1.1"
-  resolved "https://registry.yarnpkg.com/ngx-progressbar/-/ngx-progressbar-6.1.1.tgz#77156c0fbbbd163e26c9501d74bc55b7cb6d70bc"
-  integrity sha512-6FbCxbhy+lwX0hzfrr+pp4wAf0tX85664j1tnEdRd6LIfSTlUtXARiyUbGAEMyDS9MCbXhQhJyIylsJrB3gYOg==
+ngx-progressbar@^7.0.0:
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/ngx-progressbar/-/ngx-progressbar-7.0.0.tgz#c9ca11f67c0dd143789936008a2a0c9df15d38f4"
+  integrity sha512-bMijVbRLgVHkX+iQZzDyMi3ZZ2ClZKgDaZZQ6RF3f5o6iw7LvH1sM2SKnWk1IFzf+U3iOA59elvG7lDs1Wn9vQ==
   dependencies:
     tslib "^2.0.0"
 

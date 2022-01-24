@@ -2,6 +2,7 @@ namespace Pidp.Features.Parties;
 
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using DomainResults.Common;
 using FluentValidation;
 using HybridModelBinding;
 using Microsoft.EntityFrameworkCore;
@@ -19,12 +20,6 @@ public class CollegeCertification
         public int PartyId { get; set; }
     }
 
-
-    public class QueryValidator : AbstractValidator<Query>
-    {
-        public QueryValidator() => this.RuleFor(x => x.PartyId).NotEmpty();
-    }
-
     public class Command : ICommand
     {
         [HybridBindProperty(Source.Route)]
@@ -33,11 +28,16 @@ public class CollegeCertification
         public string LicenceNumber { get; set; } = string.Empty;
     }
 
+    public class QueryValidator : AbstractValidator<Query>
+    {
+        public QueryValidator() => this.RuleFor(x => x.PartyId).GreaterThan(0);
+    }
+
     public class CommandValidator : AbstractValidator<Command>
     {
         public CommandValidator()
         {
-            this.RuleFor(x => x.PartyId).NotEmpty();
+            this.RuleFor(x => x.PartyId).GreaterThan(0);
             this.RuleFor(x => x.CollegeCode).IsInEnum();
             this.RuleFor(x => x.LicenceNumber).NotEmpty();
         }

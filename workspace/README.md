@@ -24,7 +24,7 @@ git clone https://github.com/bcgov/moh-pidp
 
 #### Node
 
-[Download](https://nodejs.org/en/) and install **Node v16.10.x**
+[Download](https://nodejs.org/en/) and install **Node v16.10.x** or greater
 
 #### VS Code
 
@@ -43,6 +43,14 @@ npm install -g nx
 ```
 
 It's suggested to install the [Nx Console](https://marketplace.visualstudio.com/items?itemName=nrwl.angular-console) VSCode extension, which has been included in the projects suggested extensions.
+
+#### Yarn
+
+[Yarn](https://yarnpkg.com/) is the default package manager for the project. Version 1.x of the package manager needs to be [installed](https://classic.yarnpkg.com/lang/en/). After installation in the workspace folder type:
+
+```bash
+yarn install
+```
 
 ## Building and Running
 

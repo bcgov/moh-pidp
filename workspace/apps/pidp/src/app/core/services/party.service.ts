@@ -6,6 +6,7 @@ import { AccessRoutes } from '@app/features/access/access.routes';
 import { PortalSection } from '@app/features/portal/portal.component';
 import { ProfileRoutes } from '@app/features/profile/profile.routes';
 import { YourProfileRoutes } from '@app/features/your-profile/your-profile.routes';
+import { LookupCodePipe } from '@app/modules/lookup/lookup-code.pipe';
 
 import { ProfileStatus } from '../resources/party-resource.service';
 
@@ -19,7 +20,7 @@ export class PartyService {
   private _completedProfile: boolean;
   private _state$: BehaviorSubject<Record<string, PortalSection[]>>;
 
-  public constructor() {
+  public constructor(private lookupCodePipe: LookupCodePipe) {
     this._profileStatus = null;
     this._acceptedCollectionNotice = false;
     this._state$ = new BehaviorSubject<Record<string, PortalSection[]>>({});
@@ -71,6 +72,13 @@ export class PartyService {
         process: 'manual',
         hint: profileStatus?.demographicsComplete ? '' : '1 min to complete',
         description: 'Personal and Contact Information',
+        properties: profileStatus?.demographicsComplete
+          ? [
+              `${profileStatus?.firstName} ${profileStatus?.lastName}`,
+              profileStatus?.email,
+              profileStatus.phone,
+            ]
+          : [],
         actionLabel: 'Update',
         route: ProfileRoutes.routePath(ProfileRoutes.PERSONAL_INFO_PAGE),
         statusType: profileStatus?.demographicsComplete ? 'success' : 'warn',
@@ -88,6 +96,16 @@ export class PartyService {
           ? ''
           : '1 min to complete',
         description: 'College Licence Information and Validation',
+        properties: profileStatus?.collegeCertificationComplete
+          ? [
+              this.lookupCodePipe.transform(
+                profileStatus.collegeCode,
+                'colleges'
+              ) as string,
+              profileStatus.licenceNumber,
+              '',
+            ]
+          : [],
         actionLabel: 'Update',
         route: ProfileRoutes.routePath(ProfileRoutes.COLLEGE_LICENCE_INFO_PAGE),
         statusType: profileStatus?.collegeCertificationComplete

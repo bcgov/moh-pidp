@@ -6,7 +6,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { httpInterceptorProviders } from '@bcgov/shared/data-access';
-import { RootRoutingModule } from '@bcgov/shared/ui';
+import { NgxProgressBarModule, RootRoutingModule } from '@bcgov/shared/ui';
 import { EnsureModuleLoadedOnceGuard } from '@bcgov/shared/utils';
 
 import { FeatureFlagModule } from '@app/modules/feature-flag/feature-flag.module';
@@ -25,6 +25,7 @@ const modules = [
   KeycloakModule,
   FeatureFlagModule.forRoot(),
   RootRoutingModule,
+  NgxProgressBarModule,
 ];
 
 @NgModule({

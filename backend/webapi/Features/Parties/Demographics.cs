@@ -2,6 +2,7 @@ namespace Pidp.Features.Parties;
 
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using DomainResults.Common;
 using FluentValidation;
 using HybridModelBinding;
 using Microsoft.EntityFrameworkCore;
@@ -10,7 +11,7 @@ using Pidp.Data;
 
 public class Demographics
 {
-    public class Query : IQuery<Command>
+    public class Query : IQuery<IDomainResult<Command>>
     {
         public int Id { get; set; }
     }
@@ -30,20 +31,20 @@ public class Demographics
 
     public class QueryValidator : AbstractValidator<Query>
     {
-        public QueryValidator() => this.RuleFor(x => x.Id).NotEmpty();
+        public QueryValidator() => this.RuleFor(x => x.Id).GreaterThan(0);
     }
 
     public class CommandValidator : AbstractValidator<Command>
     {
         public CommandValidator()
         {
-            this.RuleFor(x => x.Id).NotEmpty();
-            this.RuleFor(x => x.Email).NotEmpty().EmailAddress();
+            this.RuleFor(x => x.Id).GreaterThan(0);
+            this.RuleFor(x => x.Email).NotEmpty().EmailAddress(); // TODO Custom email validation?
             this.RuleFor(x => x.Phone).NotEmpty();
         }
     }
 
-    public class QueryHandler : IQueryHandler<Query, Command>
+    public class QueryHandler : IQueryHandler<Query, IDomainResult<Command>>
     {
         private readonly PidpDbContext context;
         private readonly IMapper mapper;
@@ -54,12 +55,19 @@ public class Demographics
             this.mapper = mapper;
         }
 
-        public async Task<Command> HandleAsync(Query query)
+        public async Task<IDomainResult<Command>> HandleAsync(Query query)
         {
-            return await this.context.Parties
+            var demographic = await this.context.Parties
                 .Where(party => party.Id == query.Id)
                 .ProjectTo<Command>(this.mapper.ConfigurationProvider)
                 .SingleOrDefaultAsync();
+
+            if (demographic == null)
+            {
+                return DomainResult.NotFound<Command>();
+            }
+
+            return DomainResult.Success(demographic);
         }
     }
 
@@ -76,6 +84,7 @@ public class Demographics
 
             if (party == null)
             {
+                // TODO 404?
                 return;
             }
 

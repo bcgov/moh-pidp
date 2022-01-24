@@ -2,6 +2,7 @@ namespace Pidp.Features.Parties;
 
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using DomainResults.Common;
 using FluentValidation;
 using HybridModelBinding;
 using Microsoft.EntityFrameworkCore;
@@ -12,7 +13,7 @@ using Pidp.Models;
 
 public class WorkSetting
 {
-    public class Query : IQuery<Command>
+    public class Query : IQuery<IDomainResult<Command>>
     {
         public int Id { get; set; }
     }
@@ -38,14 +39,14 @@ public class WorkSetting
 
     public class QueryValidator : AbstractValidator<Query>
     {
-        public QueryValidator() => this.RuleFor(x => x.Id).NotEmpty();
+        public QueryValidator() => this.RuleFor(x => x.Id).GreaterThan(0);
     }
 
     public class CommandValidator : AbstractValidator<Command>
     {
         public CommandValidator()
         {
-            this.RuleFor(x => x.Id).NotEmpty();
+            this.RuleFor(x => x.Id).GreaterThan(0);
             this.RuleFor(x => x.PhysicalAddress).SetValidator(new AddressValidator()!);
         }
     }
@@ -62,7 +63,7 @@ public class WorkSetting
         }
     }
 
-    public class QueryHandler : IQueryHandler<Query, Command>
+    public class QueryHandler : IQueryHandler<Query, IDomainResult<Command>>
     {
         private readonly PidpDbContext context;
         private readonly IMapper mapper;
@@ -73,12 +74,19 @@ public class WorkSetting
             this.mapper = mapper;
         }
 
-        public async Task<Command> HandleAsync(Query query)
+        public async Task<IDomainResult<Command>> HandleAsync(Query query)
         {
-            return await this.context.Parties
+            var setting = await this.context.Parties
                 .Where(party => party.Id == query.Id)
                 .ProjectTo<Command>(this.mapper.ConfigurationProvider)
                 .SingleOrDefaultAsync();
+
+            if (setting == null)
+            {
+                return DomainResult.NotFound<Command>();
+            }
+
+            return DomainResult.Success(setting);
         }
     }
 
@@ -96,6 +104,7 @@ public class WorkSetting
 
             if (party == null)
             {
+                // TODO 404?
                 return;
             }
 
