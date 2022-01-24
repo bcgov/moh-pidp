@@ -14,12 +14,6 @@ export abstract class CrudResource<T> implements ICrudResource<T> {
 
   /**
    * @description
-   * Provides the resource path with interpolated identifier.
-   */
-  abstract getResourcePath(id: number): string;
-
-  /**
-   * @description
    * Create a new resource.
    */
   public create(id: number, payload: T): Observable<T | null> {
@@ -71,4 +65,10 @@ export abstract class CrudResource<T> implements ICrudResource<T> {
       })
     );
   }
+
+  /**
+   * @description
+   * Provides the resource path with interpolated identifier.
+   */
+  protected abstract getResourcePath(id: number): string;
 }

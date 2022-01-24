@@ -1,13 +1,15 @@
+import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { EMPTY, Observable, tap } from 'rxjs';
+import { EMPTY, Observable, catchError, of, tap } from 'rxjs';
 
 import { ToggleContentChange } from '@bcgov/shared/ui';
 
 import { AuthorizedUserService } from '@app/core/services/authorized-user.service';
+import { LoggerService } from '@app/core/services/logger.service';
 import { BcscUser } from '@app/features/auth/models/bcsc-user.model';
 
 import { AbstractFormPage } from '@core/classes/abstract-form-page.class';
@@ -38,10 +40,10 @@ export class PersonalInformationComponent
     protected formUtilsService: FormUtilsService,
     private route: ActivatedRoute,
     private router: Router,
-    // TODO switch to RxJS state management using Elf
     private partyService: PartyService,
     private resource: PersonalInformationResource,
     private authorizedUserService: AuthorizedUserService,
+    private logger: LoggerService,
     fb: FormBuilder
   ) {
     super(dialog, formUtilsService);
@@ -57,15 +59,14 @@ export class PersonalInformationComponent
   }
 
   public onBack(): void {
-    this.router.navigate([this.route.snapshot.data.routes.root]);
+    this.navigateToRoot();
   }
 
   public ngOnInit(): void {
-    // TODO pull from state management or URI param
-    const partyId = this.partyService.profileStatus?.id; // +this.route.snapshot.params.pid;
+    const partyId = this.partyService.profileStatus?.id;
     if (!partyId) {
-      throw new Error('No party ID was provided');
-      // TODO redirect to portal
+      this.logger.error('No party ID was provided');
+      return this.navigateToRoot();
     }
 
     this.resource
@@ -73,7 +74,13 @@ export class PersonalInformationComponent
       .pipe(
         tap((model: PersonalInformationModel | null) =>
           this.formState.patchValue(model)
-        )
+        ),
+        catchError((error: HttpErrorResponse) => {
+          if (error.status === HttpStatusCode.NotFound) {
+            this.navigateToRoot();
+          }
+          return of(null);
+        })
       )
       .subscribe((model: PersonalInformationModel | null) =>
         this.handlePreferredNameChange(!!model?.preferredFirstName)
@@ -81,7 +88,7 @@ export class PersonalInformationComponent
   }
 
   protected performSubmission(): Observable<void> {
-    const partyId = this.partyService.profileStatus?.id; // +this.route.snapshot.params.pid;
+    const partyId = this.partyService.profileStatus?.id;
 
     return partyId && this.formState.json
       ? this.resource.update(partyId, this.formState.json)
@@ -89,7 +96,7 @@ export class PersonalInformationComponent
   }
 
   protected afterSubmitIsSuccessful(): void {
-    this.router.navigate([this.route.snapshot.data.routes.root]);
+    this.navigateToRoot();
   }
 
   private handlePreferredNameChange(checked: boolean): void {
@@ -103,5 +110,9 @@ export class PersonalInformationComponent
     if (!checked) {
       this.formState.preferredMiddleName.reset();
     }
+  }
+
+  private navigateToRoot(): void {
+    this.router.navigate([this.route.snapshot.data.routes.root]);
   }
 }
