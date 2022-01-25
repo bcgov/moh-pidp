@@ -36,6 +36,8 @@ public class ProfileStatus
         public bool DemographicsComplete => this.Email != null && this.Phone != null;
         public bool CollegeCertificationComplete => this.CollegeCode != null && this.LicenceNumber != null;
         public bool WorkSettingComplete => this.JobTitle != null && this.FacilityName != null;
+
+        public bool SaEformsComplete => this.CollegeCertificationComplete;
     }
 
     public class QueryValidator : AbstractValidator<Query>
