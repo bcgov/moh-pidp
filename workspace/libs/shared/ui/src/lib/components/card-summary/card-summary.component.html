@@ -6,7 +6,7 @@
 </ng-container>
 
 <ng-template #card>
-  <ui-card [icon]="icon" [title]="title" [hint]="hint">
+  <ui-card [icon]="icon" [title]="title">
     <!-- Work around for ngProjectAs not passing directive reference when applied to ng-content -->
     <ng-container uiCardHint>
       <ng-content select="[uiCardSummaryHint]"></ng-content>
@@ -22,7 +22,7 @@
           mat-stroked-button
           type="button"
           color="primary"
-          [disabled]="disabled"
+          [disabled]="actionDisabled"
           (click)="onAction()">
           {{ actionLabel }}
         </button>
