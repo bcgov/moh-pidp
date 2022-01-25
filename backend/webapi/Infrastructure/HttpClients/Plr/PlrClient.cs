@@ -11,8 +11,9 @@ public class PlrClient : BaseClient, IPlrClient
 {
     public PlrClient(HttpClient client, ILogger<PlrClient> logger) : base(client, logger) { }
 
-    public async Task<string?> GetPlrRecord(string licenceNumber, CollegeCode collegeCode, LocalDate birthdate)
+    public async Task<string?> GetPlrRecord(CollegeCode collegeCode, string licenceNumber, LocalDate birthdate)
     {
+        // TODO timeout of 4-5 seconds
         var response = await this.Client.GetWithQueryParamsAsync("records", new { CollegeId = licenceNumber, Birthdate = birthdate.ToString() });
         if (!response.IsSuccessStatusCode)
         {

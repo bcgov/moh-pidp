@@ -13,5 +13,5 @@ public interface IPlrClient
     /// <param name="licenceNumber"></param>
     /// <param name="collegeCode"></param>
     /// <param name="birthdate"></param>
-    Task<string?> GetPlrRecord(string licenceNumber, CollegeCode collegeCode, LocalDate birthdate);
+    Task<string?> GetPlrRecord(CollegeCode collegeCode, string licenceNumber, LocalDate birthdate);
 }

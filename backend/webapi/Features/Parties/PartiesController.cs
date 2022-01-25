@@ -27,10 +27,10 @@ public class PartiesController : ControllerBase
     [HttpGet("{partyId}/college-certification")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    // [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<CollegeCertification.Command>> GetPartyCollegeCertification([FromServices] IQueryHandler<CollegeCertification.Query, CollegeCertification.Command> handler,
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<CollegeCertification.Command>> GetPartyCollegeCertification([FromServices] IQueryHandler<CollegeCertification.Query, IDomainResult<CollegeCertification.Command>> handler,
                                                                                                [FromRoute] CollegeCertification.Query query)
-        => await handler.HandleAsync(query);
+        => await handler.HandleAsync(query).ToActionResultOfT();
 
     [HttpPut("{partyId}/college-certification")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]

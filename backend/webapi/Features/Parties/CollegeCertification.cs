@@ -15,7 +15,7 @@ using Pidp.Models.Lookups;
 
 public class CollegeCertification
 {
-    public class Query : IQuery<Command>
+    public class Query : IQuery<IDomainResult<Command>>
     {
         public int PartyId { get; set; }
     }
@@ -43,7 +43,7 @@ public class CollegeCertification
         }
     }
 
-    public class QueryHandler : IQueryHandler<Query, Command>
+    public class QueryHandler : IQueryHandler<Query, IDomainResult<Command>>
     {
         private readonly PidpDbContext context;
         private readonly IMapper mapper;
@@ -54,12 +54,22 @@ public class CollegeCertification
             this.mapper = mapper;
         }
 
-        public async Task<Command> HandleAsync(Query query)
+        public async Task<IDomainResult<Command>> HandleAsync(Query query)
         {
-            return await this.context.PartyCertifications
+            var partyExists = await this.context.Parties
+                .AnyAsync(party => party.Id == query.PartyId);
+
+            if (!partyExists)
+            {
+                return DomainResult.NotFound<Command>();
+            }
+
+            var cert = await this.context.PartyCertifications
                 .Where(certification => certification.PartyId == query.PartyId)
                 .ProjectTo<Command>(this.mapper.ConfigurationProvider)
                 .SingleOrDefaultAsync();
+
+            return DomainResult.Success(cert ?? new Command { PartyId = query.PartyId });
         }
     }
 
@@ -82,7 +92,7 @@ public class CollegeCertification
 
             if (party == null)
             {
-                // TODO 404
+                // TODO 404?
                 return;
             }
 
@@ -93,7 +103,7 @@ public class CollegeCertification
 
             party.PartyCertification.CollegeCode = command.CollegeCode;
             party.PartyCertification.LicenceNumber = command.LicenceNumber;
-            party.PartyCertification.Ipc = await this.client.GetPlrRecord(command.LicenceNumber, command.CollegeCode, party.Birthdate);
+            party.PartyCertification.Ipc = await this.client.GetPlrRecord(command.CollegeCode, command.LicenceNumber, party.Birthdate);
 
             await this.context.SaveChangesAsync();
         }
