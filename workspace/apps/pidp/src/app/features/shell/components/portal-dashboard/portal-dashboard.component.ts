@@ -30,7 +30,7 @@ export class PortalDashboardComponent implements IDashboard {
     private authService: AuthService,
     accessTokenService: AccessTokenService
   ) {
-    this.logoutRedirectUrl = `${this.config.loginRedirectUrl}/${this.config.routes.auth}`;
+    this.logoutRedirectUrl = `${this.config.applicationUrl}/${this.config.routes.auth}`;
     this.username = accessTokenService
       .decodeToken()
       .pipe(map((token) => token?.name ?? ''));
