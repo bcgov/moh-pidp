@@ -11,6 +11,8 @@ public static class HttpClientSetup
 {
     public static IServiceCollection AddHttpClients(this IServiceCollection services, PidpConfiguration config)
     {
+        services.AddHttpClient<IAccessTokenClient, AccessTokenClient>();
+
         services.AddHttpClientWithBaseAddress<IKeycloakAdministrationClient, KeycloakAdministrationClient>(config.Keycloak.AdministrationUrl)
             .WithBearerToken(new KeycloakAdministrationClientCredentials
             {
