@@ -5,7 +5,12 @@ import { Observable, map, of } from 'rxjs';
 import { UtilsService } from '@core/services/utils.service';
 
 import { LookupResource } from './lookup-resource.service';
-import { Lookup, LookupConfig, ProvinceLookup } from './lookup.model';
+import {
+  CollegeLookup,
+  Lookup,
+  LookupConfig,
+  ProvinceLookup,
+} from './lookup.model';
 
 export interface ILookupService extends LookupConfig {
   load(): Observable<LookupConfig | null>;
@@ -24,9 +29,11 @@ export class LookupService implements ILookupService {
     this.lookupConfig = null;
   }
 
-  public get colleges(): Lookup[] {
+  public get colleges(): CollegeLookup[] {
     const colleges = this.lookupConfig?.colleges ?? [];
-    return [...colleges].sort(this.utilsService.sortByKey<Lookup>('code'));
+    return [...colleges].sort(
+      this.utilsService.sortByKey<CollegeLookup>('code')
+    );
   }
 
   public get countries(): Lookup<string>[] {

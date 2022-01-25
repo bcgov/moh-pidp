@@ -17,14 +17,16 @@ public class College
     public CollegeCode Code { get; set; }
 
     public string Name { get; set; } = string.Empty;
+
+    public string Acronym { get; set; } = string.Empty;
 }
 
 public class CollegeDataGenerator : ILookupDataGenerator<College>
 {
     public IEnumerable<College> Generate() => new[]
     {
-        new College { Code = CollegeCode.PhysiciansAndSurgeons, Name = "College of Physicians and Surgeons of BC (CPSBC)" },
-        new College { Code = CollegeCode.Pharmacists,           Name = "College of Pharmacists of BC (CPBC)"              },
-        new College { Code = CollegeCode.NursesAndMidwives,     Name = "BC College of Nurses and Midwives (BCCNM)"        },
+        new College { Code = CollegeCode.PhysiciansAndSurgeons, Name = "College of Physicians and Surgeons of BC", Acronym = "CPSBC" },
+        new College { Code = CollegeCode.Pharmacists,           Name = "College of Pharmacists of BC",             Acronym = "CPBC"  },
+        new College { Code = CollegeCode.NursesAndMidwives,     Name = "BC College of Nurses and Midwives",        Acronym = "BCCNM" },
     };
 }

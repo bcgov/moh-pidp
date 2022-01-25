@@ -8,15 +8,18 @@ export class MockLookup {
       colleges: [
         {
           code: 1,
-          name: 'College of Physicians and Surgeons of BC (CPSBC)',
+          name: 'College of Physicians and Surgeons of BC',
+          acronym: 'CPSBC',
         },
         {
           code: 2,
-          name: 'College of Pharmacists of BC (CPBC)',
+          name: 'College of Pharmacists of BC',
+          acronym: 'CPBC',
         },
         {
           code: 3,
-          name: 'BC College of Nurses and Midwives (BCCNM)',
+          name: 'BC College of Nurses and Midwives',
+          acronym: 'BCCNM',
         },
       ],
       countries: [
