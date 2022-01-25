@@ -1,7 +1,6 @@
 namespace Pidp.Infrastructure.HttpClients;
 
 using IdentityModel.Client;
-using Microsoft.Extensions.DependencyInjection;
 
 using Pidp.Extensions;
 using Pidp.Infrastructure.HttpClients.Keycloak;
