@@ -33,13 +33,24 @@
   h2 {
     margin-top: 2rem;
     margin-bottom: 0.25rem;
-
-    // font-size: 2rem;
     line-height: 2rem;
   }
 
   .row {
     margin-bottom: 2rem;
+  }
+
+  button {
+    font-size: 1.2rem;
+    padding: 0.75rem 1.2rem;
+
+    @include media-breakpoint-down(sm) {
+      width: 100%;
+    }
+
+    @include media-breakpoint-up(sm) {
+      padding: 0.75rem 1.75rem;
+    }
   }
 }
 
