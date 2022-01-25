@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 import { AccessRoutes } from '@app/features/access/access.routes';
-import { PortalSection } from '@app/features/portal/portal.component';
+import { PortalSection } from '@app/features/portal/models/portal-section.model';
 import { ProfileRoutes } from '@app/features/profile/profile.routes';
 import { YourProfileRoutes } from '@app/features/your-profile/your-profile.routes';
 import { LookupCodePipe } from '@app/modules/lookup/lookup-code.pipe';
@@ -69,43 +69,57 @@ export class PartyService {
         icon: 'fingerprint',
         type: 'personal-information',
         title: 'Personal Information',
-        process: 'manual',
         hint: profileStatus?.demographicsComplete ? '' : '1 min to complete',
         description: 'Personal and Contact Information',
         properties: profileStatus?.demographicsComplete
           ? [
-              `${profileStatus?.firstName} ${profileStatus?.lastName}`,
-              profileStatus?.email,
-              profileStatus.phone,
+              {
+                key: 'fullName',
+                value: `${profileStatus.firstName} ${profileStatus.lastName}`,
+              },
+              {
+                key: 'email',
+                value: profileStatus.email,
+              },
+              {
+                key: 'phone',
+                value: profileStatus.phone,
+              },
             ]
-          : [],
+          : null,
         actionLabel: 'Update',
         route: ProfileRoutes.routePath(ProfileRoutes.PERSONAL_INFO_PAGE),
         statusType: profileStatus?.demographicsComplete ? 'success' : 'warn',
         status: profileStatus?.demographicsComplete
           ? 'completed'
           : 'incomplete',
-        disabled: false,
+        actionDisabled: false,
       },
       {
         icon: 'fingerprint',
         type: 'college-licence-information',
         title: 'College Licence Information',
-        process: 'manual',
         hint: profileStatus?.collegeCertificationComplete
           ? ''
           : '1 min to complete',
         description: 'College Licence Information and Validation',
         properties: profileStatus?.collegeCertificationComplete
           ? [
-              this.lookupCodePipe.transform(
-                profileStatus.collegeCode,
-                'colleges'
-              ) as string,
-              profileStatus.licenceNumber,
-              '',
+              {
+                key: 'collegeCode',
+                value: profileStatus.collegeCode,
+              },
+              {
+                key: 'licenceNumber',
+                value: profileStatus.licenceNumber,
+              },
+              {
+                key: 'status',
+                value: 'verified',
+                label: 'Status',
+              },
             ]
-          : [],
+          : null,
         actionLabel: 'Update',
         route: ProfileRoutes.routePath(ProfileRoutes.COLLEGE_LICENCE_INFO_PAGE),
         statusType: profileStatus?.collegeCertificationComplete
@@ -114,7 +128,7 @@ export class PartyService {
         status: profileStatus?.collegeCertificationComplete
           ? 'completed'
           : 'incomplete',
-        disabled: false,
+        actionDisabled: false,
       },
     ];
   }
@@ -126,13 +140,12 @@ export class PartyService {
       {
         icon: 'fingerprint',
         type: 'special-authority-eforms',
-        title: 'Special Authority E-Forms',
-        process: 'automatic',
+        title: 'Special Authority eForms',
         description: `Enrol here for access to PharmaCare's Special Authority eForms application.`,
         actionLabel: 'Request',
         route: AccessRoutes.routePath(AccessRoutes.SPECIAL_AUTH_EFORMS_PAGE),
         statusType: 'info',
-        disabled: !(
+        actionDisabled: !(
           profileStatus?.demographicsComplete &&
           profileStatus?.collegeCertificationComplete
         ),
@@ -149,12 +162,11 @@ export class PartyService {
         type: 'view-signed-or-accepted-documents',
         title: 'View Signed or Accepted Documents',
         description: 'View Agreement(s)',
-        process: 'manual',
         actionLabel: 'View',
         route: YourProfileRoutes.routePath(
           YourProfileRoutes.SIGNED_ACCEPTED_DOCUMENTS_PAGE
         ),
-        disabled: !(
+        actionDisabled: !(
           profileStatus?.demographicsComplete &&
           profileStatus?.collegeCertificationComplete
         ),

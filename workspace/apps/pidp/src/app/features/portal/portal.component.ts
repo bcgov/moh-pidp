@@ -3,8 +3,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { Observable, exhaustMap, map, of } from 'rxjs';
 
-import { AlertType } from '@bcgov/shared/ui';
-
 import { DocumentService } from '@app/core/services/document.service';
 import { Role } from '@app/shared/enums/roles.enum';
 
@@ -15,23 +13,8 @@ import {
 import { PartyService } from '@core/services/party.service';
 
 import { ShellRoutes } from '../shell/shell.routes';
+import { PortalSection } from './models/portal-section.model';
 
-export interface PortalSection {
-  icon: string;
-  type: string;
-  title: string;
-  description: string;
-  properties?: string[];
-  process: 'manual' | 'automatic';
-  hint?: string;
-  actionLabel?: string;
-  route?: string;
-  statusType?: AlertType;
-  status?: string;
-  disabled: boolean;
-}
-
-// TODO find a clean way to type narrow in the template
 @Component({
   selector: 'app-portal',
   templateUrl: './portal.component.html',

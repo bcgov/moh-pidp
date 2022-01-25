@@ -37,6 +37,7 @@ import { FormatDatePipe } from './pipes/format-date.pipe';
 import { FullnamePipe } from './pipes/fullname.pipe';
 import { PhonePipe } from './pipes/phone.pipe';
 import { PostalPipe } from './pipes/postal.pipe';
+import { ReplacePipe } from './pipes/replace.pipe';
 import { SafePipe } from './pipes/safe.pipe';
 
 @NgModule({
@@ -72,6 +73,7 @@ import { SafePipe } from './pipes/safe.pipe';
     FullnamePipe,
     PhonePipe,
     PostalPipe,
+    ReplacePipe,
     SafePipe,
   ],
   imports: [
@@ -117,6 +119,7 @@ import { SafePipe } from './pipes/safe.pipe';
     FullnamePipe,
     PhonePipe,
     PostalPipe,
+    ReplacePipe,
     SafePipe,
   ],
 })

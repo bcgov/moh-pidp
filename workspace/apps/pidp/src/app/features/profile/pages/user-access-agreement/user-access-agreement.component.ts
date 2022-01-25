@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { DateTime } from 'luxon';
@@ -12,7 +12,7 @@ import { DemoService } from '@core/services/demo.service';
   templateUrl: './user-access-agreement.component.html',
   styleUrls: ['./user-access-agreement.component.scss'],
 })
-export class UserAccessAgreementComponent implements OnInit {
+export class UserAccessAgreementComponent {
   public title: string;
 
   public constructor(
@@ -41,22 +41,20 @@ export class UserAccessAgreementComponent implements OnInit {
 
     this.demoService.state.accessToSystemsSections =
       this.demoService.state.accessToSystemsSections.map((section) => {
-        section.disabled = false;
+        section.actionDisabled = false;
         return section;
       });
 
     this.demoService.state.trainingSections =
       this.demoService.state.trainingSections.map((section) => {
-        section.disabled = false;
+        section.actionDisabled = false;
         return section;
       });
 
     this.demoService.state.yourProfileSections =
       this.demoService.state.yourProfileSections.map((section) => {
-        section.disabled = false;
+        section.actionDisabled = false;
         return section;
       });
   }
-
-  public ngOnInit(): void {}
 }

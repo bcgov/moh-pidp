@@ -6,7 +6,7 @@ import { APP_DATE_FORMAT } from '@bcgov/shared/ui';
 import { ArrayUtils } from '@bcgov/shared/utils';
 
 import { AccessRoutes } from '@app/features/access/access.routes';
-import { PortalSection } from '@app/features/portal/portal.component';
+import { PortalSection } from '@app/features/portal/models/portal-section.model';
 import { ProfileRoutes } from '@app/features/profile/profile.routes';
 import { TrainingRoutes } from '@app/features/training/training.routes';
 import { YourProfileRoutes } from '@app/features/your-profile/your-profile.routes';
@@ -58,7 +58,7 @@ export class DemoService {
         if (section.type === enableMap[sectionType]) {
           return {
             ...section,
-            disabled: false,
+            actionDisabled: false,
           };
         }
 
@@ -73,27 +73,25 @@ export class DemoService {
         icon: 'fingerprint',
         type: 'personal-information',
         title: 'Personal Information',
-        process: 'manual',
         hint: '1 min to complete',
         description: 'Personal and Contact Information',
         actionLabel: 'Update',
         route: ProfileRoutes.routePath(ProfileRoutes.PERSONAL_INFO_PAGE),
         statusType: 'warn',
         status: 'incomplete',
-        disabled: false,
+        actionDisabled: false,
       },
       {
         icon: 'fingerprint',
         type: 'college-licence-information',
         title: 'College Licence Information',
-        process: 'manual',
         hint: '1 min to complete',
         description: 'College Licence Information and Validation',
         actionLabel: 'Update',
         route: ProfileRoutes.routePath(ProfileRoutes.COLLEGE_LICENCE_INFO_PAGE),
         statusType: 'warn',
         status: 'incomplete',
-        disabled: false,
+        actionDisabled: false,
       },
       ...ArrayUtils.insertIf<PortalSection>(
         this.featureFlagService.hasFlags(Role.FEATURE_PIDP_DEMO),
@@ -102,7 +100,7 @@ export class DemoService {
             icon: 'fingerprint',
             type: 'work-and-role-information',
             title: 'Work and Role Information',
-            process: 'manual',
+
             hint: '2 min to complete',
             description: 'Job title and details of your work location',
             actionLabel: 'Update',
@@ -117,7 +115,7 @@ export class DemoService {
             icon: 'fingerprint',
             type: 'user-access-agreement',
             title: 'User Access Agreement(s)',
-            process: 'manual',
+
             hint: '13 mins to complete',
             description:
               'Read and agree to the applicable User Access Agreement(s)',
@@ -139,13 +137,12 @@ export class DemoService {
       {
         icon: 'fingerprint',
         type: 'special-authority-eforms',
-        title: 'Special Authority E-Forms',
-        process: 'automatic',
+        title: 'Special Authority eForms',
         description: 'PharmaCare Special Authority eForms',
         actionLabel: 'Request',
         route: AccessRoutes.routePath(AccessRoutes.SPECIAL_AUTH_EFORMS_PAGE),
         statusType: 'info',
-        disabled: true,
+        actionDisabled: true,
       },
       ...ArrayUtils.insertIf<PortalSection>(
         this.featureFlagService.hasFlags(Role.FEATURE_PIDP_DEMO),
@@ -154,7 +151,7 @@ export class DemoService {
             icon: 'fingerprint',
             type: 'pharmanet',
             title: 'PharmaNet',
-            process: 'manual',
+
             hint: '5 mins to complete',
             description: 'Request access to PharmaNet',
             actionLabel: 'Request',
@@ -167,7 +164,7 @@ export class DemoService {
             icon: 'fingerprint',
             type: 'site-privacy-and-security-readiness-checklist',
             title: 'Site Privacy and Security Readiness Checklist',
-            process: 'manual',
+
             hint: '10 mins to complete',
             description: 'Description of what the checklist is here',
             actionLabel: 'Request',
@@ -192,7 +189,7 @@ export class DemoService {
             icon: 'fingerprint',
             type: 'compliance-training',
             title: 'Compliance Training',
-            process: 'manual',
+
             hint: '15 mins',
             description: 'Description of what the video is here',
             actionLabel: 'Watch',
@@ -218,7 +215,7 @@ export class DemoService {
             type: 'transactions',
             title: 'Transactions',
             description: 'More information on what this is here',
-            process: 'manual',
+
             actionLabel: 'View',
             route: YourProfileRoutes.routePath(
               YourProfileRoutes.TRANSACTIONS_PAGE
@@ -232,12 +229,11 @@ export class DemoService {
         type: 'view-signed-or-accepted-documents',
         title: 'View Signed or Accepted Documents',
         description: 'View Agreement(s)',
-        process: 'manual',
         actionLabel: 'View',
         route: YourProfileRoutes.routePath(
           YourProfileRoutes.SIGNED_ACCEPTED_DOCUMENTS_PAGE
         ),
-        disabled: true,
+        actionDisabled: true,
       },
     ];
   }

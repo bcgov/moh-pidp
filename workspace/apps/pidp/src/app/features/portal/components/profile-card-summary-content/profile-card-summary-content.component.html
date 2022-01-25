@@ -1,0 +1,28 @@
+<ng-container *ngIf="properties; else description">
+  <ng-container *ngFor="let property of properties">
+    <div>
+      <ng-container [ngSwitch]="property.key">
+        <ng-container *ngSwitchCase="'phone'">
+          {{ property.value | phone }}
+        </ng-container>
+        <ng-container *ngSwitchCase="'collegeCode'">
+          {{ property.value | lookupCode: 'colleges' }}
+        </ng-container>
+        <ng-container *ngSwitchCase="'licenceNumber'">
+          College Licence Number: {{ property.value }}
+        </ng-container>
+        <ng-container *ngSwitchCase="'status'">
+          <!-- strict typing and no narrowing in templates -->
+          Status: {{ property.value.toString() | titlecase }}
+        </ng-container>
+        <ng-container *ngSwitchDefault>
+          {{ property.value }}
+        </ng-container>
+      </ng-container>
+    </div>
+  </ng-container>
+</ng-container>
+
+<ng-template #description>
+  <ng-content></ng-content>
+</ng-template>
