@@ -75,7 +75,6 @@ export class DemoService {
         title: 'Personal Information',
         process: 'manual',
         hint: '1 min to complete',
-        // TODO ability to populate the card with user information
         description: 'Personal and Contact Information',
         actionLabel: 'Update',
         route: ProfileRoutes.routePath(ProfileRoutes.PERSONAL_INFO_PAGE),
@@ -89,7 +88,6 @@ export class DemoService {
         title: 'College Licence Information',
         process: 'manual',
         hint: '1 min to complete',
-        // TODO ability to populate the card with user information
         description: 'College Licence Information and Validation',
         actionLabel: 'Update',
         route: ProfileRoutes.routePath(ProfileRoutes.COLLEGE_LICENCE_INFO_PAGE),
@@ -106,7 +104,6 @@ export class DemoService {
             title: 'Work and Role Information',
             process: 'manual',
             hint: '2 min to complete',
-            // TODO ability to populate the card with user information
             description: 'Job title and details of your work location',
             actionLabel: 'Update',
             route: ProfileRoutes.routePath(

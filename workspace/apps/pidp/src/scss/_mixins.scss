@@ -179,7 +179,9 @@ $types: success, info, warn, danger, muted;
       border-color: alert-palette($type, backgroundColorSolid);
       color: alert-palette($type, color);
 
-      // TODO temporary override that should be lifted out
+      // TODO temporary override that should be lifted out,
+      //      or provided card status palette
+      //      or do this through Sass functions
       @if ($type == 'success' or $type == 'danger') {
         color: white;
       }

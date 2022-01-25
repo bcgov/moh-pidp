@@ -45,7 +45,7 @@ export class LoginComponent {
   public onLogin(): void {
     this.authService.login({
       idpHint: this.route.snapshot.data.idpHint,
-      redirectUri: this.config.loginRedirectUrl,
+      redirectUri: this.config.applicationUrl,
     });
   }
 }

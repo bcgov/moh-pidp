@@ -14,8 +14,7 @@ export const environment: AppEnvironment = {
   production: true,
   apiEndpoint: 'http://localhost:5000',
   environmentName: EnvironmentName.LOCAL,
-  // TODO should be changed to applicationUrl or equivalent
-  loginRedirectUrl: 'http://localhost:4200',
+  applicationUrl: 'http://localhost:4200',
   emails: {
     providerIdentitySupport: 'provideridentityportal@gov.bc.ca',
     specialAuthoritySupport: 'satransformation@gov.bc.ca',

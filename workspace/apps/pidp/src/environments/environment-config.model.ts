@@ -5,6 +5,6 @@ import { environmentName } from './environment.model';
 export interface EnvironmentConfig {
   apiEndpoint: string;
   environmentName: environmentName;
-  loginRedirectUrl: string;
+  applicationUrl: string;
   keycloakConfig: KeycloakOptions;
 }

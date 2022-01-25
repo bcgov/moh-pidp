@@ -24,7 +24,7 @@ const routes: Routes = [
       title: 'Provider Identity Portal',
       idpHint: IdentityProviderEnum.IDIR,
       // TODO don't hardcode in the redirect URL but also don't want cross module dependencies,
-      // TODO refactor when modules become libs otherwise premature optimization
+      //      refactor when modules become libs otherwise premature optimization
       routes: {
         auth: '/admin',
       },
