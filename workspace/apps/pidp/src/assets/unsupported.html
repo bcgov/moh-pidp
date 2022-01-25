@@ -93,92 +93,148 @@
     </script>
 
     <style>
-      /* .logo-fill-light g:not(.logo-fill-yellow) path,
-      .logo-fill-light g:not(.logo-fill-yellow) polygon {
-        fill: white;
-      }
-
-      .logo-fill-dark g:not(.logo-fill-yellow) path,
-      .logo-fill-dark g:not(.logo-fill-yellow) polygon {
-        fill: #224176;
-      }
-
-      .logo-fill-yellow path,
-      .logo-fill-yellow polygon {
-        fill: #e3a92b;
-      }
-
-      .logo-position-right {
-        transform: translate(114px, -82px);
+      body {
+        color: white;
       }
 
       .wrapper {
         min-height: 100vh;
-        background-color: #003366;
       }
 
-      @media screen and (min-width: 600px) {
-        .wrapper {
-          background-color: #ffb200;
-        }
-      }
-
-      .wrapper .header {
+      .header {
         min-height: 15vh;
+      }
+
+      .container-fluid {
+        min-height: 70vh;
+      }
+
+      .wrapper {
+        background-color: #ffb200;
+      }
+
+      .header,
+      .container-fluid {
         background-color: #003366;
       }
 
-      .wrapper .container-fluid {
-        min-height: 70vh;
-        background-color: #003366;
+      .header,
+      .container-fluid {
+        padding-top: 5vh;
+        padding-left: 5vw;
+      }
+
+      a:hover {
+        color: #ffb200;
       }
 
       h1 {
-        color: white;
-        font-size: 5rem;
-        margin-top: 6%;
-        line-height: 3rem;
+        font-size: 2rem;
+        line-height: 2rem;
       }
 
-      h1 span {
-        font-size: 2.75rem !important;
-      } */
+      p {
+        font-size: 1.5rem;
+      }
+
+      @media (min-width: 576px) {
+        h1 {
+          font-size: 2.75rem;
+          line-height: 3rem;
+        }
+
+        p {
+          font-size: 1.75rem;
+          line-height: 2.25rem;
+        }
+      }
+
+      @media (min-width: 768px) {
+        h1 {
+          font-size: 3.5rem;
+          line-height: 3.5rem;
+        }
+
+        p {
+          font-size: 2rem;
+          line-height: 2.5rem;
+        }
+      }
+
+      @media (min-width: 992px) {
+        h1 {
+          font-size: 3.75rem;
+          line-height: 4.25rem;
+        }
+
+        p {
+          font-size: 2.25rem;
+          line-height: 2.75rem;
+        }
+      }
+
+      @media (min-width: 1200px) {
+        h1 {
+          font-size: 4.25rem;
+          line-height: 4.75rem;
+        }
+
+        p {
+          font-size: 2.5rem;
+          line-height: 3rem;
+        }
+      }
+
+      @media (min-width: 1400px) {
+        h1 {
+          font-size: 5rem;
+          line-height: 5rem;
+        }
+
+        p {
+          font-size: 2.5rem;
+          line-height: 3rem;
+        }
+      }
     </style>
   </head>
 
   <body>
     <div class="wrapper">
-      <!--
-        TODO what should the page look like now? branding?
-      <div class="header p-3 p-md-5">
-        TODO add logo
+      <div class="header">
+        <img
+          src="./images/pidp-logo-blue.svg"
+          alt="Provider Identity Portal Logo" />
       </div>
       <div class="container-fluid">
         <div class="row justify-content-center">
-          <div class="col-sm-12 col-md-10 col-lg-8 text-center">
-            <h1 class="mb-5">
-              Provider Identity Portal
-              <span class="d-block d-lg-inline pt-3">
-                does not support your browser.
-              </span>
-              <span class="d-block">
-                Use
-                <a href="https://www.google.ca/chrome" target="_blank">
-                  Chrome </a
-                >,
-                <a
-                  href="https://www.mozilla.org/en-US/firefox/new"
-                  target="_blank">
-                  Firefox </a
-                >, Safari, or the latest version of
-                <a href="https://www.microsoft.com/en-us/edge" target="_blank">
-                  Edge </a
-                >.
-              </span>
-            </h1>
+          <div class="col-sm-12 col-md-10 col-lg-8 col-xl-6">
+            <h1>Provider Identity Portal</h1>
+            <p>does not support your browser.</p>
+            <p>
+              Use
+              <a
+                href="https://www.google.ca/chrome"
+                target="_blank"
+                rel="noopener noreferrer"
+                >Chrome</a
+              >,
+              <a
+                href="https://www.mozilla.org/en-US/firefox/new"
+                target="_blank"
+                rel="noopener noreferrer">
+                Firefox</a
+              >, Safari, or the latest version of
+              <a
+                href="https://www.microsoft.com/en-us/edge"
+                target="_blank"
+                rel="noopener noreferrer">
+                Edge</a
+              >.
+            </p>
           </div>
         </div>
-      </div> -->
+      </div>
     </div>
   </body>
 </html>
