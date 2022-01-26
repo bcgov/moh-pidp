@@ -6,6 +6,7 @@ import { DialogDefaultOptions } from './dialog-default-options.model';
 
 export const defaultDialogOptions: DialogDefaultOptions = {
   unsaved: () => ({
+    icon: 'error',
     title: 'Unsaved Changes Found',
     message: `
     Changes are pending that have not been saved. Would you like to

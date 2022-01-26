@@ -1,6 +1,7 @@
 @import 'palette';
 
 h2 {
+  display: flex;
   color: theme-palette(blue);
 
   .mat-icon {
@@ -19,7 +20,12 @@ h2 {
   }
 }
 
-p {
+span {
+  flex-grow: 1;
+}
+
+p,
+.cancel {
   color: theme-palette(blue);
 }
 

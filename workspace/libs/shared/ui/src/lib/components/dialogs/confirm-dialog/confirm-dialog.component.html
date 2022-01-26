@@ -1,11 +1,16 @@
-<h2 class="d-flex align-items-stretch" mat-dialog-title>
+<h2 mat-dialog-title>
   <mat-icon
     *ngIf="options.icon && !options.imageSrc"
+    [class]="{
+      'material-icons-outlined': options?.iconType === 'outlined',
+      'material-icons-round': options?.iconType === 'round',
+      'material-icons-sharp': options?.iconType === 'sharp'
+    }"
     [color]="options.actionType"
     >{{ options.icon }}</mat-icon
   >
   <img *ngIf="options.imageSrc" alt="" [attr.src]="options.imageSrc" />
-  <span class="flex-grow-1">
+  <span>
     {{ options.title }}
   </span>
 </h2>
@@ -16,7 +21,7 @@
 <mat-dialog-actions *ngIf="!(options.cancelHide && options.actionHide)">
   <button
     *ngIf="!options.cancelHide"
-    class="my-2 mr-2"
+    class="cancel"
     mat-stroked-button
     cdkFocusInitial
     [mat-dialog-close]="false">
@@ -24,14 +29,13 @@
   </button>
   <button
     *ngIf="!options.actionHide"
-    class="my-2 mr-1"
     mat-flat-button
     [color]="options.actionType"
     (click)="onConfirm()">
     {{ options.actionText }}
   </button>
 
-  <span class="flex-grow-1"></span>
+  <span></span>
 
   <a
     *ngIf="options.actionLink"

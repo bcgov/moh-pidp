@@ -1,5 +1,6 @@
 export interface DialogOptions {
   icon?: string;
+  iconType?: 'outlined' | 'round' | 'sharp';
   imageSrc?: string; // Alternative to an icon
   title?: string;
   message?: string;
