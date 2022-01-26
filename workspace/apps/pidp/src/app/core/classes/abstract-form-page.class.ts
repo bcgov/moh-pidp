@@ -1,14 +1,13 @@
 import { FormArray, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
+import { UrlTree } from '@angular/router';
 
 import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 
-import { AbstractFormState } from '@bcgov/shared/ui';
+import { AbstractFormState, ConfirmDialogComponent } from '@bcgov/shared/ui';
 
 import { FormUtilsService } from '@core/services/form-utils.service';
-
-// import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 
 export interface IFormPage {
   /**
@@ -24,12 +23,12 @@ export interface IFormPage {
    */
   onSubmit(): void;
 
-  // /**
-  //  * @description
-  //  * Handle redirection from the view when the form is
-  //  * dirty to prevent loss of form data.
-  //  */
-  // canDeactivate(): Observable<boolean> | boolean;
+  /**
+   * @description
+   * Handle redirection from the view when the form is
+   * dirty to prevent loss of form data.
+   */
+  canDeactivate(): Observable<boolean | UrlTree> | boolean;
 }
 
 /**
@@ -110,6 +109,8 @@ export abstract class AbstractFormPage<
 
   protected constructor(
     protected dialog: MatDialog,
+    // TODO replace dialog with dialogService
+    // protected dialogService: DialogService,
     protected formUtilsService: FormUtilsService
   ) {
     this.hasAttemptedSubmission = false;
@@ -147,44 +148,22 @@ export abstract class AbstractFormPage<
    * @description
    * Deactivation guard handler.
    */
-  // public canDeactivate(): Observable<boolean> | boolean {
-  //   const data = 'unsaved';
-  //   return this.formState.form.dirty && !this.checkDeactivationIsAllowed()
-  //     ? this.dialog
-  //         .open(ConfirmDialogComponent, { data })
-  //         .afterClosed()
-  //         .pipe(
-  //           map((confirmation: boolean) => {
-  //             this.handleDeactivation(confirmation);
-  //             return confirmation;
-  //           })
-  //         )
-  //     : true;
-  // }
-
-  // /**
-  //  * @description
-  //  * Instantiate the form instance.
-  //  */
-  // protected abstract createFormInstance(): void;
-
-  // /**
-  //  * @description
-  //  * Initialize the form instance with model data.
-  //  *
-  //  * Implementation Details:
-  //  * Typically invoked before form initialization using the initForm
-  //  * method, but also useful if invoked from within the initForm method
-  //  * when listeners need to be setup before and after patching the form.
-  //  *
-  //  * @param model optional parameter to reduce the rigidity of invoking
-  //  * the method in case a member variable is not available.
-  //  *
-  //  * @returns unknown to allow for flexibility when implemented, which
-  //  * is can be useful as an observable when the sequence during patching
-  //  * is asynchronous, but otherwise should be void
-  //  */
-  // protected abstract patchForm(model?: unknown): unknown;
+  public canDeactivate(): Observable<boolean | UrlTree> | boolean {
+    const data = 'unsaved';
+    return this.formState.form.dirty && !this.checkDeactivationIsAllowed()
+      ? this.dialog
+          .open(ConfirmDialogComponent, { data })
+          // TODO replace dialog with dialogService
+          // this.dialogService
+          //   .canDeactivateFormDialog()
+          .afterClosed()
+          .pipe(
+            map((dialogResult: boolean) =>
+              this.handleDeactivation(dialogResult)
+            )
+          )
+      : true;
+  }
 
   /**
    * @description
@@ -203,9 +182,8 @@ export abstract class AbstractFormPage<
    * NOTE: Usage example would be replacing previous form
    * values on deactivation so updates are discarded.
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  protected handleDeactivation(result: boolean): void {
-    // Optional can deactivate hook, otherwise NOOP
+  protected handleDeactivation(dialogResult: boolean): boolean | UrlTree {
+    return dialogResult;
   }
 
   /**
