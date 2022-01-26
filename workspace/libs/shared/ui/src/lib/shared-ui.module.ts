@@ -15,6 +15,7 @@ import { CardHintDirective } from './components/card/card-hint.directive';
 import { CardComponent } from './components/card/card.component';
 import { CollectionNoticeComponent } from './components/collection-notice/collection-notice.component';
 import { ContactFormComponent } from './components/contact-info-form/contact-info-form.component';
+import { ConfirmDialogComponent } from './components/dialogs/confirm-dialog/confirm-dialog.component';
 import { FormSectionComponent } from './components/form-section/form-section.component';
 import { IconComponent } from './components/icon/icon.component';
 import { KeyValueInfoComponent } from './components/key-value-info/key-value-info.component';
@@ -52,6 +53,7 @@ import { SafePipe } from './pipes/safe.pipe';
     CardActionsDirective,
     CardSummaryComponent,
     CollectionNoticeComponent,
+    ConfirmDialogComponent,
     ContactFormComponent,
     FormSectionComponent,
     KeyValueInfoComponent,
@@ -97,6 +99,7 @@ import { SafePipe } from './pipes/safe.pipe';
     CardContentDirective,
     CardActionsDirective,
     CardSummaryComponent,
+    ConfirmDialogComponent,
     CollectionNoticeComponent,
     ContactFormComponent,
     FormSectionComponent,
