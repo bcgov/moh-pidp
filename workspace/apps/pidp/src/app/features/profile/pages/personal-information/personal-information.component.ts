@@ -37,6 +37,8 @@ export class PersonalInformationComponent
 
   public constructor(
     protected dialog: MatDialog,
+    // TODO replace dialog with dialogService
+    // protected dialogService: DialogService,
     protected formUtilsService: FormUtilsService,
     private route: ActivatedRoute,
     private router: Router,
