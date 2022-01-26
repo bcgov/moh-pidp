@@ -86,7 +86,7 @@ export class PartyService {
                 value: profileStatus.phone,
               },
             ]
-          : null,
+          : [],
         actionLabel: 'Update',
         route: ProfileRoutes.routePath(ProfileRoutes.PERSONAL_INFO_PAGE),
         statusType: profileStatus?.demographicsComplete ? 'success' : 'warn',
@@ -112,14 +112,16 @@ export class PartyService {
               {
                 key: 'licenceNumber',
                 value: profileStatus.licenceNumber,
+                label: 'College Licence Number:',
               },
               {
                 key: 'status',
+                // TODO indicate whether they are verified or not
                 value: 'verified',
-                label: 'Status',
+                label: 'Status:',
               },
             ]
-          : null,
+          : [],
         actionLabel: 'Update',
         route: ProfileRoutes.routePath(ProfileRoutes.COLLEGE_LICENCE_INFO_PAGE),
         statusType: profileStatus?.collegeCertificationComplete

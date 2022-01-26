@@ -6,8 +6,7 @@ export interface PortalSection {
   title: string;
   hint?: string;
   description: string;
-  // TODO drop the null type when generation of properties is refined
-  properties?: { key: string; value: string | number; label?: string }[] | null;
+  properties?: { key: string; value: string | number; label?: string }[];
   actionLabel?: string;
   actionDisabled: boolean;
   route?: string;
