@@ -25,7 +25,7 @@ public class AddressAutocompleteClient : BaseClient, IAddressAutocompleteClient
         }
 
         var body = await response.Content.ReadFromJsonAsync<AddressAutocompleteApiResponse<AddressAutocompleteFindResponse>>();
-        return body?.Items;
+        return body?.Items ?? Enumerable.Empty<AddressAutocompleteFindResponse>();
     }
 
     public async Task<IEnumerable<AddressAutocompleteRetrieveResponse>> Retrieve(string id)
@@ -45,6 +45,6 @@ public class AddressAutocompleteClient : BaseClient, IAddressAutocompleteClient
         }
 
         var body = await response.Content.ReadFromJsonAsync<AddressAutocompleteApiResponse<AddressAutocompleteRetrieveResponse>>();
-        return body?.Items;
+        return body?.Items ?? Enumerable.Empty<AddressAutocompleteRetrieveResponse>();
     }
 }
