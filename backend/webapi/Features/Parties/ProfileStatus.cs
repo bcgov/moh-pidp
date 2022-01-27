@@ -7,8 +7,10 @@ using FluentValidation;
 using HybridModelBinding;
 using Microsoft.EntityFrameworkCore;
 using NodaTime;
+using System.Text.Json.Serialization;
 
 using Pidp.Data;
+using Pidp.Infrastructure.HttpClients.Plr;
 using Pidp.Models.Lookups;
 
 public class ProfileStatus
@@ -29,6 +31,8 @@ public class ProfileStatus
         public string? Phone { get; set; }
         public CollegeCode? CollegeCode { get; set; }
         public string? LicenceNumber { get; set; }
+        [JsonIgnore]
+        public string? Ipc { get; set; }
         public string? JobTitle { get; set; }
         public string? FacilityName { get; set; }
         public string? FacilityStreet { get; set; }
@@ -37,7 +41,15 @@ public class ProfileStatus
         public bool CollegeCertificationComplete => this.CollegeCode != null && this.LicenceNumber != null;
         public bool WorkSettingComplete => this.JobTitle != null && this.FacilityName != null;
 
-        public bool SaEformsComplete => this.CollegeCertificationComplete;
+        public EnrolmentStatus SaEformsStatus { get; set; }
+        public string SaEformsStatusReason { get; set; } = string.Empty;
+
+        public enum EnrolmentStatus
+        {
+            Available = 1,
+            Completed,
+            NotAvailable
+        }
     }
 
     public class QueryValidator : AbstractValidator<Query>
@@ -47,13 +59,18 @@ public class ProfileStatus
 
     public class QueryHandler : IQueryHandler<Query, IDomainResult<Model>>
     {
-        private readonly PidpDbContext context;
         private readonly IMapper mapper;
+        private readonly IPlrClient client;
+        private readonly PidpDbContext context;
 
-        public QueryHandler(PidpDbContext context, IMapper mapper)
+        public QueryHandler(
+            IMapper mapper,
+            IPlrClient client,
+            PidpDbContext context)
         {
-            this.context = context;
             this.mapper = mapper;
+            this.client = client;
+            this.context = context;
         }
 
         public async Task<IDomainResult<Model>> HandleAsync(Query query)
@@ -66,6 +83,33 @@ public class ProfileStatus
             if (model == null)
             {
                 return DomainResult.NotFound<Model>();
+            }
+
+            // TODO check submission
+
+            if (!model.DemographicsComplete || !model.CollegeCertificationComplete)
+            {
+                model.SaEformsStatus = Model.EnrolmentStatus.NotAvailable;
+                model.SaEformsStatusReason = "Profile not complete";
+            }
+            else if (model.Ipc == null)
+            {
+                model.SaEformsStatus = Model.EnrolmentStatus.NotAvailable;
+                model.SaEformsStatusReason = "College Licence not found in PLR";
+            }
+            else
+            {
+                var status = await this.client.GetRecordStatus(model.Ipc);
+                if (status == null)
+                {
+                    model.SaEformsStatus = Model.EnrolmentStatus.NotAvailable;
+                    model.SaEformsStatusReason = "Error determining Status in PLR";
+                }
+                else
+                {
+                    // TODO
+                    // var goodStanding = ;
+                }
             }
 
             return DomainResult.Success(model);

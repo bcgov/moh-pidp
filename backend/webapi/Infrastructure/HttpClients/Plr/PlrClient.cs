@@ -54,4 +54,29 @@ public class PlrClient : BaseClient, IPlrClient
             };
         }
     }
+
+    public async Task<PlrRecordStatus?> GetRecordStatus(string ipc)
+    {
+        var response = await this.Client.GetAsync($"records/{ipc}");
+        if (!response.IsSuccessStatusCode)
+        {
+            this.Logger.LogError($"Error when retrieving PLR Record Details with Ipc = {ipc}.");
+            return null;
+        }
+
+        var status = await response.Content.ReadFromJsonAsync<PlrRecordStatus>();
+        if (status == null)
+        {
+            this.Logger.LogInformation($"No Records found in PLR with Ipc = {ipc}.");
+            return null;
+        }
+
+        return status;
+    }
+}
+
+public class PlrRecordStatus
+{
+    public string StatusCode { get; set; } = string.Empty;
+    public string StatusReasonCode { get; set; } = string.Empty;
 }

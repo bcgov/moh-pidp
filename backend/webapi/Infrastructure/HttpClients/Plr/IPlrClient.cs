@@ -14,4 +14,11 @@ public interface IPlrClient
     /// <param name="collegeCode"></param>
     /// <param name="birthdate"></param>
     Task<string?> GetPlrRecord(CollegeCode collegeCode, string licenceNumber, LocalDate birthdate);
+
+    /// <summary>
+    /// Returns the Status of the PLR record matching the given Ipc.
+    /// Returns null on an error or if no record is found.
+    /// </summary>
+    /// <param name="ipc"></param>
+    Task<PlrRecordStatus?> GetRecordStatus(string ipc);
 }
