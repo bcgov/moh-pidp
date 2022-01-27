@@ -12,7 +12,6 @@ public interface IKeycloakAdministrationClient
     /// <param name="clientId"></param>
     Task<Client?> GetClient(string clientId);
 
-
     /// <summary>
     /// Assigns a Client Role to the user, if it exists.
     /// Returns true if the operation was successful.

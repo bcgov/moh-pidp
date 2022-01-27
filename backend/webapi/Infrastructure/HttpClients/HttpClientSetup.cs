@@ -3,6 +3,7 @@ namespace Pidp.Infrastructure.HttpClients;
 using IdentityModel.Client;
 
 using Pidp.Extensions;
+using Pidp.Infrastructure.HttpClients.AddressAutocomplete;
 using Pidp.Infrastructure.HttpClients.Keycloak;
 using Pidp.Infrastructure.HttpClients.Plr;
 
@@ -11,6 +12,8 @@ public static class HttpClientSetup
     public static IServiceCollection AddHttpClients(this IServiceCollection services, PidpConfiguration config)
     {
         services.AddHttpClient<IAccessTokenClient, AccessTokenClient>();
+
+        services.AddHttpClientWithBaseAddress<IAddressAutocompleteClient, AddressAutocompleteClient>(config.AddressAutocompleteClient.Url);
 
         services.AddHttpClientWithBaseAddress<IKeycloakAdministrationClient, KeycloakAdministrationClient>(config.Keycloak.AdministrationUrl)
             .WithBearerToken(new KeycloakAdministrationClientCredentials

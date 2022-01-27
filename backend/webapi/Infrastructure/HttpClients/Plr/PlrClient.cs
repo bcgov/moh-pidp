@@ -1,6 +1,5 @@
 namespace Pidp.Infrastructure.HttpClients.Plr;
 
-using Flurl;
 using NodaTime;
 using System.Threading.Tasks;
 
