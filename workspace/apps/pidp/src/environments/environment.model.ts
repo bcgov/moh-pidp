@@ -13,4 +13,13 @@ export interface AppEnvironment extends EnvironmentConfig {
   // Only indicates that Angular has been built
   // using --configuration=production
   production: boolean;
+  emails: {
+    providerIdentitySupport: string;
+    specialAuthoritySupport: string;
+  };
+  urls: {
+    bcscSupport: string;
+    bcscMobileSetup: string;
+    specialAuthority: string;
+  };
 }

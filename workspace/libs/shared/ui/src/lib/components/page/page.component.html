@@ -1,3 +1,15 @@
 <div [class]="mode">
-  <ng-content></ng-content>
+  <ng-container *ngIf="form; else pageContent">
+    <form
+      novalidate
+      [autocomplete]="autocomplete"
+      [formGroup]="form"
+      (ngSubmit)="onSubmit()">
+      <ng-container *ngTemplateOutlet="pageContent"></ng-container>
+    </form>
+  </ng-container>
 </div>
+
+<ng-template #pageContent>
+  <ng-content></ng-content>
+</ng-template>

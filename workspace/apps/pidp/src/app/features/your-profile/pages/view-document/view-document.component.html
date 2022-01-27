@@ -1,0 +1,16 @@
+<ui-page>
+  <ui-page-header>{{ title }}</ui-page-header>
+
+  <ui-page-section>
+    <ui-page-section-subheader heading="Collection Notice">
+    </ui-page-section-subheader>
+
+    <p [innerHtml]="collectionNotice | safe: 'html'"></p>
+  </ui-page-section>
+
+  <ui-page-footer>
+    <button mat-stroked-button color="primary" type="button" (click)="onBack()">
+      Back Home
+    </button>
+  </ui-page-footer>
+</ui-page>

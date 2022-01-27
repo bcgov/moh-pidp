@@ -3,10 +3,14 @@ import { Injectable } from '@angular/core';
 import { Observable, map, of } from 'rxjs';
 
 import { UtilsService } from '@core/services/utils.service';
-import { MockLookup } from '@test/mock-lookup';
 
 import { LookupResource } from './lookup-resource.service';
-import { Lookup, LookupConfig, ProvinceLookup } from './lookup.model';
+import {
+  CollegeLookup,
+  Lookup,
+  LookupConfig,
+  ProvinceLookup,
+} from './lookup.model';
 
 export interface ILookupService extends LookupConfig {
   load(): Observable<LookupConfig | null>;
@@ -25,23 +29,22 @@ export class LookupService implements ILookupService {
     this.lookupConfig = null;
   }
 
-  public get countries(): Lookup<string>[] {
-    if (!this.lookupConfig) {
-      return [];
-    }
+  public get colleges(): CollegeLookup[] {
+    const colleges = this.lookupConfig?.colleges ?? [];
+    return [...colleges].sort(
+      this.utilsService.sortByKey<CollegeLookup>('code')
+    );
+  }
 
-    const countries = this.lookupConfig.countries ?? [];
+  public get countries(): Lookup<string>[] {
+    const countries = this.lookupConfig?.countries ?? [];
     return countries.length
       ? [...countries].sort(this.utilsService.sortByKey<Lookup<string>>('name'))
       : [];
   }
 
   public get provinces(): ProvinceLookup[] {
-    if (!this.lookupConfig) {
-      return [];
-    }
-
-    const provinces = this.lookupConfig.provinces ?? [];
+    const provinces = this.lookupConfig?.provinces ?? [];
     return provinces.length
       ? [...provinces].sort(this.utilsService.sortByKey<ProvinceLookup>('name'))
       : [];
@@ -53,14 +56,14 @@ export class LookupService implements ILookupService {
    */
   public load(): Observable<LookupConfig | null> {
     if (!this.lookupConfig) {
-      return this.lookupResource.getLookups().pipe(
-        map(
-          (lookupConfig: LookupConfig | null) =>
-            (this.lookupConfig = lookupConfig)
-        ),
-        // TODO need lookup API then remove mock config
-        map((_) => (this.lookupConfig = MockLookup.get()))
-      );
+      return this.lookupResource
+        .getLookups()
+        .pipe(
+          map(
+            (lookupConfig: LookupConfig | null) =>
+              (this.lookupConfig = lookupConfig)
+          )
+        );
     }
 
     return of({ ...this.lookupConfig });

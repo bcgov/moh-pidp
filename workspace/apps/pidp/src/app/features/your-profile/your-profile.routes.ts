@@ -3,6 +3,7 @@ export class YourProfileRoutes {
 
   public static TRANSACTIONS_PAGE = 'transactions';
   public static SIGNED_ACCEPTED_DOCUMENTS_PAGE = 'signed-or-accepted-documents';
+  public static VIEW_DOCUMENT_PAGE = 'view-document';
 
   /**
    * @description

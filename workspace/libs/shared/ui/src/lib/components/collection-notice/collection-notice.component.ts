@@ -1,9 +1,9 @@
 import {
-  Component,
   ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
   Input,
   Output,
-  EventEmitter,
 } from '@angular/core';
 
 @Component({
@@ -14,16 +14,14 @@ import {
 })
 export class CollectionNoticeComponent {
   @Input() public show!: boolean;
-  @Output() public close: EventEmitter<boolean>;
+  @Output() public accepted: EventEmitter<boolean>;
 
   public constructor() {
-    this.close = new EventEmitter<boolean>();
+    this.accepted = new EventEmitter<boolean>();
   }
 
-  public onClose(checked: boolean): void {
-    if (checked) {
-      this.close.emit(checked);
-    }
+  public onAccept(): void {
+    this.accepted.emit(true);
 
     this.show = false;
   }

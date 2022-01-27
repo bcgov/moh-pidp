@@ -1,27 +1,20 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { DemoService } from '@app/core/services/demo.service';
-import { AlertType } from '@bcgov/shared/ui';
-import { PartyResource } from '@core/resources/party-resource.service';
+import { Observable, exhaustMap, map, of } from 'rxjs';
+
+import { DocumentService } from '@app/core/services/document.service';
+import { Role } from '@app/shared/enums/roles.enum';
+
+import {
+  PartyResource,
+  ProfileStatus,
+} from '@core/resources/party-resource.service';
+import { PartyService } from '@core/services/party.service';
 
 import { ShellRoutes } from '../shell/shell.routes';
+import { PortalSection } from './models/portal-section.model';
 
-export interface PortalSection {
-  icon: string;
-  type: string;
-  title: string;
-  description: string;
-  process: 'manual' | 'automatic';
-  hint?: string;
-  actionLabel?: string;
-  route?: string;
-  statusType?: AlertType;
-  status?: string;
-  disabled: boolean;
-}
-
-// TODO find a clean way to type narrowing in the template
 @Component({
   selector: 'app-portal',
   templateUrl: './portal.component.html',
@@ -29,25 +22,29 @@ export interface PortalSection {
 })
 export class PortalComponent implements OnInit {
   public title: string;
-  public showCollectionNotice: boolean;
-  public state: Record<string, PortalSection[]>;
-  public profileComplete: boolean;
+  public acceptedCollectionNotice: boolean;
+  public collectionNotice: string;
+  public state$: Observable<Record<string, PortalSection[]>>;
+  public completedProfile: boolean;
+
+  public Role = Role;
 
   public constructor(
     private route: ActivatedRoute,
     private router: Router,
+    private partyService: PartyService,
     private partyResource: PartyResource,
-    private demoService: DemoService
+    documentService: DocumentService
   ) {
     this.title = this.route.snapshot.data.title;
-
-    this.showCollectionNotice = this.demoService.showCollectionNotice;
-    this.state = this.demoService.state;
-    this.profileComplete = this.demoService.profileComplete;
+    this.acceptedCollectionNotice = this.partyService.acceptedCollectionNotice;
+    this.collectionNotice = documentService.getCollectionNotice();
+    this.state$ = this.partyService.state$;
+    this.completedProfile = this.partyService.completedProfile;
   }
 
-  public onCloseCollectionNotice(disable: boolean): void {
-    this.demoService.showCollectionNotice = !disable;
+  public onAcceptCollectionNotice(accepted: boolean): void {
+    this.partyService.acceptedCollectionNotice = accepted;
   }
 
   public onAction(routePath?: string): void {
@@ -58,5 +55,17 @@ export class PortalComponent implements OnInit {
     this.router.navigate([ShellRoutes.routePath(routePath)]);
   }
 
-  public ngOnInit(): void {}
+  public ngOnInit(): void {
+    this.partyResource
+      .firstOrCreate()
+      .pipe(
+        exhaustMap((partyId: number | null) =>
+          partyId ? this.partyResource.getPartyProfileStatus(partyId) : of(null)
+        ),
+        map((profileStatus: ProfileStatus | null) =>
+          this.partyService.updateState(profileStatus)
+        )
+      )
+      .subscribe();
+  }
 }

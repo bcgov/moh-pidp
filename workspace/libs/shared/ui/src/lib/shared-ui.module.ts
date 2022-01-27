@@ -15,6 +15,7 @@ import { CardHintDirective } from './components/card/card-hint.directive';
 import { CardComponent } from './components/card/card.component';
 import { CollectionNoticeComponent } from './components/collection-notice/collection-notice.component';
 import { ContactFormComponent } from './components/contact-info-form/contact-info-form.component';
+import { ConfirmDialogComponent } from './components/dialogs/confirm-dialog/confirm-dialog.component';
 import { FormSectionComponent } from './components/form-section/form-section.component';
 import { IconComponent } from './components/icon/icon.component';
 import { KeyValueInfoComponent } from './components/key-value-info/key-value-info.component';
@@ -35,7 +36,10 @@ import { ContextHelpModule } from './modules/context-help/context-help.module';
 import { DefaultPipe } from './pipes/default.pipe';
 import { FormatDatePipe } from './pipes/format-date.pipe';
 import { FullnamePipe } from './pipes/fullname.pipe';
+import { PhonePipe } from './pipes/phone.pipe';
 import { PostalPipe } from './pipes/postal.pipe';
+import { ReplacePipe } from './pipes/replace.pipe';
+import { SafePipe } from './pipes/safe.pipe';
 
 @NgModule({
   declarations: [
@@ -49,6 +53,7 @@ import { PostalPipe } from './pipes/postal.pipe';
     CardActionsDirective,
     CardSummaryComponent,
     CollectionNoticeComponent,
+    ConfirmDialogComponent,
     ContactFormComponent,
     FormSectionComponent,
     KeyValueInfoComponent,
@@ -68,7 +73,10 @@ import { PostalPipe } from './pipes/postal.pipe';
     DefaultPipe,
     FormatDatePipe,
     FullnamePipe,
+    PhonePipe,
     PostalPipe,
+    ReplacePipe,
+    SafePipe,
   ],
   imports: [
     CommonModule,
@@ -91,6 +99,7 @@ import { PostalPipe } from './pipes/postal.pipe';
     CardContentDirective,
     CardActionsDirective,
     CardSummaryComponent,
+    ConfirmDialogComponent,
     CollectionNoticeComponent,
     ContactFormComponent,
     FormSectionComponent,
@@ -111,7 +120,10 @@ import { PostalPipe } from './pipes/postal.pipe';
     DefaultPipe,
     FormatDatePipe,
     FullnamePipe,
+    PhonePipe,
     PostalPipe,
+    ReplacePipe,
+    SafePipe,
   ],
 })
 export class SharedUiModule {}

@@ -1,20 +1,17 @@
 <div>
-  <span>Country:</span>
-  <span>{{ address?.countryCode | lookupCode: 'countries' | default }}</span>
-</div>
-<div>
-  <span>Province:</span>
-  <span>{{ address?.provinceCode | lookupCode: 'provinces' | default }}</span>
-</div>
-<div>
-  <span>Street Address:</span>
-  <span>{{ address?.street | default }}</span>
-</div>
-<div>
-  <span>City:</span>
-  <span>{{ address?.city | default }}</span>
-</div>
-<div>
-  <span>Postal Code:</span>
-  <span>{{ address?.postal | postal | default }}</span>
+  <ui-key-value-info key="Country:" mode="horizontal">
+    {{ address?.countryCode | lookupCode: 'countries' | default }}
+  </ui-key-value-info>
+  <ui-key-value-info key="Province:" mode="horizontal">
+    {{ address?.provinceCode | lookupCode: 'provinces' | default }}
+  </ui-key-value-info>
+  <ui-key-value-info key="Street Address:" mode="horizontal">
+    {{ address?.street | default }}
+  </ui-key-value-info>
+  <ui-key-value-info key="City:" mode="horizontal">
+    {{ address?.city | default }}
+  </ui-key-value-info>
+  <ui-key-value-info key="Postal Code:" mode="horizontal">
+    {{ address?.postal | postal | default }}
+  </ui-key-value-info>
 </div>

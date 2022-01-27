@@ -1,5 +1,4 @@
-import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
-import { ThemePalette } from '@angular/material/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 @Component({
   selector: 'ui-key-value-info',
@@ -9,4 +8,9 @@ import { ThemePalette } from '@angular/material/core';
 })
 export class KeyValueInfoComponent {
   @Input() public key!: string;
+  @Input() public mode: 'vertical' | 'horizontal';
+
+  public constructor() {
+    this.mode = 'vertical';
+  }
 }

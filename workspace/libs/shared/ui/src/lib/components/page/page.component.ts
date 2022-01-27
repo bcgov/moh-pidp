@@ -1,4 +1,11 @@
-import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+} from '@angular/core';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'ui-page',
@@ -18,8 +25,25 @@ export class PageComponent {
    * are not typical pages with forms found within a specific workflow.
    */
   @Input() public mode: 'page' | 'medium' | 'large' | 'full';
+  /**
+   * @description
+   * Instance of a form.
+   */
+  @Input() public form?: FormGroup;
+  @Input() public autocomplete: 'on' | 'off';
+  /**
+   * @description
+   * Handle submission event emitter.
+   */
+  @Output() public submitted: EventEmitter<void>;
 
   public constructor() {
     this.mode = 'page';
+    this.autocomplete = 'off';
+    this.submitted = new EventEmitter<void>();
+  }
+
+  public onSubmit(): void {
+    this.submitted.emit();
   }
 }

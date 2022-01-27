@@ -8,18 +8,13 @@
   </ng-container>
   <ng-container uiAlertActions>
     <span>
-      <mat-checkbox #checkbox color="primary">
-        Do not show me this collection notice again
-      </mat-checkbox>
-    </span>
-    <span>
       <button
+        class="inherit"
         mat-flat-button
         type="button"
-        class="inherit"
         color="primary"
-        (click)="onClose(checkbox.checked)">
-        Close
+        (click)="onAccept()">
+        Ok
       </button>
     </span>
   </ng-container>

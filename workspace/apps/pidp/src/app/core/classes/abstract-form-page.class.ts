@@ -1,17 +1,19 @@
 import { FormArray, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
+import { UrlTree } from '@angular/router';
 
-import { Observable, Subscription } from 'rxjs';
+import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 
-import { AbstractFormState } from '@bcgov/shared/ui';
+import { AbstractFormState, ConfirmDialogComponent } from '@bcgov/shared/ui';
+
 import { FormUtilsService } from '@core/services/form-utils.service';
-// import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 
 export interface IFormPage {
   /**
    * @description
-   * Instance of the form state providing access to its API.
+   * Instance of the form state which provides access to
+   * an API for the form.
    */
   formState: AbstractFormState<unknown>;
 
@@ -21,12 +23,12 @@ export interface IFormPage {
    */
   onSubmit(): void;
 
-  // /**
-  //  * @description
-  //  * Handle redirection from the view when the form is
-  //  * dirty to prevent loss of form data.
-  //  */
-  // canDeactivate(): Observable<boolean> | boolean;
+  /**
+   * @description
+   * Handle redirection from the view when the form is
+   * dirty to prevent loss of form data.
+   */
+  canDeactivate(): Observable<boolean | UrlTree> | boolean;
 }
 
 /**
@@ -74,7 +76,8 @@ export abstract class AbstractFormPage<
   // public busy: Subscription;
   /**
    * @description
-   * Form state
+   * Instance of the form state which provides access to
+   * an API for the form.
    */
   public abstract formState: T;
   /**
@@ -106,6 +109,8 @@ export abstract class AbstractFormPage<
 
   protected constructor(
     protected dialog: MatDialog,
+    // TODO replace dialog with dialogService
+    // protected dialogService: DialogService,
     protected formUtilsService: FormUtilsService
   ) {
     this.hasAttemptedSubmission = false;
@@ -133,55 +138,41 @@ export abstract class AbstractFormPage<
 
   /**
    * @description
+   * Handle routing back to previous view.
+   */
+  public onBack(): void {
+    // Optional back route event handler, otherwise NOOP
+  }
+
+  /**
+   * @description
    * Deactivation guard handler.
    */
-  // public canDeactivate(): Observable<boolean> | boolean {
-  //   const data = 'unsaved';
-  //   return this.formState.form.dirty && !this.checkDeactivationIsAllowed()
-  //     ? this.dialog
-  //         .open(ConfirmDialogComponent, { data })
-  //         .afterClosed()
-  //         .pipe(
-  //           map((confirmation: boolean) => {
-  //             this.handleDeactivation(confirmation);
-  //             return confirmation;
-  //           })
-  //         )
-  //     : true;
-  // }
+  public canDeactivate(): Observable<boolean | UrlTree> | boolean {
+    const data = 'unsaved';
+    return this.formState.form.dirty && !this.checkDeactivationIsAllowed()
+      ? this.dialog
+          .open(ConfirmDialogComponent, { data })
+          // TODO replace dialog with dialogService
+          // this.dialogService
+          //   .canDeactivateFormDialog()
+          .afterClosed()
+          .pipe(
+            map((dialogResult: boolean) =>
+              this.handleDeactivation(dialogResult)
+            )
+          )
+      : true;
+  }
 
-  // /**
-  //  * @description
-  //  * Instantiate the form instance.
-  //  */
-  // protected abstract createFormInstance(): void;
-
-  // /**
-  //  * @description
-  //  * Initialize the form instance with model data.
-  //  *
-  //  * Implementation Details:
-  //  * Typically invoked before form initialization using the initForm
-  //  * method, but also useful if invoked from within the initForm method
-  //  * when listeners need to be setup before and after patching the form.
-  //  *
-  //  * @param model optional parameter to reduce the rigidity of invoking
-  //  * the method in case a member variable is not available.
-  //  *
-  //  * @returns unknown to allow for flexibility when implemented, which
-  //  * is can be useful as an observable when the sequence during patching
-  //  * is asynchronous, but otherwise should be void
-  //  */
-  // protected abstract patchForm(model?: unknown): unknown;
-
-  // /**
-  //  * @description
-  //  * Setup form listeners.
-  //  */
-  // protected initForm(): void {
-  //   // Optional method for setting up form listeners, but
-  //   // when no listeners are required is NOOP
-  // }
+  /**
+   * @description
+   * Setup form listeners.
+   */
+  protected initForm(): void {
+    // Optional method for setting up form listeners, but
+    // when no listeners are required is NOOP
+  }
 
   /**
    * @description
@@ -191,9 +182,8 @@ export abstract class AbstractFormPage<
    * NOTE: Usage example would be replacing previous form
    * values on deactivation so updates are discarded.
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  protected handleDeactivation(result: boolean): void {
-    // Optional can deactivate hook, otherwise NOOP
+  protected handleDeactivation(dialogResult: boolean): boolean | UrlTree {
+    return dialogResult;
   }
 
   /**

@@ -1,90 +1,143 @@
-# Workspace
+# Provider Identity Portal (PIDP)
 
-This project was generated using [Nx](https://nx.dev).
+## Table of Contents
 
-<p style="text-align: center;"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="450"></p>
+[TOC]
 
-🔎 **Smart, Extensible Build Framework**
+## Installation and Configuration
 
-## Adding capabilities to your workspace
+The installation and configuration of the PIdP development environment is sequentially ordered to ensure software dependencies are available when needed during setup.
 
-Nx supports many plugins which add capabilities for developing different types of applications and different tools.
+### Installation
 
-These capabilities include generating applications, libraries, etc as well as the devtools to test, and build projects as well.
+The following list includes the required software needed to run the application, as well as, the suggested IDE with extensions for web client development, and software for source control management and API development/testing.
 
-Below are our core plugins:
+#### Git and GitKraken
 
-- [React](https://reactjs.org)
-  - `npm install --save-dev @nrwl/react`
-- Web (no framework frontends)
-  - `npm install --save-dev @nrwl/web`
-- [Angular](https://angular.io)
-  - `npm install --save-dev @nrwl/angular`
-- [Nest](https://nestjs.com)
-  - `npm install --save-dev @nrwl/nest`
-- [Express](https://expressjs.com)
-  - `npm install --save-dev @nrwl/express`
-- [Node](https://nodejs.org)
-  - `npm install --save-dev @nrwl/node`
+[Download](https://git-scm.com/downloads) and install the Git version control system, and optionally [download](https://www.gitkraken.com) and install the free GitKraken Git GUI client.
 
-There are also many [community plugins](https://nx.dev/community) you could add.
+Clone the PIdP repository into a project directory GitKraken or the terminal by typing:
 
-## Generate an application
+```bash
+git clone https://github.com/bcgov/moh-pidp
+```
 
-Run `nx g @nrwl/react:app my-app` to generate an application.
+#### Node
 
-> You can use any of the plugins above to generate applications as well.
+[Download](https://nodejs.org/en/) and install **Node v16.10.x** or greater
 
-When using Nx, you can create multiple applications and libraries in the same workspace.
+#### VS Code
 
-## Generate a library
+[Download](https://code.visualstudio.com/) and install VSCode and accept the prompt to install the recommended extensions when the PIdP repository is initially opened in VSCode.
 
-Run `nx g @nrwl/react:lib my-lib` to generate a library.
+#### PostMan
 
-> You can also use any of the plugins above to generate libraries as well.
+[Download](https://www.getpostman.com/apps) and install the Postman HTTP client.
 
-Libraries are shareable across libraries and applications. They can be imported from `@workspace/mylib`.
+#### Nx Workspace
 
-## Development server
+This project was generated using [Nx](https://nx.dev) and uses an abstraction of the Angular CLI to execute schematics for creating Angular artifacts which requires the global installation of the Nx CLI.
 
-Run `nx serve my-app` for a dev server. Navigate to http://localhost:4200/. The app will automatically reload if you change any of the source files.
+```bash
+npm install -g nx
+```
 
-## Code scaffolding
+It's suggested to install the [Nx Console](https://marketplace.visualstudio.com/items?itemName=nrwl.angular-console) VSCode extension, which has been included in the projects suggested extensions.
 
-Run `nx g @nrwl/react:component my-component --project=my-app` to generate a new component.
+#### Yarn
 
-## Build
+[Yarn](https://yarnpkg.com/) is the default package manager for the project. Version 1.x of the package manager needs to be [installed](https://classic.yarnpkg.com/lang/en/). After installation in the workspace folder type:
 
-Run `nx build my-app` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+```bash
+yarn install
+```
 
-## Running unit tests
+## Building and Running
 
-Run `nx test my-app` to execute the unit tests via [Jest](https://jestjs.io).
+### Development Server
 
-Run `nx affected:test` to execute the unit tests affected by a change.
+To build, run, and open a local in memory development server which will run at `http://localhost:4200/` and automatically reload when you change any of the source files for development go to the applciation folder and type:
 
-## Running end-to-end tests
+```bash
+nx serve APP_NAME
+```
 
-Run `ng e2e my-app` to execute the end-to-end tests via [Cypress](https://www.cypress.io).
+### Build Application
 
-Run `nx affected:e2e` to execute the end-to-end tests affected by a change.
+To build the project and have the build artifacts stored in the `dist/` directory type:
 
-## Understand your workspace
+```bash
+nx build APP_NAME
+```
 
-Run `nx dep-graph` to see a diagram of the dependencies of your projects.
+### Running Unit Tests
 
-## Further help
+Execute the unit tests via [Jest](https://jestjs.io) by typing:
+
+```bash
+nx test APP_NAME
+```
+
+Execute the unit tests for affected by a change by typing:
+
+```bash
+nx affected:test
+```
+
+### Running End-to-End Tests
+
+Execute the end-to-end tests via [Cypress](https://www.cypress.io) by typing:
+
+```bash
+nx e2e APP_NAME
+```
+
+Execute the end-to-end tests for affected by a change by typing:
+
+```bash
+nx affected:e2e
+```
+
+### Generators
+
+#### Generate an application
+
+When using Nx, you can create multiple applications and libraries in the same workspace. To generate an application run:
+
+```bash
+nx g @nrwl/angular:app APP_NAME
+```
+
+#### Generate a library
+
+Libraries are shareable across libraries and applications. They can be imported from `@workspace/LIB_NAME`. To generate a library run:
+
+```bash
+nx g @nrwl/angular:lib LIB_NAME
+```
+
+#### Code Scaffolding
+
+Generate code scaffolding for the application like modules, components, services, etc;
+
+Run `nx g @nrwl/angular:component my-component --project=my-app` to generate a new component.
+
+```bash
+nx g @nrwl/angular:component my-component --project=my-app
+```
+
+### Understand Your Workspace
+
+To see a diagram of the dependencies of your projects type:
+
+```bash
+nx dep-graph
+```
+
+## Coding Styles
+
+Coding styles should adhere to the [Angular Style Guide](https://angular.io/docs/ts/latest/guide/style-guide.html) with assistance from EditorConfig, Prettier, and ESLint setups for the project that automatically apply code formatting.
+
+## Getting Help
 
 Visit the [Nx Documentation](https://nx.dev) to learn more.
-
-## ☁ Nx Cloud
-
-### Distributed Computation Caching & Distributed Task Execution
-
-<p style="text-align: center;"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-cloud-card.png"></p>
-
-Nx Cloud pairs with Nx in order to enable you to build and test code more rapidly, by up to 10 times. Even teams that are new to Nx can connect to Nx Cloud and start saving time instantly.
-
-Teams using Nx gain the advantage of building full-stack applications with their preferred framework alongside Nx’s advanced code generation and project dependency graph, plus a unified experience for both frontend and backend developers.
-
-Visit [Nx Cloud](https://nx.app/) to learn more.

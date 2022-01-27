@@ -83,8 +83,8 @@
         <mat-label>{{ postalLabel }}</mat-label>
         <input
           matInput
-          [mask]="postalMask"
           formControlName="postal"
+          [mask]="postalMask"
           [required]="isRequired('postal')" />
         <mat-error>Required</mat-error>
       </mat-form-field>

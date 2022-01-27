@@ -2,16 +2,13 @@
   <ui-page-header>{{ title }}</ui-page-header>
 
   <ui-collection-notice
-    [show]="showCollectionNotice"
-    (close)="onCloseCollectionNotice($event)">
-    The personal information you provide to the Provider Identity Portal
-    application is collected by the British Columbia Ministry of Health under
-    the authority of s. 26(a) and 26(c) of the Freedom of Information and
-    Protection of Privacy Act (FOIPPA).
+    [show]="!acceptedCollectionNotice"
+    (accepted)="onAcceptCollectionNotice($event)">
+    <p [innerHtml]="collectionNotice | safe: 'html'"></p>
   </ui-collection-notice>
 
   <ui-alert
-    *ngIf="this.profileComplete"
+    *ngIf="completedProfile"
     type="success"
     icon="check_circle"
     iconType="outlined"
@@ -38,24 +35,23 @@
 
     <div class="row">
       <div
-        *ngFor="let section of state.profileIdentitySections"
+        *ngFor="let section of (state$ | async)?.profileIdentitySections"
         class="col-12 col-xl-6">
         <ui-card-summary
           [icon]="section.icon"
           [title]="section.title"
-          [hint]="section.hint"
-          [description]="section.description"
-          [actionLabel]="section.actionLabel"
           [statusType]="section.statusType"
           [status]="section.status"
-          [disabled]="section.disabled"
+          [actionLabel]="section.actionLabel"
+          [actionDisabled]="section.actionDisabled"
           (action)="onAction(section?.route)">
           <ng-container uiCardSummaryHint>
-            <!-- <mat-icon>check_circle</mat-icon> -->
             {{ section.hint }}
           </ng-container>
           <ng-container uiCardSummaryContent>
-            {{ section.description }}
+            <app-profile-card-summary-content [properties]="section.properties">
+              {{ section.description }}
+            </app-profile-card-summary-content>
           </ng-container>
         </ui-card-summary>
       </div>
@@ -67,26 +63,24 @@
     <ui-page-section-subheader icon="assignment" heading="Access to Systems">
       <ng-container uiPageSectionSubheaderDesc>
         Complete your profile to gain access to the systems you are eligible
-        for. Access to these applications will depend on your credentials, you
-        will automatically gain access to those you are eligible for.
+        for. This will allow the portal to identify systems you may request
+        access for.
       </ng-container>
     </ui-page-section-subheader>
 
     <div class="row">
       <div
-        *ngFor="let section of state.accessToSystemsSections"
+        *ngFor="let section of (state$ | async)?.accessToSystemsSections"
         class="col-12 col-xl-6">
         <ui-card-summary
           [icon]="section.icon"
           [title]="section.title"
-          [description]="section.description"
-          [actionLabel]="section.actionLabel"
           [statusType]="section.statusType"
           [status]="section.status"
-          [disabled]="section.disabled"
+          [actionLabel]="section.actionLabel"
+          [actionDisabled]="section.actionDisabled"
           (action)="onAction(section?.route)">
           <ng-container uiCardSummaryHint>
-            <!-- <mat-icon>check_circle</mat-icon> -->
             {{ section.hint }}
           </ng-container>
           <ng-container uiCardSummaryContent>
@@ -97,29 +91,28 @@
     </div>
   </ui-page-section>
 
-  <ui-page-section>
+  <ui-page-section *featureFlag="Role.FEATURE_PIDP_DEMO">
     <ui-page-section-subheader icon="school" heading="Training">
       <ng-container uiPageSectionSubheaderDesc>
         Complete these trainings.
       </ng-container>
     </ui-page-section-subheader>
 
-    <div class="row">
+    <div
+      *ngIf="(state$ | async)?.trainingSections?.length; else noTraining"
+      class="row">
       <div
-        *ngFor="let section of state.trainingSections"
+        *ngFor="let section of (state$ | async)?.trainingSections"
         class="col-12 col-xl-6">
         <ui-card-summary
           [icon]="section.icon"
           [title]="section.title"
-          [hint]="section.hint"
-          [description]="section.description"
-          [actionLabel]="section.actionLabel"
           [statusType]="section.statusType"
           [status]="section.status"
-          [disabled]="section.disabled"
+          [actionLabel]="section.actionLabel"
+          [actionDisabled]="section.actionDisabled"
           (action)="onAction(section?.route)">
           <ng-container uiCardSummaryHint>
-            <!-- <mat-icon>check_circle</mat-icon> -->
             {{ section.hint }}
           </ng-container>
           <ng-container uiCardSummaryContent>
@@ -128,6 +121,9 @@
         </ui-card-summary>
       </div>
     </div>
+    <ng-template #noTraining>
+      <p class="lead">No training available at this time.</p>
+    </ng-template>
   </ui-page-section>
 
   <ui-page-section>
@@ -140,17 +136,15 @@
 
     <div class="row">
       <div
-        *ngFor="let section of state.yourProfileSections"
+        *ngFor="let section of (state$ | async)?.yourProfileSections"
         class="col-12 col-xl-6">
         <ui-card-summary
           [icon]="section.icon"
           [title]="section.title"
-          [description]="section.description"
           [actionLabel]="section.actionLabel"
-          [disabled]="section.disabled"
+          [actionDisabled]="section.actionDisabled"
           (action)="onAction(section?.route)">
           <ng-container uiCardSummaryHint>
-            <!-- <mat-icon>check_circle</mat-icon> -->
             {{ section.hint }}
           </ng-container>
           <ng-container uiCardSummaryContent>

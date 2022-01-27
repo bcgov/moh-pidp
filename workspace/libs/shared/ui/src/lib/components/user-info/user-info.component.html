@@ -1,8 +1,6 @@
 <div>
-  <span>Name:</span>
-  <span>{{ user | fullname | default }}</span>
-</div>
-<div>
-  <span>Date of Birth:</span>
-  <span>{{ user?.dateOfBirth | formatDate | default }}</span>
+  <ui-key-value-info key="Name:" mode="horizontal">
+    {{ user | fullname | default }}
+  </ui-key-value-info>
+  <ng-content></ng-content>
 </div>

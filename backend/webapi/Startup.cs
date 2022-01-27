@@ -12,6 +12,8 @@ using System.Text.Json;
 
 using Pidp.Data;
 using Pidp.Features;
+using Pidp.Infrastructure.Auth;
+using Pidp.Infrastructure.HttpClients;
 
 public class Startup
 {
@@ -23,12 +25,16 @@ public class Startup
     {
         var config = this.InitializeConfiguration(services);
 
-        services.AddSingleton<IClock>(SystemClock.Instance);
-        services.AddAutoMapper(typeof(Startup));
+        services
+            .AddAutoMapper(typeof(Startup))
+            .AddHttpClients(config)
+            .AddKeycloakAuth(config)
+            .AddSingleton<IClock>(SystemClock.Instance);
 
         services.AddControllers()
             .AddFluentValidation(options => options.RegisterValidatorsFromAssemblyContaining<Startup>())
-            .AddJsonOptions(options => options.JsonSerializerOptions.ConfigureForNodaTime(DateTimeZoneProviders.Tzdb));
+            .AddJsonOptions(options => options.JsonSerializerOptions.ConfigureForNodaTime(DateTimeZoneProviders.Tzdb))
+            .AddHybridModelBinder();
 
         services.AddDbContext<PidpDbContext>(options => options
             .UseNpgsql(config.ConnectionStrings.PidpDatabase, npg => npg.UseNodaTime())
@@ -56,6 +62,7 @@ public class Startup
                 Name = "Authorization",
                 Type = SecuritySchemeType.ApiKey
             });
+            options.CustomSchemaIds(x => x.FullName);
         });
     }
 

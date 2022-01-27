@@ -2,22 +2,23 @@ namespace Pidp.Features.Parties;
 
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using DomainResults.Common;
 using FluentValidation;
+using HybridModelBinding;
 using Microsoft.EntityFrameworkCore;
 
 using Pidp.Data;
-using Pidp.Models;
-using Pidp.Models.Lookups;
 
 public class Demographics
 {
-    public class Query : IQuery<Command>
+    public class Query : IQuery<IDomainResult<Command>>
     {
         public int Id { get; set; }
     }
 
     public class Command : ICommand
     {
+        [HybridBindProperty(Source.Route)]
         public int Id { get; set; }
 
         public string? PreferredFirstName { get; set; }
@@ -26,43 +27,24 @@ public class Demographics
 
         public string? Email { get; set; }
         public string? Phone { get; set; }
+    }
 
-        public Address? MailingAddress { get; set; }
-
-        public class Address
-        {
-            public CountryCode CountryCode { get; set; }
-            public ProvinceCode ProvinceCode { get; set; }
-            public string Street { get; set; } = string.Empty;
-            public string City { get; set; } = string.Empty;
-            public string Postal { get; set; } = string.Empty;
-        }
+    public class QueryValidator : AbstractValidator<Query>
+    {
+        public QueryValidator() => this.RuleFor(x => x.Id).GreaterThan(0);
     }
 
     public class CommandValidator : AbstractValidator<Command>
     {
         public CommandValidator()
         {
-            this.RuleFor(x => x.Id).NotEmpty();
-            this.RuleFor(x => x.Email).NotEmpty().EmailAddress();
+            this.RuleFor(x => x.Id).GreaterThan(0);
+            this.RuleFor(x => x.Email).NotEmpty().EmailAddress(); // TODO Custom email validation?
             this.RuleFor(x => x.Phone).NotEmpty();
-            this.RuleFor(x => x.MailingAddress).SetValidator(new AddressValidator()!);
         }
     }
 
-    public class AddressValidator : AbstractValidator<Command.Address>
-    {
-        public AddressValidator()
-        {
-            this.RuleFor(x => x.CountryCode).IsInEnum();
-            this.RuleFor(x => x.ProvinceCode).IsInEnum();
-            this.RuleFor(x => x.Street).NotEmpty();
-            this.RuleFor(x => x.City).NotEmpty();
-            this.RuleFor(x => x.Postal).NotEmpty();
-        }
-    }
-
-    public class QueryHandler : IQueryHandler<Query, Command>
+    public class QueryHandler : IQueryHandler<Query, IDomainResult<Command>>
     {
         private readonly PidpDbContext context;
         private readonly IMapper mapper;
@@ -73,12 +55,19 @@ public class Demographics
             this.mapper = mapper;
         }
 
-        public async Task<Command> HandleAsync(Query query)
+        public async Task<IDomainResult<Command>> HandleAsync(Query query)
         {
-            return await this.context.Parties
+            var demographic = await this.context.Parties
                 .Where(party => party.Id == query.Id)
                 .ProjectTo<Command>(this.mapper.ConfigurationProvider)
                 .SingleOrDefaultAsync();
+
+            if (demographic == null)
+            {
+                return DomainResult.NotFound<Command>();
+            }
+
+            return DomainResult.Success(demographic);
         }
     }
 
@@ -91,11 +80,11 @@ public class Demographics
         public async Task HandleAsync(Command command)
         {
             var party = await this.context.Parties
-                .Include(party => party.MailingAddress)
                 .SingleOrDefaultAsync(party => party.Id == command.Id);
 
             if (party == null)
             {
+                // TODO 404?
                 return;
             }
 
@@ -104,23 +93,6 @@ public class Demographics
             party.PreferredLastName = command.PreferredLastName;
             party.Email = command.Email;
             party.Phone = command.Phone;
-
-            if (command.MailingAddress == null)
-            {
-                party.MailingAddress = null;
-            }
-            else
-            {
-                party.MailingAddress = new PartyAddress
-                {
-                    AddressType = AddressType.Mailng,
-                    CountryCode = command.MailingAddress.CountryCode,
-                    ProvinceCode = command.MailingAddress.ProvinceCode,
-                    Street = command.MailingAddress.Street,
-                    City = command.MailingAddress.City,
-                    Postal = command.MailingAddress.Postal
-                };
-            }
 
             await this.context.SaveChangesAsync();
         }

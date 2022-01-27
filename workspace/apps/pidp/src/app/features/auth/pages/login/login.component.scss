@@ -1,0 +1,65 @@
+@use '@angular/material' as mat;
+@use 'material/material-variables' as var;
+
+@import 'palette';
+@import 'bootstrap/bootstrap-imports';
+
+.container {
+  margin-top: 3rem;
+}
+
+.bcsc {
+  img {
+    width: 75px;
+
+    @include media-breakpoint-up(md) {
+      width: 100px;
+    }
+
+    @include media-breakpoint-up(lg) {
+      width: 125px;
+    }
+  }
+
+  h1 {
+    margin-bottom: 0;
+
+    @include media-breakpoint-up(md) {
+      // Only for login increase the font-size for <h1>
+      font-size: 2.5rem;
+    }
+  }
+
+  h2 {
+    margin-top: 2rem;
+    margin-bottom: 0.25rem;
+    line-height: 2rem;
+  }
+
+  .row {
+    margin-bottom: 2rem;
+  }
+
+  button {
+    font-size: 1.2rem;
+    padding: 0.75rem 1.2rem;
+
+    @include media-breakpoint-down(sm) {
+      width: 100%;
+    }
+
+    @include media-breakpoint-up(sm) {
+      padding: 0.75rem 1.75rem;
+    }
+  }
+}
+
+.idir {
+  & > div {
+    text-align: center;
+  }
+
+  img {
+    margin-bottom: 3rem;
+  }
+}

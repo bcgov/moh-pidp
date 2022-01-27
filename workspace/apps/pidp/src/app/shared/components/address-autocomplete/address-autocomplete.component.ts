@@ -1,11 +1,12 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormGroup, FormControl, FormBuilder } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 
-import { debounceTime, EMPTY, switchMap } from 'rxjs';
+import { EMPTY, debounceTime, switchMap } from 'rxjs';
 
-import { AddressAutocompleteResource } from '@app/core/services/address-autocomplete-resource.service';
-import { ToastService } from '@app/core/services/toast.service';
-import { Address } from '@bcgov/shared/data-access';
+import { Address, Province } from '@bcgov/shared/data-access';
+
+import { AddressAutocompleteResource } from '@core/resources/address-autocomplete-resource.service';
+import { ToastService } from '@core/services/toast.service';
 
 import { AddressAutocompleteFindResponse } from './address-autocomplete-find-response.model';
 import { AddressAutocompleteRetrieveResponse } from './address-autocomplete-retrieve-response.model';
@@ -61,7 +62,7 @@ export class AddressAutocompleteComponent implements OnInit {
             addressRetrieved.postalCode
           );
 
-          !this.inBc || address.provinceCode === 'BC'
+          !this.inBc || address.provinceCode === Province.BRITISH_COLUMBIA
             ? this.autocompleteAddress.emit(address)
             : this.toastService.openErrorToast('Address must be located in BC');
         } else {

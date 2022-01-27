@@ -6,15 +6,15 @@ import {
 } from '@angular/material/core';
 import { MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material/dialog';
 import {
-  MatFormFieldDefaultOptions,
   MAT_FORM_FIELD_DEFAULT_OPTIONS,
+  MatFormFieldDefaultOptions,
 } from '@angular/material/form-field';
 import { MAT_PAGINATOR_DEFAULT_OPTIONS } from '@angular/material/paginator';
 
 export const APP_DATE_FORMAT = 'dd LLL yyyy';
 export const APP_DATE_FORMATS = {
   parse: {
-    // Reformat entered date values to this format
+    // Date values reformatted to this format:
     dateInput: APP_DATE_FORMAT,
   },
   display: {

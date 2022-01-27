@@ -1,0 +1,46 @@
+<h2 mat-dialog-title>
+  <mat-icon
+    *ngIf="options.icon && !options.imageSrc"
+    [class]="{
+      'material-icons-outlined': options?.iconType === 'outlined',
+      'material-icons-round': options?.iconType === 'round',
+      'material-icons-sharp': options?.iconType === 'sharp'
+    }"
+    [color]="options.actionType"
+    >{{ options.icon }}</mat-icon
+  >
+  <img *ngIf="options.imageSrc" alt="" [attr.src]="options.imageSrc" />
+  <span>
+    {{ options.title }}
+  </span>
+</h2>
+<mat-dialog-content>
+  <p *ngIf="options.message">{{ options.message }}</p>
+  <ng-template appDialogContent></ng-template>
+</mat-dialog-content>
+<mat-dialog-actions *ngIf="!(options.cancelHide && options.actionHide)">
+  <button
+    *ngIf="!options.cancelHide"
+    class="cancel"
+    mat-stroked-button
+    cdkFocusInitial
+    [mat-dialog-close]="false">
+    {{ options.cancelText }}
+  </button>
+  <button
+    *ngIf="!options.actionHide"
+    mat-flat-button
+    [color]="options.actionType"
+    (click)="onConfirm()">
+    {{ options.actionText }}
+  </button>
+
+  <span></span>
+
+  <a
+    *ngIf="options.actionLink"
+    [attr.href]="options.actionLink?.href"
+    [attr.target]="options.actionLink?.target">
+    {{ options.actionLink?.text }}
+  </a>
+</mat-dialog-actions>

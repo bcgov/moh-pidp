@@ -1,8 +1,8 @@
 import {
-  Component,
   ChangeDetectionStrategy,
-  Input,
+  Component,
   ContentChildren,
+  Input,
   QueryList,
 } from '@angular/core';
 
@@ -22,7 +22,6 @@ export class CardComponent {
   @Input() public icon?: string;
   @Input() public iconType?: IconType;
   @Input() public title!: string;
-  @Input() public hint?: string;
   @Input() public class?: string | string[] | Record<string, unknown>;
 
   @ContentChildren(CardHintDirective)
