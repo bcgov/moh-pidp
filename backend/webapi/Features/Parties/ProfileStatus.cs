@@ -95,7 +95,7 @@ public class ProfileStatus
             else if (model.Ipc == null)
             {
                 model.SaEformsStatus = Model.EnrolmentStatus.NotAvailable;
-                model.SaEformsStatusReason = "College Certification not found in PLR";
+                model.SaEformsStatusReason = "College Licence not found in PLR";
             }
             else
             {

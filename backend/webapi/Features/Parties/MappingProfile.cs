@@ -9,7 +9,6 @@ public class MappingProfile : Profile
     public MappingProfile()
     {
         this.CreateMap<Party, Demographics.Command>();
-        this.CreateMap<Party, EnrolmentStatus.Model>();
         this.CreateMap<Party, ProfileStatus.Model>()
             .IncludeMembers(party => party.PartyCertification)
             .ForMember(dest => dest.FacilityStreet, opt => opt.MapFrom(src => src.Facility!.PhysicalAddress!.Street));
