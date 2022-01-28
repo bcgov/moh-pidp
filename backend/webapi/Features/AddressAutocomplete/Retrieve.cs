@@ -11,8 +11,6 @@ public class Retrieve
         public string Id { get; set; } = string.Empty;
     }
 
-    public class Model : AddressAutocompleteRetrieveResponse { }
-
     public class QueryValidator : AbstractValidator<Query>
     {
         public QueryValidator() => this.RuleFor(x => x.Id).NotEmpty();
