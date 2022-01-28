@@ -120,7 +120,7 @@ export class PartyService {
               {
                 key: 'status',
                 // TODO indicate whether they are verified or not
-                value: 'verified',
+                value: '-',
                 label: 'Status:',
               },
             ]
@@ -133,7 +133,7 @@ export class PartyService {
         status: profileStatus?.collegeCertificationComplete
           ? 'completed'
           : 'incomplete',
-        actionDisabled: false,
+        actionDisabled: !profileStatus?.demographicsComplete,
       },
     ];
   }
@@ -147,9 +147,9 @@ export class PartyService {
         type: 'special-authority-eforms',
         title: 'Special Authority eForms',
         description: `Enrol here for access to PharmaCare's Special Authority eForms application.`,
-        actionLabel: 'Request',
         route: AccessRoutes.routePath(AccessRoutes.SPECIAL_AUTH_EFORMS_PAGE),
         statusType: 'info',
+        actionLabel: 'Request',
         actionDisabled: !(
           profileStatus?.demographicsComplete &&
           profileStatus?.collegeCertificationComplete
