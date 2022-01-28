@@ -7,57 +7,58 @@ using PlrIntake.Models;
 
 public static class PlrRecordParser
 {
-    private static readonly DateTime PlrNullDateTime = new DateTime(9999, 12, 30);
+    private static readonly DateTime PlrNullDateTime = new(9999, 12, 30);
 
     /// <summary>
     /// Reads from a row in Excel file into a PlrRecord object.
     /// </summary>
     public static PlrRecord ReadRow(CsvReader reader)
     {
-        PlrRecord provider = new PlrRecord();
-
-        provider.Ipc = GetString(reader, GetIndex("A"))!;
-        provider.Cpn = GetString(reader, GetIndex("B"));
-        provider.IdentifierType = GetString(reader, GetIndex("C"));
-        provider.CollegeId = GetString(reader, GetIndex("D"));
-        provider.ProviderRoleType = GetString(reader, GetIndex("E"));
-        provider.MspId = GetString(reader, GetIndex("F"));
-        provider.NamePrefix = GetString(reader, GetIndex("G"));
-        provider.FirstName = GetString(reader, GetIndex("H"));
-        provider.SecondName = GetString(reader, GetIndex("I"));
-        provider.ThirdName = GetString(reader, GetIndex("J"));
-        provider.LastName = GetString(reader, GetIndex("K"));
-        provider.Suffix = GetString(reader, GetIndex("L"));
-        provider.Gender = GetString(reader, GetIndex("M"));
-        provider.DateOfBirth = TryGetDateTime(reader, "N");
-        provider.StatusCode = GetString(reader, GetIndex("O"));
-        provider.StatusReasonCode = GetString(reader, GetIndex("P"));
-        provider.StatusStartDate = TryGetDateTime(reader, "Q");
-        provider.StatusExpiryDate = TryGetDateTime(reader, "R");
-        provider.Expertise = GetMultipleElements(GetString(reader, GetIndex("S")))
-            .Select(x => new Expertise(x))
-            .ToList();
-        // Not collecting Languages
-        // provider.Languages = GetString(reader, GetIndex("T"));
-        provider.Address1Line1 = GetString(reader, GetIndex("U"));
-        provider.Address1Line2 = GetString(reader, GetIndex("V"));
-        provider.Address1Line3 = GetString(reader, GetIndex("W"));
-        provider.City1 = GetString(reader, GetIndex("X"));
-        provider.Province1 = GetString(reader, GetIndex("Y"));
-        provider.Country1 = GetString(reader, GetIndex("Z"));
-        provider.PostalCode1 = GetString(reader, GetIndex("AA"));
-        provider.Address1StartDate = TryGetDateTime(reader, "AB");
-        provider.Credentials = GetMultipleElements(GetString(reader, GetIndex("AC")))
-            .Select(x => new Credential(x))
-            .ToList();
-        provider.TelephoneAreaCode = GetString(reader, GetIndex("AD"));
-        provider.TelephoneNumber = GetString(reader, GetIndex("AE"));
-        provider.FaxAreaCode = GetString(reader, GetIndex("AF"));
-        provider.FaxNumber = GetString(reader, GetIndex("AG"));
-        provider.Email = GetString(reader, GetIndex("AH"));
-        provider.ConditionCode = GetString(reader, GetIndex("AI"));
-        provider.ConditionStartDate = TryGetDateTime(reader, "AJ");
-        provider.ConditionEndDate = TryGetDateTime(reader, "AK");
+        var provider = new PlrRecord
+        {
+            Ipc = GetString(reader, GetIndex("A"))!,
+            Cpn = GetString(reader, GetIndex("B")),
+            IdentifierType = GetString(reader, GetIndex("C")),
+            CollegeId = GetString(reader, GetIndex("D")),
+            ProviderRoleType = GetString(reader, GetIndex("E")),
+            MspId = GetString(reader, GetIndex("F")),
+            NamePrefix = GetString(reader, GetIndex("G")),
+            FirstName = GetString(reader, GetIndex("H")),
+            SecondName = GetString(reader, GetIndex("I")),
+            ThirdName = GetString(reader, GetIndex("J")),
+            LastName = GetString(reader, GetIndex("K")),
+            Suffix = GetString(reader, GetIndex("L")),
+            Gender = GetString(reader, GetIndex("M")),
+            DateOfBirth = TryGetDateTime(reader, "N"),
+            StatusCode = GetString(reader, GetIndex("O")),
+            StatusReasonCode = GetString(reader, GetIndex("P")),
+            StatusStartDate = TryGetDateTime(reader, "Q"),
+            StatusExpiryDate = TryGetDateTime(reader, "R"),
+            Expertise = GetMultipleElements(GetString(reader, GetIndex("S")))
+                .Select(x => new Expertise(x))
+                .ToList(),
+            // Not collecting Languages
+            // provider.Languages = GetString(reader, GetIndex("T"));
+            Address1Line1 = GetString(reader, GetIndex("U")),
+            Address1Line2 = GetString(reader, GetIndex("V")),
+            Address1Line3 = GetString(reader, GetIndex("W")),
+            City1 = GetString(reader, GetIndex("X")),
+            Province1 = GetString(reader, GetIndex("Y")),
+            Country1 = GetString(reader, GetIndex("Z")),
+            PostalCode1 = GetString(reader, GetIndex("AA")),
+            Address1StartDate = TryGetDateTime(reader, "AB"),
+            Credentials = GetMultipleElements(GetString(reader, GetIndex("AC")))
+                .Select(x => new Credential(x))
+                .ToList(),
+            TelephoneAreaCode = GetString(reader, GetIndex("AD")),
+            TelephoneNumber = GetString(reader, GetIndex("AE")),
+            FaxAreaCode = GetString(reader, GetIndex("AF")),
+            FaxNumber = GetString(reader, GetIndex("AG")),
+            Email = GetString(reader, GetIndex("AH")),
+            ConditionCode = GetString(reader, GetIndex("AI")),
+            ConditionStartDate = TryGetDateTime(reader, "AJ"),
+            ConditionEndDate = TryGetDateTime(reader, "AK")
+        };
 
         return provider;
     }
@@ -67,7 +68,7 @@ public static class PlrRecordParser
     /// </summary>
     private static string? GetString(CsvReader reader, int colIndex)
     {
-        string value = reader.GetField<string>(colIndex);
+        var value = reader.GetField<string>(colIndex);
         return string.IsNullOrEmpty(value) ? null : value;
     }
 
@@ -96,14 +97,12 @@ public static class PlrRecordParser
     /// <returns>Array containing parsed elements or an empty array if given input is <c>null</c>.</returns>
     private static string[] GetMultipleElements(string? aValue)
     {
-        if (aValue != null)
+        if (aValue == null)
         {
-            return aValue.Split('|');
+            return Array.Empty<string>();
         }
-        else
-        {
-            return new string[0];
-        }
+
+        return aValue.Split('|');
     }
 
     /// <summary>
@@ -152,13 +151,16 @@ public static class PlrRecordParser
     /// <returns>Zero-based index, e.g. 28</returns>
     public static int GetIndex(string excelColumn)
     {
-        if (string.IsNullOrEmpty(excelColumn)) throw new ArgumentNullException("excelColumn");
+        if (string.IsNullOrEmpty(excelColumn))
+        {
+            throw new ArgumentNullException(nameof(excelColumn));
+        }
 
         excelColumn = excelColumn.ToUpperInvariant();
 
-        int sum = 0;
+        var sum = 0;
 
-        for (int i = 0; i < excelColumn.Length; i++)
+        for (var i = 0; i < excelColumn.Length; i++)
         {
             sum *= 26;
             sum += excelColumn[i] - 'A' + 1;
