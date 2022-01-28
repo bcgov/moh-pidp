@@ -12,17 +12,17 @@ using Pidp.Infrastructure.HttpClients.AddressAutocomplete;
 [Authorize(Policy = Policies.BcscAuthentication)]
 public class AddressAutocompleteController : ControllerBase
 {
-    [HttpGet("find")]
+    [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<List<AddressAutocompleteFindResponse>>> FindAddresses([FromServices] IQueryHandler<Find.Query, List<AddressAutocompleteFindResponse>> handler,
                                                                                          [FromQuery] Find.Query query)
         => await handler.HandleAsync(query);
 
-    [HttpGet("retrieve")]
+    [HttpGet("{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<List<AddressAutocompleteRetrieveResponse>>> RetrieveAddresses([FromServices] IQueryHandler<Retrieve.Query, List<AddressAutocompleteRetrieveResponse>> handler,
-                                                                                                 [FromQuery] Retrieve.Query query)
+                                                                                                 [FromRoute] Retrieve.Query query)
         => await handler.HandleAsync(query);
 }

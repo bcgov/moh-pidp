@@ -25,7 +25,7 @@ export class AddressAutocompleteResource {
   ): Observable<AddressAutocompleteFindResponse[]> {
     return this.apiResource
       .get<AddressAutocompleteFindResponse[]>(
-        `AddressAutocomplete/find?searchTerm=${searchTerm}`
+        `AddressAutocomplete?searchTerm=${searchTerm}`
       )
       .pipe(
         map((response: AddressAutocompleteFindResponse[]) => response ?? []),
@@ -46,7 +46,7 @@ export class AddressAutocompleteResource {
   ): Observable<AddressAutocompleteRetrieveResponse[]> {
     return this.apiResource
       .get<AddressAutocompleteRetrieveResponse[]>(
-        `AddressAutocomplete/retrieve?id=${id}`
+        `AddressAutocomplete/${id}`
       )
       .pipe(
         map(
