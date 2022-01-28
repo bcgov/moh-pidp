@@ -53,6 +53,9 @@ export class PartyService {
     }
 
     this._profileStatus = profileStatus;
+    this._completedProfile =
+      profileStatus.demographicsComplete &&
+      profileStatus.collegeCertificationComplete;
 
     this._state$.next({
       profileIdentitySections: this.getProfileIdentitySections(profileStatus),
