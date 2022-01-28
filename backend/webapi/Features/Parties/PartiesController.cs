@@ -3,11 +3,15 @@ namespace Pidp.Features.Parties;
 using DomainResults.Common;
 using DomainResults.Mvc;
 using HybridModelBinding;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+
+using Pidp.Infrastructure.Auth;
 
 [Produces("application/json")]
 [Route("api/[controller]")]
 [ApiController]
+[Authorize(Policy = Policies.BcscAuthentication)]
 public class PartiesController : ControllerBase
 {
     [HttpGet]

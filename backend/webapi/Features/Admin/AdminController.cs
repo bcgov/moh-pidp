@@ -1,10 +1,14 @@
 namespace Pidp.Features.Admin;
 
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+
+using Pidp.Infrastructure.Auth;
 
 [Produces("application/json")]
 [Route("api/[controller]")]
 [ApiController]
+[Authorize(Policy = Policies.IdirAuthentication, Roles = Roles.Admin)]
 public class AdminController : ControllerBase
 {
     [HttpGet("parties")]

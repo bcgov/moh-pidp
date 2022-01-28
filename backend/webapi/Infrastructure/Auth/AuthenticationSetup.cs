@@ -1,11 +1,10 @@
 namespace Pidp.Infrastructure.Auth;
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
-using System.Threading.Tasks;
 
 using Pidp.Extensions;
 
@@ -30,7 +29,20 @@ public static class AuthenticationSetup
             };
         });
 
-        services.AddAuthorization();
+        services.AddAuthorization(options =>
+        {
+            options.AddPolicy(Policies.BcscAuthentication, policy => policy
+                .RequireAuthenticatedUser()
+                .RequireClaim(Claims.IdentityProvider, AuthConstants.BCServicesCard));
+            options.AddPolicy(Policies.IdirAuthentication, policy => policy
+                .RequireAuthenticatedUser()
+                .RequireClaim(Claims.IdentityProvider, AuthConstants.Idir));
+
+            options.FallbackPolicy = new AuthorizationPolicyBuilder()
+                .RequireAuthenticatedUser()
+                .RequireClaim(Claims.IdentityProvider, AuthConstants.BCServicesCard, AuthConstants.Idir)
+                .Build();
+        });
 
         return services;
     }
