@@ -2,20 +2,20 @@
 
 using CsvHelper;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Serilog;
 using System.Globalization;
 
 using PlrIntake.Models;
 using PlrIntake.Data;
-using Microsoft.Extensions.Configuration;
 
-class Program
+public class Program
 {
     /// <summary>
-    /// Can be used like this:  `dotnet run PLR_Test_Data_IAT20210617_v2.0.csv intake.log`
+    /// Can be used like this: `dotnet run PLR_Test_Data_IAT20210617_v2.0.csv intake.log`
     /// </summary>
     /// <param name="args">Expecting path to .csv file and desired log file</param>
-    static void Main(string[] args)
+    public static void Main(string[] args)
     {
         Log.Logger = new LoggerConfiguration()
             .WriteTo.File(args[1])
