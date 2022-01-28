@@ -12,7 +12,7 @@
     type="success"
     icon="check_circle"
     iconType="outlined"
-    title="You have completed your Provider Identity Profile">
+    heading="You have completed your Provider Identity Profile">
     <ng-container uiAlertContent>
       Go to the Access to Systems section to view what systems you are eligible
       to enrol for.
@@ -39,7 +39,7 @@
         class="col-12 col-xl-6">
         <ui-card-summary
           [icon]="section.icon"
-          [title]="section.title"
+          [heading]="section.heading"
           [statusType]="section.statusType"
           [status]="section.status"
           [actionLabel]="section.actionLabel"
@@ -74,7 +74,7 @@
         class="col-12 col-xl-6">
         <ui-card-summary
           [icon]="section.icon"
-          [title]="section.title"
+          [heading]="section.heading"
           [statusType]="section.statusType"
           [status]="section.status"
           [actionLabel]="section.actionLabel"
@@ -106,7 +106,7 @@
         class="col-12 col-xl-6">
         <ui-card-summary
           [icon]="section.icon"
-          [title]="section.title"
+          [heading]="section.heading"
           [statusType]="section.statusType"
           [status]="section.status"
           [actionLabel]="section.actionLabel"
@@ -140,7 +140,7 @@
         class="col-12 col-xl-6">
         <ui-card-summary
           [icon]="section.icon"
-          [title]="section.title"
+          [heading]="section.heading"
           [actionLabel]="section.actionLabel"
           [actionDisabled]="section.actionDisabled"
           (action)="onAction(section?.route)">

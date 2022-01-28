@@ -1,14 +1,14 @@
 import {
-  Component,
   ChangeDetectionStrategy,
-  Input,
+  Component,
   ContentChildren,
+  Input,
   QueryList,
 } from '@angular/core';
 
+import { IconType } from '../icon/icon.component';
 import { AlertActionsDirective } from './alert-actions.directive';
 import { AlertContentDirective } from './alert-content.directive';
-import { IconType } from '../icon/icon.component';
 
 export type AlertType = 'success' | 'info' | 'warn' | 'danger' | 'muted';
 
@@ -20,7 +20,7 @@ export type AlertType = 'success' | 'info' | 'warn' | 'danger' | 'muted';
 })
 export class AlertComponent {
   @Input() public type!: AlertType;
-  @Input() public title!: string;
+  @Input() public heading!: string;
   @Input() public icon?: string;
   @Input() public iconType?: IconType;
 

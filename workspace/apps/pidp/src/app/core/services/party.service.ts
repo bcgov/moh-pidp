@@ -71,7 +71,7 @@ export class PartyService {
       {
         icon: 'fingerprint',
         type: 'personal-information',
-        title: 'Personal Information',
+        heading: 'Personal Information',
         hint: profileStatus?.demographicsComplete ? '' : '1 min to complete',
         description: 'Personal and Contact Information',
         properties: profileStatus?.demographicsComplete
@@ -101,7 +101,7 @@ export class PartyService {
       {
         icon: 'fingerprint',
         type: 'college-licence-information',
-        title: 'College Licence Information',
+        heading: 'College Licence Information',
         hint: profileStatus?.collegeCertificationComplete
           ? ''
           : '1 min to complete',
@@ -145,7 +145,7 @@ export class PartyService {
       {
         icon: 'fingerprint',
         type: 'special-authority-eforms',
-        title: 'Special Authority eForms',
+        heading: 'Special Authority eForms',
         description: `Enrol here for access to PharmaCare's Special Authority eForms application.`,
         route: AccessRoutes.routePath(AccessRoutes.SPECIAL_AUTH_EFORMS_PAGE),
         statusType: 'info',
@@ -165,7 +165,7 @@ export class PartyService {
       {
         icon: 'fingerprint',
         type: 'view-signed-or-accepted-documents',
-        title: 'View Signed or Accepted Documents',
+        heading: 'View Signed or Accepted Documents',
         description: 'View Agreement(s)',
         actionLabel: 'View',
         route: YourProfileRoutes.routePath(

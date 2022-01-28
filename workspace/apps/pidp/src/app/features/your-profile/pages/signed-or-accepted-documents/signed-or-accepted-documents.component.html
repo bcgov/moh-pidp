@@ -14,7 +14,7 @@
       <div *ngFor="let document of documents" class="col-12 col-xl-6">
         <ui-card-summary
           [icon]="document.icon"
-          [title]="document.title"
+          [heading]="document.title"
           [actionLabel]="document.actionLabel"
           [actionDisabled]="document.disabled"
           (action)="onViewDocument()"></ui-card-summary>

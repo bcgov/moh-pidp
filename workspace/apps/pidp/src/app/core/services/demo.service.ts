@@ -72,7 +72,7 @@ export class DemoService {
       {
         icon: 'fingerprint',
         type: 'personal-information',
-        title: 'Personal Information',
+        heading: 'Personal Information',
         hint: '1 min to complete',
         description: 'Personal and Contact Information',
         actionLabel: 'Update',
@@ -84,7 +84,7 @@ export class DemoService {
       {
         icon: 'fingerprint',
         type: 'college-licence-information',
-        title: 'College Licence Information',
+        heading: 'College Licence Information',
         hint: '1 min to complete',
         description: 'College Licence Information and Validation',
         actionLabel: 'Update',
@@ -137,7 +137,7 @@ export class DemoService {
       {
         icon: 'fingerprint',
         type: 'special-authority-eforms',
-        title: 'Special Authority eForms',
+        heading: 'Special Authority eForms',
         description: 'PharmaCare Special Authority eForms',
         actionLabel: 'Request',
         route: AccessRoutes.routePath(AccessRoutes.SPECIAL_AUTH_EFORMS_PAGE),
@@ -227,7 +227,7 @@ export class DemoService {
       {
         icon: 'fingerprint',
         type: 'view-signed-or-accepted-documents',
-        title: 'View Signed or Accepted Documents',
+        heading: 'View Signed or Accepted Documents',
         description: 'View Agreement(s)',
         actionLabel: 'View',
         route: YourProfileRoutes.routePath(

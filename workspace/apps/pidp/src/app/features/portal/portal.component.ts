@@ -40,7 +40,11 @@ export class PortalComponent implements OnInit {
     this.acceptedCollectionNotice = this.partyService.acceptedCollectionNotice;
     this.collectionNotice = documentService.getCollectionNotice();
     this.state$ = this.partyService.state$;
-    this.completedProfile = route.snapshot.queryParams.profileCompleted;
+    // TODO won't scale better as notification service that's set until displayed
+    //      and uses an accompanying component since there are already 3 different
+    //      notifications for SA eForms
+    this.completedProfile =
+      route.snapshot.queryParams.completedProfile === 'true';
   }
 
   public onAcceptCollectionNotice(accepted: boolean): void {

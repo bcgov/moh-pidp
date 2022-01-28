@@ -21,7 +21,7 @@ import { CardHintDirective } from './card-hint.directive';
 export class CardComponent {
   @Input() public icon?: string;
   @Input() public iconType?: IconType;
-  @Input() public title!: string;
+  @Input() public heading!: string;
   @Input() public class?: string | string[] | Record<string, unknown>;
 
   @ContentChildren(CardHintDirective)
