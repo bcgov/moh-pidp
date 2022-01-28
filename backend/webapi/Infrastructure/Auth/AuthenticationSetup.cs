@@ -31,16 +31,12 @@ public static class AuthenticationSetup
 
         services.AddAuthorization(options =>
         {
-            // options.AddPolicy(Policies.BcscAuthentication, policy => policy
-            //     .RequireAuthenticatedUser()
-            //     .RequireClaim(Claims.IdentityProvider, AuthConstants.BCServicesCard));
-            // options.AddPolicy(Policies.IdirAuthentication, policy => policy
-            //     .RequireAuthenticatedUser()
-            //     .RequireClaim(Claims.IdentityProvider, AuthConstants.Idir));
             options.AddPolicy(Policies.BcscAuthentication, policy => policy
-                .RequireAuthenticatedUser());
+                .RequireAuthenticatedUser()
+                .RequireClaim(Claims.IdentityProvider, AuthConstants.BCServicesCard));
             options.AddPolicy(Policies.IdirAuthentication, policy => policy
-                .RequireAuthenticatedUser());
+                .RequireAuthenticatedUser()
+                .RequireClaim(Claims.IdentityProvider, AuthConstants.Idir));
 
             options.FallbackPolicy = new AuthorizationPolicyBuilder()
                 .RequireAuthenticatedUser()
