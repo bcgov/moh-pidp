@@ -95,7 +95,7 @@ public class ProfileStatus
             else if (model.Ipc == null)
             {
                 model.SaEformsStatus = Model.EnrolmentStatus.NotAvailable;
-                model.SaEformsStatusReason = "College Licence not found in PLR";
+                model.SaEformsStatusReason = "We are unable to verify your College licence at this time, please try again later.";
             }
             else
             {
@@ -103,12 +103,21 @@ public class ProfileStatus
                 if (status == null)
                 {
                     model.SaEformsStatus = Model.EnrolmentStatus.NotAvailable;
-                    model.SaEformsStatusReason = "Error determining Status in PLR";
+                    model.SaEformsStatusReason = "Error determining College licence status, please try again later.";
                 }
                 else
                 {
-                    // TODO
-                    // var goodStanding = ;
+                    var goodStatndingReasons = new[] { "GS", "PRAC", "TEMPPER" };
+                    if (status.StatusCode == "ACTIVE" && goodStatndingReasons.Contains(status.StatusReasonCode))
+                    {
+                        model.SaEformsStatus = Model.EnrolmentStatus.Available;
+                        model.SaEformsStatusReason = "";
+                    }
+                    else
+                    {
+                        model.SaEformsStatus = Model.EnrolmentStatus.NotAvailable;
+                        model.SaEformsStatusReason = "There is a problem with your College licence, please try again later.";
+                    }
                 }
             }
 
