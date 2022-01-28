@@ -40,7 +40,7 @@ export class PortalComponent implements OnInit {
     this.acceptedCollectionNotice = this.partyService.acceptedCollectionNotice;
     this.collectionNotice = documentService.getCollectionNotice();
     this.state$ = this.partyService.state$;
-    this.completedProfile = this.partyService.completedProfile;
+    this.completedProfile = route.snapshot.queryParams.profileCompleted;
   }
 
   public onAcceptCollectionNotice(accepted: boolean): void {

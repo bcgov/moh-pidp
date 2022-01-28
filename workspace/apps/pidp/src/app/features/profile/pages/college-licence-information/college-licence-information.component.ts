@@ -2,7 +2,7 @@ import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 
 import { EMPTY, Observable, catchError, of, tap } from 'rxjs';
 
@@ -89,10 +89,16 @@ export class CollegeLicenceInformationComponent
   }
 
   protected afterSubmitIsSuccessful(): void {
-    this.navigateToRoot();
+    const queryParams = {
+      completedProfile: !this.partyService.completedProfile,
+    };
+    this.navigateToRoot({ queryParams });
   }
 
-  private navigateToRoot(): void {
-    this.router.navigate([this.route.snapshot.data.routes.root]);
+  private navigateToRoot(navigationExtras?: NavigationExtras): void {
+    this.router.navigate(
+      [this.route.snapshot.data.routes.root],
+      navigationExtras
+    );
   }
 }
