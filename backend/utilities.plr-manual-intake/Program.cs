@@ -21,6 +21,7 @@ public class Program
             .WriteTo.File(args[1])
             .CreateLogger();
 
+        AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
         var connectionString = new ConfigurationBuilder()
             .SetBasePath(Directory.GetCurrentDirectory())
             .AddJsonFile("appsettings.json")
