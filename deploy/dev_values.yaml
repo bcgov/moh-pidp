@@ -15,3 +15,15 @@ redis:
   auth:
     existingSecret: redis
     existingSecretPasswordKey: database-password
+
+nginx:
+  replicaCount: 1
+
+frontend:
+  replicaCount: 3
+
+webapi:
+  replicaCount: 3
+
+plr-intake:
+  replicaCount: 1
