@@ -1,0 +1,103 @@
+apiVersion: triggers.tekton.dev/v1alpha1
+kind: TriggerTemplate
+metadata:
+  name: github-push-trigger-template
+  namespace: d8a8f9-tools
+spec: 
+  params:
+    - name: git-revision
+      description: The git revision (SHA)
+      default: develop
+    - name: git-repository-url
+      description: The git repository url
+    - name: git-repo-name
+      description: The name of the deployment to be created / patched
+    - name: git-short-sha
+      description: Trunkated SHA of the git commit
+    - name: git-branch-name
+      description: The name of the branch
+    - name: release-namespace
+      description: Target deployment namespace
+    - name: release-name
+      description: Name of the release
+    - name: values-file
+      description: Helm deployment answer files
+  resourcetemplates:
+    - apiVersion: tekton.dev/v1beta1
+      kind: PipelineRun
+      metadata:
+        name: cicd-pipeline-run-prod-$(tt.params.git-short-sha)
+      spec:
+        pipelineRef:
+          name: cicd-pipeline
+        serviceAccountName: pipeline
+        params:
+          - name: git-url
+            value: git@github.com:bcgov/moh-pidp.git
+          - name: git-revision
+            value: $(tt.params.git-revision)
+          - name: git-short-sha
+            value: $(tt.params.git-short-sha)
+          - name: image-tag
+            value: $(tt.params.git-branch-name)
+          - name: release_name
+            value: $(tt.params.release-name)
+          - name: release_namespace
+            value: $(tt.params.release-namespace)
+          - name: values_file
+            value: $(tt.params.values-file)
+        workspaces:
+        - name: source
+          persistentVolumeClaim:
+            claimName: build-pipeline-pvc
+        - name: dockerconfig
+          secret:
+            secretName: pipeline-dockercfg-w5mgt
+    # - apiVersion: tekton.dev/v1beta1
+    #   kind: PipelineRun
+    #   metadata:
+    #     generateName: webapi-pipeline-run-$(tt.params.git-branch-name)-$(tt.params.git-short-sha)-
+    #   spec:
+    #     pipelineRef:
+    #       name: webapi-pipeline
+    #     serviceAccountName: pipeline
+    #     params:
+    #       - name: git-url
+    #         value: git@github.com:bcgov/moh-pidp.git
+    #       - name: git-revision
+    #         value: $(tt.params.git-revision)
+    #       - name: dockerfile-path
+    #         value: "."
+    #       - name: image-tag
+    #         value: $(tt.params.git-branch-name)
+    #     workspaces:
+    #     - name: source
+    #       persistentVolumeClaim:
+    #         claimName: api-pipeline-pvc
+    #     - name: dockerconfig
+    #       secret:
+    #         secretName: pipeline-dockercfg-w5mgt
+    # - apiVersion: tekton.dev/v1beta1
+    #   kind: PipelineRun
+    #   metadata:
+    #     generateName: services-pipeline-run-$(tt.params.git-branch-name)-$(tt.params.git-short-sha)-
+    #   spec:
+    #     pipelineRef:
+    #       name: services-pipeline
+    #     serviceAccountName: pipeline
+    #     params:
+    #       - name: git-url
+    #         value: git@github.com:bcgov/moh-pidp.git
+    #       - name: git-revision
+    #         value: $(tt.params.git-revision)
+    #       - name: dockerfile-path
+    #         value: "."
+    #       - name: image-tag
+    #         value: $(tt.params.git-branch-name)
+    #     workspaces:
+    #     - name: source
+    #       persistentVolumeClaim:
+    #         claimName: services-pipeline-pvc
+    #     - name: dockerconfig
+    #       secret:
+    #         secretName: pipeline-dockercfg-w5mgt
