@@ -44,11 +44,17 @@ spec:
   results:
   - name: IMAGE-DIGEST
     description: Digest of the image just built.
-
   steps:
   - name: build-and-push
     workingDir: $(workspaces.source.path)
     image: $(params.BUILDER_IMAGE)
+    resources:
+      requests:
+        memory: 250Mi
+        cpu: 200m
+      limits:
+        memory: 4Gi
+        cpu: 2
     args:
     - $(params.EXTRA_ARGS[*])
     - --dockerfile=$(params.DOCKERFILE)
