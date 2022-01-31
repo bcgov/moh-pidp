@@ -27,5 +27,18 @@ spec:
     - kind: TriggerBinding
       ref: github-pr-binding
     name: github-listener
+    interceptors:
+    - cel:
+        filter: >-
+          (header.match('X-GitHub-Event', 'pull_request') &&
+          body.action in ['opened', 'synchronize']) &&
+          body.pull_request.head.repo.full_name == 'bcgov/moh-pidp'
+        overlays:
+        - key: truncated_sha
+          expression: "body.pull_request.head.sha.truncate(7)"
+        - key: pr_number
+          expression: "body.number"
+        - key: branch_name
+          expression: "body.pull_request.head.ref.replace('/', '_')"
     template:
       ref: github-pr-trigger-template
