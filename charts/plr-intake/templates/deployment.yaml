@@ -1,0 +1,102 @@
+{{ $release := .Release.Name }}
+{{ $ocEnv := regexFind "([^-]*$)" .Release.Namespace }}
+{{ $isPR := hasPrefix "pr-" .Release.Name }}
+## Derived release name
+{{ $drn := ternary $release $ocEnv $isPR }}
+#
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "plr-intake.fullname" . }}
+  labels:
+    {{- include "plr-intake.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "plr-intake.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- if .Values.global.commit_sha }}
+        commit_sha: {{ .Values.global.commit_sha }}
+        {{- end}}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "plr-intake.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "plr-intake.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: {{ .Values.global.image.registry }}/{{ .Values.image.repository }}:{{ .Values.global.image.tag | default .Chart.AppVersion }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: DB_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: database-cm
+                  key: database-host
+            - name: POSTGRESQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ ternary $ocEnv $release $isPR }}-patroni-secret
+                  key: app-db-password
+            - name: POSTGRESQL_USER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ ternary $ocEnv $release $isPR }}-patroni-secret
+                  key: app-db-username
+            - name: POSTGRESQL_DATABASE
+              {{- if $isPR }}
+              value: pidp_{{ $drn }}
+              {{ else }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ ternary $ocEnv $release $isPR }}-patroni-secret
+                  key: app-db-name
+              {{- end }}
+            - name: ClientCertThumbprint
+              valueFrom:
+                secretKeyRef:
+                  name: plr-integration
+                  key: client_cert_thumbprint
+            - name: ConnectionStrings__PlrDatabase
+              value: "Host=$(DB_HOST);Port=5432;Database=$(POSTGRESQL_DATABASE);Username=$(POSTGRESQL_USER);Password=$(POSTGRESQL_PASSWORD)"
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          # livenessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: http
+          # readinessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: http
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

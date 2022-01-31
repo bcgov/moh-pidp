@@ -1,3 +1,13 @@
+{{- $separator :=  ternary "-" "." (regexMatch "(?:\\..*?){4}" .Values.global.vanityURL) -}}
+{{- $domain := .Values.global.vanityURL -}}
+{{- $fullName := include "frontend.fullname" . -}}
+{{ $release := .Release.Name }}
+{{ $ocEnv := regexFind "([^-]*$)" .Release.Namespace }}
+{{ $isPR := hasPrefix "pr-" .Release.Name }}
+## Derived release name
+{{ $drn := ternary $release $ocEnv $isPR }}
+{{ $isProd := contains "prod" $ocEnv }}
+#
 kind: ConfigMap
 apiVersion: v1
 metadata:
@@ -7,5 +17,17 @@ metadata:
 data:
   environment.json: |-
     {
-      "environment": "dev"
+      "environmentName": "{{ $ocEnv }}",
+      "apiEndpoint": "https://{{ if $isProd }}{{else}}{{ $drn }}.{{end}}{{ $domain }}/api/v1",
+      "applicationUrl": "https://{{ if $isProd }}{{else}}{{ $drn }}.{{end}}{{ $domain }}",
+      "keycloakConfig": {
+        "config": {
+          "url": "https://common-logon{{ if $isProd }}{{else}}-{{ $ocEnv }}.{{end}}hlth.gov.bc.ca/auth",
+          "realm": "moh_applications",
+          "clientId": "PIDP-WEBAPP"
+        },
+        "initOptions": {
+          "onLoad": "check-sso"
+        }
+      }
     }
