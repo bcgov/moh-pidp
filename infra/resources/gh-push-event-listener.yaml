@@ -1,0 +1,133 @@
+apiVersion: triggers.tekton.dev/v1alpha1
+kind: EventListener
+metadata:
+  name: github-push
+  namespace: d8a8f9-tools
+spec:
+  namespaceSelector: {}
+  podTemplate: {}
+  resources:
+    kubernetesResource:
+      spec:
+        template:
+          spec:
+            containers:
+            - name: ""
+              resources:
+                limits:
+                  cpu: 500m
+                  memory: 128Mi
+                requests:
+                  cpu: 250m
+                  memory: 64Mi
+            serviceAccountName: pipeline
+  serviceAccountName: ""
+  triggers:
+  - bindings:
+    - kind: TriggerBinding
+      ref: github-push-binding
+    - name: release-namespace
+      value: d8a8f9-dev
+    - name: release-name
+      value: dev
+    - name: values-file
+      value: deploy/dev_values.yaml
+    name: github-dev
+    interceptors:
+    - cel:
+        filter: >-
+          header.match('X-GitHub-Event', 'push') &&
+          body.repository.full_name == 'bcgov/moh-pidp' &&
+          body.ref == 'refs/heads/develop'
+        overlays:
+        - key: truncated_sha
+          expression: "body.head_commit.id.truncate(7)"
+        - key: branch_name
+          expression: "body.ref.replace('refs/heads/', '')"
+    template:
+      ref: github-push-trigger-template
+  - bindings:
+    - kind: TriggerBinding
+      ref: github-push-binding
+    - name: release-namespace
+      value: d8a8f9-test
+    - name: release-name
+      value: test
+    - name: values-file
+      value: deploy/test_values.yaml
+    name: github-test
+    interceptors:
+    - cel:
+        filter: >-
+          header.match('X-GitHub-Event', 'push') &&
+          body.repository.full_name == 'bcgov/moh-pidp' &&
+          body.ref == 'refs/heads/test'
+        overlays:
+        - key: truncated_sha
+          expression: "body.head_commit.id.truncate(7)"
+        - key: branch_name
+          expression: "body.ref.replace('refs/heads/', '')"
+    template:
+      ref: github-push-trigger-template
+  - bindings:
+    - kind: TriggerBinding
+      ref: github-push-binding
+    - name: release-namespace
+      value: d8a8f9-test
+    - name: release-name
+      value: demo
+    - name: values-file
+      value: deploy/demo_values.yaml
+    name: github-demo
+    interceptors:
+    - cel:
+        filter: >-
+          header.match('X-GitHub-Event', 'push') &&
+          body.repository.full_name == 'bcgov/moh-pidp' &&
+          body.ref == 'refs/heads/master'
+        overlays:
+        - key: truncated_sha
+          expression: "body.head_commit.id.truncate(7)"
+        - key: branch_name
+          expression: "body.ref.replace('refs/heads/', '')"
+    template:
+      ref: github-push-trigger-template
+  - bindings:
+    - kind: TriggerBinding
+      ref: github-push-binding
+    - name: release-namespace
+      value: d8a8f9-prod
+    - name: release-name
+      value: prod
+    - name: values-file
+      value: deploy/prod_values.yaml
+    name: github-prod
+    interceptors:
+    - cel:
+        filter: >-
+          header.match('X-GitHub-Event', 'push') &&
+          body.repository.full_name == 'bcgov/moh-pidp' &&
+          body.ref == 'refs/heads/master'
+        overlays:
+        - key: truncated_sha
+          expression: "body.head_commit.id.truncate(7)"
+        - key: branch_name
+          expression: "body.ref.replace('refs/heads/', '')"
+    template:
+      ref: github-push-trigger-template
+  # - bindings:
+  #   - kind: TriggerBinding
+  #     ref: github-push-binding
+  #   name: github-listener
+  #   interceptors:
+  #   - cel:
+  #       filter: >-
+  #         header.match('X-GitHub-Event', 'push') &&
+  #         body.repository.full_name == 'bcgov/moh-pidp'
+  #       overlays:
+  #       - key: truncated_sha
+  #         expression: "body.head_commit.id.truncate(7)"
+  #       - key: branch_name
+  #         expression: "body.ref.replace('refs/heads/', '').replace('/', '_')"
+  #   template:
+  #     ref: github-push-trigger-template

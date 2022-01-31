@@ -1,0 +1,16 @@
+apiVersion: triggers.tekton.dev/v1alpha1
+kind: Trigger
+metadata:
+  name: github-push-trigger
+spec:
+  interceptors:
+    - cel:
+        filter: "header.match('X-GitHub-Event', 'push')"
+        overlays:
+        - key: extensions.truncated_sha
+          expression: "body.pull_request.head.sha.truncate(7)"
+  serviceAccountName: pipeline
+  bindings:
+    - ref: github-pr-binding
+  template:
+    ref: github-pr-trigger-template
