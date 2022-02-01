@@ -8,6 +8,12 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./busy-overlay.component.scss'],
 })
 export class BusyOverlayComponent {
+  /**
+   * @description
+   * Busy subscription for use when blocking content from
+   * being interacted with in the template. For example,
+   * during but not limited to HTTP requests.
+   */
   @Input() public busy?: Subscription;
   @Output() public started: EventEmitter<boolean>;
   @Output() public stopped: EventEmitter<boolean>;

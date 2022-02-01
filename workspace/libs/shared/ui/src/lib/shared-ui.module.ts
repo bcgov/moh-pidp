@@ -33,6 +33,7 @@ import { UserInfoComponent } from './components/user-info/user-info.component';
 import { YesNoContentComponent } from './components/yes-no-content/yes-no-content.component';
 import { MaterialModule } from './material/material.module';
 import { ContextHelpModule } from './modules/context-help/context-help.module';
+import { NgxBusyModule } from './modules/ngx-busy/ngx-busy.module';
 import { DefaultPipe } from './pipes/default.pipe';
 import { FormatDatePipe } from './pipes/format-date.pipe';
 import { FullnamePipe } from './pipes/fullname.pipe';
@@ -82,6 +83,7 @@ import { SafePipe } from './pipes/safe.pipe';
     CommonModule,
     ContextHelpModule,
     MaterialModule,
+    NgxBusyModule,
     NgxMaskModule.forRoot(),
     ReactiveFormsModule,
   ],

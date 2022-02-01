@@ -61,8 +61,6 @@ export class RouteStateService {
   /**
    * @description
    * Listener for route scroll events.
-   *
-   * NOTE: Scroll events are scheduled after NavigationEnd.
    */
   public onScrollEvent(): Observable<Scroll> {
     return this.router.events.pipe(
