@@ -21,11 +21,11 @@ spec:
       {{- include "webapi.selectorLabels" . | nindent 6 }}
   template:
     metadata:
-      {{- with .Values.podAnnotations }}
       annotations:
         {{- if .Values.global.commit_sha }}
         commit_sha: {{ .Values.global.commit_sha }}
         {{- end}}
+      {{- with .Values.podAnnotations }}
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:

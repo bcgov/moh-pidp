@@ -13,12 +13,12 @@ spec:
       {{- include "frontend.selectorLabels" . | nindent 6 }}
   template:
     metadata:
-      {{- with .Values.podAnnotations }}
       annotations:
         checksum/config: {{ include (print $.Template.BasePath "/config-map.yaml") . | sha256sum }}
         {{- if .Values.global.commit_sha }}
         commit_sha: {{ .Values.global.commit_sha }}
         {{- end}}
+      {{- with .Values.podAnnotations }}
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
