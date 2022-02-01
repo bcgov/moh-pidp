@@ -36,5 +36,5 @@ dependencies:
     repository: "file://../plr-intake"
     version: "0.1.0"
   - name: nginx
-    repository: https://charts.bitnami.com/bitnami
+    repository: "file://../nginx"
     version: "9.7.3"
