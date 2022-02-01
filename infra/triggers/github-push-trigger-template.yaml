@@ -26,7 +26,7 @@ spec:
     - apiVersion: tekton.dev/v1beta1
       kind: PipelineRun
       metadata:
-        name: cicd-pipeline-run-prod-$(tt.params.git-short-sha)
+        name: cicd-pipeline-run-$(tt.params.release-name)-$(tt.params.git-short-sha)
       spec:
         pipelineRef:
           name: cicd-pipeline
