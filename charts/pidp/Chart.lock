@@ -9,7 +9,7 @@ dependencies:
   repository: file://../plr-intake
   version: 0.1.0
 - name: nginx
-  repository: https://charts.bitnami.com/bitnami
+  repository: file://../nginx
   version: 9.7.3
-digest: sha256:2b16e875e66c4759601875fdaeb7484ba5d9b6ccc2b722303b65dce765f9fd76
-generated: "2022-01-24T14:13:11.482358-08:00"
+digest: sha256:342d7d91267a12093dac6d2f8fad51e6935ac518f62d0e30da604cb94209177e
+generated: "2022-01-31T18:37:06.869062-08:00"

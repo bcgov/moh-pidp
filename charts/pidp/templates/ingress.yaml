@@ -73,9 +73,9 @@ spec:
               service:
                 name: {{ $release }}-ingress
                 port:
-                  number: 8443
+                  number: 8543
               {{- else }}
               serviceName: {{ $release }}-ingress
-              servicePort: 8443
+              servicePort: 8543
               {{- end }}
 {{- end }}
