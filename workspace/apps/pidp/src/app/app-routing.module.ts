@@ -15,7 +15,11 @@ const routes: Routes = [
 @NgModule({
   imports: [
     RouterModule.forRoot(routes, {
-      scrollPositionRestoration: 'top',
+      scrollPositionRestoration: 'enabled',
+      onSameUrlNavigation: 'reload',
+      // Does not work as expected with Material SideNav
+      // being the scrollable content container
+      // anchorScrolling: 'enabled',
       enableTracing: false,
     }),
   ],

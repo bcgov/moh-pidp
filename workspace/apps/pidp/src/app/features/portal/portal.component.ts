@@ -51,7 +51,14 @@ export class PortalComponent implements OnInit {
     this.partyService.acceptedCollectionNotice = accepted;
   }
 
-  public onAction(routePath?: string): void {
+  public onScrollToAnchor(): void {
+    this.router.navigate([], {
+      fragment: 'access',
+      queryParamsHandling: 'preserve',
+    });
+  }
+
+  public onCardAction(routePath?: string): void {
     if (!routePath) {
       return;
     }

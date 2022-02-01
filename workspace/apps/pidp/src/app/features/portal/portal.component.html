@@ -19,7 +19,9 @@
     </ng-container>
     <ng-container uiAlertActions>
       <span>
-        <button mat-stroked-button type="button">View Systems</button>
+        <button mat-stroked-button type="button" (click)="onScrollToAnchor()">
+          View Systems
+        </button>
       </span>
     </ng-container>
   </ui-alert>
@@ -44,7 +46,7 @@
           [status]="section.status"
           [actionLabel]="section.actionLabel"
           [actionDisabled]="section.actionDisabled"
-          (action)="onAction(section?.route)">
+          (action)="onCardAction(section?.route)">
           <ng-container uiCardSummaryHint>
             {{ section.hint }}
           </ng-container>
@@ -79,7 +81,7 @@
           [status]="section.status"
           [actionLabel]="section.actionLabel"
           [actionDisabled]="section.actionDisabled"
-          (action)="onAction(section?.route)">
+          (action)="onCardAction(section?.route)">
           <ng-container uiCardSummaryHint>
             {{ section.hint }}
           </ng-container>
@@ -111,7 +113,7 @@
           [status]="section.status"
           [actionLabel]="section.actionLabel"
           [actionDisabled]="section.actionDisabled"
-          (action)="onAction(section?.route)">
+          (action)="onCardAction(section?.route)">
           <ng-container uiCardSummaryHint>
             {{ section.hint }}
           </ng-container>
@@ -143,7 +145,7 @@
           [heading]="section.heading"
           [actionLabel]="section.actionLabel"
           [actionDisabled]="section.actionDisabled"
-          (action)="onAction(section?.route)">
+          (action)="onCardAction(section?.route)">
           <ng-container uiCardSummaryHint>
             {{ section.hint }}
           </ng-container>
