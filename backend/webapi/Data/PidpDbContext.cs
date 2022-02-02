@@ -62,7 +62,7 @@ public class PidpDbContext : DbContext
         }
     }
 
-    // Uncomment for DB logging
+    // Uncomment for SQL logging
     // protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     //     => optionsBuilder.LogTo(Console.WriteLine);
 }
