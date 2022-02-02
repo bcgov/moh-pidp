@@ -1,19 +1,20 @@
 import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
 
-import { AbstractResource } from '@bcgov/shared/data-access';
+import { AbstractHttpResource } from '@bcgov/shared/data-access';
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';
 
+// TODO rename resource to ApiHttpClient
 @Injectable({
   providedIn: 'root',
 })
-export class ApiResource extends AbstractResource {
-  public url: string;
+export class ApiResource extends AbstractHttpResource {
+  protected uri: string;
 
   public constructor(@Inject(APP_CONFIG) config: AppConfig, http: HttpClient) {
     super(http);
 
-    this.url = config.apiEndpoint;
+    this.uri = config.apiEndpoint;
   }
 }

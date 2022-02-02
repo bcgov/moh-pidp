@@ -4,13 +4,13 @@ import { Observable, catchError, of } from 'rxjs';
 
 import { ICrudResource } from '../interfaces/crud-resource.interface';
 import {
-  AbstractResource,
+  AbstractHttpResource,
   NoContent,
   NoContentResponse,
-} from './abstract-resource';
+} from './abstract-http-resource';
 
 export abstract class CrudResource<T> implements ICrudResource<T> {
-  protected constructor(protected resource: AbstractResource) {}
+  protected constructor(protected resource: AbstractHttpResource) {}
 
   /**
    * @description

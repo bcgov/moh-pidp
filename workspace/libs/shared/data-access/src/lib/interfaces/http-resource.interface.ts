@@ -1,8 +1,10 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { HttpResponse } from '@angular/common/http';
 
 import { Observable } from 'rxjs';
 
-export interface IResource {
+// TODO rename from resource to IHttpClient
+export interface IHttpResource {
   get<T>(
     path: string,
     options?: { [key: string]: any }

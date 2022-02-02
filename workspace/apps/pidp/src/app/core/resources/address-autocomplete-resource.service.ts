@@ -3,6 +3,8 @@ import { Injectable } from '@angular/core';
 
 import { Observable, catchError, map, of } from 'rxjs';
 
+import { AbstractResource } from '@bcgov/shared/data-access';
+
 import { AddressAutocompleteFindResponse } from '@shared/components/address-autocomplete/address-autocomplete-find-response.model';
 import { AddressAutocompleteRetrieveResponse } from '@shared/components/address-autocomplete/address-autocomplete-retrieve-response.model';
 
@@ -13,19 +15,21 @@ import { ToastService } from '../services/toast.service';
 @Injectable({
   providedIn: 'root',
 })
-export class AddressAutocompleteResource {
+export class AddressAutocompleteResource extends AbstractResource {
   public constructor(
     private apiResource: ApiResource,
     private toastService: ToastService,
     private logger: LoggerService
-  ) {}
+  ) {
+    super('address-autocomplete');
+  }
 
   public find(
     searchTerm: string
   ): Observable<AddressAutocompleteFindResponse[]> {
     return this.apiResource
       .get<AddressAutocompleteFindResponse[]>(
-        `AddressAutocomplete?searchTerm=${searchTerm}`
+        `${this.resourceBaseUri}?searchTerm=${searchTerm}`
       )
       .pipe(
         map((response: AddressAutocompleteFindResponse[]) => response ?? []),
@@ -46,7 +50,7 @@ export class AddressAutocompleteResource {
   ): Observable<AddressAutocompleteRetrieveResponse[]> {
     return this.apiResource
       .get<AddressAutocompleteRetrieveResponse[]>(
-        `AddressAutocomplete/${id}`
+        `${this.resourceBaseUri}/${id}`
       )
       .pipe(
         map(
