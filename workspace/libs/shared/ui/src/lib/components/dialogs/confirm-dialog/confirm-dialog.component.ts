@@ -40,7 +40,7 @@ export class ConfirmDialogComponent implements OnInit {
     this.dialogContentOutput = null;
   }
 
-  public onConfirm() {
+  public onConfirm(): void {
     const response =
       this.dialogContentOutput !== null
         ? { output: this.dialogContentOutput }
@@ -48,7 +48,7 @@ export class ConfirmDialogComponent implements OnInit {
     this.dialogRef.close(response);
   }
 
-  public ngOnInit() {
+  public ngOnInit(): void {
     if (this.options.component) {
       this.loadDialogContentComponent(
         this.options.component,
@@ -72,7 +72,7 @@ export class ConfirmDialogComponent implements OnInit {
     };
   }
 
-  private loadDialogContentComponent(component: any, data: any) {
+  private loadDialogContentComponent(component: any, data: any): void {
     const viewContainerRef = this.dialogContentHost.viewContainerRef;
     viewContainerRef.clear();
 

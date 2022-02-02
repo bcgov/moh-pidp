@@ -1,6 +1,7 @@
 namespace Pidp;
 
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
@@ -12,6 +13,7 @@ using System.Text.Json;
 
 using Pidp.Data;
 using Pidp.Features;
+using Pidp.Infrastructure;
 using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.HttpClients;
 
@@ -31,7 +33,7 @@ public class Startup
             .AddKeycloakAuth(config)
             .AddSingleton<IClock>(SystemClock.Instance);
 
-        services.AddControllers()
+        services.AddControllers(options => options.Conventions.Add(new RouteTokenTransformerConvention(new KabobCaseParameterTransformer())))
             .AddFluentValidation(options => options.RegisterValidatorsFromAssemblyContaining<Startup>())
             .AddJsonOptions(options => options.JsonSerializerOptions.ConfigureForNodaTime(DateTimeZoneProviders.Tzdb))
             .AddHybridModelBinder();
