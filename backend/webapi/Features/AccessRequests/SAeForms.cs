@@ -28,6 +28,7 @@ public class SAeForms
         public async Task<IDomainResult> HandleAsync(Command command)
         {
             // TODO check standing
+            // TODO Keycloak Role
             var existingRequest = await this.context.AccessRequests
                 .SingleOrDefaultAsync(request => request.PartyId == command.PartyId
                     && request.AccessType == AccessType.SAeForms);
