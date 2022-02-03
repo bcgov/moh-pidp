@@ -58,7 +58,7 @@ export class PortalComponent implements OnInit {
     });
   }
 
-  public onCardAction(routePath?: string): void {
+  public onCardRouteAction(routePath?: string): void {
     if (!routePath) {
       return;
     }
@@ -71,8 +71,10 @@ export class PortalComponent implements OnInit {
       .firstOrCreate()
       .pipe(
         exhaustMap((partyId: number | null) =>
-          partyId ? this.partyResource.getPartyProfileStatus(partyId) : of(null)
+          partyId ? this.partyResource.getProfileStatus(partyId) : of(null)
         ),
+        // TODO instantiate profile status to get access to helper methods
+        // map((profileStatus: ProfileStatus | null) => new ProfileStatus()),
         map((profileStatus: ProfileStatus | null) =>
           this.partyService.updateState(profileStatus)
         )

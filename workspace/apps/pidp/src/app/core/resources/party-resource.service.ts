@@ -11,7 +11,19 @@ import { AuthorizedUserService } from '../services/authorized-user.service';
 import { ApiResource } from './api-resource.service';
 import { ResourceUtilsService } from './resource-utils.service';
 
-// TODO move this to a different location
+// TODO split this up later since ProfileStatus won't ever use NOT_AVAILABLE
+export enum StatusCode {
+  AVAILABLE = 1,
+  COMPLETED,
+  NOT_AVAILABLE,
+  ERROR,
+}
+
+export interface StatusReason {
+  code: StatusCode;
+  reason?: string;
+}
+
 export interface ProfileStatus {
   // TODO drop the id or rename to partyId
   id: number;
@@ -24,14 +36,21 @@ export interface ProfileStatus {
   jobTitle: string;
   facilityName: string;
   facilityStreet: string;
-  demographicsComplete: boolean;
-  collegeCertificationComplete: boolean;
-  workSettingComplete: boolean;
+  // TODO hmmmmm statuses on an object...
+  status: {
+    demographics: StatusReason;
+    collegeCertification: StatusReason;
+    workSetting: StatusReason;
+    // TODO temporary placement for MVP then relocate to AccessStatus
+    // saEforms: StatusReason;
+  };
 }
 
-export interface EnrolmentStatus {
+export interface AccessStatus {
   // TODO test placeholder that should be removed
-  specialAuthEformsCompleted: boolean;
+  statuses: {
+    saEforms: boolean;
+  };
 }
 
 @Injectable({
@@ -112,9 +131,7 @@ export class PartyResource {
     );
   }
 
-  public getPartyProfileStatus(
-    partyId: number
-  ): Observable<ProfileStatus | null> {
+  public getProfileStatus(partyId: number): Observable<ProfileStatus | null> {
     return this.apiResource
       .get<ProfileStatus>(`parties/${partyId}/profile-status`)
       .pipe(
@@ -128,11 +145,9 @@ export class PartyResource {
       );
   }
 
-  public getPartyEnrolmentStatus(
-    partyId: number
-  ): Observable<EnrolmentStatus | null> {
+  public getAccessStatus(partyId: number): Observable<AccessStatus | null> {
     return this.apiResource
-      .get<EnrolmentStatus>(`parties/${partyId}/enrolment-status`)
+      .get<AccessStatus>(`parties/${partyId}/enrolment-status`)
       .pipe(
         catchError((error: HttpErrorResponse) => {
           if (error.status === HttpStatusCode.NotFound) {

@@ -75,11 +75,10 @@ export class DemoService {
         heading: 'Personal Information',
         hint: '1 min to complete',
         description: 'Personal and Contact Information',
-        actionLabel: 'Update',
+        actions: [{ label: 'Update', disabled: false }],
         route: ProfileRoutes.routePath(ProfileRoutes.PERSONAL_INFO_PAGE),
         statusType: 'warn',
         status: 'incomplete',
-        actionDisabled: false,
       },
       {
         icon: 'fingerprint',
@@ -87,11 +86,10 @@ export class DemoService {
         heading: 'College Licence Information',
         hint: '1 min to complete',
         description: 'College Licence Information and Validation',
-        actionLabel: 'Update',
+        actions: [{ label: 'Update', disabled: false }],
         route: ProfileRoutes.routePath(ProfileRoutes.COLLEGE_LICENCE_INFO_PAGE),
         statusType: 'warn',
         status: 'incomplete',
-        actionDisabled: false,
       },
       ...ArrayUtils.insertIf<PortalSection>(
         this.featureFlagService.hasFlags(Role.FEATURE_PIDP_DEMO),
@@ -103,13 +101,12 @@ export class DemoService {
 
             hint: '2 min to complete',
             description: 'Job title and details of your work location',
-            actionLabel: 'Update',
+            actions: [{ label: 'Update', disabled: false }],
             route: ProfileRoutes.routePath(
               ProfileRoutes.WORK_AND_ROLE_INFO_PAGE
             ),
             statusType: 'warn',
             status: 'incomplete',
-            disabled: false,
           },
           {
             icon: 'fingerprint',
@@ -119,13 +116,12 @@ export class DemoService {
             hint: '13 mins to complete',
             description:
               'Read and agree to the applicable User Access Agreement(s)',
-            actionLabel: 'Open',
+            actions: [{ label: 'Open', disabled: false }],
             route: ProfileRoutes.routePath(
               ProfileRoutes.USER_ACCESS_AGREEMENT_PAGE
             ),
             statusType: 'warn',
             status: 'incomplete',
-            disabled: false,
           },
         ]
       ),
@@ -139,10 +135,9 @@ export class DemoService {
         type: 'special-authority-eforms',
         heading: 'Special Authority eForms',
         description: 'PharmaCare Special Authority eForms',
-        actionLabel: 'Request',
+        actions: [{ label: 'Request', disabled: true }],
         route: AccessRoutes.routePath(AccessRoutes.SPECIAL_AUTH_EFORMS_PAGE),
         statusType: 'info',
-        actionDisabled: true,
       },
       ...ArrayUtils.insertIf<PortalSection>(
         this.featureFlagService.hasFlags(Role.FEATURE_PIDP_DEMO),
@@ -154,11 +149,10 @@ export class DemoService {
 
             hint: '5 mins to complete',
             description: 'Request access to PharmaNet',
-            actionLabel: 'Request',
+            actions: [{ label: 'Request', disabled: true }],
             route: AccessRoutes.routePath(AccessRoutes.PHARMANET_PAGE),
             statusType: 'warn',
             status: 'incomplete',
-            disabled: false,
           },
           {
             icon: 'fingerprint',
@@ -167,13 +161,12 @@ export class DemoService {
 
             hint: '10 mins to complete',
             description: 'Description of what the checklist is here',
-            actionLabel: 'Request',
+            actions: [{ label: 'Request', disabled: true }],
             route: AccessRoutes.routePath(
               AccessRoutes.SITE_PRIVACY_SECURITY_CHECKLIST_PAGE
             ),
             statusType: 'warn',
             status: 'incomplete',
-            disabled: false,
           },
         ]
       ),
@@ -215,12 +208,10 @@ export class DemoService {
             type: 'transactions',
             title: 'Transactions',
             description: 'More information on what this is here',
-
-            actionLabel: 'View',
+            actions: [{ label: 'View', disabled: false }],
             route: YourProfileRoutes.routePath(
               YourProfileRoutes.TRANSACTIONS_PAGE
             ),
-            disabled: false,
           },
         ]
       ),
@@ -229,11 +220,10 @@ export class DemoService {
         type: 'view-signed-or-accepted-documents',
         heading: 'View Signed or Accepted Documents',
         description: 'View Agreement(s)',
-        actionLabel: 'View',
+        actions: [{ label: 'View', disabled: false }],
         route: YourProfileRoutes.routePath(
           YourProfileRoutes.SIGNED_ACCEPTED_DOCUMENTS_PAGE
         ),
-        actionDisabled: true,
       },
     ];
   }

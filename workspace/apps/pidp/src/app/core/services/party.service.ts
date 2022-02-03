@@ -3,14 +3,21 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 import { AccessRoutes } from '@app/features/access/access.routes';
-import { PortalSection } from '@app/features/portal/models/portal-section.model';
+import {
+  AccessRequestType,
+  PortalSection,
+  PortalSectionType,
+  ProfileAccessType,
+} from '@app/features/portal/models/portal-section.model';
 import { ProfileRoutes } from '@app/features/profile/profile.routes';
 import { YourProfileRoutes } from '@app/features/your-profile/your-profile.routes';
-import { LookupCodePipe } from '@app/modules/lookup/lookup-code.pipe';
 
-import { ProfileStatus } from '../resources/party-resource.service';
+import { ProfileStatus, StatusCode } from '../resources/party-resource.service';
 
-// TODO create custom initializer that inits keycloak then gets partyId and stores in this service for easy replacement by state management
+// TODO create custom initializer that:
+//      1. uses existing init for keycloak
+//      2. gets partyId and stores in this service
+//      3. pulls profile status and stores in this service
 @Injectable({
   providedIn: 'root',
 })
@@ -20,7 +27,7 @@ export class PartyService {
   private _completedProfile: boolean;
   private _state$: BehaviorSubject<Record<string, PortalSection[]>>;
 
-  public constructor(private lookupCodePipe: LookupCodePipe) {
+  public constructor() {
     this._profileStatus = null;
     this._acceptedCollectionNotice = false;
     this._state$ = new BehaviorSubject<Record<string, PortalSection[]>>({});
@@ -47,6 +54,7 @@ export class PartyService {
     return this._completedProfile;
   }
 
+  // TODO instantiate ProfileStatus and add helper methods to avoid === hell
   public updateState(profileStatus: ProfileStatus | null): void {
     if (!profileStatus) {
       return;
@@ -54,13 +62,13 @@ export class PartyService {
 
     this._profileStatus = profileStatus;
     this._completedProfile =
-      profileStatus.demographicsComplete &&
-      profileStatus.collegeCertificationComplete;
+      profileStatus.status?.demographics.code === StatusCode.COMPLETED &&
+      profileStatus.status?.collegeCertification.code === StatusCode.COMPLETED;
 
     this._state$.next({
       profileIdentitySections: this.getProfileIdentitySections(profileStatus),
       accessToSystemsSections: this.getAccessToSystemsSections(profileStatus),
-      yourProfileSections: this.getYourProfileSections(profileStatus),
+      yourProfileSections: this.getYourProfileSections(),
     });
   }
 
@@ -70,70 +78,99 @@ export class PartyService {
     return [
       {
         icon: 'fingerprint',
-        type: 'personal-information',
+        type: PortalSectionType.PERSONAL_INFORMATION,
         heading: 'Personal Information',
-        hint: profileStatus?.demographicsComplete ? '' : '1 min to complete',
+        hint:
+          profileStatus?.status?.demographics.code === StatusCode.COMPLETED
+            ? ''
+            : '1 min to complete',
         description: 'Personal and Contact Information',
-        properties: profileStatus?.demographicsComplete
-          ? [
-              {
-                key: 'fullName',
-                value: `${profileStatus.firstName} ${profileStatus.lastName}`,
-              },
-              {
-                key: 'email',
-                value: profileStatus.email,
-              },
-              {
-                key: 'phone',
-                value: profileStatus.phone,
-              },
-            ]
-          : [],
-        actionLabel: 'Update',
+        properties:
+          profileStatus?.status?.demographics.code === StatusCode.COMPLETED
+            ? [
+                {
+                  key: 'fullName',
+                  value: `${profileStatus.firstName} ${profileStatus.lastName}`,
+                },
+                {
+                  key: 'email',
+                  value: profileStatus.email,
+                },
+                {
+                  key: 'phone',
+                  value: profileStatus.phone,
+                },
+              ]
+            : [],
+        actions: [
+          {
+            label: 'Update',
+            disabled: false,
+          },
+        ],
         route: ProfileRoutes.routePath(ProfileRoutes.PERSONAL_INFO_PAGE),
-        statusType: profileStatus?.demographicsComplete ? 'success' : 'warn',
-        status: profileStatus?.demographicsComplete
-          ? 'completed'
-          : 'incomplete',
-        actionDisabled: false,
+        statusType:
+          profileStatus?.status?.demographics.code === StatusCode.COMPLETED
+            ? 'success'
+            : 'warn',
+        status:
+          profileStatus?.status?.demographics.code === StatusCode.COMPLETED
+            ? 'completed'
+            : 'incomplete',
       },
       {
         icon: 'fingerprint',
-        type: 'college-licence-information',
+        type: PortalSectionType.COLLEGE_LICENCE_INFORMATION,
         heading: 'College Licence Information',
-        hint: profileStatus?.collegeCertificationComplete
-          ? ''
-          : '1 min to complete',
+        hint:
+          profileStatus?.status?.collegeCertification.code ===
+          StatusCode.COMPLETED
+            ? ''
+            : '1 min to complete',
         description: 'College Licence Information and Validation',
-        properties: profileStatus?.collegeCertificationComplete
-          ? [
-              {
-                key: 'collegeCode',
-                value: profileStatus.collegeCode,
-              },
-              {
-                key: 'licenceNumber',
-                value: profileStatus.licenceNumber,
-                label: 'College Licence Number:',
-              },
-              {
-                key: 'status',
-                // TODO indicate whether they are verified or not
-                value: '-',
-                label: 'Status:',
-              },
-            ]
-          : [],
-        actionLabel: 'Update',
+        properties:
+          profileStatus?.status?.collegeCertification.code ===
+          StatusCode.COMPLETED
+            ? [
+                {
+                  key: 'collegeCode',
+                  value: profileStatus.collegeCode,
+                },
+                {
+                  key: 'licenceNumber',
+                  value: profileStatus.licenceNumber,
+                  label: 'College Licence Number:',
+                },
+                {
+                  key: 'status',
+                  value:
+                    profileStatus?.status?.demographics.code ===
+                    StatusCode.COMPLETED
+                      ? 'Verified'
+                      : 'Not Verified',
+                  label: 'Status:',
+                },
+              ]
+            : [],
+        actions: [
+          {
+            label: 'Update',
+            disabled: !(
+              profileStatus?.status?.demographics.code === StatusCode.COMPLETED
+            ),
+          },
+        ],
         route: ProfileRoutes.routePath(ProfileRoutes.COLLEGE_LICENCE_INFO_PAGE),
-        statusType: profileStatus?.collegeCertificationComplete
-          ? 'success'
-          : 'warn',
-        status: profileStatus?.collegeCertificationComplete
-          ? 'completed'
-          : 'incomplete',
-        actionDisabled: !profileStatus?.demographicsComplete,
+        statusType:
+          profileStatus?.status?.collegeCertification.code ===
+          StatusCode.COMPLETED
+            ? 'success'
+            : 'warn',
+        status:
+          profileStatus?.status?.collegeCertification.code ===
+          StatusCode.COMPLETED
+            ? 'completed'
+            : 'incomplete',
       },
     ];
   }
@@ -144,37 +181,42 @@ export class PartyService {
     return [
       {
         icon: 'fingerprint',
-        type: 'special-authority-eforms',
+        type: AccessRequestType.SA_EFORMS,
         heading: 'Special Authority eForms',
         description: `Enrol here for access to PharmaCare's Special Authority eForms application.`,
         route: AccessRoutes.routePath(AccessRoutes.SPECIAL_AUTH_EFORMS_PAGE),
         statusType: 'info',
-        actionLabel: 'Request',
-        actionDisabled: !(
-          profileStatus?.demographicsComplete &&
-          profileStatus?.collegeCertificationComplete
-        ),
+        actions: [
+          {
+            label: 'Request',
+            disabled: !(
+              profileStatus?.status?.demographics.code ===
+                StatusCode.COMPLETED &&
+              profileStatus?.status?.collegeCertification.code ===
+                StatusCode.COMPLETED
+            ),
+          },
+        ],
       },
     ];
   }
 
-  private getYourProfileSections(
-    profileStatus?: ProfileStatus | null
-  ): PortalSection[] {
+  private getYourProfileSections(): PortalSection[] {
     return [
       {
         icon: 'fingerprint',
-        type: 'view-signed-or-accepted-documents',
+        type: ProfileAccessType.SIGNED_ACCEPTED_DOCUMENTS,
         heading: 'View Signed or Accepted Documents',
         description: 'View Agreement(s)',
-        actionLabel: 'View',
         route: YourProfileRoutes.routePath(
           YourProfileRoutes.SIGNED_ACCEPTED_DOCUMENTS_PAGE
         ),
-        actionDisabled: !(
-          profileStatus?.demographicsComplete &&
-          profileStatus?.collegeCertificationComplete
-        ),
+        actions: [
+          {
+            label: 'View',
+            disabled: false,
+          },
+        ],
       },
     ];
   }

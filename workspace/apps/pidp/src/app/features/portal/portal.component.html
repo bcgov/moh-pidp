@@ -44,9 +44,9 @@
           [heading]="section.heading"
           [statusType]="section.statusType"
           [status]="section.status"
-          [actionLabel]="section.actionLabel"
-          [actionDisabled]="section.actionDisabled"
-          (action)="onCardAction(section?.route)">
+          [actionLabel]="section.actions[0].label"
+          [actionDisabled]="section.actions[0].disabled"
+          (action)="onCardRouteAction(section?.route)">
           <ng-container uiCardSummaryHint>
             {{ section.hint }}
           </ng-container>
@@ -79,9 +79,9 @@
           [heading]="section.heading"
           [statusType]="section.statusType"
           [status]="section.status"
-          [actionLabel]="section.actionLabel"
-          [actionDisabled]="section.actionDisabled"
-          (action)="onCardAction(section?.route)">
+          [actionLabel]="section.actions[0].label"
+          [actionDisabled]="section.actions[0].disabled"
+          (action)="onCardRouteAction(section.route)">
           <ng-container uiCardSummaryHint>
             {{ section.hint }}
           </ng-container>
@@ -111,9 +111,9 @@
           [heading]="section.heading"
           [statusType]="section.statusType"
           [status]="section.status"
-          [actionLabel]="section.actionLabel"
-          [actionDisabled]="section.actionDisabled"
-          (action)="onCardAction(section?.route)">
+          [actionLabel]="section.actions[0].label"
+          [actionDisabled]="section.actions[0].disabled"
+          (action)="onCardRouteAction(section?.route)">
           <ng-container uiCardSummaryHint>
             {{ section.hint }}
           </ng-container>
@@ -143,9 +143,9 @@
         <ui-card-summary
           [icon]="section.icon"
           [heading]="section.heading"
-          [actionLabel]="section.actionLabel"
-          [actionDisabled]="section.actionDisabled"
-          (action)="onCardAction(section?.route)">
+          [actionLabel]="section.actions[0].label"
+          [actionDisabled]="section.actions[0].disabled"
+          (action)="onCardRouteAction(section?.route)">
           <ng-container uiCardSummaryHint>
             {{ section.hint }}
           </ng-container>

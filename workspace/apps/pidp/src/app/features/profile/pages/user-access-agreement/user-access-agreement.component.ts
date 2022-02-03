@@ -39,22 +39,22 @@ export class UserAccessAgreementComponent {
         return section;
       });
 
-    this.demoService.state.accessToSystemsSections =
-      this.demoService.state.accessToSystemsSections.map((section) => {
-        section.actionDisabled = false;
-        return section;
-      });
+    // this.demoService.state.accessToSystemsSections =
+    //   this.demoService.state.accessToSystemsSections.map((section) => {
+    //     section.actionDisabled = false;
+    //     return section;
+    //   });
 
-    this.demoService.state.trainingSections =
-      this.demoService.state.trainingSections.map((section) => {
-        section.actionDisabled = false;
-        return section;
-      });
+    // this.demoService.state.trainingSections =
+    //   this.demoService.state.trainingSections.map((section) => {
+    //     section.actionDisabled = false;
+    //     return section;
+    //   });
 
-    this.demoService.state.yourProfileSections =
-      this.demoService.state.yourProfileSections.map((section) => {
-        section.actionDisabled = false;
-        return section;
-      });
+    // this.demoService.state.yourProfileSections =
+    //   this.demoService.state.yourProfileSections.map((section) => {
+    //     section.actionDisabled = false;
+    //     return section;
+    //   });
   }
 }

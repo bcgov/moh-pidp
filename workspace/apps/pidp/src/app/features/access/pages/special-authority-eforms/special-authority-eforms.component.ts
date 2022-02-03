@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { DemoService } from '@core/services/demo.service';
+import { AccessRequestResource } from '@app/core/resources/access-request-resource.service';
+import { LoggerService } from '@app/core/services/logger.service';
 
 @Component({
   selector: 'app-special-authority-eforms',
@@ -13,24 +14,27 @@ export class SpecialAuthorityEformsComponent implements OnInit {
 
   public constructor(
     private route: ActivatedRoute,
-    private demoService: DemoService
+    private accessRequestResource: AccessRequestResource,
+    private logger: LoggerService
   ) {
     this.title = this.route.snapshot.data.title;
   }
 
-  public onSubmit(): void {
-    this.demoService.state.accessToSystemsSections =
-      this.demoService.state.accessToSystemsSections.map((section) => {
-        if (section.type === 'special-authority-eforms') {
-          return {
-            ...section,
-            statusType: 'success',
-            status: 'completed',
-          };
-        }
-        return section;
-      });
-  }
+  public onSubmit(): void {}
+
+  // TODO drop after section are being instantiated
+  // public onCardAccessRequestAction(accessType: string): void {
+  //   const partyId = this.partyService.profileStatus?.id;
+
+  //   if (!accessType || !partyId) {
+  //     return;
+  //   }
+
+  //   if (accessType === AccessRequestType.SA_EFORMS) {
+  //     // TODO handle error and display notification
+  //     this.accessRequestResource.saEforms(partyId).subscribe();
+  //   }
+  // }
 
   public ngOnInit(): void {}
 }
