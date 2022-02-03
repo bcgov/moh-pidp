@@ -15,10 +15,11 @@ const routes: Routes = [
 @NgModule({
   imports: [
     RouterModule.forRoot(routes, {
-      scrollPositionRestoration: 'enabled',
       onSameUrlNavigation: 'reload',
-      // Does not work as expected with Material SideNav
-      // being the scrollable content container
+      // WARNING: Does not work as expected with Material SideNav
+      // being the scrollable content container.
+      // @see app.component.ts for implementation
+      // scrollPositionRestoration: 'enabled',
       // anchorScrolling: 'enabled',
       enableTracing: false,
     }),

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Data, Event, Scroll } from '@angular/router';
 
-import { Observable, delay, filter, map, mergeMap } from 'rxjs';
+import { Observable, map, mergeMap } from 'rxjs';
 
 import { contentContainerSelector } from '@bcgov/shared/ui';
 
@@ -29,7 +29,7 @@ export class AppComponent implements OnInit {
 
     this.setPageTitle(onNavEnd);
     // TODO don't scroll top when anchor scroll is about to occur
-    this.scrollTop(onNavEnd);
+    // this.scrollTop(onNavEnd);
     this.scrollToAnchor(this.routeStateService.onScrollEvent());
   }
 
@@ -59,27 +59,16 @@ export class AppComponent implements OnInit {
 
   /**
    * @description
-   * Scroll to the top of the content container on NavigationEnd.
-   */
-  private scrollTop(routeEvent: Observable<Event>): void {
-    routeEvent.subscribe(() =>
-      this.utilsService.scrollTop(contentContainerSelector)
-    );
-  }
-
-  /**
-   * @description
-   * Scroll to an anchor in the content container on Scroll event.
+   * Scroll the content container based on the
+   * triggered scroll event.
    */
   private scrollToAnchor(scroll: Observable<Scroll>): void {
     scroll
-      .pipe(
-        filter((event: Scroll) => !!event?.anchor),
-        delay(500), // Provide settling time before triggering anchor scroll
-        map((event: Scroll) => event.anchor)
-      )
+      .pipe(map((event: Scroll) => event.anchor ?? null))
       .subscribe((routeFragment: string | null) =>
-        this.utilsService.scrollToAnchor(routeFragment)
+        routeFragment
+          ? this.utilsService.scrollToAnchor(routeFragment)
+          : this.utilsService.scrollTop(contentContainerSelector)
       );
   }
 }
