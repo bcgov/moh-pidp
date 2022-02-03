@@ -3,12 +3,14 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { Observable, Subscription, exhaustMap, map, of } from 'rxjs';
 
+import { AccessRequestResource } from '@app/core/resources/access-request-resource.service';
 import { DocumentService } from '@app/core/services/document.service';
 import { Role } from '@app/shared/enums/roles.enum';
 
 import {
   PartyResource,
   ProfileStatus,
+  StatusCode,
 } from '@core/resources/party-resource.service';
 import { PartyService } from '@core/services/party.service';
 
@@ -28,7 +30,7 @@ export class PortalComponent implements OnInit {
   public state$: Observable<Record<string, PortalSection[]>>;
   public hasCompletedProfile: boolean;
   public completedProfile: boolean;
-  public collegeLicenceVerified: boolean;
+  public collegeLicenceValidationError: boolean;
 
   public Role = Role;
 
@@ -37,6 +39,7 @@ export class PortalComponent implements OnInit {
     private router: Router,
     private partyService: PartyService,
     private partyResource: PartyResource,
+    private accessRequestResource: AccessRequestResource,
     documentService: DocumentService
   ) {
     this.title = this.route.snapshot.data.title;
@@ -48,8 +51,8 @@ export class PortalComponent implements OnInit {
     //      notifications for SA eForms
     this.hasCompletedProfile =
       route.snapshot.queryParams.completedProfile === 'true';
-    this.completedProfile = this.partyService.completedProfile;
-    this.collegeLicenceVerified = this.partyService.collegeLicenceVerified;
+    this.completedProfile = false;
+    this.collegeLicenceValidationError = false;
   }
 
   public onAcceptCollectionNotice(accepted: boolean): void {
@@ -63,12 +66,43 @@ export class PortalComponent implements OnInit {
     });
   }
 
-  public onCardRouteAction(routePath?: string): void {
+  public onCardRouteAction(routePath: string): void {
     if (!routePath) {
       return;
     }
 
     this.router.navigate([ShellRoutes.routePath(routePath)]);
+  }
+
+  public onCardRequestAccess(routePath: string): void {
+    // TODO remove possibility of profileStatus being empty from type
+    const profileStatus = this.partyService.profileStatus;
+    const partyId = profileStatus?.id;
+
+    if (!partyId) {
+      return;
+    }
+
+    const saEformsStatusCode = profileStatus.status.saEforms.statusCode;
+
+    if (saEformsStatusCode !== StatusCode.COMPLETED) {
+      this.busy = this.accessRequestResource
+        .saEforms(partyId)
+        .subscribe((accessAlreadyExists: boolean) => {
+          if (!routePath) {
+            return;
+          }
+
+          // TODO either perform request on other page, or something where we don't pass queryParams
+          const queryParams = { accessAlreadyExists };
+
+          this.router.navigate([ShellRoutes.routePath(routePath)], {
+            queryParams,
+          });
+        });
+    } else {
+      this.router.navigate([ShellRoutes.routePath(routePath)]);
+    }
   }
 
   public ngOnInit(): void {
@@ -80,9 +114,12 @@ export class PortalComponent implements OnInit {
         ),
         // TODO instantiate profile status to get access to helper methods
         // map((profileStatus: ProfileStatus | null) => new ProfileStatus()),
-        map((profileStatus: ProfileStatus | null) =>
-          this.partyService.updateState(profileStatus)
-        )
+        map((profileStatus: ProfileStatus | null) => {
+          this.partyService.updateState(profileStatus);
+          this.completedProfile = this.partyService.completedProfile;
+          this.collegeLicenceValidationError =
+            this.partyService.collegeLicenceValidationError;
+        })
       )
       .subscribe();
   }

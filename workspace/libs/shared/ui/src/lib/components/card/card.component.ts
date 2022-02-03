@@ -6,8 +6,7 @@ import {
   QueryList,
 } from '@angular/core';
 
-import { IconType } from '@bcgov/shared/ui';
-
+import { IconType } from '../icon/icon.component';
 import { CardActionsDirective } from './card-actions.directive';
 import { CardContentDirective } from './card-content.directive';
 import { CardHintDirective } from './card-hint.directive';

@@ -52,9 +52,9 @@ export class PartyService {
     return this._completedProfile;
   }
 
-  public get collegeLicenceVerified(): boolean {
+  public get collegeLicenceValidationError(): boolean {
     return (
-      this._profileStatus?.status.collegeCertification.statusCode !==
+      this._profileStatus?.status.collegeCertification.statusCode ===
       StatusCode.ERROR
     );
   }
@@ -116,15 +116,13 @@ export class PartyService {
                 },
               ]
             : [],
-        actions: [
-          {
-            label: 'Update',
-            disabled:
-              demographicsStatusCode === StatusCode.ERROR ||
-              demographicsStatusCode === StatusCode.NOT_AVAILABLE,
-          },
-        ],
-        route: ProfileRoutes.routePath(ProfileRoutes.PERSONAL_INFO_PAGE),
+        action: {
+          label: 'Update',
+          route: ProfileRoutes.routePath(ProfileRoutes.PERSONAL_INFO_PAGE),
+          disabled:
+            demographicsStatusCode === StatusCode.ERROR ||
+            demographicsStatusCode === StatusCode.NOT_AVAILABLE,
+        },
         statusType:
           demographicsStatusCode === StatusCode.ERROR
             ? 'danger'
@@ -135,8 +133,8 @@ export class PartyService {
           demographicsStatusCode === StatusCode.ERROR
             ? ''
             : demographicsStatusCode === StatusCode.COMPLETED
-            ? 'completed'
-            : 'incomplete',
+            ? 'Completed'
+            : 'Incomplete',
       },
       {
         icon: 'fingerprint',
@@ -173,17 +171,17 @@ export class PartyService {
                 },
               ]
             : [],
-        actions: [
-          {
-            label: 'Update',
-            disabled:
-              demographicsStatusCode !== StatusCode.COMPLETED ||
-              // TODO do they get multiple chances to correct? assumed to be yes
-              // collegeCertStatusCode === StatusCode.ERROR ||
-              collegeCertStatusCode === StatusCode.NOT_AVAILABLE,
-          },
-        ],
-        route: ProfileRoutes.routePath(ProfileRoutes.COLLEGE_LICENCE_INFO_PAGE),
+        action: {
+          label: 'Update',
+          route: ProfileRoutes.routePath(
+            ProfileRoutes.COLLEGE_LICENCE_INFO_PAGE
+          ),
+          disabled:
+            demographicsStatusCode !== StatusCode.COMPLETED ||
+            // TODO do they get multiple chances to correct? assumed to be yes
+            // collegeCertStatusCode === StatusCode.ERROR ||
+            collegeCertStatusCode === StatusCode.NOT_AVAILABLE,
+        },
         statusType:
           collegeCertStatusCode === StatusCode.ERROR
             ? 'danger'
@@ -194,8 +192,8 @@ export class PartyService {
           collegeCertStatusCode === StatusCode.ERROR
             ? 'Licence validation error'
             : collegeCertStatusCode === StatusCode.COMPLETED
-            ? 'completed'
-            : 'incomplete',
+            ? 'Completed'
+            : 'Incomplete',
       },
     ];
   }
@@ -213,18 +211,18 @@ export class PartyService {
         type: PortalSectionType.SA_EFORMS,
         heading: 'Special Authority eForms',
         description: `Enrol here for access to PharmaCare's Special Authority eForms application.`,
-        actions: [
-          {
-            label: 'Request',
-            disabled: !(
-              demographicsStatusCode === StatusCode.COMPLETED &&
-              collegeCertStatusCode === StatusCode.COMPLETED
-            ),
-          },
-        ],
-        route: AccessRoutes.routePath(AccessRoutes.SPECIAL_AUTH_EFORMS_PAGE),
+        action: {
+          label:
+            saEformsStatusCode === StatusCode.COMPLETED ? 'View' : 'Request',
+          route: AccessRoutes.routePath(AccessRoutes.SPECIAL_AUTH_EFORMS_PAGE),
+          disabled: !(
+            demographicsStatusCode === StatusCode.COMPLETED &&
+            collegeCertStatusCode === StatusCode.COMPLETED
+          ),
+        },
         statusType: 'info',
         status:
+          // TODO how does this card indicate you have access?
           saEformsStatusCode === StatusCode.COMPLETED
             ? 'You are eligible to use Special Authority eForms'
             : '',
@@ -239,15 +237,13 @@ export class PartyService {
         type: PortalSectionType.SIGNED_ACCEPTED_DOCUMENTS,
         heading: 'View Signed or Accepted Documents',
         description: 'View Agreement(s)',
-        route: YourProfileRoutes.routePath(
-          YourProfileRoutes.SIGNED_ACCEPTED_DOCUMENTS_PAGE
-        ),
-        actions: [
-          {
-            label: 'View',
-            disabled: false,
-          },
-        ],
+        action: {
+          label: 'View',
+          route: YourProfileRoutes.routePath(
+            YourProfileRoutes.SIGNED_ACCEPTED_DOCUMENTS_PAGE
+          ),
+          disabled: false,
+        },
       },
     ];
   }

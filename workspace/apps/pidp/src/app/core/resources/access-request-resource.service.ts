@@ -1,14 +1,9 @@
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
-import { catchError, of, throwError } from 'rxjs';
+import { Observable, catchError, map, of, throwError } from 'rxjs';
 
-import {
-  AbstractResource,
-  NoContent,
-  NoContentOrError,
-  NoContentResponse,
-} from '@bcgov/shared/data-access';
+import { AbstractResource } from '@bcgov/shared/data-access';
 
 import { ApiResource } from './api-resource.service';
 
@@ -20,14 +15,18 @@ export class AccessRequestResource extends AbstractResource {
     super('access-requests');
   }
 
-  public saEforms(partyId: number): NoContentOrError<null> {
+  public saEforms(partyId: number): Observable<boolean> {
     return this.apiResource
-      .post<NoContent>(`${this.resourceBaseUri}/sa-eforms`, { partyId })
+      .post<boolean>(`${this.resourceBaseUri}/sa-eforms`, { partyId })
       .pipe(
-        NoContentResponse,
+        map(() => {
+          const accessAlreadyExists = false;
+          return accessAlreadyExists;
+        }),
         catchError((error: HttpErrorResponse) => {
-          if (error.status === HttpStatusCode.UnprocessableEntity) {
-            return of(null);
+          if (error.status === HttpStatusCode.BadRequest) {
+            const accessAlreadyExists = true;
+            return of(accessAlreadyExists);
           }
 
           return throwError(() => error);

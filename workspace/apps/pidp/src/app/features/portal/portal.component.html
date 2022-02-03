@@ -36,7 +36,7 @@
   </ui-alert> -->
 
   <ui-alert
-    *ngIf="completedProfile && !collegeLicenceVerified"
+    *ngIf="collegeLicenceValidationError"
     type="info"
     icon="error_outline"
     iconType="outlined"
@@ -64,9 +64,9 @@
           [heading]="section.heading"
           [statusType]="section.statusType"
           [status]="section.status"
-          [actionLabel]="section.actions[0].label"
-          [actionDisabled]="section.actions[0].disabled"
-          (action)="onCardRouteAction(section?.route)">
+          [actionLabel]="section.action.label"
+          [actionDisabled]="section.action.disabled"
+          (action)="onCardRouteAction(section.action.route)">
           <ng-container uiCardSummaryHint>
             {{ section.hint }}
           </ng-container>
@@ -99,9 +99,9 @@
           [heading]="section.heading"
           [statusType]="section.statusType"
           [status]="section.status"
-          [actionLabel]="section.actions[0].label"
-          [actionDisabled]="section.actions[0].disabled"
-          (action)="onCardRouteAction(section.route)">
+          [actionLabel]="section.action.label"
+          [actionDisabled]="section.action.disabled"
+          (action)="onCardRequestAccess(section.action.route)">
           <ng-container uiCardSummaryHint>
             {{ section.hint }}
           </ng-container>
@@ -131,9 +131,9 @@
           [heading]="section.heading"
           [statusType]="section.statusType"
           [status]="section.status"
-          [actionLabel]="section.actions[0].label"
-          [actionDisabled]="section.actions[0].disabled"
-          (action)="onCardRouteAction(section?.route)">
+          [actionLabel]="section.action.label"
+          [actionDisabled]="section.action.disabled"
+          (action)="onCardRouteAction(section.action.route)">
           <ng-container uiCardSummaryHint>
             {{ section.hint }}
           </ng-container>
@@ -163,9 +163,9 @@
         <ui-card-summary
           [icon]="section.icon"
           [heading]="section.heading"
-          [actionLabel]="section.actions[0].label"
-          [actionDisabled]="section.actions[0].disabled"
-          (action)="onCardRouteAction(section?.route)">
+          [actionLabel]="section.action.label"
+          [actionDisabled]="section.action.disabled"
+          (action)="onCardRouteAction(section.action.route)">
           <ng-container uiCardSummaryHint>
             {{ section.hint }}
           </ng-container>

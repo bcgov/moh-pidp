@@ -1,7 +1,7 @@
 <ng-container>
   <div class="card-status" [class]="statusType">
     <ng-container *ngTemplateOutlet="card"></ng-container>
-    <span *ngIf="status || statusType">{{ status | titlecase }}</span>
+    <span *ngIf="status || statusType">{{ status }}</span>
   </div>
 </ng-container>
 

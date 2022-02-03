@@ -50,6 +50,7 @@ export class CollegeLicenceInformationComponent
     this.title = this.route.snapshot.data.title;
     this.formState = new CollegeLicenceInformationFormState(fb);
     this.colleges = lookupService.colleges;
+    // TODO change this member variable
     this.inGoodStanding = false;
   }
 

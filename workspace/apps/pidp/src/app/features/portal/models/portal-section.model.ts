@@ -15,6 +15,7 @@ export interface PortalSectionProperty {
 
 export interface PortalSectionAction {
   label: string;
+  route: string;
   disabled: boolean;
 }
 
@@ -25,8 +26,7 @@ export interface PortalSection {
   hint?: string;
   description: string;
   properties?: PortalSectionProperty[];
-  actions: PortalSectionAction[];
-  route?: string;
+  action: PortalSectionAction;
   statusType?: AlertType;
   status?: string;
 }
