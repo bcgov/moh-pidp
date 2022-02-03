@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { AuthRoutes } from './auth.routes';
-import { IdentityProviderEnum } from './enums/identity-provider.enum';
+import { IdentityProvider } from './enums/identity-provider.enum';
 import { AuthorizationRedirectGuard } from './guards/authorization-redirect.guard';
 import { LoginPage } from './pages/login/login.page';
 
@@ -13,7 +13,7 @@ const routes: Routes = [
     component: LoginPage,
     data: {
       title: 'Provider Identity Portal',
-      idpHint: IdentityProviderEnum.BCSC,
+      idpHint: IdentityProvider.BCSC,
     },
   },
   {
@@ -22,7 +22,7 @@ const routes: Routes = [
     component: LoginPage,
     data: {
       title: 'Provider Identity Portal',
-      idpHint: IdentityProviderEnum.IDIR,
+      idpHint: IdentityProvider.IDIR,
       // TODO don't hardcode in the redirect URL but also don't want cross module dependencies,
       //      refactor when modules become libs otherwise premature optimization
       routes: {

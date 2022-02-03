@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { selfDeclarationQuestions } from './self-declaration-questions';
-import { SelfDeclarationTypeEnum } from './self-declaration.enum';
+import { SelfDeclarationType } from './self-declaration.enum';
 
 @Component({
   selector: 'app-self-declaration',
@@ -12,7 +12,7 @@ import { SelfDeclarationTypeEnum } from './self-declaration.enum';
 export class SelfDeclarationPage implements OnInit {
   public title: string;
 
-  public SelfDeclarationTypeEnum = SelfDeclarationTypeEnum;
+  public SelfDeclarationType = SelfDeclarationType;
   public selfDeclarationQuestions = selfDeclarationQuestions;
 
   public constructor(private route: ActivatedRoute) {

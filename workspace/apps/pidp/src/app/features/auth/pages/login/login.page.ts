@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';
 
-import { IdentityProviderEnum } from '../../enums/identity-provider.enum';
+import { IdentityProvider } from '../../enums/identity-provider.enum';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
@@ -19,9 +19,9 @@ export class LoginPage {
   public specialAuthorityUrl: string;
   public providerIdentitySupportEmail: string;
   public specialAuthoritySupportEmail: string;
-  public idpHint: IdentityProviderEnum;
+  public idpHint: IdentityProvider;
 
-  public IdentityProviderEnum = IdentityProviderEnum;
+  public IdentityProvider = IdentityProvider;
 
   public constructor(
     @Inject(APP_CONFIG) private config: AppConfig,

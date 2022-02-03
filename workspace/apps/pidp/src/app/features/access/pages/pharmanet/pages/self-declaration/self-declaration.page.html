@@ -22,7 +22,7 @@
     </ui-page-section-subheader>
 
     <p class="bold">
-      {{ selfDeclarationQuestions[SelfDeclarationTypeEnum.HAS_CONVICTION] }}
+      {{ selfDeclarationQuestions[SelfDeclarationType.HAS_CONVICTION] }}
     </p>
     <ui-yes-no-content>
       <p>Provide these details:</p>
@@ -51,9 +51,7 @@
     </ui-yes-no-content>
 
     <p class="bold">
-      {{
-        selfDeclarationQuestions[SelfDeclarationTypeEnum.LIMITS_OR_CONDITIONS]
-      }}
+      {{ selfDeclarationQuestions[SelfDeclarationType.LIMITS_OR_CONDITIONS] }}
     </p>
     <ui-yes-no-content>
       <p>Provide these details:</p>
@@ -82,9 +80,7 @@
       </mat-form-field>
     </ui-yes-no-content>
     <p class="bold">
-      {{
-        selfDeclarationQuestions[SelfDeclarationTypeEnum.SUSPENDED_OR_CANCELLED]
-      }}
+      {{ selfDeclarationQuestions[SelfDeclarationType.SUSPENDED_OR_CANCELLED] }}
     </p>
     <ui-yes-no-content>
       <p>Provide these details:</p>
@@ -109,9 +105,7 @@
       </mat-form-field>
     </ui-yes-no-content>
     <p class="bold">
-      {{
-        selfDeclarationQuestions[SelfDeclarationTypeEnum.DISCIPLINED_OR_FIRED]
-      }}
+      {{ selfDeclarationQuestions[SelfDeclarationType.DISCIPLINED_OR_FIRED] }}
     </p>
     <ui-yes-no-content>
       <p>Provide these details:</p>
