@@ -28,6 +28,7 @@ export class AppComponent implements OnInit {
     const onNavEnd = this.routeStateService.onNavigationEnd();
 
     this.setPageTitle(onNavEnd);
+    // TODO don't scroll top when anchor scroll is about to occur
     this.scrollTop(onNavEnd);
     this.scrollToAnchor(this.routeStateService.onScrollEvent());
   }

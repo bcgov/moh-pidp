@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { Observable, exhaustMap, map, of } from 'rxjs';
+import { Observable, Subscription, exhaustMap, map, of } from 'rxjs';
 
 import { DocumentService } from '@app/core/services/document.service';
 import { Role } from '@app/shared/enums/roles.enum';
@@ -21,11 +21,14 @@ import { PortalSection } from './models/portal-section.model';
   styleUrls: ['./portal.component.scss'],
 })
 export class PortalComponent implements OnInit {
+  public busy?: Subscription;
   public title: string;
   public acceptedCollectionNotice: boolean;
   public collectionNotice: string;
   public state$: Observable<Record<string, PortalSection[]>>;
+  public hasCompletedProfile: boolean;
   public completedProfile: boolean;
+  public collegeLicenceVerified: boolean;
 
   public Role = Role;
 
@@ -43,8 +46,10 @@ export class PortalComponent implements OnInit {
     // TODO won't scale better as notification service that's set until displayed
     //      and uses an accompanying component since there are already 3 different
     //      notifications for SA eForms
-    this.completedProfile =
+    this.hasCompletedProfile =
       route.snapshot.queryParams.completedProfile === 'true';
+    this.completedProfile = this.partyService.completedProfile;
+    this.collegeLicenceVerified = this.partyService.collegeLicenceVerified;
   }
 
   public onAcceptCollectionNotice(accepted: boolean): void {
@@ -67,7 +72,7 @@ export class PortalComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    this.partyResource
+    this.busy = this.partyResource
       .firstOrCreate()
       .pipe(
         exhaustMap((partyId: number | null) =>

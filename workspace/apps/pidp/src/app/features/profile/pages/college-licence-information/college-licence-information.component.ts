@@ -89,8 +89,7 @@ export class CollegeLicenceInformationComponent
   }
 
   protected afterSubmitIsSuccessful(): void {
-    // TODO won't scale better as notification service with associated component
-    //      but good enough for MVP
+    // TODO will scale better as notification service with associated component
     const queryParams = {
       completedProfile: !this.partyService.completedProfile,
     };

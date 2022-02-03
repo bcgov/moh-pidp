@@ -4,10 +4,8 @@ import { BehaviorSubject, Observable } from 'rxjs';
 
 import { AccessRoutes } from '@app/features/access/access.routes';
 import {
-  AccessRequestType,
   PortalSection,
   PortalSectionType,
-  ProfileAccessType,
 } from '@app/features/portal/models/portal-section.model';
 import { ProfileRoutes } from '@app/features/profile/profile.routes';
 import { YourProfileRoutes } from '@app/features/your-profile/your-profile.routes';
@@ -54,6 +52,13 @@ export class PartyService {
     return this._completedProfile;
   }
 
+  public get collegeLicenceVerified(): boolean {
+    return (
+      this._profileStatus?.status.collegeCertification.statusCode !==
+      StatusCode.ERROR
+    );
+  }
+
   // TODO instantiate ProfileStatus and add helper methods to avoid === hell
   public updateState(profileStatus: ProfileStatus | null): void {
     if (!profileStatus) {
@@ -62,8 +67,11 @@ export class PartyService {
 
     this._profileStatus = profileStatus;
     this._completedProfile =
-      profileStatus.status?.demographics.code === StatusCode.COMPLETED &&
-      profileStatus.status?.collegeCertification.code === StatusCode.COMPLETED;
+      profileStatus.status?.demographics.statusCode === StatusCode.COMPLETED &&
+      profileStatus.status?.collegeCertification.statusCode ===
+        StatusCode.COMPLETED;
+
+    // profileStatus.status.demographics.statusCode = StatusCode.AVAILABLE;
 
     this._state$.next({
       profileIdentitySections: this.getProfileIdentitySections(profileStatus),
@@ -73,20 +81,26 @@ export class PartyService {
   }
 
   private getProfileIdentitySections(
-    profileStatus?: ProfileStatus | null
+    profileStatus: ProfileStatus
   ): PortalSection[] {
+    const status = profileStatus.status;
+    const demographicsStatusCode = status.demographics.statusCode;
+    const collegeCertStatusCode = status.collegeCertification.statusCode;
+
     return [
+      // TODO possibility of an error low, but not handled and will block completely
       {
         icon: 'fingerprint',
         type: PortalSectionType.PERSONAL_INFORMATION,
         heading: 'Personal Information',
         hint:
-          profileStatus?.status?.demographics.code === StatusCode.COMPLETED
+          demographicsStatusCode === StatusCode.ERROR ||
+          demographicsStatusCode === StatusCode.COMPLETED
             ? ''
             : '1 min to complete',
         description: 'Personal and Contact Information',
         properties:
-          profileStatus?.status?.demographics.code === StatusCode.COMPLETED
+          demographicsStatusCode === StatusCode.COMPLETED
             ? [
                 {
                   key: 'fullName',
@@ -105,16 +119,22 @@ export class PartyService {
         actions: [
           {
             label: 'Update',
-            disabled: false,
+            disabled:
+              demographicsStatusCode === StatusCode.ERROR ||
+              demographicsStatusCode === StatusCode.NOT_AVAILABLE,
           },
         ],
         route: ProfileRoutes.routePath(ProfileRoutes.PERSONAL_INFO_PAGE),
         statusType:
-          profileStatus?.status?.demographics.code === StatusCode.COMPLETED
+          demographicsStatusCode === StatusCode.ERROR
+            ? 'danger'
+            : demographicsStatusCode === StatusCode.COMPLETED
             ? 'success'
             : 'warn',
         status:
-          profileStatus?.status?.demographics.code === StatusCode.COMPLETED
+          demographicsStatusCode === StatusCode.ERROR
+            ? ''
+            : demographicsStatusCode === StatusCode.COMPLETED
             ? 'completed'
             : 'incomplete',
       },
@@ -123,14 +143,15 @@ export class PartyService {
         type: PortalSectionType.COLLEGE_LICENCE_INFORMATION,
         heading: 'College Licence Information',
         hint:
-          profileStatus?.status?.collegeCertification.code ===
-          StatusCode.COMPLETED
+          collegeCertStatusCode === StatusCode.ERROR ||
+          collegeCertStatusCode === StatusCode.COMPLETED
             ? ''
             : '1 min to complete',
         description: 'College Licence Information and Validation',
         properties:
-          profileStatus?.status?.collegeCertification.code ===
-          StatusCode.COMPLETED
+          // TODO does this error check really make sense?
+          collegeCertStatusCode === StatusCode.ERROR ||
+          collegeCertStatusCode === StatusCode.COMPLETED
             ? [
                 {
                   key: 'collegeCode',
@@ -144,8 +165,8 @@ export class PartyService {
                 {
                   key: 'status',
                   value:
-                    profileStatus?.status?.demographics.code ===
-                    StatusCode.COMPLETED
+                    collegeCertStatusCode !== StatusCode.ERROR &&
+                    demographicsStatusCode === StatusCode.COMPLETED
                       ? 'Verified'
                       : 'Not Verified',
                   label: 'Status:',
@@ -155,20 +176,24 @@ export class PartyService {
         actions: [
           {
             label: 'Update',
-            disabled: !(
-              profileStatus?.status?.demographics.code === StatusCode.COMPLETED
-            ),
+            disabled:
+              demographicsStatusCode !== StatusCode.COMPLETED ||
+              // TODO do they get multiple chances to correct? assumed to be yes
+              // collegeCertStatusCode === StatusCode.ERROR ||
+              collegeCertStatusCode === StatusCode.NOT_AVAILABLE,
           },
         ],
         route: ProfileRoutes.routePath(ProfileRoutes.COLLEGE_LICENCE_INFO_PAGE),
         statusType:
-          profileStatus?.status?.collegeCertification.code ===
-          StatusCode.COMPLETED
+          collegeCertStatusCode === StatusCode.ERROR
+            ? 'danger'
+            : collegeCertStatusCode === StatusCode.COMPLETED
             ? 'success'
             : 'warn',
         status:
-          profileStatus?.status?.collegeCertification.code ===
-          StatusCode.COMPLETED
+          collegeCertStatusCode === StatusCode.ERROR
+            ? 'Licence validation error'
+            : collegeCertStatusCode === StatusCode.COMPLETED
             ? 'completed'
             : 'incomplete',
       },
@@ -176,27 +201,33 @@ export class PartyService {
   }
 
   private getAccessToSystemsSections(
-    profileStatus?: ProfileStatus | null
+    profileStatus: ProfileStatus
   ): PortalSection[] {
+    const status = profileStatus.status;
+    const demographicsStatusCode = status.demographics.statusCode;
+    const collegeCertStatusCode = status.collegeCertification.statusCode;
+    const saEformsStatusCode = status.saEforms.statusCode;
     return [
       {
         icon: 'fingerprint',
-        type: AccessRequestType.SA_EFORMS,
+        type: PortalSectionType.SA_EFORMS,
         heading: 'Special Authority eForms',
         description: `Enrol here for access to PharmaCare's Special Authority eForms application.`,
-        route: AccessRoutes.routePath(AccessRoutes.SPECIAL_AUTH_EFORMS_PAGE),
-        statusType: 'info',
         actions: [
           {
             label: 'Request',
             disabled: !(
-              profileStatus?.status?.demographics.code ===
-                StatusCode.COMPLETED &&
-              profileStatus?.status?.collegeCertification.code ===
-                StatusCode.COMPLETED
+              demographicsStatusCode === StatusCode.COMPLETED &&
+              collegeCertStatusCode === StatusCode.COMPLETED
             ),
           },
         ],
+        route: AccessRoutes.routePath(AccessRoutes.SPECIAL_AUTH_EFORMS_PAGE),
+        statusType: 'info',
+        status:
+          saEformsStatusCode === StatusCode.COMPLETED
+            ? 'You are eligible to use Special Authority eForms'
+            : '',
       },
     ];
   }
@@ -205,7 +236,7 @@ export class PartyService {
     return [
       {
         icon: 'fingerprint',
-        type: ProfileAccessType.SIGNED_ACCEPTED_DOCUMENTS,
+        type: PortalSectionType.SIGNED_ACCEPTED_DOCUMENTS,
         heading: 'View Signed or Accepted Documents',
         description: 'View Agreement(s)',
         route: YourProfileRoutes.routePath(

@@ -1,4 +1,4 @@
-<ui-page mode="large">
+<ui-page mode="large" [busy]="busy">
   <ui-page-header>{{ title }}</ui-page-header>
 
   <ui-collection-notice
@@ -8,7 +8,7 @@
   </ui-collection-notice>
 
   <ui-alert
-    *ngIf="completedProfile"
+    *ngIf="hasCompletedProfile"
     type="success"
     icon="check_circle"
     iconType="outlined"
@@ -23,6 +23,26 @@
           View Systems
         </button>
       </span>
+    </ng-container>
+  </ui-alert>
+
+  <!-- TODO do we really need to inform them that it's verified? -->
+  <!-- <ui-alert
+    *ngIf="completedProfile"
+    type="success"
+    icon="check_circle"
+    iconType="outlined"
+    heading="Your College licence has been verified">
+  </ui-alert> -->
+
+  <ui-alert
+    *ngIf="completedProfile && !collegeLicenceVerified"
+    type="info"
+    icon="error_outline"
+    iconType="outlined"
+    heading="There is a problem with your College licence">
+    <ng-container uiAlertContent>
+      Contact your College for more information.
     </ng-container>
   </ui-alert>
 

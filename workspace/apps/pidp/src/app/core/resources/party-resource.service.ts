@@ -19,9 +19,11 @@ export enum StatusCode {
   ERROR,
 }
 
-export interface StatusReason {
-  code: StatusCode;
-  reason?: string;
+export interface SectionStatus {
+  // TODO change the key names or interface name, but doesn't need to be sectionStatus.statusCode, or
+  //      it should be sectionStatus.statusReason as well
+  statusCode: StatusCode;
+  reason: string | null;
 }
 
 export interface ProfileStatus {
@@ -36,13 +38,11 @@ export interface ProfileStatus {
   jobTitle: string;
   facilityName: string;
   facilityStreet: string;
-  // TODO hmmmmm statuses on an object...
   status: {
-    demographics: StatusReason;
-    collegeCertification: StatusReason;
-    workSetting: StatusReason;
+    demographics: SectionStatus;
+    collegeCertification: SectionStatus;
     // TODO temporary placement for MVP then relocate to AccessStatus
-    // saEforms: StatusReason;
+    saEforms: SectionStatus;
   };
 }
 

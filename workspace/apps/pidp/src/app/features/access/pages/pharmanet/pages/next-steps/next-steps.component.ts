@@ -21,13 +21,13 @@ export class NextStepsComponent implements OnInit {
   public onSubmit(): void {
     this.demoService.state.accessToSystemsSections =
       this.demoService.state.accessToSystemsSections.map((section) => {
-        if (section.type === 'pharmanet') {
-          return {
-            ...section,
-            statusType: 'success',
-            status: 'completed',
-          };
-        }
+        // if (section.type === 'pharmanet') {
+        //   return {
+        //     ...section,
+        //     statusType: 'success',
+        //     status: 'completed',
+        //   };
+        // }
         return section;
       });
   }

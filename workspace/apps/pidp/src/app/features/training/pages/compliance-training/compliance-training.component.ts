@@ -21,13 +21,13 @@ export class ComplianceTrainingComponent implements OnInit {
   public onSubmit(): void {
     this.demoService.state.trainingSections =
       this.demoService.state.trainingSections.map((section) => {
-        if (section.type === 'compliance-training') {
-          return {
-            ...section,
-            statusType: 'success',
-            status: 'completed',
-          };
-        }
+        // if (section.type === 'compliance-training') {
+        //   return {
+        //     ...section,
+        //     statusType: 'success',
+        //     status: 'completed',
+        //   };
+        // }
         return section;
       });
   }

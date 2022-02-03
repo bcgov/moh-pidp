@@ -27,14 +27,14 @@ export class UserAccessAgreementComponent {
 
     this.demoService.state.profileIdentitySections =
       this.demoService.state.profileIdentitySections.map((section) => {
-        if (section.type === 'user-access-agreement') {
-          return {
-            ...section,
-            statusType: 'success',
-            status: 'completed',
-            hint: DateTime.now().toFormat(APP_DATE_FORMAT),
-          };
-        }
+        // if (section.type === 'user-access-agreement') {
+        //   return {
+        //     ...section,
+        //     statusType: 'success',
+        //     status: 'completed',
+        //     hint: DateTime.now().toFormat(APP_DATE_FORMAT),
+        //   };
+        // }
 
         return section;
       });

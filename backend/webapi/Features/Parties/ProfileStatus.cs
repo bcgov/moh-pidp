@@ -87,11 +87,11 @@ public class ProfileStatus
                 return DomainResult.NotFound<Model>();
             }
 
-            var demogrpahicsStatus = model.Email != null && model.Phone != null
+            var demographicsStatus = model.Email != null && model.Phone != null
                 ? Model.StatusCode.Completed
                 : Model.StatusCode.Available;
 
-            var certificationStatus = demogrpahicsStatus != Model.StatusCode.Completed
+            var certificationStatus = demographicsStatus != Model.StatusCode.Completed
                 ? Model.StatusCode.NotAvailable
                 : model.CollegeCode == null || model.LicenceNumber == null
                     ? Model.StatusCode.Available
@@ -101,7 +101,7 @@ public class ProfileStatus
 
             var saStatus = await this.ComputeSaStatus(model.Id, model.Ipc);
 
-            model.Status.Add("demographics", new Model.SectionStatus { StatusCode = demogrpahicsStatus });
+            model.Status.Add("demographics", new Model.SectionStatus { StatusCode = demographicsStatus });
             model.Status.Add("collegeCertification", new Model.SectionStatus { StatusCode = certificationStatus });
             model.Status.Add("saEforms", saStatus);
 
