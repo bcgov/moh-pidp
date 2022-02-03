@@ -4,13 +4,13 @@ import { RouterModule, Routes } from '@angular/router';
 import { AuthRoutes } from './auth.routes';
 import { IdentityProviderEnum } from './enums/identity-provider.enum';
 import { AuthorizationRedirectGuard } from './guards/authorization-redirect.guard';
-import { LoginComponent } from './pages/login/login.component';
+import { LoginPage } from './pages/login/login.page';
 
 const routes: Routes = [
   {
     path: AuthRoutes.PORTAL_LOGIN,
     canActivate: [AuthorizationRedirectGuard],
-    component: LoginComponent,
+    component: LoginPage,
     data: {
       title: 'Provider Identity Portal',
       idpHint: IdentityProviderEnum.BCSC,
@@ -19,7 +19,7 @@ const routes: Routes = [
   {
     path: AuthRoutes.ADMIN_LOGIN,
     canActivate: [AuthorizationRedirectGuard],
-    component: LoginComponent,
+    component: LoginPage,
     data: {
       title: 'Provider Identity Portal',
       idpHint: IdentityProviderEnum.IDIR,

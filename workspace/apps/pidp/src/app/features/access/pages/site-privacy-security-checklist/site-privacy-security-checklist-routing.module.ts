@@ -1,12 +1,12 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { SitePrivacySecurityChecklistComponent } from './site-privacy-security-checklist.component';
+import { SitePrivacySecurityChecklistPage } from './site-privacy-security-checklist.page';
 
 const routes: Routes = [
   {
     path: '',
-    component: SitePrivacySecurityChecklistComponent,
+    component: SitePrivacySecurityChecklistPage,
     data: {
       title: 'Provider Identity Portal',
     },

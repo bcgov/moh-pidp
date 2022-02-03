@@ -5,7 +5,7 @@ import { AdminGuard } from '@app/core/guards/admin.guard';
 
 import { AuthenticationGuard } from '../auth/guards/authentication.guard';
 import { AdminRoutes } from './admin.routes';
-import { PartiesComponent } from './pages/parties/parties.component';
+import { PartiesPage } from './pages/parties/parties.page';
 import { AdminDashboardComponent } from './shared/components/admin-dashboard/admin-dashboard.component';
 
 const routes: Routes = [
@@ -24,7 +24,7 @@ const routes: Routes = [
     children: [
       {
         path: AdminRoutes.PARTIES,
-        component: PartiesComponent,
+        component: PartiesPage,
         data: { title: 'Provider Identity Portal' },
       },
       {

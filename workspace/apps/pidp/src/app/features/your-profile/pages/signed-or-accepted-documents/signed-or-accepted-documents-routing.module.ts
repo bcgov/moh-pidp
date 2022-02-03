@@ -1,12 +1,12 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { SignedOrAcceptedDocumentsComponent } from './signed-or-accepted-documents.component';
+import { SignedOrAcceptedDocumentsPage } from './signed-or-accepted-documents.page';
 
 const routes: Routes = [
   {
     path: '',
-    component: SignedOrAcceptedDocumentsComponent,
+    component: SignedOrAcceptedDocumentsPage,
     data: {
       title: 'Provider Identity Portal',
     },

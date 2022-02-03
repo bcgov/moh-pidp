@@ -1,12 +1,12 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { ComplianceTrainingComponent } from './compliance-training.component';
+import { ComplianceTrainingPage } from './compliance-training.page';
 
 const routes: Routes = [
   {
     path: '',
-    component: ComplianceTrainingComponent,
+    component: ComplianceTrainingPage,
     data: {
       title: 'Provider Identity Portal',
     },

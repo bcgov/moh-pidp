@@ -1,12 +1,12 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { ViewDocumentComponent } from './view-document.component';
+import { ViewDocumentPage } from './view-document.page';
 
 const routes: Routes = [
   {
     path: '',
-    component: ViewDocumentComponent,
+    component: ViewDocumentPage,
     data: {
       title: 'Provider Identity Portal',
     },

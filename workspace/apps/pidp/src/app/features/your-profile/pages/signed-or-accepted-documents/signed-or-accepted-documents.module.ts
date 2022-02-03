@@ -3,10 +3,10 @@ import { NgModule } from '@angular/core';
 import { SharedModule } from '@shared/shared.module';
 
 import { SignedOrAcceptedDocumentsRoutingModule } from './signed-or-accepted-documents-routing.module';
-import { SignedOrAcceptedDocumentsComponent } from './signed-or-accepted-documents.component';
+import { SignedOrAcceptedDocumentsPage } from './signed-or-accepted-documents.page';
 
 @NgModule({
-  declarations: [SignedOrAcceptedDocumentsComponent],
+  declarations: [SignedOrAcceptedDocumentsPage],
   imports: [SignedOrAcceptedDocumentsRoutingModule, SharedModule],
 })
 export class SignedOrAcceptedDocumentsModule {}

@@ -6,11 +6,11 @@ import { LookupModule } from '@app/modules/lookup/lookup.module';
 import { SharedModule } from '@app/shared/shared.module';
 
 import { AdminRoutingModule } from './admin-routing.module';
-import { PartiesComponent } from './pages/parties/parties.component';
+import { PartiesPage } from './pages/parties/parties.page';
 import { AdminDashboardComponent } from './shared/components/admin-dashboard/admin-dashboard.component';
 
 @NgModule({
-  declarations: [PartiesComponent, AdminDashboardComponent],
+  declarations: [PartiesPage, AdminDashboardComponent],
   imports: [
     AdminRoutingModule,
     DashboardModule,
