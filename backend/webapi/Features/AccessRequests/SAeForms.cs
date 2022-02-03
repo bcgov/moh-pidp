@@ -41,7 +41,7 @@ public class SAeForms
             var newRequest = new AccessRequest
             {
                 PartyId = command.PartyId,
-
+                AccessType = AccessType.SAeForms
             };
 
             this.context.AccessRequests.Add(newRequest);
