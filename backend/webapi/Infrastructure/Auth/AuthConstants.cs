@@ -34,4 +34,8 @@ public static class Roles
     // Placeholders
     public const string Admin = "ADMIN";
     public const string User = "USER";
+
+
+    // External Systems
+    public const string SaEforms = "phsa_eforms_sat";
 }
