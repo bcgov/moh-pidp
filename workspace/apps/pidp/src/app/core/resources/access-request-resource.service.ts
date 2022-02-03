@@ -5,13 +5,13 @@ import { Observable, catchError, map, of, throwError } from 'rxjs';
 
 import { AbstractResource } from '@bcgov/shared/data-access';
 
-import { ApiResource } from './api-resource.service';
+import { ApiHttpClient } from './api-http-client.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AccessRequestResource extends AbstractResource {
-  public constructor(private apiResource: ApiResource) {
+  public constructor(private apiResource: ApiHttpClient) {
     super('access-requests');
   }
 

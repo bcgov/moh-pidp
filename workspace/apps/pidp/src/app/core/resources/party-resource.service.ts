@@ -8,7 +8,7 @@ import { Party, PartyCreate } from '@bcgov/shared/data-access';
 import { BcscUser } from '@app/features/auth/models/bcsc-user.model';
 
 import { AuthorizedUserService } from '../services/authorized-user.service';
-import { ApiResource } from './api-resource.service';
+import { ApiHttpClient } from './api-http-client.service';
 import { ResourceUtilsService } from './resource-utils.service';
 
 // TODO split this up later since ProfileStatus won't ever use NOT_AVAILABLE
@@ -58,7 +58,7 @@ export interface AccessStatus {
 })
 export class PartyResource {
   public constructor(
-    private apiResource: ApiResource,
+    private apiResource: ApiHttpClient,
     private resourceUtilsService: ResourceUtilsService,
     private authorizedUserService: AuthorizedUserService
   ) {}

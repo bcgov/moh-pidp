@@ -11,7 +11,7 @@ import {
   throwError,
 } from 'rxjs';
 
-import { IHttpResource } from '../interfaces/http-resource.interface';
+import { IHttpClient } from '../interfaces/http-client.interface';
 
 /**
  * @description
@@ -33,8 +33,7 @@ export type NoContentOrError<T = unknown> = Observable<void | T>;
  */
 export const NoContentResponse = pipe(map(() => void 0));
 
-// TODO rename from resource to AbstractHttpClient
-export abstract class AbstractHttpResource implements IHttpResource {
+export abstract class AbstractHttpClient implements IHttpClient {
   protected abstract uri: string;
 
   public constructor(protected http: HttpClient) {}

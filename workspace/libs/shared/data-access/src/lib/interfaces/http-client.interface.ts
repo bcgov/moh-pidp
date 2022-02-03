@@ -3,8 +3,7 @@ import { HttpResponse } from '@angular/common/http';
 
 import { Observable } from 'rxjs';
 
-// TODO rename from resource to IHttpClient
-export interface IHttpResource {
+export interface IHttpClient {
   get<T>(
     path: string,
     options?: { [key: string]: any }

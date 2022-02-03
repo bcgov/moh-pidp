@@ -8,16 +8,16 @@ import { AbstractResource } from '@bcgov/shared/data-access';
 import { AddressAutocompleteFindResponse } from '@shared/components/address-autocomplete/address-autocomplete-find-response.model';
 import { AddressAutocompleteRetrieveResponse } from '@shared/components/address-autocomplete/address-autocomplete-retrieve-response.model';
 
-import { ApiResource } from '../resources/api-resource.service';
 import { LoggerService } from '../services/logger.service';
 import { ToastService } from '../services/toast.service';
+import { ApiHttpClient } from './api-http-client.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AddressAutocompleteResource extends AbstractResource {
   public constructor(
-    private apiResource: ApiResource,
+    private apiResource: ApiHttpClient,
     private toastService: ToastService,
     private logger: LoggerService
   ) {
