@@ -9,7 +9,7 @@ export interface PartyList {
   id: number;
   providerName?: string;
   providerCollegeCode?: string;
-  saEforms?: boolean;
+  saEformsAccessRequest?: boolean;
 }
 
 // TODO temporary resource until more of the admin is known
