@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 
-import { AccessRequestResource } from '@app/core/resources/access-request-resource.service';
 import { LoggerService } from '@app/core/services/logger.service';
+import { PartyService } from '@app/core/services/party.service';
 
 @Component({
   selector: 'app-special-authority-eforms',
@@ -11,30 +11,34 @@ import { LoggerService } from '@app/core/services/logger.service';
 })
 export class SpecialAuthorityEformsComponent implements OnInit {
   public title: string;
+  public saEformsUrl: string;
 
   public constructor(
     private route: ActivatedRoute,
-    private accessRequestResource: AccessRequestResource,
+    private router: Router,
+    private partyService: PartyService,
     private logger: LoggerService
   ) {
     this.title = this.route.snapshot.data.title;
+    this.saEformsUrl = 'https://www.eforms.phsahealth.ca/appdash';
   }
 
-  public onSubmit(): void {}
+  public onBack(): void {
+    this.navigateToRoot();
+  }
 
-  // TODO drop after section are being instantiated
-  // public onCardAccessRequestAction(accessType: string): void {
-  //   const partyId = this.partyService.profileStatus?.id;
+  public ngOnInit(): void {
+    const partyId = this.partyService.profileStatus?.id;
+    if (!partyId) {
+      this.logger.error('No party ID was provided');
+      return this.navigateToRoot();
+    }
+  }
 
-  //   if (!accessType || !partyId) {
-  //     return;
-  //   }
-
-  //   if (accessType === AccessRequestType.SA_EFORMS) {
-  //     // TODO handle error and display notification
-  //     this.accessRequestResource.saEforms(partyId).subscribe();
-  //   }
-  // }
-
-  public ngOnInit(): void {}
+  private navigateToRoot(navigationExtras?: NavigationExtras): void {
+    this.router.navigate(
+      [this.route.snapshot.data.routes.root],
+      navigationExtras
+    );
+  }
 }

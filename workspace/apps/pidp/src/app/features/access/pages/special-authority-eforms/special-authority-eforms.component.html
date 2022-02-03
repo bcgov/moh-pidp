@@ -5,7 +5,7 @@
     <ui-page-section-subheader
       icon="assignment"
       heading="Special Authority eForms">
-      <ng-container uiPageSectionSubheaderDesc> Next Steps. </ng-container>
+      <ng-container uiPageSectionSubheaderDesc>Enrolment Complete</ng-container>
     </ui-page-section-subheader>
   </ui-page-section>
 
@@ -13,27 +13,26 @@
     type="success"
     icon="check_circle"
     iconType="outlined"
-    heading="You Have Access">
+    heading="You have access">
     <ng-container uiAlertContent>
-      You now have access to the Special Authority eForms Application. You can
-      log into the application using your BC Services Card.
+      <p>
+        You now have access to the Special Authority eForms application. You can
+        log in to the application using your BC Services Card.
+      </p>
+      <p>
+        Follow this link to Special Authority eForms:<br />
+        <a target="_blank" rel="noopener noreferrer" [attr.href]="saEformsUrl">
+          {{ saEformsUrl }}
+        </a>
+      </p>
     </ng-container>
   </ui-alert>
 
   <ui-page-footer>
-    <button
-      mat-stroked-button
-      color="primary"
-      type="button"
-      routerLink="../../">
+    <button mat-stroked-button type="button" color="primary" (click)="onBack()">
       Back Home
     </button>
-    <button
-      mat-flat-button
-      color="primary"
-      type="button"
-      routerLink="../../"
-      (click)="onSubmit()">
+    <button mat-flat-button type="button" color="primary" (click)="onBack()">
       Continue
     </button>
   </ui-page-footer>
