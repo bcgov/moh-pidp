@@ -7,14 +7,14 @@ public class PidpConfiguration
     public static bool IsDevelopment() => EnvironmentName == Environments.Development;
     private static readonly string? EnvironmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
 
-    public AddressAutocompleteConfiguration AddressAutocompleteClient { get; set; } = new();
+    public AddressAutocompleteClientConfiguration AddressAutocompleteClient { get; set; } = new();
     public ConnectionStringConfiguration ConnectionStrings { get; set; } = new();
     public KeycloakConfiguration Keycloak { get; set; } = new();
     public PlrClientConfiguration PlrClient { get; set; } = new();
 
     // ------- Configuration Objects -------
 
-    public class AddressAutocompleteConfiguration
+    public class AddressAutocompleteClientConfiguration
     {
         public string ApiKey { get; set; } = string.Empty;
         public string Url { get; set; } = string.Empty;
