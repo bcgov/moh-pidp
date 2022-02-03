@@ -8,10 +8,10 @@ import { saEformsUrl } from './special-authority.constants';
 
 @Component({
   selector: 'app-special-authority-eforms',
-  templateUrl: './special-authority-eforms.component.html',
-  styleUrls: ['./special-authority-eforms.component.scss'],
+  templateUrl: './special-authority-eforms.page.html',
+  styleUrls: ['./special-authority-eforms.page.scss'],
 })
-export class SpecialAuthorityEformsComponent implements OnInit {
+export class SpecialAuthorityEformsPage implements OnInit {
   public title: string;
   public saEformsUrl: string;
 

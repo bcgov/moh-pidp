@@ -1,12 +1,12 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { SpecialAuthorityEformsComponent } from './special-authority-eforms.component';
+import { SpecialAuthorityEformsPage } from './special-authority-eforms.page';
 
 const routes: Routes = [
   {
     path: '',
-    component: SpecialAuthorityEformsComponent,
+    component: SpecialAuthorityEformsPage,
     data: {
       title: 'Provider Identity Portal',
       routes: {
