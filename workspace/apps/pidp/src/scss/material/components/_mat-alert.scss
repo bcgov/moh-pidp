@@ -9,7 +9,6 @@
 // danger, and muted; but is not opinionated on content, which can be
 // enforced at the component-level.
 
-// TODO move class creation of types into mixin
 @each $type in mixins.$types {
   mat-card.ui-card-alert.#{$type} {
     @include mixins.card-alert(

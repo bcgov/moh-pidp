@@ -1,9 +1,9 @@
 import {
-  HttpRequest,
-  HttpHandler,
-  HttpEvent,
-  HttpInterceptor,
   HTTP_INTERCEPTORS,
+  HttpEvent,
+  HttpHandler,
+  HttpInterceptor,
+  HttpRequest,
 } from '@angular/common/http';
 import { Injectable, Provider } from '@angular/core';
 
@@ -13,7 +13,6 @@ import { Observable, retry } from 'rxjs';
  * @description
  * Retry attempts when an HTTP error occurs.
  */
-// TODO create an injector token for this constant
 export const HTTP_RETRY_ATTEMPTS = 1;
 
 @Injectable()
