@@ -167,7 +167,7 @@ export class PartyService {
                     demographicsStatusCode === StatusCode.COMPLETED
                       ? 'Verified'
                       : 'Not Verified',
-                  label: 'Status:',
+                  label: 'College Licence Status:',
                 },
               ]
             : [],
