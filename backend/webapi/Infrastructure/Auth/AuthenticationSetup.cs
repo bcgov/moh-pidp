@@ -21,7 +21,7 @@ public static class AuthenticationSetup
         .AddJwtBearer(options =>
         {
             options.Authority = config.Keycloak.RealmUrl;
-            options.Audience = AuthConstants.Audience;
+            options.Audience = Resources.PidpApi;
             options.MetadataAddress = config.Keycloak.WellKnownConfig;
             options.Events = new JwtBearerEvents
             {
@@ -33,14 +33,14 @@ public static class AuthenticationSetup
         {
             options.AddPolicy(Policies.BcscAuthentication, policy => policy
                 .RequireAuthenticatedUser()
-                .RequireClaim(Claims.IdentityProvider, AuthConstants.BCServicesCard));
+                .RequireClaim(Claims.IdentityProvider, ClaimValues.BCServicesCard));
             options.AddPolicy(Policies.IdirAuthentication, policy => policy
                 .RequireAuthenticatedUser()
-                .RequireClaim(Claims.IdentityProvider, AuthConstants.Idir));
+                .RequireClaim(Claims.IdentityProvider, ClaimValues.Idir));
 
             options.FallbackPolicy = new AuthorizationPolicyBuilder()
                 .RequireAuthenticatedUser()
-                .RequireClaim(Claims.IdentityProvider, AuthConstants.BCServicesCard, AuthConstants.Idir)
+                .RequireClaim(Claims.IdentityProvider, ClaimValues.BCServicesCard, ClaimValues.Idir)
                 .Build();
         });
 
@@ -53,7 +53,8 @@ public static class AuthenticationSetup
             && identity.IsAuthenticated)
         {
             // Flatten the Resource Access claim
-            identity.AddClaims(identity.GetResourceAccessRoles(AuthConstants.Audience).Select(role => new Claim(ClaimTypes.Role, role)));
+            identity.AddClaims(identity.GetResourceAccessRoles(Resources.PidpApi)
+                .Select(role => new Claim(ClaimTypes.Role, role)));
         }
 
         return Task.CompletedTask;
