@@ -86,20 +86,13 @@ export class PortalPage implements OnInit {
     const saEformsStatusCode = profileStatus.status.saEforms.statusCode;
 
     if (saEformsStatusCode !== StatusCode.COMPLETED) {
-      this.busy = this.accessRequestResource
-        .saEforms(partyId)
-        .subscribe((accessAlreadyExists: boolean) => {
-          if (!routePath) {
-            return;
-          }
+      this.busy = this.accessRequestResource.saEforms(partyId).subscribe(() => {
+        if (!routePath) {
+          return;
+        }
 
-          // TODO either perform request on other page, or something where we don't pass queryParams
-          const queryParams = { accessAlreadyExists };
-
-          this.router.navigate([ShellRoutes.routePath(routePath)], {
-            queryParams,
-          });
-        });
+        this.router.navigate([ShellRoutes.routePath(routePath)]);
+      });
     } else {
       this.router.navigate([ShellRoutes.routePath(routePath)]);
     }

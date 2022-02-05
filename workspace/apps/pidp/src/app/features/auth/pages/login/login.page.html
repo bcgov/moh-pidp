@@ -19,20 +19,14 @@
                   </p>
                   <ul>
                     <li>
-                      For support with the provider identity portal, please
-                      contact
-                      <a [attr.href]="'mailto:' + providerIdentitySupportEmail">
-                        {{ providerIdentitySupportEmail }}
-                      </a>
+                      For support with the provider identity portal, contact
+                      <ui-anchor
+                        scheme="mailto"
+                        [href]="providerIdentitySupportEmail"></ui-anchor>
                     </li>
                     <li>
-                      For support with your BC Services Card, please click
-                      <a
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        [attr.href]="bcscSupportUrl">
-                        here
-                      </a>
+                      For support with your BC Services Card, click
+                      <ui-anchor [href]="bcscSupportUrl">here</ui-anchor>
                     </li>
                   </ul>
                 </ng-container>
@@ -66,20 +60,14 @@
               </ui-page-section-subheader>
               <p>
                 You need to set up the
-                <a
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  [attr.href]="bcscMobileSetupUrl"
-                  >BC Services Card app</a
+                <ui-anchor [href]="bcscMobileSetupUrl"
+                  >BC Services Card app</ui-anchor
                 >
                 to enrol. You will use the app each time you access the eForms
                 application. If you are not eligible for BC Services Card, or
                 cannot set up the app, you can
-                <a
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  [attr.href]="specialAuthorityUrl">
-                  submit SA requests by fax</a
+                <ui-anchor [href]="specialAuthorityUrl"
+                  >submit SA requests by fax</ui-anchor
                 >.
               </p>
 
@@ -97,9 +85,9 @@
             <div class="col-12 col-lg-8">
               <p>
                 Questions about Special Authority eForms should be directed to:
-                <a [attr.href]="'mailto:' + specialAuthoritySupportEmail">
-                  {{ specialAuthoritySupportEmail }}
-                </a>
+                <ui-anchor
+                  scheme="mailto"
+                  [href]="specialAuthoritySupportEmail"></ui-anchor>
               </p>
             </div>
           </div>

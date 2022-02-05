@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 
 import { AccessTokenService } from '@app/features/auth/services/access-token.service';
 
-// TODO replace with state management using Elf and use store query
 @Injectable({
   providedIn: 'root',
 })

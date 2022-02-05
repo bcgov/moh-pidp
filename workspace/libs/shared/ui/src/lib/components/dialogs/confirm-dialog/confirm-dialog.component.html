@@ -37,10 +37,10 @@
 
   <span></span>
 
-  <a
+  <ui-anchor
     *ngIf="options.actionLink"
-    [attr.href]="options.actionLink?.href"
-    [attr.target]="options.actionLink?.target">
+    [href]="options.actionLink.href"
+    [target]="options.actionLink.target">
     {{ options.actionLink?.text }}
-  </a>
+  </ui-anchor>
 </mat-dialog-actions>
