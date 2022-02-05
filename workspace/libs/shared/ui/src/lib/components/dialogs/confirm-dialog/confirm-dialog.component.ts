@@ -14,14 +14,16 @@ import { DialogOptions } from '../dialog-options.model';
 import { DialogContentOutput } from '../dialog-output.model';
 import { DIALOG_DEFAULT_OPTION } from '../dialogs-properties.provider';
 
+// TODO use generics to get typings in place and drop use of any
 @Component({
-  selector: 'app-confirm-dialog',
+  selector: 'ui-confirm-dialog',
   templateUrl: './confirm-dialog.component.html',
   styleUrls: ['./confirm-dialog.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ConfirmDialogComponent implements OnInit {
   public options: DialogOptions;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public dialogContentOutput: DialogContentOutput<any> | null;
 
   @ViewChild(DialogContentDirective, { static: true })
@@ -57,7 +59,7 @@ export class ConfirmDialogComponent implements OnInit {
     }
   }
 
-  private getOptions(dialogOptions: DialogOptions) {
+  private getOptions(dialogOptions: DialogOptions): DialogOptions {
     const options: DialogOptions = {
       actionType: 'primary',
       actionText: 'Confirm',
@@ -72,6 +74,7 @@ export class ConfirmDialogComponent implements OnInit {
     };
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private loadDialogContentComponent(component: any, data: any): void {
     const viewContainerRef = this.dialogContentHost.viewContainerRef;
     viewContainerRef.clear();
@@ -82,6 +85,7 @@ export class ConfirmDialogComponent implements OnInit {
     const output$ = componentInstance.output;
 
     if (output$) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       output$.subscribe((value: any) => (this.dialogContentOutput = value));
     }
   }

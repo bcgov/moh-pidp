@@ -26,15 +26,6 @@
     </ng-container>
   </ui-alert>
 
-  <!-- TODO do we really need to inform them that it's verified? -->
-  <!-- <ui-alert
-    *ngIf="completedProfile"
-    type="success"
-    icon="check_circle"
-    iconType="outlined"
-    heading="Your College licence has been verified">
-  </ui-alert> -->
-
   <ui-alert
     *ngIf="collegeLicenceValidationError"
     type="info"
@@ -67,9 +58,7 @@
           [actionLabel]="section.action.label"
           [actionDisabled]="section.action.disabled"
           (action)="onCardRouteAction(section.action.route)">
-          <ng-container uiCardSummaryHint>
-            {{ section.hint }}
-          </ng-container>
+          <ng-container uiCardSummaryHint>{{ section.hint }}</ng-container>
           <ng-container uiCardSummaryContent>
             <app-profile-card-summary-content [properties]="section.properties">
               {{ section.description }}
@@ -81,7 +70,7 @@
   </ui-page-section>
 
   <ui-page-section>
-    <ui-anchor-link linkId="access"></ui-anchor-link>
+    <ui-scroll-target targetId="access"></ui-scroll-target>
     <ui-page-section-subheader icon="assignment" heading="Access to Systems">
       <ng-container uiPageSectionSubheaderDesc>
         Complete your profile to gain access to the systems you are eligible
@@ -102,9 +91,7 @@
           [actionLabel]="section.action.label"
           [actionDisabled]="section.action.disabled"
           (action)="onCardRequestAccess(section.action.route)">
-          <ng-container uiCardSummaryHint>
-            {{ section.hint }}
-          </ng-container>
+          <ng-container uiCardSummaryHint>{{ section.hint }}</ng-container>
           <ng-container uiCardSummaryContent>
             {{ section.description }}
           </ng-container>
@@ -134,9 +121,7 @@
           [actionLabel]="section.action.label"
           [actionDisabled]="section.action.disabled"
           (action)="onCardRouteAction(section.action.route)">
-          <ng-container uiCardSummaryHint>
-            {{ section.hint }}
-          </ng-container>
+          <ng-container uiCardSummaryHint>{{ section.hint }}</ng-container>
           <ng-container uiCardSummaryContent>
             {{ section.description }}
           </ng-container>
@@ -166,9 +151,7 @@
           [actionLabel]="section.action.label"
           [actionDisabled]="section.action.disabled"
           (action)="onCardRouteAction(section.action.route)">
-          <ng-container uiCardSummaryHint>
-            {{ section.hint }}
-          </ng-container>
+          <ng-container uiCardSummaryHint>{{ section.hint }}</ng-container>
           <ng-container uiCardSummaryContent>
             {{ section.description }}
           </ng-container>

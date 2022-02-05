@@ -10,7 +10,7 @@ import { PartiesPage } from './pages/parties/parties.page';
 import { AdminDashboardComponent } from './shared/components/admin-dashboard/admin-dashboard.component';
 
 @NgModule({
-  declarations: [PartiesPage, AdminDashboardComponent],
+  declarations: [AdminDashboardComponent, PartiesPage],
   imports: [
     AdminRoutingModule,
     DashboardModule,
