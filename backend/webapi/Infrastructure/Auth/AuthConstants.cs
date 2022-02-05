@@ -30,7 +30,7 @@ public static class Policies
 public static class Resources
 {
     public const string PidpApi = "PIDP-SERVICE";
-    public const string SaEforms = "SAT-EFORMS";
+    public const string SAEforms = "SAT-EFORMS";
 }
 
 public static class Roles
@@ -40,5 +40,5 @@ public static class Roles
     public const string User = "USER";
 
     // External Systems
-    public const string SaEforms = "phsa_eforms_sat";
+    public const string SAEforms = "phsa_eforms_sat";
 }

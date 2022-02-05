@@ -16,7 +16,7 @@ public class Demographics
         public int Id { get; set; }
     }
 
-    public class Command : ICommand
+    public class Command : ICommand<IDomainResult>
     {
         [HybridBindProperty(Source.Route)]
         public int Id { get; set; }
@@ -71,21 +71,20 @@ public class Demographics
         }
     }
 
-    public class CommandHandler : ICommandHandler<Command>
+    public class CommandHandler : ICommandHandler<Command, IDomainResult>
     {
         private readonly PidpDbContext context;
 
         public CommandHandler(PidpDbContext context) => this.context = context;
 
-        public async Task HandleAsync(Command command)
+        public async Task<IDomainResult> HandleAsync(Command command)
         {
             var party = await this.context.Parties
                 .SingleOrDefaultAsync(party => party.Id == command.Id);
 
             if (party == null)
             {
-                // TODO 404?
-                return;
+                return DomainResult.NotFound();
             }
 
             party.PreferredFirstName = command.PreferredFirstName;
@@ -95,6 +94,7 @@ public class Demographics
             party.Phone = command.Phone;
 
             await this.context.SaveChangesAsync();
+            return DomainResult.Success();
         }
     }
 }

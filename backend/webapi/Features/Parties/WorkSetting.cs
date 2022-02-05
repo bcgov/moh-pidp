@@ -18,7 +18,7 @@ public class WorkSetting
         public int Id { get; set; }
     }
 
-    public class Command : ICommand
+    public class Command : ICommand<IDomainResult>
     {
         [HybridBindProperty(Source.Route)]
         public int Id { get; set; }
@@ -90,13 +90,13 @@ public class WorkSetting
         }
     }
 
-    public class CommandHandler : ICommandHandler<Command>
+    public class CommandHandler : ICommandHandler<Command, IDomainResult>
     {
         private readonly PidpDbContext context;
 
         public CommandHandler(PidpDbContext context) => this.context = context;
 
-        public async Task HandleAsync(Command command)
+        public async Task<IDomainResult> HandleAsync(Command command)
         {
             var party = await this.context.Parties
                 .Include(party => party.Facility)
@@ -104,8 +104,7 @@ public class WorkSetting
 
             if (party == null)
             {
-                // TODO 404?
-                return;
+                return DomainResult.NotFound();
             }
 
             party.JobTitle = command.JobTitle;
@@ -134,6 +133,7 @@ public class WorkSetting
             }
 
             await this.context.SaveChangesAsync();
+            return DomainResult.Success();
         }
     }
 }

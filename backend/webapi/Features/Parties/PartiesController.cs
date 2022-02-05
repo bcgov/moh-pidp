@@ -39,13 +39,11 @@ public class PartiesController : ControllerBase
     [HttpPut("{partyId}/college-certification")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    // [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult> UpdatePartyCollegeCertification([FromServices] ICommandHandler<CollegeCertification.Command> handler,
-                                                                    [FromHybrid] CollegeCertification.Command command)
-    {
-        await handler.HandleAsync(command);
-        return this.NoContent();
-    }
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> UpdatePartyCollegeCertification([FromServices] ICommandHandler<CollegeCertification.Command, IDomainResult> handler,
+                                                                     [FromHybrid] CollegeCertification.Command command)
+        => await handler.HandleAsync(command).ToActionResult();
+
 
     [HttpGet("{id}/demographics")]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -58,13 +56,10 @@ public class PartiesController : ControllerBase
     [HttpPut("{id}/demographics")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    // [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult> UpdatePartyDemographics([FromServices] ICommandHandler<Demographics.Command> handler,
-                                                            [FromHybrid] Demographics.Command command)
-    {
-        await handler.HandleAsync(command);
-        return this.NoContent();
-    }
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> UpdatePartyDemographics([FromServices] ICommandHandler<Demographics.Command, IDomainResult> handler,
+                                                             [FromHybrid] Demographics.Command command)
+        => await handler.HandleAsync(command).ToActionResult();
 
     [HttpGet("{id}/profile-status")]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -85,11 +80,8 @@ public class PartiesController : ControllerBase
     [HttpPut("{id}/work-setting")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    // [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult> UpdatePartyWorkSetting([FromServices] ICommandHandler<WorkSetting.Command> handler,
-                                                           [FromHybrid] WorkSetting.Command command)
-    {
-        await handler.HandleAsync(command);
-        return this.NoContent();
-    }
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> UpdatePartyWorkSetting([FromServices] ICommandHandler<WorkSetting.Command, IDomainResult> handler,
+                                                            [FromHybrid] WorkSetting.Command command)
+        => await handler.HandleAsync(command).ToActionResult();
 }

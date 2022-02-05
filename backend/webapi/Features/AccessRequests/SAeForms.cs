@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Pidp.Data;
 using Pidp.Models;
 
-public class SAeForms
+public class SAEforms
 {
     public class Command : ICommand<IDomainResult>
     {
@@ -31,7 +31,7 @@ public class SAeForms
             // TODO Keycloak Role
             var existingRequest = await this.context.AccessRequests
                 .SingleOrDefaultAsync(request => request.PartyId == command.PartyId
-                    && request.AccessType == AccessType.SAeForms);
+                    && request.AccessType == AccessType.SAEforms);
 
             if (existingRequest != null)
             {
@@ -41,7 +41,7 @@ public class SAeForms
             var newRequest = new AccessRequest
             {
                 PartyId = command.PartyId,
-                AccessType = AccessType.SAeForms
+                AccessType = AccessType.SAEforms
             };
 
             this.context.AccessRequests.Add(newRequest);

@@ -16,7 +16,7 @@ public class Index
         public int Id { get; set; }
         public string? ProviderName { get; set; }
         public CollegeCode? ProviderCollegeCode { get; set; }
-        public bool SaEformsAccessRequest { get; set; }
+        public bool SAEformsAccessRequest { get; set; }
     }
 
     public class QueryHandler : IQueryHandler<Query, List<Model>>

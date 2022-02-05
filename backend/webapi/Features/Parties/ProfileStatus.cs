@@ -112,7 +112,7 @@ public class ProfileStatus
         {
             var accessGranted = await this.context.AccessRequests
                 .AnyAsync(access => access.PartyId == partyId
-                    && access.AccessType == Models.AccessType.SAeForms);
+                    && access.AccessType == Models.AccessType.SAEforms);
 
             if (accessGranted)
             {

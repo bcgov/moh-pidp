@@ -6,7 +6,7 @@ using NodaTime;
 
 public enum AccessType
 {
-    SAeForms = 1
+    SAEforms = 1
 }
 
 public class AccessRequest : BaseAuditable
