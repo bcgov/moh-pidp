@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AnchorLinkComponent } from './anchor-link.component';
+import { ScrollTargetComponent } from './scroll-target.component';
 
-describe('AnchorLinkComponent', () => {
-  let component: AnchorLinkComponent;
-  let fixture: ComponentFixture<AnchorLinkComponent>;
+describe('ScrollTargetComponent', () => {
+  let component: ScrollTargetComponent;
+  let fixture: ComponentFixture<ScrollTargetComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ AnchorLinkComponent ]
+      declarations: [ ScrollTargetComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(AnchorLinkComponent);
+    fixture = TestBed.createComponent(ScrollTargetComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
