@@ -220,11 +220,13 @@ export class PartyService {
             collegeCertStatusCode === StatusCode.COMPLETED
           ),
         },
-        statusType: 'info',
+        statusType:
+          saEformsStatusCode === StatusCode.COMPLETED ? 'success' : 'info',
         status:
-          // TODO how does this card indicate you have access?
-          saEformsStatusCode === StatusCode.COMPLETED
+          saEformsStatusCode === StatusCode.AVAILABLE
             ? 'You are eligible to use Special Authority eForms'
+            : saEformsStatusCode === StatusCode.COMPLETED
+            ? 'Completed'
             : '',
       },
     ];
