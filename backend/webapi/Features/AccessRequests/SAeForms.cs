@@ -3,6 +3,7 @@ namespace Pidp.Features.AccessRequests;
 using DomainResults.Common;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
+using NodaTime;
 
 using Pidp.Data;
 using Pidp.Infrastructure.Auth;
@@ -23,11 +24,16 @@ public class SAEforms
 
     public class CommandHandler : ICommandHandler<Command, IDomainResult>
     {
+        private readonly IClock clock;
         private readonly IKeycloakAdministrationClient client;
         private readonly PidpDbContext context;
 
-        public CommandHandler(IKeycloakAdministrationClient client, PidpDbContext context)
+        public CommandHandler(
+            IClock clock,
+            IKeycloakAdministrationClient client,
+            PidpDbContext context)
         {
+            this.clock = clock;
             this.client = client;
             this.context = context;
         }
@@ -57,7 +63,8 @@ public class SAEforms
             var newRequest = new AccessRequest
             {
                 PartyId = command.PartyId,
-                AccessType = AccessType.SAEforms
+                AccessType = AccessType.SAEforms,
+                RequestedOn = this.clock.GetCurrentInstant()
             };
 
             this.context.AccessRequests.Add(newRequest);
