@@ -85,11 +85,8 @@ public class PartiesController : ControllerBase
     [HttpPut("{id}/work-setting")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    // [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult> UpdatePartyWorkSetting([FromServices] ICommandHandler<WorkSetting.Command> handler,
-                                                           [FromHybrid] WorkSetting.Command command)
-    {
-        await handler.HandleAsync(command);
-        return this.NoContent();
-    }
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> UpdatePartyWorkSetting([FromServices] ICommandHandler<WorkSetting.Command, IDomainResult> handler,
+                                                            [FromHybrid] WorkSetting.Command command)
+        => await handler.HandleAsync(command).ToActionResult();
 }
