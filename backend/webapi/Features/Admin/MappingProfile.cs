@@ -9,5 +9,5 @@ public class MappingProfile : Profile
     public MappingProfile() => this.CreateMap<Party, Index.Model>()
         .ForMember(dest => dest.ProviderName, opt => opt.MapFrom(src => $"{src.FirstName} {src.LastName}"))
         .ForMember(dest => dest.ProviderCollegeCode, opt => opt.MapFrom(src => src.PartyCertification!.CollegeCode))
-        .ForMember(dest => dest.SaEformsAccessRequest, opt => opt.MapFrom(src => src.AccessRequests.Any(accessRequest => accessRequest.AccessType == AccessType.SAeForms)));
+        .ForMember(dest => dest.SAEformsAccessRequest, opt => opt.MapFrom(src => src.AccessRequests.Any(accessRequest => accessRequest.AccessType == AccessType.SAEforms)));
 }

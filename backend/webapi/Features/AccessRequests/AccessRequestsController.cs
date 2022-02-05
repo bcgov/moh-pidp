@@ -17,7 +17,7 @@ public class AccessRequestsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
-    public async Task<IActionResult> CreateSAeFormsEnrolment([FromServices] ICommandHandler<SAeForms.Command, IDomainResult> handler,
-                                                             [FromBody] SAeForms.Command command)
+    public async Task<IActionResult> CreateSAEformsEnrolment([FromServices] ICommandHandler<SAEforms.Command, IDomainResult> handler,
+                                                             [FromBody] SAEforms.Command command)
         => await handler.HandleAsync(command).ToActionResult();
 }
