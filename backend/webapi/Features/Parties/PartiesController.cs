@@ -58,13 +58,10 @@ public class PartiesController : ControllerBase
     [HttpPut("{id}/demographics")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    // [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult> UpdatePartyDemographics([FromServices] ICommandHandler<Demographics.Command> handler,
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> UpdatePartyDemographics([FromServices] ICommandHandler<Demographics.Command, IDomainResult> handler,
                                                             [FromHybrid] Demographics.Command command)
-    {
-        await handler.HandleAsync(command);
-        return this.NoContent();
-    }
+     => await handler.HandleAsync(command).ToActionResult();
 
     [HttpGet("{id}/profile-status")]
     [ProducesResponseType(StatusCodes.Status200OK)]
