@@ -5,12 +5,12 @@ using Microsoft.AspNetCore.Mvc;
 
 using Pidp.Infrastructure.Auth;
 
-[Produces("application/json")]
 [Route("api/[controller]")]
-[ApiController]
 [Authorize(Policy = Policies.IdirAuthentication, Roles = Roles.Admin)]
-public class AdminController : ControllerBase
+public class AdminController : PidpControllerBase
 {
+    public AdminController(IAuthorizationService authorizationService) : base(authorizationService) { }
+
     [HttpGet("parties")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<List<Index.Model>>> GetParties([FromServices] IQueryHandler<Index.Query, List<Index.Model>> handler,

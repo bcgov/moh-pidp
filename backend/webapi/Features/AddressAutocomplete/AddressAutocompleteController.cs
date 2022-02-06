@@ -6,12 +6,12 @@ using Microsoft.AspNetCore.Mvc;
 using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.HttpClients.AddressAutocomplete;
 
-[Produces("application/json")]
 [Route("api/[controller]")]
-[ApiController]
 [Authorize(Policy = Policies.BcscAuthentication)]
-public class AddressAutocompleteController : ControllerBase
+public class AddressAutocompleteController : PidpControllerBase
 {
+    public AddressAutocompleteController(IAuthorizationService authorizationService) : base(authorizationService) { }
+
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]

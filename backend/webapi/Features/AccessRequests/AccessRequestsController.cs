@@ -7,12 +7,12 @@ using Microsoft.AspNetCore.Mvc;
 
 using Pidp.Infrastructure.Auth;
 
-[Produces("application/json")]
 [Route("api/[controller]")]
-[ApiController]
 [Authorize(Policy = Policies.BcscAuthentication)]
-public class AccessRequestsController : ControllerBase
+public class AccessRequestsController : PidpControllerBase
 {
+    public AccessRequestsController(IAuthorizationService authorizationService) : base(authorizationService) { }
+
     [HttpPost("sa-eforms")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]

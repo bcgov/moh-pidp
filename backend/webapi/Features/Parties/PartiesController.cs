@@ -8,12 +8,12 @@ using Microsoft.AspNetCore.Mvc;
 
 using Pidp.Infrastructure.Auth;
 
-[Produces("application/json")]
 [Route("api/[controller]")]
-[ApiController]
 [Authorize(Policy = Policies.BcscAuthentication)]
-public class PartiesController : ControllerBase
+public class PartiesController : PidpControllerBase
 {
+    public PartiesController(IAuthorizationService authorizationService) : base(authorizationService) { }
+
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
