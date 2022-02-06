@@ -25,6 +25,7 @@ public static class Policies
 {
     public const string BcscAuthentication = "bcsc-authentication-policy";
     public const string IdirAuthentication = "idir-authentication-policy";
+    public const string UserOwnsParty = "user-owns-party-policy";
 }
 
 public static class Resources
