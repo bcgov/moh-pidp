@@ -115,19 +115,3 @@ spec:
           expression: "body.ref.replace('refs/heads/', '')"
     template:
       ref: github-push-trigger-template
-  # - bindings:
-  #   - kind: TriggerBinding
-  #     ref: github-push-binding
-  #   name: github-listener
-  #   interceptors:
-  #   - cel:
-  #       filter: >-
-  #         header.match('X-GitHub-Event', 'push') &&
-  #         body.repository.full_name == 'bcgov/moh-pidp'
-  #       overlays:
-  #       - key: truncated_sha
-  #         expression: "body.head_commit.id.truncate(7)"
-  #       - key: branch_name
-  #         expression: "body.ref.replace('refs/heads/', '').replace('/', '_')"
-  #   template:
-  #     ref: github-push-trigger-template
