@@ -26,7 +26,7 @@ spec:
   - bindings:
     - kind: TriggerBinding
       ref: github-pr-binding
-    name: github-listener
+    name: github-pr-trigger
     interceptors:
     - cel:
         filter: >-
