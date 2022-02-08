@@ -7,10 +7,10 @@ import { SharedModule } from '@shared/shared.module';
 
 import { ProfileCardSummaryContentComponent } from './components/profile-card-summary-content/profile-card-summary-content.component';
 import { PortalRoutingModule } from './portal-routing.module';
-import { PortalComponent } from './portal.component';
+import { PortalPage } from './portal.page';
 
 @NgModule({
-  declarations: [PortalComponent, ProfileCardSummaryContentComponent],
+  declarations: [PortalPage, ProfileCardSummaryContentComponent],
   imports: [
     PortalRoutingModule,
     SharedModule,

@@ -3,10 +3,10 @@ import { NgModule } from '@angular/core';
 import { SharedModule } from '@app/shared/shared.module';
 
 import { ViewDocumentRoutingModule } from './view-document-routing.module';
-import { ViewDocumentComponent } from './view-document.component';
+import { ViewDocumentPage } from './view-document.page';
 
 @NgModule({
-  declarations: [ViewDocumentComponent],
+  declarations: [ViewDocumentPage],
   imports: [ViewDocumentRoutingModule, SharedModule],
 })
 export class ViewDocumentModule {}

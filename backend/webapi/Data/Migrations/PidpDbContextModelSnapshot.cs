@@ -23,6 +23,36 @@ namespace Pidp.Data.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("Pidp.Models.AccessRequest", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("AccessType")
+                        .HasColumnType("integer");
+
+                    b.Property<Instant>("Created")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Instant>("Modified")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("PartyId")
+                        .HasColumnType("integer");
+
+                    b.Property<Instant>("RequestedOn")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PartyId");
+
+                    b.ToTable("AccessRequests");
+                });
+
             modelBuilder.Entity("Pidp.Models.Address", b =>
                 {
                     b.Property<int>("Id")
@@ -136,6 +166,12 @@ namespace Pidp.Data.Migrations
                             Code = 3,
                             Acronym = "BCCNM",
                             Name = "BC College of Nurses and Midwives"
+                        },
+                        new
+                        {
+                            Code = 4,
+                            Acronym = "CNPBC",
+                            Name = "College of Naturopathic Physicians of BC"
                         });
                 });
 
@@ -718,6 +754,17 @@ namespace Pidp.Data.Migrations
                     b.HasDiscriminator().HasValue("FacilityAddress");
                 });
 
+            modelBuilder.Entity("Pidp.Models.AccessRequest", b =>
+                {
+                    b.HasOne("Pidp.Models.Party", "Party")
+                        .WithMany("AccessRequests")
+                        .HasForeignKey("PartyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Party");
+                });
+
             modelBuilder.Entity("Pidp.Models.Address", b =>
                 {
                     b.HasOne("Pidp.Models.Lookups.Country", "Country")
@@ -785,6 +832,8 @@ namespace Pidp.Data.Migrations
 
             modelBuilder.Entity("Pidp.Models.Party", b =>
                 {
+                    b.Navigation("AccessRequests");
+
                     b.Navigation("Facility");
 
                     b.Navigation("PartyCertification");

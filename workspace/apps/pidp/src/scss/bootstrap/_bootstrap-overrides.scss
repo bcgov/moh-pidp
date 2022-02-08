@@ -24,3 +24,11 @@ body {
 .small {
   @extend small;
 }
+
+//
+// Utilities
+//
+
+.nowrap {
+  white-space: nowrap;
+}

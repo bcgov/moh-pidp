@@ -40,7 +40,7 @@ public class UserRepresentation
     public string? Email { get; set; }
     public Dictionary<string, string[]> Attributes { get; set; } = new();
 
-    public void SetPhone(string phoneNumber) => this.SetAttribute("phone", phoneNumber);
+    public void SetPhone(string phone) => this.SetAttribute("phone", phone);
 
     public void SetPhoneNumber(string phoneNumber) => this.SetAttribute("phoneNumber", phoneNumber);
 

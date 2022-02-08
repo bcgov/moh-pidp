@@ -6755,6 +6755,13 @@ neo-async@^2.6.2:
   resolved "https://registry.yarnpkg.com/neo-async/-/neo-async-2.6.2.tgz#b4aafb93e3aeb2d8174ca53cf163ab7d7308305f"
   integrity sha512-Yd3UES5mWCSqR+qNT93S3UoYUkqAZ9lLg8a7g9rimsWmYGK8cVToA4/sF3RrshdyV3sAGMXVUmpMYOw+dLpOuw==
 
+ng-busy@^12.0.2:
+  version "12.0.2"
+  resolved "https://registry.yarnpkg.com/ng-busy/-/ng-busy-12.0.2.tgz#4ba0c40405b1209244f3909bc7e2bdbc315f2b78"
+  integrity sha512-xf6++PAbFJzw8FpIMzD611PP72926XRDNoQPdI5kQnNVHl+n1AQM8ln+/VyXEOIxrbq4GkG7TPnSmK5vR0hLWA==
+  dependencies:
+    tslib "^2.0.3"
+
 ngx-mask@^13.0.0:
   version "13.0.0"
   resolved "https://registry.yarnpkg.com/ngx-mask/-/ngx-mask-13.0.0.tgz#03a3b0bb2f1d271141946a443d2af625216eacaf"
@@ -8904,7 +8911,7 @@ tsconfig-paths@^3.11.0, tsconfig-paths@^3.9.0:
     minimist "^1.2.0"
     strip-bom "^3.0.0"
 
-tslib@2.3.1, tslib@^2.0.0, tslib@^2.3.0:
+tslib@2.3.1, tslib@^2.0.0, tslib@^2.0.3, tslib@^2.3.0:
   version "2.3.1"
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.3.1.tgz#e8a335add5ceae51aa261d32a490158ef042ef01"
   integrity sha512-77EbyPPpMz+FRFRuAFlWMtmgUWGe9UOG2Z25NqCwiIjRhOf5iKGuzSe5P2w1laq+FkRy4p+PCuVkJSGkzTEKVw==

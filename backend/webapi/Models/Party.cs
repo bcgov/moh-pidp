@@ -35,4 +35,6 @@ public class Party : BaseAuditable
     public string? JobTitle { get; set; }
 
     public Facility? Facility { get; set; }
+
+    public ICollection<AccessRequest> AccessRequests { get; set; } = new List<AccessRequest>();
 }

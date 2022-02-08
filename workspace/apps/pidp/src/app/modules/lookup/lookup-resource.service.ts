@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 
 import { Observable, catchError, map, of } from 'rxjs';
 
-import { ApiResource } from '@core/resources/api-resource.service';
+import { ApiHttpClient } from '@app/core/resources/api-http-client.service';
 
 import { LookupConfig } from './lookup.model';
 
@@ -10,7 +10,7 @@ import { LookupConfig } from './lookup.model';
   providedIn: 'root',
 })
 export class LookupResource {
-  public constructor(private apiResource: ApiResource) {}
+  public constructor(private apiResource: ApiHttpClient) {}
 
   /**
    * @description

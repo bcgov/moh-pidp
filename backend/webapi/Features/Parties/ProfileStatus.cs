@@ -37,18 +37,20 @@ public class ProfileStatus
         public string? FacilityName { get; set; }
         public string? FacilityStreet { get; set; }
 
-        public bool DemographicsComplete => this.Email != null && this.Phone != null;
-        public bool CollegeCertificationComplete => this.CollegeCode != null && this.LicenceNumber != null;
-        public bool WorkSettingComplete => this.JobTitle != null && this.FacilityName != null;
+        public Dictionary<string, SectionStatus> Status { get; set; } = new();
 
-        public EnrolmentStatus SaEformsStatus { get; set; }
-        public string SaEformsStatusReason { get; set; } = string.Empty;
+        public class SectionStatus
+        {
+            public StatusCode StatusCode { get; set; }
+            public string? Reason { get; set; }
+        }
 
-        public enum EnrolmentStatus
+        public enum StatusCode
         {
             Available = 1,
             Completed,
-            NotAvailable
+            NotAvailable,
+            Error
         }
     }
 
@@ -85,34 +87,75 @@ public class ProfileStatus
                 return DomainResult.NotFound<Model>();
             }
 
-            // TODO check submission
+            var demographicsStatus = model.Email != null && model.Phone != null
+                ? Model.StatusCode.Completed
+                : Model.StatusCode.Available;
 
-            if (!model.DemographicsComplete || !model.CollegeCertificationComplete)
+            var certificationStatus = demographicsStatus != Model.StatusCode.Completed
+                ? Model.StatusCode.NotAvailable
+                : model.CollegeCode == null || model.LicenceNumber == null
+                    ? Model.StatusCode.Available
+                    : model.Ipc != null
+                        ? Model.StatusCode.Completed
+                        : Model.StatusCode.Error;
+
+            var saStatus = await this.ComputeSaStatus(model.Id, model.Ipc);
+
+            model.Status.Add("demographics", new Model.SectionStatus { StatusCode = demographicsStatus });
+            model.Status.Add("collegeCertification", new Model.SectionStatus { StatusCode = certificationStatus });
+            model.Status.Add("saEforms", saStatus);
+
+            return DomainResult.Success(model);
+        }
+
+        private async Task<Model.SectionStatus> ComputeSaStatus(int partyId, string? ipc)
+        {
+            var accessGranted = await this.context.AccessRequests
+                .AnyAsync(access => access.PartyId == partyId
+                    && access.AccessType == Models.AccessType.SAEforms);
+
+            if (accessGranted)
             {
-                model.SaEformsStatus = Model.EnrolmentStatus.NotAvailable;
-                model.SaEformsStatusReason = "Profile not complete";
+                return new Model.SectionStatus
+                {
+                    StatusCode = Model.StatusCode.Completed
+                };
             }
-            else if (model.Ipc == null)
+
+            if (ipc == null)
             {
-                model.SaEformsStatus = Model.EnrolmentStatus.NotAvailable;
-                model.SaEformsStatusReason = "College Licence not found in PLR";
+                return new Model.SectionStatus
+                {
+                    StatusCode = Model.StatusCode.NotAvailable
+                };
+            }
+
+            var recordStatus = await this.client.GetRecordStatus(ipc);
+
+            if (recordStatus == null)
+            {
+                return new Model.SectionStatus
+                {
+                    StatusCode = Model.StatusCode.Error
+                };
+            }
+
+            var goodStatndingReasons = new[] { "GS", "PRAC", "TEMPPER" };
+            if (recordStatus.StatusCode == "ACTIVE" && goodStatndingReasons.Contains(recordStatus.StatusReasonCode))
+            {
+                return new Model.SectionStatus
+                {
+                    StatusCode = Model.StatusCode.Available
+                };
             }
             else
             {
-                var status = await this.client.GetRecordStatus(model.Ipc);
-                if (status == null)
+                return new Model.SectionStatus
                 {
-                    model.SaEformsStatus = Model.EnrolmentStatus.NotAvailable;
-                    model.SaEformsStatusReason = "Error determining Status in PLR";
-                }
-                else
-                {
-                    // TODO
-                    // var goodStanding = ;
-                }
+                    StatusCode = Model.StatusCode.NotAvailable,
+                    Reason = "There is a problem with your College licence, please try again later."
+                };
             }
-
-            return DomainResult.Success(model);
         }
     }
 }

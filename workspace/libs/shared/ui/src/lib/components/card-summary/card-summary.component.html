@@ -1,12 +1,12 @@
 <ng-container>
   <div class="card-status" [class]="statusType">
     <ng-container *ngTemplateOutlet="card"></ng-container>
-    <span *ngIf="status || statusType">{{ status | titlecase }}</span>
+    <span *ngIf="status || statusType">{{ status }}</span>
   </div>
 </ng-container>
 
 <ng-template #card>
-  <ui-card [icon]="icon" [title]="title">
+  <ui-card [icon]="icon" [heading]="heading">
     <!-- Work around for ngProjectAs not passing directive reference when applied to ng-content -->
     <ng-container uiCardHint>
       <ng-content select="[uiCardSummaryHint]"></ng-content>

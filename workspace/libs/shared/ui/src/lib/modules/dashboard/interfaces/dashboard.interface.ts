@@ -1,7 +1,3 @@
-import { Observable } from 'rxjs';
-
-import { DashboardMenuItem } from '../models/dashboard-menu-item.model';
-
 export interface IDashboard {
   /**
    * @description

@@ -1,9 +1,9 @@
 <mat-card class="ui-card" [class]="class">
   <mat-card-header
-    *ngIf="icon || title"
+    *ngIf="icon || heading"
     [class]="{
-      'icon-only': icon && !title,
-      'title-only': !icon && title
+      'icon-only': icon && !heading,
+      'title-only': !icon && heading
     }">
     <div *ngIf="icon" mat-card-avatar>
       <!-- Using <mat-icon> to maintain specificity and allow mixins to override -->
@@ -16,8 +16,8 @@
         {{ icon }}
       </mat-icon>
     </div>
-    <mat-card-title *ngIf="title">
-      {{ title }}
+    <mat-card-title *ngIf="heading">
+      {{ heading }}
     </mat-card-title>
     <span *ngIf="cardHint.length" class="hint">
       <ng-content select="[uiCardHint]"></ng-content>

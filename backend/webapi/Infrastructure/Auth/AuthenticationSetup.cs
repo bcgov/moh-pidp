@@ -1,11 +1,10 @@
 namespace Pidp.Infrastructure.Auth;
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
-using System.Threading.Tasks;
 
 using Pidp.Extensions;
 
@@ -22,7 +21,7 @@ public static class AuthenticationSetup
         .AddJwtBearer(options =>
         {
             options.Authority = config.Keycloak.RealmUrl;
-            options.Audience = AuthConstants.Audience;
+            options.Audience = Resources.PidpApi;
             options.MetadataAddress = config.Keycloak.WellKnownConfig;
             options.Events = new JwtBearerEvents
             {
@@ -30,7 +29,23 @@ public static class AuthenticationSetup
             };
         });
 
-        services.AddAuthorization();
+        services.AddScoped<IAuthorizationHandler, UserOwnsPartyHandler>();
+
+        services.AddAuthorization(options =>
+        {
+            options.AddPolicy(Policies.BcscAuthentication, policy => policy
+                .RequireAuthenticatedUser()
+                .RequireClaim(Claims.IdentityProvider, ClaimValues.BCServicesCard));
+            options.AddPolicy(Policies.IdirAuthentication, policy => policy
+                .RequireAuthenticatedUser()
+                .RequireClaim(Claims.IdentityProvider, ClaimValues.Idir));
+            options.AddPolicy(Policies.UserOwnsParty, policy => policy.Requirements.Add(new UserOwnsPartyRequirement()));
+
+            options.FallbackPolicy = new AuthorizationPolicyBuilder()
+                .RequireAuthenticatedUser()
+                .RequireClaim(Claims.IdentityProvider, ClaimValues.BCServicesCard, ClaimValues.Idir)
+                .Build();
+        });
 
         return services;
     }
@@ -41,7 +56,8 @@ public static class AuthenticationSetup
             && identity.IsAuthenticated)
         {
             // Flatten the Resource Access claim
-            identity.AddClaims(identity.GetResourceAccessRoles(AuthConstants.Audience).Select(role => new Claim(ClaimTypes.Role, role)));
+            identity.AddClaims(identity.GetResourceAccessRoles(Resources.PidpApi)
+                .Select(role => new Claim(ClaimTypes.Role, role)));
         }
 
         return Task.CompletedTask;

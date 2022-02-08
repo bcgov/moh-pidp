@@ -1,4 +1,4 @@
-export enum IdentityProviderEnum {
+export enum IdentityProvider {
   BCSC = 'bcsc',
   IDIR = 'idir',
 }

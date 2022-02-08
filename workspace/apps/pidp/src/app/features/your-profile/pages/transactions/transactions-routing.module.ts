@@ -1,12 +1,12 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { TransactionsComponent } from './transactions.component';
+import { TransactionsPage } from './transactions.page';
 
 const routes: Routes = [
   {
     path: '',
-    component: TransactionsComponent,
+    component: TransactionsPage,
     data: {
       title: 'Provider Identity Portal',
     },

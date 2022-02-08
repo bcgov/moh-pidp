@@ -50,6 +50,7 @@ public class PlrClient : BaseClient, IPlrClient
                 "PHID" or "PHTID " => CollegeCode.Pharmacists,
                 "CPSID" => CollegeCode.PhysiciansAndSurgeons,
                 "RNID" or "RMID" => CollegeCode.NursesAndMidwives,
+                "NDID" => CollegeCode.NaturopathicPhysicians,
                 _ => null
             };
         }

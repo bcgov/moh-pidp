@@ -3,10 +3,10 @@ import { NgModule } from '@angular/core';
 import { SharedModule } from '@shared/shared.module';
 
 import { CollegeLicenceInformationRoutingModule } from './college-licence-information-routing.module';
-import { CollegeLicenceInformationComponent } from './college-licence-information.component';
+import { CollegeLicenceInformationPage } from './college-licence-information.page';
 
 @NgModule({
-  declarations: [CollegeLicenceInformationComponent],
+  declarations: [CollegeLicenceInformationPage],
   imports: [CollegeLicenceInformationRoutingModule, SharedModule],
 })
 export class CollegeLicenceInformationModule {}

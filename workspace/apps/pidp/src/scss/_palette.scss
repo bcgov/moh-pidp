@@ -6,9 +6,6 @@
 
 // Mapping of colours outside of Material that are used for
 // accents, notifications, or shading.
-
-// TODO re-evaluate the use of these colours
-
 $palettes: (
   blue: (
     lightest: #f8f9fb,
@@ -29,14 +26,7 @@ $palettes: (
     base: #228338,
   ),
   grey: (
-    lightest: #eeeeee,
-    lighter: #e1e1e1,
-    // divider colour
-    light: #bdbdbd,
-    // secondary text colour
-    base: #575757,
-    // primary text colour
-    dark: #212121,
+    base: #e1e1e1,
   ),
 );
 
@@ -89,7 +79,6 @@ $alerts: (
 // Gets the attrib colour(s) for a type of alert from the palette.
 // @use alert-palette( type, attrib );
 //
-// TODO reduce palette by using a single colour to generate difference using a scaled ratio
 @function alert-palette($type, $attrib) {
   @return map-get(map-get($alerts, $type), $attrib);
 }

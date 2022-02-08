@@ -7,6 +7,7 @@ import {
   NavigationStart,
   Router,
   RouterEvent,
+  Scroll,
 } from '@angular/router';
 
 import { Observable } from 'rxjs';
@@ -54,6 +55,16 @@ export class RouteStateService {
       filter(
         (event: Event): event is RouterEvent => event instanceof NavigationEnd
       )
+    );
+  }
+
+  /**
+   * @description
+   * Listener for route scroll events.
+   */
+  public onScrollEvent(): Observable<Scroll> {
+    return this.router.events.pipe(
+      filter((event: Event): event is Scroll => event instanceof Scroll)
     );
   }
 }

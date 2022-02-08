@@ -1,7 +1,7 @@
 <a
   mat-icon-button
-  [color]="menuIconColor"
   aria-label="Help"
+  [color]="menuIconColor"
   [class.small]="small"
   [matMenuTriggerFor]="help"
   (click)="onOpenContextMenu($event)">
@@ -12,8 +12,7 @@
     <div class="context-help-menu">
       <!-- Use directive for projection to use provided markup -->
       <div *ngIf="contextHelpTitleChildren?.length" class="header">
-        <!-- TODO allow for addition of icon using separate directive otherwise can't be passed down -->
-        <mat-icon *ngIf="titleIcon" color="primary" class="title-icon">
+        <mat-icon *ngIf="titleIcon" class="title-icon" color="primary">
           {{ titleIcon }}
         </mat-icon>
         <h2>

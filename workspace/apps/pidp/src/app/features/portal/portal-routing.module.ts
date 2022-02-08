@@ -1,12 +1,12 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { PortalComponent } from './portal.component';
+import { PortalPage } from './portal.page';
 
 const routes: Routes = [
   {
     path: '',
-    component: PortalComponent,
+    component: PortalPage,
     data: { title: 'Provider Identity Portal' },
   },
 ];

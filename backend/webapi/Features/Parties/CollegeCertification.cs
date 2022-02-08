@@ -20,7 +20,7 @@ public class CollegeCertification
         public int PartyId { get; set; }
     }
 
-    public class Command : ICommand
+    public class Command : ICommand<IDomainResult>
     {
         [HybridBindProperty(Source.Route)]
         public int PartyId { get; set; }
@@ -73,7 +73,7 @@ public class CollegeCertification
         }
     }
 
-    public class CommandHandler : ICommandHandler<Command>
+    public class CommandHandler : ICommandHandler<Command, IDomainResult>
     {
         private readonly IPlrClient client;
         private readonly PidpDbContext context;
@@ -84,7 +84,7 @@ public class CollegeCertification
             this.context = context;
         }
 
-        public async Task HandleAsync(Command command)
+        public async Task<IDomainResult> HandleAsync(Command command)
         {
             var party = await this.context.Parties
                 .Include(party => party.PartyCertification)
@@ -92,8 +92,7 @@ public class CollegeCertification
 
             if (party == null)
             {
-                // TODO 404?
-                return;
+                return DomainResult.NotFound();
             }
 
             if (party.PartyCertification == null)
@@ -106,6 +105,7 @@ public class CollegeCertification
             party.PartyCertification.Ipc = await this.client.GetPlrRecord(command.CollegeCode, command.LicenceNumber, party.Birthdate);
 
             await this.context.SaveChangesAsync();
+            return DomainResult.Success();
         }
     }
 }

@@ -17,8 +17,8 @@ export class ToastService {
 
   public constructor(private snackBar: MatSnackBar) {
     this.durationInMilliSecs = 3000;
-    this.verticalPosition = 'top';
-    this.horizontalPosition = 'end';
+    this.verticalPosition = 'bottom';
+    this.horizontalPosition = 'left';
     this.defaultConfig = {
       duration: this.durationInMilliSecs,
       horizontalPosition: this.horizontalPosition,

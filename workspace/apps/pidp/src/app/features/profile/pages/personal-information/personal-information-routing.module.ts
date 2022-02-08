@@ -3,12 +3,12 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { CanDeactivateFormGuard } from '@app/core/guards/can-deactivate-form.guard';
 
-import { PersonalInformationComponent } from './personal-information.component';
+import { PersonalInformationPage } from './personal-information.page';
 
 const routes: Routes = [
   {
     path: '',
-    component: PersonalInformationComponent,
+    component: PersonalInformationPage,
     canDeactivate: [CanDeactivateFormGuard],
     data: {
       title: 'Provider Identity Portal',

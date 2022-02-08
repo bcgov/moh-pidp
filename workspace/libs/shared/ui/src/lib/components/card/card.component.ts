@@ -6,8 +6,7 @@ import {
   QueryList,
 } from '@angular/core';
 
-import { IconType } from '@bcgov/shared/ui';
-
+import { IconType } from '../icon/icon.component';
 import { CardActionsDirective } from './card-actions.directive';
 import { CardContentDirective } from './card-content.directive';
 import { CardHintDirective } from './card-hint.directive';
@@ -21,7 +20,7 @@ import { CardHintDirective } from './card-hint.directive';
 export class CardComponent {
   @Input() public icon?: string;
   @Input() public iconType?: IconType;
-  @Input() public title!: string;
+  @Input() public heading!: string;
   @Input() public class?: string | string[] | Record<string, unknown>;
 
   @ContentChildren(CardHintDirective)

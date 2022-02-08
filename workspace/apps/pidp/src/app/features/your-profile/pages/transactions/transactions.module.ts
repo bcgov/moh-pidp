@@ -3,10 +3,10 @@ import { NgModule } from '@angular/core';
 import { SharedModule } from '@shared/shared.module';
 
 import { TransactionsRoutingModule } from './transactions-routing.module';
-import { TransactionsComponent } from './transactions.component';
+import { TransactionsPage } from './transactions.page';
 
 @NgModule({
-  declarations: [TransactionsComponent],
+  declarations: [TransactionsPage],
   imports: [TransactionsRoutingModule, SharedModule],
 })
 export class TransactionsModule {}

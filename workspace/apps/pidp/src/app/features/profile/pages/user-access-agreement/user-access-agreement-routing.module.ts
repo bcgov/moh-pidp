@@ -1,12 +1,12 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { UserAccessAgreementComponent } from './user-access-agreement.component';
+import { UserAccessAgreementPage } from './user-access-agreement.page';
 
 const routes: Routes = [
   {
     path: '',
-    component: UserAccessAgreementComponent,
+    component: UserAccessAgreementPage,
     data: {
       title: 'Provider Identity Portal',
       routes: {

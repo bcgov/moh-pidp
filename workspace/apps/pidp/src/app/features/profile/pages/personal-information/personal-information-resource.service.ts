@@ -5,7 +5,8 @@ import { catchError, tap, throwError } from 'rxjs';
 
 import { CrudResource, NoContent } from '@bcgov/shared/data-access';
 
-import { ApiResource } from '@core/resources/api-resource.service';
+import { ApiHttpClient } from '@app/core/resources/api-http-client.service';
+
 import { ToastService } from '@core/services/toast.service';
 
 import { PersonalInformationModel } from './personal-information.model';
@@ -13,7 +14,7 @@ import { PersonalInformationModel } from './personal-information.model';
 @Injectable()
 export class PersonalInformationResource extends CrudResource<PersonalInformationModel> {
   public constructor(
-    protected apiResource: ApiResource,
+    protected apiResource: ApiHttpClient,
     private toastService: ToastService
   ) {
     super(apiResource);

@@ -8,7 +8,7 @@ export class PostalPipe implements PipeTransform {
     return value ? this.postalValue(value) : null;
   }
 
-  private postalValue(value: string) {
+  private postalValue(value: string): string {
     return `${value.toUpperCase().slice(0, 3)} ${value.toUpperCase().slice(3)}`;
   }
 }

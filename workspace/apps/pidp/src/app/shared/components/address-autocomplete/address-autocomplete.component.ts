@@ -31,6 +31,7 @@ export class AddressAutocompleteComponent implements OnInit {
 
   public form!: FormGroup;
   public addressAutocompleteFields: AddressAutocompleteFindResponse[];
+  public canadaPostUrl: string;
 
   public constructor(
     private fb: FormBuilder,
@@ -40,6 +41,7 @@ export class AddressAutocompleteComponent implements OnInit {
     this.inBc = false;
     this.autocompleteAddress = new EventEmitter<Address>();
     this.addressAutocompleteFields = [];
+    this.canadaPostUrl = 'https://www.canadapost.ca/pca';
   }
 
   public get autocomplete(): FormControl {
