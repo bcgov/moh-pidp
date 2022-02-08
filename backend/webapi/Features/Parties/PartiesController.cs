@@ -61,7 +61,7 @@ public class PartiesController : PidpControllerBase
                                                              [FromHybrid] Demographics.Command command)
         => await handler.HandleAsync(command).ToActionResult();
 
-    [HttpGet("{id}/profile-status")]
+    [HttpPost("{id}/profile-status")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
