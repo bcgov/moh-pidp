@@ -76,6 +76,8 @@ spec:
           envFrom:
             - secretRef:
                 name: keycloak-secrets
+            - secretRef:
+                name: canada-post-addresscomplete-secrets
           ports:
             - name: http
               containerPort: 8080
