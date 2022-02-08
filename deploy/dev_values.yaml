@@ -20,10 +20,10 @@ nginx:
   replicaCount: 1
 
 frontend:
-  replicaCount: 3
+  replicaCount: 1
 
 webapi:
-  replicaCount: 3
+  replicaCount: 1
 
 plr-intake:
   replicaCount: 1
