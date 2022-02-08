@@ -16,7 +16,7 @@ import { AlertType } from '../alert/alert.component';
 })
 export class CardSummaryComponent {
   @Input() public icon!: string;
-  @Input() public title!: string;
+  @Input() public heading!: string;
   @Input() public statusType?: AlertType;
   @Input() public status?: string;
   @Input() public actionLabel?: string;

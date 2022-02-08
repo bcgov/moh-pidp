@@ -20,7 +20,8 @@ public class AddressAutocompleteClient : BaseClient, IAddressAutocompleteClient
         if (!response.IsSuccessStatusCode)
         {
             // See documentation for error details
-            this.Logger.LogError($"Error when retrieving AddressAutocompleteFindResponse results for SearchTerm = {searchTerm}.", await response.Content.ReadAsStringAsync());
+            var message = await response.Content.ReadAsStringAsync();
+            this.Logger.LogError($"Error when retrieving AddressAutocompleteFindResponse results for SearchTerm = {searchTerm}. {message}");
             return Enumerable.Empty<AddressAutocompleteFindResponse>();
         }
 
@@ -40,7 +41,8 @@ public class AddressAutocompleteClient : BaseClient, IAddressAutocompleteClient
         if (!response.IsSuccessStatusCode)
         {
             // See documentation for error details
-            this.Logger.LogError($"Error when retrieving AddressAutocompleteRetrieveResponse results for Id = {id}.", await response.Content.ReadAsStringAsync());
+            var message = await response.Content.ReadAsStringAsync();
+            this.Logger.LogError($"Error when retrieving AddressAutocompleteRetrieveResponse results for Id = {id}. {message}");
             return Enumerable.Empty<AddressAutocompleteRetrieveResponse>();
         }
 

@@ -2,7 +2,7 @@ import { FormArray, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { UrlTree } from '@angular/router';
 
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 
 import { AbstractFormState, ConfirmDialogComponent } from '@bcgov/shared/ui';
@@ -67,13 +67,13 @@ export abstract class AbstractFormPage<
   S = unknown
 > implements IFormPage
 {
-  // /**
-  //  * @description
-  //  * Busy subscription for use when blocking content from
-  //  * being interacted with in the template. For example,
-  //  * during but not limited to HTTP requests.
-  //  */
-  // public busy: Subscription;
+  /**
+   * @description
+   * Busy subscription for use when blocking content from
+   * being interacted with in the template. For example,
+   * during but not limited to HTTP requests.
+   */
+  public busy?: Subscription;
   /**
    * @description
    * Instance of the form state which provides access to
@@ -126,9 +126,8 @@ export abstract class AbstractFormPage<
     this.hasAttemptedSubmission = true;
     if (this.checkValidity(this.formState.form)) {
       this.onSubmitFormIsValid();
-      // TODO add in busy or find alternative so not attached to subscribe
-      // this.busy = this.performSubmission()
-      this.performSubmission()
+      // TODO implement through HTTP interceptor instead of subscription to reduce dependencies
+      this.busy = this.performSubmission()
         .pipe(tap((_) => this.formState.form.markAsPristine()))
         .subscribe((response?: S) => this.afterSubmitIsSuccessful(response));
     } else {

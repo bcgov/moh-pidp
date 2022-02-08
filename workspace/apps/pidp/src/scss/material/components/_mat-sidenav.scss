@@ -38,16 +38,12 @@
   // and router bindings where ".ng-active" is removed immediately
   .active,
   .active:focus,
-  // TODO remove after DashboardV1Component is removed
-  .force-active,
-  .force-active:focus,
   .mat-list-item:focus {
     background-color: theme-palette(blue, lighter) !important;
   }
 
   .ng-active,
-  .active,
-  .force-active {
+  .active {
     a {
       font-weight: bold !important;
     }

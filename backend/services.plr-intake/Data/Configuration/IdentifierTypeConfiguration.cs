@@ -34,7 +34,7 @@ public class IdentifierTypeConfiguration : IEntityTypeConfiguration<IdentifierTy
             new IdentifierType { Oid = "2.16.840.1.113883.4.530",     Name = "RDID"     },
             new IdentifierType { Oid = "2.16.840.1.113883.3.40.2.46", Name = "MOAID"    },
             new IdentifierType { Oid = "2.16.840.1.113883.3.40.2.44", Name = "PPID"     },
-            new IdentifierType { Oid = "2.16.840.1.113883.4.538",     Name = "NAPID"    }
+            new IdentifierType { Oid = "2.16.840.1.113883.4.538",     Name = "NDID"     }
         });
     }
 }

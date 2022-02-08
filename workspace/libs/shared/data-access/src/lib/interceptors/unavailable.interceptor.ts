@@ -23,7 +23,7 @@ export class UnavailableInterceptor implements HttpInterceptor {
     return next.handle(request).pipe(
       catchError((error: HttpResponse<Record<string, string>>) => {
         if (error.status === HttpStatusCode.ServiceUnavailable) {
-          // TODO use root route config to populate redirect or merge into config
+          // TODO use root route config to populate redirect
           this.router.navigate(['maintenance']);
           return of(error);
         }

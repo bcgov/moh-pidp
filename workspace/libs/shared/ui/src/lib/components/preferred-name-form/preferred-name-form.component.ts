@@ -21,7 +21,7 @@ export class PreferredNameFormComponent {
 
   public formControlConfig: { label: string; name: string }[];
 
-  constructor() {
+  public constructor() {
     this.mode = 'column';
     this.formControlConfig = [
       { label: 'Preferred First Name', name: 'preferredFirstName' },

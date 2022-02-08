@@ -23,7 +23,7 @@ public static class ClaimsPrincipalExtensions
             : Guid.Empty;
     }
 
-    public static int GetIdentityAssuranceLevel(this ClaimsPrincipal user)
+    public static int GetIdentityAssuranceLevel(this ClaimsPrincipal? user)
     {
         var assuranceLevel = user?.FindFirstValue(Claims.AssuranceLevel);
 
@@ -65,10 +65,18 @@ public static class ClaimsPrincipalExtensions
             return Enumerable.Empty<string>();
         }
 
-        var resources = JsonSerializer.Deserialize<Dictionary<string, ResourceAccess>>(resourceAccessClaim, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase })!;
-        return resources.TryGetValue(resourceName, out var access)
-            ? access.Roles
-            : Enumerable.Empty<string>();
+        try
+        {
+            var resources = JsonSerializer.Deserialize<Dictionary<string, ResourceAccess>>(resourceAccessClaim, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
+
+            return resources?.TryGetValue(resourceName, out var access) == true
+                ? access.Roles
+                : Enumerable.Empty<string>();
+        }
+        catch
+        {
+            return Enumerable.Empty<string>();
+        }
     }
 
     private class ResourceAccess

@@ -27,7 +27,7 @@ export class BcGovLogoComponent implements OnInit {
 
   private readonly scale: Record<svgSize, number>;
 
-  constructor() {
+  public constructor() {
     this.scale = {
       small: 0.16,
       medium: 0.26,

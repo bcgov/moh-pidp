@@ -7,6 +7,8 @@ import {
 } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 
+import { Subscription } from 'rxjs';
+
 @Component({
   selector: 'ui-page',
   templateUrl: './page.component.html',
@@ -14,6 +16,13 @@ import { FormGroup } from '@angular/forms';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PageComponent {
+  /**
+   * @description
+   * Busy subscription for use when blocking content from
+   * being interacted with in the template. For example,
+   * during but not limited to HTTP requests.
+   */
+  @Input() public busy?: Subscription;
   /**
    * @description
    * Contraints applied to the maximum width of the

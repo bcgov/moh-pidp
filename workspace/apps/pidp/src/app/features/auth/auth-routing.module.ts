@@ -2,27 +2,27 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { AuthRoutes } from './auth.routes';
-import { IdentityProviderEnum } from './enums/identity-provider.enum';
+import { IdentityProvider } from './enums/identity-provider.enum';
 import { AuthorizationRedirectGuard } from './guards/authorization-redirect.guard';
-import { LoginComponent } from './pages/login/login.component';
+import { LoginPage } from './pages/login/login.page';
 
 const routes: Routes = [
   {
     path: AuthRoutes.PORTAL_LOGIN,
     canActivate: [AuthorizationRedirectGuard],
-    component: LoginComponent,
+    component: LoginPage,
     data: {
       title: 'Provider Identity Portal',
-      idpHint: IdentityProviderEnum.BCSC,
+      idpHint: IdentityProvider.BCSC,
     },
   },
   {
     path: AuthRoutes.ADMIN_LOGIN,
     canActivate: [AuthorizationRedirectGuard],
-    component: LoginComponent,
+    component: LoginPage,
     data: {
       title: 'Provider Identity Portal',
-      idpHint: IdentityProviderEnum.IDIR,
+      idpHint: IdentityProvider.IDIR,
       // TODO don't hardcode in the redirect URL but also don't want cross module dependencies,
       //      refactor when modules become libs otherwise premature optimization
       routes: {

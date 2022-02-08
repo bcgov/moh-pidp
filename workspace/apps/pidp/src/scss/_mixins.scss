@@ -15,7 +15,7 @@ $theme-typography: mat.define-typography-config();
   // visual appeal
   padding-left: 1.2rem;
   padding-right: 1.75rem;
-  padding-bottom: 1.75rem;
+  padding-bottom: 1.5rem;
 
   .mat-card-header {
     // mobile version
@@ -182,7 +182,7 @@ $types: success, info, warn, danger, muted;
       // TODO temporary override that should be lifted out,
       //      or provided card status palette
       //      or do this through Sass functions
-      @if ($type == 'success' or $type == 'danger') {
+      @if ($type == 'success' or $type == 'danger' or $type == 'info') {
         color: white;
       }
     }

@@ -299,24 +299,7 @@
         }
       ],
       "security-admin-console": [],
-      "PIDP-WEBAPP": [
-        {
-          "id": "193d530a-108c-4d52-a4e1-61e3098f3396",
-          "name": "user",
-          "composite": false,
-          "clientRole": true,
-          "containerId": "f3e1630a-4a5c-4005-bdae-5d02def9e40b",
-          "attributes": {}
-        },
-        {
-          "id": "eac1e824-c557-4c71-8d7f-d1838ed3b99d",
-          "name": "admin",
-          "composite": false,
-          "clientRole": true,
-          "containerId": "f3e1630a-4a5c-4005-bdae-5d02def9e40b",
-          "attributes": {}
-        }
-      ],
+      "PIDP-WEBAPP": [],
       "admin-cli": [],
       "account-console": [],
       "broker": [
@@ -327,6 +310,24 @@
           "composite": false,
           "clientRole": true,
           "containerId": "a17b65b4-100b-4f8b-871c-259402c83e57",
+          "attributes": {}
+        }
+      ],
+      "PIDP-SERVICE": [
+        {
+          "id": "ce70b288-2977-4630-8815-553246089792",
+          "name": "ADMIN",
+          "composite": false,
+          "clientRole": true,
+          "containerId": "86c60f81-6979-4dba-950a-aee15680822c",
+          "attributes": {}
+        },
+        {
+          "id": "d83d530a-108c-4d52-a4e1-61e3098f3396",
+          "name": "USER",
+          "composite": false,
+          "clientRole": true,
+          "containerId": "86c60f81-6979-4dba-950a-aee15680822c",
           "attributes": {}
         }
       ],
@@ -468,6 +469,14 @@
       "firstName": "User",
       "lastName": "One",
       "email": "UserOne@email.com",
+      "attributes": {
+        "birthdate": [
+          "2021-02-04"
+        ],
+        "identityProvider": [
+          "bcsc"
+        ]
+      },
       "credentials": [
         {
           "id": "c157029c-6b83-4b67-bdf1-9bb85c567668",
@@ -487,9 +496,6 @@
         "account": [
           "view-profile",
           "manage-account"
-        ],
-        "PIDP-WEBAPP": [
-          "user"
         ]
       },
       "notBefore": 0,
@@ -505,6 +511,14 @@
       "firstName": "Admin",
       "lastName": "Wone",
       "email": "AdminWone@email.com",
+      "attributes": {
+        "birthdate": [
+          "2021-02-04"
+        ],
+        "identityProvider": [
+          "idir"
+        ]
+      },
       "credentials": [
         {
           "id": "44b0f9ad-4af3-4757-931b-8aa539ddb801",
@@ -525,8 +539,8 @@
           "view-profile",
           "manage-account"
         ],
-        "PIDP-WEBAPP": [
-          "admin"
+        "PIDP-SERVICE": [
+          "ADMIN"
         ]
       },
       "notBefore": 0,
@@ -552,6 +566,45 @@
     ]
   },
   "clients": [
+    {
+      "id": "86c60f81-6979-4dba-950a-aee15680822c",
+      "clientId": "PIDP-SERVICE",
+      "surrogateAuthRequired": false,
+      "enabled": true,
+      "alwaysDisplayInConsole": false,
+      "clientAuthenticatorType": "client-secret",
+      "redirectUris": [],
+      "webOrigins": [],
+      "notBefore": 0,
+      "bearerOnly": false,
+      "consentRequired": false,
+      "standardFlowEnabled": true,
+      "implicitFlowEnabled": false,
+      "directAccessGrantsEnabled": true,
+      "serviceAccountsEnabled": false,
+      "publicClient": true,
+      "frontchannelLogout": false,
+      "protocol": "openid-connect",
+      "attributes": {
+        "backchannel.logout.session.required": "true",
+        "backchannel.logout.revoke.offline.tokens": "false"
+      },
+      "authenticationFlowBindingOverrides": {},
+      "fullScopeAllowed": true,
+      "nodeReRegistrationTimeout": -1,
+      "defaultClientScopes": [
+        "web-origins",
+        "roles",
+        "profile",
+        "email"
+      ],
+      "optionalClientScopes": [
+        "address",
+        "phone",
+        "offline_access",
+        "microprofile-jwt"
+      ]
+    },
     {
       "id": "f3e1630a-4a5c-4005-bdae-5d02def9e40b",
       "clientId": "PIDP-WEBAPP",
@@ -602,6 +655,39 @@
       "authenticationFlowBindingOverrides": {},
       "fullScopeAllowed": true,
       "nodeReRegistrationTimeout": -1,
+      "protocolMappers": [
+        {
+          "id": "991648a5-2f85-4c7c-8985-5d79ea05ce7c",
+          "name": "set audience to pidp-service",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-hardcoded-claim-mapper",
+          "consentRequired": false,
+          "config": {
+            "claim.value": "PIDP-SERVICE",
+            "userinfo.token.claim": "false",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "claim.name": "aud",
+            "jsonType.label": "String",
+            "access.tokenResponse.claim": "false"
+          }
+        },
+        {
+          "id": "5a5c01ff-3497-4df7-aa3e-bec954c4cf13",
+          "name": "simulate identity_provider session note",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usermodel-attribute-mapper",
+          "consentRequired": false,
+          "config": {
+            "userinfo.token.claim": "false",
+            "user.attribute": "identityProvider",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "claim.name": "identity_provider",
+            "jsonType.label": "String"
+          }
+        }
+      ],
       "defaultClientScopes": [
         "web-origins",
         "roles",

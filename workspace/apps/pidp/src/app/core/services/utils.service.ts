@@ -1,4 +1,4 @@
-import { DOCUMENT } from '@angular/common';
+import { DOCUMENT, ViewportScroller } from '@angular/common';
 import { Inject, Injectable } from '@angular/core';
 import { SortDirection } from '@angular/material/sort';
 
@@ -12,17 +12,44 @@ export type SortWeight = -1 | 0 | 1;
 export class UtilsService {
   public constructor(
     @Inject(WINDOW) private window: Window,
-    @Inject(DOCUMENT) private document: Document
+    @Inject(DOCUMENT) private document: Document,
+    private viewportScroller: ViewportScroller
   ) {}
 
   /**
    * @description
-   * Scroll to the top of the mat-sidenav container.
+   * Scroll to the top of the content container.
+   *
+   * Scrolling the content to a position has to be performed
+   * on the container with the scrollbar. The default container
+   * is considered to be the window.
+   *
+   * For example, when using Angular Material's SideNav
+   * <mat-sidenav-content></mat-sidenav-content> will
+   * be that container that needs to be scrolled using
+   * the `.mat-sidenav-content` selector.
+   *
+   * @example utilsService('.mat-sidenav-content');
    */
-  public scrollTop(): void {
-    const contentContainer =
-      this.document.querySelector('.mat-sidenav-content') || this.window;
+  public scrollTop(containerQuerySelector?: string): void {
+    const contentContainer = containerQuerySelector
+      ? this.document.querySelector(containerQuerySelector) ?? this.window
+      : this.window;
     contentContainer.scroll({ top: 0, left: 0, behavior: 'smooth' });
+  }
+
+  /**
+   * @description
+   * Scroll to an anchor within the content container.
+   */
+  public scrollToAnchor(elementId: string | null): void {
+    if (!elementId) {
+      return;
+    }
+
+    this.document
+      .querySelector(`#${elementId}`)
+      ?.scrollIntoView({ behavior: 'smooth' });
   }
 
   /**

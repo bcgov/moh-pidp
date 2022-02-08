@@ -159,7 +159,7 @@ namespace PlrIntake.Migrations
                         new
                         {
                             Oid = "2.16.840.1.113883.4.538",
-                            Name = "NAPID"
+                            Name = "NDID"
                         });
                 });
 

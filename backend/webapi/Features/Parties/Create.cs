@@ -27,7 +27,7 @@ public class Create
 
             this.RuleFor(x => x.UserId).NotEmpty().Equal(user.GetUserId());
             this.RuleFor(x => x.Hpdid).NotEmpty().MatchesUserClaim(user, Claims.PreferredUsername);
-            this.RuleFor(x => x.Birthdate).NotEmpty().Equal(user.GetBirthdate() ?? LocalDate.MinIsoValue);
+            this.RuleFor(x => x.Birthdate).NotEmpty().Must(birthdate => birthdate.Equals(user?.GetBirthdate()));
             this.RuleFor(x => x.FirstName).NotEmpty().MatchesUserClaim(user, Claims.GivenName);
             this.RuleFor(x => x.LastName).NotEmpty().MatchesUserClaim(user, Claims.FamilyName);
         }

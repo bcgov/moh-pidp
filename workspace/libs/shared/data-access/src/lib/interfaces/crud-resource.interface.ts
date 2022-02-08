@@ -1,6 +1,6 @@
 import { Observable } from 'rxjs';
 
-import { NoContent } from '../classes/abstract-resource';
+import { NoContent } from '../classes/abstract-http-client';
 
 export interface ICrudResource<T> {
   create(id: number, payload: T): Observable<T | null>;

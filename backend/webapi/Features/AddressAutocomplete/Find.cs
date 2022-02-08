@@ -11,8 +11,6 @@ public class Find
         public string SearchTerm { get; set; } = string.Empty;
     }
 
-    public class Model : AddressAutocompleteFindResponse { }
-
     public class QueryValidator : AbstractValidator<Query>
     {
         public QueryValidator() => this.RuleFor(x => x.SearchTerm).NotEmpty();

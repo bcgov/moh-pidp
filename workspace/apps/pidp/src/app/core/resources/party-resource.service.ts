@@ -8,10 +8,24 @@ import { Party, PartyCreate } from '@bcgov/shared/data-access';
 import { BcscUser } from '@app/features/auth/models/bcsc-user.model';
 
 import { AuthorizedUserService } from '../services/authorized-user.service';
-import { ApiResource } from './api-resource.service';
+import { ApiHttpClient } from './api-http-client.service';
 import { ResourceUtilsService } from './resource-utils.service';
 
-// TODO move this to a different location
+// TODO split this up later since ProfileStatus won't ever use NOT_AVAILABLE
+export enum StatusCode {
+  AVAILABLE = 1,
+  COMPLETED,
+  NOT_AVAILABLE,
+  ERROR,
+}
+
+export interface SectionStatus {
+  // TODO change the key names or interface name, but doesn't need to be sectionStatus.statusCode, or
+  //      it should be sectionStatus.statusReason as well
+  statusCode: StatusCode;
+  reason: string | null;
+}
+
 export interface ProfileStatus {
   // TODO drop the id or rename to partyId
   id: number;
@@ -24,14 +38,19 @@ export interface ProfileStatus {
   jobTitle: string;
   facilityName: string;
   facilityStreet: string;
-  demographicsComplete: boolean;
-  collegeCertificationComplete: boolean;
-  workSettingComplete: boolean;
+  status: {
+    demographics: SectionStatus;
+    collegeCertification: SectionStatus;
+    // TODO temporary placement for MVP then relocate to AccessStatus
+    saEforms: SectionStatus;
+  };
 }
 
-export interface EnrolmentStatus {
+export interface AccessStatus {
   // TODO test placeholder that should be removed
-  specialAuthEformsCompleted: boolean;
+  statuses: {
+    saEforms: boolean;
+  };
 }
 
 @Injectable({
@@ -39,7 +58,7 @@ export interface EnrolmentStatus {
 })
 export class PartyResource {
   public constructor(
-    private apiResource: ApiResource,
+    private apiResource: ApiHttpClient,
     private resourceUtilsService: ResourceUtilsService,
     private authorizedUserService: AuthorizedUserService
   ) {}
@@ -112,9 +131,7 @@ export class PartyResource {
     );
   }
 
-  public getPartyProfileStatus(
-    partyId: number
-  ): Observable<ProfileStatus | null> {
+  public getProfileStatus(partyId: number): Observable<ProfileStatus | null> {
     return this.apiResource
       .get<ProfileStatus>(`parties/${partyId}/profile-status`)
       .pipe(
@@ -128,11 +145,9 @@ export class PartyResource {
       );
   }
 
-  public getPartyEnrolmentStatus(
-    partyId: number
-  ): Observable<EnrolmentStatus | null> {
+  public getAccessStatus(partyId: number): Observable<AccessStatus | null> {
     return this.apiResource
-      .get<EnrolmentStatus>(`parties/${partyId}/enrolment-status`)
+      .get<AccessStatus>(`parties/${partyId}/enrolment-status`)
       .pipe(
         catchError((error: HttpErrorResponse) => {
           if (error.status === HttpStatusCode.NotFound) {

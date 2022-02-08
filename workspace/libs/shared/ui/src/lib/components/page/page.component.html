@@ -1,14 +1,16 @@
-<div [class]="mode">
-  <ng-container *ngIf="form; else pageContent">
-    <form
-      novalidate
-      [autocomplete]="autocomplete"
-      [formGroup]="form"
-      (ngSubmit)="onSubmit()">
-      <ng-container *ngTemplateOutlet="pageContent"></ng-container>
-    </form>
-  </ng-container>
-</div>
+<ui-busy-overlay [busy]="busy">
+  <div [class]="mode">
+    <ng-container *ngIf="form; else pageContent">
+      <form
+        novalidate
+        [autocomplete]="autocomplete"
+        [formGroup]="form"
+        (ngSubmit)="onSubmit()">
+        <ng-container *ngTemplateOutlet="pageContent"></ng-container>
+      </form>
+    </ng-container>
+  </div>
+</ui-busy-overlay>
 
 <ng-template #pageContent>
   <ng-content></ng-content>

@@ -12,6 +12,7 @@ public class PidpDbContext : DbContext
     public PidpDbContext(DbContextOptions<PidpDbContext> options, IClock clock)
         : base(options) => this.clock = clock;
 
+    public DbSet<AccessRequest> AccessRequests { get; set; } = default!;
     public DbSet<Facility> Facilities { get; set; } = default!;
     public DbSet<Party> Parties { get; set; } = default!;
     public DbSet<PartyCertification> PartyCertifications { get; set; } = default!;
@@ -60,4 +61,8 @@ public class PidpDbContext : DbContext
             }
         }
     }
+
+    // Uncomment for SQL logging
+    // protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    //     => optionsBuilder.LogTo(Console.WriteLine);
 }
