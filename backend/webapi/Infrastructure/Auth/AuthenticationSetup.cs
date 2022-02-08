@@ -29,7 +29,7 @@ public static class AuthenticationSetup
             };
         });
 
-        services.AddScoped<IAuthorizationHandler, UserOwnsPartyHandler>();
+        services.AddScoped<IAuthorizationHandler, UserOwnsResourceHandler>();
 
         services.AddAuthorization(options =>
         {
@@ -39,7 +39,7 @@ public static class AuthenticationSetup
             options.AddPolicy(Policies.IdirAuthentication, policy => policy
                 .RequireAuthenticatedUser()
                 .RequireClaim(Claims.IdentityProvider, ClaimValues.Idir));
-            options.AddPolicy(Policies.UserOwnsParty, policy => policy.Requirements.Add(new UserOwnsPartyRequirement()));
+            options.AddPolicy(Policies.UserOwnsResource, policy => policy.Requirements.Add(new UserOwnsResourceRequirement()));
 
             options.FallbackPolicy = new AuthorizationPolicyBuilder()
                 .RequireAuthenticatedUser()

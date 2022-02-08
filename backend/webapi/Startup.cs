@@ -16,6 +16,7 @@ using Pidp.Features;
 using Pidp.Infrastructure;
 using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.HttpClients;
+using Pidp.Infrastructure.Services;
 
 public class Startup
 {
@@ -31,6 +32,7 @@ public class Startup
             .AddAutoMapper(typeof(Startup))
             .AddHttpClients(config)
             .AddKeycloakAuth(config)
+            .AddScoped<IPidpAuthorizationService, PidpAuthorizationService>()
             .AddSingleton<IClock>(SystemClock.Instance);
 
         services.AddControllers(options => options.Conventions.Add(new RouteTokenTransformerConvention(new KabobCaseParameterTransformer())))
