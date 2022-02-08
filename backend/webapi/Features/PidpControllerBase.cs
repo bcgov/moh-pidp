@@ -19,8 +19,5 @@ public class PidpControllerBase : ControllerBase
     /// </summary>
     /// <param name="partyId"></param>
     /// <returns></returns>
-    protected async Task<IDomainResult> CheckPartyAccessibility(int partyId)
-    {
-       return await this.AuthorizationService.CheckResourceAccessibility((Party p) => p.Id == partyId, this.User);
-    }
+    protected async Task<IDomainResult> CheckPartyAccessibility(int partyId) => await this.AuthorizationService.CheckResourceAccessibility((Party p) => p.Id == partyId, this.User);
 }
