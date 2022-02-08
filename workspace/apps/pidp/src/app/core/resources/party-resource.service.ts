@@ -133,7 +133,7 @@ export class PartyResource {
 
   public getProfileStatus(partyId: number): Observable<ProfileStatus | null> {
     return this.apiResource
-      .get<ProfileStatus>(`parties/${partyId}/profile-status`)
+      .post<ProfileStatus>(`parties/${partyId}/profile-status`, {})
       .pipe(
         catchError((error: HttpErrorResponse) => {
           if (error.status === HttpStatusCode.NotFound) {
