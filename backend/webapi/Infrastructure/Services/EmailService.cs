@@ -99,12 +99,7 @@ public class EmailService : IEmailService
 
         foreach (var emailLog in emailLogs)
         {
-            if (!emailLog.MsgId.HasValue)
-            {
-                continue;
-            }
-
-            var status = await this.chesClient.GetStatusAsync(emailLog.MsgId.Value);
+            var status = await this.chesClient.GetStatusAsync(emailLog.MsgId!.Value);
             if (status != null && emailLog.LatestStatus != status)
             {
                 emailLog.LatestStatus = status;
