@@ -8,7 +8,7 @@
   </ui-collection-notice>
 
   <ui-alert
-    *ngIf="hasCompletedProfile"
+    *ngIf="completedProfile"
     type="success"
     icon="check_circle"
     iconType="outlined"
@@ -23,6 +23,18 @@
           View Systems
         </button>
       </span>
+    </ng-container>
+  </ui-alert>
+
+  <ui-alert
+    *ngIf="collegeLicenceValidationError"
+    type="info"
+    icon="error_outline"
+    iconType="outlined"
+    heading="Having trouble verifying your college licence?">
+    <ng-container uiAlertContent>
+      Your licence may not be active yet.<br />
+      Try again in 24 hours. If this problem persists, contact your College.
     </ng-container>
   </ui-alert>
 
