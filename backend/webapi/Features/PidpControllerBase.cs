@@ -15,7 +15,7 @@ public class PidpControllerBase : ControllerBase
     protected PidpControllerBase(IPidpAuthorizationService authService) => this.AuthorizationService = authService;
 
     /// <summary>
-    /// Checks that the given Party both exists and is owned by the current User before exicuting the handler.
+    /// Checks that the given Party both exists and is owned by the current User before executing the handler.
     /// </summary>
     /// <typeparam name="TRequest"></typeparam>
     /// <param name="partyId"></param>
@@ -34,7 +34,7 @@ public class PidpControllerBase : ControllerBase
     }
 
     /// <summary>
-    /// Checks that the given Party both exists and is owned by the current User before exicuting the handler.
+    /// Checks that the given Party both exists and is owned by the current User before executing the handler.
     /// </summary>
     /// <typeparam name="TRequest"></typeparam>
     /// <param name="partyId"></param>
