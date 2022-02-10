@@ -7,7 +7,6 @@ spec:
   params:
     - name: git-revision
       description: The git revision (SHA)
-      default: develop
     - name: git-repository-url
       description: The git repository url
     - name: git-repo-name
