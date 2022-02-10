@@ -3,10 +3,12 @@ namespace Pidp.Features.Lookups;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
+using Pidp.Infrastructure.Services;
+
 [Route("api/[controller]")]
 public class LookupsController : PidpControllerBase
 {
-    public LookupsController(IAuthorizationService authorizationService) : base(authorizationService) { }
+    public LookupsController(IPidpAuthorizationService authorizationService) : base(authorizationService) { }
 
     [HttpGet]
     [AllowAnonymous]
