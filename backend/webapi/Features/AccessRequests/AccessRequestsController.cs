@@ -19,6 +19,6 @@ public class AccessRequestsController : PidpControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> CreateSAEformsEnrolment([FromServices] ICommandHandler<SAEforms.Command, IDomainResult> handler,
                                                              [FromBody] SAEforms.Command command)
-        => await this.AuthorizePartyThen(command.PartyId, handler, command)
+        => await this.AuthorizePartyBeforeHandleAsync(command.PartyId, handler, command)
             .ToActionResult();
 }

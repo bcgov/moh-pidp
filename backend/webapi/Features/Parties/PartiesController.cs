@@ -36,7 +36,7 @@ public class PartiesController : PidpControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<CollegeCertification.Command>> GetPartyCollegeCertification([FromServices] IQueryHandler<CollegeCertification.Query, IDomainResult<CollegeCertification.Command>> handler,
                                                                                                [FromRoute] CollegeCertification.Query query)
-        => await this.AuthorizePartyThen(query.PartyId, handler, query)
+        => await this.AuthorizePartyBeforeHandleAsync(query.PartyId, handler, query)
             .ToActionResultOfT();
 
     [HttpPut("{partyId}/college-certification")]
@@ -45,7 +45,7 @@ public class PartiesController : PidpControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> UpdatePartyCollegeCertification([FromServices] ICommandHandler<CollegeCertification.Command, IDomainResult> handler,
                                                                      [FromHybrid] CollegeCertification.Command command)
-        => await this.AuthorizePartyThen(command.PartyId, handler, command)
+        => await this.AuthorizePartyBeforeHandleAsync(command.PartyId, handler, command)
             .ToActionResult();
 
 
@@ -55,7 +55,7 @@ public class PartiesController : PidpControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<Demographics.Command>> GetPartyDemographics([FromServices] IQueryHandler<Demographics.Query, IDomainResult<Demographics.Command>> handler,
                                                                                [FromRoute] Demographics.Query query)
-        => await this.AuthorizePartyThen(query.Id, handler, query)
+        => await this.AuthorizePartyBeforeHandleAsync(query.Id, handler, query)
             .ToActionResultOfT();
 
     [HttpPut("{id}/demographics")]
@@ -64,7 +64,7 @@ public class PartiesController : PidpControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> UpdatePartyDemographics([FromServices] ICommandHandler<Demographics.Command, IDomainResult> handler,
                                                              [FromHybrid] Demographics.Command command)
-        => await this.AuthorizePartyThen(command.Id, handler, command)
+        => await this.AuthorizePartyBeforeHandleAsync(command.Id, handler, command)
             .ToActionResult();
 
     [HttpPost("{id}/profile-status")]
@@ -73,7 +73,7 @@ public class PartiesController : PidpControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<ProfileStatus.Model>> GetPartyProfileStatus([FromServices] IQueryHandler<ProfileStatus.Query, IDomainResult<ProfileStatus.Model>> handler,
                                                                                [FromRoute] ProfileStatus.Query query)
-        => await this.AuthorizePartyThen(query.Id, handler, query)
+        => await this.AuthorizePartyBeforeHandleAsync(query.Id, handler, query)
             .ToActionResultOfT();
 
     [HttpGet("{id}/work-setting")]
@@ -82,7 +82,7 @@ public class PartiesController : PidpControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<WorkSetting.Command>> GetPartyWorkSetting([FromServices] IQueryHandler<WorkSetting.Query, IDomainResult<WorkSetting.Command>> handler,
                                                                              [FromRoute] WorkSetting.Query query)
-        => await this.AuthorizePartyThen(query.Id, handler, query)
+        => await this.AuthorizePartyBeforeHandleAsync(query.Id, handler, query)
             .ToActionResultOfT();
 
     [HttpPut("{id}/work-setting")]
@@ -91,6 +91,6 @@ public class PartiesController : PidpControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> UpdatePartyWorkSetting([FromServices] ICommandHandler<WorkSetting.Command, IDomainResult> handler,
                                                             [FromHybrid] WorkSetting.Command command)
-        => await this.AuthorizePartyThen(command.Id, handler, command)
+        => await this.AuthorizePartyBeforeHandleAsync(command.Id, handler, command)
             .ToActionResult();
 }
