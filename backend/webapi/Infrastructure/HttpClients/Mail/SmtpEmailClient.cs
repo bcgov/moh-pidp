@@ -5,13 +5,15 @@ using System.Net.Mail;
 using System.Threading.Tasks;
 using System.IO;
 
-public class SmtpEmailClient : BaseClient, ISmtpEmailClient
+public class SmtpEmailClient : ISmtpEmailClient
 {
+    private readonly ILogger<SmtpEmailClient> logger;
     private readonly string url;
     private readonly int port;
 
-    public SmtpEmailClient(HttpClient httpClient, ILogger<SmtpEmailClient> logger, PidpConfiguration config) : base(httpClient, logger)
+    public SmtpEmailClient(ILogger<SmtpEmailClient> logger, PidpConfiguration config)
     {
+        this.logger = logger;
         this.url = config.MailServer.Url;
         this.port = config.MailServer.Port;
     }

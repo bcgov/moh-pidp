@@ -53,25 +53,6 @@ public class Email
         }
     }
 
-    public static IEnumerable<string> ParseCommaSeparatedEmails(string emailString)
-    {
-        if (string.IsNullOrWhiteSpace(emailString))
-        {
-            return Enumerable.Empty<string>();
-        }
-
-        var emails = emailString.Split(",")
-            .Select(s => s.Trim());
-        if (emails.All(e => IsValidEmail(e)))
-        {
-            return emails;
-        }
-        else
-        {
-            return Enumerable.Empty<string>();
-        }
-    }
-
     private static void ValidateEmails(string from, IEnumerable<string> to, IEnumerable<string> cc)
     {
         if (!IsValidEmail(from))

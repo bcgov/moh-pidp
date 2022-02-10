@@ -1,6 +1,5 @@
 namespace Pidp.Infrastructure.HttpClients;
 
-using Flurl;
 using IdentityModel.Client;
 
 using Pidp.Extensions;
@@ -18,9 +17,9 @@ public static class HttpClientSetup
         services.AddHttpClientWithBaseAddress<IAddressAutocompleteClient, AddressAutocompleteClient>(config.AddressAutocompleteClient.Url);
 
         services.AddHttpClientWithBaseAddress<IChesClient, ChesClient>(config.ChesClient.Url)
-            .WithBearerToken(new ChesClientConfiguration
+            .WithBearerToken(new ChesClientCredentials
             {
-                Address = Url.Combine(config.ChesClient.TokenUrl, "token"),
+                Address = config.ChesClient.TokenUrl,
                 ClientId = config.ChesClient.ClientId,
                 ClientSecret = config.ChesClient.ClientSecret
             });

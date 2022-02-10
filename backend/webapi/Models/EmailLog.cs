@@ -25,9 +25,9 @@ public class EmailLog : BaseAuditable
 
     public Instant? DateSent { get; set; }
 
-    public string LatestStatus { get; set; } = string.Empty;
+    public string? LatestStatus { get; set; }
 
-    public string StatusMessage { get; set; } = string.Empty;
+    public string? StatusMessage { get; set; }
 
     public int UpdateCount { get; set; }
 
