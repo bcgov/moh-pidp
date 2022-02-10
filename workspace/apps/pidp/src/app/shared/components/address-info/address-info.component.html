@@ -1,0 +1,17 @@
+<div>
+  <ui-key-value-info key="Country:" mode="horizontal">
+    {{ address?.countryCode | lookupCode: 'countries' | default }}
+  </ui-key-value-info>
+  <ui-key-value-info key="Province:" mode="horizontal">
+    {{ address?.provinceCode | lookupCode: 'provinces' | default }}
+  </ui-key-value-info>
+  <ui-key-value-info key="Street Address:" mode="horizontal">
+    {{ address?.street | default }}
+  </ui-key-value-info>
+  <ui-key-value-info key="City:" mode="horizontal">
+    {{ address?.city | default }}
+  </ui-key-value-info>
+  <ui-key-value-info key="Postal Code:" mode="horizontal">
+    {{ address?.postal | postal | default }}
+  </ui-key-value-info>
+</div>

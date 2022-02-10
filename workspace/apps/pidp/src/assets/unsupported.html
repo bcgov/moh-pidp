@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Unsupported Browser</title>
+
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
+      integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2"
+      crossorigin="anonymous" />
+
+    <script
+      src="https://code.jquery.com/jquery-3.6.0.min.js"
+      integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+      crossorigin="anonymous"></script>
+
+    <script>
+      /**
+       * UNSUPPORTED BROWSERS
+       * Angular no longer supports legacy browsers like Internet Explorer,
+       * Edge (pre-Chromium), etc; and this page provides a work around to
+       * provide feedback to users that their browser is out of date.
+       */
+      function getBrowserByUserAgent() {
+        var name;
+        var userAgent = navigator.userAgent;
+
+        if (userAgent.indexOf('Firefox') > -1) {
+          name = 'Mozilla Firefox';
+        } else if (userAgent.indexOf('SamsungBrowser') > -1) {
+          name = 'Samsung Internet';
+        } else if (
+          userAgent.indexOf('Opera') > -1 ||
+          userAgent.indexOf('OPR') > -1
+        ) {
+          name = 'Opera';
+        } else if (userAgent.indexOf('Trident') > -1) {
+          name = 'Microsoft Internet Explorer';
+        } else if (userAgent.indexOf('Edge') > -1) {
+          name = 'Microsoft Edge (Legacy)';
+        } else if (userAgent.indexOf('Edg') > -1) {
+          name = 'Microsoft Edge (Chromium)';
+        } else if (userAgent.indexOf('Chrome') > -1) {
+          // User agent name explicitly says "Pre-Chromium" to remove ambiguity around the
+          // browser based on users only being redirected to this page when using unsupported
+          // browsers, but otherwise rule indicates "Google Chrome or Chromium browsers"
+          name = 'Google Chrome Pre-Chromium';
+        } else if (userAgent.indexOf('Safari') > -1) {
+          name = 'Apple Safari';
+        } else {
+          name = 'Unknown';
+        }
+
+        return {
+          name: name,
+          userAgent: userAgent,
+        };
+      }
+
+      /**
+       * @description
+       * Log unsupported browser information to the server.
+       */
+      // TODO logging should be accomplished through sentry not through our API
+      // $.get('/assets/environment.json')
+      //   .then(
+      //     function (configMap) {
+      //       return configMap.apiEndpoint;
+      //     },
+      //     function () {
+      //       return 'http://localhost:5000/api';
+      //     }
+      //   )
+      //   .always(function (apiEndpoint) {
+      //     var browser = getBrowserByUserAgent();
+      //     var log = {
+      //       message: 'Unsupported Browser: ' + browser.name,
+      //       data: JSON.stringify(browser.userAgent),
+      //       logType: 1,
+      //     };
+      //     $.ajax({
+      //       type: 'POST',
+      //       url: apiEndpoint + '/client-logs',
+      //       data: JSON.stringify(log),
+      //       success: function () {
+      //         console.log('Unsupported browser has been logged');
+      //       },
+      //       contentType: 'application/json; charset=utf-8',
+      //       dataType: 'json',
+      //     });
+      //   });
+    </script>
+
+    <style>
+      body {
+        color: white;
+      }
+
+      .wrapper {
+        min-height: 100vh;
+      }
+
+      .header {
+        min-height: 15vh;
+      }
+
+      .container-fluid {
+        min-height: 70vh;
+      }
+
+      .wrapper {
+        background-color: #ffb200;
+      }
+
+      .header,
+      .container-fluid {
+        background-color: #003366;
+      }
+
+      .header,
+      .container-fluid {
+        padding-top: 5vh;
+        padding-left: 5vw;
+      }
+
+      a:hover {
+        color: #ffb200;
+      }
+
+      h1 {
+        font-size: 2rem;
+        line-height: 2rem;
+      }
+
+      p {
+        font-size: 1.5rem;
+      }
+
+      @media (min-width: 576px) {
+        h1 {
+          font-size: 2.75rem;
+          line-height: 3rem;
+        }
+
+        p {
+          font-size: 1.75rem;
+          line-height: 2.25rem;
+        }
+      }
+
+      @media (min-width: 768px) {
+        h1 {
+          font-size: 3.5rem;
+          line-height: 3.5rem;
+        }
+
+        p {
+          font-size: 2rem;
+          line-height: 2.5rem;
+        }
+      }
+
+      @media (min-width: 992px) {
+        h1 {
+          font-size: 3.75rem;
+          line-height: 4.25rem;
+        }
+
+        p {
+          font-size: 2.25rem;
+          line-height: 2.75rem;
+        }
+      }
+
+      @media (min-width: 1200px) {
+        h1 {
+          font-size: 4.25rem;
+          line-height: 4.75rem;
+        }
+
+        p {
+          font-size: 2.5rem;
+          line-height: 3rem;
+        }
+      }
+
+      @media (min-width: 1400px) {
+        h1 {
+          font-size: 5rem;
+          line-height: 5rem;
+        }
+
+        p {
+          font-size: 2.5rem;
+          line-height: 3rem;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="wrapper">
+      <div class="header">
+        <img
+          src="./images/pidp-logo-blue.svg"
+          alt="Provider Identity Portal Logo" />
+      </div>
+      <div class="container-fluid">
+        <div class="row justify-content-center">
+          <div class="col-sm-12 col-md-10 col-lg-8 col-xl-6">
+            <h1>Provider Identity Portal</h1>
+            <p>does not support your browser.</p>
+            <p>
+              Use
+              <a
+                href="https://www.google.ca/chrome"
+                target="_blank"
+                rel="noopener noreferrer"
+                >Chrome</a
+              >,
+              <a
+                href="https://www.mozilla.org/en-US/firefox/new"
+                target="_blank"
+                rel="noopener noreferrer">
+                Firefox</a
+              >, Safari, or the latest version of
+              <a
+                href="https://www.microsoft.com/en-us/edge"
+                target="_blank"
+                rel="noopener noreferrer">
+                Edge</a
+              >.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

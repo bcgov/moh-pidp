@@ -1,0 +1,174 @@
+<ui-page mode="large" [busy]="busy">
+  <ui-page-header>{{ title }}</ui-page-header>
+
+  <ui-collection-notice
+    [show]="!acceptedCollectionNotice"
+    (accepted)="onAcceptCollectionNotice($event)">
+    <p [innerHtml]="collectionNotice | safe: 'html'"></p>
+  </ui-collection-notice>
+
+  <ui-alert
+    *ngIf="completedProfile"
+    type="success"
+    icon="check_circle"
+    iconType="outlined"
+    heading="You have completed your Provider Identity Profile">
+    <ng-container uiAlertContent>
+      Go to the Access to Systems section to view what systems you are eligible
+      to enrol for.
+    </ng-container>
+    <ng-container uiAlertActions>
+      <span>
+        <button mat-stroked-button type="button" (click)="onScrollToAnchor()">
+          View Systems
+        </button>
+      </span>
+    </ng-container>
+  </ui-alert>
+
+  <ui-alert
+    *ngIf="collegeLicenceValidationError"
+    type="info"
+    icon="error_outline"
+    iconType="outlined"
+    heading="Having trouble verifying your college licence?">
+    <ng-container uiAlertContent>
+      Your licence may not be active yet.<br />
+      Try again in 24 hours. If this problem persists, contact your College.
+    </ng-container>
+  </ui-alert>
+
+  <ui-alert
+    *ngIf="collegeLicenceValidationError"
+    type="info"
+    icon="error_outline"
+    iconType="outlined"
+    heading="There is a problem with your college licence">
+    <ng-container uiAlertContent>
+      Contact your college for more information.
+    </ng-container>
+  </ui-alert>
+
+  <ui-page-section>
+    <ui-page-section-subheader icon="assignment_ind" heading="Profile">
+      <ng-container uiPageSectionSubheaderDesc>
+        Complete the information for each portion of your Provider Identity
+        Profile. This will allow the portal to identify systems for which you
+        may request access.
+      </ng-container>
+    </ui-page-section-subheader>
+
+    <div class="row">
+      <div
+        *ngFor="let section of (state$ | async)?.profileIdentitySections"
+        class="col-12 col-xl-6">
+        <ui-card-summary
+          [icon]="section.icon"
+          [heading]="section.heading"
+          [statusType]="section.statusType"
+          [status]="section.status"
+          [actionLabel]="section.action.label"
+          [actionDisabled]="section.action.disabled"
+          (action)="onCardRouteAction(section.action.route)">
+          <ng-container uiCardSummaryHint>{{ section.hint }}</ng-container>
+          <ng-container uiCardSummaryContent>
+            <app-profile-card-summary-content [properties]="section.properties">
+              {{ section.description }}
+            </app-profile-card-summary-content>
+          </ng-container>
+        </ui-card-summary>
+      </div>
+    </div>
+  </ui-page-section>
+
+  <ui-page-section>
+    <ui-scroll-target targetId="access"></ui-scroll-target>
+    <ui-page-section-subheader icon="assignment" heading="Access to Systems">
+      <ng-container uiPageSectionSubheaderDesc>
+        Complete your profile to gain access to the systems you are eligible
+        for. This will allow the portal to identify systems you may request
+        access for.
+      </ng-container>
+    </ui-page-section-subheader>
+
+    <div class="row">
+      <div
+        *ngFor="let section of (state$ | async)?.accessToSystemsSections"
+        class="col-12 col-xl-6">
+        <ui-card-summary
+          [icon]="section.icon"
+          [heading]="section.heading"
+          [statusType]="section.statusType"
+          [status]="section.status"
+          [actionLabel]="section.action.label"
+          [actionDisabled]="section.action.disabled"
+          (action)="onCardRequestAccess(section.action.route)">
+          <ng-container uiCardSummaryHint>{{ section.hint }}</ng-container>
+          <ng-container uiCardSummaryContent>
+            {{ section.description }}
+          </ng-container>
+        </ui-card-summary>
+      </div>
+    </div>
+  </ui-page-section>
+
+  <ui-page-section *featureFlag="Role.FEATURE_PIDP_DEMO">
+    <ui-page-section-subheader icon="school" heading="Training">
+      <ng-container uiPageSectionSubheaderDesc>
+        Complete these trainings.
+      </ng-container>
+    </ui-page-section-subheader>
+
+    <div
+      *ngIf="(state$ | async)?.trainingSections?.length; else noTraining"
+      class="row">
+      <div
+        *ngFor="let section of (state$ | async)?.trainingSections"
+        class="col-12 col-xl-6">
+        <ui-card-summary
+          [icon]="section.icon"
+          [heading]="section.heading"
+          [statusType]="section.statusType"
+          [status]="section.status"
+          [actionLabel]="section.action.label"
+          [actionDisabled]="section.action.disabled"
+          (action)="onCardRouteAction(section.action.route)">
+          <ng-container uiCardSummaryHint>{{ section.hint }}</ng-container>
+          <ng-container uiCardSummaryContent>
+            {{ section.description }}
+          </ng-container>
+        </ui-card-summary>
+      </div>
+    </div>
+    <ng-template #noTraining>
+      <p class="lead">No training available at this time.</p>
+    </ng-template>
+  </ui-page-section>
+
+  <ui-page-section>
+    <ui-page-section-subheader icon="history" heading="Your Profile">
+      <ng-container uiPageSectionSubheaderDesc>
+        View information pertaining to your profile and interaction with the
+        systems you use for work.
+      </ng-container>
+    </ui-page-section-subheader>
+
+    <div class="row">
+      <div
+        *ngFor="let section of (state$ | async)?.yourProfileSections"
+        class="col-12 col-xl-6">
+        <ui-card-summary
+          [icon]="section.icon"
+          [heading]="section.heading"
+          [actionLabel]="section.action.label"
+          [actionDisabled]="section.action.disabled"
+          (action)="onCardRouteAction(section.action.route)">
+          <ng-container uiCardSummaryHint>{{ section.hint }}</ng-container>
+          <ng-container uiCardSummaryContent>
+            {{ section.description }}
+          </ng-container>
+        </ui-card-summary>
+      </div>
+    </div>
+  </ui-page-section>
+</ui-page>

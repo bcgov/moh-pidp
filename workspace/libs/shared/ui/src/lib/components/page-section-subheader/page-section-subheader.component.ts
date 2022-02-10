@@ -1,0 +1,32 @@
+import {
+  Component,
+  ChangeDetectionStrategy,
+  Input,
+  ContentChildren,
+  QueryList,
+} from '@angular/core';
+
+import { PageSectionSubheaderDescDirective } from './page-section-subheader-desc.directive';
+import { PageSectionSubheaderHintDirective } from './page-section-subheader-hint.directive';
+
+@Component({
+  selector: 'ui-page-section-subheader',
+  templateUrl: './page-section-subheader.component.html',
+  styleUrls: ['./page-section-subheader.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class PageSectionSubheaderComponent {
+  @Input() public icon?: string;
+  @Input() public heading!: string;
+
+  @ContentChildren(PageSectionSubheaderDescDirective, { descendants: true })
+  public descriptions: QueryList<PageSectionSubheaderDescDirective>;
+
+  @ContentChildren(PageSectionSubheaderHintDirective, { descendants: true })
+  public hints: QueryList<PageSectionSubheaderHintDirective>;
+
+  public constructor() {
+    this.descriptions = new QueryList();
+    this.hints = new QueryList();
+  }
+}

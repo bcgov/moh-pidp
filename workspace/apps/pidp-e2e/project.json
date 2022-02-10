@@ -1,0 +1,28 @@
+{
+  "root": "apps/pidp-e2e",
+  "sourceRoot": "apps/pidp-e2e/src",
+  "projectType": "application",
+  "targets": {
+    "e2e": {
+      "executor": "@nrwl/cypress:cypress",
+      "options": {
+        "cypressConfig": "apps/pidp-e2e/cypress.json",
+        "devServerTarget": "pidp:serve:development"
+      },
+      "configurations": {
+        "production": {
+          "devServerTarget": "pidp:serve:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/pidp-e2e/**/*.{js,ts}"]
+      }
+    }
+  },
+  "tags": [],
+  "implicitDependencies": ["pidp"]
+}

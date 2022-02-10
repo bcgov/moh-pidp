@@ -1,0 +1,53 @@
+<ui-page [form]="formState.form" [busy]="busy" (submitted)="onSubmit()">
+  <ui-page-header>{{ title }}</ui-page-header>
+  <ui-page-section>
+    <ui-page-section-subheader
+      icon="assignment_ind"
+      heading="Personal Information">
+      <ng-container uiPageSectionSubheaderDesc>
+        Provide the following information to complete your Provider Identity
+        Profile.
+      </ng-container>
+    </ui-page-section-subheader>
+  </ui-page-section>
+
+  <ui-page-section>
+    <ui-page-section-subheader heading="Name">
+      <ng-container uiPageSectionSubheaderDesc>
+        This information comes from the BC Services Card. If you use a different
+        name professionally, select "I have a preferred name".
+      </ng-container>
+      <ng-container uiPageSectionSubheaderHint>
+        Entering a preferred name will not change your BC Services Card name.
+      </ng-container>
+    </ui-page-section-subheader>
+
+    <app-bcsc-user-info [bcscUser]="bcscUser | async"></app-bcsc-user-info>
+
+    <ui-toggle-content
+      label="I have a preferred name"
+      [checked]="hasPreferredName"
+      (toggle)="onPreferredNameToggle($event)">
+      <ui-preferred-name-form [form]="formState.form"></ui-preferred-name-form>
+    </ui-toggle-content>
+  </ui-page-section>
+
+  <ui-page-section>
+    <ui-page-section-subheader heading="Contact Information">
+      <ng-container uiPageSectionSubheaderDesc>
+        Provide your contact information.
+      </ng-container>
+    </ui-page-section-subheader>
+
+    <ui-contact-info-form [form]="formState.form"></ui-contact-info-form>
+  </ui-page-section>
+
+  <ui-page-footer>
+    <button mat-stroked-button type="button" color="primary" (click)="onBack()">
+      Back Home
+    </button>
+    <button mat-flat-button type="submit" color="primary">
+      Save Information
+    </button>
+  </ui-page-footer>
+</ui-page>

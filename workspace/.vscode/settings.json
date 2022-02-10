@@ -1,0 +1,18 @@
+{
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.renderWhitespace": "boundary",
+  "editor.semanticHighlighting.enabled": true,
+  "editor.formatOnType": true,
+  "editor.formatOnPaste": true,
+  "editor.formatOnSave": true,
+  "eslint.format.enable": true,
+  "editor.guides.bracketPairs": "active",
+  "editor.bracketPairColorization.enabled": true,
+  "files.autoSave": "onFocusChange",
+  "files.trimTrailingWhitespace": true,
+  "files.insertFinalNewline": true,
+  "css.lint.important": "warning",
+  "scss.lint.important": "warning",
+  "scss.lint.zeroUnits": "warning",
+  "typescript.updateImportsOnFileMove.enabled": "always"
+}

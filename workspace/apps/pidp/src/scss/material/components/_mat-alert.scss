@@ -1,0 +1,29 @@
+@use '../../mixins' as mixins;
+
+//
+// MATERIAL ALERT
+//
+// @description
+// Applies general theme styles to Material Card components to create
+// Bootstrap-like alerts for a variety of types: success, info, warn,
+// danger, and muted; but is not opinionated on content, which can be
+// enforced at the component-level.
+
+@each $type in mixins.$types {
+  mat-card.ui-card-alert.#{$type} {
+    @include mixins.card-alert(
+      alert-palette($type, color),
+      alert-palette($type, backgroundColor),
+      alert-palette($type, borderColor)
+    );
+
+    // Apply alert specific styels to actions, but allow buttons
+    // to maintain default (inherited) styles if required by using
+    // the .inherit class
+    .mat-card-actions button:not(.inherit) {
+      background-color: white;
+      border-color: alert-palette($type, backgroundColorSolid);
+      color: alert-palette($type, color);
+    }
+  }
+}

@@ -1,0 +1,29 @@
+@use '../../mixins' as mixins;
+
+//
+// MATERIAL CARD
+//
+// @description
+// Applies general theme styles to Material Card components, but
+// is not opinionated on responsiveness of the container dimensions,
+// which can be enforced at the component-level.
+
+mat-card.ui-card {
+  @include mixins.card-base;
+  @include mixins.card-hint;
+}
+
+.card-status {
+  @include mixins.card-status;
+
+  // Override base card styles to provide a bit of variety
+  // between default cards, and cards with statuses
+  mat-card.ui-card {
+    // Remove card margin which is handled by card-status
+    margin-bottom: 0;
+
+    .mat-card-content {
+      font-weight: 300;
+    }
+  }
+}

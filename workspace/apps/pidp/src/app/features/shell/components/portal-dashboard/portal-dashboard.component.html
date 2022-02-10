@@ -1,0 +1,8 @@
+<ui-dashboard
+  [username]="(username | async)!"
+  [headerConfig]="headerConfig"
+  [brandConfig]="brandConfig"
+  [showMenuItemIcons]="showMenuItemIcons"
+  [responsiveMenuItems]="responsiveMenuItems"
+  [logoutRedirectUrl]="logoutRedirectUrl"
+  (logout)="onLogout()"></ui-dashboard>

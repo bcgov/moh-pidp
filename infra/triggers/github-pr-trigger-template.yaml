@@ -1,0 +1,51 @@
+apiVersion: triggers.tekton.dev/v1alpha1
+kind: TriggerTemplate
+metadata:
+  name: github-pr-trigger-template
+  namespace: d8a8f9-tools
+spec: 
+  params:
+    - name: git-revision
+      description: The git revision (SHA)
+      default: develop
+    - name: git-repository-url
+      description: The git repository url
+    - name: git-repo-name
+      description: The name of the deployment to be created / patched
+    - name: git-short-sha
+      description: Trunkated SHA of the git commit
+    - name: git-pr-number
+      description: GitHUb PR number
+    - name: git-branch-name
+      description: The name of the branch
+  resourcetemplates:
+    - apiVersion: tekton.dev/v1beta1
+      kind: PipelineRun
+      metadata:
+        name: cicd-pipeline-run-$(tt.params.git-pr-number)-$(tt.params.git-short-sha)
+      spec:
+        pipelineRef:
+          name: cicd-pipeline
+        serviceAccountName: pipeline
+        params:
+          - name: git-url
+            value: git@github.com:bcgov/moh-pidp.git
+          - name: git-revision
+            value: $(tt.params.git-revision)
+          - name: git-short-sha
+            value: $(tt.params.git-short-sha)
+          - name: image-tag
+            value: $(tt.params.git-pr-number)
+          - name: release_name
+            value: $(tt.params.git-pr-number)
+          - name: release_namespace
+            value: d8a8f9-dev
+          - name: values_file
+            value: deploy/pr_values.yaml
+        workspaces:
+        - name: source
+          persistentVolumeClaim:
+            claimName: build-pipeline-pvc
+        - name: dockerconfig
+          secret:
+            secretName: pipeline-dockercfg-w5mgt

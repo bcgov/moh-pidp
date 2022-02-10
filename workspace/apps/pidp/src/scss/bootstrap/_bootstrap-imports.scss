@@ -1,0 +1,20 @@
+// ---
+// Bootstrap Component Imports
+//
+// Description:
+// Used to import mixins and variables into components with
+// ViewEncapsulation.Emulated (default) or ShadowDom to
+// avoid creating increasing memory footprint, and/or
+// overwriting globally applied styles.
+//
+// An example usage would be grid breakpoint mixins within
+// components.
+// ---
+
+@import '../palette';
+
+@import './bootstrap-variables';
+
+@import '~bootstrap/scss/functions';
+@import '~bootstrap/scss/variables';
+@import '~bootstrap/scss/mixins';

@@ -1,0 +1,29 @@
+# PR Helm values
+global:
+  vanityURL: "healthprovideridentityportal.gov.bc.ca"
+  commit_sha: ""
+  image:
+    tag: master
+
+database:
+  autoCreate: false
+  # databaseHost: dev-patroni
+  # existingSecret: dev-patroni-secret
+
+redis:
+  enabled: false
+  auth:
+    existingSecret: redis
+    existingSecretPasswordKey: database-password
+
+nginx:
+  replicaCount: 2
+
+frontend:
+  replicaCount: 3
+
+webapi:
+  replicaCount: 3
+
+plr-intake:
+  replicaCount: 1

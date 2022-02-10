@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "projects": {
+    "pidp": "apps/pidp",
+    "pidp-e2e": "apps/pidp-e2e",
+    "shared-data-access": "libs/shared/data-access",
+    "shared-ui": "libs/shared/ui",
+    "shared-utils": "libs/shared/utils"
+  }
+}

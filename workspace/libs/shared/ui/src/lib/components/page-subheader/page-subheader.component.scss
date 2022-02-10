@@ -1,0 +1,13 @@
+h2 {
+  display: flex;
+  gap: 1rem;
+
+  .mat-icon {
+    font-size: 2rem;
+  }
+
+  span {
+    // Slight vertical alignment of icon and header
+    padding-top: 0.05rem;
+  }
+}

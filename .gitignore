@@ -1,0 +1,24 @@
+# General
+.DS_Store
+.AppleDouble
+.LSOverride
+
+tls/
+
+# Icon must end with two \r
+Icon
+
+# Thumbnails
+._*
+
+# Windows thumbnail cache files
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+
+# Dump file
+*.stackdump
+
+# Folder config file
+[Dd]esktop.ini

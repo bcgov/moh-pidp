@@ -1,0 +1,14 @@
+<div class="key-value-info" [class]="mode">
+  <div class="key-content">
+    <span>{{ key }}</span>
+    <span>
+      <!-- TODO create key-value-info-icon for projection and selection -->
+      <ng-content select="ui-key-value-icon"></ng-content>
+      <!-- TODO create key-value-info-context-menu for projection and selection -->
+      <ng-content select="ui-key-value-context-menu"></ng-content>
+    </span>
+  </div>
+  <div class="value-content">
+    <ng-content></ng-content>
+  </div>
+</div>

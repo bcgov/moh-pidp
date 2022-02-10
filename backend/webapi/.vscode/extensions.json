@@ -1,0 +1,8 @@
+{
+  "recommendations": [
+    "editorconfig.editorconfig",
+    "eamodio.gitlens",
+    "ms-dotnettools.csharp",
+    "ms-azuretools.vscode-docker"
+  ]
+}

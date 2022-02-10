@@ -1,0 +1,22 @@
+<ui-card
+  [icon]="icon"
+  [iconType]="iconType"
+  [heading]="heading"
+  [class]="{
+    'ui-card-alert': true,
+    indent: true,
+    success: type === 'success',
+    info: type === 'info',
+    warn: type === 'warn',
+    danger: type === 'danger',
+    muted: type === 'muted'
+  }">
+  <!-- Work around for ngProjectAs not passing directive reference when applied to ng-content -->
+  <ng-container *ngIf="alertContent.length" uiCardContent>
+    <ng-content select="[uiAlertContent]"></ng-content>
+  </ng-container>
+  <!-- Work around for ngProjectAs not passing directive reference when applied to ng-content -->
+  <ng-container *ngIf="alertActions.length" uiCardActions>
+    <ng-content select="[uiAlertActions]"></ng-content>
+  </ng-container>
+</ui-card>
