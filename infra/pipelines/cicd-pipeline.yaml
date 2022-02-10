@@ -134,7 +134,7 @@ spec:
       - name: release_namespace
         value: $(params.release_namespace)
       - name: overwrite_values
-        value: global.image.tag=$(params.image-tag),global.commit_sha=$(params.git-revision)
+        value: global.image.tag=$(params.image-tag),global.commit_sha=$(params.git-short-sha)
       - name: values_file
         value: moh-pidp/$(params.values_file)
       taskRef:
