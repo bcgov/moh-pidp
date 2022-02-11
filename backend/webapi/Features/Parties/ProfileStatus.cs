@@ -9,7 +9,10 @@ using NodaTime;
 using System.Text.Json.Serialization;
 
 using Pidp.Data;
+using Pidp.Features.Parties.ProfileStatusInternal;
+using Pidp.Infrastructure;
 using Pidp.Infrastructure.HttpClients.Plr;
+using Pidp.Models;
 using Pidp.Models.Lookups;
 
 public class ProfileStatus
@@ -21,33 +24,35 @@ public class ProfileStatus
 
     public class Model
     {
-        public string FirstName { get; set; } = string.Empty;
-        public string LastName { get; set; } = string.Empty;
-        public LocalDate Birthdate { get; set; }
-        public string? Email { get; set; }
-        public string? Phone { get; set; }
-        public CollegeCode? CollegeCode { get; set; }
-        public string? LicenceNumber { get; set; }
-        [JsonIgnore]
-        public string? Ipc { get; set; }
-        public string? JobTitle { get; set; }
-        public string? FacilityName { get; set; }
-        public string? FacilityStreet { get; set; }
+        public List<string> Alerts { get; set; } = new();
+        [JsonConverter(typeof(PolymorphicDictionarySerializer<string, ProfileSection>))]
+        public Dictionary<string, ProfileSection> Status { get; set; } = new();
 
-        public Dictionary<string, SectionStatus> Status { get; set; } = new();
+        public static class Section
+        {
+            public const string Demographics = "demographics";
+            public const string CollegeCertification = "collegeCertification";
+            public const string SAEforms = "saEforms";
+        }
 
-        public class SectionStatus
+        public class ProfileSection
         {
             public StatusCode StatusCode { get; set; }
-            public string? Reason { get; set; }
         }
 
         public enum StatusCode
         {
-            Available = 1,
-            Completed,
-            NotAvailable,
+            Incomplete = 1,
+            Complete,
+            Locked,
             Error
+        }
+
+        public StatusCode? GetSectionStatus(string sectionName)
+        {
+            return this.Status.TryGetValue(sectionName, out var section)
+                 ? section.StatusCode
+                 : null;
         }
     }
 
@@ -74,85 +79,68 @@ public class ProfileStatus
 
         public async Task<IDomainResult<Model>> HandleAsync(Command command)
         {
-            var model = await this.context.Parties
+            var profile = await this.context.Parties
                 .Where(party => party.Id == command.Id)
-                .ProjectTo<Model>(this.mapper.ConfigurationProvider)
-                .SingleOrDefaultAsync();
+                .ProjectTo<ProfileDto>(this.mapper.ConfigurationProvider)
+                .SingleAsync();
 
-            if (model == null)
+            if (profile.Ipc == null
+                && profile.CollegeCode != null
+                && profile.LicenceNumber != null)
             {
-                return DomainResult.NotFound<Model>();
+                // Cert has been entered but no IPC found, likely due to a transient error or delay in PLR record updates. Retry once.
+                profile.Ipc = await this.RecheckIpc(command.Id, profile.CollegeCode.Value, profile.LicenceNumber, profile.Birthdate);
             }
 
-            var demographicsStatus = model.Email != null && model.Phone != null
-                ? Model.StatusCode.Completed
-                : Model.StatusCode.Available;
+            profile.PlrRecordStatus = await this.client.GetRecordStatus(profile.Ipc);
 
-            var certificationStatus = demographicsStatus != Model.StatusCode.Completed
-                ? Model.StatusCode.NotAvailable
-                : model.CollegeCode == null || model.LicenceNumber == null
-                    ? Model.StatusCode.Available
-                    : model.Ipc != null
-                        ? Model.StatusCode.Completed
-                        : Model.StatusCode.Error;
+            var resolvers = new IProfileSectionResolver[]
+            {
+                new DemographicsSectionResolver(),
+                new CollegeCertificationSectionResolver(),
+                new SAEformsSectionResolver()
+            };
+            var profileStatus = new Model();
+            foreach (var resolver in resolvers)
+            {
+                resolver.ComputeSection(profileStatus, profile);
+            }
 
-            var saStatus = await this.ComputeSaStatus(model.Id, model.Ipc);
-
-            model.Status.Add("demographics", new Model.SectionStatus { StatusCode = demographicsStatus });
-            model.Status.Add("collegeCertification", new Model.SectionStatus { StatusCode = certificationStatus });
-            model.Status.Add("saEforms", saStatus);
-
-            return DomainResult.Success(model);
+            return DomainResult.Success(profileStatus);
         }
 
-        private async Task<Model.SectionStatus> ComputeSaStatus(int partyId, string? ipc)
+        private async Task<string?> RecheckIpc(int partyId, CollegeCode collegeCode, string licenceNumber, LocalDate birthdate)
         {
-            var accessGranted = await this.context.AccessRequests
-                .AnyAsync(access => access.PartyId == partyId
-                    && access.AccessType == Models.AccessType.SAEforms);
-
-            if (accessGranted)
+            var newIpc = await this.client.GetPlrRecord(collegeCode, licenceNumber, birthdate);
+            if (newIpc != null)
             {
-                return new Model.SectionStatus
-                {
-                    StatusCode = Model.StatusCode.Completed
-                };
+                var cert = await this.context.PartyCertifications
+                    .SingleAsync(cert => cert.PartyId == partyId);
+                cert.Ipc = newIpc;
+                await this.context.SaveChangesAsync();
             }
 
-            if (ipc == null)
-            {
-                return new Model.SectionStatus
-                {
-                    StatusCode = Model.StatusCode.NotAvailable
-                };
-            }
+            return newIpc;
+        }
 
-            var recordStatus = await this.client.GetRecordStatus(ipc);
+        public class ProfileDto
+        {
+            public string FirstName { get; set; } = string.Empty;
+            public string LastName { get; set; } = string.Empty;
+            public LocalDate Birthdate { get; set; }
+            public string? Email { get; set; }
+            public string? Phone { get; set; }
+            public CollegeCode? CollegeCode { get; set; }
+            public string? LicenceNumber { get; set; }
+            public string? Ipc { get; set; }
+            // For Work Setting, currently unused
+            // public string? JobTitle { get; set; }
+            // public string? FacilityName { get; set; }
+            // public string? FacilityStreet { get; set; }
+            public IEnumerable<AccessType> CompletedEnrolments { get; set; } = Enumerable.Empty<AccessType>();
 
-            if (recordStatus == null)
-            {
-                return new Model.SectionStatus
-                {
-                    StatusCode = Model.StatusCode.Error
-                };
-            }
-
-            var goodStatndingReasons = new[] { "GS", "PRAC", "TEMPPER" };
-            if (recordStatus.StatusCode == "ACTIVE" && goodStatndingReasons.Contains(recordStatus.StatusReasonCode))
-            {
-                return new Model.SectionStatus
-                {
-                    StatusCode = Model.StatusCode.Available
-                };
-            }
-            else
-            {
-                return new Model.SectionStatus
-                {
-                    StatusCode = Model.StatusCode.NotAvailable,
-                    Reason = "There is a problem with your College licence, please try again later."
-                };
-            }
+            // Computed after projection
+            public PlrRecordStatus? PlrRecordStatus { get; set; }
         }
     }
 }
