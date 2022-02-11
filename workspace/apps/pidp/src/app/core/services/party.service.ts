@@ -65,13 +65,14 @@ export class PartyService {
       return;
     }
 
+    const status = profileStatus.status;
+
     this._profileStatus = profileStatus;
     this._completedProfile =
-      profileStatus.status?.demographics.statusCode === StatusCode.COMPLETED &&
-      profileStatus.status?.collegeCertification.statusCode ===
-        StatusCode.COMPLETED;
-
-    // profileStatus.status.demographics.statusCode = StatusCode.AVAILABLE;
+      status?.demographics.statusCode === StatusCode.COMPLETED &&
+      status?.collegeCertification.statusCode === StatusCode.COMPLETED &&
+      // TODO won't scale but works with one system to provision
+      status.saEforms.statusCode === StatusCode.AVAILABLE;
 
     this._state$.next({
       profileIdentitySections: this.getProfileIdentitySections(profileStatus),
@@ -178,8 +179,6 @@ export class PartyService {
           ),
           disabled:
             demographicsStatusCode !== StatusCode.COMPLETED ||
-            // TODO do they get multiple chances to correct? assumed to be yes
-            // collegeCertStatusCode === StatusCode.ERROR ||
             collegeCertStatusCode === StatusCode.NOT_AVAILABLE,
         },
         statusType:

@@ -28,7 +28,6 @@ export class PortalPage implements OnInit {
   public acceptedCollectionNotice: boolean;
   public collectionNotice: string;
   public state$: Observable<Record<string, PortalSection[]>>;
-  public hasCompletedProfile: boolean;
   public completedProfile: boolean;
   public collegeLicenceValidationError: boolean;
 
@@ -46,11 +45,6 @@ export class PortalPage implements OnInit {
     this.acceptedCollectionNotice = this.partyService.acceptedCollectionNotice;
     this.collectionNotice = documentService.getCollectionNotice();
     this.state$ = this.partyService.state$;
-    // TODO won't scale better as notification service that's set until displayed
-    //      and uses an accompanying component since there are already 3 different
-    //      notifications for SA eForms
-    this.hasCompletedProfile =
-      route.snapshot.queryParams.completedProfile === 'true';
     this.completedProfile = false;
     this.collegeLicenceValidationError = false;
   }
