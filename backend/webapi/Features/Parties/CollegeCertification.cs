@@ -6,6 +6,7 @@ using DomainResults.Common;
 using FluentValidation;
 using HybridModelBinding;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json.Serialization;
 
 using Pidp.Data;
 using Pidp.Features;
@@ -22,6 +23,7 @@ public class CollegeCertification
 
     public class Command : ICommand<IDomainResult>
     {
+        [JsonIgnore]
         [HybridBindProperty(Source.Route)]
         public int PartyId { get; set; }
         public CollegeCode CollegeCode { get; set; }

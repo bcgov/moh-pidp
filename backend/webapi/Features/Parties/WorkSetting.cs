@@ -6,6 +6,7 @@ using DomainResults.Common;
 using FluentValidation;
 using HybridModelBinding;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json.Serialization;
 
 using Pidp.Data;
 using Pidp.Features;
@@ -20,6 +21,7 @@ public class WorkSetting
 
     public class Command : ICommand<IDomainResult>
     {
+        [JsonIgnore]
         [HybridBindProperty(Source.Route)]
         public int Id { get; set; }
         public string JobTitle { get; set; } = string.Empty;
