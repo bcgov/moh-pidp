@@ -99,6 +99,7 @@ public class ProfileStatus
                 new CollegeCertificationSectionResolver(),
                 new SAEformsSectionResolver()
             };
+
             var profileStatus = new Model();
             foreach (var resolver in resolvers)
             {
