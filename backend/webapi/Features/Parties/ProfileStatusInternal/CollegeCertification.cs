@@ -31,7 +31,7 @@ public class CollegeCertificationSectionResolver : IProfileSectionResolver
 
     private static StatusCode ComputeStatus(ProfileStatus.Model profileStatus, ProfileDto profile)
     {
-        if (profileStatus.GetSectionStatus(Section.Demographics) != StatusCode.Complete)
+        if (!profileStatus.SectionIsComplete(Section.Demographics))
         {
             return StatusCode.Locked;
         }

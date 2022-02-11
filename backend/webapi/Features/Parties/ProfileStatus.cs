@@ -48,11 +48,10 @@ public class ProfileStatus
             Error
         }
 
-        public StatusCode? GetSectionStatus(string sectionName)
+        public bool SectionIsComplete(string sectionName)
         {
             return this.Status.TryGetValue(sectionName, out var section)
-                 ? section.StatusCode
-                 : null;
+                && section.StatusCode == StatusCode.Complete;
         }
     }
 

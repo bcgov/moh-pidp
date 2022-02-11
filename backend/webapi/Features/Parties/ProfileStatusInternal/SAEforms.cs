@@ -27,8 +27,8 @@ public class SAEformsSectionResolver : IProfileSectionResolver
             return StatusCode.Complete;
         }
 
-        if (profileStatus.GetSectionStatus(Section.Demographics) != StatusCode.Complete
-            || profileStatus.GetSectionStatus(Section.CollegeCertification) != StatusCode.Complete
+        if (!profileStatus.SectionIsComplete(Section.Demographics)
+            || !profileStatus.SectionIsComplete(Section.CollegeCertification)
             || profile.PlrRecordStatus == null
             || !profile.PlrRecordStatus.IsGoodStanding())
         {
