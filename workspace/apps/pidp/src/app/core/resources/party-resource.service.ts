@@ -27,8 +27,6 @@ export interface SectionStatus {
 }
 
 export interface ProfileStatus {
-  // TODO drop the id or rename to partyId
-  id: number;
   firstName: string;
   lastName: string;
   email: string;
