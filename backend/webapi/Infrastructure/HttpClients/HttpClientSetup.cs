@@ -5,6 +5,7 @@ using IdentityModel.Client;
 using Pidp.Extensions;
 using Pidp.Infrastructure.HttpClients.AddressAutocomplete;
 using Pidp.Infrastructure.HttpClients.Keycloak;
+using Pidp.Infrastructure.HttpClients.Mail;
 using Pidp.Infrastructure.HttpClients.Plr;
 
 public static class HttpClientSetup
@@ -15,6 +16,14 @@ public static class HttpClientSetup
 
         services.AddHttpClientWithBaseAddress<IAddressAutocompleteClient, AddressAutocompleteClient>(config.AddressAutocompleteClient.Url);
 
+        services.AddHttpClientWithBaseAddress<IChesClient, ChesClient>(config.ChesClient.Url)
+            .WithBearerToken(new ChesClientCredentials
+            {
+                Address = config.ChesClient.TokenUrl,
+                ClientId = config.ChesClient.ClientId,
+                ClientSecret = config.ChesClient.ClientSecret
+            });
+
         services.AddHttpClientWithBaseAddress<IKeycloakAdministrationClient, KeycloakAdministrationClient>(config.Keycloak.AdministrationUrl)
             .WithBearerToken(new KeycloakAdministrationClientCredentials
             {
@@ -24,6 +33,8 @@ public static class HttpClientSetup
             });
 
         services.AddHttpClientWithBaseAddress<IPlrClient, PlrClient>(config.PlrClient.Url);
+
+        services.AddTransient<ISmtpEmailClient, SmtpEmailClient>();
 
         return services;
     }

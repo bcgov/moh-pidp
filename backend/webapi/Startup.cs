@@ -32,6 +32,7 @@ public class Startup
             .AddAutoMapper(typeof(Startup))
             .AddHttpClients(config)
             .AddKeycloakAuth(config)
+            .AddScoped<IEmailService, EmailService>()
             .AddScoped<IPidpAuthorizationService, PidpAuthorizationService>()
             .AddSingleton<IClock>(SystemClock.Instance);
 
