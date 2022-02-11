@@ -4,7 +4,6 @@ using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using DomainResults.Common;
 using FluentValidation;
-using HybridModelBinding;
 using Microsoft.EntityFrameworkCore;
 using NodaTime;
 using System.Text.Json.Serialization;
@@ -15,15 +14,13 @@ using Pidp.Models.Lookups;
 
 public class ProfileStatus
 {
-    public class Query : IQuery<IDomainResult<Model>>
+    public class Command : ICommand<IDomainResult<Model>>
     {
         public int Id { get; set; }
     }
 
     public class Model
     {
-        [HybridBindProperty(Source.Route)]
-        public int Id { get; set; }
         public string FirstName { get; set; } = string.Empty;
         public string LastName { get; set; } = string.Empty;
         public LocalDate Birthdate { get; set; }
@@ -54,18 +51,18 @@ public class ProfileStatus
         }
     }
 
-    public class QueryValidator : AbstractValidator<Query>
+    public class CommandValidator : AbstractValidator<Command>
     {
-        public QueryValidator() => this.RuleFor(x => x.Id).GreaterThan(0);
+        public CommandValidator() => this.RuleFor(x => x.Id).GreaterThan(0);
     }
 
-    public class QueryHandler : IQueryHandler<Query, IDomainResult<Model>>
+    public class CommandHandler : ICommandHandler<Command, IDomainResult<Model>>
     {
         private readonly IMapper mapper;
         private readonly IPlrClient client;
         private readonly PidpDbContext context;
 
-        public QueryHandler(
+        public CommandHandler(
             IMapper mapper,
             IPlrClient client,
             PidpDbContext context)
@@ -75,10 +72,10 @@ public class ProfileStatus
             this.context = context;
         }
 
-        public async Task<IDomainResult<Model>> HandleAsync(Query query)
+        public async Task<IDomainResult<Model>> HandleAsync(Command command)
         {
             var model = await this.context.Parties
-                .Where(party => party.Id == query.Id)
+                .Where(party => party.Id == command.Id)
                 .ProjectTo<Model>(this.mapper.ConfigurationProvider)
                 .SingleOrDefaultAsync();
 
