@@ -6,8 +6,8 @@ using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 using System.Security.Claims;
 
-using Pidp.Infrastructure.Auth;
 using Pidp.Data;
+using Pidp.Infrastructure.Auth;
 using Pidp.Models;
 
 public class PidpAuthorizationService : IPidpAuthorizationService

@@ -1,11 +1,11 @@
 namespace Pidp.Features;
 
-public interface ICommandHandler<TCommand> : IRequestHandler where TCommand : ICommand
+public interface ICommandHandler<TCommand> : IRequestHandler<TCommand> where TCommand : ICommand
 {
-    Task HandleAsync(TCommand command);
+    new Task HandleAsync(TCommand command);
 }
 
-public interface ICommandHandler<TCommand, TResult> : IRequestHandler where TCommand : ICommand<TResult>
+public interface ICommandHandler<TCommand, TResult> : IRequestHandler<TCommand, TResult> where TCommand : ICommand<TResult>
 {
-    Task<TResult> HandleAsync(TCommand command);
+    new Task<TResult> HandleAsync(TCommand command);
 }
