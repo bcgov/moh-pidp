@@ -6,7 +6,6 @@ using HybridModelBinding;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-using Pidp.Extensions;
 using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.Services;
 
