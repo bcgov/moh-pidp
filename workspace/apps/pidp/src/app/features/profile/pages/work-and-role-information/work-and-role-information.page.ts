@@ -54,7 +54,7 @@ export class WorkAndRoleInformationPage
   }
 
   public ngOnInit(): void {
-    const partyId = this.partyService.profileStatus?.id;
+    const partyId = this.partyService.partyId;
     if (!partyId) {
       this.logger.error('No party ID was provided');
       return this.navigateToRoot();
@@ -80,7 +80,7 @@ export class WorkAndRoleInformationPage
   }
 
   protected performSubmission(): Observable<void> {
-    const partyId = this.partyService.profileStatus?.id;
+    const partyId = this.partyService.partyId;
 
     return partyId && this.formState.json
       ? this.resource.update(partyId, this.formState.json)

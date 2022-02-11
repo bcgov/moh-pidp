@@ -20,16 +20,26 @@ import { ProfileStatus, StatusCode } from '../resources/party-resource.service';
   providedIn: 'root',
 })
 export class PartyService {
+  private _partyId: number | null;
   private _profileStatus: ProfileStatus | null;
   private _acceptedCollectionNotice: boolean;
   private _completedProfile: boolean;
   private _state$: BehaviorSubject<Record<string, PortalSection[]>>;
 
   public constructor() {
+    this._partyId = null;
     this._profileStatus = null;
     this._acceptedCollectionNotice = false;
     this._state$ = new BehaviorSubject<Record<string, PortalSection[]>>({});
     this._completedProfile = false;
+  }
+
+  public set partyId(partyId: number | null) {
+    this._partyId = partyId;
+  }
+
+  public get partyId(): number | null {
+    return this._partyId;
   }
 
   public get state$(): Observable<Record<string, PortalSection[]>> {

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { Observable, Subscription, exhaustMap, map, of } from 'rxjs';
+import { Observable, Subscription, exhaustMap, map, of, tap } from 'rxjs';
 
 import { AccessRequestResource } from '@app/core/resources/access-request-resource.service';
 import { DocumentService } from '@app/core/services/document.service';
@@ -70,10 +70,10 @@ export class PortalPage implements OnInit {
 
   public onCardRequestAccess(routePath: string): void {
     // TODO remove possibility of profileStatus being empty from type
+    const partyId = this.partyService.partyId;
     const profileStatus = this.partyService.profileStatus;
-    const partyId = profileStatus?.id;
 
-    if (!partyId) {
+    if (!partyId || !profileStatus) {
       return;
     }
 
@@ -96,6 +96,8 @@ export class PortalPage implements OnInit {
     this.busy = this.partyResource
       .firstOrCreate()
       .pipe(
+        // TODO move this up higher into routing config and use a resolver
+        tap((partyId: number | null) => (this.partyService.partyId = partyId)),
         exhaustMap((partyId: number | null) =>
           partyId ? this.partyResource.getProfileStatus(partyId) : of(null)
         ),
