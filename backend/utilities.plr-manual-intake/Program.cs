@@ -12,24 +12,23 @@ using PlrIntake.Data;
 public class Program
 {
     /// <summary>
-    /// Can be used like this: `dotnet run PLR_Test_Data_IAT20210617_v2.0.csv intake.log`
+    /// Can be used like this: `dotnet run PLR_Test_Data_IAT20210617_v2.0.csv`
     /// </summary>
-    /// <param name="args">Expecting path to .csv file and desired log file</param>
+    /// <param name="args">Expecting path to .csv file</param>
     public static void Main(string[] args)
     {
+        var config = new ConfigurationBuilder()
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile("appsettings.json")
+            .Build();
+
         Log.Logger = new LoggerConfiguration()
-            .WriteTo.File(args[1])
+            .WriteTo.File(config["LogFile"])
             .CreateLogger();
 
         AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
-        var connectionString = new ConfigurationBuilder()
-            .SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile("appsettings.json")
-            .Build()
-            .GetConnectionString("PlrDatabase");
-
         var dbOptions = new DbContextOptionsBuilder<PlrDbContext>()
-            .UseNpgsql(connectionString)
+            .UseNpgsql(config.GetConnectionString("PlrDatabase"))
             .Options;
 
         Log.Information($"Started loading {args[0]} at {DateTime.Now}");
