@@ -42,6 +42,7 @@ import { PhonePipe } from './pipes/phone.pipe';
 import { PostalPipe } from './pipes/postal.pipe';
 import { ReplacePipe } from './pipes/replace.pipe';
 import { SafePipe } from './pipes/safe.pipe';
+import { HtmlComponent } from './components/dialogs/content/html/html.component';
 
 @NgModule({
   declarations: [
@@ -80,6 +81,7 @@ import { SafePipe } from './pipes/safe.pipe';
     PostalPipe,
     ReplacePipe,
     SafePipe,
+    HtmlComponent,
   ],
   imports: [
     CommonModule,
@@ -129,6 +131,7 @@ import { SafePipe } from './pipes/safe.pipe';
     PostalPipe,
     ReplacePipe,
     SafePipe,
+    HtmlComponent,
   ],
 })
 export class SharedUiModule {}

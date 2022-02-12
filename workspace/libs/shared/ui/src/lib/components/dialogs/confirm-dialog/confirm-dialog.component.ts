@@ -1,4 +1,5 @@
 import {
+  AfterViewInit,
   ChangeDetectionStrategy,
   Component,
   Inject,
@@ -21,7 +22,7 @@ import { DIALOG_DEFAULT_OPTION } from '../dialogs-properties.provider';
   styleUrls: ['./confirm-dialog.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ConfirmDialogComponent implements OnInit {
+export class ConfirmDialogComponent implements OnInit, AfterViewInit {
   public options: DialogOptions;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public dialogContentOutput: DialogContentOutput<any> | null;
@@ -51,6 +52,15 @@ export class ConfirmDialogComponent implements OnInit {
   }
 
   public ngOnInit(): void {
+    // if (this.options.component) {
+    //   this.loadDialogContentComponent(
+    //     this.options.component,
+    //     this.options.data
+    //   );
+    // }
+  }
+
+  public ngAfterViewInit(): void {
     if (this.options.component) {
       this.loadDialogContentComponent(
         this.options.component,

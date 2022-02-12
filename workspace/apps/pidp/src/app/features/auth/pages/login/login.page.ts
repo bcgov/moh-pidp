@@ -1,7 +1,14 @@
 import { Component, Inject } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 
+import { EMPTY, exhaustMap } from 'rxjs';
+
+import { DialogOptions, HtmlComponent } from '@bcgov/shared/ui';
+import { ConfirmDialogComponent } from '@bcgov/shared/ui';
+
 import { APP_CONFIG, AppConfig } from '@app/app.config';
+import { DocumentService } from '@app/core/services/document.service';
 
 import { IdentityProvider } from '../../enums/identity-provider.enum';
 import { AuthService } from '../../services/auth.service';
@@ -20,13 +27,16 @@ export class LoginPage {
   public providerIdentitySupportEmail: string;
   public specialAuthoritySupportEmail: string;
   public idpHint: IdentityProvider;
+  public collectionNotice: string;
 
   public IdentityProvider = IdentityProvider;
 
   public constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
     private authService: AuthService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private dialog: MatDialog,
+    documentService: DocumentService
   ) {
     const routeSnapshot = this.route.snapshot;
 
@@ -40,12 +50,29 @@ export class LoginPage {
     this.specialAuthoritySupportEmail =
       this.config.emails.specialAuthoritySupport;
     this.idpHint = routeSnapshot.data.idpHint;
+    this.collectionNotice = documentService.getAuthCollectionNotice();
   }
 
   public onLogin(): void {
-    this.authService.login({
-      idpHint: this.route.snapshot.data.idpHint,
-      redirectUri: this.config.applicationUrl,
-    });
+    const data: DialogOptions = {
+      title: 'Collection Notice',
+      message: this.collectionNotice,
+      component: HtmlComponent,
+    };
+
+    this.dialog
+      .open(ConfirmDialogComponent, { data })
+      .afterClosed()
+      .pipe(
+        exhaustMap((result) =>
+          result
+            ? this.authService.login({
+                idpHint: this.route.snapshot.data.idpHint,
+                redirectUri: this.config.applicationUrl,
+              })
+            : EMPTY
+        )
+      )
+      .subscribe();
   }
 }
