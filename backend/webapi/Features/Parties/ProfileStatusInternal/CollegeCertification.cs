@@ -23,13 +23,13 @@ public class CollegeCertificationSectionResolver : IProfileSectionResolver
     {
         var section = new CollegeCertificationSection(profile)
         {
-            StatusCode = ComputeStatus(profileStatus, profile)
+            StatusCode = ComputeStatusAndAlerts(profileStatus, profile)
         };
 
         profileStatus.Status.Add(Section.CollegeCertification, section);
     }
 
-    private static StatusCode ComputeStatus(ProfileStatus.Model profileStatus, ProfileDto profile)
+    private static StatusCode ComputeStatusAndAlerts(ProfileStatus.Model profileStatus, ProfileDto profile)
     {
         if (!profileStatus.SectionIsComplete(Section.Demographics))
         {
@@ -42,9 +42,15 @@ public class CollegeCertificationSectionResolver : IProfileSectionResolver
         }
 
         if (profile.Ipc == null
-            || profile.PlrRecordStatus == null
-            || !profile.PlrRecordStatus.IsGoodStanding())
+            || profile.PlrRecordStatus == null)
         {
+            profileStatus.Alerts.Add(Alert.TransientError);
+            return StatusCode.Error;
+        }
+
+        if (!profile.PlrRecordStatus.IsGoodStanding())
+        {
+            profileStatus.Alerts.Add(Alert.PlrBadStanding);
             return StatusCode.Error;
         }
 

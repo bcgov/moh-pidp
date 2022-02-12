@@ -24,9 +24,15 @@ public class ProfileStatus
 
     public class Model
     {
-        public List<string> Alerts { get; set; } = new();
+        public HashSet<Alert> Alerts { get; set; } = new();
         [JsonConverter(typeof(PolymorphicDictionarySerializer<string, ProfileSection>))]
         public Dictionary<string, ProfileSection> Status { get; set; } = new();
+
+        public enum Alert
+        {
+            TransientError = 1,
+            PlrBadStanding
+        }
 
         public static class Section
         {
