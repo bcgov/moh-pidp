@@ -3,11 +3,12 @@ import {
   ChangeDetectionStrategy,
   Component,
   Inject,
+  OnInit,
   ViewChild,
-  ViewContainerRef,
 } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
+import { DialogContentDirective } from '../dialog-content.directive';
 import { IDialogContent } from '../dialog-content.model';
 import { DialogDefaultOptions } from '../dialog-default-options.model';
 import { DialogOptions } from '../dialog-options.model';
@@ -21,13 +22,13 @@ import { DIALOG_DEFAULT_OPTION } from '../dialogs-properties.provider';
   styleUrls: ['./confirm-dialog.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ConfirmDialogComponent implements AfterViewInit {
+export class ConfirmDialogComponent implements OnInit, AfterViewInit {
   public options: DialogOptions;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public dialogContentOutput: DialogContentOutput<any> | null;
 
-  @ViewChild('dialogContentHost', { read: ViewContainerRef })
-  public dialogContentHost!: ViewContainerRef;
+  @ViewChild(DialogContentDirective, { static: true })
+  public dialogContentHost!: DialogContentDirective;
 
   public constructor(
     public dialogRef: MatDialogRef<ConfirmDialogComponent>,
@@ -48,6 +49,15 @@ export class ConfirmDialogComponent implements AfterViewInit {
         ? { output: this.dialogContentOutput }
         : true;
     this.dialogRef.close(response);
+  }
+
+  public ngOnInit(): void {
+    // if (this.options.component) {
+    //   this.loadDialogContentComponent(
+    //     this.options.component,
+    //     this.options.data
+    //   );
+    // }
   }
 
   public ngAfterViewInit(): void {
@@ -76,9 +86,10 @@ export class ConfirmDialogComponent implements AfterViewInit {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private loadDialogContentComponent(component: any, data: any): void {
-    this.dialogContentHost.clear();
+    const viewContainerRef = this.dialogContentHost.viewContainerRef;
+    viewContainerRef.clear();
 
-    const componentRef = this.dialogContentHost.createComponent(component);
+    const componentRef = viewContainerRef.createComponent(component);
     const componentInstance = componentRef.instance as IDialogContent;
     componentInstance.data = data;
     const output$ = componentInstance.output;
