@@ -2,7 +2,7 @@ import { Component, Inject } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 
-import { EMPTY, exhaustMap } from 'rxjs';
+import { EMPTY, Subscription, exhaustMap } from 'rxjs';
 
 import { DialogOptions, HtmlComponent } from '@bcgov/shared/ui';
 import { ConfirmDialogComponent } from '@bcgov/shared/ui';
@@ -28,6 +28,7 @@ export class LoginPage {
   public specialAuthoritySupportEmail: string;
   public idpHint: IdentityProvider;
   public collectionNotice: string;
+  public busy?: Subscription;
 
   public IdentityProvider = IdentityProvider;
 
@@ -60,7 +61,7 @@ export class LoginPage {
       component: HtmlComponent,
     };
 
-    this.dialog
+    this.busy = this.dialog
       .open(ConfirmDialogComponent, { data })
       .afterClosed()
       .pipe(
