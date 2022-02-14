@@ -1,8 +1,9 @@
 import {
-  AfterViewInit,
   ChangeDetectionStrategy,
   Component,
+  ComponentFactoryResolver,
   Inject,
+  OnInit,
   ViewChild,
   ViewContainerRef,
 } from '@angular/core';
@@ -21,18 +22,19 @@ import { DIALOG_DEFAULT_OPTION } from '../dialogs-properties.provider';
   styleUrls: ['./confirm-dialog.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ConfirmDialogComponent implements AfterViewInit {
+export class ConfirmDialogComponent implements OnInit {
   public options: DialogOptions;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public dialogContentOutput: DialogContentOutput<any> | null;
 
-  @ViewChild('dialogContentHost', { read: ViewContainerRef })
+  @ViewChild('dialogContentHost', { static: true, read: ViewContainerRef })
   public dialogContentHost!: ViewContainerRef;
 
   public constructor(
     public dialogRef: MatDialogRef<ConfirmDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public customOptions: DialogOptions,
-    @Inject(DIALOG_DEFAULT_OPTION) public defaultOptions: DialogDefaultOptions
+    @Inject(DIALOG_DEFAULT_OPTION) public defaultOptions: DialogDefaultOptions,
+    private componentFactoryResolver: ComponentFactoryResolver
   ) {
     this.options =
       typeof customOptions === 'string'
@@ -50,7 +52,7 @@ export class ConfirmDialogComponent implements AfterViewInit {
     this.dialogRef.close(response);
   }
 
-  public ngAfterViewInit(): void {
+  public ngOnInit(): void {
     if (this.options.component) {
       this.loadDialogContentComponent(
         this.options.component,
@@ -76,9 +78,13 @@ export class ConfirmDialogComponent implements AfterViewInit {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private loadDialogContentComponent(component: any, data: any): void {
+    const componentFactory =
+      this.componentFactoryResolver.resolveComponentFactory(component);
     this.dialogContentHost.clear();
 
-    const componentRef = this.dialogContentHost.createComponent(component);
+    // TODO dynamic component creation in v13 has an issue with rendering the generate component vs the deprecated API
+    const componentRef =
+      this.dialogContentHost.createComponent(componentFactory);
     const componentInstance = componentRef.instance as IDialogContent;
     componentInstance.data = data;
     const output$ = componentInstance.output;
