@@ -13,6 +13,7 @@ public class PidpDbContext : DbContext
         : base(options) => this.clock = clock;
 
     public DbSet<AccessRequest> AccessRequests { get; set; } = default!;
+    public DbSet<EmailLog> EmailLogs { get; set; } = default!;
     public DbSet<Facility> Facilities { get; set; } = default!;
     public DbSet<Party> Parties { get; set; } = default!;
     public DbSet<PartyCertification> PartyCertifications { get; set; } = default!;

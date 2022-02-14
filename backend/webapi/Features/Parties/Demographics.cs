@@ -6,6 +6,7 @@ using DomainResults.Common;
 using FluentValidation;
 using HybridModelBinding;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json.Serialization;
 
 using Pidp.Data;
 
@@ -18,6 +19,7 @@ public class Demographics
 
     public class Command : ICommand<IDomainResult>
     {
+        [JsonIgnore]
         [HybridBindProperty(Source.Route)]
         public int Id { get; set; }
 
