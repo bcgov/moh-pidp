@@ -6,7 +6,7 @@ using Xunit;
 
 using PlrManualIntake;
 
-public class PlrManualIntakeTests
+public class PlrRecordParserTests
 {
     [Theory]
     [InlineData("A", 0)]
