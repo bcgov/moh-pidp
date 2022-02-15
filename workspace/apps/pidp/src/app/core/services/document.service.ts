@@ -19,7 +19,7 @@ export class DocumentService {
       <a href="mailto:${this.config.emails.specialAuthoritySupport}">${this.config.emails.specialAuthoritySupport}</a>.
     `;
   }
-  // TODO Change text to prototype text
+
   public getAuthCollectionNotice(): string {
     return `
       The Provider Identity Portal collects personal information for the purposes of verification and access
