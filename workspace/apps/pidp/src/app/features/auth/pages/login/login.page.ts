@@ -2,7 +2,7 @@ import { Component, Inject } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 
-import { EMPTY, Subscription, exhaustMap } from 'rxjs';
+import { EMPTY, Subscription, exhaustMap, of } from 'rxjs';
 
 import { DialogOptions, HtmlComponent } from '@bcgov/shared/ui';
 import { ConfirmDialogComponent } from '@bcgov/shared/ui';
@@ -65,20 +65,15 @@ export class LoginPage {
       ? (this.busy = this.dialog
           .open(ConfirmDialogComponent, { data })
           .afterClosed()
-          .pipe(
-            exhaustMap((result) =>
-              result
-                ? this.authService.login({
-                    idpHint: this.route.snapshot.data.idpHint,
-                    redirectUri: this.config.applicationUrl,
-                  })
-                : EMPTY
-            )
-          )
+          .pipe(exhaustMap((result) => (result ? of(this.login()) : EMPTY)))
           .subscribe())
-      : this.authService.login({
-          idpHint: this.route.snapshot.data.idpHint,
-          redirectUri: this.config.applicationUrl,
-        });
+      : this.login();
+  }
+
+  private login(): void {
+    this.authService.login({
+      idpHint: this.idpHint,
+      redirectUri: this.config.applicationUrl,
+    });
   }
 }
