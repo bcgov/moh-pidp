@@ -28,7 +28,6 @@ export class LoginPage {
   public providerIdentitySupportEmail: string;
   public specialAuthoritySupportEmail: string;
   public idpHint: IdentityProvider;
-  public collectionNotice: string;
 
   public IdentityProvider = IdentityProvider;
 
@@ -37,7 +36,7 @@ export class LoginPage {
     private authService: AuthService,
     private route: ActivatedRoute,
     private dialog: MatDialog,
-    documentService: DocumentService
+    private documentService: DocumentService
   ) {
     const routeSnapshot = this.route.snapshot;
 
@@ -51,7 +50,6 @@ export class LoginPage {
     this.specialAuthoritySupportEmail =
       this.config.emails.specialAuthoritySupport;
     this.idpHint = routeSnapshot.data.idpHint;
-    this.collectionNotice = documentService.getAuthCollectionNotice();
   }
 
   public onLogin(): void {
@@ -59,7 +57,7 @@ export class LoginPage {
       title: 'Collection Notice',
       component: HtmlComponent,
       data: {
-        content: this.collectionNotice,
+        content: this.documentService.getAuthCollectionNotice(),
       },
     };
 
