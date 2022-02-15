@@ -8,9 +8,5 @@ import { IDialogContent } from '../../dialog-content.model';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HtmlComponent implements IDialogContent {
-  @Input() public data: { content: string };
-
-  public constructor() {
-    this.data = { content: '' };
-  }
+  @Input() public data!: { content: string };
 }
