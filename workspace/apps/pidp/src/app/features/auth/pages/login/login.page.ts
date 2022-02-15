@@ -57,8 +57,10 @@ export class LoginPage {
   public onLogin(): void {
     const data: DialogOptions = {
       title: 'Collection Notice',
-      message: this.collectionNotice,
       component: HtmlComponent,
+      data: {
+        message: this.collectionNotice,
+      },
     };
 
     this.busy = this.dialog

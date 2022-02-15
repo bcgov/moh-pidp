@@ -1,9 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  Inject,
-  OnInit,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
@@ -11,8 +6,6 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
   template: ` <p [innerHtml]="data.message | safe: 'html'"></p> `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class HtmlComponent implements OnInit {
+export class HtmlComponent {
   public constructor(@Inject(MAT_DIALOG_DATA) public data: any) {}
-
-  public ngOnInit(): void {}
 }
