@@ -53,6 +53,10 @@ export class LoginPage {
   }
 
   public onLogin(): void {
+    if (this.idpHint === IdentityProvider.IDIR) {
+      return this.login();
+    }
+
     const data: DialogOptions = {
       title: 'Collection Notice',
       component: HtmlComponent,
@@ -60,14 +64,11 @@ export class LoginPage {
         content: this.documentService.getAuthCollectionNotice(),
       },
     };
-
-    this.idpHint === IdentityProvider.BCSC
-      ? (this.busy = this.dialog
-          .open(ConfirmDialogComponent, { data })
-          .afterClosed()
-          .pipe(exhaustMap((result) => (result ? of(this.login()) : EMPTY)))
-          .subscribe())
-      : this.login();
+    this.busy = this.dialog
+      .open(ConfirmDialogComponent, { data })
+      .afterClosed()
+      .pipe(exhaustMap((result) => (result ? of(this.login()) : EMPTY)))
+      .subscribe();
   }
 
   private login(): void {
