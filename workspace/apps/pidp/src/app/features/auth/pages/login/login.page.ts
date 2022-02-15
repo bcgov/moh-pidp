@@ -19,6 +19,7 @@ import { AuthService } from '../../services/auth.service';
   styleUrls: ['./login.page.scss'],
 })
 export class LoginPage {
+  public busy?: Subscription;
   public title: string;
   public loginCancelled: boolean;
   public bcscSupportUrl: string;
@@ -28,7 +29,6 @@ export class LoginPage {
   public specialAuthoritySupportEmail: string;
   public idpHint: IdentityProvider;
   public collectionNotice: string;
-  public busy?: Subscription;
 
   public IdentityProvider = IdentityProvider;
 
