@@ -61,19 +61,24 @@ export class LoginPage {
       },
     };
 
-    this.busy = this.dialog
-      .open(ConfirmDialogComponent, { data })
-      .afterClosed()
-      .pipe(
-        exhaustMap((result) =>
-          result
-            ? this.authService.login({
-                idpHint: this.route.snapshot.data.idpHint,
-                redirectUri: this.config.applicationUrl,
-              })
-            : EMPTY
-        )
-      )
-      .subscribe();
+    this.idpHint === IdentityProvider.BCSC
+      ? (this.busy = this.dialog
+          .open(ConfirmDialogComponent, { data })
+          .afterClosed()
+          .pipe(
+            exhaustMap((result) =>
+              result
+                ? this.authService.login({
+                    idpHint: this.route.snapshot.data.idpHint,
+                    redirectUri: this.config.applicationUrl,
+                  })
+                : EMPTY
+            )
+          )
+          .subscribe())
+      : this.authService.login({
+          idpHint: this.route.snapshot.data.idpHint,
+          redirectUri: this.config.applicationUrl,
+        });
   }
 }
