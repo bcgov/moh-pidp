@@ -59,7 +59,7 @@ export class LoginPage {
       title: 'Collection Notice',
       component: HtmlComponent,
       data: {
-        message: this.collectionNotice,
+        content: this.collectionNotice,
       },
     };
 

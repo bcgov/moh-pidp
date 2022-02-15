@@ -1,11 +1,16 @@
-import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+
+import { IDialogContent } from '../../dialog-content.model';
 
 @Component({
   selector: 'ui-html',
-  template: ` <p [innerHtml]="data.message | safe: 'html'"></p> `,
+  template: ` <p [innerHtml]="data.content | safe: 'html'"></p> `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class HtmlComponent {
-  public constructor(@Inject(MAT_DIALOG_DATA) public data: any) {}
+export class HtmlComponent implements IDialogContent {
+  @Input() public data: { content: string };
+
+  public constructor() {
+    this.data = { content: '' };
+  }
 }
