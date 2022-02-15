@@ -6,3 +6,4 @@ export { IconType } from './icon/icon.component';
 export { ToggleContentChange } from './toggle-content/toggle-content-change.model';
 export { HtmlComponent } from './dialogs/content/html/html.component';
 export { DialogOptions } from './dialogs/dialog-options.model';
+export { IDialogContent } from './dialogs/dialog-content.model';
