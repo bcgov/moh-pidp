@@ -2,7 +2,7 @@ import { Component, Inject } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 
-import { EMPTY, Subscription, exhaustMap, of } from 'rxjs';
+import { EMPTY, Observable, Subscription, exhaustMap } from 'rxjs';
 
 import { DialogOptions, HtmlComponent } from '@bcgov/shared/ui';
 import { ConfirmDialogComponent } from '@bcgov/shared/ui';
@@ -54,7 +54,8 @@ export class LoginPage {
 
   public onLogin(): void {
     if (this.idpHint === IdentityProvider.IDIR) {
-      return this.login();
+      this.login();
+      return;
     }
 
     const data: DialogOptions = {
@@ -67,12 +68,12 @@ export class LoginPage {
     this.busy = this.dialog
       .open(ConfirmDialogComponent, { data })
       .afterClosed()
-      .pipe(exhaustMap((result) => (result ? of(this.login()) : EMPTY)))
+      .pipe(exhaustMap((result) => (result ? this.login() : EMPTY)))
       .subscribe();
   }
 
-  private login(): void {
-    this.authService.login({
+  private login(): Observable<void> {
+    return this.authService.login({
       idpHint: this.idpHint,
       redirectUri: this.config.applicationUrl,
     });
