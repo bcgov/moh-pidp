@@ -20,5 +20,5 @@ public interface IPlrClient
     /// Returns null on an error or if no record is found.
     /// </summary>
     /// <param name="ipc"></param>
-    Task<PlrRecordStatus?> GetRecordStatus(string ipc);
+    Task<PlrRecordStatus?> GetRecordStatus(string? ipc);
 }

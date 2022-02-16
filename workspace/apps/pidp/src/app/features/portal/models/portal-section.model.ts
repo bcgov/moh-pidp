@@ -1,5 +1,6 @@
 import { AlertType } from '@bcgov/shared/ui';
 
+// TODO swap for known key that now exists in the response
 export enum PortalSectionType {
   PERSONAL_INFORMATION = 'personal-information',
   COLLEGE_LICENCE_INFORMATION = 'college-licence-information',
@@ -7,6 +8,7 @@ export enum PortalSectionType {
   SIGNED_ACCEPTED_DOCUMENTS = 'signed-accepted-documents',
 }
 
+// TODO rename section to card which will be isolated to portal
 export interface PortalSectionProperty {
   key: string;
   value: string | number;
