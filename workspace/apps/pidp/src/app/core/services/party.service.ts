@@ -7,38 +7,53 @@ import {
   PortalSection,
   PortalSectionType,
 } from '@app/features/portal/models/portal-section.model';
+import {
+  AlertCode,
+  ProfileStatus,
+  ProfileStatusAlert,
+  StatusCode,
+} from '@app/features/portal/models/profile-status.model';
 import { ProfileRoutes } from '@app/features/profile/profile.routes';
 import { YourProfileRoutes } from '@app/features/your-profile/your-profile.routes';
 
-import { ProfileStatus, StatusCode } from '../resources/party-resource.service';
-
-// TODO create custom initializer that:
-//      1. uses existing init for keycloak
-//      2. gets partyId and stores in this service
-//      3. pulls profile status and stores in this service
+// TODO party service should be split into PartyService and PortalService
+// TODO add generic update methods for spreading data into base cards
+// TODO instantiate profile status to get access to helper methods to avoid === hell
 @Injectable({
   providedIn: 'root',
 })
 export class PartyService {
-  private _partyId: number | null;
+  /**
+   * @description
+   * Party identifier that is guaranteed to exist based on the
+   * existence of the PartyResolver in the route configuration.
+   */
+  // TODO DI route config to access resolver data directly instead of explicitly setting
+  private _partyId!: number;
+  /**
+   * @description
+   * Copy of the provided profile status from the most recent
+   * update of the service.
+   */
   private _profileStatus: ProfileStatus | null;
+  private _alerts: ProfileStatusAlert[];
   private _acceptedCollectionNotice: boolean;
   private _completedProfile: boolean;
   private _state$: BehaviorSubject<Record<string, PortalSection[]>>;
 
   public constructor() {
-    this._partyId = null;
     this._profileStatus = null;
     this._acceptedCollectionNotice = false;
     this._state$ = new BehaviorSubject<Record<string, PortalSection[]>>({});
     this._completedProfile = false;
+    this._alerts = [];
   }
 
-  public set partyId(partyId: number | null) {
+  public set partyId(partyId: number) {
     this._partyId = partyId;
   }
 
-  public get partyId(): number | null {
+  public get partyId(): number {
     return this._partyId;
   }
 
@@ -62,6 +77,10 @@ export class PartyService {
     return this._completedProfile;
   }
 
+  public get alerts(): ProfileStatusAlert[] {
+    return this._alerts;
+  }
+
   public get collegeLicenceValidationError(): boolean {
     return (
       this._profileStatus?.status.collegeCertification.statusCode ===
@@ -69,20 +88,35 @@ export class PartyService {
     );
   }
 
-  // TODO instantiate ProfileStatus and add helper methods to avoid === hell
   public updateState(profileStatus: ProfileStatus | null): void {
     if (!profileStatus) {
+      // TODO reset everything when this occurs except the partyId
       return;
     }
 
-    const status = profileStatus.status;
-
     this._profileStatus = profileStatus;
+    this._alerts = profileStatus.alerts.map((alert) => {
+      switch (alert) {
+        case AlertCode.PLR_BAD_STANDING:
+          return {
+            heading: 'There is a problem with your college licence',
+            content: 'Contact your college for more information.',
+          };
+        case AlertCode.TRANSIENT_ERROR:
+          return {
+            heading: 'Having trouble verifying your college licence?',
+            content:
+              'Your licence may not be active yet. Try again in 24 hours. If this problem persists, contact your College.',
+          };
+      }
+    });
+    // TODO won't scale but works with one system to provision
+    // TODO should be loop over profile keys and have at least one access request
     this._completedProfile =
-      status?.demographics.statusCode === StatusCode.COMPLETED &&
-      status?.collegeCertification.statusCode === StatusCode.COMPLETED &&
-      // TODO won't scale but works with one system to provision
-      status.saEforms.statusCode === StatusCode.AVAILABLE;
+      profileStatus?.status.demographics.statusCode === StatusCode.COMPLETED &&
+      profileStatus?.status.collegeCertification.statusCode ===
+        StatusCode.COMPLETED &&
+      profileStatus.status.saEforms.statusCode === StatusCode.AVAILABLE;
 
     this._state$.next({
       profileIdentitySections: this.getProfileIdentitySections(profileStatus),
@@ -94,14 +128,16 @@ export class PartyService {
   private getProfileIdentitySections(
     profileStatus: ProfileStatus
   ): PortalSection[] {
-    const status = profileStatus.status;
-    const demographicsStatusCode = status.demographics.statusCode;
-    const collegeCertStatusCode = status.collegeCertification.statusCode;
+    const demographics = profileStatus.status.demographics;
+    const demographicsStatusCode = demographics.statusCode;
+    const collegeCertification = profileStatus.status.collegeCertification;
+    const collegeCertificationStatusCode =
+      profileStatus.status.collegeCertification.statusCode;
 
     return [
-      // TODO possibility of an error low, but not handled and will block completely
       {
         icon: 'fingerprint',
+        // TODO swap for known key that now exists in the response
         type: PortalSectionType.PERSONAL_INFORMATION,
         heading: 'Personal Information',
         hint:
@@ -115,15 +151,15 @@ export class PartyService {
             ? [
                 {
                   key: 'fullName',
-                  value: `${profileStatus.firstName} ${profileStatus.lastName}`,
+                  value: `${demographics.firstName} ${demographics.lastName}`,
                 },
                 {
                   key: 'email',
-                  value: profileStatus.email,
+                  value: demographics.email,
                 },
                 {
                   key: 'phone',
-                  value: profileStatus.phone,
+                  value: demographics.phone,
                 },
               ]
             : [],
@@ -152,29 +188,28 @@ export class PartyService {
         type: PortalSectionType.COLLEGE_LICENCE_INFORMATION,
         heading: 'College Licence Information',
         hint:
-          collegeCertStatusCode === StatusCode.ERROR ||
-          collegeCertStatusCode === StatusCode.COMPLETED
+          collegeCertificationStatusCode === StatusCode.ERROR ||
+          collegeCertificationStatusCode === StatusCode.COMPLETED
             ? ''
             : '1 min to complete',
         description: 'College Licence Information and Validation',
         properties:
-          // TODO does this error check really make sense?
-          collegeCertStatusCode === StatusCode.ERROR ||
-          collegeCertStatusCode === StatusCode.COMPLETED
+          collegeCertificationStatusCode === StatusCode.ERROR ||
+          collegeCertificationStatusCode === StatusCode.COMPLETED
             ? [
                 {
                   key: 'collegeCode',
-                  value: profileStatus.collegeCode,
+                  value: collegeCertification.collegeCode,
                 },
                 {
                   key: 'licenceNumber',
-                  value: profileStatus.licenceNumber,
+                  value: collegeCertification.licenceNumber,
                   label: 'College Licence Number:',
                 },
                 {
                   key: 'status',
                   value:
-                    collegeCertStatusCode !== StatusCode.ERROR &&
+                    collegeCertificationStatusCode !== StatusCode.ERROR &&
                     demographicsStatusCode === StatusCode.COMPLETED
                       ? 'Verified'
                       : 'Not Verified',
@@ -189,18 +224,18 @@ export class PartyService {
           ),
           disabled:
             demographicsStatusCode !== StatusCode.COMPLETED ||
-            collegeCertStatusCode === StatusCode.NOT_AVAILABLE,
+            collegeCertificationStatusCode === StatusCode.NOT_AVAILABLE,
         },
         statusType:
-          collegeCertStatusCode === StatusCode.ERROR
+          collegeCertificationStatusCode === StatusCode.ERROR
             ? 'danger'
-            : collegeCertStatusCode === StatusCode.COMPLETED
+            : collegeCertificationStatusCode === StatusCode.COMPLETED
             ? 'success'
             : 'warn',
         status:
-          collegeCertStatusCode === StatusCode.ERROR
+          collegeCertificationStatusCode === StatusCode.ERROR
             ? 'Licence validation error'
-            : collegeCertStatusCode === StatusCode.COMPLETED
+            : collegeCertificationStatusCode === StatusCode.COMPLETED
             ? 'Completed'
             : 'Incomplete',
       },
@@ -210,10 +245,10 @@ export class PartyService {
   private getAccessToSystemsSections(
     profileStatus: ProfileStatus
   ): PortalSection[] {
-    const status = profileStatus.status;
-    const demographicsStatusCode = status.demographics.statusCode;
-    const collegeCertStatusCode = status.collegeCertification.statusCode;
-    const saEformsStatusCode = status.saEforms.statusCode;
+    const saEformsStatusCode = profileStatus.status.saEforms.statusCode;
+    const demographicsStatusCode = profileStatus.status.demographics.statusCode;
+    const collegeCertStatusCode =
+      profileStatus.status.collegeCertification.statusCode;
     return [
       {
         icon: 'fingerprint',

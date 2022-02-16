@@ -28,7 +28,7 @@ export class WorkAndRoleInformationPage
 {
   public title: string;
   public formState: WorkAndRoleInformationFormState;
-  public hasPhysicalAddress: boolean;
+  public hasFacilityAddress: boolean;
 
   public constructor(
     protected dialog: MatDialog,
@@ -46,7 +46,7 @@ export class WorkAndRoleInformationPage
 
     this.title = this.route.snapshot.data.title;
     this.formState = new WorkAndRoleInformationFormState(fb, formUtilsService);
-    this.hasPhysicalAddress = false;
+    this.hasFacilityAddress = false;
   }
 
   public onBack(): void {
@@ -75,7 +75,7 @@ export class WorkAndRoleInformationPage
       )
       .subscribe(
         (model: WorkAndRoleInformationModel | null) =>
-          (this.hasPhysicalAddress = !!model?.physicalAddress)
+          (this.hasFacilityAddress = !!model?.facilityAddress)
       );
   }
 
