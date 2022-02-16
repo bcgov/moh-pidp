@@ -43,7 +43,7 @@ export class PortalPage implements OnInit {
   ) {
     this.title = this.route.snapshot.data.title;
     this.acceptedCollectionNotice = this.partyService.acceptedCollectionNotice;
-    this.collectionNotice = documentService.getCollectionNotice();
+    this.collectionNotice = documentService.getSAeFormsCollectionNotice();
     this.state$ = this.partyService.state$;
     this.completedProfile = false;
     this.collegeLicenceValidationError = false;
