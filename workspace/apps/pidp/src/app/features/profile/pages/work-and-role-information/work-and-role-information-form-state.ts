@@ -16,8 +16,8 @@ export class WorkAndRoleInformationFormState extends AbstractFormState<WorkAndRo
     this.buildForm();
   }
 
-  public get physicalAddress(): FormGroup {
-    return this.form.get('physicalAddress') as FormGroup;
+  public get facilityAddress(): FormGroup {
+    return this.form.get('facilityAddress') as FormGroup;
   }
 
   public get json(): WorkAndRoleInformationModel | undefined {
@@ -40,7 +40,7 @@ export class WorkAndRoleInformationFormState extends AbstractFormState<WorkAndRo
     this.formInstance = this.fb.group({
       jobTitle: ['', [Validators.required]],
       facilityName: ['', [Validators.required]],
-      physicalAddress: this.formUtilsService.buildAddressForm({
+      facilityAddress: this.formUtilsService.buildAddressForm({
         areRequired: true,
       }),
     });

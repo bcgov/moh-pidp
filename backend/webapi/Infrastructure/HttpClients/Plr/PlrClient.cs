@@ -76,4 +76,11 @@ public class PlrRecordStatus
 {
     public string StatusCode { get; set; } = string.Empty;
     public string StatusReasonCode { get; set; } = string.Empty;
+
+    public virtual bool IsGoodStanding()
+    {
+        var goodStatndingReasons = new[] { "GS", "PRAC", "TEMPPER" };
+        return this.StatusCode == "ACTIVE"
+            && goodStatndingReasons.Contains(this.StatusReasonCode);
+    }
 }

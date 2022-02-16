@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { UserGuard } from '@app/core/guards/user.guard';
+import { PartyResolver } from '@app/core/resolvers/party.resolver';
 import { FeatureFlagGuard } from '@app/modules/feature-flag/feature-flag.guard';
 import { Role } from '@app/shared/enums/roles.enum';
 
@@ -39,6 +40,9 @@ const routes: Routes = [
     component: PortalDashboardComponent,
     canActivate: [AuthenticationGuard, UserGuard],
     canActivateChild: [AuthenticationGuard],
+    resolve: {
+      partyId: PartyResolver,
+    },
     data: {
       // TODO don't hardcode in the redirect URL but also don't want cross module dependencies,
       //      refactor when modules become libs otherwise premature optimization
