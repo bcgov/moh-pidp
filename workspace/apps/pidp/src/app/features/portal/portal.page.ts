@@ -17,6 +17,7 @@ import {
   StatusCode,
 } from './models/profile-status.model';
 import { PortalResource } from './portal-resource.service';
+import { PortalService } from './portal.service';
 
 @Component({
   selector: 'app-portal',
@@ -39,19 +40,20 @@ export class PortalPage implements OnInit {
     private router: Router,
     private partyService: PartyService,
     private portalResource: PortalResource,
+    private portalService: PortalService,
     private accessRequestResource: AccessRequestResource,
     documentService: DocumentService
   ) {
     this.title = this.route.snapshot.data.title;
-    this.acceptedCollectionNotice = this.partyService.acceptedCollectionNotice;
+    this.acceptedCollectionNotice = this.portalService.acceptedCollectionNotice;
     this.collectionNotice = documentService.getSAeFormsCollectionNotice();
-    this.state$ = this.partyService.state$;
+    this.state$ = this.portalService.state$;
     this.completedProfile = false;
     this.alerts = [];
   }
 
   public onAcceptCollectionNotice(accepted: boolean): void {
-    this.partyService.acceptedCollectionNotice = accepted;
+    this.portalService.acceptedCollectionNotice = accepted;
   }
 
   public onScrollToAnchor(): void {
@@ -71,7 +73,7 @@ export class PortalPage implements OnInit {
 
   public onCardRequestAccess(routePath: string): void {
     const partyId = this.partyService.partyId;
-    const profileStatus = this.partyService.profileStatus;
+    const profileStatus = this.portalService.profileStatus;
 
     if (!partyId || !profileStatus) {
       return;
@@ -97,9 +99,9 @@ export class PortalPage implements OnInit {
       .getProfileStatus(this.partyService.partyId)
       .pipe(
         map((profileStatus: ProfileStatus | null) => {
-          this.partyService.updateState(profileStatus);
-          this.completedProfile = this.partyService.completedProfile;
-          this.alerts = this.partyService.alerts;
+          this.portalService.updateState(profileStatus);
+          this.completedProfile = this.portalService.completedProfile;
+          this.alerts = this.portalService.alerts;
         })
       )
       .subscribe();

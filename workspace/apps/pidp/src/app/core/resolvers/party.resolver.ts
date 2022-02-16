@@ -9,11 +9,12 @@ import { PartyService } from '../services/party.service';
 
 /**
  * @description
- * Gets a Party from the API based on the access token, and if not
- * found creates the resource before setting it in a local service.
+ * Gets a Party from the API based on the access token, and
+ * if not found creates the resource before setting the Party
+ * identifier in a singleton service.
  *
- * WARNING: Should be located on or under the route config containing
- * guard(s) that manage redirection.
+ * WARNING: Should be located on or under the route config
+ * containing guard(s) that manage unauthorized redirection.
  */
 @Injectable({
   providedIn: 'root',

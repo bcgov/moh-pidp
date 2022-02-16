@@ -40,8 +40,6 @@ const routes: Routes = [
     component: PortalDashboardComponent,
     canActivate: [AuthenticationGuard, UserGuard],
     canActivateChild: [AuthenticationGuard],
-    // Initialization of the PartyService through the
-    // use of the access token and discovery endpoint
     resolve: {
       partyId: PartyResolver,
     },
