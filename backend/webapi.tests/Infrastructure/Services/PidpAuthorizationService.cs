@@ -9,6 +9,7 @@ using Xunit;
 using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.Services;
 using Pidp.Models;
+using PidpTests.TestingExtensions;
 
 public class PidpAuthorizationServiceTests : InMemoryDbTest
 {
