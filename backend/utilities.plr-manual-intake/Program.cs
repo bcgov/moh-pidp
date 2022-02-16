@@ -1,4 +1,4 @@
-﻿namespace PlrManualIntake;
+namespace PlrManualIntake;
 
 using CsvHelper;
 using Microsoft.EntityFrameworkCore;
@@ -82,7 +82,7 @@ public class Program
         finally
         {
             Log.Information($"Program ended at {DateTime.Now}");
-            Console.WriteLine($"Program completed ... check {args[1]}.");
+            Console.WriteLine($"Program completed ... check log file.");
         }
     }
 
