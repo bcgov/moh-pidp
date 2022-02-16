@@ -1,0 +1,14 @@
+.scroll-target {
+  position: relative;
+
+  div {
+    position: absolute;
+    // Absolute position of the inner div provides a native
+    // solution to scrolling that doesn't require an offset.
+    //
+    // NOTE: The offset applied is equal to the default spacing
+    // that should be applied between containers.
+    top: -2rem;
+    left: 0;
+  }
+}

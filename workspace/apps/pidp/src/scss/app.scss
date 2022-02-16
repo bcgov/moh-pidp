@@ -1,0 +1,35 @@
+// Load the applications palettes and variables
+// to allow there use throughout the styles
+@import './material/material-palette';
+
+@import './palette';
+
+// ---
+// BOOTSTRAP
+// ---
+
+// Bootstrap is used to provide an HTML reset, grid, utilities, and
+// mixins; but does not import components as they are provided by
+// Angular Material.
+//
+// NOTE: Imported before Material to ensure order of precedence is
+// in Materials favour.
+@import './bootstrap/bootstrap';
+
+// ---
+// MATERIAL
+// ---
+
+// Material provides a API and default theming for typography and
+// associated material components, which are used throughout the
+// application. Material represents the backbone of application
+// theming.
+@import './material/material';
+
+// ---
+// VENDORS
+// ---
+
+// Vendors is used to include customized vendor styles into the
+// application.
+@import './vendors/vendors';

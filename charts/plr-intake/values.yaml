@@ -1,0 +1,98 @@
+# Default values for plr-intake.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+global:
+  vanityURL: "healthprovideridentityportal.gov.bc.ca"
+  commit_sha: ""
+  image:
+    registry: image-registry.openshift-image-registry.svc:5000/d8a8f9-tools
+    tag: latest
+
+replicaCount: 1
+
+image:
+  repository: pidp-plr-intake
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: "latest"
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+database:
+  # .NET Core database connection string
+  dbConnectionString: 'host=pghost;port=5432;database=pgdb;username=pgusr;password=pgpsw'
+  # If secret exists, it should contain key "database_url". specify the name of the secret below.
+  # existingSecret:
+
+mutualAuth:
+  # existingSecret:
+
+# Run migrations pre-install and pre-upgrade
+migrations:
+  enabled: true
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: false
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+podAnnotations: {}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+service:
+  type: ClusterIP
+  port: 8080
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  hosts:
+    - host: chart-example.local
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+
+resources: 
+  limits:
+    cpu: 50m
+    memory: 128Mi
+  requests:
+    cpu: 25m
+    memory: 60Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}

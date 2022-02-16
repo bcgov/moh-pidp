@@ -1,0 +1,34 @@
+//
+// HTML Reset
+//
+
+html,
+body {
+  // Not provided in Bootstrap Reset
+  height: 100%;
+}
+
+//
+// Typography
+//
+
+// Include typography classes that are omitted with the exclusion
+// of the type module to allow Material to control the base
+// application typography
+
+.lead {
+  @include font-size($lead-font-size);
+  font-weight: $lead-font-weight;
+}
+
+.small {
+  @extend small;
+}
+
+//
+// Utilities
+//
+
+.nowrap {
+  white-space: nowrap;
+}

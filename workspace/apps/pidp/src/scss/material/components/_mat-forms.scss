@@ -1,0 +1,52 @@
+@import 'palette';
+
+//
+// MATERIAL FORMS
+//
+
+.mat-form-field {
+  // Provide a bit more spacing under form fields so error
+  // messages are not resting on underlying field labels
+  margin-bottom: 0.5rem;
+}
+
+.mat-input-element,
+.mat-select-value {
+  color: theme-palette(blue, light) !important;
+}
+
+.mat-checkbox .mat-checkbox-inner-container {
+  // Enforce a white background to avoid transparency when
+  // placed when placed on coloured backgrounds
+  background-color: white;
+  margin-right: 1rem;
+}
+
+.mat-checkbox-layout .mat-checkbox-label {
+  // Reduced to improve the appearance of labels that are line wrapped
+  line-height: 1.4rem;
+}
+
+.mat-checkbox-label {
+  line-height: 0.5rem;
+}
+
+// .mat-checkbox label,
+// .mat-radio-button label {
+//   color: theme-palette(blue);
+// }
+
+// .mat-slide-toggle-content {
+//   color: theme-palette(blue, dark);
+// }
+
+// .mat-checkbox-layout,
+// .mat-slide-toggle-content {
+//   // Force checkbox and slide labels to line wrap if required
+//   // instead of overflowing their container
+//   white-space: normal !important;
+// }
+
+// .mat-drawer-container {
+//   color: $body-color;
+// }

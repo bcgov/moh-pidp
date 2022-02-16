@@ -1,0 +1,21 @@
+<ui-alert
+  *ngIf="show"
+  type="info"
+  icon="error_outline"
+  heading="Collection Notice">
+  <ng-container uiAlertContent>
+    <ng-content></ng-content>
+  </ng-container>
+  <ng-container uiAlertActions>
+    <span>
+      <button
+        class="inherit"
+        mat-flat-button
+        type="button"
+        color="primary"
+        (click)="onAccept()">
+        Ok
+      </button>
+    </span>
+  </ng-container>
+</ui-alert>

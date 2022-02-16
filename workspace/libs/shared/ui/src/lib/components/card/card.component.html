@@ -1,0 +1,32 @@
+<mat-card class="ui-card" [class]="class">
+  <mat-card-header
+    *ngIf="icon || heading"
+    [class]="{
+      'icon-only': icon && !heading,
+      'title-only': !icon && heading
+    }">
+    <div *ngIf="icon" mat-card-avatar>
+      <!-- Using <mat-icon> to maintain specificity and allow mixins to override -->
+      <mat-icon
+        [class]="{
+          'material-icons-outlined': iconType === 'outlined',
+          'material-icons-round': iconType === 'round',
+          'material-icons-sharp': iconType === 'sharp'
+        }">
+        {{ icon }}
+      </mat-icon>
+    </div>
+    <mat-card-title *ngIf="heading">
+      {{ heading }}
+    </mat-card-title>
+    <span *ngIf="cardHint.length" class="hint">
+      <ng-content select="[uiCardHint]"></ng-content>
+    </span>
+  </mat-card-header>
+  <mat-card-content *ngIf="cardContent.length">
+    <ng-content select="[uiCardContent]"></ng-content>
+  </mat-card-content>
+  <mat-card-actions *ngIf="cardActions.length">
+    <ng-content select="[uiCardActions]"></ng-content>
+  </mat-card-actions>
+</mat-card>

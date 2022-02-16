@@ -1,0 +1,11 @@
+.bold {
+  font-weight: 500;
+}
+
+ol {
+  margin-bottom: 1.5rem;
+
+  & > li {
+    font-size: 0.8rem;
+  }
+}

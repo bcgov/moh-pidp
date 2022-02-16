@@ -1,0 +1,113 @@
+<ui-dashboard-header></ui-dashboard-header>
+
+<div class="container">
+  <ng-container *ngIf="idpHint === IdentityProvider.BCSC; else IDIR">
+    <!-- TODO complete throw away until a UX/UI provided -->
+    <div class="bcsc">
+      <div class="row justify-content-center">
+        <div class="col col-md-10 col-xl-8">
+          <div class="row justify-content-center">
+            <div *ngIf="loginCancelled" class="col-12 col-lg-8">
+              <ui-alert
+                type="info"
+                icon="error_outline"
+                heading="Login Cancelled">
+                <ng-container uiAlertContent>
+                  <p>
+                    You have cancelled your login to the Provider Identity
+                    Portal.
+                  </p>
+                  <ul>
+                    <li>
+                      For support with the provider identity portal, contact
+                      <ui-anchor
+                        scheme="mailto"
+                        [href]="providerIdentitySupportEmail"></ui-anchor>
+                    </li>
+                    <li>
+                      For support with your BC Services Card, click
+                      <ui-anchor [href]="bcscSupportUrl">here</ui-anchor>
+                    </li>
+                  </ul>
+                </ng-container>
+              </ui-alert>
+            </div>
+          </div>
+          <div class="row justify-content-center">
+            <div class="col-12 col-lg-8">
+              <div class="row align-items-center">
+                <div class="col-auto">
+                  <img
+                    src="/assets/images/pidp-logo-white.svg"
+                    alt="Provider Identity Portal Logo" />
+                </div>
+                <div class="col">
+                  <h1>{{ title }}</h1>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row justify-content-center">
+            <div class="col-12 col-lg-8">
+              <ui-page-section-subheader
+                heading="Enrol for access to Special Authority eForms">
+                <ng-container uiPageSectionSubheaderDesc>
+                  B.C. healthcare professionals enrol here for access to
+                  PharmaCare's
+                  <span class="nowrap">Special Authority</span> eForms
+                  application.
+                </ng-container>
+              </ui-page-section-subheader>
+              <p>
+                You need to set up the
+                <ui-anchor [href]="bcscMobileSetupUrl"
+                  >BC Services Card app</ui-anchor
+                >
+                to enrol. You will use the app each time you access the eForms
+                application. If you are not eligible for BC Services Card, or
+                cannot set up the app, you can
+                <ui-anchor [href]="specialAuthorityUrl"
+                  >submit SA requests by fax</ui-anchor
+                >.
+              </p>
+
+              <br />
+
+              <button mat-flat-button color="primary" (click)="onLogin()">
+                Login with the BC Services Card app
+              </button>
+            </div>
+          </div>
+          <div class="row justify-content-center">
+            <div class="col-12 col-lg-8">
+              <h2>Get Support</h2>
+            </div>
+            <div class="col-12 col-lg-8">
+              <p>
+                Questions about Special Authority eForms should be directed to:
+                <ui-anchor
+                  scheme="mailto"
+                  [href]="specialAuthoritySupportEmail"></ui-anchor>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-template #IDIR>
+    <div class="row idir">
+      <div class="col-12">
+        <img
+          src="/assets/images/pidp-logo-white.svg"
+          alt="Provider Identity Portal Logo" />
+      </div>
+      <div class="col-12">
+        <button mat-flat-button color="primary" (click)="onLogin()">
+          {{ idpHint | uppercase }} Login
+        </button>
+      </div>
+    </div>
+  </ng-template>
+</div>

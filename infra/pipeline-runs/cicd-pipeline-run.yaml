@@ -1,0 +1,30 @@
+apiVersion: tekton.dev/v1beta1
+kind: PipelineRun
+metadata:
+  generateName: cicd-pipeline-run-
+spec:
+  pipelineRef:
+    name: cicd-pipeline
+  serviceAccountName: pipeline
+  params:
+    - name: git-url
+      value: git@github.com:bcgov/moh-pidp.git
+    - name: git-revision
+      value: $(tt.params.git-revision)
+    - name: git-short-sha
+      value: $(tt.params.git-short-sha)
+    - name: image-tag
+      value: $(tt.params.git-branch-name)
+    - name: release_name
+      value: $(tt.params.release-name)
+    - name: release_namespace
+      value: $(tt.params.release-namespace)
+    - name: values_file
+      value: $(tt.params.values-file)
+  workspaces:
+  - name: source
+    persistentVolumeClaim:
+      claimName: build-pipeline-pvc
+  - name: dockerconfig
+    secret:
+      secretName: pipeline-dockercfg-w5mgt

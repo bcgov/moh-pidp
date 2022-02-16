@@ -1,0 +1,11 @@
+@use '@angular/material' as mat;
+@use 'material/material-variables' as var;
+
+h1 {
+  $maxFontSize: var.$mat-theme-headline-font-size;
+  $minFontSize: calc($maxFontSize - 25%);
+  $scaler: 5vw;
+
+  font-size: clamp($minFontSize, $scaler, $maxFontSize);
+  margin-bottom: 2.5rem;
+}

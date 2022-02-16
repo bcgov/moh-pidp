@@ -1,0 +1,33 @@
+@import 'palette';
+@import 'material/material-variables';
+
+@mixin dashboard-header-theme($bgColor, $color) {
+  background-color: $bgColor;
+  color: $color;
+}
+
+.mat-toolbar {
+  height: $mat-theme-dashboard-header-height;
+
+  @include dashboard-header-theme(theme-palette(blue), white);
+
+  &.theme-light {
+    @include dashboard-header-theme(white, theme-palette(blue));
+  }
+
+  .username {
+    font-size: 0.8rem;
+    padding-top: 0.1rem;
+  }
+
+  .logout {
+    .mat-icon {
+      font-size: 1.25rem;
+    }
+
+    // Horizontal space to provide buffer around
+    // the logout action icon
+    margin-left: 1.2rem;
+    margin-right: 0.2rem;
+  }
+}

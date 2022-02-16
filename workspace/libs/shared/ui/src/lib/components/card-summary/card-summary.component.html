@@ -1,0 +1,32 @@
+<ng-container>
+  <div class="card-status" [class]="statusType">
+    <ng-container *ngTemplateOutlet="card"></ng-container>
+    <span *ngIf="status || statusType">{{ status }}</span>
+  </div>
+</ng-container>
+
+<ng-template #card>
+  <ui-card [icon]="icon" [heading]="heading">
+    <!-- Work around for ngProjectAs not passing directive reference when applied to ng-content -->
+    <ng-container uiCardHint>
+      <ng-content select="[uiCardSummaryHint]"></ng-content>
+    </ng-container>
+    <!-- Work around for ngProjectAs not passing directive reference when applied to ng-content -->
+    <ng-container uiCardContent>
+      <ng-content select="[uiCardSummaryContent]"></ng-content>
+    </ng-container>
+    <ng-container uiCardActions>
+      <span>
+        <button
+          *ngIf="actionLabel"
+          mat-stroked-button
+          type="button"
+          color="primary"
+          [disabled]="actionDisabled"
+          (click)="onAction()">
+          {{ actionLabel }}
+        </button>
+      </span>
+    </ng-container>
+  </ui-card>
+</ng-template>

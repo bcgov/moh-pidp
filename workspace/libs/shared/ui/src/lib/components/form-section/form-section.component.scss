@@ -1,0 +1,23 @@
+.form-section {
+  display: flex;
+
+  span:first-child {
+    width: 100%;
+    flex-grow: 1;
+  }
+  span:last-child {
+    flex-shrink: 1;
+    // Vertically align icon with text of the form field
+    padding-top: 7px;
+
+    button {
+      margin-left: 0.75rem;
+    }
+
+    ui-context-help {
+      // Align contextual help with end of form field
+      position: relative;
+      left: 10px;
+    }
+  }
+}

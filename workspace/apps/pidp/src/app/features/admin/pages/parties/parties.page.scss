@@ -1,0 +1,22 @@
+@use 'palette' as palette;
+
+table {
+  width: 100%;
+
+  td {
+    color: palette.theme-palette(blue);
+  }
+}
+
+mat-icon {
+  color: #999;
+  padding-top: 0.5rem;
+
+  &.has-requested {
+    color: palette.theme-palette(green);
+  }
+
+  &.not-requested {
+    color: palette.theme-palette(red);
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "singleQuote": true,
+  "bracketSameLine": true,
+  "attributeGroups": [
+    "$ANGULAR_STRUCTURAL_DIRECTIVE",
+    "^(id|name)$",
+    "^class$",
+    "$DEFAULT",
+    "^aria-",
+    "$ANGULAR_INPUT",
+    "$ANGULAR_TWO_WAY_BINDING",
+    "$ANGULAR_OUTPUT"
+  ],
+  "importOrder": [
+    "^@angular/(.*)$",
+    "^rxjs(.*)$",
+    "<THIRD_PARTY_MODULES>",
+    "^@bcgov/(.*)$",
+    "^@app/(.*)$",
+    "^@core/(.*)$",
+    "^@shared/(.*)$",
+    "^[./]"
+  ],
+  "importOrderSeparation": true,
+  "importOrderSortSpecifiers": true,
+  "importOrderParserPlugins": ["typescript", "decorators-legacy"]
+}

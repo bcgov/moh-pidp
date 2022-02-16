@@ -1,0 +1,154 @@
+version: "3"
+
+services:
+  ###############################################################################
+  ###                     PostgreSQL Database Definition                      ###
+  ###############################################################################
+  pidp-db:
+    restart: always
+    container_name: pidpdb
+    image: postgres:10.6
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USERNAME: postgres
+      POSTGRES_DB: postgres
+    ports:
+      - "5433:5432"
+    volumes:
+      - local_pidp_postgress_data:/var/lib/postgresql/data
+    networks:
+      - pidp-net
+
+  ###############################################################################
+  ###                     PIdP API Backend Definition                         ###
+  ###############################################################################
+  pidp-webapi:
+    container_name: pidp-webapi
+    restart: always
+    image: pidp-webapi
+    build:
+      context: backend/webapi/
+      dockerfile: Dockerfile.local
+      args:
+        ASPNETCORE_HTTPS_PORT: "5001"
+        ASPNETCORE_ENVIRONMENT: "Development"
+        ASPNETCORE_URLS: "http://+:8080"
+        DOTNET_CLI_HOME: "/tmp/DOTNET_CLI_HOME"
+    environment:
+      ASPNETCORE_HTTPS_PORT: "5001"
+      ASPNETCORE_ENVIRONMENT: "Development"
+      ASPNETCORE_URLS: "http://+:8080"
+      DOTNET_CLI_HOME: "/tmp/DOTNET_CLI_HOME"
+      ConnectionStrings__PidpDatabase: "host=pidpdb;port=5432;database=postgres;username=postgres;password=postgres"
+    volumes:
+      - ./backend/webapi/:/app
+      - pidp-webapi-bin:/app/bin
+      - pidp-webapi-obj:/app/obj
+      - ${APPDATA}/Microsoft/UserSecrets/5c2dc965-00b4-4531-9ff0-9b37193ead9b:/root/.microsoft/usersecrets/5c2dc965-00b4-4531-9ff0-9b37193ead9b
+      # Use the following instead if developing on Mac/Linux:
+      # - ${HOME}/.microsoft/usersecrets/5c2dc965-00b4-4531-9ff0-9b37193ead9b:/root/.microsoft/usersecrets/5c2dc965-00b4-4531-9ff0-9b37193ead9b
+    ports:
+      - "5050:8080"
+      - "5051:5001"
+    networks:
+      - pidp-net
+    depends_on:
+      - pidp-db
+    entrypoint: /bin/bash
+    command: [
+      "-c",
+      "echo Waiting for Database...;
+      sleep 10;
+      echo \"Running Database Migrations...\";
+      dotnet ef database update;
+      echo \"Starting API...\";
+      dotnet watch run --urls=http://+:8080"
+    ]
+
+  ###############################################################################
+  ###                        PLR Intake Definition                            ###
+  ###############################################################################
+  pidp-plr-intake:
+    container_name: pidp-plr-intake
+    restart: always
+    image: pidp-plr-intake
+    build:
+      context: backend/services.plr-intake/
+      dockerfile: Dockerfile.local
+      args:
+        ASPNETCORE_HTTPS_PORT: "5001"
+        ASPNETCORE_ENVIRONMENT: "Development"
+        ASPNETCORE_URLS: "http://+:8080"
+        DOTNET_CLI_HOME: "/tmp/DOTNET_CLI_HOME"
+    environment:
+      ASPNETCORE_HTTPS_PORT: "5001"
+      ASPNETCORE_ENVIRONMENT: "Development"
+      ASPNETCORE_URLS: "http://+:8080"
+      DOTNET_CLI_HOME: "/tmp/DOTNET_CLI_HOME"
+      ConnectionStrings__PlrDatabase: "host=pidpdb;port=5432;database=postgres;username=postgres;password=postgres"
+    volumes:
+      - ./backend/services.plr-intake/:/app
+    ports:
+      - "5060:8080"
+      - "5061:5001"
+    networks:
+      - pidp-net
+    depends_on:
+      - pidp-db
+    entrypoint: /bin/bash
+    command: [
+      "-c",
+      "echo Waiting for Database...;
+      sleep 5;
+      echo \"Running PLR Database Migrations...\";
+      dotnet ef database update;
+      echo \"Starting PLR API...\";
+      dotnet watch run --urls=http://+:8080"
+    ]
+
+  ###############################################################################
+  ###                                Mailhog                                  ###
+  ###############################################################################
+  mailhog:
+    container_name: mailhog
+    restart: always
+    image: mailhog/mailhog:latest
+    ports:
+      - 25:1025
+      - 1025:1025
+      - 8025:8025 # Visit localhost:8025 to see the list of captured emails
+    networks:
+      - pidp-net
+
+  ###############################################################################
+  ###                                Keycloak                                 ###
+  ###############################################################################
+  keycloak:
+    container_name: keycloak
+    image: jboss/keycloak:latest
+    restart: always
+    volumes:
+      - ./realm-export-local.json:/tmp/realm-export.json
+    environment:
+      DB_VENDOR: h2
+      KEYCLOAK_USER: realm-admin
+      KEYCLOAK_PASSWORD: realm-admin
+      KEYCLOAK_IMPORT: /tmp/realm-export.json -Dkeycloak.profile.feature.upload_scripts=enabled
+    ports:
+      - 9090:8080
+    profiles: ["full", "keycloak"]
+
+###############################################################################
+###                           Networks Definition                           ###
+###############################################################################
+networks:
+  pidp-net:
+    driver: bridge
+
+###############################################################################
+###                            Volumes Definition                           ###
+###############################################################################
+volumes:
+  local_pidp_postgress_data: null
+  pidp-webapi-bin:
+  pidp-webapi-obj:
