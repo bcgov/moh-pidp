@@ -2,31 +2,10 @@ namespace Pidp.Infrastructure.HttpClients.Keycloak;
 
 using System.Net;
 
+// TODO DomainResult rather than null or bool
 public class KeycloakAdministrationClient : BaseClient, IKeycloakAdministrationClient
 {
     public KeycloakAdministrationClient(HttpClient httpClient, ILogger<KeycloakAdministrationClient> logger) : base(httpClient, logger) { }
-
-    public async Task<Client?> GetClient(string clientId)
-    {
-        var response = await this.Client.GetAsync("clients");
-
-        if (!response.IsSuccessStatusCode)
-        {
-            var responseMessage = await response.Content.ReadAsStringAsync();
-            this.Logger.LogError($"Could not retrieve the Clients from Keycloak. Response message: {responseMessage}");
-            return null;
-        }
-
-        var clients = await response.Content.ReadFromJsonAsync<IEnumerable<Client>>();
-        var client = clients?.SingleOrDefault(c => c.ClientId == clientId);
-
-        if (client == null)
-        {
-            this.Logger.LogError($"Could not find a Client with ClientId {clientId} from Keycloak.");
-        }
-
-        return client;
-    }
 
     public async Task<bool> AssignClientRole(Guid userId, string clientId, string roleName)
     {
@@ -38,17 +17,8 @@ public class KeycloakAdministrationClient : BaseClient, IKeycloakAdministrationC
         }
 
         // Keycloak expects an array of roles.
-        var content = this.CreateStringContent(new[] { role });
-        var response = await this.Client.PostAsync($"users/{userId}/role-mappings/clients/{role.ContainerId}", content);
-
-        if (!response.IsSuccessStatusCode)
-        {
-            var responseMessage = await response.Content.ReadAsStringAsync();
-            this.Logger.LogError($"Could not assign the role {role} to user {userId}. Response message: {responseMessage}");
-            return false;
-        }
-
-        return true;
+        var result = await this.PostAsync($"users/{userId}/role-mappings/clients/{role.ContainerId}", new[] { role });
+        return result.IsSuccess;
     }
 
     public async Task<bool> AssignRealmRole(Guid userId, string roleName)
@@ -61,17 +31,27 @@ public class KeycloakAdministrationClient : BaseClient, IKeycloakAdministrationC
         }
 
         // Keycloak expects an array of roles.
-        var content = this.CreateStringContent(new[] { role });
-        var response = await this.Client.PostAsync($"users/{userId}/role-mappings/realm", content);
+        var response = await this.PostAsync($"users/{userId}/role-mappings/realm", new[] { role });
+        return response.IsSuccess;
+    }
 
-        if (!response.IsSuccessStatusCode)
+    public async Task<Client?> GetClient(string clientId)
+    {
+        var result = await this.GetAsync<IEnumerable<Client>>("clients");
+
+        if (!result.IsSuccess)
         {
-            var responseMessage = await response.Content.ReadAsStringAsync();
-            this.Logger.LogError($"Could not assign the role {roleName} to user {userId}. Response message: {responseMessage}");
-            return false;
+            return null;
         }
 
-        return true;
+        var client = result.Value?.SingleOrDefault(c => c.ClientId == clientId);
+
+        if (client == null)
+        {
+            this.Logger.LogError($"Could not find a Client with ClientId {clientId} from Keycloak.");
+        }
+
+        return client;
     }
 
     public async Task<Role?> GetClientRole(string clientId, string roleName)
@@ -83,17 +63,14 @@ public class KeycloakAdministrationClient : BaseClient, IKeycloakAdministrationC
             return null;
         }
 
-        var response = await this.Client.GetAsync($"clients/{client.Id}/roles");
+        var result = await this.GetAsync<IEnumerable<Role>>($"clients/{client.Id}/roles");
 
-        if (!response.IsSuccessStatusCode)
+        if (!result.IsSuccess)
         {
-            var responseMessage = await response.Content.ReadAsStringAsync();
-            this.Logger.LogError($"Could not retrieve the Roles from Client {client.Id}. Response message: {responseMessage}");
             return null;
         }
 
-        var roles = await response.Content.ReadFromJsonAsync<IEnumerable<Role>>();
-        var role = roles?.SingleOrDefault(r => r.Name == roleName);
+        var role = result.Value?.SingleOrDefault(r => r.Name == roleName);
 
         if (role == null)
         {
@@ -105,41 +82,30 @@ public class KeycloakAdministrationClient : BaseClient, IKeycloakAdministrationC
 
     public async Task<Role?> GetRealmRole(string roleName)
     {
-        var response = await this.Client.GetAsync($"roles/{WebUtility.UrlEncode(roleName)}");
+        var result = await this.GetAsync<Role>($"roles/{WebUtility.UrlEncode(roleName)}");
 
-        if (!response.IsSuccessStatusCode)
+        if (!result.IsSuccess)
         {
-            var responseMessage = await response.Content.ReadAsStringAsync();
-            this.Logger.LogError($"Could not retrieve the role {roleName} from Keycloak. Response message: {responseMessage}");
             return null;
         }
 
-        return await response.Content.ReadFromJsonAsync<Role>();
+        return result.Value;
     }
 
     public async Task<UserRepresentation?> GetUser(Guid userId)
     {
-        var response = await this.Client.GetAsync($"users/{userId}");
-        if (!response.IsSuccessStatusCode)
+        var result = await this.GetAsync<UserRepresentation>($"users/{userId}");
+        if (!result.IsSuccess)
         {
-            var responseMessage = await response.Content.ReadAsStringAsync();
-            this.Logger.LogError($"Could not retrieve user {userId} from Keycloak. Response message: {responseMessage}");
             return null;
         }
 
-        return await response.Content.ReadFromJsonAsync<UserRepresentation>();
+        return result.Value;
     }
 
     public async Task<bool> UpdateUser(Guid userId, UserRepresentation userRep)
     {
-        var response = await this.Client.PutAsync($"users/{userId}", this.CreateStringContent(userRep));
-        if (!response.IsSuccessStatusCode)
-        {
-            var responseMessage = await response.Content.ReadAsStringAsync();
-            this.Logger.LogDebug($"Could not update the user {userId}. Response message: {responseMessage}");
-            return false;
-        }
-
-        return true;
+        var result = await this.PutAsync($"users/{userId}", userRep);
+        return result.IsSuccess
     }
 }
