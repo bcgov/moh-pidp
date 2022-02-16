@@ -1,13 +1,14 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  ComponentFactoryResolver,
   Inject,
   OnInit,
   ViewChild,
+  ViewContainerRef,
 } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
-import { DialogContentDirective } from '../dialog-content.directive';
 import { IDialogContent } from '../dialog-content.model';
 import { DialogDefaultOptions } from '../dialog-default-options.model';
 import { DialogOptions } from '../dialog-options.model';
@@ -26,13 +27,14 @@ export class ConfirmDialogComponent implements OnInit {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public dialogContentOutput: DialogContentOutput<any> | null;
 
-  @ViewChild(DialogContentDirective, { static: true })
-  public dialogContentHost!: DialogContentDirective;
+  @ViewChild('dialogContentHost', { static: true, read: ViewContainerRef })
+  public dialogContentHost!: ViewContainerRef;
 
   public constructor(
     public dialogRef: MatDialogRef<ConfirmDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public customOptions: DialogOptions,
-    @Inject(DIALOG_DEFAULT_OPTION) public defaultOptions: DialogDefaultOptions
+    @Inject(DIALOG_DEFAULT_OPTION) public defaultOptions: DialogDefaultOptions,
+    private componentFactoryResolver: ComponentFactoryResolver
   ) {
     this.options =
       typeof customOptions === 'string'
@@ -76,10 +78,13 @@ export class ConfirmDialogComponent implements OnInit {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private loadDialogContentComponent(component: any, data: any): void {
-    const viewContainerRef = this.dialogContentHost.viewContainerRef;
-    viewContainerRef.clear();
+    const componentFactory =
+      this.componentFactoryResolver.resolveComponentFactory(component);
+    this.dialogContentHost.clear();
 
-    const componentRef = viewContainerRef.createComponent(component);
+    // TODO dynamic component creation in v13 has an issue with rendering the generate component vs the deprecated API
+    const componentRef =
+      this.dialogContentHost.createComponent(componentFactory);
     const componentInstance = componentRef.instance as IDialogContent;
     componentInstance.data = data;
     const output$ = componentInstance.output;

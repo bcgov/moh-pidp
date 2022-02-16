@@ -17,6 +17,7 @@ import { CollectionNoticeComponent } from './components/collection-notice/collec
 import { ContactFormComponent } from './components/contact-info-form/contact-info-form.component';
 import { ConfirmDialogComponent } from './components/dialogs/confirm-dialog/confirm-dialog.component';
 import { FormSectionComponent } from './components/form-section/form-section.component';
+import { HtmlComponent } from './components/dialogs/content/html/html.component';
 import { IconComponent } from './components/icon/icon.component';
 import { KeyValueInfoComponent } from './components/key-value-info/key-value-info.component';
 import { PageFooterComponent } from './components/page-footer/page-footer.component';
@@ -59,6 +60,7 @@ import { SafePipe } from './pipes/safe.pipe';
     ContactFormComponent,
     FormSectionComponent,
     KeyValueInfoComponent,
+    HtmlComponent,
     IconComponent,
     PageComponent,
     PageFooterComponent,
@@ -108,6 +110,7 @@ import { SafePipe } from './pipes/safe.pipe';
     ContactFormComponent,
     FormSectionComponent,
     KeyValueInfoComponent,
+    HtmlComponent,
     IconComponent,
     PageComponent,
     PageFooterComponent,

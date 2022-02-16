@@ -25,7 +25,7 @@ export class ViewDocumentPage {
     documentService: DocumentService
   ) {
     this.title = route.snapshot.data.title;
-    this.collectionNotice = documentService.getCollectionNotice();
+    this.collectionNotice = documentService.getSAeFormsCollectionNotice();
     // TODO move into provider for each module and DI into components to reduce redundant initialization
     this.routeUtils = new RouteUtils(
       route,
