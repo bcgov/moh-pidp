@@ -106,6 +106,6 @@ public class KeycloakAdministrationClient : BaseClient, IKeycloakAdministrationC
     public async Task<bool> UpdateUser(Guid userId, UserRepresentation userRep)
     {
         var result = await this.PutAsync($"users/{userId}", userRep);
-        return result.IsSuccess
+        return result.IsSuccess;
     }
 }

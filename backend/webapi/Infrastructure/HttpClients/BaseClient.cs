@@ -64,6 +64,14 @@ public class BaseClient
     protected async Task<IDomainResult> PostAsync(string url, object? data) => await this.SendCoreAsync(HttpMethod.Post, url, data == null ? null : this.CreateStringContent(data), default);
 
     /// <summary>
+    /// Performs a POST to the supplied Url with an optional JSON StringContent body as per the serialization settings set in the constructor.
+    /// Produces a Success result with a (non-null) value of the indicated type, or a Failure result in the case of errors, non-success status codes, or a missing/null response value.
+    /// </summary>
+    /// <param name="url"></param>
+    /// <param name="data"></param>
+    protected async Task<IDomainResult<T>> PostAsync<T>(string url, object? data) => await this.SendCoreAsync<T>(HttpMethod.Post, url, data == null ? null : this.CreateStringContent(data), default);
+
+    /// <summary>
     /// Performs a PUT to the supplied Url with an optional JSON StringContent body as per the serialization settings set in the constructor
     /// </summary>
     /// <param name="url"></param>
