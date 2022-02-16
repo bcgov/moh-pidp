@@ -1,8 +1,5 @@
 namespace Pidp.Extensions;
 
-using System;
-using System.Linq;
-
 public static class QueryableExtensions
 {
     /// <summary>
