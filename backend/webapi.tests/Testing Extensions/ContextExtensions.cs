@@ -1,4 +1,4 @@
-namespace PidpTests;
+namespace PidpTests.TestingExtensions;
 
 using Pidp.Data;
 

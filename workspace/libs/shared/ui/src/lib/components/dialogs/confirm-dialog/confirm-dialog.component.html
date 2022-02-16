@@ -6,9 +6,9 @@
       'material-icons-round': options?.iconType === 'round',
       'material-icons-sharp': options?.iconType === 'sharp'
     }"
-    [color]="options.actionType"
-    >{{ options.icon }}</mat-icon
-  >
+    [color]="options.actionType">
+    {{ options.icon }}
+  </mat-icon>
   <img *ngIf="options.imageSrc" alt="" [attr.src]="options.imageSrc" />
   <span>
     {{ options.title }}
@@ -16,7 +16,7 @@
 </h2>
 <mat-dialog-content>
   <p *ngIf="options.message">{{ options.message }}</p>
-  <ng-template appDialogContent></ng-template>
+  <ng-template #dialogContentHost></ng-template>
 </mat-dialog-content>
 <mat-dialog-actions *ngIf="!(options.cancelHide && options.actionHide)">
   <button
