@@ -41,8 +41,13 @@ public class PlrClient : BaseClient, IPlrClient
         return records.Single().Ipc;
     }
 
-    public async Task<PlrRecordStatus?> GetRecordStatus(string ipc)
+    public async Task<PlrRecordStatus?> GetRecordStatus(string? ipc)
     {
+        if (ipc == null)
+        {
+            return null;
+        }
+
         var result = await this.GetAsync<PlrRecordStatus>($"records/{ipc}");
         if (!result.IsSuccess)
         {
