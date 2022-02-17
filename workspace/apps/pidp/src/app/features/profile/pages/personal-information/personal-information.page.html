@@ -15,19 +15,24 @@
     <ui-page-section-subheader heading="Name">
       <ng-container uiPageSectionSubheaderDesc>
         This information comes from the BC Services Card. If you use a different
-        name professionally, select "I have a preferred name".
-      </ng-container>
-      <ng-container uiPageSectionSubheaderHint>
-        Entering a preferred name will not change your BC Services Card name.
+        name in your college licence, select “My name is different on my college
+        licence”.
       </ng-container>
     </ui-page-section-subheader>
 
     <app-bcsc-user-info [bcscUser]="bcscUser | async"></app-bcsc-user-info>
 
     <ui-toggle-content
-      label="I have a preferred name"
+      label="My name is different on my college licence"
       [checked]="hasPreferredName"
       (toggle)="onPreferredNameToggle($event)">
+      <ui-page-section-subheader heading="Preferred Name">
+        <ng-container uiPageSectionSubheaderDesc>
+          If you use a name professionally that is different from your legal
+          name, enter it here. Entering a preferred name will not change your BC
+          Services Card name.
+        </ng-container>
+      </ui-page-section-subheader>
       <ui-preferred-name-form [form]="formState.form"></ui-preferred-name-form>
     </ui-toggle-content>
   </ui-page-section>
