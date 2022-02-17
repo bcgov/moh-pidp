@@ -1,8 +1,10 @@
 namespace PidpTests;
 
+using AutoMapper;
 using FakeItEasy.Sdk;
 using Microsoft.EntityFrameworkCore;
 using NodaTime;
+using System.Reflection;
 
 using Pidp.Data;
 
@@ -27,8 +29,10 @@ public class InMemoryDbTest : IDisposable
         GC.SuppressFinalize(this);
     }
 
+    public static IMapper DefaultMapper() => new MapperConfiguration(cfg => cfg.AddMaps(Assembly.GetAssembly(typeof(PidpDbContext)))).CreateMapper();
+
     /// <summary>
-    /// Creates an instance of the given Type, injecting the TestDb and empty mocks for all dependencies (as applicable).
+    /// Creates an instance of the given Type, injecting the TestDb, Automapper Configuration, and empty mocks for all dependencies (as applicable).
     /// Any supplied implementations or mocks of Interfaces will be used instead of empty mocks.
     /// Requires exactly one public constructor on the Type.
     /// </summary>
@@ -42,9 +46,19 @@ public class InMemoryDbTest : IDisposable
         var parameters = new List<object>();
         foreach (var parameterType in ctor.GetParameters().Select(p => p.ParameterType))
         {
-            var defaultParameter = parameterType == typeof(PidpDbContext)
-                ? this.TestDb
-                : Create.Fake(parameterType);
+            object defaultParameter;
+            if (parameterType == typeof(PidpDbContext))
+            {
+                defaultParameter = this.TestDb;
+            }
+            else if (parameterType == typeof(IMapper))
+            {
+                defaultParameter = DefaultMapper();
+            }
+            else
+            {
+                defaultParameter = Create.Fake(parameterType);
+            }
 
             parameters.Add(
                 dependencyOverrides.SingleOrDefault(x => x.GetType().GetInterfaces().Contains(parameterType))

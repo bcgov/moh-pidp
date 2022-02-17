@@ -3,10 +3,23 @@ import { Facility } from './facility.model';
 import { PartyCertification } from './party-certification.model';
 import { User } from './user.model';
 
+export enum AccessType {
+  SAEforms = 1,
+}
+
+export interface AccessRequest {
+  id: number;
+  partyId: number;
+  requestedOn: string;
+  accessType: AccessType;
+}
+
 export interface Party extends User {
   id?: number;
-  firstName: string;
-  lastName: string;
+  // TODO should be off BcscUser not User but need Auth lib to share
+  //      which contains a base BcscUser interface with userId
+  // userId: string;
+  // hpdid: string;
   preferredFirstName: string;
   preferredMiddleName: string;
   preferredLastName: string;
@@ -17,4 +30,5 @@ export interface Party extends User {
   partyCertification: PartyCertification;
   jobTitle: string;
   facility: Facility;
+  accessRequests: AccessRequest[];
 }

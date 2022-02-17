@@ -1,7 +1,14 @@
 import { Component, Inject } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 
+import { EMPTY, Observable, Subscription, exhaustMap } from 'rxjs';
+
+import { DialogOptions, HtmlComponent } from '@bcgov/shared/ui';
+import { ConfirmDialogComponent } from '@bcgov/shared/ui';
+
 import { APP_CONFIG, AppConfig } from '@app/app.config';
+import { DocumentService } from '@app/core/services/document.service';
 
 import { IdentityProvider } from '../../enums/identity-provider.enum';
 import { AuthService } from '../../services/auth.service';
@@ -12,6 +19,7 @@ import { AuthService } from '../../services/auth.service';
   styleUrls: ['./login.page.scss'],
 })
 export class LoginPage {
+  public busy?: Subscription;
   public title: string;
   public loginCancelled: boolean;
   public bcscSupportUrl: string;
@@ -26,7 +34,9 @@ export class LoginPage {
   public constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
     private authService: AuthService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private dialog: MatDialog,
+    private documentService: DocumentService
   ) {
     const routeSnapshot = this.route.snapshot;
 
@@ -43,8 +53,28 @@ export class LoginPage {
   }
 
   public onLogin(): void {
-    this.authService.login({
-      idpHint: this.route.snapshot.data.idpHint,
+    if (this.idpHint === IdentityProvider.IDIR) {
+      this.login();
+      return;
+    }
+
+    const data: DialogOptions = {
+      title: 'Collection Notice',
+      component: HtmlComponent,
+      data: {
+        content: this.documentService.getPIdPCollectionNotice(),
+      },
+    };
+    this.busy = this.dialog
+      .open(ConfirmDialogComponent, { data })
+      .afterClosed()
+      .pipe(exhaustMap((result) => (result ? this.login() : EMPTY)))
+      .subscribe();
+  }
+
+  private login(): Observable<void> {
+    return this.authService.login({
+      idpHint: this.idpHint,
       redirectUri: this.config.applicationUrl,
     });
   }

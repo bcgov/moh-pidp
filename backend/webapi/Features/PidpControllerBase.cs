@@ -24,7 +24,7 @@ public class PidpControllerBase : ControllerBase
     /// <returns></returns>
     protected async Task<IDomainResult> AuthorizePartyBeforeHandleAsync<TRequest>(int partyId, IRequestHandler<TRequest, IDomainResult> handler, TRequest request)
     {
-        var access = await this.AuthorizationService.CheckResourceAccessibility((Party p) => p.Id == partyId, this.User);
+        var access = await this.AuthorizationService.CheckPartyAccessibility(partyId, this.User);
         if (access.IsSuccess)
         {
             return await handler.HandleAsync(request);
@@ -43,7 +43,7 @@ public class PidpControllerBase : ControllerBase
     /// <returns></returns>
     protected async Task<IDomainResult<TResult>> AuthorizePartyBeforeHandleAsync<TRequest, TResult>(int partyId, IRequestHandler<TRequest, IDomainResult<TResult>> handler, TRequest request)
     {
-        var access = await this.AuthorizationService.CheckResourceAccessibility((Party p) => p.Id == partyId, this.User);
+        var access = await this.AuthorizationService.CheckPartyAccessibility(partyId, this.User);
         if (access.IsSuccess)
         {
             return await handler.HandleAsync(request);

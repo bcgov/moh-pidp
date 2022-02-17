@@ -21,7 +21,9 @@ public class PidpAuthorizationService : IPidpAuthorizationService
         this.context = context;
     }
 
-    public async Task<IDomainResult> CheckResourceAccessibility<T>(Expression<Func<T, bool>> predicate, ClaimsPrincipal user, string policy = Policies.UserOwnsResource) where T : class, IOwnedResource
+    public async Task<IDomainResult> CheckPartyAccessibility(int partyId, ClaimsPrincipal user) => await this.CheckResourceAccessibility((Party party) => party.Id == partyId, user, Policies.UserOwnsResource);
+
+    public async Task<IDomainResult> CheckResourceAccessibility<T>(Expression<Func<T, bool>> predicate, ClaimsPrincipal user, string policy) where T : class, IOwnedResource
     {
         var resourceStub = await this.context.Set<T>()
             .AsNoTracking()

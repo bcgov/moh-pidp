@@ -1,11 +1,8 @@
-namespace PidpTests;
+namespace PidpTests.TestingExtensions;
 
 public static class ObjectExtensions
 {
-    public static bool AllPropertiesNull<T>(this T obj)
-    {
-        return AllPropertiesNullExcept(obj, Array.Empty<string>());
-    }
+    public static bool AllPropertiesNull<T>(this T obj) => AllPropertiesNullExcept(obj, Array.Empty<string>());
 
     public static bool AllPropertiesNullExcept<T>(this T obj, params string[] excludedProperties)
     {

@@ -89,7 +89,6 @@ export class FormGroupValidators {
   //   };
   // }
 
-  // TODO convert moment to luxon equivalent
   // /**
   //  * @description
   //  * Checks that the start key dateTime is same or before the end key value.
@@ -108,7 +107,6 @@ export class FormGroupValidators {
   //   };
   // }
 
-  // TODO convert moment to luxon equivalent
   // /**
   //  * @description
   //  * Compares date range start and end.

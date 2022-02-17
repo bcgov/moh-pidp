@@ -2,7 +2,6 @@
 
 <div class="container">
   <ng-container *ngIf="idpHint === IdentityProvider.BCSC; else IDIR">
-    <!-- TODO complete throw away until a UX/UI provided -->
     <div class="bcsc">
       <div class="row justify-content-center">
         <div class="col col-md-10 col-xl-8">
@@ -64,8 +63,8 @@
                   >BC Services Card app</ui-anchor
                 >
                 to enrol. You will use the app each time you access the eForms
-                application. If you are not eligible for BC Services Card, or
-                cannot set up the app, you can
+                application. If you are not eligible for the BC Services Card,
+                or cannot set up the app, you can
                 <ui-anchor [href]="specialAuthorityUrl"
                   >submit SA requests by fax</ui-anchor
                 >.

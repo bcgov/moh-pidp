@@ -1,15 +1,6 @@
 <ui-page [form]="formState.form" [busy]="busy" (submitted)="onSubmit()">
   <ui-page-header>{{ title }}</ui-page-header>
 
-  <ui-alert
-    *ngIf="inGoodStanding"
-    type="success"
-    icon="check_circle"
-    iconType="outlined"
-    heading="You are in good standing with the college">
-    <ng-container uiAlertContent>More details here.</ng-container>
-  </ui-alert>
-
   <ui-page-section>
     <ui-page-section-subheader
       icon="assignment_ind"

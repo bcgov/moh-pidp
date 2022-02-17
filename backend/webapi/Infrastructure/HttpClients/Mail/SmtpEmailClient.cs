@@ -1,9 +1,6 @@
 namespace Pidp.Infrastructure.HttpClients.Mail;
 
-using System;
 using System.Net.Mail;
-using System.Threading.Tasks;
-using System.IO;
 
 public class SmtpEmailClient : ISmtpEmailClient
 {
