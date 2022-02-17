@@ -3,6 +3,7 @@ namespace PidpTests.Data;
 using Xunit;
 
 using Pidp.Models;
+using PidpTests.TestingExtensions;
 
 public class PidpDbContextAuditTests : InMemoryDbTest
 {

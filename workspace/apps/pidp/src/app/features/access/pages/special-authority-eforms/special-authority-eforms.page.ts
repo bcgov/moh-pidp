@@ -30,7 +30,7 @@ export class SpecialAuthorityEformsPage implements OnInit {
   }
 
   public ngOnInit(): void {
-    const partyId = this.partyService.profileStatus?.id;
+    const partyId = this.partyService.partyId;
     if (!partyId) {
       this.logger.error('No party ID was provided');
       return this.navigateToRoot();

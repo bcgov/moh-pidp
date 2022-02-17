@@ -1,20 +1,21 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  ComponentFactoryResolver,
   Inject,
   OnInit,
+  Type,
   ViewChild,
+  ViewContainerRef,
 } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
-import { DialogContentDirective } from '../dialog-content.directive';
 import { IDialogContent } from '../dialog-content.model';
 import { DialogDefaultOptions } from '../dialog-default-options.model';
 import { DialogOptions } from '../dialog-options.model';
 import { DialogContentOutput } from '../dialog-output.model';
 import { DIALOG_DEFAULT_OPTION } from '../dialogs-properties.provider';
 
-// TODO use generics to get typings in place and drop use of any
 @Component({
   selector: 'ui-confirm-dialog',
   templateUrl: './confirm-dialog.component.html',
@@ -23,16 +24,16 @@ import { DIALOG_DEFAULT_OPTION } from '../dialogs-properties.provider';
 })
 export class ConfirmDialogComponent implements OnInit {
   public options: DialogOptions;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  public dialogContentOutput: DialogContentOutput<any> | null;
+  public dialogContentOutput: DialogContentOutput<unknown> | null;
 
-  @ViewChild(DialogContentDirective, { static: true })
-  public dialogContentHost!: DialogContentDirective;
+  @ViewChild('dialogContentHost', { static: true, read: ViewContainerRef })
+  public dialogContentHost!: ViewContainerRef;
 
   public constructor(
     public dialogRef: MatDialogRef<ConfirmDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public customOptions: DialogOptions,
-    @Inject(DIALOG_DEFAULT_OPTION) public defaultOptions: DialogDefaultOptions
+    @Inject(DIALOG_DEFAULT_OPTION) public defaultOptions: DialogDefaultOptions,
+    private componentFactoryResolver: ComponentFactoryResolver
   ) {
     this.options =
       typeof customOptions === 'string'
@@ -74,19 +75,27 @@ export class ConfirmDialogComponent implements OnInit {
     };
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  private loadDialogContentComponent(component: any, data: any): void {
-    const viewContainerRef = this.dialogContentHost.viewContainerRef;
-    viewContainerRef.clear();
+  private loadDialogContentComponent(
+    component: Type<unknown>,
+    data: unknown
+  ): void {
+    const componentFactory =
+      this.componentFactoryResolver.resolveComponentFactory(component);
+    this.dialogContentHost.clear();
 
-    const componentRef = viewContainerRef.createComponent(component);
+    // TODO dynamic component creation in v13 has an issue with rendering
+    //      the generate component vs the deprecated API
+    const componentRef =
+      this.dialogContentHost.createComponent(componentFactory);
     const componentInstance = componentRef.instance as IDialogContent;
     componentInstance.data = data;
     const output$ = componentInstance.output;
 
     if (output$) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      output$.subscribe((value: any) => (this.dialogContentOutput = value));
+      output$.subscribe(
+        (value: DialogContentOutput<unknown> | null) =>
+          (this.dialogContentOutput = value)
+      );
     }
   }
 }
