@@ -72,7 +72,7 @@ export class PortalService {
 
   public updateState(profileStatus: ProfileStatus | null): void {
     if (!profileStatus) {
-      // TODO reset everything when this occurs except the partyId
+      // TODO clear service when this occurs
       return;
     }
 

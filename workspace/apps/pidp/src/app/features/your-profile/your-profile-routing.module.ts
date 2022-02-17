@@ -29,7 +29,7 @@ const routes: Routes = [
       ).then((m) => m.SignedOrAcceptedDocumentsModule),
   },
   {
-    path: YourProfileRoutes.VIEW_DOCUMENT_PAGE,
+    path: `${YourProfileRoutes.VIEW_DOCUMENT_PAGE}/:doctype`,
     loadChildren: (): Promise<ViewDocumentModule> =>
       import('./pages/view-document/view-document.module').then(
         (m) => m.ViewDocumentModule

@@ -4,7 +4,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { RouteUtils } from '@bcgov/shared/utils';
 
-import { DocumentService } from '@app/core/services/document.service';
+import {
+  DocumentService,
+  IDocument,
+} from '@app/core/services/document.service';
 
 import { YourProfileRoutes } from '../../your-profile.routes';
 
@@ -15,7 +18,7 @@ import { YourProfileRoutes } from '../../your-profile.routes';
 })
 export class ViewDocumentPage {
   public title: string;
-  public collectionNotice: string;
+  public document: IDocument;
   private routeUtils: RouteUtils;
 
   public constructor(
@@ -25,7 +28,9 @@ export class ViewDocumentPage {
     documentService: DocumentService
   ) {
     this.title = route.snapshot.data.title;
-    this.collectionNotice = documentService.getSAeFormsCollectionNotice();
+    this.document = documentService.getDocumentByType(
+      route.snapshot.params.doctype
+    );
     // TODO move into provider for each module and DI into components to reduce redundant initialization
     this.routeUtils = new RouteUtils(
       route,
