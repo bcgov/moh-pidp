@@ -3,7 +3,6 @@ import { Facility } from './facility.model';
 import { PartyCertification } from './party-certification.model';
 import { User } from './user.model';
 
-// TODO split out into separate files before merging
 export enum AccessType {
   SAEforms = 1,
 }
@@ -18,6 +17,7 @@ export interface AccessRequest {
 export interface Party extends User {
   id?: number;
   // TODO should be off BcscUser not User but need Auth lib to share
+  //      which contains a base BcscUser interface with userId
   // userId: string;
   // hpdid: string;
   preferredFirstName: string;

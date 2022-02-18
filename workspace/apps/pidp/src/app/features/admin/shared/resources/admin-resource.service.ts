@@ -12,7 +12,6 @@ export interface PartyList {
   saEformsAccessRequest?: boolean;
 }
 
-// TODO temporary resource until more of the admin is known
 @Injectable({
   providedIn: 'root',
 })

@@ -52,7 +52,6 @@ const routes: Routes = [
     },
     children: [
       {
-        // TODO rename portal module so portal can become a parent module not a specific page
         path: PortalRoutes.MODULE_PATH,
         loadChildren: (): Promise<PortalModule> =>
           import('../portal/portal.module').then((m) => m.PortalModule),

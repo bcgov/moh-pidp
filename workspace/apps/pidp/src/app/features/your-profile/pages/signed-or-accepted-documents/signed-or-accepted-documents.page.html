@@ -17,7 +17,7 @@
           [heading]="document.title"
           [actionLabel]="document.actionLabel"
           [actionDisabled]="document.disabled"
-          (action)="onViewDocument()"></ui-card-summary>
+          (action)="onViewDocument(document.type)"></ui-card-summary>
       </div>
     </div>
   </ui-page-section>

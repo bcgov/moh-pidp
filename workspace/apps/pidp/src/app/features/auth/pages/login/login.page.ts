@@ -62,7 +62,7 @@ export class LoginPage {
       title: 'Collection Notice',
       component: HtmlComponent,
       data: {
-        content: this.documentService.getAuthCollectionNotice(),
+        content: this.documentService.getPIdPCollectionNotice(),
       },
     };
     this.busy = this.dialog

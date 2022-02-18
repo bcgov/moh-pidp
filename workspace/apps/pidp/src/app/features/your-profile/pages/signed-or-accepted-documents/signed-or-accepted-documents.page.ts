@@ -2,17 +2,18 @@ import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { ArrayUtils, RouteUtils } from '@bcgov/shared/utils';
+import { RouteUtils } from '@bcgov/shared/utils';
 
-import { FeatureFlagService } from '@app/modules/feature-flag/feature-flag.service';
-import { Role } from '@app/shared/enums/roles.enum';
+import {
+  DocumentService,
+  DocumentType,
+  IDocumentMetaData,
+} from '@app/core/services/document.service';
 
 import { YourProfileRoutes } from '../../your-profile.routes';
 
-export interface DocumentSection {
+export interface DocumentSection extends IDocumentMetaData {
   icon: string;
-  type: string;
-  title: string;
   actionLabel?: string;
   disabled?: boolean;
 }
@@ -28,7 +29,7 @@ export class SignedOrAcceptedDocumentsPage implements OnInit {
   private routeUtils: RouteUtils;
 
   public constructor(
-    private featureFlagService: FeatureFlagService,
+    private documentService: DocumentService,
     route: ActivatedRoute,
     router: Router,
     location: Location
@@ -44,41 +45,16 @@ export class SignedOrAcceptedDocumentsPage implements OnInit {
     );
   }
 
-  public onViewDocument(): void {
-    this.routeUtils.routeWithin([YourProfileRoutes.VIEW_DOCUMENT_PAGE]);
+  public onViewDocument(documentType: DocumentType): void {
+    this.routeUtils.routeWithin([
+      YourProfileRoutes.VIEW_DOCUMENT_PAGE,
+      documentType,
+    ]);
   }
 
   public ngOnInit(): void {
-    this.getDocuments();
-  }
-
-  private getDocuments(): void {
-    this.documents = this.documents = [
-      {
-        icon: 'fingerprint',
-        type: 'collection-notice',
-        title: 'Collection Notice',
-        actionLabel: 'View',
-      },
-      ...ArrayUtils.insertIf<DocumentSection>(
-        this.featureFlagService.hasFlags(Role.FEATURE_PIDP_DEMO),
-        [
-          {
-            icon: 'fingerprint',
-            type: 'user-access-agreement',
-            title: 'User Access Agreement',
-            actionLabel: 'View',
-            disabled: true,
-          },
-          {
-            icon: 'fingerprint',
-            type: 'pharmanet-terms-of-access',
-            title: 'PharmaNet Terms of Access',
-            actionLabel: 'View',
-            disabled: true,
-          },
-        ]
-      ),
-    ];
+    this.documents = this.documentService.getDocuments().map((document) => {
+      return { icon: 'fingerprint', ...document, actionLabel: 'View' };
+    });
   }
 }
