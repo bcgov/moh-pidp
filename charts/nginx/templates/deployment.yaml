@@ -166,6 +166,8 @@ spec:
             - name: https
               containerPort: {{ .Values.containerPorts.https }}
             {{- end }}
+            - name: mtls
+              containerPort: {{ .Values.containerPorts.mtls }}
           {{- if .Values.livenessProbe.enabled }}
           livenessProbe:
             tcpSocket:
