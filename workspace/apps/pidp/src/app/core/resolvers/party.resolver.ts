@@ -3,6 +3,8 @@ import { Resolve, Router } from '@angular/router';
 
 import { Observable, catchError, exhaustMap, of, throwError } from 'rxjs';
 
+import { RootRoutes } from '@bcgov/shared/ui';
+
 import { PartyResource } from '../resources/party-resource.service';
 import { LoggerService } from '../services/logger.service';
 import { PartyService } from '../services/party.service';
@@ -14,7 +16,8 @@ import { PartyService } from '../services/party.service';
  * identifier in a singleton service.
  *
  * WARNING: Should be located on or under the route config
- * containing guard(s) that manage unauthorized redirection.
+ * containing guard(s) that manage access, otherwise will
+ * redirect to access denied.
  */
 @Injectable({
   providedIn: 'root',
@@ -36,10 +39,7 @@ export class PartyResolver implements Resolve<number | null> {
       ),
       catchError((error: Error) => {
         this.logger.error(error.message);
-        // TODO could redirect to root, but possible to create an infinite loop
-        // this.router.navigate(['/']);
-        // TODO could redirect to an appropriate error page but what error page?
-        // this.router.navigateByUrl(RootRoutes.DENIED);
+        this.router.navigateByUrl(RootRoutes.DENIED);
         return of(null);
       })
     );
