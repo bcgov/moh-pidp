@@ -1,7 +1,8 @@
 <mat-list-item
-  routerLinkActive="ng-active"
-  [routerLink]="routeMenuItem.route"
-  [routerLinkActiveOptions]="{ exact: routeMenuItem.exact }"
+  [routerLink]="routeMenuItem.commands"
+  [routerLinkActive]="routeMenuItem.linkActiveClass"
+  [routerLinkActiveOptions]="routeMenuItem.linkActiveOptions"
+  [fragment]="routeMenuItem.extras.fragment"
   [class]="routeMenuItem.getOptions()"
   (click)="onRoute(routeMenuItem)">
   <ng-container

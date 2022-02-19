@@ -1,3 +1,7 @@
+import { NavigationExtras } from '@angular/router';
+
+import { RoutePath } from '@bcgov/shared/utils';
+
 export type DashboardMenuType = 'route' | 'list';
 
 export interface DashboardMenuDetail {
@@ -45,27 +49,44 @@ export class DashboardRouteMenuItem
   public readonly type: DashboardMenuType;
   /**
    * @description
-   * Route path.
+   * URL fragments with which to construct the target URL.
    */
-  public route: (string | number)[] | string;
+  public commands: RoutePath;
   /**
    * @description
-   * Only active on exact route.
+   * Options that modify the route URL.
    */
-  public exact: boolean;
+  public extras: NavigationExtras;
+  /**
+   * @description
+   * CSS class applied
+   */
+  public linkActiveClass: string | string[];
+
+  public linkActiveOptions: { exact: boolean };
 
   public constructor(
     label: string,
-    route: string,
+    routeParams: {
+      commands: RoutePath;
+      extras?: NavigationExtras;
+      linkActiveClass?: string | string[];
+      linkActiveOptions?: { exact: boolean };
+    },
     icon: string = '',
-    exact: boolean = false,
-    options: DashboardMenuItemOptions = {}
+    // TODO what to do with options?
+    menuOptions: DashboardMenuItemOptions = {}
   ) {
-    super(label, icon, options);
+    super(label, icon, menuOptions);
+
+    const { commands, extras, linkActiveClass, linkActiveOptions } =
+      routeParams;
 
     this.type = 'route';
-    this.route = route;
-    this.exact = exact;
+    this.commands = commands;
+    this.extras = extras ?? {};
+    this.linkActiveClass = linkActiveClass ?? 'ng-active';
+    this.linkActiveOptions = linkActiveOptions ?? { exact: true };
   }
 }
 
