@@ -138,7 +138,7 @@ nginx:
       server_name localhost *.gov.bc.ca;
       ssl_certificate certs/tls.crt;
       ssl_certificate_key certs/tls.key;
-      # ssl_verify_client optional_no_ca;
+      ssl_verify_client optional_no_ca;
       ssl_client_certificate certs/plr/trusted-ca-certs.pem;
 
       add_header X-Frame-Options "ALLOW-FROM dev.oidc.gov.bc.ca" always;

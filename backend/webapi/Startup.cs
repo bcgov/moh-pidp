@@ -1,13 +1,14 @@
 namespace Pidp;
 
 using FluentValidation.AspNetCore;
+using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using NodaTime;
 using NodaTime.Serialization.SystemTextJson;
 using Serilog;
+using Swashbuckle.AspNetCore.Filters;
 using System.Reflection;
 using System.Text.Json;
 
@@ -67,8 +68,10 @@ public class Startup
                 Name = "Authorization",
                 Type = SecuritySchemeType.ApiKey
             });
+            options.OperationFilter<SecurityRequirementsOperationFilter>();
             options.CustomSchemaIds(x => x.FullName);
         });
+        services.AddFluentValidationRulesToSwagger();
     }
 
     private PidpConfiguration InitializeConfiguration(IServiceCollection services)

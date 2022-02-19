@@ -8,6 +8,7 @@ public class MappingProfile : Profile
 {
     public MappingProfile()
     {
+        // TODO use CreateProjection instead
         this.CreateMap<Party, Demographics.Command>();
         this.CreateMap<Party, ProfileStatus.CommandHandler.ProfileDto>()
             .IncludeMembers(party => party.PartyCertification)
