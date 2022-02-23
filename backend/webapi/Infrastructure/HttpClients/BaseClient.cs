@@ -61,7 +61,7 @@ public class BaseClient
     /// </summary>
     /// <param name="url"></param>
     /// <param name="data"></param>
-    protected async Task<IDomainResult> PostAsync(string url, object? data) => await this.SendCoreAsync(HttpMethod.Post, url, data == null ? null : this.CreateStringContent(data), default);
+    protected async Task<IDomainResult> PostAsync(string url, object? data = null) => await this.SendCoreAsync(HttpMethod.Post, url, data == null ? null : this.CreateStringContent(data), default);
 
     /// <summary>
     /// Performs a POST to the supplied Url with an optional JSON StringContent body as per the serialization settings set in the constructor.
@@ -69,14 +69,14 @@ public class BaseClient
     /// </summary>
     /// <param name="url"></param>
     /// <param name="data"></param>
-    protected async Task<IDomainResult<T>> PostAsync<T>(string url, object? data) => await this.SendCoreAsync<T>(HttpMethod.Post, url, data == null ? null : this.CreateStringContent(data), default);
+    protected async Task<IDomainResult<T>> PostAsync<T>(string url, object? data = null) => await this.SendCoreAsync<T>(HttpMethod.Post, url, data == null ? null : this.CreateStringContent(data), default);
 
     /// <summary>
     /// Performs a PUT to the supplied Url with an optional JSON StringContent body as per the serialization settings set in the constructor
     /// </summary>
     /// <param name="url"></param>
     /// <param name="data"></param>
-    protected async Task<IDomainResult> PutAsync(string url, object? data) => await this.SendCoreAsync(HttpMethod.Put, url, data == null ? null : this.CreateStringContent(data), default);
+    protected async Task<IDomainResult> PutAsync(string url, object? data = null) => await this.SendCoreAsync(HttpMethod.Put, url, data == null ? null : this.CreateStringContent(data), default);
 
     /// <summary>
     /// Sends an HTTP message to the API; returning:
