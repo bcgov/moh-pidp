@@ -89,7 +89,7 @@ public class BaseClient
     /// <param name="cancellationToken"></param>
     protected async Task<IDomainResult> SendCoreAsync(HttpMethod method, string url, HttpContent? content, CancellationToken cancellationToken)
     {
-        var result = await this.SendCoreInternalAsync(method, url, content, cancellationToken);
+        var result = await this.SendCoreInternalAsync<object>(method, url, content, cancellationToken, true);
         result.Deconstruct(out _, out var details);
         return details;
     }
@@ -104,45 +104,13 @@ public class BaseClient
     /// <param name="url"></param>
     /// <param name="content"></param>
     /// <param name="cancellationToken"></param>
-    protected async Task<IDomainResult<T>> SendCoreAsync<T>(HttpMethod method, string url, HttpContent? content, CancellationToken cancellationToken)
-    {
-        var result = await this.SendCoreInternalAsync(method, url, content, cancellationToken);
-        if (!result.IsSuccess)
-        {
-            return result.To<T>();
-        }
+    protected async Task<IDomainResult<T>> SendCoreAsync<T>(HttpMethod method, string url, HttpContent? content, CancellationToken cancellationToken) => await this.SendCoreInternalAsync<T>(method, url, content, cancellationToken, false);
 
-        var responseContent = result.Value;
-
-        if (responseContent == null)
-        {
-            this.Logger.LogError("Response content was null");
-            return DomainResult.Failed<T>("Response content was null");
-        }
-
-        try
-        {
-            var deserializationResult = await responseContent.ReadFromJsonAsync<T>(cancellationToken: cancellationToken);
-            if (deserializationResult == null)
-            {
-                this.Logger.LogError("Response content was null");
-                return DomainResult.Failed<T>("Response content was null");
-            }
-
-            return DomainResult.Success(deserializationResult);
-        }
-        catch (JsonException exception)
-        {
-            this.Logger.LogError(exception, "Error when deserializaing response body after calling the API");
-            return DomainResult.Failed<T>("Could not deserialize API response");
-        }
-    }
-
-    private async Task<IDomainResult<HttpContent>> SendCoreInternalAsync(HttpMethod method, string url, HttpContent? content, CancellationToken cancellationToken)
+    private async Task<IDomainResult<T>> SendCoreInternalAsync<T>(HttpMethod method, string url, HttpContent? content, CancellationToken cancellationToken, bool ignoreResponseContent)
     {
         try
         {
-            var request = new HttpRequestMessage(method, url)
+            using var request = new HttpRequestMessage(method, url)
             {
                 Content = content
             };
@@ -161,32 +129,55 @@ public class BaseClient
                     : "";
 
                 this.Logger.LogError($"Recieved non-success status code {response.StatusCode} with message: {responseMessage}.");
-                return DomainResult.Failed<HttpContent>(response.StatusCode == HttpStatusCode.NotFound
+                return DomainResult.Failed<T>(response.StatusCode == HttpStatusCode.NotFound
                     ? $"The URL {url} was not found"
                     : "Did not receive a successful status code");
             }
 
-            return DomainResult.Success(response.Content);
+            if (ignoreResponseContent)
+            {
+                return DomainResult.Success<T>(default!);
+            }
+
+            if (response.Content == null)
+            {
+                this.Logger.LogError("Response content was null");
+                return DomainResult.Failed<T>("Response content was null");
+            }
+
+            var deserializationResult = await response.Content.ReadFromJsonAsync<T>(cancellationToken: cancellationToken);
+            if (deserializationResult == null)
+            {
+                this.Logger.LogError("Response content was null");
+                return DomainResult.Failed<T>("Response content was null");
+            }
+
+            return DomainResult.Success(deserializationResult);
         }
         catch (HttpRequestException exception)
         {
             this.Logger.LogError(exception, "HttpRequestException when calling the API");
-            return DomainResult.Failed<HttpContent>("HttpRequestException during call to API");
+            return DomainResult.Failed<T>("HttpRequestException during call to API");
         }
         catch (TimeoutException exception)
         {
             this.Logger.LogError(exception, "TimeoutException during call to API");
-            return DomainResult.Failed<HttpContent>("TimeoutException during call to API");
+            return DomainResult.Failed<T>("TimeoutException during call to API");
         }
         catch (OperationCanceledException exception)
         {
             this.Logger.LogError(exception, "Task was canceled during call to API");
-            return DomainResult.Failed<HttpContent>("Task was canceled during call to API");
+            return DomainResult.Failed<T>("Task was canceled during call to API");
+        }
+        catch (JsonException exception)
+        {
+            this.Logger.LogError(exception, "Error when deserializaing response body after calling the API");
+            return DomainResult.Failed<T>("Could not deserialize API response");
         }
         catch (Exception exception)
         {
             this.Logger.LogError(exception, "Unhandled exception when calling the API");
-            return DomainResult.Failed<HttpContent>("Unhandled exception when calling the API");
+            return DomainResult.Failed<T>("Unhandled exception when calling the API");
         }
     }
 }
