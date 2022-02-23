@@ -142,7 +142,6 @@ $types: success, info, warn, danger, muted;
 
   border-radius: 5px;
   margin-bottom: 2rem;
-  padding-left: 0.3rem;
 
   & > span {
     font-size: 0.85rem;
@@ -178,6 +177,9 @@ $types: success, info, warn, danger, muted;
       background-color: alert-palette($type, backgroundColorSolid);
       border-color: alert-palette($type, backgroundColorSolid);
       color: alert-palette($type, color);
+
+      // Spacing provide on left side for status colour
+      padding-left: 0.3rem;
 
       // TODO temporary override that should be lifted out,
       //      or provided card status palette
