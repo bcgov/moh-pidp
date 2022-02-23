@@ -46,27 +46,22 @@
       </ng-container>
     </ui-page-section-subheader>
 
-    <div class="row">
-      <div
-        *ngFor="let section of (state$ | async)?.profileIdentitySections"
-        class="col-12 col-xl-6">
-        <ui-card-summary
-          [icon]="section.icon"
-          [heading]="section.heading"
-          [statusType]="section.statusType"
-          [status]="section.status"
-          [actionLabel]="section.action.label"
-          [actionDisabled]="section.action.disabled"
-          (action)="onCardRouteAction(section.action.route)">
-          <ng-container uiCardSummaryHint>{{ section.hint }}</ng-container>
-          <ng-container uiCardSummaryContent>
-            <app-profile-card-summary-content [properties]="section.properties">
-              {{ section.description }}
-            </app-profile-card-summary-content>
-          </ng-container>
-        </ui-card-summary>
-      </div>
-    </div>
+    <ui-card-summary
+      *ngFor="let section of (state$ | async)?.profileIdentitySections"
+      [icon]="section.icon"
+      [heading]="section.heading"
+      [statusType]="section.statusType"
+      [status]="section.status"
+      [actionLabel]="section.action.label"
+      [actionDisabled]="section.action.disabled"
+      (action)="onCardRouteAction(section.action.route)">
+      <ng-container uiCardSummaryHint>{{ section.hint }}</ng-container>
+      <ng-container uiCardSummaryContent>
+        <app-profile-card-summary-content [properties]="section.properties">
+          {{ section.description }}
+        </app-profile-card-summary-content>
+      </ng-container>
+    </ui-card-summary>
   </ui-page-section>
 
   <ui-page-section>
@@ -78,25 +73,20 @@
       </ng-container>
     </ui-page-section-subheader>
 
-    <div class="row">
-      <div
-        *ngFor="let section of (state$ | async)?.accessToSystemsSections"
-        class="col-12 col-xl-6">
-        <ui-card-summary
-          [icon]="section.icon"
-          [heading]="section.heading"
-          [statusType]="section.statusType"
-          [status]="section.status"
-          [actionLabel]="section.action.label"
-          [actionDisabled]="section.action.disabled"
-          (action)="onCardRequestAccess(section.action.route)">
-          <ng-container uiCardSummaryHint>{{ section.hint }}</ng-container>
-          <ng-container uiCardSummaryContent>
-            {{ section.description }}
-          </ng-container>
-        </ui-card-summary>
-      </div>
-    </div>
+    <ui-card-summary
+      *ngFor="let section of (state$ | async)?.accessToSystemsSections"
+      [icon]="section.icon"
+      [heading]="section.heading"
+      [statusType]="section.statusType"
+      [status]="section.status"
+      [actionLabel]="section.action.label"
+      [actionDisabled]="section.action.disabled"
+      (action)="onCardRequestAccess(section.action.route)">
+      <ng-container uiCardSummaryHint>{{ section.hint }}</ng-container>
+      <ng-container uiCardSummaryContent>
+        {{ section.description }}
+      </ng-container>
+    </ui-card-summary>
   </ui-page-section>
 
   <ui-page-section *featureFlag="Role.FEATURE_PIDP_DEMO">
@@ -107,27 +97,23 @@
       </ng-container>
     </ui-page-section-subheader>
 
-    <div
-      *ngIf="(state$ | async)?.trainingSections?.length; else noTraining"
-      class="row">
-      <div
+    <ng-container
+      *ngIf="(state$ | async)?.trainingSections?.length; else noTraining">
+      <ui-card-summary
         *ngFor="let section of (state$ | async)?.trainingSections"
-        class="col-12 col-xl-6">
-        <ui-card-summary
-          [icon]="section.icon"
-          [heading]="section.heading"
-          [statusType]="section.statusType"
-          [status]="section.status"
-          [actionLabel]="section.action.label"
-          [actionDisabled]="section.action.disabled"
-          (action)="onCardRouteAction(section.action.route)">
-          <ng-container uiCardSummaryHint>{{ section.hint }}</ng-container>
-          <ng-container uiCardSummaryContent>
-            {{ section.description }}
-          </ng-container>
-        </ui-card-summary>
-      </div>
-    </div>
+        [icon]="section.icon"
+        [heading]="section.heading"
+        [statusType]="section.statusType"
+        [status]="section.status"
+        [actionLabel]="section.action.label"
+        [actionDisabled]="section.action.disabled"
+        (action)="onCardRouteAction(section.action.route)">
+        <ng-container uiCardSummaryHint>{{ section.hint }}</ng-container>
+        <ng-container uiCardSummaryContent>
+          {{ section.description }}
+        </ng-container>
+      </ui-card-summary>
+    </ng-container>
     <ng-template #noTraining>
       <p class="lead">No training available at this time.</p>
     </ng-template>
@@ -135,29 +121,46 @@
 
   <ui-page-section>
     <ui-scroll-target targetId="documents"></ui-scroll-target>
-    <ui-page-section-subheader icon="history" heading="Documents">
+    <ui-page-section-subheader icon="history" heading="Your Documents">
       <ng-container uiPageSectionSubheaderDesc>
         View information pertaining to your profile and interaction with the
         systems you use for work.
       </ng-container>
     </ui-page-section-subheader>
 
-    <div class="row">
-      <div
-        *ngFor="let section of (state$ | async)?.yourProfileSections"
-        class="col-12 col-xl-6">
-        <ui-card-summary
-          [icon]="section.icon"
-          [heading]="section.heading"
-          [actionLabel]="section.action.label"
-          [actionDisabled]="section.action.disabled"
-          (action)="onCardRouteAction(section.action.route)">
-          <ng-container uiCardSummaryHint>{{ section.hint }}</ng-container>
-          <ng-container uiCardSummaryContent>
-            {{ section.description }}
-          </ng-container>
-        </ui-card-summary>
-      </div>
-    </div>
+    <ui-card-summary
+      *ngFor="let section of (state$ | async)?.yourDocumentsSections"
+      [icon]="section.icon"
+      [heading]="section.heading"
+      [actionLabel]="section.action.label"
+      [actionDisabled]="section.action.disabled"
+      (action)="onCardRouteAction(section.action.route)">
+      <ng-container uiCardSummaryHint>{{ section.hint }}</ng-container>
+      <ng-container uiCardSummaryContent>
+        {{ section.description }}
+      </ng-container>
+    </ui-card-summary>
   </ui-page-section>
+
+  <div class="support">
+    <ui-page-section>
+      <ui-page-section-subheader
+        icon="help_outline"
+        heading="Get Support"></ui-page-section-subheader>
+      <ul>
+        <li>
+          Questions about the Provider Identity Portal should be directed to:<br />
+          <ui-anchor
+            scheme="mailto"
+            [href]="providerIdentitySupportEmail"></ui-anchor>
+        </li>
+        <li>
+          Questions about Special Authority eForms should be directed to:<br />
+          <ui-anchor
+            scheme="mailto"
+            [href]="specialAuthoritySupportEmail"></ui-anchor>
+        </li>
+      </ul>
+    </ui-page-section>
+  </div>
 </ui-page>
