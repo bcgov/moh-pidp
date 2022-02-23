@@ -41,13 +41,13 @@ export class PortalDashboardComponent implements IDashboard {
     this.username = accessTokenService
       .decodeToken()
       .pipe(map((token) => token?.name ?? ''));
-    this.headerConfig = { theme: 'dark', allowMobileToggle: false };
+    this.headerConfig = { theme: 'light', allowMobileToggle: true };
     this.brandConfig = {
-      imgSrc: '/assets/images/pidp-logo-white.svg',
+      imgSrc: '/assets/images/pidp-logo-blue.svg',
       imgAlt: 'Provider Identity Portal Logo',
     };
     this.showMenuItemIcons = true;
-    this.responsiveMenuItems = true;
+    this.responsiveMenuItems = false;
     this.menuItems = this.createMenuItems();
   }
 
@@ -62,7 +62,6 @@ export class PortalDashboardComponent implements IDashboard {
         {
           commands: PortalRoutes.MODULE_PATH,
           extras: { fragment: 'profile' },
-          linkActiveClass: '',
         },
         'assignment_ind'
       ),
@@ -71,16 +70,14 @@ export class PortalDashboardComponent implements IDashboard {
         {
           commands: PortalRoutes.MODULE_PATH,
           extras: { fragment: 'access' },
-          linkActiveClass: '',
         },
         'assignment'
       ),
       new DashboardRouteMenuItem(
-        'Documents',
+        'Your Documents',
         {
           commands: PortalRoutes.MODULE_PATH,
           extras: { fragment: 'documents' },
-          linkActiveClass: '',
         },
         'restore'
       ),
@@ -88,7 +85,6 @@ export class PortalDashboardComponent implements IDashboard {
         'Get Support',
         {
           commands: PortalRoutes.MODULE_PATH,
-          linkActiveClass: '',
         },
         'help_outline'
       ),
