@@ -89,7 +89,7 @@ public class BaseClient
     /// <param name="cancellationToken"></param>
     protected async Task<IDomainResult> SendCoreAsync(HttpMethod method, string url, HttpContent? content, CancellationToken cancellationToken)
     {
-        var result = await this.SendCoreInternalAsync<object>(method, url, content, cancellationToken, true);
+        var result = await this.SendCoreInternalAsync<object>(method, url, content, true, cancellationToken);
         result.Deconstruct(out _, out var details);
         return details;
     }
@@ -104,9 +104,9 @@ public class BaseClient
     /// <param name="url"></param>
     /// <param name="content"></param>
     /// <param name="cancellationToken"></param>
-    protected async Task<IDomainResult<T>> SendCoreAsync<T>(HttpMethod method, string url, HttpContent? content, CancellationToken cancellationToken) => await this.SendCoreInternalAsync<T>(method, url, content, cancellationToken, false);
+    protected async Task<IDomainResult<T>> SendCoreAsync<T>(HttpMethod method, string url, HttpContent? content, CancellationToken cancellationToken) => await this.SendCoreInternalAsync<T>(method, url, content, false, cancellationToken);
 
-    private async Task<IDomainResult<T>> SendCoreInternalAsync<T>(HttpMethod method, string url, HttpContent? content, CancellationToken cancellationToken, bool ignoreResponseContent)
+    private async Task<IDomainResult<T>> SendCoreInternalAsync<T>(HttpMethod method, string url, HttpContent? content, bool ignoreResponseContent, CancellationToken cancellationToken)
     {
         try
         {
