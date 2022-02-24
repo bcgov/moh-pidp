@@ -67,6 +67,7 @@ public class Startup
             app.UseDeveloperExceptionPage();
         }
 
+        app.UseSerilogRequestLogging();
         app.UseRouting();
         app.UseCors("CorsPolicy");
         app.UseAuthentication();
