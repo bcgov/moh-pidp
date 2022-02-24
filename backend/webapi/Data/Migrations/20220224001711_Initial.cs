@@ -84,7 +84,7 @@ namespace Pidp.Data.Migrations
                 {
                     table.PrimaryKey("PK_Party", x => x.Id);
                 });
-            migrationBuilder.Sql("ALTER SEQUENCE \"Party_Id_seq\" RESTART WITH 1000;");
+            migrationBuilder.Sql("ALTER SEQUENCE \"Party_Id_seq\" RESTART WITH 1001;");
 
             migrationBuilder.CreateTable(
                 name: "ProvinceLookup",
