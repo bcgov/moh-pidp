@@ -16,7 +16,7 @@
 .title-group {
   margin: 0.75rem;
 }
-
+// TODO PHSA button
 // .button-group {
 //   display: grid;
 //   grid-template-columns: repeat(2, 1fr);
@@ -147,7 +147,8 @@ h3.systems-heading {
     margin-bottom: 3rem;
   }
 }
-// @media only screen and (max-width: 1400px) {
+// TODO PHSA button
+// @include media-breakpoint-down(xxl) {
 //   .button-group {
 //     display: grid;
 //     grid-template-rows: repeat(3, 1fr);
@@ -167,7 +168,7 @@ h3.systems-heading {
 //   }
 // }
 
-@media only screen and (max-width: 768px) {
+@include media-breakpoint-down(md) {
   .container {
     margin-top: 0;
   }
