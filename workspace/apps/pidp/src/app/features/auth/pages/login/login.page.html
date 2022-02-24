@@ -51,16 +51,24 @@
         </div>
         <br />
 
-        <button mat-flat-button color="primary" (click)="onLogin()">
-          Login with the BC Services Card app
-        </button>
-        <p class="subtext">
-          Need an account?
-          <ui-anchor [href]="bcscMobileSetupUrl">Register</ui-anchor>
-        </p>
-        <button mat-flat-button color="primary" (click)="onLogin()">
-          Login with your PHSA Active Directory
-        </button>
+        <div class="button-group">
+          <div class="button-group-1">
+            <button mat-flat-button color="primary" (click)="onLogin()">
+              Login with the BC Services Card app
+            </button>
+          </div>
+          <div class="button-group-2">
+            <p class="subtext">
+              Need an account?
+              <ui-anchor [href]="bcscMobileSetupUrl">Register</ui-anchor>
+            </p>
+          </div>
+          <div class="button-group-3">
+            <button mat-flat-button color="primary" (click)="onLogin()">
+              Login with your PHSA Active Directory
+            </button>
+          </div>
+        </div>
       </div>
       <div class="grid-container-3">
         <div class="">
