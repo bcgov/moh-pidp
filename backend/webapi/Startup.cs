@@ -97,6 +97,7 @@ public class Startup
         app.UseSwagger();
         app.UseSwaggerUI(options => options.SwaggerEndpoint("/swagger/v1/swagger.json", "PIdP Web API"));
 
+        app.UseSerilogRequestLogging();
         app.UseRouting();
         app.UseCors("CorsPolicy");
         app.UseAuthentication();
