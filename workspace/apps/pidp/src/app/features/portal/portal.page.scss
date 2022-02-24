@@ -1,17 +1,76 @@
 @use '@angular/material' as mat;
-@import 'palette';
+@use 'palette' as palette;
 @import 'bootstrap/bootstrap-imports';
-
-$theme-typography: mat.define-typography-config();
 
 p.lead {
   margin-bottom: 3rem;
 }
 
 .support {
-  border: 2px solid theme-palette(yellow);
+  border: 2px solid palette.theme-palette(yellow);
   border-radius: 5px;
   box-shadow: 0 2px 1px -1px rgb(0 0 0 / 20%), 0 1px 1px 0 rgb(0 0 0 / 14%),
     0 1px 3px 0 rgb(0 0 0 / 12%);
   padding: 1rem 1rem 0 1rem;
+  position: sticky;
+  top: 2rem; // Sticky offset
+}
+
+// For XL viewports and up provide appropriate fine-grained
+// restrictions on the widths of the grid columns to maintain
+// readability of the content without unnecessary wrapping
+
+$supportWidth: 375px;
+
+@include media-breakpoint-up(xl) {
+  $contentWidth: 500px;
+
+  // Maintain stacked columns until min-width of the
+  // support column can properly be fit side-by-side
+  .row > div {
+    max-width: 800px;
+  }
+
+  @media (min-width: 1300px) {
+    .row > div {
+      &:first-child {
+        max-width: $contentWidth + $supportWidth;
+      }
+      &:nth-child(2) {
+        max-width: $contentWidth;
+      }
+      &:last-child {
+        min-width: $supportWidth;
+        max-width: $supportWidth;
+      }
+    }
+  }
+}
+
+// Expand content width but hold on support
+// width for readability and space saving
+@include media-breakpoint-up(xxl) {
+  .row > div {
+    $contentWidth: 600px;
+
+    &:first-child {
+      max-width: $contentWidth + $supportWidth;
+    }
+    &:nth-child(2) {
+      max-width: $contentWidth;
+    }
+  }
+
+  @media (min-width: 1500px) {
+    .row > div {
+      $contentWidth: 700px;
+
+      &:first-child {
+        max-width: $contentWidth + $supportWidth;
+      }
+      &:nth-child(2) {
+        max-width: $contentWidth;
+      }
+    }
+  }
 }
