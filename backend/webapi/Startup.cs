@@ -13,6 +13,7 @@ using System.Reflection;
 using System.Text.Json;
 
 using Pidp.Data;
+using Pidp.Extensions;
 using Pidp.Features;
 using Pidp.Infrastructure;
 using Pidp.Infrastructure.Auth;
@@ -97,7 +98,14 @@ public class Startup
         app.UseSwagger();
         app.UseSwaggerUI(options => options.SwaggerEndpoint("/swagger/v1/swagger.json", "PIdP Web API"));
 
-        app.UseSerilogRequestLogging();
+        app.UseSerilogRequestLogging(options => options.EnrichDiagnosticContext = (diagnosticContext, httpContext) =>
+        {
+            var userId = httpContext.User.GetUserId();
+            if (!userId.Equals(Guid.Empty))
+            {
+                diagnosticContext.Set("User", userId);
+            }
+        });
         app.UseRouting();
         app.UseCors("CorsPolicy");
         app.UseAuthentication();
