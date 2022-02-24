@@ -28,13 +28,13 @@ icon: https://svgshare.com/i/_6C.svg
 dependencies:
   - name: frontend
     repository: "file://../frontend"
-    version: "0.1.0"
+    version: "0.1.1"
   - name: webapi
     repository: "file://../webapi"
-    version: "0.1.0"
+    version: "0.1.1"
   - name: plr-intake
     repository: "file://../plr-intake"
-    version: "0.1.0"
+    version: "0.1.1"
   - name: nginx
     repository: "file://../nginx"
     version: "9.7.3"
