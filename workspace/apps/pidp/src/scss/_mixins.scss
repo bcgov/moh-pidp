@@ -68,7 +68,6 @@ $theme-typography: mat.define-typography-config();
     // but for now is an unnecessary optimization .mat-card-hint
     span {
       font-size: 0.8rem;
-      font-style: italic;
       line-height: 1rem;
       // Reduce space between content and boundary to match actions
       // and possible card status
@@ -145,7 +144,6 @@ $types: success, info, warn, danger, muted;
 
   & > span {
     font-size: 0.85rem;
-    font-style: italic;
     // Apply padding to provide a bit of space
     // between text and boundary
     padding-right: 1rem;
