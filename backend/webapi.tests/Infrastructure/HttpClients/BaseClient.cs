@@ -9,6 +9,7 @@ using Xunit;
 using Pidp.Infrastructure.HttpClients;
 using Pidp.Models;
 using Pidp.Models.Lookups;
+using PidpTests.TestingExtensions;
 
 public class BaseClientTests : BaseClient
 {
@@ -34,16 +35,13 @@ public class BaseClientTests : BaseClient
     {
         var content = new StringContent("2");
         A.CallTo(this.MockedMessageHandler)
-            .Where(x => x.Method.Name == "SendAsync")
-            .WithReturnType<Task<HttpResponseMessage>>()
-            .WhenArgumentsMatch(ArgumentsOfSendCoreAsync(method, TestUrl, content))
+            .InvokingSendAsyncWith(method, TestUrl, content)
             .Returns(Task.FromResult(new HttpResponseMessage(HttpStatusCode.OK)));
 
         var result = await this.SendCoreAsync(method, TestUrl, content, default);
 
         A.CallTo(this.MockedMessageHandler)
-            .Where(x => x.Method.Name == "SendAsync")
-            .WhenArgumentsMatch(ArgumentsOfSendCoreAsync(method, TestUrl, content))
+            .InvokingSendAsyncWith(method, TestUrl, content)
             .MustHaveHappenedOnceExactly();
         Assert.True(result.IsSuccess);
     }
@@ -84,9 +82,7 @@ public class BaseClientTests : BaseClient
         };
         var responseContent = new StringContent(JsonSerializer.Serialize(expectedCert), System.Text.Encoding.UTF8, "application/json");
         A.CallTo(this.MockedMessageHandler)
-            .Where(x => x.Method.Name == "SendAsync")
-            .WithReturnType<Task<HttpResponseMessage>>()
-            .WhenArgumentsMatch(ArgumentsOfSendCoreAsync(method, TestUrl, null))
+            .InvokingSendAsyncWith(method, TestUrl, null)
             .Returns(Task.FromResult(new HttpResponseMessage(HttpStatusCode.OK) { Content = responseContent }));
 
         var result = await this.SendCoreAsync<PartyCertification>(method, TestUrl, null, default);
@@ -133,12 +129,5 @@ public class BaseClientTests : BaseClient
         yield return new object[] { HttpMethod.Post };
         yield return new object[] { HttpMethod.Put };
         yield return new object[] { HttpMethod.Trace };
-    }
-
-    public static Func<HttpRequestMessage, CancellationToken, bool> ArgumentsOfSendCoreAsync(HttpMethod method, string url, HttpContent? content)
-    {
-        return (HttpRequestMessage message, CancellationToken token) => message.Method == method
-            && message.RequestUri == new Uri(url)
-            && message.Content == content;
     }
 }
