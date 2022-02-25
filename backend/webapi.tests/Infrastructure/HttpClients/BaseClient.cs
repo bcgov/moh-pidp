@@ -51,7 +51,7 @@ public class BaseClientTests : BaseClient
     public async void SendCoreAsync_FailResponseCode_FailsWithNoExceptions(HttpMethod method)
     {
         A.CallTo(this.MockedMessageHandler)
-            .WithReturnType<Task<HttpResponseMessage>>()
+            .InvokingSendAsyncWithAnything()
             .Returns(Task.FromResult(new HttpResponseMessage(HttpStatusCode.InternalServerError)));
 
         var result = await this.SendCoreAsync(method, TestUrl, null, default);
@@ -64,6 +64,7 @@ public class BaseClientTests : BaseClient
     public async void SendCoreAsync_InternalError_FailsWithNoExceptions(HttpMethod method)
     {
         A.CallTo(this.MockedMessageHandler)
+            .InvokingSendAsyncWithAnything()
             .Throws(() => new HttpRequestException());
 
         var result = await this.SendCoreAsync(method, TestUrl, null, default);
@@ -99,7 +100,7 @@ public class BaseClientTests : BaseClient
     public async void SendCoreAsyncT_FailResponseCode_FailsWithNoExceptions(HttpMethod method)
     {
         A.CallTo(this.MockedMessageHandler)
-            .WithReturnType<Task<HttpResponseMessage>>()
+            .InvokingSendAsyncWithAnything()
             .Returns(Task.FromResult(new HttpResponseMessage(HttpStatusCode.InternalServerError)));
 
         var result = await this.SendCoreAsync<object>(method, TestUrl, null, default);
@@ -112,6 +113,7 @@ public class BaseClientTests : BaseClient
     public async void SendCoreAsyncT_InternalError_FailsWithNoExceptions(HttpMethod method)
     {
         A.CallTo(this.MockedMessageHandler)
+            .InvokingSendAsyncWithAnything()
             .Throws(() => new HttpRequestException());
 
         var result = await this.SendCoreAsync<object>(method, TestUrl, null, default);

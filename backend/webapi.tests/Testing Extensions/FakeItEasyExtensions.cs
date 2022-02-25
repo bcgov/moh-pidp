@@ -14,4 +14,11 @@ public static class FakeItEasyExtensions
                 && message.RequestUri == new Uri(url)
                 && message.Content == content);
     }
+
+    public static IReturnValueConfiguration<Task<HttpResponseMessage>> InvokingSendAsyncWithAnything(this IWhereConfiguration<IAnyCallConfigurationWithNoReturnTypeSpecified> configuration)
+    {
+        return configuration
+            .Where(x => x.Method.Name == "SendAsync")
+            .WithReturnType<Task<HttpResponseMessage>>();
+    }
 }
