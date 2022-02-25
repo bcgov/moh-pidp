@@ -182,7 +182,8 @@ containerSecurityContext:
 ##
 containerPorts:
   http: 8080
-  https: ""
+  https: 8443
+  mtls: 8543
 ## NGINX containers' resource requests and limits
 ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
 ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -588,7 +589,7 @@ service:
   targetPort:
     http: http
     https: https
-    mtls: plr
+    mtls: mtls
   ## @param service.loadBalancerIP LoadBalancer service IP address
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
   ##

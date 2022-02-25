@@ -1,17 +1,19 @@
 namespace Pidp;
 
 using FluentValidation.AspNetCore;
+using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using NodaTime;
 using NodaTime.Serialization.SystemTextJson;
 using Serilog;
+using Swashbuckle.AspNetCore.Filters;
 using System.Reflection;
 using System.Text.Json;
 
 using Pidp.Data;
+using Pidp.Extensions;
 using Pidp.Features;
 using Pidp.Infrastructure;
 using Pidp.Infrastructure.Auth;
@@ -67,8 +69,10 @@ public class Startup
                 Name = "Authorization",
                 Type = SecuritySchemeType.ApiKey
             });
+            options.OperationFilter<SecurityRequirementsOperationFilter>();
             options.CustomSchemaIds(x => x.FullName);
         });
+        services.AddFluentValidationRulesToSwagger();
     }
 
     private PidpConfiguration InitializeConfiguration(IServiceCollection services)
@@ -94,6 +98,14 @@ public class Startup
         app.UseSwagger();
         app.UseSwaggerUI(options => options.SwaggerEndpoint("/swagger/v1/swagger.json", "PIdP Web API"));
 
+        app.UseSerilogRequestLogging(options => options.EnrichDiagnosticContext = (diagnosticContext, httpContext) =>
+        {
+            var userId = httpContext.User.GetUserId();
+            if (!userId.Equals(Guid.Empty))
+            {
+                diagnosticContext.Set("User", userId);
+            }
+        });
         app.UseRouting();
         app.UseCors("CorsPolicy");
         app.UseAuthentication();
