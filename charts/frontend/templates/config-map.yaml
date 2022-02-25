@@ -17,12 +17,12 @@ metadata:
 data:
   environment.json: |-
     {
-      "environmentName": "{{ $ocEnv }}",
-      "apiEndpoint": "https://{{ if $isProd }}{{else}}{{ $drn }}.{{end}}{{ $domain }}/api/v1",
-      "applicationUrl": "https://{{ if $isProd }}{{else}}{{ $drn }}.{{end}}{{ $domain }}",
+      "environmentName": "{{ $dnr }}",
+      "apiEndpoint": "https://{{ if $isProd }}{{else}}{{ $release }}.{{end}}{{ $domain }}/api/v1",
+      "applicationUrl": "https://{{ if $isProd }}{{else}}{{ $release }}.{{end}}{{ $domain }}",
       "keycloakConfig": {
         "config": {
-          "url": "https://common-logon{{ if $isProd }}{{else}}-dev.{{end}}hlth.gov.bc.ca/auth",
+          "url": "https://common-logon{{ if $isProd }}{{else}}-{{ $drn }}{{end}}.hlth.gov.bc.ca/auth",
           "realm": "moh_applications",
           "clientId": "PIDP-WEBAPP"
         },
