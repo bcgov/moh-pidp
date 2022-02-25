@@ -1,9 +1,10 @@
 import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
+import { IsActiveMatchOptions } from '@angular/router';
 
 import { Observable, map } from 'rxjs';
 
 import {
-  DashboardHeaderTheme,
+  DashboardHeaderConfig,
   DashboardMenuItem,
   DashboardRouteMenuItem,
   IDashboard,
@@ -23,10 +24,7 @@ import { PortalRoutes } from '@app/features/portal/portal.routes';
 export class PortalDashboardComponent implements IDashboard {
   public logoutRedirectUrl: string;
   public username: Observable<string>;
-  public headerConfig: {
-    theme: DashboardHeaderTheme;
-    allowMobileToggle: boolean;
-  };
+  public headerConfig: DashboardHeaderConfig;
   public brandConfig: { imgSrc: string; imgAlt: string };
   public showMenuItemIcons: boolean;
   public responsiveMenuItems: boolean;
@@ -56,12 +54,19 @@ export class PortalDashboardComponent implements IDashboard {
   }
 
   private createMenuItems(): DashboardMenuItem[] {
+    const linkActiveOptions = {
+      matrixParams: 'exact',
+      queryParams: 'exact',
+      paths: 'exact',
+      fragment: 'exact',
+    } as IsActiveMatchOptions;
     return [
       new DashboardRouteMenuItem(
         'Profile',
         {
           commands: PortalRoutes.MODULE_PATH,
           extras: { fragment: 'profile' },
+          linkActiveOptions,
         },
         'assignment_ind'
       ),
@@ -70,6 +75,7 @@ export class PortalDashboardComponent implements IDashboard {
         {
           commands: PortalRoutes.MODULE_PATH,
           extras: { fragment: 'access' },
+          linkActiveOptions,
         },
         'assignment'
       ),
@@ -78,6 +84,7 @@ export class PortalDashboardComponent implements IDashboard {
         {
           commands: PortalRoutes.MODULE_PATH,
           extras: { fragment: 'documents' },
+          linkActiveOptions,
         },
         'restore'
       ),
@@ -85,6 +92,8 @@ export class PortalDashboardComponent implements IDashboard {
         'Get Support',
         {
           commands: PortalRoutes.MODULE_PATH,
+          extras: { fragment: 'support' },
+          linkActiveOptions,
         },
         'help_outline'
       ),

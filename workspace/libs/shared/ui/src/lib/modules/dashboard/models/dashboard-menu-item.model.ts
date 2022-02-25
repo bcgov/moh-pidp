@@ -1,4 +1,4 @@
-import { NavigationExtras } from '@angular/router';
+import { IsActiveMatchOptions, NavigationExtras } from '@angular/router';
 
 import { RoutePath } from '@bcgov/shared/utils';
 
@@ -9,7 +9,6 @@ export interface DashboardMenuDetail {
 }
 
 export interface DashboardMenuItemOptions {
-  active?: boolean;
   deemphasize?: boolean;
   disabled?: boolean;
 }
@@ -35,7 +34,6 @@ export abstract class DashboardMenuItem {
    */
   public getOptions(): DashboardMenuItemOptions {
     return {
-      active: this.options?.active,
       disabled: this.options?.disabled,
       deemphasize: this.options?.deemphasize,
     };
@@ -59,33 +57,36 @@ export class DashboardRouteMenuItem
   public extras: NavigationExtras;
   /**
    * @description
-   * CSS class applied
+   * Options to configure how to determine if the
+   * router link is active.
    */
-  public linkActiveClass: string | string[];
-
-  public linkActiveOptions: { exact: boolean };
+  public linkActiveOptions:
+    | {
+        exact: boolean;
+      }
+    | IsActiveMatchOptions;
 
   public constructor(
     label: string,
     routeParams: {
       commands: RoutePath;
       extras?: NavigationExtras;
-      linkActiveClass?: string | string[];
-      linkActiveOptions?: { exact: boolean };
+      linkActiveOptions?:
+        | {
+            exact: boolean;
+          }
+        | IsActiveMatchOptions;
     },
     icon: string = '',
-    // TODO what to do with options?
     menuOptions: DashboardMenuItemOptions = {}
   ) {
     super(label, icon, menuOptions);
 
-    const { commands, extras, linkActiveClass, linkActiveOptions } =
-      routeParams;
+    const { commands, extras, linkActiveOptions } = routeParams;
 
     this.type = 'route';
     this.commands = commands;
     this.extras = extras ?? {};
-    this.linkActiveClass = linkActiveClass ?? 'ng-active';
     this.linkActiveOptions = linkActiveOptions ?? { exact: true };
   }
 }
