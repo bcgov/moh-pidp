@@ -3,7 +3,6 @@ namespace PidpTests.Infrastructure.HttpClients;
 using FakeItEasy;
 using Microsoft.Extensions.Logging;
 using System.Net;
-using System.Text.Json;
 using Xunit;
 
 using Pidp.Infrastructure.HttpClients;
@@ -36,7 +35,7 @@ public class BaseClientTests : BaseClient
         var content = new StringContent("2");
         A.CallTo(this.MockedMessageHandler)
             .InvokingSendAsyncWith(method, TestUrl, content)
-            .Returns(Task.FromResult(new HttpResponseMessage(HttpStatusCode.OK)));
+            .ReturnsAMessageWith(HttpStatusCode.OK);
 
         var result = await this.SendCoreAsync(method, TestUrl, content, default);
 
@@ -52,7 +51,7 @@ public class BaseClientTests : BaseClient
     {
         A.CallTo(this.MockedMessageHandler)
             .InvokingSendAsyncWithAnything()
-            .Returns(Task.FromResult(new HttpResponseMessage(HttpStatusCode.InternalServerError)));
+            .ReturnsAMessageWith(HttpStatusCode.InternalServerError);
 
         var result = await this.SendCoreAsync(method, TestUrl, null, default);
 
@@ -81,10 +80,9 @@ public class BaseClientTests : BaseClient
             CollegeCode = CollegeCode.Pharmacists,
             LicenceNumber = "12345"
         };
-        var responseContent = new StringContent(JsonSerializer.Serialize(expectedCert), System.Text.Encoding.UTF8, "application/json");
         A.CallTo(this.MockedMessageHandler)
             .InvokingSendAsyncWith(method, TestUrl, null)
-            .Returns(Task.FromResult(new HttpResponseMessage(HttpStatusCode.OK) { Content = responseContent }));
+            .ReturnsAMessageWith(HttpStatusCode.OK, expectedCert);
 
         var result = await this.SendCoreAsync<PartyCertification>(method, TestUrl, null, default);
 
@@ -101,7 +99,7 @@ public class BaseClientTests : BaseClient
     {
         A.CallTo(this.MockedMessageHandler)
             .InvokingSendAsyncWithAnything()
-            .Returns(Task.FromResult(new HttpResponseMessage(HttpStatusCode.InternalServerError)));
+            .ReturnsAMessageWith(HttpStatusCode.InternalServerError);
 
         var result = await this.SendCoreAsync<object>(method, TestUrl, null, default);
 

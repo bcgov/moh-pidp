@@ -2,6 +2,8 @@ namespace PidpTests.TestingExtensions;
 
 using FakeItEasy;
 using FakeItEasy.Configuration;
+using System.Net;
+using System.Text.Json;
 
 public static class FakeItEasyExtensions
 {
@@ -20,5 +22,18 @@ public static class FakeItEasyExtensions
         return configuration
             .Where(x => x.Method.Name == "SendAsync")
             .WithReturnType<Task<HttpResponseMessage>>();
+    }
+
+    public static IAfterCallConfiguredWithOutAndRefParametersConfiguration<IReturnValueConfiguration<Task<HttpResponseMessage>>> ReturnsAMessageWith(this IReturnValueConfiguration<Task<HttpResponseMessage>> configuration, HttpStatusCode code)
+    {
+        return configuration
+            .Returns(Task.FromResult(new HttpResponseMessage(code)));
+    }
+
+    public static IAfterCallConfiguredWithOutAndRefParametersConfiguration<IReturnValueConfiguration<Task<HttpResponseMessage>>> ReturnsAMessageWith(this IReturnValueConfiguration<Task<HttpResponseMessage>> configuration, HttpStatusCode code, object asStringContent)
+    {
+        var content = new StringContent(JsonSerializer.Serialize(asStringContent), System.Text.Encoding.UTF8, "application/json");
+        return configuration
+            .Returns(Task.FromResult(new HttpResponseMessage(code) { Content = content }));
     }
 }
