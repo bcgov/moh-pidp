@@ -81,7 +81,7 @@ public class BaseClientTests : BaseClient
             LicenceNumber = "12345"
         };
         A.CallTo(this.MockedMessageHandler)
-            .InvokingSendAsyncWith(method, TestUrl, null)
+            .InvokingSendAsyncWith(method, TestUrl)
             .ReturnsAMessageWith(HttpStatusCode.OK, expectedCert);
 
         var result = await this.SendCoreAsync<PartyCertification>(method, TestUrl, null, default);
