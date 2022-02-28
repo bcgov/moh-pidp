@@ -1455,6 +1455,18 @@
   resolved "https://registry.yarnpkg.com/@gar/promisify/-/promisify-1.1.2.tgz#30aa825f11d438671d585bd44e7fd564535fc210"
   integrity sha512-82cpyJyKRoQoRi+14ibCeGPu0CwypgtBAdBhq1WfvagpCZNKqwXbKwXllYSMG91DhmG4jt9gN8eP6lGOtozuaw==
 
+"@hirez_io/auto-spies-core@1.6.7":
+  version "1.6.7"
+  resolved "https://registry.yarnpkg.com/@hirez_io/auto-spies-core/-/auto-spies-core-1.6.7.tgz#432c9628625b2407d5a8277c465928b734524257"
+  integrity sha512-y+Rzu/+92nXBUO03GJmUhUiCFMSWEVGNvi6s8mJNpac41t1rEkhqePJoDA08pK1/or4JjQnNeFPnA+45mrkVnw==
+  dependencies:
+    javascript-stringify "2.1.0"
+
+"@hirez_io/jest-single@^1.1.1":
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/@hirez_io/jest-single/-/jest-single-1.1.1.tgz#f997c5fdc929b07695102a72e57c97fbce1dc2bc"
+  integrity sha512-p93Cej1+TyZd3GYf49X9x4IVS17QUzfvjAbYXcWZlUx1idRK6/08v+gPKMWrMhhVdk523jQTlTVJN6Q67FSeww==
+
 "@humanwhocodes/config-array@^0.5.0":
   version "0.5.0"
   resolved "https://registry.yarnpkg.com/@humanwhocodes/config-array/-/config-array-0.5.0.tgz#1407967d4c6eecd7388f83acf1eaf4d0c6e58ef9"
@@ -5660,6 +5672,18 @@ javascript-natural-sort@0.7.1:
   version "0.7.1"
   resolved "https://registry.yarnpkg.com/javascript-natural-sort/-/javascript-natural-sort-0.7.1.tgz#f9e2303d4507f6d74355a73664d1440fb5a0ef59"
   integrity sha1-+eIwPUUH9tdDVac2ZNFED7Wg71k=
+
+javascript-stringify@2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/javascript-stringify/-/javascript-stringify-2.1.0.tgz#27c76539be14d8bd128219a2d731b09337904e79"
+  integrity sha512-JVAfqNPTvNq3sB/VHQJAFxN/sPgKnsKrCwyRt15zwNCdrMMJDdcEOdubuy+DuJYYdm0ox1J4uzEuYKkN+9yhVg==
+
+jest-auto-spies@^1.6.9:
+  version "1.6.9"
+  resolved "https://registry.yarnpkg.com/jest-auto-spies/-/jest-auto-spies-1.6.9.tgz#44e1891c7244f2b739f30188a9cc561a24380e0b"
+  integrity sha512-YBV7IPC2Ob6+Vlhs1wsipb5QW/9En8fpXOx62IHRpJ5qwmwkb/HUdkQHWpv2OnnXuLyhFbSssQ4PodBXe9ZUZQ==
+  dependencies:
+    "@hirez_io/auto-spies-core" "1.6.7"
 
 jest-changed-files@^27.3.0:
   version "27.3.0"

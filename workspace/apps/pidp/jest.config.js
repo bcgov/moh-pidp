@@ -1,7 +1,10 @@
 module.exports = {
   displayName: 'pidp',
   preset: '../../jest.preset.js',
-  setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
+  setupFilesAfterEnv: [
+    '<rootDir>/src/test-setup.ts',
+    '../../node_modules/@hirez_io/jest-single/dist/jest-single.js',
+  ],
   globals: {
     'ts-jest': {
       tsconfig: '<rootDir>/tsconfig.spec.json',
