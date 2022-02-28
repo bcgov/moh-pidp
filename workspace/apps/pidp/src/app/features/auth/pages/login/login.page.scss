@@ -1,56 +1,109 @@
 @use '@angular/material' as mat;
 @use 'material/material-variables' as var;
 
-@import 'palette';
+@use 'palette' as palette;
 @import 'bootstrap/bootstrap-imports';
 
 .container {
-  margin-top: 3rem;
+  padding-top: 3rem;
+  padding-bottom: 1rem;
+  max-width: 1115px;
 }
 
-.bcsc {
+//
+// BCSC Login
+//
+
+.header,
+.actions,
+.systems,
+.support {
+  margin-bottom: 3rem;
+}
+
+.header {
+  display: flex;
+
   img {
-    width: 75px;
-
-    @include media-breakpoint-up(md) {
-      width: 100px;
-    }
-
-    @include media-breakpoint-up(lg) {
-      width: 125px;
-    }
+    display: none;
   }
 
-  h1 {
-    margin-bottom: 0;
+  p {
+    margin-top: -1.5rem;
 
-    @include media-breakpoint-up(md) {
-      // Only for login increase the font-size for <h1>
-      font-size: 2.5rem;
+    @include media-breakpoint-up(sm) {
+      width: 425px;
     }
   }
 
-  h2 {
-    margin-top: 2rem;
-    margin-bottom: 0.25rem;
-    line-height: 2rem;
-  }
+  @include media-breakpoint-up(md) {
+    img {
+      display: block;
+    }
 
-  .row {
-    margin-bottom: 2rem;
+    span {
+      margin-top: 2rem;
+      margin-left: 2rem;
+    }
+  }
+}
+
+.actions {
+  small {
+    margin-top: 0.2rem;
+    display: block;
   }
 
   button {
     font-size: 1.2rem;
     padding: 0.75rem 1.2rem;
-
-    @include media-breakpoint-down(sm) {
-      width: 100%;
-    }
+    width: 100%;
 
     @include media-breakpoint-up(sm) {
+      width: auto;
       padding: 0.75rem 1.75rem;
     }
+  }
+}
+
+.support {
+  padding: 1rem 0;
+  max-width: 425px;
+
+  li {
+    margin-bottom: 1.2rem;
+  }
+}
+
+.systems {
+  $border: 3px solid palette.theme-palette(blue);
+  border: $border;
+  border-radius: 5px;
+
+  h2 {
+    text-align: right;
+    border-bottom: $border;
+  }
+
+  h2,
+  div {
+    padding: 1rem 1.5rem;
+  }
+
+  @include media-breakpoint-up(xl) {
+    max-width: 450px;
+  }
+}
+
+@include media-breakpoint-down(xl) {
+  .hide-on-small-viewports {
+    display: none;
+  }
+}
+
+@include media-breakpoint-up(xl) {
+  .hide-on-large-viewports {
+    display: none;
   }
 }
 
