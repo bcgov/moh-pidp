@@ -10,7 +10,7 @@ module.exports = {
   },
   coverageDirectory: '../../coverage/apps/pidp',
   transform: {
-    '^.+\\.(ts|mjs|js|html)$': 'jest-preset-angular',
+    '^.+\\.(ts|mjs|js|html|svg)$': 'jest-preset-angular',
   },
   transformIgnorePatterns: ['node_modules/(?!.*\\.mjs$)'],
   snapshotSerializers: [
