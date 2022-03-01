@@ -1,13 +1,11 @@
 namespace Pidp.Extensions;
 
 using NodaTime;
-using System;
-using System.Linq;
+using NodaTime.Text;
 using System.Security.Claims;
 using System.Text.Json;
 
 using Pidp.Infrastructure.Auth;
-using NodaTime.Text;
 
 public static class ClaimsPrincipalExtensions
 {
