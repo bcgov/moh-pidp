@@ -52,7 +52,7 @@ public class EmailService : IEmailService
             return;
         }
 
-        var url = "https://www.eforms.phsahealth.ca/appdash";
+        var url = "https://www.eforms.healthbc.org/login";
         var link = $"<a href=\"{url}\" target=\"_blank\" rel=\"noopener noreferrer\">link</a>";
         var email = new Email(
             from: PidpEmail,
