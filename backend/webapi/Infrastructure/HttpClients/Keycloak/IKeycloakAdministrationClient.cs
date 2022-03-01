@@ -1,17 +1,7 @@
 namespace Pidp.Infrastructure.HttpClients.Keycloak;
 
-using System;
-using System.Threading.Tasks;
-
 public interface IKeycloakAdministrationClient
 {
-    /// <summary>
-    /// Gets the Keycloak Client representation by ClientId.
-    /// Returns null if unccessful.
-    /// </summary>
-    /// <param name="clientId"></param>
-    Task<Client?> GetClient(string clientId);
-
     /// <summary>
     /// Assigns a Client Role to the user, if it exists.
     /// Returns true if the operation was successful.
@@ -30,6 +20,13 @@ public interface IKeycloakAdministrationClient
     Task<bool> AssignRealmRole(Guid userId, string roleName);
 
     /// <summary>
+    /// Gets the Keycloak Client representation by ClientId.
+    /// Returns null if unccessful.
+    /// </summary>
+    /// <param name="clientId"></param>
+    Task<Client?> GetClient(string clientId);
+
+    /// <summary>
     /// Gets the Keycloak Client Role representation by name.
     /// Returns null if unccessful or if no roles of that name exist on the client.
     /// </summary>
@@ -43,7 +40,6 @@ public interface IKeycloakAdministrationClient
     /// </summary>
     /// <param name="roleName"></param>
     Task<Role?> GetRealmRole(string roleName);
-
 
     /// <summary>
     /// Gets the Keycloak User Representation for the user.
