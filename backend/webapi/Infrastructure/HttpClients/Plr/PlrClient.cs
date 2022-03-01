@@ -1,10 +1,8 @@
 namespace Pidp.Infrastructure.HttpClients.Plr;
 
 using NodaTime;
-using System.Threading.Tasks;
 
 using Pidp.Models.Lookups;
-using Pidp.Extensions;
 
 public class PlrClient : BaseClient, IPlrClient
 {
@@ -13,15 +11,20 @@ public class PlrClient : BaseClient, IPlrClient
     public async Task<string?> GetPlrRecord(CollegeCode collegeCode, string licenceNumber, LocalDate birthdate)
     {
         // TODO timeout of 4-5 seconds
-        var response = await this.Client.GetWithQueryParamsAsync("records", new { CollegeId = licenceNumber, Birthdate = birthdate.ToString() });
-        if (!response.IsSuccessStatusCode)
+        var result = await this.GetWithQueryParamsAsync<IEnumerable<PlrRecord>>("records", new
         {
-            this.Logger.LogError($"Error when retrieving PLR Record with CollegeId = {licenceNumber} and Birthdate = {birthdate}.");
+            CollegeId = licenceNumber,
+            Birthdate = birthdate.ToString()
+        });
+
+        if (!result.IsSuccess)
+        {
+            // this.Logger.LogError($"Error when retrieving PLR Record with CollegeId = {licenceNumber} and Birthdate = {birthdate}.");
             return null;
         }
 
-        var records = await response.Content.ReadFromJsonAsync<IEnumerable<PlrRecord>>();
-        if (records == null || !records.Any())
+        var records = result.Value;
+        if (!records.Any())
         {
             this.Logger.LogInformation($"No Records found in PLR with CollegeId = {licenceNumber} and Birthdate = {birthdate}.");
             return null;
@@ -36,6 +39,23 @@ public class PlrClient : BaseClient, IPlrClient
         }
 
         return records.Single().Ipc;
+    }
+
+    public async Task<PlrRecordStatus?> GetRecordStatus(string? ipc)
+    {
+        if (ipc == null)
+        {
+            return null;
+        }
+
+        var result = await this.GetAsync<PlrRecordStatus>($"records/{ipc}");
+        if (!result.IsSuccess)
+        {
+            // this.Logger.LogError($"Error when retrieving PLR Record Details with Ipc = {ipc}.");
+            return null;
+        }
+
+        return result.Value;
     }
 
     private class PlrRecord
@@ -54,30 +74,6 @@ public class PlrClient : BaseClient, IPlrClient
                 _ => null
             };
         }
-    }
-
-    public async Task<PlrRecordStatus?> GetRecordStatus(string? ipc)
-    {
-        if (ipc == null)
-        {
-            return null;
-        }
-
-        var response = await this.Client.GetAsync($"records/{ipc}");
-        if (!response.IsSuccessStatusCode)
-        {
-            this.Logger.LogError($"Error when retrieving PLR Record Details with Ipc = {ipc}.");
-            return null;
-        }
-
-        var status = await response.Content.ReadFromJsonAsync<PlrRecordStatus>();
-        if (status == null)
-        {
-            this.Logger.LogInformation($"No Records found in PLR with Ipc = {ipc}.");
-            return null;
-        }
-
-        return status;
     }
 }
 

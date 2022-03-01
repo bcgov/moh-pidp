@@ -1,8 +1,9 @@
 namespace Pidp.Infrastructure.Services;
 
-using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using NodaTime;
+using System.Linq.Expressions;
+
 using Pidp;
 using Pidp.Data;
 using Pidp.Infrastructure.HttpClients.Mail;
@@ -18,7 +19,13 @@ public class EmailService : IEmailService
     private readonly ISmtpEmailClient smtpEmailClient;
     private readonly IClock clock;
 
-    public EmailService(PidpDbContext context, ILogger<EmailService> logger, PidpConfiguration config, IChesClient chesClient, ISmtpEmailClient smtpEmailClient, IClock clock)
+    public EmailService(
+        PidpDbContext context,
+        ILogger<EmailService> logger,
+        PidpConfiguration config,
+        IChesClient chesClient,
+        ISmtpEmailClient smtpEmailClient,
+        IClock clock)
     {
         this.context = context;
         this.logger = logger;
@@ -48,10 +55,10 @@ public class EmailService : IEmailService
         var url = "https://www.eforms.phsahealth.ca/appdash";
         var link = $"<a href=\"{url}\" target=\"_blank\" rel=\"noopener noreferrer\">link</a>";
         var email = new Email(
-            PidpEmail,
-            party.Email,
-            "SA eForms Enrolment Confirmation",
-            $"Hi {party.FirstName},<br><br>You will need to visit this {link} each time you want to submit an SA eForm. It may be helpful to bookmark this {link} for future use."
+            from: PidpEmail,
+            to: party.Email,
+            subject: "SA eForms Enrolment Confirmation",
+            body: $"Hi {party.FirstName},<br><br>You will need to visit this {link} each time you want to submit an SA eForm. It may be helpful to bookmark this {link} for future use."
         );
         await this.Send(email);
     }

@@ -10,6 +10,7 @@ using Pidp.Features.Parties.ProfileStatusInternal;
 using Pidp.Infrastructure.HttpClients.Plr;
 using static Pidp.Features.Parties.ProfileStatus;
 using static Pidp.Features.Parties.ProfileStatus.Model;
+using PidpTests.TestingExtensions;
 
 public class ProfileStatusTests : InMemoryDbTest
 {
