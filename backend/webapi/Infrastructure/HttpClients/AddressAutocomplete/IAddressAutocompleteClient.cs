@@ -1,7 +1,5 @@
 namespace Pidp.Infrastructure.HttpClients.AddressAutocomplete;
 
-using System.Threading.Tasks;
-
 /// <summary>
 /// Address autocomplete client for CanadaPost for more information on the API:
 /// https://www.canadapost-postescanada.ca/ac/support/api/
