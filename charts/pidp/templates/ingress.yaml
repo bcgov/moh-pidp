@@ -44,7 +44,7 @@ spec:
     {{- end }}
   {{- end }}
   rules:
-    - host: {{ if $isProd }}{{else}}{{ $drn }}.{{end}}{{ .Values.global.vanityURL }}
+    - host: {{ if $isProd }}{{else}}{{ $release }}.{{end}}{{ .Values.global.vanityURL }}
       http:
         paths:
           - path: ''
@@ -61,7 +61,7 @@ spec:
               serviceName: {{ $release }}-ingress
               servicePort: 8443
               {{- end }}
-    - host: 'mauth{{ if $isProd }}{{else}}-{{ $drn }}{{end}}.{{ .Values.global.vanityURL }}'
+    - host: 'mauth{{ if $isProd }}{{else}}-{{ $release }}{{end}}.{{ .Values.global.vanityURL }}'
       http:
         paths:
           - path: ''
