@@ -48,7 +48,7 @@ public class KeycloakAdministrationClient : BaseClient, IKeycloakAdministrationC
 
         if (client == null)
         {
-            this.Logger.LogError($"Could not find a Client with ClientId {clientId} from Keycloak.");
+            this.Logger.LogClientNotFound(clientId);
         }
 
         return client;
@@ -74,7 +74,7 @@ public class KeycloakAdministrationClient : BaseClient, IKeycloakAdministrationC
 
         if (role == null)
         {
-            this.Logger.LogError($"Could not find a Client Role with name {roleName} from Client {clientId}.");
+            this.Logger.LogClientRoleNotFound(roleName, clientId);
         }
 
         return role;
@@ -108,4 +108,13 @@ public class KeycloakAdministrationClient : BaseClient, IKeycloakAdministrationC
         var result = await this.PutAsync($"users/{userId}", userRep);
         return result.IsSuccess;
     }
+}
+
+public static partial class KeycloakAdministrationClientLoggingExtensions
+{
+    [LoggerMessage(1, LogLevel.Error, "Could not find a Client with ClientId {clientId} from Keycloak.")]
+    public static partial void LogClientNotFound(this ILogger logger, string clientId);
+
+    [LoggerMessage(2, LogLevel.Error, "Could not find a Client Role with name {roleName} from Client {clientId}.")]
+    public static partial void LogClientRoleNotFound(this ILogger logger, string roleName, string clientId);
 }
