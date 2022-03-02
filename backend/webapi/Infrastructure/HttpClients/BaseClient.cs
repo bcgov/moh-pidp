@@ -128,7 +128,7 @@ public class BaseClient
                     ? await response.Content.ReadAsStringAsync(cancellationToken)
                     : "";
 
-                this.Logger.LogError($"Recieved non-success status code {response.StatusCode} with message: {responseMessage}.");
+                this.Logger.LogNonSuccessStatusCode(response.StatusCode, responseMessage);
                 return DomainResult.Failed<T>(response.StatusCode == HttpStatusCode.NotFound
                     ? $"The URL {url} was not found"
                     : "Did not receive a successful status code");
@@ -141,14 +141,14 @@ public class BaseClient
 
             if (response.Content == null)
             {
-                this.Logger.LogError("Response content was null");
+                this.Logger.LogNullResponseContent();
                 return DomainResult.Failed<T>("Response content was null");
             }
 
             var deserializationResult = await response.Content.ReadFromJsonAsync<T>(cancellationToken: cancellationToken);
             if (deserializationResult == null)
             {
-                this.Logger.LogError("Response content was null");
+                this.Logger.LogNullResponseContent();
                 return DomainResult.Failed<T>("Response content was null");
             }
 
@@ -156,28 +156,40 @@ public class BaseClient
         }
         catch (HttpRequestException exception)
         {
-            this.Logger.LogError(exception, "HttpRequestException when calling the API");
+            this.Logger.LogClientException(exception);
             return DomainResult.Failed<T>("HttpRequestException during call to API");
         }
         catch (TimeoutException exception)
         {
-            this.Logger.LogError(exception, "TimeoutException during call to API");
+            this.Logger.LogClientException(exception);
             return DomainResult.Failed<T>("TimeoutException during call to API");
         }
         catch (OperationCanceledException exception)
         {
-            this.Logger.LogError(exception, "Task was canceled during call to API");
+            this.Logger.LogClientException(exception);
             return DomainResult.Failed<T>("Task was canceled during call to API");
         }
         catch (JsonException exception)
         {
-            this.Logger.LogError(exception, "Error when deserializaing response body after calling the API");
+            this.Logger.LogClientException(exception);
             return DomainResult.Failed<T>("Could not deserialize API response");
         }
         catch (Exception exception)
         {
-            this.Logger.LogError(exception, "Unhandled exception when calling the API");
+            this.Logger.LogClientException(exception);
             return DomainResult.Failed<T>("Unhandled exception when calling the API");
         }
     }
+}
+
+public static partial class BaseClientLoggingExtensions
+{
+    [LoggerMessage(1, LogLevel.Error, "Recieved non-success status code {statusCode} with message: {responseMessage}.")]
+    public static partial void LogNonSuccessStatusCode(this ILogger logger, HttpStatusCode statusCode, string responseMessage);
+
+    [LoggerMessage(2, LogLevel.Error, "Response content was null.")]
+    public static partial void LogNullResponseContent(this ILogger logger);
+
+    [LoggerMessage(3, LogLevel.Error, "Unhandled exception when calling the API.")]
+    public static partial void LogClientException(this ILogger logger, Exception e);
 }
