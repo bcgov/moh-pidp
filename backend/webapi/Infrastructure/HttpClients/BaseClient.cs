@@ -156,27 +156,27 @@ public class BaseClient
         }
         catch (HttpRequestException exception)
         {
-            this.Logger.LogClientException(exception);
+            this.Logger.LogBaseClientException(exception);
             return DomainResult.Failed<T>("HttpRequestException during call to API");
         }
         catch (TimeoutException exception)
         {
-            this.Logger.LogClientException(exception);
+            this.Logger.LogBaseClientException(exception);
             return DomainResult.Failed<T>("TimeoutException during call to API");
         }
         catch (OperationCanceledException exception)
         {
-            this.Logger.LogClientException(exception);
+            this.Logger.LogBaseClientException(exception);
             return DomainResult.Failed<T>("Task was canceled during call to API");
         }
         catch (JsonException exception)
         {
-            this.Logger.LogClientException(exception);
+            this.Logger.LogBaseClientException(exception);
             return DomainResult.Failed<T>("Could not deserialize API response");
         }
         catch (Exception exception)
         {
-            this.Logger.LogClientException(exception);
+            this.Logger.LogBaseClientException(exception);
             return DomainResult.Failed<T>("Unhandled exception when calling the API");
         }
     }
@@ -191,5 +191,5 @@ public static partial class BaseClientLoggingExtensions
     public static partial void LogNullResponseContent(this ILogger logger);
 
     [LoggerMessage(3, LogLevel.Error, "Unhandled exception when calling the API.")]
-    public static partial void LogClientException(this ILogger logger, Exception e);
+    public static partial void LogBaseClientException(this ILogger logger, Exception e);
 }

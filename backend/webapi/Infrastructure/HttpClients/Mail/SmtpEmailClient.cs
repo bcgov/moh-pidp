@@ -26,7 +26,7 @@ public class SmtpEmailClient : ISmtpEmailClient
         }
         catch (Exception e)
         {
-            this.logger.LogSendEmailException(e);
+            this.logger.LogSmtpClientException(e);
         }
     }
 
@@ -62,5 +62,5 @@ public class SmtpEmailClient : ISmtpEmailClient
 public static partial class SmtpClientLoggingExtensions
 {
     [LoggerMessage(1, LogLevel.Error, "Unhandled exception when sending Email via SMTP.")]
-    public static partial void LogSendEmailException(this ILogger logger, Exception e);
+    public static partial void LogSmtpClientException(this ILogger logger, Exception e);
 }
