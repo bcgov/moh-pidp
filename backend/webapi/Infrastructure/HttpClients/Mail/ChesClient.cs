@@ -7,10 +7,8 @@ public class ChesClient : BaseClient, IChesClient
     public async Task<Guid?> SendAsync(Email email)
     {
         var result = await this.PostAsync<EmailSuccessResponse>("email", new ChesEmailRequestParams(email));
-
         if (!result.IsSuccess)
         {
-            // this.Logger.LogError($"CHES Response code: {(int)result.StatusCode}, response body:{responseJsonString}");
             return null;
         }
 
@@ -19,11 +17,9 @@ public class ChesClient : BaseClient, IChesClient
 
     public async Task<string?> GetStatusAsync(Guid msgId)
     {
-        var result = await this.GetAsync<IEnumerable<StatusResponse>>($"status?msgId={msgId}");
-
+        var result = await this.GetWithQueryParamsAsync<IEnumerable<StatusResponse>>("status", new { msgId });
         if (!result.IsSuccess)
         {
-            // this.Logger.LogError($"CHES Response code: {(int)response.StatusCode}, response body:{responseString}");
             return null;
         }
 

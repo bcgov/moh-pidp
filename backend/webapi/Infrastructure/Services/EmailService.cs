@@ -48,7 +48,7 @@ public class EmailService : IEmailService
 
         if (party?.Email == null)
         {
-            this.logger.LogError($"Could not send SA eForms access request confirmation.No email address found for partyId {partyId}");
+            this.logger.LogNullPartyEmail(partyId);
             return;
         }
 
@@ -82,8 +82,8 @@ public class EmailService : IEmailService
         }
 
         // Fall back to SMTP client
-        await this.smtpEmailClient.SendAsync(email);
         await this.CreateEmailLog(email, SendType.Smtp);
+        await this.smtpEmailClient.SendAsync(email);
     }
 
     public async Task<int> UpdateEmailLogStatuses(int limit)
@@ -129,4 +129,10 @@ public class EmailService : IEmailService
         public const string Ches = "CHES";
         public const string Smtp = "SMTP";
     }
+}
+
+public static partial class EmailServiceLogingExtensions
+{
+    [LoggerMessage(1, LogLevel.Error, "No email address found for Party with Id {partyId}.")]
+    public static partial void LogNullPartyEmail(this ILogger logger, int partyId);
 }
