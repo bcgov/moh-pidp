@@ -8,18 +8,16 @@ public class MappingProfile : Profile
 {
     public MappingProfile()
     {
-        // TODO use CreateProjection instead
-        this.CreateMap<Party, Demographics.Command>();
-        this.CreateMap<Party, ProfileStatus.CommandHandler.ProfileDto>()
+        this.CreateProjection<Party, Demographics.Command>();
+        this.CreateProjection<Party, ProfileStatus.CommandHandler.ProfileDto>()
             .IncludeMembers(party => party.PartyCertification)
             .ForMember(dest => dest.CompletedEnrolments, opt => opt.MapFrom(src => src.AccessRequests.Select(x => x.AccessType)))
-            // .ForMember(dest => dest.FacilityStreet, opt => opt.MapFrom(src => src.Facility!.PhysicalAddress!.Street))
             .ForMember(dest => dest.PlrRecordStatus, opt => opt.Ignore());
-        this.CreateMap<Party, WorkSetting.Command>()
+        this.CreateProjection<Party, WorkSetting.Command>()
             .ForMember(dest => dest.PhysicalAddress, opt => opt.MapFrom(src => src.Facility!.PhysicalAddress));
 
-        this.CreateMap<FacilityAddress, WorkSetting.Command.Address>();
-        this.CreateMap<PartyCertification, CollegeCertification.Command>();
-        this.CreateMap<PartyCertification, ProfileStatus.CommandHandler.ProfileDto>();
+        this.CreateProjection<FacilityAddress, WorkSetting.Command.Address>();
+        this.CreateProjection<PartyCertification, CollegeCertification.Command>();
+        this.CreateProjection<PartyCertification, ProfileStatus.CommandHandler.ProfileDto>();
     }
 }
