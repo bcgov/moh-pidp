@@ -69,6 +69,7 @@ public class Startup
                 Name = "Authorization",
                 Type = SecuritySchemeType.ApiKey
             });
+            options.OperationFilter<FluentValidationClientErrorOperationFilter>();
             options.OperationFilter<SecurityRequirementsOperationFilter>();
             options.CustomSchemaIds(x => x.FullName);
         });
