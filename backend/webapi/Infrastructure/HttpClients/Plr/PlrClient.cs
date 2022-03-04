@@ -69,6 +69,8 @@ public class PlrClient : BaseClient, IPlrClient
                 "CPSID" => CollegeCode.PhysiciansAndSurgeons,
                 "RNID" or "RMID" => CollegeCode.NursesAndMidwives,
                 "NDID" => CollegeCode.NaturopathicPhysicians,
+                "DENID" => CollegeCode.DentalSurgeons,
+                "OPTID" => CollegeCode.Optometrists,
                 _ => null
             };
         }
