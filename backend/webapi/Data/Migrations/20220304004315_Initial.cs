@@ -221,7 +221,9 @@ namespace Pidp.Data.Migrations
                     { 1, "CPSBC", "College of Physicians and Surgeons of BC" },
                     { 2, "CPBC", "College of Pharmacists of BC" },
                     { 3, "BCCNM", "BC College of Nurses and Midwives" },
-                    { 4, "CNPBC", "College of Naturopathic Physicians of BC" }
+                    { 4, "CNPBC", "College of Naturopathic Physicians of BC" },
+                    { 5, "CDSBC", "College of Dental Surgeons of British Columbia" },
+                    { 6, "COBC", "College Of Optometrists of British Columbia" }
                 });
 
             migrationBuilder.InsertData(

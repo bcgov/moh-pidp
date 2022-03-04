@@ -13,8 +13,8 @@ using Pidp.Data;
 namespace Pidp.Data.Migrations
 {
     [DbContext(typeof(PidpDbContext))]
-    [Migration("20220304004047_TwoNewColleges")]
-    partial class TwoNewColleges
+    [Migration("20220304004315_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
