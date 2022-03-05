@@ -9,8 +9,7 @@ public class PidpDbContext : DbContext
 {
     private readonly IClock clock;
 
-    public PidpDbContext(DbContextOptions<PidpDbContext> options, IClock clock)
-        : base(options) => this.clock = clock;
+    public PidpDbContext(DbContextOptions<PidpDbContext> options, IClock clock) : base(options) => this.clock = clock;
 
     public DbSet<AccessRequest> AccessRequests { get; set; } = default!;
     public DbSet<EmailLog> EmailLogs { get; set; } = default!;
