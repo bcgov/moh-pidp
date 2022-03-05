@@ -1,68 +1,34 @@
 namespace Pidp.Infrastructure.HttpClients.Mail;
 
-using System.Text.Json;
-
 public class ChesClient : BaseClient, IChesClient
 {
-    public ChesClient(HttpClient httpClient, ILogger<ChesClient> logger) : base(httpClient, logger, PropertySerialization.CamelCase) { }
+    public ChesClient(HttpClient httpClient, ILogger<ChesClient> logger) : base(httpClient, logger) { }
 
     public async Task<Guid?> SendAsync(Email email)
     {
-        try
+        var result = await this.PostAsync<EmailSuccessResponse>("email", new ChesEmailRequestParams(email));
+        if (!result.IsSuccess)
         {
-            var response = await this.Client.PostAsync("email", this.CreateStringContent(new ChesEmailRequestParams(email)));
-            var responseJsonString = await response.Content.ReadAsStringAsync();
-
-            if (response.IsSuccessStatusCode)
-            {
-                var successResponse = JsonSerializer.Deserialize<EmailSuccessResponse>(responseJsonString);
-                return successResponse?.Messages.Single().MsgId;
-            }
-
-            this.Logger.LogError($"CHES Response code: {(int)response.StatusCode}, response body:{responseJsonString}");
             return null;
         }
-        catch (Exception ex)
-        {
-            this.Logger.LogError($"CHES Exception: {ex.Message}");
-            return null;
-        }
+
+        return result.Value.Messages.Single().MsgId;
     }
 
     public async Task<string?> GetStatusAsync(Guid msgId)
     {
-        try
+        var result = await this.GetWithQueryParamsAsync<IEnumerable<StatusResponse>>("status", new { msgId });
+        if (!result.IsSuccess)
         {
-            var response = await this.Client.GetAsync($"status?msgId={msgId}");
-            var responseString = await response.Content.ReadAsStringAsync();
-
-            if (response.IsSuccessStatusCode)
-            {
-                var statusResponse = JsonSerializer.Deserialize<IEnumerable<StatusResponse>>(responseString);
-                return statusResponse?.Single().Status;
-            }
-
-            this.Logger.LogError($"CHES Response code: {(int)response.StatusCode}, response body:{responseString}");
             return null;
         }
-        catch (Exception ex)
-        {
-            this.Logger.LogError($"CHES Exception: {ex.Message}");
-            throw new Exception("Error occurred when calling CHES Email API. Try again later.", ex);
-        }
+
+        return result.Value.Single().Status;
     }
 
     public async Task<bool> HealthCheckAsync()
     {
-        try
-        {
-            var response = await this.Client.GetAsync("health");
-            return response.IsSuccessStatusCode;
-        }
-        catch (Exception ex)
-        {
-            this.Logger.LogError($"Error occurred when calling CHES Healthcheck: {ex.Message}");
-            return false;
-        }
+        var result = await this.SendCoreAsync(HttpMethod.Get, "health", null, default);
+        return result.IsSuccess;
     }
 }

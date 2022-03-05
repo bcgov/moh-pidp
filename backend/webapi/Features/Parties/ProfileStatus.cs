@@ -139,10 +139,6 @@ public class ProfileStatus
             public CollegeCode? CollegeCode { get; set; }
             public string? LicenceNumber { get; set; }
             public string? Ipc { get; set; }
-            // For Work Setting, currently unused
-            // public string? JobTitle { get; set; }
-            // public string? FacilityName { get; set; }
-            // public string? FacilityStreet { get; set; }
             public IEnumerable<AccessType> CompletedEnrolments { get; set; } = Enumerable.Empty<AccessType>();
 
             // Computed after projection

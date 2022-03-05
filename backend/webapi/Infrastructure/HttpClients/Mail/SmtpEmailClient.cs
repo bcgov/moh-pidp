@@ -4,7 +4,7 @@ using System.Net.Mail;
 
 public class SmtpEmailClient : ISmtpEmailClient
 {
-    private readonly ILogger<SmtpEmailClient> logger;
+    private readonly ILogger logger;
     private readonly string url;
     private readonly int port;
 
@@ -17,30 +17,16 @@ public class SmtpEmailClient : ISmtpEmailClient
 
     public async Task SendAsync(Email email)
     {
-        var mail = ConvertToMailMessage(email);
-        var smtp = new SmtpClient(this.url, this.port);
+        using var mail = ConvertToMailMessage(email);
+        using var smtp = new SmtpClient(this.url, this.port);
 
         try
         {
             await smtp.SendMailAsync(mail);
         }
-        catch (Exception ex)
+        catch (Exception e)
         {
-            if (ex is InvalidOperationException
-                or SmtpException
-                or SmtpFailedRecipientException
-                or SmtpFailedRecipientsException)
-            {
-                // TODO add logging for mail exception
-                Console.WriteLine($"SmtpEmailClient exception: {ex}");
-            }
-
-            throw;
-        }
-        finally
-        {
-            smtp.Dispose();
-            mail.Dispose();
+            this.logger.LogSmtpClientException(e);
         }
     }
 
@@ -71,4 +57,10 @@ public class SmtpEmailClient : ISmtpEmailClient
 
         return mail;
     }
+}
+
+public static partial class SmtpClientLoggingExtensions
+{
+    [LoggerMessage(1, LogLevel.Error, "Unhandled exception when sending Email via SMTP.")]
+    public static partial void LogSmtpClientException(this ILogger logger, Exception e);
 }
