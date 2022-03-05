@@ -88,7 +88,7 @@ export class PortalService {
           return {
             heading: 'Having trouble verifying your college licence?',
             content:
-              'Your licence may not be active yet. Try again in 24 hours. If this problem persists, contact your College.',
+              'Your licence may not be active yet. Try again in 24 hours. If this problem persists, contact your college.',
           };
       }
     });
