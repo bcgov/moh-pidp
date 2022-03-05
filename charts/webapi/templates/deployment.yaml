@@ -78,6 +78,8 @@ spec:
                 name: keycloak-secrets
             - secretRef:
                 name: canada-post-addresscomplete-secrets
+            - secretRef:
+                name: ches
             - configMapRef:
                 name: mail-settings
           ports:

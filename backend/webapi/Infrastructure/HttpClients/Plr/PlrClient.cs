@@ -19,14 +19,13 @@ public class PlrClient : BaseClient, IPlrClient
 
         if (!result.IsSuccess)
         {
-            // this.Logger.LogError($"Error when retrieving PLR Record with CollegeId = {licenceNumber} and Birthdate = {birthdate}.");
             return null;
         }
 
         var records = result.Value;
         if (!records.Any())
         {
-            this.Logger.LogInformation($"No Records found in PLR with CollegeId = {licenceNumber} and Birthdate = {birthdate}.");
+            this.Logger.LogNoRecordsFound(licenceNumber, birthdate);
             return null;
         }
 
@@ -34,7 +33,7 @@ public class PlrClient : BaseClient, IPlrClient
             .Where(record => record.MapIdentifierTypeToCollegeCode() == collegeCode);
         if (records.Count() > 1)
         {
-            this.Logger.LogInformation($"Multiple matching Records found in PLR with CollegeId = {licenceNumber}, Birthdate = {birthdate}, and IdentifierType matching CollegeCode {collegeCode}.");
+            this.Logger.LogMultipleRecordsFound(licenceNumber, birthdate, collegeCode);
             return null;
         }
 
@@ -51,7 +50,6 @@ public class PlrClient : BaseClient, IPlrClient
         var result = await this.GetAsync<PlrRecordStatus>($"records/{ipc}");
         if (!result.IsSuccess)
         {
-            // this.Logger.LogError($"Error when retrieving PLR Record Details with Ipc = {ipc}.");
             return null;
         }
 
@@ -71,6 +69,8 @@ public class PlrClient : BaseClient, IPlrClient
                 "CPSID" => CollegeCode.PhysiciansAndSurgeons,
                 "RNID" or "RMID" => CollegeCode.NursesAndMidwives,
                 "NDID" => CollegeCode.NaturopathicPhysicians,
+                "DENID" => CollegeCode.DentalSurgeons,
+                "OPTID" => CollegeCode.Optometrists,
                 _ => null
             };
         }
@@ -88,4 +88,13 @@ public class PlrRecordStatus
         return this.StatusCode == "ACTIVE"
             && goodStatndingReasons.Contains(this.StatusReasonCode);
     }
+}
+
+public static partial class PlrClientLoggingExtensions
+{
+    [LoggerMessage(1, LogLevel.Warning, "No Records found in PLR with CollegeId = {licenceNumber} and Birthdate = {birthdate}.")]
+    public static partial void LogNoRecordsFound(this ILogger logger, string licenceNumber, LocalDate birthdate);
+
+    [LoggerMessage(2, LogLevel.Warning, "Multiple matching Records found in PLR with CollegeId = {licenceNumber}, Birthdate = {birthdate}, and IdentifierType matching CollegeCode {collegeCode}.")]
+    public static partial void LogMultipleRecordsFound(this ILogger logger, string licenceNumber, LocalDate birthdate, CollegeCode collegeCode);
 }

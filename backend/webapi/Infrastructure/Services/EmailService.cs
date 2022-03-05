@@ -12,27 +12,27 @@ using Pidp.Models;
 public class EmailService : IEmailService
 {
     private const string PidpEmail = "provideridentityportal@gov.bc.ca";
-    private readonly PidpDbContext context;
-    private readonly ILogger logger;
-    private readonly PidpConfiguration config;
     private readonly IChesClient chesClient;
-    private readonly ISmtpEmailClient smtpEmailClient;
     private readonly IClock clock;
+    private readonly ILogger logger;
+    private readonly ISmtpEmailClient smtpEmailClient;
+    private readonly PidpConfiguration config;
+    private readonly PidpDbContext context;
 
     public EmailService(
-        PidpDbContext context,
-        ILogger<EmailService> logger,
-        PidpConfiguration config,
         IChesClient chesClient,
+        IClock clock,
+        ILogger<EmailService> logger,
         ISmtpEmailClient smtpEmailClient,
-        IClock clock)
+        PidpConfiguration config,
+        PidpDbContext context)
     {
-        this.context = context;
-        this.logger = logger;
-        this.config = config;
         this.chesClient = chesClient;
-        this.smtpEmailClient = smtpEmailClient;
         this.clock = clock;
+        this.logger = logger;
+        this.smtpEmailClient = smtpEmailClient;
+        this.config = config;
+        this.context = context;
     }
 
     public async Task SendSaEformsAccessRequestConfirmationAsync(int partyId)
@@ -48,7 +48,7 @@ public class EmailService : IEmailService
 
         if (party?.Email == null)
         {
-            this.logger.LogError($"Could not send SA eForms access request confirmation.No email address found for partyId {partyId}");
+            this.logger.LogNullPartyEmail(partyId);
             return;
         }
 
@@ -82,8 +82,8 @@ public class EmailService : IEmailService
         }
 
         // Fall back to SMTP client
-        await this.smtpEmailClient.SendAsync(email);
         await this.CreateEmailLog(email, SendType.Smtp);
+        await this.smtpEmailClient.SendAsync(email);
     }
 
     public async Task<int> UpdateEmailLogStatuses(int limit)
@@ -129,4 +129,10 @@ public class EmailService : IEmailService
         public const string Ches = "CHES";
         public const string Smtp = "SMTP";
     }
+}
+
+public static partial class EmailServiceLogingExtensions
+{
+    [LoggerMessage(1, LogLevel.Error, "No email address found for Party with Id {partyId}.")]
+    public static partial void LogNullPartyEmail(this ILogger logger, int partyId);
 }
