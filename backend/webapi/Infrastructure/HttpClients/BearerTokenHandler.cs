@@ -4,13 +4,13 @@ using IdentityModel.Client;
 
 public class BearerTokenHandler<T> : DelegatingHandler where T : ClientCredentialsTokenRequest
 {
-    private readonly IAccessTokenClient tokenClient;
     private readonly ClientCredentialsTokenRequest credentials;
+    private readonly IAccessTokenClient tokenClient;
 
-    public BearerTokenHandler(IAccessTokenClient accessTokenClient, T credentials)
+    public BearerTokenHandler(T credentials, IAccessTokenClient accessTokenClient)
     {
-        this.tokenClient = accessTokenClient ?? throw new ArgumentNullException(nameof(accessTokenClient));
         this.credentials = credentials ?? throw new ArgumentNullException(nameof(credentials));
+        this.tokenClient = accessTokenClient ?? throw new ArgumentNullException(nameof(accessTokenClient));
     }
 
     protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)

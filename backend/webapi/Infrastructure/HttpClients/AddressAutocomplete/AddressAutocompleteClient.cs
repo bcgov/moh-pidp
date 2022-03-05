@@ -4,7 +4,11 @@ public class AddressAutocompleteClient : BaseClient, IAddressAutocompleteClient
 {
     private readonly string apiKey;
 
-    public AddressAutocompleteClient(HttpClient httpClient, ILogger<AddressAutocompleteClient> logger, PidpConfiguration config) : base(httpClient, logger) => this.apiKey = config.AddressAutocompleteClient.ApiKey;
+    public AddressAutocompleteClient(
+        HttpClient httpClient,
+        ILogger<AddressAutocompleteClient> logger,
+        PidpConfiguration config)
+        : base(httpClient, logger) => this.apiKey = config.AddressAutocompleteClient.ApiKey;
 
     public async Task<IEnumerable<AddressAutocompleteFindResponse>> Find(string searchTerm)
     {

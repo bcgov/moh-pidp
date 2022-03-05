@@ -4,7 +4,6 @@ using DomainResults.Common;
 using Microsoft.AspNetCore.Mvc;
 
 using Pidp.Infrastructure.Services;
-using Pidp.Models;
 
 [Produces("application/json")]
 [ApiController]
