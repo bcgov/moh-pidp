@@ -12,27 +12,27 @@ using Pidp.Models;
 public class EmailService : IEmailService
 {
     private const string PidpEmail = "provideridentityportal@gov.bc.ca";
-    private readonly PidpDbContext context;
-    private readonly ILogger logger;
-    private readonly PidpConfiguration config;
     private readonly IChesClient chesClient;
-    private readonly ISmtpEmailClient smtpEmailClient;
     private readonly IClock clock;
+    private readonly ILogger logger;
+    private readonly ISmtpEmailClient smtpEmailClient;
+    private readonly PidpConfiguration config;
+    private readonly PidpDbContext context;
 
     public EmailService(
-        PidpDbContext context,
-        ILogger<EmailService> logger,
-        PidpConfiguration config,
         IChesClient chesClient,
+        IClock clock,
+        ILogger<EmailService> logger,
         ISmtpEmailClient smtpEmailClient,
-        IClock clock)
+        PidpConfiguration config,
+        PidpDbContext context)
     {
-        this.context = context;
-        this.logger = logger;
-        this.config = config;
         this.chesClient = chesClient;
-        this.smtpEmailClient = smtpEmailClient;
         this.clock = clock;
+        this.logger = logger;
+        this.smtpEmailClient = smtpEmailClient;
+        this.config = config;
+        this.context = context;
     }
 
     public async Task SendSaEformsAccessRequestConfirmationAsync(int partyId)
@@ -52,7 +52,7 @@ public class EmailService : IEmailService
             return;
         }
 
-        var url = "https://www.eforms.phsahealth.ca/appdash";
+        var url = "https://www.eforms.healthbc.org/login";
         var link = $"<a href=\"{url}\" target=\"_blank\" rel=\"noopener noreferrer\">link</a>";
         var email = new Email(
             from: PidpEmail,

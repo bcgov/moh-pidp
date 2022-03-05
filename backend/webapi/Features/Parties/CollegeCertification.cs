@@ -47,13 +47,13 @@ public class CollegeCertification
 
     public class QueryHandler : IQueryHandler<Query, IDomainResult<Command>>
     {
-        private readonly PidpDbContext context;
         private readonly IMapper mapper;
+        private readonly PidpDbContext context;
 
-        public QueryHandler(PidpDbContext context, IMapper mapper)
+        public QueryHandler(IMapper mapper, PidpDbContext context)
         {
-            this.context = context;
             this.mapper = mapper;
+            this.context = context;
         }
 
         public async Task<IDomainResult<Command>> HandleAsync(Query query)
