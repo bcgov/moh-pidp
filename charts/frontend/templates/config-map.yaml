@@ -17,7 +17,7 @@ metadata:
 data:
   environment.json: |-
     {
-      "environmentName": "{{ $dnr }}",
+      "environmentName": "{{ $drn }}",
       "apiEndpoint": "https://{{ if $isProd }}{{else}}{{ $release }}.{{end}}{{ $domain }}/api/v1",
       "applicationUrl": "https://{{ if $isProd }}{{else}}{{ $release }}.{{end}}{{ $domain }}",
       "keycloakConfig": {
