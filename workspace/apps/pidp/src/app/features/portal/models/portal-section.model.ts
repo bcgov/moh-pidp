@@ -6,6 +6,7 @@ export enum PortalSectionType {
   PERSONAL_INFORMATION = 'personal-information',
   COLLEGE_LICENCE_INFORMATION = 'college-licence-information',
   SA_EFORMS = 'special-authority-eforms',
+  HCIM_WEB_ENROLMENT = 'hcim-web-enrolment',
   SIGNED_ACCEPTED_DOCUMENTS = 'signed-accepted-documents',
 }
 

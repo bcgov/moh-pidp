@@ -16,6 +16,8 @@ import {
 import { ProfileRoutes } from '@app/features/profile/profile.routes';
 import { YourDocumentsRoutes } from '@app/features/your-documents/your-documents.routes';
 
+// TODO not optimal but isolated to a single service. not enough road map
+// to make updates that might not be premature optimizations
 @Injectable({
   providedIn: 'root',
 })
@@ -236,7 +238,8 @@ export class PortalService {
         icon: 'fingerprint',
         type: PortalSectionType.SA_EFORMS,
         heading: 'Special Authority eForms',
-        description: `Enrol here for access to PharmaCare's Special Authority eForms application.`,
+        description:
+          "Enrol here for access to PharmaCare's Special Authority eForms application.",
         action: {
           label:
             saEformsStatusCode === StatusCode.COMPLETED ? 'View' : 'Request',
@@ -247,13 +250,27 @@ export class PortalService {
           ),
         },
         statusType:
-          saEformsStatusCode === StatusCode.COMPLETED ? 'success' : 'info',
+          saEformsStatusCode === StatusCode.COMPLETED ? 'success' : 'warn',
         status:
           saEformsStatusCode === StatusCode.AVAILABLE
             ? 'You are eligible to use Special Authority eForms'
             : saEformsStatusCode === StatusCode.COMPLETED
             ? 'Completed'
             : '',
+      },
+      {
+        icon: 'fingerprint',
+        type: PortalSectionType.HCIM_WEB_ENROLMENT,
+        heading: 'HCIM Web Enrolment',
+        hint: '3 min to complete',
+        description: 'Enrol here for access to HCIM.',
+        action: {
+          label: 'Request',
+          route: AccessRoutes.routePath(AccessRoutes.HCIM_WEB_ENROLMENT),
+          disabled: false,
+        },
+        statusType: 'warn',
+        status: 'Incomplete',
       },
     ];
   }

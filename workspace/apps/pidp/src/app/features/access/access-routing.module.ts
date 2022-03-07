@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { AccessRoutes } from './access.routes';
+import { HcimWebEnrolmentModule } from './pages/hcim-web-enrolment/hcim-web-enrolment.module';
 import { PharmanetModule } from './pages/pharmanet/pharmanet.module';
 import { SitePrivacySecurityChecklistModule } from './pages/site-privacy-security-checklist/site-privacy-security-checklist.module';
 import { SpecialAuthorityEformsModule } from './pages/special-authority-eforms/special-authority-eforms.module';
@@ -27,6 +28,13 @@ const routes: Routes = [
       import(
         './pages/site-privacy-security-checklist/site-privacy-security-checklist.module'
       ).then((m) => m.SitePrivacySecurityChecklistModule),
+  },
+  {
+    path: AccessRoutes.HCIM_WEB_ENROLMENT,
+    loadChildren: (): Promise<HcimWebEnrolmentModule> =>
+      import('./pages/hcim-web-enrolment/hcim-web-enrolment.module').then(
+        (m) => m.HcimWebEnrolmentModule
+      ),
   },
 ];
 
