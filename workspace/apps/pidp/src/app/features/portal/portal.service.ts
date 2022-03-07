@@ -235,6 +235,7 @@ export class PortalService {
       {
         type: PortalSectionType.SA_EFORMS,
         heading: 'Special Authority eForms',
+        hint: '1 min to complete',
         description:
           "Enrol here for access to PharmaCare's Special Authority eForms application.",
         action: {
@@ -253,7 +254,7 @@ export class PortalService {
             ? 'You are eligible to use Special Authority eForms'
             : saEformsStatusCode === StatusCode.COMPLETED
             ? 'Completed'
-            : '',
+            : 'Incomplete',
       },
       {
         type: PortalSectionType.HCIM_WEB_ENROLMENT,
