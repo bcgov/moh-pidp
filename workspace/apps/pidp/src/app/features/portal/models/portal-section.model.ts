@@ -24,7 +24,7 @@ export interface PortalSectionAction {
 }
 
 export interface PortalSection {
-  icon: string;
+  icon?: string;
   type: PortalSectionType;
   heading: string;
   hint?: string;

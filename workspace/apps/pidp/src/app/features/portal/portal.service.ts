@@ -120,7 +120,6 @@ export class PortalService {
 
     return [
       {
-        icon: 'fingerprint',
         // TODO swap for known key that now exists in the response
         type: PortalSectionType.PERSONAL_INFORMATION,
         heading: 'Personal Information',
@@ -168,7 +167,6 @@ export class PortalService {
             : 'Incomplete',
       },
       {
-        icon: 'fingerprint',
         type: PortalSectionType.COLLEGE_LICENCE_INFORMATION,
         heading: 'College Licence Information',
         hint:
@@ -235,7 +233,6 @@ export class PortalService {
       profileStatus.status.collegeCertification.statusCode;
     return [
       {
-        icon: 'fingerprint',
         type: PortalSectionType.SA_EFORMS,
         heading: 'Special Authority eForms',
         description:
@@ -259,7 +256,6 @@ export class PortalService {
             : '',
       },
       {
-        icon: 'fingerprint',
         type: PortalSectionType.HCIM_WEB_ENROLMENT,
         heading: 'HCIM Web Enrolment',
         hint: '3 min to complete',
@@ -278,7 +274,6 @@ export class PortalService {
   private getYourDocumentsSections(): PortalSection[] {
     return [
       {
-        icon: 'fingerprint',
         type: PortalSectionType.SIGNED_ACCEPTED_DOCUMENTS,
         heading: 'View Signed or Accepted Documents',
         description: 'View Agreement(s)',
