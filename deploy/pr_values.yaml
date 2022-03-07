@@ -21,6 +21,8 @@ nginx:
 
 frontend:
   replicaCount: 1
+  settings:
+    environmentName: dev
 
 webapi:
   replicaCount: 1

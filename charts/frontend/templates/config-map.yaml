@@ -17,14 +17,14 @@ metadata:
 data:
   environment.json: |-
     {
-      "environmentName": "{{ $dnr }}",
+      "environmentName": "{{ .Values.settings.environmentName }}",
       "apiEndpoint": "https://{{ if $isProd }}{{else}}{{ $release }}.{{end}}{{ $domain }}/api/v1",
       "applicationUrl": "https://{{ if $isProd }}{{else}}{{ $release }}.{{end}}{{ $domain }}",
       "keycloakConfig": {
         "config": {
-          "url": "https://common-logon{{ if $isProd }}{{else}}-{{ $drn }}{{end}}.hlth.gov.bc.ca/auth",
-          "realm": "moh_applications",
-          "clientId": "PIDP-WEBAPP"
+          "url": "{{ .Values.settings.keycloak.url }}",
+          "realm": "{{ .Values.settings.keycloak.realm }}",
+          "clientId": "{{ .Values.settings.keycloak.clientId }}"
         },
         "initOptions": {
           "onLoad": "check-sso"

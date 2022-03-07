@@ -12,8 +12,8 @@
   "omnisharp.enableEditorConfigSupport": true,
   "omnisharp.enableRoslynAnalyzers": true,
   "search.exclude": {
-    "./bin": true,
-    "./logs": true,
-    "./obj": true,
+    "**/bin": true,
+    "**/logs": true,
+    "**/obj": true,
   },
 }
