@@ -13,14 +13,14 @@ using Pidp.Data;
 namespace Pidp.Data.Migrations
 {
     [DbContext(typeof(PidpDbContext))]
-    [Migration("20220210234409_AddedEmailLogs")]
-    partial class AddedEmailLogs
+    [Migration("20220304004315_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.0")
+                .HasAnnotation("ProductVersion", "6.0.2")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -228,6 +228,18 @@ namespace Pidp.Data.Migrations
                             Code = 4,
                             Acronym = "CNPBC",
                             Name = "College of Naturopathic Physicians of BC"
+                        },
+                        new
+                        {
+                            Code = 5,
+                            Acronym = "CDSBC",
+                            Name = "College of Dental Surgeons of British Columbia"
+                        },
+                        new
+                        {
+                            Code = 6,
+                            Acronym = "COBC",
+                            Name = "College Of Optometrists of British Columbia"
                         });
                 });
 

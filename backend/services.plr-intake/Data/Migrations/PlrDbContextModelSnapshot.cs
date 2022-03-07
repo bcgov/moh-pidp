@@ -8,7 +8,7 @@ using PlrIntake.Data;
 
 #nullable disable
 
-namespace PlrIntake.Migrations
+namespace PlrIntake.Data.Migrations
 {
     [DbContext(typeof(PlrDbContext))]
     partial class PlrDbContextModelSnapshot : ModelSnapshot
@@ -17,7 +17,7 @@ namespace PlrIntake.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.0")
+                .HasAnnotation("ProductVersion", "6.0.2")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -301,6 +301,12 @@ namespace PlrIntake.Migrations
 
                             NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b1.Property<int>("Id"));
 
+                            b1.Property<DateTime>("Created")
+                                .HasColumnType("timestamp without time zone");
+
+                            b1.Property<DateTime>("Modified")
+                                .HasColumnType("timestamp without time zone");
+
                             b1.Property<string>("Value")
                                 .IsRequired()
                                 .HasColumnType("text");
@@ -327,6 +333,12 @@ namespace PlrIntake.Migrations
                             b1.Property<string>("Code")
                                 .IsRequired()
                                 .HasColumnType("text");
+
+                            b1.Property<DateTime>("Created")
+                                .HasColumnType("timestamp without time zone");
+
+                            b1.Property<DateTime>("Modified")
+                                .HasColumnType("timestamp without time zone");
 
                             b1.HasKey("PlrRecordId", "Id");
 
