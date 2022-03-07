@@ -4,9 +4,9 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace PlrIntake.Migrations
+namespace PlrIntake.Data.Migrations
 {
-    public partial class PlrIntake_Initial : Migration
+    public partial class Plr_Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -77,7 +77,9 @@ namespace PlrIntake.Migrations
                     PlrRecordId = table.Column<int>(type: "integer", nullable: false),
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Value = table.Column<string>(type: "text", nullable: false)
+                    Value = table.Column<string>(type: "text", nullable: false),
+                    Created = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    Modified = table.Column<DateTime>(type: "timestamp without time zone", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -97,7 +99,9 @@ namespace PlrIntake.Migrations
                     PlrRecordId = table.Column<int>(type: "integer", nullable: false),
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Code = table.Column<string>(type: "text", nullable: false)
+                    Code = table.Column<string>(type: "text", nullable: false),
+                    Created = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    Modified = table.Column<DateTime>(type: "timestamp without time zone", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -138,7 +142,7 @@ namespace PlrIntake.Migrations
                     { "2.16.840.1.113883.4.454", "RACID" },
                     { "2.16.840.1.113883.4.477", "COUNID" },
                     { "2.16.840.1.113883.4.530", "RDID" },
-                    { "2.16.840.1.113883.4.538", "NAPID" },
+                    { "2.16.840.1.113883.4.538", "NDID" },
                     { "2.16.840.1.113883.4.608", "RPNRC" }
                 });
 
