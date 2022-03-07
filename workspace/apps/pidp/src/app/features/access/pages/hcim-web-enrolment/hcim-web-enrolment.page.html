@@ -1,0 +1,41 @@
+<ui-page>
+  <ui-page-header>{{ title }}</ui-page-header>
+
+  <!-- <ui-page-section>
+    <ui-page-section-subheader
+      icon="assignment"
+      heading="Special Authority eForms">
+      <ng-container uiPageSectionSubheaderDesc>Enrolment Complete</ng-container>
+    </ui-page-section-subheader>
+  </ui-page-section> -->
+
+  <!-- <ui-alert
+    type="success"
+    icon="check_circle"
+    iconType="outlined"
+    heading="You have access">
+    <ng-container uiAlertContent>
+      <p>
+        You now have access to the Special Authority eForms application. You can
+        log into the application using your BC Services Card app.
+      </p>
+      <p>
+        Follow this link to Special Authority eForms:<br />
+        <ui-anchor [href]="saEformsUrl"></ui-anchor>
+      </p>
+      <p>
+        You will need to visit this link each time you want to submit an SA
+        eForm. It may be helpful to bookmark this link for future use.
+      </p>
+    </ng-container>
+  </ui-alert> -->
+
+  <ui-page-footer>
+    <button mat-stroked-button type="button" color="primary" (click)="onBack()">
+      Back Home
+    </button>
+    <button mat-flat-button type="button" color="primary" (click)="onBack()">
+      Continue
+    </button>
+  </ui-page-footer>
+</ui-page>
