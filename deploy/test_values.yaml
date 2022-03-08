@@ -21,6 +21,10 @@ nginx:
 
 frontend:
   replicaCount: 3
+  settings:
+    environmentName: test
+    keycloak:
+      url: https://common-logon-test.hlth.gov.bc.ca/auth
 
 webapi:
   replicaCount: 3

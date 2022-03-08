@@ -21,6 +21,13 @@ imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
 
+settings:
+  environmentName: dev
+  keycloak:
+    url: https://common-logon-dev.hlth.gov.bc.ca/auth
+    realm: "moh_applications"
+    clientId: "PIDP-WEBAPP"
+
 serviceAccount:
   # Specifies whether a service account should be created
   create: false
