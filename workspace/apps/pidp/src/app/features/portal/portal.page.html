@@ -54,7 +54,6 @@
 
         <ui-card-summary
           *ngFor="let section of (state$ | async)?.profileIdentitySections"
-          [icon]="section.icon"
           [heading]="section.heading"
           [statusType]="section.statusType"
           [status]="section.status"
@@ -83,13 +82,12 @@
 
         <ui-card-summary
           *ngFor="let section of (state$ | async)?.accessToSystemsSections"
-          [icon]="section.icon"
           [heading]="section.heading"
           [statusType]="section.statusType"
           [status]="section.status"
           [actionLabel]="section.action.label"
           [actionDisabled]="section.action.disabled"
-          (action)="onCardRequestAccess(section.type, section.action.route)">
+          (action)="onCardRequestAccess(section.key, section.action.route)">
           <ng-container uiCardSummaryHint>{{ section.hint }}</ng-container>
           <ng-container uiCardSummaryContent>
             {{ section.description }}
@@ -109,7 +107,6 @@
           *ngIf="(state$ | async)?.trainingSections?.length; else noTraining">
           <ui-card-summary
             *ngFor="let section of (state$ | async)?.trainingSections"
-            [icon]="section.icon"
             [heading]="section.heading"
             [statusType]="section.statusType"
             [status]="section.status"
@@ -138,7 +135,6 @@
 
         <ui-card-summary
           *ngFor="let section of (state$ | async)?.yourDocumentsSections"
-          [icon]="section.icon"
           [heading]="section.heading"
           [actionLabel]="section.action.label"
           [actionDisabled]="section.action.disabled"

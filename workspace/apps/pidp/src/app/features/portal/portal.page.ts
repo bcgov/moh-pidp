@@ -11,15 +11,10 @@ import { Role } from '@app/shared/enums/roles.enum';
 import { PartyService } from '@core/services/party.service';
 
 import { ShellRoutes } from '../shell/shell.routes';
-import {
-  PortalSection,
-  PortalSectionType,
-} from './models/portal-section.model';
-import {
-  ProfileStatus,
-  ProfileStatusAlert,
-  StatusCode,
-} from './models/profile-status.model';
+import { StatusCode } from './enums/status-code.enum';
+import { PortalSection, PortalSectionKey } from './models/portal-section.model';
+import { ProfileStatusAlert } from './models/profile-status-alert.model';
+import { ProfileStatus } from './models/profile-status.model';
 import { PortalResource } from './portal-resource.service';
 import { PortalService } from './portal.service';
 
@@ -82,11 +77,7 @@ export class PortalPage implements OnInit {
     this.router.navigate([ShellRoutes.routePath(routePath)]);
   }
 
-  // TODO drop PortalSectionType and use type narrowing
-  public onCardRequestAccess(
-    sectionType: PortalSectionType,
-    routePath: string
-  ): void {
+  public onCardRequestAccess(key: PortalSectionKey, routePath: string): void {
     const partyId = this.partyService.partyId;
     const profileStatus = this.portalService.profileStatus;
 
@@ -94,7 +85,7 @@ export class PortalPage implements OnInit {
       return;
     }
 
-    if (sectionType === PortalSectionType.SA_EFORMS) {
+    if (key === 'saEforms') {
       // TODO don't allow access if identity provider is Active Directory and show modal
       const saEformsStatusCode = profileStatus.status.saEforms.statusCode;
 
@@ -111,7 +102,7 @@ export class PortalPage implements OnInit {
       } else {
         this.router.navigate([ShellRoutes.routePath(routePath)]);
       }
-    } else if (sectionType === PortalSectionType.HCIM_WEB_ENROLMENT) {
+    } else if (key === 'hcimWebEnrolment') {
       // TODO don't allow access if identity provider is BCSC and show modal
       this.router.navigate([ShellRoutes.routePath(routePath)]);
     }

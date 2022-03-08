@@ -1,15 +1,15 @@
 import { Party, PartyCertification } from '@bcgov/shared/data-access';
 
-export enum StatusCode {
-  AVAILABLE = 1,
-  COMPLETED,
-  NOT_AVAILABLE,
-  ERROR,
+import { AlertCode } from '../enums/alert-code.enum';
+import { StatusCode } from '../enums/status-code.enum';
+
+export interface ProfileStatus {
+  alerts: AlertCode[];
+  status: ProfileSectionStatus;
 }
 
-export enum AlertCode {
-  TRANSIENT_ERROR = 1,
-  PLR_BAD_STANDING,
+export interface AccessStatus {
+  saEforms: Section;
 }
 
 export interface Section {
@@ -27,18 +27,4 @@ export interface CollegeCertificationSection
 export interface ProfileSectionStatus extends AccessStatus {
   demographics: PersonalInformationSection;
   collegeCertification: CollegeCertificationSection;
-}
-
-export interface AccessStatus {
-  saEforms: Section;
-}
-
-export interface ProfileStatus {
-  alerts: AlertCode[];
-  status: ProfileSectionStatus;
-}
-
-export interface ProfileStatusAlert {
-  heading: string;
-  content: string;
 }

@@ -3,18 +3,14 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 import { AccessRoutes } from '@app/features/access/access.routes';
-import {
-  PortalSection,
-  PortalSectionType,
-} from '@app/features/portal/models/portal-section.model';
-import {
-  AlertCode,
-  ProfileStatus,
-  ProfileStatusAlert,
-  StatusCode,
-} from '@app/features/portal/models/profile-status.model';
+import { PortalSection } from '@app/features/portal/models/portal-section.model';
+import { ProfileStatus } from '@app/features/portal/models/profile-status.model';
 import { ProfileRoutes } from '@app/features/profile/profile.routes';
 import { YourDocumentsRoutes } from '@app/features/your-documents/your-documents.routes';
+
+import { AlertCode } from './enums/alert-code.enum';
+import { StatusCode } from './enums/status-code.enum';
+import { ProfileStatusAlert } from './models/profile-status-alert.model';
 
 // TODO not optimal but isolated to a single service. not enough road map
 // to make updates that might not be premature optimizations
@@ -121,7 +117,7 @@ export class PortalService {
     return [
       {
         // TODO swap for known key that now exists in the response
-        type: PortalSectionType.PERSONAL_INFORMATION,
+        key: 'demographics',
         heading: 'Personal Information',
         hint:
           demographicsStatusCode === StatusCode.ERROR ||
@@ -167,7 +163,7 @@ export class PortalService {
             : 'Incomplete',
       },
       {
-        type: PortalSectionType.COLLEGE_LICENCE_INFORMATION,
+        key: 'collegeCertification',
         heading: 'College Licence Information',
         hint:
           collegeCertificationStatusCode === StatusCode.ERROR ||
@@ -233,7 +229,7 @@ export class PortalService {
       profileStatus.status.collegeCertification.statusCode;
     return [
       {
-        type: PortalSectionType.SA_EFORMS,
+        key: 'saEforms',
         heading: 'Special Authority eForms',
         hint: '1 min to complete',
         description:
@@ -257,7 +253,7 @@ export class PortalService {
             : 'Incomplete',
       },
       {
-        type: PortalSectionType.HCIM_WEB_ENROLMENT,
+        key: 'hcimWebEnrolment',
         heading: 'HCIM Web Enrolment',
         hint: '3 min to complete',
         description: 'Enrol here for access to HCIM.',
@@ -275,7 +271,7 @@ export class PortalService {
   private getYourDocumentsSections(): PortalSection[] {
     return [
       {
-        type: PortalSectionType.SIGNED_ACCEPTED_DOCUMENTS,
+        key: 'signedAcceptedDocuments',
         heading: 'View Signed or Accepted Documents',
         description: 'View Agreement(s)',
         action: {
