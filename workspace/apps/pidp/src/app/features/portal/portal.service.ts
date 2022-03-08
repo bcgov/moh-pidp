@@ -12,8 +12,6 @@ import { AlertCode } from './enums/alert-code.enum';
 import { StatusCode } from './enums/status-code.enum';
 import { ProfileStatusAlert } from './models/profile-status-alert.model';
 
-// TODO not optimal but isolated to a single service. not enough road map
-// to make updates that might not be premature optimizations
 @Injectable({
   providedIn: 'root',
 })
@@ -116,7 +114,6 @@ export class PortalService {
 
     return [
       {
-        // TODO swap for known key that now exists in the response
         key: 'demographics',
         heading: 'Personal Information',
         hint:

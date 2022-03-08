@@ -1,22 +1,10 @@
 import { Party, PartyCertification } from '@bcgov/shared/data-access';
 
 import { AlertCode } from '../enums/alert-code.enum';
-import { StatusCode } from '../enums/status-code.enum';
+import { AccessSectionStatus } from './access-status.model';
+import { Section } from './section.model';
 
-export interface ProfileStatus {
-  alerts: AlertCode[];
-  status: ProfileSectionStatus;
-}
-
-export interface AccessStatus {
-  saEforms: Section;
-}
-
-export interface Section {
-  statusCode: StatusCode;
-}
-
-export interface PersonalInformationSection
+export interface DemographicsSection
   extends Pick<Party, 'firstName' | 'lastName' | 'phone' | 'email'>,
     Section {}
 
@@ -24,7 +12,13 @@ export interface CollegeCertificationSection
   extends Pick<PartyCertification, 'collegeCode' | 'licenceNumber'>,
     Section {}
 
-export interface ProfileSectionStatus extends AccessStatus {
-  demographics: PersonalInformationSection;
+export interface ProfileSectionStatus {
+  demographics: DemographicsSection;
   collegeCertification: CollegeCertificationSection;
+}
+
+export interface ProfileStatus {
+  alerts: AlertCode[];
+  // TODO temporarily merged profile and access statuses
+  status: ProfileSectionStatus & AccessSectionStatus;
 }
