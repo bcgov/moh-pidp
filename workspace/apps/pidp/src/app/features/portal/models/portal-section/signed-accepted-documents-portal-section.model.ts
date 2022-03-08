@@ -1,5 +1,7 @@
 import { Router } from '@angular/router';
 
+import { Observable } from 'rxjs';
+
 import { ShellRoutes } from '@app/features/shell/shell.routes';
 import { YourDocumentsRoutes } from '@app/features/your-documents/your-documents.routes';
 
@@ -32,7 +34,7 @@ export class SignedAcceptedDocumentsPortalSection implements IPortalSection {
     };
   }
 
-  public performAction(): void {
+  public performAction(): void | Observable<void> {
     this.router.navigate([ShellRoutes.routePath(this.action.route)]);
   }
 }

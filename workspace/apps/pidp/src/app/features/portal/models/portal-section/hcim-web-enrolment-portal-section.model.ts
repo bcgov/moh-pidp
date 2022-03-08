@@ -1,8 +1,11 @@
 import { Router } from '@angular/router';
 
+import { Observable } from 'rxjs';
+
 import { AlertType } from '@bcgov/shared/ui';
 
 import { AccessRoutes } from '@app/features/access/access.routes';
+import { ShellRoutes } from '@app/features/shell/shell.routes';
 
 import { StatusCode } from '../../enums/status-code.enum';
 import { ProfileStatus } from '../profile-status.model';
@@ -41,8 +44,7 @@ export class HcimWebEnrolmentPortalSection implements IPortalSection {
   }
 
   public get statusType(): AlertType {
-    const statusCode = this.getStatusCode();
-    return statusCode === StatusCode.COMPLETED ? 'success' : 'warn';
+    return this.getStatusCode() === StatusCode.COMPLETED ? 'success' : 'warn';
   }
 
   public get status(): string {
@@ -54,12 +56,11 @@ export class HcimWebEnrolmentPortalSection implements IPortalSection {
       : 'Incomplete';
   }
 
-  public performAction(): void {
-    // TODO perform access request
-    // this.router.navigate([ShellRoutes.routePath(this.action.route)]);
+  public performAction(): void | Observable<void> {
+    this.router.navigate([ShellRoutes.routePath(this.action.route)]);
   }
 
   private getStatusCode(): StatusCode {
-    return this.profileStatus.status.collegeCertification.statusCode;
+    return this.profileStatus.status.hcimWebEnrolment.statusCode;
   }
 }

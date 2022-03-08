@@ -1,5 +1,7 @@
 import { Router } from '@angular/router';
 
+import { Observable } from 'rxjs';
+
 import { AlertType } from '@bcgov/shared/ui';
 
 import { ProfileRoutes } from '@app/features/profile/profile.routes';
@@ -31,8 +33,9 @@ export class DemographicsPortalSection implements IPortalSection {
   }
 
   public get hint(): string {
-    const statusCode = this.getStatusCode();
-    return [StatusCode.ERROR, StatusCode.COMPLETED].includes(statusCode)
+    return [StatusCode.ERROR, StatusCode.COMPLETED].includes(
+      this.getStatusCode()
+    )
       ? ''
       : '1 min to complete';
   }
@@ -86,7 +89,7 @@ export class DemographicsPortalSection implements IPortalSection {
       : 'Incomplete';
   }
 
-  public performAction(): void {
+  public performAction(): void | Observable<void> {
     this.router.navigate([ShellRoutes.routePath(this.action.route)]);
   }
 

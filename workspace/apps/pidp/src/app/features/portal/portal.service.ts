@@ -3,6 +3,8 @@ import { Router } from '@angular/router';
 
 import { BehaviorSubject, Observable } from 'rxjs';
 
+import { AccessRequestResource } from '@app/core/resources/access-request-resource.service';
+import { PartyService } from '@app/core/services/party.service';
 import { ProfileStatus } from '@app/features/portal/models/profile-status.model';
 
 import { AlertCode } from './enums/alert-code.enum';
@@ -32,7 +34,11 @@ export class PortalService {
   private _completedProfile: boolean;
   private _state$: BehaviorSubject<Record<string, IPortalSection[]>>;
 
-  public constructor(private router: Router) {
+  public constructor(
+    private router: Router,
+    private partyService: PartyService,
+    private accessRequestResource: AccessRequestResource
+  ) {
     this._profileStatus = null;
     this._acceptedCollectionNotice = false;
     this._state$ = new BehaviorSubject<Record<string, IPortalSection[]>>({});
@@ -129,8 +135,14 @@ export class PortalService {
     profileStatus: ProfileStatus
   ): IPortalSection[] {
     return [
-      new SaEformsPortalSection(profileStatus, this.router),
-      new HcimWebEnrolmentPortalSection(profileStatus, this.router),
+      new SaEformsPortalSection(
+        profileStatus,
+        this.router,
+        this.partyService,
+        this.accessRequestResource
+      ),
+      // TODO uncomment when available through API
+      // new HcimWebEnrolmentPortalSection(profileStatus, this.router),
     ];
   }
 

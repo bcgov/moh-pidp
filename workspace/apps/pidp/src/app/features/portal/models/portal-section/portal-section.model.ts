@@ -1,3 +1,5 @@
+import { Observable } from 'rxjs';
+
 import { AlertType } from '@bcgov/shared/ui';
 
 import { AccessSectionStatus } from '../access-status.model';
@@ -35,5 +37,5 @@ export interface IPortalSection {
   statusType?: AlertType;
   status?: string;
 
-  performAction(): void;
+  performAction(): Observable<void> | void;
 }

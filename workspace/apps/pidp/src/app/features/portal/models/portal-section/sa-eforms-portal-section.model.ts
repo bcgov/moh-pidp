@@ -1,8 +1,13 @@
 import { Router } from '@angular/router';
 
+import { Observable, map } from 'rxjs';
+
 import { AlertType } from '@bcgov/shared/ui';
 
+import { AccessRequestResource } from '@app/core/resources/access-request-resource.service';
+import { PartyService } from '@app/core/services/party.service';
 import { AccessRoutes } from '@app/features/access/access.routes';
+import { ShellRoutes } from '@app/features/shell/shell.routes';
 
 import { StatusCode } from '../../enums/status-code.enum';
 import { ProfileStatus } from '../profile-status.model';
@@ -20,7 +25,9 @@ export class SaEformsPortalSection implements IPortalSection {
 
   public constructor(
     private profileStatus: ProfileStatus,
-    private router: Router
+    private router: Router,
+    private partyService: PartyService,
+    private accessRequestResource: AccessRequestResource
   ) {
     this.key = 'saEforms';
     this.type = 'access';
@@ -33,13 +40,12 @@ export class SaEformsPortalSection implements IPortalSection {
   }
 
   public get action(): PortalSectionAction {
-    const statusCode = this.getStatusCode();
     const demographicsStatusCode =
       this.profileStatus.status.demographics.statusCode;
     const collegeCertStatusCode =
       this.profileStatus.status.collegeCertification.statusCode;
     return {
-      label: statusCode === StatusCode.COMPLETED ? 'View' : 'Request',
+      label: this.getStatusCode() === StatusCode.COMPLETED ? 'View' : 'Request',
       route: AccessRoutes.routePath(AccessRoutes.SPECIAL_AUTH_EFORMS_PAGE),
       disabled: !(
         demographicsStatusCode === StatusCode.COMPLETED &&
@@ -49,8 +55,7 @@ export class SaEformsPortalSection implements IPortalSection {
   }
 
   public get statusType(): AlertType {
-    const statusCode = this.getStatusCode();
-    return statusCode === StatusCode.COMPLETED ? 'success' : 'warn';
+    return this.getStatusCode() === StatusCode.COMPLETED ? 'success' : 'warn';
   }
 
   public get status(): string {
@@ -62,12 +67,28 @@ export class SaEformsPortalSection implements IPortalSection {
       : 'Incomplete';
   }
 
-  public performAction(): void {
-    // TODO perform access request
-    // this.router.navigate([ShellRoutes.routePath(this.action.route)]);
+  public performAction(): Observable<void> | void {
+    if (this.getStatusCode() !== StatusCode.COMPLETED) {
+      return this.accessRequestResource
+        .saEforms(this.partyService.partyId)
+        .pipe(
+          map(() => {
+            if (!this.action.route) {
+              return;
+            }
+            this.navigate();
+          })
+        );
+    } else {
+      this.navigate();
+    }
   }
 
   private getStatusCode(): StatusCode {
-    return this.profileStatus.status.collegeCertification.statusCode;
+    return this.profileStatus.status.saEforms.statusCode;
+  }
+
+  private navigate(): void {
+    this.router.navigate([ShellRoutes.routePath(this.action.route)]);
   }
 }

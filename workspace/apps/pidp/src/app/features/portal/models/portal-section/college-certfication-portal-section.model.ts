@@ -1,5 +1,7 @@
 import { Router } from '@angular/router';
 
+import { Observable } from 'rxjs';
+
 import { AlertType } from '@bcgov/shared/ui';
 
 import { ProfileRoutes } from '@app/features/profile/profile.routes';
@@ -34,8 +36,9 @@ export class CollegeCertificationPortalSection implements IPortalSection {
   }
 
   public get hint(): string {
-    const statusCode = this.getStatusCode();
-    return [StatusCode.ERROR, StatusCode.COMPLETED].includes(statusCode)
+    return [StatusCode.ERROR, StatusCode.COMPLETED].includes(
+      this.getStatusCode()
+    )
       ? ''
       : '1 min to complete';
   }
@@ -70,7 +73,6 @@ export class CollegeCertificationPortalSection implements IPortalSection {
   }
 
   public get action(): PortalSectionAction {
-    const statusCode = this.getStatusCode();
     const demographicsStatusCode =
       this.profileStatus.status.demographics.statusCode;
     return {
@@ -78,7 +80,7 @@ export class CollegeCertificationPortalSection implements IPortalSection {
       route: ProfileRoutes.routePath(ProfileRoutes.COLLEGE_LICENCE_INFO_PAGE),
       disabled:
         demographicsStatusCode !== StatusCode.COMPLETED ||
-        statusCode === StatusCode.NOT_AVAILABLE,
+        this.getStatusCode() === StatusCode.NOT_AVAILABLE,
     };
   }
 
@@ -100,7 +102,7 @@ export class CollegeCertificationPortalSection implements IPortalSection {
       : 'Incomplete';
   }
 
-  public performAction(): void {
+  public performAction(): void | Observable<void> {
     this.router.navigate([ShellRoutes.routePath(this.action.route)]);
   }
 
