@@ -112,6 +112,9 @@ public class ProfileStatus
                 resolver.ComputeSection(profileStatus, profile);
             }
 
+            // TODO: Remove dev stub
+            profileStatus.Status.Add("hcim", new Model.ProfileSection { StatusCode = Model.StatusCode.Incomplete });
+
             return DomainResult.Success(profileStatus);
         }
 
