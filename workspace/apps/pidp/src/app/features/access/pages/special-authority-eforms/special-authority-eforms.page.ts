@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { LoggerService } from '@app/core/services/logger.service';
 import { PartyService } from '@app/core/services/party.service';
@@ -38,10 +38,7 @@ export class SpecialAuthorityEformsPage implements OnInit {
     }
   }
 
-  private navigateToRoot(navigationExtras?: NavigationExtras): void {
-    this.router.navigate(
-      [this.route.snapshot.data.routes.root],
-      navigationExtras
-    );
+  private navigateToRoot(): void {
+    this.router.navigate([this.route.snapshot.data.routes.root]);
   }
 }
