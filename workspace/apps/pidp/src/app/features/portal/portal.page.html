@@ -89,7 +89,7 @@
           [status]="section.status"
           [actionLabel]="section.action.label"
           [actionDisabled]="section.action.disabled"
-          (action)="onCardRequestAccess(section.action.route)">
+          (action)="onCardRequestAccess(section.type, section.action.route)">
           <ng-container uiCardSummaryHint>{{ section.hint }}</ng-container>
           <ng-container uiCardSummaryContent>
             {{ section.description }}

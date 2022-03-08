@@ -11,7 +11,10 @@ import { Role } from '@app/shared/enums/roles.enum';
 import { PartyService } from '@core/services/party.service';
 
 import { ShellRoutes } from '../shell/shell.routes';
-import { PortalSection } from './models/portal-section.model';
+import {
+  PortalSection,
+  PortalSectionType,
+} from './models/portal-section.model';
 import {
   ProfileStatus,
   ProfileStatusAlert,
@@ -79,7 +82,11 @@ export class PortalPage implements OnInit {
     this.router.navigate([ShellRoutes.routePath(routePath)]);
   }
 
-  public onCardRequestAccess(routePath: string): void {
+  // TODO drop PortalSectionType and use type narrowing
+  public onCardRequestAccess(
+    sectionType: PortalSectionType,
+    routePath: string
+  ): void {
     const partyId = this.partyService.partyId;
     const profileStatus = this.portalService.profileStatus;
 
@@ -87,17 +94,25 @@ export class PortalPage implements OnInit {
       return;
     }
 
-    const saEformsStatusCode = profileStatus.status.saEforms.statusCode;
+    if (sectionType === PortalSectionType.SA_EFORMS) {
+      // TODO don't allow access if identity provider is Active Directory and show modal
+      const saEformsStatusCode = profileStatus.status.saEforms.statusCode;
 
-    if (saEformsStatusCode !== StatusCode.COMPLETED) {
-      this.busy = this.accessRequestResource.saEforms(partyId).subscribe(() => {
-        if (!routePath) {
-          return;
-        }
+      if (saEformsStatusCode !== StatusCode.COMPLETED) {
+        this.busy = this.accessRequestResource
+          .saEforms(partyId)
+          .subscribe(() => {
+            if (!routePath) {
+              return;
+            }
 
+            this.router.navigate([ShellRoutes.routePath(routePath)]);
+          });
+      } else {
         this.router.navigate([ShellRoutes.routePath(routePath)]);
-      });
-    } else {
+      }
+    } else if (sectionType === PortalSectionType.HCIM_WEB_ENROLMENT) {
+      // TODO don't allow access if identity provider is BCSC and show modal
       this.router.navigate([ShellRoutes.routePath(routePath)]);
     }
   }
