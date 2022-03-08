@@ -65,6 +65,7 @@ export class PortalPage implements OnInit {
   }
 
   public onCardAction(section: IPortalSection): void {
+    // TODO provider specific access use modal
     const result = section.performAction();
     if (isObservable(result)) {
       this.busy = result.subscribe();

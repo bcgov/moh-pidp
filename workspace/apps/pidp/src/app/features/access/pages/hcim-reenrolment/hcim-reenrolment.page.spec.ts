@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { HcimWebEnrolmentPage } from './hcim-web-enrolment.page';
+import { HcimReenrolmentPage } from './hcim-reenrolment.page';
 
-describe('HcimWebEnrolmentPage', () => {
-  let component: HcimWebEnrolmentPage;
-  let fixture: ComponentFixture<HcimWebEnrolmentPage>;
+describe('HcimReenrolmentPage', () => {
+  let component: HcimReenrolmentPage;
+  let fixture: ComponentFixture<HcimReenrolmentPage>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [HcimWebEnrolmentPage],
+      declarations: [HcimReenrolmentPage],
     }).compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(HcimWebEnrolmentPage);
+    fixture = TestBed.createComponent(HcimReenrolmentPage);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

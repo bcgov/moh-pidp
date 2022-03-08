@@ -2,9 +2,9 @@ import { FormBuilder, FormControl, Validators } from '@angular/forms';
 
 import { AbstractFormState } from '@bcgov/shared/ui';
 
-import { HcimWebEnrolmentModel } from './hcim-web-enrolment.model';
+import { HcimReenrolmentModel } from './hcim-reenrolment.model';
 
-export class HcimWebEnrolmentFormState extends AbstractFormState<HcimWebEnrolmentModel> {
+export class HcimReenrolmentFormState extends AbstractFormState<HcimReenrolmentModel> {
   public constructor(private fb: FormBuilder) {
     super();
 
@@ -19,7 +19,7 @@ export class HcimWebEnrolmentFormState extends AbstractFormState<HcimWebEnrolmen
     return this.formInstance.get('ldapPassword') as FormControl;
   }
 
-  public get json(): HcimWebEnrolmentModel | undefined {
+  public get json(): HcimReenrolmentModel | undefined {
     if (!this.formInstance) {
       return;
     }
@@ -27,13 +27,9 @@ export class HcimWebEnrolmentFormState extends AbstractFormState<HcimWebEnrolmen
     return this.formInstance.getRawValue();
   }
 
-  public patchValue(model: HcimWebEnrolmentModel | null): void {
-    if (!this.formInstance || !model) {
-      return;
-    }
-
-    // TODO unless more is going into the form it will never be patched
-    // this.formInstance.patchValue(model);
+  public patchValue(): void {
+    // Form will never be patched!
+    throw new Error('Method Not Implemented');
   }
 
   public buildForm(): void {

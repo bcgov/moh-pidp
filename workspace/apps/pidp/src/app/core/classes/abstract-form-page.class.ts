@@ -109,8 +109,6 @@ export abstract class AbstractFormPage<
 
   protected constructor(
     protected dialog: MatDialog,
-    // TODO replace dialog with dialogService
-    // protected dialogService: DialogService,
     protected formUtilsService: FormUtilsService
   ) {
     this.hasAttemptedSubmission = false;
@@ -152,9 +150,6 @@ export abstract class AbstractFormPage<
     return this.formState.form.dirty && !this.checkDeactivationIsAllowed()
       ? this.dialog
           .open(ConfirmDialogComponent, { data })
-          // TODO replace dialog with dialogService
-          // this.dialogService
-          //   .canDeactivateFormDialog()
           .afterClosed()
           .pipe(
             map((dialogResult: boolean) =>

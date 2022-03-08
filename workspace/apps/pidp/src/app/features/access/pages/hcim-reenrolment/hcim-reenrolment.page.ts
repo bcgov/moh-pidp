@@ -10,38 +10,36 @@ import { FormUtilsService } from '@app/core/services/form-utils.service';
 import { LoggerService } from '@app/core/services/logger.service';
 import { PartyService } from '@app/core/services/party.service';
 
-import { HcimWebEnrolmentFormState } from './hcim-web-enrolment-form-state';
-import { HcimWebEnrolmentResource } from './hcim-web-enrolment-resource.service';
+import { HcimReenrolmentFormState } from './hcim-reenrolment-form-state';
+import { HcimReenrolmentResource } from './hcim-reenrolment-resource.service';
 
 @Component({
-  selector: 'app-hcim-web-enrolment',
-  templateUrl: './hcim-web-enrolment.page.html',
-  styleUrls: ['./hcim-web-enrolment.page.scss'],
-  viewProviders: [HcimWebEnrolmentResource],
+  selector: 'app-hcim-reenrolment',
+  templateUrl: './hcim-reenrolment.page.html',
+  styleUrls: ['./hcim-reenrolment.page.scss'],
+  viewProviders: [HcimReenrolmentResource],
 })
-export class HcimWebEnrolmentPage
-  extends AbstractFormPage<HcimWebEnrolmentFormState>
+export class HcimReenrolmentPage
+  extends AbstractFormPage<HcimReenrolmentFormState>
   implements OnInit
 {
   public title: string;
-  public formState: HcimWebEnrolmentFormState;
+  public formState: HcimReenrolmentFormState;
 
   public constructor(
     protected dialog: MatDialog,
-    // TODO replace dialog with dialogService
-    // protected dialogService: DialogService,
     protected formUtilsService: FormUtilsService,
     private route: ActivatedRoute,
     private router: Router,
     private partyService: PartyService,
-    private resource: HcimWebEnrolmentResource,
+    private resource: HcimReenrolmentResource,
     private logger: LoggerService,
     fb: FormBuilder
   ) {
     super(dialog, formUtilsService);
 
     this.title = this.route.snapshot.data.title;
-    this.formState = new HcimWebEnrolmentFormState(fb);
+    this.formState = new HcimReenrolmentFormState(fb);
   }
 
   public onBack(): void {
@@ -55,10 +53,6 @@ export class HcimWebEnrolmentPage
       this.logger.error('No party ID was provided');
       return this.navigateToRoot();
     }
-
-    // TODO perform request to determine whether completed
-    // and show the appropriate markup based on response
-    // this.resource.get(partyId).subscribe();
   }
 
   protected performSubmission(): Observable<void> {

@@ -4,10 +4,10 @@ import { CrudResource } from '@bcgov/shared/data-access';
 
 import { ApiHttpClient } from '@app/core/resources/api-http-client.service';
 
-import { HcimWebEnrolmentModel } from './hcim-web-enrolment.model';
+import { HcimReenrolmentModel } from './hcim-reenrolment.model';
 
 @Injectable()
-export class HcimWebEnrolmentResource extends CrudResource<HcimWebEnrolmentModel> {
+export class HcimReenrolmentResource extends CrudResource<HcimReenrolmentModel> {
   public constructor(protected apiResource: ApiHttpClient) {
     super(apiResource);
   }

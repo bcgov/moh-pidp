@@ -15,7 +15,7 @@ import {
   PortalSectionKey,
 } from './portal-section.model';
 
-export class HcimWebEnrolmentPortalSection implements IPortalSection {
+export class HcimReenrolmentPortalSection implements IPortalSection {
   public readonly key: PortalSectionKey;
   public type: 'profile' | 'access' | 'training' | 'documents';
   public heading: string;
@@ -25,9 +25,9 @@ export class HcimWebEnrolmentPortalSection implements IPortalSection {
     private profileStatus: ProfileStatus,
     private router: Router
   ) {
-    this.key = 'hcimWebEnrolment';
+    this.key = 'hcim';
     this.type = 'access';
-    this.heading = 'HCIM Web Enrolment';
+    this.heading = 'HCIM Web Re-enrolment';
     this.description = 'Enrol here for access to HCIM.';
   }
 
@@ -38,7 +38,7 @@ export class HcimWebEnrolmentPortalSection implements IPortalSection {
   public get action(): PortalSectionAction {
     return {
       label: 'Request',
-      route: AccessRoutes.routePath(AccessRoutes.HCIM_WEB_ENROLMENT),
+      route: AccessRoutes.routePath(AccessRoutes.HCIM_REENROLMENT),
       disabled: false,
     };
   }
@@ -50,7 +50,7 @@ export class HcimWebEnrolmentPortalSection implements IPortalSection {
   public get status(): string {
     const statusCode = this.getStatusCode();
     return statusCode === StatusCode.AVAILABLE
-      ? 'You are eligible to use HCIM Web Enrolment'
+      ? 'You are eligible to use HCIM Web Re-enrolment'
       : statusCode === StatusCode.COMPLETED
       ? 'Completed'
       : 'Incomplete';
@@ -61,6 +61,6 @@ export class HcimWebEnrolmentPortalSection implements IPortalSection {
   }
 
   private getStatusCode(): StatusCode {
-    return this.profileStatus.status.hcimWebEnrolment.statusCode;
+    return this.profileStatus.status.hcim.statusCode;
   }
 }

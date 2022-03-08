@@ -2,7 +2,9 @@
   <ui-page-header>{{ title }}</ui-page-header>
 
   <ui-page-section>
-    <ui-page-section-subheader icon="assignment" heading="HCIM Web Enrolment">
+    <ui-page-section-subheader
+      icon="assignment"
+      heading="HCIM Web Account Transfer">
       <ng-container uiPageSectionSubheaderDesc>
         Lorem ipsum, dolor sit amet consectetur adipisicing elit. Doloremque quo
         modi optio tenetur dolore iste. Delectus dolorum provident dolore.
@@ -11,8 +13,8 @@
   </ui-page-section>
 
   <ui-alert
-    type="success"
-    icon="check_circle"
+    type="danger"
+    icon="error_outline"
     iconType="outlined"
     heading="You have access">
     <ng-container uiAlertContent>
@@ -25,11 +27,26 @@
     </ng-container>
   </ui-alert>
 
-  <!-- <ng-container [formGroup]="formState.form">
+  <!-- <ui-alert
+    type="success"
+    icon="check_circle"
+    iconType="outlined"
+    heading="You have access">
+    <ng-container uiAlertContent>
+      <p>
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Veritatis animi
+        ipsam, magnam mollitia quas neque reprehenderit odio culpa dolorem
+        laborum sapiente, adipisci cumque placeat. At facilis magnam vel tempora
+        voluptatum.
+      </p>
+    </ng-container>
+  </ui-alert> -->
+
+  <ng-container [formGroup]="formState.form">
     <ui-page-section>
-      <ui-page-section-subheader heading="LDAP Information">
+      <ui-page-section-subheader heading="HealthNetBC Credentials">
         <ng-container uiPageSectionSubheaderDesc>
-          Enter your LDAP information below.
+          Enter your HealthNetBC information below.
         </ng-container>
       </ui-page-section-subheader>
 
@@ -55,7 +72,7 @@
         </div>
       </div>
     </ui-page-section>
-  </ng-container> -->
+  </ng-container>
 
   <ui-page-footer>
     <button mat-stroked-button type="button" color="primary" (click)="onBack()">

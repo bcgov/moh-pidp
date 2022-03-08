@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { HcimWebEnrolmentResource } from './hcim-web-enrolment-resource.service';
+import { HcimReenrolmentResource } from './hcim-reenrolment-resource.service';
 
 describe('HcimWebEnrolmentResource', () => {
-  let service: HcimWebEnrolmentResource;
+  let service: HcimReenrolmentResource;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(HcimWebEnrolmentResource);
+    service = TestBed.inject(HcimReenrolmentResource);
   });
 
   it('should be created', () => {

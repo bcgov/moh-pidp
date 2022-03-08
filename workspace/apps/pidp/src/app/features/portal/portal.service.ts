@@ -12,7 +12,7 @@ import { StatusCode } from './enums/status-code.enum';
 import {
   CollegeCertificationPortalSection,
   DemographicsPortalSection,
-  HcimWebEnrolmentPortalSection,
+  HcimReenrolmentPortalSection,
   IPortalSection,
   SaEformsPortalSection,
   SignedAcceptedDocumentsPortalSection,
@@ -141,8 +141,7 @@ export class PortalService {
         this.partyService,
         this.accessRequestResource
       ),
-      // TODO uncomment when available through API
-      // new HcimWebEnrolmentPortalSection(profileStatus, this.router),
+      new HcimReenrolmentPortalSection(profileStatus, this.router),
     ];
   }
 
