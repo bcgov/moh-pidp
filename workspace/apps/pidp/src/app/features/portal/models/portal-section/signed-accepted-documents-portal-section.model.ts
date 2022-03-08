@@ -1,0 +1,38 @@
+import { Router } from '@angular/router';
+
+import { ShellRoutes } from '@app/features/shell/shell.routes';
+import { YourDocumentsRoutes } from '@app/features/your-documents/your-documents.routes';
+
+import {
+  IPortalSection,
+  PortalSectionAction,
+  PortalSectionKey,
+} from './portal-section.model';
+
+export class SignedAcceptedDocumentsPortalSection implements IPortalSection {
+  public readonly key: PortalSectionKey;
+  public type: 'profile' | 'access' | 'training' | 'documents';
+  public heading: string;
+  public description: string;
+
+  public constructor(private router: Router) {
+    this.key = 'signedAcceptedDocuments';
+    this.type = 'documents';
+    this.heading = 'View Signed or Accepted Documents';
+    this.description = 'View Agreement(s)';
+  }
+
+  public get action(): PortalSectionAction {
+    return {
+      label: 'View',
+      route: YourDocumentsRoutes.routePath(
+        YourDocumentsRoutes.SIGNED_ACCEPTED_DOCUMENTS_PAGE
+      ),
+      disabled: false,
+    };
+  }
+
+  public performAction(): void {
+    this.router.navigate([ShellRoutes.routePath(this.action.route)]);
+  }
+}

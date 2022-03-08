@@ -59,7 +59,7 @@
           [status]="section.status"
           [actionLabel]="section.action.label"
           [actionDisabled]="section.action.disabled"
-          (action)="onCardRouteAction(section.action.route)">
+          (action)="onCardAction(section)">
           <ng-container uiCardSummaryHint>{{ section.hint }}</ng-container>
           <ng-container uiCardSummaryContent>
             <app-profile-card-summary-content [properties]="section.properties">
@@ -87,7 +87,7 @@
           [status]="section.status"
           [actionLabel]="section.action.label"
           [actionDisabled]="section.action.disabled"
-          (action)="onCardRequestAccess(section.key, section.action.route)">
+          (action)="onCardAction(section)">
           <ng-container uiCardSummaryHint>{{ section.hint }}</ng-container>
           <ng-container uiCardSummaryContent>
             {{ section.description }}
@@ -112,7 +112,7 @@
             [status]="section.status"
             [actionLabel]="section.action.label"
             [actionDisabled]="section.action.disabled"
-            (action)="onCardRouteAction(section.action.route)">
+            (action)="onCardAction(section)">
             <ng-container uiCardSummaryHint>{{ section.hint }}</ng-container>
             <ng-container uiCardSummaryContent>
               {{ section.description }}
@@ -138,7 +138,7 @@
           [heading]="section.heading"
           [actionLabel]="section.action.label"
           [actionDisabled]="section.action.disabled"
-          (action)="onCardRouteAction(section.action.route)">
+          (action)="onCardAction(section)">
           <ng-container uiCardSummaryHint>{{ section.hint }}</ng-container>
           <ng-container uiCardSummaryContent>
             {{ section.description }}

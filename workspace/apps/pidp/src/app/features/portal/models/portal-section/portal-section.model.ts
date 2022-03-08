@@ -1,7 +1,7 @@
 import { AlertType } from '@bcgov/shared/ui';
 
-import { AccessSectionStatus } from './access-status.model';
-import { ProfileSectionStatus } from './profile-status.model';
+import { AccessSectionStatus } from '../access-status.model';
+import { ProfileSectionStatus } from '../profile-status.model';
 
 /**
  * @description
@@ -24,8 +24,9 @@ export interface PortalSectionAction {
   disabled: boolean;
 }
 
-export interface PortalSection {
-  key: PortalSectionKey;
+export interface IPortalSection {
+  readonly key: PortalSectionKey;
+  type: 'profile' | 'access' | 'training' | 'documents';
   heading: string;
   hint?: string;
   description: string;
@@ -33,4 +34,6 @@ export interface PortalSection {
   action: PortalSectionAction;
   statusType?: AlertType;
   status?: string;
+
+  performAction(): void;
 }

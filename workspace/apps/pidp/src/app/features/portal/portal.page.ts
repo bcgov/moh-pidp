@@ -6,13 +6,10 @@ import { Observable, Subscription, map } from 'rxjs';
 import { APP_CONFIG, AppConfig } from '@app/app.config';
 import { AccessRequestResource } from '@app/core/resources/access-request-resource.service';
 import { DocumentService } from '@app/core/services/document.service';
+import { PartyService } from '@app/core/services/party.service';
 import { Role } from '@app/shared/enums/roles.enum';
 
-import { PartyService } from '@core/services/party.service';
-
-import { ShellRoutes } from '../shell/shell.routes';
-import { StatusCode } from './enums/status-code.enum';
-import { PortalSection, PortalSectionKey } from './models/portal-section.model';
+import { IPortalSection } from './models/portal-section';
 import { ProfileStatusAlert } from './models/profile-status-alert.model';
 import { ProfileStatus } from './models/profile-status.model';
 import { PortalResource } from './portal-resource.service';
@@ -28,7 +25,7 @@ export class PortalPage implements OnInit {
   public title: string;
   public acceptedCollectionNotice: boolean;
   public collectionNotice: string;
-  public state$: Observable<Record<string, PortalSection[]>>;
+  public state$: Observable<Record<string, IPortalSection[]>>;
   public completedProfile: boolean;
   public alerts: ProfileStatusAlert[];
   public providerIdentitySupportEmail: string;
@@ -69,44 +66,40 @@ export class PortalPage implements OnInit {
     });
   }
 
-  public onCardRouteAction(routePath: string): void {
-    if (!routePath) {
-      return;
-    }
-
-    this.router.navigate([ShellRoutes.routePath(routePath)]);
+  public onCardAction(section: IPortalSection): void {
+    section.performAction();
   }
 
-  public onCardRequestAccess(key: PortalSectionKey, routePath: string): void {
-    const partyId = this.partyService.partyId;
-    const profileStatus = this.portalService.profileStatus;
+  // public onCardRequestAccess(key: PortalSectionKey, routePath: string): void {
+  //   const partyId = this.partyService.partyId;
+  //   const profileStatus = this.portalService.profileStatus;
 
-    if (!partyId || !profileStatus) {
-      return;
-    }
+  //   if (!partyId || !profileStatus) {
+  //     return;
+  //   }
 
-    if (key === 'saEforms') {
-      // TODO don't allow access if identity provider is Active Directory and show modal
-      const saEformsStatusCode = profileStatus.status.saEforms.statusCode;
+  //   if (key === 'saEforms') {
+  //     // TODO don't allow access if identity provider is Active Directory and show modal
+  //     const saEformsStatusCode = profileStatus.status.saEforms.statusCode;
 
-      if (saEformsStatusCode !== StatusCode.COMPLETED) {
-        this.busy = this.accessRequestResource
-          .saEforms(partyId)
-          .subscribe(() => {
-            if (!routePath) {
-              return;
-            }
+  //     if (saEformsStatusCode !== StatusCode.COMPLETED) {
+  //       this.busy = this.accessRequestResource
+  //         .saEforms(partyId)
+  //         .subscribe(() => {
+  //           if (!routePath) {
+  //             return;
+  //           }
 
-            this.router.navigate([ShellRoutes.routePath(routePath)]);
-          });
-      } else {
-        this.router.navigate([ShellRoutes.routePath(routePath)]);
-      }
-    } else if (key === 'hcimWebEnrolment') {
-      // TODO don't allow access if identity provider is BCSC and show modal
-      this.router.navigate([ShellRoutes.routePath(routePath)]);
-    }
-  }
+  //           this.router.navigate([ShellRoutes.routePath(routePath)]);
+  //         });
+  //     } else {
+  //       this.router.navigate([ShellRoutes.routePath(routePath)]);
+  //     }
+  //   } else if (key === 'hcimWebEnrolment') {
+  //     // TODO don't allow access if identity provider is BCSC and show modal
+  //     this.router.navigate([ShellRoutes.routePath(routePath)]);
+  //   }
+  // }
 
   public ngOnInit(): void {
     this.busy = this.portalResource
