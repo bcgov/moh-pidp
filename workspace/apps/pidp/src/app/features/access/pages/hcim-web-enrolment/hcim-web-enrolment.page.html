@@ -1,34 +1,61 @@
-<ui-page>
+<ui-page [form]="formState.form" [busy]="busy" (submitted)="onSubmit()">
   <ui-page-header>{{ title }}</ui-page-header>
 
-  <!-- <ui-page-section>
-    <ui-page-section-subheader
-      icon="assignment"
-      heading="Special Authority eForms">
-      <ng-container uiPageSectionSubheaderDesc>Enrolment Complete</ng-container>
+  <ui-page-section>
+    <ui-page-section-subheader icon="assignment" heading="HCIM Web Enrolment">
+      <ng-container uiPageSectionSubheaderDesc>
+        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Doloremque quo
+        modi optio tenetur dolore iste. Delectus dolorum provident dolore.
+      </ng-container>
     </ui-page-section-subheader>
-  </ui-page-section> -->
+  </ui-page-section>
 
-  <!-- <ui-alert
+  <ui-alert
     type="success"
     icon="check_circle"
     iconType="outlined"
     heading="You have access">
     <ng-container uiAlertContent>
       <p>
-        You now have access to the Special Authority eForms application. You can
-        log into the application using your BC Services Card app.
-      </p>
-      <p>
-        Follow this link to Special Authority eForms:<br />
-        <ui-anchor [href]="saEformsUrl"></ui-anchor>
-      </p>
-      <p>
-        You will need to visit this link each time you want to submit an SA
-        eForm. It may be helpful to bookmark this link for future use.
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Veritatis animi
+        ipsam, magnam mollitia quas neque reprehenderit odio culpa dolorem
+        laborum sapiente, adipisci cumque placeat. At facilis magnam vel tempora
+        voluptatum.
       </p>
     </ng-container>
-  </ui-alert> -->
+  </ui-alert>
+
+  <!-- <ng-container [formGroup]="formState.form">
+    <ui-page-section>
+      <ui-page-section-subheader heading="LDAP Information">
+        <ng-container uiPageSectionSubheaderDesc>
+          Enter your LDAP information below.
+        </ng-container>
+      </ui-page-section-subheader>
+
+      <div class="row">
+        <div class="col-12">
+          <mat-form-field class="w-100">
+            <input
+              matInput
+              placeholder="LDAP User Name"
+              formControlName="ldapUsername" />
+            <mat-error>Required</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-12">
+          <mat-form-field class="w-100">
+            <input
+              matInput
+              type="password"
+              placeholder="LDAP Password"
+              formControlName="ldapPassword" />
+            <mat-error>Required</mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+    </ui-page-section>
+  </ng-container> -->
 
   <ui-page-footer>
     <button mat-stroked-button type="button" color="primary" (click)="onBack()">
