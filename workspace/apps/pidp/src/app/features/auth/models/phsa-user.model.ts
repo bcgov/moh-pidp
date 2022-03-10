@@ -1,6 +1,6 @@
 import { IdentityProvider } from '../enums/identity-provider.enum';
 import { UserIdentity } from './user-identity.model';
-import { User } from './user.model';
+import { IUserResolver, User } from './user.model';
 
 export class PhsaUser implements User {
   public readonly identityProvider: IdentityProvider;
@@ -18,5 +18,12 @@ export class PhsaUser implements User {
     this.firstName = firstName;
     this.lastName = lastName;
     this.email = email;
+  }
+}
+
+export class PhsaResolver implements IUserResolver<PhsaUser> {
+  public constructor(public userIdentity: UserIdentity) {}
+  public resolve(): PhsaUser {
+    return new PhsaUser(this.userIdentity);
   }
 }

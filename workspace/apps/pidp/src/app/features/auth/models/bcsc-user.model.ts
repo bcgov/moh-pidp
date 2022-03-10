@@ -1,6 +1,6 @@
 import { IdentityProvider } from '../enums/identity-provider.enum';
 import { UserIdentity } from './user-identity.model';
-import { User } from './user.model';
+import { IUserResolver, User } from './user.model';
 
 export class BcscUser implements User {
   public readonly identityProvider: IdentityProvider;
@@ -27,5 +27,12 @@ export class BcscUser implements User {
     this.firstName = firstName;
     this.lastName = lastName;
     this.birthdate = birthdate;
+  }
+}
+
+export class BcscResolver implements IUserResolver<BcscUser> {
+  public constructor(public userIdentity: UserIdentity) {}
+  public resolve(): BcscUser {
+    return new BcscUser(this.userIdentity);
   }
 }

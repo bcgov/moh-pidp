@@ -1,6 +1,6 @@
 import { IdentityProvider } from '../enums/identity-provider.enum';
 import { UserIdentity } from './user-identity.model';
-import { User } from './user.model';
+import { IUserResolver, User } from './user.model';
 
 export class IdirUser implements User {
   public readonly identityProvider: IdentityProvider;
@@ -22,5 +22,12 @@ export class IdirUser implements User {
     this.userId = userId;
     this.firstName = firstName;
     this.lastName = lastName;
+  }
+}
+
+export class IdirResolver implements IUserResolver<IdirUser> {
+  public constructor(public userIdentity: UserIdentity) {}
+  public resolve(): IdirUser {
+    return new IdirUser(this.userIdentity);
   }
 }

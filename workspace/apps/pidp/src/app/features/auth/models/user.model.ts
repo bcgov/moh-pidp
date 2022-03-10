@@ -10,3 +10,7 @@ export interface User extends BaseUser, KeycloakUser<IdentityProvider> {
   email?: string;
   birthdate?: string;
 }
+
+export interface IUserResolver<T extends User> {
+  resolve(): T;
+}

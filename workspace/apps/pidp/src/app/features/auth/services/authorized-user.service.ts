@@ -3,37 +3,12 @@ import { Injectable } from '@angular/core';
 import { Observable, combineLatest, map } from 'rxjs';
 
 import { IdentityProvider } from '../enums/identity-provider.enum';
-import { BcscUser } from '../models/bcsc-user.model';
-import { IdirUser } from '../models/idir-user.model';
-import { PhsaUser } from '../models/phsa-user.model';
+import { BcscResolver } from '../models/bcsc-user.model';
+import { IdirResolver } from '../models/idir-user.model';
+import { PhsaResolver } from '../models/phsa-user.model';
 import { UserIdentity } from '../models/user-identity.model';
-import { User } from '../models/user.model';
+import { IUserResolver, User } from '../models/user.model';
 import { AccessTokenService } from './access-token.service';
-
-export interface IUserResolver<T extends User> {
-  resolve(): T;
-}
-
-export class IdirResolver implements IUserResolver<IdirUser> {
-  public constructor(public userIdentity: UserIdentity) {}
-  public resolve(): IdirUser {
-    return new IdirUser(this.userIdentity);
-  }
-}
-
-export class BcscResolver implements IUserResolver<BcscUser> {
-  public constructor(public userIdentity: UserIdentity) {}
-  public resolve(): BcscUser {
-    return new BcscUser(this.userIdentity);
-  }
-}
-
-export class PhsaResolver implements IUserResolver<PhsaUser> {
-  public constructor(public userIdentity: UserIdentity) {}
-  public resolve(): PhsaUser {
-    return new PhsaUser(this.userIdentity);
-  }
-}
 
 @Injectable({
   providedIn: 'root',
