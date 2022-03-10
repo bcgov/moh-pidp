@@ -7,11 +7,11 @@ import { Role } from '@app/shared/enums/roles.enum';
 import { SignedOrAcceptedDocumentsModule } from './pages/signed-or-accepted-documents/signed-or-accepted-documents.module';
 import { TransactionsModule } from './pages/transactions/transactions.module';
 import { ViewDocumentModule } from './pages/view-document/view-document.module';
-import { YourProfileRoutes } from './your-profile.routes';
+import { YourDocumentsRoutes } from './your-documents.routes';
 
 const routes: Routes = [
   {
-    path: YourProfileRoutes.TRANSACTIONS_PAGE,
+    path: YourDocumentsRoutes.TRANSACTIONS_PAGE,
     canLoad: [FeatureFlagGuard],
     data: {
       features: [Role.FEATURE_PIDP_DEMO],
@@ -22,14 +22,14 @@ const routes: Routes = [
       ),
   },
   {
-    path: YourProfileRoutes.SIGNED_ACCEPTED_DOCUMENTS_PAGE,
+    path: YourDocumentsRoutes.SIGNED_ACCEPTED_DOCUMENTS_PAGE,
     loadChildren: (): Promise<SignedOrAcceptedDocumentsModule> =>
       import(
         './pages/signed-or-accepted-documents/signed-or-accepted-documents.module'
       ).then((m) => m.SignedOrAcceptedDocumentsModule),
   },
   {
-    path: `${YourProfileRoutes.VIEW_DOCUMENT_PAGE}/:doctype`,
+    path: `${YourDocumentsRoutes.VIEW_DOCUMENT_PAGE}/:doctype`,
     loadChildren: (): Promise<ViewDocumentModule> =>
       import('./pages/view-document/view-document.module').then(
         (m) => m.ViewDocumentModule
@@ -41,4 +41,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class YourProfileRoutingModule {}
+export class YourDocumentsRoutingModule {}
