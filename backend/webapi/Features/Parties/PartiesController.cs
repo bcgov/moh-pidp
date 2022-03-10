@@ -47,7 +47,6 @@ public class PartiesController : PidpControllerBase
         => await this.AuthorizePartyBeforeHandleAsync(command.PartyId, handler, command)
             .ToActionResult();
 
-
     [HttpGet("{id}/demographics")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]

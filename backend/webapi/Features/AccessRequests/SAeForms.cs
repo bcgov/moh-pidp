@@ -26,20 +26,20 @@ public class SAEforms
     public class CommandHandler : ICommandHandler<Command, IDomainResult>
     {
         private readonly IClock clock;
+        private readonly IEmailService emailService;
         private readonly IKeycloakAdministrationClient client;
         private readonly PidpDbContext context;
-        private readonly IEmailService emailService;
 
         public CommandHandler(
             IClock clock,
+            IEmailService emailService,
             IKeycloakAdministrationClient client,
-            PidpDbContext context,
-            IEmailService emailService)
+            PidpDbContext context)
         {
             this.clock = clock;
+            this.emailService = emailService;
             this.client = client;
             this.context = context;
-            this.emailService = emailService;
         }
 
         public async Task<IDomainResult> HandleAsync(Command command)

@@ -9,17 +9,17 @@ using PlrIntake.Data;
 
 #nullable disable
 
-namespace PlrIntake.Migrations
+namespace PlrIntake.Data.Migrations
 {
     [DbContext(typeof(PlrDbContext))]
-    [Migration("20220204235655_NatPharmacists")]
-    partial class NatPharmacists
+    [Migration("20220224014254_Plr_Initial")]
+    partial class Plr_Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.0")
+                .HasAnnotation("ProductVersion", "6.0.2")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -303,6 +303,12 @@ namespace PlrIntake.Migrations
 
                             NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b1.Property<int>("Id"));
 
+                            b1.Property<DateTime>("Created")
+                                .HasColumnType("timestamp without time zone");
+
+                            b1.Property<DateTime>("Modified")
+                                .HasColumnType("timestamp without time zone");
+
                             b1.Property<string>("Value")
                                 .IsRequired()
                                 .HasColumnType("text");
@@ -329,6 +335,12 @@ namespace PlrIntake.Migrations
                             b1.Property<string>("Code")
                                 .IsRequired()
                                 .HasColumnType("text");
+
+                            b1.Property<DateTime>("Created")
+                                .HasColumnType("timestamp without time zone");
+
+                            b1.Property<DateTime>("Modified")
+                                .HasColumnType("timestamp without time zone");
 
                             b1.HasKey("PlrRecordId", "Id");
 

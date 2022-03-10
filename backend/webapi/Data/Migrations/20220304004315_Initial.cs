@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 using NodaTime;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -6,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Pidp.Data.Migrations
 {
-    public partial class InitialDev : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -15,7 +16,8 @@ namespace Pidp.Data.Migrations
                 columns: table => new
                 {
                     Code = table.Column<int>(type: "integer", nullable: false),
-                    Name = table.Column<string>(type: "text", nullable: false)
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    Acronym = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -35,11 +37,38 @@ namespace Pidp.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "EmailLog",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    SendType = table.Column<string>(type: "text", nullable: false),
+                    MsgId = table.Column<Guid>(type: "uuid", nullable: true),
+                    SentTo = table.Column<string>(type: "text", nullable: false),
+                    Cc = table.Column<string>(type: "text", nullable: false),
+                    Subject = table.Column<string>(type: "text", nullable: false),
+                    Body = table.Column<string>(type: "text", nullable: false),
+                    DateSent = table.Column<Instant>(type: "timestamp with time zone", nullable: true),
+                    LatestStatus = table.Column<string>(type: "text", nullable: true),
+                    StatusMessage = table.Column<string>(type: "text", nullable: true),
+                    UpdateCount = table.Column<int>(type: "integer", nullable: false),
+                    Created = table.Column<Instant>(type: "timestamp with time zone", nullable: false),
+                    Modified = table.Column<Instant>(type: "timestamp with time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_EmailLog", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Party",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Hpdid = table.Column<string>(type: "text", nullable: false),
+                    Birthdate = table.Column<LocalDate>(type: "date", nullable: false),
                     FirstName = table.Column<string>(type: "text", nullable: false),
                     LastName = table.Column<string>(type: "text", nullable: false),
                     PreferredFirstName = table.Column<string>(type: "text", nullable: true),
@@ -55,6 +84,7 @@ namespace Pidp.Data.Migrations
                 {
                     table.PrimaryKey("PK_Party", x => x.Id);
                 });
+            migrationBuilder.Sql("ALTER SEQUENCE \"Party_Id_seq\" RESTART WITH 1001;");
 
             migrationBuilder.CreateTable(
                 name: "ProvinceLookup",
@@ -70,13 +100,36 @@ namespace Pidp.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "AccessRequests",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    PartyId = table.Column<int>(type: "integer", nullable: false),
+                    RequestedOn = table.Column<Instant>(type: "timestamp with time zone", nullable: false),
+                    AccessType = table.Column<int>(type: "integer", nullable: false),
+                    Created = table.Column<Instant>(type: "timestamp with time zone", nullable: false),
+                    Modified = table.Column<Instant>(type: "timestamp with time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AccessRequests", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AccessRequests_Party_PartyId",
+                        column: x => x.PartyId,
+                        principalTable: "Party",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Facility",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     PartyId = table.Column<int>(type: "integer", nullable: false),
-                    FacilityName = table.Column<string>(type: "text", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: false),
                     Created = table.Column<Instant>(type: "timestamp with time zone", nullable: false),
                     Modified = table.Column<Instant>(type: "timestamp with time zone", nullable: false)
                 },
@@ -100,6 +153,7 @@ namespace Pidp.Data.Migrations
                     PartyId = table.Column<int>(type: "integer", nullable: false),
                     CollegeCode = table.Column<int>(type: "integer", nullable: false),
                     LicenceNumber = table.Column<string>(type: "text", nullable: false),
+                    Ipc = table.Column<string>(type: "text", nullable: true),
                     Created = table.Column<Instant>(type: "timestamp with time zone", nullable: false),
                     Modified = table.Column<Instant>(type: "timestamp with time zone", nullable: false)
                 },
@@ -161,12 +215,15 @@ namespace Pidp.Data.Migrations
 
             migrationBuilder.InsertData(
                 table: "CollegeLookup",
-                columns: new[] { "Code", "Name" },
+                columns: new[] { "Code", "Acronym", "Name" },
                 values: new object[,]
                 {
-                    { 1, "College of Physicians and Surgeons of BC (CPSBC)" },
-                    { 2, "College of Pharmacists of BC (CPBC)" },
-                    { 3, "BC College of Nurses and Midwives (BCCNM)" }
+                    { 1, "CPSBC", "College of Physicians and Surgeons of BC" },
+                    { 2, "CPBC", "College of Pharmacists of BC" },
+                    { 3, "BCCNM", "BC College of Nurses and Midwives" },
+                    { 4, "CNPBC", "College of Naturopathic Physicians of BC" },
+                    { 5, "CDSBC", "College of Dental Surgeons of British Columbia" },
+                    { 6, "COBC", "College Of Optometrists of British Columbia" }
                 });
 
             migrationBuilder.InsertData(
@@ -256,6 +313,11 @@ namespace Pidp.Data.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_AccessRequests_PartyId",
+                table: "AccessRequests",
+                column: "PartyId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Address_CountryCode",
                 table: "Address",
                 column: "CountryCode");
@@ -278,6 +340,18 @@ namespace Pidp.Data.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_Party_Hpdid",
+                table: "Party",
+                column: "Hpdid",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Party_UserId",
+                table: "Party",
+                column: "UserId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_PartyCertification_CollegeCode",
                 table: "PartyCertification",
                 column: "CollegeCode");
@@ -292,7 +366,13 @@ namespace Pidp.Data.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "AccessRequests");
+
+            migrationBuilder.DropTable(
                 name: "Address");
+
+            migrationBuilder.DropTable(
+                name: "EmailLog");
 
             migrationBuilder.DropTable(
                 name: "PartyCertification");

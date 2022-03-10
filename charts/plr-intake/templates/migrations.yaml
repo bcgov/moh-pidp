@@ -20,7 +20,7 @@ spec:
       containers:
       - name: migrations
         image: {{ .Values.global.image.registry }}/{{ .Values.image.repository }}:{{ .Values.global.image.tag | default .Chart.AppVersion }}
-        imagepullPolicy: Always
+        imagePullPolicy: Always
         command: ['./efbundle', '--connection', '$(ConnectionStrings__PlrDatabase)']
         env:
           - name: DB_HOST

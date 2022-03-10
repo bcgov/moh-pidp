@@ -2,32 +2,20 @@ namespace Pidp.Infrastructure.HttpClients.Mail;
 
 public class ChesEmailRequestParams
 {
-    public IEnumerable<ChesAttachment> Attachments { get; set; }
-    public IEnumerable<string> Bcc { get; set; }
-    public string BodyType { get; set; }
-    public string Body { get; set; }
-    public IEnumerable<string> Cc { get; set; }
-    public int? DelayTS { get; set; }
-    public string Encoding { get; set; }
+    public IEnumerable<ChesAttachment> Attachments { get; set; } = Enumerable.Empty<ChesAttachment>();
+    public IEnumerable<string> Bcc { get; set; } = Enumerable.Empty<string>();
+    public string BodyType { get; set; } = "html";
+    public string Body { get; set; } = string.Empty;
+    public IEnumerable<string> Cc { get; set; } = Enumerable.Empty<string>();
+    public int? DelayTS { get; set; } = 0;
+    public string Encoding { get; set; } = "utf-8";
     public string From { get; set; }
-    public string Priority { get; set; }
-    public string Subject { get; set; }
-    public string Tag { get; set; }
+    public string Priority { get; set; } = "normal";
+    public string Subject { get; set; } = string.Empty;
+    public string Tag { get; set; } = "tag";
     public IEnumerable<string> To { get; set; }
 
-    public ChesEmailRequestParams()
-    {
-        // Defaults
-        this.Bcc = Enumerable.Empty<string>();
-        this.BodyType = "html";
-        this.DelayTS = 0;
-        this.Encoding = "utf-8";
-        this.Priority = "normal";
-        this.Tag = "tag";
-    }
-
     public ChesEmailRequestParams(Email email)
-        : this()
     {
         this.Attachments = email.Attachments.Select(file => new ChesAttachment()
         {

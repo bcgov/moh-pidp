@@ -1,7 +1,6 @@
 namespace Pidp.Infrastructure.HttpClients.Mail;
 
 using System.Net.Mail;
-using Pidp.Models;
 
 public class Email
 {
