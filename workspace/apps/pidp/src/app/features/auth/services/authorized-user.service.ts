@@ -24,15 +24,21 @@ export class AuthorizedUserService {
     return this.accessTokenService.roles();
   }
 
+  /**
+   * @description
+   * Get the authenticated user subtype based on
+   * identity provider.
+   */
   public get user$(): Observable<User> {
     return this.getUserResolver$().pipe(map((resolver) => resolver.resolve()));
   }
 
   /**
    * @description
-   * Get the authorized user resolver mapped from the access token.
+   * Get the authorized user resolver mapped from
+   * the access token.
    */
-  public getUserResolver$(): Observable<IUserResolver<User>> {
+  private getUserResolver$(): Observable<IUserResolver<User>> {
     return combineLatest({
       accessTokenParsed: this.accessTokenService.decodeToken(),
       brokerProfile: this.accessTokenService.loadBrokerProfile(),
@@ -41,6 +47,11 @@ export class AuthorizedUserService {
     );
   }
 
+  /**
+   * @description
+   * Factory for generating an user subtype based
+   * on identity provider.
+   */
   private getUserResolver(userIdentity: UserIdentity): IUserResolver<User> {
     switch (userIdentity.accessTokenParsed.identity_provider) {
       case IdentityProvider.IDIR:
