@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { BcscUserInfoComponent } from './bcsc-user-info.component';
+import { UserInfoComponent } from './user-info.component';
 
-describe('BcscUserInfoComponent', () => {
-  let component: BcscUserInfoComponent;
-  let fixture: ComponentFixture<BcscUserInfoComponent>;
+describe('UserInfoComponent', () => {
+  let component: UserInfoComponent;
+  let fixture: ComponentFixture<UserInfoComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [BcscUserInfoComponent],
+      declarations: [UserInfoComponent],
     }).compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(BcscUserInfoComponent);
+    fixture = TestBed.createComponent(UserInfoComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

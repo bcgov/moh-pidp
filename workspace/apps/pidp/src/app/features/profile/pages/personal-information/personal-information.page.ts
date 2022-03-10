@@ -8,13 +8,13 @@ import { EMPTY, Observable, catchError, of, tap } from 'rxjs';
 
 import { ToggleContentChange } from '@bcgov/shared/ui';
 
-import { AuthorizedUserService } from '@app/core/services/authorized-user.service';
+import { PartyService } from '@app/core/party/party.service';
 import { LoggerService } from '@app/core/services/logger.service';
-import { BcscUser } from '@app/features/auth/models/bcsc-user.model';
+import { User } from '@app/features/auth/models/user.model';
+import { AuthorizedUserService } from '@app/features/auth/services/authorized-user.service';
 
 import { AbstractFormPage } from '@core/classes/abstract-form-page.class';
 import { FormUtilsService } from '@core/services/form-utils.service';
-import { PartyService } from '@core/services/party.service';
 
 import { PersonalInformationFormState } from './personal-information-form-state';
 import { PersonalInformationResource } from './personal-information-resource.service';
@@ -32,7 +32,7 @@ export class PersonalInformationPage
 {
   public title: string;
   public formState: PersonalInformationFormState;
-  public bcscUser: Observable<BcscUser | null>;
+  public user: Observable<User>;
   public hasPreferredName: boolean;
 
   public constructor(
@@ -52,7 +52,7 @@ export class PersonalInformationPage
 
     this.title = this.route.snapshot.data.title;
     this.formState = new PersonalInformationFormState(fb);
-    this.bcscUser = this.authorizedUserService.user$;
+    this.user = this.authorizedUserService.user$;
     this.hasPreferredName = false;
   }
 

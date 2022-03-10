@@ -3,9 +3,8 @@ import { CanActivate, Router, UrlTree } from '@angular/router';
 
 import { Observable } from 'rxjs';
 
+import { AuthorizedUserService } from '@app/features/auth/services/authorized-user.service';
 import { Role } from '@app/shared/enums/roles.enum';
-
-import { AuthorizedUserService } from '../services/authorized-user.service';
 
 @Injectable({
   providedIn: 'root',
@@ -19,6 +18,7 @@ export class AdminGuard implements CanActivate {
   // TODO add other guard methods
   // TODO make something generic and move into specific modules
   // TODO abstract permissions guard
+  // TODO pull redirect from route config
   public canActivate():
     | Observable<boolean | UrlTree>
     | Promise<boolean | UrlTree>

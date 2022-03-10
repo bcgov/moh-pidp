@@ -5,9 +5,9 @@ import { Observable, catchError, exhaustMap, of, throwError } from 'rxjs';
 
 import { RootRoutes } from '@bcgov/shared/ui';
 
-import { PartyResource } from '../resources/party-resource.service';
 import { LoggerService } from '../services/logger.service';
-import { PartyService } from '../services/party.service';
+import { PartyResource } from './party-resource.service';
+import { PartyService } from './party.service';
 
 /**
  * @description

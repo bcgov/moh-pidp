@@ -3,11 +3,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { Observable, Subscription, map } from 'rxjs';
 
+import { PartyService } from '@app/core/party/party.service';
 import { AccessRequestResource } from '@app/core/resources/access-request-resource.service';
 import { DocumentService } from '@app/core/services/document.service';
 import { Role } from '@app/shared/enums/roles.enum';
-
-import { PartyService } from '@core/services/party.service';
 
 import { ShellRoutes } from '../shell/shell.routes';
 import { PortalSection } from './models/portal-section.model';
