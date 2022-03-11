@@ -4,7 +4,11 @@ import { ActivatedRoute } from '@angular/router';
 
 import { EMPTY, Observable, Subscription, exhaustMap } from 'rxjs';
 
-import { DialogOptions, HtmlComponent } from '@bcgov/shared/ui';
+import {
+  DashboardHeaderConfig,
+  DialogOptions,
+  HtmlComponent,
+} from '@bcgov/shared/ui';
 import { ConfirmDialogComponent } from '@bcgov/shared/ui';
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';
@@ -21,12 +25,12 @@ import { AuthService } from '../../services/auth.service';
 export class LoginPage {
   public busy?: Subscription;
   public title: string;
+  public headerConfig: DashboardHeaderConfig;
   public loginCancelled: boolean;
   public bcscSupportUrl: string;
   public bcscMobileSetupUrl: string;
   public specialAuthorityUrl: string;
   public providerIdentitySupportEmail: string;
-  public specialAuthoritySupportEmail: string;
   public idpHint: IdentityProvider;
 
   public IdentityProvider = IdentityProvider;
@@ -41,14 +45,13 @@ export class LoginPage {
     const routeSnapshot = this.route.snapshot;
 
     this.title = routeSnapshot.data.title;
+    this.headerConfig = { theme: 'dark', allowMobileToggle: false };
     this.loginCancelled = routeSnapshot.queryParams.action === 'cancelled';
     this.bcscSupportUrl = this.config.urls.bcscSupport;
     this.bcscMobileSetupUrl = this.config.urls.bcscMobileSetup;
     this.specialAuthorityUrl = this.config.urls.specialAuthority;
     this.providerIdentitySupportEmail =
       this.config.emails.providerIdentitySupport;
-    this.specialAuthoritySupportEmail =
-      this.config.emails.specialAuthoritySupport;
     this.idpHint = routeSnapshot.data.idpHint;
   }
 

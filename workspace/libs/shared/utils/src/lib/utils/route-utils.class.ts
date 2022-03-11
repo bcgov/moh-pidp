@@ -1,5 +1,5 @@
-import { Router, NavigationExtras, ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
+import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 
 export type RoutePath = string | (string | number)[];
 
@@ -9,7 +9,7 @@ export class RouteUtils {
   private readonly baseRoutePath: string;
   private location: Location;
 
-  constructor(
+  public constructor(
     route: ActivatedRoute,
     router: Router,
     baseRoutePath: RoutePath,
