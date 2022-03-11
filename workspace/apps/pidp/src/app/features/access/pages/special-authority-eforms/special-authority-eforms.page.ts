@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
+import { PartyService } from '@app/core/party/party.service';
 import { LoggerService } from '@app/core/services/logger.service';
-import { PartyService } from '@app/core/services/party.service';
 
 import { saEformsUrl } from './special-authority.constants';
 

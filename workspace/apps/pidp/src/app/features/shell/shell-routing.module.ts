@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { UserGuard } from '@app/core/guards/user.guard';
-import { PartyResolver } from '@app/core/resolvers/party.resolver';
+import { PartyResolver } from '@app/core/party/party.resolver';
 import { FeatureFlagGuard } from '@app/modules/feature-flag/feature-flag.guard';
 import { Role } from '@app/shared/enums/roles.enum';
 

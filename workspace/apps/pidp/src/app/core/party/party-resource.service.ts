@@ -1,17 +1,15 @@
-import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
+import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 import { Observable, catchError, exhaustMap, map, of, throwError } from 'rxjs';
 
-import { Party } from '@bcgov/shared/data-access';
+import { ResourceUtilsService } from '@bcgov/shared/data-access';
 
-import { BcscUser } from '@app/features/auth/models/bcsc-user.model';
+import { ApiHttpClient } from '@app/core/resources/api-http-client.service';
+import { User } from '@app/features/auth/models/user.model';
+import { AuthorizedUserService } from '@app/features/auth/services/authorized-user.service';
 
-// TODO specific to app but should be with everything related to a party
-import { PartyCreate } from '../models/party-create.model';
-import { AuthorizedUserService } from '../services/authorized-user.service';
-import { ApiHttpClient } from './api-http-client.service';
-import { ResourceUtilsService } from './resource-utils.service';
+import { PartyCreate } from './party-create.model';
 
 @Injectable({
   providedIn: 'root',
@@ -23,18 +21,6 @@ export class PartyResource {
     private authorizedUserService: AuthorizedUserService
   ) {}
 
-  public getParty(partyId: number): Observable<Party | null> {
-    return this.apiResource.get<Party>(`parties/${partyId}`).pipe(
-      catchError((error: HttpErrorResponse) => {
-        if (error.status === HttpStatusCode.NotFound) {
-          return of(null);
-        }
-
-        throw error;
-      })
-    );
-  }
-
   /**
    * @description
    * Get a party ID based on the access token user ID, and
@@ -42,7 +28,7 @@ export class PartyResource {
    */
   public firstOrCreate(): Observable<number | null> {
     return this.authorizedUserService.user$.pipe(
-      exhaustMap((user: BcscUser | null) =>
+      exhaustMap((user: User) =>
         user
           ? this.getParties(user.userId).pipe(
               map((partyId: number | null) => partyId ?? user)
@@ -54,10 +40,10 @@ export class PartyResource {
                 )
             )
       ),
-      exhaustMap((partyIdOrBcscUser: number | BcscUser | null) =>
-        typeof partyIdOrBcscUser === 'number' || !partyIdOrBcscUser
-          ? of(partyIdOrBcscUser)
-          : this.createParty(partyIdOrBcscUser)
+      exhaustMap((partyIdOrUser: number | User | null) =>
+        typeof partyIdOrUser === 'number' || !partyIdOrUser
+          ? of(partyIdOrUser)
+          : this.createParty(partyIdOrUser)
       )
     );
   }

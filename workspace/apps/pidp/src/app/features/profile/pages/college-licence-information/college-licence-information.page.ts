@@ -7,9 +7,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { EMPTY, Observable, catchError, of, tap } from 'rxjs';
 
 import { AbstractFormPage } from '@app/core/classes/abstract-form-page.class';
+import { PartyService } from '@app/core/party/party.service';
 import { FormUtilsService } from '@app/core/services/form-utils.service';
 import { LoggerService } from '@app/core/services/logger.service';
-import { PartyService } from '@app/core/services/party.service';
 import { CollegeLookup } from '@app/modules/lookup/lookup.model';
 import { LookupService } from '@app/modules/lookup/lookup.service';
 

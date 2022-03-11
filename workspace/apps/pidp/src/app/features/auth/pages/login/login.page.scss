@@ -7,7 +7,11 @@
 .container {
   padding-top: 3rem;
   padding-bottom: 1rem;
-  max-width: 1115px;
+  max-width: 866px;
+
+  @include media-breakpoint-up(xxl) {
+    max-width: 1340px;
+  }
 }
 
 //
@@ -27,30 +31,38 @@
     display: none;
   }
 
+  @media (min-width: 645px) {
+    img {
+      display: block;
+    }
+
+    span {
+      // Repositioning of text with image
+      margin-top: 2rem;
+      margin-left: 2rem;
+    }
+  }
+
   p {
     margin-top: -1.5rem;
 
     @include media-breakpoint-up(sm) {
       width: 425px;
     }
-  }
-
-  @include media-breakpoint-up(md) {
-    img {
-      display: block;
+    @include media-breakpoint-up(md) {
+      width: 500px;
     }
-
-    span {
-      margin-top: 2rem;
-      margin-left: 2rem;
+    @include media-breakpoint-up(lg) {
+      width: 600px;
     }
   }
 }
 
 .actions {
   small {
-    margin-top: 0.2rem;
     display: block;
+    margin-top: 0.2rem;
+    margin-bottom: 1rem;
   }
 
   button {
@@ -58,9 +70,20 @@
     padding: 0.75rem 1.2rem;
     width: 100%;
 
-    @include media-breakpoint-up(sm) {
-      width: auto;
+    @include media-breakpoint-up(md) {
+      padding: 0.75rem 1rem;
+    }
+    @include media-breakpoint-up(lg) {
       padding: 0.75rem 1.75rem;
+      width: auto;
+    }
+  }
+
+  @include media-breakpoint-up(lg) {
+    display: flex;
+
+    span:first-child {
+      padding-right: 2rem;
     }
   }
 }
@@ -80,18 +103,18 @@
     padding: 1rem 1.5rem;
   }
 
-  @include media-breakpoint-up(xl) {
+  @include media-breakpoint-up(xxl) {
     max-width: 450px;
   }
 }
 
-@include media-breakpoint-down(xl) {
+@include media-breakpoint-down(xxl) {
   .hide-on-small-viewports {
     display: none;
   }
 }
 
-@include media-breakpoint-up(xl) {
+@include media-breakpoint-up(xxl) {
   .hide-on-large-viewports {
     display: none;
   }

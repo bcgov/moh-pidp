@@ -49,13 +49,23 @@
         </div>
 
         <div class="actions">
-          <button mat-flat-button color="primary" (click)="onLogin()">
-            Login with the BC Services Card app
-          </button>
-          <small>
-            Need an account?
-            <ui-anchor [href]="bcscMobileSetupUrl">Register</ui-anchor>
-          </small>
+          <span>
+            <button mat-flat-button color="primary" (click)="onLogin()">
+              Login with the BC Services Card app
+            </button>
+            <small>
+              Need an account?
+              <ui-anchor [href]="bcscMobileSetupUrl">Register</ui-anchor>
+            </small>
+          </span>
+          <span>
+            <button
+              mat-flat-button
+              color="primary"
+              (click)="onLogin(IdentityProvider.PHSA)">
+              Login with your PHSA Active Directory
+            </button>
+          </span>
         </div>
 
         <div class="hide-on-large-viewports">
@@ -95,6 +105,12 @@
               >submit SA requests by fax </ui-anchor
             >.
           </p>
+        </ui-page-section>
+
+        <ui-page-section>
+          <ui-page-section-subheader
+            heading="HCIM Web Enrolment"></ui-page-section-subheader>
+          <p>Request access to HCIM Web</p>
         </ui-page-section>
       </div>
     </div>
