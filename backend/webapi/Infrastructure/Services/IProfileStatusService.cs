@@ -8,8 +8,9 @@ public interface IProfileStatusService
     /// Computes the Status Code, Alerts, and Properties of all supplied Sections, resolving dependant Sections as required.
     /// </summary>
     /// <param name="partyId"></param>
+    /// <param name="recheckIpc">If true and IPC is null, attempts to find the Party's record in PLR</param>
     /// <param name="sections"></param>
-    Task<IEnumerable<IProfileSection>> CompileSectionsAsync(int partyId, params Section[] sections);
+    Task<IEnumerable<IProfileSection>> CompileSectionsAsync(int partyId, bool recheckIpc = false, params Section[] sections);
 
     /// <summary>
     /// Computes the Status of a single Section, resolving dependant Sections as required.
