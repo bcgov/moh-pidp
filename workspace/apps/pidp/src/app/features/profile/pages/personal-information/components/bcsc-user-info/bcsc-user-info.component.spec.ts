@@ -1,24 +1,16 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 
 import { BcscUserInfoComponent } from './bcsc-user-info.component';
 
 describe('BcscUserInfoComponent', () => {
   let component: BcscUserInfoComponent;
-  let fixture: ComponentFixture<BcscUserInfoComponent>;
-
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [BcscUserInfoComponent],
-    }).compileComponents();
-  });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(BcscUserInfoComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+    TestBed.configureTestingModule({
+      providers: [BcscUserInfoComponent],
+    });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    component = TestBed.inject(BcscUserInfoComponent);
   });
 });
