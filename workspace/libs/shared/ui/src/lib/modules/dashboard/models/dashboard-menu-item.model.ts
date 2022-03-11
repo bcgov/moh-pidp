@@ -1,3 +1,7 @@
+import { IsActiveMatchOptions, NavigationExtras } from '@angular/router';
+
+import { RoutePath } from '@bcgov/shared/utils';
+
 export type DashboardMenuType = 'route' | 'list';
 
 export interface DashboardMenuDetail {
@@ -5,7 +9,6 @@ export interface DashboardMenuDetail {
 }
 
 export interface DashboardMenuItemOptions {
-  active?: boolean;
   deemphasize?: boolean;
   disabled?: boolean;
 }
@@ -31,7 +34,6 @@ export abstract class DashboardMenuItem {
    */
   public getOptions(): DashboardMenuItemOptions {
     return {
-      active: this.options?.active,
       disabled: this.options?.disabled,
       deemphasize: this.options?.deemphasize,
     };
@@ -45,27 +47,47 @@ export class DashboardRouteMenuItem
   public readonly type: DashboardMenuType;
   /**
    * @description
-   * Route path.
+   * URL fragments with which to construct the target URL.
    */
-  public route: (string | number)[] | string;
+  public commands: RoutePath;
   /**
    * @description
-   * Only active on exact route.
+   * Options that modify the route URL.
    */
-  public exact: boolean;
+  public extras: NavigationExtras;
+  /**
+   * @description
+   * Options to configure how to determine if the
+   * router link is active.
+   */
+  public linkActiveOptions:
+    | {
+        exact: boolean;
+      }
+    | IsActiveMatchOptions;
 
   public constructor(
     label: string,
-    route: string,
+    routeParams: {
+      commands: RoutePath;
+      extras?: NavigationExtras;
+      linkActiveOptions?:
+        | {
+            exact: boolean;
+          }
+        | IsActiveMatchOptions;
+    },
     icon: string = '',
-    exact: boolean = false,
-    options: DashboardMenuItemOptions = {}
+    menuOptions: DashboardMenuItemOptions = {}
   ) {
-    super(label, icon, options);
+    super(label, icon, menuOptions);
+
+    const { commands, extras, linkActiveOptions } = routeParams;
 
     this.type = 'route';
-    this.route = route;
-    this.exact = exact;
+    this.commands = commands;
+    this.extras = extras ?? {};
+    this.linkActiveOptions = linkActiveOptions ?? { exact: true };
   }
 }
 

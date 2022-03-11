@@ -1,1 +1,1 @@
-export const saEformsUrl = 'https://www.eforms.phsahealth.ca/appdash';
+export const saEformsUrl = 'https://www.eforms.healthbc.org/login';

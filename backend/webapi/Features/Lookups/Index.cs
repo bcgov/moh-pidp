@@ -1,7 +1,6 @@
 namespace Pidp.Features.Lookups;
 
 using Microsoft.EntityFrameworkCore;
-using System.Threading.Tasks;
 
 using Pidp.Data;
 using Pidp.Models.Lookups;

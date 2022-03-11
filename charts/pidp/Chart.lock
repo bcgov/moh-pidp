@@ -1,15 +1,15 @@
 dependencies:
 - name: frontend
   repository: file://../frontend
-  version: 0.1.0
+  version: 0.1.1
 - name: webapi
   repository: file://../webapi
-  version: 0.1.0
+  version: 0.1.1
 - name: plr-intake
   repository: file://../plr-intake
-  version: 0.1.0
+  version: 0.1.1
 - name: nginx
   repository: file://../nginx
   version: 9.7.3
-digest: sha256:342d7d91267a12093dac6d2f8fad51e6935ac518f62d0e30da604cb94209177e
-generated: "2022-01-31T18:37:06.869062-08:00"
+digest: sha256:028b6e8714983d04f62ead270133ea1f6ae4c692f25b6b3dff8d9b907f29dada
+generated: "2022-02-24T12:15:27.541989-08:00"

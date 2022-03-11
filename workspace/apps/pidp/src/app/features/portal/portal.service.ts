@@ -14,7 +14,7 @@ import {
   StatusCode,
 } from '@app/features/portal/models/profile-status.model';
 import { ProfileRoutes } from '@app/features/profile/profile.routes';
-import { YourProfileRoutes } from '@app/features/your-profile/your-profile.routes';
+import { YourDocumentsRoutes } from '@app/features/your-documents/your-documents.routes';
 
 @Injectable({
   providedIn: 'root',
@@ -88,7 +88,7 @@ export class PortalService {
           return {
             heading: 'Having trouble verifying your college licence?',
             content:
-              'Your licence may not be active yet. Try again in 24 hours. If this problem persists, contact your College.',
+              'Your licence may not be active yet. Try again in 24 hours. If this problem persists, contact your college.',
           };
       }
     });
@@ -103,7 +103,7 @@ export class PortalService {
     this._state$.next({
       profileIdentitySections: this.getProfileIdentitySections(profileStatus),
       accessToSystemsSections: this.getAccessToSystemsSections(profileStatus),
-      yourProfileSections: this.getYourProfileSections(),
+      yourDocumentsSections: this.getYourDocumentsSections(),
     });
   }
 
@@ -258,7 +258,7 @@ export class PortalService {
     ];
   }
 
-  private getYourProfileSections(): PortalSection[] {
+  private getYourDocumentsSections(): PortalSection[] {
     return [
       {
         icon: 'fingerprint',
@@ -267,8 +267,8 @@ export class PortalService {
         description: 'View Agreement(s)',
         action: {
           label: 'View',
-          route: YourProfileRoutes.routePath(
-            YourProfileRoutes.SIGNED_ACCEPTED_DOCUMENTS_PAGE
+          route: YourDocumentsRoutes.routePath(
+            YourDocumentsRoutes.SIGNED_ACCEPTED_DOCUMENTS_PAGE
           ),
           disabled: false,
         },

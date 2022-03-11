@@ -1,99 +1,104 @@
-<ui-dashboard-header></ui-dashboard-header>
+<ui-dashboard-header
+  [theme]="headerConfig.theme"
+  [allowMobileToggle]="headerConfig.allowMobileToggle"></ui-dashboard-header>
 
 <div class="container">
   <ng-container *ngIf="idpHint === IdentityProvider.BCSC; else IDIR">
-    <div class="bcsc">
-      <div class="row justify-content-center">
-        <div class="col col-md-10 col-xl-8">
-          <div class="row justify-content-center">
-            <div *ngIf="loginCancelled" class="col-12 col-lg-8">
-              <ui-alert
-                type="info"
-                icon="error_outline"
-                heading="Login Cancelled">
-                <ng-container uiAlertContent>
-                  <p>
-                    You have cancelled your login to the Provider Identity
-                    Portal.
-                  </p>
-                  <ul>
-                    <li>
-                      For support with the provider identity portal, contact
-                      <ui-anchor
-                        scheme="mailto"
-                        [href]="providerIdentitySupportEmail"></ui-anchor>
-                    </li>
-                    <li>
-                      For support with your BC Services Card, click
-                      <ui-anchor [href]="bcscSupportUrl">here</ui-anchor>
-                    </li>
-                  </ul>
-                </ng-container>
-              </ui-alert>
-            </div>
-          </div>
-          <div class="row justify-content-center">
-            <div class="col-12 col-lg-8">
-              <div class="row align-items-center">
-                <div class="col-auto">
-                  <img
-                    src="/assets/images/pidp-logo-white.svg"
-                    alt="Provider Identity Portal Logo" />
-                </div>
-                <div class="col">
-                  <h1>{{ title }}</h1>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="row justify-content-center">
-            <div class="col-12 col-lg-8">
-              <ui-page-section-subheader
-                heading="Enrol for access to Special Authority eForms">
-                <ng-container uiPageSectionSubheaderDesc>
-                  B.C. healthcare professionals enrol here for access to
-                  PharmaCare's
-                  <span class="nowrap">Special Authority</span> eForms
-                  application.
-                </ng-container>
-              </ui-page-section-subheader>
-              <p>
-                You need to set up the
-                <ui-anchor [href]="bcscMobileSetupUrl"
-                  >BC Services Card app</ui-anchor
-                >
-                to enrol. You will use the app each time you access the eForms
-                application. If you are not eligible for the BC Services Card,
-                or cannot set up the app, you can
-                <ui-anchor [href]="specialAuthorityUrl"
-                  >submit SA requests by fax</ui-anchor
-                >.
-              </p>
-
-              <br />
-
-              <button mat-flat-button color="primary" (click)="onLogin()">
-                Login with the BC Services Card app
-              </button>
-            </div>
-          </div>
-          <div class="row justify-content-center">
-            <div class="col-12 col-lg-8">
-              <h2>Get Support</h2>
-            </div>
-            <div class="col-12 col-lg-8">
-              <p>
-                Questions about Special Authority eForms should be directed to:
+    <div class="row">
+      <div class="col-12">
+        <ui-alert
+          *ngIf="loginCancelled"
+          type="info"
+          icon="error_outline"
+          heading="Login Cancelled">
+          <ng-container uiAlertContent>
+            <p>
+              You have cancelled your login to the Provider Identity Portal.
+            </p>
+            <ul>
+              <li>
+                For support with the provider identity portal, contact
                 <ui-anchor
                   scheme="mailto"
-                  [href]="specialAuthoritySupportEmail"></ui-anchor>
-              </p>
-            </div>
-          </div>
+                  [href]="providerIdentitySupportEmail"></ui-anchor>
+              </li>
+              <li>
+                For support with your BC Services Card, click
+                <ui-anchor [href]="bcscSupportUrl">here</ui-anchor>
+              </li>
+            </ul>
+          </ng-container>
+        </ui-alert>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12 col-xl-auto">
+        <div class="header">
+          <img
+            src="/assets/images/pidp-logo-white.svg"
+            alt="Provider Identity Portal Logo" />
+          <span>
+            <ui-page-header>Provider Identity Portal</ui-page-header>
+            <p>
+              A portal for health care providers and health care professionals
+              in
+              <strong>British Columbia</strong> to enrol for access to
+              participating health systems
+            </p>
+          </span>
         </div>
+
+        <div class="actions">
+          <button mat-flat-button color="primary" (click)="onLogin()">
+            Login with the BC Services Card app
+          </button>
+          <small>
+            Need an account?
+            <ui-anchor [href]="bcscMobileSetupUrl">Register</ui-anchor>
+          </small>
+        </div>
+
+        <div class="hide-on-large-viewports">
+          <ng-container *ngTemplateOutlet="systems"></ng-container>
+        </div>
+
+        <div class="support">
+          <app-get-support></app-get-support>
+        </div>
+      </div>
+      <div class="col-12 col-xl-auto hide-on-small-viewports">
+        <ng-container *ngTemplateOutlet="systems"></ng-container>
       </div>
     </div>
   </ng-container>
+
+  <ng-template #systems>
+    <div class="systems">
+      <h2>Systems Available</h2>
+      <div>
+        <ui-page-section>
+          <ui-page-section-subheader
+            heading="Special Authority eForms"></ui-page-section-subheader>
+          <p>
+            B.C. healthcare professionals can enrol for access to PharmaCare's
+            Special Authority eForms application.
+          </p>
+          <p>
+            You need to set up the
+            <ui-anchor [href]="bcscMobileSetupUrl"
+              >BC Services Card app</ui-anchor
+            >
+            to enrol. You will use the app each time you access the eForms
+            application. If you are not eligible for the BC Services Card, or
+            cannot set up the app, you can
+            <ui-anchor [href]="specialAuthorityUrl"
+              >submit SA requests by fax </ui-anchor
+            >.
+          </p>
+        </ui-page-section>
+      </div>
+    </div>
+  </ng-template>
 
   <ng-template #IDIR>
     <div class="row idir">
