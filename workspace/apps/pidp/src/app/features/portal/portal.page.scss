@@ -1,9 +1,13 @@
 @use '@angular/material' as mat;
-@import 'palette';
+@use 'palette' as palette;
 @import 'bootstrap/bootstrap-imports';
-
-$theme-typography: mat.define-typography-config();
 
 p.lead {
   margin-bottom: 3rem;
+}
+
+@include media-breakpoint-up(xl) {
+  .row > div {
+    max-width: 800px;
+  }
 }

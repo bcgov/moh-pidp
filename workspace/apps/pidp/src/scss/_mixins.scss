@@ -68,7 +68,6 @@ $theme-typography: mat.define-typography-config();
     // but for now is an unnecessary optimization .mat-card-hint
     span {
       font-size: 0.8rem;
-      font-style: italic;
       line-height: 1rem;
       // Reduce space between content and boundary to match actions
       // and possible card status
@@ -142,11 +141,9 @@ $types: success, info, warn, danger, muted;
 
   border-radius: 5px;
   margin-bottom: 2rem;
-  padding-left: 0.3rem;
 
   & > span {
     font-size: 0.85rem;
-    font-style: italic;
     // Apply padding to provide a bit of space
     // between text and boundary
     padding-right: 1rem;
@@ -178,6 +175,9 @@ $types: success, info, warn, danger, muted;
       background-color: alert-palette($type, backgroundColorSolid);
       border-color: alert-palette($type, backgroundColorSolid);
       color: alert-palette($type, color);
+
+      // Spacing provide on left side for status colour
+      padding-left: 0.3rem;
 
       // TODO temporary override that should be lifted out,
       //      or provided card status palette
