@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { Observable, Subscription, map } from 'rxjs';
 
+import { APP_CONFIG, AppConfig } from '@app/app.config';
 import { PartyService } from '@app/core/party/party.service';
 import { AccessRequestResource } from '@app/core/resources/access-request-resource.service';
 import { DocumentService } from '@app/core/services/document.service';
