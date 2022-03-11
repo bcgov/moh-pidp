@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { FeatureFlagGuard } from '@app/modules/feature-flag/feature-flag.guard';
+import { PermissionsGuard } from '@app/modules/permissions/permissions.guard';
 import { Role } from '@app/shared/enums/roles.enum';
 
 import { SignedOrAcceptedDocumentsModule } from './pages/signed-or-accepted-documents/signed-or-accepted-documents.module';
@@ -12,9 +12,9 @@ import { YourDocumentsRoutes } from './your-documents.routes';
 const routes: Routes = [
   {
     path: YourDocumentsRoutes.TRANSACTIONS_PAGE,
-    canLoad: [FeatureFlagGuard],
+    canLoad: [PermissionsGuard],
     data: {
-      features: [Role.FEATURE_PIDP_DEMO],
+      roles: [Role.FEATURE_PIDP_DEMO],
     },
     loadChildren: (): Promise<TransactionsModule> =>
       import('./pages/transactions/transactions.module').then(

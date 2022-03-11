@@ -1,8 +1,8 @@
-import { FeatureFlagDirective } from './feature-flag.directive';
+import { PermissionsDirective } from './permissions.directive';
 
 describe('FeatureFlagDirective', () => {
   it('should create an instance', () => {
-    const directive = new FeatureFlagDirective();
+    const directive = new PermissionsDirective();
     expect(directive).toBeTruthy();
   });
 });

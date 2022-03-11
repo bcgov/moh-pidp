@@ -11,17 +11,17 @@ import {
 
 import { Observable } from 'rxjs';
 
-import { FeatureFlagService } from './feature-flag.service';
+import { PermissionsService } from './permissions.service';
 
 @Injectable({
   providedIn: 'root',
 })
-export class FeatureFlagGuard
+export class PermissionsGuard
   implements CanActivate, CanActivateChild, CanLoad
 {
   public constructor(
     private router: Router,
-    private featureFlagService: FeatureFlagService
+    private permissionsService: PermissionsService
   ) {}
 
   public canActivate(
@@ -31,7 +31,7 @@ export class FeatureFlagGuard
     | Promise<boolean | UrlTree>
     | boolean
     | UrlTree {
-    return this.checkFeatureFlags(route);
+    return this.checkPermissions(route);
   }
 
   public canActivateChild(
@@ -41,7 +41,7 @@ export class FeatureFlagGuard
     | Promise<boolean | UrlTree>
     | boolean
     | UrlTree {
-    return this.checkFeatureFlags(childRoute);
+    return this.checkPermissions(childRoute);
   }
 
   public canLoad(
@@ -51,20 +51,19 @@ export class FeatureFlagGuard
     | Promise<boolean | UrlTree>
     | boolean
     | UrlTree {
-    return this.checkFeatureFlags(route);
+    return this.checkPermissions(route);
   }
 
-  private checkFeatureFlags(
+  private checkPermissions(
     route: Route | ActivatedRouteSnapshot
   ):
     | Observable<boolean | UrlTree>
     | Promise<boolean | UrlTree>
     | boolean
     | UrlTree {
-    const features = (route.data?.features ?? []) as string[];
-
-    return this.featureFlagService.hasFlags(features)
-      ? true
-      : this.router.createUrlTree(['/']);
+    return (
+      this.permissionsService.hasRole(route.data?.roles ?? []) ||
+      this.router.createUrlTree(['/'])
+    );
   }
 }

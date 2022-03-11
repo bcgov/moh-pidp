@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { FeatureFlagGuard } from './feature-flag.guard';
+import { PermissionsGuard } from './permissions.guard';
 
 describe('FeatureFlagGuard', () => {
-  let guard: FeatureFlagGuard;
+  let guard: PermissionsGuard;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    guard = TestBed.inject(FeatureFlagGuard);
+    guard = TestBed.inject(PermissionsGuard);
   });
 
   it('should be created', () => {

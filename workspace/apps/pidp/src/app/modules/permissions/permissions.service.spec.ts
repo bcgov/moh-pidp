@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { FeatureFlagService } from './feature-flag.service';
+import { PermissionsService } from './permissions.service';
 
-describe('FeatureFlagService', () => {
-  let service: FeatureFlagService;
+describe('PermissionsService', () => {
+  let service: PermissionsService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(FeatureFlagService);
+    service = TestBed.inject(PermissionsService);
   });
 
   it('should be created', () => {

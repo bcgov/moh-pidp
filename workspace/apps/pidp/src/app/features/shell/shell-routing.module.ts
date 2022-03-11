@@ -4,7 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { UserGuard } from '@app/core/guards/user.guard';
 import { PartyResolver } from '@app/core/party/party.resolver';
-import { FeatureFlagGuard } from '@app/modules/feature-flag/feature-flag.guard';
+import { PermissionsGuard } from '@app/modules/permissions/permissions.guard';
 import { Role } from '@app/shared/enums/roles.enum';
 
 import { AccessModule } from '../access/access.module';
@@ -68,9 +68,9 @@ const routes: Routes = [
       },
       {
         path: TrainingRoutes.MODULE_PATH,
-        canLoad: [FeatureFlagGuard],
+        canLoad: [PermissionsGuard],
         data: {
-          features: [Role.FEATURE_PIDP_DEMO],
+          roles: [Role.FEATURE_PIDP_DEMO],
         },
         loadChildren: (): Promise<TrainingModule> =>
           import('../training/training.module').then((m) => m.TrainingModule),
