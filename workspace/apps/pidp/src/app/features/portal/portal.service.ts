@@ -3,8 +3,8 @@ import { Router } from '@angular/router';
 
 import { BehaviorSubject, Observable } from 'rxjs';
 
+import { PartyService } from '@app/core/party/party.service';
 import { AccessRequestResource } from '@app/core/resources/access-request-resource.service';
-import { PartyService } from '@app/core/services/party.service';
 import { ProfileStatus } from '@app/features/portal/models/profile-status.model';
 
 import { AlertCode } from './enums/alert-code.enum';

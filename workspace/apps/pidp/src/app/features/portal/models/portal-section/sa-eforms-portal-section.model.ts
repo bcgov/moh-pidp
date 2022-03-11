@@ -4,8 +4,8 @@ import { Observable, map } from 'rxjs';
 
 import { AlertType } from '@bcgov/shared/ui';
 
+import { PartyService } from '@app/core/party/party.service';
 import { AccessRequestResource } from '@app/core/resources/access-request-resource.service';
-import { PartyService } from '@app/core/services/party.service';
 import { AccessRoutes } from '@app/features/access/access.routes';
 import { ShellRoutes } from '@app/features/shell/shell.routes';
 

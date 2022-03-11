@@ -4,8 +4,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, Subscription, isObservable, map } from 'rxjs';
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';
+import { PartyService } from '@app/core/party/party.service';
 import { DocumentService } from '@app/core/services/document.service';
-import { PartyService } from '@app/core/services/party.service';
 import { Role } from '@app/shared/enums/roles.enum';
 
 import { IPortalSection } from './models/portal-section';

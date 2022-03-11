@@ -6,9 +6,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { EMPTY, Observable } from 'rxjs';
 
 import { AbstractFormPage } from '@app/core/classes/abstract-form-page.class';
+import { PartyService } from '@app/core/party/party.service';
 import { FormUtilsService } from '@app/core/services/form-utils.service';
 import { LoggerService } from '@app/core/services/logger.service';
-import { PartyService } from '@app/core/services/party.service';
 
 import { HcimReenrolmentFormState } from './hcim-reenrolment-form-state';
 import { HcimReenrolmentResource } from './hcim-reenrolment-resource.service';
