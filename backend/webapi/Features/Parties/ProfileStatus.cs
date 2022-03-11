@@ -14,6 +14,8 @@ using Pidp.Infrastructure;
 using Pidp.Infrastructure.HttpClients.Plr;
 using Pidp.Models;
 using Pidp.Models.Lookups;
+using Pidp.Models.ProfileStatus;
+using Pidp.Infrastructure.Services;
 
 public class ProfileStatus
 {
@@ -25,40 +27,8 @@ public class ProfileStatus
     public class Model
     {
         public HashSet<Alert> Alerts { get; set; } = new();
-        [JsonConverter(typeof(PolymorphicDictionarySerializer<string, ProfileSection>))]
-        public Dictionary<string, ProfileSection> Status { get; set; } = new();
-
-        public enum Alert
-        {
-            TransientError = 1,
-            PlrBadStanding
-        }
-
-        public static class Section
-        {
-            public const string Demographics = "demographics";
-            public const string CollegeCertification = "collegeCertification";
-            public const string SAEforms = "saEforms";
-        }
-
-        public class ProfileSection
-        {
-            public StatusCode StatusCode { get; set; }
-        }
-
-        public enum StatusCode
-        {
-            Incomplete = 1,
-            Complete,
-            Locked,
-            Error
-        }
-
-        public bool SectionIsComplete(string sectionName)
-        {
-            return this.Status.TryGetValue(sectionName, out var section)
-                && section.StatusCode == StatusCode.Complete;
-        }
+        [JsonConverter(typeof(PolymorphicDictionarySerializer<string, IProfileSection>))]
+        public Dictionary<string, IProfileSection> Status { get; set; } = new();
     }
 
     public class CommandValidator : AbstractValidator<Command>
@@ -68,81 +38,64 @@ public class ProfileStatus
 
     public class CommandHandler : ICommandHandler<Command, IDomainResult<Model>>
     {
-        private readonly IMapper mapper;
         private readonly IPlrClient client;
+        private readonly IProfileStatusService profileService;
         private readonly PidpDbContext context;
 
         public CommandHandler(
-            IMapper mapper,
             IPlrClient client,
-            PidpDbContext context)
+            IProfileStatusService profileService,
+            PidpDbContext context
+            )
         {
-            this.mapper = mapper;
             this.client = client;
+            this.profileService = profileService;
             this.context = context;
         }
 
         public async Task<IDomainResult<Model>> HandleAsync(Command command)
         {
-            var profile = await this.context.Parties
-                .Where(party => party.Id == command.Id)
-                .ProjectTo<ProfileDto>(this.mapper.ConfigurationProvider)
-                .SingleAsync();
+            // Cert could have been entered but no IPC found, likely due to a transient error or delay in PLR record updates. Retry once.
+            await this.RecheckIpc(command.Id);
 
-            if (profile.Ipc == null
-                && profile.CollegeCode != null
-                && profile.LicenceNumber != null)
+            var sections = await this.profileService.CompileSectionsAsync(command.Id, Section.AllSections.ToArray());
+
+            return DomainResult.Success(new Model
             {
-                // Cert has been entered but no IPC found, likely due to a transient error or delay in PLR record updates. Retry once.
-                profile.Ipc = await this.RecheckIpc(command.Id, profile.CollegeCode.Value, profile.LicenceNumber, profile.Birthdate);
-            }
-
-            profile.PlrRecordStatus = await this.client.GetRecordStatus(profile.Ipc);
-
-            var resolvers = new IProfileSectionResolver[]
-            {
-                new DemographicsSectionResolver(),
-                new CollegeCertificationSectionResolver(),
-                new SAEformsSectionResolver()
-            };
-
-            var profileStatus = new Model();
-            foreach (var resolver in resolvers)
-            {
-                resolver.ComputeSection(profileStatus, profile);
-            }
-
-            return DomainResult.Success(profileStatus);
+                Alerts = new(sections.SelectMany(section => section.Alerts)),
+                Status = sections.ToDictionary(x => x.Name, x => x)
+            });
         }
 
-        private async Task<string?> RecheckIpc(int partyId, CollegeCode collegeCode, string licenceNumber, LocalDate birthdate)
+        private async Task RecheckIpc(int partyId)
         {
-            var newIpc = await this.client.GetPlrRecord(collegeCode, licenceNumber, birthdate);
-            if (newIpc != null)
-            {
-                var cert = await this.context.PartyCertifications
-                    .SingleAsync(cert => cert.PartyId == partyId);
-                cert.Ipc = newIpc;
-                await this.context.SaveChangesAsync();
-            }
+            // var cert = await this.context.PartyCertifications
+            //     .SingleOrDefaultAsync(cert => cert.PartyId == partyId);
 
-            return newIpc;
-        }
+            // if (cert == null
+            //     || ())
+            // {
+            //     return;
+            // }
 
-        public class ProfileDto
-        {
-            public string FirstName { get; set; } = string.Empty;
-            public string LastName { get; set; } = string.Empty;
-            public LocalDate Birthdate { get; set; }
-            public string? Email { get; set; }
-            public string? Phone { get; set; }
-            public CollegeCode? CollegeCode { get; set; }
-            public string? LicenceNumber { get; set; }
-            public string? Ipc { get; set; }
-            public IEnumerable<AccessType> CompletedEnrolments { get; set; } = Enumerable.Empty<AccessType>();
+            // if (profile.Ipc == null
+            //                 && profile.CollegeCode != null
+            //                 && profile.LicenceNumber != null)
+            // {
+            //     profile.Ipc = await this.RecheckIpc(command.Id, profile.CollegeCode.Value, profile.LicenceNumber, profile.Birthdate);
+            // }
 
-            // Computed after projection
-            public PlrRecordStatus? PlrRecordStatus { get; set; }
+
+            // var newIpc = await this.client.GetPlrRecord(collegeCode, licenceNumber, birthdate);
+            // if (newIpc != null)
+            // {
+            //     var cert = await this.context.PartyCertifications
+            //         .SingleAsync(cert => cert.PartyId == partyId);
+            //     cert.Ipc = newIpc;
+            //     await this.context.SaveChangesAsync();
+            // }
+
+            // return newIpc;
         }
     }
 }

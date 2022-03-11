@@ -36,6 +36,7 @@ public class Startup
             .AddKeycloakAuth(config)
             .AddScoped<IEmailService, EmailService>()
             .AddScoped<IPidpAuthorizationService, PidpAuthorizationService>()
+            .AddScoped<IProfileStatusService, ProfileStatusService>()
             .AddSingleton<IClock>(SystemClock.Instance);
 
         services.AddControllers(options => options.Conventions.Add(new RouteTokenTransformerConvention(new KabobCaseParameterTransformer())))
