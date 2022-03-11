@@ -31,7 +31,6 @@ export class LoginPage {
   public bcscMobileSetupUrl: string;
   public specialAuthorityUrl: string;
   public providerIdentitySupportEmail: string;
-  public specialAuthoritySupportEmail: string;
   public idpHint: IdentityProvider;
 
   public IdentityProvider = IdentityProvider;
@@ -53,8 +52,6 @@ export class LoginPage {
     this.specialAuthorityUrl = this.config.urls.specialAuthority;
     this.providerIdentitySupportEmail =
       this.config.emails.providerIdentitySupport;
-    this.specialAuthoritySupportEmail =
-      this.config.emails.specialAuthoritySupport;
     this.idpHint = routeSnapshot.data.idpHint;
   }
 

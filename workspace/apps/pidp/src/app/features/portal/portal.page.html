@@ -152,27 +152,7 @@
     </div>
     <div class="col-12">
       <div class="support">
-        <ui-page-section>
-          <ui-scroll-target targetId="support"></ui-scroll-target>
-          <ui-page-section-subheader
-            icon="help_outline"
-            heading="Get Support"></ui-page-section-subheader>
-          <ul>
-            <li>
-              Questions about the Provider Identity Portal should be directed
-              to:<br />
-              <ui-anchor
-                scheme="mailto"
-                [href]="providerIdentitySupportEmail"></ui-anchor>
-            </li>
-            <li>
-              Questions about Special Authority eForms should be directed to:<br />
-              <ui-anchor
-                scheme="mailto"
-                [href]="specialAuthoritySupportEmail"></ui-anchor>
-            </li>
-          </ul>
-        </ui-page-section>
+        <app-get-support></app-get-support>
       </div>
     </div>
   </div>
