@@ -17,7 +17,7 @@ import { PartyService } from './party.service';
  *
  * WARNING: Should be located on or under the route config
  * containing guard(s) that manage access, otherwise will
- * redirect to access denied.
+ * redirect to access denied when unauthenticated.
  */
 @Injectable({
   providedIn: 'root',

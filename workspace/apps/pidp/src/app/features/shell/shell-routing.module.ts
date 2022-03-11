@@ -19,8 +19,8 @@ import { ProfileModule } from '../profile/profile.module';
 import { ProfileRoutes } from '../profile/profile.routes';
 import { TrainingModule } from '../training/training.module';
 import { TrainingRoutes } from '../training/training.routes';
-import { YourProfileModule } from '../your-profile/your-profile.module';
-import { YourProfileRoutes } from '../your-profile/your-profile.routes';
+import { YourDocumentsModule } from '../your-documents/your-documents.module';
+import { YourDocumentsRoutes } from '../your-documents/your-documents.routes';
 import { PortalDashboardComponent } from './components/portal-dashboard/portal-dashboard.component';
 
 const routes: Routes = [
@@ -76,10 +76,10 @@ const routes: Routes = [
           import('../training/training.module').then((m) => m.TrainingModule),
       },
       {
-        path: YourProfileRoutes.MODULE_PATH,
-        loadChildren: (): Promise<YourProfileModule> =>
-          import('../your-profile/your-profile.module').then(
-            (m) => m.YourProfileModule
+        path: YourDocumentsRoutes.MODULE_PATH,
+        loadChildren: (): Promise<YourDocumentsModule> =>
+          import('../your-documents/your-documents.module').then(
+            (m) => m.YourDocumentsModule
           ),
       },
       {

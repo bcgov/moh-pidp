@@ -9,7 +9,7 @@ import {
   IDocument,
 } from '@app/core/services/document.service';
 
-import { YourProfileRoutes } from '../../your-profile.routes';
+import { YourDocumentsRoutes } from '../../your-documents.routes';
 
 @Component({
   selector: 'app-view-document',
@@ -35,14 +35,14 @@ export class ViewDocumentPage {
     this.routeUtils = new RouteUtils(
       route,
       router,
-      YourProfileRoutes.MODULE_PATH,
+      YourDocumentsRoutes.MODULE_PATH,
       location
     );
   }
 
   public onBack(): void {
     this.routeUtils.routeWithin([
-      YourProfileRoutes.SIGNED_ACCEPTED_DOCUMENTS_PAGE,
+      YourDocumentsRoutes.SIGNED_ACCEPTED_DOCUMENTS_PAGE,
     ]);
   }
 }
