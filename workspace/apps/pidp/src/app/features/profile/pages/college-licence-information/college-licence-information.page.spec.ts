@@ -22,6 +22,7 @@ describe('CollegeLicenceInformationPage', () => {
   let component: CollegeLicenceInformationPage;
   let partyServiceSpy: Spy<PartyService>;
   let collegeLicenceInfoResourceSpy: Spy<CollegeLicenceInformationResource>;
+  let formUtilsServiceSpy: Spy<FormUtilsService>;
   let router: Router;
 
   const mockActivatedRoute = {
@@ -35,9 +36,14 @@ describe('CollegeLicenceInformationPage', () => {
     },
   };
 
+  // const mockForm = {
+  //   collegeLicence: '',
+  //   licenceNumber: randTextRange({ min: 1, max: 6 }),
+  // };
+
   const mockParty = {
     collegeCode: randNumber(),
-    licenceNumber: randTextRange({ min: 1, max: 8 }),
+    licenceNumber: randTextRange({ min: 1, max: 6 }),
   };
 
   beforeEach(() => {
@@ -79,6 +85,7 @@ describe('CollegeLicenceInformationPage', () => {
     collegeLicenceInfoResourceSpy = TestBed.inject<any>(
       CollegeLicenceInformationResource
     );
+    formUtilsServiceSpy = TestBed.inject<any>(FormUtilsService);
   });
 
   describe('INIT', () => {
@@ -136,7 +143,43 @@ describe('CollegeLicenceInformationPage', () => {
     });
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  describe('METHOD: onSubmit', () => {
+    given('a form submission', () => {
+      const partyId = randNumber({ min: 1 });
+      partyServiceSpy.accessorSpies.getters.partyId.mockReturnValue(partyId);
+      component.formState.form.patchValue(mockParty);
+
+      when('no validation errors exist', () => {
+        formUtilsServiceSpy.checkValidity.mockReturnValue(true);
+        collegeLicenceInfoResourceSpy.update
+          .mustBeCalledWith(partyId, mockParty)
+          .nextWith(void 0);
+        component.onSubmit();
+
+        then(
+          'college info will be updated and router navigate to root route',
+          () => {
+            expect(router.navigate).toHaveBeenCalled();
+          }
+        );
+      });
+    });
+
+    given('a form submission', () => {
+      const partyId = randNumber({ min: 1 });
+      partyServiceSpy.accessorSpies.getters.partyId.mockReturnValue(partyId);
+      component.formState.form.patchValue(mockParty);
+      when('validation errors exist', () => {
+        formUtilsServiceSpy.checkValidity.mockReturnValue(false);
+        component.onSubmit();
+
+        then(
+          'college licence information should not be updated and router not navigate',
+          () => {
+            expect(router.navigate).not.toHaveBeenCalled();
+          }
+        );
+      });
+    });
   });
 });
