@@ -36,11 +36,6 @@ describe('CollegeLicenceInformationPage', () => {
     },
   };
 
-  // const mockForm = {
-  //   collegeLicence: '',
-  //   licenceNumber: randTextRange({ min: 1, max: 6 }),
-  // };
-
   const mockParty = {
     collegeCode: randNumber(),
     licenceNumber: randTextRange({ min: 1, max: 6 }),
@@ -179,6 +174,19 @@ describe('CollegeLicenceInformationPage', () => {
             expect(router.navigate).not.toHaveBeenCalled();
           }
         );
+      });
+    });
+  });
+
+  describe('METHOD: onBack', () => {
+    given('user wants to go back to the previous page', () => {
+      when('onBack is invoked', () => {
+        component.onBack();
+
+        then('router should navigate to root route', () => {
+          const rootRoute = mockActivatedRoute.snapshot.data.routes.root;
+          expect(router.navigate).toHaveBeenCalledWith([rootRoute]);
+        });
       });
     });
   });
