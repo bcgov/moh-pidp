@@ -6,16 +6,17 @@ import { AlertType } from '@bcgov/shared/ui';
 
 import { AccessRoutes } from '@app/features/access/access.routes';
 import { ShellRoutes } from '@app/features/shell/shell.routes';
+import { TrainingRoutes } from '@app/features/training/training.routes';
 
 import { StatusCode } from '../../enums/status-code.enum';
-import { ProfileStatus } from '../profile-status.model';
+import { ProfileStatus } from '../models/profile-status.model';
 import {
   IPortalSection,
   PortalSectionAction,
   PortalSectionKey,
-} from './portal-section.model';
+} from './portal-section.class';
 
-export class HcimReenrolmentPortalSection implements IPortalSection {
+export class ComplianceTrainingPortalSection implements IPortalSection {
   public readonly key: PortalSectionKey;
   public type: 'profile' | 'access' | 'training' | 'documents';
   public heading: string;
@@ -25,21 +26,25 @@ export class HcimReenrolmentPortalSection implements IPortalSection {
     private profileStatus: ProfileStatus,
     private router: Router
   ) {
-    this.key = 'hcim';
-    this.type = 'access';
-    this.heading = 'HCIM Web Re-enrolment';
-    this.description = 'Enrol here for access to HCIM.';
+    this.key = 'complianceTraining';
+    this.type = 'training';
+    this.heading = 'Compliance Training Video';
+    this.description = `Description of the training provided by the video.`;
   }
 
   public get hint(): string {
-    return '3 min to complete';
+    return '15 min to complete';
   }
 
+  /**
+   * @description
+   * Get the properties that define the action on the section.
+   */
   public get action(): PortalSectionAction {
     return {
-      label: 'Request',
-      route: AccessRoutes.routePath(AccessRoutes.HCIM_REENROLMENT),
-      disabled: false,
+      label: this.getStatusCode() === StatusCode.COMPLETED ? 'View' : 'Watch',
+      route: AccessRoutes.routePath(TrainingRoutes.COMPLIANCE_TRAINING_PAGE),
+      disabled: true,
     };
   }
 
@@ -49,18 +54,14 @@ export class HcimReenrolmentPortalSection implements IPortalSection {
 
   public get status(): string {
     const statusCode = this.getStatusCode();
-    return statusCode === StatusCode.AVAILABLE
-      ? 'You are eligible to use HCIM Web Re-enrolment'
-      : statusCode === StatusCode.COMPLETED
-      ? 'Completed'
-      : 'Incomplete';
+    return statusCode === StatusCode.COMPLETED ? 'Completed' : 'Incomplete';
   }
 
-  public performAction(): void | Observable<void> {
+  public performAction(): Observable<void> | void {
     this.router.navigate([ShellRoutes.routePath(this.action.route)]);
   }
 
   private getStatusCode(): StatusCode {
-    return this.profileStatus.status.hcim.statusCode;
+    return this.profileStatus.status.complianceTraining.statusCode;
   }
 }

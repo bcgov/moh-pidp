@@ -2,8 +2,9 @@ import { Observable } from 'rxjs';
 
 import { AlertType } from '@bcgov/shared/ui';
 
-import { AccessSectionStatus } from '../access-status.model';
-import { ProfileSectionStatus } from '../profile-status.model';
+import { AccessSystemSectionStatus } from '../models/access-system-status.model';
+import { ProfileSectionStatus } from '../models/profile-status.model';
+import { TrainingSectionStatus } from '../models/training-status.model';
 
 /**
  * @description
@@ -11,7 +12,8 @@ import { ProfileSectionStatus } from '../profile-status.model';
  */
 export type PortalSectionKey =
   | keyof ProfileSectionStatus
-  | keyof AccessSectionStatus
+  | keyof AccessSystemSectionStatus
+  | keyof TrainingSectionStatus
   | 'signedAcceptedDocuments';
 
 export interface PortalSectionProperty {

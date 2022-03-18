@@ -11,13 +11,13 @@ import { StatusCode } from '../../enums/status-code.enum';
 import {
   CollegeCertificationSection,
   ProfileStatus,
-} from '../profile-status.model';
+} from '../models/profile-status.model';
 import {
   IPortalSection,
   PortalSectionAction,
   PortalSectionKey,
   PortalSectionProperty,
-} from './portal-section.model';
+} from './portal-section.class';
 
 export class CollegeCertificationPortalSection implements IPortalSection {
   public readonly key: PortalSectionKey;
@@ -72,6 +72,10 @@ export class CollegeCertificationPortalSection implements IPortalSection {
       : [];
   }
 
+  /**
+   * @description
+   * Get the properties that define the action on the section.
+   */
   public get action(): PortalSectionAction {
     const demographicsStatusCode =
       this.profileStatus.status.demographics.statusCode;

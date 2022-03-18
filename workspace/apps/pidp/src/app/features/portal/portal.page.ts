@@ -1,18 +1,18 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { Observable, Subscription, isObservable, map } from 'rxjs';
+import { Observable, Subscription, map } from 'rxjs';
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';
 import { PartyService } from '@app/core/party/party.service';
 import { DocumentService } from '@app/core/services/document.service';
 import { Role } from '@app/shared/enums/roles.enum';
 
-import { IPortalSection } from './models/portal-section';
-import { ProfileStatusAlert } from './models/profile-status-alert.model';
-import { ProfileStatus } from './models/profile-status.model';
 import { PortalResource } from './portal-resource.service';
 import { PortalService } from './portal.service';
+import { IPortalSection } from './sections/classes';
+import { ProfileStatusAlert } from './sections/models/profile-status-alert.model';
+import { ProfileStatus } from './sections/models/profile-status.model';
 
 @Component({
   selector: 'app-portal',
@@ -65,11 +65,7 @@ export class PortalPage implements OnInit {
   }
 
   public onCardAction(section: IPortalSection): void {
-    // TODO provider specific access use modal
-    const result = section.performAction();
-    if (isObservable(result)) {
-      this.busy = result.subscribe();
-    }
+    section.performAction();
   }
 
   public ngOnInit(): void {

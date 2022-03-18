@@ -9,7 +9,7 @@ import {
   IPortalSection,
   PortalSectionAction,
   PortalSectionKey,
-} from './portal-section.model';
+} from './portal-section.class';
 
 export class SignedAcceptedDocumentsPortalSection implements IPortalSection {
   public readonly key: PortalSectionKey;
@@ -24,6 +24,10 @@ export class SignedAcceptedDocumentsPortalSection implements IPortalSection {
     this.description = 'View Agreement(s)';
   }
 
+  /**
+   * @description
+   * Get the properties that define the action on the section.
+   */
   public get action(): PortalSectionAction {
     return {
       label: 'View',

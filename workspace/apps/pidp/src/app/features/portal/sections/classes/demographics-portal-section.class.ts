@@ -8,13 +8,16 @@ import { ProfileRoutes } from '@app/features/profile/profile.routes';
 import { ShellRoutes } from '@app/features/shell/shell.routes';
 
 import { StatusCode } from '../../enums/status-code.enum';
-import { DemographicsSection, ProfileStatus } from '../profile-status.model';
+import {
+  DemographicsSection,
+  ProfileStatus,
+} from '../models/profile-status.model';
 import {
   IPortalSection,
   PortalSectionAction,
   PortalSectionKey,
   PortalSectionProperty,
-} from './portal-section.model';
+} from './portal-section.class';
 
 export class DemographicsPortalSection implements IPortalSection {
   public readonly key: PortalSectionKey;
@@ -60,6 +63,10 @@ export class DemographicsPortalSection implements IPortalSection {
       : [];
   }
 
+  /**
+   * @description
+   * Get the properties that define the action on the section.
+   */
   public get action(): PortalSectionAction {
     const statusCode = this.getStatusCode();
     return {

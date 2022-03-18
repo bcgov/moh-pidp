@@ -10,25 +10,19 @@ import { PermissionsService } from './permissions.service';
 
 @Directive({
   // eslint-disable-next-line @angular-eslint/directive-selector
-  selector: '[permissions]',
+  selector: '[permittedRoles]',
 })
 export class PermissionsDirective implements OnInit {
-  @Input() public roles!: string | string[];
-  @Input() public roleOr: string;
+  @Input() public permittedRoles!: string | string[];
 
   public constructor(
     private vcr: ViewContainerRef,
     private tpl: TemplateRef<unknown>,
     private permissionsService: PermissionsService
-  ) {
-    this.roleOr = '';
-  }
+  ) {}
 
   public ngOnInit(): void {
-    if (
-      this.permissionsService.hasRole(this.roles) ||
-      this.permissionsService.hasRole(this.roleOr)
-    ) {
+    if (this.permissionsService.hasRole(this.permittedRoles)) {
       this.vcr.createEmbeddedView(this.tpl);
     }
   }

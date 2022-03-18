@@ -81,7 +81,7 @@
         </ui-page-section-subheader>
 
         <ui-card-summary
-          *ngFor="let section of (state$ | async)?.accessToSystemsSections"
+          *ngFor="let section of (state$ | async)?.accessSystemsSections"
           [heading]="section.heading"
           [statusType]="section.statusType"
           [status]="section.status"
@@ -95,7 +95,7 @@
         </ui-card-summary>
       </ui-page-section>
 
-      <ui-page-section *featureFlag="Role.FEATURE_PIDP_DEMO">
+      <ui-page-section *permittedRoles="Role.FEATURE_PIDP_DEMO">
         <ui-scroll-target targetId="training"></ui-scroll-target>
         <ui-page-section-subheader icon="school" heading="Training">
           <ng-container uiPageSectionSubheaderDesc>
@@ -134,7 +134,7 @@
         </ui-page-section-subheader>
 
         <ui-card-summary
-          *ngFor="let section of (state$ | async)?.yourDocumentsSections"
+          *ngFor="let section of (state$ | async)?.documentsSections"
           [heading]="section.heading"
           [actionLabel]="section.action.label"
           [actionDisabled]="section.action.disabled"

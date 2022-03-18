@@ -1,21 +1,19 @@
 import { Router } from '@angular/router';
 
-import { Observable, map } from 'rxjs';
+import { Observable } from 'rxjs';
 
 import { AlertType } from '@bcgov/shared/ui';
 
-import { PartyService } from '@app/core/party/party.service';
-import { AccessRequestResource } from '@app/core/resources/access-request-resource.service';
 import { AccessRoutes } from '@app/features/access/access.routes';
 import { ShellRoutes } from '@app/features/shell/shell.routes';
 
 import { StatusCode } from '../../enums/status-code.enum';
-import { ProfileStatus } from '../profile-status.model';
+import { ProfileStatus } from '../models/profile-status.model';
 import {
   IPortalSection,
   PortalSectionAction,
   PortalSectionKey,
-} from './portal-section.model';
+} from './portal-section.class';
 
 export class SaEformsPortalSection implements IPortalSection {
   public readonly key: PortalSectionKey;
@@ -25,9 +23,7 @@ export class SaEformsPortalSection implements IPortalSection {
 
   public constructor(
     private profileStatus: ProfileStatus,
-    private router: Router,
-    private partyService: PartyService,
-    private accessRequestResource: AccessRequestResource
+    private router: Router
   ) {
     this.key = 'saEforms';
     this.type = 'access';
@@ -39,6 +35,10 @@ export class SaEformsPortalSection implements IPortalSection {
     return '1 min to complete';
   }
 
+  /**
+   * @description
+   * Get the properties that define the action on the section.
+   */
   public get action(): PortalSectionAction {
     const demographicsStatusCode =
       this.profileStatus.status.demographics.statusCode;
@@ -68,27 +68,10 @@ export class SaEformsPortalSection implements IPortalSection {
   }
 
   public performAction(): Observable<void> | void {
-    if (this.getStatusCode() !== StatusCode.COMPLETED) {
-      return this.accessRequestResource
-        .saEforms(this.partyService.partyId)
-        .pipe(
-          map(() => {
-            if (!this.action.route) {
-              return;
-            }
-            this.navigate();
-          })
-        );
-    } else {
-      this.navigate();
-    }
+    this.router.navigate([ShellRoutes.routePath(this.action.route)]);
   }
 
   private getStatusCode(): StatusCode {
     return this.profileStatus.status.saEforms.statusCode;
-  }
-
-  private navigate(): void {
-    this.router.navigate([ShellRoutes.routePath(this.action.route)]);
   }
 }

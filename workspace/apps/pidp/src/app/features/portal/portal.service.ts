@@ -3,9 +3,10 @@ import { Router } from '@angular/router';
 
 import { BehaviorSubject, Observable } from 'rxjs';
 
-import { PartyService } from '@app/core/party/party.service';
-import { AccessRequestResource } from '@app/core/resources/access-request-resource.service';
-import { ProfileStatus } from '@app/features/portal/models/profile-status.model';
+import { ArrayUtils } from '@bcgov/shared/utils';
+
+import { PermissionsService } from '@app/modules/permissions/permissions.service';
+import { Role } from '@app/shared/enums/roles.enum';
 
 import { AlertCode } from './enums/alert-code.enum';
 import { StatusCode } from './enums/status-code.enum';
@@ -16,8 +17,10 @@ import {
   IPortalSection,
   SaEformsPortalSection,
   SignedAcceptedDocumentsPortalSection,
-} from './models/portal-section';
-import { ProfileStatusAlert } from './models/profile-status-alert.model';
+} from './sections/classes';
+import { ComplianceTrainingPortalSection } from './sections/classes/compliance-training-portal-section.class';
+import { ProfileStatusAlert } from './sections/models/profile-status-alert.model';
+import { ProfileStatus } from './sections/models/profile-status.model';
 
 @Injectable({
   providedIn: 'root',
@@ -36,8 +39,7 @@ export class PortalService {
 
   public constructor(
     private router: Router,
-    private partyService: PartyService,
-    private accessRequestResource: AccessRequestResource
+    private permissionsService: PermissionsService
   ) {
     this._profileStatus = null;
     this._acceptedCollectionNotice = false;
@@ -79,7 +81,7 @@ export class PortalService {
 
   public updateState(profileStatus: ProfileStatus | null): void {
     if (!profileStatus) {
-      // TODO clear service when this occurs
+      this.clearState();
       return;
     }
 
@@ -89,8 +91,9 @@ export class PortalService {
 
     this._state$.next({
       profileIdentitySections: this.getProfileIdentitySections(profileStatus),
-      accessToSystemsSections: this.getAccessToSystemsSections(profileStatus),
-      yourDocumentsSections: this.getYourDocumentsSections(),
+      accessSystemsSections: this.getAccessSystemsSections(profileStatus),
+      trainingSections: this.getTrainingSections(profileStatus),
+      documentsSections: this.getDocumentsSections(),
     });
   }
 
@@ -131,21 +134,33 @@ export class PortalService {
     ];
   }
 
-  private getAccessToSystemsSections(
+  private getAccessSystemsSections(
     profileStatus: ProfileStatus
   ): IPortalSection[] {
     return [
-      new SaEformsPortalSection(
-        profileStatus,
-        this.router,
-        this.partyService,
-        this.accessRequestResource
-      ),
+      new SaEformsPortalSection(profileStatus, this.router),
       new HcimReenrolmentPortalSection(profileStatus, this.router),
     ];
   }
 
-  private getYourDocumentsSections(): IPortalSection[] {
+  private getTrainingSections(profileStatus: ProfileStatus): IPortalSection[] {
+    return [
+      ...ArrayUtils.insertIf<IPortalSection>(
+        this.permissionsService.hasRole(Role.FEATURE_PIDP_DEMO),
+        new ComplianceTrainingPortalSection(profileStatus, this.router)
+      ),
+    ];
+  }
+
+  private getDocumentsSections(): IPortalSection[] {
     return [new SignedAcceptedDocumentsPortalSection(this.router)];
+  }
+
+  private clearState(): void {
+    this._profileStatus = null;
+    this._acceptedCollectionNotice = false;
+    this._state$.next({});
+    this._completedProfile = false;
+    this._alerts = [];
   }
 }

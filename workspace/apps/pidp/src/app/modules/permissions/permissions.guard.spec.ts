@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 
 import { PermissionsGuard } from './permissions.guard';
 
-describe('FeatureFlagGuard', () => {
+describe('PermissionsGuard', () => {
   let guard: PermissionsGuard;
 
   beforeEach(() => {
