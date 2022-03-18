@@ -10,7 +10,7 @@ import {
   IDocumentMetaData,
 } from '@app/core/services/document.service';
 
-import { YourDocumentsRoutes } from '../../your-documents.routes';
+import { DocumentsRoutes } from '../../documents.routes';
 
 export interface DocumentSection extends IDocumentMetaData {
   icon: string;
@@ -40,14 +40,14 @@ export class SignedOrAcceptedDocumentsPage implements OnInit {
     this.routeUtils = new RouteUtils(
       route,
       router,
-      YourDocumentsRoutes.MODULE_PATH,
+      DocumentsRoutes.MODULE_PATH,
       location
     );
   }
 
   public onViewDocument(documentType: DocumentType): void {
     this.routeUtils.routeWithin([
-      YourDocumentsRoutes.VIEW_DOCUMENT_PAGE,
+      DocumentsRoutes.VIEW_DOCUMENT_PAGE,
       documentType,
     ]);
   }

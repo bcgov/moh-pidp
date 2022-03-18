@@ -1,5 +1,5 @@
-export class YourDocumentsRoutes {
-  public static MODULE_PATH = 'your-documents';
+export class DocumentsRoutes {
+  public static MODULE_PATH = 'documents';
 
   public static TRANSACTIONS_PAGE = 'transactions';
   public static SIGNED_ACCEPTED_DOCUMENTS_PAGE = 'signed-or-accepted-documents';
@@ -10,6 +10,6 @@ export class YourDocumentsRoutes {
    * Useful for redirecting to module root-level routes.
    */
   public static routePath(route: string): string {
-    return `/${YourDocumentsRoutes.MODULE_PATH}/${route}`;
+    return `/${DocumentsRoutes.MODULE_PATH}/${route}`;
   }
 }
