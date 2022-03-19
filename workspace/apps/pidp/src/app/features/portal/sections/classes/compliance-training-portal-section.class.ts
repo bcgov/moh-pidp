@@ -62,6 +62,7 @@ export class ComplianceTrainingPortalSection implements IPortalSection {
   }
 
   private getStatusCode(): StatusCode {
-    return this.profileStatus.status.complianceTraining.statusCode;
+    // TODO when provided by API remove null check
+    return this.profileStatus.status.complianceTraining?.statusCode;
   }
 }
