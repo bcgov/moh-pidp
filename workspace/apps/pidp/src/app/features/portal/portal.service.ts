@@ -19,6 +19,7 @@ import {
   SignedAcceptedDocumentsPortalSection,
 } from './sections/classes';
 import { ComplianceTrainingPortalSection } from './sections/classes/compliance-training-portal-section.class';
+import { TransactionsPortalSection } from './sections/classes/transactions-portal-section.class';
 import { ProfileStatusAlert } from './sections/models/profile-status-alert.model';
 import { ProfileStatus } from './sections/models/profile-status.model';
 
@@ -153,7 +154,13 @@ export class PortalService {
   }
 
   private getDocumentsSections(): IPortalSection[] {
-    return [new SignedAcceptedDocumentsPortalSection(this.router)];
+    return [
+      new SignedAcceptedDocumentsPortalSection(this.router),
+      ...ArrayUtils.insertIf<IPortalSection>(
+        this.permissionsService.hasRole(Role.FEATURE_PIDP_DEMO),
+        new TransactionsPortalSection(this.router)
+      ),
+    ];
   }
 
   private clearState(): void {

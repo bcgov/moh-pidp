@@ -12,7 +12,7 @@ import {
   PortalSectionType,
 } from './portal-section.class';
 
-export class SignedAcceptedDocumentsPortalSection implements IPortalSection {
+export class TransactionsPortalSection implements IPortalSection {
   public readonly key: PortalSectionKey;
   public type: PortalSectionType;
   public heading: string;
@@ -21,8 +21,8 @@ export class SignedAcceptedDocumentsPortalSection implements IPortalSection {
   public constructor(private router: Router) {
     this.key = 'signedAcceptedDocuments';
     this.type = 'documents';
-    this.heading = 'View Signed or Accepted Documents';
-    this.description = 'View Agreement(s)';
+    this.heading = 'Transactions';
+    this.description = 'View Transaction(s)';
   }
 
   /**
@@ -32,9 +32,7 @@ export class SignedAcceptedDocumentsPortalSection implements IPortalSection {
   public get action(): PortalSectionAction {
     return {
       label: 'View',
-      route: DocumentsRoutes.routePath(
-        DocumentsRoutes.SIGNED_ACCEPTED_DOCUMENTS_PAGE
-      ),
+      route: DocumentsRoutes.routePath(DocumentsRoutes.TRANSACTIONS_PAGE),
       disabled: false,
     };
   }

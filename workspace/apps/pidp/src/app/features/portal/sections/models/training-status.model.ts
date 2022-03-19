@@ -6,6 +6,7 @@ import { Section } from './section.model';
  */
 export interface TrainingSectionStatus {
   complianceTraining: Section;
+  transactions: Section;
 }
 
 /**

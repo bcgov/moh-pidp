@@ -14,11 +14,12 @@ import {
   IPortalSection,
   PortalSectionAction,
   PortalSectionKey,
+  PortalSectionType,
 } from './portal-section.class';
 
 export class ComplianceTrainingPortalSection implements IPortalSection {
   public readonly key: PortalSectionKey;
-  public type: 'profile' | 'access' | 'training' | 'documents';
+  public type: PortalSectionType;
   public heading: string;
   public description: string;
 

@@ -28,9 +28,11 @@ export interface PortalSectionAction {
   disabled: boolean;
 }
 
+export type PortalSectionType = 'profile' | 'access' | 'training' | 'documents';
+
 export interface IPortalSection {
   readonly key: PortalSectionKey;
-  type: 'profile' | 'access' | 'training' | 'documents';
+  type: PortalSectionType;
   heading: string;
   hint?: string;
   description: string;
