@@ -4,7 +4,6 @@ import { Observable } from 'rxjs';
 
 import { AlertType } from '@bcgov/shared/ui';
 
-import { AccessRoutes } from '@app/features/access/access.routes';
 import { ShellRoutes } from '@app/features/shell/shell.routes';
 import { TrainingRoutes } from '@app/features/training/training.routes';
 
