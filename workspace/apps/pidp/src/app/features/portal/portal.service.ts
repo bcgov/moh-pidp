@@ -151,7 +151,10 @@ export class PortalService {
   ): IPortalSection[] {
     return [
       new SaEformsPortalSection(profileStatus, this.router),
-      new HcimReenrolmentPortalSection(profileStatus, this.router),
+      ...ArrayUtils.insertIf<IPortalSection>(
+        this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
+        new HcimReenrolmentPortalSection(profileStatus, this.router)
+      ),
       ...ArrayUtils.insertIf<IPortalSection>(
         this.permissionsService.hasRole([
           Role.FEATURE_PIDP_DEMO,
