@@ -1,0 +1,20 @@
+<ui-page-section>
+  <ng-content select="ui-scroll-target"></ng-content>
+  <ui-page-section-subheader
+    icon="help_outline"
+    heading="Get Support"></ui-page-section-subheader>
+  <ul>
+    <li>
+      Questions about the Provider Identity Portal should be directed to:
+      <ui-anchor
+        scheme="mailto"
+        [href]="providerIdentitySupportEmail"></ui-anchor>
+    </li>
+    <li>
+      Questions about Special Authority eForms should be directed to:
+      <ui-anchor
+        scheme="mailto"
+        [href]="specialAuthoritySupportEmail"></ui-anchor>
+    </li>
+  </ul>
+</ui-page-section>

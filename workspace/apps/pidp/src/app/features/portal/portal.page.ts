@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { Observable, Subscription, map } from 'rxjs';
 
+import { APP_CONFIG, AppConfig } from '@app/app.config';
 import { AccessRequestResource } from '@app/core/resources/access-request-resource.service';
 import { DocumentService } from '@app/core/services/document.service';
 import { Role } from '@app/shared/enums/roles.enum';
@@ -32,10 +33,13 @@ export class PortalPage implements OnInit {
   public state$: Observable<Record<string, PortalSection[]>>;
   public completedProfile: boolean;
   public alerts: ProfileStatusAlert[];
+  public providerIdentitySupportEmail: string;
+  public specialAuthoritySupportEmail: string;
 
   public Role = Role;
 
   public constructor(
+    @Inject(APP_CONFIG) private config: AppConfig,
     private route: ActivatedRoute,
     private router: Router,
     private partyService: PartyService,
@@ -50,6 +54,10 @@ export class PortalPage implements OnInit {
     this.state$ = this.portalService.state$;
     this.completedProfile = false;
     this.alerts = [];
+    this.providerIdentitySupportEmail =
+      this.config.emails.providerIdentitySupport;
+    this.specialAuthoritySupportEmail =
+      this.config.emails.specialAuthoritySupport;
   }
 
   public onAcceptCollectionNotice(accepted: boolean): void {
