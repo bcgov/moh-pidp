@@ -8,6 +8,7 @@ import { ArrayUtils } from '@bcgov/shared/utils';
 import { PermissionsService } from '@app/modules/permissions/permissions.service';
 import { Role } from '@app/shared/enums/roles.enum';
 
+import { AuthorizedUserService } from '../auth/services/authorized-user.service';
 import { AlertCode } from './enums/alert-code.enum';
 import { StatusCode } from './enums/status-code.enum';
 import {
@@ -19,7 +20,9 @@ import {
   SignedAcceptedDocumentsPortalSection,
 } from './sections/classes';
 import { ComplianceTrainingPortalSection } from './sections/classes/compliance-training-portal-section.class';
+import { SitePrivacySecurityPortalSection } from './sections/classes/site-privacy-security-checklist-portal-section.class';
 import { TransactionsPortalSection } from './sections/classes/transactions-portal-section.class';
+import { UserAccessAgreementPortalSection } from './sections/classes/user-access-agreement-portal-section.class';
 import { ProfileStatusAlert } from './sections/models/profile-status-alert.model';
 import { ProfileStatus } from './sections/models/profile-status.model';
 
@@ -40,6 +43,7 @@ export class PortalService {
 
   public constructor(
     private router: Router,
+    private authorizedUserService: AuthorizedUserService,
     private permissionsService: PermissionsService
   ) {
     this._profileStatus = null;
@@ -132,6 +136,13 @@ export class PortalService {
     return [
       new DemographicsPortalSection(profileStatus, this.router),
       new CollegeCertificationPortalSection(profileStatus, this.router),
+      ...ArrayUtils.insertIf<IPortalSection>(
+        this.permissionsService.hasRole([
+          Role.FEATURE_PIDP_DEMO,
+          Role.FEATURE_AMH_DEMO,
+        ]),
+        new UserAccessAgreementPortalSection(profileStatus, this.router)
+      ),
     ];
   }
 
@@ -141,13 +152,23 @@ export class PortalService {
     return [
       new SaEformsPortalSection(profileStatus, this.router),
       new HcimReenrolmentPortalSection(profileStatus, this.router),
+      ...ArrayUtils.insertIf<IPortalSection>(
+        this.permissionsService.hasRole([
+          Role.FEATURE_PIDP_DEMO,
+          Role.FEATURE_AMH_DEMO,
+        ]),
+        new SitePrivacySecurityPortalSection(profileStatus, this.router)
+      ),
     ];
   }
 
   private getTrainingSections(profileStatus: ProfileStatus): IPortalSection[] {
     return [
       ...ArrayUtils.insertIf<IPortalSection>(
-        this.permissionsService.hasRole(Role.FEATURE_PIDP_DEMO),
+        this.permissionsService.hasRole([
+          Role.FEATURE_PIDP_DEMO,
+          Role.FEATURE_AMH_DEMO,
+        ]),
         new ComplianceTrainingPortalSection(profileStatus, this.router)
       ),
     ];
