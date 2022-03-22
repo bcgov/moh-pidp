@@ -1,8 +1,7 @@
 export class AccessRoutes {
   public static MODULE_PATH = 'profile';
 
-  public static GIS_PAGE = 'gis';
-  public static SPECIAL_AUTH_EFORMS_PAGE = 'special-authority-eforms';
+  public static SPECIAL_AUTH_EFORMS_PAGE = 'sa-eforms';
   public static HCIM_REENROLMENT = 'hcim-reenrolment';
   public static PHARMANET_PAGE = 'pharmanet';
   public static SITE_PRIVACY_SECURITY_CHECKLIST_PAGE =

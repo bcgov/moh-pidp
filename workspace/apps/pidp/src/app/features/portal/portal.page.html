@@ -3,12 +3,6 @@
 
   <div class="row">
     <div class="col-12">
-      <ui-collection-notice
-        [show]="!acceptedCollectionNotice"
-        (accepted)="onAcceptCollectionNotice($event)">
-        <p [innerHtml]="collectionNotice | safe: 'html'"></p>
-      </ui-collection-notice>
-
       <ui-alert
         *ngIf="completedProfile"
         type="success"

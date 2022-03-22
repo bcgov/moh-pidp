@@ -5,7 +5,6 @@ import { Observable, Subscription, map } from 'rxjs';
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';
 import { PartyService } from '@app/core/party/party.service';
-import { DocumentService } from '@app/core/services/document.service';
 import { Role } from '@app/shared/enums/roles.enum';
 
 import { PortalResource } from './portal-resource.service';
@@ -22,8 +21,6 @@ import { ProfileStatus } from './sections/models/profile-status.model';
 export class PortalPage implements OnInit {
   public busy?: Subscription;
   public title: string;
-  public acceptedCollectionNotice: boolean;
-  public collectionNotice: string;
   public state$: Observable<Record<string, IPortalSection[]>>;
   public completedProfile: boolean;
   public alerts: ProfileStatusAlert[];
@@ -38,12 +35,9 @@ export class PortalPage implements OnInit {
     private router: Router,
     private partyService: PartyService,
     private portalResource: PortalResource,
-    private portalService: PortalService,
-    documentService: DocumentService
+    private portalService: PortalService
   ) {
     this.title = this.route.snapshot.data.title;
-    this.acceptedCollectionNotice = this.portalService.acceptedCollectionNotice;
-    this.collectionNotice = documentService.getSAeFormsCollectionNotice();
     this.state$ = this.portalService.state$;
     this.completedProfile = false;
     this.alerts = [];
@@ -51,10 +45,6 @@ export class PortalPage implements OnInit {
       this.config.emails.providerIdentitySupport;
     this.specialAuthoritySupportEmail =
       this.config.emails.specialAuthoritySupport;
-  }
-
-  public onAcceptCollectionNotice(accepted: boolean): void {
-    this.portalService.acceptedCollectionNotice = accepted;
   }
 
   public onScrollToAnchor(): void {
