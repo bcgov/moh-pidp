@@ -7,6 +7,7 @@ import { Section } from './section.model';
 export interface AccessSystemSectionStatus {
   saEforms: Section;
   hcim: Section;
+  sitePrivacySecurityChecklist: Section;
 }
 
 /**

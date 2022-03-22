@@ -1,6 +1,9 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
+import { PermissionsGuard } from '@app/modules/permissions/permissions.guard';
+import { Role } from '@app/shared/enums/roles.enum';
+
 import { AccessRoutes } from './access.routes';
 import { HcimWebEnrolmentModule } from './pages/hcim-reenrolment/hcim-reenrolment.module';
 import { PharmanetModule } from './pages/pharmanet/pharmanet.module';
@@ -31,6 +34,10 @@ const routes: Routes = [
   },
   {
     path: AccessRoutes.SITE_PRIVACY_SECURITY_CHECKLIST_PAGE,
+    canActivate: [PermissionsGuard],
+    data: {
+      roles: [Role.FEATURE_PIDP_DEMO, Role.FEATURE_AMH_DEMO],
+    },
     loadChildren: (): Promise<SitePrivacySecurityChecklistModule> =>
       import(
         './pages/site-privacy-security-checklist/site-privacy-security-checklist.module'

@@ -20,6 +20,7 @@ export interface CollegeCertificationSection
 export interface ProfileSectionStatus {
   demographics: DemographicsSection;
   collegeCertification: CollegeCertificationSection;
+  userAccessAgreement: Section;
 }
 
 /**

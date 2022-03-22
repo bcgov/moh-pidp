@@ -95,7 +95,8 @@
         </ui-card-summary>
       </ui-page-section>
 
-      <ui-page-section *permittedRoles="Role.FEATURE_PIDP_DEMO">
+      <ui-page-section
+        *permittedRoles="[Role.FEATURE_PIDP_DEMO, Role.FEATURE_AMH_DEMO]">
         <ui-scroll-target targetId="training"></ui-scroll-target>
         <ui-page-section-subheader icon="school" heading="Training">
           <ng-container uiPageSectionSubheaderDesc>
