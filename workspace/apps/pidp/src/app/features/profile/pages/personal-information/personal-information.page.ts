@@ -69,7 +69,7 @@ export class PersonalInformationPage
       return this.navigateToRoot();
     }
 
-    this.resource
+    this.busy = this.resource
       .get(partyId)
       .pipe(
         tap((model: PersonalInformationModel | null) =>

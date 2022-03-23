@@ -58,7 +58,7 @@ export class WorkAndRoleInformationPage
       return this.navigateToRoot();
     }
 
-    this.resource
+    this.busy = this.resource
       .get(partyId)
       .pipe(
         tap((model: WorkAndRoleInformationModel | null) =>
