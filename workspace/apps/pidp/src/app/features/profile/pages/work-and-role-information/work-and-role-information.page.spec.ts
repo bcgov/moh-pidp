@@ -1,3 +1,4 @@
+import { HttpStatusCode } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -112,6 +113,41 @@ describe('WorkAndRoleInformationPage', () => {
           expect(workAndRoleInformationResourceSpy.get).toHaveBeenCalledWith(
             partyId
           );
+        });
+      });
+    });
+
+    given('partyId exists', () => {
+      const partyId = randNumber({ min: 1 });
+      partyServiceSpy.accessorSpies.getters.partyId.mockReturnValue(partyId);
+      workAndRoleInformationResourceSpy.get.nextWithValues([
+        {
+          errorValue: {
+            status: HttpStatusCode.NotFound,
+          },
+        },
+      ]);
+
+      when('resource request rejected', () => {
+        component.ngOnInit();
+
+        then('router should navigate to root route', () => {
+          const rootRoute = mockActivatedRoute.snapshot.data.routes.root;
+          expect(router.navigate).toHaveBeenCalledWith([rootRoute]);
+        });
+      });
+    });
+
+    given('partyId does not exist', () => {
+      const partyId = null;
+      partyServiceSpy.accessorSpies.getters.partyId.mockReturnValue(partyId);
+
+      when('initializing the component', () => {
+        component.ngOnInit();
+
+        then('router should navigate to root route', () => {
+          const rootRoute = mockActivatedRoute.snapshot.data.routes.root;
+          expect(router.navigate).toHaveBeenCalledWith([rootRoute]);
         });
       });
     });
