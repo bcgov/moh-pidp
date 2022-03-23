@@ -17,6 +17,7 @@
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "noImplicitReturns": true,
+    "noPropertyAccessFromIndexSignature": false,
     "noFallthroughCasesInSwitch": true,
     "paths": {
       "@env/*": ["apps/pidp/src/environment/*"],

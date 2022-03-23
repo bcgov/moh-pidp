@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { RouteUtils } from '@bcgov/shared/utils';
 
 @Component({
-  selector: 'app-page-not-found',
+  selector: 'ui-page-not-found',
   template: `
     <app-root-route-container>
       <div class="row justify-content-center">

@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 
-import { FeatureFlagModule } from '@app/modules/feature-flag/feature-flag.module';
 import { LookupModule } from '@app/modules/lookup/lookup.module';
+import { PermissionsModule } from '@app/modules/permissions/permissions.module';
 
 import { SharedModule } from '@shared/shared.module';
 
@@ -15,7 +15,7 @@ import { PortalPage } from './portal.page';
     PortalRoutingModule,
     SharedModule,
     LookupModule.forChild(),
-    FeatureFlagModule,
+    PermissionsModule,
   ],
 })
 export class PortalModule {}

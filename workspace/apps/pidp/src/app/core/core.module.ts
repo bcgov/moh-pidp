@@ -6,12 +6,16 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { httpInterceptorProviders } from '@bcgov/shared/data-access';
-import { NgxProgressBarModule, RootRoutingModule } from '@bcgov/shared/ui';
+import {
+  NgxBusyModule,
+  NgxProgressBarModule,
+  RootRoutingModule,
+} from '@bcgov/shared/ui';
 import { EnsureModuleLoadedOnceGuard } from '@bcgov/shared/utils';
 
-import { FeatureFlagModule } from '@app/modules/feature-flag/feature-flag.module';
 import { KeycloakModule } from '@app/modules/keycloak/keycloak.module';
 import { LookupModule } from '@app/modules/lookup/lookup.module';
+import { PermissionsModule } from '@app/modules/permissions/permissions.module';
 
 const modules = [
   BrowserModule,
@@ -23,9 +27,11 @@ const modules = [
   MatSnackBarModule,
   LookupModule.forRoot(),
   KeycloakModule,
-  FeatureFlagModule.forRoot(),
+  PermissionsModule.forRoot(),
   RootRoutingModule,
   NgxProgressBarModule,
+  // TODO temporily added to stop message from being displayed
+  NgxBusyModule,
 ];
 
 @NgModule({
