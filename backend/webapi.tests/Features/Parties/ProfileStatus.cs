@@ -277,6 +277,8 @@ public class ProfileStatusTests : InMemoryDbTest
         Assert.Equal(new HashSet<Alert>(), profile.Alerts);
         profile.AssertSectionStatus(StatusCode.Complete, StatusCode.Complete, StatusCode.Complete);
     }
+    
+    // TODO HCIM tests
 
     private class MockedPlrRecordStatus : PlrRecordStatus
     {
