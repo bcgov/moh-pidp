@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
+import { Subscription, catchError, noop, of, tap } from 'rxjs';
+
 import { PartyService } from '@app/core/party/party.service';
 import { DocumentService } from '@app/core/services/document.service';
 import { LoggerService } from '@app/core/services/logger.service';
@@ -15,10 +17,12 @@ import { saEformsUrl } from './sa-eforms.constants';
   styleUrls: ['./sa-eforms.page.scss'],
 })
 export class SaEformsPage implements OnInit {
+  public busy?: Subscription;
   public title: string;
   public saEformsUrl: string;
   public collectionNotice: string;
   public completed: boolean | null;
+  public accessRequestFailed: boolean;
 
   public constructor(
     private route: ActivatedRoute,
@@ -33,6 +37,7 @@ export class SaEformsPage implements OnInit {
     this.saEformsUrl = saEformsUrl;
     this.collectionNotice = documentService.getSAeFormsCollectionNotice();
     this.completed = routeData.saEformsStatusCode === StatusCode.COMPLETED;
+    this.accessRequestFailed = false;
   }
 
   public onBack(): void {
@@ -40,7 +45,16 @@ export class SaEformsPage implements OnInit {
   }
 
   public onRequestAccess(): void {
-    this.resource.requestAccess(this.partyService.partyId).pipe();
+    this.busy = this.resource
+      .requestAccess(this.partyService.partyId)
+      .pipe(
+        tap(() => (this.completed = true)),
+        catchError(() => {
+          this.accessRequestFailed = true;
+          return of(noop());
+        })
+      )
+      .subscribe();
   }
 
   public ngOnInit(): void {

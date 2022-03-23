@@ -1,5 +1,19 @@
-<ui-page>
+<ui-page [busy]="busy">
   <ui-page-header>{{ title }}</ui-page-header>
+
+  <ui-alert
+    *ngIf="accessRequestFailed"
+    type="danger"
+    icon="error_outline"
+    iconType="outlined"
+    heading="Error Requesting Access">
+    <ng-container uiAlertContent>
+      <p>
+        Your request for access to Special Authority eForms could not be
+        processed at this time.
+      </p>
+    </ng-container>
+  </ui-alert>
 
   <ui-page-section>
     <ui-page-section-subheader
