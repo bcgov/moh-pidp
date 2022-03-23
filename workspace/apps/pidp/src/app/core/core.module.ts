@@ -30,7 +30,8 @@ const modules = [
   PermissionsModule.forRoot(),
   RootRoutingModule,
   NgxProgressBarModule,
-  // NgxBusyModule,
+  // TODO temporily added to stop message from being displayed
+  NgxBusyModule,
 ];
 
 @NgModule({
