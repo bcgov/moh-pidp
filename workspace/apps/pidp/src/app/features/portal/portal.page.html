@@ -3,12 +3,6 @@
 
   <div class="row">
     <div class="col-12">
-      <ui-collection-notice
-        [show]="!acceptedCollectionNotice"
-        (accepted)="onAcceptCollectionNotice($event)">
-        <p [innerHtml]="collectionNotice | safe: 'html'"></p>
-      </ui-collection-notice>
-
       <ui-alert
         *ngIf="completedProfile"
         type="success"
@@ -54,13 +48,12 @@
 
         <ui-card-summary
           *ngFor="let section of (state$ | async)?.profileIdentitySections"
-          [icon]="section.icon"
           [heading]="section.heading"
           [statusType]="section.statusType"
           [status]="section.status"
           [actionLabel]="section.action.label"
           [actionDisabled]="section.action.disabled"
-          (action)="onCardRouteAction(section.action.route)">
+          (action)="onCardAction(section)">
           <ng-container uiCardSummaryHint>{{ section.hint }}</ng-container>
           <ng-container uiCardSummaryContent>
             <app-profile-card-summary-content [properties]="section.properties">
@@ -82,14 +75,13 @@
         </ui-page-section-subheader>
 
         <ui-card-summary
-          *ngFor="let section of (state$ | async)?.accessToSystemsSections"
-          [icon]="section.icon"
+          *ngFor="let section of (state$ | async)?.accessSystemsSections"
           [heading]="section.heading"
           [statusType]="section.statusType"
           [status]="section.status"
           [actionLabel]="section.action.label"
           [actionDisabled]="section.action.disabled"
-          (action)="onCardRequestAccess(section.action.route)">
+          (action)="onCardAction(section)">
           <ng-container uiCardSummaryHint>{{ section.hint }}</ng-container>
           <ng-container uiCardSummaryContent>
             {{ section.description }}
@@ -97,7 +89,8 @@
         </ui-card-summary>
       </ui-page-section>
 
-      <ui-page-section *featureFlag="Role.FEATURE_PIDP_DEMO">
+      <ui-page-section
+        *permittedRoles="[Role.FEATURE_PIDP_DEMO, Role.FEATURE_AMH_DEMO]">
         <ui-scroll-target targetId="training"></ui-scroll-target>
         <ui-page-section-subheader icon="school" heading="Training">
           <ng-container uiPageSectionSubheaderDesc>
@@ -109,13 +102,12 @@
           *ngIf="(state$ | async)?.trainingSections?.length; else noTraining">
           <ui-card-summary
             *ngFor="let section of (state$ | async)?.trainingSections"
-            [icon]="section.icon"
             [heading]="section.heading"
             [statusType]="section.statusType"
             [status]="section.status"
             [actionLabel]="section.action.label"
             [actionDisabled]="section.action.disabled"
-            (action)="onCardRouteAction(section.action.route)">
+            (action)="onCardAction(section)">
             <ng-container uiCardSummaryHint>{{ section.hint }}</ng-container>
             <ng-container uiCardSummaryContent>
               {{ section.description }}
@@ -137,12 +129,11 @@
         </ui-page-section-subheader>
 
         <ui-card-summary
-          *ngFor="let section of (state$ | async)?.yourDocumentsSections"
-          [icon]="section.icon"
+          *ngFor="let section of (state$ | async)?.documentsSections"
           [heading]="section.heading"
           [actionLabel]="section.action.label"
           [actionDisabled]="section.action.disabled"
-          (action)="onCardRouteAction(section.action.route)">
+          (action)="onCardAction(section)">
           <ng-container uiCardSummaryHint>{{ section.hint }}</ng-container>
           <ng-container uiCardSummaryContent>
             {{ section.description }}
@@ -151,9 +142,9 @@
       </ui-page-section>
     </div>
     <div class="col-12">
-      <div class="support">
-        <app-get-support></app-get-support>
-      </div>
+      <app-get-support>
+        <ui-scroll-target targetId="support"></ui-scroll-target>
+      </app-get-support>
     </div>
   </div>
 </ui-page>

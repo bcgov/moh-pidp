@@ -3,9 +3,8 @@ import { CanActivate, Router, UrlTree } from '@angular/router';
 
 import { Observable } from 'rxjs';
 
+import { AuthorizedUserService } from '@app/features/auth/services/authorized-user.service';
 import { Role } from '@app/shared/enums/roles.enum';
-
-import { AuthorizedUserService } from '../services/authorized-user.service';
 
 @Injectable({
   providedIn: 'root',

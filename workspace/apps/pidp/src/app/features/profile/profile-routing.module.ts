@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { FeatureFlagGuard } from '@app/modules/feature-flag/feature-flag.guard';
+import { PermissionsGuard } from '@app/modules/permissions/permissions.guard';
 import { Role } from '@app/shared/enums/roles.enum';
 
 import { CollegeLicenceInformationModule } from './pages/college-licence-information/college-licence-information.module';
@@ -27,9 +27,9 @@ const routes: Routes = [
   },
   {
     path: ProfileRoutes.WORK_AND_ROLE_INFO_PAGE,
-    canLoad: [FeatureFlagGuard],
+    canLoad: [PermissionsGuard],
     data: {
-      features: [Role.FEATURE_PIDP_DEMO],
+      roles: [Role.FEATURE_PIDP_DEMO],
     },
     loadChildren: (): Promise<WorkAndRoleInformationModule> =>
       import(
@@ -38,9 +38,9 @@ const routes: Routes = [
   },
   {
     path: ProfileRoutes.USER_ACCESS_AGREEMENT_PAGE,
-    canLoad: [FeatureFlagGuard],
+    canLoad: [PermissionsGuard],
     data: {
-      features: [Role.FEATURE_PIDP_DEMO],
+      roles: [Role.FEATURE_PIDP_DEMO, Role.FEATURE_AMH_DEMO],
     },
     loadChildren: (): Promise<UserAccessAgreementModule> =>
       import('./pages/user-access-agreement/user-access-agreement.module').then(
