@@ -5,11 +5,12 @@
 // TODO create shared/assets and shared/theme with import for adjusting the theme app level
 $sideNavBackgroundColor: theme-palette(blue);
 $sideNavBorderRight: 0px solid transparent;
+$menuItemContentBorderWidth: 5px;
 $menuItemColor: white;
 $menuItemAnchorColorHover: theme-palette(yellow);
 $menuItemAnchorColorFocus: theme-palette(yellow);
 $menuItemAnchorColorActive: theme-palette(yellow);
-$menuItemAnchorBorderActive: 0px solid transparent;
+$menuItemAnchorBorderActiveColor: transparent;
 $menuListDividerColor: theme-palette(blue);
 
 // NOTE: Cannot be moved into dashboard component for use
@@ -29,7 +30,7 @@ $menuListDividerColor: theme-palette(blue);
     .mat-list-item-content {
       // Add a border for spacing to prevent the sidenav from jumping
       // if the navigation applies an active border on menu items
-      border-right: 5px solid transparent !important;
+      border-right: $menuItemContentBorderWidth solid transparent !important;
       padding-left: 25px !important;
     }
 
@@ -83,7 +84,8 @@ $menuListDividerColor: theme-palette(blue);
       background-color: mix(white, theme-palette(blue), 5%) !important;
 
       .mat-list-item-content {
-        border-right: $menuItemAnchorBorderActive !important;
+        border-right: $menuItemContentBorderWidth solid
+          $menuItemAnchorBorderActiveColor !important;
       }
       .mat-icon,
       a {

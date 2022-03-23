@@ -34,9 +34,9 @@ export class AccessTokenService implements IAccessTokenService {
     return this.keycloakService.isTokenExpired();
   }
 
-  public decodeToken(): Observable<AccessTokenParsed | null> {
+  public decodeToken(): Observable<AccessTokenParsed> {
     return this.token().pipe(
-      map((token: string) => (token ? this.jwtHelper.decodeToken(token) : null))
+      map((token: string) => this.jwtHelper.decodeToken(token))
     );
   }
 

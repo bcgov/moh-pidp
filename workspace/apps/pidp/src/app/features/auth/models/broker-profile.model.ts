@@ -5,6 +5,7 @@ export interface BrokerProfile extends KeycloakProfile {
   lastName: string;
   birthdate: string;
   username: string;
+  email: string;
   attributes: {
     birthdate: string;
   };
