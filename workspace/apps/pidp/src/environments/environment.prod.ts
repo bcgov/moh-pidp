@@ -22,7 +22,7 @@ export const environment: AppEnvironment = {
   urls: {
     bcscSupport:
       'https://www2.gov.bc.ca/gov/content/governments/government-id/bcservicescardapp/help',
-    bcscMobileSetup: 'https://id.gov.bc.ca/account/',
+    bcscMobileSetup: 'https://id.gov.bc.ca/account',
     specialAuthority: 'https://www.gov.bc.ca/pharmacarespecialauthority',
   },
   keycloakConfig: {
