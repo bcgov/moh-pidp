@@ -52,7 +52,8 @@ public partial class ProfileStatus
             Incomplete = 1,
             Complete,
             Locked,
-            Error
+            Error,
+            Hidden
         }
     }
 
