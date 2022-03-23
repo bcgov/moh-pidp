@@ -152,4 +152,17 @@ describe('WorkAndRoleInformationPage', () => {
       });
     });
   });
+
+  describe('METHOD: onBack', () => {
+    given('user wants to go back to the previous page', () => {
+      when('onBack is invoked', () => {
+        component.onBack();
+
+        then('router should navigate to root route', () => {
+          const rootRoute = mockActivatedRoute.snapshot.data.routes.root;
+          expect(router.navigate).toHaveBeenCalledWith([rootRoute]);
+        });
+      });
+    });
+  });
 });
