@@ -68,6 +68,19 @@ public partial class ProfileStatus
             protected override void SetAlertsAndStatus(ProfileStatusDto profile) => this.StatusCode = profile.DemographicsEntered ? StatusCode.Complete : StatusCode.Incomplete;
         }
 
+        public class HcimReEnrolment : ProfileSection
+        {
+            internal override string SectionName => "hcim";
+
+            public HcimReEnrolment(ProfileStatusDto profile) : base(profile) { }
+
+            protected override void SetAlertsAndStatus(ProfileStatusDto profile)
+            {
+                // TODO this
+                this.StatusCode = StatusCode.Incomplete;
+            }
+        }
+
         public class SAEforms : ProfileSection
         {
             internal override string SectionName => "saEforms";
