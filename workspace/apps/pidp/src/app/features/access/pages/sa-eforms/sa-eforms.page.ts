@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { Subscription, catchError, noop, of, tap } from 'rxjs';
 
+import { APP_CONFIG, AppConfig } from '@app/app.config';
 import { PartyService } from '@app/core/party/party.service';
 import { DocumentService } from '@app/core/services/document.service';
 import { LoggerService } from '@app/core/services/logger.service';
@@ -23,8 +24,10 @@ export class SaEformsPage implements OnInit {
   public collectionNotice: string;
   public completed: boolean | null;
   public accessRequestFailed: boolean;
+  public specialAuthoritySupportEmail: string;
 
   public constructor(
+    @Inject(APP_CONFIG) private config: AppConfig,
     private route: ActivatedRoute,
     private router: Router,
     private partyService: PartyService,
@@ -38,6 +41,8 @@ export class SaEformsPage implements OnInit {
     this.collectionNotice = documentService.getSAeFormsCollectionNotice();
     this.completed = routeData.saEformsStatusCode === StatusCode.COMPLETED;
     this.accessRequestFailed = false;
+    this.specialAuthoritySupportEmail =
+      this.config.emails.specialAuthoritySupport;
   }
 
   public onBack(): void {
