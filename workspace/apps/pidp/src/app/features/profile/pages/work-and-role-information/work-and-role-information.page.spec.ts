@@ -4,7 +4,15 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 
-import { randNumber, randTextRange } from '@ngneat/falso';
+import {
+  randCity,
+  randCountryCode,
+  randNumber,
+  randStateAbbr,
+  randStreetAddress,
+  randTextRange,
+  randZipCode,
+} from '@ngneat/falso';
 import { Spy, createSpyFromClass, provideAutoSpy } from 'jest-auto-spies';
 
 import { APP_CONFIG, APP_DI_CONFIG } from '@app/app.config';
@@ -19,6 +27,7 @@ describe('WorkAndRoleInformationPage', () => {
   let component: WorkAndRoleInformationPage;
   let partyServiceSpy: Spy<PartyService>;
   let workAndRoleInformationResourceSpy: Spy<WorkAndRoleInformationResource>;
+  let router: Router;
 
   const mockActivatedRoute = {
     snapshot: {
@@ -29,6 +38,22 @@ describe('WorkAndRoleInformationPage', () => {
         },
       },
     },
+  };
+
+  const mockForm = {
+    jobTitle: randTextRange({ min: 4, max: 15 }),
+    facilityName: randTextRange({ min: 4, max: 15 }),
+  };
+
+  const mockParty = {
+    facilityAddress: {
+      countryCode: randCountryCode(),
+      provinceCode: randStateAbbr(),
+      street: randStreetAddress(),
+      city: randCity(),
+      postal: randZipCode(),
+    },
+    ...mockForm,
   };
 
   beforeEach(() => {
@@ -63,6 +88,7 @@ describe('WorkAndRoleInformationPage', () => {
     workAndRoleInformationResourceSpy = TestBed.inject<any>(
       WorkAndRoleInformationResource
     );
+    router = TestBed.inject(Router);
   });
 
   it('should create', () => {
@@ -73,7 +99,21 @@ describe('WorkAndRoleInformationPage', () => {
     given('partyId exists', () => {
       const partyId = randNumber({ min: 1 });
       partyServiceSpy.accessorSpies.getters.partyId.mockReturnValue(partyId);
-      workAndRoleInformationResourceSpy.get.nextOneTimeWith();
+      workAndRoleInformationResourceSpy.get.nextOneTimeWith(mockParty);
+
+      when('resource request resolved', () => {
+        component.ngOnInit();
+
+        then('it should GET party work and role information', () => {
+          expect(router.navigate).not.toHaveBeenCalled();
+          expect(workAndRoleInformationResourceSpy.get).toHaveBeenCalledTimes(
+            1
+          );
+          expect(workAndRoleInformationResourceSpy.get).toHaveBeenCalledWith(
+            partyId
+          );
+        });
+      });
     });
   });
 });
