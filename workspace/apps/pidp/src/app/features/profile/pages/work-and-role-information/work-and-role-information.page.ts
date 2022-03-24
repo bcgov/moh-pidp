@@ -6,11 +6,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { EMPTY, Observable, catchError, of, tap } from 'rxjs';
 
+import { PartyService } from '@app/core/party/party.service';
 import { LoggerService } from '@app/core/services/logger.service';
 
 import { AbstractFormPage } from '@core/classes/abstract-form-page.class';
 import { FormUtilsService } from '@core/services/form-utils.service';
-import { PartyService } from '@core/services/party.service';
 
 import { WorkAndRoleInformationFormState } from './work-and-role-information-form-state';
 import { WorkAndRoleInformationResource } from './work-and-role-information-resource.service';
@@ -32,8 +32,6 @@ export class WorkAndRoleInformationPage
 
   public constructor(
     protected dialog: MatDialog,
-    // TODO replace dialog with dialogService
-    // protected dialogService: DialogService,
     protected formUtilsService: FormUtilsService,
     private route: ActivatedRoute,
     private router: Router,
@@ -60,7 +58,7 @@ export class WorkAndRoleInformationPage
       return this.navigateToRoot();
     }
 
-    this.resource
+    this.busy = this.resource
       .get(partyId)
       .pipe(
         tap((model: WorkAndRoleInformationModel | null) =>

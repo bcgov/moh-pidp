@@ -13,5 +13,7 @@ export class UserAccessAgreementPage {
     this.title = this.route.snapshot.data.title;
   }
 
-  public onSubmit(): void {}
+  public onSubmit(): void {
+    console.log('ON_SUBMIT');
+  }
 }

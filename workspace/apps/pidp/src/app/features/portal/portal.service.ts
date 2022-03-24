@@ -1,20 +1,30 @@
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { BehaviorSubject, Observable } from 'rxjs';
 
-import { AccessRoutes } from '@app/features/access/access.routes';
+import { ArrayUtils } from '@bcgov/shared/utils';
+
+import { PermissionsService } from '@app/modules/permissions/permissions.service';
+import { Role } from '@app/shared/enums/roles.enum';
+
+import { AuthorizedUserService } from '../auth/services/authorized-user.service';
+import { AlertCode } from './enums/alert-code.enum';
+import { StatusCode } from './enums/status-code.enum';
 import {
-  PortalSection,
-  PortalSectionType,
-} from '@app/features/portal/models/portal-section.model';
-import {
-  AlertCode,
-  ProfileStatus,
-  ProfileStatusAlert,
-  StatusCode,
-} from '@app/features/portal/models/profile-status.model';
-import { ProfileRoutes } from '@app/features/profile/profile.routes';
-import { YourDocumentsRoutes } from '@app/features/your-documents/your-documents.routes';
+  CollegeCertificationPortalSection,
+  DemographicsPortalSection,
+  HcimReenrolmentPortalSection,
+  IPortalSection,
+  SaEformsPortalSection,
+  SignedAcceptedDocumentsPortalSection,
+} from './sections/classes';
+import { ComplianceTrainingPortalSection } from './sections/classes/compliance-training-portal-section.class';
+import { SitePrivacySecurityPortalSection } from './sections/classes/site-privacy-security-checklist-portal-section.class';
+import { TransactionsPortalSection } from './sections/classes/transactions-portal-section.class';
+import { UserAccessAgreementPortalSection } from './sections/classes/user-access-agreement-portal-section.class';
+import { ProfileStatusAlert } from './sections/models/profile-status-alert.model';
+import { ProfileStatus } from './sections/models/profile-status.model';
 
 @Injectable({
   providedIn: 'root',
@@ -29,17 +39,21 @@ export class PortalService {
   private _alerts: ProfileStatusAlert[];
   private _acceptedCollectionNotice: boolean;
   private _completedProfile: boolean;
-  private _state$: BehaviorSubject<Record<string, PortalSection[]>>;
+  private _state$: BehaviorSubject<Record<string, IPortalSection[]>>;
 
-  public constructor() {
+  public constructor(
+    private router: Router,
+    private authorizedUserService: AuthorizedUserService,
+    private permissionsService: PermissionsService
+  ) {
     this._profileStatus = null;
     this._acceptedCollectionNotice = false;
-    this._state$ = new BehaviorSubject<Record<string, PortalSection[]>>({});
+    this._state$ = new BehaviorSubject<Record<string, IPortalSection[]>>({});
     this._completedProfile = false;
     this._alerts = [];
   }
 
-  public get state$(): Observable<Record<string, PortalSection[]>> {
+  public get state$(): Observable<Record<string, IPortalSection[]>> {
     return this._state$.asObservable();
   }
 
@@ -72,12 +86,24 @@ export class PortalService {
 
   public updateState(profileStatus: ProfileStatus | null): void {
     if (!profileStatus) {
-      // TODO clear service when this occurs
+      this.clearState();
       return;
     }
 
     this._profileStatus = profileStatus;
-    this._alerts = profileStatus.alerts.map((alert) => {
+    this._alerts = this.getAlerts(profileStatus);
+    this._completedProfile = this.hasCompletedProfile(profileStatus);
+
+    this._state$.next({
+      profileIdentitySections: this.getProfileIdentitySections(profileStatus),
+      accessSystemsSections: this.getAccessSystemsSections(profileStatus),
+      trainingSections: this.getTrainingSections(profileStatus),
+      documentsSections: this.getDocumentsSections(),
+    });
+  }
+
+  private getAlerts(profileStatus: ProfileStatus): ProfileStatusAlert[] {
+    return profileStatus.alerts.map((alert) => {
       switch (alert) {
         case AlertCode.PLR_BAD_STANDING:
           return {
@@ -87,192 +113,85 @@ export class PortalService {
         case AlertCode.TRANSIENT_ERROR:
           return {
             heading: 'Having trouble verifying your college licence?',
-            content:
-              'Your licence may not be active yet. Try again in 24 hours. If this problem persists, contact your college.',
+            content: `Your licence may not be active yet. Try again in 24 hours. If this problem persists, contact your college.`,
           };
       }
     });
-    // TODO won't scale but works with one system to provision
-    // TODO should be loop over profile keys and have at least one access request
-    this._completedProfile =
-      profileStatus?.status.demographics.statusCode === StatusCode.COMPLETED &&
-      profileStatus?.status.collegeCertification.statusCode ===
-        StatusCode.COMPLETED &&
-      profileStatus.status.saEforms.statusCode === StatusCode.AVAILABLE;
+  }
 
-    this._state$.next({
-      profileIdentitySections: this.getProfileIdentitySections(profileStatus),
-      accessToSystemsSections: this.getAccessToSystemsSections(profileStatus),
-      yourDocumentsSections: this.getYourDocumentsSections(),
-    });
+  private hasCompletedProfile(profileStatus: ProfileStatus): boolean {
+    // TODO won't scale and needs revision with more than one enrolment for provision
+    const status = profileStatus.status;
+
+    return (
+      status.demographics.statusCode === StatusCode.COMPLETED &&
+      status.collegeCertification.statusCode === StatusCode.COMPLETED &&
+      status.saEforms.statusCode === StatusCode.AVAILABLE
+    );
   }
 
   private getProfileIdentitySections(
     profileStatus: ProfileStatus
-  ): PortalSection[] {
-    const demographics = profileStatus.status.demographics;
-    const demographicsStatusCode = demographics.statusCode;
-    const collegeCertification = profileStatus.status.collegeCertification;
-    const collegeCertificationStatusCode =
-      profileStatus.status.collegeCertification.statusCode;
-
+  ): IPortalSection[] {
     return [
-      {
-        icon: 'fingerprint',
-        // TODO swap for known key that now exists in the response
-        type: PortalSectionType.PERSONAL_INFORMATION,
-        heading: 'Personal Information',
-        hint:
-          demographicsStatusCode === StatusCode.ERROR ||
-          demographicsStatusCode === StatusCode.COMPLETED
-            ? ''
-            : '1 min to complete',
-        description: 'Personal and Contact Information',
-        properties:
-          demographicsStatusCode === StatusCode.COMPLETED
-            ? [
-                {
-                  key: 'fullName',
-                  value: `${demographics.firstName} ${demographics.lastName}`,
-                },
-                {
-                  key: 'email',
-                  value: demographics.email,
-                },
-                {
-                  key: 'phone',
-                  value: demographics.phone,
-                },
-              ]
-            : [],
-        action: {
-          label: 'Update',
-          route: ProfileRoutes.routePath(ProfileRoutes.PERSONAL_INFO_PAGE),
-          disabled:
-            demographicsStatusCode === StatusCode.ERROR ||
-            demographicsStatusCode === StatusCode.NOT_AVAILABLE,
-        },
-        statusType:
-          demographicsStatusCode === StatusCode.ERROR
-            ? 'danger'
-            : demographicsStatusCode === StatusCode.COMPLETED
-            ? 'success'
-            : 'warn',
-        status:
-          demographicsStatusCode === StatusCode.ERROR
-            ? ''
-            : demographicsStatusCode === StatusCode.COMPLETED
-            ? 'Completed'
-            : 'Incomplete',
-      },
-      {
-        icon: 'fingerprint',
-        type: PortalSectionType.COLLEGE_LICENCE_INFORMATION,
-        heading: 'College Licence Information',
-        hint:
-          collegeCertificationStatusCode === StatusCode.ERROR ||
-          collegeCertificationStatusCode === StatusCode.COMPLETED
-            ? ''
-            : '1 min to complete',
-        description: 'College Licence Information and Validation',
-        properties:
-          collegeCertificationStatusCode === StatusCode.ERROR ||
-          collegeCertificationStatusCode === StatusCode.COMPLETED
-            ? [
-                {
-                  key: 'collegeCode',
-                  value: collegeCertification.collegeCode,
-                },
-                {
-                  key: 'licenceNumber',
-                  value: collegeCertification.licenceNumber,
-                  label: 'College Licence Number:',
-                },
-                {
-                  key: 'status',
-                  value:
-                    collegeCertificationStatusCode !== StatusCode.ERROR &&
-                    demographicsStatusCode === StatusCode.COMPLETED
-                      ? 'Verified'
-                      : 'Not Verified',
-                  label: 'College Licence Status:',
-                },
-              ]
-            : [],
-        action: {
-          label: 'Update',
-          route: ProfileRoutes.routePath(
-            ProfileRoutes.COLLEGE_LICENCE_INFO_PAGE
-          ),
-          disabled:
-            demographicsStatusCode !== StatusCode.COMPLETED ||
-            collegeCertificationStatusCode === StatusCode.NOT_AVAILABLE,
-        },
-        statusType:
-          collegeCertificationStatusCode === StatusCode.ERROR
-            ? 'danger'
-            : collegeCertificationStatusCode === StatusCode.COMPLETED
-            ? 'success'
-            : 'warn',
-        status:
-          collegeCertificationStatusCode === StatusCode.ERROR
-            ? 'Licence validation error'
-            : collegeCertificationStatusCode === StatusCode.COMPLETED
-            ? 'Completed'
-            : 'Incomplete',
-      },
+      new DemographicsPortalSection(profileStatus, this.router),
+      new CollegeCertificationPortalSection(profileStatus, this.router),
+      ...ArrayUtils.insertIf<IPortalSection>(
+        this.permissionsService.hasRole([
+          Role.FEATURE_PIDP_DEMO,
+          Role.FEATURE_AMH_DEMO,
+        ]),
+        new UserAccessAgreementPortalSection(profileStatus, this.router)
+      ),
     ];
   }
 
-  private getAccessToSystemsSections(
+  private getAccessSystemsSections(
     profileStatus: ProfileStatus
-  ): PortalSection[] {
-    const saEformsStatusCode = profileStatus.status.saEforms.statusCode;
-    const demographicsStatusCode = profileStatus.status.demographics.statusCode;
-    const collegeCertStatusCode =
-      profileStatus.status.collegeCertification.statusCode;
+  ): IPortalSection[] {
     return [
-      {
-        icon: 'fingerprint',
-        type: PortalSectionType.SA_EFORMS,
-        heading: 'Special Authority eForms',
-        description: `Enrol here for access to PharmaCare's Special Authority eForms application.`,
-        action: {
-          label:
-            saEformsStatusCode === StatusCode.COMPLETED ? 'View' : 'Request',
-          route: AccessRoutes.routePath(AccessRoutes.SPECIAL_AUTH_EFORMS_PAGE),
-          disabled: !(
-            demographicsStatusCode === StatusCode.COMPLETED &&
-            collegeCertStatusCode === StatusCode.COMPLETED
-          ),
-        },
-        statusType:
-          saEformsStatusCode === StatusCode.COMPLETED ? 'success' : 'info',
-        status:
-          saEformsStatusCode === StatusCode.AVAILABLE
-            ? 'You are eligible to use Special Authority eForms'
-            : saEformsStatusCode === StatusCode.COMPLETED
-            ? 'Completed'
-            : '',
-      },
+      new SaEformsPortalSection(profileStatus, this.router),
+      ...ArrayUtils.insertIf<IPortalSection>(
+        this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
+        new HcimReenrolmentPortalSection(profileStatus, this.router)
+      ),
+      ...ArrayUtils.insertIf<IPortalSection>(
+        this.permissionsService.hasRole([
+          Role.FEATURE_PIDP_DEMO,
+          Role.FEATURE_AMH_DEMO,
+        ]),
+        new SitePrivacySecurityPortalSection(profileStatus, this.router)
+      ),
     ];
   }
 
-  private getYourDocumentsSections(): PortalSection[] {
+  private getTrainingSections(profileStatus: ProfileStatus): IPortalSection[] {
     return [
-      {
-        icon: 'fingerprint',
-        type: PortalSectionType.SIGNED_ACCEPTED_DOCUMENTS,
-        heading: 'View Signed or Accepted Documents',
-        description: 'View Agreement(s)',
-        action: {
-          label: 'View',
-          route: YourDocumentsRoutes.routePath(
-            YourDocumentsRoutes.SIGNED_ACCEPTED_DOCUMENTS_PAGE
-          ),
-          disabled: false,
-        },
-      },
+      ...ArrayUtils.insertIf<IPortalSection>(
+        this.permissionsService.hasRole([
+          Role.FEATURE_PIDP_DEMO,
+          Role.FEATURE_AMH_DEMO,
+        ]),
+        new ComplianceTrainingPortalSection(profileStatus, this.router)
+      ),
     ];
+  }
+
+  private getDocumentsSections(): IPortalSection[] {
+    return [
+      new SignedAcceptedDocumentsPortalSection(this.router),
+      ...ArrayUtils.insertIf<IPortalSection>(
+        this.permissionsService.hasRole(Role.FEATURE_PIDP_DEMO),
+        new TransactionsPortalSection(this.router)
+      ),
+    ];
+  }
+
+  private clearState(): void {
+    this._profileStatus = null;
+    this._acceptedCollectionNotice = false;
+    this._state$.next({});
+    this._completedProfile = false;
+    this._alerts = [];
   }
 }

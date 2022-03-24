@@ -6,7 +6,15 @@ describe('ErrorService', () => {
   let service: ErrorService;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
+    TestBed.configureTestingModule({
+      providers: [
+        ErrorService,
+        {
+          provide: Navigator,
+          useValue: {},
+        },
+      ],
+    });
     service = TestBed.inject(ErrorService);
   });
 

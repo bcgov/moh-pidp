@@ -6,7 +6,6 @@ using Xunit;
 
 using Pidp.Models;
 using Pidp.Models.Lookups;
-using Pidp.Features.Parties.ProfileStatusInternal;
 using Pidp.Infrastructure.HttpClients.Plr;
 using static Pidp.Features.Parties.ProfileStatus;
 using static Pidp.Features.Parties.ProfileStatus.Model;
@@ -28,7 +27,7 @@ public class ProfileStatusTests : InMemoryDbTest
 
         var profile = result.Value;
         Assert.Equal(new HashSet<Alert>(), profile.Alerts);
-        profile.AssertSectionStatus(StatusCode.Incomplete, StatusCode.Locked, StatusCode.Locked);
+        profile.AssertSectionStatus(StatusCode.Incomplete, StatusCode.Incomplete, StatusCode.Locked);
     }
 
     [Fact]
@@ -54,7 +53,7 @@ public class ProfileStatusTests : InMemoryDbTest
         Assert.Equal(new HashSet<Alert>(), profile.Alerts);
         profile.AssertSectionStatus(StatusCode.Complete, StatusCode.Incomplete, StatusCode.Locked);
 
-        var demographics = profile.Demographics();
+        var demographics = profile.Section<Demographics>();
         Assert.Equal(party.FirstName, demographics.FirstName);
         Assert.Equal(party.LastName, demographics.LastName);
         Assert.Equal(party.Birthdate, demographics.Birthdate);
@@ -92,7 +91,7 @@ public class ProfileStatusTests : InMemoryDbTest
         Assert.Equal(new HashSet<Alert>(), profile.Alerts);
         profile.AssertSectionStatus(StatusCode.Complete, StatusCode.Complete, StatusCode.Incomplete);
 
-        var certification = profile.Certification();
+        var certification = profile.Section<CollegeCertification>();
         Assert.Equal(party.PartyCertification!.CollegeCode, certification.CollegeCode);
         Assert.Equal(party.PartyCertification!.LicenceNumber, certification.LicenceNumber);
     }
@@ -127,7 +126,7 @@ public class ProfileStatusTests : InMemoryDbTest
         Assert.Equal(new HashSet<Alert> { Alert.PlrBadStanding }, profile.Alerts);
         profile.AssertSectionStatus(StatusCode.Complete, StatusCode.Error, StatusCode.Locked);
 
-        var certification = profile.Certification();
+        var certification = profile.Section<CollegeCertification>();
         Assert.Equal(party.PartyCertification!.CollegeCode, certification.CollegeCode);
         Assert.Equal(party.PartyCertification!.LicenceNumber, certification.LicenceNumber);
     }
@@ -162,7 +161,7 @@ public class ProfileStatusTests : InMemoryDbTest
         Assert.Equal(new HashSet<Alert> { Alert.TransientError }, profile.Alerts);
         profile.AssertSectionStatus(StatusCode.Complete, StatusCode.Error, StatusCode.Locked);
 
-        var certification = profile.Certification();
+        var certification = profile.Section<CollegeCertification>();
         Assert.Equal(party.PartyCertification!.CollegeCode, certification.CollegeCode);
         Assert.Equal(party.PartyCertification!.LicenceNumber, certification.LicenceNumber);
     }
@@ -198,7 +197,7 @@ public class ProfileStatusTests : InMemoryDbTest
         Assert.Equal(new HashSet<Alert> { Alert.TransientError }, profile.Alerts);
         profile.AssertSectionStatus(StatusCode.Complete, StatusCode.Error, StatusCode.Locked);
 
-        var certification = profile.Certification();
+        var certification = profile.Section<CollegeCertification>();
         Assert.Equal(party.PartyCertification!.CollegeCode, certification.CollegeCode);
         Assert.Equal(party.PartyCertification!.LicenceNumber, certification.LicenceNumber);
     }
@@ -236,7 +235,7 @@ public class ProfileStatusTests : InMemoryDbTest
         Assert.Equal(new HashSet<Alert>(), profile.Alerts);
         profile.AssertSectionStatus(StatusCode.Complete, StatusCode.Complete, StatusCode.Incomplete);
 
-        var certification = profile.Certification();
+        var certification = profile.Section<CollegeCertification>();
         Assert.Equal(party.PartyCertification!.CollegeCode, certification.CollegeCode);
         Assert.Equal(party.PartyCertification!.LicenceNumber, certification.LicenceNumber);
     }
@@ -278,6 +277,8 @@ public class ProfileStatusTests : InMemoryDbTest
         Assert.Equal(new HashSet<Alert>(), profile.Alerts);
         profile.AssertSectionStatus(StatusCode.Complete, StatusCode.Complete, StatusCode.Complete);
     }
+    
+    // TODO HCIM tests
 
     private class MockedPlrRecordStatus : PlrRecordStatus
     {
@@ -290,13 +291,12 @@ public class ProfileStatusTests : InMemoryDbTest
 
 public static class ProfileStatusExtensions
 {
-    public static void AssertSectionStatus(this Model profileStatus, StatusCode demographics, StatusCode certs, StatusCode saEforms)
+    public static void AssertSectionStatus(this Model profileStatus, StatusCode demographicsStatus, StatusCode collegeCertStatus, StatusCode saEformsStatus)
     {
-        Assert.Equal(demographics, profileStatus.Status[Section.Demographics].StatusCode);
-        Assert.Equal(certs, profileStatus.Status[Section.CollegeCertification].StatusCode);
-        Assert.Equal(saEforms, profileStatus.Status[Section.SAEforms].StatusCode);
+        Assert.Equal(demographicsStatus, profileStatus.Section<Demographics>().StatusCode);
+        Assert.Equal(collegeCertStatus, profileStatus.Section<CollegeCertification>().StatusCode);
+        Assert.Equal(saEformsStatus, profileStatus.Section<SAEforms>().StatusCode);
     }
 
-    public static DemographicsSection Demographics(this Model profileStatus) => (DemographicsSection)profileStatus.Status[Section.Demographics];
-    public static CollegeCertificationSection Certification(this Model profileStatus) => (CollegeCertificationSection)profileStatus.Status[Section.CollegeCertification];
+    public static T Section<T>(this Model profileStatus) where T : ProfileSection => profileStatus.Status.Values.OfType<T>().Single();
 }

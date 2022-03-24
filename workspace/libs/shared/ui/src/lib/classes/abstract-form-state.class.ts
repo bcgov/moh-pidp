@@ -24,7 +24,7 @@ export abstract class AbstractFormState<T> {
 
   /**
    * @description
-   * Patch the reactive form with model.
+   * Patch the reactive form with data.
    *
    * NOTE: "options" is provided to allow for additional
    * information to be passed into the method, but should

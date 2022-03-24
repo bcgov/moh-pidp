@@ -1,32 +1,45 @@
 namespace Pidp.Features.Parties;
 
-using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using DomainResults.Common;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
-using NodaTime;
 using System.Text.Json.Serialization;
 
-using Pidp.Data;
-using Pidp.Features.Parties.ProfileStatusInternal;
 using Pidp.Infrastructure;
+using Pidp.Data;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Pidp.Infrastructure.HttpClients.Plr;
 using Pidp.Models;
+using System.Security.Claims;
+using NodaTime;
 using Pidp.Models.Lookups;
 
-public class ProfileStatus
+public partial class ProfileStatus
 {
     public class Command : ICommand<IDomainResult<Model>>
     {
         public int Id { get; set; }
     }
 
-    public class Model
+    public partial class Model
     {
-        public HashSet<Alert> Alerts { get; set; } = new();
         [JsonConverter(typeof(PolymorphicDictionarySerializer<string, ProfileSection>))]
         public Dictionary<string, ProfileSection> Status { get; set; } = new();
+        public HashSet<Alert> Alerts => new(this.Status.SelectMany(x => x.Value.Alerts));
+
+        public abstract class ProfileSection
+        {
+            internal abstract string SectionName { get; }
+            public HashSet<Alert> Alerts { get; set; } = new();
+            public StatusCode StatusCode { get; set; }
+
+            public bool IsComplete => this.StatusCode == StatusCode.Complete;
+
+            public ProfileSection(ProfileStatusDto profile) => this.SetAlertsAndStatus(profile);
+
+            protected abstract void SetAlertsAndStatus(ProfileStatusDto profile);
+        }
 
         public enum Alert
         {
@@ -34,30 +47,13 @@ public class ProfileStatus
             PlrBadStanding
         }
 
-        public static class Section
-        {
-            public const string Demographics = "demographics";
-            public const string CollegeCertification = "collegeCertification";
-            public const string SAEforms = "saEforms";
-        }
-
-        public class ProfileSection
-        {
-            public StatusCode StatusCode { get; set; }
-        }
-
         public enum StatusCode
         {
             Incomplete = 1,
             Complete,
             Locked,
-            Error
-        }
-
-        public bool SectionIsComplete(string sectionName)
-        {
-            return this.Status.TryGetValue(sectionName, out var section)
-                && section.StatusCode == StatusCode.Complete;
+            Error,
+            Hidden
         }
     }
 
@@ -85,9 +81,9 @@ public class ProfileStatus
         public async Task<IDomainResult<Model>> HandleAsync(Command command)
         {
             var profile = await this.context.Parties
-                .Where(party => party.Id == command.Id)
-                .ProjectTo<ProfileDto>(this.mapper.ConfigurationProvider)
-                .SingleAsync();
+               .Where(party => party.Id == command.Id)
+               .ProjectTo<ProfileStatusDto>(this.mapper.ConfigurationProvider)
+               .SingleAsync();
 
             if (profile.Ipc == null
                 && profile.CollegeCode != null
@@ -98,19 +94,19 @@ public class ProfileStatus
             }
 
             profile.PlrRecordStatus = await this.client.GetRecordStatus(profile.Ipc);
+            //profile.User = ??
 
-            var resolvers = new IProfileSectionResolver[]
+            var profileStatus = new Model
             {
-                new DemographicsSectionResolver(),
-                new CollegeCertificationSectionResolver(),
-                new SAEformsSectionResolver()
+                Status = new List<Model.ProfileSection>
+                {
+                    new Model.Demographics(profile),
+                    new Model.CollegeCertification(profile),
+                    new Model.SAEforms(profile),
+                    new Model.HcimReEnrolment(profile)
+                }
+                .ToDictionary(section => section.SectionName, section => section)
             };
-
-            var profileStatus = new Model();
-            foreach (var resolver in resolvers)
-            {
-                resolver.ComputeSection(profileStatus, profile);
-            }
 
             return DomainResult.Success(profileStatus);
         }
@@ -128,21 +124,25 @@ public class ProfileStatus
 
             return newIpc;
         }
+    }
 
-        public class ProfileDto
-        {
-            public string FirstName { get; set; } = string.Empty;
-            public string LastName { get; set; } = string.Empty;
-            public LocalDate Birthdate { get; set; }
-            public string? Email { get; set; }
-            public string? Phone { get; set; }
-            public CollegeCode? CollegeCode { get; set; }
-            public string? LicenceNumber { get; set; }
-            public string? Ipc { get; set; }
-            public IEnumerable<AccessType> CompletedEnrolments { get; set; } = Enumerable.Empty<AccessType>();
+    public class ProfileStatusDto
+    {
+        public string FirstName { get; set; } = string.Empty;
+        public string LastName { get; set; } = string.Empty;
+        public LocalDate Birthdate { get; set; }
+        public string? Email { get; set; }
+        public string? Phone { get; set; }
+        public CollegeCode? CollegeCode { get; set; }
+        public string? LicenceNumber { get; set; }
+        public string? Ipc { get; set; }
+        public IEnumerable<AccessType> CompletedEnrolments { get; set; } = Enumerable.Empty<AccessType>();
 
-            // Computed after projection
-            public PlrRecordStatus? PlrRecordStatus { get; set; }
-        }
+        // Computed after projection
+        public PlrRecordStatus? PlrRecordStatus { get; set; }
+        public ClaimsPrincipal? User { get; set; }
+
+        public bool DemographicsEntered => this.Email != null && this.Phone != null;
+        public bool CollegeCertificationEntered => this.CollegeCode.HasValue && this.LicenceNumber != null;
     }
 }

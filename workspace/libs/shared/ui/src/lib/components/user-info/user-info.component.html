@@ -1,5 +1,5 @@
 <div>
-  <ui-key-value-info key="Name:" mode="horizontal">
+  <ui-key-value-info key="Name:" [mode]="this.mode">
     {{ user | fullname | default }}
   </ui-key-value-info>
   <ng-content></ng-content>

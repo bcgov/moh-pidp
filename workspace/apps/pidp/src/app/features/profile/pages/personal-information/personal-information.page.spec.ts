@@ -20,10 +20,10 @@ import {
 import { Spy, createSpyFromClass, provideAutoSpy } from 'jest-auto-spies';
 
 import { APP_CONFIG, APP_DI_CONFIG } from '@app/app.config';
-import { AuthorizedUserService } from '@app/core/services/authorized-user.service';
+import { PartyService } from '@app/core/party/party.service';
 import { FormUtilsService } from '@app/core/services/form-utils.service';
 import { LoggerService } from '@app/core/services/logger.service';
-import { PartyService } from '@app/core/services/party.service';
+import { AuthorizedUserService } from '@app/features/auth/services/authorized-user.service';
 
 import { PersonalInformationResource } from './personal-information-resource.service';
 import { PersonalInformationPage } from './personal-information.page';
@@ -114,7 +114,7 @@ describe('PersonalInformationPage', () => {
       when('resource request resolved', () => {
         component.ngOnInit();
 
-        then('should GET party college licence information', () => {
+        then('it should GET party college licence information', () => {
           expect(router.navigate).not.toHaveBeenCalled();
           expect(personalInfoResourceSpy.get).toHaveBeenCalledTimes(1);
           expect(personalInfoResourceSpy.get).toHaveBeenCalledWith(partyId);
