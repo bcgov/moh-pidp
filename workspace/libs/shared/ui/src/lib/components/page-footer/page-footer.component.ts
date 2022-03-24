@@ -1,4 +1,12 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ContentChildren,
+  Input,
+  QueryList,
+} from '@angular/core';
+
+import { PageFooterActionDirective } from './page-footer-action.directive';
 
 @Component({
   selector: 'ui-page-footer',
@@ -6,8 +14,14 @@ import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
   styleUrls: ['./page-footer.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PageFooterComponent implements OnInit {
-  public constructor() {}
+export class PageFooterComponent {
+  @Input() public mode: 'normal' | 'reverse';
 
-  public ngOnInit(): void {}
+  @ContentChildren(PageFooterActionDirective, { descendants: true })
+  public actions: QueryList<PageFooterActionDirective>;
+
+  public constructor() {
+    this.mode = 'normal';
+    this.actions = new QueryList();
+  }
 }
