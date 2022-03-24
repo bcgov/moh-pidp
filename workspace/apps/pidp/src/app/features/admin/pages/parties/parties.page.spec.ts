@@ -1,13 +1,36 @@
 import { TestBed } from '@angular/core/testing';
+import { ActivatedRoute } from '@angular/router';
 
+import { randTextRange } from '@ngneat/falso';
+import { provideAutoSpy } from 'jest-auto-spies';
+
+import { AdminResource } from '../../shared/resources/admin-resource.service';
 import { PartiesPage } from './parties.page';
 
 describe('PartiesComponent', () => {
   let component: PartiesPage;
 
+  const mockActivatedRoute = {
+    snapshot: {
+      data: {
+        title: randTextRange({ min: 1, max: 4 }),
+        routes: {
+          auth: '/auth/admin',
+        },
+      },
+    },
+  };
+
   beforeEach(async () => {
     TestBed.configureTestingModule({
-      providers: [PartiesPage],
+      providers: [
+        PartiesPage,
+        {
+          provide: ActivatedRoute,
+          useValue: mockActivatedRoute,
+        },
+        provideAutoSpy(AdminResource),
+      ],
     });
 
     component = TestBed.inject(PartiesPage);

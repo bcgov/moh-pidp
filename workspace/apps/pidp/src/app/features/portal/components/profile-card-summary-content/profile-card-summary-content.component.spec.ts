@@ -9,6 +9,8 @@ describe('ProfileCardSummaryContentComponent', () => {
     TestBed.configureTestingModule({
       providers: [ProfileCardSummaryContentComponent],
     });
+
+    component = TestBed.inject(ProfileCardSummaryContentComponent);
   });
 
   it('should create', () => {

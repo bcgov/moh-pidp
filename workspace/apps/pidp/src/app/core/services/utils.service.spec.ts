@@ -1,7 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
 import { APP_CONFIG, APP_DI_CONFIG } from '../../app.config';
-
 import { UtilsService } from './utils.service';
 
 interface SortableModel {
@@ -17,6 +16,14 @@ describe('UtilsService', () => {
         {
           provide: APP_CONFIG,
           useValue: APP_DI_CONFIG,
+        },
+        {
+          provide: Window,
+          useValue: {},
+        },
+        {
+          provide: Document,
+          useValue: {},
         },
       ],
     })

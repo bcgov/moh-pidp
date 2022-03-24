@@ -9,6 +9,8 @@ describe('UserInfoComponent', () => {
     TestBed.configureTestingModule({
       providers: [UserInfoComponent],
     });
+
+    component = TestBed.inject(UserInfoComponent);
   });
 
   it('should create', () => {

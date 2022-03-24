@@ -1,4 +1,4 @@
-import { DOCUMENT, ViewportScroller } from '@angular/common';
+import { DOCUMENT } from '@angular/common';
 import { Inject, Injectable } from '@angular/core';
 import { SortDirection } from '@angular/material/sort';
 
@@ -12,8 +12,7 @@ export type SortWeight = -1 | 0 | 1;
 export class UtilsService {
   public constructor(
     @Inject(WINDOW) private window: Window,
-    @Inject(DOCUMENT) private document: Document,
-    private viewportScroller: ViewportScroller
+    @Inject(DOCUMENT) private document: Document
   ) {}
 
   /**
