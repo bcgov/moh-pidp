@@ -42,3 +42,18 @@ spec:
           expression: "body.pull_request.head.ref.replace('/', '_')"
     template:
       ref: github-pr-trigger-template
+  - bindings:
+    - kind: TriggerBinding
+      ref: github-pr-binding
+    name: pr-cleanup-trigger
+    interceptors:
+    - cel:
+        filter: >-
+          (header.match('X-GitHub-Event', 'pull_request') &&
+          body.action in ['closed', 'deleted']) &&
+          body.pull_request.head.repo.full_name == 'bcgov/moh-pidp'
+        overlays:
+        - key: pr_number
+          expression: "body.number"
+    template:
+      ref: pr-cleanup-trigger-template
