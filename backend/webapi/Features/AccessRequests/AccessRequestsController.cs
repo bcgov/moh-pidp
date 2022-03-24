@@ -9,12 +9,12 @@ using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.Services;
 
 [Route("api/[controller]")]
-[Authorize(Policy = Policies.BcscAuthentication)]
 public class AccessRequestsController : PidpControllerBase
 {
     public AccessRequestsController(IPidpAuthorizationService authorizationService) : base(authorizationService) { }
 
     [HttpPost("sa-eforms")]
+    [Authorize(Policy = Policies.BcscAuthentication)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> CreateSAEformsEnrolment([FromServices] ICommandHandler<SAEforms.Command, IDomainResult> handler,
