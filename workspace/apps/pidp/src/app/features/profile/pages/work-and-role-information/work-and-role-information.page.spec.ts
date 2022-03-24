@@ -92,10 +92,6 @@ describe('WorkAndRoleInformationPage', () => {
     router = TestBed.inject(Router);
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-
   describe('INIT', () => {
     given('partyId exists', () => {
       const partyId = randNumber({ min: 1 });
