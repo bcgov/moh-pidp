@@ -1,14 +1,16 @@
 namespace Pidp.Models;
 
-using System.ComponentModel.DataAnnotations;
-
 using NodaTime;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 public enum AccessType
 {
-    SAEforms = 1
+    SAEforms = 1,
+    HcimReEnrolment
 }
 
+[Table(nameof(AccessRequest))]
 public class AccessRequest : BaseAuditable
 {
     [Key]
