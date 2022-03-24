@@ -1,22 +1,24 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
+
+import { APP_CONFIG, APP_DI_CONFIG } from '@app/app.config';
 
 import { GetSupportComponent } from './get-support.component';
 
 describe('GetSupportComponent', () => {
   let component: GetSupportComponent;
-  let fixture: ComponentFixture<GetSupportComponent>;
-
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [ GetSupportComponent ]
-    })
-    .compileComponents();
-  });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(GetSupportComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+    TestBed.configureTestingModule({
+      providers: [
+        GetSupportComponent,
+        {
+          provide: APP_CONFIG,
+          useValue: APP_DI_CONFIG,
+        },
+      ],
+    });
+
+    component = TestBed.inject(GetSupportComponent);
   });
 
   it('should create', () => {
