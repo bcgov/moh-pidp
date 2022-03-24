@@ -31,7 +31,7 @@ spec:
     - cel:
         filter: >-
           (header.match('X-GitHub-Event', 'pull_request') &&
-          body.action in ['opened', 'synchronize']) &&
+          body.action in ['opened', 'reopened', 'synchronize']) &&
           body.pull_request.head.repo.full_name == 'bcgov/moh-pidp'
         overlays:
         - key: truncated_sha
