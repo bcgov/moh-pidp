@@ -17,7 +17,7 @@ import {
 import { Spy, createSpyFromClass, provideAutoSpy } from 'jest-auto-spies';
 
 import { APP_CONFIG, APP_DI_CONFIG } from '@app/app.config';
-import { PartyService } from '@app/core/services/party.service';
+import { PartyService } from '@app/core/party/party.service';
 import { FormUtilsService } from '@app/core/services/form-utils.service';
 import { LoggerService } from '@app/core/services/logger.service';
 
@@ -29,7 +29,6 @@ describe('WorkAndRoleInformationPage', () => {
   let partyServiceSpy: Spy<PartyService>;
   let workAndRoleInformationResourceSpy: Spy<WorkAndRoleInformationResource>;
   let router: Router;
-
 
   const mockActivatedRoute = {
     snapshot: {
