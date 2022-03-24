@@ -1,21 +1,25 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
+
+import { provideAutoSpy } from 'jest-auto-spies';
+
+import { FormUtilsService } from '@app/core/services/form-utils.service';
+import { LookupService } from '@app/modules/lookup/lookup.service';
 
 import { AddressFormComponent } from './address-form.component';
 
 describe('AddressFormComponent', () => {
   let component: AddressFormComponent;
-  let fixture: ComponentFixture<AddressFormComponent>;
-
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [AddressFormComponent],
-    }).compileComponents();
-  });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(AddressFormComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+    TestBed.configureTestingModule({
+      providers: [
+        AddressFormComponent,
+        provideAutoSpy(LookupService),
+        provideAutoSpy(FormUtilsService),
+      ],
+    });
+
+    component = TestBed.inject(AddressFormComponent);
   });
 
   it('should create', () => {

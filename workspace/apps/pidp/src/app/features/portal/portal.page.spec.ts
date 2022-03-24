@@ -59,9 +59,12 @@ describe('PortalPage', () => {
         licenceNumber: randText(),
         statusCode: StatusCode.AVAILABLE,
       },
+      userAccessAgreement: { statusCode: StatusCode.AVAILABLE },
       saEforms: { statusCode: StatusCode.AVAILABLE },
       hcim: { statusCode: StatusCode.AVAILABLE },
+      sitePrivacySecurityChecklist: { statusCode: StatusCode.AVAILABLE },
       complianceTraining: { statusCode: StatusCode.AVAILABLE },
+      transactions: { statusCode: StatusCode.AVAILABLE },
     },
   };
 
@@ -131,23 +134,6 @@ describe('PortalPage', () => {
             portalServiceSpy.completedProfile
           );
           expect(component.alerts.length).toEqual(1);
-        });
-      });
-    });
-  });
-
-  describe('METHOD: onAcceptCollectionNotice', () => {
-    given('the component has been initialized', () => {
-      const partyId = randNumber({ min: 1 });
-      partyServiceSpy.accessorSpies.getters.partyId.mockReturnValue(partyId);
-      portalResourceSpy.getProfileStatus.nextWith(mockProfileStatusResponse);
-      component.ngOnInit();
-
-      when('the accept collectioin notice method is invoked', () => {
-        component.onAcceptCollectionNotice(true);
-
-        then('the portal service should be set to that value', () => {
-          expect(portalServiceSpy.acceptedCollectionNotice).toEqual(true);
         });
       });
     });

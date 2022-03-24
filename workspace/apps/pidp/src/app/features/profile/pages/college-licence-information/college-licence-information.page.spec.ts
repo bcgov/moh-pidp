@@ -10,10 +10,11 @@ import { randNumber, randTextRange } from '@ngneat/falso';
 import { Spy, createSpyFromClass, provideAutoSpy } from 'jest-auto-spies';
 
 import { APP_CONFIG, APP_DI_CONFIG } from '@app/app.config';
-import { AuthorizedUserService } from '@app/core/services/authorized-user.service';
-import { FormUtilsService } from '@app/core/services/form-utils.service';
-import { LoggerService } from '@app/core/services/logger.service';
-import { PartyService } from '@app/core/services/party.service';
+import { AuthorizedUserService } from '@app/features/auth/services/authorized-user.service';
+
+import { PartyService } from '@core/party/party.service';
+import { FormUtilsService } from '@core/services/form-utils.service';
+import { LoggerService } from '@core/services/logger.service';
 
 import { CollegeLicenceInformationResource } from './college-licence-information-resource.service';
 import { CollegeLicenceInformationPage } from './college-licence-information.page';

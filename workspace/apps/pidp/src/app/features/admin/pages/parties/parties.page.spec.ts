@@ -1,21 +1,16 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 
 import { PartiesPage } from './parties.page';
 
 describe('PartiesComponent', () => {
   let component: PartiesPage;
-  let fixture: ComponentFixture<PartiesPage>;
 
   beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [PartiesPage],
-    }).compileComponents();
-  });
+    TestBed.configureTestingModule({
+      providers: [PartiesPage],
+    });
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(PartiesPage);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+    component = TestBed.inject(PartiesPage);
   });
 
   it('should create', () => {

@@ -1,21 +1,36 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
+import { ActivatedRoute } from '@angular/router';
+
+import { randTextRange } from '@ngneat/falso';
 
 import { TransactionsPage } from './transactions.page';
 
 describe('TransactionsPage', () => {
   let component: TransactionsPage;
-  let fixture: ComponentFixture<TransactionsPage>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [TransactionsPage],
-    }).compileComponents();
-  });
+  const mockActivatedRoute = {
+    snapshot: {
+      data: {
+        title: randTextRange({ min: 1, max: 4 }),
+        routes: {
+          root: '../../',
+        },
+      },
+    },
+  };
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TransactionsPage);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+    TestBed.configureTestingModule({
+      providers: [
+        TransactionsPage,
+        {
+          provide: ActivatedRoute,
+          useValue: mockActivatedRoute,
+        },
+      ],
+    });
+
+    component = TestBed.inject(TransactionsPage);
   });
 
   it('should create', () => {
