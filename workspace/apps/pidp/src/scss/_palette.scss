@@ -17,7 +17,7 @@ $palettes: (
   ),
   yellow: (
     // BC Gov. Secondary
-    base: map-get($bcgov-yellow, 500),
+    base: map-get($material-theme-secondary, 500),
   ),
   red: (
     base: #ed202a,
