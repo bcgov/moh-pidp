@@ -12,7 +12,7 @@ $palettes: (
     lighter: #d6ddec,
     light: #0f48ae,
     // BC Gov. Primary
-    base: map-get($bcgov-blue, 500),
+    base: map-get($material-theme-primary, 500),
     dark: #001b4a,
   ),
   yellow: (
