@@ -24,3 +24,9 @@ public class AccessRequest : BaseAuditable
 
     public AccessType AccessType { get; set; }
 }
+
+[Table(nameof(HcimReEnrolmentAccessRequest))]
+public class HcimReEnrolmentAccessRequest : AccessRequest
+{
+    public string LdapUsername { get; set; } = string.Empty;
+}

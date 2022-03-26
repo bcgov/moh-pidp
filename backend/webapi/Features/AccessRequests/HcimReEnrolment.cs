@@ -53,14 +53,15 @@ public class HcimReEnrolment
         {
             // TODO check prerequisites
             // TODO additional LDAP properties
-            var newRequest = new AccessRequest
+            var newRequest = new HcimReEnrolmentAccessRequest
             {
                 PartyId = command.PartyId,
                 AccessType = AccessType.HcimReEnrolment,
-                RequestedOn = this.clock.GetCurrentInstant()
+                RequestedOn = this.clock.GetCurrentInstant(),
+                LdapUsername = command.LdapUsername
             };
 
-            this.context.AccessRequests.Add(newRequest);
+            this.context.HcimReEnrolmentAccessRequests.Add(newRequest);
 
             await this.context.SaveChangesAsync();
 
