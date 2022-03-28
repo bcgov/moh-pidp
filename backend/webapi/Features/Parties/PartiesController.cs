@@ -10,7 +10,7 @@ using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.Services;
 
 [Route("api/[controller]")]
-[Authorize(Policy = Policies.BcscAuthentication)]
+[Authorize(Policy = Policies.AllowedPartyIdentityProvider)]
 public class PartiesController : PidpControllerBase
 {
     public PartiesController(IPidpAuthorizationService authorizationService) : base(authorizationService) { }
