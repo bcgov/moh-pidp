@@ -11,6 +11,12 @@ import { FormUtilsService } from '@app/core/services/form-utils.service';
 import { LoggerService } from '@app/core/services/logger.service';
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
 
+import {
+  hcimWebUrl,
+  healthNetBcHelpDeskEmail,
+  healthNetBcHelpDeskPhone,
+  healthNetBcPasswordResetUrl,
+} from './hcim-constants';
 import { HcimReenrolmentFormState } from './hcim-reenrolment-form-state';
 import { HcimReenrolmentResource } from './hcim-reenrolment-resource.service';
 
@@ -29,6 +35,11 @@ export class HcimReenrolmentPage
   public completed: boolean | null;
   public accessRequestFailed: boolean;
 
+  public readonly hcimWebUrl: string;
+  public readonly healthNetBcPasswordResetUrl: string;
+  public readonly healthNetBcHelpDeskEmail: string;
+  public readonly healthNetBcHelpDeskPhone: string;
+
   public constructor(
     protected dialog: MatDialog,
     protected formUtilsService: FormUtilsService,
@@ -46,6 +57,10 @@ export class HcimReenrolmentPage
     this.formState = new HcimReenrolmentFormState(fb);
     this.completed = routeData.saEformsStatusCode === StatusCode.COMPLETED;
     this.accessRequestFailed = false;
+    this.hcimWebUrl = hcimWebUrl;
+    this.healthNetBcPasswordResetUrl = healthNetBcPasswordResetUrl;
+    this.healthNetBcHelpDeskEmail = healthNetBcHelpDeskEmail;
+    this.healthNetBcHelpDeskPhone = healthNetBcHelpDeskPhone;
   }
 
   public onBack(): void {

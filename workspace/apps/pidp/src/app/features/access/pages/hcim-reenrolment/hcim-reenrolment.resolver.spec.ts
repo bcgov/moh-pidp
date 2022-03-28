@@ -75,55 +75,69 @@ describe('HcimReenrolmentResolver', () => {
       const partyId = randNumber({ min: 1 });
       partyServiceSpy.accessorSpies.getters.partyId.mockReturnValue(partyId);
 
-      when('resolving the SA eForms enrolment status is successful', () => {
-        hcimReenrolmentResourceSpy.getProfileStatus
-          .mustBeCalledWith(partyId)
-          .nextOneTimeWith(mockProfileStatus);
-        let actualResult: StatusCode | null;
-        resolver
-          .resolve()
-          .subscribe(
-            (profileStatus: StatusCode | null) => (actualResult = profileStatus)
-          );
+      when(
+        'resolving the HCIM web account transfer status is successful',
+        () => {
+          hcimReenrolmentResourceSpy.getProfileStatus
+            .mustBeCalledWith(partyId)
+            .nextOneTimeWith(mockProfileStatus);
+          let actualResult: StatusCode | null;
+          resolver
+            .resolve()
+            .subscribe(
+              (profileStatus: StatusCode | null) =>
+                (actualResult = profileStatus)
+            );
 
-        then('response will provide the status code for SA eForms', () => {
-          expect(
-            hcimReenrolmentResourceSpy.getProfileStatus
-          ).toHaveBeenCalledTimes(1);
-          expect(actualResult).toBe(
-            mockProfileStatus.status.saEforms.statusCode
+          then(
+            'response will provide the status code for HCIM web account transfer',
+            () => {
+              expect(
+                hcimReenrolmentResourceSpy.getProfileStatus
+              ).toHaveBeenCalledTimes(1);
+              expect(actualResult).toBe(
+                mockProfileStatus.status.hcim.statusCode
+              );
+            }
           );
-        });
-      });
+        }
+      );
     });
 
     given('partyId exists', () => {
       const partyId = randNumber({ min: 1 });
       partyServiceSpy.accessorSpies.getters.partyId.mockReturnValue(partyId);
-      when('resolving the SA eForms enrolment status is unsuccessful', () => {
-        hcimReenrolmentResourceSpy.getProfileStatus
-          .mustBeCalledWith(partyId)
-          .nextWithValues([
-            {
-              errorValue: {
-                status: HttpStatusCode.NotFound,
+      when(
+        'resolving the HCIM web account transfer status is unsuccessful',
+        () => {
+          hcimReenrolmentResourceSpy.getProfileStatus
+            .mustBeCalledWith(partyId)
+            .nextWithValues([
+              {
+                errorValue: {
+                  status: HttpStatusCode.NotFound,
+                },
               },
-            },
-          ]);
-        let actualResult: StatusCode | null;
-        resolver
-          .resolve()
-          .subscribe(
-            (profileStatus: StatusCode | null) => (actualResult = profileStatus)
-          );
+            ]);
+          let actualResult: StatusCode | null;
+          resolver
+            .resolve()
+            .subscribe(
+              (profileStatus: StatusCode | null) =>
+                (actualResult = profileStatus)
+            );
 
-        then('response will provide null as status code for SA eForms', () => {
-          expect(
-            hcimReenrolmentResourceSpy.getProfileStatus
-          ).toHaveBeenCalledTimes(1);
-          expect(actualResult).toBe(null);
-        });
-      });
+          then(
+            'response will provide null as status code for HCIM web account transfer',
+            () => {
+              expect(
+                hcimReenrolmentResourceSpy.getProfileStatus
+              ).toHaveBeenCalledTimes(1);
+              expect(actualResult).toBe(null);
+            }
+          );
+        }
+      );
     });
 
     given('partyId does not exists', () => {
@@ -138,12 +152,15 @@ describe('HcimReenrolmentResolver', () => {
             (profileStatus: StatusCode | null) => (actualResult = profileStatus)
           );
 
-        then('response will provide null as status code for SA eForms', () => {
-          expect(
-            hcimReenrolmentResourceSpy.requestAccess
-          ).not.toHaveBeenCalled();
-          expect(actualResult).toBe(null);
-        });
+        then(
+          'response will provide null as status code for HCIM web account transfer',
+          () => {
+            expect(
+              hcimReenrolmentResourceSpy.requestAccess
+            ).not.toHaveBeenCalled();
+            expect(actualResult).toBe(null);
+          }
+        );
       });
     });
   });

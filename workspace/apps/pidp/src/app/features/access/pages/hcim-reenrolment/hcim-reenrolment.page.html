@@ -10,7 +10,7 @@
       <ng-container uiAlertContent>
         <p>
           Bookmark the new HCIM Web URL,
-          <ui-anchor href="https://hcimweb-cl.hlth.gov.bc.ca"></ui-anchor>
+          <ui-anchor [href]="hcimWebUrl"></ui-anchor>
           and use your organization credentials to access HCIM Web going
           forward.
         </p>
@@ -27,9 +27,7 @@
       <ng-container uiAlertContent>
         <p>
           If you have forgotten your password, or are unsure of it, follow this
-          <ui-anchor href="https://healthnetbc.hlth.gov.bc.ca/?resetPassword">
-            link
-          </ui-anchor>
+          <ui-anchor [href]="healthNetBcPasswordResetUrl"> link </ui-anchor>
           to reset it before you start this process.
         </p>
         <p>
@@ -84,7 +82,7 @@
               it, please follow this link to reset it before you start this
               process
               <ui-anchor
-                href="https://healthnetbc.hlth.gov.bc.ca/?resetPassword"></ui-anchor>
+                [href]="healthNetBcPasswordResetUrl"></ui-anchor>
             </li>
           </ul>
         </ng-container>
@@ -95,7 +93,7 @@
             <mat-form-field class="w-100">
               <input
                 matInput
-                placeholder="HealthNetBC User Name"
+                placeholder="HealthNetBC Username"
                 formControlName="ldapUsername" />
               <mat-error>Required</mat-error>
             </mat-form-field>
@@ -112,8 +110,7 @@
           </div>
           <div class="col-12">
             <small>
-              <ui-anchor
-                href="https://healthnetbc.hlth.gov.bc.ca/?resetPassword">
+              <ui-anchor [href]="healthNetBcPasswordResetUrl">
                 Have you forgotten your password?
               </ui-anchor>
             </small>
@@ -127,8 +124,12 @@
         <p>
           You have had multiple failed login attempts the next failed attempt
           will lock your account. If you need assistance contact the HelpDesk at
-          <ui-anchor scheme="mailto" href="HLTH.HELPDESK@gov.bc.ca"></ui-anchor>
-          or <ui-anchor scheme="tel" href="2509521234"></ui-anchor>.
+          <ui-anchor
+            scheme="mailto"
+            [href]="healthNetBcHelpDeskEmail"></ui-anchor>
+          or
+          <ui-anchor scheme="tel" [href]="healthNetBcHelpDeskPhone"></ui-anchor
+          >.
         </p>
       </ng-container>
     </ui-alert>
