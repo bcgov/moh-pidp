@@ -34,7 +34,9 @@ export class HcimReenrolmentPage
   public formState: HcimReenrolmentFormState;
   public completed: boolean | null;
   public accessRequestFailed: boolean;
-
+  public accountLocked: boolean;
+  public loginAttempts: number;
+  public readonly maxLoginAttempts: number;
   public readonly hcimWebUrl: string;
   public readonly healthNetBcPasswordResetUrl: string;
   public readonly healthNetBcHelpDeskEmail: string;
@@ -57,6 +59,9 @@ export class HcimReenrolmentPage
     this.formState = new HcimReenrolmentFormState(fb);
     this.completed = routeData.saEformsStatusCode === StatusCode.COMPLETED;
     this.accessRequestFailed = false;
+    this.accountLocked = false;
+    this.loginAttempts = 0;
+    this.maxLoginAttempts = 3;
     this.hcimWebUrl = hcimWebUrl;
     this.healthNetBcPasswordResetUrl = healthNetBcPasswordResetUrl;
     this.healthNetBcHelpDeskEmail = healthNetBcHelpDeskEmail;
@@ -84,9 +89,15 @@ export class HcimReenrolmentPage
   protected performSubmission(): Observable<void> {
     const partyId = this.partyService.partyId;
 
+    // TODO handle account lock when headers are provided
+
     return partyId && this.formState.json
       ? this.resource.requestAccess(partyId, this.formState.json)
       : EMPTY;
+  }
+
+  protected onSubmitFormIsValid(): void {
+    this.loginAttempts += 1;
   }
 
   protected afterSubmitIsSuccessful(): void {
