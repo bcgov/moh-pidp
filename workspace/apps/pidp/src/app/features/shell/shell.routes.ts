@@ -1,5 +1,6 @@
 export class ShellRoutes {
   public static MODULE_PATH = '';
+  public static SUPPORT_ERROR = 'support-error';
 
   /**
    * @description
