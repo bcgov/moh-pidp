@@ -7,15 +7,15 @@ import { PartyService } from '@app/core/party/party.service';
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
 import { ProfileStatus } from '@app/features/portal/sections/models/profile-status.model';
 
-import { SaEformsResource } from './sa-eforms-resource.service';
+import { HcimReenrolmentResource } from './hcim-reenrolment-resource.service';
 
 @Injectable({
   providedIn: 'root',
 })
-export class SaEformsResolver implements Resolve<StatusCode | null> {
+export class HcimReenrolmentResolver implements Resolve<StatusCode | null> {
   public constructor(
     private partyService: PartyService,
-    private resource: SaEformsResource
+    private resource: HcimReenrolmentResource
   ) {}
 
   public resolve(): Observable<StatusCode | null> {
@@ -29,7 +29,7 @@ export class SaEformsResolver implements Resolve<StatusCode | null> {
           return null;
         }
 
-        return profileStatus.status.saEforms.statusCode;
+        return profileStatus.status.hcim.statusCode;
       }),
       catchError(() => of(null))
     );

@@ -37,7 +37,6 @@ export class PortalService {
    */
   private _profileStatus: ProfileStatus | null;
   private _alerts: ProfileStatusAlert[];
-  private _acceptedCollectionNotice: boolean;
   private _completedProfile: boolean;
   private _state$: BehaviorSubject<Record<string, IPortalSection[]>>;
 
@@ -47,7 +46,6 @@ export class PortalService {
     private permissionsService: PermissionsService
   ) {
     this._profileStatus = null;
-    this._acceptedCollectionNotice = false;
     this._state$ = new BehaviorSubject<Record<string, IPortalSection[]>>({});
     this._completedProfile = false;
     this._alerts = [];
@@ -55,14 +53,6 @@ export class PortalService {
 
   public get state$(): Observable<Record<string, IPortalSection[]>> {
     return this._state$.asObservable();
-  }
-
-  public get acceptedCollectionNotice(): boolean {
-    return this._acceptedCollectionNotice;
-  }
-
-  public set acceptedCollectionNotice(hasAccepted: boolean) {
-    this._acceptedCollectionNotice = hasAccepted;
   }
 
   public get profileStatus(): ProfileStatus | null {
@@ -189,7 +179,6 @@ export class PortalService {
 
   private clearState(): void {
     this._profileStatus = null;
-    this._acceptedCollectionNotice = false;
     this._state$.next({});
     this._completedProfile = false;
     this._alerts = [];

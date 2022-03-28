@@ -1,4 +1,15 @@
 div {
   display: flex;
-  justify-content: space-between;
+
+  &.single {
+    justify-content: flex-end;
+  }
+
+  &.multiple {
+    justify-content: space-between;
+  }
+
+  &.reverse {
+    flex-direction: row-reverse;
+  }
 }

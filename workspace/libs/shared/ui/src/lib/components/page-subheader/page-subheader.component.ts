@@ -1,4 +1,6 @@
-import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+
+import { IconType } from '../icon/icon.component';
 
 @Component({
   selector: 'ui-page-subheader',
@@ -8,4 +10,5 @@ import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
 })
 export class PageSubheaderComponent {
   @Input() public icon?: string;
+  @Input() public iconType?: IconType;
 }
