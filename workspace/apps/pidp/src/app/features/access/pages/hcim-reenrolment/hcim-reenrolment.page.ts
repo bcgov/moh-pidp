@@ -9,6 +9,7 @@ import { AbstractFormPage } from '@app/core/classes/abstract-form-page.class';
 import { PartyService } from '@app/core/party/party.service';
 import { FormUtilsService } from '@app/core/services/form-utils.service';
 import { LoggerService } from '@app/core/services/logger.service';
+import { StatusCode } from '@app/features/portal/enums/status-code.enum';
 
 import { HcimReenrolmentFormState } from './hcim-reenrolment-form-state';
 import { HcimReenrolmentResource } from './hcim-reenrolment-resource.service';
@@ -25,6 +26,8 @@ export class HcimReenrolmentPage
 {
   public title: string;
   public formState: HcimReenrolmentFormState;
+  public completed: boolean | null;
+  public accessRequestFailed: boolean;
 
   public constructor(
     protected dialog: MatDialog,
@@ -38,8 +41,11 @@ export class HcimReenrolmentPage
   ) {
     super(dialog, formUtilsService);
 
-    this.title = this.route.snapshot.data.title;
+    const routeData = this.route.snapshot.data;
+    this.title = routeData.title;
     this.formState = new HcimReenrolmentFormState(fb);
+    this.completed = routeData.saEformsStatusCode === StatusCode.COMPLETED;
+    this.accessRequestFailed = false;
   }
 
   public onBack(): void {
@@ -53,13 +59,18 @@ export class HcimReenrolmentPage
       this.logger.error('No party ID was provided');
       return this.navigateToRoot();
     }
+
+    if (this.completed === null) {
+      this.logger.error('No status code was provided');
+      return this.navigateToRoot();
+    }
   }
 
   protected performSubmission(): Observable<void> {
     const partyId = this.partyService.partyId;
 
     return partyId && this.formState.json
-      ? this.resource.update(partyId, this.formState.json)
+      ? this.resource.requestAccess(partyId, this.formState.json)
       : EMPTY;
   }
 

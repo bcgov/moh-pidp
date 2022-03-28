@@ -1,78 +1,138 @@
-<ui-page [form]="formState.form" [busy]="busy" (submitted)="onSubmit()">
+<ui-page [busy]="busy" [form]="formState.form" (submitted)="onSubmit()">
   <ui-page-header>{{ title }}</ui-page-header>
 
-  <ui-page-section>
-    <ui-page-section-subheader
-      icon="assignment"
+  <ng-container *ngIf="completed; else notCompleted">
+    <ui-alert
+      type="success"
+      icon="check_circle"
+      iconType="outlined"
       heading="HCIM Web Account Transfer">
-      <ng-container uiPageSectionSubheaderDesc>
-        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Doloremque quo
-        modi optio tenetur dolore iste. Delectus dolorum provident dolore.
+      <ng-container uiAlertContent>
+        <p>
+          Bookmark the new HCIM Web URL,
+          <ui-anchor href="https://hcimweb-cl.hlth.gov.bc.ca"></ui-anchor>
+          and use your organization credentials to access HCIM Web going
+          forward.
+        </p>
       </ng-container>
-    </ui-page-section-subheader>
-  </ui-page-section>
-
-  <ui-alert
-    type="danger"
-    icon="error_outline"
-    iconType="outlined"
-    heading="You have access">
-    <ng-container uiAlertContent>
-      <p>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Veritatis animi
-        ipsam, magnam mollitia quas neque reprehenderit odio culpa dolorem
-        laborum sapiente, adipisci cumque placeat. At facilis magnam vel tempora
-        voluptatum.
-      </p>
-    </ng-container>
-  </ui-alert>
-
-  <!-- <ui-alert
-    type="success"
-    icon="check_circle"
-    iconType="outlined"
-    heading="You have access">
-    <ng-container uiAlertContent>
-      <p>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Veritatis animi
-        ipsam, magnam mollitia quas neque reprehenderit odio culpa dolorem
-        laborum sapiente, adipisci cumque placeat. At facilis magnam vel tempora
-        voluptatum.
-      </p>
-    </ng-container>
-  </ui-alert> -->
-
-  <ng-container [formGroup]="formState.form">
-    <ui-page-section>
-      <ui-page-section-subheader heading="HealthNetBC Credentials">
-        <ng-container uiPageSectionSubheaderDesc>
-          Enter your HealthNetBC information below.
-        </ng-container>
-      </ui-page-section-subheader>
-
-      <div class="row">
-        <div class="col-12">
-          <mat-form-field class="w-100">
-            <input
-              matInput
-              placeholder="LDAP User Name"
-              formControlName="ldapUsername" />
-            <mat-error>Required</mat-error>
-          </mat-form-field>
-        </div>
-        <div class="col-12">
-          <mat-form-field class="w-100">
-            <input
-              matInput
-              type="password"
-              placeholder="LDAP Password"
-              formControlName="ldapPassword" />
-            <mat-error>Required</mat-error>
-          </mat-form-field>
-        </div>
-      </div>
-    </ui-page-section>
+    </ui-alert>
   </ng-container>
+
+  <ng-template #notCompleted>
+    <ui-alert
+      type="danger"
+      icon="error_outline"
+      iconType="outlined"
+      heading="Access Request Failed">
+      <ng-container uiAlertContent>
+        <p>
+          If you have forgotten your password, or are unsure of it, follow this
+          <ui-anchor href="https://healthnetbc.hlth.gov.bc.ca/?resetPassword">
+            link
+          </ui-anchor>
+          to reset it before you start this process.
+        </p>
+        <p>
+          If you are still having trouble after resetting your password, contact
+          <ui-anchor
+            scheme="mailto"
+            href="hlth.registriesadmin@gov.bc.ca"></ui-anchor>
+          or <ui-anchor scheme="tel" href="2509529137"></ui-anchor>.
+        </p>
+      </ng-container>
+    </ui-alert>
+
+    <ui-page-section>
+      <ui-page-section-subheader
+        icon="assignment"
+        heading="HCIM Web Account Transfer">
+        <ng-container uiPageSectionSubheaderDesc>
+          You will no longer be able to access HCIM Web through the HealthNetBC
+          portal with your HealthNetBC username and password.
+        </ng-container>
+        <p>
+          Instead you will login directly using your organization's credentials
+          (the same credentials used to access your workstation).
+        </p>
+        <p>Follow these steps to transition your access.</p>
+      </ui-page-section-subheader>
+    </ui-page-section>
+
+    <ng-container [formGroup]="formState.form">
+      <ui-page-section>
+        <ui-page-section-subheader heading="HealthNetBC Credentials">
+          <ng-container uiPageSectionSubheaderDesc>
+            Enter your HealthNetBC Credentials.
+          </ng-container>
+        </ui-page-section-subheader>
+
+        <!-- <ui-form-section [showAction]="true">
+        asdfasdf
+        <ng-container uiContextHelpContent>
+          <p>
+            Users will be locked out if you don't know your HCIM-Web HealthNetBC
+            Username & Password. This is the account you would use to login
+            through the HealthNetBC Portal to access HCIM-Web
+          </p>
+          <ul>
+            <li>
+              Username Format: 1767-bsmith (typical format of username:
+              Organization ID-First Initial, Last Name)
+            </li>
+            <li>
+              Password: If you have forgotten your password, or are unsure of
+              it, please follow this link to reset it before you start this
+              process
+              <ui-anchor
+                href="https://healthnetbc.hlth.gov.bc.ca/?resetPassword"></ui-anchor>
+            </li>
+          </ul>
+        </ng-container>
+      </ui-form-section> -->
+
+        <div class="row">
+          <div class="col-12">
+            <mat-form-field class="w-100">
+              <input
+                matInput
+                placeholder="HealthNetBC User Name"
+                formControlName="ldapUsername" />
+              <mat-error>Required</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col-12">
+            <mat-form-field class="w-100">
+              <input
+                matInput
+                type="password"
+                placeholder="HealthNetBC Password"
+                formControlName="ldapPassword" />
+              <mat-error>Required</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col-12">
+            <small>
+              <ui-anchor
+                href="https://healthnetbc.hlth.gov.bc.ca/?resetPassword">
+                Have you forgotten your password?
+              </ui-anchor>
+            </small>
+          </div>
+        </div>
+      </ui-page-section>
+    </ng-container>
+
+    <ui-alert type="danger" icon="error_outline" iconType="outlined">
+      <ng-container uiAlertContent>
+        <p>
+          You have had multiple failed login attempts the next failed attempt
+          will lock your account. If you need assistance contact the HelpDesk at
+          <ui-anchor scheme="mailto" href="HLTH.HELPDESK@gov.bc.ca"></ui-anchor>
+          or <ui-anchor scheme="tel" href="2509521234"></ui-anchor>.
+        </p>
+      </ng-container>
+    </ui-alert>
+  </ng-template>
 
   <ui-page-footer>
     <button
@@ -83,13 +143,22 @@
       (click)="onBack()">
       Back Home
     </button>
-    <button
-      mat-flat-button
-      uiPageFooterAction
-      type="button"
-      color="primary"
-      (click)="onBack()">
-      Continue
-    </button>
+
+    <ng-container *ngIf="completed; else notRequested">
+      <button
+        mat-flat-button
+        uiPageFooterAction
+        type="button"
+        color="primary"
+        (click)="onBack()">
+        Continue
+      </button>
+    </ng-container>
+
+    <ng-template #notRequested>
+      <button mat-flat-button uiPageFooterAction type="button" color="primary">
+        Next
+      </button>
+    </ng-template>
   </ui-page-footer>
 </ui-page>
