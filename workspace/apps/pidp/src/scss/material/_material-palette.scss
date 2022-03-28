@@ -2,23 +2,22 @@
 // MATERIAL PALETTE
 //
 
-// http://mcg.mbitson.com/#!?mcgpalette0=%23003366
-$bcgov-blue: (
-  50: #e0e7ed,
-  100: #b3c2d1,
-  200: #8099b3,
-  300: #4d7094,
-  400: #26527d,
-  // BC Gov. Primary
-  500: #003366,
-  600: #002e5e,
-  700: #002753,
-  800: #002049,
-  900: #001438,
-  A100: #6e93ff,
-  A200: #3b6cff,
-  A400: #0846ff,
-  A700: #003bee,
+// http://mcg.mbitson.com/#!?materialthemeprimary=%231a284f
+$material-theme-primary: (
+  50: #e4e5ea,
+  100: #babfca,
+  200: #8d94a7,
+  300: #5f6984,
+  400: #3c4869,
+  500: #1a284f,
+  600: #172448,
+  700: #131e3f,
+  800: #0f1836,
+  900: #080f26,
+  A100: #637fff,
+  A200: #3055ff,
+  A400: #002efc,
+  A700: #0029e2,
   contrast: (
     50: #000000,
     100: #000000,
@@ -38,13 +37,12 @@ $bcgov-blue: (
 );
 
 // http://mcg.mbitson.com/#!?mcgpalette0=%23fcba19
-$bcgov-yellow: (
+$material-theme-secondary: (
   50: #fff7e3,
   100: #feeaba,
   200: #fedd8c,
   300: #fdcf5e,
   400: #fcc43c,
-  // BC Gov. Secondary
   500: #fcba19,
   600: #fcb316,
   700: #fbab12,

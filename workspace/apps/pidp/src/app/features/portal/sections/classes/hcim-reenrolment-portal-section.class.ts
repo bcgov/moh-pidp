@@ -28,8 +28,8 @@ export class HcimReenrolmentPortalSection implements IPortalSection {
   ) {
     this.key = 'hcim';
     this.type = 'access';
-    this.heading = 'HCIM Web Re-enrolment';
-    this.description = 'Enrol here for access to HCIM.';
+    this.heading = 'HCIM Web Account Transfer';
+    this.description = 'For existing users of HCIM Web';
   }
 
   public get hint(): string {
@@ -55,7 +55,7 @@ export class HcimReenrolmentPortalSection implements IPortalSection {
   public get status(): string {
     const statusCode = this.getStatusCode();
     return statusCode === StatusCode.AVAILABLE
-      ? 'You are eligible to use HCIM Web Re-enrolment'
+      ? 'For existing users of HCIM Web only'
       : statusCode === StatusCode.COMPLETED
       ? 'Completed'
       : 'Incomplete';
