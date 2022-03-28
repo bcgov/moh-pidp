@@ -145,13 +145,8 @@
       Back Home
     </button>
 
-    <ng-container *ngIf="completed; else notRequested">
-      <button
-        mat-flat-button
-        uiPageFooterAction
-        type="button"
-        color="primary"
-        (click)="onBack()">
+    <ng-container *ngIf="completed; else notRequested" uiPageFooterAction>
+      <button mat-flat-button type="button" color="primary" (click)="onBack()">
         Continue
       </button>
     </ng-container>
