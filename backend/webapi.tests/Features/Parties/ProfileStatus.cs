@@ -27,7 +27,7 @@ public class ProfileStatusTests : InMemoryDbTest
 
         var profile = result.Value;
         Assert.Equal(new HashSet<Alert>(), profile.Alerts);
-        profile.AssertSectionStatus(StatusCode.Incomplete, StatusCode.Incomplete, StatusCode.Locked);
+        profile.AssertSectionStatus(StatusCode.Incomplete, StatusCode.Locked, StatusCode.Locked);
     }
 
     [Fact]

@@ -23,6 +23,12 @@ public partial class ProfileStatus
 
             protected override void SetAlertsAndStatus(ProfileStatusDto profile)
             {
+                if (!profile.DemographicsEntered)
+                {
+                    this.StatusCode = StatusCode.Locked;
+                    return;
+                }
+
                 if (!profile.CollegeCertificationEntered)
                 {
                     this.StatusCode = StatusCode.Incomplete;
