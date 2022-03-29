@@ -13,7 +13,7 @@ public class AccessRequestsController : PidpControllerBase
 {
     public AccessRequestsController(IPidpAuthorizationService authorizationService) : base(authorizationService) { }
 
-    [HttpPost("hcim-re-enrolment")]
+    [HttpPost("hcim-reenrolment")]
     [Authorize(Policy = Policies.PhsaAuthentication)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
