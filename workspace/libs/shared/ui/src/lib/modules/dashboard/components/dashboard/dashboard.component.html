@@ -14,6 +14,15 @@
     [fixedTopGap]="0"
     [fixedBottomGap]="0">
     <div class="logo">
+      <!--
+        NOTE: Pass placeholder markup using ngProjectAs to hold open the
+        dashboard navigation when no image or menu items exist. Do not
+        pass a blank img src to hold open the dashboard, which does not
+        meet WCAG standards for accessibility.
+
+        @example
+        <div ngProjectAs="ui-dashboard-image"></div>
+      -->
       <ng-content select="ui-dashboard-image"></ng-content>
     </div>
 
