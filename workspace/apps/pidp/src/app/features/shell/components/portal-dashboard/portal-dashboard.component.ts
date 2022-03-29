@@ -41,7 +41,7 @@ export class PortalDashboardComponent implements IDashboard {
       .pipe(map((token) => token?.name ?? ''));
     this.headerConfig = { theme: 'light', allowMobileToggle: true };
     this.brandConfig = {
-      imgSrc: '/assets/images/pidp-logo-blue.svg',
+      imgSrc: '/assets/images/pidp-logo-white.svg',
       imgAlt: 'Provider Identity Portal Logo',
     };
     this.showMenuItemIcons = true;

@@ -1,0 +1,11 @@
+@import 'bootstrap/bootstrap-imports';
+
+ui-dashboard-image {
+  margin: 3rem 1rem 3.5rem;
+  width: 200px;
+
+  @include media-breakpoint-up(md) {
+    margin-left: 2rem;
+    margin-right: 2rem;
+  }
+}

@@ -13,11 +13,8 @@
     [fixedInViewport]="sideNavProps.fixedInViewport"
     [fixedTopGap]="0"
     [fixedBottomGap]="0">
-    <div class="logo" [class.hidden]="!brandConfig">
-      <img
-        [src]="brandConfig?.imgSrc"
-        [attr.alt]="brandConfig?.imgAlt"
-        [class.fixed]="!responsiveMenuItems" />
+    <div class="logo">
+      <ng-content select="ui-dashboard-image"></ng-content>
     </div>
 
     <ui-dashboard-menu
