@@ -184,14 +184,14 @@ public class ProfileStatusTests : InMemoryDbTest
             }
         });
         var client = A.Fake<IPlrClient>();
-        A.CallTo(() => client.GetPlrRecord(party.PartyCertification!.CollegeCode, party.PartyCertification.LicenceNumber, party.Birthdate)).Returns((string)null!);
+        A.CallTo(() => client.GetPlrRecord(party.PartyCertification!.CollegeCode, party.PartyCertification.LicenceNumber, party.Birthdate!.Value)).Returns((string)null!);
         var handler = this.MockDependenciesFor<CommandHandler>(client);
 
         var result = await handler.HandleAsync(new Command { Id = party.Id });
 
         Assert.True(result.IsSuccess);
         Assert.Null(party.PartyCertification!.Ipc);
-        A.CallTo(() => client.GetPlrRecord(party.PartyCertification!.CollegeCode, party.PartyCertification.LicenceNumber, party.Birthdate)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => client.GetPlrRecord(party.PartyCertification!.CollegeCode, party.PartyCertification.LicenceNumber, party.Birthdate!.Value)).MustHaveHappenedOnceExactly();
 
         var profile = result.Value;
         Assert.Equal(new HashSet<Alert> { Alert.TransientError }, profile.Alerts);
@@ -221,7 +221,7 @@ public class ProfileStatusTests : InMemoryDbTest
         });
         var expectedIpc = "newIPC";
         var client = A.Fake<IPlrClient>();
-        A.CallTo(() => client.GetPlrRecord(party.PartyCertification!.CollegeCode, party.PartyCertification.LicenceNumber, party.Birthdate)).Returns(expectedIpc);
+        A.CallTo(() => client.GetPlrRecord(party.PartyCertification!.CollegeCode, party.PartyCertification.LicenceNumber, party.Birthdate!.Value)).Returns(expectedIpc);
         A.CallTo(() => client.GetRecordStatus(expectedIpc)).Returns(new MockedPlrRecordStatus(true));
         var handler = this.MockDependenciesFor<CommandHandler>(client);
 
@@ -229,7 +229,7 @@ public class ProfileStatusTests : InMemoryDbTest
 
         Assert.True(result.IsSuccess);
         Assert.Equal(expectedIpc, party.PartyCertification!.Ipc);
-        A.CallTo(() => client.GetPlrRecord(party.PartyCertification!.CollegeCode, party.PartyCertification.LicenceNumber, party.Birthdate)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => client.GetPlrRecord(party.PartyCertification!.CollegeCode, party.PartyCertification.LicenceNumber, party.Birthdate!.Value)).MustHaveHappenedOnceExactly();
 
         var profile = result.Value;
         Assert.Equal(new HashSet<Alert>(), profile.Alerts);
@@ -277,7 +277,7 @@ public class ProfileStatusTests : InMemoryDbTest
         Assert.Equal(new HashSet<Alert>(), profile.Alerts);
         profile.AssertSectionStatus(StatusCode.Complete, StatusCode.Complete, StatusCode.Complete);
     }
-    
+
     // TODO HCIM tests
 
     private class MockedPlrRecordStatus : PlrRecordStatus

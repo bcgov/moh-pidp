@@ -2,6 +2,7 @@ namespace Pidp.Features.Parties;
 
 using FluentValidation;
 using NodaTime;
+using System.Security.Claims;
 
 using Pidp.Data;
 using Pidp.Extensions;
@@ -13,8 +14,8 @@ public class Create
     public class Command : ICommand<int>
     {
         public Guid UserId { get; set; }
-        public string Hpdid { get; set; } = string.Empty;
-        public LocalDate Birthdate { get; set; }
+        public string? Hpdid { get; set; }
+        public LocalDate? Birthdate { get; set; }
         public string FirstName { get; set; } = string.Empty;
         public string LastName { get; set; } = string.Empty;
     }
@@ -26,10 +27,33 @@ public class Create
             var user = accessor?.HttpContext?.User;
 
             this.RuleFor(x => x.UserId).NotEmpty().Equal(user.GetUserId());
-            this.RuleFor(x => x.Hpdid).NotEmpty().MatchesUserClaim(user, Claims.PreferredUsername);
-            this.RuleFor(x => x.Birthdate).NotEmpty().Must(birthdate => birthdate.Equals(user?.GetBirthdate()));
             this.RuleFor(x => x.FirstName).NotEmpty().MatchesUserClaim(user, Claims.GivenName);
             this.RuleFor(x => x.LastName).NotEmpty().MatchesUserClaim(user, Claims.FamilyName);
+
+            this.Include<AbstractValidator<Command>>(x => user.FindFirstValue(Claims.IdentityProvider) switch
+            {
+                ClaimValues.BCServicesCard => new BcscValidator(user),
+                ClaimValues.Phsa => new PhsaValidator(),
+                _ => throw new NotImplementedException("Given Identity Provider is not supported")
+            });
+        }
+
+        private class BcscValidator : AbstractValidator<Command>
+        {
+            public BcscValidator(ClaimsPrincipal? user)
+            {
+                this.RuleFor(x => x.Hpdid).NotEmpty().MatchesUserClaim(user, Claims.PreferredUsername);
+                this.RuleFor(x => x.Birthdate).NotEmpty().Equal(user?.GetBirthdate()).WithMessage($"Must match the \"birthdate\" Claim on the current User");
+            }
+        }
+
+        private class PhsaValidator : AbstractValidator<Command>
+        {
+            public PhsaValidator()
+            {
+                this.RuleFor(x => x.Hpdid).Empty();
+                this.RuleFor(x => x.Birthdate).Empty();
+            }
         }
     }
 
