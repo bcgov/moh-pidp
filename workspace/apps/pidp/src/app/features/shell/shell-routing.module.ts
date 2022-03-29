@@ -22,7 +22,6 @@ import { ProfileRoutes } from '../profile/profile.routes';
 import { TrainingModule } from '../training/training.module';
 import { TrainingRoutes } from '../training/training.routes';
 import { PortalDashboardComponent } from './components/portal-dashboard/portal-dashboard.component';
-import { SupportErrorPage } from './pages/support-error/support-error.page';
 
 const routes: Routes = [
   {
@@ -89,10 +88,6 @@ const routes: Routes = [
         pathMatch: 'full',
       },
     ],
-  },
-  {
-    path: '**',
-    component: SupportErrorPage,
   },
 ];
 
