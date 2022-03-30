@@ -22,6 +22,14 @@ public partial class ProfileStatus
     public class Command : ICommand<IDomainResult<Model>>
     {
         public int Id { get; set; }
+        [JsonIgnore]
+        public ClaimsPrincipal? User { get; set; }
+
+        public Command WithUser(ClaimsPrincipal user)
+        {
+            this.User = user;
+            return this;
+        }
     }
 
     public partial class Model
@@ -92,11 +100,11 @@ public partial class ProfileStatus
                 && profile.LicenceNumber != null)
             {
                 // Cert has been entered but no IPC found, likely due to a transient error or delay in PLR record updates. Retry once.
-                profile.Ipc = await this.RecheckIpc(command.Id, profile.CollegeCode.Value, profile.LicenceNumber, profile.Birthdate);
+                profile.Ipc = await this.RecheckIpc(command.Id, profile.CollegeCode.Value, profile.LicenceNumber, profile.Birthdate!.Value);
             }
 
             profile.PlrRecordStatus = await this.client.GetRecordStatus(profile.Ipc);
-            //profile.User = ??
+            profile.User = command.User;
 
             var profileStatus = new Model
             {
@@ -132,7 +140,7 @@ public partial class ProfileStatus
     {
         public string FirstName { get; set; } = string.Empty;
         public string LastName { get; set; } = string.Empty;
-        public LocalDate Birthdate { get; set; }
+        public LocalDate? Birthdate { get; set; }
         public string? Email { get; set; }
         public string? Phone { get; set; }
         public CollegeCode? CollegeCode { get; set; }

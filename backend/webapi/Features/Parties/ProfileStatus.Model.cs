@@ -3,9 +3,7 @@ namespace Pidp.Features.Parties;
 using NodaTime;
 
 using Pidp.Models;
-using Pidp.Infrastructure.Auth;
 using Pidp.Models.Lookups;
-using Pidp.Extensions;
 
 public partial class ProfileStatus
 {
