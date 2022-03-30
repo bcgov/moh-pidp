@@ -10,7 +10,9 @@ using System.Security.Claims;
 using System.Text.Json.Serialization;
 
 using Pidp.Data;
+using Pidp.Extensions;
 using Pidp.Infrastructure;
+using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.HttpClients.Plr;
 using Pidp.Models;
 using Pidp.Models.Lookups;
@@ -144,5 +146,6 @@ public partial class ProfileStatus
 
         public bool DemographicsEntered => this.Email != null && this.Phone != null;
         public bool CollegeCertificationEntered => this.CollegeCode.HasValue && this.LicenceNumber != null;
+        public bool UserIsBcServicesCard => this.User.GetIdentityProvider() == ClaimValues.BCServicesCard;
     }
 }

@@ -30,7 +30,7 @@ public class Create
             this.RuleFor(x => x.FirstName).NotEmpty().MatchesUserClaim(user, Claims.GivenName);
             this.RuleFor(x => x.LastName).NotEmpty().MatchesUserClaim(user, Claims.FamilyName);
 
-            this.Include<AbstractValidator<Command>>(x => user.FindFirstValue(Claims.IdentityProvider) switch
+            this.Include<AbstractValidator<Command>>(x => user.GetIdentityProvider() switch
             {
                 ClaimValues.BCServicesCard => new BcscValidator(user),
                 ClaimValues.Phsa => new PhsaValidator(),

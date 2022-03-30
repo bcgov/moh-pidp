@@ -21,15 +21,6 @@ public static class ClaimsPrincipalExtensions
             : Guid.Empty;
     }
 
-    public static int GetIdentityAssuranceLevel(this ClaimsPrincipal? user)
-    {
-        var assuranceLevel = user?.FindFirstValue(Claims.AssuranceLevel);
-
-        return int.TryParse(assuranceLevel, out var parsed)
-            ? parsed
-            : 0;
-    }
-
     /// <summary>
     /// Returns the Birthdate Claim of the User, parsed in ISO format (yyyy-MM-dd)
     /// </summary>
@@ -47,6 +38,11 @@ public static class ClaimsPrincipalExtensions
             return null;
         }
     }
+
+    /// <summary>
+    /// Returns the Identity Provider of the User, or null if User is null
+    /// </summary>
+    public static string? GetIdentityProvider(this ClaimsPrincipal? user) => user?.FindFirstValue(Claims.IdentityProvider);
 
     /// <summary>
     /// Parses the Resource Access claim and returns the roles for the given resource
