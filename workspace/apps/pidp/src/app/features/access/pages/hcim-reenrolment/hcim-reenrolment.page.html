@@ -43,10 +43,6 @@
           </ng-container>
         </ui-page-section-subheader>
 
-        <!-- Users will be locked out if you don't know your HCIM-Web HealthNetBC
-        Username & Password. This is the account you would use to login through
-        the HealthNetBC Portal to access HCIM-Web. -->
-
         <ui-alert
           *ngIf="loginAttempts > 0 && loginAttempts < maxLoginAttempts"
           type="danger"

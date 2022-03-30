@@ -8,13 +8,25 @@ import { TrainingSectionStatus } from '../models/training-status.model';
 
 /**
  * @description
- * Set of unique identifiers for portal sections.
+ * Set of unique identifiers for portal sections
+ * that can have a specific status.
  */
-export type PortalSectionKey =
+export type PortalSectionStatusKey =
   | keyof ProfileSectionStatus
   | keyof AccessSystemSectionStatus
-  | keyof TrainingSectionStatus
-  | 'signedAcceptedDocuments';
+  | keyof TrainingSectionStatus;
+
+/**
+ * @description
+ * Set of unique identifiers for all possible
+ * portal sections.
+ */
+export type PortalSectionKey =
+  | PortalSectionStatusKey
+  // Status-less sections are listed to allow
+  // their typed inclusion
+  | 'signedAcceptedDocuments'
+  | 'transactions';
 
 export interface PortalSectionProperty {
   key: string;
