@@ -1,4 +1,4 @@
-export interface HcimReenrolmentModel {
+export interface HcimReenrolment {
   ldapUsername: string;
   ldapPassword: string;
 }

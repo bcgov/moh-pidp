@@ -1,3 +1,6 @@
-<div>
-  <ng-content></ng-content>
+<div
+  [class.single]="actions.length === 1"
+  [class.multiple]="actions.length > 1"
+  [class.reverse]="mode === 'reverse'">
+  <ng-content select="[uiPageFooterAction]"></ng-content>
 </div>

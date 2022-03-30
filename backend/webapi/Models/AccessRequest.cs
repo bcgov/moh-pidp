@@ -1,14 +1,16 @@
 namespace Pidp.Models;
 
-using System.ComponentModel.DataAnnotations;
-
 using NodaTime;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 public enum AccessType
 {
-    SAEforms = 1
+    SAEforms = 1,
+    HcimReEnrolment
 }
 
+[Table(nameof(AccessRequest))]
 public class AccessRequest : BaseAuditable
 {
     [Key]
@@ -21,4 +23,10 @@ public class AccessRequest : BaseAuditable
     public Instant RequestedOn { get; set; }
 
     public AccessType AccessType { get; set; }
+}
+
+[Table(nameof(HcimReEnrolmentAccessRequest))]
+public class HcimReEnrolmentAccessRequest : AccessRequest
+{
+    public string LdapUsername { get; set; } = string.Empty;
 }

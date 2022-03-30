@@ -1,8 +1,11 @@
 namespace Pidp.Features.Parties;
 
 using NodaTime;
+
 using Pidp.Models;
+using Pidp.Infrastructure.Auth;
 using Pidp.Models.Lookups;
+using Pidp.Extensions;
 
 public partial class ProfileStatus
 {
@@ -22,6 +25,18 @@ public partial class ProfileStatus
 
             protected override void SetAlertsAndStatus(ProfileStatusDto profile)
             {
+                if (!profile.UserIsBcServicesCard)
+                {
+                    this.StatusCode = StatusCode.Hidden;
+                    return;
+                }
+
+                if (!profile.DemographicsEntered)
+                {
+                    this.StatusCode = StatusCode.Locked;
+                    return;
+                }
+
                 if (!profile.CollegeCertificationEntered)
                 {
                     this.StatusCode = StatusCode.Incomplete;
@@ -76,8 +91,15 @@ public partial class ProfileStatus
 
             protected override void SetAlertsAndStatus(ProfileStatusDto profile)
             {
-                // TODO this
-                this.StatusCode = StatusCode.Incomplete;
+                if (profile.CompletedEnrolments.Contains(AccessType.SAEforms))
+                {
+                    this.StatusCode = StatusCode.Complete;
+                    return;
+                }
+
+                this.StatusCode = profile.DemographicsEntered
+                    ? StatusCode.Incomplete
+                    : StatusCode.Locked;
             }
         }
 
@@ -89,6 +111,12 @@ public partial class ProfileStatus
 
             protected override void SetAlertsAndStatus(ProfileStatusDto profile)
             {
+                if (!profile.UserIsBcServicesCard)
+                {
+                    this.StatusCode = StatusCode.Hidden;
+                    return;
+                }
+
                 if (profile.CompletedEnrolments.Contains(AccessType.SAEforms))
                 {
                     this.StatusCode = StatusCode.Complete;

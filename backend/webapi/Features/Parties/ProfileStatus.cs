@@ -1,18 +1,20 @@
 namespace Pidp.Features.Parties;
 
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using DomainResults.Common;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
+using NodaTime;
+using System.Security.Claims;
 using System.Text.Json.Serialization;
 
-using Pidp.Infrastructure;
 using Pidp.Data;
-using AutoMapper;
-using AutoMapper.QueryableExtensions;
+using Pidp.Extensions;
+using Pidp.Infrastructure;
+using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.HttpClients.Plr;
 using Pidp.Models;
-using System.Security.Claims;
-using NodaTime;
 using Pidp.Models.Lookups;
 
 public partial class ProfileStatus
@@ -144,5 +146,6 @@ public partial class ProfileStatus
 
         public bool DemographicsEntered => this.Email != null && this.Phone != null;
         public bool CollegeCertificationEntered => this.CollegeCode.HasValue && this.LicenceNumber != null;
+        public bool UserIsBcServicesCard => this.User.GetIdentityProvider() == ClaimValues.BCServicesCard;
     }
 }

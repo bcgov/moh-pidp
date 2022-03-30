@@ -1,11 +1,12 @@
 import {
-  Component,
   ChangeDetectionStrategy,
-  Input,
+  Component,
   ContentChildren,
+  Input,
   QueryList,
 } from '@angular/core';
 
+import { IconType } from '../icon/icon.component';
 import { PageSectionSubheaderDescDirective } from './page-section-subheader-desc.directive';
 import { PageSectionSubheaderHintDirective } from './page-section-subheader-hint.directive';
 
@@ -17,6 +18,7 @@ import { PageSectionSubheaderHintDirective } from './page-section-subheader-hint
 })
 export class PageSectionSubheaderComponent {
   @Input() public icon?: string;
+  @Input() public iconType?: IconType;
   @Input() public heading!: string;
 
   @ContentChildren(PageSectionSubheaderDescDirective, { descendants: true })
