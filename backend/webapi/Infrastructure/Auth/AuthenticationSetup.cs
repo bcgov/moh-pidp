@@ -47,7 +47,7 @@ public static class AuthenticationSetup
 
             options.AddPolicy(Policies.AllowedPartyIdentityProvider, policy => policy
                 .RequireAuthenticatedUser()
-                .RequireClaim(Claims.IdentityProvider, ClaimValues.BCServicesCard, ClaimValues.Phsa));
+                .RequireClaim(Claims.IdentityProvider, ClaimValues.BCServicesCard, ClaimValues.Idir, ClaimValues.Phsa));
 
             options.AddPolicy(Policies.UserOwnsResource, policy => policy.Requirements.Add(new UserOwnsResourceRequirement()));
 
