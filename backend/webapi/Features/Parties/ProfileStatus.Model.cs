@@ -65,7 +65,7 @@ public partial class ProfileStatus
             internal override string SectionName => "demographics";
             public string FirstName { get; set; } = string.Empty;
             public string LastName { get; set; } = string.Empty;
-            public LocalDate Birthdate { get; set; }
+            public LocalDate? Birthdate { get; set; }
             public string? Email { get; set; }
             public string? Phone { get; set; }
 
@@ -73,9 +73,9 @@ public partial class ProfileStatus
             {
                 this.FirstName = profile.FirstName;
                 this.LastName = profile.LastName;
-                this.Birthdate = profile.Birthdate;
-                this.Email = profile.Email;
-                this.Phone = profile.Phone;
+                this.Birthdate = profile?.Birthdate;
+                this.Email = profile?.Email;
+                this.Phone = profile?.Phone;
             }
 
             protected override void SetAlertsAndStatus(ProfileStatusDto profile) => this.StatusCode = profile.DemographicsEntered ? StatusCode.Complete : StatusCode.Incomplete;
