@@ -1,22 +1,31 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
+import { ActivatedRoute, Router } from '@angular/router';
+
+import { provideAutoSpy } from 'jest-auto-spies';
 
 import { SupportErrorPage } from './support-error.page';
 
 describe('SupportErrorPage', () => {
   let component: SupportErrorPage;
-  let fixture: ComponentFixture<SupportErrorPage>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [ SupportErrorPage ]
-    })
-    .compileComponents();
-  });
+  const mockActivatedRoute = {
+    shellRoutes: {
+      MODULE_PATH: '',
+    },
+  };
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SupportErrorPage);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+    TestBed.configureTestingModule({
+      providers: [
+        SupportErrorPage,
+        {
+          provide: ActivatedRoute,
+          useValue: mockActivatedRoute,
+        },
+        provideAutoSpy(Router),
+      ],
+    });
+    component = TestBed.inject(SupportErrorPage);
   });
 
   it('should create', () => {
