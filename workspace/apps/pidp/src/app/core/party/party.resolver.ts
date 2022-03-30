@@ -3,7 +3,7 @@ import { Resolve, Router } from '@angular/router';
 
 import { Observable, catchError, exhaustMap, of, throwError } from 'rxjs';
 
-import { RootRoutes } from '@bcgov/shared/ui';
+import { ShellRoutes } from '@app/features/shell/shell.routes';
 
 import { LoggerService } from '../services/logger.service';
 import { PartyResource } from './party-resource.service';
@@ -39,7 +39,7 @@ export class PartyResolver implements Resolve<number | null> {
       ),
       catchError((error: Error) => {
         this.logger.error(error.message);
-        this.router.navigateByUrl(RootRoutes.DENIED);
+        this.router.navigateByUrl(ShellRoutes.SUPPORT_ERROR);
         return of(null);
       })
     );
