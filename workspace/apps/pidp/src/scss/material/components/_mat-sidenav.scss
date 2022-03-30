@@ -26,6 +26,12 @@ $menuListDividerColor: theme-palette(blue);
   background-color: $sideNavBackgroundColor;
   border-right: $sideNavBorderRight;
 
+  &.mat-drawer.mat-drawer-side {
+    // Reduced by 1 to allow overlays to cover the
+    // sidenav to overcome decendent depth
+    z-index: 1;
+  }
+
   .mat-list-item {
     .mat-list-item-content {
       // Add a border for spacing to prevent the sidenav from jumping

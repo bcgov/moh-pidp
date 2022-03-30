@@ -242,3 +242,21 @@ $types: success, info, warn, danger, muted;
     }
   }
 }
+
+@mixin position(
+  $position: absolute,
+  $top: null,
+  $right: null,
+  $bottom: null,
+  $left: null
+) {
+  position: $position;
+  top: $top;
+  right: $right;
+  bottom: $bottom;
+  left: $left;
+}
+
+@mixin cover($position: absolute) {
+  @include position($position, 0, 0, 0, 0);
+}

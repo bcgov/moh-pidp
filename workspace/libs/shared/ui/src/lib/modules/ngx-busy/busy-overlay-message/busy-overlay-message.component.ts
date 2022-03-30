@@ -1,6 +1,9 @@
-import { Component, Inject } from '@angular/core';
+import { Component } from '@angular/core';
 
-import { InstanceConfigHolderService } from 'ng-busy';
+import { Observable, map } from 'rxjs';
+
+import { BusyService } from '../busy.service';
+import { BusyOverlayOptions } from '../models/busy-overlay-options.model';
 
 @Component({
   selector: 'ui-busy-overlay-message',
@@ -8,12 +11,28 @@ import { InstanceConfigHolderService } from 'ng-busy';
   styleUrls: ['./busy-overlay-message.component.scss'],
 })
 export class BusyOverlayMessageComponent {
-  public constructor(
-    @Inject('instanceConfigHolder')
-    private instanceConfigHolder: InstanceConfigHolderService
-  ) {}
+  public constructor(private busyService: BusyService) {}
 
-  public get message(): string | undefined {
-    return this.instanceConfigHolder.config.message;
+  /**
+   * @description
+   * Message to be shown when displaying the
+   * busy indicator.
+   */
+  public get message$(): Observable<string> {
+    return this.busyService.message$;
+  }
+
+  /**
+   * @description
+   * Whether the viewport should be covered by the
+   * overlay when displaying the busy indicator.
+   */
+  public get overlayViewport$(): Observable<boolean> {
+    return this.busyService.options$.pipe(
+      map(
+        (busyOverlayOptions: BusyOverlayOptions) =>
+          busyOverlayOptions.overlayViewport
+      )
+    );
   }
 }
