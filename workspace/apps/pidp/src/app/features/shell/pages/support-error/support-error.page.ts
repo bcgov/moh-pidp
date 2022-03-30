@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { DashboardHeaderConfig } from '@bcgov/shared/ui';
 
@@ -10,19 +10,13 @@ import { ShellRoutes } from '../../shell.routes';
   templateUrl: './support-error.page.html',
   styleUrls: ['./support-error.page.scss'],
 })
-export class SupportErrorPage implements OnInit {
+export class SupportErrorPage {
   public headerConfig: DashboardHeaderConfig;
-  public constructor(private route: ActivatedRoute, private router: Router) {
+  public constructor(private router: Router) {
     this.headerConfig = { theme: 'light', allowMobileToggle: false };
   }
 
   public onBack(): void {
-    this.navigateToRoot();
-  }
-
-  public ngOnInit(): void {}
-
-  private navigateToRoot(): void {
     this.router.navigate([ShellRoutes.MODULE_PATH]);
   }
 }

@@ -39,7 +39,7 @@ export class PartyResolver implements Resolve<number | null> {
       ),
       catchError((error: Error) => {
         this.logger.error(error.message);
-        this.router.navigateByUrl(ShellRoutes.SUPPORT_ERROR);
+        this.router.navigateByUrl(ShellRoutes.SUPPORT_ERROR_PAGE);
         return of(null);
       })
     );

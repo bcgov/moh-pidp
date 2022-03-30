@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 
 import { provideAutoSpy } from 'jest-auto-spies';
 
@@ -17,14 +17,7 @@ describe('SupportErrorPage', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [
-        SupportErrorPage,
-        {
-          provide: ActivatedRoute,
-          useValue: mockActivatedRoute,
-        },
-        provideAutoSpy(Router),
-      ],
+      providers: [SupportErrorPage, provideAutoSpy(Router)],
     });
     router = TestBed.inject(Router);
     component = TestBed.inject(SupportErrorPage);
