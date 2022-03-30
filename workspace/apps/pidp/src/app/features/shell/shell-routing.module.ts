@@ -22,6 +22,8 @@ import { ProfileRoutes } from '../profile/profile.routes';
 import { TrainingModule } from '../training/training.module';
 import { TrainingRoutes } from '../training/training.routes';
 import { PortalDashboardComponent } from './components/portal-dashboard/portal-dashboard.component';
+import { SupportErrorModule } from './pages/support-error/support-error.module';
+import { ShellRoutes } from './shell.routes';
 
 const routes: Routes = [
   {
@@ -80,6 +82,13 @@ const routes: Routes = [
         loadChildren: (): Promise<DocumentsModule> =>
           import('../documents/documents.module').then(
             (m) => m.DocumentsModule
+          ),
+      },
+      {
+        path: ShellRoutes.SUPPORT_ERROR_PAGE,
+        loadChildren: (): Promise<SupportErrorModule> =>
+          import('../shell/pages/support-error/support-error.module').then(
+            (m) => m.SupportErrorModule
           ),
       },
       {
