@@ -1,5 +1,16 @@
+@import 'palette';
+
 .error-page {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
   color: #fff;
-  background-color: #1a284f;
+  background-color: theme-palette(blue);
   height: 100vh;
+}
+
+button {
+  border: 1px solid #fff;
+  background-color: theme-palette(blue) !important;
 }
