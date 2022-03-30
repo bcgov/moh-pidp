@@ -41,10 +41,12 @@ export class HcimReenrolmentPortalSection implements IPortalSection {
    * Get the properties that define the action on the section.
    */
   public get action(): PortalSectionAction {
+    const demographicsStatusCode =
+      this.profileStatus.status.demographics.statusCode;
     return {
       label: 'Request',
       route: AccessRoutes.routePath(AccessRoutes.HCIM_REENROLMENT),
-      disabled: false,
+      disabled: demographicsStatusCode !== StatusCode.COMPLETED,
     };
   }
 
