@@ -1,12 +1,13 @@
+<ui-dashboard-header
+  [theme]="headerConfig.theme"
+  [allowMobileToggle]="headerConfig.allowMobileToggle"></ui-dashboard-header>
 <div class="error-page">
-  <div class="row">
+  <div class="message">
     <h1>An error has occurred</h1>
   </div>
-  <div class="row">
-    <ui-page-footer>
-      <button mat-flat-button type="button" color="primary" (click)="onBack()">
-        Back to the Provider Identity Portal
-      </button>
-    </ui-page-footer>
+  <div>
+    <button mat-flat-button type="button" color="primary" (click)="onBack()">
+      Back to the Provider Identity Portal
+    </button>
   </div>
 </div>

@@ -11,6 +11,6 @@ import { ShellRoutingModule } from './shell-routing.module';
 
 @NgModule({
   declarations: [PortalDashboardComponent, SupportErrorPage],
-  imports: [ShellRoutingModule, DashboardModule, CommonModule, SharedModule],
+  imports: [ShellRoutingModule, DashboardModule, CommonModule],
 })
 export class ShellModule {}

@@ -3,14 +3,21 @@
 .error-page {
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
-  align-items: center;
   color: #fff;
   background-color: theme-palette(blue);
   height: 100vh;
+  padding: 30px;
+}
+
+.message {
+  padding: 10px;
 }
 
 button {
   border: 1px solid #fff;
-  background-color: theme-palette(blue) !important;
+  color: #fff;
+  border-radius: 5px;
+  margin: 10px;
+  padding: 10px;
+  background-color: theme-palette(blue);
 }

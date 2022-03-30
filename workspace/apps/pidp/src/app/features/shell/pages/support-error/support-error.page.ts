@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
+import { DashboardHeaderConfig } from '@bcgov/shared/ui';
+
 import { ShellRoutes } from '../../shell.routes';
 
 @Component({
@@ -9,7 +11,10 @@ import { ShellRoutes } from '../../shell.routes';
   styleUrls: ['./support-error.page.scss'],
 })
 export class SupportErrorPage implements OnInit {
-  public constructor(private route: ActivatedRoute, private router: Router) {}
+  public headerConfig: DashboardHeaderConfig;
+  public constructor(private route: ActivatedRoute, private router: Router) {
+    this.headerConfig = { theme: 'light', allowMobileToggle: false };
+  }
 
   public onBack(): void {
     this.navigateToRoot();
