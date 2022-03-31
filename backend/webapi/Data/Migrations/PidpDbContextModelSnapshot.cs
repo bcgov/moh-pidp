@@ -50,7 +50,7 @@ namespace Pidp.Data.Migrations
 
                     b.HasIndex("PartyId");
 
-                    b.ToTable("AccessRequests");
+                    b.ToTable("AccessRequest");
                 });
 
             modelBuilder.Entity("Pidp.Models.Address", b =>
@@ -715,7 +715,7 @@ namespace Pidp.Data.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<LocalDate>("Birthdate")
+                    b.Property<LocalDate?>("Birthdate")
                         .HasColumnType("date");
 
                     b.Property<Instant>("Created")
@@ -729,7 +729,6 @@ namespace Pidp.Data.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("Hpdid")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("JobTitle")
@@ -820,6 +819,17 @@ namespace Pidp.Data.Migrations
                     b.HasDiscriminator().HasValue("FacilityAddress");
                 });
 
+            modelBuilder.Entity("Pidp.Models.HcimReEnrolmentAccessRequest", b =>
+                {
+                    b.HasBaseType("Pidp.Models.AccessRequest");
+
+                    b.Property<string>("LdapUsername")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.ToTable("HcimReEnrolmentAccessRequest");
+                });
+
             modelBuilder.Entity("Pidp.Models.AccessRequest", b =>
                 {
                     b.HasOne("Pidp.Models.Party", "Party")
@@ -889,6 +899,15 @@ namespace Pidp.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Facility");
+                });
+
+            modelBuilder.Entity("Pidp.Models.HcimReEnrolmentAccessRequest", b =>
+                {
+                    b.HasOne("Pidp.Models.AccessRequest", null)
+                        .WithOne()
+                        .HasForeignKey("Pidp.Models.HcimReEnrolmentAccessRequest", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Pidp.Models.Facility", b =>

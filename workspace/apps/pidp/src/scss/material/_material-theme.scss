@@ -52,8 +52,8 @@ $pidp-typography: mat.define-typography-config(
 // Define the palettes for your theme using the Material Design palettes available in palette.scss
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue. Available color palettes: https://material.io/design/color/
-$pidp-primary: mat.define-palette($bcgov-blue, 500);
-$pidp-accent: mat.define-palette($bcgov-yellow, 500);
+$pidp-primary: mat.define-palette($material-theme-primary, 500);
+$pidp-accent: mat.define-palette($material-theme-secondary, 500);
 
 // The warn palette is optional (defaults to red).
 $pidp-warn: mat.define-palette(mat.$red-palette);

@@ -9,8 +9,6 @@ import { ProfileStatus } from '@app/features/portal/sections/models/profile-stat
 
 import { SaEformsResource } from './sa-eforms-resource.service';
 
-// TODO push higher up into route config and provide through party service
-// to remove interdependencies between modules
 @Injectable({
   providedIn: 'root',
 })

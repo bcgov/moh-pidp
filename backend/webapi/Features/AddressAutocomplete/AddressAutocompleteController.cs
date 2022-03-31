@@ -8,7 +8,7 @@ using Pidp.Infrastructure.HttpClients.AddressAutocomplete;
 using Pidp.Infrastructure.Services;
 
 [Route("api/[controller]")]
-[Authorize(Policy = Policies.BcscAuthentication)]
+[Authorize(Policy = Policies.AllowedPartyIdentityProvider)]
 public class AddressAutocompleteController : PidpControllerBase
 {
     public AddressAutocompleteController(IPidpAuthorizationService authorizationService) : base(authorizationService) { }

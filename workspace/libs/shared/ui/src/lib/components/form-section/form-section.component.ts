@@ -1,17 +1,17 @@
 import {
-  Component,
-  OnInit,
   ChangeDetectionStrategy,
+  Component,
+  ContentChildren,
   EventEmitter,
   Input,
   Output,
-  ContentChildren,
   QueryList,
 } from '@angular/core';
+
 import {
   ContextHelpContentDirective,
   ContextHelpTitleDirective,
-} from '@bcgov/shared/ui';
+} from '../../modules';
 
 @Component({
   selector: 'ui-form-section',

@@ -8,8 +8,13 @@
     <p [innerHtml]="document.content | safe: 'html'"></p>
   </ui-page-section>
 
-  <ui-page-footer>
-    <button mat-stroked-button color="primary" type="button" (click)="onBack()">
+  <ui-page-footer mode="reverse">
+    <button
+      mat-stroked-button
+      uiPageFooterAction
+      color="primary"
+      type="button"
+      (click)="onBack()">
       Back
     </button>
   </ui-page-footer>

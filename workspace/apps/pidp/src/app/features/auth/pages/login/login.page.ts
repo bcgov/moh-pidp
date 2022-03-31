@@ -68,7 +68,7 @@ export class LoginPage {
         content: this.documentService.getPIdPCollectionNotice(),
       },
     };
-    this.busy = this.dialog
+    this.dialog
       .open(ConfirmDialogComponent, { data })
       .afterClosed()
       .pipe(

@@ -8,7 +8,6 @@ import { ArrayUtils } from '@bcgov/shared/utils';
 import { PermissionsService } from '@app/modules/permissions/permissions.service';
 import { Role } from '@app/shared/enums/roles.enum';
 
-import { AuthorizedUserService } from '../auth/services/authorized-user.service';
 import { AlertCode } from './enums/alert-code.enum';
 import { StatusCode } from './enums/status-code.enum';
 import {
@@ -16,6 +15,7 @@ import {
   DemographicsPortalSection,
   HcimReenrolmentPortalSection,
   IPortalSection,
+  PortalSectionStatusKey,
   SaEformsPortalSection,
   SignedAcceptedDocumentsPortalSection,
 } from './sections/classes';
@@ -37,17 +37,14 @@ export class PortalService {
    */
   private _profileStatus: ProfileStatus | null;
   private _alerts: ProfileStatusAlert[];
-  private _acceptedCollectionNotice: boolean;
   private _completedProfile: boolean;
   private _state$: BehaviorSubject<Record<string, IPortalSection[]>>;
 
   public constructor(
     private router: Router,
-    private authorizedUserService: AuthorizedUserService,
     private permissionsService: PermissionsService
   ) {
     this._profileStatus = null;
-    this._acceptedCollectionNotice = false;
     this._state$ = new BehaviorSubject<Record<string, IPortalSection[]>>({});
     this._completedProfile = false;
     this._alerts = [];
@@ -55,14 +52,6 @@ export class PortalService {
 
   public get state$(): Observable<Record<string, IPortalSection[]>> {
     return this._state$.asObservable();
-  }
-
-  public get acceptedCollectionNotice(): boolean {
-    return this._acceptedCollectionNotice;
-  }
-
-  public set acceptedCollectionNotice(hasAccepted: boolean) {
-    this._acceptedCollectionNotice = hasAccepted;
   }
 
   public get profileStatus(): ProfileStatus | null {
@@ -79,7 +68,7 @@ export class PortalService {
 
   public get collegeLicenceValidationError(): boolean {
     return (
-      this._profileStatus?.status.collegeCertification.statusCode ===
+      this._profileStatus?.status.collegeCertification?.statusCode ===
       StatusCode.ERROR
     );
   }
@@ -119,77 +108,97 @@ export class PortalService {
     });
   }
 
+  // TODO won't scale and needs revision with more than one enrolment for provision
   private hasCompletedProfile(profileStatus: ProfileStatus): boolean {
-    // TODO won't scale and needs revision with more than one enrolment for provision
     const status = profileStatus.status;
 
     return (
       status.demographics.statusCode === StatusCode.COMPLETED &&
-      status.collegeCertification.statusCode === StatusCode.COMPLETED &&
-      status.saEforms.statusCode === StatusCode.AVAILABLE
+      status.collegeCertification?.statusCode === StatusCode.COMPLETED &&
+      status.saEforms?.statusCode === StatusCode.AVAILABLE
     );
   }
 
+  // TODO loop through keys in preferred order and insert using factory based on status
   private getProfileIdentitySections(
     profileStatus: ProfileStatus
   ): IPortalSection[] {
     return [
       new DemographicsPortalSection(profileStatus, this.router),
-      new CollegeCertificationPortalSection(profileStatus, this.router),
-      ...ArrayUtils.insertIf<IPortalSection>(
+      ...ArrayUtils.insertResultIf<IPortalSection>(
+        this.insertSection('collegeCertification', profileStatus),
+        () => [
+          new CollegeCertificationPortalSection(profileStatus, this.router),
+        ]
+      ),
+      ...ArrayUtils.insertResultIf<IPortalSection>(
         this.permissionsService.hasRole([
           Role.FEATURE_PIDP_DEMO,
           Role.FEATURE_AMH_DEMO,
         ]),
-        new UserAccessAgreementPortalSection(profileStatus, this.router)
+        () => [new UserAccessAgreementPortalSection(profileStatus, this.router)]
       ),
     ];
   }
 
+  // TODO loop through keys in preferred order and insert using factory based on status
   private getAccessSystemsSections(
     profileStatus: ProfileStatus
   ): IPortalSection[] {
     return [
-      new SaEformsPortalSection(profileStatus, this.router),
-      ...ArrayUtils.insertIf<IPortalSection>(
-        this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
-        new HcimReenrolmentPortalSection(profileStatus, this.router)
+      ...ArrayUtils.insertResultIf<IPortalSection>(
+        this.insertSection('saEforms', profileStatus),
+        () => [new SaEformsPortalSection(profileStatus, this.router)]
       ),
-      ...ArrayUtils.insertIf<IPortalSection>(
+      ...ArrayUtils.insertResultIf<IPortalSection>(
+        this.insertSection('hcim', profileStatus),
+        () => [new HcimReenrolmentPortalSection(profileStatus, this.router)]
+      ),
+      ...ArrayUtils.insertResultIf<IPortalSection>(
         this.permissionsService.hasRole([
           Role.FEATURE_PIDP_DEMO,
           Role.FEATURE_AMH_DEMO,
         ]),
-        new SitePrivacySecurityPortalSection(profileStatus, this.router)
+        () => [new SitePrivacySecurityPortalSection(profileStatus, this.router)]
       ),
     ];
   }
 
+  // TODO loop through keys in preferred order and insert using factory based on status
   private getTrainingSections(profileStatus: ProfileStatus): IPortalSection[] {
     return [
-      ...ArrayUtils.insertIf<IPortalSection>(
+      ...ArrayUtils.insertResultIf<IPortalSection>(
         this.permissionsService.hasRole([
           Role.FEATURE_PIDP_DEMO,
           Role.FEATURE_AMH_DEMO,
         ]),
-        new ComplianceTrainingPortalSection(profileStatus, this.router)
+        () => [new ComplianceTrainingPortalSection(profileStatus, this.router)]
       ),
     ];
   }
 
+  // TODO loop through keys in preferred order and insert using factory based on status
   private getDocumentsSections(): IPortalSection[] {
     return [
       new SignedAcceptedDocumentsPortalSection(this.router),
-      ...ArrayUtils.insertIf<IPortalSection>(
+      ...ArrayUtils.insertResultIf<IPortalSection>(
         this.permissionsService.hasRole(Role.FEATURE_PIDP_DEMO),
-        new TransactionsPortalSection(this.router)
+        () => [new TransactionsPortalSection(this.router)]
       ),
     ];
+  }
+
+  private insertSection(
+    portalSectionKey: PortalSectionStatusKey,
+    profileStatus: ProfileStatus
+  ): boolean {
+    return (
+      profileStatus.status[portalSectionKey].statusCode !== StatusCode.HIDDEN
+    );
   }
 
   private clearState(): void {
     this._profileStatus = null;
-    this._acceptedCollectionNotice = false;
     this._state$.next({});
     this._completedProfile = false;
     this._alerts = [];

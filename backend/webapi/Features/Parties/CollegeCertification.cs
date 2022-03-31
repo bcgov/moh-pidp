@@ -92,6 +92,7 @@ public class CollegeCertification
                 .Include(party => party.PartyCertification)
                 .SingleOrDefaultAsync(party => party.Id == command.PartyId);
 
+            // TODO remove?
             if (party == null)
             {
                 return DomainResult.NotFound();
@@ -104,7 +105,9 @@ public class CollegeCertification
 
             party.PartyCertification.CollegeCode = command.CollegeCode;
             party.PartyCertification.LicenceNumber = command.LicenceNumber;
-            party.PartyCertification.Ipc = await this.client.GetPlrRecord(command.CollegeCode, command.LicenceNumber, party.Birthdate);
+            party.PartyCertification.Ipc = party.Birthdate.HasValue
+                ? await this.client.GetPlrRecord(command.CollegeCode, command.LicenceNumber, party.Birthdate.Value)
+                : null;
 
             await this.context.SaveChangesAsync();
             return DomainResult.Success();
