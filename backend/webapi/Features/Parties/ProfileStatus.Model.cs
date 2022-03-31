@@ -89,7 +89,7 @@ public partial class ProfileStatus
 
             protected override void SetAlertsAndStatus(ProfileStatusDto profile)
             {
-                if (profile.CompletedEnrolments.Contains(AccessType.SAEforms))
+                if (profile.CompletedEnrolments.Contains(AccessType.HcimReEnrolment))
                 {
                     this.StatusCode = StatusCode.Complete;
                     return;

@@ -57,7 +57,8 @@ export class HcimReenrolmentPage
     const routeData = this.route.snapshot.data;
     this.title = routeData.title;
     this.formState = new HcimReenrolmentFormState(fb);
-    this.completed = routeData.saEformsStatusCode === StatusCode.COMPLETED;
+    this.completed =
+      routeData.hcimReenrolmentStatusCode === StatusCode.COMPLETED;
     this.accessRequestFailed = false;
     this.accountLocked = false;
     this.loginAttempts = 0;
