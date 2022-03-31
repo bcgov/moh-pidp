@@ -30,7 +30,7 @@ public class ProfileStatusTests : InMemoryDbTest
 
         var profile = result.Value;
         Assert.Equal(new HashSet<Alert>(), profile.Alerts);
-        profile.AssertSectionStatus(StatusCode.Incomplete, StatusCode.Locked, StatusCode.Locked, StatusCode.Locked);
+        profile.AssertSectionStatus(StatusCode.Incomplete, StatusCode.Locked, StatusCode.Hidden, StatusCode.Locked);
     }
 
     [Fact]
@@ -54,7 +54,7 @@ public class ProfileStatusTests : InMemoryDbTest
 
         var profile = result.Value;
         Assert.Equal(new HashSet<Alert>(), profile.Alerts);
-        profile.AssertSectionStatus(StatusCode.Complete, StatusCode.Incomplete, StatusCode.Incomplete, StatusCode.Locked);
+        profile.AssertSectionStatus(StatusCode.Complete, StatusCode.Incomplete, StatusCode.Hidden, StatusCode.Locked);
 
         var demographics = profile.Section<Demographics>();
         Assert.Equal(party.FirstName, demographics.FirstName);
@@ -92,7 +92,7 @@ public class ProfileStatusTests : InMemoryDbTest
 
         var profile = result.Value;
         Assert.Equal(new HashSet<Alert>(), profile.Alerts);
-        profile.AssertSectionStatus(StatusCode.Complete, StatusCode.Complete, StatusCode.Incomplete, StatusCode.Incomplete);
+        profile.AssertSectionStatus(StatusCode.Complete, StatusCode.Complete, StatusCode.Hidden, StatusCode.Incomplete);
 
         var certification = profile.Section<CollegeCertification>();
         Assert.Equal(party.PartyCertification!.CollegeCode, certification.CollegeCode);
@@ -127,7 +127,7 @@ public class ProfileStatusTests : InMemoryDbTest
 
         var profile = result.Value;
         Assert.Equal(new HashSet<Alert> { Alert.PlrBadStanding }, profile.Alerts);
-        profile.AssertSectionStatus(StatusCode.Complete, StatusCode.Error, StatusCode.Incomplete, StatusCode.Locked);
+        profile.AssertSectionStatus(StatusCode.Complete, StatusCode.Error, StatusCode.Hidden, StatusCode.Locked);
 
         var certification = profile.Section<CollegeCertification>();
         Assert.Equal(party.PartyCertification!.CollegeCode, certification.CollegeCode);
@@ -162,7 +162,7 @@ public class ProfileStatusTests : InMemoryDbTest
 
         var profile = result.Value;
         Assert.Equal(new HashSet<Alert> { Alert.TransientError }, profile.Alerts);
-        profile.AssertSectionStatus(StatusCode.Complete, StatusCode.Error, StatusCode.Incomplete, StatusCode.Locked);
+        profile.AssertSectionStatus(StatusCode.Complete, StatusCode.Error, StatusCode.Hidden, StatusCode.Locked);
 
         var certification = profile.Section<CollegeCertification>();
         Assert.Equal(party.PartyCertification!.CollegeCode, certification.CollegeCode);
@@ -198,7 +198,7 @@ public class ProfileStatusTests : InMemoryDbTest
 
         var profile = result.Value;
         Assert.Equal(new HashSet<Alert> { Alert.TransientError }, profile.Alerts);
-        profile.AssertSectionStatus(StatusCode.Complete, StatusCode.Error, StatusCode.Incomplete, StatusCode.Locked);
+        profile.AssertSectionStatus(StatusCode.Complete, StatusCode.Error, StatusCode.Hidden, StatusCode.Locked);
 
         var certification = profile.Section<CollegeCertification>();
         Assert.Equal(party.PartyCertification!.CollegeCode, certification.CollegeCode);
@@ -236,7 +236,7 @@ public class ProfileStatusTests : InMemoryDbTest
 
         var profile = result.Value;
         Assert.Equal(new HashSet<Alert>(), profile.Alerts);
-        profile.AssertSectionStatus(StatusCode.Complete, StatusCode.Complete, StatusCode.Incomplete, StatusCode.Incomplete);
+        profile.AssertSectionStatus(StatusCode.Complete, StatusCode.Complete, StatusCode.Hidden, StatusCode.Incomplete);
 
         var certification = profile.Section<CollegeCertification>();
         Assert.Equal(party.PartyCertification!.CollegeCode, certification.CollegeCode);
@@ -278,7 +278,7 @@ public class ProfileStatusTests : InMemoryDbTest
 
         var profile = result.Value;
         Assert.Equal(new HashSet<Alert>(), profile.Alerts);
-        profile.AssertSectionStatus(StatusCode.Complete, StatusCode.Complete, StatusCode.Incomplete, StatusCode.Complete);
+        profile.AssertSectionStatus(StatusCode.Complete, StatusCode.Complete, StatusCode.Hidden, StatusCode.Complete);
     }
 
     // TODO HCIM tests

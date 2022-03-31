@@ -89,6 +89,12 @@ public partial class ProfileStatus
 
             protected override void SetAlertsAndStatus(ProfileStatusDto profile)
             {
+                if (profile.UserIsBcServicesCard)
+                {
+                    this.StatusCode = StatusCode.Hidden;
+                    return;
+                }
+
                 if (profile.CompletedEnrolments.Contains(AccessType.HcimReEnrolment))
                 {
                     this.StatusCode = StatusCode.Complete;
