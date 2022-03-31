@@ -73,9 +73,9 @@ public partial class ProfileStatus
             {
                 this.FirstName = profile.FirstName;
                 this.LastName = profile.LastName;
-                this.Birthdate = profile?.Birthdate;
-                this.Email = profile?.Email;
-                this.Phone = profile?.Phone;
+                this.Birthdate = profile.Birthdate;
+                this.Email = profile.Email;
+                this.Phone = profile.Phone;
             }
 
             protected override void SetAlertsAndStatus(ProfileStatusDto profile) => this.StatusCode = profile.DemographicsEntered ? StatusCode.Complete : StatusCode.Incomplete;
@@ -89,7 +89,7 @@ public partial class ProfileStatus
 
             protected override void SetAlertsAndStatus(ProfileStatusDto profile)
             {
-                if (profile.CompletedEnrolments.Contains(AccessType.SAEforms))
+                if (profile.CompletedEnrolments.Contains(AccessType.HcimReEnrolment))
                 {
                     this.StatusCode = StatusCode.Complete;
                     return;
