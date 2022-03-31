@@ -1,10 +1,18 @@
 <ui-dashboard-header
   [theme]="headerConfig.theme"
   [allowMobileToggle]="headerConfig.allowMobileToggle"></ui-dashboard-header>
-<div class="error-page">
+<div>
   <h1>An error has occurred</h1>
+  <p>
+    Need support? Contact
+    <ui-anchor
+      scheme="mailto"
+      href="provideridentityportal@gov.bc.ca"></ui-anchor>
+  </p>
 
-  <button mat-flat-button type="button" color="primary" (click)="onBack()">
-    Back to the Provider Identity Portal
-  </button>
+  <span>
+    <button mat-flat-button type="button" color="primary" (click)="onBack()">
+      Back to the Provider Identity Portal
+    </button>
+  </span>
 </div>

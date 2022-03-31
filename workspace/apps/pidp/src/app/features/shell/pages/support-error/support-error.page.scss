@@ -1,6 +1,6 @@
 @import 'palette';
 
-.error-page {
+div {
   display: flex;
   flex-direction: column;
   color: #fff;
@@ -11,5 +11,4 @@
 
 button {
   border: 1px solid #fff;
-  max-width: 300px;
 }

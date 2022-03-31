@@ -9,12 +9,6 @@ describe('SupportErrorPage', () => {
   let component: SupportErrorPage;
   let router: Router;
 
-  const mockActivatedRoute = {
-    shellRoutes: {
-      MODULE_PATH: '',
-    },
-  };
-
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [SupportErrorPage, provideAutoSpy(Router)],
@@ -24,13 +18,12 @@ describe('SupportErrorPage', () => {
   });
 
   describe('METHOD: onBack', () => {
-    given('user wants to navigate back to the PIDP', () => {
+    given('user wants to be redirected back to the application', () => {
       when('onBack is invoked', () => {
         component.onBack();
 
         then('router should navigate to the module root route', () => {
-          const moduleRootRoute = mockActivatedRoute.shellRoutes.MODULE_PATH;
-          expect(router.navigate).toHaveBeenCalledWith([moduleRootRoute]);
+          expect(router.navigate).toHaveBeenCalledWith(['']);
         });
       });
     });
