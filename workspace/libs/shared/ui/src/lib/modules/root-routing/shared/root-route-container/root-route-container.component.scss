@@ -12,6 +12,17 @@
   .header {
     min-height: 15vh;
     background-color: theme-palette(blue);
+
+    img {
+      width: 175px;
+
+      @include media-breakpoint-up(md) {
+        width: 225px;
+      }
+      @include media-breakpoint-up(lg) {
+        width: 275px;
+      }
+    }
   }
 
   .container-fluid {

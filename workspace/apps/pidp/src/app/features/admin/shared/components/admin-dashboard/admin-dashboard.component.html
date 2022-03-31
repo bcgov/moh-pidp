@@ -1,8 +1,11 @@
 <ui-dashboard
   [username]="(username | async)!"
   [headerConfig]="headerConfig"
-  [brandConfig]="brandConfig"
   [showMenuItemIcons]="showMenuItemIcons"
   [responsiveMenuItems]="responsiveMenuItems"
   [logoutRedirectUrl]="logoutRedirectUrl"
-  (logout)="onLogout()"></ui-dashboard>
+  (logout)="onLogout()">
+  <ui-dashboard-image
+    [brandConfig]="brandConfig"
+    [responsiveMenuItems]="responsiveMenuItems"></ui-dashboard-image>
+</ui-dashboard>
