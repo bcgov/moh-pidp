@@ -3,6 +3,8 @@ import { Router } from '@angular/router';
 
 import { provideAutoSpy } from 'jest-auto-spies';
 
+import { APP_CONFIG, APP_DI_CONFIG } from '@app/app.config';
+
 import { SupportErrorPage } from './support-error.page';
 
 describe('SupportErrorPage', () => {
@@ -11,7 +13,14 @@ describe('SupportErrorPage', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [SupportErrorPage, provideAutoSpy(Router)],
+      providers: [
+        SupportErrorPage,
+        {
+          provide: APP_CONFIG,
+          useValue: APP_DI_CONFIG,
+        },
+        provideAutoSpy(Router),
+      ],
     });
     router = TestBed.inject(Router);
     component = TestBed.inject(SupportErrorPage);

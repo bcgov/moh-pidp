@@ -1,7 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { DashboardHeaderConfig } from '@bcgov/shared/ui';
+
+import { APP_CONFIG, AppConfig } from '@app/app.config';
 
 import { ShellRoutes } from '../../shell.routes';
 
@@ -12,8 +14,15 @@ import { ShellRoutes } from '../../shell.routes';
 })
 export class SupportErrorPage {
   public headerConfig: DashboardHeaderConfig;
-  public constructor(private router: Router) {
+  public providerIdentitySupportEmail: string;
+
+  public constructor(
+    private router: Router,
+    @Inject(APP_CONFIG) private config: AppConfig
+  ) {
     this.headerConfig = { theme: 'light', allowMobileToggle: false };
+    this.providerIdentitySupportEmail =
+      this.config.emails.providerIdentitySupport;
   }
 
   public onBack(): void {
