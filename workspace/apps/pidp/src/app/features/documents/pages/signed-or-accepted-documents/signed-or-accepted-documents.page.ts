@@ -91,7 +91,6 @@ export class SignedOrAcceptedDocumentsPage implements OnInit {
     return documents
       .filter((document: IDocumentMetaData) => {
         if (
-          identityProvider === IdentityProvider.BCSC &&
           document.type === DocumentType.SA_EFORMS_COLLECTION_NOTICE &&
           profileStatus?.status.saEforms.statusCode !== StatusCode.COMPLETED
         ) {
