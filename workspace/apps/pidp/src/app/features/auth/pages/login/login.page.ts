@@ -55,9 +55,9 @@ export class LoginPage {
     this.idpHint = routeSnapshot.data.idpHint;
   }
 
-  public onLogin(): void {
+  public onLogin(idpHint?: IdentityProvider): void {
     if (this.idpHint === IdentityProvider.IDIR) {
-      this.login();
+      this.login(this.idpHint);
       return;
     }
 
@@ -68,16 +68,20 @@ export class LoginPage {
         content: this.documentService.getPIdPCollectionNotice(),
       },
     };
-    this.busy = this.dialog
+    this.dialog
       .open(ConfirmDialogComponent, { data })
       .afterClosed()
-      .pipe(exhaustMap((result) => (result ? this.login() : EMPTY)))
+      .pipe(
+        exhaustMap((result) =>
+          result ? this.login(idpHint ?? this.idpHint) : EMPTY
+        )
+      )
       .subscribe();
   }
 
-  private login(): Observable<void> {
+  private login(idpHint: IdentityProvider): Observable<void> {
     return this.authService.login({
-      idpHint: this.idpHint,
+      idpHint: idpHint,
       redirectUri: this.config.applicationUrl,
     });
   }

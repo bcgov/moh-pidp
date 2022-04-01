@@ -1,0 +1,21 @@
+<ui-page>
+  <ui-page-header>{{ title }}</ui-page-header>
+
+  <ui-page-section>
+    <ui-page-section-subheader [heading]="document.title">
+    </ui-page-section-subheader>
+
+    <p [innerHtml]="document.content | safe: 'html'"></p>
+  </ui-page-section>
+
+  <ui-page-footer mode="reverse">
+    <button
+      mat-stroked-button
+      uiPageFooterAction
+      color="primary"
+      type="button"
+      (click)="onBack()">
+      Back
+    </button>
+  </ui-page-footer>
+</ui-page>

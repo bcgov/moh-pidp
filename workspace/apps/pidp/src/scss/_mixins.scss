@@ -79,6 +79,19 @@ $theme-typography: mat.define-typography-config();
     // TODO add in options for cards to have top right menu as alt to hint
   }
 
+  // When only an icon exists in the card header reduce the size of
+  // icon to deemphasis and pull the content up to align horizontally
+  .mat-card-header.icon-only {
+    .mat-icon {
+      font-size: 2rem;
+    }
+
+    & + .mat-card-content {
+      margin-top: -3.6rem;
+      margin-left: 3rem;
+    }
+  }
+
   .mat-card-content,
   .mat-card-actions {
     // Adjust margin slightly to align with edge of header
@@ -228,4 +241,22 @@ $types: success, info, warn, danger, muted;
       align-items: center;
     }
   }
+}
+
+@mixin position(
+  $position: absolute,
+  $top: null,
+  $right: null,
+  $bottom: null,
+  $left: null
+) {
+  position: $position;
+  top: $top;
+  right: $right;
+  bottom: $bottom;
+  left: $left;
+}
+
+@mixin cover($position: absolute) {
+  @include position($position, 0, 0, 0, 0);
 }

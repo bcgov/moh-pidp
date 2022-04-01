@@ -20,7 +20,7 @@
       </ng-container>
     </ui-page-section-subheader>
 
-    <app-bcsc-user-info [bcscUser]="bcscUser | async"></app-bcsc-user-info>
+    <app-user-info [user]="user | async"></app-user-info>
 
     <ui-toggle-content
       label="My name is different on my college licence"
@@ -48,10 +48,15 @@
   </ui-page-section>
 
   <ui-page-footer>
-    <button mat-stroked-button type="button" color="primary" (click)="onBack()">
+    <button
+      mat-stroked-button
+      uiPageFooterAction
+      type="button"
+      color="primary"
+      (click)="onBack()">
       Back Home
     </button>
-    <button mat-flat-button type="submit" color="primary">
+    <button mat-flat-button uiPageFooterAction type="submit" color="primary">
       Save Information
     </button>
   </ui-page-footer>

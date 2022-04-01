@@ -6,7 +6,10 @@ describe('CanDeactivateFormGuard', () => {
   let guard: CanDeactivateFormGuard;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
+    TestBed.configureTestingModule({
+      providers: [CanDeactivateFormGuard],
+    });
+
     guard = TestBed.inject(CanDeactivateFormGuard);
   });
 

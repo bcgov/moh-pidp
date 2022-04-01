@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-maintenance',
+  selector: 'ui-maintenance',
   template: `
     <app-root-route-container>
       <div class="row justify-content-center">

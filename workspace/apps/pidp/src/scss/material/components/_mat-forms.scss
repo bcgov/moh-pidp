@@ -7,7 +7,7 @@
 .mat-form-field {
   // Provide a bit more spacing under form fields so error
   // messages are not resting on underlying field labels
-  margin-bottom: 0.5rem;
+  margin-bottom: 1.5rem;
 }
 
 .mat-input-element,
@@ -30,23 +30,3 @@
 .mat-checkbox-label {
   line-height: 0.5rem;
 }
-
-// .mat-checkbox label,
-// .mat-radio-button label {
-//   color: theme-palette(blue);
-// }
-
-// .mat-slide-toggle-content {
-//   color: theme-palette(blue, dark);
-// }
-
-// .mat-checkbox-layout,
-// .mat-slide-toggle-content {
-//   // Force checkbox and slide labels to line wrap if required
-//   // instead of overflowing their container
-//   white-space: normal !important;
-// }
-
-// .mat-drawer-container {
-//   color: $body-color;
-// }

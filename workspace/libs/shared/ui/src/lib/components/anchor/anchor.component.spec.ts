@@ -1,22 +1,16 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 
 import { AnchorComponent } from './anchor.component';
 
 describe('AnchorComponent', () => {
   let component: AnchorComponent;
-  let fixture: ComponentFixture<AnchorComponent>;
-
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [ AnchorComponent ]
-    })
-    .compileComponents();
-  });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(AnchorComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+    TestBed.configureTestingModule({
+      providers: [AnchorComponent],
+    });
+
+    component = TestBed.inject(AnchorComponent);
   });
 
   it('should create', () => {

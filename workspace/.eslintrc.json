@@ -24,7 +24,6 @@
                 "sourceTag": "scope:pidp",
                 "onlyDependOnLibsWithTags": ["scope:pidp", "scope:shared"]
               }
-              // TODO setup more module boundaries between scopes and tags
             ]
           }
         ]

@@ -12,9 +12,9 @@ public class Party : BaseAuditable, IOwnedResource
 
     public Guid UserId { get; set; }
 
-    public string Hpdid { get; set; } = string.Empty;
+    public string? Hpdid { get; set; }
 
-    public LocalDate Birthdate { get; set; }
+    public LocalDate? Birthdate { get; set; }
 
     public string FirstName { get; set; } = string.Empty;
 

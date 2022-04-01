@@ -34,28 +34,38 @@
     <div class="row">
       <div class="col-12 col-xl-auto">
         <div class="header">
-          <img
-            src="/assets/images/pidp-logo-white.svg"
-            alt="Provider Identity Portal Logo" />
-          <span>
-            <ui-page-header>Provider Identity Portal</ui-page-header>
-            <p>
-              A portal for health care providers and health care professionals
-              in
-              <strong>British Columbia</strong> to enrol for access to
-              participating health systems
-            </p>
-          </span>
+          <div class="heading">
+            <img
+              src="/assets/images/pidp-logo-blue.svg"
+              alt="Provider Identity Portal Logo" />
+            <h1>Provider Identity Portal</h1>
+          </div>
+
+          <p>
+            A portal for health care professionals in
+            <strong>British Columbia</strong> to enrol for access to
+            participating health systems
+          </p>
         </div>
 
         <div class="actions">
-          <button mat-flat-button color="primary" (click)="onLogin()">
-            Login with the BC Services Card app
-          </button>
-          <small>
-            Need an account?
-            <ui-anchor [href]="bcscMobileSetupUrl">Register</ui-anchor>
-          </small>
+          <span>
+            <button mat-flat-button color="primary" (click)="onLogin()">
+              Login with the BC Services Card app
+            </button>
+            <small>
+              Need an account?
+              <ui-anchor [href]="bcscMobileSetupUrl">Set up</ui-anchor>
+            </small>
+          </span>
+          <span>
+            <!-- <button
+              mat-flat-button
+              color="primary"
+              (click)="onLogin(IdentityProvider.PHSA)">
+              Login with your Health Authority ID
+            </button> -->
+          </span>
         </div>
 
         <div class="hide-on-large-viewports">
@@ -96,6 +106,12 @@
             >.
           </p>
         </ui-page-section>
+
+        <!-- <ui-page-section>
+          <ui-page-section-subheader
+            heading="HCIM Web Enrolment"></ui-page-section-subheader>
+          <p>Request access to HCIM Web</p>
+        </ui-page-section> -->
       </div>
     </div>
   </ng-template>
@@ -104,7 +120,7 @@
     <div class="row idir">
       <div class="col-12">
         <img
-          src="/assets/images/pidp-logo-white.svg"
+          src="/assets/images/pidp-logo-blue.svg"
           alt="Provider Identity Portal Logo" />
       </div>
       <div class="col-12">

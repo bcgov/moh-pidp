@@ -146,14 +146,14 @@ export class FormUtilsService {
   /**
    * @description
    * Check for the required validator applied to a FormControl,
-   * FormGroup, or FormArray.
+   * FormGroup, or FormArray within a FormGroup.
    *
    * @example
-   * isRequired('controlName')
-   * isRequired('groupName')
-   * isRequired('groupName.controlName')
-   * isRequired('arrayName')
-   * isRequired('arrayName[#].groupName.controlName')
+   * isRequired(formGroup, 'controlName')
+   * isRequired(formGroup, 'groupName')
+   * isRequired(formGroup, 'groupName.controlName')
+   * isRequired(formGroup, 'arrayName')
+   * isRequired(formGroup, 'arrayName[#].groupName.controlName')
    */
   public isRequired(form: FormGroup, path: string): boolean {
     const control = form.get(path);

@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 export class ObjectUtils {
   /**
    * @description
@@ -6,7 +8,7 @@ export class ObjectUtils {
   public static keyMapping(
     object: { [key: string]: any },
     mapping: { [key: string]: string }
-  ) {
+  ): void {
     if (!object || !mapping) {
       return;
     }
@@ -68,7 +70,7 @@ export class ObjectUtils {
       return mergeObject;
     }
 
-    return refObject.hasOwnProperty(key)
+    return Object.hasOwnProperty.call(refObject, key)
       ? { ...mergeObject, [key]: refObject[key] }
       : mergeObject;
   }
@@ -97,7 +99,7 @@ export class ObjectUtils {
    * an infinite loop being triggered, or freezing object that should
    * not be made immutable.
    */
-  public static deepFreeze(object: any) {
+  public static deepFreeze(object: any): { [key: string]: any } {
     // Retrieve the property names defined on object
     const propNames = Object.getOwnPropertyNames(object);
 

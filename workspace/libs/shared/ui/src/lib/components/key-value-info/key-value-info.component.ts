@@ -1,5 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
+export type KeyValueInfoOrientation = 'vertical' | 'horizontal';
+
 @Component({
   selector: 'ui-key-value-info',
   templateUrl: './key-value-info.component.html',
@@ -8,7 +10,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 })
 export class KeyValueInfoComponent {
   @Input() public key!: string;
-  @Input() public mode: 'vertical' | 'horizontal';
+  @Input() public mode: KeyValueInfoOrientation;
 
   public constructor() {
     this.mode = 'vertical';
