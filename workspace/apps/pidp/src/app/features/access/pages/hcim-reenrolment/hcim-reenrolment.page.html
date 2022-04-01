@@ -2,17 +2,26 @@
   <ui-page-header>{{ title }}</ui-page-header>
 
   <ng-container *ngIf="completed; else notCompleted">
+    <ui-page-section-subheader
+      icon="assignment"
+      heading="HCIMWeb Account Transfer">
+      <ng-container uiPageSectionSubheaderDesc
+        >Next Steps.</ng-container
+      ></ui-page-section-subheader
+    >
     <ui-alert
       type="success"
       icon="check_circle"
       iconType="outlined"
-      heading="HCIM Web Account Transfer">
+      heading="Account Transfer Successful">
       <ng-container uiAlertContent>
         <p>
-          Bookmark the new HCIM Web URL,
-          <ui-anchor [href]="hcimWebUrl"></ui-anchor>
-          and use your organization credentials to access HCIM Web going
-          forward.
+          You are ready to login to HCIMWeb using your new credentials.<br />
+          <button class="login-button" mat-flat-button type="button">
+            <a href="hcimWebUrl" target="_blank" rel="noopener noreferrer"
+              >Login to HCIMWeb</a
+            >
+          </button>
         </p>
       </ng-container>
     </ui-alert>
@@ -22,24 +31,41 @@
     <ui-page-section>
       <ui-page-section-subheader
         icon="assignment"
-        heading="HCIM Web Account Transfer">
+        heading="HCIMWeb Account Transfer">
         <ng-container uiPageSectionSubheaderDesc>
-          You will no longer be able to access HCIM Web through the HealthNetBC
-          portal with your HealthNetBC username and password.
+          HCIMWeb will be changing its login and authentication process with the
+          following key changes:
+          <ul>
+            <li>
+              You will no longer access HCIMWeb through the HealthNetBC Portal,
+              using your HCIMWeb HealthNetBC Username and Password.
+            </li>
+            <li>
+              Instead, you will login directly through
+              <strong>
+                <ui-anchor [href]="hcimWebUrl"> this link</ui-anchor> </strong
+              >, using your organization credential (the same credentials used
+              to access your workstation).
+            </li>
+          </ul>
         </ng-container>
         <p>
-          Instead you will login directly using your organization's credentials
-          (the same credentials used to access your workstation).
+          <strong
+            >Enter your HCIMWeb HealthNetBC Username and Password to transfer
+            your current HCIMWeb HealthNetBC account credential to your
+            organization credential.</strong
+          >
         </p>
-        <p>Complete this step to transition your access.</p>
       </ui-page-section-subheader>
     </ui-page-section>
 
     <ng-container [formGroup]="formState.form">
       <ui-page-section>
-        <ui-page-section-subheader heading="HealthNetBC Credentials">
+        <ui-page-section-subheader heading="HCIMWeb HealthNetBC Username">
           <ng-container uiPageSectionSubheaderDesc>
-            Enter your HealthNetBC Credentials.
+            Username Format is:
+            <strong>Organization ID-First Initial, Last Name.</strong><br />
+            Example: 1767-bsmith
           </ng-container>
         </ui-page-section-subheader>
 
@@ -113,44 +139,39 @@
 
         <div class="row">
           <div class="col-12">
-            <ui-form-section [showAction]="true">
+            <ui-form-section [showAction]="false">
               <mat-form-field class="w-100">
                 <input
                   matInput
-                  placeholder="HealthNetBC Username"
+                  placeholder="Username"
                   formControlName="ldapUsername" />
                 <mat-error>Required</mat-error>
               </mat-form-field>
-              <ng-container uiContextHelpContent>
-                <strong>Username Format:</strong> 1767-bsmith (typical format of
-                username: Organization ID-First Initial, Last Name)
-              </ng-container>
             </ui-form-section>
           </div>
+          <ui-page-section-subheader heading="HCIMWeb HealthNetBC Password">
+            <ng-container uiPageSectionSubheaderDesc>
+              If you have forgotten your password, or are unsure of it, please
+              follow
+              <strong>
+                <ui-anchor [href]="healthNetBcPasswordResetUrl">
+                  this link
+                </ui-anchor>
+              </strong>
+              to reset it before you start this process.
+            </ng-container>
+          </ui-page-section-subheader>
           <div class="col-12">
-            <ui-form-section [showAction]="true">
+            <ui-form-section [showAction]="false">
               <mat-form-field class="w-100">
                 <input
                   matInput
                   type="password"
-                  placeholder="HealthNetBC Password"
+                  placeholder="Password"
                   formControlName="ldapPassword" />
                 <mat-error>Required</mat-error>
               </mat-form-field>
-              <ng-container uiContextHelpContent>
-                <strong>Password:</strong> If you have forgotten your password,
-                or are unsure of it, please follow this
-                <ui-anchor [href]="healthNetBcPasswordResetUrl">link</ui-anchor>
-                to reset it before you start this process
-              </ng-container>
             </ui-form-section>
-          </div>
-          <div class="col-12">
-            <small>
-              <ui-anchor [href]="healthNetBcPasswordResetUrl">
-                Have you forgotten your password?
-              </ui-anchor>
-            </small>
           </div>
         </div>
       </ui-page-section>
