@@ -20,6 +20,8 @@ public class AccessRequestsController : PidpControllerBase
     [Authorize(Policy = Policies.PhsaAuthentication)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
+    [ProducesResponseType(StatusCodes.Status423Locked)]
     public async Task<IActionResult> CreateHcimReEnrolment([FromServices] ICommandHandler<HcimReEnrolment.Command, IDomainResult<HcimReEnrolment.Model>> handler,
                                                            [FromBody] HcimReEnrolment.Command command)
     {
