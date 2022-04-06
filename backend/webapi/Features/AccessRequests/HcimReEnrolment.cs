@@ -7,16 +7,29 @@ using NodaTime;
 
 using Pidp.Data;
 using Pidp.Infrastructure.HttpClients.Keycloak;
+using Pidp.Infrastructure.HttpClients.Ldap;
 using Pidp.Infrastructure.Services;
 using Pidp.Models;
 
 public class HcimReEnrolment
 {
-    public class Command : ICommand<IDomainResult>
+    public class Command : ICommand<IDomainResult<Model>>
     {
         public int PartyId { get; set; }
         public string LdapUsername { get; set; } = string.Empty;
         public string LdapPassword { get; set; } = string.Empty;
+    }
+
+    public class Model
+    {
+        public HcimLoginResult.AuthStatus AuthStatus { get; set; }
+        public int? RemainingAttempts { get; set; }
+
+        public Model(HcimLoginResult result)
+        {
+            this.AuthStatus = result.Status;
+            this.RemainingAttempts = result.RemainingAttempts;
+        }
     }
 
     public class CommandValidator : AbstractValidator<Command>
@@ -29,29 +42,53 @@ public class HcimReEnrolment
         }
     }
 
-    public class CommandHandler : ICommandHandler<Command, IDomainResult>
+    public class CommandHandler : ICommandHandler<Command, IDomainResult<Model>>
     {
         private readonly IClock clock;
         private readonly IEmailService emailService;
         private readonly IKeycloakAdministrationClient client;
+        private readonly ILdapClient ldapClient;
         private readonly PidpDbContext context;
 
         public CommandHandler(
             IClock clock,
             IEmailService emailService,
             IKeycloakAdministrationClient client,
+            ILdapClient ldapClient,
             PidpDbContext context)
         {
             this.clock = clock;
             this.emailService = emailService;
             this.client = client;
+            this.ldapClient = ldapClient;
             this.context = context;
         }
 
-        public async Task<IDomainResult> HandleAsync(Command command)
+        public async Task<IDomainResult<Model>> HandleAsync(Command command)
         {
-            // TODO check prerequisites
-            // TODO additional LDAP properties
+            var alreadyEnroled = await this.context.AccessRequests
+                .AnyAsync(request => request.PartyId == command.PartyId
+                    && request.AccessType == AccessType.HcimReEnrolment);
+            // TODO check other prerequisites
+            if (alreadyEnroled)
+            {
+                return DomainResult.Failed<Model>();
+            }
+
+            var loginResult = await this.ldapClient.HcimLoginAsync(command.LdapUsername, command.LdapPassword);
+            if (!loginResult.IsSuccess)
+            {
+                return loginResult.To<Model>();
+            }
+            if (loginResult.Value.IsError)
+            {
+                // DomainResult can only pass a value on Success.
+                return DomainResult.Success(new Model(loginResult.Value));
+            }
+
+            // TODO role assignment
+            // await this.client.AssignClientRole(dto.UserId, Resources.SAEforms, Roles.SAEforms);
+
             var newRequest = new HcimReEnrolmentAccessRequest
             {
                 PartyId = command.PartyId,
@@ -64,13 +101,10 @@ public class HcimReEnrolment
 
             await this.context.SaveChangesAsync();
 
-            // TODO role assignment?
-            // await this.client.AssignClientRole(dto.UserId, Resources.SAEforms, Roles.SAEforms);
-
             // TODO Email?
             // await this.emailService.SendSaEformsAccessRequestConfirmationAsync(command.PartyId);
 
-            return DomainResult.Success();
+            return DomainResult.Success(new Model(loginResult.Value));
         }
     }
 }
