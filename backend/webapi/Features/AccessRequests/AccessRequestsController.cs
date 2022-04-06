@@ -4,6 +4,7 @@ using DomainResults.Common;
 using DomainResults.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Globalization;
 
 using Pidp.Extensions;
 using Pidp.Infrastructure.Auth;
@@ -41,7 +42,7 @@ public class AccessRequestsController : PidpControllerBase
             case HcimLoginResult.AuthStatus.AccountLocked:
                 return this.StatusCode(StatusCodes.Status423Locked);
             case HcimLoginResult.AuthStatus.AuthFailure:
-                this.Response.SafeAddHeader("RemainingAttempts", result.Value.RemainingAttempts.Value.ToString());
+                this.Response.SafeAddHeader("RemainingAttempts", result.Value.RemainingAttempts?.ToString(CultureInfo.InvariantCulture));
                 return this.UnprocessableEntity();
             case HcimLoginResult.AuthStatus.Unauthorized:
                 return this.Forbid();
