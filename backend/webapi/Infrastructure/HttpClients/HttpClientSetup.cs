@@ -25,7 +25,7 @@ public static class HttpClientSetup
                 ClientSecret = config.ChesClient.ClientSecret
             });
 
-        services.AddHttpClientWithBaseAddress<ILdapClient, LdapClient>("https://common-logon-dev.hlth.gov.bc.ca"); //TODO config
+        services.AddHttpClientWithBaseAddress<ILdapClient, LdapClient>(config.LdapClient.Url);
 
         services.AddHttpClientWithBaseAddress<IKeycloakAdministrationClient, KeycloakAdministrationClient>(config.Keycloak.AdministrationUrl)
             .WithBearerToken(new KeycloakAdministrationClientCredentials
