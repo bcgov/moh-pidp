@@ -64,7 +64,7 @@ public class BaseClientTests : BaseClient
     {
         A.CallTo(this.MockedMessageHandler)
             .InvokingSendAsyncWithAnything()
-            .Throws(() => new HttpRequestException());
+            .Throws<HttpRequestException>();
 
         var result = await this.SendCoreAsync(method, TestUrl, null, default);
 
@@ -112,7 +112,7 @@ public class BaseClientTests : BaseClient
     {
         A.CallTo(this.MockedMessageHandler)
             .InvokingSendAsyncWithAnything()
-            .Throws(() => new HttpRequestException());
+            .Throws<HttpRequestException>();
 
         var result = await this.SendCoreAsync<object>(method, TestUrl, null, default);
 
