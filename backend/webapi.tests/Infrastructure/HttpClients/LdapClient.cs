@@ -118,7 +118,7 @@ public class LdapClientTests
     {
         var messageHandler = A.Fake<HttpMessageHandler>();
         A.CallTo(messageHandler)
-            .InvokingSendAsyncWith(HttpMethod.Post, BaseUrl + "ldap/users")
+            .InvokingSendAsyncWithAnything()
             .Throws<HttpRequestException>();
         var ldapClient = new LdapClient(new HttpClient(messageHandler) { BaseAddress = new Uri(BaseUrl) }, A.Fake<ILogger<LdapClient>>());
 
