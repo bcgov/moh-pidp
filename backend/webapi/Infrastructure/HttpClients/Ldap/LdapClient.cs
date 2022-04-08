@@ -7,63 +7,57 @@ public class LdapClient : BaseClient, ILdapClient
 {
     public LdapClient(HttpClient client, ILogger<LdapClient> logger) : base(client, logger) { }
 
-    public async Task<IDomainResult<HcimLoginResult>> HcimLoginAsync(string username, string password)
+    public async Task<IDomainResult<HcimAuthorizationStatus>> HcimLoginAsync(string username, string password)
     {
-        var response = await this.PostAsync<HcimLoginResponse>("ldap/users", new LoginRequest(username, password));
+        var response = await this.PostAsync<LdapLoginResponse>("ldap/users", new LoginRequest(username, password));
 
         if (!response.IsSuccess)
         {
-            return response.To<HcimLoginResult>();
+            return response.To<HcimAuthorizationStatus>();
         }
 
-        return DomainResult.Success(HcimLoginResult.FromLoginResponse(response.Value));
+        return DomainResult.Success(HcimAuthorizationStatus.FromLoginResponse(response.Value));
     }
 }
 
-public class HcimLoginResult
+public class HcimAuthorizationStatus
 {
-    public enum AuthStatus
+    public enum AuthorizationStatus
     {
-        Success = 1,
+        Authorized = 1,
         AccountLocked,
         AuthFailure,
         Unauthorized,
     }
 
-    public AuthStatus Status { get; set; }
+    public AuthorizationStatus Status { get; set; }
     public string? HcimUserRole { get; set; }
     public int? RemainingAttempts { get; set; }
 
-    public bool IsError => this.Status != AuthStatus.Success;
+    public bool IsAuthorized => this.Status == AuthorizationStatus.Authorized;
 
-    public static HcimLoginResult FromLoginResponse(HcimLoginResponse login)
+    public static HcimAuthorizationStatus FromLoginResponse(LdapLoginResponse login)
     {
         if (login.Unlocked == false)
         {
-            return new HcimLoginResult { Status = AuthStatus.AccountLocked };
+            return new HcimAuthorizationStatus { Status = AuthorizationStatus.AccountLocked };
         }
 
         if (login.Authenticated == true)
         {
-            return new HcimLoginResult
+            return new HcimAuthorizationStatus
             {
                 HcimUserRole = login.Hcmuserrole,
                 Status = string.IsNullOrWhiteSpace(login.Hcmuserrole)
-                    ? AuthStatus.Unauthorized
-                    : AuthStatus.Success
+                    ? AuthorizationStatus.Unauthorized
+                    : AuthorizationStatus.Authorized
             };
         }
 
-        return new HcimLoginResult
+        return new HcimAuthorizationStatus
         {
-            Status = AuthStatus.AuthFailure,
+            Status = AuthorizationStatus.AuthFailure,
             RemainingAttempts = login.RemaingingAttempts
         };
     }
-}
-
-public static partial class LdapLoggingExtensions
-{
-    [LoggerMessage(1, LogLevel.Error, "Empty response from LDAP login; most likely the user doesn't exist.")]
-    public static partial void LogEmptyResponse(this ILogger logger);
 }

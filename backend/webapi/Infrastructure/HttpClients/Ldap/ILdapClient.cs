@@ -4,5 +4,5 @@ using DomainResults.Common;
 
 public interface ILdapClient
 {
-    Task<IDomainResult<HcimLoginResult>> HcimLoginAsync(string username, string password);
+    Task<IDomainResult<HcimAuthorizationStatus>> HcimLoginAsync(string username, string password);
 }

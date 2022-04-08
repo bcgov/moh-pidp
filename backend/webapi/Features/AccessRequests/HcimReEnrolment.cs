@@ -22,10 +22,12 @@ public class HcimReEnrolment
 
     public class Model
     {
-        public HcimLoginResult.AuthStatus AuthStatus { get; set; }
+        public HcimAuthorizationStatus.AuthorizationStatus AuthStatus { get; set; }
         public int? RemainingAttempts { get; set; }
 
-        public Model(HcimLoginResult result)
+        public Model() { }
+
+        public Model(HcimAuthorizationStatus result)
         {
             this.AuthStatus = result.Status;
             this.RemainingAttempts = result.RemainingAttempts;
@@ -80,10 +82,13 @@ public class HcimReEnrolment
             {
                 return loginResult.To<Model>();
             }
-            if (loginResult.Value.IsError)
+
+            var authStatus = loginResult.Value;
+
+            if (!authStatus.IsAuthorized)
             {
                 // DomainResult can only pass a value on Success.
-                return DomainResult.Success(new Model(loginResult.Value));
+                return DomainResult.Success(new Model(authStatus));
             }
 
             // TODO role assignment
@@ -104,7 +109,7 @@ public class HcimReEnrolment
             // TODO Email?
             // await this.emailService.SendSaEformsAccessRequestConfirmationAsync(command.PartyId);
 
-            return DomainResult.Success(new Model(loginResult.Value));
+            return DomainResult.Success(new Model(authStatus));
         }
     }
 }

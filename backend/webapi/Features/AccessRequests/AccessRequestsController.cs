@@ -8,8 +8,8 @@ using System.Globalization;
 
 using Pidp.Extensions;
 using Pidp.Infrastructure.Auth;
-using Pidp.Infrastructure.HttpClients.Ldap;
 using Pidp.Infrastructure.Services;
+using static Pidp.Infrastructure.HttpClients.Ldap.HcimAuthorizationStatus;
 
 [Route("api/[controller]")]
 public class AccessRequestsController : PidpControllerBase
@@ -39,14 +39,14 @@ public class AccessRequestsController : PidpControllerBase
 
         switch (result.Value.AuthStatus)
         {
-            case HcimLoginResult.AuthStatus.Success:
+            case AuthorizationStatus.Authorized:
                 return this.NoContent();
-            case HcimLoginResult.AuthStatus.AccountLocked:
+            case AuthorizationStatus.AccountLocked:
                 return this.StatusCode(StatusCodes.Status423Locked);
-            case HcimLoginResult.AuthStatus.AuthFailure:
+            case AuthorizationStatus.AuthFailure:
                 this.Response.SafeAddHeader("RemainingAttempts", result.Value.RemainingAttempts?.ToString(CultureInfo.InvariantCulture));
                 return this.UnprocessableEntity();
-            case HcimLoginResult.AuthStatus.Unauthorized:
+            case AuthorizationStatus.Unauthorized:
                 return this.Forbid();
             default:
                 throw new NotImplementedException();

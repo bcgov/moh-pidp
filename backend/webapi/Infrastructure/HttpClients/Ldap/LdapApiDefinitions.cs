@@ -32,7 +32,7 @@ public class LoginRequest
 //     "remainingAttempts": <0 to 3>,
 //     "userName": "uid=<username>,o=Ministry of Health"
 // }
-public class HcimLoginResponse
+public class LdapLoginResponse
 {
     public bool? Authenticated { get; set; }
     public string? Hcmuserrole { get; set; }
