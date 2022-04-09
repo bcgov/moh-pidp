@@ -2,6 +2,7 @@ namespace Pidp.Infrastructure.HttpClients.Ldap;
 
 using DomainResults.Common;
 using Microsoft.Extensions.Logging;
+using System.Diagnostics.CodeAnalysis;
 
 public class LdapClient : BaseClient, ILdapClient
 {
@@ -34,6 +35,7 @@ public class HcimAuthorizationStatus
     public string? HcimUserRole { get; set; }
     public int? RemainingAttempts { get; set; }
 
+    [MemberNotNullWhen(true, nameof(HcimUserRole))]
     public bool IsAuthorized => this.Status == AuthorizationStatus.Authorized;
 
     public static HcimAuthorizationStatus FromLoginResponse(LdapLoginResponse login)

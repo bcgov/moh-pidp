@@ -27,10 +27,10 @@ public class HcimReEnrolment
 
         public Model() { }
 
-        public Model(HcimAuthorizationStatus result)
+        public Model(HcimAuthorizationStatus authStatus)
         {
-            this.AuthStatus = result.Status;
-            this.RemainingAttempts = result.RemainingAttempts;
+            this.AuthStatus = authStatus.Status;
+            this.RemainingAttempts = authStatus.RemainingAttempts;
         }
     }
 
@@ -46,6 +46,7 @@ public class HcimReEnrolment
 
     public class CommandHandler : ICommandHandler<Command, IDomainResult<Model>>
     {
+        private readonly string hcimClientId;
         private readonly IClock clock;
         private readonly IEmailService emailService;
         private readonly IKeycloakAdministrationClient client;
@@ -57,8 +58,10 @@ public class HcimReEnrolment
             IEmailService emailService,
             IKeycloakAdministrationClient client,
             ILdapClient ldapClient,
+            PidpConfiguration config,
             PidpDbContext context)
         {
+            this.hcimClientId = config.Keycloak.HcimClientId;
             this.clock = clock;
             this.emailService = emailService;
             this.client = client;
@@ -68,11 +71,17 @@ public class HcimReEnrolment
 
         public async Task<IDomainResult<Model>> HandleAsync(Command command)
         {
-            var alreadyEnroled = await this.context.AccessRequests
-                .AnyAsync(request => request.PartyId == command.PartyId
-                    && request.AccessType == AccessType.HcimReEnrolment);
+            var dto = await this.context.Parties
+                .Where(party => party.Id == command.PartyId)
+                .Select(party => new
+                {
+                    party.UserId,
+                    AlreadyEnroled = party.AccessRequests.Any(request => request.AccessType == AccessType.HcimReEnrolment)
+                })
+                .SingleAsync(); // Already did existance check
+
             // TODO check other prerequisites
-            if (alreadyEnroled)
+            if (dto.AlreadyEnroled)
             {
                 return DomainResult.Failed<Model>();
             }
@@ -91,8 +100,12 @@ public class HcimReEnrolment
                 return DomainResult.Success(new Model(authStatus));
             }
 
-            // TODO role assignment
-            // await this.client.AssignClientRole(dto.UserId, Resources.SAEforms, Roles.SAEforms);
+            var roleAssignmentSuccess = await this.client.AssignClientRole(dto.UserId, this.hcimClientId, authStatus.HcimUserRole);
+            if (!roleAssignmentSuccess)
+            {
+                // TODO uncomment when MOH keycloak service account has access to client
+                // return DomainResult.Failed<Model>();
+            }
 
             var newRequest = new HcimReEnrolmentAccessRequest
             {

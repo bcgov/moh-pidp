@@ -46,6 +46,7 @@ public class PidpConfiguration
         public string AdministrationUrl { get; set; } = string.Empty;
         public string AdministrationClientId { get; set; } = string.Empty;
         public string AdministrationClientSecret { get; set; } = string.Empty;
+        public string HcimClientId { get; set; } = string.Empty;
     }
 
     public class LdapClientConfiguration
