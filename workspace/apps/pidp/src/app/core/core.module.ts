@@ -19,8 +19,10 @@ import { PermissionsModule } from '@app/modules/permissions/permissions.module';
 
 const modules = [
   BrowserModule,
-  HttpClientModule,
   BrowserAnimationsModule,
+  HttpClientModule,
+  // TODO required at root to connect with HttpClientModule
+  NgxProgressBarModule,
   // TODO only applied to allow for a few core services until moved
   ReactiveFormsModule,
   // TODO only applied to allow for a few core services until moved
@@ -29,8 +31,6 @@ const modules = [
   KeycloakModule,
   PermissionsModule.forRoot(),
   RootRoutingModule,
-  NgxProgressBarModule,
-  // TODO temporily added to stop message from being displayed
   NgxBusyModule,
 ];
 

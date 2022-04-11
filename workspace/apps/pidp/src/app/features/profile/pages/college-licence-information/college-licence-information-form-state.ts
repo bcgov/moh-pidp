@@ -1,6 +1,6 @@
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 
-import { AbstractFormState } from '@bcgov/shared/ui';
+import { AbstractFormState, FormControlValidators } from '@bcgov/shared/ui';
 
 import { CollegeLicenceInformationModel } from './college-licence-information.model';
 
@@ -37,7 +37,10 @@ export class CollegeLicenceInformationFormState extends AbstractFormState<Colleg
 
   public buildForm(): void {
     this.formInstance = this.fb.group({
-      collegeCode: [0, [Validators.required]],
+      collegeCode: [
+        0,
+        [Validators.required, FormControlValidators.requiredIndex],
+      ],
       licenceNumber: ['', [Validators.required]],
     });
   }

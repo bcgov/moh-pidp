@@ -1,0 +1,13 @@
+:host {
+  // Force the host to be block-level so the spacing
+  // of the dashboard image can be manipulated externally
+  display: block;
+
+  // Host component controls the width of the projected
+  // content and should not be maintained within the
+  // component
+  img {
+    width: 100%;
+    height: auto;
+  }
+}

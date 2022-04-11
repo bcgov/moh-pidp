@@ -114,9 +114,8 @@ export class PortalService {
 
     return (
       status.demographics.statusCode === StatusCode.COMPLETED &&
-      (status.hcim?.statusCode === StatusCode.AVAILABLE ||
-        (status.collegeCertification?.statusCode === StatusCode.COMPLETED &&
-          status.saEforms?.statusCode === StatusCode.AVAILABLE))
+      status.collegeCertification?.statusCode === StatusCode.COMPLETED &&
+      status.saEforms?.statusCode === StatusCode.AVAILABLE
     );
   }
 
