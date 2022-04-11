@@ -53,7 +53,7 @@
             <p>
               If you have forgotten your password, or are unsure of it, follow
               this
-              <ui-anchor [href]="healthNetBcPasswordResetUrl"> link </ui-anchor>
+              <ui-anchor [href]="healthNetBcPasswordResetUrl">link</ui-anchor>
               to reset it before you start this process.
             </p>
             <p>
@@ -90,7 +90,7 @@
         </ui-alert>
 
         <ui-alert
-          *ngIf="loginAttempts >= maxLoginAttempts"
+          *ngIf="accessRequestStatusCode === HcimAccessRequestStatusCode.ACCOUNT_LOCKED"
           type="danger"
           icon="error_outline"
           iconType="outlined"
@@ -174,12 +174,7 @@
     </ng-container>
 
     <ng-template #notRequested>
-      <button
-        mat-flat-button
-        uiPageFooterAction
-        type="submit"
-        color="primary"
-        [disabled]="loginAttempts >= maxLoginAttempts">
+      <button mat-flat-button uiPageFooterAction type="submit" color="primary">
         Next
       </button>
     </ng-template>
