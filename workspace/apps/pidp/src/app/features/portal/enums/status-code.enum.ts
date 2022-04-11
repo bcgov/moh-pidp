@@ -3,4 +3,5 @@ export enum StatusCode {
   COMPLETED,
   NOT_AVAILABLE,
   ERROR,
+  HIDDEN,
 }

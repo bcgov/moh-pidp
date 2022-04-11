@@ -1,6 +1,12 @@
-<div class="ng-busy-default-wrapper">
-  <!--
-  // NOTE: Already obvious to user that load is occurring this seems
-  // annoying, but left in case it becomes required
-  -->
+<div [class.overlay-viewport]="overlayViewport$ | async">
+  <div *ngIf="message$ | async as message">
+    <span>
+      <mat-spinner diameter="50"></mat-spinner>
+    </span>
+    <span>
+      <p>
+        {{ message }}
+      </p>
+    </span>
+  </div>
 </div>

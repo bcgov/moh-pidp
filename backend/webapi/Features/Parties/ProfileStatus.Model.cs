@@ -1,6 +1,7 @@
 namespace Pidp.Features.Parties;
 
 using NodaTime;
+
 using Pidp.Models;
 using Pidp.Models.Lookups;
 
@@ -22,6 +23,18 @@ public partial class ProfileStatus
 
             protected override void SetAlertsAndStatus(ProfileStatusDto profile)
             {
+                if (!profile.UserIsBcServicesCard)
+                {
+                    this.StatusCode = StatusCode.Hidden;
+                    return;
+                }
+
+                if (!profile.DemographicsEntered)
+                {
+                    this.StatusCode = StatusCode.Locked;
+                    return;
+                }
+
                 if (!profile.CollegeCertificationEntered)
                 {
                     this.StatusCode = StatusCode.Incomplete;
@@ -52,7 +65,7 @@ public partial class ProfileStatus
             internal override string SectionName => "demographics";
             public string FirstName { get; set; } = string.Empty;
             public string LastName { get; set; } = string.Empty;
-            public LocalDate Birthdate { get; set; }
+            public LocalDate? Birthdate { get; set; }
             public string? Email { get; set; }
             public string? Phone { get; set; }
 
@@ -60,9 +73,9 @@ public partial class ProfileStatus
             {
                 this.FirstName = profile.FirstName;
                 this.LastName = profile.LastName;
-                this.Birthdate = profile.Birthdate;
-                this.Email = profile.Email;
-                this.Phone = profile.Phone;
+                this.Birthdate = profile?.Birthdate;
+                this.Email = profile?.Email;
+                this.Phone = profile?.Phone;
             }
 
             protected override void SetAlertsAndStatus(ProfileStatusDto profile) => this.StatusCode = profile.DemographicsEntered ? StatusCode.Complete : StatusCode.Incomplete;
@@ -76,8 +89,21 @@ public partial class ProfileStatus
 
             protected override void SetAlertsAndStatus(ProfileStatusDto profile)
             {
-                // TODO this
-                this.StatusCode = StatusCode.Incomplete;
+                if (profile.UserIsBcServicesCard)
+                {
+                    this.StatusCode = StatusCode.Hidden;
+                    return;
+                }
+
+                if (profile.CompletedEnrolments.Contains(AccessType.HcimReEnrolment))
+                {
+                    this.StatusCode = StatusCode.Complete;
+                    return;
+                }
+
+                this.StatusCode = profile.DemographicsEntered
+                    ? StatusCode.Incomplete
+                    : StatusCode.Locked;
             }
         }
 
@@ -89,6 +115,12 @@ public partial class ProfileStatus
 
             protected override void SetAlertsAndStatus(ProfileStatusDto profile)
             {
+                if (!profile.UserIsBcServicesCard)
+                {
+                    this.StatusCode = StatusCode.Hidden;
+                    return;
+                }
+
                 if (profile.CompletedEnrolments.Contains(AccessType.SAEforms))
                 {
                     this.StatusCode = StatusCode.Complete;

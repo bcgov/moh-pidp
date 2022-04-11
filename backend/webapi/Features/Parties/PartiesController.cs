@@ -71,7 +71,7 @@ public class PartiesController : PidpControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<ProfileStatus.Model>> ComputePartyProfileStatus([FromServices] ICommandHandler<ProfileStatus.Command, IDomainResult<ProfileStatus.Model>> handler,
                                                                                    [FromRoute] ProfileStatus.Command command)
-        => await this.AuthorizePartyBeforeHandleAsync(command.Id, handler, command)
+        => await this.AuthorizePartyBeforeHandleAsync(command.Id, handler, command.WithUser(this.User))
             .ToActionResultOfT();
 
     [HttpGet("{id}/work-setting")]

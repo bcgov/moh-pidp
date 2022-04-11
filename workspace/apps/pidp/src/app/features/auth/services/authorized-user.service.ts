@@ -35,6 +35,14 @@ export class AuthorizedUserService {
 
   /**
    * @description
+   * Get the identity provider used to authenticate.
+   */
+  public get identityProvider$(): Observable<IdentityProvider> {
+    return this.user$.pipe(map((user: User) => user.identityProvider));
+  }
+
+  /**
+   * @description
    * Get the authorized user resolver mapped from
    * the access token.
    */

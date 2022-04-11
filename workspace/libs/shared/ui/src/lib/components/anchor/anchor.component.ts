@@ -8,6 +8,8 @@ import {
   ViewChild,
 } from '@angular/core';
 
+import { PhonePipe } from '../../pipes';
+
 @Component({
   selector: 'ui-anchor',
   template: `
@@ -15,6 +17,7 @@ import {
       <ng-content></ng-content>
     </a>
   `,
+  viewProviders: [PhonePipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AnchorComponent implements OnInit, AfterViewInit {
@@ -41,7 +44,7 @@ export class AnchorComponent implements OnInit, AfterViewInit {
 
   public hrefPrefix: string;
 
-  public constructor() {
+  public constructor(private phonePipe: PhonePipe) {
     this.scheme = 'url';
     this.hrefPrefix = '';
     this.target = '_blank';
@@ -51,7 +54,8 @@ export class AnchorComponent implements OnInit, AfterViewInit {
     if (this.scheme === 'scroll') {
       this.hrefPrefix = '#';
     } else if (this.scheme !== 'url') {
-      this.hrefPrefix = `${this.scheme}:`;
+      const suffix = this.scheme === 'tel' ? '+1' : '';
+      this.hrefPrefix = `${this.scheme}:${suffix}`;
     }
   }
 
@@ -62,7 +66,8 @@ export class AnchorComponent implements OnInit, AfterViewInit {
     }
 
     if (!this.link.nativeElement.innerText.trim().length) {
-      this.link.nativeElement.innerText = this.href;
+      this.link.nativeElement.innerText =
+        this.scheme === 'tel' ? this.phonePipe.transform(this.href) : this.href;
     }
   }
 }

@@ -49,10 +49,15 @@
   </ng-container>
 
   <ui-page-footer>
-    <button mat-stroked-button type="button" color="primary" (click)="onBack()">
+    <button
+      mat-stroked-button
+      uiPageFooterAction
+      type="button"
+      color="primary"
+      (click)="onBack()">
       Back Home
     </button>
-    <button mat-flat-button type="submit" color="primary">
+    <button mat-flat-button uiPageFooterAction type="submit" color="primary">
       Save Information
     </button>
   </ui-page-footer>

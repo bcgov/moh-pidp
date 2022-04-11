@@ -3,11 +3,11 @@ h2 {
   gap: 1rem;
 
   .mat-icon {
-    font-size: 2rem;
+    font-size: 1.65rem;
   }
 
   span {
     // Slight vertical alignment of icon and header
-    padding-top: 0.05rem;
+    margin-top: -0.15rem;
   }
 }

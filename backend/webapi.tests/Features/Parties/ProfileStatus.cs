@@ -2,36 +2,39 @@ namespace PidpTests.Features.Parties;
 
 using FakeItEasy;
 using NodaTime;
+using System.Security.Claims;
 using Xunit;
 
+using Pidp.Extensions;
 using Pidp.Models;
 using Pidp.Models.Lookups;
 using Pidp.Infrastructure.HttpClients.Plr;
 using static Pidp.Features.Parties.ProfileStatus;
 using static Pidp.Features.Parties.ProfileStatus.Model;
 using PidpTests.TestingExtensions;
+using Pidp.Infrastructure.Auth;
 
 public class ProfileStatusTests : InMemoryDbTest
 {
     [Fact]
-    public async void HandleAsync_NoProfile_NoCompleteSections()
+    public async void HandleAsync_BcscNoProfile_NoCompleteSections()
     {
         var party = this.TestDb.Has(new Party { FirstName = "first", LastName = "last", Birthdate = LocalDate.FromDateTime(DateTime.Today) });
         var client = A.Fake<IPlrClient>();
         var handler = this.MockDependenciesFor<CommandHandler>(client);
 
-        var result = await handler.HandleAsync(new Command { Id = party.Id });
+        var result = await handler.HandleAsync(new Command { Id = party.Id, User = MockedBcscUser() });
 
         Assert.True(result.IsSuccess);
         A.CallTo(() => client.GetPlrRecord(A<CollegeCode>._, A<string>._, A<LocalDate>._)).MustNotHaveHappened();
 
         var profile = result.Value;
         Assert.Equal(new HashSet<Alert>(), profile.Alerts);
-        profile.AssertSectionStatus(StatusCode.Incomplete, StatusCode.Incomplete, StatusCode.Locked);
+        profile.AssertSectionStatus(StatusCode.Incomplete, StatusCode.Locked, StatusCode.Hidden, StatusCode.Locked);
     }
 
     [Fact]
-    public async void HandleAsync_DemographicsFinished_OneCompleteSection()
+    public async void HandleAsync_BcscDemographicsFinished_OneCompleteSection()
     {
         var party = this.TestDb.Has(new Party
         {
@@ -44,14 +47,14 @@ public class ProfileStatusTests : InMemoryDbTest
         var client = A.Fake<IPlrClient>();
         var handler = this.MockDependenciesFor<CommandHandler>(client);
 
-        var result = await handler.HandleAsync(new Command { Id = party.Id });
+        var result = await handler.HandleAsync(new Command { Id = party.Id, User = MockedBcscUser() });
 
         Assert.True(result.IsSuccess);
         A.CallTo(() => client.GetPlrRecord(A<CollegeCode>._, A<string>._, A<LocalDate>._)).MustNotHaveHappened();
 
         var profile = result.Value;
         Assert.Equal(new HashSet<Alert>(), profile.Alerts);
-        profile.AssertSectionStatus(StatusCode.Complete, StatusCode.Incomplete, StatusCode.Locked);
+        profile.AssertSectionStatus(StatusCode.Complete, StatusCode.Incomplete, StatusCode.Hidden, StatusCode.Locked);
 
         var demographics = profile.Section<Demographics>();
         Assert.Equal(party.FirstName, demographics.FirstName);
@@ -62,7 +65,7 @@ public class ProfileStatusTests : InMemoryDbTest
     }
 
     [Fact]
-    public async void HandleAsync_CertificationFinishedWithIpcAndGoodStanding_TwoCompleteSections()
+    public async void HandleAsync_BcscCertificationFinishedWithIpcAndGoodStanding_TwoCompleteSections()
     {
         var party = this.TestDb.Has(new Party
         {
@@ -82,14 +85,14 @@ public class ProfileStatusTests : InMemoryDbTest
         A.CallTo(() => client.GetRecordStatus(party.PartyCertification!.Ipc)).Returns(new MockedPlrRecordStatus(true));
         var handler = this.MockDependenciesFor<CommandHandler>(client);
 
-        var result = await handler.HandleAsync(new Command { Id = party.Id });
+        var result = await handler.HandleAsync(new Command { Id = party.Id, User = MockedBcscUser() });
 
         Assert.True(result.IsSuccess);
         A.CallTo(() => client.GetPlrRecord(A<CollegeCode>._, A<string>._, A<LocalDate>._)).MustNotHaveHappened();
 
         var profile = result.Value;
         Assert.Equal(new HashSet<Alert>(), profile.Alerts);
-        profile.AssertSectionStatus(StatusCode.Complete, StatusCode.Complete, StatusCode.Incomplete);
+        profile.AssertSectionStatus(StatusCode.Complete, StatusCode.Complete, StatusCode.Hidden, StatusCode.Incomplete);
 
         var certification = profile.Section<CollegeCertification>();
         Assert.Equal(party.PartyCertification!.CollegeCode, certification.CollegeCode);
@@ -97,7 +100,7 @@ public class ProfileStatusTests : InMemoryDbTest
     }
 
     [Fact]
-    public async void HandleAsync_CertificationFinishedWithIpcAndBadStanding_Error()
+    public async void HandleAsync_BcscCertificationFinishedWithIpcAndBadStanding_Error()
     {
         var party = this.TestDb.Has(new Party
         {
@@ -117,14 +120,14 @@ public class ProfileStatusTests : InMemoryDbTest
         A.CallTo(() => client.GetRecordStatus(party.PartyCertification!.Ipc)).Returns(new MockedPlrRecordStatus(false));
         var handler = this.MockDependenciesFor<CommandHandler>(client);
 
-        var result = await handler.HandleAsync(new Command { Id = party.Id });
+        var result = await handler.HandleAsync(new Command { Id = party.Id, User = MockedBcscUser() });
 
         Assert.True(result.IsSuccess);
         A.CallTo(() => client.GetPlrRecord(A<CollegeCode>._, A<string>._, A<LocalDate>._)).MustNotHaveHappened();
 
         var profile = result.Value;
         Assert.Equal(new HashSet<Alert> { Alert.PlrBadStanding }, profile.Alerts);
-        profile.AssertSectionStatus(StatusCode.Complete, StatusCode.Error, StatusCode.Locked);
+        profile.AssertSectionStatus(StatusCode.Complete, StatusCode.Error, StatusCode.Hidden, StatusCode.Locked);
 
         var certification = profile.Section<CollegeCertification>();
         Assert.Equal(party.PartyCertification!.CollegeCode, certification.CollegeCode);
@@ -132,7 +135,7 @@ public class ProfileStatusTests : InMemoryDbTest
     }
 
     [Fact]
-    public async void HandleAsync_CertificationFinishedWithIpcAndRecordStatusCannotBeFound_TransientError()
+    public async void HandleAsync_BcscCertificationFinishedWithIpcAndRecordStatusCannotBeFound_TransientError()
     {
         var party = this.TestDb.Has(new Party
         {
@@ -152,14 +155,14 @@ public class ProfileStatusTests : InMemoryDbTest
         A.CallTo(() => client.GetRecordStatus(party.PartyCertification!.Ipc)).Returns((PlrRecordStatus)null!);
         var handler = this.MockDependenciesFor<CommandHandler>(client);
 
-        var result = await handler.HandleAsync(new Command { Id = party.Id });
+        var result = await handler.HandleAsync(new Command { Id = party.Id, User = MockedBcscUser() });
 
         Assert.True(result.IsSuccess);
         A.CallTo(() => client.GetPlrRecord(A<CollegeCode>._, A<string>._, A<LocalDate>._)).MustNotHaveHappened();
 
         var profile = result.Value;
         Assert.Equal(new HashSet<Alert> { Alert.TransientError }, profile.Alerts);
-        profile.AssertSectionStatus(StatusCode.Complete, StatusCode.Error, StatusCode.Locked);
+        profile.AssertSectionStatus(StatusCode.Complete, StatusCode.Error, StatusCode.Hidden, StatusCode.Locked);
 
         var certification = profile.Section<CollegeCertification>();
         Assert.Equal(party.PartyCertification!.CollegeCode, certification.CollegeCode);
@@ -167,7 +170,7 @@ public class ProfileStatusTests : InMemoryDbTest
     }
 
     [Fact]
-    public async void HandleAsync_CertificationFinishedWithNoIpcCannotBeFound_TransientError()
+    public async void HandleAsync_BcscCertificationFinishedWithNoIpcCannotBeFound_TransientError()
     {
         var party = this.TestDb.Has(new Party
         {
@@ -184,18 +187,18 @@ public class ProfileStatusTests : InMemoryDbTest
             }
         });
         var client = A.Fake<IPlrClient>();
-        A.CallTo(() => client.GetPlrRecord(party.PartyCertification!.CollegeCode, party.PartyCertification.LicenceNumber, party.Birthdate)).Returns((string)null!);
+        A.CallTo(() => client.GetPlrRecord(party.PartyCertification!.CollegeCode, party.PartyCertification.LicenceNumber, party.Birthdate!.Value)).Returns((string)null!);
         var handler = this.MockDependenciesFor<CommandHandler>(client);
 
-        var result = await handler.HandleAsync(new Command { Id = party.Id });
+        var result = await handler.HandleAsync(new Command { Id = party.Id, User = MockedBcscUser() });
 
         Assert.True(result.IsSuccess);
         Assert.Null(party.PartyCertification!.Ipc);
-        A.CallTo(() => client.GetPlrRecord(party.PartyCertification!.CollegeCode, party.PartyCertification.LicenceNumber, party.Birthdate)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => client.GetPlrRecord(party.PartyCertification!.CollegeCode, party.PartyCertification.LicenceNumber, party.Birthdate!.Value)).MustHaveHappenedOnceExactly();
 
         var profile = result.Value;
         Assert.Equal(new HashSet<Alert> { Alert.TransientError }, profile.Alerts);
-        profile.AssertSectionStatus(StatusCode.Complete, StatusCode.Error, StatusCode.Locked);
+        profile.AssertSectionStatus(StatusCode.Complete, StatusCode.Error, StatusCode.Hidden, StatusCode.Locked);
 
         var certification = profile.Section<CollegeCertification>();
         Assert.Equal(party.PartyCertification!.CollegeCode, certification.CollegeCode);
@@ -203,7 +206,7 @@ public class ProfileStatusTests : InMemoryDbTest
     }
 
     [Fact]
-    public async void HandleAsync_CertificationFinishedWithNoIpcButThenFoundInGoodStanding_IpcUpdatedTwoCompleteSections()
+    public async void HandleAsync_BcscCertificationFinishedWithNoIpcButThenFoundInGoodStanding_IpcUpdatedTwoCompleteSections()
     {
         var party = this.TestDb.Has(new Party
         {
@@ -221,19 +224,19 @@ public class ProfileStatusTests : InMemoryDbTest
         });
         var expectedIpc = "newIPC";
         var client = A.Fake<IPlrClient>();
-        A.CallTo(() => client.GetPlrRecord(party.PartyCertification!.CollegeCode, party.PartyCertification.LicenceNumber, party.Birthdate)).Returns(expectedIpc);
+        A.CallTo(() => client.GetPlrRecord(party.PartyCertification!.CollegeCode, party.PartyCertification.LicenceNumber, party.Birthdate!.Value)).Returns(expectedIpc);
         A.CallTo(() => client.GetRecordStatus(expectedIpc)).Returns(new MockedPlrRecordStatus(true));
         var handler = this.MockDependenciesFor<CommandHandler>(client);
 
-        var result = await handler.HandleAsync(new Command { Id = party.Id });
+        var result = await handler.HandleAsync(new Command { Id = party.Id, User = MockedBcscUser() });
 
         Assert.True(result.IsSuccess);
         Assert.Equal(expectedIpc, party.PartyCertification!.Ipc);
-        A.CallTo(() => client.GetPlrRecord(party.PartyCertification!.CollegeCode, party.PartyCertification.LicenceNumber, party.Birthdate)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => client.GetPlrRecord(party.PartyCertification!.CollegeCode, party.PartyCertification.LicenceNumber, party.Birthdate!.Value)).MustHaveHappenedOnceExactly();
 
         var profile = result.Value;
         Assert.Equal(new HashSet<Alert>(), profile.Alerts);
-        profile.AssertSectionStatus(StatusCode.Complete, StatusCode.Complete, StatusCode.Incomplete);
+        profile.AssertSectionStatus(StatusCode.Complete, StatusCode.Complete, StatusCode.Hidden, StatusCode.Incomplete);
 
         var certification = profile.Section<CollegeCertification>();
         Assert.Equal(party.PartyCertification!.CollegeCode, certification.CollegeCode);
@@ -241,7 +244,7 @@ public class ProfileStatusTests : InMemoryDbTest
     }
 
     [Fact]
-    public async void HandleAsync_CompletedProfileAndSaEnrolement_EverythingComplete()
+    public async void HandleAsync_BcscCompletedProfileAndSaEnrolement_EverythingComplete()
     {
         var party = this.TestDb.Has(new Party
         {
@@ -268,16 +271,16 @@ public class ProfileStatusTests : InMemoryDbTest
         A.CallTo(() => client.GetRecordStatus(party.PartyCertification!.Ipc)).Returns(new MockedPlrRecordStatus(true));
         var handler = this.MockDependenciesFor<CommandHandler>(client);
 
-        var result = await handler.HandleAsync(new Command { Id = party.Id });
+        var result = await handler.HandleAsync(new Command { Id = party.Id, User = MockedBcscUser() });
 
         Assert.True(result.IsSuccess);
         A.CallTo(() => client.GetPlrRecord(A<CollegeCode>._, A<string>._, A<LocalDate>._)).MustNotHaveHappened();
 
         var profile = result.Value;
         Assert.Equal(new HashSet<Alert>(), profile.Alerts);
-        profile.AssertSectionStatus(StatusCode.Complete, StatusCode.Complete, StatusCode.Complete);
+        profile.AssertSectionStatus(StatusCode.Complete, StatusCode.Complete, StatusCode.Hidden, StatusCode.Complete);
     }
-    
+
     // TODO HCIM tests
 
     private class MockedPlrRecordStatus : PlrRecordStatus
@@ -287,14 +290,29 @@ public class ProfileStatusTests : InMemoryDbTest
 
         public override bool IsGoodStanding() => this.goodStanding;
     }
+
+    private static ClaimsPrincipal MockedBcscUser()
+    {
+        var user = A.Fake<ClaimsPrincipal>();
+        A.CallTo(() => user.FindFirst(Claims.IdentityProvider)).Returns(new Claim(Claims.IdentityProvider, ClaimValues.BCServicesCard));
+        return user;
+    }
+
+    private static ClaimsPrincipal MockedPhsaUser()
+    {
+        var user = A.Fake<ClaimsPrincipal>();
+        A.CallTo(() => user.FindFirst(Claims.IdentityProvider)).Returns(new Claim(Claims.IdentityProvider, ClaimValues.Phsa));
+        return user;
+    }
 }
 
 public static class ProfileStatusExtensions
 {
-    public static void AssertSectionStatus(this Model profileStatus, StatusCode demographicsStatus, StatusCode collegeCertStatus, StatusCode saEformsStatus)
+    public static void AssertSectionStatus(this Model profileStatus, StatusCode demographics, StatusCode collegeCertification, StatusCode hcimReEnrolment, StatusCode saEformsStatus)
     {
-        Assert.Equal(demographicsStatus, profileStatus.Section<Demographics>().StatusCode);
-        Assert.Equal(collegeCertStatus, profileStatus.Section<CollegeCertification>().StatusCode);
+        Assert.Equal(demographics, profileStatus.Section<Demographics>().StatusCode);
+        Assert.Equal(collegeCertification, profileStatus.Section<CollegeCertification>().StatusCode);
+        Assert.Equal(hcimReEnrolment, profileStatus.Section<HcimReEnrolment>().StatusCode);
         Assert.Equal(saEformsStatus, profileStatus.Section<SAEforms>().StatusCode);
     }
 

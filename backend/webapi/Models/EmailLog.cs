@@ -1,8 +1,9 @@
 namespace Pidp.Models;
 
+using NodaTime;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using NodaTime;
+
 using Pidp.Infrastructure.HttpClients.Mail;
 
 [Table(nameof(EmailLog))]

@@ -13,7 +13,7 @@ public static class FluentValidationExtensions
     /// <param name="ruleBuilder"></param>
     /// <param name="httpContextAccessor"></param>
     /// <param name="claimType"></param>
-    public static IRuleBuilderOptionsConditions<T, string> MatchesUserClaim<T>(this IRuleBuilder<T, string> ruleBuilder, ClaimsPrincipal? user, string claimType)
+    public static IRuleBuilderOptionsConditions<T, string?> MatchesUserClaim<T>(this IRuleBuilder<T, string?> ruleBuilder, ClaimsPrincipal? user, string claimType)
     {
         return ruleBuilder.Custom((property, context) =>
         {

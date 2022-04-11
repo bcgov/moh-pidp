@@ -1,18 +1,20 @@
 namespace Pidp.Features.Parties;
 
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using DomainResults.Common;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
+using NodaTime;
+using System.Security.Claims;
 using System.Text.Json.Serialization;
 
-using Pidp.Infrastructure;
 using Pidp.Data;
-using AutoMapper;
-using AutoMapper.QueryableExtensions;
+using Pidp.Extensions;
+using Pidp.Infrastructure;
+using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.HttpClients.Plr;
 using Pidp.Models;
-using System.Security.Claims;
-using NodaTime;
 using Pidp.Models.Lookups;
 
 public partial class ProfileStatus
@@ -20,6 +22,14 @@ public partial class ProfileStatus
     public class Command : ICommand<IDomainResult<Model>>
     {
         public int Id { get; set; }
+        [JsonIgnore]
+        public ClaimsPrincipal? User { get; set; }
+
+        public Command WithUser(ClaimsPrincipal user)
+        {
+            this.User = user;
+            return this;
+        }
     }
 
     public partial class Model
@@ -90,11 +100,11 @@ public partial class ProfileStatus
                 && profile.LicenceNumber != null)
             {
                 // Cert has been entered but no IPC found, likely due to a transient error or delay in PLR record updates. Retry once.
-                profile.Ipc = await this.RecheckIpc(command.Id, profile.CollegeCode.Value, profile.LicenceNumber, profile.Birthdate);
+                profile.Ipc = await this.RecheckIpc(command.Id, profile.CollegeCode.Value, profile.LicenceNumber, profile.Birthdate!.Value);
             }
 
             profile.PlrRecordStatus = await this.client.GetRecordStatus(profile.Ipc);
-            //profile.User = ??
+            profile.User = command.User;
 
             var profileStatus = new Model
             {
@@ -130,7 +140,7 @@ public partial class ProfileStatus
     {
         public string FirstName { get; set; } = string.Empty;
         public string LastName { get; set; } = string.Empty;
-        public LocalDate Birthdate { get; set; }
+        public LocalDate? Birthdate { get; set; }
         public string? Email { get; set; }
         public string? Phone { get; set; }
         public CollegeCode? CollegeCode { get; set; }
@@ -144,5 +154,6 @@ public partial class ProfileStatus
 
         public bool DemographicsEntered => this.Email != null && this.Phone != null;
         public bool CollegeCertificationEntered => this.CollegeCode.HasValue && this.LicenceNumber != null;
+        public bool UserIsBcServicesCard => this.User.GetIdentityProvider() == ClaimValues.BCServicesCard;
     }
 }

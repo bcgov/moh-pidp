@@ -1,6 +1,46 @@
-.align-center {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translateY(-50%);
+@use 'mixins' as mixins;
+
+:host {
+  // Force the container to cover the parent (default)
+  & > div:not(.overlay-viewport) {
+    @include mixins.cover;
+    & > div {
+      // and ensure content remains centrally positioned
+      // in screen on different viewports (scrollable)
+      @include mixins.position(sticky, 0);
+      padding-top: 40%;
+    }
+  }
+
+  // Or the entire viewport
+  & > div.overlay-viewport {
+    @include mixins.cover(fixed);
+    & > div {
+      // and ensure content remains centrally positioned
+      // in screen on different viewports (unscrollable)
+      @include mixins.cover(fixed);
+    }
+  }
+
+  & > div {
+    background-color: hsla(360, 100%, 100%, 0.7);
+
+    & > div {
+      // Regardless always center the content
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+
+      span:first-child {
+        padding-bottom: 1.75rem;
+      }
+
+      span:last-child p {
+        text-align: center;
+        font-size: 1.5rem;
+        line-height: 2.5rem;
+      }
+    }
+  }
 }
