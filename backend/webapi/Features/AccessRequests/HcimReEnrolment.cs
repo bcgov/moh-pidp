@@ -103,8 +103,7 @@ public class HcimReEnrolment
             var roleAssignmentSuccess = await this.client.AssignClientRole(dto.UserId, this.hcimClientId, authStatus.HcimUserRole);
             if (!roleAssignmentSuccess)
             {
-                // TODO uncomment when MOH keycloak service account has access to client
-                // return DomainResult.Failed<Model>();
+                return DomainResult.Failed<Model>();
             }
 
             var newRequest = new HcimReEnrolmentAccessRequest
