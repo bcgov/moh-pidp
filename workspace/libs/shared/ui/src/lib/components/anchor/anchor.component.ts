@@ -5,8 +5,6 @@ import {
   OnInit,
 } from '@angular/core';
 
-import { PhonePipe } from '../../pipes';
-
 @Component({
   selector: 'ui-anchor',
   template: `
@@ -14,7 +12,6 @@ import { PhonePipe } from '../../pipes';
       <ng-content></ng-content>
     </a>
   `,
-  viewProviders: [PhonePipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AnchorComponent implements OnInit {
@@ -33,7 +30,7 @@ export class AnchorComponent implements OnInit {
 
   public hrefPrefix: string;
 
-  public constructor(private phonePipe: PhonePipe) {
+  public constructor() {
     this.scheme = 'url';
     this.hrefPrefix = '';
   }
