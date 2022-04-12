@@ -14,7 +14,7 @@ public class AccessRequestsController : PidpControllerBase
     public AccessRequestsController(IPidpAuthorizationService authorizationService) : base(authorizationService) { }
 
     [HttpPost("hcim-reenrolment")]
-    [Authorize(Policy = Policies.PhsaAuthentication)]
+    [Authorize(Policy = Policies.HcimUser)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> CreateHcimReEnrolment([FromServices] ICommandHandler<HcimReEnrolment.Command, IDomainResult> handler,
