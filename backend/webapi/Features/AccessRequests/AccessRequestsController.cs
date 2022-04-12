@@ -17,7 +17,7 @@ public class AccessRequestsController : PidpControllerBase
     public AccessRequestsController(IPidpAuthorizationService authorizationService) : base(authorizationService) { }
 
     [HttpPost("hcim-reenrolment")]
-    [Authorize(Policy = Policies.PhsaAuthentication)]
+    [Authorize(Policy = Policies.HcimUser)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
