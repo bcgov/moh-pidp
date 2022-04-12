@@ -2,18 +2,26 @@
   <ui-page-header>{{ title }}</ui-page-header>
 
   <ng-container *ngIf="completed; else notCompleted">
+    <ui-page-section-subheader
+      icon="assignment"
+      heading="HCIMWeb Account Transfer">
+      <ng-container uiPageSectionSubheaderDesc>Next Steps.</ng-container>
+    </ui-page-section-subheader>
+
     <ui-alert
       type="success"
       icon="check_circle"
       iconType="outlined"
-      heading="HCIM Web Account Transfer">
+      heading="Account Transfer Successful">
       <ng-container uiAlertContent>
-        <p>
-          Bookmark the new HCIM Web URL,
-          <ui-anchor [href]="hcimWebUrl"></ui-anchor>
-          and use your organization credentials to access HCIM Web going
-          forward.
-        </p>
+        <p>You are ready to login to HCIMWeb using your new credentials.</p>
+      </ng-container>
+      <ng-container uiAlertActions>
+        <span>
+          <a mat-stroked-button uiAnchor scheme="url" [attr.href]="hcimWebUrl">
+            Login to HCIMWeb
+          </a>
+        </span>
       </ng-container>
     </ui-alert>
   </ng-container>

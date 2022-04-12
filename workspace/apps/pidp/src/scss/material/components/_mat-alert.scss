@@ -17,13 +17,16 @@
       alert-palette($type, borderColor)
     );
 
-    // Apply alert specific styels to actions, but allow buttons
+    // Apply alert specific styles to actions, but allow buttons
     // to maintain default (inherited) styles if required by using
     // the .inherit class
-    .mat-card-actions button:not(.inherit) {
-      background-color: white;
-      border-color: alert-palette($type, backgroundColorSolid);
-      color: alert-palette($type, color);
+    .mat-card-actions {
+      button:not(.inherit),
+      a:not(.inherit) {
+        background-color: white;
+        border-color: alert-palette($type, backgroundColorSolid);
+        color: alert-palette($type, color);
+      }
     }
   }
 }
