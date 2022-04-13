@@ -19,9 +19,13 @@ public class LoginRequest
 // 2. User exists, correct password
 // {
 //     "authenticated": true,
-//     ["hcmuserrole": "<user's role>",]
+//     "hcmuserrole": "<user's role>", (optional)
 //     "unlocked": true,
-//     "userName": "uid=<username>,o=Ministry of Health"
+//     "userName": "uid=<username>,o=<org name>",
+//     "org_details": {
+//         "id": "<id>",
+//         "name": "<org name>"
+//     } (optional)
 // }
 //
 // 3. User exists but is locked, or bad password
@@ -30,7 +34,7 @@ public class LoginRequest
 //     "lockoutTimeInHours": 0, (unused)
 //     "unlocked": <true or false>,
 //     "remainingAttempts": <0 to 3>,
-//     "userName": "uid=<username>,o=Ministry of Health"
+//     "userName": "uid=<username>,o=<org name>"
 // }
 public class LdapLoginResponse
 {
@@ -39,6 +43,13 @@ public class LdapLoginResponse
     public int? RemaingingAttempts { get; set; }
     public bool? Unlocked { get; set; }
     public string? UserName { get; set; }
+    public OrgDetails? Org_details { get; set; }
 
     public bool UserNotFound => this.Authenticated == null;
+
+    public class OrgDetails
+    {
+        public string Id { get; set; } = string.Empty;
+        public string Name { get; set; } = string.Empty;
+    }
 }

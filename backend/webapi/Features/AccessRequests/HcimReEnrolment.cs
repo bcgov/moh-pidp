@@ -46,27 +46,27 @@ public class HcimReEnrolment
 
     public class CommandHandler : ICommandHandler<Command, IDomainResult<Model>>
     {
-        private readonly string hcimClientId;
         private readonly IClock clock;
         private readonly IEmailService emailService;
-        private readonly IKeycloakAdministrationClient client;
+        private readonly IKeycloakAdministrationClient keycloakClient;
         private readonly ILdapClient ldapClient;
         private readonly PidpDbContext context;
+        private readonly string hcimClientId;
 
         public CommandHandler(
             IClock clock,
             IEmailService emailService,
-            IKeycloakAdministrationClient client,
+            IKeycloakAdministrationClient keycloakClient,
             ILdapClient ldapClient,
             PidpConfiguration config,
             PidpDbContext context)
         {
-            this.hcimClientId = config.Keycloak.HcimClientId;
             this.clock = clock;
             this.emailService = emailService;
-            this.client = client;
+            this.keycloakClient = keycloakClient;
             this.ldapClient = ldapClient;
             this.context = context;
+            this.hcimClientId = config.Keycloak.HcimClientId;
         }
 
         public async Task<IDomainResult<Model>> HandleAsync(Command command)
@@ -100,8 +100,7 @@ public class HcimReEnrolment
                 return DomainResult.Success(new Model(authStatus));
             }
 
-            var roleAssignmentSuccess = await this.client.AssignClientRole(dto.UserId, this.hcimClientId, authStatus.HcimUserRole);
-            if (!roleAssignmentSuccess)
+            if (!await this.UpdateKeycloakUser(dto.UserId, authStatus.OrgDetails, authStatus.HcimUserRole))
             {
                 return DomainResult.Failed<Model>();
             }
@@ -122,6 +121,29 @@ public class HcimReEnrolment
             // await this.emailService.SendSaEformsAccessRequestConfirmationAsync(command.PartyId);
 
             return DomainResult.Success(new Model(authStatus));
+        }
+
+        private async Task<bool> UpdateKeycloakUser(Guid userId, LdapLoginResponse.OrgDetails orgDetails, string hcimRole)
+        {
+            var user = await this.keycloakClient.GetUser(userId);
+            if (user == null)
+            {
+                return false;
+            }
+
+            user.SetLdapOrgDetails(orgDetails);
+
+            if (!await this.keycloakClient.UpdateUser(userId, user))
+            {
+                return false;
+            }
+
+            if (!await this.keycloakClient.AssignClientRole(userId, this.hcimClientId, hcimRole))
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }

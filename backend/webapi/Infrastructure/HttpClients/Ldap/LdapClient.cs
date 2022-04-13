@@ -33,9 +33,11 @@ public class HcimAuthorizationStatus
 
     public AuthorizationStatus Status { get; set; }
     public string? HcimUserRole { get; set; }
+    public LdapLoginResponse.OrgDetails? OrgDetails { get; set; }
     public int? RemainingAttempts { get; set; }
 
     [MemberNotNullWhen(true, nameof(HcimUserRole))]
+    [MemberNotNullWhen(true, nameof(OrgDetails))]
     public bool IsAuthorized => this.Status == AuthorizationStatus.Authorized;
 
     public static HcimAuthorizationStatus FromLoginResponse(LdapLoginResponse login)
@@ -47,12 +49,16 @@ public class HcimAuthorizationStatus
 
         if (login.Authenticated == true)
         {
+            if (string.IsNullOrWhiteSpace(login.Hcmuserrole))
+            {
+                return new HcimAuthorizationStatus { Status = AuthorizationStatus.Unauthorized };
+            }
+
             return new HcimAuthorizationStatus
             {
+                Status = AuthorizationStatus.Authorized,
                 HcimUserRole = login.Hcmuserrole,
-                Status = string.IsNullOrWhiteSpace(login.Hcmuserrole)
-                    ? AuthorizationStatus.Unauthorized
-                    : AuthorizationStatus.Authorized
+                OrgDetails = login.Org_details,
             };
         }
 
