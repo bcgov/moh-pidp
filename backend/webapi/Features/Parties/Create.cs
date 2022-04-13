@@ -34,6 +34,7 @@ public class Create
             {
                 ClaimValues.BCServicesCard => new BcscValidator(user),
                 ClaimValues.Phsa => new PhsaValidator(),
+                ClaimValues.Idir => new IdirValidator(),
                 _ => throw new NotImplementedException("Given Identity Provider is not supported")
             });
         }
@@ -50,6 +51,15 @@ public class Create
         private class PhsaValidator : AbstractValidator<Command>
         {
             public PhsaValidator()
+            {
+                this.RuleFor(x => x.Hpdid).Empty();
+                this.RuleFor(x => x.Birthdate).Empty();
+            }
+        }
+
+        private class IdirValidator : AbstractValidator<Command>
+        {
+            public IdirValidator()
             {
                 this.RuleFor(x => x.Hpdid).Empty();
                 this.RuleFor(x => x.Birthdate).Empty();
