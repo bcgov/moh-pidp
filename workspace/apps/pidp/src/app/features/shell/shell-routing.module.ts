@@ -2,7 +2,6 @@ import { PortalModule } from '@angular/cdk/portal';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { UserGuard } from '@app/core/guards/user.guard';
 import { PartyResolver } from '@app/core/party/party.resolver';
 import { PermissionsGuard } from '@app/modules/permissions/permissions.guard';
 import { Role } from '@app/shared/enums/roles.enum';
@@ -38,7 +37,7 @@ const routes: Routes = [
   {
     path: '',
     component: PortalDashboardComponent,
-    canActivate: [AuthenticationGuard, UserGuard],
+    canActivate: [AuthenticationGuard],
     canActivateChild: [AuthenticationGuard],
     resolve: {
       partyId: PartyResolver,
