@@ -1,20 +1,15 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  Input,
-  OnInit,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 @Component({
   selector: 'ui-anchor',
   template: `
-    <a #link uiAnchor [scheme]="scheme" [attr.href]="hrefPrefix + href">
+    <a #link uiAnchor [scheme]="scheme" [attr.href]="href">
       <ng-content></ng-content>
     </a>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AnchorComponent implements OnInit {
+export class AnchorComponent {
   /**
    * @description
    * Type of URL scheme.
@@ -28,19 +23,7 @@ export class AnchorComponent implements OnInit {
    */
   @Input() public href!: string;
 
-  public hrefPrefix: string;
-
   public constructor() {
     this.scheme = 'url';
-    this.hrefPrefix = '';
-  }
-
-  public ngOnInit(): void {
-    if (this.scheme === 'scroll') {
-      this.hrefPrefix = '#';
-    } else if (this.scheme !== 'url') {
-      const suffix = this.scheme === 'tel' ? '+1' : '';
-      this.hrefPrefix = `${this.scheme}:${suffix}`;
-    }
   }
 }
