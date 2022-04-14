@@ -30,6 +30,9 @@ export class AnchorDirective implements OnInit {
         nativeElement.setAttribute('href', `tel:+1${href}`);
         value = this.phonePipe.transform(href);
         break;
+      case 'mailto':
+        nativeElement.setAttribute('href', `mailto:${href}`);
+        break;
       case 'scroll':
         nativeElement.setAttribute('href', `#${href}`);
         break;
