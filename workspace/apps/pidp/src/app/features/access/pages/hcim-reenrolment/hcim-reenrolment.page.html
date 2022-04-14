@@ -75,9 +75,12 @@
           If you are still having trouble after resetting your password, contact
           <ui-anchor
             scheme="mailto"
-            href="hlth.registriesadmin@gov.bc.ca"></ui-anchor>
+            [href]="healthRegistriesAdminEmail"></ui-anchor>
           or
-          <ui-anchor scheme="tel" href="2509529137"></ui-anchor>.
+          <ui-anchor
+            scheme="tel"
+            [href]="healthRegistriesAdminPhone"></ui-anchor
+          >.
         </p>
       </ng-container>
     </ui-alert>

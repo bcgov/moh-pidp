@@ -13,6 +13,8 @@ import { StatusCode } from '@app/features/portal/enums/status-code.enum';
 
 import {
   hcimWebUrl,
+  healthNetBcAdminEmail,
+  healthNetBcAdminPhone,
   healthNetBcHelpDeskEmail,
   healthNetBcHelpDeskPhone,
   healthNetBcPasswordResetUrl,
@@ -44,6 +46,8 @@ export class HcimReenrolmentPage
   public readonly healthNetBcPasswordResetUrl: string;
   public readonly healthNetBcHelpDeskEmail: string;
   public readonly healthNetBcHelpDeskPhone: string;
+  public readonly healthRegistriesAdminEmail: string;
+  public readonly healthRegistriesAdminPhone: string;
 
   public HcimAccessRequestStatusCode = HcimAccessRequestStatusCode;
 
@@ -70,6 +74,8 @@ export class HcimReenrolmentPage
     this.healthNetBcPasswordResetUrl = healthNetBcPasswordResetUrl;
     this.healthNetBcHelpDeskEmail = healthNetBcHelpDeskEmail;
     this.healthNetBcHelpDeskPhone = healthNetBcHelpDeskPhone;
+    this.healthRegistriesAdminEmail = healthNetBcAdminEmail;
+    this.healthRegistriesAdminPhone = healthNetBcAdminPhone;
   }
 
   public onBack(): void {
