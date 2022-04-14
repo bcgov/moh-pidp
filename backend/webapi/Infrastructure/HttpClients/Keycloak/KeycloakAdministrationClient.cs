@@ -125,9 +125,9 @@ public class KeycloakAdministrationClient : BaseClient, IKeycloakAdministrationC
 
 public static partial class KeycloakAdministrationClientLoggingExtensions
 {
-    [LoggerMessage(1, LogLevel.Error, "Could not find a Client with ClientId {clientId} from Keycloak.")]
+    [LoggerMessage(1, LogLevel.Error, "Could not find a Client with ClientId {clientId} in Keycloak reponse.")]
     public static partial void LogClientNotFound(this ILogger logger, string clientId);
 
-    [LoggerMessage(2, LogLevel.Error, "Could not find a Client Role with name {roleName} from Client {clientId}.")]
+    [LoggerMessage(2, LogLevel.Error, "Could not find a Client Role with name {roleName} from Client {clientId} in Keycloak response.")]
     public static partial void LogClientRoleNotFound(this ILogger logger, string roleName, string clientId);
 }
