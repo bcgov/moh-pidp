@@ -8,6 +8,7 @@ using NodaTime;
 using Pidp.Data;
 using Pidp.Infrastructure.HttpClients.Keycloak;
 using Pidp.Infrastructure.HttpClients.Ldap;
+using Pidp.Infrastructure.HttpClients.Mail;
 using Pidp.Infrastructure.Services;
 using Pidp.Models;
 
@@ -76,7 +77,8 @@ public class HcimReEnrolment
                 .Select(party => new
                 {
                     party.UserId,
-                    AlreadyEnroled = party.AccessRequests.Any(request => request.AccessType == AccessType.HcimReEnrolment)
+                    AlreadyEnroled = party.AccessRequests.Any(request => request.AccessType == AccessType.HcimReEnrolment),
+                    party.Email
                 })
                 .SingleAsync(); // Already did existance check
 
@@ -105,20 +107,17 @@ public class HcimReEnrolment
                 return DomainResult.Failed<Model>();
             }
 
-            var newRequest = new HcimReEnrolmentAccessRequest
+            this.context.HcimReEnrolmentAccessRequests.Add(new HcimReEnrolmentAccessRequest
             {
                 PartyId = command.PartyId,
                 AccessType = AccessType.HcimReEnrolment,
                 RequestedOn = this.clock.GetCurrentInstant(),
                 LdapUsername = command.LdapUsername
-            };
-
-            this.context.HcimReEnrolmentAccessRequests.Add(newRequest);
+            });
 
             await this.context.SaveChangesAsync();
 
-            // TODO Email?
-            // await this.emailService.SendSaEformsAccessRequestConfirmationAsync(command.PartyId);
+            await this.SendConfirmationEmail(dto.Email!);
 
             return DomainResult.Success(new Model(authStatus));
         }
@@ -136,6 +135,19 @@ public class HcimReEnrolment
             }
 
             return true;
+        }
+
+        private async Task SendConfirmationEmail(string partyEmail)
+        {
+            var link = $"<a href=\"https://hcimweb-cl.hlth.gov.bc.ca/\" target=\"_blank\" rel=\"noopener noreferrer\">this link</a>";
+            var email = new Email(
+                from: EmailService.PidpEmail,
+                to: partyEmail,
+                subject: "HCIM Re-Enrolment Confirmation",
+                body: $"You have successfully transferred your HCIMWeb Account. From now on, use {link} to login to HCIMWeb with your organization credential. You may wish to bookmark this link for future use."
+            );
+
+            await this.emailService.SendAsync(email);
         }
     }
 }
