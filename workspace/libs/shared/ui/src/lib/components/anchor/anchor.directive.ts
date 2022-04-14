@@ -17,20 +17,27 @@ export class AnchorDirective implements OnInit {
   public constructor(private el: ElementRef, private phonePipe: PhonePipe) {}
 
   public ngOnInit(): void {
-    const nativeElement = this.el.nativeElement;
-    const href = nativeElement.getAttribute('href');
+    const nativeElement = this.el.nativeElement as HTMLAnchorElement;
+    const href = nativeElement.getAttribute('href') as string;
+    let value = href;
 
-    if (this.scheme === 'url') {
-      nativeElement.setAttribute('target', '_blank');
-      nativeElement.setAttribute('rel', 'noopener noreferrer');
-    } else if (this.scheme === 'tel') {
-      nativeElement.setAttribute('href', `tel:+1${href}`);
-      // Allow for display phone numbers that might be alphanumeric
-      if (!nativeElement.innerText.trim().length) {
-        nativeElement.innerText = this.phonePipe.transform(href);
-      }
-    } else if (this.scheme === 'scroll') {
-      nativeElement.setAttribute('href', `#${href}`);
+    switch (this.scheme) {
+      case 'url':
+        nativeElement.setAttribute('target', '_blank');
+        nativeElement.setAttribute('rel', 'noopener noreferrer');
+        break;
+      case 'tel':
+        nativeElement.setAttribute('href', `tel:+1${href}`);
+        value = this.phonePipe.transform(href);
+        break;
+      case 'scroll':
+        nativeElement.setAttribute('href', `#${href}`);
+        break;
+    }
+
+    // Provide a display value when none exists
+    if (!nativeElement.innerText.trim().length && this.scheme !== 'scroll') {
+      nativeElement.innerText = value;
     }
   }
 }
