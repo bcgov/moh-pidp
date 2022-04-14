@@ -108,6 +108,19 @@ public class KeycloakAdministrationClient : BaseClient, IKeycloakAdministrationC
         var result = await this.PutAsync($"users/{userId}", userRep);
         return result.IsSuccess;
     }
+
+    public async Task<bool> UpdateUser(Guid userId, Action<UserRepresentation> updateAction)
+    {
+        var user = await this.GetUser(userId);
+        if (user == null)
+        {
+            return false;
+        }
+
+        updateAction(user);
+
+        return await this.UpdateUser(userId, user);
+    }
 }
 
 public static partial class KeycloakAdministrationClientLoggingExtensions

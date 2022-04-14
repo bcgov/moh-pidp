@@ -125,15 +125,7 @@ public class HcimReEnrolment
 
         private async Task<bool> UpdateKeycloakUser(Guid userId, LdapLoginResponse.OrgDetails orgDetails, string hcimRole)
         {
-            var user = await this.keycloakClient.GetUser(userId);
-            if (user == null)
-            {
-                return false;
-            }
-
-            user.SetLdapOrgDetails(orgDetails);
-
-            if (!await this.keycloakClient.UpdateUser(userId, user))
+            if (!await this.keycloakClient.UpdateUser(userId, (user) => user.SetLdapOrgDetails(orgDetails)))
             {
                 return false;
             }
