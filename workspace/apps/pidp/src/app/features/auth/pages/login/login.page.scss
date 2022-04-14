@@ -27,7 +27,7 @@
 .header {
   .heading {
     display: flex;
-    align-items: center;
+    align-items: flex-end;
     margin-bottom: 1.5rem;
 
     img {
@@ -37,14 +37,14 @@
     @media (min-width: 645px) {
       img {
         display: block;
-        width: auto;
-        height: 100px;
+        width: 135px;
+        height: auto;
       }
 
       h1 {
         // Alignment of text with image
         margin-top: 0.5rem;
-        margin-left: 2rem;
+        margin-left: 1.5rem;
         margin-bottom: 0;
       }
     }
