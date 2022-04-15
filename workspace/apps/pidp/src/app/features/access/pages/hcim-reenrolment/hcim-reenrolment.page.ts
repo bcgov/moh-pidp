@@ -111,8 +111,8 @@ export class HcimReenrolmentPage
     const remainingAttempts =
       accessResponse.remainingAttempts ?? this.maxLoginAttempts;
 
+    this.completed = statusCode === HcimAccessRequestStatusCode.ACCESS_GRANTED;
     this.accessRequestStatusCode = statusCode;
-
     this.loginAttempts = this.maxLoginAttempts - remainingAttempts;
   }
 
