@@ -18,13 +18,14 @@
             <ul>
               <li>
                 For support with the provider identity portal, contact
-                <ui-anchor
+                <a
+                  uiAnchor
                   scheme="mailto"
-                  [href]="providerIdentitySupportEmail"></ui-anchor>
+                  [attr.href]="providerIdentitySupportEmail"></a>
               </li>
               <li>
                 For support with your BC Services Card, click
-                <ui-anchor [href]="bcscSupportUrl">here</ui-anchor>
+                <a uiAnchor [attr.href]="bcscSupportUrl">here</a>
               </li>
             </ul>
           </ng-container>
@@ -55,7 +56,7 @@
             </button>
             <small>
               Need an account?
-              <ui-anchor [href]="bcscMobileSetupUrl">Set up</ui-anchor>
+              <a uiAnchor [attr.href]="bcscMobileSetupUrl">Set up</a>
             </small>
           </span>
           <span>
@@ -95,14 +96,14 @@
           </p>
           <p>
             You need to set up the
-            <ui-anchor [href]="bcscMobileSetupUrl"
-              >BC Services Card app</ui-anchor
-            >
+            <a uiAnchor [attr.href]="bcscMobileSetupUrl">
+              BC Services Card app
+            </a>
             to enrol. You will use the app each time you access the eForms
             application. If you are not eligible for the BC Services Card, or
             cannot set up the app, you can
-            <ui-anchor [href]="specialAuthorityUrl"
-              >submit SA requests by fax </ui-anchor
+            <a uiAnchor [attr.href]="specialAuthorityUrl">
+              submit SA requests by fax</a
             >.
           </p>
         </ui-page-section>

@@ -12,13 +12,26 @@ export class AnchorDirective implements OnInit {
    * Type of URL scheme.
    * @default url
    */
-  @Input() public scheme!: 'url' | 'mailto' | 'tel' | 'scroll';
+  @Input() public scheme: 'url' | 'mailto' | 'tel' | 'scroll';
 
-  public constructor(private el: ElementRef, private phonePipe: PhonePipe) {}
+  private readonly countryCode: number;
+
+  public constructor(
+    private el: ElementRef<HTMLAnchorElement>,
+    private phonePipe: PhonePipe
+  ) {
+    this.scheme = 'url';
+    this.countryCode = 1;
+  }
 
   public ngOnInit(): void {
-    const nativeElement = this.el.nativeElement as HTMLAnchorElement;
-    const href = nativeElement.getAttribute('href') as string;
+    const nativeElement = this.el.nativeElement;
+    const href = nativeElement.getAttribute('href');
+
+    if (!href) {
+      return;
+    }
+
     let value = href;
 
     switch (this.scheme) {
@@ -27,7 +40,7 @@ export class AnchorDirective implements OnInit {
         nativeElement.setAttribute('rel', 'noopener noreferrer');
         break;
       case 'tel':
-        nativeElement.setAttribute('href', `tel:+1${href}`);
+        nativeElement.setAttribute('href', `tel:+${this.countryCode}${href}`);
         value = this.phonePipe.transform(href);
         break;
       case 'mailto':

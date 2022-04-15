@@ -16,14 +16,14 @@
       <ng-container uiAlertContent>
         <p>
           You have successfully transferred your HCIMWeb Account. From now on,
-          use this <ui-anchor [href]="hcimWebUrl">link</ui-anchor> to login to
+          use <a uiAnchor [attr.href]="hcimWebUrl">this link</a> to login to
           HCIMWeb with your organization credential. You may wish to bookmark
           this link for future use.
         </p>
       </ng-container>
       <ng-container uiAlertActions>
         <span>
-          <a mat-stroked-button uiAnchor scheme="url" [attr.href]="hcimWebUrl">
+          <a mat-stroked-button uiAnchor [attr.href]="hcimWebUrl">
             Login to HCIMWeb
           </a>
         </span>
@@ -49,7 +49,7 @@
         </li>
         <li>
           Instead, you will login directly through
-          <ui-anchor [href]="hcimWebUrl">this link</ui-anchor>, using your
+          <a uiAnchor [attr.href]="hcimWebUrl">this link</a>, using your
           organization credential (the same credentials used to access your
           workstation).
         </li>
@@ -73,18 +73,17 @@
       <ng-container uiAlertContent>
         <p>
           If you have forgotten your password, or are unsure of it, follow this
-          <ui-anchor [href]="healthNetBcPasswordResetUrl">link</ui-anchor>
+          <a uiAnchor [attr.href]="healthNetBcPasswordResetUrl">link</a>
           to reset it before you start this process.
         </p>
         <p>
           If you are still having trouble after resetting your password, contact
-          <ui-anchor
+          <a
+            uiAnchor
             scheme="mailto"
-            [href]="healthRegistriesAdminEmail"></ui-anchor>
+            [attr.href]="healthRegistriesAdminEmail"></a>
           or
-          <ui-anchor
-            scheme="tel"
-            [href]="healthRegistriesAdminPhone"></ui-anchor
+          <a uiAnchor scheme="tel" [attr.href]="healthRegistriesAdminPhone"></a
           >.
         </p>
       </ng-container>
@@ -99,12 +98,12 @@
         <p>
           You have had multiple failed login attempts the next failed attempt
           will lock your account. If you need assistance contact the HelpDesk at
-          <ui-anchor
+          <a
+            uiAnchor
             scheme="mailto"
-            [href]="healthNetBcHelpDeskEmail"></ui-anchor>
+            [attr.href]="healthNetBcHelpDeskEmail"></a>
           or
-          <ui-anchor scheme="tel" [href]="healthNetBcHelpDeskPhone"></ui-anchor
-          >.
+          <a uiAnchor scheme="tel" [attr.href]="healthNetBcHelpDeskPhone"></a>.
         </p>
       </ng-container>
     </ui-alert>
@@ -119,12 +118,12 @@
         <p>
           You have been locked out of your account. If you need assistance
           contact the HelpDesk at
-          <ui-anchor
+          <a
+            uiAnchor
             scheme="mailto"
-            [href]="healthNetBcHelpDeskEmail"></ui-anchor>
+            [attr.href]="healthNetBcHelpDeskEmail"></a>
           or
-          <ui-anchor scheme="tel" [href]="healthNetBcHelpDeskPhone"></ui-anchor
-          >.
+          <a uiAnchor scheme="tel" [attr.href]="healthNetBcHelpDeskPhone"></a>.
         </p>
       </ng-container>
     </ui-alert>
@@ -152,9 +151,7 @@
         <ui-page-section-subheader heading="HCIMWeb HealthNetBC Password">
           <ng-container uiPageSectionSubheaderDesc>
             If you have forgotten your password, or are unsure of it, follow
-            <ui-anchor [href]="healthNetBcPasswordResetUrl">
-              this link
-            </ui-anchor>
+            <a uiAnchor [attr.href]="healthNetBcPasswordResetUrl">this link</a>
             to reset it before you start this process.
           </ng-container>
         </ui-page-section-subheader>
@@ -169,9 +166,9 @@
         </mat-form-field>
 
         <small>
-          <ui-anchor [href]="healthNetBcPasswordResetUrl">
+          <a uiAnchor [attr.href]="healthNetBcPasswordResetUrl">
             Have you forgotten your password?
-          </ui-anchor>
+          </a>
         </small>
       </ui-page-section>
     </ng-container>
