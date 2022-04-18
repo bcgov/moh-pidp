@@ -12,9 +12,9 @@ import { Observable, retryWhen, tap } from 'rxjs';
 
 /**
  * @description
- * Retry attempts when an HTTP error occurs.
+ * Maximum retry attempts when an HTTP error occurs.
  */
-export const HTTP_RETRY_ATTEMPTS = 1;
+export const MAX_HTTP_RETRY_ATTEMPTS = 1;
 
 @Injectable()
 export class ServerErrorInterceptor implements HttpInterceptor {
@@ -22,6 +22,7 @@ export class ServerErrorInterceptor implements HttpInterceptor {
     request: HttpRequest<unknown>,
     next: HttpHandler
   ): Observable<HttpEvent<unknown>> {
+    let httpRetryAttempts = 0;
     return next.handle(request).pipe(
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       retryWhen((errors: Observable<any>) => {
@@ -29,11 +30,14 @@ export class ServerErrorInterceptor implements HttpInterceptor {
           tap((error: HttpErrorResponse) => {
             if (
               error.headers.get('No-Retry') ||
-              error.status.toString().startsWith('5')
+              error.status.toString().startsWith('5') ||
+              httpRetryAttempts >= MAX_HTTP_RETRY_ATTEMPTS
             ) {
               // Prevent retry by forcing entry into error handler
               throw error;
             }
+
+            httpRetryAttempts++;
           })
         );
       })
