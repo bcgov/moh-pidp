@@ -4,19 +4,10 @@
     icon="help_outline"
     heading="Get Support"></ui-page-section-subheader>
   <ul>
-    <li>
-      Questions about the Provider Identity Portal should be directed to:
-      <a
-        uiAnchor
-        scheme="mailto"
-        [attr.href]="providerIdentitySupportEmail"></a>
-    </li>
-    <li>
-      Questions about Special Authority eForms should be directed to:
-      <a
-        uiAnchor
-        scheme="mailto"
-        [attr.href]="specialAuthoritySupportEmail"></a>
+    <li *ngFor="let support of supports">
+      Questions about {{ support.name }}<br />
+      should be directed to:
+      <a uiAnchor scheme="mailto" [attr.href]="support.email"></a>
     </li>
   </ul>
 </ui-page-section>

@@ -9,13 +9,22 @@ import { APP_CONFIG, AppConfig } from '@app/app.config';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GetSupportComponent {
-  public providerIdentitySupportEmail: string;
-  public specialAuthoritySupportEmail: string;
+  public supports: { name: string; email: string }[];
 
   public constructor(@Inject(APP_CONFIG) private config: AppConfig) {
-    this.providerIdentitySupportEmail =
-      this.config.emails.providerIdentitySupport;
-    this.specialAuthoritySupportEmail =
-      this.config.emails.specialAuthoritySupport;
+    this.supports = [
+      {
+        name: 'Provider Identity Portal',
+        email: this.config.emails.providerIdentitySupport,
+      },
+      {
+        name: 'Special Authority eForms',
+        email: this.config.emails.specialAuthoritySupport,
+      },
+      {
+        name: 'HCIMWeb Enrolment',
+        email: this.config.emails.hcimWebSupportEmail,
+      },
+    ];
   }
 }
