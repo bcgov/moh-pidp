@@ -54,7 +54,7 @@ export class HcimReenrolmentResource {
             case HttpStatusCode.UnprocessableEntity:
               return of({
                 statusCode: HcimAccessRequestStatusCode.AUTHENTICATION_FAILED,
-                remainingAttempts: error.headers.get('RemainingAttempts'),
+                remainingAttempts: error.headers.get('Remaining-Attempts'),
               });
             case HttpStatusCode.Locked:
               return of({
