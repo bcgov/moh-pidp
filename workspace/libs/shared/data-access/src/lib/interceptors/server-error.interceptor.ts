@@ -1,5 +1,6 @@
 import {
   HTTP_INTERCEPTORS,
+  HttpErrorResponse,
   HttpEvent,
   HttpHandler,
   HttpInterceptor,
@@ -7,7 +8,7 @@ import {
 } from '@angular/common/http';
 import { Injectable, Provider } from '@angular/core';
 
-import { Observable, retry } from 'rxjs';
+import { Observable, retryWhen, tap } from 'rxjs';
 
 /**
  * @description
@@ -21,7 +22,22 @@ export class ServerErrorInterceptor implements HttpInterceptor {
     request: HttpRequest<unknown>,
     next: HttpHandler
   ): Observable<HttpEvent<unknown>> {
-    return next.handle(request).pipe(retry(HTTP_RETRY_ATTEMPTS));
+    return next.handle(request).pipe(
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      retryWhen((errors: Observable<any>) => {
+        return errors.pipe(
+          tap((error: HttpErrorResponse) => {
+            if (
+              error.headers.get('No-Retry') ||
+              error.status.toString().startsWith('5')
+            ) {
+              // Prevent retry by forcing entry into error handler
+              throw error;
+            }
+          })
+        );
+      })
+    );
   }
 }
 
