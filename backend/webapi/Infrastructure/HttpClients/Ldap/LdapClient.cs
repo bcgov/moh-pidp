@@ -10,7 +10,7 @@ public class LdapClient : BaseClient, ILdapClient
 
     public async Task<IDomainResult<HcimAuthorizationStatus>> HcimLoginAsync(string username, string password)
     {
-        var response = await this.PostAsync<LdapLoginResponse>("ldap/users", new LoginRequest(username, password));
+        var response = await this.PostAsync<LdapLoginResponse>("ldap/users", new LdapLoginRequest(username, password));
 
         if (!response.IsSuccess)
         {
@@ -65,7 +65,7 @@ public class HcimAuthorizationStatus
         return new HcimAuthorizationStatus
         {
             Status = AuthorizationStatus.AuthFailure,
-            RemainingAttempts = login.RemaingingAttempts
+            RemainingAttempts = login.RemainingAttempts
         };
     }
 }

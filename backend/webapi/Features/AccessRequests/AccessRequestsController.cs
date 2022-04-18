@@ -37,6 +37,8 @@ public class AccessRequestsController : PidpControllerBase
             return result.ToActionResult();
         }
 
+        this.Response.SafeAddHeader("No-Retry", "true");
+
         switch (result.Value.AuthStatus)
         {
             case AuthorizationStatus.Authorized:
@@ -44,7 +46,7 @@ public class AccessRequestsController : PidpControllerBase
             case AuthorizationStatus.AccountLocked:
                 return this.StatusCode(StatusCodes.Status423Locked);
             case AuthorizationStatus.AuthFailure:
-                this.Response.SafeAddHeader("RemainingAttempts", result.Value.RemainingAttempts?.ToString(CultureInfo.InvariantCulture));
+                this.Response.SafeAddHeader("Remaining-Attempts", result.Value.RemainingAttempts?.ToString(CultureInfo.InvariantCulture));
                 return this.UnprocessableEntity();
             case AuthorizationStatus.Unauthorized:
                 return this.Forbid();

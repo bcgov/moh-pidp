@@ -1,11 +1,11 @@
 namespace Pidp.Infrastructure.HttpClients.Ldap;
 
-public class LoginRequest
+public class LdapLoginRequest
 {
     public string UserName { get; set; }
     public string Password { get; set; }
 
-    public LoginRequest(string username, string password)
+    public LdapLoginRequest(string username, string password)
     {
         this.UserName = username;
         this.Password = password;
@@ -40,7 +40,7 @@ public class LdapLoginResponse
 {
     public bool? Authenticated { get; set; }
     public string? Hcmuserrole { get; set; }
-    public int? RemaingingAttempts { get; set; }
+    public int? RemainingAttempts { get; set; }
     public bool? Unlocked { get; set; }
     public string? UserName { get; set; }
     public OrgDetails? Org_details { get; set; }
