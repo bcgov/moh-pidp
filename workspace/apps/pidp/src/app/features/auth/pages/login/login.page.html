@@ -18,13 +18,14 @@
             <ul>
               <li>
                 For support with the provider identity portal, contact
-                <ui-anchor
+                <a
+                  uiAnchor
                   scheme="mailto"
-                  [href]="providerIdentitySupportEmail"></ui-anchor>
+                  [attr.href]="providerIdentitySupportEmail"></a>
               </li>
               <li>
                 For support with your BC Services Card, click
-                <ui-anchor [href]="bcscSupportUrl">here</ui-anchor>
+                <a uiAnchor [attr.href]="bcscSupportUrl">here</a>
               </li>
             </ul>
           </ng-container>
@@ -36,7 +37,7 @@
         <div class="header">
           <div class="heading">
             <img
-              src="/assets/images/pidp-logo-blue.svg"
+              src="/assets/images/pidp-logo-blue-small.svg"
               alt="Provider Identity Portal Logo" />
             <h1>Provider Identity Portal</h1>
           </div>
@@ -55,16 +56,16 @@
             </button>
             <small>
               Need an account?
-              <ui-anchor [href]="bcscMobileSetupUrl">Set up</ui-anchor>
+              <a uiAnchor [attr.href]="bcscMobileSetupUrl">Set up</a>
             </small>
           </span>
           <span>
-            <!-- <button
+            <button
               mat-flat-button
               color="primary"
               (click)="onLogin(IdentityProvider.PHSA)">
               Login with your Health Authority ID
-            </button> -->
+            </button>
           </span>
         </div>
 
@@ -95,23 +96,23 @@
           </p>
           <p>
             You need to set up the
-            <ui-anchor [href]="bcscMobileSetupUrl"
-              >BC Services Card app</ui-anchor
-            >
+            <a uiAnchor [attr.href]="bcscMobileSetupUrl">
+              BC Services Card app
+            </a>
             to enrol. You will use the app each time you access the eForms
             application. If you are not eligible for the BC Services Card, or
             cannot set up the app, you can
-            <ui-anchor [href]="specialAuthorityUrl"
-              >submit SA requests by fax </ui-anchor
+            <a uiAnchor [attr.href]="specialAuthorityUrl">
+              submit SA requests by fax</a
             >.
           </p>
         </ui-page-section>
 
-        <!-- <ui-page-section>
+        <ui-page-section>
           <ui-page-section-subheader
             heading="HCIM Web Enrolment"></ui-page-section-subheader>
           <p>Request access to HCIM Web</p>
-        </ui-page-section> -->
+        </ui-page-section>
       </div>
     </div>
   </ng-template>

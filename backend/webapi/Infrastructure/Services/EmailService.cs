@@ -11,7 +11,8 @@ using Pidp.Models;
 
 public class EmailService : IEmailService
 {
-    private const string PidpEmail = "provideridentityportal@gov.bc.ca";
+    public const string PidpEmail = "provideridentityportal@gov.bc.ca";
+
     private readonly IChesClient chesClient;
     private readonly IClock clock;
     private readonly ILogger logger;
@@ -60,10 +61,10 @@ public class EmailService : IEmailService
             subject: "SA eForms Enrolment Confirmation",
             body: $"Hi {party.FirstName},<br><br>You will need to visit this {link} each time you want to submit an SA eForm. It may be helpful to bookmark this {link} for future use."
         );
-        await this.Send(email);
+        await this.SendAsync(email);
     }
 
-    private async Task Send(Email email)
+    public async Task SendAsync(Email email)
     {
         if (!PidpConfiguration.IsProduction())
         {

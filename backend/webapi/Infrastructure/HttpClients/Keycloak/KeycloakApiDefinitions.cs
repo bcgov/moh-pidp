@@ -1,5 +1,9 @@
 namespace Pidp.Infrastructure.HttpClients.Keycloak;
 
+using System.Text.Json;
+
+using Pidp.Infrastructure.HttpClients.Ldap;
+
 /// <summary>
 /// This is not the entire Keycloak Client Representation! See https://www.keycloak.org/docs-api/5.0/rest-api/index.html#_clientrepresentation.
 /// </summary>
@@ -39,6 +43,8 @@ public class UserRepresentation
 {
     public string? Email { get; set; }
     public Dictionary<string, string[]> Attributes { get; set; } = new();
+
+    internal void SetLdapOrgDetails(LdapLoginResponse.OrgDetails orgDetails) => this.SetAttribute("org_details", JsonSerializer.Serialize(orgDetails));
 
     public void SetPhone(string phone) => this.SetAttribute("phone", phone);
 

@@ -1,0 +1,55 @@
+namespace Pidp.Infrastructure.HttpClients.Ldap;
+
+public class LdapLoginRequest
+{
+    public string UserName { get; set; }
+    public string Password { get; set; }
+
+    public LdapLoginRequest(string username, string password)
+    {
+        this.UserName = username;
+        this.Password = password;
+    }
+}
+
+// Possible response schemas:
+// 1. User not found
+// {}
+//
+// 2. User exists, correct password
+// {
+//     "authenticated": true,
+//     "hcmuserrole": "<user's role>", (optional)
+//     "unlocked": true,
+//     "userName": "uid=<username>,o=<org name>",
+//     "org_details": {
+//         "id": "<id>",
+//         "name": "<org name>"
+//     } (optional)
+// }
+//
+// 3. User exists but is locked, or bad password
+// {
+//     "authenticated": false,
+//     "lockoutTimeInHours": 0, (unused)
+//     "unlocked": <true or false>,
+//     "remainingAttempts": <0 to 3>,
+//     "userName": "uid=<username>,o=<org name>"
+// }
+public class LdapLoginResponse
+{
+    public bool? Authenticated { get; set; }
+    public string? Hcmuserrole { get; set; }
+    public int? RemainingAttempts { get; set; }
+    public bool? Unlocked { get; set; }
+    public string? UserName { get; set; }
+    public OrgDetails? Org_details { get; set; }
+
+    public bool UserNotFound => this.Authenticated == null;
+
+    public class OrgDetails
+    {
+        public string Id { get; set; } = string.Empty;
+        public string Name { get; set; } = string.Empty;
+    }
+}

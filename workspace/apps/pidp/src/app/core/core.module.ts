@@ -31,6 +31,7 @@ const modules = [
   KeycloakModule,
   PermissionsModule.forRoot(),
   RootRoutingModule,
+  // TODO drop this dependency from the CoreModule shows up when submitting college licence
   NgxBusyModule,
 ];
 

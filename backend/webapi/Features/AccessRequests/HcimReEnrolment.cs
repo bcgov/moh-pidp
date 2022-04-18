@@ -7,16 +7,32 @@ using NodaTime;
 
 using Pidp.Data;
 using Pidp.Infrastructure.HttpClients.Keycloak;
+using Pidp.Infrastructure.HttpClients.Ldap;
+using Pidp.Infrastructure.HttpClients.Mail;
 using Pidp.Infrastructure.Services;
 using Pidp.Models;
 
 public class HcimReEnrolment
 {
-    public class Command : ICommand<IDomainResult>
+    public class Command : ICommand<IDomainResult<Model>>
     {
         public int PartyId { get; set; }
         public string LdapUsername { get; set; } = string.Empty;
         public string LdapPassword { get; set; } = string.Empty;
+    }
+
+    public class Model
+    {
+        public HcimAuthorizationStatus.AuthorizationStatus AuthStatus { get; set; }
+        public int? RemainingAttempts { get; set; }
+
+        public Model() { }
+
+        public Model(HcimAuthorizationStatus authStatus)
+        {
+            this.AuthStatus = authStatus.Status;
+            this.RemainingAttempts = authStatus.RemainingAttempts;
+        }
     }
 
     public class CommandValidator : AbstractValidator<Command>
@@ -29,48 +45,109 @@ public class HcimReEnrolment
         }
     }
 
-    public class CommandHandler : ICommandHandler<Command, IDomainResult>
+    public class CommandHandler : ICommandHandler<Command, IDomainResult<Model>>
     {
         private readonly IClock clock;
         private readonly IEmailService emailService;
-        private readonly IKeycloakAdministrationClient client;
+        private readonly IKeycloakAdministrationClient keycloakClient;
+        private readonly ILdapClient ldapClient;
         private readonly PidpDbContext context;
+        private readonly string hcimClientId;
 
         public CommandHandler(
             IClock clock,
             IEmailService emailService,
-            IKeycloakAdministrationClient client,
+            IKeycloakAdministrationClient keycloakClient,
+            ILdapClient ldapClient,
+            PidpConfiguration config,
             PidpDbContext context)
         {
             this.clock = clock;
             this.emailService = emailService;
-            this.client = client;
+            this.keycloakClient = keycloakClient;
+            this.ldapClient = ldapClient;
             this.context = context;
+            this.hcimClientId = config.Keycloak.HcimClientId;
         }
 
-        public async Task<IDomainResult> HandleAsync(Command command)
+        public async Task<IDomainResult<Model>> HandleAsync(Command command)
         {
-            // TODO check prerequisites
-            // TODO additional LDAP properties
-            var newRequest = new HcimReEnrolmentAccessRequest
+            var dto = await this.context.Parties
+                .Where(party => party.Id == command.PartyId)
+                .Select(party => new
+                {
+                    party.UserId,
+                    AlreadyEnroled = party.AccessRequests.Any(request => request.AccessType == AccessType.HcimReEnrolment),
+                    party.Email
+                })
+                .SingleAsync(); // Already did existance check
+
+            // TODO check other prerequisites
+            if (dto.AlreadyEnroled)
+            {
+                return DomainResult.Failed<Model>();
+            }
+
+            var loginResult = await this.ldapClient.HcimLoginAsync(command.LdapUsername, command.LdapPassword);
+            if (!loginResult.IsSuccess)
+            {
+                return loginResult.To<Model>();
+            }
+
+            var authStatus = loginResult.Value;
+
+            if (!authStatus.IsAuthorized)
+            {
+                // DomainResult can only pass a value on Success.
+                return DomainResult.Success(new Model(authStatus));
+            }
+
+            if (!await this.UpdateKeycloakUser(dto.UserId, authStatus.OrgDetails, authStatus.HcimUserRole))
+            {
+                return DomainResult.Failed<Model>();
+            }
+
+            this.context.HcimReEnrolmentAccessRequests.Add(new HcimReEnrolmentAccessRequest
             {
                 PartyId = command.PartyId,
                 AccessType = AccessType.HcimReEnrolment,
                 RequestedOn = this.clock.GetCurrentInstant(),
                 LdapUsername = command.LdapUsername
-            };
-
-            this.context.HcimReEnrolmentAccessRequests.Add(newRequest);
+            });
 
             await this.context.SaveChangesAsync();
 
-            // TODO role assignment?
-            // await this.client.AssignClientRole(dto.UserId, Resources.SAEforms, Roles.SAEforms);
+            await this.SendConfirmationEmail(dto.Email!);
 
-            // TODO Email?
-            // await this.emailService.SendSaEformsAccessRequestConfirmationAsync(command.PartyId);
+            return DomainResult.Success(new Model(authStatus));
+        }
 
-            return DomainResult.Success();
+        private async Task<bool> UpdateKeycloakUser(Guid userId, LdapLoginResponse.OrgDetails orgDetails, string hcimRole)
+        {
+            if (!await this.keycloakClient.UpdateUser(userId, (user) => user.SetLdapOrgDetails(orgDetails)))
+            {
+                return false;
+            }
+
+            if (!await this.keycloakClient.AssignClientRole(userId, this.hcimClientId, hcimRole))
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        private async Task SendConfirmationEmail(string partyEmail)
+        {
+            var link = $"<a href=\"https://hcimweb-cl.hlth.gov.bc.ca/\" target=\"_blank\" rel=\"noopener noreferrer\">this link</a>";
+            var email = new Email(
+                from: EmailService.PidpEmail,
+                to: partyEmail,
+                subject: "HCIM Re-Enrolment Confirmation",
+                body: $"You have successfully transferred your HCIMWeb Account. From now on, use {link} to login to HCIMWeb with your organization credential. You may wish to bookmark this link for future use."
+            );
+
+            await this.emailService.SendAsync(email);
         }
     }
 }

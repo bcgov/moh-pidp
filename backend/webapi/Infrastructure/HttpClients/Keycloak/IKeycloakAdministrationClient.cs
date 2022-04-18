@@ -55,4 +55,12 @@ public interface IKeycloakAdministrationClient
     /// <param name="userId"></param>
     /// <param name="userRep"></param>
     Task<bool> UpdateUser(Guid userId, UserRepresentation userRep);
+
+    /// <summary>
+    /// Fetches the User and updates with the given Action.
+    /// Returns true if the operation was successful.
+    /// </summary>
+    /// <param name="userId"></param>
+    /// <param name="updateAction"></param>
+    Task<bool> UpdateUser(Guid userId, Action<UserRepresentation> updateAction);
 }

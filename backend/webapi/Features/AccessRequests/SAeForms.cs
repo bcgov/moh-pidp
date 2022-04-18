@@ -44,39 +44,34 @@ public class SAEforms
 
         public async Task<IDomainResult> HandleAsync(Command command)
         {
-            // TODO check standing
             var dto = await this.context.Parties
                 .Where(party => party.Id == command.PartyId)
                 .Select(party => new
                 {
                     party.UserId,
-                    AccessTypes = party.AccessRequests.Select(x => x.AccessType),
+                    AlreadyEnroled = party.AccessRequests.Any(request => request.AccessType == AccessType.SAEforms),
                 })
-                .SingleOrDefaultAsync();
+                .SingleAsync();
 
-            if (dto == null)
-            {
-                return DomainResult.NotFound();
-            }
-
-            if (dto.AccessTypes.Contains(AccessType.SAEforms))
+            // TODO check standing
+            if (dto.AlreadyEnroled)
             {
                 return DomainResult.Failed();
             }
 
-            var newRequest = new AccessRequest
+            if (!await this.client.AssignClientRole(dto.UserId, Resources.SAEforms, Roles.SAEforms))
+            {
+                return DomainResult.Failed();
+            }
+
+            this.context.AccessRequests.Add(new AccessRequest
             {
                 PartyId = command.PartyId,
                 AccessType = AccessType.SAEforms,
                 RequestedOn = this.clock.GetCurrentInstant()
-            };
-
-            this.context.AccessRequests.Add(newRequest);
+            });
 
             await this.context.SaveChangesAsync();
-
-            // TODO what happens if the role assignment fails?
-            await this.client.AssignClientRole(dto.UserId, Resources.SAEforms, Roles.SAEforms);
 
             await this.emailService.SendSaEformsAccessRequestConfirmationAsync(command.PartyId);
 

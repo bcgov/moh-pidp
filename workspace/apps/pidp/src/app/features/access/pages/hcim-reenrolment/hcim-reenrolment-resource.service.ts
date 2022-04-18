@@ -1,15 +1,27 @@
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
-import { Observable, catchError, of, throwError } from 'rxjs';
+import { Observable, catchError, map, of, throwError } from 'rxjs';
 
-import { NoContent, NoContentResponse } from '@bcgov/shared/data-access';
+import { NoContent } from '@bcgov/shared/data-access';
 
 import { ApiHttpClient } from '@app/core/resources/api-http-client.service';
 import { PortalResource } from '@app/features/portal/portal-resource.service';
 import { ProfileStatus } from '@app/features/portal/sections/models/profile-status.model';
 
 import { HcimReenrolment } from './hcim-reenrolment.model';
+
+export enum HcimAccessRequestStatusCode {
+  ACCESS_GRANTED,
+  AUTHENTICATION_FAILED,
+  ACCOUNT_LOCKED,
+  ACCOUNT_UNAUTHORIZED,
+}
+
+export interface HcimAccessRequestResponse {
+  statusCode: HcimAccessRequestStatusCode;
+  remainingAttempts?: number;
+}
 
 @Injectable({
   providedIn: 'root',
@@ -27,17 +39,31 @@ export class HcimReenrolmentResource {
   public requestAccess(
     partyId: number,
     ldapCredentials: HcimReenrolment
-  ): NoContent {
+  ): Observable<HcimAccessRequestResponse> {
     return this.apiResource
       .post<NoContent>('access-requests/hcim-reenrolment', {
         partyId,
         ...ldapCredentials,
       })
       .pipe(
-        NoContentResponse,
+        map(() => ({
+          statusCode: HcimAccessRequestStatusCode.ACCESS_GRANTED,
+        })),
         catchError((error: HttpErrorResponse) => {
-          if (error.status === HttpStatusCode.BadRequest) {
-            return of(void 0);
+          switch (error.status) {
+            case HttpStatusCode.UnprocessableEntity:
+              return of({
+                statusCode: HcimAccessRequestStatusCode.AUTHENTICATION_FAILED,
+                remainingAttempts: error.headers.get('Remaining-Attempts'),
+              });
+            case HttpStatusCode.Locked:
+              return of({
+                statusCode: HcimAccessRequestStatusCode.ACCOUNT_LOCKED,
+              });
+            case HttpStatusCode.Forbidden:
+              return of({
+                statusCode: HcimAccessRequestStatusCode.ACCOUNT_UNAUTHORIZED,
+              });
           }
 
           return throwError(() => error);

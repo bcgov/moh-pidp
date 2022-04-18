@@ -13,12 +13,18 @@ import { StatusCode } from '@app/features/portal/enums/status-code.enum';
 
 import {
   hcimWebUrl,
+  healthNetBcAdminEmail,
+  healthNetBcAdminPhone,
   healthNetBcHelpDeskEmail,
   healthNetBcHelpDeskPhone,
   healthNetBcPasswordResetUrl,
 } from './hcim-constants';
 import { HcimReenrolmentFormState } from './hcim-reenrolment-form-state';
-import { HcimReenrolmentResource } from './hcim-reenrolment-resource.service';
+import {
+  HcimAccessRequestResponse,
+  HcimAccessRequestStatusCode,
+  HcimReenrolmentResource,
+} from './hcim-reenrolment-resource.service';
 
 @Component({
   selector: 'app-hcim-reenrolment',
@@ -33,14 +39,17 @@ export class HcimReenrolmentPage
   public title: string;
   public formState: HcimReenrolmentFormState;
   public completed: boolean | null;
-  public accessRequestFailed: boolean;
-  public accountLocked: boolean;
+  public accessRequestStatusCode?: HcimAccessRequestStatusCode;
   public loginAttempts: number;
   public readonly maxLoginAttempts: number;
   public readonly hcimWebUrl: string;
   public readonly healthNetBcPasswordResetUrl: string;
   public readonly healthNetBcHelpDeskEmail: string;
   public readonly healthNetBcHelpDeskPhone: string;
+  public readonly healthRegistriesAdminEmail: string;
+  public readonly healthRegistriesAdminPhone: string;
+
+  public HcimAccessRequestStatusCode = HcimAccessRequestStatusCode;
 
   public constructor(
     protected dialog: MatDialog,
@@ -59,14 +68,14 @@ export class HcimReenrolmentPage
     this.formState = new HcimReenrolmentFormState(fb);
     this.completed =
       routeData.hcimReenrolmentStatusCode === StatusCode.COMPLETED;
-    this.accessRequestFailed = false;
-    this.accountLocked = false;
     this.loginAttempts = 0;
     this.maxLoginAttempts = 3;
     this.hcimWebUrl = hcimWebUrl;
     this.healthNetBcPasswordResetUrl = healthNetBcPasswordResetUrl;
     this.healthNetBcHelpDeskEmail = healthNetBcHelpDeskEmail;
     this.healthNetBcHelpDeskPhone = healthNetBcHelpDeskPhone;
+    this.healthRegistriesAdminEmail = healthNetBcAdminEmail;
+    this.healthRegistriesAdminPhone = healthNetBcAdminPhone;
   }
 
   public onBack(): void {
@@ -87,22 +96,24 @@ export class HcimReenrolmentPage
     }
   }
 
-  protected performSubmission(): Observable<void> {
+  protected performSubmission(): Observable<HcimAccessRequestResponse> {
     const partyId = this.partyService.partyId;
-
-    // TODO handle account lock when headers are provided
 
     return partyId && this.formState.json
       ? this.resource.requestAccess(partyId, this.formState.json)
       : EMPTY;
   }
 
-  protected onSubmitFormIsValid(): void {
-    this.loginAttempts += 1;
-  }
+  protected afterSubmitIsSuccessful(
+    accessResponse: HcimAccessRequestResponse
+  ): void {
+    const statusCode = accessResponse.statusCode;
+    const remainingAttempts =
+      accessResponse.remainingAttempts ?? this.maxLoginAttempts;
 
-  protected afterSubmitIsSuccessful(): void {
-    this.navigateToRoot();
+    this.completed = statusCode === HcimAccessRequestStatusCode.ACCESS_GRANTED;
+    this.accessRequestStatusCode = statusCode;
+    this.loginAttempts = this.maxLoginAttempts - remainingAttempts;
   }
 
   private navigateToRoot(): void {
