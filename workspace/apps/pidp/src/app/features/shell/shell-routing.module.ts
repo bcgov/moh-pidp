@@ -2,9 +2,8 @@ import { PortalModule } from '@angular/cdk/portal';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { UserGuard } from '@app/core/guards/user.guard';
-import { PartyResolver } from '@app/core/resolvers/party.resolver';
-import { FeatureFlagGuard } from '@app/modules/feature-flag/feature-flag.guard';
+import { PartyResolver } from '@app/core/party/party.resolver';
+import { PermissionsGuard } from '@app/modules/permissions/permissions.guard';
 import { Role } from '@app/shared/enums/roles.enum';
 
 import { AccessModule } from '../access/access.module';
@@ -14,13 +13,13 @@ import { AdminRoutes } from '../admin/admin.routes';
 import { AuthModule } from '../auth/auth.module';
 import { AuthRoutes } from '../auth/auth.routes';
 import { AuthenticationGuard } from '../auth/guards/authentication.guard';
+import { DocumentsModule } from '../documents/documents.module';
+import { DocumentsRoutes } from '../documents/documents.routes';
 import { PortalRoutes } from '../portal/portal.routes';
 import { ProfileModule } from '../profile/profile.module';
 import { ProfileRoutes } from '../profile/profile.routes';
 import { TrainingModule } from '../training/training.module';
 import { TrainingRoutes } from '../training/training.routes';
-import { YourProfileModule } from '../your-profile/your-profile.module';
-import { YourProfileRoutes } from '../your-profile/your-profile.routes';
 import { PortalDashboardComponent } from './components/portal-dashboard/portal-dashboard.component';
 
 const routes: Routes = [
@@ -38,7 +37,7 @@ const routes: Routes = [
   {
     path: '',
     component: PortalDashboardComponent,
-    canActivate: [AuthenticationGuard, UserGuard],
+    canActivate: [AuthenticationGuard],
     canActivateChild: [AuthenticationGuard],
     resolve: {
       partyId: PartyResolver,
@@ -68,18 +67,18 @@ const routes: Routes = [
       },
       {
         path: TrainingRoutes.MODULE_PATH,
-        canLoad: [FeatureFlagGuard],
+        canActivate: [PermissionsGuard],
         data: {
-          features: [Role.FEATURE_PIDP_DEMO],
+          roles: [Role.FEATURE_PIDP_DEMO, Role.FEATURE_AMH_DEMO],
         },
         loadChildren: (): Promise<TrainingModule> =>
           import('../training/training.module').then((m) => m.TrainingModule),
       },
       {
-        path: YourProfileRoutes.MODULE_PATH,
-        loadChildren: (): Promise<YourProfileModule> =>
-          import('../your-profile/your-profile.module').then(
-            (m) => m.YourProfileModule
+        path: DocumentsRoutes.MODULE_PATH,
+        loadChildren: (): Promise<DocumentsModule> =>
+          import('../documents/documents.module').then(
+            (m) => m.DocumentsModule
           ),
       },
       {

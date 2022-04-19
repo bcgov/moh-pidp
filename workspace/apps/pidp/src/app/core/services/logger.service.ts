@@ -1,13 +1,13 @@
 import { Inject, Injectable } from '@angular/core';
 
-import { EnvironmentName } from '../../../environments/environment.model';
-import { AppConfig, APP_CONFIG } from '../../app.config';
-
 import {
   AbstractLoggerService,
   LogLevel,
   LogParams,
-} from './abstract-logger-service.class';
+} from '@bcgov/shared/utils';
+
+import { EnvironmentName } from '../../../environments/environment.model';
+import { APP_CONFIG, AppConfig } from '../../app.config';
 
 @Injectable({
   providedIn: 'root',

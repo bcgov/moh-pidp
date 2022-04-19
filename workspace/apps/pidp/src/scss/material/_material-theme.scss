@@ -9,6 +9,7 @@
 // exception of body-2 to ensure it matches it's body-1 sibling.
 // Reading typography from a config: https://material.angular.io/guide/typography#reading-typography-values-from-a-config
 $pidp-typography: mat.define-typography-config(
+  $font-family: 'Poppins, "Helvetica Neue", sans-serif',
   // Native element: <h1>
   $headline:
     mat.define-typography-level(var.$mat-theme-headline-font-size, 2.5rem, 500),
@@ -40,7 +41,7 @@ $pidp-typography: mat.define-typography-config(
     mat.define-typography-level(var.$mat-theme-body-2-font-size, 1.75rem, 700),
   // Native element: <button>
   $button:
-    mat.define-typography-level(var.$mat-theme-button-font-size, 0.875rem, 400)
+    mat.define-typography-level(var.$mat-theme-button-font-size, 0.875rem, 400),
 );
 
 // Include the common styles for Angular Material. We include this here so that you only
@@ -51,8 +52,8 @@ $pidp-typography: mat.define-typography-config(
 // Define the palettes for your theme using the Material Design palettes available in palette.scss
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue. Available color palettes: https://material.io/design/color/
-$pidp-primary: mat.define-palette($bcgov-blue, 500);
-$pidp-accent: mat.define-palette($bcgov-yellow, 500);
+$pidp-primary: mat.define-palette($material-theme-primary, 500);
+$pidp-accent: mat.define-palette($material-theme-secondary, 500);
 
 // The warn palette is optional (defaults to red).
 $pidp-warn: mat.define-palette(mat.$red-palette);

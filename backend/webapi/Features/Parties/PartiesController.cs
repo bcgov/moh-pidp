@@ -10,7 +10,7 @@ using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.Services;
 
 [Route("api/[controller]")]
-[Authorize(Policy = Policies.BcscAuthentication)]
+[Authorize(Policy = Policies.AnyPartyIdentityProvider)]
 public class PartiesController : PidpControllerBase
 {
     public PartiesController(IPidpAuthorizationService authorizationService) : base(authorizationService) { }
@@ -71,7 +71,7 @@ public class PartiesController : PidpControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<ProfileStatus.Model>> ComputePartyProfileStatus([FromServices] ICommandHandler<ProfileStatus.Command, IDomainResult<ProfileStatus.Model>> handler,
                                                                                    [FromRoute] ProfileStatus.Command command)
-        => await this.AuthorizePartyBeforeHandleAsync(command.Id, handler, command)
+        => await this.AuthorizePartyBeforeHandleAsync(command.Id, handler, command.WithUser(this.User))
             .ToActionResultOfT();
 
     [HttpGet("{id}/work-setting")]

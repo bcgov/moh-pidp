@@ -19,12 +19,15 @@ public static class ClaimValues
 {
     public const string BCServicesCard = "bcsc";
     public const string Idir = "idir";
+    public const string Phsa = "phsa";
 }
 
 public static class Policies
 {
     public const string BcscAuthentication = "bcsc-authentication-policy";
     public const string IdirAuthentication = "idir-authentication-policy";
+    public const string AnyPartyIdentityProvider = "party-idp-policy";
+    public const string HcimUser = "hcim-user-policy";
     public const string UserOwnsResource = "user-owns-resource-policy";
 }
 

@@ -11,6 +11,7 @@ import { RouterModule } from '@angular/router';
 import { BcGovLogoComponent } from '../../components';
 import { NgxProgressBarModule } from '../../modules/ngx-progress-bar/ngx-progress-bar.module';
 import { ViewportService } from '../../services/viewport.service';
+import { DashboardImageComponent } from './components';
 import { DashboardHeaderComponent } from './components/dashboard-header/dashboard-header.component';
 import { DashboardMenuComponent } from './components/dashboard-menu/dashboard-menu.component';
 import { DashboardRouteMenuItemComponent } from './components/dashboard-route-menu-item/dashboard-route-menu-item.component';
@@ -20,6 +21,7 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
   declarations: [
     BcGovLogoComponent,
     DashboardHeaderComponent,
+    DashboardImageComponent,
     DashboardMenuComponent,
     DashboardRouteMenuItemComponent,
     DashboardComponent,
@@ -38,7 +40,11 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
     // the NgProgressHttpModule to attach to the HttpClient
     NgxProgressBarModule,
   ],
-  exports: [DashboardComponent, DashboardHeaderComponent],
+  exports: [
+    DashboardComponent,
+    DashboardHeaderComponent,
+    DashboardImageComponent,
+  ],
   providers: [ViewportService],
 })
 export class DashboardModule {}

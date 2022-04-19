@@ -1,23 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { Observable, Subscription, map } from 'rxjs';
 
-import { AccessRequestResource } from '@app/core/resources/access-request-resource.service';
-import { DocumentService } from '@app/core/services/document.service';
+import { APP_CONFIG, AppConfig } from '@app/app.config';
+import { PartyService } from '@app/core/party/party.service';
 import { Role } from '@app/shared/enums/roles.enum';
 
-import { PartyService } from '@core/services/party.service';
-
-import { ShellRoutes } from '../shell/shell.routes';
-import { PortalSection } from './models/portal-section.model';
-import {
-  ProfileStatus,
-  ProfileStatusAlert,
-  StatusCode,
-} from './models/profile-status.model';
 import { PortalResource } from './portal-resource.service';
 import { PortalService } from './portal.service';
+import { IPortalSection } from './sections/classes';
+import { ProfileStatusAlert } from './sections/models/profile-status-alert.model';
+import { ProfileStatus } from './sections/models/profile-status.model';
 
 @Component({
   selector: 'app-portal',
@@ -27,33 +21,30 @@ import { PortalService } from './portal.service';
 export class PortalPage implements OnInit {
   public busy?: Subscription;
   public title: string;
-  public acceptedCollectionNotice: boolean;
-  public collectionNotice: string;
-  public state$: Observable<Record<string, PortalSection[]>>;
+  public state$: Observable<Record<string, IPortalSection[]>>;
   public completedProfile: boolean;
   public alerts: ProfileStatusAlert[];
+  public providerIdentitySupportEmail: string;
+  public specialAuthoritySupportEmail: string;
 
   public Role = Role;
 
   public constructor(
+    @Inject(APP_CONFIG) private config: AppConfig,
     private route: ActivatedRoute,
     private router: Router,
     private partyService: PartyService,
     private portalResource: PortalResource,
-    private portalService: PortalService,
-    private accessRequestResource: AccessRequestResource,
-    documentService: DocumentService
+    private portalService: PortalService
   ) {
     this.title = this.route.snapshot.data.title;
-    this.acceptedCollectionNotice = this.portalService.acceptedCollectionNotice;
-    this.collectionNotice = documentService.getSAeFormsCollectionNotice();
     this.state$ = this.portalService.state$;
     this.completedProfile = false;
     this.alerts = [];
-  }
-
-  public onAcceptCollectionNotice(accepted: boolean): void {
-    this.portalService.acceptedCollectionNotice = accepted;
+    this.providerIdentitySupportEmail =
+      this.config.emails.providerIdentitySupport;
+    this.specialAuthoritySupportEmail =
+      this.config.emails.specialAuthoritySupport;
   }
 
   public onScrollToAnchor(): void {
@@ -63,35 +54,8 @@ export class PortalPage implements OnInit {
     });
   }
 
-  public onCardRouteAction(routePath: string): void {
-    if (!routePath) {
-      return;
-    }
-
-    this.router.navigate([ShellRoutes.routePath(routePath)]);
-  }
-
-  public onCardRequestAccess(routePath: string): void {
-    const partyId = this.partyService.partyId;
-    const profileStatus = this.portalService.profileStatus;
-
-    if (!partyId || !profileStatus) {
-      return;
-    }
-
-    const saEformsStatusCode = profileStatus.status.saEforms.statusCode;
-
-    if (saEformsStatusCode !== StatusCode.COMPLETED) {
-      this.busy = this.accessRequestResource.saEforms(partyId).subscribe(() => {
-        if (!routePath) {
-          return;
-        }
-
-        this.router.navigate([ShellRoutes.routePath(routePath)]);
-      });
-    } else {
-      this.router.navigate([ShellRoutes.routePath(routePath)]);
-    }
+  public onCardAction(section: IPortalSection): void {
+    section.performAction();
   }
 
   public ngOnInit(): void {

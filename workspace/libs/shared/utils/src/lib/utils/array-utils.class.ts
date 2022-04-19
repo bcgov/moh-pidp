@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export class ArrayUtils {
   /**
    * @description
@@ -14,14 +15,13 @@ export class ArrayUtils {
 
   /**
    * @description
-   * Conditional insert into an array when used in conjunction
-   * with the spread operator.
+   * Conditional insert into an array by invoking a callback
+   * used in conjunction with the spread operator.
    *
    * @example
-   * const doSomething = (...results) => [...results, 7, 8, 9]
-   * const example = [1, 2, 3, ...ArrayUtils.insertIf(true, doSomething)] // [1, 2, 3, 7, 8, 9]
-   * const example = [1, 2, 3, ...ArrayUtils.insertIf(true, () => doSomething(4, 5, 6))] // [1, 2, 3, 4, 5, 6, 7, 8, 9]
-   * const example = [1, 2, 3, ...ArrayUtils.insertIf(false, doSomething)] // [1, 2, 3, 4, 5, 6]
+   * const doSomething = () => [4, 5, 6]
+   * const example = [1, 2, 3, ...ArrayUtils.insertResultIf(true, doSomething)] // [1, 2, 3, 4, 5, 6]
+   * const example = [1, 2, 3, ...ArrayUtils.insertResultIf(false, doSomething)] // [1, 2, 3]
    */
   public static insertResultIf<T>(
     condition: boolean,

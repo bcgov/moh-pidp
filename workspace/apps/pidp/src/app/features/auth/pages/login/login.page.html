@@ -1,4 +1,6 @@
-<ui-dashboard-header></ui-dashboard-header>
+<ui-dashboard-header
+  [theme]="headerConfig.theme"
+  [allowMobileToggle]="headerConfig.allowMobileToggle"></ui-dashboard-header>
 
 <div class="container">
   <ng-container *ngIf="idpHint === IdentityProvider.BCSC; else IDIR">
@@ -16,13 +18,14 @@
             <ul>
               <li>
                 For support with the provider identity portal, contact
-                <ui-anchor
+                <a
+                  uiAnchor
                   scheme="mailto"
-                  [href]="providerIdentitySupportEmail"></ui-anchor>
+                  [attr.href]="providerIdentitySupportEmail"></a>
               </li>
               <li>
                 For support with your BC Services Card, click
-                <ui-anchor [href]="bcscSupportUrl">here</ui-anchor>
+                <a uiAnchor [attr.href]="bcscSupportUrl">here</a>
               </li>
             </ul>
           </ng-container>
@@ -32,28 +35,38 @@
     <div class="row">
       <div class="col-12 col-xl-auto">
         <div class="header">
-          <img
-            src="/assets/images/pidp-logo-white.svg"
-            alt="Provider Identity Portal Logo" />
-          <span>
-            <ui-page-header>Provider Identity Portal</ui-page-header>
-            <p>
-              A portal for health care providers and health care professionals
-              in
-              <strong>British Columbia</strong> to enrol for access to
-              participating health systems
-            </p>
-          </span>
+          <div class="heading">
+            <img
+              src="/assets/images/pidp-logo-blue-small.svg"
+              alt="Provider Identity Portal Logo" />
+            <h1>Provider Identity Portal</h1>
+          </div>
+
+          <p>
+            A portal for health care professionals in
+            <strong>British Columbia</strong> to enrol for access to
+            participating health systems
+          </p>
         </div>
 
         <div class="actions">
-          <button mat-flat-button color="primary" (click)="onLogin()">
-            Login with the BC Services Card app
-          </button>
-          <small>
-            Need an account?
-            <ui-anchor [href]="bcscMobileSetupUrl">Register</ui-anchor>
-          </small>
+          <span>
+            <button mat-flat-button color="primary" (click)="onLogin()">
+              Login with the BC Services Card app
+            </button>
+            <small>
+              Need an account?
+              <a uiAnchor [attr.href]="bcscMobileSetupUrl">Set up</a>
+            </small>
+          </span>
+          <span>
+            <button
+              mat-flat-button
+              color="primary"
+              (click)="onLogin(IdentityProvider.PHSA)">
+              Login with your Health Authority ID
+            </button>
+          </span>
         </div>
 
         <div class="hide-on-large-viewports">
@@ -61,26 +74,7 @@
         </div>
 
         <div class="support">
-          <ui-page-section>
-            <ui-page-section-subheader
-              icon="help_outline"
-              heading="Get Support"></ui-page-section-subheader>
-            <ul>
-              <li>
-                Questions about the Provider Identity Portal should be directed
-                to:
-                <ui-anchor
-                  scheme="mailto"
-                  [href]="providerIdentitySupportEmail"></ui-anchor>
-              </li>
-              <li>
-                Questions about Special Authority eForms should be directed to:
-                <ui-anchor
-                  scheme="mailto"
-                  [href]="specialAuthoritySupportEmail"></ui-anchor>
-              </li>
-            </ul>
-          </ui-page-section>
+          <app-get-support></app-get-support>
         </div>
       </div>
       <div class="col-12 col-xl-auto hide-on-small-viewports">
@@ -102,16 +96,22 @@
           </p>
           <p>
             You need to set up the
-            <ui-anchor [href]="bcscMobileSetupUrl"
-              >BC Services Card app</ui-anchor
-            >
+            <a uiAnchor [attr.href]="bcscMobileSetupUrl">
+              BC Services Card app
+            </a>
             to enrol. You will use the app each time you access the eForms
             application. If you are not eligible for the BC Services Card, or
             cannot set up the app, you can
-            <ui-anchor [href]="specialAuthorityUrl"
-              >submit SA requests by fax </ui-anchor
+            <a uiAnchor [attr.href]="specialAuthorityUrl">
+              submit SA requests by fax</a
             >.
           </p>
+        </ui-page-section>
+
+        <ui-page-section>
+          <ui-page-section-subheader
+            heading="HCIM Web Enrolment"></ui-page-section-subheader>
+          <p>Request access to HCIM Web</p>
         </ui-page-section>
       </div>
     </div>
@@ -121,7 +121,7 @@
     <div class="row idir">
       <div class="col-12">
         <img
-          src="/assets/images/pidp-logo-white.svg"
+          src="/assets/images/pidp-logo-blue.svg"
           alt="Provider Identity Portal Logo" />
       </div>
       <div class="col-12">

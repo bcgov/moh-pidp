@@ -1,21 +1,33 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
+import { ActivatedRoute } from '@angular/router';
+
+import { randTextRange } from '@ngneat/falso';
 
 import { SitePrivacySecurityChecklistPage } from './site-privacy-security-checklist.page';
 
 describe('SitePrivacySecurityChecklistPage', () => {
   let component: SitePrivacySecurityChecklistPage;
-  let fixture: ComponentFixture<SitePrivacySecurityChecklistPage>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [SitePrivacySecurityChecklistPage],
-    }).compileComponents();
-  });
+  const mockActivatedRoute = {
+    snapshot: {
+      data: {
+        title: randTextRange({ min: 1, max: 4 }),
+      },
+    },
+  };
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SitePrivacySecurityChecklistPage);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+    TestBed.configureTestingModule({
+      providers: [
+        SitePrivacySecurityChecklistPage,
+        {
+          provide: ActivatedRoute,
+          useValue: mockActivatedRoute,
+        },
+      ],
+    });
+
+    component = TestBed.inject(SitePrivacySecurityChecklistPage);
   });
 
   it('should create', () => {

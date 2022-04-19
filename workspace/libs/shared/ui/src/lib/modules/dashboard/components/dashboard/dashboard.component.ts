@@ -16,12 +16,12 @@ import {
   BootstrapBreakpoints,
   ViewportService,
 } from '../../../../services/viewport.service';
+import { DashboardHeaderConfig } from '../../models/dashboard-header-config.model';
 import {
   DashboardMenuItem,
   DashboardRouteMenuItem,
 } from '../../models/dashboard-menu-item.model';
 import { DashboardSidenavProps } from '../../models/dashboard-sidenav-props.model';
-import { DashboardHeaderTheme } from '../dashboard-header/dashboard-header.component';
 
 @UntilDestroy()
 @Component({
@@ -35,20 +35,12 @@ export class DashboardComponent implements OnInit {
    * @description
    * Dashboard header configuration.
    */
-  @Input() public headerConfig: {
-    theme: DashboardHeaderTheme;
-    allowMobileToggle: boolean;
-  };
+  @Input() public headerConfig: DashboardHeaderConfig;
   /**
    * @description
    * Username for the authenticated user.
    */
   @Input() public username?: string;
-  /**
-   * @description
-   * Branding configuration for the side navigation.
-   */
-  @Input() public brandConfig?: { imgSrc: string; imgAlt: string };
   /**
    * @description
    * List of dashboard details used to populate the side navigation

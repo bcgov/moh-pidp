@@ -1,8 +1,8 @@
 {
   "editor.bracketPairColorization.enabled": true,
-  "editor.guides.bracketPairs": "active",
   "editor.formatOnPaste": true,
   "editor.formatOnType": true,
+  "editor.guides.bracketPairs": "active",
   "editor.minimap.enabled": true,
   "editor.renderWhitespace": "boundary",
   "editor.tabSize": 4,
@@ -12,8 +12,8 @@
   "omnisharp.enableEditorConfigSupport": true,
   "omnisharp.enableRoslynAnalyzers": true,
   "search.exclude": {
-    "./bin": true,
-    "./logs": true,
-    "./obj": true,
+    "**/bin": true,
+    "**/logs": true,
+    "**/obj": true,
   },
 }

@@ -1,0 +1,52 @@
+{
+  "describe": {
+    "scope": "javascript,typescript",
+    "prefix": "describe statement",
+    "body": ["describe('$2', () => {", "  $0", "})"],
+    "description": "Module import statement"
+  },
+  "describeGivenWhenThen": {
+    "scope": "javascript,typescript",
+    "prefix": "given/when/then statement",
+    "body": [
+      "given('$1', () => {",
+      "  when('$2', () => {",
+      "    then('$3', () => {",
+      "      $0",
+      "    })",
+      "  })",
+      "})"
+    ],
+    "description": "Given/When/Then nested statements"
+  },
+  "whenThen": {
+    "scope": "javascript,typescript",
+    "prefix": "when/then statement",
+    "body": [
+      "when('$1', () => {",
+      "  then('$2', () => {",
+      "    $0",
+      "  })",
+      "})"
+    ],
+    "description": "When/Then nested statements"
+  },
+  "given": {
+    "scope": "javascript,typescript",
+    "prefix": "given method",
+    "body": ["given('$1', () => {$2})$0"],
+    "description": "Given test method"
+  },
+  "when": {
+    "scope": "javascript,typescript",
+    "prefix": "when method",
+    "body": ["when('$1', () => {$2})$0"],
+    "description": "When test method"
+  },
+  "then": {
+    "scope": "javascript,typescript",
+    "prefix": "then method",
+    "body": ["then('$1', () => {$2})$0"],
+    "description": "Then test method"
+  }
+}

@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { NgBusyModule } from 'ng-busy';
 
@@ -9,7 +10,11 @@ import { BusyOverlayComponent } from './busy-overlay/busy-overlay.component';
 import { busyConfig } from './busy.config';
 
 @NgModule({
-  imports: [CommonModule, NgBusyModule.forRoot(busyConfig)],
+  imports: [
+    CommonModule,
+    NgBusyModule.forRoot(busyConfig),
+    MatProgressSpinnerModule,
+  ],
   declarations: [
     BusyLoadingComponent,
     BusyOverlayComponent,

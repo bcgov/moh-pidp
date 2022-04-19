@@ -9,8 +9,7 @@ import {
 import { Observable, combineLatest, distinctUntilChanged, map } from 'rxjs';
 
 import { ViewportService } from '../../../../services/viewport.service';
-
-export type DashboardHeaderTheme = 'dark' | 'light';
+import { DashboardHeaderTheme } from '../../models/dashboard-header-config.model';
 
 @Component({
   selector: 'ui-dashboard-header',

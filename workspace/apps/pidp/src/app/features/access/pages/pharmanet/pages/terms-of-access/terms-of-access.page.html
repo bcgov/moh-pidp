@@ -45,7 +45,8 @@
       published by the Province on the following website (or such other website
       as may be specified by the Province from time to time for this
       purpose):<br /><br />
-      <ui-anchor href="https://www.gov.bc.ca/pharmacarenewsletter"></ui-anchor>
+      <!-- TODO remove hardcoded example URL -->
+      <a uiAnchor href="https://www.gov.bc.ca/pharmacarenewsletter"></a>
     </p>
     <p>
       <strong>"PharmaNet"</strong> means PharmaNet as continued under section 2
@@ -212,6 +213,7 @@
   <ui-page-footer>
     <button
       mat-stroked-button
+      uiPageFooterAction
       color="primary"
       type="button"
       routerLink="../self-declaration">
@@ -219,6 +221,7 @@
     </button>
     <button
       mat-flat-button
+      uiPageFooterAction
       color="primary"
       type="submit"
       routerLink="../next-steps"

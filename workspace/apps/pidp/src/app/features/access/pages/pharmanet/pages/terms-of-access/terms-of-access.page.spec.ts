@@ -1,21 +1,36 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
+import { ActivatedRoute } from '@angular/router';
+
+import { randTextRange } from '@ngneat/falso';
 
 import { TermsOfAccessPage } from './terms-of-access.page';
 
 describe('TermsOfAccessPage', () => {
   let component: TermsOfAccessPage;
-  let fixture: ComponentFixture<TermsOfAccessPage>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [TermsOfAccessPage],
-    }).compileComponents();
-  });
+  const mockActivatedRoute = {
+    snapshot: {
+      data: {
+        title: randTextRange({ min: 1, max: 4 }),
+        routes: {
+          root: '../../',
+        },
+      },
+    },
+  };
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TermsOfAccessPage);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+    TestBed.configureTestingModule({
+      providers: [
+        TermsOfAccessPage,
+        {
+          provide: ActivatedRoute,
+          useValue: mockActivatedRoute,
+        },
+      ],
+    });
+
+    component = TestBed.inject(TermsOfAccessPage);
   });
 
   it('should create', () => {

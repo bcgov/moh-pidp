@@ -1,9 +1,12 @@
 <div class="page-section-subheader">
-  <ui-page-subheader [icon]="icon">{{ heading }}</ui-page-subheader>
+  <ui-page-subheader [icon]="icon" [iconType]="iconType">
+    {{ heading }}
+  </ui-page-subheader>
   <p *ngIf="descriptions.length">
     <ng-content select="[uiPageSectionSubheaderDesc]"></ng-content>
   </p>
   <small *ngIf="hints.length">
     <ng-content select="[uiPageSectionSubheaderHint]"></ng-content>
   </small>
+  <ng-content></ng-content>
 </div>

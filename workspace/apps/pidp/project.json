@@ -13,6 +13,7 @@
         "main": "apps/pidp/src/main.ts",
         "polyfills": "apps/pidp/src/polyfills.ts",
         "tsConfig": "apps/pidp/tsconfig.app.json",
+        "inlineStyleLanguage": "scss",
         "assets": [
           "apps/pidp/src/favicon.ico",
           "apps/pidp/src/assets",

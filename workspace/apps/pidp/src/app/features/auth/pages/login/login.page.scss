@@ -7,7 +7,11 @@
 .container {
   padding-top: 3rem;
   padding-bottom: 1rem;
-  max-width: 1115px;
+  max-width: 841px;
+
+  @include media-breakpoint-up(xxl) {
+    max-width: 1340px;
+  }
 }
 
 //
@@ -16,34 +20,45 @@
 
 .header,
 .actions,
-.systems,
-.support {
+.systems {
   margin-bottom: 3rem;
 }
 
 .header {
-  display: flex;
+  .heading {
+    display: flex;
+    align-items: flex-end;
+    margin-bottom: 1.5rem;
 
-  img {
-    display: none;
+    img {
+      display: none;
+    }
+
+    @media (min-width: 645px) {
+      img {
+        display: block;
+        width: 135px;
+        height: auto;
+      }
+
+      h1 {
+        // Alignment of text with image
+        margin-top: 0.5rem;
+        margin-left: 1.5rem;
+        margin-bottom: 0;
+      }
+    }
   }
 
   p {
-    margin-top: -1.5rem;
-
     @include media-breakpoint-up(sm) {
       width: 425px;
     }
-  }
-
-  @include media-breakpoint-up(md) {
-    img {
-      display: block;
+    @include media-breakpoint-up(md) {
+      width: 500px;
     }
-
-    span {
-      margin-top: 2rem;
-      margin-left: 2rem;
+    @include media-breakpoint-up(lg) {
+      width: 600px;
     }
   }
 }
@@ -51,27 +66,37 @@
 .actions {
   small {
     margin-top: 0.2rem;
+    margin-bottom: 0.5rem;
     display: block;
+
+    @include media-breakpoint-up(lg) {
+      margin-bottom: 0;
+    }
   }
 
   button {
-    font-size: 1.2rem;
+    font-size: 0.95rem;
     padding: 0.75rem 1.2rem;
     width: 100%;
 
     @include media-breakpoint-up(sm) {
-      width: auto;
+      font-size: 1.2rem;
+    }
+    @include media-breakpoint-up(md) {
+      padding: 0.75rem 1rem;
+    }
+    @include media-breakpoint-up(lg) {
       padding: 0.75rem 1.75rem;
+      width: auto;
     }
   }
-}
 
-.support {
-  padding: 1rem 0;
-  max-width: 425px;
+  @include media-breakpoint-up(lg) {
+    display: flex;
 
-  li {
-    margin-bottom: 1.2rem;
+    span:first-child {
+      padding-right: 2rem;
+    }
   }
 }
 
@@ -90,18 +115,19 @@
     padding: 1rem 1.5rem;
   }
 
-  @include media-breakpoint-up(xl) {
-    max-width: 450px;
+  @include media-breakpoint-up(xxl) {
+    max-width: 420px;
+    margin-left: 30px;
   }
 }
 
-@include media-breakpoint-down(xl) {
+@include media-breakpoint-down(xxl) {
   .hide-on-small-viewports {
     display: none;
   }
 }
 
-@include media-breakpoint-up(xl) {
+@include media-breakpoint-up(xxl) {
   .hide-on-large-viewports {
     display: none;
   }
@@ -114,5 +140,7 @@
 
   img {
     margin-bottom: 3rem;
+    width: 275px;
+    height: auto;
   }
 }

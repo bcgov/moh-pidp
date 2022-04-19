@@ -7,7 +7,7 @@ import { NgxMaskModule } from 'ngx-mask';
 import { AlertActionsDirective } from './components/alert/alert-actions.directive';
 import { AlertContentDirective } from './components/alert/alert-content.directive';
 import { AlertComponent } from './components/alert/alert.component';
-import { AnchorComponent } from './components/anchor/anchor.component';
+import { AnchorDirective } from './components/anchor/anchor.directive';
 import { CardSummaryComponent } from './components/card-summary/card-summary.component';
 import { CardActionsDirective } from './components/card/card-actions.directive';
 import { CardContentDirective } from './components/card/card-content.directive';
@@ -16,10 +16,11 @@ import { CardComponent } from './components/card/card.component';
 import { CollectionNoticeComponent } from './components/collection-notice/collection-notice.component';
 import { ContactFormComponent } from './components/contact-info-form/contact-info-form.component';
 import { ConfirmDialogComponent } from './components/dialogs/confirm-dialog/confirm-dialog.component';
-import { FormSectionComponent } from './components/form-section/form-section.component';
 import { HtmlComponent } from './components/dialogs/content/html/html.component';
+import { FormSectionComponent } from './components/form-section/form-section.component';
 import { IconComponent } from './components/icon/icon.component';
 import { KeyValueInfoComponent } from './components/key-value-info/key-value-info.component';
+import { PageFooterActionDirective } from './components/page-footer/page-footer-action.directive';
 import { PageFooterComponent } from './components/page-footer/page-footer.component';
 import { PageHeaderComponent } from './components/page-header/page-header.component';
 import { PageSectionSubheaderDescDirective } from './components/page-section-subheader/page-section-subheader-desc.directive';
@@ -49,7 +50,7 @@ import { SafePipe } from './pipes/safe.pipe';
     AlertComponent,
     AlertContentDirective,
     AlertActionsDirective,
-    AnchorComponent,
+    AnchorDirective,
     CardComponent,
     CardHintDirective,
     CardContentDirective,
@@ -64,6 +65,7 @@ import { SafePipe } from './pipes/safe.pipe';
     IconComponent,
     PageComponent,
     PageFooterComponent,
+    PageFooterActionDirective,
     PageHeaderComponent,
     PageSectionComponent,
     PageSectionSubheaderComponent,
@@ -99,7 +101,7 @@ import { SafePipe } from './pipes/safe.pipe';
     AlertComponent,
     AlertContentDirective,
     AlertActionsDirective,
-    AnchorComponent,
+    AnchorDirective,
     CardComponent,
     CardHintDirective,
     CardContentDirective,
@@ -114,6 +116,7 @@ import { SafePipe } from './pipes/safe.pipe';
     IconComponent,
     PageComponent,
     PageFooterComponent,
+    PageFooterActionDirective,
     PageHeaderComponent,
     PageSectionComponent,
     PageSectionSubheaderComponent,
