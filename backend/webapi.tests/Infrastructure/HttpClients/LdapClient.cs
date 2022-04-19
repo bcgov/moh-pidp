@@ -78,7 +78,7 @@ public class LdapClientTests
         {
             Authenticated = false,
             Unlocked = true,
-            RemaingingAttempts = expectedRemainingAttempts,
+            RemainingAttempts = expectedRemainingAttempts,
             UserName = "USERNAME"
         });
 
@@ -99,7 +99,7 @@ public class LdapClientTests
         {
             Authenticated = false,
             Unlocked = false,
-            RemaingingAttempts = 3,
+            RemainingAttempts = 3,
             UserName = "USERNAME"
         });
 
