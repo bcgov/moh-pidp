@@ -1,3 +1,5 @@
+import { healthNetBcAdminEmail } from '@app/features/access/pages/hcim-reenrolment/hcim-constants';
+
 import { AppEnvironment, EnvironmentName } from './environment.model';
 
 /**
@@ -18,6 +20,7 @@ export const environment: AppEnvironment = {
   emails: {
     providerIdentitySupport: 'provideridentityportal@gov.bc.ca',
     specialAuthoritySupport: 'satransformation@gov.bc.ca',
+    hcimWebSupportEmail: healthNetBcAdminEmail,
   },
   urls: {
     bcscSupport:

@@ -91,6 +91,19 @@ export class PortalService {
     });
   }
 
+  public get hiddenSections(): PortalSectionStatusKey[] {
+    const status = this._profileStatus?.status;
+
+    if (!status) {
+      return [];
+    }
+
+    return (Object.keys(status) as PortalSectionStatusKey[]).filter(
+      (key: PortalSectionStatusKey) =>
+        status[key].statusCode === StatusCode.HIDDEN
+    );
+  }
+
   private getAlerts(profileStatus: ProfileStatus): ProfileStatusAlert[] {
     return profileStatus.alerts.map((alert) => {
       switch (alert) {
