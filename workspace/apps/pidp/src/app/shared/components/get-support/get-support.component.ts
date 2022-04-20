@@ -1,6 +1,23 @@
-import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Inject,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+} from '@angular/core';
+
+import { ArrayUtils } from '@bcgov/shared/utils';
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';
+
+export type SupportProvided = 'saEforms' | 'hcim';
+
+interface SupportProps {
+  name: string;
+  email: string;
+}
 
 @Component({
   selector: 'app-get-support',
@@ -8,14 +25,51 @@ import { APP_CONFIG, AppConfig } from '@app/app.config';
   styleUrls: ['./get-support.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class GetSupportComponent {
-  public providerIdentitySupportEmail: string;
-  public specialAuthoritySupportEmail: string;
+export class GetSupportComponent implements OnChanges, OnInit {
+  /**
+   * @description
+   * Support that should be hidden from view.
+   */
+  @Input() public hiddenSupport?: SupportProvided | SupportProvided[];
+
+  public providedSupport: SupportProps[];
 
   public constructor(@Inject(APP_CONFIG) private config: AppConfig) {
-    this.providerIdentitySupportEmail =
-      this.config.emails.providerIdentitySupport;
-    this.specialAuthoritySupportEmail =
-      this.config.emails.specialAuthoritySupport;
+    this.providedSupport = [];
+  }
+
+  public ngOnChanges(changes: SimpleChanges): void {
+    if (changes.hiddenSupport) {
+      const currentValue = changes.hiddenSupport.currentValue;
+      const hiddenSupport = Array.isArray(currentValue)
+        ? currentValue
+        : [currentValue];
+
+      this.setupSupport(hiddenSupport);
+    }
+  }
+
+  public ngOnInit(): void {
+    this.setupSupport();
+  }
+
+  private setupSupport(hiddenSupport: SupportProvided[] = []): void {
+    this.providedSupport = [
+      {
+        name: 'Provider Identity Portal',
+        email: this.config.emails.providerIdentitySupport,
+      },
+      ...ArrayUtils.insertIf<SupportProps>(
+        !hiddenSupport.includes('saEforms'),
+        {
+          name: 'Special Authority eForms',
+          email: this.config.emails.specialAuthoritySupport,
+        }
+      ),
+      ...ArrayUtils.insertIf<SupportProps>(!hiddenSupport.includes('hcim'), {
+        name: 'HCIMWeb Account Transfer',
+        email: this.config.emails.hcimWebSupportEmail,
+      }),
+    ];
   }
 }

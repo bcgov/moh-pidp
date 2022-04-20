@@ -1,10 +1,10 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { Observable, Subscription, map } from 'rxjs';
 
-import { APP_CONFIG, AppConfig } from '@app/app.config';
 import { PartyService } from '@app/core/party/party.service';
+import { SupportProvided } from '@app/shared/components/get-support/get-support.component';
 import { Role } from '@app/shared/enums/roles.enum';
 
 import { PortalResource } from './portal-resource.service';
@@ -24,13 +24,11 @@ export class PortalPage implements OnInit {
   public state$: Observable<Record<string, IPortalSection[]>>;
   public completedProfile: boolean;
   public alerts: ProfileStatusAlert[];
-  public providerIdentitySupportEmail: string;
-  public specialAuthoritySupportEmail: string;
+  public hiddenSupport: SupportProvided[];
 
   public Role = Role;
 
   public constructor(
-    @Inject(APP_CONFIG) private config: AppConfig,
     private route: ActivatedRoute,
     private router: Router,
     private partyService: PartyService,
@@ -41,10 +39,7 @@ export class PortalPage implements OnInit {
     this.state$ = this.portalService.state$;
     this.completedProfile = false;
     this.alerts = [];
-    this.providerIdentitySupportEmail =
-      this.config.emails.providerIdentitySupport;
-    this.specialAuthoritySupportEmail =
-      this.config.emails.specialAuthoritySupport;
+    this.hiddenSupport = [];
   }
 
   public onScrollToAnchor(): void {
@@ -66,6 +61,9 @@ export class PortalPage implements OnInit {
           this.portalService.updateState(profileStatus);
           this.completedProfile = this.portalService.completedProfile;
           this.alerts = this.portalService.alerts;
+          this.hiddenSupport = this.portalService.hiddenSections.filter(
+            (hiddenSection) => ['saEforms', 'hcim'].includes(hiddenSection)
+          ) as SupportProvided[];
         })
       )
       .subscribe();

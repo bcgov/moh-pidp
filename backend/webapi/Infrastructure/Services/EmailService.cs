@@ -36,34 +36,6 @@ public class EmailService : IEmailService
         this.context = context;
     }
 
-    public async Task SendSaEformsAccessRequestConfirmationAsync(int partyId)
-    {
-        var party = await this.context.Parties
-            .Where(party => party.Id == partyId)
-            .Select(party => new
-            {
-                party.FirstName,
-                party.Email
-            })
-            .SingleOrDefaultAsync();
-
-        if (party?.Email == null)
-        {
-            this.logger.LogNullPartyEmail(partyId);
-            return;
-        }
-
-        var url = "https://www.eforms.healthbc.org/login";
-        var link = $"<a href=\"{url}\" target=\"_blank\" rel=\"noopener noreferrer\">link</a>";
-        var email = new Email(
-            from: PidpEmail,
-            to: party.Email,
-            subject: "SA eForms Enrolment Confirmation",
-            body: $"Hi {party.FirstName},<br><br>You will need to visit this {link} each time you want to submit an SA eForm. It may be helpful to bookmark this {link} for future use."
-        );
-        await this.SendAsync(email);
-    }
-
     public async Task SendAsync(Email email)
     {
         if (!PidpConfiguration.IsProduction())
@@ -130,10 +102,4 @@ public class EmailService : IEmailService
         public const string Ches = "CHES";
         public const string Smtp = "SMTP";
     }
-}
-
-public static partial class EmailServiceLogingExtensions
-{
-    [LoggerMessage(1, LogLevel.Error, "No email address found for Party with Id {partyId}.")]
-    public static partial void LogNullPartyEmail(this ILogger logger, int partyId);
 }
