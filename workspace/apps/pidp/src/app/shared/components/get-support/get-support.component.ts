@@ -67,7 +67,7 @@ export class GetSupportComponent implements OnChanges, OnInit {
         }
       ),
       ...ArrayUtils.insertIf<SupportProps>(!hiddenSupport.includes('hcim'), {
-        name: 'HCIMWeb Enrolment',
+        name: 'HCIMWeb Account Transfer',
         email: this.config.emails.hcimWebSupportEmail,
       }),
     ];
