@@ -3,7 +3,7 @@
   [allowMobileToggle]="headerConfig.allowMobileToggle"></ui-dashboard-header>
 
 <div class="container">
-  <ng-container *ngIf="idpHint === IdentityProvider.BCSC; else IDIR">
+  <ng-container *ngIf="idpHint === IdentityProvider.BCSC; else admin">
     <div class="row">
       <div class="col-12">
         <ui-alert
@@ -49,76 +49,94 @@
           </p>
         </div>
 
-        <div class="actions">
-          <span>
-            <button mat-flat-button color="primary" (click)="onLogin()">
-              Login with the BC Services Card app
-            </button>
-            <small>
-              Need an account?
-              <a uiAnchor [attr.href]="bcscMobileSetupUrl">Set up</a>
-            </small>
-          </span>
-          <span>
-            <button
-              mat-flat-button
-              color="primary"
-              (click)="onLogin(IdentityProvider.PHSA)">
-              Login with your Health Authority ID
-            </button>
-          </span>
+        <div class="hide-on-large-viewports">
+          <ng-container *ngTemplateOutlet="login"></ng-container>
         </div>
 
-        <div class="hide-on-large-viewports">
-          <ng-container *ngTemplateOutlet="systems"></ng-container>
+        <div class="hide-on-small-viewports scroll">
+          <button
+            mat-stroked-button
+            color="primary"
+            (click)="onScrollToAnchor()">
+            View available health systems
+          </button>
         </div>
 
         <div class="support">
           <app-get-support></app-get-support>
         </div>
+
+        <div class="systems">
+          <ui-page-section>
+            <ui-scroll-target targetId="systems"></ui-scroll-target>
+            <ui-page-section-subheader
+              icon="assignment"
+              heading="Systems Available"></ui-page-section-subheader>
+
+            <ui-page-section>
+              <h3>Special Authority eForms</h3>
+              <p>
+                B.C. healthcare professionals can enrol for access to
+                PharmaCare's Special Authority eForms application.
+              </p>
+              <p>
+                You need to set up the
+                <a uiAnchor [attr.href]="bcscMobileSetupUrl">
+                  BC Services Card app
+                </a>
+                to enrol. You will use the app each time you access the eForms
+                application. If you are not eligible for the BC Services Card,
+                or cannot set up the app, you can
+                <a uiAnchor [attr.href]="specialAuthorityUrl">
+                  submit SA requests by fax</a
+                >.
+              </p>
+            </ui-page-section>
+
+            <ui-page-section>
+              <h3>HCIM Web Enrolment</h3>
+              <p>
+                Health Authorities and health care providers or organizations
+                who deliver health services are able to search for clients'
+                Personal Health Numbers (PHNs), confirm client eligibility for
+                publicly funded health care, update person demographics, and
+                assign PHNs, where required.
+              </p>
+            </ui-page-section>
+          </ui-page-section>
+        </div>
       </div>
       <div class="col-12 col-xl-auto hide-on-small-viewports">
-        <ng-container *ngTemplateOutlet="systems"></ng-container>
+        <ng-container *ngTemplateOutlet="login"></ng-container>
       </div>
     </div>
   </ng-container>
 
-  <ng-template #systems>
-    <div class="systems">
-      <h2>Systems Available</h2>
+  <ng-template #login>
+    <div class="actions">
+      <div>Login using:</div>
       <div>
-        <ui-page-section>
-          <ui-page-section-subheader
-            heading="Special Authority eForms"></ui-page-section-subheader>
-          <p>
-            B.C. healthcare professionals can enrol for access to PharmaCare's
-            Special Authority eForms application.
-          </p>
-          <p>
-            You need to set up the
-            <a uiAnchor [attr.href]="bcscMobileSetupUrl">
-              BC Services Card app
-            </a>
-            to enrol. You will use the app each time you access the eForms
-            application. If you are not eligible for the BC Services Card, or
-            cannot set up the app, you can
-            <a uiAnchor [attr.href]="specialAuthorityUrl">
-              submit SA requests by fax</a
-            >.
-          </p>
-        </ui-page-section>
+        <button mat-stroked-button (click)="onLogin()">
+          Login with the BC Services Card app
+        </button>
+        <small>
+          Need an account?
+          <a uiAnchor [attr.href]="bcscMobileSetupUrl">Set up</a>
+        </small>
 
-        <ui-page-section>
-          <ui-page-section-subheader
-            heading="HCIM Web Enrolment"></ui-page-section-subheader>
-          <p>Request access to HCIM Web</p>
-        </ui-page-section>
+        <button mat-stroked-button (click)="onLogin(IdentityProvider.PHSA)">
+          Login with your Health Authority ID
+        </button>
+
+        <button mat-stroked-button (click)="onLogin(IdentityProvider.IDIR)">
+          Login with your IDIR
+        </button>
       </div>
     </div>
   </ng-template>
 
-  <ng-template #IDIR>
-    <div class="row idir">
+  <ng-template #admin>
+    <div class="row admin">
       <div class="col-12">
         <img
           src="/assets/images/pidp-logo-blue.svg"

@@ -4,7 +4,7 @@
     icon="help_outline"
     heading="Get Support"></ui-page-section-subheader>
   <ul>
-    <li *ngFor="let support of supports">
+    <li *ngFor="let support of providedSupport">
       Questions about {{ support.name }}<br />
       should be directed to:
       <a uiAnchor scheme="mailto" [attr.href]="support.email"></a>
