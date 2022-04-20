@@ -1,6 +1,6 @@
 import { Component, Inject } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { EMPTY, Observable, Subscription, exhaustMap } from 'rxjs';
 
@@ -39,6 +39,7 @@ export class LoginPage {
     @Inject(APP_CONFIG) private config: AppConfig,
     private authService: AuthService,
     private route: ActivatedRoute,
+    private router: Router,
     private dialog: MatDialog,
     private documentService: DocumentService
   ) {
@@ -53,6 +54,13 @@ export class LoginPage {
     this.providerIdentitySupportEmail =
       this.config.emails.providerIdentitySupport;
     this.idpHint = routeSnapshot.data.idpHint;
+  }
+
+  public onScrollToAnchor(): void {
+    this.router.navigate([], {
+      fragment: 'systems',
+      queryParamsHandling: 'preserve',
+    });
   }
 
   public onLogin(idpHint?: IdentityProvider): void {
