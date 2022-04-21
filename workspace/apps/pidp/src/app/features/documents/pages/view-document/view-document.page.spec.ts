@@ -1,20 +1,25 @@
 import { Location } from '@angular/common';
 import { TestBed } from '@angular/core/testing';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { randTextRange } from '@ngneat/falso';
 import { provideAutoSpy } from 'jest-auto-spies';
 
+import { RouteUtils } from '@bcgov/shared/utils';
+
+import { APP_CONFIG, APP_DI_CONFIG } from '@app/app.config';
 import {
   DocumentService,
   DocumentType,
 } from '@app/core/services/document.service';
 
+import { DocumentsRoutes } from '../../documents.routes';
 import { ViewDocumentPage } from './view-document.page';
 
 describe('ViewDocumentPage', () => {
   let component: ViewDocumentPage;
+  let router: Router;
 
   const mockActivatedRoute = {
     snapshot: {
@@ -34,18 +39,42 @@ describe('ViewDocumentPage', () => {
       providers: [
         ViewDocumentPage,
         {
+          provide: APP_CONFIG,
+          useValue: APP_DI_CONFIG,
+        },
+        {
           provide: ActivatedRoute,
           useValue: mockActivatedRoute,
         },
         provideAutoSpy(DocumentService),
         provideAutoSpy(Location),
+        provideAutoSpy(RouteUtils),
+        provideAutoSpy(Router),
       ],
     });
 
+    router = TestBed.inject(Router);
     component = TestBed.inject(ViewDocumentPage);
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  describe('METHOD: onBack', () => {
+    given('user wants to go back to previous page', () => {
+      when('onBack is invoked', () => {
+        component.onBack();
+
+        then(
+          'router should navigate to signed or accepted documents route',
+          () => {
+            expect(router.navigate).toHaveBeenCalledWith(
+              [
+                DocumentsRoutes.MODULE_PATH,
+                DocumentsRoutes.SIGNED_ACCEPTED_DOCUMENTS_PAGE,
+              ],
+              {}
+            );
+          }
+        );
+      });
+    });
   });
 });
