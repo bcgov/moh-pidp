@@ -15,11 +15,8 @@ import { LoadingService } from '../services/loading.service';
 /**
  * @description
  * Provided by HTTP requests indicating whether the
- * loading service should show an overlay for the
- * request.
+ * loading service should show a message in the overlay.
  */
-// TODO defaulted to false until busy can be refactored out of the application
-export const SHOW_LOADING_INDICATOR = new HttpContextToken(() => false);
 export const SHOW_LOADING_MESSAGE = new HttpContextToken(() => false);
 
 @Injectable()

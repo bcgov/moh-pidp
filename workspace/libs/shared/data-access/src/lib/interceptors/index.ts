@@ -3,10 +3,7 @@ import { serverErrorInterceptorProvider } from './server-error.interceptor';
 import { unauthorizedInterceptorProvider } from './unauthorized.interceptor';
 import { unavailableInterceptorProvider } from './unavailable.interceptor';
 
-export {
-  SHOW_LOADING_INDICATOR,
-  SHOW_LOADING_MESSAGE,
-} from './loading.interceptor';
+export { SHOW_LOADING_MESSAGE } from './loading.interceptor';
 
 /**
  * @description

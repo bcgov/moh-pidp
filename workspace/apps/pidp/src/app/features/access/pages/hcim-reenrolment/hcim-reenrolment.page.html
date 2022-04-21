@@ -1,4 +1,4 @@
-<ui-page [busy]="busy" [form]="formState.form" (submitted)="onSubmit()">
+<ui-page [form]="formState.form" (submitted)="onSubmit()">
   <ui-page-header>{{ title }}</ui-page-header>
 
   <ng-container *ngIf="completed; else notCompleted">
