@@ -32,7 +32,15 @@ describe('AppComponent', () => {
     component = TestBed.inject(AppComponent);
   });
 
-  it('should create the app', () => {
-    expect(component).toBeTruthy();
+  describe('INIT', () => {
+    given('component initializes', () => {
+      when('navigation ends', () => {
+        component.ngOnInit();
+
+        then('should set the title', () => {
+          expect(component.title).toBe('Provider Identity Portal');
+        });
+      });
+    });
   });
 });
