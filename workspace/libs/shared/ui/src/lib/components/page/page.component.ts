@@ -7,9 +7,7 @@ import {
 } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 
-import { Observable, Subscription } from 'rxjs';
-
-import { LoadingService } from '@bcgov/shared/data-access';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'ui-page',
@@ -48,13 +46,10 @@ export class PageComponent {
    */
   @Output() public submitted: EventEmitter<void>;
 
-  public loading$: Observable<boolean>;
-
-  public constructor(loadingService: LoadingService) {
+  public constructor() {
     this.mode = 'page';
     this.autocomplete = 'off';
     this.submitted = new EventEmitter<void>();
-    this.loading$ = loadingService.loading$;
   }
 
   public onSubmit(): void {

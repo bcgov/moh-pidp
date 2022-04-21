@@ -6,7 +6,7 @@ import { catchError, tap, throwError } from 'rxjs';
 import {
   CrudResource,
   NoContent,
-  SHOW_LOADING_INDICATOR,
+  SHOW_LOADING_MESSAGE,
 } from '@bcgov/shared/data-access';
 
 import { ApiHttpClient } from '@app/core/resources/api-http-client.service';
@@ -30,7 +30,7 @@ export class CollegeLicenceInformationResource extends CrudResource<CollegeLicen
   ): NoContent {
     return super
       .update(id, payload, {
-        context: new HttpContext().set(SHOW_LOADING_INDICATOR, true),
+        context: new HttpContext().set(SHOW_LOADING_MESSAGE, true),
       })
       .pipe(
         tap(() =>

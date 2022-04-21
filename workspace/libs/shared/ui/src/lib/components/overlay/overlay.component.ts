@@ -1,5 +1,9 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
+import { Observable } from 'rxjs';
+
+import { LoadingOptions, LoadingService } from '@bcgov/shared/data-access';
+
 @Component({
   selector: 'ui-overlay',
   templateUrl: './overlay.component.html',
@@ -7,12 +11,11 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OverlayComponent {
-  @Input() public show: boolean | null;
-
   public readonly message: string;
+  public readonly loading$: Observable<LoadingOptions | null>;
 
-  public constructor() {
-    this.show = false;
+  public constructor(loadingService: LoadingService) {
     this.message = 'Your request is being processed';
+    this.loading$ = loadingService.loading$;
   }
 }

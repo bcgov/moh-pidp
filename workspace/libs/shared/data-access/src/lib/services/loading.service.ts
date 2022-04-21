@@ -2,6 +2,10 @@ import { Injectable } from '@angular/core';
 
 import { BehaviorSubject, Observable } from 'rxjs';
 
+export interface LoadingOptions {
+  withMessage: boolean;
+}
+
 /**
  * @description
  * Provides a state management interface between the
@@ -16,23 +20,23 @@ import { BehaviorSubject, Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class LoadingService {
-  public readonly loading$: Observable<boolean>;
-  private _loading$: BehaviorSubject<boolean>;
+  public readonly loading$: Observable<LoadingOptions | null>;
+  private _loading$: BehaviorSubject<LoadingOptions | null>;
 
   public constructor() {
-    this._loading$ = new BehaviorSubject<boolean>(false);
+    this._loading$ = new BehaviorSubject<LoadingOptions | null>(null);
     this.loading$ = this._loading$.asObservable();
   }
 
-  public show(): void {
-    this.setLoading(true);
+  public show(withMessage: boolean): void {
+    this.setLoading({ withMessage });
   }
 
   public hide(): void {
-    this.setLoading(false);
+    this.setLoading(null);
   }
 
-  private setLoading(showOrHide: boolean): void {
+  private setLoading(showOrHide: LoadingOptions | null): void {
     this._loading$.next(showOrHide);
   }
 }

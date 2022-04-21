@@ -34,12 +34,15 @@ export class LoadingInterceptor implements HttpInterceptor {
     request: HttpRequest<unknown>,
     next: HttpHandler
   ): Observable<HttpEvent<unknown>> {
+    const withMessage = request.context.get(SHOW_LOADING_MESSAGE);
+
     this.totalRequests++;
-    this.loadingService.show();
+    this.loadingService.show(withMessage);
 
     return next.handle(request).pipe(
       finalize(() => {
         this.totalRequests--;
+
         if (this.totalRequests <= 0) {
           this.loadingService.hide();
         }
