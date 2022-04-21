@@ -1,4 +1,4 @@
-<ui-busy-overlay [busy]="busy">
+<ui-overlay [show]="loading$ | async">
   <div [class]="mode">
     <ng-container *ngIf="form; else pageContent">
       <form
@@ -10,7 +10,7 @@
       </form>
     </ng-container>
   </div>
-</ui-busy-overlay>
+</ui-overlay>
 
 <ng-template #pageContent>
   <ng-content></ng-content>

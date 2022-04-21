@@ -16,20 +16,29 @@ export abstract class CrudResource<T> implements ICrudResource<T> {
    * @description
    * Create a new resource.
    */
-  public create(id: number, payload: T): Observable<T | null> {
-    return this.resource.post<T>(this.getResourcePath(id), payload).pipe(
-      catchError((error: HttpErrorResponse) => {
-        throw error;
-      })
-    );
+  public create(
+    id: number,
+    payload: T,
+    options?: { [key: string]: unknown }
+  ): Observable<T | null> {
+    return this.resource
+      .post<T>(this.getResourcePath(id), payload, options)
+      .pipe(
+        catchError((error: HttpErrorResponse) => {
+          throw error;
+        })
+      );
   }
 
   /**
    * @description
    * Read a resource.
    */
-  public get(id: number): Observable<T | null> {
-    return this.resource.get<T>(this.getResourcePath(id)).pipe(
+  public get(
+    id: number,
+    options?: { [key: string]: unknown }
+  ): Observable<T | null> {
+    return this.resource.get<T>(this.getResourcePath(id), options).pipe(
       catchError((error: HttpErrorResponse) => {
         if (error.status === HttpStatusCode.NotFound) {
           return of(null);
@@ -44,9 +53,13 @@ export abstract class CrudResource<T> implements ICrudResource<T> {
    * @description
    * Update a resource.
    */
-  public update(id: number, payload: T): NoContent {
+  public update(
+    id: number,
+    payload: T,
+    options?: { [key: string]: unknown }
+  ): NoContent {
     return this.resource
-      .put<NoContent>(this.getResourcePath(id), payload)
+      .put<NoContent>(this.getResourcePath(id), payload, options)
       .pipe(NoContentResponse);
   }
 
@@ -54,8 +67,11 @@ export abstract class CrudResource<T> implements ICrudResource<T> {
    * @description
    * Delete a resource.
    */
-  public delete(id: number): Observable<number | null> {
-    return this.resource.delete<number>(this.getResourcePath(id)).pipe(
+  public delete(
+    id: number,
+    options?: { [key: string]: unknown }
+  ): Observable<number | null> {
+    return this.resource.delete<number>(this.getResourcePath(id), options).pipe(
       catchError((error: HttpErrorResponse) => {
         if (error.status === HttpStatusCode.NotFound) {
           return of(null);
