@@ -80,7 +80,7 @@ public class HcimReEnrolment
                     AlreadyEnroled = party.AccessRequests.Any(request => request.AccessType == AccessType.HcimReEnrolment),
                     party.Email
                 })
-                .SingleAsync(); // Already did existance check
+                .SingleAsync(); // Already did existence check
 
             // TODO check other prerequisites
             if (dto.AlreadyEnroled)
