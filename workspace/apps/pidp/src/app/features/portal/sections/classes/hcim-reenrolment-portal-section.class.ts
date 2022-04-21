@@ -44,7 +44,7 @@ export class HcimReenrolmentPortalSection implements IPortalSection {
     const demographicsStatusCode =
       this.profileStatus.status.demographics.statusCode;
     return {
-      label: 'Request',
+      label: this.getStatusCode() === StatusCode.COMPLETED ? 'View' : 'Request',
       route: AccessRoutes.routePath(AccessRoutes.HCIM_REENROLMENT),
       disabled: demographicsStatusCode !== StatusCode.COMPLETED,
     };
