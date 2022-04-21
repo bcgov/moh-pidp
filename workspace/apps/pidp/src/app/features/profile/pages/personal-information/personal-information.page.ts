@@ -10,6 +10,7 @@ import { ToggleContentChange } from '@bcgov/shared/ui';
 
 import { PartyService } from '@app/core/party/party.service';
 import { LoggerService } from '@app/core/services/logger.service';
+import { IdentityProvider } from '@app/features/auth/enums/identity-provider.enum';
 import { User } from '@app/features/auth/models/user.model';
 import { AuthorizedUserService } from '@app/features/auth/services/authorized-user.service';
 
@@ -32,8 +33,11 @@ export class PersonalInformationPage
 {
   public title: string;
   public formState: PersonalInformationFormState;
-  public user: Observable<User>;
+  public user$: Observable<User>;
+  public identityProvider$: Observable<IdentityProvider>;
   public hasPreferredName: boolean;
+
+  public IdentityProvider = IdentityProvider;
 
   public constructor(
     protected dialog: MatDialog,
@@ -50,7 +54,8 @@ export class PersonalInformationPage
 
     this.title = this.route.snapshot.data.title;
     this.formState = new PersonalInformationFormState(fb);
-    this.user = this.authorizedUserService.user$;
+    this.user$ = this.authorizedUserService.user$;
+    this.identityProvider$ = this.authorizedUserService.identityProvider$;
     this.hasPreferredName = false;
   }
 
