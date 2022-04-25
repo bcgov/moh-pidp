@@ -15,6 +15,8 @@ import { AuthRoutes } from '../auth/auth.routes';
 import { AuthenticationGuard } from '../auth/guards/authentication.guard';
 import { DocumentsModule } from '../documents/documents.module';
 import { DocumentsRoutes } from '../documents/documents.routes';
+import { OrganizationInfoModule } from '../organization-info/organization-info.module';
+import { OrganizationInfoRoutes } from '../organization-info/organization-info.routes';
 import { PortalRoutes } from '../portal/portal.routes';
 import { ProfileModule } from '../profile/profile.module';
 import { ProfileRoutes } from '../profile/profile.routes';
@@ -59,6 +61,13 @@ const routes: Routes = [
         path: ProfileRoutes.MODULE_PATH,
         loadChildren: (): Promise<ProfileModule> =>
           import('../profile/profile.module').then((m) => m.ProfileModule),
+      },
+      {
+        path: OrganizationInfoRoutes.MODULE_PATH,
+        loadChildren: (): Promise<OrganizationInfoModule> =>
+          import('../organization-info/organization-info.module').then(
+            (m) => m.OrganizationInfoModule
+          ),
       },
       {
         path: AccessRoutes.MODULE_PATH,
