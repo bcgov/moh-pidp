@@ -60,7 +60,7 @@ export class CollegeLicenceInformationPage
       return this.navigateToRoot();
     }
 
-    this.busy = this.resource
+    this.resource
       .get(partyId)
       .pipe(
         tap((model: CollegeLicenceInformationModel | null) =>
