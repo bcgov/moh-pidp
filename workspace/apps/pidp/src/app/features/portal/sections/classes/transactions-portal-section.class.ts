@@ -22,7 +22,7 @@ export class TransactionsPortalSection implements IPortalSection {
     this.key = 'signedAcceptedDocuments';
     this.type = 'documents';
     this.heading = 'Transactions';
-    this.description = 'View Transaction(s)';
+    this.description = 'View Transaction';
   }
 
   /**
