@@ -45,10 +45,8 @@ const routes: Routes = [
       partyId: PartyResolver,
     },
     data: {
-      // TODO don't hardcode in the redirect URL but also don't want cross module dependencies,
-      //      refactor when modules become libs otherwise premature optimization
       routes: {
-        auth: '/auth',
+        auth: `/${AuthRoutes.MODULE_PATH}`,
       },
     },
     children: [
