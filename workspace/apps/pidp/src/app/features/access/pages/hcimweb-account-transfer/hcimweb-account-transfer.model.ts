@@ -1,4 +1,4 @@
-export interface HcimReenrolment {
+export interface HcimwebAccountTransfer {
   ldapUsername: string;
   ldapPassword: string;
 }

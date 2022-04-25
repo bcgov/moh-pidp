@@ -11,11 +11,11 @@ import { PartyService } from '@app/core/party/party.service';
 import { FormUtilsService } from '@app/core/services/form-utils.service';
 import { LoggerService } from '@app/core/services/logger.service';
 
-import { HcimReenrolmentResource } from './hcim-reenrolment-resource.service';
-import { HcimReenrolmentPage } from './hcim-reenrolment.page';
+import { HcimwebAccountTransferResource } from './hcimweb-account-transfer-resource.service';
+import { HcimwebAccountTransferPage } from './hcimweb-account-transfer.page';
 
-describe('HcimReenrolmentPage', () => {
-  let component: HcimReenrolmentPage;
+describe('HcimwebAccountTransferPage', () => {
+  let component: HcimwebAccountTransferPage;
 
   const mockActivatedRoute = {
     snapshot: {
@@ -32,7 +32,7 @@ describe('HcimReenrolmentPage', () => {
     TestBed.configureTestingModule({
       imports: [RouterTestingModule, ReactiveFormsModule, MatDialogModule],
       providers: [
-        HcimReenrolmentPage,
+        HcimwebAccountTransferPage,
         {
           provide: ActivatedRoute,
           useValue: mockActivatedRoute,
@@ -44,13 +44,13 @@ describe('HcimReenrolmentPage', () => {
             settersToSpyOn: ['partyId'],
           }),
         },
-        provideAutoSpy(HcimReenrolmentResource),
+        provideAutoSpy(HcimwebAccountTransferResource),
         provideAutoSpy(FormUtilsService),
         provideAutoSpy(LoggerService),
       ],
     });
 
-    component = TestBed.inject(HcimReenrolmentPage);
+    component = TestBed.inject(HcimwebAccountTransferPage);
   });
 
   it('should create', () => {

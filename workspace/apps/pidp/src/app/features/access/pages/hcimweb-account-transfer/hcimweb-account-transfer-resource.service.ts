@@ -9,7 +9,7 @@ import { ApiHttpClient } from '@app/core/resources/api-http-client.service';
 import { PortalResource } from '@app/features/portal/portal-resource.service';
 import { ProfileStatus } from '@app/features/portal/sections/models/profile-status.model';
 
-import { HcimReenrolment } from './hcim-reenrolment.model';
+import { HcimwebAccountTransfer } from './hcimweb-account-transfer.model';
 
 export enum HcimAccessRequestStatusCode {
   ACCESS_GRANTED,
@@ -26,7 +26,7 @@ export interface HcimAccessRequestResponse {
 @Injectable({
   providedIn: 'root',
 })
-export class HcimReenrolmentResource {
+export class HcimwebAccountTransferResource {
   public constructor(
     protected apiResource: ApiHttpClient,
     private portalResource: PortalResource
@@ -38,7 +38,7 @@ export class HcimReenrolmentResource {
 
   public requestAccess(
     partyId: number,
-    ldapCredentials: HcimReenrolment
+    ldapCredentials: HcimwebAccountTransfer
   ): Observable<HcimAccessRequestResponse> {
     return this.apiResource
       .post<NoContent>('access-requests/hcim-reenrolment', {
