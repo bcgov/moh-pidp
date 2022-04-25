@@ -1,9 +1,13 @@
-import { HttpErrorResponse } from '@angular/common/http';
+import { HttpContext, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 import { catchError, tap, throwError } from 'rxjs';
 
-import { CrudResource, NoContent } from '@bcgov/shared/data-access';
+import {
+  CrudResource,
+  NoContent,
+  SHOW_LOADING_MESSAGE,
+} from '@bcgov/shared/data-access';
 
 import { ApiHttpClient } from '@app/core/resources/api-http-client.service';
 
@@ -24,19 +28,23 @@ export class CollegeLicenceInformationResource extends CrudResource<CollegeLicen
     id: number,
     payload: CollegeLicenceInformationModel
   ): NoContent {
-    return super.update(id, payload).pipe(
-      tap(() =>
-        this.toastService.openSuccessToast(
-          'College licence information has been updated'
-        )
-      ),
-      catchError((error: HttpErrorResponse) => {
-        this.toastService.openErrorToast(
-          'College licence information could not be updated'
-        );
-        return throwError(() => error);
+    return super
+      .update(id, payload, {
+        context: new HttpContext().set(SHOW_LOADING_MESSAGE, true),
       })
-    );
+      .pipe(
+        tap(() =>
+          this.toastService.openSuccessToast(
+            'College licence information has been updated'
+          )
+        ),
+        catchError((error: HttpErrorResponse) => {
+          this.toastService.openErrorToast(
+            'College licence information could not be updated'
+          );
+          return throwError(() => error);
+        })
+      );
   }
 
   protected getResourcePath(partyId: number): string {

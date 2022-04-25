@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { Observable, Subscription, map } from 'rxjs';
+import { Observable, map } from 'rxjs';
 
 import { PartyService } from '@app/core/party/party.service';
 import { SupportProvided } from '@app/shared/components/get-support/get-support.component';
@@ -19,7 +19,6 @@ import { ProfileStatus } from './sections/models/profile-status.model';
   styleUrls: ['./portal.page.scss'],
 })
 export class PortalPage implements OnInit {
-  public busy?: Subscription;
   public title: string;
   public state$: Observable<Record<string, IPortalSection[]>>;
   public completedProfile: boolean;
@@ -54,7 +53,7 @@ export class PortalPage implements OnInit {
   }
 
   public ngOnInit(): void {
-    this.busy = this.portalResource
+    this.portalResource
       .getProfileStatus(this.partyService.partyId)
       .pipe(
         map((profileStatus: ProfileStatus | null) => {
