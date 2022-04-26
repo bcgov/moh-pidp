@@ -4,9 +4,18 @@
   <ui-page-section>
     <ui-page-section-subheader icon="history" heading="Transactions">
       <ng-container uiPageSectionSubheaderDesc>
-        View the transactions you have performed.
+        This is a log of your transactions and interactions with the Provider
+        Identity Portal.
       </ng-container>
     </ui-page-section-subheader>
+
+    <div *ngFor="let transaction of transactions" class="transaction">
+      <span>
+        <small>{{ transaction.date | formatDate }}</small>
+        <small> {{ transaction.date | formatDate: 'h:mm a' }}</small>
+      </span>
+      <span>{{ transaction.description }}</span>
+    </div>
   </ui-page-section>
 
   <ui-page-footer mode="reverse">
