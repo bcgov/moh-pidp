@@ -1,12 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
-import { DateTime } from 'luxon';
+import { Observable, map } from 'rxjs';
 
-export interface Transaction {
-  date: string;
-  description: string;
-}
+import { AccessTypeMap } from '@bcgov/shared/data-access';
+
+import { PartyService } from '@app/core/party/party.service';
+import { LoggerService } from '@app/core/services/logger.service';
+
+import { Transaction } from './transaction.model';
+import { TransactionsResource } from './transactions-resource.service';
 
 @Component({
   selector: 'app-transactions',
@@ -15,27 +18,34 @@ export interface Transaction {
 })
 export class TransactionsPage implements OnInit {
   public title: string;
-  public transactions: Transaction[];
+  public transactions$!: Observable<Transaction[]>;
+  public AccessTypeMap = AccessTypeMap;
 
-  public constructor(private route: ActivatedRoute) {
+  public constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private resource: TransactionsResource,
+    private partyService: PartyService,
+    private logger: LoggerService
+  ) {
     this.title = this.route.snapshot.data.title;
-    this.transactions = [];
+  }
+
+  public onBack(): void {
+    this.navigateToRoot();
   }
 
   public ngOnInit(): void {
-    this.transactions = [
-      {
-        date: DateTime.now().toString(),
-        description: 'HCIMWeb Account Transfer submission',
-      },
-      {
-        date: DateTime.now().toString(),
-        description: 'Special Authority eForms enrolment submission',
-      },
-      {
-        date: DateTime.now().toString(),
-        description: 'Logon to system',
-      },
-    ];
+    const partyId = this.partyService.partyId;
+    if (!partyId) {
+      this.logger.error('No party ID was provided');
+      return this.navigateToRoot();
+    }
+
+    this.transactions$ = this.resource.transactions(partyId);
+  }
+
+  private navigateToRoot(): void {
+    this.router.navigate([this.route.snapshot.data.routes.root]);
   }
 }

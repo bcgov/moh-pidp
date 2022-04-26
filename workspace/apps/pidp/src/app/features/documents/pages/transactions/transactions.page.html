@@ -9,13 +9,19 @@
       </ng-container>
     </ui-page-section-subheader>
 
-    <div *ngFor="let transaction of transactions" class="transaction">
-      <span>
-        <small>{{ transaction.date | formatDate }}</small>
-        <small> {{ transaction.date | formatDate: 'h:mm a' }}</small>
-      </span>
-      <span>{{ transaction.description }}</span>
-    </div>
+    <ng-container *ngIf="transactions$ | async as transactions">
+      <ng-container *ngIf="transactions.length; else noTransactions">
+        <div *ngFor="let transaction of transactions" class="transaction">
+          <span>
+            <small>{{ transaction.requestedOn| formatDate }}</small>
+            <small> {{ transaction.requestedOn | formatDate: 'h:mm a' }}</small>
+          </span>
+          <span>{{ AccessTypeMap[transaction.accessType] }} submission</span>
+        </div>
+      </ng-container>
+    </ng-container>
+
+    <ng-template #noTransactions>No transactions found</ng-template>
   </ui-page-section>
 
   <ui-page-footer mode="reverse">
@@ -24,7 +30,7 @@
       uiPageFooterAction
       color="primary"
       type="button"
-      routerLink="../../">
+      (click)="onBack()">
       Back Home
     </button>
   </ui-page-footer>

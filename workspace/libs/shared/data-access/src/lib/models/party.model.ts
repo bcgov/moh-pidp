@@ -5,7 +5,13 @@ import { User } from './user.model';
 
 export enum AccessType {
   SAEforms = 1,
+  HcimAccountTransfer,
 }
+
+export const AccessTypeMap = {
+  [AccessType.SAEforms]: 'Special Authority eForms',
+  [AccessType.HcimAccountTransfer]: 'HCIMWeb Account Transfer',
+};
 
 export interface AccessRequest {
   id: number;

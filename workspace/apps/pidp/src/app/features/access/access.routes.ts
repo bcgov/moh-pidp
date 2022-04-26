@@ -1,5 +1,5 @@
 export class AccessRoutes {
-  public static MODULE_PATH = 'profile';
+  public static MODULE_PATH = 'access';
 
   public static SPECIAL_AUTH_EFORMS_PAGE = 'sa-eforms';
   public static HCIMWEB_ACCOUNT_TRANSFER_PAGE = 'hcimweb-account-transfer';
