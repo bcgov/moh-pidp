@@ -33,7 +33,7 @@ export class DemographicsPortalSection implements IPortalSection {
     this.key = 'demographics';
     this.type = 'profile';
     this.heading = 'Personal Information';
-    this.description = 'Personal and Contact Information';
+    this.description = 'Provide personal and contact information.';
   }
 
   public get hint(): string {
