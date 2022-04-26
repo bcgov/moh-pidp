@@ -46,7 +46,7 @@ export class HcimwebAccountTransferPortalSection implements IPortalSection {
       this.profileStatus.status.demographics.statusCode;
     return {
       label: this.getStatusCode() === StatusCode.COMPLETED ? 'View' : 'Request',
-      route: AccessRoutes.routePath(AccessRoutes.HCIMWEB_ACCOUNT_TRANSFER_PAGE),
+      route: AccessRoutes.routePath(AccessRoutes.HCIM_ACCOUNT_TRANSFER_PAGE),
       disabled: demographicsStatusCode !== StatusCode.COMPLETED,
     };
   }

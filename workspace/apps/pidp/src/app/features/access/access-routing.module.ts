@@ -6,7 +6,7 @@ import { Role } from '@app/shared/enums/roles.enum';
 
 import { AccessRoutes } from './access.routes';
 import { HcimAccountTransferModule } from './pages/hcim-account-transfer/hcim-account-transfer.module';
-import { HcimwebEnrolmentModule } from './pages/hcimweb-enrolment/hcimweb-enrolment.module';
+import { HcimEnrolmentModule } from './pages/hcim-enrolment/hcim-enrolment.module';
 import { PharmanetModule } from './pages/pharmanet/pharmanet.module';
 import { SaEformsModule } from './pages/sa-eforms/sa-eforms.module';
 import { SitePrivacySecurityChecklistModule } from './pages/site-privacy-security-checklist/site-privacy-security-checklist.module';
@@ -20,17 +20,17 @@ const routes: Routes = [
       ),
   },
   {
-    path: AccessRoutes.HCIMWEB_ACCOUNT_TRANSFER_PAGE,
+    path: AccessRoutes.HCIM_ACCOUNT_TRANSFER_PAGE,
     loadChildren: (): Promise<HcimAccountTransferModule> =>
       import('./pages/hcim-account-transfer/hcim-account-transfer.module').then(
         (m) => m.HcimAccountTransferModule
       ),
   },
   {
-    path: AccessRoutes.HCIMWEB_ENROLMENT_PAGE,
-    loadChildren: (): Promise<HcimwebEnrolmentModule> =>
-      import('./pages/hcimweb-enrolment/hcimweb-enrolment.module').then(
-        (m) => m.HcimwebEnrolmentModule
+    path: AccessRoutes.HCIM_ENROLMENT_PAGE,
+    loadChildren: (): Promise<HcimEnrolmentModule> =>
+      import('./pages/hcim-enrolment/hcim-enrolment.module').then(
+        (m) => m.HcimEnrolmentModule
       ),
   },
   {

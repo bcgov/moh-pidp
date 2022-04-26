@@ -1,12 +1,12 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { HcimwebEnrolmentComponent } from './hcimweb-enrolment.component';
+import { HcimEnrolmentComponent } from './hcim-enrolment.component';
 
 const routes: Routes = [
   {
     path: '',
-    component: HcimwebEnrolmentComponent,
+    component: HcimEnrolmentComponent,
   },
 ];
 
@@ -14,4 +14,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class HcimwebEnrolmentRoutingModule {}
+export class HcimEnrolmentRoutingModule {}
