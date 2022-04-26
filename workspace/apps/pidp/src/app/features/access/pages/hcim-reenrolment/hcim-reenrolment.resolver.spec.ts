@@ -76,7 +76,7 @@ describe('HcimReenrolmentResolver', () => {
       partyServiceSpy.accessorSpies.getters.partyId.mockReturnValue(partyId);
 
       when(
-        'resolving the HCIM web account transfer status is successful',
+        'resolving the HCIMWeb Account Transfer status is successful',
         () => {
           hcimReenrolmentResourceSpy.getProfileStatus
             .mustBeCalledWith(partyId)
@@ -90,7 +90,7 @@ describe('HcimReenrolmentResolver', () => {
             );
 
           then(
-            'response will provide the status code for HCIM web account transfer',
+            'response will provide the status code for HCIMWeb Account Transfer',
             () => {
               expect(
                 hcimReenrolmentResourceSpy.getProfileStatus
@@ -108,7 +108,7 @@ describe('HcimReenrolmentResolver', () => {
       const partyId = randNumber({ min: 1 });
       partyServiceSpy.accessorSpies.getters.partyId.mockReturnValue(partyId);
       when(
-        'resolving the HCIM web account transfer status is unsuccessful',
+        'resolving the HCIMWeb Account Transfer status is unsuccessful',
         () => {
           hcimReenrolmentResourceSpy.getProfileStatus
             .mustBeCalledWith(partyId)
@@ -128,7 +128,7 @@ describe('HcimReenrolmentResolver', () => {
             );
 
           then(
-            'response will provide null as status code for HCIM web account transfer',
+            'response will provide null as status code for HCIMWeb Account Transfer',
             () => {
               expect(
                 hcimReenrolmentResourceSpy.getProfileStatus
@@ -153,7 +153,7 @@ describe('HcimReenrolmentResolver', () => {
           );
 
         then(
-          'response will provide null as status code for HCIM web account transfer',
+          'response will provide null as status code for HCIMWeb Account Transfer',
           () => {
             expect(
               hcimReenrolmentResourceSpy.requestAccess
