@@ -65,6 +65,7 @@ describe('HcimwebAccountTransferResolver', () => {
         userAccessAgreement: { statusCode: 1 },
         saEforms: { statusCode: 3 },
         hcim: { statusCode: 1 },
+        hcimEnrolment: { statusCode: 1 },
         sitePrivacySecurityChecklist: { statusCode: 1 },
         complianceTraining: { statusCode: 1 },
         transactions: { statusCode: 1 },
@@ -78,7 +79,7 @@ describe('HcimwebAccountTransferResolver', () => {
       partyServiceSpy.accessorSpies.getters.partyId.mockReturnValue(partyId);
 
       when(
-        'resolving the HCIM web account transfer status is successful',
+        'resolving the HCIMWeb account transfer status is successful',
         () => {
           hcimwebAccountTransferResourceSpy.getProfileStatus
             .mustBeCalledWith(partyId)
@@ -92,7 +93,7 @@ describe('HcimwebAccountTransferResolver', () => {
             );
 
           then(
-            'response will provide the status code for HCIM web account transfer',
+            'response will provide the status code for HCIMWeb account transfer',
             () => {
               expect(
                 hcimwebAccountTransferResourceSpy.getProfileStatus
@@ -110,7 +111,7 @@ describe('HcimwebAccountTransferResolver', () => {
       const partyId = randNumber({ min: 1 });
       partyServiceSpy.accessorSpies.getters.partyId.mockReturnValue(partyId);
       when(
-        'resolving the HCIM web account transfer status is unsuccessful',
+        'resolving the HCIMWeb account transfer status is unsuccessful',
         () => {
           hcimwebAccountTransferResourceSpy.getProfileStatus
             .mustBeCalledWith(partyId)
@@ -130,7 +131,7 @@ describe('HcimwebAccountTransferResolver', () => {
             );
 
           then(
-            'response will provide null as status code for HCIM web account transfer',
+            'response will provide null as status code for HCIMWeb account transfer',
             () => {
               expect(
                 hcimwebAccountTransferResourceSpy.getProfileStatus
@@ -155,7 +156,7 @@ describe('HcimwebAccountTransferResolver', () => {
           );
 
         then(
-          'response will provide null as status code for HCIM web account transfer',
+          'response will provide null as status code for HCIMWeb account transfer',
           () => {
             expect(
               hcimwebAccountTransferResourceSpy.requestAccess

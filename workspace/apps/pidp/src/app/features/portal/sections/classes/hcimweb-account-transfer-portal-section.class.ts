@@ -58,7 +58,7 @@ export class HcimwebAccountTransferPortalSection implements IPortalSection {
   public get status(): string {
     const statusCode = this.getStatusCode();
     return statusCode === StatusCode.AVAILABLE
-      ? 'For existing users of HCIM Web only'
+      ? 'For existing users of HCIMWeb only'
       : statusCode === StatusCode.COMPLETED
       ? 'Completed'
       : 'Incomplete';
