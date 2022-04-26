@@ -16,6 +16,15 @@ public class AccessRequestsController : PidpControllerBase
 {
     public AccessRequestsController(IPidpAuthorizationService authorizationService) : base(authorizationService) { }
 
+    [HttpGet("{partyId}")]
+    [Authorize(Policy = Policies.AnyPartyIdentityProvider)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<List<Index.Model>>> GetAccessRequests([FromServices] IQueryHandler<Index.Query, IDomainResult<List<Index.Model>>> handler,
+                                                                         [FromRoute] Index.Query query)
+        => await this.AuthorizePartyBeforeHandleAsync(query.PartyId, handler, query)
+            .ToActionResultOfT();
+
     [HttpPost("hcim-reenrolment")]
     [Authorize(Policy = Policies.HcimUser)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
