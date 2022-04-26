@@ -16,7 +16,7 @@ import {
   PortalSectionType,
 } from './portal-section.class';
 
-export class HcimReenrolmentPortalSection implements IPortalSection {
+export class HcimwebEnrolmentPortalSection implements IPortalSection {
   public readonly key: PortalSectionKey;
   public type: PortalSectionType;
   public heading: string;
@@ -26,10 +26,11 @@ export class HcimReenrolmentPortalSection implements IPortalSection {
     private profileStatus: ProfileStatus,
     private router: Router
   ) {
-    this.key = 'hcim';
+    this.key = 'hcimEnrolment';
     this.type = 'access';
-    this.heading = 'HCIMWeb Account Transfer';
-    this.description = 'For existing users of HCIMWeb.';
+    this.heading = 'HCIMWeb Enrolment';
+    this.description =
+      'First time users enrol here for access to the HCIMWeb application';
   }
 
   public get hint(): string {
@@ -44,8 +45,8 @@ export class HcimReenrolmentPortalSection implements IPortalSection {
     const demographicsStatusCode =
       this.profileStatus.status.demographics.statusCode;
     return {
-      label: this.getStatusCode() === StatusCode.COMPLETED ? 'View' : 'Request',
-      route: AccessRoutes.routePath(AccessRoutes.HCIM_REENROLMENT),
+      label: 'Request',
+      route: AccessRoutes.routePath(AccessRoutes.HCIMWEB_ENROLMENT_PAGE),
       disabled: demographicsStatusCode !== StatusCode.COMPLETED,
     };
   }
@@ -56,11 +57,7 @@ export class HcimReenrolmentPortalSection implements IPortalSection {
 
   public get status(): string {
     const statusCode = this.getStatusCode();
-    return statusCode === StatusCode.AVAILABLE
-      ? 'For existing users of HCIMWeb only'
-      : statusCode === StatusCode.COMPLETED
-      ? 'Completed'
-      : 'Incomplete';
+    return statusCode === StatusCode.COMPLETED ? 'Completed' : 'Incomplete';
   }
 
   public performAction(): void | Observable<void> {
@@ -68,6 +65,7 @@ export class HcimReenrolmentPortalSection implements IPortalSection {
   }
 
   private getStatusCode(): StatusCode {
-    return this.profileStatus.status.hcim.statusCode;
+    // TODO remove null check once API exists
+    return this.profileStatus.status.hcimEnrolment?.statusCode;
   }
 }

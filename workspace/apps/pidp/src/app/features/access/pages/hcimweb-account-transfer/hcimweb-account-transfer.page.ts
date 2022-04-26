@@ -18,26 +18,26 @@ import {
   healthNetBcHelpDeskEmail,
   healthNetBcHelpDeskPhone,
   healthNetBcPasswordResetUrl,
-} from './hcim-constants';
-import { HcimReenrolmentFormState } from './hcim-reenrolment-form-state';
+} from './hcimweb-account-transfer-constants';
+import { HcimwebAccountTransferFormState } from './hcimweb-account-transfer-form-state';
 import {
   HcimAccessRequestResponse,
   HcimAccessRequestStatusCode,
-  HcimReenrolmentResource,
-} from './hcim-reenrolment-resource.service';
+  HcimwebAccountTransferResource,
+} from './hcimweb-account-transfer-resource.service';
 
 @Component({
-  selector: 'app-hcim-reenrolment',
-  templateUrl: './hcim-reenrolment.page.html',
-  styleUrls: ['./hcim-reenrolment.page.scss'],
-  viewProviders: [HcimReenrolmentResource],
+  selector: 'app-hcimweb-account-transfer',
+  templateUrl: './hcimweb-account-transfer.page.html',
+  styleUrls: ['./hcimweb-account-transfer.page.scss'],
+  viewProviders: [HcimwebAccountTransferResource],
 })
-export class HcimReenrolmentPage
-  extends AbstractFormPage<HcimReenrolmentFormState>
+export class HcimwebAccountTransferPage
+  extends AbstractFormPage<HcimwebAccountTransferFormState>
   implements OnInit
 {
   public title: string;
-  public formState: HcimReenrolmentFormState;
+  public formState: HcimwebAccountTransferFormState;
   public completed: boolean | null;
   public accessRequestStatusCode?: HcimAccessRequestStatusCode;
   public loginAttempts: number;
@@ -57,7 +57,7 @@ export class HcimReenrolmentPage
     private route: ActivatedRoute,
     private router: Router,
     private partyService: PartyService,
-    private resource: HcimReenrolmentResource,
+    private resource: HcimwebAccountTransferResource,
     private logger: LoggerService,
     fb: FormBuilder
   ) {
@@ -65,9 +65,9 @@ export class HcimReenrolmentPage
 
     const routeData = this.route.snapshot.data;
     this.title = routeData.title;
-    this.formState = new HcimReenrolmentFormState(fb);
+    this.formState = new HcimwebAccountTransferFormState(fb);
     this.completed =
-      routeData.hcimReenrolmentStatusCode === StatusCode.COMPLETED;
+      routeData.hcimwebAccountTransferStatusCode === StatusCode.COMPLETED;
     this.loginAttempts = 0;
     this.maxLoginAttempts = 3;
     this.hcimWebUrl = hcimWebUrl;

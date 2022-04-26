@@ -6,7 +6,10 @@ import { Section } from './section.model';
  */
 export interface AccessSystemSectionStatus {
   saEforms: Section;
+  // TODO update this to hcimAccountTransfer
   hcim: Section;
+  // TODO what will the section status key actually be?
+  hcimEnrolment: Section;
   sitePrivacySecurityChecklist: Section;
 }
 

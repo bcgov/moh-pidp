@@ -16,12 +16,12 @@ import { PartyService } from '@app/core/party/party.service';
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
 import { ProfileStatus } from '@app/features/portal/sections/models/profile-status.model';
 
-import { HcimReenrolmentResource } from './hcim-reenrolment-resource.service';
-import { HcimReenrolmentResolver } from './hcim-reenrolment.resolver';
+import { HcimwebAccountTransferResource } from './hcimweb-account-transfer-resource.service';
+import { HcimwebAccountTransferResolver } from './hcimweb-account-transfer.resolver';
 
-describe('HcimReenrolmentResolver', () => {
-  let resolver: HcimReenrolmentResolver;
-  let hcimReenrolmentResourceSpy: Spy<HcimReenrolmentResource>;
+describe('HcimwebAccountTransferResolver', () => {
+  let resolver: HcimwebAccountTransferResolver;
+  let hcimwebAccountTransferResourceSpy: Spy<HcimwebAccountTransferResource>;
   let partyServiceSpy: Spy<PartyService>;
 
   let mockProfileStatus: ProfileStatus;
@@ -29,8 +29,8 @@ describe('HcimReenrolmentResolver', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
-        HcimReenrolmentResolver,
-        provideAutoSpy(HcimReenrolmentResource),
+        HcimwebAccountTransferResolver,
+        provideAutoSpy(HcimwebAccountTransferResource),
         {
           provide: PartyService,
           useValue: createSpyFromClass(PartyService, {
@@ -41,8 +41,10 @@ describe('HcimReenrolmentResolver', () => {
       ],
     });
 
-    resolver = TestBed.inject(HcimReenrolmentResolver);
-    hcimReenrolmentResourceSpy = TestBed.inject<any>(HcimReenrolmentResource);
+    resolver = TestBed.inject(HcimwebAccountTransferResolver);
+    hcimwebAccountTransferResourceSpy = TestBed.inject<any>(
+      HcimwebAccountTransferResource
+    );
     partyServiceSpy = TestBed.inject<any>(PartyService);
 
     mockProfileStatus = {
@@ -63,6 +65,7 @@ describe('HcimReenrolmentResolver', () => {
         userAccessAgreement: { statusCode: 1 },
         saEforms: { statusCode: 3 },
         hcim: { statusCode: 1 },
+        hcimEnrolment: { statusCode: 1 },
         sitePrivacySecurityChecklist: { statusCode: 1 },
         complianceTraining: { statusCode: 1 },
         transactions: { statusCode: 1 },
@@ -78,7 +81,7 @@ describe('HcimReenrolmentResolver', () => {
       when(
         'resolving the HCIMWeb Account Transfer status is successful',
         () => {
-          hcimReenrolmentResourceSpy.getProfileStatus
+          hcimwebAccountTransferResourceSpy.getProfileStatus
             .mustBeCalledWith(partyId)
             .nextOneTimeWith(mockProfileStatus);
           let actualResult: StatusCode | null;
@@ -93,7 +96,7 @@ describe('HcimReenrolmentResolver', () => {
             'response will provide the status code for HCIMWeb Account Transfer',
             () => {
               expect(
-                hcimReenrolmentResourceSpy.getProfileStatus
+                hcimwebAccountTransferResourceSpy.getProfileStatus
               ).toHaveBeenCalledTimes(1);
               expect(actualResult).toBe(
                 mockProfileStatus.status.hcim.statusCode
@@ -110,7 +113,7 @@ describe('HcimReenrolmentResolver', () => {
       when(
         'resolving the HCIMWeb Account Transfer status is unsuccessful',
         () => {
-          hcimReenrolmentResourceSpy.getProfileStatus
+          hcimwebAccountTransferResourceSpy.getProfileStatus
             .mustBeCalledWith(partyId)
             .nextWithValues([
               {
@@ -131,7 +134,7 @@ describe('HcimReenrolmentResolver', () => {
             'response will provide null as status code for HCIMWeb Account Transfer',
             () => {
               expect(
-                hcimReenrolmentResourceSpy.getProfileStatus
+                hcimwebAccountTransferResourceSpy.getProfileStatus
               ).toHaveBeenCalledTimes(1);
               expect(actualResult).toBe(null);
             }
@@ -156,7 +159,7 @@ describe('HcimReenrolmentResolver', () => {
           'response will provide null as status code for HCIMWeb Account Transfer',
           () => {
             expect(
-              hcimReenrolmentResourceSpy.requestAccess
+              hcimwebAccountTransferResourceSpy.requestAccess
             ).not.toHaveBeenCalled();
             expect(actualResult).toBe(null);
           }

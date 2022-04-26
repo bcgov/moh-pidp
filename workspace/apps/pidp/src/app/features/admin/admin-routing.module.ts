@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { AdminGuard } from '@app/core/guards/admin.guard';
 
+import { AuthRoutes } from '../auth/auth.routes';
 import { AuthenticationGuard } from '../auth/guards/authentication.guard';
 import { AdminRoutes } from './admin.routes';
 import { PartiesPage } from './pages/parties/parties.page';
@@ -15,10 +16,8 @@ const routes: Routes = [
     canActivate: [AuthenticationGuard, AdminGuard],
     canActivateChild: [AuthenticationGuard],
     data: {
-      // TODO don't hardcode in the redirect URL but also don't want cross module dependencies,
-      //      refactor when modules become libs otherwise premature optimization
       routes: {
-        auth: '/auth/admin',
+        auth: AuthRoutes.routePath(AuthRoutes.ADMIN_LOGIN),
       },
     },
     children: [

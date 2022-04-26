@@ -13,13 +13,14 @@ import { StatusCode } from './enums/status-code.enum';
 import {
   CollegeCertificationPortalSection,
   DemographicsPortalSection,
-  HcimReenrolmentPortalSection,
+  HcimwebAccountTransferPortalSection,
   IPortalSection,
   PortalSectionStatusKey,
   SaEformsPortalSection,
   SignedAcceptedDocumentsPortalSection,
 } from './sections/classes';
 import { ComplianceTrainingPortalSection } from './sections/classes/compliance-training-portal-section.class';
+import { HcimwebEnrolmentPortalSection } from './sections/classes/hcimweb-enrolment-portal-section.class';
 import { SitePrivacySecurityPortalSection } from './sections/classes/site-privacy-security-checklist-portal-section.class';
 import { TransactionsPortalSection } from './sections/classes/transactions-portal-section.class';
 import { UserAccessAgreementPortalSection } from './sections/classes/user-access-agreement-portal-section.class';
@@ -127,6 +128,7 @@ export class PortalService {
 
     return (
       status.demographics.statusCode === StatusCode.COMPLETED &&
+      // TODO won't work when college is hidden (ie. PHSA authenticated users)
       status.collegeCertification?.statusCode === StatusCode.COMPLETED &&
       status.saEforms?.statusCode === StatusCode.AVAILABLE
     );
@@ -165,13 +167,18 @@ export class PortalService {
       ),
       ...ArrayUtils.insertResultIf<IPortalSection>(
         this.insertSection('hcim', profileStatus),
-        () => [new HcimReenrolmentPortalSection(profileStatus, this.router)]
+        () => [
+          new HcimwebAccountTransferPortalSection(profileStatus, this.router),
+        ]
       ),
       ...ArrayUtils.insertResultIf<IPortalSection>(
-        this.permissionsService.hasRole([
-          Role.FEATURE_PIDP_DEMO,
-          Role.FEATURE_AMH_DEMO,
-        ]),
+        // TODO transition to inserSection once API exists
+        // this.insertSection('hcimEnrolment', profileStatus),
+        this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
+        () => [new HcimwebEnrolmentPortalSection(profileStatus, this.router)]
+      ),
+      ...ArrayUtils.insertResultIf<IPortalSection>(
+        this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
         () => [new SitePrivacySecurityPortalSection(profileStatus, this.router)]
       ),
     ];
@@ -205,9 +212,8 @@ export class PortalService {
     portalSectionKey: PortalSectionStatusKey,
     profileStatus: ProfileStatus
   ): boolean {
-    return (
-      profileStatus.status[portalSectionKey].statusCode !== StatusCode.HIDDEN
-    );
+    const statusCode = profileStatus.status[portalSectionKey]?.statusCode;
+    return statusCode && statusCode !== StatusCode.HIDDEN;
   }
 
   private clearState(): void {
