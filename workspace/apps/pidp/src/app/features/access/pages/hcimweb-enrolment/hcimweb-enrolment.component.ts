@@ -3,13 +3,10 @@ import { Component, OnInit } from '@angular/core';
 @Component({
   selector: 'app-hcimweb-enrolment',
   templateUrl: './hcimweb-enrolment.component.html',
-  styleUrls: ['./hcimweb-enrolment.component.css']
+  styleUrls: ['./hcimweb-enrolment.component.scss'],
 })
 export class HcimwebEnrolmentComponent implements OnInit {
+  public constructor() {}
 
-  constructor() { }
-
-  ngOnInit(): void {
-  }
-
+  public ngOnInit(): void {}
 }
