@@ -1,4 +1,4 @@
-export interface HcimwebAccountTransfer {
+export interface HcimAccountTransfer {
   ldapUsername: string;
   ldapPassword: string;
 }

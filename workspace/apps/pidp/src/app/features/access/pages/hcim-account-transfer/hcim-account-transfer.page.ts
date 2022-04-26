@@ -18,26 +18,26 @@ import {
   healthNetBcHelpDeskEmail,
   healthNetBcHelpDeskPhone,
   healthNetBcPasswordResetUrl,
-} from './hcimweb-account-transfer-constants';
-import { HcimwebAccountTransferFormState } from './hcimweb-account-transfer-form-state';
+} from './hcim-account-transfer-constants';
+import { HcimAccountTransferFormState } from './hcim-account-transfer-form-state';
 import {
   HcimAccessRequestResponse,
   HcimAccessRequestStatusCode,
-  HcimwebAccountTransferResource,
-} from './hcimweb-account-transfer-resource.service';
+  HcimAccountTransferResource,
+} from './hcim-account-transfer-resource.service';
 
 @Component({
-  selector: 'app-hcimweb-account-transfer',
-  templateUrl: './hcimweb-account-transfer.page.html',
-  styleUrls: ['./hcimweb-account-transfer.page.scss'],
-  viewProviders: [HcimwebAccountTransferResource],
+  selector: 'app-hcim-account-transfer',
+  templateUrl: './hcim-account-transfer.page.html',
+  styleUrls: ['./hcim-account-transfer.page.scss'],
+  viewProviders: [HcimAccountTransferResource],
 })
-export class HcimwebAccountTransferPage
-  extends AbstractFormPage<HcimwebAccountTransferFormState>
+export class HcimAccountTransferPage
+  extends AbstractFormPage<HcimAccountTransferFormState>
   implements OnInit
 {
   public title: string;
-  public formState: HcimwebAccountTransferFormState;
+  public formState: HcimAccountTransferFormState;
   public completed: boolean | null;
   public accessRequestStatusCode?: HcimAccessRequestStatusCode;
   public loginAttempts: number;
@@ -57,7 +57,7 @@ export class HcimwebAccountTransferPage
     private route: ActivatedRoute,
     private router: Router,
     private partyService: PartyService,
-    private resource: HcimwebAccountTransferResource,
+    private resource: HcimAccountTransferResource,
     private logger: LoggerService,
     fb: FormBuilder
   ) {
@@ -65,9 +65,9 @@ export class HcimwebAccountTransferPage
 
     const routeData = this.route.snapshot.data;
     this.title = routeData.title;
-    this.formState = new HcimwebAccountTransferFormState(fb);
+    this.formState = new HcimAccountTransferFormState(fb);
     this.completed =
-      routeData.hcimwebAccountTransferStatusCode === StatusCode.COMPLETED;
+      routeData.hcimAccountTransferStatusCode === StatusCode.COMPLETED;
     this.loginAttempts = 0;
     this.maxLoginAttempts = 3;
     this.hcimWebUrl = hcimWebUrl;

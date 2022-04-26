@@ -7,17 +7,15 @@ import { PartyService } from '@app/core/party/party.service';
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
 import { ProfileStatus } from '@app/features/portal/sections/models/profile-status.model';
 
-import { HcimwebAccountTransferResource } from './hcimweb-account-transfer-resource.service';
+import { HcimAccountTransferResource } from './hcim-account-transfer-resource.service';
 
 @Injectable({
   providedIn: 'root',
 })
-export class HcimwebAccountTransferResolver
-  implements Resolve<StatusCode | null>
-{
+export class HcimAccountTransferResolver implements Resolve<StatusCode | null> {
   public constructor(
     private partyService: PartyService,
-    private resource: HcimwebAccountTransferResource
+    private resource: HcimAccountTransferResource
   ) {}
 
   public resolve(): Observable<StatusCode | null> {

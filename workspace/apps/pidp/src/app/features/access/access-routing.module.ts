@@ -5,7 +5,7 @@ import { PermissionsGuard } from '@app/modules/permissions/permissions.guard';
 import { Role } from '@app/shared/enums/roles.enum';
 
 import { AccessRoutes } from './access.routes';
-import { HcimwebAccountTransferModule } from './pages/hcimweb-account-transfer/hcimweb-account-transfer.module';
+import { HcimAccountTransferModule } from './pages/hcim-account-transfer/hcim-account-transfer.module';
 import { HcimwebEnrolmentModule } from './pages/hcimweb-enrolment/hcimweb-enrolment.module';
 import { PharmanetModule } from './pages/pharmanet/pharmanet.module';
 import { SaEformsModule } from './pages/sa-eforms/sa-eforms.module';
@@ -21,10 +21,10 @@ const routes: Routes = [
   },
   {
     path: AccessRoutes.HCIMWEB_ACCOUNT_TRANSFER_PAGE,
-    loadChildren: (): Promise<HcimwebAccountTransferModule> =>
-      import(
-        './pages/hcimweb-account-transfer/hcimweb-account-transfer.module'
-      ).then((m) => m.HcimwebAccountTransferModule),
+    loadChildren: (): Promise<HcimAccountTransferModule> =>
+      import('./pages/hcim-account-transfer/hcim-account-transfer.module').then(
+        (m) => m.HcimAccountTransferModule
+      ),
   },
   {
     path: AccessRoutes.HCIMWEB_ENROLMENT_PAGE,

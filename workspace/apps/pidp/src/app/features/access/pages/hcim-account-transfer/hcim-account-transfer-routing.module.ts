@@ -1,15 +1,15 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { HcimwebAccountTransferPage } from './hcimweb-account-transfer.page';
-import { HcimwebAccountTransferResolver } from './hcimweb-account-transfer.resolver';
+import { HcimAccountTransferPage } from './hcim-account-transfer.page';
+import { HcimAccountTransferResolver } from './hcim-account-transfer.resolver';
 
 const routes: Routes = [
   {
     path: '',
-    component: HcimwebAccountTransferPage,
+    component: HcimAccountTransferPage,
     resolve: {
-      hcimwebAccountTransferStatusCode: HcimwebAccountTransferResolver,
+      hcimAccountTransferStatusCode: HcimAccountTransferResolver,
     },
     data: {
       title: 'Provider Identity Portal',
@@ -24,4 +24,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class HcimwebAccountTransferRoutingModule {}
+export class HcimAccountTransferRoutingModule {}

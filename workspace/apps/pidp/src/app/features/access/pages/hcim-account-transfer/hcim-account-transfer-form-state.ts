@@ -2,9 +2,9 @@ import { FormBuilder, FormControl, Validators } from '@angular/forms';
 
 import { AbstractFormState } from '@bcgov/shared/ui';
 
-import { HcimwebAccountTransfer } from './hcimweb-account-transfer.model';
+import { HcimAccountTransfer } from './hcim-account-transfer.model';
 
-export class HcimwebAccountTransferFormState extends AbstractFormState<HcimwebAccountTransfer> {
+export class HcimAccountTransferFormState extends AbstractFormState<HcimAccountTransfer> {
   public constructor(private fb: FormBuilder) {
     super();
 
@@ -19,7 +19,7 @@ export class HcimwebAccountTransferFormState extends AbstractFormState<HcimwebAc
     return this.formInstance.get('ldapPassword') as FormControl;
   }
 
-  public get json(): HcimwebAccountTransfer | undefined {
+  public get json(): HcimAccountTransfer | undefined {
     if (!this.formInstance) {
       return;
     }

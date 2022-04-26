@@ -16,12 +16,12 @@ import { PartyService } from '@app/core/party/party.service';
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
 import { ProfileStatus } from '@app/features/portal/sections/models/profile-status.model';
 
-import { HcimwebAccountTransferResource } from './hcimweb-account-transfer-resource.service';
-import { HcimwebAccountTransferResolver } from './hcimweb-account-transfer.resolver';
+import { HcimAccountTransferResource } from './hcim-account-transfer-resource.service';
+import { HcimAccountTransferResolver } from './hcim-account-transfer.resolver';
 
-describe('HcimwebAccountTransferResolver', () => {
-  let resolver: HcimwebAccountTransferResolver;
-  let hcimwebAccountTransferResourceSpy: Spy<HcimwebAccountTransferResource>;
+describe('HcimAccountTransferResolver', () => {
+  let resolver: HcimAccountTransferResolver;
+  let hcimAccountTransferResourceSpy: Spy<HcimAccountTransferResource>;
   let partyServiceSpy: Spy<PartyService>;
 
   let mockProfileStatus: ProfileStatus;
@@ -29,8 +29,8 @@ describe('HcimwebAccountTransferResolver', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
-        HcimwebAccountTransferResolver,
-        provideAutoSpy(HcimwebAccountTransferResource),
+        HcimAccountTransferResolver,
+        provideAutoSpy(HcimAccountTransferResource),
         {
           provide: PartyService,
           useValue: createSpyFromClass(PartyService, {
@@ -41,9 +41,9 @@ describe('HcimwebAccountTransferResolver', () => {
       ],
     });
 
-    resolver = TestBed.inject(HcimwebAccountTransferResolver);
-    hcimwebAccountTransferResourceSpy = TestBed.inject<any>(
-      HcimwebAccountTransferResource
+    resolver = TestBed.inject(HcimAccountTransferResolver);
+    hcimAccountTransferResourceSpy = TestBed.inject<any>(
+      HcimAccountTransferResource
     );
     partyServiceSpy = TestBed.inject<any>(PartyService);
 
@@ -81,7 +81,7 @@ describe('HcimwebAccountTransferResolver', () => {
       when(
         'resolving the HCIMWeb Account Transfer status is successful',
         () => {
-          hcimwebAccountTransferResourceSpy.getProfileStatus
+          hcimAccountTransferResourceSpy.getProfileStatus
             .mustBeCalledWith(partyId)
             .nextOneTimeWith(mockProfileStatus);
           let actualResult: StatusCode | null;
@@ -96,7 +96,7 @@ describe('HcimwebAccountTransferResolver', () => {
             'response will provide the status code for HCIMWeb Account Transfer',
             () => {
               expect(
-                hcimwebAccountTransferResourceSpy.getProfileStatus
+                hcimAccountTransferResourceSpy.getProfileStatus
               ).toHaveBeenCalledTimes(1);
               expect(actualResult).toBe(
                 mockProfileStatus.status.hcim.statusCode
@@ -113,7 +113,7 @@ describe('HcimwebAccountTransferResolver', () => {
       when(
         'resolving the HCIMWeb Account Transfer status is unsuccessful',
         () => {
-          hcimwebAccountTransferResourceSpy.getProfileStatus
+          hcimAccountTransferResourceSpy.getProfileStatus
             .mustBeCalledWith(partyId)
             .nextWithValues([
               {
@@ -134,7 +134,7 @@ describe('HcimwebAccountTransferResolver', () => {
             'response will provide null as status code for HCIMWeb Account Transfer',
             () => {
               expect(
-                hcimwebAccountTransferResourceSpy.getProfileStatus
+                hcimAccountTransferResourceSpy.getProfileStatus
               ).toHaveBeenCalledTimes(1);
               expect(actualResult).toBe(null);
             }
@@ -159,7 +159,7 @@ describe('HcimwebAccountTransferResolver', () => {
           'response will provide null as status code for HCIMWeb Account Transfer',
           () => {
             expect(
-              hcimwebAccountTransferResourceSpy.requestAccess
+              hcimAccountTransferResourceSpy.requestAccess
             ).not.toHaveBeenCalled();
             expect(actualResult).toBe(null);
           }
