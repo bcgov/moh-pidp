@@ -13,14 +13,14 @@ import { StatusCode } from './enums/status-code.enum';
 import {
   CollegeCertificationPortalSection,
   DemographicsPortalSection,
-  HcimwebAccountTransferPortalSection,
+  HcimAccountTransferPortalSection,
   IPortalSection,
   PortalSectionStatusKey,
   SaEformsPortalSection,
   SignedAcceptedDocumentsPortalSection,
 } from './sections/classes';
 import { ComplianceTrainingPortalSection } from './sections/classes/compliance-training-portal-section.class';
-import { HcimwebEnrolmentPortalSection } from './sections/classes/hcimweb-enrolment-portal-section.class';
+import { HcimEnrolmentPortalSection } from './sections/classes/hcim-enrolment-portal-section.class';
 import { SitePrivacySecurityPortalSection } from './sections/classes/site-privacy-security-checklist-portal-section.class';
 import { TransactionsPortalSection } from './sections/classes/transactions-portal-section.class';
 import { UserAccessAgreementPortalSection } from './sections/classes/user-access-agreement-portal-section.class';
@@ -167,15 +167,13 @@ export class PortalService {
       ),
       ...ArrayUtils.insertResultIf<IPortalSection>(
         this.insertSection('hcim', profileStatus),
-        () => [
-          new HcimwebAccountTransferPortalSection(profileStatus, this.router),
-        ]
+        () => [new HcimAccountTransferPortalSection(profileStatus, this.router)]
       ),
       ...ArrayUtils.insertResultIf<IPortalSection>(
         // TODO transition to inserSection once API exists
         // this.insertSection('hcimEnrolment', profileStatus),
         this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
-        () => [new HcimwebEnrolmentPortalSection(profileStatus, this.router)]
+        () => [new HcimEnrolmentPortalSection(profileStatus, this.router)]
       ),
       ...ArrayUtils.insertResultIf<IPortalSection>(
         this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),

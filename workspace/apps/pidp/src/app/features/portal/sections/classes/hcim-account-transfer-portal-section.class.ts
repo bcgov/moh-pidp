@@ -16,7 +16,7 @@ import {
   PortalSectionType,
 } from './portal-section.class';
 
-export class HcimwebAccountTransferPortalSection implements IPortalSection {
+export class HcimAccountTransferPortalSection implements IPortalSection {
   public readonly key: PortalSectionKey;
   public type: PortalSectionType;
   public heading: string;
