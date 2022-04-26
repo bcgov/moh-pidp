@@ -1,0 +1,33 @@
+@use 'palette' as palette;
+@import 'bootstrap/bootstrap-imports';
+
+.transaction {
+  margin-bottom: 1.5rem;
+
+  @include media-breakpoint-up(lg) {
+    display: flex;
+  }
+
+  span,
+  small {
+    // Force stacking
+    display: block;
+  }
+
+  span {
+    padding-top: 0.5rem;
+
+    &:first-child {
+      font-weight: 500;
+      text-align: right;
+      margin-right: 1.5rem;
+    }
+
+    &:last-child {
+      flex-grow: 1;
+      border-top: 1px solid palette.theme-palette(blue);
+      font-weight: 300;
+      padding-left: 0.1rem;
+    }
+  }
+}
