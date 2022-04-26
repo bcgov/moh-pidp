@@ -33,7 +33,7 @@ export class CollegeCertificationPortalSection implements IPortalSection {
     this.key = 'collegeCertification';
     this.type = 'profile';
     this.heading = 'College Licence Information';
-    this.description = 'College Licence Information and Validation';
+    this.description = 'Provide your College Licence if you have one.';
   }
 
   public get hint(): string {

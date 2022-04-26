@@ -79,7 +79,7 @@ describe('HcimwebAccountTransferResolver', () => {
       partyServiceSpy.accessorSpies.getters.partyId.mockReturnValue(partyId);
 
       when(
-        'resolving the HCIMWeb account transfer status is successful',
+        'resolving the HCIMWeb Account Transfer status is successful',
         () => {
           hcimwebAccountTransferResourceSpy.getProfileStatus
             .mustBeCalledWith(partyId)
@@ -93,7 +93,7 @@ describe('HcimwebAccountTransferResolver', () => {
             );
 
           then(
-            'response will provide the status code for HCIMWeb account transfer',
+            'response will provide the status code for HCIMWeb Account Transfer',
             () => {
               expect(
                 hcimwebAccountTransferResourceSpy.getProfileStatus
@@ -111,7 +111,7 @@ describe('HcimwebAccountTransferResolver', () => {
       const partyId = randNumber({ min: 1 });
       partyServiceSpy.accessorSpies.getters.partyId.mockReturnValue(partyId);
       when(
-        'resolving the HCIMWeb account transfer status is unsuccessful',
+        'resolving the HCIMWeb Account Transfer status is unsuccessful',
         () => {
           hcimwebAccountTransferResourceSpy.getProfileStatus
             .mustBeCalledWith(partyId)
@@ -131,7 +131,7 @@ describe('HcimwebAccountTransferResolver', () => {
             );
 
           then(
-            'response will provide null as status code for HCIMWeb account transfer',
+            'response will provide null as status code for HCIMWeb Account Transfer',
             () => {
               expect(
                 hcimwebAccountTransferResourceSpy.getProfileStatus
@@ -156,7 +156,7 @@ describe('HcimwebAccountTransferResolver', () => {
           );
 
         then(
-          'response will provide null as status code for HCIMWeb account transfer',
+          'response will provide null as status code for HCIMWeb Account Transfer',
           () => {
             expect(
               hcimwebAccountTransferResourceSpy.requestAccess
