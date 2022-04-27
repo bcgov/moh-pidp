@@ -13,12 +13,10 @@ import {
   IPortalSection,
   PortalSectionAction,
   PortalSectionKey,
-  PortalSectionType,
 } from './portal-section.class';
 
 export class SaEformsPortalSection implements IPortalSection {
   public readonly key: PortalSectionKey;
-  public type: PortalSectionType;
   public heading: string;
   public description: string;
 
@@ -27,7 +25,6 @@ export class SaEformsPortalSection implements IPortalSection {
     private router: Router
   ) {
     this.key = 'saEforms';
-    this.type = 'access';
     this.heading = 'Special Authority eForms';
     this.description = `Enrol here for access to PharmaCare's Special Authority eForms application.`;
   }

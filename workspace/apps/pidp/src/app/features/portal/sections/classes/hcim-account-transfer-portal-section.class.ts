@@ -13,12 +13,10 @@ import {
   IPortalSection,
   PortalSectionAction,
   PortalSectionKey,
-  PortalSectionType,
 } from './portal-section.class';
 
 export class HcimAccountTransferPortalSection implements IPortalSection {
   public readonly key: PortalSectionKey;
-  public type: PortalSectionType;
   public heading: string;
   public description: string;
 
@@ -26,11 +24,10 @@ export class HcimAccountTransferPortalSection implements IPortalSection {
     private profileStatus: ProfileStatus,
     private router: Router
   ) {
-    this.key = 'hcim';
-    this.type = 'access';
+    this.key = 'hcimAccountTransfer';
     this.heading = 'HCIMWeb Account Transfer';
     this.description =
-      'For existing users of HCIMWeb application to transfer their HNETBC account credential to their organization credential';
+      'For existing users of HCIMWeb application to transfer their HNETBC account credential to their organization credential.';
   }
 
   public get hint(): string {
@@ -69,6 +66,6 @@ export class HcimAccountTransferPortalSection implements IPortalSection {
   }
 
   private getStatusCode(): StatusCode {
-    return this.profileStatus.status.hcim.statusCode;
+    return this.profileStatus.status.hcimAccountTransfer.statusCode;
   }
 }

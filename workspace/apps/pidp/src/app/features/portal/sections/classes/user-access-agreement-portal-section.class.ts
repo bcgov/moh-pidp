@@ -13,12 +13,10 @@ import {
   IPortalSection,
   PortalSectionAction,
   PortalSectionKey,
-  PortalSectionType,
 } from './portal-section.class';
 
 export class UserAccessAgreementPortalSection implements IPortalSection {
   public readonly key: PortalSectionKey;
-  public type: PortalSectionType;
   public heading: string;
   public description: string;
 
@@ -27,7 +25,6 @@ export class UserAccessAgreementPortalSection implements IPortalSection {
     private router: Router
   ) {
     this.key = 'userAccessAgreement';
-    this.type = 'profile';
     this.heading = 'Access Model Harmonization UAA';
     this.description = `Sign and agree to the user access agreement.`;
   }

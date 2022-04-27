@@ -1,7 +1,7 @@
 import { Party, PartyCertification } from '@bcgov/shared/data-access';
 
 import { AlertCode } from '../../enums/alert-code.enum';
-import { AccessSystemSectionStatus } from './access-system-status.model';
+import { AccessSectionStatus } from './access-status.model';
 import { Section } from './section.model';
 import { TrainingSectionStatus } from './training-status.model';
 
@@ -26,13 +26,15 @@ export interface ProfileSectionStatus {
 /**
  * @description
  * HTTP response for profile sections.
+ *
+ * NOTE:
+ * Merged all response into ProfileStatus, which will be separated
+ * into different endpoints at an appropriate time to avoid unnecessary
+ * optimization early in the project.
+ * @see access-status.model.ts (AccessStatus)
+ * @see training-status.model.ts (TrainingStatus)
  */
 export interface ProfileStatus {
   alerts: AlertCode[];
-  // Merged all sections into the response from ProfileStatus, which
-  // will be separated into different endpoints at an appropriate time
-  // to avoid unnecessary optimization early in the project
-  status: ProfileSectionStatus &
-    AccessSystemSectionStatus &
-    TrainingSectionStatus;
+  status: ProfileSectionStatus & AccessSectionStatus & TrainingSectionStatus;
 }

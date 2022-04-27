@@ -9,18 +9,15 @@ import {
   IPortalSection,
   PortalSectionAction,
   PortalSectionKey,
-  PortalSectionType,
 } from './portal-section.class';
 
 export class TransactionsPortalSection implements IPortalSection {
   public readonly key: PortalSectionKey;
-  public type: PortalSectionType;
   public heading: string;
   public description: string;
 
   public constructor(private router: Router) {
     this.key = 'signedAcceptedDocuments';
-    this.type = 'documents';
     this.heading = 'Transactions';
     this.description = 'View Transaction';
   }

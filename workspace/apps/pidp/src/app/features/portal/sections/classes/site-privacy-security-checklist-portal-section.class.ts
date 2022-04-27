@@ -13,12 +13,10 @@ import {
   IPortalSection,
   PortalSectionAction,
   PortalSectionKey,
-  PortalSectionType,
 } from './portal-section.class';
 
 export class SitePrivacySecurityPortalSection implements IPortalSection {
   public readonly key: PortalSectionKey;
-  public type: PortalSectionType;
   public heading: string;
   public description: string;
 
@@ -27,7 +25,6 @@ export class SitePrivacySecurityPortalSection implements IPortalSection {
     private router: Router
   ) {
     this.key = 'sitePrivacySecurityChecklist';
-    this.type = 'access';
     this.heading = 'Site Privacy and Security Readiness Checklist';
     this.description = `Description of the checklist.`;
   }

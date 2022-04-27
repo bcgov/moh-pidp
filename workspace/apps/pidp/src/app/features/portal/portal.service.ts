@@ -3,29 +3,14 @@ import { Router } from '@angular/router';
 
 import { BehaviorSubject, Observable } from 'rxjs';
 
-import { ArrayUtils } from '@bcgov/shared/utils';
-
 import { PermissionsService } from '@app/modules/permissions/permissions.service';
-import { Role } from '@app/shared/enums/roles.enum';
 
 import { AlertCode } from './enums/alert-code.enum';
 import { StatusCode } from './enums/status-code.enum';
-import {
-  CollegeCertificationPortalSection,
-  DemographicsPortalSection,
-  HcimAccountTransferPortalSection,
-  IPortalSection,
-  PortalSectionStatusKey,
-  SaEformsPortalSection,
-  SignedAcceptedDocumentsPortalSection,
-} from './sections/classes';
-import { ComplianceTrainingPortalSection } from './sections/classes/compliance-training-portal-section.class';
-import { HcimEnrolmentPortalSection } from './sections/classes/hcim-enrolment-portal-section.class';
-import { SitePrivacySecurityPortalSection } from './sections/classes/site-privacy-security-checklist-portal-section.class';
-import { TransactionsPortalSection } from './sections/classes/transactions-portal-section.class';
-import { UserAccessAgreementPortalSection } from './sections/classes/user-access-agreement-portal-section.class';
+import { PortalSectionStatusKey } from './sections/classes';
 import { ProfileStatusAlert } from './sections/models/profile-status-alert.model';
 import { ProfileStatus } from './sections/models/profile-status.model';
+import { PortalState, PortalStateBuilder } from './state/portal-state.builder';
 
 @Injectable({
   providedIn: 'root',
@@ -39,19 +24,19 @@ export class PortalService {
   private _profileStatus: ProfileStatus | null;
   private _alerts: ProfileStatusAlert[];
   private _completedProfile: boolean;
-  private _state$: BehaviorSubject<Record<string, IPortalSection[]>>;
+  private _state$: BehaviorSubject<PortalState>;
 
   public constructor(
     private router: Router,
     private permissionsService: PermissionsService
   ) {
     this._profileStatus = null;
-    this._state$ = new BehaviorSubject<Record<string, IPortalSection[]>>({});
+    this._state$ = new BehaviorSubject<PortalState>(null);
     this._completedProfile = false;
     this._alerts = [];
   }
 
-  public get state$(): Observable<Record<string, IPortalSection[]>> {
+  public get state$(): Observable<PortalState> {
     return this._state$.asObservable();
   }
 
@@ -74,24 +59,6 @@ export class PortalService {
     );
   }
 
-  public updateState(profileStatus: ProfileStatus | null): void {
-    if (!profileStatus) {
-      this.clearState();
-      return;
-    }
-
-    this._profileStatus = profileStatus;
-    this._alerts = this.getAlerts(profileStatus);
-    this._completedProfile = this.hasCompletedProfile(profileStatus);
-
-    this._state$.next({
-      profileIdentitySections: this.getProfileIdentitySections(profileStatus),
-      accessSystemsSections: this.getAccessSystemsSections(profileStatus),
-      trainingSections: this.getTrainingSections(profileStatus),
-      documentsSections: this.getDocumentsSections(),
-    });
-  }
-
   public get hiddenSections(): PortalSectionStatusKey[] {
     const status = this._profileStatus?.status;
 
@@ -103,6 +70,23 @@ export class PortalService {
       (key: PortalSectionStatusKey) =>
         status[key].statusCode === StatusCode.HIDDEN
     );
+  }
+
+  public updateState(profileStatus: ProfileStatus | null): void {
+    if (!profileStatus) {
+      this.clearState();
+      return;
+    }
+
+    this._profileStatus = profileStatus;
+    this._alerts = this.getAlerts(profileStatus);
+    this._completedProfile = this.hasCompletedProfile(profileStatus);
+
+    const builder = new PortalStateBuilder(
+      this.router,
+      this.permissionsService
+    );
+    this._state$.next(builder.createState(profileStatus));
   }
 
   private getAlerts(profileStatus: ProfileStatus): ProfileStatusAlert[] {
@@ -134,89 +118,9 @@ export class PortalService {
     );
   }
 
-  // TODO loop through keys in preferred order and insert using factory based on status
-  private getProfileIdentitySections(
-    profileStatus: ProfileStatus
-  ): IPortalSection[] {
-    return [
-      new DemographicsPortalSection(profileStatus, this.router),
-      ...ArrayUtils.insertResultIf<IPortalSection>(
-        this.insertSection('collegeCertification', profileStatus),
-        () => [
-          new CollegeCertificationPortalSection(profileStatus, this.router),
-        ]
-      ),
-      ...ArrayUtils.insertResultIf<IPortalSection>(
-        this.permissionsService.hasRole([
-          Role.FEATURE_PIDP_DEMO,
-          Role.FEATURE_AMH_DEMO,
-        ]),
-        () => [new UserAccessAgreementPortalSection(profileStatus, this.router)]
-      ),
-    ];
-  }
-
-  // TODO loop through keys in preferred order and insert using factory based on status
-  private getAccessSystemsSections(
-    profileStatus: ProfileStatus
-  ): IPortalSection[] {
-    return [
-      ...ArrayUtils.insertResultIf<IPortalSection>(
-        this.insertSection('saEforms', profileStatus),
-        () => [new SaEformsPortalSection(profileStatus, this.router)]
-      ),
-      ...ArrayUtils.insertResultIf<IPortalSection>(
-        this.insertSection('hcim', profileStatus),
-        () => [new HcimAccountTransferPortalSection(profileStatus, this.router)]
-      ),
-      ...ArrayUtils.insertResultIf<IPortalSection>(
-        // TODO transition to inserSection once API exists
-        // this.insertSection('hcimEnrolment', profileStatus),
-        this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
-        () => [new HcimEnrolmentPortalSection(profileStatus, this.router)]
-      ),
-      ...ArrayUtils.insertResultIf<IPortalSection>(
-        this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
-        () => [new SitePrivacySecurityPortalSection(profileStatus, this.router)]
-      ),
-    ];
-  }
-
-  // TODO loop through keys in preferred order and insert using factory based on status
-  private getTrainingSections(profileStatus: ProfileStatus): IPortalSection[] {
-    return [
-      ...ArrayUtils.insertResultIf<IPortalSection>(
-        this.permissionsService.hasRole([
-          Role.FEATURE_PIDP_DEMO,
-          Role.FEATURE_AMH_DEMO,
-        ]),
-        () => [new ComplianceTrainingPortalSection(profileStatus, this.router)]
-      ),
-    ];
-  }
-
-  // TODO loop through keys in preferred order and insert using factory based on status
-  private getDocumentsSections(): IPortalSection[] {
-    return [
-      new SignedAcceptedDocumentsPortalSection(this.router),
-      ...ArrayUtils.insertResultIf<IPortalSection>(
-        this.permissionsService.hasRole(Role.FEATURE_PIDP_DEMO),
-        () => [new TransactionsPortalSection(this.router)]
-      ),
-    ];
-  }
-
-  private insertSection(
-    portalSectionKey: PortalSectionStatusKey,
-    profileStatus: ProfileStatus
-  ): boolean {
-    const statusCode = profileStatus.status[portalSectionKey]?.statusCode;
-    return statusCode && statusCode !== StatusCode.HIDDEN;
-  }
-
   private clearState(): void {
     this._profileStatus = null;
-    this._state$.next({});
+    this._state$.next(null);
     this._completedProfile = false;
     this._alerts = [];
   }

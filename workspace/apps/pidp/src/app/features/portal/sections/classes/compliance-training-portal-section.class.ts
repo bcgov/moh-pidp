@@ -13,12 +13,10 @@ import {
   IPortalSection,
   PortalSectionAction,
   PortalSectionKey,
-  PortalSectionType,
 } from './portal-section.class';
 
 export class ComplianceTrainingPortalSection implements IPortalSection {
   public readonly key: PortalSectionKey;
-  public type: PortalSectionType;
   public heading: string;
   public description: string;
 
@@ -27,7 +25,6 @@ export class ComplianceTrainingPortalSection implements IPortalSection {
     private router: Router
   ) {
     this.key = 'complianceTraining';
-    this.type = 'training';
     this.heading = 'Compliance Training Video';
     this.description = `Description of the training provided by the video.`;
   }

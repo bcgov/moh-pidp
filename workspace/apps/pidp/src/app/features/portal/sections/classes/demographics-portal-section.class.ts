@@ -17,12 +17,10 @@ import {
   PortalSectionAction,
   PortalSectionKey,
   PortalSectionProperty,
-  PortalSectionType,
 } from './portal-section.class';
 
 export class DemographicsPortalSection implements IPortalSection {
   public readonly key: PortalSectionKey;
-  public type: PortalSectionType;
   public heading: string;
   public description: string;
 
@@ -31,7 +29,6 @@ export class DemographicsPortalSection implements IPortalSection {
     private router: Router
   ) {
     this.key = 'demographics';
-    this.type = 'profile';
     this.heading = 'Personal Information';
     this.description = 'Provide personal and contact information.';
   }

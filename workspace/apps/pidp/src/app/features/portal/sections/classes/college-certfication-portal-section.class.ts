@@ -17,12 +17,10 @@ import {
   PortalSectionAction,
   PortalSectionKey,
   PortalSectionProperty,
-  PortalSectionType,
 } from './portal-section.class';
 
 export class CollegeCertificationPortalSection implements IPortalSection {
   public readonly key: PortalSectionKey;
-  public type: PortalSectionType;
   public heading: string;
   public description: string;
 
@@ -31,7 +29,6 @@ export class CollegeCertificationPortalSection implements IPortalSection {
     private router: Router
   ) {
     this.key = 'collegeCertification';
-    this.type = 'profile';
     this.heading = 'College Licence Information';
     this.description = 'Provide your College Licence if you have one.';
   }

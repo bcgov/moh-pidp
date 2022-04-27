@@ -13,12 +13,10 @@ import {
   IPortalSection,
   PortalSectionAction,
   PortalSectionKey,
-  PortalSectionType,
 } from './portal-section.class';
 
 export class HcimEnrolmentPortalSection implements IPortalSection {
   public readonly key: PortalSectionKey;
-  public type: PortalSectionType;
   public heading: string;
   public description: string;
 
@@ -27,10 +25,9 @@ export class HcimEnrolmentPortalSection implements IPortalSection {
     private router: Router
   ) {
     this.key = 'hcimEnrolment';
-    this.type = 'access';
     this.heading = 'HCIMWeb Enrolment';
     this.description =
-      'First time users enrol here for access to the HCIMWeb application';
+      'First time users enrol here for access to the HCIMWeb application.';
   }
 
   public get hint(): string {

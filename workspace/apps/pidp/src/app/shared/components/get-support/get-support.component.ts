@@ -11,8 +11,9 @@ import {
 import { ArrayUtils } from '@bcgov/shared/utils';
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';
+import { AccessSectionStatus } from '@app/features/portal/sections/models/access-status.model';
 
-export type SupportProvided = 'saEforms' | 'hcim';
+export type SupportProvided = keyof AccessSectionStatus;
 
 interface SupportProps {
   name: string;
@@ -66,10 +67,13 @@ export class GetSupportComponent implements OnChanges, OnInit {
           email: this.config.emails.specialAuthoritySupport,
         }
       ),
-      ...ArrayUtils.insertIf<SupportProps>(!hiddenSupport.includes('hcim'), {
-        name: 'HCIMWeb Account Transfer',
-        email: this.config.emails.hcimWebSupportEmail,
-      }),
+      ...ArrayUtils.insertIf<SupportProps>(
+        !hiddenSupport.includes('hcimAccountTransfer'),
+        {
+          name: 'HCIMWeb Account Transfer',
+          email: this.config.emails.hcimWebSupportEmail,
+        }
+      ),
     ];
   }
 }

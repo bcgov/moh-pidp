@@ -2,7 +2,7 @@ import { Observable } from 'rxjs';
 
 import { AlertType } from '@bcgov/shared/ui';
 
-import { AccessSystemSectionStatus } from '../models/access-system-status.model';
+import { AccessSectionStatus } from '../models/access-status.model';
 import { ProfileSectionStatus } from '../models/profile-status.model';
 import { TrainingSectionStatus } from '../models/training-status.model';
 
@@ -13,7 +13,7 @@ import { TrainingSectionStatus } from '../models/training-status.model';
  */
 export type PortalSectionStatusKey =
   | keyof ProfileSectionStatus
-  | keyof AccessSystemSectionStatus
+  | keyof AccessSectionStatus
   | keyof TrainingSectionStatus;
 
 /**
@@ -40,11 +40,8 @@ export interface PortalSectionAction {
   disabled: boolean;
 }
 
-export type PortalSectionType = 'profile' | 'access' | 'training' | 'documents';
-
 export interface IPortalSection {
   readonly key: PortalSectionKey;
-  type: PortalSectionType;
   heading: string;
   hint?: string;
   description: string;
