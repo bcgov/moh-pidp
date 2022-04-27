@@ -26,6 +26,7 @@ import { LoggerService } from '@app/core/services/logger.service';
 import { AuthorizedUserService } from '@app/features/auth/services/authorized-user.service';
 
 import { PersonalInformationResource } from './personal-information-resource.service';
+import { PersonalInformationModel } from './personal-information.model';
 import { PersonalInformationPage } from './personal-information.page';
 
 describe('PersonalInformationPage', () => {
@@ -35,37 +36,22 @@ describe('PersonalInformationPage', () => {
   let formUtilsServiceSpy: Spy<FormUtilsService>;
   let router: Router;
 
-  const mockActivatedRoute = {
-    snapshot: {
-      data: {
-        title: randTextRange({ min: 1, max: 4 }),
-        routes: {
-          root: '../../',
-        },
-      },
-    },
-  };
-
-  const mockForm = {
-    preferredFirstName: '',
-    preferredMiddleName: '',
-    preferredLastName: '',
-    phone: `${randNumber({ min: 2000000000, max: 9999999999 })}`,
-    email: randEmail(),
-  };
-
-  const mockParty = {
-    mailingAddress: {
-      street: randStreetAddress(),
-      city: randCity(),
-      provinceCode: randStateAbbr(),
-      countryCode: randCountryCode(),
-      postal: randZipCode(),
-    },
-    ...mockForm,
-  };
+  let mockActivatedRoute: { snapshot: any };
+  let mockForm: Omit<PersonalInformationModel, 'mailingAddress'>;
+  let mockParty: PersonalInformationModel;
 
   beforeEach(() => {
+    mockActivatedRoute = {
+      snapshot: {
+        data: {
+          title: randTextRange({ min: 1, max: 4 }),
+          routes: {
+            root: '../../',
+          },
+        },
+      },
+    };
+
     TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule,
@@ -103,6 +89,25 @@ describe('PersonalInformationPage', () => {
     partyServiceSpy = TestBed.inject<any>(PartyService);
     personalInfoResourceSpy = TestBed.inject<any>(PersonalInformationResource);
     formUtilsServiceSpy = TestBed.inject<any>(FormUtilsService);
+
+    mockForm = {
+      preferredFirstName: '',
+      preferredMiddleName: '',
+      preferredLastName: '',
+      phone: `${randNumber({ min: 2000000000, max: 9999999999 })}`,
+      email: randEmail(),
+    };
+
+    mockParty = {
+      mailingAddress: {
+        street: randStreetAddress(),
+        city: randCity(),
+        provinceCode: randStateAbbr(),
+        countryCode: randCountryCode(),
+        postal: randZipCode(),
+      },
+      ...mockForm,
+    };
   });
 
   describe('INIT', () => {

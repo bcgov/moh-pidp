@@ -62,10 +62,10 @@ describe('SaEformsResolver', () => {
         },
         userAccessAgreement: { statusCode: 1 },
         saEforms: { statusCode: 3 },
-        hcim: { statusCode: 1 },
+        hcimAccountTransfer: { statusCode: 1 },
+        hcimEnrolment: { statusCode: 1 },
         sitePrivacySecurityChecklist: { statusCode: 1 },
         complianceTraining: { statusCode: 1 },
-        transactions: { statusCode: 1 },
       },
     };
   });

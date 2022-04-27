@@ -21,19 +21,21 @@ describe('ViewDocumentPage', () => {
   let component: ViewDocumentPage;
   let router: Router;
 
-  const mockActivatedRoute = {
-    snapshot: {
-      params: { doctype: DocumentType.PIDP_COLLECTION_NOTICE },
-      data: {
-        title: randTextRange({ min: 1, max: 4 }),
-        routes: {
-          root: '../../',
-        },
-      },
-    },
-  };
+  let mockActivatedRoute;
 
   beforeEach(() => {
+    mockActivatedRoute = {
+      snapshot: {
+        params: { doctype: DocumentType.PIDP_COLLECTION_NOTICE },
+        data: {
+          title: randTextRange({ min: 1, max: 4 }),
+          routes: {
+            root: '../../',
+          },
+        },
+      },
+    };
+
     TestBed.configureTestingModule({
       imports: [RouterTestingModule],
       providers: [

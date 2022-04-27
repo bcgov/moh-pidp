@@ -29,7 +29,7 @@ export class HcimAccountTransferResolver implements Resolve<StatusCode | null> {
           return null;
         }
 
-        return profileStatus.status.hcim.statusCode;
+        return profileStatus.status.hcimAccountTransfer.statusCode;
       }),
       catchError(() => of(null))
     );
