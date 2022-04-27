@@ -55,7 +55,6 @@ export class PortalStateBuilder {
       profile: this.getProfileIdentitySections(profileStatus),
       access: this.getAccessSystemsSections(profileStatus),
       training: this.getTrainingSections(profileStatus),
-      // TODO what does transactions have to do with Your Documents?
       documents: this.getDocumentsSections(),
     };
   }
@@ -72,10 +71,11 @@ export class PortalStateBuilder {
         ]
       ),
       ...ArrayUtils.insertResultIf<IPortalSection>(
+        // TODO remove demo permissions when API exists
         this.permissionsService.hasRole([
           Role.FEATURE_PIDP_DEMO,
           Role.FEATURE_AMH_DEMO,
-        ]),
+        ]) || this.insertSection('userAccessAgreement', profileStatus),
         () => [new UserAccessAgreementPortalSection(profileStatus, this.router)]
       ),
     ];
@@ -94,13 +94,15 @@ export class PortalStateBuilder {
         () => [new HcimAccountTransferPortalSection(profileStatus, this.router)]
       ),
       ...ArrayUtils.insertResultIf<IPortalSection>(
-        // TODO transition to insertSection once API exists
-        // this.insertSection('hcimEnrolment', profileStatus),
-        this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
+        // TODO remove permissions when API exists
+        this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]) ||
+          this.insertSection('hcimEnrolment', profileStatus),
         () => [new HcimEnrolmentPortalSection(profileStatus, this.router)]
       ),
       ...ArrayUtils.insertResultIf<IPortalSection>(
-        this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
+        // TODO remove permissions when API exists
+        this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]) ||
+          this.insertSection('sitePrivacySecurityChecklist', profileStatus),
         () => [new SitePrivacySecurityPortalSection(profileStatus, this.router)]
       ),
     ];

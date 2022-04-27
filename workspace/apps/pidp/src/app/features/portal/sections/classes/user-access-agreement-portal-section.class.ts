@@ -63,7 +63,7 @@ export class UserAccessAgreementPortalSection implements IPortalSection {
   }
 
   private getStatusCode(): StatusCode {
-    // TODO when provided by API remove null check
+    // TODO remove null check once API exists
     return this.profileStatus.status.userAccessAgreement?.statusCode;
   }
 }
