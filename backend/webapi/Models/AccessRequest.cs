@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 public enum AccessType
 {
     SAEforms = 1,
-    HcimReEnrolment
+    HcimAccountTransfer
 }
 
 [Table(nameof(AccessRequest))]
@@ -25,8 +25,8 @@ public class AccessRequest : BaseAuditable
     public AccessType AccessType { get; set; }
 }
 
-[Table(nameof(HcimReEnrolmentAccessRequest))]
-public class HcimReEnrolmentAccessRequest : AccessRequest
+[Table(nameof(HcimAccountTransfer))]
+public class HcimAccountTransfer : AccessRequest
 {
     public string LdapUsername { get; set; } = string.Empty;
 }

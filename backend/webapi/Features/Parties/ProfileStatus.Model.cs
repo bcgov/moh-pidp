@@ -81,11 +81,11 @@ public partial class ProfileStatus
             protected override void SetAlertsAndStatus(ProfileStatusDto profile) => this.StatusCode = profile.DemographicsEntered ? StatusCode.Complete : StatusCode.Incomplete;
         }
 
-        public class HcimReEnrolment : ProfileSection
+        public class HcimAccountTransfer : ProfileSection
         {
             internal override string SectionName => "hcim";
 
-            public HcimReEnrolment(ProfileStatusDto profile) : base(profile) { }
+            public HcimAccountTransfer(ProfileStatusDto profile) : base(profile) { }
 
             protected override void SetAlertsAndStatus(ProfileStatusDto profile)
             {
@@ -95,7 +95,7 @@ public partial class ProfileStatus
                     return;
                 }
 
-                if (profile.CompletedEnrolments.Contains(AccessType.HcimReEnrolment))
+                if (profile.CompletedEnrolments.Contains(AccessType.HcimAccountTransfer))
                 {
                     this.StatusCode = StatusCode.Complete;
                     return;

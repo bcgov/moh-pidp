@@ -25,14 +25,14 @@ public class AccessRequestsController : PidpControllerBase
         => await this.AuthorizePartyBeforeHandleAsync(query.PartyId, handler, query)
             .ToActionResultOfT();
 
-    [HttpPost("hcim-reenrolment")]
+    [HttpPost("hcim-account-transfer")]
     [Authorize(Policy = Policies.HcimUser)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
     [ProducesResponseType(StatusCodes.Status423Locked)]
-    public async Task<IActionResult> CreateHcimReEnrolment([FromServices] ICommandHandler<HcimReEnrolment.Command, IDomainResult<HcimReEnrolment.Model>> handler,
-                                                           [FromBody] HcimReEnrolment.Command command)
+    public async Task<IActionResult> CreateHcimAccountTransfer([FromServices] ICommandHandler<HcimAccountTransfer.Command, IDomainResult<HcimAccountTransfer.Model>> handler,
+                                                               [FromBody] HcimAccountTransfer.Command command)
     {
         var access = await this.AuthorizationService.CheckPartyAccessibility(command.PartyId, this.User);
         if (!access.IsSuccess)

@@ -41,7 +41,7 @@ export class HcimAccountTransferResource {
     ldapCredentials: HcimAccountTransfer
   ): Observable<HcimAccessRequestResponse> {
     return this.apiResource
-      .post<NoContent>('access-requests/hcim-reenrolment', {
+      .post<NoContent>('access-requests/hcim-account-transfer', {
         partyId,
         ...ldapCredentials,
       })

@@ -12,7 +12,7 @@ using Pidp.Infrastructure.HttpClients.Mail;
 using Pidp.Infrastructure.Services;
 using Pidp.Models;
 
-public class HcimReEnrolment
+public class HcimAccountTransfer
 {
     public class Command : ICommand<IDomainResult<Model>>
     {
@@ -77,7 +77,7 @@ public class HcimReEnrolment
                 .Select(party => new
                 {
                     party.UserId,
-                    AlreadyEnroled = party.AccessRequests.Any(request => request.AccessType == AccessType.HcimReEnrolment),
+                    AlreadyEnroled = party.AccessRequests.Any(request => request.AccessType == AccessType.HcimAccountTransfer),
                     party.Email
                 })
                 .SingleAsync(); // Already did existence check
@@ -107,10 +107,10 @@ public class HcimReEnrolment
                 return DomainResult.Failed<Model>();
             }
 
-            this.context.HcimReEnrolmentAccessRequests.Add(new HcimReEnrolmentAccessRequest
+            this.context.HcimAccountTransfers.Add(new Models.HcimAccountTransfer
             {
                 PartyId = command.PartyId,
-                AccessType = AccessType.HcimReEnrolment,
+                AccessType = AccessType.HcimAccountTransfer,
                 RequestedOn = this.clock.GetCurrentInstant(),
                 LdapUsername = command.LdapUsername
             });
