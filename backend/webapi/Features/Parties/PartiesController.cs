@@ -1,6 +1,5 @@
 namespace Pidp.Features.Parties;
 
-using DomainResults.Common;
 using DomainResults.Mvc;
 using HybridModelBinding;
 using Microsoft.AspNetCore.Authorization;
@@ -33,7 +32,7 @@ public class PartiesController : PidpControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<CollegeCertification.Command>> GetPartyCollegeCertification([FromServices] IQueryHandler<CollegeCertification.Query, IDomainResult<CollegeCertification.Command>> handler,
+    public async Task<ActionResult<CollegeCertification.Command>> GetPartyCollegeCertification([FromServices] IQueryHandler<CollegeCertification.Query, CollegeCertification.Command> handler,
                                                                                                [FromRoute] CollegeCertification.Query query)
         => await this.AuthorizePartyBeforeHandleAsync(query.PartyId, handler, query)
             .ToActionResultOfT();
@@ -42,7 +41,7 @@ public class PartiesController : PidpControllerBase
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> UpdatePartyCollegeCertification([FromServices] ICommandHandler<CollegeCertification.Command, IDomainResult> handler,
+    public async Task<IActionResult> UpdatePartyCollegeCertification([FromServices] ICommandHandler<CollegeCertification.Command> handler,
                                                                      [FromHybrid] CollegeCertification.Command command)
         => await this.AuthorizePartyBeforeHandleAsync(command.PartyId, handler, command)
             .ToActionResult();
@@ -51,7 +50,7 @@ public class PartiesController : PidpControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<Demographics.Command>> GetPartyDemographics([FromServices] IQueryHandler<Demographics.Query, IDomainResult<Demographics.Command>> handler,
+    public async Task<ActionResult<Demographics.Command>> GetPartyDemographics([FromServices] IQueryHandler<Demographics.Query, Demographics.Command> handler,
                                                                                [FromRoute] Demographics.Query query)
         => await this.AuthorizePartyBeforeHandleAsync(query.Id, handler, query)
             .ToActionResultOfT();
@@ -60,7 +59,7 @@ public class PartiesController : PidpControllerBase
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> UpdatePartyDemographics([FromServices] ICommandHandler<Demographics.Command, IDomainResult> handler,
+    public async Task<IActionResult> UpdatePartyDemographics([FromServices] ICommandHandler<Demographics.Command> handler,
                                                              [FromHybrid] Demographics.Command command)
         => await this.AuthorizePartyBeforeHandleAsync(command.Id, handler, command)
             .ToActionResult();
@@ -69,7 +68,7 @@ public class PartiesController : PidpControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<ProfileStatus.Model>> ComputePartyProfileStatus([FromServices] ICommandHandler<ProfileStatus.Command, IDomainResult<ProfileStatus.Model>> handler,
+    public async Task<ActionResult<ProfileStatus.Model>> ComputePartyProfileStatus([FromServices] ICommandHandler<ProfileStatus.Command, ProfileStatus.Model> handler,
                                                                                    [FromRoute] ProfileStatus.Command command)
         => await this.AuthorizePartyBeforeHandleAsync(command.Id, handler, command.WithUser(this.User))
             .ToActionResultOfT();
@@ -78,7 +77,7 @@ public class PartiesController : PidpControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<WorkSetting.Command>> GetPartyWorkSetting([FromServices] IQueryHandler<WorkSetting.Query, IDomainResult<WorkSetting.Command>> handler,
+    public async Task<ActionResult<WorkSetting.Command>> GetPartyWorkSetting([FromServices] IQueryHandler<WorkSetting.Query, WorkSetting.Command> handler,
                                                                              [FromRoute] WorkSetting.Query query)
         => await this.AuthorizePartyBeforeHandleAsync(query.Id, handler, query)
             .ToActionResultOfT();
@@ -87,7 +86,7 @@ public class PartiesController : PidpControllerBase
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> UpdatePartyWorkSetting([FromServices] ICommandHandler<WorkSetting.Command, IDomainResult> handler,
+    public async Task<IActionResult> UpdatePartyWorkSetting([FromServices] ICommandHandler<WorkSetting.Command> handler,
                                                             [FromHybrid] WorkSetting.Command command)
         => await this.AuthorizePartyBeforeHandleAsync(command.Id, handler, command)
             .ToActionResult();
