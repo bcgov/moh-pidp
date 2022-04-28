@@ -57,8 +57,8 @@ export class PortalStateBuilder {
     };
   }
 
-  // TODO see where the next enrolments lead and then split these methods
-  // for building out the portal state into own classes, but premature
+  // TODO see where the next enrolments lead and then drop these methods
+  // for building out the portal state and create classes, but premature
   // optimization until more is known
 
   private createProfileGroup(profileStatus: ProfileStatus): IPortalSection[] {

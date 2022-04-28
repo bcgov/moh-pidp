@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 
 import { Observable, map } from 'rxjs';
 
@@ -21,7 +21,6 @@ import { PortalState } from './state/portal-state.builder';
   styleUrls: ['./portal.page.scss'],
 })
 export class PortalPage implements OnInit {
-  public title: string;
   public state$: Observable<PortalState>;
   public completedProfile: boolean;
   public alerts: ProfileStatusAlert[];
@@ -30,13 +29,11 @@ export class PortalPage implements OnInit {
   public Role = Role;
 
   public constructor(
-    private route: ActivatedRoute,
     private router: Router,
     private partyService: PartyService,
     private portalResource: PortalResource,
     private portalService: PortalService
   ) {
-    this.title = this.route.snapshot.data.title;
     this.state$ = this.portalService.state$;
     this.completedProfile = false;
     this.alerts = [];
