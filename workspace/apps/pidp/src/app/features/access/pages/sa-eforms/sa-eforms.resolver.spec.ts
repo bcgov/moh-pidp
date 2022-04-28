@@ -14,7 +14,7 @@ import { Spy, createSpyFromClass, provideAutoSpy } from 'jest-auto-spies';
 
 import { PartyService } from '@app/core/party/party.service';
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
-import { ProfileStatus } from '@app/features/portal/sections/models/profile-status.model';
+import { ProfileStatus } from '@app/features/portal/models/profile-status.model';
 
 import { SaEformsResource } from './sa-eforms-resource.service';
 import { SaEformsResolver } from './sa-eforms.resolver';

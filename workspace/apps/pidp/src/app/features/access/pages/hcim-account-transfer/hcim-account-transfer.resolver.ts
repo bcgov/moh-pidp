@@ -5,7 +5,7 @@ import { Observable, catchError, map, of } from 'rxjs';
 
 import { PartyService } from '@app/core/party/party.service';
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
-import { ProfileStatus } from '@app/features/portal/sections/models/profile-status.model';
+import { ProfileStatus } from '@app/features/portal/models/profile-status.model';
 
 import { HcimAccountTransferResource } from './hcim-account-transfer-resource.service';
 

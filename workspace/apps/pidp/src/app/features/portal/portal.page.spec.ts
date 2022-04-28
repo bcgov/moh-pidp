@@ -24,11 +24,11 @@ import { DocumentService } from '@app/core/services/document.service';
 
 import { AlertCode } from './enums/alert-code.enum';
 import { StatusCode } from './enums/status-code.enum';
+import { ProfileStatus } from './models/profile-status.model';
 import { PortalResource } from './portal-resource.service';
 import { PortalPage } from './portal.page';
 import { PortalService } from './portal.service';
-import { IPortalSection } from './sections/classes';
-import { ProfileStatus } from './sections/models/profile-status.model';
+import { IPortalSection } from './state/portal-section.model';
 
 describe('PortalPage', () => {
   let component: PortalPage;

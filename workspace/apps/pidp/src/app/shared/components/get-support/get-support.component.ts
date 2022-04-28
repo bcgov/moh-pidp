@@ -11,9 +11,9 @@ import {
 import { ArrayUtils } from '@bcgov/shared/utils';
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';
-import { AccessSectionStatus } from '@app/features/portal/sections/models/access-status.model';
+import { AccessGroup } from '@app/features/portal/state/access/access-group.model';
 
-export type SupportProvided = keyof AccessSectionStatus;
+export type SupportProvided = keyof AccessGroup;
 
 interface SupportProps {
   name: string;

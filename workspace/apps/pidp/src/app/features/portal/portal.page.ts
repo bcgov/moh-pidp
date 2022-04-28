@@ -7,11 +7,12 @@ import { PartyService } from '@app/core/party/party.service';
 import { SupportProvided } from '@app/shared/components/get-support/get-support.component';
 import { Role } from '@app/shared/enums/roles.enum';
 
+import { ProfileStatusAlert } from './models/profile-status-alert.model';
+import { ProfileStatus } from './models/profile-status.model';
 import { PortalResource } from './portal-resource.service';
 import { PortalService } from './portal.service';
-import { IPortalSection, PortalSectionStatusKey } from './sections/classes';
-import { ProfileStatusAlert } from './sections/models/profile-status-alert.model';
-import { ProfileStatus } from './sections/models/profile-status.model';
+import { PortalSectionStatusKey } from './state/portal-section-status-key.type';
+import { IPortalSection } from './state/portal-section.model';
 import { PortalState } from './state/portal-state.builder';
 
 @Component({

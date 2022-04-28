@@ -4,18 +4,16 @@ import { Observable } from 'rxjs';
 
 import { AlertType } from '@bcgov/shared/ui';
 
+import { AccessRoutes } from '@app/features/access/access.routes';
 import { ShellRoutes } from '@app/features/shell/shell.routes';
-import { TrainingRoutes } from '@app/features/training/training.routes';
 
 import { StatusCode } from '../../enums/status-code.enum';
-import { ProfileStatus } from '../models/profile-status.model';
-import {
-  IPortalSection,
-  PortalSectionAction,
-  PortalSectionKey,
-} from './portal-section.class';
+import { ProfileStatus } from '../../models/profile-status.model';
+import { PortalSectionAction } from '../portal-section-action.model';
+import { PortalSectionKey } from '../portal-section-key.type';
+import { IPortalSection } from '../portal-section.model';
 
-export class ComplianceTrainingPortalSection implements IPortalSection {
+export class HcimEnrolmentPortalSection implements IPortalSection {
   public readonly key: PortalSectionKey;
   public heading: string;
   public description: string;
@@ -24,13 +22,14 @@ export class ComplianceTrainingPortalSection implements IPortalSection {
     private profileStatus: ProfileStatus,
     private router: Router
   ) {
-    this.key = 'complianceTraining';
-    this.heading = 'Compliance Training Video';
-    this.description = `Description of the training provided by the video.`;
+    this.key = 'hcimEnrolment';
+    this.heading = 'HCIMWeb Enrolment';
+    this.description =
+      'First time users enrol here for access to the HCIMWeb application.';
   }
 
   public get hint(): string {
-    return '15 min to complete';
+    return '3 min to complete';
   }
 
   /**
@@ -38,10 +37,12 @@ export class ComplianceTrainingPortalSection implements IPortalSection {
    * Get the properties that define the action on the section.
    */
   public get action(): PortalSectionAction {
+    const demographicsStatusCode =
+      this.profileStatus.status.demographics.statusCode;
     return {
-      label: this.getStatusCode() === StatusCode.COMPLETED ? 'View' : 'Watch',
-      route: TrainingRoutes.routePath(TrainingRoutes.COMPLIANCE_TRAINING_PAGE),
-      disabled: false,
+      label: 'Request',
+      route: AccessRoutes.routePath(AccessRoutes.HCIM_ENROLMENT_PAGE),
+      disabled: demographicsStatusCode !== StatusCode.COMPLETED,
     };
   }
 
@@ -54,12 +55,12 @@ export class ComplianceTrainingPortalSection implements IPortalSection {
     return statusCode === StatusCode.COMPLETED ? 'Completed' : 'Incomplete';
   }
 
-  public performAction(): Observable<void> | void {
+  public performAction(): void | Observable<void> {
     this.router.navigate([ShellRoutes.routePath(this.action.route)]);
   }
 
   private getStatusCode(): StatusCode {
     // TODO remove null check once API exists
-    return this.profileStatus.status.complianceTraining?.statusCode;
+    return this.profileStatus.status.hcimEnrolment?.statusCode;
   }
 }

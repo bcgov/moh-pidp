@@ -6,21 +6,19 @@ import { PermissionsService } from '@app/modules/permissions/permissions.service
 import { Role } from '@app/shared/enums/roles.enum';
 
 import { StatusCode } from '../enums/status-code.enum';
-import {
-  CollegeCertificationPortalSection,
-  ComplianceTrainingPortalSection,
-  DemographicsPortalSection,
-  HcimAccountTransferPortalSection,
-  HcimEnrolmentPortalSection,
-  IPortalSection,
-  PortalSectionStatusKey,
-  SaEformsPortalSection,
-  SignedAcceptedDocumentsPortalSection,
-} from '../sections/classes';
-import { SitePrivacySecurityPortalSection } from '../sections/classes/site-privacy-security-checklist-portal-section.class';
-import { TransactionsPortalSection } from '../sections/classes/transactions-portal-section.class';
-import { UserAccessAgreementPortalSection } from '../sections/classes/user-access-agreement-portal-section.class';
-import { ProfileStatus } from '../sections/models/profile-status.model';
+import { ProfileStatus } from '../models/profile-status.model';
+import { HcimAccountTransferPortalSection } from './access/hcim-account-transfer-portal-section.class';
+import { HcimEnrolmentPortalSection } from './access/hcim-enrolment-portal-section.class';
+import { SaEformsPortalSection } from './access/sa-eforms-portal-section.class';
+import { SitePrivacySecurityPortalSection } from './access/site-privacy-security-checklist-portal-section.class';
+import { SignedAcceptedDocumentsPortalSection } from './documents/signed-accepted-documents-portal-section.class';
+import { TransactionsPortalSection } from './documents/transactions-portal-section.class';
+import { PortalSectionStatusKey } from './portal-section-status-key.type';
+import { IPortalSection } from './portal-section.model';
+import { CollegeCertificationPortalSection } from './profile/college-certification-portal-section.class';
+import { DemographicsPortalSection } from './profile/demographics-portal-section.class';
+import { UserAccessAgreementPortalSection } from './profile/user-access-agreement-portal-section.class';
+import { ComplianceTrainingPortalSection } from './training/compliance-training-portal-section.class';
 
 /**
  * @description
@@ -52,16 +50,15 @@ export class PortalStateBuilder {
     profileStatus: ProfileStatus
   ): Record<PortalStateGroupKey, IPortalSection[]> {
     return {
-      profile: this.getProfileIdentitySections(profileStatus),
-      access: this.getAccessSystemsSections(profileStatus),
-      training: this.getTrainingSections(profileStatus),
-      documents: this.getDocumentsSections(),
+      profile: this.createProfileGroup(profileStatus),
+      access: this.createAccessGroup(profileStatus),
+      training: this.createTrainingGroup(profileStatus),
+      documents: this.createDocumentsGroup(),
     };
   }
 
-  private getProfileIdentitySections(
-    profileStatus: ProfileStatus
-  ): IPortalSection[] {
+  // TODO build out each group separately in own file
+  private createProfileGroup(profileStatus: ProfileStatus): IPortalSection[] {
     return [
       new DemographicsPortalSection(profileStatus, this.router),
       ...ArrayUtils.insertResultIf<IPortalSection>(
@@ -81,9 +78,8 @@ export class PortalStateBuilder {
     ];
   }
 
-  private getAccessSystemsSections(
-    profileStatus: ProfileStatus
-  ): IPortalSection[] {
+  // TODO build out each group separately in own file
+  private createAccessGroup(profileStatus: ProfileStatus): IPortalSection[] {
     return [
       ...ArrayUtils.insertResultIf<IPortalSection>(
         this.insertSection('saEforms', profileStatus),
@@ -108,7 +104,8 @@ export class PortalStateBuilder {
     ];
   }
 
-  private getTrainingSections(profileStatus: ProfileStatus): IPortalSection[] {
+  // TODO build out each group separately in own file
+  private createTrainingGroup(profileStatus: ProfileStatus): IPortalSection[] {
     return [
       ...ArrayUtils.insertResultIf<IPortalSection>(
         this.permissionsService.hasRole([
@@ -120,7 +117,8 @@ export class PortalStateBuilder {
     ];
   }
 
-  private getDocumentsSections(): IPortalSection[] {
+  // TODO build out each group separately in own file
+  private createDocumentsGroup(): IPortalSection[] {
     return [
       new SignedAcceptedDocumentsPortalSection(this.router),
       ...ArrayUtils.insertResultIf<IPortalSection>(

@@ -7,9 +7,9 @@ import { PermissionsService } from '@app/modules/permissions/permissions.service
 
 import { AlertCode } from './enums/alert-code.enum';
 import { StatusCode } from './enums/status-code.enum';
-import { PortalSectionStatusKey } from './sections/classes';
-import { ProfileStatusAlert } from './sections/models/profile-status-alert.model';
-import { ProfileStatus } from './sections/models/profile-status.model';
+import { ProfileStatusAlert } from './models/profile-status-alert.model';
+import { ProfileStatus } from './models/profile-status.model';
+import { PortalSectionStatusKey } from './state/portal-section-status-key.type';
 import { PortalState, PortalStateBuilder } from './state/portal-state.builder';
 
 @Injectable({

@@ -6,8 +6,8 @@ import { Observable, catchError, map, of, throwError } from 'rxjs';
 import { NoContent } from '@bcgov/shared/data-access';
 
 import { ApiHttpClient } from '@app/core/resources/api-http-client.service';
+import { ProfileStatus } from '@app/features/portal/models/profile-status.model';
 import { PortalResource } from '@app/features/portal/portal-resource.service';
-import { ProfileStatus } from '@app/features/portal/sections/models/profile-status.model';
 
 import { HcimAccountTransfer } from './hcim-account-transfer.model';
 

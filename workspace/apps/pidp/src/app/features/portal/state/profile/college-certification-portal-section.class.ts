@@ -8,16 +8,12 @@ import { ProfileRoutes } from '@app/features/profile/profile.routes';
 import { ShellRoutes } from '@app/features/shell/shell.routes';
 
 import { StatusCode } from '../../enums/status-code.enum';
-import {
-  CollegeCertificationSection,
-  ProfileStatus,
-} from '../models/profile-status.model';
-import {
-  IPortalSection,
-  PortalSectionAction,
-  PortalSectionKey,
-  PortalSectionProperty,
-} from './portal-section.class';
+import { ProfileStatus } from '../../models/profile-status.model';
+import { PortalSectionAction } from '../portal-section-action.model';
+import { PortalSectionKey } from '../portal-section-key.type';
+import { PortalSectionProperty } from '../portal-section-property.model';
+import { IPortalSection } from '../portal-section.model';
+import { CollegeCertificationSection } from './college-certification-section.model';
 
 export class CollegeCertificationPortalSection implements IPortalSection {
   public readonly key: PortalSectionKey;

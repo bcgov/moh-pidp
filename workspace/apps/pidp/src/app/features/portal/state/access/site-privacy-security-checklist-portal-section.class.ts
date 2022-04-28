@@ -8,12 +8,10 @@ import { AccessRoutes } from '@app/features/access/access.routes';
 import { ShellRoutes } from '@app/features/shell/shell.routes';
 
 import { StatusCode } from '../../enums/status-code.enum';
-import { ProfileStatus } from '../models/profile-status.model';
-import {
-  IPortalSection,
-  PortalSectionAction,
-  PortalSectionKey,
-} from './portal-section.class';
+import { ProfileStatus } from '../../models/profile-status.model';
+import { PortalSectionAction } from '../portal-section-action.model';
+import { PortalSectionKey } from '../portal-section-key.type';
+import { IPortalSection } from '../portal-section.model';
 
 export class SitePrivacySecurityPortalSection implements IPortalSection {
   public readonly key: PortalSectionKey;

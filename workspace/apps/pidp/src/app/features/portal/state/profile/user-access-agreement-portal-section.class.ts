@@ -4,18 +4,16 @@ import { Observable } from 'rxjs';
 
 import { AlertType } from '@bcgov/shared/ui';
 
-import { AccessRoutes } from '@app/features/access/access.routes';
+import { ProfileRoutes } from '@app/features/profile/profile.routes';
 import { ShellRoutes } from '@app/features/shell/shell.routes';
 
 import { StatusCode } from '../../enums/status-code.enum';
-import { ProfileStatus } from '../models/profile-status.model';
-import {
-  IPortalSection,
-  PortalSectionAction,
-  PortalSectionKey,
-} from './portal-section.class';
+import { ProfileStatus } from '../../models/profile-status.model';
+import { PortalSectionAction } from '../portal-section-action.model';
+import { PortalSectionKey } from '../portal-section-key.type';
+import { IPortalSection } from '../portal-section.model';
 
-export class HcimEnrolmentPortalSection implements IPortalSection {
+export class UserAccessAgreementPortalSection implements IPortalSection {
   public readonly key: PortalSectionKey;
   public heading: string;
   public description: string;
@@ -24,14 +22,13 @@ export class HcimEnrolmentPortalSection implements IPortalSection {
     private profileStatus: ProfileStatus,
     private router: Router
   ) {
-    this.key = 'hcimEnrolment';
-    this.heading = 'HCIMWeb Enrolment';
-    this.description =
-      'First time users enrol here for access to the HCIMWeb application.';
+    this.key = 'userAccessAgreement';
+    this.heading = 'Access Model Harmonization UAA';
+    this.description = `Sign and agree to the user access agreement.`;
   }
 
   public get hint(): string {
-    return '3 min to complete';
+    return '13 min to complete';
   }
 
   /**
@@ -42,9 +39,11 @@ export class HcimEnrolmentPortalSection implements IPortalSection {
     const demographicsStatusCode =
       this.profileStatus.status.demographics.statusCode;
     return {
-      label: 'Request',
-      route: AccessRoutes.routePath(AccessRoutes.HCIM_ENROLMENT_PAGE),
-      disabled: demographicsStatusCode !== StatusCode.COMPLETED,
+      label: this.getStatusCode() === StatusCode.COMPLETED ? 'View' : 'Update',
+      route: ProfileRoutes.routePath(ProfileRoutes.USER_ACCESS_AGREEMENT_PAGE),
+      disabled:
+        demographicsStatusCode !== StatusCode.COMPLETED ||
+        this.getStatusCode() === StatusCode.NOT_AVAILABLE,
     };
   }
 
@@ -57,12 +56,12 @@ export class HcimEnrolmentPortalSection implements IPortalSection {
     return statusCode === StatusCode.COMPLETED ? 'Completed' : 'Incomplete';
   }
 
-  public performAction(): void | Observable<void> {
+  public performAction(): Observable<void> | void {
     this.router.navigate([ShellRoutes.routePath(this.action.route)]);
   }
 
   private getStatusCode(): StatusCode {
     // TODO remove null check once API exists
-    return this.profileStatus.status.hcimEnrolment?.statusCode;
+    return this.profileStatus.status.userAccessAgreement?.statusCode;
   }
 }
