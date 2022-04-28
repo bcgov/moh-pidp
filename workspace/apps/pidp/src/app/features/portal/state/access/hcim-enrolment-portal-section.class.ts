@@ -8,17 +8,13 @@ import { AccessRoutes } from '@app/features/access/access.routes';
 import { ShellRoutes } from '@app/features/shell/shell.routes';
 
 import { StatusCode } from '../../enums/status-code.enum';
-import { ProfileStatus } from '../models/profile-status.model';
-import {
-  IPortalSection,
-  PortalSectionAction,
-  PortalSectionKey,
-  PortalSectionType,
-} from './portal-section.class';
+import { ProfileStatus } from '../../models/profile-status.model';
+import { PortalSectionAction } from '../portal-section-action.model';
+import { PortalSectionKey } from '../portal-section-key.type';
+import { IPortalSection } from '../portal-section.model';
 
 export class HcimEnrolmentPortalSection implements IPortalSection {
   public readonly key: PortalSectionKey;
-  public type: PortalSectionType;
   public heading: string;
   public description: string;
 
@@ -27,10 +23,9 @@ export class HcimEnrolmentPortalSection implements IPortalSection {
     private router: Router
   ) {
     this.key = 'hcimEnrolment';
-    this.type = 'access';
     this.heading = 'HCIMWeb Enrolment';
     this.description =
-      'First time users enrol here for access to the HCIMWeb application';
+      'First time users enrol here for access to the HCIMWeb application.';
   }
 
   public get hint(): string {

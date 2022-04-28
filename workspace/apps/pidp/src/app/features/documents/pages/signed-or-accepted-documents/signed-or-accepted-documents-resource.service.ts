@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 
 import { Observable } from 'rxjs';
 
+import { ProfileStatus } from '@app/features/portal/models/profile-status.model';
 import { PortalResource } from '@app/features/portal/portal-resource.service';
-import { ProfileStatus } from '@app/features/portal/sections/models/profile-status.model';
 
 @Injectable({
   providedIn: 'root',

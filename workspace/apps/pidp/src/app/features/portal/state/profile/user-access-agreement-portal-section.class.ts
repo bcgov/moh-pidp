@@ -8,17 +8,13 @@ import { ProfileRoutes } from '@app/features/profile/profile.routes';
 import { ShellRoutes } from '@app/features/shell/shell.routes';
 
 import { StatusCode } from '../../enums/status-code.enum';
-import { ProfileStatus } from '../models/profile-status.model';
-import {
-  IPortalSection,
-  PortalSectionAction,
-  PortalSectionKey,
-  PortalSectionType,
-} from './portal-section.class';
+import { ProfileStatus } from '../../models/profile-status.model';
+import { PortalSectionAction } from '../portal-section-action.model';
+import { PortalSectionKey } from '../portal-section-key.type';
+import { IPortalSection } from '../portal-section.model';
 
 export class UserAccessAgreementPortalSection implements IPortalSection {
   public readonly key: PortalSectionKey;
-  public type: PortalSectionType;
   public heading: string;
   public description: string;
 
@@ -27,7 +23,6 @@ export class UserAccessAgreementPortalSection implements IPortalSection {
     private router: Router
   ) {
     this.key = 'userAccessAgreement';
-    this.type = 'profile';
     this.heading = 'Access Model Harmonization UAA';
     this.description = `Sign and agree to the user access agreement.`;
   }
@@ -66,7 +61,7 @@ export class UserAccessAgreementPortalSection implements IPortalSection {
   }
 
   private getStatusCode(): StatusCode {
-    // TODO when provided by API remove null check
+    // TODO remove null check once API exists
     return this.profileStatus.status.userAccessAgreement?.statusCode;
   }
 }

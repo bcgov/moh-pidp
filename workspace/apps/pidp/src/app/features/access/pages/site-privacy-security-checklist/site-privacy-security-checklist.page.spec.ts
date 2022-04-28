@@ -8,15 +8,17 @@ import { SitePrivacySecurityChecklistPage } from './site-privacy-security-checkl
 describe('SitePrivacySecurityChecklistPage', () => {
   let component: SitePrivacySecurityChecklistPage;
 
-  const mockActivatedRoute = {
-    snapshot: {
-      data: {
-        title: randTextRange({ min: 1, max: 4 }),
-      },
-    },
-  };
+  let mockActivatedRoute;
 
   beforeEach(() => {
+    mockActivatedRoute = {
+      snapshot: {
+        data: {
+          title: randTextRange({ min: 1, max: 4 }),
+        },
+      },
+    };
+
     TestBed.configureTestingModule({
       providers: [
         SitePrivacySecurityChecklistPage,

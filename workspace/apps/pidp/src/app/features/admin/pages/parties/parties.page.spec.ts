@@ -10,18 +10,20 @@ import { PartiesPage } from './parties.page';
 describe('PartiesComponent', () => {
   let component: PartiesPage;
 
-  const mockActivatedRoute = {
-    snapshot: {
-      data: {
-        title: randTextRange({ min: 1, max: 4 }),
-        routes: {
-          auth: '/auth/admin',
+  let mockActivatedRoute;
+
+  beforeEach(() => {
+    mockActivatedRoute = {
+      snapshot: {
+        data: {
+          title: randTextRange({ min: 1, max: 4 }),
+          routes: {
+            auth: '/auth/admin',
+          },
         },
       },
-    },
-  };
+    };
 
-  beforeEach(async () => {
     TestBed.configureTestingModule({
       providers: [
         PartiesPage,

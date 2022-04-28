@@ -83,7 +83,7 @@ public partial class ProfileStatus
 
         public class HcimAccountTransfer : ProfileSection
         {
-            internal override string SectionName => "hcim";
+            internal override string SectionName => "hcimAccountTransfer";
 
             public HcimAccountTransfer(ProfileStatusDto profile) : base(profile) { }
 

@@ -5,22 +5,17 @@ import { Observable } from 'rxjs';
 import { DocumentsRoutes } from '@app/features/documents/documents.routes';
 import { ShellRoutes } from '@app/features/shell/shell.routes';
 
-import {
-  IPortalSection,
-  PortalSectionAction,
-  PortalSectionKey,
-  PortalSectionType,
-} from './portal-section.class';
+import { PortalSectionAction } from '../portal-section-action.model';
+import { PortalSectionKey } from '../portal-section-key.type';
+import { IPortalSection } from '../portal-section.model';
 
 export class SignedAcceptedDocumentsPortalSection implements IPortalSection {
   public readonly key: PortalSectionKey;
-  public type: PortalSectionType;
   public heading: string;
   public description: string;
 
   public constructor(private router: Router) {
     this.key = 'signedAcceptedDocuments';
-    this.type = 'documents';
     this.heading = 'View Signed or Accepted Documents';
     this.description = 'View Agreement(s)';
   }

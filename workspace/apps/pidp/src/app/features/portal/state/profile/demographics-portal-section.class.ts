@@ -8,21 +8,15 @@ import { ProfileRoutes } from '@app/features/profile/profile.routes';
 import { ShellRoutes } from '@app/features/shell/shell.routes';
 
 import { StatusCode } from '../../enums/status-code.enum';
-import {
-  DemographicsSection,
-  ProfileStatus,
-} from '../models/profile-status.model';
-import {
-  IPortalSection,
-  PortalSectionAction,
-  PortalSectionKey,
-  PortalSectionProperty,
-  PortalSectionType,
-} from './portal-section.class';
+import { ProfileStatus } from '../../models/profile-status.model';
+import { PortalSectionAction } from '../portal-section-action.model';
+import { PortalSectionKey } from '../portal-section-key.type';
+import { PortalSectionProperty } from '../portal-section-property.model';
+import { IPortalSection } from '../portal-section.model';
+import { DemographicsSection } from './demographic-section.model';
 
 export class DemographicsPortalSection implements IPortalSection {
   public readonly key: PortalSectionKey;
-  public type: PortalSectionType;
   public heading: string;
   public description: string;
 
@@ -31,7 +25,6 @@ export class DemographicsPortalSection implements IPortalSection {
     private router: Router
   ) {
     this.key = 'demographics';
-    this.type = 'profile';
     this.heading = 'Personal Information';
     this.description = 'Provide personal and contact information.';
   }

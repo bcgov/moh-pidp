@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 
 import { Observable, map } from 'rxjs';
 
@@ -7,11 +7,13 @@ import { PartyService } from '@app/core/party/party.service';
 import { SupportProvided } from '@app/shared/components/get-support/get-support.component';
 import { Role } from '@app/shared/enums/roles.enum';
 
+import { ProfileStatusAlert } from './models/profile-status-alert.model';
+import { ProfileStatus } from './models/profile-status.model';
 import { PortalResource } from './portal-resource.service';
 import { PortalService } from './portal.service';
-import { IPortalSection } from './sections/classes';
-import { ProfileStatusAlert } from './sections/models/profile-status-alert.model';
-import { ProfileStatus } from './sections/models/profile-status.model';
+import { PortalSectionStatusKey } from './state/portal-section-status-key.type';
+import { IPortalSection } from './state/portal-section.model';
+import { PortalState } from './state/portal-state.builder';
 
 @Component({
   selector: 'app-portal',
@@ -19,8 +21,7 @@ import { ProfileStatus } from './sections/models/profile-status.model';
   styleUrls: ['./portal.page.scss'],
 })
 export class PortalPage implements OnInit {
-  public title: string;
-  public state$: Observable<Record<string, IPortalSection[]>>;
+  public state$: Observable<PortalState>;
   public completedProfile: boolean;
   public alerts: ProfileStatusAlert[];
   public hiddenSupport: SupportProvided[];
@@ -28,13 +29,11 @@ export class PortalPage implements OnInit {
   public Role = Role;
 
   public constructor(
-    private route: ActivatedRoute,
     private router: Router,
     private partyService: PartyService,
     private portalResource: PortalResource,
     private portalService: PortalService
   ) {
-    this.title = this.route.snapshot.data.title;
     this.state$ = this.portalService.state$;
     this.completedProfile = false;
     this.alerts = [];
@@ -60,8 +59,12 @@ export class PortalPage implements OnInit {
           this.portalService.updateState(profileStatus);
           this.completedProfile = this.portalService.completedProfile;
           this.alerts = this.portalService.alerts;
+          const filter: PortalSectionStatusKey[] = [
+            'saEforms',
+            'hcimAccountTransfer',
+          ];
           this.hiddenSupport = this.portalService.hiddenSections.filter(
-            (hiddenSection) => ['saEforms', 'hcim'].includes(hiddenSection)
+            (hiddenSection) => filter.includes(hiddenSection)
           ) as SupportProvided[];
         })
       )

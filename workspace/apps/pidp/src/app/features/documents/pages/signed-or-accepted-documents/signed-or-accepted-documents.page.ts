@@ -13,7 +13,7 @@ import {
 import { IdentityProvider } from '@app/features/auth/enums/identity-provider.enum';
 import { AuthorizedUserService } from '@app/features/auth/services/authorized-user.service';
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
-import { ProfileStatus } from '@app/features/portal/sections/models/profile-status.model';
+import { ProfileStatus } from '@app/features/portal/models/profile-status.model';
 
 import { DocumentsRoutes } from '../../documents.routes';
 import { SignedOrAcceptedDocumentsResource } from './signed-or-accepted-documents-resource.service';
