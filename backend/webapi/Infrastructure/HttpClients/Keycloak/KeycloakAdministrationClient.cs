@@ -18,6 +18,11 @@ public class KeycloakAdministrationClient : BaseClient, IKeycloakAdministrationC
 
         // Keycloak expects an array of roles.
         var result = await this.PostAsync($"users/{userId}/role-mappings/clients/{role.ContainerId}", new[] { role });
+        if (result.IsSuccess)
+        {
+            this.Logger.LogClientRoleAssigned(userId, clientId, roleName);
+        }
+
         return result.IsSuccess;
     }
 
@@ -32,6 +37,11 @@ public class KeycloakAdministrationClient : BaseClient, IKeycloakAdministrationC
 
         // Keycloak expects an array of roles.
         var response = await this.PostAsync($"users/{userId}/role-mappings/realm", new[] { role });
+        if (response.IsSuccess)
+        {
+            this.Logger.LogRealmRoleAssigned(userId, roleName);
+        }
+
         return response.IsSuccess;
     }
 
@@ -74,7 +84,7 @@ public class KeycloakAdministrationClient : BaseClient, IKeycloakAdministrationC
 
         if (role == null)
         {
-            this.Logger.LogClientRoleNotFound(roleName, clientId);
+            this.Logger.LogClientRoleNotFound(clientId, roleName);
         }
 
         return role;
@@ -129,5 +139,11 @@ public static partial class KeycloakAdministrationClientLoggingExtensions
     public static partial void LogClientNotFound(this ILogger logger, string clientId);
 
     [LoggerMessage(2, LogLevel.Error, "Could not find a Client Role with name {roleName} from Client {clientId} in Keycloak response.")]
-    public static partial void LogClientRoleNotFound(this ILogger logger, string roleName, string clientId);
+    public static partial void LogClientRoleNotFound(this ILogger logger, string clientId, string roleName);
+
+    [LoggerMessage(3, LogLevel.Information, "User {userId} was assigned Role {roleName} in Client {clientId}.")]
+    public static partial void LogClientRoleAssigned(this ILogger logger, Guid userId, string clientId, string roleName);
+
+    [LoggerMessage(4, LogLevel.Information, "User {userId} was assigned Realm Role {roleName}.")]
+    public static partial void LogRealmRoleAssigned(this ILogger logger, Guid userId, string roleName);
 }
