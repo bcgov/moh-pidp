@@ -57,7 +57,10 @@ export class PortalStateBuilder {
     };
   }
 
-  // TODO build out each group separately in own file
+  // TODO see where the next enrolments lead and then split these methods
+  // for building out the portal state into own classes, but premature
+  // optimization until more is known
+
   private createProfileGroup(profileStatus: ProfileStatus): IPortalSection[] {
     return [
       new DemographicsPortalSection(profileStatus, this.router),
@@ -78,7 +81,6 @@ export class PortalStateBuilder {
     ];
   }
 
-  // TODO build out each group separately in own file
   private createAccessGroup(profileStatus: ProfileStatus): IPortalSection[] {
     return [
       ...ArrayUtils.insertResultIf<IPortalSection>(
@@ -104,7 +106,6 @@ export class PortalStateBuilder {
     ];
   }
 
-  // TODO build out each group separately in own file
   private createTrainingGroup(profileStatus: ProfileStatus): IPortalSection[] {
     return [
       ...ArrayUtils.insertResultIf<IPortalSection>(
@@ -117,7 +118,6 @@ export class PortalStateBuilder {
     ];
   }
 
-  // TODO build out each group separately in own file
   private createDocumentsGroup(): IPortalSection[] {
     return [
       new SignedAcceptedDocumentsPortalSection(this.router),
