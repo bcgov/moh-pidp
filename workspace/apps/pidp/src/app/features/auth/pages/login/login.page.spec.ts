@@ -15,17 +15,19 @@ import { LoginPage } from './login.page';
 describe('LoginPage', () => {
   let component: LoginPage;
 
-  const mockActivatedRoute = {
-    snapshot: {
-      queryParams: { action: '' },
-      data: {
-        title: randTextRange({ min: 1, max: 4 }),
-        idpHint: IdentityProvider.BCSC,
-      },
-    },
-  };
+  let mockActivatedRoute;
 
   beforeEach(() => {
+    mockActivatedRoute = {
+      snapshot: {
+        queryParams: { action: '' },
+        data: {
+          title: randTextRange({ min: 1, max: 4 }),
+          idpHint: IdentityProvider.BCSC,
+        },
+      },
+    };
+
     TestBed.configureTestingModule({
       imports: [MatDialogModule],
       providers: [

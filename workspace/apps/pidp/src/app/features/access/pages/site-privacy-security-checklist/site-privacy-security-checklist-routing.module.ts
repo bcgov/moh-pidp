@@ -9,6 +9,9 @@ const routes: Routes = [
     component: SitePrivacySecurityChecklistPage,
     data: {
       title: 'Provider Identity Portal',
+      routes: {
+        root: '../../',
+      },
     },
   },
 ];

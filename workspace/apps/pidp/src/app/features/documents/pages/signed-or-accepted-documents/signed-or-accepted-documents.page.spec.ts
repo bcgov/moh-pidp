@@ -13,18 +13,20 @@ import { SignedOrAcceptedDocumentsPage } from './signed-or-accepted-documents.pa
 describe('SignedOrAcceptedDocumentsPage', () => {
   let component: SignedOrAcceptedDocumentsPage;
 
-  const mockActivatedRoute = {
-    snapshot: {
-      data: {
-        title: randTextRange({ min: 1, max: 4 }),
-        routes: {
-          root: '../../',
-        },
-      },
-    },
-  };
+  let mockActivatedRoute;
 
   beforeEach(() => {
+    mockActivatedRoute = {
+      snapshot: {
+        data: {
+          title: randTextRange({ min: 1, max: 4 }),
+          routes: {
+            root: '../../',
+          },
+        },
+      },
+    };
+
     TestBed.configureTestingModule({
       imports: [RouterTestingModule],
       providers: [

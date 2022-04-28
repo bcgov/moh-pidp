@@ -24,10 +24,11 @@ import { DocumentService } from '@app/core/services/document.service';
 
 import { AlertCode } from './enums/alert-code.enum';
 import { StatusCode } from './enums/status-code.enum';
+import { ProfileStatus } from './models/profile-status.model';
 import { PortalResource } from './portal-resource.service';
 import { PortalPage } from './portal.page';
 import { PortalService } from './portal.service';
-import { IPortalSection } from './sections/classes';
+import { IPortalSection } from './state/portal-section.model';
 
 describe('PortalPage', () => {
   let component: PortalPage;
@@ -36,39 +37,18 @@ describe('PortalPage', () => {
   let portalServiceSpy: Spy<PortalService>;
   let router: Router;
 
-  const mockActivatedRoute = {
-    snapshot: {
-      data: {
-        title: randTextRange({ min: 1, max: 4 }),
-      },
-    },
-  };
-
-  const mockProfileStatusResponse = {
-    alerts: [AlertCode.TRANSIENT_ERROR],
-    status: {
-      demographics: {
-        firstName: randFirstName(),
-        lastName: randLastName(),
-        email: randEmail(),
-        phone: randPhoneNumber(),
-        statusCode: StatusCode.AVAILABLE,
-      },
-      collegeCertification: {
-        collegeCode: randNumber(),
-        licenceNumber: randText(),
-        statusCode: StatusCode.AVAILABLE,
-      },
-      userAccessAgreement: { statusCode: StatusCode.AVAILABLE },
-      saEforms: { statusCode: StatusCode.AVAILABLE },
-      hcim: { statusCode: StatusCode.AVAILABLE },
-      sitePrivacySecurityChecklist: { statusCode: StatusCode.AVAILABLE },
-      complianceTraining: { statusCode: StatusCode.AVAILABLE },
-      transactions: { statusCode: StatusCode.AVAILABLE },
-    },
-  };
+  let mockActivatedRoute;
+  let mockProfileStatusResponse: ProfileStatus;
 
   beforeEach(() => {
+    mockActivatedRoute = {
+      snapshot: {
+        data: {
+          title: randTextRange({ min: 1, max: 4 }),
+        },
+      },
+    };
+
     TestBed.configureTestingModule({
       providers: [
         PortalPage,
@@ -106,6 +86,30 @@ describe('PortalPage', () => {
     portalResourceSpy = TestBed.inject<any>(PortalResource);
     portalServiceSpy = TestBed.inject<any>(PortalService);
     router = TestBed.inject(Router);
+
+    mockProfileStatusResponse = {
+      alerts: [AlertCode.TRANSIENT_ERROR],
+      status: {
+        demographics: {
+          firstName: randFirstName(),
+          lastName: randLastName(),
+          email: randEmail(),
+          phone: randPhoneNumber(),
+          statusCode: StatusCode.AVAILABLE,
+        },
+        collegeCertification: {
+          collegeCode: randNumber(),
+          licenceNumber: randText(),
+          statusCode: StatusCode.AVAILABLE,
+        },
+        userAccessAgreement: { statusCode: StatusCode.AVAILABLE },
+        saEforms: { statusCode: StatusCode.AVAILABLE },
+        hcimAccountTransfer: { statusCode: StatusCode.AVAILABLE },
+        hcimEnrolment: { statusCode: StatusCode.AVAILABLE },
+        sitePrivacySecurityChecklist: { statusCode: StatusCode.AVAILABLE },
+        complianceTraining: { statusCode: StatusCode.AVAILABLE },
+      },
+    };
   });
 
   describe('INIT', () => {
@@ -175,7 +179,6 @@ describe('PortalPage', () => {
 
         const section = {
           key: 'demographics',
-          type: 'profile',
           heading: randText(),
           hint: randText(),
           description: randText(),

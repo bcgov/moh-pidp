@@ -14,7 +14,7 @@ import { Spy, createSpyFromClass, provideAutoSpy } from 'jest-auto-spies';
 
 import { PartyService } from '@app/core/party/party.service';
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
-import { ProfileStatus } from '@app/features/portal/sections/models/profile-status.model';
+import { ProfileStatus } from '@app/features/portal/models/profile-status.model';
 
 import { SaEformsResource } from './sa-eforms-resource.service';
 import { SaEformsResolver } from './sa-eforms.resolver';
@@ -62,10 +62,10 @@ describe('SaEformsResolver', () => {
         },
         userAccessAgreement: { statusCode: 1 },
         saEforms: { statusCode: 3 },
-        hcim: { statusCode: 1 },
+        hcimAccountTransfer: { statusCode: 1 },
+        hcimEnrolment: { statusCode: 1 },
         sitePrivacySecurityChecklist: { statusCode: 1 },
         complianceTraining: { statusCode: 1 },
-        transactions: { statusCode: 1 },
       },
     };
   });

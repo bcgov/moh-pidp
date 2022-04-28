@@ -16,18 +16,20 @@ import { SaEformsPage } from './sa-eforms.page';
 describe('SaEformsPage', () => {
   let component: SaEformsPage;
 
-  const mockActivatedRoute = {
-    snapshot: {
-      data: {
-        title: randTextRange({ min: 1, max: 4 }),
-        routes: {
-          root: '../../',
-        },
-      },
-    },
-  };
+  let mockActivatedRoute;
 
   beforeEach(() => {
+    mockActivatedRoute = {
+      snapshot: {
+        data: {
+          title: randTextRange({ min: 1, max: 4 }),
+          routes: {
+            root: '../../',
+          },
+        },
+      },
+    };
+
     TestBed.configureTestingModule({
       imports: [RouterTestingModule],
       providers: [

@@ -9,6 +9,9 @@ const routes: Routes = [
     component: SignedOrAcceptedDocumentsPage,
     data: {
       title: 'Provider Identity Portal',
+      routes: {
+        root: '../../',
+      },
     },
   },
 ];

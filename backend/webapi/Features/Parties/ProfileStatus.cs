@@ -2,7 +2,6 @@ namespace Pidp.Features.Parties;
 
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using DomainResults.Common;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using NodaTime;
@@ -19,7 +18,7 @@ using Pidp.Models.Lookups;
 
 public partial class ProfileStatus
 {
-    public class Command : ICommand<IDomainResult<Model>>
+    public class Command : ICommand<Model>
     {
         public int Id { get; set; }
         [JsonIgnore]
@@ -72,7 +71,7 @@ public partial class ProfileStatus
         public CommandValidator() => this.RuleFor(x => x.Id).GreaterThan(0);
     }
 
-    public class CommandHandler : ICommandHandler<Command, IDomainResult<Model>>
+    public class CommandHandler : ICommandHandler<Command, Model>
     {
         private readonly IMapper mapper;
         private readonly IPlrClient client;
@@ -88,7 +87,7 @@ public partial class ProfileStatus
             this.context = context;
         }
 
-        public async Task<IDomainResult<Model>> HandleAsync(Command command)
+        public async Task<Model> HandleAsync(Command command)
         {
             var profile = await this.context.Parties
                .Where(party => party.Id == command.Id)
@@ -113,12 +112,12 @@ public partial class ProfileStatus
                     new Model.Demographics(profile),
                     new Model.CollegeCertification(profile),
                     new Model.SAEforms(profile),
-                    new Model.HcimReEnrolment(profile)
+                    new Model.HcimAccountTransfer(profile)
                 }
                 .ToDictionary(section => section.SectionName, section => section)
             };
 
-            return DomainResult.Success(profileStatus);
+            return profileStatus;
         }
 
         private async Task<string?> RecheckIpc(int partyId, CollegeCode collegeCode, string licenceNumber, LocalDate birthdate)

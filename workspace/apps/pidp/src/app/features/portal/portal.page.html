@@ -1,6 +1,4 @@
-<ui-page mode="large" [busy]="busy">
-  <ui-page-header>{{ title }}</ui-page-header>
-
+<ui-page mode="large">
   <div class="row">
     <div class="col-12">
       <ui-alert
@@ -47,7 +45,7 @@
         </ui-page-section-subheader>
 
         <ui-card-summary
-          *ngFor="let section of (state$ | async)?.profileIdentitySections"
+          *ngFor="let section of (state$ | async)?.profile"
           [heading]="section.heading"
           [statusType]="section.statusType"
           [status]="section.status"
@@ -75,7 +73,7 @@
         </ui-page-section-subheader>
 
         <ui-card-summary
-          *ngFor="let section of (state$ | async)?.accessSystemsSections"
+          *ngFor="let section of (state$ | async)?.access"
           [heading]="section.heading"
           [statusType]="section.statusType"
           [status]="section.status"
@@ -99,9 +97,9 @@
         </ui-page-section-subheader>
 
         <ng-container
-          *ngIf="(state$ | async)?.trainingSections?.length; else noTraining">
+          *ngIf="(state$ | async)?.training?.length; else noTraining">
           <ui-card-summary
-            *ngFor="let section of (state$ | async)?.trainingSections"
+            *ngFor="let section of (state$ | async)?.training"
             [heading]="section.heading"
             [statusType]="section.statusType"
             [status]="section.status"
@@ -129,7 +127,7 @@
         </ui-page-section-subheader>
 
         <ui-card-summary
-          *ngFor="let section of (state$ | async)?.documentsSections"
+          *ngFor="let section of (state$ | async)?.documents"
           [heading]="section.heading"
           [actionLabel]="section.action.label"
           [actionDisabled]="section.action.disabled"

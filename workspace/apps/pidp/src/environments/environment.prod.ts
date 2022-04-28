@@ -1,4 +1,4 @@
-import { healthNetBcAdminEmail } from '@app/features/access/pages/hcim-reenrolment/hcim-constants';
+import { healthNetBcAdminEmail } from '@app/features/access/pages/hcim-account-transfer/hcim-account-transfer-constants';
 
 import { AppEnvironment, EnvironmentName } from './environment.model';
 

@@ -819,7 +819,7 @@ namespace Pidp.Data.Migrations
                     b.HasDiscriminator().HasValue("FacilityAddress");
                 });
 
-            modelBuilder.Entity("Pidp.Models.HcimReEnrolmentAccessRequest", b =>
+            modelBuilder.Entity("Pidp.Models.HcimAccountTransfer", b =>
                 {
                     b.HasBaseType("Pidp.Models.AccessRequest");
 
@@ -827,7 +827,7 @@ namespace Pidp.Data.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.ToTable("HcimReEnrolmentAccessRequest");
+                    b.ToTable("HcimAccountTransfer");
                 });
 
             modelBuilder.Entity("Pidp.Models.AccessRequest", b =>
@@ -901,11 +901,11 @@ namespace Pidp.Data.Migrations
                     b.Navigation("Facility");
                 });
 
-            modelBuilder.Entity("Pidp.Models.HcimReEnrolmentAccessRequest", b =>
+            modelBuilder.Entity("Pidp.Models.HcimAccountTransfer", b =>
                 {
                     b.HasOne("Pidp.Models.AccessRequest", null)
                         .WithOne()
-                        .HasForeignKey("Pidp.Models.HcimReEnrolmentAccessRequest", "Id")
+                        .HasForeignKey("Pidp.Models.HcimAccountTransfer", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

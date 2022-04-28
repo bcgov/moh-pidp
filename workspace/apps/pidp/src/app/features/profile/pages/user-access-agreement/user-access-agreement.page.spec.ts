@@ -8,18 +8,19 @@ import { UserAccessAgreementPage } from './user-access-agreement.page';
 describe('UserAccessAgreementPage', () => {
   let component: UserAccessAgreementPage;
 
-  const mockActivatedRoute = {
-    snapshot: {
-      data: {
-        title: randTextRange({ min: 1, max: 4 }),
-        routes: {
-          root: '../../',
-        },
-      },
-    },
-  };
+  let mockActivatedRoute;
 
   beforeEach(() => {
+    mockActivatedRoute = {
+      snapshot: {
+        data: {
+          title: randTextRange({ min: 1, max: 4 }),
+          routes: {
+            root: '../../',
+          },
+        },
+      },
+    };
     TestBed.configureTestingModule({
       providers: [
         UserAccessAgreementPage,
