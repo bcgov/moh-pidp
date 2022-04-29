@@ -62,6 +62,34 @@
       </ui-page-section>
 
       <ui-page-section>
+        <ui-scroll-target targetId="organization"></ui-scroll-target>
+        <ui-page-section-subheader
+          icon="corporate_fare"
+          heading="Organization Information">
+          <ng-container uiPageSectionSubheaderDesc>
+            Provide your organization's details to gain access to the systems
+            you are eligible for.
+          </ng-container>
+        </ui-page-section-subheader>
+
+        <ui-card-summary
+          *ngFor="let section of (state$ | async)?.organization"
+          [heading]="section.heading"
+          [statusType]="section.statusType"
+          [status]="section.status"
+          [actionLabel]="section.action.label"
+          [actionDisabled]="section.action.disabled"
+          (action)="onCardAction(section)">
+          <ng-container uiCardSummaryHint>{{ section.hint }}</ng-container>
+          <ng-container uiCardSummaryContent>
+            <app-profile-card-summary-content [properties]="section.properties">
+              {{ section.description }}
+            </app-profile-card-summary-content>
+          </ng-container>
+        </ui-card-summary>
+      </ui-page-section>
+
+      <ui-page-section>
         <ui-scroll-target targetId="access"></ui-scroll-target>
         <ui-page-section-subheader
           icon="assignment"
