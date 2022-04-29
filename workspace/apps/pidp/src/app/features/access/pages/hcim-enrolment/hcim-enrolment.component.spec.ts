@@ -5,10 +5,12 @@ import { HcimEnrolmentComponent } from './hcim-enrolment.component';
 describe('HcimEnrolmentComponent', () => {
   let component: HcimEnrolmentComponent;
 
-  beforeEach(async () => {
+  beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [HcimEnrolmentComponent],
     });
+
+    component = TestBed.inject(HcimEnrolmentComponent);
   });
 
   it('should create', () => {

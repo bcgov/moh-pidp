@@ -21,9 +21,9 @@ import {
 } from './hcim-account-transfer-constants';
 import { HcimAccountTransferFormState } from './hcim-account-transfer-form-state';
 import {
-  HcimAccessRequestResponse,
-  HcimAccessRequestStatusCode,
   HcimAccountTransferResource,
+  HcimAccountTransferResponse,
+  HcimAccountTransferStatusCode,
 } from './hcim-account-transfer-resource.service';
 
 @Component({
@@ -39,7 +39,7 @@ export class HcimAccountTransferPage
   public title: string;
   public formState: HcimAccountTransferFormState;
   public completed: boolean | null;
-  public accessRequestStatusCode?: HcimAccessRequestStatusCode;
+  public accessRequestStatusCode?: HcimAccountTransferStatusCode;
   public loginAttempts: number;
   public readonly maxLoginAttempts: number;
   public readonly hcimWebUrl: string;
@@ -49,7 +49,7 @@ export class HcimAccountTransferPage
   public readonly healthRegistriesAdminEmail: string;
   public readonly healthRegistriesAdminPhone: string;
 
-  public HcimAccessRequestStatusCode = HcimAccessRequestStatusCode;
+  public HcimAccessRequestStatusCode = HcimAccountTransferStatusCode;
 
   public constructor(
     protected dialog: MatDialog,
@@ -96,7 +96,7 @@ export class HcimAccountTransferPage
     }
   }
 
-  protected performSubmission(): Observable<HcimAccessRequestResponse> {
+  protected performSubmission(): Observable<HcimAccountTransferResponse> {
     const partyId = this.partyService.partyId;
 
     return partyId && this.formState.json
@@ -105,13 +105,14 @@ export class HcimAccountTransferPage
   }
 
   protected afterSubmitIsSuccessful(
-    accessResponse: HcimAccessRequestResponse
+    accessResponse: HcimAccountTransferResponse
   ): void {
     const statusCode = accessResponse.statusCode;
     const remainingAttempts =
       accessResponse.remainingAttempts ?? this.maxLoginAttempts;
 
-    this.completed = statusCode === HcimAccessRequestStatusCode.ACCESS_GRANTED;
+    this.completed =
+      statusCode === HcimAccountTransferStatusCode.ACCESS_GRANTED;
     this.accessRequestStatusCode = statusCode;
     this.loginAttempts = this.maxLoginAttempts - remainingAttempts;
   }
