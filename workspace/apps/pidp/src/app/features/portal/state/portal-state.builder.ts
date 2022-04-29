@@ -13,6 +13,8 @@ import { SaEformsPortalSection } from './access/sa-eforms-portal-section.class';
 import { SitePrivacySecurityPortalSection } from './access/site-privacy-security-checklist-portal-section.class';
 import { SignedAcceptedDocumentsPortalSection } from './documents/signed-accepted-documents-portal-section.class';
 import { TransactionsPortalSection } from './documents/transactions-portal-section.class';
+import { FacilityDetailsPortalSection } from './organization/facility-details-portal-section.class';
+import { OrganizationDetailsPortalSection } from './organization/organization-details-portal-section.class';
 import { PortalSectionStatusKey } from './portal-section-status-key.type';
 import { IPortalSection } from './portal-section.model';
 import { CollegeCertificationPortalSection } from './profile/college-certification-portal-section.class';
@@ -22,19 +24,20 @@ import { ComplianceTrainingPortalSection } from './training/compliance-training-
 
 /**
  * @description
- * List of portal state group keys as a readonly tuple
- * to allow iteration and use of keyof at runtime.
+ * Group keys as a readonly tuple to allow iteration
+ * over keys at runtime to allow for filtering.
  */
 export const portalStateGroupKeys = [
   'profile',
   'access',
+  'organization',
   'training',
   'documents',
 ] as const;
 
 /**
  * @description
- * Portal state group keys as a union.
+ * Union of keys generated from the tuple.
  */
 export type PortalStateGroupKey = typeof portalStateGroupKeys[number];
 
@@ -52,6 +55,7 @@ export class PortalStateBuilder {
     return {
       profile: this.createProfileGroup(profileStatus),
       access: this.createAccessGroup(profileStatus),
+      organization: this.createOrganizationGroup(profileStatus),
       training: this.createTrainingGroup(profileStatus),
       documents: this.createDocumentsGroup(),
     };
@@ -77,6 +81,25 @@ export class PortalStateBuilder {
           Role.FEATURE_AMH_DEMO,
         ]) || this.insertSection('userAccessAgreement', profileStatus),
         () => [new UserAccessAgreementPortalSection(profileStatus, this.router)]
+      ),
+    ];
+  }
+
+  private createOrganizationGroup(
+    profileStatus: ProfileStatus
+  ): IPortalSection[] {
+    return [
+      ...ArrayUtils.insertResultIf<IPortalSection>(
+        // TODO remove permissions when API exists
+        this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]) ||
+          this.insertSection('organizationDetails', profileStatus),
+        () => [new OrganizationDetailsPortalSection(profileStatus, this.router)]
+      ),
+      ...ArrayUtils.insertResultIf<IPortalSection>(
+        // TODO remove permissions when API exists
+        this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]) ||
+          this.insertSection('facilityDetails', profileStatus),
+        () => [new FacilityDetailsPortalSection(profileStatus, this.router)]
       ),
     ];
   }
