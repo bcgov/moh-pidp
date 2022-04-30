@@ -13,6 +13,7 @@ public class PidpDbContext : DbContext
 
     public DbSet<AccessRequest> AccessRequests { get; set; } = default!;
     public DbSet<HcimAccountTransfer> HcimAccountTransfers { get; set; } = default!;
+    public DbSet<HcimEnrolment> HcimEnrolments { get; set; } = default!;
     public DbSet<EmailLog> EmailLogs { get; set; } = default!;
     public DbSet<Facility> Facilities { get; set; } = default!;
     public DbSet<Party> Parties { get; set; } = default!;
