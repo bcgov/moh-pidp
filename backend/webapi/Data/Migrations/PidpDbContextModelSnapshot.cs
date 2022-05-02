@@ -23,35 +23,6 @@ namespace Pidp.Data.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("Pidp.Models.AccessAdministrator", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<Instant>("Created")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<Instant>("Modified")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<int>("PartyId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PartyId")
-                        .IsUnique();
-
-                    b.ToTable("AccessAdministrator");
-                });
-
             modelBuilder.Entity("Pidp.Models.AccessRequest", b =>
                 {
                     b.Property<int>("Id")
@@ -796,6 +767,35 @@ namespace Pidp.Data.Migrations
                     b.ToTable("Party");
                 });
 
+            modelBuilder.Entity("Pidp.Models.PartyAccessAdministrator", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<Instant>("Created")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<Instant>("Modified")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("PartyId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PartyId")
+                        .IsUnique();
+
+                    b.ToTable("PartyAccessAdministrator");
+                });
+
             modelBuilder.Entity("Pidp.Models.PartyCertification", b =>
                 {
                     b.Property<int>("Id")
@@ -878,17 +878,6 @@ namespace Pidp.Data.Migrations
                     b.ToTable("HcimEnrolment");
                 });
 
-            modelBuilder.Entity("Pidp.Models.AccessAdministrator", b =>
-                {
-                    b.HasOne("Pidp.Models.Party", "Party")
-                        .WithOne("AccessAdministrator")
-                        .HasForeignKey("Pidp.Models.AccessAdministrator", "PartyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Party");
-                });
-
             modelBuilder.Entity("Pidp.Models.AccessRequest", b =>
                 {
                     b.HasOne("Pidp.Models.Party", "Party")
@@ -924,6 +913,17 @@ namespace Pidp.Data.Migrations
                     b.HasOne("Pidp.Models.Party", "Party")
                         .WithOne("Facility")
                         .HasForeignKey("Pidp.Models.Facility", "PartyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Party");
+                });
+
+            modelBuilder.Entity("Pidp.Models.PartyAccessAdministrator", b =>
+                {
+                    b.HasOne("Pidp.Models.Party", "Party")
+                        .WithOne("AccessAdministrator")
+                        .HasForeignKey("Pidp.Models.PartyAccessAdministrator", "PartyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
