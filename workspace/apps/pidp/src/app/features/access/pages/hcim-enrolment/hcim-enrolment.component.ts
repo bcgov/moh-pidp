@@ -17,6 +17,7 @@ import {
   HcimEnrolmentResponse,
   HcimEnrolmentStatusCode,
 } from './hcim-enrolment-resource.service';
+import { HcimEnrolment } from './hcim-enrolment.model';
 
 @Component({
   selector: 'app-hcim-enrolment',
@@ -30,6 +31,7 @@ export class HcimEnrolmentComponent
   public title: string;
   public formState: HcimEnrolmentFormState;
   public completed: boolean | null;
+  public controls: { name: keyof HcimEnrolment; question: string }[];
   public accessRequestStatusCode?: HcimEnrolmentStatusCode;
   public formInvalid?: boolean;
 
@@ -51,6 +53,24 @@ export class HcimEnrolmentComponent
     this.title = routeData.title;
     this.formState = new HcimEnrolmentFormState(fb);
     this.completed = routeData.hcimEnrolmentStatusCode === StatusCode.COMPLETED;
+    this.controls = [
+      {
+        name: 'managesTasks',
+        question: 'Do you manage tasks?',
+      },
+      {
+        name: 'modifiesPhns',
+        question: 'Do you need to create or update new PHNs?',
+      },
+      {
+        name: 'recordsNewborns',
+        question: 'Do you need to record newborns?',
+      },
+      {
+        name: 'searchesIdentifiers',
+        question: 'Do you need to search by source identifiers?',
+      },
+    ];
   }
 
   public onBack(): void {

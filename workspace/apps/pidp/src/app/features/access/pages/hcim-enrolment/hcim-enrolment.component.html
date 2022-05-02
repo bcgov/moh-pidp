@@ -66,38 +66,11 @@
 
       <ng-container [formGroup]="formState.form">
         <ol>
-          <li>
-            Do you manage tasks?<br />
+          <li *ngFor="let control of controls">
+            {{ control.question }}<br />
             <mat-radio-group
-              formControlName="managesTasks"
-              aria-label="Select an answer">
-              <mat-radio-button [value]="true">Yes</mat-radio-button>
-              <mat-radio-button [value]="false">No</mat-radio-button>
-            </mat-radio-group>
-          </li>
-          <li>
-            Do you need to create or update new PHNs?<br />
-            <mat-radio-group
-              formControlName="modifyPhns"
-              aria-label="Select an answer">
-              <mat-radio-button [value]="true">Yes</mat-radio-button>
-              <mat-radio-button [value]="false">No</mat-radio-button>
-            </mat-radio-group>
-          </li>
-          <li>
-            Do you need to record newborns?<br />
-            <mat-radio-group
-              formControlName="recordsNewborns"
-              aria-label="Select an answer">
-              <mat-radio-button [value]="true">Yes</mat-radio-button>
-              <mat-radio-button [value]="false">No</mat-radio-button>
-            </mat-radio-group>
-          </li>
-          <li>
-            Do you need to search by source identifiers?<br />
-            <mat-radio-group
-              formControlName="searchesIdentifiers"
-              aria-label="Select an answer">
+              aria-label="Select an answer"
+              [formControlName]="control.name">
               <mat-radio-button [value]="true">Yes</mat-radio-button>
               <mat-radio-button [value]="false">No</mat-radio-button>
             </mat-radio-group>

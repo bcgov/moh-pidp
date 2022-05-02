@@ -27,7 +27,7 @@ export class HcimEnrolmentFormState extends AbstractFormState<HcimEnrolment> {
   public buildForm(): void {
     this.formInstance = this.fb.group({
       managesTasks: [null, [FormControlValidators.requiredBoolean]],
-      modifyPhns: [null, [FormControlValidators.requiredBoolean]],
+      modifiesPhns: [null, [FormControlValidators.requiredBoolean]],
       recordsNewborns: [null, [FormControlValidators.requiredBoolean]],
       searchesIdentifiers: [null, [FormControlValidators.requiredBoolean]],
     });
