@@ -49,7 +49,7 @@ export class HcimAccountTransferPage
   public readonly healthRegistriesAdminEmail: string;
   public readonly healthRegistriesAdminPhone: string;
 
-  public HcimAccessRequestStatusCode = HcimAccountTransferStatusCode;
+  public HcimAccountTransferStatusCode = HcimAccountTransferStatusCode;
 
   public constructor(
     protected dialog: MatDialog,
