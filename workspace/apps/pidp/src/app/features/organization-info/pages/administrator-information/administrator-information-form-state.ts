@@ -29,7 +29,7 @@ export class AdministratorInformationFormState extends AbstractFormState<Adminis
 
   public buildForm(): void {
     this.formInstance = this.fb.group({
-      adminEmail: [null, [Validators.required, FormControlValidators.email]],
+      email: [null, [Validators.required, FormControlValidators.email]],
     });
   }
 }

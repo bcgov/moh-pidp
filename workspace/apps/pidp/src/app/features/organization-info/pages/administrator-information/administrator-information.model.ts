@@ -1,3 +1,3 @@
 export interface AdministratorInformation {
-  adminEmail: string;
+  email: string;
 }
