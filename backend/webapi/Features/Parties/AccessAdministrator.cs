@@ -1,5 +1,7 @@
 namespace Pidp.Features.Parties;
 
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using FluentValidation;
 using HybridModelBinding;
 using Microsoft.EntityFrameworkCore;
@@ -39,19 +41,20 @@ public class AccessAdministrator
 
     public class QueryHandler : IQueryHandler<Query, Command>
     {
+        private readonly IMapper mapper;
         private readonly PidpDbContext context;
 
-        public QueryHandler(PidpDbContext context) => this.context = context;
+        public QueryHandler(IMapper mapper, PidpDbContext context)
+        {
+            this.mapper = mapper;
+            this.context = context;
+        }
 
         public async Task<Command> HandleAsync(Query query)
         {
             var admin = await this.context.AccessAdministrators
                 .Where(admin => admin.PartyId == query.PartyId)
-                .Select(admin => new Command
-                {
-                    PartyId = admin.PartyId,
-                    Email = admin.Email
-                })
+                .ProjectTo<Command>(this.mapper.ConfigurationProvider)
                 .SingleOrDefaultAsync();
 
             return admin ?? new Command { PartyId = query.PartyId };
