@@ -1,7 +1,6 @@
-import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
-import { Observable, catchError, throwError } from 'rxjs';
+import { Observable, catchError, map, of } from 'rxjs';
 
 import { NoContent } from '@bcgov/shared/data-access';
 
@@ -11,7 +10,14 @@ import { PortalResource } from '@app/features/portal/portal-resource.service';
 
 import { HcimEnrolment } from './hcim-enrolment.model';
 
-export interface HcimEnrolmentResponse {}
+export enum HcimEnrolmentStatusCode {
+  ACCESS_GRANTED,
+  ACCESS_FAILED,
+}
+
+export interface HcimEnrolmentResponse {
+  statusCode: HcimEnrolmentStatusCode;
+}
 
 @Injectable({
   providedIn: 'root',
@@ -36,9 +42,10 @@ export class HcimEnrolmentResource {
         ...hcimEnrolment,
       })
       .pipe(
-        catchError((error: HttpErrorResponse) => {
-          return throwError(() => error);
-        })
+        map(() => ({ statusCode: HcimEnrolmentStatusCode.ACCESS_GRANTED })),
+        catchError(() =>
+          of({ statusCode: HcimEnrolmentStatusCode.ACCESS_FAILED })
+        )
       );
   }
 }

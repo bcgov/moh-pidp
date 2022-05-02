@@ -1,6 +1,6 @@
-import { FormBuilder, FormControl, Validators } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
 
-import { AbstractFormState } from '@bcgov/shared/ui';
+import { AbstractFormState, FormControlValidators } from '@bcgov/shared/ui';
 
 import { HcimEnrolment } from './hcim-enrolment.model';
 
@@ -11,10 +11,6 @@ export class HcimEnrolmentFormState extends AbstractFormState<HcimEnrolment> {
     this.buildForm();
   }
 
-  public get adminEmail(): FormControl {
-    return this.formInstance.get('adminEmail') as FormControl;
-  }
-
   public get json(): HcimEnrolment | undefined {
     if (!this.formInstance) {
       return;
@@ -23,11 +19,17 @@ export class HcimEnrolmentFormState extends AbstractFormState<HcimEnrolment> {
     return this.formInstance.getRawValue();
   }
 
-  public patchValue(): void {}
+  public patchValue(): void {
+    // Form will never be patched!
+    throw new Error('Method Not Implemented');
+  }
 
   public buildForm(): void {
     this.formInstance = this.fb.group({
-      adminEmail: [null, [Validators.required]],
+      managesTasks: [null, [FormControlValidators.requiredBoolean]],
+      modifyPhns: [null, [FormControlValidators.requiredBoolean]],
+      recordsNewborns: [null, [FormControlValidators.requiredBoolean]],
+      searchesIdentifiers: [null, [FormControlValidators.requiredBoolean]],
     });
   }
 }

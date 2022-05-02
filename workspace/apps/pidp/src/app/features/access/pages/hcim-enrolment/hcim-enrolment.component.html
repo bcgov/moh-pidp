@@ -1,50 +1,129 @@
 <ui-page [form]="formState.form" (submitted)="onSubmit()">
   <ui-page-header>{{ title }}</ui-page-header>
 
-  <ui-page-section>
-    <ui-page-section-subheader
-      icon="corporate_fare"
-      heading="HCIMWeb Enrolment">
-      <ng-container uiPageSectionSubheaderDesc>
-        Provide the next information to complete your HCIMWeb enrolment.
+  <ng-container *ngIf="completed; else notCompleted">
+    <ui-page-section>
+      <ui-page-section-subheader icon="assignment" heading="HCIMWeb Enrolment">
+        <ng-container uiPageSectionSubheaderDesc>Next Steps.</ng-container>
+      </ui-page-section-subheader>
+
+      <ui-alert
+        type="success"
+        icon="check_circle"
+        iconType="outlined"
+        heading="Account Transfer Successful">
+        <ng-container uiAlertContent>
+          <p>
+            Your submission has been sent to your Health Authority Access
+            Administrator.
+          </p>
+        </ng-container>
+      </ui-alert>
+    </ui-page-section>
+  </ng-container>
+
+  <ng-template #notCompleted>
+    <ui-alert
+      *ngIf="accessRequestStatusCode === HcimEnrolmentStatusCode.ACCESS_FAILED"
+      type="danger"
+      icon="error_outline"
+      iconType="outlined"
+      heading="Error Requesting Access">
+      <ng-container uiAlertContent>
+        <p>
+          Your request for access to HCIMWeb Enrolment could not be processed at
+          this time. If this issue persists, contact
+          <!-- <a
+          uiAnchor
+          scheme="mailto"
+          [attr.href]="???"></a> -->
+          for assistance.
+        </p>
       </ng-container>
-    </ui-page-section-subheader>
+    </ui-alert>
 
-    <ng-container [formGroup]="formState.form">
-      <ui-page-section>
-        <ui-page-section-subheader heading="Access administrator email">
-          <ng-container uiPageSectionSubheaderDesc>
-            Enter your access administrator's email.
-          </ng-container>
-        </ui-page-section-subheader>
-        <mat-form-field class="w-100">
-          <input
-            matInput
-            placeholder="Access administrator email"
-            formControlName="adminEmail" />
-          <mat-error>Required</mat-error>
-        </mat-form-field>
-      </ui-page-section>
-    </ng-container>
-  </ui-page-section>
+    <ui-page-section>
+      <ui-page-section-subheader
+        icon="corporate_fare"
+        heading="HCIMWeb Enrolment">
+        <ng-container uiPageSectionSubheaderDesc>
+          Provide the next information to complete your HCIMWeb enrolment.
+        </ng-container>
+      </ui-page-section-subheader>
 
-  <ui-page-footer [mode]="completed ? 'reverse' : 'normal'">
-    <button
-      mat-stroked-button
-      uiPageFooterAction
-      type="button"
-      color="primary"
-      (click)="onBack()">
-      {{ completed ? 'Back Home' : 'Cancel Back Home' }}
-    </button>
+      <ui-alert
+        *ngIf="formInvalid"
+        type="danger"
+        icon="error_outline"
+        iconType="outlined">
+        <ng-container uiAlertContent>
+          <p>
+            Each question must be answered in order to submit an HCIMWeb
+            Enrolment.
+          </p>
+        </ng-container>
+      </ui-alert>
 
-    <button
-      *ngIf="!completed"
-      mat-flat-button
-      uiPageFooterAction
-      type="submit"
-      color="primary">
-      Save Information
-    </button>
-  </ui-page-footer>
+      <ng-container [formGroup]="formState.form">
+        <ol>
+          <li>
+            Do you manage tasks?<br />
+            <mat-radio-group
+              formControlName="managesTasks"
+              aria-label="Select an answer">
+              <mat-radio-button [value]="true">Yes</mat-radio-button>
+              <mat-radio-button [value]="false">No</mat-radio-button>
+            </mat-radio-group>
+          </li>
+          <li>
+            Do you need to create or update new PHNs?<br />
+            <mat-radio-group
+              formControlName="modifyPhns"
+              aria-label="Select an answer">
+              <mat-radio-button [value]="true">Yes</mat-radio-button>
+              <mat-radio-button [value]="false">No</mat-radio-button>
+            </mat-radio-group>
+          </li>
+          <li>
+            Do you need to record newborns?<br />
+            <mat-radio-group
+              formControlName="recordsNewborns"
+              aria-label="Select an answer">
+              <mat-radio-button [value]="true">Yes</mat-radio-button>
+              <mat-radio-button [value]="false">No</mat-radio-button>
+            </mat-radio-group>
+          </li>
+          <li>
+            Do you need to search by source identifiers?<br />
+            <mat-radio-group
+              formControlName="searchesIdentifiers"
+              aria-label="Select an answer">
+              <mat-radio-button [value]="true">Yes</mat-radio-button>
+              <mat-radio-button [value]="false">No</mat-radio-button>
+            </mat-radio-group>
+          </li>
+        </ol>
+      </ng-container>
+    </ui-page-section>
+
+    <ui-page-footer [mode]="completed ? 'reverse' : 'normal'">
+      <button
+        mat-stroked-button
+        uiPageFooterAction
+        type="button"
+        color="primary"
+        (click)="onBack()">
+        {{ completed ? 'Back Home' : 'Cancel Back Home' }}
+      </button>
+
+      <button
+        *ngIf="!completed"
+        mat-flat-button
+        uiPageFooterAction
+        type="submit"
+        color="primary">
+        Save Information
+      </button>
+    </ui-page-footer>
+  </ng-template>
 </ui-page>

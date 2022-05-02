@@ -7,6 +7,12 @@ const routes: Routes = [
   {
     path: '',
     component: OrganizationDetailsComponent,
+    data: {
+      title: 'Provider Identity Portal',
+      routes: {
+        root: '../../',
+      },
+    },
   },
 ];
 

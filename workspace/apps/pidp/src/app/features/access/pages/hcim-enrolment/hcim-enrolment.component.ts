@@ -15,6 +15,7 @@ import { HcimEnrolmentFormState } from './hcim-enrolment-form-state';
 import {
   HcimEnrolmentResource,
   HcimEnrolmentResponse,
+  HcimEnrolmentStatusCode,
 } from './hcim-enrolment-resource.service';
 
 @Component({
@@ -29,6 +30,10 @@ export class HcimEnrolmentComponent
   public title: string;
   public formState: HcimEnrolmentFormState;
   public completed: boolean | null;
+  public accessRequestStatusCode?: HcimEnrolmentStatusCode;
+  public formInvalid?: boolean;
+
+  public HcimEnrolmentStatusCode = HcimEnrolmentStatusCode;
 
   public constructor(
     protected dialog: MatDialog,
@@ -74,9 +79,21 @@ export class HcimEnrolmentComponent
       : EMPTY;
   }
 
+  protected onSubmitFormIsValid(): void {
+    this.formInvalid = false;
+  }
+
+  protected onSubmitFormIsInvalid(): void {
+    this.formInvalid = true;
+  }
+
   protected afterSubmitIsSuccessful(
     accessResponse: HcimEnrolmentResponse
-  ): void {}
+  ): void {
+    const statusCode = accessResponse.statusCode;
+    this.completed = statusCode === HcimEnrolmentStatusCode.ACCESS_GRANTED;
+    this.accessRequestStatusCode = statusCode;
+  }
 
   private navigateToRoot(): void {
     this.router.navigate([this.route.snapshot.data.routes.root]);
