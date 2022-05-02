@@ -1,5 +1,5 @@
 <div class="yes-no-container">
-  <mat-radio-group (change)="onDecisionChange($event)">
+  <mat-radio-group (change)="onDecisionUpdate($event)">
     <mat-radio-button
       *ngFor="let decision of decisions"
       [value]="decision.code">
