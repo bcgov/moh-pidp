@@ -3,8 +3,8 @@ namespace Pidp.Models;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-[Table(nameof(AccessAdministrator))]
-public class AccessAdministrator : BaseAuditable
+[Table(nameof(PartyAccessAdministrator))]
+public class PartyAccessAdministrator : BaseAuditable
 {
     [Key]
     public int Id { get; set; }

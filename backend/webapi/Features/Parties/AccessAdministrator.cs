@@ -52,7 +52,7 @@ public class AccessAdministrator
 
         public async Task<Command> HandleAsync(Query query)
         {
-            var admin = await this.context.AccessAdministrators
+            var admin = await this.context.PartyAccessAdministrators
                 .Where(admin => admin.PartyId == query.PartyId)
                 .ProjectTo<Command>(this.mapper.ConfigurationProvider)
                 .SingleOrDefaultAsync();
@@ -69,16 +69,16 @@ public class AccessAdministrator
 
         public async Task HandleAsync(Command command)
         {
-            var admin = await this.context.AccessAdministrators
+            var admin = await this.context.PartyAccessAdministrators
                 .SingleOrDefaultAsync(admin => admin.PartyId == command.PartyId);
 
             if (admin == null)
             {
-                admin = new Models.AccessAdministrator
+                admin = new Models.PartyAccessAdministrator
                 {
                     PartyId = command.PartyId
                 };
-                this.context.AccessAdministrators.Add(admin);
+                this.context.PartyAccessAdministrators.Add(admin);
             }
 
             admin.Email = command.Email;
