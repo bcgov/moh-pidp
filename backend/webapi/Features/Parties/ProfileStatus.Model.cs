@@ -9,6 +9,16 @@ public partial class ProfileStatus
 {
     public partial class Model
     {
+        public class AccessAdministrator : ProfileSection
+        {
+            internal override string SectionName => "administratorInfo";
+            public string? Email { get; set; }
+
+            public AccessAdministrator(ProfileStatusDto profile) : base(profile) => this.Email = profile.AccessAdministratorEmail;
+
+            protected override void SetAlertsAndStatus(ProfileStatusDto profile) => this.StatusCode = string.IsNullOrWhiteSpace(profile.AccessAdministratorEmail) ? StatusCode.Incomplete : StatusCode.Complete;
+        }
+
         public class CollegeCertification : ProfileSection
         {
             internal override string SectionName => "collegeCertification";
@@ -73,9 +83,9 @@ public partial class ProfileStatus
             {
                 this.FirstName = profile.FirstName;
                 this.LastName = profile.LastName;
-                this.Birthdate = profile?.Birthdate;
-                this.Email = profile?.Email;
-                this.Phone = profile?.Phone;
+                this.Birthdate = profile.Birthdate;
+                this.Email = profile.Email;
+                this.Phone = profile.Phone;
             }
 
             protected override void SetAlertsAndStatus(ProfileStatusDto profile) => this.StatusCode = profile.DemographicsEntered ? StatusCode.Complete : StatusCode.Incomplete;

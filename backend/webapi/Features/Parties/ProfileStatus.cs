@@ -111,8 +111,10 @@ public partial class ProfileStatus
                 {
                     new Model.Demographics(profile),
                     new Model.CollegeCertification(profile),
+                    new Model.AccessAdministrator(profile),
                     new Model.SAEforms(profile),
                     new Model.HcimAccountTransfer(profile)
+                    // TODO HcimEnrolment
                 }
                 .ToDictionary(section => section.SectionName, section => section)
             };
@@ -142,6 +144,7 @@ public partial class ProfileStatus
         public LocalDate? Birthdate { get; set; }
         public string? Email { get; set; }
         public string? Phone { get; set; }
+        public string? AccessAdministratorEmail { get; set; }
         public CollegeCode? CollegeCode { get; set; }
         public string? LicenceNumber { get; set; }
         public string? Ipc { get; set; }
