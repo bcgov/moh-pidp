@@ -28,6 +28,24 @@ public class PartiesController : PidpControllerBase
                                                      [FromBody] Create.Command command)
         => await handler.HandleAsync(command);
 
+    [HttpGet("{partyId}/access-administrator")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<AccessAdministrator.Command>> GetAccessAdministrator([FromServices] IQueryHandler<AccessAdministrator.Query, AccessAdministrator.Command> handler,
+                                                                                        [FromRoute] AccessAdministrator.Query query)
+        => await this.AuthorizePartyBeforeHandleAsync(query.PartyId, handler, query)
+            .ToActionResultOfT();
+
+    [HttpPut("{partyId}/access-administrator")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> UpdateAccessAdministrator([FromServices] ICommandHandler<AccessAdministrator.Command> handler,
+                                                               [FromHybrid] AccessAdministrator.Command command)
+        => await this.AuthorizePartyBeforeHandleAsync(command.PartyId, handler, command)
+            .ToActionResult();
+
     [HttpGet("{partyId}/college-certification")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
