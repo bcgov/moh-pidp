@@ -113,8 +113,8 @@ public partial class ProfileStatus
                     new Model.CollegeCertification(profile),
                     new Model.AccessAdministrator(profile),
                     new Model.SAEforms(profile),
-                    new Model.HcimAccountTransfer(profile)
-                    // TODO HcimEnrolment
+                    new Model.HcimAccountTransfer(profile),
+                    new Model.HcimEnrolment(profile)
                 }
                 .ToDictionary(section => section.SectionName, section => section)
             };

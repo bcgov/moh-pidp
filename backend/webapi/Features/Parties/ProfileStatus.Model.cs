@@ -117,6 +117,26 @@ public partial class ProfileStatus
             }
         }
 
+        public class HcimEnrolment : ProfileSection
+        {
+            internal override string SectionName => "hcimEnrolment";
+
+            public HcimEnrolment(ProfileStatusDto profile) : base(profile) { }
+
+            protected override void SetAlertsAndStatus(ProfileStatusDto profile)
+            {
+                if (profile.CompletedEnrolments.Contains(AccessType.HcimEnrolment))
+                {
+                    this.StatusCode = StatusCode.Complete;
+                    return;
+                }
+
+                this.StatusCode = !profile.DemographicsEntered || string.IsNullOrWhiteSpace(profile.AccessAdministratorEmail)
+                    ? StatusCode.Locked
+                    : StatusCode.Incomplete;
+            }
+        }
+
         public class SAEforms : ProfileSection
         {
             internal override string SectionName => "saEforms";
