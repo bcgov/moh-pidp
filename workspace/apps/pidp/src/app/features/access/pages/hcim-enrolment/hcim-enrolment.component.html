@@ -78,25 +78,25 @@
         </ol>
       </ng-container>
     </ui-page-section>
-
-    <ui-page-footer [mode]="completed ? 'reverse' : 'normal'">
-      <button
-        mat-stroked-button
-        uiPageFooterAction
-        type="button"
-        color="primary"
-        (click)="onBack()">
-        {{ completed ? 'Back Home' : 'Cancel Back Home' }}
-      </button>
-
-      <button
-        *ngIf="!completed"
-        mat-flat-button
-        uiPageFooterAction
-        type="submit"
-        color="primary">
-        Save Information
-      </button>
-    </ui-page-footer>
   </ng-template>
+
+  <ui-page-footer [mode]="completed ? 'reverse' : 'normal'">
+    <button
+      mat-stroked-button
+      uiPageFooterAction
+      type="button"
+      color="primary"
+      (click)="onBack()">
+      {{ completed ? 'Back Home' : 'Cancel Back Home' }}
+    </button>
+
+    <button
+      *ngIf="!completed"
+      mat-flat-button
+      uiPageFooterAction
+      type="submit"
+      color="primary">
+      Save Information
+    </button>
+  </ui-page-footer>
 </ui-page>
