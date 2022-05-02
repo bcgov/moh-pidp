@@ -6,13 +6,14 @@ import { catchError, tap, throwError } from 'rxjs';
 import { CrudResource, NoContent } from '@bcgov/shared/data-access';
 
 import { ApiHttpClient } from '@app/core/resources/api-http-client.service';
+import { ToastService } from '@app/core/services/toast.service';
 
-import { ToastService } from '@core/services/toast.service';
+import { AdministratorInformation } from './administrator-information.model';
 
-import { WorkAndRoleInformation } from './work-and-role-information.model';
-
-@Injectable()
-export class WorkAndRoleInformationResource extends CrudResource<WorkAndRoleInformation> {
+@Injectable({
+  providedIn: 'root',
+})
+export class AdministratorInformationResource extends CrudResource<AdministratorInformation> {
   public constructor(
     protected apiResource: ApiHttpClient,
     private toastService: ToastService
@@ -20,16 +21,16 @@ export class WorkAndRoleInformationResource extends CrudResource<WorkAndRoleInfo
     super(apiResource);
   }
 
-  public update(id: number, payload: WorkAndRoleInformation): NoContent {
+  public update(id: number, payload: AdministratorInformation): NoContent {
     return super.update(id, payload).pipe(
       tap(() =>
         this.toastService.openSuccessToast(
-          'College licence information has been updated'
+          'Administrator information has been updated'
         )
       ),
       catchError((error: HttpErrorResponse) => {
         this.toastService.openErrorToast(
-          'College licence information could not be updated'
+          'Administrator information could not be updated'
         );
         return throwError(() => error);
       })
@@ -37,6 +38,6 @@ export class WorkAndRoleInformationResource extends CrudResource<WorkAndRoleInfo
   }
 
   protected getResourcePath(partyId: number): string {
-    return `parties/${partyId}/work-setting`;
+    return `parties/${partyId}/access-administrator`;
   }
 }

@@ -26,7 +26,7 @@ import { LoggerService } from '@app/core/services/logger.service';
 import { AuthorizedUserService } from '@app/features/auth/services/authorized-user.service';
 
 import { PersonalInformationResource } from './personal-information-resource.service';
-import { PersonalInformationModel } from './personal-information.model';
+import { PersonalInformation } from './personal-information.model';
 import { PersonalInformationPage } from './personal-information.page';
 
 describe('PersonalInformationPage', () => {
@@ -37,8 +37,8 @@ describe('PersonalInformationPage', () => {
   let router: Router;
 
   let mockActivatedRoute: { snapshot: any };
-  let mockForm: Omit<PersonalInformationModel, 'mailingAddress'>;
-  let mockParty: PersonalInformationModel;
+  let mockForm: Omit<PersonalInformation, 'mailingAddress'>;
+  let mockParty: PersonalInformation;
 
   beforeEach(() => {
     mockActivatedRoute = {

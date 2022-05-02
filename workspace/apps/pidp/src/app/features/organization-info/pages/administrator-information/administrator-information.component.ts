@@ -4,31 +4,30 @@ import { FormBuilder } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { EMPTY, Observable, catchError, of, tap } from 'rxjs';
+import { EMPTY, catchError, of, tap } from 'rxjs';
 
+import { NoContent } from '@bcgov/shared/data-access';
+
+import { AbstractFormPage } from '@app/core/classes/abstract-form-page.class';
 import { PartyService } from '@app/core/party/party.service';
+import { FormUtilsService } from '@app/core/services/form-utils.service';
 import { LoggerService } from '@app/core/services/logger.service';
 
-import { AbstractFormPage } from '@core/classes/abstract-form-page.class';
-import { FormUtilsService } from '@core/services/form-utils.service';
-
-import { WorkAndRoleInformationFormState } from './work-and-role-information-form-state';
-import { WorkAndRoleInformationResource } from './work-and-role-information-resource.service';
-import { WorkAndRoleInformation } from './work-and-role-information.model';
+import { AdministratorInformationFormState } from './administrator-information-form-state';
+import { AdministratorInformationResource } from './administrator-information-resource.service';
+import { AdministratorInformation } from './administrator-information.model';
 
 @Component({
-  selector: 'app-work-and-role-information',
-  templateUrl: './work-and-role-information.page.html',
-  styleUrls: ['./work-and-role-information.page.scss'],
-  viewProviders: [WorkAndRoleInformationResource],
+  selector: 'app-administrator-information',
+  templateUrl: './administrator-information.component.html',
+  styleUrls: ['./administrator-information.component.scss'],
 })
-export class WorkAndRoleInformationPage
-  extends AbstractFormPage<WorkAndRoleInformationFormState>
+export class AdministratorInformationComponent
+  extends AbstractFormPage<AdministratorInformationFormState>
   implements OnInit
 {
   public title: string;
-  public formState: WorkAndRoleInformationFormState;
-  public hasFacilityAddress: boolean;
+  public formState: AdministratorInformationFormState;
 
   public constructor(
     protected dialog: MatDialog,
@@ -36,15 +35,15 @@ export class WorkAndRoleInformationPage
     private route: ActivatedRoute,
     private router: Router,
     private partyService: PartyService,
-    private resource: WorkAndRoleInformationResource,
+    private resource: AdministratorInformationResource,
     private logger: LoggerService,
     fb: FormBuilder
   ) {
     super(dialog, formUtilsService);
 
-    this.title = this.route.snapshot.data.title;
-    this.formState = new WorkAndRoleInformationFormState(fb, formUtilsService);
-    this.hasFacilityAddress = false;
+    const routeData = this.route.snapshot.data;
+    this.title = routeData.title;
+    this.formState = new AdministratorInformationFormState(fb);
   }
 
   public onBack(): void {
@@ -61,7 +60,7 @@ export class WorkAndRoleInformationPage
     this.resource
       .get(partyId)
       .pipe(
-        tap((model: WorkAndRoleInformation | null) =>
+        tap((model: AdministratorInformation | null) =>
           this.formState.patchValue(model)
         ),
         catchError((error: HttpErrorResponse) => {
@@ -71,13 +70,10 @@ export class WorkAndRoleInformationPage
           return of(null);
         })
       )
-      .subscribe(
-        (model: WorkAndRoleInformation | null) =>
-          (this.hasFacilityAddress = !!model?.facilityAddress)
-      );
+      .subscribe();
   }
 
-  protected performSubmission(): Observable<void> {
+  protected performSubmission(): NoContent {
     const partyId = this.partyService.partyId;
 
     return partyId && this.formState.json

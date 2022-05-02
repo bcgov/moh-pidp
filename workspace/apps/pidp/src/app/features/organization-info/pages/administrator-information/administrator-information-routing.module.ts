@@ -1,12 +1,12 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { FacilityDetailsComponent } from './facility-details.component';
+import { AdministratorInformationComponent } from './administrator-information.component';
 
 const routes: Routes = [
   {
     path: '',
-    component: FacilityDetailsComponent,
+    component: AdministratorInformationComponent,
     data: {
       title: 'Provider Identity Portal',
       routes: {
@@ -20,4 +20,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class FacilityDetailsRoutingModule {}
+export class AdministratorInformationRoutingModule {}

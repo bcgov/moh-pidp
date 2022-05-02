@@ -13,10 +13,10 @@ import { ApiHttpClient } from '@app/core/resources/api-http-client.service';
 
 import { ToastService } from '@core/services/toast.service';
 
-import { CollegeLicenceInformationModel } from './college-licence-information.model';
+import { CollegeLicenceInformation } from './college-licence-information.model';
 
 @Injectable()
-export class CollegeLicenceInformationResource extends CrudResource<CollegeLicenceInformationModel> {
+export class CollegeLicenceInformationResource extends CrudResource<CollegeLicenceInformation> {
   public constructor(
     protected apiResource: ApiHttpClient,
     private toastService: ToastService
@@ -24,10 +24,7 @@ export class CollegeLicenceInformationResource extends CrudResource<CollegeLicen
     super(apiResource);
   }
 
-  public update(
-    id: number,
-    payload: CollegeLicenceInformationModel
-  ): NoContent {
+  public update(id: number, payload: CollegeLicenceInformation): NoContent {
     return super
       .update(id, payload, {
         context: new HttpContext().set(SHOW_LOADING_MESSAGE, true),

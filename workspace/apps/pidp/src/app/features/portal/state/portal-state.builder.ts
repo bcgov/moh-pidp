@@ -13,6 +13,7 @@ import { SaEformsPortalSection } from './access/sa-eforms-portal-section.class';
 import { SitePrivacySecurityPortalSection } from './access/site-privacy-security-checklist-portal-section.class';
 import { SignedAcceptedDocumentsPortalSection } from './documents/signed-accepted-documents-portal-section.class';
 import { TransactionsPortalSection } from './documents/transactions-portal-section.class';
+import { AdministratorInfoPortalSection } from './organization/administrator-information-portal-section';
 import { FacilityDetailsPortalSection } from './organization/facility-details-portal-section.class';
 import { OrganizationDetailsPortalSection } from './organization/organization-details-portal-section.class';
 import { PortalSectionStatusKey } from './portal-section-status-key.type';
@@ -100,6 +101,12 @@ export class PortalStateBuilder {
         this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]) ||
           this.insertSection('facilityDetails', profileStatus),
         () => [new FacilityDetailsPortalSection(profileStatus, this.router)]
+      ),
+      ...ArrayUtils.insertResultIf<IPortalSection>(
+        // TODO remove permissions when API exists
+        this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]) ||
+          this.insertSection('administratorInfo', profileStatus),
+        () => [new AdministratorInfoPortalSection(profileStatus, this.router)]
       ),
     ];
   }
