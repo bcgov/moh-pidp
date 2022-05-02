@@ -64,7 +64,7 @@ public class HcimEnrolment
                 })
                 .SingleAsync();
 
-            // TODO other prereq?
+            // TODO other prereq
             if (dto.AlreadyEnroled)
             {
                 this.logger.LogHcimEnrolmentAccessRequestDenied();
