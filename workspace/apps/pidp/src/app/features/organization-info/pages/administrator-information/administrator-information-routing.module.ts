@@ -1,12 +1,12 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { AdministratorInformationComponent } from './administrator-information.component';
+import { AdministratorInformationPage } from './administrator-information.page';
 
 const routes: Routes = [
   {
     path: '',
-    component: AdministratorInformationComponent,
+    component: AdministratorInformationPage,
     data: {
       title: 'Provider Identity Portal',
       routes: {

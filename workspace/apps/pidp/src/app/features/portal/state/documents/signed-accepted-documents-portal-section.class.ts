@@ -28,7 +28,7 @@ export class SignedAcceptedDocumentsPortalSection implements IPortalSection {
     return {
       label: 'View',
       route: DocumentsRoutes.routePath(
-        DocumentsRoutes.SIGNED_ACCEPTED_DOCUMENTS_PAGE
+        DocumentsRoutes.SIGNED_ACCEPTED_DOCUMENTS
       ),
       disabled: false,
     };

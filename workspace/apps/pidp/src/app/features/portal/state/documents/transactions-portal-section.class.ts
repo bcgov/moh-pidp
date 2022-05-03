@@ -27,7 +27,7 @@ export class TransactionsPortalSection implements IPortalSection {
   public get action(): PortalSectionAction {
     return {
       label: 'View',
-      route: DocumentsRoutes.routePath(DocumentsRoutes.TRANSACTIONS_PAGE),
+      route: DocumentsRoutes.routePath(DocumentsRoutes.TRANSACTIONS),
       disabled: false,
     };
   }

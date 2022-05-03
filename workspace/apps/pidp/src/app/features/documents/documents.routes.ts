@@ -1,9 +1,9 @@
 export class DocumentsRoutes {
   public static MODULE_PATH = 'documents';
 
-  public static TRANSACTIONS_PAGE = 'transactions';
-  public static SIGNED_ACCEPTED_DOCUMENTS_PAGE = 'signed-or-accepted-documents';
-  public static VIEW_DOCUMENT_PAGE = 'view-document';
+  public static TRANSACTIONS = 'transactions';
+  public static SIGNED_ACCEPTED_DOCUMENTS = 'signed-or-accepted-documents';
+  public static VIEW_DOCUMENT = 'view-document';
 
   /**
    * @description

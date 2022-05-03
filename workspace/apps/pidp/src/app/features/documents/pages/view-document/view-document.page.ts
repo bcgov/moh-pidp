@@ -31,7 +31,7 @@ export class ViewDocumentPage {
   public onBack(): void {
     this.router.navigate([
       DocumentsRoutes.MODULE_PATH,
-      DocumentsRoutes.SIGNED_ACCEPTED_DOCUMENTS_PAGE,
+      DocumentsRoutes.SIGNED_ACCEPTED_DOCUMENTS,
     ]);
   }
 }

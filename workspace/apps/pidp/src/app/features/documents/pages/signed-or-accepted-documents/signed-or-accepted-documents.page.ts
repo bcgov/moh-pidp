@@ -46,7 +46,7 @@ export class SignedOrAcceptedDocumentsPage implements OnInit {
   public onViewDocument(documentType: DocumentType): void {
     this.router.navigate([
       DocumentsRoutes.MODULE_PATH,
-      DocumentsRoutes.VIEW_DOCUMENT_PAGE,
+      DocumentsRoutes.VIEW_DOCUMENT,
       documentType,
     ]);
   }

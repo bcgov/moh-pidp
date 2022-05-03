@@ -11,7 +11,7 @@ import { ViewDocumentModule } from './pages/view-document/view-document.module';
 
 const routes: Routes = [
   {
-    path: DocumentsRoutes.TRANSACTIONS_PAGE,
+    path: DocumentsRoutes.TRANSACTIONS,
     canLoad: [PermissionsGuard],
     data: {
       roles: [Role.FEATURE_PIDP_DEMO],
@@ -22,14 +22,14 @@ const routes: Routes = [
       ),
   },
   {
-    path: DocumentsRoutes.SIGNED_ACCEPTED_DOCUMENTS_PAGE,
+    path: DocumentsRoutes.SIGNED_ACCEPTED_DOCUMENTS,
     loadChildren: (): Promise<SignedOrAcceptedDocumentsModule> =>
       import(
         './pages/signed-or-accepted-documents/signed-or-accepted-documents.module'
       ).then((m) => m.SignedOrAcceptedDocumentsModule),
   },
   {
-    path: `${DocumentsRoutes.VIEW_DOCUMENT_PAGE}/:doctype`,
+    path: `${DocumentsRoutes.VIEW_DOCUMENT}/:doctype`,
     loadChildren: (): Promise<ViewDocumentModule> =>
       import('./pages/view-document/view-document.module').then(
         (m) => m.ViewDocumentModule
