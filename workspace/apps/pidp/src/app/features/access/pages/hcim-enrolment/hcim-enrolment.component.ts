@@ -11,6 +11,10 @@ import { FormUtilsService } from '@app/core/services/form-utils.service';
 import { LoggerService } from '@app/core/services/logger.service';
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
 
+import {
+  healthNetBcHelpDeskEmail,
+  healthNetBcHelpDeskPhone,
+} from './hcim-enrolment-constants';
 import { HcimEnrolmentFormState } from './hcim-enrolment-form-state';
 import {
   HcimEnrolmentResource,
@@ -34,6 +38,8 @@ export class HcimEnrolmentComponent
   public controls: { name: keyof HcimEnrolment; question: string }[];
   public accessRequestStatusCode?: HcimEnrolmentStatusCode;
   public formInvalid?: boolean;
+  public readonly healthNetBcHelpDeskEmail: string;
+  public readonly healthNetBcHelpDeskPhone: string;
 
   public HcimEnrolmentStatusCode = HcimEnrolmentStatusCode;
 
@@ -71,6 +77,8 @@ export class HcimEnrolmentComponent
         question: 'Do you need to search by source identifiers?',
       },
     ];
+    this.healthNetBcHelpDeskEmail = healthNetBcHelpDeskEmail;
+    this.healthNetBcHelpDeskPhone = healthNetBcHelpDeskPhone;
   }
 
   public onBack(): void {
