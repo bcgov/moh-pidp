@@ -18,7 +18,7 @@ import { FormUtilsService } from '@core/services/form-utils.service';
 import { LoggerService } from '@core/services/logger.service';
 
 import { CollegeLicenceInformationResource } from './college-licence-information-resource.service';
-import { CollegeLicenceInformationModel } from './college-licence-information.model';
+import { CollegeLicenceInformation } from './college-licence-information.model';
 import { CollegeLicenceInformationPage } from './college-licence-information.page';
 
 describe('CollegeLicenceInformationPage', () => {
@@ -29,7 +29,7 @@ describe('CollegeLicenceInformationPage', () => {
   let router: Router;
 
   let mockActivatedRoute: { snapshot: any };
-  let mockParty: CollegeLicenceInformationModel;
+  let mockParty: CollegeLicenceInformation;
 
   beforeEach(() => {
     mockActivatedRoute = {

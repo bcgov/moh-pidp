@@ -23,7 +23,6 @@ export class PortalService {
    */
   private _profileStatus: ProfileStatus | null;
   private _alerts: ProfileStatusAlert[];
-  private _completedProfile: boolean;
   private _state$: BehaviorSubject<PortalState>;
 
   public constructor(
@@ -32,7 +31,6 @@ export class PortalService {
   ) {
     this._profileStatus = null;
     this._state$ = new BehaviorSubject<PortalState>(null);
-    this._completedProfile = false;
     this._alerts = [];
   }
 
@@ -42,10 +40,6 @@ export class PortalService {
 
   public get profileStatus(): ProfileStatus | null {
     return this._profileStatus;
-  }
-
-  public get completedProfile(): boolean {
-    return this._completedProfile;
   }
 
   public get alerts(): ProfileStatusAlert[] {
@@ -80,7 +74,6 @@ export class PortalService {
 
     this._profileStatus = profileStatus;
     this._alerts = this.getAlerts(profileStatus);
-    this._completedProfile = this.hasCompletedProfile(profileStatus);
 
     const builder = new PortalStateBuilder(
       this.router,
@@ -106,22 +99,9 @@ export class PortalService {
     });
   }
 
-  // TODO won't scale and needs revision with more than one enrolment for provision
-  private hasCompletedProfile(profileStatus: ProfileStatus): boolean {
-    const status = profileStatus.status;
-
-    return (
-      status.demographics.statusCode === StatusCode.COMPLETED &&
-      // TODO won't work when college is hidden (ie. PHSA authenticated users)
-      status.collegeCertification?.statusCode === StatusCode.COMPLETED &&
-      status.saEforms?.statusCode === StatusCode.AVAILABLE
-    );
-  }
-
   private clearState(): void {
     this._profileStatus = null;
     this._state$.next(null);
-    this._completedProfile = false;
     this._alerts = [];
   }
 }

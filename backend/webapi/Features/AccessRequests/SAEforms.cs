@@ -69,7 +69,7 @@ public class SAEforms
                 || dto.Ipc == null
                 || (await this.plrClient.GetRecordStatus(dto.Ipc))?.IsGoodStanding() != true)
             {
-                this.logger.LogAccessRequestDenied();
+                this.logger.LogSAEformsAccessRequestDenied();
                 return DomainResult.Failed();
             }
 
@@ -106,8 +106,8 @@ public class SAEforms
     }
 }
 
-public static partial class SAEFormsLoggingExtensions
+public static partial class SAEformsLoggingExtensions
 {
     [LoggerMessage(1, LogLevel.Warning, "SA eForms Access Request denied due to the Party Record not meeting all prerequisites.")]
-    public static partial void LogAccessRequestDenied(this ILogger logger);
+    public static partial void LogSAEformsAccessRequestDenied(this ILogger logger);
 }

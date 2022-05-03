@@ -1,4 +1,5 @@
 import { Section } from '../section.model';
+import { AdministratorInfoSection } from './administrator-information-section.model';
 
 /**
  * @description
@@ -9,6 +10,7 @@ import { Section } from '../section.model';
 export const organizationSectionKeys = [
   'organizationDetails',
   'facilityDetails',
+  'administratorInfo',
 ] as const;
 
 /**
@@ -36,4 +38,5 @@ type CheckGroup<T extends IOrganizationGroup = OrganizationGroup> = void;
 export interface OrganizationGroup {
   organizationDetails: Section;
   facilityDetails: Section;
+  administratorInfo: AdministratorInfoSection;
 }
