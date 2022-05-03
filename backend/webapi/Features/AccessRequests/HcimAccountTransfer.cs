@@ -51,6 +51,7 @@ public class HcimAccountTransfer
         private readonly IEmailService emailService;
         private readonly IKeycloakAdministrationClient keycloakClient;
         private readonly ILdapClient ldapClient;
+        private readonly ILogger logger;
         private readonly PidpDbContext context;
         private readonly string hcimClientId;
 
@@ -59,6 +60,7 @@ public class HcimAccountTransfer
             IEmailService emailService,
             IKeycloakAdministrationClient keycloakClient,
             ILdapClient ldapClient,
+            ILogger<CommandHandler> logger,
             PidpConfiguration config,
             PidpDbContext context)
         {
@@ -66,6 +68,7 @@ public class HcimAccountTransfer
             this.emailService = emailService;
             this.keycloakClient = keycloakClient;
             this.ldapClient = ldapClient;
+            this.logger = logger;
             this.context = context;
             this.hcimClientId = config.Keycloak.HcimClientId;
         }
@@ -76,15 +79,18 @@ public class HcimAccountTransfer
                 .Where(party => party.Id == command.PartyId)
                 .Select(party => new
                 {
+                    AlreadyEnroled = party.AccessRequests.Any(request => request.AccessType == AccessType.HcimAccountTransfer
+                        || request.AccessType == AccessType.HcimEnrolment),
+                    DemographicsComplete = party.Email != null && party.Phone != null,
                     party.UserId,
-                    AlreadyEnroled = party.AccessRequests.Any(request => request.AccessType == AccessType.HcimAccountTransfer),
                     party.Email
                 })
-                .SingleAsync(); // Already did existence check
+                .SingleAsync();
 
-            // TODO check other prerequisites
-            if (dto.AlreadyEnroled)
+            if (dto.AlreadyEnroled
+                || !dto.DemographicsComplete)
             {
+                this.logger.LogHcimAccountTransferRequestDenied();
                 return DomainResult.Failed<Model>();
             }
 
@@ -150,4 +156,10 @@ public class HcimAccountTransfer
             await this.emailService.SendAsync(email);
         }
     }
+}
+
+public static partial class HcimAccountTransferLoggingExtensions
+{
+    [LoggerMessage(1, LogLevel.Warning, "HCIM Account Transfer Request denied due to the Party Record not meeting all prerequisites.")]
+    public static partial void LogHcimAccountTransferRequestDenied(this ILogger logger);
 }

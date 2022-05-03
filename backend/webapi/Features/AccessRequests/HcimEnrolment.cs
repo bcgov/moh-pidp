@@ -9,7 +9,6 @@ using Pidp.Data;
 using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.HttpClients.Keycloak;
 using Pidp.Infrastructure.HttpClients.Mail;
-using Pidp.Infrastructure.HttpClients.Plr;
 using Pidp.Infrastructure.Services;
 using Pidp.Models;
 
@@ -59,12 +58,14 @@ public class HcimEnrolment
                 {
                     AlreadyEnroled = party.AccessRequests.Any(request => request.AccessType == AccessType.HcimAccountTransfer
                         || request.AccessType == AccessType.HcimEnrolment),
+                    DemographicsComplete = party.Email != null && party.Phone != null,
                     AdminEmail = party.AccessAdministrator!.Email,
                 })
                 .SingleAsync();
 
-            // TODO other prereq
-            if (dto.AlreadyEnroled)
+            if (dto.AlreadyEnroled
+                || !dto.DemographicsComplete
+                || dto.AdminEmail == null)
             {
                 this.logger.LogHcimEnrolmentAccessRequestDenied();
                 return DomainResult.Failed();
