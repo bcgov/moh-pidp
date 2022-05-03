@@ -24,7 +24,7 @@ export class ComplianceTrainingPortalSection implements IPortalSection {
   ) {
     this.key = 'complianceTraining';
     this.heading = 'Compliance Training Video';
-    this.description = `Description of the training provided by the video.`;
+    this.description = 'Description of the training provided by the video.';
   }
 
   public get hint(): string {

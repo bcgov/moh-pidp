@@ -24,8 +24,7 @@ export class HcimEnrolmentPortalSection implements IPortalSection {
   ) {
     this.key = 'hcimEnrolment';
     this.heading = 'HCIMWeb Enrolment';
-    this.description =
-      'First time users enrol here for access to the HCIMWeb application.';
+    this.description = `First time users enrol here for access to the HCIMWeb application.`;
   }
 
   public get hint(): string {

@@ -24,7 +24,7 @@ export class UserAccessAgreementPortalSection implements IPortalSection {
   ) {
     this.key = 'userAccessAgreement';
     this.heading = 'Access Model Harmonization UAA';
-    this.description = `Sign and agree to the user access agreement.`;
+    this.description = 'Sign and agree to the user access agreement.';
   }
 
   public get hint(): string {

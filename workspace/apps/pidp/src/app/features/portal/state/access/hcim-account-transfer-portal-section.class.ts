@@ -24,8 +24,7 @@ export class HcimAccountTransferPortalSection implements IPortalSection {
   ) {
     this.key = 'hcimAccountTransfer';
     this.heading = 'HCIMWeb Account Transfer';
-    this.description =
-      'For existing users of HCIMWeb application to transfer their HNETBC account credential to their organization credential.';
+    this.description = `For existing users of HCIMWeb application to transfer their HNETBC account credential to their organization credential.`;
   }
 
   public get hint(): string {

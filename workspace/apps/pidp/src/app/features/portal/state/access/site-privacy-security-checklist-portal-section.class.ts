@@ -24,7 +24,7 @@ export class SitePrivacySecurityPortalSection implements IPortalSection {
   ) {
     this.key = 'sitePrivacySecurityChecklist';
     this.heading = 'Site Privacy and Security Readiness Checklist';
-    this.description = `Description of the checklist.`;
+    this.description = 'Description of the checklist.';
   }
 
   public get hint(): string {
