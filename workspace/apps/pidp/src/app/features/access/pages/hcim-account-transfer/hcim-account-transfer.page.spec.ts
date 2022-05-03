@@ -14,13 +14,14 @@ import {
 } from '@ngneat/falso';
 import { Spy, createSpyFromClass, provideAutoSpy } from 'jest-auto-spies';
 
-import { Party } from '@bcgov/shared/data-access';
-
 import { PartyService } from '@app/core/party/party.service';
 import { FormUtilsService } from '@app/core/services/form-utils.service';
 import { LoggerService } from '@app/core/services/logger.service';
 
-import { HcimAccountTransferResource } from './hcim-account-transfer-resource.service';
+import {
+  HcimAccountTransferResource,
+  HcimAccountTransferStatusCode,
+} from './hcim-account-transfer-resource.service';
 import { HcimAccountTransfer } from './hcim-account-transfer.model';
 import { HcimAccountTransferPage } from './hcim-account-transfer.page';
 
@@ -133,36 +134,49 @@ describe('HcimAccountTransferPage', () => {
   });
 
   describe('METHOD: onSubmit', () => {
-    // given('a form submission', () => {
-    //   const partyId = randNumber({ min: 1 });
-    //   partyServiceSpy.accessorSpies.getters.partyId.mockReturnValue(partyId);
-    //   component.formState.form.patchValue(mockParty);
-    //   when('no validation errors exist', () => {
-    //     formUtilsServiceSpy.checkValidity.mockReturnValue(true);
-    //     personalInfoResourceSpy.update
-    //       .mustBeCalledWith(partyId, mockForm)
-    //       .nextWith(void 0);
-    //     component.onSubmit();
-    //     then('user will be updated and router navigate to root route', () => {
-    //       expect(router.navigate).toHaveBeenCalled();
-    //     });
-    //   });
-    // });
-    // given('a form submission', () => {
-    //   const partyId = randNumber({ min: 1 });
-    //   partyServiceSpy.accessorSpies.getters.partyId.mockReturnValue(partyId);
-    //   component.formState.form.patchValue(mockParty);
-    //   when('validation errors exist', () => {
-    //     formUtilsServiceSpy.checkValidity.mockReturnValue(false);
-    //     component.onSubmit();
-    //     then(
-    //       'party personal information should not be updated and router not navigate',
-    //       () => {
-    //         expect(router.navigate).not.toHaveBeenCalled();
-    //       }
-    //     );
-    //   });
-    // });
+    given('a form submission', () => {
+      const partyId = randNumber({ min: 1 });
+      partyServiceSpy.accessorSpies.getters.partyId.mockReturnValue(partyId);
+      component.formState.form.patchValue(mockCredentials);
+
+      when('no validation errors exist', () => {
+        formUtilsServiceSpy.checkValidity.mockReturnValue(true);
+        const response = {
+          statusCode: HcimAccountTransferStatusCode.ACCESS_GRANTED,
+          remainingAttempts: randNumber({ min: 1, max: 3 }),
+        };
+        hcimAccounTransferResourceSpy.requestAccess
+          .mustBeCalledWith(partyId, mockCredentials)
+          .nextWith(response);
+        component.onSubmit();
+
+        then('access request will be made', () => {
+          expect(component.completed).toBe(true);
+          expect(component.accessRequestStatusCode).toBe(response.statusCode);
+          expect(component.loginAttempts).toBe(
+            component.maxLoginAttempts - response.remainingAttempts
+          );
+        });
+      });
+    });
+
+    given('a form submission', () => {
+      const partyId = randNumber({ min: 1 });
+      component.completed = false;
+      partyServiceSpy.accessorSpies.getters.partyId.mockReturnValue(partyId);
+      component.formState.form.patchValue(mockCredentials);
+
+      when('validation errors exist', () => {
+        formUtilsServiceSpy.checkValidity.mockReturnValue(false);
+        component.onSubmit();
+
+        then('access request will not be made', () => {
+          expect(component.completed).toBe(false);
+          expect(component.accessRequestStatusCode).toBeUndefined();
+          expect(component.loginAttempts).toBe(0);
+        });
+      });
+    });
   });
 
   describe('METHOD: onBack', () => {

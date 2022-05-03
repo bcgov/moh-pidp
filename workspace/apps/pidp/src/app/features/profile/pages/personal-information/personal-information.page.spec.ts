@@ -119,7 +119,7 @@ describe('PersonalInformationPage', () => {
       when('resource request resolved', () => {
         component.ngOnInit();
 
-        then('it should GET party college licence information', () => {
+        then('it should GET party personal information information', () => {
           expect(router.navigate).not.toHaveBeenCalled();
           expect(personalInfoResourceSpy.get).toHaveBeenCalledTimes(1);
           expect(personalInfoResourceSpy.get).toHaveBeenCalledWith(partyId);

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { Observable, map } from 'rxjs';
+import { Observable } from 'rxjs';
 
 import { AccessTypeMap } from '@bcgov/shared/data-access';
 
