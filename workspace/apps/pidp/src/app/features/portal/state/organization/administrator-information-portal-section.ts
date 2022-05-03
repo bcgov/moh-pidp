@@ -11,7 +11,9 @@ import { StatusCode } from '../../enums/status-code.enum';
 import { ProfileStatus } from '../../models/profile-status.model';
 import { PortalSectionAction } from '../portal-section-action.model';
 import { PortalSectionKey } from '../portal-section-key.type';
+import { PortalSectionProperty } from '../portal-section-property.model';
 import { IPortalSection } from '../portal-section.model';
+import { AdministratorInfoSection } from './administrator-information-section.model';
 
 export class AdministratorInfoPortalSection implements IPortalSection {
   public readonly key: PortalSectionKey;
@@ -33,6 +35,20 @@ export class AdministratorInfoPortalSection implements IPortalSection {
     )
       ? ''
       : '1 min to complete';
+  }
+
+  public get properties(): PortalSectionProperty[] {
+    const statusCode = this.getStatusCode();
+    const { email } = this.getSectionStatus();
+    return [StatusCode.ERROR, StatusCode.COMPLETED].includes(statusCode)
+      ? [
+          {
+            key: 'email',
+            value: email,
+            label: 'Access Administrator Email:',
+          },
+        ]
+      : [];
   }
 
   /**
@@ -67,8 +83,11 @@ export class AdministratorInfoPortalSection implements IPortalSection {
     this.router.navigate([ShellRoutes.routePath(this.action.route)]);
   }
 
+  private getSectionStatus(): AdministratorInfoSection {
+    return this.profileStatus.status.administratorInfo;
+  }
+
   private getStatusCode(): StatusCode {
-    // TODO remove null check once API exists
-    return this.profileStatus.status.administratorInfo?.statusCode;
+    return this.getSectionStatus().statusCode;
   }
 }
