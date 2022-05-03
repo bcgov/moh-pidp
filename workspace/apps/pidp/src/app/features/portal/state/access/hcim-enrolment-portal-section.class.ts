@@ -63,7 +63,6 @@ export class HcimEnrolmentPortalSection implements IPortalSection {
   }
 
   private getStatusCode(): StatusCode {
-    // TODO remove null check once API exists
-    return this.profileStatus.status.hcimEnrolment?.statusCode;
+    return this.profileStatus.status.hcimEnrolment.statusCode;
   }
 }

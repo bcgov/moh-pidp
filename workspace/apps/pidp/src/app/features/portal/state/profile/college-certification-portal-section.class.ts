@@ -109,6 +109,6 @@ export class CollegeCertificationPortalSection implements IPortalSection {
   }
 
   private getStatusCode(): StatusCode {
-    return this.profileStatus.status.collegeCertification.statusCode;
+    return this.getSectionStatus().statusCode;
   }
 }

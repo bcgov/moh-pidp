@@ -1,4 +1,5 @@
 import { Section } from '../section.model';
+import { AdministratorInfoSection } from './administrator-information-section.model';
 
 /**
  * @description
@@ -37,5 +38,5 @@ type CheckGroup<T extends IOrganizationGroup = OrganizationGroup> = void;
 export interface OrganizationGroup {
   organizationDetails: Section;
   facilityDetails: Section;
-  administratorInfo: Section;
+  administratorInfo: AdministratorInfoSection;
 }

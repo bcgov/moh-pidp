@@ -99,6 +99,6 @@ export class DemographicsPortalSection implements IPortalSection {
   }
 
   private getStatusCode(): StatusCode {
-    return this.profileStatus.status.demographics.statusCode;
+    return this.getSectionStatus().statusCode;
   }
 }
