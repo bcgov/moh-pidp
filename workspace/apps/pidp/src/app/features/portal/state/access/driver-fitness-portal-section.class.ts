@@ -24,7 +24,7 @@ export class DriverFitnessPortalSection implements IPortalSection {
   ) {
     this.key = 'driverFitness';
     this.heading = 'Driver Fitness';
-    this.description = `Enrol here for access to Driver Fitnes.`;
+    this.description = `Enrol here for access to Driver Fitness.`;
   }
 
   public get hint(): string {
