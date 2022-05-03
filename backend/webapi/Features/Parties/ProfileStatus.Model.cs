@@ -99,15 +99,10 @@ public partial class ProfileStatus
 
             protected override void SetAlertsAndStatus(ProfileStatusDto profile)
             {
-                if (profile.UserIsBcServicesCard)
+                if (profile.CompletedEnrolments.Contains(AccessType.HcimAccountTransfer)
+                   || profile.CompletedEnrolments.Contains(AccessType.HcimEnrolment))
                 {
                     this.StatusCode = StatusCode.Hidden;
-                    return;
-                }
-
-                if (profile.CompletedEnrolments.Contains(AccessType.HcimAccountTransfer))
-                {
-                    this.StatusCode = StatusCode.Complete;
                     return;
                 }
 
@@ -125,7 +120,8 @@ public partial class ProfileStatus
 
             protected override void SetAlertsAndStatus(ProfileStatusDto profile)
             {
-                if (profile.CompletedEnrolments.Contains(AccessType.HcimEnrolment))
+                if (profile.CompletedEnrolments.Contains(AccessType.HcimAccountTransfer)
+                    || profile.CompletedEnrolments.Contains(AccessType.HcimEnrolment))
                 {
                     this.StatusCode = StatusCode.Complete;
                     return;

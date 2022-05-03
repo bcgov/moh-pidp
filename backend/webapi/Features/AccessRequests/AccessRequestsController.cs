@@ -26,7 +26,7 @@ public class AccessRequestsController : PidpControllerBase
             .ToActionResultOfT();
 
     [HttpPost("hcim-account-transfer")]
-    [Authorize(Policy = Policies.HcimUser)]
+    [Authorize(Policy = Policies.AnyPartyIdentityProvider)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]

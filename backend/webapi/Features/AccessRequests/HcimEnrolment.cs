@@ -59,7 +59,6 @@ public class HcimEnrolment
                 {
                     AlreadyEnroled = party.AccessRequests.Any(request => request.AccessType == AccessType.HcimAccountTransfer
                         || request.AccessType == AccessType.HcimEnrolment),
-                    party.UserId,
                     AdminEmail = party.AccessAdministrator!.Email,
                 })
                 .SingleAsync();

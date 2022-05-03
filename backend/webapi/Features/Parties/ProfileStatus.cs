@@ -6,6 +6,7 @@ using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using NodaTime;
 using System.Security.Claims;
+using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
 
 using Pidp.Data;
@@ -94,9 +95,7 @@ public partial class ProfileStatus
                .ProjectTo<ProfileStatusDto>(this.mapper.ConfigurationProvider)
                .SingleAsync();
 
-            if (profile.Ipc == null
-                && profile.CollegeCode != null
-                && profile.LicenceNumber != null)
+            if (profile.CollegeCertificationEntered && profile.Ipc == null)
             {
                 // Cert has been entered but no IPC found, likely due to a transient error or delay in PLR record updates. Retry once.
                 profile.Ipc = await this.RecheckIpc(command.Id, profile.CollegeCode.Value, profile.LicenceNumber, profile.Birthdate!.Value);
@@ -154,7 +153,9 @@ public partial class ProfileStatus
         public PlrRecordStatus? PlrRecordStatus { get; set; }
         public ClaimsPrincipal? User { get; set; }
 
+        [MemberNotNullWhen(true, nameof(Email), nameof(Phone))]
         public bool DemographicsEntered => this.Email != null && this.Phone != null;
+        [MemberNotNullWhen(true, nameof(CollegeCode), nameof(LicenceNumber))]
         public bool CollegeCertificationEntered => this.CollegeCode.HasValue && this.LicenceNumber != null;
         public bool UserIsBcServicesCard => this.User.GetIdentityProvider() == ClaimValues.BCServicesCard;
     }
