@@ -7,6 +7,7 @@ import { Role } from '@app/shared/enums/roles.enum';
 
 import { StatusCode } from '../enums/status-code.enum';
 import { ProfileStatus } from '../models/profile-status.model';
+import { DriverFitnessPortalSection } from './access/driver-fitness-portal-section.class';
 import { HcimAccountTransferPortalSection } from './access/hcim-account-transfer-portal-section.class';
 import { HcimEnrolmentPortalSection } from './access/hcim-enrolment-portal-section.class';
 import { SaEformsPortalSection } from './access/sa-eforms-portal-section.class';
@@ -62,8 +63,8 @@ export class PortalStateBuilder {
     };
   }
 
-  // TODO see where the next enrolments lead and then drop these methods
-  // for building out the portal state and create classes, but premature
+  // TODO see where the next few enrolments lead and then drop these methods
+  // for building out the portal state using factories, but premature
   // optimization until more is known
 
   private createProfileGroup(profileStatus: ProfileStatus): IPortalSection[] {
@@ -132,6 +133,12 @@ export class PortalStateBuilder {
         this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]) ||
           this.insertSection('sitePrivacySecurityChecklist', profileStatus),
         () => [new SitePrivacySecurityPortalSection(profileStatus, this.router)]
+      ),
+      ...ArrayUtils.insertResultIf<IPortalSection>(
+        // TODO remove permissions when API exists
+        this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]) ||
+          this.insertSection('driverFitness', profileStatus),
+        () => [new DriverFitnessPortalSection(profileStatus, this.router)]
       ),
     ];
   }

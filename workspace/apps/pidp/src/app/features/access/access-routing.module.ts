@@ -5,6 +5,7 @@ import { PermissionsGuard } from '@app/modules/permissions/permissions.guard';
 import { Role } from '@app/shared/enums/roles.enum';
 
 import { AccessRoutes } from './access.routes';
+import { DriverFitnessModule } from './pages/driver-fitness/driver-fitness.module';
 import { HcimAccountTransferModule } from './pages/hcim-account-transfer/hcim-account-transfer.module';
 import { HcimEnrolmentModule } from './pages/hcim-enrolment/hcim-enrolment.module';
 import { PharmanetModule } from './pages/pharmanet/pharmanet.module';
@@ -58,6 +59,17 @@ const routes: Routes = [
       import(
         './pages/site-privacy-security-checklist/site-privacy-security-checklist.module'
       ).then((m) => m.SitePrivacySecurityChecklistModule),
+  },
+  {
+    path: AccessRoutes.DRIVER_FITNESS,
+    canActivate: [PermissionsGuard],
+    data: {
+      roles: [Role.FEATURE_PIDP_DEMO],
+    },
+    loadChildren: (): Promise<DriverFitnessModule> =>
+      import('./pages/driver-fitness/driver-fitness.module').then(
+        (m) => m.DriverFitnessModule
+      ),
   },
 ];
 

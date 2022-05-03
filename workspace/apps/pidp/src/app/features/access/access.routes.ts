@@ -6,6 +6,7 @@ export class AccessRoutes {
   public static HCIM_ENROLMENT = 'hcim-enrolment';
   public static PHARMANET = 'pharmanet';
   public static SITE_PRIVACY_SECURITY_CHECKLIST = `site-privacy-and-security-checklist`;
+  public static DRIVER_FITNESS = 'driver-fitness';
 
   /**
    * @description
