@@ -35,7 +35,7 @@ export class DocumentService {
       },
       {
         type: DocumentType.DRIVER_FITNESS,
-        title: 'Driver Fitness Collection Notice',
+        title: 'Driver Medical Fitness Collection Notice',
       },
     ];
   }
@@ -84,7 +84,7 @@ export class DocumentService {
 
   public getDriverFitnessCollectionNotice(): string {
     return `
-      The personal information you provide to enrol for access to Driver Fitness lorem ipsum dolor sit amet
+      The personal information you provide to enrol for access to Driver Medical Fitness lorem ipsum dolor sit amet
       consectetur adipisicing elit. Velit quaerat, beatae libero, ullam consequuntur laudantium aliquid voluptatum
       fugit pariatur dolore repudiandae ad fuga sed, ducimus voluptates quisquam quasi perferendis possimus, contact
       <a href="mailto:${this.config.emails.driverFitnessSupport}">${this.config.emails.driverFitnessSupport}</a>.

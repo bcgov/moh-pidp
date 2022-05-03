@@ -23,8 +23,8 @@ export class DriverFitnessPortalSection implements IPortalSection {
     private router: Router
   ) {
     this.key = 'driverFitness';
-    this.heading = 'Driver Fitness';
-    this.description = `Enrol here for access to Driver Fitness.`;
+    this.heading = 'Driver Medical Fitness';
+    this.description = `Enrol here for access to Driver Medical Fitness.`;
   }
 
   public get hint(): string {

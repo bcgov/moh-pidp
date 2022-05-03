@@ -9,8 +9,8 @@
     heading="Error Requesting Access">
     <ng-container uiAlertContent>
       <p>
-        Your request for access to Driver Fitness could not be processed at this
-        time. If this issue persists, contact
+        Your request for access to Driver Medical Fitness could not be processed
+        at this time. If this issue persists, contact
         <a uiAnchor scheme="mailto" [attr.href]="driverFitnessSupportEmail"></a>
         for assistance.
       </p>
@@ -18,7 +18,9 @@
   </ui-alert>
 
   <ui-page-section>
-    <ui-page-section-subheader icon="assignment" heading="Driver Fitness">
+    <ui-page-section-subheader
+      icon="assignment"
+      heading="Driver Medical Fitness">
       <ng-container uiPageSectionSubheaderDesc>
         {{ completed ? 'Enrolment Complete.' : 'Collection Notice.' }}
       </ng-container>
@@ -33,11 +35,11 @@
       heading="You have access">
       <ng-container uiAlertContent>
         <p>
-          You now have access to the Driver Fitness application. You can log
-          into the application using your BC Services Card app.
+          You now have access to the Driver Medical Fitness application. You can
+          log into the application using your BC Services Card app.
         </p>
         <p>
-          Follow this link to Driver Fitness:<br />
+          Follow this link to Driver Medical Fitness:<br />
           <a uiAnchor [attr.href]="driverFitnessUrl"></a>
         </p>
         <p>
