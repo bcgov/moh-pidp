@@ -9,6 +9,8 @@ describe('OrganizationDetailsComponent', () => {
     TestBed.configureTestingModule({
       providers: [OrganizationDetailsComponent],
     });
+
+    component = TestBed.inject(OrganizationDetailsComponent);
   });
 
   it('should create', () => {

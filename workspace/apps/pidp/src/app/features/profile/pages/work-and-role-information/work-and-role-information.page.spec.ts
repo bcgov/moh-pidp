@@ -37,6 +37,17 @@ describe('WorkAndRoleInformationPage', () => {
   let mockParty: WorkAndRoleInformation;
 
   beforeEach(() => {
+    mockActivatedRoute = {
+      snapshot: {
+        data: {
+          title: randTextRange({ min: 1, max: 4 }),
+          routes: {
+            root: '../../',
+          },
+        },
+      },
+    };
+
     TestBed.configureTestingModule({
       imports: [MatDialogModule, ReactiveFormsModule, RouterTestingModule],
       providers: [
