@@ -5,6 +5,6 @@ import { WINDOW } from './window.provider';
 export const NAVIGATOR = new InjectionToken<Navigator>(
   'An abstraction over window.navigator object',
   {
-    factory: () => inject(WINDOW).navigator,
+    factory: (): Navigator => inject(WINDOW).navigator,
   }
 );

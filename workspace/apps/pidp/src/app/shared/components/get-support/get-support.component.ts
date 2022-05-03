@@ -36,9 +36,9 @@ export class GetSupportComponent implements OnInit {
     this.setupSupport();
   }
 
-  // TODO start having these be registered from the modules to reduce
-  //      the spread of maintenance and updates, and remove the dependency
-  //      on the config and permissions service for the component
+  // TODO start having these be registered from the modules to a service to
+  //      reduce the spread of maintenance and updates, and remove the dependency
+  //      on the config and permissions service from the component
   private setupSupport(): void {
     this.providedSupport = [
       {

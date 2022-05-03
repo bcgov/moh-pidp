@@ -1,12 +1,11 @@
 import {
-  Component,
-  OnInit,
   ChangeDetectionStrategy,
-  QueryList,
+  Component,
   ContentChildren,
   EventEmitter,
   Input,
   Output,
+  QueryList,
 } from '@angular/core';
 import { ThemePalette } from '@angular/material/core';
 import { MenuPositionX, MenuPositionY } from '@angular/material/menu';
@@ -20,7 +19,7 @@ import { ContextHelpTitleDirective } from '../context-help-title.directive';
   styleUrls: ['./context-help.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ContextHelpComponent implements OnInit {
+export class ContextHelpComponent {
   @Input() public xPosition: MenuPositionX;
   @Input() public yPosition: MenuPositionY;
   @Input() public icon: string;
@@ -47,10 +46,8 @@ export class ContextHelpComponent implements OnInit {
     this.opened = new EventEmitter<void>();
   }
 
-  public onOpenContextMenu(event: Event) {
+  public onOpenContextMenu(event: Event): void {
     event.stopPropagation();
     this.opened.emit();
   }
-
-  public ngOnInit(): void {}
 }

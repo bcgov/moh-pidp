@@ -6,15 +6,12 @@ import { Observable, map } from 'rxjs';
 import { PartyService } from '@app/core/party/party.service';
 import { Role } from '@app/shared/enums/roles.enum';
 
-import { StatusCode } from './enums/status-code.enum';
 import { ProfileStatusAlert } from './models/profile-status-alert.model';
 import { ProfileStatus } from './models/profile-status.model';
 import { PortalResource } from './portal-resource.service';
 import { PortalService } from './portal.service';
-import { accessSectionKeys } from './state/access/access-group.model';
 import { IPortalSection } from './state/portal-section.model';
 import { PortalState } from './state/portal-state.builder';
-import { profileSectionKeys } from './state/profile/profile-group.model';
 
 @Component({
   selector: 'app-portal',
@@ -22,14 +19,24 @@ import { profileSectionKeys } from './state/profile/profile-group.model';
   styleUrls: ['./portal.page.scss'],
 })
 export class PortalPage implements OnInit {
+  /**
+   * @description
+   * State for driving the displayed groups and sections of
+   * the portal.
+   */
   public state$: Observable<PortalState>;
+  /**
+   * @description
+   * List of HTTP response controlled alert messages for display
+   * in the portal.
+   */
+  public alerts: ProfileStatusAlert[];
   /**
    * @description
    * Whether to show the profile information completed
    * alert providing a scrollable route to access requests.
    */
   public completedProfile: boolean;
-  public alerts: ProfileStatusAlert[];
 
   public Role = Role;
 
