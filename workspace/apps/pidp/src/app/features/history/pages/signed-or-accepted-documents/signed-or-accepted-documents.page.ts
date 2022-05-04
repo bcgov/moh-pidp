@@ -14,7 +14,7 @@ import { AuthorizedUserService } from '@app/features/auth/services/authorized-us
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
 import { ProfileStatus } from '@app/features/portal/models/profile-status.model';
 
-import { DocumentsRoutes } from '../../documents.routes';
+import { HistoryRoutes } from '../../history.routes';
 import { SignedOrAcceptedDocumentsResource } from './signed-or-accepted-documents-resource.service';
 
 export interface DocumentSection extends IDocumentMetaData {
@@ -45,8 +45,8 @@ export class SignedOrAcceptedDocumentsPage implements OnInit {
 
   public onViewDocument(documentType: DocumentType): void {
     this.router.navigate([
-      DocumentsRoutes.MODULE_PATH,
-      DocumentsRoutes.VIEW_DOCUMENT,
+      HistoryRoutes.MODULE_PATH,
+      HistoryRoutes.VIEW_DOCUMENT,
       documentType,
     ]);
   }

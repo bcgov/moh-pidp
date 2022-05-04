@@ -2,22 +2,22 @@ import { Router } from '@angular/router';
 
 import { Observable } from 'rxjs';
 
-import { DocumentsRoutes } from '@app/features/documents/documents.routes';
+import { HistoryRoutes } from '@app/features/history/history.routes';
 import { ShellRoutes } from '@app/features/shell/shell.routes';
 
 import { PortalSectionAction } from '../portal-section-action.model';
 import { PortalSectionKey } from '../portal-section-key.type';
 import { IPortalSection } from '../portal-section.model';
 
-export class SignedAcceptedDocumentsPortalSection implements IPortalSection {
+export class TransactionsPortalSection implements IPortalSection {
   public readonly key: PortalSectionKey;
   public heading: string;
   public description: string;
 
   public constructor(private router: Router) {
     this.key = 'signedAcceptedDocuments';
-    this.heading = 'View Signed or Accepted Documents';
-    this.description = 'View Agreement(s)';
+    this.heading = 'Transactions';
+    this.description = 'View Transaction';
   }
 
   /**
@@ -27,9 +27,7 @@ export class SignedAcceptedDocumentsPortalSection implements IPortalSection {
   public get action(): PortalSectionAction {
     return {
       label: 'View',
-      route: DocumentsRoutes.routePath(
-        DocumentsRoutes.SIGNED_ACCEPTED_DOCUMENTS
-      ),
+      route: HistoryRoutes.routePath(HistoryRoutes.TRANSACTIONS),
       disabled: false,
     };
   }
