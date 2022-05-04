@@ -16,14 +16,23 @@ public class AccessRequestsController : PidpControllerBase
 {
     public AccessRequestsController(IPidpAuthorizationService authorizationService) : base(authorizationService) { }
 
-    [HttpPost("hcim-reenrolment")]
-    [Authorize(Policy = Policies.HcimUser)]
+    [HttpGet("{partyId}")]
+    [Authorize(Policy = Policies.AnyPartyIdentityProvider)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<List<Index.Model>>> GetAccessRequests([FromServices] IQueryHandler<Index.Query, List<Index.Model>> handler,
+                                                                         [FromRoute] Index.Query query)
+        => await this.AuthorizePartyBeforeHandleAsync(query.PartyId, handler, query)
+            .ToActionResultOfT();
+
+    [HttpPost("hcim-account-transfer")]
+    [Authorize(Policy = Policies.AnyPartyIdentityProvider)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
     [ProducesResponseType(StatusCodes.Status423Locked)]
-    public async Task<IActionResult> CreateHcimReEnrolment([FromServices] ICommandHandler<HcimReEnrolment.Command, IDomainResult<HcimReEnrolment.Model>> handler,
-                                                           [FromBody] HcimReEnrolment.Command command)
+    public async Task<IActionResult> CreateHcimAccountTransfer([FromServices] ICommandHandler<HcimAccountTransfer.Command, IDomainResult<HcimAccountTransfer.Model>> handler,
+                                                               [FromBody] HcimAccountTransfer.Command command)
     {
         var access = await this.AuthorizationService.CheckPartyAccessibility(command.PartyId, this.User);
         if (!access.IsSuccess)
@@ -54,6 +63,15 @@ public class AccessRequestsController : PidpControllerBase
                 throw new NotImplementedException();
         }
     }
+
+    [HttpPost("hcim-enrolment")]
+    [Authorize(Policy = Policies.AnyPartyIdentityProvider)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> CreateSAEformsEnrolment([FromServices] ICommandHandler<HcimEnrolment.Command, IDomainResult> handler,
+                                                             [FromBody] HcimEnrolment.Command command)
+        => await this.AuthorizePartyBeforeHandleAsync(command.PartyId, handler, command)
+            .ToActionResult();
 
     [HttpPost("sa-eforms")]
     [Authorize(Policy = Policies.BcscAuthentication)]

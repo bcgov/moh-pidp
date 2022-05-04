@@ -1,4 +1,3 @@
-import { Location } from '@angular/common';
 import { TestBed } from '@angular/core/testing';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -21,19 +20,21 @@ describe('ViewDocumentPage', () => {
   let component: ViewDocumentPage;
   let router: Router;
 
-  const mockActivatedRoute = {
-    snapshot: {
-      params: { doctype: DocumentType.PIDP_COLLECTION_NOTICE },
-      data: {
-        title: randTextRange({ min: 1, max: 4 }),
-        routes: {
-          root: '../../',
-        },
-      },
-    },
-  };
+  let mockActivatedRoute;
 
   beforeEach(() => {
+    mockActivatedRoute = {
+      snapshot: {
+        params: { doctype: DocumentType.PIDP_COLLECTION_NOTICE },
+        data: {
+          title: randTextRange({ min: 1, max: 4 }),
+          routes: {
+            root: '../../',
+          },
+        },
+      },
+    };
+
     TestBed.configureTestingModule({
       imports: [RouterTestingModule],
       providers: [
@@ -47,7 +48,6 @@ describe('ViewDocumentPage', () => {
           useValue: mockActivatedRoute,
         },
         provideAutoSpy(DocumentService),
-        provideAutoSpy(Location),
         provideAutoSpy(RouteUtils),
         provideAutoSpy(Router),
       ],
@@ -65,13 +65,10 @@ describe('ViewDocumentPage', () => {
         then(
           'router should navigate to signed or accepted documents route',
           () => {
-            expect(router.navigate).toHaveBeenCalledWith(
-              [
-                DocumentsRoutes.MODULE_PATH,
-                DocumentsRoutes.SIGNED_ACCEPTED_DOCUMENTS_PAGE,
-              ],
-              {}
-            );
+            expect(router.navigate).toHaveBeenCalledWith([
+              DocumentsRoutes.MODULE_PATH,
+              DocumentsRoutes.SIGNED_ACCEPTED_DOCUMENTS_PAGE,
+            ]);
           }
         );
       });

@@ -36,8 +36,7 @@ public class HcimAuthorizationStatus
     public LdapLoginResponse.OrgDetails? OrgDetails { get; set; }
     public int? RemainingAttempts { get; set; }
 
-    [MemberNotNullWhen(true, nameof(HcimUserRole))]
-    [MemberNotNullWhen(true, nameof(OrgDetails))]
+    [MemberNotNullWhen(true, nameof(HcimUserRole), nameof(OrgDetails))]
     public bool IsAuthorized => this.Status == AuthorizationStatus.Authorized;
 
     public static HcimAuthorizationStatus FromLoginResponse(LdapLoginResponse login)

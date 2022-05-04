@@ -2,7 +2,7 @@ import { Component, Inject } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { EMPTY, Observable, Subscription, exhaustMap } from 'rxjs';
+import { EMPTY, Observable, exhaustMap } from 'rxjs';
 
 import {
   DashboardHeaderConfig,
@@ -23,7 +23,6 @@ import { AuthService } from '../../services/auth.service';
   styleUrls: ['./login.page.scss'],
 })
 export class LoginPage {
-  public busy?: Subscription;
   public title: string;
   public headerConfig: DashboardHeaderConfig;
   public loginCancelled: boolean;

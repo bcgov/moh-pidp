@@ -1,10 +1,7 @@
-import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { combineLatest, map } from 'rxjs';
-
-import { RouteUtils } from '@bcgov/shared/utils';
 
 import { PartyService } from '@app/core/party/party.service';
 import {
@@ -15,7 +12,7 @@ import {
 import { IdentityProvider } from '@app/features/auth/enums/identity-provider.enum';
 import { AuthorizedUserService } from '@app/features/auth/services/authorized-user.service';
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
-import { ProfileStatus } from '@app/features/portal/sections/models/profile-status.model';
+import { ProfileStatus } from '@app/features/portal/models/profile-status.model';
 
 import { DocumentsRoutes } from '../../documents.routes';
 import { SignedOrAcceptedDocumentsResource } from './signed-or-accepted-documents-resource.service';
@@ -33,34 +30,29 @@ export interface DocumentSection extends IDocumentMetaData {
 export class SignedOrAcceptedDocumentsPage implements OnInit {
   public title: string;
   public documents: DocumentSection[];
-  private routeUtils: RouteUtils;
 
   public constructor(
+    private route: ActivatedRoute,
+    private router: Router,
     private partyService: PartyService,
     private resource: SignedOrAcceptedDocumentsResource,
     private authUserService: AuthorizedUserService,
-    private documentService: DocumentService,
-    route: ActivatedRoute,
-    router: Router,
-    location: Location
+    private documentService: DocumentService
   ) {
     this.title = route.snapshot.data.title;
     this.documents = [];
-    // TODO move into provider for each module and DI into
-    // components to reduce redundant initialization
-    this.routeUtils = new RouteUtils(
-      route,
-      router,
-      DocumentsRoutes.MODULE_PATH,
-      location
-    );
   }
 
   public onViewDocument(documentType: DocumentType): void {
-    this.routeUtils.routeWithin([
+    this.router.navigate([
+      DocumentsRoutes.MODULE_PATH,
       DocumentsRoutes.VIEW_DOCUMENT_PAGE,
       documentType,
     ]);
+  }
+
+  public onBack(): void {
+    this.navigateToRoot();
   }
 
   public ngOnInit(): void {
@@ -103,5 +95,9 @@ export class SignedOrAcceptedDocumentsPage implements OnInit {
         ...document,
         actionLabel: 'View',
       }));
+  }
+
+  private navigateToRoot(): void {
+    this.router.navigate([this.route.snapshot.data.routes.root]);
   }
 }

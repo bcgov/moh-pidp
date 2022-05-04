@@ -6,11 +6,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { httpInterceptorProviders } from '@bcgov/shared/data-access';
-import {
-  NgxBusyModule,
-  NgxProgressBarModule,
-  RootRoutingModule,
-} from '@bcgov/shared/ui';
+import { NgxProgressBarModule, RootRoutingModule } from '@bcgov/shared/ui';
 import { EnsureModuleLoadedOnceGuard } from '@bcgov/shared/utils';
 
 import { KeycloakModule } from '@app/modules/keycloak/keycloak.module';
@@ -31,8 +27,6 @@ const modules = [
   KeycloakModule,
   PermissionsModule.forRoot(),
   RootRoutingModule,
-  // TODO drop this dependency from the CoreModule shows up when submitting college licence
-  NgxBusyModule,
 ];
 
 @NgModule({

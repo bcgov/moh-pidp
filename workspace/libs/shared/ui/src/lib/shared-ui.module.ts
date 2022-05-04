@@ -20,6 +20,7 @@ import { HtmlComponent } from './components/dialogs/content/html/html.component'
 import { FormSectionComponent } from './components/form-section/form-section.component';
 import { IconComponent } from './components/icon/icon.component';
 import { KeyValueInfoComponent } from './components/key-value-info/key-value-info.component';
+import { OverlayComponent } from './components/overlay/overlay.component';
 import { PageFooterActionDirective } from './components/page-footer/page-footer-action.directive';
 import { PageFooterComponent } from './components/page-footer/page-footer.component';
 import { PageHeaderComponent } from './components/page-header/page-header.component';
@@ -36,7 +37,6 @@ import { UserInfoComponent } from './components/user-info/user-info.component';
 import { YesNoContentComponent } from './components/yes-no-content/yes-no-content.component';
 import { MaterialModule } from './material/material.module';
 import { ContextHelpModule } from './modules/context-help/context-help.module';
-import { NgxBusyModule } from './modules/ngx-busy/ngx-busy.module';
 import { DefaultPipe } from './pipes/default.pipe';
 import { FormatDatePipe } from './pipes/format-date.pipe';
 import { FullnamePipe } from './pipes/fullname.pipe';
@@ -63,6 +63,7 @@ import { SafePipe } from './pipes/safe.pipe';
     KeyValueInfoComponent,
     HtmlComponent,
     IconComponent,
+    OverlayComponent,
     PageComponent,
     PageFooterComponent,
     PageFooterActionDirective,
@@ -89,7 +90,6 @@ import { SafePipe } from './pipes/safe.pipe';
     CommonModule,
     ContextHelpModule,
     MaterialModule,
-    NgxBusyModule,
     NgxMaskModule.forRoot(),
     ReactiveFormsModule,
   ],
@@ -115,6 +115,7 @@ import { SafePipe } from './pipes/safe.pipe';
     HtmlComponent,
     IconComponent,
     PageComponent,
+    OverlayComponent,
     PageFooterComponent,
     PageFooterActionDirective,
     PageHeaderComponent,

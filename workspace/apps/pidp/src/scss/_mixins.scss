@@ -1,8 +1,6 @@
 @use '@angular/material' as mat;
 @use 'palette';
 
-// TODO review base card styles with alert styles for common attributes, and extract mobile base
-// TODO convert @import to @use
 @import 'bootstrap/bootstrap-imports';
 
 $theme-typography: mat.define-typography-config();
