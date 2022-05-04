@@ -146,8 +146,8 @@
       </ui-page-section>
 
       <ui-page-section>
-        <ui-scroll-target targetId="documents"></ui-scroll-target>
-        <ui-page-section-subheader icon="history" heading="Your Documents">
+        <ui-scroll-target targetId="history"></ui-scroll-target>
+        <ui-page-section-subheader icon="history" heading="History">
           <ng-container uiPageSectionSubheaderDesc>
             View information pertaining to your profile and interaction with the
             systems you use for work.
@@ -155,7 +155,7 @@
         </ui-page-section-subheader>
 
         <ui-card-summary
-          *ngFor="let section of (state$ | async)?.documents"
+          *ngFor="let section of (state$ | async)?.history"
           [heading]="section.heading"
           [actionLabel]="section.action.label"
           [actionDisabled]="section.action.disabled"

@@ -13,7 +13,7 @@ import {
   DocumentType,
 } from '@app/core/services/document.service';
 
-import { DocumentsRoutes } from '../../documents.routes';
+import { HistoryRoutes } from '../../history.routes';
 import { ViewDocumentPage } from './view-document.page';
 
 describe('ViewDocumentPage', () => {
@@ -66,8 +66,8 @@ describe('ViewDocumentPage', () => {
           'router should navigate to signed or accepted documents route',
           () => {
             expect(router.navigate).toHaveBeenCalledWith([
-              DocumentsRoutes.MODULE_PATH,
-              DocumentsRoutes.SIGNED_ACCEPTED_DOCUMENTS_PAGE,
+              HistoryRoutes.MODULE_PATH,
+              HistoryRoutes.SIGNED_ACCEPTED_DOCUMENTS_PAGE,
             ]);
           }
         );

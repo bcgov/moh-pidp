@@ -11,8 +11,8 @@ import { HcimAccountTransferPortalSection } from './access/hcim-account-transfer
 import { HcimEnrolmentPortalSection } from './access/hcim-enrolment-portal-section.class';
 import { SaEformsPortalSection } from './access/sa-eforms-portal-section.class';
 import { SitePrivacySecurityPortalSection } from './access/site-privacy-security-checklist-portal-section.class';
-import { SignedAcceptedDocumentsPortalSection } from './documents/signed-accepted-documents-portal-section.class';
-import { TransactionsPortalSection } from './documents/transactions-portal-section.class';
+import { SignedAcceptedDocumentsPortalSection } from './history/signed-accepted-documents-portal-section.class';
+import { TransactionsPortalSection } from './history/transactions-portal-section.class';
 import { AdministratorInfoPortalSection } from './organization/administrator-information-portal-section';
 import { FacilityDetailsPortalSection } from './organization/facility-details-portal-section.class';
 import { OrganizationDetailsPortalSection } from './organization/organization-details-portal-section.class';
@@ -33,7 +33,7 @@ export const portalStateGroupKeys = [
   'access',
   'organization',
   'training',
-  'documents',
+  'history',
 ] as const;
 
 /**
@@ -58,7 +58,7 @@ export class PortalStateBuilder {
       access: this.createAccessGroup(profileStatus),
       organization: this.createOrganizationGroup(profileStatus),
       training: this.createTrainingGroup(profileStatus),
-      documents: this.createDocumentsGroup(),
+      history: this.createHistoryGroup(),
     };
   }
 
@@ -154,7 +154,7 @@ export class PortalStateBuilder {
     ];
   }
 
-  private createDocumentsGroup(): IPortalSection[] {
+  private createHistoryGroup(): IPortalSection[] {
     return [
       new SignedAcceptedDocumentsPortalSection(this.router),
       ...ArrayUtils.insertResultIf<IPortalSection>(
