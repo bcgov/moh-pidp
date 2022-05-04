@@ -4,14 +4,14 @@ import { RouterModule, Routes } from '@angular/router';
 import { PermissionsGuard } from '@app/modules/permissions/permissions.guard';
 import { Role } from '@app/shared/enums/roles.enum';
 
-import { DocumentsRoutes } from './documents.routes';
+import { HistoryRoutes } from './history.routes';
 import { SignedOrAcceptedDocumentsModule } from './pages/signed-or-accepted-documents/signed-or-accepted-documents.module';
 import { TransactionsModule } from './pages/transactions/transactions.module';
 import { ViewDocumentModule } from './pages/view-document/view-document.module';
 
 const routes: Routes = [
   {
-    path: DocumentsRoutes.TRANSACTIONS_PAGE,
+    path: HistoryRoutes.TRANSACTIONS_PAGE,
     canLoad: [PermissionsGuard],
     data: {
       roles: [Role.FEATURE_PIDP_DEMO],
@@ -22,14 +22,14 @@ const routes: Routes = [
       ),
   },
   {
-    path: DocumentsRoutes.SIGNED_ACCEPTED_DOCUMENTS_PAGE,
+    path: HistoryRoutes.SIGNED_ACCEPTED_DOCUMENTS_PAGE,
     loadChildren: (): Promise<SignedOrAcceptedDocumentsModule> =>
       import(
         './pages/signed-or-accepted-documents/signed-or-accepted-documents.module'
       ).then((m) => m.SignedOrAcceptedDocumentsModule),
   },
   {
-    path: `${DocumentsRoutes.VIEW_DOCUMENT_PAGE}/:doctype`,
+    path: `${HistoryRoutes.VIEW_DOCUMENT_PAGE}/:doctype`,
     loadChildren: (): Promise<ViewDocumentModule> =>
       import('./pages/view-document/view-document.module').then(
         (m) => m.ViewDocumentModule
@@ -41,4 +41,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class DocumentsRoutingModule {}
+export class HistoryRoutingModule {}
