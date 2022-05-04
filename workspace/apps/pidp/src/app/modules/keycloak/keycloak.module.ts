@@ -21,6 +21,4 @@ export const keycloakProvider: Provider = {
   imports: [KeycloakAngularModule],
   providers: [keycloakProvider],
 })
-export class KeycloakModule {
-  // TODO use forRoot/forChild pattern to automatically apply the provider, otherwise allow for customization
-}
+export class KeycloakModule {}

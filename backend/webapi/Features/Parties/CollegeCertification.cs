@@ -2,7 +2,6 @@ namespace Pidp.Features.Parties;
 
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using DomainResults.Common;
 using FluentValidation;
 using HybridModelBinding;
 using Microsoft.EntityFrameworkCore;
@@ -16,12 +15,12 @@ using Pidp.Models.Lookups;
 
 public class CollegeCertification
 {
-    public class Query : IQuery<IDomainResult<Command>>
+    public class Query : IQuery<Command>
     {
         public int PartyId { get; set; }
     }
 
-    public class Command : ICommand<IDomainResult>
+    public class Command : ICommand
     {
         [JsonIgnore]
         [HybridBindProperty(Source.Route)]
@@ -45,7 +44,7 @@ public class CollegeCertification
         }
     }
 
-    public class QueryHandler : IQueryHandler<Query, IDomainResult<Command>>
+    public class QueryHandler : IQueryHandler<Query, Command>
     {
         private readonly IMapper mapper;
         private readonly PidpDbContext context;
@@ -56,26 +55,18 @@ public class CollegeCertification
             this.context = context;
         }
 
-        public async Task<IDomainResult<Command>> HandleAsync(Query query)
+        public async Task<Command> HandleAsync(Query query)
         {
-            var partyExists = await this.context.Parties
-                .AnyAsync(party => party.Id == query.PartyId);
-
-            if (!partyExists)
-            {
-                return DomainResult.NotFound<Command>();
-            }
-
             var cert = await this.context.PartyCertifications
                 .Where(certification => certification.PartyId == query.PartyId)
                 .ProjectTo<Command>(this.mapper.ConfigurationProvider)
                 .SingleOrDefaultAsync();
 
-            return DomainResult.Success(cert ?? new Command { PartyId = query.PartyId });
+            return cert ?? new Command { PartyId = query.PartyId };
         }
     }
 
-    public class CommandHandler : ICommandHandler<Command, IDomainResult>
+    public class CommandHandler : ICommandHandler<Command>
     {
         private readonly IPlrClient client;
         private readonly PidpDbContext context;
@@ -86,17 +77,11 @@ public class CollegeCertification
             this.context = context;
         }
 
-        public async Task<IDomainResult> HandleAsync(Command command)
+        public async Task HandleAsync(Command command)
         {
             var party = await this.context.Parties
                 .Include(party => party.PartyCertification)
-                .SingleOrDefaultAsync(party => party.Id == command.PartyId);
-
-            // TODO remove?
-            if (party == null)
-            {
-                return DomainResult.NotFound();
-            }
+                .SingleAsync(party => party.Id == command.PartyId);
 
             if (party.PartyCertification == null)
             {
@@ -110,7 +95,6 @@ public class CollegeCertification
                 : null;
 
             await this.context.SaveChangesAsync();
-            return DomainResult.Success();
         }
     }
 }

@@ -9,15 +9,17 @@ import { AppComponent } from './app.component';
 describe('AppComponent', () => {
   let component: AppComponent;
 
-  const mockActivatedRoute = {
-    snapshot: {
-      data: {
-        title: randTextRange({ min: 1, max: 4 }),
-      },
-    },
-  };
+  let mockActivatedRoute;
 
   beforeEach(() => {
+    mockActivatedRoute = {
+      snapshot: {
+        data: {
+          title: randTextRange({ min: 1, max: 4 }),
+        },
+      },
+    };
+
     TestBed.configureTestingModule({
       imports: [RouterTestingModule],
       providers: [

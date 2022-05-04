@@ -2,7 +2,6 @@ namespace Pidp.Features.Parties;
 
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using DomainResults.Common;
 using FluentValidation;
 using HybridModelBinding;
 using Microsoft.EntityFrameworkCore;
@@ -12,12 +11,12 @@ using Pidp.Data;
 
 public class Demographics
 {
-    public class Query : IQuery<IDomainResult<Command>>
+    public class Query : IQuery<Command>
     {
         public int Id { get; set; }
     }
 
-    public class Command : ICommand<IDomainResult>
+    public class Command : ICommand
     {
         [JsonIgnore]
         [HybridBindProperty(Source.Route)]
@@ -46,7 +45,7 @@ public class Demographics
         }
     }
 
-    public class QueryHandler : IQueryHandler<Query, IDomainResult<Command>>
+    public class QueryHandler : IQueryHandler<Query, Command>
     {
         private readonly IMapper mapper;
         private readonly PidpDbContext context;
@@ -57,37 +56,25 @@ public class Demographics
             this.context = context;
         }
 
-        public async Task<IDomainResult<Command>> HandleAsync(Query query)
+        public async Task<Command> HandleAsync(Query query)
         {
-            var demographic = await this.context.Parties
+            return await this.context.Parties
                 .Where(party => party.Id == query.Id)
                 .ProjectTo<Command>(this.mapper.ConfigurationProvider)
-                .SingleOrDefaultAsync();
-
-            if (demographic == null)
-            {
-                return DomainResult.NotFound<Command>();
-            }
-
-            return DomainResult.Success(demographic);
+                .SingleAsync();
         }
     }
 
-    public class CommandHandler : ICommandHandler<Command, IDomainResult>
+    public class CommandHandler : ICommandHandler<Command>
     {
         private readonly PidpDbContext context;
 
         public CommandHandler(PidpDbContext context) => this.context = context;
 
-        public async Task<IDomainResult> HandleAsync(Command command)
+        public async Task HandleAsync(Command command)
         {
             var party = await this.context.Parties
-                .SingleOrDefaultAsync(party => party.Id == command.Id);
-
-            if (party == null)
-            {
-                return DomainResult.NotFound();
-            }
+                .SingleAsync(party => party.Id == command.Id);
 
             party.PreferredFirstName = command.PreferredFirstName;
             party.PreferredMiddleName = command.PreferredMiddleName;
@@ -96,7 +83,6 @@ public class Demographics
             party.Phone = command.Phone;
 
             await this.context.SaveChangesAsync();
-            return DomainResult.Success();
         }
     }
 }

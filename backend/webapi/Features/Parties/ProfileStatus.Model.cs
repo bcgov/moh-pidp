@@ -3,14 +3,22 @@ namespace Pidp.Features.Parties;
 using NodaTime;
 
 using Pidp.Models;
-using Pidp.Infrastructure.Auth;
 using Pidp.Models.Lookups;
-using Pidp.Extensions;
 
 public partial class ProfileStatus
 {
     public partial class Model
     {
+        public class AccessAdministrator : ProfileSection
+        {
+            internal override string SectionName => "administratorInfo";
+            public string? Email { get; set; }
+
+            public AccessAdministrator(ProfileStatusDto profile) : base(profile) => this.Email = profile.AccessAdministratorEmail;
+
+            protected override void SetAlertsAndStatus(ProfileStatusDto profile) => this.StatusCode = string.IsNullOrWhiteSpace(profile.AccessAdministratorEmail) ? StatusCode.Incomplete : StatusCode.Complete;
+        }
+
         public class CollegeCertification : ProfileSection
         {
             internal override string SectionName => "collegeCertification";
@@ -67,7 +75,7 @@ public partial class ProfileStatus
             internal override string SectionName => "demographics";
             public string FirstName { get; set; } = string.Empty;
             public string LastName { get; set; } = string.Empty;
-            public LocalDate Birthdate { get; set; }
+            public LocalDate? Birthdate { get; set; }
             public string? Email { get; set; }
             public string? Phone { get; set; }
 
@@ -83,23 +91,45 @@ public partial class ProfileStatus
             protected override void SetAlertsAndStatus(ProfileStatusDto profile) => this.StatusCode = profile.DemographicsEntered ? StatusCode.Complete : StatusCode.Incomplete;
         }
 
-        public class HcimReEnrolment : ProfileSection
+        public class HcimAccountTransfer : ProfileSection
         {
-            internal override string SectionName => "hcim";
+            internal override string SectionName => "hcimAccountTransfer";
 
-            public HcimReEnrolment(ProfileStatusDto profile) : base(profile) { }
+            public HcimAccountTransfer(ProfileStatusDto profile) : base(profile) { }
 
             protected override void SetAlertsAndStatus(ProfileStatusDto profile)
             {
-                if (profile.CompletedEnrolments.Contains(AccessType.SAEforms))
+                if (profile.CompletedEnrolments.Contains(AccessType.HcimAccountTransfer)
+                   || profile.CompletedEnrolments.Contains(AccessType.HcimEnrolment))
                 {
-                    this.StatusCode = StatusCode.Complete;
+                    this.StatusCode = StatusCode.Hidden;
                     return;
                 }
 
                 this.StatusCode = profile.DemographicsEntered
                     ? StatusCode.Incomplete
                     : StatusCode.Locked;
+            }
+        }
+
+        public class HcimEnrolment : ProfileSection
+        {
+            internal override string SectionName => "hcimEnrolment";
+
+            public HcimEnrolment(ProfileStatusDto profile) : base(profile) { }
+
+            protected override void SetAlertsAndStatus(ProfileStatusDto profile)
+            {
+                if (profile.CompletedEnrolments.Contains(AccessType.HcimAccountTransfer)
+                    || profile.CompletedEnrolments.Contains(AccessType.HcimEnrolment))
+                {
+                    this.StatusCode = StatusCode.Complete;
+                    return;
+                }
+
+                this.StatusCode = !profile.DemographicsEntered || string.IsNullOrWhiteSpace(profile.AccessAdministratorEmail)
+                    ? StatusCode.Locked
+                    : StatusCode.Incomplete;
             }
         }
 

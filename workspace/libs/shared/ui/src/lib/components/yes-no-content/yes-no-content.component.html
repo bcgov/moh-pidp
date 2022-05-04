@@ -1,13 +1,9 @@
-<div class="yes-no-container">
-  <mat-radio-group (change)="onDecisionChange($event)">
-    <mat-radio-button
-      *ngFor="let decision of decisions"
-      [value]="decision.code">
-      {{ decision.name }}
-    </mat-radio-button>
-  </mat-radio-group>
+<mat-radio-group (change)="onDecisionUpdate($event)">
+  <mat-radio-button *ngFor="let decision of decisions" [value]="decision.code">
+    {{ decision.name }}
+  </mat-radio-button>
+</mat-radio-group>
 
-  <div *ngIf="chosenDecision" class="yes-no-content">
-    <ng-content></ng-content>
-  </div>
+<div *ngIf="chosenDecision">
+  <ng-content></ng-content>
 </div>

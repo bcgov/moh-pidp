@@ -9,11 +9,14 @@ import {
   DashboardRouteMenuItem,
   IDashboard,
 } from '@bcgov/shared/ui';
+import { ArrayUtils } from '@bcgov/shared/utils';
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';
 import { AccessTokenService } from '@app/features/auth/services/access-token.service';
 import { AuthService } from '@app/features/auth/services/auth.service';
 import { PortalRoutes } from '@app/features/portal/portal.routes';
+import { PermissionsService } from '@app/modules/permissions/permissions.service';
+import { Role } from '@app/shared/enums/roles.enum';
 
 @Component({
   selector: 'app-portal-dashboard',
@@ -33,6 +36,7 @@ export class PortalDashboardComponent implements IDashboard {
   public constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
     private authService: AuthService,
+    private permissionsService: PermissionsService,
     accessTokenService: AccessTokenService
   ) {
     this.logoutRedirectUrl = `${this.config.applicationUrl}/${this.config.routes.auth}`;
@@ -41,7 +45,7 @@ export class PortalDashboardComponent implements IDashboard {
       .pipe(map((token) => token?.name ?? ''));
     this.headerConfig = { theme: 'light', allowMobileToggle: true };
     this.brandConfig = {
-      imgSrc: '/assets/images/pidp-logo-blue.svg',
+      imgSrc: '/assets/images/pidp-logo-white.svg',
       imgAlt: 'Provider Identity Portal Logo',
     };
     this.showMenuItemIcons = true;
@@ -70,6 +74,20 @@ export class PortalDashboardComponent implements IDashboard {
         },
         'assignment_ind'
       ),
+      ...ArrayUtils.insertResultIf<DashboardRouteMenuItem>(
+        this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
+        () => [
+          new DashboardRouteMenuItem(
+            'Organization Info',
+            {
+              commands: PortalRoutes.MODULE_PATH,
+              extras: { fragment: 'organization' },
+              linkActiveOptions,
+            },
+            'corporate_fare'
+          ),
+        ]
+      ),
       new DashboardRouteMenuItem(
         'Access to Systems',
         {
@@ -78,6 +96,23 @@ export class PortalDashboardComponent implements IDashboard {
           linkActiveOptions,
         },
         'assignment'
+      ),
+      ...ArrayUtils.insertResultIf<DashboardRouteMenuItem>(
+        this.permissionsService.hasRole([
+          Role.FEATURE_PIDP_DEMO,
+          Role.FEATURE_AMH_DEMO,
+        ]),
+        () => [
+          new DashboardRouteMenuItem(
+            'Training',
+            {
+              commands: PortalRoutes.MODULE_PATH,
+              extras: { fragment: 'training' },
+              linkActiveOptions,
+            },
+            'school'
+          ),
+        ]
       ),
       new DashboardRouteMenuItem(
         'Your Documents',

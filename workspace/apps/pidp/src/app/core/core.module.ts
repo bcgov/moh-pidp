@@ -6,11 +6,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { httpInterceptorProviders } from '@bcgov/shared/data-access';
-import {
-  NgxBusyModule,
-  NgxProgressBarModule,
-  RootRoutingModule,
-} from '@bcgov/shared/ui';
+import { NgxProgressBarModule, RootRoutingModule } from '@bcgov/shared/ui';
 import { EnsureModuleLoadedOnceGuard } from '@bcgov/shared/utils';
 
 import { KeycloakModule } from '@app/modules/keycloak/keycloak.module';
@@ -19,8 +15,10 @@ import { PermissionsModule } from '@app/modules/permissions/permissions.module';
 
 const modules = [
   BrowserModule,
-  HttpClientModule,
   BrowserAnimationsModule,
+  HttpClientModule,
+  // TODO required at root to connect with HttpClientModule
+  NgxProgressBarModule,
   // TODO only applied to allow for a few core services until moved
   ReactiveFormsModule,
   // TODO only applied to allow for a few core services until moved
@@ -29,9 +27,6 @@ const modules = [
   KeycloakModule,
   PermissionsModule.forRoot(),
   RootRoutingModule,
-  NgxProgressBarModule,
-  // TODO temporily added to stop message from being displayed
-  NgxBusyModule,
 ];
 
 @NgModule({

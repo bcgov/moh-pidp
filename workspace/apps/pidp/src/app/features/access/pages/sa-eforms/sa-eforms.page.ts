@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { Subscription, catchError, noop, of, tap } from 'rxjs';
+import { catchError, noop, of, tap } from 'rxjs';
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';
 import { PartyService } from '@app/core/party/party.service';
@@ -18,7 +18,6 @@ import { saEformsUrl } from './sa-eforms.constants';
   styleUrls: ['./sa-eforms.page.scss'],
 })
 export class SaEformsPage implements OnInit {
-  public busy?: Subscription;
   public title: string;
   public saEformsUrl: string;
   public collectionNotice: string;
@@ -50,7 +49,7 @@ export class SaEformsPage implements OnInit {
   }
 
   public onRequestAccess(): void {
-    this.busy = this.resource
+    this.resource
       .requestAccess(this.partyService.partyId)
       .pipe(
         tap(() => (this.completed = true)),

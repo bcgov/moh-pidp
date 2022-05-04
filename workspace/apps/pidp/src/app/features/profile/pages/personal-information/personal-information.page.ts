@@ -10,6 +10,7 @@ import { ToggleContentChange } from '@bcgov/shared/ui';
 
 import { PartyService } from '@app/core/party/party.service';
 import { LoggerService } from '@app/core/services/logger.service';
+import { IdentityProvider } from '@app/features/auth/enums/identity-provider.enum';
 import { User } from '@app/features/auth/models/user.model';
 import { AuthorizedUserService } from '@app/features/auth/services/authorized-user.service';
 
@@ -18,7 +19,7 @@ import { FormUtilsService } from '@core/services/form-utils.service';
 
 import { PersonalInformationFormState } from './personal-information-form-state';
 import { PersonalInformationResource } from './personal-information-resource.service';
-import { PersonalInformationModel } from './personal-information.model';
+import { PersonalInformation } from './personal-information.model';
 
 @Component({
   selector: 'app-personal-information',
@@ -32,8 +33,11 @@ export class PersonalInformationPage
 {
   public title: string;
   public formState: PersonalInformationFormState;
-  public user: Observable<User>;
+  public user$: Observable<User>;
+  public identityProvider$: Observable<IdentityProvider>;
   public hasPreferredName: boolean;
+
+  public IdentityProvider = IdentityProvider;
 
   public constructor(
     protected dialog: MatDialog,
@@ -50,7 +54,8 @@ export class PersonalInformationPage
 
     this.title = this.route.snapshot.data.title;
     this.formState = new PersonalInformationFormState(fb);
-    this.user = this.authorizedUserService.user$;
+    this.user$ = this.authorizedUserService.user$;
+    this.identityProvider$ = this.authorizedUserService.identityProvider$;
     this.hasPreferredName = false;
   }
 
@@ -69,10 +74,10 @@ export class PersonalInformationPage
       return this.navigateToRoot();
     }
 
-    this.busy = this.resource
+    this.resource
       .get(partyId)
       .pipe(
-        tap((model: PersonalInformationModel | null) =>
+        tap((model: PersonalInformation | null) =>
           this.formState.patchValue(model)
         ),
         catchError((error: HttpErrorResponse) => {
@@ -82,7 +87,7 @@ export class PersonalInformationPage
           return of(null);
         })
       )
-      .subscribe((model: PersonalInformationModel | null) =>
+      .subscribe((model: PersonalInformation | null) =>
         this.handlePreferredNameChange(!!model?.preferredFirstName)
       );
   }

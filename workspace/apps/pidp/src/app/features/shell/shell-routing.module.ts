@@ -2,7 +2,6 @@ import { PortalModule } from '@angular/cdk/portal';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { UserGuard } from '@app/core/guards/user.guard';
 import { PartyResolver } from '@app/core/party/party.resolver';
 import { PermissionsGuard } from '@app/modules/permissions/permissions.guard';
 import { Role } from '@app/shared/enums/roles.enum';
@@ -16,6 +15,8 @@ import { AuthRoutes } from '../auth/auth.routes';
 import { AuthenticationGuard } from '../auth/guards/authentication.guard';
 import { DocumentsModule } from '../documents/documents.module';
 import { DocumentsRoutes } from '../documents/documents.routes';
+import { OrganizationInfoModule } from '../organization-info/organization-info.module';
+import { OrganizationInfoRoutes } from '../organization-info/organization-info.routes';
 import { PortalRoutes } from '../portal/portal.routes';
 import { ProfileModule } from '../profile/profile.module';
 import { ProfileRoutes } from '../profile/profile.routes';
@@ -47,16 +48,14 @@ const routes: Routes = [
   {
     path: '',
     component: PortalDashboardComponent,
-    canActivate: [AuthenticationGuard, UserGuard],
+    canActivate: [AuthenticationGuard],
     canActivateChild: [AuthenticationGuard],
     resolve: {
       partyId: PartyResolver,
     },
     data: {
-      // TODO don't hardcode in the redirect URL but also don't want cross module dependencies,
-      //      refactor when modules become libs otherwise premature optimization
       routes: {
-        auth: '/auth',
+        auth: `/${AuthRoutes.MODULE_PATH}`,
       },
     },
     children: [
@@ -69,6 +68,13 @@ const routes: Routes = [
         path: ProfileRoutes.MODULE_PATH,
         loadChildren: (): Promise<ProfileModule> =>
           import('../profile/profile.module').then((m) => m.ProfileModule),
+      },
+      {
+        path: OrganizationInfoRoutes.MODULE_PATH,
+        loadChildren: (): Promise<OrganizationInfoModule> =>
+          import('../organization-info/organization-info.module').then(
+            (m) => m.OrganizationInfoModule
+          ),
       },
       {
         path: AccessRoutes.MODULE_PATH,

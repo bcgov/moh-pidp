@@ -43,11 +43,6 @@ export class DashboardComponent implements OnInit {
   @Input() public username?: string;
   /**
    * @description
-   * Branding configuration for the side navigation.
-   */
-  @Input() public brandConfig?: { imgSrc: string; imgAlt: string };
-  /**
-   * @description
    * List of dashboard details used to populate the side navigation
    * links for routing within the application.
    */

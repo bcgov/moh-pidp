@@ -11,9 +11,8 @@
     </ui-page-section-subheader>
 
     <div class="row">
-      <div *ngFor="let document of documents" class="col-12 col-xl-6">
+      <div *ngFor="let document of documents" class="col-12">
         <ui-card-summary
-          [icon]="document.icon"
           [heading]="document.title"
           [actionLabel]="document.actionLabel"
           [actionDisabled]="document.disabled"
@@ -28,7 +27,7 @@
       uiPageFooterAction
       color="primary"
       type="button"
-      routerLink="../../">
+      (click)="onBack()">
       Back Home
     </button>
   </ui-page-footer>

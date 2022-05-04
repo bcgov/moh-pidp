@@ -21,7 +21,7 @@ export class AdminResource {
   public getParties(): Observable<PartyList[]> {
     return this.apiResource.get<PartyList[]>('/admin/parties').pipe(
       catchError((_: HttpErrorResponse) => {
-        // TODO add logging and toast messaging
+        // TODO add logging and toast messaging around specific errors when the admin starts getting a bit of attention
         return of([]);
       })
     );

@@ -1,0 +1,37 @@
+@use 'mixins' as mixins;
+
+:host {
+  display: block;
+  // Provide control to positioned descendents
+  // within the containing element
+  position: relative;
+
+  .overlay {
+    @include mixins.cover;
+    background-color: hsla(360, 100%, 100%, 0.5);
+  }
+
+  .overlay.cover-viewport {
+    @include mixins.cover(fixed);
+
+    div {
+      @include mixins.cover(absolute);
+
+      // Regardless always center the content
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+
+      span:first-child {
+        padding-bottom: 1.75rem;
+      }
+
+      span:last-child p {
+        text-align: center;
+        font-size: 1.5rem;
+        line-height: 2.5rem;
+      }
+    }
+  }
+}

@@ -15,14 +15,16 @@ import { UtilsService } from '@core/services/utils.service';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
-  public title = 'Provider Identity Portal';
+  public title: string;
 
   public constructor(
     private activatedRoute: ActivatedRoute,
     private titleService: Title,
     private routeStateService: RouteStateService,
     private utilsService: UtilsService
-  ) {}
+  ) {
+    this.title = 'Provider Identity Portal';
+  }
 
   public ngOnInit(): void {
     const onNavEnd = this.routeStateService.onNavigationEnd();
