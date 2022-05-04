@@ -110,6 +110,26 @@
     </ui-alert>
 
     <ui-alert
+      *ngIf="accessRequestStatusCode === HcimAccountTransferStatusCode.ACCOUNT_UNAUTHORIZED"
+      type="danger"
+      icon="error_outline"
+      iconType="outlined"
+      heading="Account Unauthorized">
+      <ng-container uiAlertContent>
+        <p>
+          You are unauthorized to perform an HCIMWeb Account Transfer. If you
+          need assistance contact the HelpDesk at
+          <a
+            uiAnchor
+            scheme="mailto"
+            [attr.href]="healthNetBcHelpDeskEmail"></a>
+          or
+          <a uiAnchor scheme="tel" [attr.href]="healthNetBcHelpDeskPhone"></a>.
+        </p>
+      </ng-container>
+    </ui-alert>
+
+    <ui-alert
       *ngIf="accessRequestStatusCode === HcimAccountTransferStatusCode.ACCOUNT_LOCKED"
       type="danger"
       icon="error_outline"
