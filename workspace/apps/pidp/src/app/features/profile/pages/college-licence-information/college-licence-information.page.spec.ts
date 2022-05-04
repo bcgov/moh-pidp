@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { HttpStatusCode } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
@@ -17,6 +18,7 @@ import { FormUtilsService } from '@core/services/form-utils.service';
 import { LoggerService } from '@core/services/logger.service';
 
 import { CollegeLicenceInformationResource } from './college-licence-information-resource.service';
+import { CollegeLicenceInformation } from './college-licence-information.model';
 import { CollegeLicenceInformationPage } from './college-licence-information.page';
 
 describe('CollegeLicenceInformationPage', () => {
@@ -26,23 +28,21 @@ describe('CollegeLicenceInformationPage', () => {
   let formUtilsServiceSpy: Spy<FormUtilsService>;
   let router: Router;
 
-  const mockActivatedRoute = {
-    snapshot: {
-      data: {
-        title: randTextRange({ min: 1, max: 4 }),
-        routes: {
-          root: '../../',
-        },
-      },
-    },
-  };
-
-  const mockParty = {
-    collegeCode: randNumber(),
-    licenceNumber: randTextRange({ min: 1, max: 6 }),
-  };
+  let mockActivatedRoute: { snapshot: any };
+  let mockParty: CollegeLicenceInformation;
 
   beforeEach(() => {
+    mockActivatedRoute = {
+      snapshot: {
+        data: {
+          title: randTextRange({ min: 1, max: 4 }),
+          routes: {
+            root: '../../',
+          },
+        },
+      },
+    };
+
     TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule,
@@ -82,6 +82,11 @@ describe('CollegeLicenceInformationPage', () => {
       CollegeLicenceInformationResource
     );
     formUtilsServiceSpy = TestBed.inject<any>(FormUtilsService);
+
+    mockParty = {
+      collegeCode: randNumber(),
+      licenceNumber: randTextRange({ min: 1, max: 6 }),
+    };
   });
 
   describe('INIT', () => {

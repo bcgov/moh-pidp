@@ -9,10 +9,10 @@ import { ApiHttpClient } from '@app/core/resources/api-http-client.service';
 
 import { ToastService } from '@core/services/toast.service';
 
-import { PersonalInformationModel } from './personal-information.model';
+import { PersonalInformation } from './personal-information.model';
 
 @Injectable()
-export class PersonalInformationResource extends CrudResource<PersonalInformationModel> {
+export class PersonalInformationResource extends CrudResource<PersonalInformation> {
   public constructor(
     protected apiResource: ApiHttpClient,
     private toastService: ToastService
@@ -20,7 +20,7 @@ export class PersonalInformationResource extends CrudResource<PersonalInformatio
     super(apiResource);
   }
 
-  public update(id: number, payload: PersonalInformationModel): NoContent {
+  public update(id: number, payload: PersonalInformation): NoContent {
     return super.update(id, payload).pipe(
       tap(() =>
         this.toastService.openSuccessToast(

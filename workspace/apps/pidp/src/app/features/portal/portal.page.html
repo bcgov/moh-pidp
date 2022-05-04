@@ -1,6 +1,4 @@
-<ui-page mode="large" [busy]="busy">
-  <ui-page-header>{{ title }}</ui-page-header>
-
+<ui-page mode="large">
   <div class="row">
     <div class="col-12">
       <ui-alert
@@ -47,7 +45,35 @@
         </ui-page-section-subheader>
 
         <ui-card-summary
-          *ngFor="let section of (state$ | async)?.profileIdentitySections"
+          *ngFor="let section of (state$ | async)?.profile"
+          [heading]="section.heading"
+          [statusType]="section.statusType"
+          [status]="section.status"
+          [actionLabel]="section.action.label"
+          [actionDisabled]="section.action.disabled"
+          (action)="onCardAction(section)">
+          <ng-container uiCardSummaryHint>{{ section.hint }}</ng-container>
+          <ng-container uiCardSummaryContent>
+            <app-profile-card-summary-content [properties]="section.properties">
+              {{ section.description }}
+            </app-profile-card-summary-content>
+          </ng-container>
+        </ui-card-summary>
+      </ui-page-section>
+
+      <ui-page-section *permittedRoles="[Role.FEATURE_PIDP_DEMO]">
+        <ui-scroll-target targetId="organization"></ui-scroll-target>
+        <ui-page-section-subheader
+          icon="corporate_fare"
+          heading="Organization Information">
+          <ng-container uiPageSectionSubheaderDesc>
+            Provide your organization's details to gain access to the systems
+            you are eligible for.
+          </ng-container>
+        </ui-page-section-subheader>
+
+        <ui-card-summary
+          *ngFor="let section of (state$ | async)?.organization"
           [heading]="section.heading"
           [statusType]="section.statusType"
           [status]="section.status"
@@ -75,7 +101,7 @@
         </ui-page-section-subheader>
 
         <ui-card-summary
-          *ngFor="let section of (state$ | async)?.accessSystemsSections"
+          *ngFor="let section of (state$ | async)?.access"
           [heading]="section.heading"
           [statusType]="section.statusType"
           [status]="section.status"
@@ -99,9 +125,9 @@
         </ui-page-section-subheader>
 
         <ng-container
-          *ngIf="(state$ | async)?.trainingSections?.length; else noTraining">
+          *ngIf="(state$ | async)?.training?.length; else noTraining">
           <ui-card-summary
-            *ngFor="let section of (state$ | async)?.trainingSections"
+            *ngFor="let section of (state$ | async)?.training"
             [heading]="section.heading"
             [statusType]="section.statusType"
             [status]="section.status"
@@ -120,8 +146,8 @@
       </ui-page-section>
 
       <ui-page-section>
-        <ui-scroll-target targetId="documents"></ui-scroll-target>
-        <ui-page-section-subheader icon="history" heading="Your Documents">
+        <ui-scroll-target targetId="history"></ui-scroll-target>
+        <ui-page-section-subheader icon="history" heading="History">
           <ng-container uiPageSectionSubheaderDesc>
             View information pertaining to your profile and interaction with the
             systems you use for work.
@@ -129,7 +155,7 @@
         </ui-page-section-subheader>
 
         <ui-card-summary
-          *ngFor="let section of (state$ | async)?.documentsSections"
+          *ngFor="let section of (state$ | async)?.history"
           [heading]="section.heading"
           [actionLabel]="section.action.label"
           [actionDisabled]="section.action.disabled"
@@ -142,7 +168,7 @@
       </ui-page-section>
     </div>
     <div class="col-12">
-      <app-get-support>
+      <app-get-support [hiddenSupport]="hiddenSupport">
         <ui-scroll-target targetId="support"></ui-scroll-target>
       </app-get-support>
     </div>

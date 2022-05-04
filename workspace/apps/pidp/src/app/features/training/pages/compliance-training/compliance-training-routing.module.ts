@@ -9,6 +9,9 @@ const routes: Routes = [
     component: ComplianceTrainingPage,
     data: {
       title: 'Provider Identity Portal',
+      routes: {
+        root: '../../',
+      },
     },
   },
 ];

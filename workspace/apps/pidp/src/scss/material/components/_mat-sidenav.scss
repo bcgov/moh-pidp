@@ -2,7 +2,8 @@
 // Sidenav
 //
 
-// TODO create shared/assets and shared/theme with import for adjusting the theme app level
+// TODO provide !default and allow override in theme to increase reuse without
+//      having to edit specific files only theme variables in isolated file
 $sideNavBackgroundColor: theme-palette(blue);
 $sideNavBorderRight: 0px solid transparent;
 $menuItemContentBorderWidth: 5px;
@@ -18,7 +19,7 @@ $menuListDividerColor: theme-palette(blue);
 // component and have to be global.
 
 .mat-sidenav-container {
-  // Force the background to match busy loader
+  // Force the background to match loader overlay
   background-color: #fff !important;
 }
 
