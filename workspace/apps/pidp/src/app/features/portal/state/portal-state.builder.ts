@@ -92,20 +92,20 @@ export class PortalStateBuilder {
     return [
       ...ArrayUtils.insertResultIf<IPortalSection>(
         // TODO remove permissions when API exists
-        this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]) ||
-          this.insertSection('organizationDetails', profileStatus),
+        this.insertSection('organizationDetails', profileStatus) ||
+          this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
         () => [new OrganizationDetailsPortalSection(profileStatus, this.router)]
       ),
       ...ArrayUtils.insertResultIf<IPortalSection>(
         // TODO remove permissions when API exists
-        this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]) ||
-          this.insertSection('facilityDetails', profileStatus),
+        this.insertSection('facilityDetails', profileStatus) ||
+          this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
         () => [new FacilityDetailsPortalSection(profileStatus, this.router)]
       ),
       ...ArrayUtils.insertResultIf<IPortalSection>(
         // TODO remove permissions when API exists
-        this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]) ||
-          this.insertSection('administratorInfo', profileStatus),
+        this.insertSection('administratorInfo', profileStatus) ||
+          this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
         () => [new AdministratorInfoPortalSection(profileStatus, this.router)]
       ),
     ];
@@ -122,15 +122,15 @@ export class PortalStateBuilder {
         () => [new HcimAccountTransferPortalSection(profileStatus, this.router)]
       ),
       ...ArrayUtils.insertResultIf<IPortalSection>(
-        // TODO remove permissions when API exists
-        this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]) ||
-          this.insertSection('hcimEnrolment', profileStatus),
+        // TODO remove permissions when ready for production
+        this.insertSection('hcimEnrolment', profileStatus) &&
+          this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
         () => [new HcimEnrolmentPortalSection(profileStatus, this.router)]
       ),
       ...ArrayUtils.insertResultIf<IPortalSection>(
         // TODO remove permissions when API exists
-        this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]) ||
-          this.insertSection('sitePrivacySecurityChecklist', profileStatus),
+        this.insertSection('sitePrivacySecurityChecklist', profileStatus) ||
+          this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
         () => [new SitePrivacySecurityPortalSection(profileStatus, this.router)]
       ),
     ];
