@@ -99,25 +99,12 @@ public partial class ProfileStatus
 
             protected override void SetAlertsAndStatus(ProfileStatusDto profile)
             {
-                // TODO revert [
-                // if (profile.CompletedEnrolments.Contains(AccessType.HcimAccountTransfer)
-                //    || profile.CompletedEnrolments.Contains(AccessType.HcimEnrolment))
-                // {
-                //     this.StatusCode = StatusCode.Hidden;
-                //     return;
-                // }
-                if (profile.CompletedEnrolments.Contains(AccessType.HcimAccountTransfer))
-                {
-                    this.StatusCode = StatusCode.Complete;
-                    return;
-                }
-
-                if (profile.CompletedEnrolments.Contains(AccessType.HcimEnrolment))
+                if (profile.CompletedEnrolments.Contains(AccessType.HcimAccountTransfer)
+                   || profile.CompletedEnrolments.Contains(AccessType.HcimEnrolment))
                 {
                     this.StatusCode = StatusCode.Hidden;
                     return;
                 }
-                // ]
 
                 this.StatusCode = profile.DemographicsEntered
                     ? StatusCode.Incomplete
@@ -133,26 +120,12 @@ public partial class ProfileStatus
 
             protected override void SetAlertsAndStatus(ProfileStatusDto profile)
             {
-                // TODO revert [
-                // if (profile.CompletedEnrolments.Contains(AccessType.HcimAccountTransfer)
-                //     || profile.CompletedEnrolments.Contains(AccessType.HcimEnrolment))
-                // {
-                //     this.StatusCode = StatusCode.Complete;
-                //     return;
-                // }
-
-                if (profile.CompletedEnrolments.Contains(AccessType.HcimAccountTransfer))
-                {
-                    this.StatusCode = StatusCode.Hidden;
-                    return;
-                }
-
-                if (profile.CompletedEnrolments.Contains(AccessType.HcimEnrolment))
+                if (profile.CompletedEnrolments.Contains(AccessType.HcimAccountTransfer)
+                    || profile.CompletedEnrolments.Contains(AccessType.HcimEnrolment))
                 {
                     this.StatusCode = StatusCode.Complete;
                     return;
                 }
-                // ]
 
                 this.StatusCode = !profile.DemographicsEntered || string.IsNullOrWhiteSpace(profile.AccessAdministratorEmail)
                     ? StatusCode.Locked
