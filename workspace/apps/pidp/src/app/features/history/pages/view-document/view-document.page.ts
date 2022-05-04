@@ -6,7 +6,7 @@ import {
   IDocument,
 } from '@app/core/services/document.service';
 
-import { DocumentsRoutes } from '../../documents.routes';
+import { HistoryRoutes } from '../../history.routes';
 
 @Component({
   selector: 'app-view-document',
@@ -30,8 +30,8 @@ export class ViewDocumentPage {
 
   public onBack(): void {
     this.router.navigate([
-      DocumentsRoutes.MODULE_PATH,
-      DocumentsRoutes.SIGNED_ACCEPTED_DOCUMENTS_PAGE,
+      HistoryRoutes.MODULE_PATH,
+      HistoryRoutes.SIGNED_ACCEPTED_DOCUMENTS_PAGE,
     ]);
   }
 }

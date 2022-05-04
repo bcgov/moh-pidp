@@ -115,10 +115,10 @@ export class PortalDashboardComponent implements IDashboard {
         ]
       ),
       new DashboardRouteMenuItem(
-        'Your Documents',
+        'History',
         {
           commands: PortalRoutes.MODULE_PATH,
-          extras: { fragment: 'documents' },
+          extras: { fragment: 'history' },
           linkActiveOptions,
         },
         'restore'

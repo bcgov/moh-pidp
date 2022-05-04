@@ -4,7 +4,7 @@
  * over keys at runtime to allow filtering or grouping
  * sections.
  */
-export const documentSectionKeys = [
+export const historySectionKeys = [
   'signedAcceptedDocuments',
   'transactions',
 ] as const;
@@ -13,9 +13,9 @@ export const documentSectionKeys = [
  * @description
  * Union of keys generated from the tuple.
  */
-export type DocumentsSectionKey = typeof documentSectionKeys[number];
+export type HistorySectionKey = typeof historySectionKeys[number];
 
-// TODO not implemented since the documents group is
+// TODO not implemented since the history group is
 // different from the other groups as its sections do
 // not have a status. Waiting to see what happens.
 
@@ -23,8 +23,8 @@ export type DocumentsSectionKey = typeof documentSectionKeys[number];
  * @description
  * Typing for a group generated from a union.
  */
-// export type IDocumentGroup = {
-//   [K in DocumentsSectionKey]: Section;
+// export type IHistoryGroup = {
+//   [K in HistorySectionKey]: Section;
 // };
 
 /**
@@ -33,7 +33,7 @@ export type DocumentsSectionKey = typeof documentSectionKeys[number];
  * included in the group interface.
  */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-// type CheckGroup<T extends IDocumentGroup = DocumentGroup> = void;
+// type CheckGroup<T extends IHistoryGroup = HistoryGroup> = void;
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-// export interface DocumentGroup {}
+// export interface HistoryGroup {}
