@@ -9,8 +9,10 @@ import { AlertCode } from './enums/alert-code.enum';
 import { StatusCode } from './enums/status-code.enum';
 import { ProfileStatusAlert } from './models/profile-status-alert.model';
 import { ProfileStatus } from './models/profile-status.model';
+import { accessSectionKeys } from './state/access/access-group.model';
 import { PortalSectionStatusKey } from './state/portal-section-status-key.type';
 import { PortalState, PortalStateBuilder } from './state/portal-state.builder';
+import { profileSectionKeys } from './state/profile/profile-group.model';
 
 @Injectable({
   providedIn: 'root',
@@ -34,6 +36,12 @@ export class PortalService {
    * in the portal.
    */
   private _alerts: ProfileStatusAlert[];
+  /**
+   * @description
+   * Whether all profile information has been completed, and
+   * no access requests have been made.
+   */
+  private _completedProfile: boolean;
 
   public constructor(
     private router: Router,
@@ -42,6 +50,7 @@ export class PortalService {
     this._profileStatus = null;
     this._state$ = new BehaviorSubject<PortalState>(null);
     this._alerts = [];
+    this._completedProfile = false;
   }
 
   public get state$(): Observable<PortalState> {
@@ -50,6 +59,10 @@ export class PortalService {
 
   public get alerts(): ProfileStatusAlert[] {
     return this._alerts;
+  }
+
+  public get completedProfile(): boolean {
+    return this._completedProfile;
   }
 
   public get hiddenSections(): PortalSectionStatusKey[] {
@@ -73,6 +86,7 @@ export class PortalService {
 
     this._profileStatus = profileStatus;
     this._alerts = this.getAlerts(profileStatus);
+    this._completedProfile = this.hasCompletedProfile(profileStatus);
 
     const builder = new PortalStateBuilder(
       this.router,
@@ -98,9 +112,29 @@ export class PortalService {
     });
   }
 
+  private hasCompletedProfile(profileStatus: ProfileStatus | null): boolean {
+    if (!profileStatus) {
+      return false;
+    }
+
+    const status = profileStatus.status;
+
+    // Assumes key absence is a requirement and should be
+    // purposefully skipped in the profile completed check
+    return (
+      profileSectionKeys.every((key) =>
+        status[key] ? status[key].statusCode === StatusCode.COMPLETED : true
+      ) &&
+      accessSectionKeys.every((key) =>
+        status[key] ? status[key].statusCode !== StatusCode.COMPLETED : true
+      )
+    );
+  }
+
   private clearState(): void {
     this._profileStatus = null;
     this._state$.next(null);
     this._alerts = [];
+    this._completedProfile = false;
   }
 }

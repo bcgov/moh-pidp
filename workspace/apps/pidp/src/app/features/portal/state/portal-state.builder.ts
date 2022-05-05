@@ -80,10 +80,7 @@ export class PortalStateBuilder {
         // TODO remove permissions when API exists and ready for production, or
         // TODO replace || with && to keep it flagged when API exists
         this.insertSection('userAccessAgreement', profileStatus) ||
-          this.permissionsService.hasRole([
-            Role.FEATURE_PIDP_DEMO,
-            Role.FEATURE_AMH_DEMO,
-          ]),
+          this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
         () => [new UserAccessAgreementPortalSection(profileStatus, this.router)]
       ),
     ];
@@ -152,10 +149,7 @@ export class PortalStateBuilder {
   private createTrainingGroup(profileStatus: ProfileStatus): IPortalSection[] {
     return [
       ...ArrayUtils.insertResultIf<IPortalSection>(
-        this.permissionsService.hasRole([
-          Role.FEATURE_PIDP_DEMO,
-          Role.FEATURE_AMH_DEMO,
-        ]),
+        this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
         () => [new ComplianceTrainingPortalSection(profileStatus, this.router)]
       ),
     ];
