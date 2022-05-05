@@ -35,7 +35,7 @@ describe('AppComponent', () => {
       },
     };
 
-    let titleServiceSpy = createSpyFromClass(Title, {
+    titleServiceSpy = createSpyFromClass(Title, {
       methodsToSpyOn: ['getTitle', 'setTitle'],
     });
 
