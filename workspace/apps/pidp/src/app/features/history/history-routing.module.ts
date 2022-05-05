@@ -1,9 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { PermissionsGuard } from '@app/modules/permissions/permissions.guard';
-import { Role } from '@app/shared/enums/roles.enum';
-
 import { HistoryRoutes } from './history.routes';
 import { SignedOrAcceptedDocumentsModule } from './pages/signed-or-accepted-documents/signed-or-accepted-documents.module';
 import { TransactionsModule } from './pages/transactions/transactions.module';
@@ -12,10 +9,6 @@ import { ViewDocumentModule } from './pages/view-document/view-document.module';
 const routes: Routes = [
   {
     path: HistoryRoutes.TRANSACTIONS,
-    canLoad: [PermissionsGuard],
-    data: {
-      roles: [Role.FEATURE_PIDP_DEMO],
-    },
     loadChildren: (): Promise<TransactionsModule> =>
       import('./pages/transactions/transactions.module').then(
         (m) => m.TransactionsModule

@@ -128,7 +128,7 @@ export class PortalStateBuilder {
         () => [new HcimAccountTransferPortalSection(profileStatus, this.router)]
       ),
       ...ArrayUtils.insertResultIf<IPortalSection>(
-        // TODO remove permissions when API exists and ready for production
+        // TODO remove permissions when ready for production
         this.insertSection('hcimEnrolment', profileStatus) &&
           this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
         () => [new HcimEnrolmentPortalSection(profileStatus, this.router)]
@@ -141,8 +141,8 @@ export class PortalStateBuilder {
         () => [new SitePrivacySecurityPortalSection(profileStatus, this.router)]
       ),
       ...ArrayUtils.insertResultIf<IPortalSection>(
-        // TODO remove permissions when API exists
-        this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]) ||
+        // TODO remove permissions when ready for production
+        this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]) &&
           this.insertSection('driverFitness', profileStatus),
         () => [new DriverFitnessPortalSection(profileStatus, this.router)]
       ),
@@ -164,10 +164,7 @@ export class PortalStateBuilder {
   private createHistoryGroup(): IPortalSection[] {
     return [
       new SignedAcceptedDocumentsPortalSection(this.router),
-      ...ArrayUtils.insertResultIf<IPortalSection>(
-        this.permissionsService.hasRole(Role.FEATURE_PIDP_DEMO),
-        () => [new TransactionsPortalSection(this.router)]
-      ),
+      new TransactionsPortalSection(this.router),
     ];
   }
 
