@@ -10,7 +10,7 @@ export enum AccessType {
   DriverFitness,
 }
 
-export const AccessTypeMap = {
+export const AccessTypeMap: { [AccessType: number]: string } = {
   [AccessType.SAEforms]: 'Special Authority eForms',
   [AccessType.HcimAccountTransfer]: 'HCIMWeb Account Transfer',
   [AccessType.HcimEnrolment]: 'HCIMWeb Enrolment',

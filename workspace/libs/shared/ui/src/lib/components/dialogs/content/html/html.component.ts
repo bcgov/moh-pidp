@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
-import { IDialogContent } from '@bcgov/shared/ui';
+import { IDialogContent } from '../../dialog-content.model';
 
 @Component({
   selector: 'ui-html',

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
@@ -17,7 +18,7 @@ describe('ConfirmDialogComponent', () => {
           {
             provide: MatDialogRef,
             useValue: {
-              close: (dialogResult: any) => {},
+              close: (dialogResult: any): any => null,
             },
           },
           {

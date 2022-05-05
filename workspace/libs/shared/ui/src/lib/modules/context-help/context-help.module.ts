@@ -1,12 +1,12 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 
-import { ContextHelpComponent } from './context-help/context-help.component';
-import { ContextHelpTitleDirective } from './context-help-title.directive';
 import { ContextHelpContentDirective } from './context-help-content.directive';
+import { ContextHelpTitleDirective } from './context-help-title.directive';
+import { ContextHelpComponent } from './context-help/context-help.component';
 
 @NgModule({
   declarations: [

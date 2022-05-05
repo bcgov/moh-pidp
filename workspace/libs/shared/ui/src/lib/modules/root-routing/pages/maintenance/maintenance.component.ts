@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 @Component({
   selector: 'ui-maintenance',
   template: `
-    <app-root-route-container>
+    <ui-root-route-container>
       <div class="row justify-content-center">
         <div class="col-sm-12 col-md-10 col-lg-8 text-center">
           <h1 class="mb-5">
@@ -19,7 +19,7 @@ import { Component } from '@angular/core';
           </p>
         </div>
       </div>
-    </app-root-route-container>
+    </ui-root-route-container>
   `,
   styleUrls: ['../../shared/root-route-page-styles.scss'],
 })
