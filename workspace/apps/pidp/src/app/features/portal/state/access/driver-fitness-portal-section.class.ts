@@ -4,8 +4,8 @@ import { Observable } from 'rxjs';
 
 import { AlertType } from '@bcgov/shared/ui';
 
+import { AccessRoutes } from '@app/features/access/access.routes';
 import { ShellRoutes } from '@app/features/shell/shell.routes';
-import { TrainingRoutes } from '@app/features/training/training.routes';
 
 import { StatusCode } from '../../enums/status-code.enum';
 import { ProfileStatus } from '../../models/profile-status.model';
@@ -13,7 +13,7 @@ import { PortalSectionAction } from '../portal-section-action.model';
 import { PortalSectionKey } from '../portal-section-key.type';
 import { IPortalSection } from '../portal-section.model';
 
-export class ComplianceTrainingPortalSection implements IPortalSection {
+export class DriverFitnessPortalSection implements IPortalSection {
   public readonly key: PortalSectionKey;
   public heading: string;
   public description: string;
@@ -22,13 +22,13 @@ export class ComplianceTrainingPortalSection implements IPortalSection {
     private profileStatus: ProfileStatus,
     private router: Router
   ) {
-    this.key = 'complianceTraining';
-    this.heading = 'Compliance Training Video';
-    this.description = 'Description of the training provided by the video.';
+    this.key = 'driverFitness';
+    this.heading = 'Driver Medical Fitness';
+    this.description = `Enrol here for access to Driver Medical Fitness.`;
   }
 
   public get hint(): string {
-    return '15 min to complete';
+    return '1 min to complete';
   }
 
   /**
@@ -36,10 +36,17 @@ export class ComplianceTrainingPortalSection implements IPortalSection {
    * Get the properties that define the action on the section.
    */
   public get action(): PortalSectionAction {
+    const demographicsStatusCode =
+      this.profileStatus.status.demographics.statusCode;
+    const collegeCertStatusCode =
+      this.profileStatus.status.collegeCertification.statusCode;
     return {
-      label: this.getStatusCode() === StatusCode.COMPLETED ? 'View' : 'Watch',
-      route: TrainingRoutes.routePath(TrainingRoutes.COMPLIANCE_TRAINING),
-      disabled: false,
+      label: this.getStatusCode() === StatusCode.COMPLETED ? 'View' : 'Request',
+      route: AccessRoutes.routePath(AccessRoutes.DRIVER_FITNESS),
+      disabled: !(
+        demographicsStatusCode === StatusCode.COMPLETED &&
+        collegeCertStatusCode === StatusCode.COMPLETED
+      ),
     };
   }
 
@@ -58,6 +65,6 @@ export class ComplianceTrainingPortalSection implements IPortalSection {
 
   private getStatusCode(): StatusCode {
     // TODO remove null check once API exists
-    return this.profileStatus.status.complianceTraining?.statusCode;
+    return this.profileStatus.status.driverFitness?.statusCode;
   }
 }

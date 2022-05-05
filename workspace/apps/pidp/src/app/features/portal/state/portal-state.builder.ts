@@ -7,6 +7,7 @@ import { Role } from '@app/shared/enums/roles.enum';
 
 import { StatusCode } from '../enums/status-code.enum';
 import { ProfileStatus } from '../models/profile-status.model';
+import { DriverFitnessPortalSection } from './access/driver-fitness-portal-section.class';
 import { HcimAccountTransferPortalSection } from './access/hcim-account-transfer-portal-section.class';
 import { HcimEnrolmentPortalSection } from './access/hcim-enrolment-portal-section.class';
 import { SaEformsPortalSection } from './access/sa-eforms-portal-section.class';
@@ -62,8 +63,8 @@ export class PortalStateBuilder {
     };
   }
 
-  // TODO see where the next enrolments lead and then drop these methods
-  // for building out the portal state and create classes, but premature
+  // TODO see where the next few enrolments lead and then drop these methods
+  // for building out the portal state using factories, but premature
   // optimization until more is known
 
   private createProfileGroup(profileStatus: ProfileStatus): IPortalSection[] {
@@ -127,7 +128,7 @@ export class PortalStateBuilder {
         () => [new HcimAccountTransferPortalSection(profileStatus, this.router)]
       ),
       ...ArrayUtils.insertResultIf<IPortalSection>(
-        // TODO remove permissions when API exists and ready for production
+        // TODO remove permissions when ready for production
         this.insertSection('hcimEnrolment', profileStatus) &&
           this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
         () => [new HcimEnrolmentPortalSection(profileStatus, this.router)]
@@ -138,6 +139,12 @@ export class PortalStateBuilder {
         this.insertSection('sitePrivacySecurityChecklist', profileStatus) ||
           this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
         () => [new SitePrivacySecurityPortalSection(profileStatus, this.router)]
+      ),
+      ...ArrayUtils.insertResultIf<IPortalSection>(
+        // TODO remove permissions when ready for production
+        this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]) &&
+          this.insertSection('driverFitness', profileStatus),
+        () => [new DriverFitnessPortalSection(profileStatus, this.router)]
       ),
     ];
   }
@@ -157,10 +164,7 @@ export class PortalStateBuilder {
   private createHistoryGroup(): IPortalSection[] {
     return [
       new SignedAcceptedDocumentsPortalSection(this.router),
-      ...ArrayUtils.insertResultIf<IPortalSection>(
-        this.permissionsService.hasRole(Role.FEATURE_PIDP_DEMO),
-        () => [new TransactionsPortalSection(this.router)]
-      ),
+      new TransactionsPortalSection(this.router),
     ];
   }
 

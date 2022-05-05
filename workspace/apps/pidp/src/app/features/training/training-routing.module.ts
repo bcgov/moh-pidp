@@ -6,7 +6,7 @@ import { TrainingRoutes } from './training.routes';
 
 const routes: Routes = [
   {
-    path: TrainingRoutes.COMPLIANCE_TRAINING_PAGE,
+    path: TrainingRoutes.COMPLIANCE_TRAINING,
     loadChildren: (): Promise<ComplianceTrainingModule> =>
       import('./pages/compliance-training/compliance-training.module').then(
         (m) => m.ComplianceTrainingModule

@@ -11,6 +11,7 @@ export const accessSectionKeys = [
   'hcimAccountTransfer',
   'hcimEnrolment',
   'sitePrivacySecurityChecklist',
+  'driverFitness',
 ] as const;
 
 /**
@@ -40,4 +41,5 @@ export interface AccessGroup {
   hcimAccountTransfer: Section;
   hcimEnrolment: Section;
   sitePrivacySecurityChecklist: Section;
+  driverFitness: Section;
 }

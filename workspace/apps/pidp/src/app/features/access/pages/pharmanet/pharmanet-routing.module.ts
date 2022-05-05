@@ -8,21 +8,21 @@ import { PharmanetRoutes } from './pharmanet.routes';
 
 const routes: Routes = [
   {
-    path: PharmanetRoutes.SELF_DECLARATION_PAGE,
+    path: PharmanetRoutes.SELF_DECLARATION,
     component: SelfDeclarationPage,
     data: {
       title: 'Provider Identity Portal',
     },
   },
   {
-    path: PharmanetRoutes.TERMS_OF_ACCESS_PAGE,
+    path: PharmanetRoutes.TERMS_OF_ACCESS,
     component: TermsOfAccessPage,
     data: {
       title: 'Provider Identity Portal',
     },
   },
   {
-    path: PharmanetRoutes.NEXT_STEPS_PAGE,
+    path: PharmanetRoutes.NEXT_STEPS,
     component: NextStepsPage,
     data: {
       title: 'Provider Identity Portal',
@@ -30,7 +30,7 @@ const routes: Routes = [
   },
   {
     path: '',
-    redirectTo: PharmanetRoutes.SELF_DECLARATION_PAGE,
+    redirectTo: PharmanetRoutes.SELF_DECLARATION,
     pathMatch: 'full',
   },
 ];

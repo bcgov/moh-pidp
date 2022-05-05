@@ -1,4 +1,9 @@
+import { driverFitnessSupportEmail } from '@app/features/access/pages/driver-fitness/driver-fitness.constants';
 import { healthNetBcAdminEmail } from '@app/features/access/pages/hcim-account-transfer/hcim-account-transfer-constants';
+import {
+  specialAuthorityEformsSupportEmail,
+  specialAuthorityUrl,
+} from '@app/features/access/pages/sa-eforms/sa-eforms.constants';
 
 import { AppEnvironment, EnvironmentName } from './environment.model';
 
@@ -19,14 +24,14 @@ export const environment: AppEnvironment = {
   applicationUrl: 'http://localhost:4200',
   emails: {
     providerIdentitySupport: 'provideridentityportal@gov.bc.ca',
-    specialAuthoritySupport: 'satransformation@gov.bc.ca',
-    hcimWebSupportEmail: healthNetBcAdminEmail,
+    specialAuthorityEformsSupport: specialAuthorityEformsSupportEmail,
+    hcimWebSupport: healthNetBcAdminEmail,
+    driverFitnessSupport: driverFitnessSupportEmail,
   },
   urls: {
-    bcscSupport:
-      'https://www2.gov.bc.ca/gov/content/governments/government-id/bcservicescardapp/help',
+    bcscSupport: `https://www2.gov.bc.ca/gov/content/governments/government-id/bcservicescardapp/help`,
     bcscMobileSetup: 'https://id.gov.bc.ca/account',
-    specialAuthority: 'https://www.gov.bc.ca/pharmacarespecialauthority',
+    specialAuthority: specialAuthorityUrl,
   },
   keycloakConfig: {
     config: {

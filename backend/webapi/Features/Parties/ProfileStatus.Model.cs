@@ -91,6 +91,39 @@ public partial class ProfileStatus
             protected override void SetAlertsAndStatus(ProfileStatusDto profile) => this.StatusCode = profile.DemographicsEntered ? StatusCode.Complete : StatusCode.Incomplete;
         }
 
+        public class DriverFitness : ProfileSection
+        {
+            internal override string SectionName => "driverFitness";
+
+            public DriverFitness(ProfileStatusDto profile) : base(profile) { }
+
+            protected override void SetAlertsAndStatus(ProfileStatusDto profile)
+            {
+                if (!profile.UserIsBcServicesCard)
+                {
+                    this.StatusCode = StatusCode.Hidden;
+                    return;
+                }
+
+                if (profile.CompletedEnrolments.Contains(AccessType.DriverFitness))
+                {
+                    this.StatusCode = StatusCode.Complete;
+                    return;
+                }
+
+                if (!profile.DemographicsEntered
+                    || !profile.CollegeCertificationEntered
+                    || profile.PlrRecordStatus == null
+                    || !profile.PlrRecordStatus.IsGoodStanding())
+                {
+                    this.StatusCode = StatusCode.Locked;
+                    return;
+                }
+
+                this.StatusCode = StatusCode.Incomplete;
+            }
+        }
+
         public class HcimAccountTransfer : ProfileSection
         {
             internal override string SectionName => "hcimAccountTransfer";
@@ -99,25 +132,12 @@ public partial class ProfileStatus
 
             protected override void SetAlertsAndStatus(ProfileStatusDto profile)
             {
-                // TODO revert [
-                // if (profile.CompletedEnrolments.Contains(AccessType.HcimAccountTransfer)
-                //    || profile.CompletedEnrolments.Contains(AccessType.HcimEnrolment))
-                // {
-                //     this.StatusCode = StatusCode.Hidden;
-                //     return;
-                // }
-                if (profile.CompletedEnrolments.Contains(AccessType.HcimAccountTransfer))
-                {
-                    this.StatusCode = StatusCode.Complete;
-                    return;
-                }
-
-                if (profile.CompletedEnrolments.Contains(AccessType.HcimEnrolment))
+                if (profile.CompletedEnrolments.Contains(AccessType.HcimAccountTransfer)
+                   || profile.CompletedEnrolments.Contains(AccessType.HcimEnrolment))
                 {
                     this.StatusCode = StatusCode.Hidden;
                     return;
                 }
-                // ]
 
                 this.StatusCode = profile.DemographicsEntered
                     ? StatusCode.Incomplete
@@ -133,26 +153,12 @@ public partial class ProfileStatus
 
             protected override void SetAlertsAndStatus(ProfileStatusDto profile)
             {
-                // TODO revert [
-                // if (profile.CompletedEnrolments.Contains(AccessType.HcimAccountTransfer)
-                //     || profile.CompletedEnrolments.Contains(AccessType.HcimEnrolment))
-                // {
-                //     this.StatusCode = StatusCode.Complete;
-                //     return;
-                // }
-
-                if (profile.CompletedEnrolments.Contains(AccessType.HcimAccountTransfer))
-                {
-                    this.StatusCode = StatusCode.Hidden;
-                    return;
-                }
-
-                if (profile.CompletedEnrolments.Contains(AccessType.HcimEnrolment))
+                if (profile.CompletedEnrolments.Contains(AccessType.HcimAccountTransfer)
+                    || profile.CompletedEnrolments.Contains(AccessType.HcimEnrolment))
                 {
                     this.StatusCode = StatusCode.Complete;
                     return;
                 }
-                // ]
 
                 this.StatusCode = !profile.DemographicsEntered || string.IsNullOrWhiteSpace(profile.AccessAdministratorEmail)
                     ? StatusCode.Locked

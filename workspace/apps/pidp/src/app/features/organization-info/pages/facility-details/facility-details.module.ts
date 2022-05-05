@@ -1,16 +1,12 @@
 import { NgModule } from '@angular/core';
 
-import { FacilityDetailsRoutingModule } from './facility-details-routing.module';
-import { FacilityDetailsComponent } from './facility-details.component';
 import { SharedModule } from '@app/shared/shared.module';
 
+import { FacilityDetailsRoutingModule } from './facility-details-routing.module';
+import { FacilityDetailsPage } from './facility-details.page';
 
 @NgModule({
-  declarations: [
-    FacilityDetailsComponent
-  ],
-  imports: [
-    FacilityDetailsRoutingModule, SharedModule
-  ]
+  declarations: [FacilityDetailsPage],
+  imports: [FacilityDetailsRoutingModule, SharedModule],
 })
-export class FacilityDetailsModule { }
+export class FacilityDetailsModule {}

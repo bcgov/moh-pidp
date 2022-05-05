@@ -48,9 +48,9 @@ export interface IFormPage {
  * @example
  * @UntilDestroy()
  * @Component({
- *   selector: 'app-example-page',
- *   templateUrl: './example-page.component.html',
- *   styleUrls: ['./example-page.component.scss']
+ *   selector: 'app-example',
+ *   templateUrl: './example.page.html',
+ *   styleUrls: ['./example.page.scss']
  * })
  * export class ExamplePageComponent {
  *   public initForm(): void {

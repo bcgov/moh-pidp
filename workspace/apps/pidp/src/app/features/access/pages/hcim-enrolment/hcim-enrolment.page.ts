@@ -25,10 +25,10 @@ import { HcimEnrolment } from './hcim-enrolment.model';
 
 @Component({
   selector: 'app-hcim-enrolment',
-  templateUrl: './hcim-enrolment.component.html',
-  styleUrls: ['./hcim-enrolment.component.scss'],
+  templateUrl: './hcim-enrolment.page.html',
+  styleUrls: ['./hcim-enrolment.page.scss'],
 })
-export class HcimEnrolmentComponent
+export class HcimEnrolmentPage
   extends AbstractFormPage<HcimEnrolmentFormState>
   implements OnInit
 {

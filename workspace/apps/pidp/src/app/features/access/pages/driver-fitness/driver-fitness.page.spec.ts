@@ -11,15 +11,15 @@ import { PartyService } from '@app/core/party/party.service';
 import { DocumentService } from '@app/core/services/document.service';
 import { LoggerService } from '@app/core/services/logger.service';
 
-import { SaEformsResource } from './sa-eforms-resource.service';
-import { SaEformsPage } from './sa-eforms.page';
+import { DriverFitnessResource } from './driver-fitness-resource.service';
+import { DriverFitnessPage } from './driver-fitness.page';
 
-describe('SaEformsPage', () => {
-  let component: SaEformsPage;
+describe('DriverFitnessPage', () => {
+  let component: DriverFitnessPage;
 
   let mockActivatedRoute: { snapshot: any };
 
-  beforeEach(() => {
+  beforeEach(async () => {
     mockActivatedRoute = {
       snapshot: {
         data: {
@@ -34,7 +34,7 @@ describe('SaEformsPage', () => {
     TestBed.configureTestingModule({
       imports: [RouterTestingModule],
       providers: [
-        SaEformsPage,
+        DriverFitnessPage,
         {
           provide: APP_CONFIG,
           useValue: APP_DI_CONFIG,
@@ -50,13 +50,13 @@ describe('SaEformsPage', () => {
             settersToSpyOn: ['partyId'],
           }),
         },
-        provideAutoSpy(SaEformsResource),
+        provideAutoSpy(DriverFitnessResource),
         provideAutoSpy(LoggerService),
         provideAutoSpy(DocumentService),
       ],
     });
 
-    component = TestBed.inject(SaEformsPage);
+    component = TestBed.inject(DriverFitnessPage);
   });
 
   it('should create', () => {

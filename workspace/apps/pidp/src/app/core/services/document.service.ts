@@ -5,6 +5,7 @@ import { APP_CONFIG, AppConfig } from '@app/app.config';
 export enum DocumentType {
   PIDP_COLLECTION_NOTICE = 'pidp-collection-notice',
   SA_EFORMS_COLLECTION_NOTICE = 'sa-eforms-collection-notice',
+  DRIVER_FITNESS = 'driver-fitness-collection-notice',
 }
 
 export interface IDocumentMetaData {
@@ -31,6 +32,10 @@ export class DocumentService {
       {
         type: DocumentType.SA_EFORMS_COLLECTION_NOTICE,
         title: 'SA eForms Collection Notice',
+      },
+      {
+        type: DocumentType.DRIVER_FITNESS,
+        title: 'Driver Medical Fitness Collection Notice',
       },
     ];
   }
@@ -73,7 +78,16 @@ export class DocumentService {
       the Freedom of Information and Protection of Privacy Act (FOIPPA) and s. 22(1)(b) of the Pharmaceutical
       Services Act for the purpose of managing your access to, and use of, the Special Authority eForms
       application. If you have any questions about the collection or use of this information, contact
-      <a href="mailto:${this.config.emails.specialAuthoritySupport}">${this.config.emails.specialAuthoritySupport}</a>.
+      <a href="mailto:${this.config.emails.specialAuthorityEformsSupport}">${this.config.emails.specialAuthorityEformsSupport}</a>.
+    `;
+  }
+
+  public getDriverFitnessCollectionNotice(): string {
+    return `
+      The personal information you provide to enrol for access to Driver Medical Fitness lorem ipsum dolor sit amet
+      consectetur adipisicing elit. Velit quaerat, beatae libero, ullam consequuntur laudantium aliquid voluptatum
+      fugit pariatur dolore repudiandae ad fuga sed, ducimus voluptates quisquam quasi perferendis possimus, contact
+      <a href="mailto:${this.config.emails.driverFitnessSupport}">${this.config.emails.driverFitnessSupport}</a>.
     `;
   }
 

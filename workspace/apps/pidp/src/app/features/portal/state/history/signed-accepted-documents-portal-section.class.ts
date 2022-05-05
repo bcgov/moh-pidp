@@ -27,9 +27,7 @@ export class SignedAcceptedDocumentsPortalSection implements IPortalSection {
   public get action(): PortalSectionAction {
     return {
       label: 'View',
-      route: HistoryRoutes.routePath(
-        HistoryRoutes.SIGNED_ACCEPTED_DOCUMENTS_PAGE
-      ),
+      route: HistoryRoutes.routePath(HistoryRoutes.SIGNED_ACCEPTED_DOCUMENTS),
       disabled: false,
     };
   }
