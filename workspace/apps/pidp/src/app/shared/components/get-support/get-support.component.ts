@@ -53,10 +53,13 @@ export class GetSupportComponent implements OnInit {
         name: 'HCIMWeb Account Transfer',
         email: this.config.emails.hcimAccountTransferSupport,
       },
-      {
-        name: 'HCIMWeb Enrolment',
-        email: this.config.emails.hcimEnrolmentSupport,
-      },
+      ...ArrayUtils.insertIf<SupportProps>(
+        this.permissionsService.hasRole(Role.FEATURE_PIDP_DEMO),
+        {
+          name: 'HCIMWeb Enrolment',
+          email: this.config.emails.hcimEnrolmentSupport,
+        }
+      ),
       ...ArrayUtils.insertIf<SupportProps>(
         this.permissionsService.hasRole(Role.FEATURE_PIDP_DEMO),
         {
