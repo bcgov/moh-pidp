@@ -12,6 +12,8 @@ import { ArrayUtils } from '@bcgov/shared/utils';
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';
 import { AccessGroup } from '@app/features/portal/state/access/access-group.model';
+import { PermissionsService } from '@app/modules/permissions/permissions.service';
+import { Role } from '@app/shared/enums/roles.enum';
 
 export type SupportProvided = keyof AccessGroup;
 
@@ -35,8 +37,12 @@ export class GetSupportComponent implements OnChanges, OnInit {
 
   public providedSupport: SupportProps[];
 
-  public constructor(@Inject(APP_CONFIG) private config: AppConfig) {
+  public constructor(
+    @Inject(APP_CONFIG) private config: AppConfig,
+    private permissionsService: PermissionsService
+  ) {
     this.providedSupport = [];
+    this.hiddenSupport = [];
   }
 
   public ngOnChanges(changes: SimpleChanges): void {
@@ -54,6 +60,9 @@ export class GetSupportComponent implements OnChanges, OnInit {
     this.setupSupport();
   }
 
+  // TODO start having these be registered from the modules to reduce
+  //      the spread of maintenance and updates, and remove the dependency
+  //      on the config and permissions service for the component
   private setupSupport(hiddenSupport: SupportProvided[] = []): void {
     this.providedSupport = [
       {
@@ -71,7 +80,22 @@ export class GetSupportComponent implements OnChanges, OnInit {
         !hiddenSupport.includes('hcimAccountTransfer'),
         {
           name: 'HCIMWeb Account Transfer',
-          email: this.config.emails.hcimWebSupport,
+          email: this.config.emails.hcimAccountTransferSupport,
+        }
+      ),
+      ...ArrayUtils.insertIf<SupportProps>(
+        !hiddenSupport.includes('hcimEnrolment'),
+        {
+          name: 'HCIMWeb Enrolment',
+          email: this.config.emails.hcimEnrolmentSupport,
+        }
+      ),
+      ...ArrayUtils.insertIf<SupportProps>(
+        !hiddenSupport.includes('driverFitness') &&
+          this.permissionsService.hasRole(Role.FEATURE_PIDP_DEMO),
+        {
+          name: 'Driver Medical Fitness',
+          email: this.config.emails.driverFitnessSupport,
         }
       ),
     ];

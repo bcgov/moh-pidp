@@ -24,14 +24,14 @@ export class PortalService {
   private _profileStatus: ProfileStatus | null;
   /**
    * @description
-   * List of HTTP response controlled alert messages for display
-   * in the portal.
+   * State for driving the displayed groups and sections of
+   * the portal.
    */
   private _state$: BehaviorSubject<PortalState>;
   /**
    * @description
-   * State for driving the displayed groups and sections of
-   * the portal.
+   * List of HTTP response controlled alert messages for display
+   * in the portal.
    */
   private _alerts: ProfileStatusAlert[];
 
