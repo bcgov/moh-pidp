@@ -8,7 +8,8 @@ public enum AccessType
 {
     SAEforms = 1,
     HcimAccountTransfer,
-    HcimEnrolment
+    HcimEnrolment,
+    DriverFitness
 }
 
 [Table(nameof(AccessRequest))]

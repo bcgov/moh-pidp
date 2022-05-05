@@ -67,7 +67,7 @@ describe('ViewDocumentPage', () => {
           () => {
             expect(router.navigate).toHaveBeenCalledWith([
               HistoryRoutes.MODULE_PATH,
-              HistoryRoutes.SIGNED_ACCEPTED_DOCUMENTS_PAGE,
+              HistoryRoutes.SIGNED_ACCEPTED_DOCUMENTS,
             ]);
           }
         );

@@ -9,39 +9,41 @@ import { DocumentService } from '@app/core/services/document.service';
 import { LoggerService } from '@app/core/services/logger.service';
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
 
-import { SaEformsResource } from './sa-eforms-resource.service';
-import { specialAuthorityEformsUrl } from './sa-eforms.constants';
+import { DriverFitnessResource } from './driver-fitness-resource.service';
+import {
+  driverFitnessSupportEmail,
+  driverFitnessUrl,
+} from './driver-fitness.constants';
 
 @Component({
-  selector: 'app-sa-eforms',
-  templateUrl: './sa-eforms.page.html',
-  styleUrls: ['./sa-eforms.page.scss'],
+  selector: 'app-driver-fitness',
+  templateUrl: './driver-fitness.page.html',
+  styleUrls: ['./driver-fitness.page.scss'],
 })
-export class SaEformsPage implements OnInit {
+export class DriverFitnessPage implements OnInit {
   public title: string;
-  public saEformsUrl: string;
+  public driverFitnessUrl: string;
   public collectionNotice: string;
   public completed: boolean | null;
   public accessRequestFailed: boolean;
-  public specialAuthoritySupportEmail: string;
+  public driverFitnessSupportEmail: string;
 
   public constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
     private route: ActivatedRoute,
     private router: Router,
     private partyService: PartyService,
-    private resource: SaEformsResource,
+    private resource: DriverFitnessResource,
     private logger: LoggerService,
     documentService: DocumentService
   ) {
     const routeData = this.route.snapshot.data;
     this.title = routeData.title;
-    this.saEformsUrl = specialAuthorityEformsUrl;
-    this.collectionNotice = documentService.getSAeFormsCollectionNotice();
-    this.completed = routeData.saEformsStatusCode === StatusCode.COMPLETED;
+    this.driverFitnessUrl = driverFitnessUrl;
+    this.collectionNotice = documentService.getDriverFitnessCollectionNotice();
+    this.completed = routeData.driverFitnessStatusCode === StatusCode.COMPLETED;
     this.accessRequestFailed = false;
-    this.specialAuthoritySupportEmail =
-      this.config.emails.specialAuthorityEformsSupport;
+    this.driverFitnessSupportEmail = driverFitnessSupportEmail;
   }
 
   public onBack(): void {

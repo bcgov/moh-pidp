@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { HttpStatusCode } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -6,7 +7,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 
-import { randBoolean, randNumber, randTextRange } from '@ngneat/falso';
+import { randEmail, randNumber, randTextRange } from '@ngneat/falso';
 import { Spy, createSpyFromClass, provideAutoSpy } from 'jest-auto-spies';
 
 import { APP_CONFIG, APP_DI_CONFIG } from '@app/app.config';
@@ -14,22 +15,19 @@ import { PartyService } from '@app/core/party/party.service';
 import { FormUtilsService } from '@app/core/services/form-utils.service';
 import { LoggerService } from '@app/core/services/logger.service';
 
-import {
-  HcimEnrolmentResource,
-  HcimEnrolmentStatusCode,
-} from './hcim-enrolment-resource.service';
-import { HcimEnrolmentComponent } from './hcim-enrolment.component';
-import { HcimEnrolment } from './hcim-enrolment.model';
+import { AdministratorInformationResource } from './administrator-information-resource.service';
+import { AdministratorInformation } from './administrator-information.model';
+import { AdministratorInformationPage } from './administrator-information.page';
 
-describe('HcimEnrolmentComponent', () => {
-  let component: HcimEnrolmentComponent;
+describe('AdministratorInformationPage', () => {
+  let component: AdministratorInformationPage;
   let partyServiceSpy: Spy<PartyService>;
-  let hcimEnrolmentResourceSpy: Spy<HcimEnrolmentResource>;
+  let administratorInfoResourceSpy: Spy<AdministratorInformationResource>;
   let formUtilsServiceSpy: Spy<FormUtilsService>;
   let router: Router;
 
   let mockActivatedRoute: { snapshot: any };
-  let mockForm: HcimEnrolment;
+  let mockForm: AdministratorInformation;
 
   beforeEach(() => {
     mockActivatedRoute = {
@@ -51,7 +49,7 @@ describe('HcimEnrolmentComponent', () => {
         RouterTestingModule,
       ],
       providers: [
-        HcimEnrolmentComponent,
+        AdministratorInformationPage,
         {
           provide: APP_CONFIG,
           useValue: APP_DI_CONFIG,
@@ -67,7 +65,7 @@ describe('HcimEnrolmentComponent', () => {
             settersToSpyOn: ['partyId'],
           }),
         },
-        provideAutoSpy(HcimEnrolmentResource),
+        provideAutoSpy(AdministratorInformationResource),
         provideAutoSpy(FormUtilsService),
         provideAutoSpy(LoggerService),
         provideAutoSpy(Router),
@@ -75,57 +73,66 @@ describe('HcimEnrolmentComponent', () => {
     });
 
     router = TestBed.inject(Router);
-    component = TestBed.inject(HcimEnrolmentComponent);
+    component = TestBed.inject(AdministratorInformationPage);
     partyServiceSpy = TestBed.inject<any>(PartyService);
-    hcimEnrolmentResourceSpy = TestBed.inject<any>(HcimEnrolmentResource);
+    administratorInfoResourceSpy = TestBed.inject<any>(
+      AdministratorInformationResource
+    );
     formUtilsServiceSpy = TestBed.inject<any>(FormUtilsService);
 
     mockForm = {
-      managesTasks: randBoolean(),
-      modifiesPhns: randBoolean(),
-      recordsNewborns: randBoolean(),
-      searchesIdentifiers: randBoolean(),
+      email: randEmail(),
     };
   });
 
   describe('INIT', () => {
-    given('partyId exists and access request completion is not null', () => {
+    given('partyId exists', () => {
       const partyId = randNumber({ min: 1 });
-      component.completed = false;
       partyServiceSpy.accessorSpies.getters.partyId.mockReturnValue(partyId);
+      administratorInfoResourceSpy.get.nextOneTimeWith(mockForm);
 
       when('resource request resolved', () => {
         component.ngOnInit();
 
-        then('it should not route to root', () => {
+        then('it should GET party access administrator information', () => {
           expect(router.navigate).not.toHaveBeenCalled();
+          expect(administratorInfoResourceSpy.get).toHaveBeenCalledTimes(1);
+          expect(administratorInfoResourceSpy.get).toHaveBeenCalledWith(
+            partyId
+          );
         });
       });
     });
 
-    given('partyId exists and access request completion is null', () => {
+    given('partyId exists', () => {
       const partyId = randNumber({ min: 1 });
-      component.completed = null;
       partyServiceSpy.accessorSpies.getters.partyId.mockReturnValue(partyId);
+      administratorInfoResourceSpy.get.nextWithValues([
+        {
+          errorValue: {
+            status: HttpStatusCode.NotFound,
+          },
+        },
+      ]);
 
-      when('resource request resolved', () => {
+      when('resource request rejected', () => {
         component.ngOnInit();
 
-        then('it should route to root', () => {
+        then('router should navigate to root route', () => {
           const rootRoute = mockActivatedRoute.snapshot.data.routes.root;
           expect(router.navigate).toHaveBeenCalledWith([rootRoute]);
         });
       });
     });
 
-    given('partyId does not exists', () => {
+    given('partyId does not exist', () => {
       const partyId = null;
       partyServiceSpy.accessorSpies.getters.partyId.mockReturnValue(partyId);
 
-      when('resource request resolved', () => {
+      when('initializing the component', () => {
         component.ngOnInit();
 
-        then('it should route to root', () => {
+        then('router should navigate to root route', () => {
           const rootRoute = mockActivatedRoute.snapshot.data.routes.root;
           expect(router.navigate).toHaveBeenCalledWith([rootRoute]);
         });
@@ -141,18 +148,17 @@ describe('HcimEnrolmentComponent', () => {
 
       when('no validation errors exist', () => {
         formUtilsServiceSpy.checkValidity.mockReturnValue(true);
-        const response = {
-          statusCode: HcimEnrolmentStatusCode.ACCESS_GRANTED,
-        };
-        hcimEnrolmentResourceSpy.requestAccess
+        administratorInfoResourceSpy.update
           .mustBeCalledWith(partyId, mockForm)
-          .nextWith(response);
+          .nextWith(void 0);
         component.onSubmit();
 
-        then('access request will be made', () => {
-          expect(component.completed).toBe(true);
-          expect(component.accessRequestStatusCode).toBe(response.statusCode);
-        });
+        then(
+          'access administrator will be updated and router navigate to root route',
+          () => {
+            expect(router.navigate).toHaveBeenCalled();
+          }
+        );
       });
     });
 
@@ -165,10 +171,12 @@ describe('HcimEnrolmentComponent', () => {
         formUtilsServiceSpy.checkValidity.mockReturnValue(false);
         component.onSubmit();
 
-        then('access request will not be made', () => {
-          expect(component.completed).toBe(false);
-          expect(component.accessRequestStatusCode).toBeUndefined();
-        });
+        then(
+          'access administrator should not be updated and router not navigate',
+          () => {
+            expect(router.navigate).not.toHaveBeenCalled();
+          }
+        );
       });
     });
   });

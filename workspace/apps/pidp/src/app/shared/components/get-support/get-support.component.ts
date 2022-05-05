@@ -64,14 +64,14 @@ export class GetSupportComponent implements OnChanges, OnInit {
         !hiddenSupport.includes('saEforms'),
         {
           name: 'Special Authority eForms',
-          email: this.config.emails.specialAuthoritySupport,
+          email: this.config.emails.specialAuthorityEformsSupport,
         }
       ),
       ...ArrayUtils.insertIf<SupportProps>(
         !hiddenSupport.includes('hcimAccountTransfer'),
         {
           name: 'HCIMWeb Account Transfer',
-          email: this.config.emails.hcimWebSupportEmail,
+          email: this.config.emails.hcimWebSupport,
         }
       ),
     ];

@@ -1,15 +1,15 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { HcimEnrolmentPage } from './hcim-enrolment.page';
-import { HcimEnrolmentResolver } from './hcim-enrolment.resolver';
+import { DriverFitnessPage } from './driver-fitness.page';
+import { DriverFitnessResolver } from './driver-fitness.resolver';
 
 const routes: Routes = [
   {
     path: '',
-    component: HcimEnrolmentPage,
+    component: DriverFitnessPage,
     resolve: {
-      hcimEnrolmentStatusCode: HcimEnrolmentResolver,
+      driverFitnessStatusCode: DriverFitnessResolver,
     },
     data: {
       title: 'Provider Identity Portal',
@@ -24,4 +24,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class HcimEnrolmentRoutingModule {}
+export class DriverFitnessRoutingModule {}
