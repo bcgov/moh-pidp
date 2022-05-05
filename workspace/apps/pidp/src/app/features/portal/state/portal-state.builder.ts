@@ -54,6 +54,7 @@ export class PortalStateBuilder {
   public createState(
     profileStatus: ProfileStatus
   ): Record<PortalStateGroupKey, IPortalSection[]> {
+    // TODO move registration into parent module
     return {
       profile: this.createProfileGroup(profileStatus),
       access: this.createAccessGroup(profileStatus),
@@ -64,8 +65,13 @@ export class PortalStateBuilder {
   }
 
   // TODO see where the next few enrolments lead and then drop these methods
-  // for building out the portal state using factories, but premature
-  // optimization until more is known
+  //      for building out the portal state using factories, but premature
+  //      optimization until more is known
+
+  // TODO have these be registered from the modules to a service to
+  //      reduce the spread of maintenance and updates. For example,
+  //      centralize feature flagging into their own modules have
+  //      those modules register those artifacts to services
 
   private createProfileGroup(profileStatus: ProfileStatus): IPortalSection[] {
     return [
