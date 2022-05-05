@@ -22,8 +22,18 @@ export class PortalService {
    * update of the service.
    */
   private _profileStatus: ProfileStatus | null;
-  private _alerts: ProfileStatusAlert[];
+  /**
+   * @description
+   * List of HTTP response controlled alert messages for display
+   * in the portal.
+   */
   private _state$: BehaviorSubject<PortalState>;
+  /**
+   * @description
+   * State for driving the displayed groups and sections of
+   * the portal.
+   */
+  private _alerts: ProfileStatusAlert[];
 
   public constructor(
     private router: Router,
@@ -38,19 +48,8 @@ export class PortalService {
     return this._state$.asObservable();
   }
 
-  public get profileStatus(): ProfileStatus | null {
-    return this._profileStatus;
-  }
-
   public get alerts(): ProfileStatusAlert[] {
     return this._alerts;
-  }
-
-  public get collegeLicenceValidationError(): boolean {
-    return (
-      this._profileStatus?.status.collegeCertification?.statusCode ===
-      StatusCode.ERROR
-    );
   }
 
   public get hiddenSections(): PortalSectionStatusKey[] {
