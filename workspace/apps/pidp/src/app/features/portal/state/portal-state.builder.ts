@@ -27,7 +27,7 @@ import { ComplianceTrainingPortalSection } from './training/compliance-training-
 /**
  * @description
  * Group keys as a readonly tuple to allow iteration
- * over keys at runtime to allow for filtering.
+ * at runtime.
  */
 export const portalStateGroupKeys = [
   'profile',
