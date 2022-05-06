@@ -56,6 +56,11 @@ export class DocumentService {
           ...this.getDocumentMetaData(documentType),
           content: this.getSAeFormsCollectionNotice(),
         };
+      case DocumentType.DRIVER_FITNESS_COLLECTION_NOTICE:
+        return {
+          ...this.getDocumentMetaData(documentType),
+          content: this.getDriverFitnessCollectionNotice(),
+        };
       default:
         throw new Error('Document type does not exist');
     }
