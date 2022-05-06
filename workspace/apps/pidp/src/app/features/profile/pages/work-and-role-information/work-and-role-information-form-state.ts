@@ -4,9 +4,9 @@ import { AbstractFormState } from '@bcgov/shared/ui';
 
 import { FormUtilsService } from '@app/core/services/form-utils.service';
 
-import { WorkAndRoleInformationModel } from './work-and-role-information.model';
+import { WorkAndRoleInformation } from './work-and-role-information.model';
 
-export class WorkAndRoleInformationFormState extends AbstractFormState<WorkAndRoleInformationModel> {
+export class WorkAndRoleInformationFormState extends AbstractFormState<WorkAndRoleInformation> {
   public constructor(
     private fb: FormBuilder,
     private formUtilsService: FormUtilsService
@@ -20,7 +20,7 @@ export class WorkAndRoleInformationFormState extends AbstractFormState<WorkAndRo
     return this.form.get('facilityAddress') as FormGroup;
   }
 
-  public get json(): WorkAndRoleInformationModel | undefined {
+  public get json(): WorkAndRoleInformation | undefined {
     if (!this.formInstance) {
       return;
     }
@@ -28,7 +28,7 @@ export class WorkAndRoleInformationFormState extends AbstractFormState<WorkAndRo
     return this.formInstance.getRawValue();
   }
 
-  public patchValue(model: WorkAndRoleInformationModel | null): void {
+  public patchValue(model: WorkAndRoleInformation | null): void {
     if (!this.formInstance || !model) {
       return;
     }

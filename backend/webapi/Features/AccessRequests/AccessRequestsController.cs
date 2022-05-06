@@ -25,8 +25,17 @@ public class AccessRequestsController : PidpControllerBase
         => await this.AuthorizePartyBeforeHandleAsync(query.PartyId, handler, query)
             .ToActionResultOfT();
 
+    [HttpPost("driver-fitness")]
+    [Authorize(Policy = Policies.BcscAuthentication)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> CreateDriverFitnessEnrolment([FromServices] ICommandHandler<DriverFitness.Command, IDomainResult> handler,
+                                                                  [FromBody] DriverFitness.Command command)
+        => await this.AuthorizePartyBeforeHandleAsync(command.PartyId, handler, command)
+            .ToActionResult();
+
     [HttpPost("hcim-account-transfer")]
-    [Authorize(Policy = Policies.HcimUser)]
+    [Authorize(Policy = Policies.AnyPartyIdentityProvider)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
@@ -63,6 +72,15 @@ public class AccessRequestsController : PidpControllerBase
                 throw new NotImplementedException();
         }
     }
+
+    [HttpPost("hcim-enrolment")]
+    [Authorize(Policy = Policies.AnyPartyIdentityProvider)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> CreateSAEformsEnrolment([FromServices] ICommandHandler<HcimEnrolment.Command, IDomainResult> handler,
+                                                             [FromBody] HcimEnrolment.Command command)
+        => await this.AuthorizePartyBeforeHandleAsync(command.PartyId, handler, command)
+            .ToActionResult();
 
     [HttpPost("sa-eforms")]
     [Authorize(Policy = Policies.BcscAuthentication)]

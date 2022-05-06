@@ -102,6 +102,12 @@ describe('PortalPage', () => {
           licenceNumber: randText(),
           statusCode: StatusCode.AVAILABLE,
         },
+        administratorInfo: {
+          email: randEmail(),
+          statusCode: StatusCode.AVAILABLE,
+        },
+        organizationDetails: { statusCode: StatusCode.AVAILABLE },
+        facilityDetails: { statusCode: StatusCode.AVAILABLE },
         userAccessAgreement: { statusCode: StatusCode.AVAILABLE },
         saEforms: { statusCode: StatusCode.AVAILABLE },
         hcimAccountTransfer: { statusCode: StatusCode.AVAILABLE },
@@ -135,7 +141,7 @@ describe('PortalPage', () => {
             mockProfileStatusResponse
           );
           expect(component.completedProfile).toEqual(
-            portalServiceSpy.completedProfile
+            component.completedProfile
           );
           expect(component.alerts.length).toEqual(1);
         });

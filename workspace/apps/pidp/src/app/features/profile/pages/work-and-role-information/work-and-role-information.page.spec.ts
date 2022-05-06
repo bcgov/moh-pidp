@@ -23,7 +23,7 @@ import { FormUtilsService } from '@app/core/services/form-utils.service';
 import { LoggerService } from '@app/core/services/logger.service';
 
 import { WorkAndRoleInformationResource } from './work-and-role-information-resource.service';
-import { WorkAndRoleInformationModel } from './work-and-role-information.model';
+import { WorkAndRoleInformation } from './work-and-role-information.model';
 import { WorkAndRoleInformationPage } from './work-and-role-information.page';
 
 describe('WorkAndRoleInformationPage', () => {
@@ -33,10 +33,21 @@ describe('WorkAndRoleInformationPage', () => {
   let router: Router;
 
   let mockActivatedRoute: { snapshot: any };
-  let mockForm: Pick<WorkAndRoleInformationModel, 'jobTitle' | 'facilityName'>;
-  let mockParty: WorkAndRoleInformationModel;
+  let mockForm: Pick<WorkAndRoleInformation, 'jobTitle' | 'facilityName'>;
+  let mockParty: WorkAndRoleInformation;
 
   beforeEach(() => {
+    mockActivatedRoute = {
+      snapshot: {
+        data: {
+          title: randTextRange({ min: 1, max: 4 }),
+          routes: {
+            root: '../../',
+          },
+        },
+      },
+    };
+
     TestBed.configureTestingModule({
       imports: [MatDialogModule, ReactiveFormsModule, RouterTestingModule],
       providers: [

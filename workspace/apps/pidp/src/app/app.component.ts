@@ -4,7 +4,6 @@ import { ActivatedRoute, Data, Event, Scroll } from '@angular/router';
 
 import { Observable, delay, map, mergeMap } from 'rxjs';
 
-import { LoadingService } from '@bcgov/shared/data-access';
 import { contentContainerSelector } from '@bcgov/shared/ui';
 
 import { RouteStateService } from '@core/services/route-state.service';
@@ -22,8 +21,7 @@ export class AppComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private titleService: Title,
     private routeStateService: RouteStateService,
-    private utilsService: UtilsService,
-    private loadingService: LoadingService
+    private utilsService: UtilsService
   ) {
     this.title = 'Provider Identity Portal';
   }

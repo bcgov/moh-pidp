@@ -24,8 +24,7 @@ export class HcimEnrolmentPortalSection implements IPortalSection {
   ) {
     this.key = 'hcimEnrolment';
     this.heading = 'HCIMWeb Enrolment';
-    this.description =
-      'First time users enrol here for access to the HCIMWeb application.';
+    this.description = `First time users enrol here for access to the HCIMWeb application.`;
   }
 
   public get hint(): string {
@@ -39,10 +38,14 @@ export class HcimEnrolmentPortalSection implements IPortalSection {
   public get action(): PortalSectionAction {
     const demographicsStatusCode =
       this.profileStatus.status.demographics.statusCode;
+    const administratorInfoStatusCode =
+      this.profileStatus.status.administratorInfo.statusCode;
     return {
-      label: 'Request',
-      route: AccessRoutes.routePath(AccessRoutes.HCIM_ENROLMENT_PAGE),
-      disabled: demographicsStatusCode !== StatusCode.COMPLETED,
+      label: this.getStatusCode() === StatusCode.COMPLETED ? 'View' : 'Request',
+      route: AccessRoutes.routePath(AccessRoutes.HCIM_ENROLMENT),
+      disabled:
+        demographicsStatusCode !== StatusCode.COMPLETED ||
+        administratorInfoStatusCode !== StatusCode.COMPLETED,
     };
   }
 
@@ -60,7 +63,6 @@ export class HcimEnrolmentPortalSection implements IPortalSection {
   }
 
   private getStatusCode(): StatusCode {
-    // TODO remove null check once API exists
-    return this.profileStatus.status.hcimEnrolment?.statusCode;
+    return this.profileStatus.status.hcimEnrolment.statusCode;
   }
 }

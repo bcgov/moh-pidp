@@ -30,6 +30,8 @@ public class Party : BaseAuditable, IOwnedResource
 
     public string? Phone { get; set; }
 
+    public PartyAccessAdministrator? AccessAdministrator { get; set; }
+
     public PartyCertification? PartyCertification { get; set; }
 
     public string? JobTitle { get; set; }

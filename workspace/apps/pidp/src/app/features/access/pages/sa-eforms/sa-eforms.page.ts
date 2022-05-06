@@ -10,7 +10,7 @@ import { LoggerService } from '@app/core/services/logger.service';
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
 
 import { SaEformsResource } from './sa-eforms-resource.service';
-import { saEformsUrl } from './sa-eforms.constants';
+import { specialAuthorityEformsUrl } from './sa-eforms.constants';
 
 @Component({
   selector: 'app-sa-eforms',
@@ -36,12 +36,12 @@ export class SaEformsPage implements OnInit {
   ) {
     const routeData = this.route.snapshot.data;
     this.title = routeData.title;
-    this.saEformsUrl = saEformsUrl;
+    this.saEformsUrl = specialAuthorityEformsUrl;
     this.collectionNotice = documentService.getSAeFormsCollectionNotice();
     this.completed = routeData.saEformsStatusCode === StatusCode.COMPLETED;
     this.accessRequestFailed = false;
     this.specialAuthoritySupportEmail =
-      this.config.emails.specialAuthoritySupport;
+      this.config.emails.specialAuthorityEformsSupport;
   }
 
   public onBack(): void {

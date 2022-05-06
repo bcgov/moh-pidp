@@ -9,6 +9,16 @@ public partial class ProfileStatus
 {
     public partial class Model
     {
+        public class AccessAdministrator : ProfileSection
+        {
+            internal override string SectionName => "administratorInfo";
+            public string? Email { get; set; }
+
+            public AccessAdministrator(ProfileStatusDto profile) : base(profile) => this.Email = profile.AccessAdministratorEmail;
+
+            protected override void SetAlertsAndStatus(ProfileStatusDto profile) => this.StatusCode = string.IsNullOrWhiteSpace(profile.AccessAdministratorEmail) ? StatusCode.Incomplete : StatusCode.Complete;
+        }
+
         public class CollegeCertification : ProfileSection
         {
             internal override string SectionName => "collegeCertification";
@@ -73,12 +83,45 @@ public partial class ProfileStatus
             {
                 this.FirstName = profile.FirstName;
                 this.LastName = profile.LastName;
-                this.Birthdate = profile?.Birthdate;
-                this.Email = profile?.Email;
-                this.Phone = profile?.Phone;
+                this.Birthdate = profile.Birthdate;
+                this.Email = profile.Email;
+                this.Phone = profile.Phone;
             }
 
             protected override void SetAlertsAndStatus(ProfileStatusDto profile) => this.StatusCode = profile.DemographicsEntered ? StatusCode.Complete : StatusCode.Incomplete;
+        }
+
+        public class DriverFitness : ProfileSection
+        {
+            internal override string SectionName => "driverFitness";
+
+            public DriverFitness(ProfileStatusDto profile) : base(profile) { }
+
+            protected override void SetAlertsAndStatus(ProfileStatusDto profile)
+            {
+                if (!profile.UserIsBcServicesCard)
+                {
+                    this.StatusCode = StatusCode.Hidden;
+                    return;
+                }
+
+                if (profile.CompletedEnrolments.Contains(AccessType.DriverFitness))
+                {
+                    this.StatusCode = StatusCode.Complete;
+                    return;
+                }
+
+                if (!profile.DemographicsEntered
+                    || !profile.CollegeCertificationEntered
+                    || profile.PlrRecordStatus == null
+                    || !profile.PlrRecordStatus.IsGoodStanding())
+                {
+                    this.StatusCode = StatusCode.Locked;
+                    return;
+                }
+
+                this.StatusCode = StatusCode.Incomplete;
+            }
         }
 
         public class HcimAccountTransfer : ProfileSection
@@ -89,21 +132,64 @@ public partial class ProfileStatus
 
             protected override void SetAlertsAndStatus(ProfileStatusDto profile)
             {
-                if (profile.UserIsBcServicesCard)
-                {
-                    this.StatusCode = StatusCode.Hidden;
-                    return;
-                }
-
+                // TODO revert [
+                // if (profile.CompletedEnrolments.Contains(AccessType.HcimAccountTransfer)
+                //    || profile.CompletedEnrolments.Contains(AccessType.HcimEnrolment))
+                // {
+                //     this.StatusCode = StatusCode.Hidden;
+                //     return;
+                // }
                 if (profile.CompletedEnrolments.Contains(AccessType.HcimAccountTransfer))
                 {
                     this.StatusCode = StatusCode.Complete;
                     return;
                 }
 
+                if (profile.CompletedEnrolments.Contains(AccessType.HcimEnrolment))
+                {
+                    this.StatusCode = StatusCode.Hidden;
+                    return;
+                }
+                // ]
+
                 this.StatusCode = profile.DemographicsEntered
                     ? StatusCode.Incomplete
                     : StatusCode.Locked;
+            }
+        }
+
+        public class HcimEnrolment : ProfileSection
+        {
+            internal override string SectionName => "hcimEnrolment";
+
+            public HcimEnrolment(ProfileStatusDto profile) : base(profile) { }
+
+            protected override void SetAlertsAndStatus(ProfileStatusDto profile)
+            {
+                // TODO revert [
+                // if (profile.CompletedEnrolments.Contains(AccessType.HcimAccountTransfer)
+                //     || profile.CompletedEnrolments.Contains(AccessType.HcimEnrolment))
+                // {
+                //     this.StatusCode = StatusCode.Complete;
+                //     return;
+                // }
+
+                if (profile.CompletedEnrolments.Contains(AccessType.HcimAccountTransfer))
+                {
+                    this.StatusCode = StatusCode.Hidden;
+                    return;
+                }
+
+                if (profile.CompletedEnrolments.Contains(AccessType.HcimEnrolment))
+                {
+                    this.StatusCode = StatusCode.Complete;
+                    return;
+                }
+                // ]
+
+                this.StatusCode = !profile.DemographicsEntered || string.IsNullOrWhiteSpace(profile.AccessAdministratorEmail)
+                    ? StatusCode.Locked
+                    : StatusCode.Incomplete;
             }
         }
 

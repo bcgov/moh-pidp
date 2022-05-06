@@ -1,6 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { MatDialogModule } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
 
 import { randTextRange } from '@ngneat/falso';
 import { provideAutoSpy } from 'jest-auto-spies';
@@ -29,7 +30,7 @@ describe('LoginPage', () => {
     };
 
     TestBed.configureTestingModule({
-      imports: [MatDialogModule],
+      imports: [RouterTestingModule, MatDialogModule],
       providers: [
         LoginPage,
         {

@@ -6,11 +6,15 @@ import { User } from './user.model';
 export enum AccessType {
   SAEforms = 1,
   HcimAccountTransfer,
+  HcimEnrolment,
+  DriverFitness,
 }
 
-export const AccessTypeMap = {
+export const AccessTypeMap: { [AccessType: number]: string } = {
   [AccessType.SAEforms]: 'Special Authority eForms',
   [AccessType.HcimAccountTransfer]: 'HCIMWeb Account Transfer',
+  [AccessType.HcimEnrolment]: 'HCIMWeb Enrolment',
+  [AccessType.DriverFitness]: 'Driver Medical Fitness',
 };
 
 export interface AccessRequest {

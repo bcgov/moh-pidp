@@ -1,4 +1,4 @@
-import { DocumentsSectionKey } from './documents/documents-group.model';
+import { HistorySectionKey } from './history/history-group.model';
 import { PortalSectionStatusKey } from './portal-section-status-key.type';
 
 /**
@@ -10,4 +10,4 @@ export type PortalSectionKey =
   | PortalSectionStatusKey
   // Status-less sections are listed to allow
   // their typed inclusion
-  | DocumentsSectionKey;
+  | HistorySectionKey;

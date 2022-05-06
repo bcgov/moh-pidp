@@ -1,11 +1,23 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { FacilityDetailsComponent } from './facility-details.component';
 
-const routes: Routes = [{ path: '', component: FacilityDetailsComponent }];
+import { FacilityDetailsPage } from './facility-details.page';
+
+const routes: Routes = [
+  {
+    path: '',
+    component: FacilityDetailsPage,
+    data: {
+      title: 'Provider Identity Portal',
+      routes: {
+        root: '../../',
+      },
+    },
+  },
+];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class FacilityDetailsRoutingModule { }
+export class FacilityDetailsRoutingModule {}

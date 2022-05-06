@@ -2,32 +2,34 @@
   <ui-page-header>{{ title }}</ui-page-header>
 
   <ng-container *ngIf="completed; else notCompleted">
-    <ui-page-section-subheader
-      icon="assignment"
-      heading="HCIMWeb Account Transfer">
-      <ng-container uiPageSectionSubheaderDesc>Next Steps.</ng-container>
-    </ui-page-section-subheader>
+    <ui-page-section>
+      <ui-page-section-subheader
+        icon="assignment"
+        heading="HCIMWeb Account Transfer">
+        <ng-container uiPageSectionSubheaderDesc>Next Steps.</ng-container>
+      </ui-page-section-subheader>
 
-    <ui-alert
-      type="success"
-      icon="check_circle"
-      iconType="outlined"
-      heading="Account Transfer Successful">
-      <ng-container uiAlertContent>
-        <p>
-          You have successfully transferred your HCIMWeb Account. From now on,
-          login to HCIMWeb with your organization credential. You may wish to
-          bookmark this link for future use.
-        </p>
-      </ng-container>
-      <ng-container uiAlertActions>
-        <span>
-          <a mat-stroked-button uiAnchor [attr.href]="hcimWebUrl">
-            Login to HCIMWeb
-          </a>
-        </span>
-      </ng-container>
-    </ui-alert>
+      <ui-alert
+        type="success"
+        icon="check_circle"
+        iconType="outlined"
+        heading="Account Transfer Successful">
+        <ng-container uiAlertContent>
+          <p>
+            You have successfully transferred your HCIMWeb Account. From now on,
+            login to HCIMWeb with your organization credential. You may wish to
+            bookmark this link for future use.
+          </p>
+        </ng-container>
+        <ng-container uiAlertActions>
+          <span>
+            <a mat-stroked-button uiAnchor [attr.href]="hcimWebUrl">
+              Login to HCIMWeb
+            </a>
+          </span>
+        </ng-container>
+      </ui-alert>
+    </ui-page-section>
   </ng-container>
 
   <ng-template #notCompleted>
@@ -108,7 +110,27 @@
     </ui-alert>
 
     <ui-alert
-      *ngIf="accessRequestStatusCode === HcimAccessRequestStatusCode.ACCOUNT_LOCKED"
+      *ngIf="accessRequestStatusCode === HcimAccountTransferStatusCode.ACCOUNT_UNAUTHORIZED"
+      type="danger"
+      icon="error_outline"
+      iconType="outlined"
+      heading="Account Unauthorized">
+      <ng-container uiAlertContent>
+        <p>
+          You are unauthorized to perform an HCIMWeb Account Transfer. If you
+          need assistance contact the HelpDesk at
+          <a
+            uiAnchor
+            scheme="mailto"
+            [attr.href]="healthNetBcHelpDeskEmail"></a>
+          or
+          <a uiAnchor scheme="tel" [attr.href]="healthNetBcHelpDeskPhone"></a>.
+        </p>
+      </ng-container>
+    </ui-alert>
+
+    <ui-alert
+      *ngIf="accessRequestStatusCode === HcimAccountTransferStatusCode.ACCOUNT_LOCKED"
       type="danger"
       icon="error_outline"
       iconType="outlined"

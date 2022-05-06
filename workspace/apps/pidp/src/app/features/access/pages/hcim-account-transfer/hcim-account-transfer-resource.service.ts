@@ -11,15 +11,15 @@ import { PortalResource } from '@app/features/portal/portal-resource.service';
 
 import { HcimAccountTransfer } from './hcim-account-transfer.model';
 
-export enum HcimAccessRequestStatusCode {
+export enum HcimAccountTransferStatusCode {
   ACCESS_GRANTED,
   AUTHENTICATION_FAILED,
   ACCOUNT_LOCKED,
   ACCOUNT_UNAUTHORIZED,
 }
 
-export interface HcimAccessRequestResponse {
-  statusCode: HcimAccessRequestStatusCode;
+export interface HcimAccountTransferResponse {
+  statusCode: HcimAccountTransferStatusCode;
   remainingAttempts?: number;
 }
 
@@ -39,7 +39,7 @@ export class HcimAccountTransferResource {
   public requestAccess(
     partyId: number,
     ldapCredentials: HcimAccountTransfer
-  ): Observable<HcimAccessRequestResponse> {
+  ): Observable<HcimAccountTransferResponse> {
     return this.apiResource
       .post<NoContent>('access-requests/hcim-account-transfer', {
         partyId,
@@ -47,22 +47,22 @@ export class HcimAccountTransferResource {
       })
       .pipe(
         map(() => ({
-          statusCode: HcimAccessRequestStatusCode.ACCESS_GRANTED,
+          statusCode: HcimAccountTransferStatusCode.ACCESS_GRANTED,
         })),
         catchError((error: HttpErrorResponse) => {
           switch (error.status) {
             case HttpStatusCode.UnprocessableEntity:
               return of({
-                statusCode: HcimAccessRequestStatusCode.AUTHENTICATION_FAILED,
+                statusCode: HcimAccountTransferStatusCode.AUTHENTICATION_FAILED,
                 remainingAttempts: error.headers.get('Remaining-Attempts'),
               });
             case HttpStatusCode.Locked:
               return of({
-                statusCode: HcimAccessRequestStatusCode.ACCOUNT_LOCKED,
+                statusCode: HcimAccountTransferStatusCode.ACCOUNT_LOCKED,
               });
             case HttpStatusCode.Forbidden:
               return of({
-                statusCode: HcimAccessRequestStatusCode.ACCOUNT_UNAUTHORIZED,
+                statusCode: HcimAccountTransferStatusCode.ACCOUNT_UNAUTHORIZED,
               });
           }
 

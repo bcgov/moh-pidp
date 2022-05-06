@@ -74,6 +74,20 @@ export class PortalDashboardComponent implements IDashboard {
         },
         'assignment_ind'
       ),
+      ...ArrayUtils.insertResultIf<DashboardRouteMenuItem>(
+        this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
+        () => [
+          new DashboardRouteMenuItem(
+            'Organization Info',
+            {
+              commands: PortalRoutes.MODULE_PATH,
+              extras: { fragment: 'organization' },
+              linkActiveOptions,
+            },
+            'corporate_fare'
+          ),
+        ]
+      ),
       new DashboardRouteMenuItem(
         'Access to Systems',
         {
@@ -83,11 +97,8 @@ export class PortalDashboardComponent implements IDashboard {
         },
         'assignment'
       ),
-      ...ArrayUtils.insertResultIf<any>(
-        this.permissionsService.hasRole([
-          Role.FEATURE_PIDP_DEMO,
-          Role.FEATURE_AMH_DEMO,
-        ]),
+      ...ArrayUtils.insertResultIf<DashboardRouteMenuItem>(
+        this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
         () => [
           new DashboardRouteMenuItem(
             'Training',
@@ -101,10 +112,10 @@ export class PortalDashboardComponent implements IDashboard {
         ]
       ),
       new DashboardRouteMenuItem(
-        'Your Documents',
+        'History',
         {
           commands: PortalRoutes.MODULE_PATH,
-          extras: { fragment: 'documents' },
+          extras: { fragment: 'history' },
           linkActiveOptions,
         },
         'restore'

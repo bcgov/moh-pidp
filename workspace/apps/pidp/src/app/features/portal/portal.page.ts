@@ -4,14 +4,12 @@ import { Router } from '@angular/router';
 import { Observable, map } from 'rxjs';
 
 import { PartyService } from '@app/core/party/party.service';
-import { SupportProvided } from '@app/shared/components/get-support/get-support.component';
 import { Role } from '@app/shared/enums/roles.enum';
 
 import { ProfileStatusAlert } from './models/profile-status-alert.model';
 import { ProfileStatus } from './models/profile-status.model';
 import { PortalResource } from './portal-resource.service';
 import { PortalService } from './portal.service';
-import { PortalSectionStatusKey } from './state/portal-section-status-key.type';
 import { IPortalSection } from './state/portal-section.model';
 import { PortalState } from './state/portal-state.builder';
 
@@ -21,10 +19,24 @@ import { PortalState } from './state/portal-state.builder';
   styleUrls: ['./portal.page.scss'],
 })
 export class PortalPage implements OnInit {
+  /**
+   * @description
+   * State for driving the displayed groups and sections of
+   * the portal.
+   */
   public state$: Observable<PortalState>;
-  public completedProfile: boolean;
+  /**
+   * @description
+   * List of HTTP response controlled alert messages for display
+   * in the portal.
+   */
   public alerts: ProfileStatusAlert[];
-  public hiddenSupport: SupportProvided[];
+  /**
+   * @description
+   * Whether to show the profile information completed
+   * alert providing a scrollable route to access requests.
+   */
+  public completedProfile: boolean;
 
   public Role = Role;
 
@@ -37,7 +49,6 @@ export class PortalPage implements OnInit {
     this.state$ = this.portalService.state$;
     this.completedProfile = false;
     this.alerts = [];
-    this.hiddenSupport = [];
   }
 
   public onScrollToAnchor(): void {
@@ -59,13 +70,6 @@ export class PortalPage implements OnInit {
           this.portalService.updateState(profileStatus);
           this.completedProfile = this.portalService.completedProfile;
           this.alerts = this.portalService.alerts;
-          const filter: PortalSectionStatusKey[] = [
-            'saEforms',
-            'hcimAccountTransfer',
-          ];
-          this.hiddenSupport = this.portalService.hiddenSections.filter(
-            (hiddenSection) => filter.includes(hiddenSection)
-          ) as SupportProvided[];
         })
       )
       .subscribe();

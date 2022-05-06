@@ -1,5 +1,5 @@
 import { Facility, Party } from '@bcgov/shared/data-access';
 
-export interface WorkAndRoleInformationModel
+export interface WorkAndRoleInformation
   extends Pick<Party, 'jobTitle'>,
     Pick<Facility, 'facilityName' | 'facilityAddress'> {}

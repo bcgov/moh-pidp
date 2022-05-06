@@ -1,12 +1,22 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { HcimEnrolmentComponent } from './hcim-enrolment.component';
+import { HcimEnrolmentPage } from './hcim-enrolment.page';
+import { HcimEnrolmentResolver } from './hcim-enrolment.resolver';
 
 const routes: Routes = [
   {
     path: '',
-    component: HcimEnrolmentComponent,
+    component: HcimEnrolmentPage,
+    resolve: {
+      hcimEnrolmentStatusCode: HcimEnrolmentResolver,
+    },
+    data: {
+      title: 'Provider Identity Portal',
+      routes: {
+        root: '../../',
+      },
+    },
   },
 ];
 

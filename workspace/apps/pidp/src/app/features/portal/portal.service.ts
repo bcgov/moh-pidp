@@ -9,8 +9,10 @@ import { AlertCode } from './enums/alert-code.enum';
 import { StatusCode } from './enums/status-code.enum';
 import { ProfileStatusAlert } from './models/profile-status-alert.model';
 import { ProfileStatus } from './models/profile-status.model';
+import { accessSectionKeys } from './state/access/access-group.model';
 import { PortalSectionStatusKey } from './state/portal-section-status-key.type';
 import { PortalState, PortalStateBuilder } from './state/portal-state.builder';
+import { profileSectionKeys } from './state/profile/profile-group.model';
 
 @Injectable({
   providedIn: 'root',
@@ -22,9 +24,24 @@ export class PortalService {
    * update of the service.
    */
   private _profileStatus: ProfileStatus | null;
-  private _alerts: ProfileStatusAlert[];
-  private _completedProfile: boolean;
+  /**
+   * @description
+   * State for driving the displayed groups and sections of
+   * the portal.
+   */
   private _state$: BehaviorSubject<PortalState>;
+  /**
+   * @description
+   * List of HTTP response controlled alert messages for display
+   * in the portal.
+   */
+  private _alerts: ProfileStatusAlert[];
+  /**
+   * @description
+   * Whether all profile information has been completed, and
+   * no access requests have been made.
+   */
+  private _completedProfile: boolean;
 
   public constructor(
     private router: Router,
@@ -32,31 +49,20 @@ export class PortalService {
   ) {
     this._profileStatus = null;
     this._state$ = new BehaviorSubject<PortalState>(null);
-    this._completedProfile = false;
     this._alerts = [];
+    this._completedProfile = false;
   }
 
   public get state$(): Observable<PortalState> {
     return this._state$.asObservable();
   }
 
-  public get profileStatus(): ProfileStatus | null {
-    return this._profileStatus;
-  }
-
-  public get completedProfile(): boolean {
-    return this._completedProfile;
-  }
-
   public get alerts(): ProfileStatusAlert[] {
     return this._alerts;
   }
 
-  public get collegeLicenceValidationError(): boolean {
-    return (
-      this._profileStatus?.status.collegeCertification?.statusCode ===
-      StatusCode.ERROR
-    );
+  public get completedProfile(): boolean {
+    return this._completedProfile;
   }
 
   public get hiddenSections(): PortalSectionStatusKey[] {
@@ -106,22 +112,29 @@ export class PortalService {
     });
   }
 
-  // TODO won't scale and needs revision with more than one enrolment for provision
-  private hasCompletedProfile(profileStatus: ProfileStatus): boolean {
+  private hasCompletedProfile(profileStatus: ProfileStatus | null): boolean {
+    if (!profileStatus) {
+      return false;
+    }
+
     const status = profileStatus.status;
 
+    // Assumes key absence is a requirement and should be
+    // purposefully skipped in the profile completed check
     return (
-      status.demographics.statusCode === StatusCode.COMPLETED &&
-      // TODO won't work when college is hidden (ie. PHSA authenticated users)
-      status.collegeCertification?.statusCode === StatusCode.COMPLETED &&
-      status.saEforms?.statusCode === StatusCode.AVAILABLE
+      profileSectionKeys.every((key) =>
+        status[key] ? status[key].statusCode === StatusCode.COMPLETED : true
+      ) &&
+      accessSectionKeys.every((key) =>
+        status[key] ? status[key].statusCode !== StatusCode.COMPLETED : true
+      )
     );
   }
 
   private clearState(): void {
     this._profileStatus = null;
     this._state$.next(null);
-    this._completedProfile = false;
     this._alerts = [];
+    this._completedProfile = false;
   }
 }
