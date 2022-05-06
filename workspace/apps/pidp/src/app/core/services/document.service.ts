@@ -5,7 +5,7 @@ import { APP_CONFIG, AppConfig } from '@app/app.config';
 export enum DocumentType {
   PIDP_COLLECTION_NOTICE = 'pidp-collection-notice',
   SA_EFORMS_COLLECTION_NOTICE = 'sa-eforms-collection-notice',
-  DRIVER_FITNESS = 'driver-fitness-collection-notice',
+  DRIVER_FITNESS_COLLECTION_NOTICE = 'driver-fitness-collection-notice',
 }
 
 export interface IDocumentMetaData {
@@ -34,7 +34,7 @@ export class DocumentService {
         title: 'SA eForms Collection Notice',
       },
       {
-        type: DocumentType.DRIVER_FITNESS,
+        type: DocumentType.DRIVER_FITNESS_COLLECTION_NOTICE,
         title: 'Driver Medical Fitness Collection Notice',
       },
     ];
@@ -55,6 +55,11 @@ export class DocumentService {
         return {
           ...this.getDocumentMetaData(documentType),
           content: this.getSAeFormsCollectionNotice(),
+        };
+      case DocumentType.DRIVER_FITNESS_COLLECTION_NOTICE:
+        return {
+          ...this.getDocumentMetaData(documentType),
+          content: this.getDriverFitnessCollectionNotice(),
         };
       default:
         throw new Error('Document type does not exist');

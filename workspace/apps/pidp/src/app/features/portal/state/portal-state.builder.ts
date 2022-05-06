@@ -27,7 +27,7 @@ import { ComplianceTrainingPortalSection } from './training/compliance-training-
 /**
  * @description
  * Group keys as a readonly tuple to allow iteration
- * over keys at runtime to allow for filtering.
+ * at runtime.
  */
 export const portalStateGroupKeys = [
   'profile',
@@ -54,6 +54,7 @@ export class PortalStateBuilder {
   public createState(
     profileStatus: ProfileStatus
   ): Record<PortalStateGroupKey, IPortalSection[]> {
+    // TODO move registration into parent module
     return {
       profile: this.createProfileGroup(profileStatus),
       access: this.createAccessGroup(profileStatus),
@@ -64,8 +65,13 @@ export class PortalStateBuilder {
   }
 
   // TODO see where the next few enrolments lead and then drop these methods
-  // for building out the portal state using factories, but premature
-  // optimization until more is known
+  //      for building out the portal state using factories, but premature
+  //      optimization until more is known
+
+  // TODO have these be registered from the modules to a service to
+  //      reduce the spread of maintenance and updates. For example,
+  //      centralize feature flagging into their own modules have
+  //      those modules register those artifacts to services
 
   private createProfileGroup(profileStatus: ProfileStatus): IPortalSection[] {
     return [
@@ -80,10 +86,7 @@ export class PortalStateBuilder {
         // TODO remove permissions when API exists and ready for production, or
         // TODO replace || with && to keep it flagged when API exists
         this.insertSection('userAccessAgreement', profileStatus) ||
-          this.permissionsService.hasRole([
-            Role.FEATURE_PIDP_DEMO,
-            Role.FEATURE_AMH_DEMO,
-          ]),
+          this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
         () => [new UserAccessAgreementPortalSection(profileStatus, this.router)]
       ),
     ];
@@ -152,10 +155,7 @@ export class PortalStateBuilder {
   private createTrainingGroup(profileStatus: ProfileStatus): IPortalSection[] {
     return [
       ...ArrayUtils.insertResultIf<IPortalSection>(
-        this.permissionsService.hasRole([
-          Role.FEATURE_PIDP_DEMO,
-          Role.FEATURE_AMH_DEMO,
-        ]),
+        this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
         () => [new ComplianceTrainingPortalSection(profileStatus, this.router)]
       ),
     ];

@@ -6,7 +6,7 @@ import { RouteUtils } from '@bcgov/shared/utils';
 @Component({
   selector: 'ui-access-denied',
   template: `
-    <app-root-route-container>
+    <ui-root-route-container>
       <div class="row justify-content-center">
         <div class="col-sm-12 col-md-10 col-lg-8 text-center">
           <h1 class="mb-5">
@@ -21,7 +21,7 @@ import { RouteUtils } from '@bcgov/shared/utils';
           </button>
         </div>
       </div>
-    </app-root-route-container>
+    </ui-root-route-container>
   `,
   styleUrls: ['../../shared/root-route-page-styles.scss'],
 })

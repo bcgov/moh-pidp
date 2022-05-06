@@ -53,7 +53,7 @@ const routes: Routes = [
     path: AccessRoutes.SITE_PRIVACY_SECURITY_CHECKLIST,
     canActivate: [PermissionsGuard],
     data: {
-      roles: [Role.FEATURE_PIDP_DEMO, Role.FEATURE_AMH_DEMO],
+      roles: [Role.FEATURE_PIDP_DEMO],
     },
     loadChildren: (): Promise<SitePrivacySecurityChecklistModule> =>
       import(

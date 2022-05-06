@@ -1,5 +1,6 @@
 import { driverFitnessSupportEmail } from '@app/features/access/pages/driver-fitness/driver-fitness.constants';
-import { healthNetBcAdminEmail } from '@app/features/access/pages/hcim-account-transfer/hcim-account-transfer-constants';
+import { hcimWebAccountTransferSupport } from '@app/features/access/pages/hcim-account-transfer/hcim-account-transfer-constants';
+import { hcimWebEnrolmentSupport } from '@app/features/access/pages/hcim-enrolment/hcim-enrolment-constants';
 import {
   specialAuthorityEformsSupportEmail,
   specialAuthorityUrl,
@@ -25,7 +26,8 @@ export const environment: AppEnvironment = {
   emails: {
     providerIdentitySupport: 'provideridentityportal@gov.bc.ca',
     specialAuthorityEformsSupport: specialAuthorityEformsSupportEmail,
-    hcimWebSupport: healthNetBcAdminEmail,
+    hcimAccountTransferSupport: hcimWebAccountTransferSupport,
+    hcimEnrolmentSupport: hcimWebEnrolmentSupport,
     driverFitnessSupport: driverFitnessSupportEmail,
   },
   urls: {

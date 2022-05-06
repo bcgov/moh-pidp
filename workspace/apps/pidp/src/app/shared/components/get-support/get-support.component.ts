@@ -2,18 +2,14 @@ import {
   ChangeDetectionStrategy,
   Component,
   Inject,
-  Input,
-  OnChanges,
   OnInit,
-  SimpleChanges,
 } from '@angular/core';
 
 import { ArrayUtils } from '@bcgov/shared/utils';
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';
-import { AccessGroup } from '@app/features/portal/state/access/access-group.model';
-
-export type SupportProvided = keyof AccessGroup;
+import { PermissionsService } from '@app/modules/permissions/permissions.service';
+import { Role } from '@app/shared/enums/roles.enum';
 
 interface SupportProps {
   name: string;
@@ -26,52 +22,49 @@ interface SupportProps {
   styleUrls: ['./get-support.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class GetSupportComponent implements OnChanges, OnInit {
-  /**
-   * @description
-   * Support that should be hidden from view.
-   */
-  @Input() public hiddenSupport?: SupportProvided | SupportProvided[];
-
+export class GetSupportComponent implements OnInit {
   public providedSupport: SupportProps[];
 
-  public constructor(@Inject(APP_CONFIG) private config: AppConfig) {
+  public constructor(
+    @Inject(APP_CONFIG) private config: AppConfig,
+    private permissionsService: PermissionsService
+  ) {
     this.providedSupport = [];
-  }
-
-  public ngOnChanges(changes: SimpleChanges): void {
-    if (changes.hiddenSupport) {
-      const currentValue = changes.hiddenSupport.currentValue;
-      const hiddenSupport = Array.isArray(currentValue)
-        ? currentValue
-        : [currentValue];
-
-      this.setupSupport(hiddenSupport);
-    }
   }
 
   public ngOnInit(): void {
     this.setupSupport();
   }
 
-  private setupSupport(hiddenSupport: SupportProvided[] = []): void {
+  // TODO start having these be registered from the modules to a service to
+  //      reduce the spread of maintenance and updates, and remove the dependency
+  //      on the config and permissions service from the component
+  private setupSupport(): void {
     this.providedSupport = [
       {
         name: 'Provider Identity Portal',
         email: this.config.emails.providerIdentitySupport,
       },
+      {
+        name: 'Special Authority eForms',
+        email: this.config.emails.specialAuthorityEformsSupport,
+      },
+      {
+        name: 'HCIMWeb Account Transfer',
+        email: this.config.emails.hcimAccountTransferSupport,
+      },
       ...ArrayUtils.insertIf<SupportProps>(
-        !hiddenSupport.includes('saEforms'),
+        this.permissionsService.hasRole(Role.FEATURE_PIDP_DEMO),
         {
-          name: 'Special Authority eForms',
-          email: this.config.emails.specialAuthorityEformsSupport,
+          name: 'HCIMWeb Enrolment',
+          email: this.config.emails.hcimEnrolmentSupport,
         }
       ),
       ...ArrayUtils.insertIf<SupportProps>(
-        !hiddenSupport.includes('hcimAccountTransfer'),
+        this.permissionsService.hasRole(Role.FEATURE_PIDP_DEMO),
         {
-          name: 'HCIMWeb Account Transfer',
-          email: this.config.emails.hcimWebSupport,
+          name: 'Driver Medical Fitness',
+          email: this.config.emails.driverFitnessSupport,
         }
       ),
     ];

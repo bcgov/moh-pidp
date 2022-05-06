@@ -16,7 +16,8 @@ export interface AppEnvironment extends EnvironmentConfig {
   emails: {
     providerIdentitySupport: string;
     specialAuthorityEformsSupport: string;
-    hcimWebSupport: string;
+    hcimAccountTransferSupport: string;
+    hcimEnrolmentSupport: string;
     driverFitnessSupport: string;
   };
   urls: {

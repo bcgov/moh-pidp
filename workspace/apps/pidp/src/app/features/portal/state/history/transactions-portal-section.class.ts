@@ -17,7 +17,7 @@ export class TransactionsPortalSection implements IPortalSection {
   public constructor(private router: Router) {
     this.key = 'signedAcceptedDocuments';
     this.heading = 'Transactions';
-    this.description = 'View Transaction';
+    this.description = 'View Transactions';
   }
 
   /**

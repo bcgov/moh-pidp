@@ -76,7 +76,7 @@ const routes: Routes = [
         path: TrainingRoutes.MODULE_PATH,
         canActivate: [PermissionsGuard],
         data: {
-          roles: [Role.FEATURE_PIDP_DEMO, Role.FEATURE_AMH_DEMO],
+          roles: [Role.FEATURE_PIDP_DEMO],
         },
         loadChildren: (): Promise<TrainingModule> =>
           import('../training/training.module').then((m) => m.TrainingModule),

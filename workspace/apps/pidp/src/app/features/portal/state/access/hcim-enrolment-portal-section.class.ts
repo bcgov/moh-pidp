@@ -41,7 +41,7 @@ export class HcimEnrolmentPortalSection implements IPortalSection {
     const administratorInfoStatusCode =
       this.profileStatus.status.administratorInfo.statusCode;
     return {
-      label: 'Request',
+      label: this.getStatusCode() === StatusCode.COMPLETED ? 'View' : 'Request',
       route: AccessRoutes.routePath(AccessRoutes.HCIM_ENROLMENT),
       disabled:
         demographicsStatusCode !== StatusCode.COMPLETED ||

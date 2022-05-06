@@ -1,4 +1,4 @@
-<div [formGroup]="form" class="row">
+<div class="row" [formGroup]="form">
   <ng-container *ngFor="let control of formControlConfig">
     <div [class.col-12]="mode === 'column'" [class.col-6]="mode === 'columns'">
       <mat-form-field class="w-100">
