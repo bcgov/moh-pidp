@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { TestBed } from '@angular/core/testing';
 import { Title } from '@angular/platform-browser';
-import { ActivatedRoute, Data, NavigationEnd } from '@angular/router';
+import { ActivatedRoute, Data, NavigationEnd, Scroll } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { of } from 'rxjs';
@@ -17,6 +17,7 @@ describe('AppComponent', () => {
   let component: AppComponent;
   let titleServiceSpy: Spy<Title>;
   let routeStateServiceSpy: Spy<RouteStateService>;
+  let utilsServiceSpy: Spy<UtilsService>;
 
   let mockActivatedRoute: { data: any; snapshot: any };
 
@@ -46,6 +47,7 @@ describe('AppComponent', () => {
     component = TestBed.inject(AppComponent);
     titleServiceSpy = TestBed.inject<any>(Title);
     routeStateServiceSpy = TestBed.inject<any>(RouteStateService);
+    utilsServiceSpy = TestBed.inject<any>(UtilsService);
   });
 
   describe('INIT', () => {
@@ -64,5 +66,28 @@ describe('AppComponent', () => {
         });
       });
     });
+
+    given('there is an initial route with a route fragment', () => {
+      const navigationEnd = new NavigationEnd(0, '/', '/');
+      const anchor = randText();
+      const scrollEvent = new Scroll(navigationEnd, [100, 100], anchor);
+      routeStateServiceSpy.onScrollEvent.nextOneTimeWith(scrollEvent);
+
+      when('the component has been initialized', () => {
+        component.ngOnInit();
+
+        then('the view should be scrolled to the anchor', () => {
+          expect(utilsServiceSpy.scrollToAnchor).toHaveBeenCalledTimes(1);
+          expect(utilsServiceSpy.scrollToAnchor).toHaveBeenCalledWith(anchor);
+        });
+      });
+    });
+
+    // given('there is an initial route with no route fragment', () => {
+    //   when('the component has been initialized', () => {
+    //     then('the view should be scrolled to the top', () => {});
+    //     // contentContainerSelector
+    //   });
+    // });
   });
 });
