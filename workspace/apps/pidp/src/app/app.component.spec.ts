@@ -2,12 +2,13 @@
 import { TestBed } from '@angular/core/testing';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Data, NavigationEnd, Scroll } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
 
-import { of } from 'rxjs';
+import { Observable, of } from 'rxjs';
 
 import { randText } from '@ngneat/falso';
 import { Spy, provideAutoSpy } from 'jest-auto-spies';
+
+import { contentContainerSelector } from '@bcgov/shared/ui';
 
 import { AppComponent } from './app.component';
 import { RouteStateService } from './core/services/route-state.service';
@@ -19,7 +20,11 @@ describe('AppComponent', () => {
   let routeStateServiceSpy: Spy<RouteStateService>;
   let utilsServiceSpy: Spy<UtilsService>;
 
-  let mockActivatedRoute: { data: any; snapshot: any };
+  let mockActivatedRoute: {
+    fragment?: Observable<string | null>;
+    data: Observable<Data>;
+    snapshot: any;
+  };
 
   beforeEach(() => {
     const data: Data = {
@@ -31,16 +36,15 @@ describe('AppComponent', () => {
     };
 
     TestBed.configureTestingModule({
-      imports: [RouterTestingModule],
       providers: [
         AppComponent,
         {
           provide: ActivatedRoute,
           useValue: mockActivatedRoute,
         },
+        provideAutoSpy(Title),
         provideAutoSpy(RouteStateService),
         provideAutoSpy(UtilsService),
-        provideAutoSpy(Title),
       ],
     });
 
@@ -54,40 +58,60 @@ describe('AppComponent', () => {
     given('there is an initial route', () => {
       const navigationEnd = new NavigationEnd(0, '/', '/');
       routeStateServiceSpy.onNavigationEnd.nextOneTimeWith(navigationEnd);
+      routeStateServiceSpy.onScrollEvent.nextOneTimeWith(
+        new Scroll(navigationEnd, [0, 0], null)
+      );
 
       when('the component has been initialized', () => {
         component.ngOnInit();
 
         then('the title should be set using the route config', () => {
           expect(titleServiceSpy.setTitle).toHaveBeenCalledTimes(1);
-          expect(titleServiceSpy.setTitle).toBeCalledWith(
+          expect(titleServiceSpy.setTitle).toHaveBeenCalledWith(
             mockActivatedRoute.snapshot.data.title
           );
         });
       });
     });
 
-    given('there is an initial route with a route fragment', () => {
+    given('there is an initial route with no route fragment', () => {
       const navigationEnd = new NavigationEnd(0, '/', '/');
-      const anchor = randText();
-      const scrollEvent = new Scroll(navigationEnd, [100, 100], anchor);
-      routeStateServiceSpy.onScrollEvent.nextOneTimeWith(scrollEvent);
+      routeStateServiceSpy.onNavigationEnd.nextOneTimeWith(navigationEnd);
+      routeStateServiceSpy.onScrollEvent.nextOneTimeWith(
+        new Scroll(navigationEnd, [0, 0], null)
+      );
 
-      when('the component has been initialized', () => {
+      when('the component has been initialized', async () => {
         component.ngOnInit();
+        await new Promise((x) => setTimeout(x, 500));
 
-        then('the view should be scrolled to the anchor', () => {
+        then('the view should be scrolled to the top', () => {
+          expect(utilsServiceSpy.scrollTop).toHaveBeenCalledTimes(1);
+          expect(utilsServiceSpy.scrollTop).toHaveBeenCalledWith(
+            contentContainerSelector
+          );
+        });
+      });
+    });
+
+    given('there is an initial route with a route fragment', () => {
+      const anchor = randText();
+      mockActivatedRoute.fragment = of(anchor);
+      const navigationEnd = new NavigationEnd(0, '/', '/');
+      routeStateServiceSpy.onNavigationEnd.nextOneTimeWith(navigationEnd);
+      routeStateServiceSpy.onScrollEvent.nextOneTimeWith(
+        new Scroll(navigationEnd, [0, 0], anchor)
+      );
+
+      when('the component has been initialized', async () => {
+        component.ngOnInit();
+        await new Promise((x) => setTimeout(x, 500));
+
+        then('the view should be scrolled to an anchor', () => {
           expect(utilsServiceSpy.scrollToAnchor).toHaveBeenCalledTimes(1);
           expect(utilsServiceSpy.scrollToAnchor).toHaveBeenCalledWith(anchor);
         });
       });
     });
-
-    // given('there is an initial route with no route fragment', () => {
-    //   when('the component has been initialized', () => {
-    //     then('the view should be scrolled to the top', () => {});
-    //     // contentContainerSelector
-    //   });
-    // });
   });
 });
