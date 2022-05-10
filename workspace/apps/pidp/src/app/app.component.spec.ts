@@ -68,10 +68,13 @@ describe('AppComponent', () => {
         component.ngOnInit();
 
         then('the title should be set using the route config', () => {
-          expect(titleServiceSpy.setTitle).toHaveBeenCalledTimes(1);
-          expect(titleServiceSpy.setTitle).toHaveBeenCalledWith(
-            mockActivatedRoute.snapshot.data.title
-          );
+          // Trigger assertion after change detection
+          setTimeout(() => {
+            expect(titleServiceSpy.setTitle).toHaveBeenCalledTimes(1);
+            expect(titleServiceSpy.setTitle).toHaveBeenCalledWith(
+              mockActivatedRoute.snapshot.data.title
+            );
+          }, 0);
         });
       });
     });
@@ -87,12 +90,13 @@ describe('AppComponent', () => {
         component.ngOnInit();
 
         then('the view should be scrolled to the top', () => {
+          // Trigger assertion after change detection
           setTimeout(() => {
             expect(utilsServiceSpy.scrollTop).toHaveBeenCalledTimes(1);
             expect(utilsServiceSpy.scrollTop).toHaveBeenCalledWith(
               contentContainerSelector
             );
-          }, 500);
+          }, 0);
         });
       });
     });
@@ -110,10 +114,11 @@ describe('AppComponent', () => {
         component.ngOnInit();
 
         then('the view should be scrolled to an anchor', () => {
+          // Trigger assertion after change detection
           setTimeout(() => {
             expect(utilsServiceSpy.scrollToAnchor).toHaveBeenCalledTimes(1);
             expect(utilsServiceSpy.scrollToAnchor).toHaveBeenCalledWith(anchor);
-          }, 500);
+          }, 0);
         });
       });
     });
