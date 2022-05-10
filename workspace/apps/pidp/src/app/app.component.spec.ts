@@ -2,6 +2,7 @@
 import { TestBed } from '@angular/core/testing';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Data, NavigationEnd, Scroll } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
 
 import { Observable, of } from 'rxjs';
 
@@ -36,6 +37,7 @@ describe('AppComponent', () => {
     };
 
     TestBed.configureTestingModule({
+      imports: [RouterTestingModule],
       providers: [
         AppComponent,
         {
@@ -66,7 +68,7 @@ describe('AppComponent', () => {
         component.ngOnInit();
 
         then('the title should be set using the route config', () => {
-          expect(titleServiceSpy.setTitle).toHaveBeenCalledTimes(1);
+          expect(titleServiceSpy.setTitle).toHaveBeenCalledTimes(2);
           expect(titleServiceSpy.setTitle).toHaveBeenCalledWith(
             mockActivatedRoute.snapshot.data.title
           );
@@ -86,7 +88,7 @@ describe('AppComponent', () => {
         await new Promise((x) => setTimeout(x, 500));
 
         then('the view should be scrolled to the top', () => {
-          expect(utilsServiceSpy.scrollTop).toHaveBeenCalledTimes(1);
+          expect(utilsServiceSpy.scrollTop).toHaveBeenCalledTimes(2);
           expect(utilsServiceSpy.scrollTop).toHaveBeenCalledWith(
             contentContainerSelector
           );
@@ -108,7 +110,7 @@ describe('AppComponent', () => {
         await new Promise((x) => setTimeout(x, 500));
 
         then('the view should be scrolled to an anchor', () => {
-          expect(utilsServiceSpy.scrollToAnchor).toHaveBeenCalledTimes(1);
+          expect(utilsServiceSpy.scrollToAnchor).toHaveBeenCalledTimes(2);
           expect(utilsServiceSpy.scrollToAnchor).toHaveBeenCalledWith(anchor);
         });
       });
