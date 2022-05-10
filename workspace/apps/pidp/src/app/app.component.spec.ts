@@ -68,7 +68,7 @@ describe('AppComponent', () => {
         component.ngOnInit();
 
         then('the title should be set using the route config', () => {
-          expect(titleServiceSpy.setTitle).toHaveBeenCalledTimes(2);
+          expect(titleServiceSpy.setTitle).toHaveBeenCalledTimes(1);
           expect(titleServiceSpy.setTitle).toHaveBeenCalledWith(
             mockActivatedRoute.snapshot.data.title
           );
@@ -83,15 +83,16 @@ describe('AppComponent', () => {
         new Scroll(navigationEnd, [0, 0], null)
       );
 
-      when('the component has been initialized', async () => {
+      when('the component has been initialized', () => {
         component.ngOnInit();
-        await new Promise((x) => setTimeout(x, 500));
 
         then('the view should be scrolled to the top', () => {
-          expect(utilsServiceSpy.scrollTop).toHaveBeenCalledTimes(2);
-          expect(utilsServiceSpy.scrollTop).toHaveBeenCalledWith(
-            contentContainerSelector
-          );
+          setTimeout(() => {
+            expect(utilsServiceSpy.scrollTop).toHaveBeenCalledTimes(1);
+            expect(utilsServiceSpy.scrollTop).toHaveBeenCalledWith(
+              contentContainerSelector
+            );
+          }, 500);
         });
       });
     });
@@ -105,13 +106,14 @@ describe('AppComponent', () => {
         new Scroll(navigationEnd, [0, 0], anchor)
       );
 
-      when('the component has been initialized', async () => {
+      when('the component has been initialized', () => {
         component.ngOnInit();
-        await new Promise((x) => setTimeout(x, 500));
 
         then('the view should be scrolled to an anchor', () => {
-          expect(utilsServiceSpy.scrollToAnchor).toHaveBeenCalledTimes(2);
-          expect(utilsServiceSpy.scrollToAnchor).toHaveBeenCalledWith(anchor);
+          setTimeout(() => {
+            expect(utilsServiceSpy.scrollToAnchor).toHaveBeenCalledTimes(1);
+            expect(utilsServiceSpy.scrollToAnchor).toHaveBeenCalledWith(anchor);
+          }, 500);
         });
       });
     });
