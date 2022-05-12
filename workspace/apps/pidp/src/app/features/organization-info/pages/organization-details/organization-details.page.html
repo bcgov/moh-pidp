@@ -11,7 +11,7 @@
     </ui-page-section-subheader>
 
     <ng-container [formGroup]="formState.form">
-      <ui-page-section>
+      <section>
         <ui-page-subheader>Organization Type</ui-page-subheader>
         <p>Select your organization type.</p>
 
@@ -21,44 +21,47 @@
             formControlName="organizationType">
             <mat-option
               *ngFor="let organization of organizations"
-              [value]="organization.code">
+              [value]="organization.code"
+              [disabled]="organization.disabled">
               {{ organization.name }}
             </mat-option>
           </mat-select>
           <mat-error>Required</mat-error>
         </mat-form-field>
-      </ui-page-section>
+      </section>
 
-      <ui-page-section>
-        <ui-page-subheader>Health Authority</ui-page-subheader>
-        <p>Select what Health Authority you work in.</p>
+      <ng-container *ngIf="formState.organizationType.value">
+        <section>
+          <ui-page-subheader>Health Authority</ui-page-subheader>
+          <p>Select what Health Authority you work in.</p>
 
-        <mat-form-field class="w-100">
-          <mat-select
-            placeholder="Health Authority"
-            formControlName="healthAuthorityType">
-            <mat-option
-              *ngFor="let healthAuthority of healthAuthorities"
-              [value]="healthAuthority.code">
-              {{ healthAuthority.name }}
-            </mat-option>
-          </mat-select>
-          <mat-error>Required</mat-error>
-        </mat-form-field>
-      </ui-page-section>
+          <mat-form-field class="w-100">
+            <mat-select
+              placeholder="Health Authority"
+              formControlName="healthAuthorityType">
+              <mat-option
+                *ngFor="let healthAuthority of healthAuthorities"
+                [value]="healthAuthority.code">
+                {{ healthAuthority.name }}
+              </mat-option>
+            </mat-select>
+            <mat-error>Required</mat-error>
+          </mat-form-field>
+        </section>
 
-      <ui-page-section>
-        <ui-page-subheader>Health Authority Employee ID</ui-page-subheader>
-        <p>Provide your Health Authority employee ID.</p>
+        <section>
+          <ui-page-subheader>Health Authority Employee ID</ui-page-subheader>
+          <p>Provide your Health Authority employee ID.</p>
 
-        <mat-form-field class="w-100">
-          <input
-            matInput
-            placeholder="Health Authority Employee ID"
-            formControlName="employeeId" />
-          <mat-error>Required</mat-error>
-        </mat-form-field>
-      </ui-page-section>
+          <mat-form-field class="w-100">
+            <input
+              matInput
+              placeholder="Health Authority Employee ID"
+              formControlName="employeeId" />
+            <mat-error>Required</mat-error>
+          </mat-form-field>
+        </section>
+      </ng-container>
     </ng-container>
   </ui-page-section>
 

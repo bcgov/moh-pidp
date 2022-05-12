@@ -6,7 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { EMPTY, catchError, of, tap } from 'rxjs';
 
-import { NoContent } from '@bcgov/shared/data-access';
+import { NoContent, OrganizationCode } from '@bcgov/shared/data-access';
 
 import { AbstractFormPage } from '@app/core/classes/abstract-form-page.class';
 import { PartyService } from '@app/core/party/party.service';
@@ -30,7 +30,7 @@ export class OrganizationDetailsPage
 {
   public title: string;
   public formState: OrganizationDetailsFormState;
-  public organizations: Lookup[];
+  public organizations: (Lookup & { disabled: boolean })[];
   public healthAuthorities: Lookup[];
 
   public constructor(
@@ -49,7 +49,12 @@ export class OrganizationDetailsPage
     const routeData = this.route.snapshot.data;
     this.title = routeData.title;
     this.formState = new OrganizationDetailsFormState(fb);
-    this.organizations = this.lookupService.organizations;
+    this.organizations = this.lookupService.organizations.map(
+      (organization) => ({
+        ...organization,
+        disabled: organization.code !== OrganizationCode.HealthAuthority,
+      })
+    );
     this.healthAuthorities = this.lookupService.healthAuthorities;
   }
 

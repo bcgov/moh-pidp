@@ -1,4 +1,4 @@
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, Validators } from '@angular/forms';
 
 import { AbstractFormState } from '@bcgov/shared/ui';
 
@@ -9,6 +9,10 @@ export class OrganizationDetailsFormState extends AbstractFormState<Organization
     super();
 
     this.buildForm();
+  }
+
+  public get organizationType(): FormControl {
+    return this.formInstance.get('organizationType') as FormControl;
   }
 
   public get json(): OrganizationDetails | undefined {
