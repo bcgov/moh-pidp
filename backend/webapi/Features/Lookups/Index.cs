@@ -16,6 +16,8 @@ public class Index
         public List<College> Colleges { get; set; } = new();
         public List<Country> Countries { get; set; } = new();
         public List<Province> Provinces { get; set; } = new();
+        public List<Organization> Organizations { get; set; } = new();
+        public List<HealthAuthority> HealthAuthorities { get; set; } = new();
     }
 
     public class QueryHandler : IQueryHandler<Query, Model>
@@ -33,6 +35,10 @@ public class Index
                 Countries = await this.context.Set<Country>()
                     .ToListAsync(),
                 Provinces = await this.context.Set<Province>()
+                    .ToListAsync(),
+                Organizations = await this.context.Set<Organization>()
+                    .ToListAsync(),
+                HealthAuthorities = await this.context.Set<HealthAuthority>()
                     .ToListAsync()
             };
         }
