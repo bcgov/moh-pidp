@@ -63,7 +63,6 @@
        * @description
        * Log unsupported browser information to the server.
        */
-      // TODO logging should be accomplished through sentry not through our API
       $.get('/assets/environment.json')
         .then(
           function (configMap) {
@@ -77,7 +76,7 @@
           var browser = getBrowserByUserAgent();
           var log = {
             message: 'Unsupported Browser: ' + browser.name,
-            pageInformation: JSON.stringify(browser.userAgent + window.location.search),
+            browserInformation: JSON.stringify(browser.userAgent + window.location.search),
             logType: 1
           };
           $.ajax({
