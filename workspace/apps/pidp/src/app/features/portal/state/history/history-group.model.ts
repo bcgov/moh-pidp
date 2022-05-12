@@ -27,13 +27,4 @@ export type HistorySectionKey = typeof historySectionKeys[number];
 //   [K in HistorySectionKey]: Section;
 // };
 
-/**
- * @description
- * Type used to ensure adding a new key to the tuple is
- * included in the group interface.
- */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-// type CheckGroup<T extends IHistoryGroup = HistoryGroup> = void;
-
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-// export interface HistoryGroup {}
+// export interface HistoryGroup extends IHistoryGroup {}

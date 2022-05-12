@@ -28,15 +28,7 @@ export type IProfileGroup = {
   [K in ProfileSectionKey]: Section;
 };
 
-/**
- * @description
- * Type used to ensure adding a new key to the tuple is
- * included in the group interface.
- */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-type CheckGroup<T extends IProfileGroup = ProfileGroup> = void;
-
-export interface ProfileGroup {
+export interface ProfileGroup extends IProfileGroup {
   demographics: DemographicsSection;
   collegeCertification: CollegeCertificationSection;
   userAccessAgreement: Section;
