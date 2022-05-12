@@ -15,4 +15,3 @@ public class ClientLog : BaseAuditable
 
     public string PageInformation { get; set; } = string.Empty;
 }
-
