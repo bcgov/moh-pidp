@@ -14,5 +14,4 @@ public class ClientLogsController : PidpControllerBase
     public async Task CreateLog([FromServices] ICommandHandler<Create.Command> handler,
                                                  [FromBody] Create.Command command)
         => await handler.HandleAsync(command);
-
 }
