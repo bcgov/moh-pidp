@@ -8,7 +8,6 @@ public class Create
 {
     public class Command : ICommand
     {
-
         public int Id { get; set; }
 
         public string Message { get; set; } = string.Empty;
@@ -16,7 +15,6 @@ public class Create
         public LogLevel? LogType { get; set; }
 
         public string PageInformation { get; set; } = string.Empty;
-
     }
 
     public class CommandValidator : AbstractValidator<Command>
@@ -52,7 +50,5 @@ public class Create
 
             await this.context.SaveChangesAsync();
         }
-
     }
-
 }
