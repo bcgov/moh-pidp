@@ -10,7 +10,7 @@ public class ClientLogsController
     [AllowAnonymous]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task CreateLog([FromServices] ICommandHandler<Create.Command> handler,
+    public async Task CreateClientLog([FromServices] ICommandHandler<Create.Command> handler,
                                 [FromBody] Create.Command command)
         => await handler.HandleAsync(command);
 }
