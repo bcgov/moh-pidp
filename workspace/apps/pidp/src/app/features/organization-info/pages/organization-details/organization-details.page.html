@@ -1,1 +1,78 @@
-<p>organization-details works!</p>
+<ui-page [form]="formState.form" (submitted)="onSubmit()">
+  <ui-page-header>{{ title }}</ui-page-header>
+
+  <ui-page-section>
+    <ui-page-section-subheader
+      icon="corporate_fare"
+      heading="Organization Details">
+      <ng-container uiPageSectionSubheaderDesc>
+        Provide your organization's details.
+      </ng-container>
+    </ui-page-section-subheader>
+
+    <ng-container [formGroup]="formState.form">
+      <ui-page-section>
+        <ui-page-subheader>Organization Type</ui-page-subheader>
+        <p>Select your organization type.</p>
+
+        <mat-form-field class="w-100">
+          <mat-select
+            placeholder="Organization Type"
+            formControlName="organizationType">
+            <mat-option
+              *ngFor="let organization of organizations"
+              [value]="organization.code">
+              {{ organization.name }}
+            </mat-option>
+          </mat-select>
+          <mat-error>Required</mat-error>
+        </mat-form-field>
+      </ui-page-section>
+
+      <ui-page-section>
+        <ui-page-subheader>Health Authority</ui-page-subheader>
+        <p>Select what Health Authority you work in.</p>
+
+        <mat-form-field class="w-100">
+          <mat-select
+            placeholder="Health Authority"
+            formControlName="healthAuthorityType">
+            <mat-option
+              *ngFor="let healthAuthority of healthAuthorities"
+              [value]="healthAuthority.code">
+              {{ healthAuthority.name }}
+            </mat-option>
+          </mat-select>
+          <mat-error>Required</mat-error>
+        </mat-form-field>
+      </ui-page-section>
+
+      <ui-page-section>
+        <ui-page-subheader>Health Authority Employee ID</ui-page-subheader>
+        <p>Provide your Health Authority employee ID.</p>
+
+        <mat-form-field class="w-100">
+          <input
+            matInput
+            placeholder="Health Authority Employee ID"
+            formControlName="employeeId" />
+          <mat-error>Required</mat-error>
+        </mat-form-field>
+      </ui-page-section>
+    </ng-container>
+  </ui-page-section>
+
+  <ui-page-footer>
+    <button
+      mat-stroked-button
+      uiPageFooterAction
+      type="button"
+      color="primary"
+      (click)="onBack()">
+      Back Home
+    </button>
+    <button mat-flat-button uiPageFooterAction type="submit" color="primary">
+      Save Information
+    </button>
+  </ui-page-footer>
+</ui-page>
