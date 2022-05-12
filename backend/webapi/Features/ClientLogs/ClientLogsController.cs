@@ -12,6 +12,6 @@ public class ClientLogsController : PidpControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task CreateLog([FromServices] ICommandHandler<Create.Command> handler,
-                                                 [FromBody] Create.Command command)
+                                [FromBody] Create.Command command)
         => await handler.HandleAsync(command);
 }
