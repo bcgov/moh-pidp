@@ -110,6 +110,10 @@ namespace Pidp.Data.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("BrowserInformation")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<Instant>("Created")
                         .HasColumnType("timestamp with time zone");
 
@@ -122,10 +126,6 @@ namespace Pidp.Data.Migrations
 
                     b.Property<Instant>("Modified")
                         .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("PageInformation")
-                        .IsRequired()
-                        .HasColumnType("text");
 
                     b.HasKey("Id");
 

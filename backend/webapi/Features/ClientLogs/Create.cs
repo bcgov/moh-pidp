@@ -14,7 +14,7 @@ public class Create
 
         public LogLevel? LogType { get; set; }
 
-        public string PageInformation { get; set; } = string.Empty;
+        public string BrowserInformation { get; set; } = string.Empty;
     }
 
     public class CommandValidator : AbstractValidator<Command>
@@ -26,7 +26,7 @@ public class Create
             this.RuleFor(x => x.Id).NotEmpty();
             this.RuleFor(x => x.LogType).NotEmpty();
             this.RuleFor(x => x.Message).NotEmpty();
-            this.RuleFor(x => x.PageInformation).NotEmpty();
+            this.RuleFor(x => x.BrowserInformation).NotEmpty();
         }
     }
 
@@ -43,7 +43,7 @@ public class Create
                 Id = command.Id,
                 Message = command.Message,
                 LogType = command.LogType,
-                PageInformation = command.PageInformation
+                BrowserInformation = command.BrowserInformation
             };
 
             this.context.ClientLogs.Add(clientLog);

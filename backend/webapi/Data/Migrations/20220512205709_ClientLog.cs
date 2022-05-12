@@ -18,7 +18,7 @@ namespace Pidp.Data.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Message = table.Column<string>(type: "text", nullable: false),
                     LogType = table.Column<int>(type: "integer", nullable: true),
-                    PageInformation = table.Column<string>(type: "text", nullable: false),
+                    BrowserInformation = table.Column<string>(type: "text", nullable: false),
                     Created = table.Column<Instant>(type: "timestamp with time zone", nullable: false),
                     Modified = table.Column<Instant>(type: "timestamp with time zone", nullable: false)
                 },
