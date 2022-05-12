@@ -86,7 +86,7 @@ public class PartiesController : PidpControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<AccessAdministrator.Command>> GetOrganizationDetails([FromServices] IQueryHandler<OrganizationDetails.Query, OrganizationDetails.Command> handler,
+    public async Task<ActionResult<OrganizationDetails.Command>> GetOrganizationDetails([FromServices] IQueryHandler<OrganizationDetails.Query, OrganizationDetails.Command> handler,
                                                                                         [FromRoute] OrganizationDetails.Query query)
         => await this.AuthorizePartyBeforeHandleAsync(query.PartyId, handler, query)
             .ToActionResultOfT();
