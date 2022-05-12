@@ -61,7 +61,7 @@
         </ui-card-summary>
       </ui-page-section>
 
-      <ui-page-section>
+      <ui-page-section *permittedRoles="[Role.FEATURE_PIDP_DEMO]">
         <ui-scroll-target targetId="organization"></ui-scroll-target>
         <ui-page-section-subheader
           icon="corporate_fare"
@@ -115,8 +115,7 @@
         </ui-card-summary>
       </ui-page-section>
 
-      <ui-page-section
-        *permittedRoles="[Role.FEATURE_PIDP_DEMO, Role.FEATURE_AMH_DEMO]">
+      <ui-page-section *permittedRoles="[Role.FEATURE_PIDP_DEMO]">
         <ui-scroll-target targetId="training"></ui-scroll-target>
         <ui-page-section-subheader icon="school" heading="Training">
           <ng-container uiPageSectionSubheaderDesc>
@@ -146,8 +145,8 @@
       </ui-page-section>
 
       <ui-page-section>
-        <ui-scroll-target targetId="documents"></ui-scroll-target>
-        <ui-page-section-subheader icon="history" heading="Your Documents">
+        <ui-scroll-target targetId="history"></ui-scroll-target>
+        <ui-page-section-subheader icon="history" heading="History">
           <ng-container uiPageSectionSubheaderDesc>
             View information pertaining to your profile and interaction with the
             systems you use for work.
@@ -155,7 +154,7 @@
         </ui-page-section-subheader>
 
         <ui-card-summary
-          *ngFor="let section of (state$ | async)?.documents"
+          *ngFor="let section of (state$ | async)?.history"
           [heading]="section.heading"
           [actionLabel]="section.action.label"
           [actionDisabled]="section.action.disabled"
@@ -168,7 +167,7 @@
       </ui-page-section>
     </div>
     <div class="col-12">
-      <app-get-support [hiddenSupport]="hiddenSupport">
+      <app-get-support>
         <ui-scroll-target targetId="support"></ui-scroll-target>
       </app-get-support>
     </div>

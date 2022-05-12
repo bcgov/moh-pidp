@@ -1,12 +1,12 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { OrganizationDetailsComponent } from './organization-details.component';
+import { OrganizationDetailsPage } from './organization-details.page';
 
 const routes: Routes = [
   {
     path: '',
-    component: OrganizationDetailsComponent,
+    component: OrganizationDetailsPage,
     data: {
       title: 'Provider Identity Portal',
       routes: {

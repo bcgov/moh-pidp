@@ -7,12 +7,13 @@ import { Role } from '@app/shared/enums/roles.enum';
 
 import { StatusCode } from '../enums/status-code.enum';
 import { ProfileStatus } from '../models/profile-status.model';
+import { DriverFitnessPortalSection } from './access/driver-fitness-portal-section.class';
 import { HcimAccountTransferPortalSection } from './access/hcim-account-transfer-portal-section.class';
 import { HcimEnrolmentPortalSection } from './access/hcim-enrolment-portal-section.class';
 import { SaEformsPortalSection } from './access/sa-eforms-portal-section.class';
 import { SitePrivacySecurityPortalSection } from './access/site-privacy-security-checklist-portal-section.class';
-import { SignedAcceptedDocumentsPortalSection } from './documents/signed-accepted-documents-portal-section.class';
-import { TransactionsPortalSection } from './documents/transactions-portal-section.class';
+import { SignedAcceptedDocumentsPortalSection } from './history/signed-accepted-documents-portal-section.class';
+import { TransactionsPortalSection } from './history/transactions-portal-section.class';
 import { AdministratorInfoPortalSection } from './organization/administrator-information-portal-section';
 import { FacilityDetailsPortalSection } from './organization/facility-details-portal-section.class';
 import { OrganizationDetailsPortalSection } from './organization/organization-details-portal-section.class';
@@ -26,14 +27,14 @@ import { ComplianceTrainingPortalSection } from './training/compliance-training-
 /**
  * @description
  * Group keys as a readonly tuple to allow iteration
- * over keys at runtime to allow for filtering.
+ * at runtime.
  */
 export const portalStateGroupKeys = [
   'profile',
   'access',
   'organization',
   'training',
-  'documents',
+  'history',
 ] as const;
 
 /**
@@ -53,18 +54,24 @@ export class PortalStateBuilder {
   public createState(
     profileStatus: ProfileStatus
   ): Record<PortalStateGroupKey, IPortalSection[]> {
+    // TODO move registration into parent module
     return {
       profile: this.createProfileGroup(profileStatus),
       access: this.createAccessGroup(profileStatus),
       organization: this.createOrganizationGroup(profileStatus),
       training: this.createTrainingGroup(profileStatus),
-      documents: this.createDocumentsGroup(),
+      history: this.createHistoryGroup(),
     };
   }
 
-  // TODO see where the next enrolments lead and then drop these methods
-  // for building out the portal state and create classes, but premature
-  // optimization until more is known
+  // TODO see where the next few enrolments lead and then drop these methods
+  //      for building out the portal state using factories, but premature
+  //      optimization until more is known
+
+  // TODO have these be registered from the modules to a service to
+  //      reduce the spread of maintenance and updates. For example,
+  //      centralize feature flagging into their own modules have
+  //      those modules register those artifacts to services
 
   private createProfileGroup(profileStatus: ProfileStatus): IPortalSection[] {
     return [
@@ -76,11 +83,10 @@ export class PortalStateBuilder {
         ]
       ),
       ...ArrayUtils.insertResultIf<IPortalSection>(
-        // TODO remove demo permissions when API exists
-        this.permissionsService.hasRole([
-          Role.FEATURE_PIDP_DEMO,
-          Role.FEATURE_AMH_DEMO,
-        ]) || this.insertSection('userAccessAgreement', profileStatus),
+        // TODO remove permissions when API exists and ready for production, or
+        // TODO replace || with && to keep it flagged when API exists
+        this.insertSection('userAccessAgreement', profileStatus) ||
+          this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
         () => [new UserAccessAgreementPortalSection(profileStatus, this.router)]
       ),
     ];
@@ -91,21 +97,24 @@ export class PortalStateBuilder {
   ): IPortalSection[] {
     return [
       ...ArrayUtils.insertResultIf<IPortalSection>(
-        // TODO remove permissions when API exists
-        this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]) ||
-          this.insertSection('organizationDetails', profileStatus),
+        // TODO remove permissions when API exists and ready for production, or
+        // TODO replace || with && to keep it flagged when API exists
+        this.insertSection('organizationDetails', profileStatus) ||
+          this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
         () => [new OrganizationDetailsPortalSection(profileStatus, this.router)]
       ),
       ...ArrayUtils.insertResultIf<IPortalSection>(
-        // TODO remove permissions when API exists
-        this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]) ||
-          this.insertSection('facilityDetails', profileStatus),
+        // TODO remove permissions when API exists and ready for production, or
+        // TODO replace || with && to keep it flagged when API exists
+        this.insertSection('facilityDetails', profileStatus) ||
+          this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
         () => [new FacilityDetailsPortalSection(profileStatus, this.router)]
       ),
       ...ArrayUtils.insertResultIf<IPortalSection>(
-        // TODO remove permissions when API exists
-        this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]) ||
-          this.insertSection('administratorInfo', profileStatus),
+        // TODO remove permissions when API exists and ready for production, or
+        // TODO replace || with && to keep it flagged when API exists
+        this.insertSection('administratorInfo', profileStatus) ||
+          this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
         () => [new AdministratorInfoPortalSection(profileStatus, this.router)]
       ),
     ];
@@ -122,16 +131,23 @@ export class PortalStateBuilder {
         () => [new HcimAccountTransferPortalSection(profileStatus, this.router)]
       ),
       ...ArrayUtils.insertResultIf<IPortalSection>(
-        // TODO remove permissions when API exists
-        this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]) ||
-          this.insertSection('hcimEnrolment', profileStatus),
+        // TODO remove permissions when ready for production
+        this.insertSection('hcimEnrolment', profileStatus) &&
+          this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
         () => [new HcimEnrolmentPortalSection(profileStatus, this.router)]
       ),
       ...ArrayUtils.insertResultIf<IPortalSection>(
-        // TODO remove permissions when API exists
-        this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]) ||
-          this.insertSection('sitePrivacySecurityChecklist', profileStatus),
+        // TODO remove permissions when API exists and ready for production, or
+        // TODO replace || with && to keep it flagged when API exists
+        this.insertSection('sitePrivacySecurityChecklist', profileStatus) ||
+          this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
         () => [new SitePrivacySecurityPortalSection(profileStatus, this.router)]
+      ),
+      ...ArrayUtils.insertResultIf<IPortalSection>(
+        // TODO remove permissions when ready for production
+        this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]) &&
+          this.insertSection('driverFitness', profileStatus),
+        () => [new DriverFitnessPortalSection(profileStatus, this.router)]
       ),
     ];
   }
@@ -139,22 +155,16 @@ export class PortalStateBuilder {
   private createTrainingGroup(profileStatus: ProfileStatus): IPortalSection[] {
     return [
       ...ArrayUtils.insertResultIf<IPortalSection>(
-        this.permissionsService.hasRole([
-          Role.FEATURE_PIDP_DEMO,
-          Role.FEATURE_AMH_DEMO,
-        ]),
+        this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
         () => [new ComplianceTrainingPortalSection(profileStatus, this.router)]
       ),
     ];
   }
 
-  private createDocumentsGroup(): IPortalSection[] {
+  private createHistoryGroup(): IPortalSection[] {
     return [
       new SignedAcceptedDocumentsPortalSection(this.router),
-      ...ArrayUtils.insertResultIf<IPortalSection>(
-        this.permissionsService.hasRole(Role.FEATURE_PIDP_DEMO),
-        () => [new TransactionsPortalSection(this.router)]
-      ),
+      new TransactionsPortalSection(this.router),
     ];
   }
 

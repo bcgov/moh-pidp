@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 
 @Component({
@@ -6,14 +6,12 @@ import { FormControl, FormGroup } from '@angular/forms';
   templateUrl: './contact-info-form.component.html',
   styleUrls: ['./contact-info-form.component.scss'],
 })
-export class ContactFormComponent implements OnInit {
+export class ContactFormComponent {
   /**
    * @description
    * Contact information form instance.
    */
   @Input() public form!: FormGroup;
-
-  public constructor() {}
 
   public get phone(): FormControl {
     return this.form.get('phone') as FormControl;
@@ -22,6 +20,4 @@ export class ContactFormComponent implements OnInit {
   public get email(): FormControl {
     return this.form.get('email') as FormControl;
   }
-
-  public ngOnInit(): void {}
 }

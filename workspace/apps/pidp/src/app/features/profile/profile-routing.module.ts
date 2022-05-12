@@ -12,21 +12,21 @@ import { ProfileRoutes } from './profile.routes';
 
 const routes: Routes = [
   {
-    path: ProfileRoutes.PERSONAL_INFO_PAGE,
+    path: ProfileRoutes.PERSONAL_INFO,
     loadChildren: (): Promise<PersonalInformationModule> =>
       import('./pages/personal-information/personal-information.module').then(
         (m) => m.PersonalInformationModule
       ),
   },
   {
-    path: ProfileRoutes.COLLEGE_LICENCE_INFO_PAGE,
+    path: ProfileRoutes.COLLEGE_LICENCE_INFO,
     loadChildren: (): Promise<CollegeLicenceInformationModule> =>
       import(
         './pages/college-licence-information/college-licence-information.module'
       ).then((m) => m.CollegeLicenceInformationModule),
   },
   {
-    path: ProfileRoutes.WORK_AND_ROLE_INFO_PAGE,
+    path: ProfileRoutes.WORK_AND_ROLE_INFO,
     canLoad: [PermissionsGuard],
     data: {
       roles: [Role.FEATURE_PIDP_DEMO],
@@ -37,10 +37,10 @@ const routes: Routes = [
       ).then((m) => m.WorkAndRoleInformationModule),
   },
   {
-    path: ProfileRoutes.USER_ACCESS_AGREEMENT_PAGE,
+    path: ProfileRoutes.USER_ACCESS_AGREEMENT,
     canLoad: [PermissionsGuard],
     data: {
-      roles: [Role.FEATURE_PIDP_DEMO, Role.FEATURE_AMH_DEMO],
+      roles: [Role.FEATURE_PIDP_DEMO],
     },
     loadChildren: (): Promise<UserAccessAgreementModule> =>
       import('./pages/user-access-agreement/user-access-agreement.module').then(

@@ -1,8 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { PhonePipe } from './phone.pipe';
 
 describe('PhonePipe', () => {
   let pipe: PhonePipe;
-  beforeEach(() => pipe = new PhonePipe());
+  beforeEach(() => (pipe = new PhonePipe()));
 
   it('create an instance', () => expect(pipe).toBeTruthy());
 
@@ -32,7 +33,7 @@ describe('PhonePipe', () => {
   });
 
   it('should not format a phone number that is null', () => {
-    const result = pipe.transform(null);
+    const result = pipe.transform(null as any);
     expect(result).toBeNull();
   });
 });

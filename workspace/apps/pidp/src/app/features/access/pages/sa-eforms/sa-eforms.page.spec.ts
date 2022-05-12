@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -16,7 +17,7 @@ import { SaEformsPage } from './sa-eforms.page';
 describe('SaEformsPage', () => {
   let component: SaEformsPage;
 
-  let mockActivatedRoute;
+  let mockActivatedRoute: { snapshot: any };
 
   beforeEach(() => {
     mockActivatedRoute = {

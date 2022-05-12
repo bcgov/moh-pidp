@@ -98,10 +98,7 @@ export class PortalDashboardComponent implements IDashboard {
         'assignment'
       ),
       ...ArrayUtils.insertResultIf<DashboardRouteMenuItem>(
-        this.permissionsService.hasRole([
-          Role.FEATURE_PIDP_DEMO,
-          Role.FEATURE_AMH_DEMO,
-        ]),
+        this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
         () => [
           new DashboardRouteMenuItem(
             'Training',
@@ -115,10 +112,10 @@ export class PortalDashboardComponent implements IDashboard {
         ]
       ),
       new DashboardRouteMenuItem(
-        'Your Documents',
+        'History',
         {
           commands: PortalRoutes.MODULE_PATH,
-          extras: { fragment: 'documents' },
+          extras: { fragment: 'history' },
           linkActiveOptions,
         },
         'restore'

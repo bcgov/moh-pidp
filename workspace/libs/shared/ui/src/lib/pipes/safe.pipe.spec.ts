@@ -1,4 +1,4 @@
-import { inject, TestBed, waitForAsync } from '@angular/core/testing';
+import { TestBed, inject, waitForAsync } from '@angular/core/testing';
 import { DomSanitizer } from '@angular/platform-browser';
 
 import { DomSanitizerType, SafePipe } from './safe.pipe';
@@ -6,16 +6,18 @@ import { DomSanitizerType, SafePipe } from './safe.pipe';
 describe('SafePipe', () => {
   let pipe: SafePipe;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      providers: []
-    });
-  }));
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        providers: [],
+      });
+    })
+  );
 
   beforeEach(inject(
     [DomSanitizer],
-    (sanitizer: DomSanitizer) => pipe = new SafePipe(sanitizer))
-  );
+    (sanitizer: DomSanitizer) => (pipe = new SafePipe(sanitizer))
+  ));
 
   it('create an instance', () => expect(pipe).toBeTruthy());
 
@@ -27,10 +29,19 @@ describe('SafePipe', () => {
 
   it('should not throw an exception if the type of DOM sanitizer exists', () => {
     const value = 'Only testing that a DOM sanitizer exists';
-    const domSanitizerTypes: DomSanitizerType[] = ['html', 'style', 'script', 'url', 'resourceUrl'];
+    const domSanitizerTypes: DomSanitizerType[] = [
+      'html',
+      'style',
+      'script',
+      'url',
+      'resourceUrl',
+    ];
     let result = true;
     try {
-      result = domSanitizerTypes.reduce((finalResult, type) => finalResult && !!pipe.transform(value, type), result);
+      result = domSanitizerTypes.reduce(
+        (finalResult, type) => finalResult && !!pipe.transform(value, type),
+        result
+      );
     } catch (e) {
       result = false;
     }

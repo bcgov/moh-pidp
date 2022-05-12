@@ -13,8 +13,8 @@ import { AdminRoutes } from '../admin/admin.routes';
 import { AuthModule } from '../auth/auth.module';
 import { AuthRoutes } from '../auth/auth.routes';
 import { AuthenticationGuard } from '../auth/guards/authentication.guard';
-import { DocumentsModule } from '../documents/documents.module';
-import { DocumentsRoutes } from '../documents/documents.routes';
+import { HistoryModule } from '../history/history.module';
+import { HistoryRoutes } from '../history/history.routes';
 import { OrganizationInfoModule } from '../organization-info/organization-info.module';
 import { OrganizationInfoRoutes } from '../organization-info/organization-info.routes';
 import { PortalRoutes } from '../portal/portal.routes';
@@ -85,17 +85,15 @@ const routes: Routes = [
         path: TrainingRoutes.MODULE_PATH,
         canActivate: [PermissionsGuard],
         data: {
-          roles: [Role.FEATURE_PIDP_DEMO, Role.FEATURE_AMH_DEMO],
+          roles: [Role.FEATURE_PIDP_DEMO],
         },
         loadChildren: (): Promise<TrainingModule> =>
           import('../training/training.module').then((m) => m.TrainingModule),
       },
       {
-        path: DocumentsRoutes.MODULE_PATH,
-        loadChildren: (): Promise<DocumentsModule> =>
-          import('../documents/documents.module').then(
-            (m) => m.DocumentsModule
-          ),
+        path: HistoryRoutes.MODULE_PATH,
+        loadChildren: (): Promise<HistoryModule> =>
+          import('../history/history.module').then((m) => m.HistoryModule),
       },
       {
         path: '',

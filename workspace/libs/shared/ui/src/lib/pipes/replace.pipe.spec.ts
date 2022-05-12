@@ -2,7 +2,7 @@ import { ReplacePipe } from './replace.pipe';
 
 describe('ReplacePipe', () => {
   let pipe: ReplacePipe;
-  beforeEach(() => pipe = new ReplacePipe());
+  beforeEach(() => (pipe = new ReplacePipe()));
 
   it('create an instance', () => expect(pipe).toBeTruthy());
 
@@ -13,7 +13,7 @@ describe('ReplacePipe', () => {
     expect(value).not.toContain(replaceWith);
     const result = pipe.transform(value, replace, replaceWith);
     expect(result).toContain(replaceWith);
-    expect(result.split(' ').filter(s => s === replaceWith).length).toBe(3);
+    expect(result.split(' ').filter((s) => s === replaceWith).length).toBe(3);
     expect(result).toBe('Have a merry merry merry Christmas!');
   });
 

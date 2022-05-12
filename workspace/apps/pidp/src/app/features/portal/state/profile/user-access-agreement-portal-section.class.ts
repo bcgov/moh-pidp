@@ -40,7 +40,7 @@ export class UserAccessAgreementPortalSection implements IPortalSection {
       this.profileStatus.status.demographics.statusCode;
     return {
       label: this.getStatusCode() === StatusCode.COMPLETED ? 'View' : 'Update',
-      route: ProfileRoutes.routePath(ProfileRoutes.USER_ACCESS_AGREEMENT_PAGE),
+      route: ProfileRoutes.routePath(ProfileRoutes.USER_ACCESS_AGREEMENT),
       disabled:
         demographicsStatusCode !== StatusCode.COMPLETED ||
         this.getStatusCode() === StatusCode.NOT_AVAILABLE,
