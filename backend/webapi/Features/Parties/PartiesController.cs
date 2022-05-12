@@ -82,6 +82,24 @@ public class PartiesController : PidpControllerBase
         => await this.AuthorizePartyBeforeHandleAsync(command.Id, handler, command)
             .ToActionResult();
 
+    [HttpGet("{partyId}/organization-details")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<AccessAdministrator.Command>> GetOrganizationDetails([FromServices] IQueryHandler<OrganizationDetails.Query, OrganizationDetails.Command> handler,
+                                                                                        [FromRoute] OrganizationDetails.Query query)
+        => await this.AuthorizePartyBeforeHandleAsync(query.PartyId, handler, query)
+            .ToActionResultOfT();
+
+    [HttpPut("{partyId}/organization-details")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> UpdateOrganizationDetails([FromServices] ICommandHandler<OrganizationDetails.Command> handler,
+                                                               [FromHybrid] OrganizationDetails.Command command)
+        => await this.AuthorizePartyBeforeHandleAsync(command.PartyId, handler, command)
+            .ToActionResult();
+
     [HttpPost("{id}/profile-status")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
