@@ -6,6 +6,7 @@ import { Role } from '@app/shared/enums/roles.enum';
 
 import { AccessRoutes } from './access.routes';
 import { DriverFitnessModule } from './pages/driver-fitness/driver-fitness.module';
+import { EndorsementModule } from './pages/endorsement/endorsement.module';
 import { HcimAccountTransferModule } from './pages/hcim-account-transfer/hcim-account-transfer.module';
 import { HcimEnrolmentModule } from './pages/hcim-enrolment/hcim-enrolment.module';
 import { PharmanetModule } from './pages/pharmanet/pharmanet.module';
@@ -69,6 +70,13 @@ const routes: Routes = [
     loadChildren: (): Promise<DriverFitnessModule> =>
       import('./pages/driver-fitness/driver-fitness.module').then(
         (m) => m.DriverFitnessModule
+      ),
+  },
+  {
+    path: AccessRoutes.ENDORSEMENT,
+    loadChildren: (): Promise<EndorsementModule> =>
+      import('./pages/endorsement/endorsement.module').then(
+        (m) => m.EndorsementModule
       ),
   },
 ];
