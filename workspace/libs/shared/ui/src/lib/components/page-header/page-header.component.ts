@@ -1,4 +1,6 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+
+import { IconType } from '../icon/icon.component';
 
 @Component({
   selector: 'ui-page-header',
@@ -6,4 +8,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
   styleUrls: ['./page-header.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PageHeaderComponent {}
+export class PageHeaderComponent {
+  @Input() public icon?: string;
+  @Input() public iconType?: IconType;
+}
