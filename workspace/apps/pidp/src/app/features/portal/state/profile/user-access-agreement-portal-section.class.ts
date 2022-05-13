@@ -23,12 +23,12 @@ export class UserAccessAgreementPortalSection implements IPortalSection {
     private router: Router
   ) {
     this.key = 'userAccessAgreement';
-    this.heading = 'Access Model Harmonization UAA';
-    this.description = 'Sign and agree to the user access agreement.';
+    this.heading = 'User Access Agreement';
+    this.description = 'Sign and accept agreement to access health systems.';
   }
 
   public get hint(): string {
-    return '13 min to complete';
+    return '8 min to complete';
   }
 
   /**
@@ -39,7 +39,7 @@ export class UserAccessAgreementPortalSection implements IPortalSection {
     const demographicsStatusCode =
       this.profileStatus.status.demographics.statusCode;
     return {
-      label: this.getStatusCode() === StatusCode.COMPLETED ? 'View' : 'Update',
+      label: this.getStatusCode() === StatusCode.COMPLETED ? 'View' : 'Sign',
       route: ProfileRoutes.routePath(ProfileRoutes.USER_ACCESS_AGREEMENT),
       disabled:
         demographicsStatusCode !== StatusCode.COMPLETED ||
