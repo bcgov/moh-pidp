@@ -20,5 +20,6 @@ public class MappingProfile : Profile
         this.CreateProjection<FacilityAddress, WorkSetting.Command.Address>();
         this.CreateProjection<PartyCertification, CollegeCertification.Command>();
         this.CreateProjection<PartyCertification, ProfileStatus.ProfileStatusDto>();
+        this.CreateProjection<PartyOrgainizationDetail, OrganizationDetails.Command>();
     }
 }

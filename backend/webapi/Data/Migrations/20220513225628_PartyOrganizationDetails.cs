@@ -1,10 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
+using NodaTime;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
 namespace Pidp.Data.Migrations
 {
-    public partial class AddedOrgAndHealthAuthLookups : Migration
+    public partial class PartyOrganizationDetails : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -32,6 +34,30 @@ namespace Pidp.Data.Migrations
                     table.PrimaryKey("PK_OrganizationLookup", x => x.Code);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "PartyOrgainizationDetail",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    PartyId = table.Column<int>(type: "integer", nullable: false),
+                    OrganizationType = table.Column<int>(type: "integer", nullable: false),
+                    HealthAuthorityType = table.Column<int>(type: "integer", nullable: false),
+                    EmployeeId = table.Column<string>(type: "text", nullable: false),
+                    Created = table.Column<Instant>(type: "timestamp with time zone", nullable: false),
+                    Modified = table.Column<Instant>(type: "timestamp with time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PartyOrgainizationDetail", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_PartyOrgainizationDetail_Party_PartyId",
+                        column: x => x.PartyId,
+                        principalTable: "Party",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.InsertData(
                 table: "HealthAuthorityLookup",
                 columns: new[] { "Code", "Name" },
@@ -57,6 +83,12 @@ namespace Pidp.Data.Migrations
                     { 4, "ICBC" },
                     { 5, "Other" }
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PartyOrgainizationDetail_PartyId",
+                table: "PartyOrgainizationDetail",
+                column: "PartyId",
+                unique: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -66,6 +98,9 @@ namespace Pidp.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "OrganizationLookup");
+
+            migrationBuilder.DropTable(
+                name: "PartyOrgainizationDetail");
         }
     }
 }

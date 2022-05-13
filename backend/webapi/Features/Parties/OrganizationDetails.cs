@@ -57,12 +57,12 @@ public class OrganizationDetails
 
         public async Task<Command> HandleAsync(Query query)
         {
-            // TODO what should this table be?
-            // return await this.context.???
-            //     .Where(??? => ???.PartyId == query.PartyId)
-            // TODO add to mapping profile
-            //     .ProjectTo<Command>(this.mapper.ConfigurationProvider)
-            //     .SingleAsync();
+            var orgDetails = await this.context.PartyOrgainizationDetails
+                .Where(detail => detail.PartyId == query.PartyId)
+                .ProjectTo<Command>(this.mapper.ConfigurationProvider)
+                .SingleOrDefaultAsync();
+
+            return orgDetails ?? new Command { PartyId = query.PartyId };
         }
     }
 
@@ -74,13 +74,21 @@ public class OrganizationDetails
 
         public async Task HandleAsync(Command command)
         {
-            // TODO add to parties or separate out into own table?
-            // var ??? = await this.context.???
-            //     .SingleAsync(??? => ???.PartyId == command.PartyId);
+            var org = await this.context.PartyOrgainizationDetails
+                .SingleOrDefaultAsync(detail => detail.PartyId == command.PartyId);
 
-            // ???.OrganizationType = command.OrganizationType;
-            // ???.HealthAuthorityType = command.HealthAuthorityType;
-            // ???.EmployeeId = command.EmployeeId;
+            if (org == null)
+            {
+                org = new Models.PartyOrgainizationDetail
+                {
+                    PartyId = command.PartyId
+                };
+                this.context.PartyOrgainizationDetails.Add(org);
+            }
+
+            org.OrganizationType = command.OrganizationType;
+            org.HealthAuthorityType = command.HealthAuthorityType;
+            org.EmployeeId = command.EmployeeId;
 
             await this.context.SaveChangesAsync();
         }
