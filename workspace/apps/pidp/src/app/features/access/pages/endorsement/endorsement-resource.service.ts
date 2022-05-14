@@ -3,22 +3,29 @@ import { Injectable } from '@angular/core';
 
 import { Observable, catchError, of, throwError } from 'rxjs';
 
-import { NoContent, NoContentResponse } from '@bcgov/shared/data-access';
+import {
+  CrudResource,
+  NoContent,
+  NoContentResponse,
+} from '@bcgov/shared/data-access';
 
 import { ApiHttpClient } from '@app/core/resources/api-http-client.service';
 import { ProfileStatus } from '@app/features/portal/models/profile-status.model';
 import { PortalResource } from '@app/features/portal/portal-resource.service';
+import { PersonalInformation } from '@app/features/profile/pages/personal-information/personal-information.model';
 
 import { Endorsement } from './endorsement.model';
 
 @Injectable({
   providedIn: 'root',
 })
-export class EndorsementResource {
+export class EndorsementResource extends CrudResource<PersonalInformation> {
   public constructor(
     private apiResource: ApiHttpClient,
     private portalResource: PortalResource
-  ) {}
+  ) {
+    super(apiResource);
+  }
 
   public getProfileStatus(partyId: number): Observable<ProfileStatus | null> {
     return this.portalResource.getProfileStatus(partyId);
@@ -26,7 +33,7 @@ export class EndorsementResource {
 
   public requestAccess(partyId: number, endorsement: Endorsement): NoContent {
     return this.apiResource
-      .post<NoContent>('access-requests/endorsement', {
+      .post<NoContent>(this.getResourcePath(), {
         partyId,
         ...endorsement,
       })
@@ -40,5 +47,9 @@ export class EndorsementResource {
           return throwError(() => error);
         })
       );
+  }
+
+  protected getResourcePath(): string {
+    return `access-requests/endorsement`;
   }
 }
