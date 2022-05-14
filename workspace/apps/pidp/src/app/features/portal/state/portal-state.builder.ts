@@ -8,6 +8,7 @@ import { Role } from '@app/shared/enums/roles.enum';
 import { StatusCode } from '../enums/status-code.enum';
 import { ProfileStatus } from '../models/profile-status.model';
 import { DriverFitnessPortalSection } from './access/driver-fitness-portal-section.class';
+import { EndorsementPortalSection } from './access/endorsement-portal-section.class';
 import { HcimAccountTransferPortalSection } from './access/hcim-account-transfer-portal-section.class';
 import { HcimEnrolmentPortalSection } from './access/hcim-enrolment-portal-section.class';
 import { SaEformsPortalSection } from './access/sa-eforms-portal-section.class';
@@ -148,6 +149,13 @@ export class PortalStateBuilder {
         this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]) &&
           this.insertSection('driverFitness', profileStatus),
         () => [new DriverFitnessPortalSection(profileStatus, this.router)]
+      ),
+      ...ArrayUtils.insertResultIf<IPortalSection>(
+        // TODO remove permissions when API exists and ready for production, or
+        // TODO replace || with && to keep it flagged when API exists
+        this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]) ||
+          this.insertSection('endorsement', profileStatus),
+        () => [new EndorsementPortalSection(profileStatus, this.router)]
       ),
     ];
   }

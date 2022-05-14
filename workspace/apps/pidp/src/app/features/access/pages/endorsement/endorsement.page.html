@@ -1,4 +1,4 @@
-<ui-page>
+<ui-page [form]="formState.form" (submitted)="onSubmit()">
   <ui-page-header icon="assignment">{{ title }}</ui-page-header>
 
   <ui-page-section>
@@ -8,6 +8,8 @@
       that you have requested their endorsement. Once they have endorsed you,
       come back to the Provider Identity Portal and complete your enrolment(s).
     </p>
+
+    <br />
 
     <ng-container [formGroup]="formState.form">
       <mat-form-field class="w-100">
