@@ -89,7 +89,9 @@ export class LoginPage {
   private login(idpHint: IdentityProvider): Observable<void> {
     return this.authService.login({
       idpHint: idpHint,
-      redirectUri: this.config.applicationUrl,
+      redirectUri:
+        this.config.applicationUrl +
+        '?guid=asdjfijasdfjasdnfiuasdhfiuasdifjweoifjaowjfoaj',
     });
   }
 }

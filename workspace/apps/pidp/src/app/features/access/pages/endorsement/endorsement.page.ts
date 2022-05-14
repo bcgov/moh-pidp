@@ -1,13 +1,15 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { EMPTY } from 'rxjs';
 
 import { NoContent } from '@bcgov/shared/data-access';
 
-import { APP_CONFIG, AppConfig } from '@app/app.config';
+import { AbstractFormPage } from '@app/core/classes/abstract-form-page.class';
 import { PartyService } from '@app/core/party/party.service';
+import { FormUtilsService } from '@app/core/services/form-utils.service';
 import { LoggerService } from '@app/core/services/logger.service';
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
 
@@ -19,13 +21,17 @@ import { EndorsementResource } from './endorsement-resource.service';
   templateUrl: './endorsement.page.html',
   styleUrls: ['./endorsement.page.scss'],
 })
-export class EndorsementPage implements OnInit {
+export class EndorsementPage
+  extends AbstractFormPage<EndorsementFormState>
+  implements OnInit
+{
   public title: string;
   public formState: EndorsementFormState;
   public completed: boolean | null;
 
   public constructor(
-    @Inject(APP_CONFIG) private config: AppConfig,
+    protected dialog: MatDialog,
+    protected formUtilsService: FormUtilsService,
     private route: ActivatedRoute,
     private router: Router,
     private partyService: PartyService,
@@ -33,6 +39,8 @@ export class EndorsementPage implements OnInit {
     private logger: LoggerService,
     fb: FormBuilder
   ) {
+    super(dialog, formUtilsService);
+
     const routeData = this.route.snapshot.data;
     this.title = routeData.title;
     this.formState = new EndorsementFormState(fb);
