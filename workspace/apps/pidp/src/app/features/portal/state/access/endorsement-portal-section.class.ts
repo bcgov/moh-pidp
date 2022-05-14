@@ -65,6 +65,6 @@ export class EndorsementPortalSection implements IPortalSection {
 
   private getStatusCode(): StatusCode {
     // TODO remove null check once API exists
-    return this.profileStatus.status.driverFitness?.statusCode;
+    return this.profileStatus.status.endorsement?.statusCode;
   }
 }
