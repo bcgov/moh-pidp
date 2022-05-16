@@ -100,7 +100,7 @@ nginx:
       ssl_client_certificate certs/plr/trusted-ca-certs.pem;
 
       set $CSP_style  "style-src    'self' 'unsafe-inline' *.googleapis.com *.gstatic.com; ";
-      set $CSP_font   "font-src     'self' data: *.googleapis.com *.bootstrapcdn.com *.gstatic.com; ";
+      set $CSP_font   "font-src     'self' data: *.googleapis.com *.gstatic.com; ";
       set $CSP_frame  "frame-ancestors 'self'  *.oidc.gov.bc.ca oidc.gov.bc.ca;
       set $CSP        "default-src  'self' ; ${CSP_style} ${CSP_font} ${CSP_frame}";
 
@@ -147,7 +147,7 @@ nginx:
       ssl_client_certificate certs/plr/trusted-ca-certs.pem;
 
       set $CSP_style  "style-src    'self' 'unsafe-inline' *.googleapis.com *.gstatic.com; ";
-      set $CSP_font   "font-src     'self' data: *.googleapis.com *.bootstrapcdn.com *.gstatic.com; ";
+      set $CSP_font   "font-src     'self' data: *.googleapis.com *.gstatic.com; ";
       set $CSP_frame  "frame-ancestors 'self'  *.oidc.gov.bc.ca oidc.gov.bc.ca;
       set $CSP        "default-src  'self' ; ${CSP_style} ${CSP_font} ${CSP_frame}";
 
