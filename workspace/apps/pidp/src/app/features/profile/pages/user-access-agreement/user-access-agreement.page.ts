@@ -1,5 +1,9 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+
+import { Observable, map } from 'rxjs';
+
+import { AccessTokenService } from '@app/features/auth/services/access-token.service';
 
 @Component({
   selector: 'app-user-access-agreement',
@@ -8,12 +12,28 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class UserAccessAgreementPage {
   public title: string;
+  public username: Observable<string>;
 
-  public constructor(private route: ActivatedRoute) {
+  public constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private accessTokenService: AccessTokenService
+  ) {
     this.title = this.route.snapshot.data.title;
+    this.username = accessTokenService
+      .decodeToken()
+      .pipe(map((token) => token?.name ?? ''));
   }
 
   public onSubmit(): void {
-    console.log('ON_SUBMIT');
+    this.navigateToRoot();
+  }
+
+  public onBack(): void {
+    this.navigateToRoot();
+  }
+
+  private navigateToRoot(): void {
+    this.router.navigate([this.route.snapshot.data.routes.root]);
   }
 }

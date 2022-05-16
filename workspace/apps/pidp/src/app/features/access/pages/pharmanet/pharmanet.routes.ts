@@ -1,9 +1,9 @@
 export class PharmanetRoutes {
   public static MODULE_PATH = 'pharmanet';
 
-  public static SELF_DECLARATION_PAGE = 'self-declaration';
-  public static TERMS_OF_ACCESS_PAGE = 'terms-of-access';
-  public static NEXT_STEPS_PAGE = 'next-steps';
+  public static SELF_DECLARATION = 'self-declaration';
+  public static TERMS_OF_ACCESS = 'terms-of-access';
+  public static NEXT_STEPS = 'next-steps';
 
   /**
    * @description

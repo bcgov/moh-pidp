@@ -1,6 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { MatDialogModule } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
 
 import { randTextRange } from '@ngneat/falso';
 import { provideAutoSpy } from 'jest-auto-spies';
@@ -15,19 +16,21 @@ import { LoginPage } from './login.page';
 describe('LoginPage', () => {
   let component: LoginPage;
 
-  const mockActivatedRoute = {
-    snapshot: {
-      queryParams: { action: '' },
-      data: {
-        title: randTextRange({ min: 1, max: 4 }),
-        idpHint: IdentityProvider.BCSC,
-      },
-    },
-  };
+  let mockActivatedRoute;
 
   beforeEach(() => {
+    mockActivatedRoute = {
+      snapshot: {
+        queryParams: { action: '' },
+        data: {
+          title: randTextRange({ min: 1, max: 4 }),
+          idpHint: IdentityProvider.BCSC,
+        },
+      },
+    };
+
     TestBed.configureTestingModule({
-      imports: [MatDialogModule],
+      imports: [RouterTestingModule, MatDialogModule],
       providers: [
         LoginPage,
         {

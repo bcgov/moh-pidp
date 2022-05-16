@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-site-privacy-security-checklist',
@@ -9,11 +9,21 @@ import { ActivatedRoute } from '@angular/router';
 export class SitePrivacySecurityChecklistPage implements OnInit {
   public title: string;
 
-  public constructor(private route: ActivatedRoute) {
+  public constructor(private route: ActivatedRoute, private router: Router) {
     this.title = this.route.snapshot.data.title;
   }
 
-  public onSubmit(): void {}
+  public onSubmit(): void {
+    this.navigateToRoot();
+  }
+
+  public onBack(): void {
+    this.navigateToRoot();
+  }
 
   public ngOnInit(): void {}
+
+  private navigateToRoot(): void {
+    this.router.navigate([this.route.snapshot.data.routes.root]);
+  }
 }

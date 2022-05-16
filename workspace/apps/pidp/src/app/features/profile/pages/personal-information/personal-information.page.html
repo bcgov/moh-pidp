@@ -1,4 +1,4 @@
-<ui-page [form]="formState.form" [busy]="busy" (submitted)="onSubmit()">
+<ui-page [form]="formState.form" (submitted)="onSubmit()">
   <ui-page-header>{{ title }}</ui-page-header>
   <ui-page-section>
     <ui-page-section-subheader
@@ -14,13 +14,15 @@
   <ui-page-section>
     <ui-page-section-subheader heading="Name">
       <ng-container uiPageSectionSubheaderDesc>
-        This information comes from the BC Services Card. If you use a different
-        name in your college licence, select "My name is different on my college
-        licence".
+        <span *ngIf="(identityProvider$ | async) === IdentityProvider.BCSC">
+          This information comes from the BC Services Card.
+        </span>
+        If you use a different name in your college licence, select "My name is
+        different on my college licence".
       </ng-container>
     </ui-page-section-subheader>
 
-    <app-user-info [user]="user | async"></app-user-info>
+    <app-user-info [user]="user$ | async"></app-user-info>
 
     <ui-toggle-content
       label="My name is different on my college licence"
@@ -29,8 +31,11 @@
       <ui-page-section-subheader heading="Preferred Name">
         <ng-container uiPageSectionSubheaderDesc>
           If you use a name professionally that is different from your legal
-          name, enter it here. Entering a preferred name will not change your BC
-          Services Card name.
+          name, enter it here.
+          <span *ngIf="(identityProvider$ | async) === IdentityProvider.BCSC">
+            Entering a preferred name will not change your BC Services Card
+            name.
+          </span>
         </ng-container>
       </ui-page-section-subheader>
       <ui-preferred-name-form [form]="formState.form"></ui-preferred-name-form>

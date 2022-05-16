@@ -1,11 +1,12 @@
 export class AccessRoutes {
-  public static MODULE_PATH = 'profile';
+  public static MODULE_PATH = 'access';
 
-  public static SPECIAL_AUTH_EFORMS_PAGE = 'sa-eforms';
-  public static HCIM_REENROLMENT = 'hcim-reenrolment';
-  public static PHARMANET_PAGE = 'pharmanet';
-  public static SITE_PRIVACY_SECURITY_CHECKLIST_PAGE =
-    'site-privacy-and-security-checklist';
+  public static SPECIAL_AUTH_EFORMS = 'sa-eforms';
+  public static HCIM_ACCOUNT_TRANSFER = 'hcim-account-transfer';
+  public static HCIM_ENROLMENT = 'hcim-enrolment';
+  public static PHARMANET = 'pharmanet';
+  public static SITE_PRIVACY_SECURITY_CHECKLIST = `site-privacy-and-security-checklist`;
+  public static DRIVER_FITNESS = 'driver-fitness';
 
   /**
    * @description

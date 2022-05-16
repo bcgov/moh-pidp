@@ -2,11 +2,11 @@ namespace Pidp.Features.Parties;
 
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using DomainResults.Common;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using NodaTime;
 using System.Security.Claims;
+using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
 
 using Pidp.Data;
@@ -19,7 +19,7 @@ using Pidp.Models.Lookups;
 
 public partial class ProfileStatus
 {
-    public class Command : ICommand<IDomainResult<Model>>
+    public class Command : ICommand<Model>
     {
         public int Id { get; set; }
         [JsonIgnore]
@@ -72,7 +72,7 @@ public partial class ProfileStatus
         public CommandValidator() => this.RuleFor(x => x.Id).GreaterThan(0);
     }
 
-    public class CommandHandler : ICommandHandler<Command, IDomainResult<Model>>
+    public class CommandHandler : ICommandHandler<Command, Model>
     {
         private readonly IMapper mapper;
         private readonly IPlrClient client;
@@ -88,16 +88,14 @@ public partial class ProfileStatus
             this.context = context;
         }
 
-        public async Task<IDomainResult<Model>> HandleAsync(Command command)
+        public async Task<Model> HandleAsync(Command command)
         {
             var profile = await this.context.Parties
                .Where(party => party.Id == command.Id)
                .ProjectTo<ProfileStatusDto>(this.mapper.ConfigurationProvider)
                .SingleAsync();
 
-            if (profile.Ipc == null
-                && profile.CollegeCode != null
-                && profile.LicenceNumber != null)
+            if (profile.CollegeCertificationEntered && profile.Ipc == null)
             {
                 // Cert has been entered but no IPC found, likely due to a transient error or delay in PLR record updates. Retry once.
                 profile.Ipc = await this.RecheckIpc(command.Id, profile.CollegeCode.Value, profile.LicenceNumber, profile.Birthdate!.Value);
@@ -112,13 +110,16 @@ public partial class ProfileStatus
                 {
                     new Model.Demographics(profile),
                     new Model.CollegeCertification(profile),
+                    new Model.AccessAdministrator(profile),
+                    new Model.DriverFitness(profile),
                     new Model.SAEforms(profile),
-                    new Model.HcimReEnrolment(profile)
+                    new Model.HcimAccountTransfer(profile),
+                    new Model.HcimEnrolment(profile)
                 }
                 .ToDictionary(section => section.SectionName, section => section)
             };
 
-            return DomainResult.Success(profileStatus);
+            return profileStatus;
         }
 
         private async Task<string?> RecheckIpc(int partyId, CollegeCode collegeCode, string licenceNumber, LocalDate birthdate)
@@ -143,6 +144,7 @@ public partial class ProfileStatus
         public LocalDate? Birthdate { get; set; }
         public string? Email { get; set; }
         public string? Phone { get; set; }
+        public string? AccessAdministratorEmail { get; set; }
         public CollegeCode? CollegeCode { get; set; }
         public string? LicenceNumber { get; set; }
         public string? Ipc { get; set; }
@@ -152,7 +154,9 @@ public partial class ProfileStatus
         public PlrRecordStatus? PlrRecordStatus { get; set; }
         public ClaimsPrincipal? User { get; set; }
 
+        [MemberNotNullWhen(true, nameof(Email), nameof(Phone))]
         public bool DemographicsEntered => this.Email != null && this.Phone != null;
+        [MemberNotNullWhen(true, nameof(CollegeCode), nameof(LicenceNumber))]
         public bool CollegeCertificationEntered => this.CollegeCode.HasValue && this.LicenceNumber != null;
         public bool UserIsBcServicesCard => this.User.GetIdentityProvider() == ClaimValues.BCServicesCard;
     }

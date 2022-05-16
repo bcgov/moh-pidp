@@ -1,8 +1,8 @@
 import {
   AbstractControl,
+  ValidationErrors,
   ValidatorFn,
   Validators,
-  ValidationErrors,
 } from '@angular/forms';
 
 export class FormControlValidators {
@@ -125,10 +125,7 @@ export class FormControlValidators {
    * @description
    * Checks the form control value is a float.
    */
-  public static float(
-    control: AbstractControl,
-    precision = 2
-  ): ValidationErrors | null {
+  public static float(control: AbstractControl): ValidationErrors | null {
     if (!control.value) {
       return null;
     }
@@ -186,7 +183,7 @@ export class FormControlValidators {
    */
   public static startsWith(value: string): ValidatorFn {
     const regexp = new RegExp(`^(${value})`);
-    return (control: AbstractControl) => {
+    return (control: AbstractControl): ValidationErrors | null => {
       const startsWith = control.valid && regexp.test(control.value);
       return startsWith ? null : { startsWith: true };
     };

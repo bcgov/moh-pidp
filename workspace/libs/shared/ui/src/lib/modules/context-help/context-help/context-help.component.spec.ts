@@ -8,9 +8,8 @@ describe('ContextHelpComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ContextHelpComponent ]
-    })
-    .compileComponents();
+      declarations: [ContextHelpComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

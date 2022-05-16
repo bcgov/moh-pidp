@@ -45,10 +45,6 @@ public static class AuthenticationSetup
                 .RequireAuthenticatedUser()
                 .RequireClaim(Claims.IdentityProvider, ClaimValues.BCServicesCard, ClaimValues.Idir, ClaimValues.Phsa));
 
-            options.AddPolicy(Policies.HcimUser, policy => policy
-                .RequireAuthenticatedUser()
-                .RequireClaim(Claims.IdentityProvider, ClaimValues.Idir, ClaimValues.Phsa));
-
             options.AddPolicy(Policies.UserOwnsResource, policy => policy.Requirements.Add(new UserOwnsResourceRequirement()));
 
             options.FallbackPolicy = new AuthorizationPolicyBuilder()

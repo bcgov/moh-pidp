@@ -14,7 +14,7 @@ import { FormUtilsService } from '@core/services/form-utils.service';
 
 import { WorkAndRoleInformationFormState } from './work-and-role-information-form-state';
 import { WorkAndRoleInformationResource } from './work-and-role-information-resource.service';
-import { WorkAndRoleInformationModel } from './work-and-role-information.model';
+import { WorkAndRoleInformation } from './work-and-role-information.model';
 
 @Component({
   selector: 'app-work-and-role-information',
@@ -58,10 +58,10 @@ export class WorkAndRoleInformationPage
       return this.navigateToRoot();
     }
 
-    this.busy = this.resource
+    this.resource
       .get(partyId)
       .pipe(
-        tap((model: WorkAndRoleInformationModel | null) =>
+        tap((model: WorkAndRoleInformation | null) =>
           this.formState.patchValue(model)
         ),
         catchError((error: HttpErrorResponse) => {
@@ -72,7 +72,7 @@ export class WorkAndRoleInformationPage
         })
       )
       .subscribe(
-        (model: WorkAndRoleInformationModel | null) =>
+        (model: WorkAndRoleInformation | null) =>
           (this.hasFacilityAddress = !!model?.facilityAddress)
       );
   }

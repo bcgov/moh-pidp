@@ -1,0 +1,34 @@
+<ui-page mode="large">
+  <ui-page-header>{{ title }}</ui-page-header>
+
+  <ui-page-section>
+    <ui-page-section-subheader
+      icon="history"
+      heading="View Signed or Accepted Documents">
+      <ng-container uiPageSectionSubheaderDesc>
+        View the documents you have signed.
+      </ng-container>
+    </ui-page-section-subheader>
+
+    <div class="row">
+      <div *ngFor="let document of documents" class="col-12">
+        <ui-card-summary
+          [heading]="document.title"
+          [actionLabel]="document.actionLabel"
+          [actionDisabled]="document.disabled"
+          (action)="onViewDocument(document.type)"></ui-card-summary>
+      </div>
+    </div>
+  </ui-page-section>
+
+  <ui-page-footer mode="reverse">
+    <button
+      mat-stroked-button
+      uiPageFooterAction
+      color="primary"
+      type="button"
+      (click)="onBack()">
+      Back Home
+    </button>
+  </ui-page-footer>
+</ui-page>

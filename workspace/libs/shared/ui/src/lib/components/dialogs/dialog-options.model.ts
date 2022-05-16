@@ -9,7 +9,6 @@ export interface DialogOptions {
   actionHide?: boolean;
   actionLink?: {
     href: string;
-    target: '_self' | '_blank';
     text: string;
   };
   cancelText?: string;
