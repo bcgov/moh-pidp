@@ -18,7 +18,7 @@
         <mat-form-field class="w-100">
           <mat-select
             placeholder="Organization Type"
-            formControlName="organizationType">
+            formControlName="organizationCode">
             <mat-option
               *ngFor="let organization of organizations"
               [value]="organization.code"
@@ -30,7 +30,7 @@
         </mat-form-field>
       </section>
 
-      <ng-container *ngIf="formState.organizationType.value">
+      <ng-container *ngIf="formState.organizationCode.value">
         <section>
           <ui-page-subheader>Health Authority</ui-page-subheader>
           <p>Select what Health Authority you work in.</p>
@@ -38,7 +38,7 @@
           <mat-form-field class="w-100">
             <mat-select
               placeholder="Health Authority"
-              formControlName="healthAuthorityType">
+              formControlName="healthAuthorityCode">
               <mat-option
                 *ngFor="let healthAuthority of healthAuthorities"
                 [value]="healthAuthority.code">

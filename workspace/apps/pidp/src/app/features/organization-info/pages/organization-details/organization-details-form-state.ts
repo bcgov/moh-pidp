@@ -11,8 +11,8 @@ export class OrganizationDetailsFormState extends AbstractFormState<Organization
     this.buildForm();
   }
 
-  public get organizationType(): FormControl {
-    return this.formInstance.get('organizationType') as FormControl;
+  public get organizationCode(): FormControl {
+    return this.formInstance.get('organizationCode') as FormControl;
   }
 
   public get json(): OrganizationDetails | undefined {
@@ -33,8 +33,8 @@ export class OrganizationDetailsFormState extends AbstractFormState<Organization
 
   public buildForm(): void {
     this.formInstance = this.fb.group({
-      organizationType: [null, [Validators.required]],
-      healthAuthorityType: [null, [Validators.required]],
+      organizationCode: [null, [Validators.required]],
+      healthAuthorityCode: [null, [Validators.required]],
       employeeId: [null, [Validators.required]],
     });
   }

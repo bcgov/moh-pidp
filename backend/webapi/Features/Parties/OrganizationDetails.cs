@@ -23,8 +23,8 @@ public class OrganizationDetails
         [HybridBindProperty(Source.Route)]
         public int PartyId { get; set; }
 
-        public OrganizationCode OrganizationType { get; set; }
-        public HealthAuthorityCode HealthAuthorityType { get; set; }
+        public OrganizationCode OrganizationCode { get; set; }
+        public HealthAuthorityCode HealthAuthorityCode { get; set; }
         public string EmployeeId { get; set; } = string.Empty;
     }
 
@@ -38,8 +38,8 @@ public class OrganizationDetails
         public CommandValidator()
         {
             this.RuleFor(x => x.PartyId).GreaterThan(0);
-            this.RuleFor(x => x.OrganizationType).NotEmpty().IsInEnum();
-            this.RuleFor(x => x.HealthAuthorityType).NotEmpty().IsInEnum();
+            this.RuleFor(x => x.OrganizationCode).NotEmpty().IsInEnum();
+            this.RuleFor(x => x.HealthAuthorityCode).NotEmpty().IsInEnum();
             this.RuleFor(x => x.EmployeeId).NotEmpty();
         }
     }
@@ -86,8 +86,8 @@ public class OrganizationDetails
                 this.context.PartyOrgainizationDetails.Add(org);
             }
 
-            org.OrganizationType = command.OrganizationType;
-            org.HealthAuthorityType = command.HealthAuthorityType;
+            org.OrganizationCode = command.OrganizationCode;
+            org.HealthAuthorityCode = command.HealthAuthorityCode;
             org.EmployeeId = command.EmployeeId;
 
             await this.context.SaveChangesAsync();

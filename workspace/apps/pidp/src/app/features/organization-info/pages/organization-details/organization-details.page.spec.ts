@@ -81,8 +81,8 @@ describe('OrganizationDetailsPage', () => {
     formUtilsServiceSpy = TestBed.inject<any>(FormUtilsService);
 
     mockForm = {
-      organizationType: randNumber(),
-      healthAuthorityType: randNumber(),
+      organizationCode: randNumber(),
+      healthAuthorityCode: randNumber(),
       employeeId: randWord(),
     };
   });

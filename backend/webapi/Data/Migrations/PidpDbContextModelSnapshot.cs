@@ -940,13 +940,13 @@ namespace Pidp.Data.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("HealthAuthorityType")
+                    b.Property<int>("HealthAuthorityCode")
                         .HasColumnType("integer");
 
                     b.Property<Instant>("Modified")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("OrganizationType")
+                    b.Property<int>("OrganizationCode")
                         .HasColumnType("integer");
 
                     b.Property<int>("PartyId")

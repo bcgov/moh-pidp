@@ -16,7 +16,18 @@ public partial class ProfileStatus
 
             public AccessAdministrator(ProfileStatusDto profile) : base(profile) => this.Email = profile.AccessAdministratorEmail;
 
-            protected override void SetAlertsAndStatus(ProfileStatusDto profile) => this.StatusCode = string.IsNullOrWhiteSpace(profile.AccessAdministratorEmail) ? StatusCode.Incomplete : StatusCode.Complete;
+            protected override void SetAlertsAndStatus(ProfileStatusDto profile)
+            {
+                if (!profile.UserIsPhsa)
+                {
+                    this.StatusCode = StatusCode.Hidden;
+                    return;
+                }
+
+                this.StatusCode = string.IsNullOrWhiteSpace(profile.AccessAdministratorEmail)
+                    ? StatusCode.Incomplete
+                    : StatusCode.Complete;
+            }
         }
 
         public class CollegeCertification : ProfileSection
@@ -89,6 +100,32 @@ public partial class ProfileStatus
             }
 
             protected override void SetAlertsAndStatus(ProfileStatusDto profile) => this.StatusCode = profile.DemographicsEntered ? StatusCode.Complete : StatusCode.Incomplete;
+        }
+
+        public class OrganizationDetails : ProfileSection
+        {
+            internal override string SectionName => "organizationDetails";
+
+            public OrganizationDetails(ProfileStatusDto profile) : base(profile) { }
+
+            protected override void SetAlertsAndStatus(ProfileStatusDto profile)
+            {
+                if (!profile.UserIsPhsa)
+                {
+                    this.StatusCode = StatusCode.Hidden;
+                    return;
+                }
+
+                if (!profile.DemographicsEntered)
+                {
+                    this.StatusCode = StatusCode.Locked;
+                    return;
+                }
+
+                this.StatusCode = profile.OrganizationDetailEntered
+                    ? StatusCode.Complete
+                    : StatusCode.Incomplete;
+            }
         }
 
         public class DriverFitness : ProfileSection

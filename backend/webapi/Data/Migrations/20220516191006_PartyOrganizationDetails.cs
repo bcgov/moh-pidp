@@ -41,8 +41,8 @@ namespace Pidp.Data.Migrations
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     PartyId = table.Column<int>(type: "integer", nullable: false),
-                    OrganizationType = table.Column<int>(type: "integer", nullable: false),
-                    HealthAuthorityType = table.Column<int>(type: "integer", nullable: false),
+                    OrganizationCode = table.Column<int>(type: "integer", nullable: false),
+                    HealthAuthorityCode = table.Column<int>(type: "integer", nullable: false),
                     EmployeeId = table.Column<string>(type: "text", nullable: false),
                     Created = table.Column<Instant>(type: "timestamp with time zone", nullable: false),
                     Modified = table.Column<Instant>(type: "timestamp with time zone", nullable: false)

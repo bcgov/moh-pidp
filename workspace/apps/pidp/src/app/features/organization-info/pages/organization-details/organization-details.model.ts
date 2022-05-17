@@ -1,5 +1,5 @@
 export interface OrganizationDetails {
-  organizationType: number;
-  healthAuthorityType: number;
+  organizationCode: number;
+  healthAuthorityCode: number;
   employeeId: string;
 }
