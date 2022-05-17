@@ -13,7 +13,7 @@ using Pidp.Data;
 namespace Pidp.Data.Migrations
 {
     [DbContext(typeof(PidpDbContext))]
-    [Migration("20220516191006_PartyOrganizationDetails")]
+    [Migration("20220517220647_PartyOrganizationDetails")]
     partial class PartyOrganizationDetails
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -938,7 +938,7 @@ namespace Pidp.Data.Migrations
                     b.Property<Instant>("Created")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("EmployeeId")
+                    b.Property<string>("EmployeeIdentifier")
                         .IsRequired()
                         .HasColumnType("text");
 

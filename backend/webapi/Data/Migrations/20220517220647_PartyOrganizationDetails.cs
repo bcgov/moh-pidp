@@ -43,7 +43,7 @@ namespace Pidp.Data.Migrations
                     PartyId = table.Column<int>(type: "integer", nullable: false),
                     OrganizationCode = table.Column<int>(type: "integer", nullable: false),
                     HealthAuthorityCode = table.Column<int>(type: "integer", nullable: false),
-                    EmployeeId = table.Column<string>(type: "text", nullable: false),
+                    EmployeeIdentifier = table.Column<string>(type: "text", nullable: false),
                     Created = table.Column<Instant>(type: "timestamp with time zone", nullable: false),
                     Modified = table.Column<Instant>(type: "timestamp with time zone", nullable: false)
                 },

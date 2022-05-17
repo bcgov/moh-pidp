@@ -936,7 +936,7 @@ namespace Pidp.Data.Migrations
                     b.Property<Instant>("Created")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("EmployeeId")
+                    b.Property<string>("EmployeeIdentifier")
                         .IsRequired()
                         .HasColumnType("text");
 

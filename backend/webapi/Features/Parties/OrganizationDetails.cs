@@ -25,7 +25,7 @@ public class OrganizationDetails
 
         public OrganizationCode OrganizationCode { get; set; }
         public HealthAuthorityCode HealthAuthorityCode { get; set; }
-        public string EmployeeId { get; set; } = string.Empty;
+        public string EmployeeIdentifier { get; set; } = string.Empty;
     }
 
     public class QueryValidator : AbstractValidator<Query>
@@ -40,7 +40,7 @@ public class OrganizationDetails
             this.RuleFor(x => x.PartyId).GreaterThan(0);
             this.RuleFor(x => x.OrganizationCode).NotEmpty().IsInEnum();
             this.RuleFor(x => x.HealthAuthorityCode).NotEmpty().IsInEnum();
-            this.RuleFor(x => x.EmployeeId).NotEmpty();
+            this.RuleFor(x => x.EmployeeIdentifier).NotEmpty();
         }
     }
 
@@ -88,7 +88,7 @@ public class OrganizationDetails
 
             org.OrganizationCode = command.OrganizationCode;
             org.HealthAuthorityCode = command.HealthAuthorityCode;
-            org.EmployeeId = command.EmployeeId;
+            org.EmployeeIdentifier = command.EmployeeIdentifier;
 
             await this.context.SaveChangesAsync();
         }

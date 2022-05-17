@@ -19,5 +19,5 @@ public class PartyOrgainizationDetail : BaseAuditable
 
     public HealthAuthorityCode HealthAuthorityCode { get; set; }
 
-    public string EmployeeId { get; set; } = string.Empty;
+    public string EmployeeIdentifier { get; set; } = string.Empty;
 }
