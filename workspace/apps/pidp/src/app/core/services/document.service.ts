@@ -1,11 +1,13 @@
-import { Inject, Injectable } from '@angular/core';
+import { Inject, Injectable, Type } from '@angular/core';
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';
+import { UserAccessAgreementDocumentComponent } from '@app/features/profile/pages/user-access-agreement/components/user-access-agreement-document/user-access-agreement-document.component';
 
 export enum DocumentType {
   PIDP_COLLECTION_NOTICE = 'pidp-collection-notice',
   SA_EFORMS_COLLECTION_NOTICE = 'sa-eforms-collection-notice',
   DRIVER_FITNESS_COLLECTION_NOTICE = 'driver-fitness-collection-notice',
+  USER_ACCESS_AGREEMENT = 'user-access-agreement',
 }
 
 export interface IDocumentMetaData {
@@ -13,8 +15,10 @@ export interface IDocumentMetaData {
   title: string;
 }
 
+export type ComponentType<T = unknown> = Type<T>;
+
 export interface IDocument extends IDocumentMetaData {
-  content: string;
+  content: ComponentType | string;
 }
 
 @Injectable({
@@ -36,6 +40,10 @@ export class DocumentService {
       {
         type: DocumentType.DRIVER_FITNESS_COLLECTION_NOTICE,
         title: 'Driver Medical Fitness Collection Notice',
+      },
+      {
+        type: DocumentType.USER_ACCESS_AGREEMENT,
+        title: 'Access Harmonization User Access Agreement',
       },
     ];
   }
@@ -60,6 +68,11 @@ export class DocumentService {
         return {
           ...this.getDocumentMetaData(documentType),
           content: this.getDriverFitnessCollectionNotice(),
+        };
+      case DocumentType.USER_ACCESS_AGREEMENT:
+        return {
+          ...this.getDocumentMetaData(documentType),
+          content: UserAccessAgreementDocumentComponent,
         };
       default:
         throw new Error('Document type does not exist');
