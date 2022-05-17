@@ -38,8 +38,8 @@ public class OrganizationDetails
         public CommandValidator()
         {
             this.RuleFor(x => x.PartyId).GreaterThan(0);
-            this.RuleFor(x => x.OrganizationCode).NotEmpty().IsInEnum();
-            this.RuleFor(x => x.HealthAuthorityCode).NotEmpty().IsInEnum();
+            this.RuleFor(x => x.OrganizationCode).IsInEnum();
+            this.RuleFor(x => x.HealthAuthorityCode).IsInEnum();
             this.RuleFor(x => x.EmployeeIdentifier).NotEmpty();
         }
     }

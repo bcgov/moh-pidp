@@ -1,6 +1,6 @@
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 
-import { AbstractFormState } from '@bcgov/shared/ui';
+import { AbstractFormState, FormControlValidators } from '@bcgov/shared/ui';
 
 import { OrganizationDetails } from './organization-details.model';
 
@@ -33,9 +33,9 @@ export class OrganizationDetailsFormState extends AbstractFormState<Organization
 
   public buildForm(): void {
     this.formInstance = this.fb.group({
-      organizationCode: [null, [Validators.required]],
-      healthAuthorityCode: [null, [Validators.required]],
-      employeeIdentifier: [null, [Validators.required]],
+      organizationCode: [0, [Validators.required, FormControlValidators.requiredIndex]],
+      healthAuthorityCode: [0, [Validators.required, FormControlValidators.requiredIndex]],
+      employeeIdentifier: ['', [Validators.required]],
     });
   }
 }
