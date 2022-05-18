@@ -22,14 +22,6 @@ export type ITrainingGroup = {
   [K in TrainingSectionKey]: Section;
 };
 
-/**
- * @description
- * Type used to ensure adding a new key to the tuple is
- * included in the group interface.
- */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-type CheckGroup<T extends ITrainingGroup = TrainingGroup> = void;
-
-export interface TrainingGroup {
+export interface TrainingGroup extends ITrainingGroup {
   complianceTraining: Section;
 }

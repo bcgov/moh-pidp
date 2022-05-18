@@ -111,6 +111,7 @@ public partial class ProfileStatus
                     new Model.Demographics(profile),
                     new Model.CollegeCertification(profile),
                     new Model.AccessAdministrator(profile),
+                    new Model.OrganizationDetails(profile),
                     new Model.DriverFitness(profile),
                     new Model.SAEforms(profile),
                     new Model.HcimAccountTransfer(profile),
@@ -148,16 +149,19 @@ public partial class ProfileStatus
         public CollegeCode? CollegeCode { get; set; }
         public string? LicenceNumber { get; set; }
         public string? Ipc { get; set; }
+        public bool OrganizationDetailEntered { get; set; }
         public IEnumerable<AccessType> CompletedEnrolments { get; set; } = Enumerable.Empty<AccessType>();
 
-        // Computed after projection
+        // Resolved after projection
         public PlrRecordStatus? PlrRecordStatus { get; set; }
         public ClaimsPrincipal? User { get; set; }
 
+        // Computed Properties
         [MemberNotNullWhen(true, nameof(Email), nameof(Phone))]
         public bool DemographicsEntered => this.Email != null && this.Phone != null;
         [MemberNotNullWhen(true, nameof(CollegeCode), nameof(LicenceNumber))]
         public bool CollegeCertificationEntered => this.CollegeCode.HasValue && this.LicenceNumber != null;
         public bool UserIsBcServicesCard => this.User.GetIdentityProvider() == ClaimValues.BCServicesCard;
+        public bool UserIsPhsa => this.User.GetIdentityProvider() == ClaimValues.Phsa;
     }
 }

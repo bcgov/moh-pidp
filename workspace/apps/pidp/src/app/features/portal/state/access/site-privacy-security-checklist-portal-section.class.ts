@@ -36,12 +36,14 @@ export class SitePrivacySecurityPortalSection implements IPortalSection {
    * Get the properties that define the action on the section.
    */
   public get action(): PortalSectionAction {
+    const demographicsStatusCode =
+      this.profileStatus.status.demographics.statusCode;
     return {
       label: this.getStatusCode() === StatusCode.COMPLETED ? 'View' : 'Update',
       route: AccessRoutes.routePath(
         AccessRoutes.SITE_PRIVACY_SECURITY_CHECKLIST
       ),
-      disabled: false,
+      disabled: demographicsStatusCode !== StatusCode.COMPLETED,
     };
   }
 
