@@ -56,12 +56,14 @@ export class AdministratorInfoPortalSection implements IPortalSection {
    * Get the properties that define the action on the section.
    */
   public get action(): PortalSectionAction {
+    const demographicsStatusCode =
+      this.profileStatus.status.demographics.statusCode;
     return {
       label: 'Update',
       route: OrganizationInfoRoutes.routePath(
         OrganizationInfoRoutes.ADMINISTRATOR_INFO
       ),
-      disabled: false,
+      disabled: demographicsStatusCode !== StatusCode.COMPLETED,
     };
   }
 

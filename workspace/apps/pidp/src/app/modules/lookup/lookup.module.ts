@@ -3,8 +3,8 @@ import { APP_INITIALIZER, ModuleWithProviders, NgModule } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { LookupCodePipe } from './lookup-code.pipe';
-import { LookupConfig } from './lookup.model';
 import { LookupService } from './lookup.service';
+import { LookupConfig } from './lookup.types';
 
 function configFactory(
   lookupService: LookupService
