@@ -23,8 +23,13 @@ spec:
       value: $(tt.params.values-file)
   workspaces:
   - name: source
-    persistentVolumeClaim:
-      claimName: build-pipeline-pvc
+    volumeClaimTemplate:
+      spec:
+        accessModes:
+          - ReadWriteMany
+        resources:
+          requests:
+            storage: 1Gi
   - name: dockerconfig
     secret:
       secretName: pipeline-dockercfg-w5mgt

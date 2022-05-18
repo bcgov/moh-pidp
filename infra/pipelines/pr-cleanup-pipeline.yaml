@@ -1,0 +1,24 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: pr-cleanup-pipeline
+  namespace: d8a8f9-tools
+spec:
+  params:
+    - name: release_name
+    - name: release_namespace
+      default: d8a8f9-dev
+  workspaces:
+    - name: source
+  tasks:
+    - name: uninstall-pr
+      workspaces:
+        - name: source
+          workspace: source
+      params:
+      - name: release_name
+        value: $(params.release_name)
+      - name: release_namespace
+        value: $(params.release_namespace)
+      taskRef:
+        name: helm-uninstall
