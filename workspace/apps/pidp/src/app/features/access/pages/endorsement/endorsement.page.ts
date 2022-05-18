@@ -44,7 +44,7 @@ export class EndorsementPage
     const routeData = this.route.snapshot.data;
     this.title = routeData.title;
     this.formState = new EndorsementFormState(fb);
-    this.completed = routeData.driverFitnessStatusCode === StatusCode.COMPLETED;
+    this.completed = routeData.endorsementStatusCode === StatusCode.COMPLETED;
   }
 
   public onBack(): void {
