@@ -4,7 +4,7 @@ import { Observable, catchError, map, of } from 'rxjs';
 
 import { ApiHttpClient } from '@app/core/resources/api-http-client.service';
 
-import { LookupConfig } from './lookup.model';
+import { LookupConfig } from './lookup.types';
 
 @Injectable({
   providedIn: 'root',

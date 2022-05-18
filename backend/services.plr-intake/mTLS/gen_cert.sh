@@ -1,7 +1,6 @@
 #!/bin/bash
-
 # # Generate a passphrase on mac, brew install pwgen
-export PASSPHRASE=$(pwgen 128 1)
+export PASSPHRASE=$(< /dev/urandom tr -dc _A-Z-a-z-0-9 | head -c${1:-32};echo;)
 echo $PASSPHRASE > passphrase.txt
 # export PASSPHRASE=$(head -c 500 /dev/urandom | tr -dc a-z0-9A-Z | head -c 128; echo)
 

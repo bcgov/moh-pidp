@@ -297,6 +297,98 @@ namespace Pidp.Data.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Pidp.Models.Lookups.HealthAuthority", b =>
+                {
+                    b.Property<int>("Code")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Code");
+
+                    b.ToTable("HealthAuthorityLookup");
+
+                    b.HasData(
+                        new
+                        {
+                            Code = 1,
+                            Name = "Provincial Health Services Authority"
+                        },
+                        new
+                        {
+                            Code = 2,
+                            Name = "Vancouver Island Health Authority"
+                        },
+                        new
+                        {
+                            Code = 3,
+                            Name = "Vancouver Coastal Health Authority"
+                        },
+                        new
+                        {
+                            Code = 4,
+                            Name = "Fraser Health Authority"
+                        },
+                        new
+                        {
+                            Code = 5,
+                            Name = "Interior Health Authority"
+                        },
+                        new
+                        {
+                            Code = 6,
+                            Name = "Northern Health Authority"
+                        },
+                        new
+                        {
+                            Code = 7,
+                            Name = "First Nations Health Authority"
+                        });
+                });
+
+            modelBuilder.Entity("Pidp.Models.Lookups.Organization", b =>
+                {
+                    b.Property<int>("Code")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Code");
+
+                    b.ToTable("OrganizationLookup");
+
+                    b.HasData(
+                        new
+                        {
+                            Code = 1,
+                            Name = "Health Authority"
+                        },
+                        new
+                        {
+                            Code = 2,
+                            Name = "BC Government Ministry"
+                        },
+                        new
+                        {
+                            Code = 3,
+                            Name = "Maximus"
+                        },
+                        new
+                        {
+                            Code = 4,
+                            Name = "ICBC"
+                        },
+                        new
+                        {
+                            Code = 5,
+                            Name = "Other"
+                        });
+                });
+
             modelBuilder.Entity("Pidp.Models.Lookups.Province", b =>
                 {
                     b.Property<string>("Code")
@@ -863,6 +955,41 @@ namespace Pidp.Data.Migrations
                     b.ToTable("PartyCertification");
                 });
 
+            modelBuilder.Entity("Pidp.Models.PartyOrgainizationDetail", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<Instant>("Created")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("EmployeeIdentifier")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("HealthAuthorityCode")
+                        .HasColumnType("integer");
+
+                    b.Property<Instant>("Modified")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("OrganizationCode")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("PartyId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PartyId")
+                        .IsUnique();
+
+                    b.ToTable("PartyOrgainizationDetail");
+                });
+
             modelBuilder.Entity("Pidp.Models.FacilityAddress", b =>
                 {
                     b.HasBaseType("Pidp.Models.Address");
@@ -979,6 +1106,17 @@ namespace Pidp.Data.Migrations
                     b.Navigation("Party");
                 });
 
+            modelBuilder.Entity("Pidp.Models.PartyOrgainizationDetail", b =>
+                {
+                    b.HasOne("Pidp.Models.Party", "Party")
+                        .WithOne("OrgainizationDetail")
+                        .HasForeignKey("Pidp.Models.PartyOrgainizationDetail", "PartyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Party");
+                });
+
             modelBuilder.Entity("Pidp.Models.FacilityAddress", b =>
                 {
                     b.HasOne("Pidp.Models.Facility", "Facility")
@@ -1020,6 +1158,8 @@ namespace Pidp.Data.Migrations
                     b.Navigation("AccessRequests");
 
                     b.Navigation("Facility");
+
+                    b.Navigation("OrgainizationDetail");
 
                     b.Navigation("PartyCertification");
                 });
