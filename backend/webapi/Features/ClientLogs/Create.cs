@@ -8,8 +8,6 @@ public class Create
 {
     public class Command : ICommand
     {
-        public int Id { get; set; }
-
         public string Message { get; set; } = string.Empty;
 
         public LogLevel? LogType { get; set; }
@@ -23,7 +21,6 @@ public class Create
         {
             var user = accessor?.HttpContext?.User;
 
-            this.RuleFor(x => x.Id).NotEmpty();
             this.RuleFor(x => x.LogType).NotEmpty();
             this.RuleFor(x => x.Message).NotEmpty();
             this.RuleFor(x => x.BrowserInformation).NotEmpty();
@@ -40,7 +37,6 @@ public class Create
         {
             var clientLog = new ClientLog
             {
-                Id = command.Id,
                 Message = command.Message,
                 LogType = command.LogType,
                 BrowserInformation = command.BrowserInformation
