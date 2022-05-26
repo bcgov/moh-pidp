@@ -12,11 +12,14 @@ public class PidpDbContext : DbContext
     public PidpDbContext(DbContextOptions<PidpDbContext> options, IClock clock) : base(options) => this.clock = clock;
 
     public DbSet<AccessRequest> AccessRequests { get; set; } = default!;
-    public DbSet<HcimReEnrolmentAccessRequest> HcimReEnrolmentAccessRequests { get; set; } = default!;
     public DbSet<EmailLog> EmailLogs { get; set; } = default!;
     public DbSet<Facility> Facilities { get; set; } = default!;
+    public DbSet<HcimAccountTransfer> HcimAccountTransfers { get; set; } = default!;
+    public DbSet<HcimEnrolment> HcimEnrolments { get; set; } = default!;
     public DbSet<Party> Parties { get; set; } = default!;
+    public DbSet<PartyAccessAdministrator> PartyAccessAdministrators { get; set; } = default!;
     public DbSet<PartyCertification> PartyCertifications { get; set; } = default!;
+    public DbSet<PartyOrgainizationDetail> PartyOrgainizationDetails { get; set; } = default!;
 
     public override int SaveChanges()
     {

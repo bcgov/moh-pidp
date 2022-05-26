@@ -1,17 +1,17 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 
-import { Observable, Subscription, map } from 'rxjs';
+import { Observable, map } from 'rxjs';
 
 import { PartyService } from '@app/core/party/party.service';
-import { SupportProvided } from '@app/shared/components/get-support/get-support.component';
 import { Role } from '@app/shared/enums/roles.enum';
 
+import { ProfileStatusAlert } from './models/profile-status-alert.model';
+import { ProfileStatus } from './models/profile-status.model';
 import { PortalResource } from './portal-resource.service';
 import { PortalService } from './portal.service';
-import { IPortalSection } from './sections/classes';
-import { ProfileStatusAlert } from './sections/models/profile-status-alert.model';
-import { ProfileStatus } from './sections/models/profile-status.model';
+import { IPortalSection } from './state/portal-section.model';
+import { PortalState } from './state/portal-state.builder';
 
 @Component({
   selector: 'app-portal',
@@ -19,27 +19,36 @@ import { ProfileStatus } from './sections/models/profile-status.model';
   styleUrls: ['./portal.page.scss'],
 })
 export class PortalPage implements OnInit {
-  public busy?: Subscription;
-  public title: string;
-  public state$: Observable<Record<string, IPortalSection[]>>;
-  public completedProfile: boolean;
+  /**
+   * @description
+   * State for driving the displayed groups and sections of
+   * the portal.
+   */
+  public state$: Observable<PortalState>;
+  /**
+   * @description
+   * List of HTTP response controlled alert messages for display
+   * in the portal.
+   */
   public alerts: ProfileStatusAlert[];
-  public hiddenSupport: SupportProvided[];
+  /**
+   * @description
+   * Whether to show the profile information completed
+   * alert providing a scrollable route to access requests.
+   */
+  public completedProfile: boolean;
 
   public Role = Role;
 
   public constructor(
-    private route: ActivatedRoute,
     private router: Router,
     private partyService: PartyService,
     private portalResource: PortalResource,
     private portalService: PortalService
   ) {
-    this.title = this.route.snapshot.data.title;
     this.state$ = this.portalService.state$;
     this.completedProfile = false;
     this.alerts = [];
-    this.hiddenSupport = [];
   }
 
   public onScrollToAnchor(): void {
@@ -54,16 +63,13 @@ export class PortalPage implements OnInit {
   }
 
   public ngOnInit(): void {
-    this.busy = this.portalResource
+    this.portalResource
       .getProfileStatus(this.partyService.partyId)
       .pipe(
         map((profileStatus: ProfileStatus | null) => {
           this.portalService.updateState(profileStatus);
           this.completedProfile = this.portalService.completedProfile;
           this.alerts = this.portalService.alerts;
-          this.hiddenSupport = this.portalService.hiddenSections.filter(
-            (hiddenSection) => ['saEforms', 'hcim'].includes(hiddenSection)
-          ) as SupportProvided[];
         })
       )
       .subscribe();

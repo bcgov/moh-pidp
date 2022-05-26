@@ -19,7 +19,7 @@ import { FormUtilsService } from '@core/services/form-utils.service';
 
 import { PersonalInformationFormState } from './personal-information-form-state';
 import { PersonalInformationResource } from './personal-information-resource.service';
-import { PersonalInformationModel } from './personal-information.model';
+import { PersonalInformation } from './personal-information.model';
 
 @Component({
   selector: 'app-personal-information',
@@ -74,10 +74,10 @@ export class PersonalInformationPage
       return this.navigateToRoot();
     }
 
-    this.busy = this.resource
+    this.resource
       .get(partyId)
       .pipe(
-        tap((model: PersonalInformationModel | null) =>
+        tap((model: PersonalInformation | null) =>
           this.formState.patchValue(model)
         ),
         catchError((error: HttpErrorResponse) => {
@@ -87,7 +87,7 @@ export class PersonalInformationPage
           return of(null);
         })
       )
-      .subscribe((model: PersonalInformationModel | null) =>
+      .subscribe((model: PersonalInformation | null) =>
         this.handlePreferredNameChange(!!model?.preferredFirstName)
       );
   }

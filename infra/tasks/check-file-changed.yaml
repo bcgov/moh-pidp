@@ -1,0 +1,35 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: check-file-changed
+spec:
+  params:
+    - name: commits
+      type: string
+      description: commits pushed in the branch
+    - name: filename
+      type: string
+      description: name of file which we want to check whether modified or not
+  results:
+    - name: is_file_changed
+      description: The following result will return yes if config.yaml changed else no
+  steps:
+    - name: build-sources
+      image: image-registry.openshift-image-registry.svc:5000/openshift/python:3.8-ubi8
+      script: |
+        #!/usr/libexec/platform-python
+        import sys
+        import json
+        commits = json.loads("""$(params.commits)""")
+        contains = False
+        for commit in commits:
+          modifiedFiles = commit["modified"]
+          if "$(params.filename)" in modifiedFiles:
+            contains = True
+            break
+        if contains == True:
+          with open("$(results.is_file_changed.path)", "w") as file_changed:
+            file_changed.write("yes")
+        else:
+          with open("$(results.is_file_changed.path)", "w") as file_changed:
+            file_changed.write("no")

@@ -18,6 +18,7 @@ describe('WorkAndRoleInformationResource', () => {
         provideAutoSpy(ToastService),
       ],
     });
+
     service = TestBed.inject(WorkAndRoleInformationResource);
   });
 

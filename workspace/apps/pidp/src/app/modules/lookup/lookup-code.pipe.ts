@@ -1,7 +1,7 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-import { Lookup, LookupConfig } from './lookup.model';
 import { LookupService } from './lookup.service';
+import { Lookup, LookupConfig } from './lookup.types';
 
 @Pipe({
   name: 'lookupCode',

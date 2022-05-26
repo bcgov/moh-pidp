@@ -1,0 +1,16 @@
+apiVersion: tekton.dev/v1beta1
+kind: PipelineRun
+metadata:
+  generateName: pr-cleanup-pipeline-run-
+spec:
+  pipelineRef:
+    name: pr-cleanup-pipeline
+  serviceAccountName: pipeline
+  params:
+    - name: release_name
+      value: $(tt.params.release-name)
+    - name: release_namespace
+      value: $(tt.params.release-namespace)
+  workspaces:
+  - name: source
+    emptyDir: {}

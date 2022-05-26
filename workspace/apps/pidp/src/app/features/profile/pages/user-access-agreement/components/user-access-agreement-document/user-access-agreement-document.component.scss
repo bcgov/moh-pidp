@@ -1,0 +1,30 @@
+p,
+ul {
+  margin-bottom: 1.5rem;
+}
+
+ul {
+  list-style-type: none;
+  padding-left: 0;
+  margin-left: 0;
+}
+
+.definitions li {
+  margin-bottom: 1rem;
+}
+
+$imgDiameter: 11rem;
+
+.uaa-section {
+  background-repeat: no-repeat;
+  min-height: $imgDiameter;
+  padding-top: 3rem;
+  padding-left: $imgDiameter + 1.75rem;
+  margin-bottom: 2rem;
+}
+
+@for $i from 1 through 7 {
+  .uaa-section-#{$i} {
+    background-image: url('/assets/images/user-access-agreement/section-#{$i}.png');
+  }
+}

@@ -1,6 +1,6 @@
 import {
-  AsyncValidatorFn,
   AbstractControl,
+  AsyncValidatorFn,
   ValidationErrors,
 } from '@angular/forms';
 

@@ -1,0 +1,17 @@
+<div>
+  <ng-content></ng-content>
+
+  <div
+    *ngIf="loading$ | async as loading"
+    class="overlay"
+    [class.cover-viewport]="loading.withMessage">
+    <div *ngIf="loading.withMessage">
+      <span>
+        <mat-spinner diameter="50"></mat-spinner>
+      </span>
+      <span>
+        <p>{{ message }}</p>
+      </span>
+    </div>
+  </div>
+</div>

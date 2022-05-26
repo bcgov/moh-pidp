@@ -1,7 +1,6 @@
 import {
-  Component,
-  OnInit,
   ChangeDetectionStrategy,
+  Component,
   EventEmitter,
   Input,
   Output,
@@ -17,13 +16,13 @@ import { ToggleContentChange } from './toggle-content-change.model';
   styleUrls: ['./toggle-content.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ToggleContentComponent implements OnInit {
+export class ToggleContentComponent {
   @Input() public color: ThemePalette;
   @Input() public label!: string;
   @Input() public checked!: boolean;
   @Output() public toggle: EventEmitter<ToggleContentChange>;
 
-  constructor() {
+  public constructor() {
     this.color = 'primary';
     this.toggle = new EventEmitter<ToggleContentChange>();
   }
@@ -32,6 +31,4 @@ export class ToggleContentComponent implements OnInit {
     this.checked = !this.checked;
     this.toggle.emit({ checked });
   }
-
-  public ngOnInit(): void {}
 }

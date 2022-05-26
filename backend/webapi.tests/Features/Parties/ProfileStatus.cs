@@ -23,12 +23,9 @@ public class ProfileStatusTests : InMemoryDbTest
         var client = A.Fake<IPlrClient>();
         var handler = this.MockDependenciesFor<CommandHandler>(client);
 
-        var result = await handler.HandleAsync(new Command { Id = party.Id, User = MockedBcscUser() });
+        var profile = await handler.HandleAsync(new Command { Id = party.Id, User = MockedBcscUser() });
 
-        Assert.True(result.IsSuccess);
         A.CallTo(() => client.GetPlrRecord(A<CollegeCode>._, A<string>._, A<LocalDate>._)).MustNotHaveHappened();
-
-        var profile = result.Value;
         Assert.Equal(new HashSet<Alert>(), profile.Alerts);
         profile.AssertSectionStatus(StatusCode.Incomplete, StatusCode.Locked, StatusCode.Hidden, StatusCode.Locked);
     }
@@ -47,12 +44,9 @@ public class ProfileStatusTests : InMemoryDbTest
         var client = A.Fake<IPlrClient>();
         var handler = this.MockDependenciesFor<CommandHandler>(client);
 
-        var result = await handler.HandleAsync(new Command { Id = party.Id, User = MockedBcscUser() });
+        var profile = await handler.HandleAsync(new Command { Id = party.Id, User = MockedBcscUser() });
 
-        Assert.True(result.IsSuccess);
         A.CallTo(() => client.GetPlrRecord(A<CollegeCode>._, A<string>._, A<LocalDate>._)).MustNotHaveHappened();
-
-        var profile = result.Value;
         Assert.Equal(new HashSet<Alert>(), profile.Alerts);
         profile.AssertSectionStatus(StatusCode.Complete, StatusCode.Incomplete, StatusCode.Hidden, StatusCode.Locked);
 
@@ -85,12 +79,9 @@ public class ProfileStatusTests : InMemoryDbTest
         A.CallTo(() => client.GetRecordStatus(party.PartyCertification!.Ipc)).Returns(new MockedPlrRecordStatus(true));
         var handler = this.MockDependenciesFor<CommandHandler>(client);
 
-        var result = await handler.HandleAsync(new Command { Id = party.Id, User = MockedBcscUser() });
+        var profile = await handler.HandleAsync(new Command { Id = party.Id, User = MockedBcscUser() });
 
-        Assert.True(result.IsSuccess);
         A.CallTo(() => client.GetPlrRecord(A<CollegeCode>._, A<string>._, A<LocalDate>._)).MustNotHaveHappened();
-
-        var profile = result.Value;
         Assert.Equal(new HashSet<Alert>(), profile.Alerts);
         profile.AssertSectionStatus(StatusCode.Complete, StatusCode.Complete, StatusCode.Hidden, StatusCode.Incomplete);
 
@@ -120,12 +111,9 @@ public class ProfileStatusTests : InMemoryDbTest
         A.CallTo(() => client.GetRecordStatus(party.PartyCertification!.Ipc)).Returns(new MockedPlrRecordStatus(false));
         var handler = this.MockDependenciesFor<CommandHandler>(client);
 
-        var result = await handler.HandleAsync(new Command { Id = party.Id, User = MockedBcscUser() });
+        var profile = await handler.HandleAsync(new Command { Id = party.Id, User = MockedBcscUser() });
 
-        Assert.True(result.IsSuccess);
         A.CallTo(() => client.GetPlrRecord(A<CollegeCode>._, A<string>._, A<LocalDate>._)).MustNotHaveHappened();
-
-        var profile = result.Value;
         Assert.Equal(new HashSet<Alert> { Alert.PlrBadStanding }, profile.Alerts);
         profile.AssertSectionStatus(StatusCode.Complete, StatusCode.Error, StatusCode.Hidden, StatusCode.Locked);
 
@@ -155,12 +143,9 @@ public class ProfileStatusTests : InMemoryDbTest
         A.CallTo(() => client.GetRecordStatus(party.PartyCertification!.Ipc)).Returns((PlrRecordStatus)null!);
         var handler = this.MockDependenciesFor<CommandHandler>(client);
 
-        var result = await handler.HandleAsync(new Command { Id = party.Id, User = MockedBcscUser() });
+        var profile = await handler.HandleAsync(new Command { Id = party.Id, User = MockedBcscUser() });
 
-        Assert.True(result.IsSuccess);
         A.CallTo(() => client.GetPlrRecord(A<CollegeCode>._, A<string>._, A<LocalDate>._)).MustNotHaveHappened();
-
-        var profile = result.Value;
         Assert.Equal(new HashSet<Alert> { Alert.TransientError }, profile.Alerts);
         profile.AssertSectionStatus(StatusCode.Complete, StatusCode.Error, StatusCode.Hidden, StatusCode.Locked);
 
@@ -190,13 +175,10 @@ public class ProfileStatusTests : InMemoryDbTest
         A.CallTo(() => client.GetPlrRecord(party.PartyCertification!.CollegeCode, party.PartyCertification.LicenceNumber, party.Birthdate!.Value)).Returns((string)null!);
         var handler = this.MockDependenciesFor<CommandHandler>(client);
 
-        var result = await handler.HandleAsync(new Command { Id = party.Id, User = MockedBcscUser() });
+        var profile = await handler.HandleAsync(new Command { Id = party.Id, User = MockedBcscUser() });
 
-        Assert.True(result.IsSuccess);
         Assert.Null(party.PartyCertification!.Ipc);
         A.CallTo(() => client.GetPlrRecord(party.PartyCertification!.CollegeCode, party.PartyCertification.LicenceNumber, party.Birthdate!.Value)).MustHaveHappenedOnceExactly();
-
-        var profile = result.Value;
         Assert.Equal(new HashSet<Alert> { Alert.TransientError }, profile.Alerts);
         profile.AssertSectionStatus(StatusCode.Complete, StatusCode.Error, StatusCode.Hidden, StatusCode.Locked);
 
@@ -228,13 +210,10 @@ public class ProfileStatusTests : InMemoryDbTest
         A.CallTo(() => client.GetRecordStatus(expectedIpc)).Returns(new MockedPlrRecordStatus(true));
         var handler = this.MockDependenciesFor<CommandHandler>(client);
 
-        var result = await handler.HandleAsync(new Command { Id = party.Id, User = MockedBcscUser() });
+        var profile = await handler.HandleAsync(new Command { Id = party.Id, User = MockedBcscUser() });
 
-        Assert.True(result.IsSuccess);
         Assert.Equal(expectedIpc, party.PartyCertification!.Ipc);
         A.CallTo(() => client.GetPlrRecord(party.PartyCertification!.CollegeCode, party.PartyCertification.LicenceNumber, party.Birthdate!.Value)).MustHaveHappenedOnceExactly();
-
-        var profile = result.Value;
         Assert.Equal(new HashSet<Alert>(), profile.Alerts);
         profile.AssertSectionStatus(StatusCode.Complete, StatusCode.Complete, StatusCode.Hidden, StatusCode.Incomplete);
 
@@ -271,12 +250,9 @@ public class ProfileStatusTests : InMemoryDbTest
         A.CallTo(() => client.GetRecordStatus(party.PartyCertification!.Ipc)).Returns(new MockedPlrRecordStatus(true));
         var handler = this.MockDependenciesFor<CommandHandler>(client);
 
-        var result = await handler.HandleAsync(new Command { Id = party.Id, User = MockedBcscUser() });
+        var profile = await handler.HandleAsync(new Command { Id = party.Id, User = MockedBcscUser() });
 
-        Assert.True(result.IsSuccess);
         A.CallTo(() => client.GetPlrRecord(A<CollegeCode>._, A<string>._, A<LocalDate>._)).MustNotHaveHappened();
-
-        var profile = result.Value;
         Assert.Equal(new HashSet<Alert>(), profile.Alerts);
         profile.AssertSectionStatus(StatusCode.Complete, StatusCode.Complete, StatusCode.Hidden, StatusCode.Complete);
     }
@@ -308,11 +284,11 @@ public class ProfileStatusTests : InMemoryDbTest
 
 public static class ProfileStatusExtensions
 {
-    public static void AssertSectionStatus(this Model profileStatus, StatusCode demographics, StatusCode collegeCertification, StatusCode hcimReEnrolment, StatusCode saEformsStatus)
+    public static void AssertSectionStatus(this Model profileStatus, StatusCode demographics, StatusCode collegeCertification, StatusCode hcimAccountTransfer, StatusCode saEformsStatus)
     {
         Assert.Equal(demographics, profileStatus.Section<Demographics>().StatusCode);
         Assert.Equal(collegeCertification, profileStatus.Section<CollegeCertification>().StatusCode);
-        Assert.Equal(hcimReEnrolment, profileStatus.Section<HcimReEnrolment>().StatusCode);
+        Assert.Equal(hcimAccountTransfer, profileStatus.Section<Model.HcimAccountTransfer>().StatusCode);
         Assert.Equal(saEformsStatus, profileStatus.Section<SAEforms>().StatusCode);
     }
 

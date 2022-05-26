@@ -1,9 +1,8 @@
 import {
-  Component,
-  OnInit,
   ChangeDetectionStrategy,
-  Output,
+  Component,
   EventEmitter,
+  Output,
 } from '@angular/core';
 import { MatRadioChange } from '@angular/material/radio';
 
@@ -13,8 +12,8 @@ import { MatRadioChange } from '@angular/material/radio';
   styleUrls: ['./yes-no-content.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class YesNoContentComponent implements OnInit {
-  @Output() public change: EventEmitter<string>;
+export class YesNoContentComponent {
+  @Output() public update: EventEmitter<string>;
 
   public decisions: { code: boolean; name: string }[];
   public chosenDecision: string | null;
@@ -25,12 +24,10 @@ export class YesNoContentComponent implements OnInit {
       { code: true, name: 'Yes' },
     ];
     this.chosenDecision = null;
-    this.change = new EventEmitter<string>();
+    this.update = new EventEmitter<string>();
   }
 
-  public onDecisionChange({ value }: MatRadioChange): void {
+  public onDecisionUpdate({ value }: MatRadioChange): void {
     this.chosenDecision = value;
   }
-
-  public ngOnInit(): void {}
 }
