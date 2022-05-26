@@ -13,5 +13,5 @@ public class ClientLog : BaseAuditable
 
     public LogLevel LogLevel { get; set; }
 
-    public string BrowserInformation { get; set; } = string.Empty;
+    public string? AdditionalInformation { get; set; }
 }

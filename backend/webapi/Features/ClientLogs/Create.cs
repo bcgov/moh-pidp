@@ -12,18 +12,15 @@ public class Create
 
         public LogLevel LogLevel { get; set; }
 
-        public string BrowserInformation { get; set; } = string.Empty;
+        public string? AdditionalInformation { get; set; }
     }
 
     public class CommandValidator : AbstractValidator<Command>
     {
-        public CommandValidator(IHttpContextAccessor accessor)
+        public CommandValidator()
         {
-            var user = accessor?.HttpContext?.User;
-
-            this.RuleFor(x => x.LogLevel).NotEmpty();
             this.RuleFor(x => x.Message).NotEmpty();
-            this.RuleFor(x => x.BrowserInformation).NotEmpty();
+            this.RuleFor(x => x.LogLevel).NotEmpty();
         }
     }
 
@@ -39,7 +36,7 @@ public class Create
             {
                 Message = command.Message,
                 LogLevel = command.LogLevel,
-                BrowserInformation = command.BrowserInformation
+                AdditionalInformation = command.AdditionalInformation
             };
 
             this.context.ClientLogs.Add(clientLog);

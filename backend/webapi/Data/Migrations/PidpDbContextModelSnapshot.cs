@@ -110,14 +110,13 @@ namespace Pidp.Data.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("BrowserInformation")
-                        .IsRequired()
+                    b.Property<string>("AdditionalInformation")
                         .HasColumnType("text");
 
                     b.Property<Instant>("Created")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int?>("LogType")
+                    b.Property<int>("LogLevel")
                         .HasColumnType("integer");
 
                     b.Property<string>("Message")

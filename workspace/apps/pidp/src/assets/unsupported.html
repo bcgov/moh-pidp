@@ -76,8 +76,8 @@
           var browser = getBrowserByUserAgent();
           var log = {
             message: 'Unsupported Browser: ' + browser.name,
-            browserInformation: JSON.stringify(browser.userAgent + window.location.search),
-            logType: 1
+            additionalInformation: JSON.stringify(browser.userAgent + window.location.search),
+            logLevel: 1
           };
           $.ajax({
             type: 'POST',

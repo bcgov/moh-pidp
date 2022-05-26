@@ -17,8 +17,8 @@ namespace Pidp.Data.Migrations
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Message = table.Column<string>(type: "text", nullable: false),
-                    LogType = table.Column<int>(type: "integer", nullable: true),
-                    BrowserInformation = table.Column<string>(type: "text", nullable: false),
+                    LogLevel = table.Column<int>(type: "integer", nullable: false),
+                    AdditionalInformation = table.Column<string>(type: "text", nullable: true),
                     Created = table.Column<Instant>(type: "timestamp with time zone", nullable: false),
                     Modified = table.Column<Instant>(type: "timestamp with time zone", nullable: false)
                 },

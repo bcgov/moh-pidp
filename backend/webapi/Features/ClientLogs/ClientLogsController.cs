@@ -3,6 +3,7 @@ namespace Pidp.Features.ClientLogs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
+[ApiController]
 [Route("api/[controller]")]
 public class ClientLogsController
 {
