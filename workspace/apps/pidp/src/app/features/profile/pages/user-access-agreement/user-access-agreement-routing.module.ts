@@ -3,12 +3,14 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { UserAccessAgreementPage } from './user-access-agreement.page';
 
+export const userAccessAgreementTitle = `Access Harmonization User Access Agreement`;
+
 const routes: Routes = [
   {
     path: '',
     component: UserAccessAgreementPage,
     data: {
-      title: 'Access Harmonization User Access Agreement',
+      title: userAccessAgreementTitle,
       routes: {
         root: '../../',
       },
