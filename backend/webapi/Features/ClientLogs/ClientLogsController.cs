@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
 [Route("api/[controller]")]
-public class ClientLogsController
+public class ClientLogsController : ControllerBase
 {
     [HttpPost]
     [AllowAnonymous]
