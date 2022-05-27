@@ -20,7 +20,7 @@ public class Create
         public CommandValidator()
         {
             this.RuleFor(x => x.Message).NotEmpty();
-            this.RuleFor(x => x.LogLevel).NotEmpty();
+            this.RuleFor(x => x.LogLevel).NotEmpty().IsInEnum();
         }
     }
 
