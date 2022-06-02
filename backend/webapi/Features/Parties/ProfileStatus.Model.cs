@@ -142,7 +142,7 @@ public partial class ProfileStatus
                     return;
                 }
 
-                if (profile.CompletedEnrolments.Contains(AccessType.DriverFitness))
+                if (profile.CompletedEnrolments.Contains(AccessTypeCode.DriverFitness))
                 {
                     this.StatusCode = StatusCode.Complete;
                     return;
@@ -170,19 +170,19 @@ public partial class ProfileStatus
             protected override void SetAlertsAndStatus(ProfileStatusDto profile)
             {
                 // TODO revert [
-                // if (profile.CompletedEnrolments.Contains(AccessType.HcimAccountTransfer)
-                //    || profile.CompletedEnrolments.Contains(AccessType.HcimEnrolment))
+                // if (profile.CompletedEnrolments.Contains(AccessTypeCode.HcimAccountTransfer)
+                //    || profile.CompletedEnrolments.Contains(AccessTypeCode.HcimEnrolment))
                 // {
                 //     this.StatusCode = StatusCode.Hidden;
                 //     return;
                 // }
-                if (profile.CompletedEnrolments.Contains(AccessType.HcimAccountTransfer))
+                if (profile.CompletedEnrolments.Contains(AccessTypeCode.HcimAccountTransfer))
                 {
                     this.StatusCode = StatusCode.Complete;
                     return;
                 }
 
-                if (profile.CompletedEnrolments.Contains(AccessType.HcimEnrolment))
+                if (profile.CompletedEnrolments.Contains(AccessTypeCode.HcimEnrolment))
                 {
                     this.StatusCode = StatusCode.Hidden;
                     return;
@@ -204,20 +204,20 @@ public partial class ProfileStatus
             protected override void SetAlertsAndStatus(ProfileStatusDto profile)
             {
                 // TODO revert [
-                // if (profile.CompletedEnrolments.Contains(AccessType.HcimAccountTransfer)
-                //     || profile.CompletedEnrolments.Contains(AccessType.HcimEnrolment))
+                // if (profile.CompletedEnrolments.Contains(AccessTypeCode.HcimAccountTransfer)
+                //     || profile.CompletedEnrolments.Contains(AccessTypeCode.HcimEnrolment))
                 // {
                 //     this.StatusCode = StatusCode.Complete;
                 //     return;
                 // }
 
-                if (profile.CompletedEnrolments.Contains(AccessType.HcimAccountTransfer))
+                if (profile.CompletedEnrolments.Contains(AccessTypeCode.HcimAccountTransfer))
                 {
                     this.StatusCode = StatusCode.Hidden;
                     return;
                 }
 
-                if (profile.CompletedEnrolments.Contains(AccessType.HcimEnrolment))
+                if (profile.CompletedEnrolments.Contains(AccessTypeCode.HcimEnrolment))
                 {
                     this.StatusCode = StatusCode.Complete;
                     return;
@@ -244,7 +244,7 @@ public partial class ProfileStatus
                     return;
                 }
 
-                if (profile.CompletedEnrolments.Contains(AccessType.SAEforms))
+                if (profile.CompletedEnrolments.Contains(AccessTypeCode.SAEforms))
                 {
                     this.StatusCode = StatusCode.Complete;
                     return;

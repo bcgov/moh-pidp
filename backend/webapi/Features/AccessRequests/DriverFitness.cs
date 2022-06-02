@@ -12,6 +12,7 @@ using Pidp.Infrastructure.HttpClients.Mail;
 using Pidp.Infrastructure.HttpClients.Plr;
 using Pidp.Infrastructure.Services;
 using Pidp.Models;
+using Pidp.Models.Lookups;
 
 public class DriverFitness
 {
@@ -56,7 +57,7 @@ public class DriverFitness
                 .Where(party => party.Id == command.PartyId)
                 .Select(party => new
                 {
-                    AlreadyEnroled = party.AccessRequests.Any(request => request.AccessType == AccessType.DriverFitness),
+                    AlreadyEnroled = party.AccessRequests.Any(request => request.AccessTypeCode == AccessTypeCode.DriverFitness),
                     party.PartyCertification!.Ipc,
                     party.Email
                 })
@@ -80,7 +81,7 @@ public class DriverFitness
             this.context.AccessRequests.Add(new AccessRequest
             {
                 PartyId = command.PartyId,
-                AccessType = AccessType.DriverFitness,
+                AccessTypeCode = AccessTypeCode.DriverFitness,
                 RequestedOn = this.clock.GetCurrentInstant()
             });
 
