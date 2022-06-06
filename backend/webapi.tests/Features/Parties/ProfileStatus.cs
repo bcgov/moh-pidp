@@ -242,7 +242,7 @@ public class ProfileStatusTests : InMemoryDbTest
             {
                 new AccessRequest
                 {
-                    AccessType = AccessType.SAEforms
+                    AccessTypeCode = AccessTypeCode.SAEforms
                 }
             }
         });

@@ -1,7 +1,7 @@
-import { AccessType } from '@bcgov/shared/data-access';
+import { AccessTypeCode } from '@bcgov/shared/data-access';
 
 export interface Transaction {
   partyId: number;
-  accessType: AccessType;
+  accessTypeCode: AccessTypeCode;
   requestedOn: string;
 }

@@ -150,7 +150,7 @@ public partial class ProfileStatus
         public string? LicenceNumber { get; set; }
         public string? Ipc { get; set; }
         public bool OrganizationDetailEntered { get; set; }
-        public IEnumerable<AccessType> CompletedEnrolments { get; set; } = Enumerable.Empty<AccessType>();
+        public IEnumerable<AccessTypeCode> CompletedEnrolments { get; set; } = Enumerable.Empty<AccessTypeCode>();
 
         // Resolved after projection
         public PlrRecordStatus? PlrRecordStatus { get; set; }

@@ -4,13 +4,7 @@ using NodaTime;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-public enum AccessType
-{
-    SAEforms = 1,
-    HcimAccountTransfer,
-    HcimEnrolment,
-    DriverFitness
-}
+using Pidp.Models.Lookups;
 
 [Table(nameof(AccessRequest))]
 public class AccessRequest : BaseAuditable
@@ -24,7 +18,7 @@ public class AccessRequest : BaseAuditable
 
     public Instant RequestedOn { get; set; }
 
-    public AccessType AccessType { get; set; }
+    public AccessTypeCode AccessTypeCode { get; set; }
 }
 
 [Table(nameof(HcimAccountTransfer))]
