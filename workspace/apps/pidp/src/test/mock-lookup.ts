@@ -384,6 +384,8 @@ export class MockLookup {
           name: 'Nevada',
         },
       ],
+      organizations: [],
+      healthAuthorities: [],
     };
     /* eslint-enable */
   }
