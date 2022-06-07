@@ -77,6 +77,8 @@ public class IntakeService : IIntakeService
         }
         else
         {
+            this.CheckStatusChange(existingRecord, record);
+
             record.Id = existingRecord.Id;
             this.context.Entry(existingRecord).CurrentValues.SetValues(record);
             existingRecord.Credentials = record.Credentials;
@@ -98,9 +100,7 @@ public class IntakeService : IIntakeService
             return -1;
         }
 
-        return existingRecord == null
-            ? record.Id
-            : existingRecord.Id;
+        return record.Id;
     }
 
     private async Task TranslateIdentifierTypeAsync(PlrRecord record)
@@ -116,6 +116,22 @@ public class IntakeService : IIntakeService
         else
         {
             this.logger.LogUntranslatableIpc(record.Ipc, record.IdentifierType);
+        }
+    }
+
+    private void CheckStatusChange(PlrRecord existingRecord, PlrRecord newRecord)
+    {
+        if (existingRecord.StatusCode != newRecord.StatusCode
+            || existingRecord.StatusReasonCode != newRecord.StatusReasonCode)
+        {
+            this.context.StatusChageLogs.Add(new StatusChageLog
+            {
+                PlrRecordId = existingRecord.Id,
+                OldStatusCode = existingRecord.StatusCode,
+                OldStatusReasonCode = existingRecord.StatusReasonCode,
+                NewStatusCode = newRecord.StatusCode,
+                NewStatusReasonCode = newRecord.StatusReasonCode
+            });
         }
     }
 }
