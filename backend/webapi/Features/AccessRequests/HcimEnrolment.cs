@@ -11,6 +11,7 @@ using Pidp.Infrastructure.HttpClients.Keycloak;
 using Pidp.Infrastructure.HttpClients.Mail;
 using Pidp.Infrastructure.Services;
 using Pidp.Models;
+using Pidp.Models.Lookups;
 
 public class HcimEnrolment
 {
@@ -56,8 +57,8 @@ public class HcimEnrolment
                 .Where(party => party.Id == command.PartyId)
                 .Select(party => new
                 {
-                    AlreadyEnroled = party.AccessRequests.Any(request => request.AccessType == AccessType.HcimAccountTransfer
-                        || request.AccessType == AccessType.HcimEnrolment),
+                    AlreadyEnroled = party.AccessRequests.Any(request => request.AccessTypeCode == AccessTypeCode.HcimAccountTransfer
+                        || request.AccessTypeCode == AccessTypeCode.HcimEnrolment),
                     DemographicsComplete = party.Email != null && party.Phone != null,
                     AdminEmail = party.AccessAdministrator!.Email,
                 })
@@ -76,7 +77,7 @@ public class HcimEnrolment
             this.context.HcimEnrolments.Add(new Models.HcimEnrolment
             {
                 PartyId = command.PartyId,
-                AccessType = AccessType.HcimEnrolment,
+                AccessTypeCode = AccessTypeCode.HcimEnrolment,
                 RequestedOn = this.clock.GetCurrentInstant(),
                 ManagesTasks = command.ManagesTasks,
                 ModifiesPhns = command.ModifiesPhns,
