@@ -46,11 +46,14 @@ public class PlrRecordReader
         // Ignore CPN, IPC, and MPID respectively
         const string nonCollegeIdXPathExpr = "not (@root='2.16.840.1.113883.3.40.2.3') and not (@root='2.16.840.1.113883.3.40.2.8') and not (@root='2.16.840.1.113883.3.40.2.11')";
         const string postalWorkplaceUseExpr = "@use='PST WP'";
-        var result = new PlrRecord();
 
-        // Primary attributes for PRIME
+#pragma warning disable IDE0017 // Object initialization syntax is too messy here
+        var result = new PlrRecord();
+#pragma warning restore IDE0017
+
+        // Primary attributes
         result.Ipc = internalProviderCode;
-        // At this point, IdentifierType as OID
+        // At this point, IdentifierType is OID
         result.IdentifierType = this.ReadNodeData($"//{Prefix}:healthCareProvider/{Prefix}:id[{nonCollegeIdXPathExpr}]/@root", documentRoot, messageId);
         result.CollegeId = this.ReadNodeData($"//{Prefix}:healthCareProvider/{Prefix}:id[{nonCollegeIdXPathExpr}]/@extension", documentRoot, messageId);
         result.ProviderRoleType = this.ReadNodeData($"//{Prefix}:healthCareProvider/{Prefix}:code/@code", documentRoot, messageId);
@@ -65,7 +68,7 @@ public class PlrRecordReader
         result.ConditionStartDate = ParseHL7v3DateTime(this.ReadNodeData($"//{Prefix}:healthCareProvider/{Prefix}:responsibleFor/{Prefix}:privilege/{Prefix}:effectiveTime/{Prefix}:low/@value", documentRoot, messageId));
         result.ConditionEndDate = ParseHL7v3DateTime(this.ReadNodeData($"//{Prefix}:healthCareProvider/{Prefix}:responsibleFor/{Prefix}:privilege/{Prefix}:effectiveTime/{Prefix}:high/@value", documentRoot, messageId));
 
-        // Secondary attributes for PRIME
+        // Secondary attributes
         result.Cpn = this.ReadNodeData($"//{Prefix}:healthCareProvider/{Prefix}:id[@root='2.16.840.1.113883.3.40.2.3']/@extension", documentRoot, messageId);
         result.Address1Line1 = this.ReadNodeData($"//{Prefix}:healthCareProvider/{Prefix}:addr[{postalWorkplaceUseExpr}]/{Prefix}:streetAddressLine[1]", documentRoot, messageId);
         result.Address1Line2 = this.ReadNodeData($"//{Prefix}:healthCareProvider/{Prefix}:addr[{postalWorkplaceUseExpr}]/{Prefix}:streetAddressLine[2]", documentRoot, messageId);
