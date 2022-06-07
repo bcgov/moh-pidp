@@ -1,8 +1,7 @@
-namespace PlrIntake.Features.Intake;
+namespace PlrIntake.Features.Intake.RecordReader;
 
 using Microsoft.Extensions.Logging;
 using System.Globalization;
-// using System.IO;
 using System.Text.RegularExpressions;
 using System.Xml;
 

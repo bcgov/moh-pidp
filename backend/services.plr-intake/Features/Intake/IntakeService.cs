@@ -2,17 +2,11 @@ namespace PlrIntake.Features.Intake;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.IO;
 using System.ServiceModel;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using System.Xml;
 using System.Xml.Linq;
 
 using PlrIntake.Data;
+using PlrIntake.Features.Intake.RecordReader;
 using PlrIntake.Models;
 
 [ServiceContract(Namespace = IntakeServiceOperationTuner.Uri)]
@@ -43,27 +37,29 @@ public class IntakeService : IIntakeService
 
     public async Task AddBcProviderAsync()
     {
-        this.logger.LogInformation("Add BC Provider message received.");
+        this.logger.LogAddMessageRecieved();
 
         var record = new PlrRecordReader(this.logger)
             .ReadDistributionMessage(this.DocumentRoot.ToString());
         var recordId = await this.CreateOrUpdateRecordAsync(record, false);
-        this.logger.LogDebug("Id of row created: " + recordId);
+
+        this.logger.LogRecordCreated(recordId);
     }
 
     public async Task UpdateBcProviderAsync()
     {
-        this.logger.LogInformation("Update BC Provider message received.");
+        this.logger.LogUpdateMessageRecieved();
 
         var record = new PlrRecordReader(this.logger)
             .ReadDistributionMessage(this.DocumentRoot.ToString());
         var recordId = await this.CreateOrUpdateRecordAsync(record, true);
-        this.logger.LogDebug("Id of row updated: " + recordId);
+
+        this.logger.LogRecordUpdated(recordId);
     }
 
-    public void LogWarning(string warningMessage) => this.logger.LogWarning(warningMessage);
+    public void LogUnrecognizedCert(string requestCertThumbprint) => this.logger.LogUnrecognizedCert(requestCertThumbprint);
 
-     private async Task<int> CreateOrUpdateRecordAsync(PlrRecord record, bool expectExists)
+    private async Task<int> CreateOrUpdateRecordAsync(PlrRecord record, bool expectExists)
     {
         await this.TranslateIdentifierTypeAsync(record);
 
@@ -76,7 +72,7 @@ public class IntakeService : IIntakeService
 
             if (expectExists)
             {
-                this.logger.LogWarning("Expected PLR Provider with IPC of {ipc} to exist but it cannot be found", record.Ipc);
+                this.logger.LogIpcNotFound(record.Ipc);
             }
         }
         else
@@ -88,7 +84,7 @@ public class IntakeService : IIntakeService
 
             if (!expectExists)
             {
-                this.logger.LogWarning("Did not expect PLR Provider with IPC of {ipc} to exist but it was found with ID of {id}", record.Ipc, existingRecord.Id);
+                this.logger.LogUnexpectedIpcFound(record.Ipc, existingRecord.Id);
             }
         }
 
@@ -98,7 +94,7 @@ public class IntakeService : IIntakeService
         }
         catch (Exception e)
         {
-            this.logger.LogError(e, "Error updating PLR Provider with with IPC of {ipc}", record.Ipc);
+            this.logger.LogDatabaseException(e, record.Ipc);
             return -1;
         }
 
@@ -119,7 +115,37 @@ public class IntakeService : IIntakeService
         }
         else
         {
-            this.logger.LogError("PLR Provider with IPC of {ipc} had an Identifier OID of {oid} that could not be translated", record.Ipc, record.IdentifierType);
+            this.logger.LogUntranslatableIpc(record.Ipc, record.IdentifierType);
         }
     }
+}
+
+public static partial class IntakeServiceLoggingExtensions
+{
+    [LoggerMessage(1, LogLevel.Warning, "A client provided an unrecognized certifcate with thumbprint {requestCertThumbprint}.")]
+    public static partial void LogUnrecognizedCert(this ILogger logger, string requestCertThumbprint);
+
+    [LoggerMessage(2, LogLevel.Information, "Add BC Provider message received.")]
+    public static partial void LogAddMessageRecieved(this ILogger logger);
+
+    [LoggerMessage(3, LogLevel.Debug, "Id of row created: {recordId}")]
+    public static partial void LogRecordCreated(this ILogger logger, int recordId);
+
+    [LoggerMessage(4, LogLevel.Information, "Update BC Provider message received.")]
+    public static partial void LogUpdateMessageRecieved(this ILogger logger);
+
+    [LoggerMessage(5, LogLevel.Debug, "Id of row updated: {recordId}")]
+    public static partial void LogRecordUpdated(this ILogger logger, int recordId);
+
+    [LoggerMessage(6, LogLevel.Warning, "Expected PLR Provider with IPC of {ipc} to exist but it cannot be found")]
+    public static partial void LogIpcNotFound(this ILogger logger, string ipc);
+
+    [LoggerMessage(7, LogLevel.Warning, "Did not expect PLR Provider with IPC of {ipc} to exist but it was found with ID of {existingRecordId}")]
+    public static partial void LogUnexpectedIpcFound(this ILogger logger, string ipc, int existingRecordId);
+
+    [LoggerMessage(8, LogLevel.Error, "Error updating PLR Provider with with IPC of {ipc}")]
+    public static partial void LogDatabaseException(this ILogger logger, Exception e, string ipc);
+
+    [LoggerMessage(9, LogLevel.Error, "PLR Provider with IPC of {ipc} had an Identifier OID of {oid} that could not be translated")]
+    public static partial void LogUntranslatableIpc(this ILogger logger, string ipc, string? oid);
 }
