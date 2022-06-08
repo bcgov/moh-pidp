@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NodaTime;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
@@ -12,9 +13,10 @@ using Pidp.Data;
 namespace Pidp.Data.Migrations
 {
     [DbContext(typeof(PidpDbContext))]
-    partial class PidpDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220526230103_ClientLog")]
+    partial class ClientLog
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -31,7 +33,7 @@ namespace Pidp.Data.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("AccessTypeCode")
+                    b.Property<int>("AccessType")
                         .HasColumnType("integer");
 
                     b.Property<Instant>("Created")
@@ -212,42 +214,6 @@ namespace Pidp.Data.Migrations
                         .IsUnique();
 
                     b.ToTable("Facility");
-                });
-
-            modelBuilder.Entity("Pidp.Models.Lookups.AccessType", b =>
-                {
-                    b.Property<int>("Code")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Code");
-
-                    b.ToTable("AccessTypeLookup");
-
-                    b.HasData(
-                        new
-                        {
-                            Code = 1,
-                            Name = "Special Authority eForms"
-                        },
-                        new
-                        {
-                            Code = 2,
-                            Name = "HCIMWeb Account Transfer"
-                        },
-                        new
-                        {
-                            Code = 3,
-                            Name = "HCIMWeb Enrolment"
-                        },
-                        new
-                        {
-                            Code = 4,
-                            Name = "Driver Medical Fitness"
-                        });
                 });
 
             modelBuilder.Entity("Pidp.Models.Lookups.College", b =>
