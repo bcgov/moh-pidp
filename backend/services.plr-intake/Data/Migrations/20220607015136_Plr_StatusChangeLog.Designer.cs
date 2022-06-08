@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using PlrIntake.Data;
@@ -11,9 +12,10 @@ using PlrIntake.Data;
 namespace PlrIntake.Data.Migrations
 {
     [DbContext(typeof(PlrDbContext))]
-    partial class PlrDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220607015136_Plr_StatusChangeLog")]
+    partial class Plr_StatusChangeLog
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
