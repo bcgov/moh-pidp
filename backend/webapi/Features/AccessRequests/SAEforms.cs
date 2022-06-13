@@ -12,6 +12,7 @@ using Pidp.Infrastructure.HttpClients.Mail;
 using Pidp.Infrastructure.HttpClients.Plr;
 using Pidp.Infrastructure.Services;
 using Pidp.Models;
+using Pidp.Models.Lookups;
 
 public class SAEforms
 {
@@ -56,7 +57,7 @@ public class SAEforms
                 .Where(party => party.Id == command.PartyId)
                 .Select(party => new
                 {
-                    AlreadyEnroled = party.AccessRequests.Any(request => request.AccessType == AccessType.SAEforms),
+                    AlreadyEnroled = party.AccessRequests.Any(request => request.AccessTypeCode == AccessTypeCode.SAEforms),
                     party.UserId,
                     party.Email,
                     party.FirstName,
@@ -81,7 +82,7 @@ public class SAEforms
             this.context.AccessRequests.Add(new AccessRequest
             {
                 PartyId = command.PartyId,
-                AccessType = AccessType.SAEforms,
+                AccessTypeCode = AccessTypeCode.SAEforms,
                 RequestedOn = this.clock.GetCurrentInstant()
             });
 

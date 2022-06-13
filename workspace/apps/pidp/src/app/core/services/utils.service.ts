@@ -1,6 +1,5 @@
 import { DOCUMENT } from '@angular/common';
 import { Inject, Injectable } from '@angular/core';
-import { SortDirection } from '@angular/material/sort';
 
 import { WINDOW } from '@bcgov/shared/utils';
 
@@ -49,52 +48,6 @@ export class UtilsService {
     this.document
       .querySelector(`#${elementId}`)
       ?.scrollIntoView({ behavior: 'smooth' });
-  }
-
-  /**
-   * @description
-   * Generic sorting of a JSON object by key.
-   */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  public sortByKey<T extends { [key: string]: any }>(
-    key: keyof T
-  ): (a: T, b: T) => SortWeight {
-    return (a: T, b: T): SortWeight => this.sort<T>(a[key], b[key]);
-  }
-
-  /**
-   * @description
-   * Generic sorting of a JSON object by direction.
-   */
-  public sortByDirection<T>(
-    a: T,
-    b: T,
-    direction: SortDirection = 'asc',
-    withTrailingNull: boolean = true
-  ): SortWeight {
-    let result: SortWeight;
-
-    if (a === null && withTrailingNull) {
-      result = -1;
-    } else if (b === null && withTrailingNull) {
-      result = 1;
-    } else {
-      result = this.sort(a, b);
-    }
-
-    if (direction === 'desc') {
-      result *= -1;
-    }
-
-    return result as SortWeight;
-  }
-
-  /**
-   * @description
-   * Generic sorting of a JSON object by key.
-   */
-  public sort<T>(a: T, b: T): SortWeight {
-    return a > b ? 1 : a < b ? -1 : 0;
   }
 
   /**

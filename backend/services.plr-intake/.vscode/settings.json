@@ -15,5 +15,6 @@
     "**/bin": true,
     "**/logs": true,
     "**/obj": true,
+    "**/Data/Migrations": true
   },
 }

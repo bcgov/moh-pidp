@@ -17,7 +17,7 @@ export class UserAccessAgreementPage {
   public constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private accessTokenService: AccessTokenService
+    accessTokenService: AccessTokenService
   ) {
     this.title = this.route.snapshot.data.title;
     this.username = accessTokenService

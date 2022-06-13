@@ -1,0 +1,26 @@
+apiVersion: triggers.tekton.dev/v1alpha1
+kind: TriggerTemplate
+metadata:
+  name: pr-cleanup-trigger-template
+  namespace: d8a8f9-tools
+spec: 
+  params:
+    - name: git-pr-number
+      description: GitHUb PR number
+  resourcetemplates:
+    - apiVersion: tekton.dev/v1beta1
+      kind: PipelineRun
+      metadata:
+        generateName: pr-cleanup-pipeline-run-$(tt.params.git-pr-number)
+      spec:
+        pipelineRef:
+          name: pr-cleanup-pipeline
+        serviceAccountName: pipeline
+        params:
+          - name: release_name
+            value: $(tt.params.git-pr-number)
+          - name: release_namespace
+            value: d8a8f9-dev
+        workspaces:
+        - name: source
+          emptyDir: {}

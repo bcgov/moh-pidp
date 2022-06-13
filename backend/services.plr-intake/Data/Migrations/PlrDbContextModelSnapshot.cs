@@ -288,6 +288,42 @@ namespace PlrIntake.Data.Migrations
                     b.ToTable("Plr_PlrRecord");
                 });
 
+            modelBuilder.Entity("PlrIntake.Models.StatusChageLog", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<DateTime>("Modified")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("NewStatusCode")
+                        .HasColumnType("text");
+
+                    b.Property<string>("NewStatusReasonCode")
+                        .HasColumnType("text");
+
+                    b.Property<string>("OldStatusCode")
+                        .HasColumnType("text");
+
+                    b.Property<string>("OldStatusReasonCode")
+                        .HasColumnType("text");
+
+                    b.Property<int>("PlrRecordId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PlrRecordId");
+
+                    b.ToTable("Plr_StatusChageLog");
+                });
+
             modelBuilder.Entity("PlrIntake.Models.PlrRecord", b =>
                 {
                     b.OwnsMany("PlrIntake.Models.Credential", "Credentials", b1 =>
@@ -351,6 +387,17 @@ namespace PlrIntake.Data.Migrations
                     b.Navigation("Credentials");
 
                     b.Navigation("Expertise");
+                });
+
+            modelBuilder.Entity("PlrIntake.Models.StatusChageLog", b =>
+                {
+                    b.HasOne("PlrIntake.Models.PlrRecord", "PlrRecord")
+                        .WithMany()
+                        .HasForeignKey("PlrRecordId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("PlrRecord");
                 });
 #pragma warning restore 612, 618
         }

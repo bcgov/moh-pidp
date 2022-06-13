@@ -28,15 +28,7 @@ export type IAccessGroup = {
   [K in AccessSectionKey]: Section;
 };
 
-/**
- * @description
- * Type used to ensure adding a new key to the tuple is
- * included in the group interface.
- */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-type CheckGroup<T extends IAccessGroup = AccessGroup> = void;
-
-export interface AccessGroup {
+export interface AccessGroup extends IAccessGroup {
   saEforms: Section;
   hcimAccountTransfer: Section;
   hcimEnrolment: Section;

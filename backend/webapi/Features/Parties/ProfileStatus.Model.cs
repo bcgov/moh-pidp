@@ -16,7 +16,18 @@ public partial class ProfileStatus
 
             public AccessAdministrator(ProfileStatusDto profile) : base(profile) => this.Email = profile.AccessAdministratorEmail;
 
-            protected override void SetAlertsAndStatus(ProfileStatusDto profile) => this.StatusCode = string.IsNullOrWhiteSpace(profile.AccessAdministratorEmail) ? StatusCode.Incomplete : StatusCode.Complete;
+            protected override void SetAlertsAndStatus(ProfileStatusDto profile)
+            {
+                if (!profile.UserIsPhsa)
+                {
+                    this.StatusCode = StatusCode.Hidden;
+                    return;
+                }
+
+                this.StatusCode = string.IsNullOrWhiteSpace(profile.AccessAdministratorEmail)
+                    ? StatusCode.Incomplete
+                    : StatusCode.Complete;
+            }
         }
 
         public class CollegeCertification : ProfileSection
@@ -91,6 +102,32 @@ public partial class ProfileStatus
             protected override void SetAlertsAndStatus(ProfileStatusDto profile) => this.StatusCode = profile.DemographicsEntered ? StatusCode.Complete : StatusCode.Incomplete;
         }
 
+        public class OrganizationDetails : ProfileSection
+        {
+            internal override string SectionName => "organizationDetails";
+
+            public OrganizationDetails(ProfileStatusDto profile) : base(profile) { }
+
+            protected override void SetAlertsAndStatus(ProfileStatusDto profile)
+            {
+                if (!profile.UserIsPhsa)
+                {
+                    this.StatusCode = StatusCode.Hidden;
+                    return;
+                }
+
+                if (!profile.DemographicsEntered)
+                {
+                    this.StatusCode = StatusCode.Locked;
+                    return;
+                }
+
+                this.StatusCode = profile.OrganizationDetailEntered
+                    ? StatusCode.Complete
+                    : StatusCode.Incomplete;
+            }
+        }
+
         public class DriverFitness : ProfileSection
         {
             internal override string SectionName => "driverFitness";
@@ -105,7 +142,7 @@ public partial class ProfileStatus
                     return;
                 }
 
-                if (profile.CompletedEnrolments.Contains(AccessType.DriverFitness))
+                if (profile.CompletedEnrolments.Contains(AccessTypeCode.DriverFitness))
                 {
                     this.StatusCode = StatusCode.Complete;
                     return;
@@ -133,19 +170,19 @@ public partial class ProfileStatus
             protected override void SetAlertsAndStatus(ProfileStatusDto profile)
             {
                 // TODO revert [
-                // if (profile.CompletedEnrolments.Contains(AccessType.HcimAccountTransfer)
-                //    || profile.CompletedEnrolments.Contains(AccessType.HcimEnrolment))
+                // if (profile.CompletedEnrolments.Contains(AccessTypeCode.HcimAccountTransfer)
+                //    || profile.CompletedEnrolments.Contains(AccessTypeCode.HcimEnrolment))
                 // {
                 //     this.StatusCode = StatusCode.Hidden;
                 //     return;
                 // }
-                if (profile.CompletedEnrolments.Contains(AccessType.HcimAccountTransfer))
+                if (profile.CompletedEnrolments.Contains(AccessTypeCode.HcimAccountTransfer))
                 {
                     this.StatusCode = StatusCode.Complete;
                     return;
                 }
 
-                if (profile.CompletedEnrolments.Contains(AccessType.HcimEnrolment))
+                if (profile.CompletedEnrolments.Contains(AccessTypeCode.HcimEnrolment))
                 {
                     this.StatusCode = StatusCode.Hidden;
                     return;
@@ -167,20 +204,20 @@ public partial class ProfileStatus
             protected override void SetAlertsAndStatus(ProfileStatusDto profile)
             {
                 // TODO revert [
-                // if (profile.CompletedEnrolments.Contains(AccessType.HcimAccountTransfer)
-                //     || profile.CompletedEnrolments.Contains(AccessType.HcimEnrolment))
+                // if (profile.CompletedEnrolments.Contains(AccessTypeCode.HcimAccountTransfer)
+                //     || profile.CompletedEnrolments.Contains(AccessTypeCode.HcimEnrolment))
                 // {
                 //     this.StatusCode = StatusCode.Complete;
                 //     return;
                 // }
 
-                if (profile.CompletedEnrolments.Contains(AccessType.HcimAccountTransfer))
+                if (profile.CompletedEnrolments.Contains(AccessTypeCode.HcimAccountTransfer))
                 {
                     this.StatusCode = StatusCode.Hidden;
                     return;
                 }
 
-                if (profile.CompletedEnrolments.Contains(AccessType.HcimEnrolment))
+                if (profile.CompletedEnrolments.Contains(AccessTypeCode.HcimEnrolment))
                 {
                     this.StatusCode = StatusCode.Complete;
                     return;
@@ -207,7 +244,7 @@ public partial class ProfileStatus
                     return;
                 }
 
-                if (profile.CompletedEnrolments.Contains(AccessType.SAEforms))
+                if (profile.CompletedEnrolments.Contains(AccessTypeCode.SAEforms))
                 {
                     this.StatusCode = StatusCode.Complete;
                     return;

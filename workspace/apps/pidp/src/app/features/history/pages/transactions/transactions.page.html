@@ -16,7 +16,7 @@
             <small>{{ transaction.requestedOn| formatDate }}</small>
             <small> {{ transaction.requestedOn | formatDate: 'h:mm a' }}</small>
           </span>
-          <span>{{ AccessTypeMap[transaction.accessType] }} submission</span>
+          <span>{{ AccessTypeMap[transaction.accessTypeCode] }} submission</span>
         </div>
       </ng-container>
     </ng-container>
