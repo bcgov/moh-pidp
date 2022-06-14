@@ -85,7 +85,7 @@ public class Startup
         {
             endpoints.UseSoapEndpoint<IIntakeService>("/api/PLRHL7", intakeBinding, SoapSerializer.XmlSerializer);
             endpoints.MapControllers();
-            endpoints.MapHealthChecks("/health/liveness");
+            endpoints.MapHealthChecks("/health/liveness").AllowAnonymous();
         });
     }
 }
