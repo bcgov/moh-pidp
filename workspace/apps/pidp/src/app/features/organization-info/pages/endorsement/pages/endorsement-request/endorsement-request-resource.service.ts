@@ -33,25 +33,13 @@ export class EndorsementRequestResource extends CrudResource<PersonalInformation
 
   public requestAccess(
     partyId: number,
-    endorsement: EndorsementRequest
+    endorsementRequest: EndorsementRequest
   ): NoContent {
     return this.apiResource
-      .post<NoContent>(`parties/${partyId}/endorsement-requests`, endorsement)
-      .pipe(
-        NoContentResponse,
-        catchError((error: HttpErrorResponse) => {
-          if (error.status === HttpStatusCode.BadRequest) {
-            return of(void 0);
-          }
-
-          return throwError(() => error);
-        })
-      );
-  }
-
-  public recieveEndorsementRequest(partyId: number, token: string): NoContent {
-    return this.apiResource
-      .post<NoContent>(`parties/${partyId}/endorsement-requests/recieved`, { token })
+      .post<NoContent>(
+        `parties/${partyId}/endorsement-requests`,
+        endorsementRequest
+      )
       .pipe(
         NoContentResponse,
         catchError((error: HttpErrorResponse) => {

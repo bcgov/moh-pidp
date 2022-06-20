@@ -17,6 +17,17 @@
         <mat-error>Required</mat-error>
       </mat-form-field>
     </ng-container>
+
+    <ui-page-subheader>Job title</ui-page-subheader>
+    <p>Enter your job title.</p>
+
+    <br />
+    <ng-container [formGroup]="formState.form">
+      <mat-form-field class="w-100">
+        <input matInput placeholder="Job Title" formControlName="jobTitle" />
+        <mat-error>Required</mat-error>
+      </mat-form-field>
+    </ng-container>
   </ui-page-section>
 
   <ui-page-footer>
