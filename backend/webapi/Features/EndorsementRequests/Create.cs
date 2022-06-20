@@ -64,7 +64,7 @@ public class Create
             var email = new Email(
                 from: EmailService.PidpEmail,
                 to: recipientEmail,
-                subject: "You Have Recieved an Endorement Request in PIdP",
+                subject: "You Have Received an Endorement Request in PIdP",
                 body: $"You have a new endorsement in the Provider Identity Portal. Please follow {link} and log in to the Provider Identity Portal to complete your enrolment(s)"
             );
             await this.emailService.SendAsync(email);

@@ -8,7 +8,7 @@ using NodaTime;
 
 using Pidp.Data;
 
-public class RecievedIndex
+public class ReceivedIndex
 {
     public class Query : IQuery<List<Model>>
     {

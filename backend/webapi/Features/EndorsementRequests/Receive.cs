@@ -8,7 +8,7 @@ using System.Text.Json.Serialization;
 
 using Pidp.Data;
 
-public class Recieve
+public class Receive
 {
     public class Command : ICommand<IDomainResult>
     {
@@ -40,26 +40,26 @@ public class Recieve
 
         public async Task<IDomainResult> HandleAsync(Command command)
         {
-            var recievedRequest = await this.context.EndorsementRequests
+            var receivedRequest = await this.context.EndorsementRequests
                 .Where(request => request.Token == command.Token)
                 .SingleOrDefaultAsync();
 
-            if (recievedRequest == null)
+            if (receivedRequest == null)
             {
                 return DomainResult.NotFound();
             }
-            if (recievedRequest.RequestingPartyId == command.PartyId)
+            if (receivedRequest.RequestingPartyId == command.PartyId)
             {
                 this.logger.LogSelfEndorsementAttempt(command.PartyId);
                 return DomainResult.Failed();
             }
-            if (recievedRequest.EndorsingPartyId.HasValue)
+            if (receivedRequest.EndorsingPartyId.HasValue)
             {
-                // Already recieved
+                // Already received
                 return DomainResult.Failed();
             }
 
-            recievedRequest.EndorsingPartyId = command.PartyId;
+            receivedRequest.EndorsingPartyId = command.PartyId;
 
             await this.context.SaveChangesAsync();
 
@@ -68,7 +68,7 @@ public class Recieve
     }
 }
 
-public static partial class EndorsementRequestRecieveLoggingExtensions
+public static partial class EndorsementRequestReceiveLoggingExtensions
 {
     [LoggerMessage(1, LogLevel.Warning, "Possible fraudulent behaviour: Party {partyId} attempted to endorse themselves.")]
     public static partial void LogSelfEndorsementAttempt(this ILogger logger, int partyId);

@@ -31,19 +31,19 @@ public class EndorsementRequestsController : PidpControllerBase
         => await this.AuthorizePartyBeforeHandleAsync(command.PartyId, handler, command)
             .ToActionResult();
 
-    [HttpGet("recieved")]
+    [HttpGet("received")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<List<RecievedIndex.Model>>> GetRecievedEndorsementRequests([FromServices] IQueryHandler<RecievedIndex.Query, List<RecievedIndex.Model>> handler,
-                                                                                              [FromRoute] RecievedIndex.Query query)
+    public async Task<ActionResult<List<ReceivedIndex.Model>>> GetReceivedEndorsementRequests([FromServices] IQueryHandler<ReceivedIndex.Query, List<ReceivedIndex.Model>> handler,
+                                                                                              [FromRoute] ReceivedIndex.Query query)
         => await this.AuthorizePartyBeforeHandleAsync(query.PartyId, handler, query)
             .ToActionResultOfT();
 
-    [HttpPost("recieved")]
+    [HttpPost("received")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> RecieveEndorsementRequest([FromServices] ICommandHandler<Recieve.Command, IDomainResult> handler,
-                                                               [FromHybrid] Recieve.Command command)
+    public async Task<IActionResult> ReceiveEndorsementRequest([FromServices] ICommandHandler<Receive.Command, IDomainResult> handler,
+                                                               [FromHybrid] Receive.Command command)
         => await this.AuthorizePartyBeforeHandleAsync(command.PartyId, handler, command)
             .ToActionResult();
 }

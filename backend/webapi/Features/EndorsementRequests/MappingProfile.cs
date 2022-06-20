@@ -8,7 +8,7 @@ public class MappingProfile : Profile
 {
     public MappingProfile()
     {
-        this.CreateProjection<EndorsementRequest, RecievedIndex.Model>()
+        this.CreateProjection<EndorsementRequest, ReceivedIndex.Model>()
             .ForMember(dest => dest.PartyName, opt => opt.MapFrom(src => $"{src.RequestingParty!.FirstName} {src.RequestingParty.LastName}"));
     }
 }
