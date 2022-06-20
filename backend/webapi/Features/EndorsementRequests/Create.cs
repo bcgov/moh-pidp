@@ -1,6 +1,7 @@
 namespace Pidp.Features.EndorsementRequests;
 
 using FluentValidation;
+using Flurl;
 using HybridModelBinding;
 using System.Text.Json.Serialization;
 
@@ -34,11 +35,16 @@ public class Create
     {
         private readonly IEmailService emailService;
         private readonly PidpDbContext context;
+        private readonly string frontendUrl;
 
-        public CommandHandler(IEmailService emailService, PidpDbContext context)
+        public CommandHandler(
+            IEmailService emailService,
+            PidpConfiguration config,
+            PidpDbContext context)
         {
             this.emailService = emailService;
             this.context = context;
+            this.frontendUrl = config.FrontendUrl;
         }
 
         public async Task HandleAsync(Command command)
@@ -60,12 +66,13 @@ public class Create
         private async Task SendEndorsementRequestEmailAsync(string recipientEmail, Guid token)
         {
             // TODO FE url environent variable
-            var link = $"<a href=\"localhost:4200/?endorsementToken={token}\" target=\"_blank\" rel=\"noopener noreferrer\">this link</a>";
+            string url = this.frontendUrl.SetQueryParam("endorsementToken", token);
+            var link = $"<a href=\"{url}\" target=\"_blank\" rel=\"noopener noreferrer\">this link</a>";
             var email = new Email(
                 from: EmailService.PidpEmail,
                 to: recipientEmail,
-                subject: "You Have Recieved an Endorement Request in PIdP",
-                body: $"You have a new endorsement in the Provider Identity Portal. Please follow {link} and log in to the Provider Identity Portal to complete your enrolment(s)"
+                subject: "You Have Received an Endorsement Request in PIdP",
+                body: $"You have a new endorsement in the Provider Identity Portal. Please use {link} and log in to the Provider Identity Portal to complete your enrolment(s)"
             );
             await this.emailService.SendAsync(email);
         }
