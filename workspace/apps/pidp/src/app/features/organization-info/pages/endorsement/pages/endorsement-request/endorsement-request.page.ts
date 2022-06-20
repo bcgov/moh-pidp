@@ -17,7 +17,7 @@ import { EndorsementRequestFormState } from './endorsement-request-form-state';
 import { EndorsementRequestResource } from './endorsement-request-resource.service';
 
 @Component({
-  selector: 'app-endorsement',
+  selector: 'app-endorsement-request',
   templateUrl: './endorsement-request.page.html',
   styleUrls: ['./endorsement-request.page.scss'],
 })

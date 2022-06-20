@@ -17,7 +17,7 @@ import { LoggerService } from '@app/core/services/logger.service';
 import { EndorsementRequestResource } from './endorsement-request-resource.service';
 import { EndorsementRequestPage } from './endorsement-request.page';
 
-describe('EndorsementPage', () => {
+describe('EndorsementRequestPage', () => {
   let component: EndorsementRequestPage;
   let partyServiceSpy: Spy<PartyService>;
   let mockActivatedRoute: { snapshot: any };

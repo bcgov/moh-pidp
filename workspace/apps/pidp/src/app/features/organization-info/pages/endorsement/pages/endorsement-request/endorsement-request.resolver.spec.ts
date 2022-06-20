@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 
 import { EndorsementRequestResolver } from './endorsement-request.resolver';
 
-describe('EndorsementResolver', () => {
+describe('EndorsementRequestResolver', () => {
   let resolver: EndorsementRequestResolver;
 
   beforeEach(() => {

@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { EndorsementRequestResolver } from './pages/endorsement-request//endorsement-request.resolver';
 import { EndorsementRequestPage } from './pages/endorsement-request/endorsement-request.page';
+import { EndorsementRequestResolver } from './pages/endorsement-request/endorsement-request.resolver';
 
 const routes: Routes = [
   {
