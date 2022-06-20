@@ -26,8 +26,8 @@ public class Create
         public CommandValidator()
         {
             this.RuleFor(x => x.PartyId).GreaterThan(0);
-            this.RuleFor(x => x.RecipientEmail).NotEmpty();
-            // this.RuleFor(x => x.JobTitle).NotEmpty();
+            this.RuleFor(x => x.RecipientEmail).NotEmpty().EmailAddress();
+            this.RuleFor(x => x.JobTitle).NotEmpty();
         }
     }
 
