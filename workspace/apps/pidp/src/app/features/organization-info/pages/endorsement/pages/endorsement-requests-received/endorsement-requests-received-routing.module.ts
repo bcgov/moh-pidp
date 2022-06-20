@@ -1,15 +1,15 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { EndorsementRequestPage } from './pages/endorsement-request/endorsement-request.page';
-import { EndorsementRequestResolver } from './pages/endorsement-request/endorsement-request.resolver';
+import { EndorsementRequestsReceivedPage } from './endorsement-requests-received.page';
+import { EndorsementRequestsReceivedResolver } from './endorsement-requests-received.resolver';
 
 const routes: Routes = [
   {
     path: '',
-    component: EndorsementRequestPage,
+    component: EndorsementRequestsReceivedPage,
     resolve: {
-      endorsementStatusCode: EndorsementRequestResolver,
+      endorsementStatusCode: EndorsementRequestsReceivedResolver,
     },
     data: {
       title: 'Endorsement',
@@ -24,4 +24,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class EndorsementRoutingModule {}
+export class EndorsementRequestsReceivedRoutingModule {}
