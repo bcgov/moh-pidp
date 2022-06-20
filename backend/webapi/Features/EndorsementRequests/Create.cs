@@ -59,12 +59,13 @@ public class Create
 
         private async Task SendEndorsementRequestEmailAsync(string recipientEmail, Guid token)
         {
-            // var link = $"<a href=\"https://www.eforms.healthbc.org/login?sat=true\" target=\"_blank\" rel=\"noopener noreferrer\">link</a>";
+            // TODO FE url environent variable
+            var link = $"<a href=\"localhost:4200/?endorsementToken={token}\" target=\"_blank\" rel=\"noopener noreferrer\">this link</a>";
             var email = new Email(
                 from: EmailService.PidpEmail,
                 to: recipientEmail,
                 subject: "You Have Recieved an Endorement Request in PIdP",
-                body: $"Click: {token}."
+                body: $"You have a new endorsement in the Provider Identity Portal. Please follow {link} and log in to the Provider Identity Portal to complete your enrolment(s)"
             );
             await this.emailService.SendAsync(email);
         }

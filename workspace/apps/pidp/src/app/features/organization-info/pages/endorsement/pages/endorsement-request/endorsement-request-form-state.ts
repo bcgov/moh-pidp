@@ -29,7 +29,7 @@ export class EndorsementRequestFormState extends AbstractFormState<EndorsementRe
 
   public buildForm(): void {
     this.formInstance = this.fb.group({
-      email: [null, [Validators.required, FormControlValidators.email]],
+      recipientEmail: [null, [Validators.required, FormControlValidators.email]],
     });
   }
 }
