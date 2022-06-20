@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 
 import { AlertType } from '@bcgov/shared/ui';
 
-import { AccessRoutes } from '@app/features/access/access.routes';
+import { OrganizationInfoRoutes } from '@app/features/organization-info/organization-info.routes';
 import { ShellRoutes } from '@app/features/shell/shell.routes';
 
 import { StatusCode } from '../../enums/status-code.enum';
@@ -38,15 +38,14 @@ export class EndorsementPortalSection implements IPortalSection {
   public get action(): PortalSectionAction {
     const demographicsStatusCode =
       this.profileStatus.status.demographics.statusCode;
-    const collegeCertStatusCode =
-      this.profileStatus.status.collegeCertification.statusCode;
+    // const collegeCertStatusCode =
+    //   this.profileStatus.status.collegeCertification.statusCode;
     return {
       label: this.getStatusCode() === StatusCode.COMPLETED ? 'View' : 'Request',
-      route: AccessRoutes.routePath(AccessRoutes.ENDORSEMENT),
-      disabled: !(
-        demographicsStatusCode === StatusCode.COMPLETED &&
-        collegeCertStatusCode === StatusCode.COMPLETED
+      route: OrganizationInfoRoutes.routePath(
+        OrganizationInfoRoutes.ENDORSEMENT_REQUEST
       ),
+      disabled: !(demographicsStatusCode === StatusCode.COMPLETED),
     };
   }
 

@@ -12,7 +12,6 @@ export const accessSectionKeys = [
   'hcimEnrolment',
   'sitePrivacySecurityChecklist',
   'driverFitness',
-  'endorsement',
 ] as const;
 
 /**
@@ -35,5 +34,4 @@ export interface AccessGroup extends IAccessGroup {
   hcimEnrolment: Section;
   sitePrivacySecurityChecklist: Section;
   driverFitness: Section;
-  endorsement: Section;
 }

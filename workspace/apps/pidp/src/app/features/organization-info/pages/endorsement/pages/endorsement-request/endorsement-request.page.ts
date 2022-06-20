@@ -13,20 +13,20 @@ import { FormUtilsService } from '@app/core/services/form-utils.service';
 import { LoggerService } from '@app/core/services/logger.service';
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
 
-import { EndorsementFormState } from './endorsement-form-state';
-import { EndorsementResource } from './endorsement-resource.service';
+import { EndorsementRequestFormState } from './endorsement-request-form-state';
+import { EndorsementRequestResource } from './endorsement-request-resource.service';
 
 @Component({
   selector: 'app-endorsement',
-  templateUrl: './endorsement.page.html',
-  styleUrls: ['./endorsement.page.scss'],
+  templateUrl: './endorsement-request.page.html',
+  styleUrls: ['./endorsement-request.page.scss'],
 })
-export class EndorsementPage
-  extends AbstractFormPage<EndorsementFormState>
+export class EndorsementRequestPage
+  extends AbstractFormPage<EndorsementRequestFormState>
   implements OnInit
 {
   public title: string;
-  public formState: EndorsementFormState;
+  public formState: EndorsementRequestFormState;
   public completed: boolean | null;
 
   public constructor(
@@ -35,7 +35,7 @@ export class EndorsementPage
     private route: ActivatedRoute,
     private router: Router,
     private partyService: PartyService,
-    private resource: EndorsementResource,
+    private resource: EndorsementRequestResource,
     private logger: LoggerService,
     fb: FormBuilder
   ) {
@@ -43,7 +43,7 @@ export class EndorsementPage
 
     const routeData = this.route.snapshot.data;
     this.title = routeData.title;
-    this.formState = new EndorsementFormState(fb);
+    this.formState = new EndorsementRequestFormState(fb);
     this.completed = routeData.endorsementStatusCode === StatusCode.COMPLETED;
   }
 

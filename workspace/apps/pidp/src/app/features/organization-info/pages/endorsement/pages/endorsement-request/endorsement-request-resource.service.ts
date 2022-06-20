@@ -14,12 +14,12 @@ import { ProfileStatus } from '@app/features/portal/models/profile-status.model'
 import { PortalResource } from '@app/features/portal/portal-resource.service';
 import { PersonalInformation } from '@app/features/profile/pages/personal-information/personal-information.model';
 
-import { Endorsement } from './endorsement.model';
+import { EndorsementRequest } from './endorsement-request.model';
 
 @Injectable({
   providedIn: 'root',
 })
-export class EndorsementResource extends CrudResource<PersonalInformation> {
+export class EndorsementRequestResource extends CrudResource<PersonalInformation> {
   public constructor(
     private apiResource: ApiHttpClient,
     private portalResource: PortalResource
@@ -31,7 +31,10 @@ export class EndorsementResource extends CrudResource<PersonalInformation> {
     return this.portalResource.getProfileStatus(partyId);
   }
 
-  public requestAccess(partyId: number, endorsement: Endorsement): NoContent {
+  public requestAccess(
+    partyId: number,
+    endorsement: EndorsementRequest
+  ): NoContent {
     return this.apiResource
       .post<NoContent>(this.getResourcePath(), {
         partyId,
@@ -50,6 +53,6 @@ export class EndorsementResource extends CrudResource<PersonalInformation> {
   }
 
   protected getResourcePath(): string {
-    return `access-requests/endorsement`;
+    return `organization-info/endorsement-request`;
   }
 }

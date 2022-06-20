@@ -8,7 +8,6 @@ import { Role } from '@app/shared/enums/roles.enum';
 import { StatusCode } from '../enums/status-code.enum';
 import { ProfileStatus } from '../models/profile-status.model';
 import { DriverFitnessPortalSection } from './access/driver-fitness-portal-section.class';
-import { EndorsementPortalSection } from './access/endorsement-portal-section.class';
 import { HcimAccountTransferPortalSection } from './access/hcim-account-transfer-portal-section.class';
 import { HcimEnrolmentPortalSection } from './access/hcim-enrolment-portal-section.class';
 import { SaEformsPortalSection } from './access/sa-eforms-portal-section.class';
@@ -16,6 +15,7 @@ import { SitePrivacySecurityPortalSection } from './access/site-privacy-security
 import { SignedAcceptedDocumentsPortalSection } from './history/signed-accepted-documents-portal-section.class';
 import { TransactionsPortalSection } from './history/transactions-portal-section.class';
 import { AdministratorInfoPortalSection } from './organization/administrator-information-portal-section';
+import { EndorsementPortalSection } from './organization/endorsement-portal-section.class';
 import { FacilityDetailsPortalSection } from './organization/facility-details-portal-section.class';
 import { OrganizationDetailsPortalSection } from './organization/organization-details-portal-section.class';
 import { PortalSectionStatusKey } from './portal-section-status-key.type';
@@ -118,6 +118,13 @@ export class PortalStateBuilder {
           this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
         () => [new AdministratorInfoPortalSection(profileStatus, this.router)]
       ),
+      ...ArrayUtils.insertResultIf<IPortalSection>(
+        // TODO remove permissions when API exists and ready for production, or
+        // TODO replace || with && to keep it flagged when API exists
+        this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]) ||
+          this.insertSection('endorsement', profileStatus),
+        () => [new EndorsementPortalSection(profileStatus, this.router)]
+      ),
     ];
   }
 
@@ -149,13 +156,6 @@ export class PortalStateBuilder {
         this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]) &&
           this.insertSection('driverFitness', profileStatus),
         () => [new DriverFitnessPortalSection(profileStatus, this.router)]
-      ),
-      ...ArrayUtils.insertResultIf<IPortalSection>(
-        // TODO remove permissions when API exists and ready for production, or
-        // TODO replace || with && to keep it flagged when API exists
-        this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]) ||
-          this.insertSection('endorsement', profileStatus),
-        () => [new EndorsementPortalSection(profileStatus, this.router)]
       ),
     ];
   }

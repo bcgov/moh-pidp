@@ -7,15 +7,15 @@ import { PartyService } from '@app/core/party/party.service';
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
 import { ProfileStatus } from '@app/features/portal/models/profile-status.model';
 
-import { EndorsementResource } from './endorsement-resource.service';
+import { EndorsementRequestResource } from './endorsement-request-resource.service';
 
 @Injectable({
   providedIn: 'root',
 })
-export class EndorsementResolver implements Resolve<StatusCode | null> {
+export class EndorsementRequestResolver implements Resolve<StatusCode | null> {
   public constructor(
     private partyService: PartyService,
-    private resource: EndorsementResource
+    private resource: EndorsementRequestResource
   ) {}
 
   public resolve(): Observable<StatusCode | null> {

@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { EndorsementResolver } from './endorsement.resolver';
+import { EndorsementRequestResolver } from './endorsement-request.resolver';
 
 describe('EndorsementResolver', () => {
-  let resolver: EndorsementResolver;
+  let resolver: EndorsementRequestResolver;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    resolver = TestBed.inject(EndorsementResolver);
+    resolver = TestBed.inject(EndorsementRequestResolver);
   });
 
   it('should be created', () => {

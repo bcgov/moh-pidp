@@ -1,15 +1,15 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { EndorsementPage } from './endorsement.page';
-import { EndorsementResolver } from './endorsement.resolver';
+import { EndorsementRequestResolver } from './pages/endorsement-request//endorsement-request.resolver';
+import { EndorsementRequestPage } from './pages/endorsement-request/endorsement-request.page';
 
 const routes: Routes = [
   {
     path: '',
-    component: EndorsementPage,
+    component: EndorsementRequestPage,
     resolve: {
-      endorsementStatusCode: EndorsementResolver,
+      endorsementStatusCode: EndorsementRequestResolver,
     },
     data: {
       title: 'Endorsement',

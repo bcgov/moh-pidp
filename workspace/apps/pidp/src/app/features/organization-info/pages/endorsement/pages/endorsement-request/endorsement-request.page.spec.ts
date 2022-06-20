@@ -14,11 +14,11 @@ import { PartyService } from '@app/core/party/party.service';
 import { FormUtilsService } from '@app/core/services/form-utils.service';
 import { LoggerService } from '@app/core/services/logger.service';
 
-import { EndorsementResource } from './endorsement-resource.service';
-import { EndorsementPage } from './endorsement.page';
+import { EndorsementRequestResource } from './endorsement-request-resource.service';
+import { EndorsementRequestPage } from './endorsement-request.page';
 
 describe('EndorsementPage', () => {
-  let component: EndorsementPage;
+  let component: EndorsementRequestPage;
   let partyServiceSpy: Spy<PartyService>;
   let mockActivatedRoute: { snapshot: any };
   let router: Router;
@@ -43,7 +43,7 @@ describe('EndorsementPage', () => {
         RouterTestingModule,
       ],
       providers: [
-        EndorsementPage,
+        EndorsementRequestPage,
         {
           provide: APP_CONFIG,
           useValue: APP_DI_CONFIG,
@@ -59,7 +59,7 @@ describe('EndorsementPage', () => {
             settersToSpyOn: ['partyId'],
           }),
         },
-        provideAutoSpy(EndorsementResource),
+        provideAutoSpy(EndorsementRequestResource),
         provideAutoSpy(FormUtilsService),
         provideAutoSpy(LoggerService),
         provideAutoSpy(Router),
@@ -67,7 +67,7 @@ describe('EndorsementPage', () => {
     });
 
     router = TestBed.inject(Router);
-    component = TestBed.inject(EndorsementPage);
+    component = TestBed.inject(EndorsementRequestPage);
     partyServiceSpy = TestBed.inject<any>(PartyService);
   });
 
