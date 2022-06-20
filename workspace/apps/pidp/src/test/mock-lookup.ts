@@ -1,4 +1,4 @@
-import { LookupConfig } from '@app/modules/lookup/lookup.model';
+import { LookupConfig } from '@app/modules/lookup/lookup.types';
 
 export class MockLookup {
   public static get(): LookupConfig {

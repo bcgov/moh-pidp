@@ -38,5 +38,7 @@ public class Party : BaseAuditable, IOwnedResource
 
     public Facility? Facility { get; set; }
 
+    public PartyOrgainizationDetail? OrgainizationDetail { get; set; }
+
     public ICollection<AccessRequest> AccessRequests { get; set; } = new List<AccessRequest>();
 }

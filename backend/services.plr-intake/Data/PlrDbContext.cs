@@ -10,6 +10,7 @@ public class PlrDbContext : DbContext
 
     public DbSet<PlrRecord> PlrRecords { get; set; } = default!;
     public DbSet<IdentifierType> IdentifierTypes { get; set; } = default!;
+    public DbSet<StatusChageLog> StatusChageLogs { get; set; } = default!;
 
     public override int SaveChanges()
     {

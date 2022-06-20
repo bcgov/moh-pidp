@@ -5,8 +5,8 @@ import { distinctUntilChanged, pairwise, startWith } from 'rxjs';
 
 import { Address, AddressLine, Country } from '@bcgov/shared/data-access';
 
-import { Lookup, ProvinceLookup } from '@app/modules/lookup/lookup.model';
 import { LookupService } from '@app/modules/lookup/lookup.service';
+import { Lookup, ProvinceLookup } from '@app/modules/lookup/lookup.types';
 
 import { FormUtilsService } from '@core/services/form-utils.service';
 

@@ -3,8 +3,6 @@ namespace PlrIntake.Features.Intake;
 using Microsoft.AspNetCore.Http;
 using SoapCore.Extensibility;
 using SoapCore.ServiceModel;
-using System;
-using System.IO;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Web;
@@ -35,7 +33,7 @@ public class IntakeServiceOperationTuner : IServiceOperationTuner
 
             if (!requestCert.Thumbprint.Equals(this.clientCertThumbprint, StringComparison.OrdinalIgnoreCase))
             {
-                service.LogWarning($"A client provided an unrecognized certifcate with thumbprint {requestCert.Thumbprint}.");
+                service.LogUnrecognizedCert(requestCert.Thumbprint);
                 throw new ArgumentException("The provided certificate is invalid to the receiving system.");
             }
 

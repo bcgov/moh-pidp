@@ -94,7 +94,7 @@ describe('AdministratorInformationPage', () => {
       when('resource request resolved', () => {
         component.ngOnInit();
 
-        then('it should GET party access administrator information', () => {
+        then('it should GET party organization details', () => {
           expect(router.navigate).not.toHaveBeenCalled();
           expect(administratorInfoResourceSpy.get).toHaveBeenCalledTimes(1);
           expect(administratorInfoResourceSpy.get).toHaveBeenCalledWith(
