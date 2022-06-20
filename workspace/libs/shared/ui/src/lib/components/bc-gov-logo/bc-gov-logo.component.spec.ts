@@ -8,9 +8,8 @@ describe('BcGovLogoComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ BcGovLogoComponent ]
-    })
-    .compileComponents();
+      declarations: [BcGovLogoComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

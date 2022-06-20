@@ -42,7 +42,7 @@ export class SaEformsPortalSection implements IPortalSection {
       this.profileStatus.status.collegeCertification.statusCode;
     return {
       label: this.getStatusCode() === StatusCode.COMPLETED ? 'View' : 'Request',
-      route: AccessRoutes.routePath(AccessRoutes.SPECIAL_AUTH_EFORMS_PAGE),
+      route: AccessRoutes.routePath(AccessRoutes.SPECIAL_AUTH_EFORMS),
       disabled: !(
         demographicsStatusCode === StatusCode.COMPLETED &&
         collegeCertStatusCode === StatusCode.COMPLETED

@@ -19,10 +19,10 @@ import { AdministratorInformation } from './administrator-information.model';
 
 @Component({
   selector: 'app-administrator-information',
-  templateUrl: './administrator-information.component.html',
-  styleUrls: ['./administrator-information.component.scss'],
+  templateUrl: './administrator-information.page.html',
+  styleUrls: ['./administrator-information.page.scss'],
 })
-export class AdministratorInformationComponent
+export class AdministratorInformationPage
   extends AbstractFormPage<AdministratorInformationFormState>
   implements OnInit
 {

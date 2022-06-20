@@ -1,7 +1,7 @@
 export class TrainingRoutes {
   public static MODULE_PATH = 'training';
 
-  public static COMPLIANCE_TRAINING_PAGE = 'compliance-training';
+  public static COMPLIANCE_TRAINING = 'compliance-training';
 
   /**
    * @description

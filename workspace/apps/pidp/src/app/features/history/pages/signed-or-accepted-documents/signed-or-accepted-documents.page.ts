@@ -46,7 +46,7 @@ export class SignedOrAcceptedDocumentsPage implements OnInit {
   public onViewDocument(documentType: DocumentType): void {
     this.router.navigate([
       HistoryRoutes.MODULE_PATH,
-      HistoryRoutes.VIEW_DOCUMENT_PAGE,
+      HistoryRoutes.VIEW_DOCUMENT,
       documentType,
     ]);
   }
@@ -82,14 +82,15 @@ export class SignedOrAcceptedDocumentsPage implements OnInit {
 
     return documents
       .filter((document: IDocumentMetaData) => {
-        if (
-          document.type === DocumentType.SA_EFORMS_COLLECTION_NOTICE &&
-          profileStatus?.status.saEforms.statusCode !== StatusCode.COMPLETED
-        ) {
-          return false;
-        }
+        const status = profileStatus?.status;
 
-        return true;
+        return (
+          document.type === DocumentType.PIDP_COLLECTION_NOTICE ||
+          (document.type === DocumentType.SA_EFORMS_COLLECTION_NOTICE &&
+            status?.saEforms.statusCode === StatusCode.COMPLETED) ||
+          (document.type === DocumentType.DRIVER_FITNESS_COLLECTION_NOTICE &&
+            status?.driverFitness.statusCode === StatusCode.COMPLETED)
+        );
       })
       .map((document) => ({
         ...document,

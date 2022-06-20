@@ -65,7 +65,7 @@ export class DemographicsPortalSection implements IPortalSection {
     const statusCode = this.getStatusCode();
     return {
       label: 'Update',
-      route: ProfileRoutes.routePath(ProfileRoutes.PERSONAL_INFO_PAGE),
+      route: ProfileRoutes.routePath(ProfileRoutes.PERSONAL_INFO),
       disabled:
         statusCode === StatusCode.ERROR ||
         statusCode === StatusCode.NOT_AVAILABLE,

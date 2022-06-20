@@ -38,7 +38,7 @@ export class ComplianceTrainingPortalSection implements IPortalSection {
   public get action(): PortalSectionAction {
     return {
       label: this.getStatusCode() === StatusCode.COMPLETED ? 'View' : 'Watch',
-      route: TrainingRoutes.routePath(TrainingRoutes.COMPLIANCE_TRAINING_PAGE),
+      route: TrainingRoutes.routePath(TrainingRoutes.COMPLIANCE_TRAINING),
       disabled: false,
     };
   }

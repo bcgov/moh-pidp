@@ -8,7 +8,7 @@ const routes: Routes = [
     path: '',
     component: UserAccessAgreementPage,
     data: {
-      title: 'Provider Identity Portal',
+      title: 'Access Harmonization User Access Agreement',
       routes: {
         root: '../../',
       },

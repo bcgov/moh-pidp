@@ -111,6 +111,7 @@ public partial class ProfileStatus
                     new Model.Demographics(profile),
                     new Model.CollegeCertification(profile),
                     new Model.AccessAdministrator(profile),
+                    new Model.DriverFitness(profile),
                     new Model.SAEforms(profile),
                     new Model.HcimAccountTransfer(profile),
                     new Model.HcimEnrolment(profile)
