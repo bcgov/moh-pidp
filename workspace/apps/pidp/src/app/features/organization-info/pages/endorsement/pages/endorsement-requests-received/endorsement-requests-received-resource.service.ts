@@ -22,7 +22,7 @@ export class EndorsementRequestsReceivedResource extends CrudResource<ReceivedEn
     super(apiResource);
   }
 
-  public recieveEndorsementRequest(partyId: number, token: string): NoContent {
+  public receiveEndorsementRequest(partyId: number, token: string): NoContent {
     return this.apiResource
       .post<NoContent>(this.getResourcePath(partyId), { token })
       .pipe(
