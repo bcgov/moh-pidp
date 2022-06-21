@@ -1,7 +1,7 @@
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
-import { catchError, of, throwError } from 'rxjs';
+import { catchError, Observable, of, throwError } from 'rxjs';
 
 import {
   CrudResource,
@@ -10,12 +10,12 @@ import {
 } from '@bcgov/shared/data-access';
 
 import { ApiHttpClient } from '@app/core/resources/api-http-client.service';
-import { PersonalInformation } from '@app/features/profile/pages/personal-information/personal-information.model';
+import { ReceivedEndorsementRequest } from '../../models/received-endorsement-request';
 
 @Injectable({
   providedIn: 'root',
 })
-export class EndorsementRequestsReceivedResource extends CrudResource<PersonalInformation> {
+export class EndorsementRequestsReceivedResource extends CrudResource<ReceivedEndorsementRequest> {
   public constructor(
     private apiResource: ApiHttpClient
   ) {
@@ -24,14 +24,26 @@ export class EndorsementRequestsReceivedResource extends CrudResource<PersonalIn
 
   public recieveEndorsementRequest(partyId: number, token: string): NoContent {
     return this.apiResource
-      .post<NoContent>(`parties/${partyId}/endorsement-requests/recieved`, {
-        token,
-      })
+      .post<NoContent>(this.getResourcePath(partyId), { token })
       .pipe(
         NoContentResponse,
         catchError((error: HttpErrorResponse) => {
           if (error.status === HttpStatusCode.BadRequest) {
             return of(void 0);
+          }
+
+          return throwError(() => error);
+        })
+      );
+  }
+
+  public getReceivedEndorsementRequests(partyId: number): Observable<ReceivedEndorsementRequest[]> {
+    return this.apiResource
+      .get<ReceivedEndorsementRequest[]>(this.getResourcePath(partyId))
+      .pipe(
+        catchError((error: HttpErrorResponse) => {
+          if (error.status === HttpStatusCode.BadRequest) {
+            return of([]);
           }
 
           return throwError(() => error);
