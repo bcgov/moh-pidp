@@ -44,7 +44,8 @@ export class EndorsementRequestPage
     const routeData = this.route.snapshot.data;
     this.title = routeData.title;
     this.formState = new EndorsementRequestFormState(fb);
-    this.completed = routeData.endorsementStatusCode === StatusCode.COMPLETED;
+    this.completed =
+      routeData.endorsementRequestStatusCode === StatusCode.COMPLETED;
   }
 
   public onBack(): void {

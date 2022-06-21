@@ -9,7 +9,7 @@ const routes: Routes = [
     path: '',
     component: EndorsementRequestPage,
     resolve: {
-      endorsementStatusCode: EndorsementRequestResolver,
+      endorsementRequestStatusCode: EndorsementRequestResolver,
     },
     data: {
       title: 'Endorsement',
