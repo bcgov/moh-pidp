@@ -62,6 +62,6 @@ export class EndorsementRequestsReceivedResource extends CrudResource<ReceivedEn
   }
 
   protected getResourcePath(partyId: number): string {
-    return `parties/${partyId}/endorsement-requests/recieved`;
+    return `parties/${partyId}/endorsement-requests/received`;
   }
 }
