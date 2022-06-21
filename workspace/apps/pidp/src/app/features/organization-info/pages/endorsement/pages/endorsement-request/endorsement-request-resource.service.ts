@@ -52,7 +52,7 @@ export class EndorsementRequestResource extends CrudResource<PersonalInformation
       );
   }
 
-  protected getResourcePath(): string {
-    return `organization-info/endorsement-request`;
+  protected getResourcePath(partyId: number): string {
+    return `parties/${partyId}/endorsement-requests`;
   }
 }
