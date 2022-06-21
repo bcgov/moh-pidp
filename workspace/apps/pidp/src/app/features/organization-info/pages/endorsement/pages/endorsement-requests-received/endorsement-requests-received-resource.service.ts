@@ -1,7 +1,7 @@
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
-import { catchError, Observable, of, throwError } from 'rxjs';
+import { Observable, catchError, of, throwError } from 'rxjs';
 
 import {
   CrudResource,
@@ -10,6 +10,9 @@ import {
 } from '@bcgov/shared/data-access';
 
 import { ApiHttpClient } from '@app/core/resources/api-http-client.service';
+import { ProfileStatus } from '@app/features/portal/models/profile-status.model';
+import { PortalResource } from '@app/features/portal/portal-resource.service';
+
 import { ReceivedEndorsementRequest } from '../../models/received-endorsement-request';
 
 @Injectable({
@@ -17,9 +20,14 @@ import { ReceivedEndorsementRequest } from '../../models/received-endorsement-re
 })
 export class EndorsementRequestsReceivedResource extends CrudResource<ReceivedEndorsementRequest> {
   public constructor(
-    private apiResource: ApiHttpClient
+    private apiResource: ApiHttpClient,
+    private portalResource: PortalResource
   ) {
     super(apiResource);
+  }
+
+  public getProfileStatus(partyId: number): Observable<ProfileStatus | null> {
+    return this.portalResource.getProfileStatus(partyId);
   }
 
   public recieveEndorsementRequest(partyId: number, token: string): NoContent {
@@ -37,7 +45,9 @@ export class EndorsementRequestsReceivedResource extends CrudResource<ReceivedEn
       );
   }
 
-  public getReceivedEndorsementRequests(partyId: number): Observable<ReceivedEndorsementRequest[]> {
+  public getReceivedEndorsementRequests(
+    partyId: number
+  ): Observable<ReceivedEndorsementRequest[]> {
     return this.apiResource
       .get<ReceivedEndorsementRequest[]>(this.getResourcePath(partyId))
       .pipe(
