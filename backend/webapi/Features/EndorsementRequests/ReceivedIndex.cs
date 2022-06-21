@@ -45,6 +45,8 @@ public class ReceivedIndex
             return await this.context.EndorsementRequests
                 .Where(request => request.EndorsingPartyId == query.PartyId)
                 .ProjectTo<Model>(this.mapper.ConfigurationProvider)
+                .OrderBy(model => model.AdjudicatedOn.HasValue) // show unadjudicated results first
+                    .ThenByDescending(model => model.AdjudicatedOn)
                 .ToListAsync();
         }
     }
