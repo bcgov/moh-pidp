@@ -68,17 +68,15 @@ export class PortalPage implements OnInit {
   public ngOnInit(): void {
     this.handleLandingActions$()
       .pipe(
-        switchMap(() => {
-          return this.portalResource
-            .getProfileStatus(this.partyService.partyId)
-            .pipe(
-              map((profileStatus: ProfileStatus | null) => {
-                this.portalService.updateState(profileStatus);
-                this.completedProfile = this.portalService.completedProfile;
-                this.alerts = this.portalService.alerts;
-              })
-            );
-        })
+        switchMap(() =>
+          this.portalResource.getProfileStatus(this.partyService.partyId).pipe(
+            map((profileStatus: ProfileStatus | null) => {
+              this.portalService.updateState(profileStatus);
+              this.completedProfile = this.portalService.completedProfile;
+              this.alerts = this.portalService.alerts;
+            })
+          )
+        )
       )
       .subscribe();
   }
