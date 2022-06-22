@@ -9,32 +9,39 @@
       <li>Add team members</li>
     </ol>
   </ui-page-section>
-  <!-- <ui-alert
-    type="muted"
-    icon="check_circle"
-    iconType="outlined"
-    heading="Test Name">
-    <ng-container uiAlertContent>
-      <p>placeholder job title</p>
+
+  <ui-card [heading]="'Team member'">
+    <ng-container uiCardContent>
+      <p>Job Title here</p>
     </ng-container>
-  </ui-alert> -->
+    <ng-container uiCardActions>
+      <span>
+        <button
+          mat-stroked-button
+          type="button"
+          color="primary"
+          (click)="onFakeIt()">
+          decline
+        </button>
+      </span>
+    </ng-container>
+    <ng-container uiCardActions>
+      <span>
+        <button
+          mat-stroked-button
+          type="button"
+          color="primary"
+          (click)="onBack()">
+          accept
+        </button>
+      </span>
+    </ng-container>
+  </ui-card>
+
   <ui-card-summary [heading]="'Team member'">
-    <ng-container uiCardSummaryContent>Job Title here</ng-container>
-    <ng-container>
-      <button
-        mat-stroked-button
-        type="button"
-        color="primary"
-        (click)="onBack()">
-        decline
-      </button>
-      <button
-        mat-stroked-button
-        type="button"
-        color="primary"
-        (click)="onBack()">
-        accept
-      </button>
+    <ng-container uiCardSummaryHint>Date user was approved</ng-container>
+    <ng-container uiCardSummaryContent>
+      <p>Job title</p>
     </ng-container>
   </ui-card-summary>
 

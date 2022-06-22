@@ -36,6 +36,9 @@ export class EndorsementRequestsReceivedPage implements OnInit {
   public onBack(): void {
     this.navigateToRoot();
   }
+  public onFakeIt(): void {
+    console.log('Fakin it');
+  }
 
   public ngOnInit(): void {
     const partyId = this.partyService.partyId;
