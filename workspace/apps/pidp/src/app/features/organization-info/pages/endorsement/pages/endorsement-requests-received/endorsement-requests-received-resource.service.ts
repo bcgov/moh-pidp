@@ -61,6 +61,28 @@ export class EndorsementRequestsReceivedResource extends CrudResource<ReceivedEn
       );
   }
 
+  public adjudicateEndorsementRequest(
+    partyId: number,
+    endorsementRequestId: number,
+    approved: boolean
+  ): NoContent {
+    return this.apiResource
+      .put<NoContent>(
+        `${this.getResourcePath(partyId)}/${endorsementRequestId}/adjudicate`,
+        { approved }
+      )
+      .pipe(
+        NoContentResponse,
+        catchError((error: HttpErrorResponse) => {
+          if (error.status === HttpStatusCode.BadRequest) {
+            return of(void 0);
+          }
+
+          return throwError(() => error);
+        })
+      );
+  }
+
   protected getResourcePath(partyId: number): string {
     return `parties/${partyId}/endorsement-requests/received`;
   }
