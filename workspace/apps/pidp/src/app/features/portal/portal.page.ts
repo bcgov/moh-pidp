@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { EMPTY, Observable, map } from 'rxjs';
+import { EMPTY, Observable, concatMap, map } from 'rxjs';
 
 import { PartyService } from '@app/core/party/party.service';
 import { Role } from '@app/shared/enums/roles.enum';
@@ -68,7 +68,7 @@ export class PortalPage implements OnInit {
   public ngOnInit(): void {
     this.handleLandingActions$()
       .pipe(
-        map(() => {
+        concatMap(() => {
           return this.portalResource
             .getProfileStatus(this.partyService.partyId)
             .pipe(
