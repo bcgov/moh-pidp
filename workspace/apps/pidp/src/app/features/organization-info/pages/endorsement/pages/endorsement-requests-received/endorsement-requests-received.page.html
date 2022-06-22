@@ -1,1 +1,51 @@
-<p>endorsement-requests-received works!</p>
+<ui-page>
+  <ui-page-header icon="business">{{ title }}</ui-page-header>
+
+  <ui-page-section>
+    <p>This is a list of your care team members, here you can:</p>
+    <ol>
+      <li>Approve or decline team members</li>
+      <li>Remove team members</li>
+      <li>Add team members</li>
+    </ol>
+  </ui-page-section>
+  <!-- <ui-alert
+    type="muted"
+    icon="check_circle"
+    iconType="outlined"
+    heading="Test Name">
+    <ng-container uiAlertContent>
+      <p>placeholder job title</p>
+    </ng-container>
+  </ui-alert> -->
+  <ui-card-summary [heading]="'Team member'">
+    <ng-container uiCardSummaryContent>Job Title here</ng-container>
+    <ng-container>
+      <button
+        mat-stroked-button
+        type="button"
+        color="primary"
+        (click)="onBack()">
+        decline
+      </button>
+      <button
+        mat-stroked-button
+        type="button"
+        color="primary"
+        (click)="onBack()">
+        accept
+      </button>
+    </ng-container>
+  </ui-card-summary>
+
+  <ui-page-footer>
+    <button
+      mat-stroked-button
+      uiPageFooterAction
+      type="button"
+      color="primary"
+      (click)="onBack()">
+      Back Home
+    </button>
+  </ui-page-footer>
+</ui-page>
