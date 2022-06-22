@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { EMPTY, Observable, concatMap, map, switchMap } from 'rxjs';
+import { Observable, map, of, switchMap } from 'rxjs';
 
 import { PartyService } from '@app/core/party/party.service';
 import { Role } from '@app/shared/enums/roles.enum';
@@ -88,7 +88,7 @@ export class PortalPage implements OnInit {
       this.activatedRoute.snapshot.queryParamMap.get('endorsement-token');
 
     if (!endorsementToken) {
-      return EMPTY;
+      return of(undefined);
     }
 
     return this.endorsementResource
