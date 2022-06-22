@@ -14,28 +14,28 @@
     <ng-container uiCardContent>
       <p>Job Title here</p>
     </ng-container>
-    <ng-container uiCardActions>
+    <div class="actions" uiCardActions>
       <span>
         <button
+          class="decline"
           mat-stroked-button
           type="button"
-          color="primary"
           (click)="onFakeIt()">
-          decline
+          Decline
         </button>
       </span>
-    </ng-container>
-    <ng-container uiCardActions>
-      <span>
-        <button
-          mat-stroked-button
-          type="button"
-          color="primary"
-          (click)="onBack()">
-          accept
-        </button>
-      </span>
-    </ng-container>
+      <ng-container uiCardActions>
+        <span>
+          <button
+            class="accept"
+            mat-stroked-button
+            type="button"
+            (click)="onBack()">
+            Approve
+          </button>
+        </span>
+      </ng-container>
+    </div>
   </ui-card>
 
   <ui-card-summary [heading]="'Team member'">

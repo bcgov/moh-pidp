@@ -1,4 +1,16 @@
-.myclass {
+@use 'palette' as palette;
+
+.actions {
   display: flex;
   flex-direction: row;
+}
+
+.accept {
+  color: #fff;
+  background-color: palette.theme-palette(green);
+}
+
+.decline {
+  color: palette.theme-palette(red);
+  border-color: palette.theme-palette(red);
 }
