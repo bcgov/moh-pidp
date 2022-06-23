@@ -11,6 +11,7 @@
 }
 
 .decline {
+  display: flex;
   color: palette.theme-palette(red);
   border-color: palette.theme-palette(red);
 }
