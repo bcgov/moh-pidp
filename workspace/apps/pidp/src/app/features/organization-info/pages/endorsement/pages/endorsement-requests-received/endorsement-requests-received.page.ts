@@ -7,6 +7,7 @@ import { FormUtilsService } from '@app/core/services/form-utils.service';
 import { LoggerService } from '@app/core/services/logger.service';
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
 
+import { ReceivedEndorsementRequest } from '../../models/received-endorsement-request';
 import { EndorsementRequestsReceivedResource } from './endorsement-requests-received-resource.service';
 
 @Component({
@@ -17,6 +18,7 @@ import { EndorsementRequestsReceivedResource } from './endorsement-requests-rece
 export class EndorsementRequestsReceivedPage implements OnInit {
   public title: string;
   public completed: boolean | null;
+  public receivedEndorsementRequests: ReceivedEndorsementRequest[];
 
   public constructor(
     protected dialog: MatDialog,
@@ -31,6 +33,7 @@ export class EndorsementRequestsReceivedPage implements OnInit {
     this.title = routeData.title;
     this.completed =
       routeData.endorsementRequestStatusCode === StatusCode.COMPLETED;
+    this.receivedEndorsementRequests = [];
   }
 
   public onBack(): void {
@@ -52,6 +55,12 @@ export class EndorsementRequestsReceivedPage implements OnInit {
       this.logger.error('No status code was provided');
       return this.navigateToRoot();
     }
+
+    this.resource
+      .getReceivedEndorsementRequests(partyId)
+      .subscribe((endorsementRequests: ReceivedEndorsementRequest[]) => {
+        this.receivedEndorsementRequests.push(...endorsementRequests);
+      });
   }
 
   protected afterSubmitIsSuccessful(): void {
