@@ -4,12 +4,12 @@ dependencies:
   version: 0.1.1
 - name: webapi
   repository: file://../webapi
-  version: 0.1.1
+  version: 0.1.2
 - name: plr-intake
   repository: file://../plr-intake
-  version: 0.1.1
+  version: 0.1.2
 - name: nginx
   repository: file://../nginx
   version: 9.7.3
-digest: sha256:028b6e8714983d04f62ead270133ea1f6ae4c692f25b6b3dff8d9b907f29dada
-generated: "2022-02-24T12:15:27.541989-08:00"
+digest: sha256:52ee19cd15f4ab78268dc5af0b9ee590f97562bd904a68e9517754112bf49e5e
+generated: "2022-06-16T09:37:14.504556006-07:00"
