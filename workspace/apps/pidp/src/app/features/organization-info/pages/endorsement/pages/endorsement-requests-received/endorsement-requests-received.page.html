@@ -33,7 +33,7 @@
               class="decline"
               mat-stroked-button
               type="button"
-              (click)="onFakeIt()">
+              (click)="onAdjudicate(receivedEndorsementRequest.id,false)">
               Decline
             </button>
           </span>
@@ -43,7 +43,7 @@
                 class="accept"
                 mat-stroked-button
                 type="button"
-                (click)="onBack()">
+                (click)="onAdjudicate(receivedEndorsementRequest.id,true)">
                 Approve
               </button>
             </span>

@@ -39,8 +39,17 @@ export class EndorsementRequestsReceivedPage implements OnInit {
   public onBack(): void {
     this.navigateToRoot();
   }
-  public onFakeIt(): void {
-    console.log('Fakin it');
+
+  public onAdjudicate(requestId: number, approved: boolean): void {
+    this.resource
+      .adjudicateEndorsementRequest(
+        this.partyService.partyId,
+        requestId,
+        approved
+      )
+      .subscribe(() => {
+        // TODO: Reload the list?
+      });
   }
 
   public ngOnInit(): void {
