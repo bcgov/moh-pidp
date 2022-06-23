@@ -58,7 +58,7 @@
           <p>This team member has been approved</p>
         </div>
         <div
-          *ngIf="!receivedEndorsementRequest.approved"
+          *ngIf="receivedEndorsementRequest.approved === false"
           class="decline"
           uiCardContent>
           <ui-icon type="outlined">dangerous</ui-icon>
