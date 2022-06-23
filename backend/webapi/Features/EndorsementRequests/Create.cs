@@ -65,7 +65,6 @@ public class Create
 
         private async Task SendEndorsementRequestEmailAsync(string recipientEmail, Guid token)
         {
-            // TODO FE url environent variable
             string url = this.frontendUrl.SetQueryParam("endorsement-token", token);
             var link = $"<a href=\"{url}\" target=\"_blank\" rel=\"noopener noreferrer\">this link</a>";
             var email = new Email(
