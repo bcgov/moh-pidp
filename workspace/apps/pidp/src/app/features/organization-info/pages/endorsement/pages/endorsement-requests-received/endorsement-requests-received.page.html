@@ -4,13 +4,12 @@
   <ui-page-section>
     <p>This is a list of your care team members, here you can:</p>
     <ol>
-      <li>Approve or decline team members</li>
-      <li>Remove team members</li>
-      <li>Add team members</li>
+      <li>Approve or decline requests to join your team</li>
+      <li>View team members</li>
     </ol>
   </ui-page-section>
 
-  <ui-card [heading]="'Team member'">
+  <ui-card icon="person_pin" [heading]="'Team member'">
     <ng-container uiCardContent>
       <p>Job Title here</p>
     </ng-container>
@@ -38,12 +37,16 @@
     </div>
   </ui-card>
 
-  <ui-card-summary [heading]="'Team member'">
-    <ng-container uiCardSummaryHint>Date user was approved</ng-container>
-    <ng-container uiCardSummaryContent>
+  <ui-card icon="person_pin" [heading]="'Team member'">
+    <ng-container uiCardHint>Date user was approved</ng-container>
+    <ng-container uiCardContent>
       <p>Job title</p>
     </ng-container>
-  </ui-card-summary>
+    <div class="approved" uiCardContent>
+      <ui-icon type="outlined">check_circle</ui-icon>
+      <p>This team member has been approved</p>
+    </div>
+  </ui-card>
 
   <ui-page-footer>
     <button

@@ -14,3 +14,12 @@
   color: palette.theme-palette(red);
   border-color: palette.theme-palette(red);
 }
+
+.approved {
+  display: flex;
+  color: palette.theme-palette(green);
+}
+
+.mat-icon.mat-primary {
+  color: palette.theme-palette(green);
+}
