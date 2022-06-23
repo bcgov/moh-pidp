@@ -36,16 +36,21 @@ export class EndorsementPortalSection implements IPortalSection {
    * Get the properties that define the action on the section.
    */
   public get action(): PortalSectionAction {
-    const demographicsStatusCode =
-      this.profileStatus.status.demographics.statusCode;
-    // const collegeCertStatusCode =
-    //   this.profileStatus.status.collegeCertification.statusCode;
+    // TODO: soon this will no longer be true because OBOs will bbe selecting "No College Licence" rather than not filling out the card.
+    const isRegulated =
+      this.profileStatus.status.collegeCertification.statusCode ===
+      StatusCode.COMPLETED;
     return {
-      label: this.getStatusCode() === StatusCode.COMPLETED ? 'View' : 'Request',
+      label: isRegulated ? 'View' : 'Request',
       route: OrganizationInfoRoutes.routePath(
-        OrganizationInfoRoutes.ENDORSEMENT_REQUEST
+        isRegulated
+          ? OrganizationInfoRoutes.ENDORSMENT_REQUESTS_RECEIVED
+          : OrganizationInfoRoutes.ENDORSEMENT_REQUEST
       ),
-      disabled: !(demographicsStatusCode === StatusCode.COMPLETED),
+      disabled: !(
+        this.profileStatus.status.demographics.statusCode ===
+        StatusCode.COMPLETED
+      ),
     };
   }
 
