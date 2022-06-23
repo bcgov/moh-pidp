@@ -17,6 +17,7 @@ export class EndorsementPortalSection implements IPortalSection {
   public readonly key: PortalSectionKey;
   public heading: string;
   public description: string;
+  private isRegulated: boolean;
 
   public constructor(
     private profileStatus: ProfileStatus,
@@ -24,7 +25,13 @@ export class EndorsementPortalSection implements IPortalSection {
   ) {
     this.key = 'endorsement';
     this.heading = 'Endorsement';
-    this.description = `Request endorsement from the licenced practitioners you work with to gain access to systems.`;
+    // TODO: soon this will no longer be true because OBOs will be selecting "No College Licence" rather than not filling out the card.
+    this.isRegulated =
+      this.profileStatus.status.collegeCertification.statusCode ===
+      StatusCode.COMPLETED;
+    this.description = this.isRegulated
+      ? 'View and make changes to you care team'
+      : 'Request endorsement from the licenced practitioners you work with to gain access to systems.';
   }
 
   public get hint(): string {
@@ -36,14 +43,10 @@ export class EndorsementPortalSection implements IPortalSection {
    * Get the properties that define the action on the section.
    */
   public get action(): PortalSectionAction {
-    // TODO: soon this will no longer be true because OBOs will bbe selecting "No College Licence" rather than not filling out the card.
-    const isRegulated =
-      this.profileStatus.status.collegeCertification.statusCode ===
-      StatusCode.COMPLETED;
     return {
-      label: isRegulated ? 'View' : 'Request',
+      label: this.isRegulated ? 'View' : 'Request',
       route: OrganizationInfoRoutes.routePath(
-        isRegulated
+        this.isRegulated
           ? OrganizationInfoRoutes.ENDORSMENT_REQUESTS_RECEIVED
           : OrganizationInfoRoutes.ENDORSEMENT_REQUEST
       ),
