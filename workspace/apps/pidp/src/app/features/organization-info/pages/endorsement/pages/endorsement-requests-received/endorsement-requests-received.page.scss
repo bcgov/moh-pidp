@@ -21,6 +21,7 @@
   color: palette.theme-palette(green);
 }
 
-.mat-icon.mat-primary {
-  color: palette.theme-palette(green);
+div.approved mat-icon,
+div.decline mat-icon {
+  margin-right: 5px;
 }

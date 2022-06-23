@@ -54,14 +54,14 @@
           *ngIf="receivedEndorsementRequest.approved"
           class="approved"
           uiCardContent>
-          <ui-icon type="outlined">check_circle</ui-icon>
+          <mat-icon>check_circle_outline</mat-icon>
           <p>This team member has been approved</p>
         </div>
         <div
           *ngIf="receivedEndorsementRequest.approved === false"
           class="decline"
           uiCardContent>
-          <ui-icon type="outlined">dangerous</ui-icon>
+          <mat-icon>error_outline</mat-icon>
           <p>This team member has been declined</p>
         </div>
       </ui-card>
