@@ -44,7 +44,7 @@ public class Create
         {
             this.emailService = emailService;
             this.context = context;
-            this.frontendUrl = config.FrontendUrl;
+            this.frontendUrl = config.ApplicationUrl;
         }
 
         public async Task HandleAsync(Command command)
