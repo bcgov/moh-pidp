@@ -25,7 +25,7 @@ export class EndorsementPortalSection implements IPortalSection {
   ) {
     this.key = 'endorsement';
     this.heading = 'Endorsement';
-    // TODO: soon this will no longer be true because OBOs will bbe selecting "No College Licence" rather than not filling out the card.
+    // TODO: soon this will no longer be true because OBOs will be selecting "No College Licence" rather than not filling out the card.
     this.isRegulated =
       this.profileStatus.status.collegeCertification.statusCode ===
       StatusCode.COMPLETED;
