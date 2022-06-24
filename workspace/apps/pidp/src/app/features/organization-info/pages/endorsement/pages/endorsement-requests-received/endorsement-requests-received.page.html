@@ -28,25 +28,21 @@
           *ngIf="!receivedEndorsementRequest.adjudicatedOn"
           class="actions"
           uiCardActions>
-          <span>
+          <button
+            class="decline"
+            mat-stroked-button
+            type="button"
+            (click)="onAdjudicate(receivedEndorsementRequest.id,false)">
+            Decline
+          </button>
+          <ng-container uiCardActions>
             <button
-              class="decline"
+              class="accept"
               mat-stroked-button
               type="button"
-              (click)="onAdjudicate(receivedEndorsementRequest.id,false)">
-              Decline
+              (click)="onAdjudicate(receivedEndorsementRequest.id,true)">
+              Approve
             </button>
-          </span>
-          <ng-container uiCardActions>
-            <span>
-              <button
-                class="accept"
-                mat-stroked-button
-                type="button"
-                (click)="onAdjudicate(receivedEndorsementRequest.id,true)">
-                Approve
-              </button>
-            </span>
           </ng-container>
         </div>
 
