@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 
+import { Observable, switchMap } from 'rxjs';
+
 import { PartyService } from '@app/core/party/party.service';
 import { FormUtilsService } from '@app/core/services/form-utils.service';
 import { LoggerService } from '@app/core/services/logger.service';
@@ -18,7 +20,9 @@ import { EndorsementRequestsReceivedResource } from './endorsement-requests-rece
 export class EndorsementRequestsReceivedPage implements OnInit {
   public title: string;
   public completed: boolean | null;
-  public receivedEndorsementRequests: ReceivedEndorsementRequest[];
+  public receivedEndorsementRequests$!: Observable<
+    ReceivedEndorsementRequest[]
+  >;
 
   public constructor(
     protected dialog: MatDialog,
@@ -33,7 +37,6 @@ export class EndorsementRequestsReceivedPage implements OnInit {
     this.title = routeData.title;
     this.completed =
       routeData.endorsementRequestStatusCode === StatusCode.COMPLETED;
-    this.receivedEndorsementRequests = [];
   }
 
   public onBack(): void {
@@ -41,15 +44,19 @@ export class EndorsementRequestsReceivedPage implements OnInit {
   }
 
   public onAdjudicate(requestId: number, approved: boolean): void {
-    this.resource
+    this.receivedEndorsementRequests$ = this.resource
       .adjudicateEndorsementRequest(
         this.partyService.partyId,
         requestId,
         approved
       )
-      .subscribe(() => {
-        // TODO: Reload the list?
-      });
+      .pipe(
+        switchMap(() =>
+          this.resource.getReceivedEndorsementRequests(
+            this.partyService.partyId
+          )
+        )
+      );
   }
 
   public ngOnInit(): void {
@@ -65,11 +72,8 @@ export class EndorsementRequestsReceivedPage implements OnInit {
       return this.navigateToRoot();
     }
 
-    this.resource
-      .getReceivedEndorsementRequests(partyId)
-      .subscribe((endorsementRequests: ReceivedEndorsementRequest[]) => {
-        this.receivedEndorsementRequests.push(...endorsementRequests);
-      });
+    this.receivedEndorsementRequests$ =
+      this.resource.getReceivedEndorsementRequests(partyId);
   }
 
   protected afterSubmitIsSuccessful(): void {
