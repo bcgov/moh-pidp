@@ -47,7 +47,7 @@ export class EndorsementPortalSection implements IPortalSection {
       label: this.isRegulated ? 'View' : 'Request',
       route: OrganizationInfoRoutes.routePath(
         this.isRegulated
-          ? OrganizationInfoRoutes.ENDORSMENT_REQUESTS_RECEIVED
+          ? OrganizationInfoRoutes.ENDORSEMENT_REQUESTS_RECEIVED
           : OrganizationInfoRoutes.ENDORSEMENT_REQUEST
       ),
       disabled: !(

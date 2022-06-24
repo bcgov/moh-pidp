@@ -38,7 +38,7 @@ const routes: Routes = [
       ).then((m) => m.EndorsementRequestModule),
   },
   {
-    path: OrganizationInfoRoutes.ENDORSMENT_REQUESTS_RECEIVED,
+    path: OrganizationInfoRoutes.ENDORSEMENT_REQUESTS_RECEIVED,
     loadChildren: (): Promise<EndorsementRequestsReceivedModule> =>
       import(
         './pages/endorsement/pages/endorsement-requests-received/endorsement-requests-received.module'
