@@ -1,0 +1,47 @@
+<ui-page [form]="formState.form" (submitted)="onSubmit()">
+  <ui-page-header icon="assignment">{{ title }}</ui-page-header>
+
+  <ui-page-section>
+    <ui-page-subheader>Licenced Practitioner Email</ui-page-subheader>
+    <p>
+      Enter the licenced practitioner's email here. The system will notify them
+      that you have requested their endorsement. Once they have endorsed you,
+      come back to the Provider Identity Portal and complete your enrolment(s).
+    </p>
+
+    <br />
+
+    <ng-container [formGroup]="formState.form">
+      <mat-form-field class="w-100">
+        <input matInput placeholder="Email" formControlName="recipientEmail" />
+        <mat-error>Required</mat-error>
+      </mat-form-field>
+    </ng-container>
+
+    <ui-page-subheader>Job title</ui-page-subheader>
+    <p>Enter your job title.</p>
+
+    <br />
+    <ng-container [formGroup]="formState.form">
+      <mat-form-field class="w-100">
+        <input matInput placeholder="Job Title" formControlName="jobTitle" />
+        <mat-error>Required</mat-error>
+      </mat-form-field>
+    </ng-container>
+  </ui-page-section>
+
+  <ui-page-footer>
+    <button
+      mat-stroked-button
+      uiPageFooterAction
+      type="button"
+      color="primary"
+      (click)="onBack()">
+      Back Home
+    </button>
+
+    <button mat-flat-button uiPageFooterAction type="submit" color="primary">
+      Save Information
+    </button>
+  </ui-page-footer>
+</ui-page>
