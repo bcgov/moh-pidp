@@ -73,6 +73,11 @@ spec:
               {{- end }}
             - name: ConnectionStrings__PidpDatabase
               value: "Host=$(DB_HOST);Port=5432;Database=$(POSTGRESQL_DATABASE);Username=$(POSTGRESQL_USER);Password=$(POSTGRESQL_PASSWORD)"
+            {{- if and .Values.ApplicationUrl }}
+            - name: ApplicationUrl
+              value: {{ .Values.ApplicationUrl }}
+            {{- end}}
+          envFrom:
           envFrom:
             - secretRef:
                 name: keycloak-secrets

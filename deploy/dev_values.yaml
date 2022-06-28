@@ -28,6 +28,7 @@ frontend:
 
 webapi:
   replicaCount: 1
+  ApplicationUrl: https://dev.healthprovideridentityportal.gov.bc.ca
 
 plr-intake:
   replicaCount: 1

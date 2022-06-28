@@ -28,6 +28,7 @@ frontend:
 
 webapi:
   replicaCount: 3
+  ApplicationUrl: https://common-logon-test.hlth.gov.bc.ca/auth
 
 plr-intake:
   replicaCount: 2
