@@ -11,6 +11,7 @@ import { HcimEnrolmentModule } from './pages/hcim-enrolment/hcim-enrolment.modul
 import { PharmanetModule } from './pages/pharmanet/pharmanet.module';
 import { SaEformsModule } from './pages/sa-eforms/sa-eforms.module';
 import { SitePrivacySecurityChecklistModule } from './pages/site-privacy-security-checklist/site-privacy-security-checklist.module';
+import { UciModule } from './pages/uci/uci.module';
 
 const routes: Routes = [
   {
@@ -70,6 +71,14 @@ const routes: Routes = [
       import('./pages/driver-fitness/driver-fitness.module').then(
         (m) => m.DriverFitnessModule
       ),
+  },
+  {
+    path: AccessRoutes.UCI,
+    data: {
+      roles: [Role.FEATURE_PIDP_DEMO],
+    },
+    loadChildren: (): Promise<UciModule> =>
+      import('./pages/uci/uci.module').then((m) => m.UciModule),
   },
 ];
 
