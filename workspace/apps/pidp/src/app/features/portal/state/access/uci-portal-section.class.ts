@@ -68,6 +68,7 @@ export class UciPortalSection implements IPortalSection {
   }
 
   private getStatusCode(): StatusCode {
+    // TODO remove null check once API exists
     return this.profileStatus.status.uci?.statusCode;
   }
 }
