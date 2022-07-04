@@ -31,7 +31,7 @@ export class UciPage implements OnInit {
   ) {
     const routeData = this.route.snapshot.data;
     this.title = routeData.title;
-    this.collectionNotice = documentService.getSAeFormsCollectionNotice();
+    this.collectionNotice = documentService.getUciCollectionNotice();
     this.completed = routeData.uciStatusCode === StatusCode.COMPLETED;
     this.accessRequestFailed = false;
     this.uciUrl = uciUrl;

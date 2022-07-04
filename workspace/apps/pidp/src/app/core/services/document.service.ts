@@ -8,6 +8,7 @@ export enum DocumentType {
   SA_EFORMS_COLLECTION_NOTICE = 'sa-eforms-collection-notice',
   DRIVER_FITNESS_COLLECTION_NOTICE = 'driver-fitness-collection-notice',
   USER_ACCESS_AGREEMENT = 'user-access-agreement',
+  UCI_COLLECTION_NOTICE = 'uci-collection-notice',
 }
 
 export interface IDocumentMetaData {
@@ -45,6 +46,10 @@ export class DocumentService {
         type: DocumentType.USER_ACCESS_AGREEMENT,
         title: 'Access Harmonization User Access Agreement',
       },
+      {
+        type: DocumentType.UCI_COLLECTION_NOTICE,
+        title: 'UCI Collection Notice',
+      },
     ];
   }
 
@@ -73,6 +78,11 @@ export class DocumentService {
         return {
           ...this.getDocumentMetaData(documentType),
           content: UserAccessAgreementDocumentComponent,
+        };
+      case DocumentType.UCI_COLLECTION_NOTICE:
+        return {
+          ...this.getDocumentMetaData(documentType),
+          content: this.getUciCollectionNotice(),
         };
       default:
         throw new Error('Document type does not exist');
@@ -106,6 +116,16 @@ export class DocumentService {
       consectetur adipisicing elit. Velit quaerat, beatae libero, ullam consequuntur laudantium aliquid voluptatum
       fugit pariatur dolore repudiandae ad fuga sed, ducimus voluptates quisquam quasi perferendis possimus, contact
       <a href="mailto:${this.config.emails.driverFitnessSupport}">${this.config.emails.driverFitnessSupport}</a>.
+    `;
+  }
+
+  public getUciCollectionNotice(): string {
+    //TODO replace Lorem Ipsum
+    return `
+      Strip steak shoulder drumstick andouille cupim turkey. Tongue ball tip tail, pork loin kevin bresaola ham
+      meatball boudin beef alcatra shoulder pastrami flank. Sirloin rump cow, meatloaf tenderloin filet mignon
+      landjaeger meatball. Meatball capicola sirloin venison ball tip, picanha flank chuck ground round strip
+      steak pancetta turducken pastrami rump jerky.
     `;
   }
 

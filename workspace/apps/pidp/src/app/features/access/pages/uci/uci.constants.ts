@@ -1,2 +1,3 @@
+// TODO replace with real link
 export const uciUrl =
-  'https://designshack.net/wp-content/uploads/placehold.jpg';
+  'https://knowyourmeme.com/memes/these-are-not-the-droids-you-are-looking-for';

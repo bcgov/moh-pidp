@@ -74,6 +74,7 @@ const routes: Routes = [
   },
   {
     path: AccessRoutes.UCI,
+    canActivate: [PermissionsGuard],
     data: {
       roles: [Role.FEATURE_PIDP_DEMO],
     },
