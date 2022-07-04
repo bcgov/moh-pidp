@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
+import { catchError, noop, of, tap } from 'rxjs';
+
 import { PartyService } from '@app/core/party/party.service';
 import { DocumentService } from '@app/core/services/document.service';
 import { LoggerService } from '@app/core/services/logger.service';
@@ -39,6 +41,19 @@ export class UciPage implements OnInit {
 
   public onBack(): void {
     this.navigateToRoot();
+  }
+
+  public onRequestAccess(): void {
+    this.resource
+      .requestAccess(this.partyService.partyId)
+      .pipe(
+        tap(() => (this.completed = true)),
+        catchError(() => {
+          this.accessRequestFailed = true;
+          return of(noop());
+        })
+      )
+      .subscribe();
   }
 
   public ngOnInit(): void {

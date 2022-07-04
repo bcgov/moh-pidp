@@ -1,17 +1,6 @@
 <ui-page>
   <ui-page-header>{{ title }}</ui-page-header>
 
-  <ui-alert
-    *ngIf="accessRequestFailed"
-    type="danger"
-    icon="error_outline"
-    iconType="outlined"
-    heading="Error Requesting Access">
-    <ng-container uiAlertContent>
-      <p>Sorry try again</p>
-    </ng-container>
-  </ui-alert>
-
   <ui-page-section>
     <ui-page-section-subheader icon="assignment" heading="UCI">
       <ng-container uiPageSectionSubheaderDesc>
@@ -28,6 +17,7 @@
       heading="You have access to UCI">
       <ng-container uiAlertContent>
         <p>
+          <!-- TODO replace Lorum ipsum -->
           Bacon ipsum dolor amet meatball ground round buffalo boudin, salami
           cupim shoulder bresaola ball tip strip steak. Beef ribs meatloaf short
           ribs sausage salami meatball. Ribeye landjaeger sirloin venison. Pork
@@ -61,6 +51,16 @@
       color="primary"
       (click)="onBack()">
       {{ completed ? 'Back Home' : 'Cancel Back Home' }}
+    </button>
+
+    <button
+      *ngIf="!completed"
+      mat-flat-button
+      uiPageFooterAction
+      type="button"
+      color="primary"
+      (click)="onRequestAccess()">
+      Next
     </button>
   </ui-page-footer>
 </ui-page>
