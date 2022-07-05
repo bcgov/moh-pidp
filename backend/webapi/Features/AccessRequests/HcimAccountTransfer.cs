@@ -149,7 +149,7 @@ public class HcimAccountTransfer
             var email = new Email(
                 from: EmailService.PidpEmail,
                 to: partyEmail,
-                subject: "HCIM Re-Enrolment Confirmation",
+                subject: "HCIMWeb Account Transfer Confirmation",
                 body: $"You have successfully transferred your HCIMWeb Account. From now on, use {link} to login to HCIMWeb with your organization credential. You may wish to bookmark this link for future use."
             );
 

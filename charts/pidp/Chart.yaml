@@ -31,10 +31,10 @@ dependencies:
     version: "0.1.1"
   - name: webapi
     repository: "file://../webapi"
-    version: "0.1.1"
+    version: "0.1.2"
   - name: plr-intake
     repository: "file://../plr-intake"
-    version: "0.1.1"
+    version: "0.1.2"
   - name: nginx
     repository: "file://../nginx"
     version: "9.7.3"
