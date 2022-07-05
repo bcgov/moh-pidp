@@ -74,7 +74,7 @@ public class SAEforms
                 return DomainResult.Failed();
             }
 
-            if (!await this.keycloakClient.AssignClientRole(dto.UserId, Resources.SAEforms, Roles.SAEforms))
+            if (!await this.keycloakClient.AssignClientRole(dto.UserId, Clients.SAEforms, Roles.SAEforms))
             {
                 return DomainResult.Failed();
             }
