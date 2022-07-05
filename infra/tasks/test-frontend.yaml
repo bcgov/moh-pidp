@@ -1,0 +1,101 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: test-frontend
+  labels:
+    app.kubernetes.io/version: "0.1"
+  annotations:
+    tekton.dev/pipelines.minVersion: "0.17.0"
+    tekton.dev/categories: Build Tools
+    tekton.dev/tags: build-tool
+    tekton.dev/platforms: "linux/amd64,linux/s390x,linux/ppc64le"
+spec:
+  description: >-
+    This task can be used to run npm/yarn goals on a project.
+
+    This task can be used to run npm/yarn goals on a project
+    where package.json is present and has some pre-defined
+    npm/yarn scripts.
+  workspaces:
+    - name: source
+  params:
+    - name: PATH_CONTEXT
+      type: string
+      default: "."
+      description: The path where package.json of the project is defined.
+    - name: IMAGE
+      type: string
+      default: "public.ecr.aws/bitnami/node:16-prod"
+      description: The node image you want to use.
+    - name: SONAR_LOGIN_KEY_SECRET
+      type: string
+      default: "sonarqube-login"
+    - name: SONAR_LOGIN_KEY_SECRET_KEY
+      type: string
+      default: "login"
+      description: Sonarqube login key secret
+    - name: SONAR_LINKS_SCM
+      type: string
+      default: "https://github.com/bcgov/moh-pidp"
+      description: Sonarqube scm link
+    - name: SONAR_PROJECTBASEDIR
+      type: string
+      default: "moh-pidp/workspace"
+      description: Sonarqube project base directory
+    - name: SONAR_PROJECTVERSION
+      type: string
+      default: "develop"
+      description: Sonarqube project version
+    - name: SONAR_BUILDSTRING
+      type: string
+      default: "."
+      description: Sonarqube build string
+    - name: SONAR_QUALITYGATE_WAIT
+      type: string
+      default: "true"
+      description: Sonarqube guality-gate wait
+  steps:
+    - name: testci-application
+      image: $(params.IMAGE)
+      command:
+        - "yarn"
+      args:
+        - test:ci
+      workingDir: $(workspaces.source.path)/$(params.PATH_CONTEXT)
+      resources:
+        requests:
+          memory: 250Mi
+          cpu: 200m
+        limits:
+          memory: 4Gi
+          cpu: 1
+    - name: run-sonarqube
+      image: $(params.IMAGE)
+      command:
+        - "yarn"
+      args:
+        - sonar
+      env:
+        - name: SONAR_PROJECTBASEDIR
+          value: ${params.SONAR_PROJECTBASEDIR}
+        - name: SONAR_PROJECTVERSION
+          value: ${params.SONAR_PROJECTVERSION}
+        - name: SONAR_LINKS_SCM
+          value: ${params.SONAR_LINKS_SCM}
+        - name: SONAR_BUILDSTRING
+          value: ${params.SONAR_BUILDSTRING}
+        - name: SONAR_QUALITYGATE_WAIT
+          value: ${params.SONAR_QUALITYGATE_WAIT}
+        - name: SONAR_LOGIN
+          valueFrom:
+            secretKeyRef:
+              name: $(params.SONAR_LOGIN_KEY_SECRET)
+              key: ${params.SONAR_LOGIN_KEY_SECRET_KEY}
+      workingDir: $(workspaces.source.path)/$(params.PATH_CONTEXT)
+      resources:
+        requests:
+          memory: 250Mi
+          cpu: 200m
+        limits:
+          memory: 4Gi
+          cpu: 1

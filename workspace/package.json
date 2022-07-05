@@ -6,9 +6,10 @@
     "start": "nx serve",
     "build": "nx build",
     "test": "nx test",
-    "test:ci": "nx test --ci --reporters=default --reporters=jest-Junit",
+    "test:ci": "nx test --ci --reporters=default --reporters=jest-sonar --reporters=jest-junit --coverage --coverage-reporters=lcov",
     "analyze": "nx build pidp --stats-json && webpack-bundle-analyzer dist/apps/pidp/stats.json",
-    "postinstall": "ngcc --properties es2015 browser module main"
+    "postinstall": "ngcc --properties es2015 browser module main",
+    "sonar": "sonar-scanner -Dsonar.login=${SONAR_LOGIN} -Dsonar.scm.provider=git -Dsonar.links.scm=${SONAR_LINKS_SCM} -Dsonar.projectBaseDir=${SONAR_PROJECTBASEDIR} -Dsonar.qualitygate.wait=${SONAR_QUALITYGATE_WAIT} -Dsonar.projectVersion=${SONAR_PROJECTVERSION} -Dsonar.buildString=${SONAR_BUILDSTRING}"
   },
   "private": true,
   "dependencies": {
@@ -67,8 +68,10 @@
     "jest-auto-spies": "^1.6.9",
     "jest-junit": "^13.0.0",
     "jest-preset-angular": "11.0.0",
+    "jest-sonar": "^0.2.12",
     "prettier": "^2.3.1",
     "prettier-plugin-organize-attributes": "^0.0.4",
+    "sonarqube-scanner": "^2.8.1",
     "ts-jest": "27.0.5",
     "typescript": "~4.4.3",
     "webpack-bundle-analyzer": "^4.5.0"

@@ -1,0 +1,798 @@
+kind: Pod
+apiVersion: v1
+metadata:
+  annotations:
+    openshift.io/scc: pipelines-scc
+    pipeline.tekton.dev/release: v0.24.3
+    kubernetes.io/limit-ranger: >-
+      LimitRanger plugin set: cpu, memory request for init container
+      working-dir-initializer; cpu, memory limit for init container
+      working-dir-initializer; cpu, memory request for init container
+      place-tools; cpu, memory limit for init container place-tools
+    tekton.dev/tags: build-tool
+    tekton.dev/categories: Build Tools
+    kubectl.kubernetes.io/last-applied-configuration: >
+      {"apiVersion":"tekton.dev/v1beta1","kind":"Task","metadata":{"annotations":{"tekton.dev/categories":"Build
+      Tools","tekton.dev/pipelines.minVersion":"0.17.0","tekton.dev/platforms":"linux/amd64,linux/s390x,linux/ppc64le","tekton.dev/tags":"build-tool"},"labels":{"app.kubernetes.io/version":"0.1"},"name":"build-frontend","namespace":"d8a8f9-tools"},"spec":{"description":"This
+      task can be used to run npm/yarn goals on a project.\nThis task can be
+      used to run npm/yarn goals on a project where package.json is present and
+      has some pre-defined npm/yarn
+      scripts.","params":[{"default":".","description":"The path where
+      package.json of the project is
+      defined.","name":"PATH_CONTEXT","type":"string"},{"default":"public.ecr.aws/bitnami/node:16-prod","description":"The
+      node image you want to
+      use.","name":"IMAGE","type":"string"}],"steps":[{"command":["yarn"],"image":"$(params.IMAGE)","name":"install-dependencies","resources":{"limits":{"cpu":1,"memory":"4Gi"},"requests":{"cpu":"200m","memory":"250Mi"}},"workingDir":"$(workspaces.source.path)/$(params.PATH_CONTEXT)"},{"args":["build"],"command":["yarn"],"image":"$(params.IMAGE)","name":"build-application","resources":{"limits":{"cpu":1,"memory":"4Gi"},"requests":{"cpu":"200m","memory":"250Mi"}},"workingDir":"$(workspaces.source.path)/$(params.PATH_CONTEXT)"}],"workspaces":[{"name":"source"}]}}
+    tekton.dev/platforms: 'linux/amd64,linux/s390x,linux/ppc64le'
+    tekton.dev/pipelines.minVersion: 0.17.0
+    tekton.dev/ready: READY
+    k8s.v1.cni.cncf.io/network-status: |-
+      [{
+          "name": "openshift-sdn",
+          "interface": "eth0",
+          "ips": [
+              "10.97.88.53"
+          ],
+          "default": true,
+          "dns": {}
+      }]
+    k8s.v1.cni.cncf.io/networks-status: |-
+      [{
+          "name": "openshift-sdn",
+          "interface": "eth0",
+          "ips": [
+              "10.97.88.53"
+          ],
+          "default": true,
+          "dns": {}
+      }]
+  resourceVersion: '3653681044'
+  name: cicd-pipeline-run-dev-38a038c-sbc5x-build-frontend-dzbp7--jngtt
+  uid: d3166712-0e25-4e0c-8d81-46c1623d64eb
+  creationTimestamp: '2022-06-02T02:35:47Z'
+  managedFields:
+    - manager: multus
+      operation: Update
+      apiVersion: v1
+      time: '2022-06-02T02:35:58Z'
+      fieldsType: FieldsV1
+      fieldsV1:
+        'f:metadata':
+          'f:annotations':
+            'f:k8s.v1.cni.cncf.io/network-status': {}
+            'f:k8s.v1.cni.cncf.io/networks-status': {}
+    - manager: openshift-pipelines-controller
+      operation: Update
+      apiVersion: v1
+      time: '2022-06-02T02:36:26Z'
+      fieldsType: FieldsV1
+      fieldsV1:
+        'f:metadata':
+          'f:annotations':
+            .: {}
+            'f:kubectl.kubernetes.io/last-applied-configuration': {}
+            'f:pipeline.tekton.dev/release': {}
+            'f:tekton.dev/categories': {}
+            'f:tekton.dev/pipelines.minVersion': {}
+            'f:tekton.dev/platforms': {}
+            'f:tekton.dev/ready': {}
+            'f:tekton.dev/tags': {}
+          'f:labels':
+            'f:tekton.dev/task': {}
+            'f:tekton.dev/pipelineTask': {}
+            'f:app.kubernetes.io/managed-by': {}
+            'f:triggers.tekton.dev/trigger': {}
+            'f:tekton.dev/taskRun': {}
+            .: {}
+            'f:tekton.dev/pipelineRun': {}
+            'f:triggers.tekton.dev/triggers-eventid': {}
+            'f:app.kubernetes.io/version': {}
+            'f:tekton.dev/pipeline': {}
+            'f:triggers.tekton.dev/eventlistener': {}
+          'f:ownerReferences':
+            .: {}
+            'k:{"uid":"5a8077ee-e387-4cd8-b519-1ed7d90766e8"}':
+              .: {}
+              'f:apiVersion': {}
+              'f:blockOwnerDeletion': {}
+              'f:controller': {}
+              'f:kind': {}
+              'f:name': {}
+              'f:uid': {}
+        'f:spec':
+          'f:volumes':
+            'k:{"name":"tekton-creds-init-home-0"}':
+              .: {}
+              'f:emptyDir':
+                .: {}
+                'f:medium': {}
+              'f:name': {}
+            'k:{"name":"tekton-creds-init-home-1"}':
+              .: {}
+              'f:emptyDir':
+                .: {}
+                'f:medium': {}
+              'f:name': {}
+            'k:{"name":"tekton-internal-workspace"}':
+              .: {}
+              'f:emptyDir': {}
+              'f:name': {}
+            'k:{"name":"tekton-internal-results"}':
+              .: {}
+              'f:emptyDir': {}
+              'f:name': {}
+            'k:{"name":"ws-gt6sc"}':
+              .: {}
+              'f:name': {}
+              'f:persistentVolumeClaim':
+                .: {}
+                'f:claimName': {}
+            .: {}
+            'k:{"name":"tekton-internal-secret-volume-pipeline-dockercfg-w5mgt-6fkr7"}':
+              .: {}
+              'f:name': {}
+              'f:secret':
+                .: {}
+                'f:defaultMode': {}
+                'f:secretName': {}
+            'k:{"name":"tekton-internal-tools"}':
+              .: {}
+              'f:emptyDir': {}
+              'f:name': {}
+            'k:{"name":"tekton-internal-secret-volume-moh-pidp-github-secret-9k4dt"}':
+              .: {}
+              'f:name': {}
+              'f:secret':
+                .: {}
+                'f:defaultMode': {}
+                'f:secretName': {}
+            'k:{"name":"tekton-internal-downward"}':
+              .: {}
+              'f:downwardAPI':
+                .: {}
+                'f:defaultMode': {}
+                'f:items': {}
+              'f:name': {}
+            'k:{"name":"tekton-internal-home"}':
+              .: {}
+              'f:emptyDir': {}
+              'f:name': {}
+          'f:containers':
+            'k:{"name":"step-build-application"}':
+              'f:image': {}
+              'f:volumeMounts':
+                'k:{"mountPath":"/tekton/creds-secrets/pipeline-dockercfg-w5mgt"}':
+                  .: {}
+                  'f:mountPath': {}
+                  'f:name': {}
+                'k:{"mountPath":"/workspace"}':
+                  .: {}
+                  'f:mountPath': {}
+                  'f:name': {}
+                'k:{"mountPath":"/tekton/home"}':
+                  .: {}
+                  'f:mountPath': {}
+                  'f:name': {}
+                'k:{"mountPath":"/tekton/results"}':
+                  .: {}
+                  'f:mountPath': {}
+                  'f:name': {}
+                'k:{"mountPath":"/tekton/tools"}':
+                  .: {}
+                  'f:mountPath': {}
+                  'f:name': {}
+                .: {}
+                'k:{"mountPath":"/tekton/creds-secrets/moh-pidp-github-secret"}':
+                  .: {}
+                  'f:mountPath': {}
+                  'f:name': {}
+                'k:{"mountPath":"/tekton/creds"}':
+                  .: {}
+                  'f:mountPath': {}
+                  'f:name': {}
+                'k:{"mountPath":"/workspace/source"}':
+                  .: {}
+                  'f:mountPath': {}
+                  'f:name': {}
+              'f:terminationMessagePolicy': {}
+              .: {}
+              'f:workingDir': {}
+              'f:resources':
+                .: {}
+                'f:limits':
+                  .: {}
+                  'f:cpu': {}
+                  'f:memory': {}
+                'f:requests':
+                  .: {}
+                  'f:cpu': {}
+                  'f:ephemeral-storage': {}
+                  'f:memory': {}
+              'f:args': {}
+              'f:command': {}
+              'f:env':
+                .: {}
+                'k:{"name":"HOME"}':
+                  .: {}
+                  'f:name': {}
+                  'f:value': {}
+              'f:terminationMessagePath': {}
+              'f:imagePullPolicy': {}
+              'f:name': {}
+            'k:{"name":"step-install-dependencies"}':
+              'f:image': {}
+              'f:volumeMounts':
+                'k:{"mountPath":"/tekton/creds-secrets/pipeline-dockercfg-w5mgt"}':
+                  .: {}
+                  'f:mountPath': {}
+                  'f:name': {}
+                'k:{"mountPath":"/tekton/downward"}':
+                  .: {}
+                  'f:mountPath': {}
+                  'f:name': {}
+                'k:{"mountPath":"/workspace"}':
+                  .: {}
+                  'f:mountPath': {}
+                  'f:name': {}
+                'k:{"mountPath":"/tekton/home"}':
+                  .: {}
+                  'f:mountPath': {}
+                  'f:name': {}
+                'k:{"mountPath":"/tekton/results"}':
+                  .: {}
+                  'f:mountPath': {}
+                  'f:name': {}
+                'k:{"mountPath":"/tekton/tools"}':
+                  .: {}
+                  'f:mountPath': {}
+                  'f:name': {}
+                .: {}
+                'k:{"mountPath":"/tekton/creds-secrets/moh-pidp-github-secret"}':
+                  .: {}
+                  'f:mountPath': {}
+                  'f:name': {}
+                'k:{"mountPath":"/tekton/creds"}':
+                  .: {}
+                  'f:mountPath': {}
+                  'f:name': {}
+                'k:{"mountPath":"/workspace/source"}':
+                  .: {}
+                  'f:mountPath': {}
+                  'f:name': {}
+              'f:terminationMessagePolicy': {}
+              .: {}
+              'f:workingDir': {}
+              'f:resources':
+                .: {}
+                'f:limits':
+                  .: {}
+                  'f:cpu': {}
+                  'f:memory': {}
+                'f:requests':
+                  .: {}
+                  'f:cpu': {}
+                  'f:ephemeral-storage': {}
+                  'f:memory': {}
+              'f:args': {}
+              'f:command': {}
+              'f:env':
+                .: {}
+                'k:{"name":"HOME"}':
+                  .: {}
+                  'f:name': {}
+                  'f:value': {}
+              'f:terminationMessagePath': {}
+              'f:imagePullPolicy': {}
+              'f:name': {}
+          'f:dnsPolicy': {}
+          'f:serviceAccount': {}
+          'f:restartPolicy': {}
+          'f:schedulerName': {}
+          'f:terminationGracePeriodSeconds': {}
+          'f:initContainers':
+            .: {}
+            'k:{"name":"place-tools"}':
+              'f:image': {}
+              'f:volumeMounts':
+                .: {}
+                'k:{"mountPath":"/tekton/tools"}':
+                  .: {}
+                  'f:mountPath': {}
+                  'f:name': {}
+              'f:terminationMessagePolicy': {}
+              .: {}
+              'f:workingDir': {}
+              'f:resources': {}
+              'f:command': {}
+              'f:terminationMessagePath': {}
+              'f:imagePullPolicy': {}
+              'f:name': {}
+            'k:{"name":"working-dir-initializer"}':
+              'f:image': {}
+              'f:volumeMounts':
+                .: {}
+                'k:{"mountPath":"/tekton/home"}':
+                  .: {}
+                  'f:mountPath': {}
+                  'f:name': {}
+                'k:{"mountPath":"/tekton/results"}':
+                  .: {}
+                  'f:mountPath': {}
+                  'f:name': {}
+                'k:{"mountPath":"/workspace"}':
+                  .: {}
+                  'f:mountPath': {}
+                  'f:name': {}
+              'f:terminationMessagePolicy': {}
+              .: {}
+              'f:workingDir': {}
+              'f:resources': {}
+              'f:args': {}
+              'f:command': {}
+              'f:terminationMessagePath': {}
+              'f:imagePullPolicy': {}
+              'f:name': {}
+          'f:serviceAccountName': {}
+          'f:enableServiceLinks': {}
+          'f:securityContext': {}
+    - manager: kubelet
+      operation: Update
+      apiVersion: v1
+      time: '2022-06-02T02:46:23Z'
+      fieldsType: FieldsV1
+      fieldsV1:
+        'f:status':
+          'f:conditions':
+            'k:{"type":"ContainersReady"}':
+              .: {}
+              'f:lastProbeTime': {}
+              'f:lastTransitionTime': {}
+              'f:reason': {}
+              'f:status': {}
+              'f:type': {}
+            'k:{"type":"Initialized"}':
+              .: {}
+              'f:lastProbeTime': {}
+              'f:lastTransitionTime': {}
+              'f:reason': {}
+              'f:status': {}
+              'f:type': {}
+            'k:{"type":"Ready"}':
+              .: {}
+              'f:lastProbeTime': {}
+              'f:lastTransitionTime': {}
+              'f:reason': {}
+              'f:status': {}
+              'f:type': {}
+          'f:containerStatuses': {}
+          'f:hostIP': {}
+          'f:initContainerStatuses': {}
+          'f:phase': {}
+          'f:podIP': {}
+          'f:podIPs':
+            .: {}
+            'k:{"ip":"10.97.88.53"}':
+              .: {}
+              'f:ip': {}
+          'f:startTime': {}
+  namespace: d8a8f9-tools
+  ownerReferences:
+    - apiVersion: tekton.dev/v1beta1
+      kind: TaskRun
+      name: cicd-pipeline-run-dev-38a038c-sbc5x-build-frontend-dzbp7
+      uid: 5a8077ee-e387-4cd8-b519-1ed7d90766e8
+      controller: true
+      blockOwnerDeletion: true
+  labels:
+    app.kubernetes.io/version: '0.1'
+    tekton.dev/pipeline: cicd-pipeline
+    triggers.tekton.dev/eventlistener: github-push
+    app.kubernetes.io/managed-by: tekton-pipelines
+    tekton.dev/task: build-frontend
+    tekton.dev/pipelineTask: build-frontend
+    tekton.dev/taskRun: cicd-pipeline-run-dev-38a038c-sbc5x-build-frontend-dzbp7
+    tekton.dev/pipelineRun: cicd-pipeline-run-dev-38a038c-sbc5x
+    triggers.tekton.dev/trigger: github-dev
+    triggers.tekton.dev/triggers-eventid: 80479dc4-6728-49d7-8244-fd52399574ce
+spec:
+  nodeSelector:
+    node-role.kubernetes.io/worker: ''
+  restartPolicy: Never
+  initContainers:
+    - resources:
+        limits:
+          cpu: 250m
+          memory: 1Gi
+        requests:
+          cpu: 50m
+          memory: 256Mi
+      terminationMessagePath: /dev/termination-log
+      name: working-dir-initializer
+      command:
+        - sh
+      securityContext:
+        capabilities:
+          drop:
+            - MKNOD
+      imagePullPolicy: IfNotPresent
+      volumeMounts:
+        - name: tekton-internal-workspace
+          mountPath: /workspace
+        - name: tekton-internal-home
+          mountPath: /tekton/home
+        - name: tekton-internal-results
+          mountPath: /tekton/results
+        - name: kube-api-access-pskvk
+          readOnly: true
+          mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+      terminationMessagePolicy: File
+      image: >-
+        registry.access.redhat.com/ubi8/ubi-minimal@sha256:b6b0c30bb747dfacee216e5ae2ad02adb18920d8f744c04f29354278e19df2a9
+      workingDir: /workspace
+      args:
+        - '-c'
+        - mkdir -p /workspace/source/moh-pidp/workspace
+    - resources:
+        limits:
+          cpu: 250m
+          memory: 1Gi
+        requests:
+          cpu: 50m
+          memory: 256Mi
+      terminationMessagePath: /dev/termination-log
+      name: place-tools
+      command:
+        - /ko-app/entrypoint
+        - cp
+        - /ko-app/entrypoint
+        - /tekton/tools/entrypoint
+      securityContext:
+        capabilities:
+          drop:
+            - MKNOD
+      imagePullPolicy: IfNotPresent
+      volumeMounts:
+        - name: tekton-internal-tools
+          mountPath: /tekton/tools
+        - name: kube-api-access-pskvk
+          readOnly: true
+          mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+      terminationMessagePolicy: File
+      image: >-
+        registry.redhat.io/openshift-pipelines/pipelines-entrypoint-rhel8@sha256:63ee95bc1966b58da3b5ace4bbab83d48c800ac0345b061b463579ae2aed6351
+      workingDir: /
+  serviceAccountName: pipeline
+  imagePullSecrets:
+    - name: pipeline-dockercfg-w5mgt
+  priority: 0
+  schedulerName: default-scheduler
+  enableServiceLinks: true
+  terminationGracePeriodSeconds: 30
+  preemptionPolicy: PreemptLowerPriority
+  nodeName: mcs-silver-app-33.dmz
+  securityContext:
+    seLinuxOptions:
+      level: 's0:c104,c54'
+    fsGroup: 1010820000
+  containers:
+    - resources:
+        limits:
+          cpu: '1'
+          memory: 4Gi
+        requests:
+          cpu: 200m
+          ephemeral-storage: '0'
+          memory: 250Mi
+      terminationMessagePath: /tekton/termination
+      name: step-install-dependencies
+      command:
+        - /tekton/tools/entrypoint
+      env:
+        - name: HOME
+          value: /tekton/home
+        - name: SSL_CERT_DIR
+          value: /tekton-custom-certs
+      securityContext:
+        capabilities:
+          drop:
+            - MKNOD
+      imagePullPolicy: IfNotPresent
+      volumeMounts:
+        - name: ws-gt6sc
+          mountPath: /workspace/source
+        - name: tekton-internal-tools
+          mountPath: /tekton/tools
+        - name: tekton-internal-downward
+          mountPath: /tekton/downward
+        - name: tekton-creds-init-home-0
+          mountPath: /tekton/creds
+        - name: tekton-internal-workspace
+          mountPath: /workspace
+        - name: tekton-internal-home
+          mountPath: /tekton/home
+        - name: tekton-internal-results
+          mountPath: /tekton/results
+        - name: tekton-internal-secret-volume-pipeline-dockercfg-w5mgt-6fkr7
+          mountPath: /tekton/creds-secrets/pipeline-dockercfg-w5mgt
+        - name: tekton-internal-secret-volume-moh-pidp-github-secret-9k4dt
+          mountPath: /tekton/creds-secrets/moh-pidp-github-secret
+        - name: kube-api-access-pskvk
+          readOnly: true
+          mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        - name: config-trusted-cabundle-volume
+          readOnly: true
+          mountPath: /tekton-custom-certs/ca-bundle.crt
+          subPath: ca-bundle.crt
+        - name: config-service-cabundle-volume
+          readOnly: true
+          mountPath: /tekton-custom-certs/service-ca.crt
+          subPath: service-ca.crt
+      terminationMessagePolicy: File
+      image: 'public.ecr.aws/bitnami/node:16-prod'
+      workingDir: /workspace/source/moh-pidp/workspace/
+      args:
+        - '-wait_file'
+        - /tekton/downward/ready
+        - '-wait_file_content'
+        - '-post_file'
+        - /tekton/tools/0
+        - '-termination_path'
+        - /tekton/termination
+        - '-docker-cfg=pipeline-dockercfg-w5mgt'
+        - '-ssh-git=moh-pidp-github-secret=github.com'
+        - '-entrypoint'
+        - yarn
+        - '--'
+    - resources:
+        limits:
+          cpu: '1'
+          memory: 4Gi
+        requests:
+          cpu: '0'
+          ephemeral-storage: '0'
+          memory: '0'
+      terminationMessagePath: /tekton/termination
+      name: step-build-application
+      command:
+        - /tekton/tools/entrypoint
+      env:
+        - name: HOME
+          value: /tekton/home
+        - name: SSL_CERT_DIR
+          value: /tekton-custom-certs
+      securityContext:
+        capabilities:
+          drop:
+            - MKNOD
+      imagePullPolicy: IfNotPresent
+      volumeMounts:
+        - name: ws-gt6sc
+          mountPath: /workspace/source
+        - name: tekton-internal-tools
+          mountPath: /tekton/tools
+        - name: tekton-creds-init-home-1
+          mountPath: /tekton/creds
+        - name: tekton-internal-workspace
+          mountPath: /workspace
+        - name: tekton-internal-home
+          mountPath: /tekton/home
+        - name: tekton-internal-results
+          mountPath: /tekton/results
+        - name: tekton-internal-secret-volume-pipeline-dockercfg-w5mgt-6fkr7
+          mountPath: /tekton/creds-secrets/pipeline-dockercfg-w5mgt
+        - name: tekton-internal-secret-volume-moh-pidp-github-secret-9k4dt
+          mountPath: /tekton/creds-secrets/moh-pidp-github-secret
+        - name: kube-api-access-pskvk
+          readOnly: true
+          mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        - name: config-trusted-cabundle-volume
+          readOnly: true
+          mountPath: /tekton-custom-certs/ca-bundle.crt
+          subPath: ca-bundle.crt
+        - name: config-service-cabundle-volume
+          readOnly: true
+          mountPath: /tekton-custom-certs/service-ca.crt
+          subPath: service-ca.crt
+      terminationMessagePolicy: File
+      image: 'public.ecr.aws/bitnami/node:16-prod'
+      workingDir: /workspace/source/moh-pidp/workspace/
+      args:
+        - '-wait_file'
+        - /tekton/tools/0
+        - '-post_file'
+        - /tekton/tools/1
+        - '-termination_path'
+        - /tekton/termination
+        - '-docker-cfg=pipeline-dockercfg-w5mgt'
+        - '-ssh-git=moh-pidp-github-secret=github.com'
+        - '-entrypoint'
+        - yarn
+        - '--'
+        - build
+  serviceAccount: pipeline
+  volumes:
+    - name: tekton-internal-workspace
+      emptyDir: {}
+    - name: tekton-internal-home
+      emptyDir: {}
+    - name: tekton-internal-results
+      emptyDir: {}
+    - name: tekton-internal-secret-volume-pipeline-dockercfg-w5mgt-6fkr7
+      secret:
+        secretName: pipeline-dockercfg-w5mgt
+        defaultMode: 420
+    - name: tekton-internal-secret-volume-moh-pidp-github-secret-9k4dt
+      secret:
+        secretName: moh-pidp-github-secret
+        defaultMode: 420
+    - name: tekton-internal-tools
+      emptyDir: {}
+    - name: tekton-internal-downward
+      downwardAPI:
+        items:
+          - path: ready
+            fieldRef:
+              apiVersion: v1
+              fieldPath: 'metadata.annotations[''tekton.dev/ready'']'
+        defaultMode: 420
+    - name: tekton-creds-init-home-0
+      emptyDir:
+        medium: Memory
+    - name: tekton-creds-init-home-1
+      emptyDir:
+        medium: Memory
+    - name: ws-gt6sc
+      persistentVolumeClaim:
+        claimName: pvc-2df456a1ef
+    - name: kube-api-access-pskvk
+      projected:
+        sources:
+          - serviceAccountToken:
+              expirationSeconds: 3607
+              path: token
+          - configMap:
+              name: kube-root-ca.crt
+              items:
+                - key: ca.crt
+                  path: ca.crt
+          - downwardAPI:
+              items:
+                - path: namespace
+                  fieldRef:
+                    apiVersion: v1
+                    fieldPath: metadata.namespace
+          - configMap:
+              name: openshift-service-ca.crt
+              items:
+                - key: service-ca.crt
+                  path: service-ca.crt
+        defaultMode: 420
+    - name: config-trusted-cabundle-volume
+      configMap:
+        name: config-trusted-cabundle
+        items:
+          - key: ca-bundle.crt
+            path: ca-bundle.crt
+        defaultMode: 420
+    - name: config-service-cabundle-volume
+      configMap:
+        name: config-service-cabundle
+        items:
+          - key: service-ca.crt
+            path: service-ca.crt
+        defaultMode: 420
+  dnsPolicy: ClusterFirst
+  tolerations:
+    - key: node.kubernetes.io/not-ready
+      operator: Exists
+      effect: NoExecute
+      tolerationSeconds: 300
+    - key: node.kubernetes.io/unreachable
+      operator: Exists
+      effect: NoExecute
+      tolerationSeconds: 300
+    - key: node.kubernetes.io/memory-pressure
+      operator: Exists
+      effect: NoSchedule
+status:
+  containerStatuses:
+    - restartCount: 0
+      started: false
+      ready: false
+      name: step-build-application
+      state:
+        terminated:
+          exitCode: 0
+          reason: Completed
+          message: >-
+            [{"key":"StartedAt","value":"2022-06-02T02:42:31.480Z","type":"InternalTektonResult"}]
+          startedAt: '2022-06-02T02:36:26Z'
+          finishedAt: '2022-06-02T02:46:22Z'
+          containerID: >-
+            cri-o://59cb6f2e8d7230ccee8c74c3f757ff0f79ac6b047c270cdd341f3eee2cb0cd41
+      imageID: >-
+        public.ecr.aws/bitnami/node@sha256:352db4342cf41b2e92181408257c40af3623d565b3befc3a3c52069eca5f90c2
+      image: 'public.ecr.aws/bitnami/node:16-prod'
+      lastState: {}
+      containerID: 'cri-o://59cb6f2e8d7230ccee8c74c3f757ff0f79ac6b047c270cdd341f3eee2cb0cd41'
+    - restartCount: 0
+      started: false
+      ready: false
+      name: step-install-dependencies
+      state:
+        terminated:
+          exitCode: 0
+          reason: Completed
+          message: >-
+            [{"key":"StartedAt","value":"2022-06-02T02:36:28.528Z","type":"InternalTektonResult"}]
+          startedAt: '2022-06-02T02:36:24Z'
+          finishedAt: '2022-06-02T02:42:30Z'
+          containerID: >-
+            cri-o://99ef231c497937072b85514a421f6ad3c4ec9f5e400dbdebd580f12df2d83463
+      imageID: >-
+        public.ecr.aws/bitnami/node@sha256:352db4342cf41b2e92181408257c40af3623d565b3befc3a3c52069eca5f90c2
+      image: 'public.ecr.aws/bitnami/node:16-prod'
+      lastState: {}
+      containerID: 'cri-o://99ef231c497937072b85514a421f6ad3c4ec9f5e400dbdebd580f12df2d83463'
+  qosClass: Burstable
+  podIPs:
+    - ip: 10.97.88.53
+  podIP: 10.97.88.53
+  hostIP: 142.34.151.194
+  startTime: '2022-06-02T02:35:47Z'
+  initContainerStatuses:
+    - name: working-dir-initializer
+      state:
+        terminated:
+          exitCode: 0
+          reason: Completed
+          startedAt: '2022-06-02T02:36:02Z'
+          finishedAt: '2022-06-02T02:36:02Z'
+          containerID: >-
+            cri-o://08d3c9272b71aba34b3ae648ecf0fcd08587c33da943ff3919c81d551e0a1482
+      lastState: {}
+      ready: true
+      restartCount: 0
+      image: >-
+        registry.access.redhat.com/ubi8/ubi-minimal@sha256:b6b0c30bb747dfacee216e5ae2ad02adb18920d8f744c04f29354278e19df2a9
+      imageID: >-
+        registry.access.redhat.com/ubi8/ubi-minimal@sha256:48a4bec3d1dec90b5dd5420bf7c41a5756b7fbe8b862546134fbe2caa607679f
+      containerID: 'cri-o://08d3c9272b71aba34b3ae648ecf0fcd08587c33da943ff3919c81d551e0a1482'
+    - name: place-tools
+      state:
+        terminated:
+          exitCode: 0
+          reason: Completed
+          startedAt: '2022-06-02T02:36:06Z'
+          finishedAt: '2022-06-02T02:36:06Z'
+          containerID: >-
+            cri-o://69b8409d2bea9686324b6d409cefc6e29b6e9d68986eeba32ec8c81551827e4b
+      lastState: {}
+      ready: true
+      restartCount: 0
+      image: >-
+        registry.redhat.io/openshift-pipelines/pipelines-entrypoint-rhel8@sha256:63ee95bc1966b58da3b5ace4bbab83d48c800ac0345b061b463579ae2aed6351
+      imageID: >-
+        registry.redhat.io/openshift-pipelines/pipelines-entrypoint-rhel8@sha256:1f893e2bbc394b99bf2b9971e2e89549294c4e801d99d55789de02a5e5841768
+      containerID: 'cri-o://69b8409d2bea9686324b6d409cefc6e29b6e9d68986eeba32ec8c81551827e4b'
+  conditions:
+    - type: Initialized
+      status: 'True'
+      lastProbeTime: null
+      lastTransitionTime: '2022-06-02T02:36:07Z'
+      reason: PodCompleted
+    - type: Ready
+      status: 'False'
+      lastProbeTime: null
+      lastTransitionTime: '2022-06-02T02:42:31Z'
+      reason: PodCompleted
+    - type: ContainersReady
+      status: 'False'
+      lastProbeTime: null
+      lastTransitionTime: '2022-06-02T02:42:31Z'
+      reason: PodCompleted
+    - type: PodScheduled
+      status: 'True'
+      lastProbeTime: null
+      lastTransitionTime: '2022-06-02T02:35:47Z'
+  phase: Succeeded
+

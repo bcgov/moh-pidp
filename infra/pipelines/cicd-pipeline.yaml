@@ -63,6 +63,22 @@ spec:
           value: moh-pidp/workspace/
       runAfter: 
         - git-clone
+    - name: test-frontend
+      workspaces:
+        - name: source
+          workspace: source
+      taskRef:
+        kind: Task
+        name: test-frontend
+      params:
+        - name: PATH_CONTEXT
+          value: moh-pidp/workspace/
+        - name: SONAR_BUILDSTRING
+          value: $(params.git-short-sha)
+        - name: SONAR_PROJECTVERSION
+          value: $(params.image-tag)
+      runAfter: 
+        - build-frontend
     - name: build-frontend-image
       workspaces:
         - name: source
@@ -81,7 +97,7 @@ spec:
           value: 
             - --skip-tls-verify
       runAfter: 
-        - build-frontend
+        - test-frontend
     - name: build-webapi
       workspaces:
         - name: source
