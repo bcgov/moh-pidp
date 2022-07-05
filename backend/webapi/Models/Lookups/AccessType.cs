@@ -26,10 +26,10 @@ public class AccessTypeDataGenerator : ILookupDataGenerator<AccessType>
 {
     public IEnumerable<AccessType> Generate() => new[]
     {
-        new AccessType { Code = AccessTypeCode.SAEforms,            Name = "Special Authority eForms"      },
-        new AccessType { Code = AccessTypeCode.HcimAccountTransfer, Name = "HCIMWeb Account Transfer"      },
-        new AccessType { Code = AccessTypeCode.HcimEnrolment,       Name = "HCIMWeb Enrolment"             },
-        new AccessType { Code = AccessTypeCode.DriverFitness,       Name = "Driver Medical Fitness"        },
-        new AccessType { Code = AccessTypeCode.Uci,                 Name = "Unifying Clinical Information" },
+        new AccessType { Code = AccessTypeCode.SAEforms,            Name = "Special Authority eForms" },
+        new AccessType { Code = AccessTypeCode.HcimAccountTransfer, Name = "HCIMWeb Account Transfer" },
+        new AccessType { Code = AccessTypeCode.HcimEnrolment,       Name = "HCIMWeb Enrolment"        },
+        new AccessType { Code = AccessTypeCode.DriverFitness,       Name = "Driver Medical Fitness"   },
+        new AccessType { Code = AccessTypeCode.Uci,                 Name = "Fraser Health UCI"        },
     };
 }

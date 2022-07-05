@@ -115,7 +115,8 @@ public partial class ProfileStatus
                     new Model.DriverFitness(profile),
                     new Model.SAEforms(profile),
                     new Model.HcimAccountTransfer(profile),
-                    new Model.HcimEnrolment(profile)
+                    new Model.HcimEnrolment(profile),
+                    new Model.Uci(profile)
                 }
                 .ToDictionary(section => section.SectionName, section => section)
             };
