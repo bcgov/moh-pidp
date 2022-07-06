@@ -1,6 +1,9 @@
+import { loadingInterceptorProvider } from './loading.interceptor';
 import { serverErrorInterceptorProvider } from './server-error.interceptor';
 import { unauthorizedInterceptorProvider } from './unauthorized.interceptor';
 import { unavailableInterceptorProvider } from './unavailable.interceptor';
+
+export { SHOW_LOADING_MESSAGE } from './loading.interceptor';
 
 /**
  * @description
@@ -8,6 +11,7 @@ import { unavailableInterceptorProvider } from './unavailable.interceptor';
  * outside-in order.
  */
 export const httpInterceptorProviders = [
+  loadingInterceptorProvider,
   unavailableInterceptorProvider,
   unauthorizedInterceptorProvider,
   serverErrorInterceptorProvider,

@@ -37,7 +37,7 @@ public class Index
         public async Task<List<Model>> HandleAsync(Query query)
         {
             return await this.context.PlrRecords
-                .Where(record => record.CollegeId == query.CollegeId
+                .Where(record => record.CollegeId!.TrimStart('0') == query.CollegeId.TrimStart('0')
                     && record.DateOfBirth!.Value.Date == query.Birthdate.Date)
                 .Select(record => new Model
                 {

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { HttpStatusCode } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -22,6 +23,7 @@ import { FormUtilsService } from '@app/core/services/form-utils.service';
 import { LoggerService } from '@app/core/services/logger.service';
 
 import { WorkAndRoleInformationResource } from './work-and-role-information-resource.service';
+import { WorkAndRoleInformation } from './work-and-role-information.model';
 import { WorkAndRoleInformationPage } from './work-and-role-information.page';
 
 describe('WorkAndRoleInformationPage', () => {
@@ -30,33 +32,22 @@ describe('WorkAndRoleInformationPage', () => {
   let workAndRoleInformationResourceSpy: Spy<WorkAndRoleInformationResource>;
   let router: Router;
 
-  const mockActivatedRoute = {
-    snapshot: {
-      data: {
-        title: randTextRange({ min: 1, max: 4 }),
-        routes: {
-          root: '../../',
-        },
-      },
-    },
-  };
-  const mockForm = {
-    jobTitle: randTextRange({ min: 4, max: 15 }),
-    facilityName: randTextRange({ min: 4, max: 15 }),
-  };
-
-  const mockParty = {
-    facilityAddress: {
-      countryCode: randCountryCode(),
-      provinceCode: randStateAbbr(),
-      street: randStreetAddress(),
-      city: randCity(),
-      postal: randZipCode(),
-    },
-    ...mockForm,
-  };
+  let mockActivatedRoute: { snapshot: any };
+  let mockForm: Pick<WorkAndRoleInformation, 'jobTitle' | 'facilityName'>;
+  let mockParty: WorkAndRoleInformation;
 
   beforeEach(() => {
+    mockActivatedRoute = {
+      snapshot: {
+        data: {
+          title: randTextRange({ min: 1, max: 4 }),
+          routes: {
+            root: '../../',
+          },
+        },
+      },
+    };
+
     TestBed.configureTestingModule({
       imports: [MatDialogModule, ReactiveFormsModule, RouterTestingModule],
       providers: [
@@ -89,6 +80,22 @@ describe('WorkAndRoleInformationPage', () => {
       WorkAndRoleInformationResource
     );
     router = TestBed.inject(Router);
+
+    mockForm = {
+      jobTitle: randTextRange({ min: 4, max: 15 }),
+      facilityName: randTextRange({ min: 4, max: 15 }),
+    };
+
+    mockParty = {
+      facilityAddress: {
+        countryCode: randCountryCode(),
+        provinceCode: randStateAbbr(),
+        street: randStreetAddress(),
+        city: randCity(),
+        postal: randZipCode(),
+      },
+      ...mockForm,
+    };
   });
 
   describe('INIT', () => {

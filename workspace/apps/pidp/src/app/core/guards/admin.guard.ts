@@ -15,10 +15,6 @@ export class AdminGuard implements CanActivate {
     private authorizedUserService: AuthorizedUserService
   ) {}
 
-  // TODO add other guard methods
-  // TODO make something generic and move into specific modules
-  // TODO abstract permissions guard
-  // TODO pull redirect from route config
   public canActivate():
     | Observable<boolean | UrlTree>
     | Promise<boolean | UrlTree>

@@ -1,10 +1,13 @@
-import { Inject, Injectable } from '@angular/core';
+import { Inject, Injectable, Type } from '@angular/core';
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';
+import { UserAccessAgreementDocumentComponent } from '@app/features/profile/pages/user-access-agreement/components/user-access-agreement-document/user-access-agreement-document.component';
 
 export enum DocumentType {
   PIDP_COLLECTION_NOTICE = 'pidp-collection-notice',
   SA_EFORMS_COLLECTION_NOTICE = 'sa-eforms-collection-notice',
+  DRIVER_FITNESS_COLLECTION_NOTICE = 'driver-fitness-collection-notice',
+  USER_ACCESS_AGREEMENT = 'user-access-agreement',
 }
 
 export interface IDocumentMetaData {
@@ -12,8 +15,10 @@ export interface IDocumentMetaData {
   title: string;
 }
 
+export type ComponentType<T = unknown> = Type<T>;
+
 export interface IDocument extends IDocumentMetaData {
-  content: string;
+  content: ComponentType | string;
 }
 
 @Injectable({
@@ -31,6 +36,14 @@ export class DocumentService {
       {
         type: DocumentType.SA_EFORMS_COLLECTION_NOTICE,
         title: 'SA eForms Collection Notice',
+      },
+      {
+        type: DocumentType.DRIVER_FITNESS_COLLECTION_NOTICE,
+        title: 'Driver Medical Fitness Collection Notice',
+      },
+      {
+        type: DocumentType.USER_ACCESS_AGREEMENT,
+        title: 'Access Harmonization User Access Agreement',
       },
     ];
   }
@@ -50,6 +63,16 @@ export class DocumentService {
         return {
           ...this.getDocumentMetaData(documentType),
           content: this.getSAeFormsCollectionNotice(),
+        };
+      case DocumentType.DRIVER_FITNESS_COLLECTION_NOTICE:
+        return {
+          ...this.getDocumentMetaData(documentType),
+          content: this.getDriverFitnessCollectionNotice(),
+        };
+      case DocumentType.USER_ACCESS_AGREEMENT:
+        return {
+          ...this.getDocumentMetaData(documentType),
+          content: UserAccessAgreementDocumentComponent,
         };
       default:
         throw new Error('Document type does not exist');
@@ -73,7 +96,16 @@ export class DocumentService {
       the Freedom of Information and Protection of Privacy Act (FOIPPA) and s. 22(1)(b) of the Pharmaceutical
       Services Act for the purpose of managing your access to, and use of, the Special Authority eForms
       application. If you have any questions about the collection or use of this information, contact
-      <a href="mailto:${this.config.emails.specialAuthoritySupport}">${this.config.emails.specialAuthoritySupport}</a>.
+      <a href="mailto:${this.config.emails.specialAuthorityEformsSupport}">${this.config.emails.specialAuthorityEformsSupport}</a>.
+    `;
+  }
+
+  public getDriverFitnessCollectionNotice(): string {
+    return `
+      The personal information you provide to enrol for access to Driver Medical Fitness lorem ipsum dolor sit amet
+      consectetur adipisicing elit. Velit quaerat, beatae libero, ullam consequuntur laudantium aliquid voluptatum
+      fugit pariatur dolore repudiandae ad fuga sed, ducimus voluptates quisquam quasi perferendis possimus, contact
+      <a href="mailto:${this.config.emails.driverFitnessSupport}">${this.config.emails.driverFitnessSupport}</a>.
     `;
   }
 

@@ -1,0 +1,27 @@
+@use 'palette' as palette;
+
+.actions {
+  display: flex;
+  flex-direction: row;
+}
+
+.accept {
+  color: #fff;
+  background-color: palette.theme-palette(green);
+}
+
+.decline {
+  display: flex;
+  color: palette.theme-palette(red);
+  border-color: palette.theme-palette(red);
+}
+
+.approved {
+  display: flex;
+  color: palette.theme-palette(green);
+}
+
+div.approved mat-icon,
+div.decline mat-icon {
+  margin-right: 5px;
+}

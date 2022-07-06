@@ -44,7 +44,7 @@ public class UserRepresentation
     public string? Email { get; set; }
     public Dictionary<string, string[]> Attributes { get; set; } = new();
 
-    internal void SetLdapOrgDetails(LdapLoginResponse.OrgDetails orgDetails) => this.SetAttribute("org_details", JsonSerializer.Serialize(orgDetails));
+    internal void SetLdapOrgDetails(LdapLoginResponse.OrgDetails orgDetails) => this.SetAttribute("org_details", JsonSerializer.Serialize(orgDetails, new JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }));
 
     public void SetPhone(string phone) => this.SetAttribute("phone", phone);
 

@@ -1,10 +1,9 @@
 @import 'palette';
 
-// TODO temporary class used during quick setup
+p {
+  margin-bottom: 1.5rem;
+}
+
 .signature {
-  display: flex;
-  justify-content: flex-end;
-  margin-bottom: 2rem;
-  padding-top: 1rem;
-  border-top: 1px solid theme-palette(grey);
+  border-bottom: 2px solid theme-palette(yellow);
 }

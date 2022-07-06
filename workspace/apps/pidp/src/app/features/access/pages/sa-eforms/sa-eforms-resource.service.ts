@@ -6,8 +6,8 @@ import { Observable, catchError, of, throwError } from 'rxjs';
 import { NoContent, NoContentResponse } from '@bcgov/shared/data-access';
 
 import { ApiHttpClient } from '@app/core/resources/api-http-client.service';
+import { ProfileStatus } from '@app/features/portal/models/profile-status.model';
 import { PortalResource } from '@app/features/portal/portal-resource.service';
-import { ProfileStatus } from '@app/features/portal/sections/models/profile-status.model';
 
 @Injectable({
   providedIn: 'root',

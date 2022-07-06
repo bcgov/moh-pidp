@@ -40,11 +40,7 @@ public class Startup
         services.AddSoapServiceOperationTuner(new IntakeServiceOperationTuner(config));
         services.AddSoapCore();
 
-        // TODO Healthchecks
-        // services
-        //     .AddHealthChecks()
-        //     .AddDbContextCheck<PlrIntakeDbContext>("DbContextHealthCheck")
-        //     .AddNpgSql(connectionString);
+        services.AddHealthChecks();
     }
 
     private PlrIntakeConfiguration InitializeConfiguration(IServiceCollection services)
@@ -89,7 +85,7 @@ public class Startup
         {
             endpoints.UseSoapEndpoint<IIntakeService>("/api/PLRHL7", intakeBinding, SoapSerializer.XmlSerializer);
             endpoints.MapControllers();
-            // endpoints.MapHealthChecks("/health");
+            endpoints.MapHealthChecks("/health/liveness").AllowAnonymous();
         });
     }
 }

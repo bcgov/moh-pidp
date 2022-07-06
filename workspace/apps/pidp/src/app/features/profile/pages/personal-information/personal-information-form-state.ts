@@ -2,9 +2,9 @@ import { FormBuilder, FormControl, Validators } from '@angular/forms';
 
 import { AbstractFormState, FormControlValidators } from '@bcgov/shared/ui';
 
-import { PersonalInformationModel } from './personal-information.model';
+import { PersonalInformation } from './personal-information.model';
 
-export class PersonalInformationFormState extends AbstractFormState<PersonalInformationModel> {
+export class PersonalInformationFormState extends AbstractFormState<PersonalInformation> {
   public constructor(private fb: FormBuilder) {
     super();
 
@@ -23,7 +23,7 @@ export class PersonalInformationFormState extends AbstractFormState<PersonalInfo
     return this.formInstance.get('preferredLastName') as FormControl;
   }
 
-  public get json(): PersonalInformationModel | undefined {
+  public get json(): PersonalInformation | undefined {
     if (!this.formInstance) {
       return;
     }
@@ -31,7 +31,7 @@ export class PersonalInformationFormState extends AbstractFormState<PersonalInfo
     return this.formInstance.getRawValue();
   }
 
-  public patchValue(model: PersonalInformationModel | null): void {
+  public patchValue(model: PersonalInformation | null): void {
     if (!this.formInstance || !model) {
       return;
     }

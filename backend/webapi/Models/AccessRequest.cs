@@ -4,11 +4,7 @@ using NodaTime;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-public enum AccessType
-{
-    SAEforms = 1,
-    HcimReEnrolment
-}
+using Pidp.Models.Lookups;
 
 [Table(nameof(AccessRequest))]
 public class AccessRequest : BaseAuditable
@@ -22,11 +18,20 @@ public class AccessRequest : BaseAuditable
 
     public Instant RequestedOn { get; set; }
 
-    public AccessType AccessType { get; set; }
+    public AccessTypeCode AccessTypeCode { get; set; }
 }
 
-[Table(nameof(HcimReEnrolmentAccessRequest))]
-public class HcimReEnrolmentAccessRequest : AccessRequest
+[Table(nameof(HcimAccountTransfer))]
+public class HcimAccountTransfer : AccessRequest
 {
     public string LdapUsername { get; set; } = string.Empty;
+}
+
+[Table(nameof(HcimEnrolment))]
+public class HcimEnrolment : AccessRequest
+{
+    public bool ManagesTasks { get; set; }
+    public bool ModifiesPhns { get; set; }
+    public bool RecordsNewborns { get; set; }
+    public bool SearchesIdentifiers { get; set; }
 }

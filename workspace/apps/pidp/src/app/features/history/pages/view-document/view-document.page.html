@@ -1,0 +1,22 @@
+<ui-page>
+  <ng-container *ngIf="document">
+    <ui-page-header>{{ document.title }}</ui-page-header>
+
+    <ui-page-section>
+      <p [innerHtml]="document.content | safe: 'html'"></p>
+    </ui-page-section>
+  </ng-container>
+
+  <ng-template appViewDocument></ng-template>
+
+  <ui-page-footer mode="reverse">
+    <button
+      mat-stroked-button
+      uiPageFooterAction
+      color="primary"
+      type="button"
+      (click)="onBack()">
+      Back
+    </button>
+  </ui-page-footer>
+</ui-page>

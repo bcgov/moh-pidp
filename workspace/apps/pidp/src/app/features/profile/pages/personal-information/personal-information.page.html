@@ -1,4 +1,4 @@
-<ui-page [form]="formState.form" [busy]="busy" (submitted)="onSubmit()">
+<ui-page [form]="formState.form" (submitted)="onSubmit()">
   <ui-page-header>{{ title }}</ui-page-header>
   <ui-page-section>
     <ui-page-section-subheader
@@ -61,6 +61,7 @@
       (click)="onBack()">
       Back Home
     </button>
+
     <button mat-flat-button uiPageFooterAction type="submit" color="primary">
       Save Information
     </button>

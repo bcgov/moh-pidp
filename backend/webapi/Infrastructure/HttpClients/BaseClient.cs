@@ -184,7 +184,7 @@ public class BaseClient
 
 public static partial class BaseClientLoggingExtensions
 {
-    [LoggerMessage(1, LogLevel.Error, "Recieved non-success status code {statusCode} with message: {responseMessage}.")]
+    [LoggerMessage(1, LogLevel.Error, "Received non-success status code {statusCode} with message: {responseMessage}.")]
     public static partial void LogNonSuccessStatusCode(this ILogger logger, HttpStatusCode statusCode, string responseMessage);
 
     [LoggerMessage(2, LogLevel.Error, "Response content was null.")]

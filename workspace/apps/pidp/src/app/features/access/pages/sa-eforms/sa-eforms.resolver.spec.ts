@@ -14,7 +14,7 @@ import { Spy, createSpyFromClass, provideAutoSpy } from 'jest-auto-spies';
 
 import { PartyService } from '@app/core/party/party.service';
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
-import { ProfileStatus } from '@app/features/portal/sections/models/profile-status.model';
+import { ProfileStatus } from '@app/features/portal/models/profile-status.model';
 
 import { SaEformsResource } from './sa-eforms-resource.service';
 import { SaEformsResolver } from './sa-eforms.resolver';
@@ -53,19 +53,25 @@ describe('SaEformsResolver', () => {
           lastName: randLastName(),
           email: randEmail(),
           phone: randPhoneNumber(),
-          statusCode: 1,
+          statusCode: StatusCode.AVAILABLE,
         },
         collegeCertification: {
           collegeCode: randNumber(),
           licenceNumber: randText(),
-          statusCode: 3,
+          statusCode: StatusCode.AVAILABLE,
         },
-        userAccessAgreement: { statusCode: 1 },
-        saEforms: { statusCode: 3 },
-        hcim: { statusCode: 1 },
-        sitePrivacySecurityChecklist: { statusCode: 1 },
-        complianceTraining: { statusCode: 1 },
-        transactions: { statusCode: 1 },
+        administratorInfo: {
+          email: randEmail(),
+          statusCode: StatusCode.AVAILABLE,
+        },
+        organizationDetails: { statusCode: StatusCode.AVAILABLE },
+        facilityDetails: { statusCode: StatusCode.AVAILABLE },
+        userAccessAgreement: { statusCode: StatusCode.AVAILABLE },
+        saEforms: { statusCode: StatusCode.AVAILABLE },
+        hcimAccountTransfer: { statusCode: StatusCode.AVAILABLE },
+        hcimEnrolment: { statusCode: StatusCode.AVAILABLE },
+        sitePrivacySecurityChecklist: { statusCode: StatusCode.AVAILABLE },
+        complianceTraining: { statusCode: StatusCode.AVAILABLE },
       },
     };
   });

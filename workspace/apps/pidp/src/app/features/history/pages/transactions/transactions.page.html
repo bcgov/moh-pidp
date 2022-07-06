@@ -1,0 +1,37 @@
+<ui-page>
+  <ui-page-header>{{ title }}</ui-page-header>
+
+  <ui-page-section>
+    <ui-page-section-subheader icon="history" heading="Transactions">
+      <ng-container uiPageSectionSubheaderDesc>
+        This is a log of your transactions and interactions with the Provider
+        Identity Portal.
+      </ng-container>
+    </ui-page-section-subheader>
+
+    <ng-container *ngIf="transactions$ | async as transactions">
+      <ng-container *ngIf="transactions.length; else noTransactions">
+        <div *ngFor="let transaction of transactions" class="transaction">
+          <span>
+            <small>{{ transaction.requestedOn| formatDate }}</small>
+            <small> {{ transaction.requestedOn | formatDate: 'h:mm a' }}</small>
+          </span>
+          <span>{{ AccessTypeMap[transaction.accessTypeCode] }} submission</span>
+        </div>
+      </ng-container>
+    </ng-container>
+
+    <ng-template #noTransactions>No transactions found</ng-template>
+  </ui-page-section>
+
+  <ui-page-footer mode="reverse">
+    <button
+      mat-stroked-button
+      uiPageFooterAction
+      color="primary"
+      type="button"
+      (click)="onBack()">
+      Back Home
+    </button>
+  </ui-page-footer>
+</ui-page>

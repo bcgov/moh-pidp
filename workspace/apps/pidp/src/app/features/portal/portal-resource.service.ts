@@ -5,7 +5,7 @@ import { Observable, catchError, of } from 'rxjs';
 
 import { ApiHttpClient } from '@app/core/resources/api-http-client.service';
 
-import { ProfileStatus } from './sections/models/profile-status.model';
+import { ProfileStatus } from './models/profile-status.model';
 
 @Injectable({
   providedIn: 'root',

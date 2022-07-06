@@ -10,12 +10,12 @@ import { AbstractFormPage } from '@app/core/classes/abstract-form-page.class';
 import { PartyService } from '@app/core/party/party.service';
 import { FormUtilsService } from '@app/core/services/form-utils.service';
 import { LoggerService } from '@app/core/services/logger.service';
-import { CollegeLookup } from '@app/modules/lookup/lookup.model';
 import { LookupService } from '@app/modules/lookup/lookup.service';
+import { CollegeLookup } from '@app/modules/lookup/lookup.types';
 
 import { CollegeLicenceInformationFormState } from './college-licence-information-form-state';
 import { CollegeLicenceInformationResource } from './college-licence-information-resource.service';
-import { CollegeLicenceInformationModel } from './college-licence-information.model';
+import { CollegeLicenceInformation } from './college-licence-information.model';
 
 @Component({
   selector: 'app-college-licence-information',
@@ -60,10 +60,10 @@ export class CollegeLicenceInformationPage
       return this.navigateToRoot();
     }
 
-    this.busy = this.resource
+    this.resource
       .get(partyId)
       .pipe(
-        tap((model: CollegeLicenceInformationModel | null) =>
+        tap((model: CollegeLicenceInformation | null) =>
           this.formState.patchValue(model)
         ),
         catchError((error: HttpErrorResponse) => {

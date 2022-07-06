@@ -1,23 +1,13 @@
-<ui-page>
-  <ui-page-header>{{ title }}</ui-page-header>
+<ui-page mode="medium">
+  <app-user-access-agreement-document></app-user-access-agreement-document>
 
-  <ui-page-section>
-    <ui-page-section-subheader
-      icon="assignment_ind"
-      heading="Access Model Harmonization UAA">
-      <ng-container uiPageSectionSubheaderDesc>
-        Agree to the following agreement(s).
-      </ng-container>
-    </ui-page-section-subheader>
-
-    <p>UAA here</p>
-  </ui-page-section>
-
-  <div class="signature">
-    <mat-checkbox #checkbox color="primary">
-      I have read and accept the User Access Agreement(s).
-    </mat-checkbox>
-  </div>
+  <p>
+    <strong>
+      I <span class="signature">{{ username | async }}</span>, represent and
+      warrant that all information provided in connection with my application
+      for access to the System(s), is true and correct.
+    </strong>
+  </p>
 
   <ui-page-footer>
     <button
@@ -25,7 +15,7 @@
       uiPageFooterAction
       color="primary"
       type="button"
-      routerLink="../../">
+      (click)="onBack()">
       Back Home
     </button>
     <button
@@ -33,10 +23,8 @@
       uiPageFooterAction
       color="primary"
       type="submit"
-      routerLink="../../"
-      [disabled]="!checkbox.checked"
       (click)="onSubmit()">
-      Save Information
+      Accept Agreement
     </button>
   </ui-page-footer>
 </ui-page>
