@@ -94,12 +94,12 @@ public class Uci
 
         private async Task SendConfirmationEmailAsync(string partyEmail)
         {
-            // var link = $"<a href=\"https://www.eforms.healthbc.org/login?sat=true\" target=\"_blank\" rel=\"noopener noreferrer\">link</a>";
+            var link = $"<a href=\"https://www.eforms.healthbc.org/login?sat=true\" target=\"_blank\" rel=\"noopener noreferrer\">link</a>";
             var email = new Email(
                 from: EmailService.PidpEmail,
                 to: partyEmail,
                 subject: "UCI Enrolment Confirmation",
-                body: $"Placeholder Email"
+                body: $"You have successfully enrolled for UCI. You may wish to bookmark this {link} for future use."
             );
             await this.emailService.SendAsync(email);
         }
