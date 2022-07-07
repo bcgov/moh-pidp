@@ -106,7 +106,7 @@ export class PortalService {
         case AlertCode.TRANSIENT_ERROR:
           return {
             heading: 'Having trouble verifying your college licence?',
-            content: `Your licence may not be active yet. Try again in 24 hours. If this problem persists, contact your college.`,
+            content: `Your licence may not be active yet. Try again in 24 hours. If this problem persists, contact your college. If you are a Nurse Practitioner, the validation of your license is currently not available. Check back later.`,
           };
       }
     });
