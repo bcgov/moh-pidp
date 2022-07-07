@@ -14,9 +14,4 @@
   <ItemGroup>
     <ProjectReference Include="..\services.plr-intake\plr-intake.csproj" />
   </ItemGroup>
-  <!-- <ItemGroup>
-    <None Update="appsettings.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup> -->
 </Project>
