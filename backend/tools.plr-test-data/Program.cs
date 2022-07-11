@@ -40,7 +40,7 @@ public class Program
         return new PlrRecord
         {
             Ipc = $"IPC.PIDP0{fourDigitCardId}.{collegeIdentifier}.{plrStatus.StatusName}",
-            Cpn = $"CPN.PIDP0{fourDigitCardId}",
+            Cpn = $"CPN.PIDP0{fourDigitCardId}.{collegeIdentifier}.{plrStatus.StatusName}",
             IdentifierType = collegeIdentifier,
             CollegeId = plrStatus.CollegeIdPrefix + fourDigitCardId,
             FirstName = card.FirstName,
