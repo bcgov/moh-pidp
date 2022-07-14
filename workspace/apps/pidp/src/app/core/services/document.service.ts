@@ -122,10 +122,10 @@ export class DocumentService {
   public getUciCollectionNotice(): string {
     //TODO replace Lorem Ipsum
     return `
-      Strip steak shoulder drumstick andouille cupim turkey. Tongue ball tip tail, pork loin kevin bresaola ham
-      meatball boudin beef alcatra shoulder pastrami flank. Sirloin rump cow, meatloaf tenderloin filet mignon
-      landjaeger meatball. Meatball capicola sirloin venison ball tip, picanha flank chuck ground round strip
-      steak pancetta turducken pastrami rump jerky.
+      The Provider Identity Portal collects personal information for the purposes of verification and access to
+      participating health systems. This is collected by the Ministry of Health under sections 26(c) and 27(1)(b)
+      of the Freedom of Information and Protection of Privacy Act. Should you have any questions about the collection
+      of this personal information, contact <a href="mailto:${this.config.emails.uciSupport}">${this.config.emails.uciSupport}</a>.
     `;
   }
 

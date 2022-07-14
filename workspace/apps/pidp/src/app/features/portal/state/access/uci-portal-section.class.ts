@@ -23,8 +23,8 @@ export class UciPortalSection implements IPortalSection {
     private router: Router
   ) {
     this.key = 'uci';
-    this.heading = 'UCI';
-    this.description = `Enrol here to access UCI.`;
+    this.heading = 'Unifying Clinical Information (UCI)';
+    this.description = `Click here to access UCI.`;
   }
 
   public get hint(): string {

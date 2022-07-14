@@ -19,6 +19,7 @@ export interface AppEnvironment extends EnvironmentConfig {
     hcimAccountTransferSupport: string;
     hcimEnrolmentSupport: string;
     driverFitnessSupport: string;
+    uciSupport: string;
   };
   urls: {
     bcscSupport: string;
