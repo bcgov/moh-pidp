@@ -122,7 +122,7 @@ export class DocumentService {
   public getUciCollectionNotice(): string {
     //TODO replace Lorem Ipsum
     return `
-      The Provider Identity Portal collects personal information for the purposes of verification and access to
+      Unifying Clinical Information collects personal information for the purposes of verification and access to
       participating health systems. This is collected by the Ministry of Health under sections 26(c) and 27(1)(b)
       of the Freedom of Information and Protection of Privacy Act. Should you have any questions about the collection
       of this personal information, contact <a href="mailto:${this.config.emails.uciSupport}">${this.config.emails.uciSupport}</a>.
