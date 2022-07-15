@@ -63,7 +63,7 @@ public class Index
                         && query.IdentifierTypes.Contains(record.IdentifierType!)))
                 .Select(record => new Model
                 {
-                    Cpn = record.Cpn!, // All valid PLR records will have CPNs,
+                    Cpn = record.Cpn!, // All valid PLR records will have CPNs
                     Ipc = record.Ipc,
                     IdentifierType = record.IdentifierType,
                     ProviderRoleType = record.ProviderRoleType,
