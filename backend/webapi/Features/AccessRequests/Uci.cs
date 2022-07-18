@@ -94,7 +94,7 @@ public class Uci
 
         private async Task SendConfirmationEmailAsync(string partyEmail)
         {
-            var link = $"<a href=\"https://www.eforms.healthbc.org/login?sat=true\" target=\"_blank\" rel=\"noopener noreferrer\">link</a>";
+            var link = $"<a href=\"https://uci-saml.fraserhealth.org/ExSSOIdentityProvider/Account/Login?ReturnUrl=%2fExSSOIdentityProvider%2fExternalLogin.aspx%3fclientApp%3dex_webAccess&clientApp=ex_webAccess\" target=\"_blank\" rel=\"noopener noreferrer\">link</a>";
             var email = new Email(
                 from: EmailService.PidpEmail,
                 to: partyEmail,
