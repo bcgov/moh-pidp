@@ -120,7 +120,6 @@ export class DocumentService {
   }
 
   public getUciCollectionNotice(): string {
-    //TODO replace Lorem Ipsum
     return `
       Unifying Clinical Information collects personal information for the purposes of verification and access to
       participating health systems. This is collected by the Ministry of Health under sections 26(c) and 27(1)(b)
