@@ -95,7 +95,7 @@ public class SAEforms
 
         private async Task SendConfirmationEmailAsync(string partyEmail, string firstName)
         {
-            var link = $"<a href=\"https://www.eforms.healthbc.org/login?sat=true\" target=\"_blank\" rel=\"noopener noreferrer\">link</a>";
+            var link = $"<a href=\"https://www.eforms.healthbc.org/login\" target=\"_blank\" rel=\"noopener noreferrer\">link</a>";
             var email = new Email(
                 from: EmailService.PidpEmail,
                 to: partyEmail,
