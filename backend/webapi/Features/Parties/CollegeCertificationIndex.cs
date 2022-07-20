@@ -22,7 +22,6 @@ public class CollegeCertificationIndex
         public string? ProviderRoleType { get; set; }
         public string? StatusCode { get; set; }
         public LocalDate? StatusStartDate { get; set; }
-        public string? StatusReasonCode { get; set; }
 
         public bool IsGoodStanding { get; set; }
     }
@@ -63,7 +62,7 @@ public class CollegeCertificationIndex
             var records = await this.client.GetRecords(cpn);
             if (records == null)
             {
-                // TODO  what to do on error?
+                // TODO what to do on error?
                 return new();
             }
 
