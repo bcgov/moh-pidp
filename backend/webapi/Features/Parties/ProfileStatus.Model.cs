@@ -278,9 +278,7 @@ public partial class ProfileStatus
                 }
 
                 if (!profile.DemographicsEntered
-                    || !profile.CollegeCertificationEntered
-                    || profile.PlrRecordStatus == null
-                    || !profile.PlrRecordStatus.IsGoodStanding())
+                    || profile.PlrGoodStanding != true)
                 {
                     this.StatusCode = StatusCode.Locked;
                     return;
