@@ -14,7 +14,7 @@ using Pidp.Infrastructure.Services;
 using Pidp.Models;
 using Pidp.Models.Lookups;
 
-public class SAEforms
+public class Uci
 {
     public class Command : ICommand<IDomainResult>
     {
@@ -57,10 +57,9 @@ public class SAEforms
                 .Where(party => party.Id == command.PartyId)
                 .Select(party => new
                 {
-                    AlreadyEnroled = party.AccessRequests.Any(request => request.AccessTypeCode == AccessTypeCode.SAEforms),
+                    AlreadyEnroled = party.AccessRequests.Any(request => request.AccessTypeCode == AccessTypeCode.Uci),
                     party.UserId,
                     party.Email,
-                    party.FirstName,
                     party.PartyCertification!.Ipc,
                 })
                 .SingleAsync();
@@ -74,7 +73,7 @@ public class SAEforms
                 return DomainResult.Failed();
             }
 
-            if (!await this.keycloakClient.AssignClientRole(dto.UserId, Clients.SAEforms, Roles.SAEforms))
+            if (!await this.keycloakClient.AssignClientRole(dto.UserId, Clients.Uci, Roles.Uci))
             {
                 return DomainResult.Failed();
             }
@@ -82,33 +81,33 @@ public class SAEforms
             this.context.AccessRequests.Add(new AccessRequest
             {
                 PartyId = command.PartyId,
-                AccessTypeCode = AccessTypeCode.SAEforms,
+                AccessTypeCode = AccessTypeCode.Uci,
                 RequestedOn = this.clock.GetCurrentInstant()
             });
 
             await this.context.SaveChangesAsync();
 
-            await this.SendConfirmationEmailAsync(dto.Email, dto.FirstName);
+            await this.SendConfirmationEmailAsync(dto.Email);
 
             return DomainResult.Success();
         }
 
-        private async Task SendConfirmationEmailAsync(string partyEmail, string firstName)
+        private async Task SendConfirmationEmailAsync(string partyEmail)
         {
-            var link = $"<a href=\"https://www.eforms.healthbc.org/login\" target=\"_blank\" rel=\"noopener noreferrer\">link</a>";
+            var link = $"<a href=\"https://uci-saml.fraserhealth.org/ExSSOIdentityProvider/Account/Login?ReturnUrl=%2fExSSOIdentityProvider%2fExternalLogin.aspx%3fclientApp%3dex_webAccess&clientApp=ex_webAccess\" target=\"_blank\" rel=\"noopener noreferrer\">link</a>";
             var email = new Email(
                 from: EmailService.PidpEmail,
                 to: partyEmail,
-                subject: "SA eForms Enrolment Confirmation",
-                body: $"Hi {firstName},<br><br>You will need to visit this {link} each time you want to submit an SA eForm. It may be helpful to bookmark this {link} for future use."
+                subject: "UCI Enrolment Confirmation",
+                body: $"You have successfully enrolled for UCI. You may wish to bookmark this {link} for future use."
             );
             await this.emailService.SendAsync(email);
         }
     }
 }
 
-public static partial class SAEformsLoggingExtensions
+public static partial class UciLoggingExtensions
 {
-    [LoggerMessage(1, LogLevel.Warning, "SA eForms Access Request denied due to the Party Record not meeting all prerequisites.")]
-    public static partial void LogSAEformsAccessRequestDenied(this ILogger logger);
+    [LoggerMessage(1, LogLevel.Warning, "UCI Access Request denied due to the Party Record not meeting all prerequisites.")]
+    public static partial void LogUciAccessRequestDenied(this ILogger logger);
 }
