@@ -260,6 +260,42 @@ namespace Pidp.Data.Migrations
                     b.ToTable("Facility");
                 });
 
+            modelBuilder.Entity("Pidp.Models.LicenceDeclaration", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("CollegeCode")
+                        .HasColumnType("integer");
+
+                    b.Property<Instant>("Created")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Ipc")
+                        .HasColumnType("text");
+
+                    b.Property<string>("LicenceNumber")
+                        .HasColumnType("text");
+
+                    b.Property<Instant>("Modified")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("PartyId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CollegeCode");
+
+                    b.HasIndex("PartyId")
+                        .IsUnique();
+
+                    b.ToTable("LicenceDeclaration");
+                });
+
             modelBuilder.Entity("Pidp.Models.Lookups.AccessType", b =>
                 {
                     b.Property<int>("Code")
@@ -1002,42 +1038,6 @@ namespace Pidp.Data.Migrations
                     b.ToTable("PartyAccessAdministrator");
                 });
 
-            modelBuilder.Entity("Pidp.Models.PartyCertification", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int?>("CollegeCode")
-                        .HasColumnType("integer");
-
-                    b.Property<Instant>("Created")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Ipc")
-                        .HasColumnType("text");
-
-                    b.Property<string>("LicenceNumber")
-                        .HasColumnType("text");
-
-                    b.Property<Instant>("Modified")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<int>("PartyId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CollegeCode");
-
-                    b.HasIndex("PartyId")
-                        .IsUnique();
-
-                    b.ToTable("LicenceDeclaration");
-                });
-
             modelBuilder.Entity("Pidp.Models.PartyOrgainizationDetail", b =>
                 {
                     b.Property<int>("Id")
@@ -1176,18 +1176,7 @@ namespace Pidp.Data.Migrations
                     b.Navigation("Party");
                 });
 
-            modelBuilder.Entity("Pidp.Models.PartyAccessAdministrator", b =>
-                {
-                    b.HasOne("Pidp.Models.Party", "Party")
-                        .WithOne("AccessAdministrator")
-                        .HasForeignKey("Pidp.Models.PartyAccessAdministrator", "PartyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Party");
-                });
-
-            modelBuilder.Entity("Pidp.Models.PartyCertification", b =>
+            modelBuilder.Entity("Pidp.Models.LicenceDeclaration", b =>
                 {
                     b.HasOne("Pidp.Models.Lookups.College", "College")
                         .WithMany()
@@ -1195,11 +1184,22 @@ namespace Pidp.Data.Migrations
 
                     b.HasOne("Pidp.Models.Party", "Party")
                         .WithOne("LicenceDeclaration")
-                        .HasForeignKey("Pidp.Models.PartyCertification", "PartyId")
+                        .HasForeignKey("Pidp.Models.LicenceDeclaration", "PartyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("College");
+
+                    b.Navigation("Party");
+                });
+
+            modelBuilder.Entity("Pidp.Models.PartyAccessAdministrator", b =>
+                {
+                    b.HasOne("Pidp.Models.Party", "Party")
+                        .WithOne("AccessAdministrator")
+                        .HasForeignKey("Pidp.Models.PartyAccessAdministrator", "PartyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Party");
                 });
