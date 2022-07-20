@@ -5,9 +5,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 using Pidp.Models.Lookups;
 
-[Table("LicenceDeclaration")]
-// [Table(nameof(LicenceDeclaration))]
-public class PartyCertification : BaseAuditable
+[Table(nameof(LicenceDeclaration))]
+public class LicenceDeclaration : BaseAuditable
 {
     [Key]
     public int Id { get; set; }
@@ -23,6 +22,6 @@ public class PartyCertification : BaseAuditable
     [RegularExpression(@"([a-zA-Z0-9]+)", ErrorMessage = "Licence Number should be alpha numeric characters")]
     public string? LicenceNumber { get; set; } = string.Empty;
 
-    // KEEPING THIS FOR NOW, NEED MIGRATION
+    // TOOD: KEEPING THIS FOR NOW, NEED MIGRATION
     public string? Ipc { get; set; }
 }

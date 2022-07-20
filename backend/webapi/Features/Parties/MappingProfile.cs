@@ -15,15 +15,14 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.OrganizationDetailEntered, opt => opt.MapFrom(src => src.OrgainizationDetail != null))
             .ForMember(dest => dest.PlrGoodStanding, opt => opt.Ignore())
             .ForMember(dest => dest.User, opt => opt.Ignore());
-        this.CreateProjection<PartyCertification, ProfileStatus.ProfileStatusDto.LicenceDeclarationStatus>()
+        this.CreateProjection<LicenceDeclaration, ProfileStatus.ProfileStatusDto.LicenceDeclarationStatus>()
             .ForMember(dest => dest.NoLicence, opt => opt.MapFrom(src => src.CollegeCode == null));
         this.CreateProjection<Party, WorkSetting.Command>()
             .ForMember(dest => dest.PhysicalAddress, opt => opt.MapFrom(src => src.Facility!.PhysicalAddress));
 
-        this.CreateProjection<PartyAccessAdministrator, AccessAdministrator.Command>();
         this.CreateProjection<FacilityAddress, WorkSetting.Command.Address>();
-        this.CreateProjection<PartyCertification, CollegeCertification.Command>();
-        this.CreateProjection<PartyCertification, ProfileStatus.ProfileStatusDto>();
+        this.CreateProjection<LicenceDeclaration, CollegeCertification.Command>();
+        this.CreateProjection<PartyAccessAdministrator, AccessAdministrator.Command>();
         this.CreateProjection<PartyOrgainizationDetail, OrganizationDetails.Command>();
     }
 }

@@ -86,7 +86,7 @@ public class CollegeCertification
 
             if (party.LicenceDeclaration == null)
             {
-                party.LicenceDeclaration = new PartyCertification();
+                party.LicenceDeclaration = new LicenceDeclaration();
             }
 
             // TODO fail if removing licence
