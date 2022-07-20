@@ -58,15 +58,16 @@ public class PlrClient : BaseClient, IPlrClient
         };
     }
 
-    public async Task<bool?> CheckStanding(string cpn)
+    public async Task<bool?> IsGoodStanding(string? cpn)
     {
         if (string.IsNullOrWhiteSpace(cpn))
         {
-            return false;
+            return null;
         }
 
         var result = await this.GetWithQueryParamsAsync<IEnumerable<PlrRecord>>("records", new { Cpn = cpn });
-        if (!result.IsSuccess)
+        if (!result.IsSuccess
+            || !result.Value.Any())
         {
             return null;
         }
@@ -75,7 +76,7 @@ public class PlrClient : BaseClient, IPlrClient
             .Any(record => record.IsGoodStanding());
     }
 
-    public async Task<IEnumerable<PlrRecord>?> GetRecords(string cpn)
+    public async Task<IEnumerable<PlrRecord>?> GetRecords(string? cpn)
     {
         if (string.IsNullOrWhiteSpace(cpn))
         {

@@ -8,7 +8,7 @@ public interface IPlrClient
 {
     /// <summary>
     /// Searches PLR for Records matching the user's College information and Birthdate, and Returns the single CPN of those records.
-    /// Returns null on an errorm no records found, or if multiple matching records are found with different CPNs.
+    /// Returns null on an error, no records are found, or if multiple matching records are found with different CPNs.
     /// </summary>
     /// <param name="collegeCode"></param>
     /// <param name="licenceNumber"></param>
@@ -17,10 +17,10 @@ public interface IPlrClient
 
     /// <summary>
     /// Checks PLR to see if the given CPN has at least one Record in "good standing".
-    /// Returns null on an error.
+    /// Returns null on an error or if no records are found.
     /// </summary>
     /// <param name="cpn"></param>
-    Task<bool?> CheckStanding(string cpn);
+    Task<bool?> IsGoodStanding(string? cpn);
 
     /// <summary>
     /// Fetches the PLR record(s) corresponding to the given CPN.

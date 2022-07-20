@@ -5,7 +5,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 using Pidp.Models.Lookups;
 
-[Table(nameof(PartyCertification))]
+[Table("LicenceDeclaration")]
+// [Table(nameof(LicenceDeclaration))]
 public class PartyCertification : BaseAuditable
 {
     [Key]
@@ -15,15 +16,13 @@ public class PartyCertification : BaseAuditable
 
     public Party? Party { get; set; }
 
-    public CollegeCode CollegeCode { get; set; }
+    public CollegeCode? CollegeCode { get; set; }
 
     public College? College { get; set; }
 
-    [RegularExpression(@"([a-zA-Z0-9]+)", ErrorMessage = "License Number should be alpha numeric characters")]
-    public string LicenceNumber { get; set; } = string.Empty;
+    [RegularExpression(@"([a-zA-Z0-9]+)", ErrorMessage = "Licence Number should be alpha numeric characters")]
+    public string? LicenceNumber { get; set; } = string.Empty;
 
-    /// <summary>
-    /// Internal Party Code, PLR's unique identifier for a certification
-    /// </summary>
+    // KEEPING THIS FOR NOW, NEED MIGRATION
     public string? Ipc { get; set; }
 }

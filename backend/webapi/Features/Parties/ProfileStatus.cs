@@ -95,13 +95,13 @@ public partial class ProfileStatus
                .ProjectTo<ProfileStatusDto>(this.mapper.ConfigurationProvider)
                .SingleAsync();
 
-            if (profile.CollegeCertificationEntered && profile.Ipc == null)
-            {
-                // Cert has been entered but no IPC found, likely due to a transient error or delay in PLR record updates. Retry once.
-                profile.Ipc = await this.RecheckIpc(command.Id, profile.CollegeCode.Value, profile.LicenceNumber, profile.Birthdate!.Value);
-            }
+            // if (profile.CollegeCertificationEntered && profile.Ipc == null)
+            // {
+            //     // Cert has been entered but no IPC found, likely due to a transient error or delay in PLR record updates. Retry once.
+            //     profile.Ipc = await this.RecheckIpc(command.Id, profile.CollegeCode.Value, profile.LicenceNumber, profile.Birthdate!.Value);
+            // }
 
-            profile.PlrRecordStatus = await this.client.GetRecordStatus(profile.Ipc);
+            profile.PlrGoodStanding = await this.client.IsGoodStanding(profile.Cpn);
             profile.User = command.User;
 
             var profileStatus = new Model
@@ -123,19 +123,19 @@ public partial class ProfileStatus
             return profileStatus;
         }
 
-        private async Task<string?> RecheckIpc(int partyId, CollegeCode collegeCode, string licenceNumber, LocalDate birthdate)
-        {
-            var newIpc = await this.client.GetPlrRecord(collegeCode, licenceNumber, birthdate);
-            if (newIpc != null)
-            {
-                var cert = await this.context.PartyCertifications
-                    .SingleAsync(cert => cert.PartyId == partyId);
-                cert.Ipc = newIpc;
-                await this.context.SaveChangesAsync();
-            }
+        // private async Task<string?> RecheckIpc(int partyId, CollegeCode collegeCode, string licenceNumber, LocalDate birthdate)
+        // {
+        //     var newIpc = await this.client.GetPlrRecord(collegeCode, licenceNumber, birthdate);
+        //     if (newIpc != null)
+        //     {
+        //         var cert = await this.context.PartyCertifications
+        //             .SingleAsync(cert => cert.PartyId == partyId);
+        //         cert.Ipc = newIpc;
+        //         await this.context.SaveChangesAsync();
+        //     }
 
-            return newIpc;
-        }
+        //     return newIpc;
+        // }
     }
 
     public class ProfileStatusDto
@@ -145,23 +145,25 @@ public partial class ProfileStatus
         public LocalDate? Birthdate { get; set; }
         public string? Email { get; set; }
         public string? Phone { get; set; }
+        public string? Cpn { get; set; }
+        public LicenceDeclarationStatus? LicenceDeclaration { get; set; }
         public string? AccessAdministratorEmail { get; set; }
-        public CollegeCode? CollegeCode { get; set; }
-        public string? LicenceNumber { get; set; }
-        public string? Ipc { get; set; }
         public bool OrganizationDetailEntered { get; set; }
         public IEnumerable<AccessTypeCode> CompletedEnrolments { get; set; } = Enumerable.Empty<AccessTypeCode>();
 
         // Resolved after projection
-        public PlrRecordStatus? PlrRecordStatus { get; set; }
+        public bool? PlrGoodStanding { get; set; }
         public ClaimsPrincipal? User { get; set; }
 
         // Computed Properties
         [MemberNotNullWhen(true, nameof(Email), nameof(Phone))]
         public bool DemographicsEntered => this.Email != null && this.Phone != null;
-        [MemberNotNullWhen(true, nameof(CollegeCode), nameof(LicenceNumber))]
-        public bool CollegeCertificationEntered => this.CollegeCode.HasValue && this.LicenceNumber != null;
         public bool UserIsBcServicesCard => this.User.GetIdentityProvider() == ClaimValues.BCServicesCard;
         public bool UserIsPhsa => this.User.GetIdentityProvider() == ClaimValues.Phsa;
+
+        public class LicenceDeclarationStatus
+        {
+            public bool NoLicence { get; set; }
+        }
     }
 }

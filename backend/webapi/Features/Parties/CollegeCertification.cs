@@ -25,8 +25,8 @@ public class CollegeCertification
         [JsonIgnore]
         [HybridBindProperty(Source.Route)]
         public int PartyId { get; set; }
-        public CollegeCode CollegeCode { get; set; }
-        public string LicenceNumber { get; set; } = string.Empty;
+        public CollegeCode? CollegeCode { get; set; }
+        public string? LicenceNumber { get; set; }
     }
 
     public class QueryValidator : AbstractValidator<Query>
@@ -39,8 +39,9 @@ public class CollegeCertification
         public CommandValidator()
         {
             this.RuleFor(x => x.PartyId).GreaterThan(0);
-            this.RuleFor(x => x.CollegeCode).IsInEnum();
-            this.RuleFor(x => x.LicenceNumber).NotEmpty();
+            // TODO validation
+            // this.RuleFor(x => x.CollegeCode).IsInEnum();
+            // this.RuleFor(x => x.LicenceNumber).NotEmpty();
         }
     }
 
@@ -57,7 +58,7 @@ public class CollegeCertification
 
         public async Task<Command> HandleAsync(Query query)
         {
-            var cert = await this.context.PartyCertifications
+            var cert = await this.context.LicenceDeclarations
                 .Where(certification => certification.PartyId == query.PartyId)
                 .ProjectTo<Command>(this.mapper.ConfigurationProvider)
                 .SingleOrDefaultAsync();
@@ -80,18 +81,20 @@ public class CollegeCertification
         public async Task HandleAsync(Command command)
         {
             var party = await this.context.Parties
-                .Include(party => party.PartyCertification)
+                .Include(party => party.LicenceDeclaration)
                 .SingleAsync(party => party.Id == command.PartyId);
 
-            if (party.PartyCertification == null)
+            if (party.LicenceDeclaration == null)
             {
-                party.PartyCertification = new PartyCertification();
+                party.LicenceDeclaration = new PartyCertification();
             }
 
-            party.PartyCertification.CollegeCode = command.CollegeCode;
-            party.PartyCertification.LicenceNumber = command.LicenceNumber;
-            party.PartyCertification.Ipc = party.Birthdate.HasValue
-                ? await this.client.GetPlrRecord(command.CollegeCode, command.LicenceNumber, party.Birthdate.Value)
+            // TODO fail if removing licence
+
+            party.LicenceDeclaration.CollegeCode = command.CollegeCode;
+            party.LicenceDeclaration.LicenceNumber = command.LicenceNumber;
+            party.Cpn = command.CollegeCode.HasValue && !string.IsNullOrWhiteSpace(command.LicenceNumber) && party.Birthdate.HasValue
+                ? await this.client.FindCpn(command.CollegeCode.Value, command.LicenceNumber, party.Birthdate.Value)
                 : null;
 
             await this.context.SaveChangesAsync();
