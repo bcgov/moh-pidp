@@ -1,7 +1,9 @@
 namespace Pidp.Features.Parties;
 
 using AutoMapper;
+using static NodaTime.Extensions.DateTimeExtensions;
 
+using Pidp.Infrastructure.HttpClients.Plr;
 using Pidp.Models;
 
 public class MappingProfile : Profile
@@ -24,5 +26,14 @@ public class MappingProfile : Profile
         this.CreateProjection<LicenceDeclaration, CollegeCertification.Command>();
         this.CreateProjection<PartyAccessAdministrator, AccessAdministrator.Command>();
         this.CreateProjection<PartyOrgainizationDetail, OrganizationDetails.Command>();
+
+        this.CreateMap<PlrRecord, CollegeCertificationIndex.Model>()
+            .AfterMap((record, model) =>
+            {
+                model.IsGoodStanding = record.IsGoodStanding();
+                model.StatusStartDate = record.StatusStartDate.HasValue
+                    ? record.StatusStartDate.Value.ToLocalDateTime().Date
+                    : null;
+            });
     }
 }
