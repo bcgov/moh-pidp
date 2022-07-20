@@ -27,7 +27,7 @@ public class MappingProfile : Profile
         this.CreateProjection<PartyAccessAdministrator, AccessAdministrator.Command>();
         this.CreateProjection<PartyOrgainizationDetail, OrganizationDetails.Command>();
 
-        this.CreateMap<PlrRecord, CollegeCertificationIndex.Model>()
+        this.CreateMap<PlrRecord, CollegeCertifications.Model>()
             .AfterMap((record, model) =>
             {
                 model.IsGoodStanding = record.IsGoodStanding();

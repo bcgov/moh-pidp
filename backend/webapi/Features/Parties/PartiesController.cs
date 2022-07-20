@@ -46,6 +46,14 @@ public class PartiesController : PidpControllerBase
         => await this.AuthorizePartyBeforeHandleAsync(command.PartyId, handler, command)
             .ToActionResult();
 
+    [HttpGet("{partyId}/college-certifications")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<List<CollegeCertifications.Model>>> GetCollegeCertifications([FromServices] IQueryHandler<CollegeCertifications.Query, List<CollegeCertifications.Model>> handler,
+                                                                                                [FromRoute] CollegeCertifications.Query query)
+        => await this.AuthorizePartyBeforeHandleAsync(query.PartyId, handler, query)
+            .ToActionResultOfT();
+
     [HttpGet("{id}/demographics")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]

@@ -9,7 +9,7 @@ using Pidp.Data;
 using Pidp.Features;
 using Pidp.Infrastructure.HttpClients.Plr;
 
-public class CollegeCertificationIndex
+public class CollegeCertifications
 {
     public class Query : IQuery<List<Model>>
     {
