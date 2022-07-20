@@ -13,7 +13,7 @@ using Pidp.Data;
 namespace Pidp.Data.Migrations
 {
     [DbContext(typeof(PidpDbContext))]
-    [Migration("20220720060726_MultipleLicences")]
+    [Migration("20220720223706_MultipleLicences")]
     partial class MultipleLicences
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -1009,7 +1009,7 @@ namespace Pidp.Data.Migrations
                     b.ToTable("PartyAccessAdministrator");
                 });
 
-            modelBuilder.Entity("Pidp.Models.PartyCertification", b =>
+            modelBuilder.Entity("Pidp.Models.PartyLicenceDeclaration", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -1042,7 +1042,7 @@ namespace Pidp.Data.Migrations
                     b.HasIndex("PartyId")
                         .IsUnique();
 
-                    b.ToTable("LicenceDeclaration");
+                    b.ToTable("PartyLicenceDeclaration");
                 });
 
             modelBuilder.Entity("Pidp.Models.PartyOrgainizationDetail", b =>
@@ -1194,7 +1194,7 @@ namespace Pidp.Data.Migrations
                     b.Navigation("Party");
                 });
 
-            modelBuilder.Entity("Pidp.Models.PartyCertification", b =>
+            modelBuilder.Entity("Pidp.Models.PartyLicenceDeclaration", b =>
                 {
                     b.HasOne("Pidp.Models.Lookups.College", "College")
                         .WithMany()
@@ -1202,7 +1202,7 @@ namespace Pidp.Data.Migrations
 
                     b.HasOne("Pidp.Models.Party", "Party")
                         .WithOne("LicenceDeclaration")
-                        .HasForeignKey("Pidp.Models.PartyCertification", "PartyId")
+                        .HasForeignKey("Pidp.Models.PartyLicenceDeclaration", "PartyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

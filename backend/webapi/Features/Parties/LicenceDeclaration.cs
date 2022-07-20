@@ -13,7 +13,7 @@ using Pidp.Infrastructure.HttpClients.Plr;
 using Pidp.Models;
 using Pidp.Models.Lookups;
 
-public class CollegeCertification
+public class LicenceDeclaration
 {
     public class Query : IQuery<Command>
     {
@@ -58,7 +58,7 @@ public class CollegeCertification
 
         public async Task<Command> HandleAsync(Query query)
         {
-            var cert = await this.context.LicenceDeclarations
+            var cert = await this.context.PartyLicenceDeclarations
                 .Where(certification => certification.PartyId == query.PartyId)
                 .ProjectTo<Command>(this.mapper.ConfigurationProvider)
                 .SingleOrDefaultAsync();
@@ -86,7 +86,7 @@ public class CollegeCertification
 
             if (party.LicenceDeclaration == null)
             {
-                party.LicenceDeclaration = new LicenceDeclaration();
+                party.LicenceDeclaration = new PartyLicenceDeclaration();
             }
 
             // TODO fail if removing licence

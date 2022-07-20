@@ -1,4 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
+using NodaTime;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
@@ -22,17 +24,17 @@ namespace Pidp.Data.Migrations
 
             migrationBuilder.RenameTable(
                 name: "PartyCertification",
-                newName: "LicenceDeclaration");
+                newName: "PartyLicenceDeclaration");
 
             migrationBuilder.RenameIndex(
                 name: "IX_PartyCertification_PartyId",
-                table: "LicenceDeclaration",
-                newName: "IX_LicenceDeclaration_PartyId");
+                table: "PartyLicenceDeclaration",
+                newName: "IX_PartyLicenceDeclaration_PartyId");
 
             migrationBuilder.RenameIndex(
                 name: "IX_PartyCertification_CollegeCode",
-                table: "LicenceDeclaration",
-                newName: "IX_LicenceDeclaration_CollegeCode");
+                table: "PartyLicenceDeclaration",
+                newName: "IX_PartyLicenceDeclaration_CollegeCode");
 
             migrationBuilder.AddColumn<string>(
                 name: "Cpn",
@@ -42,7 +44,7 @@ namespace Pidp.Data.Migrations
 
             migrationBuilder.AlterColumn<string>(
                 name: "LicenceNumber",
-                table: "LicenceDeclaration",
+                table: "PartyLicenceDeclaration",
                 type: "text",
                 nullable: true,
                 oldClrType: typeof(string),
@@ -50,27 +52,27 @@ namespace Pidp.Data.Migrations
 
             migrationBuilder.AlterColumn<int>(
                 name: "CollegeCode",
-                table: "LicenceDeclaration",
+                table: "PartyLicenceDeclaration",
                 type: "integer",
                 nullable: true,
                 oldClrType: typeof(int),
                 oldType: "integer");
 
             migrationBuilder.AddPrimaryKey(
-                name: "PK_LicenceDeclaration",
-                table: "LicenceDeclaration",
+                name: "PK_PartyLicenceDeclaration",
+                table: "PartyLicenceDeclaration",
                 column: "Id");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_LicenceDeclaration_CollegeLookup_CollegeCode",
-                table: "LicenceDeclaration",
+                name: "FK_PartyLicenceDeclaration_CollegeLookup_CollegeCode",
+                table: "PartyLicenceDeclaration",
                 column: "CollegeCode",
                 principalTable: "CollegeLookup",
                 principalColumn: "Code");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_LicenceDeclaration_Party_PartyId",
-                table: "LicenceDeclaration",
+                name: "FK_PartyLicenceDeclaration_Party_PartyId",
+                table: "PartyLicenceDeclaration",
                 column: "PartyId",
                 principalTable: "Party",
                 principalColumn: "Id",
@@ -80,32 +82,32 @@ namespace Pidp.Data.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_LicenceDeclaration_CollegeLookup_CollegeCode",
-                table: "LicenceDeclaration");
+                name: "FK_PartyLicenceDeclaration_CollegeLookup_CollegeCode",
+                table: "PartyLicenceDeclaration");
 
             migrationBuilder.DropForeignKey(
-                name: "FK_LicenceDeclaration_Party_PartyId",
-                table: "LicenceDeclaration");
+                name: "FK_PartyLicenceDeclaration_Party_PartyId",
+                table: "PartyLicenceDeclaration");
 
             migrationBuilder.DropPrimaryKey(
-                name: "PK_LicenceDeclaration",
-                table: "LicenceDeclaration");
+                name: "PK_PartyLicenceDeclaration",
+                table: "PartyLicenceDeclaration");
 
             migrationBuilder.DropColumn(
                 name: "Cpn",
                 table: "Party");
 
             migrationBuilder.RenameTable(
-                name: "LicenceDeclaration",
+                name: "PartyLicenceDeclaration",
                 newName: "PartyCertification");
 
             migrationBuilder.RenameIndex(
-                name: "IX_LicenceDeclaration_PartyId",
+                name: "IX_PartyLicenceDeclaration_PartyId",
                 table: "PartyCertification",
                 newName: "IX_PartyCertification_PartyId");
 
             migrationBuilder.RenameIndex(
-                name: "IX_LicenceDeclaration_CollegeCode",
+                name: "IX_PartyLicenceDeclaration_CollegeCode",
                 table: "PartyCertification",
                 newName: "IX_PartyCertification_CollegeCode");
 

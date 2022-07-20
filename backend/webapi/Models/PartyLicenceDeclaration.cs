@@ -5,8 +5,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 using Pidp.Models.Lookups;
 
-[Table(nameof(LicenceDeclaration))]
-public class LicenceDeclaration : BaseAuditable
+[Table(nameof(PartyLicenceDeclaration))]
+public class PartyLicenceDeclaration : BaseAuditable
 {
     [Key]
     public int Id { get; set; }
