@@ -45,6 +45,6 @@ export class CollegeLicenceInformationResource extends CrudResource<CollegeLicen
   }
 
   protected getResourcePath(partyId: number): string {
-    return `parties/${partyId}/college-certification`;
+    return `parties/${partyId}/licence-declaration`;
   }
 }
