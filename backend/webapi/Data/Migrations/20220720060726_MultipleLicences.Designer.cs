@@ -295,6 +295,11 @@ namespace Pidp.Data.Migrations
                         {
                             Code = 4,
                             Name = "Driver Medical Fitness"
+                        },
+                        new
+                        {
+                            Code = 5,
+                            Name = "Fraser Health UCI"
                         });
                 });
 
