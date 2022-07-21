@@ -1,6 +1,7 @@
 namespace Pidp.Features.Parties;
 
 using AutoMapper;
+using DomainResults.Common;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using NodaTime;
@@ -11,7 +12,7 @@ using Pidp.Infrastructure.HttpClients.Plr;
 
 public class CollegeCertifications
 {
-    public class Query : IQuery<List<Model>>
+    public class Query : IQuery<IDomainResult<List<Model>>>
     {
         public int PartyId { get; set; }
     }
@@ -32,23 +33,26 @@ public class CollegeCertifications
         public QueryValidator() => this.RuleFor(x => x.PartyId).GreaterThan(0);
     }
 
-    public class QueryHandler : IQueryHandler<Query, List<Model>>
+    public class QueryHandler : IQueryHandler<Query, IDomainResult<List<Model>>>
     {
+        private readonly ILogger logger;
         private readonly IMapper mapper;
         private readonly IPlrClient client;
         private readonly PidpDbContext context;
 
         public QueryHandler(
+            ILogger<QueryHandler> logger,
             IMapper mapper,
             IPlrClient client,
             PidpDbContext context)
         {
+            this.logger = logger;
             this.mapper = mapper;
             this.client = client;
             this.context = context;
         }
 
-        public async Task<List<Model>> HandleAsync(Query query)
+        public async Task<IDomainResult<List<Model>>> HandleAsync(Query query)
         {
             var cpn = await this.context.Parties
                 .Where(party => party.Id == query.PartyId)
@@ -57,17 +61,26 @@ public class CollegeCertifications
 
             if (string.IsNullOrWhiteSpace(cpn))
             {
-                return new();
+                return DomainResult.Success(new List<Model>());
             }
 
             var records = await this.client.GetRecords(cpn);
             if (records == null)
             {
-                // TODO what to do on error?
-                return new();
+                return DomainResult.Failed<List<Model>>();
+            }
+            if (!records.Any())
+            {
+                this.logger.LogNoCertsFound(cpn);
             }
 
-            return this.mapper.Map<List<Model>>(records);
+            return DomainResult.Success(this.mapper.Map<List<Model>>(records));
         }
     }
+}
+
+public static partial class CollegeCertificationLoggingExtensions
+{
+    [LoggerMessage(1, LogLevel.Warning, "Unexpected result of no Records in PLR for user with CPN = {cpn}.")]
+    public static partial void LogNoCertsFound(this ILogger logger, string cpn);
 }
