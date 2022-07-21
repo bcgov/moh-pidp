@@ -2,6 +2,7 @@ namespace Pidp.Features.Parties;
 
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using DomainResults.Common;
 using FluentValidation;
 using HybridModelBinding;
 using Microsoft.EntityFrameworkCore;
@@ -20,7 +21,7 @@ public class LicenceDeclaration
         public int PartyId { get; set; }
     }
 
-    public class Command : ICommand
+    public class Command : ICommand<IDomainResult>
     {
         [JsonIgnore]
         [HybridBindProperty(Source.Route)]
@@ -67,7 +68,7 @@ public class LicenceDeclaration
         }
     }
 
-    public class CommandHandler : ICommandHandler<Command>
+    public class CommandHandler : ICommandHandler<Command, IDomainResult>
     {
         private readonly IPlrClient client;
         private readonly PidpDbContext context;
@@ -78,18 +79,22 @@ public class LicenceDeclaration
             this.context = context;
         }
 
-        public async Task HandleAsync(Command command)
+        public async Task<IDomainResult> HandleAsync(Command command)
         {
             var party = await this.context.Parties
                 .Include(party => party.LicenceDeclaration)
                 .SingleAsync(party => party.Id == command.PartyId);
 
+            if (!string.IsNullOrWhiteSpace(party.Cpn))
+            {
+                // Users cannot update licence declarations once found in PLR
+                return DomainResult.Failed();
+            }
+
             if (party.LicenceDeclaration == null)
             {
                 party.LicenceDeclaration = new PartyLicenceDeclaration();
             }
-
-            // TODO fail if removing licence
 
             party.LicenceDeclaration.CollegeCode = command.CollegeCode;
             party.LicenceDeclaration.LicenceNumber = command.LicenceNumber;
@@ -98,6 +103,8 @@ public class LicenceDeclaration
                 : null;
 
             await this.context.SaveChangesAsync();
+
+            return DomainResult.Success();
         }
     }
 }
