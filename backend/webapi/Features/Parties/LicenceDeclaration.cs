@@ -59,7 +59,7 @@ public class LicenceDeclaration
         public async Task<Command> HandleAsync(Query query)
         {
             var cert = await this.context.PartyLicenceDeclarations
-                .Where(certification => certification.PartyId == query.PartyId)
+                .Where(licence => licence.PartyId == query.PartyId)
                 .ProjectTo<Command>(this.mapper.ConfigurationProvider)
                 .SingleOrDefaultAsync();
 
