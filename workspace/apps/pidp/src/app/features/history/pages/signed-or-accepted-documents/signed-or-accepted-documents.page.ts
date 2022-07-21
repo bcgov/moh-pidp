@@ -96,7 +96,9 @@ export class SignedOrAcceptedDocumentsPage implements OnInit {
           (document.type === DocumentType.DRIVER_FITNESS_COLLECTION_NOTICE &&
             status?.driverFitness.statusCode === StatusCode.COMPLETED) ||
           (document.type === DocumentType.USER_ACCESS_AGREEMENT &&
-            status?.userAccessAgreement.statusCode === StatusCode.COMPLETED)
+            status?.userAccessAgreement.statusCode === StatusCode.COMPLETED) ||
+          (document.type === DocumentType.UCI_COLLECTION_NOTICE &&
+            status?.uci.statusCode === StatusCode.COMPLETED)
         );
       })
       .map((document) => ({
