@@ -1,7 +1,11 @@
-import { HttpContext, HttpErrorResponse } from '@angular/common/http';
+import {
+  HttpContext,
+  HttpErrorResponse,
+  HttpStatusCode,
+} from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
-import { catchError, tap, throwError } from 'rxjs';
+import { Observable, catchError, of, tap, throwError } from 'rxjs';
 
 import {
   CrudResource,
@@ -48,7 +52,27 @@ export class CollegeLicenceInformationResource extends CrudResource<PartyLicence
       );
   }
 
+  public getCollegeCertifications(
+    partyId: number
+  ): Observable<CollegeCertification[]> {
+    return this.apiResource
+      .get<CollegeCertification[]>(this.getCertificationResourcePath(partyId))
+      .pipe(
+        catchError((error: HttpErrorResponse) => {
+          if (error.status === HttpStatusCode.BadRequest) {
+            return of([]);
+          }
+
+          return throwError(() => error);
+        })
+      );
+  }
+
   protected getResourcePath(partyId: number): string {
     return `parties/${partyId}/licence-declaration`;
+  }
+
+  protected getCertificationResourcePath(partyId: number): string {
+    return `parties/${partyId}/college-certifications`;
   }
 }
