@@ -41,18 +41,8 @@ export class CollegeCertificationPortalSection implements IPortalSection {
     const statusCode = this.getStatusCode();
     const demographicsStatusCode =
       this.profileStatus.status.demographics.statusCode;
-    const { collegeCode, licenceNumber } = this.getSectionStatus();
     return [StatusCode.ERROR, StatusCode.COMPLETED].includes(statusCode)
       ? [
-          {
-            key: 'collegeCode',
-            value: collegeCode,
-          },
-          {
-            key: 'licenceNumber',
-            value: licenceNumber,
-            label: 'College Licence Number:',
-          },
           {
             key: 'status',
             value:
