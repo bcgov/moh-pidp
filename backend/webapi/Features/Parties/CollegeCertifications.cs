@@ -18,9 +18,8 @@ public class CollegeCertifications
 
     public class Model
     {
-        // TODO update plr service
-        public string? CollegeId { get; set; }
         public string? IdentifierType { get; set; }
+        public string? CollegeId { get; set; }
         public string? ProviderRoleType { get; set; }
         public string? StatusCode { get; set; }
         public LocalDate? StatusStartDate { get; set; }

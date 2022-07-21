@@ -25,6 +25,7 @@ public class Index
         public string Cpn { get; set; } = string.Empty;
         public string Ipc { get; set; } = string.Empty;
         public string? IdentifierType { get; set; }
+        public string? CollegeId { get; set; }
         public string? ProviderRoleType { get; set; }
         public string? StatusCode { get; set; }
         public DateTime? StatusStartDate { get; set; }
@@ -66,6 +67,7 @@ public class Index
                     Cpn = record.Cpn!, // All valid PLR records will have CPNs
                     Ipc = record.Ipc,
                     IdentifierType = record.IdentifierType,
+                    CollegeId = record.CollegeId,
                     ProviderRoleType = record.ProviderRoleType,
                     StatusCode = record.StatusCode,
                     StatusStartDate = record.StatusStartDate,
