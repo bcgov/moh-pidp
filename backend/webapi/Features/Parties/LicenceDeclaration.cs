@@ -40,9 +40,12 @@ public class LicenceDeclaration
         public CommandValidator()
         {
             this.RuleFor(x => x.PartyId).GreaterThan(0);
-            // TODO validation
-            // this.RuleFor(x => x.CollegeCode).IsInEnum();
-            // this.RuleFor(x => x.LicenceNumber).NotEmpty();
+            this.When(x => x.CollegeCode.HasValue, () =>
+            {
+                this.RuleFor(x => x.CollegeCode).IsInEnum();
+                this.RuleFor(x => x.LicenceNumber).NotEmpty();
+            })
+            .Otherwise(() => this.RuleFor(x => x.LicenceNumber).Null());
         }
     }
 
