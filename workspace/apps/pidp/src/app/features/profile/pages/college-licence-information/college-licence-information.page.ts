@@ -15,7 +15,7 @@ import { CollegeLookup } from '@app/modules/lookup/lookup.types';
 
 import { CollegeLicenceInformationFormState } from './college-licence-information-form-state';
 import { CollegeLicenceInformationResource } from './college-licence-information-resource.service';
-import { CollegeLicenceInformation } from './college-licence-information.model';
+import { PartyLicenceDeclarationInformation } from './party-licence-declaration-information.model';
 
 @Component({
   selector: 'app-college-licence-information',
@@ -63,7 +63,7 @@ export class CollegeLicenceInformationPage
     this.resource
       .get(partyId)
       .pipe(
-        tap((model: CollegeLicenceInformation | null) =>
+        tap((model: PartyLicenceDeclarationInformation | null) =>
           this.formState.patchValue(model)
         ),
         catchError((error: HttpErrorResponse) => {

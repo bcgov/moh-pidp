@@ -2,9 +2,9 @@ import { FormBuilder, FormControl, Validators } from '@angular/forms';
 
 import { AbstractFormState, FormControlValidators } from '@bcgov/shared/ui';
 
-import { CollegeLicenceInformation } from './college-licence-information.model';
+import { PartyLicenceDeclarationInformation } from './party-licence-declaration-information.model';
 
-export class CollegeLicenceInformationFormState extends AbstractFormState<CollegeLicenceInformation> {
+export class CollegeLicenceInformationFormState extends AbstractFormState<PartyLicenceDeclarationInformation> {
   public constructor(private fb: FormBuilder) {
     super();
 
@@ -19,7 +19,7 @@ export class CollegeLicenceInformationFormState extends AbstractFormState<Colleg
     return this.formInstance.get('licenceNumber') as FormControl;
   }
 
-  public get json(): CollegeLicenceInformation | undefined {
+  public get json(): PartyLicenceDeclarationInformation | undefined {
     if (!this.formInstance) {
       return;
     }
@@ -27,7 +27,7 @@ export class CollegeLicenceInformationFormState extends AbstractFormState<Colleg
     return this.formInstance.getRawValue();
   }
 
-  public patchValue(model: CollegeLicenceInformation | null): void {
+  public patchValue(model: PartyLicenceDeclarationInformation | null): void {
     if (!this.formInstance || !model) {
       return;
     }
