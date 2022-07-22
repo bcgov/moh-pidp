@@ -6,7 +6,7 @@
     "start": "nx serve",
     "build": "nx build",
     "test": "nx test",
-    "test:ci": "nx test --ci --reporters=default --reporters=jest-sonar --reporters=jest-junit --coverage --coverage-reporters=lcov",
+    "test:ci": "nx test --ci --reporters=default --reporters=jest-sonar --coverage --coverage-reporters=lcov --maxWorkers=1",
     "analyze": "nx build pidp --stats-json && webpack-bundle-analyzer dist/apps/pidp/stats.json",
     "postinstall": "ngcc --properties es2015 browser module main",
     "sonar": "sonar-scanner -Dsonar.login=${SONAR_LOGIN} -Dsonar.scm.provider=git -Dsonar.links.scm=${SONAR_LINKS_SCM} -Dsonar.projectBaseDir=${SONAR_PROJECTBASEDIR} -Dsonar.qualitygate.wait=${SONAR_QUALITYGATE_WAIT} -Dsonar.projectVersion=${SONAR_PROJECTVERSION} -Dsonar.buildString=${SONAR_BUILDSTRING}"
