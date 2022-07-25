@@ -27,6 +27,7 @@
               <mat-select
                 placeholder="College Licence"
                 formControlName="collegeCode">
+                <mat-option [value]="0">None</mat-option>
                 <mat-option
                   *ngFor="let college of colleges"
                   [value]="college.code">

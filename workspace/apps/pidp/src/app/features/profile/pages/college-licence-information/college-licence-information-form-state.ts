@@ -24,12 +24,25 @@ export class CollegeLicenceInformationFormState extends AbstractFormState<PartyL
       return;
     }
 
-    return this.formInstance.getRawValue();
+    const values =
+      this.formInstance.getRawValue() as PartyLicenceDeclarationInformation;
+
+    // Map '0' in the form back into null for the server (mat-select can't use null as a value)
+    if (values.collegeCode === 0) {
+      values.collegeCode = null;
+    }
+
+    return values;
   }
 
   public patchValue(model: PartyLicenceDeclarationInformation | null): void {
     if (!this.formInstance || !model) {
       return;
+    }
+
+    // Map null from server into '0' in the form (mat-select can't use null as a value)
+    if (model.collegeCode === null) {
+      model.collegeCode = 0;
     }
 
     this.formInstance.patchValue(model);
