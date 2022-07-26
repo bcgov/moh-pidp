@@ -24,12 +24,12 @@ export class CollegeLicenceInformationFormState extends AbstractFormState<PartyL
       return;
     }
 
-    const values =
-      this.formInstance.getRawValue() as PartyLicenceDeclarationInformation;
+    const values = this.formInstance.getRawValue();
 
     // Map '0' in the form back into null for the server (mat-select can't use null as a value)
     if (values.collegeCode === 0) {
       values.collegeCode = null;
+      values.licenceNumber = null;
     }
 
     return values;
@@ -50,11 +50,22 @@ export class CollegeLicenceInformationFormState extends AbstractFormState<PartyL
 
   public buildForm(): void {
     this.formInstance = this.fb.group({
-      collegeCode: [
-        0,
-        [Validators.required, FormControlValidators.requiredIndex],
-      ],
-      licenceNumber: ['', [Validators.required]],
+      collegeCode: [0, [Validators.required]],
+      licenceNumber: [''],
     });
+
+    this.collegeCode.valueChanges.subscribe((value) =>
+      this.onCollegeCodeValueChanged(value)
+    );
+  }
+
+  private onCollegeCodeValueChanged(collegeCode: number | null) {
+    if (collegeCode) {
+      this.licenceNumber.setValidators([Validators.required]);
+    } else {
+      this.licenceNumber.clearValidators();
+    }
+
+    this.licenceNumber.updateValueAndValidity();
   }
 }
