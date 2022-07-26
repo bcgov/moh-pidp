@@ -4,8 +4,10 @@ import { ActivatedRoute } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { randTextRange } from '@ngneat/falso';
+import { provideAutoSpy } from 'jest-auto-spies';
 
 import { APP_CONFIG, APP_DI_CONFIG } from '@app/app.config';
+import { LoggerService } from '@app/core/services/logger.service';
 
 import { TransactionsPage } from './transactions.page';
 
@@ -38,6 +40,7 @@ describe('TransactionsPage', () => {
           provide: ActivatedRoute,
           useValue: mockActivatedRoute,
         },
+        provideAutoSpy(LoggerService),
       ],
     });
 

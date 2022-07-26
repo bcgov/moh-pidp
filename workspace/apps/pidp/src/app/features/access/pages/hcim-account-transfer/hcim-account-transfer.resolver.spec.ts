@@ -74,6 +74,7 @@ describe('HcimAccountTransferResolver', () => {
         hcimEnrolment: { statusCode: StatusCode.AVAILABLE },
         sitePrivacySecurityChecklist: { statusCode: StatusCode.AVAILABLE },
         complianceTraining: { statusCode: StatusCode.AVAILABLE },
+        driverFitness: { statusCode: StatusCode.AVAILABLE },
       },
     };
   });
