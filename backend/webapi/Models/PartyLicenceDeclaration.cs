@@ -21,7 +21,4 @@ public class PartyLicenceDeclaration : BaseAuditable
 
     [RegularExpression(@"([a-zA-Z0-9]+)", ErrorMessage = "Licence Number should be alpha numeric characters")]
     public string? LicenceNumber { get; set; } = string.Empty;
-
-    // TOOD: KEEPING THIS FOR NOW, NEED MIGRATION
-    public string? Ipc { get; set; }
 }

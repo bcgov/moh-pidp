@@ -77,6 +77,18 @@ namespace Pidp.Data.Migrations
                 principalTable: "Party",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Cascade);
+
+            migrationBuilder.Sql(@"
+                UPDATE ""Party"" as p
+                SET ""Cpn"" = plr.""Cpn""
+                FROM ""Plr_PlrRecord"" as plr
+                join ""PartyLicenceDeclaration"" l on l.""Ipc"" = plr.""Ipc""
+                WHERE p.""Id"" = l.""PartyId"";
+            ");
+
+            migrationBuilder.DropColumn(
+                name: "Ipc",
+                table: "PartyLicenceDeclaration");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

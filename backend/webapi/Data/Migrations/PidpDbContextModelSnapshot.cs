@@ -1021,9 +1021,6 @@ namespace Pidp.Data.Migrations
                     b.Property<Instant>("Created")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("Ipc")
-                        .HasColumnType("text");
-
                     b.Property<string>("LicenceNumber")
                         .HasColumnType("text");
 
