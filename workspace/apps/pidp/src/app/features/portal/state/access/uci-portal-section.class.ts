@@ -36,17 +36,10 @@ export class UciPortalSection implements IPortalSection {
    * Get the properties that define the action on the section.
    */
   public get action(): PortalSectionAction {
-    const demographicsStatusCode =
-      this.profileStatus.status.demographics.statusCode;
-    const collegeCertStatusCode =
-      this.profileStatus.status.collegeCertification.statusCode;
     return {
       label: this.getStatusCode() === StatusCode.COMPLETED ? 'View' : 'Request',
       route: AccessRoutes.routePath(AccessRoutes.UCI),
-      disabled: !(
-        demographicsStatusCode === StatusCode.COMPLETED &&
-        collegeCertStatusCode === StatusCode.COMPLETED
-      ),
+      disabled: this.getStatusCode() === StatusCode.NOT_AVAILABLE,
     };
   }
 
@@ -68,7 +61,6 @@ export class UciPortalSection implements IPortalSection {
   }
 
   private getStatusCode(): StatusCode {
-    // TODO remove null check once API exists
-    return this.profileStatus.status.uci?.statusCode;
+    return this.profileStatus.status.uci.statusCode;
   }
 }

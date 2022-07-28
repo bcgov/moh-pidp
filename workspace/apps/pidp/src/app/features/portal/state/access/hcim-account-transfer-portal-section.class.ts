@@ -36,12 +36,10 @@ export class HcimAccountTransferPortalSection implements IPortalSection {
    * Get the properties that define the action on the section.
    */
   public get action(): PortalSectionAction {
-    const demographicsStatusCode =
-      this.profileStatus.status.demographics.statusCode;
     return {
       label: this.getStatusCode() === StatusCode.COMPLETED ? 'View' : 'Request',
       route: AccessRoutes.routePath(AccessRoutes.HCIM_ACCOUNT_TRANSFER),
-      disabled: demographicsStatusCode !== StatusCode.COMPLETED,
+      disabled: this.getStatusCode() === StatusCode.NOT_AVAILABLE,
     };
   }
 

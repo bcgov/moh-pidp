@@ -36,16 +36,10 @@ export class HcimEnrolmentPortalSection implements IPortalSection {
    * Get the properties that define the action on the section.
    */
   public get action(): PortalSectionAction {
-    const demographicsStatusCode =
-      this.profileStatus.status.demographics.statusCode;
-    const administratorInfoStatusCode =
-      this.profileStatus.status.administratorInfo.statusCode;
     return {
       label: this.getStatusCode() === StatusCode.COMPLETED ? 'View' : 'Request',
       route: AccessRoutes.routePath(AccessRoutes.HCIM_ENROLMENT),
-      disabled:
-        demographicsStatusCode !== StatusCode.COMPLETED ||
-        administratorInfoStatusCode !== StatusCode.COMPLETED,
+      disabled: this.getStatusCode() === StatusCode.NOT_AVAILABLE,
     };
   }
 
