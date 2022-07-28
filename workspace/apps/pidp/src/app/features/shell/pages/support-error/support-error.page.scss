@@ -1,0 +1,14 @@
+@import 'palette';
+
+div {
+  display: flex;
+  flex-direction: column;
+  color: #fff;
+  background-color: theme-palette(blue);
+  height: 100vh;
+  padding: 30px;
+}
+
+button {
+  border: 1px solid #fff;
+}
