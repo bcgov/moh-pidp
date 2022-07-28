@@ -32,8 +32,9 @@ public partial class ProfileStatus
         public class CollegeCertification : ProfileSection
         {
             internal override string SectionName => "collegeCertification";
+            public bool LicenceDeclared { get; set; }
 
-            public CollegeCertification(ProfileStatusDto profile) : base(profile) { }
+            public CollegeCertification(ProfileStatusDto profile) : base(profile) => this.LicenceDeclared = profile.LicenceDeclared;
 
             protected override void SetAlertsAndStatus(ProfileStatusDto profile)
             {
