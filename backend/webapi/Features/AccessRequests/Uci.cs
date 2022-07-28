@@ -60,14 +60,13 @@ public class Uci
                     AlreadyEnroled = party.AccessRequests.Any(request => request.AccessTypeCode == AccessTypeCode.Uci),
                     party.UserId,
                     party.Email,
-                    party.PartyCertification!.Ipc,
+                    party.Cpn
                 })
                 .SingleAsync();
 
             if (dto.AlreadyEnroled
                 || dto.Email == null
-                || dto.Ipc == null
-                || (await this.plrClient.GetRecordStatus(dto.Ipc))?.IsGoodStanding() != true)
+                || await this.plrClient.IsGoodStanding(dto.Cpn) != true)
             {
                 this.logger.LogSAEformsAccessRequestDenied();
                 return DomainResult.Failed();

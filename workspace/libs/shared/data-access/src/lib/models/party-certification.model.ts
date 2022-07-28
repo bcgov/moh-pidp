@@ -1,5 +1,5 @@
-export interface PartyCertification {
+export interface PartyLicenceDeclaration {
   id: number;
-  collegeCode: number;
-  licenceNumber: string;
+  collegeCode: number | null;
+  licenceNumber: string | null;
 }

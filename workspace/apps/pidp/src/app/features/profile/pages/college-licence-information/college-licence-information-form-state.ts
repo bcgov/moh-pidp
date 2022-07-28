@@ -2,9 +2,9 @@ import { FormBuilder, FormControl, Validators } from '@angular/forms';
 
 import { AbstractFormState, FormControlValidators } from '@bcgov/shared/ui';
 
-import { CollegeLicenceInformation } from './college-licence-information.model';
+import { PartyLicenceDeclarationInformation } from './party-licence-declaration-information.model';
 
-export class CollegeLicenceInformationFormState extends AbstractFormState<CollegeLicenceInformation> {
+export class CollegeLicenceInformationFormState extends AbstractFormState<PartyLicenceDeclarationInformation> {
   public constructor(private fb: FormBuilder) {
     super();
 
@@ -19,17 +19,30 @@ export class CollegeLicenceInformationFormState extends AbstractFormState<Colleg
     return this.formInstance.get('licenceNumber') as FormControl;
   }
 
-  public get json(): CollegeLicenceInformation | undefined {
+  public get json(): PartyLicenceDeclarationInformation | undefined {
     if (!this.formInstance) {
       return;
     }
 
-    return this.formInstance.getRawValue();
+    const values = this.formInstance.getRawValue();
+
+    // Map '0' in the form back into null for the server (mat-select can't use null as a value)
+    if (values.collegeCode === 0) {
+      values.collegeCode = null;
+      values.licenceNumber = null;
+    }
+
+    return values;
   }
 
-  public patchValue(model: CollegeLicenceInformation | null): void {
+  public patchValue(model: PartyLicenceDeclarationInformation | null): void {
     if (!this.formInstance || !model) {
       return;
+    }
+
+    // Map null from server into '0' in the form (mat-select can't use null as a value)
+    if (model.collegeCode === null) {
+      model.collegeCode = 0;
     }
 
     this.formInstance.patchValue(model);
@@ -37,11 +50,22 @@ export class CollegeLicenceInformationFormState extends AbstractFormState<Colleg
 
   public buildForm(): void {
     this.formInstance = this.fb.group({
-      collegeCode: [
-        0,
-        [Validators.required, FormControlValidators.requiredIndex],
-      ],
-      licenceNumber: ['', [Validators.required]],
+      collegeCode: [0, [Validators.required]],
+      licenceNumber: [''],
     });
+
+    this.collegeCode.valueChanges.subscribe((value) =>
+      this.onCollegeCodeValueChanged(value)
+    );
+  }
+
+  private onCollegeCodeValueChanged(collegeCode: number | null) {
+    if (collegeCode) {
+      this.licenceNumber.setValidators([Validators.required]);
+    } else {
+      this.licenceNumber.clearValidators();
+    }
+
+    this.licenceNumber.updateValueAndValidity();
   }
 }

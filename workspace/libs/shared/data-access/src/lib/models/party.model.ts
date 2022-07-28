@@ -1,6 +1,6 @@
 import { Address } from './address.model';
 import { Facility } from './facility.model';
-import { PartyCertification } from './party-certification.model';
+import { PartyLicenceDeclaration } from './party-certification.model';
 import { User } from './user.model';
 
 export enum AccessTypeCode {
@@ -38,7 +38,7 @@ export interface Party extends User {
   email: string;
   phone: string;
   mailingAddress: Address;
-  partyCertification: PartyCertification;
+  partyLicenceDeclaration: PartyLicenceDeclaration;
   jobTitle: string;
   facility: Facility;
   accessRequests: AccessRequest[];

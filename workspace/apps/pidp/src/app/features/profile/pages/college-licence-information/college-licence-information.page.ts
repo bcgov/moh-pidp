@@ -13,9 +13,10 @@ import { LoggerService } from '@app/core/services/logger.service';
 import { LookupService } from '@app/modules/lookup/lookup.service';
 import { CollegeLookup } from '@app/modules/lookup/lookup.types';
 
+import { CollegeCertification } from './college-certification.model';
 import { CollegeLicenceInformationFormState } from './college-licence-information-form-state';
 import { CollegeLicenceInformationResource } from './college-licence-information-resource.service';
-import { CollegeLicenceInformation } from './college-licence-information.model';
+import { PartyLicenceDeclarationInformation } from './party-licence-declaration-information.model';
 
 @Component({
   selector: 'app-college-licence-information',
@@ -30,6 +31,7 @@ export class CollegeLicenceInformationPage
   public title: string;
   public formState: CollegeLicenceInformationFormState;
   public colleges: CollegeLookup[];
+  public collegeCertifications: CollegeCertification[];
 
   public constructor(
     protected dialog: MatDialog,
@@ -47,6 +49,7 @@ export class CollegeLicenceInformationPage
     this.title = this.route.snapshot.data.title;
     this.formState = new CollegeLicenceInformationFormState(fb);
     this.colleges = lookupService.colleges;
+    this.collegeCertifications = [];
   }
 
   public onBack(): void {
@@ -63,7 +66,7 @@ export class CollegeLicenceInformationPage
     this.resource
       .get(partyId)
       .pipe(
-        tap((model: CollegeLicenceInformation | null) =>
+        tap((model: PartyLicenceDeclarationInformation | null) =>
           this.formState.patchValue(model)
         ),
         catchError((error: HttpErrorResponse) => {
@@ -74,6 +77,10 @@ export class CollegeLicenceInformationPage
         })
       )
       .subscribe();
+
+    this.resource.getCollegeCertifications(partyId).subscribe((cc) => {
+      this.collegeCertifications.push(...cc);
+    });
   }
 
   protected performSubmission(): Observable<void> {

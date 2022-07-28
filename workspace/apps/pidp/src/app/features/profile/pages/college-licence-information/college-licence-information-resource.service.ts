@@ -1,7 +1,11 @@
-import { HttpContext, HttpErrorResponse } from '@angular/common/http';
+import {
+  HttpContext,
+  HttpErrorResponse,
+  HttpStatusCode,
+} from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
-import { catchError, tap, throwError } from 'rxjs';
+import { Observable, catchError, of, tap, throwError } from 'rxjs';
 
 import {
   CrudResource,
@@ -13,10 +17,11 @@ import { ApiHttpClient } from '@app/core/resources/api-http-client.service';
 
 import { ToastService } from '@core/services/toast.service';
 
-import { CollegeLicenceInformation } from './college-licence-information.model';
+import { CollegeCertification } from './college-certification.model';
+import { PartyLicenceDeclarationInformation } from './party-licence-declaration-information.model';
 
 @Injectable()
-export class CollegeLicenceInformationResource extends CrudResource<CollegeLicenceInformation> {
+export class CollegeLicenceInformationResource extends CrudResource<PartyLicenceDeclarationInformation> {
   public constructor(
     protected apiResource: ApiHttpClient,
     private toastService: ToastService
@@ -24,7 +29,10 @@ export class CollegeLicenceInformationResource extends CrudResource<CollegeLicen
     super(apiResource);
   }
 
-  public update(id: number, payload: CollegeLicenceInformation): NoContent {
+  public update(
+    id: number,
+    payload: PartyLicenceDeclarationInformation
+  ): NoContent {
     return super
       .update(id, payload, {
         context: new HttpContext().set(SHOW_LOADING_MESSAGE, true),
@@ -44,7 +52,27 @@ export class CollegeLicenceInformationResource extends CrudResource<CollegeLicen
       );
   }
 
+  public getCollegeCertifications(
+    partyId: number
+  ): Observable<CollegeCertification[]> {
+    return this.apiResource
+      .get<CollegeCertification[]>(this.getCertificationResourcePath(partyId))
+      .pipe(
+        catchError((error: HttpErrorResponse) => {
+          if (error.status === HttpStatusCode.BadRequest) {
+            return of([]);
+          }
+
+          return throwError(() => error);
+        })
+      );
+  }
+
   protected getResourcePath(partyId: number): string {
-    return `parties/${partyId}/college-certification`;
+    return `parties/${partyId}/licence-declaration`;
+  }
+
+  protected getCertificationResourcePath(partyId: number): string {
+    return `parties/${partyId}/college-certifications`;
   }
 }

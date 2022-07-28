@@ -41,18 +41,8 @@ export class CollegeCertificationPortalSection implements IPortalSection {
     const statusCode = this.getStatusCode();
     const demographicsStatusCode =
       this.profileStatus.status.demographics.statusCode;
-    const { collegeCode, licenceNumber } = this.getSectionStatus();
     return [StatusCode.ERROR, StatusCode.COMPLETED].includes(statusCode)
       ? [
-          {
-            key: 'collegeCode',
-            value: collegeCode,
-          },
-          {
-            key: 'licenceNumber',
-            value: licenceNumber,
-            label: 'College Licence Number:',
-          },
           {
             key: 'status',
             value:
@@ -71,10 +61,11 @@ export class CollegeCertificationPortalSection implements IPortalSection {
    * Get the properties that define the action on the section.
    */
   public get action(): PortalSectionAction {
+    const statusCode = this.getStatusCode();
     const demographicsStatusCode =
       this.profileStatus.status.demographics.statusCode;
     return {
-      label: 'Update',
+      label: statusCode === StatusCode.COMPLETED ? 'View' : 'Update',
       route: ProfileRoutes.routePath(ProfileRoutes.COLLEGE_LICENCE_INFO),
       disabled:
         demographicsStatusCode !== StatusCode.COMPLETED ||

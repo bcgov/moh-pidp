@@ -8,6 +8,7 @@ public class PlrRecordConfiguration : IEntityTypeConfiguration<PlrRecord>
 {
     public void Configure(EntityTypeBuilder<PlrRecord> builder)
     {
+        builder.HasIndex(x => x.Cpn);
         builder.HasIndex(x => x.Ipc)
             .IsUnique();
 

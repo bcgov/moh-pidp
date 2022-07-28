@@ -2,7 +2,7 @@ namespace Pidp.Infrastructure.HttpClients.Keycloak;
 
 using System.Net;
 
-// TODO DomainResult rather than null or bool
+// TODO Use DomainResult for success/fail?
 public class KeycloakAdministrationClient : BaseClient, IKeycloakAdministrationClient
 {
     public KeycloakAdministrationClient(HttpClient httpClient, ILogger<KeycloakAdministrationClient> logger) : base(httpClient, logger) { }
