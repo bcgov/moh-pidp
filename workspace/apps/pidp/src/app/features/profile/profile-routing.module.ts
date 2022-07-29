@@ -19,7 +19,7 @@ const routes: Routes = [
       ),
   },
   {
-    path: ProfileRoutes.COLLEGE_LICENCE_INFO,
+    path: ProfileRoutes.COLLEGE_LICENCE_DECLARATION,
     loadChildren: (): Promise<CollegeLicenceDeclarationModule> =>
       import(
         './pages/college-licence/college-licence-declaration/college-licence-declaration.module'
