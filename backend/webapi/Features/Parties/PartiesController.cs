@@ -84,13 +84,13 @@ public class PartiesController : PidpControllerBase
             .ToActionResultOfT();
 
     [HttpPut("{partyId}/licence-declaration")]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> UpdatePartyLicenceDeclaration([FromServices] ICommandHandler<LicenceDeclaration.Command, IDomainResult> handler,
-                                                                   [FromHybrid] LicenceDeclaration.Command command)
+    public async Task<ActionResult<string?>> UpdatePartyLicenceDeclaration([FromServices] ICommandHandler<LicenceDeclaration.Command, IDomainResult<string?>> handler,
+                                                                           [FromHybrid] LicenceDeclaration.Command command)
         => await this.AuthorizePartyBeforeHandleAsync(command.PartyId, handler, command)
-            .ToActionResult();
+            .ToActionResultOfT();
 
     [HttpGet("{partyId}/organization-details")]
     [ProducesResponseType(StatusCodes.Status200OK)]

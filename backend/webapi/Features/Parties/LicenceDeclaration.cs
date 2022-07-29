@@ -21,7 +21,7 @@ public class LicenceDeclaration
         public int PartyId { get; set; }
     }
 
-    public class Command : ICommand<IDomainResult>
+    public class Command : ICommand<IDomainResult<string?>>
     {
         [JsonIgnore]
         [HybridBindProperty(Source.Route)]
@@ -71,7 +71,7 @@ public class LicenceDeclaration
         }
     }
 
-    public class CommandHandler : ICommandHandler<Command, IDomainResult>
+    public class CommandHandler : ICommandHandler<Command, IDomainResult<string?>>
     {
         private readonly IPlrClient client;
         private readonly PidpDbContext context;
@@ -82,7 +82,7 @@ public class LicenceDeclaration
             this.context = context;
         }
 
-        public async Task<IDomainResult> HandleAsync(Command command)
+        public async Task<IDomainResult<string?>> HandleAsync(Command command)
         {
             var party = await this.context.Parties
                 .Include(party => party.LicenceDeclaration)
@@ -91,7 +91,7 @@ public class LicenceDeclaration
             if (!string.IsNullOrWhiteSpace(party.Cpn))
             {
                 // Users cannot update licence declarations once found in PLR
-                return DomainResult.Failed();
+                return DomainResult.Failed<string?>();
             }
 
             if (party.LicenceDeclaration == null)
@@ -107,7 +107,7 @@ public class LicenceDeclaration
 
             await this.context.SaveChangesAsync();
 
-            return DomainResult.Success();
+            return DomainResult.Success(party.Cpn);
         }
     }
 }
