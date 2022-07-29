@@ -1,11 +1,7 @@
-import {
-  HttpContext,
-  HttpErrorResponse,
-  HttpStatusCode,
-} from '@angular/common/http';
+import { HttpContext, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
-import { Observable, catchError, of, tap, throwError } from 'rxjs';
+import { catchError, tap, throwError } from 'rxjs';
 
 import {
   CrudResource,
@@ -17,7 +13,6 @@ import { ApiHttpClient } from '@app/core/resources/api-http-client.service';
 
 import { ToastService } from '@core/services/toast.service';
 
-import { CollegeCertification } from './college-certification.model';
 import { PartyLicenceDeclarationInformation } from './party-licence-declaration-information.model';
 
 @Injectable()
@@ -52,27 +47,7 @@ export class CollegeLicenceDeclarationResource extends CrudResource<PartyLicence
       );
   }
 
-  public getCollegeCertifications(
-    partyId: number
-  ): Observable<CollegeCertification[]> {
-    return this.apiResource
-      .get<CollegeCertification[]>(this.getCertificationResourcePath(partyId))
-      .pipe(
-        catchError((error: HttpErrorResponse) => {
-          if (error.status === HttpStatusCode.BadRequest) {
-            return of([]);
-          }
-
-          return throwError(() => error);
-        })
-      );
-  }
-
   protected getResourcePath(partyId: number): string {
     return `parties/${partyId}/licence-declaration`;
-  }
-
-  protected getCertificationResourcePath(partyId: number): string {
-    return `parties/${partyId}/college-certifications`;
   }
 }

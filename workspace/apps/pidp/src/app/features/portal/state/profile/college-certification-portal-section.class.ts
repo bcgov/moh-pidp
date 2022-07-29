@@ -61,8 +61,6 @@ export class CollegeCertificationPortalSection implements IPortalSection {
    */
   public get action(): PortalSectionAction {
     const statusCode = this.getStatusCode();
-    const demographicsStatusCode =
-      this.profileStatus.status.demographics.statusCode;
     return {
       label: statusCode === StatusCode.COMPLETED ? 'View' : 'Update',
       route: ProfileRoutes.routePath(ProfileRoutes.COLLEGE_LICENCE_DECLARATION),

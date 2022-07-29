@@ -13,7 +13,6 @@ import { LoggerService } from '@app/core/services/logger.service';
 import { LookupService } from '@app/modules/lookup/lookup.service';
 import { CollegeLookup } from '@app/modules/lookup/lookup.types';
 
-import { CollegeCertification } from './college-certification.model';
 import { CollegeLicenceDeclarationFormState } from './college-licence-declaration-form-state';
 import { CollegeLicenceDeclarationResource } from './college-licence-declaration-resource.service';
 import { PartyLicenceDeclarationInformation } from './party-licence-declaration-information.model';
@@ -31,7 +30,6 @@ export class CollegeLicenceDeclarationPage
   public title: string;
   public formState: CollegeLicenceDeclarationFormState;
   public colleges: CollegeLookup[];
-  public collegeCertifications: CollegeCertification[];
 
   public constructor(
     protected dialog: MatDialog,
@@ -49,7 +47,6 @@ export class CollegeLicenceDeclarationPage
     this.title = this.route.snapshot.data.title;
     this.formState = new CollegeLicenceDeclarationFormState(fb);
     this.colleges = lookupService.colleges;
-    this.collegeCertifications = [];
   }
 
   public onBack(): void {
@@ -77,10 +74,6 @@ export class CollegeLicenceDeclarationPage
         })
       )
       .subscribe();
-
-    this.resource.getCollegeCertifications(partyId).subscribe((cc) => {
-      this.collegeCertifications.push(...cc);
-    });
   }
 
   protected performSubmission(): Observable<void> {

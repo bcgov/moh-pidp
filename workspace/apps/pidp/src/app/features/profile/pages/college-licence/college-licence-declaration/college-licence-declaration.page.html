@@ -1,7 +1,7 @@
 <ui-page [form]="formState.form" (submitted)="onSubmit()">
   <ui-page-header>{{ title }}</ui-page-header>
 
-  <ng-container *ngIf="collegeCertifications.length === 0; else foundInPLR">
+  <div class="row">
     <ui-page-section>
       <ui-page-section-subheader
         icon="assignment_ind"
@@ -49,23 +49,7 @@
         </div>
       </ui-page-section>
     </ng-container>
-  </ng-container>
-
-  <ng-template #foundInPLR>
-    <div *ngFor="let collegeCertification of collegeCertifications">
-      <strong>Identifier Type</strong>
-      <p>{{ collegeCertification.identifierType ?? 'Not Available' }}</p>
-      <strong>College Id</strong>
-      <p>{{ collegeCertification.collegeId ?? 'Not Available' }}</p>
-      <strong>Provider Role Type</strong>
-      <p>{{ collegeCertification.providerRoleType ?? 'Not Available' }}</p>
-      <strong>Status Code</strong>
-      <p>{{ collegeCertification.statusCode ?? 'Not Available' }}</p>
-      <strong>Status Start Date</strong>
-      <p>{{ collegeCertification.statusStartDate ?? 'Not Available' }}</p>
-      <br />
-    </div>
-  </ng-template>
+  </div>
 
   <ui-page-footer>
     <button
@@ -76,12 +60,7 @@
       (click)="onBack()">
       Back Home
     </button>
-    <button
-      *ngIf="collegeCertifications.length === 0"
-      mat-flat-button
-      uiPageFooterAction
-      type="submit"
-      color="primary">
+    <button mat-flat-button uiPageFooterAction type="submit" color="primary">
       Save Information
     </button>
   </ui-page-footer>
