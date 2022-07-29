@@ -4,7 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { PermissionsGuard } from '@app/modules/permissions/permissions.guard';
 import { Role } from '@app/shared/enums/roles.enum';
 
-import { CollegeLicenceInformationModule } from './pages/college-licence-information/college-licence-information.module';
+import { CollegeLicenceDeclarationModule } from './pages/college-licence/college-licence-declaration/college-licence-declaration.module';
 import { PersonalInformationModule } from './pages/personal-information/personal-information.module';
 import { UserAccessAgreementModule } from './pages/user-access-agreement/user-access-agreement.module';
 import { WorkAndRoleInformationModule } from './pages/work-and-role-information/work-and-role-information.module';
@@ -20,10 +20,10 @@ const routes: Routes = [
   },
   {
     path: ProfileRoutes.COLLEGE_LICENCE_INFO,
-    loadChildren: (): Promise<CollegeLicenceInformationModule> =>
+    loadChildren: (): Promise<CollegeLicenceDeclarationModule> =>
       import(
-        './pages/college-licence-information/college-licence-information.module'
-      ).then((m) => m.CollegeLicenceInformationModule),
+        './pages/college-licence/college-licence-declaration/college-licence-declaration.module'
+      ).then((m) => m.CollegeLicenceDeclarationModule),
   },
   {
     path: ProfileRoutes.WORK_AND_ROLE_INFO,

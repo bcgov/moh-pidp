@@ -21,7 +21,7 @@ import { CollegeCertification } from './college-certification.model';
 import { PartyLicenceDeclarationInformation } from './party-licence-declaration-information.model';
 
 @Injectable()
-export class CollegeLicenceInformationResource extends CrudResource<PartyLicenceDeclarationInformation> {
+export class CollegeLicenceDeclarationResource extends CrudResource<PartyLicenceDeclarationInformation> {
   public constructor(
     protected apiResource: ApiHttpClient,
     private toastService: ToastService

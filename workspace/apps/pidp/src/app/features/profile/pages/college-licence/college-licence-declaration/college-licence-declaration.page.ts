@@ -14,22 +14,22 @@ import { LookupService } from '@app/modules/lookup/lookup.service';
 import { CollegeLookup } from '@app/modules/lookup/lookup.types';
 
 import { CollegeCertification } from './college-certification.model';
-import { CollegeLicenceInformationFormState } from './college-licence-information-form-state';
-import { CollegeLicenceInformationResource } from './college-licence-information-resource.service';
+import { CollegeLicenceDeclarationFormState } from './college-licence-declaration-form-state';
+import { CollegeLicenceDeclarationResource } from './college-licence-declaration-resource.service';
 import { PartyLicenceDeclarationInformation } from './party-licence-declaration-information.model';
 
 @Component({
-  selector: 'app-college-licence-information',
-  templateUrl: './college-licence-information.page.html',
-  styleUrls: ['./college-licence-information.page.scss'],
-  viewProviders: [CollegeLicenceInformationResource],
+  selector: 'app-college-licence-declaration',
+  templateUrl: './college-licence-declaration.page.html',
+  styleUrls: ['./college-licence-declaration.page.scss'],
+  viewProviders: [CollegeLicenceDeclarationResource],
 })
-export class CollegeLicenceInformationPage
-  extends AbstractFormPage<CollegeLicenceInformationFormState>
+export class CollegeLicenceDeclarationPage
+  extends AbstractFormPage<CollegeLicenceDeclarationFormState>
   implements OnInit
 {
   public title: string;
-  public formState: CollegeLicenceInformationFormState;
+  public formState: CollegeLicenceDeclarationFormState;
   public colleges: CollegeLookup[];
   public collegeCertifications: CollegeCertification[];
 
@@ -39,7 +39,7 @@ export class CollegeLicenceInformationPage
     private route: ActivatedRoute,
     private router: Router,
     private partyService: PartyService,
-    private resource: CollegeLicenceInformationResource,
+    private resource: CollegeLicenceDeclarationResource,
     private logger: LoggerService,
     lookupService: LookupService,
     fb: FormBuilder
@@ -47,7 +47,7 @@ export class CollegeLicenceInformationPage
     super(dialog, formUtilsService);
 
     this.title = this.route.snapshot.data.title;
-    this.formState = new CollegeLicenceInformationFormState(fb);
+    this.formState = new CollegeLicenceDeclarationFormState(fb);
     this.colleges = lookupService.colleges;
     this.collegeCertifications = [];
   }

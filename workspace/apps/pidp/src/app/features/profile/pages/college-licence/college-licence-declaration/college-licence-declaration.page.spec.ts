@@ -17,14 +17,14 @@ import { PartyService } from '@core/party/party.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { LoggerService } from '@core/services/logger.service';
 
-import { CollegeLicenceInformationResource } from './college-licence-information-resource.service';
+import { CollegeLicenceDeclarationResource } from './college-licence-declaration-resource.service';
+import { CollegeLicenceDeclarationPage } from './college-licence-declaration.page';
 import { PartyLicenceDeclarationInformation } from './party-licence-declaration-information.model';
-import { CollegeLicenceInformationPage } from './college-licence-information.page';
 
-describe('CollegeLicenceInformationPage', () => {
-  let component: CollegeLicenceInformationPage;
+describe('CollegeLicenceDeclarationPage', () => {
+  let component: CollegeLicenceDeclarationPage;
   let partyServiceSpy: Spy<PartyService>;
-  let collegeLicenceInfoResourceSpy: Spy<CollegeLicenceInformationResource>;
+  let collegeLicenceDeclarationResourceSpy: Spy<CollegeLicenceDeclarationResource>;
   let formUtilsServiceSpy: Spy<FormUtilsService>;
   let router: Router;
 
@@ -51,7 +51,7 @@ describe('CollegeLicenceInformationPage', () => {
         RouterTestingModule,
       ],
       providers: [
-        CollegeLicenceInformationPage,
+        CollegeLicenceDeclarationPage,
         {
           provide: APP_CONFIG,
           useValue: APP_DI_CONFIG,
@@ -67,7 +67,7 @@ describe('CollegeLicenceInformationPage', () => {
             settersToSpyOn: ['partyId'],
           }),
         },
-        provideAutoSpy(CollegeLicenceInformationResource),
+        provideAutoSpy(CollegeLicenceDeclarationResource),
         provideAutoSpy(FormUtilsService),
         provideAutoSpy(AuthorizedUserService),
         provideAutoSpy(LoggerService),
@@ -76,10 +76,10 @@ describe('CollegeLicenceInformationPage', () => {
     });
 
     router = TestBed.inject(Router);
-    component = TestBed.inject(CollegeLicenceInformationPage);
+    component = TestBed.inject(CollegeLicenceDeclarationPage);
     partyServiceSpy = TestBed.inject<any>(PartyService);
-    collegeLicenceInfoResourceSpy = TestBed.inject<any>(
-      CollegeLicenceInformationResource
+    collegeLicenceDeclarationResourceSpy = TestBed.inject<any>(
+      CollegeLicenceDeclarationResource
     );
     formUtilsServiceSpy = TestBed.inject<any>(FormUtilsService);
 
@@ -93,15 +93,17 @@ describe('CollegeLicenceInformationPage', () => {
     given('partyId exists', () => {
       const partyId = randNumber({ min: 1 });
       partyServiceSpy.accessorSpies.getters.partyId.mockReturnValue(partyId);
-      collegeLicenceInfoResourceSpy.get.nextOneTimeWith(mockParty);
+      collegeLicenceDeclarationResourceSpy.get.nextOneTimeWith(mockParty);
 
       when('resource request resolved', () => {
         component.ngOnInit();
 
         then('should GET party college licence information', () => {
           expect(router.navigate).not.toHaveBeenCalled();
-          expect(collegeLicenceInfoResourceSpy.get).toHaveBeenCalledTimes(1);
-          expect(collegeLicenceInfoResourceSpy.get).toHaveBeenCalledWith(
+          expect(
+            collegeLicenceDeclarationResourceSpy.get
+          ).toHaveBeenCalledTimes(1);
+          expect(collegeLicenceDeclarationResourceSpy.get).toHaveBeenCalledWith(
             partyId
           );
         });
@@ -111,7 +113,7 @@ describe('CollegeLicenceInformationPage', () => {
     given('partyId exists', () => {
       const partyId = randNumber({ min: 1 });
       partyServiceSpy.accessorSpies.getters.partyId.mockReturnValue(partyId);
-      collegeLicenceInfoResourceSpy.get.nextWithValues([
+      collegeLicenceDeclarationResourceSpy.get.nextWithValues([
         {
           errorValue: {
             status: HttpStatusCode.NotFound,
@@ -152,7 +154,7 @@ describe('CollegeLicenceInformationPage', () => {
 
       when('no validation errors exist', () => {
         formUtilsServiceSpy.checkValidity.mockReturnValue(true);
-        collegeLicenceInfoResourceSpy.update
+        collegeLicenceDeclarationResourceSpy.update
           .mustBeCalledWith(partyId, mockParty)
           .nextWith(void 0);
         component.onSubmit();

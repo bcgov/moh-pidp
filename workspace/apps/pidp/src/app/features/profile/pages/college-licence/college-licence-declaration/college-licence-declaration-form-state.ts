@@ -1,10 +1,10 @@
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 
-import { AbstractFormState, FormControlValidators } from '@bcgov/shared/ui';
+import { AbstractFormState } from '@bcgov/shared/ui';
 
 import { PartyLicenceDeclarationInformation } from './party-licence-declaration-information.model';
 
-export class CollegeLicenceInformationFormState extends AbstractFormState<PartyLicenceDeclarationInformation> {
+export class CollegeLicenceDeclarationFormState extends AbstractFormState<PartyLicenceDeclarationInformation> {
   public constructor(private fb: FormBuilder) {
     super();
 
@@ -59,7 +59,7 @@ export class CollegeLicenceInformationFormState extends AbstractFormState<PartyL
     );
   }
 
-  private onCollegeCodeValueChanged(collegeCode: number | null) {
+  private onCollegeCodeValueChanged(collegeCode: number | null): void {
     if (collegeCode) {
       this.licenceNumber.setValidators([Validators.required]);
     } else {
