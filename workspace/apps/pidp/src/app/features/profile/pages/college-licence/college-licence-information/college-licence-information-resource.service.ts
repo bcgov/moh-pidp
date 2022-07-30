@@ -1,7 +1,7 @@
-import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
+import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
-import { Observable, catchError, of, throwError } from 'rxjs';
+import { Observable, catchError } from 'rxjs';
 
 import { CrudResource } from '@bcgov/shared/data-access';
 
@@ -29,11 +29,7 @@ export class CollegeLicenceInformationResource extends CrudResource<
         this.toastService.openErrorToast(
           'College licence information could not be retrieved'
         );
-        if (error.status === HttpStatusCode.BadRequest) {
-          return of([]);
-        }
-
-        return throwError(() => error);
+        throw error;
       })
     );
   }

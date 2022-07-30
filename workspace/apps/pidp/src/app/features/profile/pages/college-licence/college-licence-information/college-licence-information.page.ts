@@ -2,7 +2,7 @@ import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { catchError, of, switchMap, tap } from 'rxjs';
+import { Observable, catchError, map, of } from 'rxjs';
 
 import { PartyService } from '@app/core/party/party.service';
 import { LoggerService } from '@app/core/services/logger.service';
@@ -17,7 +17,7 @@ import { CollegeLicenceInformationResource } from './college-licence-information
 })
 export class CollegeLicenceInformationPage implements OnInit {
   public title: string;
-  public collegeCertifications: CollegeCertification[];
+  public collegeCertifications$!: Observable<CollegeCertification[]>;
 
   public constructor(
     private route: ActivatedRoute,
@@ -27,7 +27,6 @@ export class CollegeLicenceInformationPage implements OnInit {
     private logger: LoggerService
   ) {
     this.title = this.route.snapshot.data.title;
-    this.collegeCertifications = [];
   }
 
   public onBack(): void {
@@ -41,21 +40,15 @@ export class CollegeLicenceInformationPage implements OnInit {
       return this.navigateToRoot();
     }
 
-    this.resource
-      .get(partyId)
-      .pipe(
-        tap(() => this.resource.get(partyId)),
-        tap((cc: CollegeCertification[] | null) =>
-          this.collegeCertifications.push(...cc)
-        ),
-        catchError((error: HttpErrorResponse) => {
-          if (error.status === HttpStatusCode.NotFound) {
-            this.navigateToRoot();
-          }
-          return of(null);
-        })
-      )
-      .subscribe();
+    this.collegeCertifications$ = this.resource.get(partyId).pipe(
+      map((response: CollegeCertification[] | null) => response ?? []),
+      catchError((error: HttpErrorResponse) => {
+        if (error.status === HttpStatusCode.NotFound) {
+          this.navigateToRoot();
+        }
+        return of([]);
+      })
+    );
   }
 
   private navigateToRoot(): void {

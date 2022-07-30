@@ -3,7 +3,7 @@
 
   <div class="row">
     <div
-      *ngFor="let collegeCertification of collegeCertifications"
+      *ngFor="let collegeCertification of collegeCertifications$ | async"
       class="col-12">
       <strong>Identifier Type</strong>
       <p>{{ collegeCertification.identifierType ?? 'Not Available' }}</p>
