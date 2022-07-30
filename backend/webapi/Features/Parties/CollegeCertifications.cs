@@ -72,6 +72,7 @@ public class CollegeCertifications
             if (!records.Any())
             {
                 this.logger.LogNoCertsFound(cpn);
+                return DomainResult.Failed<List<Model>>();
             }
 
             return DomainResult.Success(this.mapper.Map<List<Model>>(records));
