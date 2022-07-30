@@ -25,10 +25,9 @@ export class EndorsementPortalSection implements IPortalSection {
   ) {
     this.key = 'endorsement';
     this.heading = 'Endorsement';
-    // TODO: soon this will no longer be true because OBOs will be selecting "No College Licence" rather than not filling out the card.
+    const collegeCard = this.profileStatus.status.collegeCertification;
     this.isRegulated =
-      this.profileStatus.status.collegeCertification.statusCode ===
-      StatusCode.COMPLETED;
+      collegeCard.statusCode === StatusCode.COMPLETED && collegeCard.hasCpn;
     this.description = this.isRegulated
       ? 'View and make changes to you care team'
       : 'Request endorsement from the licenced practitioners you work with to gain access to systems.';
