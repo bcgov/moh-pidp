@@ -36,10 +36,11 @@ export class SaEformsPortalSection implements IPortalSection {
    * Get the properties that define the action on the section.
    */
   public get action(): PortalSectionAction {
+    const statusCode = this.getStatusCode();
     return {
-      label: this.getStatusCode() === StatusCode.COMPLETED ? 'View' : 'Request',
+      label: statusCode === StatusCode.COMPLETED ? 'View' : 'Request',
       route: AccessRoutes.routePath(AccessRoutes.SPECIAL_AUTH_EFORMS),
-      disabled: this.getStatusCode() === StatusCode.NOT_AVAILABLE,
+      disabled: statusCode === StatusCode.NOT_AVAILABLE,
     };
   }
 

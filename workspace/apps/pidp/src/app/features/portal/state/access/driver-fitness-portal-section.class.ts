@@ -36,10 +36,11 @@ export class DriverFitnessPortalSection implements IPortalSection {
    * Get the properties that define the action on the section.
    */
   public get action(): PortalSectionAction {
+    const statusCode = this.getStatusCode();
     return {
-      label: this.getStatusCode() === StatusCode.COMPLETED ? 'View' : 'Request',
+      label: statusCode === StatusCode.COMPLETED ? 'View' : 'Request',
       route: AccessRoutes.routePath(AccessRoutes.DRIVER_FITNESS),
-      disabled: this.getStatusCode() === StatusCode.NOT_AVAILABLE,
+      disabled: statusCode === StatusCode.NOT_AVAILABLE,
     };
   }
 
@@ -48,8 +49,9 @@ export class DriverFitnessPortalSection implements IPortalSection {
   }
 
   public get status(): string {
-    const statusCode = this.getStatusCode();
-    return statusCode === StatusCode.COMPLETED ? 'Completed' : 'Incomplete';
+    return this.getStatusCode() === StatusCode.COMPLETED
+      ? 'Completed'
+      : 'Incomplete';
   }
 
   public performAction(): Observable<void> | void {
