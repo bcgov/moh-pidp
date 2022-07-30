@@ -25,9 +25,9 @@ export class EndorsementPortalSection implements IPortalSection {
   ) {
     this.key = 'endorsement';
     this.heading = 'Endorsement';
-    const collegeCard = this.profileStatus.status.collegeCertification;
-    this.isRegulated =
-      collegeCard.statusCode === StatusCode.COMPLETED && collegeCard.hasCpn;
+    const { statusCode, hasCpn } =
+      this.profileStatus.status.collegeCertification;
+    this.isRegulated = statusCode === StatusCode.COMPLETED && hasCpn;
     this.description = this.isRegulated
       ? 'View and make changes to you care team'
       : 'Request endorsement from the licenced practitioners you work with to gain access to systems.';
