@@ -97,7 +97,7 @@ public partial class ProfileStatus
                .SingleAsync();
 
             if (profile.LicenceDeclared
-                && profile.Cpn == null)
+                && string.IsNullOrWhiteSpace(profile.Cpn))
             {
                 // Cert has been entered but no CPN found, likely due to a transient error or delay in PLR record updates. Retry once.
                 profile.Cpn = await this.RecheckCpn(command.Id, profile.LicenceDeclaration, profile.Birthdate);
