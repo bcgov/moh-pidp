@@ -10,25 +10,26 @@ import { AbstractFormPage } from '@app/core/classes/abstract-form-page.class';
 import { PartyService } from '@app/core/party/party.service';
 import { FormUtilsService } from '@app/core/services/form-utils.service';
 import { LoggerService } from '@app/core/services/logger.service';
+import { ProfileRoutes } from '@app/features/profile/profile.routes';
 import { LookupService } from '@app/modules/lookup/lookup.service';
 import { CollegeLookup } from '@app/modules/lookup/lookup.types';
 
-import { CollegeLicenceInformationFormState } from './college-licence-information-form-state';
-import { CollegeLicenceInformationResource } from './college-licence-information-resource.service';
-import { CollegeLicenceInformation } from './college-licence-information.model';
+import { CollegeLicenceDeclarationFormState } from './college-licence-declaration-form-state';
+import { CollegeLicenceDeclarationResource } from './college-licence-declaration-resource.service';
+import { PartyLicenceDeclarationInformation } from './party-licence-declaration-information.model';
 
 @Component({
-  selector: 'app-college-licence-information',
-  templateUrl: './college-licence-information.page.html',
-  styleUrls: ['./college-licence-information.page.scss'],
-  viewProviders: [CollegeLicenceInformationResource],
+  selector: 'app-college-licence-declaration',
+  templateUrl: './college-licence-declaration.page.html',
+  styleUrls: ['./college-licence-declaration.page.scss'],
+  viewProviders: [CollegeLicenceDeclarationResource],
 })
-export class CollegeLicenceInformationPage
-  extends AbstractFormPage<CollegeLicenceInformationFormState>
+export class CollegeLicenceDeclarationPage
+  extends AbstractFormPage<CollegeLicenceDeclarationFormState>
   implements OnInit
 {
   public title: string;
-  public formState: CollegeLicenceInformationFormState;
+  public formState: CollegeLicenceDeclarationFormState;
   public colleges: CollegeLookup[];
 
   public constructor(
@@ -37,7 +38,7 @@ export class CollegeLicenceInformationPage
     private route: ActivatedRoute,
     private router: Router,
     private partyService: PartyService,
-    private resource: CollegeLicenceInformationResource,
+    private resource: CollegeLicenceDeclarationResource,
     private logger: LoggerService,
     lookupService: LookupService,
     fb: FormBuilder
@@ -45,7 +46,7 @@ export class CollegeLicenceInformationPage
     super(dialog, formUtilsService);
 
     this.title = this.route.snapshot.data.title;
-    this.formState = new CollegeLicenceInformationFormState(fb);
+    this.formState = new CollegeLicenceDeclarationFormState(fb);
     this.colleges = lookupService.colleges;
   }
 
@@ -63,7 +64,7 @@ export class CollegeLicenceInformationPage
     this.resource
       .get(partyId)
       .pipe(
-        tap((model: CollegeLicenceInformation | null) =>
+        tap((model: PartyLicenceDeclarationInformation | null) =>
           this.formState.patchValue(model)
         ),
         catchError((error: HttpErrorResponse) => {
@@ -76,16 +77,23 @@ export class CollegeLicenceInformationPage
       .subscribe();
   }
 
-  protected performSubmission(): Observable<void> {
+  protected performSubmission(): Observable<string | null> {
     const partyId = this.partyService.partyId;
 
     return partyId && this.formState.json
-      ? this.resource.update(partyId, this.formState.json)
+      ? this.resource.updateDeclaration(partyId, this.formState.json)
       : EMPTY;
   }
 
-  protected afterSubmitIsSuccessful(): void {
-    this.navigateToRoot();
+  protected afterSubmitIsSuccessful(cpn: string | null): void {
+    if (!cpn) {
+      this.navigateToRoot();
+    }
+
+    this.router.navigate(
+      [ProfileRoutes.routePath(ProfileRoutes.COLLEGE_LICENCE_INFO)],
+      { replaceUrl: true }
+    );
   }
 
   private navigateToRoot(): void {
