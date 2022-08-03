@@ -90,9 +90,10 @@ export class CollegeLicenceDeclarationPage
       this.navigateToRoot();
     }
 
-    this.router.navigate([
-      ProfileRoutes.routePath(ProfileRoutes.COLLEGE_LICENCE_INFO),
-    ]);
+    this.router.navigate(
+      [ProfileRoutes.routePath(ProfileRoutes.COLLEGE_LICENCE_INFO)],
+      { replaceUrl: true }
+    );
   }
 
   private navigateToRoot(): void {
