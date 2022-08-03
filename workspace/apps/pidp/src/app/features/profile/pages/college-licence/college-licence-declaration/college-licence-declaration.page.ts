@@ -10,6 +10,7 @@ import { AbstractFormPage } from '@app/core/classes/abstract-form-page.class';
 import { PartyService } from '@app/core/party/party.service';
 import { FormUtilsService } from '@app/core/services/form-utils.service';
 import { LoggerService } from '@app/core/services/logger.service';
+import { ProfileRoutes } from '@app/features/profile/profile.routes';
 import { LookupService } from '@app/modules/lookup/lookup.service';
 import { CollegeLookup } from '@app/modules/lookup/lookup.types';
 
@@ -76,16 +77,22 @@ export class CollegeLicenceDeclarationPage
       .subscribe();
   }
 
-  protected performSubmission(): Observable<void> {
+  protected performSubmission(): Observable<string | null> {
     const partyId = this.partyService.partyId;
 
     return partyId && this.formState.json
-      ? this.resource.update(partyId, this.formState.json)
+      ? this.resource.updateDeclaration(partyId, this.formState.json)
       : EMPTY;
   }
 
-  protected afterSubmitIsSuccessful(): void {
-    this.navigateToRoot();
+  protected afterSubmitIsSuccessful(cpn: string | null): void {
+    if (!cpn) {
+      this.navigateToRoot();
+    }
+
+    this.router.navigate([
+      ProfileRoutes.routePath(ProfileRoutes.COLLEGE_LICENCE_INFO),
+    ]);
   }
 
   private navigateToRoot(): void {

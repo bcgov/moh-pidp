@@ -1,13 +1,9 @@
 import { HttpContext, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
-import { catchError, tap, throwError } from 'rxjs';
+import { Observable, catchError, tap, throwError } from 'rxjs';
 
-import {
-  CrudResource,
-  NoContent,
-  SHOW_LOADING_MESSAGE,
-} from '@bcgov/shared/data-access';
+import { CrudResource, SHOW_LOADING_MESSAGE } from '@bcgov/shared/data-access';
 
 import { ApiHttpClient } from '@app/core/resources/api-http-client.service';
 
@@ -24,12 +20,12 @@ export class CollegeLicenceDeclarationResource extends CrudResource<PartyLicence
     super(apiResource);
   }
 
-  public update(
+  public updateDeclaration(
     id: number,
     payload: PartyLicenceDeclarationInformation
-  ): NoContent {
-    return super
-      .update(id, payload, {
+  ): Observable<string | null> {
+    return this.resource
+      .put<string | null>(this.getResourcePath(id), payload, {
         context: new HttpContext().set(SHOW_LOADING_MESSAGE, true),
       })
       .pipe(
