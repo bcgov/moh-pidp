@@ -88,12 +88,12 @@ export class CollegeLicenceDeclarationPage
   protected afterSubmitIsSuccessful(cpn: string | null): void {
     if (!cpn) {
       this.navigateToRoot();
+    } else {
+      this.router.navigate(
+        [ProfileRoutes.routePath(ProfileRoutes.COLLEGE_LICENCE_INFO)],
+        { replaceUrl: true }
+      );
     }
-
-    this.router.navigate(
-      [ProfileRoutes.routePath(ProfileRoutes.COLLEGE_LICENCE_INFO)],
-      { replaceUrl: true }
-    );
   }
 
   private navigateToRoot(): void {
