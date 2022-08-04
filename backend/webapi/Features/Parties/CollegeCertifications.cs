@@ -64,7 +64,7 @@ public class CollegeCertifications
                 return DomainResult.Success(new List<Model>());
             }
 
-            var records = await this.client.GetRecords(cpn);
+            var records = await this.client.GetRecordsAsync(cpn);
             if (records == null)
             {
                 return DomainResult.Failed<List<Model>>();

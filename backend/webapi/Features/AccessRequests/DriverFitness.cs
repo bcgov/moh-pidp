@@ -65,7 +65,7 @@ public class DriverFitness
 
             if (dto.AlreadyEnroled
                 || dto.Email == null
-                || await this.plrClient.IsGoodStanding(dto.Cpn) != true)
+                || !await this.plrClient.GetStandingAsync(dto.Cpn))
             {
                 this.logger.LogDriverFitnessAccessRequestDenied();
                 return DomainResult.Failed();

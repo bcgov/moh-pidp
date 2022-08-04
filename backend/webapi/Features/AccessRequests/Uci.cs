@@ -66,7 +66,7 @@ public class Uci
 
             if (dto.AlreadyEnroled
                 || dto.Email == null
-                || await this.plrClient.IsGoodStanding(dto.Cpn) != true)
+                || !await this.plrClient.GetStandingAsync(dto.Cpn))
             {
                 this.logger.LogSAEformsAccessRequestDenied();
                 return DomainResult.Failed();

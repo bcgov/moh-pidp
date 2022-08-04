@@ -61,27 +61,22 @@ public partial class ProfileStatus
                     return;
                 }
 
-                if (profile.LicenceDeclaration.NoLicence)
+                if (profile.LicenceDeclaration.NoLicence
+                    || profile.PlrStanding.HasRecordInGoodStanding())
                 {
                     this.StatusCode = StatusCode.Complete;
                     return;
                 }
 
-                if (profile.PlrGoodStanding == null)
+                if (profile.PlrStanding.Error)
                 {
                     this.Alerts.Add(Alert.TransientError);
                     this.StatusCode = StatusCode.Error;
                     return;
                 }
 
-                if (profile.PlrGoodStanding == false)
-                {
-                    this.Alerts.Add(Alert.PlrBadStanding);
-                    this.StatusCode = StatusCode.Error;
-                    return;
-                }
-
-                this.StatusCode = StatusCode.Complete;
+                this.Alerts.Add(Alert.PlrBadStanding);
+                this.StatusCode = StatusCode.Error;
             }
         }
 
@@ -153,7 +148,7 @@ public partial class ProfileStatus
                 }
 
                 if (!profile.DemographicsEntered
-                    || profile.PlrGoodStanding != true)
+                    || !profile.PlrStanding.HasRecordInGoodStanding())
                 {
                     this.StatusCode = StatusCode.Locked;
                     return;
@@ -253,7 +248,7 @@ public partial class ProfileStatus
                 }
 
                 if (!profile.DemographicsEntered
-                    || profile.PlrGoodStanding != true)
+                    || !profile.PlrStanding.HasRecordInGoodStanding())
                 {
                     this.StatusCode = StatusCode.Locked;
                     return;
@@ -284,7 +279,7 @@ public partial class ProfileStatus
                 }
 
                 if (!profile.DemographicsEntered
-                    || profile.PlrGoodStanding != true)
+                    || !profile.PlrStanding.HasRecordInGoodStanding())
                 {
                     this.StatusCode = StatusCode.Locked;
                     return;

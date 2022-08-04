@@ -103,7 +103,7 @@ public partial class ProfileStatus
                 profile.Cpn = await this.RecheckCpn(command.Id, profile.LicenceDeclaration, profile.Birthdate);
             }
 
-            profile.PlrGoodStanding = await this.client.IsGoodStanding(profile.Cpn);
+            profile.PlrStanding = await this.client.GetStandingsDigestAsync(profile.Cpn);
             profile.User = command.User;
 
             var profileStatus = new Model
@@ -134,7 +134,7 @@ public partial class ProfileStatus
                 return null;
             }
 
-            var newCpn = await this.client.FindCpn(declaration.CollegeCode.Value, declaration.LicenceNumber, birthdate.Value);
+            var newCpn = await this.client.FindCpnAsync(declaration.CollegeCode.Value, declaration.LicenceNumber, birthdate.Value);
             if (newCpn != null)
             {
                 var party = await this.context.Parties
@@ -161,7 +161,7 @@ public partial class ProfileStatus
         public IEnumerable<AccessTypeCode> CompletedEnrolments { get; set; } = Enumerable.Empty<AccessTypeCode>();
 
         // Resolved after projection
-        public bool? PlrGoodStanding { get; set; }
+        public PlrStandingsDigest PlrStanding { get; set; } = default!;
         public ClaimsPrincipal? User { get; set; }
 
         // Computed Properties
