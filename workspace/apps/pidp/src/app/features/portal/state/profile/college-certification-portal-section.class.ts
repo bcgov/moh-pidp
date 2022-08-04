@@ -39,26 +39,15 @@ export class CollegeCertificationPortalSection implements IPortalSection {
 
   public get properties(): PortalSectionProperty[] {
     const statusCode = this.getStatusCode();
-    const demographicsStatusCode =
-      this.profileStatus.status.demographics.statusCode;
-    const { collegeCode, licenceNumber } = this.getSectionStatus();
     return [StatusCode.ERROR, StatusCode.COMPLETED].includes(statusCode)
       ? [
           {
-            key: 'collegeCode',
-            value: collegeCode,
-          },
-          {
-            key: 'licenceNumber',
-            value: licenceNumber,
-            label: 'College Licence Number:',
-          },
-          {
             key: 'status',
             value:
-              statusCode !== StatusCode.ERROR &&
-              demographicsStatusCode === StatusCode.COMPLETED
-                ? 'Verified'
+              statusCode === StatusCode.COMPLETED
+                ? this.getSectionStatus().licenceDeclared
+                  ? 'Verified'
+                  : 'No College Licence'
                 : 'Not Verified',
             label: 'College Licence Status:',
           },
@@ -71,14 +60,15 @@ export class CollegeCertificationPortalSection implements IPortalSection {
    * Get the properties that define the action on the section.
    */
   public get action(): PortalSectionAction {
-    const demographicsStatusCode =
-      this.profileStatus.status.demographics.statusCode;
+    const statusCode = this.getStatusCode();
     return {
-      label: 'Update',
-      route: ProfileRoutes.routePath(ProfileRoutes.COLLEGE_LICENCE_INFO),
-      disabled:
-        demographicsStatusCode !== StatusCode.COMPLETED ||
-        this.getStatusCode() === StatusCode.NOT_AVAILABLE,
+      label: statusCode === StatusCode.COMPLETED ? 'View' : 'Update',
+      route: ProfileRoutes.routePath(
+        this.getSectionStatus().hasCpn
+          ? ProfileRoutes.COLLEGE_LICENCE_INFO
+          : ProfileRoutes.COLLEGE_LICENCE_DECLARATION
+      ),
+      disabled: statusCode === StatusCode.NOT_AVAILABLE,
     };
   }
 

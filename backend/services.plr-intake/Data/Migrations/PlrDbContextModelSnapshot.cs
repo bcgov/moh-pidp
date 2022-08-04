@@ -282,6 +282,8 @@ namespace PlrIntake.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Cpn");
+
                     b.HasIndex("Ipc")
                         .IsUnique();
 

@@ -61,20 +61,19 @@ public class SAEforms
                     party.UserId,
                     party.Email,
                     party.FirstName,
-                    party.PartyCertification!.Ipc,
+                    party.Cpn,
                 })
                 .SingleAsync();
 
             if (dto.AlreadyEnroled
                 || dto.Email == null
-                || dto.Ipc == null
-                || (await this.plrClient.GetRecordStatus(dto.Ipc))?.IsGoodStanding() != true)
+                || await this.plrClient.IsGoodStanding(dto.Cpn) != true)
             {
                 this.logger.LogSAEformsAccessRequestDenied();
                 return DomainResult.Failed();
             }
 
-            if (!await this.keycloakClient.AssignClientRole(dto.UserId, Resources.SAEforms, Roles.SAEforms))
+            if (!await this.keycloakClient.AssignClientRole(dto.UserId, Clients.SAEforms, Roles.SAEforms))
             {
                 return DomainResult.Failed();
             }

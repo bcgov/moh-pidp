@@ -21,7 +21,7 @@ public static class AuthenticationSetup
         .AddJwtBearer(options =>
         {
             options.Authority = config.Keycloak.RealmUrl;
-            options.Audience = Resources.PidpApi;
+            options.Audience = Clients.PidpApi;
             options.MetadataAddress = config.Keycloak.WellKnownConfig;
             options.Events = new JwtBearerEvents
             {
@@ -62,7 +62,7 @@ public static class AuthenticationSetup
             && identity.IsAuthenticated)
         {
             // Flatten the Resource Access claim
-            identity.AddClaims(identity.GetResourceAccessRoles(Resources.PidpApi)
+            identity.AddClaims(identity.GetResourceAccessRoles(Clients.PidpApi)
                 .Select(role => new Claim(ClaimTypes.Role, role)));
         }
 
