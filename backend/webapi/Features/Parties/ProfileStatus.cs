@@ -96,7 +96,7 @@ public partial class ProfileStatus
                .ProjectTo<ProfileStatusDto>(this.mapper.ConfigurationProvider)
                .SingleAsync();
 
-            if (profile.LicenceDeclared
+            if (profile.HasDeclaredLicence
                 && string.IsNullOrWhiteSpace(profile.Cpn))
             {
                 // Cert has been entered but no CPN found, likely due to a transient error or delay in PLR record updates. Retry once.
@@ -128,7 +128,7 @@ public partial class ProfileStatus
 
         private async Task<string?> RecheckCpn(int partyId, LicenceDeclarationDto declaration, LocalDate? birthdate)
         {
-            if (declaration.NoLicence
+            if (declaration.HasNoLicence
                 || birthdate == null)
             {
                 return null;
@@ -168,7 +168,7 @@ public partial class ProfileStatus
         [MemberNotNullWhen(true, nameof(Email), nameof(Phone))]
         public bool DemographicsEntered => this.Email != null && this.Phone != null;
         [MemberNotNullWhen(true, nameof(LicenceDeclaration))]
-        public bool LicenceDeclared => this.LicenceDeclaration?.NoLicence == false;
+        public bool HasDeclaredLicence => this.LicenceDeclaration?.HasNoLicence == false;
         public bool UserIsBcServicesCard => this.User.GetIdentityProvider() == ClaimValues.BCServicesCard;
         public bool UserIsPhsa => this.User.GetIdentityProvider() == ClaimValues.Phsa;
 
@@ -178,7 +178,7 @@ public partial class ProfileStatus
             public string? LicenceNumber { get; set; }
 
             [MemberNotNullWhen(false, nameof(CollegeCode), nameof(LicenceNumber))]
-            public bool NoLicence => this.CollegeCode == null || this.LicenceNumber == null;
+            public bool HasNoLicence => this.CollegeCode == null || this.LicenceNumber == null;
         }
     }
 }

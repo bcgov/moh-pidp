@@ -38,7 +38,7 @@ public partial class ProfileStatus
             public CollegeCertification(ProfileStatusDto profile) : base(profile)
             {
                 this.HasCpn = !string.IsNullOrWhiteSpace(profile.Cpn);
-                this.LicenceDeclared = profile.LicenceDeclared;
+                this.LicenceDeclared = profile.HasDeclaredLicence;
             }
 
             protected override void SetAlertsAndStatus(ProfileStatusDto profile)
@@ -61,7 +61,7 @@ public partial class ProfileStatus
                     return;
                 }
 
-                if (profile.LicenceDeclaration.NoLicence
+                if (profile.LicenceDeclaration.HasNoLicence
                     || profile.PlrStanding.HasRecordInGoodStanding())
                 {
                     this.StatusCode = StatusCode.Complete;
