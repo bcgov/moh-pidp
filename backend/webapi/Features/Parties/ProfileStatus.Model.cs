@@ -2,7 +2,6 @@ namespace Pidp.Features.Parties;
 
 using NodaTime;
 
-using Pidp.Models;
 using Pidp.Models.Lookups;
 
 public partial class ProfileStatus
@@ -33,13 +32,13 @@ public partial class ProfileStatus
         public class CollegeCertification : ProfileSection
         {
             internal override string SectionName => "collegeCertification";
-            public CollegeCode? CollegeCode { get; set; }
-            public string? LicenceNumber { get; set; }
+            public bool HasCpn { get; set; }
+            public bool LicenceDeclared { get; set; }
 
             public CollegeCertification(ProfileStatusDto profile) : base(profile)
             {
-                this.CollegeCode = profile.CollegeCode;
-                this.LicenceNumber = profile.LicenceNumber;
+                this.HasCpn = !string.IsNullOrWhiteSpace(profile.Cpn);
+                this.LicenceDeclared = profile.LicenceDeclared;
             }
 
             protected override void SetAlertsAndStatus(ProfileStatusDto profile)
@@ -56,21 +55,26 @@ public partial class ProfileStatus
                     return;
                 }
 
-                if (!profile.CollegeCertificationEntered)
+                if (profile.LicenceDeclaration == null)
                 {
                     this.StatusCode = StatusCode.Incomplete;
                     return;
                 }
 
-                if (profile.Ipc == null
-                    || profile.PlrRecordStatus == null)
+                if (profile.LicenceDeclaration.NoLicence)
+                {
+                    this.StatusCode = StatusCode.Complete;
+                    return;
+                }
+
+                if (profile.PlrGoodStanding == null)
                 {
                     this.Alerts.Add(Alert.TransientError);
                     this.StatusCode = StatusCode.Error;
                     return;
                 }
 
-                if (!profile.PlrRecordStatus.IsGoodStanding())
+                if (profile.PlrGoodStanding == false)
                 {
                     this.Alerts.Add(Alert.PlrBadStanding);
                     this.StatusCode = StatusCode.Error;
@@ -149,9 +153,7 @@ public partial class ProfileStatus
                 }
 
                 if (!profile.DemographicsEntered
-                    || !profile.CollegeCertificationEntered
-                    || profile.PlrRecordStatus == null
-                    || !profile.PlrRecordStatus.IsGoodStanding())
+                    || profile.PlrGoodStanding != true)
                 {
                     this.StatusCode = StatusCode.Locked;
                     return;
@@ -251,9 +253,38 @@ public partial class ProfileStatus
                 }
 
                 if (!profile.DemographicsEntered
-                    || !profile.CollegeCertificationEntered
-                    || profile.PlrRecordStatus == null
-                    || !profile.PlrRecordStatus.IsGoodStanding())
+                    || profile.PlrGoodStanding != true)
+                {
+                    this.StatusCode = StatusCode.Locked;
+                    return;
+                }
+
+                this.StatusCode = StatusCode.Incomplete;
+            }
+        }
+
+        public class Uci : ProfileSection
+        {
+            internal override string SectionName => "uci";
+
+            public Uci(ProfileStatusDto profile) : base(profile) { }
+
+            protected override void SetAlertsAndStatus(ProfileStatusDto profile)
+            {
+                if (!profile.UserIsBcServicesCard)
+                {
+                    this.StatusCode = StatusCode.Hidden;
+                    return;
+                }
+
+                if (profile.CompletedEnrolments.Contains(AccessTypeCode.Uci))
+                {
+                    this.StatusCode = StatusCode.Complete;
+                    return;
+                }
+
+                if (!profile.DemographicsEntered
+                    || profile.PlrGoodStanding != true)
                 {
                     this.StatusCode = StatusCode.Locked;
                     return;

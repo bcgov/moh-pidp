@@ -61,20 +61,19 @@ public class SAEforms
                     party.UserId,
                     party.Email,
                     party.FirstName,
-                    party.PartyCertification!.Ipc,
+                    party.Cpn,
                 })
                 .SingleAsync();
 
             if (dto.AlreadyEnroled
                 || dto.Email == null
-                || dto.Ipc == null
-                || (await this.plrClient.GetRecordStatus(dto.Ipc))?.IsGoodStanding() != true)
+                || await this.plrClient.IsGoodStanding(dto.Cpn) != true)
             {
                 this.logger.LogSAEformsAccessRequestDenied();
                 return DomainResult.Failed();
             }
 
-            if (!await this.keycloakClient.AssignClientRole(dto.UserId, Resources.SAEforms, Roles.SAEforms))
+            if (!await this.keycloakClient.AssignClientRole(dto.UserId, Clients.SAEforms, Roles.SAEforms))
             {
                 return DomainResult.Failed();
             }
@@ -95,7 +94,7 @@ public class SAEforms
 
         private async Task SendConfirmationEmailAsync(string partyEmail, string firstName)
         {
-            var link = $"<a href=\"https://www.eforms.healthbc.org/login?sat=true\" target=\"_blank\" rel=\"noopener noreferrer\">link</a>";
+            var link = $"<a href=\"https://www.eforms.healthbc.org/login\" target=\"_blank\" rel=\"noopener noreferrer\">link</a>";
             var email = new Email(
                 from: EmailService.PidpEmail,
                 to: partyEmail,

@@ -1,22 +1,18 @@
 import { HttpContext, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
-import { catchError, tap, throwError } from 'rxjs';
+import { Observable, catchError, tap, throwError } from 'rxjs';
 
-import {
-  CrudResource,
-  NoContent,
-  SHOW_LOADING_MESSAGE,
-} from '@bcgov/shared/data-access';
+import { CrudResource, SHOW_LOADING_MESSAGE } from '@bcgov/shared/data-access';
 
 import { ApiHttpClient } from '@app/core/resources/api-http-client.service';
 
 import { ToastService } from '@core/services/toast.service';
 
-import { CollegeLicenceInformation } from './college-licence-information.model';
+import { PartyLicenceDeclarationInformation } from './party-licence-declaration-information.model';
 
 @Injectable()
-export class CollegeLicenceInformationResource extends CrudResource<CollegeLicenceInformation> {
+export class CollegeLicenceDeclarationResource extends CrudResource<PartyLicenceDeclarationInformation> {
   public constructor(
     protected apiResource: ApiHttpClient,
     private toastService: ToastService
@@ -24,9 +20,12 @@ export class CollegeLicenceInformationResource extends CrudResource<CollegeLicen
     super(apiResource);
   }
 
-  public update(id: number, payload: CollegeLicenceInformation): NoContent {
-    return super
-      .update(id, payload, {
+  public updateDeclaration(
+    id: number,
+    payload: PartyLicenceDeclarationInformation
+  ): Observable<string | null> {
+    return this.resource
+      .put<string | null>(this.getResourcePath(id), payload, {
         context: new HttpContext().set(SHOW_LOADING_MESSAGE, true),
       })
       .pipe(
@@ -45,6 +44,6 @@ export class CollegeLicenceInformationResource extends CrudResource<CollegeLicen
   }
 
   protected getResourcePath(partyId: number): string {
-    return `parties/${partyId}/college-certification`;
+    return `parties/${partyId}/licence-declaration`;
   }
 }

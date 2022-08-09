@@ -1,15 +1,16 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { CanDeactivateFormGuard } from '@app/core/guards/can-deactivate-form.guard';
-
-import { CollegeLicenceInformationPage } from './college-licence-information.page';
+import { UciPage } from './uci.page';
+import { UciResolver } from './uci.resolver';
 
 const routes: Routes = [
   {
     path: '',
-    component: CollegeLicenceInformationPage,
-    canDeactivate: [CanDeactivateFormGuard],
+    component: UciPage,
+    resolve: {
+      uciStatusCode: UciResolver,
+    },
     data: {
       title: 'Provider Identity Portal',
       routes: {
@@ -23,4 +24,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class CollegeLicenceInformationRoutingModule {}
+export class UciRoutingModule {}
