@@ -15,7 +15,7 @@ public class MappingProfile : Profile
         this.CreateProjection<Party, ProfileStatus.ProfileStatusDto>()
             .ForMember(dest => dest.CompletedEnrolments, opt => opt.MapFrom(src => src.AccessRequests.Select(x => x.AccessTypeCode)))
             .ForMember(dest => dest.OrganizationDetailEntered, opt => opt.MapFrom(src => src.OrgainizationDetail != null))
-            .ForMember(dest => dest.PlrGoodStanding, opt => opt.Ignore())
+            .ForMember(dest => dest.PlrStanding, opt => opt.Ignore())
             .ForMember(dest => dest.User, opt => opt.Ignore());
         this.CreateProjection<Party, WorkSetting.Command>()
             .ForMember(dest => dest.PhysicalAddress, opt => opt.MapFrom(src => src.Facility!.PhysicalAddress));

@@ -96,14 +96,14 @@ public partial class ProfileStatus
                .ProjectTo<ProfileStatusDto>(this.mapper.ConfigurationProvider)
                .SingleAsync();
 
-            if (profile.LicenceDeclared
+            if (profile.HasDeclaredLicence
                 && string.IsNullOrWhiteSpace(profile.Cpn))
             {
                 // Cert has been entered but no CPN found, likely due to a transient error or delay in PLR record updates. Retry once.
                 profile.Cpn = await this.RecheckCpn(command.Id, profile.LicenceDeclaration, profile.Birthdate);
             }
 
-            profile.PlrGoodStanding = await this.client.IsGoodStanding(profile.Cpn);
+            profile.PlrStanding = await this.client.GetStandingsDigestAsync(profile.Cpn);
             profile.User = command.User;
 
             var profileStatus = new Model
@@ -128,13 +128,13 @@ public partial class ProfileStatus
 
         private async Task<string?> RecheckCpn(int partyId, LicenceDeclarationDto declaration, LocalDate? birthdate)
         {
-            if (declaration.NoLicence
+            if (declaration.HasNoLicence
                 || birthdate == null)
             {
                 return null;
             }
 
-            var newCpn = await this.client.FindCpn(declaration.CollegeCode.Value, declaration.LicenceNumber, birthdate.Value);
+            var newCpn = await this.client.FindCpnAsync(declaration.CollegeCode.Value, declaration.LicenceNumber, birthdate.Value);
             if (newCpn != null)
             {
                 var party = await this.context.Parties
@@ -161,14 +161,14 @@ public partial class ProfileStatus
         public IEnumerable<AccessTypeCode> CompletedEnrolments { get; set; } = Enumerable.Empty<AccessTypeCode>();
 
         // Resolved after projection
-        public bool? PlrGoodStanding { get; set; }
+        public PlrStandingsDigest PlrStanding { get; set; } = default!;
         public ClaimsPrincipal? User { get; set; }
 
         // Computed Properties
         [MemberNotNullWhen(true, nameof(Email), nameof(Phone))]
         public bool DemographicsEntered => this.Email != null && this.Phone != null;
         [MemberNotNullWhen(true, nameof(LicenceDeclaration))]
-        public bool LicenceDeclared => this.LicenceDeclaration?.NoLicence == false;
+        public bool HasDeclaredLicence => this.LicenceDeclaration?.HasNoLicence == false;
         public bool UserIsBcServicesCard => this.User.GetIdentityProvider() == ClaimValues.BCServicesCard;
         public bool UserIsPhsa => this.User.GetIdentityProvider() == ClaimValues.Phsa;
 
@@ -178,7 +178,7 @@ public partial class ProfileStatus
             public string? LicenceNumber { get; set; }
 
             [MemberNotNullWhen(false, nameof(CollegeCode), nameof(LicenceNumber))]
-            public bool NoLicence => this.CollegeCode == null || this.LicenceNumber == null;
+            public bool HasNoLicence => this.CollegeCode == null || this.LicenceNumber == null;
         }
     }
 }

@@ -102,7 +102,7 @@ public class LicenceDeclaration
             party.LicenceDeclaration.CollegeCode = command.CollegeCode;
             party.LicenceDeclaration.LicenceNumber = command.LicenceNumber;
             party.Cpn = command.CollegeCode.HasValue && !string.IsNullOrWhiteSpace(command.LicenceNumber) && party.Birthdate.HasValue
-                ? await this.client.FindCpn(command.CollegeCode.Value, command.LicenceNumber, party.Birthdate.Value)
+                ? await this.client.FindCpnAsync(command.CollegeCode.Value, command.LicenceNumber, party.Birthdate.Value)
                 : null;
 
             await this.context.SaveChangesAsync();

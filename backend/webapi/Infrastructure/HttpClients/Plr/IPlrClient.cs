@@ -13,19 +13,26 @@ public interface IPlrClient
     /// <param name="collegeCode"></param>
     /// <param name="licenceNumber"></param>
     /// <param name="birthdate"></param>
-    Task<string?> FindCpn(CollegeCode collegeCode, string licenceNumber, LocalDate birthdate);
-
-    /// <summary>
-    /// Checks PLR to see if the given CPN has at least one Record in "good standing".
-    /// Returns null on an error or if no records are found.
-    /// </summary>
-    /// <param name="cpn"></param>
-    Task<bool?> IsGoodStanding(string? cpn);
+    Task<string?> FindCpnAsync(CollegeCode collegeCode, string licenceNumber, LocalDate birthdate);
 
     /// <summary>
     /// Fetches the PLR record(s) corresponding to the given CPN.
     /// Returns null on an error.
     /// </summary>
     /// <param name="cpn"></param>
-    Task<IEnumerable<PlrRecord>?> GetRecords(string cpn);
+    Task<IEnumerable<PlrRecord>?> GetRecordsAsync(string cpn);
+
+    /// <summary>
+    /// Returns true if the user has at least one Record in good standing in PLR (and there are no errors).
+    /// Convience method for (await GetStandingsDigestAsync(cpn)).HasRecordInGoodStanding(identifierTypes).
+    /// </summary>
+    /// <param name="cpn"></param>
+    Task<bool> GetStandingAsync(string? cpn, params IdentifierType[] identifierTypes);
+
+    /// <summary>
+    /// Creates a summary of the status of all PLR Records for the given CPN.
+    /// The digest indicates an error on HTTP failure or if the CPN is not null but finds no Records.
+    /// </summary>
+    /// <param name="cpn"></param>
+    Task<PlrStandingsDigest> GetStandingsDigestAsync(string? cpn);
 }
