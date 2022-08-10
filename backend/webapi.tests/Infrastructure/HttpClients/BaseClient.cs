@@ -75,7 +75,7 @@ public class BaseClientTests : BaseClient
     [MemberData(nameof(HttpMethodTestData))]
     public async void SendCoreAsyncT_Success_SuccessResult(HttpMethod method)
     {
-        var expectedCert = new PartyCertification
+        var expectedCert = new PartyLicenceDeclaration
         {
             CollegeCode = CollegeCode.Pharmacists,
             LicenceNumber = "12345"
@@ -84,7 +84,7 @@ public class BaseClientTests : BaseClient
             .InvokingSendAsyncWith(method, TestUrl)
             .ReturnsAMessageWith(HttpStatusCode.OK, expectedCert);
 
-        var result = await this.SendCoreAsync<PartyCertification>(method, TestUrl, null, default);
+        var result = await this.SendCoreAsync<PartyLicenceDeclaration>(method, TestUrl, null, default);
 
         Assert.True(result.IsSuccess);
 

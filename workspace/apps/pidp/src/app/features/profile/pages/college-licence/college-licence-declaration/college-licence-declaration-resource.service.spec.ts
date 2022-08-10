@@ -5,21 +5,21 @@ import { provideAutoSpy } from 'jest-auto-spies';
 import { ApiHttpClient } from '@app/core/resources/api-http-client.service';
 import { ToastService } from '@app/core/services/toast.service';
 
-import { CollegeLicenceInformationResource } from './college-licence-information-resource.service';
+import { CollegeLicenceDeclarationResource } from './college-licence-declaration-resource.service';
 
-describe('CollegeLicenceInformationResource', () => {
-  let service: CollegeLicenceInformationResource;
+describe('CollegeLicenceDeclarationResource', () => {
+  let service: CollegeLicenceDeclarationResource;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
-        CollegeLicenceInformationResource,
+        CollegeLicenceDeclarationResource,
         provideAutoSpy(ApiHttpClient),
         provideAutoSpy(ToastService),
       ],
     });
 
-    service = TestBed.inject(CollegeLicenceInformationResource);
+    service = TestBed.inject(CollegeLicenceDeclarationResource);
   });
 
   it('should be created', () => {

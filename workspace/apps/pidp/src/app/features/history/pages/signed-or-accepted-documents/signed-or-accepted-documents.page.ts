@@ -85,9 +85,11 @@ export class SignedOrAcceptedDocumentsPage implements OnInit {
 
         // TODO remove when an API or equivalent is available, but until
         // then has to be displayed all the time or none of the time
-        if (this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO])) {
-          status.userAccessAgreement = { statusCode: StatusCode.COMPLETED };
-        }
+        status.userAccessAgreement = this.permissionsService.hasRole([
+          Role.FEATURE_PIDP_DEMO,
+        ])
+          ? { statusCode: StatusCode.COMPLETED }
+          : { statusCode: StatusCode.NOT_AVAILABLE };
 
         return (
           document.type === DocumentType.PIDP_COLLECTION_NOTICE ||

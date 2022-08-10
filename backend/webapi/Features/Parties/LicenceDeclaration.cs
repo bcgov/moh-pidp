@@ -2,6 +2,7 @@ namespace Pidp.Features.Parties;
 
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using DomainResults.Common;
 using FluentValidation;
 using HybridModelBinding;
 using Microsoft.EntityFrameworkCore;
@@ -13,20 +14,20 @@ using Pidp.Infrastructure.HttpClients.Plr;
 using Pidp.Models;
 using Pidp.Models.Lookups;
 
-public class CollegeCertification
+public class LicenceDeclaration
 {
     public class Query : IQuery<Command>
     {
         public int PartyId { get; set; }
     }
 
-    public class Command : ICommand
+    public class Command : ICommand<IDomainResult<string?>>
     {
         [JsonIgnore]
         [HybridBindProperty(Source.Route)]
         public int PartyId { get; set; }
-        public CollegeCode CollegeCode { get; set; }
-        public string LicenceNumber { get; set; } = string.Empty;
+        public CollegeCode? CollegeCode { get; set; }
+        public string? LicenceNumber { get; set; }
     }
 
     public class QueryValidator : AbstractValidator<Query>
@@ -39,8 +40,12 @@ public class CollegeCertification
         public CommandValidator()
         {
             this.RuleFor(x => x.PartyId).GreaterThan(0);
-            this.RuleFor(x => x.CollegeCode).IsInEnum();
-            this.RuleFor(x => x.LicenceNumber).NotEmpty();
+            this.When(x => x.CollegeCode.HasValue, () =>
+            {
+                this.RuleFor(x => x.CollegeCode).IsInEnum();
+                this.RuleFor(x => x.LicenceNumber).NotEmpty();
+            })
+            .Otherwise(() => this.RuleFor(x => x.LicenceNumber).Null());
         }
     }
 
@@ -57,8 +62,8 @@ public class CollegeCertification
 
         public async Task<Command> HandleAsync(Query query)
         {
-            var cert = await this.context.PartyCertifications
-                .Where(certification => certification.PartyId == query.PartyId)
+            var cert = await this.context.PartyLicenceDeclarations
+                .Where(licence => licence.PartyId == query.PartyId)
                 .ProjectTo<Command>(this.mapper.ConfigurationProvider)
                 .SingleOrDefaultAsync();
 
@@ -66,7 +71,7 @@ public class CollegeCertification
         }
     }
 
-    public class CommandHandler : ICommandHandler<Command>
+    public class CommandHandler : ICommandHandler<Command, IDomainResult<string?>>
     {
         private readonly IPlrClient client;
         private readonly PidpDbContext context;
@@ -77,24 +82,32 @@ public class CollegeCertification
             this.context = context;
         }
 
-        public async Task HandleAsync(Command command)
+        public async Task<IDomainResult<string?>> HandleAsync(Command command)
         {
             var party = await this.context.Parties
-                .Include(party => party.PartyCertification)
+                .Include(party => party.LicenceDeclaration)
                 .SingleAsync(party => party.Id == command.PartyId);
 
-            if (party.PartyCertification == null)
+            if (!string.IsNullOrWhiteSpace(party.Cpn))
             {
-                party.PartyCertification = new PartyCertification();
+                // Users cannot update licence declarations once found in PLR
+                return DomainResult.Failed<string?>();
             }
 
-            party.PartyCertification.CollegeCode = command.CollegeCode;
-            party.PartyCertification.LicenceNumber = command.LicenceNumber;
-            party.PartyCertification.Ipc = party.Birthdate.HasValue
-                ? await this.client.GetPlrRecord(command.CollegeCode, command.LicenceNumber, party.Birthdate.Value)
+            if (party.LicenceDeclaration == null)
+            {
+                party.LicenceDeclaration = new PartyLicenceDeclaration();
+            }
+
+            party.LicenceDeclaration.CollegeCode = command.CollegeCode;
+            party.LicenceDeclaration.LicenceNumber = command.LicenceNumber;
+            party.Cpn = command.CollegeCode.HasValue && !string.IsNullOrWhiteSpace(command.LicenceNumber) && party.Birthdate.HasValue
+                ? await this.client.FindCpnAsync(command.CollegeCode.Value, command.LicenceNumber, party.Birthdate.Value)
                 : null;
 
             await this.context.SaveChangesAsync();
+
+            return DomainResult.Success(party.Cpn);
         }
     }
 }

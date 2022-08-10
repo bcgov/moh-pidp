@@ -8,46 +8,46 @@ public class PlrClient : BaseClient, IPlrClient
 {
     public PlrClient(HttpClient client, ILogger<PlrClient> logger) : base(client, logger) { }
 
-    public async Task<string?> GetPlrRecord(CollegeCode collegeCode, string licenceNumber, LocalDate birthdate)
+    public async Task<string?> FindCpnAsync(CollegeCode collegeCode, string licenceNumber, LocalDate birthdate)
     {
-        // TODO timeout of 4-5 seconds
-        var result = await this.GetWithQueryParamsAsync<IEnumerable<PlrRecord>>("records", new
+        var query = new
         {
             CollegeId = licenceNumber,
-            Birthdate = birthdate.ToString()
-        });
+            Birthdate = birthdate.ToString(),
+            IdentifierTypes = MapToIdentifierTypes(collegeCode)
+        };
+        var result = await this.GetWithQueryParamsAsync<IEnumerable<PlrRecord>>("records", query);
 
         if (!result.IsSuccess)
         {
             return null;
         }
 
-        var records = result.Value;
-        if (!records.Any())
-        {
-            this.Logger.LogNoRecordsFound(licenceNumber, birthdate);
-            return null;
-        }
+        var cpns = result.Value
+            .Select(record => record.Cpn)
+            .Distinct();
 
-        records = records
-            .Where(record => record.MapIdentifierTypeToCollegeCode() == collegeCode);
-        if (records.Count() > 1)
+        switch (cpns.Count())
         {
-            this.Logger.LogMultipleRecordsFound(licenceNumber, birthdate, collegeCode);
-            return null;
-        }
-
-        return records.Single().Ipc;
+            case 0:
+                this.Logger.LogNoRecordsFound(query.CollegeId, query.Birthdate, query.IdentifierTypes);
+                return null;
+            case 1:
+                return cpns.Single();
+            default:
+                this.Logger.LogMultipleRecordsFound(query.CollegeId, query.Birthdate, query.IdentifierTypes);
+                return null;
+        };
     }
 
-    public async Task<PlrRecordStatus?> GetRecordStatus(string? ipc)
+    public async Task<IEnumerable<PlrRecord>?> GetRecordsAsync(string? cpn)
     {
-        if (ipc == null)
+        if (string.IsNullOrWhiteSpace(cpn))
         {
-            return null;
+            return Enumerable.Empty<PlrRecord>();
         }
 
-        var result = await this.GetAsync<PlrRecordStatus>($"records/{ipc}");
+        var result = await this.GetWithQueryParamsAsync<IEnumerable<PlrRecord>>("records", new { Cpn = cpn });
         if (!result.IsSuccess)
         {
             return null;
@@ -56,45 +56,49 @@ public class PlrClient : BaseClient, IPlrClient
         return result.Value;
     }
 
-    private class PlrRecord
-    {
-        public string Ipc { get; set; } = string.Empty;
-        public string? IdentifierType { get; set; }
+    public async Task<bool> GetStandingAsync(string? cpn) => (await this.GetStandingsDigestAsync(cpn)).HasGoodStanding;
 
-        public CollegeCode? MapIdentifierTypeToCollegeCode()
+    public async Task<PlrStandingsDigest> GetStandingsDigestAsync(string? cpn)
+    {
+        if (string.IsNullOrWhiteSpace(cpn))
         {
-            return this.IdentifierType switch
-            {
-                "PHID" or "PHTID " => CollegeCode.Pharmacists,
-                "CPSID" => CollegeCode.PhysiciansAndSurgeons,
-                "RNID" or "RMID" => CollegeCode.NursesAndMidwives,
-                "NDID" => CollegeCode.NaturopathicPhysicians,
-                "DENID" => CollegeCode.DentalSurgeons,
-                "OPTID" => CollegeCode.Optometrists,
-                _ => null
-            };
+            return PlrStandingsDigest.FromEmpty();
         }
+
+        var result = await this.GetWithQueryParamsAsync<IEnumerable<PlrRecord>>("records", new { Cpn = cpn });
+        if (!result.IsSuccess
+            || !result.Value.Any())
+        {
+            return PlrStandingsDigest.FromError();
+        }
+
+        return PlrStandingsDigest.FromRecords(result.Value);
     }
-}
 
-public class PlrRecordStatus
-{
-    public string StatusCode { get; set; } = string.Empty;
-    public string StatusReasonCode { get; set; } = string.Empty;
-
-    public virtual bool IsGoodStanding()
+    /// <summary>
+    /// Returns the PLR Identifier Types(s) that correspond to the given College.
+    /// </summary>
+    /// <param name="collegeCode"></param>
+    private static string[] MapToIdentifierTypes(CollegeCode collegeCode)
     {
-        var goodStatndingReasons = new[] { "GS", "PRAC", "TEMPPER" };
-        return this.StatusCode == "ACTIVE"
-            && goodStatndingReasons.Contains(this.StatusReasonCode);
+        return collegeCode switch
+        {
+            CollegeCode.Pharmacists => new string[] { IdentifierType.Pharmacist, IdentifierType.PharmacyTech },
+            CollegeCode.PhysiciansAndSurgeons => new string[] { IdentifierType.PhysiciansAndSurgeons },
+            CollegeCode.NursesAndMidwives => new string[] { IdentifierType.Nurse, IdentifierType.Midwife },
+            CollegeCode.NaturopathicPhysicians => new string[] { IdentifierType.NaturopathicPhysician },
+            CollegeCode.DentalSurgeons => new string[] { IdentifierType.DentalSurgeon },
+            CollegeCode.Optometrists => new string[] { IdentifierType.Optometrist },
+            _ => Array.Empty<string>()
+        };
     }
 }
 
 public static partial class PlrClientLoggingExtensions
 {
-    [LoggerMessage(1, LogLevel.Warning, "No Records found in PLR with CollegeId = {licenceNumber} and Birthdate = {birthdate}.")]
-    public static partial void LogNoRecordsFound(this ILogger logger, string licenceNumber, LocalDate birthdate);
+    [LoggerMessage(1, LogLevel.Warning, "No Records found in PLR with CollegeId = {licenceNumber}, Birthdate = {birthdate}, and any of {identifierTypes} Identifier Types.")]
+    public static partial void LogNoRecordsFound(this ILogger logger, string licenceNumber, string birthdate, string[] identifierTypes);
 
-    [LoggerMessage(2, LogLevel.Warning, "Multiple matching Records found in PLR with CollegeId = {licenceNumber}, Birthdate = {birthdate}, and IdentifierType matching CollegeCode {collegeCode}.")]
-    public static partial void LogMultipleRecordsFound(this ILogger logger, string licenceNumber, LocalDate birthdate, CollegeCode collegeCode);
+    [LoggerMessage(2, LogLevel.Warning, "Multiple matching Records found in PLR with CollegeId = {licenceNumber}, Birthdate = {birthdate}, and any of {identifierTypes} Identifier Types.")]
+    public static partial void LogMultipleRecordsFound(this ILogger logger, string licenceNumber, string birthdate, string[] identifierTypes);
 }
