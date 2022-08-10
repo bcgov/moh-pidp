@@ -45,6 +45,11 @@ public class PlrStandingsDigest
 
     public bool Error { get; private set; }
 
+    /// <summary>
+    /// Returns true if there is at least one record in good standing.
+    /// </summary>
+    public bool HasGoodStanding => this.records.Any(record => record.IsGoodStanding);
+
     private PlrStandingsDigest(bool error, IEnumerable<(string? IdentifierType, bool IsGoodStanding)>? records = null)
     {
         this.Error = error;
@@ -52,16 +57,29 @@ public class PlrStandingsDigest
     }
 
     /// <summary>
-    /// Returns true if there is at least one record in good standing.
-    /// If any Identifier Types are supplied, only checks records matching the supplied Identifier Types.
+    /// Filters the digest to only include records of the given Identifier Type(s)
     /// </summary>
-    public bool HasRecordInGoodStanding(params IdentifierType[] identifierTypes)
+    /// <param name="identifierTypes"></param>
+    public PlrStandingsDigest With(params IdentifierType[] identifierTypes)
     {
-        return this.records
-            .If(identifierTypes.Any(), e => e
-                .Where(record => identifierTypes.Cast<string>().Contains(record.IdentifierType))
-            )
-            .Any(record => record.IsGoodStanding);
+        return new PlrStandingsDigest
+        (
+            this.Error,
+            this.records.IntersectBy(identifierTypes.Cast<string>(), record => record.IdentifierType)
+        );
+    }
+
+    /// <summary>
+    /// Filters the digest to exclude records of the given Identifier Type(s)
+    /// </summary>
+    /// <param name="identifierTypes"></param>
+    public PlrStandingsDigest Excluding(params IdentifierType[] identifierTypes)
+    {
+        return new PlrStandingsDigest
+        (
+            this.Error,
+            this.records.ExceptBy(identifierTypes.Cast<string>(), record => record.IdentifierType)
+        );
     }
 
     public static PlrStandingsDigest FromEmpty() => new(false);
