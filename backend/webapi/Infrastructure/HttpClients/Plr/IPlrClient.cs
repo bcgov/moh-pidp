@@ -24,10 +24,10 @@ public interface IPlrClient
 
     /// <summary>
     /// Returns true if the user has at least one Record in good standing in PLR (and there are no errors).
-    /// Convience method for (await GetStandingsDigestAsync(cpn)).HasRecordInGoodStanding(identifierTypes).
+    /// Convience method for (await GetStandingsDigestAsync(cpn)).HasGoodStanding.
     /// </summary>
     /// <param name="cpn"></param>
-    Task<bool> GetStandingAsync(string? cpn, params IdentifierType[] identifierTypes);
+    Task<bool> GetStandingAsync(string? cpn);
 
     /// <summary>
     /// Creates a summary of the status of all PLR Records for the given CPN.

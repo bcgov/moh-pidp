@@ -62,7 +62,7 @@ public partial class ProfileStatus
                 }
 
                 if (profile.LicenceDeclaration.HasNoLicence
-                    || profile.PlrStanding.HasRecordInGoodStanding())
+                    || profile.PlrStanding.HasGoodStanding)
                 {
                     this.StatusCode = StatusCode.Complete;
                     return;
@@ -148,7 +148,7 @@ public partial class ProfileStatus
                 }
 
                 if (!profile.DemographicsEntered
-                    || !profile.PlrStanding.HasRecordInGoodStanding())
+                    || !profile.PlrStanding.HasGoodStanding)
                 {
                     this.StatusCode = StatusCode.Locked;
                     return;
@@ -248,7 +248,7 @@ public partial class ProfileStatus
                 }
 
                 if (!profile.DemographicsEntered
-                    || !profile.PlrStanding.HasRecordInGoodStanding())
+                    || !profile.PlrStanding.HasGoodStanding)
                 {
                     this.StatusCode = StatusCode.Locked;
                     return;
@@ -279,7 +279,7 @@ public partial class ProfileStatus
                 }
 
                 if (!profile.DemographicsEntered
-                    || !profile.PlrStanding.HasRecordInGoodStanding())
+                    || !profile.PlrStanding.HasGoodStanding)
                 {
                     this.StatusCode = StatusCode.Locked;
                     return;
