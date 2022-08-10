@@ -65,7 +65,7 @@ public class PlrStandingsDigest
         return new PlrStandingsDigest
         (
             this.Error,
-            this.records.IntersectBy(identifierTypes.Cast<string>(), record => record.IdentifierType)
+            this.records.IntersectBy(identifierTypes.Select(t => (string)t), record => record.IdentifierType)
         );
     }
 
@@ -78,7 +78,7 @@ public class PlrStandingsDigest
         return new PlrStandingsDigest
         (
             this.Error,
-            this.records.ExceptBy(identifierTypes.Cast<string>(), record => record.IdentifierType)
+            this.records.ExceptBy(identifierTypes.Select(t => (string)t), record => record.IdentifierType)
         );
     }
 
