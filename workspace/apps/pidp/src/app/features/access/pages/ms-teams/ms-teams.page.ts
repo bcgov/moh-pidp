@@ -6,6 +6,7 @@ import { catchError, noop, of, tap } from 'rxjs';
 import { PartyService } from '@app/core/party/party.service';
 import { DocumentService } from '@app/core/services/document.service';
 import { LoggerService } from '@app/core/services/logger.service';
+import { UtilsService } from '@app/core/services/utils.service';
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
 
 import { MsTeamsResource } from './ms-teams-resource.service';
@@ -16,7 +17,6 @@ import { MsTeamsResource } from './ms-teams-resource.service';
   styleUrls: ['./ms-teams.page.scss'],
 })
 export class MsTeamsPage implements OnInit {
-  public title: string;
   public completed: boolean | null;
   public declarationAgreement: string;
   public detailsAgreement: string;
@@ -28,10 +28,10 @@ export class MsTeamsPage implements OnInit {
     private partyService: PartyService,
     private resource: MsTeamsResource,
     private logger: LoggerService,
+    private utilsService: UtilsService,
     documentService: DocumentService
   ) {
     const routeData = this.route.snapshot.data;
-    this.title = routeData.title;
     this.completed = routeData.msTeamsStatusCode === StatusCode.COMPLETED;
     this.declarationAgreement =
       documentService.getMsTeamsDeclarationAgreement();
@@ -42,6 +42,7 @@ export class MsTeamsPage implements OnInit {
 
   public onBack(): void {
     if (this.currentPage > 0) {
+      this.utilsService.scrollTop('.mat-sidenav-content');
       this.currentPage--;
     } else {
       this.navigateToRoot();
@@ -50,6 +51,7 @@ export class MsTeamsPage implements OnInit {
 
   public onRequestAccess(): void {
     if (this.currentPage < 2) {
+      this.utilsService.scrollTop('.mat-sidenav-content');
       this.currentPage++;
     } else {
       this.resource
