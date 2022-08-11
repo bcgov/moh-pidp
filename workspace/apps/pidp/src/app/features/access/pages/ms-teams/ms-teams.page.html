@@ -54,7 +54,8 @@
       type="button"
       color="primary"
       (click)="onBack()">
-      {{ completed ? 'Back Home' : 'Cancel Back Home' }}
+      {{ completed ? 'Back Home' : (currentPage < 1) ? 'Cancel Back Home' :
+      'Back' }}
     </button>
 
     <button
