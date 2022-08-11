@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { catchError, noop, of, tap } from 'rxjs';
 
 import { PartyService } from '@app/core/party/party.service';
+import { DocumentService } from '@app/core/services/document.service';
 import { LoggerService } from '@app/core/services/logger.service';
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
 
@@ -17,32 +18,50 @@ import { MsTeamsResource } from './ms-teams-resource.service';
 export class MsTeamsPage implements OnInit {
   public title: string;
   public completed: boolean | null;
+  public declarationAgreement: string;
+  public detailsAgreement: string;
+  public itSecurityAgreement: string;
+  public currentPage: number;
   public constructor(
     private route: ActivatedRoute,
     private router: Router,
     private partyService: PartyService,
     private resource: MsTeamsResource,
-    private logger: LoggerService
+    private logger: LoggerService,
+    documentService: DocumentService
   ) {
     const routeData = this.route.snapshot.data;
     this.title = routeData.title;
     this.completed = routeData.msTeamsStatusCode === StatusCode.COMPLETED;
+    this.declarationAgreement =
+      documentService.getMsTeamsDeclarationAgreement();
+    this.detailsAgreement = documentService.getMsTeamsDetailsAgreement();
+    this.itSecurityAgreement = documentService.getMsTeamsITSecurityAgreement();
+    this.currentPage = 0;
   }
 
   public onBack(): void {
-    this.navigateToRoot();
+    if (this.currentPage > 0) {
+      this.currentPage--;
+    } else {
+      this.navigateToRoot();
+    }
   }
 
   public onRequestAccess(): void {
-    this.resource
-      .requestAccess(this.partyService.partyId)
-      .pipe(
-        tap(() => (this.completed = true)),
-        catchError(() => {
-          return of(noop());
-        })
-      )
-      .subscribe();
+    if (this.currentPage < 2) {
+      this.currentPage++;
+    } else {
+      this.resource
+        .requestAccess(this.partyService.partyId)
+        .pipe(
+          tap(() => (this.completed = true)),
+          catchError(() => {
+            return of(noop());
+          })
+        )
+        .subscribe();
+    }
   }
 
   public ngOnInit(): void {

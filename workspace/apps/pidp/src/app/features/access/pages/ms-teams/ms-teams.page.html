@@ -28,11 +28,24 @@
   </ng-container>
 
   <ng-template #notCompleted>
-    <!-- <ui-page-section>
-      <p
-        class="collection-notice"
-        [innerHtml]="collectionNotice | safe: 'html'"></p>
-    </ui-page-section> -->
+    <ng-container [ngSwitch]="currentPage">
+      <ng-container *ngSwitchCase="0">
+        <ui-page-section>
+          <p [innerHtml]="declarationAgreement | safe: 'html'"></p>
+        </ui-page-section>
+      </ng-container>
+      <ng-container *ngSwitchCase="1">
+        <ui-page-section>
+          <p [innerHtml]="detailsAgreement | safe: 'html'"></p>
+        </ui-page-section>
+      </ng-container>
+      <ng-container *ngSwitchCase="2">
+        <ui-page-section>
+          <p [innerHtml]="itSecurityAgreement | safe: 'html'"></p>
+        </ui-page-section>
+      </ng-container>
+      <ng-container *ngSwitchDefault></ng-container>
+    </ng-container>
   </ng-template>
 
   <ui-page-footer [mode]="completed ? 'reverse' : 'normal'">
