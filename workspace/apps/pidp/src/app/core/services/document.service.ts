@@ -207,9 +207,11 @@ export class DocumentService {
     return `
       Details on Privacy & Security Requirements<br><br>
       <strong>Privacy & Security Resources for Private Practice Physicians:</strong><br><br>
-      Education, resources and support on Clinic Privacy and Security are available via the Doctors Technology Office (DTO).<br><br>
-      DTOinfo@doctorsofbc.ca or 604-638-5841.<br><br>
-      The Physician Office IT Security Guide outlines basic administrative, physical and technology????? safeguards you take implement????
+      Education, resources and support on Clinic Privacy and Security are available via the
+      <a href="${this.config.urls.doctorsTechnologyOffice}">Doctors Technology Office (DTO)</a>.<br><br>
+      <a href="mailto:${this.config.emails.doctorsTechnologyOfficeSupport}">${this.config.emails.doctorsTechnologyOfficeSupport}</a> or 604-638-5841.<br><br>
+      The <a href="https://www.doctorsofbc.ca/sites/default/files/physician_office_security_guide_2018_august_0.pdf">Physician Office IT
+      Security Guide</a> outlines basic administrative, physical and technology????? safeguards you take implement????
       with the help of your Local IT provider in your practice. Most relevant tools can be found under the Physician Office IT Security
       and the Physician Privacy Tool Kit section of the Doctors Technology Office Website.<br><br>
       <strong>Privacy & Security Declaration Information:</strong><br><br>
@@ -241,7 +243,8 @@ export class DocumentService {
           password. Each user should change their passwords semi-annually. See password management requirements on page 3 of this guide. For tips on
           creating secure passwords, visit the Physician Office IT Security Guide.</li><br>
         <li>Notifying the FHA mHealth secure messaging Team ensures that FH access accounts remain current. This will prevent the risk of someone accessing
-          information to which they are no longer eligible. To contact the secure messaging team, email securemessaging@fraserhealth.ca</li><br>
+          information to which they are no longer eligible. To contact the secure messaging team, email
+          <a href="mailto:${this.config.emails.msTeamsSupport}">${this.config.emails.msTeamsSupport}</a></li><br>
         <li>During the course of providing technical support, there is a chance that unauthorized access to clinical information can occur. Keep invoices
           and/or service receipts for at least two years. In case of a privacy breach or investigation, the clinic should be able to provide details about
           technology and physical safeguards implemented. Refer to the DTO Health Technology Guide - Selecting IT Support for what can be expected from your
@@ -256,8 +259,9 @@ export class DocumentService {
     <strong>There are a number of basic technology requirements that need to be in place to safeguard patient information within your practice.</strong>
     The checklist below details the minimum clinic IT security requirements defined by FHA and the Ministry of Health for protecting your clinic from
     local threats.<br><br>
-    Education, resources and supports on Clinic Privacy and Security are available via the Doctors Technology Office (DTO)<br>
-    DTOinfo@doctorsofbc.ca or 604-638-5841<br><br>
+    Education, resources and supports on Clinic Privacy and Security are available via the
+    <a href="${this.config.urls.doctorsTechnologyOffice}">Doctors Technology Office (DTO)</a>.<br>
+    <a href="mailto:${this.config.emails.doctorsTechnologyOfficeSupport}">${this.config.emails.doctorsTechnologyOfficeSupport}</a> or 604-638-5841<br><br>
     <strong>Physical Access Control</strong><br><br>
     <ul style="list-style-type:square">
       <li>Clinic site is equipped with a monitored alarm system</li><br>
@@ -299,8 +303,6 @@ export class DocumentService {
     </ul><br>
     `;
   }
-  // TODO Add hrefs Doctors Technology Office
-  // TODO make DTO mailTo href
 
   private getDocumentMetaData(documentType: DocumentType): IDocumentMetaData {
     const metadata = this.documents.find(

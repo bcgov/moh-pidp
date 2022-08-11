@@ -10,6 +10,7 @@ import { UtilsService } from '@app/core/services/utils.service';
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
 
 import { MsTeamsResource } from './ms-teams-resource.service';
+import { msTeamsSupportEmail } from './ms-teams.constants';
 
 @Component({
   selector: 'app-ms-teams',
@@ -21,6 +22,7 @@ export class MsTeamsPage implements OnInit {
   public declarationAgreement: string;
   public detailsAgreement: string;
   public itSecurityAgreement: string;
+  public msTeamsSupportEmail: string;
   public currentPage: number;
   public constructor(
     private route: ActivatedRoute,
@@ -37,6 +39,7 @@ export class MsTeamsPage implements OnInit {
       documentService.getMsTeamsDeclarationAgreement();
     this.detailsAgreement = documentService.getMsTeamsDetailsAgreement();
     this.itSecurityAgreement = documentService.getMsTeamsITSecurityAgreement();
+    this.msTeamsSupportEmail = msTeamsSupportEmail;
     this.currentPage = 0;
   }
 
