@@ -208,10 +208,10 @@ export class DocumentService {
       Details on Privacy & Security Requirements<br><br>
       <strong>Privacy & Security Resources for Private Practice Physicians:</strong><br><br>
       Education, resources and support on Clinic Privacy and Security are available via the
-      <a href="${this.config.urls.doctorsTechnologyOffice}">Doctors Technology Office (DTO)</a>.<br><br>
+      <a href="${this.config.urls.doctorsTechnologyOffice}" target="_blank">Doctors Technology Office (DTO)</a>.<br><br>
       <a href="mailto:${this.config.emails.doctorsTechnologyOfficeSupport}">${this.config.emails.doctorsTechnologyOfficeSupport}</a> or 604-638-5841.<br><br>
-      The <a href="https://www.doctorsofbc.ca/sites/default/files/physician_office_security_guide_2018_august_0.pdf">Physician Office IT
-      Security Guide</a> outlines basic administrative, physical and technology????? safeguards you take implement????
+      The <a href="https://www.doctorsofbc.ca/sites/default/files/physician_office_security_guide_2018_august_0.pdf" target="_blank">Physician Office IT
+      Security Guide</a> outlines basic administrative, physical and technological safeguards you take to implement
       with the help of your Local IT provider in your practice. Most relevant tools can be found under the Physician Office IT Security
       and the Physician Privacy Tool Kit section of the Doctors Technology Office Website.<br><br>
       <strong>Privacy & Security Declaration Information:</strong><br><br>
@@ -260,7 +260,7 @@ export class DocumentService {
     The checklist below details the minimum clinic IT security requirements defined by FHA and the Ministry of Health for protecting your clinic from
     local threats.<br><br>
     Education, resources and supports on Clinic Privacy and Security are available via the
-    <a href="${this.config.urls.doctorsTechnologyOffice}">Doctors Technology Office (DTO)</a>.<br><br>
+    <a href="${this.config.urls.doctorsTechnologyOffice}" target="_blank">Doctors Technology Office (DTO)</a>.<br><br>
     <a href="mailto:${this.config.emails.doctorsTechnologyOfficeSupport}">${this.config.emails.doctorsTechnologyOfficeSupport}</a> or 604-638-5841<br><br>
     <strong>Physical Access Control</strong><br><br>
     <ul style="list-style-type:square">
