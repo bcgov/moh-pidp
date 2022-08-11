@@ -260,7 +260,7 @@ export class DocumentService {
     The checklist below details the minimum clinic IT security requirements defined by FHA and the Ministry of Health for protecting your clinic from
     local threats.<br><br>
     Education, resources and supports on Clinic Privacy and Security are available via the
-    <a href="${this.config.urls.doctorsTechnologyOffice}">Doctors Technology Office (DTO)</a>.<br>
+    <a href="${this.config.urls.doctorsTechnologyOffice}">Doctors Technology Office (DTO)</a>.<br><br>
     <a href="mailto:${this.config.emails.doctorsTechnologyOfficeSupport}">${this.config.emails.doctorsTechnologyOfficeSupport}</a> or 604-638-5841<br><br>
     <strong>Physical Access Control</strong><br><br>
     <ul style="list-style-type:square">
