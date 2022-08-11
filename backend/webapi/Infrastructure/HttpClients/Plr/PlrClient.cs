@@ -56,7 +56,7 @@ public class PlrClient : BaseClient, IPlrClient
         return result.Value;
     }
 
-    public async Task<bool> GetStandingAsync(string? cpn, params IdentifierType[] identifierTypes) => (await this.GetStandingsDigestAsync(cpn)).HasRecordInGoodStanding(identifierTypes);
+    public async Task<bool> GetStandingAsync(string? cpn) => (await this.GetStandingsDigestAsync(cpn)).HasGoodStanding;
 
     public async Task<PlrStandingsDigest> GetStandingsDigestAsync(string? cpn)
     {
