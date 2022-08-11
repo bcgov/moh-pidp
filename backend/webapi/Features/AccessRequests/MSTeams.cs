@@ -103,7 +103,7 @@ public class MSTeams
                 from: EmailService.PidpEmail,
                 to: partyEmail,
                 subject: "MS Teams for Clinical Use Enrolment Confirmation",
-                body: $"Dear {partyName},<br><br>You have been successfully enrolled for MS Teams for Clinical Use.<br>The Fraser Health mHealth team will contact you via email with account information and setup instructions. In the meantime please email securemessaging@fraserhealth.ca if you have any questions."
+                body: $"Dear {partyName},<br><br>You have been successfully enrolled for MS Teams for Clinical Use.<br>The Fraser Health mHealth team will contact you via email with account information and setup instructions. In the meantime please email <a href=\"mailto:securemessaging@fraserhealth.ca\">securemessaging@fraserhealth.ca</a> if you have any questions."
             );
             await this.emailService.SendAsync(email);
         }
