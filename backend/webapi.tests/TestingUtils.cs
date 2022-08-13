@@ -1,9 +1,17 @@
 namespace PidpTests;
 
+using System.Reflection;
+
 using Pidp.Infrastructure.HttpClients.Plr;
 
 public static class TestingUtils
 {
+    public static IEnumerable<IdentifierType> AllIdentifierTypes =>
+        typeof(IdentifierType)
+            .GetFields(BindingFlags.Public | BindingFlags.Static)
+            .Where(field => field.FieldType == typeof(IdentifierType))
+            .Select(field => (IdentifierType)field.GetValue(null)!);
+
     /// <summary>
     /// Creates a digest containing a single record with the properties indicated.
     /// </summary>
