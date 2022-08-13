@@ -6,8 +6,8 @@ using Microsoft.EntityFrameworkCore;
 using NodaTime;
 
 using Pidp.Data;
-using Pidp.Infrastructure.Auth;
-using Pidp.Infrastructure.HttpClients.Keycloak;
+// using Pidp.Infrastructure.Auth;
+// using Pidp.Infrastructure.HttpClients.Keycloak;
 using Pidp.Infrastructure.HttpClients.Mail;
 using Pidp.Infrastructure.HttpClients.Plr;
 using Pidp.Infrastructure.Services;
@@ -32,7 +32,7 @@ public class MSTeams
     {
         private readonly IClock clock;
         private readonly IEmailService emailService;
-        private readonly IKeycloakAdministrationClient keycloakClient;
+        // private readonly IKeycloakAdministrationClient keycloakClient;
         private readonly ILogger logger;
         private readonly IPlrClient plrClient;
         private readonly PidpDbContext context;
@@ -40,14 +40,14 @@ public class MSTeams
         public CommandHandler(
             IClock clock,
             IEmailService emailService,
-            IKeycloakAdministrationClient keycloakClient,
+            // IKeycloakAdministrationClient keycloakClient,
             ILogger<CommandHandler> logger,
             IPlrClient plrClient,
             PidpDbContext context)
         {
             this.clock = clock;
             this.emailService = emailService;
-            this.keycloakClient = keycloakClient;
+            // this.keycloakClient = keycloakClient;
             this.logger = logger;
             this.plrClient = plrClient;
             this.context = context;
@@ -73,11 +73,11 @@ public class MSTeams
                     .With(AllowedIdentifierTypes)
                     .HasGoodStanding)
             {
-                this.logger.LogSAEformsAccessRequestDenied();
+                this.logger.LogMSTeamsAccessRequestDenied();
                 return DomainResult.Failed();
             }
 
-            // TODO Assign role
+            // TODO Assign role / other enrolment actions
             // if (!await this.keycloakClient.AssignClientRole(dto.UserId, ?, ?))
             // {
             //     return DomainResult.Failed();
