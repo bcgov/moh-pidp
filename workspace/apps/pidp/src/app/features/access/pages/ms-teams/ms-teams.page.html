@@ -1,0 +1,71 @@
+<ui-page>
+  <ui-page-section>
+    <ui-page-section-subheader
+      icon="assignment"
+      heading="MS Teams for Clinical Use">
+    </ui-page-section-subheader>
+  </ui-page-section>
+
+  <ng-container *ngIf="completed; else notCompleted">
+    <ui-alert
+      type="success"
+      icon="check_circle"
+      iconType="outlined"
+      heading="Thank you for enrolling your clinic for MS Teams access.">
+      <ng-container uiAlertContent>
+        <p>
+          Your clinic will be provided with instructions via email on how to
+          setup and use MS Teams for Clinical Use.
+        </p>
+        <p>
+          If you have any additional questions contact the FH mhealth team via
+          email:
+          <a uiAnchor scheme="mailto" [attr.href]="msTeamsSupportEmail"></a>
+        </p>
+      </ng-container>
+    </ui-alert>
+  </ng-container>
+
+  <ng-template #notCompleted>
+    <ng-container [ngSwitch]="currentPage">
+      <ng-container *ngSwitchCase="0">
+        <ui-page-section>
+          <p [innerHtml]="declarationAgreement | safe: 'html'"></p>
+        </ui-page-section>
+      </ng-container>
+      <ng-container *ngSwitchCase="1">
+        <ui-page-section>
+          <p [innerHtml]="detailsAgreement | safe: 'html'"></p>
+        </ui-page-section>
+      </ng-container>
+      <ng-container *ngSwitchCase="2">
+        <ui-page-section>
+          <p [innerHtml]="itSecurityAgreement | safe: 'html'"></p>
+        </ui-page-section>
+      </ng-container>
+      <ng-container *ngSwitchDefault></ng-container>
+    </ng-container>
+  </ng-template>
+
+  <ui-page-footer [mode]="completed ? 'reverse' : 'normal'">
+    <button
+      mat-stroked-button
+      uiPageFooterAction
+      type="button"
+      color="primary"
+      (click)="onBack()">
+      {{ completed ? 'Back Home' : (currentPage < 1) ? 'Cancel Back Home' :
+      'Back' }}
+    </button>
+
+    <button
+      *ngIf="!completed"
+      mat-flat-button
+      uiPageFooterAction
+      type="button"
+      color="primary"
+      (click)="onRequestAccess()">
+      I accept
+    </button>
+  </ui-page-footer>
+</ui-page>

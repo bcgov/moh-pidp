@@ -1,7 +1,5 @@
 namespace Pidp.Infrastructure.HttpClients.Plr;
 
-using Pidp.Extensions;
-
 public class IdentifierType
 {
     public static readonly IdentifierType Pharmacist = new("PHID");
