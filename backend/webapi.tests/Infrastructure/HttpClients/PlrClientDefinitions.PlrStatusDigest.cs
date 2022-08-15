@@ -1,8 +1,5 @@
 namespace PidpTests.Infrastructure.HttpClients;
 
-using FakeItEasy;
-using Microsoft.Extensions.Logging;
-using System.Net;
 using Xunit;
 
 using Pidp.Infrastructure.HttpClients.Plr;
@@ -157,18 +154,5 @@ public class PlrStatusDigestTests
         yield return new object[] { IdentifierType.DentalSurgeon, true };
         yield return new object[] { IdentifierType.Nurse, false };
         yield return new object[] { IdentifierType.NaturopathicPhysician, true };
-    }
-
-
-    private class PlrRecordMock : PlrRecord
-    {
-        public bool GoodStanding { get; set; }
-        public PlrRecordMock(bool goodStanding, string? identifierType = null)
-        {
-            this.GoodStanding = goodStanding;
-            this.IdentifierType = identifierType;
-        }
-
-        public override bool IsGoodStanding() => this.GoodStanding;
     }
 }

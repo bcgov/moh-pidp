@@ -110,14 +110,15 @@ public partial class ProfileStatus
             {
                 Status = new List<Model.ProfileSection>
                 {
-                    new Model.Demographics(profile),
-                    new Model.CollegeCertification(profile),
                     new Model.AccessAdministrator(profile),
+                    new Model.CollegeCertification(profile),
                     new Model.OrganizationDetails(profile),
+                    new Model.Demographics(profile),
                     new Model.DriverFitness(profile),
-                    new Model.SAEforms(profile),
                     new Model.HcimAccountTransfer(profile),
                     new Model.HcimEnrolment(profile),
+                    new Model.MSTeams(profile),
+                    new Model.SAEforms(profile),
                     new Model.Uci(profile)
                 }
                 .ToDictionary(section => section.SectionName, section => section)

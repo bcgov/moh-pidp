@@ -2,6 +2,11 @@ import { driverFitnessSupportEmail } from '@app/features/access/pages/driver-fit
 import { hcimWebAccountTransferSupport } from '@app/features/access/pages/hcim-account-transfer/hcim-account-transfer-constants';
 import { hcimWebEnrolmentSupport } from '@app/features/access/pages/hcim-enrolment/hcim-enrolment-constants';
 import {
+  doctorsTechnologyOfficeEmail,
+  doctorsTechnologyOfficeUrl,
+  msTeamsSupportEmail,
+} from '@app/features/access/pages/ms-teams/ms-teams.constants';
+import {
   specialAuthorityEformsSupportEmail,
   specialAuthorityUrl,
 } from '@app/features/access/pages/sa-eforms/sa-eforms.constants';
@@ -31,11 +36,14 @@ export const environment: AppEnvironment = {
     hcimEnrolmentSupport: hcimWebEnrolmentSupport,
     driverFitnessSupport: driverFitnessSupportEmail,
     uciSupport: uciSupportEmail,
+    msTeamsSupport: msTeamsSupportEmail,
+    doctorsTechnologyOfficeSupport: doctorsTechnologyOfficeEmail,
   },
   urls: {
     bcscSupport: `https://www2.gov.bc.ca/gov/content/governments/government-id/bcservicescardapp/help`,
     bcscMobileSetup: 'https://id.gov.bc.ca/account',
     specialAuthority: specialAuthorityUrl,
+    doctorsTechnologyOffice: doctorsTechnologyOfficeUrl,
   },
   keycloakConfig: {
     config: {

@@ -227,6 +227,39 @@ public partial class ProfileStatus
             }
         }
 
+        public class MSTeams : ProfileSection
+        {
+            internal override string SectionName => "msTeams";
+
+            public MSTeams(ProfileStatusDto profile) : base(profile) { }
+
+            protected override void SetAlertsAndStatus(ProfileStatusDto profile)
+            {
+                if (!profile.UserIsBcServicesCard)
+                {
+                    this.StatusCode = StatusCode.Hidden;
+                    return;
+                }
+
+                if (profile.CompletedEnrolments.Contains(AccessTypeCode.MSTeams))
+                {
+                    this.StatusCode = StatusCode.Complete;
+                    return;
+                }
+
+                if (!profile.DemographicsEntered
+                    || !profile.PlrStanding
+                        .With(AccessRequests.MSTeams.AllowedIdentifierTypes)
+                        .HasGoodStanding)
+                {
+                    this.StatusCode = StatusCode.Locked;
+                    return;
+                }
+
+                this.StatusCode = StatusCode.Incomplete;
+            }
+        }
+
         public class SAEforms : ProfileSection
         {
             internal override string SectionName => "saEforms";
