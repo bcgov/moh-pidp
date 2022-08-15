@@ -264,7 +264,15 @@ public partial class ProfileStatus
         {
             internal override string SectionName => "saEforms";
 
-            public SAEforms(ProfileStatusDto profile) : base(profile) { }
+            public bool IncorrectLicenceType { get; set; }
+
+            public SAEforms(ProfileStatusDto profile) : base(profile)
+            {
+                this.IncorrectLicenceType = profile.PlrStanding.HasGoodStanding
+                    && !profile.PlrStanding
+                        .Excluding(AccessRequests.SAEforms.ExcludedIdentifierTypes)
+                        .HasGoodStanding;
+            }
 
             protected override void SetAlertsAndStatus(ProfileStatusDto profile)
             {
@@ -281,7 +289,9 @@ public partial class ProfileStatus
                 }
 
                 if (!profile.DemographicsEntered
-                    || !profile.PlrStanding.HasGoodStanding)
+                    || !profile.PlrStanding
+                        .Excluding(AccessRequests.SAEforms.ExcludedIdentifierTypes)
+                        .HasGoodStanding)
                 {
                     this.StatusCode = StatusCode.Locked;
                     return;
