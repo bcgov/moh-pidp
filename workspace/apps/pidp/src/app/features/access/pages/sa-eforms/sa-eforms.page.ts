@@ -1,4 +1,4 @@
-import { HttpErrorResponse } from '@angular/common/http';
+import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -57,7 +57,7 @@ export class SaEformsPage implements OnInit {
       .pipe(
         tap(() => (this.completed = true)),
         catchError((error: HttpErrorResponse) => {
-          if (error.status === 400) {
+          if (error.status === HttpStatusCode.BadRequest) {
             this.completed = false;
             this.keycloakError = true;
             return of(noop());
