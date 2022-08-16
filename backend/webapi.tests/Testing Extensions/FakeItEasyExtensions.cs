@@ -37,7 +37,7 @@ public static class FakeItEasyExtensions
     }
 
     public static IPlrClient ReturningAStatandingsDigest(this IPlrClient client, bool goodStanding, string? identifierType = null)
-        => client.ReturningAStatandingsDigest(TestingUtils.CreateDigestFrom(goodStanding, identifierType));
+        => client.ReturningAStatandingsDigest(AMock.StandingsDigest(goodStanding, identifierType));
 
     public static IPlrClient ReturningAStatandingsDigest(this IPlrClient client, PlrStandingsDigest digest)
     {
