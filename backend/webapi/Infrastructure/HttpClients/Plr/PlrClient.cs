@@ -4,30 +4,11 @@ using NodaTime;
 
 using Pidp.Models.Lookups;
 
-public class PlrRecord
-{
-    public string Cpn { get; set; } = string.Empty;
-    public string Ipc { get; set; } = string.Empty;
-    public string? CollegeId { get; set; }
-    public string? IdentifierType { get; set; }
-    public string? ProviderRoleType { get; set; }
-    public string? StatusCode { get; set; }
-    public DateTime? StatusStartDate { get; set; }
-    public string? StatusReasonCode { get; set; }
-
-    public virtual bool IsGoodStanding()
-    {
-        var goodStatndingReasons = new[] { "GS", "PRAC", "TEMPPER" };
-        return this.StatusCode == "ACTIVE"
-            && goodStatndingReasons.Contains(this.StatusReasonCode);
-    }
-}
-
 public class PlrClient : BaseClient, IPlrClient
 {
     public PlrClient(HttpClient client, ILogger<PlrClient> logger) : base(client, logger) { }
 
-    public async Task<string?> FindCpn(CollegeCode collegeCode, string licenceNumber, LocalDate birthdate)
+    public async Task<string?> FindCpnAsync(CollegeCode collegeCode, string licenceNumber, LocalDate birthdate)
     {
         var query = new
         {
@@ -59,25 +40,7 @@ public class PlrClient : BaseClient, IPlrClient
         };
     }
 
-    public async Task<bool?> IsGoodStanding(string? cpn)
-    {
-        if (string.IsNullOrWhiteSpace(cpn))
-        {
-            return null;
-        }
-
-        var result = await this.GetWithQueryParamsAsync<IEnumerable<PlrRecord>>("records", new { Cpn = cpn });
-        if (!result.IsSuccess
-            || !result.Value.Any())
-        {
-            return null;
-        }
-
-        return result.Value
-            .Any(record => record.IsGoodStanding());
-    }
-
-    public async Task<IEnumerable<PlrRecord>?> GetRecords(string? cpn)
+    public async Task<IEnumerable<PlrRecord>?> GetRecordsAsync(string? cpn)
     {
         if (string.IsNullOrWhiteSpace(cpn))
         {
@@ -93,6 +56,25 @@ public class PlrClient : BaseClient, IPlrClient
         return result.Value;
     }
 
+    public async Task<bool> GetStandingAsync(string? cpn) => (await this.GetStandingsDigestAsync(cpn)).HasGoodStanding;
+
+    public async Task<PlrStandingsDigest> GetStandingsDigestAsync(string? cpn)
+    {
+        if (string.IsNullOrWhiteSpace(cpn))
+        {
+            return PlrStandingsDigest.FromEmpty();
+        }
+
+        var result = await this.GetWithQueryParamsAsync<IEnumerable<PlrRecord>>("records", new { Cpn = cpn });
+        if (!result.IsSuccess
+            || !result.Value.Any())
+        {
+            return PlrStandingsDigest.FromError();
+        }
+
+        return PlrStandingsDigest.FromRecords(result.Value);
+    }
+
     /// <summary>
     /// Returns the PLR Identifier Types(s) that correspond to the given College.
     /// </summary>
@@ -101,12 +83,12 @@ public class PlrClient : BaseClient, IPlrClient
     {
         return collegeCode switch
         {
-            CollegeCode.Pharmacists => new[] { "PHID", "PHTID" },
-            CollegeCode.PhysiciansAndSurgeons => new[] { "CPSID" },
-            CollegeCode.NursesAndMidwives => new[] { "RNID", "RMID" },
-            CollegeCode.NaturopathicPhysicians => new[] { "NDID" },
-            CollegeCode.DentalSurgeons => new[] { "DENID" },
-            CollegeCode.Optometrists => new[] { "OPTID" },
+            CollegeCode.Pharmacists => new string[] { IdentifierType.Pharmacist, IdentifierType.PharmacyTech },
+            CollegeCode.PhysiciansAndSurgeons => new string[] { IdentifierType.PhysiciansAndSurgeons },
+            CollegeCode.NursesAndMidwives => new string[] { IdentifierType.Nurse, IdentifierType.Midwife },
+            CollegeCode.NaturopathicPhysicians => new string[] { IdentifierType.NaturopathicPhysician },
+            CollegeCode.DentalSurgeons => new string[] { IdentifierType.DentalSurgeon },
+            CollegeCode.Optometrists => new string[] { IdentifierType.Optometrist },
             _ => Array.Empty<string>()
         };
     }

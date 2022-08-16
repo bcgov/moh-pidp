@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 
 import { AlertType } from '@bcgov/shared/ui';
 
-import { OrganizationInfoRoutes } from '@app/features/organization-info/organization-info.routes';
+import { AccessRoutes } from '@app/features/access/access.routes';
 import { ShellRoutes } from '@app/features/shell/shell.routes';
 
 import { StatusCode } from '../../enums/status-code.enum';
@@ -13,24 +13,18 @@ import { PortalSectionAction } from '../portal-section-action.model';
 import { PortalSectionKey } from '../portal-section-key.type';
 import { IPortalSection } from '../portal-section.model';
 
-export class EndorsementPortalSection implements IPortalSection {
+export class MsTeamsPortalSection implements IPortalSection {
   public readonly key: PortalSectionKey;
   public heading: string;
   public description: string;
-  private isRegulated: boolean;
 
   public constructor(
     private profileStatus: ProfileStatus,
     private router: Router
   ) {
-    this.key = 'endorsement';
-    this.heading = 'Endorsement';
-    const { statusCode, hasCpn } =
-      this.profileStatus.status.collegeCertification;
-    this.isRegulated = statusCode === StatusCode.COMPLETED && hasCpn;
-    this.description = this.isRegulated
-      ? 'View and make changes to your care team'
-      : 'Request endorsement from the licenced practitioners you work with to gain access to systems.';
+    this.key = 'msTeams';
+    this.heading = 'MS Teams for Clinical Use';
+    this.description = `Enrol here for clinic access for MS Teams with Fraser Health.`;
   }
 
   public get hint(): string {
@@ -42,17 +36,11 @@ export class EndorsementPortalSection implements IPortalSection {
    * Get the properties that define the action on the section.
    */
   public get action(): PortalSectionAction {
+    const statusCode = this.getStatusCode();
     return {
-      label: this.isRegulated ? 'View' : 'Request',
-      route: OrganizationInfoRoutes.routePath(
-        this.isRegulated
-          ? OrganizationInfoRoutes.ENDORSEMENT_REQUESTS_RECEIVED
-          : OrganizationInfoRoutes.ENDORSEMENT_REQUEST
-      ),
-      disabled: !(
-        this.profileStatus.status.demographics.statusCode ===
-        StatusCode.COMPLETED
-      ),
+      label: statusCode === StatusCode.COMPLETED ? 'View' : 'Request',
+      route: AccessRoutes.routePath(AccessRoutes.MS_TEAMS),
+      disabled: statusCode === StatusCode.NOT_AVAILABLE,
     };
   }
 
@@ -62,7 +50,11 @@ export class EndorsementPortalSection implements IPortalSection {
 
   public get status(): string {
     const statusCode = this.getStatusCode();
-    return statusCode === StatusCode.COMPLETED ? 'Completed' : 'Incomplete';
+    return statusCode === StatusCode.AVAILABLE
+      ? 'You are eligible to access MS Teams'
+      : statusCode === StatusCode.COMPLETED
+      ? 'Completed'
+      : 'Incomplete';
   }
 
   public performAction(): Observable<void> | void {
@@ -70,7 +62,6 @@ export class EndorsementPortalSection implements IPortalSection {
   }
 
   private getStatusCode(): StatusCode {
-    // TODO remove null check once API exists
-    return this.profileStatus.status.endorsement?.statusCode;
+    return this.profileStatus.status.msTeams.statusCode;
   }
 }

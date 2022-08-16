@@ -38,7 +38,7 @@ public partial class ProfileStatus
             public CollegeCertification(ProfileStatusDto profile) : base(profile)
             {
                 this.HasCpn = !string.IsNullOrWhiteSpace(profile.Cpn);
-                this.LicenceDeclared = profile.LicenceDeclared;
+                this.LicenceDeclared = profile.HasDeclaredLicence;
             }
 
             protected override void SetAlertsAndStatus(ProfileStatusDto profile)
@@ -61,27 +61,22 @@ public partial class ProfileStatus
                     return;
                 }
 
-                if (profile.LicenceDeclaration.NoLicence)
+                if (profile.LicenceDeclaration.HasNoLicence
+                    || profile.PlrStanding.HasGoodStanding)
                 {
                     this.StatusCode = StatusCode.Complete;
                     return;
                 }
 
-                if (profile.PlrGoodStanding == null)
+                if (profile.PlrStanding.Error)
                 {
                     this.Alerts.Add(Alert.TransientError);
                     this.StatusCode = StatusCode.Error;
                     return;
                 }
 
-                if (profile.PlrGoodStanding == false)
-                {
-                    this.Alerts.Add(Alert.PlrBadStanding);
-                    this.StatusCode = StatusCode.Error;
-                    return;
-                }
-
-                this.StatusCode = StatusCode.Complete;
+                this.Alerts.Add(Alert.PlrBadStanding);
+                this.StatusCode = StatusCode.Error;
             }
         }
 
@@ -153,7 +148,7 @@ public partial class ProfileStatus
                 }
 
                 if (!profile.DemographicsEntered
-                    || profile.PlrGoodStanding != true)
+                    || !profile.PlrStanding.HasGoodStanding)
                 {
                     this.StatusCode = StatusCode.Locked;
                     return;
@@ -232,6 +227,39 @@ public partial class ProfileStatus
             }
         }
 
+        public class MSTeams : ProfileSection
+        {
+            internal override string SectionName => "msTeams";
+
+            public MSTeams(ProfileStatusDto profile) : base(profile) { }
+
+            protected override void SetAlertsAndStatus(ProfileStatusDto profile)
+            {
+                if (!profile.UserIsBcServicesCard)
+                {
+                    this.StatusCode = StatusCode.Hidden;
+                    return;
+                }
+
+                if (profile.CompletedEnrolments.Contains(AccessTypeCode.MSTeams))
+                {
+                    this.StatusCode = StatusCode.Complete;
+                    return;
+                }
+
+                if (!profile.DemographicsEntered
+                    || !profile.PlrStanding
+                        .With(AccessRequests.MSTeams.AllowedIdentifierTypes)
+                        .HasGoodStanding)
+                {
+                    this.StatusCode = StatusCode.Locked;
+                    return;
+                }
+
+                this.StatusCode = StatusCode.Incomplete;
+            }
+        }
+
         public class SAEforms : ProfileSection
         {
             internal override string SectionName => "saEforms";
@@ -253,7 +281,7 @@ public partial class ProfileStatus
                 }
 
                 if (!profile.DemographicsEntered
-                    || profile.PlrGoodStanding != true)
+                    || !profile.PlrStanding.HasGoodStanding)
                 {
                     this.StatusCode = StatusCode.Locked;
                     return;
@@ -284,7 +312,7 @@ public partial class ProfileStatus
                 }
 
                 if (!profile.DemographicsEntered
-                    || profile.PlrGoodStanding != true)
+                    || !profile.PlrStanding.HasGoodStanding)
                 {
                     this.StatusCode = StatusCode.Locked;
                     return;
