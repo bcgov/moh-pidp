@@ -28,7 +28,7 @@ export class SaEformsResource {
       .pipe(
         NoContentResponse,
         catchError((error: HttpErrorResponse) => {
-          if (error.status === HttpStatusCode.BadRequest) {
+          if (error.status !== HttpStatusCode.BadRequest) {
             return of(void 0);
           }
 
