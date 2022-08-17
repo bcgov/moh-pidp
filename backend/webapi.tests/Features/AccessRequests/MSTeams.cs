@@ -2,7 +2,6 @@ namespace PidpTests.Features.AccessRequests;
 
 using FakeItEasy;
 using NodaTime;
-using System.Reflection;
 using Xunit;
 
 using Pidp.Features.AccessRequests;
@@ -36,10 +35,7 @@ public class MSTeamsTests : InMemoryDbTest
 
     public static IEnumerable<object[]> MSTeamsIdentifierTypeTestData()
     {
-        return typeof(IdentifierType)
-             .GetFields(BindingFlags.Public | BindingFlags.Static)
-             .Where(field => field.FieldType == typeof(IdentifierType))
-             .Select(field => (IdentifierType)field.GetValue(null)!)
+        return TestingUtils.AllIdentifierTypes
              .Select(identifierType => new object[] { identifierType });
     }
 }

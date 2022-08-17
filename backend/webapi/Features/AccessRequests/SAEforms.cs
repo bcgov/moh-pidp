@@ -16,6 +16,8 @@ using Pidp.Models.Lookups;
 
 public class SAEforms
 {
+    public static IdentifierType[] ExcludedIdentifierTypes => new[] { IdentifierType.Pharmacist, IdentifierType.PharmacyTech };
+
     public class Command : ICommand<IDomainResult>
     {
         public int PartyId { get; set; }
@@ -67,7 +69,9 @@ public class SAEforms
 
             if (dto.AlreadyEnroled
                 || dto.Email == null
-                || !await this.plrClient.GetStandingAsync(dto.Cpn))
+                || !(await this.plrClient.GetStandingsDigestAsync(dto.Cpn))
+                    .Excluding(ExcludedIdentifierTypes)
+                    .HasGoodStanding)
             {
                 this.logger.LogSAEformsAccessRequestDenied();
                 return DomainResult.Failed();
