@@ -1,4 +1,5 @@
 import { Section } from '../section.model';
+import { SaEformsSection } from './sa-eforms-section.model';
 
 /**
  * @description
@@ -31,7 +32,7 @@ export type IAccessGroup = {
 };
 
 export interface AccessGroup extends IAccessGroup {
-  saEforms: Section;
+  saEforms: SaEformsSection;
   hcimAccountTransfer: Section;
   hcimEnrolment: Section;
   sitePrivacySecurityChecklist: Section;
