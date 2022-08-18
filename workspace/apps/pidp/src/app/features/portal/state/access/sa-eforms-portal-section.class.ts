@@ -12,6 +12,7 @@ import { ProfileStatus } from '../../models/profile-status.model';
 import { PortalSectionAction } from '../portal-section-action.model';
 import { PortalSectionKey } from '../portal-section-key.type';
 import { IPortalSection } from '../portal-section.model';
+import { SaEformsSection } from './sa-eforms-section.model';
 
 export class SaEformsPortalSection implements IPortalSection {
   public readonly key: PortalSectionKey;
@@ -36,17 +37,11 @@ export class SaEformsPortalSection implements IPortalSection {
    * Get the properties that define the action on the section.
    */
   public get action(): PortalSectionAction {
-    const demographicsStatusCode =
-      this.profileStatus.status.demographics.statusCode;
-    const collegeCertStatusCode =
-      this.profileStatus.status.collegeCertification.statusCode;
+    const statusCode = this.getStatusCode();
     return {
-      label: this.getStatusCode() === StatusCode.COMPLETED ? 'View' : 'Request',
+      label: statusCode === StatusCode.COMPLETED ? 'View' : 'Request',
       route: AccessRoutes.routePath(AccessRoutes.SPECIAL_AUTH_EFORMS),
-      disabled: !(
-        demographicsStatusCode === StatusCode.COMPLETED &&
-        collegeCertStatusCode === StatusCode.COMPLETED
-      ),
+      disabled: statusCode === StatusCode.NOT_AVAILABLE,
     };
   }
 
@@ -55,16 +50,26 @@ export class SaEformsPortalSection implements IPortalSection {
   }
 
   public get status(): string {
-    const statusCode = this.getStatusCode();
-    return statusCode === StatusCode.AVAILABLE
-      ? 'You are eligible to use Special Authority eForms'
-      : statusCode === StatusCode.COMPLETED
-      ? 'Completed'
-      : 'Incomplete';
+    const { statusCode, incorrectLicenceType } = this.getSectionStatus();
+
+    switch (statusCode) {
+      case StatusCode.AVAILABLE:
+        return 'You are eligible to use Special Authority eForms';
+      case StatusCode.COMPLETED:
+        return 'Completed';
+      default:
+        return incorrectLicenceType
+          ? 'Pharmacists and Pharmacy Technicians can not apply for Special Authority eForms'
+          : 'Incomplete';
+    }
   }
 
   public performAction(): Observable<void> | void {
     this.router.navigate([ShellRoutes.routePath(this.action.route)]);
+  }
+
+  private getSectionStatus(): SaEformsSection {
+    return this.profileStatus.status.saEforms;
   }
 
   private getStatusCode(): StatusCode {

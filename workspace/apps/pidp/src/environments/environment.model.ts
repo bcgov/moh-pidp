@@ -19,10 +19,14 @@ export interface AppEnvironment extends EnvironmentConfig {
     hcimAccountTransferSupport: string;
     hcimEnrolmentSupport: string;
     driverFitnessSupport: string;
+    uciSupport: string;
+    msTeamsSupport: string;
+    doctorsTechnologyOfficeSupport: string;
   };
   urls: {
     bcscSupport: string;
     bcscMobileSetup: string;
     specialAuthority: string;
+    doctorsTechnologyOffice: string;
   };
 }

@@ -1,4 +1,5 @@
 import { Section } from '../section.model';
+import { SaEformsSection } from './sa-eforms-section.model';
 
 /**
  * @description
@@ -12,6 +13,8 @@ export const accessSectionKeys = [
   'hcimEnrolment',
   'sitePrivacySecurityChecklist',
   'driverFitness',
+  'uci',
+  'msTeams',
 ] as const;
 
 /**
@@ -29,9 +32,11 @@ export type IAccessGroup = {
 };
 
 export interface AccessGroup extends IAccessGroup {
-  saEforms: Section;
+  saEforms: SaEformsSection;
   hcimAccountTransfer: Section;
   hcimEnrolment: Section;
   sitePrivacySecurityChecklist: Section;
   driverFitness: Section;
+  uci: Section;
+  msTeams: Section;
 }

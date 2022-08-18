@@ -36,16 +36,11 @@ export class HcimEnrolmentPortalSection implements IPortalSection {
    * Get the properties that define the action on the section.
    */
   public get action(): PortalSectionAction {
-    const demographicsStatusCode =
-      this.profileStatus.status.demographics.statusCode;
-    const administratorInfoStatusCode =
-      this.profileStatus.status.administratorInfo.statusCode;
+    const statusCode = this.getStatusCode();
     return {
-      label: this.getStatusCode() === StatusCode.COMPLETED ? 'View' : 'Request',
+      label: statusCode === StatusCode.COMPLETED ? 'View' : 'Request',
       route: AccessRoutes.routePath(AccessRoutes.HCIM_ENROLMENT),
-      disabled:
-        demographicsStatusCode !== StatusCode.COMPLETED ||
-        administratorInfoStatusCode !== StatusCode.COMPLETED,
+      disabled: statusCode === StatusCode.NOT_AVAILABLE,
     };
   }
 
@@ -54,8 +49,9 @@ export class HcimEnrolmentPortalSection implements IPortalSection {
   }
 
   public get status(): string {
-    const statusCode = this.getStatusCode();
-    return statusCode === StatusCode.COMPLETED ? 'Completed' : 'Incomplete';
+    return this.getStatusCode() === StatusCode.COMPLETED
+      ? 'Completed'
+      : 'Incomplete';
   }
 
   public performAction(): void | Observable<void> {

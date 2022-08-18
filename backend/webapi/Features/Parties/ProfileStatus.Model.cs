@@ -2,7 +2,6 @@ namespace Pidp.Features.Parties;
 
 using NodaTime;
 
-using Pidp.Models;
 using Pidp.Models.Lookups;
 
 public partial class ProfileStatus
@@ -33,13 +32,13 @@ public partial class ProfileStatus
         public class CollegeCertification : ProfileSection
         {
             internal override string SectionName => "collegeCertification";
-            public CollegeCode? CollegeCode { get; set; }
-            public string? LicenceNumber { get; set; }
+            public bool HasCpn { get; set; }
+            public bool LicenceDeclared { get; set; }
 
             public CollegeCertification(ProfileStatusDto profile) : base(profile)
             {
-                this.CollegeCode = profile.CollegeCode;
-                this.LicenceNumber = profile.LicenceNumber;
+                this.HasCpn = !string.IsNullOrWhiteSpace(profile.Cpn);
+                this.LicenceDeclared = profile.HasDeclaredLicence;
             }
 
             protected override void SetAlertsAndStatus(ProfileStatusDto profile)
@@ -56,28 +55,28 @@ public partial class ProfileStatus
                     return;
                 }
 
-                if (!profile.CollegeCertificationEntered)
+                if (profile.LicenceDeclaration == null)
                 {
                     this.StatusCode = StatusCode.Incomplete;
                     return;
                 }
 
-                if (profile.Ipc == null
-                    || profile.PlrRecordStatus == null)
+                if (profile.LicenceDeclaration.HasNoLicence
+                    || profile.PlrStanding.HasGoodStanding)
+                {
+                    this.StatusCode = StatusCode.Complete;
+                    return;
+                }
+
+                if (profile.PlrStanding.Error)
                 {
                     this.Alerts.Add(Alert.TransientError);
                     this.StatusCode = StatusCode.Error;
                     return;
                 }
 
-                if (!profile.PlrRecordStatus.IsGoodStanding())
-                {
-                    this.Alerts.Add(Alert.PlrBadStanding);
-                    this.StatusCode = StatusCode.Error;
-                    return;
-                }
-
-                this.StatusCode = StatusCode.Complete;
+                this.Alerts.Add(Alert.PlrBadStanding);
+                this.StatusCode = StatusCode.Error;
             }
         }
 
@@ -149,9 +148,7 @@ public partial class ProfileStatus
                 }
 
                 if (!profile.DemographicsEntered
-                    || !profile.CollegeCertificationEntered
-                    || profile.PlrRecordStatus == null
-                    || !profile.PlrRecordStatus.IsGoodStanding())
+                    || !profile.PlrStanding.HasGoodStanding)
                 {
                     this.StatusCode = StatusCode.Locked;
                     return;
@@ -230,11 +227,52 @@ public partial class ProfileStatus
             }
         }
 
+        public class MSTeams : ProfileSection
+        {
+            internal override string SectionName => "msTeams";
+
+            public MSTeams(ProfileStatusDto profile) : base(profile) { }
+
+            protected override void SetAlertsAndStatus(ProfileStatusDto profile)
+            {
+                if (!profile.UserIsBcServicesCard)
+                {
+                    this.StatusCode = StatusCode.Hidden;
+                    return;
+                }
+
+                if (profile.CompletedEnrolments.Contains(AccessTypeCode.MSTeams))
+                {
+                    this.StatusCode = StatusCode.Complete;
+                    return;
+                }
+
+                if (!profile.DemographicsEntered
+                    || !profile.PlrStanding
+                        .With(AccessRequests.MSTeams.AllowedIdentifierTypes)
+                        .HasGoodStanding)
+                {
+                    this.StatusCode = StatusCode.Locked;
+                    return;
+                }
+
+                this.StatusCode = StatusCode.Incomplete;
+            }
+        }
+
         public class SAEforms : ProfileSection
         {
             internal override string SectionName => "saEforms";
 
-            public SAEforms(ProfileStatusDto profile) : base(profile) { }
+            public bool IncorrectLicenceType { get; set; }
+
+            public SAEforms(ProfileStatusDto profile) : base(profile)
+            {
+                this.IncorrectLicenceType = profile.PlrStanding.HasGoodStanding
+                    && !profile.PlrStanding
+                        .Excluding(AccessRequests.SAEforms.ExcludedIdentifierTypes)
+                        .HasGoodStanding;
+            }
 
             protected override void SetAlertsAndStatus(ProfileStatusDto profile)
             {
@@ -251,9 +289,40 @@ public partial class ProfileStatus
                 }
 
                 if (!profile.DemographicsEntered
-                    || !profile.CollegeCertificationEntered
-                    || profile.PlrRecordStatus == null
-                    || !profile.PlrRecordStatus.IsGoodStanding())
+                    || !profile.PlrStanding
+                        .Excluding(AccessRequests.SAEforms.ExcludedIdentifierTypes)
+                        .HasGoodStanding)
+                {
+                    this.StatusCode = StatusCode.Locked;
+                    return;
+                }
+
+                this.StatusCode = StatusCode.Incomplete;
+            }
+        }
+
+        public class Uci : ProfileSection
+        {
+            internal override string SectionName => "uci";
+
+            public Uci(ProfileStatusDto profile) : base(profile) { }
+
+            protected override void SetAlertsAndStatus(ProfileStatusDto profile)
+            {
+                if (!profile.UserIsBcServicesCard)
+                {
+                    this.StatusCode = StatusCode.Hidden;
+                    return;
+                }
+
+                if (profile.CompletedEnrolments.Contains(AccessTypeCode.Uci))
+                {
+                    this.StatusCode = StatusCode.Complete;
+                    return;
+                }
+
+                if (!profile.DemographicsEntered
+                    || !profile.PlrStanding.HasGoodStanding)
                 {
                     this.StatusCode = StatusCode.Locked;
                     return;

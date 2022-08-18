@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
-import { Observable, map } from 'rxjs';
+import { Observable, map, of, switchMap } from 'rxjs';
 
 import { PartyService } from '@app/core/party/party.service';
 import { Role } from '@app/shared/enums/roles.enum';
 
+import { EndorsementRequestsReceivedResource } from '../organization-info/pages/endorsement/pages/endorsement-requests-received/endorsement-requests-received-resource.service';
 import { ProfileStatusAlert } from './models/profile-status-alert.model';
 import { ProfileStatus } from './models/profile-status.model';
 import { PortalResource } from './portal-resource.service';
@@ -44,7 +45,9 @@ export class PortalPage implements OnInit {
     private router: Router,
     private partyService: PartyService,
     private portalResource: PortalResource,
-    private portalService: PortalService
+    private portalService: PortalService,
+    private endorsementResource: EndorsementRequestsReceivedResource,
+    private activatedRoute: ActivatedRoute
   ) {
     this.state$ = this.portalService.state$;
     this.completedProfile = false;
@@ -63,15 +66,40 @@ export class PortalPage implements OnInit {
   }
 
   public ngOnInit(): void {
-    this.portalResource
-      .getProfileStatus(this.partyService.partyId)
+    this.handleLandingActions$()
       .pipe(
-        map((profileStatus: ProfileStatus | null) => {
-          this.portalService.updateState(profileStatus);
-          this.completedProfile = this.portalService.completedProfile;
-          this.alerts = this.portalService.alerts;
-        })
+        switchMap(() =>
+          this.portalResource.getProfileStatus(this.partyService.partyId).pipe(
+            map((profileStatus: ProfileStatus | null) => {
+              this.portalService.updateState(profileStatus);
+              this.completedProfile = this.portalService.completedProfile;
+              this.alerts = this.portalService.alerts;
+            })
+          )
+        )
       )
       .subscribe();
+  }
+
+  public handleLandingActions$(): Observable<void> {
+    const endorsementToken =
+      this.activatedRoute.snapshot.queryParamMap.get('endorsement-token');
+
+    if (!endorsementToken) {
+      return of(undefined);
+    }
+
+    return this.endorsementResource
+      .receiveEndorsementRequest(this.partyService.partyId, endorsementToken)
+      .pipe(
+        map(() => {
+          this.router.navigate([], {
+            queryParams: {
+              'endorsement-token': null,
+            },
+            queryParamsHandling: 'merge',
+          });
+        })
+      );
   }
 }

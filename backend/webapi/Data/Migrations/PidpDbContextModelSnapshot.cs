@@ -185,6 +185,52 @@ namespace Pidp.Data.Migrations
                     b.ToTable("EmailLog");
                 });
 
+            modelBuilder.Entity("Pidp.Models.EndorsementRequest", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<Instant?>("AdjudicatedOn")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool?>("Approved")
+                        .HasColumnType("boolean");
+
+                    b.Property<Instant>("Created")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int?>("EndorsingPartyId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("JobTitle")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<Instant>("Modified")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("RecipientEmail")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("RequestingPartyId")
+                        .HasColumnType("integer");
+
+                    b.Property<Guid>("Token")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EndorsingPartyId");
+
+                    b.HasIndex("RequestingPartyId");
+
+                    b.ToTable("EndorsementRequest");
+                });
+
             modelBuilder.Entity("Pidp.Models.Facility", b =>
                 {
                     b.Property<int>("Id")
@@ -247,6 +293,16 @@ namespace Pidp.Data.Migrations
                         {
                             Code = 4,
                             Name = "Driver Medical Fitness"
+                        },
+                        new
+                        {
+                            Code = 5,
+                            Name = "Fraser Health UCI"
+                        },
+                        new
+                        {
+                            Code = 6,
+                            Name = "MS Teams for Clinical Use"
                         });
                 });
 
@@ -875,6 +931,9 @@ namespace Pidp.Data.Migrations
                     b.Property<LocalDate?>("Birthdate")
                         .HasColumnType("date");
 
+                    b.Property<string>("Cpn")
+                        .HasColumnType("text");
+
                     b.Property<Instant>("Created")
                         .HasColumnType("timestamp with time zone");
 
@@ -953,7 +1012,7 @@ namespace Pidp.Data.Migrations
                     b.ToTable("PartyAccessAdministrator");
                 });
 
-            modelBuilder.Entity("Pidp.Models.PartyCertification", b =>
+            modelBuilder.Entity("Pidp.Models.PartyLicenceDeclaration", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -961,17 +1020,13 @@ namespace Pidp.Data.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("CollegeCode")
+                    b.Property<int?>("CollegeCode")
                         .HasColumnType("integer");
 
                     b.Property<Instant>("Created")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("Ipc")
-                        .HasColumnType("text");
-
                     b.Property<string>("LicenceNumber")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<Instant>("Modified")
@@ -987,7 +1042,7 @@ namespace Pidp.Data.Migrations
                     b.HasIndex("PartyId")
                         .IsUnique();
 
-                    b.ToTable("PartyCertification");
+                    b.ToTable("PartyLicenceDeclaration");
                 });
 
             modelBuilder.Entity("Pidp.Models.PartyOrgainizationDetail", b =>
@@ -1100,6 +1155,23 @@ namespace Pidp.Data.Migrations
                     b.Navigation("Province");
                 });
 
+            modelBuilder.Entity("Pidp.Models.EndorsementRequest", b =>
+                {
+                    b.HasOne("Pidp.Models.Party", "EndorsingParty")
+                        .WithMany()
+                        .HasForeignKey("EndorsingPartyId");
+
+                    b.HasOne("Pidp.Models.Party", "RequestingParty")
+                        .WithMany()
+                        .HasForeignKey("RequestingPartyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("EndorsingParty");
+
+                    b.Navigation("RequestingParty");
+                });
+
             modelBuilder.Entity("Pidp.Models.Facility", b =>
                 {
                     b.HasOne("Pidp.Models.Party", "Party")
@@ -1122,17 +1194,15 @@ namespace Pidp.Data.Migrations
                     b.Navigation("Party");
                 });
 
-            modelBuilder.Entity("Pidp.Models.PartyCertification", b =>
+            modelBuilder.Entity("Pidp.Models.PartyLicenceDeclaration", b =>
                 {
                     b.HasOne("Pidp.Models.Lookups.College", "College")
                         .WithMany()
-                        .HasForeignKey("CollegeCode")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CollegeCode");
 
                     b.HasOne("Pidp.Models.Party", "Party")
-                        .WithOne("PartyCertification")
-                        .HasForeignKey("Pidp.Models.PartyCertification", "PartyId")
+                        .WithOne("LicenceDeclaration")
+                        .HasForeignKey("Pidp.Models.PartyLicenceDeclaration", "PartyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -1194,9 +1264,9 @@ namespace Pidp.Data.Migrations
 
                     b.Navigation("Facility");
 
-                    b.Navigation("OrgainizationDetail");
+                    b.Navigation("LicenceDeclaration");
 
-                    b.Navigation("PartyCertification");
+                    b.Navigation("OrgainizationDetail");
                 });
 #pragma warning restore 612, 618
         }

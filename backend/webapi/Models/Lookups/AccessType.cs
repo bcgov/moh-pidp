@@ -8,7 +8,9 @@ public enum AccessTypeCode
     SAEforms = 1,
     HcimAccountTransfer,
     HcimEnrolment,
-    DriverFitness
+    DriverFitness,
+    Uci,
+    MSTeams
 }
 
 // This table is only for reporting/database readability; it is not used by the FE or BE of the app.
@@ -25,9 +27,11 @@ public class AccessTypeDataGenerator : ILookupDataGenerator<AccessType>
 {
     public IEnumerable<AccessType> Generate() => new[]
     {
-        new AccessType { Code = AccessTypeCode.SAEforms,            Name = "Special Authority eForms"},
-        new AccessType { Code = AccessTypeCode.HcimAccountTransfer, Name = "HCIMWeb Account Transfer"},
-        new AccessType { Code = AccessTypeCode.HcimEnrolment,       Name = "HCIMWeb Enrolment"       },
-        new AccessType { Code = AccessTypeCode.DriverFitness,       Name = "Driver Medical Fitness"  },
+        new AccessType { Code = AccessTypeCode.SAEforms,            Name = "Special Authority eForms"  },
+        new AccessType { Code = AccessTypeCode.HcimAccountTransfer, Name = "HCIMWeb Account Transfer"  },
+        new AccessType { Code = AccessTypeCode.HcimEnrolment,       Name = "HCIMWeb Enrolment"         },
+        new AccessType { Code = AccessTypeCode.DriverFitness,       Name = "Driver Medical Fitness"    },
+        new AccessType { Code = AccessTypeCode.Uci,                 Name = "Fraser Health UCI"         },
+        new AccessType { Code = AccessTypeCode.MSTeams,             Name = "MS Teams for Clinical Use" },
     };
 }
