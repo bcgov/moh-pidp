@@ -20,16 +20,7 @@
     </ng-container>
   </ui-alert>
 
-  <ui-alert
-    *ngIf="keycloakError"
-    type="info"
-    icon="error_outline"
-    iconType="outlined"
-    heading="Error">
-    <ng-container uiAlertContent>
-      <p>There was an error with this enrolment, try again later.</p>
-    </ng-container>
-  </ui-alert>
+  <app-enrolment-error *ngIf="enrolmentError"></app-enrolment-error>
 
   <ui-page-section>
     <ui-page-section-subheader

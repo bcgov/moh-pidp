@@ -27,7 +27,7 @@ export class SaEformsPage implements OnInit {
   public accessRequestFailed: boolean;
   public specialAuthorityEformsUrl: string;
   public specialAuthoritySupportEmail: string;
-  public keycloakError: boolean;
+  public enrolmentError: boolean;
 
   public constructor(
     private route: ActivatedRoute,
@@ -44,7 +44,7 @@ export class SaEformsPage implements OnInit {
     this.accessRequestFailed = false;
     this.specialAuthorityEformsUrl = specialAuthorityEformsUrl;
     this.specialAuthoritySupportEmail = specialAuthorityEformsSupportEmail;
-    this.keycloakError = false;
+    this.enrolmentError = false;
   }
 
   public onBack(): void {
@@ -59,7 +59,7 @@ export class SaEformsPage implements OnInit {
         catchError((error: HttpErrorResponse) => {
           if (error.status === HttpStatusCode.BadRequest) {
             this.completed = false;
-            this.keycloakError = true;
+            this.enrolmentError = true;
             return of(noop());
           }
           this.accessRequestFailed = true;
