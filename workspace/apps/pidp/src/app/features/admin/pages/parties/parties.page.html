@@ -2,13 +2,8 @@
   <ui-page-header>{{ title }}</ui-page-header>
 </ui-page>
 
-<ng-container>
-  <button
-    *ngIf="environment !== 'prod'"
-    mat-stroked-button
-    type="button"
-    color="warn"
-    (click)="onDelete()">
+<ng-container *ngIf="environment !== 'prod'">
+  <button mat-stroked-button type="button" color="warn" (click)="onDelete()">
     Delete all
   </button>
 </ng-container>
