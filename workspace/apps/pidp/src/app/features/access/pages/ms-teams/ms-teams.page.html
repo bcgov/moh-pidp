@@ -6,6 +6,8 @@
     </ui-page-section-subheader>
   </ui-page-section>
 
+  <app-enrolment-error *ngIf="enrolmentError"></app-enrolment-error>
+
   <ng-container *ngIf="completed; else notCompleted">
     <ui-alert
       type="success"

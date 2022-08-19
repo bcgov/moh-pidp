@@ -1,3 +1,4 @@
+import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { Component, Inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -27,6 +28,7 @@ export class DriverFitnessPage implements OnInit {
   public completed: boolean | null;
   public accessRequestFailed: boolean;
   public driverFitnessSupportEmail: string;
+  public enrolmentError: boolean;
 
   public constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
@@ -44,6 +46,7 @@ export class DriverFitnessPage implements OnInit {
     this.completed = routeData.driverFitnessStatusCode === StatusCode.COMPLETED;
     this.accessRequestFailed = false;
     this.driverFitnessSupportEmail = driverFitnessSupportEmail;
+    this.enrolmentError = false;
   }
 
   public onBack(): void {
@@ -55,7 +58,12 @@ export class DriverFitnessPage implements OnInit {
       .requestAccess(this.partyService.partyId)
       .pipe(
         tap(() => (this.completed = true)),
-        catchError(() => {
+        catchError((error: HttpErrorResponse) => {
+          if (error.status === HttpStatusCode.BadRequest) {
+            this.completed = false;
+            this.enrolmentError = true;
+            return of(noop());
+          }
           this.accessRequestFailed = true;
           return of(noop());
         })

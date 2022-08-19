@@ -1,3 +1,4 @@
+import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -22,6 +23,7 @@ export class UciPage implements OnInit {
   public completed: boolean | null;
   public accessRequestFailed: boolean;
   public uciUrl: string;
+  public enrolmentError: boolean;
 
   public constructor(
     private route: ActivatedRoute,
@@ -37,6 +39,7 @@ export class UciPage implements OnInit {
     this.completed = routeData.uciStatusCode === StatusCode.COMPLETED;
     this.accessRequestFailed = false;
     this.uciUrl = uciUrl;
+    this.enrolmentError = false;
   }
 
   public onBack(): void {
@@ -48,7 +51,12 @@ export class UciPage implements OnInit {
       .requestAccess(this.partyService.partyId)
       .pipe(
         tap(() => (this.completed = true)),
-        catchError(() => {
+        catchError((error: HttpErrorResponse) => {
+          if (error.status === HttpStatusCode.BadRequest) {
+            this.completed = false;
+            this.enrolmentError = true;
+            return of(noop());
+          }
           this.accessRequestFailed = true;
           return of(noop());
         })

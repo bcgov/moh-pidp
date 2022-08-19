@@ -1,3 +1,4 @@
+import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -24,6 +25,8 @@ export class MsTeamsPage implements OnInit {
   public itSecurityAgreement: string;
   public msTeamsSupportEmail: string;
   public currentPage: number;
+  public enrolmentError: boolean;
+
   public constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -41,6 +44,7 @@ export class MsTeamsPage implements OnInit {
     this.itSecurityAgreement = documentService.getMsTeamsITSecurityAgreement();
     this.msTeamsSupportEmail = msTeamsSupportEmail;
     this.currentPage = 0;
+    this.enrolmentError = false;
   }
 
   public onBack(): void {
@@ -61,7 +65,12 @@ export class MsTeamsPage implements OnInit {
         .requestAccess(this.partyService.partyId)
         .pipe(
           tap(() => (this.completed = true)),
-          catchError(() => {
+          catchError((error: HttpErrorResponse) => {
+            if (error.status === HttpStatusCode.BadRequest) {
+              this.completed = false;
+              this.enrolmentError = true;
+              return of(noop());
+            }
             return of(noop());
           })
         )
