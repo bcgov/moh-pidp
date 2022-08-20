@@ -1,11 +1,10 @@
 namespace Pidp.Features.Admin;
 
-using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 
 using Pidp.Data;
 using Pidp.Infrastructure.HttpClients.Keycloak;
+using Pidp.Models;
 using Pidp.Models.Lookups;
 
 public class PartyDelete
@@ -14,16 +13,11 @@ public class PartyDelete
 
     public class CommandHandler : ICommandHandler<Command>
     {
-        private readonly IMapper mapper;
         private readonly IKeycloakAdministrationClient client;
         private readonly PidpDbContext context;
 
-        public CommandHandler(
-            IMapper mapper,
-            IKeycloakAdministrationClient client,
-            PidpDbContext context)
+        public CommandHandler(IKeycloakAdministrationClient client, PidpDbContext context)
         {
-            this.mapper = mapper;
             this.client = client;
             this.context = context;
         }
@@ -65,8 +59,11 @@ public class PartyDelete
                 return;
             }
 
-            // var roleRemover = await RoleRemover.CreateNew();
-
+            var roleRemover = new RoleRemover(this.client);
+            foreach (var party in parties)
+            {
+                await roleRemover.RemoveClientRoles(party);
+            }
 
             this.context.Parties.RemoveRange(parties);
             await this.context.SaveChangesAsync();
@@ -78,18 +75,48 @@ public class PartyDelete
     /// </summary>
     private class RoleRemover
     {
-        // private readonly Dictionary<AccessTypeCode, Role> roleMap;
+        private readonly Dictionary<AccessTypeCode, Role?> roleCache;
+        private readonly IKeycloakAdministrationClient client;
 
-        // private RoleRemover(Dictionary<AccessTypeCode, Role> roleMap) => this.roleMap = roleMap;
+        public RoleRemover(IKeycloakAdministrationClient client)
+        {
+            this.client = client;
+            this.roleCache = new();
+        }
 
-        // public static async Task<RoleRemover> CreateNew()
-        // {
-        //     Dictionary<AccessTypeCode
-        // }
+        public async Task RemoveClientRoles(Party party)
+        {
+            foreach (var access in party.AccessRequests)
+            {
+                var role = await this.FetchClientRole(access.AccessTypeCode);
+                if (role == null)
+                {
+                    continue;
+                }
 
-        // public async Task<bool> RemoveClientRoles(PartyDelete party)
-        // {
+                if (!await this.client.RemoveClientRole(party.UserId, role))
+                {
+                    // log failure;
+                }
+            }
+        }
 
-        // }
+        private async Task<Role?> FetchClientRole(AccessTypeCode accessType)
+        {
+            if (this.roleCache.TryGetValue(accessType, out var cached))
+            {
+                return cached;
+            }
+
+            Role? role = null;
+            var mohClient = MohClients.FromAccessType(accessType);
+            if (mohClient != null)
+            {
+                role = await this.client.GetClientRole(mohClient.Value.ClientId, mohClient.Value.AccessRole);
+            }
+
+            this.roleCache.Add(accessType, role);
+            return role;
+        }
     }
 }

@@ -6,11 +6,10 @@ using Microsoft.EntityFrameworkCore;
 using NodaTime;
 
 using Pidp.Data;
-using Pidp.Infrastructure.Auth;
-using Pidp.Infrastructure.HttpClients.Keycloak;
+// using Pidp.Infrastructure.Auth;
+// using Pidp.Infrastructure.HttpClients.Keycloak;
 using Pidp.Infrastructure.HttpClients.Mail;
 using Pidp.Infrastructure.Services;
-using Pidp.Models;
 using Pidp.Models.Lookups;
 
 public class HcimEnrolment
@@ -33,20 +32,20 @@ public class HcimEnrolment
     {
         private readonly IClock clock;
         private readonly IEmailService emailService;
-        private readonly IKeycloakAdministrationClient keycloakClient;
+        // private readonly IKeycloakAdministrationClient keycloakClient;
         private readonly ILogger logger;
         private readonly PidpDbContext context;
 
         public CommandHandler(
             IClock clock,
             IEmailService emailService,
-            IKeycloakAdministrationClient keycloakClient,
+            // IKeycloakAdministrationClient keycloakClient,
             ILogger<CommandHandler> logger,
             PidpDbContext context)
         {
             this.clock = clock;
             this.emailService = emailService;
-            this.keycloakClient = keycloakClient;
+            // this.keycloakClient = keycloakClient;
             this.logger = logger;
             this.context = context;
         }
@@ -73,6 +72,10 @@ public class HcimEnrolment
             }
 
             // TODO assign role?
+            // if (!await this.keycloakClient.AssignClientRole(dto.UserId, ?, ?))
+            // {
+            //     return DomainResult.Failed();
+            // }
 
             this.context.HcimEnrolments.Add(new Models.HcimEnrolment
             {

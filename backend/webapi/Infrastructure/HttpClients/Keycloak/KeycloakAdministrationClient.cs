@@ -113,6 +113,19 @@ public class KeycloakAdministrationClient : BaseClient, IKeycloakAdministrationC
         return result.Value;
     }
 
+    public async Task<bool> RemoveClientRole(Guid userId, Role role)
+    {
+        if (role.ClientRole != true)
+        {
+            return false;
+        }
+
+        // Keycloak expects an array of roles.
+        var response = await this.DeleteAsync($"users/{userId}/role-mappings/client/{role.ContainerId}", new[] { role });
+
+        return response.IsSuccess;
+    }
+
     public async Task<bool> UpdateUser(Guid userId, UserRepresentation userRep)
     {
         var result = await this.PutAsync($"users/{userId}", userRep);
