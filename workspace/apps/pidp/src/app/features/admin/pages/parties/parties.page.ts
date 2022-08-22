@@ -13,6 +13,7 @@ import {
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';
 
+import { EnvironmentName } from '../../../../../environments/environment.model';
 import {
   AdminResource,
   PartyList,
@@ -33,6 +34,7 @@ export class PartiesPage implements OnInit {
     'saEforms',
   ];
   public environment: string;
+  public production: string;
 
   public constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
@@ -43,6 +45,7 @@ export class PartiesPage implements OnInit {
     this.title = route.snapshot.data.title;
     this.dataSource = new MatTableDataSource();
     this.environment = this.config.environmentName;
+    this.production = EnvironmentName.PRODUCTION;
   }
 
   public onDelete(): void {
