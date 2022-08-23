@@ -28,6 +28,6 @@ public class AdminController : PidpControllerBase
     [HttpGet("parties")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<List<PartyIndex.Model>>> GetParties([FromServices] IQueryHandler<PartyIndex.Query, List<PartyIndex.Model>> handler,
-                                                                           [FromQuery] PartyIndex.Query query)
+                                                                       [FromQuery] PartyIndex.Query query)
         => await handler.HandleAsync(query);
 }
