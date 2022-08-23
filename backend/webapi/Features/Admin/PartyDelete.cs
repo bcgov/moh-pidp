@@ -14,11 +14,16 @@ public class PartyDelete
     public class CommandHandler : ICommandHandler<Command>
     {
         private readonly IKeycloakAdministrationClient client;
+        private readonly ILogger logger;
         private readonly PidpDbContext context;
 
-        public CommandHandler(IKeycloakAdministrationClient client, PidpDbContext context)
+        public CommandHandler(
+            IKeycloakAdministrationClient client,
+            ILogger<CommandHandler> logger,
+            PidpDbContext context)
         {
             this.client = client;
+            this.logger = logger;
             this.context = context;
         }
 
@@ -51,7 +56,7 @@ public class PartyDelete
             var parties = await this.context.Parties
                 .Include(party => party.AccessRequests)
                 .Where(party => party.FirstName == "PIDP"
-                    || cardLastNames.Contains(party.LastName))
+                    && cardLastNames.Contains(party.LastName))
                 .ToListAsync();
 
             if (!parties.Any())
@@ -59,7 +64,7 @@ public class PartyDelete
                 return;
             }
 
-            var roleRemover = new RoleRemover(this.client);
+            var roleRemover = new RoleRemover(this.client, this.logger);
             foreach (var party in parties)
             {
                 await roleRemover.RemoveClientRoles(party);
@@ -77,10 +82,12 @@ public class PartyDelete
     {
         private readonly Dictionary<AccessTypeCode, Role?> roleCache;
         private readonly IKeycloakAdministrationClient client;
+        private readonly ILogger logger;
 
-        public RoleRemover(IKeycloakAdministrationClient client)
+        public RoleRemover(IKeycloakAdministrationClient client, ILogger logger)
         {
             this.client = client;
+            this.logger = logger;
             this.roleCache = new();
         }
 
@@ -94,9 +101,13 @@ public class PartyDelete
                     continue;
                 }
 
-                if (!await this.client.RemoveClientRole(party.UserId, role))
+                if (await this.client.RemoveClientRole(party.UserId, role))
                 {
-                    // log failure;
+                    this.logger.LogRemoveSuccess(role.Name!, party.UserId);
+                }
+                else
+                {
+                    this.logger.LogRemoveFailure(role.Name!, party.UserId);
                 }
             }
         }
@@ -113,10 +124,27 @@ public class PartyDelete
             if (mohClient != null)
             {
                 role = await this.client.GetClientRole(mohClient.Value.ClientId, mohClient.Value.AccessRole);
+
+                if (role == null)
+                {
+                    this.logger.LogClientRoleNotFound(accessType, mohClient.Value.AccessRole, mohClient.Value.ClientId);
+                }
             }
 
             this.roleCache.Add(accessType, role);
             return role;
         }
     }
+}
+
+public static partial class PartyDeleteLoggingExtensions
+{
+    [LoggerMessage(1, LogLevel.Error, "Removed {roleName} from {userId}.")]
+    public static partial void LogRemoveSuccess(this ILogger logger, string roleName, Guid userId);
+
+    [LoggerMessage(2, LogLevel.Error, "Could not remove {roleName} from {userId}.")]
+    public static partial void LogRemoveFailure(this ILogger logger, string roleName, Guid userId);
+
+    [LoggerMessage(3, LogLevel.Error, "For Access Type {accessType}, could not find a Client Role with name {roleName} in Client {clientId}.")]
+    public static partial void LogClientRoleNotFound(this ILogger logger, AccessTypeCode accessType, string roleName, string clientId);
 }

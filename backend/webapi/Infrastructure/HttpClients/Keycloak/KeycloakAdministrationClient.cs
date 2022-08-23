@@ -121,7 +121,7 @@ public class KeycloakAdministrationClient : BaseClient, IKeycloakAdministrationC
         }
 
         // Keycloak expects an array of roles.
-        var response = await this.DeleteAsync($"users/{userId}/role-mappings/client/{role.ContainerId}", new[] { role });
+        var response = await this.DeleteAsync($"users/{userId}/role-mappings/clients/{role.ContainerId}", new[] { role });
 
         return response.IsSuccess;
     }
