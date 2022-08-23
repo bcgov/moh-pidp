@@ -6,7 +6,6 @@ using Microsoft.EntityFrameworkCore;
 using NodaTime;
 
 using Pidp.Data;
-using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.HttpClients.Keycloak;
 using Pidp.Infrastructure.HttpClients.Mail;
 using Pidp.Infrastructure.HttpClients.Plr;
@@ -72,7 +71,7 @@ public class Uci
                 return DomainResult.Failed();
             }
 
-            if (!await this.keycloakClient.AssignClientRole(dto.UserId, Clients.Uci, Roles.Uci))
+            if (!await this.keycloakClient.AssignClientRole(dto.UserId, MohClients.Uci.ClientId, MohClients.Uci.AccessRole))
             {
                 return DomainResult.Failed();
             }

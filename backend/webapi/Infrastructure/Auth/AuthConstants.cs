@@ -33,8 +33,6 @@ public static class Policies
 public static class Clients
 {
     public const string PidpApi = "PIDP-SERVICE";
-    public const string SAEforms = "SAT-EFORMS";
-    public const string Uci = "UCI-SSO";
 }
 
 public static class Roles
@@ -42,8 +40,4 @@ public static class Roles
     // PIdP Role Placeholders
     public const string Admin = "ADMIN";
     public const string User = "USER";
-
-    // External Systems
-    public const string SAEforms = "phsa_eforms_sat";
-    public const string Uci = "UCIROLE";
 }
