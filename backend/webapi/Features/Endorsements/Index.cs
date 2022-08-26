@@ -16,8 +16,8 @@ public class Index
     public class Model
     {
         public string PartyName { get; set; } = string.Empty;
-        public Instant CreatedOn { get; set; }
         public bool Active { get; set; }
+        public Instant CreatedOn { get; set; }
     }
 
     public class QueryValidator : AbstractValidator<Query>
@@ -40,8 +40,8 @@ public class Index
                 .Select(relationship => new Model
                 {
                     PartyName = $"{relationship.Party!.FirstName} {relationship.Party.LastName}",
-                    CreatedOn = relationship.Endorsement!.CreatedOn,
-                    Active = relationship.Endorsement.Active
+                    Active = relationship.Endorsement.Active,
+                    CreatedOn = relationship.Endorsement!.CreatedOn
                 })
                 .ToListAsync();
         }
