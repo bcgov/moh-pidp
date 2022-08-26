@@ -19,7 +19,7 @@ public class ReceivedIndex
     {
         public int Id { get; set; }
         public string PartyName { get; set; } = string.Empty;
-        public string JobTitle { get; set; } = string.Empty;
+        public string? AdditionalInformation { get; set; }
         public bool? Approved { get; set; }
         public Instant? AdjudicatedOn { get; set; }
     }
@@ -43,7 +43,7 @@ public class ReceivedIndex
         public async Task<List<Model>> HandleAsync(Query query)
         {
             return await this.context.EndorsementRequests
-                .Where(request => request.EndorsingPartyId == query.PartyId)
+                .Where(request => request.ReceivingPartyId == query.PartyId)
                 .ProjectTo<Model>(this.mapper.ConfigurationProvider)
                 .OrderBy(model => model.AdjudicatedOn.HasValue) // show unadjudicated results first
                     .ThenByDescending(model => model.AdjudicatedOn)

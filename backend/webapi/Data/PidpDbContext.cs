@@ -14,7 +14,9 @@ public class PidpDbContext : DbContext
     public DbSet<AccessRequest> AccessRequests { get; set; } = default!;
     public DbSet<ClientLog> ClientLogs { get; set; } = default!;
     public DbSet<EmailLog> EmailLogs { get; set; } = default!;
+    public DbSet<EndorsementRelationship> EndorsementRelationships { get; set; } = default!;
     public DbSet<EndorsementRequest> EndorsementRequests { get; set; } = default!;
+    public DbSet<Endorsement> Endorsements { get; set; } = default!;
     public DbSet<Facility> Facilities { get; set; } = default!;
     public DbSet<HcimAccountTransfer> HcimAccountTransfers { get; set; } = default!;
     public DbSet<HcimEnrolment> HcimEnrolments { get; set; } = default!;
