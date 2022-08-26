@@ -40,8 +40,8 @@ public class Index
                 .Select(relationship => new Model
                 {
                     PartyName = $"{relationship.Party!.FirstName} {relationship.Party.LastName}",
-                    Active = relationship.Endorsement.Active,
-                    CreatedOn = relationship.Endorsement!.CreatedOn
+                    Active = relationship.Endorsement!.Active,
+                    CreatedOn = relationship.Endorsement.CreatedOn
                 })
                 .ToListAsync();
         }
