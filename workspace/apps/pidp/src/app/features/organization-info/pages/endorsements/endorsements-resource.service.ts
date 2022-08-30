@@ -12,6 +12,7 @@ import {
 import { ApiHttpClient } from '@app/core/resources/api-http-client.service';
 import { PortalResource } from '@app/features/portal/portal-resource.service';
 
+import { EndorsementRequest } from './models/endorsement-request.model';
 import { ReceivedEndorsementRequest } from './models/received-endorsement-request.model';
 
 @Injectable({
@@ -28,6 +29,27 @@ export class EndorsementsResource extends CrudResource<ReceivedEndorsementReques
   public receiveEndorsementRequest(partyId: number, token: string): NoContent {
     return this.apiResource
       .post<NoContent>(this.getResourcePath(partyId), { token })
+      .pipe(
+        NoContentResponse,
+        catchError((error: HttpErrorResponse) => {
+          if (error.status === HttpStatusCode.BadRequest) {
+            return of(void 0);
+          }
+
+          return throwError(() => error);
+        })
+      );
+  }
+
+  public requestEndorsement(
+    partyId: number,
+    endorsementRequest: EndorsementRequest
+  ): NoContent {
+    return this.apiResource
+      .post<NoContent>(
+        `parties/${partyId}/endorsement-requests`,
+        endorsementRequest
+      )
       .pipe(
         NoContentResponse,
         catchError((error: HttpErrorResponse) => {
