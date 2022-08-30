@@ -8,7 +8,7 @@ const routes: Routes = [
     path: '',
     component: EndorsementsPage,
     data: {
-      title: 'Provider Identity Portal',
+      title: 'Your Care Team',
       routes: {
         root: '../../',
       },
