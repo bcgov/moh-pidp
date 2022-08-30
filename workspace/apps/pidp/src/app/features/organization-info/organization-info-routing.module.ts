@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { OrganizationInfoRoutes } from './organization-info.routes';
 import { AdministratorInformationModule } from './pages/administrator-information/administrator-information.module';
+import { EndorsementsModule } from './pages/endorsements/endorsements.module';
 import { FacilityDetailsModule } from './pages/facility-details/facility-details.module';
 import { OrganizationDetailsModule } from './pages/organization-details/organization-details.module';
 
@@ -27,6 +28,13 @@ const routes: Routes = [
       import(
         './pages/administrator-information/administrator-information.module'
       ).then((m) => m.AdministratorInformationModule),
+  },
+  {
+    path: OrganizationInfoRoutes.ENDORSEMENTS,
+    loadChildren: (): Promise<EndorsementsModule> =>
+      import('./pages/endorsements/endorsements.module').then(
+        (m) => m.EndorsementsModule
+      ),
   },
 ];
 
