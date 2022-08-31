@@ -23,4 +23,6 @@ public class EndorsementsController : PidpControllerBase
                                                                        [FromRoute] Index.Query query)
         => await this.AuthorizePartyBeforeHandleAsync(query.PartyId, handler, query)
             .ToActionResultOfT();
+
+    // TODO: cancel
 }
