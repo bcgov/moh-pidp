@@ -1,4 +1,10 @@
+import { EndorsementRequestStatus } from '../enums/endorsement-request-status.enum';
+
 export interface EndorsementRequest {
+  id: number;
   recipientEmail: string;
-  actionable?: boolean;
+  partyName: string | null;
+  status: EndorsementRequestStatus;
+  statusDate: string;
+  actionable: boolean;
 }
