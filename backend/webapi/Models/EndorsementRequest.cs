@@ -4,7 +4,6 @@ using DomainResults.Common;
 using NodaTime;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq.Expressions;
 
 using Pidp.Features.EndorsementRequests;
 
@@ -82,8 +81,4 @@ public class EndorsementRequest : BaseAuditable
 
     private bool ActionableByReciever(int partyId) => this.ReceivingPartyId == partyId && this.Status == EndorsementRequestStatus.Received;
     private bool ActionableByRequester(int partyId) => this.RequestingPartyId == partyId && this.Status == EndorsementRequestStatus.Approved;
-
-    public static Expression<Func<EndorsementRequest, bool>> ActionableBy(int partyId) =>
-        (request) => (request.ReceivingPartyId == partyId && request.Status == EndorsementRequestStatus.Received)
-            || (request.RequestingPartyId == partyId && request.Status == EndorsementRequestStatus.Approved);
 }
