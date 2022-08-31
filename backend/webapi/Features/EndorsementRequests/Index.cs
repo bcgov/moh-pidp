@@ -37,7 +37,7 @@ public class Index
 
         public async Task<List<Model>> HandleAsync(Query query)
         {
-            // TODO: do this better
+            // TODO: do this better?
             return await this.context.EndorsementRequests
                 .Where(request => request.RequestingPartyId == query.PartyId
                     || request.ReceivingPartyId == query.PartyId)
@@ -53,7 +53,7 @@ public class Index
                 {
                     Id = dto.Request.Id,
                     RecipientEmail = dto.Request.RecipientEmail,
-                    PartyName = $"{dto.OtherParty!.FirstName} {dto.OtherParty.LastName}",
+                    PartyName = dto.OtherParty == null ? null : $"{dto.OtherParty.FirstName} {dto.OtherParty.LastName}",
                     Status = dto.Request.Status,
                     StatusDate = dto.Request.StatusDate,
                     Actionable = (dto.PartyIsRequester && dto.Request.Status == EndorsementRequestStatus.Approved)
