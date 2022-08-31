@@ -59,6 +59,7 @@ public class Index
                     Actionable = (dto.PartyIsRequester && dto.Request.Status == EndorsementRequestStatus.Approved)
                         || (!dto.PartyIsRequester && dto.Request.Status == EndorsementRequestStatus.Received)
                 })
+                .OrderByDescending(model => model.StatusDate)
                 .ToListAsync();
         }
     }
