@@ -2,7 +2,6 @@ namespace Pidp.Features.Endorsements;
 
 using DomainResults.Common;
 using DomainResults.Mvc;
-using HybridModelBinding;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -23,4 +22,13 @@ public class EndorsementsController : PidpControllerBase
                                                                        [FromRoute] Index.Query query)
         => await this.AuthorizePartyBeforeHandleAsync(query.PartyId, handler, query)
             .ToActionResultOfT();
+
+    [HttpPost("{endorsementId}/cancel")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> CancelEndorsement([FromServices] ICommandHandler<Cancel.Command, IDomainResult> handler,
+                                                       [FromRoute] Cancel.Command command)
+        => await this.AuthorizePartyBeforeHandleAsync(command.PartyId, handler, command)
+            .ToActionResult();
 }

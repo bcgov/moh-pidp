@@ -15,4 +15,24 @@ public class Endorsement : BaseAuditable
     public Instant CreatedOn { get; set; }
 
     public ICollection<EndorsementRelationship> EndorsementRelationships { get; set; } = new List<EndorsementRelationship>();
+
+    public static Endorsement FromCompletedRequest(EndorsementRequest request)
+    {
+        if (request.Status != EndorsementRequestStatus.Completed
+            || request.ReceivingPartyId == null)
+        {
+            throw new InvalidOperationException();
+        }
+
+        return new Endorsement
+        {
+            Active = true,
+            CreatedOn = request.StatusDate,
+            EndorsementRelationships = new List<EndorsementRelationship>
+            {
+                new EndorsementRelationship { PartyId = request.RequestingPartyId },
+                new EndorsementRelationship { PartyId = request.ReceivingPartyId.Value }
+            }
+        };
+    }
 }
