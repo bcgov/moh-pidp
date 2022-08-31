@@ -6,6 +6,7 @@ using NodaTime;
 
 using Pidp.Data;
 using Pidp.Models;
+using Pidp.Models.Lookups;
 
 public class Index
 {
@@ -18,7 +19,9 @@ public class Index
     {
         public int Id { get; set; }
         public string RecipientEmail { get; set; } = string.Empty;
+        public string? AdditionalInformation { get; set; }
         public string? PartyName { get; set; }
+        public CollegeCode? CollegeCode { get; set; }
         public EndorsementRequestStatus Status { get; set; }
         public Instant StatusDate { get; set; }
         public bool Actionable { get; set; }
@@ -53,7 +56,9 @@ public class Index
                 {
                     Id = dto.Request.Id,
                     RecipientEmail = dto.Request.RecipientEmail,
+                    AdditionalInformation = dto.Request.AdditionalInformation,
                     PartyName = dto.OtherParty == null ? null : $"{dto.OtherParty.FirstName} {dto.OtherParty.LastName}",
+                    CollegeCode = dto.OtherParty!.LicenceDeclaration!.CollegeCode,
                     Status = dto.Request.Status,
                     StatusDate = dto.Request.StatusDate,
                     Actionable = (dto.PartyIsRequester && dto.Request.Status == EndorsementRequestStatus.Approved)
