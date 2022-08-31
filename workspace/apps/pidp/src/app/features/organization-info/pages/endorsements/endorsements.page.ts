@@ -13,20 +13,20 @@ import { FormUtilsService } from '@app/core/services/form-utils.service';
 import { LoggerService } from '@app/core/services/logger.service';
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
 
-import { EndorsementRequestFormState } from './endorsement-request-form-state';
-import { EndorsementRequestResource } from './endorsement-request-resource.service';
+import { EndorsementsFormState } from './endorsements-form-state';
+import { EndorsementsResource } from './endorsements-resource.service';
 
 @Component({
-  selector: 'app-endorsement-request',
-  templateUrl: './endorsement-request.page.html',
-  styleUrls: ['./endorsement-request.page.scss'],
+  selector: 'app-endorsements',
+  templateUrl: './endorsements.page.html',
+  styleUrls: ['./endorsements.page.scss'],
 })
-export class EndorsementRequestPage
-  extends AbstractFormPage<EndorsementRequestFormState>
+export class EndorsementsPage
+  extends AbstractFormPage<EndorsementsFormState>
   implements OnInit
 {
   public title: string;
-  public formState: EndorsementRequestFormState;
+  public formState: EndorsementsFormState;
   public completed: boolean | null;
 
   public constructor(
@@ -35,7 +35,7 @@ export class EndorsementRequestPage
     private route: ActivatedRoute,
     private router: Router,
     private partyService: PartyService,
-    private resource: EndorsementRequestResource,
+    private resource: EndorsementsResource,
     private logger: LoggerService,
     fb: FormBuilder
   ) {
@@ -43,11 +43,10 @@ export class EndorsementRequestPage
 
     const routeData = this.route.snapshot.data;
     this.title = routeData.title;
-    this.formState = new EndorsementRequestFormState(fb);
+    this.formState = new EndorsementsFormState(fb);
     this.completed =
       routeData.endorsementRequestStatusCode === StatusCode.COMPLETED;
   }
-
   public onBack(): void {
     this.navigateToRoot();
   }
@@ -70,7 +69,7 @@ export class EndorsementRequestPage
     const partyId = this.partyService.partyId;
 
     return partyId && this.formState.json
-      ? this.resource.requestAccess(partyId, this.formState.json)
+      ? this.resource.requestEndorsement(partyId, this.formState.json)
       : EMPTY;
   }
 

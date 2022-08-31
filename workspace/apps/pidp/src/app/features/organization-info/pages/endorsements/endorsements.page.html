@@ -1,0 +1,51 @@
+<ui-page [form]="formState.form" (submitted)="onSubmit()">
+  <ui-page-header icon="assignment">{{ title }}</ui-page-header>
+
+  <ui-page-section>
+    <ui-page-subheader
+      >Here you can endorse people you have working relationships with and
+      invite them to the Provider identity Portal.</ui-page-subheader
+    >
+    <p>
+      Licenced health care providers can endorse unlicenced health care
+      professionals they work with. In the future, endorsements will allow you
+      to delegate access. Unlicenced health care providers can also send
+      endorsement requests to the licenced providers they work with.
+    </p>
+
+    <mat-tab-group>
+      <mat-tab label="First">
+        <ng-template matTabContent> Content 1 </ng-template>
+      </mat-tab>
+      <mat-tab label="Second">
+        <ng-template matTabContent> Content 2 </ng-template>
+      </mat-tab>
+      <mat-tab label="Third">
+        <ng-template matTabContent> Content 3 </ng-template>
+      </mat-tab>
+    </mat-tab-group>
+    <br />
+
+    <ng-container [formGroup]="formState.form">
+      <mat-form-field class="w-100">
+        <input matInput placeholder="Email" formControlName="recipientEmail" />
+        <mat-error>Required</mat-error>
+      </mat-form-field>
+    </ng-container>
+  </ui-page-section>
+
+  <ui-page-footer>
+    <button
+      mat-stroked-button
+      uiPageFooterAction
+      type="button"
+      color="primary"
+      (click)="onBack()">
+      Back Home
+    </button>
+
+    <button mat-flat-button uiPageFooterAction type="submit" color="primary">
+      Save Information
+    </button>
+  </ui-page-footer>
+</ui-page>

@@ -1,7 +1,7 @@
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
-import { Observable, catchError, of, throwError } from 'rxjs';
+import { catchError, of, throwError } from 'rxjs';
 
 import {
   CrudResource,
@@ -10,24 +10,20 @@ import {
 } from '@bcgov/shared/data-access';
 
 import { ApiHttpClient } from '@app/core/resources/api-http-client.service';
-import { ProfileStatus } from '@app/features/portal/models/profile-status.model';
 import { PortalResource } from '@app/features/portal/portal-resource.service';
 
-import { ReceivedEndorsementRequest } from '../../models/received-endorsement-request';
+import { EndorsementRequest } from './models/endorsement-request.model';
+import { ReceivedEndorsementRequest } from './models/received-endorsement-request.model';
 
 @Injectable({
   providedIn: 'root',
 })
-export class EndorsementRequestsReceivedResource extends CrudResource<ReceivedEndorsementRequest> {
+export class EndorsementsResource extends CrudResource<ReceivedEndorsementRequest> {
   public constructor(
     private apiResource: ApiHttpClient,
     private portalResource: PortalResource
   ) {
     super(apiResource);
-  }
-
-  public getProfileStatus(partyId: number): Observable<ProfileStatus | null> {
-    return this.portalResource.getProfileStatus(partyId);
   }
 
   public receiveEndorsementRequest(partyId: number, token: string): NoContent {
@@ -45,31 +41,14 @@ export class EndorsementRequestsReceivedResource extends CrudResource<ReceivedEn
       );
   }
 
-  public getReceivedEndorsementRequests(
-    partyId: number
-  ): Observable<ReceivedEndorsementRequest[]> {
-    return this.apiResource
-      .get<ReceivedEndorsementRequest[]>(this.getResourcePath(partyId))
-      .pipe(
-        catchError((error: HttpErrorResponse) => {
-          if (error.status === HttpStatusCode.BadRequest) {
-            return of([]);
-          }
-
-          return throwError(() => error);
-        })
-      );
-  }
-
-  public adjudicateEndorsementRequest(
+  public requestEndorsement(
     partyId: number,
-    endorsementRequestId: number,
-    approved: boolean
+    endorsementRequest: EndorsementRequest
   ): NoContent {
     return this.apiResource
-      .put<NoContent>(
-        `${this.getResourcePath(partyId)}/${endorsementRequestId}/adjudicate`,
-        { approved }
+      .post<NoContent>(
+        `parties/${partyId}/endorsement-requests`,
+        endorsementRequest
       )
       .pipe(
         NoContentResponse,
@@ -84,6 +63,6 @@ export class EndorsementRequestsReceivedResource extends CrudResource<ReceivedEn
   }
 
   protected getResourcePath(partyId: number): string {
-    return `parties/${partyId}/endorsement-requests/received`;
+    return `parties/${partyId}/endorsements`;
   }
 }

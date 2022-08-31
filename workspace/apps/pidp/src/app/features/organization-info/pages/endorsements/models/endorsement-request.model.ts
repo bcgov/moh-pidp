@@ -1,4 +1,4 @@
 export interface EndorsementRequest {
   recipientEmail: string;
-  jobTitle: string;
+  actionable?: boolean;
 }

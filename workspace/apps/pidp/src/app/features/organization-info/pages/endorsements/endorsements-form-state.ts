@@ -2,9 +2,9 @@ import { FormBuilder, Validators } from '@angular/forms';
 
 import { AbstractFormState, FormControlValidators } from '@bcgov/shared/ui';
 
-import { EndorsementRequest } from './endorsement-request.model';
+import { EndorsementRequest } from './models/endorsement-request.model';
 
-export class EndorsementRequestFormState extends AbstractFormState<EndorsementRequest> {
+export class EndorsementsFormState extends AbstractFormState<EndorsementRequest> {
   public constructor(private fb: FormBuilder) {
     super();
 
@@ -33,7 +33,6 @@ export class EndorsementRequestFormState extends AbstractFormState<EndorsementRe
         null,
         [Validators.required, FormControlValidators.email],
       ],
-      jobTitle: [null, Validators.required],
     });
   }
 }
