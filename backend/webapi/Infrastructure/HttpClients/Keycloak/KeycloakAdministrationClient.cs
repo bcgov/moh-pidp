@@ -20,7 +20,7 @@ public class KeycloakAdministrationClient : BaseClient, IKeycloakAdministrationC
         var result = await this.PostAsync($"users/{userId}/role-mappings/clients/{role.ContainerId}", new[] { role });
         if (result.IsSuccess)
         {
-            this.Logger.LogClientRoleAssigned(userId, clientId, roleName);
+            this.Logger.LogClientRoleAssigned(userId, roleName, clientId);
         }
 
         return result.IsSuccess;
@@ -84,7 +84,7 @@ public class KeycloakAdministrationClient : BaseClient, IKeycloakAdministrationC
 
         if (role == null)
         {
-            this.Logger.LogClientRoleNotFound(clientId, roleName);
+            this.Logger.LogClientRoleNotFound(roleName, clientId);
         }
 
         return role;
@@ -113,6 +113,19 @@ public class KeycloakAdministrationClient : BaseClient, IKeycloakAdministrationC
         return result.Value;
     }
 
+    public async Task<bool> RemoveClientRole(Guid userId, Role role)
+    {
+        if (role.ClientRole != true)
+        {
+            return false;
+        }
+
+        // Keycloak expects an array of roles.
+        var response = await this.DeleteAsync($"users/{userId}/role-mappings/clients/{role.ContainerId}", new[] { role });
+
+        return response.IsSuccess;
+    }
+
     public async Task<bool> UpdateUser(Guid userId, UserRepresentation userRep)
     {
         var result = await this.PutAsync($"users/{userId}", userRep);
@@ -139,10 +152,10 @@ public static partial class KeycloakAdministrationClientLoggingExtensions
     public static partial void LogClientNotFound(this ILogger logger, string clientId);
 
     [LoggerMessage(2, LogLevel.Error, "Could not find a Client Role with name {roleName} from Client {clientId} in Keycloak response.")]
-    public static partial void LogClientRoleNotFound(this ILogger logger, string clientId, string roleName);
+    public static partial void LogClientRoleNotFound(this ILogger logger, string roleName, string clientId);
 
     [LoggerMessage(3, LogLevel.Information, "User {userId} was assigned Role {roleName} in Client {clientId}.")]
-    public static partial void LogClientRoleAssigned(this ILogger logger, Guid userId, string clientId, string roleName);
+    public static partial void LogClientRoleAssigned(this ILogger logger, Guid userId, string roleName, string clientId);
 
     [LoggerMessage(4, LogLevel.Information, "User {userId} was assigned Realm Role {roleName}.")]
     public static partial void LogRealmRoleAssigned(this ILogger logger, Guid userId, string roleName);

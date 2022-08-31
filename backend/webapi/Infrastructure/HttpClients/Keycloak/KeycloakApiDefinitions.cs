@@ -3,6 +3,27 @@ namespace Pidp.Infrastructure.HttpClients.Keycloak;
 using System.Text.Json;
 
 using Pidp.Infrastructure.HttpClients.Ldap;
+using Pidp.Models.Lookups;
+
+public static class MohClients
+{
+    public static (string ClientId, string AccessRole) SAEforms => ("SAT-EFORMS", "phsa_eforms_sat");
+    public static (string ClientId, string AccessRole) Uci => ("UCI-SSO", "UCIROLE");
+
+    public static (string ClientId, string AccessRole)? FromAccessType(AccessTypeCode code)
+    {
+        return code switch
+        {
+            AccessTypeCode.DriverFitness => null,
+            AccessTypeCode.HcimAccountTransfer => null,
+            AccessTypeCode.HcimEnrolment => null,
+            AccessTypeCode.MSTeams => null,
+            AccessTypeCode.SAEforms => SAEforms,
+            AccessTypeCode.Uci => Uci,
+            _ => null
+        };
+    }
+}
 
 /// <summary>
 /// This is not the entire Keycloak Client Representation! See https://www.keycloak.org/docs-api/5.0/rest-api/index.html#_clientrepresentation.

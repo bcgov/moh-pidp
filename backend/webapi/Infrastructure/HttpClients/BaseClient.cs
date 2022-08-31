@@ -46,6 +46,8 @@ public class BaseClient
     /// <param name="data"></param>
     protected StringContent CreateStringContent(object data) => new(JsonSerializer.Serialize(data, this.serializationOptions), Encoding.UTF8, "application/json");
 
+    protected async Task<IDomainResult> DeleteAsync(string url, object? data = null) => await this.SendCoreAsync(HttpMethod.Delete, url, data == null ? null : this.CreateStringContent(data), default);
+
     protected async Task<IDomainResult<T>> GetAsync<T>(string url) => await this.SendCoreAsync<T>(HttpMethod.Get, url, null, default);
 
     /// <summary>

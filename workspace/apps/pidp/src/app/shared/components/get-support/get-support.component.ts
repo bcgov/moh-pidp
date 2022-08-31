@@ -67,6 +67,20 @@ export class GetSupportComponent implements OnInit {
           email: this.config.emails.driverFitnessSupport,
         }
       ),
+      ...ArrayUtils.insertIf<SupportProps>(
+        this.permissionsService.hasRole(Role.FEATURE_PIDP_DEMO),
+        {
+          name: 'Unifying Clinical Information (UCI)',
+          email: this.config.emails.uciSupport,
+        }
+      ),
+      ...ArrayUtils.insertIf<SupportProps>(
+        this.permissionsService.hasRole(Role.FEATURE_PIDP_DEMO),
+        {
+          name: 'MS Teams for Clinical Use',
+          email: this.config.emails.msTeamsSupport,
+        }
+      ),
     ];
   }
 }

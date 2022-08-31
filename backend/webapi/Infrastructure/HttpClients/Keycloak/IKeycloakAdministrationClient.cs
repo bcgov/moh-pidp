@@ -49,6 +49,14 @@ public interface IKeycloakAdministrationClient
     Task<UserRepresentation?> GetUser(Guid userId);
 
     /// <summary>
+    /// Removes the given Client Role from the User.
+    /// Returns true if the operation was successful.
+    /// </summary>
+    /// <param name="userId"></param>
+    /// <param name="role"></param>
+    Task<bool> RemoveClientRole(Guid userId, Role role);
+
+    /// <summary>
     /// Updates the User with the given Keycloak User Representation.
     /// Returns true if the operation was successful.
     /// </summary>

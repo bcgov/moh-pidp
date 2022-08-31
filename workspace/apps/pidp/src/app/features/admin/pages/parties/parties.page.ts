@@ -1,7 +1,19 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
 
+import { EMPTY, exhaustMap } from 'rxjs';
+
+import {
+  ConfirmDialogComponent,
+  DialogOptions,
+  HtmlComponent,
+} from '@bcgov/shared/ui';
+
+import { APP_CONFIG, AppConfig } from '@app/app.config';
+
+import { EnvironmentName } from '../../../../../environments/environment.model';
 import {
   AdminResource,
   PartyList,
@@ -21,13 +33,38 @@ export class PartiesPage implements OnInit {
     'providerCollegeCode',
     'saEforms',
   ];
+  public environment: string;
+  public production: string;
 
   public constructor(
+    @Inject(APP_CONFIG) private config: AppConfig,
     private adminResource: AdminResource,
+    private dialog: MatDialog,
     route: ActivatedRoute
   ) {
     this.title = route.snapshot.data.title;
     this.dataSource = new MatTableDataSource();
+    this.environment = this.config.environmentName;
+    this.production = EnvironmentName.PRODUCTION;
+  }
+
+  public onDelete(): void {
+    const data: DialogOptions = {
+      title: 'Delete all parties',
+      component: HtmlComponent,
+      data: {
+        content: 'You are about to delete all parties. Continue?',
+      },
+    };
+    this.dialog
+      .open(ConfirmDialogComponent, { data })
+      .afterClosed()
+      .pipe(
+        exhaustMap((result) =>
+          result ? this.adminResource.deleteParties() : EMPTY
+        )
+      )
+      .subscribe();
   }
 
   public ngOnInit(): void {

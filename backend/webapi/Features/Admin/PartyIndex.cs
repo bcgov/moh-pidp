@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Pidp.Data;
 using Pidp.Models.Lookups;
 
-public class Index
+public class PartyIndex
 {
     public class Query : IQuery<List<Model>> { }
 
