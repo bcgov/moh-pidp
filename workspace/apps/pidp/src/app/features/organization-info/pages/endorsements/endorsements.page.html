@@ -13,17 +13,98 @@
       endorsement requests to the licenced providers they work with.
     </p>
 
-    <mat-tab-group>
-      <mat-tab label="Your Working Relationships">
-        <ng-template matTabContent> Content 1 </ng-template>
-      </mat-tab>
-      <mat-tab label="Incoming Requests">
-        <ng-template matTabContent> Content 2 </ng-template>
-      </mat-tab>
-      <mat-tab label="Outgoing Requests">
-        <ng-template matTabContent> Content 3 </ng-template>
-      </mat-tab>
-    </mat-tab-group>
+    <ui-page-section>
+      <mat-tab-group>
+        <mat-tab label="Your Working Relationships">
+          <ng-template matTabContent>
+            <div class="row">
+              <div
+                *ngFor="let endorsementRequest of endorsementRequests$ | async"
+                class="col-6">
+                <ui-card
+                  icon="person_pin"
+                  [heading]="endorsementRequest.partyName ?? ''">
+                  <ng-container uiCardHint>Relationship</ng-container>
+                  <div class="actions" uiCardActions>
+                    <span>
+                      <button
+                        class="decline"
+                        mat-stroked-button
+                        type="button"
+                        (click)="onAdjudicate(endorsementRequest.id,false)">
+                        Cancel
+                      </button>
+                    </span>
+                  </div>
+                </ui-card>
+              </div>
+            </div>
+          </ng-template>
+        </mat-tab>
+        <mat-tab label="Incoming Requests">
+          <ng-template matTabContent>
+            <div class="row">
+              <div
+                *ngFor="let endorsementRequest of endorsementRequests$ | async"
+                class="col-6">
+                <ui-card
+                  icon="person_pin"
+                  [heading]="endorsementRequest.partyName ?? ''">
+                  <div class="actions" uiCardActions>
+                    <span>
+                      <button
+                        class="decline"
+                        mat-stroked-button
+                        type="button"
+                        (click)="onAdjudicate(endorsementRequest.id,false)">
+                        Decline
+                      </button>
+                    </span>
+                    <ng-container uiCardActions>
+                      <span>
+                        <button
+                          class="accept"
+                          mat-stroked-button
+                          type="button"
+                          (click)="onAdjudicate(endorsementRequest.id,true)">
+                          Approve
+                        </button>
+                      </span>
+                    </ng-container>
+                  </div>
+                </ui-card>
+              </div>
+            </div>
+          </ng-template>
+        </mat-tab>
+        <mat-tab label="Outgoing Requests">
+          <ng-template matTabContent>
+            <div class="row">
+              <div
+                *ngFor="let endorsementRequest of endorsementRequests$ | async"
+                class="col-6">
+                <ui-card
+                  icon="person_pin"
+                  [heading]="endorsementRequest.partyName ?? ''">
+                  <ng-container uiCardHint>Requested</ng-container>
+                  <div class="actions" uiCardActions>
+                    <span>
+                      <button
+                        class="decline"
+                        mat-stroked-button
+                        type="button"
+                        (click)="onAdjudicate(endorsementRequest.id,false)">
+                        Cancel
+                      </button>
+                    </span>
+                  </div>
+                </ui-card>
+              </div>
+            </div>
+          </ng-template>
+        </mat-tab>
+      </mat-tab-group>
+    </ui-page-section>
     <br />
 
     <ng-container [formGroup]="formState.form">

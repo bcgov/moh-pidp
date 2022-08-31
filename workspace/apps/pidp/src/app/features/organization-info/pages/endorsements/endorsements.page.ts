@@ -3,7 +3,7 @@ import { FormBuilder } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { EMPTY } from 'rxjs';
+import { EMPTY, Observable } from 'rxjs';
 
 import { NoContent } from '@bcgov/shared/data-access';
 
@@ -15,6 +15,7 @@ import { StatusCode } from '@app/features/portal/enums/status-code.enum';
 
 import { EndorsementsFormState } from './endorsements-form-state';
 import { EndorsementsResource } from './endorsements-resource.service';
+import { EndorsementRequest } from './models/endorsement-request.model';
 
 @Component({
   selector: 'app-endorsements',
@@ -28,6 +29,7 @@ export class EndorsementsPage
   public title: string;
   public formState: EndorsementsFormState;
   public completed: boolean | null;
+  public endorsementRequests$!: Observable<EndorsementRequest[]>;
 
   public constructor(
     protected dialog: MatDialog,
@@ -49,6 +51,23 @@ export class EndorsementsPage
   }
   public onBack(): void {
     this.navigateToRoot();
+  }
+
+  public onAdjudicate(requestId: number, approved: boolean): void {
+    // this.receivedEndorsementRequests$ = this.resource
+    //   .adjudicateEndorsementRequest(
+    //     this.partyService.partyId,
+    //     requestId,
+    //     approved
+    //   )
+    //   .pipe(
+    //     switchMap(() =>
+    //       this.resource.getReceivedEndorsementRequests(
+    //         this.partyService.partyId
+    //       )
+    //     )
+    //   );
+    console.log('Dis reqId, dis Approved', requestId, approved);
   }
 
   public ngOnInit(): void {
