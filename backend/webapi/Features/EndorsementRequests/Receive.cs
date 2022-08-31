@@ -47,28 +47,27 @@ public class Receive
 
         public async Task<IDomainResult> HandleAsync(Command command)
         {
-            var receivedRequest = await this.context.EndorsementRequests
-                .Where(request => request.Token == command.Token)
-                .SingleOrDefaultAsync();
+            var endorsementRequest = await this.context.EndorsementRequests
+                .SingleOrDefaultAsync(request => request.Token == command.Token);
 
-            if (receivedRequest == null)
+            if (endorsementRequest == null)
             {
                 return DomainResult.NotFound();
             }
-            if (receivedRequest.Status != EndorsementRequestStatus.Created)
+            if (endorsementRequest.Status != EndorsementRequestStatus.Created)
             {
                 // Already received
                 return DomainResult.Failed();
             }
-            if (receivedRequest.RequestingPartyId == command.PartyId)
+            if (endorsementRequest.RequestingPartyId == command.PartyId)
             {
                 this.logger.LogSelfEndorsementAttempt(command.PartyId);
                 return DomainResult.Failed();
             }
 
-            receivedRequest.ReceivingPartyId = command.PartyId;
-            receivedRequest.Status = EndorsementRequestStatus.Received;
-            receivedRequest.StatusDate = this.clock.GetCurrentInstant();
+            endorsementRequest.ReceivingPartyId = command.PartyId;
+            endorsementRequest.Status = EndorsementRequestStatus.Received;
+            endorsementRequest.StatusDate = this.clock.GetCurrentInstant();
 
             await this.context.SaveChangesAsync();
 
