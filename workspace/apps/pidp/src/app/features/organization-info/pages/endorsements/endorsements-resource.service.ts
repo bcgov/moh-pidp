@@ -3,11 +3,7 @@ import { Injectable } from '@angular/core';
 
 import { Observable, catchError, of, throwError } from 'rxjs';
 
-import {
-  CrudResource,
-  NoContent,
-  NoContentResponse,
-} from '@bcgov/shared/data-access';
+import { NoContent, NoContentResponse } from '@bcgov/shared/data-access';
 
 import { ApiHttpClient } from '@app/core/resources/api-http-client.service';
 
