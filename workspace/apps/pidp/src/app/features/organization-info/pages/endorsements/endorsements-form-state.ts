@@ -2,16 +2,16 @@ import { FormBuilder, Validators } from '@angular/forms';
 
 import { AbstractFormState, FormControlValidators } from '@bcgov/shared/ui';
 
-import { EndorsementRequest } from './models/endorsement-request.model';
+import { EndorsementRequestInformation } from './models/endorsement-request-information.model';
 
-export class EndorsementsFormState extends AbstractFormState<EndorsementRequest> {
+export class EndorsementsFormState extends AbstractFormState<EndorsementRequestInformation> {
   public constructor(private fb: FormBuilder) {
     super();
 
     this.buildForm();
   }
 
-  public get json(): EndorsementRequest | undefined {
+  public get json(): EndorsementRequestInformation | undefined {
     if (!this.formInstance) {
       return;
     }
@@ -19,7 +19,7 @@ export class EndorsementsFormState extends AbstractFormState<EndorsementRequest>
     return this.formInstance.getRawValue();
   }
 
-  public patchValue(model: EndorsementRequest | null): void {
+  public patchValue(model: EndorsementRequestInformation | null): void {
     if (!this.formInstance || !model) {
       return;
     }

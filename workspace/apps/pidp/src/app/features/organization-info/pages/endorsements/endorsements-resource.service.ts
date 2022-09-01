@@ -1,7 +1,7 @@
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
-import { catchError, of, throwError } from 'rxjs';
+import { Observable, catchError, of, throwError } from 'rxjs';
 
 import {
   CrudResource,
@@ -10,44 +10,41 @@ import {
 } from '@bcgov/shared/data-access';
 
 import { ApiHttpClient } from '@app/core/resources/api-http-client.service';
-import { PortalResource } from '@app/features/portal/portal-resource.service';
 
+import { EndorsementRequestInformation } from './models/endorsement-request-information.model';
 import { EndorsementRequest } from './models/endorsement-request.model';
-import { ReceivedEndorsementRequest } from './models/received-endorsement-request.model';
 
 @Injectable({
   providedIn: 'root',
 })
-export class EndorsementsResource extends CrudResource<ReceivedEndorsementRequest> {
-  public constructor(
-    private apiResource: ApiHttpClient,
-    private portalResource: PortalResource
-  ) {
-    super(apiResource);
-  }
+export class EndorsementsResource {
+  public constructor(private apiResource: ApiHttpClient) {}
 
-  public receiveEndorsementRequest(partyId: number, token: string): NoContent {
+  public getEndorsementRequests(
+    partyId: number
+  ): Observable<EndorsementRequest[] | null> {
     return this.apiResource
-      .post<NoContent>(this.getResourcePath(partyId), { token })
+      .get<EndorsementRequest[]>(
+        this.getEndorsementRequestsResourcePath(partyId)
+      )
       .pipe(
-        NoContentResponse,
         catchError((error: HttpErrorResponse) => {
-          if (error.status === HttpStatusCode.BadRequest) {
-            return of(void 0);
+          if (error.status === HttpStatusCode.NotFound) {
+            return of(null);
           }
 
-          return throwError(() => error);
+          throw error;
         })
       );
   }
 
-  public requestEndorsement(
+  public createEndorsementRequest(
     partyId: number,
-    endorsementRequest: EndorsementRequest
+    endorsementRequest: EndorsementRequestInformation
   ): NoContent {
     return this.apiResource
       .post<NoContent>(
-        `parties/${partyId}/endorsement-requests`,
+        this.getEndorsementRequestsResourcePath(partyId),
         endorsementRequest
       )
       .pipe(
@@ -62,7 +59,86 @@ export class EndorsementsResource extends CrudResource<ReceivedEndorsementReques
       );
   }
 
-  protected getResourcePath(partyId: number): string {
+  public receiveEndorsementRequest(partyId: number, token: string): NoContent {
+    return this.apiResource
+      .post<NoContent>(
+        `${this.getEndorsementRequestsResourcePath(partyId)}/receive`,
+        { token }
+      )
+      .pipe(
+        NoContentResponse,
+        catchError((error: HttpErrorResponse) => {
+          if (error.status === HttpStatusCode.BadRequest) {
+            return of(void 0);
+          }
+
+          return throwError(() => error);
+        })
+      );
+  }
+
+  public approveEndorsementRequest(
+    partyId: number,
+    endorsementRequestId: number
+  ): NoContent {
+    return this.apiResource
+      .post<NoContent>(
+        `${this.getEndorsementRequestResourcePath(
+          partyId,
+          endorsementRequestId
+        )}/approve`,
+        null
+      )
+      .pipe(
+        NoContentResponse,
+        catchError((error: HttpErrorResponse) => {
+          if (error.status === HttpStatusCode.BadRequest) {
+            return of(void 0);
+          }
+
+          return throwError(() => error);
+        })
+      );
+  }
+
+  public declineEndorsementRequest(
+    partyId: number,
+    endorsementRequestId: number
+  ): NoContent {
+    return this.apiResource
+      .post<NoContent>(
+        `${this.getEndorsementRequestResourcePath(
+          partyId,
+          endorsementRequestId
+        )}/decline`,
+        null
+      )
+      .pipe(
+        NoContentResponse,
+        catchError((error: HttpErrorResponse) => {
+          if (error.status === HttpStatusCode.BadRequest) {
+            return of(void 0);
+          }
+
+          return throwError(() => error);
+        })
+      );
+  }
+
+  private getEndorsementsResourcePath(partyId: number): string {
     return `parties/${partyId}/endorsements`;
+  }
+
+  private getEndorsementRequestsResourcePath(partyId: number): string {
+    return `parties/${partyId}/endorsement-requests`;
+  }
+
+  private getEndorsementRequestResourcePath(
+    partyId: number,
+    endorsementRequestId: number
+  ): string {
+    return `${this.getEndorsementRequestsResourcePath(
+      partyId
+    )}/${endorsementRequestId}`;
   }
 }

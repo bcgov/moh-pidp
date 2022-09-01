@@ -88,7 +88,7 @@ export class EndorsementsPage
     const partyId = this.partyService.partyId;
 
     return partyId && this.formState.json
-      ? this.resource.requestEndorsement(partyId, this.formState.json)
+      ? this.resource.createEndorsementRequest(partyId, this.formState.json)
       : EMPTY;
   }
 
