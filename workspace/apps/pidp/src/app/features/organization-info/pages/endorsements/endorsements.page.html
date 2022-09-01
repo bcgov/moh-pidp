@@ -19,11 +19,9 @@
           <ng-template matTabContent>
             <div class="row">
               <div
-                *ngFor="let endorsementRequest of endorsementRequests$ | async"
+                *ngFor="let endorsement of endorsements$ | async"
                 class="col-6">
-                <ui-card
-                  icon="person_pin"
-                  [heading]="endorsementRequest.partyName ?? ''">
+                <ui-card icon="person_pin" [heading]="endorsement.partyName">
                   <ng-container uiCardHint>Relationship</ng-container>
                   <div class="actions" uiCardActions>
                     <span>
@@ -31,7 +29,7 @@
                         class="decline"
                         mat-stroked-button
                         type="button"
-                        (click)="onAdjudicate(endorsementRequest.id,false)">
+                        (click)="onCancel(endorsement.id)">
                         Cancel
                       </button>
                     </span>
@@ -48,6 +46,7 @@
                 *ngFor="let endorsementRequest of endorsementRequests$ | async"
                 class="col-6">
                 <ui-card
+                  *ngIf="endorsementRequest.actionable"
                   icon="person_pin"
                   [heading]="endorsementRequest.partyName ?? ''">
                   <div class="actions" uiCardActions>
@@ -56,7 +55,7 @@
                         class="decline"
                         mat-stroked-button
                         type="button"
-                        (click)="onAdjudicate(endorsementRequest.id,false)">
+                        (click)="onCancel(endorsementRequest.id)">
                         Decline
                       </button>
                     </span>
@@ -66,7 +65,7 @@
                           class="accept"
                           mat-stroked-button
                           type="button"
-                          (click)="onAdjudicate(endorsementRequest.id,true)">
+                          (click)="onApprove(endorsementRequest.id)">
                           Approve
                         </button>
                       </span>
@@ -84,6 +83,7 @@
                 *ngFor="let endorsementRequest of endorsementRequests$ | async"
                 class="col-6">
                 <ui-card
+                  *ngIf="!endorsementRequest.actionable"
                   icon="person_pin"
                   [heading]="endorsementRequest.partyName ?? ''">
                   <ng-container uiCardHint>Requested</ng-container>
@@ -93,7 +93,7 @@
                         class="decline"
                         mat-stroked-button
                         type="button"
-                        (click)="onAdjudicate(endorsementRequest.id,false)">
+                        (click)="onCancel(endorsementRequest.id)">
                         Cancel
                       </button>
                     </span>
