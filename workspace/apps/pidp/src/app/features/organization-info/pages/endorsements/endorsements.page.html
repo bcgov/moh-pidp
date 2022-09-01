@@ -86,18 +86,6 @@
                   *ngIf="!endorsementRequest.actionable"
                   icon="person_pin"
                   [heading]="endorsementRequest.partyName ?? ''">
-                  <ng-container uiCardHint>Requested</ng-container>
-                  <div class="actions" uiCardActions>
-                    <span>
-                      <button
-                        class="decline"
-                        mat-stroked-button
-                        type="button"
-                        (click)="onCancel(endorsementRequest.id)">
-                        Cancel
-                      </button>
-                    </span>
-                  </div>
                 </ui-card>
               </div>
             </div>
@@ -106,6 +94,20 @@
       </mat-tab-group>
     </ui-page-section>
     <br />
+
+    <ui-page-section>
+      <ui-page-subheader icon="assignment">
+        Endorsement Request
+      </ui-page-subheader>
+
+      <p>
+        Enter the email of the person you have a working relationship with here.
+        This person will receive an email invitation from the Provider Identity
+        Portal. Once they register, they can endorse your relationship request.
+        In the future, endorsements from licenced providers will allow for
+        delegated access.
+      </p>
+    </ui-page-section>
 
     <ng-container [formGroup]="formState.form">
       <mat-form-field class="w-100">
@@ -126,7 +128,7 @@
     </button>
 
     <button mat-flat-button uiPageFooterAction type="submit" color="primary">
-      Save Information
+      Send Endorsement Request
     </button>
   </ui-page-footer>
 </ui-page>
