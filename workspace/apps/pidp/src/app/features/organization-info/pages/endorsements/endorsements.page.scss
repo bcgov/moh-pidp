@@ -1,3 +1,10 @@
-.row {
-  margin: 10px;
+.tab-view {
+  height: 25rem;
+  border: 1px solid rgb(216, 211, 211);
+  border-radius: 3px;
+}
+
+.tab-view .mat-tab-label,
+.mat-tab-link {
+  font-size: 0.675rem !important;
 }

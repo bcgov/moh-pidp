@@ -12,103 +12,104 @@
       to delegate access. Unlicenced health care providers can also send
       endorsement requests to the licenced providers they work with.
     </p>
-
-    <ui-page-section>
-      <mat-tab-group>
-        <mat-tab label="Your Working Relationships">
-          <ng-template matTabContent>
-            <div class="row">
-              <div
-                *ngFor="let endorsement of endorsements$ | async"
-                class="col-6">
-                <ui-card icon="person_pin" [heading]="endorsement.partyName">
-                  <ng-container uiCardHint>Relationship</ng-container>
-                  <div class="actions" uiCardActions>
+  </ui-page-section>
+  <div class="tab-view">
+    <mat-tab-group>
+      <mat-tab label="Your Working Relationships">
+        <ng-template matTabContent>
+          <div class="row">
+            <div
+              *ngFor="let endorsement of endorsements$ | async"
+              class="col-6">
+              <ui-card icon="person_pin" [heading]="endorsement.partyName">
+                <ng-container uiCardHint>Relationship</ng-container>
+                <ng-container uiCardHint
+                  >{{ endorsement.createdOn }}</ng-container
+                >
+                <div class="actions" uiCardActions>
+                  <span>
+                    <button
+                      class="decline"
+                      mat-stroked-button
+                      type="button"
+                      (click)="onCancelEndorsement(endorsement.id)">
+                      Cancel
+                    </button>
+                  </span>
+                </div>
+              </ui-card>
+            </div>
+          </div>
+        </ng-template>
+      </mat-tab>
+      <mat-tab label="Pending Your Approval">
+        <ng-template matTabContent>
+          <div class="row">
+            <div
+              *ngFor="let endorsementRequest of endorsementRequests$ | async"
+              class="col-6">
+              <ui-card
+                *ngIf="endorsementRequest.actionable"
+                icon="person_pin"
+                [heading]="endorsementRequest.partyName ?? ''">
+                <div class="actions" uiCardActions>
+                  <span>
+                    <button
+                      class="decline"
+                      mat-stroked-button
+                      type="button"
+                      (click)="onCancel(endorsementRequest.id)">
+                      Decline
+                    </button>
+                  </span>
+                  <ng-container uiCardActions>
                     <span>
                       <button
-                        class="decline"
+                        class="accept"
                         mat-stroked-button
                         type="button"
-                        (click)="onCancelEndorsement(endorsement.id)">
-                        Cancel
+                        (click)="onApprove(endorsementRequest.id)">
+                        Approve
                       </button>
                     </span>
-                  </div>
-                </ui-card>
-              </div>
+                  </ng-container>
+                </div>
+              </ui-card>
             </div>
-          </ng-template>
-        </mat-tab>
-        <mat-tab label="Pending Your Approval">
-          <ng-template matTabContent>
-            <div class="row">
-              <div
-                *ngFor="let endorsementRequest of endorsementRequests$ | async"
-                class="col-6">
-                <ui-card
-                  *ngIf="endorsementRequest.actionable"
-                  icon="person_pin"
-                  [heading]="endorsementRequest.partyName ?? ''">
-                  <div class="actions" uiCardActions>
-                    <span>
-                      <button
-                        class="decline"
-                        mat-stroked-button
-                        type="button"
-                        (click)="onCancel(endorsementRequest.id)">
-                        Decline
-                      </button>
-                    </span>
-                    <ng-container uiCardActions>
-                      <span>
-                        <button
-                          class="accept"
-                          mat-stroked-button
-                          type="button"
-                          (click)="onApprove(endorsementRequest.id)">
-                          Approve
-                        </button>
-                      </span>
-                    </ng-container>
-                  </div>
-                </ui-card>
-              </div>
+          </div>
+        </ng-template>
+      </mat-tab>
+      <mat-tab label="Pending and Cancelled Requests">
+        <ng-template matTabContent>
+          <div class="row">
+            <div
+              *ngFor="let endorsementRequest of endorsementRequests$ | async"
+              class="col-6">
+              <ui-card
+                *ngIf="!endorsementRequest.actionable"
+                icon="person_pin"
+                [heading]="endorsementRequest.partyName ?? ''">
+              </ui-card>
             </div>
-          </ng-template>
-        </mat-tab>
-        <mat-tab label="Pending and Cancelled Requests">
-          <ng-template matTabContent>
-            <div class="row">
-              <div
-                *ngFor="let endorsementRequest of endorsementRequests$ | async"
-                class="col-6">
-                <ui-card
-                  *ngIf="!endorsementRequest.actionable"
-                  icon="person_pin"
-                  [heading]="endorsementRequest.partyName ?? ''">
-                </ui-card>
-              </div>
-            </div>
-          </ng-template>
-        </mat-tab>
-      </mat-tab-group>
-    </ui-page-section>
-    <br />
+          </div>
+        </ng-template>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
+  <br />
 
-    <ui-page-section>
-      <ui-page-subheader icon="assignment">
-        Endorsement Request
-      </ui-page-subheader>
+  <ui-page-section>
+    <ui-page-subheader icon="assignment">
+      Endorsement Request
+    </ui-page-subheader>
 
-      <p>
-        Enter the email of the person you have a working relationship with here.
-        This person will receive an email invitation from the Provider Identity
-        Portal. Once they register, they can endorse your relationship request.
-        In the future, endorsements from licenced providers will allow for
-        delegated access.
-      </p>
-    </ui-page-section>
-
+    <p>
+      Enter the email of the person you have a working relationship with here.
+      This person will receive an email invitation from the Provider Identity
+      Portal. Once they register, they can endorse your relationship request. In
+      the future, endorsements from licenced providers will allow for delegated
+      access.
+    </p>
     <ng-container [formGroup]="formState.form">
       <mat-form-field class="w-100">
         <input matInput placeholder="Email" formControlName="recipientEmail" />

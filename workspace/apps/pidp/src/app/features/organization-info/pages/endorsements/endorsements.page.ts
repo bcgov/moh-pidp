@@ -1,5 +1,5 @@
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -23,6 +23,7 @@ import { Endorsement } from './models/endorsement.model';
   selector: 'app-endorsements',
   templateUrl: './endorsements.page.html',
   styleUrls: ['./endorsements.page.scss'],
+  encapsulation: ViewEncapsulation.None,
 })
 export class EndorsementsPage
   extends AbstractFormPage<EndorsementsFormState>
