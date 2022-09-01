@@ -56,7 +56,6 @@ export class EndorsementsPage
   }
 
   public onApprove(requestId: number): void {
-    // hit approve endpoint
     this.endorsementRequests$ = this.resource
       .approveEndorsementRequest(this.partyService.partyId, requestId)
       .pipe(
@@ -67,7 +66,6 @@ export class EndorsementsPage
   }
 
   public onCancel(requestId: number): void {
-    //hit decline endpoint
     this.endorsementRequests$ = this.resource
       .declineEndorsementRequest(this.partyService.partyId, requestId)
       .pipe(
