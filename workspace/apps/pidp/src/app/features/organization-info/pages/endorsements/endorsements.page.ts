@@ -1,9 +1,10 @@
+import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { EMPTY, Observable, switchMap } from 'rxjs';
+import { EMPTY, Observable, catchError, map, of, switchMap } from 'rxjs';
 
 import { NoContent } from '@bcgov/shared/data-access';
 
@@ -91,6 +92,28 @@ export class EndorsementsPage
       this.logger.error('No status code was provided');
       return this.navigateToRoot();
     }
+
+    this.endorsements$ = this.resource.getEndorsements(partyId).pipe(
+      map((response: Endorsement[] | null) => response ?? []),
+      catchError((error: HttpErrorResponse) => {
+        if (error.status === HttpStatusCode.NotFound) {
+          this.navigateToRoot();
+        }
+        return of([]);
+      })
+    );
+
+    this.endorsementRequests$ = this.resource
+      .getEndorsementRequests(partyId)
+      .pipe(
+        map((response: EndorsementRequest[] | null) => response ?? []),
+        catchError((error: HttpErrorResponse) => {
+          if (error.status === HttpStatusCode.NotFound) {
+            this.navigateToRoot();
+          }
+          return of([]);
+        })
+      );
   }
 
   protected performSubmission(): NoContent {
