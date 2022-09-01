@@ -153,7 +153,8 @@ export class EndorsementsPage
   }
 
   protected afterSubmitIsSuccessful(): void {
-    this.navigateToRoot();
+    this.formState.form.reset();
+    this.formState.form.clearValidators();
   }
 
   private navigateToRoot(): void {
