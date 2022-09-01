@@ -44,7 +44,9 @@ export class EndorsementsPortalSection implements IPortalSection {
       ),
       disabled: !(
         this.profileStatus.status.demographics.statusCode ===
-        StatusCode.COMPLETED
+          StatusCode.COMPLETED &&
+        this.profileStatus.status.collegeCertification.statusCode ===
+          StatusCode.COMPLETED
       ),
     };
   }
