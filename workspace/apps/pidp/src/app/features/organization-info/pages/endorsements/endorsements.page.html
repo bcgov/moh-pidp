@@ -1,18 +1,20 @@
-<ui-page [form]="formState.form" (submitted)="onSubmit()">
+<ui-page mode="large" [form]="formState.form" (submitted)="onSubmit()">
   <ui-page-header icon="assignment">{{ title }}</ui-page-header>
 
-  <ui-page-section>
-    <ui-page-subheader
-      >Here you can endorse people you have working relationships with and
-      invite them to the Provider identity Portal.</ui-page-subheader
-    >
-    <p>
-      Licenced health care providers can endorse unlicenced health care
-      professionals they work with. In the future, endorsements will allow you
-      to delegate access. Unlicenced health care providers can also send
-      endorsement requests to the licenced providers they work with.
-    </p>
-  </ui-page-section>
+  <div class="col-6">
+    <ui-page-section>
+      <ui-page-subheader
+        >Here you can endorse people you have working relationships with and
+        invite them to the Provider identity Portal.
+      </ui-page-subheader>
+      <p>
+        Licenced health care providers can endorse unlicenced health care
+        professionals they work with. In the future, endorsements will allow you
+        to delegate access. Unlicenced health care providers can also send
+        endorsement requests to the licenced providers they work with.
+      </p>
+    </ui-page-section>
+  </div>
   <div class="tab-view">
     <mat-tab-group>
       <mat-tab label="Your Working Relationships">
@@ -96,27 +98,32 @@
       </mat-tab>
     </mat-tab-group>
   </div>
+
   <br />
 
-  <ui-page-section>
-    <ui-page-subheader icon="assignment">
-      Endorsement Request
+  <div class="col-6">
+    <ui-page-section>
+      <ui-page-subheader icon="assignment">
+        Endorsement Request
     </ui-page-subheader>
-
-    <p>
-      Enter the email of the person you have a working relationship with here.
-      This person will receive an email invitation from the Provider Identity
-      Portal. Once they register, they can endorse your relationship request. In
-      the future, endorsements from licenced providers will allow for delegated
-      access.
-    </p>
-    <ng-container [formGroup]="formState.form">
-      <mat-form-field class="w-100">
-        <input matInput placeholder="Email" formControlName="recipientEmail" />
-        <mat-error>Required</mat-error>
-      </mat-form-field>
-    </ng-container>
-  </ui-page-section>
+      <p>
+        Enter the email of the person you have a working relationship with here.
+        This person will receive an email invitation from the Provider Identity
+        Portal. Once they register, they can endorse your relationship request.
+        In the future, endorsements from licenced providers will allow for
+        delegated access.
+      </p>
+      <ng-container [formGroup]="formState.form">
+        <mat-form-field class="w-100">
+          <input
+            matInput
+            placeholder="Email"
+            formControlName="recipientEmail" />
+          <mat-error>Required</mat-error>
+        </mat-form-field>
+      </ng-container>
+    </ui-page-section>
+  </div>
 
   <ui-page-footer>
     <button
