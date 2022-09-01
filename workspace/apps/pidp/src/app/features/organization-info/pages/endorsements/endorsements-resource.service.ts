@@ -1,11 +1,12 @@
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
-import { Observable, catchError, of, throwError } from 'rxjs';
+import { Observable, catchError, of, tap, throwError } from 'rxjs';
 
 import { NoContent, NoContentResponse } from '@bcgov/shared/data-access';
 
 import { ApiHttpClient } from '@app/core/resources/api-http-client.service';
+import { ToastService } from '@app/core/services/toast.service';
 
 import { EndorsementRequestInformation } from './models/endorsement-request-information.model';
 import { EndorsementRequest } from './models/endorsement-request.model';
@@ -15,7 +16,10 @@ import { Endorsement } from './models/endorsement.model';
   providedIn: 'root',
 })
 export class EndorsementsResource {
-  public constructor(private apiResource: ApiHttpClient) {}
+  public constructor(
+    private apiResource: ApiHttpClient,
+    private toastService: ToastService
+  ) {}
 
   public getEndorsements(partyId: number): Observable<Endorsement[] | null> {
     return this.apiResource
@@ -76,6 +80,11 @@ export class EndorsementsResource {
       )
       .pipe(
         NoContentResponse,
+        tap(() =>
+          this.toastService.openSuccessToast(
+            'Endorsement Request has been created'
+          )
+        ),
         catchError((error: HttpErrorResponse) => {
           if (error.status === HttpStatusCode.BadRequest) {
             return of(void 0);
