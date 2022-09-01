@@ -90,7 +90,22 @@ export class EndorsementsPage
       );
   }
 
-  // public onCancelEndorsement(endorsementId: number): void {}
+  public onCancelEndorsement(endorsementId: number): void {
+    this.endorsements$ = this.resource
+      .cancelEndorsement(this.partyService.partyId, endorsementId)
+      .pipe(
+        switchMap(() =>
+          this.resource.getEndorsements(this.partyService.partyId)
+        ),
+        map((response: Endorsement[] | null) => response ?? []),
+        catchError((error: HttpErrorResponse) => {
+          if (error.status === HttpStatusCode.NotFound) {
+            this.navigateToRoot();
+          }
+          return of([]);
+        })
+      );
+  }
 
   public ngOnInit(): void {
     const partyId = this.partyService.partyId;
