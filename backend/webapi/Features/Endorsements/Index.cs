@@ -15,6 +15,7 @@ public class Index
 
     public class Model
     {
+        public int Id { get; set; }
         public string PartyName { get; set; } = string.Empty;
         public bool Active { get; set; }
         public Instant CreatedOn { get; set; }
@@ -39,6 +40,7 @@ public class Index
                 .Where(relationship => relationship.PartyId != query.PartyId)
                 .Select(relationship => new Model
                 {
+                    Id = relationship.EndorsementId,
                     PartyName = $"{relationship.Party!.FirstName} {relationship.Party.LastName}",
                     Active = relationship.Endorsement!.Active,
                     CreatedOn = relationship.Endorsement.CreatedOn
