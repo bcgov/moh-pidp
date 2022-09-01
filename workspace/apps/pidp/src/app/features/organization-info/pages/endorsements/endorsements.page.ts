@@ -31,8 +31,8 @@ export class EndorsementsPage
   public title: string;
   public formState: EndorsementsFormState;
   public completed: boolean | null;
-  public endorsementRequests$!: Observable<EndorsementRequest[] | null>;
-  public endorsements$!: Observable<Endorsement[] | null>;
+  public endorsementRequests$!: Observable<EndorsementRequest[]>;
+  public endorsements$!: Observable<Endorsement[]>;
 
   public constructor(
     protected dialog: MatDialog,
@@ -62,7 +62,14 @@ export class EndorsementsPage
       .pipe(
         switchMap(() =>
           this.resource.getEndorsementRequests(this.partyService.partyId)
-        )
+        ),
+        map((response: EndorsementRequest[] | null) => response ?? []),
+        catchError((error: HttpErrorResponse) => {
+          if (error.status === HttpStatusCode.NotFound) {
+            this.navigateToRoot();
+          }
+          return of([]);
+        })
       );
   }
 
@@ -72,7 +79,14 @@ export class EndorsementsPage
       .pipe(
         switchMap(() =>
           this.resource.getEndorsementRequests(this.partyService.partyId)
-        )
+        ),
+        map((response: EndorsementRequest[] | null) => response ?? []),
+        catchError((error: HttpErrorResponse) => {
+          if (error.status === HttpStatusCode.NotFound) {
+            this.navigateToRoot();
+          }
+          return of([]);
+        })
       );
   }
 
