@@ -86,18 +86,6 @@
                   *ngIf="!endorsementRequest.actionable"
                   icon="person_pin"
                   [heading]="endorsementRequest.partyName ?? ''">
-                  <ng-container uiCardHint>Requested</ng-container>
-                  <div class="actions" uiCardActions>
-                    <span>
-                      <button
-                        class="decline"
-                        mat-stroked-button
-                        type="button"
-                        (click)="onCancel(endorsementRequest.id)">
-                        Cancel
-                      </button>
-                    </span>
-                  </div>
                 </ui-card>
               </div>
             </div>
