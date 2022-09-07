@@ -28,6 +28,8 @@ frontend:
 
 webapi:
   replicaCount: 3
+  aspnetcore:
+    environment: Production
 
 plr-intake:
   replicaCount: 2
