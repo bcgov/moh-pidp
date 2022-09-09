@@ -35,3 +35,12 @@ public class HcimEnrolment : AccessRequest
     public bool RecordsNewborns { get; set; }
     public bool SearchesIdentifiers { get; set; }
 }
+
+[Table(nameof(MSTeamsEnrolment))]
+public class MSTeamsEnrolment : AccessRequest
+{
+    public string ClinicName { get; set; } = string.Empty;
+
+    [Required]
+    public MSTeamsClinicAddress? ClinicAddress { get; set; } = new();
+}
