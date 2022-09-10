@@ -57,20 +57,17 @@ export class EndorsementsPage
   }
 
   public onApprove(requestId: number): void {
-    this.endorsementRequests$ = this.resource
+    this.resource
       .approveEndorsementRequest(this.partyService.partyId, requestId)
       .pipe(
-        switchMap(() =>
-          this.resource.getEndorsementRequests(this.partyService.partyId)
-        ),
-        map((response: EndorsementRequest[] | null) => response ?? []),
-        catchError((error: HttpErrorResponse) => {
-          if (error.status === HttpStatusCode.NotFound) {
-            this.navigateToRoot();
-          }
-          return of([]);
-        })
-      );
+        switchMap(
+          () =>
+            (this.endorsementRequests$ = this.getEndorsementRequests(
+              this.partyService.partyId
+            ))
+        )
+      )
+      .subscribe();
   }
 
   public onCancel(requestId: number): void {
@@ -130,17 +127,7 @@ export class EndorsementsPage
       })
     );
 
-    this.endorsementRequests$ = this.resource
-      .getEndorsementRequests(partyId)
-      .pipe(
-        map((response: EndorsementRequest[] | null) => response ?? []),
-        catchError((error: HttpErrorResponse) => {
-          if (error.status === HttpStatusCode.NotFound) {
-            this.navigateToRoot();
-          }
-          return of([]);
-        })
-      );
+    this.endorsementRequests$ = this.getEndorsementRequests(partyId);
   }
 
   protected performSubmission(): NoContent {
@@ -154,9 +141,26 @@ export class EndorsementsPage
   protected afterSubmitIsSuccessful(): void {
     this.formState.form.reset();
     this.formState.form.clearValidators();
+    this.endorsementRequests$ = this.getEndorsementRequests(
+      this.partyService.partyId
+    );
   }
 
   private navigateToRoot(): void {
     this.router.navigate([this.route.snapshot.data.routes.root]);
+  }
+
+  private getEndorsementRequests(
+    partyId: number
+  ): Observable<EndorsementRequest[]> {
+    return this.resource.getEndorsementRequests(partyId).pipe(
+      map((response: EndorsementRequest[] | null) => response ?? []),
+      catchError((error: HttpErrorResponse) => {
+        if (error.status === HttpStatusCode.NotFound) {
+          this.navigateToRoot();
+        }
+        return of([]);
+      })
+    );
   }
 }

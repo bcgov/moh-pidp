@@ -66,7 +66,7 @@
                       Decline
                     </button>
                   </span>
-                  <ng-container uiCardActions>
+                  <ng-container>
                     <span>
                       <button
                         class="accept"
@@ -85,12 +85,17 @@
       </mat-tab>
       <mat-tab label="Pending and Cancelled Requests">
         <ng-template matTabContent>
-          <div class="row">
+          <div
+            class="tab-content"
+            fxLayout="row wrap"
+            fxLayoutGap="16px grid"
+            fxFlexFill>
             <div
               *ngFor="let endorsementRequest of endorsementRequests$ | async"
-              class="col-6">
+              fxFlex="33%">
               <ui-card
                 *ngIf="!endorsementRequest.actionable"
+                class="endorsement-card"
                 icon="person_pin"
                 [heading]="endorsementRequest.recipientEmail">
               </ui-card>
