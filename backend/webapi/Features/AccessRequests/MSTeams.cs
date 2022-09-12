@@ -135,13 +135,13 @@ public class MSTeams
 
         private async Task SendEnrolmentEmailAsync(EnrolmentDto dto, Command command)
         {
-            var records = await this.plrClient.GetRecordsAsync(dto.Cpn);
+            var plrRecords = await this.plrClient.GetRecordsAsync(dto.Cpn);
             var model = new EnrolmentEmailModel
             (
                 dto,
                 command,
                 this.clock.GetCurrentInstant(),
-                records?.Select(record => new EnrolmentEmailModel.PlrRecord
+                plrRecords?.Select(record => new EnrolmentEmailModel.PlrRecord
                 {
                     CollegeId = record.CollegeId,
                     ProviderRoleType = record.ProviderRoleType,
@@ -154,7 +154,7 @@ public class MSTeams
                 from: EmailService.PidpEmail,
                 to: "enrolment_securemessaging@fraserhealth.ca",
                 subject: "New MS Teams for Clinical Use Enrolment",
-                body: JsonSerializer.Serialize(model)
+                body: $"<pre>{JsonSerializer.Serialize(model, new JsonSerializerOptions { WriteIndented = true })}</pre>"
             );
             await this.emailService.SendAsync(email);
         }
@@ -183,10 +183,10 @@ public class MSTeams
 
         private class EnrolmentEmailModel
         {
-            public Instant EnrolmentDate { get; set; }
+            public string EnrolmentDate { get; set; }
             public string FirstName { get; set; }
             public string LastName { get; set; }
-            public LocalDate? Birthdate { get; set; }
+            public string? Birthdate { get; set; }
             public string? Email { get; set; }
             public string? Phone { get; set; }
             public List<PlrRecord> PlrRecords { get; set; }
@@ -204,10 +204,10 @@ public class MSTeams
 
             public EnrolmentEmailModel(EnrolmentDto enrolmentDto, Command command, Instant enrolmentDate, List<PlrRecord> plrRecords)
             {
-                this.EnrolmentDate = enrolmentDate;
+                this.EnrolmentDate = enrolmentDate.InZone(DateTimeZoneProviders.Tzdb.GetSystemDefault()).Date.ToString();
                 this.FirstName = enrolmentDto.FirstName;
                 this.LastName = enrolmentDto.LastName;
-                this.Birthdate = enrolmentDto.Birthdate;
+                this.Birthdate = enrolmentDto.Birthdate?.ToString();
                 this.Email = enrolmentDto.Email;
                 this.Phone = enrolmentDto.Phone;
                 this.PlrRecords = plrRecords;
