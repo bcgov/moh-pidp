@@ -25,7 +25,6 @@
 
   @include media-breakpoint-down(lg) {
     .tab-content {
-      // flex-direction: column;
       overflow-y: auto;
     }
   }
