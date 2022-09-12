@@ -26,6 +26,8 @@ frontend:
 
 webapi:
   replicaCount: 1
+  aspnetcore:
+    environment: Staging
 
 plr-intake:
   replicaCount: 1
