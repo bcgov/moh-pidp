@@ -19,14 +19,11 @@
     <mat-tab-group>
       <mat-tab label="Your Working Relationships">
         <ng-template matTabContent>
-          <div
-            class="tab-content"
-            fxLayout="row wrap"
-            fxLayoutGap="16px grid"
-            fxFlexFill>
-            <div *ngFor="let endorsement of endorsements$ | async" fxFlex="33%">
+          <div class="tab-content">
+            <div
+              *ngFor="let endorsement of endorsements$ | async"
+              class="endorsement-card">
               <ui-card icon="person_pin" [heading]="endorsement.partyName">
-                <ng-container uiCardHint>Relationship</ng-container>
                 <ng-container uiCardHint
                   >{{ endorsement.createdOn | date }}</ng-container
                 >
@@ -51,7 +48,7 @@
           <div class="row">
             <div
               *ngFor="let endorsementRequest of endorsementRequests$ | async"
-              class="col-6">
+              class="endorsement-card">
               <ui-card
                 *ngIf="endorsementRequest.actionable"
                 icon="person_pin"
@@ -85,19 +82,12 @@
       </mat-tab>
       <mat-tab label="Pending and Cancelled Requests">
         <ng-template matTabContent>
-          <div
-            class="tab-content"
-            fxLayout="row wrap"
-            fxLayoutGap="16px grid"
-            fxFlexFill>
+          <div class="tab-content">
             <div
               *ngFor="let endorsementRequest of endorsementRequests$ | async"
-              fxFlex="33%">
-              <ui-card
-                *ngIf="!endorsementRequest.actionable"
-                class="endorsement-card"
-                icon="person_pin"
-                [heading]="endorsementRequest.recipientEmail">
+              class="endorsement-card">
+              <ui-card *ngIf="!endorsementRequest.actionable" icon="person_pin">
+                <p uiCardContent>{{endorsementRequest.recipientEmail}}</p>
               </ui-card>
             </div>
           </div>

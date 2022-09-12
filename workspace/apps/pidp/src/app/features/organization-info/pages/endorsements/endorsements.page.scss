@@ -8,8 +8,24 @@
   height: 25rem;
   border: 1px solid palette.theme-palette(grey);
   border-radius: 3px;
-}
+  overflow: auto;
 
-.tab-view .tab-content {
-  padding: 16px;
+  .tab-content {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding: 16px;
+    gap: 10px 20px; /* row-gap column gap */
+
+    .endorsement-card {
+      min-width: 260px;
+      min-height: 100px;
+    }
+  }
+
+  @include media-breakpoint-down(lg) {
+    .tab-content {
+      flex-direction: column;
+    }
+  }
 }
