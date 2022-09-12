@@ -29,34 +29,8 @@ public class PartyDelete
 
         public async Task HandleAsync(Command command)
         {
-            var cardLastNames = new[]
-            {
-                "ONE",
-                "TWO",
-                "THREE",
-                "FOUR",
-                "FIVE",
-                "SIX",
-                "SEVEN",
-                "EIGHT",
-                "NINE",
-                "TEN",
-                "ELEVEN",
-                "TWELVE",
-                "THIRTEEN",
-                "FOURTEEN",
-                "FIFTEEN",
-                "SIXTEEN",
-                "SEVENTEEN",
-                "EIGHTEEN",
-                "NINETEEN",
-                "TWENTY"
-            };
-
             var parties = await this.context.Parties
                 .Include(party => party.AccessRequests)
-                .Where(party => party.FirstName == "PIDP"
-                    && cardLastNames.Contains(party.LastName))
                 .ToListAsync();
 
             if (!parties.Any())
