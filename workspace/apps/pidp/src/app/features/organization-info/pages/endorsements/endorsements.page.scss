@@ -1,6 +1,12 @@
+@use '@angular/material' as mat;
+@use 'material/material-variables' as var;
+
+@use 'palette' as palette;
+@import 'bootstrap/bootstrap-imports';
+
 .tab-view {
   height: 25rem;
-  border: 1px solid rgb(216, 211, 211);
+  border: 1px solid palette.theme-palette(grey);
   border-radius: 3px;
 }
 
