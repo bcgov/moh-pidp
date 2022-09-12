@@ -10,6 +10,8 @@ global:
     tag: latest
 
 replicaCount: 1
+aspnetcore:
+  environment: Staging
 
 image:
   repository: pidp-webapi
