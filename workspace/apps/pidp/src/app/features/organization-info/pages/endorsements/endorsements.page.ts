@@ -31,7 +31,8 @@ export class EndorsementsPage
   public title: string;
   public formState: EndorsementsFormState;
   public completed: boolean | null;
-  public endorsementRequests$!: Observable<EndorsementRequest[]>;
+  public actionableEndorsementRequests$!: Observable<EndorsementRequest[]>;
+  public nonActionableEndorsementRequests$!: Observable<EndorsementRequest[]>;
   public endorsements$!: Observable<Endorsement[]>;
 
   public constructor(
@@ -62,16 +63,15 @@ export class EndorsementsPage
       .pipe(
         switchMap(
           () =>
-            (this.endorsementRequests$ = this.getEndorsementRequests(
-              this.partyService.partyId
-            ))
+            (this.actionableEndorsementRequests$ =
+              this.getActionableEndorsementRequests(this.partyService.partyId))
         )
       )
       .subscribe();
   }
 
   public onCancel(requestId: number): void {
-    this.endorsementRequests$ = this.resource
+    this.actionableEndorsementRequests$ = this.resource
       .declineEndorsementRequest(this.partyService.partyId, requestId)
       .pipe(
         switchMap(() =>
@@ -127,7 +127,10 @@ export class EndorsementsPage
       })
     );
 
-    this.endorsementRequests$ = this.getEndorsementRequests(partyId);
+    this.actionableEndorsementRequests$ =
+      this.getActionableEndorsementRequests(partyId);
+    this.nonActionableEndorsementRequests$ =
+      this.getNonActionableEndorsementRequests(partyId);
   }
 
   protected performSubmission(): NoContent {
@@ -141,20 +144,42 @@ export class EndorsementsPage
   protected afterSubmitIsSuccessful(): void {
     this.formState.form.reset();
     this.formState.form.clearValidators();
-    this.endorsementRequests$ = this.getEndorsementRequests(
+    this.actionableEndorsementRequests$ = this.getActionableEndorsementRequests(
       this.partyService.partyId
     );
+    this.nonActionableEndorsementRequests$ =
+      this.getNonActionableEndorsementRequests(this.partyService.partyId);
   }
 
   private navigateToRoot(): void {
     this.router.navigate([this.route.snapshot.data.routes.root]);
   }
 
-  private getEndorsementRequests(
+  private getActionableEndorsementRequests(
     partyId: number
   ): Observable<EndorsementRequest[]> {
     return this.resource.getEndorsementRequests(partyId).pipe(
       map((response: EndorsementRequest[] | null) => response ?? []),
+      map((response: EndorsementRequest[]) =>
+        response.filter((res) => res.actionable === true)
+      ),
+      catchError((error: HttpErrorResponse) => {
+        if (error.status === HttpStatusCode.NotFound) {
+          this.navigateToRoot();
+        }
+        return of([]);
+      })
+    );
+  }
+
+  private getNonActionableEndorsementRequests(
+    partyId: number
+  ): Observable<EndorsementRequest[]> {
+    return this.resource.getEndorsementRequests(partyId).pipe(
+      map((response: EndorsementRequest[] | null) => response ?? []),
+      map((response: EndorsementRequest[]) =>
+        response.filter((res) => res.actionable === false)
+      ),
       catchError((error: HttpErrorResponse) => {
         if (error.status === HttpStatusCode.NotFound) {
           this.navigateToRoot();

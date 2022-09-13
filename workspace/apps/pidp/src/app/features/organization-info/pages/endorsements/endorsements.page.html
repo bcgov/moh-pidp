@@ -47,10 +47,9 @@
         <ng-template matTabContent>
           <div class="tab-content">
             <div
-              *ngFor="let endorsementRequest of endorsementRequests$ | async"
+              *ngFor="let endorsementRequest of actionableEndorsementRequests$ | async"
               class="endorsement-card">
               <ui-card
-                *ngIf="endorsementRequest.actionable"
                 icon="person_pin"
                 [heading]="endorsementRequest.partyName ?? ''">
                 <div class="actions" uiCardActions>
@@ -84,9 +83,9 @@
         <ng-template matTabContent>
           <div class="tab-content">
             <div
-              *ngFor="let endorsementRequest of endorsementRequests$ | async"
+              *ngFor="let endorsementRequest of nonActionableEndorsementRequests$ | async"
               class="endorsement-card">
-              <ui-card *ngIf="!endorsementRequest.actionable" icon="person_pin">
+              <ui-card icon="person_pin">
                 <p uiCardContent>{{endorsementRequest.recipientEmail}}</p>
               </ui-card>
             </div>
