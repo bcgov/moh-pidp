@@ -46,6 +46,7 @@ export class MsTeamsFormState extends AbstractFormState<MsTeamsClinicInfo> {
       clinicAddress: this.formUtilsService.buildAddressForm({
         areRequired: true,
       }),
+      clinicMembers: [[], [Validators.required]],
     });
   }
 }
