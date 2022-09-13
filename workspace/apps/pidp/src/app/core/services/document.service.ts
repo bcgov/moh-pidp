@@ -158,6 +158,24 @@ export class DocumentService {
       of this personal information, contact <a href="mailto:${this.config.emails.uciSupport}">${this.config.emails.uciSupport}</a>.
     `;
   }
+
+  public getMsTeamsAgreementPageCount(): number {
+    return 3;
+  }
+
+  public getMsTeamsAgreement(page: number): string {
+    switch (page) {
+      case 1:
+        return this.getMsTeamsDeclarationAgreement();
+      case 2:
+        return this.getMsTeamsDetailsAgreement();
+      case 3:
+        return this.getMsTeamsITSecurityAgreement();
+      default:
+        return '';
+    }
+  }
+
   public getMsTeamsDeclarationAgreement(): string {
     return `
       Private Practice Access to FH Secure Messaging via MS Teams Privacy and Security Declaration<br><br>
@@ -257,52 +275,52 @@ export class DocumentService {
 
   public getMsTeamsITSecurityAgreement(): string {
     return `
-    Private Practice Clinic IT Security Checklist<br><br>
-    <strong>There are a number of basic technology requirements that need to be in place to safeguard patient information within your practice.</strong>
-    The checklist below details the minimum clinic IT security requirements defined by FHA and the Ministry of Health for protecting your clinic from
-    local threats.<br><br>
-    Education, resources and supports on Clinic Privacy and Security are available via the
-    <a href="${this.config.urls.doctorsTechnologyOffice}" target="_blank" rel="noopener noreferrer">Doctors Technology Office (DTO)</a>.<br><br>
-    <a href="mailto:${this.config.emails.doctorsTechnologyOfficeSupport}">${this.config.emails.doctorsTechnologyOfficeSupport}</a> or 604-638-5841<br><br>
-    <strong>Physical Access Control</strong><br><br>
-    <ul style="list-style-type:square">
-      <li>Clinic site is equipped with a monitored alarm system</li><br>
-      <li>Server/Network equipment is physically secured from public access</li><br>
-    </ul><br>
-    <strong>User Account</strong><br><br>
-    <ul style="list-style-type:square">
-      <li>Each user has a unique account and password to access systems within clinic's network</li><br>
-      <li>User accounts are not shared among multiple users</li><br>
-      <li>A separate user account is used for system administration</li><br>
-    </ul><br>
-    <strong>Password Management</strong><br><br>
-    <ul style="list-style-type:square">
-      <li>Minimum password length is 8 characters</li><br>
-      <li>Passwords contain characters from three of the following categories (Uppercase characters, Lowercase characters, Numerals,
-        Non-alphanumeric keyboard symbols)</li><br>
-      <li>Passwords are changed at a minimum semi-annually</li><br>
-    </ul><br>
-    <strong>WiFi Network</strong><br><br>
-    <ul style="list-style-type:square">
-      <li>SSID, WPA2/WPA3 and WiFi password settings are as per DTO Technical Bulletin</li><br>
-      <li>Guest WiFi access is completely isolated from the Clinic Lan/WiFi network</li><br>
-    </ul><br>
-    <strong>Anti-Virus Software</strong><br><br>
-    <ul style="list-style-type:square">
-      <li>Anti-virus software installed and enabled fro auto update (screenshot of configuration must be attached)</li><br>
-    </ul><br>
-    <strong>Operating System</strong><br><br>
-    <ul style="list-style-type:square">
-      <li>There are no legacy/end-of-support operating systems in use (e.g. Windows XP, MacOS older than the latest three versions)</li><br>
-      <li>The Operating System is enabled fro auto updates or manually patched at a minimum semi-annually</li><br>
-    </ul><br>
-    <strong>Application Patching</strong><br><br>
-    Where it doesn't conflict with my EMR's system requirements,
-    <ul style="list-style-type:square">
-      <li>Desktop software, e.g. MS Office / Other applications are patched at a minimum semi-annually</li><br>
-      <li>Browser plugin (Adobe Flash, PDF, Java) are patched at a minimum semi-annually</li><br>
-      <li>Such patching conflicts with my EMR system requirements</li><br>
-    </ul><br>
+      Private Practice Clinic IT Security Checklist<br><br>
+      <strong>There are a number of basic technology requirements that need to be in place to safeguard patient information within your practice.</strong>
+      The checklist below details the minimum clinic IT security requirements defined by FHA and the Ministry of Health for protecting your clinic from
+      local threats.<br><br>
+      Education, resources and supports on Clinic Privacy and Security are available via the
+      <a href="${this.config.urls.doctorsTechnologyOffice}" target="_blank" rel="noopener noreferrer">Doctors Technology Office (DTO)</a>.<br><br>
+      <a href="mailto:${this.config.emails.doctorsTechnologyOfficeSupport}">${this.config.emails.doctorsTechnologyOfficeSupport}</a> or 604-638-5841<br><br>
+      <strong>Physical Access Control</strong><br><br>
+      <ul style="list-style-type:square">
+        <li>Clinic site is equipped with a monitored alarm system</li><br>
+        <li>Server/Network equipment is physically secured from public access</li><br>
+      </ul><br>
+      <strong>User Account</strong><br><br>
+      <ul style="list-style-type:square">
+        <li>Each user has a unique account and password to access systems within clinic's network</li><br>
+        <li>User accounts are not shared among multiple users</li><br>
+        <li>A separate user account is used for system administration</li><br>
+      </ul><br>
+      <strong>Password Management</strong><br><br>
+      <ul style="list-style-type:square">
+        <li>Minimum password length is 8 characters</li><br>
+        <li>Passwords contain characters from three of the following categories (Uppercase characters, Lowercase characters, Numerals,
+          Non-alphanumeric keyboard symbols)</li><br>
+        <li>Passwords are changed at a minimum semi-annually</li><br>
+      </ul><br>
+      <strong>WiFi Network</strong><br><br>
+      <ul style="list-style-type:square">
+        <li>SSID, WPA2/WPA3 and WiFi password settings are as per DTO Technical Bulletin</li><br>
+        <li>Guest WiFi access is completely isolated from the Clinic Lan/WiFi network</li><br>
+      </ul><br>
+      <strong>Anti-Virus Software</strong><br><br>
+      <ul style="list-style-type:square">
+        <li>Anti-virus software installed and enabled fro auto update (screenshot of configuration must be attached)</li><br>
+      </ul><br>
+      <strong>Operating System</strong><br><br>
+      <ul style="list-style-type:square">
+        <li>There are no legacy/end-of-support operating systems in use (e.g. Windows XP, MacOS older than the latest three versions)</li><br>
+        <li>The Operating System is enabled fro auto updates or manually patched at a minimum semi-annually</li><br>
+      </ul><br>
+      <strong>Application Patching</strong><br><br>
+      Where it doesn't conflict with my EMR's system requirements,
+      <ul style="list-style-type:square">
+        <li>Desktop software, e.g. MS Office / Other applications are patched at a minimum semi-annually</li><br>
+        <li>Browser plugin (Adobe Flash, PDF, Java) are patched at a minimum semi-annually</li><br>
+        <li>Such patching conflicts with my EMR system requirements</li><br>
+      </ul><br>
     `;
   }
 
