@@ -32,20 +32,21 @@
     <ng-container [ngSwitch]="currentPage">
       <ng-container *ngSwitchCase="0">
         <ui-page-section>
-          <p [innerHtml]="declarationAgreement | safe: 'html'"></p>
+          <p>FORM FIELDS</p>
         </ui-page-section>
       </ng-container>
-      <ng-container *ngSwitchCase="1">
+
+      <ng-container *ngSwitchDefault>
         <ui-page-section>
-          <p [innerHtml]="detailsAgreement | safe: 'html'"></p>
+          <p [innerHtml]="getAgreementText(currentPage) | safe: 'html'"></p>
         </ui-page-section>
       </ng-container>
-      <ng-container *ngSwitchCase="2">
+
+      <ng-container *ngSwitchCase="submissionPage">
         <ui-page-section>
-          <p [innerHtml]="itSecurityAgreement | safe: 'html'"></p>
+          <p>FORM FIELDS2</p>
         </ui-page-section>
       </ng-container>
-      <ng-container *ngSwitchDefault></ng-container>
     </ng-container>
   </ng-template>
 
@@ -56,7 +57,7 @@
       type="button"
       color="primary"
       (click)="onBack()">
-      {{ completed ? 'Back Home' : (currentPage < 1) ? 'Cancel Back Home' :
+      {{ completed ? 'Back Home' : currentPage === 0 ? 'Cancel Back Home' :
       'Back' }}
     </button>
 
@@ -66,8 +67,8 @@
       uiPageFooterAction
       type="button"
       color="primary"
-      (click)="onRequestAccess()">
-      I accept
+      (click)="onNext()">
+      {{ getNextButtonText(currentPage) }}
     </button>
   </ui-page-footer>
 </ui-page>

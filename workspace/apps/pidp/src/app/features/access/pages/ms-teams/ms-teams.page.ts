@@ -20,12 +20,10 @@ import { msTeamsSupportEmail } from './ms-teams.constants';
 })
 export class MsTeamsPage implements OnInit {
   public completed: boolean | null;
-  public declarationAgreement: string;
-  public detailsAgreement: string;
-  public itSecurityAgreement: string;
   public msTeamsSupportEmail: string;
   public currentPage: number;
   public enrolmentError: boolean;
+  public submissionPage: number;
 
   public constructor(
     private route: ActivatedRoute,
@@ -34,33 +32,27 @@ export class MsTeamsPage implements OnInit {
     private resource: MsTeamsResource,
     private logger: LoggerService,
     private utilsService: UtilsService,
-    documentService: DocumentService
+    private documentService: DocumentService
   ) {
     const routeData = this.route.snapshot.data;
     this.completed = routeData.msTeamsStatusCode === StatusCode.COMPLETED;
-    this.declarationAgreement =
-      documentService.getMsTeamsDeclarationAgreement();
-    this.detailsAgreement = documentService.getMsTeamsDetailsAgreement();
-    this.itSecurityAgreement = documentService.getMsTeamsITSecurityAgreement();
     this.msTeamsSupportEmail = msTeamsSupportEmail;
     this.currentPage = 0;
     this.enrolmentError = false;
+    this.submissionPage = documentService.getMsTeamsAgreementPageCount() + 1;
   }
 
   public onBack(): void {
-    if (this.currentPage > 0) {
+    if (this.currentPage === 0) {
+      this.navigateToRoot();
+    } else {
       this.utilsService.scrollTop('.mat-sidenav-content');
       this.currentPage--;
-    } else {
-      this.navigateToRoot();
     }
   }
 
-  public onRequestAccess(): void {
-    if (this.currentPage < 2) {
-      this.utilsService.scrollTop('.mat-sidenav-content');
-      this.currentPage++;
-    } else {
+  public onNext(): void {
+    if (this.currentPage === this.submissionPage) {
       this.resource
         .requestAccess(this.partyService.partyId)
         .pipe(
@@ -75,6 +67,9 @@ export class MsTeamsPage implements OnInit {
           })
         )
         .subscribe();
+    } else {
+      this.utilsService.scrollTop('.mat-sidenav-content');
+      this.currentPage++;
     }
   }
 
@@ -89,6 +84,20 @@ export class MsTeamsPage implements OnInit {
     if (this.completed === null) {
       this.logger.error('No status code was provided');
       return this.navigateToRoot();
+    }
+  }
+
+  public getAgreementText(page: number): string {
+    return this.documentService.getMsTeamsAgreement(page);
+  }
+
+  public getNextButtonText(page: number): string {
+    switch (page) {
+      case 0:
+      case this.submissionPage:
+        return 'Next';
+      default:
+        return 'I Agree';
     }
   }
 
