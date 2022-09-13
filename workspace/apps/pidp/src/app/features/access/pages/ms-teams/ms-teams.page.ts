@@ -12,6 +12,7 @@ import { StatusCode } from '@app/features/portal/enums/status-code.enum';
 
 import { MsTeamsResource } from './ms-teams-resource.service';
 import { msTeamsSupportEmail } from './ms-teams.constants';
+import { MsTeamsClinicInfo } from './ms-teams.model';
 
 @Component({
   selector: 'app-ms-teams',
@@ -54,7 +55,7 @@ export class MsTeamsPage implements OnInit {
   public onNext(): void {
     if (this.currentPage === this.submissionPage) {
       this.resource
-        .requestAccess(this.partyService.partyId)
+        .requestAccess(this.partyService.partyId, {} as MsTeamsClinicInfo)
         .pipe(
           tap(() => (this.completed = true)),
           catchError((error: HttpErrorResponse) => {
