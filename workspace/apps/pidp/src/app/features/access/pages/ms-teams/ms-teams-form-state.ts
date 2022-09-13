@@ -2,10 +2,15 @@ import { FormBuilder, FormControl, Validators } from '@angular/forms';
 
 import { AbstractFormState } from '@bcgov/shared/ui';
 
+import { FormUtilsService } from '@app/core/services/form-utils.service';
+
 import { MsTeamsClinicInfo } from './ms-teams.model';
 
 export class MsTeamsFormState extends AbstractFormState<MsTeamsClinicInfo> {
-  public constructor(private fb: FormBuilder) {
+  public constructor(
+    private fb: FormBuilder,
+    private formUtilsService: FormUtilsService
+  ) {
     super();
 
     this.buildForm();
@@ -36,6 +41,11 @@ export class MsTeamsFormState extends AbstractFormState<MsTeamsClinicInfo> {
   }
 
   public buildForm(): void {
-    this.formInstance = this.fb.group({});
+    this.formInstance = this.fb.group({
+      clinicName: [null, [Validators.required]],
+      clinicAddress: this.formUtilsService.buildAddressForm({
+        areRequired: true,
+      }),
+    });
   }
 }
