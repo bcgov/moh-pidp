@@ -1,4 +1,4 @@
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, Validators } from '@angular/forms';
 
 import { AbstractFormState } from '@bcgov/shared/ui';
 
@@ -16,13 +16,17 @@ export class MsTeamsFormState extends AbstractFormState<MsTeamsClinicInfo> {
     this.buildForm();
   }
 
-  // public get ldapUsername(): FormControl {
-  //   return this.formInstance.get('ldapUsername') as FormControl;
-  // }
+  public get clinicName(): FormControl {
+    return this.formInstance.get('clinicName') as FormControl;
+  }
 
-  // public get ldapPassword(): FormControl {
-  //   return this.formInstance.get('ldapPassword') as FormControl;
-  // }
+  public get clinicAddress(): FormControl {
+    return this.formInstance.get('clinicAddress') as FormControl;
+  }
+
+  public get clinicMembers(): FormControl {
+    return this.formInstance.get('clinicMembers') as FormControl;
+  }
 
   public get json(): MsTeamsClinicInfo | undefined {
     if (!this.formInstance) {
