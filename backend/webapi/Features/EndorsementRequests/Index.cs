@@ -44,6 +44,7 @@ public class Index
             return await this.context.EndorsementRequests
                 .Where(request => request.RequestingPartyId == query.PartyId
                     || request.ReceivingPartyId == query.PartyId)
+                .Where(request => request.Status != EndorsementRequestStatus.Completed) // Endorsement Requests that successfully complete are now full Endorsements
                 .Select(request => new
                 {
                     PartyIsRequester = request.RequestingPartyId == query.PartyId,
