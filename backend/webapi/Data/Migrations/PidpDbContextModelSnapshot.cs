@@ -1231,7 +1231,8 @@ namespace Pidp.Data.Migrations
                 {
                     b.HasOne("Pidp.Models.Party", "ReceivingParty")
                         .WithMany()
-                        .HasForeignKey("ReceivingPartyId");
+                        .HasForeignKey("ReceivingPartyId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Pidp.Models.Party", "RequestingParty")
                         .WithMany()

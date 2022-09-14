@@ -62,8 +62,8 @@ namespace Pidp.Data.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    CreatedOn = table.Column<Instant>(type: "timestamp with time zone", nullable: false),
                     Active = table.Column<bool>(type: "boolean", nullable: false),
+                    CreatedOn = table.Column<Instant>(type: "timestamp with time zone", nullable: false),
                     Created = table.Column<Instant>(type: "timestamp with time zone", nullable: false),
                     Modified = table.Column<Instant>(type: "timestamp with time zone", nullable: false)
                 },
@@ -115,7 +115,8 @@ namespace Pidp.Data.Migrations
                 table: "EndorsementRequest",
                 column: "ReceivingPartyId",
                 principalTable: "Party",
-                principalColumn: "Id");
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

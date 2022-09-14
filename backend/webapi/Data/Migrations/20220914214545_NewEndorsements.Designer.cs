@@ -13,7 +13,7 @@ using Pidp.Data;
 namespace Pidp.Data.Migrations
 {
     [DbContext(typeof(PidpDbContext))]
-    [Migration("20220825233825_NewEndorsements")]
+    [Migration("20220914214545_NewEndorsements")]
     partial class NewEndorsements
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -1233,7 +1233,8 @@ namespace Pidp.Data.Migrations
                 {
                     b.HasOne("Pidp.Models.Party", "ReceivingParty")
                         .WithMany()
-                        .HasForeignKey("ReceivingPartyId");
+                        .HasForeignKey("ReceivingPartyId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Pidp.Models.Party", "RequestingParty")
                         .WithMany()
