@@ -92,24 +92,22 @@ export class MsTeamsPage
   }
 
   protected performSubmission(): NoContent {
-    // this.resource
-    //   .requestAccess(this.partyService.partyId, {} as MsTeamsClinicInfo)
-    //   .pipe(
-    //     tap(() => (this.completed = true)),
-    //     catchError((error: HttpErrorResponse) => {
-    //       if (error.status === HttpStatusCode.BadRequest) {
-    //         this.completed = false;
-    //         this.enrolmentError = true;
-    //         return of(noop());
-    //       }
-    //       return of(noop());
-    //     })
-    //   )
-    //   .subscribe();
     const partyId = this.partyService.partyId;
 
     return partyId && this.formState.json
-      ? this.resource.requestAccess(partyId, this.formState.json)
+      ? this.resource
+          .requestAccess(this.partyService.partyId, {} as MsTeamsClinicInfo)
+          .pipe(
+            tap(() => (this.completed = true)),
+            catchError((error: HttpErrorResponse) => {
+              if (error.status === HttpStatusCode.BadRequest) {
+                this.completed = false;
+                this.enrolmentError = true;
+                return of(noop());
+              }
+              return of(noop());
+            })
+          )
       : EMPTY;
   }
 
