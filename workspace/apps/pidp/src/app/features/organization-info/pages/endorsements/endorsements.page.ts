@@ -71,37 +71,30 @@ export class EndorsementsPage
   }
 
   public onCancel(requestId: number): void {
-    this.actionableEndorsementRequests$ = this.resource
+    this.resource
       .declineEndorsementRequest(this.partyService.partyId, requestId)
       .pipe(
-        switchMap(() =>
-          this.resource.getEndorsementRequests(this.partyService.partyId)
-        ),
-        map((response: EndorsementRequest[] | null) => response ?? []),
-        catchError((error: HttpErrorResponse) => {
-          if (error.status === HttpStatusCode.NotFound) {
-            this.navigateToRoot();
-          }
-          return of([]);
-        })
-      );
+        switchMap(
+          () =>
+            (this.actionableEndorsementRequests$ =
+              this.getActionableEndorsementRequests(this.partyService.partyId))
+        )
+      )
+      .subscribe();
   }
 
   public onCancelEndorsement(endorsementId: number): void {
-    this.endorsements$ = this.resource
+    this.resource
       .cancelEndorsement(this.partyService.partyId, endorsementId)
       .pipe(
-        switchMap(() =>
-          this.resource.getEndorsements(this.partyService.partyId)
-        ),
-        map((response: Endorsement[] | null) => response ?? []),
-        catchError((error: HttpErrorResponse) => {
-          if (error.status === HttpStatusCode.NotFound) {
-            this.navigateToRoot();
-          }
-          return of([]);
-        })
-      );
+        switchMap(
+          () =>
+            (this.endorsements$ = this.getEndorsements(
+              this.partyService.partyId
+            ))
+        )
+      )
+      .subscribe();
   }
 
   public ngOnInit(): void {
@@ -117,18 +110,11 @@ export class EndorsementsPage
       return this.navigateToRoot();
     }
 
-    this.endorsements$ = this.resource.getEndorsements(partyId).pipe(
-      map((response: Endorsement[] | null) => response ?? []),
-      catchError((error: HttpErrorResponse) => {
-        if (error.status === HttpStatusCode.NotFound) {
-          this.navigateToRoot();
-        }
-        return of([]);
-      })
-    );
+    this.endorsements$ = this.getEndorsements(partyId);
 
     this.actionableEndorsementRequests$ =
       this.getActionableEndorsementRequests(partyId);
+
     this.nonActionableEndorsementRequests$ =
       this.getNonActionableEndorsementRequests(partyId);
   }
@@ -144,15 +130,25 @@ export class EndorsementsPage
   protected afterSubmitIsSuccessful(): void {
     this.formState.form.reset();
     this.formState.form.clearValidators();
-    this.actionableEndorsementRequests$ = this.getActionableEndorsementRequests(
-      this.partyService.partyId
-    );
+
     this.nonActionableEndorsementRequests$ =
       this.getNonActionableEndorsementRequests(this.partyService.partyId);
   }
 
   private navigateToRoot(): void {
     this.router.navigate([this.route.snapshot.data.routes.root]);
+  }
+
+  private getEndorsements(partyId: number): Observable<Endorsement[]> {
+    return this.resource.getEndorsements(partyId).pipe(
+      map((response: Endorsement[] | null) => response ?? []),
+      catchError((error: HttpErrorResponse) => {
+        if (error.status === HttpStatusCode.NotFound) {
+          this.navigateToRoot();
+        }
+        return of([]);
+      })
+    );
   }
 
   private getActionableEndorsementRequests(
