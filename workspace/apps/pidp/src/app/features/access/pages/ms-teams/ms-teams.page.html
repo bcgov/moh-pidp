@@ -73,13 +73,21 @@
     </button>
 
     <button
-      *ngIf="!completed"
+      *ngIf="!completed && currentPage !== submissionPage"
       mat-flat-button
       uiPageFooterAction
       type="button"
       color="primary"
       (click)="onNext()">
       {{ getNextButtonText(currentPage) }}
+    </button>
+    <button
+      *ngIf="!completed && currentPage === submissionPage"
+      mat-flat-button
+      uiPageFooterAction
+      type="submit"
+      color="primary">
+      Next
     </button>
   </ui-page-footer>
 </ui-page>
