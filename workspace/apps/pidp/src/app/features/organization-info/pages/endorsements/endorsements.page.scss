@@ -13,6 +13,7 @@
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
+    align-content: flex-start;
     padding: 16px;
     gap: 10px 20px; /* row-gap column gap */
     height: 33.8rem;
