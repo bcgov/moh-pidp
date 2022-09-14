@@ -96,7 +96,7 @@ export class MsTeamsPage
 
     return partyId && this.formState.json
       ? this.resource
-          .requestAccess(this.partyService.partyId, {} as MsTeamsClinicInfo)
+          .requestAccess(this.partyService.partyId, this.formState.json)
           .pipe(
             tap(() => (this.completed = true)),
             catchError((error: HttpErrorResponse) => {
