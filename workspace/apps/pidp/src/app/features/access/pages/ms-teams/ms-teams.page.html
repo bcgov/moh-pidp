@@ -1,4 +1,4 @@
-<ui-page>
+<ui-page [form]="formState.form" (submitted)="onSubmit()">
   <ui-page-section>
     <ui-page-section-subheader
       icon="assignment"
@@ -30,10 +30,21 @@
 
   <ng-template #notCompleted>
     <ng-container [ngSwitch]="currentPage">
-      <ng-container *ngSwitchCase="0">
-        <ui-page-section>
-          <p>FORM FIELDS</p>
-        </ui-page-section>
+      <ng-container *ngSwitchCase="0" [formGroup]="formState.form">
+        <!-- <ui-page-section>
+          <ui-page-section-subheader heading="Access administrator email">
+            <ng-container uiPageSectionSubheaderDesc>
+              Enter your access administrator's email.
+            </ng-container>
+          </ui-page-section-subheader>
+          <mat-form-field class="w-100">
+            <input
+              matInput
+              placeholder="Access administrator email"
+              formControlName="email" />
+            <mat-error>Required</mat-error>
+          </mat-form-field>
+        </ui-page-section> -->
       </ng-container>
 
       <ng-container *ngSwitchDefault>
