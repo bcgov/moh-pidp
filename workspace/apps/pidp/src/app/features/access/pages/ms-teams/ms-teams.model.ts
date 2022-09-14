@@ -1,6 +1,6 @@
 export interface MsTeamsClinicInfo {
   clinicName: string;
-  address: ClinicAddress;
+  clinicAddress: ClinicAddress;
   clinicMembers: ClinicMember[];
 }
 
