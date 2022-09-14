@@ -85,12 +85,12 @@
             <div
               *ngFor="let endorsementRequest of nonActionableEndorsementRequests$ | async"
               class="endorsement-card">
-              <ui-card icon="person_pin">
+              <ui-card
+                icon="person_pin"
+                [heading]="endorsementRequest.partyName ? endorsementRequest.partyName : 'Name Not Available'">
                 <p uiCardContent>
-                  {{endorsementRequest.partyName ? endorsementRequest.partyName
-                  : "Name Not Available" }}
+                  {{ 'Sent To: '+ endorsementRequest.recipientEmail}}
                 </p>
-                <p uiCardContent>{{endorsementRequest.recipientEmail}}</p>
               </ui-card>
             </div>
           </div>
