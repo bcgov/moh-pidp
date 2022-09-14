@@ -79,7 +79,7 @@
       type="button"
       color="primary"
       (click)="onNext()">
-      {{ getNextButtonText(currentPage) }}
+      {{ currentPage === 0 ? 'Next' : 'I Agree'}}
     </button>
     <button
       *ngIf="!completed && currentPage === submissionPage"

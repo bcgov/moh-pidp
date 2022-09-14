@@ -69,25 +69,8 @@ export class MsTeamsPage
   }
 
   public onNext(): void {
-    if (this.currentPage === this.submissionPage) {
-      this.resource
-        .requestAccess(this.partyService.partyId, {} as MsTeamsClinicInfo)
-        .pipe(
-          tap(() => (this.completed = true)),
-          catchError((error: HttpErrorResponse) => {
-            if (error.status === HttpStatusCode.BadRequest) {
-              this.completed = false;
-              this.enrolmentError = true;
-              return of(noop());
-            }
-            return of(noop());
-          })
-        )
-        .subscribe();
-    } else {
-      this.utilsService.scrollTop('.mat-sidenav-content');
-      this.currentPage++;
-    }
+    this.utilsService.scrollTop('.mat-sidenav-content');
+    this.currentPage++;
   }
 
   public ngOnInit(): void {
@@ -108,17 +91,21 @@ export class MsTeamsPage
     return this.documentService.getMsTeamsAgreement(page);
   }
 
-  public getNextButtonText(page: number): string {
-    switch (page) {
-      case 0:
-      case this.submissionPage:
-        return 'Next';
-      default:
-        return 'I Agree';
-    }
-  }
-
   protected performSubmission(): NoContent {
+    // this.resource
+    //   .requestAccess(this.partyService.partyId, {} as MsTeamsClinicInfo)
+    //   .pipe(
+    //     tap(() => (this.completed = true)),
+    //     catchError((error: HttpErrorResponse) => {
+    //       if (error.status === HttpStatusCode.BadRequest) {
+    //         this.completed = false;
+    //         this.enrolmentError = true;
+    //         return of(noop());
+    //       }
+    //       return of(noop());
+    //     })
+    //   )
+    //   .subscribe();
     const partyId = this.partyService.partyId;
 
     return partyId && this.formState.json
