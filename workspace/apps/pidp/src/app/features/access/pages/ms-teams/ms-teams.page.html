@@ -31,20 +31,29 @@
   <ng-template #notCompleted>
     <ng-container [ngSwitch]="currentPage">
       <ng-container *ngSwitchCase="0" [formGroup]="formState.form">
-        <!-- <ui-page-section>
-          <ui-page-section-subheader heading="Access administrator email">
+        <ui-page-section>
+          <ui-page-section-subheader heading="Clinic Name">
             <ng-container uiPageSectionSubheaderDesc>
-              Enter your access administrator's email.
+              Enter your clinic's name.
             </ng-container>
           </ui-page-section-subheader>
           <mat-form-field class="w-100">
             <input
               matInput
-              placeholder="Access administrator email"
-              formControlName="email" />
+              placeholder="Clinic name"
+              formControlName="clinicName" />
             <mat-error>Required</mat-error>
           </mat-form-field>
-        </ui-page-section> -->
+        </ui-page-section>
+        <ui-page-section>
+          <ui-page-section-subheader heading="Facility Address">
+            <ng-container uiPageSectionSubheaderDesc>
+              Provide your work address.
+            </ng-container>
+          </ui-page-section-subheader>
+
+          <app-address-form [form]="formState.clinicAddress"></app-address-form>
+        </ui-page-section>
       </ng-container>
 
       <ng-container *ngSwitchDefault>

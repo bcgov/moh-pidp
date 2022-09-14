@@ -19,7 +19,6 @@ import { StatusCode } from '@app/features/portal/enums/status-code.enum';
 import { MsTeamsFormState } from './ms-teams-form-state';
 import { MsTeamsResource } from './ms-teams-resource.service';
 import { msTeamsSupportEmail } from './ms-teams.constants';
-import { MsTeamsClinicInfo } from './ms-teams.model';
 
 @Component({
   selector: 'app-ms-teams',

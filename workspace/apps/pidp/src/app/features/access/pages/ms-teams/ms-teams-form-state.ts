@@ -1,4 +1,9 @@
-import { FormBuilder, FormControl, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 
 import { AbstractFormState } from '@bcgov/shared/ui';
 
@@ -20,8 +25,8 @@ export class MsTeamsFormState extends AbstractFormState<MsTeamsClinicInfo> {
     return this.formInstance.get('clinicName') as FormControl;
   }
 
-  public get clinicAddress(): FormControl {
-    return this.formInstance.get('clinicAddress') as FormControl;
+  public get clinicAddress(): FormGroup {
+    return this.formInstance.get('clinicAddress') as FormGroup;
   }
 
   public get clinicMembers(): FormControl {
