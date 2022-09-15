@@ -13,24 +13,19 @@ import { PortalSectionAction } from '../portal-section-action.model';
 import { PortalSectionKey } from '../portal-section-key.type';
 import { IPortalSection } from '../portal-section.model';
 
-export class EndorsementPortalSection implements IPortalSection {
+export class EndorsementsPortalSection implements IPortalSection {
   public readonly key: PortalSectionKey;
   public heading: string;
   public description: string;
-  private isRegulated: boolean;
 
   public constructor(
     private profileStatus: ProfileStatus,
     private router: Router
   ) {
-    this.key = 'endorsement';
-    this.heading = 'Endorsement';
-    const { statusCode, hasCpn } =
-      this.profileStatus.status.collegeCertification;
-    this.isRegulated = statusCode === StatusCode.COMPLETED && hasCpn;
-    this.description = this.isRegulated
-      ? 'View and make changes to your care team'
-      : 'Request endorsement from the licenced practitioners you work with to gain access to systems.';
+    this.key = 'endorsements';
+    this.heading = 'Endorsements';
+    this.description =
+      'View and make changes to your care team. Request endorsement from the licenced practitioners you work with to gain access to systems.';
   }
 
   public get hint(): string {
@@ -43,15 +38,15 @@ export class EndorsementPortalSection implements IPortalSection {
    */
   public get action(): PortalSectionAction {
     return {
-      label: this.isRegulated ? 'View' : 'Request',
+      label: 'View',
       route: OrganizationInfoRoutes.routePath(
-        this.isRegulated
-          ? OrganizationInfoRoutes.ENDORSEMENT_REQUESTS_RECEIVED
-          : OrganizationInfoRoutes.ENDORSEMENT_REQUEST
+        OrganizationInfoRoutes.ENDORSEMENTS
       ),
       disabled: !(
         this.profileStatus.status.demographics.statusCode ===
-        StatusCode.COMPLETED
+          StatusCode.COMPLETED &&
+        this.profileStatus.status.collegeCertification.statusCode ===
+          StatusCode.COMPLETED
       ),
     };
   }
@@ -71,6 +66,6 @@ export class EndorsementPortalSection implements IPortalSection {
 
   private getStatusCode(): StatusCode {
     // TODO remove null check once API exists
-    return this.profileStatus.status.endorsement?.statusCode;
+    return this.profileStatus.status.endorsements?.statusCode;
   }
 }

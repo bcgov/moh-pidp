@@ -7,6 +7,8 @@ using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
 
 using Pidp.Data;
+using Pidp.Models;
+using NodaTime;
 
 public class Receive
 {
@@ -29,37 +31,43 @@ public class Receive
 
     public class CommandHandler : ICommandHandler<Command, IDomainResult>
     {
+        private readonly IClock clock;
         private readonly ILogger logger;
         private readonly PidpDbContext context;
 
-        public CommandHandler(ILogger<CommandHandler> logger, PidpDbContext context)
+        public CommandHandler(
+            IClock clock,
+            ILogger<CommandHandler> logger,
+            PidpDbContext context)
         {
+            this.clock = clock;
             this.logger = logger;
             this.context = context;
         }
 
         public async Task<IDomainResult> HandleAsync(Command command)
         {
-            var receivedRequest = await this.context.EndorsementRequests
-                .Where(request => request.Token == command.Token)
-                .SingleOrDefaultAsync();
+            var endorsementRequest = await this.context.EndorsementRequests
+                .SingleOrDefaultAsync(request => request.Token == command.Token);
 
-            if (receivedRequest == null)
+            if (endorsementRequest == null)
             {
                 return DomainResult.NotFound();
             }
-            if (receivedRequest.RequestingPartyId == command.PartyId)
-            {
-                this.logger.LogSelfEndorsementAttempt(command.PartyId);
-                return DomainResult.Failed();
-            }
-            if (receivedRequest.EndorsingPartyId.HasValue)
+            if (endorsementRequest.Status != EndorsementRequestStatus.Created)
             {
                 // Already received
                 return DomainResult.Failed();
             }
+            if (endorsementRequest.RequestingPartyId == command.PartyId)
+            {
+                this.logger.LogSelfEndorsementAttempt(command.PartyId);
+                return DomainResult.Failed();
+            }
 
-            receivedRequest.EndorsingPartyId = command.PartyId;
+            endorsementRequest.ReceivingPartyId = command.PartyId;
+            endorsementRequest.Status = EndorsementRequestStatus.Received;
+            endorsementRequest.StatusDate = this.clock.GetCurrentInstant();
 
             await this.context.SaveChangesAsync();
 
@@ -70,6 +78,6 @@ public class Receive
 
 public static partial class EndorsementRequestReceiveLoggingExtensions
 {
-    [LoggerMessage(1, LogLevel.Warning, "Possible fraudulent behaviour: Party {partyId} attempted to endorse themselves.")]
+    [LoggerMessage(1, LogLevel.Warning, "Possible fraudulent behaviour: Party {partyId} received an Endorsement Request from themselves.")]
     public static partial void LogSelfEndorsementAttempt(this ILogger logger, int partyId);
 }

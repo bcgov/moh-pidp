@@ -1,5 +1,3 @@
-import { PartyLicenceDeclaration } from '@bcgov/shared/data-access';
-
 import { Section } from '../section.model';
 
 /**

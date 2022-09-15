@@ -2,24 +2,17 @@ namespace Pidp.Features.EndorsementRequests;
 
 using DomainResults.Common;
 using FluentValidation;
-using HybridModelBinding;
 using Microsoft.EntityFrameworkCore;
 using NodaTime;
-using System.Text.Json.Serialization;
 
 using Pidp.Data;
 
-public class Adjudicate
+public class Decline
 {
     public class Command : ICommand<IDomainResult>
     {
-        [JsonIgnore]
-        [HybridBindProperty(Source.Route)]
         public int PartyId { get; set; }
-        [JsonIgnore]
-        [HybridBindProperty(Source.Route)]
         public int EndorsementRequestId { get; set; }
-        public bool Approved { get; set; }
     }
 
     public class CommandValidator : AbstractValidator<Command>
@@ -45,20 +38,18 @@ public class Adjudicate
         public async Task<IDomainResult> HandleAsync(Command command)
         {
             var endorsementRequest = await this.context.EndorsementRequests
-                .SingleOrDefaultAsync(request => request.Id == command.EndorsementRequestId
-                    && request.EndorsingPartyId == command.PartyId);
+                .SingleOrDefaultAsync(request => request.Id == command.EndorsementRequestId);
 
             if (endorsementRequest == null)
             {
                 return DomainResult.NotFound();
             }
-            if (endorsementRequest.Approved.HasValue)
-            {
-                return DomainResult.Failed();
-            }
 
-            endorsementRequest.Approved = command.Approved;
-            endorsementRequest.AdjudicatedOn = this.clock.GetCurrentInstant();
+            var result = endorsementRequest.Handle(command, this.clock);
+            if (!result.IsSuccess)
+            {
+                return result;
+            }
 
             await this.context.SaveChangesAsync();
 

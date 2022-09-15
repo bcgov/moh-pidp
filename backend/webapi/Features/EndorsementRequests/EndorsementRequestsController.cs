@@ -33,16 +33,7 @@ public class EndorsementRequestsController : PidpControllerBase
         => await this.AuthorizePartyBeforeHandleAsync(command.PartyId, handler, command)
             .ToActionResult();
 
-    [HttpGet("received")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<List<ReceivedIndex.Model>>> GetReceivedEndorsementRequests([FromServices] IQueryHandler<ReceivedIndex.Query, List<ReceivedIndex.Model>> handler,
-                                                                                              [FromRoute] ReceivedIndex.Query query)
-        => await this.AuthorizePartyBeforeHandleAsync(query.PartyId, handler, query)
-            .ToActionResultOfT();
-
-    [HttpPost("received")]
+    [HttpPost("receive")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -51,12 +42,21 @@ public class EndorsementRequestsController : PidpControllerBase
         => await this.AuthorizePartyBeforeHandleAsync(command.PartyId, handler, command)
             .ToActionResult();
 
-    [HttpPut("received/{endorsementRequestId}/adjudicate")]
+    [HttpPost("{endorsementRequestId}/approve")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> AdjudicateEndorsementRequest([FromServices] ICommandHandler<Adjudicate.Command, IDomainResult> handler,
-                                                                  [FromHybrid] Adjudicate.Command command)
+    public async Task<IActionResult> ApproveEndorsementRequest([FromServices] ICommandHandler<Approve.Command, IDomainResult> handler,
+                                                               [FromRoute] Approve.Command command)
+        => await this.AuthorizePartyBeforeHandleAsync(command.PartyId, handler, command)
+            .ToActionResult();
+
+    [HttpPost("{endorsementRequestId}/decline")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> DeclineEndorsementRequest([FromServices] ICommandHandler<Decline.Command, IDomainResult> handler,
+                                                               [FromRoute] Decline.Command command)
         => await this.AuthorizePartyBeforeHandleAsync(command.PartyId, handler, command)
             .ToActionResult();
 }

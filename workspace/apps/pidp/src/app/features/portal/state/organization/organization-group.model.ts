@@ -11,7 +11,7 @@ export const organizationSectionKeys = [
   'organizationDetails',
   'facilityDetails',
   'administratorInfo',
-  'endorsement',
+  'endorsements',
 ] as const;
 
 /**
@@ -32,5 +32,5 @@ export interface OrganizationGroup extends IOrganizationGroup {
   organizationDetails: Section;
   facilityDetails: Section;
   administratorInfo: AdministratorInfoSection;
-  endorsement: Section;
+  endorsements: Section;
 }

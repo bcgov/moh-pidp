@@ -1,0 +1,142 @@
+<ui-page mode="large" [form]="formState.form" (submitted)="onSubmit()">
+  <ui-page-header icon="assignment">{{ title }}</ui-page-header>
+
+  <div class="col-6">
+    <ui-page-section>
+      <ui-page-subheader
+        >Here you can endorse people you have working relationships with and
+        invite them to the Provider identity Portal.
+      </ui-page-subheader>
+      <p>
+        Licenced health care providers can endorse unlicenced health care
+        professionals they work with. In the future, endorsements will allow you
+        to delegate access. Unlicenced health care providers can also send
+        endorsement requests to the licenced providers they work with.
+      </p>
+    </ui-page-section>
+  </div>
+  <div class="tab-view">
+    <mat-tab-group>
+      <mat-tab label="Your Working Relationships">
+        <ng-template matTabContent>
+          <div class="tab-content">
+            <div
+              *ngFor="let endorsement of endorsements$ | async"
+              class="endorsement-card">
+              <ui-card icon="person_pin" [heading]="endorsement.partyName">
+                <ng-container uiCardHint
+                  >{{ endorsement.createdOn | date }}</ng-container
+                >
+                <div class="actions" uiCardActions>
+                  <span>
+                    <button
+                      class="decline"
+                      mat-stroked-button
+                      type="button"
+                      (click)="onCancelEndorsement(endorsement.id)">
+                      Cancel
+                    </button>
+                  </span>
+                </div>
+              </ui-card>
+            </div>
+          </div>
+        </ng-template>
+      </mat-tab>
+      <mat-tab label="Pending Your Approval">
+        <ng-template matTabContent>
+          <div class="tab-content">
+            <div
+              *ngFor="let endorsementRequest of actionableEndorsementRequests$ | async"
+              class="endorsement-card">
+              <ui-card
+                icon="person_pin"
+                [heading]="endorsementRequest.partyName ?? ''">
+                <div class="actions" uiCardActions>
+                  <span>
+                    <button
+                      class="decline"
+                      mat-stroked-button
+                      type="button"
+                      (click)="onCancel(endorsementRequest.id)">
+                      Decline
+                    </button>
+                  </span>
+                  <ng-container>
+                    <span>
+                      <button
+                        class="accept"
+                        mat-stroked-button
+                        type="button"
+                        (click)="onApprove(endorsementRequest.id)">
+                        Approve
+                      </button>
+                    </span>
+                  </ng-container>
+                </div>
+              </ui-card>
+            </div>
+          </div>
+        </ng-template>
+      </mat-tab>
+      <mat-tab label="Pending and Cancelled Requests">
+        <ng-template matTabContent>
+          <div class="tab-content">
+            <div
+              *ngFor="let endorsementRequest of nonActionableEndorsementRequests$ | async"
+              class="endorsement-card">
+              <ui-card
+                icon="person_pin"
+                [heading]="endorsementRequest.partyName ? endorsementRequest.partyName : 'Name Not Available'">
+                <p uiCardContent>
+                  {{ 'Sent To: '+ endorsementRequest.recipientEmail}}
+                </p>
+              </ui-card>
+            </div>
+          </div>
+        </ng-template>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
+
+  <br />
+
+  <div class="col-6">
+    <ui-page-section>
+      <ui-page-subheader icon="assignment">
+        Endorsement Request
+      </ui-page-subheader>
+      <p>
+        Enter the email of the person you have a working relationship with here.
+        This person will receive an email invitation from the Provider Identity
+        Portal. Once they register, they can endorse your relationship request.
+        In the future, endorsements from licenced providers will allow for
+        delegated access.
+      </p>
+      <ng-container [formGroup]="formState.form">
+        <mat-form-field class="w-100">
+          <input
+            matInput
+            placeholder="Email"
+            formControlName="recipientEmail" />
+          <mat-error>Required</mat-error>
+        </mat-form-field>
+      </ng-container>
+    </ui-page-section>
+  </div>
+
+  <ui-page-footer>
+    <button
+      mat-stroked-button
+      uiPageFooterAction
+      type="button"
+      color="primary"
+      (click)="onBack()">
+      Back Home
+    </button>
+
+    <button mat-flat-button uiPageFooterAction type="submit" color="primary">
+      Send Endorsement Request
+    </button>
+  </ui-page-footer>
+</ui-page>
