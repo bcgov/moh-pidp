@@ -45,6 +45,7 @@ public class Index
                     Active = relationship.Endorsement!.Active,
                     CreatedOn = relationship.Endorsement.CreatedOn
                 })
+                .Where(relationship => relationship.Active)
                 .ToListAsync();
         }
     }
