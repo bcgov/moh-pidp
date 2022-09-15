@@ -84,6 +84,16 @@ export class MsTeamsPage
       this.logger.error('No status code was provided');
       return this.navigateToRoot();
     }
+
+    // always start with one (empty) clinic member
+    if (!this.formState.clinicMembers.length) {
+      this.addClincMember();
+    }
+  }
+
+  public addClincMember() {
+    const member = this.formState.buildClinicMemberForm();
+    this.formState.clinicMembers.push(member);
   }
 
   public getAgreementText(page: number): string {

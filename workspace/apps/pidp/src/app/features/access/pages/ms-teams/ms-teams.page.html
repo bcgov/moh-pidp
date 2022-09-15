@@ -29,8 +29,8 @@
   </ng-container>
 
   <ng-template #notCompleted>
-    <ng-container [ngSwitch]="currentPage">
-      <ng-container *ngSwitchCase="0" [formGroup]="formState.form">
+    <ng-container [ngSwitch]="currentPage" [formGroup]="formState.form">
+      <ng-container *ngSwitchCase="0">
         <ui-page-section>
           <ui-page-section-subheader heading="Clinic Name">
             <ng-container uiPageSectionSubheaderDesc>
@@ -64,7 +64,38 @@
 
       <ng-container *ngSwitchCase="submissionPage">
         <ui-page-section>
-          <p>FORM FIELDS2</p>
+          <ui-page-section-subheader heading="Clinic Members">
+            <ng-container uiPageSectionSubheaderDesc>
+              Here you can add clinic members to be sent to Fraser Health for
+              approval.
+            </ng-container>
+          </ui-page-section-subheader>
+        </ui-page-section>
+        <ui-page-section formArrayName="clinicMembers">
+          <ng-container
+            *ngFor="let member of formState.clinicMembers.controls; let i = index;"
+            [formGroupName]="i">
+            <mat-form-field class="w-100">
+              <input matInput placeholder="Name" formControlName="name" />
+            </mat-form-field>
+            <mat-form-field class="w-100">
+              <input
+                matInput
+                placeholder="Job Title"
+                formControlName="jobTitle" />
+            </mat-form-field>
+            <mat-form-field class="w-100">
+              <input matInput placeholder="Email" formControlName="email" />
+            </mat-form-field>
+            <mat-form-field class="w-100">
+              <input
+                matInput
+                placeholder="Phone Number"
+                formControlName="phone"
+                mask="(000) 000-0000"
+                [showMaskTyped]="false" />
+            </mat-form-field>
+          </ng-container>
         </ui-page-section>
       </ng-container>
     </ng-container>
