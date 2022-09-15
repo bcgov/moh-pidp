@@ -87,11 +87,11 @@ export class MsTeamsPage
 
     // always start with one (empty) clinic member
     if (!this.formState.clinicMembers.length) {
-      this.addClincMember();
+      this.addClinicMember();
     }
   }
 
-  public addClincMember() {
+  public addClinicMember(): void {
     const member = this.formState.buildClinicMemberForm();
     this.formState.clinicMembers.push(member);
   }
