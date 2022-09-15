@@ -6,7 +6,7 @@ import { Observable, map, of, switchMap } from 'rxjs';
 import { PartyService } from '@app/core/party/party.service';
 import { Role } from '@app/shared/enums/roles.enum';
 
-import { EndorsementRequestsReceivedResource } from '../organization-info/pages/endorsement/pages/endorsement-requests-received/endorsement-requests-received-resource.service';
+import { EndorsementsResource } from '../organization-info/pages/endorsements/endorsements-resource.service';
 import { ProfileStatusAlert } from './models/profile-status-alert.model';
 import { ProfileStatus } from './models/profile-status.model';
 import { PortalResource } from './portal-resource.service';
@@ -46,7 +46,7 @@ export class PortalPage implements OnInit {
     private partyService: PartyService,
     private portalResource: PortalResource,
     private portalService: PortalService,
-    private endorsementResource: EndorsementRequestsReceivedResource,
+    private endorsementsResource: EndorsementsResource,
     private activatedRoute: ActivatedRoute
   ) {
     this.state$ = this.portalService.state$;
@@ -89,7 +89,7 @@ export class PortalPage implements OnInit {
       return of(undefined);
     }
 
-    return this.endorsementResource
+    return this.endorsementsResource
       .receiveEndorsementRequest(this.partyService.partyId, endorsementToken)
       .pipe(
         map(() => {
