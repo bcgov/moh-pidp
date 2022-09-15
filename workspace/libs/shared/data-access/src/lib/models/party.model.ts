@@ -8,15 +8,9 @@ export enum AccessTypeCode {
   HcimAccountTransfer,
   HcimEnrolment,
   DriverFitness,
+  Uci,
+  MSTeams,
 }
-
-// TODO use lookups
-export const AccessTypeMap: { [AccessTypeCode: number]: string } = {
-  [AccessTypeCode.SAEforms]: 'Special Authority eForms',
-  [AccessTypeCode.HcimAccountTransfer]: 'HCIMWeb Account Transfer',
-  [AccessTypeCode.HcimEnrolment]: 'HCIMWeb Enrolment',
-  [AccessTypeCode.DriverFitness]: 'Driver Medical Fitness',
-};
 
 export interface AccessRequest {
   id: number;
