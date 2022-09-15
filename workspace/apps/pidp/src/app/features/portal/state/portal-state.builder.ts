@@ -17,7 +17,7 @@ import { UciPortalSection } from './access/uci-portal-section.class';
 import { SignedAcceptedDocumentsPortalSection } from './history/signed-accepted-documents-portal-section.class';
 import { TransactionsPortalSection } from './history/transactions-portal-section.class';
 import { AdministratorInfoPortalSection } from './organization/administrator-information-portal-section';
-import { EndorsementPortalSection } from './organization/endorsement-portal-section.class';
+import { EndorsementsPortalSection } from './organization/endorsements-portal-section.class';
 import { FacilityDetailsPortalSection } from './organization/facility-details-portal-section.class';
 import { OrganizationDetailsPortalSection } from './organization/organization-details-portal-section.class';
 import { PortalSectionStatusKey } from './portal-section-status-key.type';
@@ -124,8 +124,8 @@ export class PortalStateBuilder {
         // TODO remove permissions when API exists and ready for production, or
         // TODO replace || with && to keep it flagged when API exists
         this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]) ||
-          this.insertSection('endorsement', profileStatus),
-        () => [new EndorsementPortalSection(profileStatus, this.router)]
+          this.insertSection('endorsements', profileStatus),
+        () => [new EndorsementsPortalSection(profileStatus, this.router)]
       ),
     ];
   }
