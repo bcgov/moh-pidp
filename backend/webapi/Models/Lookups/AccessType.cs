@@ -13,7 +13,6 @@ public enum AccessTypeCode
     MSTeams
 }
 
-// This table is only for reporting/database readability; it is not used by the FE or BE of the app.
 [Table("AccessTypeLookup")]
 public class AccessType
 {
