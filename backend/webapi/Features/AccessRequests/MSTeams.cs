@@ -144,6 +144,7 @@ public class MSTeams
                 plrRecords?.Select(record => new EnrolmentEmailModel.PlrRecord
                 {
                     CollegeId = record.CollegeId,
+                    IdentifierType = record.IdentifierType,
                     ProviderRoleType = record.ProviderRoleType,
                     StatusCode = record.StatusCode,
                     StatusReasonCode = record.StatusReasonCode
@@ -197,6 +198,7 @@ public class MSTeams
             public class PlrRecord
             {
                 public string? CollegeId { get; set; }
+                public string? IdentifierType { get; set; }
                 public string? ProviderRoleType { get; set; }
                 public string? StatusCode { get; set; }
                 public string? StatusReasonCode { get; set; }
