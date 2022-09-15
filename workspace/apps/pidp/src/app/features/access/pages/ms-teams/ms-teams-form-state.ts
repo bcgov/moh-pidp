@@ -1,4 +1,5 @@
 import {
+  FormArray,
   FormBuilder,
   FormControl,
   FormGroup,
@@ -29,8 +30,24 @@ export class MsTeamsFormState extends AbstractFormState<MsTeamsClinicInfo> {
     return this.formInstance.get('clinicAddress') as FormGroup;
   }
 
-  public get clinicMembers(): FormControl {
-    return this.formInstance.get('clinicMembers') as FormControl;
+  public get clinicMembers(): FormArray {
+    return this.formInstance.get('clinicMembers') as FormArray;
+  }
+
+  public get name(): FormControl {
+    return this.formInstance.get('name') as FormControl;
+  }
+
+  public get email(): FormControl {
+    return this.formInstance.get('email') as FormControl;
+  }
+
+  public get jobTitle(): FormControl {
+    return this.formInstance.get('jobTitle') as FormControl;
+  }
+
+  public get phone(): FormControl {
+    return this.formInstance.get('phone') as FormControl;
   }
 
   public get json(): MsTeamsClinicInfo | undefined {
@@ -56,6 +73,15 @@ export class MsTeamsFormState extends AbstractFormState<MsTeamsClinicInfo> {
         areRequired: true,
       }),
       clinicMembers: [[], [Validators.required]],
+    });
+  }
+
+  public buildClinicMemberForm(): FormGroup {
+    return this.fb.group({
+      name: [null, []],
+      email: [null, []],
+      jobTitle: [null, []],
+      phone: [null, []],
     });
   }
 }
