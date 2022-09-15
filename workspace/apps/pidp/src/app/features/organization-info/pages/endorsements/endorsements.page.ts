@@ -4,9 +4,22 @@ import { FormBuilder } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { EMPTY, Observable, catchError, map, of, switchMap } from 'rxjs';
+import {
+  EMPTY,
+  Observable,
+  catchError,
+  exhaustMap,
+  map,
+  of,
+  switchMap,
+} from 'rxjs';
 
 import { NoContent } from '@bcgov/shared/data-access';
+import {
+  ConfirmDialogComponent,
+  DialogOptions,
+  HtmlComponent,
+} from '@bcgov/shared/ui';
 
 import { AbstractFormPage } from '@app/core/classes/abstract-form-page.class';
 import { PartyService } from '@app/core/party/party.service';
@@ -84,14 +97,30 @@ export class EndorsementsPage
   }
 
   public onCancelEndorsement(endorsementId: number): void {
-    this.resource
-      .cancelEndorsement(this.partyService.partyId, endorsementId)
+    const data: DialogOptions = {
+      title: 'Cancel Endorsement',
+      component: HtmlComponent,
+      data: {
+        content: 'Are you sure you want to cancel this Endorsement?',
+      },
+    };
+    this.dialog
+      .open(ConfirmDialogComponent, { data })
+      .afterClosed()
       .pipe(
-        switchMap(
-          () =>
-            (this.endorsements$ = this.getEndorsements(
-              this.partyService.partyId
-            ))
+        exhaustMap((result) =>
+          result
+            ? this.resource
+                .cancelEndorsement(this.partyService.partyId, endorsementId)
+                .pipe(
+                  switchMap(
+                    () =>
+                      (this.endorsements$ = this.getEndorsements(
+                        this.partyService.partyId
+                      ))
+                  )
+                )
+            : EMPTY
         )
       )
       .subscribe();
