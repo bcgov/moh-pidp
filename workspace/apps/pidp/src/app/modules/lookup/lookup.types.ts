@@ -13,6 +13,7 @@ export type ILookupConfig = {
 };
 
 export interface LookupConfig extends ILookupConfig {
+  accessTypes: Lookup[];
   colleges: CollegeLookup[];
   countries: Lookup<string>[];
   provinces: ProvinceLookup[];
