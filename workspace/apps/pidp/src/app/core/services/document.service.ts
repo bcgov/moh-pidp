@@ -56,15 +56,17 @@ export class DocumentService {
       {
         type: DocumentType.MS_TEAMS_DECLARATION_AGREEMENT,
         title:
-          'Private Practice Access to FH Secure Messaging via MS Teams Privacy and Security Declaration',
+          'FH MS Teams for Clinical Use - Private Practice Privacy and Security Declaration',
       },
       {
         type: DocumentType.MS_TEAMS_DETAILS_AGREEMENT,
-        title: 'Details on Privacy & Security Requirements',
+        title:
+          'FH MS Teams for Clinical Use - Details on Privacy & Security Requirements',
       },
       {
         type: DocumentType.MS_TEAMS_IT_SECURITY_AGREEMENT,
-        title: 'Private Practice Clinic IT Security Checklist',
+        title:
+          'FH MS Teams for Clinical Use - Private Practice Clinic IT Security Checklist',
       },
     ];
   }
