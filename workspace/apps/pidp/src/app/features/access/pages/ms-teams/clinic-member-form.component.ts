@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 
@@ -16,7 +16,7 @@ import { MsTeamsFormState } from './ms-teams-form-state';
   template: `
     <div class="clinic-member-form">
       <ng-container [formGroup]="form">
-        <mat-icon class="material-icons-sharp">account_circle</mat-icon>
+        <mat-icon>account_circle</mat-icon>
         <mat-form-field class="w-100 form-field" appearance="fill">
           <input matInput placeholder="Name" formControlName="name" />
           <mat-error>Required</mat-error>
@@ -38,6 +38,9 @@ import { MsTeamsFormState } from './ms-teams-form-state';
             [showMaskTyped]="false" />
           <mat-error>Required</mat-error>
         </mat-form-field>
+        <button mat-icon-button type="button" (click)="removeForm(index)">
+          <mat-icon>close</mat-icon>
+        </button>
       </ng-container>
     </div>
   `,
@@ -51,7 +54,8 @@ import { MsTeamsFormState } from './ms-teams-form-state';
         margin: 5px;
       }
 
-      mat-icon {
+      mat-icon,
+      .mat-icon-button {
         align-self: center;
       }
     `,
@@ -63,6 +67,7 @@ export class ClinicMemberFormComponent
 {
   @Input() public form: FormGroup;
   @Input() public index!: number;
+  @Output() public remove: EventEmitter<number>;
 
   public formState: MsTeamsFormState;
 
@@ -72,8 +77,13 @@ export class ClinicMemberFormComponent
     fb: FormBuilder
   ) {
     super(dialog, formUtilsService);
+    this.remove = new EventEmitter<number>();
     this.formState = new MsTeamsFormState(fb, formUtilsService);
     this.form = this.formState.buildClinicMemberForm();
+  }
+
+  public removeForm(index: number): void {
+    this.remove.emit(index);
   }
 
   public ngOnInit(): void {}

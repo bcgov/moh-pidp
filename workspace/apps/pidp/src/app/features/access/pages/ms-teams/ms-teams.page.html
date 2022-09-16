@@ -78,7 +78,8 @@
           <ng-container
             *ngFor="let member of formState.clinicMembers.controls; let i = index;">
             <app-clinic-member-form
-              [formGroupName]="i"></app-clinic-member-form>
+              [formGroupName]="i"
+              (remove)="removeClinicMember($event)"></app-clinic-member-form>
           </ng-container>
           <button
             mat-button

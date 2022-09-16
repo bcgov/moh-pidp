@@ -96,6 +96,10 @@ export class MsTeamsPage
     this.formState.clinicMembers.push(member);
   }
 
+  public removeClinicMember(index: number): void {
+    this.formState.clinicMembers.removeAt(index);
+  }
+
   public getAgreementText(page: number): string {
     return this.documentService.getMsTeamsAgreement(page);
   }
