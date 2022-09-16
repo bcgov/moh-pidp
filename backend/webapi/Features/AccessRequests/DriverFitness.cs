@@ -61,7 +61,7 @@ public class DriverFitness
                 return DomainResult.Failed();
             }
 
-            // TODO assign role
+            // TODO assign role?
             // if (!await this.keycloakClient.AssignClientRole(dto.UserId, ?, ?))
             // {
             //     return DomainResult.Failed();
