@@ -307,12 +307,12 @@ export class DocumentService {
       </ul><br>
       <strong>Anti-Virus Software</strong><br><br>
       <ul style="list-style-type:square">
-        <li>Anti-virus software installed and enabled fro auto update (screenshot of configuration must be attached)</li><br>
+        <li>Anti-virus software installed and enabled for auto update (screenshot of configuration must be attached)</li><br>
       </ul><br>
       <strong>Operating System</strong><br><br>
       <ul style="list-style-type:square">
         <li>There are no legacy/end-of-support operating systems in use (e.g. Windows XP, MacOS older than the latest three versions)</li><br>
-        <li>The Operating System is enabled fro auto updates or manually patched at a minimum semi-annually</li><br>
+        <li>The Operating System is enabled for auto updates or manually patched at a minimum semi-annually</li><br>
       </ul><br>
       <strong>Application Patching</strong><br><br>
       Where it doesn't conflict with my EMR's system requirements,
