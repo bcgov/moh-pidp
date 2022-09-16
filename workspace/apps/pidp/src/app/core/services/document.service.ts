@@ -191,8 +191,8 @@ export class DocumentService {
       Health Privacy and Security resources.<br><br>
       I acknowledge that:<br><br>
       <ol>
-        <li>The member of my clinic staff who is ultimately responsible for maintaining users access and our
-          privacy and security policies is:?????</li><br>
+        <li>I am the member of my clinic staff who is ultimately responsible for maintaining user access and our
+          privacy and security policies.</li><br>
         <li>Documented privacy and security policies are communicated to all staff and external parties (e.g. vendors,
           suppliers, and partners) who have access to the clinic's computer systems.</li><br>
         <li>Security awareness training is provided to clinic staff and reviewed yearly.</li><br>
