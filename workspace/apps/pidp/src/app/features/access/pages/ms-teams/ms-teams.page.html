@@ -1,4 +1,7 @@
-<ui-page mode="large" [form]="formState.form" (submitted)="onSubmit()">
+<ui-page
+  [mode]="currentPage !== 0 ? 'large' : 'page'"
+  [form]="formState.form"
+  (submitted)="onSubmit()">
   <ui-page-section>
     <ui-page-section-subheader
       icon="assignment"
