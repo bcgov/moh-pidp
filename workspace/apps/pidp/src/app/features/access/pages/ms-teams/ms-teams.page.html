@@ -35,6 +35,16 @@
     <ng-container [ngSwitch]="currentPage" [formGroup]="formState.form">
       <ng-container *ngSwitchCase="0">
         <ui-page-section>
+          <ui-page-section-subheader heading="Privacy Officer only">
+            <ng-container uiPageSectionSubheaderDesc>
+              The form below is to be filled out by the clinic's Privacy Officer
+              only. If you are not the Privacy Officer, click next to continue
+              your MS Teams enrolment.
+            </ng-container>
+          </ui-page-section-subheader>
+        </ui-page-section>
+
+        <ui-page-section>
           <ui-page-section-subheader heading="Clinic Name">
             <ng-container uiPageSectionSubheaderDesc>
               Enter your clinic's name.
