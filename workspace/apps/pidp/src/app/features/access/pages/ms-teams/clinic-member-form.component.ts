@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 
 import { EMPTY } from 'rxjs';
@@ -27,7 +27,10 @@ import { MsTeamsFormState } from './ms-teams-form-state';
         </mat-form-field>
         <mat-form-field class="w-100 form-field" appearance="fill">
           <input matInput placeholder="Email" formControlName="email" />
-          <mat-error>Required</mat-error>
+          <mat-error *ngIf="email.hasError('required')">Required</mat-error>
+          <mat-error *ngIf="email.hasError('email')">
+            Must be a valid email address
+          </mat-error>
         </mat-form-field>
         <mat-form-field class="w-100 form-field" appearance="fill">
           <input
@@ -36,7 +39,10 @@ import { MsTeamsFormState } from './ms-teams-form-state';
             formControlName="phone"
             mask="(000) 000-0000"
             [showMaskTyped]="false" />
-          <mat-error>Required</mat-error>
+          <mat-error *ngIf="phone.hasError('required')">Required</mat-error>
+          <mat-error *ngIf="phone.hasError('phone')">
+            Must be a valid phone number
+          </mat-error>
         </mat-form-field>
         <button mat-icon-button type="button" (click)="removeForm(index)">
           <mat-icon>close</mat-icon>
@@ -80,6 +86,14 @@ export class ClinicMemberFormComponent
     this.remove = new EventEmitter<number>();
     this.formState = new MsTeamsFormState(fb, formUtilsService);
     this.form = this.formState.buildClinicMemberForm();
+  }
+
+  public get phone(): FormControl {
+    return this.form.get('phone') as FormControl;
+  }
+
+  public get email(): FormControl {
+    return this.form.get('email') as FormControl;
   }
 
   public removeForm(index: number): void {
