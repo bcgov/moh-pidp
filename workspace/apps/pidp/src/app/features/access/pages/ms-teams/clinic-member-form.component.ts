@@ -1,15 +1,5 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
-
-import { EMPTY } from 'rxjs';
-
-import { NoContent } from '@bcgov/shared/data-access';
-
-import { AbstractFormPage } from '@app/core/classes/abstract-form-page.class';
-import { FormUtilsService } from '@app/core/services/form-utils.service';
-
-import { MsTeamsFormState } from './ms-teams-form-state';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-clinic-member-form',
@@ -67,25 +57,13 @@ import { MsTeamsFormState } from './ms-teams-form-state';
     `,
   ],
 })
-export class ClinicMemberFormComponent
-  extends AbstractFormPage
-  implements OnInit
-{
-  @Input() public form: FormGroup;
+export class ClinicMemberFormComponent {
+  @Input() public form!: FormGroup;
   @Input() public index!: number;
   @Output() public remove: EventEmitter<number>;
 
-  public formState: MsTeamsFormState;
-
-  public constructor(
-    protected dialog: MatDialog,
-    protected formUtilsService: FormUtilsService,
-    fb: FormBuilder
-  ) {
-    super(dialog, formUtilsService);
+  public constructor() {
     this.remove = new EventEmitter<number>();
-    this.formState = new MsTeamsFormState(fb, formUtilsService);
-    this.form = this.formState.buildClinicMemberForm();
   }
 
   public get phone(): FormControl {
@@ -98,11 +76,5 @@ export class ClinicMemberFormComponent
 
   public removeForm(index: number): void {
     this.remove.emit(index);
-  }
-
-  public ngOnInit(): void {}
-
-  protected performSubmission(): NoContent {
-    return EMPTY;
   }
 }

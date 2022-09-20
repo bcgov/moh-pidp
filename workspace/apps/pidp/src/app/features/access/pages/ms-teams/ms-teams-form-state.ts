@@ -34,6 +34,10 @@ export class MsTeamsFormState extends AbstractFormState<MsTeamsClinicInfo> {
     return this.formInstance.get('clinicMembers') as FormArray;
   }
 
+  public get clinicMemberControls(): FormGroup[] {
+    return this.clinicMembers.controls as FormGroup[];
+  }
+
   public get json(): MsTeamsClinicInfo | undefined {
     if (!this.formInstance) {
       return;

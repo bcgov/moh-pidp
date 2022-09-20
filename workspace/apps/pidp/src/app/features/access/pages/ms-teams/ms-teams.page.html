@@ -86,9 +86,11 @@
         </ui-page-section>
         <ui-page-section formArrayName="clinicMembers">
           <ng-container
-            *ngFor="let member of formState.clinicMembers.controls; let i = index;">
+            *ngFor="let member of formState.clinicMemberControls; let i = index;">
             <app-clinic-member-form
               [formGroupName]="i"
+              [form]="member"
+              [index]="i"
               (remove)="removeClinicMember($event)"></app-clinic-member-form>
           </ng-container>
           <button

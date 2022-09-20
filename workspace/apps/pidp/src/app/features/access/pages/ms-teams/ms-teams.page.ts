@@ -1,6 +1,6 @@
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -68,8 +68,18 @@ export class MsTeamsPage
   }
 
   public onNext(): void {
+    if (this.currentPage === 0 && !this.validateFirstPage()) {
+      return;
+    }
+
     this.utilsService.scrollTop('.mat-sidenav-content');
     this.currentPage++;
+  }
+
+  private validateFirstPage(): boolean {
+    return this.checkValidity(
+      new FormArray([this.formState.clinicName, this.formState.clinicAddress])
+    );
   }
 
   public ngOnInit(): void {
