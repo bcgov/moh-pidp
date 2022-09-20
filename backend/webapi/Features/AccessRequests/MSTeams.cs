@@ -1,13 +1,14 @@
 namespace Pidp.Features.AccessRequests;
 
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using DomainResults.Common;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using NodaTime;
+using System.Text.Json;
 
 using Pidp.Data;
-// using Pidp.Infrastructure.Auth;
-// using Pidp.Infrastructure.HttpClients.Keycloak;
 using Pidp.Infrastructure.HttpClients.Mail;
 using Pidp.Infrastructure.HttpClients.Plr;
 using Pidp.Infrastructure.Services;
@@ -21,34 +22,79 @@ public class MSTeams
     public class Command : ICommand<IDomainResult>
     {
         public int PartyId { get; set; }
+        public string ClinicName { get; set; } = string.Empty;
+        public Address ClinicAddress { get; set; } = new();
+        public List<ClinicMember> ClinicMembers { get; set; } = new();
+
+        public class Address
+        {
+            public string CountryCode { get; set; } = string.Empty;
+            public string ProvinceCode { get; set; } = string.Empty;
+            public string Street { get; set; } = string.Empty;
+            public string City { get; set; } = string.Empty;
+            public string Postal { get; set; } = string.Empty;
+        }
+
+        public class ClinicMember
+        {
+            public string Name { get; set; } = string.Empty;
+            public string Email { get; set; } = string.Empty;
+            public string JobTitle { get; set; } = string.Empty;
+            public string Phone { get; set; } = string.Empty;
+        }
     }
 
     public class CommandValidator : AbstractValidator<Command>
     {
-        public CommandValidator() => this.RuleFor(x => x.PartyId).GreaterThan(0);
+        public CommandValidator()
+        {
+            this.RuleFor(x => x.PartyId).GreaterThan(0);
+            this.RuleFor(x => x.ClinicName).NotEmpty();
+
+            this.RuleFor(x => x.ClinicAddress).NotNull();
+            this.RuleFor(x => x.ClinicAddress.CountryCode).NotEmpty();
+            this.RuleFor(x => x.ClinicAddress.ProvinceCode).NotEmpty();
+            this.RuleFor(x => x.ClinicAddress.Street).NotEmpty();
+            this.RuleFor(x => x.ClinicAddress.City).NotEmpty();
+            this.RuleFor(x => x.ClinicAddress.Postal).NotEmpty();
+
+            this.RuleFor(x => x.ClinicMembers).NotEmpty();
+            this.RuleForEach(x => x.ClinicMembers).NotNull().SetValidator(new ClinicMemberValidator());
+        }
+    }
+
+    public class ClinicMemberValidator : AbstractValidator<Command.ClinicMember>
+    {
+        public ClinicMemberValidator()
+        {
+            this.RuleFor(x => x.Name).NotEmpty();
+            this.RuleFor(x => x.Email).NotEmpty().EmailAddress();
+            this.RuleFor(x => x.JobTitle).NotEmpty();
+            this.RuleFor(x => x.Phone).NotEmpty();
+        }
     }
 
     public class CommandHandler : ICommandHandler<Command, IDomainResult>
     {
         private readonly IClock clock;
         private readonly IEmailService emailService;
-        // private readonly IKeycloakAdministrationClient keycloakClient;
         private readonly ILogger logger;
+        private readonly IMapper mapper;
         private readonly IPlrClient plrClient;
         private readonly PidpDbContext context;
 
         public CommandHandler(
             IClock clock,
             IEmailService emailService,
-            // IKeycloakAdministrationClient keycloakClient,
             ILogger<CommandHandler> logger,
+            IMapper mapper,
             IPlrClient plrClient,
             PidpDbContext context)
         {
             this.clock = clock;
             this.emailService = emailService;
-            // this.keycloakClient = keycloakClient;
             this.logger = logger;
+            this.mapper = mapper;
             this.plrClient = plrClient;
             this.context = context;
         }
@@ -57,14 +103,7 @@ public class MSTeams
         {
             var dto = await this.context.Parties
                 .Where(party => party.Id == command.PartyId)
-                .Select(party => new
-                {
-                    AlreadyEnroled = party.AccessRequests.Any(request => request.AccessTypeCode == AccessTypeCode.MSTeams),
-                    party.UserId,
-                    party.Email,
-                    party.Cpn,
-                    Name = $"{party.FirstName} {party.LastName}"
-                })
+                .ProjectTo<EnrolmentDto>(this.mapper.ConfigurationProvider)
                 .SingleAsync();
 
             if (dto.AlreadyEnroled
@@ -77,24 +116,48 @@ public class MSTeams
                 return DomainResult.Failed();
             }
 
-            // TODO Assign role / other enrolment actions
-            // if (!await this.keycloakClient.AssignClientRole(dto.UserId, ?, ?))
-            // {
-            //     return DomainResult.Failed();
-            // }
-
-            this.context.AccessRequests.Add(new AccessRequest
+            this.context.MSTeamsEnrolments.Add(new MSTeamsEnrolment
             {
                 PartyId = command.PartyId,
                 AccessTypeCode = AccessTypeCode.MSTeams,
-                RequestedOn = this.clock.GetCurrentInstant()
+                RequestedOn = this.clock.GetCurrentInstant(),
+                ClinicName = command.ClinicName,
+                ClinicAddress = this.mapper.Map<MSTeamsClinicAddress>(command.ClinicAddress)
             });
 
             await this.context.SaveChangesAsync();
 
-            await this.SendConfirmationEmailAsync(dto.Email, dto.Name);
+            await this.SendEnrolmentEmailAsync(dto, command);
+            await this.SendConfirmationEmailAsync(dto.Email, $"{dto.FirstName} {dto.LastName}");
 
             return DomainResult.Success();
+        }
+
+        private async Task SendEnrolmentEmailAsync(EnrolmentDto dto, Command command)
+        {
+            var plrRecords = await this.plrClient.GetRecordsAsync(dto.Cpn);
+            var model = new EnrolmentEmailModel
+            (
+                dto,
+                command,
+                this.clock.GetCurrentInstant(),
+                plrRecords?.Select(record => new EnrolmentEmailModel.PlrRecord
+                {
+                    CollegeId = record.CollegeId,
+                    IdentifierType = record.IdentifierType,
+                    ProviderRoleType = record.ProviderRoleType,
+                    StatusCode = record.StatusCode,
+                    StatusReasonCode = record.StatusReasonCode
+                }).ToList() ?? new()
+            );
+
+            var email = new Email(
+                from: EmailService.PidpEmail,
+                to: "enrolment_securemessaging@fraserhealth.ca",
+                subject: "New MS Teams for Clinical Use Enrolment",
+                body: $"<pre>{JsonSerializer.Serialize(model, new JsonSerializerOptions { WriteIndented = true })}</pre>"
+            );
+            await this.emailService.SendAsync(email);
         }
 
         private async Task SendConfirmationEmailAsync(string partyEmail, string partyName)
@@ -106,6 +169,54 @@ public class MSTeams
                 body: $"Dear {partyName},<br><br>You have been successfully enrolled for MS Teams for Clinical Use.<br>The Fraser Health mHealth team will contact you via email with account information and setup instructions. In the meantime please email <a href=\"mailto:securemessaging@fraserhealth.ca\">securemessaging@fraserhealth.ca</a> if you have any questions."
             );
             await this.emailService.SendAsync(email);
+        }
+
+        public class EnrolmentDto
+        {
+            public string FirstName { get; set; } = string.Empty;
+            public string LastName { get; set; } = string.Empty;
+            public LocalDate? Birthdate { get; set; }
+            public string? Email { get; set; }
+            public string? Phone { get; set; }
+            public bool AlreadyEnroled { get; set; }
+            public string? Cpn { get; set; }
+        }
+
+        private class EnrolmentEmailModel
+        {
+            public string EnrolmentDate { get; set; }
+            public string FirstName { get; set; }
+            public string LastName { get; set; }
+            public string? Birthdate { get; set; }
+            public string? Email { get; set; }
+            public string? Phone { get; set; }
+            public List<PlrRecord> PlrRecords { get; set; }
+            public string ClinicName { get; set; }
+            public Command.Address ClinicAddress { get; set; }
+            public List<Command.ClinicMember> ClinicMembers { get; set; }
+
+            public class PlrRecord
+            {
+                public string? CollegeId { get; set; }
+                public string? IdentifierType { get; set; }
+                public string? ProviderRoleType { get; set; }
+                public string? StatusCode { get; set; }
+                public string? StatusReasonCode { get; set; }
+            }
+
+            public EnrolmentEmailModel(EnrolmentDto enrolmentDto, Command command, Instant enrolmentDate, List<PlrRecord> plrRecords)
+            {
+                this.EnrolmentDate = enrolmentDate.InZone(DateTimeZoneProviders.Tzdb.GetSystemDefault()).Date.ToString();
+                this.FirstName = enrolmentDto.FirstName;
+                this.LastName = enrolmentDto.LastName;
+                this.Birthdate = enrolmentDto.Birthdate?.ToString();
+                this.Email = enrolmentDto.Email;
+                this.Phone = enrolmentDto.Phone;
+                this.PlrRecords = plrRecords;
+                this.ClinicName = command.ClinicName;
+                this.ClinicAddress = command.ClinicAddress;
+                this.ClinicMembers = command.ClinicMembers;
+            }
         }
     }
 }

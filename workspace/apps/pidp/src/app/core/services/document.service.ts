@@ -160,6 +160,24 @@ export class DocumentService {
       of this personal information, contact <a href="mailto:${this.config.emails.uciSupport}">${this.config.emails.uciSupport}</a>.
     `;
   }
+
+  public getMsTeamsAgreementPageCount(): number {
+    return 3;
+  }
+
+  public getMsTeamsAgreement(page: number): string {
+    switch (page) {
+      case 1:
+        return this.getMsTeamsDeclarationAgreement();
+      case 2:
+        return this.getMsTeamsDetailsAgreement();
+      case 3:
+        return this.getMsTeamsITSecurityAgreement();
+      default:
+        return '';
+    }
+  }
+
   public getMsTeamsDeclarationAgreement(): string {
     return `
       Private Practice Access to FH Secure Messaging via MS Teams Privacy and Security Declaration<br><br>
@@ -175,8 +193,8 @@ export class DocumentService {
       Health Privacy and Security resources.<br><br>
       I acknowledge that:<br><br>
       <ol>
-        <li>The member of my clinic staff who is ultimately responsible for maintaining users access and our
-          privacy and security policies is:?????</li><br>
+        <li>I am the member of my clinic staff who is ultimately responsible for maintaining user access and our
+          privacy and security policies.</li><br>
         <li>Documented privacy and security policies are communicated to all staff and external parties (e.g. vendors,
           suppliers, and partners) who have access to the clinic's computer systems.</li><br>
         <li>Security awareness training is provided to clinic staff and reviewed yearly.</li><br>
@@ -185,7 +203,7 @@ export class DocumentService {
         <li>My staff is aware of risks associated with using USB drivers and other portable devices that may compromise
           my network.</li><br>
         <li>My staff is aware that passwords used for access to MS Teams are not permitted to be shared with other
-          individuals or re-used for other servies, and that the "Save Password" feature in browsers is not utilized to
+          individuals or re-used for other services, and that the "Save Password" feature in browsers is not utilized to
           access MS Teams.</li><br>
         <li>My clinic agrees to notify the FH eHealth Team when one of my staff no longer requires access to MS Teams.</li><br>
         <li>My clinic will retain a record for two years of the support activities (e.g. invoice/receipt with name of vendor
@@ -225,7 +243,7 @@ export class DocumentService {
           local IT. The Privacy Officer is also responsible for establishing the Privacy Policy and Security Policies, procedures, and
           forms. For more information, on this role, refer to the BC Physician Privacy Toolkit: A Guide for Physicians.</li><br>
         <li>Privacy and Security Policies and related documents should be communicated to staff and any individuals accessing the
-          clinic eSystems. Assistance in creating such policies are available from the Doctors of BC.</li><br>
+          clinic eSystems. Assistance in creating such policies is available from the Doctors of BC.</li><br>
         <li> All clinic staff need to complete Privacy Training and Security Awareness Training comprised of new employee orientation and
           regularly scheduled refreshers. The content should include:<br>
           <ol type="a">
@@ -239,10 +257,10 @@ export class DocumentService {
           to possible fraud and prevent them from clicking on attachments or links that can download malicious software (malware) to be installed
           on the user's computer and potentially spread to the entire network.</li><br>
         <li>Use of non-encrypted USB drives and mobile storage devices to store or transfer patient information is not recommended. If not properly
-          protected, they can be compromised (lost of stolen) or be intercepted with malware. Malicious software can be spread to user's computer and
+          protected, they can be compromised (lost or stolen) or be intercepted with malware. Malicious software can be spread to user's computer and
           potentially entire network.</li><br>
         <li>Clinic should provide employees with instructions about password protection practises to reduce the risk of unauthorized access into the
-          eHealth application. Passwords must not be shared with other even as temporary workaround and not used for access to any other services (e.g.
+          eHealth application. Passwords must not be shared with others even as temporary workaround and not used for access to any other services (e.g.
           Gmail, Facebook, LinkedIn). The "save password" feature for any account is not safe because any user on that computer can then use the stored
           password. Each user should change their passwords semi-annually. See password management requirements on page 3 of this guide. For tips on
           creating secure passwords, visit the Physician Office IT Security Guide.</li><br>
@@ -259,52 +277,52 @@ export class DocumentService {
 
   public getMsTeamsITSecurityAgreement(): string {
     return `
-    Private Practice Clinic IT Security Checklist<br><br>
-    <strong>There are a number of basic technology requirements that need to be in place to safeguard patient information within your practice.</strong>
-    The checklist below details the minimum clinic IT security requirements defined by FHA and the Ministry of Health for protecting your clinic from
-    local threats.<br><br>
-    Education, resources and supports on Clinic Privacy and Security are available via the
-    <a href="${this.config.urls.doctorsTechnologyOffice}" target="_blank" rel="noopener noreferrer">Doctors Technology Office (DTO)</a>.<br><br>
-    <a href="mailto:${this.config.emails.doctorsTechnologyOfficeSupport}">${this.config.emails.doctorsTechnologyOfficeSupport}</a> or 604-638-5841<br><br>
-    <strong>Physical Access Control</strong><br><br>
-    <ul style="list-style-type:square">
-      <li>Clinic site is equipped with a monitored alarm system</li><br>
-      <li>Server/Network equipment is physically secured from public access</li><br>
-    </ul><br>
-    <strong>User Account</strong><br><br>
-    <ul style="list-style-type:square">
-      <li>Each user has a unique account and password to access systems within clinic's network</li><br>
-      <li>User accounts are not shared among multiple users</li><br>
-      <li>A separate user account is used for system administration</li><br>
-    </ul><br>
-    <strong>Password Management</strong><br><br>
-    <ul style="list-style-type:square">
-      <li>Minimum password length is 8 characters</li><br>
-      <li>Passwords contain characters from three of the following categories (Uppercase characters, Lowercase characters, Numerals,
-        Non-alphanumeric keyboard symbols)</li><br>
-      <li>Passwords are changed at a minimum semi-annually</li><br>
-    </ul><br>
-    <strong>WiFi Network</strong><br><br>
-    <ul style="list-style-type:square">
-      <li>SSID, WPA2/WPA3 and WiFi password settings are as per DTO Technical Bulletin</li><br>
-      <li>Guest WiFi access is completely isolated from the Clinic Lan/WiFi network</li><br>
-    </ul><br>
-    <strong>Anti-Virus Software</strong><br><br>
-    <ul style="list-style-type:square">
-      <li>Anti-virus software installed and enabled fro auto update (screenshot of configuration must be attached)</li><br>
-    </ul><br>
-    <strong>Operating System</strong><br><br>
-    <ul style="list-style-type:square">
-      <li>There are no legacy/end-of-support operating systems in use (e.g. Windows XP, MacOS older than the latest three versions)</li><br>
-      <li>The Operating System is enabled fro auto updates or manually patched at a minimum semi-annually</li><br>
-    </ul><br>
-    <strong>Application Patching</strong><br><br>
-    Where it doesn't conflict with my EMR's system requirements,
-    <ul style="list-style-type:square">
-      <li>Desktop software, e.g. MS Office / Other applications are patched at a minimum semi-annually</li><br>
-      <li>Browser plugin (Adobe Flash, PDF, Java) are patched at a minimum semi-annually</li><br>
-      <li>Such patching conflicts with my EMR system requirements</li><br>
-    </ul><br>
+      Private Practice Clinic IT Security Checklist<br><br>
+      <strong>There are a number of basic technology requirements that need to be in place to safeguard patient information within your practice.</strong>
+      The checklist below details the minimum clinic IT security requirements defined by FHA and the Ministry of Health for protecting your clinic from
+      local threats.<br><br>
+      Education, resources and supports on Clinic Privacy and Security are available via the
+      <a href="${this.config.urls.doctorsTechnologyOffice}" target="_blank" rel="noopener noreferrer">Doctors Technology Office (DTO)</a>.<br><br>
+      <a href="mailto:${this.config.emails.doctorsTechnologyOfficeSupport}">${this.config.emails.doctorsTechnologyOfficeSupport}</a> or 604-638-5841<br><br>
+      <strong>Physical Access Control</strong><br><br>
+      <ul style="list-style-type:square">
+        <li>Clinic site is equipped with a monitored alarm system</li><br>
+        <li>Server/Network equipment is physically secured from public access</li><br>
+      </ul><br>
+      <strong>User Account</strong><br><br>
+      <ul style="list-style-type:square">
+        <li>Each user has a unique account and password to access systems within clinic's network</li><br>
+        <li>User accounts are not shared among multiple users</li><br>
+        <li>A separate user account is used for system administration</li><br>
+      </ul><br>
+      <strong>Password Management</strong><br><br>
+      <ul style="list-style-type:square">
+        <li>Minimum password length is 8 characters</li><br>
+        <li>Passwords contain characters from three of the following categories (Uppercase characters, Lowercase characters, Numerals,
+          Non-alphanumeric keyboard symbols)</li><br>
+        <li>Passwords are changed at a minimum semi-annually</li><br>
+      </ul><br>
+      <strong>WiFi Network</strong><br><br>
+      <ul style="list-style-type:square">
+        <li>SSID, WPA2/WPA3 and WiFi password settings are as per DTO Technical Bulletin</li><br>
+        <li>Guest WiFi access is completely isolated from the Clinic Lan/WiFi network</li><br>
+      </ul><br>
+      <strong>Anti-Virus Software</strong><br><br>
+      <ul style="list-style-type:square">
+        <li>Anti-virus software installed and enabled for auto update (screenshot of configuration must be attached)</li><br>
+      </ul><br>
+      <strong>Operating System</strong><br><br>
+      <ul style="list-style-type:square">
+        <li>There are no legacy/end-of-support operating systems in use (e.g. Windows XP, MacOS older than the latest three versions)</li><br>
+        <li>The Operating System is enabled for auto updates or manually patched at a minimum semi-annually</li><br>
+      </ul><br>
+      <strong>Application Patching</strong><br><br>
+      Where it doesn't conflict with my EMR's system requirements,
+      <ul style="list-style-type:square">
+        <li>Desktop software, e.g. MS Office / Other applications are patched at a minimum semi-annually</li><br>
+        <li>Browser plugin (Adobe Flash, PDF, Java) are patched at a minimum semi-annually</li><br>
+        <li>Such patching conflicts with my EMR system requirements</li><br>
+      </ul><br>
     `;
   }
 
