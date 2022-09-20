@@ -203,7 +203,7 @@ export class DocumentService {
         <li>My staff is aware of risks associated with using USB drivers and other portable devices that may compromise
           my network.</li><br>
         <li>My staff is aware that passwords used for access to MS Teams are not permitted to be shared with other
-          individuals or re-used for other servies, and that the "Save Password" feature in browsers is not utilized to
+          individuals or re-used for other services, and that the "Save Password" feature in browsers is not utilized to
           access MS Teams.</li><br>
         <li>My clinic agrees to notify the FH eHealth Team when one of my staff no longer requires access to MS Teams.</li><br>
         <li>My clinic will retain a record for two years of the support activities (e.g. invoice/receipt with name of vendor
@@ -243,7 +243,7 @@ export class DocumentService {
           local IT. The Privacy Officer is also responsible for establishing the Privacy Policy and Security Policies, procedures, and
           forms. For more information, on this role, refer to the BC Physician Privacy Toolkit: A Guide for Physicians.</li><br>
         <li>Privacy and Security Policies and related documents should be communicated to staff and any individuals accessing the
-          clinic eSystems. Assistance in creating such policies are available from the Doctors of BC.</li><br>
+          clinic eSystems. Assistance in creating such policies is available from the Doctors of BC.</li><br>
         <li> All clinic staff need to complete Privacy Training and Security Awareness Training comprised of new employee orientation and
           regularly scheduled refreshers. The content should include:<br>
           <ol type="a">
@@ -257,10 +257,10 @@ export class DocumentService {
           to possible fraud and prevent them from clicking on attachments or links that can download malicious software (malware) to be installed
           on the user's computer and potentially spread to the entire network.</li><br>
         <li>Use of non-encrypted USB drives and mobile storage devices to store or transfer patient information is not recommended. If not properly
-          protected, they can be compromised (lost of stolen) or be intercepted with malware. Malicious software can be spread to user's computer and
+          protected, they can be compromised (lost or stolen) or be intercepted with malware. Malicious software can be spread to user's computer and
           potentially entire network.</li><br>
         <li>Clinic should provide employees with instructions about password protection practises to reduce the risk of unauthorized access into the
-          eHealth application. Passwords must not be shared with other even as temporary workaround and not used for access to any other services (e.g.
+          eHealth application. Passwords must not be shared with others even as temporary workaround and not used for access to any other services (e.g.
           Gmail, Facebook, LinkedIn). The "save password" feature for any account is not safe because any user on that computer can then use the stored
           password. Each user should change their passwords semi-annually. See password management requirements on page 3 of this guide. For tips on
           creating secure passwords, visit the Physician Office IT Security Guide.</li><br>
