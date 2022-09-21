@@ -1,4 +1,7 @@
-<ui-page>
+<ui-page
+  [mode]="currentPage !== 0 ? 'large' : 'page'"
+  [form]="formState.form"
+  (submitted)="onSubmit()">
   <ui-page-section>
     <ui-page-section-subheader
       icon="assignment"
@@ -29,23 +32,77 @@
   </ng-container>
 
   <ng-template #notCompleted>
-    <ng-container [ngSwitch]="currentPage">
+    <ng-container [ngSwitch]="currentPage" [formGroup]="formState.form">
       <ng-container *ngSwitchCase="0">
         <ui-page-section>
-          <p [innerHtml]="declarationAgreement | safe: 'html'"></p>
+          <ui-page-section-subheader heading="Privacy Officer only">
+            <ng-container uiPageSectionSubheaderDesc>
+              The form below is to be filled out by the clinic's Privacy Officer
+              only. If you are not the Privacy Officer, click back to return to
+              the Portal page.
+            </ng-container>
+          </ui-page-section-subheader>
         </ui-page-section>
-      </ng-container>
-      <ng-container *ngSwitchCase="1">
+
         <ui-page-section>
-          <p [innerHtml]="detailsAgreement | safe: 'html'"></p>
+          <ui-page-section-subheader heading="Clinic Name">
+            <ng-container uiPageSectionSubheaderDesc>
+              Enter your clinic's name.
+            </ng-container>
+          </ui-page-section-subheader>
+          <mat-form-field class="w-100">
+            <input
+              matInput
+              placeholder="Clinic name"
+              formControlName="clinicName" />
+            <mat-error>Required</mat-error>
+          </mat-form-field>
         </ui-page-section>
-      </ng-container>
-      <ng-container *ngSwitchCase="2">
         <ui-page-section>
-          <p [innerHtml]="itSecurityAgreement | safe: 'html'"></p>
+          <ui-page-section-subheader heading="Facility Address">
+            <ng-container uiPageSectionSubheaderDesc>
+              Provide your work address.
+            </ng-container>
+          </ui-page-section-subheader>
+
+          <app-address-form [form]="formState.clinicAddress"></app-address-form>
         </ui-page-section>
       </ng-container>
-      <ng-container *ngSwitchDefault></ng-container>
+
+      <ng-container *ngSwitchDefault>
+        <ui-page-section>
+          <p [innerHtml]="getAgreementText(currentPage) | safe: 'html'"></p>
+        </ui-page-section>
+      </ng-container>
+
+      <ng-container *ngSwitchCase="submissionPage">
+        <ui-page-section>
+          <ui-page-section-subheader heading="Clinic Members">
+            <ng-container uiPageSectionSubheaderDesc>
+              Here you can add clinic members to be sent to Fraser Health for
+              approval.
+            </ng-container>
+          </ui-page-section-subheader>
+        </ui-page-section>
+        <ui-page-section formArrayName="clinicMembers">
+          <ng-container
+            *ngFor="let member of formState.clinicMemberControls; let i = index;">
+            <app-clinic-member-form
+              [formGroupName]="i"
+              [form]="member"
+              [index]="i"
+              (remove)="removeClinicMember($event)"></app-clinic-member-form>
+          </ng-container>
+          <button
+            mat-button
+            type="button"
+            color="primary"
+            (click)="addClinicMember()">
+            <mat-icon>person_add</mat-icon>
+            Add Additional Clinic Member
+          </button>
+        </ui-page-section>
+      </ng-container>
     </ng-container>
   </ng-template>
 
@@ -56,18 +113,26 @@
       type="button"
       color="primary"
       (click)="onBack()">
-      {{ completed ? 'Back Home' : (currentPage < 1) ? 'Cancel Back Home' :
+      {{ completed ? 'Back Home' : currentPage === 0 ? 'Cancel Back Home' :
       'Back' }}
     </button>
 
     <button
-      *ngIf="!completed"
+      *ngIf="!completed && currentPage !== submissionPage"
       mat-flat-button
       uiPageFooterAction
       type="button"
       color="primary"
-      (click)="onRequestAccess()">
-      I accept
+      (click)="onNext()">
+      {{ currentPage === 0 ? 'Next' : 'I Agree'}}
+    </button>
+    <button
+      *ngIf="!completed && currentPage === submissionPage"
+      mat-flat-button
+      uiPageFooterAction
+      type="submit"
+      color="primary">
+      Next
     </button>
   </ui-page-footer>
 </ui-page>
