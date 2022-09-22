@@ -1,0 +1,23 @@
+FROM mcr.microsoft.com/dotnet/sdk:6.0
+
+ARG SONAR_LOGIN="login"
+
+# Install java, needed for sonar-scanner
+RUN apt update
+RUN apt install default-jre -y
+
+
+ENV DOTNET_CLI_HOME="/opt"
+ENV PATH="$PATH:/opt/.dotnet/tools"
+
+# Install sonar-scanner 
+RUN dotnet tool install --global dotnet-sonarscanner
+RUN dotnet tool install --global dotnet-coverage
+
+WORKDIR /source
+
+COPY . .
+
+RUN dotnet-sonarscanner begin /k:webapi /d:sonar.host.url=https://sonarqube-d8a8f9-tools.apps.silver.devops.gov.bc.ca /d:sonar.login=${SONAR_LOGIN}
+RUN dotnet build
+RUN dotnet-sonarscanner end /d:sonar.login=${SONAR_LOGIN}
