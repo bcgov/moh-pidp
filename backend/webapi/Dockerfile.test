@@ -1,7 +1,7 @@
 FROM mcr.microsoft.com/dotnet/sdk:6.0
 
 ARG SONAR_LOGIN="login"
-ARG SOMAR_PROJECT="webapi"
+ARG SONAR_PROJECT="webapi"
 
 # Install java, needed for sonar-scanner
 RUN apt update
