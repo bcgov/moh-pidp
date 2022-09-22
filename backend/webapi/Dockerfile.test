@@ -19,6 +19,6 @@ WORKDIR /source
 
 COPY . .
 
-RUN dotnet-sonarscanner begin /k:${SOMAR_PROJECT} /d:sonar.host.url=https://sonarqube-d8a8f9-tools.apps.silver.devops.gov.bc.ca /d:sonar.login=${SONAR_LOGIN}
+RUN dotnet-sonarscanner begin /k:${SONAR_PROJECT} /d:sonar.host.url=https://sonarqube-d8a8f9-tools.apps.silver.devops.gov.bc.ca /d:sonar.login=${SONAR_LOGIN}
 RUN dotnet build
 RUN dotnet-sonarscanner end /d:sonar.login=${SONAR_LOGIN}
