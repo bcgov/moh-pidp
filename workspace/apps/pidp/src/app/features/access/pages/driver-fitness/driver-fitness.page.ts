@@ -6,7 +6,6 @@ import { catchError, noop, of, tap } from 'rxjs';
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';
 import { PartyService } from '@app/core/party/party.service';
-import { DocumentService } from '@app/core/services/document.service';
 import { LoggerService } from '@app/core/services/logger.service';
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
 
@@ -24,7 +23,6 @@ import {
 export class DriverFitnessPage implements OnInit {
   public title: string;
   public driverFitnessUrl: string;
-  public collectionNotice: string;
   public completed: boolean | null;
   public accessRequestFailed: boolean;
   public driverFitnessSupportEmail: string;
@@ -36,13 +34,11 @@ export class DriverFitnessPage implements OnInit {
     private router: Router,
     private partyService: PartyService,
     private resource: DriverFitnessResource,
-    private logger: LoggerService,
-    documentService: DocumentService
+    private logger: LoggerService
   ) {
     const routeData = this.route.snapshot.data;
     this.title = routeData.title;
     this.driverFitnessUrl = driverFitnessUrl;
-    this.collectionNotice = documentService.getDriverFitnessCollectionNotice();
     this.completed = routeData.driverFitnessStatusCode === StatusCode.COMPLETED;
     this.accessRequestFailed = false;
     this.driverFitnessSupportEmail = driverFitnessSupportEmail;
