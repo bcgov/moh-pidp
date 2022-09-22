@@ -23,8 +23,8 @@ export class DriverFitnessPortalSection implements IPortalSection {
     private router: Router
   ) {
     this.key = 'driverFitness';
-    this.heading = 'Driver Medical Fitness';
-    this.description = `Enrol here for access to Driver Medical Fitness.`;
+    this.heading = 'Medical Practitioner Registration';
+    this.description = `Register as a Medical Practitioner (or Designate) to the RoadSafetyBC Medical Practitioner Portal.`;
   }
 
   public get hint(): string {
@@ -38,7 +38,7 @@ export class DriverFitnessPortalSection implements IPortalSection {
   public get action(): PortalSectionAction {
     const statusCode = this.getStatusCode();
     return {
-      label: statusCode === StatusCode.COMPLETED ? 'View' : 'Request',
+      label: statusCode === StatusCode.COMPLETED ? 'View' : 'Register',
       route: AccessRoutes.routePath(AccessRoutes.DRIVER_FITNESS),
       disabled: statusCode === StatusCode.NOT_AVAILABLE,
     };
