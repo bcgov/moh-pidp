@@ -1,6 +1,7 @@
 FROM mcr.microsoft.com/dotnet/sdk:6.0
 
 ARG SONAR_LOGIN="login"
+ARG SOMAR_PROJECT="webapi"
 
 # Install java, needed for sonar-scanner
 RUN apt update
@@ -18,6 +19,6 @@ WORKDIR /source
 
 COPY . .
 
-RUN dotnet-sonarscanner begin /k:webapi /d:sonar.host.url=https://sonarqube-d8a8f9-tools.apps.silver.devops.gov.bc.ca /d:sonar.login=${SONAR_LOGIN}
+RUN dotnet-sonarscanner begin /k:${SOMAR_PROJECT} /d:sonar.host.url=https://sonarqube-d8a8f9-tools.apps.silver.devops.gov.bc.ca /d:sonar.login=${SONAR_LOGIN}
 RUN dotnet build
 RUN dotnet-sonarscanner end /d:sonar.login=${SONAR_LOGIN}
