@@ -3,7 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
 
-import { EMPTY, exhaustMap } from 'rxjs';
+import { EMPTY, exhaustMap, of, switchMap } from 'rxjs';
 
 import {
   ConfirmDialogComponent,
@@ -62,7 +62,8 @@ export class PartiesPage implements OnInit {
       .pipe(
         exhaustMap((result) =>
           result ? this.adminResource.deleteParties() : EMPTY
-        )
+        ),
+        switchMap(() => of(this.getParties()))
       )
       .subscribe();
   }
