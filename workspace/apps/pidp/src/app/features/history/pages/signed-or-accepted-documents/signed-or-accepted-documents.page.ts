@@ -103,9 +103,6 @@ export class SignedOrAcceptedDocumentsPage implements OnInit {
           case DocumentType.SA_EFORMS_COLLECTION_NOTICE:
             return status?.saEforms.statusCode === StatusCode.COMPLETED;
 
-          case DocumentType.DRIVER_FITNESS_COLLECTION_NOTICE:
-            return status?.driverFitness.statusCode === StatusCode.COMPLETED;
-
           case DocumentType.UCI_COLLECTION_NOTICE:
             return status?.uci.statusCode === StatusCode.COMPLETED;
 
