@@ -59,7 +59,7 @@ export class SaEformsPortalSection implements IPortalSection {
         return 'Completed';
       default:
         return incorrectLicenceType
-          ? 'Pharmacists and Pharmacy Technicians can not apply for Special Authority eForms'
+          ? 'Pharmacy Technicians can not apply for Special Authority eForms'
           : 'Incomplete';
     }
   }

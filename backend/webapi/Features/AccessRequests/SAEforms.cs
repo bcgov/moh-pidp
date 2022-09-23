@@ -15,7 +15,7 @@ using Pidp.Models.Lookups;
 
 public class SAEforms
 {
-    public static IdentifierType[] ExcludedIdentifierTypes => new[] { IdentifierType.Pharmacist, IdentifierType.PharmacyTech };
+    public static IdentifierType[] ExcludedIdentifierTypes => new[] { IdentifierType.PharmacyTech };
 
     public class Command : ICommand<IDomainResult>
     {

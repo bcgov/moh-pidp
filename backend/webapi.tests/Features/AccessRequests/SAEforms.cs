@@ -5,7 +5,6 @@ using NodaTime;
 using Xunit;
 
 using Pidp.Features.AccessRequests;
-using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.HttpClients.Keycloak;
 using Pidp.Infrastructure.HttpClients.Plr;
 using Pidp.Models;
@@ -37,7 +36,7 @@ public class SAEformsTests : InMemoryDbTest
         Assert.Equal(expected, result.IsSuccess);
         if (expected)
         {
-            A.CallTo(() => keycloak.AssignClientRole(party.UserId, Clients.SAEforms, Roles.SAEforms)).MustHaveHappened();
+            A.CallTo(() => keycloak.AssignClientRole(party.UserId, MohClients.SAEforms.ClientId, MohClients.SAEforms.AccessRole)).MustHaveHappened();
         }
         else
         {

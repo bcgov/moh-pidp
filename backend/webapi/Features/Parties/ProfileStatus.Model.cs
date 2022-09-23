@@ -288,16 +288,16 @@ public partial class ProfileStatus
                     return;
                 }
 
-                if (!profile.DemographicsEntered
-                    || !profile.PlrStanding
+                if (profile.DemographicsEntered
+                    && profile.PlrStanding
                         .Excluding(AccessRequests.SAEforms.ExcludedIdentifierTypes)
                         .HasGoodStanding)
                 {
-                    this.StatusCode = StatusCode.Locked;
+                    this.StatusCode = StatusCode.Incomplete;
                     return;
                 }
 
-                this.StatusCode = StatusCode.Incomplete;
+                this.StatusCode = StatusCode.Locked;
             }
         }
 
