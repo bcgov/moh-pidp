@@ -22,9 +22,9 @@
   <ui-page-section>
     <ui-page-section-subheader
       icon="assignment"
-      heading="Driver Medical Fitness">
+      heading="Medical Practitioner Registration">
       <ng-container uiPageSectionSubheaderDesc>
-        {{ completed ? 'Enrolment Complete.' : 'Collection Notice.' }}
+        {{ completed ? 'Enrolment Complete.' : 'Cheese ipsum.' }}
       </ng-container>
     </ui-page-section-subheader>
   </ui-page-section>
@@ -34,19 +34,12 @@
       type="success"
       icon="check_circle"
       iconType="outlined"
-      heading="You have access">
+      heading="Success!">
       <ng-container uiAlertContent>
+        <p>You may now log into the Portal.</p>
         <p>
-          You now have access to the Driver Medical Fitness application. You can
-          log into the application using your BC Services Card app.
-        </p>
-        <p>
-          Follow this link to Driver Medical Fitness:<br />
-          <a uiAnchor [attr.href]="driverFitnessUrl"></a>
-        </p>
-        <p>
-          You will need to visit this link each time you want to submit an SA
-          eForm. It may be helpful to bookmark this link for future use.
+          Log in:<br />
+          <a uiAnchor [attr.href]="'https://www.cheeseipsum.co.uk/'"></a>
         </p>
       </ng-container>
     </ui-alert>
@@ -54,9 +47,18 @@
 
   <ng-template #notCompleted>
     <ui-page-section>
-      <p
-        class="collection-notice"
-        [innerHtml]="collectionNotice | safe: 'html'"></p>
+      <p class="cheese">
+        Parmesan airedale bocconcini. Manchego paneer hard cheese cheese and
+        wine camembert de normandie stilton fromage frais port-salut. Cheese
+        triangles croque monsieur boursin goat cheddar everyone loves edam
+        monterey jack. Bavarian bergkase rubber cheese jarlsberg. Cheese
+        triangles cheese slices cheddar. Brie smelly cheese airedale mozzarella
+        paneer mascarpone cheese slices st. agur blue cheese. Feta queso
+        halloumi cheese triangles say cheese chalk and cheese goat who moved my
+        cheese. Fromage frais fromage dolcelatte melted cheese cow ricotta
+        cheese strings mascarpone. Cheese slices say cheese cheesy feet everyone
+        loves.
+      </p>
     </ui-page-section>
   </ng-template>
 
