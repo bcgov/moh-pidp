@@ -31,7 +31,7 @@ export class PrescriptionRefillEformsResolver
           return null;
         }
 
-        return profileStatus.status.saEforms.statusCode;
+        return profileStatus.status.prescriptionRefillEforms.statusCode;
       }),
       catchError(() => of(null))
     );
