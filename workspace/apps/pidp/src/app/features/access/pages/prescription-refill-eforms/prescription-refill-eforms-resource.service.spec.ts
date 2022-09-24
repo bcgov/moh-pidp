@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 
 import { PrescriptionRefillEformsResource } from './prescription-refill-eforms-resource.service';
 
-describe('PrescriptionRefillEformsResourceService', () => {
+describe('PrescriptionRefillEformsResource', () => {
   let service: PrescriptionRefillEformsResource;
 
   beforeEach(() => {

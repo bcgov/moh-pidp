@@ -30,7 +30,8 @@ export class PrescriptionRefillEformsPage implements OnInit {
   ) {
     const routeData = this.route.snapshot.data;
     this.title = routeData.title;
-    this.completed = routeData.uciStatusCode === StatusCode.COMPLETED;
+    this.completed =
+      routeData.prescriptionRefillEformsStatusCode === StatusCode.COMPLETED;
     this.accessRequestFailed = false;
     this.enrolmentError = false;
   }
