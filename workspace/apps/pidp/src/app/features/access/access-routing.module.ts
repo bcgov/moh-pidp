@@ -24,6 +24,17 @@ const routes: Routes = [
       ),
   },
   {
+    path: AccessRoutes.PRESCRIPTION_REFILL_EFORMS,
+    canActivate: [PermissionsGuard],
+    data: {
+      roles: [Role.FEATURE_PIDP_DEMO],
+    },
+    loadChildren: (): Promise<PrescriptionRefillEformsModule> =>
+      import(
+        './pages/prescription-refill-eforms/prescription-refill-eforms.module'
+      ).then((m) => m.PrescriptionRefillEformsModule),
+  },
+  {
     path: AccessRoutes.HCIM_ACCOUNT_TRANSFER,
     loadChildren: (): Promise<HcimAccountTransferModule> =>
       import('./pages/hcim-account-transfer/hcim-account-transfer.module').then(
@@ -91,17 +102,6 @@ const routes: Routes = [
     },
     loadChildren: (): Promise<MsTeamsModule> =>
       import('./pages/ms-teams/ms-teams.module').then((m) => m.MsTeamsModule),
-  },
-  {
-    path: AccessRoutes.PRESCRIPTION_REFILL_EFORMS,
-    canActivate: [PermissionsGuard],
-    data: {
-      roles: [Role.FEATURE_PIDP_DEMO],
-    },
-    loadChildren: (): Promise<PrescriptionRefillEformsModule> =>
-      import(
-        './pages/prescription-refill-eforms/prescription-refill-eforms.module'
-      ).then((m) => m.PrescriptionRefillEformsModule),
   },
 ];
 
