@@ -8,7 +8,7 @@ import { PartyService } from '@app/core/party/party.service';
 import { LoggerService } from '@app/core/services/logger.service';
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
 
-import { SaEformsResource } from '../sa-eforms/sa-eforms-resource.service';
+import { PrescriptionRefillEformsResource } from './prescription-refill-eforms-resource.service';
 
 @Component({
   selector: 'app-prescription-refill-eforms',
@@ -25,7 +25,7 @@ export class PrescriptionRefillEformsPage implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private partyService: PartyService,
-    private resource: SaEformsResource,
+    private resource: PrescriptionRefillEformsResource,
     private logger: LoggerService
   ) {
     const routeData = this.route.snapshot.data;
