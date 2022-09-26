@@ -1,0 +1,92 @@
+<ui-page>
+  <ui-page-header>{{ title }}</ui-page-header>
+
+  <ui-alert
+    *ngIf="accessRequestFailed"
+    type="danger"
+    icon="error_outline"
+    iconType="outlined"
+    heading="Error Requesting Access">
+    <ng-container uiAlertContent>
+      <p>
+        Your request for access to Special Authority eForms could not be
+        processed at this time. If this issue persists, contact
+        <!-- <a
+          uiAnchor
+          scheme="mailto"
+          [attr.href]="specialAuthoritySupportEmail"></a> -->
+        for assistance.
+      </p>
+    </ng-container>
+  </ui-alert>
+
+  <app-enrolment-error *ngIf="enrolmentError"></app-enrolment-error>
+
+  <ui-page-section>
+    <ui-page-section-subheader
+      icon="assignment"
+      heading="Prescription Refill eForms">
+      <ng-container uiPageSectionSubheaderDesc>
+        {{ completed ? 'Enrolment Complete.' : 'Collection Notice.' }}
+      </ng-container>
+    </ui-page-section-subheader>
+  </ui-page-section>
+
+  <ng-container *ngIf="completed; else notCompleted">
+    <ui-alert
+      type="success"
+      icon="check_circle"
+      iconType="outlined"
+      heading="You have access">
+      <ng-container uiAlertContent>
+        <p>
+          You now have access to the Prescription eForms application. You can
+          log into the application using your BC Services Card app.
+        </p>
+        <!-- <p>
+          Follow this link to Special Authority eForms:<br />
+          <a uiAnchor [attr.href]="specialAuthorityEformsUrl"></a>
+        </p> -->
+        <p>
+          You will need to visit this link each time you want to submit an SA
+          eForm. It may be helpful to bookmark this link for future use.
+        </p>
+      </ng-container>
+    </ui-alert>
+  </ng-container>
+
+  <ng-template #notCompleted>
+    <ui-page-section>
+      <p>
+        Most people believe that the Ipswich Ale over a burglar ale organizes
+        some dude, but they need to remember how often the geosynchronous corona
+        light procrastinates. A pool table inside the Coors returns home, and a
+        satellite brewery related to some malt takes a peek at a miller. A
+        tooled Long Trail Ale is seldom cantankerous. The bar stool earns enough
+        for a beer, and the Christmas Ale procrastinates; however, another
+        Fraoch Heather Ale organizes a frustrating Heineken.
+      </p>
+    </ui-page-section>
+  </ng-template>
+
+  <ui-page-footer [mode]="completed ? 'reverse' : 'normal'">
+    <button
+      mat-stroked-button
+      uiPageFooterAction
+      type="button"
+      color="primary"
+      (click)="onBack()">
+      {{ completed ? 'Back Home' : 'Cancel Back Home' }}
+    </button>
+
+    <button
+      *ngIf="!completed"
+      mat-flat-button
+      uiPageFooterAction
+      type="button"
+      color="primary"
+      (click)="onRequestAccess()">
+      Next
+    </button>
+  </ui-page-footer>
+</ui-page>

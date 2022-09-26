@@ -260,6 +260,39 @@ public partial class ProfileStatus
             }
         }
 
+        public class PrescriptionRefillEforms : ProfileSection
+        {
+            internal override string SectionName => "prescriptionRefillEforms";
+
+            public PrescriptionRefillEforms(ProfileStatusDto profile) : base(profile) { }
+
+            protected override void SetAlertsAndStatus(ProfileStatusDto profile)
+            {
+                if (!profile.UserIsBcServicesCard)
+                {
+                    this.StatusCode = StatusCode.Hidden;
+                    return;
+                }
+
+                if (profile.CompletedEnrolments.Contains(AccessTypeCode.PrescriptionRefillEforms))
+                {
+                    this.StatusCode = StatusCode.Complete;
+                    return;
+                }
+
+                if (profile.DemographicsEntered
+                    && profile.PlrStanding
+                        .With(AccessRequests.PrescriptionRefillEforms.AllowedIdentifierTypes)
+                        .HasGoodStanding)
+                {
+                    this.StatusCode = StatusCode.Incomplete;
+                    return;
+                }
+
+                this.StatusCode = StatusCode.Locked;
+            }
+        }
+
         public class SAEforms : ProfileSection
         {
             internal override string SectionName => "saEforms";

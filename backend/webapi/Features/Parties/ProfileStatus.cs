@@ -117,6 +117,7 @@ public partial class ProfileStatus
                     new Model.HcimAccountTransfer(profile),
                     new Model.HcimEnrolment(profile),
                     new Model.MSTeams(profile),
+                    new Model.PrescriptionRefillEforms(profile),
                     new Model.SAEforms(profile),
                     new Model.Uci(profile)
                 }
