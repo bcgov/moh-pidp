@@ -102,7 +102,7 @@ public class PrescriptionRefillEforms
                 from: EmailService.PidpEmail,
                 to: partyEmail,
                 subject: "Prescription Refill eForms Enrolment Confirmation",
-                body: $"Hi {firstName},<br><br>You will need to visit this {link} each time you want to submit an SA eForm. It may be helpful to bookmark this {link} for future use."
+                body: $"Hi {firstName},<br><br>You will need to visit this {link} each time you want to submit an eForm. It may be helpful to bookmark this {link} for future use."
             );
             await this.emailService.SendAsync(email);
         }
