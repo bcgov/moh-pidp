@@ -109,7 +109,7 @@ public class PrescriptionRefillEforms
     }
 }
 
-public static partial class PharmacistSAEformsLoggingExtensions
+public static partial class PrescriptionRefillEformsLoggingExtensions
 {
     [LoggerMessage(1, LogLevel.Warning, "Prescription Refill eForm for Pharmacists denied due to the Party Record not meeting all prerequisites.")]
     public static partial void LogPrescriptionRefillEformsAccessRequestDenied(this ILogger logger);
