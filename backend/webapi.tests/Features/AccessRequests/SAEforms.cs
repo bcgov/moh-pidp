@@ -5,7 +5,6 @@ using NodaTime;
 using Xunit;
 
 using Pidp.Features.AccessRequests;
-using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.HttpClients.Keycloak;
 using Pidp.Infrastructure.HttpClients.Plr;
 using Pidp.Models;

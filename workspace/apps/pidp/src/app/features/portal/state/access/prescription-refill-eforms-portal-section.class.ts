@@ -12,9 +12,9 @@ import { ProfileStatus } from '../../models/profile-status.model';
 import { PortalSectionAction } from '../portal-section-action.model';
 import { PortalSectionKey } from '../portal-section-key.type';
 import { IPortalSection } from '../portal-section.model';
-import { SaEformsSection } from './sa-eforms-section.model';
+import { Section } from '../section.model';
 
-export class SaEformsPortalSection implements IPortalSection {
+export class PrescriptionRefillEformsPortalSection implements IPortalSection {
   public readonly key: PortalSectionKey;
   public heading: string;
   public description: string;
@@ -23,9 +23,9 @@ export class SaEformsPortalSection implements IPortalSection {
     private profileStatus: ProfileStatus,
     private router: Router
   ) {
-    this.key = 'saEforms';
-    this.heading = 'Special Authority eForms';
-    this.description = `Enrol here for access to PharmaCare's Special Authority eForms application.`;
+    this.key = 'prescriptionRefillEforms';
+    this.heading = 'Prescription Refill Eforms';
+    this.description = `Enrol here for access to Prescription Refill eForms application.`;
   }
 
   public get hint(): string {
@@ -40,7 +40,7 @@ export class SaEformsPortalSection implements IPortalSection {
     const statusCode = this.getStatusCode();
     return {
       label: statusCode === StatusCode.COMPLETED ? 'View' : 'Request',
-      route: AccessRoutes.routePath(AccessRoutes.SPECIAL_AUTH_EFORMS),
+      route: AccessRoutes.routePath(AccessRoutes.PRESCRIPTION_REFILL_EFORMS),
       disabled: statusCode === StatusCode.NOT_AVAILABLE,
     };
   }
@@ -50,17 +50,13 @@ export class SaEformsPortalSection implements IPortalSection {
   }
 
   public get status(): string {
-    const { statusCode, incorrectLicenceType } = this.getSectionStatus();
-
-    switch (statusCode) {
+    switch (this.getSectionStatus().statusCode) {
       case StatusCode.AVAILABLE:
-        return 'You are eligible to use Special Authority eForms';
+        return 'You are eligible to use Prescription Refill eforms';
       case StatusCode.COMPLETED:
         return 'Completed';
       default:
-        return incorrectLicenceType
-          ? 'Pharmacy Technicians can not apply for Special Authority eForms'
-          : 'Incomplete';
+        return 'Incomplete';
     }
   }
 
@@ -68,11 +64,11 @@ export class SaEformsPortalSection implements IPortalSection {
     this.router.navigate([ShellRoutes.routePath(this.action.route)]);
   }
 
-  private getSectionStatus(): SaEformsSection {
-    return this.profileStatus.status.saEforms;
+  private getSectionStatus(): Section {
+    return this.profileStatus.status.prescriptionRefillEforms;
   }
 
   private getStatusCode(): StatusCode {
-    return this.profileStatus.status.saEforms.statusCode;
+    return this.profileStatus.status.prescriptionRefillEforms.statusCode;
   }
 }

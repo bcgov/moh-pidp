@@ -69,8 +69,7 @@ public class ProfileStatusSAEformsTests : ProfileStatusTest
 
         var eforms = profile.Section<SAEforms>();
         eforms.AssertNoAlerts();
-        if (identifierType == IdentifierType.Pharmacist
-            || identifierType == IdentifierType.PharmacyTech)
+        if (identifierType == IdentifierType.PharmacyTech)
         {
             Assert.Equal(StatusCode.Locked, eforms.StatusCode);
             Assert.True(eforms.IncorrectLicenceType);

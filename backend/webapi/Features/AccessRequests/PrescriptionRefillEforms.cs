@@ -13,9 +13,9 @@ using Pidp.Infrastructure.Services;
 using Pidp.Models;
 using Pidp.Models.Lookups;
 
-public class SAEforms
+public class PrescriptionRefillEforms
 {
-    public static IdentifierType[] ExcludedIdentifierTypes => new[] { IdentifierType.PharmacyTech };
+    public static IdentifierType[] AllowedIdentifierTypes => new[] { IdentifierType.Pharmacist };
 
     public class Command : ICommand<IDomainResult>
     {
@@ -58,7 +58,7 @@ public class SAEforms
                 .Where(party => party.Id == command.PartyId)
                 .Select(party => new
                 {
-                    AlreadyEnroled = party.AccessRequests.Any(request => request.AccessTypeCode == AccessTypeCode.SAEforms),
+                    AlreadyEnroled = party.AccessRequests.Any(request => request.AccessTypeCode == AccessTypeCode.PrescriptionRefillEforms),
                     party.UserId,
                     party.Email,
                     party.FirstName,
@@ -69,14 +69,14 @@ public class SAEforms
             if (dto.AlreadyEnroled
                 || dto.Email == null
                 || !(await this.plrClient.GetStandingsDigestAsync(dto.Cpn))
-                    .Excluding(ExcludedIdentifierTypes)
+                    .With(AllowedIdentifierTypes)
                     .HasGoodStanding)
             {
-                this.logger.LogSAEformsAccessRequestDenied();
+                this.logger.LogPrescriptionRefillEformsAccessRequestDenied();
                 return DomainResult.Failed();
             }
 
-            if (!await this.keycloakClient.AssignClientRole(dto.UserId, MohClients.SAEforms.ClientId, MohClients.SAEforms.AccessRole))
+            if (!await this.keycloakClient.AssignClientRole(dto.UserId, MohClients.PrescriptionRefillEforms.ClientId, MohClients.PrescriptionRefillEforms.AccessRole))
             {
                 return DomainResult.Failed();
             }
@@ -84,7 +84,7 @@ public class SAEforms
             this.context.AccessRequests.Add(new AccessRequest
             {
                 PartyId = command.PartyId,
-                AccessTypeCode = AccessTypeCode.SAEforms,
+                AccessTypeCode = AccessTypeCode.PrescriptionRefillEforms,
                 RequestedOn = this.clock.GetCurrentInstant()
             });
 
@@ -101,16 +101,16 @@ public class SAEforms
             var email = new Email(
                 from: EmailService.PidpEmail,
                 to: partyEmail,
-                subject: "SA eForms Enrolment Confirmation",
-                body: $"Hi {firstName},<br><br>You will need to visit this {link} each time you want to submit an SA eForm. It may be helpful to bookmark this {link} for future use."
+                subject: "Prescription Refill eForms Enrolment Confirmation",
+                body: $"Hi {firstName},<br><br>You will need to visit this {link} each time you want to submit an eForm. It may be helpful to bookmark this {link} for future use."
             );
             await this.emailService.SendAsync(email);
         }
     }
 }
 
-public static partial class SAEformsLoggingExtensions
+public static partial class PrescriptionRefillEformsLoggingExtensions
 {
-    [LoggerMessage(1, LogLevel.Warning, "SA eForms Access Request denied due to the Party Record not meeting all prerequisites.")]
-    public static partial void LogSAEformsAccessRequestDenied(this ILogger logger);
+    [LoggerMessage(1, LogLevel.Warning, "Prescription Refill eForm for Pharmacists denied due to the Party Record not meeting all prerequisites.")]
+    public static partial void LogPrescriptionRefillEformsAccessRequestDenied(this ILogger logger);
 }
