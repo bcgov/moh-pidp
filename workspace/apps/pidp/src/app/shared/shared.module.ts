@@ -9,6 +9,7 @@ import { AddressAutocompleteComponent } from './components/address-autocomplete/
 import { AddressFormComponent } from './components/address-form/address-form.component';
 import { AddressInfoComponent } from './components/address-info/address-info.component';
 import { GetSupportComponent } from './components/get-support/get-support.component';
+import { EmailWithDomainValidationComponent } from './components/email-with-domain-validation/email-with-domain-validation.component';
 
 @NgModule({
   declarations: [
@@ -16,6 +17,7 @@ import { GetSupportComponent } from './components/get-support/get-support.compon
     AddressFormComponent,
     AddressInfoComponent,
     GetSupportComponent,
+    EmailWithDomainValidationComponent,
   ],
   imports: [CommonModule, SharedUiModule, LookupModule.forChild()],
   exports: [

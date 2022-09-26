@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 import { Observable, catchError, map, of } from 'rxjs';
@@ -22,6 +23,14 @@ export class LookupResource {
       // Catch and release to allow the application to render
       // views regardless of the presence of the lookups
       catchError((_) => of(null))
+    );
+  }
+
+  public getCommonEmailDomains(): Observable<string[] | null> {
+    return this.apiResource.get<string[]>('lookups/emails').pipe(
+      catchError((error: HttpErrorResponse) => {
+        throw error;
+      })
     );
   }
 }
