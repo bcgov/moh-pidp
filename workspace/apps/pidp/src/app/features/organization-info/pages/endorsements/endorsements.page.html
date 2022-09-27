@@ -119,7 +119,12 @@
             matInput
             placeholder="Email"
             formControlName="recipientEmail" />
-          <mat-error>Required</mat-error>
+          <mat-error *ngIf="recipientEmail.hasError('required')"
+            >Required</mat-error
+          >
+          <mat-error *ngIf="recipientEmail.hasError('email')">
+            Must be a valid email address
+          </mat-error>
         </mat-form-field>
       </ng-container>
     </ui-page-section>
