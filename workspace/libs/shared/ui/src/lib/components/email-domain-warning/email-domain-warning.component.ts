@@ -18,7 +18,7 @@ export class EmailDomainWarningComponent implements OnChanges {
   }
 
   public ngOnChanges(): void {
-    var inputDomain = this.getDomain(this.inputEmail);
+    const inputDomain = this.getDomain(this.inputEmail);
 
     this.showWarning = inputDomain
       ? !this.commonDomains.includes(inputDomain)
