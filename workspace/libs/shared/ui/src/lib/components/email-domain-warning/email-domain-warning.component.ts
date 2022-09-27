@@ -32,6 +32,6 @@ export class EmailDomainWarningComponent implements OnChanges {
       return '';
     }
 
-    return this.inputEmail.substring(atIndex + 1);
+    return email.substring(atIndex + 1);
   }
 }
