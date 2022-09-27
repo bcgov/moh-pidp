@@ -12,6 +12,7 @@ export class ContactFormComponent {
    * Contact information form instance.
    */
   @Input() public form!: FormGroup;
+  @Input() public warningMessage!: string;
 
   public get phone(): FormControl {
     return this.form.get('phone') as FormControl;

@@ -36,6 +36,7 @@ export class PersonalInformationPage
   public user$: Observable<User>;
   public identityProvider$: Observable<IdentityProvider>;
   public hasPreferredName: boolean;
+  public warningMessage: string;
 
   public IdentityProvider = IdentityProvider;
 
@@ -57,6 +58,7 @@ export class PersonalInformationPage
     this.user$ = this.authorizedUserService.user$;
     this.identityProvider$ = this.authorizedUserService.identityProvider$;
     this.hasPreferredName = false;
+    this.warningMessage = 'YE HAVE BEEN WARNED MATEY';
   }
 
   public onPreferredNameToggle({ checked }: ToggleContentChange): void {
