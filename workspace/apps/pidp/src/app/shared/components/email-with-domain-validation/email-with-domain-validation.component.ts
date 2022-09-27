@@ -1,4 +1,11 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+} from '@angular/core';
 
 import { EMPTY } from 'rxjs';
 
@@ -9,29 +16,35 @@ import { LookupResource } from '@app/modules/lookup/lookup-resource.service';
   templateUrl: './email-with-domain-validation.component.html',
   styleUrls: ['./email-with-domain-validation.component.scss'],
 })
-export class EmailWithDomainValidationComponent implements OnInit {
+export class EmailWithDomainValidationComponent implements OnInit, OnChanges {
   /**
    * @description
    * Email input by the user.
    */
   @Input() public inputEmail: string;
-  /**
-   * @description
-   * Emits true if email input is found in common email domain list.
-   */
-  @Output() public domainRecognized: EventEmitter<boolean>;
 
-  public commonEmailDomains: string[];
+  public showWarning: boolean;
+  private commonEmailDomains: string[];
 
   public constructor(private lookupResource: LookupResource) {
     this.inputEmail = '';
-    this.domainRecognized = new EventEmitter<boolean>();
+    this.showWarning = false;
     this.commonEmailDomains = [];
   }
 
+  public ngOnChanges(): void {
+    const inputDomain = this.inputEmail?.split('@').pop();
+    this.showWarning = inputDomain === 'google.ca';
+    console.log(inputDomain);
+    console.log(this.showWarning);
+    // this.showWarning = inputDomain
+    //   ? !this.commonEmailDomains.includes(inputDomain)
+    //   : false;
+  }
+
   public ngOnInit(): void {
-    this.lookupResource.getCommonEmailDomains().subscribe((emails) => {
-      emails ? this.commonEmailDomains.push(...emails) : EMPTY;
-    });
+    // this.lookupResource.getCommonEmailDomains().subscribe((emails) => {
+    //   emails ? this.commonEmailDomains.push(...emails) : EMPTY;
+    // });
   }
 }
