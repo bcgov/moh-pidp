@@ -18,7 +18,21 @@ export class EmailDomainWarningComponent implements OnChanges {
   }
 
   public ngOnChanges(): void {
-    const inputDomain = this.inputEmail?.split('@').pop() ?? '';
-    this.showWarning = !this.commonDomains.includes(inputDomain);
+    var inputDomain = this.getDomain(this.inputEmail);
+    console.log(`domain:[${inputDomain}]`);
+
+    this.showWarning = inputDomain
+      ? !this.commonDomains.includes(inputDomain)
+      : false;
+  }
+
+  private getDomain(email: string): string {
+    const atIndex = email?.lastIndexOf('@') ?? -1;
+
+    if (atIndex === -1) {
+      return '';
+    }
+
+    return this.inputEmail.substring(atIndex + 1);
   }
 }
