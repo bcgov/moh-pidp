@@ -1,6 +1,6 @@
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, FormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -66,6 +66,11 @@ export class EndorsementsPage
     this.completed =
       routeData.endorsementRequestStatusCode === StatusCode.COMPLETED;
   }
+
+  public get recipientEmail(): FormControl {
+    return this.formState.form.get('recipientEmail') as FormControl;
+  }
+
   public onBack(): void {
     this.navigateToRoot();
   }
