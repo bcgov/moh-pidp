@@ -26,7 +26,9 @@ export class LookupResource {
     );
   }
 
-  public getCommonEmailDomains(): Observable<string[] | null> {
+  public getCommonEmailDomains(
+    emailInput: string
+  ): Observable<string[] | null> {
     return this.apiResource.get<string[]>('lookups/emails').pipe(
       catchError((error: HttpErrorResponse) => {
         throw error;

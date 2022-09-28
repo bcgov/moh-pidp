@@ -51,7 +51,8 @@
 
     <ui-contact-info-form
       [warningMessage]="warningMessage"
-      [form]="formState.form"></ui-contact-info-form>
+      [form]="formState.form"
+      (emailChanges)="onEmailInputChange($event)"></ui-contact-info-form>
   </ui-page-section>
 
   <ui-page-footer>
