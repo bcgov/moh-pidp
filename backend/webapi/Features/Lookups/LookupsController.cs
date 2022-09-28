@@ -1,5 +1,7 @@
 namespace Pidp.Features.Lookups;
 
+using DomainResults.Common;
+using DomainResults.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,9 +19,12 @@ public class LookupsController : PidpControllerBase
     public async Task<ActionResult<Index.Model>> GetLookups([FromServices] IQueryHandler<Index.Query, Index.Model> handler)
         => await handler.HandleAsync(new Index.Query());
 
-    [HttpGet("emails")]
+    [HttpHead("common-email-domains")]
     [Authorize(Policy = Policies.AnyPartyIdentityProvider)]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult<List<string>>> GetCommonEmailDomains([FromServices] IQueryHandler<CommonEmailDomains.Query, List<string>> handler)
-        => await handler.HandleAsync(new CommonEmailDomains.Query());
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> FindCommonEmailDomains([FromServices] IQueryHandler<CommonEmailDomains.Query, IDomainResult> handler,
+                                                            [FromQuery] CommonEmailDomains.Query query)
+        => await handler.HandleAsync(query)
+            .ToActionResult();
 }
