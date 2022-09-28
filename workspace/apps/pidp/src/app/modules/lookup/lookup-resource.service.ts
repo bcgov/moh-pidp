@@ -3,6 +3,8 @@ import { Injectable } from '@angular/core';
 
 import { Observable, catchError, map, of } from 'rxjs';
 
+import { NoContent, ResourceUtilsService } from '@bcgov/shared/data-access';
+
 import { ApiHttpClient } from '@app/core/resources/api-http-client.service';
 
 import { LookupConfig } from './lookup.types';
@@ -11,7 +13,10 @@ import { LookupConfig } from './lookup.types';
   providedIn: 'root',
 })
 export class LookupResource {
-  public constructor(private apiResource: ApiHttpClient) {}
+  public constructor(
+    private apiResource: ApiHttpClient,
+    private resourceUtilsService: ResourceUtilsService
+  ) {}
 
   /**
    * @description
@@ -26,13 +31,19 @@ export class LookupResource {
     );
   }
 
-  public getCommonEmailDomains(
-    emailInput: string
-  ): Observable<string[] | null> {
-    return this.apiResource.get<string[]>('lookups/emails').pipe(
-      catchError((error: HttpErrorResponse) => {
-        throw error;
-      })
-    );
+  public hasCommonEmailDomain(email: string): Observable<boolean> {
+    const params = this.resourceUtilsService.makeHttpParams({ email });
+    return this.apiResource
+      .head<NoContent>('lookups/common-email-domains', { params })
+      .pipe(
+        map(() => true),
+        catchError((error: HttpErrorResponse) => {
+          if (error.status === 404) {
+            return of(false);
+          }
+
+          throw error;
+        })
+      );
   }
 }
