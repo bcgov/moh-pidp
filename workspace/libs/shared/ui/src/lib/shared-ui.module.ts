@@ -44,7 +44,6 @@ import { PhonePipe } from './pipes/phone.pipe';
 import { PostalPipe } from './pipes/postal.pipe';
 import { ReplacePipe } from './pipes/replace.pipe';
 import { SafePipe } from './pipes/safe.pipe';
-import { EmailDomainWarningComponent } from './components/email-domain-warning/email-domain-warning.component';
 
 @NgModule({
   declarations: [
@@ -86,7 +85,6 @@ import { EmailDomainWarningComponent } from './components/email-domain-warning/e
     PostalPipe,
     ReplacePipe,
     SafePipe,
-    EmailDomainWarningComponent,
   ],
   imports: [
     CommonModule,
