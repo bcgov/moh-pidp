@@ -1,5 +1,18 @@
 <div class="row" [formGroup]="form">
   <div class="col">
+    <mat-form-field class="w-100 email">
+      <input
+        matInput
+        placeholder="Email"
+        formControlName="email"
+        (keyup)="onKeyUp()" />
+      <mat-error *ngIf="email.hasError('required')">Required</mat-error>
+      <mat-error *ngIf="email.hasError('email')">
+        Must be a valid email address
+      </mat-error>
+    </mat-form-field>
+  </div>
+  <div class="col">
     <mat-form-field class="w-100">
       <input
         matInput
@@ -12,19 +25,5 @@
         Must be a valid phone number
       </mat-error>
     </mat-form-field>
-  </div>
-  <div class="col">
-    <mat-form-field class="w-100">
-      <input matInput placeholder="Email" formControlName="email" />
-      <mat-error *ngIf="email.hasError('required')">Required</mat-error>
-      <mat-error *ngIf="email.hasError('email')">
-        Must be a valid email address
-      </mat-error>
-    </mat-form-field>
-    <ui-email-domain-warning
-      [inputEmail]="email.value"
-      [commonDomains]="['google.ca', 'bing.com']"
-      >{{ warningMessage }}</ui-email-domain-warning
-    >
   </div>
 </div>
