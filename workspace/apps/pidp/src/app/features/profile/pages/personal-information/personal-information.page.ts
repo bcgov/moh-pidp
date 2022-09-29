@@ -105,6 +105,7 @@ export class PersonalInformationPage
 
     this.emailChanged
       .pipe(
+        tap(() => this._snackBar.dismiss()),
         debounceTime(1000),
         switchMap(() =>
           this.lookupResource.hasCommonEmailDomain(this.userInput)
