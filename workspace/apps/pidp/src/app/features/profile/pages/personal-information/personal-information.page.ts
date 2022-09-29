@@ -11,7 +11,6 @@ import {
   Subject,
   catchError,
   debounceTime,
-  map,
   of,
   switchMap,
   tap,
@@ -49,7 +48,6 @@ export class PersonalInformationPage
   public identityProvider$: Observable<IdentityProvider>;
   public hasPreferredName: boolean;
   public warningMessage: string;
-  public emailChanges$!: Observable<string | null>;
   public emailChanged: Subject<null>;
   public userInput: string;
 
@@ -77,7 +75,7 @@ export class PersonalInformationPage
     this.hasPreferredName = false;
     this.warningMessage =
       'Double check the spelling of your email. Your email domain does not appear to be commonly used';
-    this.emailChanged = new Subject();
+    this.emailChanged = new Subject<null>();
     this.userInput = '';
   }
 
@@ -91,11 +89,7 @@ export class PersonalInformationPage
 
   public onEmailInputChange(emailInput: string): void {
     this.userInput = emailInput;
-    console.log(this.userInput);
-    // TESTING
-    if (emailInput?.includes('@')) {
-      this.openSnackBar(this.warningMessage, 'Ok');
-    }
+    this.emailChanged.next(null);
   }
 
   public openSnackBar(message: string, action: string): void {
@@ -109,14 +103,18 @@ export class PersonalInformationPage
       return this.navigateToRoot();
     }
 
-    this.emailChanges$ = this.emailChanged.pipe(
-      debounceTime(1000)
-      // TBD
-      // switchMap((emailDomainFound) =>
-      //   this.lookupResource.getCommonEmailDomains(this.userInput)
-      // ),
-      // .subscribe()
-    );
+    this.emailChanged
+      .pipe(
+        debounceTime(1000),
+        switchMap(() =>
+          this.lookupResource.hasCommonEmailDomain(this.userInput)
+        )
+      )
+      .subscribe((emailFound) => {
+        if (!emailFound) {
+          this.openSnackBar(this.warningMessage, 'Ok');
+        }
+      });
 
     this.resource
       .get(partyId)
