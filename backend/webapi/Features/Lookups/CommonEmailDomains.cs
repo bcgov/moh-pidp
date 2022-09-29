@@ -1,4 +1,3 @@
-#pragma warning disable CA1304 // ToLower() is Locale Dependant
 namespace Pidp.Features.Lookups;
 
 using DomainResults.Common;
@@ -25,18 +24,26 @@ public class CommonEmailDomains
 
         public QueryHandler(PidpDbContext context) => this.context = context;
 
+#pragma warning disable CA1304 // ToLower() is Locale Dependant
         public async Task<IDomainResult> HandleAsync(Query query)
         {
-            return DomainResult.NotFound();
-            // return await this.context.Parties
-            //     .Where(party => party.Email != null)
-            //     .Select(party => party.Email!.Substring(party.Email.IndexOf("@") + 1).ToLower())
-            //     .GroupBy(email => email)
-            //     .Where(group => group.Count() > 1)
-            //     .Select(group => group.Key)
-            //     .ToListAsync();
+            // If the input Email is just the domain, this should return the entire input.
+            var domain = query.Email[(query.Email.IndexOf("@") + 1)..].ToLower();
+
+            var count = await this.context.Parties
+                .Where(party => party.Email!.Substring(party.Email.IndexOf("@") + 1).ToLower() == domain)
+                .CountAsync();
+
+            if (count > 1)
+            {
+                return DomainResult.Success();
+            }
+            else
+            {
+                return DomainResult.NotFound();
+            }
         }
+#pragma warning restore CA1304
     }
 }
 
-#pragma warning restore CA1304
