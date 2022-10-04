@@ -3,7 +3,7 @@ FROM ${SRC_IMAGE}
 
 ARG SONAR_LOGIN="login"
 ARG SONAR_PROJECT="webapi"
-ARG SONAR_ZAP_TARGETPATH="webapi-zap-report.xml"
+ARG SONAR_ZAP_REPORTPATH="webapi-zap-report.xml"
 
 # # Install java, needed for sonar-scanner
 # RUN apt update
@@ -21,6 +21,6 @@ WORKDIR /source
 
 COPY . .
 
-RUN dotnet-sonarscanner begin /k:${SONAR_PROJECT} /d:sonar.host.url=https://sonarqube-d8a8f9-tools.apps.silver.devops.gov.bc.ca /d:sonar.login=${SONAR_LOGIN} /d:sonar.zaproxy.reportPath=${SONAR_ZAP_TARGETPATH}
+RUN dotnet-sonarscanner begin /k:${SONAR_PROJECT} /d:sonar.host.url=https://sonarqube-d8a8f9-tools.apps.silver.devops.gov.bc.ca /d:sonar.login=${SONAR_LOGIN} /d:sonar.zaproxy.reportPath=${SONAR_ZAP_REPORTPATH}
 RUN dotnet build
 RUN dotnet-sonarscanner end /d:sonar.login=${SONAR_LOGIN}
