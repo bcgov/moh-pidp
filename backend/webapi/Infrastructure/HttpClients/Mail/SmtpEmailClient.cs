@@ -7,18 +7,23 @@ public class SmtpEmailClient : ISmtpEmailClient
     private readonly ILogger logger;
     private readonly string url;
     private readonly int port;
+    private readonly bool enableSsl;
 
     public SmtpEmailClient(ILogger<SmtpEmailClient> logger, PidpConfiguration config)
     {
         this.logger = logger;
         this.url = config.MailServer.Url;
         this.port = config.MailServer.Port;
+        this.enableSsl = PidpConfiguration.IsProduction(); // Mailhog does not support SSL.
     }
 
     public async Task SendAsync(Email email)
     {
         using var mail = ConvertToMailMessage(email);
-        using var smtp = new SmtpClient(this.url, this.port);
+        using var smtp = new SmtpClient(this.url, this.port)
+        {
+            EnableSsl = this.enableSsl
+        };
 
         try
         {
