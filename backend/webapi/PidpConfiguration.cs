@@ -60,6 +60,7 @@ public class PidpConfiguration
     {
         public string Url { get; set; } = string.Empty;
         public int Port { get; set; }
+        public bool EnableSsl { get; set; }
     }
 
     public class PlrClientConfiguration
