@@ -49,7 +49,7 @@ export class PersonalInformationPage
   public hasPreferredName: boolean;
   public warningMessage: string;
   public emailChanged: Subject<null>;
-  public userInput: string;
+  public userEmail: string;
 
   public IdentityProvider = IdentityProvider;
 
@@ -74,9 +74,9 @@ export class PersonalInformationPage
     this.identityProvider$ = this.authorizedUserService.identityProvider$;
     this.hasPreferredName = false;
     this.warningMessage =
-      'Double check the spelling of your email. Your email domain does not appear to be commonly used';
+      'Your email may have been misspelled. Double check the spelling of your email before hitting submit.';
     this.emailChanged = new Subject<null>();
-    this.userInput = '';
+    this.userEmail = '';
   }
 
   public onPreferredNameToggle({ checked }: ToggleContentChange): void {
@@ -88,7 +88,7 @@ export class PersonalInformationPage
   }
 
   public onEmailInputChange(emailInput: string): void {
-    this.userInput = emailInput;
+    this.userEmail = emailInput;
     this.emailChanged.next(null);
   }
 
@@ -108,7 +108,7 @@ export class PersonalInformationPage
         tap(() => this._snackBar.dismiss()),
         debounceTime(1000),
         switchMap(() =>
-          this.lookupResource.hasCommonEmailDomain(this.userInput)
+          this.lookupResource.hasCommonEmailDomain(this.userEmail)
         )
       )
       .subscribe((emailFound) => {

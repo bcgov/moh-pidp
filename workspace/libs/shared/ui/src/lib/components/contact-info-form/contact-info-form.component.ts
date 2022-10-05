@@ -12,7 +12,6 @@ export class ContactFormComponent {
    * Contact information form instance.
    */
   @Input() public form!: FormGroup;
-  @Input() public warningMessage!: string;
   @Output() public emailChanges!: EventEmitter<string>;
 
   public constructor() {
