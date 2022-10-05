@@ -7,6 +7,7 @@ using Pidp.Models.Lookups;
 
 public static class MohClients
 {
+    public static (string ClientId, string AccessRole) PrescriptionRefillEforms => ("SAT-EFORMS", "phsa_eforms_sat2");
     public static (string ClientId, string AccessRole) SAEforms => ("SAT-EFORMS", "phsa_eforms_sat");
     public static (string ClientId, string AccessRole) Uci => ("UCI-SSO", "UCIROLE");
 
@@ -18,6 +19,7 @@ public static class MohClients
             AccessTypeCode.HcimAccountTransfer => null,
             AccessTypeCode.HcimEnrolment => null,
             AccessTypeCode.MSTeams => null,
+            AccessTypeCode.PrescriptionRefillEforms => PrescriptionRefillEforms,
             AccessTypeCode.SAEforms => SAEforms,
             AccessTypeCode.Uci => Uci,
             _ => null

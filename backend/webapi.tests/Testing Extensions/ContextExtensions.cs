@@ -11,9 +11,9 @@ public static class ContextExtensions
         return thing;
     }
 
-    public static IEnumerable<T> Has<T>(this PidpDbContext context, IEnumerable<T> things)
+    public static IEnumerable<T> HasSome<T>(this PidpDbContext context, IEnumerable<T> things)
     {
-        context.AddRange(things);
+        context.AddRange(things.Cast<object>());
         context.SaveChanges();
         return things;
     }

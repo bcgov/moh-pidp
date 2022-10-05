@@ -10,7 +10,8 @@ public enum AccessTypeCode
     HcimEnrolment,
     DriverFitness,
     Uci,
-    MSTeams
+    MSTeams,
+    PrescriptionRefillEforms
 }
 
 [Table("AccessTypeLookup")]
@@ -26,11 +27,12 @@ public class AccessTypeDataGenerator : ILookupDataGenerator<AccessType>
 {
     public IEnumerable<AccessType> Generate() => new[]
     {
-        new AccessType { Code = AccessTypeCode.SAEforms,            Name = "Special Authority eForms"  },
-        new AccessType { Code = AccessTypeCode.HcimAccountTransfer, Name = "HCIMWeb Account Transfer"  },
-        new AccessType { Code = AccessTypeCode.HcimEnrolment,       Name = "HCIMWeb Enrolment"         },
-        new AccessType { Code = AccessTypeCode.DriverFitness,       Name = "Driver Medical Fitness"    },
-        new AccessType { Code = AccessTypeCode.Uci,                 Name = "Fraser Health UCI"         },
-        new AccessType { Code = AccessTypeCode.MSTeams,             Name = "MS Teams for Clinical Use" },
+        new AccessType { Code = AccessTypeCode.SAEforms,                 Name = "Special Authority eForms"                  },
+        new AccessType { Code = AccessTypeCode.HcimAccountTransfer,      Name = "HCIMWeb Account Transfer"                  },
+        new AccessType { Code = AccessTypeCode.HcimEnrolment,            Name = "HCIMWeb Enrolment"                         },
+        new AccessType { Code = AccessTypeCode.DriverFitness,            Name = "Driver Medical Fitness"                    },
+        new AccessType { Code = AccessTypeCode.Uci,                      Name = "Fraser Health UCI"                         },
+        new AccessType { Code = AccessTypeCode.MSTeams,                  Name = "MS Teams for Clinical Use"                 },
+        new AccessType { Code = AccessTypeCode.PrescriptionRefillEforms, Name = "Prescription Refill eForm for Pharmacists" },
     };
 }

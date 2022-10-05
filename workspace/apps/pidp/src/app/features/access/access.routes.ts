@@ -9,6 +9,7 @@ export class AccessRoutes {
   public static DRIVER_FITNESS = 'driver-fitness';
   public static UCI = 'uci';
   public static MS_TEAMS = 'ms-teams';
+  public static PRESCRIPTION_REFILL_EFORMS = 'prescription-refill-eforms';
 
   /**
    * @description
