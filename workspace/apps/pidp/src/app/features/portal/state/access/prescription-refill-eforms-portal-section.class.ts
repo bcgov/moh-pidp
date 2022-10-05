@@ -52,7 +52,7 @@ export class PrescriptionRefillEformsPortalSection implements IPortalSection {
   public get status(): string {
     switch (this.getSectionStatus().statusCode) {
       case StatusCode.AVAILABLE:
-        return 'You are eligible to use Prescription Refill eforms';
+        return 'You are eligible to use Prescription Refill eForms';
       case StatusCode.COMPLETED:
         return 'Completed';
       default:
