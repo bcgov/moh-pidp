@@ -23,7 +23,7 @@ export class DriverFitnessPortalSection implements IPortalSection {
     private router: Router
   ) {
     this.key = 'driverFitness';
-    this.heading = 'Medical Practitioner Registration';
+    this.heading = 'Driver Fitness Practitioner Portal';
     this.description = `Register as a Medical Practitioner (or Designate) to the RoadSafetyBC Medical Practitioner Portal.`;
   }
 
