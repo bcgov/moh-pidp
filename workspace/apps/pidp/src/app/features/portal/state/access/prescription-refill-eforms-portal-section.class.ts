@@ -24,7 +24,7 @@ export class PrescriptionRefillEformsPortalSection implements IPortalSection {
     private router: Router
   ) {
     this.key = 'prescriptionRefillEforms';
-    this.heading = 'Prescription Refill Eforms';
+    this.heading = 'Prescription Refill eForms';
     this.description = `Enrol here for access to Prescription Refill eForms application.`;
   }
 
@@ -52,7 +52,7 @@ export class PrescriptionRefillEformsPortalSection implements IPortalSection {
   public get status(): string {
     switch (this.getSectionStatus().statusCode) {
       case StatusCode.AVAILABLE:
-        return 'You are eligible to use Prescription Refill eforms';
+        return 'You are eligible to use Prescription Refill eForms';
       case StatusCode.COMPLETED:
         return 'Completed';
       default:
