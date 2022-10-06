@@ -10,6 +10,7 @@ using System.Text.Json.Serialization;
 
 using Pidp.Data;
 using Pidp.Features;
+using Pidp.Infrastructure.HttpClients.Keycloak;
 using Pidp.Infrastructure.HttpClients.Plr;
 using Pidp.Models;
 using Pidp.Models.Lookups;
@@ -73,12 +74,17 @@ public class LicenceDeclaration
 
     public class CommandHandler : ICommandHandler<Command, IDomainResult<string?>>
     {
-        private readonly IPlrClient client;
+        private readonly IKeycloakAdministrationClient keycloakClient;
+        private readonly IPlrClient plrClient;
         private readonly PidpDbContext context;
 
-        public CommandHandler(IPlrClient client, PidpDbContext context)
+        public CommandHandler(
+            IKeycloakAdministrationClient keycloakClient,
+            IPlrClient plrClient,
+            PidpDbContext context)
         {
-            this.client = client;
+            this.keycloakClient = keycloakClient;
+            this.plrClient = plrClient;
             this.context = context;
         }
 
@@ -102,10 +108,16 @@ public class LicenceDeclaration
             party.LicenceDeclaration.CollegeCode = command.CollegeCode;
             party.LicenceDeclaration.LicenceNumber = command.LicenceNumber;
             party.Cpn = command.CollegeCode.HasValue && !string.IsNullOrWhiteSpace(command.LicenceNumber) && party.Birthdate.HasValue
-                ? await this.client.FindCpnAsync(command.CollegeCode.Value, command.LicenceNumber, party.Birthdate.Value)
+                ? await this.plrClient.FindCpnAsync(command.CollegeCode.Value, command.LicenceNumber, party.Birthdate.Value)
                 : null;
 
             await this.context.SaveChangesAsync();
+
+            if (party.Cpn != null)
+            {
+                var success = this.keycloakClient.UpdateUser(party.UserId, (user) => user.SetCpn(party.Cpn));
+                // LOG ON FAILURE
+            }
 
             return DomainResult.Success(party.Cpn);
         }
