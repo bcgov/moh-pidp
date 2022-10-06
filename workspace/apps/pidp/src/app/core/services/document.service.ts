@@ -46,10 +46,6 @@ export class DocumentService {
         title: 'Prescription Refill eForms Collection Notice',
       },
       {
-        type: DocumentType.PRESCRIPTION_REFILL_EFORMS_COLLECTION_NOTICE,
-        title: 'SA eForms Collection Notice',
-      },
-      {
         type: DocumentType.USER_ACCESS_AGREEMENT,
         title: 'Access Harmonization User Access Agreement',
       },
