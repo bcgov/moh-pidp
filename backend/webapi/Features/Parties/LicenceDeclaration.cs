@@ -75,15 +75,18 @@ public class LicenceDeclaration
     public class CommandHandler : ICommandHandler<Command, IDomainResult<string?>>
     {
         private readonly IKeycloakAdministrationClient keycloakClient;
+        private readonly ILogger logger;
         private readonly IPlrClient plrClient;
         private readonly PidpDbContext context;
 
         public CommandHandler(
             IKeycloakAdministrationClient keycloakClient,
+            ILogger<CommandHandler> logger,
             IPlrClient plrClient,
             PidpDbContext context)
         {
             this.keycloakClient = keycloakClient;
+            this.logger = logger;
             this.plrClient = plrClient;
             this.context = context;
         }
@@ -100,26 +103,31 @@ public class LicenceDeclaration
                 return DomainResult.Failed<string?>();
             }
 
-            if (party.LicenceDeclaration == null)
-            {
-                party.LicenceDeclaration = new PartyLicenceDeclaration();
-            }
-
+            party.LicenceDeclaration ??= new PartyLicenceDeclaration();
             party.LicenceDeclaration.CollegeCode = command.CollegeCode;
             party.LicenceDeclaration.LicenceNumber = command.LicenceNumber;
-            party.Cpn = command.CollegeCode.HasValue && !string.IsNullOrWhiteSpace(command.LicenceNumber) && party.Birthdate.HasValue
-                ? await this.plrClient.FindCpnAsync(command.CollegeCode.Value, command.LicenceNumber, party.Birthdate.Value)
-                : null;
+
+            party.Cpn = command.CollegeCode == null || command.LicenceNumber == null || party.Birthdate == null
+                ? null // Declared "No Licence"
+                : await this.plrClient.FindCpnAsync(command.CollegeCode.Value, command.LicenceNumber, party.Birthdate.Value);
 
             await this.context.SaveChangesAsync();
 
             if (party.Cpn != null)
             {
-                var success = this.keycloakClient.UpdateUser(party.UserId, (user) => user.SetCpn(party.Cpn));
-                // LOG ON FAILURE
+                if (!await this.keycloakClient.UpdateUser(party.UserId, (user) => user.SetCpn(party.Cpn)))
+                {
+                    this.logger.LogCpnAssignmentFailure(party.UserId);
+                }
             }
 
             return DomainResult.Success(party.Cpn);
         }
     }
+}
+
+public static partial class LicenceDeclarationLoggingExtensions
+{
+    [LoggerMessage(1, LogLevel.Error, "Could not assign a CPN to user {userId}.")]
+    public static partial void LogCpnAssignmentFailure(this ILogger logger, Guid userId);
 }
