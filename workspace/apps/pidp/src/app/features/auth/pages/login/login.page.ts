@@ -13,6 +13,7 @@ import { ConfirmDialogComponent } from '@bcgov/shared/ui';
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';
 import { DocumentService } from '@app/core/services/document.service';
+import { UtilsService } from '@app/core/services/utils.service';
 
 import { IdentityProvider } from '../../enums/identity-provider.enum';
 import { AuthService } from '../../services/auth.service';
@@ -50,7 +51,8 @@ export class LoginPage {
     private route: ActivatedRoute,
     private router: Router,
     private dialog: MatDialog,
-    private documentService: DocumentService
+    private documentService: DocumentService,
+    private utilsService: UtilsService
   ) {
     const routeSnapshot = this.route.snapshot;
 
@@ -74,6 +76,10 @@ export class LoginPage {
       fragment: 'systems',
       queryParamsHandling: 'preserve',
     });
+  }
+
+  public scrollTop(): void {
+    this.utilsService.scrollTop();
   }
 
   public onLogin(idpHint?: IdentityProvider): void {

@@ -2,7 +2,7 @@
   [theme]="headerConfig.theme"
   [allowMobileToggle]="headerConfig.allowMobileToggle"></ui-dashboard-header>
 
-<div id="top" class="container">
+<div class="container">
   <ng-container *ngIf="idpHint === IdentityProvider.BCSC; else admin">
     <div class="row">
       <div class="col-12">
@@ -148,7 +148,7 @@
 <footer class="footer">
   <div class="container">
     <ul>
-      <!-- <li><a href="#top">Home</a></li> -->
+      <li><a (click)="scrollTop()">Home</a></li>
       <li>
         <a uiAnchor [attr.href]="disclaimerUrl">Disclaimer</a>
       </li>
