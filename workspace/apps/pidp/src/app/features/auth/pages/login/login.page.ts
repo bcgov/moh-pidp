@@ -16,6 +16,12 @@ import { DocumentService } from '@app/core/services/document.service';
 
 import { IdentityProvider } from '../../enums/identity-provider.enum';
 import { AuthService } from '../../services/auth.service';
+import {
+  accessibilityUrl,
+  copyrightUrl,
+  disclaimerUrl,
+  privacyUrl,
+} from './login.constants';
 
 @Component({
   selector: 'app-login',
@@ -31,6 +37,10 @@ export class LoginPage {
   public specialAuthorityUrl: string;
   public providerIdentitySupportEmail: string;
   public idpHint: IdentityProvider;
+  public disclaimerUrl: string;
+  public privacyUrl: string;
+  public accessibilityUrl: string;
+  public copyrightUrl: string;
 
   public IdentityProvider = IdentityProvider;
 
@@ -53,6 +63,10 @@ export class LoginPage {
     this.providerIdentitySupportEmail =
       this.config.emails.providerIdentitySupport;
     this.idpHint = routeSnapshot.data.idpHint;
+    this.disclaimerUrl = disclaimerUrl;
+    this.privacyUrl = privacyUrl;
+    this.accessibilityUrl = accessibilityUrl;
+    this.copyrightUrl = copyrightUrl;
   }
 
   public onScrollToAnchor(): void {
