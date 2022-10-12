@@ -1,6 +1,7 @@
 <ui-dashboard-header
   [theme]="headerConfig.theme"
-  [allowMobileToggle]="headerConfig.allowMobileToggle"></ui-dashboard-header>
+  [allowMobileToggle]="headerConfig.allowMobileToggle">
+</ui-dashboard-header>
 
 <div class="container">
   <ng-container *ngIf="idpHint === IdentityProvider.BCSC; else admin">
@@ -90,6 +91,18 @@
                 <a uiAnchor [attr.href]="specialAuthorityUrl">
                   submit SA requests by fax</a
                 >.
+              </p>
+            </ui-page-section>
+
+            <ui-page-section>
+              <h3>Prescription Refill Request eForm</h3>
+              <p>
+                B.C. Pharmacists can enrol for access to Prescription Refill
+                Request eForm Application
+              </p>
+              <p>
+                You need to set up this BC service Card app to enrol. You will
+                user the app each time you access the eForm application.
               </p>
             </ui-page-section>
 

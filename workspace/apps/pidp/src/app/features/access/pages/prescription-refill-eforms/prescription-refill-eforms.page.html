@@ -37,19 +37,22 @@
       type="success"
       icon="check_circle"
       iconType="outlined"
-      heading="You have access">
+      heading="You are approved!">
       <ng-container uiAlertContent>
         <p>
-          You now have access to the eForms application. You can log into the
-          application using your BC Services Card app.
+          You now have access to the Prescription Refill Request eForm. You can
+          log into the application using your BC Services Card app.
         </p>
         <p>
-          Follow this link to Special Authority eForms:<br />
-          <a uiAnchor [attr.href]="prescriptionRefillEformsUrl"></a>
+          Follow this link to Prescription Refill Request eForm:<br />
+          <a title="" target="_blank" href="{{prescriptionRefillEformsUrl}}"
+            >{{prescriptionRefillEformsUrl}}</a
+          >
         </p>
         <p>
-          You will need to visit this link each time you want to submit an SA
-          eForm. It may be helpful to bookmark this link for future use.
+          You will need to visit this link each time you want to submit
+          prescription refill. It may be helpful to bookmark this link for
+          future use.
         </p>
       </ng-container>
     </ui-alert>

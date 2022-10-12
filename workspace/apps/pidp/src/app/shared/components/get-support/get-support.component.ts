@@ -50,6 +50,10 @@ export class GetSupportComponent implements OnInit {
         email: this.config.emails.specialAuthorityEformsSupport,
       },
       {
+        name: 'Prescription Refill Request eForm',
+        email: this.config.emails.prescriptionRefillRequestEformSupport,
+      },
+      {
         name: 'HCIMWeb Account Transfer',
         email: this.config.emails.hcimAccountTransferSupport,
       },

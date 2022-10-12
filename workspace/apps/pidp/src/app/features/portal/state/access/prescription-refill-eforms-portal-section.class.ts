@@ -24,8 +24,8 @@ export class PrescriptionRefillEformsPortalSection implements IPortalSection {
     private router: Router
   ) {
     this.key = 'prescriptionRefillEforms';
-    this.heading = 'Prescription Refill eForms';
-    this.description = `Enrol here for access to Prescription Refill eForms application.`;
+    this.heading = 'Prescription Refill Request eForm';
+    this.description = `Enrol here for access to Prescription Refill Request eForm`;
   }
 
   public get hint(): string {
@@ -39,7 +39,7 @@ export class PrescriptionRefillEformsPortalSection implements IPortalSection {
   public get action(): PortalSectionAction {
     const statusCode = this.getStatusCode();
     return {
-      label: statusCode === StatusCode.COMPLETED ? 'View' : 'Request',
+      label: statusCode === StatusCode.COMPLETED ? 'View' : 'Signup',
       route: AccessRoutes.routePath(AccessRoutes.PRESCRIPTION_REFILL_EFORMS),
       disabled: statusCode === StatusCode.NOT_AVAILABLE,
     };
