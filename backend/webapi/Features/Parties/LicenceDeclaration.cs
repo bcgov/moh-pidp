@@ -75,18 +75,15 @@ public class LicenceDeclaration
     public class CommandHandler : ICommandHandler<Command, IDomainResult<string?>>
     {
         private readonly IKeycloakAdministrationClient keycloakClient;
-        private readonly ILogger logger;
         private readonly IPlrClient plrClient;
         private readonly PidpDbContext context;
 
         public CommandHandler(
             IKeycloakAdministrationClient keycloakClient,
-            ILogger<CommandHandler> logger,
             IPlrClient plrClient,
             PidpDbContext context)
         {
             this.keycloakClient = keycloakClient;
-            this.logger = logger;
             this.plrClient = plrClient;
             this.context = context;
         }
@@ -113,21 +110,9 @@ public class LicenceDeclaration
 
             await this.context.SaveChangesAsync();
 
-            if (party.Cpn != null)
-            {
-                if (!await this.keycloakClient.UpdateUser(party.UserId, (user) => user.SetCpn(party.Cpn)))
-                {
-                    this.logger.LogCpnAssignmentFailure(party.UserId);
-                }
-            }
+            await this.keycloakClient.UpdateUserCpn(party.UserId, party.Cpn);
 
             return DomainResult.Success(party.Cpn);
         }
     }
-}
-
-public static partial class LicenceDeclarationLoggingExtensions
-{
-    [LoggerMessage(1, LogLevel.Error, "Could not assign a CPN to user {userId}.")]
-    public static partial void LogCpnAssignmentFailure(this ILogger logger, Guid userId);
 }
