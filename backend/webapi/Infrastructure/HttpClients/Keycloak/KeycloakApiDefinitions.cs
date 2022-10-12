@@ -69,6 +69,8 @@ public class UserRepresentation
 
     internal void SetLdapOrgDetails(LdapLoginResponse.OrgDetails orgDetails) => this.SetAttribute("org_details", JsonSerializer.Serialize(orgDetails, new JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }));
 
+    public void SetCpn(string cpn) => this.SetAttribute("common_provider_number", cpn);
+
     public void SetPhone(string phone) => this.SetAttribute("phone", phone);
 
     public void SetPhoneNumber(string phoneNumber) => this.SetAttribute("phoneNumber", phoneNumber);
