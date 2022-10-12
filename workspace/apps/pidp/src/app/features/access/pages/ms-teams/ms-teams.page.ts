@@ -1,6 +1,6 @@
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormArray, FormBuilder } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -59,7 +59,7 @@ export class MsTeamsPage
   }
 
   public onBack(): void {
-    if (this.currentPage === 0) {
+    if (this.currentPage === 0 || this.completed) {
       this.navigateToRoot();
     } else {
       this.utilsService.scrollTop('.mat-sidenav-content');

@@ -13,6 +13,7 @@ import { DriverFitnessResource } from './driver-fitness-resource.service';
 import {
   driverFitnessSupportEmail,
   driverFitnessUrl,
+  medicalPractitionerPortalUrl,
 } from './driver-fitness.constants';
 
 @Component({
@@ -27,6 +28,7 @@ export class DriverFitnessPage implements OnInit {
   public accessRequestFailed: boolean;
   public driverFitnessSupportEmail: string;
   public enrolmentError: boolean;
+  public medicalPractitionerPortalUrl: string;
 
   public constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
@@ -43,6 +45,7 @@ export class DriverFitnessPage implements OnInit {
     this.accessRequestFailed = false;
     this.driverFitnessSupportEmail = driverFitnessSupportEmail;
     this.enrolmentError = false;
+    this.medicalPractitionerPortalUrl = medicalPractitionerPortalUrl;
   }
 
   public onBack(): void {

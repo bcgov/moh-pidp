@@ -7,9 +7,7 @@ using Pidp.Models.Lookups;
 
 public class Index
 {
-    public class Query : IQuery<Model>
-    {
-    }
+    public class Query : IQuery<Model> { }
 
     public class Model
     {
