@@ -144,6 +144,22 @@ public class KeycloakAdministrationClient : BaseClient, IKeycloakAdministrationC
 
         return await this.UpdateUser(userId, user);
     }
+
+    public async Task<bool> UpdateUserCpn(Guid userId, string? cpn)
+    {
+        if (cpn == null)
+        {
+            return true;
+        }
+
+        var result = await this.UpdateUser(userId, (user) => user.SetCpn(cpn));
+        if (!result)
+        {
+            this.Logger.LogCpnUpdateFailure(userId, cpn);
+        }
+
+        return result;
+    }
 }
 
 public static partial class KeycloakAdministrationClientLoggingExtensions
@@ -159,4 +175,7 @@ public static partial class KeycloakAdministrationClientLoggingExtensions
 
     [LoggerMessage(4, LogLevel.Information, "User {userId} was assigned Realm Role {roleName}.")]
     public static partial void LogRealmRoleAssigned(this ILogger logger, Guid userId, string roleName);
+
+    [LoggerMessage(5, LogLevel.Error, "Failed to update user {userId} with CPN {cpn}.")]
+    public static partial void LogCpnUpdateFailure(this ILogger logger, Guid userId, string cpn);
 }

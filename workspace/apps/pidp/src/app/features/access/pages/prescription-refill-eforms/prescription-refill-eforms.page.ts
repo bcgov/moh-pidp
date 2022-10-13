@@ -5,10 +5,15 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { catchError, noop, of, tap } from 'rxjs';
 
 import { PartyService } from '@app/core/party/party.service';
+import { DocumentService } from '@app/core/services/document.service';
 import { LoggerService } from '@app/core/services/logger.service';
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
 
 import { PrescriptionRefillEformsResource } from './prescription-refill-eforms-resource.service';
+import {
+  prescriptionRefillEformsSupportEmail,
+  prescriptionRefillUrl,
+} from './prescription-refill-eforms.constants';
 
 @Component({
   selector: 'app-prescription-refill-eforms',
@@ -17,8 +22,11 @@ import { PrescriptionRefillEformsResource } from './prescription-refill-eforms-r
 })
 export class PrescriptionRefillEformsPage implements OnInit {
   public title: string;
+  public collectionNotice: string;
   public completed: boolean | null;
   public accessRequestFailed: boolean;
+  public prescriptionRefillEformsUrl: string;
+  public prescriptionRefillSupportEmail: string;
   public enrolmentError: boolean;
 
   public constructor(
@@ -26,14 +34,19 @@ export class PrescriptionRefillEformsPage implements OnInit {
     private router: Router,
     private partyService: PartyService,
     private resource: PrescriptionRefillEformsResource,
-    private logger: LoggerService
+    private logger: LoggerService,
+    private documentService: DocumentService
   ) {
     const routeData = this.route.snapshot.data;
     this.title = routeData.title;
+    this.collectionNotice =
+      documentService.getPrescriptionRefilleFormsCollectionNotice();
     this.completed =
       routeData.prescriptionRefillEformsStatusCode === StatusCode.COMPLETED;
     this.accessRequestFailed = false;
     this.enrolmentError = false;
+    this.prescriptionRefillEformsUrl = prescriptionRefillUrl;
+    this.prescriptionRefillSupportEmail = prescriptionRefillEformsSupportEmail;
   }
 
   public onBack(): void {
