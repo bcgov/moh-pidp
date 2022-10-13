@@ -59,7 +59,7 @@ export class MsTeamsPage
   }
 
   public onBack(): void {
-    if (this.currentPage === 0) {
+    if (this.currentPage === 0 || this.completed) {
       this.navigateToRoot();
     } else {
       this.utilsService.scrollTop('.mat-sidenav-content');
