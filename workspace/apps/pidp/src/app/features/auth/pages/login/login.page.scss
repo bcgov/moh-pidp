@@ -5,7 +5,7 @@
 @import 'bootstrap/bootstrap-imports';
 
 .container {
-  padding-top: 3rem;
+  // padding-top: 3rem;
   padding-bottom: 1rem;
   max-width: 840px;
 
@@ -42,8 +42,21 @@
     align-items: flex-end;
     margin-bottom: 1.5rem;
 
+    // img {
+    //   display: none;
+    // }
     img {
-      display: none;
+      display: block;
+      width: 100vw;
+      height: auto;
+      position: relative;
+      clip-path: inset(20px 50px 10px 0 round 0);
+    }
+
+    h1 {
+      position: absolute;
+      text-align: center;
+      color: #fff;
     }
 
     @media (min-width: 645px) {
