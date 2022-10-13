@@ -18,7 +18,7 @@ export interface AppEnvironment extends EnvironmentConfig {
     specialAuthorityEformsSupport: string;
     hcimAccountTransferSupport: string;
     hcimEnrolmentSupport: string;
-    prescriptionRefillRequestEformSupport: string;
+    prescriptionRefillRequestEformsSupport: string;
     driverFitnessSupport: string;
     uciSupport: string;
     msTeamsSupport: string;

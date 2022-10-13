@@ -14,7 +14,7 @@
         <a
           uiAnchor
           scheme="mailto"
-          [attr.href]="prescriptionRefillSupportEmail"></a>
+          [href]="prescriptionRefillEformsSupportEmail"></a>
         for assistance.
       </p>
     </ng-container>
@@ -45,7 +45,10 @@
         </p>
         <p>
           Follow this link to Prescription Refill Request eForm:<br />
-          <a title="" target="_blank" href="{{prescriptionRefillEformsUrl}}"
+          <a
+            target="_blank"
+            aria-label="Link to Prescription Refill Request eForm"
+            [href]="prescriptionRefillEformsUrl"
             >{{prescriptionRefillEformsUrl}}</a
           >
         </p>

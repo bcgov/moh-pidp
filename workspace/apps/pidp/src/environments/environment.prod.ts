@@ -5,9 +5,11 @@ import {
   doctorsTechnologyOfficeEmail,
   doctorsTechnologyOfficeUrl,
   msTeamsSupportEmail,
-  prescriptionRefillRequestEformSupportEmail,
 } from '@app/features/access/pages/ms-teams/ms-teams.constants';
-import { phsaInformationAccessAndPrivacyOfficeEmail } from '@app/features/access/pages/prescription-refill-eforms/prescription-refill-eforms.constants';
+import {
+  phsaInformationAccessAndPrivacyOfficeEmail,
+  prescriptionRefillRequestEformsSupportEmail,
+} from '@app/features/access/pages/prescription-refill-eforms/prescription-refill-eforms.constants';
 import {
   specialAuthorityEformsSupportEmail,
   specialAuthorityUrl,
@@ -36,8 +38,8 @@ export const environment: AppEnvironment = {
     specialAuthorityEformsSupport: specialAuthorityEformsSupportEmail,
     hcimAccountTransferSupport: hcimWebAccountTransferSupport,
     hcimEnrolmentSupport: hcimWebEnrolmentSupport,
-    prescriptionRefillRequestEformSupport:
-      prescriptionRefillRequestEformSupportEmail,
+    prescriptionRefillRequestEformsSupport:
+      prescriptionRefillRequestEformsSupportEmail,
     driverFitnessSupport: driverFitnessSupportEmail,
     uciSupport: uciSupportEmail,
     msTeamsSupport: msTeamsSupportEmail,
