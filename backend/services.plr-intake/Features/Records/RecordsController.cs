@@ -11,4 +11,9 @@ public class RecordsController : ControllerBase
     public async Task<ActionResult<List<Index.Model>>> GetRecords([FromServices] IQueryHandler<Index.Query, List<Index.Model>> handler,
                                                                   [FromQuery] Index.Query query)
         => await handler.HandleAsync(query);
+
+    [HttpPost("search")]
+    public async Task<ActionResult<List<string>>> SearchRecords([FromServices] ICommandHandler<Search.Command, List<string>> handler,
+                                                                [FromBody] Search.Command command)
+        => await handler.HandleAsync(command);
 }
