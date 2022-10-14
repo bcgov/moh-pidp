@@ -7,6 +7,10 @@ import {
   msTeamsSupportEmail,
 } from '@app/features/access/pages/ms-teams/ms-teams.constants';
 import {
+  phsaInformationAccessAndPrivacyOfficeEmail,
+  prescriptionRefillRequestEformsSupportEmail,
+} from '@app/features/access/pages/prescription-refill-eforms/prescription-refill-eforms.constants';
+import {
   specialAuthorityEformsSupportEmail,
   specialAuthorityUrl,
 } from '@app/features/access/pages/sa-eforms/sa-eforms.constants';
@@ -34,10 +38,14 @@ export const environment: AppEnvironment = {
     specialAuthorityEformsSupport: specialAuthorityEformsSupportEmail,
     hcimAccountTransferSupport: hcimWebAccountTransferSupport,
     hcimEnrolmentSupport: hcimWebEnrolmentSupport,
+    prescriptionRefillRequestEformsSupport:
+      prescriptionRefillRequestEformsSupportEmail,
     driverFitnessSupport: driverFitnessSupportEmail,
     uciSupport: uciSupportEmail,
     msTeamsSupport: msTeamsSupportEmail,
     doctorsTechnologyOfficeSupport: doctorsTechnologyOfficeEmail,
+    phsaInformationAccessAndPrivacyOffice:
+      phsaInformationAccessAndPrivacyOfficeEmail,
   },
   urls: {
     bcscSupport: `https://www2.gov.bc.ca/gov/content/governments/government-id/bcservicescardapp/help`,

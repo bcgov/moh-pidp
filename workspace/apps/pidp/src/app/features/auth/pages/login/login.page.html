@@ -1,6 +1,7 @@
 <ui-dashboard-header
   [theme]="headerConfig.theme"
-  [allowMobileToggle]="headerConfig.allowMobileToggle"></ui-dashboard-header>
+  [allowMobileToggle]="headerConfig.allowMobileToggle">
+</ui-dashboard-header>
 
 <div class="container">
   <ng-container *ngIf="idpHint === IdentityProvider.BCSC; else admin">

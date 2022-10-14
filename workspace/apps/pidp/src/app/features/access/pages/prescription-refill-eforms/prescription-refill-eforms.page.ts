@@ -11,8 +11,8 @@ import { StatusCode } from '@app/features/portal/enums/status-code.enum';
 
 import { PrescriptionRefillEformsResource } from './prescription-refill-eforms-resource.service';
 import {
-  prescriptionRefillEformsSupportEmail,
-  prescriptionRefillUrl,
+  prescriptionRefillRequestEformsSupportEmail,
+  prescriptionRefillRequestEformsUrl,
 } from './prescription-refill-eforms.constants';
 
 @Component({
@@ -26,7 +26,7 @@ export class PrescriptionRefillEformsPage implements OnInit {
   public completed: boolean | null;
   public accessRequestFailed: boolean;
   public prescriptionRefillEformsUrl: string;
-  public prescriptionRefillSupportEmail: string;
+  public prescriptionRefillEformsSupportEmail: string;
   public enrolmentError: boolean;
 
   public constructor(
@@ -45,8 +45,9 @@ export class PrescriptionRefillEformsPage implements OnInit {
       routeData.prescriptionRefillEformsStatusCode === StatusCode.COMPLETED;
     this.accessRequestFailed = false;
     this.enrolmentError = false;
-    this.prescriptionRefillEformsUrl = prescriptionRefillUrl;
-    this.prescriptionRefillSupportEmail = prescriptionRefillEformsSupportEmail;
+    this.prescriptionRefillEformsUrl = prescriptionRefillRequestEformsUrl;
+    this.prescriptionRefillEformsSupportEmail =
+      prescriptionRefillRequestEformsSupportEmail;
   }
 
   public onBack(): void {
