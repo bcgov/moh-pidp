@@ -76,10 +76,17 @@ export class MsTeamsPage
     this.currentPage++;
   }
 
-  private validateFirstPage(): boolean {
-    return this.checkValidity(
-      new FormArray([this.formState.clinicName, this.formState.clinicAddress])
-    );
+  public addClinicMember(): void {
+    const member = this.formState.buildClinicMemberForm();
+    this.formState.clinicMembers.push(member);
+  }
+
+  public removeClinicMember(index: number): void {
+    this.formState.clinicMembers.removeAt(index);
+  }
+
+  public getAgreementText(page: number): string {
+    return this.documentService.getMsTeamsAgreement(page);
   }
 
   public ngOnInit(): void {
@@ -101,19 +108,6 @@ export class MsTeamsPage
     }
   }
 
-  public addClinicMember(): void {
-    const member = this.formState.buildClinicMemberForm();
-    this.formState.clinicMembers.push(member);
-  }
-
-  public removeClinicMember(index: number): void {
-    this.formState.clinicMembers.removeAt(index);
-  }
-
-  public getAgreementText(page: number): string {
-    return this.documentService.getMsTeamsAgreement(page);
-  }
-
   protected performSubmission(): NoContent {
     const partyId = this.partyService.partyId;
 
@@ -132,6 +126,12 @@ export class MsTeamsPage
             })
           )
       : EMPTY;
+  }
+
+  private validateFirstPage(): boolean {
+    return this.checkValidity(
+      new FormArray([this.formState.clinicName, this.formState.clinicAddress])
+    );
   }
 
   private navigateToRoot(): void {
