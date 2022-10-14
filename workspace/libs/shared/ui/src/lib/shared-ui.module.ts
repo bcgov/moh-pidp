@@ -29,6 +29,7 @@ import { PageSectionSubheaderHintDirective } from './components/page-section-sub
 import { PageSectionSubheaderComponent } from './components/page-section-subheader/page-section-subheader.component';
 import { PageSectionComponent } from './components/page-section/page-section.component';
 import { PageSubheaderComponent } from './components/page-subheader/page-subheader.component';
+import { PageV2Component } from './components/page-v2/page-v2.component';
 import { PageComponent } from './components/page/page.component';
 import { PreferredNameFormComponent } from './components/preferred-name-form/preferred-name-form.component';
 import { ScrollTargetComponent } from './components/scroll-target/scroll-target.component';
@@ -73,6 +74,7 @@ import { SafePipe } from './pipes/safe.pipe';
     PageSectionSubheaderDescDirective,
     PageSectionSubheaderHintDirective,
     PageSubheaderComponent,
+    PageV2Component,
     PreferredNameFormComponent,
     ScrollTargetComponent,
     ToggleContentComponent,
@@ -124,6 +126,7 @@ import { SafePipe } from './pipes/safe.pipe';
     PageSectionSubheaderDescDirective,
     PageSectionSubheaderHintDirective,
     PageSubheaderComponent,
+    PageV2Component,
     PreferredNameFormComponent,
     ScrollTargetComponent,
     ToggleContentComponent,

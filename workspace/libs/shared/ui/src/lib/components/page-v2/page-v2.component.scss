@@ -1,0 +1,88 @@
+.page-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+header {
+  background-color: #036;
+  border-bottom: 2px solid #fcba19;
+  color: #fff;
+  display: flex;
+  height: 65px;
+  position: sticky;
+  width: 100%;
+
+  & .banner {
+    display: flex;
+    align-content: center;
+  }
+  & .logo-link {
+    display: flex;
+
+    & img {
+      margin: auto 12px; // auto will vertically center the image in the anchor.
+    }
+  }
+  & a.logo-link:focus img {
+    outline: 4px solid #3b99fc !important; // NOTE: Material uses !important to set outline to 0.
+    outline-offset: 1px;
+  }
+
+  & .logo-mobile {
+    width: 45px;
+    height: 50px;
+  }
+
+  & .logo-desktop {
+    width: 100px;
+    height: 50px;
+  }
+
+  & .title {
+    display: flex;
+
+    & h1 {
+      margin: 12px auto; // auto will vertically center the image in the anchor.
+      font-family: ‘BCSans’, ‘Noto Sans’, Verdana, Arial, sans-serif;
+      font-weight: normal;
+      white-space: nowrap;
+    }
+  }
+}
+footer {
+  margin-top: auto; // This ensure the footer sticks to the bottom of the flex container.
+  padding: 8px;
+  background-color: #036;
+  border-top: 2px solid #fcba19;
+  color: #fff;
+  font-family: ‘BCSans’, ‘Noto Sans’, Verdana, Arial, sans-serif;
+
+  & ul {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin: 0;
+    list-style: none;
+    align-items: center;
+
+    & li {
+      & a {
+        font-size: 0.813em;
+        font-weight: normal; /* 400 */
+        color: #fff;
+        border-right: 1px solid #4b5e7e;
+        padding-left: 5px;
+        padding-right: 5px;
+        text-decoration: none;
+      }
+      & a:focus {
+        outline: 4px solid #3b99fc !important; // NOTE: Material uses !important to set outline to 0.
+        outline-offset: 1px;
+      }
+      & a:hover {
+        color: #fff;
+        text-decoration: underline;
+      }
+    }
+  }
+}
