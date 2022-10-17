@@ -41,16 +41,16 @@ public class PlrClient : BaseClient, IPlrClient
 
     public async Task<IEnumerable<PlrRecord>?> GetRecordsAsync(params string?[] cpns)
     {
-        var filteredCpns = cpns?
-            .Where(cpn => !string.IsNullOrWhiteSpace(cpn));
+        cpns = cpns
+            .Where(cpn => !string.IsNullOrWhiteSpace(cpn))
+            .ToArray();
 
-        if (cpns == null
-            || !cpns.Any())
+        if (!cpns.Any())
         {
             return Enumerable.Empty<PlrRecord>();
         }
 
-        var result = await this.GetWithQueryParamsAsync<IEnumerable<PlrRecord>>("records", new { Cpns = filteredCpns });
+        var result = await this.GetWithQueryParamsAsync<IEnumerable<PlrRecord>>("records", new { Cpns = cpns });
         if (!result.IsSuccess)
         {
             return null;
