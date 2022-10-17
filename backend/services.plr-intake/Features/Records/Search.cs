@@ -8,16 +8,16 @@ using PlrIntake.Extensions;
 
 public class Search
 {
-    public class Command : ICommand<List<string>>
+    public class Query : IQuery<List<string>>
     {
         public string CollegeId { get; set; } = string.Empty;
         public DateTime Birthdate { get; set; }
         public List<string> IdentifierTypes { get; set; } = new();
     }
 
-    public class CommandValidator : AbstractValidator<Command>
+    public class QueryValidator : AbstractValidator<Query>
     {
-        public CommandValidator()
+        public QueryValidator()
         {
             this.RuleFor(x => x.CollegeId).NotEmpty();
             this.RuleFor(x => x.Birthdate).NotEmpty();
@@ -26,19 +26,19 @@ public class Search
         }
     }
 
-    public class CommandHandler : ICommandHandler<Command, List<string>>
+    public class QueryHandler : IQueryHandler<Query, List<string>>
     {
         private readonly PlrDbContext context;
 
-        public CommandHandler(PlrDbContext context) => this.context = context;
+        public QueryHandler(PlrDbContext context) => this.context = context;
 
-        public async Task<List<string>> HandleAsync(Command command)
+        public async Task<List<string>> HandleAsync(Query query)
         {
             return await this.context.PlrRecords
                 .ExcludeDeleted()
-                .Where(record => record.CollegeId!.TrimStart('0') == command.CollegeId.TrimStart('0')
-                    && record.DateOfBirth!.Value.Date == command.Birthdate.Date
-                    && command.IdentifierTypes.Contains(record.IdentifierType!))
+                .Where(record => record.CollegeId!.TrimStart('0') == query.CollegeId.TrimStart('0')
+                    && record.DateOfBirth!.Value.Date == query.Birthdate.Date
+                    && query.IdentifierTypes.Contains(record.IdentifierType!))
                 .Select(record => record.Cpn!) // All valid PLR records will have CPNs
                 .ToListAsync();
         }

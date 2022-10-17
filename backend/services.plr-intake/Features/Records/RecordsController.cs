@@ -13,7 +13,7 @@ public class RecordsController : ControllerBase
         => await handler.HandleAsync(query);
 
     [HttpPost("search")]
-    public async Task<ActionResult<List<string>>> SearchRecords([FromServices] ICommandHandler<Search.Command, List<string>> handler,
-                                                                [FromBody] Search.Command command)
-        => await handler.HandleAsync(command);
+    public async Task<ActionResult<List<string>>> SearchCpns([FromServices] IQueryHandler<Search.Query, List<string>> handler,
+                                                             [FromBody] Search.Query query)
+        => await handler.HandleAsync(query);
 }
