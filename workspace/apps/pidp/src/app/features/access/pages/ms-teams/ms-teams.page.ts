@@ -101,11 +101,6 @@ export class MsTeamsPage
       this.logger.error('No status code was provided');
       return this.navigateToRoot();
     }
-
-    // always start with one (empty) clinic member
-    if (!this.formState.clinicMembers.length) {
-      this.addClinicMember();
-    }
   }
 
   protected performSubmission(): NoContent {

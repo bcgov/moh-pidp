@@ -91,6 +91,7 @@
               [formGroupName]="i"
               [form]="member"
               [index]="i"
+              [length]="formState.clinicMembers.length"
               (remove)="removeClinicMember($event)"></app-clinic-member-form>
           </ng-container>
           <button
