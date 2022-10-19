@@ -48,6 +48,7 @@ import { FormControl, FormGroup } from '@angular/forms';
     `
       .clinic-member-form {
         display: flex !important;
+        width: max-content;
       }
 
       .form-field {
