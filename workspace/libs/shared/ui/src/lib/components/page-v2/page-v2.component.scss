@@ -1,12 +1,14 @@
+@use '../../../scss/pidp-variables' as pidp;
+
 .page-container {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
 }
 header {
-  background-color: #036;
-  border-bottom: 2px solid #fcba19;
-  color: #fff;
+  background-color: pidp.$bcgov-color-primary;
+  border-bottom: 2px solid pidp.$bcgov-color-accent;
+  color: #ffffff;
   display: flex;
   height: 65px;
   position: sticky;
@@ -43,36 +45,40 @@ header {
 
     & h1 {
       margin: 12px auto; // auto will vertically center the image in the anchor.
-      font-family: ‘BCSans’, ‘Noto Sans’, Verdana, Arial, sans-serif;
+      font-family: pidp.$bcgov-font-family;
       font-weight: normal;
       white-space: nowrap;
     }
   }
 }
+.content {
+  display: flex;
+  justify-content: center;
+}
 footer {
   margin-top: auto; // This ensure the footer sticks to the bottom of the flex container.
-  padding: 8px;
-  background-color: #036;
-  border-top: 2px solid #fcba19;
-  color: #fff;
-  font-family: ‘BCSans’, ‘Noto Sans’, Verdana, Arial, sans-serif;
+  padding: 20px;
+  background-color: pidp.$bcgov-color-primary;
+  border-top: 2px solid pidp.$bcgov-color-accent;
+  color: #ffffff;
+  font-family: pidp.$bcgov-font-family;
 
   & ul {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     margin: 0;
+    padding: 0;
     list-style: none;
     align-items: center;
+    row-gap: 8px;
 
     & li {
       & a {
-        font-size: 0.813em;
         font-weight: normal; /* 400 */
-        color: #fff;
-        border-right: 1px solid #4b5e7e;
-        padding-left: 5px;
-        padding-right: 5px;
+        color: #ffffff;
+        border-right: 1px solid #ffffff;
+        padding: 0 8px;
         text-decoration: none;
       }
       & a:focus {
@@ -80,7 +86,7 @@ footer {
         outline-offset: 1px;
       }
       & a:hover {
-        color: #fff;
+        color: #ffffff;
         text-decoration: underline;
       }
     }

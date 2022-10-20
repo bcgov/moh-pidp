@@ -1,7 +1,7 @@
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { Injectable } from '@angular/core';
 
-import { Observable, map } from 'rxjs';
+import { BehaviorSubject, Observable, map, tap } from 'rxjs';
 
 /**
  * @description
@@ -17,18 +17,59 @@ export const BootstrapBreakpoints = {
   mobile: '(min-width: 0px) and (max-width: 767.98px)',
   tablet: '(min-width: 768px) and (max-width: 991.98px)',
 };
-
-@Injectable()
+export const PidpBreakpoints = {
+  handset: '(min-width: 0px) and (max-width: 640px)',
+  web: '(min-width: 641px)',
+};
+export enum PidpViewport {
+  handset,
+  web,
+}
+@Injectable({
+  providedIn: 'root',
+})
 export class ViewportService {
   public breakpointObserver$: Observable<BreakpointState>;
 
-  public constructor(private breakpointObserver: BreakpointObserver) {
+  public pidpBreakpointObserver$: Observable<BreakpointState>;
+  public viewport = PidpViewport.handset;
+  public viewportSubject = new BehaviorSubject<PidpViewport>(this.viewport);
+  public viewportBroadcast$ = this.viewportSubject.asObservable();
+
+  public constructor(
+    private breakpointObserver: BreakpointObserver,
+    private pidpBreakpointObserver: BreakpointObserver
+  ) {
     this.breakpointObserver$ = breakpointObserver.observe([
       BootstrapBreakpoints.medium,
       BootstrapBreakpoints.large,
       BootstrapBreakpoints.mobile,
       BootstrapBreakpoints.tablet,
     ]);
+
+    // Set up the breakpoint observer.
+    this.pidpBreakpointObserver$ = this.pidpBreakpointObserver.observe([
+      PidpBreakpoints.handset,
+      PidpBreakpoints.web,
+    ]);
+
+    // Subscribe to the breakpoint observer.
+    this.pidpBreakpointObserver$.subscribe(() => this.onBreakpointChange());
+  }
+
+  private onBreakpointChange(): void {
+    if (this.pidpBreakpointObserver.isMatched(PidpBreakpoints.handset)) {
+      this.setViewport(PidpViewport.handset);
+    } else {
+      this.setViewport(PidpViewport.web);
+    }
+  }
+  private setViewport(viewport: PidpViewport): void {
+    // If the viewport has changed, notify observers.
+    if (this.viewport !== viewport) {
+      this.viewport = viewport;
+      this.viewportSubject.next(this.viewport);
+    }
   }
 
   public get isMobileBreakpoint(): boolean {

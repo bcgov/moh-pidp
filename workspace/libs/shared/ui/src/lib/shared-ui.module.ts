@@ -36,6 +36,7 @@ import { ScrollTargetComponent } from './components/scroll-target/scroll-target.
 import { ToggleContentComponent } from './components/toggle-content/toggle-content.component';
 import { UserInfoComponent } from './components/user-info/user-info.component';
 import { YesNoContentComponent } from './components/yes-no-content/yes-no-content.component';
+import { InjectViewportCssClassDirective } from './directives/viewport-css.directive';
 import { MaterialModule } from './material/material.module';
 import { ContextHelpModule } from './modules/context-help/context-help.module';
 import { DefaultPipe } from './pipes/default.pipe';
@@ -87,6 +88,7 @@ import { SafePipe } from './pipes/safe.pipe';
     PostalPipe,
     ReplacePipe,
     SafePipe,
+    InjectViewportCssClassDirective,
   ],
   imports: [
     CommonModule,
@@ -139,6 +141,7 @@ import { SafePipe } from './pipes/safe.pipe';
     PostalPipe,
     ReplacePipe,
     SafePipe,
+    InjectViewportCssClassDirective,
   ],
 })
 export class SharedUiModule {}

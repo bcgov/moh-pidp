@@ -2,12 +2,14 @@ import { Component, Inject } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { EMPTY, Observable, exhaustMap } from 'rxjs';
+import { EMPTY, Observable, exhaustMap, tap } from 'rxjs';
 
 import {
   DashboardHeaderConfig,
   DialogOptions,
   HtmlComponent,
+  PidpViewport,
+  ViewportService,
 } from '@bcgov/shared/ui';
 import { ConfirmDialogComponent } from '@bcgov/shared/ui';
 
@@ -19,10 +21,12 @@ import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-login',
-  templateUrl: './login.page.html',
-  styleUrls: ['./login.page.scss'],
+  templateUrl: './login-v2.page.html',
+  styleUrls: ['./login-v2.page.scss'],
 })
 export class LoginPage {
+  public viewportOptions = PidpViewport;
+
   public title: string;
   public headerConfig: DashboardHeaderConfig;
   public loginCancelled: boolean;
@@ -34,13 +38,20 @@ export class LoginPage {
 
   public IdentityProvider = IdentityProvider;
 
+  public viewport = PidpViewport.handset;
+  public isMobileTitleVisible = this.viewport === PidpViewport.handset;
+  public isWebTitleVisible = this.viewport === PidpViewport.web;
+  public isPidpLogoVisible = this.viewport === PidpViewport.web;
+  public hcimWebHeaderColor: 'white' | 'grey' = 'grey';
+
   public constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
     private authService: AuthService,
     private route: ActivatedRoute,
     private router: Router,
     private dialog: MatDialog,
-    private documentService: DocumentService
+    private documentService: DocumentService,
+    private viewportService: ViewportService
   ) {
     const routeSnapshot = this.route.snapshot;
 
@@ -53,6 +64,30 @@ export class LoginPage {
     this.providerIdentitySupportEmail =
       this.config.emails.providerIdentitySupport;
     this.idpHint = routeSnapshot.data.idpHint;
+
+    this.viewportService.viewportBroadcast$.subscribe((viewport) =>
+      this.onViewportChange(viewport)
+    );
+  }
+  private onViewportChange(viewport: PidpViewport): void {
+    this.viewport = viewport;
+
+    switch (this.viewport) {
+      case PidpViewport.handset:
+        this.isMobileTitleVisible = true;
+        this.isWebTitleVisible = false;
+        this.isPidpLogoVisible = false;
+        this.hcimWebHeaderColor = 'grey';
+        break;
+      case PidpViewport.web:
+        this.isMobileTitleVisible = false;
+        this.isWebTitleVisible = true;
+        this.isPidpLogoVisible = true;
+        this.hcimWebHeaderColor = 'white';
+        break;
+      default:
+        throw 'not implemented: ' + this.viewport;
+    }
   }
 
   public onScrollToAnchor(): void {

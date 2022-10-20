@@ -1,0 +1,60 @@
+@use '@angular/material' as mat;
+@use 'material/material-variables' as var;
+@use 'palette' as palette;
+@use '../../../../../scss/pidp-variables' as pidp;
+
+*,
+h2 {
+  font-family: pidp.$bcgov-font-family;
+}
+
+.card-container.viewport-mobile {
+  display: flex;
+  flex-direction: column;
+  .card-image {
+    height: 100px;
+    width: 100%;
+  }
+
+  & header {
+    padding: 30px;
+  }
+}
+.card-container.viewport-desktop {
+  display: flex;
+  flex: 1;
+
+  .card-image {
+    width: 240px;
+    height: 500px;
+    // min-height: 270px;
+  }
+  .card-content-container {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+
+    & header {
+      padding: 80px 30px 30px;
+    }
+    .card-content {
+      display: flex;
+      flex: 1;
+    }
+  }
+}
+.card-container.viewport-all {
+  & h2.card-header-text {
+    font-size: 2em;
+    font-weight: 700;
+    white-space: wrap;
+    margin: 0;
+    line-height: 1.5;
+  }
+  & .header-white {
+    background-color: #ffffff;
+  }
+  & .header-grey {
+    background-color: pidp.$bcgov-color-background-grey;
+  }
+}
