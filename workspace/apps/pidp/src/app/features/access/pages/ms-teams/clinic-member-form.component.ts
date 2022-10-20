@@ -35,7 +35,7 @@ import { FormControl, FormGroup } from '@angular/forms';
           </mat-error>
         </mat-form-field>
         <button
-          *ngIf="length > 1 && index !== 0"
+          *ngIf="index !== 0"
           mat-icon-button
           type="button"
           (click)="removeForm(index)">
@@ -65,7 +65,6 @@ import { FormControl, FormGroup } from '@angular/forms';
 export class ClinicMemberFormComponent {
   @Input() public form!: FormGroup;
   @Input() public index!: number;
-  @Input() public length!: number;
   @Output() public remove: EventEmitter<number>;
 
   public constructor() {
