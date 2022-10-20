@@ -65,20 +65,6 @@ export class MsTeamsFormState extends AbstractFormState<MsTeamsClinicInfo> {
   }
 
   public buildClinicMemberForm(): FormGroup {
-    if (!this.json?.clinicMembers) {
-      return this.fb.group({
-        name: ['Mike', [Validators.required]],
-        jobTitle: ['Privacy Officer', [Validators.required]],
-        email: [
-          'NOFX@nofx.com',
-          [Validators.required, FormControlValidators.email],
-        ],
-        phone: [
-          '999999999',
-          [Validators.required, FormControlValidators.phone],
-        ],
-      });
-    }
     return this.fb.group({
       name: ['', [Validators.required]],
       jobTitle: ['', [Validators.required]],
