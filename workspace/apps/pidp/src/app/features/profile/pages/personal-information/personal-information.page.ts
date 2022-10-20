@@ -84,6 +84,7 @@ export class PersonalInformationPage
   }
 
   public onBack(): void {
+    this._snackBar.dismiss();
     this.navigateToRoot();
   }
 
