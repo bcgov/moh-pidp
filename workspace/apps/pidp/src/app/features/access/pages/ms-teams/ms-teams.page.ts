@@ -18,7 +18,6 @@ import { User } from '@app/features/auth/models/user.model';
 import { AuthorizedUserService } from '@app/features/auth/services/authorized-user.service';
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
 import { PersonalInformationResource } from '@app/features/profile/pages/personal-information/personal-information-resource.service';
-import { PersonalInformation } from '@app/features/profile/pages/personal-information/personal-information.model';
 
 import { MsTeamsFormState } from './ms-teams-form-state';
 import { MsTeamsResource } from './ms-teams-resource.service';
@@ -41,10 +40,7 @@ export class MsTeamsPage
   public submissionPage: number;
   public formState: MsTeamsFormState;
   public user$: Observable<User>;
-  // public clinicPrivacyOfficer: ClinicMember;
-  public clinicPrivacyOfficerName: string;
-  public clinicPrivacyOfficerEmail: string;
-  public clinicPrivacyOfficerPhone: string;
+  public clinicPrivacyOfficer: ClinicMember;
 
   public constructor(
     protected dialog: MatDialog,
@@ -69,15 +65,12 @@ export class MsTeamsPage
     this.submissionPage = documentService.getMsTeamsAgreementPageCount() + 1;
     this.formState = new MsTeamsFormState(fb, formUtilsService);
     this.user$ = this.authorizedUserService.user$;
-    // this.clinicPrivacyOfficer = {
-    //   email: '',
-    //   jobTitle: 'Privacy Officer',
-    //   name: '',
-    //   phone: '',
-    // };
-    this.clinicPrivacyOfficerName = '';
-    this.clinicPrivacyOfficerEmail = '';
-    this.clinicPrivacyOfficerPhone = '';
+    this.clinicPrivacyOfficer = {
+      name: '',
+      email: '',
+      jobTitle: '',
+      phone: '',
+    };
   }
 
   public onBack(): void {
@@ -118,18 +111,18 @@ export class MsTeamsPage
       personalInfo: this.personalInformationResource.get(partyId),
       user: this.authorizedUserService.user$,
     }).subscribe(({ personalInfo, user }) => {
-      this.clinicPrivacyOfficerName = `${user.firstName} ${user.lastName}`;
-      this.clinicPrivacyOfficerEmail = personalInfo?.email
+      this.clinicPrivacyOfficer.name = `${user.firstName} ${user.lastName}`;
+      this.clinicPrivacyOfficer.email = personalInfo?.email
         ? personalInfo.email
         : '';
-      this.clinicPrivacyOfficerPhone = personalInfo?.phone
+      this.clinicPrivacyOfficer.phone = personalInfo?.phone
         ? personalInfo.phone
         : '';
       const privacyOfficer = {
-        name: this.clinicPrivacyOfficerName,
+        name: this.clinicPrivacyOfficer.name,
+        email: this.clinicPrivacyOfficer.email,
         jobTitle: 'Privacy Officer',
-        email: this.clinicPrivacyOfficerEmail,
-        phone: this.clinicPrivacyOfficerPhone,
+        phone: this.clinicPrivacyOfficer.phone,
       };
       this.formState.clinicMemberControls[0].setValue(privacyOfficer);
     });
