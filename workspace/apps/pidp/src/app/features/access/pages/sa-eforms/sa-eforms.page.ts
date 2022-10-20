@@ -1,3 +1,4 @@
+import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -26,6 +27,7 @@ export class SaEformsPage implements OnInit {
   public accessRequestFailed: boolean;
   public specialAuthorityEformsUrl: string;
   public specialAuthoritySupportEmail: string;
+  public enrolmentError: boolean;
 
   public constructor(
     private route: ActivatedRoute,
@@ -42,6 +44,7 @@ export class SaEformsPage implements OnInit {
     this.accessRequestFailed = false;
     this.specialAuthorityEformsUrl = specialAuthorityEformsUrl;
     this.specialAuthoritySupportEmail = specialAuthorityEformsSupportEmail;
+    this.enrolmentError = false;
   }
 
   public onBack(): void {
@@ -53,7 +56,12 @@ export class SaEformsPage implements OnInit {
       .requestAccess(this.partyService.partyId)
       .pipe(
         tap(() => (this.completed = true)),
-        catchError(() => {
+        catchError((error: HttpErrorResponse) => {
+          if (error.status === HttpStatusCode.BadRequest) {
+            this.completed = false;
+            this.enrolmentError = true;
+            return of(noop());
+          }
           this.accessRequestFailed = true;
           return of(noop());
         })

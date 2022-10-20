@@ -20,7 +20,7 @@ public interface IPlrClient
     /// Returns null on an error.
     /// </summary>
     /// <param name="cpn"></param>
-    Task<IEnumerable<PlrRecord>?> GetRecordsAsync(string cpn);
+    Task<IEnumerable<PlrRecord>?> GetRecordsAsync(string? cpn);
 
     /// <summary>
     /// Returns true if the user has at least one Record in good standing in PLR (and there are no errors).

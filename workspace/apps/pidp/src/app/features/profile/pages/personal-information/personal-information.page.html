@@ -49,7 +49,9 @@
       </ng-container>
     </ui-page-section-subheader>
 
-    <ui-contact-info-form [form]="formState.form"></ui-contact-info-form>
+    <ui-contact-info-form
+      [form]="formState.form"
+      (emailChanges)="onEmailInputChange($event)"></ui-contact-info-form>
   </ui-page-section>
 
   <ui-page-footer>

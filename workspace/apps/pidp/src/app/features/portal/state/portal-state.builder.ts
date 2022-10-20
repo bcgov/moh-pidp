@@ -11,13 +11,14 @@ import { DriverFitnessPortalSection } from './access/driver-fitness-portal-secti
 import { HcimAccountTransferPortalSection } from './access/hcim-account-transfer-portal-section.class';
 import { HcimEnrolmentPortalSection } from './access/hcim-enrolment-portal-section.class';
 import { MsTeamsPortalSection } from './access/ms-teams-portal-section.class';
+import { PrescriptionRefillEformsPortalSection } from './access/prescription-refill-eforms-portal-section.class';
 import { SaEformsPortalSection } from './access/sa-eforms-portal-section.class';
 import { SitePrivacySecurityPortalSection } from './access/site-privacy-security-checklist-portal-section.class';
 import { UciPortalSection } from './access/uci-portal-section.class';
 import { SignedAcceptedDocumentsPortalSection } from './history/signed-accepted-documents-portal-section.class';
 import { TransactionsPortalSection } from './history/transactions-portal-section.class';
 import { AdministratorInfoPortalSection } from './organization/administrator-information-portal-section';
-import { EndorsementPortalSection } from './organization/endorsement-portal-section.class';
+import { EndorsementsPortalSection } from './organization/endorsements-portal-section.class';
 import { FacilityDetailsPortalSection } from './organization/facility-details-portal-section.class';
 import { OrganizationDetailsPortalSection } from './organization/organization-details-portal-section.class';
 import { PortalSectionStatusKey } from './portal-section-status-key.type';
@@ -124,8 +125,8 @@ export class PortalStateBuilder {
         // TODO remove permissions when API exists and ready for production, or
         // TODO replace || with && to keep it flagged when API exists
         this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]) ||
-          this.insertSection('endorsement', profileStatus),
-        () => [new EndorsementPortalSection(profileStatus, this.router)]
+          this.insertSection('endorsements', profileStatus),
+        () => [new EndorsementsPortalSection(profileStatus, this.router)]
       ),
     ];
   }
@@ -135,6 +136,13 @@ export class PortalStateBuilder {
       ...ArrayUtils.insertResultIf<IPortalSection>(
         this.insertSection('saEforms', profileStatus),
         () => [new SaEformsPortalSection(profileStatus, this.router)]
+      ),
+      ...ArrayUtils.insertResultIf<IPortalSection>(
+        this.insertSection('prescriptionRefillEforms', profileStatus) &&
+          this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
+        () => [
+          new PrescriptionRefillEformsPortalSection(profileStatus, this.router),
+        ]
       ),
       ...ArrayUtils.insertResultIf<IPortalSection>(
         this.insertSection('hcimAccountTransfer', profileStatus),

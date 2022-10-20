@@ -13,6 +13,7 @@ using Pidp.Data;
 using Pidp.Extensions;
 using Pidp.Infrastructure;
 using Pidp.Infrastructure.Auth;
+using Pidp.Infrastructure.HttpClients.Keycloak;
 using Pidp.Infrastructure.HttpClients.Plr;
 using Pidp.Models.Lookups;
 using static Pidp.Features.Parties.ProfileStatus.ProfileStatusDto;
@@ -74,17 +75,20 @@ public partial class ProfileStatus
 
     public class CommandHandler : ICommandHandler<Command, Model>
     {
+        private readonly IKeycloakAdministrationClient keycloakClient;
         private readonly IMapper mapper;
-        private readonly IPlrClient client;
+        private readonly IPlrClient plrClient;
         private readonly PidpDbContext context;
 
         public CommandHandler(
+            IKeycloakAdministrationClient keycloakClient,
             IMapper mapper,
-            IPlrClient client,
+            IPlrClient plrClient,
             PidpDbContext context)
         {
+            this.keycloakClient = keycloakClient;
             this.mapper = mapper;
-            this.client = client;
+            this.plrClient = plrClient;
             this.context = context;
         }
 
@@ -102,7 +106,7 @@ public partial class ProfileStatus
                 profile.Cpn = await this.RecheckCpn(command.Id, profile.LicenceDeclaration, profile.Birthdate);
             }
 
-            profile.PlrStanding = await this.client.GetStandingsDigestAsync(profile.Cpn);
+            profile.PlrStanding = await this.plrClient.GetStandingsDigestAsync(profile.Cpn);
             profile.User = command.User;
 
             var profileStatus = new Model
@@ -117,6 +121,7 @@ public partial class ProfileStatus
                     new Model.HcimAccountTransfer(profile),
                     new Model.HcimEnrolment(profile),
                     new Model.MSTeams(profile),
+                    new Model.PrescriptionRefillEforms(profile),
                     new Model.SAEforms(profile),
                     new Model.Uci(profile)
                 }
@@ -134,13 +139,14 @@ public partial class ProfileStatus
                 return null;
             }
 
-            var newCpn = await this.client.FindCpnAsync(declaration.CollegeCode.Value, declaration.LicenceNumber, birthdate.Value);
+            var newCpn = await this.plrClient.FindCpnAsync(declaration.CollegeCode.Value, declaration.LicenceNumber, birthdate.Value);
             if (newCpn != null)
             {
                 var party = await this.context.Parties
                     .SingleAsync(party => party.Id == partyId);
                 party.Cpn = newCpn;
                 await this.context.SaveChangesAsync();
+                await this.keycloakClient.UpdateUserCpn(party.UserId, newCpn);
             }
 
             return newCpn;

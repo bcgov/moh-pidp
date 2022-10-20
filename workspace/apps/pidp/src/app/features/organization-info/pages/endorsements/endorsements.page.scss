@@ -1,0 +1,32 @@
+@use '@angular/material' as mat;
+@use 'material/material-variables' as var;
+
+@use 'palette' as palette;
+@import 'bootstrap/bootstrap-imports';
+
+.tab-view {
+  height: 37rem;
+  border: 1px solid palette.theme-palette(grey);
+  border-radius: 3px;
+
+  .tab-content {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    padding: 16px;
+    gap: 10px 20px; /* row-gap column gap */
+    height: 33.8rem;
+
+    .endorsement-card {
+      min-width: 260px;
+      min-height: 100px;
+    }
+  }
+
+  @include media-breakpoint-down(lg) {
+    .tab-content {
+      overflow-y: auto;
+    }
+  }
+}

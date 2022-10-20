@@ -32,3 +32,10 @@ public class FacilityAddress : Address
 
     public Facility? Facility { get; set; }
 }
+
+public class MSTeamsClinicAddress : Address
+{
+    public int MSTeamsEnrolmentId { get; set; }
+
+    public MSTeamsEnrolment? MSTeamsEnrolment { get; set; }
+}

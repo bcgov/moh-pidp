@@ -6,7 +6,6 @@ using Microsoft.EntityFrameworkCore;
 using NodaTime;
 
 using Pidp.Data;
-using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.HttpClients.Keycloak;
 using Pidp.Infrastructure.HttpClients.Mail;
 using Pidp.Infrastructure.HttpClients.Plr;
@@ -16,7 +15,7 @@ using Pidp.Models.Lookups;
 
 public class SAEforms
 {
-    public static IdentifierType[] ExcludedIdentifierTypes => new[] { IdentifierType.Pharmacist, IdentifierType.PharmacyTech };
+    public static IdentifierType[] ExcludedIdentifierTypes => new[] { IdentifierType.PharmacyTech };
 
     public class Command : ICommand<IDomainResult>
     {
@@ -77,7 +76,7 @@ public class SAEforms
                 return DomainResult.Failed();
             }
 
-            if (!await this.keycloakClient.AssignClientRole(dto.UserId, Clients.SAEforms, Roles.SAEforms))
+            if (!await this.keycloakClient.AssignClientRole(dto.UserId, MohClients.SAEforms.ClientId, MohClients.SAEforms.AccessRole))
             {
                 return DomainResult.Failed();
             }

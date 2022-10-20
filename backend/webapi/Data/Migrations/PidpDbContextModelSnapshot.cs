@@ -185,6 +185,60 @@ namespace Pidp.Data.Migrations
                     b.ToTable("EmailLog");
                 });
 
+            modelBuilder.Entity("Pidp.Models.Endorsement", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("Active")
+                        .HasColumnType("boolean");
+
+                    b.Property<Instant>("Created")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Instant>("CreatedOn")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Instant>("Modified")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Endorsement");
+                });
+
+            modelBuilder.Entity("Pidp.Models.EndorsementRelationship", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<Instant>("Created")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("EndorsementId")
+                        .HasColumnType("integer");
+
+                    b.Property<Instant>("Modified")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("PartyId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EndorsementId");
+
+                    b.HasIndex("PartyId");
+
+                    b.ToTable("EndorsementRelationship");
+                });
+
             modelBuilder.Entity("Pidp.Models.EndorsementRequest", b =>
                 {
                     b.Property<int>("Id")
@@ -193,24 +247,17 @@ namespace Pidp.Data.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<Instant?>("AdjudicatedOn")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<bool?>("Approved")
-                        .HasColumnType("boolean");
+                    b.Property<string>("AdditionalInformation")
+                        .HasColumnType("text");
 
                     b.Property<Instant>("Created")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int?>("EndorsingPartyId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("JobTitle")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<Instant>("Modified")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<int?>("ReceivingPartyId")
+                        .HasColumnType("integer");
 
                     b.Property<string>("RecipientEmail")
                         .IsRequired()
@@ -219,12 +266,18 @@ namespace Pidp.Data.Migrations
                     b.Property<int>("RequestingPartyId")
                         .HasColumnType("integer");
 
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
+
+                    b.Property<Instant>("StatusDate")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<Guid>("Token")
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EndorsingPartyId");
+                    b.HasIndex("ReceivingPartyId");
 
                     b.HasIndex("RequestingPartyId");
 
@@ -303,6 +356,11 @@ namespace Pidp.Data.Migrations
                         {
                             Code = 6,
                             Name = "MS Teams for Clinical Use"
+                        },
+                        new
+                        {
+                            Code = 7,
+                            Name = "Prescription Refill eForm for Pharmacists"
                         });
                 });
 
@@ -1125,6 +1183,32 @@ namespace Pidp.Data.Migrations
                     b.ToTable("HcimEnrolment");
                 });
 
+            modelBuilder.Entity("Pidp.Models.MSTeamsClinicAddress", b =>
+                {
+                    b.HasBaseType("Pidp.Models.Address");
+
+                    b.Property<int>("MSTeamsEnrolmentId")
+                        .HasColumnType("integer");
+
+                    b.HasIndex("MSTeamsEnrolmentId")
+                        .IsUnique();
+
+                    b.ToTable("Address");
+
+                    b.HasDiscriminator().HasValue("MSTeamsClinicAddress");
+                });
+
+            modelBuilder.Entity("Pidp.Models.MSTeamsEnrolment", b =>
+                {
+                    b.HasBaseType("Pidp.Models.AccessRequest");
+
+                    b.Property<string>("ClinicName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.ToTable("MSTeamsEnrolment");
+                });
+
             modelBuilder.Entity("Pidp.Models.AccessRequest", b =>
                 {
                     b.HasOne("Pidp.Models.Party", "Party")
@@ -1155,11 +1239,31 @@ namespace Pidp.Data.Migrations
                     b.Navigation("Province");
                 });
 
+            modelBuilder.Entity("Pidp.Models.EndorsementRelationship", b =>
+                {
+                    b.HasOne("Pidp.Models.Endorsement", "Endorsement")
+                        .WithMany("EndorsementRelationships")
+                        .HasForeignKey("EndorsementId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Pidp.Models.Party", "Party")
+                        .WithMany()
+                        .HasForeignKey("PartyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Endorsement");
+
+                    b.Navigation("Party");
+                });
+
             modelBuilder.Entity("Pidp.Models.EndorsementRequest", b =>
                 {
-                    b.HasOne("Pidp.Models.Party", "EndorsingParty")
+                    b.HasOne("Pidp.Models.Party", "ReceivingParty")
                         .WithMany()
-                        .HasForeignKey("EndorsingPartyId");
+                        .HasForeignKey("ReceivingPartyId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Pidp.Models.Party", "RequestingParty")
                         .WithMany()
@@ -1167,7 +1271,7 @@ namespace Pidp.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("EndorsingParty");
+                    b.Navigation("ReceivingParty");
 
                     b.Navigation("RequestingParty");
                 });
@@ -1251,6 +1355,31 @@ namespace Pidp.Data.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Pidp.Models.MSTeamsClinicAddress", b =>
+                {
+                    b.HasOne("Pidp.Models.MSTeamsEnrolment", "MSTeamsEnrolment")
+                        .WithOne("ClinicAddress")
+                        .HasForeignKey("Pidp.Models.MSTeamsClinicAddress", "MSTeamsEnrolmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("MSTeamsEnrolment");
+                });
+
+            modelBuilder.Entity("Pidp.Models.MSTeamsEnrolment", b =>
+                {
+                    b.HasOne("Pidp.Models.AccessRequest", null)
+                        .WithOne()
+                        .HasForeignKey("Pidp.Models.MSTeamsEnrolment", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Pidp.Models.Endorsement", b =>
+                {
+                    b.Navigation("EndorsementRelationships");
+                });
+
             modelBuilder.Entity("Pidp.Models.Facility", b =>
                 {
                     b.Navigation("PhysicalAddress");
@@ -1267,6 +1396,12 @@ namespace Pidp.Data.Migrations
                     b.Navigation("LicenceDeclaration");
 
                     b.Navigation("OrgainizationDetail");
+                });
+
+            modelBuilder.Entity("Pidp.Models.MSTeamsEnrolment", b =>
+                {
+                    b.Navigation("ClinicAddress")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

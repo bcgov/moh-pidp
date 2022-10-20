@@ -9,6 +9,7 @@ using Pidp.Data;
 using Pidp.Infrastructure.Services;
 using Pidp.Infrastructure.HttpClients.Mail;
 using Pidp.Models;
+using NodaTime;
 
 public class Create
 {
@@ -18,7 +19,7 @@ public class Create
         [HybridBindProperty(Source.Route)]
         public int PartyId { get; set; }
         public string RecipientEmail { get; set; } = string.Empty;
-        public string JobTitle { get; set; } = string.Empty;
+        public string? AdditionalInformation { get; set; }
     }
 
     public class CommandValidator : AbstractValidator<Command>
@@ -27,24 +28,26 @@ public class Create
         {
             this.RuleFor(x => x.PartyId).GreaterThan(0);
             this.RuleFor(x => x.RecipientEmail).NotEmpty().EmailAddress();
-            this.RuleFor(x => x.JobTitle).NotEmpty();
         }
     }
 
     public class CommandHandler : ICommandHandler<Command>
     {
+        private readonly string applicationUrl;
+        private readonly IClock clock;
         private readonly IEmailService emailService;
         private readonly PidpDbContext context;
-        private readonly string frontendUrl;
 
         public CommandHandler(
+            IClock clock,
             IEmailService emailService,
             PidpConfiguration config,
             PidpDbContext context)
         {
+            this.applicationUrl = config.ApplicationUrl;
+            this.clock = clock;
             this.emailService = emailService;
             this.context = context;
-            this.frontendUrl = config.ApplicationUrl;
         }
 
         public async Task HandleAsync(Command command)
@@ -54,7 +57,9 @@ public class Create
                 RequestingPartyId = command.PartyId,
                 Token = Guid.NewGuid(),
                 RecipientEmail = command.RecipientEmail,
-                JobTitle = command.JobTitle
+                AdditionalInformation = command.AdditionalInformation,
+                Status = EndorsementRequestStatus.Created,
+                StatusDate = this.clock.GetCurrentInstant()
             };
 
             this.context.EndorsementRequests.Add(request);
@@ -65,7 +70,7 @@ public class Create
 
         private async Task SendEndorsementRequestEmailAsync(string recipientEmail, Guid token)
         {
-            string url = this.frontendUrl.SetQueryParam("endorsement-token", token);
+            string url = this.applicationUrl.SetQueryParam("endorsement-token", token);
             var link = $"<a href=\"{url}\" target=\"_blank\" rel=\"noopener noreferrer\">this link</a>";
             var email = new Email(
                 from: EmailService.PidpEmail,

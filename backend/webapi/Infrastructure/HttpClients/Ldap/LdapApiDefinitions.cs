@@ -43,7 +43,9 @@ public class LdapLoginResponse
     public int? RemainingAttempts { get; set; }
     public bool? Unlocked { get; set; }
     public string? UserName { get; set; }
+#pragma warning disable CA1707 // Remove Underscores From Member Names
     public OrgDetails? Org_details { get; set; }
+#pragma warning restore CA1707
 
     public bool UserNotFound => this.Authenticated == null;
 

@@ -1,14 +1,22 @@
+import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { FormArray, FormBuilder } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { catchError, noop, of, tap } from 'rxjs';
+import { EMPTY, catchError, noop, of, tap } from 'rxjs';
 
+import { NoContent } from '@bcgov/shared/data-access';
+
+import { AbstractFormPage } from '@app/core/classes/abstract-form-page.class';
 import { PartyService } from '@app/core/party/party.service';
 import { DocumentService } from '@app/core/services/document.service';
+import { FormUtilsService } from '@app/core/services/form-utils.service';
 import { LoggerService } from '@app/core/services/logger.service';
 import { UtilsService } from '@app/core/services/utils.service';
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
 
+import { MsTeamsFormState } from './ms-teams-form-state';
 import { MsTeamsResource } from './ms-teams-resource.service';
 import { msTeamsSupportEmail } from './ms-teams.constants';
 
@@ -17,56 +25,61 @@ import { msTeamsSupportEmail } from './ms-teams.constants';
   templateUrl: './ms-teams.page.html',
   styleUrls: ['./ms-teams.page.scss'],
 })
-export class MsTeamsPage implements OnInit {
+export class MsTeamsPage
+  extends AbstractFormPage<MsTeamsFormState>
+  implements OnInit
+{
   public completed: boolean | null;
-  public declarationAgreement: string;
-  public detailsAgreement: string;
-  public itSecurityAgreement: string;
   public msTeamsSupportEmail: string;
   public currentPage: number;
+  public enrolmentError: boolean;
+  public submissionPage: number;
+  public formState: MsTeamsFormState;
+
   public constructor(
+    protected dialog: MatDialog,
+    protected formUtilsService: FormUtilsService,
     private route: ActivatedRoute,
     private router: Router,
     private partyService: PartyService,
     private resource: MsTeamsResource,
     private logger: LoggerService,
     private utilsService: UtilsService,
-    documentService: DocumentService
+    private documentService: DocumentService,
+    fb: FormBuilder
   ) {
+    super(dialog, formUtilsService);
     const routeData = this.route.snapshot.data;
     this.completed = routeData.msTeamsStatusCode === StatusCode.COMPLETED;
-    this.declarationAgreement =
-      documentService.getMsTeamsDeclarationAgreement();
-    this.detailsAgreement = documentService.getMsTeamsDetailsAgreement();
-    this.itSecurityAgreement = documentService.getMsTeamsITSecurityAgreement();
     this.msTeamsSupportEmail = msTeamsSupportEmail;
     this.currentPage = 0;
+    this.enrolmentError = false;
+    this.submissionPage = documentService.getMsTeamsAgreementPageCount() + 1;
+    this.formState = new MsTeamsFormState(fb, formUtilsService);
   }
 
   public onBack(): void {
-    if (this.currentPage > 0) {
+    if (this.currentPage === 0 || this.completed) {
+      this.navigateToRoot();
+    } else {
       this.utilsService.scrollTop('.mat-sidenav-content');
       this.currentPage--;
-    } else {
-      this.navigateToRoot();
     }
   }
 
-  public onRequestAccess(): void {
-    if (this.currentPage < 2) {
-      this.utilsService.scrollTop('.mat-sidenav-content');
-      this.currentPage++;
-    } else {
-      this.resource
-        .requestAccess(this.partyService.partyId)
-        .pipe(
-          tap(() => (this.completed = true)),
-          catchError(() => {
-            return of(noop());
-          })
-        )
-        .subscribe();
+  public onNext(): void {
+    if (this.currentPage === 0 && !this.validateFirstPage()) {
+      return;
     }
+
+    this.utilsService.scrollTop('.mat-sidenav-content');
+    this.currentPage++;
+  }
+
+  private validateFirstPage(): boolean {
+    return this.checkValidity(
+      new FormArray([this.formState.clinicName, this.formState.clinicAddress])
+    );
   }
 
   public ngOnInit(): void {
@@ -81,6 +94,44 @@ export class MsTeamsPage implements OnInit {
       this.logger.error('No status code was provided');
       return this.navigateToRoot();
     }
+
+    // always start with one (empty) clinic member
+    if (!this.formState.clinicMembers.length) {
+      this.addClinicMember();
+    }
+  }
+
+  public addClinicMember(): void {
+    const member = this.formState.buildClinicMemberForm();
+    this.formState.clinicMembers.push(member);
+  }
+
+  public removeClinicMember(index: number): void {
+    this.formState.clinicMembers.removeAt(index);
+  }
+
+  public getAgreementText(page: number): string {
+    return this.documentService.getMsTeamsAgreement(page);
+  }
+
+  protected performSubmission(): NoContent {
+    const partyId = this.partyService.partyId;
+
+    return partyId && this.formState.json
+      ? this.resource
+          .requestAccess(this.partyService.partyId, this.formState.json)
+          .pipe(
+            tap(() => (this.completed = true)),
+            catchError((error: HttpErrorResponse) => {
+              if (error.status === HttpStatusCode.BadRequest) {
+                this.completed = false;
+                this.enrolmentError = true;
+                return of(noop());
+              }
+              return of(noop());
+            })
+          )
+      : EMPTY;
   }
 
   private navigateToRoot(): void {

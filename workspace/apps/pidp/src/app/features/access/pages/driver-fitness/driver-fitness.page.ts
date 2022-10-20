@@ -1,3 +1,4 @@
+import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { Component, Inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -5,7 +6,6 @@ import { catchError, noop, of, tap } from 'rxjs';
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';
 import { PartyService } from '@app/core/party/party.service';
-import { DocumentService } from '@app/core/services/document.service';
 import { LoggerService } from '@app/core/services/logger.service';
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
 
@@ -13,6 +13,7 @@ import { DriverFitnessResource } from './driver-fitness-resource.service';
 import {
   driverFitnessSupportEmail,
   driverFitnessUrl,
+  medicalPractitionerPortalUrl,
 } from './driver-fitness.constants';
 
 @Component({
@@ -23,10 +24,11 @@ import {
 export class DriverFitnessPage implements OnInit {
   public title: string;
   public driverFitnessUrl: string;
-  public collectionNotice: string;
   public completed: boolean | null;
   public accessRequestFailed: boolean;
   public driverFitnessSupportEmail: string;
+  public enrolmentError: boolean;
+  public medicalPractitionerPortalUrl: string;
 
   public constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
@@ -34,16 +36,16 @@ export class DriverFitnessPage implements OnInit {
     private router: Router,
     private partyService: PartyService,
     private resource: DriverFitnessResource,
-    private logger: LoggerService,
-    documentService: DocumentService
+    private logger: LoggerService
   ) {
     const routeData = this.route.snapshot.data;
     this.title = routeData.title;
     this.driverFitnessUrl = driverFitnessUrl;
-    this.collectionNotice = documentService.getDriverFitnessCollectionNotice();
     this.completed = routeData.driverFitnessStatusCode === StatusCode.COMPLETED;
     this.accessRequestFailed = false;
     this.driverFitnessSupportEmail = driverFitnessSupportEmail;
+    this.enrolmentError = false;
+    this.medicalPractitionerPortalUrl = medicalPractitionerPortalUrl;
   }
 
   public onBack(): void {
@@ -55,7 +57,12 @@ export class DriverFitnessPage implements OnInit {
       .requestAccess(this.partyService.partyId)
       .pipe(
         tap(() => (this.completed = true)),
-        catchError(() => {
+        catchError((error: HttpErrorResponse) => {
+          if (error.status === HttpStatusCode.BadRequest) {
+            this.completed = false;
+            this.enrolmentError = true;
+            return of(noop());
+          }
           this.accessRequestFailed = true;
           return of(noop());
         })

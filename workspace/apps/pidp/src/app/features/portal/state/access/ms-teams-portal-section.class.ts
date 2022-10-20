@@ -51,7 +51,7 @@ export class MsTeamsPortalSection implements IPortalSection {
   public get status(): string {
     const statusCode = this.getStatusCode();
     return statusCode === StatusCode.AVAILABLE
-      ? 'You are eligible to access MS Teams'
+      ? 'Clinic owners in the Fraser Health region may enrol for MS Teams access for their clinic'
       : statusCode === StatusCode.COMPLETED
       ? 'Completed'
       : 'Incomplete';

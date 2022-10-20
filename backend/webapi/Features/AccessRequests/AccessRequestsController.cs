@@ -77,8 +77,8 @@ public class AccessRequestsController : PidpControllerBase
     [Authorize(Policy = Policies.AnyPartyIdentityProvider)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> CreateSAEformsEnrolment([FromServices] ICommandHandler<HcimEnrolment.Command, IDomainResult> handler,
-                                                             [FromBody] HcimEnrolment.Command command)
+    public async Task<IActionResult> CreateHcimEnrolment([FromServices] ICommandHandler<HcimEnrolment.Command, IDomainResult> handler,
+                                                         [FromBody] HcimEnrolment.Command command)
         => await this.AuthorizePartyBeforeHandleAsync(command.PartyId, handler, command)
             .ToActionResult();
 
@@ -88,6 +88,15 @@ public class AccessRequestsController : PidpControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> CreateMSTeamsEnrolment([FromServices] ICommandHandler<MSTeams.Command, IDomainResult> handler,
                                                             [FromBody] MSTeams.Command command)
+        => await this.AuthorizePartyBeforeHandleAsync(command.PartyId, handler, command)
+            .ToActionResult();
+
+    [HttpPost("prescription-refill-eforms")]
+    [Authorize(Policy = Policies.BcscAuthentication)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> CreatePrescriptionRefillEformsEnrolment([FromServices] ICommandHandler<PrescriptionRefillEforms.Command, IDomainResult> handler,
+                                                                             [FromBody] PrescriptionRefillEforms.Command command)
         => await this.AuthorizePartyBeforeHandleAsync(command.PartyId, handler, command)
             .ToActionResult();
 

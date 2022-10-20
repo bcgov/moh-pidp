@@ -17,12 +17,15 @@
     </ng-container>
   </ui-alert>
 
+  <app-enrolment-error *ngIf="enrolmentError"></app-enrolment-error>
+
   <ui-page-section>
     <ui-page-section-subheader
       icon="assignment"
-      heading="Driver Medical Fitness">
+      heading="Medical Practitioner Registration">
       <ng-container uiPageSectionSubheaderDesc>
-        {{ completed ? 'Enrolment Complete.' : 'Collection Notice.' }}
+        {{ completed ? 'Enrolment Complete.' : 'Confirm enrolment to Driver
+        Fitness Practitioner Portal.' }}
       </ng-container>
     </ui-page-section-subheader>
   </ui-page-section>
@@ -32,19 +35,14 @@
       type="success"
       icon="check_circle"
       iconType="outlined"
-      heading="You have access">
+      heading="Success!">
       <ng-container uiAlertContent>
+        <p>You may now log into the Portal.</p>
         <p>
-          You now have access to the Driver Medical Fitness application. You can
-          log into the application using your BC Services Card app.
-        </p>
-        <p>
-          Follow this link to Driver Medical Fitness:<br />
-          <a uiAnchor [attr.href]="driverFitnessUrl"></a>
-        </p>
-        <p>
-          You will need to visit this link each time you want to submit an SA
-          eForm. It may be helpful to bookmark this link for future use.
+          Log in:<br />
+          <a uiAnchor [attr.href]="medicalPractitionerPortalUrl"
+            >Medical Practitioner Portal</a
+          >
         </p>
       </ng-container>
     </ui-alert>
@@ -52,9 +50,10 @@
 
   <ng-template #notCompleted>
     <ui-page-section>
-      <p
-        class="collection-notice"
-        [innerHtml]="collectionNotice | safe: 'html'"></p>
+      <p class="confirmation">
+        You are about to enrol in “Driver Fitness Practitioner Portal.” Click
+        Next to continue or cancel to go back to the overview page.
+      </p>
     </ui-page-section>
   </ng-template>
 
