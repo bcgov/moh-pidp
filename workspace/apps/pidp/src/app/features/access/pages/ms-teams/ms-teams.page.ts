@@ -106,9 +106,9 @@ export class MsTeamsPage
     }).subscribe(({ personalInfo, user }) => {
       const privacyOfficer: ClinicMember = {
         name: `${user.firstName} ${user.lastName}`,
-        email: personalInfo?.email ? personalInfo.email : '',
+        email: personalInfo?.email ?? '',
         jobTitle: 'Privacy Officer',
-        phone: personalInfo?.phone ? personalInfo.phone : '',
+        phone: personalInfo?.phone ?? '',
       };
 
       this.formState.clinicMemberControls[0].setValue(privacyOfficer);
