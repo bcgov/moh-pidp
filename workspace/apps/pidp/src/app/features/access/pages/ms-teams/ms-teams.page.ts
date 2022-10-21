@@ -40,7 +40,6 @@ export class MsTeamsPage
   public submissionPage: number;
   public formState: MsTeamsFormState;
   public user$: Observable<User>;
-  public clinicPrivacyOfficer: ClinicMember;
 
   public constructor(
     protected dialog: MatDialog,
@@ -65,12 +64,6 @@ export class MsTeamsPage
     this.submissionPage = documentService.getMsTeamsAgreementPageCount() + 1;
     this.formState = new MsTeamsFormState(fb, formUtilsService);
     this.user$ = this.authorizedUserService.user$;
-    this.clinicPrivacyOfficer = {
-      name: '',
-      email: '',
-      jobTitle: '',
-      phone: '',
-    };
   }
 
   public onBack(): void {
@@ -111,26 +104,19 @@ export class MsTeamsPage
       personalInfo: this.personalInformationResource.get(partyId),
       user: this.authorizedUserService.user$,
     }).subscribe(({ personalInfo, user }) => {
-      this.clinicPrivacyOfficer.name = `${user.firstName} ${user.lastName}`;
-      this.clinicPrivacyOfficer.email = personalInfo?.email
-        ? personalInfo.email
-        : '';
-      this.clinicPrivacyOfficer.phone = personalInfo?.phone
-        ? personalInfo.phone
-        : '';
-      const privacyOfficer = {
-        name: this.clinicPrivacyOfficer.name,
-        email: this.clinicPrivacyOfficer.email,
+      const privacyOfficer: ClinicMember = {
+        name: `${user.firstName} ${user.lastName}`,
+        email: personalInfo?.email ? personalInfo.email : '',
         jobTitle: 'Privacy Officer',
-        phone: this.clinicPrivacyOfficer.phone,
+        phone: personalInfo?.phone ? personalInfo.phone : '',
       };
+
       this.formState.clinicMemberControls[0].setValue(privacyOfficer);
     });
   }
 
   public ngOnInit(): void {
     const partyId = this.partyService.partyId;
-    this.prepopulateForm();
 
     if (!partyId) {
       this.logger.error('No party ID was provided');
@@ -141,6 +127,8 @@ export class MsTeamsPage
       this.logger.error('No status code was provided');
       return this.navigateToRoot();
     }
+
+    this.prepopulateForm();
   }
 
   protected performSubmission(): NoContent {
