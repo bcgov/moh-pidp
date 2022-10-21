@@ -67,6 +67,8 @@ spec:
       workspaces:
         - name: source
           workspace: source
+        - name: dockerconfig
+          workspace: dockerconfig
       taskRef:
         kind: Task
         name: kaniko
@@ -86,6 +88,8 @@ spec:
       workspaces:
         - name: source
           workspace: source
+        - name: dockerconfig
+          workspace: dockerconfig
       taskRef:
         kind: Task
         name: kaniko
@@ -100,11 +104,13 @@ spec:
           value: 
             - --skip-tls-verify
       runAfter: 
-        - git-clone
+        - build-plr-intake
     - name: build-plr-intake
       workspaces:
         - name: source
           workspace: source
+        - name: dockerconfig
+          workspace: dockerconfig
       taskRef:
         kind: Task
         name: kaniko
@@ -119,7 +125,7 @@ spec:
           value: 
             - --skip-tls-verify
       runAfter: 
-        - git-clone
+        - build-frontend-image
     - name: install-upgrade
       workspaces:
         - name: source

@@ -66,3 +66,10 @@ spec:
     # makes it explicit that it needs to run as root.
     securityContext:
       runAsUser: 0
+  workspaces:
+    - description: Holds the context and docker file
+      name: source
+    - description: Includes a docker `config.json`
+      mountPath: /kaniko/.docker
+      name: dockerconfig
+      optional: true

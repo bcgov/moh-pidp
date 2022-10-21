@@ -53,4 +53,4 @@ spec:
                   storage: 1Gi
         - name: dockerconfig
           secret:
-            secretName: pipeline-dockercfg-w5mgt
+            secretName: openshift-image-registry
