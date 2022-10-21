@@ -38,10 +38,10 @@ export class LoginPage {
 
   public IdentityProvider = IdentityProvider;
 
-  public viewport = PidpViewport.handset;
-  public isMobileTitleVisible = this.viewport === PidpViewport.handset;
-  public isWebTitleVisible = this.viewport === PidpViewport.web;
-  public isPidpLogoVisible = this.viewport === PidpViewport.web;
+  public viewport = PidpViewport.xsmall;
+  public isMobileTitleVisible = this.viewport === PidpViewport.xsmall;
+  public isWebTitleVisible = this.viewport !== PidpViewport.xsmall;
+  public isPidpLogoVisible = this.viewport !== PidpViewport.xsmall;
   public hcimWebHeaderColor: 'white' | 'grey' = 'grey';
 
   public constructor(
@@ -73,13 +73,15 @@ export class LoginPage {
     this.viewport = viewport;
 
     switch (this.viewport) {
-      case PidpViewport.handset:
+      case PidpViewport.xsmall:
         this.isMobileTitleVisible = true;
         this.isWebTitleVisible = false;
         this.isPidpLogoVisible = false;
         this.hcimWebHeaderColor = 'grey';
         break;
-      case PidpViewport.web:
+      case PidpViewport.small:
+      case PidpViewport.medium:
+      case PidpViewport.large:
         this.isMobileTitleVisible = false;
         this.isWebTitleVisible = true;
         this.isPidpLogoVisible = true;

@@ -18,12 +18,28 @@ export const BootstrapBreakpoints = {
   tablet: '(min-width: 768px) and (max-width: 991.98px)',
 };
 export const PidpBreakpoints = {
-  handset: '(min-width: 0px) and (max-width: 640px)',
-  web: '(min-width: 641px)',
+  xsmall: '(min-width: 0px) and (max-width: 640px)',
+  small: '(min-width: 641px) and (max-width: 1023px)',
+  medium: '(min-width: 1024px) and (max-width: 1199px)',
+  large: '(min-width: 1200px)',
 };
 export enum PidpViewport {
-  handset,
-  web,
+  /**
+   * Roughly corresponds to mobile
+   */
+  xsmall,
+  /**
+   * Roughly corresponds to tablet in portrait mode
+   */
+  small,
+  /**
+   * Roughly corresponds to mobile in landscape mode
+   */
+  medium,
+  /**
+   * Roughly corresponds to desktop
+   */
+  large,
 }
 @Injectable({
   providedIn: 'root',
@@ -32,7 +48,7 @@ export class ViewportService {
   public breakpointObserver$: Observable<BreakpointState>;
 
   public pidpBreakpointObserver$: Observable<BreakpointState>;
-  public viewport = PidpViewport.handset;
+  public viewport = PidpViewport.xsmall;
   public viewportSubject = new BehaviorSubject<PidpViewport>(this.viewport);
   public viewportBroadcast$ = this.viewportSubject.asObservable();
 
@@ -49,8 +65,10 @@ export class ViewportService {
 
     // Set up the breakpoint observer.
     this.pidpBreakpointObserver$ = this.pidpBreakpointObserver.observe([
-      PidpBreakpoints.handset,
-      PidpBreakpoints.web,
+      PidpBreakpoints.xsmall,
+      PidpBreakpoints.small,
+      PidpBreakpoints.medium,
+      PidpBreakpoints.large,
     ]);
 
     // Subscribe to the breakpoint observer.
@@ -58,10 +76,14 @@ export class ViewportService {
   }
 
   private onBreakpointChange(): void {
-    if (this.pidpBreakpointObserver.isMatched(PidpBreakpoints.handset)) {
-      this.setViewport(PidpViewport.handset);
+    if (this.pidpBreakpointObserver.isMatched(PidpBreakpoints.xsmall)) {
+      this.setViewport(PidpViewport.xsmall);
+    } else if (this.pidpBreakpointObserver.isMatched(PidpBreakpoints.small)) {
+      this.setViewport(PidpViewport.small);
+    } else if (this.pidpBreakpointObserver.isMatched(PidpBreakpoints.medium)) {
+      this.setViewport(PidpViewport.medium);
     } else {
-      this.setViewport(PidpViewport.web);
+      this.setViewport(PidpViewport.large);
     }
   }
   private setViewport(viewport: PidpViewport): void {

@@ -1,14 +1,18 @@
-@use '@angular/material' as mat;
-@use 'material/material-variables' as var;
-@use 'palette' as palette;
 @use '../../../../../scss/pidp-variables' as pidp;
 
-*,
 h2 {
   font-family: pidp.$bcgov-font-family;
 }
 
-.card-container.viewport-mobile {
+.card-container.viewport-all {
+  & .header-white {
+    background-color: #ffffff;
+  }
+  & .header-grey {
+    background-color: pidp.$bcgov-color-background-grey;
+  }
+}
+.card-container.viewport-xsmall {
   display: flex;
   flex-direction: column;
   .card-image {
@@ -19,15 +23,24 @@ h2 {
   & header {
     padding: 30px;
   }
+  & h2.card-header-text {
+    font-size: 2em;
+    font-weight: 700;
+    white-space: wrap;
+    margin: 0;
+    line-height: 1.5;
+  }
 }
-.card-container.viewport-desktop {
+.card-container.viewport-small,
+.card-container.viewport-medium,
+.card-container.viewport-large {
   display: flex;
   flex: 1;
 
   .card-image {
     width: 240px;
-    height: 500px;
-    // min-height: 270px;
+    min-height: 500px;
+    height: 100%;
   }
   .card-content-container {
     display: flex;
@@ -37,24 +50,45 @@ h2 {
     & header {
       padding: 80px 30px 30px;
     }
+    & h2.card-header-text {
+      font-size: 2em;
+      font-weight: 700;
+      white-space: wrap;
+      margin: 0;
+      line-height: 1.5;
+    }
     .card-content {
       display: flex;
       flex: 1;
     }
   }
 }
-.card-container.viewport-all {
-  & h2.card-header-text {
-    font-size: 2em;
-    font-weight: 700;
-    white-space: wrap;
-    margin: 0;
-    line-height: 1.5;
+// Adjust for small and medium, which have a layout very similar to large.
+.card-container.viewport-medium {
+  .card-image {
+    width: 160px;
+    min-height: 415px;
   }
-  & .header-white {
-    background-color: #ffffff;
+  .card-content-container {
+    & header {
+      padding: 55px 24px 24px;
+    }
+    & h2.card-header-text {
+      font-size: 1.75em;
+    }
   }
-  & .header-grey {
-    background-color: pidp.$bcgov-color-background-grey;
+}
+.card-container.viewport-small {
+  .card-image {
+    width: 90px;
+    min-height: 300px;
+  }
+  .card-content-container {
+    & header {
+      padding: 30px 12px 12px;
+    }
+    & h2.card-header-text {
+      font-size: 1em;
+    }
   }
 }

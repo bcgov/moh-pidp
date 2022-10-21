@@ -52,125 +52,6 @@
       <ng-container *ngTemplateOutlet="systems"></ng-container>
     </section>
   </div>
-
-  <div class="container old-content">
-    <ng-container *ngIf="idpHint === IdentityProvider.BCSC; else admin">
-      <div class="row">
-        <div class="col-12">
-          <ui-alert
-            *ngIf="loginCancelled"
-            type="info"
-            icon="error_outline"
-            heading="Login Cancelled">
-            <ng-container uiAlertContent>
-              <p>
-                You have cancelled your login to the Provider Identity Portal.
-              </p>
-              <ul>
-                <li>
-                  For support with the provider identity portal, contact
-                  <a
-                    uiAnchor
-                    scheme="mailto"
-                    [attr.href]="providerIdentitySupportEmail"></a>
-                </li>
-                <li>
-                  For support with your BC Services Card, click
-                  <a uiAnchor [attr.href]="bcscSupportUrl">here</a>
-                </li>
-              </ul>
-            </ng-container>
-          </ui-alert>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-12 col-xl-auto">
-          <div class="header">
-            <div class="heading">
-              <img
-                src="/assets/images/pidp-logo-blue-small.svg"
-                attr.aria-labelledby="Provider Identity Portal Logo"
-                loading="lazy" />
-              <h1>Provider Identity Portal</h1>
-            </div>
-
-            <p>
-              A portal for healthcare professionals in
-              <strong>British Columbia</strong> to enrol for access to
-              participating health systems
-            </p>
-          </div>
-
-          <div class="hide-on-large-viewports"></div>
-
-          <div class="hide-on-small-viewports scroll">
-            <button
-              mat-stroked-button
-              color="primary"
-              (click)="onScrollToAnchor()">
-              View available health systems
-            </button>
-          </div>
-
-          <div class="support">
-            <app-get-support></app-get-support>
-          </div>
-
-          <div class="systems">
-            <ui-page-section>
-              <ui-scroll-target targetId="systems"></ui-scroll-target>
-              <ui-page-section-subheader
-                icon="assignment"
-                heading="Systems Available"></ui-page-section-subheader>
-
-              <ui-page-section>
-                <h3>Special Authority eForms</h3>
-                <p>
-                  B.C. healthcare professionals can enrol for access to
-                  PharmaCare's Special Authority eForms application.
-                </p>
-                <p>
-                  You need to set up the
-                  <a uiAnchor [attr.href]="bcscMobileSetupUrl">
-                    BC Services Card app
-                  </a>
-                  to enrol. You will use the app each time you access the eForms
-                  application. If you are not eligible for the BC Services Card,
-                  or cannot set up the app, you can
-                  <a uiAnchor [attr.href]="specialAuthorityUrl">
-                    submit SA requests by fax</a
-                  >.
-                </p>
-              </ui-page-section>
-
-              <ui-page-section>
-                <h3>HCIMWeb Account Transfer</h3>
-                <p>For existing users of the HCIMWeb Application.</p>
-              </ui-page-section>
-            </ui-page-section>
-          </div>
-        </div>
-        <div class="col-12 col-xl-auto hide-on-small-viewports">
-          <ng-container *ngTemplateOutlet="login"></ng-container>
-        </div>
-      </div>
-    </ng-container>
-
-    <ng-template #admin>
-      <div class="row admin">
-        <div class="col-12">
-          <img
-            src="/assets/images/pidp-logo-blue.svg"
-            alt="Provider Identity Portal Logo" />
-        </div>
-        <div class="col-12">
-          <button mat-flat-button color="primary" (click)="onLogin()">
-            {{ idpHint | uppercase }} Login
-          </button>
-        </div>
-      </div>
-    </ng-template>
-  </div>
 </ui-page-v2>
 
 <ng-template #login>
@@ -258,16 +139,19 @@
 <ng-template #hcimWeb>
   <div class="card-content card-hcimweb">
     <p>For existing users of the HCIMWeb Application.</p>
-    <div class="hcimweb-arrow">&#8594;</div>
-    <div class="hcimweb-arrow">&#8592;</div>
+    <div class="hcimweb-arrows">
+      <mat-icon>swap_horiz</mat-icon>
+    </div>
   </div>
 </ng-template>
 <ng-template #comingSoon>
   <div class="card-content card-coming-soon">
     <header>
       <div class="coming-soon-header-content">
-        <h2>Coming Soon</h2>
-        <div>V</div>
+        <div><h2>Coming Soon</h2></div>
+        <div>
+          <mat-icon class="material-icons-outlined">verified</mat-icon>
+        </div>
       </div>
     </header>
     <div class="coming-soon-text-container">

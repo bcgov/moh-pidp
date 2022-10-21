@@ -14,7 +14,7 @@ export class SystemCardComponent {
   @Input() public headerColor: 'white' | 'grey' = 'white';
 
   public viewportOptions = PidpViewport;
-  public viewport = PidpViewport.handset;
+  public viewport = PidpViewport.xsmall;
 
   public constructor(private viewportService: ViewportService) {
     this.viewportService.viewportBroadcast$.subscribe((viewport) =>
@@ -23,27 +23,16 @@ export class SystemCardComponent {
   }
   private onViewportChange(viewport: PidpViewport): void {
     this.viewport = viewport;
-
-    // switch (this.viewport) {
-    //   case PidpViewport.handset:
-    //     this.isMobileTitleVisible = true;
-    //     this.isWebTitleVisible = false;
-    //     break;
-    //   case PidpViewport.web:
-    //     this.isMobileTitleVisible = false;
-    //     this.isWebTitleVisible = true;
-    //     break;
-    //   default:
-    //     throw 'not implemented: ' + this.viewport;
-    // }
   }
   public getImageUrl(): string {
     let imageUrl: string;
     switch (this.viewport) {
-      case PidpViewport.handset:
+      case PidpViewport.xsmall:
         imageUrl = this.imageUrls[0];
         break;
-      case PidpViewport.web:
+      case PidpViewport.small:
+      case PidpViewport.medium:
+      case PidpViewport.large:
         imageUrl = this.imageUrls[1];
         break;
       default:

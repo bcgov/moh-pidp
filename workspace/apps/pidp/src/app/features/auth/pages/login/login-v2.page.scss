@@ -1,35 +1,103 @@
 @use '../../../../../scss/pidp-variables' as pidp;
 
-// .title-container,
-// .welcome-section
-// .systems-section
-// {
-//   display: none !important;
-// }
-// .title-container {
-//   background-color: lightcoral;
-// }
-// .welcome-section {
-//   background-color: lightblue;
-// }
-// .systems-section {
-//   background-color: lightgreen;
-// }
-
-.old-content {
-  display: none;
-}
-
-*,
 h1,
 h2,
-p {
+p,
+span {
   font-family: pidp.$bcgov-font-family;
   color: pidp.$bcgov-color-text;
   box-sizing: border-box;
 }
 
-.login-container.viewport-mobile {
+.viewport-all {
+  & .title-container {
+    & p,
+    & h1,
+    & .title-text,
+    & .title-text span {
+      color: #ffffff;
+    }
+  }
+  & .welcome-section {
+    & .login-container {
+      & .login-content > .login-continue-with {
+        margin-bottom: 20px;
+      }
+
+      & .login-content {
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+      }
+
+      & .login-app-button {
+        margin-left: auto;
+        margin-right: auto;
+        padding: 15px 25px;
+        color: #ffffff;
+        background-color: pidp.$bcgov-color-primary;
+      }
+
+      & .login-setup {
+        margin-left: auto;
+        margin-right: auto;
+        margin-bottom: 30px;
+      }
+
+      & .login-continue-with {
+        display: flex;
+        margin-bottom: 20px;
+
+        & .login-continue-with-text {
+          margin: auto;
+        }
+        & .login-line-container {
+          flex: 1;
+        }
+        & hr {
+          margin-left: 20px;
+          margin-right: 20px;
+          height: 2px;
+          background-color: #000000;
+        }
+      }
+
+      & button.login-button-secondary {
+        margin-left: auto;
+        margin-right: auto;
+        margin-bottom: 20px;
+        padding: 10px 15px;
+        border-color: pidp.$bcgov-color-primary;
+        white-space: pre-wrap;
+        line-height: 1.6;
+      }
+    }
+  }
+
+  & .card-pharmacare {
+    background-color: pidp.$bcgov-color-background-grey;
+  }
+  & .card-hcimweb {
+    background-color: pidp.$bcgov-color-primary;
+
+    & p {
+      color: #ffffff;
+    }
+
+    & .hcimweb-arrows {
+      color: pidp.$bcgov-color-semantic-success;
+    }
+  }
+  & .card-coming-soon {
+    background-color: pidp.$bcgov-color-background-grey;
+
+    & mat-icon {
+      color: pidp.$bcgov-color-semantic-success;
+    }
+  }
+}
+
+.login-container.viewport-xsmall {
   flex: 1;
 
   & .title-container {
@@ -99,8 +167,15 @@ p {
         line-height: 200%;
       }
 
-      & .hcimweb-arrow {
-        font-size: 4em;
+      & .hcimweb-arrows {
+        display: flex;
+        justify-content: flex-end;
+        & mat-icon {
+          margin-right: 15px;
+          font-size: 80px;
+          height: 80px;
+          width: 80px;
+        }
       }
     }
 
@@ -111,18 +186,35 @@ p {
           text-align: center;
           font-size: 2em;
           line-height: 1;
+          margin: 0;
         }
         & .coming-soon-header-content {
           display: grid;
           grid-template-columns: auto auto;
-          column-gap: 75px;
+          column-gap: 20px;
+
+          & div {
+            display: flex;
+            align-items: center;
+          }
+          & mat-icon {
+            font-size: 54px;
+            height: 54px;
+            width: 54px;
+          }
         }
+      }
+      & .coming-soon-text-container {
+        margin-top: 20px;
       }
     }
   }
 }
-.login-container.viewport-desktop {
-  // NOTE: This sections is to always show as 2 columns in desktop (= no wrapping).
+// NOTE: Layout for small/medium is refined further below.
+.login-container.viewport-small,
+.login-container.viewport-medium,
+.login-container.viewport-large {
+  // NOTE: This section will always show as 2 columns in desktop (= no wrapping).
   display: grid;
   grid-template-columns: calc(600px - 15px) calc(600px - 15px);
   gap: 30px;
@@ -160,7 +252,6 @@ p {
         border: solid 1px pidp.$bcgov-color-component;
         background-color: #d1d1d1;
         font-size: 0.85em;
-        font-size: 1vw;
         line-height: 1.6;
         & p {
           margin: 0;
@@ -267,8 +358,15 @@ p {
         line-height: 2;
       }
 
-      & .hcimweb-arrow {
-        font-size: 4em;
+      & .hcimweb-arrows {
+        display: flex;
+        justify-content: flex-end;
+        & mat-icon {
+          margin-right: 30px;
+          font-size: 100px;
+          height: 100px;
+          width: 100px;
+        }
       }
     }
 
@@ -286,11 +384,22 @@ p {
           text-align: center;
           font-size: 4em;
           line-height: 1;
+          margin: 0;
         }
         & .coming-soon-header-content {
           display: grid;
           grid-template-columns: auto auto;
           column-gap: 75px;
+
+          & div {
+            display: flex;
+            align-items: center;
+          }
+          & mat-icon {
+            font-size: 72px;
+            height: 72px;
+            width: 72px;
+          }
         }
       }
       & .coming-soon-text-container {
@@ -302,87 +411,205 @@ p {
   }
 }
 
-.viewport-all {
+// Adjust sizing for smaller screens.
+// NOTE: For small and medium screens, the layout is identical to large.
+.login-container.viewport-small,
+.login-container.viewport-medium {
+  // Total width including padding is 1024px.
+  grid-template-columns: calc(482px - 10px) calc(482px - 10px);
+  gap: 20px;
+  padding: 30px 0;
+
   & .title-container {
-    & p,
-    & h1,
-    & .title-text,
-    & .title-text span {
-      color: #ffffff;
+    & .title-content-container {
+      padding: 30px;
+
+      & h1.title {
+        font-size: 3em;
+        line-height: 1.4;
+      }
+
+      & .title-site-description {
+        margin-bottom: 10px;
+        padding: 10px 20px;
+        font-size: 0.85em;
+      }
     }
   }
   & .welcome-section {
-    & .login-container {
-      & .login-content > .login-continue-with {
-        margin: inherit; // Override margin: auto above.
-        margin-bottom: 20px;
+    & .welcome-container {
+      & .welcome-pidp-logo {
+        & img {
+          width: 200px;
+        }
       }
-
+      & h1.welcome-title {
+        font-size: 4.5em;
+      }
       & .login-content {
-        display: flex;
-        justify-content: center;
-        flex-direction: column;
-      }
-
-      & .login-app-button {
-        margin-left: auto;
-        margin-right: auto;
-        padding: 15px 25px;
-        color: #ffffff;
-        background-color: pidp.$bcgov-color-primary;
-      }
-
-      & .login-setup {
-        margin-left: auto;
-        margin-right: auto;
-        margin-bottom: 30px;
-      }
-
-      & .login-continue-with {
-        display: flex;
-        margin-bottom: 20px;
-
-        & .login-continue-with-text {
-          margin: auto;
-        }
-        & .login-line-container {
-          flex: 1;
-        }
-        & hr {
-          margin-left: 20px;
-          margin-right: 20px;
-          height: 2px;
-          background-color: #000000;
+        & button {
+          font-size: 0.75em;
+          border-radius: 12px;
+          padding: 10px 10px;
         }
       }
+      & .login-secondary-container {
+        padding: 0 20px;
+        gap: 15px;
+      }
+    }
+  }
+  & .systems-section {
+    & .systems-title {
+      margin: 20px;
+      font-size: 3.5em;
+    }
 
-      & button.login-button-secondary {
-        margin-left: auto;
-        margin-right: auto;
-        margin-bottom: 20px;
-        padding: 10px 15px;
-        border-color: pidp.$bcgov-color-primary;
-        white-space: pre-wrap;
+    & .systems-content {
+      grid-template-columns: calc(50% - 10px) calc(50% - 10px);
+      gap: 20px;
+    }
+    & .card-content {
+      padding: 15px 24px 8px;
+      & p {
+        font-size: 0.75em;
+      }
+    }
+
+    & .card-hcimweb {
+      padding: 24px;
+
+      & p {
+        font-size: 1.5em;
+        line-height: 1.8;
+      }
+
+      & .hcimweb-arrows {
+        mat-icon {
+          font-size: 80px;
+          height: 80px;
+          width: 80px;
+        }
+      }
+    }
+
+    & .card-coming-soon {
+      padding: 45px 30px 15px;
+
+      & header {
+        & h2 {
+          font-size: 3em;
+        }
+        & .coming-soon-header-content {
+          column-gap: 60px;
+
+          & mat-icon {
+            font-size: 64px;
+            height: 64px;
+            width: 64px;
+          }
+        }
+      }
+      & .coming-soon-text-container {
+        margin-top: 20px;
+      }
+    }
+  }
+}
+.login-container.viewport-small {
+  // Total width including padding is 600px.
+  grid-template-columns: calc(290px - 5px) calc(290px - 5px);
+  gap: 10px;
+  padding: 10px 0;
+
+  & .title-container {
+    & .title-content-container {
+      padding: 30px;
+
+      & .title-site-description {
+        margin-bottom: 10px;
+        padding: 10px 20px;
+        font-size: 0.85em;
+      }
+    }
+  }
+  & .welcome-section {
+    & .welcome-container {
+      & .welcome-pidp-logo {
+        & img {
+          width: 200px;
+        }
+      }
+      & h1.welcome-title {
+        font-size: 4.5em;
+      }
+      & .login-content {
+        & button {
+          font-size: 0.75em;
+          border-radius: 12px;
+          padding: 10px 10px;
+        }
+      }
+      & .login-secondary-container {
+        padding: 0 20px;
+        gap: 15px;
+      }
+    }
+  }
+  & .systems-section {
+    & .systems-title {
+      font-size: 2.5em;
+    }
+
+    & .systems-content {
+      grid-template-columns: calc(50% - 5px) calc(50% - 5px);
+      gap: 10px;
+    }
+    & .card-content {
+      & p {
+        font-size: 0.65em;
         line-height: 1.6;
       }
     }
-  }
 
-  & .card-pharmacare {
-    background-color: pidp.$bcgov-color-background-grey;
-  }
-  & .card-hcimweb {
-    background-color: pidp.$bcgov-color-primary;
+    & .card-hcimweb {
+      padding: 10px;
 
-    & p {
-      color: #ffffff;
+      & p {
+        font-size: 1em;
+        line-height: 1.6;
+      }
+
+      & .hcimweb-arrows {
+        mat-icon {
+          margin-right: 20px;
+          font-size: 80px;
+          height: 80px;
+          width: 80px;
+        }
+      }
     }
 
-    & .hcimweb-arrow {
-      color: pidp.$bcgov-color-semantic-success;
+    & .card-coming-soon {
+      padding: 30px 20px 10px;
+
+      & header {
+        & h2 {
+          font-size: 2em;
+        }
+        & .coming-soon-header-content {
+          column-gap: 30px;
+
+          & mat-icon {
+            font-size: 32px;
+            height: 32px;
+            width: 32px;
+          }
+        }
+      }
+      & .coming-soon-text-container {
+        margin-top: 10px;
+      }
     }
-  }
-  & .card-coming-soon {
-    background-color: pidp.$bcgov-color-background-grey;
   }
 }

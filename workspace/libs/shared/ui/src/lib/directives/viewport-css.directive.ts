@@ -10,12 +10,13 @@ import { PidpViewport, ViewportService } from '../services';
   selector: '[uiPidpInjectViewportCss]',
 })
 export class InjectViewportCssClassDirective {
-  @HostBinding('class.viewport-mobile') public viewportMobileClass = false;
-  @HostBinding('class.viewport-desktop') public viewportDesktopClass = false;
+  @HostBinding('class.viewport-xsmall') public viewportXsClass = false;
+  @HostBinding('class.viewport-small') public viewportSClass = false;
+  @HostBinding('class.viewport-medium') public viewportMClass = false;
+  @HostBinding('class.viewport-large') public viewportLClass = false;
   @HostBinding('class.viewport-all') public viewportAllClass = true;
 
   public constructor(viewportService: ViewportService) {
-    console.log('inject');
     viewportService.viewportBroadcast$.subscribe((viewport) =>
       this.onViewportChange(viewport)
     );
@@ -23,13 +24,29 @@ export class InjectViewportCssClassDirective {
 
   private onViewportChange(viewport: PidpViewport): void {
     switch (viewport) {
-      case PidpViewport.handset:
-        this.viewportMobileClass = true;
-        this.viewportDesktopClass = false;
+      case PidpViewport.xsmall:
+        this.viewportXsClass = true;
+        this.viewportSClass = false;
+        this.viewportMClass = false;
+        this.viewportLClass = false;
         break;
-      case PidpViewport.web:
-        this.viewportMobileClass = false;
-        this.viewportDesktopClass = true;
+      case PidpViewport.small:
+        this.viewportXsClass = false;
+        this.viewportSClass = true;
+        this.viewportMClass = false;
+        this.viewportLClass = false;
+        break;
+      case PidpViewport.medium:
+        this.viewportXsClass = false;
+        this.viewportSClass = false;
+        this.viewportMClass = true;
+        this.viewportLClass = false;
+        break;
+      case PidpViewport.large:
+        this.viewportXsClass = false;
+        this.viewportSClass = false;
+        this.viewportMClass = false;
+        this.viewportLClass = true;
         break;
       default:
         throw 'not implemented: ' + viewport;
