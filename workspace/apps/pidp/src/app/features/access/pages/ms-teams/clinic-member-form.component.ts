@@ -34,7 +34,11 @@ import { FormControl, FormGroup } from '@angular/forms';
             Must be a valid phone number
           </mat-error>
         </mat-form-field>
-        <button mat-icon-button type="button" (click)="removeForm(index)">
+        <button
+          *ngIf="index !== 0"
+          mat-icon-button
+          type="button"
+          (click)="removeForm(index)">
           <mat-icon>close</mat-icon>
         </button>
       </ng-container>
@@ -44,6 +48,7 @@ import { FormControl, FormGroup } from '@angular/forms';
     `
       .clinic-member-form {
         display: flex !important;
+        width: max-content;
       }
 
       .form-field {
