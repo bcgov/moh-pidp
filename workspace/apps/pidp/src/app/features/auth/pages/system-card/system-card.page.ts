@@ -9,7 +9,8 @@ import { PidpViewport, ViewportService } from '@bcgov/shared/ui';
 })
 export class SystemCardComponent {
   @Input() public titleText = '';
-  @Input() public imageUrls = [''];
+  @Input() public webpImageUrls = [''];
+  @Input() public jpegImageUrls = [''];
   @Input() public imageTitleText = '';
   @Input() public headerColor: 'white' | 'grey' = 'white';
 
@@ -24,20 +25,33 @@ export class SystemCardComponent {
   private onViewportChange(viewport: PidpViewport): void {
     this.viewport = viewport;
   }
-  public getImageUrl(): string {
+  public getImageUrl(format: 'webp' | 'jpeg'): string {
     let imageUrl: string;
     switch (this.viewport) {
       case PidpViewport.xsmall:
-        imageUrl = this.imageUrls[0];
+        imageUrl = this.getImageUrlFromFormat(0, format);
         break;
       case PidpViewport.small:
       case PidpViewport.medium:
       case PidpViewport.large:
-        imageUrl = this.imageUrls[1];
+        imageUrl = this.getImageUrlFromFormat(1, format);
         break;
       default:
         throw 'not implemented: ' + this.viewport;
     }
     return imageUrl;
+  }
+  private getImageUrlFromFormat(
+    index: number,
+    format: 'webp' | 'jpeg'
+  ): string {
+    switch (format) {
+      case 'webp':
+        return this.webpImageUrls[index];
+      case 'jpeg':
+        return this.jpegImageUrls[index];
+      default:
+        throw 'getImageUrlFromFormat: not implemented ' + format;
+    }
   }
 }

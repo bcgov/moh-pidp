@@ -1,10 +1,13 @@
 <div class="card-container" uiPidpInjectViewportCss>
-  <img
-    class="card-image"
-    loading="lazy"
-    aria-labelledby="card-header-text"
-    [src]="getImageUrl()"
-    [title]="imageTitleText" />
+  <picture>
+    <source type="image/webp" [srcset]="getImageUrl('webp')" />
+    <source type="image/jpeg" [srcset]="getImageUrl('jpeg')" />
+    <img
+      class="card-image"
+      loading="lazy"
+      aria-labelledby="card-header-text"
+      [title]="imageTitleText" />
+  </picture>
   <div class="card-content-container">
     <header
       [class.header-white]="headerColor === 'white'"
