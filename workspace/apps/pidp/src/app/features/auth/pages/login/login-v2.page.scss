@@ -260,27 +260,9 @@ span {
         }
       }
 
-      & .title-bcgov {
-        display: flex;
-
-        & .title-bcgov-logo {
-          padding-right: 8px;
-          border-right: solid 1px pidp.$bcgov-color-accent;
-          & img {
-            height: 60px;
-            width: 60px;
-          }
-        }
-        & .title-bcgov-text {
-          display: flex;
-          flex-direction: column;
-          justify-content: flex-end;
-          padding-left: 8px;
-          & p {
-            margin: 0;
-            line-height: 1;
-          }
-        }
+      & .title-bcgov img {
+        height: 102px;
+        width: 200px;
       }
     }
   }
@@ -438,6 +420,10 @@ span {
         padding: 10px 20px;
         font-size: 0.85em;
       }
+      & .title-bcgov img {
+        height: 82px;
+        width: 160px;
+      }
     }
   }
   & .welcome-section {
@@ -452,7 +438,6 @@ span {
       }
       & .login-content {
         & button {
-          font-size: 0.75em;
           border-radius: 12px;
           padding: 10px 10px;
         }

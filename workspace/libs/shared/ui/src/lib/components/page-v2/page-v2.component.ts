@@ -1,17 +1,12 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  EventEmitter,
-  Input,
-  Output,
-} from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+
+import { PidpViewport, ViewportService } from '../../services';
 
 @Component({
   selector: 'ui-page-v2',
   templateUrl: './page-v2.component.html',
   styleUrls: ['./page-v2.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PageV2Component {
   /**
@@ -26,11 +21,17 @@ export class PageV2Component {
    */
   @Output() public submitted: EventEmitter<void>;
 
-  public isMobile = false;
+  public isMobile = true;
 
-  public constructor() {
+  public constructor(viewportService: ViewportService) {
     this.autocomplete = 'off';
     this.submitted = new EventEmitter<void>();
+    viewportService.viewportBroadcast$.subscribe((viewport) =>
+      this.onViewportChange(viewport)
+    );
+  }
+  private onViewportChange(viewport: PidpViewport): void {
+    this.isMobile = viewport === PidpViewport.xsmall;
   }
 
   public onSubmit(): void {
