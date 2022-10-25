@@ -2,7 +2,7 @@ import { Component, Inject } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { EMPTY, Observable, exhaustMap, tap } from 'rxjs';
+import { EMPTY, Observable, exhaustMap } from 'rxjs';
 
 import {
   DashboardHeaderConfig,
