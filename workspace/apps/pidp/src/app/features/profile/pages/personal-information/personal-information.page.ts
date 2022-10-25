@@ -74,7 +74,7 @@ export class PersonalInformationPage
     this.identityProvider$ = this.authorizedUserService.identityProvider$;
     this.hasPreferredName = false;
     this.warningMessage =
-      'Your email may have been misspelled. Double check the spelling of your email before hitting submit.';
+      'Our system is not familiar with this email address, please double check the spelling. If everything is correct hit save information, and our system will update.';
     this.emailChanged = new Subject<null>();
     this.userEmail = '';
   }
@@ -84,6 +84,7 @@ export class PersonalInformationPage
   }
 
   public onBack(): void {
+    this._snackBar.dismiss();
     this.navigateToRoot();
   }
 
@@ -106,7 +107,7 @@ export class PersonalInformationPage
     this.emailChanged
       .pipe(
         tap(() => this._snackBar.dismiss()),
-        debounceTime(1000),
+        debounceTime(800),
         switchMap(() =>
           this.lookupResource.hasCommonEmailDomain(this.userEmail)
         )
