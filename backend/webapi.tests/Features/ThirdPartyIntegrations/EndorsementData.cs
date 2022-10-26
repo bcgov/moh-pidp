@@ -11,6 +11,10 @@ using PidpTests.TestingExtensions;
 
 public class EndorsementDataTests : InMemoryDbTest
 {
+    private static Func<PlrRecord, EndorsementData.Model.LicenceInformation, bool> RecordModelPredicate => (PlrRecord record, EndorsementData.Model.LicenceInformation result) => record.IdentifierType == result.IdentifierType
+        && record.StatusCode == result.StatusCode
+        && record.StatusReasonCode == result.StatusReasonCode;
+
     [Fact]
     public async void GetEndorsementData_NoParty_404()
     {
@@ -138,7 +142,7 @@ public class EndorsementDataTests : InMemoryDbTest
         var model = result.Value.Single();
         Assert.Equal(expectedHpdid, model.Hpdid);
         Assert.NotNull(model.Licences);
-        AssertEquivalentRecords(expectedPlrRecords, model.Licences);
+        AssertThat.CollectionsAreEquivalent(expectedPlrRecords, model.Licences, RecordModelPredicate);
     }
 
     [Fact]
@@ -200,24 +204,10 @@ public class EndorsementDataTests : InMemoryDbTest
 
         var found = result.Value.SingleOrDefault(res => res.Hpdid == expectedHpdid1);
         Assert.NotNull(found);
-        AssertEquivalentRecords(expectedPlrRecords1, found!.Licences);
+        AssertThat.CollectionsAreEquivalent(expectedPlrRecords1, found!.Licences, RecordModelPredicate);
 
         found = result.Value.SingleOrDefault(res => res.Hpdid == expectedHpdid2);
         Assert.NotNull(found);
-        AssertEquivalentRecords(Array.Empty<PlrRecord>(), found!.Licences);
-    }
-
-    private static void AssertEquivalentRecords(IEnumerable<PlrRecord> records, IEnumerable<EndorsementData.Model.LicenceInformation> results)
-    {
-        Assert.Equal(records.Count(), results.Count());
-
-        static bool comparesEqual(PlrRecord record, EndorsementData.Model.LicenceInformation result) => record.IdentifierType == result.IdentifierType
-            && record.StatusCode == result.StatusCode
-            && record.StatusReasonCode == result.StatusReasonCode;
-
-        foreach (var record in records)
-        {
-            Assert.Single(results.Where(result => comparesEqual(record, result)));
-        }
+        AssertThat.CollectionsAreEquivalent(Array.Empty<PlrRecord>(), found!.Licences, RecordModelPredicate);
     }
 }

@@ -46,7 +46,7 @@ public class SAEformsTests : InMemoryDbTest
 
     public static IEnumerable<object[]> SAEformsIdentifierTypeTestData()
     {
-        return TestingUtils.AllIdentifierTypes
+        return TestData.AllIdentifierTypes
              .Select(identifierType => new object[] { identifierType, !SAEforms.ExcludedIdentifierTypes.Contains(identifierType) });
     }
 }
