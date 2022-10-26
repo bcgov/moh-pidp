@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 using Pidp.Infrastructure.Auth;
 
-[Route("api/etx")]
+[Route("api/ext")]
 public class ThirdPartyintegrationsController : ControllerBase
 {
     [HttpGet("parties/{hpdid}/endorsements")]
