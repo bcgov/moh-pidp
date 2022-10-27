@@ -13,6 +13,7 @@ import { ConfirmDialogComponent } from '@bcgov/shared/ui';
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';
 import { DocumentService } from '@app/core/services/document.service';
+import { AdminRoutes } from '@app/features/admin/admin.routes';
 
 import { IdentityProvider } from '../../enums/identity-provider.enum';
 import { AuthService } from '../../services/auth.service';
@@ -93,6 +94,8 @@ export class LoginPage {
       idpHint: idpHint,
       redirectUri:
         this.config.applicationUrl +
+        '/' +
+        AdminRoutes.MODULE_PATH +
         (endorsementToken ? `?endorsement-token=${endorsementToken}` : ''),
     });
   }
