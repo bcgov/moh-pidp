@@ -1,147 +1,176 @@
-<ui-dashboard-header
-  [theme]="headerConfig.theme"
-  [allowMobileToggle]="headerConfig.allowMobileToggle">
-</ui-dashboard-header>
-
-<div class="container">
-  <ng-container *ngIf="idpHint === IdentityProvider.BCSC; else admin">
-    <div class="row">
-      <div class="col-12">
-        <ui-alert
-          *ngIf="loginCancelled"
-          type="info"
-          icon="error_outline"
-          heading="Login Cancelled">
-          <ng-container uiAlertContent>
-            <p>
-              You have cancelled your login to the Provider Identity Portal.
-            </p>
-            <ul>
-              <li>
-                For support with the provider identity portal, contact
-                <a
-                  uiAnchor
-                  scheme="mailto"
-                  [attr.href]="providerIdentitySupportEmail"></a>
-              </li>
-              <li>
-                For support with your BC Services Card, click
-                <a uiAnchor [attr.href]="bcscSupportUrl">here</a>
-              </li>
-            </ul>
-          </ng-container>
-        </ui-alert>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-12 col-xl-auto">
-        <div class="header">
-          <div class="heading">
-            <img
-              src="/assets/images/pidp-logo-blue-small.svg"
-              alt="Provider Identity Portal Logo" />
-            <h1>Provider Identity Portal</h1>
-          </div>
-
+<ui-layout-header-footer>
+  <span page-v2-title></span>
+  <div class="login-container" uiPidpInjectViewportCss>
+    <header *ngIf="isMobileTitleVisible" class="title-container">
+      <h1 class="title">
+        <span class="title-text">
+          <span class="title-provider">Provider</span>
+          <span class="title-portal">Identity Portal</span>
+        </span>
+      </h1>
+    </header>
+    <header *ngIf="isWebTitleVisible" class="title-container">
+      <div class="title-content-container">
+        <h1 class="title">
+          <span class="title-text">Provider<br />Identity Portal</span>
+        </h1>
+        <section class="title-site-description">
           <p>
-            A portal for healthcare professionals in
-            <strong>British Columbia</strong> to enrol for access to
-            participating health systems
+            A portal for healthcare professionals in British Columbia to enrol
+            for access to participating health systems
           </p>
-        </div>
-
-        <div class="hide-on-large-viewports">
-          <ng-container *ngTemplateOutlet="login"></ng-container>
-        </div>
-
-        <div class="hide-on-small-viewports scroll">
-          <button
-            mat-stroked-button
-            color="primary"
-            (click)="onScrollToAnchor()">
-            View available health systems
-          </button>
-        </div>
-
-        <div class="support">
-          <app-get-support></app-get-support>
-        </div>
-
-        <div class="systems">
-          <ui-page-section>
-            <ui-scroll-target targetId="systems"></ui-scroll-target>
-            <ui-page-section-subheader
-              icon="assignment"
-              heading="Systems Available"></ui-page-section-subheader>
-
-            <ui-page-section>
-              <h3>Special Authority eForms</h3>
-              <p>
-                B.C. healthcare professionals can enrol for access to
-                PharmaCare's Special Authority eForms application.
-              </p>
-              <p>
-                You need to set up the
-                <a uiAnchor [attr.href]="bcscMobileSetupUrl">
-                  BC Services Card app
-                </a>
-                to enrol. You will use the app each time you access the eForms
-                application. If you are not eligible for the BC Services Card,
-                or cannot set up the app, you can
-                <a uiAnchor [attr.href]="specialAuthorityUrl">
-                  submit SA requests by fax</a
-                >.
-              </p>
-            </ui-page-section>
-
-            <ui-page-section>
-              <h3>HCIMWeb Account Transfer</h3>
-              <p>For existing users of the HCIMWeb Application.</p>
-            </ui-page-section>
-          </ui-page-section>
-        </div>
+        </section>
+        <section class="title-bcgov">
+          <div class="title-bcgov-logo">
+            <picture>
+              <source
+                type="image/webp"
+                srcset="/assets/images/BC_HLTH_H_RGB_rev.webp" />
+              <source
+                type="image/png"
+                srcset="/assets/images/BC_HLTH_H_RGB_rev.png" />
+              <img
+                title="BC Government Logo"
+                loading="lazy"
+                aria-label="BC Ministry of Health Logo" />
+            </picture>
+          </div>
+        </section>
       </div>
-      <div class="col-12 col-xl-auto hide-on-small-viewports">
+    </header>
+    <section class="welcome-section">
+      <div class="welcome-container">
+        <div *ngIf="isPidpLogoVisible" class="welcome-pidp-logo">
+          <img
+            src="/assets/images/pidp-logo-blue.svg"
+            title="PIDP Logo"
+            loading="lazy"
+            aria-label="PIDP Logo" />
+        </div>
+        <h1 id="welcome" class="welcome-title">Welcome</h1>
         <ng-container *ngTemplateOutlet="login"></ng-container>
       </div>
-    </div>
-  </ng-container>
+    </section>
+    <section class="systems-section">
+      <h1 class="systems-title">Systems Available</h1>
+      <ng-container *ngTemplateOutlet="systems"></ng-container>
+    </section>
+  </div>
+</ui-layout-header-footer>
 
-  <ng-template #login>
-    <div class="actions">
-      <div>Login using:</div>
-      <div>
-        <button mat-stroked-button (click)="onLogin()">
-          Login with the BC Services Card app
-        </button>
+<ng-template #login>
+  <div class="login-container">
+    <div class="login-content">
+      <button
+        class="login-app-button"
+        mat-stroked-button
+        (click)="onLogin(IdentityProvider.BCSC)">
+        Login with the BC Services Card app
+      </button>
+      <div class="login-setup">
         <small>
-          Need an account?
-          <a uiAnchor [attr.href]="bcscMobileSetupUrl">Set up</a>
+          Don't have an account?
+          <a uiAnchor [href]="bcscMobileSetupUrl">Set up</a>
         </small>
+      </div>
 
-        <button mat-stroked-button (click)="onLogin(IdentityProvider.PHSA)">
+      <div class="login-continue-with">
+        <div class="login-line-container">
+          <hr class="login-line" />
+        </div>
+        <span class="login-continue-with-text">Or continue with</span>
+        <div class="login-line-container">
+          <hr class="login-line" />
+        </div>
+      </div>
+
+      <div class="login-secondary-container">
+        <button
+          class="login-button-secondary"
+          mat-stroked-button
+          (click)="onLogin(IdentityProvider.PHSA)">
           Login with your Health Authority ID
         </button>
 
-        <button mat-stroked-button (click)="onLogin(IdentityProvider.IDIR)">
+        <button
+          class="login-button-secondary"
+          mat-stroked-button
+          (click)="onLogin(IdentityProvider.IDIR)">
           Login with your IDIR
         </button>
       </div>
     </div>
-  </ng-template>
-
-  <ng-template #admin>
-    <div class="row admin">
-      <div class="col-12">
-        <img
-          src="/assets/images/pidp-logo-blue.svg"
-          alt="Provider Identity Portal Logo" />
+  </div>
+</ng-template>
+<ng-template #systems>
+  <div class="systems-container">
+    <div class="systems-content">
+      <app-auth-system-card
+        class="systems-card"
+        titleText="Special Authority eForms"
+        imageTitleText=""
+        [headerColor]="hcimWebHeaderColor"
+        [webpImageUrls]="['/assets/images/login-laptop-mobile-1200x200.webp', '/assets/images/login-laptop-medium-141x302.webp', '/assets/images/login-laptop-medium-141x302.webp', '/assets/images/login-laptop-desktop-280x600.webp']"
+        [jpegImageUrls]="['/assets/images/login-laptop-mobile-1200x200.jpg', '/assets/images/login-laptop-medium-141x302.jpg', '/assets/images/login-laptop-medium-141x302.jpg', '/assets/images/login-laptop-desktop-280x600.jpg']">
+        <ng-container *ngTemplateOutlet="pharmacareEforms"></ng-container>
+      </app-auth-system-card>
+      <app-auth-system-card
+        class="systems-card"
+        titleText="HCIMWeb Account Transfer"
+        imageTitleText=""
+        headerColor="white"
+        [webpImageUrls]="['/assets/images/login-people-mobile-1200x200.webp','/assets/images/login-people-medium-141x302.webp','/assets/images/login-people-medium-141x302.webp','/assets/images/login-people-desktop-280x600.webp']"
+        [jpegImageUrls]="['/assets/images/login-people-mobile-1200x200.jpg','/assets/images/login-people-medium-141x302.jpg','/assets/images/login-people-medium-141x302.jpg','/assets/images/login-people-desktop-280x600.jpg']">
+        <ng-container *ngTemplateOutlet="hcimWeb"></ng-container>
+      </app-auth-system-card>
+      <ng-container *ngTemplateOutlet="comingSoon"></ng-container>
+    </div>
+  </div>
+</ng-template>
+<ng-template #pharmacareEforms>
+  <div class="card-content card-pharmacare">
+    <p>
+      B.C. healthcare professionals can enrol for access to PharmaCare's Special
+      Authority eForms application.
+    </p>
+    <p>
+      You need to set up the
+      <a uiAnchor [attr.href]="bcscMobileSetupUrl"> BC Services Card app </a>
+      to enrol. You will use the app each time you access the eForms
+      application. If you are not eligible for the BC Services Card, or cannot
+      set up the app, you can
+      <a uiAnchor [attr.href]="specialAuthorityUrl">
+        submit SA requests by fax</a
+      >.
+    </p>
+  </div>
+</ng-template>
+<ng-template #hcimWeb>
+  <div class="card-content card-hcimweb">
+    <p>For existing users of the HCIMWeb Application.</p>
+    <div class="hcimweb-arrows">
+      <mat-icon>swap_horiz</mat-icon>
+    </div>
+  </div>
+</ng-template>
+<ng-template #comingSoon>
+  <div class="card-content card-coming-soon">
+    <header>
+      <div class="coming-soon-header-content">
+        <div><h2>Coming Soon</h2></div>
+        <div>
+          <mat-icon class="material-icons-outlined">verified</mat-icon>
+        </div>
       </div>
-      <div class="col-12">
-        <button mat-flat-button color="primary" (click)="onLogin()">
-          {{ idpHint | uppercase }} Login
-        </button>
+    </header>
+    <div class="coming-soon-text-container">
+      <div class="coming-soon-text">
+        <p>
+          For private clinics in the Fraser Health Authority region: Enrolment
+          to Microsoft Teams for Clinical Use and Unifying Clinical Information
+          (UCI) Viewer.
+        </p>
       </div>
     </div>
-  </ng-template>
-</div>
+  </div>
+</ng-template>

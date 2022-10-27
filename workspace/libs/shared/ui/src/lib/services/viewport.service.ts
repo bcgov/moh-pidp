@@ -33,7 +33,7 @@ export enum PidpViewport {
    */
   small,
   /**
-   * Roughly corresponds to mobile in landscape mode
+   * Roughly corresponds to tablet in landscape mode
    */
   medium,
   /**

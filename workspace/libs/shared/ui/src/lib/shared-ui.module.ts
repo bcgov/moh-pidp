@@ -20,6 +20,7 @@ import { HtmlComponent } from './components/dialogs/content/html/html.component'
 import { FormSectionComponent } from './components/form-section/form-section.component';
 import { IconComponent } from './components/icon/icon.component';
 import { KeyValueInfoComponent } from './components/key-value-info/key-value-info.component';
+import { LayoutHeaderFooterComponent } from './components/layout-header-footer/layout-header-footer.component';
 import { OverlayComponent } from './components/overlay/overlay.component';
 import { PageFooterActionDirective } from './components/page-footer/page-footer-action.directive';
 import { PageFooterComponent } from './components/page-footer/page-footer.component';
@@ -29,7 +30,6 @@ import { PageSectionSubheaderHintDirective } from './components/page-section-sub
 import { PageSectionSubheaderComponent } from './components/page-section-subheader/page-section-subheader.component';
 import { PageSectionComponent } from './components/page-section/page-section.component';
 import { PageSubheaderComponent } from './components/page-subheader/page-subheader.component';
-import { PageV2Component } from './components/page-v2/page-v2.component';
 import { PageComponent } from './components/page/page.component';
 import { PreferredNameFormComponent } from './components/preferred-name-form/preferred-name-form.component';
 import { ScrollTargetComponent } from './components/scroll-target/scroll-target.component';
@@ -75,7 +75,7 @@ import { SafePipe } from './pipes/safe.pipe';
     PageSectionSubheaderDescDirective,
     PageSectionSubheaderHintDirective,
     PageSubheaderComponent,
-    PageV2Component,
+    LayoutHeaderFooterComponent,
     PreferredNameFormComponent,
     ScrollTargetComponent,
     ToggleContentComponent,
@@ -128,7 +128,7 @@ import { SafePipe } from './pipes/safe.pipe';
     PageSectionSubheaderDescDirective,
     PageSectionSubheaderHintDirective,
     PageSubheaderComponent,
-    PageV2Component,
+    LayoutHeaderFooterComponent,
     PreferredNameFormComponent,
     ScrollTargetComponent,
     ToggleContentComponent,

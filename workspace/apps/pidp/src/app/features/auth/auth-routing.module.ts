@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { AuthRoutes } from './auth.routes';
-import { IdentityProvider } from './enums/identity-provider.enum';
 import { AuthorizationRedirectGuard } from './guards/authorization-redirect.guard';
 import { LoginPage } from './pages/login/login.page';
 
@@ -12,8 +11,10 @@ const routes: Routes = [
     canActivate: [AuthorizationRedirectGuard],
     component: LoginPage,
     data: {
-      title: 'Provider Identity Portal',
-      idpHint: IdentityProvider.BCSC,
+      loginPageData: {
+        title: 'Provider Identity Portal',
+        isAdminLogin: false,
+      },
     },
   },
   {
@@ -21,8 +22,10 @@ const routes: Routes = [
     canActivate: [AuthorizationRedirectGuard],
     component: LoginPage,
     data: {
-      title: 'Provider Identity Portal',
-      idpHint: IdentityProvider.IDIR,
+      loginPageData: {
+        title: 'Provider Identity Portal',
+        isAdminLogin: true,
+      },
       routes: {
         auth: AuthRoutes.routePath(AuthRoutes.ADMIN_LOGIN),
       },

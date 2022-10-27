@@ -19,10 +19,14 @@ import { DocumentService } from '@app/core/services/document.service';
 import { IdentityProvider } from '../../enums/identity-provider.enum';
 import { AuthService } from '../../services/auth.service';
 
+export interface LoginPageRouteData {
+  title: string;
+  isAdminLogin: boolean;
+}
 @Component({
   selector: 'app-login',
-  templateUrl: './login-v2.page.html',
-  styleUrls: ['./login-v2.page.scss'],
+  templateUrl: './login.page.html',
+  styleUrls: ['./login.page.scss'],
 })
 export class LoginPage {
   public viewportOptions = PidpViewport;
@@ -34,7 +38,7 @@ export class LoginPage {
   public bcscMobileSetupUrl: string;
   public specialAuthorityUrl: string;
   public providerIdentitySupportEmail: string;
-  public idpHint: IdentityProvider;
+  public isAdminLogin: boolean;
 
   public IdentityProvider = IdentityProvider;
 
@@ -55,7 +59,9 @@ export class LoginPage {
   ) {
     const routeSnapshot = this.route.snapshot;
 
-    this.title = routeSnapshot.data.title;
+    const routeData = routeSnapshot.data.loginPageData as LoginPageRouteData;
+
+    this.title = routeData.title;
     this.headerConfig = { theme: 'dark', allowMobileToggle: false };
     this.loginCancelled = routeSnapshot.queryParams.action === 'cancelled';
     this.bcscSupportUrl = this.config.urls.bcscSupport;
@@ -63,7 +69,7 @@ export class LoginPage {
     this.specialAuthorityUrl = this.config.urls.specialAuthority;
     this.providerIdentitySupportEmail =
       this.config.emails.providerIdentitySupport;
-    this.idpHint = routeSnapshot.data.idpHint;
+    this.isAdminLogin = routeData.isAdminLogin;
 
     this.viewportService.viewportBroadcast$.subscribe((viewport) =>
       this.onViewportChange(viewport)
@@ -99,9 +105,9 @@ export class LoginPage {
     });
   }
 
-  public onLogin(idpHint?: IdentityProvider): void {
-    if (this.idpHint === IdentityProvider.IDIR) {
-      this.login(this.idpHint);
+  public onLogin(idpHint: IdentityProvider): void {
+    if (idpHint === IdentityProvider.IDIR) {
+      this.login(idpHint);
       return;
     }
 
@@ -115,11 +121,7 @@ export class LoginPage {
     this.dialog
       .open(ConfirmDialogComponent, { data })
       .afterClosed()
-      .pipe(
-        exhaustMap((result) =>
-          result ? this.login(idpHint ?? this.idpHint) : EMPTY
-        )
-      )
+      .pipe(exhaustMap((result) => (result ? this.login(idpHint) : EMPTY)))
       .subscribe();
   }
 
