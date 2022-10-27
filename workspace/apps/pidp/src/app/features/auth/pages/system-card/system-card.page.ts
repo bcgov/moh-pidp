@@ -32,12 +32,16 @@ export class SystemCardComponent {
         imageUrl = this.getImageUrlFromFormat(0, format);
         break;
       case PidpViewport.small:
-      case PidpViewport.medium:
-      case PidpViewport.large:
         imageUrl = this.getImageUrlFromFormat(1, format);
         break;
+      case PidpViewport.medium:
+        imageUrl = this.getImageUrlFromFormat(2, format);
+        break;
+      case PidpViewport.large:
+        imageUrl = this.getImageUrlFromFormat(3, format);
+        break;
       default:
-        throw 'not implemented: ' + this.viewport;
+        throw 'getImageUrl: not implemented ' + this.viewport;
     }
     return imageUrl;
   }

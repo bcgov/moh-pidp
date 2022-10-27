@@ -1,5 +1,10 @@
 @use '../../../../../scss/pidp-variables' as pidp;
 
+.title-container,
+.welcome-section {
+  // display: none !important;
+}
+
 h1,
 h2,
 p,
@@ -95,6 +100,7 @@ span {
   }
 }
 
+// This section is optimized for iPhone SE
 .login-container.viewport-xsmall {
   flex: 1;
 
@@ -102,7 +108,7 @@ span {
     background-image: url('/assets/images/login-bridge-mobile-1200x400.jpg');
     background-repeat: no-repeat;
     background-size: 100% 100%;
-    min-height: 200px;
+    min-height: 280px;
     display: flex;
     justify-content: center;
 
@@ -119,26 +125,40 @@ span {
 
         & .title-provider {
           font-size: 1.75em;
-          font-weight: 1000;
-          margin: 0 auto 20px;
+          font-weight: 700;
+          letter-spacing: 0.05em;
+          margin: 0 auto 30px;
         }
         & .title-portal {
           font-size: 1.25em;
           font-weight: normal;
+          letter-spacing: 0.05em;
         }
       }
     }
   }
   & .welcome-section {
     & h1.welcome-title {
-      margin: 25px;
+      margin: 60px 25px;
       text-align: center;
-      font-size: 2.75em;
-      letter-spacing: 0.1em;
+      font-size: 3.5em;
+      letter-spacing: 0.15em;
     }
-
-    & .login-app-button {
-      padding: 15px 25px;
+    & .login-content {
+      & button {
+        font-size: 1em;
+      }
+      & button.login-app-button {
+        padding: 15px 25px;
+      }
+      & .login-setup {
+        font-size: 1em;
+      }
+      & .login-continue-with {
+        & .login-continue-with-text {
+          font-size: 1em;
+        }
+      }
     }
     & .login-secondary-container {
       display: flex;
@@ -147,7 +167,7 @@ span {
   }
   & .systems-section {
     & .systems-title {
-      margin: 25px;
+      margin: 25px 10px;
       text-align: center;
       font-size: 2.5em;
       line-height: 1;
@@ -166,7 +186,7 @@ span {
 
       & p {
         font-size: 1.75em;
-        line-height: 200%;
+        line-height: 1.6;
       }
 
       & .hcimweb-arrows {
@@ -218,7 +238,7 @@ span {
 .login-container.viewport-large {
   // NOTE: This section will always show as 2 columns in desktop (= no wrapping).
   display: grid;
-  grid-template-columns: calc(600px - 15px) calc(600px - 15px);
+  grid-template-columns: 585px 585px;
   gap: 30px;
   padding: 50px 0;
 
@@ -227,9 +247,8 @@ span {
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center center;
-    height: 100%; // Fallback in case the browser does not support vw units.
-    // height: 40vw; // Resize the image height based on viewport size.
-    width: 100%; // Allow width to scale automatically with the container, which should scale with viewport size.
+    height: 648px;
+    width: 585px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -241,7 +260,7 @@ span {
       padding: 30px;
 
       & h1.title {
-        font-size: 3.75em;
+        font-size: 4.25em;
         font-weight: 700;
         line-height: 1.4;
       }
@@ -255,14 +274,16 @@ span {
         background-color: #d1d1d1;
         line-height: 1.6;
         & p {
+          font-size: 1.15em;
           margin: 0;
           color: pidp.$bcgov-color-text;
         }
       }
 
       & .title-bcgov img {
-        height: 102px;
-        width: 200px;
+        height: 122px;
+        width: 240px;
+        margin-left: -20px;
       }
     }
   }
@@ -275,7 +296,6 @@ span {
 
     & .welcome-container {
       display: flex;
-      // justify-content: center;
       flex-direction: column;
 
       & .welcome-pidp-logo {
@@ -292,13 +312,29 @@ span {
         line-height: 1;
       }
       & .login-content {
-        & button {
-          font-size: 1em;
-          border-radius: 16px;
-          padding: 10px 20px;
+        & button.login-app-button {
+          border-radius: 8px;
+          padding: 12px 32px;
+          font-size: 18px;
+          font-weight: 700;
+
+          &:hover {
+            text-decoration: underline;
+            opacity: 0.8;
+          }
+          &:focus {
+            outline: 4px solid pidp.$bcgov-color-button-focus-outline;
+            outline-offset: 1px;
+          }
+          &:active {
+            background-color: #ffffff;
+          }
         }
         & .login-app-button {
-          padding: 15px 40px;
+          padding: 10px 40px;
+        }
+        & .login-setup {
+          margin-top: 10px;
         }
       }
       & .login-secondary-container {
@@ -306,6 +342,25 @@ span {
         justify-content: space-evenly;
         padding: 0 20px;
         gap: 20px;
+
+        & .login-button-secondary {
+          border-radius: 8px;
+          padding: 12px;
+
+          &:hover {
+            opacity: 0.8;
+            text-decoration: underline;
+            background-color: pidp.$bcgov-color-primary;
+            color: #ffffff;
+          }
+          &:focus {
+            outline-offset: 1px;
+            outline: 4px solid pidp.$bcgov-color-button-focus-outline;
+          }
+          &:active {
+            opacity: 1;
+          }
+        }
       }
     }
   }
@@ -328,12 +383,15 @@ span {
       flex: 1;
       padding: 20px 30px 10px;
       & p {
-        font-size: 0.75em;
+        line-height: 1.6;
+      }
+      & a:hover {
+        text-decoration: none;
+        color: blue;
       }
     }
 
     & .systems-card {
-      // width: 50%;
       display: flex;
     }
     & .card-hcimweb {
@@ -397,16 +455,152 @@ span {
   }
 }
 
-// Adjust sizing for smaller screens.
-// NOTE: For small and medium screens, the layout is identical to large.
-.login-container.viewport-small,
-.login-container.viewport-medium {
-  // Total width including padding is 1024px.
-  grid-template-columns: calc(482px - 10px) calc(482px - 10px);
-  gap: 20px;
-  padding: 30px 0;
+// Adjust sizing for small screens.
+.login-container.viewport-small {
+  // Total width including padding is 640px.
+  grid-template-columns: 295px 295px;
+  gap: 10px;
+  padding: 20px 0;
 
   & .title-container {
+    height: 327px;
+    width: 295px;
+    & .title-content-container {
+      padding: 30px;
+
+      & h1.title {
+        font-size: 1.75em;
+        line-height: 1.4;
+      }
+
+      & .title-site-description {
+        margin-bottom: 10px;
+        padding: 10px 20px;
+        & p {
+          font-size: 0.65em;
+        }
+      }
+      & .title-bcgov img {
+        height: 60px;
+        width: 120px;
+      }
+    }
+  }
+  & .welcome-section {
+    & .welcome-container {
+      & .welcome-pidp-logo {
+        & img {
+          width: 100px;
+        }
+      }
+      & h1.welcome-title {
+        margin: 12px;
+        font-size: 2.5em;
+      }
+      & .login-content {
+        & button {
+          font-size: 0.65em;
+          border-radius: 12px;
+          padding: 0 10px;
+        }
+        & button.login-app-button {
+          padding: 0 24px;
+          font-size: 0.65em;
+        }
+        & .login-setup {
+          margin-top: 6px;
+          margin-bottom: 0;
+          font-size: 0.65em;
+        }
+        & .login-continue-with {
+          margin-bottom: 10px;
+          & .login-continue-with-text {
+            font-size: 0.65em;
+          }
+        }
+      }
+      & .login-secondary-container {
+        padding: 0 10px;
+        gap: 6px;
+        flex-direction: column;
+        & .login-button-secondary {
+          margin-bottom: 10px;
+          padding: 6px 10px;
+        }
+      }
+    }
+  }
+  & .systems-section {
+    & .systems-title {
+      margin: 20px;
+      font-size: 2.5em;
+    }
+
+    & .systems-content {
+      grid-template-columns: calc(50% - 5px) calc(50% - 5px);
+      gap: 10px;
+    }
+    & .card-content {
+      padding: 10px;
+      & p {
+        font-size: 0.55em;
+        line-height: 1.6;
+      }
+    }
+
+    & .card-hcimweb {
+      padding: 10px;
+
+      & p {
+        font-size: 1em;
+        line-height: 1.6;
+      }
+
+      & .hcimweb-arrows {
+        mat-icon {
+          margin-right: 20px;
+          font-size: 80px;
+          height: 80px;
+          width: 80px;
+        }
+      }
+    }
+
+    & .card-coming-soon {
+      padding: 30px 20px 10px;
+
+      & header {
+        & h2 {
+          font-size: 1.75em;
+        }
+        & .coming-soon-header-content {
+          column-gap: 20px;
+
+          & mat-icon {
+            font-size: 32px;
+            height: 32px;
+            width: 32px;
+          }
+        }
+      }
+      & .coming-soon-text-container {
+        margin: 10px 40px;
+      }
+    }
+  }
+}
+
+// Adjust sizing for medium screens.
+.login-container.viewport-medium {
+  // Total width including padding is 1024px = 472 + 472 + 20 + 30 + 30.
+  grid-template-columns: 472px 472px;
+  gap: 20px;
+  padding: 30px;
+
+  & .title-container {
+    height: 523px;
+    width: 472px;
+
     & .title-content-container {
       padding: 30px;
 
@@ -459,10 +653,7 @@ span {
       gap: 20px;
     }
     & .card-content {
-      padding: 15px 24px 8px;
-      & p {
-        font-size: 0.75em;
-      }
+      padding: 20px;
     }
 
     & .card-hcimweb {
@@ -501,97 +692,6 @@ span {
       }
       & .coming-soon-text-container {
         margin-top: 20px;
-      }
-    }
-  }
-}
-.login-container.viewport-small {
-  // Total width including padding is 600px.
-  grid-template-columns: calc(290px - 5px) calc(290px - 5px);
-  gap: 10px;
-  padding: 10px 0;
-
-  & .title-container {
-    & .title-content-container {
-      padding: 30px;
-    }
-  }
-  & .welcome-section {
-    & .welcome-container {
-      & .welcome-pidp-logo {
-        & img {
-          width: 200px;
-        }
-      }
-      & h1.welcome-title {
-        font-size: 4.5em;
-      }
-      & .login-content {
-        & button {
-          font-size: 0.75em;
-          border-radius: 12px;
-          padding: 10px 10px;
-        }
-      }
-      & .login-secondary-container {
-        padding: 0 20px;
-        gap: 15px;
-      }
-    }
-  }
-  & .systems-section {
-    & .systems-title {
-      font-size: 2.5em;
-    }
-
-    & .systems-content {
-      grid-template-columns: calc(50% - 5px) calc(50% - 5px);
-      gap: 10px;
-    }
-    & .card-content {
-      & p {
-        font-size: 0.65em;
-        line-height: 1.6;
-      }
-    }
-
-    & .card-hcimweb {
-      padding: 10px;
-
-      & p {
-        font-size: 1em;
-        line-height: 1.6;
-      }
-
-      & .hcimweb-arrows {
-        mat-icon {
-          margin-right: 20px;
-          font-size: 80px;
-          height: 80px;
-          width: 80px;
-        }
-      }
-    }
-
-    & .card-coming-soon {
-      padding: 30px 20px 10px;
-
-      & header {
-        & h2 {
-          font-size: 2em;
-        }
-        & .coming-soon-header-content {
-          column-gap: 30px;
-
-          & mat-icon {
-            font-size: 32px;
-            height: 32px;
-            width: 32px;
-          }
-        }
-      }
-      & .coming-soon-text-container {
-        margin-top: 10px;
       }
     }
   }

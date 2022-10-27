@@ -39,7 +39,7 @@ h2 {
 
   .card-image {
     width: 240px;
-    min-height: 500px;
+    min-height: 515px;
     height: 100%;
   }
   .card-content-container {
@@ -66,22 +66,22 @@ h2 {
 // Adjust for small and medium, which have a layout very similar to large.
 .card-container.viewport-medium {
   .card-image {
-    width: 160px;
-    min-height: 415px;
+    width: 172px;
+    min-height: 510px;
   }
   .card-content-container {
     & header {
       padding: 55px 24px 24px;
     }
     & h2.card-header-text {
-      font-size: 1.75em;
+      font-size: 1.5em;
     }
   }
 }
 .card-container.viewport-small {
   .card-image {
-    width: 90px;
-    min-height: 300px;
+    width: 107px;
+    min-height: 229px;
   }
   .card-content-container {
     & header {
