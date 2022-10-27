@@ -1,11 +1,8 @@
-namespace PidpTests;
+namespace PlrIntakeTests.TestingExtensions;
 
 public static class ObjectExtensions
 {
-    public static bool AllPropertiesNull<T>(this T obj)
-    {
-        return AllPropertiesNullExcept(obj, Array.Empty<string>());
-    }
+    public static bool AllPropertiesNull<T>(this T obj) => AllPropertiesNullExcept(obj, Array.Empty<string>());
 
     public static bool AllPropertiesNullExcept<T>(this T obj, params string[] excludedProperties)
     {
@@ -19,7 +16,7 @@ public static class ObjectExtensions
     /// Returns empty string on null.
     /// </summary>
     /// <param name="original"></param>
-    public static string Bump(this string original)
+    public static string Bump(this string? original)
     {
         if (original == null)
         {

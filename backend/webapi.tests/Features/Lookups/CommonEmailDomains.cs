@@ -1,11 +1,11 @@
 namespace PidpTests.Features.Lookups;
 
 using Xunit;
+using DomainResults.Common;
 
 using Pidp.Features.Lookups;
 using Pidp.Models;
 using PidpTests.TestingExtensions;
-using DomainResults.Common;
 
 public class CommonEmailDomainsTests : InMemoryDbTest
 {

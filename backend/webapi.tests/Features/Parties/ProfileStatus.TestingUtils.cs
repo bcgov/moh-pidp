@@ -25,7 +25,7 @@ public class ProfileStatusTest : InMemoryDbTest
         yield return new object[] { AMock.User(ClaimValues.Idir) };
     }
 
-    public static IEnumerable<object[]> AllIdentifierTypesTestCases() => TestingUtils.AllIdentifierTypes.Select(type => new object[] { type });
+    public static IEnumerable<object[]> AllIdentifierTypesTestCases() => TestData.AllIdentifierTypes.Select(type => new object[] { type });
 }
 
 public static class AParty

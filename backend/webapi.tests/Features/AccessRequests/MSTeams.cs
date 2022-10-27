@@ -35,7 +35,7 @@ public class MSTeamsTests : InMemoryDbTest
 
     public static IEnumerable<object[]> MSTeamsIdentifierTypeTestData()
     {
-        return TestingUtils.AllIdentifierTypes
+        return TestData.AllIdentifierTypes
              .Select(identifierType => new object[] { identifierType });
     }
 }
