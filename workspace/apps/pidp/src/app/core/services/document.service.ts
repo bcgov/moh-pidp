@@ -43,7 +43,7 @@ export class DocumentService {
       },
       {
         type: DocumentType.PRESCRIPTION_REFILL_EFORMS_COLLECTION_NOTICE,
-        title: 'Prescription Refill eForms Collection Notice',
+        title: 'Prescription Renewal Support eForm Collection Notice',
       },
       {
         type: DocumentType.USER_ACCESS_AGREEMENT,
