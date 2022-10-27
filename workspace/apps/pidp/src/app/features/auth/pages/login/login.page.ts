@@ -94,8 +94,9 @@ export class LoginPage {
       idpHint: idpHint,
       redirectUri:
         this.config.applicationUrl +
-        '/' +
-        AdminRoutes.MODULE_PATH +
+        (this.route.snapshot.routeConfig?.path === 'admin'
+          ? '/' + AdminRoutes.MODULE_PATH
+          : '') +
         (endorsementToken ? `?endorsement-token=${endorsementToken}` : ''),
     });
   }
