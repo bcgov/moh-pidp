@@ -12,8 +12,8 @@ public class RecordsController : ControllerBase
                                                                   [FromQuery] Index.Query query)
         => await handler.HandleAsync(query);
 
-    [HttpPost("search")]
+    [HttpGet("cpns")]
     public async Task<ActionResult<List<string>>> SearchCpns([FromServices] IQueryHandler<Search.Query, List<string>> handler,
-                                                             [FromBody] Search.Query query)
+                                                             [FromQuery] Search.Query query)
         => await handler.HandleAsync(query);
 }
