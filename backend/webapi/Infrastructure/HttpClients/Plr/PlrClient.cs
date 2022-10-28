@@ -2,6 +2,7 @@ namespace Pidp.Infrastructure.HttpClients.Plr;
 
 using NodaTime;
 
+using Pidp.Extensions;
 using Pidp.Models.Lookups;
 
 public class PlrClient : BaseClient, IPlrClient
@@ -13,19 +14,18 @@ public class PlrClient : BaseClient, IPlrClient
         var query = new
         {
             CollegeId = licenceNumber,
-            Birthdate = birthdate.ToString(),
+            Birthdate = birthdate.ToIsoDateString(),
             IdentifierTypes = MapToIdentifierTypes(collegeCode)
         };
-        var result = await this.GetWithQueryParamsAsync<IEnumerable<PlrRecord>>("records", query);
+
+        var result = await this.GetWithQueryParamsAsync<IEnumerable<string>>("records/cpns", query);
 
         if (!result.IsSuccess)
         {
             return null;
         }
 
-        var cpns = result.Value
-            .Select(record => record.Cpn)
-            .Distinct();
+        var cpns = result.Value.Distinct();
 
         switch (cpns.Count())
         {
@@ -40,14 +40,18 @@ public class PlrClient : BaseClient, IPlrClient
         };
     }
 
-    public async Task<IEnumerable<PlrRecord>?> GetRecordsAsync(string? cpn)
+    public async Task<IEnumerable<PlrRecord>?> GetRecordsAsync(params string?[] cpns)
     {
-        if (string.IsNullOrWhiteSpace(cpn))
+        cpns = cpns
+            .Where(cpn => !string.IsNullOrWhiteSpace(cpn))
+            .ToArray();
+
+        if (!cpns.Any())
         {
             return Enumerable.Empty<PlrRecord>();
         }
 
-        var result = await this.GetWithQueryParamsAsync<IEnumerable<PlrRecord>>("records", new { Cpn = cpn });
+        var result = await this.GetWithQueryParamsAsync<IEnumerable<PlrRecord>>("records", new { Cpns = cpns });
         if (!result.IsSuccess)
         {
             return null;
@@ -65,7 +69,7 @@ public class PlrClient : BaseClient, IPlrClient
             return PlrStandingsDigest.FromEmpty();
         }
 
-        var result = await this.GetWithQueryParamsAsync<IEnumerable<PlrRecord>>("records", new { Cpn = cpn });
+        var result = await this.GetWithQueryParamsAsync<IEnumerable<PlrRecord>>("records", new { Cpns = new[] { cpn } });
         if (!result.IsSuccess
             || !result.Value.Any())
         {
