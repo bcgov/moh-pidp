@@ -16,11 +16,11 @@ public interface IPlrClient
     Task<string?> FindCpnAsync(CollegeCode collegeCode, string licenceNumber, LocalDate birthdate);
 
     /// <summary>
-    /// Fetches the PLR record(s) corresponding to the given CPN.
+    /// Fetches the PLR record(s) corresponding to the given CPN(s).
     /// Returns null on an error.
     /// </summary>
-    /// <param name="cpn"></param>
-    Task<IEnumerable<PlrRecord>?> GetRecordsAsync(string? cpn);
+    /// <param name="cpns"></param>
+    Task<IEnumerable<PlrRecord>?> GetRecordsAsync(params string?[] cpns);
 
     /// <summary>
     /// Returns true if the user has at least one Record in good standing in PLR (and there are no errors).

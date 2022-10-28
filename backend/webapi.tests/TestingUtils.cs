@@ -3,11 +3,35 @@ namespace PidpTests;
 using FakeItEasy;
 using System.Reflection;
 using System.Security.Claims;
+using Xunit;
 
 using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.HttpClients.Plr;
 
-public static class TestingUtils
+public static class AssertThat
+{
+    /// <summary>
+    /// Verifies that two collections are "equivalent" using a comparison lambda. Order is irrelevant.
+    /// </summary>
+    public static void CollectionsAreEquivalent<T1, T2>(IEnumerable<T1> collection1, IEnumerable<T2> collection2, Func<T1, T2, bool> predicate)
+    {
+        Assert.Equal(collection1.Count(), collection2.Count());
+
+        var list2 = collection2.ToList();
+
+        foreach (var item1 in collection1)
+        {
+            var index = list2.FindIndex(item2 => predicate(item1, item2));
+            Assert.NotEqual(-1, index);
+
+            list2.RemoveAt(index);
+        }
+
+        Assert.Empty(list2);
+    }
+}
+
+public static class TestData
 {
     public static IEnumerable<IdentifierType> AllIdentifierTypes => typeof(IdentifierType)
         .GetFields(BindingFlags.Public | BindingFlags.Static)
