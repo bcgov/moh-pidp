@@ -27,9 +27,11 @@ export class LoginPage {
   public title: string;
   public headerConfig: DashboardHeaderConfig;
   public loginCancelled: boolean;
+  public bcscAppDownload: string;
   public bcscSupportUrl: string;
   public bcscMobileSetupUrl: string;
   public specialAuthorityUrl: string;
+  public prescriptionRenewalSupportUrl: string;
   public providerIdentitySupportEmail: string;
   public idpHint: IdentityProvider;
 
@@ -48,9 +50,11 @@ export class LoginPage {
     this.title = routeSnapshot.data.title;
     this.headerConfig = { theme: 'dark', allowMobileToggle: false };
     this.loginCancelled = routeSnapshot.queryParams.action === 'cancelled';
+    this.bcscAppDownload = this.config.urls.bcscAppDownload;
     this.bcscSupportUrl = this.config.urls.bcscSupport;
     this.bcscMobileSetupUrl = this.config.urls.bcscMobileSetup;
     this.specialAuthorityUrl = this.config.urls.specialAuthority;
+    this.prescriptionRenewalSupportUrl = this.config.urls.prescriptionRenewal;
     this.providerIdentitySupportEmail =
       this.config.emails.providerIdentitySupport;
     this.idpHint = routeSnapshot.data.idpHint;

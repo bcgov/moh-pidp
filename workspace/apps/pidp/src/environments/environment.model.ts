@@ -26,9 +26,11 @@ export interface AppEnvironment extends EnvironmentConfig {
     phsaInformationAccessAndPrivacyOffice: string;
   };
   urls: {
+    bcscAppDownload: string;
     bcscSupport: string;
     bcscMobileSetup: string;
     specialAuthority: string;
     doctorsTechnologyOffice: string;
+    prescriptionRenewal: string;
   };
 }

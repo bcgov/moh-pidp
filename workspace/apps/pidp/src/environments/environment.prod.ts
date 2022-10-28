@@ -9,6 +9,7 @@ import {
 import {
   phsaInformationAccessAndPrivacyOfficeEmail,
   prescriptionRefillRequestEformsSupportEmail,
+  prescriptionRenewalEformsSupportUrl,
 } from '@app/features/access/pages/prescription-refill-eforms/prescription-refill-eforms.constants';
 import {
   specialAuthorityEformsSupportEmail,
@@ -48,10 +49,12 @@ export const environment: AppEnvironment = {
       phsaInformationAccessAndPrivacyOfficeEmail,
   },
   urls: {
+    bcscAppDownload: `https://www2.gov.bc.ca/gov/content/governments/government-id/bcservicescardapp/download-app`,
     bcscSupport: `https://www2.gov.bc.ca/gov/content/governments/government-id/bcservicescardapp/help`,
     bcscMobileSetup: 'https://id.gov.bc.ca/account',
     specialAuthority: specialAuthorityUrl,
     doctorsTechnologyOffice: doctorsTechnologyOfficeUrl,
+    prescriptionRenewal: prescriptionRenewalEformsSupportUrl,
   },
   keycloakConfig: {
     config: {
