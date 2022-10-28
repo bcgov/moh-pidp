@@ -69,6 +69,10 @@ fetchConfig()
     if (environment.production) {
       enableProdMode();
     }
+    // For convenience, log the config being used when in development.
+    if (appConfig.environmentName === 'dev') {
+      console.log('pidp.config', appConfig);
+    }
 
     platformBrowserDynamic([
       {
