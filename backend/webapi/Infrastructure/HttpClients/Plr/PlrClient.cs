@@ -2,6 +2,7 @@ namespace Pidp.Infrastructure.HttpClients.Plr;
 
 using NodaTime;
 
+using Pidp.Extensions;
 using Pidp.Models.Lookups;
 
 public class PlrClient : BaseClient, IPlrClient
@@ -10,14 +11,14 @@ public class PlrClient : BaseClient, IPlrClient
 
     public async Task<string?> FindCpnAsync(CollegeCode collegeCode, string licenceNumber, LocalDate birthdate)
     {
-        var search = new
+        var query = new
         {
             CollegeId = licenceNumber,
-            Birthdate = birthdate.ToString(),
+            Birthdate = birthdate.ToIsoDateString(),
             IdentifierTypes = MapToIdentifierTypes(collegeCode)
         };
 
-        var result = await this.PostAsync<IEnumerable<string>>("records/search", search);
+        var result = await this.GetWithQueryParamsAsync<IEnumerable<string>>("records/cpns", query);
 
         if (!result.IsSuccess)
         {
@@ -29,12 +30,12 @@ public class PlrClient : BaseClient, IPlrClient
         switch (cpns.Count())
         {
             case 0:
-                this.Logger.LogNoRecordsFound(search.CollegeId, search.Birthdate, search.IdentifierTypes);
+                this.Logger.LogNoRecordsFound(query.CollegeId, query.Birthdate, query.IdentifierTypes);
                 return null;
             case 1:
                 return cpns.Single();
             default:
-                this.Logger.LogMultipleRecordsFound(search.CollegeId, search.Birthdate, search.IdentifierTypes);
+                this.Logger.LogMultipleRecordsFound(query.CollegeId, query.Birthdate, query.IdentifierTypes);
                 return null;
         };
     }
