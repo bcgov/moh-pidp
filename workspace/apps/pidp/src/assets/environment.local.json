@@ -1,3 +1,4 @@
 {
-  "environmentName": "dev"
+  "environmentName": "dev",
+  "featureFlags": { "isLoginV2Enabled": true }
 }
