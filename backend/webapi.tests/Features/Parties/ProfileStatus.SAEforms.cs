@@ -120,7 +120,7 @@ public class ProfileStatusSAEformsTests : ProfileStatusTest
         yield return new object[] { null!, PlrStandingsDigest.FromEmpty() };
         yield return new object[] { "cpn", PlrStandingsDigest.FromError() };
 
-        foreach (var identifierType in TestingUtils.AllIdentifierTypes)
+        foreach (var identifierType in TestData.AllIdentifierTypes)
         {
             yield return new object[] { "cpn", AMock.StandingsDigest(false, identifierType) };
         }

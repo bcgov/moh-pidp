@@ -43,7 +43,7 @@ export class DocumentService {
       },
       {
         type: DocumentType.PRESCRIPTION_REFILL_EFORMS_COLLECTION_NOTICE,
-        title: 'Prescription Refill eForms Collection Notice',
+        title: 'Prescription Renewal Support eForm Collection Notice',
       },
       {
         type: DocumentType.USER_ACCESS_AGREEMENT,
@@ -146,7 +146,7 @@ export class DocumentService {
   public getPrescriptionRefilleFormsCollectionNotice(): string {
     return `
       Personal information is protected under BC privacy laws and is collected under the authority of section
-      26(c) of the Freedom of Information Protection of Privacy Act. All data will be securely stored at PHSA
+      26(c) of the Freedom of Information Protection of Privacy Act. All data will be securely stored at PHSA
       and will not be used for any other purpose other than the one stated above. If you have any questions
       about the collection of this personal information please contact PHSA's Information Access & Privacy
       Office at 1-855-229-9800 or at <a href="mailto:${this.config.emails.phsaInformationAccessAndPrivacyOffice}">${this.config.emails.phsaInformationAccessAndPrivacyOffice}</a>.
@@ -201,7 +201,7 @@ export class DocumentService {
         <li>Security awareness training is provided to clinic staff and reviewed yearly.</li><br>
         <li>My staff is aware of malicious emails and have been informed not to click links or open attachments that
           appear suspicious.</li><br>
-        <li>My staff is aware of risks associated with using USB drivers and other portable devices that may compromise
+        <li>My staff is aware of risks associated with using USB drives and other portable devices that may compromise
           my network.</li><br>
         <li>My staff is aware that passwords used for access to MS Teams are not permitted to be shared with other
           individuals or re-used for other services, and that the "Save Password" feature in browsers is not utilized to
@@ -248,10 +248,10 @@ export class DocumentService {
         <li> All clinic staff need to complete Privacy Training and Security Awareness Training comprised of new employee orientation and
           regularly scheduled refreshers. The content should include:<br>
           <ol type="a">
-            <li>Privacy and Security policies and related procedures including any changes introduced</li>
-            <li>Overview of the clinic's security safeguards and staff responsibilities</li>
-            <li>Risk mitigation strategies to protect patient information security</li>
-            <li>Steps required for managing a breach in emergency situations</li>
+            <li>Privacy and Security policies and related procedures including any changes introduced.</li>
+            <li>Overview of the clinic's security safeguards and staff responsibilities.</li>
+            <li>Risk mitigation strategies to protect patient information security.</li>
+            <li>Steps required for managing a breach in emergency situations.</li>
           </ol>
         </li><br>
         <li>Clinic should provide employees with instructions for e-mails, text messaging, and web browsing. These guidelines must alert staff
@@ -265,9 +265,9 @@ export class DocumentService {
           Gmail, Facebook, LinkedIn). The "save password" feature for any account is not safe because any user on that computer can then use the stored
           password. Each user should change their passwords semi-annually. See password management requirements on page 3 of this guide. For tips on
           creating secure passwords, visit the Physician Office IT Security Guide.</li><br>
-        <li>Notifying the FHA mHealth secure messaging Team ensures that FH access accounts remain current. This will prevent the risk of someone accessing
-          information to which they are no longer eligible. To contact the secure messaging team, email
-          <a href="mailto:${this.config.emails.msTeamsSupport}">${this.config.emails.msTeamsSupport}</a></li><br>
+        <li>Notifying the FHA mHealth Secure Messaging Team ensures that FH access accounts remain current. This will prevent the risk of someone accessing
+          information to which they are no longer eligible. To contact the Secure Messaging Team, email
+          <a href="mailto:${this.config.emails.msTeamsSupport}">${this.config.emails.msTeamsSupport}</a>.</li><br>
         <li>During the course of providing technical support, there is a chance that unauthorized access to clinical information can occur. Keep invoices
           and/or service receipts for at least two years. In case of a privacy breach or investigation, the clinic should be able to provide details about
           technology and physical safeguards implemented. Refer to the DTO Health Technology Guide - Selecting IT Support for what can be expected from your
@@ -284,45 +284,44 @@ export class DocumentService {
       local threats.<br><br>
       Education, resources and supports on Clinic Privacy and Security are available via the
       <a href="${this.config.urls.doctorsTechnologyOffice}" target="_blank" rel="noopener noreferrer">Doctors Technology Office (DTO)</a>.<br><br>
-      <a href="mailto:${this.config.emails.doctorsTechnologyOfficeSupport}">${this.config.emails.doctorsTechnologyOfficeSupport}</a> or 604-638-5841<br><br>
+      <a href="mailto:${this.config.emails.doctorsTechnologyOfficeSupport}">${this.config.emails.doctorsTechnologyOfficeSupport}</a> or 604-638-5841.<br><br>
       <strong>Physical Access Control</strong><br><br>
       <ul style="list-style-type:square">
-        <li>Clinic site is equipped with a monitored alarm system</li><br>
-        <li>Server/Network equipment is physically secured from public access</li><br>
+        <li>Clinic site is equipped with a monitored alarm system.</li><br>
+        <li>Server/Network equipment is physically secured from public access.</li><br>
       </ul><br>
       <strong>User Account</strong><br><br>
       <ul style="list-style-type:square">
-        <li>Each user has a unique account and password to access systems within clinic's network</li><br>
-        <li>User accounts are not shared among multiple users</li><br>
-        <li>A separate user account is used for system administration</li><br>
+        <li>Each user has a unique account and password to access systems within clinic's network.</li><br>
+        <li>User accounts are not shared among multiple users.</li><br>
+        <li>A separate user account is used for system administration.</li><br>
       </ul><br>
       <strong>Password Management</strong><br><br>
       <ul style="list-style-type:square">
-        <li>Minimum password length is 8 characters</li><br>
+        <li>Minimum password length is 8 characters.</li><br>
         <li>Passwords contain characters from three of the following categories (Uppercase characters, Lowercase characters, Numerals,
-          Non-alphanumeric keyboard symbols)</li><br>
-        <li>Passwords are changed at a minimum semi-annually</li><br>
+          Non-alphanumeric keyboard symbols).</li><br>
+        <li>Passwords are changed at a minimum semi-annually.</li><br>
       </ul><br>
       <strong>WiFi Network</strong><br><br>
       <ul style="list-style-type:square">
-        <li>SSID, WPA2/WPA3 and WiFi password settings are as per DTO Technical Bulletin</li><br>
-        <li>Guest WiFi access is completely isolated from the Clinic Lan/WiFi network</li><br>
+        <li>SSID, WPA2/WPA3 and WiFi password settings are as per DTO Technical Bulletin.</li><br>
+        <li>Guest WiFi access is completely isolated from the Clinic Lan/WiFi network.</li><br>
       </ul><br>
       <strong>Anti-Virus Software</strong><br><br>
       <ul style="list-style-type:square">
-        <li>Anti-virus software installed and enabled for auto update (screenshot of configuration must be attached)</li><br>
+        <li>Anti-virus software installed and enabled for auto update.</li><br>
       </ul><br>
       <strong>Operating System</strong><br><br>
       <ul style="list-style-type:square">
-        <li>There are no legacy/end-of-support operating systems in use (e.g. Windows XP, MacOS older than the latest three versions)</li><br>
-        <li>The Operating System is enabled for auto updates or manually patched at a minimum semi-annually</li><br>
+        <li>There are no legacy/end-of-support operating systems in use (e.g. Windows XP, MacOS older than the latest three versions).</li><br>
+        <li>The Operating System is enabled for auto updates or manually patched at a minimum semi-annually.</li><br>
       </ul><br>
       <strong>Application Patching</strong><br><br>
       Where it doesn't conflict with my EMR's system requirements,
       <ul style="list-style-type:square">
-        <li>Desktop software, e.g. MS Office / Other applications are patched at a minimum semi-annually</li><br>
-        <li>Browser plugin (Adobe Flash, PDF, Java) are patched at a minimum semi-annually</li><br>
-        <li>Such patching conflicts with my EMR system requirements</li><br>
+        <li>Desktop software, e.g. MS Office / Other applications are patched at a minimum semi-annually.</li><br>
+        <li>Browser plugins (Adobe Flash, PDF, Java) are patched at a minimum semi-annually.</li><br>
       </ul><br>
     `;
   }

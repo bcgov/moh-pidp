@@ -11,7 +11,9 @@ import { ToastService } from '@core/services/toast.service';
 
 import { PersonalInformation } from './personal-information.model';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class PersonalInformationResource extends CrudResource<PersonalInformation> {
   public constructor(
     protected apiResource: ApiHttpClient,
