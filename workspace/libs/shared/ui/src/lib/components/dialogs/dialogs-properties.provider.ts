@@ -7,15 +7,14 @@ import { DialogDefaultOptions } from './dialog-default-options.model';
 export const defaultDialogOptions: DialogDefaultOptions = {
   unsaved: () => ({
     icon: 'error',
-    title: 'Unsaved Changes Found',
+    title: 'Are you sure you want to leave?',
     message: `
-    Changes are pending that have not been saved. Would you like to
-    remain on this page until it has been completed and saved, or
-    discard your changes?
+    You have unsaved changes. Are you sure you want to leave this page?
+    Unsaved changes will be lost.
     `,
     actionType: 'warn',
-    actionText: 'Discard Changes',
-    cancelText: 'Keep Changes and Continue',
+    actionText: 'Leave this page',
+    cancelText: 'Stay on this page',
   }),
   delete: (modelName: string, supplementaryMessage: string = '') => {
     const capitalized = StringUtils.capitalize(modelName);
