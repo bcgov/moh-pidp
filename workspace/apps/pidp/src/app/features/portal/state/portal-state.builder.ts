@@ -138,8 +138,7 @@ export class PortalStateBuilder {
         () => [new SaEformsPortalSection(profileStatus, this.router)]
       ),
       ...ArrayUtils.insertResultIf<IPortalSection>(
-        this.insertSection('prescriptionRefillEforms', profileStatus) &&
-          this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
+        this.insertSection('prescriptionRefillEforms', profileStatus),
         () => [
           new PrescriptionRefillEformsPortalSection(profileStatus, this.router),
         ]
