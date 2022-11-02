@@ -27,6 +27,6 @@ export const APP_DI_CONFIG: AppConfig = {
     admin: AdminRoutes.MODULE_PATH,
   },
   featureFlags: {
-    isLoginV2Enabled: false,
+    example: false,
   },
 };
