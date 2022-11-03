@@ -5,6 +5,7 @@
   "scripts": {
     "start": "nx serve",
     "build": "nx build",
+    "lint:all": "nx run-many --all --target=lint",
     "test": "nx test",
     "test:ci": "nx test --ci --reporters=default --reporters=jest-Junit",
     "analyze": "nx build pidp --stats-json && webpack-bundle-analyzer dist/apps/pidp/stats.json",
