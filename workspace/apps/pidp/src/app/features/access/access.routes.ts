@@ -7,6 +7,9 @@ export class AccessRoutes {
   public static PHARMANET = 'pharmanet';
   public static SITE_PRIVACY_SECURITY_CHECKLIST = `site-privacy-and-security-checklist`;
   public static DRIVER_FITNESS = 'driver-fitness';
+  public static UCI = 'uci';
+  public static MS_TEAMS = 'ms-teams';
+  public static PRESCRIPTION_REFILL_EFORMS = 'prescription-refill-eforms';
 
   /**
    * @description

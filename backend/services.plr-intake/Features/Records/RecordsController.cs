@@ -12,15 +12,8 @@ public class RecordsController : ControllerBase
                                                                   [FromQuery] Index.Query query)
         => await handler.HandleAsync(query);
 
-    [HttpGet("{ipc}")]
-    public async Task<ActionResult<Details.Model>> GetDetails([FromServices] IQueryHandler<Details.Query, Details.Model?> handler,
-                                                              [FromRoute] Details.Query query)
-    {
-        var details = await handler.HandleAsync(query);
-        if (details == null)
-        {
-            return this.NotFound();
-        }
-        return details;
-    }
+    [HttpGet("cpns")]
+    public async Task<ActionResult<List<string>>> SearchCpns([FromServices] IQueryHandler<Search.Query, List<string>> handler,
+                                                             [FromQuery] Search.Query query)
+        => await handler.HandleAsync(query);
 }

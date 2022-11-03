@@ -5,6 +5,8 @@ using FakeItEasy.Configuration;
 using System.Net;
 using System.Text.Json;
 
+using Pidp.Infrastructure.HttpClients.Plr;
+
 public static class FakeItEasyExtensions
 {
     public static IReturnValueConfiguration<Task<HttpResponseMessage>> InvokingSendAsyncWith(this IWhereConfiguration<IAnyCallConfigurationWithNoReturnTypeSpecified> configuration, HttpMethod method, string url, HttpContent? content = null)
@@ -32,5 +34,16 @@ public static class FakeItEasyExtensions
             : new StringContent(JsonSerializer.Serialize(asStringContent), System.Text.Encoding.UTF8, "application/json");
         return configuration
             .Returns(Task.FromResult(new HttpResponseMessage(code) { Content = content }));
+    }
+
+    public static IPlrClient ReturningAStatandingsDigest(this IPlrClient client, bool goodStanding, string? identifierType = null)
+        => client.ReturningAStatandingsDigest(AMock.StandingsDigest(goodStanding, identifierType));
+
+    public static IPlrClient ReturningAStatandingsDigest(this IPlrClient client, PlrStandingsDigest digest)
+    {
+        A.CallTo(() => client.GetStandingAsync(A<string?>._)).Returns(digest.HasGoodStanding);
+        A.CallTo(() => client.GetStandingsDigestAsync(A<string?>._)).Returns(digest);
+
+        return client;
     }
 }

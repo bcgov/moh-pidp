@@ -18,11 +18,19 @@ export interface AppEnvironment extends EnvironmentConfig {
     specialAuthorityEformsSupport: string;
     hcimAccountTransferSupport: string;
     hcimEnrolmentSupport: string;
+    prescriptionRefillRequestEformsSupport: string;
     driverFitnessSupport: string;
+    uciSupport: string;
+    msTeamsSupport: string;
+    doctorsTechnologyOfficeSupport: string;
+    phsaInformationAccessAndPrivacyOffice: string;
   };
   urls: {
+    bcscAppDownload: string;
     bcscSupport: string;
     bcscMobileSetup: string;
     specialAuthority: string;
+    doctorsTechnologyOffice: string;
+    prescriptionRenewal: string;
   };
 }

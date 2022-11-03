@@ -26,6 +26,10 @@ export class LookupService implements ILookupService {
     this.lookupConfig = null;
   }
 
+  public get accessTypes(): Lookup[] {
+    return this.copyAndSortByKey(this.lookupConfig?.accessTypes);
+  }
+
   public get colleges(): CollegeLookup[] {
     return this.copyAndSortByKey<CollegeLookup>(this.lookupConfig?.colleges);
   }

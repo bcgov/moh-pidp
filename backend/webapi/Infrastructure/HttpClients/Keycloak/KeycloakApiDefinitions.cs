@@ -3,6 +3,29 @@ namespace Pidp.Infrastructure.HttpClients.Keycloak;
 using System.Text.Json;
 
 using Pidp.Infrastructure.HttpClients.Ldap;
+using Pidp.Models.Lookups;
+
+public static class MohClients
+{
+    public static (string ClientId, string AccessRole) PrescriptionRefillEforms => ("SAT-EFORMS", "phsa_eforms_rxrefill");
+    public static (string ClientId, string AccessRole) SAEforms => ("SAT-EFORMS", "phsa_eforms_sat");
+    public static (string ClientId, string AccessRole) Uci => ("UCI-SSO", "UCIROLE");
+
+    public static (string ClientId, string AccessRole)? FromAccessType(AccessTypeCode code)
+    {
+        return code switch
+        {
+            AccessTypeCode.DriverFitness => null,
+            AccessTypeCode.HcimAccountTransfer => null,
+            AccessTypeCode.HcimEnrolment => null,
+            AccessTypeCode.MSTeams => null,
+            AccessTypeCode.PrescriptionRefillEforms => PrescriptionRefillEforms,
+            AccessTypeCode.SAEforms => SAEforms,
+            AccessTypeCode.Uci => Uci,
+            _ => null
+        };
+    }
+}
 
 /// <summary>
 /// This is not the entire Keycloak Client Representation! See https://www.keycloak.org/docs-api/5.0/rest-api/index.html#_clientrepresentation.
@@ -45,6 +68,8 @@ public class UserRepresentation
     public Dictionary<string, string[]> Attributes { get; set; } = new();
 
     internal void SetLdapOrgDetails(LdapLoginResponse.OrgDetails orgDetails) => this.SetAttribute("org_details", JsonSerializer.Serialize(orgDetails, new JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }));
+
+    public void SetCpn(string cpn) => this.SetAttribute("common_provider_number", cpn);
 
     public void SetPhone(string phone) => this.SetAttribute("phone", phone);
 

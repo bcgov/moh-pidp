@@ -1,0 +1,32 @@
+<ui-page>
+  <ui-page-header>{{ title }}</ui-page-header>
+
+  <div class="row">
+    <div
+      *ngFor="let collegeCertification of collegeCertifications$ | async"
+      class="col-12">
+      <strong>Identifier Type</strong>
+      <p>{{ collegeCertification.identifierType ?? 'Not Available' }}</p>
+      <strong>College Id</strong>
+      <p>{{ collegeCertification.collegeId ?? 'Not Available' }}</p>
+      <strong>Provider Role Type</strong>
+      <p>{{ collegeCertification.providerRoleType ?? 'Not Available' }}</p>
+      <strong>Status Code</strong>
+      <p>{{ collegeCertification.statusCode ?? 'Not Available' }}</p>
+      <strong>Status Start Date</strong>
+      <p>{{ collegeCertification.statusStartDate ?? 'Not Available' }}</p>
+      <br />
+    </div>
+  </div>
+
+  <ui-page-footer mode="reverse">
+    <button
+      mat-stroked-button
+      uiPageFooterAction
+      type="button"
+      color="primary"
+      (click)="onBack()">
+      Back Home
+    </button>
+  </ui-page-footer>
+</ui-page>

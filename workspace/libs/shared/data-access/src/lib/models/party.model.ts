@@ -1,27 +1,22 @@
 import { Address } from './address.model';
 import { Facility } from './facility.model';
-import { PartyCertification } from './party-certification.model';
+import { PartyLicenceDeclaration } from './party-certification.model';
 import { User } from './user.model';
 
-export enum AccessType {
+export enum AccessTypeCode {
   SAEforms = 1,
   HcimAccountTransfer,
   HcimEnrolment,
   DriverFitness,
+  Uci,
+  MSTeams,
 }
-
-export const AccessTypeMap: { [AccessType: number]: string } = {
-  [AccessType.SAEforms]: 'Special Authority eForms',
-  [AccessType.HcimAccountTransfer]: 'HCIMWeb Account Transfer',
-  [AccessType.HcimEnrolment]: 'HCIMWeb Enrolment',
-  [AccessType.DriverFitness]: 'Driver Medical Fitness',
-};
 
 export interface AccessRequest {
   id: number;
   partyId: number;
   requestedOn: string;
-  accessType: AccessType;
+  accessTypeCode: AccessTypeCode;
 }
 
 export interface Party extends User {
@@ -37,7 +32,7 @@ export interface Party extends User {
   email: string;
   phone: string;
   mailingAddress: Address;
-  partyCertification: PartyCertification;
+  partyLicenceDeclaration: PartyLicenceDeclaration;
   jobTitle: string;
   facility: Facility;
   accessRequests: AccessRequest[];

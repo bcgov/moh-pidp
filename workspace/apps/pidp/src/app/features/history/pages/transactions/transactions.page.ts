@@ -3,8 +3,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { Observable } from 'rxjs';
 
-import { AccessTypeMap } from '@bcgov/shared/data-access';
-
 import { PartyService } from '@app/core/party/party.service';
 import { LoggerService } from '@app/core/services/logger.service';
 
@@ -19,7 +17,6 @@ import { TransactionsResource } from './transactions-resource.service';
 export class TransactionsPage implements OnInit {
   public title: string;
   public transactions$!: Observable<Transaction[]>;
-  public AccessTypeMap = AccessTypeMap;
 
   public constructor(
     private route: ActivatedRoute,

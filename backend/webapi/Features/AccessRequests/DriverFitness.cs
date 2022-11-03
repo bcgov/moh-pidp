@@ -6,12 +6,9 @@ using Microsoft.EntityFrameworkCore;
 using NodaTime;
 
 using Pidp.Data;
-using Pidp.Infrastructure.Auth;
-using Pidp.Infrastructure.HttpClients.Keycloak;
-using Pidp.Infrastructure.HttpClients.Mail;
 using Pidp.Infrastructure.HttpClients.Plr;
-using Pidp.Infrastructure.Services;
 using Pidp.Models;
+using Pidp.Models.Lookups;
 
 public class DriverFitness
 {
@@ -28,23 +25,17 @@ public class DriverFitness
     public class CommandHandler : ICommandHandler<Command, IDomainResult>
     {
         private readonly IClock clock;
-        private readonly IEmailService emailService;
-        private readonly IKeycloakAdministrationClient keycloakClient;
         private readonly ILogger logger;
         private readonly IPlrClient plrClient;
         private readonly PidpDbContext context;
 
         public CommandHandler(
             IClock clock,
-            IEmailService emailService,
-            IKeycloakAdministrationClient keycloakClient,
             ILogger<CommandHandler> logger,
             IPlrClient plrClient,
             PidpDbContext context)
         {
             this.clock = clock;
-            this.emailService = emailService;
-            this.keycloakClient = keycloakClient;
             this.logger = logger;
             this.plrClient = plrClient;
             this.context = context;
@@ -56,23 +47,22 @@ public class DriverFitness
                 .Where(party => party.Id == command.PartyId)
                 .Select(party => new
                 {
-                    AlreadyEnroled = party.AccessRequests.Any(request => request.AccessType == AccessType.DriverFitness),
-                    party.PartyCertification!.Ipc,
+                    AlreadyEnroled = party.AccessRequests.Any(request => request.AccessTypeCode == AccessTypeCode.DriverFitness),
+                    party.Cpn,
                     party.Email
                 })
                 .SingleAsync();
 
             if (dto.AlreadyEnroled
                 || dto.Email == null
-                || dto.Ipc == null
-                || (await this.plrClient.GetRecordStatus(dto.Ipc))?.IsGoodStanding() != true)
+                || !await this.plrClient.GetStandingAsync(dto.Cpn))
             {
                 this.logger.LogDriverFitnessAccessRequestDenied();
                 return DomainResult.Failed();
             }
 
-            // TODO assign role
-            // if (!await this.keycloakClient.AssignClientRole(dto.UserId, Resources.SAEforms, Roles.SAEforms))
+            // TODO assign role?
+            // if (!await this.keycloakClient.AssignClientRole(dto.UserId, ?, ?))
             // {
             //     return DomainResult.Failed();
             // }
@@ -80,27 +70,13 @@ public class DriverFitness
             this.context.AccessRequests.Add(new AccessRequest
             {
                 PartyId = command.PartyId,
-                AccessType = AccessType.DriverFitness,
+                AccessTypeCode = AccessTypeCode.DriverFitness,
                 RequestedOn = this.clock.GetCurrentInstant()
             });
 
             await this.context.SaveChangesAsync();
 
-            await this.SendConfirmationEmailAsync(dto.Email);
-
             return DomainResult.Success();
-        }
-
-        private async Task SendConfirmationEmailAsync(string partyEmail)
-        {
-            // TODO email text
-            var email = new Email(
-                from: EmailService.PidpEmail,
-                to: partyEmail,
-                subject: "Driver Fitness Enrolment Confirmation",
-                body: $"Driver Fitness Enrolment Confirmation"
-            );
-            await this.emailService.SendAsync(email);
         }
     }
 }

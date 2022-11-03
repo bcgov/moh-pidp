@@ -189,37 +189,44 @@
   "version" "13.0.2"
   dependencies:
     "@babel/core" "^7.8.6"
-    "canonical-path" "1.0.0"
-    "chokidar" "^3.0.0"
-    "convert-source-map" "^1.5.1"
-    "dependency-graph" "^0.11.0"
-    "magic-string" "^0.25.0"
-    "reflect-metadata" "^0.1.2"
-    "semver" "^7.0.0"
-    "sourcemap-codec" "^1.4.8"
-    "tslib" "^2.3.0"
-    "yargs" "^17.2.1"
+    canonical-path "1.0.0"
+    chokidar "^3.0.0"
+    convert-source-map "^1.5.1"
+    dependency-graph "^0.11.0"
+    magic-string "^0.25.0"
+    reflect-metadata "^0.1.2"
+    semver "^7.0.0"
+    sourcemap-codec "^1.4.8"
+    tslib "^2.3.0"
+    yargs "^17.2.1"
 
-"@angular/compiler@^13.0.0", "@angular/compiler@13.0.2":
-  "integrity" "sha512-EvIFT8y5VNICrnPgiamv/z9hfQ7KjLCM52g4ssXGCeGPVj58OEfslEc3jO4BCJG7xuLm7dCuSRV0pBlJNTSYFg=="
-  "resolved" "https://registry.npmjs.org/@angular/compiler/-/compiler-13.0.2.tgz"
-  "version" "13.0.2"
+"@angular/compiler@^13.0.0":
+  version "13.0.2"
+  resolved "https://registry.yarnpkg.com/@angular/compiler/-/compiler-13.0.2.tgz#5bc1bfc1931f1ff2813f8fff8b8ceaa57b47d717"
+  integrity sha512-EvIFT8y5VNICrnPgiamv/z9hfQ7KjLCM52g4ssXGCeGPVj58OEfslEc3jO4BCJG7xuLm7dCuSRV0pBlJNTSYFg==
   dependencies:
-    "tslib" "^2.3.0"
+    tslib "^2.3.0"
 
-"@angular/core@^11 || ^12 || ^13", "@angular/core@^13.0.0", "@angular/core@^13.0.0 || ^14.0.0-0", "@angular/core@>=10.0.0", "@angular/core@>=13", "@angular/core@>=13.0.0", "@angular/core@13.0.2":
-  "integrity" "sha512-6Jbct50lncMqzwLILzfmwQRK8eOEMv0quCL3pQptEpYPSlPqKz6QRxD76BykSUOs7XYJ/KdZmu3uGcT2Q/DUVg=="
-  "resolved" "https://registry.npmjs.org/@angular/core/-/core-13.0.2.tgz"
-  "version" "13.0.2"
+"@angular/core@^13.0.0":
+  version "13.0.2"
+  resolved "https://registry.yarnpkg.com/@angular/core/-/core-13.0.2.tgz#786bb1242d69e8b7a2cbae224448c27e2f1fc064"
+  integrity sha512-6Jbct50lncMqzwLILzfmwQRK8eOEMv0quCL3pQptEpYPSlPqKz6QRxD76BykSUOs7XYJ/KdZmu3uGcT2Q/DUVg==
   dependencies:
-    "tslib" "^2.3.0"
+    tslib "^2.3.0"
 
-"@angular/forms@^13.0.0", "@angular/forms@^13.0.0 || ^14.0.0-0", "@angular/forms@>=10.0.0":
-  "integrity" "sha512-JGgEOTH/OYr7/RlqJUPSzKQF/a55UM5PD6CgpUjAXKrCV18+zhofO05g+ibIZH3OfONntthcbKEXxMTX2EEQqg=="
-  "resolved" "https://registry.npmjs.org/@angular/forms/-/forms-13.0.2.tgz"
-  "version" "13.0.2"
+"@angular/flex-layout@13.0.0-beta.38":
+  version "13.0.0-beta.38"
+  resolved "https://registry.yarnpkg.com/@angular/flex-layout/-/flex-layout-13.0.0-beta.38.tgz#b0993a255ba51d2cfd16537ba8a8d88c3adf6587"
+  integrity sha512-kcWb7CcoHbvw7fjo/knizWVmSSmvaTnr8v1ML6zOdxu1PK9UPPOcOS8RTm6fy61zoC2LABivP1/6Z2jF5XfpdQ==
   dependencies:
-    "tslib" "^2.3.0"
+    tslib "^2.3.0"
+
+"@angular/forms@^13.0.0":
+  version "13.0.2"
+  resolved "https://registry.yarnpkg.com/@angular/forms/-/forms-13.0.2.tgz#c4779636639b9a3c7166b223f3d5c39149b7c72d"
+  integrity sha512-JGgEOTH/OYr7/RlqJUPSzKQF/a55UM5PD6CgpUjAXKrCV18+zhofO05g+ibIZH3OfONntthcbKEXxMTX2EEQqg==
+  dependencies:
+    tslib "^2.3.0"
 
 "@angular/language-service@^13.0.0":
   "integrity" "sha512-Q0pvN1cwrUz1qjTis0jsuaZ/NmByKvlLaecDfluOsf4y8AoL509A1Ih5bsN+RNR74EdYj9AmBpBx37Mf7SygWQ=="

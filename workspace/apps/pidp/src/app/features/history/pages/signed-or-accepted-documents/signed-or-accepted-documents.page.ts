@@ -85,19 +85,35 @@ export class SignedOrAcceptedDocumentsPage implements OnInit {
 
         // TODO remove when an API or equivalent is available, but until
         // then has to be displayed all the time or none of the time
-        if (this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO])) {
-          status.userAccessAgreement = { statusCode: StatusCode.COMPLETED };
-        }
+        status.userAccessAgreement = this.permissionsService.hasRole([
+          Role.FEATURE_PIDP_DEMO,
+        ])
+          ? { statusCode: StatusCode.COMPLETED }
+          : { statusCode: StatusCode.NOT_AVAILABLE };
 
-        return (
-          document.type === DocumentType.PIDP_COLLECTION_NOTICE ||
-          (document.type === DocumentType.SA_EFORMS_COLLECTION_NOTICE &&
-            status?.saEforms.statusCode === StatusCode.COMPLETED) ||
-          (document.type === DocumentType.DRIVER_FITNESS_COLLECTION_NOTICE &&
-            status?.driverFitness.statusCode === StatusCode.COMPLETED) ||
-          (document.type === DocumentType.USER_ACCESS_AGREEMENT &&
-            status?.userAccessAgreement.statusCode === StatusCode.COMPLETED)
-        );
+        switch (document.type) {
+          case DocumentType.PIDP_COLLECTION_NOTICE:
+            return true;
+
+          case DocumentType.USER_ACCESS_AGREEMENT:
+            return (
+              status?.userAccessAgreement.statusCode === StatusCode.COMPLETED
+            );
+
+          case DocumentType.SA_EFORMS_COLLECTION_NOTICE:
+            return status?.saEforms.statusCode === StatusCode.COMPLETED;
+
+          case DocumentType.UCI_COLLECTION_NOTICE:
+            return status?.uci.statusCode === StatusCode.COMPLETED;
+
+          case DocumentType.MS_TEAMS_DECLARATION_AGREEMENT:
+          case DocumentType.MS_TEAMS_DETAILS_AGREEMENT:
+          case DocumentType.MS_TEAMS_IT_SECURITY_AGREEMENT:
+            return status?.msTeams.statusCode === StatusCode.COMPLETED;
+
+          default:
+            return false;
+        }
       })
       .map((document) => ({
         ...document,

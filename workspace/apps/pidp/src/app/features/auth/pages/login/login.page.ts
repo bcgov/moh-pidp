@@ -8,31 +8,48 @@ import {
   DashboardHeaderConfig,
   DialogOptions,
   HtmlComponent,
+  PidpViewport,
+  ViewportService,
 } from '@bcgov/shared/ui';
 import { ConfirmDialogComponent } from '@bcgov/shared/ui';
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';
 import { DocumentService } from '@app/core/services/document.service';
+import { AdminRoutes } from '@app/features/admin/admin.routes';
 
 import { IdentityProvider } from '../../enums/identity-provider.enum';
 import { AuthService } from '../../services/auth.service';
 
+export interface LoginPageRouteData {
+  title: string;
+  isAdminLogin: boolean;
+}
 @Component({
   selector: 'app-login',
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
 })
 export class LoginPage {
+  public viewportOptions = PidpViewport;
+
   public title: string;
   public headerConfig: DashboardHeaderConfig;
   public loginCancelled: boolean;
+  public bcscAppDownload: string;
   public bcscSupportUrl: string;
   public bcscMobileSetupUrl: string;
   public specialAuthorityUrl: string;
+  public prescriptionRenewalSupportUrl: string;
   public providerIdentitySupportEmail: string;
-  public idpHint: IdentityProvider;
+  public isAdminLogin: boolean;
 
   public IdentityProvider = IdentityProvider;
+
+  public viewport = PidpViewport.xsmall;
+  public isMobileTitleVisible = this.viewport === PidpViewport.xsmall;
+  public isWebTitleVisible = this.viewport !== PidpViewport.xsmall;
+  public isPidpLogoVisible = this.viewport !== PidpViewport.xsmall;
+  public hcimWebHeaderColor: 'white' | 'grey' = 'grey';
 
   public constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
@@ -40,19 +57,50 @@ export class LoginPage {
     private route: ActivatedRoute,
     private router: Router,
     private dialog: MatDialog,
-    private documentService: DocumentService
+    private documentService: DocumentService,
+    private viewportService: ViewportService
   ) {
     const routeSnapshot = this.route.snapshot;
 
-    this.title = routeSnapshot.data.title;
+    const routeData = routeSnapshot.data.loginPageData as LoginPageRouteData;
+
+    this.title = routeData.title;
     this.headerConfig = { theme: 'dark', allowMobileToggle: false };
     this.loginCancelled = routeSnapshot.queryParams.action === 'cancelled';
+    this.bcscAppDownload = this.config.urls.bcscAppDownload;
     this.bcscSupportUrl = this.config.urls.bcscSupport;
     this.bcscMobileSetupUrl = this.config.urls.bcscMobileSetup;
     this.specialAuthorityUrl = this.config.urls.specialAuthority;
+    this.prescriptionRenewalSupportUrl = this.config.urls.prescriptionRenewal;
     this.providerIdentitySupportEmail =
       this.config.emails.providerIdentitySupport;
-    this.idpHint = routeSnapshot.data.idpHint;
+    this.isAdminLogin = routeData.isAdminLogin;
+
+    this.viewportService.viewportBroadcast$.subscribe((viewport) =>
+      this.onViewportChange(viewport)
+    );
+  }
+  private onViewportChange(viewport: PidpViewport): void {
+    this.viewport = viewport;
+
+    switch (this.viewport) {
+      case PidpViewport.xsmall:
+        this.isMobileTitleVisible = true;
+        this.isWebTitleVisible = false;
+        this.isPidpLogoVisible = false;
+        this.hcimWebHeaderColor = 'grey';
+        break;
+      case PidpViewport.small:
+      case PidpViewport.medium:
+      case PidpViewport.large:
+        this.isMobileTitleVisible = false;
+        this.isWebTitleVisible = true;
+        this.isPidpLogoVisible = true;
+        this.hcimWebHeaderColor = 'white';
+        break;
+      default:
+        throw 'not implemented: ' + this.viewport;
+    }
   }
 
   public onScrollToAnchor(): void {
@@ -62,9 +110,9 @@ export class LoginPage {
     });
   }
 
-  public onLogin(idpHint?: IdentityProvider): void {
-    if (this.idpHint === IdentityProvider.IDIR) {
-      this.login(this.idpHint);
+  public onLogin(idpHint: IdentityProvider): void {
+    if (idpHint === IdentityProvider.IDIR) {
+      this.login(idpHint);
       return;
     }
 
@@ -78,18 +126,21 @@ export class LoginPage {
     this.dialog
       .open(ConfirmDialogComponent, { data })
       .afterClosed()
-      .pipe(
-        exhaustMap((result) =>
-          result ? this.login(idpHint ?? this.idpHint) : EMPTY
-        )
-      )
+      .pipe(exhaustMap((result) => (result ? this.login(idpHint) : EMPTY)))
       .subscribe();
   }
 
   private login(idpHint: IdentityProvider): Observable<void> {
+    const endorsementToken =
+      this.route.snapshot.queryParamMap.get('endorsement-token');
     return this.authService.login({
       idpHint: idpHint,
-      redirectUri: this.config.applicationUrl,
+      redirectUri:
+        this.config.applicationUrl +
+        (this.route.snapshot.routeConfig?.path === 'admin'
+          ? '/' + AdminRoutes.MODULE_PATH
+          : '') +
+        (endorsementToken ? `?endorsement-token=${endorsementToken}` : ''),
     });
   }
 }

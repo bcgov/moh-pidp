@@ -1,7 +1,7 @@
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { Injectable } from '@angular/core';
 
-import { Observable, map } from 'rxjs';
+import { BehaviorSubject, Observable, map } from 'rxjs';
 
 /**
  * @description
@@ -17,18 +17,81 @@ export const BootstrapBreakpoints = {
   mobile: '(min-width: 0px) and (max-width: 767.98px)',
   tablet: '(min-width: 768px) and (max-width: 991.98px)',
 };
-
-@Injectable()
+export const PidpBreakpoints = {
+  xsmall: '(min-width: 0px) and (max-width: 640px)',
+  small: '(min-width: 641px) and (max-width: 1023px)',
+  medium: '(min-width: 1024px) and (max-width: 1199px)',
+  large: '(min-width: 1200px)',
+};
+export enum PidpViewport {
+  /**
+   * Roughly corresponds to mobile
+   */
+  xsmall,
+  /**
+   * Roughly corresponds to tablet in portrait mode
+   */
+  small,
+  /**
+   * Roughly corresponds to tablet in landscape mode
+   */
+  medium,
+  /**
+   * Roughly corresponds to desktop
+   */
+  large,
+}
+@Injectable({
+  providedIn: 'root',
+})
 export class ViewportService {
   public breakpointObserver$: Observable<BreakpointState>;
 
-  public constructor(private breakpointObserver: BreakpointObserver) {
+  public pidpBreakpointObserver$: Observable<BreakpointState>;
+  public viewport = PidpViewport.xsmall;
+  public viewportSubject = new BehaviorSubject<PidpViewport>(this.viewport);
+  public viewportBroadcast$ = this.viewportSubject.asObservable();
+
+  public constructor(
+    private breakpointObserver: BreakpointObserver,
+    private pidpBreakpointObserver: BreakpointObserver
+  ) {
     this.breakpointObserver$ = breakpointObserver.observe([
       BootstrapBreakpoints.medium,
       BootstrapBreakpoints.large,
       BootstrapBreakpoints.mobile,
       BootstrapBreakpoints.tablet,
     ]);
+
+    // Set up the breakpoint observer.
+    this.pidpBreakpointObserver$ = this.pidpBreakpointObserver.observe([
+      PidpBreakpoints.xsmall,
+      PidpBreakpoints.small,
+      PidpBreakpoints.medium,
+      PidpBreakpoints.large,
+    ]);
+
+    // Subscribe to the breakpoint observer.
+    this.pidpBreakpointObserver$.subscribe(() => this.onBreakpointChange());
+  }
+
+  private onBreakpointChange(): void {
+    if (this.pidpBreakpointObserver.isMatched(PidpBreakpoints.xsmall)) {
+      this.setViewport(PidpViewport.xsmall);
+    } else if (this.pidpBreakpointObserver.isMatched(PidpBreakpoints.small)) {
+      this.setViewport(PidpViewport.small);
+    } else if (this.pidpBreakpointObserver.isMatched(PidpBreakpoints.medium)) {
+      this.setViewport(PidpViewport.medium);
+    } else {
+      this.setViewport(PidpViewport.large);
+    }
+  }
+  private setViewport(viewport: PidpViewport): void {
+    // If the viewport has changed, notify observers.
+    if (this.viewport !== viewport) {
+      this.viewport = viewport;
+      this.viewportSubject.next(this.viewport);
+    }
   }
 
   public get isMobileBreakpoint(): boolean {

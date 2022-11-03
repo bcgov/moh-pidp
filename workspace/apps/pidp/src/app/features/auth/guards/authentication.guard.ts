@@ -19,7 +19,12 @@ export abstract class AuthenticationGuard extends AuthGuard {
     routeRedirect: string | undefined
   ): (authenticated: boolean) => boolean | UrlTree {
     return (authenticated: boolean): boolean | UrlTree =>
-      authenticated ? true : this.router.createUrlTree([routeRedirect ?? '/']);
+      authenticated
+        ? true
+        : this.router.createUrlTree([routeRedirect ?? '/'], {
+          queryParams: this.router.getCurrentNavigation()?.extractedUrl.queryParams,
+          queryParamsHandling: 'merge'
+        });
   }
 
   protected handleAccessError(): boolean {

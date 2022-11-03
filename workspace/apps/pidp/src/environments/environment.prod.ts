@@ -2,9 +2,20 @@ import { driverFitnessSupportEmail } from '@app/features/access/pages/driver-fit
 import { hcimWebAccountTransferSupport } from '@app/features/access/pages/hcim-account-transfer/hcim-account-transfer-constants';
 import { hcimWebEnrolmentSupport } from '@app/features/access/pages/hcim-enrolment/hcim-enrolment-constants';
 import {
+  doctorsTechnologyOfficeEmail,
+  doctorsTechnologyOfficeUrl,
+  msTeamsSupportEmail,
+} from '@app/features/access/pages/ms-teams/ms-teams.constants';
+import {
+  phsaInformationAccessAndPrivacyOfficeEmail,
+  prescriptionRefillRequestEformsSupportEmail,
+  prescriptionRenewalEformsSupportUrl,
+} from '@app/features/access/pages/prescription-refill-eforms/prescription-refill-eforms.constants';
+import {
   specialAuthorityEformsSupportEmail,
   specialAuthorityUrl,
 } from '@app/features/access/pages/sa-eforms/sa-eforms.constants';
+import { uciSupportEmail } from '@app/features/access/pages/uci/uci.constants';
 
 import { AppEnvironment, EnvironmentName } from './environment.model';
 
@@ -28,12 +39,22 @@ export const environment: AppEnvironment = {
     specialAuthorityEformsSupport: specialAuthorityEformsSupportEmail,
     hcimAccountTransferSupport: hcimWebAccountTransferSupport,
     hcimEnrolmentSupport: hcimWebEnrolmentSupport,
+    prescriptionRefillRequestEformsSupport:
+      prescriptionRefillRequestEformsSupportEmail,
     driverFitnessSupport: driverFitnessSupportEmail,
+    uciSupport: uciSupportEmail,
+    msTeamsSupport: msTeamsSupportEmail,
+    doctorsTechnologyOfficeSupport: doctorsTechnologyOfficeEmail,
+    phsaInformationAccessAndPrivacyOffice:
+      phsaInformationAccessAndPrivacyOfficeEmail,
   },
   urls: {
+    bcscAppDownload: `https://www2.gov.bc.ca/gov/content/governments/government-id/bcservicescardapp/download-app`,
     bcscSupport: `https://www2.gov.bc.ca/gov/content/governments/government-id/bcservicescardapp/help`,
     bcscMobileSetup: 'https://id.gov.bc.ca/account',
     specialAuthority: specialAuthorityUrl,
+    doctorsTechnologyOffice: doctorsTechnologyOfficeUrl,
+    prescriptionRenewal: prescriptionRenewalEformsSupportUrl,
   },
   keycloakConfig: {
     config: {

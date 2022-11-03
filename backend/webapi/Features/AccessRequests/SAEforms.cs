@@ -6,15 +6,17 @@ using Microsoft.EntityFrameworkCore;
 using NodaTime;
 
 using Pidp.Data;
-using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.HttpClients.Keycloak;
 using Pidp.Infrastructure.HttpClients.Mail;
 using Pidp.Infrastructure.HttpClients.Plr;
 using Pidp.Infrastructure.Services;
 using Pidp.Models;
+using Pidp.Models.Lookups;
 
 public class SAEforms
 {
+    public static IdentifierType[] ExcludedIdentifierTypes => new[] { IdentifierType.PharmacyTech };
+
     public class Command : ICommand<IDomainResult>
     {
         public int PartyId { get; set; }
@@ -56,24 +58,25 @@ public class SAEforms
                 .Where(party => party.Id == command.PartyId)
                 .Select(party => new
                 {
-                    AlreadyEnroled = party.AccessRequests.Any(request => request.AccessType == AccessType.SAEforms),
+                    AlreadyEnroled = party.AccessRequests.Any(request => request.AccessTypeCode == AccessTypeCode.SAEforms),
                     party.UserId,
                     party.Email,
                     party.FirstName,
-                    party.PartyCertification!.Ipc,
+                    party.Cpn,
                 })
                 .SingleAsync();
 
             if (dto.AlreadyEnroled
                 || dto.Email == null
-                || dto.Ipc == null
-                || (await this.plrClient.GetRecordStatus(dto.Ipc))?.IsGoodStanding() != true)
+                || !(await this.plrClient.GetStandingsDigestAsync(dto.Cpn))
+                    .Excluding(ExcludedIdentifierTypes)
+                    .HasGoodStanding)
             {
                 this.logger.LogSAEformsAccessRequestDenied();
                 return DomainResult.Failed();
             }
 
-            if (!await this.keycloakClient.AssignClientRole(dto.UserId, Resources.SAEforms, Roles.SAEforms))
+            if (!await this.keycloakClient.AssignClientRole(dto.UserId, MohClients.SAEforms.ClientId, MohClients.SAEforms.AccessRole))
             {
                 return DomainResult.Failed();
             }
@@ -81,7 +84,7 @@ public class SAEforms
             this.context.AccessRequests.Add(new AccessRequest
             {
                 PartyId = command.PartyId,
-                AccessType = AccessType.SAEforms,
+                AccessTypeCode = AccessTypeCode.SAEforms,
                 RequestedOn = this.clock.GetCurrentInstant()
             });
 
@@ -94,7 +97,7 @@ public class SAEforms
 
         private async Task SendConfirmationEmailAsync(string partyEmail, string firstName)
         {
-            var link = $"<a href=\"https://www.eforms.healthbc.org/login?sat=true\" target=\"_blank\" rel=\"noopener noreferrer\">link</a>";
+            var link = $"<a href=\"https://www.eforms.healthbc.org/login\" target=\"_blank\" rel=\"noopener noreferrer\">link</a>";
             var email = new Email(
                 from: EmailService.PidpEmail,
                 to: partyEmail,

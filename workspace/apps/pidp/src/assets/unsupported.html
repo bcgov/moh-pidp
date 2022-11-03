@@ -63,34 +63,33 @@
        * @description
        * Log unsupported browser information to the server.
        */
-      // TODO logging should be accomplished through sentry not through our API
-      // $.get('/assets/environment.json')
-      //   .then(
-      //     function (configMap) {
-      //       return configMap.apiEndpoint;
-      //     },
-      //     function () {
-      //       return 'http://localhost:5000/api';
-      //     }
-      //   )
-      //   .always(function (apiEndpoint) {
-      //     var browser = getBrowserByUserAgent();
-      //     var log = {
-      //       message: 'Unsupported Browser: ' + browser.name,
-      //       data: JSON.stringify(browser.userAgent + window.location.search),
-      //       logType: 1
-      //     };
-      //     $.ajax({
-      //       type: 'POST',
-      //       url: apiEndpoint + '/client-logs',
-      //       data: JSON.stringify(log),
-      //       success: function () {
-      //         console.log('Unsupported browser has been logged');
-      //       },
-      //       contentType: 'application/json; charset=utf-8',
-      //       dataType: 'json',
-      //     });
-      //   });
+      $.get('/assets/environment.json')
+        .then(
+          function (configMap) {
+            return configMap.apiEndpoint;
+          },
+          function () {
+            return 'http://localhost:4200/api';
+          }
+        )
+        .always(function (apiEndpoint) {
+          var browser = getBrowserByUserAgent();
+          var log = {
+            message: 'Unsupported Browser: ' + browser.name,
+            additionalInformation: JSON.stringify(browser.userAgent + window.location.search),
+            logLevel: 1
+          };
+          $.ajax({
+            type: 'POST',
+            url: apiEndpoint + '/client-logs',
+            data: JSON.stringify(log),
+            success: function () {
+              console.log('Unsupported browser has been logged');
+            },
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+          });
+        });
     </script>
 
     <style>
@@ -205,7 +204,7 @@
     <div class="wrapper">
       <div class="header">
         <img
-          src="./images/pidp-logo-blue.svg"
+          src="./images/pidp-logo-white.svg"
           alt="Provider Identity Portal Logo" />
       </div>
       <div class="container-fluid">
