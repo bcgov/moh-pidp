@@ -2,6 +2,8 @@
 // to allow there use throughout the styles
 @import './material/material-palette';
 
+@import './pidp-variables';
+
 @import './palette';
 
 // ---
@@ -33,6 +35,8 @@
 // Vendors is used to include customized vendor styles into the
 // application.
 @import './vendors/vendors';
+
+// Define custom BC Gov fonts.
 
 // NOTE: woff2 is provided for very modern browsers.
 //       wodd if provided for modern browsers.
