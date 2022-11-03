@@ -4,7 +4,7 @@
 </ui-dashboard-header>
 
 <div class="container">
-  <ng-container *ngIf="idpHint === IdentityProvider.BCSC; else admin">
+  <ng-container *ngIf="!isAdminLogin; else admin">
     <div class="row">
       <div class="col-12">
         <ui-alert
@@ -126,7 +126,7 @@
     <div class="actions">
       <div>Login using:</div>
       <div>
-        <button mat-stroked-button (click)="onLogin()">
+        <button mat-stroked-button (click)="onLogin(IdentityProvider.BCSC)">
           Login with the BC Services Card app
         </button>
         <small>
@@ -153,8 +153,11 @@
           alt="Provider Identity Portal Logo" />
       </div>
       <div class="col-12">
-        <button mat-flat-button color="primary" (click)="onLogin()">
-          {{ idpHint | uppercase }} Login
+        <button
+          mat-flat-button
+          color="primary"
+          (click)="onLogin(IdentityProvider.IDIR)">
+          {{ IdentityProvider.BCSC | uppercase }} Login
         </button>
       </div>
     </div>

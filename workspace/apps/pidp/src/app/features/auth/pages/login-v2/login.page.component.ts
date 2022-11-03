@@ -26,20 +26,18 @@ export interface LoginPageRouteData {
 }
 @Component({
   selector: 'app-login',
-  templateUrl: './login.page.html',
-  styleUrls: ['./login.page.scss'],
+  templateUrl: './login.page.component.html',
+  styleUrls: ['./login.page.component.scss'],
 })
-export class LoginPage {
+export class LoginPageV2Component {
   public viewportOptions = PidpViewport;
 
   public title: string;
   public headerConfig: DashboardHeaderConfig;
   public loginCancelled: boolean;
-  public bcscAppDownload: string;
   public bcscSupportUrl: string;
   public bcscMobileSetupUrl: string;
   public specialAuthorityUrl: string;
-  public prescriptionRenewalSupportUrl: string;
   public providerIdentitySupportEmail: string;
   public isAdminLogin: boolean;
 
@@ -67,11 +65,9 @@ export class LoginPage {
     this.title = routeData.title;
     this.headerConfig = { theme: 'dark', allowMobileToggle: false };
     this.loginCancelled = routeSnapshot.queryParams.action === 'cancelled';
-    this.bcscAppDownload = this.config.urls.bcscAppDownload;
     this.bcscSupportUrl = this.config.urls.bcscSupport;
     this.bcscMobileSetupUrl = this.config.urls.bcscMobileSetup;
     this.specialAuthorityUrl = this.config.urls.specialAuthority;
-    this.prescriptionRenewalSupportUrl = this.config.urls.prescriptionRenewal;
     this.providerIdentitySupportEmail =
       this.config.emails.providerIdentitySupport;
     this.isAdminLogin = routeData.isAdminLogin;
