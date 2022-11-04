@@ -1,0 +1,59 @@
+@use 'pidp-variables' as pidp;
+$lightgrey: #f2f2f2;
+$darkgrey: pidp.$bcgov-color-text;
+
+.viewport-all {
+  .header {
+    background-color: $lightgrey;
+  }
+  & .licences-box {
+    & .licences-licence-box {
+      border: solid 1px $darkgrey;
+      border-radius: 4px;
+      & .licence-icon-box {
+        background-color: $lightgrey;
+      }
+    }
+  }
+}
+.viewport-large {
+  display: flex;
+  flex-direction: column;
+  max-width: 800px;
+  & .header {
+    padding: 6px 20px;
+  }
+  & .info-box {
+    & .info-here {
+      margin-bottom: 0;
+    }
+  }
+  & .licences-box {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    & .licences-licence-box {
+      display: flex;
+      height: 100px;
+      & .licence-icon-box {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100px;
+      }
+
+      & .licence-detail-box {
+        flex: 1;
+        padding: 20px;
+        display: flex;
+        align-items: center;
+
+        & .licence-detail-content {
+          flex: 1;
+          display: grid;
+          grid-template-columns: 50% 50%;
+        }
+      }
+    }
+  }
+}
