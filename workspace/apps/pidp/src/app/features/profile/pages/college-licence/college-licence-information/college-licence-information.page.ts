@@ -19,9 +19,10 @@ export class CollegeLicenceInformationPage implements OnInit {
   public title: string;
   public collegeCertifications$!: Observable<CollegeCertification[]>;
 
+  // TODO: 397. Remove this temporary data.
   public get temp(): Observable<CollegeCertification[]> {
     const cert: CollegeCertification = {
-      collegeId: 'ABCDE',
+      collegeId: 'NOTREAL',
       identifierType: 'PHID',
       providerRoleType: undefined,
       statusCode: 'ACTIVE',
@@ -38,7 +39,7 @@ export class CollegeLicenceInformationPage implements OnInit {
       collegeId: '8345F',
       identifierType: 'PHID',
       providerRoleType: undefined,
-      statusCode: 'ACTIVE',
+      statusCode: 'DISINTEGRATED',
       statusStartDate: undefined,
     };
     return of([cert, cert2, cert3]);

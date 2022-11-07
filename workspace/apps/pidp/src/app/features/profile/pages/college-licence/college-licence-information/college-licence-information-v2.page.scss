@@ -40,6 +40,9 @@ $darkgrey: pidp.$bcgov-color-text;
         justify-content: center;
         align-items: center;
         width: 100px;
+        & .licence-icon-image {
+          font-size: 45px;
+        }
       }
 
       & .licence-detail-box {

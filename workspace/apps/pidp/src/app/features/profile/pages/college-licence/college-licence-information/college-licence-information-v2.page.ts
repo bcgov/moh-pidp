@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
+import { faStethoscope } from '@fortawesome/free-solid-svg-icons';
+
 import { PartyService } from '@app/core/party/party.service';
 import { LoggerService } from '@app/core/services/logger.service';
 
@@ -16,6 +18,8 @@ export class CollegeLicenceInformationV2Page
   extends CollegeLicenceInformationPage
   implements OnInit
 {
+  public faStethoscope = faStethoscope;
+
   public constructor(
     resource: CollegeLicenceInformationResource,
 

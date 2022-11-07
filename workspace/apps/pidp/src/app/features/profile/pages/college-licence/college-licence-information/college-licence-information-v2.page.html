@@ -13,7 +13,12 @@
     <div
       *ngFor="let certification of temp | async"
       class="licences-licence-box">
-      <div class="licence-icon-box">ICON</div>
+      <div class="licence-icon-box">
+        <fa-icon
+          class="licence-icon-image"
+          [fixedWidth]="true"
+          [icon]="faStethoscope"></fa-icon>
+      </div>
       <div class="licence-detail-box">
         <div class="licence-detail-content">
           <app-college-licence-information-detail
