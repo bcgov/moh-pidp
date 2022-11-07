@@ -19,32 +19,6 @@ export class CollegeLicenceInformationPage implements OnInit {
   public title: string;
   public collegeCertifications$!: Observable<CollegeCertification[]>;
 
-  // TODO: 397. Remove this temporary data.
-  public get temp(): Observable<CollegeCertification[]> {
-    const cert: CollegeCertification = {
-      collegeId: 'NOTREAL',
-      identifierType: 'PHID',
-      providerRoleType: undefined,
-      statusCode: 'ACTIVE',
-      statusStartDate: undefined,
-    };
-    const cert2: CollegeCertification = {
-      collegeId: '90001',
-      identifierType: 'PHID',
-      providerRoleType: undefined,
-      statusCode: 'TERMINATED',
-      statusStartDate: undefined,
-    };
-    const cert3: CollegeCertification = {
-      collegeId: '8345F',
-      identifierType: 'PHID',
-      providerRoleType: undefined,
-      statusCode: 'DISINTEGRATED',
-      statusStartDate: undefined,
-    };
-    return of([cert, cert2, cert3]);
-  }
-
   public constructor(
     private route: ActivatedRoute,
     private router: Router,
