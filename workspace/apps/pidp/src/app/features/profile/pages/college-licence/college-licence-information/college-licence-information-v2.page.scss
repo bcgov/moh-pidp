@@ -25,8 +25,9 @@ $darkgrey: pidp.$bcgov-color-text;
     padding: 6px 20px;
   }
   & .info-box {
+    margin: 10px 0;
     & .info-here {
-      margin-bottom: 0;
+      margin-bottom: 6px;
     }
   }
   & .licences-box {
@@ -35,20 +36,20 @@ $darkgrey: pidp.$bcgov-color-text;
     gap: 20px;
     & .licences-licence-box {
       display: flex;
-      height: 100px;
+      height: 125px;
       & .licence-icon-box {
         display: flex;
         justify-content: center;
         align-items: center;
-        width: 100px;
+        width: 125px;
         & .licence-icon-image {
-          font-size: 45px;
+          font-size: 50px;
         }
       }
 
       & .licence-detail-box {
         flex: 1;
-        padding: 20px;
+        padding: 20px 30px;
         display: flex;
         align-items: center;
 
@@ -56,6 +57,7 @@ $darkgrey: pidp.$bcgov-color-text;
           flex: 1;
           display: grid;
           grid-template-columns: 50% 50%;
+          grid-gap: 3px;
         }
       }
     }
