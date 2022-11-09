@@ -4,7 +4,7 @@
 </ui-dashboard-header>
 
 <div class="container">
-  <ng-container *ngIf="idpHint === IdentityProvider.BCSC; else admin">
+  <ng-container *ngIf="!isAdminLogin; else admin">
     <div class="row">
       <div class="col-12">
         <ui-alert
@@ -99,6 +99,21 @@
               <p>For existing users of the HCIMWeb Application.</p>
             </ui-page-section>
           </ui-page-section>
+
+          <ui-page-section>
+            <h3>Prescription Renewal Support eForm</h3>
+            <p>
+              Pharmacists can enrol for access to the Prescription Renewal
+              Support eForm. You need to set up the
+              <a uiAnchor [attr.href]="bcscAppDownload">BC Services Card app</a>
+              to enrol. You will use the app each time you access the
+              Prescription Renewal Support e-Form. See
+              <a uiAnchor [attr.href]="prescriptionRenewalSupportUrl"
+                >Prescription Renewal Support</a
+              >
+              for more information.
+            </p>
+          </ui-page-section>
         </div>
       </div>
       <div class="col-12 col-xl-auto hide-on-small-viewports">
@@ -111,7 +126,7 @@
     <div class="actions">
       <div>Login using:</div>
       <div>
-        <button mat-stroked-button (click)="onLogin()">
+        <button mat-stroked-button (click)="onLogin(IdentityProvider.BCSC)">
           Login with the BC Services Card app
         </button>
         <small>
@@ -138,8 +153,11 @@
           alt="Provider Identity Portal Logo" />
       </div>
       <div class="col-12">
-        <button mat-flat-button color="primary" (click)="onLogin()">
-          {{ idpHint | uppercase }} Login
+        <button
+          mat-flat-button
+          color="primary"
+          (click)="onLogin(IdentityProvider.IDIR)">
+          {{ IdentityProvider.BCSC | uppercase }} Login
         </button>
       </div>
     </div>

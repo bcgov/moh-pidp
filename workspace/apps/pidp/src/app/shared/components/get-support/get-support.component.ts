@@ -50,7 +50,7 @@ export class GetSupportComponent implements OnInit {
         email: this.config.emails.specialAuthorityEformsSupport,
       },
       {
-        name: 'Prescription Refill Request eForm',
+        name: 'Prescription Renewal Support eForm',
         email: this.config.emails.prescriptionRefillRequestEformsSupport,
       },
       {

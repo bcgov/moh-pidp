@@ -25,10 +25,6 @@ const routes: Routes = [
   },
   {
     path: AccessRoutes.PRESCRIPTION_REFILL_EFORMS,
-    canActivate: [PermissionsGuard],
-    data: {
-      roles: [Role.FEATURE_PIDP_DEMO],
-    },
     loadChildren: (): Promise<PrescriptionRefillEformsModule> =>
       import(
         './pages/prescription-refill-eforms/prescription-refill-eforms.module'
