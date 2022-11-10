@@ -4,6 +4,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { Observable, catchError, map, of } from 'rxjs';
 
+import { faStethoscope } from '@fortawesome/free-solid-svg-icons';
+
 import { PartyService } from '@app/core/party/party.service';
 import { LoggerService } from '@app/core/services/logger.service';
 
@@ -16,6 +18,8 @@ import { CollegeLicenceInformationResource } from './college-licence-information
   styleUrls: ['./college-licence-information.page.scss'],
 })
 export class CollegeLicenceInformationPage implements OnInit {
+  public faStethoscope = faStethoscope;
+
   public title: string;
   public collegeCertifications$!: Observable<CollegeCertification[]>;
 
