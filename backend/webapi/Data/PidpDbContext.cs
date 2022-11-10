@@ -12,6 +12,7 @@ public class PidpDbContext : DbContext
     public PidpDbContext(DbContextOptions<PidpDbContext> options, IClock clock) : base(options) => this.clock = clock;
 
     public DbSet<AccessRequest> AccessRequests { get; set; } = default!;
+    public DbSet<BusinessEvent> BusinessEvents { get; set; } = default!;
     public DbSet<ClientLog> ClientLogs { get; set; } = default!;
     public DbSet<EmailLog> EmailLogs { get; set; } = default!;
     public DbSet<EndorsementRelationship> EndorsementRelationships { get; set; } = default!;
@@ -45,6 +46,7 @@ public class PidpDbContext : DbContext
         base.OnModelCreating(modelBuilder);
 
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(PidpDbContext).Assembly);
+        modelBuilder.Entity<PartyNotInPlr>(); // We must make the context aware of types. Since business events are not referenced on any models and we don't want to make a DB Set for each type of event; here we are.
     }
 
     private void ApplyAudits()
