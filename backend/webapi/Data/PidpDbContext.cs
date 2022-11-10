@@ -49,10 +49,8 @@ public class PidpDbContext : DbContext
 
     private void ApplyAudits()
     {
-        this.ChangeTracker.DetectChanges();
-        var updated = this.ChangeTracker.Entries()
-            .Where(x => x.Entity is BaseAuditable
-                && (x.State == EntityState.Added || x.State == EntityState.Modified));
+        var updated = this.ChangeTracker.Entries<BaseAuditable>()
+            .Where(x => x.State is EntityState.Added or EntityState.Modified);
 
         var currentInstant = this.clock.GetCurrentInstant();
 
