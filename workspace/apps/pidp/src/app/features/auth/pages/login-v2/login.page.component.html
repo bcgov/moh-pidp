@@ -115,15 +115,15 @@
         [headerColor]="hcimWebHeaderColor"
         [webpImageUrls]="[
           '/assets/images/login-laptop-mobile-1200x200.webp',
-          '/assets/images/login-laptop-medium-141x302.webp',
-          '/assets/images/login-laptop-medium-141x302.webp',
-          '/assets/images/login-laptop-desktop-280x600.webp'
+          '/assets/images/login-laptop-small-70x326.webp',
+          '/assets/images/login-laptop-medium-70x302.webp',
+          '/assets/images/login-laptop-desktop-140x600.webp'
         ]"
         [jpegImageUrls]="[
           '/assets/images/login-laptop-mobile-1200x200.jpg',
-          '/assets/images/login-laptop-medium-141x302.jpg',
-          '/assets/images/login-laptop-medium-141x302.jpg',
-          '/assets/images/login-laptop-desktop-280x600.jpg'
+          '/assets/images/login-laptop-small-70x326.jpg',
+          '/assets/images/login-laptop-medium-70x302.jpg',
+          '/assets/images/login-laptop-desktop-140x600.jpg'
         ]">
         <ng-container *ngTemplateOutlet="pharmacareEforms"></ng-container>
       </app-auth-system-card>
@@ -134,17 +134,37 @@
         headerColor="white"
         [webpImageUrls]="[
           '/assets/images/login-people-mobile-1200x200.webp',
-          '/assets/images/login-people-medium-141x302.webp',
-          '/assets/images/login-people-medium-141x302.webp',
-          '/assets/images/login-people-desktop-280x600.webp'
+          '/assets/images/login-people-small-70x326.webp',
+          '/assets/images/login-people-medium-70x302.webp',
+          '/assets/images/login-people-desktop-140x600.webp'
         ]"
         [jpegImageUrls]="[
           '/assets/images/login-people-mobile-1200x200.jpg',
-          '/assets/images/login-people-medium-141x302.jpg',
-          '/assets/images/login-people-medium-141x302.jpg',
-          '/assets/images/login-people-desktop-280x600.jpg'
+          '/assets/images/login-people-small-70x326.jpg',
+          '/assets/images/login-people-medium-70x302.jpg',
+          '/assets/images/login-people-desktop-140x600.jpg'
         ]">
         <ng-container *ngTemplateOutlet="hcimWeb"></ng-container>
+      </app-auth-system-card>
+      <app-auth-system-card
+        class="systems-card"
+        titleText="Prescription Renewal Support eForm"
+        imageTitleText=""
+        headerColor="white"
+        [webpImageUrls]="[
+          '/assets/images/login-prescription-mobile-1200x200.webp',
+          '/assets/images/login-prescription-small-70x326.webp',
+          '/assets/images/login-prescription-medium-70x302.webp',
+          '/assets/images/login-prescription-desktop-140x600.webp'
+        ]"
+        [jpegImageUrls]="[
+          '/assets/images/login-prescription-mobile-1200x200.jpg',
+          '/assets/images/login-prescription-small-70x326.jpg',
+          '/assets/images/login-prescription-medium-70x302.jpg',
+          '/assets/images/login-prescription-desktop-140x600.jpg'
+        ]">
+        <ng-container
+          *ngTemplateOutlet="prescriptionRefillEforms"></ng-container>
       </app-auth-system-card>
       <ng-container *ngTemplateOutlet="comingSoon"></ng-container>
     </div>
