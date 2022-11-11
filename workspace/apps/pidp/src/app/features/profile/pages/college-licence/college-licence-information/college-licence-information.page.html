@@ -1,32 +1,48 @@
-<ui-page>
-  <ui-page-header>{{ title }}</ui-page-header>
-
-  <div class="row">
+<section class="component-container viewport-all viewport-large">
+  <h2 class="header">All licence information found in our records</h2>
+  <div class="info-box">
+    <p class="info-here">
+      Here you can view your licence information and status.
+    </p>
+    <p class="info-confirm">
+      If any of this information is incorrect, please contact your regulatory
+      college.
+    </p>
+  </div>
+  <div class="licences-box">
     <div
-      *ngFor="let collegeCertification of collegeCertifications$ | async"
-      class="col-12">
-      <strong>Identifier Type</strong>
-      <p>{{ collegeCertification.identifierType ?? 'Not Available' }}</p>
-      <strong>College Id</strong>
-      <p>{{ collegeCertification.collegeId ?? 'Not Available' }}</p>
-      <strong>Provider Role Type</strong>
-      <p>{{ collegeCertification.providerRoleType ?? 'Not Available' }}</p>
-      <strong>Status Code</strong>
-      <p>{{ collegeCertification.statusCode ?? 'Not Available' }}</p>
-      <strong>Status Start Date</strong>
-      <p>{{ collegeCertification.statusStartDate ?? 'Not Available' }}</p>
-      <br />
+      *ngFor="let certification of collegeCertifications$ | async"
+      class="licences-licence-box">
+      <div class="licence-icon-box">
+        <fa-icon
+          class="licence-icon-image"
+          [fixedWidth]="true"
+          [icon]="faStethoscope"></fa-icon>
+      </div>
+      <div class="licence-detail-box">
+        <div class="licence-detail-content">
+          <app-college-licence-information-detail
+            class="licence-detail"
+            labelText="Identifier Type:"
+            [valueText]="certification.identifierType"></app-college-licence-information-detail>
+          <app-college-licence-information-detail
+            class="licence-detail"
+            labelText="Status Code:"
+            [valueText]="certification.statusCode"></app-college-licence-information-detail>
+          <app-college-licence-information-detail
+            class="licence-detail"
+            labelText="College ID:"
+            [valueText]="certification.collegeId"></app-college-licence-information-detail>
+          <app-college-licence-information-detail
+            class="licence-detail"
+            labelText="Status Start Date:"
+            [valueText]="certification.statusStartDate"></app-college-licence-information-detail>
+          <app-college-licence-information-detail
+            class="licence-detail"
+            labelText="Provider Role Type:"
+            [valueText]="certification.providerRoleType"></app-college-licence-information-detail>
+        </div>
+      </div>
     </div>
   </div>
-
-  <ui-page-footer mode="reverse">
-    <button
-      mat-stroked-button
-      uiPageFooterAction
-      type="button"
-      color="primary"
-      (click)="onBack()">
-      Back Home
-    </button>
-  </ui-page-footer>
-</ui-page>
+</section>

@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { NgxMaskModule } from 'ngx-mask';
 
 import { AlertActionsDirective } from './components/alert/alert-actions.directive';
@@ -96,12 +97,14 @@ import { SafePipe } from './pipes/safe.pipe';
     MaterialModule,
     NgxMaskModule.forRoot(),
     ReactiveFormsModule,
+    FontAwesomeModule,
   ],
   exports: [
     ContextHelpModule,
     MaterialModule,
     NgxMaskModule,
     ReactiveFormsModule,
+    FontAwesomeModule,
     AlertComponent,
     AlertContentDirective,
     AlertActionsDirective,
