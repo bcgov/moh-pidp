@@ -1,7 +1,10 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Resolve, Router } from '@angular/router';
 
 import { Observable, catchError, exhaustMap, of, throwError } from 'rxjs';
+
+import { RootRoutes } from '@bcgov/shared/ui';
 
 import { ShellRoutes } from '@app/features/shell/shell.routes';
 
@@ -37,9 +40,11 @@ export class PartyResolver implements Resolve<number | null> {
           ? of((this.partyService.partyId = partyId))
           : throwError(() => new Error('Party could not be found or created'))
       ),
-      catchError((error: Error) => {
+      catchError((error: HttpErrorResponse) => {
         this.logger.error(error.message);
-        this.router.navigateByUrl(ShellRoutes.SUPPORT_ERROR_PAGE);
+        error.status === 403
+          ? this.router.navigateByUrl(RootRoutes.DENIED)
+          : this.router.navigateByUrl(ShellRoutes.SUPPORT_ERROR_PAGE);
         return of(null);
       })
     );
