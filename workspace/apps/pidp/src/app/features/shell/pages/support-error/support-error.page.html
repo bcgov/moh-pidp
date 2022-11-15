@@ -1,0 +1,16 @@
+<ui-dashboard-header
+  [theme]="headerConfig.theme"
+  [allowMobileToggle]="headerConfig.allowMobileToggle"></ui-dashboard-header>
+<div>
+  <h1>An error has occurred</h1>
+  <p>
+    Need support? Contact
+    <a uiAnchor scheme="mailto" [href]="providerIdentitySupportEmail"></a>
+  </p>
+
+  <span>
+    <button mat-flat-button type="button" color="primary" (click)="onBack()">
+      Back to the Provider Identity Portal
+    </button>
+  </span>
+</div>
