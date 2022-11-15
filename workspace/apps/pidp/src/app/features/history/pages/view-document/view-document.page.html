@@ -1,12 +1,13 @@
 <ui-page>
-  <ui-page-header>{{ title }}</ui-page-header>
+  <ng-container *ngIf="document">
+    <ui-page-header>{{ document.title }}</ui-page-header>
 
-  <ui-page-section>
-    <ui-page-section-subheader [heading]="document.title">
-    </ui-page-section-subheader>
+    <ui-page-section>
+      <p [innerHtml]="document.content | safe: 'html'"></p>
+    </ui-page-section>
+  </ng-container>
 
-    <p [innerHtml]="document.content | safe: 'html'"></p>
-  </ui-page-section>
+  <ng-template appViewDocument></ng-template>
 
   <ui-page-footer mode="reverse">
     <button

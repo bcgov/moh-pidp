@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using NodaTime;
 
 using Pidp.Data;
-using Pidp.Models;
+using Pidp.Models.Lookups;
 
 public class Index
 {
@@ -17,7 +17,7 @@ public class Index
     public class Model
     {
         public int PartyId { get; set; }
-        public AccessType AccessType { get; set; }
+        public AccessTypeCode AccessTypeCode { get; set; }
         public Instant RequestedOn { get; set; }
     }
 
@@ -40,7 +40,7 @@ public class Index
                 .Select(access => new Model
                 {
                     PartyId = access.PartyId,
-                    AccessType = access.AccessType,
+                    AccessTypeCode = access.AccessTypeCode,
                     RequestedOn = access.RequestedOn,
                 })
                 .ToListAsync();

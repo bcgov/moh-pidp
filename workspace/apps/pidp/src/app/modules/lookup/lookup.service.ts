@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 
 import { Observable, map, of } from 'rxjs';
 
-import { UtilsService } from '@core/services/utils.service';
+import { SortUtils } from '@bcgov/shared/utils';
 
 import { LookupResource } from './lookup-resource.service';
 import {
@@ -10,7 +10,7 @@ import {
   Lookup,
   LookupConfig,
   ProvinceLookup,
-} from './lookup.model';
+} from './lookup.types';
 
 export interface ILookupService extends LookupConfig {
   load(): Observable<LookupConfig | null>;
@@ -20,52 +20,71 @@ export interface ILookupService extends LookupConfig {
   providedIn: 'root',
 })
 export class LookupService implements ILookupService {
-  protected lookupConfig: LookupConfig | null;
+  private lookupConfig: LookupConfig | null;
 
-  public constructor(
-    protected lookupResource: LookupResource,
-    protected utilsService: UtilsService
-  ) {
+  public constructor(private lookupResource: LookupResource) {
     this.lookupConfig = null;
   }
 
+  public get accessTypes(): Lookup[] {
+    return this.copyAndSortByKey(this.lookupConfig?.accessTypes);
+  }
+
   public get colleges(): CollegeLookup[] {
-    const colleges = this.lookupConfig?.colleges ?? [];
-    return [...colleges].sort(
-      this.utilsService.sortByKey<CollegeLookup>('code')
-    );
+    return this.copyAndSortByKey<CollegeLookup>(this.lookupConfig?.colleges);
   }
 
   public get countries(): Lookup<string>[] {
-    const countries = this.lookupConfig?.countries ?? [];
-    return countries.length
-      ? [...countries].sort(this.utilsService.sortByKey<Lookup<string>>('name'))
-      : [];
+    return this.copyAndSortByKey<Lookup<string>>(
+      this.lookupConfig?.countries,
+      'name'
+    );
   }
 
   public get provinces(): ProvinceLookup[] {
-    const provinces = this.lookupConfig?.provinces ?? [];
-    return provinces.length
-      ? [...provinces].sort(this.utilsService.sortByKey<ProvinceLookup>('name'))
-      : [];
+    return this.copyAndSortByKey<ProvinceLookup>(
+      this.lookupConfig?.provinces,
+      'name'
+    );
+  }
+
+  public get organizations(): Lookup[] {
+    return this.copyAndSortByKey(this.lookupConfig?.organizations);
+  }
+
+  public get healthAuthorities(): Lookup[] {
+    return this.copyAndSortByKey(this.lookupConfig?.healthAuthorities);
   }
 
   /**
    * @description
-   * Load the runtime lookups.
+   * Load the runtime lookups, otherwise use a locally
+   * cached version of the lookups.
    */
   public load(): Observable<LookupConfig | null> {
-    if (!this.lookupConfig) {
-      return this.lookupResource
-        .getLookups()
-        .pipe(
-          map(
-            (lookupConfig: LookupConfig | null) =>
-              (this.lookupConfig = lookupConfig)
+    return !this.lookupConfig
+      ? this.lookupResource
+          .getLookups()
+          .pipe(
+            map(
+              (lookupConfig: LookupConfig | null) =>
+                (this.lookupConfig = lookupConfig)
+            )
           )
-        );
-    }
+      : of({ ...this.lookupConfig });
+  }
 
-    return of({ ...this.lookupConfig });
+  /**
+   * @description
+   * Make a copy of the lookup so it won't be overwritten by
+   * reference within the service, and then sort by key.
+   */
+  private copyAndSortByKey<T = Lookup>(
+    lookup: T[] | undefined,
+    sortBy: keyof T = 'code' as keyof T
+  ): T[] {
+    return lookup?.length
+      ? [...lookup].sort(SortUtils.sortByKey<T>(sortBy))
+      : [];
   }
 }

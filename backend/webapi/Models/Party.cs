@@ -32,11 +32,15 @@ public class Party : BaseAuditable, IOwnedResource
 
     public PartyAccessAdministrator? AccessAdministrator { get; set; }
 
-    public PartyCertification? PartyCertification { get; set; }
+    public string? Cpn { get; set; }
+
+    public PartyLicenceDeclaration? LicenceDeclaration { get; set; }
 
     public string? JobTitle { get; set; }
 
     public Facility? Facility { get; set; }
+
+    public PartyOrgainizationDetail? OrgainizationDetail { get; set; }
 
     public ICollection<AccessRequest> AccessRequests { get; set; } = new List<AccessRequest>();
 }

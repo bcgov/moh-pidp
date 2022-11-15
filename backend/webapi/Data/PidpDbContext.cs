@@ -12,13 +12,20 @@ public class PidpDbContext : DbContext
     public PidpDbContext(DbContextOptions<PidpDbContext> options, IClock clock) : base(options) => this.clock = clock;
 
     public DbSet<AccessRequest> AccessRequests { get; set; } = default!;
+    public DbSet<BusinessEvent> BusinessEvents { get; set; } = default!;
+    public DbSet<ClientLog> ClientLogs { get; set; } = default!;
     public DbSet<EmailLog> EmailLogs { get; set; } = default!;
+    public DbSet<EndorsementRelationship> EndorsementRelationships { get; set; } = default!;
+    public DbSet<EndorsementRequest> EndorsementRequests { get; set; } = default!;
+    public DbSet<Endorsement> Endorsements { get; set; } = default!;
     public DbSet<Facility> Facilities { get; set; } = default!;
     public DbSet<HcimAccountTransfer> HcimAccountTransfers { get; set; } = default!;
     public DbSet<HcimEnrolment> HcimEnrolments { get; set; } = default!;
+    public DbSet<MSTeamsEnrolment> MSTeamsEnrolments { get; set; } = default!;
+    public DbSet<PartyLicenceDeclaration> PartyLicenceDeclarations { get; set; } = default!;
     public DbSet<Party> Parties { get; set; } = default!;
     public DbSet<PartyAccessAdministrator> PartyAccessAdministrators { get; set; } = default!;
-    public DbSet<PartyCertification> PartyCertifications { get; set; } = default!;
+    public DbSet<PartyOrgainizationDetail> PartyOrgainizationDetails { get; set; } = default!;
 
     public override int SaveChanges()
     {
@@ -39,14 +46,13 @@ public class PidpDbContext : DbContext
         base.OnModelCreating(modelBuilder);
 
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(PidpDbContext).Assembly);
+        modelBuilder.Entity<PartyNotInPlr>(); // We must make the context aware of types. Since business events are not referenced on any models and we don't want to make a DB Set for each type of event; here we are.
     }
 
     private void ApplyAudits()
     {
-        this.ChangeTracker.DetectChanges();
-        var updated = this.ChangeTracker.Entries()
-            .Where(x => x.Entity is BaseAuditable
-                && (x.State == EntityState.Added || x.State == EntityState.Modified));
+        var updated = this.ChangeTracker.Entries<BaseAuditable>()
+            .Where(x => x.State is EntityState.Added or EntityState.Modified);
 
         var currentInstant = this.clock.GetCurrentInstant();
 

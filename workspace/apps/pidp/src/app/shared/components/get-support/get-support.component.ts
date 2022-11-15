@@ -50,6 +50,10 @@ export class GetSupportComponent implements OnInit {
         email: this.config.emails.specialAuthorityEformsSupport,
       },
       {
+        name: 'Prescription Renewal Support eForm',
+        email: this.config.emails.prescriptionRefillRequestEformsSupport,
+      },
+      {
         name: 'HCIMWeb Account Transfer',
         email: this.config.emails.hcimAccountTransferSupport,
       },
@@ -65,6 +69,20 @@ export class GetSupportComponent implements OnInit {
         {
           name: 'Driver Medical Fitness',
           email: this.config.emails.driverFitnessSupport,
+        }
+      ),
+      ...ArrayUtils.insertIf<SupportProps>(
+        this.permissionsService.hasRole(Role.FEATURE_PIDP_DEMO),
+        {
+          name: 'Unifying Clinical Information (UCI)',
+          email: this.config.emails.uciSupport,
+        }
+      ),
+      ...ArrayUtils.insertIf<SupportProps>(
+        this.permissionsService.hasRole(Role.FEATURE_PIDP_DEMO),
+        {
+          name: 'MS Teams for Clinical Use',
+          email: this.config.emails.msTeamsSupport,
         }
       ),
     ];

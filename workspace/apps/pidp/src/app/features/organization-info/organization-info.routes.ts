@@ -4,6 +4,7 @@ export class OrganizationInfoRoutes {
   public static ADMINISTRATOR_INFO = 'administrator-info';
   public static ORGANIZATION_DETAILS = 'organization-details';
   public static FACILITY_DETAILS = 'facility-details';
+  public static ENDORSEMENTS = 'endorsements';
 
   /**
    * @description

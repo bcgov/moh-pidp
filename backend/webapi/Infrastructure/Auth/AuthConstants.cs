@@ -30,18 +30,17 @@ public static class Policies
     public const string UserOwnsResource = "user-owns-resource-policy";
 }
 
-public static class Resources
+public static class Clients
 {
     public const string PidpApi = "PIDP-SERVICE";
-    public const string SAEforms = "SAT-EFORMS";
 }
 
 public static class Roles
 {
-    // Placeholders
+    // PIdP Role Placeholders
     public const string Admin = "ADMIN";
     public const string User = "USER";
 
-    // External Systems
-    public const string SAEforms = "phsa_eforms_sat";
+    // Service account roles for external access
+    public const string ViewEndorsements = "view_endorsement_data";
 }

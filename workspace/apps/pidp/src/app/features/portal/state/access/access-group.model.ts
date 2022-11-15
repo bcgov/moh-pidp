@@ -1,4 +1,5 @@
 import { Section } from '../section.model';
+import { SaEformsSection } from './sa-eforms-section.model';
 
 /**
  * @description
@@ -8,10 +9,13 @@ import { Section } from '../section.model';
  */
 export const accessSectionKeys = [
   'saEforms',
+  'prescription-refill-eforms',
   'hcimAccountTransfer',
   'hcimEnrolment',
   'sitePrivacySecurityChecklist',
   'driverFitness',
+  'uci',
+  'msTeams',
 ] as const;
 
 /**
@@ -28,18 +32,13 @@ export type IAccessGroup = {
   [K in AccessSectionKey]: Section;
 };
 
-/**
- * @description
- * Type used to ensure adding a new key to the tuple is
- * included in the group interface.
- */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-type CheckGroup<T extends IAccessGroup = AccessGroup> = void;
-
-export interface AccessGroup {
-  saEforms: Section;
+export interface AccessGroup extends IAccessGroup {
+  saEforms: SaEformsSection;
+  prescriptionRefillEforms: Section;
   hcimAccountTransfer: Section;
   hcimEnrolment: Section;
   sitePrivacySecurityChecklist: Section;
   driverFitness: Section;
+  uci: Section;
+  msTeams: Section;
 }

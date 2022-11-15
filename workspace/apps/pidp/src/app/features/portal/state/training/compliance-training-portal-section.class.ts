@@ -36,10 +36,12 @@ export class ComplianceTrainingPortalSection implements IPortalSection {
    * Get the properties that define the action on the section.
    */
   public get action(): PortalSectionAction {
+    const demographicsStatusCode =
+      this.profileStatus.status.demographics.statusCode;
     return {
       label: this.getStatusCode() === StatusCode.COMPLETED ? 'View' : 'Watch',
       route: TrainingRoutes.routePath(TrainingRoutes.COMPLIANCE_TRAINING),
-      disabled: false,
+      disabled: demographicsStatusCode !== StatusCode.COMPLETED,
     };
   }
 

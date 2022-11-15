@@ -10,7 +10,7 @@ using Pidp.Infrastructure.HttpClients.Keycloak;
 using Pidp.Infrastructure.HttpClients.Ldap;
 using Pidp.Infrastructure.HttpClients.Mail;
 using Pidp.Infrastructure.Services;
-using Pidp.Models;
+using Pidp.Models.Lookups;
 
 public class HcimAccountTransfer
 {
@@ -79,8 +79,8 @@ public class HcimAccountTransfer
                 .Where(party => party.Id == command.PartyId)
                 .Select(party => new
                 {
-                    AlreadyEnroled = party.AccessRequests.Any(request => request.AccessType == AccessType.HcimAccountTransfer
-                        || request.AccessType == AccessType.HcimEnrolment),
+                    AlreadyEnroled = party.AccessRequests.Any(request => request.AccessTypeCode == AccessTypeCode.HcimAccountTransfer
+                        || request.AccessTypeCode == AccessTypeCode.HcimEnrolment),
                     DemographicsComplete = party.Email != null && party.Phone != null,
                     party.UserId,
                     party.Email
@@ -116,7 +116,7 @@ public class HcimAccountTransfer
             this.context.HcimAccountTransfers.Add(new Models.HcimAccountTransfer
             {
                 PartyId = command.PartyId,
-                AccessType = AccessType.HcimAccountTransfer,
+                AccessTypeCode = AccessTypeCode.HcimAccountTransfer,
                 RequestedOn = this.clock.GetCurrentInstant(),
                 LdapUsername = command.LdapUsername
             });
@@ -149,7 +149,7 @@ public class HcimAccountTransfer
             var email = new Email(
                 from: EmailService.PidpEmail,
                 to: partyEmail,
-                subject: "HCIM Re-Enrolment Confirmation",
+                subject: "HCIMWeb Account Transfer Confirmation",
                 body: $"You have successfully transferred your HCIMWeb Account. From now on, use {link} to login to HCIMWeb with your organization credential. You may wish to bookmark this link for future use."
             );
 

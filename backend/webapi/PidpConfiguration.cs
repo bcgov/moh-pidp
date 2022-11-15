@@ -8,6 +8,8 @@ public class PidpConfiguration
     public static bool IsDevelopment() => EnvironmentName == Environments.Development;
     private static readonly string? EnvironmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
 
+    public string ApplicationUrl { get; set; } = string.Empty;
+
     public AddressAutocompleteClientConfiguration AddressAutocompleteClient { get; set; } = new();
     public ConnectionStringConfiguration ConnectionStrings { get; set; } = new();
     public ChesClientConfiguration ChesClient { get; set; } = new();
@@ -58,6 +60,7 @@ public class PidpConfiguration
     {
         public string Url { get; set; } = string.Empty;
         public int Port { get; set; }
+        public bool EnableSsl { get; set; }
     }
 
     public class PlrClientConfiguration

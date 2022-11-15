@@ -11,6 +11,7 @@ export const organizationSectionKeys = [
   'organizationDetails',
   'facilityDetails',
   'administratorInfo',
+  'endorsements',
 ] as const;
 
 /**
@@ -27,16 +28,9 @@ export type IOrganizationGroup = {
   [K in OrganizationSectionKey]: Section;
 };
 
-/**
- * @description
- * Type used to ensure adding a new key to the tuple is
- * included in the group interface.
- */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-type CheckGroup<T extends IOrganizationGroup = OrganizationGroup> = void;
-
-export interface OrganizationGroup {
+export interface OrganizationGroup extends IOrganizationGroup {
   organizationDetails: Section;
   facilityDetails: Section;
   administratorInfo: AdministratorInfoSection;
+  endorsements: Section;
 }

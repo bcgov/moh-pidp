@@ -2,9 +2,19 @@ import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { EMPTY, Observable, catchError, of, tap } from 'rxjs';
+import {
+  EMPTY,
+  Observable,
+  Subject,
+  catchError,
+  debounceTime,
+  of,
+  switchMap,
+  tap,
+} from 'rxjs';
 
 import { ToggleContentChange } from '@bcgov/shared/ui';
 
@@ -13,6 +23,7 @@ import { LoggerService } from '@app/core/services/logger.service';
 import { IdentityProvider } from '@app/features/auth/enums/identity-provider.enum';
 import { User } from '@app/features/auth/models/user.model';
 import { AuthorizedUserService } from '@app/features/auth/services/authorized-user.service';
+import { LookupResource } from '@app/modules/lookup/lookup-resource.service';
 
 import { AbstractFormPage } from '@core/classes/abstract-form-page.class';
 import { FormUtilsService } from '@core/services/form-utils.service';
@@ -36,6 +47,9 @@ export class PersonalInformationPage
   public user$: Observable<User>;
   public identityProvider$: Observable<IdentityProvider>;
   public hasPreferredName: boolean;
+  public warningMessage: string;
+  public emailChanged: Subject<null>;
+  public userEmail: string;
 
   public IdentityProvider = IdentityProvider;
 
@@ -48,6 +62,8 @@ export class PersonalInformationPage
     private resource: PersonalInformationResource,
     private authorizedUserService: AuthorizedUserService,
     private logger: LoggerService,
+    private _snackBar: MatSnackBar,
+    private lookupResource: LookupResource,
     fb: FormBuilder
   ) {
     super(dialog, formUtilsService);
@@ -57,6 +73,10 @@ export class PersonalInformationPage
     this.user$ = this.authorizedUserService.user$;
     this.identityProvider$ = this.authorizedUserService.identityProvider$;
     this.hasPreferredName = false;
+    this.warningMessage =
+      'Our system is not familiar with this email address, please double check the spelling. If everything is correct hit save information, and our system will update.';
+    this.emailChanged = new Subject<null>();
+    this.userEmail = '';
   }
 
   public onPreferredNameToggle({ checked }: ToggleContentChange): void {
@@ -64,7 +84,17 @@ export class PersonalInformationPage
   }
 
   public onBack(): void {
+    this._snackBar.dismiss();
     this.navigateToRoot();
+  }
+
+  public onEmailInputChange(emailInput: string): void {
+    this.userEmail = emailInput;
+    this.emailChanged.next(null);
+  }
+
+  public openSnackBar(message: string, action: string): void {
+    this._snackBar.open(message, action);
   }
 
   public ngOnInit(): void {
@@ -73,6 +103,20 @@ export class PersonalInformationPage
       this.logger.error('No party ID was provided');
       return this.navigateToRoot();
     }
+
+    this.emailChanged
+      .pipe(
+        tap(() => this._snackBar.dismiss()),
+        debounceTime(800),
+        switchMap(() =>
+          this.lookupResource.hasCommonEmailDomain(this.userEmail)
+        )
+      )
+      .subscribe((emailFound) => {
+        if (!emailFound) {
+          this.openSnackBar(this.warningMessage, 'Ok');
+        }
+      });
 
     this.resource
       .get(partyId)

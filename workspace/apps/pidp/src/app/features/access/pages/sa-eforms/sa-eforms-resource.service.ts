@@ -1,7 +1,7 @@
-import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
+import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
-import { Observable, catchError, of, throwError } from 'rxjs';
+import { Observable, catchError, throwError } from 'rxjs';
 
 import { NoContent, NoContentResponse } from '@bcgov/shared/data-access';
 
@@ -28,10 +28,6 @@ export class SaEformsResource {
       .pipe(
         NoContentResponse,
         catchError((error: HttpErrorResponse) => {
-          if (error.status === HttpStatusCode.BadRequest) {
-            return of(void 0);
-          }
-
           return throwError(() => error);
         })
       );

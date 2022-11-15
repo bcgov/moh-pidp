@@ -2,6 +2,12 @@
   <ui-page-header>{{ title }}</ui-page-header>
 </ui-page>
 
+<ng-container *ngIf="environment !== production">
+  <button mat-stroked-button type="button" color="warn" (click)="onDelete()">
+    Delete all
+  </button>
+</ng-container>
+
 <table mat-table [dataSource]="dataSource">
   <ng-container matColumnDef="id">
     <th *matHeaderCellDef mat-header-cell>Reference ID</th>

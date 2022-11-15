@@ -53,11 +53,7 @@ public class Startup
             .AsImplementedInterfaces()
             .WithTransientLifetime());
 
-        // TODO Healthchecks
-        // services
-        //     .AddHealthChecks()
-        //     .AddDbContextCheck<PidpDbContext>("DbContextHealthCheck")
-        //     .AddNpgSql(connectionString);
+        services.AddHealthChecks();
 
         services.AddSwaggerGen(options =>
         {
@@ -113,7 +109,7 @@ public class Startup
         app.UseEndpoints(endpoints =>
         {
             endpoints.MapControllers();
-            // endpoints.MapHealthChecks("/health");
+            endpoints.MapHealthChecks("/health/liveness").AllowAnonymous();
         });
     }
 }

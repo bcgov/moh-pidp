@@ -47,6 +47,8 @@ spec:
           env:
             - name: PlrClient__Url
               value: http://{{ $release }}-plr-intake:8080/api
+            - name: ASPNETCORE_ENVIRONMENT
+              value: {{ .Values.aspnetcore.environment }}
             - name: DB_HOST
               valueFrom:
                 configMapKeyRef:
@@ -73,6 +75,8 @@ spec:
               {{- end }}
             - name: ConnectionStrings__PidpDatabase
               value: "Host=$(DB_HOST);Port=5432;Database=$(POSTGRESQL_DATABASE);Username=$(POSTGRESQL_USER);Password=$(POSTGRESQL_PASSWORD)"
+            - name: ApplicationUrl
+              value: "https://{{ if $isProd }}{{else}}{{ $release }}.{{end}}{{ $domain }}"
           envFrom:
             - secretRef:
                 name: keycloak-secrets
@@ -86,10 +90,23 @@ spec:
             - name: http
               containerPort: 8080
               protocol: TCP
-          # livenessProbe:
-          #   httpGet:
-          #     path: /
-          #     port: http
+          livenessProbe:
+            httpGet:
+              path: /health/liveness
+              port: http
+            timeoutSeconds: 1
+            periodSeconds: 10
+            successThreshold: 1
+            failureThreshold: 3
+          startupProbe:
+            httpGet:
+              path: /health/liveness
+              port: http
+              scheme: HTTP
+            timeoutSeconds: 1
+            periodSeconds: 10
+            successThreshold: 1
+            failureThreshold: 30
           # readinessProbe:
           #   httpGet:
           #     path: /
