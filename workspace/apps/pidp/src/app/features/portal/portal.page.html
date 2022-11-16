@@ -1,6 +1,14 @@
 <ui-page mode="large">
   <div class="row">
     <div class="col-12">
+      <button mat-stroked-button routerLink="/link" color="primary">
+        Account Linking POC (Click here!)
+      </button>
+      <br /><br />
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
       <ui-alert
         *ngIf="completedProfile"
         type="success"

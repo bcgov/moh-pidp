@@ -8,6 +8,7 @@ import { Role } from '@app/shared/enums/roles.enum';
 
 import { AccessModule } from '../access/access.module';
 import { AccessRoutes } from '../access/access.routes';
+import { AccountLinkingModule } from '../account-linking/account-linking.module';
 import { AdminModule } from '../admin/admin.module';
 import { AdminRoutes } from '../admin/admin.routes';
 import { AuthModule } from '../auth/auth.module';
@@ -94,6 +95,13 @@ const routes: Routes = [
         path: HistoryRoutes.MODULE_PATH,
         loadChildren: (): Promise<HistoryModule> =>
           import('../history/history.module').then((m) => m.HistoryModule),
+      },
+      {
+        path: 'link',
+        loadChildren: (): Promise<AccountLinkingModule> =>
+          import('../account-linking/account-linking.module').then(
+            (m) => m.AccountLinkingModule
+          ),
       },
       {
         path: '',
