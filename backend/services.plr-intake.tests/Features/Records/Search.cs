@@ -13,27 +13,31 @@ public class SearchTests : InMemoryDbTest
     {
         var record = this.TestDb.Has(new PlrRecord
         {
-            Ipc = "IPC1",
             Cpn = "CPN",
             IdentifierType = "CPSID",
             CollegeId = "12345",
-            ProviderRoleType = "ProviderRoleType",
-            StatusCode = "StatusCode",
-            StatusStartDate = DateTime.Today,
-            StatusReasonCode = "StatusReasonCode",
             DateOfBirth = DateTime.Today
         });
-        this.TestDb.Has(new PlrRecord
+        this.TestDb.HasSome(new PlrRecord
         {
-            Ipc = "DECOY",
-            Cpn = "DECOYCPN",
-            IdentifierType = "CPSID",
+            Cpn = "DecoyIdentifier",
+            IdentifierType = "PHID",
+            CollegeId = record.CollegeId,
+            DateOfBirth = record.DateOfBirth
+        },
+        new PlrRecord
+        {
+            Cpn = "DecoyId",
+            IdentifierType = record.IdentifierType,
             CollegeId = "52345",
-            ProviderRoleType = "DecoyProviderRoleType",
-            StatusCode = "DecoyStatusCode",
-            StatusStartDate = DateTime.Today,
-            StatusReasonCode = "DecoyStatusReasonCode",
-            DateOfBirth = DateTime.Today
+            DateOfBirth = record.DateOfBirth
+        },
+        new PlrRecord
+        {
+            Cpn = "DecoyBirthdate",
+            IdentifierType = record.IdentifierType,
+            CollegeId = record.CollegeId,
+            DateOfBirth = record.DateOfBirth!.Value.AddDays(1)
         });
         var query = new Search.Query
         {
@@ -56,14 +60,9 @@ public class SearchTests : InMemoryDbTest
     {
         var record = this.TestDb.Has(new PlrRecord
         {
-            Ipc = "IPC1",
             Cpn = "CPN",
             IdentifierType = "CPSID",
             CollegeId = dbId,
-            ProviderRoleType = "ProviderRoleType",
-            StatusCode = "StatusCode",
-            StatusStartDate = DateTime.Today,
-            StatusReasonCode = "StatusReasonCode",
             DateOfBirth = DateTime.Today
         });
         var query = new Search.Query
@@ -108,14 +107,9 @@ public class SearchTests : InMemoryDbTest
     {
         var record = this.TestDb.Has(new PlrRecord
         {
-            Ipc = "IPC1",
             Cpn = "CPN",
             IdentifierType = "CPSID",
             CollegeId = dbId,
-            ProviderRoleType = "ProviderRoleType",
-            StatusCode = "StatusCode",
-            StatusStartDate = DateTime.Today,
-            StatusReasonCode = "StatusReasonCode",
             DateOfBirth = DateTime.Today
         });
         var query = new Search.Query

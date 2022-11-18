@@ -17,4 +17,6 @@ public static class ContextExtensions
         context.SaveChanges();
         return things;
     }
+
+    public static IEnumerable<T> HasSome<T>(this PlrDbContext context, params T[] things) => HasSome(context, things.AsEnumerable());
 }
