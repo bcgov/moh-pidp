@@ -2,13 +2,18 @@
   <ui-page-header>{{ title }}</ui-page-header>
 </ui-page>
 
-<ng-container *ngIf="environment !== production">
-  <button mat-stroked-button type="button" color="warn" (click)="onDelete()">
-    Delete all
-  </button>
-</ng-container>
+<div class="admin-header">
+  <p id="table-description">
+    <strong>List of users in the Provider Identity Portal</strong>
+  </p>
+  <ng-container *ngIf="environment !== production">
+    <button mat-stroked-button type="button" color="warn" (click)="onDelete()">
+      Delete all
+    </button>
+  </ng-container>
+</div>
 
-<table mat-table [dataSource]="dataSource">
+<table mat-table aria-describedby="table-description" [dataSource]="dataSource">
   <ng-container matColumnDef="id">
     <th *matHeaderCellDef mat-header-cell>Reference ID</th>
     <td *matCellDef="let element" mat-cell>{{ element.id }}</td>
