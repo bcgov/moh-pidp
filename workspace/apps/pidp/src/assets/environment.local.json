@@ -1,4 +1,3 @@
 {
-  "environmentName": "dev",
-  "featureFlags": { "example": false }
+  "environmentName": "dev"
 }
