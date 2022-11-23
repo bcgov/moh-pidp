@@ -87,7 +87,7 @@ span {
     }
   }
   & .card-coming-soon {
-    background-color: pidp.$bcgov-color-background-grey;
+    background-color: pidp.$bcgov-color-background-darker-grey;
 
     & mat-icon {
       color: pidp.$bcgov-color-semantic-success;
@@ -371,14 +371,14 @@ span {
 
     & .systems-content {
       display: grid;
-      grid-template-columns: calc(50% - 20px) calc(50% - 20px);
-      gap: 40px;
+      grid-template-columns: calc(33% - 10px) calc(33% - 10px) calc(33% - 10px);
+      gap: 20px;
     }
     & .card-content {
       flex: 1;
       padding: 20px 30px 10px;
       & p {
-        line-height: 1.6;
+        line-height: 1.4;
       }
       & a:hover {
         text-decoration: none;
@@ -410,7 +410,7 @@ span {
     }
 
     & .card-coming-soon {
-      grid-column-start: span 2;
+      grid-column-start: span 3;
       border: solid 1px pidp.$bcgov-color-component;
       display: flex;
       flex-direction: column;
@@ -532,8 +532,8 @@ span {
     }
 
     & .systems-content {
-      grid-template-columns: calc(50% - 5px) calc(50% - 5px);
-      gap: 10px;
+      grid-template-columns: calc(33% - 2px) calc(33% - 2px) calc(33% - 2px);
+      gap: 4px;
     }
     & .card-content {
       padding: 10px;
@@ -644,11 +644,14 @@ span {
     }
 
     & .systems-content {
-      grid-template-columns: calc(50% - 10px) calc(50% - 10px);
-      gap: 20px;
+      grid-template-columns: calc(33% - 5px) calc(33% - 5px) calc(33% - 5px);
+      gap: 10px;
     }
     & .card-content {
-      padding: 20px;
+      padding: 10px;
+      & p {
+        line-height: 1.2;
+      }
     }
 
     & .card-hcimweb {

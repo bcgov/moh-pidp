@@ -31,16 +31,15 @@ h2 {
     line-height: 1.5;
   }
 }
-.card-container.viewport-small,
+.card-container.viewport-small {
+  display: flex;
+}
 .card-container.viewport-medium,
 .card-container.viewport-large {
   display: flex;
   flex: 1;
 
   .card-image {
-    width: 240px;
-    min-height: 515px;
-    height: 100%;
   }
   .card-content-container {
     display: flex;
@@ -48,14 +47,14 @@ h2 {
     flex: 1;
 
     & header {
-      padding: 80px 30px 30px;
+      padding: 30px 20px 20px;
     }
     & h2.card-header-text {
-      font-size: 2em;
+      font-size: 1.6em;
       font-weight: 700;
       white-space: wrap;
       margin: 0;
-      line-height: 1.5;
+      line-height: 1.4;
     }
     .card-content {
       display: flex;
@@ -66,12 +65,11 @@ h2 {
 // Adjust for small and medium, which have a layout very similar to large.
 .card-container.viewport-medium {
   .card-image {
-    width: 172px;
     min-height: 510px;
   }
   .card-content-container {
     & header {
-      padding: 55px 24px 24px;
+      padding: 25px 14px 14px;
     }
     & h2.card-header-text {
       font-size: 1.5em;
@@ -80,15 +78,22 @@ h2 {
 }
 .card-container.viewport-small {
   .card-image {
-    width: 107px;
     min-height: 229px;
   }
   .card-content-container {
+    display: flex;
+    flex-direction: column;
     & header {
-      padding: 30px 12px 12px;
+      padding: 0 12px;
     }
     & h2.card-header-text {
+      margin-bottom: 3px;
       font-size: 1em;
+      line-height: 1.1;
+    }
+    & .card-content {
+      display: flex;
+      flex: auto;
     }
   }
 }

@@ -40,6 +40,8 @@ export class LoginPageV2Component {
   public specialAuthorityUrl: string;
   public providerIdentitySupportEmail: string;
   public isAdminLogin: boolean;
+  public prescriptionRenewalSupportUrl: string;
+  public bcscAppDownload: string;
 
   public IdentityProvider = IdentityProvider;
 
@@ -71,6 +73,8 @@ export class LoginPageV2Component {
     this.providerIdentitySupportEmail =
       this.config.emails.providerIdentitySupport;
     this.isAdminLogin = routeData.isAdminLogin;
+    this.prescriptionRenewalSupportUrl = this.config.urls.prescriptionRenewal;
+    this.bcscAppDownload = this.config.urls.bcscAppDownload;
 
     this.viewportService.viewportBroadcast$.subscribe((viewport) =>
       this.onViewportChange(viewport)
