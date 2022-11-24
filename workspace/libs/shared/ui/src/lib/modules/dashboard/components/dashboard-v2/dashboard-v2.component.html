@@ -8,14 +8,16 @@
       (click)="onMiniMenuButtonClick()">
       <mat-icon>menu</mat-icon>
     </button>
-    <button
-      *ngIf="isLogoutButtonVisible$ | async"
-      mat-icon-button
-      matTooltip="Logout"
-      aria-label="logout"
-      (click)="onLogout()">
-      <mat-icon>logout</mat-icon>
-    </button>
+    <div *ngIf="isLogoutButtonVisible$ | async">
+      <span class="signout-text">sign out</span>
+      <button
+        mat-icon-button
+        matTooltip="Logout"
+        aria-label="logout"
+        (click)="onLogout()">
+        <mat-icon>logout</mat-icon>
+      </button>
+    </div>
   </div>
   <div uiPidpInjectViewportCss>
     <div class="header-bar-left"></div>

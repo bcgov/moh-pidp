@@ -17,8 +17,17 @@ $header-height-medium: 120px;
   & mat-icon {
     color: #fff;
   }
+  & .signout-text {
+    margin-right: 10px;
+  }
 }
 .viewport-all {
+  & .content-body-box {
+    // This is a hack to prevent a horizontal scrollbar from appearing in v1 page content
+    // that uses bootstrap. The bug may caused by bootstrap but it not yet known.
+    // This should be removed as soon as possible.
+    overflow-x: hidden;
+  }
   & .content-header-box,
   & .sidenav-header-box,
   & .header-bar-right,
@@ -121,9 +130,6 @@ $header-height-medium: 120px;
       & img {
         width: 150px;
       }
-    }
-    & .header-spacer {
-      flex: 1;
     }
   }
 
