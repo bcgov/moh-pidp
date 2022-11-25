@@ -28,6 +28,12 @@ export class DashboardV2Component implements OnChanges {
   @Output() public logout = new EventEmitter<void>();
 
   private viewport = PidpViewport.xsmall;
+  public showMiniMenuButton = true;
+  public isSidenavOpened = false;
+  public sidenavMode: MatDrawerMode = 'over';
+  public isMenuUserProfileVisible = false;
+  public isLogoutButtonVisible = false;
+  public isLogoutMenuItemVisible = false;
 
   public get menuItems(): DashboardMenuItem[] {
     return this.dashboardState.menuItems ?? [];
@@ -38,12 +44,6 @@ export class DashboardV2Component implements OnChanges {
   public get showTitleDescription(): boolean {
     return !!this.dashboardState.titleDescriptionText;
   }
-  public showMiniMenuButton = true;
-  public isSidenavOpened = false;
-  public sidenavMode: MatDrawerMode = 'over';
-  public isMenuUserProfileVisible = false;
-  public isLogoutButtonVisible = false;
-  public isLogoutMenuItemVisible = false;
   public get isCollegeInfoVisible(): boolean {
     return !!this.dashboardState?.userProfileCollegeNameText;
   }
@@ -135,42 +135,4 @@ export class DashboardV2Component implements OnChanges {
         throw `Dashboard v2 not implemented: ${this.viewport}`;
     }
   }
-  // private showSidenav(show: boolean, mode: MatDrawerMode): void {
-  //   if (show !== this.isSidenavOpened) {
-  //     this.isSidenavOpened = show;
-  //     // this.isSidenavOpened$.next(show);
-  //   }
-  //   if (mode !== this.sidenavMode) {
-  //     this.sidenavMode = mode;
-  //     // this.sidenavMode$.next(mode);
-  //   }
-  // }
-  // private showMenuUserProfile(show: boolean): void {
-  //   if (
-  //     this.dashboardState?.userProfileFullNameText &&
-  //     show !== this.isMenuUserProfileVisible
-  //   ) {
-  //     this.isMenuUserProfileVisible = show;
-  //     this.isMenuUserProfileVisible$.next(show);
-  //   }
-  //   if (
-  //     this.dashboardState?.userProfileCollegeNameText &&
-  //     show !== this.isCollegeInfoVisible
-  //   ) {
-  //     this.isCollegeInfoVisible = show;
-  //     this.isCollegeInfoVisible$.next(show);
-  //   }
-  // }
-  // private showLogoutButton(show: boolean): void {
-  //   if (show !== this.isLogoutButtonVisible) {
-  //     this.isLogoutButtonVisible = show;
-  //     this.isLogoutButtonVisible$.next(show);
-  //   }
-  // }
-  // private showLogoutMenuItem(show: boolean): void {
-  //   if (show !== this.isLogoutMenuItemVisible) {
-  //     this.isLogoutMenuItemVisible = show;
-  //     this.isLogoutMenuItemVisible$.next(show);
-  //   }
-  // }
 }
