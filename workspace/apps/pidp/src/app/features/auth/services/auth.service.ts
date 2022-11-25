@@ -28,7 +28,4 @@ export class AuthService implements IAuthService {
   public logout(redirectUri: string): Observable<void> {
     return from(this.keycloakService.logout(redirectUri));
   }
-  public getToken(): Observable<string> {
-    return from(this.keycloakService.getToken());
-  }
 }
