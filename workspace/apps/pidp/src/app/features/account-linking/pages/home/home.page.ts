@@ -46,5 +46,5 @@ export class AccountLinkingHomePage {
 // Users don't currently have that role in the PIDP-WEBAPP client, so using that clientId will result in a "not allowed" response (a 302 redirect to <redirect URI>/?link_error=not_allowed).
 // Using "account" as the clientId causes a different error: a 400 Bad Request due to our application not being a valid redirect URI of the "account" client.
 
-// Technically, the token has both "PIDP-WEBAPP" and "account" as audiances (the "aud" claim), but may in practice only have an active session with "PIDP-WEBAPP" and not "account".
+// Technically, the token has both "PIDP-WEBAPP" and "account" as audiences (the "aud" claim), but may in practice only have an active session with "PIDP-WEBAPP" and not "account".
 // In that case, updating the valid redirect URIs of the "account" client and using "account" as the clientId will result in a 400 Bad Request as before but will be recorded in the error events as "INVALID_TOKEN" instead of "INVALID_REDIRECT_URI".
