@@ -12,6 +12,7 @@ $header-height-large: 160px;
 $content-width-medium: 994px;
 $sidenav-width-medium: 240px;
 $header-height-medium: 120px;
+$header-height-small: 100px;
 
 .header-right {
   & mat-icon {
@@ -67,12 +68,29 @@ $header-height-medium: 120px;
 }
 .viewport-small,
 .viewport-xsmall {
+  width: 100%;
+  display: flex;
+  & .content-header-box,
+  & .sidenav-header-box {
+    height: $header-height-small;
+  }
+  & .content {
+    // Ensure the sidenav will stretch to fit vertically
+    display: flex;
+    flex-direction: column;
+    // Expand to fit horizontally
+    flex: 1;
+  }
   & header {
     display: flex;
     flex-direction: column;
     & .header-image-container {
       padding: 15px 0;
       text-align: center;
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
   }
   & .sidenav-container {

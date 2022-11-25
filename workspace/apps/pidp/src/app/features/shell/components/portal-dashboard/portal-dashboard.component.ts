@@ -1,9 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  Inject,
-  OnInit,
-} from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { IsActiveMatchOptions } from '@angular/router';
 
 import { BehaviorSubject, Observable, forkJoin, map } from 'rxjs';
@@ -40,7 +35,6 @@ import {
   selector: 'app-portal-dashboard',
   templateUrl: './portal-dashboard.component.html',
   styleUrls: ['./portal-dashboard.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PortalDashboardComponent implements IDashboard, OnInit {
   public logoutRedirectUrl: string;

@@ -1,14 +1,14 @@
 <ui-layout-header-footer>
   <div class="header-right" page-header-right>
     <button
-      *ngIf="showMiniMenuButton$ | async"
+      *ngIf="showMiniMenuButton"
       class="menu"
       title="menu"
       mat-icon-button
       (click)="onMiniMenuButtonClick()">
       <mat-icon>menu</mat-icon>
     </button>
-    <div *ngIf="isLogoutButtonVisible$ | async">
+    <div *ngIf="isLogoutButtonVisible">
       <span class="signout-text">sign out</span>
       <button
         mat-icon-button
@@ -19,14 +19,11 @@
       </button>
     </div>
   </div>
-  <div uiPidpInjectViewportCss>
+  <div class="dashboard-v2" uiPidpInjectViewportCss>
     <div class="header-bar-left"></div>
     <div class="content">
       <mat-sidenav-container class="sidenav-container">
-        <mat-sidenav
-          #sidenav
-          [mode]="(sidenavMode$ | async) ?? 'over'"
-          [opened]="isSidenavOpened$ | async">
+        <mat-sidenav #sidenav [mode]="sidenavMode" [opened]="isSidenavOpened">
           <div class="sidenav-header-box"></div>
           <div class="sidenav-body-box">
             <ng-container *ngTemplateOutlet="menu"></ng-container>
@@ -70,17 +67,15 @@
     <div class="sidenav-panel-box">
       <div class="sidenav-bar"></div>
       <div class="sidenav-panel-content">
-        <div *ngIf="isMenuUserProfileVisible$ | async" class="sidenav-header">
+        <div *ngIf="isMenuUserProfileVisible" class="sidenav-header">
           <p class="sidenav-name">
             {{ dashboardState.userProfileFullNameText }}
           </p>
-          <p *ngIf="isCollegeInfoVisible$ | async" class="sidenav-college">
+          <p *ngIf="isCollegeInfoVisible" class="sidenav-college">
             {{ dashboardState.userProfileCollegeNameText }}
           </p>
         </div>
-        <div
-          *ngIf="isMenuUserProfileVisible$ | async"
-          class="sidenav-line"></div>
+        <div *ngIf="isMenuUserProfileVisible" class="sidenav-line"></div>
         <div class="sidenav-menu">
           <a
             *ngFor="let menuItem of menuItems"
@@ -92,7 +87,7 @@
             >{{ menuItem.label }}
           </a>
           <a
-            *ngIf="isLogoutMenuItemVisible$ | async"
+            *ngIf="isLogoutMenuItemVisible"
             class="sidenav-menu-item"
             routerLinkActive="sidenav-menu-item-active"
             (click)="onLogout()">
