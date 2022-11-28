@@ -14,7 +14,6 @@ export interface AppConfig extends AppEnvironment {
     portal: string;
     admin: string;
   };
-  featureFlags: { [key: string]: boolean };
 }
 
 // Default environment configuration is for local development
@@ -27,6 +26,6 @@ export const APP_DI_CONFIG: AppConfig = {
     admin: AdminRoutes.MODULE_PATH,
   },
   featureFlags: {
-    example: false,
+    isLayoutV2Enabled: true,
   },
 };
