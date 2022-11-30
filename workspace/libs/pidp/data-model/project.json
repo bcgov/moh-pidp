@@ -22,5 +22,5 @@
       }
     }
   },
-  "tags": ["scope:pidp"]
+  "tags": ["scope:pidp", "scope:shared"]
 }
