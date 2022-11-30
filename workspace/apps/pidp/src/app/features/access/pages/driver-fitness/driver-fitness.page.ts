@@ -70,13 +70,16 @@ export class DriverFitnessPage implements OnInit {
     }
 
     // TODO: Remove this temporary code
-    const completed = this.route.snapshot.queryParamMap.get('completed');
-    if (completed) {
-      if (completed === '2') {
+    const state = this.route.snapshot.queryParamMap.get('state');
+    if (state) {
+      if (state === '1') {
         this.completed = false;
-      } else {
+      } else if (state === '2') {
         this.completed = true;
         this.onAccessGranted();
+      } else if (state === '3') {
+        this.completed = false;
+        this.accessRequestFailed = true;
       }
     }
   }
