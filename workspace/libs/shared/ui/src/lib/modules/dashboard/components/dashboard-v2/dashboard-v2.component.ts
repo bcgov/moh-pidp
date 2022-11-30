@@ -30,6 +30,18 @@ export class DashboardV2Component implements OnChanges {
   public showMiniMenuButton = true;
   public isSidenavOpened = false;
   public sidenavMode: MatDrawerMode = 'over';
+  public get isHeaderImageVisible(): boolean {
+    // Hide the image in xsmall small when there is title text to display.
+    if (
+      (this.viewport === PidpViewport.small ||
+        this.viewport === PidpViewport.xsmall) &&
+      this.dashboardState.titleText
+    ) {
+      return false;
+    }
+    return true;
+  }
+
   public get isMenuUserProfileVisible(): boolean {
     // NOTE: The user name section is always hidden in xsmall and small views
     if (
