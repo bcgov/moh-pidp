@@ -23,6 +23,7 @@ public abstract class Credential : BaseAuditable
     public string IdpId { get; set; } = string.Empty;
 
     public int PartyId { get; set; }
+
     public Party? Party { get; set; }
 
     public CredentialType CredentialType { get; set; }
