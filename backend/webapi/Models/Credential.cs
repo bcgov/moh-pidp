@@ -9,7 +9,6 @@ public enum CredentialType
     BcProvider,
     Idir,
     HealthAuthority
-
 }
 
 [Table(nameof(Credential))]
