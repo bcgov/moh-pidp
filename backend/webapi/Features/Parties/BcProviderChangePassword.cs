@@ -12,7 +12,7 @@ public class BcProviderChangePassword
     /// <summary>
     /// Adapted from https://uibakery.io/regex-library/password-regex-csharp
     /// </summary>
-    public static readonly string PASSWORD_REGEX = "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,32}$";
+    public static readonly string PASSWORDREGEX = "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,32}$";
 
     public class Command : ICommand<IDomainResult>
     {
@@ -34,7 +34,7 @@ public class BcProviderChangePassword
                 .NotEmpty()
                 .MinimumLength(8)
                 .MaximumLength(32)
-                .Matches(PASSWORD_REGEX, RegexOptions.Singleline)
+                .Matches(PASSWORDREGEX, RegexOptions.Singleline)
                 .WithMessage("A BC Provider account was not created. Please check that your password meets all password rules.");
             this.RuleFor(x => x.NewPassword)
                 .NotEqual(x => x.CurrentPassword)
@@ -48,7 +48,9 @@ public class BcProviderChangePassword
         {
             if (command.NewPassword?.Contains("servererror", StringComparison.OrdinalIgnoreCase) == true)
             {
+#pragma warning disable CA2201 // Do not raise reserved exception types
                 throw new Exception("TEST EXCEPTION");
+#pragma warning restore CA2201 // Do not raise reserved exception types
             }
             return Task.FromResult(DomainResult.Success());
         }

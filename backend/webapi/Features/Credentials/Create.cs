@@ -1,8 +1,8 @@
 namespace Pidp.Features.Credentials;
 
 using FluentValidation;
+using System.Text.RegularExpressions;
 
-using Pidp.Extensions;
 using Pidp.Infrastructure.Auth;
 
 public class Create
@@ -29,7 +29,7 @@ public class Create
                 .NotEmpty()
                 .MinimumLength(8)
                 .MaximumLength(32)
-                .Matches(Parties.BcProviderChangePassword.PASSWORD_REGEX, RegexOptions.Singleline)
+                .Matches(Parties.BcProviderChangePassword.PASSWORDREGEX, RegexOptions.Singleline)
                 .WithMessage("A BC Provider account was not created. Please check that your password meets all password rules.");
         }
     }
