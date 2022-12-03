@@ -5,14 +5,15 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 public enum CredentialType
 {
-    Bcsc = 1,
+    Unknown = 0,
+    Bcsc,
     BcProvider,
     Idir,
     HealthAuthority
 }
 
 [Table(nameof(Credential))]
-public abstract class Credential : BaseAuditable
+public class Credential : BaseAuditable
 {
     [Key]
     public int Id { get; set; }

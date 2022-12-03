@@ -43,4 +43,6 @@ public class Party : BaseAuditable, IOwnedResource
     public PartyOrgainizationDetail? OrgainizationDetail { get; set; }
 
     public ICollection<AccessRequest> AccessRequests { get; set; } = new List<AccessRequest>();
+
+    public ICollection<Credential> Credentials { get; set; } = new List<Credential>();
 }
