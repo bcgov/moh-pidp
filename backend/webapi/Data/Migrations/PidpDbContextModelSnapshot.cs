@@ -1309,17 +1309,6 @@ namespace Pidp.Data.Migrations
                     b.Navigation("Province");
                 });
 
-            modelBuilder.Entity("Pidp.Models.Credential", b =>
-                {
-                    b.HasOne("Pidp.Models.Party", "Party")
-                        .WithMany("Credentials")
-                        .HasForeignKey("PartyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Party");
-                });
-
             modelBuilder.Entity("Pidp.Models.EndorsementRelationship", b =>
                 {
                     b.HasOne("Pidp.Models.Endorsement", "Endorsement")
@@ -1482,8 +1471,6 @@ namespace Pidp.Data.Migrations
                     b.Navigation("AccessAdministrator");
 
                     b.Navigation("AccessRequests");
-
-                    b.Navigation("Credentials");
 
                     b.Navigation("Facility");
 
