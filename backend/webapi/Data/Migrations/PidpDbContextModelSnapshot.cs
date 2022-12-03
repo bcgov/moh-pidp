@@ -166,40 +166,6 @@ namespace Pidp.Data.Migrations
                     b.ToTable("ClientLog");
                 });
 
-            modelBuilder.Entity("Pidp.Models.Credential", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<Instant>("Created")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<int>("CredentialType")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("IdpId")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<Instant>("Modified")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<int>("PartyId")
-                        .HasColumnType("integer");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PartyId");
-
-                    b.ToTable("Credential");
-                });
-
             modelBuilder.Entity("Pidp.Models.EmailLog", b =>
                 {
                     b.Property<int>("Id")
@@ -1322,17 +1288,6 @@ namespace Pidp.Data.Migrations
                     b.Navigation("Province");
                 });
 
-            modelBuilder.Entity("Pidp.Models.Credential", b =>
-                {
-                    b.HasOne("Pidp.Models.Party", "Party")
-                        .WithMany("Credentials")
-                        .HasForeignKey("PartyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Party");
-                });
-
             modelBuilder.Entity("Pidp.Models.EndorsementRelationship", b =>
                 {
                     b.HasOne("Pidp.Models.Endorsement", "Endorsement")
@@ -1495,8 +1450,6 @@ namespace Pidp.Data.Migrations
                     b.Navigation("AccessAdministrator");
 
                     b.Navigation("AccessRequests");
-
-                    b.Navigation("Credentials");
 
                     b.Navigation("Facility");
 
