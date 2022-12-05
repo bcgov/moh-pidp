@@ -185,7 +185,7 @@ public partial class ProfileStatus
                 if (profile.PartyPlrStanding
                     .With(DriverFitness.AllowedIdentifierTypes)
                     .HasGoodStanding
-                    || (profile.LicenceDeclaration.HasNoLicence && profile.EndorsementPlrStanding.HasGoodStanding))
+                    || (profile.LicenceDeclaration.HasNoLicence && profile.EndorsementPlrStanding.HasGoodStanding)) // TODO: We should be differring this calcualtion until this step if possible
                 {
                     this.StatusCode = StatusCode.Incomplete;
                     return;
