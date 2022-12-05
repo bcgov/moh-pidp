@@ -206,7 +206,7 @@ public partial class ProfileStatus
                 //    || profile.CompletedEnrolments.Contains(AccessTypeCode.HcimEnrolment))
                 // {
                 //     this.StatusCode = StatusCode.Hidden;
-                //     return Task.CompletedTask;
+                //     return;
                 // }
                 if (profile.CompletedEnrolments.Contains(AccessTypeCode.HcimAccountTransfer))
                 {
@@ -238,7 +238,7 @@ public partial class ProfileStatus
                 //     || profile.CompletedEnrolments.Contains(AccessTypeCode.HcimEnrolment))
                 // {
                 //     this.StatusCode = StatusCode.Complete;
-                //     return Task.CompletedTask;
+                //     return;
                 // }
 
                 if (profile.CompletedEnrolments.Contains(AccessTypeCode.HcimAccountTransfer))
