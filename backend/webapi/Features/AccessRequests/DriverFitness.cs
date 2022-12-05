@@ -12,6 +12,8 @@ using Pidp.Models.Lookups;
 
 public class DriverFitness
 {
+    public static IdentifierType[] AllowedIdentifierTypes => new[] { IdentifierType.PhysiciansAndSurgeons };
+
     public class Command : ICommand<IDomainResult>
     {
         public int PartyId { get; set; }

@@ -1,7 +1,7 @@
 namespace Pidp.Features.Parties;
 
 using NodaTime;
-
+using Pidp.Features.AccessRequests;
 using Pidp.Models.Lookups;
 
 public partial class ProfileStatus
@@ -176,13 +176,22 @@ public partial class ProfileStatus
                 }
 
                 if (!profile.DemographicsEntered
-                    || !profile.PartyPlrStanding.HasGoodStanding)
+                    || !profile.LicenceDeclarationEntered)
                 {
                     this.StatusCode = StatusCode.Locked;
                     return;
                 }
 
-                this.StatusCode = StatusCode.Incomplete;
+                if (profile.PartyPlrStanding
+                    .With(DriverFitness.AllowedIdentifierTypes)
+                    .HasGoodStanding
+                    || (profile.LicenceDeclaration.HasNoLicence && profile.EndorsementPlrStanding.HasGoodStanding))
+                {
+                    this.StatusCode = StatusCode.Incomplete;
+                    return;
+                }
+
+                this.StatusCode = StatusCode.Locked;
             }
         }
 
@@ -271,7 +280,7 @@ public partial class ProfileStatus
 
                 if (!profile.DemographicsEntered
                     || !profile.PartyPlrStanding
-                        .With(AccessRequests.MSTeams.AllowedIdentifierTypes)
+                        .With(MSTeams.AllowedIdentifierTypes)
                         .HasGoodStanding)
                 {
                     this.StatusCode = StatusCode.Locked;
@@ -302,7 +311,7 @@ public partial class ProfileStatus
 
                 if (profile.DemographicsEntered
                     && profile.PartyPlrStanding
-                        .With(AccessRequests.PrescriptionRefillEforms.AllowedIdentifierTypes)
+                        .With(PrescriptionRefillEforms.AllowedIdentifierTypes)
                         .HasGoodStanding)
                 {
                     this.StatusCode = StatusCode.Incomplete;
@@ -322,7 +331,7 @@ public partial class ProfileStatus
             {
                 this.IncorrectLicenceType = profile.PartyPlrStanding.HasGoodStanding
                     && !profile.PartyPlrStanding
-                        .Excluding(AccessRequests.SAEforms.ExcludedIdentifierTypes)
+                        .Excluding(SAEforms.ExcludedIdentifierTypes)
                         .HasGoodStanding;
 
                 if (!profile.UserIsBcServicesCard)
@@ -339,7 +348,7 @@ public partial class ProfileStatus
 
                 if (profile.DemographicsEntered
                     && profile.PartyPlrStanding
-                        .Excluding(AccessRequests.SAEforms.ExcludedIdentifierTypes)
+                        .Excluding(SAEforms.ExcludedIdentifierTypes)
                         .HasGoodStanding)
                 {
                     this.StatusCode = StatusCode.Incomplete;
