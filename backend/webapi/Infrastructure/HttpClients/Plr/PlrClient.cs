@@ -79,7 +79,7 @@ public class PlrClient : BaseClient, IPlrClient
         return PlrStandingsDigest.FromRecords(records);
     }
 
-    public async Task<PlrStandingsDigest> GetAggrigateStandingsDigestAsync(IEnumerable<string?> cpns)
+    public async Task<PlrStandingsDigest> GetAggregateStandingsDigestAsync(IEnumerable<string?> cpns)
     {
         var records = await this.GetRecordsAsync(cpns.ToArray());
 
