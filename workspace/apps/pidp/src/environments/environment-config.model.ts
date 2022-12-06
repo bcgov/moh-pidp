@@ -7,4 +7,5 @@ export interface EnvironmentConfig {
   environmentName: environmentName;
   applicationUrl: string;
   keycloakConfig: KeycloakOptions;
+  featureFlags: { [key: string]: boolean };
 }

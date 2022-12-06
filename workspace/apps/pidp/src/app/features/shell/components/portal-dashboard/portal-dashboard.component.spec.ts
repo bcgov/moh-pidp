@@ -9,8 +9,6 @@ import { AuthService } from '@app/features/auth/services/auth.service';
 import { PortalDashboardComponent } from './portal-dashboard.component';
 
 describe('PortalDashboardComponent', () => {
-  let component: PortalDashboardComponent;
-
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [

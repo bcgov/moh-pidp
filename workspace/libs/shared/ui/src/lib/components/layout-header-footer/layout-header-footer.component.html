@@ -1,4 +1,4 @@
-<div class="page-container">
+<div class="page-container" uiPidpInjectViewportCss>
   <header>
     <div class="banner">
       <a class="logo-link" href="." title="Home" aria-label="Go home">
@@ -17,7 +17,10 @@
       </a>
     </div>
     <div class="title">
-      <h1><ng-content select="[page-v2-title]"></ng-content></h1>
+      <h1><ng-content select="[page-title]"></ng-content></h1>
+    </div>
+    <div class="header-right">
+      <ng-content select="[page-header-right]"></ng-content>
     </div>
   </header>
   <div class="content">
