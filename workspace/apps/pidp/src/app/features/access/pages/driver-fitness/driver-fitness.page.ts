@@ -1,17 +1,11 @@
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
-import {
-  ChangeDetectionStrategy,
-  Component,
-  Inject,
-  OnInit,
-} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { catchError, noop, of, tap } from 'rxjs';
 
 import { ApplicationService } from '@pidp/presentation';
 
-import { APP_CONFIG, AppConfig } from '@app/app.config';
 import { PartyService } from '@app/core/party/party.service';
 import { LoggerService } from '@app/core/services/logger.service';
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
@@ -29,7 +23,6 @@ import {
   styleUrls: ['./driver-fitness.page.scss'],
 })
 export class DriverFitnessPage implements OnInit {
-  public title: string;
   public driverFitnessUrl: string;
   public completed: boolean | null;
   public accessRequestFailed: boolean;
@@ -38,7 +31,6 @@ export class DriverFitnessPage implements OnInit {
   public medicalPractitionerPortalUrl: string;
 
   public constructor(
-    @Inject(APP_CONFIG) private config: AppConfig,
     private route: ActivatedRoute,
     private router: Router,
     private partyService: PartyService,
@@ -47,7 +39,6 @@ export class DriverFitnessPage implements OnInit {
     private applicationService: ApplicationService
   ) {
     const routeData = this.route.snapshot.data;
-    this.title = routeData.title;
     this.driverFitnessUrl = driverFitnessUrl;
     this.completed = routeData.driverFitnessStatusCode === StatusCode.COMPLETED;
     this.accessRequestFailed = false;
@@ -119,6 +110,6 @@ export class DriverFitnessPage implements OnInit {
   }
 
   private navigateToRoot(): void {
-    this.router.navigate([this.route.snapshot.data.routes.root]);
+    this.router.navigate(['/']);
   }
 }

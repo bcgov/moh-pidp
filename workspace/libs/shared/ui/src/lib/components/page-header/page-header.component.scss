@@ -8,6 +8,7 @@ h1 {
 
   font-size: clamp($minFontSize, $scaler, $maxFontSize);
   margin-bottom: 2.5rem;
+  margin-top: 2rem;
 
   display: flex;
   gap: 1.5rem;
