@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using Pidp.Infrastructure.Auth;
 
 [Table(nameof(Credential))]
-public class Credential : BaseAuditable
+public class Credential : BaseAuditable, IOwnedResource
 {
     [Key]
     public int Id { get; set; }

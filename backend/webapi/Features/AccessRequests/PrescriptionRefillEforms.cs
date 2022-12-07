@@ -54,6 +54,11 @@ public class PrescriptionRefillEforms
 
         public async Task<IDomainResult> HandleAsync(Command command)
         {
+            var userId = await this.context.Credentials
+                .Where(credential => credential.PartyId == command.PartyId)
+                .Select(credential => credential.UserId)
+                .SingleAsync();
+
             var dto = await this.context.Parties
                 .Where(party => party.Id == command.PartyId)
                 .Select(party => new
@@ -76,7 +81,7 @@ public class PrescriptionRefillEforms
                 return DomainResult.Failed();
             }
 
-            if (!await this.keycloakClient.AssignClientRole(dto.UserId, MohClients.PrescriptionRefillEforms.ClientId, MohClients.PrescriptionRefillEforms.AccessRole))
+            if (!await this.keycloakClient.AssignClientRole(dto.userId, MohClients.PrescriptionRefillEforms.ClientId, MohClients.PrescriptionRefillEforms.AccessRole))
             {
                 return DomainResult.Failed();
             }
