@@ -144,9 +144,14 @@ public partial class ProfileStatus
             {
                 var party = await this.context.Parties
                     .SingleAsync(party => party.Id == partyId);
+                var userId = await this.context.Credentials
+                    .Where(credential => credential.PartyId == party.Id)
+                    .Select(credential => credential.UserId)
+                    .SingleAsync();
+
                 party.Cpn = newCpn;
                 await this.context.SaveChangesAsync();
-                await this.keycloakClient.UpdateUserCpn(party.UserId, newCpn);
+                await this.keycloakClient.UpdateUserCpn(userId, newCpn);
             }
 
             return newCpn;

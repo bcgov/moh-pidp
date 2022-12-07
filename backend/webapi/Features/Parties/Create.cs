@@ -13,7 +13,6 @@ public class Create
 {
     public class Command : ICommand<int>
     {
-        public Guid UserId { get; set; }
         public string? Hpdid { get; set; }
         public LocalDate? Birthdate { get; set; }
         public string FirstName { get; set; } = string.Empty;
@@ -26,7 +25,6 @@ public class Create
         {
             var user = accessor?.HttpContext?.User;
 
-            this.RuleFor(x => x.UserId).NotEmpty().Equal(user.GetUserId());
             this.RuleFor(x => x.FirstName).NotEmpty().MatchesUserClaim(user, Claims.GivenName);
             this.RuleFor(x => x.LastName).NotEmpty().MatchesUserClaim(user, Claims.FamilyName);
 
@@ -77,7 +75,6 @@ public class Create
         {
             var party = new Party
             {
-                UserId = command.UserId,
                 Hpdid = command.Hpdid,
                 Birthdate = command.Birthdate,
                 FirstName = command.FirstName,

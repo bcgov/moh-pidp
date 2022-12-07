@@ -38,7 +38,7 @@ public class PartyDelete
                 return;
             }
 
-            var roleRemover = new RoleRemover(this.client, this.logger);
+            var roleRemover = new RoleRemover(this.client, this.logger, this.context);
             foreach (var party in parties)
             {
                 await roleRemover.RemoveClientRoles(party);
@@ -57,11 +57,14 @@ public class PartyDelete
         private readonly Dictionary<AccessTypeCode, Role?> roleCache;
         private readonly IKeycloakAdministrationClient client;
         private readonly ILogger logger;
+        private readonly PidpDbContext context;
 
-        public RoleRemover(IKeycloakAdministrationClient client, ILogger logger)
+
+        public RoleRemover(IKeycloakAdministrationClient client, ILogger logger, PidpDbContext context)
         {
             this.client = client;
             this.logger = logger;
+            this.context = context;
             this.roleCache = new();
         }
 
@@ -75,13 +78,18 @@ public class PartyDelete
                     continue;
                 }
 
-                if (await this.client.RemoveClientRole(party.UserId, role))
+                var userId = await this.context.Credentials
+                .Where(credential => credential.PartyId == party.Id)
+                .Select(credential => credential.UserId)
+                .SingleAsync();
+
+                if (await this.client.RemoveClientRole(userId, role))
                 {
-                    this.logger.LogRemoveSuccess(role.Name!, party.UserId);
+                    this.logger.LogRemoveSuccess(role.Name!, userId);
                 }
                 else
                 {
-                    this.logger.LogRemoveFailure(role.Name!, party.UserId);
+                    this.logger.LogRemoveFailure(role.Name!, userId);
                 }
             }
         }

@@ -13,7 +13,7 @@ public enum CredentialType
 }
 
 [Table(nameof(Credential))]
-public class Credential : BaseAuditable
+public class Credential : BaseAuditable, IOwnedResource
 {
     [Key]
     public int Id { get; set; }

@@ -35,11 +35,11 @@ public class Index
 
         public async Task<List<Model>> HandleAsync(Query query)
         {
-            return await this.context.Parties
-                .Where(party => party.UserId == query.UserId)
-                .Select(party => new Model
+            return await this.context.Credentials
+                .Where(credential => credential.UserId == query.UserId)
+                .Select(credential => new Model
                 {
-                    Id = party.Id
+                    Id = credential.PartyId
                 })
                 .ToListAsync();
         }
