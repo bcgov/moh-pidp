@@ -1,13 +1,15 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { IsActiveMatchOptions } from '@angular/router';
 
-import { BehaviorSubject, Observable, forkJoin, map } from 'rxjs';
+import { Observable, forkJoin, map } from 'rxjs';
+
+import { DashboardStateModel, PidpStateName } from '@pidp/data-model';
+import { AppStateService, ApplicationService } from '@pidp/presentation';
 
 import {
   DashboardHeaderConfig,
   DashboardMenuItem,
   DashboardRouteMenuItem,
-  DashboardStateModel,
   IDashboard,
 } from '@bcgov/shared/ui';
 import { ArrayUtils } from '@bcgov/shared/utils';
@@ -45,15 +47,19 @@ export class PortalDashboardComponent implements IDashboard, OnInit {
   public responsiveMenuItems: boolean;
   public menuItems: DashboardMenuItem[];
   public showUxV2: boolean;
-  public dashboardState: DashboardStateModel = {
-    titleText: '',
-    titleDescriptionText: '',
-    menuItems: [],
-    userProfileFullNameText: '',
-    userProfileCollegeNameText: '',
-  };
-  public dashboardState$ = new BehaviorSubject<DashboardStateModel>(
-    this.dashboardState
+
+  public dashboardState$ = this.stateService.stateBroadcast$.pipe(
+    map((state) => {
+      console.log('dashboard state changed');
+      const dashboardNamedState = state.all.find(
+        (x) => x.stateName === PidpStateName.dashboard
+      );
+      if (!dashboardNamedState) {
+        throw 'dashboard state not found';
+      }
+      const dashboardState = dashboardNamedState as DashboardStateModel;
+      return dashboardState;
+    })
   );
 
   public constructor(
@@ -65,7 +71,8 @@ export class PortalDashboardComponent implements IDashboard, OnInit {
     private portalResourceService: PortalResource,
     private partyService: PartyService,
     private collegeLicenceInformationService: CollegeLicenceInformationResource,
-    private lookupService: LookupService
+    private lookupService: LookupService,
+    private stateService: AppStateService
   ) {
     this.logoutRedirectUrl = `${this.config.applicationUrl}/${this.config.routes.auth}`;
     this.username = accessTokenService.decodeToken().pipe(
@@ -86,11 +93,6 @@ export class PortalDashboardComponent implements IDashboard, OnInit {
     this.routeIdentificationService.routeNameBroadcast$.subscribe((arg) =>
       this.onRouteNameChange(arg)
     );
-
-    this.setDashboardState({
-      ...this.dashboardState,
-      menuItems: [...this.menuItems],
-    });
   }
   public ngOnInit(): void {
     // Get profile status and college info.
@@ -104,16 +106,18 @@ export class PortalDashboardComponent implements IDashboard, OnInit {
     }).subscribe((result) => {
       const fullNameText = this.getUserFullNameText(result.profileStatus);
       const collegeName = this.getCollegeName(result.collegeInfo);
-      this.setDashboardState({
-        ...this.dashboardState,
+
+      const oldState = this.stateService.getNamedState<DashboardStateModel>(
+        PidpStateName.dashboard
+      );
+      const newState: DashboardStateModel = {
+        ...oldState,
         userProfileFullNameText: fullNameText,
         userProfileCollegeNameText: collegeName,
-      });
+      };
+      console.log('setting college', newState);
+      this.stateService.setNamedState(PidpStateName.dashboard, newState);
     });
-  }
-  private setDashboardState(newState: DashboardStateModel): void {
-    this.dashboardState = { ...newState };
-    this.dashboardState$.next(this.dashboardState);
   }
 
   private onRouteNameChange(arg: RouteChangeDetectedEventArg): void {
@@ -121,6 +125,7 @@ export class PortalDashboardComponent implements IDashboard, OnInit {
     switch (arg.routeName) {
       case knownRouteNames.profile.collegeLicenseInfo:
       case knownRouteNames.portal:
+      case knownRouteNames.access.driverFitness:
         this.showUxV2 = this.config.featureFlags?.isLayoutV2Enabled ?? false;
         break;
       default:
