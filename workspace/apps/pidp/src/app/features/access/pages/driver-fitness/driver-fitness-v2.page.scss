@@ -1,0 +1,110 @@
+@use 'pidp-variables' as pidp;
+.viewport-all {
+  --header-padding: 30px;
+  --button-margin-right: 15px;
+  --endorsement-header-margin: 30px 0 30px;
+  --endorsement-card-header-font-size: 24px;
+  --endorsement-card-width: 300px;
+  --endorsement-card-min-height: 300px;
+  --endorsement-card-padding: 30px;
+  --endorsement-card-learn-more-label-margin-right: 25px;
+  --endorsement-card-learn-more-button-length: 50px;
+  --endorsement-card-learn-more-button-font-size: 36px;
+  --actions-margin-top: 30px;
+}
+.viewport-medium {
+  --button-margin-right: 20px;
+  --endorsement-card-width: 320px;
+  --endorsement-card-min-height: 320px;
+}
+.viewport-large {
+  --header-padding: 40px;
+  --button-margin-right: 20px;
+  --endorsement-card-width: 320px;
+  --endorsement-card-min-height: 320px;
+}
+h2,
+h3,
+p,
+span {
+  font-family: pidp.$bcgov-font-family;
+}
+.viewport-all {
+  &.box {
+    padding: var(--header-padding) 0 var(--header-padding) var(--header-padding);
+    & .title {
+      background-color: pidp.$bcgov-color-background-grey;
+      padding: 9px 24px;
+    }
+  }
+  & .content {
+    padding-right: var(--header-padding);
+  }
+  & .actions {
+    margin-top: var(--actions-margin-top);
+    & button {
+      margin-right: var(--button-margin-right);
+    }
+  }
+  & .endorsement-section {
+    & h3,
+    & p,
+    & span {
+      color: #fff;
+    }
+    & header {
+      margin: var(--endorsement-header-margin);
+      & h2 {
+        margin: 0;
+        font-style: italic;
+      }
+    }
+    & .endorsement-card {
+      display: flex;
+      flex-direction: column;
+      padding: var(--endorsement-card-padding);
+      width: var(--endorsement-card-width);
+      min-height: var(--endorsement-card-min-height);
+      background-image: url('/assets/images/endorsements-card-320x320.jpg');
+      background-color: rgba(0, 51, 102, 0.6);
+      background-blend-mode: multiply;
+
+      & h3 {
+        font-size: var(--endorsement-card-header-font-size);
+      }
+      & .endorsement-spacer {
+        // Push learn-more-row to the bottom of the container
+        flex-grow: 1;
+      }
+      & .learn-more-row {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        flex-wrap: nowrap;
+        & .learn-more-label {
+          margin-right: var(--endorsement-card-learn-more-label-margin-right);
+        }
+        & .learn-more-button {
+          width: var(--endorsement-card-learn-more-button-length);
+          height: var(--endorsement-card-learn-more-button-length);
+          font-size: var(--endorsement-card-learn-more-button-font-size);
+        }
+      }
+    }
+  }
+}
+.viewport-large {
+  &.box {
+    padding-left: 0;
+  }
+  & .endorsement-section {
+    & header h2 {
+      font-size: 24px;
+    }
+  }
+}
+.viewport-medium {
+  &.box {
+    padding-left: 0;
+  }
+}

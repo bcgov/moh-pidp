@@ -14,5 +14,6 @@
 <ui-dashboard-v2
   *ngIf="showUxV2"
   [dashboardState]="(dashboardState$ | async)!"
+  [menuItems]="menuItems"
   (logout)="onLogout()">
 </ui-dashboard-v2>
