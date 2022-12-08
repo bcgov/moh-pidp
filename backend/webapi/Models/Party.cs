@@ -10,10 +10,6 @@ public class Party : BaseAuditable
     [Key]
     public int Id { get; set; }
 
-    public Guid UserId { get; set; }
-
-    public string? Hpdid { get; set; }
-
     public LocalDate? Birthdate { get; set; }
 
     public string FirstName { get; set; } = string.Empty;
