@@ -75,7 +75,6 @@ public class Create
         {
             var party = new Party
             {
-                Hpdid = command.Hpdid,
                 Birthdate = command.Birthdate,
                 FirstName = command.FirstName,
                 LastName = command.LastName,

@@ -46,9 +46,9 @@ public class EndorsementData
 
         public async Task<IDomainResult<List<Model>>> HandleAsync(Query query)
         {
-            var partyId = await this.context.Parties
-                .Where(party => party.Hpdid!.Replace("@bcsc", "") == query.Hpdid)
-                .Select(party => (int?)party.Id)
+            var partyId = await this.context.Credentials
+                .Where(credential => credential.Hpdid!.Replace("@bcsc", "") == query.Hpdid)
+                .Select(credential => credential.PartyId)
                 .SingleOrDefaultAsync();
 
             if (partyId == null)
@@ -63,8 +63,8 @@ public class EndorsementData
                 .Where(relationship => relationship.PartyId != partyId)
                 .Select(relationship => new Dto
                 {
-                    Hpdid = relationship.Party!.Hpdid!.Replace("@bcsc", ""),
-                    Cpn = relationship.Party.Cpn
+                    Hpdid = query.Hpdid!.Replace("@bcsc", ""),
+                    Cpn = relationship.Party!.Cpn
                 })
                 .ToListAsync();
 
