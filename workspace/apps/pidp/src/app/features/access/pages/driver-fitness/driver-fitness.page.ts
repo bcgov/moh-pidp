@@ -59,20 +59,6 @@ export class DriverFitnessPage implements OnInit {
       this.logger.error('No status code was provided');
       return this.navigateToRoot();
     }
-
-    // TODO: Remove this temporary code
-    const state = this.route.snapshot.queryParamMap.get('state');
-    if (state) {
-      if (state === '1') {
-        this.completed = false;
-      } else if (state === '2') {
-        this.completed = true;
-        this.onAccessGranted();
-      } else if (state === '3') {
-        this.completed = false;
-        this.accessRequestFailed = true;
-      }
-    }
   }
 
   public onBack(): void {
