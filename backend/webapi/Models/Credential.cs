@@ -27,4 +27,7 @@ public class Credential : BaseAuditable, IOwnedResource
     public Party? Party { get; set; }
 
     public CredentialType CredentialType { get; set; }
+
+    // Computed properties
+    public string? Hpdid => this.CredentialType == CredentialType.Bcsc ? this.IdpId : string.Empty;
 }
