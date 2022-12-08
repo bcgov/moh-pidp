@@ -1,18 +1,4 @@
-<ui-dashboard
-  *ngIf="!showUxV2"
-  [username]="(username | async)!"
-  [headerConfig]="headerConfig"
-  [showMenuItemIcons]="showMenuItemIcons"
-  [menuItems]="menuItems"
-  [responsiveMenuItems]="responsiveMenuItems"
-  [logoutRedirectUrl]="logoutRedirectUrl"
-  (logout)="onLogout()">
-  <ui-dashboard-image
-    [brandConfig]="brandConfig"
-    [responsiveMenuItems]="responsiveMenuItems"></ui-dashboard-image>
-</ui-dashboard>
 <ui-dashboard-v2
-  *ngIf="showUxV2"
   [dashboardState]="(dashboardState$ | async)!"
   [menuItems]="menuItems"
   (logout)="onLogout()">

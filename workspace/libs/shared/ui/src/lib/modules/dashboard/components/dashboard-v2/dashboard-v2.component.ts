@@ -74,7 +74,6 @@ export class DashboardV2Component implements OnChanges {
     );
   }
   public ngOnChanges(_: SimpleChanges): void {
-    console.log('dashboard-v2 onchanges', this.dashboardState);
     this.refresh();
   }
   public onMiniMenuButtonClick(): void {
