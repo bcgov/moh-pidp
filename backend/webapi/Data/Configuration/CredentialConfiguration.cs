@@ -12,6 +12,6 @@ public class CredentialConfiguration : IEntityTypeConfiguration<Credential>
             .IsUnique();
 
         builder.Property(x => x.CredentialType)
-            .HasDefaultValue(0);
+            .HasDefaultValue(CredentialType.Unknown);
     }
 }
