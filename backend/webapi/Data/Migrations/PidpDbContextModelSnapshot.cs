@@ -1070,6 +1070,9 @@ namespace Pidp.Data.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("Hpdid")
+                        .HasColumnType("text");
+
                     b.Property<string>("JobTitle")
                         .HasColumnType("text");
 
@@ -1092,7 +1095,16 @@ namespace Pidp.Data.Migrations
                     b.Property<string>("PreferredMiddleName")
                         .HasColumnType("text");
 
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("Hpdid")
+                        .IsUnique();
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
 
                     b.ToTable("Party");
                 });
@@ -1309,17 +1321,6 @@ namespace Pidp.Data.Migrations
                     b.Navigation("Province");
                 });
 
-            modelBuilder.Entity("Pidp.Models.Credential", b =>
-                {
-                    b.HasOne("Pidp.Models.Party", "Party")
-                        .WithMany("Credentials")
-                        .HasForeignKey("PartyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Party");
-                });
-
             modelBuilder.Entity("Pidp.Models.EndorsementRelationship", b =>
                 {
                     b.HasOne("Pidp.Models.Endorsement", "Endorsement")
@@ -1482,8 +1483,6 @@ namespace Pidp.Data.Migrations
                     b.Navigation("AccessAdministrator");
 
                     b.Navigation("AccessRequests");
-
-                    b.Navigation("Credentials");
 
                     b.Navigation("Facility");
 
