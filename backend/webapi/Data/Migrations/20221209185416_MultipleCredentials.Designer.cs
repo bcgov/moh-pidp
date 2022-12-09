@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NodaTime;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
@@ -12,9 +13,10 @@ using Pidp.Data;
 namespace Pidp.Data.Migrations
 {
     [DbContext(typeof(PidpDbContext))]
-    partial class PidpDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221209185416_MultipleCredentials")]
+    partial class MultipleCredentials
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -177,10 +179,13 @@ namespace Pidp.Data.Migrations
                     b.Property<Instant>("Created")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("IdentityProvider")
-                        .HasColumnType("text");
+                    b.Property<int>("CredentialType")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasDefaultValue(0);
 
                     b.Property<string>("IdpId")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<Instant>("Modified")
@@ -200,8 +205,6 @@ namespace Pidp.Data.Migrations
                         .IsUnique();
 
                     b.ToTable("Credential");
-
-                    b.HasCheckConstraint("CHK_Credential_AtLeastOneIdentifier", "((\"UserId\" is not null) or (\"IdpId\" is not null))");
                 });
 
             modelBuilder.Entity("Pidp.Models.EmailLog", b =>
@@ -423,11 +426,16 @@ namespace Pidp.Data.Migrations
                         new
                         {
                             Code = 5,
-                            Name = "MS Teams for Clinical Use"
+                            Name = "Fraser Health UCI"
                         },
                         new
                         {
                             Code = 6,
+                            Name = "MS Teams for Clinical Use"
+                        },
+                        new
+                        {
+                            Code = 7,
                             Name = "Prescription Refill eForm for Pharmacists"
                         });
                 });
