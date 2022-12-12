@@ -38,8 +38,6 @@ export class AppStateService {
     name: string,
     state: TNamedState
   ): void {
-    console.log(`setting state '${name}'`, state);
-
     const appState = this.getState();
 
     const appStateAsJson = JSON.stringify(appState);

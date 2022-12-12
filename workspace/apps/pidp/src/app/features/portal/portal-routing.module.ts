@@ -13,7 +13,7 @@ const routes: Routes = [
     data: {
       title: 'Provider Identity Portal',
       setDashboardTitleGuard: {
-        titleText: '',
+        titleText: 'Welcome to Provider Identity Portal',
         titleDescriptionText: '',
       },
     },

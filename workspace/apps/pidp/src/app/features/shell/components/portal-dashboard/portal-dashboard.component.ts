@@ -4,7 +4,7 @@ import { IsActiveMatchOptions } from '@angular/router';
 import { Observable, forkJoin, map } from 'rxjs';
 
 import { DashboardStateModel, PidpStateName } from '@pidp/data-model';
-import { AppStateService, ApplicationService } from '@pidp/presentation';
+import { AppStateService } from '@pidp/presentation';
 
 import {
   DashboardHeaderConfig,
@@ -46,11 +46,9 @@ export class PortalDashboardComponent implements IDashboard, OnInit {
   public showMenuItemIcons: boolean;
   public responsiveMenuItems: boolean;
   public menuItems: DashboardMenuItem[];
-  public showUxV2: boolean;
 
   public dashboardState$ = this.stateService.stateBroadcast$.pipe(
     map((state) => {
-      console.log('dashboard state changed');
       const dashboardNamedState = state.all.find(
         (x) => x.stateName === PidpStateName.dashboard
       );
@@ -88,11 +86,6 @@ export class PortalDashboardComponent implements IDashboard, OnInit {
     this.showMenuItemIcons = true;
     this.responsiveMenuItems = false;
     this.menuItems = this.createMenuItems();
-    this.showUxV2 = false;
-
-    this.routeIdentificationService.routeNameBroadcast$.subscribe((arg) =>
-      this.onRouteNameChange(arg)
-    );
   }
   public ngOnInit(): void {
     // Get profile status and college info.
@@ -107,6 +100,7 @@ export class PortalDashboardComponent implements IDashboard, OnInit {
       const fullNameText = this.getUserFullNameText(result.profileStatus);
       const collegeName = this.getCollegeName(result.collegeInfo);
 
+      // Set the user name and college on the dashboard.
       const oldState = this.stateService.getNamedState<DashboardStateModel>(
         PidpStateName.dashboard
       );
@@ -115,23 +109,8 @@ export class PortalDashboardComponent implements IDashboard, OnInit {
         userProfileFullNameText: fullNameText,
         userProfileCollegeNameText: collegeName,
       };
-      console.log('setting college', newState);
       this.stateService.setNamedState(PidpStateName.dashboard, newState);
     });
-  }
-
-  private onRouteNameChange(arg: RouteChangeDetectedEventArg): void {
-    // Map the route to the UX dashboard version to use
-    switch (arg.routeName) {
-      case knownRouteNames.profile.collegeLicenseInfo:
-      case knownRouteNames.portal:
-      case knownRouteNames.access.driverFitness:
-        this.showUxV2 = this.config.featureFlags?.isLayoutV2Enabled ?? false;
-        break;
-      default:
-        this.showUxV2 = false;
-        break;
-    }
   }
 
   public onLogout(): void {
