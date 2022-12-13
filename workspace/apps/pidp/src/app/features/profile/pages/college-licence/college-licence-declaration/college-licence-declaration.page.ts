@@ -32,6 +32,11 @@ export class CollegeLicenceDeclarationPage
   public formState: CollegeLicenceDeclarationFormState;
   public colleges: CollegeLookup[];
 
+  public get showNurseValidationInfo(): boolean {
+    const isNurse = this.formState.collegeCode.value === 3;
+    return isNurse;
+  }
+
   public constructor(
     protected dialog: MatDialog,
     protected formUtilsService: FormUtilsService,
