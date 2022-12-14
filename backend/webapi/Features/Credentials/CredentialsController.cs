@@ -2,7 +2,6 @@ namespace Pidp.Features.Credentials;
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-
 using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.Services;
 
