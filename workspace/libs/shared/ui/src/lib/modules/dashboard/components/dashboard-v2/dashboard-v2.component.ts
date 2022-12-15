@@ -9,14 +9,12 @@ import {
 import { MatDrawerMode } from '@angular/material/sidenav';
 import { IsActiveMatchOptions } from '@angular/router';
 
+import { DashboardStateModel } from '@pidp/data-model';
+
 import { RoutePath } from '@bcgov/shared/utils';
 
 import { PidpViewport, ViewportService } from '../../../../services';
-import {
-  DashboardMenuItem,
-  DashboardRouteMenuItem,
-  DashboardStateModel,
-} from '../../models';
+import { DashboardMenuItem, DashboardRouteMenuItem } from '../../models';
 
 @Component({
   selector: 'ui-dashboard-v2',
@@ -25,19 +23,38 @@ import {
 })
 export class DashboardV2Component implements OnChanges {
   @Input() public dashboardState!: DashboardStateModel;
+  @Input() public menuItems!: DashboardMenuItem[];
   @Output() public logout = new EventEmitter<void>();
 
   private viewport = PidpViewport.xsmall;
   public showMiniMenuButton = true;
   public isSidenavOpened = false;
   public sidenavMode: MatDrawerMode = 'over';
-  public isMenuUserProfileVisible = false;
+  public get isHeaderImageVisible(): boolean {
+    // Hide the image in xsmall small when there is title text to display.
+    if (
+      (this.viewport === PidpViewport.small ||
+        this.viewport === PidpViewport.xsmall) &&
+      this.dashboardState.titleText
+    ) {
+      return false;
+    }
+    return true;
+  }
+
+  public get isMenuUserProfileVisible(): boolean {
+    // NOTE: The user name section is always hidden in xsmall and small views
+    if (
+      this.viewport === PidpViewport.small ||
+      this.viewport === PidpViewport.xsmall
+    ) {
+      return false;
+    }
+    return !!this.dashboardState.userProfileFullNameText;
+  }
   public isLogoutButtonVisible = false;
   public isLogoutMenuItemVisible = false;
 
-  public get menuItems(): DashboardMenuItem[] {
-    return this.dashboardState.menuItems ?? [];
-  }
   public get showTitle(): boolean {
     return !!this.dashboardState.titleText;
   }
@@ -45,7 +62,10 @@ export class DashboardV2Component implements OnChanges {
     return !!this.dashboardState.titleDescriptionText;
   }
   public get isCollegeInfoVisible(): boolean {
-    return !!this.dashboardState?.userProfileCollegeNameText;
+    return (
+      this.isMenuUserProfileVisible &&
+      !!this.dashboardState.userProfileCollegeNameText
+    );
   }
 
   public constructor(private viewportService: ViewportService) {
@@ -100,7 +120,6 @@ export class DashboardV2Component implements OnChanges {
     switch (this.viewport) {
       case PidpViewport.xsmall:
         this.showMiniMenuButton = true;
-        this.isMenuUserProfileVisible = false;
         this.isSidenavOpened = false;
         this.sidenavMode = 'over';
 
@@ -109,7 +128,6 @@ export class DashboardV2Component implements OnChanges {
         break;
       case PidpViewport.small:
         this.showMiniMenuButton = true;
-        this.isMenuUserProfileVisible = false;
         this.isSidenavOpened = false;
         this.sidenavMode = 'over';
         this.isLogoutButtonVisible = false;
@@ -117,7 +135,6 @@ export class DashboardV2Component implements OnChanges {
         break;
       case PidpViewport.medium:
         this.showMiniMenuButton = false;
-        this.isMenuUserProfileVisible = false;
         this.isSidenavOpened = true;
         this.sidenavMode = 'side';
         this.isLogoutButtonVisible = true;
@@ -125,7 +142,6 @@ export class DashboardV2Component implements OnChanges {
         break;
       case PidpViewport.large:
         this.showMiniMenuButton = false;
-        this.isMenuUserProfileVisible = false;
         this.isSidenavOpened = true;
         this.sidenavMode = 'side';
         this.isLogoutButtonVisible = true;

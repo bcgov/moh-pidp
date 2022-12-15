@@ -32,16 +32,15 @@ export interface LoginPageRouteData {
 export class LoginPage {
   public viewportOptions = PidpViewport;
 
-  public title: string;
   public headerConfig: DashboardHeaderConfig;
   public loginCancelled: boolean;
-  public bcscAppDownload: string;
   public bcscSupportUrl: string;
   public bcscMobileSetupUrl: string;
   public specialAuthorityUrl: string;
-  public prescriptionRenewalSupportUrl: string;
   public providerIdentitySupportEmail: string;
   public isAdminLogin: boolean;
+  public prescriptionRenewalSupportUrl: string;
+  public bcscAppDownload: string;
 
   public IdentityProvider = IdentityProvider;
 
@@ -64,17 +63,16 @@ export class LoginPage {
 
     const routeData = routeSnapshot.data.loginPageData as LoginPageRouteData;
 
-    this.title = routeData.title;
     this.headerConfig = { theme: 'dark', allowMobileToggle: false };
     this.loginCancelled = routeSnapshot.queryParams.action === 'cancelled';
-    this.bcscAppDownload = this.config.urls.bcscAppDownload;
     this.bcscSupportUrl = this.config.urls.bcscSupport;
     this.bcscMobileSetupUrl = this.config.urls.bcscMobileSetup;
     this.specialAuthorityUrl = this.config.urls.specialAuthority;
-    this.prescriptionRenewalSupportUrl = this.config.urls.prescriptionRenewal;
     this.providerIdentitySupportEmail =
       this.config.emails.providerIdentitySupport;
     this.isAdminLogin = routeData.isAdminLogin;
+    this.prescriptionRenewalSupportUrl = this.config.urls.prescriptionRenewal;
+    this.bcscAppDownload = this.config.urls.bcscAppDownload;
 
     this.viewportService.viewportBroadcast$.subscribe((viewport) =>
       this.onViewportChange(viewport)

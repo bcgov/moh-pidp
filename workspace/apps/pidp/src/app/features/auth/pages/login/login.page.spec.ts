@@ -11,10 +11,10 @@ import { DocumentService } from '@app/core/services/document.service';
 
 import { IdentityProvider } from '../../enums/identity-provider.enum';
 import { AuthService } from '../../services/auth.service';
-import { LoginPage } from './login.page';
+import { LoginPageV2Component } from './login.page';
 
-describe('LoginPage', () => {
-  let component: LoginPage;
+describe('LoginPageV2Component', () => {
+  let component: LoginPageV2Component;
 
   let mockActivatedRoute;
 
@@ -32,7 +32,7 @@ describe('LoginPage', () => {
     TestBed.configureTestingModule({
       imports: [RouterTestingModule, MatDialogModule],
       providers: [
-        LoginPage,
+        LoginPageV2Component,
         {
           provide: APP_CONFIG,
           useValue: APP_DI_CONFIG,
@@ -46,7 +46,7 @@ describe('LoginPage', () => {
       ],
     });
 
-    component = TestBed.inject(LoginPage);
+    component = TestBed.inject(LoginPageV2Component);
   });
 
   it('should create', () => {
