@@ -29,5 +29,5 @@ public class Credential : BaseAuditable, IOwnedResource
     public CredentialType CredentialType { get; set; }
 
     // Computed properties
-    public string? Hpdid => this.CredentialType == CredentialType.Bcsc ? this.IdpId : string.Empty;
+    public string? Hpdid => this.CredentialType == CredentialType.Bcsc ? this.IdpId : null;
 }
