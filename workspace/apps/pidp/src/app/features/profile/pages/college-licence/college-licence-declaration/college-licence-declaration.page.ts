@@ -6,6 +6,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { EMPTY, Observable, catchError, of, tap } from 'rxjs';
 
+import { RegisteredCollege } from '@pidp/data-model';
+
 import { AbstractFormPage } from '@app/core/classes/abstract-form-page.class';
 import { PartyService } from '@app/core/party/party.service';
 import { FormUtilsService } from '@app/core/services/form-utils.service';
@@ -33,7 +35,8 @@ export class CollegeLicenceDeclarationPage
   public colleges: CollegeLookup[];
 
   public get showNurseValidationInfo(): boolean {
-    const isNurse = this.formState.collegeCode.value === 3;
+    const isNurse =
+      this.formState.collegeCode.value === RegisteredCollege.Bccnm;
     return isNurse;
   }
 
