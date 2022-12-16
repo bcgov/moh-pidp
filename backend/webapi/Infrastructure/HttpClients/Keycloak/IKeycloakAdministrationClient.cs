@@ -12,6 +12,15 @@ public interface IKeycloakAdministrationClient
     Task<bool> AssignClientRole(Guid userId, string clientId, string roleName);
 
     /// <summary>
+    /// Assigns a Client Role to the user with multiple credentials, if it exists.
+    /// Returns true if the operation was successful.
+    /// </summary>
+    /// <param name="userId"></param>
+    /// <param name="clientId"></param>
+    /// <param name="roleName"></param>
+    Task<bool> AssignClientRole(IEnumerable<Guid> userIds, string clientId, string roleName);
+
+    /// <summary>
     /// Assigns a realm-level role to the user, if it exists.
     /// Returns true if the operation was successful.
     /// </summary>

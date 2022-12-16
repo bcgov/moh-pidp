@@ -25,6 +25,32 @@ public class KeycloakAdministrationClient : BaseClient, IKeycloakAdministrationC
 
         return result.IsSuccess;
     }
+    public async Task<bool> AssignClientRole(IEnumerable<Guid> userIds, string clientId, string roleName)
+    {
+        // We need both the name and ID of the role to assign it.
+        var role = await this.GetClientRole(clientId, roleName);
+        if (role == null)
+        {
+            return false;
+        }
+
+        var success = true;
+        foreach (var userId in userIds)
+        {
+            // Keycloak expects an array of roles.
+            var result = await this.PostAsync($"users/{userId}/role-mappings/clients/{role.ContainerId}", new[] { role });
+            if (result.IsSuccess)
+            {
+                this.Logger.LogClientRoleAssigned(userId, roleName, clientId);
+            }
+            else
+            {
+                success = false;
+                this.Logger.LogClientRoleAssignmentFailure(userId, roleName, clientId)
+            }
+        }
+        return success;
+    }
 
     public async Task<bool> AssignRealmRole(Guid userId, string roleName)
     {
@@ -178,4 +204,7 @@ public static partial class KeycloakAdministrationClientLoggingExtensions
 
     [LoggerMessage(5, LogLevel.Error, "Failed to update user {userId} with CPN {cpn}.")]
     public static partial void LogCpnUpdateFailure(this ILogger logger, Guid userId, string cpn);
+
+    [LoggerMessage(6, LogLevel.Information, "Failed to assign Role {roleName} to User {userId} in Client {clientId}.")]
+    public static partial void LogClientRoleAssignmentFailure(this ILogger logger, Guid userId, string roleName, string clientId);
 }
