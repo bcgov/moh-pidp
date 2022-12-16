@@ -46,7 +46,7 @@ public class KeycloakAdministrationClient : BaseClient, IKeycloakAdministrationC
             else
             {
                 success = false;
-                this.Logger.LogClientRoleAssignmentFailure(userId, roleName, clientId)
+                this.Logger.LogClientRoleAssignmentFailure(userId, roleName, clientId);
             }
         }
         return success;
@@ -169,6 +169,27 @@ public class KeycloakAdministrationClient : BaseClient, IKeycloakAdministrationC
         updateAction(user);
 
         return await this.UpdateUser(userId, user);
+    }
+
+    public async Task<bool> UpdateUser(IEnumerable<Guid> userIds, Action<UserRepresentation> updateAction)
+    {
+        var success = true;
+
+        foreach (var userId in userIds)
+        {
+            var user = await this.GetUser(userId);
+            if (user == null)
+            {
+                success = false;
+                continue;
+            }
+
+            updateAction(user);
+
+            success = success && await this.UpdateUser(userId, user);
+        }
+
+        return success;
     }
 
     public async Task<bool> UpdateUserCpn(Guid userId, string? cpn)
