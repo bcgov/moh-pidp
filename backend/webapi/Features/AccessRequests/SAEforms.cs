@@ -54,17 +54,17 @@ public class SAEforms
 
         public async Task<IDomainResult> HandleAsync(Command command)
         {
-            var userId = await this.context.Credentials
-                .Where(credential => credential.PartyId == command.PartyId)
-                .Select(credential => credential.UserId)
-                .SingleAsync();
+            var userIds = await this.context.Credentials
+                    .Where(credential => credential.PartyId == command.PartyId)
+                    .Select(credential => credential.UserId)
+                    .ToListAsync();
 
             var dto = await this.context.Parties
                 .Where(party => party.Id == command.PartyId)
                 .Select(party => new
                 {
                     AlreadyEnroled = party.AccessRequests.Any(request => request.AccessTypeCode == AccessTypeCode.SAEforms),
-                    userId,
+                    userIds,
                     party.Email,
                     party.FirstName,
                     party.Cpn,
@@ -81,7 +81,7 @@ public class SAEforms
                 return DomainResult.Failed();
             }
 
-            if (!await this.keycloakClient.AssignClientRole(dto.userId, MohClients.SAEforms.ClientId, MohClients.SAEforms.AccessRole))
+            if (!await this.keycloakClient.AssignClientRole(dto.userIds, MohClients.SAEforms.ClientId, MohClients.SAEforms.AccessRole))
             {
                 return DomainResult.Failed();
             }

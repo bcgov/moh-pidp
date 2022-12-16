@@ -75,10 +75,10 @@ public class HcimAccountTransfer
 
         public async Task<IDomainResult<Model>> HandleAsync(Command command)
         {
-            var userId = await this.context.Credentials
-            .Where(credential => credential.PartyId == command.PartyId)
-            .Select(credential => credential.UserId)
-            .SingleAsync();
+            var userIds = await this.context.Credentials
+                    .Where(credential => credential.PartyId == command.PartyId)
+                    .Select(credential => credential.UserId)
+                    .ToListAsync();
 
             var dto = await this.context.Parties
                 .Where(party => party.Id == command.PartyId)
@@ -87,7 +87,7 @@ public class HcimAccountTransfer
                     AlreadyEnroled = party.AccessRequests.Any(request => request.AccessTypeCode == AccessTypeCode.HcimAccountTransfer
                         || request.AccessTypeCode == AccessTypeCode.HcimEnrolment),
                     DemographicsComplete = party.Email != null && party.Phone != null,
-                    userId,
+                    userIds,
                     party.Email
                 })
                 .SingleAsync();
@@ -113,7 +113,7 @@ public class HcimAccountTransfer
                 return DomainResult.Success(new Model(authStatus));
             }
 
-            if (!await this.UpdateKeycloakUser(dto.userId, authStatus.OrgDetails, authStatus.HcimUserRole))
+            if (!await this.UpdateKeycloakUser(dto.userIds, authStatus.OrgDetails, authStatus.HcimUserRole))
             {
                 return DomainResult.Failed<Model>();
             }
@@ -133,14 +133,14 @@ public class HcimAccountTransfer
             return DomainResult.Success(new Model(authStatus));
         }
 
-        private async Task<bool> UpdateKeycloakUser(Guid userId, LdapLoginResponse.OrgDetails orgDetails, string hcimRole)
+        private async Task<bool> UpdateKeycloakUser(IEnumerable<Guid> userIds, LdapLoginResponse.OrgDetails orgDetails, string hcimRole)
         {
-            if (!await this.keycloakClient.UpdateUser(userId, (user) => user.SetLdapOrgDetails(orgDetails)))
+            if (!await this.keycloakClient.UpdateUser(userIds, (user) => user.SetLdapOrgDetails(orgDetails)))
             {
                 return false;
             }
 
-            if (!await this.keycloakClient.AssignClientRole(userId, this.hcimClientId, hcimRole))
+            if (!await this.keycloakClient.AssignClientRole(userIds, this.hcimClientId, hcimRole))
             {
                 return false;
             }
