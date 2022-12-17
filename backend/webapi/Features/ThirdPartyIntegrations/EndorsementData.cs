@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 using Pidp.Data;
 using Pidp.Infrastructure.HttpClients.Plr;
+using Pidp.Models;
 
 // Currently used by DMFT
 public class EndorsementData
@@ -47,11 +48,12 @@ public class EndorsementData
         public async Task<IDomainResult<List<Model>>> HandleAsync(Query query)
         {
             var partyId = await this.context.Credentials
-                .Where(credential => credential.Hpdid!.Replace("@bcsc", "") == query.Hpdid)
+                .Where(credential => credential.IdpId!.Replace("@bcsc", "") == query.Hpdid
+                    && credential.CredentialType == CredentialType.Bcsc)
                 .Select(credential => credential.PartyId)
                 .SingleOrDefaultAsync();
 
-            if (partyId == null)
+            if (partyId == default)
             {
                 return DomainResult.NotFound<List<Model>>();
             }
@@ -63,7 +65,8 @@ public class EndorsementData
                 .Where(relationship => relationship.PartyId != partyId)
                 .Select(relationship => new Dto
                 {
-                    Hpdid = query.Hpdid!.Replace("@bcsc", ""),
+                    BcscCredential = relationship.Party!.Credentials
+                        .SingleOrDefault(credential => credential.CredentialType == CredentialType.Bcsc),
                     Cpn = relationship.Party!.Cpn
                 })
                 .ToListAsync();
@@ -72,7 +75,7 @@ public class EndorsementData
 
             return DomainResult.Success(dtos.Select(dto => new Model
             {
-                Hpdid = dto.Hpdid,
+                Hpdid = dto.BcscCredential?.IdpId,
                 Licences = licences?
                     .Where(licence => licence.Cpn == dto.Cpn)
                     .Select(licence => new Model.LicenceInformation
@@ -89,7 +92,7 @@ public class EndorsementData
 
     private class Dto
     {
-        public string? Hpdid { get; set; } = string.Empty;
+        public Credential? BcscCredential { get; set; }
         public string? Cpn { get; set; }
     }
 }
