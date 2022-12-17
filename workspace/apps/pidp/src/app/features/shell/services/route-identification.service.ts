@@ -8,6 +8,9 @@ export const knownRouteNames = {
   profile: {
     collegeLicenseInfo: 'college-licence-info',
   },
+  access: {
+    driverFitness: 'driver-fitness',
+  },
 };
 export interface RouteChangeDetectedEventArg {
   path: string;
@@ -45,6 +48,8 @@ export class RouteIdentificationService {
         return knownRouteNames.profile.collegeLicenseInfo;
       case '/portal':
         return knownRouteNames.portal;
+      case '/access/driver-fitness/v2':
+        return knownRouteNames.access.driverFitness;
       default:
         return '';
     }

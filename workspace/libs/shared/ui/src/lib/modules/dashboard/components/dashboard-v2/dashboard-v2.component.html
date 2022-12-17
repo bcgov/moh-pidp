@@ -52,7 +52,7 @@
           {{ dashboardState.titleDescriptionText }}
         </p>
       </div>
-      <div class="header-image-container">
+      <div *ngIf="isHeaderImageVisible" class="header-image-container">
         <img
           src="/assets/images/pidp-logo-white.svg"
           title="PIDP Logo"
