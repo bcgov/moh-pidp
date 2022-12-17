@@ -75,11 +75,6 @@ public class HcimAccountTransfer
 
         public async Task<IDomainResult<Model>> HandleAsync(Command command)
         {
-            var userIds = await this.context.Credentials
-                    .Where(credential => credential.PartyId == command.PartyId)
-                    .Select(credential => credential.UserId)
-                    .ToListAsync();
-
             var dto = await this.context.Parties
                 .Where(party => party.Id == command.PartyId)
                 .Select(party => new
@@ -87,7 +82,7 @@ public class HcimAccountTransfer
                     AlreadyEnroled = party.AccessRequests.Any(request => request.AccessTypeCode == AccessTypeCode.HcimAccountTransfer
                         || request.AccessTypeCode == AccessTypeCode.HcimEnrolment),
                     DemographicsComplete = party.Email != null && party.Phone != null,
-                    userIds,
+                    UserIds = party.Credentials.Select(credential => credential.UserId),
                     party.Email
                 })
                 .SingleAsync();
@@ -113,7 +108,7 @@ public class HcimAccountTransfer
                 return DomainResult.Success(new Model(authStatus));
             }
 
-            if (!await this.UpdateKeycloakUser(dto.userIds, authStatus.OrgDetails, authStatus.HcimUserRole))
+            if (!await this.UpdateKeycloakUser(dto.UserIds, authStatus.OrgDetails, authStatus.HcimUserRole))
             {
                 return DomainResult.Failed<Model>();
             }
