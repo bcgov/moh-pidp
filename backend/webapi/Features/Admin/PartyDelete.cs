@@ -39,7 +39,7 @@ public class PartyDelete
                 return;
             }
 
-            var roleRemover = new RoleRemover(this.client, this.logger, this.context);
+            var roleRemover = new RoleRemover(this.client, this.logger);
             foreach (var party in parties)
             {
                 await roleRemover.RemoveClientRoles(party);
@@ -58,14 +58,11 @@ public class PartyDelete
         private readonly Dictionary<AccessTypeCode, Role?> roleCache;
         private readonly IKeycloakAdministrationClient client;
         private readonly ILogger logger;
-        private readonly PidpDbContext context;
 
-
-        public RoleRemover(IKeycloakAdministrationClient client, ILogger logger, PidpDbContext context)
+        public RoleRemover(IKeycloakAdministrationClient client, ILogger logger)
         {
             this.client = client;
             this.logger = logger;
-            this.context = context;
             this.roleCache = new();
         }
 
