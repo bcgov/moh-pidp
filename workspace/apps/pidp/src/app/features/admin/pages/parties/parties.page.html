@@ -2,32 +2,40 @@
   <ui-page-header>{{ title }}</ui-page-header>
 </ui-page>
 
-<ng-container *ngIf="environment !== production">
-  <button mat-stroked-button type="button" color="warn" (click)="onDelete()">
-    Delete all
-  </button>
-</ng-container>
+<div class="admin-header">
+  <p id="parties-table-description">
+    <strong>List of users in the Provider Identity Portal</strong>
+  </p>
+  <ng-container *ngIf="environment !== production">
+    <button mat-stroked-button type="button" color="warn" (click)="onDelete()">
+      Delete all
+    </button>
+  </ng-container>
+</div>
 
-<table mat-table [dataSource]="dataSource">
+<table
+  mat-table
+  aria-describedby="parties-table-description"
+  [dataSource]="dataSource">
   <ng-container matColumnDef="id">
-    <th *matHeaderCellDef mat-header-cell>Reference ID</th>
+    <th *matHeaderCellDef scope="col" mat-header-cell>Reference ID</th>
     <td *matCellDef="let element" mat-cell>{{ element.id }}</td>
   </ng-container>
 
   <ng-container matColumnDef="providerName">
-    <th *matHeaderCellDef mat-header-cell>Provider Name</th>
+    <th *matHeaderCellDef scope="col" mat-header-cell>Provider Name</th>
     <td *matCellDef="let element" mat-cell>{{ element.providerName }}</td>
   </ng-container>
 
   <ng-container matColumnDef="providerCollegeCode">
-    <th *matHeaderCellDef mat-header-cell>Provider College</th>
+    <th *matHeaderCellDef scope="col" mat-header-cell>Provider College</th>
     <td *matCellDef="let element" mat-cell>
       {{ element.providerCollegeCode | lookupCode: 'colleges':'acronym' }}
     </td>
   </ng-container>
 
   <ng-container matColumnDef="saEforms">
-    <th *matHeaderCellDef mat-header-cell>SA eForms</th>
+    <th *matHeaderCellDef scope="col" mat-header-cell>SA eForms</th>
     <td *matCellDef="let element" mat-cell>
       <mat-icon
         [class]="
