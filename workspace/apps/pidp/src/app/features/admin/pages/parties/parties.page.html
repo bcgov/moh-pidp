@@ -3,7 +3,7 @@
 </ui-page>
 
 <div class="admin-header">
-  <p id="table-description">
+  <p id="parties-table-description">
     <strong>List of users in the Provider Identity Portal</strong>
   </p>
   <ng-container *ngIf="environment !== production">
@@ -13,7 +13,10 @@
   </ng-container>
 </div>
 
-<table mat-table aria-describedby="table-description" [dataSource]="dataSource">
+<table
+  mat-table
+  aria-describedby="parties-table-description"
+  [dataSource]="dataSource">
   <ng-container matColumnDef="id">
     <th *matHeaderCellDef scope="col" mat-header-cell>Reference ID</th>
     <td *matCellDef="let element" mat-cell>{{ element.id }}</td>
