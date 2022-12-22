@@ -50,6 +50,7 @@ public class DriverFitness
                 .Select(party => new
                 {
                     AlreadyEnroled = party.AccessRequests.Any(request => request.AccessTypeCode == AccessTypeCode.DriverFitness),
+                    LicenceDeclarationCompleted = party.LicenceDeclaration != null,
                     party.Cpn,
                     party.Email
                 })
@@ -57,10 +58,40 @@ public class DriverFitness
 
             if (dto.AlreadyEnroled
                 || dto.Email == null
-                || !await this.plrClient.GetStandingAsync(dto.Cpn))
+                || !dto.LicenceDeclarationCompleted)
             {
                 this.logger.LogDriverFitnessAccessRequestDenied();
                 return DomainResult.Failed();
+            }
+
+            if (dto.Cpn == null)
+            {
+                // Check status of Endorsements
+                var endorsementCpns = await this.context.Endorsements
+                    .Where(endorsement => endorsement.Active
+                        && endorsement.EndorsementRelationships.Any(relationship => relationship.PartyId == command.PartyId))
+                    .SelectMany(endorsement => endorsement.EndorsementRelationships)
+                    .Where(relationship => relationship.PartyId != command.PartyId)
+                    .Select(relationship => relationship.Party!.Cpn)
+                    .ToListAsync();
+
+                var endorsementPlrStanding = await this.plrClient.GetAggregateStandingsDigestAsync(endorsementCpns);
+                if (!endorsementPlrStanding.HasGoodStanding)
+                {
+                    this.logger.LogDriverFitnessAccessRequestDenied();
+                    return DomainResult.Failed();
+                }
+            }
+            else
+            {
+                // Check status of College Licence
+                if (!(await this.plrClient.GetStandingsDigestAsync(dto.Cpn))
+                    .With(AllowedIdentifierTypes)
+                    .HasGoodStanding)
+                {
+                    this.logger.LogDriverFitnessAccessRequestDenied();
+                    return DomainResult.Failed();
+                }
             }
 
             // TODO assign role?
