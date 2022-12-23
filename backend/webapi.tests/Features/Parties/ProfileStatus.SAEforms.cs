@@ -27,7 +27,7 @@ public class ProfileStatusSAEformsTests : ProfileStatusTest
 
         var profile = await handler.HandleAsync(new Command { Id = party.Id, User = user });
 
-        var eforms = profile.Section<SAEforms>();
+        var eforms = profile.Section<SAEformsSection>();
         eforms.AssertNoAlerts();
         var expected = user.GetIdentityProvider() == ClaimValues.BCServicesCard
             ? StatusCode.Locked
@@ -47,7 +47,7 @@ public class ProfileStatusSAEformsTests : ProfileStatusTest
 
         var profile = await handler.HandleAsync(new Command { Id = party.Id, User = user });
 
-        var eforms = profile.Section<SAEforms>();
+        var eforms = profile.Section<SAEformsSection>();
         eforms.AssertNoAlerts();
         var expected = user.GetIdentityProvider() == ClaimValues.BCServicesCard
             ? StatusCode.Locked
@@ -67,7 +67,7 @@ public class ProfileStatusSAEformsTests : ProfileStatusTest
 
         var profile = await handler.HandleAsync(new Command { Id = party.Id, User = AMock.BcscUser() });
 
-        var eforms = profile.Section<SAEforms>();
+        var eforms = profile.Section<SAEformsSection>();
         eforms.AssertNoAlerts();
         if (identifierType == IdentifierType.PharmacyTech)
         {
@@ -91,7 +91,7 @@ public class ProfileStatusSAEformsTests : ProfileStatusTest
 
         var profile = await handler.HandleAsync(new Command { Id = party.Id, User = AMock.BcscUser() });
 
-        var eforms = profile.Section<SAEforms>();
+        var eforms = profile.Section<SAEformsSection>();
         eforms.AssertNoAlerts();
         Assert.Equal(StatusCode.Locked, eforms.StatusCode);
         Assert.False(eforms.IncorrectLicenceType);
@@ -109,7 +109,7 @@ public class ProfileStatusSAEformsTests : ProfileStatusTest
 
         var profile = await handler.HandleAsync(new Command { Id = party.Id, User = AMock.BcscUser() });
 
-        var eforms = profile.Section<SAEforms>();
+        var eforms = profile.Section<SAEformsSection>();
         eforms.AssertNoAlerts();
         Assert.Equal(StatusCode.Locked, eforms.StatusCode);
         Assert.False(eforms.IncorrectLicenceType);
@@ -140,7 +140,7 @@ public class ProfileStatusSAEformsTests : ProfileStatusTest
 
         var profile = await handler.HandleAsync(new Command { Id = party.Id, User = AMock.BcscUser() });
 
-        var eforms = profile.Section<SAEforms>();
+        var eforms = profile.Section<SAEformsSection>();
         eforms.AssertNoAlerts();
         Assert.Equal(StatusCode.Complete, eforms.StatusCode);
         Assert.False(eforms.IncorrectLicenceType);
