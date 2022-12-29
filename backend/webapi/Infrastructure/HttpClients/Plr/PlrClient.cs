@@ -69,14 +69,30 @@ public class PlrClient : BaseClient, IPlrClient
             return PlrStandingsDigest.FromEmpty();
         }
 
-        var result = await this.GetWithQueryParamsAsync<IEnumerable<PlrRecord>>("records", new { Cpns = new[] { cpn } });
-        if (!result.IsSuccess
-            || !result.Value.Any())
+        var records = await this.GetRecordsAsync(cpn);
+        if (records == null
+            || !records.Any())
         {
             return PlrStandingsDigest.FromError();
         }
 
-        return PlrStandingsDigest.FromRecords(result.Value);
+        return PlrStandingsDigest.FromRecords(records);
+    }
+
+    public async Task<PlrStandingsDigest> GetAggregateStandingsDigestAsync(IEnumerable<string?> cpns)
+    {
+        var records = await this.GetRecordsAsync(cpns.ToArray());
+
+        if (records == null)
+        {
+            return PlrStandingsDigest.FromError();
+        }
+        if (!records.Any())
+        {
+            return PlrStandingsDigest.FromEmpty();
+        }
+
+        return PlrStandingsDigest.FromRecords(records);
     }
 
     /// <summary>
