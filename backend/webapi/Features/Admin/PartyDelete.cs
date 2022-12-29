@@ -30,6 +30,7 @@ public class PartyDelete
         public async Task HandleAsync(Command command)
         {
             var parties = await this.context.Parties
+                .Include(party => party.Credentials)
                 .Include(party => party.AccessRequests)
                 .ToListAsync();
 
@@ -75,13 +76,16 @@ public class PartyDelete
                     continue;
                 }
 
-                if (await this.client.RemoveClientRole(party.UserId, role))
+                foreach (var credential in party.Credentials)
                 {
-                    this.logger.LogRemoveSuccess(role.Name!, party.UserId);
-                }
-                else
-                {
-                    this.logger.LogRemoveFailure(role.Name!, party.UserId);
+                    if (await this.client.RemoveClientRole(credential.UserId, role))
+                    {
+                        this.logger.LogRemoveSuccess(role.Name!, credential.UserId);
+                    }
+                    else
+                    {
+                        this.logger.LogRemoveFailure(role.Name!, credential.UserId);
+                    }
                 }
             }
         }
