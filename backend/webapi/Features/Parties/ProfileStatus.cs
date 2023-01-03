@@ -16,7 +16,7 @@ using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.HttpClients.Keycloak;
 using Pidp.Infrastructure.HttpClients.Plr;
 using Pidp.Models.Lookups;
-using static Pidp.Features.Parties.ProfileStatus.ProfileStatusDto;
+using static Pidp.Features.Parties.ProfileStatus.Model;
 
 public partial class ProfileStatus
 {
@@ -38,34 +38,6 @@ public partial class ProfileStatus
         [JsonConverter(typeof(PolymorphicDictionarySerializer<string, ProfileSection>))]
         public Dictionary<string, ProfileSection> Status { get; set; } = new();
         public HashSet<Alert> Alerts => new(this.Status.SelectMany(x => x.Value.Alerts));
-
-        public abstract class ProfileSection
-        {
-            internal abstract string SectionName { get; }
-            public HashSet<Alert> Alerts { get; set; } = new();
-            public StatusCode StatusCode { get; set; }
-
-            public bool IsComplete => this.StatusCode == StatusCode.Complete;
-
-            public ProfileSection(ProfileStatusDto profile) => this.SetAlertsAndStatus(profile);
-
-            protected abstract void SetAlertsAndStatus(ProfileStatusDto profile);
-        }
-
-        public enum Alert
-        {
-            TransientError = 1,
-            PlrBadStanding
-        }
-
-        public enum StatusCode
-        {
-            Incomplete = 1,
-            Complete,
-            Locked,
-            Error,
-            Hidden
-        }
     }
 
     public class CommandValidator : AbstractValidator<Command>
@@ -94,67 +66,66 @@ public partial class ProfileStatus
 
         public async Task<Model> HandleAsync(Command command)
         {
-            var profile = await this.context.Parties
-               .Where(party => party.Id == command.Id)
-               .ProjectTo<ProfileStatusDto>(this.mapper.ConfigurationProvider)
-               .SingleAsync();
+            var data = await this.context.Parties
+                .Where(party => party.Id == command.Id)
+                .ProjectTo<ProfileData>(this.mapper.ConfigurationProvider)
+                .SingleAsync();
 
-            if (profile.HasDeclaredLicence
-                && string.IsNullOrWhiteSpace(profile.Cpn))
+            if (data.CollegeLicenceDeclared
+                && data.Birthdate != null
+                && string.IsNullOrWhiteSpace(data.Cpn))
             {
                 // Cert has been entered but no CPN found, likely due to a transient error or delay in PLR record updates. Retry once.
-                profile.Cpn = await this.RecheckCpn(command.Id, profile.LicenceDeclaration, profile.Birthdate);
+                var newCpn = await this.plrClient.FindCpnAsync(data.LicenceDeclaration.CollegeCode!.Value, data.LicenceDeclaration.LicenceNumber!, data.Birthdate.Value);
+                if (newCpn != null)
+                {
+                    var party = await this.context.Parties
+                        .SingleAsync(party => party.Id == command.Id);
+                    party.Cpn = newCpn;
+                    await this.context.SaveChangesAsync();
+                    await this.keycloakClient.UpdateUserCpn(party.UserId, newCpn);
+                }
+
+                data.Cpn = newCpn;
             }
 
-            profile.PlrStanding = await this.plrClient.GetStandingsDigestAsync(profile.Cpn);
-            profile.User = command.User;
+            await data.Finalize(this.context, this.plrClient, command.User);
 
             var profileStatus = new Model
             {
-                Status = new List<Model.ProfileSection>
+                Status = new List<ProfileSection>
                 {
-                    new Model.AccessAdministrator(profile),
-                    new Model.CollegeCertification(profile),
-                    new Model.OrganizationDetails(profile),
-                    new Model.Demographics(profile),
-                    new Model.DriverFitness(profile),
-                    new Model.HcimAccountTransfer(profile),
-                    new Model.HcimEnrolment(profile),
-                    new Model.MSTeams(profile),
-                    new Model.PrescriptionRefillEforms(profile),
-                    new Model.SAEforms(profile),
-                    new Model.Uci(profile)
+                    ProfileSection.Create<AccessAdministratorSection>(data),
+                    ProfileSection.Create<CollegeCertificationSection>(data),
+                    ProfileSection.Create<OrganizationDetailsSection>(data),
+                    ProfileSection.Create<DemographicsSection>(data),
+                    ProfileSection.Create<DriverFitnessSection>(data),
+                    ProfileSection.Create<HcimAccountTransferSection>(data),
+                    ProfileSection.Create<HcimEnrolmentSection>(data),
+                    ProfileSection.Create<MSTeamsSection>(data),
+                    ProfileSection.Create<PrescriptionRefillEformsSection>(data),
+                    ProfileSection.Create<SAEformsSection>(data),
+                    ProfileSection.Create<UciSection>(data)
                 }
                 .ToDictionary(section => section.SectionName, section => section)
             };
 
             return profileStatus;
         }
-
-        private async Task<string?> RecheckCpn(int partyId, LicenceDeclarationDto declaration, LocalDate? birthdate)
-        {
-            if (declaration.HasNoLicence
-                || birthdate == null)
-            {
-                return null;
-            }
-
-            var newCpn = await this.plrClient.FindCpnAsync(declaration.CollegeCode.Value, declaration.LicenceNumber, birthdate.Value);
-            if (newCpn != null)
-            {
-                var party = await this.context.Parties
-                    .SingleAsync(party => party.Id == partyId);
-                party.Cpn = newCpn;
-                await this.context.SaveChangesAsync();
-                await this.keycloakClient.UpdateUserCpn(party.UserId, newCpn);
-            }
-
-            return newCpn;
-        }
     }
 
-    public class ProfileStatusDto
+    public class ProfileData
     {
+        public class LicenceDeclarationDto
+        {
+            public CollegeCode? CollegeCode { get; set; }
+            public string? LicenceNumber { get; set; }
+
+            [MemberNotNullWhen(false, nameof(CollegeCode), nameof(LicenceNumber))]
+            public bool HasNoLicence => this.CollegeCode == null || this.LicenceNumber == null;
+        }
+
+        public int Id { get; set; }
         public string FirstName { get; set; } = string.Empty;
         public string LastName { get; set; } = string.Empty;
         public LocalDate? Birthdate { get; set; }
@@ -166,25 +137,35 @@ public partial class ProfileStatus
         public bool OrganizationDetailEntered { get; set; }
         public IEnumerable<AccessTypeCode> CompletedEnrolments { get; set; } = Enumerable.Empty<AccessTypeCode>();
 
-        // Resolved after projection
-        public PlrStandingsDigest PlrStanding { get; set; } = default!;
-        public ClaimsPrincipal? User { get; set; }
+        private string? userIdentityProvider;
+        public PlrStandingsDigest PartyPlrStanding { get; set; } = default!;
+        public PlrStandingsDigest EndorsementPlrStanding { get; set; } = default!;
 
-        // Computed Properties
         [MemberNotNullWhen(true, nameof(Email), nameof(Phone))]
         public bool DemographicsEntered => this.Email != null && this.Phone != null;
         [MemberNotNullWhen(true, nameof(LicenceDeclaration))]
-        public bool HasDeclaredLicence => this.LicenceDeclaration?.HasNoLicence == false;
-        public bool UserIsBcServicesCard => this.User.GetIdentityProvider() == ClaimValues.BCServicesCard;
-        public bool UserIsPhsa => this.User.GetIdentityProvider() == ClaimValues.Phsa;
+        public bool LicenceDeclarationEntered => this.LicenceDeclaration != null;
+        [MemberNotNullWhen(true, nameof(LicenceDeclaration))]
+        public bool CollegeLicenceDeclared => this.LicenceDeclaration?.HasNoLicence == false;
+        public bool UserIsBcServicesCard => this.userIdentityProvider == ClaimValues.BCServicesCard;
+        public bool UserIsPhsa => this.userIdentityProvider == ClaimValues.Phsa;
 
-        public class LicenceDeclarationDto
+        public async Task Finalize(
+            PidpDbContext context,
+            IPlrClient plrClient,
+            ClaimsPrincipal? user)
         {
-            public CollegeCode? CollegeCode { get; set; }
-            public string? LicenceNumber { get; set; }
+            this.userIdentityProvider = user.GetIdentityProvider();
+            this.PartyPlrStanding = await plrClient.GetStandingsDigestAsync(this.Cpn);
 
-            [MemberNotNullWhen(false, nameof(CollegeCode), nameof(LicenceNumber))]
-            public bool HasNoLicence => this.CollegeCode == null || this.LicenceNumber == null;
+            var endorsementCpns = await context.Endorsements
+                .Where(endorsement => endorsement.Active
+                    && endorsement.EndorsementRelationships.Any(relationship => relationship.PartyId == this.Id))
+                .SelectMany(endorsement => endorsement.EndorsementRelationships)
+                .Where(relationship => relationship.PartyId != this.Id)
+                .Select(relationship => relationship.Party!.Cpn)
+                .ToArrayAsync();
+            this.EndorsementPlrStanding = await plrClient.GetAggregateStandingsDigestAsync(endorsementCpns);
         }
     }
 }
