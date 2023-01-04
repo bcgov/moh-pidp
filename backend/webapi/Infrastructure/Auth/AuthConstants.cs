@@ -17,7 +17,8 @@ public static class Claims
 
 public static class IdentityProviders
 {
-    public const string BCServicesCard = "bcsc";
+    public const string BcServicesCard = "bcsc";
+    public const string BcProvider = "????"; // TODO: what is it?
     public const string Idir = "idir";
     public const string Phsa = "phsa";
 }
