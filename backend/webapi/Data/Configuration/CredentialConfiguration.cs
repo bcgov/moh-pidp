@@ -11,9 +11,6 @@ public class CredentialConfiguration : IEntityTypeConfiguration<Credential>
         builder.HasIndex(x => x.UserId)
             .IsUnique();
 
-        builder.Property(x => x.CredentialType)
-            .HasDefaultValue(CredentialType.Unknown);
-
         builder.HasCheckConstraint("CHK_Credential_AtLeastOneIdentifier",
             @"((""UserId"" is not null) or (""IdpId"" is not null))");
     }

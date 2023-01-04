@@ -1,16 +1,10 @@
 namespace Pidp.Models;
 
+using EntityFrameworkCore.Projectables;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-public enum CredentialType
-{
-    Unknown = 0,
-    Bcsc,
-    BcProvider,
-    Idir,
-    Phsa
-}
+using Pidp.Infrastructure.Auth;
 
 [Table(nameof(Credential))]
 public class Credential : BaseAuditable, IOwnedResource
@@ -18,16 +12,19 @@ public class Credential : BaseAuditable, IOwnedResource
     [Key]
     public int Id { get; set; }
 
-    public Guid UserId { get; set; }
-
-    public string IdpId { get; set; } = string.Empty;
-
     public int PartyId { get; set; }
 
     public Party? Party { get; set; }
 
-    public CredentialType CredentialType { get; set; }
+    public Guid UserId { get; set; } // TODO: fix IOwnedResource + auth
 
-    // Computed properties
-    public string? Hpdid => this.CredentialType == CredentialType.Bcsc ? this.IdpId : null;
+    public string? IdentityProvider { get; set; }
+
+    public string? IdpId { get; set; }
+
+    [Projectable]
+    public string? Hpdid => this.IsBcServicesCard ? this.IdpId : null;
+
+    [Projectable]
+    public bool IsBcServicesCard => this.IdentityProvider == IdentityProviders.BcServicesCard;
 }
