@@ -1,4 +1,5 @@
 namespace Pidp.Features.Endorsements;
+using Pidp.Models.Lookups;
 
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
@@ -17,6 +18,7 @@ public class Index
     {
         public int Id { get; set; }
         public string PartyName { get; set; } = string.Empty;
+        public CollegeCode? CollegeCode { get; set; }
         public bool Active { get; set; }
         public Instant CreatedOn { get; set; }
     }
@@ -42,6 +44,7 @@ public class Index
                 {
                     Id = relationship.EndorsementId,
                     PartyName = $"{relationship.Party!.FirstName} {relationship.Party.LastName}",
+                    CollegeCode = relationship.Party!.LicenceDeclaration!.CollegeCode,
                     Active = relationship.Endorsement!.Active,
                     CreatedOn = relationship.Endorsement.CreatedOn
                 })

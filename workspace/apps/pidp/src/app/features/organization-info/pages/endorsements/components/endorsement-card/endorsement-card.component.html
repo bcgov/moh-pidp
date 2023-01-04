@@ -1,0 +1,60 @@
+<section class="box" uiPidpInjectViewportCss>
+  <div class="content">
+    <div class="icon-box">
+      <mat-icon class="material-icons-outlined">account_circle</mat-icon>
+    </div>
+    <div class="spacer-left"></div>
+    <div class="name-box">
+      <h3 class="name">{{ nameText }}</h3>
+    </div>
+    <div class="school-box">
+      <span>{{ collegeText }}</span>
+    </div>
+    <div class="extra-box-large">
+      <div
+        *ngIf="noticeText"
+        class="notice-box"
+        [class.notice-green]="noticeColour === 'green'"
+        [class.notice-yellow]="noticeColour === 'yellow'">
+        <span>{{ noticeText }}</span>
+      </div>
+      <div *ngIf="createdOnText" class="created-box">
+        <span>{{ createdOnText }}</span>
+      </div>
+    </div>
+    <div
+      *ngIf="showMobileNoticeIcon || !!createdOnText"
+      class="extra-box-xsmall">
+      <fa-icon
+        *ngIf="showMobileNoticeIcon"
+        [class.notice-green]="noticeColour === 'green'"
+        [icon]="faUserGroup"></fa-icon>
+      <span
+        *ngIf="createdOnText"
+        [class.notice-green]="noticeColour === 'green'"
+        >{{ createdOnText }}</span
+      >
+      <span *ngIf="showMobileNoticeText">
+        {{ noticeText }}
+      </span>
+    </div>
+  </div>
+  <div *ngIf="isCancelEnabled || isApproveEnabled" class="actions">
+    <button
+      *ngIf="isCancelEnabled"
+      class="cancel"
+      mat-stroked-button
+      type="button"
+      (click)="cancelClick.emit(id)">
+      Cancel
+    </button>
+    <button
+      *ngIf="isApproveEnabled"
+      class="approve"
+      mat-stroked-button
+      type="button"
+      (click)="approveClick.emit(id)">
+      Approve
+    </button>
+  </div>
+</section>
