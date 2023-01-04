@@ -48,8 +48,7 @@ public class EndorsementData
         public async Task<IDomainResult<List<Model>>> HandleAsync(Query query)
         {
             var partyId = await this.context.Credentials
-                .Where(credential => credential.IdpId!.Replace("@bcsc", "") == query.Hpdid
-                    && credential.CredentialType == CredentialType.Bcsc)
+                .Where(credential => credential.Hpdid!.Replace("@bcsc", "") == query.Hpdid)
                 .Select(credential => credential.PartyId)
                 .SingleOrDefaultAsync();
 
