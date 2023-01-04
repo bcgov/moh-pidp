@@ -15,7 +15,7 @@ public static class Claims
     public const string Subject = "sub";
 }
 
-public static class ClaimValues
+public static class IdentityProviders
 {
     public const string BCServicesCard = "bcsc";
     public const string Idir = "idir";
