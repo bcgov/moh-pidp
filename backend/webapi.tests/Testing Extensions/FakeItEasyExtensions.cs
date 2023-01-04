@@ -43,6 +43,7 @@ public static class FakeItEasyExtensions
     {
         A.CallTo(() => client.GetStandingAsync(A<string?>._)).Returns(digest.HasGoodStanding);
         A.CallTo(() => client.GetStandingsDigestAsync(A<string?>._)).Returns(digest);
+        A.CallTo(() => client.GetAggregateStandingsDigestAsync(A<IEnumerable<string?>>._)).Returns(digest);
 
         return client;
     }
