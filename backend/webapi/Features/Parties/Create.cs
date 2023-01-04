@@ -2,7 +2,6 @@ namespace Pidp.Features.Parties;
 
 using FluentValidation;
 using NodaTime;
-using System.Security.Claims;
 
 using Pidp.Data;
 using Pidp.Extensions;
@@ -13,7 +12,9 @@ public class Create
 {
     public class Command : ICommand<int>
     {
-        public string? Hpdid { get; set; }
+        public Guid UserId { get; set; }
+        public string IdentityProvider { get; set; } = string.Empty;
+        public string IdpId { get; set; } = string.Empty;
         public LocalDate? Birthdate { get; set; }
         public string FirstName { get; set; } = string.Empty;
         public string LastName { get; set; } = string.Empty;
@@ -25,43 +26,15 @@ public class Create
         {
             var user = accessor?.HttpContext?.User;
 
+            this.RuleFor(x => x.UserId).NotEmpty().Equal(user.GetUserId());
+            this.RuleFor(x => x.IdentityProvider).NotEmpty().MatchesUserClaim(user, Claims.IdentityProvider)
+                .NotEqual(IdentityProviders.BcProvider).WithMessage("Bc Provider cannot be used to create a Party");
+            this.RuleFor(x => x.IdpId).NotEmpty().MatchesUserClaim(user, Claims.PreferredUsername);
             this.RuleFor(x => x.FirstName).NotEmpty().MatchesUserClaim(user, Claims.GivenName);
             this.RuleFor(x => x.LastName).NotEmpty().MatchesUserClaim(user, Claims.FamilyName);
 
-            this.Include<AbstractValidator<Command>>(x => user.GetIdentityProvider() switch
-            {
-                ClaimValues.BCServicesCard => new BcscValidator(user),
-                ClaimValues.Phsa => new PhsaValidator(),
-                ClaimValues.Idir => new IdirValidator(),
-                _ => throw new NotImplementedException("Given Identity Provider is not supported")
-            });
-        }
-
-        private class BcscValidator : AbstractValidator<Command>
-        {
-            public BcscValidator(ClaimsPrincipal? user)
-            {
-                this.RuleFor(x => x.Hpdid).NotEmpty().MatchesUserClaim(user, Claims.PreferredUsername);
-                this.RuleFor(x => x.Birthdate).NotEmpty().Equal(user?.GetBirthdate()).WithMessage($"Must match the \"birthdate\" Claim on the current User");
-            }
-        }
-
-        private class PhsaValidator : AbstractValidator<Command>
-        {
-            public PhsaValidator()
-            {
-                this.RuleFor(x => x.Hpdid).Empty();
-                this.RuleFor(x => x.Birthdate).Empty();
-            }
-        }
-
-        private class IdirValidator : AbstractValidator<Command>
-        {
-            public IdirValidator()
-            {
-                this.RuleFor(x => x.Hpdid).Empty();
-                this.RuleFor(x => x.Birthdate).Empty();
-            }
+            this.When(x => x.IdentityProvider == IdentityProviders.BcServicesCard, () => this.RuleFor(x => x.Birthdate).NotEmpty().Equal(user?.GetBirthdate()).WithMessage("Must match the \"birthdate\" Claim on the current User"))
+                .Otherwise(() => this.RuleFor(x => x.Birthdate).Empty());
         }
     }
 
@@ -79,6 +52,12 @@ public class Create
                 FirstName = command.FirstName,
                 LastName = command.LastName,
             };
+            party.Credentials.Add(new Credential
+            {
+                UserId = command.UserId,
+                IdentityProvider = command.IdentityProvider,
+                IdpId = command.IdpId,
+            });
 
             this.context.Parties.Add(party);
 
