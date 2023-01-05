@@ -84,7 +84,7 @@ public partial class ProfileStatus
                         .SingleAsync(party => party.Id == command.Id);
                     party.Cpn = newCpn;
                     await this.context.SaveChangesAsync();
-                    await this.keycloakClient.UpdateUserCpn(new Guid(), newCpn); // TODO: FIX
+                    await this.keycloakClient.UpdateUserCpn(party.PrimaryUserId, newCpn);
                 }
 
                 data.Cpn = newCpn;
