@@ -16,6 +16,7 @@ public class InMemoryDbTest : IDisposable
     {
         var options = new DbContextOptionsBuilder<PidpDbContext>()
             .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+            .UseProjectables()
             .Options;
 
         this.TestDb = new PidpDbContext(options, SystemClock.Instance);
