@@ -29,7 +29,7 @@ public class ProfileStatusSAEformsTests : ProfileStatusTest
 
         var eforms = profile.Section<SAEformsSection>();
         eforms.AssertNoAlerts();
-        var expected = user.GetIdentityProvider() == ClaimValues.BCServicesCard
+        var expected = user.GetIdentityProvider() == IdentityProviders.BcServicesCard
             ? StatusCode.Locked
             : StatusCode.Hidden;
         Assert.Equal(expected, eforms.StatusCode);
@@ -49,7 +49,7 @@ public class ProfileStatusSAEformsTests : ProfileStatusTest
 
         var eforms = profile.Section<SAEformsSection>();
         eforms.AssertNoAlerts();
-        var expected = user.GetIdentityProvider() == ClaimValues.BCServicesCard
+        var expected = user.GetIdentityProvider() == IdentityProviders.BcServicesCard
             ? StatusCode.Locked
             : StatusCode.Hidden;
         Assert.Equal(expected, eforms.StatusCode);
@@ -84,7 +84,7 @@ public class ProfileStatusSAEformsTests : ProfileStatusTest
     [Fact]
     public async void HandleAsync_BcscNoLicenceDeclared_Locked()
     {
-        var party = this.TestDb.Has(AParty.WithNoLicenceDeclared(ClaimValues.BCServicesCard));
+        var party = this.TestDb.Has(AParty.WithNoLicenceDeclared(IdentityProviders.BcServicesCard));
         var client = A.Fake<IPlrClient>()
             .ReturningAStatandingsDigest(PlrStandingsDigest.FromEmpty());
         var handler = this.MockDependenciesFor<CommandHandler>(client);

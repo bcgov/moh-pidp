@@ -15,14 +15,14 @@ public class ProfileStatusTest : InMemoryDbTest
     public static IEnumerable<object[]> AllIdpsUserTestCases()
     {
         yield return new object[] { AMock.BcscUser() };
-        yield return new object[] { AMock.User(ClaimValues.Phsa) };
-        yield return new object[] { AMock.User(ClaimValues.Idir) };
+        yield return new object[] { AMock.User(IdentityProviders.Phsa) };
+        yield return new object[] { AMock.User(IdentityProviders.Idir) };
     }
 
     public static IEnumerable<object[]> NonBcscUserTestCases()
     {
-        yield return new object[] { AMock.User(ClaimValues.Phsa) };
-        yield return new object[] { AMock.User(ClaimValues.Idir) };
+        yield return new object[] { AMock.User(IdentityProviders.Phsa) };
+        yield return new object[] { AMock.User(IdentityProviders.Idir) };
     }
 
     public static IEnumerable<object[]> AllIdentifierTypesTestCases() => TestData.AllIdentifierTypes.Select(type => new object[] { type });
@@ -34,14 +34,18 @@ public static class AParty
     {
         var party = new Party
         {
-            UserId = Guid.NewGuid(),
             FirstName = "FirstName",
             LastName = "LastName"
         };
-
-        if (identityProvider == ClaimValues.BCServicesCard)
+        party.Credentials.Add(new Credential
         {
-            party.Hpdid = "HPDID";
+            UserId = Guid.NewGuid(),
+            IdentityProvider = identityProvider,
+            IdpId = "idpId"
+        });
+
+        if (identityProvider == IdentityProviders.BcServicesCard)
+        {
             party.Birthdate = LocalDate.FromDateTime(DateTime.Today);
         }
 
@@ -65,7 +69,7 @@ public static class AParty
 
     public static Party WithLicenceDeclared(string? cpn = "Cpn", CollegeCode collegeCode = CollegeCode.PhysiciansAndSurgeons, string licenceNumber = "12345")
     {
-        var party = WithDemographics(ClaimValues.BCServicesCard);
+        var party = WithDemographics(IdentityProviders.BcServicesCard);
         party.LicenceDeclaration = new PartyLicenceDeclaration
         {
             CollegeCode = collegeCode,

@@ -8,6 +8,7 @@ using Pidp.Features.ThirdPartyIntegrations;
 using Pidp.Infrastructure.HttpClients.Plr;
 using Pidp.Models;
 using PidpTests.TestingExtensions;
+using Pidp.Infrastructure.Auth;
 
 public class EndorsementDataTests : InMemoryDbTest
 {
@@ -18,7 +19,7 @@ public class EndorsementDataTests : InMemoryDbTest
     [Fact]
     public async void GetEndorsementData_NoParty_404()
     {
-        this.TestDb.Has(new Party { Hpdid = "hpdid" });
+        this.TestDb.Has(APartyWith(id: 1, hpdid: "hpdid"));
         var query = new EndorsementData.Query { Hpdid = "NoMatch" };
         var handler = this.MockDependenciesFor<EndorsementData.QueryHandler>();
 
@@ -30,7 +31,7 @@ public class EndorsementDataTests : InMemoryDbTest
     [Fact]
     public async void GetEndorsementData_NoEndorsements_Empty()
     {
-        this.TestDb.Has(new Party { Hpdid = "hpdid" });
+        this.TestDb.Has(APartyWith(id: 1, hpdid: "hpdid"));
         var query = new EndorsementData.Query { Hpdid = "hpdid" };
         var handler = this.MockDependenciesFor<EndorsementData.QueryHandler>();
 
@@ -44,8 +45,8 @@ public class EndorsementDataTests : InMemoryDbTest
     public async void GetEndorsementData_OneEndorsementNotActive_Empty()
     {
         var expectedHpdid = "expected";
-        this.TestDb.Has(new Party { Id = 1, Hpdid = "hpdid" });
-        this.TestDb.Has(new Party { Id = 2, Hpdid = expectedHpdid });
+        this.TestDb.Has(APartyWith(id: 1, hpdid: "hpdid"));
+        this.TestDb.Has(APartyWith(id: 2, hpdid: expectedHpdid));
         this.TestDb.Has(new Endorsement
         {
             Active = false,
@@ -70,8 +71,8 @@ public class EndorsementDataTests : InMemoryDbTest
     public async void GetEndorsementData_OneEndorsementNoCpn_MatchingHpdidEmptyLicences(string partyHpdid)
     {
         var expectedHpdid = "expected";
-        this.TestDb.Has(new Party { Id = 1, Hpdid = partyHpdid });
-        this.TestDb.Has(new Party { Id = 2, Hpdid = expectedHpdid });
+        this.TestDb.Has(APartyWith(id: 1, hpdid: partyHpdid));
+        this.TestDb.Has(APartyWith(id: 2, hpdid: expectedHpdid));
         this.TestDb.Has(new Endorsement
         {
             Active = true,
@@ -117,8 +118,8 @@ public class EndorsementDataTests : InMemoryDbTest
                 StatusReasonCode = "StatusReasonCode2"
             }
         };
-        this.TestDb.Has(new Party { Id = 1, Hpdid = "hpdid" });
-        this.TestDb.Has(new Party { Id = 2, Hpdid = expectedHpdid, Cpn = expectedCpn });
+        this.TestDb.Has(APartyWith(id: 1, hpdid: "hpdid"));
+        this.TestDb.Has(APartyWith(id: 2, hpdid: expectedHpdid, cpn: expectedCpn));
         this.TestDb.Has(new Endorsement
         {
             Active = true,
@@ -168,9 +169,10 @@ public class EndorsementDataTests : InMemoryDbTest
                 StatusReasonCode = "StatusReasonCode2"
             }
         };
-        this.TestDb.Has(new Party { Id = 1, Hpdid = "hpdid" });
-        this.TestDb.Has(new Party { Id = 2, Hpdid = expectedHpdid1, Cpn = expectedCpn1 });
-        this.TestDb.Has(new Party { Id = 3, Hpdid = expectedHpdid2 });
+
+        this.TestDb.Has(APartyWith(id: 1, hpdid: "hpdid"));
+        this.TestDb.Has(APartyWith(id: 2, hpdid: expectedHpdid1, cpn: expectedCpn1));
+        this.TestDb.Has(APartyWith(id: 3, hpdid: expectedHpdid2));
         this.TestDb.Has(new Endorsement
         {
             Active = true,
@@ -209,5 +211,22 @@ public class EndorsementDataTests : InMemoryDbTest
         found = result.Value.SingleOrDefault(res => res.Hpdid == expectedHpdid2);
         Assert.NotNull(found);
         AssertThat.CollectionsAreEquivalent(Array.Empty<PlrRecord>(), found!.Licences, RecordModelPredicate);
+    }
+
+    public static Party APartyWith(int id, string hpdid, string? cpn = null)
+    {
+        return new Party
+        {
+            Id = id,
+            Cpn = cpn,
+            Credentials = new List<Credential>
+            {
+                new Credential
+                {
+                    IdentityProvider = IdentityProviders.BcServicesCard,
+                    IdpId = hpdid
+                }
+            }
+        };
     }
 }

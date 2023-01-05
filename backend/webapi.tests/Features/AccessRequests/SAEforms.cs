@@ -36,7 +36,7 @@ public class SAEformsTests : InMemoryDbTest
         Assert.Equal(expected, result.IsSuccess);
         if (expected)
         {
-            A.CallTo(() => keycloak.AssignClientRole(party.UserId, MohClients.SAEforms.ClientId, MohClients.SAEforms.AccessRole)).MustHaveHappened();
+            A.CallTo(() => keycloak.AssignClientRole(A<Guid>._, MohClients.SAEforms.ClientId, MohClients.SAEforms.AccessRole)).MustHaveHappened();
         }
         else
         {
