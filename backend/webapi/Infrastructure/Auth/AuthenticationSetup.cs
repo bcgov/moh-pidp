@@ -29,8 +29,6 @@ public static class AuthenticationSetup
             };
         });
 
-        services.AddScoped<IAuthorizationHandler, UserOwnsResourceHandler>();
-
         services.AddAuthorization(options =>
         {
             options.AddPolicy(Policies.BcscAuthentication, policy => policy
@@ -44,8 +42,6 @@ public static class AuthenticationSetup
             options.AddPolicy(Policies.AnyPartyIdentityProvider, policy => policy
                 .RequireAuthenticatedUser()
                 .RequireClaim(Claims.IdentityProvider, IdentityProviders.BCServicesCard, IdentityProviders.Idir, IdentityProviders.Phsa));
-
-            options.AddPolicy(Policies.UserOwnsResource, policy => policy.Requirements.Add(new UserOwnsResourceRequirement()));
 
             options.FallbackPolicy = new AuthorizationPolicyBuilder()
                 .RequireAuthenticatedUser()

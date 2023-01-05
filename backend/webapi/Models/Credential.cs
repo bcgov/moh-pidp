@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using Pidp.Infrastructure.Auth;
 
 [Table(nameof(Credential))]
-public class Credential : BaseAuditable, IOwnedResource
+public class Credential : BaseAuditable
 {
     [Key]
     public int Id { get; set; }
@@ -16,7 +16,7 @@ public class Credential : BaseAuditable, IOwnedResource
 
     public Party? Party { get; set; }
 
-    public Guid UserId { get; set; } // TODO: fix IOwnedResource + auth
+    public Guid UserId { get; set; } // TODO: fix nullable + auth
 
     public string? IdentityProvider { get; set; }
 
