@@ -73,14 +73,6 @@ public interface IKeycloakAdministrationClient
     Task<bool> UpdateUser(Guid userId, Action<UserRepresentation> updateAction);
 
     /// <summary>
-    /// Fetches the User and updates with the given Action.
-    /// Returns true if the operation was successful.
-    /// </summary>
-    /// <param name="userId"></param>
-    /// <param name="updateAction"></param>
-    Task<bool> UpdateUser(IEnumerable<Guid> userIds, Action<UserRepresentation> updateAction);
-
-    /// <summary>
     /// Fetches the User and updates their CPN with the provided value. Does not update if the provided cpn is null.
     /// A convenience method for UpdateUser.
     /// Returns true if the operation was successful.
