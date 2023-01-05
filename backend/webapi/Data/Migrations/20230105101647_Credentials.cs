@@ -7,27 +7,27 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Pidp.Data.Migrations
 {
-    public partial class MultipleCredentials : Migration
+    public partial class Credentials : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-
             migrationBuilder.CreateTable(
                 name: "Credential",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
-                    IdpId = table.Column<string>(type: "text", nullable: false),
                     PartyId = table.Column<int>(type: "integer", nullable: false),
-                    CredentialType = table.Column<int>(type: "integer", nullable: false, defaultValue: 0),
+                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
+                    IdentityProvider = table.Column<string>(type: "text", nullable: true),
+                    IdpId = table.Column<string>(type: "text", nullable: true),
                     Created = table.Column<Instant>(type: "timestamp with time zone", nullable: false),
                     Modified = table.Column<Instant>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Credential", x => x.Id);
+                    table.CheckConstraint("CHK_Credential_AtLeastOneIdentifier", "((\"UserId\" is not null) or (\"IdpId\" is not null))");
                     table.ForeignKey(
                         name: "FK_Credential_Party_PartyId",
                         column: x => x.PartyId,
@@ -55,7 +55,7 @@ namespace Pidp.Data.Migrations
 
             migrationBuilder.Sql(@"
                 UPDATE ""Credential""
-                SET ""CredentialType"" = 1
+                SET ""IdentityProvider"" = 'bcsc'
                 WHERE ""IdpId"" IS NOT NULL;
             ");
 
