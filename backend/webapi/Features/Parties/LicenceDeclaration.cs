@@ -99,11 +99,6 @@ public class LicenceDeclaration
                 .Include(party => party.LicenceDeclaration)
                 .SingleAsync(party => party.Id == command.PartyId);
 
-            var userId = await this.context.Credentials
-                .Where(credential => credential.PartyId == command.PartyId)
-                .Select(credential => credential.UserId)
-                .SingleAsync();
-
             if (!string.IsNullOrWhiteSpace(party.Cpn))
             {
                 // Users cannot update licence declarations once found in PLR
