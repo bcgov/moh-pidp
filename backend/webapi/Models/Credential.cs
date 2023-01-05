@@ -16,7 +16,7 @@ public class Credential : BaseAuditable
 
     public Party? Party { get; set; }
 
-    public Guid UserId { get; set; } // TODO: fix nullable + auth
+    public Guid UserId { get; set; }
 
     public string? IdentityProvider { get; set; }
 

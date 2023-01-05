@@ -15,13 +15,6 @@ public class PartiesController : PidpControllerBase
 {
     public PartiesController(IPidpAuthorizationService authorizationService) : base(authorizationService) { }
 
-    [HttpGet]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<List<Index.Model>>> GetParties([FromServices] IQueryHandler<Index.Query, List<Index.Model>> handler,
-                                                                  [FromQuery] Index.Query query)
-        => await handler.HandleAsync(query);
-
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
