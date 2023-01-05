@@ -52,17 +52,12 @@ public class Uci
 
         public async Task<IDomainResult> HandleAsync(Command command)
         {
-            var userId = await this.context.Credentials
-                .Where(credential => credential.PartyId == command.PartyId)
-                .Select(credential => credential.UserId)
-                .SingleAsync();
-
             var dto = await this.context.Parties
                 .Where(party => party.Id == command.PartyId)
                 .Select(party => new
                 {
                     AlreadyEnroled = party.AccessRequests.Any(request => request.AccessTypeCode == AccessTypeCode.Uci),
-                    userId,
+                    UserId = party.PrimaryUserId,
                     party.Email,
                     party.Cpn
                 })
@@ -76,7 +71,7 @@ public class Uci
                 return DomainResult.Failed();
             }
 
-            if (!await this.keycloakClient.AssignClientRole(dto.userId, MohClients.Uci.ClientId, MohClients.Uci.AccessRole))
+            if (!await this.keycloakClient.AssignClientRole(dto.UserId, MohClients.Uci.ClientId, MohClients.Uci.AccessRole))
             {
                 return DomainResult.Failed();
             }
