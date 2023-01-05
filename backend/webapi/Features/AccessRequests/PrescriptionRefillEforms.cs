@@ -76,7 +76,7 @@ public class PrescriptionRefillEforms
                 return DomainResult.Failed();
             }
 
-            if (!await this.keycloakClient.AssignClientRole(dto.UserIds, MohClients.PrescriptionRefillEforms.ClientId, MohClients.PrescriptionRefillEforms.AccessRole))
+            if (!await this.keycloakClient.AssignClientRole(dto.UserId, MohClients.PrescriptionRefillEforms.ClientId, MohClients.PrescriptionRefillEforms.AccessRole))
             {
                 return DomainResult.Failed();
             }
