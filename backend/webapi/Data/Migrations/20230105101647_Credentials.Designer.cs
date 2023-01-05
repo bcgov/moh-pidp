@@ -13,8 +13,8 @@ using Pidp.Data;
 namespace Pidp.Data.Migrations
 {
     [DbContext(typeof(PidpDbContext))]
-    [Migration("20221209185416_MultipleCredentials")]
-    partial class MultipleCredentials
+    [Migration("20230105101647_Credentials")]
+    partial class Credentials
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -179,13 +179,10 @@ namespace Pidp.Data.Migrations
                     b.Property<Instant>("Created")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("CredentialType")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasDefaultValue(0);
+                    b.Property<string>("IdentityProvider")
+                        .HasColumnType("text");
 
                     b.Property<string>("IdpId")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<Instant>("Modified")
@@ -205,6 +202,8 @@ namespace Pidp.Data.Migrations
                         .IsUnique();
 
                     b.ToTable("Credential");
+
+                    b.HasCheckConstraint("CHK_Credential_AtLeastOneIdentifier", "((\"UserId\" is not null) or (\"IdpId\" is not null))");
                 });
 
             modelBuilder.Entity("Pidp.Models.EmailLog", b =>
