@@ -44,7 +44,7 @@ public static class AParty
             IdpId = "idpId"
         });
 
-        if (identityProvider == IdentityProviders.BcServicesCard)
+        if (identityProvider == IdentityProviders.BCServicesCard)
         {
             party.Birthdate = LocalDate.FromDateTime(DateTime.Today);
         }
@@ -69,7 +69,7 @@ public static class AParty
 
     public static Party WithLicenceDeclared(string? cpn = "Cpn", CollegeCode collegeCode = CollegeCode.PhysiciansAndSurgeons, string licenceNumber = "12345")
     {
-        var party = WithDemographics(IdentityProviders.BcServicesCard);
+        var party = WithDemographics(IdentityProviders.BCServicesCard);
         party.LicenceDeclaration = new PartyLicenceDeclaration
         {
             CollegeCode = collegeCode,

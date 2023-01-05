@@ -26,5 +26,5 @@ public class Credential : BaseAuditable, IOwnedResource
     public string? Hpdid => this.IsBcServicesCard ? this.IdpId : null;
 
     [Projectable]
-    public bool IsBcServicesCard => this.IdentityProvider == IdentityProviders.BcServicesCard;
+    public bool IsBcServicesCard => this.IdentityProvider == IdentityProviders.BCServicesCard;
 }

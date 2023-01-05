@@ -60,7 +60,7 @@ public static class AMock
         );
     }
 
-    public static ClaimsPrincipal BcscUser() => User(IdentityProviders.BcServicesCard);
+    public static ClaimsPrincipal BcscUser() => User(IdentityProviders.BCServicesCard);
 
     public static ClaimsPrincipal User(string idp)
     {

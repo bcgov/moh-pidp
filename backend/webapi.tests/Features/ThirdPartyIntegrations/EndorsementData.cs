@@ -223,7 +223,7 @@ public class EndorsementDataTests : InMemoryDbTest
             {
                 new Credential
                 {
-                    IdentityProvider = IdentityProviders.BcServicesCard,
+                    IdentityProvider = IdentityProviders.BCServicesCard,
                     IdpId = hpdid
                 }
             }
