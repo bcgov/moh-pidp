@@ -76,6 +76,9 @@ p {
           font-size: 1.25rem;
         }
       }
+      & .care-team-tabs {
+        min-height: 10rem;
+      }
       & .tab-label-box {
         display: flex;
         align-items: center;

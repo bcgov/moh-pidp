@@ -40,7 +40,6 @@ import { LookupService } from '@app/modules/lookup/lookup.service';
 
 import { EndorsementsFormState } from './endorsements-form-state';
 import { EndorsementsResource } from './endorsements-resource.service';
-import { EndorsementRequestStatus } from './enums/endorsement-request-status.enum';
 import { EndorsementRequest } from './models/endorsement-request.model';
 import { Endorsement } from './models/endorsement.model';
 
@@ -224,68 +223,7 @@ export class EndorsementsPage
     this.navigationService.navigateToRoot();
   }
 
-  private getMockEndorsements(_: number): Observable<Endorsement[]> {
-    const e1: Endorsement = {
-      id: 1,
-      partyName: 'Cornelius Reginaldus Fudge',
-      collegeCode: 1,
-      active: true,
-      createdOn: new Date(2022, 9, 13).toISOString(),
-    };
-    const e2: Endorsement = {
-      id: 2,
-      partyName: 'Lucius Malfoy',
-      collegeCode: 2,
-      active: true,
-      createdOn: new Date(2022, 7, 12).toISOString(),
-    };
-    const e3: Endorsement = {
-      id: 3,
-      partyName: 'The Dark Lord',
-      collegeCode: 3,
-      active: true,
-      createdOn: new Date().toISOString(),
-    };
-    return of([e1, e2, e3]);
-  }
-  private getMockEndorsementRequests(
-    _: number
-  ): Observable<EndorsementRequest[]> {
-    const e1: EndorsementRequest = {
-      id: 1,
-      partyName: 'Cornelius Reginaldus Fudge',
-      actionable: true,
-      additionalInformation: '',
-      collegeCode: 1,
-      recipientEmail: 'cornelius.fudge@magic.org',
-      statusDate: new Date(2022, 9, 13).toISOString(),
-      status: EndorsementRequestStatus.RECEIVED,
-    };
-    const e2: EndorsementRequest = {
-      id: 2,
-      partyName: 'Lucius Malfoy',
-      actionable: true,
-      additionalInformation: '',
-      collegeCode: 2,
-      recipientEmail: 'lucius.malfoy@magic.org',
-      statusDate: new Date(2022, 7, 12).toISOString(),
-      status: EndorsementRequestStatus.RECEIVED,
-    };
-    const e3: EndorsementRequest = {
-      id: 3,
-      partyName: 'The Dark Lord',
-      actionable: true,
-      additionalInformation: '',
-      collegeCode: 3,
-      recipientEmail: 'thedark.lord@magic.org',
-      statusDate: new Date().toISOString(),
-      status: EndorsementRequestStatus.RECEIVED,
-    };
-    return of([e1, e2, e3]);
-  }
-
   private getEndorsements(partyId: number): Observable<Endorsement[]> {
-    return this.getMockEndorsements(partyId);
     return this.resource.getEndorsements(partyId).pipe(
       map((response: Endorsement[] | null) => response ?? []),
       catchError((error: HttpErrorResponse) => {
@@ -300,8 +238,6 @@ export class EndorsementsPage
   private getActionableEndorsementRequests(
     partyId: number
   ): Observable<EndorsementRequest[]> {
-    return this.getMockEndorsementRequests(partyId);
-
     return this.resource.getEndorsementRequests(partyId).pipe(
       map((response: EndorsementRequest[] | null) => response ?? []),
       map((response: EndorsementRequest[]) =>
@@ -319,7 +255,6 @@ export class EndorsementsPage
   private getNonActionableEndorsementRequests(
     partyId: number
   ): Observable<EndorsementRequest[]> {
-    return this.getMockEndorsementRequests(partyId);
     return this.resource.getEndorsementRequests(partyId).pipe(
       map((response: EndorsementRequest[] | null) => response ?? []),
       map((response: EndorsementRequest[]) =>
