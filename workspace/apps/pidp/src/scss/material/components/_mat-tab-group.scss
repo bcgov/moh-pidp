@@ -1,0 +1,29 @@
+@use '../../mixins' as mixins;
+@use 'pidp-variables' as pidp;
+
+//
+// MATERIAL TAB GROUP
+//
+// @description
+// Applies general theme styles to Material Tab Group components
+
+mat-tab-group {
+  border: solid 1px pidp.$grey-30;
+  & .mat-tab-header {
+    border-style: none;
+  }
+  & .mat-tab-labels {
+    background-color: pidp.$blue-primary;
+  }
+  // Line below active tab
+  &.mat-primary .mat-ink-bar {
+    border-bottom: solid 4px pidp.$yellow;
+  }
+  & .mat-tab-label {
+    color: #fff;
+    opacity: 1;
+    &:not(:last-of-type) {
+      border-right: solid 1px pidp.$grey-30;
+    }
+  }
+}

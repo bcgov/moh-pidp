@@ -2,7 +2,7 @@ import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
 import {
   EMPTY,
@@ -14,11 +14,21 @@ import {
   switchMap,
 } from 'rxjs';
 
+import {
+  faArrowDown,
+  faArrowUp,
+  faUser,
+  faUserGroup,
+} from '@fortawesome/free-solid-svg-icons';
+import { NavigationService } from '@pidp/presentation';
+
 import { NoContent } from '@bcgov/shared/data-access';
 import {
   ConfirmDialogComponent,
   DialogOptions,
   HtmlComponent,
+  PidpViewport,
+  ViewportService,
 } from '@bcgov/shared/ui';
 
 import { AbstractFormPage } from '@app/core/classes/abstract-form-page.class';
@@ -26,12 +36,19 @@ import { PartyService } from '@app/core/party/party.service';
 import { FormUtilsService } from '@app/core/services/form-utils.service';
 import { LoggerService } from '@app/core/services/logger.service';
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
+import { LookupService } from '@app/modules/lookup/lookup.service';
 
 import { EndorsementsFormState } from './endorsements-form-state';
 import { EndorsementsResource } from './endorsements-resource.service';
+import { EndorsementRequestStatus } from './enums/endorsement-request-status.enum';
 import { EndorsementRequest } from './models/endorsement-request.model';
 import { Endorsement } from './models/endorsement.model';
 
+export enum EndorsementType {
+  WorkingRelationship,
+  IncomingRequest,
+  OutgoingRequest,
+}
 @Component({
   selector: 'app-endorsements',
   templateUrl: './endorsements.page.html',
@@ -41,7 +58,11 @@ export class EndorsementsPage
   extends AbstractFormPage<EndorsementsFormState>
   implements OnInit
 {
-  public title: string;
+  public faUser = faUser;
+  public faUserGroup = faUserGroup;
+  public faArrowUp = faArrowUp;
+  public faArrowDown = faArrowDown;
+
   public formState: EndorsementsFormState;
   public completed: boolean | null;
   public actionableEndorsementRequests$!: Observable<EndorsementRequest[]>;
@@ -52,27 +73,43 @@ export class EndorsementsPage
     protected dialog: MatDialog,
     protected formUtilsService: FormUtilsService,
     private route: ActivatedRoute,
-    private router: Router,
     private partyService: PartyService,
     private resource: EndorsementsResource,
     private logger: LoggerService,
+    private navigationService: NavigationService,
+    private lookupService: LookupService,
+    viewportService: ViewportService,
     fb: FormBuilder
   ) {
     super(dialog, formUtilsService);
 
     const routeData = this.route.snapshot.data;
-    this.title = routeData.title;
     this.formState = new EndorsementsFormState(fb);
     this.completed =
       routeData.endorsementRequestStatusCode === StatusCode.COMPLETED;
+    viewportService.viewportBroadcast$.subscribe((viewport) =>
+      this.onViewportChange(viewport)
+    );
   }
+
+  public showTextLabels = false;
+  public showIconLabels = true;
 
   public get recipientEmail(): FormControl {
     return this.formState.form.get('recipientEmail') as FormControl;
   }
 
+  private onViewportChange(viewport: PidpViewport): void {
+    if (viewport === PidpViewport.xsmall) {
+      this.showIconLabels = true;
+      this.showTextLabels = false;
+    } else {
+      this.showIconLabels = false;
+      this.showTextLabels = true;
+    }
+  }
   public onBack(): void {
-    this.navigateToRoot();
+    this.navigationService.navigateToRoot();
   }
 
   public onApprove(requestId: number): void {
@@ -152,6 +189,20 @@ export class EndorsementsPage
     this.nonActionableEndorsementRequests$ =
       this.getNonActionableEndorsementRequests(partyId);
   }
+  public getCollegeTextForEndorsement(endorsement: Endorsement): string {
+    const college = this.lookupService.colleges.find(
+      (x) => x.code === endorsement.id
+    );
+    return college?.name ?? '';
+  }
+  public getCollegeTextForEndorsementRequest(
+    endorsementRequest: EndorsementRequest
+  ): string {
+    const college = this.lookupService.colleges.find(
+      (x) => x.code === endorsementRequest.collegeCode
+    );
+    return college?.name ?? '';
+  }
 
   protected performSubmission(): NoContent {
     const partyId = this.partyService.partyId;
@@ -170,10 +221,71 @@ export class EndorsementsPage
   }
 
   private navigateToRoot(): void {
-    this.router.navigate([this.route.snapshot.data.routes.root]);
+    this.navigationService.navigateToRoot();
+  }
+
+  private getMockEndorsements(_: number): Observable<Endorsement[]> {
+    const e1: Endorsement = {
+      id: 1,
+      partyName: 'Cornelius Reginaldus Fudge',
+      collegeCode: 1,
+      active: true,
+      createdOn: new Date(2022, 9, 13).toISOString(),
+    };
+    const e2: Endorsement = {
+      id: 2,
+      partyName: 'Lucius Malfoy',
+      collegeCode: 2,
+      active: true,
+      createdOn: new Date(2022, 7, 12).toISOString(),
+    };
+    const e3: Endorsement = {
+      id: 3,
+      partyName: 'The Dark Lord',
+      collegeCode: 3,
+      active: true,
+      createdOn: new Date().toISOString(),
+    };
+    return of([e1, e2, e3]);
+  }
+  private getMockEndorsementRequests(
+    _: number
+  ): Observable<EndorsementRequest[]> {
+    const e1: EndorsementRequest = {
+      id: 1,
+      partyName: 'Cornelius Reginaldus Fudge',
+      actionable: true,
+      additionalInformation: '',
+      collegeCode: 1,
+      recipientEmail: 'cornelius.fudge@magic.org',
+      statusDate: new Date(2022, 9, 13).toISOString(),
+      status: EndorsementRequestStatus.RECEIVED,
+    };
+    const e2: EndorsementRequest = {
+      id: 2,
+      partyName: 'Lucius Malfoy',
+      actionable: true,
+      additionalInformation: '',
+      collegeCode: 2,
+      recipientEmail: 'lucius.malfoy@magic.org',
+      statusDate: new Date(2022, 7, 12).toISOString(),
+      status: EndorsementRequestStatus.RECEIVED,
+    };
+    const e3: EndorsementRequest = {
+      id: 3,
+      partyName: 'The Dark Lord',
+      actionable: true,
+      additionalInformation: '',
+      collegeCode: 3,
+      recipientEmail: 'thedark.lord@magic.org',
+      statusDate: new Date().toISOString(),
+      status: EndorsementRequestStatus.RECEIVED,
+    };
+    return of([e1, e2, e3]);
   }
 
   private getEndorsements(partyId: number): Observable<Endorsement[]> {
+    return this.getMockEndorsements(partyId);
     return this.resource.getEndorsements(partyId).pipe(
       map((response: Endorsement[] | null) => response ?? []),
       catchError((error: HttpErrorResponse) => {
@@ -188,6 +300,8 @@ export class EndorsementsPage
   private getActionableEndorsementRequests(
     partyId: number
   ): Observable<EndorsementRequest[]> {
+    return this.getMockEndorsementRequests(partyId);
+
     return this.resource.getEndorsementRequests(partyId).pipe(
       map((response: EndorsementRequest[] | null) => response ?? []),
       map((response: EndorsementRequest[]) =>
@@ -205,6 +319,7 @@ export class EndorsementsPage
   private getNonActionableEndorsementRequests(
     partyId: number
   ): Observable<EndorsementRequest[]> {
+    return this.getMockEndorsementRequests(partyId);
     return this.resource.getEndorsementRequests(partyId).pipe(
       map((response: EndorsementRequest[] | null) => response ?? []),
       map((response: EndorsementRequest[]) =>
