@@ -95,13 +95,9 @@ public class LicenceDeclaration
         public async Task<IDomainResult<string?>> HandleAsync(Command command)
         {
             var party = await this.context.Parties
+                .Include(party => party.Credentials)
                 .Include(party => party.LicenceDeclaration)
                 .SingleAsync(party => party.Id == command.PartyId);
-
-            var userId = await this.context.Credentials
-                .Where(credential => credential.PartyId == command.PartyId)
-                .Select(credential => credential.UserId)
-                .SingleAsync();
 
             if (!string.IsNullOrWhiteSpace(party.Cpn))
             {
@@ -123,7 +119,7 @@ public class LicenceDeclaration
                 }
                 else
                 {
-                    await this.keycloakClient.UpdateUserCpn(userId, party.Cpn);
+                    await this.keycloakClient.UpdateUserCpn(party.PrimaryUserId, party.Cpn);
                 }
             }
 
