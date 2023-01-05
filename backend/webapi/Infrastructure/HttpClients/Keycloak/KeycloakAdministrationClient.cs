@@ -178,7 +178,4 @@ public static partial class KeycloakAdministrationClientLoggingExtensions
 
     [LoggerMessage(5, LogLevel.Error, "Failed to update user {userId} with CPN {cpn}.")]
     public static partial void LogCpnUpdateFailure(this ILogger logger, Guid userId, string cpn);
-
-    [LoggerMessage(6, LogLevel.Information, "Failed to assign Role {roleName} to User {userId} in Client {clientId}.")]
-    public static partial void LogClientRoleAssignmentFailure(this ILogger logger, Guid userId, string roleName, string clientId);
 }
