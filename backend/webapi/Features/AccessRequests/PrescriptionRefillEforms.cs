@@ -59,7 +59,7 @@ public class PrescriptionRefillEforms
                 .Select(party => new
                 {
                     AlreadyEnroled = party.AccessRequests.Any(request => request.AccessTypeCode == AccessTypeCode.PrescriptionRefillEforms),
-                    UserIds = party.Credentials.Select(credential => credential.UserId),
+                    UserId = party.PrimaryUserId,
                     party.Email,
                     party.FirstName,
                     party.Cpn,
@@ -76,7 +76,7 @@ public class PrescriptionRefillEforms
                 return DomainResult.Failed();
             }
 
-            if (!await this.keycloakClient.AssignClientRole(dto.UserIds, MohClients.PrescriptionRefillEforms.ClientId, MohClients.PrescriptionRefillEforms.AccessRole))
+            if (!await this.keycloakClient.AssignClientRole(dto.UserId, MohClients.PrescriptionRefillEforms.ClientId, MohClients.PrescriptionRefillEforms.AccessRole))
             {
                 return DomainResult.Failed();
             }

@@ -59,7 +59,7 @@ public class SAEforms
                 .Select(party => new
                 {
                     AlreadyEnroled = party.AccessRequests.Any(request => request.AccessTypeCode == AccessTypeCode.SAEforms),
-                    UserIds = party.Credentials.Select(credential => credential.UserId),
+                    UserId = party.PrimaryUserId,
                     party.Email,
                     party.FirstName,
                     party.Cpn,
@@ -76,7 +76,7 @@ public class SAEforms
                 return DomainResult.Failed();
             }
 
-            if (!await this.keycloakClient.AssignClientRole(dto.UserIds, MohClients.SAEforms.ClientId, MohClients.SAEforms.AccessRole))
+            if (!await this.keycloakClient.AssignClientRole(dto.UserId, MohClients.SAEforms.ClientId, MohClients.SAEforms.AccessRole))
             {
                 return DomainResult.Failed();
             }
