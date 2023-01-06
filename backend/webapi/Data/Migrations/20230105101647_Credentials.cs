@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 using NodaTime;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
@@ -48,8 +48,8 @@ namespace Pidp.Data.Migrations
                 unique: true);
 
             migrationBuilder.Sql(@"
-                INSERT INTO ""Credential"" (""UserId"", ""PartyId"", ""IdpId"")
-                SELECT ""UserId"", ""Id"" AS ""PartyId"", ""Hpdid"" AS ""IdpId""
+                INSERT INTO ""Credential"" (""UserId"", ""PartyId"", ""IdpId"", ""Created"", ""Modified"")
+                SELECT ""UserId"", ""Id"" AS ""PartyId"", ""Hpdid"" AS ""IdpId"", ""Created"", ""Modified""
                 FROM ""Party"";
             ");
 
