@@ -103,9 +103,6 @@ export class SignedOrAcceptedDocumentsPage implements OnInit {
           case DocumentType.SA_EFORMS_COLLECTION_NOTICE:
             return status?.saEforms.statusCode === StatusCode.COMPLETED;
 
-          case DocumentType.UCI_COLLECTION_NOTICE:
-            return status?.uci.statusCode === StatusCode.COMPLETED;
-
           case DocumentType.MS_TEAMS_DECLARATION_AGREEMENT:
           case DocumentType.MS_TEAMS_DETAILS_AGREEMENT:
           case DocumentType.MS_TEAMS_IT_SECURITY_AGREEMENT:

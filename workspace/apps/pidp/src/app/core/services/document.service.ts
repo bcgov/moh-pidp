@@ -8,7 +8,6 @@ export enum DocumentType {
   SA_EFORMS_COLLECTION_NOTICE = 'sa-eforms-collection-notice',
   PRESCRIPTION_REFILL_EFORMS_COLLECTION_NOTICE = 'prescription-refill-eforms-collection-notice',
   USER_ACCESS_AGREEMENT = 'user-access-agreement',
-  UCI_COLLECTION_NOTICE = 'uci-collection-notice',
   MS_TEAMS_DECLARATION_AGREEMENT = 'ms-teams-declaration-agreement',
   MS_TEAMS_DETAILS_AGREEMENT = 'ms-teams-details-agreement',
   MS_TEAMS_IT_SECURITY_AGREEMENT = 'ms-teams-it-security-agreement',
@@ -48,10 +47,6 @@ export class DocumentService {
       {
         type: DocumentType.USER_ACCESS_AGREEMENT,
         title: 'Access Harmonization User Access Agreement',
-      },
-      {
-        type: DocumentType.UCI_COLLECTION_NOTICE,
-        title: 'UCI Collection Notice',
       },
       {
         type: DocumentType.MS_TEAMS_DECLARATION_AGREEMENT,
@@ -96,11 +91,6 @@ export class DocumentService {
         return {
           ...this.getDocumentMetaData(documentType),
           content: UserAccessAgreementDocumentComponent,
-        };
-      case DocumentType.UCI_COLLECTION_NOTICE:
-        return {
-          ...this.getDocumentMetaData(documentType),
-          content: this.getUciCollectionNotice(),
         };
       case DocumentType.MS_TEAMS_DECLARATION_AGREEMENT:
         return {
@@ -150,15 +140,6 @@ export class DocumentService {
       and will not be used for any other purpose other than the one stated above. If you have any questions
       about the collection of this personal information please contact PHSA's Information Access & Privacy
       Office at 1-855-229-9800 or at <a href="mailto:${this.config.emails.phsaInformationAccessAndPrivacyOffice}">${this.config.emails.phsaInformationAccessAndPrivacyOffice}</a>.
-    `;
-  }
-
-  public getUciCollectionNotice(): string {
-    return `
-      Unifying Clinical Information collects personal information for the purposes of verification and access to
-      participating health systems. This is collected by the Ministry of Health under sections 26(c) and 27(1)(b)
-      of the Freedom of Information and Protection of Privacy Act. Should you have any questions about the collection
-      of this personal information, contact <a href="mailto:${this.config.emails.uciSupport}">${this.config.emails.uciSupport}</a>.
     `;
   }
 

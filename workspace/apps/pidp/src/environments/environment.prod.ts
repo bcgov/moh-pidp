@@ -15,7 +15,6 @@ import {
   specialAuthorityEformsSupportEmail,
   specialAuthorityUrl,
 } from '@app/features/access/pages/sa-eforms/sa-eforms.constants';
-import { uciSupportEmail } from '@app/features/access/pages/uci/uci.constants';
 
 import { AppEnvironment, EnvironmentName } from './environment.model';
 
@@ -45,7 +44,6 @@ export const environment: AppEnvironment = {
     prescriptionRefillRequestEformsSupport:
       prescriptionRefillRequestEformsSupportEmail,
     driverFitnessSupport: driverFitnessSupportEmail,
-    uciSupport: uciSupportEmail,
     msTeamsSupport: msTeamsSupportEmail,
     doctorsTechnologyOfficeSupport: doctorsTechnologyOfficeEmail,
     phsaInformationAccessAndPrivacyOffice:
