@@ -43,6 +43,20 @@ public partial class ProfileStatus
             }
         }
 
+        public class DashboardInfoSection : ProfileSection
+        {
+            internal override string SectionName => "dashboardInfo";
+            public string FullName { get; set; } = string.Empty;
+            public CollegeCode? CollegeCode { get; set; }
+
+            protected override void Compute(ProfileData profile)
+            {
+                this.FullName = $"{profile.FirstName} {profile.LastName}";
+                this.CollegeCode = profile.LicenceDeclaration?.CollegeCode;
+                this.StatusCode = StatusCode.Complete; // Unused
+            }
+        }
+
         public class AccessAdministratorSection : ProfileSection
         {
             internal override string SectionName => "administratorInfo";
