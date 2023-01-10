@@ -8,6 +8,12 @@ namespace Pidp.Data.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.Sql(@"
+                UPDATE ""AccessRequest""
+                SET ""AccessTypeCode"" = 5
+                WHERE ""AccessTypeCode"" = 7;
+            ");
+
             migrationBuilder.DeleteData(
                 table: "AccessTypeLookup",
                 keyColumn: "Code",
