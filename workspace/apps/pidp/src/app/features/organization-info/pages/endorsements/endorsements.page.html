@@ -1,135 +1,135 @@
-<div class="box" uiPidpInjectViewportCss>
-  <div class="content">
-    <section class="care-team">
-      <header>
-        <h2>Your Care Team</h2>
-        <mat-icon>help</mat-icon>
-      </header>
-      <div class="care-team-text">
-        <p class="large">
-          Here you can endorse people you have working relationships with and
-          invite them to the Provider identity Portal.
+<form [formGroup]="formState.form" (submit)="onSubmit()">
+  <div class="box" uiPidpInjectViewportCss>
+    <div class="content">
+      <section class="care-team">
+        <header>
+          <h2>Your Care Team</h2>
+          <mat-icon>help</mat-icon>
+        </header>
+        <div class="care-team-text">
+          <p class="large">
+            Here you can endorse people you have working relationships with and
+            invite them to the Provider identity Portal.
+          </p>
+          <p>
+            Licenced health care providers can endorse unlicenced health care
+            professionals they work with. In the future, endorsements will allow
+            you to delegate access. Unlicenced health care providers can also
+            send endorsement requests to the licenced providers they work with.
+          </p>
+        </div>
+        <mat-tab-group
+          class="care-team-tabs"
+          mat-stretch-tabs
+          [selectedIndex]="0">
+          <mat-tab>
+            <ng-template mat-tab-label>
+              <div class="tab-label-box">
+                <ng-container *ngIf="showIconLabels; else textLabels">
+                  <fa-icon [icon]="faUser"></fa-icon>
+                  <fa-icon [icon]="faArrowUp"></fa-icon>
+                  <div class="badge">
+                    {{(actionableEndorsementRequests$ | async)?.length}}
+                  </div>
+                </ng-container>
+                <ng-template #textLabels>
+                  <span>Incoming Requests</span>
+                  <div class="badge">
+                    {{(actionableEndorsementRequests$ | async)?.length}}
+                  </div>
+                </ng-template>
+              </div>
+            </ng-template>
+            <ng-template matTabContent>
+              <div class="tab-content">
+                <app-endorsement-card
+                  *ngFor="let endorsementRequest of actionableEndorsementRequests$ | async"
+                  class="endorsement-card"
+                  [id]="endorsementRequest.id"
+                  [nameText]="endorsementRequest.partyName ?? ''"
+                  [collegeText]="getCollegeTextForEndorsementRequest(endorsementRequest)"
+                  [isApproveEnabled]="true"
+                  [isCancelEnabled]="true"
+                  (approveClick)="onApprove($event)"
+                  (cancelClick)="onCancel($event)"></app-endorsement-card>
+              </div>
+            </ng-template>
+          </mat-tab>
+          <mat-tab>
+            <ng-template mat-tab-label>
+              <div *ngIf="showTextLabels" class="tab-label-box">
+                <span>Your Working Relationships</span>
+              </div>
+              <span *ngIf="showIconLabels" class="tab-label-box">
+                <fa-icon [icon]="faUserGroup"></fa-icon>
+              </span>
+            </ng-template>
+            <ng-template matTabContent>
+              <div class="tab-content">
+                <app-endorsement-card
+                  *ngFor="let endorsement of endorsements$ | async"
+                  class="endorsement-card"
+                  noticeText="Relationship"
+                  noticeColour="green"
+                  [id]="endorsement.id"
+                  [nameText]="endorsement.partyName"
+                  [collegeText]="getCollegeTextForEndorsement(endorsement)"
+                  [createdOnText]="endorsement.createdOn | date"
+                  [isCancelEnabled]="true"
+                  (cancelClick)="onCancelEndorsement($event)"></app-endorsement-card>
+              </div>
+            </ng-template>
+          </mat-tab>
+          <mat-tab>
+            <ng-template mat-tab-label>
+              <div *ngIf="showTextLabels" class="tab-label-box">
+                <span>Outgoing Requests</span>
+                <div class="badge">
+                  {{(nonActionableEndorsementRequests$ | async)?.length}}
+                </div>
+              </div>
+              <span *ngIf="showIconLabels" class="tab-label-box">
+                <fa-icon [icon]="faUser"></fa-icon>
+                <fa-icon [icon]="faArrowDown"></fa-icon>
+                <div class="badge">
+                  {{(nonActionableEndorsementRequests$ | async)?.length}}
+                </div>
+              </span>
+            </ng-template>
+            <ng-template matTabContent>
+              <div class="tab-content">
+                <app-endorsement-card
+                  *ngFor="let endorsementRequest of nonActionableEndorsementRequests$ | async"
+                  class="endorsement-card"
+                  noticeText="Requested"
+                  noticeColour="yellow"
+                  [id]="endorsementRequest.id"
+                  [nameText]="endorsementRequest.partyName ?? ''"
+                  [collegeText]="getCollegeTextForEndorsementRequest(endorsementRequest)"></app-endorsement-card>
+              </div>
+            </ng-template>
+          </mat-tab>
+        </mat-tab-group>
+      </section>
+      <section class="endorsement-request">
+        <header>
+          <h2>Endorsement Request</h2>
+          <mat-icon>help</mat-icon>
+        </header>
+        <h3>Licenced Practitioner Email</h3>
+        <p>
+          Enter the email of the person you have a working relationship with
+          here. This person will receive an email invitation from the Provider
+          Identity Portal. Once they register, they can endorse your
+          relationship request. In the future, endorsements from licenced
+          providers will allow for delegated access.
         </p>
         <p>
-          Licenced health care providers can endorse unlicenced health care
-          professionals they work with. In the future, endorsements will allow
-          you to delegate access. Unlicenced health care providers can also send
-          endorsement requests to the licenced providers they work with.
+          If you have more than one member, feel free to enter a single, or as
+          many email addresses as you need. Include each email on a
+          <strong>new line</strong> and our system will send out instructions to
+          each individual listed.
         </p>
-      </div>
-      <mat-tab-group
-        class="care-team-tabs"
-        mat-stretch-tabs
-        [selectedIndex]="0">
-        <mat-tab>
-          <ng-template mat-tab-label>
-            <div class="tab-label-box">
-              <ng-container *ngIf="showIconLabels; else textLabels">
-                <fa-icon [icon]="faUser"></fa-icon>
-                <fa-icon [icon]="faArrowUp"></fa-icon>
-                <div class="badge">
-                  {{(actionableEndorsementRequests$ | async)?.length}}
-                </div>
-              </ng-container>
-              <ng-template #textLabels>
-                <span>Incoming Requests</span>
-                <div class="badge">
-                  {{(actionableEndorsementRequests$ | async)?.length}}
-                </div>
-              </ng-template>
-            </div>
-          </ng-template>
-          <ng-template matTabContent>
-            <div class="tab-content">
-              <app-endorsement-card
-                *ngFor="let endorsementRequest of actionableEndorsementRequests$ | async"
-                class="endorsement-card"
-                [id]="endorsementRequest.id"
-                [nameText]="endorsementRequest.partyName ?? ''"
-                [collegeText]="getCollegeTextForEndorsementRequest(endorsementRequest)"
-                [isApproveEnabled]="true"
-                [isCancelEnabled]="true"
-                (approveClick)="onApprove($event)"
-                (cancelClick)="onCancel($event)"></app-endorsement-card>
-            </div>
-          </ng-template>
-        </mat-tab>
-        <mat-tab>
-          <ng-template mat-tab-label>
-            <div *ngIf="showTextLabels" class="tab-label-box">
-              <span>Your Working Relationships</span>
-            </div>
-            <span *ngIf="showIconLabels" class="tab-label-box">
-              <fa-icon [icon]="faUserGroup"></fa-icon>
-            </span>
-          </ng-template>
-          <ng-template matTabContent>
-            <div class="tab-content">
-              <app-endorsement-card
-                *ngFor="let endorsement of endorsements$ | async"
-                class="endorsement-card"
-                noticeText="Relationship"
-                noticeColour="green"
-                [id]="endorsement.id"
-                [nameText]="endorsement.partyName"
-                [collegeText]="getCollegeTextForEndorsement(endorsement)"
-                [createdOnText]="endorsement.createdOn | date"
-                [isCancelEnabled]="true"
-                (cancelClick)="onCancelEndorsement($event)"></app-endorsement-card>
-            </div>
-          </ng-template>
-        </mat-tab>
-        <mat-tab>
-          <ng-template mat-tab-label>
-            <div *ngIf="showTextLabels" class="tab-label-box">
-              <span>Outgoing Requests</span>
-              <div class="badge">
-                {{(nonActionableEndorsementRequests$ | async)?.length}}
-              </div>
-            </div>
-            <span *ngIf="showIconLabels" class="tab-label-box">
-              <fa-icon [icon]="faUser"></fa-icon>
-              <fa-icon [icon]="faArrowDown"></fa-icon>
-              <div class="badge">
-                {{(nonActionableEndorsementRequests$ | async)?.length}}
-              </div>
-            </span>
-          </ng-template>
-          <ng-template matTabContent>
-            <div class="tab-content">
-              <app-endorsement-card
-                *ngFor="let endorsementRequest of nonActionableEndorsementRequests$ | async"
-                class="endorsement-card"
-                noticeText="Requested"
-                noticeColour="yellow"
-                [id]="endorsementRequest.id"
-                [nameText]="endorsementRequest.partyName ?? ''"
-                [collegeText]="getCollegeTextForEndorsementRequest(endorsementRequest)"></app-endorsement-card>
-            </div>
-          </ng-template>
-        </mat-tab>
-      </mat-tab-group>
-    </section>
-    <section class="endorsement-request">
-      <header>
-        <h2>Endorsement Request</h2>
-        <mat-icon>help</mat-icon>
-      </header>
-      <h3>Licenced Practitioner Email</h3>
-      <p>
-        Enter the email of the person you have a working relationship with here.
-        This person will receive an email invitation from the Provider Identity
-        Portal. Once they register, they can endorse your relationship request.
-        In the future, endorsements from licenced providers will allow for
-        delegated access.
-      </p>
-      <p>
-        If you have more than one member, feel free to enter a single, or as
-        many email addresses as you need. Include each email on a
-        <strong>new line</strong> and our system will send out instructions to
-        each individual listed.
-      </p>
-      <form [formGroup]="formState.form" (submit)="onSubmit()">
         <mat-form-field appearance="outline">
           <input
             matInput
@@ -142,21 +142,25 @@
             Must be a valid email address
           </mat-error>
         </mat-form-field>
-      </form>
-    </section>
-    <section class="actions">
-      <button
-        mat-stroked-button
-        uiPageFooterAction
-        type="button"
-        color="primary"
-        (click)="onBack()">
-        Back Home
-      </button>
+      </section>
+      <section class="actions">
+        <button
+          mat-stroked-button
+          uiPageFooterAction
+          type="button"
+          color="primary"
+          (click)="onBack()">
+          Back Home
+        </button>
 
-      <button mat-flat-button uiPageFooterAction type="submit" color="primary">
-        Send
-      </button>
-    </section>
+        <button
+          mat-flat-button
+          uiPageFooterAction
+          type="submit"
+          color="primary">
+          Send
+        </button>
+      </section>
+    </div>
   </div>
-</div>
+</form>
