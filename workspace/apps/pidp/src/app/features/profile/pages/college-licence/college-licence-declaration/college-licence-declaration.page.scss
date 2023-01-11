@@ -1,0 +1,65 @@
+@use 'pidp-variables' as pidp;
+$lightgrey: #f2f2f2;
+h2,
+label,
+p {
+  font-family: pidp.$bcgov-font-family;
+}
+.viewport-all {
+  --box-padding: 0;
+  --header-padding: 6px 20px;
+  --content-padding: 0 20px;
+  --field-label-font-size: 16px;
+  --field-max-width: unset;
+  --button-margin-right: 15px;
+  --actions-padding: 0 20px;
+}
+.viewport-large {
+  --box-padding: 40px 0;
+  --content-padding: 0;
+  --field-max-width: 400px;
+  --actions-padding: 0;
+}
+.viewport-medium {
+  --box-padding: 25px 0;
+  --content-padding: 0;
+  --field-max-width: 400px;
+  --actions-padding: 0;
+}
+.viewport-small {
+  --box-padding: 0 0 20px;
+  --field-max-width: 400px;
+}
+.viewport-all {
+  padding: var(--box-padding);
+  & section {
+    display: flex;
+    flex-direction: column;
+
+    & .header {
+      padding: var(--header-padding);
+      background-color: $lightgrey;
+    }
+
+    & .content {
+      display: flex;
+      flex-direction: column;
+      padding: var(--content-padding);
+
+      & .field-label {
+        font-size: var(--field-label-font-size);
+        font-weight: bold;
+      }
+
+      & mat-form-field {
+        max-width: var(--field-max-width);
+      }
+    }
+  }
+  & .actions {
+    padding: var(--actions-padding);
+    & button:not(:last-of-type) {
+      margin-right: var(--button-margin-right);
+    }
+  }
+}
