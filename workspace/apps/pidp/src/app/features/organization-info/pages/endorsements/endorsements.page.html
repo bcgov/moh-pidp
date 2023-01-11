@@ -104,7 +104,7 @@
                   noticeText="Requested"
                   noticeColour="yellow"
                   [id]="endorsementRequest.id"
-                  [nameText]="endorsementRequest.partyName ?? ''"
+                  [nameText]="endorsementRequest.recipientEmail"
                   [collegeText]="getCollegeTextForEndorsementRequest(endorsementRequest)"></app-endorsement-card>
               </div>
             </ng-template>
