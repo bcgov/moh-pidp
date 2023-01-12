@@ -7,7 +7,6 @@ using Xunit;
 using Pidp.Features.AccessRequests;
 using Pidp.Infrastructure.HttpClients.Keycloak;
 using Pidp.Infrastructure.HttpClients.Plr;
-using Pidp.Models;
 using PidpTests.TestingExtensions;
 
 public class SAEformsTests : InMemoryDbTest
@@ -16,14 +15,14 @@ public class SAEformsTests : InMemoryDbTest
     [MemberData(nameof(SAEformsIdentifierTypeTestData))]
     public async void CreateSAEformsEnrolment_ValidProfileWithVaryingLicence_MatchesExcludedTypes(IdentifierType identifierType, bool expected)
     {
-        var party = this.TestDb.Has(new Party
+        var party = this.TestDb.HasAParty(party =>
         {
-            FirstName = "FirstName",
-            LastName = "LastName",
-            Birthdate = LocalDate.FromDateTime(DateTime.Today),
-            Email = "Email@email.com",
-            Phone = "5551234567",
-            Cpn = "Cpn"
+            party.FirstName = "FirstName";
+            party.LastName = "LastName";
+            party.Birthdate = LocalDate.FromDateTime(DateTime.Today);
+            party.Email = "Email@email.com";
+            party.Phone = "5551234567";
+            party.Cpn = "Cpn";
         });
         var client = A.Fake<IPlrClient>()
             .ReturningAStatandingsDigest(true, identifierType);
@@ -36,7 +35,7 @@ public class SAEformsTests : InMemoryDbTest
         Assert.Equal(expected, result.IsSuccess);
         if (expected)
         {
-            A.CallTo(() => keycloak.AssignClientRole(party.UserId, MohClients.SAEforms.ClientId, MohClients.SAEforms.AccessRole)).MustHaveHappened();
+            A.CallTo(() => keycloak.AssignClientRole(A<Guid>._, MohClients.SAEforms.ClientId, MohClients.SAEforms.AccessRole)).MustHaveHappened();
         }
         else
         {

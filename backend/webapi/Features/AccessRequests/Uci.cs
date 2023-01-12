@@ -57,7 +57,7 @@ public class Uci
                 .Select(party => new
                 {
                     AlreadyEnroled = party.AccessRequests.Any(request => request.AccessTypeCode == AccessTypeCode.Uci),
-                    party.UserId,
+                    UserId = party.PrimaryUserId,
                     party.Email,
                     party.Cpn
                 })

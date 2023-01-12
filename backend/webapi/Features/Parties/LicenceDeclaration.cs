@@ -95,6 +95,7 @@ public class LicenceDeclaration
         public async Task<IDomainResult<string?>> HandleAsync(Command command)
         {
             var party = await this.context.Parties
+                .Include(party => party.Credentials)
                 .Include(party => party.LicenceDeclaration)
                 .SingleAsync(party => party.Id == command.PartyId);
 
@@ -118,7 +119,7 @@ public class LicenceDeclaration
                 }
                 else
                 {
-                    await this.keycloakClient.UpdateUserCpn(party.UserId, party.Cpn);
+                    await this.keycloakClient.UpdateUserCpn(party.PrimaryUserId, party.Cpn);
                 }
             }
 

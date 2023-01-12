@@ -24,25 +24,29 @@ public class PidpAuthorizationServiceTests : InMemoryDbTest
         Assert.Equal(DomainOperationStatus.NotFound, result.Status);
     }
 
-    [Theory]
-    [MemberData(nameof(AuthResultTestData))]
-    public async void CheckPartyAccessibility_PartyExists_DomainResult(AuthorizationResult authServiceResponse, DomainOperationStatus expected)
+    [Fact]
+    public async void CheckPartyAccessibility_PartyExistsMatchingUserId_Success()
     {
-        var party = this.TestDb.Has(new Party { UserId = Guid.NewGuid() });
+        var party = this.TestDb.HasAParty();
         var user = A.Fake<ClaimsPrincipal>();
-        var authService = A.Fake<IAuthorizationService>();
-        A.CallTo(() => authService.AuthorizeAsync(user, A<IOwnedResource>.That.Matches(x => x.UserId == party.UserId), Policies.UserOwnsResource)).Returns(authServiceResponse);
-        var service = this.MockDependenciesFor<PidpAuthorizationService>(authService);
+        A.CallTo(() => user.FindFirst(Claims.Subject)).Returns(new Claim(Claims.Subject, party.PrimaryUserId.ToString()));
+        var service = this.MockDependenciesFor<PidpAuthorizationService>();
 
         var result = await service.CheckPartyAccessibility(party.Id, user);
 
-        Assert.Equal(expected, result.Status);
-        A.CallTo(() => authService.AuthorizeAsync(user, A<IOwnedResource>.That.Matches(x => x.UserId == party.UserId), Policies.UserOwnsResource)).MustHaveHappened();
+        Assert.Equal(DomainOperationStatus.Success, result.Status);
     }
 
-    public static IEnumerable<object[]> AuthResultTestData()
+    [Fact]
+    public async void CheckPartyAccessibility_PartyExistsNotMatchingUserId_Fail()
     {
-        yield return new object[] { AuthorizationResult.Failed(), DomainOperationStatus.Unauthorized };
-        yield return new object[] { AuthorizationResult.Success(), DomainOperationStatus.Success };
+        var party = this.TestDb.HasAParty();
+        var user = A.Fake<ClaimsPrincipal>();
+        A.CallTo(() => user.FindFirst(Claims.Subject)).Returns(new Claim(Claims.Subject, Guid.NewGuid().ToString()));
+        var service = this.MockDependenciesFor<PidpAuthorizationService>();
+
+        var result = await service.CheckPartyAccessibility(party.Id, user);
+
+        Assert.Equal(DomainOperationStatus.Unauthorized, result.Status);
     }
 }
