@@ -9,8 +9,9 @@
     heading="Error Requesting Access">
     <ng-container uiAlertContent>
       <p>
-        Your request for access to the Prescription Renewal Support eForm could
-        not be processed at this time. If this issue persists, contact
+        Your request for access to the Provincial Prescription Renewal Support
+        Service eForm could not be processed at this time. If this issue
+        persists, contact
         <a
           uiAnchor
           scheme="mailto"
@@ -25,7 +26,7 @@
   <ui-page-section>
     <ui-page-section-subheader
       icon="assignment"
-      heading="Prescription Renewal Support eForm">
+      heading="Provincial Prescription Renewal Support Service eForm">
       <ng-container uiPageSectionSubheaderDesc>
         {{ completed ? 'Enrolment Complete.' : 'Collection Notice.' }}
       </ng-container>
@@ -40,14 +41,16 @@
       heading="You are approved!">
       <ng-container uiAlertContent>
         <p>
-          You now have access to the Prescription Renewal Support eForm. You can
-          log into the application using your BC Services Card app.
+          You now have access to the Provincial Prescription Renewal Support
+          Service eForm. You can log into the application using your BC Services
+          Card app.
         </p>
         <p>
-          Follow this link to Prescription Renewal Support eForm:<br />
+          Follow this link to Provincial Prescription Renewal Support Service
+          eForm:<br />
           <a
             target="_blank"
-            aria-label="Link to Prescription Renewal Support eForm"
+            aria-label="Link to Provincial Prescription Renewal Support Service eForm"
             [href]="prescriptionRefillEformsUrl"
             >{{prescriptionRefillEformsUrl}}</a
           >

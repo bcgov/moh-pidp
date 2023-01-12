@@ -43,7 +43,7 @@ export class DocumentService {
       },
       {
         type: DocumentType.PRESCRIPTION_REFILL_EFORMS_COLLECTION_NOTICE,
-        title: 'Prescription Renewal Support eForm Collection Notice',
+        title: 'Provincial Prescription Renewal Support Service eForm',
       },
       {
         type: DocumentType.USER_ACCESS_AGREEMENT,
