@@ -20,9 +20,11 @@ import { OrganizationInfoRoutes } from '../organization-info/organization-info.r
 import { PortalRoutes } from '../portal/portal.routes';
 import { ProfileModule } from '../profile/profile.module';
 import { ProfileRoutes } from '../profile/profile.routes';
+import { SupportErrorModule } from '../shell/pages/support-error/support-error.module';
 import { TrainingModule } from '../training/training.module';
 import { TrainingRoutes } from '../training/training.routes';
 import { PortalDashboardComponent } from './components/portal-dashboard/portal-dashboard.component';
+import { ShellRoutes } from './shell.routes';
 
 const routes: Routes = [
   {
@@ -35,6 +37,13 @@ const routes: Routes = [
     canLoad: [AuthenticationGuard],
     loadChildren: (): Promise<AdminModule> =>
       import('../admin/admin.module').then((m) => m.AdminModule),
+  },
+  {
+    path: ShellRoutes.SUPPORT_ERROR_PAGE,
+    loadChildren: (): Promise<SupportErrorModule> =>
+      import('../shell/pages/support-error/support-error.module').then(
+        (m) => m.SupportErrorModule
+      ),
   },
   {
     path: '',

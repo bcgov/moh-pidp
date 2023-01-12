@@ -102,6 +102,41 @@ namespace Pidp.Data.Migrations
                     b.HasDiscriminator<string>("Discriminator").HasValue("Address");
                 });
 
+            modelBuilder.Entity("Pidp.Models.BusinessEvent", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<Instant>("Created")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<Instant>("Modified")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Instant>("RecordedOn")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("Severity")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("BusinessEvent");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("BusinessEvent");
+                });
+
             modelBuilder.Entity("Pidp.Models.ClientLog", b =>
                 {
                     b.Property<int>("Id")
@@ -1209,6 +1244,20 @@ namespace Pidp.Data.Migrations
                     b.ToTable("MSTeamsEnrolment");
                 });
 
+            modelBuilder.Entity("Pidp.Models.PartyNotInPlr", b =>
+                {
+                    b.HasBaseType("Pidp.Models.BusinessEvent");
+
+                    b.Property<int>("PartyId")
+                        .HasColumnType("integer");
+
+                    b.HasIndex("PartyId");
+
+                    b.ToTable("BusinessEvent");
+
+                    b.HasDiscriminator().HasValue("PartyNotInPlr");
+                });
+
             modelBuilder.Entity("Pidp.Models.AccessRequest", b =>
                 {
                     b.HasOne("Pidp.Models.Party", "Party")
@@ -1373,6 +1422,17 @@ namespace Pidp.Data.Migrations
                         .HasForeignKey("Pidp.Models.MSTeamsEnrolment", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Pidp.Models.PartyNotInPlr", b =>
+                {
+                    b.HasOne("Pidp.Models.Party", "Party")
+                        .WithMany()
+                        .HasForeignKey("PartyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Party");
                 });
 
             modelBuilder.Entity("Pidp.Models.Endorsement", b =>

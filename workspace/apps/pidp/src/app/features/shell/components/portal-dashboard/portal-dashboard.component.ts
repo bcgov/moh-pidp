@@ -1,7 +1,10 @@
-import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { IsActiveMatchOptions } from '@angular/router';
 
-import { Observable, map } from 'rxjs';
+import { Observable, forkJoin, map } from 'rxjs';
+
+import { DashboardStateModel, PidpStateName } from '@pidp/data-model';
+import { AppStateService } from '@pidp/presentation';
 
 import {
   DashboardHeaderConfig,
@@ -12,19 +15,30 @@ import {
 import { ArrayUtils } from '@bcgov/shared/utils';
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';
+import { PartyService } from '@app/core/party/party.service';
 import { AccessTokenService } from '@app/features/auth/services/access-token.service';
 import { AuthService } from '@app/features/auth/services/auth.service';
+import { ProfileStatus } from '@app/features/portal/models/profile-status.model';
+import { PortalResource } from '@app/features/portal/portal-resource.service';
 import { PortalRoutes } from '@app/features/portal/portal.routes';
+import { CollegeCertification } from '@app/features/profile/pages/college-licence/college-licence-declaration/college-certification.model';
+import { CollegeLicenceInformationResource } from '@app/features/profile/pages/college-licence/college-licence-information/college-licence-information-resource.service';
+import { LookupService } from '@app/modules/lookup/lookup.service';
 import { PermissionsService } from '@app/modules/permissions/permissions.service';
 import { Role } from '@app/shared/enums/roles.enum';
+
+import {
+  RouteChangeDetectedEventArg,
+  RouteIdentificationService,
+  knownRouteNames,
+} from '../../services/route-identification.service';
 
 @Component({
   selector: 'app-portal-dashboard',
   templateUrl: './portal-dashboard.component.html',
   styleUrls: ['./portal-dashboard.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PortalDashboardComponent implements IDashboard {
+export class PortalDashboardComponent implements IDashboard, OnInit {
   public logoutRedirectUrl: string;
   public username: Observable<string>;
   public headerConfig: DashboardHeaderConfig;
@@ -33,16 +47,37 @@ export class PortalDashboardComponent implements IDashboard {
   public responsiveMenuItems: boolean;
   public menuItems: DashboardMenuItem[];
 
+  public dashboardState$ = this.stateService.stateBroadcast$.pipe(
+    map((state) => {
+      const dashboardNamedState = state.all.find(
+        (x) => x.stateName === PidpStateName.dashboard
+      );
+      if (!dashboardNamedState) {
+        throw 'dashboard state not found';
+      }
+      const dashboardState = dashboardNamedState as DashboardStateModel;
+      return dashboardState;
+    })
+  );
+
   public constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
     private authService: AuthService,
     private permissionsService: PermissionsService,
-    accessTokenService: AccessTokenService
+    accessTokenService: AccessTokenService,
+    private routeIdentificationService: RouteIdentificationService,
+    private portalResourceService: PortalResource,
+    private partyService: PartyService,
+    private collegeLicenceInformationService: CollegeLicenceInformationResource,
+    private lookupService: LookupService,
+    private stateService: AppStateService
   ) {
     this.logoutRedirectUrl = `${this.config.applicationUrl}/${this.config.routes.auth}`;
-    this.username = accessTokenService
-      .decodeToken()
-      .pipe(map((token) => token?.name ?? ''));
+    this.username = accessTokenService.decodeToken().pipe(
+      map((token) => {
+        return token?.name ?? '';
+      })
+    );
     this.headerConfig = { theme: 'light', allowMobileToggle: true };
     this.brandConfig = {
       imgSrc: '/assets/images/pidp-logo-white.svg',
@@ -51,6 +86,31 @@ export class PortalDashboardComponent implements IDashboard {
     this.showMenuItemIcons = true;
     this.responsiveMenuItems = false;
     this.menuItems = this.createMenuItems();
+  }
+  public ngOnInit(): void {
+    // Get profile status and college info.
+    // TODO: Insert a caching layer so a full get is not always required.
+    const partyId = this.partyService.partyId;
+
+    // Use forkJoin to wait for both to return.
+    forkJoin({
+      profileStatus: this.portalResourceService.getProfileStatus(partyId),
+      collegeInfo: this.collegeLicenceInformationService.get(partyId),
+    }).subscribe((result) => {
+      const fullNameText = this.getUserFullNameText(result.profileStatus);
+      const collegeName = this.getCollegeName(result.collegeInfo);
+
+      // Set the user name and college on the dashboard.
+      const oldState = this.stateService.getNamedState<DashboardStateModel>(
+        PidpStateName.dashboard
+      );
+      const newState: DashboardStateModel = {
+        ...oldState,
+        userProfileFullNameText: fullNameText,
+        userProfileCollegeNameText: collegeName,
+      };
+      this.stateService.setNamedState(PidpStateName.dashboard, newState);
+    });
   }
 
   public onLogout(): void {
@@ -130,5 +190,27 @@ export class PortalDashboardComponent implements IDashboard {
         'help_outline'
       ),
     ];
+  }
+  private getUserFullNameText(profileStatus: ProfileStatus | null): string {
+    if (profileStatus?.status.demographics.firstName) {
+      const fullName = `${profileStatus?.status.demographics.firstName} ${profileStatus?.status.demographics.lastName}`;
+      return fullName;
+    } else {
+      return '';
+    }
+  }
+  private getCollegeName(collegeInfo: CollegeCertification[] | null): string {
+    if (!collegeInfo || collegeInfo.length === 0) {
+      return '';
+    }
+    const firstCollegeInfo = collegeInfo[0];
+    if (!firstCollegeInfo.collegeId) {
+      return '';
+    }
+    const codeNumber = parseInt(firstCollegeInfo.collegeId);
+    const college = this.lookupService.colleges.find(
+      (x) => x.code === codeNumber
+    );
+    return college?.name ?? '';
   }
 }

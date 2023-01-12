@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { NgxMaskModule } from 'ngx-mask';
 
 import { AlertActionsDirective } from './components/alert/alert-actions.directive';
@@ -20,6 +21,7 @@ import { HtmlComponent } from './components/dialogs/content/html/html.component'
 import { FormSectionComponent } from './components/form-section/form-section.component';
 import { IconComponent } from './components/icon/icon.component';
 import { KeyValueInfoComponent } from './components/key-value-info/key-value-info.component';
+import { LayoutHeaderFooterComponent } from './components/layout-header-footer/layout-header-footer.component';
 import { OverlayComponent } from './components/overlay/overlay.component';
 import { PageFooterActionDirective } from './components/page-footer/page-footer-action.directive';
 import { PageFooterComponent } from './components/page-footer/page-footer.component';
@@ -35,6 +37,7 @@ import { ScrollTargetComponent } from './components/scroll-target/scroll-target.
 import { ToggleContentComponent } from './components/toggle-content/toggle-content.component';
 import { UserInfoComponent } from './components/user-info/user-info.component';
 import { YesNoContentComponent } from './components/yes-no-content/yes-no-content.component';
+import { InjectViewportCssClassDirective } from './directives/viewport-css.directive';
 import { MaterialModule } from './material/material.module';
 import { ContextHelpModule } from './modules/context-help/context-help.module';
 import { DefaultPipe } from './pipes/default.pipe';
@@ -73,6 +76,7 @@ import { SafePipe } from './pipes/safe.pipe';
     PageSectionSubheaderDescDirective,
     PageSectionSubheaderHintDirective,
     PageSubheaderComponent,
+    LayoutHeaderFooterComponent,
     PreferredNameFormComponent,
     ScrollTargetComponent,
     ToggleContentComponent,
@@ -85,6 +89,7 @@ import { SafePipe } from './pipes/safe.pipe';
     PostalPipe,
     ReplacePipe,
     SafePipe,
+    InjectViewportCssClassDirective,
   ],
   imports: [
     CommonModule,
@@ -92,12 +97,14 @@ import { SafePipe } from './pipes/safe.pipe';
     MaterialModule,
     NgxMaskModule.forRoot(),
     ReactiveFormsModule,
+    FontAwesomeModule,
   ],
   exports: [
     ContextHelpModule,
     MaterialModule,
     NgxMaskModule,
     ReactiveFormsModule,
+    FontAwesomeModule,
     AlertComponent,
     AlertContentDirective,
     AlertActionsDirective,
@@ -124,6 +131,7 @@ import { SafePipe } from './pipes/safe.pipe';
     PageSectionSubheaderDescDirective,
     PageSectionSubheaderHintDirective,
     PageSubheaderComponent,
+    LayoutHeaderFooterComponent,
     PreferredNameFormComponent,
     ScrollTargetComponent,
     ToggleContentComponent,
@@ -136,6 +144,7 @@ import { SafePipe } from './pipes/safe.pipe';
     PostalPipe,
     ReplacePipe,
     SafePipe,
+    InjectViewportCssClassDirective,
   ],
 })
 export class SharedUiModule {}

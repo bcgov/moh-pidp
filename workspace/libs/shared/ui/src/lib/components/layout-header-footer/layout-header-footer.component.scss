@@ -1,0 +1,101 @@
+@use 'pidp-variables' as pidp;
+
+.page-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+.viewport-all {
+  header {
+    background-color: pidp.$bcgov-color-primary;
+    border-bottom: 2px solid pidp.$bcgov-color-accent;
+    color: #ffffff;
+    display: flex;
+    height: 65px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    width: 100%;
+
+    & .banner {
+      display: flex;
+      align-content: center;
+    }
+    & .logo-link {
+      display: flex;
+
+      & img {
+        margin: auto 12px; // auto will vertically center the image in the anchor.
+      }
+    }
+    & a.logo-link:focus img {
+      outline: 4px solid #3b99fc !important; // NOTE: Material uses !important to set outline to 0.
+      outline-offset: 1px;
+    }
+
+    & .logo-mobile {
+      width: 45px;
+      height: 50px;
+    }
+
+    & .logo-desktop {
+      width: 120px;
+      height: 65px;
+    }
+
+    & .title {
+      display: flex;
+      flex: 1;
+
+      & h1 {
+        margin: 12px auto; // auto will vertically center the image in the anchor.
+        font-family: pidp.$bcgov-font-family;
+        font-weight: normal;
+        white-space: nowrap;
+      }
+    }
+  }
+  .content {
+    // Ensure this div stretches to fit vertically.
+    flex: 1;
+    // Ensure the inner child stretches to fit.
+    display: flex;
+  }
+  footer {
+    margin-top: auto; // This ensure the footer sticks to the bottom of the flex container.
+    padding: 20px;
+    background-color: pidp.$bcgov-color-primary;
+    border-top: 2px solid pidp.$bcgov-color-accent;
+    color: #ffffff;
+    font-family: pidp.$bcgov-font-family;
+
+    & ul {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      align-items: center;
+      row-gap: 8px;
+
+      & li {
+        & a {
+          font-weight: normal; /* 400 */
+          color: #ffffff;
+          border-right: 1px solid #ffffff;
+          padding: 0 8px;
+          text-decoration: none;
+        }
+        & a:focus {
+          outline: 4px solid #3b99fc !important; // NOTE: Material uses !important to set outline to 0.
+          outline-offset: 1px;
+        }
+        & a:hover {
+          color: #ffffff;
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+}

@@ -6,6 +6,7 @@ using DomainResults.Common;
 using FluentValidation;
 using HybridModelBinding;
 using Microsoft.EntityFrameworkCore;
+using NodaTime;
 using System.Text.Json.Serialization;
 
 using Pidp.Data;
@@ -74,15 +75,18 @@ public class LicenceDeclaration
 
     public class CommandHandler : ICommandHandler<Command, IDomainResult<string?>>
     {
+        private readonly IClock clock;
         private readonly IKeycloakAdministrationClient keycloakClient;
         private readonly IPlrClient plrClient;
         private readonly PidpDbContext context;
 
         public CommandHandler(
+            IClock clock,
             IKeycloakAdministrationClient keycloakClient,
             IPlrClient plrClient,
             PidpDbContext context)
         {
+            this.clock = clock;
             this.keycloakClient = keycloakClient;
             this.plrClient = plrClient;
             this.context = context;
@@ -104,13 +108,21 @@ public class LicenceDeclaration
             party.LicenceDeclaration.CollegeCode = command.CollegeCode;
             party.LicenceDeclaration.LicenceNumber = command.LicenceNumber;
 
-            party.Cpn = command.CollegeCode == null || command.LicenceNumber == null || party.Birthdate == null
-                ? null // Declared "No Licence"
-                : await this.plrClient.FindCpnAsync(command.CollegeCode.Value, command.LicenceNumber, party.Birthdate.Value);
+            if (command.CollegeCode != null && command.LicenceNumber != null && party.Birthdate.HasValue)
+            {
+                party.Cpn = await this.plrClient.FindCpnAsync(command.CollegeCode.Value, command.LicenceNumber, party.Birthdate.Value);
+
+                if (party.Cpn == null)
+                {
+                    this.context.BusinessEvents.Add(PartyNotInPlr.Create(party.Id, this.clock.GetCurrentInstant()));
+                }
+                else
+                {
+                    await this.keycloakClient.UpdateUserCpn(party.UserId, party.Cpn);
+                }
+            }
 
             await this.context.SaveChangesAsync();
-
-            await this.keycloakClient.UpdateUserCpn(party.UserId, party.Cpn);
 
             return DomainResult.Success(party.Cpn);
         }

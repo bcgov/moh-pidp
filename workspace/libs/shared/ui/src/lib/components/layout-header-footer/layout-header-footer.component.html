@@ -1,0 +1,55 @@
+<div class="page-container" uiPidpInjectViewportCss>
+  <header>
+    <div class="banner">
+      <a class="logo-link" href="." title="Home" aria-label="Go home">
+        <img
+          *ngIf="isMobile"
+          class="logo-mobile"
+          loading="lazy"
+          src="../assets/images/logo.svg"
+          aria-label="BC Government Logo" />
+        <img
+          *ngIf="!isMobile"
+          class="logo-desktop"
+          loading="lazy"
+          src="../assets/images/logo-banner.svg"
+          aria-label="BC Government Logo" />
+      </a>
+    </div>
+    <div class="title">
+      <h1><ng-content select="[page-title]"></ng-content></h1>
+    </div>
+    <div class="header-right">
+      <ng-content select="[page-header-right]"></ng-content>
+    </div>
+  </header>
+  <div class="content">
+    <ng-content></ng-content>
+  </div>
+  <footer class="footer">
+    <div class="footer-container">
+      <ul>
+        <li><a href=".">Home</a></li>
+        <li>
+          <a href="https://www2.gov.bc.ca/gov/content/home/disclaimer"
+            >Disclaimer</a
+          >
+        </li>
+        <li>
+          <a href="https://www2.gov.bc.ca/gov/content/home/privacy">Privacy</a>
+        </li>
+        <li>
+          <a href="https://www2.gov.bc.ca/gov/content/home/accessibility"
+            >Accessibility</a
+          >
+        </li>
+        <li>
+          <a href="https://www2.gov.bc.ca/gov/content/home/copyright"
+            >Copyright</a
+          >
+        </li>
+        <li><a href=".">Contact Us</a></li>
+      </ul>
+    </div>
+  </footer>
+</div>
