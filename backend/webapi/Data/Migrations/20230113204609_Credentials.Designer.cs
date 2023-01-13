@@ -13,7 +13,7 @@ using Pidp.Data;
 namespace Pidp.Data.Migrations
 {
     [DbContext(typeof(PidpDbContext))]
-    [Migration("20230105101647_Credentials")]
+    [Migration("20230113204609_Credentials")]
     partial class Credentials
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -425,16 +425,11 @@ namespace Pidp.Data.Migrations
                         new
                         {
                             Code = 5,
-                            Name = "Fraser Health UCI"
-                        },
-                        new
-                        {
-                            Code = 6,
                             Name = "MS Teams for Clinical Use"
                         },
                         new
                         {
-                            Code = 7,
+                            Code = 6,
                             Name = "Prescription Refill eForm for Pharmacists"
                         });
                 });
