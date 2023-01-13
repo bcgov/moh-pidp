@@ -10,7 +10,7 @@ namespace Pidp.Data.Migrations
         {
             migrationBuilder.Sql(@"
                 UPDATE ""AccessRequest""
-                SET ""AccessTypeCode"" = 5
+                SET ""AccessTypeCode"" = 6
                 WHERE ""AccessTypeCode"" = 7;
             ");
 
