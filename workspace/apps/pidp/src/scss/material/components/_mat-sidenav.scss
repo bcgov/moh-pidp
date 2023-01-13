@@ -23,6 +23,17 @@ $menuListDividerColor: theme-palette(blue);
   background-color: #fff !important;
 }
 
+// NOTE: overflow-y must be unset in all parents to the left menu so position: sticky will work.
+.mat-drawer {
+  // This is needed to allow the sticky side nav to work.
+  overflow-y: unset !important;
+}
+.mat-drawer-container,
+.mat-drawer-inner-container {
+  // This is needed to allow the sticky side nav to work.
+  overflow: unset !important;
+}
+
 .mat-sidenav {
   background-color: $sideNavBackgroundColor;
   border-right: $sideNavBorderRight;
