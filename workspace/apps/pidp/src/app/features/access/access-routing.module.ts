@@ -1,16 +1,18 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
+import { SetDashboardTitleGuard } from '@pidp/presentation';
+
 import { PermissionsGuard } from '@app/modules/permissions/permissions.guard';
 import { Role } from '@app/shared/enums/roles.enum';
 
 import { AccessRoutes } from './access.routes';
+import { BcProviderApplicationComponent } from './pages/bc-provider-application/bc-provider-application.component';
 import { DriverFitnessModule } from './pages/driver-fitness/driver-fitness.module';
 import { HcimAccountTransferModule } from './pages/hcim-account-transfer/hcim-account-transfer.module';
 import { HcimEnrolmentModule } from './pages/hcim-enrolment/hcim-enrolment.module';
 import { MsTeamsModule } from './pages/ms-teams/ms-teams.module';
 import { PharmanetModule } from './pages/pharmanet/pharmanet.module';
-import { PrescriptionRefillEformsModule } from './pages/prescription-refill-eforms/prescription-refill-eforms.module';
 import { SaEformsModule } from './pages/sa-eforms/sa-eforms.module';
 import { SitePrivacySecurityChecklistModule } from './pages/site-privacy-security-checklist/site-privacy-security-checklist.module';
 import { UciModule } from './pages/uci/uci.module';
@@ -24,11 +26,22 @@ const routes: Routes = [
       ),
   },
   {
-    path: AccessRoutes.PRESCRIPTION_REFILL_EFORMS,
-    loadChildren: (): Promise<PrescriptionRefillEformsModule> =>
-      import(
-        './pages/prescription-refill-eforms/prescription-refill-eforms.module'
-      ).then((m) => m.PrescriptionRefillEformsModule),
+    path: AccessRoutes.BC_PROVIDER_APPLICATION,
+    canActivate: [SetDashboardTitleGuard],
+    component: BcProviderApplicationComponent,
+    data: {
+      setDashboardTitleGuard: {
+        titleText: 'BC Provider Application',
+        titleDescriptionText: '',
+      },
+    },
+  },
+  {
+    path: AccessRoutes.HCIM_ACCOUNT_TRANSFER,
+    loadChildren: (): Promise<HcimAccountTransferModule> =>
+      import('./pages/hcim-account-transfer/hcim-account-transfer.module').then(
+        (m) => m.HcimAccountTransferModule
+      ),
   },
   {
     path: AccessRoutes.HCIM_ACCOUNT_TRANSFER,
