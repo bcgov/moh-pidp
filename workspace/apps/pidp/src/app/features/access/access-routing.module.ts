@@ -52,13 +52,6 @@ const routes: Routes = [
       ),
   },
   {
-    path: AccessRoutes.HCIM_ACCOUNT_TRANSFER,
-    loadChildren: (): Promise<HcimAccountTransferModule> =>
-      import('./pages/hcim-account-transfer/hcim-account-transfer.module').then(
-        (m) => m.HcimAccountTransferModule
-      ),
-  },
-  {
     path: AccessRoutes.HCIM_ENROLMENT,
     canActivate: [PermissionsGuard],
     data: {
