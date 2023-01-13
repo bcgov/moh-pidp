@@ -105,8 +105,7 @@ public partial class ProfileStatus
                     ProfileSection.Create<HcimEnrolmentSection>(data),
                     ProfileSection.Create<MSTeamsSection>(data),
                     ProfileSection.Create<PrescriptionRefillEformsSection>(data),
-                    ProfileSection.Create<SAEformsSection>(data),
-                    ProfileSection.Create<UciSection>(data)
+                    ProfileSection.Create<SAEformsSection>(data)
                 }
                 .ToDictionary(section => section.SectionName, section => section)
             };

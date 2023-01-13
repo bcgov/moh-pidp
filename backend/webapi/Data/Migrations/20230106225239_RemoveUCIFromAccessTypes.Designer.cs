@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NodaTime;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
@@ -12,9 +13,10 @@ using Pidp.Data;
 namespace Pidp.Data.Migrations
 {
     [DbContext(typeof(PidpDbContext))]
-    partial class PidpDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230106225239_RemoveUCIFromAccessTypes")]
+    partial class RemoveUCIFromAccessTypes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -164,44 +166,6 @@ namespace Pidp.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("ClientLog");
-                });
-
-            modelBuilder.Entity("Pidp.Models.Credential", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<Instant>("Created")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("IdentityProvider")
-                        .HasColumnType("text");
-
-                    b.Property<string>("IdpId")
-                        .HasColumnType("text");
-
-                    b.Property<Instant>("Modified")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<int>("PartyId")
-                        .HasColumnType("integer");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PartyId");
-
-                    b.HasIndex("UserId")
-                        .IsUnique();
-
-                    b.ToTable("Credential");
-
-                    b.HasCheckConstraint("CHK_Credential_AtLeastOneIdentifier", "((\"UserId\" is not null) or (\"IdpId\" is not null))");
                 });
 
             modelBuilder.Entity("Pidp.Models.EmailLog", b =>
@@ -1070,6 +1034,9 @@ namespace Pidp.Data.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("Hpdid")
+                        .HasColumnType("text");
+
                     b.Property<string>("JobTitle")
                         .HasColumnType("text");
 
@@ -1092,7 +1059,16 @@ namespace Pidp.Data.Migrations
                     b.Property<string>("PreferredMiddleName")
                         .HasColumnType("text");
 
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("Hpdid")
+                        .IsUnique();
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
 
                     b.ToTable("Party");
                 });
@@ -1309,17 +1285,6 @@ namespace Pidp.Data.Migrations
                     b.Navigation("Province");
                 });
 
-            modelBuilder.Entity("Pidp.Models.Credential", b =>
-                {
-                    b.HasOne("Pidp.Models.Party", "Party")
-                        .WithMany("Credentials")
-                        .HasForeignKey("PartyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Party");
-                });
-
             modelBuilder.Entity("Pidp.Models.EndorsementRelationship", b =>
                 {
                     b.HasOne("Pidp.Models.Endorsement", "Endorsement")
@@ -1482,8 +1447,6 @@ namespace Pidp.Data.Migrations
                     b.Navigation("AccessAdministrator");
 
                     b.Navigation("AccessRequests");
-
-                    b.Navigation("Credentials");
 
                     b.Navigation("Facility");
 
