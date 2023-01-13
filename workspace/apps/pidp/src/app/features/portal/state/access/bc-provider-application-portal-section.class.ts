@@ -62,6 +62,6 @@ export class BcProviderApplicationPortalSection implements IPortalSection {
   }
 
   private getStatusCode(): StatusCode {
-    return this.profileStatus.status.hcimAccountTransfer.statusCode;
+    return this.profileStatus.status.bcProviderApplication.statusCode;
   }
 }
