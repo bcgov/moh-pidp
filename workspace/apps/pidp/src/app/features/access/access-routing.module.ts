@@ -13,6 +13,7 @@ import { HcimAccountTransferModule } from './pages/hcim-account-transfer/hcim-ac
 import { HcimEnrolmentModule } from './pages/hcim-enrolment/hcim-enrolment.module';
 import { MsTeamsModule } from './pages/ms-teams/ms-teams.module';
 import { PharmanetModule } from './pages/pharmanet/pharmanet.module';
+import { PrescriptionRefillEformsModule } from './pages/prescription-refill-eforms/prescription-refill-eforms.module';
 import { SaEformsModule } from './pages/sa-eforms/sa-eforms.module';
 import { SitePrivacySecurityChecklistModule } from './pages/site-privacy-security-checklist/site-privacy-security-checklist.module';
 import { UciModule } from './pages/uci/uci.module';
@@ -24,6 +25,13 @@ const routes: Routes = [
       import('./pages/sa-eforms/sa-eforms-routing.module').then(
         (m) => m.SaEformsRoutingModule
       ),
+  },
+  {
+    path: AccessRoutes.PRESCRIPTION_REFILL_EFORMS,
+    loadChildren: (): Promise<PrescriptionRefillEformsModule> =>
+      import(
+        './pages/prescription-refill-eforms/prescription-refill-eforms.module'
+      ).then((m) => m.PrescriptionRefillEformsModule),
   },
   {
     path: AccessRoutes.BC_PROVIDER_APPLICATION,
