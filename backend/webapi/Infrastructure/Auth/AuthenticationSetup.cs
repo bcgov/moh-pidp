@@ -31,9 +31,9 @@ public static class AuthenticationSetup
 
         services.AddAuthorization(options =>
         {
-            options.AddPolicy(Policies.BcscAuthentication, policy => policy
+            options.AddPolicy(Policies.HighAssuranceIdentityProvider, policy => policy
                 .RequireAuthenticatedUser()
-                .RequireClaim(Claims.IdentityProvider, IdentityProviders.BCServicesCard));
+                .RequireClaim(Claims.IdentityProvider, IdentityProviders.BCServicesCard, IdentityProviders.BCProvider));
 
             options.AddPolicy(Policies.IdirAuthentication, policy => policy
                 .RequireAuthenticatedUser()
@@ -41,11 +41,11 @@ public static class AuthenticationSetup
 
             options.AddPolicy(Policies.AnyPartyIdentityProvider, policy => policy
                 .RequireAuthenticatedUser()
-                .RequireClaim(Claims.IdentityProvider, IdentityProviders.BCServicesCard, IdentityProviders.Idir, IdentityProviders.Phsa));
+                .RequireClaim(Claims.IdentityProvider, IdentityProviders.BCServicesCard, IdentityProviders.BCProvider, IdentityProviders.Idir, IdentityProviders.Phsa));
 
             options.FallbackPolicy = new AuthorizationPolicyBuilder()
                 .RequireAuthenticatedUser()
-                .RequireClaim(Claims.IdentityProvider, IdentityProviders.BCServicesCard, IdentityProviders.Idir, IdentityProviders.Phsa)
+                .RequireClaim(Claims.IdentityProvider, IdentityProviders.BCServicesCard, IdentityProviders.BCProvider, IdentityProviders.Idir, IdentityProviders.Phsa)
                 .Build();
         });
 

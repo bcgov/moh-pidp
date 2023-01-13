@@ -25,7 +25,7 @@ public static class IdentityProviders
 
 public static class Policies
 {
-    public const string BcscAuthentication = "bcsc-authentication-policy";
+    public const string HighAssuranceIdentityProvider = "high-assurance-idp-policy";
     public const string IdirAuthentication = "idir-authentication-policy";
     public const string AnyPartyIdentityProvider = "party-idp-policy";
 }
