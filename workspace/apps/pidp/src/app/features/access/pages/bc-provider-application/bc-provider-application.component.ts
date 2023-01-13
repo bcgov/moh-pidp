@@ -31,8 +31,8 @@ export class BcProviderApplicationComponent extends AbstractFormPage<BcProviderA
   public showMessageCard = false;
   public messageCardText = '';
 
-  public get isEnrolButtonDisabled(): boolean {
-    return this.formState.form.errors?.length > 0;
+  public get isEnrolButtonEnabled(): boolean {
+    return this.formState.form.valid;
   }
 
   public constructor(
