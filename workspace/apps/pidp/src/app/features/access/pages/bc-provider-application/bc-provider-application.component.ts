@@ -79,10 +79,10 @@ export class BcProviderApplicationComponent extends AbstractFormPage<BcProviderA
             'OK'
           );
         }),
-        catchError((error) => {
+        catchError((response) => {
           let message = 'An error occurred.';
-          if (error?.error?.errors) {
-            const errors = error.error.errors;
+          if (response?.error?.errors) {
+            const errors = response.error.errors;
             if (errors.Password?.length > 0) {
               message = errors.Password[0];
             }
