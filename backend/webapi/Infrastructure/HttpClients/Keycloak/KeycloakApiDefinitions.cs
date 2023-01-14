@@ -7,6 +7,7 @@ using Pidp.Models.Lookups;
 
 public static class MohClients
 {
+    public static (string ClientId, string AccessRole) DriverFitness => ("DMFT-WEBAPP", "?????");
     public static (string ClientId, string AccessRole) PrescriptionRefillEforms => ("SAT-EFORMS", "phsa_eforms_rxrefill");
     public static (string ClientId, string AccessRole) SAEforms => ("SAT-EFORMS", "phsa_eforms_sat");
 
@@ -14,7 +15,7 @@ public static class MohClients
     {
         return code switch
         {
-            AccessTypeCode.DriverFitness => null,
+            AccessTypeCode.DriverFitness => DriverFitness,
             AccessTypeCode.HcimAccountTransfer => null,
             AccessTypeCode.HcimEnrolment => null,
             AccessTypeCode.MSTeams => null,
