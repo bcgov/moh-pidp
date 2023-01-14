@@ -20,7 +20,6 @@ export interface AppEnvironment extends EnvironmentConfig {
     hcimEnrolmentSupport: string;
     prescriptionRefillRequestEformsSupport: string;
     driverFitnessSupport: string;
-    uciSupport: string;
     msTeamsSupport: string;
     doctorsTechnologyOfficeSupport: string;
     phsaInformationAccessAndPrivacyOffice: string;
