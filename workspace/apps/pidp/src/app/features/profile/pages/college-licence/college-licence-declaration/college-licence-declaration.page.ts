@@ -6,6 +6,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { EMPTY, Observable, catchError, of, tap } from 'rxjs';
 
+import { DashboardStateModel, PidpStateName } from '@pidp/data-model';
+import { AppStateService } from '@pidp/presentation';
+
 import { AbstractFormPage } from '@app/core/classes/abstract-form-page.class';
 import { PartyService } from '@app/core/party/party.service';
 import { FormUtilsService } from '@app/core/services/form-utils.service';
@@ -40,7 +43,8 @@ export class CollegeLicenceDeclarationPage
     private partyService: PartyService,
     private resource: CollegeLicenceDeclarationResource,
     private logger: LoggerService,
-    lookupService: LookupService,
+    private lookupService: LookupService,
+    private stateService: AppStateService,
     fb: FormBuilder
   ) {
     super(dialog, formUtilsService);
@@ -86,6 +90,20 @@ export class CollegeLicenceDeclarationPage
   }
 
   protected afterSubmitIsSuccessful(cpn: string | null): void {
+    // Set college on the left navigation.
+    const collegeCode = this.formState.collegeCode.value as number;
+    const college = this.lookupService.getCollege(collegeCode);
+    const collegeName = college?.name ?? '';
+
+    const oldState = this.stateService.getNamedState<DashboardStateModel>(
+      PidpStateName.dashboard
+    );
+    const newState: DashboardStateModel = {
+      ...oldState,
+      userProfileCollegeNameText: collegeName,
+    };
+    this.stateService.setNamedState(PidpStateName.dashboard, newState);
+
     if (!cpn) {
       this.navigateToRoot();
     } else {
