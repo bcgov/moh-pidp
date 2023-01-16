@@ -7,6 +7,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { EMPTY, Observable, catchError, of, tap } from 'rxjs';
 
 import { DashboardStateModel, PidpStateName } from '@pidp/data-model';
+import { RegisteredCollege } from '@pidp/data-model';
 import { AppStateService } from '@pidp/presentation';
 
 import { AbstractFormPage } from '@app/core/classes/abstract-form-page.class';
@@ -34,6 +35,12 @@ export class CollegeLicenceDeclarationPage
   public title: string;
   public formState: CollegeLicenceDeclarationFormState;
   public colleges: CollegeLookup[];
+
+  public get showNurseValidationInfo(): boolean {
+    const isNurse =
+      this.formState.collegeCode.value === RegisteredCollege.Bccnm;
+    return isNurse;
+  }
 
   public constructor(
     protected dialog: MatDialog,

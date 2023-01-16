@@ -19,8 +19,9 @@ const routes: Routes = [
         root: '../../',
       },
       setDashboardTitleGuard: {
-        titleText: '',
-        titleDescriptionText: '',
+        titleText: 'College Licence Information',
+        titleDescriptionText:
+          'Provide the following information to complete your Provider Identity Profile',
       },
     },
   },
