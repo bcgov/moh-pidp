@@ -41,8 +41,8 @@ const routes: Routes = [
       setDashboardTitleGuard: {
         titleText: 'BC Provider Application',
         titleDescriptionText: '',
-        roles: [Role.FEATURE_PIDP_DEMO],
       },
+      roles: [Role.FEATURE_PIDP_DEMO],
     },
   },
   {
