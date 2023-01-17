@@ -145,7 +145,10 @@ export class PortalStateBuilder {
         ]
       ),
       ...ArrayUtils.insertResultIf<IPortalSection>(
-        this.insertSection('bcProviderApplication', profileStatus),
+        // TODO remove permissions when API exists and ready for production, or
+        // TODO replace || with && to keep it flagged when API exists
+        this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]) ||
+          this.insertSection('bcProviderApplication', profileStatus),
         () => [
           new BcProviderApplicationPortalSection(profileStatus, this.router),
         ]
