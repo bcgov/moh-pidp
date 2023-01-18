@@ -96,6 +96,7 @@ public partial class ProfileStatus
             {
                 Status = new List<ProfileSection>
                 {
+                    ProfileSection.Create<DashboardInfoSection>(data),
                     ProfileSection.Create<AccessAdministratorSection>(data),
                     ProfileSection.Create<CollegeCertificationSection>(data),
                     ProfileSection.Create<OrganizationDetailsSection>(data),
