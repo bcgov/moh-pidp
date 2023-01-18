@@ -12,7 +12,7 @@ public class CredentialsController : PidpControllerBase
 {
     public CredentialsController(IPidpAuthorizationService authorizationService) : base(authorizationService) { }
 
-    [HttpGet()]
+    [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<List<Index.Model>>> GetCredentials([FromServices] IQueryHandler<Index.Query, List<Index.Model>> handler)
         => await handler.HandleAsync(new Index.Query { User = this.User });

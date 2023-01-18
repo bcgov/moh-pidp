@@ -59,6 +59,7 @@ public class Index
 
         // This is to update old non-BCSC records we didn't originally capture the IDP info for.
         // One day, this should be removed entirely once all the records in the DB have IdentityProvider and IdpId (also, those properties can then be made non-nullable).
+        // Additionally, we could then find the Credential using only IdentityProvider + IdpId instead of needing the entire ClaimsPrincipal User.
         private async Task UpdateRecord(Credential credential, ClaimsPrincipal user)
         {
             credential.IdentityProvider ??= user.GetIdentityProvider();
