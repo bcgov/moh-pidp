@@ -55,7 +55,7 @@ public class DriverFitness
                 {
                     AlreadyEnroled = party.AccessRequests.Any(request => request.AccessTypeCode == AccessTypeCode.DriverFitness),
                     LicenceDeclarationCompleted = party.LicenceDeclaration != null,
-                    UserId = party.PrimaryUserId,
+                    party.UserId,
                     party.Cpn,
                     party.Email
                 })
@@ -99,7 +99,7 @@ public class DriverFitness
                 }
             }
 
-            if (!await this.keycloakClient.AssignClientRole(dto.PrimaryUserId, MohClients.DriverFitness.ClientId, MohClients.DriverFitness.AccessRole))
+            if (!await this.keycloakClient.AssignClientRole(dto.UserId, MohClients.DriverFitness.ClientId, MohClients.DriverFitness.AccessRole))
             {
                 return DomainResult.Failed();
             }
