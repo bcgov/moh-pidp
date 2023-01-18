@@ -99,6 +99,11 @@ export class SignedOrAcceptedDocumentsPage implements OnInit {
             return (
               status?.userAccessAgreement.statusCode === StatusCode.COMPLETED
             );
+          case DocumentType.PRESCRIPTION_REFILL_EFORMS_COLLECTION_NOTICE:
+            return (
+              status?.prescriptionRefillEforms.statusCode ===
+              StatusCode.COMPLETED
+            );
 
           case DocumentType.SA_EFORMS_COLLECTION_NOTICE:
             return status?.saEforms.statusCode === StatusCode.COMPLETED;
