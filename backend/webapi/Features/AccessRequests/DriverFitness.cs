@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using NodaTime;
 
 using Pidp.Data;
+using Pidp.Infrastructure.HttpClients.Keycloak;
 using Pidp.Infrastructure.HttpClients.Plr;
 using Pidp.Models;
 using Pidp.Models.Lookups;
@@ -27,17 +28,20 @@ public class DriverFitness
     public class CommandHandler : ICommandHandler<Command, IDomainResult>
     {
         private readonly IClock clock;
+        private readonly IKeycloakAdministrationClient keycloakClient;
         private readonly ILogger logger;
         private readonly IPlrClient plrClient;
         private readonly PidpDbContext context;
 
         public CommandHandler(
             IClock clock,
+            IKeycloakAdministrationClient keycloakClient,
             ILogger<CommandHandler> logger,
             IPlrClient plrClient,
             PidpDbContext context)
         {
             this.clock = clock;
+            this.keycloakClient = keycloakClient;
             this.logger = logger;
             this.plrClient = plrClient;
             this.context = context;
@@ -51,6 +55,7 @@ public class DriverFitness
                 {
                     AlreadyEnroled = party.AccessRequests.Any(request => request.AccessTypeCode == AccessTypeCode.DriverFitness),
                     LicenceDeclarationCompleted = party.LicenceDeclaration != null,
+                    party.UserId,
                     party.Cpn,
                     party.Email
                 })
@@ -94,11 +99,10 @@ public class DriverFitness
                 }
             }
 
-            // TODO assign role?
-            // if (!await this.keycloakClient.AssignClientRole(dto.UserId, ?, ?))
-            // {
-            //     return DomainResult.Failed();
-            // }
+            if (!await this.keycloakClient.AssignClientRole(dto.UserId, MohClients.DriverFitness.ClientId, MohClients.DriverFitness.AccessRole))
+            {
+                return DomainResult.Failed();
+            }
 
             this.context.AccessRequests.Add(new AccessRequest
             {
