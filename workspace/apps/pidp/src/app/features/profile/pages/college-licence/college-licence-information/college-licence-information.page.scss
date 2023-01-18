@@ -17,6 +17,11 @@ $darkgrey: pidp.$bcgov-color-text;
       }
     }
   }
+  & .actions {
+    & button {
+      margin-top: 1rem;
+    }
+  }
 }
 .viewport-large,
 .viewport-medium,
