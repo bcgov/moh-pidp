@@ -27,9 +27,9 @@ public class Create
             var user = accessor?.HttpContext?.User;
 
             this.RuleFor(x => x.UserId).NotEmpty().Equal(user.GetUserId());
-            this.RuleFor(x => x.IdentityProvider).NotEmpty().MatchesUserClaim(user, Claims.IdentityProvider)
+            this.RuleFor(x => x.IdentityProvider).NotEmpty().Equal(user.GetIdentityProvider())
                 .NotEqual(IdentityProviders.BCProvider).WithMessage("Bc Provider cannot be used to create a Party");
-            this.RuleFor(x => x.IdpId).NotEmpty().MatchesUserClaim(user, Claims.PreferredUsername);
+            this.RuleFor(x => x.IdpId).NotEmpty().Equal(user.GetIdpId());
             this.RuleFor(x => x.FirstName).NotEmpty().MatchesUserClaim(user, Claims.GivenName);
             this.RuleFor(x => x.LastName).NotEmpty().MatchesUserClaim(user, Claims.FamilyName);
 
