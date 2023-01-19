@@ -1,5 +1,6 @@
 import { Section } from '../section.model';
 import { CollegeCertificationSection } from './college-certification-section.model';
+import { DashboardInfoSection } from './dashboard-info-section.model';
 import { DemographicsSection } from './demographic-section.model';
 
 /**
@@ -29,6 +30,7 @@ export type IProfileGroup = {
 };
 
 export interface ProfileGroup extends IProfileGroup {
+  dashboardInfo: DashboardInfoSection;
   demographics: DemographicsSection;
   collegeCertification: CollegeCertificationSection;
   userAccessAgreement: Section;

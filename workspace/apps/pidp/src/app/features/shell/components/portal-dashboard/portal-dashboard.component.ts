@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { IsActiveMatchOptions } from '@angular/router';
 
-import { Observable, forkJoin, map } from 'rxjs';
+import { Observable, map } from 'rxjs';
 
 import { DashboardStateModel, PidpStateName } from '@pidp/data-model';
 import { AppStateService } from '@pidp/presentation';
@@ -21,17 +21,9 @@ import { AuthService } from '@app/features/auth/services/auth.service';
 import { ProfileStatus } from '@app/features/portal/models/profile-status.model';
 import { PortalResource } from '@app/features/portal/portal-resource.service';
 import { PortalRoutes } from '@app/features/portal/portal.routes';
-import { CollegeCertification } from '@app/features/profile/pages/college-licence/college-licence-declaration/college-certification.model';
-import { CollegeLicenceInformationResource } from '@app/features/profile/pages/college-licence/college-licence-information/college-licence-information-resource.service';
 import { LookupService } from '@app/modules/lookup/lookup.service';
 import { PermissionsService } from '@app/modules/permissions/permissions.service';
 import { Role } from '@app/shared/enums/roles.enum';
-
-import {
-  RouteChangeDetectedEventArg,
-  RouteIdentificationService,
-  knownRouteNames,
-} from '../../services/route-identification.service';
 
 @Component({
   selector: 'app-portal-dashboard',
@@ -65,10 +57,8 @@ export class PortalDashboardComponent implements IDashboard, OnInit {
     private authService: AuthService,
     private permissionsService: PermissionsService,
     accessTokenService: AccessTokenService,
-    private routeIdentificationService: RouteIdentificationService,
     private portalResourceService: PortalResource,
     private partyService: PartyService,
-    private collegeLicenceInformationService: CollegeLicenceInformationResource,
     private lookupService: LookupService,
     private stateService: AppStateService
   ) {
@@ -93,24 +83,23 @@ export class PortalDashboardComponent implements IDashboard, OnInit {
     const partyId = this.partyService.partyId;
 
     // Use forkJoin to wait for both to return.
-    forkJoin({
-      profileStatus: this.portalResourceService.getProfileStatus(partyId),
-      collegeInfo: this.collegeLicenceInformationService.get(partyId),
-    }).subscribe((result) => {
-      const fullNameText = this.getUserFullNameText(result.profileStatus);
-      const collegeName = this.getCollegeName(result.collegeInfo);
+    this.portalResourceService
+      .getProfileStatus(partyId)
+      .subscribe((profileStatus) => {
+        const fullNameText = this.getUserFullNameText(profileStatus);
+        const collegeName = this.getCollegeName(profileStatus);
 
-      // Set the user name and college on the dashboard.
-      const oldState = this.stateService.getNamedState<DashboardStateModel>(
-        PidpStateName.dashboard
-      );
-      const newState: DashboardStateModel = {
-        ...oldState,
-        userProfileFullNameText: fullNameText,
-        userProfileCollegeNameText: collegeName,
-      };
-      this.stateService.setNamedState(PidpStateName.dashboard, newState);
-    });
+        // Set the user name and college on the dashboard.
+        const oldState = this.stateService.getNamedState<DashboardStateModel>(
+          PidpStateName.dashboard
+        );
+        const newState: DashboardStateModel = {
+          ...oldState,
+          userProfileFullNameText: fullNameText,
+          userProfileCollegeNameText: collegeName,
+        };
+        this.stateService.setNamedState(PidpStateName.dashboard, newState);
+      });
   }
 
   public onLogout(): void {
@@ -199,18 +188,17 @@ export class PortalDashboardComponent implements IDashboard, OnInit {
       return '';
     }
   }
-  private getCollegeName(collegeInfo: CollegeCertification[] | null): string {
-    if (!collegeInfo || collegeInfo.length === 0) {
+  private getCollegeName(profileStatus: ProfileStatus | null): string {
+    if (!profileStatus || !profileStatus.status?.dashboardInfo) {
       return '';
     }
-    const firstCollegeInfo = collegeInfo[0];
-    if (!firstCollegeInfo.collegeId) {
+
+    const collegeCode = profileStatus.status.dashboardInfo.collegeCode ?? null;
+    if (!collegeCode) {
       return '';
     }
-    const codeNumber = parseInt(firstCollegeInfo.collegeId);
-    const college = this.lookupService.colleges.find(
-      (x) => x.code === codeNumber
-    );
+
+    const college = this.lookupService.getCollege(collegeCode);
     return college?.name ?? '';
   }
 }

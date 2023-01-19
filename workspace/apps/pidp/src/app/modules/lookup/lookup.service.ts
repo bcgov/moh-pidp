@@ -73,6 +73,15 @@ export class LookupService implements ILookupService {
           )
       : of({ ...this.lookupConfig });
   }
+  /**
+   * Helper method so the calling code does not need to know about how this class implements the college lookup.
+   * @param collegeCode
+   * @returns
+   */
+  public getCollege(collegeCode: number): Lookup | null {
+    const college = this.colleges.find((x) => x.code === collegeCode);
+    return college ?? null;
+  }
 
   /**
    * @description
