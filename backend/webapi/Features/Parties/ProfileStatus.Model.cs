@@ -89,7 +89,7 @@ public partial class ProfileStatus
                 this.HasCpn = !string.IsNullOrWhiteSpace(profile.Cpn);
                 this.LicenceDeclared = profile.CollegeLicenceDeclared;
 
-                if (!profile.UserIsBcServicesCard)
+                if (!profile.UserHasHighAssuranceIdentity)
                 {
                     this.StatusCode = StatusCode.Hidden;
                     return;
@@ -177,7 +177,7 @@ public partial class ProfileStatus
 
             protected override void Compute(ProfileData profile)
             {
-                if (!profile.UserIsBcServicesCard)
+                if (!profile.UserHasHighAssuranceIdentity)
                 {
                     this.StatusCode = StatusCode.Hidden;
                     return;
@@ -280,7 +280,7 @@ public partial class ProfileStatus
 
             protected override void Compute(ProfileData profile)
             {
-                if (!profile.UserIsBcServicesCard)
+                if (!profile.UserHasHighAssuranceIdentity)
                 {
                     this.StatusCode = StatusCode.Hidden;
                     return;
@@ -311,7 +311,7 @@ public partial class ProfileStatus
 
             protected override void Compute(ProfileData profile)
             {
-                if (!profile.UserIsBcServicesCard)
+                if (!profile.UserHasHighAssuranceIdentity)
                 {
                     this.StatusCode = StatusCode.Hidden;
                     return;
@@ -348,7 +348,7 @@ public partial class ProfileStatus
                         .Excluding(SAEforms.ExcludedIdentifierTypes)
                         .HasGoodStanding;
 
-                if (!profile.UserIsBcServicesCard)
+                if (!profile.UserHasHighAssuranceIdentity)
                 {
                     this.StatusCode = StatusCode.Hidden;
                     return;

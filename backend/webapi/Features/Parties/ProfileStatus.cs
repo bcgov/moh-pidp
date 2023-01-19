@@ -148,7 +148,7 @@ public partial class ProfileStatus
         public bool LicenceDeclarationEntered => this.LicenceDeclaration != null;
         [MemberNotNullWhen(true, nameof(LicenceDeclaration))]
         public bool CollegeLicenceDeclared => this.LicenceDeclaration?.HasNoLicence == false;
-        public bool UserIsBcServicesCard => this.userIdentityProvider == IdentityProviders.BCServicesCard;
+        public bool UserHasHighAssuranceIdentity => this.userIdentityProvider is IdentityProviders.BCServicesCard or IdentityProviders.BCProvider;
         public bool UserIsPhsa => this.userIdentityProvider == IdentityProviders.Phsa;
 
         public async Task Finalize(
