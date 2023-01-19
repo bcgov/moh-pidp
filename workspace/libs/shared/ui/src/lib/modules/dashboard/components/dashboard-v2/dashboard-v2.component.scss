@@ -172,10 +172,12 @@ h1 {
 
   & .sidenav-container {
     & .sidenav-body-box {
+      // NOTE: for position: sticky to work, all parent elements must have overflow-y: unset.
+      //       This has been implemented in _mat-sidenav.scss for mat-sidenav globally to enable this.
+      position: sticky;
+      top: 64px;
       & .sidenav-panel-box {
         border: 1px solid #ccc;
-        position: fixed;
-        top: 200px;
 
         & .sidenav-panel-content {
           & .sidenav-header {

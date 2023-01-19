@@ -109,21 +109,4 @@ public class AccessRequestsController : PidpControllerBase
         => await this.AuthorizePartyBeforeHandleAsync(command.PartyId, handler, command)
             .ToActionResult();
 
-    [HttpPost("uci")]
-    [Authorize(Policy = Policies.BcscAuthentication)]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> CreateUciEnrolment([FromServices] ICommandHandler<Uci.Command, IDomainResult> handler,
-                                                        [FromBody] Uci.Command command)
-        => await this.AuthorizePartyBeforeHandleAsync(command.PartyId, handler, command)
-            .ToActionResult();
-
-    [HttpPost("bc-provider")]
-    [Authorize(Policy = Policies.BcscAuthentication)]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> CreateBcProviderEnrolment([FromServices] ICommandHandler<BcProvider.Command, IDomainResult> handler,
-                                                                  [FromBody] BcProvider.Command command)
-        => await this.AuthorizePartyBeforeHandleAsync(command.PartyId, handler, command)
-            .ToActionResult();
 }

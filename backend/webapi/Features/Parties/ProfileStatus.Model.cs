@@ -43,6 +43,20 @@ public partial class ProfileStatus
             }
         }
 
+        public class DashboardInfoSection : ProfileSection
+        {
+            internal override string SectionName => "dashboardInfo";
+            public string FullName { get; set; } = string.Empty;
+            public CollegeCode? CollegeCode { get; set; }
+
+            protected override void Compute(ProfileData profile)
+            {
+                this.FullName = $"{profile.FirstName} {profile.LastName}";
+                this.CollegeCode = profile.LicenceDeclaration?.CollegeCode;
+                this.StatusCode = StatusCode.Complete; // Unused
+            }
+        }
+
         public class AccessAdministratorSection : ProfileSection
         {
             internal override string SectionName => "administratorInfo";
@@ -374,33 +388,5 @@ public partial class ProfileStatus
             }
         }
 
-        public class UciSection : ProfileSection
-        {
-            internal override string SectionName => "uci";
-
-            protected override void Compute(ProfileData profile)
-            {
-                if (!profile.UserIsBcServicesCard)
-                {
-                    this.StatusCode = StatusCode.Hidden;
-                    return;
-                }
-
-                if (profile.CompletedEnrolments.Contains(AccessTypeCode.Uci))
-                {
-                    this.StatusCode = StatusCode.Complete;
-                    return;
-                }
-
-                if (!profile.DemographicsEntered
-                    || !profile.PartyPlrStanding.HasGoodStanding)
-                {
-                    this.StatusCode = StatusCode.Locked;
-                    return;
-                }
-
-                this.StatusCode = StatusCode.Incomplete;
-            }
-        }
     }
 }

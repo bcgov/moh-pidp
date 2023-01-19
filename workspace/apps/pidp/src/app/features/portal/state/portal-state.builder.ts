@@ -15,7 +15,6 @@ import { MsTeamsPortalSection } from './access/ms-teams-portal-section.class';
 import { PrescriptionRefillEformsPortalSection } from './access/prescription-refill-eforms-portal-section.class';
 import { SaEformsPortalSection } from './access/sa-eforms-portal-section.class';
 import { SitePrivacySecurityPortalSection } from './access/site-privacy-security-checklist-portal-section.class';
-import { UciPortalSection } from './access/uci-portal-section.class';
 import { SignedAcceptedDocumentsPortalSection } from './history/signed-accepted-documents-portal-section.class';
 import { TransactionsPortalSection } from './history/transactions-portal-section.class';
 import { AdministratorInfoPortalSection } from './organization/administrator-information-portal-section';
@@ -180,12 +179,6 @@ export class PortalStateBuilder {
         this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]) &&
           this.insertSection('msTeams', profileStatus),
         () => [new MsTeamsPortalSection(profileStatus, this.router)]
-      ),
-      ...ArrayUtils.insertResultIf<IPortalSection>(
-        // TODO remove permissions when ready for production
-        this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]) &&
-          this.insertSection('uci', profileStatus),
-        () => [new UciPortalSection(profileStatus, this.router)]
       ),
     ];
   }
