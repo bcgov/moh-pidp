@@ -1,14 +1,32 @@
+import { Injectable } from '@angular/core';
 import { FormArray, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { UrlTree } from '@angular/router';
 
-import { Observable } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { Observable, throwError } from 'rxjs';
+import { catchError, map, tap } from 'rxjs/operators';
+
+import {
+  LOADING_OVERLAY_DEFAULT_MESSAGE,
+  LoadingOverlayService,
+} from '@pidp/presentation';
 
 import { AbstractFormState, ConfirmDialogComponent } from '@bcgov/shared/ui';
 
 import { FormUtilsService } from '@core/services/form-utils.service';
 
+/**
+ * Helper service so the AbstractForm constructor can accept new service injections
+ * without having to update every derived class.
+ */
+@Injectable({ providedIn: 'root' })
+export class AbstractFormDependenciesService {
+  public constructor(
+    public dialog: MatDialog,
+    public formUtilsService: FormUtilsService,
+    public loadingOverlayService: LoadingOverlayService
+  ) {}
+}
 export interface IFormPage {
   /**
    * @description
@@ -81,6 +99,19 @@ export abstract class AbstractFormPage<
   public hasAttemptedSubmission: boolean;
   /**
    * @description
+   * If true, the a overlay will be displayed when the form is submitted.
+   * Declared as abstract so derived classes must explicitly opt in to the behaviour.
+   * This is done so that it is clear to the person reading the code how to track down
+   * where the overlay is implemented.
+   */
+  public abstract showOverlayOnSubmit: boolean;
+  /**
+   * @description
+   * Text to be displayed in the loading overlay when showOverlayOnSubmit is true.
+   */
+  public loadingOverlayMessageText: string;
+  /**
+   * @description
    * Whether routing should be allowed after any form
    * control's value has been changed.
    */
@@ -101,12 +132,12 @@ export abstract class AbstractFormPage<
   protected canDeactivateAllowlist: string[];
 
   protected constructor(
-    protected dialog: MatDialog,
-    protected formUtilsService: FormUtilsService
+    protected dependencies: AbstractFormDependenciesService // protected dialog: MatDialog, // protected formUtilsService: FormUtilsService, // protected loadingOverlayService: LoadingOverlayService
   ) {
     this.hasAttemptedSubmission = false;
     this.allowRoutingWhenDirty = false;
     this.canDeactivateAllowlist = [];
+    this.loadingOverlayMessageText = LOADING_OVERLAY_DEFAULT_MESSAGE;
   }
 
   /**
@@ -117,8 +148,27 @@ export abstract class AbstractFormPage<
     this.hasAttemptedSubmission = true;
     if (this.checkValidity(this.formState.form)) {
       this.onSubmitFormIsValid();
+      const showLoadingOverlay = this.showOverlayOnSubmit;
+      if (showLoadingOverlay) {
+        this.dependencies.loadingOverlayService.open(
+          this.loadingOverlayMessageText
+        );
+      }
       this.performSubmission()
-        .pipe(tap((_) => this.formState.form.markAsPristine()))
+        .pipe(
+          tap((_) => {
+            this.formState.form.markAsPristine();
+            if (showLoadingOverlay) {
+              this.dependencies.loadingOverlayService.close();
+            }
+          }),
+          catchError((error) => {
+            if (showLoadingOverlay) {
+              this.dependencies.loadingOverlayService.close();
+            }
+            return throwError(() => error);
+          })
+        )
         .subscribe((response?: S) => this.afterSubmitIsSuccessful(response));
     } else {
       this.onSubmitFormIsInvalid();
@@ -140,7 +190,7 @@ export abstract class AbstractFormPage<
   public canDeactivate(): Observable<boolean | UrlTree> | boolean {
     const data = 'unsaved';
     return this.formState.form.dirty && !this.checkDeactivationIsAllowed()
-      ? this.dialog
+      ? this.dependencies.dialog
           .open(ConfirmDialogComponent, { data })
           .afterClosed()
           .pipe(
@@ -172,6 +222,13 @@ export abstract class AbstractFormPage<
     return dialogResult;
   }
 
+  protected get formUtilsService(): FormUtilsService {
+    return this.dependencies.formUtilsService;
+  }
+  protected get dialog(): MatDialog {
+    return this.dependencies.dialog;
+  }
+
   /**
    * @description
    * Check the validity of the form, as well as, perform
@@ -179,7 +236,7 @@ export abstract class AbstractFormPage<
    */
   protected checkValidity(form: FormGroup | FormArray): boolean {
     return (
-      this.formUtilsService.checkValidity(form) &&
+      this.dependencies.formUtilsService.checkValidity(form) &&
       this.additionalValidityChecks(form)
     );
   }
