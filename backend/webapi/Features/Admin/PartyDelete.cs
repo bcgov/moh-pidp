@@ -76,16 +76,13 @@ public class PartyDelete
                     continue;
                 }
 
-                foreach (var credential in party.Credentials)
+                if (await this.client.RemoveClientRole(party.PrimaryUserId, role))
                 {
-                    if (await this.client.RemoveClientRole(credential.UserId, role))
-                    {
-                        this.logger.LogRemoveSuccess(role.Name!, credential.UserId);
-                    }
-                    else
-                    {
-                        this.logger.LogRemoveFailure(role.Name!, credential.UserId);
-                    }
+                    this.logger.LogRemoveSuccess(role.Name!, party.PrimaryUserId);
+                }
+                else
+                {
+                    this.logger.LogRemoveFailure(role.Name!, party.PrimaryUserId);
                 }
             }
         }
