@@ -110,7 +110,7 @@ public class AccessRequestsController : PidpControllerBase
             .ToActionResult();
 
     [HttpPost("bc-provider")]
-    [Authorize(Policy = Policies.BcscAuthentication)]
+    [Authorize(Policy = Policies.HighAssuranceIdentityProvider)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> CreateBcProviderEnrolment([FromServices] ICommandHandler<BcProvider.Command, IDomainResult> handler,
