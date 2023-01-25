@@ -7,6 +7,7 @@ import { Role } from '@app/shared/enums/roles.enum';
 
 import { StatusCode } from '../enums/status-code.enum';
 import { ProfileStatus } from '../models/profile-status.model';
+import { BcProviderApplicationPortalSection } from './access/bc-provider-application-portal-section.class';
 import { DriverFitnessPortalSection } from './access/driver-fitness-portal-section.class';
 import { HcimAccountTransferPortalSection } from './access/hcim-account-transfer-portal-section.class';
 import { HcimEnrolmentPortalSection } from './access/hcim-enrolment-portal-section.class';
@@ -140,6 +141,14 @@ export class PortalStateBuilder {
         this.insertSection('prescriptionRefillEforms', profileStatus),
         () => [
           new PrescriptionRefillEformsPortalSection(profileStatus, this.router),
+        ]
+      ),
+      ...ArrayUtils.insertResultIf<IPortalSection>(
+        // TODO remove permissions when API exists and ready for production
+        this.insertSection('bcProviderApplication', profileStatus) &&
+          this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
+        () => [
+          new BcProviderApplicationPortalSection(profileStatus, this.router),
         ]
       ),
       ...ArrayUtils.insertResultIf<IPortalSection>(

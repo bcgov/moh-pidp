@@ -1,3 +1,4 @@
+@use 'pidp-variables' as pidp;
 @import 'palette';
 
 //
@@ -12,7 +13,10 @@
 
 .mat-input-element,
 .mat-select-value {
-  color: theme-palette(blue, light) !important;
+  color: pidp.$font-color-default !important;
+}
+.mat-input-element:disabled {
+  color: pidp.$font-color-disabled !important;
 }
 
 .mat-checkbox .mat-checkbox-inner-container {

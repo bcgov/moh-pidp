@@ -2,6 +2,7 @@ export class AccessRoutes {
   public static MODULE_PATH = 'access';
 
   public static SPECIAL_AUTH_EFORMS = 'sa-eforms';
+  public static BC_PROVIDER_APPLICATION = 'bc-provider-application';
   public static HCIM_ACCOUNT_TRANSFER = 'hcim-account-transfer';
   public static HCIM_ENROLMENT = 'hcim-enrolment';
   public static PHARMANET = 'pharmanet';
