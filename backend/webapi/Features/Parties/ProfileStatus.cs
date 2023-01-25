@@ -95,6 +95,7 @@ public partial class ProfileStatus
             {
                 Status = new List<ProfileSection>
                 {
+                    ProfileSection.Create<DashboardInfoSection>(data),
                     ProfileSection.Create<AccessAdministratorSection>(data),
                     ProfileSection.Create<CollegeCertificationSection>(data),
                     ProfileSection.Create<OrganizationDetailsSection>(data),
@@ -104,8 +105,7 @@ public partial class ProfileStatus
                     ProfileSection.Create<HcimEnrolmentSection>(data),
                     ProfileSection.Create<MSTeamsSection>(data),
                     ProfileSection.Create<PrescriptionRefillEformsSection>(data),
-                    ProfileSection.Create<SAEformsSection>(data),
-                    ProfileSection.Create<UciSection>(data)
+                    ProfileSection.Create<SAEformsSection>(data)
                 }
                 .ToDictionary(section => section.SectionName, section => section)
             };
