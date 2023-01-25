@@ -26,8 +26,8 @@ public class SAEformsTests : InMemoryDbTest
         });
         var client = A.Fake<IPlrClient>()
             .ReturningAStatandingsDigest(true, identifierType);
-        var keycloak = A.Fake<IKeycloakAdministrationClient>();
-        A.CallTo(() => keycloak.AssignClientRole(A<Guid>._, A<string>._, A<string>._)).Returns(true);
+        var keycloak = A.Fake<IKeycloakAdministrationClient>()
+            .ReturningTrueWhenAssigingClientRoles();
         var handler = this.MockDependenciesFor<SAEforms.CommandHandler>(client, keycloak);
 
         var result = await handler.HandleAsync(new SAEforms.Command { PartyId = party.Id });
@@ -35,7 +35,7 @@ public class SAEformsTests : InMemoryDbTest
         Assert.Equal(expected, result.IsSuccess);
         if (expected)
         {
-            A.CallTo(() => keycloak.AssignClientRole(A<Guid>._, MohClients.SAEforms.ClientId, MohClients.SAEforms.AccessRole)).MustHaveHappened();
+            A.CallTo(() => keycloak.AssignClientRole(party.PrimaryUserId, MohClients.SAEforms.ClientId, MohClients.SAEforms.AccessRole)).MustHaveHappened();
         }
         else
         {

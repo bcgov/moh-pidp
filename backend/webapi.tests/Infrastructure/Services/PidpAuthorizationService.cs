@@ -2,13 +2,11 @@ namespace PidpTests.Infrastructure.Services;
 
 using DomainResults.Common;
 using FakeItEasy;
-using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 using Xunit;
 
 using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.Services;
-using Pidp.Models;
 using PidpTests.TestingExtensions;
 
 public class PidpAuthorizationServiceTests : InMemoryDbTest
@@ -16,7 +14,7 @@ public class PidpAuthorizationServiceTests : InMemoryDbTest
     [Fact]
     public async void CheckPartyAccessibility_NoParty_NotFound()
     {
-        this.TestDb.Has(new Party { Id = 1 });
+        this.TestDb.HasAParty(party => party.Id = 1);
         var service = this.MockDependenciesFor<PidpAuthorizationService>();
 
         var result = await service.CheckPartyAccessibility(2, A.Fake<ClaimsPrincipal>());

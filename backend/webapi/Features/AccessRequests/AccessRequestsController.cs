@@ -108,4 +108,13 @@ public class AccessRequestsController : PidpControllerBase
                                                              [FromBody] SAEforms.Command command)
         => await this.AuthorizePartyBeforeHandleAsync(command.PartyId, handler, command)
             .ToActionResult();
+
+    [HttpPost("bc-provider")]
+    [Authorize(Policy = Policies.BcscAuthentication)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> CreateBcProviderEnrolment([FromServices] ICommandHandler<BcProvider.Command, IDomainResult> handler,
+                                                                  [FromBody] BcProvider.Command command)
+        => await this.AuthorizePartyBeforeHandleAsync(command.PartyId, handler, command)
+            .ToActionResult();
 }
