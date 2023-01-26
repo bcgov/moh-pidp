@@ -1,4 +1,4 @@
-namespace Pidp.Infrastructure.HttpClients.Aad;
+namespace Pidp.Infrastructure.HttpClients.BCProvider;
 
 public interface IBCProviderClient
 {
