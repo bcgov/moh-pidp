@@ -9,4 +9,9 @@ public class AadClient : BaseClient, IAadClient
     {
 
     }
+
+    public async Task<bool> UpdatePassword(string BcProviderId, string password)
+    {
+
+    }
 }
