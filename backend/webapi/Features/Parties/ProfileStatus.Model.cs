@@ -208,6 +208,21 @@ public partial class ProfileStatus
                 this.StatusCode = StatusCode.Locked;
             }
         }
+        public class BcProviderApplicationSection : ProfileSection
+        {
+            internal override string SectionName => "bcProviderApplication";
+
+            protected override void Compute(ProfileData profile) =>
+                this.StatusCode = StatusCode.Incomplete;
+            // TODO: Implement status for BC Provider
+            //{
+            //if (profile.CompletedEnrolments.Contains(AccessTypeCode.???))
+            //{
+            //    this.StatusCode = StatusCode.Complete;
+            //    return;
+            //}
+            //}
+        }
 
         public class HcimAccountTransferSection : ProfileSection
         {
