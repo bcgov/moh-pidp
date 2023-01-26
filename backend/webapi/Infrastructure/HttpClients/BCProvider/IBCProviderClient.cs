@@ -1,6 +1,6 @@
 namespace Pidp.Infrastructure.HttpClients.Aad;
 
-public interface IAadClient
+public interface IBCProviderClient
 {
     /// <summary>
     /// Creates a BC Provider account on AAD

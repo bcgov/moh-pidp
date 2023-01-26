@@ -1,4 +1,4 @@
-namespace Pidp.Infrastructure.HttpClients.Aad;
+namespace Pidp.Infrastructure.HttpClients.BCProvider;
 
 // shape of object sent to AAD to create the account
 // or
