@@ -6,10 +6,10 @@ public interface IBCProviderClient
     /// Creates a BC Provider account on AAD
     /// Return the account object if the operation
     /// was successful.
-    Task<BcProviderAccount> CreateBcProviderAccount();
+    Task<BCProviderAccount> CreateBCProviderAccount();
 
     /// <summary>
     /// Updates the password for a BC Provider account
     /// Returns true if the operation was successful
-    Task<bool> UpdatePassword(string BcProviderId, string password);
+    Task<bool> UpdatePassword(string BCProviderId, string password);
 }

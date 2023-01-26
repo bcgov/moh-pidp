@@ -3,7 +3,7 @@ namespace Pidp.Infrastructure.HttpClients.BCProvider;
 // shape of object sent to AAD to create the account
 // or
 // shape of account information returned after creation?
-public class BcProviderAccount
+public class BCProviderAccount
 {
     public string DisplayName { get; set; }
     public string MailNickname { get; set; }
