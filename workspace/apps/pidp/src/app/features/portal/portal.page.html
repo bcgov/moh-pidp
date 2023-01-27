@@ -35,6 +35,15 @@
       </ng-container>
 
       <ui-page-section>
+        <ui-page-section-subheader
+          icon="person"
+          heading="Graph Spike"></ui-page-section-subheader>
+        <button mat-stroked-button color="primary" (click)="onSpikeClick()">
+          Create Azure AD User
+        </button>
+      </ui-page-section>
+
+      <ui-page-section>
         <ui-scroll-target targetId="profile"></ui-scroll-target>
         <ui-page-section-subheader icon="assignment_ind" heading="Profile">
           <ng-container uiPageSectionSubheaderDesc>

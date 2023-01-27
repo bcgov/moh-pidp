@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { Observable, map, of, switchMap } from 'rxjs';
@@ -7,6 +8,10 @@ import { PartyService } from '@app/core/party/party.service';
 import { Role } from '@app/shared/enums/roles.enum';
 
 import { EndorsementsResource } from '../organization-info/pages/endorsements/endorsements-resource.service';
+import {
+  BcProviderCreateUserRequest,
+  BcProviderResource,
+} from './bc-provider-resource.service';
 import { ProfileStatusAlert } from './models/profile-status-alert.model';
 import { ProfileStatus } from './models/profile-status.model';
 import { PortalResource } from './portal-resource.service';
@@ -39,6 +44,8 @@ export class PortalPage implements OnInit {
    */
   public completedProfile: boolean;
 
+  private profileStatus: ProfileStatus | null = null;
+
   public Role = Role;
 
   public constructor(
@@ -47,7 +54,9 @@ export class PortalPage implements OnInit {
     private portalResource: PortalResource,
     private portalService: PortalService,
     private endorsementsResource: EndorsementsResource,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private bcProviderResource: BcProviderResource,
+    private snackBar: MatSnackBar
   ) {
     this.state$ = this.portalService.state$;
     this.completedProfile = false;
@@ -74,6 +83,8 @@ export class PortalPage implements OnInit {
               this.portalService.updateState(profileStatus);
               this.completedProfile = this.portalService.completedProfile;
               this.alerts = this.portalService.alerts;
+
+              this.profileStatus = profileStatus;
             })
           )
         )
@@ -101,5 +112,21 @@ export class PortalPage implements OnInit {
           });
         })
       );
+  }
+
+  public onSpikeClick(): void {
+    if (!this.profileStatus) {
+      this.snackBar.open('profile status not ready', 'OK');
+      return;
+    }
+    const demographics = this.profileStatus.status.demographics;
+    const createUserRequest: BcProviderCreateUserRequest = {
+      firstName: demographics.firstName,
+      lastName: demographics.lastName,
+      email: demographics.email,
+    };
+    this.bcProviderResource.createUser(createUserRequest).subscribe((x) => {
+      console.log(x);
+    });
   }
 }
