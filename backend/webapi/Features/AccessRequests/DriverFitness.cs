@@ -55,7 +55,7 @@ public class DriverFitness
                 {
                     AlreadyEnroled = party.AccessRequests.Any(request => request.AccessTypeCode == AccessTypeCode.DriverFitness),
                     LicenceDeclarationCompleted = party.LicenceDeclaration != null,
-                    party.UserId,
+                    UserId = party.PrimaryUserId,
                     party.Cpn,
                     party.Email
                 })

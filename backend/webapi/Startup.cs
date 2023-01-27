@@ -45,7 +45,8 @@ public class Startup
 
         services.AddDbContext<PidpDbContext>(options => options
             .UseNpgsql(config.ConnectionStrings.PidpDatabase, npg => npg.UseNodaTime())
-            .EnableSensitiveDataLogging(sensitiveDataLoggingEnabled: false));
+            .EnableSensitiveDataLogging(sensitiveDataLoggingEnabled: false)
+            .UseProjectables());
 
         services.Scan(scan => scan
             .FromAssemblyOf<Startup>()

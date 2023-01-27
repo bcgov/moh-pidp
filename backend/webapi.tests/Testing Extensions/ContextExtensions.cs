@@ -1,6 +1,7 @@
 namespace PidpTests.TestingExtensions;
 
 using Pidp.Data;
+using Pidp.Models;
 
 public static class ContextExtensions
 {
@@ -16,5 +17,17 @@ public static class ContextExtensions
         context.AddRange(things.Cast<object>());
         context.SaveChanges();
         return things;
+    }
+
+    public static Party HasAParty(this PidpDbContext context, Action<Party>? config = null)
+    {
+        var party = new Party();
+        config?.Invoke(party);
+        if (!party.Credentials.Any())
+        {
+            party.Credentials.Add(new Credential { UserId = Guid.NewGuid() });
+        }
+
+        return context.Has(party);
     }
 }
