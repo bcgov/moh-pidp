@@ -34,15 +34,24 @@ public class Create
 
         public async Task<string> HandleAsync(Command command)
         {
+            // This code snippet is from here (Client Secret :
+            // https://learn.microsoft.com/en-us/graph/sdks/choose-authentication-providers?tabs=CS#client-credentials-provider
+
             // This code depends on packages:
             // - Microsoft.Identity.Client
             //   (this requiremnent should be confirmed when creating the non-POC implementation; I think Azure.Identity is coming from this package)
             // - Microsoft.Identity.Web.MicrosoftGraph
 
+            // To create the app registration:
+            // https://learn.microsoft.com/en-us/graph/auth-register-app-v2
+            // To request API permissions:
+            // In the app registration, tap API Permissions, then add User.ReadWrite.All or (?) Directory.ReadWrite.All
             // NOTE: For this spike, both User.ReadWrite.All and Directory.ReadWrite.All API permissions
             //       were granted with admin consent on the app registration.
-            //       The Graph method Users.Create (AddAsync() below) is supposed to work with EITHER and not necessarily 
+            //       The Graph method Users.Create (AddAsync() below) is supposed to work with either and not necessarily 
             //       both permissions, but this was not tested for this spike.
+            // To grant admin consent:
+            // https://learn.microsoft.com/en-us/azure/active-directory/manage-apps/review-admin-consent-requests
 
             // Client ID from Azure App Registration overview
             var clientId = "3ae76269-7f47-4613-a372-6e84b00bab55";
@@ -53,6 +62,8 @@ public class Create
             // NOTE: Consider using certificate instead of secret in final implementation
             var clientSecret = "GET FROM AZURE APP CONFIG";
 
+            // Scope construction from here:
+            // https://learn.microsoft.com/en-us/azure/active-directory/develop/scenario-daemon-acquire-token?tabs=dotnet
             //var scopes = new[] { "User.ReadWrite.All/.default" };//, "Directory.ReadWrite.All" };
             var scopes = new string[] { "https://graph.microsoft.com/.default" };
             var options = new TokenCredentialOptions
@@ -64,6 +75,8 @@ public class Create
             var client = new GraphServiceClient(credential, scopes);
 
             // NOTE: This must match an allowed domain as configured in Azure or AddAsync() below will fail.
+            // For how to view the domains:
+            // https://learn.microsoft.com/en-us/azure/active-directory/enterprise-users/domains-manage
             var userprincipal = $"{command.FirstName}.{command.LastName}@bcproviderlab.ca";
 
             // NOTE: These is the minimum set of properties that must be set for the user creation to work.
