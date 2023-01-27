@@ -10,7 +10,7 @@ public class BCProviderClient : BaseClient, IBCProviderClient
 
     }
 
-    public async Task<bool> UpdatePassword(string BCProviderId, string password)
+    public async Task<bool> UpdatePassword(string bcProviderId, string password)
     {
 
     }

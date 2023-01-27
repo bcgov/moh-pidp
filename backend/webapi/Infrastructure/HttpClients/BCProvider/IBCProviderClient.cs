@@ -11,5 +11,5 @@ public interface IBCProviderClient
     /// <summary>
     /// Updates the password for a BC Provider account
     /// Returns true if the operation was successful
-    Task<bool> UpdatePassword(string BCProviderId, string password);
+    Task<bool> UpdatePassword(string bcProviderId, string password);
 }
