@@ -5,7 +5,7 @@ public class BCProviderClient : BaseClient, IBCProviderClient
 {
     public BCProviderClient(HttpClient httpClient, ILogger<BCProviderClient> logger) : base(httpClient, logger) { }
 
-    public async Task<BCProviderAccount> CreateBCProviderAccount()
+    public async Task<BCProviderAccount> CreateBCProviderAccount(BCProviderAccount bCProviderAccount)
     {
 
     }
