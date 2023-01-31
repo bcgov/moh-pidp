@@ -31,6 +31,10 @@ public static class AuthenticationSetup
 
         services.AddAuthorization(options =>
         {
+            options.AddPolicy(Policies.BcscAuthentication, policy => policy
+                .RequireAuthenticatedUser()
+                .RequireClaim(Claims.IdentityProvider, IdentityProviders.BCServicesCard));
+
             options.AddPolicy(Policies.HighAssuranceIdentityProvider, policy => policy
                 .RequireAuthenticatedUser()
                 .RequireClaim(Claims.IdentityProvider, IdentityProviders.BCServicesCard, IdentityProviders.BCProvider));
