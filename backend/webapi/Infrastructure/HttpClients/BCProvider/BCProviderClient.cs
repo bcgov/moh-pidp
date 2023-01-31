@@ -35,7 +35,7 @@ public class BCProviderClient : HttpClients.BaseClient, IBCProviderClient
         // NOTE: This must match an allowed domain as configured in Azure or AddAsync() below will fail.
         // For how to view the domains:
         // https://learn.microsoft.com/en-us/azure/active-directory/enterprise-users/domains-manage
-        var userPrincipal = $"{userRepresentation.FullName}@bcproviderlab.ca";
+        var userPrincipal = await this.CreateUserPrincipal(userRepresentation.FullName);
 
         // NOTE: These is the minimum set of properties that must be set for the user creation to work.
         var bcProviderAccount = new User()
@@ -57,6 +57,25 @@ public class BCProviderClient : HttpClients.BaseClient, IBCProviderClient
 
     public async Task<bool> UpdatePassword(string bcProviderId, string password)
     {
-
+        //TODO implementation
     }
+
+    public async Task<bool> UserPrincipalExists(string userPrincipal)
+    {
+        //TODO implementation
+    }
+
+    private async Task<string> CreateUserPrincipal(string name)
+    {
+        var userPrincipal = $"{name}@bcproviderlab$" + ".ca";
+
+        while (await this.UserPrincipalExists(userPrincipal))
+        {
+            userPrincipal = CreateUserPrincipalWithNumbers(name);
+        }
+
+        return userPrincipal;
+    }
+
+    private static string CreateUserPrincipalWithNumbers(string name) => $"{name}@bcproviderlab$" + "{Next(1, 99)}" + ".ca";
 }
