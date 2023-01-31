@@ -5,8 +5,8 @@ using System.Security.Claims;
 
 using Pidp.Data;
 using Pidp.Extensions;
-using Pidp.Models;
 using Pidp.Infrastructure.Auth;
+using Pidp.Models;
 
 public class Index
 {
@@ -32,17 +32,23 @@ public class Index
         public async Task<List<Model>> HandleAsync(Query query)
         {
             var credential = await this.context.Credentials
-                .SingleOrDefaultAsync(credential => credential.UserId == query.User.GetUserId());
+                .SingleOrDefaultAsync(credential => credential.UserId == query.User.GetUserId()
+                    || (credential.IdentityProvider == query.User.GetIdentityProvider()
+                        && credential.IdpId == query.User.GetIdpId()));
 
             if (credential == null)
             {
                 return new();
             }
 
+            if (credential.UserId == default)
+            {
+                await this.UpdateUserId(credential, query.User.GetUserId());
+            }
             if (credential.IdentityProvider == null
                 || credential.IdpId == null)
             {
-                await this.UpdateRecord(credential, query.User);
+                await this.UpdateIncompleteRecord(credential, query.User);
             }
 
             return new List<Model>
@@ -57,12 +63,21 @@ public class Index
             };
         }
 
+        // BC Provider Credentials are created in our app without UserIds (since the user has not logged into Keycloak yet).
+        // Update them when we see them.
+        private async Task UpdateUserId(Credential credential, Guid userId)
+        {
+            credential.UserId = userId;
+            await this.context.SaveChangesAsync();
+        }
+
         // This is to update old non-BCSC records we didn't originally capture the IDP info for.
         // One day, this should be removed entirely once all the records in the DB have IdentityProvider and IdpId (also, those properties can then be made non-nullable).
-        private async Task UpdateRecord(Credential credential, ClaimsPrincipal user)
+        // Additionally, we could then find the Credential using only IdentityProvider + IdpId.
+        private async Task UpdateIncompleteRecord(Credential credential, ClaimsPrincipal user)
         {
             credential.IdentityProvider ??= user.GetIdentityProvider();
-            credential.IdpId ??= user.FindFirstValue(Claims.PreferredUsername);
+            credential.IdpId ??= user.GetIdpId();
 
             await this.context.SaveChangesAsync();
         }
