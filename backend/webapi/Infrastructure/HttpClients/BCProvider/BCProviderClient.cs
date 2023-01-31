@@ -35,13 +35,13 @@ public class BCProviderClient : HttpClients.BaseClient, IBCProviderClient
         // NOTE: This must match an allowed domain as configured in Azure or AddAsync() below will fail.
         // For how to view the domains:
         // https://learn.microsoft.com/en-us/azure/active-directory/enterprise-users/domains-manage
-        var userPrincipal = await this.CreateUserPrincipal(userRepresentation.FullName);
+        var userPrincipal = await this.CreateUserPrincipal(userRepresentation.FullName.Replace(" ", ""));
 
         // NOTE: These is the minimum set of properties that must be set for the user creation to work.
         var bcProviderAccount = new User()
         {
             AccountEnabled = true,
-            DisplayName = userRepresentation.FullName,
+            DisplayName = userRepresentation.FullName.Replace(" ", ""),
             MailNickname = userRepresentation.FullName,
             UserPrincipalName = userPrincipal,
             PasswordProfile = new PasswordProfile
