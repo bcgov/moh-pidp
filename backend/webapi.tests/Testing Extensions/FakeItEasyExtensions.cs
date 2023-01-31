@@ -5,6 +5,7 @@ using FakeItEasy.Configuration;
 using System.Net;
 using System.Text.Json;
 
+using Pidp.Infrastructure.HttpClients.Keycloak;
 using Pidp.Infrastructure.HttpClients.Plr;
 
 public static class FakeItEasyExtensions
@@ -34,6 +35,20 @@ public static class FakeItEasyExtensions
             : new StringContent(JsonSerializer.Serialize(asStringContent), System.Text.Encoding.UTF8, "application/json");
         return configuration
             .Returns(Task.FromResult(new HttpResponseMessage(code) { Content = content }));
+    }
+
+    public static IKeycloakAdministrationClient ReturningTrueWhenAssigingClientRoles(this IKeycloakAdministrationClient client, Guid? userId = null)
+    {
+        if (userId == null)
+        {
+            A.CallTo(() => client.AssignClientRole(A<Guid>._, A<string>._, A<string>._)).Returns(true);
+        }
+        else
+        {
+            A.CallTo(() => client.AssignClientRole(userId.Value, A<string>._, A<string>._)).Returns(true);
+        }
+
+        return client;
     }
 
     public static IPlrClient ReturningAStatandingsDigest(this IPlrClient client, bool goodStanding, string? identifierType = null)

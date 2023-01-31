@@ -45,6 +45,11 @@ public static class ClaimsPrincipalExtensions
     public static string? GetIdentityProvider(this ClaimsPrincipal? user) => user?.FindFirstValue(Claims.IdentityProvider);
 
     /// <summary>
+    /// Returns the Identity Provider ID of the User, or null if User is null
+    /// </summary>
+    public static string? GetIdpId(this ClaimsPrincipal? user) => user?.FindFirstValue(Claims.PreferredUsername);
+
+    /// <summary>
     /// Parses the Resource Access claim and returns the roles for the given resource
     /// </summary>
     /// <param name="resourceName">The name of the resource to retrive the roles from</param>

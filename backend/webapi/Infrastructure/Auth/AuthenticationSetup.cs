@@ -29,27 +29,27 @@ public static class AuthenticationSetup
             };
         });
 
-        services.AddScoped<IAuthorizationHandler, UserOwnsResourceHandler>();
-
         services.AddAuthorization(options =>
         {
             options.AddPolicy(Policies.BcscAuthentication, policy => policy
                 .RequireAuthenticatedUser()
-                .RequireClaim(Claims.IdentityProvider, ClaimValues.BCServicesCard));
+                .RequireClaim(Claims.IdentityProvider, IdentityProviders.BCServicesCard));
+
+            options.AddPolicy(Policies.HighAssuranceIdentityProvider, policy => policy
+                .RequireAuthenticatedUser()
+                .RequireClaim(Claims.IdentityProvider, IdentityProviders.BCServicesCard, IdentityProviders.BCProvider));
 
             options.AddPolicy(Policies.IdirAuthentication, policy => policy
                 .RequireAuthenticatedUser()
-                .RequireClaim(Claims.IdentityProvider, ClaimValues.Idir));
+                .RequireClaim(Claims.IdentityProvider, IdentityProviders.Idir));
 
             options.AddPolicy(Policies.AnyPartyIdentityProvider, policy => policy
                 .RequireAuthenticatedUser()
-                .RequireClaim(Claims.IdentityProvider, ClaimValues.BCServicesCard, ClaimValues.Idir, ClaimValues.Phsa));
-
-            options.AddPolicy(Policies.UserOwnsResource, policy => policy.Requirements.Add(new UserOwnsResourceRequirement()));
+                .RequireClaim(Claims.IdentityProvider, IdentityProviders.BCServicesCard, IdentityProviders.BCProvider, IdentityProviders.Idir, IdentityProviders.Phsa));
 
             options.FallbackPolicy = new AuthorizationPolicyBuilder()
                 .RequireAuthenticatedUser()
-                .RequireClaim(Claims.IdentityProvider, ClaimValues.BCServicesCard, ClaimValues.Idir, ClaimValues.Phsa)
+                .RequireClaim(Claims.IdentityProvider, IdentityProviders.BCServicesCard, IdentityProviders.BCProvider, IdentityProviders.Idir, IdentityProviders.Phsa)
                 .Build();
         });
 
