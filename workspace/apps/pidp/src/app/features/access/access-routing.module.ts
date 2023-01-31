@@ -8,7 +8,7 @@ import { Role } from '@app/shared/enums/roles.enum';
 
 import { AccessRoutes } from './access.routes';
 import { BcProviderApplicationComponent } from './pages/bc-provider-application/bc-provider-application.component';
-import { BcProviderApplicationEditComponent } from './pages/bc-provider-edit/bc-provider-edit.component';
+import { BcProviderEditComponent } from './pages/bc-provider-edit/bc-provider-edit.component';
 import { BcProviderEditResolver } from './pages/bc-provider-edit/bc-provider-edit.resolver';
 import { DriverFitnessModule } from './pages/driver-fitness/driver-fitness.module';
 import { HcimAccountTransferModule } from './pages/hcim-account-transfer/hcim-account-transfer.module';
@@ -49,7 +49,7 @@ const routes: Routes = [
   {
     path: AccessRoutes.BC_PROVIDER_APPLICATION_CHANGE_PASSWORD,
     canActivate: [SetDashboardTitleGuard],
-    component: BcProviderApplicationEditComponent,
+    component: BcProviderEditComponent,
     resolve: {
       bcProviderEditData: BcProviderEditResolver,
     },

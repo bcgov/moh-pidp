@@ -9,12 +9,12 @@ import {
 
 import { AbstractFormState } from '@bcgov/shared/ui';
 
-export interface BcProviderApplicationEditFormData {
+export interface BcProviderEditFormData {
   currentPassword: string;
   newPassword: string;
   confirmPassword: string;
 }
-export class BcProviderApplicationEditFormState extends AbstractFormState<BcProviderApplicationEditFormData> {
+export class BcProviderEditFormState extends AbstractFormState<BcProviderEditFormData> {
   public constructor(private fb: FormBuilder) {
     super();
 
@@ -33,7 +33,7 @@ export class BcProviderApplicationEditFormState extends AbstractFormState<BcProv
     return this.formInstance.get('confirmPassword') as FormControl;
   }
 
-  public get json(): BcProviderApplicationEditFormData | undefined {
+  public get json(): BcProviderEditFormData | undefined {
     if (!this.formInstance) {
       return;
     }
@@ -43,7 +43,7 @@ export class BcProviderApplicationEditFormState extends AbstractFormState<BcProv
     return values;
   }
 
-  public patchValue(model: BcProviderApplicationEditFormData | null): void {
+  public patchValue(model: BcProviderEditFormData | null): void {
     if (!this.formInstance || !model) {
       return;
     }
