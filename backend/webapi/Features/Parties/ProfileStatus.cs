@@ -118,6 +118,10 @@ public partial class ProfileStatus
 
     public class ProfileData
     {
+        public class CredentialDto
+        {
+            public string IdentityProvider { get; set; } = string.Empty;
+        }
         public class LicenceDeclarationDto
         {
             public CollegeCode? CollegeCode { get; set; }
@@ -134,6 +138,7 @@ public partial class ProfileStatus
         public string? Email { get; set; }
         public string? Phone { get; set; }
         public string? Cpn { get; set; }
+        public IEnumerable<CredentialDto> Credentials { get; set; } = Enumerable.Empty<CredentialDto>();
         public LicenceDeclarationDto? LicenceDeclaration { get; set; }
         public string? AccessAdministratorEmail { get; set; }
         public bool OrganizationDetailEntered { get; set; }

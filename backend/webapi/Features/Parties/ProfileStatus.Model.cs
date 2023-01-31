@@ -2,6 +2,7 @@ namespace Pidp.Features.Parties;
 
 using NodaTime;
 using Pidp.Features.AccessRequests;
+using Pidp.Infrastructure.Auth;
 using Pidp.Models.Lookups;
 
 public partial class ProfileStatus
@@ -212,16 +213,16 @@ public partial class ProfileStatus
         {
             internal override string SectionName => "bcProviderApplication";
 
-            protected override void Compute(ProfileData profile) =>
+            protected override void Compute(ProfileData profile)
+            {
+                if (profile.Credentials.Any(x => string.Equals(x.IdentityProvider, IdentityProviders.BCProvider, StringComparison.Ordinal)))
+                {
+                    this.StatusCode = StatusCode.Complete;
+                    return;
+                }
+
                 this.StatusCode = StatusCode.Incomplete;
-            // TODO: Implement status for BC Provider
-            //{
-            //if (profile.CompletedEnrolments.Contains(AccessTypeCode.???))
-            //{
-            //    this.StatusCode = StatusCode.Complete;
-            //    return;
-            //}
-            //}
+            }
         }
 
         public class HcimAccountTransferSection : ProfileSection

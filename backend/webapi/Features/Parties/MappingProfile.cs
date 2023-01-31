@@ -20,6 +20,7 @@ public class MappingProfile : Profile
         this.CreateProjection<Party, WorkSetting.Command>()
             .ForMember(dest => dest.PhysicalAddress, opt => opt.MapFrom(src => src.Facility!.PhysicalAddress));
 
+        this.CreateProjection<Credential, ProfileStatus.ProfileData.CredentialDto>();
         this.CreateProjection<FacilityAddress, WorkSetting.Command.Address>();
         this.CreateProjection<PartyAccessAdministrator, AccessAdministrator.Command>();
         this.CreateProjection<PartyLicenceDeclaration, LicenceDeclaration.Command>();
