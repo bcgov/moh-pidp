@@ -13,7 +13,7 @@ import { AbstractFormPage } from '@app/core/classes/abstract-form-page.class';
 import { PartyService } from '@app/core/party/party.service';
 import { FormUtilsService } from '@app/core/services/form-utils.service';
 
-import { BcProviderApplicationEditFormState } from './bc-provider-edit-form-state';
+import { BcProviderEditFormState } from './bc-provider-edit-form-state';
 import {
   BcProviderChangePasswordRequest,
   BcProviderEditResource,
@@ -28,10 +28,10 @@ export interface BcProviderEditInitialStateModel {
   templateUrl: './bc-provider-edit.component.html',
   styleUrls: ['./bc-provider-edit.component.scss'],
 })
-export class BcProviderApplicationEditComponent extends AbstractFormPage<BcProviderApplicationEditFormState> {
+export class BcProviderEditComponent extends AbstractFormPage<BcProviderEditFormState> {
   public faCircleCheck = faCircleCheck;
   public faXmark = faXmark;
-  public formState: BcProviderApplicationEditFormState;
+  public formState: BcProviderEditFormState;
   public showErrorCard = false;
   public errorCardText = '';
   public showMessageCard = false;
@@ -57,7 +57,7 @@ export class BcProviderApplicationEditComponent extends AbstractFormPage<BcProvi
     route: ActivatedRoute
   ) {
     super(dialog, formUtilsService);
-    this.formState = new BcProviderApplicationEditFormState(fb);
+    this.formState = new BcProviderEditFormState(fb);
 
     const model = route.snapshot.data
       .bcProviderEditData as BcProviderEditInitialStateModel;
