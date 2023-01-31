@@ -16,4 +16,10 @@ public class CredentialsController : PidpControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<List<Index.Model>>> GetCredentials([FromServices] IQueryHandler<Index.Query, List<Index.Model>> handler)
         => await handler.HandleAsync(new Index.Query { User = this.User });
+    [HttpPost]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<int>> CreateCredential([FromServices] ICommandHandler<Create.Command, int> handler,
+                                                     [FromBody] Create.Command command)
+        => await handler.HandleAsync(command);
 }

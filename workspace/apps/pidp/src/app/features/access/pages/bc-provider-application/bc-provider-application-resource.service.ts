@@ -5,9 +5,11 @@ import { Observable, map } from 'rxjs';
 import { NoContent } from '@bcgov/shared/data-access';
 
 import { ApiHttpClient } from '@app/core/resources/api-http-client.service';
+import { IdentityProvider } from '@app/features/auth/enums/identity-provider.enum';
 
 export interface BcProviderApplicationRequest {
   partyId: number;
+  identityProvider: IdentityProvider;
   username: string;
   password: string;
 }
@@ -22,7 +24,7 @@ export class BcProviderApplicationResource {
     data: BcProviderApplicationRequest
   ): Observable<string> {
     return this.apiResource
-      .post<NoContent>('access-requests/bc-provider', data)
+      .post<NoContent>('credentials', data)
       .pipe(map((_) => ''));
   }
 }

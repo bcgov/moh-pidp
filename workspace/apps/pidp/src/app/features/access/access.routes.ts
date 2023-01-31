@@ -3,6 +3,8 @@ export class AccessRoutes {
 
   public static SPECIAL_AUTH_EFORMS = 'sa-eforms';
   public static BC_PROVIDER_APPLICATION = 'bc-provider-application';
+  public static BC_PROVIDER_APPLICATION_CHANGE_PASSWORD =
+    'bc-provider-application/change-password';
   public static HCIM_ACCOUNT_TRANSFER = 'hcim-account-transfer';
   public static HCIM_ENROLMENT = 'hcim-enrolment';
   public static PHARMANET = 'pharmanet';

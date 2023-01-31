@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { Component } from '@angular/core';
+import { FormBuilder } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
@@ -11,6 +11,7 @@ import { NavigationService } from '@pidp/presentation';
 import { AbstractFormPage } from '@app/core/classes/abstract-form-page.class';
 import { PartyService } from '@app/core/party/party.service';
 import { FormUtilsService } from '@app/core/services/form-utils.service';
+import { IdentityProvider } from '@app/features/auth/enums/identity-provider.enum';
 
 import { BcProviderApplicationFormState } from './bc-provider-application-form-state';
 import {
@@ -63,6 +64,7 @@ export class BcProviderApplicationComponent extends AbstractFormPage<BcProviderA
   protected performSubmission(): Observable<string | null> {
     const data: BcProviderApplicationRequest = {
       partyId: this.partyService.partyId,
+      identityProvider: IdentityProvider.BC_PROVIDER,
       username: this.formState.username.value,
       password: this.formState.password.value,
     };

@@ -37,9 +37,10 @@ export class BcProviderApplicationPortalSection implements IPortalSection {
    */
   public get action(): PortalSectionAction {
     const statusCode = this.getStatusCode();
+    const route = this.getRoute();
     return {
-      label: statusCode === StatusCode.COMPLETED ? 'View' : 'Request',
-      route: AccessRoutes.routePath(AccessRoutes.BC_PROVIDER_APPLICATION),
+      label: statusCode === StatusCode.COMPLETED ? 'Edit' : 'Request',
+      route: route,
       disabled: statusCode === StatusCode.NOT_AVAILABLE,
     };
   }
@@ -63,5 +64,18 @@ export class BcProviderApplicationPortalSection implements IPortalSection {
 
   private getStatusCode(): StatusCode {
     return this.profileStatus.status.bcProviderApplication.statusCode;
+  }
+  private getRoute(): string {
+    const statusCode = this.getStatusCode();
+    switch (statusCode) {
+      case StatusCode.COMPLETED:
+        return AccessRoutes.routePath(
+          AccessRoutes.BC_PROVIDER_APPLICATION_CHANGE_PASSWORD
+        );
+      case StatusCode.AVAILABLE:
+        return AccessRoutes.routePath(AccessRoutes.BC_PROVIDER_APPLICATION);
+      default:
+        throw 'not implemented: ' + statusCode;
+    }
   }
 }
