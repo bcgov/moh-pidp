@@ -16,8 +16,6 @@ public class Credential : BaseAuditable
 
     public Party? Party { get; set; }
 
-    public Party? Party { get; set; }
-
     public Guid UserId { get; set; }
 
     public string? IdentityProvider { get; set; }
