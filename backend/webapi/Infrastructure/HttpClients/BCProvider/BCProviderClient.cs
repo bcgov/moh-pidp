@@ -4,45 +4,27 @@ using Azure.Identity;
 using Microsoft.Graph;
 using static Pidp.PidpConfiguration;
 
-public class BCProviderClient : HttpClients.BaseClient, IBCProviderClient
+public class BCProviderClient : IBCProviderClient
 {
-    private readonly BCProviderClientConfiguration config;
-    public BCProviderClient(
-        HttpClient httpClient,
-        ILogger<BCProviderClient> logger,
-        PidpConfiguration config) : base(httpClient, logger) => this.config = config.BCProviderClient;
+    private readonly GraphServiceClient client;
+    private readonly ILogger logger;
 
-    public async Task<User> CreateBCProviderAccount(UserRepresentation userRepresentation)
+    public BCProviderClient(ILogger<BCProviderClient> logger, PidpConfiguration config)
     {
-        var clientId = this.config.ClientId;
+        this.client = BuildClient(config.BCProviderClient);
+        this.logger = logger;
+    }
 
-        var tenantId = this.config.TenantId;
-
-        var clientSecret = this.config.ClientSecret;
-
-        // Scope construction from here:
-        // https://learn.microsoft.com/en-us/azure/active-directory/develop/scenario-daemon-acquire-token?tabs=dotnet
-        //var scopes = new[] { "User.ReadWrite.All/.default" };//, "Directory.ReadWrite.All" };
-        var scopes = new string[] { "https://graph.microsoft.com/.default" };
-        var options = new TokenCredentialOptions
-        {
-            AuthorityHost = AzureAuthorityHosts.AzurePublicCloud
-        };
-
-        var credential = new ClientSecretCredential(tenantId, clientId, clientSecret, options);
-        var client = new GraphServiceClient(credential, scopes);
-
-        // NOTE: This must match an allowed domain as configured in Azure or AddAsync() below will fail.
-        // For how to view the domains:
-        // https://learn.microsoft.com/en-us/azure/active-directory/enterprise-users/domains-manage
-        var userPrincipal = await this.CreateUserPrincipal(userRepresentation.FullName.Replace(" ", ""));
+    public async Task<User?> CreateBCProviderAccount(UserRepresentation userRepresentation)
+    {
+        var userPrincipal = await this.CreateUniqueUserPrincipalName(userRepresentation);
 
         // NOTE: These is the minimum set of properties that must be set for the user creation to work.
         var bcProviderAccount = new User()
         {
             AccountEnabled = true,
-            DisplayName = userRepresentation.FullName.Replace(" ", ""),
-            MailNickname = userRepresentation.FullName,
+            DisplayName = userRepresentation.FullName,
+            MailNickname = userRepresentation.FullName.Replace(" ", ""),
             UserPrincipalName = userPrincipal,
             PasswordProfile = new PasswordProfile
             {
@@ -51,7 +33,8 @@ public class BCProviderClient : HttpClients.BaseClient, IBCProviderClient
             }
         };
 
-        var result = await client.Users.Request().AddAsync(bcProviderAccount);
+        var result = await this.client.Users.Request().AddAsync(bcProviderAccount);
+        // TODO: try/catch error handling
         return result;
     }
 
@@ -60,22 +43,35 @@ public class BCProviderClient : HttpClients.BaseClient, IBCProviderClient
         //TODO implementation
     }
 
-    public async Task<bool> UserPrincipalExists(string userPrincipal)
-    {
-        //TODO implementation
-    }
-
-    public async Task<string> CreateUserPrincipal(string name)
-    {
-        var userPrincipal = $"{name}@bcproviderlab$" + ".ca";
-
-        while (await this.UserPrincipalExists(userPrincipal))
-        {
-            userPrincipal = CreateUserPrincipalWithNumbers(name);
-        }
-
-        return userPrincipal;
-    }
-
     private static string CreateUserPrincipalWithNumbers(string name) => $"{name}@bcproviderlab$" + "{Next(1, 99)}" + ".ca";
+
+    private static GraphServiceClient BuildClient(BCProviderClientConfiguration config)
+    {
+        var scopes = new string[] { "https://graph.microsoft.com/.default" };
+        var options = new TokenCredentialOptions
+        {
+            AuthorityHost = AzureAuthorityHosts.AzurePublicCloud
+        };
+        var credential = new ClientSecretCredential(config.TenantId, config.ClientId, config.ClientSecret, options);
+
+        // TODO: GraphServiceClient creates a new HttpClient using GraphClientFactory that has custom headers and middleware.
+        // We should be injecting a managed HttpClient rather than creating a new one every time (to avoid socket exhaustion) but then it won't have that custom configuration.
+        // Review this if/when Microsoft.Graph gives guidance on the propper pattern for doing this.
+        return new GraphServiceClient(credential, scopes);
+    }
+
+    private async Task<string> CreateUniqueUserPrincipalName(UserRepresentation user)
+    {
+        // TODO
+    }
+
+    private async Task<bool> UserPrincipalExists(string userPrincipalName)
+    {
+        var result = await this.client.Users.Request()
+            .Select("UserPrincipalName")
+            .Filter($"UserPrincipalName eq '{userPrincipalName}'")
+            .GetAsync();
+
+        return result.Count > 0;
+    }
 }
