@@ -40,7 +40,7 @@ public class BCProviderClient : IBCProviderClient
 
     public async Task<bool> UpdatePassword(string bcProviderId, string password)
     {
-        //TODO implementation
+        throw new NotImplementedException();
     }
 
     private static string CreateUserPrincipalWithNumbers(string name) => $"{name}@bcproviderlab$" + "{Next(1, 99)}" + ".ca";
@@ -62,7 +62,7 @@ public class BCProviderClient : IBCProviderClient
 
     private async Task<string> CreateUniqueUserPrincipalName(UserRepresentation user)
     {
-        // TODO
+        throw new NotImplementedException();
     }
 
     private async Task<bool> UserPrincipalExists(string userPrincipalName)
