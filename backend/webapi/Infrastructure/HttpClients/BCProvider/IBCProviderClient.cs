@@ -36,11 +36,4 @@ public interface IBCProviderClient
     /// <returns></returns>
     Task<string> CreateUserPrincipal(string name);
 
-    /// <summary>
-    /// Creates the User Principal. Only gets called
-    /// if the name already exists
-    /// </summary>
-    /// <param name="name"></param>
-    /// <returns></returns>
-    Task<string> CreateUserPrincipalWithNumbers(string name);
 }

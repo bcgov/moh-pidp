@@ -65,7 +65,7 @@ public class BCProviderClient : HttpClients.BaseClient, IBCProviderClient
         //TODO implementation
     }
 
-    private async Task<string> CreateUserPrincipal(string name)
+    public async Task<string> CreateUserPrincipal(string name)
     {
         var userPrincipal = $"{name}@bcproviderlab$" + ".ca";
 
