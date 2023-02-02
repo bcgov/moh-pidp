@@ -81,7 +81,16 @@ public class BCProviderClient : IBCProviderClient
 
     private async Task<string> CreateUniqueUserPrincipalName(UserRepresentation user)
     {
-        throw new NotImplementedException();
+        var name = user.FullName.Replace(" ", "");
+
+        var userPrincipal = $"{name}@bcproviderlab$" + ".ca";
+
+        while (await this.UserExists(userPrincipal))
+        {
+            userPrincipal = CreateUserPrincipalWithNumbers(name);
+        }
+
+        return userPrincipal;
     }
 
     private async Task<bool> UserExists(string userPrincipalName)
