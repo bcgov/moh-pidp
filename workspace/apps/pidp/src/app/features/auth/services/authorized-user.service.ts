@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable, combineLatest, map } from 'rxjs';
 
 import { IdentityProvider } from '../enums/identity-provider.enum';
+import { BcProviderResolver } from '../models/bc-provider-user.model';
 import { BcscResolver } from '../models/bcsc-user.model';
 import { IdirResolver } from '../models/idir-user.model';
 import { PhsaResolver } from '../models/phsa-user.model';
@@ -66,6 +67,8 @@ export class AuthorizedUserService {
         return new IdirResolver(userIdentity);
       case IdentityProvider.BCSC:
         return new BcscResolver(userIdentity);
+      case IdentityProvider.BC_PROVIDER:
+        return new BcProviderResolver(userIdentity);
       case IdentityProvider.PHSA:
         return new PhsaResolver(userIdentity);
       default:

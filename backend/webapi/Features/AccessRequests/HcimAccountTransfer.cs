@@ -82,7 +82,7 @@ public class HcimAccountTransfer
                     AlreadyEnroled = party.AccessRequests.Any(request => request.AccessTypeCode == AccessTypeCode.HcimAccountTransfer
                         || request.AccessTypeCode == AccessTypeCode.HcimEnrolment),
                     DemographicsComplete = party.Email != null && party.Phone != null,
-                    party.UserId,
+                    UserId = party.PrimaryUserId,
                     party.Email
                 })
                 .SingleAsync();

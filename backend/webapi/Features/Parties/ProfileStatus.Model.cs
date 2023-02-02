@@ -89,7 +89,7 @@ public partial class ProfileStatus
                 this.HasCpn = !string.IsNullOrWhiteSpace(profile.Cpn);
                 this.LicenceDeclared = profile.CollegeLicenceDeclared;
 
-                if (!profile.UserIsBcServicesCard)
+                if (!profile.UserHasHighAssuranceIdentity)
                 {
                     this.StatusCode = StatusCode.Hidden;
                     return;
@@ -177,7 +177,7 @@ public partial class ProfileStatus
 
             protected override void Compute(ProfileData profile)
             {
-                if (!profile.UserIsBcServicesCard)
+                if (!profile.UserHasHighAssuranceIdentity)
                 {
                     this.StatusCode = StatusCode.Hidden;
                     return;
@@ -207,6 +207,21 @@ public partial class ProfileStatus
 
                 this.StatusCode = StatusCode.Locked;
             }
+        }
+        public class BcProviderApplicationSection : ProfileSection
+        {
+            internal override string SectionName => "bcProviderApplication";
+
+            protected override void Compute(ProfileData profile) =>
+                this.StatusCode = StatusCode.Incomplete;
+            // TODO: Implement status for BC Provider
+            //{
+            //if (profile.CompletedEnrolments.Contains(AccessTypeCode.???))
+            //{
+            //    this.StatusCode = StatusCode.Complete;
+            //    return;
+            //}
+            //}
         }
 
         public class HcimAccountTransferSection : ProfileSection
@@ -280,7 +295,7 @@ public partial class ProfileStatus
 
             protected override void Compute(ProfileData profile)
             {
-                if (!profile.UserIsBcServicesCard)
+                if (!profile.UserHasHighAssuranceIdentity)
                 {
                     this.StatusCode = StatusCode.Hidden;
                     return;
@@ -311,7 +326,7 @@ public partial class ProfileStatus
 
             protected override void Compute(ProfileData profile)
             {
-                if (!profile.UserIsBcServicesCard)
+                if (!profile.UserHasHighAssuranceIdentity)
                 {
                     this.StatusCode = StatusCode.Hidden;
                     return;
@@ -348,7 +363,7 @@ public partial class ProfileStatus
                         .Excluding(SAEforms.ExcludedIdentifierTypes)
                         .HasGoodStanding;
 
-                if (!profile.UserIsBcServicesCard)
+                if (!profile.UserHasHighAssuranceIdentity)
                 {
                     this.StatusCode = StatusCode.Hidden;
                     return;

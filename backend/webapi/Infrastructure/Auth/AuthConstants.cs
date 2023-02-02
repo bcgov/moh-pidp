@@ -15,9 +15,10 @@ public static class Claims
     public const string Subject = "sub";
 }
 
-public static class ClaimValues
+public static class IdentityProviders
 {
     public const string BCServicesCard = "bcsc";
+    public const string BCProvider = "bcprovider_aad";
     public const string Idir = "idir";
     public const string Phsa = "phsa";
 }
@@ -25,9 +26,9 @@ public static class ClaimValues
 public static class Policies
 {
     public const string BcscAuthentication = "bcsc-authentication-policy";
+    public const string HighAssuranceIdentityProvider = "high-assurance-idp-policy";
     public const string IdirAuthentication = "idir-authentication-policy";
     public const string AnyPartyIdentityProvider = "party-idp-policy";
-    public const string UserOwnsResource = "user-owns-resource-policy";
 }
 
 public static class Clients

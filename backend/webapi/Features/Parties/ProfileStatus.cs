@@ -80,10 +80,11 @@ public partial class ProfileStatus
                 if (newCpn != null)
                 {
                     var party = await this.context.Parties
+                        .Include(party => party.Credentials)
                         .SingleAsync(party => party.Id == command.Id);
                     party.Cpn = newCpn;
                     await this.context.SaveChangesAsync();
-                    await this.keycloakClient.UpdateUserCpn(party.UserId, newCpn);
+                    await this.keycloakClient.UpdateUserCpn(party.PrimaryUserId, newCpn);
                 }
 
                 data.Cpn = newCpn;
@@ -103,6 +104,7 @@ public partial class ProfileStatus
                     ProfileSection.Create<DriverFitnessSection>(data),
                     ProfileSection.Create<HcimAccountTransferSection>(data),
                     ProfileSection.Create<HcimEnrolmentSection>(data),
+                    ProfileSection.Create<BcProviderApplicationSection>(data),
                     ProfileSection.Create<MSTeamsSection>(data),
                     ProfileSection.Create<PrescriptionRefillEformsSection>(data),
                     ProfileSection.Create<SAEformsSection>(data)
@@ -147,8 +149,8 @@ public partial class ProfileStatus
         public bool LicenceDeclarationEntered => this.LicenceDeclaration != null;
         [MemberNotNullWhen(true, nameof(LicenceDeclaration))]
         public bool CollegeLicenceDeclared => this.LicenceDeclaration?.HasNoLicence == false;
-        public bool UserIsBcServicesCard => this.userIdentityProvider == ClaimValues.BCServicesCard;
-        public bool UserIsPhsa => this.userIdentityProvider == ClaimValues.Phsa;
+        public bool UserHasHighAssuranceIdentity => this.userIdentityProvider is IdentityProviders.BCServicesCard or IdentityProviders.BCProvider;
+        public bool UserIsPhsa => this.userIdentityProvider == IdentityProviders.Phsa;
 
         public async Task Finalize(
             PidpDbContext context,
