@@ -86,7 +86,7 @@ public class Approve
                 .Select(party => new
                 {
                     party.Id,
-                    party.UserId,
+                    UserId = party.PrimaryUserId,
                     party.Cpn
                 })
                 .ToListAsync();
