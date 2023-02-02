@@ -104,7 +104,7 @@ public partial class ProfileStatus
                     ProfileSection.Create<DriverFitnessSection>(data),
                     ProfileSection.Create<HcimAccountTransferSection>(data),
                     ProfileSection.Create<HcimEnrolmentSection>(data),
-                    ProfileSection.Create<BcProviderApplicationSection>(data),
+                    ProfileSection.Create<BCProviderApplicationSection>(data),
                     ProfileSection.Create<MSTeamsSection>(data),
                     ProfileSection.Create<PrescriptionRefillEformsSection>(data),
                     ProfileSection.Create<SAEformsSection>(data)
@@ -118,10 +118,6 @@ public partial class ProfileStatus
 
     public class ProfileData
     {
-        public class CredentialDto
-        {
-            public string IdentityProvider { get; set; } = string.Empty;
-        }
         public class LicenceDeclarationDto
         {
             public CollegeCode? CollegeCode { get; set; }
@@ -138,7 +134,7 @@ public partial class ProfileStatus
         public string? Email { get; set; }
         public string? Phone { get; set; }
         public string? Cpn { get; set; }
-        public IEnumerable<CredentialDto> Credentials { get; set; } = Enumerable.Empty<CredentialDto>();
+        public bool HasBCProviderCredential { get; set; }
         public LicenceDeclarationDto? LicenceDeclaration { get; set; }
         public string? AccessAdministratorEmail { get; set; }
         public bool OrganizationDetailEntered { get; set; }

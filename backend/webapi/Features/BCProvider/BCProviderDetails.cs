@@ -1,9 +1,9 @@
-namespace Pidp.Features.Parties;
+namespace Pidp.Features.BCProvider;
 
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 
-public class BcProvider
+public class BCProviderDetails
 {
     public class Query : IQuery<Model>
     {

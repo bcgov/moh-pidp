@@ -1,4 +1,4 @@
-namespace Pidp.Features.Parties;
+namespace Pidp.Features.BCProvider;
 
 using DomainResults.Common;
 using FluentValidation;
@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Text.RegularExpressions;
 using Pidp.Infrastructure.HttpClients.Plr;
 
-public class BcProviderChangePassword
+public class BCProviderChangePassword
 {
     public static IdentifierType[] AllowedIdentifierTypes => new[] { IdentifierType.PhysiciansAndSurgeons };
     /// <summary>

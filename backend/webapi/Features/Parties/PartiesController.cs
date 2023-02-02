@@ -129,21 +129,4 @@ public class PartiesController : PidpControllerBase
                                                             [FromHybrid] WorkSetting.Command command)
         => await this.AuthorizePartyBeforeHandleAsync(command.Id, handler, command)
             .ToActionResult();
-
-    [HttpGet("{partyId:int}/credentials/bc-provider")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<BcProvider.Model>> BcProvider([FromServices] IQueryHandler<BcProvider.Query, BcProvider.Model> handler,
-                                                                                        [FromRoute] BcProvider.Query query)
-        => await this.AuthorizePartyBeforeHandleAsync(query.PartyId, handler, query)
-            .ToActionResultOfT();
-
-    [HttpPost("{partyId:int}/credentials/bc-provider/change-password")]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> BcProviderChangePassword([FromServices] ICommandHandler<BcProviderChangePassword.Command, IDomainResult> handler,
-        [FromBody] BcProviderChangePassword.Command command)
-        => await this.AuthorizePartyBeforeHandleAsync(command.PartyId, handler, command)
-            .ToActionResult();
 }

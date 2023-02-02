@@ -4,6 +4,7 @@ using FluentValidation;
 using System.Text.RegularExpressions;
 
 using Pidp.Infrastructure.Auth;
+using Pidp.Features.BCProvider;
 
 public class Create
 {
@@ -29,7 +30,7 @@ public class Create
                 .NotEmpty()
                 .MinimumLength(8)
                 .MaximumLength(32)
-                .Matches(Parties.BcProviderChangePassword.PASSWORDREGEX, RegexOptions.Singleline)
+                .Matches(BCProviderChangePassword.PASSWORDREGEX, RegexOptions.Singleline)
                 .WithMessage("A BC Provider account was not created. Please check that your password meets all password rules.");
         }
     }

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { Observable, catchError, map, of } from 'rxjs';
+import { Observable, map } from 'rxjs';
 
 import { NoContent } from '@bcgov/shared/data-access';
 

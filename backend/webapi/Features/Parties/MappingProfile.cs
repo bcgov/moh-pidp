@@ -6,6 +6,7 @@ using static NodaTime.Extensions.DateTimeExtensions;
 
 using Pidp.Infrastructure.HttpClients.Plr;
 using Pidp.Models;
+using Pidp.Infrastructure.Auth;
 
 public class MappingProfile : Profile
 {
@@ -16,11 +17,11 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.CompletedEnrolments, opt => opt.MapFrom(src => src.AccessRequests.Select(x => x.AccessTypeCode)))
             .ForMember(dest => dest.OrganizationDetailEntered, opt => opt.MapFrom(src => src.OrgainizationDetail != null))
             .ForMember(dest => dest.PartyPlrStanding, opt => opt.Ignore())
-            .ForMember(dest => dest.EndorsementPlrStanding, opt => opt.Ignore());
+            .ForMember(dest => dest.EndorsementPlrStanding, opt => opt.Ignore())
+            .ForMember(dest => dest.HasBCProviderCredential, opt => opt.MapFrom(src => src.Credentials.Any(x => x.IdentityProvider == IdentityProviders.BCProvider)));
         this.CreateProjection<Party, WorkSetting.Command>()
             .ForMember(dest => dest.PhysicalAddress, opt => opt.MapFrom(src => src.Facility!.PhysicalAddress));
 
-        this.CreateProjection<Credential, ProfileStatus.ProfileData.CredentialDto>();
         this.CreateProjection<FacilityAddress, WorkSetting.Command.Address>();
         this.CreateProjection<PartyAccessAdministrator, AccessAdministrator.Command>();
         this.CreateProjection<PartyLicenceDeclaration, LicenceDeclaration.Command>();

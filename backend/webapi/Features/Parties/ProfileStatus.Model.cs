@@ -209,13 +209,13 @@ public partial class ProfileStatus
                 this.StatusCode = StatusCode.Locked;
             }
         }
-        public class BcProviderApplicationSection : ProfileSection
+        public class BCProviderApplicationSection : ProfileSection
         {
             internal override string SectionName => "bcProviderApplication";
 
             protected override void Compute(ProfileData profile)
             {
-                if (profile.Credentials.Any(x => string.Equals(x.IdentityProvider, IdentityProviders.BCProvider, StringComparison.Ordinal)))
+                if (profile.HasBCProviderCredential)
                 {
                     this.StatusCode = StatusCode.Complete;
                     return;
