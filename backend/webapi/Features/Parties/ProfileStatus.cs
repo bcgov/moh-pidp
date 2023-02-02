@@ -47,17 +47,20 @@ public partial class ProfileStatus
 
     public class CommandHandler : ICommandHandler<Command, Model>
     {
+        private readonly IClock clock;
         private readonly IKeycloakAdministrationClient keycloakClient;
         private readonly IMapper mapper;
         private readonly IPlrClient plrClient;
         private readonly PidpDbContext context;
 
         public CommandHandler(
+            IClock clock,
             IKeycloakAdministrationClient keycloakClient,
             IMapper mapper,
             IPlrClient plrClient,
             PidpDbContext context)
         {
+            this.clock = clock;
             this.keycloakClient = keycloakClient;
             this.mapper = mapper;
             this.plrClient = plrClient;
@@ -82,8 +85,12 @@ public partial class ProfileStatus
                     var party = await this.context.Parties
                         .SingleAsync(party => party.Id == command.Id);
                     party.Cpn = newCpn;
-                    await this.context.SaveChangesAsync();
                     await this.keycloakClient.UpdateUserCpn(party.UserId, newCpn);
+                    if (await this.keycloakClient.AssignClientRole(party.UserId, MohClients.LicenceStatus.ClientId, MohClients.LicenceStatus.PractitionerRole))
+                    {
+                        this.context.BusinessEvents.Add(LicenceStatusRoleAssigned.Create(party.Id, MohClients.LicenceStatus.PractitionerRole, this.clock.GetCurrentInstant()));
+                    };
+                    await this.context.SaveChangesAsync();
                 }
 
                 data.Cpn = newCpn;

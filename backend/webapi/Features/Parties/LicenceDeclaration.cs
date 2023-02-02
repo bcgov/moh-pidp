@@ -119,6 +119,10 @@ public class LicenceDeclaration
                 else
                 {
                     await this.keycloakClient.UpdateUserCpn(party.UserId, party.Cpn);
+                    if (await this.keycloakClient.AssignClientRole(party.UserId, MohClients.LicenceStatus.ClientId, MohClients.LicenceStatus.PractitionerRole))
+                    {
+                        this.context.BusinessEvents.Add(LicenceStatusRoleAssigned.Create(party.Id, MohClients.LicenceStatus.PractitionerRole, this.clock.GetCurrentInstant()));
+                    };
                 }
             }
 
