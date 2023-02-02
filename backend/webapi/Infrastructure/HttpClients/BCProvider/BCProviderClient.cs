@@ -47,7 +47,19 @@ public class BCProviderClient : IBCProviderClient
 
     public async Task<bool> UpdatePassword(string bcProviderId, string password)
     {
-        throw new NotImplementedException();
+
+        try
+        {
+            await client.Users["{bcProviderId}"].Authentication.PasswordMethods["{passwordAuthenticationMethod-id}"]
+                .ResetPassword(password)
+                .Request()
+                .PostAsync();
+        }
+        catch
+        {
+            // TODO: logging
+        }
+
     }
 
     private static string CreateUserPrincipalWithNumbers(string name) => $"{name}@bcproviderlab$" + "{Next(1, 99)}" + ".ca";
