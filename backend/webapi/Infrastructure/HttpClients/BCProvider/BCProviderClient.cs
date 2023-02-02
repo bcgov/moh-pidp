@@ -50,7 +50,7 @@ public class BCProviderClient : IBCProviderClient
 
         try
         {
-            await client.Users["{bcProviderId}"].Authentication.PasswordMethods["{passwordAuthenticationMethod-id}"]
+            await this.client.Users["{bcProviderId}"].Authentication.PasswordMethods["{passwordAuthenticationMethod-id}"]
                 .ResetPassword(password)
                 .Request()
                 .PostAsync();
@@ -60,6 +60,7 @@ public class BCProviderClient : IBCProviderClient
             // TODO: logging
         }
 
+        return true;
     }
 
     private static string CreateUserPrincipalWithNumbers(string name) => $"{name}@bcproviderlab$" + "{Next(1, 99)}" + ".ca";
@@ -81,16 +82,19 @@ public class BCProviderClient : IBCProviderClient
 
     private async Task<string> CreateUniqueUserPrincipalName(UserRepresentation user)
     {
-        var name = user.FullName.Replace(" ", "");
+        var joinedFullName = $"{user.FirstName}.{user.LastName}".Replace(" ", ""); // Cannot contain spaces.
 
-        var userPrincipal = $"{name}@bcproviderlab$" + ".ca";
-
-        while (await this.UserExists(userPrincipal))
+        for (var i = 1; i <= 100; i++)
         {
-            userPrincipal = CreateUserPrincipalWithNumbers(name);
+            // Generates First.Last@... instead of First.Last1@... for the first instance of a name.
+            var proposedName = $"{joinedFullName}{(i < 2 ? string.Empty : i)}@bcproviderlab.ca";
+            if (!await this.UserExists(proposedName))
+            {
+                return proposedName;
+            }
         }
 
-        return userPrincipal;
+        throw new Exception("we should do something if there are more than 100 people with the same name");
     }
 
     private async Task<bool> UserExists(string userPrincipalName)
