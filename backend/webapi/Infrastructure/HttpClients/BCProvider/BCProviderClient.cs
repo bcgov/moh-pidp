@@ -63,8 +63,6 @@ public class BCProviderClient : IBCProviderClient
         return true;
     }
 
-    private static string CreateUserPrincipalWithNumbers(string name) => $"{name}@bcproviderlab$" + "{Next(1, 99)}" + ".ca";
-
     private static GraphServiceClient BuildClient(BCProviderClientConfiguration config)
     {
         var scopes = new string[] { "https://graph.microsoft.com/.default" };
