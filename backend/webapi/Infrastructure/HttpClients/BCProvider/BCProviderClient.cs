@@ -24,18 +24,25 @@ public class BCProviderClient : IBCProviderClient
         {
             AccountEnabled = true,
             DisplayName = userRepresentation.FullName,
-            MailNickname = userRepresentation.FullName.Replace(" ", ""),
+            MailNickname = userRepresentation.FullName.Replace(" ", ""), // Cannot contain spaces
             UserPrincipalName = userPrincipal,
             PasswordProfile = new PasswordProfile
             {
-                ForceChangePasswordNextSignIn = true,
                 Password = "Graph-Spike"
+                // Password = userRepresentation.Password
             }
         };
 
-        var result = await this.client.Users.Request().AddAsync(bcProviderAccount);
-        // TODO: try/catch error handling
-        return result;
+        try
+        {
+            return await this.client.Users.Request().AddAsync(bcProviderAccount);
+        }
+        catch
+        {
+            // TODO: logging
+        }
+
+        return null;
     }
 
     public async Task<bool> UpdatePassword(string bcProviderId, string password)
@@ -65,7 +72,7 @@ public class BCProviderClient : IBCProviderClient
         throw new NotImplementedException();
     }
 
-    private async Task<bool> UserPrincipalExists(string userPrincipalName)
+    private async Task<bool> UserExists(string userPrincipalName)
     {
         var result = await this.client.Users.Request()
             .Select("UserPrincipalName")
