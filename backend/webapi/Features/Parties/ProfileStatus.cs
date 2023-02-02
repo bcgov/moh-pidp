@@ -83,10 +83,11 @@ public partial class ProfileStatus
                 if (newCpn != null)
                 {
                     var party = await this.context.Parties
+                        .Include(party => party.Credentials)
                         .SingleAsync(party => party.Id == command.Id);
                     party.Cpn = newCpn;
-                    await this.keycloakClient.UpdateUserCpn(party.UserId, newCpn);
-                    if (await this.keycloakClient.AssignClientRole(party.UserId, MohClients.LicenceStatus.ClientId, MohClients.LicenceStatus.PractitionerRole))
+                    await this.keycloakClient.UpdateUserCpn(party.PrimaryUserId, newCpn);
+                    if (await this.keycloakClient.AssignClientRole(party.PrimaryUserId, MohClients.LicenceStatus.ClientId, MohClients.LicenceStatus.PractitionerRole))
                     {
                         this.context.BusinessEvents.Add(LicenceStatusRoleAssigned.Create(party.Id, MohClients.LicenceStatus.PractitionerRole, this.clock.GetCurrentInstant()));
                     };
@@ -155,8 +156,8 @@ public partial class ProfileStatus
         public bool LicenceDeclarationEntered => this.LicenceDeclaration != null;
         [MemberNotNullWhen(true, nameof(LicenceDeclaration))]
         public bool CollegeLicenceDeclared => this.LicenceDeclaration?.HasNoLicence == false;
-        public bool UserIsBcServicesCard => this.userIdentityProvider == ClaimValues.BCServicesCard;
-        public bool UserIsPhsa => this.userIdentityProvider == ClaimValues.Phsa;
+        public bool UserHasHighAssuranceIdentity => this.userIdentityProvider is IdentityProviders.BCServicesCard or IdentityProviders.BCProvider;
+        public bool UserIsPhsa => this.userIdentityProvider == IdentityProviders.Phsa;
 
         public async Task Finalize(
             PidpDbContext context,

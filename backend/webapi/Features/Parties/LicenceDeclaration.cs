@@ -95,6 +95,7 @@ public class LicenceDeclaration
         public async Task<IDomainResult<string?>> HandleAsync(Command command)
         {
             var party = await this.context.Parties
+                .Include(party => party.Credentials)
                 .Include(party => party.LicenceDeclaration)
                 .SingleAsync(party => party.Id == command.PartyId);
 
@@ -118,8 +119,8 @@ public class LicenceDeclaration
                 }
                 else
                 {
-                    await this.keycloakClient.UpdateUserCpn(party.UserId, party.Cpn);
-                    if (await this.keycloakClient.AssignClientRole(party.UserId, MohClients.LicenceStatus.ClientId, MohClients.LicenceStatus.PractitionerRole))
+                    await this.keycloakClient.UpdateUserCpn(party.PrimaryUserId, party.Cpn);
+                    if (await this.keycloakClient.AssignClientRole(party.PrimaryUserId, MohClients.LicenceStatus.ClientId, MohClients.LicenceStatus.PractitionerRole))
                     {
                         this.context.BusinessEvents.Add(LicenceStatusRoleAssigned.Create(party.Id, MohClients.LicenceStatus.PractitionerRole, this.clock.GetCurrentInstant()));
                     };

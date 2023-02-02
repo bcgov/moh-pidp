@@ -3,8 +3,6 @@ import { Injectable } from '@angular/core';
 
 import { Observable, catchError, exhaustMap, map, of, throwError } from 'rxjs';
 
-import { ResourceUtilsService } from '@bcgov/shared/data-access';
-
 import { ApiHttpClient } from '@app/core/resources/api-http-client.service';
 import { User } from '@app/features/auth/models/user.model';
 import { AuthorizedUserService } from '@app/features/auth/services/authorized-user.service';
@@ -17,7 +15,6 @@ import { PartyCreate } from './party-create.model';
 export class PartyResource {
   public constructor(
     private apiResource: ApiHttpClient,
-    private resourceUtilsService: ResourceUtilsService,
     private authorizedUserService: AuthorizedUserService
   ) {}
 
@@ -30,7 +27,7 @@ export class PartyResource {
     return this.authorizedUserService.user$.pipe(
       exhaustMap((user: User) =>
         user
-          ? this.getParties(user.userId).pipe(
+          ? this.getCredentials().pipe(
               map((partyId: number | null) => partyId ?? user)
             )
           : throwError(
@@ -53,11 +50,10 @@ export class PartyResource {
    * Discovery endpoint for checking the existence of a Party
    * based on a UserId, which provides a PartyId in response.
    */
-  private getParties(userId: string): Observable<number | null> {
-    const params = this.resourceUtilsService.makeHttpParams({ userId });
-    return this.apiResource.get<{ id: number }[]>('parties', { params }).pipe(
-      map((parties: { id: number }[]) =>
-        parties?.length ? parties.shift()?.id ?? null : null
+  private getCredentials(): Observable<number | null> {
+    return this.apiResource.get<{ partyId: number }[]>('credentials').pipe(
+      map((parties: { partyId: number }[]) =>
+        parties?.length ? parties.shift()?.partyId ?? null : null
       ),
       catchError((error: HttpErrorResponse) => {
         if (error.status === 400) {
@@ -66,9 +62,7 @@ export class PartyResource {
 
         return throwError(
           () =>
-            new Error(
-              `Error occurred attempting to retrieve Party with user ID ${userId}`
-            )
+            new Error(`Error occurred attempting to retrieve Party Credentials`)
         );
       })
     );

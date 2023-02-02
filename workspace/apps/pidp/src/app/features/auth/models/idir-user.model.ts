@@ -5,21 +5,21 @@ import { IUserResolver, User } from './user.model';
 export class IdirUser implements User {
   public readonly identityProvider: IdentityProvider;
   public userId: string;
+  public idpId: string;
   public firstName: string;
   public lastName: string;
-  public idir: string;
 
   public constructor({ accessTokenParsed, brokerProfile }: UserIdentity) {
     const { firstName, lastName } = brokerProfile;
     const {
       identity_provider,
-      preferred_username: idir,
+      preferred_username: idpId,
       sub: userId,
     } = accessTokenParsed;
 
     this.identityProvider = identity_provider;
-    this.idir = idir;
     this.userId = userId;
+    this.idpId = idpId;
     this.firstName = firstName;
     this.lastName = lastName;
   }

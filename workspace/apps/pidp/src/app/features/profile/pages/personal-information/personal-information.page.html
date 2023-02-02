@@ -14,7 +14,7 @@
   <ui-page-section>
     <ui-page-section-subheader heading="Name">
       <ng-container uiPageSectionSubheaderDesc>
-        <span *ngIf="(identityProvider$ | async) === IdentityProvider.BCSC">
+        <span *ngIf="(identityProvider$ | async) | isHighAssurance">
           This information comes from the BC Services Card. If you use a
           different name in your college licence, select "My name is different
           on my college licence".
@@ -25,7 +25,7 @@
     <app-user-info [user]="user$ | async"></app-user-info>
 
     <ui-toggle-content
-      *ngIf="(identityProvider$ | async) === IdentityProvider.BCSC"
+      *ngIf="(identityProvider$ | async) | isHighAssurance"
       label="My name is different on my college licence"
       [checked]="hasPreferredName"
       (toggle)="onPreferredNameToggle($event)">

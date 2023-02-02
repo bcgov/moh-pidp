@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 using Pidp.Data;
 using Pidp.Infrastructure.HttpClients.Plr;
+using Pidp.Models;
 
 // Currently used by DMFT
 public class EndorsementData
@@ -46,12 +47,12 @@ public class EndorsementData
 
         public async Task<IDomainResult<List<Model>>> HandleAsync(Query query)
         {
-            var partyId = await this.context.Parties
-                .Where(party => party.Hpdid!.Replace("@bcsc", "") == query.Hpdid)
-                .Select(party => (int?)party.Id)
+            var partyId = await this.context.Credentials
+                .Where(credential => credential.Hpdid!.Replace("@bcsc", "") == query.Hpdid)
+                .Select(credential => credential.PartyId)
                 .SingleOrDefaultAsync();
 
-            if (partyId == null)
+            if (partyId == default)
             {
                 return DomainResult.NotFound<List<Model>>();
             }
@@ -63,8 +64,9 @@ public class EndorsementData
                 .Where(relationship => relationship.PartyId != partyId)
                 .Select(relationship => new Dto
                 {
-                    Hpdid = relationship.Party!.Hpdid!.Replace("@bcsc", ""),
-                    Cpn = relationship.Party.Cpn
+                    BcscCredential = relationship.Party!.Credentials
+                        .SingleOrDefault(credential => credential.IsBcServicesCard),
+                    Cpn = relationship.Party!.Cpn
                 })
                 .ToListAsync();
 
@@ -72,7 +74,7 @@ public class EndorsementData
 
             return DomainResult.Success(dtos.Select(dto => new Model
             {
-                Hpdid = dto.Hpdid,
+                Hpdid = dto.BcscCredential?.IdpId,
                 Licences = licences?
                     .Where(licence => licence.Cpn == dto.Cpn)
                     .Select(licence => new Model.LicenceInformation
@@ -89,7 +91,7 @@ public class EndorsementData
 
     private class Dto
     {
-        public string? Hpdid { get; set; } = string.Empty;
+        public Credential? BcscCredential { get; set; }
         public string? Cpn { get; set; }
     }
 }

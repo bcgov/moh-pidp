@@ -59,7 +59,7 @@ public class PrescriptionRefillEforms
                 .Select(party => new
                 {
                     AlreadyEnroled = party.AccessRequests.Any(request => request.AccessTypeCode == AccessTypeCode.PrescriptionRefillEforms),
-                    party.UserId,
+                    UserId = party.PrimaryUserId,
                     party.Email,
                     party.FirstName,
                     party.Cpn,
