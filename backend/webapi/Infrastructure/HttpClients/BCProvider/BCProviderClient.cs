@@ -39,7 +39,7 @@ public class BCProviderClient : IBCProviderClient
         }
         catch
         {
-            // TODO: logging
+            this.logger.LogAccountCreationFailure(userPrincipal);
         }
 
         return null;
@@ -57,7 +57,7 @@ public class BCProviderClient : IBCProviderClient
         }
         catch
         {
-            // TODO: logging
+            this.logger.LogPasswordUpdateFailure(bcProviderId);
         }
 
         return true;
@@ -104,4 +104,13 @@ public class BCProviderClient : IBCProviderClient
 
         return result.Count > 0;
     }
+}
+
+public static partial class BCProviderLoggingExtensions
+{
+    [LoggerMessage(1, LogLevel.Error, "Failed to create account {userPrincipal}.")]
+    public static partial void LogAccountCreationFailure(this ILogger logger, string userPrincipal);
+
+    [LoggerMessage(2, LogLevel.Error, "Failed to update user {bcProviderId}'s password.")]
+    public static partial void LogPasswordUpdateFailure(this ILogger logger, string bcProviderId);
 }
