@@ -84,7 +84,7 @@ public class BCProviderClient : IBCProviderClient
 
         for (var i = 1; i <= 100; i++)
         {
-            // Generates First.Last@... instead of First.Last1@... for the first instance of a name.
+            // Generates First.Last@domain instead of First.Last1@domain for the first instance of a name.
             var proposedName = $"{joinedFullName}{(i < 2 ? string.Empty : i)}@bcproviderlab.ca";
             if (!await this.UserExists(proposedName))
             {
