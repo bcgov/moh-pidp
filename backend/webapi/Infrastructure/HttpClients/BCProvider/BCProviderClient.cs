@@ -70,10 +70,11 @@ public class BCProviderClient : IBCProviderClient
             var proposedName = $"{joinedFullName}{(i < 2 ? string.Empty : i)}@bcproviderlab.ca";
             if (!await this.UserExists(proposedName))
             {
+                this.logger.LogNewBCProviderUserCreated(proposedName);
                 return proposedName;
             }
         }
-
+        this.logger.LogBCProviderAccountCreationFailure(joinedFullName, user.FirstName, user.LastName);
         return null;
     }
 
@@ -95,4 +96,10 @@ public static partial class BCProviderLoggingExtensions
 
     [LoggerMessage(2, LogLevel.Error, "Failed to update user {bcProviderId}'s password.")]
     public static partial void LogPasswordUpdateFailure(this ILogger logger, string bcProviderId);
+
+    [LoggerMessage(3, LogLevel.Information, "Created new BC Provider user {proposedName}")]
+    public static partial void LogNewBCProviderUserCreated(this ILogger logger, string proposedName);
+
+    [LoggerMessage(4, LogLevel.Error, "Failed to create user {fullName}, possibly reached maximum amount of users named {firstName} {lastName}.")]
+    public static partial void LogBCProviderAccountCreationFailure(this ILogger logger, string fullName, string firstName, string lastName);
 }
