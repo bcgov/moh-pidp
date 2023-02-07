@@ -1,6 +1,8 @@
 namespace Pidp.Infrastructure.HttpClients;
 
+using Azure.Identity;
 using IdentityModel.Client;
+using Microsoft.Graph;
 
 using Pidp.Extensions;
 using Pidp.Infrastructure.HttpClients.AddressAutocomplete;
@@ -13,6 +15,22 @@ public static class HttpClientSetup
 {
     public static IServiceCollection AddHttpClients(this IServiceCollection services, PidpConfiguration config)
     {
+        services.AddScoped<GraphServiceClient, GraphServiceClient>(services =>
+        {
+            // This configuration will need to change if our Authorization context changes, i.e. if we use any delegated access
+            var scopes = new string[] { "https://graph.microsoft.com/.default" };
+            var options = new TokenCredentialOptions
+            {
+                AuthorityHost = AzureAuthorityHosts.AzurePublicCloud
+            };
+            var credential = new ClientSecretCredential(config.BCProviderClient.TenantId, config.BCProviderClient.ClientId, config.BCProviderClient.ClientSecret, options);
+
+            // TODO: GraphServiceClient creates a new HttpClient using GraphClientFactory that has custom headers and middleware.
+            // We should be injecting a managed HttpClient rather than creating a new one every time (to avoid socket exhaustion) but then it won't have that custom configuration.
+            // Review this if/when Microsoft.Graph gives guidance on the propper pattern for doing this.
+            return new GraphServiceClient(credential, scopes);
+        });
+
         services.AddHttpClient<IAccessTokenClient, AccessTokenClient>();
 
         services.AddHttpClientWithBaseAddress<IAddressAutocompleteClient, AddressAutocompleteClient>(config.AddressAutocompleteClient.Url);

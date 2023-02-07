@@ -2,16 +2,15 @@ namespace Pidp.Infrastructure.HttpClients.BCProvider;
 
 using Azure.Identity;
 using Microsoft.Graph;
-using static Pidp.PidpConfiguration;
 
 public class BCProviderClient : IBCProviderClient
 {
     private readonly GraphServiceClient client;
     private readonly ILogger logger;
 
-    public BCProviderClient(ILogger<BCProviderClient> logger, PidpConfiguration config)
+    public BCProviderClient(GraphServiceClient client, ILogger<BCProviderClient> logger)
     {
-        this.client = BuildClient(config.BCProviderClient);
+        this.client = client;
         this.logger = logger;
     }
 
@@ -28,8 +27,7 @@ public class BCProviderClient : IBCProviderClient
             UserPrincipalName = userPrincipal,
             PasswordProfile = new PasswordProfile
             {
-                Password = "Graph-Spike"
-                // Password = userRepresentation.Password
+                Password = userRepresentation.Password
             }
         };
 
@@ -61,21 +59,6 @@ public class BCProviderClient : IBCProviderClient
         }
 
         return true;
-    }
-
-    private static GraphServiceClient BuildClient(BCProviderClientConfiguration config)
-    {
-        var scopes = new string[] { "https://graph.microsoft.com/.default" };
-        var options = new TokenCredentialOptions
-        {
-            AuthorityHost = AzureAuthorityHosts.AzurePublicCloud
-        };
-        var credential = new ClientSecretCredential(config.TenantId, config.ClientId, config.ClientSecret, options);
-
-        // TODO: GraphServiceClient creates a new HttpClient using GraphClientFactory that has custom headers and middleware.
-        // We should be injecting a managed HttpClient rather than creating a new one every time (to avoid socket exhaustion) but then it won't have that custom configuration.
-        // Review this if/when Microsoft.Graph gives guidance on the propper pattern for doing this.
-        return new GraphServiceClient(credential, scopes);
     }
 
     private async Task<string> CreateUniqueUserPrincipalName(UserRepresentation user)
