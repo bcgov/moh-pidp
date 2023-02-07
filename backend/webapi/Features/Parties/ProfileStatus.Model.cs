@@ -78,6 +78,24 @@ public partial class ProfileStatus
             }
         }
 
+        public class BCProviderApplicationSection : ProfileSection
+        {
+            internal override string SectionName => "bcProviderApplication";
+
+            protected override void Compute(ProfileData profile)
+            {
+                if (!profile.UserHasHighAssuranceIdentity)
+                {
+                    this.StatusCode = StatusCode.Hidden;
+                    return;
+                }
+
+                this.StatusCode = profile.HasBCProviderCredential
+                    ? StatusCode.Complete
+                    : StatusCode.Incomplete;
+            }
+        }
+
         public class CollegeCertificationSection : ProfileSection
         {
             internal override string SectionName => "collegeCertification";
@@ -208,21 +226,7 @@ public partial class ProfileStatus
                 this.StatusCode = StatusCode.Locked;
             }
         }
-        public class BcProviderApplicationSection : ProfileSection
-        {
-            internal override string SectionName => "bcProviderApplication";
 
-            protected override void Compute(ProfileData profile) =>
-                this.StatusCode = StatusCode.Incomplete;
-            // TODO: Implement status for BC Provider
-            //{
-            //if (profile.CompletedEnrolments.Contains(AccessTypeCode.???))
-            //{
-            //    this.StatusCode = StatusCode.Complete;
-            //    return;
-            //}
-            //}
-        }
 
         public class HcimAccountTransferSection : ProfileSection
         {
