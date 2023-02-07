@@ -1,6 +1,5 @@
 namespace Pidp.Infrastructure.HttpClients.BCProvider;
 
-using Azure.Identity;
 using Microsoft.Graph;
 
 public class BCProviderClient : IBCProviderClient
