@@ -60,7 +60,7 @@ public class BCProviderClient : IBCProviderClient
         return true;
     }
 
-    private async Task<string> CreateUniqueUserPrincipalName(UserRepresentation user)
+    private async Task<string?> CreateUniqueUserPrincipalName(UserRepresentation user)
     {
         var joinedFullName = $"{user.FirstName}.{user.LastName}".Replace(" ", ""); // Cannot contain spaces.
 
@@ -74,7 +74,7 @@ public class BCProviderClient : IBCProviderClient
             }
         }
 
-        throw new Exception("we should do something if there are more than 100 people with the same name");
+        return null;
     }
 
     private async Task<bool> UserExists(string userPrincipalName)
