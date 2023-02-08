@@ -6,6 +6,7 @@ using Microsoft.Graph;
 
 using Pidp.Extensions;
 using Pidp.Infrastructure.HttpClients.AddressAutocomplete;
+using Pidp.Infrastructure.HttpClients.BCProvider;
 using Pidp.Infrastructure.HttpClients.Keycloak;
 using Pidp.Infrastructure.HttpClients.Ldap;
 using Pidp.Infrastructure.HttpClients.Mail;
@@ -34,6 +35,8 @@ public static class HttpClientSetup
         services.AddHttpClient<IAccessTokenClient, AccessTokenClient>();
 
         services.AddHttpClientWithBaseAddress<IAddressAutocompleteClient, AddressAutocompleteClient>(config.AddressAutocompleteClient.Url);
+
+        services.AddScoped<IBCProviderClient, BCProviderClient>();
 
         services.AddHttpClientWithBaseAddress<IChesClient, ChesClient>(config.ChesClient.Url)
             .WithBearerToken(new ChesClientCredentials
