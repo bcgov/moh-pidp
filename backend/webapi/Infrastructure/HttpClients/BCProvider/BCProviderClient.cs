@@ -57,6 +57,7 @@ public class BCProviderClient : IBCProviderClient
 
             if (!passwordMethods.Any())
             {
+                this.logger.LogNoPasswordMethodFound(userPrincipalName);
                 return false;
             }
 
@@ -112,9 +113,12 @@ public static partial class BCProviderLoggingExtensions
     [LoggerMessage(2, LogLevel.Error, "Failed to create account '{userPrincipalName}'.")]
     public static partial void LogAccountCreationFailure(this ILogger logger, string userPrincipalName);
 
-    [LoggerMessage(3, LogLevel.Error, "Failed to update the password of user '{userPrincipalName}'.")]
+    [LoggerMessage(3, LogLevel.Error, "Failed to update the password of user '{userPrincipalName}', user has no PasswordMethods.")]
+    public static partial void LogNoPasswordMethodFound(this ILogger logger, string userPrincipalName);
+
+    [LoggerMessage(4, LogLevel.Error, "Failed to update the password of user '{userPrincipalName}'.")]
     public static partial void LogPasswordUpdateFailure(this ILogger logger, string userPrincipalName);
 
-    [LoggerMessage(4, LogLevel.Error, "Hit maximum retrys attempting to make a unique User Principal Name for user '{fullName}'.")]
+    [LoggerMessage(5, LogLevel.Error, "Hit maximum retrys attempting to make a unique User Principal Name for user '{fullName}'.")]
     public static partial void LogNoUniqueUserPrincipalNameFound(this ILogger logger, string fullName);
 }

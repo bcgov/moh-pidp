@@ -29,4 +29,14 @@ public class CredentialsController : PidpControllerBase
                                                                 [FromHybrid] BCProviderCreate.Command command)
         => await this.AuthorizePartyBeforeHandleAsync(command.PartyId, handler, command)
             .ToActionResult();
+
+    [HttpPost("bc-provider/password")]
+    [Authorize(Policy = Policies.HighAssuranceIdentityProvider)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> UpdateBCProviderPassword([FromServices] ICommandHandler<BCProviderPassword.Command, IDomainResult> handler,
+                                                              [FromHybrid] BCProviderPassword.Command command)
+        => await this.AuthorizePartyBeforeHandleAsync(command.PartyId, handler, command)
+            .ToActionResult();
 }
