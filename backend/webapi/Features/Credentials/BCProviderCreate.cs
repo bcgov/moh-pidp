@@ -18,8 +18,6 @@ public class BCProviderCreate
         [JsonIgnore]
         [HybridBindProperty(Source.Route)]
         public int PartyId { get; set; }
-        public string FirstName { get; set; } = string.Empty;
-        public string LastName { get; set; } = string.Empty;
         public string Password { get; set; } = string.Empty;
     }
 
@@ -28,8 +26,6 @@ public class BCProviderCreate
         public CommandValidator()
         {
             this.RuleFor(x => x.PartyId).GreaterThan(0);
-            this.RuleFor(x => x.FirstName).NotEmpty();
-            this.RuleFor(x => x.LastName).NotEmpty();
             this.RuleFor(x => x.Password).NotEmpty();
         }
     }
@@ -47,18 +43,25 @@ public class BCProviderCreate
 
         public async Task<IDomainResult> HandleAsync(Command command)
         {
-            if (await this.context.Credentials
-                .AnyAsync(credential => credential.PartyId == command.PartyId
-                    && credential.IdentityProvider == IdentityProviders.BCProvider))
+            var party = await this.context.Parties
+                .Where(party => party.Id == command.PartyId)
+                .Select(party => new
+                {
+                    party.FirstName,
+                    party.LastName,
+                    HasBCProviderCredential = party.Credentials.Any(credential => credential.IdentityProvider == IdentityProviders.BCProvider)
+                })
+                .SingleAsync();
+
+            if (party.HasBCProviderCredential)
             {
-                // Already has a BC Provider Credential
                 return DomainResult.Failed();
             }
 
             var createdUser = await this.client.CreateBCProviderAccount(new UserRepresentation
             {
-                FirstName = command.FirstName,
-                LastName = command.LastName,
+                FirstName = party.FirstName,
+                LastName = party.LastName,
                 Password = command.Password
             });
 
