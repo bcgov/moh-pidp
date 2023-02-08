@@ -55,8 +55,12 @@ public class BCProviderClient : IBCProviderClient
                 .Request()
                 .GetAsync();
 
-            var passwordId = passwordMethods.Single().Id;
+            if (!passwordMethods.Any())
+            {
+                return false;
+            }
 
+            var passwordId = passwordMethods.Single().Id;
             await this.client.Users[userPrincipalName].Authentication.PasswordMethods[passwordId]
                 .ResetPassword(password)
                 .Request()
