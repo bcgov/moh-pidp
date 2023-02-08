@@ -28,21 +28,6 @@
               </div>
             </div>
             <div class="field">
-              <label id="bc-provider-application-username">Username</label>
-              <mat-form-field appearance="outline">
-                <input
-                  matInput
-                  formControlName="username"
-                  aria-labelledby="bc-provider-application-username" />
-                <mat-error *ngIf="formState.username.hasError('required')"
-                  >Required</mat-error
-                >
-                <mat-error *ngIf="formState.username.hasError('email')"
-                  >Enter a valid email address</mat-error
-                >
-              </mat-form-field>
-            </div>
-            <div class="field">
               <label id="bc-provider-application-password">Password</label>
               <mat-form-field appearance="outline">
                 <input

@@ -3,7 +3,6 @@ import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { AbstractFormState } from '@bcgov/shared/ui';
 
 export interface BcProviderApplicationFormData {
-  username: string;
   password: string;
 }
 export class BcProviderApplicationFormState extends AbstractFormState<BcProviderApplicationFormData> {
@@ -11,10 +10,6 @@ export class BcProviderApplicationFormState extends AbstractFormState<BcProvider
     super();
 
     this.buildForm();
-  }
-
-  public get username(): FormControl {
-    return this.formInstance.get('username') as FormControl;
   }
 
   public get password(): FormControl {
@@ -41,13 +36,6 @@ export class BcProviderApplicationFormState extends AbstractFormState<BcProvider
 
   public buildForm(): void {
     this.formInstance = this.fb.group({
-      username: [
-        {
-          value: 'example@bcproviderlab.ca',
-          disabled: true,
-        },
-        [Validators.required, Validators.email, Validators.maxLength(255)],
-      ],
       password: [
         '',
         [
