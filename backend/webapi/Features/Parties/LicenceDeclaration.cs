@@ -120,16 +120,26 @@ public class LicenceDeclaration
                 else
                 {
                     await this.keycloakClient.UpdateUserCpn(party.PrimaryUserId, party.Cpn);
-                    if (await this.keycloakClient.AssignClientRole(party.PrimaryUserId, MohClients.LicenceStatus.ClientId, MohClients.LicenceStatus.PractitionerRole))
-                    {
-                        this.context.BusinessEvents.Add(LicenceStatusRoleAssigned.Create(party.Id, MohClients.LicenceStatus.PractitionerRole, this.clock.GetCurrentInstant()));
-                    };
+                    await this.HandlePractitionerRoleAssignment(party.Id, party.PrimaryUserId, party.Cpn);
                 }
             }
 
             await this.context.SaveChangesAsync();
 
             return DomainResult.Success(party.Cpn);
+        }
+
+        private async Task HandlePractitionerRoleAssignment(int partyId, Guid userId, string cpn)
+        {
+            if (!await this.plrClient.GetStandingAsync(cpn))
+            {
+                return;
+            }
+
+            if (await this.keycloakClient.AssignClientRole(userId, MohClients.LicenceStatus.ClientId, MohClients.LicenceStatus.PractitionerRole))
+            {
+                this.context.BusinessEvents.Add(LicenceStatusRoleAssigned.Create(partyId, MohClients.LicenceStatus.PractitionerRole, this.clock.GetCurrentInstant()));
+            };
         }
     }
 }
