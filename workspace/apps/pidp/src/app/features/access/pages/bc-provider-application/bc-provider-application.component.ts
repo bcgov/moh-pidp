@@ -104,10 +104,16 @@ export class BcProviderApplicationComponent
       })
     );
   }
+
+  protected afterSubmitIsSuccessful(): void {
+    this.navigationService.navigateToRoot();
+  }
+
   private setError(message: string): void {
     this.showErrorCard = !!message;
     this.errorCardText = message;
   }
+
   private setMessage(message: string): void {
     this.showMessageCard = !!message;
     this.messageCardText = message;
