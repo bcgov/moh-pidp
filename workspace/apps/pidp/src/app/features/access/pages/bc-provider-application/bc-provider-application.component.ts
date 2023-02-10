@@ -67,9 +67,7 @@ export class BcProviderApplicationComponent
   }
 
   public hasPasswordRuleError(): boolean {
-    const hasMinlengthError = this.formState.password.hasError('minlength');
-    const hasMaxlengthError = this.formState.password.hasError('maxlength');
-    return hasMinlengthError || hasMaxlengthError;
+    return this.formState.password.hasError('invalidRequirements');
   }
 
   public ngOnInit(): void {
