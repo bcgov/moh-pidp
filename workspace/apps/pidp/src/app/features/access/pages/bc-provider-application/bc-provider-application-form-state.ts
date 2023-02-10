@@ -57,6 +57,11 @@ export class BcProviderApplicationFormState extends AbstractFormState<BcProvider
 
   public validatePassword(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
+      // hide validation errors until control is dirty
+      if (control.pristine) {
+        return null;
+      }
+
       const password = control.value;
       const upper = /[A-Z]/;
       const lower = /[a-z]/;
