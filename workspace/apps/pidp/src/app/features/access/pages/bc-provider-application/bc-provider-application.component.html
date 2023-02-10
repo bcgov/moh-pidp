@@ -7,11 +7,11 @@
       <div class="content">
         <p class="welcome">Welcome to your BC Provider account setup.</p>
         <p class="password-info">
-          Your password must be 8 to 32 characters long, with at least one
-          letter and one number. Strong passwords include both upper- and
-          lower-case letters, as well as special characters (such as an
-          exclamation point, question mark or ampersand). Do not use a password
-          that you use anywhere else.
+          Your password must be 8 to 256 characters long, with at least one
+          letter and one number or special character. Strong passwords include
+          both upper- and lower-case letters, as well as special characters
+          (such as an exclamation point, question mark or ampersand). Do not use
+          a password that you use anywhere else.
         </p>
         <section class="error-card" [class.show-card]="showErrorCard">
           <p>{{ errorCardText }}</p>
@@ -51,19 +51,6 @@
                   <li>At least one symbol</li>
                 </ul></mat-error
               >
-            </div>
-            <div class="temporary-password-generator">
-              <mat-checkbox
-                class="generate-password-checkbox"
-                (change)="onGeneratePasswordCheckChange()"
-                >Generate temporary password</mat-checkbox
-              >
-              <p>
-                <em
-                  >If using a temporary password, on your next sign in you will
-                  need to update it.</em
-                >
-              </p>
             </div>
           </div>
         </section>

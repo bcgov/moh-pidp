@@ -62,10 +62,6 @@ export class BcProviderApplicationComponent
     this.navigationService.navigateToRoot();
   }
 
-  public onGeneratePasswordCheckChange(): void {
-    this.snackBar.open('Not yet implemented', 'OK');
-  }
-
   public hasPasswordRuleError(): boolean {
     return this.formState.password.hasError('invalidRequirements');
   }
