@@ -69,7 +69,7 @@ export class BcProviderApplicationFormState extends AbstractFormState<BcProvider
       const symbols = /[^A-Za-z0-9]/;
 
       let requirementCounter = 0;
-      console.log(password);
+
       if (password.length > 7) {
         // Password requirements 3 out of 4 of these to match
         if (upper.test(password)) requirementCounter++;
