@@ -1,9 +1,15 @@
-import { FormBuilder, FormControl, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormBuilder,
+  FormControl,
+  ValidationErrors,
+  ValidatorFn,
+  Validators,
+} from '@angular/forms';
 
 import { AbstractFormState } from '@bcgov/shared/ui';
 
 export interface BcProviderApplicationFormData {
-  username: string;
   password: string;
 }
 export class BcProviderApplicationFormState extends AbstractFormState<BcProviderApplicationFormData> {
@@ -11,10 +17,6 @@ export class BcProviderApplicationFormState extends AbstractFormState<BcProvider
     super();
 
     this.buildForm();
-  }
-
-  public get username(): FormControl {
-    return this.formInstance.get('username') as FormControl;
   }
 
   public get password(): FormControl {
@@ -41,21 +43,49 @@ export class BcProviderApplicationFormState extends AbstractFormState<BcProvider
 
   public buildForm(): void {
     this.formInstance = this.fb.group({
-      username: [
-        {
-          value: 'example@bcproviderlab.ca',
-          disabled: true,
-        },
-        [Validators.required, Validators.email, Validators.maxLength(255)],
-      ],
       password: [
         '',
         [
           Validators.required,
           Validators.minLength(8),
-          Validators.maxLength(32),
+          Validators.maxLength(256),
+          this.validatePassword(),
         ],
       ],
     });
+  }
+
+  public validatePassword(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      // hide validation errors until control is dirty
+      if (control.pristine) {
+        return null;
+      }
+
+      const password = control.value;
+      const upper = /[A-Z]/;
+      const lower = /[a-z]/;
+      const numbers = /[0-9]/;
+      const symbols = /[^A-Za-z0-9]/;
+
+      let requirementCounter = 0;
+
+      if (password.length > 7) {
+        // Password requirements 3 out of 4 of these to match
+        if (upper.test(password)) requirementCounter++;
+
+        if (lower.test(password)) requirementCounter++;
+
+        if (numbers.test(password)) requirementCounter++;
+
+        if (symbols.test(password)) requirementCounter++;
+      }
+
+      if (requirementCounter < 3) {
+        return { invalidRequirements: true };
+      }
+
+      return null;
+    };
   }
 }
