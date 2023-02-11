@@ -106,10 +106,10 @@ public partial class ProfileStatus
                 {
                     ProfileSection.Create<DashboardInfoSection>(data),
                     ProfileSection.Create<AccessAdministratorSection>(data),
-                    ProfileSection.Create<BCProviderApplicationSection>(data),
+                    ProfileSection.Create<BCProviderSection>(data),
                     ProfileSection.Create<CollegeCertificationSection>(data),
-                    ProfileSection.Create<OrganizationDetailsSection>(data),
                     ProfileSection.Create<DemographicsSection>(data),
+                    ProfileSection.Create<OrganizationDetailsSection>(data),
                     ProfileSection.Create<DriverFitnessSection>(data),
                     ProfileSection.Create<HcimAccountTransferSection>(data),
                     ProfileSection.Create<HcimEnrolmentSection>(data),

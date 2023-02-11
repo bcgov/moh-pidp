@@ -34,7 +34,7 @@ export type IAccessGroup = {
 export interface AccessGroup extends IAccessGroup {
   saEforms: SaEformsSection;
   prescriptionRefillEforms: Section;
-  bcProviderApplication: Section;
+  bcProvider: Section;
   hcimAccountTransfer: Section;
   hcimEnrolment: Section;
   sitePrivacySecurityChecklist: Section;

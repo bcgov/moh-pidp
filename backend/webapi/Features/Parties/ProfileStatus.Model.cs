@@ -78,9 +78,9 @@ public partial class ProfileStatus
             }
         }
 
-        public class BCProviderApplicationSection : ProfileSection
+        public class BCProviderSection : ProfileSection
         {
-            internal override string SectionName => "bcProviderApplication";
+            internal override string SectionName => "bcProvider";
 
             protected override void Compute(ProfileData profile)
             {

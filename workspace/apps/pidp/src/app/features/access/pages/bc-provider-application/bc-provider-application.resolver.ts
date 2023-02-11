@@ -30,7 +30,7 @@ export class BcProviderApplicationResolver
           return null;
         }
 
-        return profileStatus.status.bcProviderApplication.statusCode;
+        return profileStatus.status.bcProvider.statusCode;
       }),
       catchError(() => of(null))
     );

@@ -22,7 +22,7 @@ export class BcProviderApplicationPortalSection implements IPortalSection {
     private profileStatus: ProfileStatus,
     private router: Router
   ) {
-    this.key = 'bcProviderApplication';
+    this.key = 'bcProvider';
     this.heading = 'BC Provider Application';
     this.description = ``;
   }
@@ -62,6 +62,6 @@ export class BcProviderApplicationPortalSection implements IPortalSection {
   }
 
   private getStatusCode(): StatusCode {
-    return this.profileStatus.status.bcProviderApplication.statusCode;
+    return this.profileStatus.status.bcProvider.statusCode;
   }
 }
