@@ -23,7 +23,7 @@ export class BcProviderPortalSection implements IPortalSection {
     private router: Router
   ) {
     this.key = 'bcProvider';
-    this.heading = 'BC Provider Application';
+    this.heading = 'BC Provider';
     this.description = ``;
   }
 
