@@ -19,6 +19,7 @@ export class BcProviderApplicationResolver
     private partyService: PartyService,
     private resource: BcProviderApplicationResource
   ) {}
+
   public resolve(): Observable<StatusCode | null> {
     if (!this.partyService.partyId) {
       return of(null);
