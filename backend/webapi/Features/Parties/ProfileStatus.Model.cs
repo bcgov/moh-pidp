@@ -79,6 +79,24 @@ public partial class ProfileStatus
             }
         }
 
+        public class BCProviderSection : ProfileSection
+        {
+            internal override string SectionName => "bcProvider";
+
+            protected override void Compute(ProfileData profile)
+            {
+                if (!profile.UserHasHighAssuranceIdentity)
+                {
+                    this.StatusCode = StatusCode.Hidden;
+                    return;
+                }
+
+                this.StatusCode = profile.HasBCProviderCredential
+                    ? StatusCode.Complete
+                    : StatusCode.Incomplete;
+            }
+        }
+
         public class CollegeCertificationSection : ProfileSection
         {
             internal override string SectionName => "collegeCertification";
@@ -209,21 +227,7 @@ public partial class ProfileStatus
                 this.StatusCode = StatusCode.Locked;
             }
         }
-        public class BCProviderApplicationSection : ProfileSection
-        {
-            internal override string SectionName => "bcProviderApplication";
 
-            protected override void Compute(ProfileData profile)
-            {
-                if (profile.HasBCProviderCredential)
-                {
-                    this.StatusCode = StatusCode.Complete;
-                    return;
-                }
-
-                this.StatusCode = StatusCode.Incomplete;
-            }
-        }
 
         public class HcimAccountTransferSection : ProfileSection
         {

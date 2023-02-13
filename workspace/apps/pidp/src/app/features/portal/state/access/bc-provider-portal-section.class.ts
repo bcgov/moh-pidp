@@ -13,7 +13,7 @@ import { PortalSectionAction } from '../portal-section-action.model';
 import { PortalSectionKey } from '../portal-section-key.type';
 import { IPortalSection } from '../portal-section.model';
 
-export class BcProviderApplicationPortalSection implements IPortalSection {
+export class BcProviderPortalSection implements IPortalSection {
   public readonly key: PortalSectionKey;
   public heading: string;
   public description: string;
@@ -22,8 +22,8 @@ export class BcProviderApplicationPortalSection implements IPortalSection {
     private profileStatus: ProfileStatus,
     private router: Router
   ) {
-    this.key = 'bcProviderApplication';
-    this.heading = 'BC Provider Application';
+    this.key = 'bcProvider';
+    this.heading = 'BC Provider';
     this.description = ``;
   }
 
@@ -63,7 +63,7 @@ export class BcProviderApplicationPortalSection implements IPortalSection {
   }
 
   private getStatusCode(): StatusCode {
-    return this.profileStatus.status.bcProviderApplication.statusCode;
+    return this.profileStatus.status.bcProvider.statusCode;
   }
   private getRoute(): string {
     const statusCode = this.getStatusCode();

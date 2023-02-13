@@ -5,26 +5,34 @@ import { Observable, map } from 'rxjs';
 import { NoContent } from '@bcgov/shared/data-access';
 
 import { ApiHttpClient } from '@app/core/resources/api-http-client.service';
-import { IdentityProvider } from '@app/features/auth/enums/identity-provider.enum';
-
-export interface BcProviderApplicationRequest {
-  partyId: number;
-  identityProvider: IdentityProvider;
-  username: string;
-  password: string;
-}
+import { ProfileStatus } from '@app/features/portal/models/profile-status.model';
+import { PortalResource } from '@app/features/portal/portal-resource.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class BcProviderApplicationResource {
-  public constructor(private apiResource: ApiHttpClient) {}
+  public constructor(
+    private apiResource: ApiHttpClient,
+    private portalResource: PortalResource
+  ) {}
+
+  public getProfileStatus(partyId: number): Observable<ProfileStatus | null> {
+    return this.portalResource.getProfileStatus(partyId);
+  }
 
   public createBcProviderAccount(
-    data: BcProviderApplicationRequest
+    partyId: number,
+    password: string
   ): Observable<string> {
     return this.apiResource
-      .post<NoContent>('credentials', data)
+      .post<NoContent>(`${this.getResourcePath(partyId)}/bc-provider`, {
+        password,
+      })
       .pipe(map((_) => ''));
+  }
+
+  private getResourcePath(partyId: number): string {
+    return `parties/${partyId}/credentials`;
   }
 }

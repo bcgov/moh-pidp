@@ -15,6 +15,7 @@ using Pidp.Infrastructure;
 using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.HttpClients.Keycloak;
 using Pidp.Infrastructure.HttpClients.Plr;
+using Pidp.Models;
 using Pidp.Models.Lookups;
 using static Pidp.Features.Parties.ProfileStatus.Model;
 
@@ -47,17 +48,20 @@ public partial class ProfileStatus
 
     public class CommandHandler : ICommandHandler<Command, Model>
     {
+        private readonly IClock clock;
         private readonly IKeycloakAdministrationClient keycloakClient;
         private readonly IMapper mapper;
         private readonly IPlrClient plrClient;
         private readonly PidpDbContext context;
 
         public CommandHandler(
+            IClock clock,
             IKeycloakAdministrationClient keycloakClient,
             IMapper mapper,
             IPlrClient plrClient,
             PidpDbContext context)
         {
+            this.clock = clock;
             this.keycloakClient = keycloakClient;
             this.mapper = mapper;
             this.plrClient = plrClient;
@@ -83,8 +87,12 @@ public partial class ProfileStatus
                         .Include(party => party.Credentials)
                         .SingleAsync(party => party.Id == command.Id);
                     party.Cpn = newCpn;
-                    await this.context.SaveChangesAsync();
                     await this.keycloakClient.UpdateUserCpn(party.PrimaryUserId, newCpn);
+                    if (await this.keycloakClient.AssignClientRole(party.PrimaryUserId, MohClients.LicenceStatus.ClientId, MohClients.LicenceStatus.PractitionerRole))
+                    {
+                        this.context.BusinessEvents.Add(LicenceStatusRoleAssigned.Create(party.Id, MohClients.LicenceStatus.PractitionerRole, this.clock.GetCurrentInstant()));
+                    };
+                    await this.context.SaveChangesAsync();
                 }
 
                 data.Cpn = newCpn;
@@ -98,13 +106,13 @@ public partial class ProfileStatus
                 {
                     ProfileSection.Create<DashboardInfoSection>(data),
                     ProfileSection.Create<AccessAdministratorSection>(data),
+                    ProfileSection.Create<BCProviderSection>(data),
                     ProfileSection.Create<CollegeCertificationSection>(data),
-                    ProfileSection.Create<OrganizationDetailsSection>(data),
                     ProfileSection.Create<DemographicsSection>(data),
+                    ProfileSection.Create<OrganizationDetailsSection>(data),
                     ProfileSection.Create<DriverFitnessSection>(data),
                     ProfileSection.Create<HcimAccountTransferSection>(data),
                     ProfileSection.Create<HcimEnrolmentSection>(data),
-                    ProfileSection.Create<BCProviderApplicationSection>(data),
                     ProfileSection.Create<MSTeamsSection>(data),
                     ProfileSection.Create<PrescriptionRefillEformsSection>(data),
                     ProfileSection.Create<SAEformsSection>(data)
