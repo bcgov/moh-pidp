@@ -7,7 +7,6 @@ using static NodaTime.Extensions.DateTimeExtensions;
 using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.HttpClients.Plr;
 using Pidp.Models;
-using Pidp.Infrastructure.Auth;
 
 public class MappingProfile : Profile
 {

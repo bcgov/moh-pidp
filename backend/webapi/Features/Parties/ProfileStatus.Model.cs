@@ -2,7 +2,6 @@ namespace Pidp.Features.Parties;
 
 using NodaTime;
 using Pidp.Features.AccessRequests;
-using Pidp.Infrastructure.Auth;
 using Pidp.Models.Lookups;
 
 public partial class ProfileStatus
