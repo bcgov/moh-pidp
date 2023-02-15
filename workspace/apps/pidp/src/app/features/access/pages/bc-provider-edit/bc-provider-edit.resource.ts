@@ -10,7 +10,6 @@ import { BcProviderEditInitialStateModel } from './bc-provider-edit.component';
 
 export interface BcProviderChangePasswordRequest {
   partyId: number;
-  username: string;
   newPassword: string;
 }
 
@@ -25,7 +24,7 @@ export class BcProviderEditResource {
   public changePassword(
     data: BcProviderChangePasswordRequest
   ): Observable<boolean> {
-    const url = `parties/${data.partyId}/credentials/bc-provider/change-password`;
+    const url = `parties/${data.partyId}/credentials/bc-provider/password`;
     return this.apiResource.post<NoContent>(url, data).pipe(map((_) => true));
   }
 }

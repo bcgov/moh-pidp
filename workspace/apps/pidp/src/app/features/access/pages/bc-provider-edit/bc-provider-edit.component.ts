@@ -2,7 +2,6 @@ import { Component, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ActivatedRoute } from '@angular/router';
 
 import { Observable, catchError, of, tap } from 'rxjs';
 
@@ -44,7 +43,7 @@ export class BcProviderEditComponent extends AbstractFormPage<BcProviderEditForm
   public get isResetButtonEnabled(): boolean {
     return this.formState.form.valid;
   }
-  public username: string;
+  public username!: string;
 
   public constructor(
     dialog: MatDialog,
@@ -53,15 +52,10 @@ export class BcProviderEditComponent extends AbstractFormPage<BcProviderEditForm
     private navigationService: NavigationService,
     private snackBar: MatSnackBar,
     private partyService: PartyService,
-    private bcProviderEditResource: BcProviderEditResource,
-    route: ActivatedRoute
+    private bcProviderEditResource: BcProviderEditResource
   ) {
     super(dialog, formUtilsService);
     this.formState = new BcProviderEditFormState(fb);
-
-    const model = route.snapshot.data
-      .bcProviderEditData as BcProviderEditInitialStateModel;
-    this.username = model?.username ?? '';
   }
 
   public onBack(): void {
@@ -83,7 +77,6 @@ export class BcProviderEditComponent extends AbstractFormPage<BcProviderEditForm
   protected performSubmission(): Observable<boolean> {
     const data: BcProviderChangePasswordRequest = {
       partyId: this.partyService.partyId,
-      username: this.username,
       newPassword: this.formState.newPassword.value,
     };
     return this.bcProviderEditResource.changePassword(data).pipe(
