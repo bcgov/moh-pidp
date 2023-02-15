@@ -1,5 +1,5 @@
 import { Component, TemplateRef, ViewChild } from '@angular/core';
-import { FormBuilder, FormControl } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
@@ -70,28 +70,14 @@ export class BcProviderEditComponent extends AbstractFormPage<BcProviderEditForm
   public onGeneratePasswordCheckChange(): void {
     this.snackBar.open('Not yet implemented', 'OK');
   }
-  public hasPasswordRuleError(passwordField: 'new' | 'confirm'): boolean {
-    const formControl = this.getFormControl(passwordField);
-    return this.hasPasswordRuleErrorInternal(formControl);
+
+  public hasPasswordRuleError(): boolean {
+    return this.formState.newPassword.hasError('invalidRequirements');
   }
+
   public onSuccessDialogClose(): void {
     this.dialog.closeAll();
     this.navigationService.navigateToRoot();
-  }
-  private getFormControl(passwordField: 'new' | 'confirm'): FormControl {
-    switch (passwordField) {
-      case 'new':
-        return this.formState.newPassword;
-      case 'confirm':
-        return this.formState.confirmPassword;
-      default:
-        throw 'not implemented: ' + passwordField;
-    }
-  }
-  private hasPasswordRuleErrorInternal(formControl: FormControl): boolean {
-    const hasMinlengthError = formControl.hasError('minlength');
-    const hasMaxlengthError = formControl.hasError('maxlength');
-    return hasMinlengthError || hasMaxlengthError;
   }
 
   protected performSubmission(): Observable<boolean> {
@@ -124,14 +110,17 @@ export class BcProviderEditComponent extends AbstractFormPage<BcProviderEditForm
       })
     );
   }
+
   private setError(message: string): void {
     this.showErrorCard = !!message;
     this.errorCardText = message;
   }
+
   private setMessage(message: string): void {
     this.showMessageCard = !!message;
     this.messageCardText = message;
   }
+
   private showSuccessDialog(): void {
     const config: MatDialogConfig = {
       disableClose: true,

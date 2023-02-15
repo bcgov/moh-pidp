@@ -77,14 +77,14 @@
             >Required</mat-error
           >
         </mat-form-field>
-        <mat-error
-          class="error"
-          [class.error-show]="hasPasswordRuleError('new')"
-          >Your password must satisfy each of the following:
+        <mat-error class="error" [class.error-show]="hasPasswordRuleError()"
+          >Your password must be between 8 and 256 characters and satisfy 3 out
+          of the 4 following requirements:
           <ul>
-            <li>Between 8 and 32 characters</li>
-            <li>At least one letter</li>
+            <li>At least one uppercase letter</li>
+            <li>At least one lowercase letter</li>
             <li>At least one number</li>
+            <li>At least one symbol</li>
           </ul></mat-error
         >
       </div>

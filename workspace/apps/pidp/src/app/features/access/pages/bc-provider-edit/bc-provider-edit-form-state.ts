@@ -54,7 +54,8 @@ export class BcProviderEditFormState extends AbstractFormState<BcProviderEditFor
         [
           Validators.required,
           Validators.minLength(8),
-          Validators.maxLength(32),
+          Validators.maxLength(256),
+          this.validatePassword(),
         ],
       ],
       confirmPassword: [
@@ -84,6 +85,42 @@ export class BcProviderEditFormState extends AbstractFormState<BcProviderEditFor
         return null;
       }
       return { isEqualToControlValue: true };
+    };
+  }
+
+  // Password requirements as per Azure Active Directory
+  // https://learn.microsoft.com/en-us/azure/active-directory/authentication/concept-sspr-policy
+  private validatePassword(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      // hide validation errors until control is dirty
+      if (control.pristine) {
+        return null;
+      }
+
+      const password = control.value;
+      const upper = /[A-Z]/;
+      const lower = /[a-z]/;
+      const numbers = /[0-9]/;
+      const symbols = /[^A-Za-z0-9]/;
+
+      let requirementCounter = 0;
+
+      if (password.length > 7) {
+        // Password requirements 3 out of 4 of these to match
+        if (upper.test(password)) requirementCounter++;
+
+        if (lower.test(password)) requirementCounter++;
+
+        if (numbers.test(password)) requirementCounter++;
+
+        if (symbols.test(password)) requirementCounter++;
+      }
+
+      if (requirementCounter < 3) {
+        return { invalidRequirements: true };
+      }
+
+      return null;
     };
   }
 }

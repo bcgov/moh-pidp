@@ -56,7 +56,9 @@ export class BcProviderApplicationFormState extends AbstractFormState<BcProvider
     });
   }
 
-  public validatePassword(): ValidatorFn {
+  // Password requirements as per Azure Active Directory
+  // https://learn.microsoft.com/en-us/azure/active-directory/authentication/concept-sspr-policy
+  private validatePassword(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       // hide validation errors until control is dirty
       if (control.pristine) {
