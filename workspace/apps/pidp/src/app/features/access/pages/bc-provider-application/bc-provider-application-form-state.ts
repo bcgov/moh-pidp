@@ -12,6 +12,7 @@ import { AbstractFormState } from '@bcgov/shared/ui';
 export interface BcProviderApplicationFormData {
   password: string;
 }
+
 export class BcProviderApplicationFormState extends AbstractFormState<BcProviderApplicationFormData> {
   public constructor(private fb: FormBuilder) {
     super();

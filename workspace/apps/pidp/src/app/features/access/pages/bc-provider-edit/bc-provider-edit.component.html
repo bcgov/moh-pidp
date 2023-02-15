@@ -64,31 +64,6 @@
     <h3>Password reset</h3>
     <div class="form-content">
       <div class="field">
-        <label id="bc-provider-application-current-password"
-          >Current password</label
-        >
-        <mat-form-field appearance="outline">
-          <input
-            matInput
-            formControlName="currentPassword"
-            type="password"
-            aria-labelledby="bc-provider-application-current-password" />
-          <mat-error *ngIf="formState.currentPassword.hasError('required')"
-            >Required</mat-error
-          >
-        </mat-form-field>
-        <mat-error
-          class="error"
-          [class.error-show]="hasPasswordRuleError('current')"
-          >Your password must satisfy each of the following:
-          <ul>
-            <li>Between 8 and 32 characters</li>
-            <li>At least one letter</li>
-            <li>At least one number</li>
-          </ul></mat-error
-        >
-      </div>
-      <div class="field">
         <label id="bc-provider-application-new-password"
           >Choose new password</label
         >

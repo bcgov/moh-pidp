@@ -11,7 +11,6 @@ import { BcProviderEditInitialStateModel } from './bc-provider-edit.component';
 export interface BcProviderChangePasswordRequest {
   partyId: number;
   username: string;
-  currentPassword: string;
   newPassword: string;
 }
 

@@ -70,9 +70,7 @@ export class BcProviderEditComponent extends AbstractFormPage<BcProviderEditForm
   public onGeneratePasswordCheckChange(): void {
     this.snackBar.open('Not yet implemented', 'OK');
   }
-  public hasPasswordRuleError(
-    passwordField: 'current' | 'new' | 'confirm'
-  ): boolean {
+  public hasPasswordRuleError(passwordField: 'new' | 'confirm'): boolean {
     const formControl = this.getFormControl(passwordField);
     return this.hasPasswordRuleErrorInternal(formControl);
   }
@@ -80,12 +78,8 @@ export class BcProviderEditComponent extends AbstractFormPage<BcProviderEditForm
     this.dialog.closeAll();
     this.navigationService.navigateToRoot();
   }
-  private getFormControl(
-    passwordField: 'current' | 'new' | 'confirm'
-  ): FormControl {
+  private getFormControl(passwordField: 'new' | 'confirm'): FormControl {
     switch (passwordField) {
-      case 'current':
-        return this.formState.currentPassword;
       case 'new':
         return this.formState.newPassword;
       case 'confirm':
@@ -104,7 +98,6 @@ export class BcProviderEditComponent extends AbstractFormPage<BcProviderEditForm
     const data: BcProviderChangePasswordRequest = {
       partyId: this.partyService.partyId,
       username: this.username,
-      currentPassword: this.formState.currentPassword.value,
       newPassword: this.formState.newPassword.value,
     };
     return this.bcProviderEditResource.changePassword(data).pipe(

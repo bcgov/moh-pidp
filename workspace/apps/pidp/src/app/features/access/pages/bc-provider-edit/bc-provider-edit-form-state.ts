@@ -10,19 +10,15 @@ import {
 import { AbstractFormState } from '@bcgov/shared/ui';
 
 export interface BcProviderEditFormData {
-  currentPassword: string;
   newPassword: string;
   confirmPassword: string;
 }
+
 export class BcProviderEditFormState extends AbstractFormState<BcProviderEditFormData> {
   public constructor(private fb: FormBuilder) {
     super();
 
     this.buildForm();
-  }
-
-  public get currentPassword(): FormControl {
-    return this.formInstance.get('currentPassword') as FormControl;
   }
 
   public get newPassword(): FormControl {
@@ -53,7 +49,6 @@ export class BcProviderEditFormState extends AbstractFormState<BcProviderEditFor
 
   public buildForm(): void {
     this.formInstance = this.fb.group({
-      currentPassword: ['', [Validators.required]],
       newPassword: [
         '',
         [
@@ -68,6 +63,7 @@ export class BcProviderEditFormState extends AbstractFormState<BcProviderEditFor
       ],
     });
   }
+
   private isEqualToControlValue(otherControlName: string): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       if (!control.parent) {
