@@ -3,10 +3,12 @@ import { FormBuilder } from '@angular/forms';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
-import { Observable, catchError, of, tap } from 'rxjs';
+import { catchError, noop, of, tap } from 'rxjs';
 
 import { faCircleCheck, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { NavigationService } from '@pidp/presentation';
+
+import { NoContent } from '@bcgov/shared/data-access';
 
 import { AbstractFormPage } from '@app/core/classes/abstract-form-page.class';
 import { PartyService } from '@app/core/party/party.service';
@@ -74,7 +76,7 @@ export class BcProviderEditComponent extends AbstractFormPage<BcProviderEditForm
     this.navigationService.navigateToRoot();
   }
 
-  protected performSubmission(): Observable<boolean> {
+  protected performSubmission(): NoContent {
     const data: BcProviderChangePasswordRequest = {
       partyId: this.partyService.partyId,
       newPassword: this.formState.newPassword.value,
@@ -82,24 +84,13 @@ export class BcProviderEditComponent extends AbstractFormPage<BcProviderEditForm
     return this.bcProviderEditResource.changePassword(data).pipe(
       tap((_) => {
         this.setError('');
-        this.snackBar.open(
-          'No AD account was actually created. This is a work in progress.',
-          'OK'
-        );
         this.showSuccessDialog();
       }),
-      catchError((response) => {
-        console.log('error', response);
-        let message = 'An error occurred.';
-        if (response?.error?.errors) {
-          const errors = response.error.errors;
-          if (errors.Password?.length > 0) {
-            message = errors.Password[0];
-          }
-        }
+      catchError(() => {
+        const message = 'An error occurred.';
         this.setError(message);
         this.setMessage('');
-        return of(false);
+        return of(noop());
       })
     );
   }
