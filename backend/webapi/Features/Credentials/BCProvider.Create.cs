@@ -18,7 +18,7 @@ public class BCProviderCreate
         [JsonIgnore]
         [HybridBindProperty(Source.Route)]
         public int PartyId { get; set; }
-        public string NewPassword { get; set; } = string.Empty;
+        public string Password { get; set; } = string.Empty;
     }
 
     public class CommandValidator : AbstractValidator<Command>
@@ -26,7 +26,7 @@ public class BCProviderCreate
         public CommandValidator()
         {
             this.RuleFor(x => x.PartyId).GreaterThan(0);
-            this.RuleFor(x => x.NewPassword).NotEmpty();
+            this.RuleFor(x => x.Password).NotEmpty();
         }
     }
 
@@ -62,7 +62,7 @@ public class BCProviderCreate
             {
                 FirstName = party.FirstName,
                 LastName = party.LastName,
-                Password = command.NewPassword
+                Password = command.Password
             });
 
             if (createdUser == null)
