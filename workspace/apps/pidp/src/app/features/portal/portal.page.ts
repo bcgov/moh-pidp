@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { Observable, map, of, switchMap } from 'rxjs';
+import { Observable, map, of, switchMap, tap } from 'rxjs';
 
 import { PartyService } from '@app/core/party/party.service';
 import { Role } from '@app/shared/enums/roles.enum';
@@ -69,14 +69,13 @@ export class PortalPage implements OnInit {
     this.handleLandingActions$()
       .pipe(
         switchMap(() =>
-          this.portalResource.getProfileStatus(this.partyService.partyId).pipe(
-            map((profileStatus: ProfileStatus | null) => {
-              this.portalService.updateState(profileStatus);
-              this.completedProfile = this.portalService.completedProfile;
-              this.alerts = this.portalService.alerts;
-            })
-          )
-        )
+          this.portalResource.getProfileStatus(this.partyService.partyId)
+        ),
+        tap((profileStatus: ProfileStatus | null) => {
+          this.portalService.updateState(profileStatus);
+          this.completedProfile = this.portalService.completedProfile;
+          this.alerts = this.portalService.alerts;
+        })
       )
       .subscribe();
   }

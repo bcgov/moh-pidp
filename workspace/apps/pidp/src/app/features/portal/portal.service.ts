@@ -49,13 +49,12 @@ export class PortalService {
   ) {
     this._profileStatus = null;
     this._state$ = new BehaviorSubject<PortalState>(null);
+    this.state$ = this._state$.asObservable();
     this._alerts = [];
     this._completedProfile = false;
   }
 
-  public get state$(): Observable<PortalState> {
-    return this._state$.asObservable();
-  }
+  public state$: Observable<PortalState>;
 
   public get alerts(): ProfileStatusAlert[] {
     return this._alerts;
@@ -83,7 +82,6 @@ export class PortalService {
       this.clearState();
       return;
     }
-
     this._profileStatus = profileStatus;
     this._alerts = this.getAlerts(profileStatus);
     this._completedProfile = this.hasCompletedProfile(profileStatus);
