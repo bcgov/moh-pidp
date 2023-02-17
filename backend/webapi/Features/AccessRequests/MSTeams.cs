@@ -182,7 +182,7 @@ public class MSTeams
 
             public EnrolmentEmailModel(EnrolmentDto enrolmentDto, Command command, Instant enrolmentDate, List<PlrRecord> plrRecords)
             {
-                this.EnrolmentDate = enrolmentDate.InZone(DateTimeZoneProviders.Tzdb.GetSystemDefault()).Date.ToString();
+                this.EnrolmentDate = enrolmentDate.InZone(DateTimeZoneProviders.Tzdb.GetZoneOrNull("America/Vancouver")!).Date.ToString();
                 this.FirstName = enrolmentDto.FirstName;
                 this.LastName = enrolmentDto.LastName;
                 this.Birthdate = enrolmentDto.Birthdate?.ToString();
