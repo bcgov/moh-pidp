@@ -1,12 +1,11 @@
 import {
-  FormArray,
   FormBuilder,
   FormControl,
   FormGroup,
   Validators,
 } from '@angular/forms';
 
-import { AbstractFormState, FormControlValidators } from '@bcgov/shared/ui';
+import { AbstractFormState } from '@bcgov/shared/ui';
 
 import { FormUtilsService } from '@app/core/services/form-utils.service';
 
@@ -28,14 +27,6 @@ export class MsTeamsFormState extends AbstractFormState<MsTeamsClinicInfo> {
 
   public get clinicAddress(): FormGroup {
     return this.formInstance.get('clinicAddress') as FormGroup;
-  }
-
-  public get clinicMembers(): FormArray {
-    return this.formInstance.get('clinicMembers') as FormArray;
-  }
-
-  public get clinicMemberControls(): FormGroup[] {
-    return this.clinicMembers.controls as FormGroup[];
   }
 
   public get json(): MsTeamsClinicInfo | undefined {
@@ -60,16 +51,6 @@ export class MsTeamsFormState extends AbstractFormState<MsTeamsClinicInfo> {
       clinicAddress: this.formUtilsService.buildAddressForm({
         areRequired: true,
       }),
-      clinicMembers: this.fb.array([this.buildClinicMemberForm()]),
-    });
-  }
-
-  public buildClinicMemberForm(): FormGroup {
-    return this.fb.group({
-      name: ['', [Validators.required]],
-      jobTitle: ['', [Validators.required]],
-      email: ['', [Validators.required, FormControlValidators.email]],
-      phone: ['', [Validators.required, FormControlValidators.phone]],
     });
   }
 }
