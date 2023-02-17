@@ -24,7 +24,6 @@ public class MSTeams
         public int PartyId { get; set; }
         public string ClinicName { get; set; } = string.Empty;
         public Address ClinicAddress { get; set; } = new();
-        public List<ClinicMember> ClinicMembers { get; set; } = new();
 
         public class Address
         {
@@ -33,14 +32,6 @@ public class MSTeams
             public string Street { get; set; } = string.Empty;
             public string City { get; set; } = string.Empty;
             public string Postal { get; set; } = string.Empty;
-        }
-
-        public class ClinicMember
-        {
-            public string Name { get; set; } = string.Empty;
-            public string Email { get; set; } = string.Empty;
-            public string JobTitle { get; set; } = string.Empty;
-            public string Phone { get; set; } = string.Empty;
         }
     }
 
@@ -57,20 +48,6 @@ public class MSTeams
             this.RuleFor(x => x.ClinicAddress.Street).NotEmpty();
             this.RuleFor(x => x.ClinicAddress.City).NotEmpty();
             this.RuleFor(x => x.ClinicAddress.Postal).NotEmpty();
-
-            this.RuleFor(x => x.ClinicMembers).NotEmpty();
-            this.RuleForEach(x => x.ClinicMembers).NotNull().SetValidator(new ClinicMemberValidator());
-        }
-    }
-
-    public class ClinicMemberValidator : AbstractValidator<Command.ClinicMember>
-    {
-        public ClinicMemberValidator()
-        {
-            this.RuleFor(x => x.Name).NotEmpty();
-            this.RuleFor(x => x.Email).NotEmpty().EmailAddress();
-            this.RuleFor(x => x.JobTitle).NotEmpty();
-            this.RuleFor(x => x.Phone).NotEmpty();
         }
     }
 
@@ -193,7 +170,6 @@ public class MSTeams
             public List<PlrRecord> PlrRecords { get; set; }
             public string ClinicName { get; set; }
             public Command.Address ClinicAddress { get; set; }
-            public List<Command.ClinicMember> ClinicMembers { get; set; }
 
             public class PlrRecord
             {
@@ -215,7 +191,6 @@ public class MSTeams
                 this.PlrRecords = plrRecords;
                 this.ClinicName = command.ClinicName;
                 this.ClinicAddress = command.ClinicAddress;
-                this.ClinicMembers = command.ClinicMembers;
             }
         }
     }
