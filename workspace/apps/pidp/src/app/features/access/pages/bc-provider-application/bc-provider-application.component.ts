@@ -86,7 +86,7 @@ export class BcProviderApplicationComponent
 
     return this.resource.createBcProviderAccount(partyId, this.password).pipe(
       tap(() => (this.completed = true)),
-      catchError((response) => {
+      catchError(() => {
         const message = 'An error occurred.';
         this.setError(message);
         this.setMessage('');
