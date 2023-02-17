@@ -29,7 +29,7 @@ export class PortalCardComponent {
     return show;
   }
   public get showLearnMore(): boolean {
-    return !this.showCompleted;
+    return !this.showCompleted && !this.section.action.disabled;
   }
   public get hasImageCssClass(): boolean {
     return (
