@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { Router } from '@angular/router';
 
 import {
@@ -16,9 +16,7 @@ import { IPortalSection } from '../../state/portal-section.model';
   templateUrl: './portal-carousel.component.html',
   styleUrls: ['./portal-carousel.component.scss'],
 })
-export class PortalCarouselComponent implements OnInit {
-  public cardsPerSlide = 1;
-
+export class PortalCarouselComponent implements OnChanges {
   public faCaretLeft = faCaretLeft;
   public faCaretRight = faCaretRight;
   public faCircle = faCircle;
@@ -26,7 +24,14 @@ export class PortalCarouselComponent implements OnInit {
   @Input() public sections?: IPortalSection[];
   @Input() public portalCategoryName!: string;
 
-  public groups: IPortalSection[][] = [] as IPortalSection[][];
+  /**
+   * sections are grouped into individual slides to be displayed on the carousel.
+   */
+  public slideModels: IPortalSection[][] = [] as IPortalSection[][];
+  /**
+   * Controls how many cards (= "sections") will be displayed on each slide.
+   */
+  public cardsPerSlide = 1;
 
   /**
    * Navigation with arrows is enabled when there is more than one card per slide.
@@ -44,17 +49,17 @@ export class PortalCarouselComponent implements OnInit {
       }
     });
   }
-
-  public ngOnInit(): void {
-    this.groups = this.getCarouselGroups(this.sections);
+  public ngOnChanges(changes: SimpleChanges): void {
+    // Ensure slides are updated every time the sections input changes.
+    if (changes.sections) {
+      this.slideModels = this.getSlideModels(this.sections);
+    }
   }
   public onClick(section: IPortalSection): void {
     this.router.navigateByUrl(section.action.route);
   }
 
-  private getCarouselGroups(
-    allSections?: IPortalSection[]
-  ): IPortalSection[][] {
+  private getSlideModels(allSections?: IPortalSection[]): IPortalSection[][] {
     // Map state.profile such that each carousel slide gets an array of portal cards.
     const slideModels: IPortalSection[][] = [] as IPortalSection[][];
     if (!allSections?.length) {

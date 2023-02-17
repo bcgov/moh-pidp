@@ -6,10 +6,10 @@
     pagination-clickable="true"
     navigation-prevE1=".prev"
     navigation-nextE1=".next">
-    <ng-container *ngFor="let group of groups; index as groupIndex">
+    <ng-container *ngFor="let slide of slideModels; index as groupIndex">
       <swiper-slide class="slide">
         <app-portal-card
-          *ngFor="let section of group; index as categoryIndex"
+          *ngFor="let section of slide; index as categoryIndex"
           class="card"
           [section]="section"
           [isFirst]="groupIndex === 0 && categoryIndex === 0"
