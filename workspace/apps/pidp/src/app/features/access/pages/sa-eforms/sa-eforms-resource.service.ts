@@ -24,7 +24,7 @@ export class SaEformsResource {
 
   public requestAccess(partyId: number): NoContent {
     return this.apiResource
-      .post<NoContent>('access-requests/sa-eforms', { partyId })
+      .post<NoContent>(`parties/${partyId}/access-requests/sa-eforms`, {})
       .pipe(
         NoContentResponse,
         catchError((error: HttpErrorResponse) => {
