@@ -1,4 +1,4 @@
-import { Component, TemplateRef, ViewChild } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -21,7 +21,7 @@ import {
 } from './bc-provider-edit.resource';
 
 export interface BcProviderEditInitialStateModel {
-  username: string;
+  bcProviderId: string;
 }
 
 @Component({
@@ -29,7 +29,10 @@ export interface BcProviderEditInitialStateModel {
   templateUrl: './bc-provider-edit.component.html',
   styleUrls: ['./bc-provider-edit.component.scss'],
 })
-export class BcProviderEditComponent extends AbstractFormPage<BcProviderEditFormState> {
+export class BcProviderEditComponent
+  extends AbstractFormPage<BcProviderEditFormState>
+  implements OnInit
+{
   public faCircleCheck = faCircleCheck;
   public faXmark = faXmark;
   public formState: BcProviderEditFormState;
@@ -37,6 +40,7 @@ export class BcProviderEditComponent extends AbstractFormPage<BcProviderEditForm
   public errorCardText = '';
   public showMessageCard = false;
   public messageCardText = '';
+  public username = '';
 
   @ViewChild('successDialog')
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -45,7 +49,6 @@ export class BcProviderEditComponent extends AbstractFormPage<BcProviderEditForm
   public get isResetButtonEnabled(): boolean {
     return this.formState.form.valid;
   }
-  public username!: string;
 
   public constructor(
     dialog: MatDialog,
@@ -54,7 +57,7 @@ export class BcProviderEditComponent extends AbstractFormPage<BcProviderEditForm
     private navigationService: NavigationService,
     private snackBar: MatSnackBar,
     private partyService: PartyService,
-    private bcProviderEditResource: BcProviderEditResource
+    private resource: BcProviderEditResource
   ) {
     super(dialog, formUtilsService);
     this.formState = new BcProviderEditFormState(fb);
@@ -76,12 +79,23 @@ export class BcProviderEditComponent extends AbstractFormPage<BcProviderEditForm
     this.navigationService.navigateToRoot();
   }
 
+  public ngOnInit(): void {
+    const partyId = this.partyService.partyId;
+
+    this.resource
+      .get(partyId)
+      .subscribe((bcProviderObject: BcProviderEditInitialStateModel) => {
+        this.username = bcProviderObject.bcProviderId;
+      });
+  }
+
   protected performSubmission(): NoContent {
     const data: BcProviderChangePasswordRequest = {
       partyId: this.partyService.partyId,
       newPassword: this.formState.newPassword.value,
     };
-    return this.bcProviderEditResource.changePassword(data).pipe(
+
+    return this.resource.changePassword(data).pipe(
       tap((_) => {
         this.setError('');
         this.showSuccessDialog();

@@ -62,6 +62,10 @@
 <ng-template #passwordForm>
   <form novalidate [formGroup]="formState.form" (ngSubmit)="onSubmit()">
     <h3>Password reset</h3>
+    <div class="username">
+      <h4><strong>Provided username</strong></h4>
+      <h5>{{ username }}</h5>
+    </div>
     <div class="form-content">
       <div class="field">
         <label id="bc-provider-application-new-password"
@@ -135,9 +139,8 @@ to be refactored into a separate component. -->
       </div>
       <h3>Password reset completed</h3>
       <p>
-        Password reset for <strong>{{ username }}</strong> has been created. You
-        will now have the option to sign in to our system with these
-        credentials.
+        Password reset for <strong>username</strong> has been created. You will
+        now have the option to sign in to our system with these credentials.
       </p>
     </div>
   </div>
