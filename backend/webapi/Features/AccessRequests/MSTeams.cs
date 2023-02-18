@@ -4,9 +4,11 @@ using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using DomainResults.Common;
 using FluentValidation;
+using HybridModelBinding;
 using Microsoft.EntityFrameworkCore;
 using NodaTime;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 using Pidp.Data;
 using Pidp.Infrastructure.HttpClients.Mail;
@@ -21,6 +23,8 @@ public class MSTeams
 
     public class Command : ICommand<IDomainResult>
     {
+        [JsonIgnore]
+        [HybridBindProperty(Source.Route)]
         public int PartyId { get; set; }
         public string ClinicName { get; set; } = string.Empty;
         public Address ClinicAddress { get; set; } = new();
