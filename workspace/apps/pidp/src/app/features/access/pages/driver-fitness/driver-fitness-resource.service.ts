@@ -24,7 +24,7 @@ export class DriverFitnessResource {
 
   public requestAccess(partyId: number): NoContent {
     return this.apiResource
-      .post<NoContent>('access-requests/driver-fitness', { partyId })
+      .post<NoContent>(`parties/${partyId}/access-requests/driver-fitness`, {})
       .pipe(
         NoContentResponse,
         catchError((error: HttpErrorResponse) => {
