@@ -11,6 +11,7 @@ public class PidpConfiguration
     public string ApplicationUrl { get; set; } = string.Empty;
 
     public AddressAutocompleteClientConfiguration AddressAutocompleteClient { get; set; } = new();
+    public BCProviderClientConfiguration BCProviderClient { get; set; } = new();
     public ConnectionStringConfiguration ConnectionStrings { get; set; } = new();
     public ChesClientConfiguration ChesClient { get; set; } = new();
     public KeycloakConfiguration Keycloak { get; set; } = new();
@@ -24,6 +25,13 @@ public class PidpConfiguration
     {
         public string ApiKey { get; set; } = string.Empty;
         public string Url { get; set; } = string.Empty;
+    }
+
+    public class BCProviderClientConfiguration
+    {
+        public string ClientId { get; set; } = string.Empty;
+        public string TenantId { get; set; } = string.Empty;
+        public string ClientSecret { get; set; } = string.Empty;
     }
 
     public class ConnectionStringConfiguration

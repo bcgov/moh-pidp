@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.Services;
 
-[Route("api/Parties/{partyId}/[controller]")]
+[Route("api/parties/{partyId}/[controller]")]
 [Authorize(Policy = Policies.AnyPartyIdentityProvider)]
 public class EndorsementRequestsController : PidpControllerBase
 {

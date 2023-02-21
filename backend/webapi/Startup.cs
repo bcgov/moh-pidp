@@ -59,12 +59,14 @@ public class Startup
         services.AddSwaggerGen(options =>
         {
             options.SwaggerDoc("v1", new OpenApiInfo { Title = "PIdP Web API", Version = "v1" });
-            options.AddSecurityDefinition("OAuth2", new OpenApiSecurityScheme
+            options.AddSecurityDefinition("Bearer Auth", new OpenApiSecurityScheme
             {
-                Description = "Standard Authorization header using the Bearer scheme. Example: \"bearer {token}\"",
+                BearerFormat = "JWT",
+                Description = "Standard JWT Authorization header using the Bearer scheme.",
                 In = ParameterLocation.Header,
                 Name = "Authorization",
-                Type = SecuritySchemeType.ApiKey
+                Scheme = "Bearer",
+                Type = SecuritySchemeType.Http,
             });
             options.OperationFilter<SecurityRequirementsOperationFilter>();
             options.CustomSchemaIds(x => x.FullName);
