@@ -37,10 +37,10 @@ export class HcimEnrolmentResource {
     hcimEnrolment: HcimEnrolment
   ): Observable<HcimEnrolmentResponse> {
     return this.apiResource
-      .post<NoContent>('access-requests/hcim-enrolment', {
-        partyId,
-        ...hcimEnrolment,
-      })
+      .post<NoContent>(
+        `parties/${partyId}/access-requests/hcim-enrolment`,
+        hcimEnrolment
+      )
       .pipe(
         map(() => ({ statusCode: HcimEnrolmentStatusCode.ACCESS_GRANTED })),
         catchError(() =>

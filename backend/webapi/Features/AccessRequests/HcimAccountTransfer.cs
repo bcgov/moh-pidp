@@ -2,8 +2,10 @@ namespace Pidp.Features.AccessRequests;
 
 using DomainResults.Common;
 using FluentValidation;
+using HybridModelBinding;
 using Microsoft.EntityFrameworkCore;
 using NodaTime;
+using System.Text.Json.Serialization;
 
 using Pidp.Data;
 using Pidp.Infrastructure.HttpClients.Keycloak;
@@ -16,6 +18,8 @@ public class HcimAccountTransfer
 {
     public class Command : ICommand<IDomainResult<Model>>
     {
+        [JsonIgnore]
+        [HybridBindProperty(Source.Route)]
         public int PartyId { get; set; }
         public string LdapUsername { get; set; } = string.Empty;
         public string LdapPassword { get; set; } = string.Empty;
