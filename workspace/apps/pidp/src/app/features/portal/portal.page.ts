@@ -32,12 +32,6 @@ export class PortalPage implements OnInit {
    * in the portal.
    */
   public alerts: ProfileStatusAlert[];
-  /**
-   * @description
-   * Whether to show the profile information completed
-   * alert providing a scrollable route to access requests.
-   */
-  public completedProfile: boolean;
 
   public Role = Role;
 
@@ -50,7 +44,6 @@ export class PortalPage implements OnInit {
     private activatedRoute: ActivatedRoute
   ) {
     this.state$ = this.portalService.state$;
-    this.completedProfile = false;
     this.alerts = [];
   }
 
@@ -73,7 +66,6 @@ export class PortalPage implements OnInit {
         ),
         tap((profileStatus: ProfileStatus | null) => {
           this.portalService.updateState(profileStatus);
-          this.completedProfile = this.portalService.completedProfile;
           this.alerts = this.portalService.alerts;
         })
       )

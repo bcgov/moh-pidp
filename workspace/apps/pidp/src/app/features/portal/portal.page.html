@@ -1,20 +1,12 @@
 <div class="box" uiPidpInjectViewportCss>
-  <section *ngIf="completedProfile" class="success">
-    <h3>You have completed your Provider Identity Profile</h3>
-    <p>
-      Go to the Access to Systems section to view what systems you are eligible
-      to enrol for.
-    </p>
-    <div class="success-buttons">
-      <button mat-stroked-button type="button" (click)="onScrollToAnchor()">
-        View Systems
-      </button>
+  <section *ngFor="let alert of alerts" class="alert-box section-box">
+    <header>
+      <h2>{{ alert.heading }}</h2>
+    </header>
+    <div class="section-content-box">
+      <p>{{ alert.content }}</p>
     </div>
   </section>
-  <div *ngFor="let alert of alerts" class="alert">
-    <h3>alert.heading</h3>
-    <p>{{ alert.content }}</p>
-  </div>
   <ng-container *ngIf="state$ | async as state">
     <section class="profile-box section-box">
       <ui-scroll-target targetId="profile"></ui-scroll-target>

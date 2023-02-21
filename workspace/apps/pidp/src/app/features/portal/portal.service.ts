@@ -60,10 +60,6 @@ export class PortalService {
     return this._alerts;
   }
 
-  public get completedProfile(): boolean {
-    return this._completedProfile;
-  }
-
   public get hiddenSections(): PortalSectionStatusKey[] {
     const status = this._profileStatus?.status;
 
