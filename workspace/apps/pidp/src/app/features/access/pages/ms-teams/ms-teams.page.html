@@ -74,35 +74,6 @@
           <p [innerHtml]="getAgreementText(currentPage) | safe: 'html'"></p>
         </ui-page-section>
       </ng-container>
-
-      <ng-container *ngSwitchCase="submissionPage">
-        <ui-page-section>
-          <ui-page-section-subheader heading="Clinic Members">
-            <ng-container uiPageSectionSubheaderDesc>
-              Here you can add clinic members to be sent to Fraser Health for
-              approval.
-            </ng-container>
-          </ui-page-section-subheader>
-        </ui-page-section>
-        <ui-page-section formArrayName="clinicMembers">
-          <ng-container
-            *ngFor="let member of formState.clinicMemberControls; let i = index;">
-            <app-clinic-member-form
-              [formGroupName]="i"
-              [form]="member"
-              [index]="i"
-              (remove)="removeClinicMember($event)"></app-clinic-member-form>
-          </ng-container>
-          <button
-            mat-button
-            type="button"
-            color="primary"
-            (click)="addClinicMember()">
-            <mat-icon>person_add</mat-icon>
-            Add Additional Clinic Member
-          </button>
-        </ui-page-section>
-      </ng-container>
     </ng-container>
   </ng-template>
 
