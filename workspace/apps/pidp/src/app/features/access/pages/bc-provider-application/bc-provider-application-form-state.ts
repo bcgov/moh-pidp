@@ -24,6 +24,10 @@ export class BcProviderApplicationFormState extends AbstractFormState<BcProvider
     return this.formInstance.get('password') as FormControl;
   }
 
+  public get confirmPassword(): FormControl {
+    return this.formInstance.get('confirmPassword') as FormControl;
+  }
+
   public get json(): BcProviderApplicationFormData | undefined {
     if (!this.formInstance) {
       return;
@@ -53,7 +57,34 @@ export class BcProviderApplicationFormState extends AbstractFormState<BcProvider
           this.validatePassword(),
         ],
       ],
+      confirmPassword: [
+        '',
+        [Validators.required, this.isEqualToControlValue('password')],
+      ],
     });
+  }
+
+  private isEqualToControlValue(otherControlName: string): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      if (!control.parent) {
+        return null;
+      }
+      const thisValue = control.value;
+      if (!thisValue) {
+        return null;
+      }
+      const otherControl = control.parent.get(otherControlName);
+      const otherValue = otherControl?.value;
+      if (!otherValue) {
+        return null;
+      }
+
+      const areEqual = thisValue === otherValue;
+      if (areEqual) {
+        return null;
+      }
+      return { isEqualToControlValue: true };
+    };
   }
 
   // Password requirements as per Azure Active Directory
