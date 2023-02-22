@@ -24,9 +24,10 @@ export class PrescriptionRefillEformsResource {
 
   public requestAccess(partyId: number): NoContent {
     return this.apiResource
-      .post<NoContent>('access-requests/prescription-refill-eforms', {
-        partyId,
-      })
+      .post<NoContent>(
+        `parties/${partyId}/access-requests/prescription-refill-eforms`,
+        {}
+      )
       .pipe(
         NoContentResponse,
         catchError((error: HttpErrorResponse) => {

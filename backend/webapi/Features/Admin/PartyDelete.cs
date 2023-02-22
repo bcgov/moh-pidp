@@ -55,7 +55,7 @@ public class PartyDelete
     /// </summary>
     private class RoleRemover
     {
-        private readonly Dictionary<AccessTypeCode, Role?> roleCache;
+        private readonly Dictionary<string, Role?> roleCache;
         private readonly IKeycloakAdministrationClient client;
         private readonly ILogger logger;
 
@@ -68,14 +68,8 @@ public class PartyDelete
 
         public async Task RemoveClientRoles(Party party)
         {
-            foreach (var access in party.AccessRequests)
+            foreach (var role in await this.DetermineRoles(party.AccessRequests))
             {
-                var role = await this.FetchClientRole(access.AccessTypeCode);
-                if (role == null)
-                {
-                    continue;
-                }
-
                 if (await this.client.RemoveClientRole(party.PrimaryUserId, role))
                 {
                     this.logger.LogRemoveSuccess(role.Name!, party.PrimaryUserId);
@@ -87,26 +81,38 @@ public class PartyDelete
             }
         }
 
-        private async Task<Role?> FetchClientRole(AccessTypeCode accessType)
+        private async Task<IEnumerable<Role>> DetermineRoles(IEnumerable<AccessRequest> accessRequests)
         {
-            if (this.roleCache.TryGetValue(accessType, out var cached))
+            var roleList = new List<Role?>();
+            foreach (var accessRequest in accessRequests)
+            {
+                var clientInfo = MohClients.FromAccessType(accessRequest.AccessTypeCode);
+                if (clientInfo != null)
+                {
+                    roleList.Add(await this.GetOrAddRole(clientInfo.Value.ClientId, clientInfo.Value.AccessRole));
+                }
+            }
+
+            roleList.Add(await this.GetOrAddRole(MohClients.LicenceStatus.ClientId, MohClients.LicenceStatus.MoaRole));
+            roleList.Add(await this.GetOrAddRole(MohClients.LicenceStatus.ClientId, MohClients.LicenceStatus.PractitionerRole));
+
+            return roleList.Where(role => role != null).Cast<Role>();
+        }
+
+        private async Task<Role?> GetOrAddRole(string clientId, string roleName)
+        {
+            if (this.roleCache.TryGetValue(roleName, out var cached))
             {
                 return cached;
             }
 
-            Role? role = null;
-            var mohClient = MohClients.FromAccessType(accessType);
-            if (mohClient != null)
+            var role = await this.client.GetClientRole(clientId, roleName);
+            if (role == null)
             {
-                role = await this.client.GetClientRole(mohClient.Value.ClientId, mohClient.Value.AccessRole);
-
-                if (role == null)
-                {
-                    this.logger.LogClientRoleNotFound(accessType, mohClient.Value.AccessRole, mohClient.Value.ClientId);
-                }
+                this.logger.LogClientRoleNotFound(roleName, clientId);
             }
 
-            this.roleCache.Add(accessType, role);
+            this.roleCache.Add(roleName, role);
             return role;
         }
     }
@@ -120,6 +126,6 @@ public static partial class PartyDeleteLoggingExtensions
     [LoggerMessage(2, LogLevel.Error, "Could not remove {roleName} from {userId}.")]
     public static partial void LogRemoveFailure(this ILogger logger, string roleName, Guid userId);
 
-    [LoggerMessage(3, LogLevel.Error, "For Access Type {accessType}, could not find a Client Role with name {roleName} in Client {clientId}.")]
-    public static partial void LogClientRoleNotFound(this ILogger logger, AccessTypeCode accessType, string roleName, string clientId);
+    [LoggerMessage(3, LogLevel.Error, "Could not find a Client Role with name {roleName} in Client {clientId}.")]
+    public static partial void LogClientRoleNotFound(this ILogger logger, string roleName, string clientId);
 }
