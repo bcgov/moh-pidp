@@ -28,7 +28,6 @@ public class MSTeams
         public int PartyId { get; set; }
         public string ClinicName { get; set; } = string.Empty;
         public Address ClinicAddress { get; set; } = new();
-        public List<ClinicMember> ClinicMembers { get; set; } = new();
 
         public class Address
         {
@@ -37,14 +36,6 @@ public class MSTeams
             public string Street { get; set; } = string.Empty;
             public string City { get; set; } = string.Empty;
             public string Postal { get; set; } = string.Empty;
-        }
-
-        public class ClinicMember
-        {
-            public string Name { get; set; } = string.Empty;
-            public string Email { get; set; } = string.Empty;
-            public string JobTitle { get; set; } = string.Empty;
-            public string Phone { get; set; } = string.Empty;
         }
     }
 
@@ -61,20 +52,6 @@ public class MSTeams
             this.RuleFor(x => x.ClinicAddress.Street).NotEmpty();
             this.RuleFor(x => x.ClinicAddress.City).NotEmpty();
             this.RuleFor(x => x.ClinicAddress.Postal).NotEmpty();
-
-            this.RuleFor(x => x.ClinicMembers).NotEmpty();
-            this.RuleForEach(x => x.ClinicMembers).NotNull().SetValidator(new ClinicMemberValidator());
-        }
-    }
-
-    public class ClinicMemberValidator : AbstractValidator<Command.ClinicMember>
-    {
-        public ClinicMemberValidator()
-        {
-            this.RuleFor(x => x.Name).NotEmpty();
-            this.RuleFor(x => x.Email).NotEmpty().EmailAddress();
-            this.RuleFor(x => x.JobTitle).NotEmpty();
-            this.RuleFor(x => x.Phone).NotEmpty();
         }
     }
 
@@ -189,15 +166,13 @@ public class MSTeams
         private class EnrolmentEmailModel
         {
             public string EnrolmentDate { get; set; }
-            public string FirstName { get; set; }
-            public string LastName { get; set; }
-            public string? Birthdate { get; set; }
-            public string? Email { get; set; }
-            public string? Phone { get; set; }
-            public List<PlrRecord> PlrRecords { get; set; }
+            public string PrivacyOfficerName { get; set; }
+            public string? PrivacyOfficerBirthdate { get; set; }
+            public string? PrivacyOfficerEmail { get; set; }
+            public string? PrivacyOfficerPhone { get; set; }
+            public List<PlrRecord> PrivacyOfficerPlrRecords { get; set; }
             public string ClinicName { get; set; }
             public Command.Address ClinicAddress { get; set; }
-            public List<Command.ClinicMember> ClinicMembers { get; set; }
 
             public class PlrRecord
             {
@@ -210,16 +185,14 @@ public class MSTeams
 
             public EnrolmentEmailModel(EnrolmentDto enrolmentDto, Command command, Instant enrolmentDate, List<PlrRecord> plrRecords)
             {
-                this.EnrolmentDate = enrolmentDate.InZone(DateTimeZoneProviders.Tzdb.GetSystemDefault()).Date.ToString();
-                this.FirstName = enrolmentDto.FirstName;
-                this.LastName = enrolmentDto.LastName;
-                this.Birthdate = enrolmentDto.Birthdate?.ToString();
-                this.Email = enrolmentDto.Email;
-                this.Phone = enrolmentDto.Phone;
-                this.PlrRecords = plrRecords;
+                this.EnrolmentDate = enrolmentDate.InZone(DateTimeZoneProviders.Tzdb.GetZoneOrNull("America/Vancouver")!).Date.ToString();
+                this.PrivacyOfficerName = $"{enrolmentDto.FirstName} {enrolmentDto.LastName}";
+                this.PrivacyOfficerBirthdate = enrolmentDto.Birthdate?.ToString();
+                this.PrivacyOfficerEmail = enrolmentDto.Email;
+                this.PrivacyOfficerPhone = enrolmentDto.Phone;
+                this.PrivacyOfficerPlrRecords = plrRecords;
                 this.ClinicName = command.ClinicName;
                 this.ClinicAddress = command.ClinicAddress;
-                this.ClinicMembers = command.ClinicMembers;
             }
         }
     }
