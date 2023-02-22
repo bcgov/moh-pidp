@@ -21,12 +21,13 @@ public class BCProviderClient : IBCProviderClient
             return null;
         }
 
-        // NOTE: These is the minimum set of properties that must be set for the user creation to work.
         var bcProviderAccount = new User()
         {
             AccountEnabled = true,
-            DisplayName = userRepresentation.FullName,
-            MailNickname = userRepresentation.FullName.Replace(" ", ""), // Cannot contain spaces
+            DisplayName = userRepresentation.FullName, // Required
+            GivenName = userRepresentation.FirstName,
+            MailNickname = userRepresentation.FullName.Replace(" ", ""), // Required, cannot contain spaces
+            Surname = userRepresentation.LastName,
             UserPrincipalName = userPrincipal,
             PasswordProfile = new PasswordProfile
             {
