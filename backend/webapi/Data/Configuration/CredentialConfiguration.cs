@@ -9,9 +9,10 @@ public class CredentialConfiguration : IEntityTypeConfiguration<Credential>
     public virtual void Configure(EntityTypeBuilder<Credential> builder)
     {
         builder.HasIndex(x => x.UserId)
+            .HasFilter(@$"""UserId"" != '{Guid.Empty}'") // New BC Provider Credentials have not yet signed into Keycloak, and so have a UserId of Guid.Empty.
             .IsUnique();
 
         builder.HasCheckConstraint("CHK_Credential_AtLeastOneIdentifier",
-            @"((""UserId"" is not null) or (""IdpId"" is not null))");
+            @$"((""UserId"" != '{Guid.Empty}') or (""IdpId"" is not null))");
     }
 }

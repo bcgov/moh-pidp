@@ -11,6 +11,8 @@ public static class MohClients
     public static (string ClientId, string AccessRole) PrescriptionRefillEforms => ("SAT-EFORMS", "phsa_eforms_rxrefill");
     public static (string ClientId, string AccessRole) SAEforms => ("SAT-EFORMS", "phsa_eforms_sat");
 
+    public static (string ClientId, string MoaRole, string PractitionerRole) LicenceStatus => ("LICENCE-STATUS", "MOA", "PRACTITIONER");
+
     public static (string ClientId, string AccessRole)? FromAccessType(AccessTypeCode code)
     {
         return code switch
