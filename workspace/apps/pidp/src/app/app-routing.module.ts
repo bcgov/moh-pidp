@@ -21,6 +21,7 @@ const routes: Routes = [
       // @see app.component.ts for implementation
       // scrollPositionRestoration: 'enabled',
       // anchorScrolling: 'enabled',
+      // NOTE: For scroll to top behaviour, use ScrollToTopService.
       enableTracing: false,
     }),
   ],

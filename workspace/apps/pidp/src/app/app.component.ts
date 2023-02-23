@@ -62,10 +62,11 @@ export class AppComponent implements OnInit {
         map((event: Scroll) => event.anchor ?? null),
         delay(500) // Provide settling time before triggering scroll
       )
-      .subscribe((routeFragment: string | null) =>
-        routeFragment
-          ? this.utilsService.scrollToAnchor(routeFragment)
-          : this.utilsService.scrollTop(contentContainerSelector)
-      );
+      .subscribe((routeFragment: string | null) => {
+        if (routeFragment) {
+          // NOTE: For scroll to top behaviour, use ScrollToTopService.
+          this.utilsService.scrollToAnchor(routeFragment);
+        }
+      });
   }
 }

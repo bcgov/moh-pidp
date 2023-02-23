@@ -6,7 +6,7 @@ import { MsTeamsResolver } from './ms-teams.resolver';
 
 const routes: Routes = [
   {
-    path: '',
+    path: ':pageid',
     component: MsTeamsPage,
     resolve: {
       msTeamsStatusCode: MsTeamsResolver,
@@ -17,6 +17,10 @@ const routes: Routes = [
         root: '../../',
       },
     },
+  },
+  {
+    path: '**',
+    redirectTo: '0',
   },
 ];
 

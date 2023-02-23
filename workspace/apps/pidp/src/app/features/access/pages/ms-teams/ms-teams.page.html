@@ -71,7 +71,9 @@
 
       <ng-container *ngSwitchDefault>
         <ui-page-section>
-          <p [innerHtml]="getAgreementText(currentPage) | safe: 'html'"></p>
+          <p
+            *ngIf="(scrollToTopService.showContent$ | async)"
+            [innerHtml]="getAgreementText(currentPage) | safe: 'html'"></p>
         </ui-page-section>
       </ng-container>
     </ng-container>
