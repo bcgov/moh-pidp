@@ -9,7 +9,10 @@ import { Observable, catchError, tap } from 'rxjs';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
 import { NavigationService } from '@pidp/presentation';
 
-import { AbstractFormPage } from '@app/core/classes/abstract-form-page.class';
+import {
+  AbstractFormDependenciesService,
+  AbstractFormPage,
+} from '@app/core/classes/abstract-form-page.class';
 import { PartyService } from '@app/core/party/party.service';
 import { FormUtilsService } from '@app/core/services/form-utils.service';
 import { LoggerService } from '@app/core/services/logger.service';
@@ -35,6 +38,8 @@ export class BcProviderApplicationComponent
   public messageCardText = '';
   public completed: boolean | null;
   public password = '';
+  // ui-page is handling this.
+  public showOverlayOnSubmit = false;
 
   public get isEnrolButtonEnabled(): boolean {
     return this.formState.form.valid;
@@ -44,6 +49,7 @@ export class BcProviderApplicationComponent
     private route: ActivatedRoute,
     dialog: MatDialog,
     formUtilsService: FormUtilsService,
+    dependenciesService: AbstractFormDependenciesService,
     fb: FormBuilder,
     private navigationService: NavigationService,
     private snackBar: MatSnackBar,
@@ -51,7 +57,7 @@ export class BcProviderApplicationComponent
     private resource: BcProviderApplicationResource,
     private logger: LoggerService
   ) {
-    super(dialog, formUtilsService);
+    super(dependenciesService);
     this.formState = new BcProviderApplicationFormState(fb);
     const routeData = this.route.snapshot.data;
     this.completed =
