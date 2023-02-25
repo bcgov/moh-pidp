@@ -225,6 +225,7 @@ export abstract class AbstractFormPage<
   protected get formUtilsService(): FormUtilsService {
     return this.dependencies.formUtilsService;
   }
+
   protected get dialog(): MatDialog {
     return this.dependencies.dialog;
   }
