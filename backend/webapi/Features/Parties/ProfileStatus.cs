@@ -109,6 +109,7 @@ public partial class ProfileStatus
                     ProfileSection.Create<BCProviderSection>(data),
                     ProfileSection.Create<CollegeCertificationSection>(data),
                     ProfileSection.Create<DemographicsSection>(data),
+                    ProfileSection.Create<EndorsementsSection>(data),
                     ProfileSection.Create<OrganizationDetailsSection>(data),
                     ProfileSection.Create<DriverFitnessSection>(data),
                     ProfileSection.Create<HcimAccountTransferSection>(data),
@@ -158,7 +159,7 @@ public partial class ProfileStatus
         public bool LicenceDeclarationEntered => this.LicenceDeclaration != null;
         [MemberNotNullWhen(true, nameof(LicenceDeclaration))]
         public bool CollegeLicenceDeclared => this.LicenceDeclaration?.HasNoLicence == false;
-        public bool UserHasHighAssuranceIdentity => this.userIdentityProvider is IdentityProviders.BCServicesCard or IdentityProviders.BCProvider;
+        public bool UserIsHighAssuranceIdentity => this.userIdentityProvider is IdentityProviders.BCServicesCard or IdentityProviders.BCProvider;
         public bool UserIsPhsa => this.userIdentityProvider == IdentityProviders.Phsa;
 
         public async Task Finalize(
