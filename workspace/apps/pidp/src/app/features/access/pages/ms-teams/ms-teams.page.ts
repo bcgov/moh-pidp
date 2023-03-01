@@ -1,17 +1,18 @@
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { EMPTY, catchError, noop, of, tap } from 'rxjs';
 
 import { NoContent } from '@bcgov/shared/data-access';
 
-import { AbstractFormPage } from '@app/core/classes/abstract-form-page.class';
+import {
+  AbstractFormDependenciesService,
+  AbstractFormPage,
+} from '@app/core/classes/abstract-form-page.class';
 import { PartyService } from '@app/core/party/party.service';
 import { DocumentService } from '@app/core/services/document.service';
-import { FormUtilsService } from '@app/core/services/form-utils.service';
 import { LoggerService } from '@app/core/services/logger.service';
 import { UtilsService } from '@app/core/services/utils.service';
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
@@ -36,9 +37,11 @@ export class MsTeamsPage
   public submissionPage: number;
   public formState: MsTeamsFormState;
 
+  // ui-page is handling this.
+  public showOverlayOnSubmit = false;
+
   public constructor(
-    protected dialog: MatDialog,
-    protected formUtilsService: FormUtilsService,
+    dependenciesService: AbstractFormDependenciesService,
     private route: ActivatedRoute,
     private router: Router,
     private partyService: PartyService,
@@ -48,21 +51,24 @@ export class MsTeamsPage
     private documentService: DocumentService,
     fb: FormBuilder
   ) {
-    super(dialog, formUtilsService);
+    super(dependenciesService);
     const routeData = this.route.snapshot.data;
     this.completed = routeData.msTeamsStatusCode === StatusCode.COMPLETED;
     this.msTeamsSupportEmail = msTeamsSupportEmail;
     this.currentPage = 0;
     this.enrolmentError = false;
     this.submissionPage = documentService.getMsTeamsAgreementPageCount();
-    this.formState = new MsTeamsFormState(fb, formUtilsService);
+    this.formState = new MsTeamsFormState(
+      fb,
+      dependenciesService.formUtilsService
+    );
   }
 
   public onBack(): void {
     if (this.currentPage === 0 || this.completed) {
       this.navigateToRoot();
     } else {
-      this.utilsService.scrollTop('.mat-sidenav-content');
+      this.utilsService.scrollTopWithDelay();
       this.currentPage--;
     }
   }
@@ -72,7 +78,7 @@ export class MsTeamsPage
       return;
     }
 
-    this.utilsService.scrollTop('.mat-sidenav-content');
+    this.utilsService.scrollTopWithDelay();
     this.currentPage++;
   }
 

@@ -1,16 +1,17 @@
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { EMPTY, catchError, of, tap } from 'rxjs';
 
 import { NoContent, OrganizationCode } from '@bcgov/shared/data-access';
 
-import { AbstractFormPage } from '@app/core/classes/abstract-form-page.class';
+import {
+  AbstractFormDependenciesService,
+  AbstractFormPage,
+} from '@app/core/classes/abstract-form-page.class';
 import { PartyService } from '@app/core/party/party.service';
-import { FormUtilsService } from '@app/core/services/form-utils.service';
 import { LoggerService } from '@app/core/services/logger.service';
 import { LookupService } from '@app/modules/lookup/lookup.service';
 import { Lookup } from '@app/modules/lookup/lookup.types';
@@ -33,9 +34,11 @@ export class OrganizationDetailsPage
   public organizations: (Lookup & { disabled: boolean })[];
   public healthAuthorities: Lookup[];
 
+  // ui-page is handling this.
+  public showOverlayOnSubmit = false;
+
   public constructor(
-    protected dialog: MatDialog,
-    protected formUtilsService: FormUtilsService,
+    dependenciesService: AbstractFormDependenciesService,
     private route: ActivatedRoute,
     private router: Router,
     private partyService: PartyService,
@@ -44,7 +47,7 @@ export class OrganizationDetailsPage
     private lookupService: LookupService,
     fb: FormBuilder
   ) {
-    super(dialog, formUtilsService);
+    super(dependenciesService);
 
     const routeData = this.route.snapshot.data;
     this.title = routeData.title;
