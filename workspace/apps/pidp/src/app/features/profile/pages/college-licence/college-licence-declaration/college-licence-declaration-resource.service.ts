@@ -25,9 +25,7 @@ export class CollegeLicenceDeclarationResource extends CrudResource<PartyLicence
     payload: PartyLicenceDeclarationInformation
   ): Observable<string | null> {
     return this.resource
-      .put<string | null>(this.getResourcePath(id), payload, {
-        context: new HttpContext().set(SHOW_LOADING_MESSAGE, true),
-      })
+      .put<string | null>(this.getResourcePath(id), payload)
       .pipe(
         tap(() =>
           this.toastService.openSuccessToast(

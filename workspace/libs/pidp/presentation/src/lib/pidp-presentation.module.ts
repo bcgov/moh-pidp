@@ -1,9 +1,19 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { PidpDataModelModule } from '@pidp/data-model';
 
+import { PidpLoadingDialogComponent } from './services/loading-overlay.service';
+
 @NgModule({
-  imports: [CommonModule, PidpDataModelModule],
+  imports: [
+    CommonModule,
+    PidpDataModelModule,
+    MatDialogModule,
+    MatProgressSpinnerModule,
+  ],
+  declarations: [PidpLoadingDialogComponent],
 })
 export class PidpPresentationModule {}
