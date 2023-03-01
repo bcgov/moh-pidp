@@ -62,7 +62,7 @@ export class MsTeamsPage
     if (this.currentPage === 0 || this.completed) {
       this.navigateToRoot();
     } else {
-      this.utilsService.scrollTop('.mat-sidenav-content');
+      this.utilsService.scrollTopWithDelay();
       this.currentPage--;
     }
   }
@@ -72,7 +72,7 @@ export class MsTeamsPage
       return;
     }
 
-    this.utilsService.scrollTop('.mat-sidenav-content');
+    this.utilsService.scrollTopWithDelay();
     this.currentPage++;
   }
 
