@@ -84,7 +84,7 @@ public partial class ProfileStatus
 
             protected override void Compute(ProfileData profile)
             {
-                if (!profile.UserHasHighAssuranceIdentity)
+                if (!profile.UserIsHighAssuranceIdentity)
                 {
                     this.StatusCode = StatusCode.Hidden;
                     return;
@@ -107,7 +107,7 @@ public partial class ProfileStatus
                 this.HasCpn = !string.IsNullOrWhiteSpace(profile.Cpn);
                 this.LicenceDeclared = profile.CollegeLicenceDeclared;
 
-                if (!profile.UserHasHighAssuranceIdentity)
+                if (!profile.UserIsHighAssuranceIdentity)
                 {
                     this.StatusCode = StatusCode.Hidden;
                     return;
@@ -165,6 +165,24 @@ public partial class ProfileStatus
             }
         }
 
+        public class EndorsementsSection : ProfileSection
+        {
+            internal override string SectionName => "endorsements";
+
+            protected override void Compute(ProfileData profile)
+            {
+                if (!profile.UserIsHighAssuranceIdentity)
+                {
+                    this.StatusCode = StatusCode.Hidden;
+                    return;
+                }
+
+                this.StatusCode = profile.DemographicsEntered && profile.LicenceDeclarationEntered
+                    ? StatusCode.Complete
+                    : StatusCode.Locked;
+            }
+        }
+
         public class OrganizationDetailsSection : ProfileSection
         {
             internal override string SectionName => "organizationDetails";
@@ -195,7 +213,7 @@ public partial class ProfileStatus
 
             protected override void Compute(ProfileData profile)
             {
-                if (!profile.UserHasHighAssuranceIdentity)
+                if (!profile.UserIsHighAssuranceIdentity)
                 {
                     this.StatusCode = StatusCode.Hidden;
                     return;
@@ -299,7 +317,7 @@ public partial class ProfileStatus
 
             protected override void Compute(ProfileData profile)
             {
-                if (!profile.UserHasHighAssuranceIdentity)
+                if (!profile.UserIsHighAssuranceIdentity)
                 {
                     this.StatusCode = StatusCode.Hidden;
                     return;
@@ -330,7 +348,7 @@ public partial class ProfileStatus
 
             protected override void Compute(ProfileData profile)
             {
-                if (!profile.UserHasHighAssuranceIdentity)
+                if (!profile.UserIsHighAssuranceIdentity)
                 {
                     this.StatusCode = StatusCode.Hidden;
                     return;
@@ -367,7 +385,7 @@ public partial class ProfileStatus
                         .Excluding(SAEforms.ExcludedIdentifierTypes)
                         .HasGoodStanding;
 
-                if (!profile.UserHasHighAssuranceIdentity)
+                if (!profile.UserIsHighAssuranceIdentity)
                 {
                     this.StatusCode = StatusCode.Hidden;
                     return;
