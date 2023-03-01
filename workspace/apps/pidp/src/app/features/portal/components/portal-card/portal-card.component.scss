@@ -1,0 +1,135 @@
+@use 'pidp-variables' as pidp;
+
+// Set parent variables
+.viewport-xsmall {
+  --gap: 1rem;
+  --font-size: 1rem;
+  --card-header-font-size: calc(2 * var(--font-size));
+  --card-header-line-height: calc(var(--card-header-font-size) + 0.5rem);
+}
+.viewport-small,
+.viewport-medium {
+  --gap: 1.25rem;
+  --font-size: 0.75rem;
+  --card-header-font-size: unset;
+  --card-header-line-height: unset;
+}
+
+.viewport-large {
+  --gap: 1.25rem;
+  --font-size: 1rem;
+  --card-header-font-size: inherit;
+  --card-header-line-height: unset;
+}
+
+// Set child variables
+.viewport-all {
+  --card-padding: calc(1 * var(--gap));
+  --font-size-small: var(--font-size);
+  --no-image-border-right-style: none;
+}
+.viewport-small .viewport-medium,
+.viewport-large {
+  --font-size-small: calc(0.75 * var(--font-size));
+  --no-image-border-right-style: solid;
+}
+.box {
+  min-height: 213px;
+  height: 100%;
+  padding: var(--card-padding);
+  display: flex;
+  flex-direction: column;
+  &.no-image {
+    border-right: 1px pidp.$grey-30;
+    border-right-style: var(--no-image-border-right-style);
+  }
+  &.has-image {
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    color: white;
+    background-color: rgba(0, 51, 102, 0.6);
+    background-blend-mode: multiply;
+    & .mat-primary {
+      color: white;
+      border-color: white;
+    }
+  }
+  &.profile.has-image {
+    background-image: url('/assets/images/portal-profile-320x320.jpg');
+  }
+  &.organization.has-image {
+    background-image: url('/assets/images/portal-org-info-320x320.jpg');
+  }
+  &.access-to-systems.has-image {
+    background-image: url('/assets/images/portal-access-to-systems-320x320.jpg');
+  }
+  & h3 {
+    font-size: var(--card-header-font-size);
+    line-height: var(--card-header-line-height);
+  }
+  & p {
+    margin: 0;
+    line-height: 1.25rem;
+  }
+  & .description {
+    font-size: var(--font-size-small);
+  }
+  & .hint {
+    font-size: var(--font-size-small);
+  }
+  &.has-image .actions {
+    & .completed-text {
+      color: white;
+    }
+    & .completed-badge {
+      background-color: pidp.$green;
+      color: white;
+    }
+  }
+  &.no-image .actions {
+    & .completed-badge {
+      background-color: pidp.$green-10;
+      color: pidp.$green;
+    }
+  }
+  & .actions {
+    // Send the actions section to the bottom of the container.
+    margin-top: auto;
+    padding-top: var(--gap);
+    display: flex;
+    align-items: center;
+    &.center {
+      justify-content: center;
+    }
+    &.right {
+      justify-content: end;
+    }
+    & .learn-more {
+      font-size: var(--font-size-small);
+    }
+    & button {
+      margin-left: calc(0.75 * var(--gap));
+    }
+    & .learn-more-button {
+      height: 3rem;
+      width: 3rem;
+      border: none;
+      background-color: pidp.$grey-10;
+      font-size: calc(1.5 * var(--font-size));
+      color: pidp.$font-color-default;
+      padding: calc(0.5 * var(--gap));
+    }
+    & .completed-text {
+      font-size: 0.75rem;
+      margin-right: calc(0.5 * var(--gap));
+    }
+    & .completed-badge {
+      padding: calc(0.25 * var(--gap)) calc(0.5 * var(--gap));
+      display: flex;
+      flex-wrap: nowrap;
+      & fa-icon {
+        font-size: 1.5rem;
+      }
+    }
+  }
+}

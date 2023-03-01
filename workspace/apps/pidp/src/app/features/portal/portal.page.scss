@@ -1,11 +1,49 @@
-@import 'bootstrap/bootstrap-imports';
+@use 'pidp-variables' as pidp;
 
-p.lead {
-  margin-bottom: 3rem;
+.viewport-all {
+  --gap: 1rem;
+  --font-size: 0.75rem;
 }
 
-@include media-breakpoint-up(xl) {
-  .row > div {
-    max-width: 800px;
+.viewport-small,
+.viewport-medium,
+.viewport-large {
+  --gap: 1.25rem;
+  --font-size: 1rem;
+}
+.viewport-all {
+  --header-margin: unset;
+  --card-border-radius: calc(var(--gap) * 0.375);
+  --content-padding: var(--gap);
+  --form-card-width: unset;
+}
+.viewport-medium,
+.viewport-large {
+  --header-margin: var(--gap) 0 0;
+  --content-padding: var(--gap) 0;
+  --form-card-width: 25rem;
+}
+.viewport-all {
+  padding: var(--content-padding);
+  & header {
+    margin: var(--header-margin);
+    & h2 {
+      margin: 0;
+      padding: calc(var(--gap) / 2) calc(var(--gap) * 2);
+      background-color: pidp.$grey-10;
+    }
+  }
+  & .section-content-box {
+    margin: var(--gap) 0;
+
+    & p {
+      padding-left: calc(var(--gap) * 2);
+    }
+
+    & .carousel-box {
+      & .card-box {
+        display: flex;
+      }
+    }
   }
 }

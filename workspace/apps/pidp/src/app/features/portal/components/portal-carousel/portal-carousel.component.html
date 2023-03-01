@@ -1,0 +1,25 @@
+<div class="box" uiPidpInjectViewportCss>
+  <swiper-container
+    class="swiper mySwiper"
+    pagination-bulletClass=".bullet"
+    pagination-bulletActiveClass=".bullet-active"
+    pagination-clickable="true"
+    navigation-prevE1=".prev"
+    navigation-nextE1=".next">
+    <ng-container *ngFor="let slide of slideModels; index as groupIndex">
+      <swiper-slide class="slide">
+        <app-portal-card
+          *ngFor="let section of slide; index as categoryIndex"
+          class="card"
+          [section]="section"
+          [isFirst]="groupIndex === 0 && categoryIndex === 0"
+          [portalCategoryName]="portalCategoryName">
+        </app-portal-card>
+      </swiper-slide>
+    </ng-container>
+    <div class="next"></div>
+    <div class="prev"></div>
+    <div class="bullet"></div>
+    <div class="bullet-active"></div>
+  </swiper-container>
+</div>

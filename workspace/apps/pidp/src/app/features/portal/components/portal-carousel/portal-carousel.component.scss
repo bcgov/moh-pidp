@@ -1,0 +1,75 @@
+@use 'pidp-variables' as pidp;
+
+.viewport-all {
+  --gap: 1rem;
+  --font-size: 0.75rem;
+  --swiper-width: calc(100vw - (2 * var(--gap)));
+  --swiper-bottom-padding: calc(3 * (var(--gap)));
+  --swiper-side-padding-size: calc(3 * var(--gap));
+}
+.viewport-small,
+.viewport-medium,
+.viewport-large {
+  --gap: 1.25rem;
+  --font-size: 1rem;
+  --swiper-bottom-padding: calc(2.5 * (var(--gap)));
+  --swiper-side-padding-size: calc(2 * var(--gap));
+}
+
+.viewport-small {
+  --swiper-width: 780px;
+}
+.viewport-medium {
+  --swiper-width: 754px;
+}
+.viewport-large {
+  --swiper-width: 840px;
+}
+
+.viewport-xsmall {
+  --swiper-card-width: calc(
+    var(--swiper-width) - (2 * var(--swiper-side-padding-size))
+  );
+  --slide-padding: 0 var(--swiper-side-padding-size);
+  --swiper-padding: 0 0 var(--swiper-bottom-padding);
+}
+.viewport-small,
+.viewport-medium,
+.viewport-large {
+  --swiper-card-area-width: calc(
+    var(--swiper-width) - (2 * var(--swiper-side-padding-size))
+  );
+  --swiper-card-width: calc((var(--swiper-card-area-width) / 3));
+  --slide-padding: 0 var(--swiper-side-padding-size);
+  --swiper-padding: 0 0 var(--swiper-bottom-padding);
+}
+
+.box {
+  width: var(--swiper-width);
+}
+.swiper {
+  width: 100%;
+  padding: var(--swiper-padding);
+}
+.slide {
+  display: flex;
+  padding: var(--slide-padding);
+}
+.card {
+  display: block;
+  width: var(--swiper-card-width);
+  min-height: var(--swiper-card-width);
+}
+:host {
+  --swiper-navigation-color: pidp.$blue-40;
+  --swiper-navigation-size: 2rem;
+  --swiper-navigation-top-offset: 38%;
+  --swiper-navigation-sides-offset: 10px;
+
+  // --swiper-pagination-color does not work with the pidp SASS variables
+  --swiper-pagination-color: #036;
+  // --swiper-pagination-left: auto;
+  // --swiper-pagination-right: 100px;
+  // --swiper-pagination-bottom: 8px;
+  // --swiper-pagination-top: auto;
+}

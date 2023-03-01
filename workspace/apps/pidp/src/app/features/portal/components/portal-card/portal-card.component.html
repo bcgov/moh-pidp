@@ -1,0 +1,58 @@
+<div
+  class="box"
+  uiPidpInjectViewportCss
+  [ngClass]="{
+    first: isFirst,
+    'has-image': hasImageCssClass,
+    'no-image': !hasImageCssClass,
+    profile: isProfileCardCategory,
+    organization: isOrganizationCategory,
+    'access-to-systems': isAccessToSystemsCategory
+  }">
+  <h3>{{ section.heading }}</h3>
+  <p class="description">{{ section.description }}</p>
+  <p class="hint">{{ section.hint }}</p>
+  <div
+    class="actions"
+    [ngClass]="{ center: showCompleted, right: showLearnMore }">
+    <ng-container *ngIf="showCompleted && this.hasImageCssClass">
+      <div class="completed-badge">
+        <span class="completed-text">Completed</span
+        ><fa-icon [icon]="faThumbsUp"></fa-icon>
+      </div>
+      <button
+        *ngIf="!section.action.disabled"
+        mat-stroked-button
+        color="primary"
+        aria-label="Edit"
+        (click)="onClick(section)">
+        <span>{{ section.action.label }}</span>
+      </button>
+    </ng-container>
+    <ng-container *ngIf="showCompleted && !this.hasImageCssClass">
+      <span class="completed-text">Completed</span>
+      <div class="completed-badge">
+        <fa-icon [icon]="faThumbsUp"></fa-icon>
+      </div>
+      <button
+        *ngIf="!section.action.disabled"
+        mat-stroked-button
+        color="primary"
+        aria-label="Edit"
+        (click)="onClick(section)">
+        <span>{{ section.action.label }}</span>
+      </button>
+    </ng-container>
+    <ng-container *ngIf="showLearnMore">
+      <div class="learn-more">
+        <span>Learn More</span>
+      </div>
+      <button
+        class="learn-more-button"
+        aria-label="Go"
+        (click)="onClick(section)">
+        <fa-icon [icon]="faPlus"></fa-icon>
+      </button>
+    </ng-container>
+  </div>
+</div>
