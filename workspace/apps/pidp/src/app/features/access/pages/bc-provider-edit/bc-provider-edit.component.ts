@@ -1,6 +1,6 @@
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { MatDialogConfig } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { catchError, noop, of, tap } from 'rxjs';
@@ -10,9 +10,11 @@ import { NavigationService } from '@pidp/presentation';
 
 import { NoContent } from '@bcgov/shared/data-access';
 
-import { AbstractFormPage } from '@app/core/classes/abstract-form-page.class';
+import {
+  AbstractFormDependenciesService,
+  AbstractFormPage,
+} from '@app/core/classes/abstract-form-page.class';
 import { PartyService } from '@app/core/party/party.service';
-import { FormUtilsService } from '@app/core/services/form-utils.service';
 
 import { BcProviderEditFormState } from './bc-provider-edit-form-state';
 import {
@@ -42,6 +44,9 @@ export class BcProviderEditComponent
   public messageCardText = '';
   public username = '';
 
+  // ui-page is handling this.
+  public showOverlayOnSubmit = false;
+
   @ViewChild('successDialog')
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public successDialogTemplate!: TemplateRef<any>;
@@ -51,15 +56,14 @@ export class BcProviderEditComponent
   }
 
   public constructor(
-    dialog: MatDialog,
-    formUtilsService: FormUtilsService,
+    dependenciesService: AbstractFormDependenciesService,
     fb: FormBuilder,
     private navigationService: NavigationService,
     private snackBar: MatSnackBar,
     private partyService: PartyService,
     private resource: BcProviderEditResource
   ) {
-    super(dialog, formUtilsService);
+    super(dependenciesService);
     this.formState = new BcProviderEditFormState(fb);
   }
 
