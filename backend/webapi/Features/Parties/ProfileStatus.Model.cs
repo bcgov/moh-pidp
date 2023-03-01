@@ -113,13 +113,13 @@ public partial class ProfileStatus
                     return;
                 }
 
-                if (!profile.DemographicsEntered)
+                if (!profile.DemographicsComplete)
                 {
                     this.StatusCode = StatusCode.Locked;
                     return;
                 }
 
-                if (!profile.LicenceDeclarationEntered)
+                if (!profile.LicenceDeclarationComplete)
                 {
                     this.StatusCode = StatusCode.Incomplete;
                     return;
@@ -161,7 +161,7 @@ public partial class ProfileStatus
                 this.Email = profile.Email;
                 this.Phone = profile.Phone;
 
-                this.StatusCode = profile.DemographicsEntered ? StatusCode.Complete : StatusCode.Incomplete;
+                this.StatusCode = profile.DemographicsComplete ? StatusCode.Complete : StatusCode.Incomplete;
             }
         }
 
@@ -177,7 +177,7 @@ public partial class ProfileStatus
                     return;
                 }
 
-                this.StatusCode = profile.DemographicsEntered && profile.LicenceDeclarationEntered
+                this.StatusCode = profile.DemographicsComplete && profile.LicenceDeclarationComplete
                     ? StatusCode.Complete
                     : StatusCode.Locked;
             }
@@ -195,7 +195,7 @@ public partial class ProfileStatus
                     return;
                 }
 
-                if (!profile.DemographicsEntered)
+                if (!profile.DemographicsComplete)
                 {
                     this.StatusCode = StatusCode.Locked;
                     return;
@@ -225,8 +225,8 @@ public partial class ProfileStatus
                     return;
                 }
 
-                if (!profile.DemographicsEntered
-                    || !profile.LicenceDeclarationEntered)
+                if (!profile.DemographicsComplete
+                    || !profile.LicenceDeclarationComplete)
                 {
                     this.StatusCode = StatusCode.Locked;
                     return;
@@ -272,7 +272,7 @@ public partial class ProfileStatus
                 }
                 // ]
 
-                this.StatusCode = profile.DemographicsEntered
+                this.StatusCode = profile.DemographicsComplete
                     ? StatusCode.Incomplete
                     : StatusCode.Locked;
             }
@@ -305,7 +305,7 @@ public partial class ProfileStatus
                 }
                 // ]
 
-                this.StatusCode = !profile.DemographicsEntered || string.IsNullOrWhiteSpace(profile.AccessAdministratorEmail)
+                this.StatusCode = !profile.DemographicsComplete || string.IsNullOrWhiteSpace(profile.AccessAdministratorEmail)
                     ? StatusCode.Locked
                     : StatusCode.Incomplete;
             }
@@ -329,7 +329,7 @@ public partial class ProfileStatus
                     return;
                 }
 
-                if (!profile.DemographicsEntered
+                if (!profile.DemographicsComplete
                     || !profile.PartyPlrStanding
                         .With(MSTeams.AllowedIdentifierTypes)
                         .HasGoodStanding)
@@ -360,9 +360,41 @@ public partial class ProfileStatus
                     return;
                 }
 
-                if (profile.DemographicsEntered
+                if (profile.DemographicsComplete
                     && profile.PartyPlrStanding
                         .With(PrescriptionRefillEforms.AllowedIdentifierTypes)
+                        .HasGoodStanding)
+                {
+                    this.StatusCode = StatusCode.Incomplete;
+                    return;
+                }
+
+                this.StatusCode = StatusCode.Locked;
+            }
+        }
+
+        public class ProviderReportingPortalSection : ProfileSection
+        {
+            internal override string SectionName => "providerReportingPortal";
+
+            protected override void Compute(ProfileData profile)
+            {
+                if (!profile.UserIsBCProvider)
+                {
+                    // TODO: AND CHECK DB
+                    this.StatusCode = StatusCode.Hidden;
+                    return;
+                }
+
+                if (profile.CompletedEnrolments.Contains(AccessTypeCode.ProviderReportingPortal))
+                {
+                    this.StatusCode = StatusCode.Complete;
+                    return;
+                }
+
+                if (profile.DemographicsComplete
+                    && profile.PartyPlrStanding
+                        .With(ProviderReportingPortal.AllowedIdentifierTypes)
                         .HasGoodStanding)
                 {
                     this.StatusCode = StatusCode.Incomplete;
@@ -397,7 +429,7 @@ public partial class ProfileStatus
                     return;
                 }
 
-                if (profile.DemographicsEntered
+                if (profile.DemographicsComplete
                     && profile.PartyPlrStanding
                         .Excluding(SAEforms.ExcludedIdentifierTypes)
                         .HasGoodStanding)

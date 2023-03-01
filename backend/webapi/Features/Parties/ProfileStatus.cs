@@ -116,6 +116,7 @@ public partial class ProfileStatus
                     ProfileSection.Create<HcimEnrolmentSection>(data),
                     ProfileSection.Create<MSTeamsSection>(data),
                     ProfileSection.Create<PrescriptionRefillEformsSection>(data),
+                    ProfileSection.Create<ProviderReportingPortalSection>(data),
                     ProfileSection.Create<SAEformsSection>(data)
                 }
                 .ToDictionary(section => section.SectionName, section => section)
@@ -154,11 +155,12 @@ public partial class ProfileStatus
         public PlrStandingsDigest EndorsementPlrStanding { get; set; } = default!;
 
         [MemberNotNullWhen(true, nameof(Email), nameof(Phone))]
-        public bool DemographicsEntered => this.Email != null && this.Phone != null;
+        public bool DemographicsComplete => this.Email != null && this.Phone != null;
         [MemberNotNullWhen(true, nameof(LicenceDeclaration))]
-        public bool LicenceDeclarationEntered => this.LicenceDeclaration != null;
+        public bool LicenceDeclarationComplete => this.LicenceDeclaration != null;
         [MemberNotNullWhen(true, nameof(LicenceDeclaration))]
         public bool CollegeLicenceDeclared => this.LicenceDeclaration?.HasNoLicence == false;
+        public bool UserIsBCProvider => this.userIdentityProvider == IdentityProviders.BCProvider;
         public bool UserIsHighAssuranceIdentity => this.userIdentityProvider is IdentityProviders.BCServicesCard or IdentityProviders.BCProvider;
         public bool UserIsPhsa => this.userIdentityProvider == IdentityProviders.Phsa;
 
