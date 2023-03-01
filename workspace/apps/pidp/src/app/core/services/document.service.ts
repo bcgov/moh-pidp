@@ -11,6 +11,7 @@ export enum DocumentType {
   MS_TEAMS_DECLARATION_AGREEMENT = 'ms-teams-declaration-agreement',
   MS_TEAMS_DETAILS_AGREEMENT = 'ms-teams-details-agreement',
   MS_TEAMS_IT_SECURITY_AGREEMENT = 'ms-teams-it-security-agreement',
+  PROVIDER_REPORTING_PORTAL_COLLECTION_NOTICE = 'provider-reporting-portal-collection-notice',
 }
 
 export interface IDocumentMetaData {
@@ -63,6 +64,10 @@ export class DocumentService {
         title:
           'FH MS Teams for Clinical Use - Private Practice Clinic IT Security Checklist',
       },
+      {
+        type: DocumentType.PROVIDER_REPORTING_PORTAL_COLLECTION_NOTICE,
+        title: 'Provider Reporting Portal Collection Notice',
+      },
     ];
   }
 
@@ -106,6 +111,11 @@ export class DocumentService {
         return {
           ...this.getDocumentMetaData(documentType),
           content: this.getMsTeamsITSecurityAgreement(),
+        };
+      case DocumentType.PROVIDER_REPORTING_PORTAL_COLLECTION_NOTICE:
+        return {
+          ...this.getDocumentMetaData(documentType),
+          content: this.getProviderReportingPortalCollectionNotice(),
         };
       default:
         throw new Error('Document type does not exist');
@@ -304,6 +314,15 @@ export class DocumentService {
         <li>Desktop software, e.g. MS Office / Other applications are patched at a minimum semi-annually.</li><br>
         <li>Browser plugins (Adobe Flash, PDF, Java) are patched at a minimum semi-annually.</li><br>
       </ul><br>
+    `;
+  }
+
+  public getProviderReportingPortalCollectionNotice(): string {
+    return `
+      Lotus ipsum root brussels sprout turnip greens beet greens mustard okra earthnut pea fennel radicchio
+      kohlrabi soko gram arugula carrot plantain welsh onion courgette. Dandelion mustard spinach bush
+      tomato beet greens lentil salsify garbanzo. Chickweed celery maize summer purslane black-eyed pea
+      epazote melon bell pepper salad bitterleaf soybean corn wattle seed.
     `;
   }
 

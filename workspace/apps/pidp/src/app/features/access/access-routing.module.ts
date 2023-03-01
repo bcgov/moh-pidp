@@ -15,6 +15,7 @@ import { HcimEnrolmentModule } from './pages/hcim-enrolment/hcim-enrolment.modul
 import { MsTeamsModule } from './pages/ms-teams/ms-teams.module';
 import { PharmanetModule } from './pages/pharmanet/pharmanet.module';
 import { PrescriptionRefillEformsModule } from './pages/prescription-refill-eforms/prescription-refill-eforms.module';
+import { ProviderReportingPortalModule } from './pages/provider-reporting-portal/provider-reporting-portal.module';
 import { SaEformsModule } from './pages/sa-eforms/sa-eforms.module';
 import { SitePrivacySecurityChecklistModule } from './pages/site-privacy-security-checklist/site-privacy-security-checklist.module';
 
@@ -107,6 +108,13 @@ const routes: Routes = [
     },
     loadChildren: (): Promise<MsTeamsModule> =>
       import('./pages/ms-teams/ms-teams.module').then((m) => m.MsTeamsModule),
+  },
+  {
+    path: AccessRoutes.PROVIDER_REPORTING_PORTAL,
+    loadChildren: (): Promise<ProviderReportingPortalModule> =>
+      import(
+        './pages/provider-reporting-portal/provider-reporting-portal.module'
+      ).then((m) => m.ProviderReportingPortalModule),
   },
 ];
 
