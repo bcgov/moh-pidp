@@ -1,109 +1,100 @@
-<ui-page
-  [mode]="currentPage !== 0 ? 'large' : 'page'"
-  [form]="formState.form"
-  (submitted)="onSubmit()">
-  <ui-page-section>
-    <ui-page-section-subheader
-      icon="assignment"
-      heading="MS Teams for Clinical Use">
-    </ui-page-section-subheader>
-  </ui-page-section>
-
-  <app-enrolment-error *ngIf="enrolmentError"></app-enrolment-error>
-
-  <ng-container *ngIf="completed; else notCompleted">
-    <ui-alert
-      type="success"
-      icon="check_circle"
-      iconType="outlined"
-      heading="Thank you for enrolling your clinic for MS Teams access.">
-      <ng-container uiAlertContent>
-        <p>
-          Your clinic will be provided with instructions via email on how to
-          setup and use MS Teams for Clinical Use.
-        </p>
-        <p>
-          If you have any additional questions contact the FH mHealth team via
-          email:
-          <a uiAnchor scheme="mailto" [attr.href]="msTeamsSupportEmail"></a>
-        </p>
+<div class="box" uiPidpInjectViewportCss>
+  <div class="content">
+    <app-enrolment-error *ngIf="enrolmentError"></app-enrolment-error>
+    <form [formGroup]="formState.form">
+      <ng-container *ngIf="completed; else notCompleted">
+        <header>
+          <h2 class="title">
+            Thank you for enrolling your clinic for MS Teams access.
+          </h2>
+        </header>
+        <section class="completed">
+          <p>
+            Your clinic will be provided with instructions via email on how to
+            setup and use MS Teams for Clinical Use.
+          </p>
+          <p>
+            If you have any additional questions contact the FH mHealth team via
+            email:
+            <a uiAnchor scheme="mailto" [attr.href]="msTeamsSupportEmail"></a>
+          </p>
+        </section>
       </ng-container>
-    </ui-alert>
-  </ng-container>
-
-  <ng-template #notCompleted>
-    <ng-container [ngSwitch]="currentPage" [formGroup]="formState.form">
-      <ng-container *ngSwitchCase="0">
-        <ui-page-section>
-          <ui-page-section-subheader heading="Privacy Officer only">
-            <ng-container uiPageSectionSubheaderDesc>
+      <ng-template #notCompleted>
+        <header>
+          <h2 class="title">MS Teams for Clinical Use</h2>
+        </header>
+        <ng-container [ngSwitch]="currentPage">
+          <ng-container *ngSwitchCase="0">
+            <section *ngIf="false">
+              <h3>Privacy officer only</h3>
+              <p>
+                The form below is to be filled out by the clinic's Privacy
+                Officer only. If you are not the Privacy Officer, click back to
+                return to the Portal page.
+              </p>
+            </section>
+            <p class="privacy-text">
               The form below is to be filled out by the clinic's Privacy Officer
               only. If you are not the Privacy Officer, click back to return to
               the Portal page.
-            </ng-container>
-          </ui-page-section-subheader>
-        </ui-page-section>
+            </p>
+            <section class="clinic-info">
+              <header>
+                <h3>Clinic Information</h3>
+              </header>
+              <div class="form">
+                <div class="field">
+                  <label id="ms-teams-clinic">FHA Clinic Name</label>
+                  <mat-form-field appearance="outline">
+                    <input
+                      matInput
+                      formControlName="clinicName"
+                      aria-labelledby="ms-teams-clinic" />
+                    <mat-error>Required</mat-error>
+                  </mat-form-field>
+                </div>
+                <app-address-form
+                  [form]="formState.clinicAddress"></app-address-form>
+              </div>
+            </section>
+          </ng-container>
 
-        <ui-page-section>
-          <ui-page-section-subheader heading="Clinic Name">
-            <ng-container uiPageSectionSubheaderDesc>
-              Enter your clinic's name.
-            </ng-container>
-          </ui-page-section-subheader>
-          <mat-form-field class="w-100">
-            <input
-              matInput
-              placeholder="Clinic name"
-              formControlName="clinicName" />
-            <mat-error>Required</mat-error>
-          </mat-form-field>
-        </ui-page-section>
-        <ui-page-section>
-          <ui-page-section-subheader heading="Facility Address">
-            <ng-container uiPageSectionSubheaderDesc>
-              Provide your work address.
-            </ng-container>
-          </ui-page-section-subheader>
+          <ng-container *ngSwitchDefault>
+            <p
+              class="agreement-text"
+              [innerHtml]="getAgreementText(currentPage) | safe: 'html'"></p>
+          </ng-container>
+        </ng-container>
+      </ng-template>
+      <section class="actions">
+        <button
+          mat-stroked-button
+          uiPageFooterAction
+          type="button"
+          color="primary"
+          (click)="onBack()">
+          {{ completed ? 'Home' : 'Back' }}
+        </button>
 
-          <app-address-form [form]="formState.clinicAddress"></app-address-form>
-        </ui-page-section>
-      </ng-container>
-
-      <ng-container *ngSwitchDefault>
-        <ui-page-section>
-          <p [innerHtml]="getAgreementText(currentPage) | safe: 'html'"></p>
-        </ui-page-section>
-      </ng-container>
-    </ng-container>
-  </ng-template>
-
-  <ui-page-footer [mode]="completed ? 'reverse' : 'normal'">
-    <button
-      mat-stroked-button
-      uiPageFooterAction
-      type="button"
-      color="primary"
-      (click)="onBack()">
-      {{ completed ? 'Back Home' : currentPage === 0 ? 'Cancel Back Home' :
-      'Back' }}
-    </button>
-
-    <button
-      *ngIf="!completed && currentPage !== submissionPage"
-      mat-flat-button
-      uiPageFooterAction
-      type="button"
-      color="primary"
-      (click)="onNext()">
-      {{ currentPage === 0 ? 'Next' : 'I Agree'}}
-    </button>
-    <button
-      *ngIf="!completed && currentPage === submissionPage"
-      mat-flat-button
-      uiPageFooterAction
-      type="submit"
-      color="primary">
-      Next
-    </button>
-  </ui-page-footer>
-</ui-page>
+        <button
+          *ngIf="!completed && currentPage !== submissionPage"
+          mat-flat-button
+          uiPageFooterAction
+          type="button"
+          color="primary"
+          (click)="onNext()">
+          {{ currentPage === 0 ? 'Next' : 'I Accept'}}
+        </button>
+        <button
+          *ngIf="!completed && currentPage === submissionPage"
+          mat-flat-button
+          uiPageFooterAction
+          type="submit"
+          color="primary">
+          Submit
+        </button>
+      </section>
+    </form>
+  </div>
+</div>

@@ -4,13 +4,11 @@
 //
 // MATERIAL FORMS
 //
-
-.mat-form-field {
-  // Provide a bit more spacing under form fields so error
-  // messages are not resting on underlying field labels
-  margin-bottom: 1.5rem;
+.mat-form-field-appearance-outline {
+  .mat-form-field-infix {
+    padding: 0.5rem 0 0.75rem;
+  }
 }
-
 .mat-input-element,
 .mat-select-value {
   color: pidp.$font-color-default !important;

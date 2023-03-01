@@ -1,0 +1,46 @@
+.viewport-all {
+  &.form {
+    & label {
+      font-weight: 700;
+    }
+  }
+  .field {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+/* One column layout for mobile */
+.viewport-xsmall {
+  .form {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+/* Two column layout for everything else */
+.viewport-small,
+.viewport-medium,
+.viewport-large {
+  .country {
+    grid-area: country;
+  }
+  .province {
+    grid-area: province;
+  }
+  .city {
+    grid-area: city;
+  }
+  .street {
+    grid-area: street;
+  }
+  .postal {
+    grid-area: postal;
+  }
+
+  &.form {
+    display: grid;
+    grid-template: 'street street' 'city province' 'country postal';
+    column-gap: var(--gap);
+  }
+}
