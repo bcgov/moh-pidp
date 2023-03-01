@@ -27,6 +27,7 @@ public class PidpDbContext : DbContext
     public DbSet<Party> Parties { get; set; } = default!;
     public DbSet<PartyAccessAdministrator> PartyAccessAdministrators { get; set; } = default!;
     public DbSet<PartyOrgainizationDetail> PartyOrgainizationDetails { get; set; } = default!;
+    public DbSet<PrpAllowedParty> PrpAllowedParties { get; set; } = default!;
 
     public override int SaveChanges()
     {

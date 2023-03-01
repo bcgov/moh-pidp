@@ -38,7 +38,7 @@ public class PlrRecord
 
 public class PlrStandingsDigest
 {
-    private readonly IEnumerable<(string? IdentifierType, bool IsGoodStanding)> records;
+    private readonly IEnumerable<DigestRecord> records;
 
     public bool Error { get; private set; }
 
@@ -47,10 +47,12 @@ public class PlrStandingsDigest
     /// </summary>
     public bool HasGoodStanding => this.records.Any(record => record.IsGoodStanding);
 
-    private PlrStandingsDigest(bool error, IEnumerable<(string? IdentifierType, bool IsGoodStanding)>? records = null)
+    public IEnumerable<string> LicenceNumbers => this.records.Where(record => record.LicenceNumber != null).Select(record => record.LicenceNumber!);
+
+    private PlrStandingsDigest(bool error, IEnumerable<DigestRecord>? records = null)
     {
         this.Error = error;
-        this.records = records ?? Enumerable.Empty<(string? IdentifierType, bool IsGoodStanding)>();
+        this.records = records ?? Enumerable.Empty<DigestRecord>();
     }
 
     /// <summary>
@@ -83,10 +85,18 @@ public class PlrStandingsDigest
     public static PlrStandingsDigest FromError() => new(true);
     public static PlrStandingsDigest FromRecords(IEnumerable<PlrRecord> records)
     {
-        return new(false, records.Select(record =>
-        (
-            record.IdentifierType,
-            IsGoodStanding: record.IsGoodStanding()
-        )));
+        return new(false, records.Select(record => new DigestRecord
+        {
+            IdentifierType = record.IdentifierType,
+            LicenceNumber = record.CollegeId,
+            IsGoodStanding = record.IsGoodStanding()
+        }));
+    }
+
+    private class DigestRecord
+    {
+        public string? IdentifierType { get; set; }
+        public string? LicenceNumber { get; set; }
+        public bool IsGoodStanding { get; set; }
     }
 }
