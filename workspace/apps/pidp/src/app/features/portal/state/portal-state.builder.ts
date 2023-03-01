@@ -13,6 +13,7 @@ import { HcimAccountTransferPortalSection } from './access/hcim-account-transfer
 import { HcimEnrolmentPortalSection } from './access/hcim-enrolment-portal-section.class';
 import { MsTeamsPortalSection } from './access/ms-teams-portal-section.class';
 import { PrescriptionRefillEformsPortalSection } from './access/prescription-refill-eforms-portal-section.class';
+import { ProviderReportingPortalSection } from './access/provider-reporting-portal-section.class';
 import { SaEformsPortalSection } from './access/sa-eforms-portal-section.class';
 import { SitePrivacySecurityPortalSection } from './access/site-privacy-security-checklist-portal-section.class';
 import { SignedAcceptedDocumentsPortalSection } from './history/signed-accepted-documents-portal-section.class';
@@ -174,6 +175,12 @@ export class PortalStateBuilder {
         this.insertSection('msTeams', profileStatus) &&
           this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
         () => [new MsTeamsPortalSection(profileStatus, this.router)]
+      ),
+      ...ArrayUtils.insertResultIf<IPortalSection>(
+        // TODO remove permissions when ready for production
+        this.insertSection('providerReportingPortal', profileStatus) &&
+          this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
+        () => [new ProviderReportingPortalSection(profileStatus, this.router)]
       ),
     ];
   }
