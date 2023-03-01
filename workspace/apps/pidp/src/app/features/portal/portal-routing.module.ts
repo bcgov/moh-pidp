@@ -14,7 +14,8 @@ const routes: Routes = [
       title: 'Provider Identity Portal',
       setDashboardTitleGuard: {
         titleText: 'Welcome to Provider Identity Portal',
-        titleDescriptionText: '',
+        titleDescriptionText:
+          'Complete your profile to gain access to the systems you are eligible for',
       },
     },
   },
