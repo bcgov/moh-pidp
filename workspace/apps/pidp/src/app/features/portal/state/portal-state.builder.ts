@@ -120,10 +120,9 @@ export class PortalStateBuilder {
         () => [new AdministratorInfoPortalSection(profileStatus, this.router)]
       ),
       ...ArrayUtils.insertResultIf<IPortalSection>(
-        // TODO add insertSection call when it exists in the ProfileStatus API
         // TODO remove permissions when ready for production
-        // this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]) &&
-        this.insertSection('endorsements', profileStatus),
+        this.insertSection('endorsements', profileStatus) &&
+          this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
         () => [new EndorsementsPortalSection(profileStatus, this.router)]
       ),
     ];

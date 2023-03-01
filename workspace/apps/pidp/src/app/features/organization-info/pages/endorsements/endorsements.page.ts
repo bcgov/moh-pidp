@@ -1,7 +1,6 @@
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 
 import {
@@ -31,9 +30,11 @@ import {
   ViewportService,
 } from '@bcgov/shared/ui';
 
-import { AbstractFormPage } from '@app/core/classes/abstract-form-page.class';
+import {
+  AbstractFormDependenciesService,
+  AbstractFormPage,
+} from '@app/core/classes/abstract-form-page.class';
 import { PartyService } from '@app/core/party/party.service';
-import { FormUtilsService } from '@app/core/services/form-utils.service';
 import { LoggerService } from '@app/core/services/logger.service';
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
 import { LookupService } from '@app/modules/lookup/lookup.service';
@@ -68,9 +69,10 @@ export class EndorsementsPage
   public nonActionableEndorsementRequests$!: Observable<EndorsementRequest[]>;
   public endorsements$!: Observable<Endorsement[]>;
 
+  public showOverlayOnSubmit = true;
+
   public constructor(
-    protected dialog: MatDialog,
-    protected formUtilsService: FormUtilsService,
+    dependenciesService: AbstractFormDependenciesService,
     private route: ActivatedRoute,
     private partyService: PartyService,
     private resource: EndorsementsResource,
@@ -80,7 +82,7 @@ export class EndorsementsPage
     viewportService: ViewportService,
     fb: FormBuilder
   ) {
-    super(dialog, formUtilsService);
+    super(dependenciesService);
 
     const routeData = this.route.snapshot.data;
     this.formState = new EndorsementsFormState(fb);
