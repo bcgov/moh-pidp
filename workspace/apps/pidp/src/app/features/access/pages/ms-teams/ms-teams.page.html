@@ -1,7 +1,7 @@
 <div class="box" uiPidpInjectViewportCss>
   <div class="content">
     <app-enrolment-error *ngIf="enrolmentError"></app-enrolment-error>
-    <form [formGroup]="formState.form">
+    <form [formGroup]="formState.form" (ngSubmit)="onSubmit()">
       <ng-container *ngIf="completed; else notCompleted">
         <header>
           <h2 class="title">
