@@ -102,7 +102,7 @@ public class AccessRequestsController : PidpControllerBase
             .ToActionResult();
 
     [HttpPost("provider-reporting-portal")]
-    [Authorize(Policy = Policies.HighAssuranceIdentityProvider)]
+    [Authorize(Policy = Policies.BCProviderAuthentication)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> CreateProviderReportingPortalEnrolment([FromServices] ICommandHandler<ProviderReportingPortal.Command, IDomainResult> handler,
