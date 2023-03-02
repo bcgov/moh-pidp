@@ -17,7 +17,7 @@ public class BCProviderPassword
         [JsonIgnore]
         [HybridBindProperty(Source.Route)]
         public int PartyId { get; set; }
-        public string Password { get; set; } = string.Empty;
+        public string NewPassword { get; set; } = string.Empty;
     }
 
     public class CommandValidator : AbstractValidator<Command>
@@ -25,7 +25,7 @@ public class BCProviderPassword
         public CommandValidator()
         {
             this.RuleFor(x => x.PartyId).GreaterThan(0);
-            this.RuleFor(x => x.Password).NotEmpty();
+            this.RuleFor(x => x.NewPassword).NotEmpty();
         }
     }
 
@@ -53,7 +53,7 @@ public class BCProviderPassword
                 return DomainResult.NotFound();
             }
 
-            if (await this.client.UpdatePassword(bcProviderId, command.Password))
+            if (await this.client.UpdatePassword(bcProviderId, command.NewPassword))
             {
                 return DomainResult.Success();
             }
