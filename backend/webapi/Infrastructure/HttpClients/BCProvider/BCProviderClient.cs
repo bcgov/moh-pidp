@@ -31,6 +31,7 @@ public class BCProviderClient : IBCProviderClient
             UserPrincipalName = userPrincipal,
             PasswordProfile = new PasswordProfile
             {
+                ForceChangePasswordNextSignIn = false,
                 Password = userRepresentation.Password
             }
         };
