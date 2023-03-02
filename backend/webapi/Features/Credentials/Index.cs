@@ -5,7 +5,6 @@ using System.Security.Claims;
 
 using Pidp.Data;
 using Pidp.Extensions;
-using Pidp.Infrastructure.Auth;
 using Pidp.Models;
 
 public class Index
