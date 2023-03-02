@@ -5,9 +5,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 using Pidp.Models;
 
-public class PrpAllowedPartyConfiguration : IEntityTypeConfiguration<PrpAllowedParty>
+public class PrpAuthorizedLicenceConfiguration : IEntityTypeConfiguration<PrpAuthorizedLicence>
 {
-    public virtual void Configure(EntityTypeBuilder<PrpAllowedParty> builder)
+    public virtual void Configure(EntityTypeBuilder<PrpAuthorizedLicence> builder)
     {
         builder.HasIndex(x => x.LicenceNumber)
             .IsUnique();

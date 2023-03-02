@@ -4,10 +4,10 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 /// <summary>
-/// A list of Parties that have been pre-approved to use the Provider Reporting Portal enrolment. Found using Licence Number (from the college of Physicians and Surgeons).
+/// College Licence Numbers from the College of Physicians and Surgeons that have been pre-authorized to use the Provider Reporting Portal enrolment.
 /// </summary>
-[Table(nameof(PrpAllowedParty))]
-public class PrpAllowedParty
+[Table(nameof(PrpAuthorizedLicence))]
+public class PrpAuthorizedLicence
 {
     [Key]
     public int Id { get; set; }
