@@ -9,7 +9,7 @@ import { DocumentService } from '@app/core/services/document.service';
 import { LoggerService } from '@app/core/services/logger.service';
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
 
-import { PrescriptionRefillEformsResource } from '../prescription-refill-eforms/prescription-refill-eforms-resource.service';
+import { ProviderReportingPortalResource } from './provider-reporting-portal-resource.service';
 
 @Component({
   selector: 'app-provider-reporting-portal',
@@ -27,7 +27,7 @@ export class ProviderReportingPortalPage implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private partyService: PartyService,
-    private resource: PrescriptionRefillEformsResource,
+    private resource: ProviderReportingPortalResource,
     private logger: LoggerService,
     private documentService: DocumentService
   ) {
