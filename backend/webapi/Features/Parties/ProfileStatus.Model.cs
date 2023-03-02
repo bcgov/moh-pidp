@@ -125,8 +125,7 @@ public partial class ProfileStatus
                     return;
                 }
 
-                if (profile.LicenceDeclaration.HasNoLicence
-                    || profile.PartyPlrStanding.HasGoodStanding)
+                if (profile.LicenceDeclaration.HasNoLicence || profile.PartyPlrStanding.HasGoodStanding)
                 {
                     this.StatusCode = StatusCode.Complete;
                     return;
@@ -225,8 +224,7 @@ public partial class ProfileStatus
                     return;
                 }
 
-                if (!profile.DemographicsComplete
-                    || !profile.LicenceDeclarationComplete)
+                if (!profile.DemographicsComplete || !profile.LicenceDeclarationComplete)
                 {
                     this.StatusCode = StatusCode.Locked;
                     return;
@@ -379,9 +377,8 @@ public partial class ProfileStatus
 
             protected override void Compute(ProfileData profile)
             {
-                if (!profile.UserIsBCProvider)
+                if (!profile.UserIsBCProvider || !profile.HasPrpAuthorizedLicence)
                 {
-                    // TODO: AND CHECK DB
                     this.StatusCode = StatusCode.Hidden;
                     return;
                 }

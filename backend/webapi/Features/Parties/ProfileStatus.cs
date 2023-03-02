@@ -11,6 +11,7 @@ using System.Text.Json.Serialization;
 
 using Pidp.Data;
 using Pidp.Extensions;
+using Pidp.Features.AccessRequests;
 using Pidp.Infrastructure;
 using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.HttpClients.Keycloak;
@@ -153,6 +154,7 @@ public partial class ProfileStatus
         private string? userIdentityProvider;
         public PlrStandingsDigest PartyPlrStanding { get; set; } = default!;
         public PlrStandingsDigest EndorsementPlrStanding { get; set; } = default!;
+        public bool HasPrpAuthorizedLicence { get; set; }
 
         [MemberNotNullWhen(true, nameof(Email), nameof(Phone))]
         public bool DemographicsComplete => this.Email != null && this.Phone != null;
@@ -172,6 +174,17 @@ public partial class ProfileStatus
             this.userIdentityProvider = user.GetIdentityProvider();
             this.PartyPlrStanding = await plrClient.GetStandingsDigestAsync(this.Cpn);
 
+
+            var possiblePrpLicenceNumbers = this.PartyPlrStanding
+                .With(ProviderReportingPortal.AllowedIdentifierTypes)
+                .LicenceNumbers;
+            if (this.UserIsBCProvider && possiblePrpLicenceNumbers.Any())
+            {
+                this.HasPrpAuthorizedLicence = await context.PrpAuthorizedLicences
+                    .AnyAsync(authorizedLicence => possiblePrpLicenceNumbers.Contains(authorizedLicence.LicenceNumber));
+            }
+
+            // We should defer this check if possible. See DriverFitnessSection.
             var endorsementCpns = await context.Endorsements
                 .Where(endorsement => endorsement.Active
                     && endorsement.EndorsementRelationships.Any(relationship => relationship.PartyId == this.Id))
