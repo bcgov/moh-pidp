@@ -177,7 +177,7 @@ public partial class ProfileStatus
                 }
 
                 this.StatusCode = profile.DemographicsComplete && profile.LicenceDeclarationComplete
-                    ? StatusCode.Complete
+                    ? StatusCode.Incomplete
                     : StatusCode.Locked;
             }
         }
