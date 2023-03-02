@@ -9,26 +9,27 @@ import {
 
 import { AbstractFormState } from '@bcgov/shared/ui';
 
-export interface BcProviderApplicationFormData {
-  password: string;
+export interface BcProviderEditFormData {
+  newPassword: string;
+  confirmPassword: string;
 }
 
-export class BcProviderApplicationFormState extends AbstractFormState<BcProviderApplicationFormData> {
+export class BcProviderEditFormState extends AbstractFormState<BcProviderEditFormData> {
   public constructor(private fb: FormBuilder) {
     super();
 
     this.buildForm();
   }
 
-  public get password(): FormControl {
-    return this.formInstance.get('password') as FormControl;
+  public get newPassword(): FormControl {
+    return this.formInstance.get('newPassword') as FormControl;
   }
 
   public get confirmPassword(): FormControl {
     return this.formInstance.get('confirmPassword') as FormControl;
   }
 
-  public get json(): BcProviderApplicationFormData | undefined {
+  public get json(): BcProviderEditFormData | undefined {
     if (!this.formInstance) {
       return;
     }
@@ -38,7 +39,7 @@ export class BcProviderApplicationFormState extends AbstractFormState<BcProvider
     return values;
   }
 
-  public patchValue(model: BcProviderApplicationFormData | null): void {
+  public patchValue(model: BcProviderEditFormData | null): void {
     if (!this.formInstance || !model) {
       return;
     }
@@ -48,7 +49,7 @@ export class BcProviderApplicationFormState extends AbstractFormState<BcProvider
 
   public buildForm(): void {
     this.formInstance = this.fb.group({
-      password: [
+      newPassword: [
         '',
         [
           Validators.required,
@@ -59,7 +60,7 @@ export class BcProviderApplicationFormState extends AbstractFormState<BcProvider
       ],
       confirmPassword: [
         '',
-        [Validators.required, this.isEqualToControlValue('password')],
+        [Validators.required, this.isEqualToControlValue('newPassword')],
       ],
     });
   }

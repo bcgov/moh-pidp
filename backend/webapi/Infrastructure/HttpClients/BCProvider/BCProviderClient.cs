@@ -21,12 +21,13 @@ public class BCProviderClient : IBCProviderClient
             return null;
         }
 
-        // NOTE: These is the minimum set of properties that must be set for the user creation to work.
         var bcProviderAccount = new User()
         {
             AccountEnabled = true,
-            DisplayName = userRepresentation.FullName,
-            MailNickname = userRepresentation.FullName.Replace(" ", ""), // Cannot contain spaces
+            DisplayName = userRepresentation.FullName, // Required
+            GivenName = userRepresentation.FirstName,
+            MailNickname = userRepresentation.FullName.Replace(" ", ""), // Required, cannot contain spaces
+            Surname = userRepresentation.LastName,
             UserPrincipalName = userPrincipal,
             PasswordProfile = new PasswordProfile
             {
@@ -51,21 +52,16 @@ public class BCProviderClient : IBCProviderClient
     {
         try
         {
-            var passwordMethods = await this.client.Users[userPrincipalName].Authentication.PasswordMethods
+            await this.client.Users[userPrincipalName]
                 .Request()
-                .GetAsync();
-
-            if (!passwordMethods.Any())
-            {
-                this.logger.LogNoPasswordMethodFound(userPrincipalName);
-                return false;
-            }
-
-            var passwordId = passwordMethods.Single().Id;
-            await this.client.Users[userPrincipalName].Authentication.PasswordMethods[passwordId]
-                .ResetPassword(password)
-                .Request()
-                .PostAsync();
+                .UpdateAsync(new User
+                {
+                    PasswordProfile = new PasswordProfile
+                    {
+                        ForceChangePasswordNextSignIn = false,
+                        Password = password
+                    }
+                });
 
             return true;
         }
@@ -112,9 +108,6 @@ public static partial class BCProviderLoggingExtensions
 
     [LoggerMessage(2, LogLevel.Error, "Failed to create account '{userPrincipalName}'.")]
     public static partial void LogAccountCreationFailure(this ILogger logger, string userPrincipalName);
-
-    [LoggerMessage(3, LogLevel.Error, "Failed to update the password of user '{userPrincipalName}', user has no PasswordMethods.")]
-    public static partial void LogNoPasswordMethodFound(this ILogger logger, string userPrincipalName);
 
     [LoggerMessage(4, LogLevel.Error, "Failed to update the password of user '{userPrincipalName}'.")]
     public static partial void LogPasswordUpdateFailure(this ILogger logger, string userPrincipalName);
