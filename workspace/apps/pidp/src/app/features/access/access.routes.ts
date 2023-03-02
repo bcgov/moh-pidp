@@ -2,6 +2,8 @@ export class AccessRoutes {
   public static MODULE_PATH = 'access';
 
   public static BC_PROVIDER_APPLICATION = 'bc-provider-application';
+  public static BC_PROVIDER_APPLICATION_CHANGE_PASSWORD =
+    'bc-provider-application/change-password';
   public static DRIVER_FITNESS = 'driver-fitness';
   public static HCIM_ACCOUNT_TRANSFER = 'hcim-account-transfer';
   public static HCIM_ENROLMENT = 'hcim-enrolment';

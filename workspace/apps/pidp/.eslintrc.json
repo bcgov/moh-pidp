@@ -16,7 +16,7 @@
           "error",
           {
             "type": "attribute",
-            "prefix": "app",
+            "prefix": ["pidp", "app"],
             "style": "camelCase"
           }
         ],
@@ -24,7 +24,7 @@
           "error",
           {
             "type": "element",
-            "prefix": "app",
+            "prefix": ["pidp", "app"],
             "style": "kebab-case"
           }
         ],

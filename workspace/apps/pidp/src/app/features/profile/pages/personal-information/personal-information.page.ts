@@ -1,7 +1,6 @@
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -25,8 +24,10 @@ import { User } from '@app/features/auth/models/user.model';
 import { AuthorizedUserService } from '@app/features/auth/services/authorized-user.service';
 import { LookupResource } from '@app/modules/lookup/lookup-resource.service';
 
-import { AbstractFormPage } from '@core/classes/abstract-form-page.class';
-import { FormUtilsService } from '@core/services/form-utils.service';
+import {
+  AbstractFormDependenciesService,
+  AbstractFormPage,
+} from '@core/classes/abstract-form-page.class';
 
 import { PersonalInformationFormState } from './personal-information-form-state';
 import { PersonalInformationResource } from './personal-information-resource.service';
@@ -53,9 +54,11 @@ export class PersonalInformationPage
 
   public IdentityProvider = IdentityProvider;
 
+  // ui-page is handling this.
+  public showOverlayOnSubmit = false;
+
   public constructor(
-    protected dialog: MatDialog,
-    protected formUtilsService: FormUtilsService,
+    dependenciesService: AbstractFormDependenciesService,
     private route: ActivatedRoute,
     private router: Router,
     private partyService: PartyService,
@@ -66,7 +69,7 @@ export class PersonalInformationPage
     private lookupResource: LookupResource,
     fb: FormBuilder
   ) {
-    super(dialog, formUtilsService);
+    super(dependenciesService);
 
     this.title = this.route.snapshot.data.title;
     this.formState = new PersonalInformationFormState(fb);

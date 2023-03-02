@@ -4,7 +4,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { catchError, noop, of, tap } from 'rxjs';
 
-import { ApplicationService } from '@pidp/presentation';
+import {
+  ApplicationService,
+  LOADING_OVERLAY_DEFAULT_MESSAGE,
+  LoadingOverlayService,
+} from '@pidp/presentation';
 
 import { PartyService } from '@app/core/party/party.service';
 import { LoggerService } from '@app/core/services/logger.service';
@@ -31,6 +35,7 @@ export class DriverFitnessPage implements OnInit {
   public medicalPractitionerPortalUrl: string;
 
   public constructor(
+    private loadingOverlayService: LoadingOverlayService,
     private route: ActivatedRoute,
     private router: Router,
     private partyService: PartyService,
@@ -66,13 +71,16 @@ export class DriverFitnessPage implements OnInit {
   }
 
   public onRequestAccess(): void {
+    this.loadingOverlayService.open(LOADING_OVERLAY_DEFAULT_MESSAGE);
     this.resource
       .requestAccess(this.partyService.partyId)
       .pipe(
         tap(() => {
           this.completed = true;
+          this.loadingOverlayService.close();
         }),
         catchError((error: HttpErrorResponse) => {
+          this.loadingOverlayService.close();
           if (error.status === HttpStatusCode.BadRequest) {
             this.completed = false;
             this.enrolmentError = true;

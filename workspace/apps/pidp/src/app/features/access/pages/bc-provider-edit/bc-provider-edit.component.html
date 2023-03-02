@@ -1,18 +1,9 @@
 <div class="container-box" uiPidpInjectViewportCss>
   <div class="content-box">
     <header>
-      <h2>Create BC Provider Account</h2>
+      <h2>BC Provider Account Information</h2>
     </header>
     <div class="content">
-      <p class="welcome">Welcome to your BC Provider account setup.</p>
-      <p class="password-info">
-        Your password must be 8 to 256 characters long, with at least one letter
-        and one number or special character. Strong passwords include both
-        upper- and lower-case letters, as well as special characters (such as an
-        exclamation point, question mark or ampersand). Do not use a password
-        that you use anywhere else.
-      </p>
-
       <section class="error-card" [class.show-card]="showErrorCard">
         <p>{{ errorCardText }}</p>
       </section>
@@ -70,17 +61,23 @@
 
 <ng-template #passwordForm>
   <form novalidate [formGroup]="formState.form" (ngSubmit)="onSubmit()">
-    <h3>Create an account</h3>
+    <h3>Password reset</h3>
+    <div class="username">
+      <h4><strong>Provided username</strong></h4>
+      <h5>{{ username }}</h5>
+    </div>
     <div class="form-content">
       <div class="field">
-        <label id="bc-provider-application-password">Choose a password</label>
+        <label id="bc-provider-application-new-password"
+          >Choose new password</label
+        >
         <mat-form-field appearance="outline">
           <input
             matInput
-            formControlName="password"
+            formControlName="newPassword"
             type="password"
-            aria-labelledby="bc-provider-application-password" />
-          <mat-error *ngIf="formState.password.hasError('required')"
+            aria-labelledby="bc-provider-application-new-password" />
+          <mat-error *ngIf="formState.newPassword.hasError('required')"
             >Required</mat-error
           >
         </mat-form-field>
@@ -97,7 +94,7 @@
       </div>
       <div class="field">
         <label id="bc-provider-application-confirm-password"
-          >Confirm password</label
+          >Confirm new password</label
         >
         <mat-form-field appearance="outline">
           <input
@@ -106,7 +103,7 @@
             type="password"
             aria-labelledby="bc-provider-application-confirm-password" />
           <mat-error *ngIf="formState.confirmPassword.invalid"
-            >Must match the password entered above</mat-error
+            >Must match the new password entered above</mat-error
           >
         </mat-form-field>
       </div>
@@ -115,11 +112,37 @@
           mat-flat-button
           type="submit"
           color="primary"
-          [disabled]="!isEnrolButtonEnabled">
-          Enrol now
+          [disabled]="!isResetButtonEnabled">
+          Reset password
         </button>
       </div>
       <div class="help-link"><a href="">Need help?</a></div>
     </div>
   </form>
+</ng-template>
+
+<!-- NOTE: It is not yet clear whether this dialog will be in the "final" UX. If it is, it is a candidate
+to be refactored into a separate component. -->
+<ng-template #successDialog>
+  <div class="dialog-box" uiPidpInjectViewportCss>
+    <div class="dialog-header">
+      <button
+        type="button"
+        aria-label="Close dialog"
+        (click)="onSuccessDialogClose()">
+        <fa-icon [icon]="faXmark"></fa-icon>
+      </button>
+    </div>
+    <div class="dialog-content">
+      <div class="dialog-icon">
+        <fa-icon [icon]="faCircleCheck"></fa-icon>
+      </div>
+      <h3>Password reset completed</h3>
+      <p>
+        Password reset for <strong>{{ username }}</strong> has been created. You
+        will now have the option to sign in to our system with these
+        credentials.
+      </p>
+    </div>
+  </div>
 </ng-template>
