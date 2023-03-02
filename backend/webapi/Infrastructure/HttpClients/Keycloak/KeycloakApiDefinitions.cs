@@ -9,6 +9,7 @@ public static class MohClients
 {
     public static (string ClientId, string AccessRole) DriverFitness => ("DMFT-WEBAPP", "ROLE_NAME_TBD");
     public static (string ClientId, string AccessRole) PrescriptionRefillEforms => ("SAT-EFORMS", "phsa_eforms_rxrefill");
+    public static (string ClientId, string[] AccessRoles) ProviderReportingPortal => ("PRP-SERVICE", new[] { "MSPQI", "PMP" });
     public static (string ClientId, string AccessRole) SAEforms => ("SAT-EFORMS", "phsa_eforms_sat");
 
     public static (string ClientId, string MoaRole, string PractitionerRole) LicenceStatus => ("LICENCE-STATUS", "MOA", "PRACTITIONER");

@@ -80,9 +80,12 @@ public class ProviderReportingPortal
                 return DomainResult.Failed();
             }
 
-            if (!await this.keycloakClient.AssignClientRole(dto.UserId, MohClients.ProviderReportingPortal.ClientId, MohClients.ProviderReportingPortal.AccessRole))
+            foreach (var role in MohClients.ProviderReportingPortal.AccessRoles)
             {
-                return DomainResult.Failed();
+                if (!await this.keycloakClient.AssignClientRole(dto.UserId, MohClients.ProviderReportingPortal.ClientId, role))
+                {
+                    return DomainResult.Failed();
+                }
             }
 
             this.context.AccessRequests.Add(new AccessRequest
