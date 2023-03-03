@@ -5,6 +5,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { EMPTY, catchError, noop, of, tap } from 'rxjs';
 
+import { LoadingOverlayService } from '@pidp/presentation';
+
 import { NoContent } from '@bcgov/shared/data-access';
 
 import {
@@ -49,7 +51,8 @@ export class MsTeamsPage
     private logger: LoggerService,
     private utilsService: UtilsService,
     private documentService: DocumentService,
-    fb: FormBuilder
+    fb: FormBuilder,
+    private loadingOverlayService: LoadingOverlayService
   ) {
     super(dependenciesService);
     const routeData = this.route.snapshot.data;
@@ -101,12 +104,18 @@ export class MsTeamsPage
   protected performSubmission(): NoContent {
     const partyId = this.partyService.partyId;
 
+    this.loadingOverlayService.open();
+
     return partyId && this.formState.json
       ? this.resource
           .requestAccess(this.partyService.partyId, this.formState.json)
           .pipe(
-            tap(() => (this.completed = true)),
+            tap(() => {
+              this.loadingOverlayService.close();
+              this.completed = true;
+            }),
             catchError((error: HttpErrorResponse) => {
+              this.loadingOverlayService.close();
               if (error.status === HttpStatusCode.BadRequest) {
                 this.completed = false;
                 this.enrolmentError = true;
