@@ -14,15 +14,16 @@
 </app-address-autocomplete>
 
 <ng-container *ngIf="showAddressLineFields" [formGroup]="form">
-  <div class="row">
+  <div class="form" uiPidpInjectViewportCss>
     <div
       *ngIf="showFormControl('countryCode')"
-      class="col-12"
+      class="field country"
       [class]="getFormControlOrder('countryCode')">
-      <mat-form-field class="w-100">
-        <mat-label>Country</mat-label>
+      <label id="address-form-street-country">Country</label>
+      <mat-form-field appearance="outline">
         <mat-select
           formControlName="countryCode"
+          aria-labelledby="address-form-street-country"
           [required]="isRequired('countryCode')">
           <mat-option *ngFor="let country of countries" [value]="country.code">
             {{ country.name }}
@@ -33,12 +34,13 @@
     </div>
     <div
       *ngIf="showFormControl('provinceCode')"
-      class="col-12"
+      class="field province"
       [class]="getFormControlOrder('provinceCode')">
-      <mat-form-field class="w-100">
-        <mat-label>{{ provinceLabel }}</mat-label>
+      <label id="address-form-street-province">{{ provinceLabel }}</label>
+      <mat-form-field appearance="outline">
         <mat-select
           formControlName="provinceCode"
+          aria-labelledby="address-form-street-province"
           [required]="isRequired('provinceCode')">
           <mat-option
             *ngFor="let province of filteredProvinces"
@@ -51,39 +53,42 @@
     </div>
     <div
       *ngIf="showFormControl('street')"
-      class="col-12"
+      class="field street"
       [class]="getFormControlOrder('street')">
-      <mat-form-field class="w-100">
+      <label id="address-form-street-label">Street Address</label>
+      <mat-form-field appearance="outline">
         <input
           matInput
-          placeholder="Street Address"
           formControlName="street"
+          aria-labelledby="address-form-street-label"
           [required]="isRequired('street')" />
         <mat-error>Required</mat-error>
       </mat-form-field>
     </div>
     <div
       *ngIf="showFormControl('city')"
-      class="col-12"
+      class="field city"
       [class]="getFormControlOrder('city')">
-      <mat-form-field class="w-100">
+      <label id="address-form-street-city">City</label>
+      <mat-form-field appearance="outline">
         <input
           matInput
-          placeholder="City"
           formControlName="city"
+          aria-labelledby="address-form-street-city"
           [required]="isRequired('city')" />
         <mat-error>Required</mat-error>
       </mat-form-field>
     </div>
     <div
       *ngIf="showFormControl('postal')"
-      class="col-12"
+      class="field postal"
       [class]="getFormControlOrder('postal')">
-      <mat-form-field class="w-100">
-        <mat-label>{{ postalLabel }}</mat-label>
+      <label id="address-form-street-postal">{{ postalLabel }}</label>
+      <mat-form-field appearance="outline">
         <input
           matInput
           formControlName="postal"
+          aria-labelledby="address-form-street-postal"
           [mask]="postalMask"
           [required]="isRequired('postal')" />
         <mat-error>Required</mat-error>
