@@ -102,7 +102,6 @@ export class MsTeamsPage
   }
 
   protected performSubmission(): NoContent {
-    console.log('performSubmission');
     const partyId = this.partyService.partyId;
 
     this.loadingOverlayService.open();
