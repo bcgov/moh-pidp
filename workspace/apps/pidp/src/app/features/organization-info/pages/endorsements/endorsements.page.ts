@@ -70,6 +70,8 @@ export class EndorsementsPage
   public endorsements$!: Observable<Endorsement[]>;
 
   public showOverlayOnSubmit = true;
+  public showTextLabels = false;
+  public showIconLabels = true;
 
   public constructor(
     dependenciesService: AbstractFormDependenciesService,
@@ -93,22 +95,10 @@ export class EndorsementsPage
     );
   }
 
-  public showTextLabels = false;
-  public showIconLabels = true;
-
   public get recipientEmail(): FormControl {
     return this.formState.form.get('recipientEmail') as FormControl;
   }
 
-  private onViewportChange(viewport: PidpViewport): void {
-    if (viewport === PidpViewport.xsmall) {
-      this.showIconLabels = true;
-      this.showTextLabels = false;
-    } else {
-      this.showIconLabels = false;
-      this.showTextLabels = true;
-    }
-  }
   public onBack(): void {
     this.navigationService.navigateToRoot();
   }
@@ -169,6 +159,22 @@ export class EndorsementsPage
       .subscribe();
   }
 
+  public getCollegeTextForEndorsement(endorsement: Endorsement): string {
+    const college = this.lookupService.colleges.find(
+      (x) => x.code === endorsement.id
+    );
+    return college?.name ?? '';
+  }
+
+  public getCollegeTextForEndorsementRequest(
+    endorsementRequest: EndorsementRequest
+  ): string {
+    const college = this.lookupService.colleges.find(
+      (x) => x.code === endorsementRequest.collegeCode
+    );
+    return college?.name ?? '';
+  }
+
   public ngOnInit(): void {
     const partyId = this.partyService.partyId;
 
@@ -190,20 +196,6 @@ export class EndorsementsPage
     this.nonActionableEndorsementRequests$ =
       this.getNonActionableEndorsementRequests(partyId);
   }
-  public getCollegeTextForEndorsement(endorsement: Endorsement): string {
-    const college = this.lookupService.colleges.find(
-      (x) => x.code === endorsement.id
-    );
-    return college?.name ?? '';
-  }
-  public getCollegeTextForEndorsementRequest(
-    endorsementRequest: EndorsementRequest
-  ): string {
-    const college = this.lookupService.colleges.find(
-      (x) => x.code === endorsementRequest.collegeCode
-    );
-    return college?.name ?? '';
-  }
 
   protected performSubmission(): NoContent {
     const partyId = this.partyService.partyId;
@@ -219,6 +211,16 @@ export class EndorsementsPage
 
     this.nonActionableEndorsementRequests$ =
       this.getNonActionableEndorsementRequests(this.partyService.partyId);
+  }
+
+  private onViewportChange(viewport: PidpViewport): void {
+    if (viewport === PidpViewport.xsmall) {
+      this.showIconLabels = true;
+      this.showTextLabels = false;
+    } else {
+      this.showIconLabels = false;
+      this.showTextLabels = true;
+    }
   }
 
   private navigateToRoot(): void {
