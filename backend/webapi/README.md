@@ -21,3 +21,5 @@ volumes:
   # Use the following instead if developing on Mac/Linux:
   # - ${HOME}/.microsoft/usersecrets/5c2dc965-00b4-4531-9ff0-9b37193ead9b:/root/.microsoft/usersecrets/5c2dc965-00b4-4531-9ff0-9b37193ead9b
 ```
+
+The application's user secrets ID is set in the `pidp.csproj` file.
