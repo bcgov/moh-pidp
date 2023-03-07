@@ -6,11 +6,16 @@ public class BCProviderClient : IBCProviderClient
 {
     private readonly GraphServiceClient client;
     private readonly ILogger logger;
+    private readonly string domain;
 
-    public BCProviderClient(GraphServiceClient client, ILogger<BCProviderClient> logger)
+    public BCProviderClient(
+        GraphServiceClient client,
+        ILogger<BCProviderClient> logger,
+        PidpConfiguration config)
     {
         this.client = client;
         this.logger = logger;
+        this.domain = config.BCProviderClient.Domain;
     }
 
     public async Task<User?> CreateBCProviderAccount(UserRepresentation userRepresentation)
@@ -80,7 +85,7 @@ public class BCProviderClient : IBCProviderClient
         for (var i = 1; i <= 100; i++)
         {
             // Generates First.Last@domain instead of First.Last1@domain for the first instance of a name.
-            var proposedName = $"{joinedFullName}{(i < 2 ? string.Empty : i)}@bcproviderlab.ca"; // TODO: update domain
+            var proposedName = $"{joinedFullName}{(i < 2 ? string.Empty : i)}@{this.domain}";
             if (!await this.UserExists(proposedName))
             {
                 return proposedName;
