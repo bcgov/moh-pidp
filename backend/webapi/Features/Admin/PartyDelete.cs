@@ -68,53 +68,54 @@ public class PartyDelete
 
         public async Task RemoveClientRoles(Party party)
         {
-            foreach (var role in await this.DetermineRoles(party.AccessRequests))
-            {
-                if (await this.client.RemoveClientRole(party.PrimaryUserId, role))
-                {
-                    this.logger.LogRemoveSuccess(role.Name!, party.PrimaryUserId);
-                }
-                else
-                {
-                    this.logger.LogRemoveFailure(role.Name!, party.PrimaryUserId);
-                }
-            }
+            // TODO: restore this functionality
+            // foreach (var role in await this.DetermineRoles(party.AccessRequests))
+            // {
+            //     if (await this.client.RemoveClientRole(party.PrimaryUserId, role))
+            //     {
+            //         this.logger.LogRemoveSuccess(role.Name!, party.PrimaryUserId);
+            //     }
+            //     else
+            //     {
+            //         this.logger.LogRemoveFailure(role.Name!, party.PrimaryUserId);
+            //     }
+            // }
         }
 
-        private async Task<IEnumerable<Role>> DetermineRoles(IEnumerable<AccessRequest> accessRequests)
-        {
-            var roleList = new List<Role?>();
-            foreach (var accessRequest in accessRequests)
-            {
-                var clientInfo = MohClients.FromAccessType(accessRequest.AccessTypeCode);
-                if (clientInfo != null)
-                {
-                    roleList.Add(await this.GetOrAddRole(clientInfo.Value.ClientId, clientInfo.Value.AccessRole));
-                }
-            }
+        // private async Task<IEnumerable<Role>> DetermineRoles(IEnumerable<AccessRequest> accessRequests)
+        // {
+        //     var roleList = new List<Role?>();
+        //     foreach (var accessRequest in accessRequests)
+        //     {
+        //         var clientInfo = MohClients.FromAccessType(accessRequest.AccessTypeCode);
+        //         if (clientInfo != null)
+        //         {
+        //             roleList.Add(await this.GetOrAddRole(clientInfo.Value.ClientId, clientInfo.Value.AccessRole));
+        //         }
+        //     }
 
-            roleList.Add(await this.GetOrAddRole(MohClients.LicenceStatus.ClientId, MohClients.LicenceStatus.MoaRole));
-            roleList.Add(await this.GetOrAddRole(MohClients.LicenceStatus.ClientId, MohClients.LicenceStatus.PractitionerRole));
+        //     roleList.Add(await this.GetOrAddRole(MohClients.LicenceStatus.ClientId, MohClients.LicenceStatus.MoaRole));
+        //     roleList.Add(await this.GetOrAddRole(MohClients.LicenceStatus.ClientId, MohClients.LicenceStatus.PractitionerRole));
 
-            return roleList.Where(role => role != null).Cast<Role>();
-        }
+        //     return roleList.Where(role => role != null).Cast<Role>();
+        // }
 
-        private async Task<Role?> GetOrAddRole(string clientId, string roleName)
-        {
-            if (this.roleCache.TryGetValue(roleName, out var cached))
-            {
-                return cached;
-            }
+        // private async Task<Role?> GetOrAddRole(string clientId, string roleName)
+        // {
+        //     if (this.roleCache.TryGetValue(roleName, out var cached))
+        //     {
+        //         return cached;
+        //     }
 
-            var role = await this.client.GetClientRole(clientId, roleName);
-            if (role == null)
-            {
-                this.logger.LogClientRoleNotFound(roleName, clientId);
-            }
+        //     var role = await this.client.GetClientRole(clientId, roleName);
+        //     if (role == null)
+        //     {
+        //         this.logger.LogClientRoleNotFound(roleName, clientId);
+        //     }
 
-            this.roleCache.Add(roleName, role);
-            return role;
-        }
+        //     this.roleCache.Add(roleName, role);
+        //     return role;
+        // }
     }
 }
 

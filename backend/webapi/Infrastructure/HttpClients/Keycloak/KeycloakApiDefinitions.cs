@@ -14,19 +14,21 @@ public static class MohClients
 
     public static (string ClientId, string MoaRole, string PractitionerRole) LicenceStatus => ("LICENCE-STATUS", "MOA", "PRACTITIONER");
 
-    public static (string ClientId, string AccessRole)? FromAccessType(AccessTypeCode code)
-    {
-        return code switch
-        {
-            AccessTypeCode.DriverFitness => DriverFitness,
-            AccessTypeCode.HcimAccountTransfer => null,
-            AccessTypeCode.HcimEnrolment => null,
-            AccessTypeCode.MSTeams => null,
-            AccessTypeCode.PrescriptionRefillEforms => PrescriptionRefillEforms,
-            AccessTypeCode.SAEforms => SAEforms,
-            _ => null
-        };
-    }
+    // TODO: restore this functionality
+    // public static (string ClientId, string AccessRole)? FromAccessType(AccessTypeCode code)
+    // {
+    //     return code switch
+    //     {
+    //         AccessTypeCode.DriverFitness => DriverFitness,
+    //         AccessTypeCode.HcimAccountTransfer => null,
+    //         AccessTypeCode.HcimEnrolment => null,
+    //         AccessTypeCode.MSTeams => null,
+    //         AccessTypeCode.PrescriptionRefillEforms => PrescriptionRefillEforms,
+    //         AccessTypeCode.ProviderReportingPortal => ProviderReportingPortal,
+    //         AccessTypeCode.SAEforms => SAEforms,
+    //         _ => null
+    //     };
+    // }
 }
 
 /// <summary>
