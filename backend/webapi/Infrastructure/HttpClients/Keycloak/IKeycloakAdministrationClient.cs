@@ -3,6 +3,14 @@ namespace Pidp.Infrastructure.HttpClients.Keycloak;
 public interface IKeycloakAdministrationClient
 {
     /// <summary>
+    /// Assigns the User one or more Roles relevant to an enrolment.
+    /// Returns true if the operation was successful.
+    /// </summary>
+    /// <param name="userId"></param>
+    /// <param name="enrolment"></param>
+    Task<bool> AssignAccessRoles(Guid userId, MohKeycloakEnrolment enrolment);
+
+    /// <summary>
     /// Assigns a Client Role to the user, if it exists.
     /// Returns true if the operation was successful.
     /// </summary>
@@ -33,6 +41,13 @@ public interface IKeycloakAdministrationClient
     /// <param name="clientId"></param>
     /// <param name="roleName"></param>
     Task<Role?> GetClientRole(string clientId, string roleName);
+
+    /// <summary>
+    /// Gets the Keycloak Client Roles from a Client.
+    /// Returns null if unsuccessful.
+    /// </summary>
+    /// <param name="clientId"></param>
+    Task<IEnumerable<Role>?> GetClientRoles(string clientId);
 
     /// <summary>
     /// Gets the Keycloak Role representation by name.

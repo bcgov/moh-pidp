@@ -7,6 +7,36 @@ public class KeycloakAdministrationClient : BaseClient, IKeycloakAdministrationC
 {
     public KeycloakAdministrationClient(HttpClient httpClient, ILogger<KeycloakAdministrationClient> logger) : base(httpClient, logger) { }
 
+    public async Task<bool> AssignAccessRoles(Guid userId, MohKeycloakEnrolment enrolment)
+    {
+        if (!enrolment.AccessRoles.Any())
+        {
+            return true;
+        }
+
+        // We need both the name and ID of the role to assign it.
+        var roles = await this.GetClientRoles(enrolment.ClientId);
+        if (roles == null)
+        {
+            return false;
+        }
+
+        var rolesToAssign = roles.IntersectBy(enrolment.AccessRoles, role => role.Name);
+        if (rolesToAssign.Count() < enrolment.AccessRoles.Count())
+        {
+            // Some Roles were not found
+            return false;
+        }
+
+        var result = await this.PostAsync($"users/{userId}/role-mappings/clients/{rolesToAssign.First().ContainerId}", rolesToAssign);
+        if (result.IsSuccess)
+        {
+            this.Logger.LogClientRolesAssigned(userId, enrolment.AccessRoles, enrolment.ClientId);
+        }
+
+        return result.IsSuccess;
+    }
+
     public async Task<bool> AssignClientRole(Guid userId, string clientId, string roleName)
     {
         // We need both the name and ID of the role to assign it.
@@ -20,7 +50,7 @@ public class KeycloakAdministrationClient : BaseClient, IKeycloakAdministrationC
         var result = await this.PostAsync($"users/{userId}/role-mappings/clients/{role.ContainerId}", new[] { role });
         if (result.IsSuccess)
         {
-            this.Logger.LogClientRoleAssigned(userId, roleName, clientId);
+            this.Logger.LogClientRolesAssigned(userId, new[] { roleName }, clientId);
         }
 
         return result.IsSuccess;
@@ -66,6 +96,24 @@ public class KeycloakAdministrationClient : BaseClient, IKeycloakAdministrationC
 
     public async Task<Role?> GetClientRole(string clientId, string roleName)
     {
+        var roles = await this.GetClientRoles(clientId);
+        if (roles == null)
+        {
+            return null;
+        }
+
+        var role = roles.SingleOrDefault(r => r.Name == roleName);
+
+        if (role == null)
+        {
+            this.Logger.LogClientRoleNotFound(roleName, clientId);
+        }
+
+        return role;
+    }
+
+    public async Task<IEnumerable<Role>?> GetClientRoles(string clientId)
+    {
         // Need ID of Client (not the same as ClientId!) to fetch roles.
         var client = await this.GetClient(clientId);
         if (client == null)
@@ -80,14 +128,7 @@ public class KeycloakAdministrationClient : BaseClient, IKeycloakAdministrationC
             return null;
         }
 
-        var role = result.Value?.SingleOrDefault(r => r.Name == roleName);
-
-        if (role == null)
-        {
-            this.Logger.LogClientRoleNotFound(roleName, clientId);
-        }
-
-        return role;
+        return result.Value;
     }
 
     public async Task<Role?> GetRealmRole(string roleName)
@@ -170,8 +211,8 @@ public static partial class KeycloakAdministrationClientLoggingExtensions
     [LoggerMessage(2, LogLevel.Error, "Could not find a Client Role with name {roleName} from Client {clientId} in Keycloak response.")]
     public static partial void LogClientRoleNotFound(this ILogger logger, string roleName, string clientId);
 
-    [LoggerMessage(3, LogLevel.Information, "User {userId} was assigned Role {roleName} in Client {clientId}.")]
-    public static partial void LogClientRoleAssigned(this ILogger logger, Guid userId, string roleName, string clientId);
+    [LoggerMessage(3, LogLevel.Information, "User {userId} was assigned Role(s) {roleNames} in Client {clientId}.")]
+    public static partial void LogClientRolesAssigned(this ILogger logger, Guid userId, IEnumerable<string> roleNames, string clientId);
 
     [LoggerMessage(4, LogLevel.Information, "User {userId} was assigned Realm Role {roleName}.")]
     public static partial void LogRealmRoleAssigned(this ILogger logger, Guid userId, string roleName);
