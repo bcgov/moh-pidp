@@ -21,14 +21,14 @@ public interface IKeycloakAdministrationClient
 
     /// <summary>
     /// Gets the Keycloak Client representation by ClientId.
-    /// Returns null if unccessful.
+    /// Returns null if unsuccessful.
     /// </summary>
     /// <param name="clientId"></param>
     Task<Client?> GetClient(string clientId);
 
     /// <summary>
     /// Gets the Keycloak Client Role representation by name.
-    /// Returns null if unccessful or if no roles of that name exist on the client.
+    /// Returns null if unsuccessful or if no roles of that name exist on the client.
     /// </summary>
     /// <param name="clientId"></param>
     /// <param name="roleName"></param>
@@ -36,14 +36,14 @@ public interface IKeycloakAdministrationClient
 
     /// <summary>
     /// Gets the Keycloak Role representation by name.
-    /// Returns null if unccessful.
+    /// Returns null if unsuccessful.
     /// </summary>
     /// <param name="roleName"></param>
     Task<Role?> GetRealmRole(string roleName);
 
     /// <summary>
     /// Gets the Keycloak User Representation for the user.
-    /// Returns null if unccessful.
+    /// Returns null if unsuccessful.
     /// </summary>
     /// <param name="userId"></param>
     Task<UserRepresentation?> GetUser(Guid userId);
