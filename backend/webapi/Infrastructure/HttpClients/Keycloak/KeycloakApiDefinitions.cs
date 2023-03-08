@@ -8,6 +8,7 @@ using Pidp.Models.Lookups;
 public class MohKeycloakEnrolment
 {
 
+    private static readonly List<MohKeycloakEnrolment> All = new();
     public static readonly MohKeycloakEnrolment DriverFitness = new("DMFT-WEBAPP", AccessTypeCode.DriverFitness, "ROLE_NAME_TBD");
     public static readonly MohKeycloakEnrolment PrescriptionRefillEforms = new("SAT-EFORMS", AccessTypeCode.PrescriptionRefillEforms, "phsa_eforms_rxrefill");
     public static readonly MohKeycloakEnrolment ProviderReportingPortal = new("PRP-SERVICE", AccessTypeCode.ProviderReportingPortal, "MSPQI", "PMP");
@@ -20,7 +21,6 @@ public class MohKeycloakEnrolment
     public AccessTypeCode? AssocatedAccessRequest { get; private set; }
     public string ClientId { get; private set; }
 
-    private static readonly List<MohKeycloakEnrolment> All = new();
 
     private MohKeycloakEnrolment(string clientId, params string[] accessRoles) : this(clientId, null, accessRoles) { }
 
