@@ -17,23 +17,23 @@ public class MohKeycloakEnrolment
     public static readonly MohKeycloakEnrolment PractitionerLicenceStatus = new("LICENCE-STATUS", "PRACTITIONER");
 
     public IEnumerable<string> AccessRoles { get; private set; }
-    public AccessTypeCode? AssocatedEnrolment { get; private set; }
+    public AccessTypeCode? AssocatedAccessRequest { get; private set; }
     public string ClientId { get; private set; }
 
     private static readonly List<MohKeycloakEnrolment> All = new();
 
     private MohKeycloakEnrolment(string clientId, params string[] accessRoles) : this(clientId, null, accessRoles) { }
 
-    private MohKeycloakEnrolment(string clientId, AccessTypeCode? associatedEnrolment, params string[] accessRoles)
+    private MohKeycloakEnrolment(string clientId, AccessTypeCode? associatedAccessRequest, params string[] accessRoles)
     {
         this.AccessRoles = accessRoles;
-        this.AssocatedEnrolment = associatedEnrolment;
+        this.AssocatedAccessRequest = associatedAccessRequest;
         this.ClientId = clientId;
 
         All.Add(this);
     }
 
-    public static MohKeycloakEnrolment? FromAssociatedEnrolment(AccessTypeCode associatedEnrolment) => All.SingleOrDefault(enrolment => enrolment.AssocatedEnrolment == associatedEnrolment);
+    public static MohKeycloakEnrolment? FromAssociatedAccessRequest(AccessTypeCode associatedEnrolment) => All.SingleOrDefault(enrolment => enrolment.AssocatedAccessRequest == associatedEnrolment);
 }
 
 /// <summary>

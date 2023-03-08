@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore;
 using Pidp.Data;
 using Pidp.Infrastructure.HttpClients.Keycloak;
 using Pidp.Models;
-using Pidp.Models.Lookups;
 
 public class PartyDelete
 {
@@ -55,7 +54,7 @@ public class PartyDelete
     /// </summary>
     private class RoleRemover
     {
-        private readonly Dictionary<string, Role?> roleCache;
+        private readonly Dictionary<MohKeycloakEnrolment, IEnumerable<Role>> roleCache;
         private readonly IKeycloakAdministrationClient client;
         private readonly ILogger logger;
 
@@ -68,65 +67,72 @@ public class PartyDelete
 
         public async Task RemoveClientRoles(Party party)
         {
-            // TODO: restore this functionality
-            // foreach (var role in await this.DetermineRoles(party.AccessRequests))
-            // {
-            //     if (await this.client.RemoveClientRole(party.PrimaryUserId, role))
-            //     {
-            //         this.logger.LogRemoveSuccess(role.Name!, party.PrimaryUserId);
-            //     }
-            //     else
-            //     {
-            //         this.logger.LogRemoveFailure(role.Name!, party.PrimaryUserId);
-            //     }
-            // }
+            foreach (var role in await this.DetermineRoles(party))
+            {
+                foreach (var credential in party.Credentials)
+                {
+                    if (!await this.client.RemoveClientRole(credential.UserId, role))
+                    {
+                        this.logger.LogRemoveFailure(role.Name!, party.PrimaryUserId);
+                    }
+                }
+            }
         }
 
-        // private async Task<IEnumerable<Role>> DetermineRoles(IEnumerable<AccessRequest> accessRequests)
-        // {
-        //     var roleList = new List<Role?>();
-        //     foreach (var accessRequest in accessRequests)
-        //     {
-        //         var clientInfo = MohClients.FromAccessType(accessRequest.AccessTypeCode);
-        //         if (clientInfo != null)
-        //         {
-        //             roleList.Add(await this.GetOrAddRole(clientInfo.Value.ClientId, clientInfo.Value.AccessRole));
-        //         }
-        //     }
+        private async Task<IEnumerable<Role>> DetermineRoles(Party party)
+        {
+            var enrolments = party.AccessRequests
+                .Select(accessRequest => MohKeycloakEnrolment.FromAssociatedAccessRequest(accessRequest.AccessTypeCode))
+                .Where(enrolment => enrolment != null);
 
-        //     roleList.Add(await this.GetOrAddRole(MohClients.LicenceStatus.ClientId, MohClients.LicenceStatus.MoaRole));
-        //     roleList.Add(await this.GetOrAddRole(MohClients.LicenceStatus.ClientId, MohClients.LicenceStatus.PractitionerRole));
+            if (string.IsNullOrWhiteSpace(party.Cpn))
+            {
+                enrolments = enrolments.Append(MohKeycloakEnrolment.MoaLicenceStatus);
+            }
+            else
+            {
+                enrolments = enrolments.Append(MohKeycloakEnrolment.PractitionerLicenceStatus);
+            }
 
-        //     return roleList.Where(role => role != null).Cast<Role>();
-        // }
+            List<Role> roles = new();
+            foreach (var enrolment in enrolments)
+            {
+                roles.AddRange(await this.GetOrAddRoles(enrolment!));
+            }
+            return roles;
+        }
 
-        // private async Task<Role?> GetOrAddRole(string clientId, string roleName)
-        // {
-        //     if (this.roleCache.TryGetValue(roleName, out var cached))
-        //     {
-        //         return cached;
-        //     }
+        private async Task<IEnumerable<Role>> GetOrAddRoles(MohKeycloakEnrolment enrolment)
+        {
+            if (this.roleCache.TryGetValue(enrolment, out var cached))
+            {
+                return cached;
+            }
 
-        //     var role = await this.client.GetClientRole(clientId, roleName);
-        //     if (role == null)
-        //     {
-        //         this.logger.LogClientRoleNotFound(roleName, clientId);
-        //     }
+            List<Role> roles = new();
+            foreach (var roleName in enrolment.AccessRoles)
+            {
+                var role = await this.client.GetClientRole(enrolment.ClientId, roleName);
+                if (role == null)
+                {
+                    this.logger.LogClientRoleNotFound(roleName, enrolment.ClientId);
+                    throw new InvalidOperationException("Error Comunicating with Keycloak");
+                }
 
-        //     this.roleCache.Add(roleName, role);
-        //     return role;
-        // }
+                roles.Add(role);
+            }
+
+            this.roleCache.Add(enrolment, roles);
+            return roles;
+        }
     }
 }
 
 public static partial class PartyDeleteLoggingExtensions
 {
-    [LoggerMessage(1, LogLevel.Error, "Removed {roleName} from {userId}.")]
-    public static partial void LogRemoveSuccess(this ILogger logger, string roleName, Guid userId);
-
-    [LoggerMessage(2, LogLevel.Error, "Could not remove {roleName} from {userId}.")]
+    [LoggerMessage(1, LogLevel.Error, "Could not remove {roleName} from {userId}.")]
     public static partial void LogRemoveFailure(this ILogger logger, string roleName, Guid userId);
 
-    [LoggerMessage(3, LogLevel.Error, "Could not find a Client Role with name {roleName} in Client {clientId}.")]
+    [LoggerMessage(2, LogLevel.Error, "Could not find a Client Role with name {roleName} in Client {clientId}.")]
     public static partial void LogClientRoleNotFound(this ILogger logger, string roleName, string clientId);
 }
