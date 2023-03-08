@@ -136,9 +136,9 @@ public class LicenceDeclaration
                 return;
             }
 
-            if (await this.keycloakClient.AssignClientRole(userId, MohClients.LicenceStatus.ClientId, MohClients.LicenceStatus.PractitionerRole))
+            if (await this.keycloakClient.AssignAccessRoles(userId, MohKeycloakEnrolment.PractitionerLicenceStatus))
             {
-                this.context.BusinessEvents.Add(LicenceStatusRoleAssigned.Create(partyId, MohClients.LicenceStatus.PractitionerRole, this.clock.GetCurrentInstant()));
+                this.context.BusinessEvents.Add(LicenceStatusRoleAssigned.Create(partyId, MohKeycloakEnrolment.PractitionerLicenceStatus, this.clock.GetCurrentInstant()));
             };
         }
     }

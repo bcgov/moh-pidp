@@ -89,9 +89,9 @@ public partial class ProfileStatus
                         .SingleAsync(party => party.Id == command.Id);
                     party.Cpn = newCpn;
                     await this.keycloakClient.UpdateUserCpn(party.PrimaryUserId, newCpn);
-                    if (await this.keycloakClient.AssignClientRole(party.PrimaryUserId, MohClients.LicenceStatus.ClientId, MohClients.LicenceStatus.PractitionerRole))
+                    if (await this.keycloakClient.AssignAccessRoles(party.PrimaryUserId, MohKeycloakEnrolment.PractitionerLicenceStatus))
                     {
-                        this.context.BusinessEvents.Add(LicenceStatusRoleAssigned.Create(party.Id, MohClients.LicenceStatus.PractitionerRole, this.clock.GetCurrentInstant()));
+                        this.context.BusinessEvents.Add(LicenceStatusRoleAssigned.Create(party.Id, MohKeycloakEnrolment.PractitionerLicenceStatus, this.clock.GetCurrentInstant()));
                     };
                     await this.context.SaveChangesAsync();
                 }

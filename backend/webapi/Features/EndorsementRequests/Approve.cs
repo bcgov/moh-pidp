@@ -105,9 +105,9 @@ public class Approve
             }
 
             var unLicencedParty = parties.Single(party => string.IsNullOrWhiteSpace(party.Cpn));
-            if (await this.keycloakClient.AssignClientRole(unLicencedParty.UserId, MohClients.LicenceStatus.ClientId, MohClients.LicenceStatus.MoaRole))
+            if (await this.keycloakClient.AssignAccessRoles(unLicencedParty.UserId, MohKeycloakEnrolment.MoaLicenceStatus))
             {
-                this.context.BusinessEvents.Add(LicenceStatusRoleAssigned.Create(unLicencedParty.Id, MohClients.LicenceStatus.MoaRole, this.clock.GetCurrentInstant()));
+                this.context.BusinessEvents.Add(LicenceStatusRoleAssigned.Create(unLicencedParty.Id, MohKeycloakEnrolment.MoaLicenceStatus, this.clock.GetCurrentInstant()));
             }
             else
             {

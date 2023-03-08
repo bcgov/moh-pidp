@@ -76,7 +76,7 @@ public class SAEforms
                 return DomainResult.Failed();
             }
 
-            if (!await this.keycloakClient.AssignClientRole(dto.UserId, MohClients.SAEforms.ClientId, MohClients.SAEforms.AccessRole))
+            if (!await this.keycloakClient.AssignAccessRoles(dto.UserId, MohKeycloakEnrolment.SAEforms))
             {
                 return DomainResult.Failed();
             }
