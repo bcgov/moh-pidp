@@ -110,7 +110,7 @@ public class DriverFitnessTests : InMemoryDbTest
 
         Assert.True(result.IsSuccess);
         A.CallTo(() => client.GetAggregateStandingsDigestAsync(An<IEnumerable<string?>>.That.IsSameSequenceAs(new[] { otherParty.Cpn }))).MustHaveHappened();
-        A.CallTo(() => keycloakClient.AssignClientRole(party.PrimaryUserId, MohClients.DriverFitness.ClientId, MohClients.DriverFitness.AccessRole)).MustHaveHappened();
+        A.CallTo(() => keycloakClient.AssignAccessRoles(party.PrimaryUserId, MohKeycloakEnrolment.DriverFitness)).MustHaveHappened();
     }
 
     [Fact]

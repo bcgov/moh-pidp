@@ -126,6 +126,7 @@ public class EndorsementApproveTests : InMemoryDbTest
         Assert.True(result.IsSuccess);
         if (expectedRoleAssigned == null)
         {
+            A.CallTo(() => keycloakClient.AssignAccessRoles(A<Guid>._, A<MohKeycloakEnrolment>._)).MustNotHaveHappened();
             A.CallTo(() => keycloakClient.AssignClientRole(A<Guid>._, A<string>._, A<string>._)).MustNotHaveHappened();
         }
         else
@@ -134,7 +135,7 @@ public class EndorsementApproveTests : InMemoryDbTest
                 .Where(party => party.Id == expectedRoleAssigned)
                 .Select(party => party.PrimaryUserId)
                 .Single();
-            A.CallTo(() => keycloakClient.AssignClientRole(expectedUserId, MohClients.LicenceStatus.ClientId, MohClients.LicenceStatus.MoaRole)).MustHaveHappened();
+            A.CallTo(() => keycloakClient.AssignAccessRoles(expectedUserId, MohKeycloakEnrolment.MoaLicenceStatus)).MustHaveHappened();
         }
     }
 

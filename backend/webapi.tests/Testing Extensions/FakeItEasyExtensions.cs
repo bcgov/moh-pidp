@@ -42,10 +42,12 @@ public static class FakeItEasyExtensions
         if (userId == null)
         {
             A.CallTo(() => client.AssignClientRole(A<Guid>._, A<string>._, A<string>._)).Returns(true);
+            A.CallTo(() => client.AssignAccessRoles(A<Guid>._, A<MohKeycloakEnrolment>._)).Returns(true);
         }
         else
         {
             A.CallTo(() => client.AssignClientRole(userId.Value, A<string>._, A<string>._)).Returns(true);
+            A.CallTo(() => client.AssignAccessRoles(userId.Value, A<MohKeycloakEnrolment>._)).Returns(true);
         }
 
         return client;
