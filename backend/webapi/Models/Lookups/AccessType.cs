@@ -10,7 +10,8 @@ public enum AccessTypeCode
     HcimEnrolment,
     DriverFitness,
     MSTeams,
-    PrescriptionRefillEforms
+    PrescriptionRefillEforms,
+    ProviderReportingPortal
 }
 
 [Table("AccessTypeLookup")]
@@ -32,5 +33,6 @@ public class AccessTypeDataGenerator : ILookupDataGenerator<AccessType>
         new AccessType { Code = AccessTypeCode.DriverFitness,            Name = "Driver Medical Fitness"                    },
         new AccessType { Code = AccessTypeCode.MSTeams,                  Name = "MS Teams for Clinical Use"                 },
         new AccessType { Code = AccessTypeCode.PrescriptionRefillEforms, Name = "Prescription Refill eForm for Pharmacists" },
+        new AccessType { Code = AccessTypeCode.ProviderReportingPortal,  Name = "Provider Reporting Portal"                 },
     };
 }

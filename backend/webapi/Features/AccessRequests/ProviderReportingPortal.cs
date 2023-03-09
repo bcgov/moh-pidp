@@ -6,16 +6,15 @@ using Microsoft.EntityFrameworkCore;
 using NodaTime;
 
 using Pidp.Data;
+using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.HttpClients.Keycloak;
-using Pidp.Infrastructure.HttpClients.Mail;
 using Pidp.Infrastructure.HttpClients.Plr;
-using Pidp.Infrastructure.Services;
 using Pidp.Models;
 using Pidp.Models.Lookups;
 
-public class SAEforms
+public class ProviderReportingPortal
 {
-    public static IdentifierType[] ExcludedIdentifierTypes => new[] { IdentifierType.PharmacyTech };
+    public static IdentifierType[] AllowedIdentifierTypes => new[] { IdentifierType.PhysiciansAndSurgeons };
 
     public class Command : ICommand<IDomainResult>
     {
@@ -30,7 +29,6 @@ public class SAEforms
     public class CommandHandler : ICommandHandler<Command, IDomainResult>
     {
         private readonly IClock clock;
-        private readonly IEmailService emailService;
         private readonly IKeycloakAdministrationClient keycloakClient;
         private readonly ILogger logger;
         private readonly IPlrClient plrClient;
@@ -38,14 +36,12 @@ public class SAEforms
 
         public CommandHandler(
             IClock clock,
-            IEmailService emailService,
             IKeycloakAdministrationClient keycloakClient,
             ILogger<CommandHandler> logger,
             IPlrClient plrClient,
             PidpDbContext context)
         {
             this.clock = clock;
-            this.emailService = emailService;
             this.keycloakClient = keycloakClient;
             this.logger = logger;
             this.plrClient = plrClient;
@@ -58,25 +54,33 @@ public class SAEforms
                 .Where(party => party.Id == command.PartyId)
                 .Select(party => new
                 {
-                    AlreadyEnroled = party.AccessRequests.Any(request => request.AccessTypeCode == AccessTypeCode.SAEforms),
-                    UserId = party.PrimaryUserId,
-                    party.Email,
-                    party.FirstName,
+                    AlreadyEnroled = party.AccessRequests.Any(request => request.AccessTypeCode == AccessTypeCode.ProviderReportingPortal),
+                    party.Credentials.Single(credential => credential.IdentityProvider == IdentityProviders.BCProvider).UserId,
                     party.Cpn,
                 })
                 .SingleAsync();
 
+            var filteredPlrDigest = (await this.plrClient.GetStandingsDigestAsync(dto.Cpn))
+                .With(AllowedIdentifierTypes);
+
             if (dto.AlreadyEnroled
-                || dto.Email == null
-                || !(await this.plrClient.GetStandingsDigestAsync(dto.Cpn))
-                    .Excluding(ExcludedIdentifierTypes)
+                || !filteredPlrDigest
                     .HasGoodStanding)
             {
-                this.logger.LogSAEformsAccessRequestDenied();
+                this.logger.LogProviderReportingPortalAccessRequestDenied();
                 return DomainResult.Failed();
             }
 
-            if (!await this.keycloakClient.AssignAccessRoles(dto.UserId, MohKeycloakEnrolment.SAEforms))
+            var prpAuthorization = await this.context.PrpAuthorizedLicences
+                .SingleOrDefaultAsync(authorizedLicence => filteredPlrDigest.LicenceNumbers.Contains(authorizedLicence.LicenceNumber));
+
+            if (prpAuthorization == null)
+            {
+                this.logger.LogProviderReportingPortalUnauthorizedLicence(command.PartyId, filteredPlrDigest.LicenceNumbers);
+                return DomainResult.Failed();
+            }
+
+            if (!await this.keycloakClient.AssignAccessRoles(dto.UserId, MohKeycloakEnrolment.ProviderReportingPortal))
             {
                 return DomainResult.Failed();
             }
@@ -84,33 +88,24 @@ public class SAEforms
             this.context.AccessRequests.Add(new AccessRequest
             {
                 PartyId = command.PartyId,
-                AccessTypeCode = AccessTypeCode.SAEforms,
+                AccessTypeCode = AccessTypeCode.ProviderReportingPortal,
                 RequestedOn = this.clock.GetCurrentInstant()
             });
 
+            prpAuthorization.Claimed = true;
+
             await this.context.SaveChangesAsync();
 
-            await this.SendConfirmationEmailAsync(dto.Email, dto.FirstName);
-
             return DomainResult.Success();
-        }
-
-        private async Task SendConfirmationEmailAsync(string partyEmail, string firstName)
-        {
-            var link = $"<a href=\"https://www.eforms.healthbc.org/login\" target=\"_blank\" rel=\"noopener noreferrer\">link</a>";
-            var email = new Email(
-                from: EmailService.PidpEmail,
-                to: partyEmail,
-                subject: "SA eForms Enrolment Confirmation",
-                body: $"Hi {firstName},<br><br>You will need to visit this {link} each time you want to submit an SA eForm. It may be helpful to bookmark this {link} for future use."
-            );
-            await this.emailService.SendAsync(email);
         }
     }
 }
 
-public static partial class SAEformsLoggingExtensions
+public static partial class ProviderReportingPortalLoggingExtensions
 {
-    [LoggerMessage(1, LogLevel.Warning, "SA eForms Access Request denied due to the Party Record not meeting all prerequisites.")]
-    public static partial void LogSAEformsAccessRequestDenied(this ILogger logger);
+    [LoggerMessage(1, LogLevel.Warning, "Provider Reporting Portal enrolment denied due to the Party Record not meeting all prerequisites.")]
+    public static partial void LogProviderReportingPortalAccessRequestDenied(this ILogger logger);
+
+    [LoggerMessage(2, LogLevel.Warning, "Provider Reporting Portal enrolment denied; Party #{partyId} with Licence Number(s) {licenceNumbers} are not pre-authorized.")]
+    public static partial void LogProviderReportingPortalUnauthorizedLicence(this ILogger logger, int partyId, IEnumerable<string> licenceNumbers);
 }

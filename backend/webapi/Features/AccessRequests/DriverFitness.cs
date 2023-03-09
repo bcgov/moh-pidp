@@ -99,7 +99,7 @@ public class DriverFitness
                 }
             }
 
-            if (!await this.keycloakClient.AssignClientRole(dto.UserId, MohClients.DriverFitness.ClientId, MohClients.DriverFitness.AccessRole))
+            if (!await this.keycloakClient.AssignAccessRoles(dto.UserId, MohKeycloakEnrolment.DriverFitness))
             {
                 return DomainResult.Failed();
             }

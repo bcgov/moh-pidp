@@ -11,6 +11,7 @@ using System.Text.Json.Serialization;
 
 using Pidp.Data;
 using Pidp.Extensions;
+using Pidp.Features.AccessRequests;
 using Pidp.Infrastructure;
 using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.HttpClients.Keycloak;
@@ -88,9 +89,9 @@ public partial class ProfileStatus
                         .SingleAsync(party => party.Id == command.Id);
                     party.Cpn = newCpn;
                     await this.keycloakClient.UpdateUserCpn(party.PrimaryUserId, newCpn);
-                    if (await this.keycloakClient.AssignClientRole(party.PrimaryUserId, MohClients.LicenceStatus.ClientId, MohClients.LicenceStatus.PractitionerRole))
+                    if (await this.keycloakClient.AssignAccessRoles(party.PrimaryUserId, MohKeycloakEnrolment.PractitionerLicenceStatus))
                     {
-                        this.context.BusinessEvents.Add(LicenceStatusRoleAssigned.Create(party.Id, MohClients.LicenceStatus.PractitionerRole, this.clock.GetCurrentInstant()));
+                        this.context.BusinessEvents.Add(LicenceStatusRoleAssigned.Create(party.Id, MohKeycloakEnrolment.PractitionerLicenceStatus, this.clock.GetCurrentInstant()));
                     };
                     await this.context.SaveChangesAsync();
                 }
@@ -116,6 +117,7 @@ public partial class ProfileStatus
                     ProfileSection.Create<HcimEnrolmentSection>(data),
                     ProfileSection.Create<MSTeamsSection>(data),
                     ProfileSection.Create<PrescriptionRefillEformsSection>(data),
+                    ProfileSection.Create<ProviderReportingPortalSection>(data),
                     ProfileSection.Create<SAEformsSection>(data)
                 }
                 .ToDictionary(section => section.SectionName, section => section)
@@ -152,13 +154,15 @@ public partial class ProfileStatus
         private string? userIdentityProvider;
         public PlrStandingsDigest PartyPlrStanding { get; set; } = default!;
         public PlrStandingsDigest EndorsementPlrStanding { get; set; } = default!;
+        public bool HasPrpAuthorizedLicence { get; set; }
 
         [MemberNotNullWhen(true, nameof(Email), nameof(Phone))]
-        public bool DemographicsEntered => this.Email != null && this.Phone != null;
+        public bool DemographicsComplete => this.Email != null && this.Phone != null;
         [MemberNotNullWhen(true, nameof(LicenceDeclaration))]
-        public bool LicenceDeclarationEntered => this.LicenceDeclaration != null;
+        public bool LicenceDeclarationComplete => this.LicenceDeclaration != null;
         [MemberNotNullWhen(true, nameof(LicenceDeclaration))]
         public bool CollegeLicenceDeclared => this.LicenceDeclaration?.HasNoLicence == false;
+        public bool UserIsBCProvider => this.userIdentityProvider == IdentityProviders.BCProvider;
         public bool UserIsHighAssuranceIdentity => this.userIdentityProvider is IdentityProviders.BCServicesCard or IdentityProviders.BCProvider;
         public bool UserIsPhsa => this.userIdentityProvider == IdentityProviders.Phsa;
 
@@ -170,6 +174,17 @@ public partial class ProfileStatus
             this.userIdentityProvider = user.GetIdentityProvider();
             this.PartyPlrStanding = await plrClient.GetStandingsDigestAsync(this.Cpn);
 
+
+            var possiblePrpLicenceNumbers = this.PartyPlrStanding
+                .With(ProviderReportingPortal.AllowedIdentifierTypes)
+                .LicenceNumbers;
+            if (this.UserIsBCProvider && possiblePrpLicenceNumbers.Any())
+            {
+                this.HasPrpAuthorizedLicence = await context.PrpAuthorizedLicences
+                    .AnyAsync(authorizedLicence => possiblePrpLicenceNumbers.Contains(authorizedLicence.LicenceNumber));
+            }
+
+            // We should defer this check if possible. See DriverFitnessSection.
             var endorsementCpns = await context.Endorsements
                 .Where(endorsement => endorsement.Active
                     && endorsement.EndorsementRelationships.Any(relationship => relationship.PartyId == this.Id))

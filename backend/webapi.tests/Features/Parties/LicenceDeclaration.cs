@@ -2,17 +2,13 @@ namespace PidpTests.Features.Parties;
 
 using FakeItEasy;
 using NodaTime;
-using System.Security.Claims;
 using Xunit;
 
-using Pidp.Extensions;
-using Pidp.Models;
 using Pidp.Models.Lookups;
 using Pidp.Infrastructure.HttpClients.Keycloak;
 using Pidp.Infrastructure.HttpClients.Plr;
 using static Pidp.Features.Parties.LicenceDeclaration;
 using PidpTests.TestingExtensions;
-using Pidp.Infrastructure.Auth;
 
 public class LicenceDeclarationTests : InMemoryDbTest
 {
@@ -47,7 +43,7 @@ public class LicenceDeclarationTests : InMemoryDbTest
         Assert.Equal(collegeCode, party.LicenceDeclaration.CollegeCode);
 
         A.CallTo(() => keycloakClient.UpdateUserCpn(party.PrimaryUserId, party.Cpn)).MustHaveHappened();
-        A.CallTo(() => keycloakClient.AssignClientRole(party.PrimaryUserId, MohClients.LicenceStatus.ClientId, MohClients.LicenceStatus.PractitionerRole)).MustHaveHappened();
+        A.CallTo(() => keycloakClient.AssignAccessRoles(party.PrimaryUserId, MohKeycloakEnrolment.PractitionerLicenceStatus)).MustHaveHappened();
     }
 
     [Theory]
@@ -78,7 +74,7 @@ public class LicenceDeclarationTests : InMemoryDbTest
         Assert.Equal(collegeCode, party.LicenceDeclaration.CollegeCode);
 
         A.CallTo(() => keycloakClient.UpdateUserCpn(A<Guid>._, A<string>._)).MustNotHaveHappened();
-        A.CallTo(() => keycloakClient.AssignClientRole(A<Guid>._, A<string>._, A<string>._)).MustNotHaveHappened();
+        keycloakClient.AssertNoRolesAssigned();
     }
 
     [Theory]
@@ -112,7 +108,7 @@ public class LicenceDeclarationTests : InMemoryDbTest
         Assert.Equal(collegeCode, party.LicenceDeclaration.CollegeCode);
 
         A.CallTo(() => keycloakClient.UpdateUserCpn(party.PrimaryUserId, party.Cpn)).MustHaveHappened();
-        A.CallTo(() => keycloakClient.AssignClientRole(A<Guid>._, A<string>._, A<string>._)).MustNotHaveHappened();
+        keycloakClient.AssertNoRolesAssigned();
     }
 
     public static IEnumerable<object[]> CollegeCodeTestCases()

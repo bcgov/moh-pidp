@@ -5,27 +5,35 @@ using System.Text.Json;
 using Pidp.Infrastructure.HttpClients.Ldap;
 using Pidp.Models.Lookups;
 
-public static class MohClients
+public class MohKeycloakEnrolment
 {
-    public static (string ClientId, string AccessRole) DriverFitness => ("DMFT-WEBAPP", "ROLE_NAME_TBD");
-    public static (string ClientId, string AccessRole) PrescriptionRefillEforms => ("SAT-EFORMS", "phsa_eforms_rxrefill");
-    public static (string ClientId, string AccessRole) SAEforms => ("SAT-EFORMS", "phsa_eforms_sat");
 
-    public static (string ClientId, string MoaRole, string PractitionerRole) LicenceStatus => ("LICENCE-STATUS", "MOA", "PRACTITIONER");
+    private static readonly List<MohKeycloakEnrolment> All = new();
+    public static readonly MohKeycloakEnrolment DriverFitness = new("DMFT-WEBAPP", AccessTypeCode.DriverFitness, "ROLE_NAME_TBD");
+    public static readonly MohKeycloakEnrolment PrescriptionRefillEforms = new("SAT-EFORMS", AccessTypeCode.PrescriptionRefillEforms, "phsa_eforms_rxrefill");
+    public static readonly MohKeycloakEnrolment ProviderReportingPortal = new("PRP-SERVICE", AccessTypeCode.ProviderReportingPortal, "MSPQI", "PMP");
+    public static readonly MohKeycloakEnrolment SAEforms = new("SAT-EFORMS", AccessTypeCode.SAEforms, "phsa_eforms_sat");
 
-    public static (string ClientId, string AccessRole)? FromAccessType(AccessTypeCode code)
+    public static readonly MohKeycloakEnrolment MoaLicenceStatus = new("LICENCE-STATUS", "MOA");
+    public static readonly MohKeycloakEnrolment PractitionerLicenceStatus = new("LICENCE-STATUS", "PRACTITIONER");
+
+    public IEnumerable<string> AccessRoles { get; private set; }
+    public AccessTypeCode? AssocatedAccessRequest { get; private set; }
+    public string ClientId { get; private set; }
+
+
+    private MohKeycloakEnrolment(string clientId, params string[] accessRoles) : this(clientId, null, accessRoles) { }
+
+    private MohKeycloakEnrolment(string clientId, AccessTypeCode? associatedAccessRequest, params string[] accessRoles)
     {
-        return code switch
-        {
-            AccessTypeCode.DriverFitness => DriverFitness,
-            AccessTypeCode.HcimAccountTransfer => null,
-            AccessTypeCode.HcimEnrolment => null,
-            AccessTypeCode.MSTeams => null,
-            AccessTypeCode.PrescriptionRefillEforms => PrescriptionRefillEforms,
-            AccessTypeCode.SAEforms => SAEforms,
-            _ => null
-        };
+        this.AccessRoles = accessRoles;
+        this.AssocatedAccessRequest = associatedAccessRequest;
+        this.ClientId = clientId;
+
+        All.Add(this);
     }
+
+    public static MohKeycloakEnrolment? FromAssociatedAccessRequest(AccessTypeCode associatedEnrolment) => All.SingleOrDefault(enrolment => enrolment.AssocatedAccessRequest == associatedEnrolment);
 }
 
 /// <summary>

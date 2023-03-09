@@ -4,6 +4,8 @@ using NodaTime;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
+using Pidp.Infrastructure.HttpClients.Keycloak;
+
 [Table(nameof(BusinessEvent))]
 public abstract class BusinessEvent : BaseAuditable
 {
@@ -39,12 +41,12 @@ public class LicenceStatusRoleAssigned : BusinessEvent
     public int PartyId { get; set; }
     public Party? Party { get; set; }
 
-    public static LicenceStatusRoleAssigned Create(int partyId, string roleAssigned, Instant recordedOn)
+    public static LicenceStatusRoleAssigned Create(int partyId, MohKeycloakEnrolment enrolmentAssigned, Instant recordedOn)
     {
         return new LicenceStatusRoleAssigned
         {
             PartyId = partyId,
-            Description = $"Party was assigned the {roleAssigned} role.",
+            Description = $"Party was assigned the {enrolmentAssigned.AccessRoles.Single()} role.",
             Severity = LogLevel.Information,
             RecordedOn = recordedOn
         };
