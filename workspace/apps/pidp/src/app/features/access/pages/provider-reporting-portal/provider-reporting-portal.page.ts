@@ -36,7 +36,7 @@ export class ProviderReportingPortalPage implements OnInit {
     this.collectionNotice =
       documentService.getProviderReportingPortalCollectionNotice();
     this.completed =
-      routeData.prescriptionRefillEformsStatusCode === StatusCode.COMPLETED;
+      routeData.providerReportingPortalStatusCode === StatusCode.COMPLETED;
     this.accessRequestFailed = false;
     this.enrolmentError = false;
   }
