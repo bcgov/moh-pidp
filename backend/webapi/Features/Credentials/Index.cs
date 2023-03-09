@@ -5,7 +5,6 @@ using System.Security.Claims;
 
 using Pidp.Data;
 using Pidp.Extensions;
-using Pidp.Infrastructure.Auth;
 using Pidp.Models;
 
 public class Index
@@ -31,10 +30,14 @@ public class Index
 
         public async Task<List<Model>> HandleAsync(Query query)
         {
+            var lowerIdpId = query.User.GetIdpId()?.ToLowerInvariant();
+
+#pragma warning disable CA1304 // ToLower() is Locale Dependant
             var credential = await this.context.Credentials
                 .SingleOrDefaultAsync(credential => credential.UserId == query.User.GetUserId()
                     || (credential.IdentityProvider == query.User.GetIdentityProvider()
-                        && credential.IdpId == query.User.GetIdpId()));
+                        && credential.IdpId!.ToLower() == lowerIdpId));
+#pragma warning restore CA1304
 
             if (credential == null)
             {
