@@ -93,13 +93,23 @@
           (click)="onLogin(IdentityProvider.PHSA)">
           Login with your Health Authority ID
         </button>
-
         <button
           class="login-button-secondary"
           mat-stroked-button
-          (click)="onLogin(IdentityProvider.IDIR)">
-          Login with your IDIR
+          (click)="onLogin(IdentityProvider.BC_PROVIDER)">
+          Login with BC Provider
         </button>
+      </div>
+      <div class="login-with-idir">
+        <small
+          >Do you have a IDIR account?
+          <a
+            href="javascript:"
+            role="button"
+            (click)="onLogin(IdentityProvider.IDIR)"
+            >Login</a
+          ></small
+        >
       </div>
     </div>
   </div>
