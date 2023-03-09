@@ -74,8 +74,7 @@ public class LicenceDeclarationTests : InMemoryDbTest
         Assert.Equal(collegeCode, party.LicenceDeclaration.CollegeCode);
 
         A.CallTo(() => keycloakClient.UpdateUserCpn(A<Guid>._, A<string>._)).MustNotHaveHappened();
-        A.CallTo(() => keycloakClient.AssignAccessRoles(A<Guid>._, A<MohKeycloakEnrolment>._)).MustNotHaveHappened();
-        A.CallTo(() => keycloakClient.AssignClientRole(A<Guid>._, A<string>._, A<string>._)).MustNotHaveHappened();
+        keycloakClient.AssertNoRolesAssigned();
     }
 
     [Theory]
@@ -109,9 +108,7 @@ public class LicenceDeclarationTests : InMemoryDbTest
         Assert.Equal(collegeCode, party.LicenceDeclaration.CollegeCode);
 
         A.CallTo(() => keycloakClient.UpdateUserCpn(party.PrimaryUserId, party.Cpn)).MustHaveHappened();
-
-        A.CallTo(() => keycloakClient.AssignAccessRoles(A<Guid>._, A<MohKeycloakEnrolment>._)).MustNotHaveHappened();
-        A.CallTo(() => keycloakClient.AssignClientRole(A<Guid>._, A<string>._, A<string>._)).MustNotHaveHappened();
+        keycloakClient.AssertNoRolesAssigned();
     }
 
     public static IEnumerable<object[]> CollegeCodeTestCases()

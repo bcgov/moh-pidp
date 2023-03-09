@@ -126,8 +126,7 @@ public class EndorsementApproveTests : InMemoryDbTest
         Assert.True(result.IsSuccess);
         if (expectedRoleAssigned == null)
         {
-            A.CallTo(() => keycloakClient.AssignAccessRoles(A<Guid>._, A<MohKeycloakEnrolment>._)).MustNotHaveHappened();
-            A.CallTo(() => keycloakClient.AssignClientRole(A<Guid>._, A<string>._, A<string>._)).MustNotHaveHappened();
+            keycloakClient.AssertNoRolesAssigned();
         }
         else
         {

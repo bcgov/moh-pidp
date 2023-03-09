@@ -39,8 +39,7 @@ public class SAEformsTests : InMemoryDbTest
         }
         else
         {
-            A.CallTo(() => keycloak.AssignAccessRoles(A<Guid>._, A<MohKeycloakEnrolment>._)).MustNotHaveHappened();
-            A.CallTo(() => keycloak.AssignClientRole(A<Guid>._, A<string>._, A<string>._)).MustNotHaveHappened();
+            keycloak.AssertNoRolesAssigned();
         }
     }
 
