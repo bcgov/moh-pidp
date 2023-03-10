@@ -113,6 +113,7 @@ export class MsTeamsPage
             tap(() => {
               this.loadingOverlayService.close();
               this.completed = true;
+              this.enrolmentError = false;
             }),
             catchError((error: HttpErrorResponse) => {
               this.loadingOverlayService.close();
