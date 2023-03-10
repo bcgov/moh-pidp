@@ -78,6 +78,7 @@ export class DriverFitnessPage implements OnInit {
         tap(() => {
           this.completed = true;
           this.loadingOverlayService.close();
+          this.enrolmentError = false;
         }),
         catchError((error: HttpErrorResponse) => {
           this.loadingOverlayService.close();

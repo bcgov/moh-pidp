@@ -49,7 +49,10 @@ export class ProviderReportingPortalPage implements OnInit {
     this.resource
       .requestAccess(this.partyService.partyId)
       .pipe(
-        tap(() => (this.completed = true)),
+        tap(() => {
+          this.completed = true;
+          this.enrolmentError = false;
+        }),
         catchError((error: HttpErrorResponse) => {
           if (error.status === HttpStatusCode.BadRequest) {
             this.completed = false;
