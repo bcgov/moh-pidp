@@ -36,10 +36,6 @@ jobs:
         # Optional - this sets your Kubernetes context's current namespace after logging in.
         namespace: ${{ env.OPENSHIFT_NAMESPACE }}
 
-
     - name: Remove Helm deployment
       run: |
         helm uninstall pr-${{ env.PR_NUMBER }}
-      env:
-        OPENSHIFT_TOKEN: ${{ secrets.OPENSHIFT_TOKEN }} # The OpenShift token for authentication
-      if: github.event.pull_request.merged == true
