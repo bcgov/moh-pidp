@@ -28,8 +28,7 @@ jobs:
 
         # Credentials, if desired instead of token.
         # Username and password override token if they are set.
-        openshift_username: ${{ env.OPENSHIFT_USER }}
-        openshift_password: ${{ secrets.OPENSHIFT_SERVICE_ACCOUNT_PASSWORD }}
+        openshift_token: ${{ secrets.OPENSHIFT_TOKEN}}
 
         # Disables SSL cert checking. Use this if you don't have the certificate authority data.
         insecure_skip_tls_verify: true
