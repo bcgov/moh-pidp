@@ -1,0 +1,46 @@
+name: Remove Helm deployment on PR merge
+on:
+  pull_request:
+    types: [closed]
+    branches-ignore:
+      - 'test'
+      - 'master'
+jobs:
+  remove-deployment:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Login to Openshift
+
+      uses: redhat-actions/oc-login@v1
+      env:
+        # These can be stored in secrets, if desired.
+        OPENSHIFT_USER: serviceaccount
+        OPENSHIFT_NAMESPACE: d8a8f9-dev
+        PR_NUMBER: ${{ github.event.number }}
+
+      with:
+        # URL to your OpenShift cluster.
+        # Refer to Step 2.
+        openshift_server_url: ${{ secrets.OPENSHIFT_CLUSTER_URL}}
+
+        # Credentials, if desired instead of token.
+        # Username and password override token if they are set.
+        openshift_username: ${{ env.OPENSHIFT_USER }}
+        openshift_password: ${{ secrets.OPENSHIFT_SERVICE_ACCOUNT_PASSWORD }}
+
+        # Disables SSL cert checking. Use this if you don't have the certificate authority data.
+        insecure_skip_tls_verify: true
+
+        # Optional - this sets your Kubernetes context's current namespace after logging in.
+        namespace: ${{ env.OPENSHIFT_NAMESPACE }}
+
+
+    - name: Remove Helm deployment
+      run: |
+        helm uninstall pr-${{ env.PR_NUMBER }}
+      env:
+        OPENSHIFT_TOKEN: ${{ secrets.OPENSHIFT_TOKEN }} # The OpenShift token for authentication
+      if: github.event.pull_request.merged == true
