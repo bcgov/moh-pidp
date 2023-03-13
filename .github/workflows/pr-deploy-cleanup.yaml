@@ -19,7 +19,7 @@ jobs:
         # These can be stored in secrets, if desired.
         OPENSHIFT_USER: serviceaccount
         OPENSHIFT_NAMESPACE: d8a8f9-dev
-        PR_NUMBER: ${{ github.event.issue.number }}
+        
 
       with:
         # URL to your OpenShift cluster.
@@ -39,3 +39,5 @@ jobs:
     - name: Remove Helm deployment
       run: |
         helm uninstall pr-${{ env.PR_NUMBER }}
+      env:
+        PR_NUMBER: ${{ github.event.issue.number }}
