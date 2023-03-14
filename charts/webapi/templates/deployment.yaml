@@ -120,6 +120,12 @@ spec:
                 name: canada-post-addresscomplete-secrets
             - secretRef:
                 name: ches
+            - secretRef:
+              {{- if $isPR }}
+                name: dev-bc-provider
+              {{ else }}
+                name: {{ ternary $ocEnv $release $isPR }}-bc-provider
+              {{ end }}
             - configMapRef:
                 name: mail-settings
           ports:
