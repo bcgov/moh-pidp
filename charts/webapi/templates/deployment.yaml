@@ -77,6 +77,42 @@ spec:
               value: "Host=$(DB_HOST);Port=5432;Database=$(POSTGRESQL_DATABASE);Username=$(POSTGRESQL_USER);Password=$(POSTGRESQL_PASSWORD)"
             - name: ApplicationUrl
               value: "https://{{ if $isProd }}{{else}}{{ $release }}.{{end}}{{ $domain }}"
+            - name: BCProviderClient__ClientID
+              {{- if $isPR }}
+              value: dev-bc-provider # Use dev secret for pr
+              {{ else }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ ternary $ocEnv $release $isPR }}-bc-provider
+                  key: BCProviderClient__ClientID
+              {{ end }}
+            - name: BCProviderClient__TenantID
+              {{- if $isPR }}
+              value: dev-bc-provider # Use dev secret for pr
+              {{ else }}
+              valueFrom:
+                secretKeyRef: 
+                  name: {{ ternary $ocEnv $release $isPR }}-bc-provider
+                  key: BCProviderClient__TenantID
+              {{ end }}
+            - name: BCProviderClient__ClientSecret
+              {{- if $isPR }}
+              value: dev-bc-provider # Use dev secret for pr
+              {{ else }}
+              valueFrom:
+                secretKeyRef: 
+                  name: {{ ternary $ocEnv $release $isPR }}-bc-provider
+                  key: BCProviderClient__ClientSecret
+              {{ end }}
+            - name: BCProviderClient__Domain
+              {{- if $isPR }}
+              value: dev-bc-provider # Use dev secret for pr
+              {{ else }}
+              valueFrom:
+                secretKeyRef: 
+                  name: {{ ternary $ocEnv $release $isPR }}-bc-provider
+                  key: BCProviderClient__Domain
+              {{ end }}
           envFrom:
             - secretRef:
                 name: keycloak-secrets
