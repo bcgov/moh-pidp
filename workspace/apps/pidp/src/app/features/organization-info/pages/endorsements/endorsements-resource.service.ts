@@ -8,8 +8,11 @@ import { NoContent, NoContentResponse } from '@bcgov/shared/data-access';
 import { ApiHttpClient } from '@app/core/resources/api-http-client.service';
 import { ToastService } from '@app/core/services/toast.service';
 
-import { EndorsementRequestInformation } from './models/endorsement-request-information.model';
-import { EndorsementRequest } from './models/endorsement-request.model';
+import {
+  EndorsementRequest,
+  EndorsementRequestCommand,
+  EndorsementRequestInformation,
+} from './models/endorsement-request.model';
 import { Endorsement } from './models/endorsement.model';
 
 @Injectable({
@@ -73,11 +76,19 @@ export class EndorsementsResource {
     partyId: number,
     endorsementRequest: EndorsementRequestInformation
   ): NoContent {
+    const recipientEmails = endorsementRequest.recipientEmails.split('\n');
+    // Trim all entries of whitespace.
+    for (let index = 0; index < recipientEmails.length; index++) {
+      const email = recipientEmails[index];
+      recipientEmails[index] = email.trim();
+    }
+
+    const command: EndorsementRequestCommand = {
+      recipientEmails: recipientEmails,
+      additionalInformation: endorsementRequest.additionalInformation,
+    };
     return this.apiResource
-      .post<NoContent>(
-        this.getRequestsResourcePath(partyId),
-        endorsementRequest
-      )
+      .post<NoContent>(this.getRequestsResourcePath(partyId), command)
       .pipe(
         NoContentResponse,
         tap(() =>

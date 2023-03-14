@@ -10,3 +10,13 @@ export interface EndorsementRequest {
   statusDate: string;
   actionable: boolean;
 }
+
+export interface EndorsementRequestInformation {
+  recipientEmails: string;
+  additionalInformation: string | null;
+}
+
+export interface EndorsementRequestCommand {
+  recipientEmails: string[];
+  additionalInformation: string | null;
+}
