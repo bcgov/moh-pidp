@@ -35,8 +35,7 @@ export class BcProviderApplicationComponent
   public messageCardText = '';
   public completed: boolean | null;
   public password = '';
-  // ui-page is handling this.
-  public showOverlayOnSubmit = false;
+  public showOverlayOnSubmit = true;
 
   public get isEnrolButtonEnabled(): boolean {
     return this.formState.form.valid;
