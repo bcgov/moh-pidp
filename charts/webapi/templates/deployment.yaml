@@ -77,7 +77,7 @@ spec:
               value: "Host=$(DB_HOST);Port=5432;Database=$(POSTGRESQL_DATABASE);Username=$(POSTGRESQL_USER);Password=$(POSTGRESQL_PASSWORD)"
             - name: ApplicationUrl
               value: "https://{{ if $isProd }}{{else}}{{ $release }}.{{end}}{{ $domain }}"
-            - name: BCProviderClient__ClientID
+            - name: BCProviderClient__ClientId
               valueFrom:
                 secretKeyRef: 
                 {{- if $isPR }}
@@ -87,7 +87,7 @@ spec:
                   name: {{ ternary $ocEnv $release $isPR }}-bc-provider
                   key: BCProviderClient__ClientId
                 {{ end }}
-            - name: BCProviderClient__TenantID
+            - name: BCProviderClient__TenantId
               {{- if $isPR }}
               valueFrom:
                 secretKeyRef: 
