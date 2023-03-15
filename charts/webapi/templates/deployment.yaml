@@ -82,22 +82,22 @@ spec:
                 secretKeyRef: 
                 {{- if $isPR }}
                   name: dev-bc-provider
-                  key: BCProviderClient__ClientID
+                  key: BCProviderClient__ClientId
                 {{ else }} 
                   name: {{ ternary $ocEnv $release $isPR }}-bc-provider
-                  key: BCProviderClient__ClientID
+                  key: BCProviderClient__ClientId
                 {{ end }}
             - name: BCProviderClient__TenantID
               {{- if $isPR }}
               valueFrom:
                 secretKeyRef: 
                   name: dev-bc-provider
-                  key: BCProviderClient__TenantID
+                  key: BCProviderClient__TenantId
               {{ else }}
               valueFrom:
                 secretKeyRef: 
                   name: {{ ternary $ocEnv $release $isPR }}-bc-provider
-                  key: BCProviderClient__TenantID
+                  key: BCProviderClient__TenantId
               {{ end }}
             - name: BCProviderClient__ClientSecret
               {{- if $isPR }}
