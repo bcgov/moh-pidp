@@ -78,17 +78,21 @@ spec:
             - name: ApplicationUrl
               value: "https://{{ if $isProd }}{{else}}{{ $release }}.{{end}}{{ $domain }}"
             - name: BCProviderClient__ClientID
-              {{- if $isPR }}
-              value: dev-bc-provider # Use dev secret for pr
-              {{ else }}
               valueFrom:
-                secretKeyRef:
+                secretKeyRef: 
+                {{- if $isPR }}
+                  name: dev-bc-provider
+                  key: BCProviderClient__ClientID
+                {{ else }} 
                   name: {{ ternary $ocEnv $release $isPR }}-bc-provider
                   key: BCProviderClient__ClientID
-              {{ end }}
+                {{ end }}
             - name: BCProviderClient__TenantID
               {{- if $isPR }}
-              value: dev-bc-provider # Use dev secret for pr
+              valueFrom:
+                secretKeyRef: 
+                  name: dev-bc-provider
+                  key: BCProviderClient__TenantID
               {{ else }}
               valueFrom:
                 secretKeyRef: 
@@ -97,7 +101,10 @@ spec:
               {{ end }}
             - name: BCProviderClient__ClientSecret
               {{- if $isPR }}
-              value: dev-bc-provider # Use dev secret for pr
+              valueFrom:
+                secretKeyRef: 
+                  name: dev-bc-provider
+                  key: BCProviderClient__ClientSecret
               {{ else }}
               valueFrom:
                 secretKeyRef: 
@@ -106,7 +113,10 @@ spec:
               {{ end }}
             - name: BCProviderClient__Domain
               {{- if $isPR }}
-              value: dev-bc-provider # Use dev secret for pr
+              valueFrom:
+                secretKeyRef: 
+                  name: dev-bc-provider
+                  key: BCProviderClient__Domain
               {{ else }}
               valueFrom:
                 secretKeyRef: 
