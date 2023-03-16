@@ -85,11 +85,7 @@ spec:
             - secretRef:
                 name: ches
             - secretRef:
-              {{- if $isPR }}
-                name: dev-bc-provider
-              {{ else }}
-                name: {{ ternary $ocEnv $release $isPR }}-bc-provider
-              {{ end }}
+                name: bc-provider
             - configMapRef:
                 name: mail-settings
           ports:
