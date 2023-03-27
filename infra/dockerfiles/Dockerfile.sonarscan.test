@@ -1,5 +1,7 @@
-ARG SRC_IMAGE="image-registry.openshift-image-registry.svc:5000/d8a8f9-tools/dotnet-sonarscanner:6.0-bcgov"
-FROM ${SRC_IMAGE}
+# ARG SRC_IMAGE="image-registry.openshift-image-registry.svc:5000/d8a8f9-tools/dotnet-sonarscanner:6.0-bcgov"
+
+# FROM ${SRC_IMAGE}
+FROM sonarqube:8.9-community
 
 ARG SONAR_LOGIN="login"
 ARG SONAR_PROJECT="webapi"
@@ -8,16 +10,16 @@ ARG SONAR_BUILDSTRING="a1b2c3d"
 ARG SONAR_PROJECTVERSION="dev"
 
 # # Install java, needed for sonar-scanner
-# RUN apt update
-# RUN apt install default-jre -y
+RUN apt update
+RUN apt install default-jre -y
 
 
-# ENV DOTNET_CLI_HOME="/opt"
-# ENV PATH="$PATH:/opt/.dotnet/tools"
+ENV DOTNET_CLI_HOME="/opt"
+ENV PATH="$PATH:/opt/.dotnet/tools"
 
-# # Install sonar-scanner 
-# RUN dotnet tool install --global dotnet-sonarscanner
-# RUN dotnet tool install --global dotnet-coverage
+# Install sonar-scanner
+RUN dotnet tool install --global dotnet-sonarscanner
+RUN dotnet tool install --global dotnet-coverage
 
 WORKDIR /source
 
