@@ -1,0 +1,221 @@
+﻿apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: cicd-pipeline-testing
+  namespace: d8a8f9-tools
+spec:
+  params:
+    - default: 'git@github.com:bcgov/moh-pidp.git'
+      name: git-url
+      type: string
+    - default: 224169bbed7884367d08e4242d58307a9d41b88e
+      name: git-revision
+      type: string
+    - default: 224169b
+      name: git-short-sha
+      type: string
+    - default: 'image-registry.openshift-image-registry.svc:5000/d8a8f9-tools'
+      name: image-registry
+      type: string
+    - default: pr-82
+      name: image-tag
+      type: string
+    - default: pr-82
+      name: release_name
+      type: string
+    - default: d8a8f9-dev
+      name: release_namespace
+      type: string
+    - default: v0.1.0
+      name: release_version
+      type: string
+    - default: deploy/pr_values.yaml
+      name: values_file
+      type: string
+  tasks:
+    - name: git-clone
+      params:
+        - name: url
+          value: $(params.git-url)
+        - name: submodules
+          value: 'true'
+        - name: depth
+          value: '1'
+        - name: sslVerify
+          value: 'true'
+        - name: subdirectory
+          value: moh-pidp
+        - name: deleteExisting
+          value: 'true'
+        - name: verbose
+          value: 'true'
+        - name: revision
+          value: $(params.git-revision)
+        - name: gitInitImage
+          value: >-
+            registry.redhat.io/openshift-pipelines/pipelines-git-init-rhel8@sha256:afc5d3f9efe26c7042635d43b8ffd09d67936e3d0b6b901dc08a33e20313d361
+      runAfter:
+        - wait-for-deployment
+      taskRef:
+        kind: ClusterTask
+        name: git-clone-v0-22-0
+      workspaces:
+        - name: output
+          workspace: source
+    - name: zap-scan-frontend
+      params:
+        - name: PATH_CONTEXT
+          value: moh-pidp/workspace/
+        - name: ZAP_API_SCAN
+          value: 'false'
+        - name: PIDP_SERVICE
+          value: frontend
+        - name: ZAP_TARGET
+          value: >-
+            https://$(params.release_name).healthprovideridentityportal.gov.bc.ca
+      runAfter:
+        - git-clone
+      taskRef:
+        kind: Task
+        name: zap-scan
+      workspaces:
+        - name: source
+          workspace: source
+    - name: test-frontend
+      params:
+        - name: PIDP_SERVICE
+          value: frontend
+        - name: PATH_CONTEXT
+          value: moh-pidp/workspace/
+        - name: SONAR_BUILDSTRING
+          value: $(params.git-short-sha)
+        - name: SONAR_PROJECTVERSION
+          value: $(params.image-tag)
+        - name: SONAR_QUALITYGATE_WAIT
+          value: 'false'
+      runAfter:
+        - zap-scan-frontend
+      taskRef:
+        kind: Task
+        name: test-frontend
+      workspaces:
+        - name: source
+          workspace: source
+    - name: zap-scan-webapi
+      params:
+        - name: PATH_CONTEXT
+          value: moh-pidp/workspace/
+        - name: ZAP_API_SCAN
+          value: 'true'
+        - name: PIDP_SERVICE
+          value: webapi
+        - name: ZAP_TARGET
+          value: >-
+            http://$(params.release_name)-webapi.$(params.release_namespace).svc.cluster.local:8080/swagger/v1/swagger.json
+      runAfter:
+        - git-clone
+      taskRef:
+        kind: Task
+        name: zap-scan
+      workspaces:
+        - name: source
+          workspace: source
+    - name: test-webapi
+      params:
+        - name: IMAGE
+          value: '$(params.image-registry)/dotnet-sonarscanner:webapi'
+        - name: CONTEXT
+          value: moh-pidp/backend/webapi/
+        - name: DOCKERFILE
+          value: >-
+            https://gist.githubusercontent.com/emuthiah/fda4a765628b6569922518cdaf7ca51b/raw/8d319e12d1bcba069126ba3f5e8e600eeac317d6/Dockerfile.zap.test
+        - name: EXTRA_ARGS
+          value:
+            - '--skip-tls-verify'
+            - '--build-arg'
+            - SONAR_LOGIN=f606bc25f190b5ed59cb813a728cbcf30c849726
+            - '--build-arg'
+            - SONAR_PROJECT=webapi
+            - '--build-arg'
+            - >-
+              SONAR_ZAP_REPORTPATH=$(workspaces.source.path)/webapi-zap-report.xml
+            - '--build-arg'
+            - SONAR_PROJECTVERSION=$(params.release_name)
+            - '--build-arg'
+            - SONAR_BUILDSTRING=$(params.git-short-sha)
+            - '--build-arg'
+            - 'SONAR_HOST=http://sonarqube.d8a8f9-tools.svc.cluster.local:9000'
+      runAfter:
+        - zap-scan-webapi
+      taskRef:
+        kind: Task
+        name: test-webapi
+      workspaces:
+        - name: source
+          workspace: source
+        - name: dockerconfig
+          workspace: dockerconfig
+    - name: zap-plr-intake
+      params:
+        - name: PATH_CONTEXT
+          value: moh-pidp/workspace/
+        - name: ZAP_API_SCAN
+          value: 'false'
+        - name: PIDP_SERVICE
+          value: plr-intake
+        - name: ZAP_TARGET
+          value: >-
+            http://$(params.release_name)-plr-intake.$(params.release_namespace).svc.cluster.local:8080/api/records
+      runAfter:
+        - git-clone
+      taskRef:
+        kind: Task
+        name: zap-scan
+      workspaces:
+        - name: source
+          workspace: source
+    - name: test-plr-intake
+      params:
+        - name: IMAGE
+          value: '$(params.image-registry)/dotnet-sonarscanner:plr-intake'
+        - name: CONTEXT
+          value: moh-pidp/backend/services.plr-intake/
+        - name: DOCKERFILE
+          value: >-
+            https://gist.githubusercontent.com/emuthiah/fda4a765628b6569922518cdaf7ca51b/raw/8d319e12d1bcba069126ba3f5e8e600eeac317d6/Dockerfile.zap.test
+        - name: EXTRA_ARGS
+          value:
+            - '--skip-tls-verify'
+            - '--build-arg'
+            - SONAR_LOGIN=f606bc25f190b5ed59cb813a728cbcf30c849726
+            - '--build-arg'
+            - SONAR_PROJECT=plr-intake
+            - '--build-arg'
+            - >-
+              SONAR_ZAP_REPORTPATH=$(workspaces.source.path)/plr-intake-zap-report.xml
+            - '--build-arg'
+            - SONAR_PROJECTVERSION=$(params.release_name)
+            - '--build-arg'
+            - SONAR_BUILDSTRING=$(params.git-short-sha)
+            - '--build-arg'
+            - 'SONAR_HOST=http://sonarqube.d8a8f9-tools.svc.cluster.local:9000'
+      runAfter:
+        - zap-plr-intake
+      taskRef:
+        kind: Task
+        name: kaniko
+      workspaces:
+        - name: source
+          workspace: source
+        - name: dockerconfig
+          workspace: dockerconfig
+    - name: wait-for-deployment
+      taskRef:
+        kind: Task
+        name: test-webapi
+      workspaces:
+        - name: source
+          workspace: source
+  workspaces:
+    - name: source
+    - name: dockerconfig
