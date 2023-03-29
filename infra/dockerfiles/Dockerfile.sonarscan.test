@@ -1,7 +1,4 @@
-# ARG SRC_IMAGE="image-registry.openshift-image-registry.svc:5000/d8a8f9-tools/dotnet-sonarscanner:6.0-bcgov"
-
-# FROM ${SRC_IMAGE}
-FROM sonarqube:8.9-community
+FROM sonarqube:9.9.0-community
 
 ARG SONAR_LOGIN="login"
 ARG SONAR_PROJECT="webapi"
@@ -10,8 +7,10 @@ ARG SONAR_BUILDSTRING="a1b2c3d"
 ARG SONAR_PROJECTVERSION="dev"
 
 # # Install java, needed for sonar-scanner
+USER root
 RUN apt update
 RUN apt install default-jre -y
+RUN apt install -y dotnet-sdk-6.0
 
 
 ENV DOTNET_CLI_HOME="/opt"
@@ -22,9 +21,5 @@ RUN dotnet tool install --global dotnet-sonarscanner
 RUN dotnet tool install --global dotnet-coverage
 
 WORKDIR /source
-
 COPY . .
 
-RUN dotnet-sonarscanner begin /k:${SONAR_PROJECT} /d:sonar.host.url=https://sonarqube-d8a8f9-tools.apps.silver.devops.gov.bc.ca /d:sonar.login=${SONAR_LOGIN} /d:sonar.zaproxy.reportPath=${SONAR_ZAP_REPORTPATH} /d:sonar.buildString=${SONAR_BUILDSTRING} /v:${SONAR_PROJECTVERSION} 
-RUN dotnet build
-RUN dotnet-sonarscanner end /d:sonar.login=${SONAR_LOGIN}
