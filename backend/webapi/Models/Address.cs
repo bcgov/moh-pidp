@@ -35,7 +35,7 @@ public class FacilityAddress : Address
 
 public class MSTeamsClinicAddress : Address
 {
-    public int MSTeamsEnrolmentId { get; set; }
+    public int MSTeamsPrivacyOfficerEnrolmentId { get; set; }
 
-    public MSTeamsEnrolment? MSTeamsEnrolment { get; set; }
+    public MSTeamsPrivacyOfficerEnrolment? MSTeamsPrivacyOfficerEnrolment { get; set; }
 }

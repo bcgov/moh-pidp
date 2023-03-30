@@ -294,9 +294,9 @@ public partial class ProfileStatus
             }
         }
 
-        public class MSTeamsSection : ProfileSection
+        public class MSTeamsPrivacyOfficerSection : ProfileSection
         {
-            internal override string SectionName => "msTeams";
+            internal override string SectionName => "msTeamsPrivacyOfficer";
 
             protected override StatusCode Compute(ProfileData profile)
             {
@@ -305,14 +305,14 @@ public partial class ProfileStatus
                     return StatusCode.Hidden;
                 }
 
-                if (profile.CompletedEnrolments.Contains(AccessTypeCode.MSTeams))
+                if (profile.CompletedEnrolments.Contains(AccessTypeCode.MSTeamsPrivacyOfficer))
                 {
                     return StatusCode.Complete;
                 }
 
                 if (!profile.DemographicsComplete
                     || !profile.PartyPlrStanding
-                        .With(MSTeams.AllowedIdentifierTypes)
+                        .With(MSTeamsPrivacyOfficer.AllowedIdentifierTypes)
                         .HasGoodStanding)
                 {
                     return StatusCode.Locked;
