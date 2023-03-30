@@ -3,7 +3,7 @@
 $lightgrey: #f2f2f2;
 
 .viewport-all {
-  --gap: 1rem;
+  --gap: 2rem;
   --font-size: 0.75rem;
 }
 
@@ -17,25 +17,34 @@ $lightgrey: #f2f2f2;
 .viewport-all {
   --box-padding: 0;
   --content-padding: var(--gap);
+  --top-text-padding: 0 var(--gap);
+  --top-text-margin: var(--gap) 0;
+  --bcsc-margin: 0 var(--gap) var(--gap);
+  --toggle-margin: 0 var(--gap);
+  --card-margin: var(--gap);
   --field-label-font-size: 16px;
   --field-max-width: unset;
-  --button-margin-right: 15px;
-  --actions-padding: 0 20px;
+  --actions-padding: 0 var(--gap) var(--gap);
 }
 .viewport-large {
-  --box-padding: 40px 0;
+  --box-padding: var(--gap) 0;
   --content-padding: 0 var(--gap);
+  --bcsc-margin: 0 0 var(--gap);
+  --toggle-margin: 0;
+  --card-margin: 0 0 var(--gap);
   --field-max-width: 400px;
   --actions-padding: 0;
 }
 .viewport-medium {
-  --box-padding: 25px 0;
+  --box-padding: var(--gap) 0;
   --content-padding: 0 var(--gap);
+  --bcsc-margin: 0 0 var(--gap);
+  --toggle-margin: 0;
+  --card-margin: 0 0 var(--gap);
   --field-max-width: 400px;
   --actions-padding: 0;
 }
 .viewport-small {
-  --box-padding: 0 0 20px;
   --field-max-width: 400px;
 }
 .viewport-all {
@@ -47,18 +56,20 @@ $lightgrey: #f2f2f2;
     & .header {
       padding: calc(var(--gap) / 2) var(--gap);
       background-color: $lightgrey;
+      margin: 0;
     }
 
     & .content {
       display: flex;
       flex-direction: column;
       & p {
-        padding: var(--content-padding);
+        padding: var(--top-text-padding);
+        margin: var(--top-text-margin);
       }
 
       & .bcsc-info {
         border: solid 1px pidp.$grey-30;
-        margin: var(--gap) 0;
+        margin: var(--bcsc-margin);
         padding: var(--gap);
         background-color: $lightgrey;
         & label {
@@ -72,10 +83,13 @@ $lightgrey: #f2f2f2;
       }
     }
   }
+  & .toggle {
+    margin: var(--toggle-margin);
+  }
   & section.form-card {
     border-radius: 0.5rem;
     border: solid 1px pidp.$grey-30;
-    margin-bottom: var(--gap);
+    margin: var(--card-margin);
     & h2 {
       font-size: 1.25rem;
       border-top-left-radius: 0.5rem;
@@ -148,7 +162,7 @@ $lightgrey: #f2f2f2;
   & .actions {
     padding: var(--actions-padding);
     & button:not(:last-of-type) {
-      margin-right: var(--button-margin-right);
+      margin-right: var(--gap);
     }
   }
 }

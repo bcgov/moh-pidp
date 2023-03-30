@@ -20,63 +20,64 @@
         </div>
       </div>
     </section>
-    <ui-toggle-content
-      *ngIf="(identityProvider$ | async) | isHighAssurance"
-      label="I have a preferred name"
-      [checked]="hasPreferredName"
-      (toggle)="onPreferredNameToggle($event)">
-      <section class="preferred-name-form form-card">
-        <h2 class="card-header">Preferred Name</h2>
-        <div class="content">
-          <div class="preferred-name-text">
-            <p>
-              If you use a name professionally that is different from your legal
-              name, enter it here.
-            </p>
-            <p>
-              Entering a preferred name will not change your BC Services Card
-              name.
-            </p>
+    <div class="toggle">
+      <ui-toggle-content
+        *ngIf="(identityProvider$ | async) | isHighAssurance"
+        label="I have a preferred name"
+        [checked]="hasPreferredName"
+        (toggle)="onPreferredNameToggle($event)">
+        <section class="preferred-name-form form-card">
+          <h2 class="card-header">Preferred Name</h2>
+          <div class="content">
+            <div class="preferred-name-text">
+              <p>
+                If you use a name professionally that is different from your
+                legal name, enter it here.
+              </p>
+              <p>
+                Entering a preferred name will not change your BC Services Card
+                name.
+              </p>
+            </div>
+            <div class="field-area">
+              <div class="preferred-first-name-field field">
+                <label id="me-preferred-first-name" class="field-label"
+                  >Preferred First Name</label
+                >
+                <mat-form-field appearance="outline">
+                  <input
+                    matInput
+                    formControlName="preferredFirstName"
+                    aria-labelledby="me-preferred-first-name" />
+                </mat-form-field>
+              </div>
+              <div class="preferred-middle-name-field field">
+                <label id="me-preferred-middle-name" class="field-label"
+                  >Preferred Middle Name (optional)</label
+                >
+                <mat-form-field appearance="outline">
+                  <input
+                    matInput
+                    formControlName="preferredMiddleName"
+                    aria-labelledby="me-preferred-middle-name" />
+                </mat-form-field>
+              </div>
+              <div class="preferred-last-name-field field">
+                <label id="me-preferred-last-name" class="field-label"
+                  >Preferred Last Name</label
+                >
+                <mat-form-field appearance="outline">
+                  <input
+                    matInput
+                    formControlName="preferredLastName"
+                    aria-labelledby="me-preferred-last-name" />
+                </mat-form-field>
+              </div>
+            </div>
           </div>
-          <div class="field-area">
-            <div class="preferred-first-name-field field">
-              <label id="me-preferred-first-name" class="field-label"
-                >Preferred First Name</label
-              >
-              <mat-form-field appearance="outline">
-                <input
-                  matInput
-                  formControlName="preferredFirstName"
-                  aria-labelledby="me-preferred-first-name" />
-              </mat-form-field>
-            </div>
-            <div class="preferred-middle-name-field field">
-              <label id="me-preferred-middle-name" class="field-label"
-                >Preferred Middle Name (optional)</label
-              >
-              <mat-form-field appearance="outline">
-                <input
-                  matInput
-                  formControlName="preferredMiddleName"
-                  aria-labelledby="me-preferred-middle-name" />
-              </mat-form-field>
-            </div>
-            <div class="preferred-last-name-field field">
-              <label id="me-preferred-last-name" class="field-label"
-                >Preferred Last Name</label
-              >
-              <mat-form-field appearance="outline">
-                <input
-                  matInput
-                  formControlName="preferredLastName"
-                  aria-labelledby="me-preferred-last-name" />
-              </mat-form-field>
-            </div>
-          </div>
-        </div>
-      </section>
-      <!-- She  -->
-    </ui-toggle-content>
+        </section>
+      </ui-toggle-content>
+    </div>
     <section class="contact-info form-card">
       <h2 class="card-header">Contact Information</h2>
       <div class="content">
@@ -154,15 +155,6 @@
                 >here</a
               >.
             </p>
-            <!-- <mat-form-field
-              *ngIf="formState.collegeCode.value"
-              appearance="outline">
-              <input
-                matInput
-                formControlName="licenceNumber"
-                aria-labelledby="college-licence-declaration-licence-number" />
-              <mat-error>Required</mat-error>
-            </mat-form-field> -->
           </div>
         </div>
       </div>
