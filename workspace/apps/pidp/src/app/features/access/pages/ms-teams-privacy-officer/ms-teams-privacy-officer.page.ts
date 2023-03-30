@@ -19,17 +19,17 @@ import { LoggerService } from '@app/core/services/logger.service';
 import { UtilsService } from '@app/core/services/utils.service';
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
 
-import { MsTeamsFormState } from './ms-teams-form-state';
-import { MsTeamsResource } from './ms-teams-resource.service';
+import { MsTeamsPrivacyOfficerFormState } from './ms-teams-privacy-officer-form-state';
+import { MsTeamsPrivacyOfficerResource } from './ms-teams-privacy-officer-resource.service';
 import { msTeamsSupportEmail } from './ms-teams.constants';
 
 @Component({
   selector: 'app-ms-teams',
-  templateUrl: './ms-teams.page.html',
-  styleUrls: ['./ms-teams.page.scss'],
+  templateUrl: './ms-teams-privacy-officer.page.html',
+  styleUrls: ['./ms-teams-privacy-officer.page.scss'],
 })
-export class MsTeamsPage
-  extends AbstractFormPage<MsTeamsFormState>
+export class MsTeamsPrivacyOfficerPage
+  extends AbstractFormPage<MsTeamsPrivacyOfficerFormState>
   implements OnInit
 {
   public completed: boolean | null;
@@ -37,7 +37,7 @@ export class MsTeamsPage
   public currentPage: number;
   public enrolmentError: boolean;
   public submissionPage: number;
-  public formState: MsTeamsFormState;
+  public formState: MsTeamsPrivacyOfficerFormState;
 
   // ui-page is handling this.
   public showOverlayOnSubmit = false;
@@ -47,7 +47,7 @@ export class MsTeamsPage
     private route: ActivatedRoute,
     private router: Router,
     private partyService: PartyService,
-    private resource: MsTeamsResource,
+    private resource: MsTeamsPrivacyOfficerResource,
     private logger: LoggerService,
     private utilsService: UtilsService,
     private documentService: DocumentService,
@@ -61,7 +61,7 @@ export class MsTeamsPage
     this.currentPage = 0;
     this.enrolmentError = false;
     this.submissionPage = documentService.getMsTeamsAgreementPageCount();
-    this.formState = new MsTeamsFormState(
+    this.formState = new MsTeamsPrivacyOfficerFormState(
       fb,
       dependenciesService.formUtilsService
     );

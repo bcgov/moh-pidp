@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { MsTeamsResource } from './ms-teams-resource.service';
+import { MsTeamsPrivacyOfficerResource } from './ms-teams-privacy-officer-resource.service';
 
 describe('MsTeamsResource', () => {
-  let service: MsTeamsResource;
+  let service: MsTeamsPrivacyOfficerResource;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(MsTeamsResource);
+    service = TestBed.inject(MsTeamsPrivacyOfficerResource);
   });
 
   it('should be created', () => {

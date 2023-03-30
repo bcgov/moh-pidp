@@ -3,20 +3,20 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { SetDashboardTitleGuard } from '@pidp/presentation';
 
-import { MsTeamsPage } from './ms-teams.page';
-import { MsTeamsResolver } from './ms-teams.resolver';
+import { MsTeamsPrivacyOfficerPage } from './ms-teams-privacy-officer.page';
+import { MsTeamsPrivacyOfficerResolver } from './ms-teams-privacy-officer.resolver';
 
 const routes: Routes = [
   {
     path: '',
-    component: MsTeamsPage,
+    component: MsTeamsPrivacyOfficerPage,
     resolve: {
-      msTeamsStatusCode: MsTeamsResolver,
+      msTeamsPrivacyOfficerStatusCode: MsTeamsPrivacyOfficerResolver,
     },
     canActivate: [SetDashboardTitleGuard],
     data: {
       setDashboardTitleGuard: {
-        titleText: 'MS Teams Enrolment',
+        titleText: 'MS Teams Privacy Officer',
         titleDescriptionText:
           'Here you can add view and edit your MS teams members',
       },
@@ -32,4 +32,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class MsTeamsRoutingModule {}
+export class MsTeamsPrivacyOfficerRoutingModule {}

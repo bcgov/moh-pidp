@@ -11,7 +11,7 @@ import { FormUtilsService } from '@app/core/services/form-utils.service';
 
 import { MsTeamsClinicInfo } from './ms-teams.model';
 
-export class MsTeamsFormState extends AbstractFormState<MsTeamsClinicInfo> {
+export class MsTeamsPrivacyOfficerFormState extends AbstractFormState<MsTeamsClinicInfo> {
   public constructor(
     private fb: FormBuilder,
     private formUtilsService: FormUtilsService
