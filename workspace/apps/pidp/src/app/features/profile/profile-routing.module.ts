@@ -6,12 +6,18 @@ import { Role } from '@app/shared/enums/roles.enum';
 
 import { CollegeLicenceDeclarationModule } from './pages/college-licence/college-licence-declaration/college-licence-declaration.module';
 import { CollegeLicenceInformationModule } from './pages/college-licence/college-licence-information/college-licence-information.module';
+import { MeModule } from './pages/me/me.module';
 import { PersonalInformationModule } from './pages/personal-information/personal-information.module';
 import { UserAccessAgreementModule } from './pages/user-access-agreement/user-access-agreement.module';
 import { WorkAndRoleInformationModule } from './pages/work-and-role-information/work-and-role-information.module';
 import { ProfileRoutes } from './profile.routes';
 
 const routes: Routes = [
+  {
+    path: ProfileRoutes.ME,
+    loadChildren: (): Promise<MeModule> =>
+      import('./pages/me/me.module').then((m) => m.MeModule),
+  },
   {
     path: ProfileRoutes.PERSONAL_INFO,
     loadChildren: (): Promise<PersonalInformationModule> =>

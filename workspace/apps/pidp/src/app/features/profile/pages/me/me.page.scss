@@ -1,0 +1,193 @@
+@use 'pidp-variables' as pidp;
+
+$lightgrey: #f2f2f2;
+
+.viewport-all {
+  --gap: 1rem;
+  --font-size: 0.75rem;
+}
+
+.viewport-small,
+.viewport-medium,
+.viewport-large {
+  --gap: 1.25rem;
+  --font-size: 1rem;
+}
+
+.viewport-all {
+  --box-padding: 0;
+  --content-padding: var(--gap);
+  --field-label-font-size: 16px;
+  --field-max-width: unset;
+  --button-margin-right: 15px;
+  --actions-padding: 0 20px;
+}
+.viewport-large {
+  --box-padding: 40px 0;
+  --content-padding: 0 var(--gap);
+  --field-max-width: 400px;
+  --actions-padding: 0;
+}
+.viewport-medium {
+  --box-padding: 25px 0;
+  --content-padding: 0 var(--gap);
+  --field-max-width: 400px;
+  --actions-padding: 0;
+}
+.viewport-small {
+  --box-padding: 0 0 20px;
+  --field-max-width: 400px;
+}
+.viewport-all {
+  padding: var(--box-padding);
+  & section.top {
+    display: flex;
+    flex-direction: column;
+
+    & .header {
+      padding: calc(var(--gap) / 2) var(--gap);
+      background-color: $lightgrey;
+    }
+
+    & .content {
+      display: flex;
+      flex-direction: column;
+      & p {
+        padding: var(--content-padding);
+      }
+
+      & .bcsc-info {
+        border: solid 1px pidp.$grey-30;
+        margin: var(--gap) 0;
+        padding: var(--gap);
+        background-color: $lightgrey;
+        & label {
+          margin-right: 0.25rem;
+          font-weight: 700;
+        }
+      }
+      & .preferred-name {
+        margin-bottom: var(--gap);
+        padding: 0 var(--gap);
+      }
+    }
+  }
+  & section.form-card {
+    border-radius: 0.5rem;
+    border: solid 1px pidp.$grey-30;
+    margin-bottom: var(--gap);
+    & h2 {
+      font-size: 1.25rem;
+      border-top-left-radius: 0.5rem;
+      border-top-right-radius: 0.5rem;
+      border-bottom: solid 1px pidp.$grey-30;
+      padding: calc(var(--gap) / 2) var(--gap);
+      background-color: $lightgrey;
+    }
+    & .content {
+      display: flex;
+      flex-direction: column;
+      padding: var(--content-padding);
+
+      & .field {
+        display: flex;
+        flex-direction: column;
+      }
+      & .field-label {
+        font-size: var(--field-label-font-size);
+        font-weight: bold;
+      }
+
+      & mat-form-field {
+        max-width: var(--field-max-width);
+      }
+    }
+  }
+  & .preferred-name-form {
+    & .field-area {
+      display: grid;
+      gap: var(--gap);
+
+      & .preferred-first-name-field {
+        grid-area: first;
+      }
+      & .preferred-middle-name-field {
+        grid-area: middle;
+      }
+      & .preferred-last-name-field {
+        grid-area: last;
+      }
+    }
+  }
+  & .contact-info {
+    & .field-area {
+      display: grid;
+      gap: var(--gap);
+
+      & .email-field {
+        grid-area: email;
+      }
+      & .phone-field {
+        grid-area: phone;
+      }
+    }
+  }
+  & .college-info {
+    & .field-area {
+      display: grid;
+      gap: var(--gap);
+
+      & .college-field {
+        grid-area: college;
+      }
+      & .licence-number-field {
+        grid-area: licence;
+      }
+    }
+  }
+  & .actions {
+    padding: var(--actions-padding);
+    & button:not(:last-of-type) {
+      margin-right: var(--button-margin-right);
+    }
+  }
+}
+.viewport-xsmall {
+  & .preferred-name-form {
+    & .field-area {
+      grid-template-areas: 'first' 'middle' 'last';
+    }
+  }
+  & .contact-info {
+    & .field-area {
+      grid-template-areas: 'email' 'phone';
+    }
+  }
+  & .college-info {
+    & .field-area {
+      grid-template-areas: 'college' 'licence';
+    }
+  }
+}
+.viewport-large,
+.viewport-medium,
+.viewport-small {
+  & .preferred-name-form {
+    & .field-area {
+      grid-template-areas: 'first middle' 'last last';
+      grid-template-columns: calc(50% - var(--gap) / 2);
+    }
+  }
+  & .contact-info-form {
+    & .field-area {
+      grid-template-areas: 'email phone';
+      grid-template-columns: calc(50% - var(--gap) / 2);
+    }
+  }
+  & .college-info {
+    & .field-area {
+      grid-template-areas: 'college licence';
+      grid-template-columns: calc(50% - var(--gap) / 2);
+    }
+  }
+}

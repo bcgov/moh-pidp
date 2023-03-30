@@ -1,0 +1,184 @@
+<div class="box" uiPidpInjectViewportCss>
+  <form novalidate [formGroup]="formState.form" (ngSubmit)="onSubmit()">
+    <section class="top">
+      <h2 class="header">Personal Information</h2>
+      <div class="content">
+        <p>
+          This information comes from the BC Services Card. If you use a
+          different name in your college licence, select "My name is different
+          on my college licence."
+        </p>
+        <div class="bcsc-info">
+          <div class="bcsc-row">
+            <label for="bcsc-name">Name:</label>
+            <span id="bcsc-name">{{name}}</span>
+          </div>
+          <div class="bcsc-row">
+            <label for="bcsc-dob">Date of Birth:</label>
+            <span id="bcsc-dob">{{dateOfBirthText}}</span>
+          </div>
+        </div>
+      </div>
+    </section>
+    <ui-toggle-content
+      *ngIf="(identityProvider$ | async) | isHighAssurance"
+      label="I have a preferred name"
+      [checked]="hasPreferredName"
+      (toggle)="onPreferredNameToggle($event)">
+      <section class="preferred-name-form form-card">
+        <h2 class="card-header">Preferred Name</h2>
+        <div class="content">
+          <div class="preferred-name-text">
+            <p>
+              If you use a name professionally that is different from your legal
+              name, enter it here.
+            </p>
+            <p>
+              Entering a preferred name will not change your BC Services Card
+              name.
+            </p>
+          </div>
+          <div class="field-area">
+            <div class="preferred-first-name-field field">
+              <label id="me-preferred-first-name" class="field-label"
+                >Preferred First Name</label
+              >
+              <mat-form-field appearance="outline">
+                <input
+                  matInput
+                  formControlName="preferredFirstName"
+                  aria-labelledby="me-preferred-first-name" />
+              </mat-form-field>
+            </div>
+            <div class="preferred-middle-name-field field">
+              <label id="me-preferred-middle-name" class="field-label"
+                >Preferred Middle Name (optional)</label
+              >
+              <mat-form-field appearance="outline">
+                <input
+                  matInput
+                  formControlName="preferredMiddleName"
+                  aria-labelledby="me-preferred-middle-name" />
+              </mat-form-field>
+            </div>
+            <div class="preferred-last-name-field field">
+              <label id="me-preferred-last-name" class="field-label"
+                >Preferred Last Name</label
+              >
+              <mat-form-field appearance="outline">
+                <input
+                  matInput
+                  formControlName="preferredLastName"
+                  aria-labelledby="me-preferred-last-name" />
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- She  -->
+    </ui-toggle-content>
+    <section class="contact-info form-card">
+      <h2 class="card-header">Contact Information</h2>
+      <div class="content">
+        <p>
+          Provide the following information to complete your Provider Identity
+          Profile.
+        </p>
+        <div class="field-area">
+          <div class="email-field field">
+            <label id="me-email" class="field-label">Email</label>
+            <mat-form-field appearance="outline">
+              <input
+                matInput
+                formControlName="email"
+                aria-labelledby="me-email" />
+              <mat-error>Required</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="phone-field field">
+            <label id="me-phone" class="field-label">Phone Number</label>
+            <mat-form-field appearance="outline">
+              <input
+                matInput
+                formControlName="phone"
+                aria-labelledby="me-phone" />
+              <mat-error>Required</mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="college-info form-card">
+      <h2 class="card-header">College Licence Information</h2>
+      <div class="content">
+        <p>
+          Provide details for your college licence if you have one. If you do
+          not have a college licence, select "None".
+        </p>
+        <div class="field-area">
+          <div class="college-field field">
+            <label id="me-college" class="field-label">College Licence</label>
+            <mat-form-field appearance="outline">
+              <mat-select
+                formControlName="collegeCode"
+                aria-labelledby="college-licence-declaration-college-licence">
+                <mat-option [value]="0">None</mat-option>
+                <mat-option
+                  *ngFor="let college of colleges"
+                  [value]="college.code">
+                  {{ college.name }}
+                </mat-option>
+              </mat-select>
+              <mat-error>Required</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="licence-number-field field">
+            <label id="me-licence-number" class="field-label"
+              >Licence Number</label
+            >
+            <mat-form-field appearance="outline">
+              <input
+                matInput
+                formControlName="licenceNumber"
+                aria-labelledby="me-licence-number" />
+              <mat-error>Required</mat-error>
+            </mat-form-field>
+            <p *ngIf="showNurseValidationInfo">
+              If you are a nurse, this number may be referred to as your "Nurse
+              ID". You can confirm you have the correct number by checking it
+              <a
+                target="_blank"
+                rel="noopener"
+                href="https://registry.bccnp.ca/ElasticSearch/Search"
+                aria-label="BC College of Nurses and Midwives Search"
+                >here</a
+              >.
+            </p>
+            <!-- <mat-form-field
+              *ngIf="formState.collegeCode.value"
+              appearance="outline">
+              <input
+                matInput
+                formControlName="licenceNumber"
+                aria-labelledby="college-licence-declaration-licence-number" />
+              <mat-error>Required</mat-error>
+            </mat-form-field> -->
+          </div>
+        </div>
+      </div>
+    </section>
+    <div class="actions">
+      <button
+        mat-stroked-button
+        uiPageFooterAction
+        type="button"
+        color="primary"
+        (click)="onBack()">
+        Back
+      </button>
+      <button mat-flat-button uiPageFooterAction type="submit" color="primary">
+        Save Information
+      </button>
+    </div>
+  </form>
+</div>

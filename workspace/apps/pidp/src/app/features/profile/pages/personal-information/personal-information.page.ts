@@ -54,8 +54,7 @@ export class PersonalInformationPage
 
   public IdentityProvider = IdentityProvider;
 
-  // ui-page is handling this.
-  public showOverlayOnSubmit = false;
+  public showOverlayOnSubmit = true;
 
   public constructor(
     dependenciesService: AbstractFormDependenciesService,

@@ -1,6 +1,7 @@
 export class ProfileRoutes {
   public static MODULE_PATH = 'profile';
 
+  public static ME = 'me';
   public static PERSONAL_INFO = 'personal-information';
   public static COLLEGE_LICENCE_DECLARATION = 'college-licence-declaration';
   public static COLLEGE_LICENCE_INFO = 'college-licence-info';
