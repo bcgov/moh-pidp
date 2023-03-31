@@ -9,7 +9,7 @@ import { AbstractFormState } from '@bcgov/shared/ui';
 
 import { FormUtilsService } from '@app/core/services/form-utils.service';
 
-import { MsTeamsClinicInfo } from './ms-teams.model';
+import { MsTeamsClinicInfo } from './ms-teams-privacy-officer.model';
 
 export class MsTeamsPrivacyOfficerFormState extends AbstractFormState<MsTeamsClinicInfo> {
   public constructor(
