@@ -17,7 +17,7 @@ using Pidp.Infrastructure.Services;
 using Pidp.Models;
 using Pidp.Models.Lookups;
 
-public class MSTeams
+public class MSTeamsPrivacyOfficer
 {
     public static IdentifierType[] AllowedIdentifierTypes => new[] { IdentifierType.PhysiciansAndSurgeons, IdentifierType.Nurse };
 
@@ -93,14 +93,14 @@ public class MSTeams
                     .With(AllowedIdentifierTypes)
                     .HasGoodStanding)
             {
-                this.logger.LogMSTeamsAccessRequestDenied();
+                this.logger.LogMSTeamsPrivacyOfficerAccessRequestDenied();
                 return DomainResult.Failed();
             }
 
-            this.context.MSTeamsEnrolments.Add(new MSTeamsEnrolment
+            this.context.MSTeamsPrivacyOfficerEnrolments.Add(new MSTeamsPrivacyOfficerEnrolment
             {
                 PartyId = command.PartyId,
-                AccessTypeCode = AccessTypeCode.MSTeams,
+                AccessTypeCode = AccessTypeCode.MSTeamsPrivacyOfficer,
                 RequestedOn = this.clock.GetCurrentInstant(),
                 ClinicName = command.ClinicName,
                 ClinicAddress = this.mapper.Map<MSTeamsClinicAddress>(command.ClinicAddress)
@@ -200,6 +200,6 @@ public class MSTeams
 
 public static partial class MSTeamsLoggingExtensions
 {
-    [LoggerMessage(1, LogLevel.Warning, "MS Teams Access Request denied due to the Party Record not meeting all prerequisites.")]
-    public static partial void LogMSTeamsAccessRequestDenied(this ILogger logger);
+    [LoggerMessage(1, LogLevel.Warning, "MS Teams Privacy Officer Access Request denied due to the Party Record not meeting all prerequisites.")]
+    public static partial void LogMSTeamsPrivacyOfficerAccessRequestDenied(this ILogger logger);
 }
