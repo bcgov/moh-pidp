@@ -102,8 +102,11 @@ public class MSTeamsPrivacyOfficer
                 PartyId = command.PartyId,
                 AccessTypeCode = AccessTypeCode.MSTeamsPrivacyOfficer,
                 RequestedOn = this.clock.GetCurrentInstant(),
-                ClinicName = command.ClinicName,
-                ClinicAddress = this.mapper.Map<MSTeamsClinicAddress>(command.ClinicAddress)
+                Clinic = new MSTeamsClinic
+                {
+                    Name = command.ClinicName,
+                    Address = this.mapper.Map<MSTeamsClinicAddress>(command.ClinicAddress)
+                }
             });
 
             await this.context.SaveChangesAsync();

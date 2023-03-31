@@ -39,8 +39,15 @@ public class HcimEnrolment : AccessRequest
 [Table(nameof(MSTeamsPrivacyOfficerEnrolment))]
 public class MSTeamsPrivacyOfficerEnrolment : AccessRequest
 {
-    public string ClinicName { get; set; } = string.Empty;
+    public int ClinicId { get; set; }
 
-    [Required]
-    public MSTeamsClinicAddress? ClinicAddress { get; set; } = new();
+    public MSTeamsClinic? Clinic { get; set; }
+}
+
+[Table(nameof(MSTeamsClinicMemberEnrolment))]
+public class MSTeamsClinicMemberEnrolment : AccessRequest
+{
+    public int ClinicId { get; set; }
+
+    public MSTeamsClinic? Clinic { get; set; }
 }
