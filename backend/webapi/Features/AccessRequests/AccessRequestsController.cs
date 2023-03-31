@@ -83,6 +83,15 @@ public class AccessRequestsController : PidpControllerBase
         => await this.AuthorizePartyBeforeHandleAsync(command.PartyId, handler, command)
             .ToActionResult();
 
+    [HttpPost("ms-teams-clinic-member")]
+    [Authorize(Policy = Policies.HighAssuranceIdentityProvider)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> CreateMSTeamsClinicMemberEnrolment([FromServices] ICommandHandler<MSTeamsClinicMember.Command, IDomainResult> handler,
+                                                                        [FromHybrid] MSTeamsClinicMember.Command command)
+        => await this.AuthorizePartyBeforeHandleAsync(command.PartyId, handler, command)
+            .ToActionResult();
+
     [HttpPost("ms-teams-privacy-officer")]
     [Authorize(Policy = Policies.HighAssuranceIdentityProvider)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
