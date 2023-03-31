@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 
 import { MsTeamsPrivacyOfficerResource } from './ms-teams-privacy-officer-resource.service';
 
-describe('MsTeamsResource', () => {
+describe('MsTeamsPrivacyOfficerResource', () => {
   let service: MsTeamsPrivacyOfficerResource;
 
   beforeEach(() => {

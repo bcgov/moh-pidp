@@ -9,7 +9,7 @@ import { ApiHttpClient } from '@app/core/resources/api-http-client.service';
 import { ProfileStatus } from '@app/features/portal/models/profile-status.model';
 import { PortalResource } from '@app/features/portal/portal-resource.service';
 
-import { MsTeamsClinicInfo } from './ms-teams.model';
+import { MsTeamsClinicInfo } from './ms-teams-privacy-officer.model';
 
 @Injectable({
   providedIn: 'root',

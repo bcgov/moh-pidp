@@ -24,7 +24,7 @@ export class MsTeamsPrivacyOfficerPortalSection implements IPortalSection {
   ) {
     this.key = 'msTeamsPrivacyOfficer';
     this.heading = 'MS Teams for Clinical Use';
-    this.description = `Enrol here for clinic access for MS Teams with Fraser Health.`;
+    this.description = `Privacy Officer enrol here for clinic access for MS Teams with Fraser Health.`;
   }
 
   public get hint(): string {
