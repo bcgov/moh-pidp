@@ -11,10 +11,12 @@ using System.Text.Json.Serialization;
 
 using Pidp.Data;
 using Pidp.Extensions;
+using Pidp.Features.AccessRequests;
 using Pidp.Infrastructure;
 using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.HttpClients.Keycloak;
 using Pidp.Infrastructure.HttpClients.Plr;
+using Pidp.Models;
 using Pidp.Models.Lookups;
 using static Pidp.Features.Parties.ProfileStatus.Model;
 
@@ -47,17 +49,20 @@ public partial class ProfileStatus
 
     public class CommandHandler : ICommandHandler<Command, Model>
     {
+        private readonly IClock clock;
         private readonly IKeycloakAdministrationClient keycloakClient;
         private readonly IMapper mapper;
         private readonly IPlrClient plrClient;
         private readonly PidpDbContext context;
 
         public CommandHandler(
+            IClock clock,
             IKeycloakAdministrationClient keycloakClient,
             IMapper mapper,
             IPlrClient plrClient,
             PidpDbContext context)
         {
+            this.clock = clock;
             this.keycloakClient = keycloakClient;
             this.mapper = mapper;
             this.plrClient = plrClient;
@@ -80,10 +85,15 @@ public partial class ProfileStatus
                 if (newCpn != null)
                 {
                     var party = await this.context.Parties
+                        .Include(party => party.Credentials)
                         .SingleAsync(party => party.Id == command.Id);
                     party.Cpn = newCpn;
+                    await this.keycloakClient.UpdateUserCpn(party.PrimaryUserId, newCpn);
+                    if (await this.keycloakClient.AssignAccessRoles(party.PrimaryUserId, MohKeycloakEnrolment.PractitionerLicenceStatus))
+                    {
+                        this.context.BusinessEvents.Add(LicenceStatusRoleAssigned.Create(party.Id, MohKeycloakEnrolment.PractitionerLicenceStatus, this.clock.GetCurrentInstant()));
+                    };
                     await this.context.SaveChangesAsync();
-                    await this.keycloakClient.UpdateUserCpn(party.UserId, newCpn);
                 }
 
                 data.Cpn = newCpn;
@@ -97,14 +107,17 @@ public partial class ProfileStatus
                 {
                     ProfileSection.Create<DashboardInfoSection>(data),
                     ProfileSection.Create<AccessAdministratorSection>(data),
+                    ProfileSection.Create<BCProviderSection>(data),
                     ProfileSection.Create<CollegeCertificationSection>(data),
-                    ProfileSection.Create<OrganizationDetailsSection>(data),
                     ProfileSection.Create<DemographicsSection>(data),
+                    ProfileSection.Create<EndorsementsSection>(data),
+                    ProfileSection.Create<OrganizationDetailsSection>(data),
                     ProfileSection.Create<DriverFitnessSection>(data),
                     ProfileSection.Create<HcimAccountTransferSection>(data),
                     ProfileSection.Create<HcimEnrolmentSection>(data),
                     ProfileSection.Create<MSTeamsSection>(data),
                     ProfileSection.Create<PrescriptionRefillEformsSection>(data),
+                    ProfileSection.Create<ProviderReportingPortalSection>(data),
                     ProfileSection.Create<SAEformsSection>(data)
                 }
                 .ToDictionary(section => section.SectionName, section => section)
@@ -132,6 +145,7 @@ public partial class ProfileStatus
         public string? Email { get; set; }
         public string? Phone { get; set; }
         public string? Cpn { get; set; }
+        public bool HasBCProviderCredential { get; set; }
         public LicenceDeclarationDto? LicenceDeclaration { get; set; }
         public string? AccessAdministratorEmail { get; set; }
         public bool OrganizationDetailEntered { get; set; }
@@ -140,15 +154,17 @@ public partial class ProfileStatus
         private string? userIdentityProvider;
         public PlrStandingsDigest PartyPlrStanding { get; set; } = default!;
         public PlrStandingsDigest EndorsementPlrStanding { get; set; } = default!;
+        public bool HasPrpAuthorizedLicence { get; set; }
 
         [MemberNotNullWhen(true, nameof(Email), nameof(Phone))]
-        public bool DemographicsEntered => this.Email != null && this.Phone != null;
+        public bool DemographicsComplete => this.Email != null && this.Phone != null;
         [MemberNotNullWhen(true, nameof(LicenceDeclaration))]
-        public bool LicenceDeclarationEntered => this.LicenceDeclaration != null;
+        public bool LicenceDeclarationComplete => this.LicenceDeclaration != null;
         [MemberNotNullWhen(true, nameof(LicenceDeclaration))]
         public bool CollegeLicenceDeclared => this.LicenceDeclaration?.HasNoLicence == false;
-        public bool UserIsBcServicesCard => this.userIdentityProvider == ClaimValues.BCServicesCard;
-        public bool UserIsPhsa => this.userIdentityProvider == ClaimValues.Phsa;
+        public bool UserIsBCProvider => this.userIdentityProvider == IdentityProviders.BCProvider;
+        public bool UserIsHighAssuranceIdentity => this.userIdentityProvider is IdentityProviders.BCServicesCard or IdentityProviders.BCProvider;
+        public bool UserIsPhsa => this.userIdentityProvider == IdentityProviders.Phsa;
 
         public async Task Finalize(
             PidpDbContext context,
@@ -158,6 +174,17 @@ public partial class ProfileStatus
             this.userIdentityProvider = user.GetIdentityProvider();
             this.PartyPlrStanding = await plrClient.GetStandingsDigestAsync(this.Cpn);
 
+
+            var possiblePrpLicenceNumbers = this.PartyPlrStanding
+                .With(ProviderReportingPortal.AllowedIdentifierTypes)
+                .LicenceNumbers;
+            if (this.UserIsBCProvider && possiblePrpLicenceNumbers.Any())
+            {
+                this.HasPrpAuthorizedLicence = await context.PrpAuthorizedLicences
+                    .AnyAsync(authorizedLicence => possiblePrpLicenceNumbers.Contains(authorizedLicence.LicenceNumber));
+            }
+
+            // We should defer this check if possible. See DriverFitnessSection.
             var endorsementCpns = await context.Endorsements
                 .Where(endorsement => endorsement.Active
                     && endorsement.EndorsementRelationships.Any(relationship => relationship.PartyId == this.Id))

@@ -13,6 +13,6 @@ export class TransactionsResource {
   public constructor(private apiResource: ApiHttpClient) {}
 
   public transactions(partyId: number): Observable<Transaction[]> {
-    return this.apiResource.get<Transaction[]>(`access-requests/${partyId}`);
+    return this.apiResource.get<Transaction[]>(`parties/${partyId}/access-requests`);
   }
 }

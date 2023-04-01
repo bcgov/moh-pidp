@@ -1,175 +1,110 @@
-<ui-page mode="large">
-  <div class="row">
-    <div class="col-12">
-      <ui-alert
-        *ngIf="completedProfile"
-        type="success"
-        icon="check_circle"
-        iconType="outlined"
-        heading="You have completed your Provider Identity Profile">
-        <ng-container uiAlertContent>
-          Go to the Access to Systems section to view what systems you are
-          eligible to enrol for.
-        </ng-container>
-        <ng-container uiAlertActions>
-          <span>
-            <button
-              mat-stroked-button
-              type="button"
-              (click)="onScrollToAnchor()">
-              View Systems
-            </button>
-          </span>
-        </ng-container>
-      </ui-alert>
+<div class="box" uiPidpInjectViewportCss>
+  <section *ngFor="let alert of alerts" class="alert-box section-box">
+    <header>
+      <h2>{{ alert.heading }}</h2>
+    </header>
+    <div class="section-content-box">
+      <p>{{ alert.content }}</p>
     </div>
-    <div class="col-12">
-      <ng-container *ngFor="let alert of alerts">
-        <ui-alert
-          type="info"
-          icon="error_outline"
-          iconType="outlined"
-          [heading]="alert.heading">
-          <ng-container uiAlertContent> {{ alert.content }} </ng-container>
-        </ui-alert>
-      </ng-container>
-
-      <ui-page-section>
-        <ui-scroll-target targetId="profile"></ui-scroll-target>
-        <ui-page-section-subheader icon="assignment_ind" heading="Profile">
-          <ng-container uiPageSectionSubheaderDesc>
-            Complete the information for each portion of your Provider Identity
-            Profile. This will allow the portal to identify the systems you may
-            request access for.
-          </ng-container>
-        </ui-page-section-subheader>
-
-        <ui-card-summary
-          *ngFor="let section of (state$ | async)?.profile"
-          [heading]="section.heading"
-          [statusType]="section.statusType"
-          [status]="section.status"
-          [actionLabel]="section.action.label"
-          [actionDisabled]="section.action.disabled"
-          (action)="onCardAction(section)">
-          <ng-container uiCardSummaryHint>{{ section.hint }}</ng-container>
-          <ng-container uiCardSummaryContent>
-            <app-profile-card-summary-content [properties]="section.properties">
-              {{ section.description }}
-            </app-profile-card-summary-content>
-          </ng-container>
-        </ui-card-summary>
-      </ui-page-section>
-
-      <ui-page-section *permittedRoles="[Role.FEATURE_PIDP_DEMO]">
-        <ui-scroll-target targetId="organization"></ui-scroll-target>
-        <ui-page-section-subheader
-          icon="corporate_fare"
-          heading="Organization Information">
-          <ng-container uiPageSectionSubheaderDesc>
-            Provide your organization's details to gain access to the systems
-            you are eligible for.
-          </ng-container>
-        </ui-page-section-subheader>
-
-        <ui-card-summary
-          *ngFor="let section of (state$ | async)?.organization"
-          [heading]="section.heading"
-          [statusType]="section.statusType"
-          [status]="section.status"
-          [actionLabel]="section.action.label"
-          [actionDisabled]="section.action.disabled"
-          (action)="onCardAction(section)">
-          <ng-container uiCardSummaryHint>{{ section.hint }}</ng-container>
-          <ng-container uiCardSummaryContent>
-            <app-profile-card-summary-content [properties]="section.properties">
-              {{ section.description }}
-            </app-profile-card-summary-content>
-          </ng-container>
-        </ui-card-summary>
-      </ui-page-section>
-
-      <ui-page-section>
-        <ui-scroll-target targetId="access"></ui-scroll-target>
-        <ui-page-section-subheader
-          icon="assignment"
-          heading="Access to Systems">
-          <ng-container uiPageSectionSubheaderDesc>
+  </section>
+  <ng-container *ngIf="state$ | async as state">
+    <section class="profile-box section-box">
+      <ui-scroll-target targetId="profile"></ui-scroll-target>
+      <header>
+        <h2>Profile</h2>
+      </header>
+      <div class="section-content-box">
+        <p>
+          Complete the information for each portion of your Provider Identity
+          Profile. This will allow the portal to identify the systems you may
+          request access for.
+        </p>
+        <div class="carousel-box">
+          <app-portal-carousel
+            portalCategoryName="profile"
+            [sections]="state.profile">
+          </app-portal-carousel>
+        </div>
+      </div>
+    </section>
+    <section
+      *ngIf="state.organization.length"
+      class="organization-box section-box">
+      <ui-scroll-target targetId="organization"></ui-scroll-target>
+      <header>
+        <h2>Organization Information</h2>
+      </header>
+      <div class="section-content-box">
+        <p>
+          Provide your organization's details to gain access to the systems you
+          are eligible for.
+        </p>
+        <div class="carousel-box">
+          <app-portal-carousel
+            portalCategoryName="organization"
+            [sections]="state.organization">
+          </app-portal-carousel>
+        </div>
+      </div>
+    </section>
+    <section *ngIf="state.access.length" class="access-box section-box">
+      <ui-scroll-target targetId="access"></ui-scroll-target>
+      <header>
+        <h2>Access to Systems</h2>
+      </header>
+      <div class="section-content-box">
+        <p>
+          Complete your profile to gain access to the systems you are eligible
+          for.
+        </p>
+        <div class="carousel-box">
+          <app-portal-carousel
+            portalCategoryName="access-to-systems"
+            [sections]="state.access"></app-portal-carousel>
+        </div>
+      </div>
+    </section>
+    <section *ngIf="state.training.length" class="training-box section-box">
+      <ui-scroll-target targetId="training"></ui-scroll-target>
+      <header>
+        <h2>Complete these trainings</h2>
+      </header>
+      <div class="section-content-box">
+        <ng-container *ngIf="state?.training?.length; else noTraining">
+          <p>
             Complete your profile to gain access to the systems you are eligible
             for.
-          </ng-container>
-        </ui-page-section-subheader>
-
-        <ui-card-summary
-          *ngFor="let section of (state$ | async)?.access"
-          [heading]="section.heading"
-          [statusType]="section.statusType"
-          [status]="section.status"
-          [actionLabel]="section.action.label"
-          [actionDisabled]="section.action.disabled"
-          (action)="onCardAction(section)">
-          <ng-container uiCardSummaryHint>{{ section.hint }}</ng-container>
-          <ng-container uiCardSummaryContent>
-            {{ section.description }}
-          </ng-container>
-        </ui-card-summary>
-      </ui-page-section>
-
-      <ui-page-section *permittedRoles="[Role.FEATURE_PIDP_DEMO]">
-        <ui-scroll-target targetId="training"></ui-scroll-target>
-        <ui-page-section-subheader icon="school" heading="Training">
-          <ng-container uiPageSectionSubheaderDesc>
-            Complete these trainings.
-          </ng-container>
-        </ui-page-section-subheader>
-
-        <ng-container
-          *ngIf="(state$ | async)?.training?.length; else noTraining">
-          <ui-card-summary
-            *ngFor="let section of (state$ | async)?.training"
-            [heading]="section.heading"
-            [statusType]="section.statusType"
-            [status]="section.status"
-            [actionLabel]="section.action.label"
-            [actionDisabled]="section.action.disabled"
-            (action)="onCardAction(section)">
-            <ng-container uiCardSummaryHint>{{ section.hint }}</ng-container>
-            <ng-container uiCardSummaryContent>
-              {{ section.description }}
-            </ng-container>
-          </ui-card-summary>
+          </p>
+          <div class="carousel-box">
+            <app-portal-carousel
+              portalCategoryName="training"
+              [sections]="state.training"></app-portal-carousel>
+          </div>
         </ng-container>
         <ng-template #noTraining>
           <p class="lead">No training available at this time.</p>
         </ng-template>
-      </ui-page-section>
-
-      <ui-page-section>
-        <ui-scroll-target targetId="history"></ui-scroll-target>
-        <ui-page-section-subheader icon="history" heading="History">
-          <ng-container uiPageSectionSubheaderDesc>
-            View information pertaining to your profile and interaction with the
-            systems you use for work.
-          </ng-container>
-        </ui-page-section-subheader>
-
-        <ui-card-summary
-          *ngFor="let section of (state$ | async)?.history"
-          [heading]="section.heading"
-          [actionLabel]="section.action.label"
-          [actionDisabled]="section.action.disabled"
-          (action)="onCardAction(section)">
-          <ng-container uiCardSummaryHint>{{ section.hint }}</ng-container>
-          <ng-container uiCardSummaryContent>
-            {{ section.description }}
-          </ng-container>
-        </ui-card-summary>
-      </ui-page-section>
-    </div>
-    <div class="col-12">
-      <app-get-support>
-        <ui-scroll-target targetId="support"></ui-scroll-target>
-      </app-get-support>
-    </div>
-  </div>
-</ui-page>
+      </div>
+    </section>
+    <section *ngIf="state.history.length" class="history-box section-box">
+      <ui-scroll-target targetId="history"></ui-scroll-target>
+      <header>
+        <h2>History</h2>
+      </header>
+      <div class="section-content-box">
+        <p>
+          View information pertaining to your profile and interaction with the
+          systems you use for work.
+        </p>
+        <div class="carousel-box">
+          <app-portal-carousel
+            portalCategoryName="history"
+            [sections]="state.history"></app-portal-carousel>
+        </div>
+      </div>
+    </section>
+  </ng-container>
+  <app-get-support>
+    <ui-scroll-target targetId="support"></ui-scroll-target>
+  </app-get-support>
+</div>

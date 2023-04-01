@@ -4,6 +4,8 @@ using NodaTime;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
+using Pidp.Infrastructure.HttpClients.Keycloak;
+
 [Table(nameof(BusinessEvent))]
 public abstract class BusinessEvent : BaseAuditable
 {
@@ -20,7 +22,6 @@ public abstract class BusinessEvent : BaseAuditable
 public class PartyNotInPlr : BusinessEvent
 {
     public int PartyId { get; set; }
-
     public Party? Party { get; set; }
 
     public static PartyNotInPlr Create(int partyId, Instant recordedOn)
@@ -29,6 +30,23 @@ public class PartyNotInPlr : BusinessEvent
         {
             PartyId = partyId,
             Description = "Party declared a College Licence but was not found in PLR.",
+            Severity = LogLevel.Information,
+            RecordedOn = recordedOn
+        };
+    }
+}
+
+public class LicenceStatusRoleAssigned : BusinessEvent
+{
+    public int PartyId { get; set; }
+    public Party? Party { get; set; }
+
+    public static LicenceStatusRoleAssigned Create(int partyId, MohKeycloakEnrolment enrolmentAssigned, Instant recordedOn)
+    {
+        return new LicenceStatusRoleAssigned
+        {
+            PartyId = partyId,
+            Description = $"Party was assigned the {enrolmentAssigned.AccessRoles.Single()} role.",
             Severity = LogLevel.Information,
             RecordedOn = recordedOn
         };

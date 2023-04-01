@@ -1,6 +1,8 @@
 import { DOCUMENT } from '@angular/common';
 import { Inject, Injectable } from '@angular/core';
 
+import { delay, of } from 'rxjs';
+
 import { WINDOW } from '@bcgov/shared/utils';
 
 export type SortWeight = -1 | 0 | 1;
@@ -34,6 +36,18 @@ export class UtilsService {
       ? this.document.querySelector(containerQuerySelector) ?? this.window
       : this.window;
     contentContainer.scroll({ top: 0, left: 0, behavior: 'smooth' });
+  }
+
+  /**
+   * @description
+   * Scroll to top with added delay
+   */
+  public scrollTopWithDelay(): void {
+    of(true)
+      .pipe(delay(250))
+      .subscribe(() => {
+        this.scrollTop();
+      });
   }
 
   /**

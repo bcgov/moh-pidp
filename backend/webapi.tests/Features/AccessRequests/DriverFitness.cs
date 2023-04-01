@@ -5,6 +5,7 @@ using NodaTime;
 using Xunit;
 
 using Pidp.Features.AccessRequests;
+using Pidp.Infrastructure.HttpClients.Keycloak;
 using Pidp.Infrastructure.HttpClients.Plr;
 using Pidp.Models;
 using PidpTests.TestingExtensions;
@@ -21,19 +22,21 @@ public class DriverFitnessTests : InMemoryDbTest
     [MemberData(nameof(DriverFitnessIdentifierTypeTestData))]
     public async void CreateDriverFitnessEnrolment_ValidProfileWithVaryingLicence_MatchesAllowedTypes(IdentifierType identifierType)
     {
-        var party = this.TestDb.Has(new Party
+        var party = this.TestDb.HasAParty(party =>
         {
-            FirstName = "FirstName",
-            LastName = "LastName",
-            Birthdate = LocalDate.FromDateTime(DateTime.Today),
-            Email = "Email@email.com",
-            Phone = "5551234567",
-            Cpn = "Cpn",
-            LicenceDeclaration = new PartyLicenceDeclaration()
+            party.FirstName = "FirstName";
+            party.LastName = "LastName";
+            party.Birthdate = LocalDate.FromDateTime(DateTime.Today);
+            party.Email = "Email@email.com";
+            party.Phone = "5551234567";
+            party.Cpn = "Cpn";
+            party.LicenceDeclaration = new PartyLicenceDeclaration();
         });
         var client = A.Fake<IPlrClient>()
             .ReturningAStatandingsDigest(true, identifierType);
-        var handler = this.MockDependenciesFor<DriverFitness.CommandHandler>(client);
+        var keycloakClient = A.Fake<IKeycloakAdministrationClient>()
+            .ReturningTrueWhenAssigingClientRoles();
+        var handler = this.MockDependenciesFor<DriverFitness.CommandHandler>(client, keycloakClient);
 
         var result = await handler.HandleAsync(new DriverFitness.Command { PartyId = party.Id });
 
@@ -43,19 +46,21 @@ public class DriverFitnessTests : InMemoryDbTest
     [Fact]
     public async void CreateDriverFitnessEnrolment_NoLicenceNoEndorsements_Denied()
     {
-        var party = this.TestDb.Has(new Party
+        var party = this.TestDb.HasAParty(party =>
         {
-            FirstName = "FirstName",
-            LastName = "LastName",
-            Birthdate = LocalDate.FromDateTime(DateTime.Today),
-            Email = "Email@email.com",
-            Phone = "5551234567",
-            Cpn = null,
-            LicenceDeclaration = new PartyLicenceDeclaration()
+            party.FirstName = "FirstName";
+            party.LastName = "LastName";
+            party.Birthdate = LocalDate.FromDateTime(DateTime.Today);
+            party.Email = "Email@email.com";
+            party.Phone = "5551234567";
+            party.Cpn = null;
+            party.LicenceDeclaration = new PartyLicenceDeclaration();
         });
         var client = A.Fake<IPlrClient>()
             .ReturningAStatandingsDigest(PlrStandingsDigest.FromEmpty());
-        var handler = this.MockDependenciesFor<DriverFitness.CommandHandler>(client);
+        var keycloakClient = A.Fake<IKeycloakAdministrationClient>()
+            .ReturningTrueWhenAssigingClientRoles();
+        var handler = this.MockDependenciesFor<DriverFitness.CommandHandler>(client, keycloakClient);
 
         var result = await handler.HandleAsync(new DriverFitness.Command { PartyId = party.Id });
 
@@ -64,27 +69,27 @@ public class DriverFitnessTests : InMemoryDbTest
 
     [Theory]
     [MemberData(nameof(DriverFitnessIdentifierTypeTestData))]
-    public async void CreateDriverFitnessEnrolment_NoLicenceWithEndorsement_Accepted(IdentifierType identifierType)
+    public async void CreateDriverFitnessEnrolment_NoLicenceWithEndorsement_Accepted(IdentifierType otherPartyIdentifierType)
     {
-        var party = this.TestDb.Has(new Party
+        var party = this.TestDb.HasAParty(party =>
         {
-            FirstName = "FirstName",
-            LastName = "LastName",
-            Birthdate = LocalDate.FromDateTime(DateTime.Today),
-            Email = "Email@email.com",
-            Phone = "5551234567",
-            Cpn = null,
-            LicenceDeclaration = new PartyLicenceDeclaration()
+            party.FirstName = "FirstName";
+            party.LastName = "LastName";
+            party.Birthdate = LocalDate.FromDateTime(DateTime.Today);
+            party.Email = "Email@email.com";
+            party.Phone = "5551234567";
+            party.Cpn = null;
+            party.LicenceDeclaration = new PartyLicenceDeclaration();
         });
-        var otherParty = this.TestDb.Has(new Party
+        var otherParty = this.TestDb.HasAParty(party =>
         {
-            FirstName = "FirstName2",
-            LastName = "LastName2",
-            Birthdate = LocalDate.FromDateTime(DateTime.Today),
-            Email = "Email2@email.com",
-            Phone = "5551234567",
-            Cpn = "cpn",
-            LicenceDeclaration = new PartyLicenceDeclaration()
+            party.FirstName = "FirstName2";
+            party.LastName = "LastName2";
+            party.Birthdate = LocalDate.FromDateTime(DateTime.Today);
+            party.Email = "Email2@email.com";
+            party.Phone = "5551234567";
+            party.Cpn = "cpn";
+            party.LicenceDeclaration = new PartyLicenceDeclaration();
         });
         this.TestDb.Has(new Endorsement
         {
@@ -96,37 +101,40 @@ public class DriverFitnessTests : InMemoryDbTest
             }
         });
         var client = A.Fake<IPlrClient>()
-            .ReturningAStatandingsDigest(true, identifierType);
-        var handler = this.MockDependenciesFor<DriverFitness.CommandHandler>(client);
+            .ReturningAStatandingsDigest(true, otherPartyIdentifierType);
+        var keycloakClient = A.Fake<IKeycloakAdministrationClient>()
+            .ReturningTrueWhenAssigingClientRoles();
+        var handler = this.MockDependenciesFor<DriverFitness.CommandHandler>(client, keycloakClient);
 
         var result = await handler.HandleAsync(new DriverFitness.Command { PartyId = party.Id });
 
         Assert.True(result.IsSuccess);
         A.CallTo(() => client.GetAggregateStandingsDigestAsync(An<IEnumerable<string?>>.That.IsSameSequenceAs(new[] { otherParty.Cpn }))).MustHaveHappened();
+        A.CallTo(() => keycloakClient.AssignAccessRoles(party.PrimaryUserId, MohKeycloakEnrolment.DriverFitness)).MustHaveHappened();
     }
 
     [Fact]
     public async void CreateDriverFitnessEnrolment_WrongLicenceWithEndorsement_Denied()
     {
-        var party = this.TestDb.Has(new Party
+        var party = this.TestDb.HasAParty(party =>
         {
-            FirstName = "FirstName",
-            LastName = "LastName",
-            Birthdate = LocalDate.FromDateTime(DateTime.Today),
-            Email = "Email@email.com",
-            Phone = "5551234567",
-            Cpn = "cpn",
-            LicenceDeclaration = new PartyLicenceDeclaration()
+            party.FirstName = "FirstName";
+            party.LastName = "LastName";
+            party.Birthdate = LocalDate.FromDateTime(DateTime.Today);
+            party.Email = "Email@email.com";
+            party.Phone = "5551234567";
+            party.Cpn = "cpn";
+            party.LicenceDeclaration = new PartyLicenceDeclaration();
         });
-        var otherParty = this.TestDb.Has(new Party
+        var otherParty = this.TestDb.HasAParty(party =>
         {
-            FirstName = "FirstName2",
-            LastName = "LastName2",
-            Birthdate = LocalDate.FromDateTime(DateTime.Today),
-            Email = "Email2@email.com",
-            Phone = "5551234567",
-            Cpn = "cpn2",
-            LicenceDeclaration = new PartyLicenceDeclaration()
+            party.FirstName = "FirstName2";
+            party.LastName = "LastName2";
+            party.Birthdate = LocalDate.FromDateTime(DateTime.Today);
+            party.Email = "Email2@email.com";
+            party.Phone = "5551234567";
+            party.Cpn = "cpn2";
+            party.LicenceDeclaration = new PartyLicenceDeclaration();
         });
         this.TestDb.Has(new Endorsement
         {
@@ -140,8 +148,9 @@ public class DriverFitnessTests : InMemoryDbTest
         var client = A.Fake<IPlrClient>();
         A.CallTo(() => client.GetStandingsDigestAsync(party.Cpn)).Returns(AMock.StandingsDigest(true, IdentifierType.DentalSurgeon));
         A.CallTo(() => client.GetAggregateStandingsDigestAsync(new[] { otherParty.Cpn })).Returns(AMock.StandingsDigest(true, IdentifierType.PhysiciansAndSurgeons));
-
-        var handler = this.MockDependenciesFor<DriverFitness.CommandHandler>(client);
+        var keycloakClient = A.Fake<IKeycloakAdministrationClient>()
+            .ReturningTrueWhenAssigingClientRoles();
+        var handler = this.MockDependenciesFor<DriverFitness.CommandHandler>(client, keycloakClient);
 
         var result = await handler.HandleAsync(new DriverFitness.Command { PartyId = party.Id });
 

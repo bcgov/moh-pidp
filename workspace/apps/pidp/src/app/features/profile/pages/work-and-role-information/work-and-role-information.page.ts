@@ -1,7 +1,6 @@
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { EMPTY, Observable, catchError, of, tap } from 'rxjs';
@@ -9,8 +8,10 @@ import { EMPTY, Observable, catchError, of, tap } from 'rxjs';
 import { PartyService } from '@app/core/party/party.service';
 import { LoggerService } from '@app/core/services/logger.service';
 
-import { AbstractFormPage } from '@core/classes/abstract-form-page.class';
-import { FormUtilsService } from '@core/services/form-utils.service';
+import {
+  AbstractFormDependenciesService,
+  AbstractFormPage,
+} from '@core/classes/abstract-form-page.class';
 
 import { WorkAndRoleInformationFormState } from './work-and-role-information-form-state';
 import { WorkAndRoleInformationResource } from './work-and-role-information-resource.service';
@@ -30,20 +31,25 @@ export class WorkAndRoleInformationPage
   public formState: WorkAndRoleInformationFormState;
   public hasFacilityAddress: boolean;
 
+  // ui-page is handling this.
+  public showOverlayOnSubmit = false;
+
   public constructor(
-    protected dialog: MatDialog,
-    protected formUtilsService: FormUtilsService,
     private route: ActivatedRoute,
     private router: Router,
     private partyService: PartyService,
     private resource: WorkAndRoleInformationResource,
     private logger: LoggerService,
-    fb: FormBuilder
+    fb: FormBuilder,
+    dependenciesService: AbstractFormDependenciesService
   ) {
-    super(dialog, formUtilsService);
+    super(dependenciesService);
 
     this.title = this.route.snapshot.data.title;
-    this.formState = new WorkAndRoleInformationFormState(fb, formUtilsService);
+    this.formState = new WorkAndRoleInformationFormState(
+      fb,
+      dependenciesService.formUtilsService
+    );
     this.hasFacilityAddress = false;
   }
 

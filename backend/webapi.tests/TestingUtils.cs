@@ -37,6 +37,8 @@ public static class TestData
         .GetFields(BindingFlags.Public | BindingFlags.Static)
         .Where(field => field.FieldType == typeof(IdentifierType))
         .Select(field => (IdentifierType)field.GetValue(null)!);
+
+    public static IEnumerable<TEnum> AllValuesOf<TEnum>() where TEnum : Enum => (TEnum[])Enum.GetValues(typeof(TEnum));
 }
 
 public static class AMock
@@ -60,7 +62,7 @@ public static class AMock
         );
     }
 
-    public static ClaimsPrincipal BcscUser() => User(ClaimValues.BCServicesCard);
+    public static ClaimsPrincipal BcscUser() => User(IdentityProviders.BCServicesCard);
 
     public static ClaimsPrincipal User(string idp)
     {

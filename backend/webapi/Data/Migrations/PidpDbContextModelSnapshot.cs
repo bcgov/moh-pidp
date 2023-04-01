@@ -166,6 +166,45 @@ namespace Pidp.Data.Migrations
                     b.ToTable("ClientLog");
                 });
 
+            modelBuilder.Entity("Pidp.Models.Credential", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<Instant>("Created")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("IdentityProvider")
+                        .HasColumnType("text");
+
+                    b.Property<string>("IdpId")
+                        .HasColumnType("text");
+
+                    b.Property<Instant>("Modified")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("PartyId")
+                        .HasColumnType("integer");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PartyId");
+
+                    b.HasIndex("UserId")
+                        .IsUnique()
+                        .HasFilter("\"UserId\" != '00000000-0000-0000-0000-000000000000'");
+
+                    b.ToTable("Credential");
+
+                    b.HasCheckConstraint("CHK_Credential_AtLeastOneIdentifier", "((\"UserId\" != '00000000-0000-0000-0000-000000000000') or (\"IdpId\" is not null))");
+                });
+
             modelBuilder.Entity("Pidp.Models.EmailLog", b =>
                 {
                     b.Property<int>("Id")
@@ -391,6 +430,11 @@ namespace Pidp.Data.Migrations
                         {
                             Code = 6,
                             Name = "Prescription Refill eForm for Pharmacists"
+                        },
+                        new
+                        {
+                            Code = 7,
+                            Name = "Provider Reporting Portal"
                         });
                 });
 
@@ -1032,9 +1076,6 @@ namespace Pidp.Data.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("Hpdid")
-                        .HasColumnType("text");
-
                     b.Property<string>("JobTitle")
                         .HasColumnType("text");
 
@@ -1057,16 +1098,7 @@ namespace Pidp.Data.Migrations
                     b.Property<string>("PreferredMiddleName")
                         .HasColumnType("text");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("Hpdid")
-                        .IsUnique();
-
-                    b.HasIndex("UserId")
-                        .IsUnique();
 
                     b.ToTable("Party");
                 });
@@ -1166,6 +1198,29 @@ namespace Pidp.Data.Migrations
                         .IsUnique();
 
                     b.ToTable("PartyOrgainizationDetail");
+                });
+
+            modelBuilder.Entity("Pidp.Models.PrpAuthorizedLicence", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("Claimed")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("LicenceNumber")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LicenceNumber")
+                        .IsUnique();
+
+                    b.ToTable("PrpAuthorizedLicence");
                 });
 
             modelBuilder.Entity("Pidp.Models.FacilityAddress", b =>
@@ -1281,6 +1336,17 @@ namespace Pidp.Data.Migrations
                     b.Navigation("Country");
 
                     b.Navigation("Province");
+                });
+
+            modelBuilder.Entity("Pidp.Models.Credential", b =>
+                {
+                    b.HasOne("Pidp.Models.Party", "Party")
+                        .WithMany("Credentials")
+                        .HasForeignKey("PartyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Party");
                 });
 
             modelBuilder.Entity("Pidp.Models.EndorsementRelationship", b =>
@@ -1445,6 +1511,8 @@ namespace Pidp.Data.Migrations
                     b.Navigation("AccessAdministrator");
 
                     b.Navigation("AccessRequests");
+
+                    b.Navigation("Credentials");
 
                     b.Navigation("Facility");
 

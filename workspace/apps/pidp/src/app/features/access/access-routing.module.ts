@@ -1,16 +1,22 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
+import { SetDashboardTitleGuard } from '@pidp/presentation';
+
 import { PermissionsGuard } from '@app/modules/permissions/permissions.guard';
 import { Role } from '@app/shared/enums/roles.enum';
 
 import { AccessRoutes } from './access.routes';
+import { BcProviderApplicationComponent } from './pages/bc-provider-application/bc-provider-application.component';
+import { BcProviderApplicationResolver } from './pages/bc-provider-application/bc-provider-application.resolver';
+import { BcProviderEditComponent } from './pages/bc-provider-edit/bc-provider-edit.component';
 import { DriverFitnessModule } from './pages/driver-fitness/driver-fitness.module';
 import { HcimAccountTransferModule } from './pages/hcim-account-transfer/hcim-account-transfer.module';
 import { HcimEnrolmentModule } from './pages/hcim-enrolment/hcim-enrolment.module';
 import { MsTeamsModule } from './pages/ms-teams/ms-teams.module';
 import { PharmanetModule } from './pages/pharmanet/pharmanet.module';
 import { PrescriptionRefillEformsModule } from './pages/prescription-refill-eforms/prescription-refill-eforms.module';
+import { ProviderReportingPortalModule } from './pages/provider-reporting-portal/provider-reporting-portal.module';
 import { SaEformsModule } from './pages/sa-eforms/sa-eforms.module';
 import { SitePrivacySecurityChecklistModule } from './pages/site-privacy-security-checklist/site-privacy-security-checklist.module';
 
@@ -28,6 +34,33 @@ const routes: Routes = [
       import(
         './pages/prescription-refill-eforms/prescription-refill-eforms.module'
       ).then((m) => m.PrescriptionRefillEformsModule),
+  },
+  {
+    path: AccessRoutes.BC_PROVIDER_APPLICATION,
+    resolve: {
+      bcProviderApplicationStatusCode: BcProviderApplicationResolver,
+    },
+    canActivate: [SetDashboardTitleGuard],
+    component: BcProviderApplicationComponent,
+    data: {
+      setDashboardTitleGuard: {
+        titleText: 'BC Provider Application',
+        titleDescriptionText: '',
+      },
+      roles: [Role.FEATURE_PIDP_DEMO],
+    },
+  },
+  {
+    path: AccessRoutes.BC_PROVIDER_APPLICATION_CHANGE_PASSWORD,
+    canActivate: [SetDashboardTitleGuard],
+    component: BcProviderEditComponent,
+    data: {
+      setDashboardTitleGuard: {
+        titleText: 'BC Provider Application',
+        titleDescriptionText: '',
+      },
+      roles: [Role.FEATURE_PIDP_DEMO],
+    },
   },
   {
     path: AccessRoutes.HCIM_ACCOUNT_TRANSFER,
@@ -88,6 +121,13 @@ const routes: Routes = [
     },
     loadChildren: (): Promise<MsTeamsModule> =>
       import('./pages/ms-teams/ms-teams.module').then((m) => m.MsTeamsModule),
+  },
+  {
+    path: AccessRoutes.PROVIDER_REPORTING_PORTAL,
+    loadChildren: (): Promise<ProviderReportingPortalModule> =>
+      import(
+        './pages/provider-reporting-portal/provider-reporting-portal.module'
+      ).then((m) => m.ProviderReportingPortalModule),
   },
 ];
 

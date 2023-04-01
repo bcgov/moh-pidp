@@ -29,10 +29,10 @@ export class MsTeamsResource {
     clinicInfo: MsTeamsClinicInfo
   ): NoContent {
     return this.apiResource
-      .post<NoContent>('access-requests/ms-teams', {
-        partyId,
-        ...clinicInfo,
-      })
+      .post<NoContent>(
+        `parties/${partyId}/access-requests/ms-teams`,
+        clinicInfo
+      )
       .pipe(
         NoContentResponse,
         catchError((error: HttpErrorResponse) => {

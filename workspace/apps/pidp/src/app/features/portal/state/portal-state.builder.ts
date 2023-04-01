@@ -7,11 +7,13 @@ import { Role } from '@app/shared/enums/roles.enum';
 
 import { StatusCode } from '../enums/status-code.enum';
 import { ProfileStatus } from '../models/profile-status.model';
+import { BcProviderPortalSection } from './access/bc-provider-portal-section.class';
 import { DriverFitnessPortalSection } from './access/driver-fitness-portal-section.class';
 import { HcimAccountTransferPortalSection } from './access/hcim-account-transfer-portal-section.class';
 import { HcimEnrolmentPortalSection } from './access/hcim-enrolment-portal-section.class';
 import { MsTeamsPortalSection } from './access/ms-teams-portal-section.class';
 import { PrescriptionRefillEformsPortalSection } from './access/prescription-refill-eforms-portal-section.class';
+import { ProviderReportingPortalSection } from './access/provider-reporting-portal-section.class';
 import { SaEformsPortalSection } from './access/sa-eforms-portal-section.class';
 import { SitePrivacySecurityPortalSection } from './access/site-privacy-security-checklist-portal-section.class';
 import { SignedAcceptedDocumentsPortalSection } from './history/signed-accepted-documents-portal-section.class';
@@ -86,10 +88,10 @@ export class PortalStateBuilder {
         ]
       ),
       ...ArrayUtils.insertResultIf<IPortalSection>(
-        // TODO remove permissions when API exists and ready for production, or
-        // TODO replace || with && to keep it flagged when API exists
-        this.insertSection('userAccessAgreement', profileStatus) ||
-          this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
+        // TODO add insertSection call when it exists in the ProfileStatus API
+        // TODO remove permissions when ready for production
+        // this.insertSection('userAccessAgreement', profileStatus) &&
+        this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
         () => [new UserAccessAgreementPortalSection(profileStatus, this.router)]
       ),
     ];
@@ -100,31 +102,28 @@ export class PortalStateBuilder {
   ): IPortalSection[] {
     return [
       ...ArrayUtils.insertResultIf<IPortalSection>(
-        // TODO remove permissions when API exists and ready for production, or
-        // TODO replace || with && to keep it flagged when API exists
-        this.insertSection('organizationDetails', profileStatus) ||
+        // TODO remove permissions when ready for production
+        this.insertSection('organizationDetails', profileStatus) &&
           this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
         () => [new OrganizationDetailsPortalSection(profileStatus, this.router)]
       ),
       ...ArrayUtils.insertResultIf<IPortalSection>(
-        // TODO remove permissions when API exists and ready for production, or
-        // TODO replace || with && to keep it flagged when API exists
-        this.insertSection('facilityDetails', profileStatus) ||
-          this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
+        // TODO add insertSection call when it exists in the ProfileStatus API
+        // TODO remove permissions when ready for production
+        // this.insertSection('facilityDetails', profileStatus) &&
+        this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
         () => [new FacilityDetailsPortalSection(profileStatus, this.router)]
       ),
       ...ArrayUtils.insertResultIf<IPortalSection>(
-        // TODO remove permissions when API exists and ready for production, or
-        // TODO replace || with && to keep it flagged when API exists
-        this.insertSection('administratorInfo', profileStatus) ||
+        // TODO remove permissions when ready for production
+        this.insertSection('administratorInfo', profileStatus) &&
           this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
         () => [new AdministratorInfoPortalSection(profileStatus, this.router)]
       ),
       ...ArrayUtils.insertResultIf<IPortalSection>(
-        // TODO remove permissions when API exists and ready for production, or
-        // TODO replace || with && to keep it flagged when API exists
-        this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]) ||
-          this.insertSection('endorsements', profileStatus),
+        // TODO remove permissions when ready for production
+        this.insertSection('endorsements', profileStatus) &&
+          this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
         () => [new EndorsementsPortalSection(profileStatus, this.router)]
       ),
     ];
@@ -143,6 +142,12 @@ export class PortalStateBuilder {
         ]
       ),
       ...ArrayUtils.insertResultIf<IPortalSection>(
+        // TODO remove permissions when ready for production
+        this.insertSection('bcProvider', profileStatus) &&
+          this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
+        () => [new BcProviderPortalSection(profileStatus, this.router)]
+      ),
+      ...ArrayUtils.insertResultIf<IPortalSection>(
         this.insertSection('hcimAccountTransfer', profileStatus),
         () => [new HcimAccountTransferPortalSection(profileStatus, this.router)]
       ),
@@ -153,23 +158,29 @@ export class PortalStateBuilder {
         () => [new HcimEnrolmentPortalSection(profileStatus, this.router)]
       ),
       ...ArrayUtils.insertResultIf<IPortalSection>(
-        // TODO remove permissions when API exists and ready for production, or
-        // TODO replace || with && to keep it flagged when API exists
-        this.insertSection('sitePrivacySecurityChecklist', profileStatus) ||
-          this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
+        // TODO add insertSection call when it exists in the ProfileStatus API
+        // TODO remove permissions when ready for production
+        // this.insertSection('sitePrivacySecurityChecklist', profileStatus) &&
+        this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
         () => [new SitePrivacySecurityPortalSection(profileStatus, this.router)]
       ),
       ...ArrayUtils.insertResultIf<IPortalSection>(
         // TODO remove permissions when ready for production
-        this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]) &&
-          this.insertSection('driverFitness', profileStatus),
+        this.insertSection('driverFitness', profileStatus) &&
+          this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
         () => [new DriverFitnessPortalSection(profileStatus, this.router)]
       ),
       ...ArrayUtils.insertResultIf<IPortalSection>(
         // TODO remove permissions when ready for production
-        this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]) &&
-          this.insertSection('msTeams', profileStatus),
+        this.insertSection('msTeams', profileStatus) &&
+          this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
         () => [new MsTeamsPortalSection(profileStatus, this.router)]
+      ),
+      ...ArrayUtils.insertResultIf<IPortalSection>(
+        // TODO remove permissions when ready for production
+        this.insertSection('providerReportingPortal', profileStatus) &&
+          this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
+        () => [new ProviderReportingPortalSection(profileStatus, this.router)]
       ),
     ];
   }

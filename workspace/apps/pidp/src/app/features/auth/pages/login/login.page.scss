@@ -8,7 +8,9 @@ span {
   color: pidp.$bcgov-color-text;
   box-sizing: border-box;
 }
-
+a {
+  color: pidp.$bcgov-color-links;
+}
 .viewport-all {
   & .title-container {
     & p,
@@ -68,6 +70,10 @@ span {
         border-color: pidp.$bcgov-color-primary;
         white-space: pre-wrap;
         line-height: 1.6;
+      }
+      & .login-with-idir {
+        display: flex;
+        justify-content: center;
       }
     }
   }
@@ -531,6 +537,9 @@ span {
             margin-bottom: 10px;
             padding: 6px 10px;
           }
+        }
+        & .login-with-idir {
+          font-size: 0.65em;
         }
       }
     }

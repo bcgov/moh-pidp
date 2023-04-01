@@ -14,6 +14,7 @@ public class PidpDbContext : DbContext
     public DbSet<AccessRequest> AccessRequests { get; set; } = default!;
     public DbSet<BusinessEvent> BusinessEvents { get; set; } = default!;
     public DbSet<ClientLog> ClientLogs { get; set; } = default!;
+    public DbSet<Credential> Credentials { get; set; } = default!;
     public DbSet<EmailLog> EmailLogs { get; set; } = default!;
     public DbSet<EndorsementRelationship> EndorsementRelationships { get; set; } = default!;
     public DbSet<EndorsementRequest> EndorsementRequests { get; set; } = default!;
@@ -26,6 +27,7 @@ public class PidpDbContext : DbContext
     public DbSet<Party> Parties { get; set; } = default!;
     public DbSet<PartyAccessAdministrator> PartyAccessAdministrators { get; set; } = default!;
     public DbSet<PartyOrgainizationDetail> PartyOrgainizationDetails { get; set; } = default!;
+    public DbSet<PrpAuthorizedLicence> PrpAuthorizedLicences { get; set; } = default!;
 
     public override int SaveChanges()
     {

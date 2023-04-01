@@ -41,10 +41,10 @@ export class HcimAccountTransferResource {
     ldapCredentials: HcimAccountTransfer
   ): Observable<HcimAccountTransferResponse> {
     return this.apiResource
-      .post<NoContent>('access-requests/hcim-account-transfer', {
-        partyId,
-        ...ldapCredentials,
-      })
+      .post<NoContent>(
+        `parties/${partyId}/access-requests/hcim-account-transfer`,
+        ldapCredentials
+      )
       .pipe(
         map(() => ({
           statusCode: HcimAccountTransferStatusCode.ACCESS_GRANTED,
