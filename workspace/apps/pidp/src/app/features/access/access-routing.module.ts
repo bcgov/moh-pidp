@@ -13,6 +13,7 @@ import { BcProviderEditComponent } from './pages/bc-provider-edit/bc-provider-ed
 import { DriverFitnessModule } from './pages/driver-fitness/driver-fitness.module';
 import { HcimAccountTransferModule } from './pages/hcim-account-transfer/hcim-account-transfer.module';
 import { HcimEnrolmentModule } from './pages/hcim-enrolment/hcim-enrolment.module';
+import { MsTeamsClinicMemberModule } from './pages/ms-teams-clinic-member/ms-teams-clinic-member.module';
 import { MsTeamsPrivacyOfficerModule } from './pages/ms-teams-privacy-officer/ms-teams-privacy-officer.module';
 import { PharmanetModule } from './pages/pharmanet/pharmanet.module';
 import { PrescriptionRefillEformsModule } from './pages/prescription-refill-eforms/prescription-refill-eforms.module';
@@ -130,6 +131,13 @@ const routes: Routes = [
       import(
         './pages/provider-reporting-portal/provider-reporting-portal.module'
       ).then((m) => m.ProviderReportingPortalModule),
+  },
+  {
+    path: AccessRoutes.MS_TEAMS_CLINIC_MEMBER,
+    loadChildren: (): Promise<MsTeamsClinicMemberModule> =>
+      import(
+        './pages/ms-teams-clinic-member/ms-teams-clinic-member.module'
+      ).then((m) => m.MsTeamsClinicMemberModule),
   },
 ];
 

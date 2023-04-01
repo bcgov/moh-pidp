@@ -15,6 +15,7 @@ export const accessSectionKeys = [
   'sitePrivacySecurityChecklist',
   'driverFitness',
   'msTeamsPrivacyOfficer',
+  'msTeamsClinicMember',
   'provider-reporting-portal',
 ] as const;
 
@@ -41,5 +42,6 @@ export interface AccessGroup extends IAccessGroup {
   sitePrivacySecurityChecklist: Section;
   driverFitness: Section;
   msTeamsPrivacyOfficer: Section;
+  msTeamsClinicMember: Section;
   providerReportingPortal: Section;
 }
