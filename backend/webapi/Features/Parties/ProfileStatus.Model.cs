@@ -294,6 +294,28 @@ public partial class ProfileStatus
             }
         }
 
+        public class MSTeamsClinicMemberSection : ProfileSection
+        {
+            internal override string SectionName => "msTeamsClinicMember";
+
+            protected override StatusCode Compute(ProfileData profile)
+            {
+                if (!profile.UserIsHighAssuranceIdentity)
+                {
+                    return StatusCode.Hidden;
+                }
+
+                if (profile.CompletedEnrolments.Contains(AccessTypeCode.MSTeamsClinicMember))
+                {
+                    return StatusCode.Complete;
+                }
+
+                return profile.DemographicsComplete && profile.HasMSTeamsClinicEndorsement
+                    ? StatusCode.Incomplete
+                    : StatusCode.Locked;
+            }
+        }
+
         public class MSTeamsPrivacyOfficerSection : ProfileSection
         {
             internal override string SectionName => "msTeamsPrivacyOfficer";

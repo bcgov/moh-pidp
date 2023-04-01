@@ -88,7 +88,7 @@ public class MSTeamsClinicMember
     }
 }
 
-public static partial class MSTeamsLoggingExtensions
+public static partial class MSTeamsClinicMemberLoggingExtensions
 {
     [LoggerMessage(1, LogLevel.Warning, "MS Teams Privacy Officer Access Request denied due to the Party Record not meeting all prerequisites.")]
     public static partial void LogMSTeamsPrivacyOfficerAccessRequestDenied(this ILogger logger);
