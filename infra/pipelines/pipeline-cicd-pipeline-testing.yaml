@@ -133,7 +133,7 @@ spec:
           value:
             - '--skip-tls-verify'
             - '--build-arg'
-            - SONAR_LOGIN=f606bc25f190b5ed59cb813a728cbcf30c849726
+            - SONAR_LOGIN=<replace_with_sonarqube_token>
             - '--build-arg'
             - SONAR_PROJECT=webapi
             - '--build-arg'
@@ -187,7 +187,7 @@ spec:
           value:
             - '--skip-tls-verify'
             - '--build-arg'
-            - SONAR_LOGIN=f606bc25f190b5ed59cb813a728cbcf30c849726
+            - SONAR_LOGIN=<replace_with_sonarqube_token>
             - '--build-arg'
             - SONAR_PROJECT=plr-intake
             - '--build-arg'
