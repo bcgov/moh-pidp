@@ -7,7 +7,7 @@ using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 
 using Pidp.Data;
-using Pidp.Models.Lookups;
+using Pidp.Extensions;
 
 public class MSTeamsPrivacyOfficers
 {
@@ -51,7 +51,13 @@ public class MSTeamsPrivacyOfficers
 
         public async Task<IDomainResult<List<Model>>> HandleAsync(Query query)
         {
-            return DomainResult.Success(new List<Model>());
+            var models = await this.context.MSTeamsClinics
+                .Where(clinic => this.context.ActiveEndorsementRelationships(query.PartyId)
+                    .Any(relationship => relationship.PartyId == clinic.PrivacyOfficerId))
+                .ProjectTo<Model>(this.mapper.ConfigurationProvider)
+                .ToListAsync();
+
+            return DomainResult.Success(models);
         }
     }
 }
