@@ -8,7 +8,7 @@ using Pidp.Features.AccessRequests;
 using Pidp.Infrastructure.HttpClients.Plr;
 using PidpTests.TestingExtensions;
 
-public class MSTeamsTests : InMemoryDbTest
+public class MSTeamsPrivacyOfficerTests : InMemoryDbTest
 {
     [Theory]
     [MemberData(nameof(MSTeamsIdentifierTypeTestData))]
