@@ -25,11 +25,11 @@ public class MSTeamsTests : InMemoryDbTest
         });
         var client = A.Fake<IPlrClient>()
             .ReturningAStatandingsDigest(true, identifierType);
-        var handler = this.MockDependenciesFor<MSTeams.CommandHandler>(client);
+        var handler = this.MockDependenciesFor<MSTeamsPrivacyOfficer.CommandHandler>(client);
 
-        var result = await handler.HandleAsync(new MSTeams.Command { PartyId = party.Id });
+        var result = await handler.HandleAsync(new MSTeamsPrivacyOfficer.Command { PartyId = party.Id });
 
-        Assert.Equal(MSTeams.AllowedIdentifierTypes.Contains(identifierType), result.IsSuccess);
+        Assert.Equal(MSTeamsPrivacyOfficer.AllowedIdentifierTypes.Contains(identifierType), result.IsSuccess);
     }
 
     public static IEnumerable<object[]> MSTeamsIdentifierTypeTestData()
