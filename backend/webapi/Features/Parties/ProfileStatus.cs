@@ -187,20 +187,17 @@ public partial class ProfileStatus
                     .AnyAsync(authorizedLicence => possiblePrpLicenceNumbers.Contains(authorizedLicence.LicenceNumber));
             }
 
-            var endorsementDtos = await context.Endorsements
-                .Where(endorsement => endorsement.Active
-                    && endorsement.EndorsementRelationships.Any(relationship => relationship.PartyId == this.Id))
-                .SelectMany(endorsement => endorsement.EndorsementRelationships)
-                .Where(relationship => relationship.PartyId != this.Id)
+            var endorsementDtos = await context.ActiveEndorsementRelationships(this.Id)
                 .Select(relationship => new
                 {
                     relationship.Party!.Cpn,
-                    IsMSTeamsPrivacyOfficer = relationship.Party.AccessRequests.Any(request => request.AccessTypeCode == AccessTypeCode.MSTeamsPrivacyOfficer)
+                    IsMSTeamsPrivacyOfficer = context.MSTeamsClinics.Any(clinic => clinic.PrivacyOfficerId == relationship.PartyId)
                 })
                 .ToArrayAsync();
+
+            this.HasMSTeamsClinicEndorsement = endorsementDtos.Any(dto => dto.IsMSTeamsPrivacyOfficer);
             // We should defer this check if possible. See DriverFitnessSection.
             this.EndorsementPlrStanding = await plrClient.GetAggregateStandingsDigestAsync(endorsementDtos.Select(dto => dto.Cpn));
-            this.HasMSTeamsClinicEndorsement = endorsementDtos.Any(dto => dto.IsMSTeamsPrivacyOfficer);
         }
     }
 }
