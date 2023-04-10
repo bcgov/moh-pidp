@@ -1,7 +1,6 @@
 namespace Pidp.Features.AccessRequests;
 
 using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using DomainResults.Common;
 using FluentValidation;
 using HybridModelBinding;
@@ -11,6 +10,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 
 using Pidp.Data;
+using Pidp.Extensions;
 using Pidp.Infrastructure.HttpClients.Mail;
 using Pidp.Infrastructure.HttpClients.Plr;
 using Pidp.Infrastructure.Services;
@@ -24,6 +24,7 @@ public class MSTeamsClinicMember
         [JsonIgnore]
         [HybridBindProperty(Source.Route)]
         public int PartyId { get; set; }
+        public int ClinicId { get; set; }
     }
 
     public class CommandValidator : AbstractValidator<Command>
@@ -31,6 +32,7 @@ public class MSTeamsClinicMember
         public CommandValidator()
         {
             this.RuleFor(x => x.PartyId).GreaterThan(0);
+            this.RuleFor(x => x.ClinicId).GreaterThan(0);
         }
     }
 
@@ -61,6 +63,38 @@ public class MSTeamsClinicMember
 
         public async Task<IDomainResult> HandleAsync(Command command)
         {
+            var dto = await this.context.Parties
+                .Where(party => party.Id == command.PartyId)
+                .Select(party => new
+                {
+                    AlreadyEnroled = party.AccessRequests.Any(request => request.AccessTypeCode == AccessTypeCode.MSTeamsClinicMember),
+                    party.Email,
+                    party.FirstName,
+                })
+                .SingleAsync();
+
+            var validClinic = await this.context.MSTeamsClinics.AnyAsync(clinic => clinic.Id == command.ClinicId
+                && this.context.ActiveEndorsementRelationships(command.PartyId)
+                    .Any(relationship => relationship.PartyId == clinic.PrivacyOfficerId));
+
+            if (dto.AlreadyEnroled
+                || dto.Email == null
+                || !validClinic)
+            {
+                this.logger.LogMSTeamsClinicMemberAccessRequestDenied();
+                return DomainResult.Failed();
+            }
+
+            this.context.MSTeamsClinicMemberEnrolments.Add(new MSTeamsClinicMemberEnrolment
+            {
+                PartyId = command.PartyId,
+                AccessTypeCode = AccessTypeCode.MSTeamsClinicMember,
+                RequestedOn = this.clock.GetCurrentInstant(),
+                ClinicId = command.ClinicId
+            });
+
+            await this.context.SaveChangesAsync();
+
             return DomainResult.Success();
         }
 
