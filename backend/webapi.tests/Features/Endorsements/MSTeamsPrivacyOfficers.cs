@@ -2,7 +2,6 @@ namespace PidpTests.Features.Endorsements;
 
 using Xunit;
 
-
 using static Pidp.Features.Endorsements.MSTeamsPrivacyOfficers;
 using Pidp.Models;
 using Pidp.Models.Lookups;
