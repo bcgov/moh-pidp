@@ -46,6 +46,15 @@
     // stretch to fit vertically
     height: 100%;
 
+    & .title {
+      color: pidp.$bcgov-color-primary;
+    }
+
+    & .subtitle {
+      color: pidp.$bcgov-color-text;
+      font-size: x-large;
+    }
+
     & .image {
       flex: 1;
       display: var(--image-display);
@@ -76,7 +85,9 @@
     & .field {
       display: flex;
       flex-direction: column;
-
+      & .slender {
+        width: 50%;
+      }
       & label {
         font-weight: 700;
       }
