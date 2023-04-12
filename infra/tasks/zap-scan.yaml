@@ -1,0 +1,98 @@
+﻿apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  creationTimestamp: '2022-09-28T06:02:28Z'
+  generation: 25
+  managedFields:
+    - apiVersion: tekton.dev/v1beta1
+      fieldsType: FieldsV1
+      fieldsV1:
+        'f:spec':
+          .: {}
+          'f:description': {}
+          'f:params': {}
+          'f:steps': {}
+          'f:workspaces': {}
+      manager: Mozilla
+      operation: Update
+      time: '2022-09-28T06:02:28Z'
+  name: zap-scan
+  namespace: d8a8f9-tools
+  resourceVersion: '4702162475'
+  uid: ec1e02fa-1db7-4fee-9620-a7f6b68dae9b
+spec:
+  description: This task can be used to run zap scan.
+  params:
+    - default: .
+      description: The path where package.json of the project is defined.
+      name: PATH_CONTEXT
+      type: string
+    - default: >-
+        image-registry.openshift-image-registry.svc:5000/d8a8f9-tools/zap2docker-stable:2.11.1-bcgov-1
+      description: The node image you want to use.
+      name: IMAGE
+      type: string
+    - default: plr-intake
+      description: Service name
+      name: PIDP_SERVICE
+      type: string
+    - default: 'true'
+      description: Toggle for API_SCAN
+      name: ZAP_API_SCAN
+      type: string
+    - default: 'true'
+      description: ZAP scan target
+      name: ZAP_TARGET
+      type: string
+  steps:
+    - env:
+        - name: API_SCAN
+          value: $(params.ZAP_API_SCAN)
+        - name: PIDP_SERVICE
+          value: $(params.PIDP_SERVICE)
+        - name: ZAP_TARGET
+          value: $(params.ZAP_TARGET)
+        - name: ZAP_REPORTS
+          value: $(workspaces.source.path)
+      image: $(params.IMAGE)
+      name: zap-scan
+      resources:
+        limits:
+          cpu: '1'
+          memory: 4Gi
+        requests:
+          cpu: 200m
+          memory: 250Mi
+      script: |-
+        #!/usr/bin/env bash
+
+        if [ ${API_SCAN} == 'true' ]; then
+          zap-api-scan.py \
+            -t ${ZAP_TARGET} \
+            -f openapi \
+            -d \
+            -x ${PIDP_SERVICE}-zap-report.xml \
+            -r ${PIDP_SERVICE}-zap-report.html
+        else
+          zap-full-scan.py \
+            -t ${ZAP_TARGET} \
+            -d \
+            -x ${PIDP_SERVICE}-zap-report.xml \
+            -r ${PIDP_SERVICE}-zap-report.html
+        fi
+
+        if [ -f /zap/wrk/${PIDP_SERVICE}-zap-report.xml ]; then
+          ls -la /zap/wrk/
+          cp /zap/wrk/${PIDP_SERVICE}-zap-report.xml .
+          ls -la
+        else
+          echo "file not found"
+          ls -la /zap/wrk
+          ls -la
+          pwd
+        fi
+      securityContext:
+        runAsUser: 0
+      workingDir: $(workspaces.source.path)
+  workspaces:
+    - name: source

@@ -1,0 +1,107 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  annotations:
+    tekton.dev/categories: Build Tools
+    tekton.dev/pipelines.minVersion: 0.17.0
+    tekton.dev/platforms: 'linux/amd64,linux/s390x,linux/ppc64le'
+    tekton.dev/tags: build-tool
+  name: test-plr-intake
+  namespace: d8a8f9-tools
+  labels:
+    app.kubernetes.io/version: '0.1'
+spec:
+  description: This task can be used to run sonarscanner.
+  params:
+    - default: .
+      description: The path where package.json of the project is defined.
+      name: PATH_CONTEXT
+      type: string
+    - default: 'public.ecr.aws/bitnami/node:16-prod'
+      description: The node image you want to use.
+      name: IMAGE
+      type: string
+    - default: sonarqube-login
+      name: SONAR_LOGIN_KEY_SECRET
+      type: string
+    - default: login
+      description: Sonarqube login key secret
+      name: SONAR_LOGIN_KEY_SECRET_KEY
+      type: string
+    - default: 'https://github.com/bcgov/moh-pidp'
+      description: Sonarqube scm link
+      name: SONAR_LINKS_SCM
+      type: string
+    - default: $(workspaces.source.path)/$(params.PATH_CONTEXT)
+      description: Sonarqube project base directory
+      name: SONAR_PROJECTBASEDIR
+      type: string
+    - default: develop
+      description: Sonarqube project version
+      name: SONAR_PROJECTVERSION
+      type: string
+    - default: .
+      description: Sonarqube build string
+      name: SONAR_BUILDSTRING
+      type: string
+    - default: 'true'
+      description: Sonarqube guality-gate wait
+      name: SONAR_QUALITYGATE_WAIT
+      type: string
+    - default: plr-intake
+      description: Service name
+      name: PIDP_SERVICE
+      type: string
+  steps:
+    - env:
+        - name: SONAR_PROJECTVERSION
+          value: $(params.SONAR_PROJECTVERSION)
+        - name: SONAR_HOST
+          value: 'http://sonarqube.d8a8f9-tools.svc.cluster.local:9000'
+        - name: SONAR_LINKS_SCM
+          value: $(params.SONAR_LINKS_SCM)
+        - name: SONAR_BUILDSTRING
+          value: $(params.SONAR_BUILDSTRING)
+        - name: SONAR_QUALITYGATE_WAIT
+          value: $(params.SONAR_QUALITYGATE_WAIT)
+        - name: SONAR_PROJECTKEY
+          value: $(params.PIDP_SERVICE)
+        - name: SONAR_LOGIN
+          valueFrom:
+            secretKeyRef:
+              key: $(params.SONAR_LOGIN_KEY_SECRET_KEY)
+              name: $(params.SONAR_LOGIN_KEY_SECRET)
+      image: >-
+        image-registry.openshift-image-registry.svc:5000/d8a8f9-tools/dotnet-sonarscanner:webapi
+      name: sonar-scan
+      resources:
+        limits:
+          cpu: '1'
+          memory: 4Gi
+        requests:
+          cpu: 200m
+          memory: 250Mi
+      script: >-
+        #!/usr/bin/env bash
+
+        export PATH="$PATH:/root/.dotnet/tools"
+
+        sleep 600
+
+        # echo "Begin sonar scanner"
+
+        # dotnet-sonarscanner begin /k:${SONAR_PROJECTKEY}
+        /d:sonar.host.url=${SONAR_HOST} /d:sonar.login=${SONAR_LOGIN}   
+
+        # echo "Build service: ${SONAR_PROJECTKEY}"
+
+        # dotnet build
+
+        # echo "End sonar scanner"
+
+        # dotnet-sonarscanner end /d:sonar.login=${SONAR_LOGIN}
+      securityContext:
+        runAsUser: 0
+      workingDir: $(workspaces.source.path)/$(params.PATH_CONTEXT)
+  workspaces:
+    - name: source

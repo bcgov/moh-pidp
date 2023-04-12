@@ -23,6 +23,15 @@ public class EndorsementsController : PidpControllerBase
         => await this.AuthorizePartyBeforeHandleAsync(query.PartyId, handler, query)
             .ToActionResultOfT();
 
+    [HttpGet("ms-teams-privacy-officers")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<List<MSTeamsPrivacyOfficers.Model>>> GetMSTeamsPrivacyOfficers([FromServices] IQueryHandler<MSTeamsPrivacyOfficers.Query, IDomainResult<List<MSTeamsPrivacyOfficers.Model>>> handler,
+                                                                                                  [FromRoute] MSTeamsPrivacyOfficers.Query query)
+        => await this.AuthorizePartyBeforeHandleAsync(query.PartyId, handler, query)
+            .ToActionResultOfT();
+
     [HttpPost("{endorsementId}/cancel")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]

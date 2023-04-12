@@ -36,14 +36,6 @@ public class HcimEnrolment : AccessRequest
     public bool SearchesIdentifiers { get; set; }
 }
 
-[Table(nameof(MSTeamsPrivacyOfficerEnrolment))]
-public class MSTeamsPrivacyOfficerEnrolment : AccessRequest
-{
-    public int ClinicId { get; set; }
-
-    public MSTeamsClinic? Clinic { get; set; }
-}
-
 [Table(nameof(MSTeamsClinicMemberEnrolment))]
 public class MSTeamsClinicMemberEnrolment : AccessRequest
 {

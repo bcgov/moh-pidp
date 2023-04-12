@@ -97,16 +97,17 @@ public class MSTeamsPrivacyOfficer
                 return DomainResult.Failed();
             }
 
-            this.context.MSTeamsPrivacyOfficerEnrolments.Add(new MSTeamsPrivacyOfficerEnrolment
+            this.context.AccessRequests.Add(new AccessRequest
             {
                 PartyId = command.PartyId,
                 AccessTypeCode = AccessTypeCode.MSTeamsPrivacyOfficer,
                 RequestedOn = this.clock.GetCurrentInstant(),
-                Clinic = new MSTeamsClinic
-                {
-                    Name = command.ClinicName,
-                    Address = this.mapper.Map<MSTeamsClinicAddress>(command.ClinicAddress)
-                }
+            });
+            this.context.MSTeamsClinics.Add(new MSTeamsClinic
+            {
+                PrivacyOfficerId = command.PartyId,
+                Name = command.ClinicName,
+                Address = this.mapper.Map<MSTeamsClinicAddress>(command.ClinicAddress)
             });
 
             await this.context.SaveChangesAsync();
