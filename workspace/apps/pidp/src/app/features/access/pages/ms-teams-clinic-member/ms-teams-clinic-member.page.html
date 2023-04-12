@@ -58,7 +58,7 @@
                     [(ngModel)]="selectedPrivacyOfficer"
                     (selectionChange)="onSelectPrivacyOfficer($event)">
                     <mat-option
-                      *ngFor="let privacyOfficer of privacyOfficers"
+                      *ngFor="let privacyOfficer of privacyOfficers$ | async"
                       [value]="privacyOfficer"
                       >{{ privacyOfficer.name }}</mat-option
                     >

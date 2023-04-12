@@ -46,18 +46,22 @@ export class MsTeamsClinicMemberResource extends CrudResource<PrivacyOfficer> {
       );
   }
 
-  public get(partyId: number): Observable<PrivacyOfficer | null> {
-    return super.get(partyId).pipe(
-      catchError((error: HttpErrorResponse) => {
-        this.toastService.openErrorToast(
-          'MS Teams clinic information could not be retrieved'
-        );
-        throw error;
-      })
-    );
+  public getPrivacyOfficer(
+    partyId: number
+  ): Observable<PrivacyOfficer[] | null> {
+    return this.apiResource
+      .get<PrivacyOfficer[]>(this.getResourcePath(partyId), { partyId })
+      .pipe(
+        catchError((error: HttpErrorResponse) => {
+          this.toastService.openErrorToast(
+            'MS Teams Privacy Officer information could not be retrieved'
+          );
+          throw error;
+        })
+      );
   }
 
   protected getResourcePath(partyId: number): string {
-    return `parties/${partyId}/`;
+    return `parties/${partyId}/ms-teams-privacy-officers`;
   }
 }

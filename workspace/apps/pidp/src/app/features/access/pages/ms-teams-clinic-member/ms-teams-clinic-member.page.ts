@@ -4,7 +4,7 @@ import { FormBuilder } from '@angular/forms';
 import { MatSelectChange } from '@angular/material/select';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { EMPTY, catchError, noop, of, tap } from 'rxjs';
+import { EMPTY, Observable, catchError, noop, of, tap } from 'rxjs';
 
 import {
   LOADING_OVERLAY_DEFAULT_MESSAGE,
@@ -44,8 +44,7 @@ export class MsTeamsClinicMemberPage
   public enrolmentError = false;
   public formState: MsTeamsClinicMemberFormState;
   public showOverlayOnSubmit = false;
-  // TODO perform GET to initialize on Init and remove !
-  public privacyOfficers!: PrivacyOfficer[];
+  public privacyOfficers$!: Observable<PrivacyOfficer[] | null>;
 
   public constructor(
     dependenciesService: AbstractFormDependenciesService,
@@ -116,6 +115,8 @@ export class MsTeamsClinicMemberPage
       this.logger.error('No status code was provided');
       return this.navigateToRoot();
     }
+
+    this.privacyOfficers$ = this.resource.getPrivacyOfficer(partyId);
   }
 
   protected performSubmission(): NoContent {
