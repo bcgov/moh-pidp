@@ -16,6 +16,7 @@ using Pidp.Infrastructure.HttpClients.Plr;
 using Pidp.Infrastructure.Services;
 using Pidp.Models;
 using Pidp.Models.Lookups;
+using AutoMapper.QueryableExtensions;
 
 public class MSTeamsClinicMember
 {
@@ -42,7 +43,6 @@ public class MSTeamsClinicMember
         private readonly IEmailService emailService;
         private readonly ILogger logger;
         private readonly IMapper mapper;
-        private readonly IPlrClient plrClient;
         private readonly PidpDbContext context;
 
         public CommandHandler(
@@ -50,36 +50,32 @@ public class MSTeamsClinicMember
             IEmailService emailService,
             ILogger<CommandHandler> logger,
             IMapper mapper,
-            IPlrClient plrClient,
             PidpDbContext context)
         {
             this.clock = clock;
             this.emailService = emailService;
             this.logger = logger;
             this.mapper = mapper;
-            this.plrClient = plrClient;
             this.context = context;
         }
 
         public async Task<IDomainResult> HandleAsync(Command command)
         {
-            var dto = await this.context.Parties
+            var enrolmentDto = await this.context.Parties
                 .Where(party => party.Id == command.PartyId)
-                .Select(party => new
-                {
-                    AlreadyEnroled = party.AccessRequests.Any(request => request.AccessTypeCode == AccessTypeCode.MSTeamsClinicMember),
-                    party.Email,
-                    party.FirstName,
-                })
+                .ProjectTo<EnrolmentDto>(this.mapper.ConfigurationProvider)
                 .SingleAsync();
 
-            var validClinic = await this.context.MSTeamsClinics.AnyAsync(clinic => clinic.Id == command.ClinicId
-                && this.context.ActiveEndorsementRelationships(command.PartyId)
-                    .Any(relationship => relationship.PartyId == clinic.PrivacyOfficerId));
+            var clinicDto = await this.context.MSTeamsClinics
+                .Where(clinic => clinic.Id == command.ClinicId
+                    && this.context.ActiveEndorsementRelationships(command.PartyId)
+                        .Any(relationship => relationship.PartyId == clinic.PrivacyOfficerId))
+                .ProjectTo<ClinicDto>(this.mapper.ConfigurationProvider)
+                .SingleOrDefaultAsync();
 
-            if (dto.AlreadyEnroled
-                || dto.Email == null
-                || !validClinic)
+            if (enrolmentDto.AlreadyEnroled
+                || enrolmentDto.Email == null
+                || clinicDto == null)
             {
                 this.logger.LogMSTeamsClinicMemberAccessRequestDenied();
                 return DomainResult.Failed();
@@ -95,29 +91,100 @@ public class MSTeamsClinicMember
 
             await this.context.SaveChangesAsync();
 
+            await this.SendEnrolmentEmailAsync(enrolmentDto, clinicDto);
+            await this.SendPrivacyOfficerConfirmationEmailAsync(clinicDto.PrivacyOfficerEmail!, enrolmentDto.Name);
+
             return DomainResult.Success();
         }
 
-        private async Task SendEnrolmentEmailAsync()
+        private async Task SendEnrolmentEmailAsync(EnrolmentDto enrolment, ClinicDto clinic)
         {
+            var body = new EnrolmentEmailModel(enrolment, clinic, this.clock.GetCurrentInstant());
             var email = new Email(
                 from: EmailService.PidpEmail,
                 to: "enrolment_securemessagingsupport@fraserhealth.ca",
-                subject: "New MS Teams for Clinical Use Clinic Member Enrolment",
-                body: $"<pre>{JsonSerializer.Serialize(new { }, new JsonSerializerOptions { WriteIndented = true })}</pre>"
+                subject: $"Add User to MS Teams (Privacy Officer: {clinic.PrivacyOfficerName})",
+                body: $"<pre>{JsonSerializer.Serialize(body, new JsonSerializerOptions { WriteIndented = true })}</pre>"
+            );
+
+            await this.emailService.SendAsync(email);
+        }
+
+        private async Task SendPrivacyOfficerConfirmationEmailAsync(string privacyOfficerEmail, string enrolleeName)
+        {
+            var email = new Email(
+                from: EmailService.PidpEmail,
+                to: privacyOfficerEmail,
+                subject: "MS Teams for Clinical Use Member Enrolment Confirmation",
+                body: $"Team member {enrolleeName} has been requested to be added to your clinic's MS Teams group."
             );
             await this.emailService.SendAsync(email);
         }
 
-        private async Task SendConfirmationEmailAsync(string partyEmail, string partyName)
+        public class EnrolmentDto
         {
-            var email = new Email(
-                from: EmailService.PidpEmail,
-                to: partyEmail,
-                subject: "MS Teams for Clinical Use Enrolment Confirmation",
-                body: $"Dear {partyName},<br><br>You have been successfully enrolled for MS Teams for Clinical Use.<br>The Fraser Health mHealth team will contact you via email with account information and setup instructions. In the meantime please email <a href=\"mailto:securemessagingsupport@fraserhealth.ca\">securemessagingsupport@fraserhealth.ca</a> if you have any questions."
-            );
-            await this.emailService.SendAsync(email);
+            public LocalDate? Birthdate { get; set; }
+            public string? Email { get; set; }
+            public string? Phone { get; set; }
+            public bool AlreadyEnroled { get; set; }
+            public string Name { get; set; } = string.Empty;
+        }
+
+        public class ClinicDto
+        {
+            public string PrivacyOfficerName { get; set; } = string.Empty;
+            public string? PrivacyOfficerEmail { get; set; }
+            public string Name { get; set; } = string.Empty;
+            public ClinicAddressDto Address { get; set; } = new();
+
+            public class ClinicAddressDto
+            {
+                public string CountryCode { get; set; } = string.Empty;
+                public string ProvinceCode { get; set; } = string.Empty;
+                public string Street { get; set; } = string.Empty;
+                public string City { get; set; } = string.Empty;
+                public string Postal { get; set; } = string.Empty;
+            }
+        }
+
+        private class EnrolmentEmailModel
+        {
+            public string EnrolmentDate { get; set; }
+            public string MemberName { get; set; }
+            public string? MemberBirthdate { get; set; }
+            public string? MemberEmail { get; set; }
+            public string? MemberPhone { get; set; }
+            public string PrivacyOfficerName { get; set; }
+            public string ClinicName { get; set; }
+            public Address ClinicAddress { get; set; }
+
+            public class Address
+            {
+                public string CountryCode { get; set; } = string.Empty;
+                public string ProvinceCode { get; set; } = string.Empty;
+                public string Street { get; set; } = string.Empty;
+                public string City { get; set; } = string.Empty;
+                public string Postal { get; set; } = string.Empty;
+            }
+
+            public EnrolmentEmailModel(EnrolmentDto enrolment, ClinicDto clinic, Instant enrolmentDate)
+            {
+                this.EnrolmentDate = enrolmentDate.InZone(DateTimeZoneProviders.Tzdb.GetZoneOrNull("America/Vancouver")!).Date.ToString();
+                this.MemberName = enrolment.Name;
+                this.MemberBirthdate = enrolment.Birthdate?.ToString();
+                this.MemberEmail = enrolment.Email;
+                this.MemberPhone = enrolment.Phone;
+                this.PrivacyOfficerName = clinic.PrivacyOfficerName;
+                this.ClinicName = clinic.Name;
+                this.ClinicAddress = new Address
+                {
+                    CountryCode = clinic.Address!.CountryCode,
+                    ProvinceCode = clinic.Address.ProvinceCode,
+                    Street = clinic.Address.Street,
+                    City = clinic.Address.City,
+                    Postal = clinic.Address.Postal
+                };
+            }
         }
     }
 }
