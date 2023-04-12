@@ -30,7 +30,7 @@ export class MsTeamsPrivacyOfficerResource {
   ): NoContent {
     return this.apiResource
       .post<NoContent>(
-        `parties/${partyId}/access-requests/ms-teams/privacy-officer`,
+        `parties/${partyId}/access-requests/ms-teams-privacy-officer`,
         clinicInfo
       )
       .pipe(

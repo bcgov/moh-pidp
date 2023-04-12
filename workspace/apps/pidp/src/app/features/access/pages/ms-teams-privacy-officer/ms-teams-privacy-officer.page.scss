@@ -22,6 +22,13 @@
 }
 
 .viewport-all {
+  &.box {
+    padding: var(--header-padding) 0 var(--header-padding) var(--header-padding);
+    & .title {
+      background-color: pidp.$bcgov-color-background-grey;
+      padding: 9px 24px;
+    }
+  }
   & header {
     & h2 {
       margin: 0;
@@ -70,6 +77,52 @@
     margin: var(--gap) var(--gap) 0;
     & button:not(:last-child) {
       margin-right: var(--gap);
+    }
+  }
+  & .endorsement-section {
+    & h3,
+    & p,
+    & span {
+      color: #fff;
+    }
+    & header {
+      margin: var(--endorsement-header-margin);
+      & h2 {
+        margin: 0;
+        font-style: italic;
+      }
+    }
+    & .endorsement-card {
+      display: flex;
+      flex-direction: column;
+      padding: 50px;
+      width: 350px;
+      min-height: var(--endorsement-card-min-height);
+      background-image: url('/assets/images/endorsements-card-320x320.jpg');
+      background-color: rgba(0, 51, 102, 0.6);
+      background-blend-mode: multiply;
+
+      & h3 {
+        font-size: var(--endorsement-card-header-font-size);
+      }
+      & .endorsement-spacer {
+        // Push learn-more-row to the bottom of the container
+        flex-grow: 1;
+      }
+      & .learn-more-row {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        flex-wrap: nowrap;
+        & .learn-more-label {
+          margin-right: var(--endorsement-card-learn-more-label-margin-right);
+        }
+        & .learn-more-button {
+          width: var(--endorsement-card-learn-more-button-length);
+          height: var(--endorsement-card-learn-more-button-length);
+          font-size: var(--endorsement-card-learn-more-button-font-size);
+        }
+      }
     }
   }
 }

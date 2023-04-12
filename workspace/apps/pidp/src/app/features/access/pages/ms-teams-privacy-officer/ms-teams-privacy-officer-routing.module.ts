@@ -18,7 +18,7 @@ const routes: Routes = [
       setDashboardTitleGuard: {
         titleText: 'MS Teams Privacy Officer',
         titleDescriptionText:
-          'Here you can add view and edit your MS teams members',
+          'Here you can add your clinic information and access MS Teams',
       },
       title: 'Provider Identity Portal',
       routes: {
