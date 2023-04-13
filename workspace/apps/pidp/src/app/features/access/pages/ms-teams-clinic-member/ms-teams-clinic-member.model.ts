@@ -1,13 +1,13 @@
 export interface PrivacyOfficer {
-  name: string;
+  fullName: string;
   clinicName: string;
   clinicId: number;
-  address: {
+  clinicAddress: {
     street: string;
     provinceCode: string;
     city: string;
-    postalCode: string;
-    country: string;
+    postal: string;
+    countryCode: string;
   };
 }
 

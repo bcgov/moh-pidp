@@ -3,11 +3,7 @@ import { Injectable } from '@angular/core';
 
 import { Observable, catchError, throwError } from 'rxjs';
 
-import {
-  CrudResource,
-  NoContent,
-  NoContentResponse,
-} from '@bcgov/shared/data-access';
+import { NoContent, NoContentResponse } from '@bcgov/shared/data-access';
 
 import { ApiHttpClient } from '@app/core/resources/api-http-client.service';
 import { ToastService } from '@app/core/services/toast.service';
@@ -19,14 +15,12 @@ import { PrivacyOfficer } from './ms-teams-clinic-member.model';
 @Injectable({
   providedIn: 'root',
 })
-export class MsTeamsClinicMemberResource extends CrudResource<PrivacyOfficer> {
+export class MsTeamsClinicMemberResource {
   public constructor(
     protected apiResource: ApiHttpClient,
     private portalResource: PortalResource,
     private toastService: ToastService
-  ) {
-    super(apiResource);
-  }
+  ) {}
 
   public getProfileStatus(partyId: number): Observable<ProfileStatus | null> {
     return this.portalResource.getProfileStatus(partyId);
@@ -46,11 +40,13 @@ export class MsTeamsClinicMemberResource extends CrudResource<PrivacyOfficer> {
       );
   }
 
-  public getPrivacyOfficer(
+  public getPrivacyOfficers(
     partyId: number
   ): Observable<PrivacyOfficer[] | null> {
     return this.apiResource
-      .get<PrivacyOfficer[]>(this.getResourcePath(partyId), { partyId })
+      .get<PrivacyOfficer[]>(
+        `parties/${partyId}/endorsements/ms-teams-privacy-officers`
+      )
       .pipe(
         catchError((error: HttpErrorResponse) => {
           this.toastService.openErrorToast(
@@ -59,9 +55,5 @@ export class MsTeamsClinicMemberResource extends CrudResource<PrivacyOfficer> {
           throw error;
         })
       );
-  }
-
-  protected getResourcePath(partyId: number): string {
-    return `parties/${partyId}/ms-teams-privacy-officers`;
   }
 }
