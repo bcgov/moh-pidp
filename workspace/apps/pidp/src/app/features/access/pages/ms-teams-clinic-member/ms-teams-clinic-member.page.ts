@@ -68,10 +68,6 @@ export class MsTeamsClinicMemberPage
     );
     this.selectedPrivacyOfficer = null;
   }
-  // TODO is this even needed
-  // public get doctor(): FormControl {
-  //   return this.formState.form.get('selectedPrivacyOfficer') as FormControl;
-  // }
 
   public onSelectPrivacyOfficer(selection: MatSelectChange): void {
     this.selectedPrivacyOfficer = selection.value;
