@@ -17,8 +17,7 @@ const routes: Routes = [
     data: {
       setDashboardTitleGuard: {
         titleText: 'MS Teams Clinic Member',
-        titleDescriptionText:
-          'Here you sign up for MS Teams once you are endorsed by the clinic Privacy Officer',
+        titleDescriptionText: 'Stay connected with team members',
       },
       title: 'Provider Identity Portal',
       routes: {

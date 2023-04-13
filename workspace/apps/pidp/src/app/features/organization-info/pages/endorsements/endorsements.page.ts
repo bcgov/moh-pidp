@@ -109,6 +109,7 @@ export class EndorsementsPage
       this.showTextLabels = true;
     }
   }
+
   public onBack(): void {
     this.navigationService.navigateToRoot();
   }
@@ -190,12 +191,14 @@ export class EndorsementsPage
     this.nonActionableEndorsementRequests$ =
       this.getNonActionableEndorsementRequests(partyId);
   }
+
   public getCollegeTextForEndorsement(endorsement: Endorsement): string {
     const college = this.lookupService.colleges.find(
       (x) => x.code === endorsement.id
     );
     return college?.name ?? '';
   }
+
   public getCollegeTextForEndorsementRequest(
     endorsementRequest: EndorsementRequest
   ): string {

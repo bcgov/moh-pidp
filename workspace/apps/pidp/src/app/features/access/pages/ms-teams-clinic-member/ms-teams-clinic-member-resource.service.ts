@@ -14,12 +14,12 @@ import { ToastService } from '@app/core/services/toast.service';
 import { ProfileStatus } from '@app/features/portal/models/profile-status.model';
 import { PortalResource } from '@app/features/portal/portal-resource.service';
 
-import { MsTeamsClinicInfo } from '../ms-teams-privacy-officer/ms-teams-privacy-officer.model';
+import { PrivacyOfficer } from './ms-teams-clinic-member.model';
 
 @Injectable({
   providedIn: 'root',
 })
-export class MsTeamsClinicMemberResource extends CrudResource<MsTeamsClinicInfo> {
+export class MsTeamsClinicMemberResource extends CrudResource<PrivacyOfficer> {
   public constructor(
     protected apiResource: ApiHttpClient,
     private portalResource: PortalResource,
@@ -32,11 +32,11 @@ export class MsTeamsClinicMemberResource extends CrudResource<MsTeamsClinicInfo>
     return this.portalResource.getProfileStatus(partyId);
   }
 
-  public requestAccess(partyId: number): NoContent {
+  public requestAccess(partyId: number, clinicId: number): NoContent {
     return this.apiResource
       .post<NoContent>(
-        `parties/${partyId}/access-requests/ms-teams/clinic-member`,
-        {}
+        `parties/${partyId}/access-requests/ms-teams-clinic-member`,
+        { clinicId }
       )
       .pipe(
         NoContentResponse,
@@ -46,18 +46,22 @@ export class MsTeamsClinicMemberResource extends CrudResource<MsTeamsClinicInfo>
       );
   }
 
-  public get(partyId: number): Observable<MsTeamsClinicInfo | null> {
-    return super.get(partyId).pipe(
-      catchError((error: HttpErrorResponse) => {
-        this.toastService.openErrorToast(
-          'MS Teams clinic information could not be retrieved'
-        );
-        throw error;
-      })
-    );
+  public getPrivacyOfficer(
+    partyId: number
+  ): Observable<PrivacyOfficer[] | null> {
+    return this.apiResource
+      .get<PrivacyOfficer[]>(this.getResourcePath(partyId), { partyId })
+      .pipe(
+        catchError((error: HttpErrorResponse) => {
+          this.toastService.openErrorToast(
+            'MS Teams Privacy Officer information could not be retrieved'
+          );
+          throw error;
+        })
+      );
   }
 
   protected getResourcePath(partyId: number): string {
-    return `parties/${partyId}/`;
+    return `parties/${partyId}/ms-teams-privacy-officers`;
   }
 }

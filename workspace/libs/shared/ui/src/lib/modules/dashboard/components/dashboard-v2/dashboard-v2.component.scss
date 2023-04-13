@@ -40,15 +40,6 @@ h1 {
 }
 
 .viewport-all {
-  & .content-body-box {
-    // This is a hack to prevent a horizontal scrollbar from appearing in v1 page content
-    // that uses bootstrap. The bug may caused by bootstrap but it not yet known.
-    // This should be removed as soon as possible.
-    overflow-x: hidden;
-  }
-}
-
-.viewport-all {
   width: 100%;
   display: flex;
   & .content-header-box {
