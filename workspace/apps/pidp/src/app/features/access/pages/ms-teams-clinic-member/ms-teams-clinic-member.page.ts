@@ -4,7 +4,7 @@ import { FormBuilder } from '@angular/forms';
 import { MatSelectChange } from '@angular/material/select';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { EMPTY, Observable, catchError, noop, of, tap } from 'rxjs';
+import { EMPTY, catchError, noop, of, tap } from 'rxjs';
 
 import {
   LOADING_OVERLAY_DEFAULT_MESSAGE,
@@ -37,14 +37,14 @@ export class MsTeamsClinicMemberPage
 {
   public completed: boolean | null;
   public msTeamsSupportEmail: string;
-  public selectedPrivacyOfficer!: PrivacyOfficer;
+  public selectedPrivacyOfficer: PrivacyOfficer | null;
   public clinicId!: number;
 
   public accessRequestFailed = false;
   public enrolmentError = false;
   public formState: MsTeamsClinicMemberFormState;
   public showOverlayOnSubmit = false;
-  public privacyOfficers$!: Observable<PrivacyOfficer[] | null>;
+  public privacyOfficers!: PrivacyOfficer[] | null;
 
   public constructor(
     dependenciesService: AbstractFormDependenciesService,
@@ -66,6 +66,7 @@ export class MsTeamsClinicMemberPage
       fb,
       dependenciesService.formUtilsService
     );
+    this.selectedPrivacyOfficer = null;
   }
   // TODO is this even needed
   // public get doctor(): FormControl {
@@ -73,6 +74,7 @@ export class MsTeamsClinicMemberPage
   // }
 
   public onSelectPrivacyOfficer(selection: MatSelectChange): void {
+    this.selectedPrivacyOfficer = selection.value;
     this.clinicId = selection.value.clinicId;
   }
 
@@ -91,6 +93,7 @@ export class MsTeamsClinicMemberPage
           this.enrolmentError = false;
         }),
         catchError((error: HttpErrorResponse) => {
+          this.loadingOverlayService.close();
           if (error.status === HttpStatusCode.BadRequest) {
             this.completed = false;
             this.enrolmentError = true;
@@ -116,7 +119,9 @@ export class MsTeamsClinicMemberPage
       return this.navigateToRoot();
     }
 
-    this.privacyOfficers$ = this.resource.getPrivacyOfficer(partyId);
+    this.resource
+      .getPrivacyOfficers(partyId)
+      .subscribe((privacyOfficers) => (this.privacyOfficers = privacyOfficers));
   }
 
   protected performSubmission(): NoContent {

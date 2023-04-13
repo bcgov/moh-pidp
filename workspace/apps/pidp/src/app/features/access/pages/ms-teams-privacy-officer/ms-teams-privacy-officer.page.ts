@@ -56,7 +56,8 @@ export class MsTeamsPrivacyOfficerPage
   ) {
     super(dependenciesService);
     const routeData = this.route.snapshot.data;
-    this.completed = routeData.msTeamsStatusCode === StatusCode.COMPLETED;
+    this.completed =
+      routeData.msTeamsPrivacyOfficerStatusCode === StatusCode.COMPLETED;
     this.msTeamsSupportEmail = msTeamsSupportEmail;
     this.currentPage = 0;
     this.enrolmentError = false;
