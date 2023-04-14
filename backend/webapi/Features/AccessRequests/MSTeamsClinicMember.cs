@@ -1,6 +1,7 @@
 namespace Pidp.Features.AccessRequests;
 
 using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using DomainResults.Common;
 using FluentValidation;
 using HybridModelBinding;
@@ -12,11 +13,9 @@ using System.Text.Json.Serialization;
 using Pidp.Data;
 using Pidp.Extensions;
 using Pidp.Infrastructure.HttpClients.Mail;
-using Pidp.Infrastructure.HttpClients.Plr;
 using Pidp.Infrastructure.Services;
 using Pidp.Models;
 using Pidp.Models.Lookups;
-using AutoMapper.QueryableExtensions;
 
 public class MSTeamsClinicMember
 {
