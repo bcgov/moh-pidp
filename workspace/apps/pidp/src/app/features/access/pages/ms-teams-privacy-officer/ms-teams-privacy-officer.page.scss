@@ -1,0 +1,128 @@
+@use 'pidp-variables' as pidp;
+
+.viewport-all {
+  --gap: 1rem;
+  --font-size: 0.75rem;
+}
+
+.viewport-small,
+.viewport-medium,
+.viewport-large {
+  --gap: 1.25rem;
+  --font-size: 1rem;
+}
+.viewport-all {
+  --content-padding: var(--gap) 0;
+}
+
+.viewport-small,
+.viewport-medium,
+.viewport-large {
+  --content-padding: var(--gap) 0;
+}
+
+.viewport-all {
+  &.box {
+    padding: var(--header-padding) 0 var(--header-padding) var(--header-padding);
+    & .title {
+      background-color: pidp.$bcgov-color-background-grey;
+      padding: 9px 24px;
+    }
+  }
+  & header {
+    & h2 {
+      margin: 0;
+      padding: calc(var(--gap) / 2) calc(var(--gap));
+      background-color: pidp.$grey-10;
+    }
+  }
+  & .content {
+    padding: var(--content-padding);
+  }
+  & .completed {
+    padding-top: var(--gap);
+  }
+  & .privacy-text {
+    margin: var(--gap);
+  }
+  & .clinic-info {
+    margin: 0 var(--gap);
+    border: solid 1px pidp.$grey-30;
+    & header {
+      margin: 0;
+    }
+    & h3 {
+      margin: 0;
+      padding: calc(var(--gap) / 2) calc(var(--gap));
+      background-color: pidp.$grey-10;
+    }
+    & .form {
+      padding: var(--gap);
+    }
+    & .field {
+      display: flex;
+      flex-direction: column;
+
+      & label {
+        font-weight: 700;
+      }
+    }
+  }
+  & .agreement-text,
+  & .completed {
+    margin: 0 var(--gap) var(--gap);
+  }
+  & .actions {
+    display: flex;
+    margin: var(--gap) var(--gap) 0;
+    & button:not(:last-child) {
+      margin-right: var(--gap);
+    }
+  }
+  & .endorsement-section {
+    & h3,
+    & p,
+    & span {
+      color: #fff;
+    }
+    & header {
+      margin: var(--endorsement-header-margin);
+      & h2 {
+        margin: 0;
+        font-style: italic;
+      }
+    }
+    & .endorsement-card {
+      display: flex;
+      flex-direction: column;
+      padding: 50px;
+      width: 350px;
+      min-height: var(--endorsement-card-min-height);
+      background-image: url('/assets/images/endorsements-card-320x320.jpg');
+      background-color: rgba(0, 51, 102, 0.6);
+      background-blend-mode: multiply;
+
+      & h3 {
+        font-size: var(--endorsement-card-header-font-size);
+      }
+      & .endorsement-spacer {
+        // Push learn-more-row to the bottom of the container
+        flex-grow: 1;
+      }
+      & .learn-more-row {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        flex-wrap: nowrap;
+        & .learn-more-label {
+          margin-right: var(--endorsement-card-learn-more-label-margin-right);
+        }
+        & .learn-more-button {
+          width: var(--endorsement-card-learn-more-button-length);
+          height: var(--endorsement-card-learn-more-button-length);
+          font-size: var(--endorsement-card-learn-more-button-font-size);
+        }
+      }
+    }
+  }
+}

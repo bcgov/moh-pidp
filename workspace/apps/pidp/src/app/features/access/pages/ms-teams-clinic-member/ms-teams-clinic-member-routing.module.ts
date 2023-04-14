@@ -3,22 +3,21 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { SetDashboardTitleGuard } from '@pidp/presentation';
 
-import { MsTeamsPage } from './ms-teams.page';
-import { MsTeamsResolver } from './ms-teams.resolver';
+import { MsTeamsClinicMemberPage } from './ms-teams-clinic-member.page';
+import { MsTeamsClinicMemberResolver } from './ms-teams-clinic-member.resolver';
 
 const routes: Routes = [
   {
     path: '',
-    component: MsTeamsPage,
+    component: MsTeamsClinicMemberPage,
     resolve: {
-      msTeamsStatusCode: MsTeamsResolver,
+      msTeamsClinicMemberStatusCode: MsTeamsClinicMemberResolver,
     },
     canActivate: [SetDashboardTitleGuard],
     data: {
       setDashboardTitleGuard: {
-        titleText: 'MS Teams Enrolment',
-        titleDescriptionText:
-          'Here you can add view and edit your MS teams members',
+        titleText: 'MS Teams Clinic Member',
+        titleDescriptionText: 'Stay connected with team members',
       },
       title: 'Provider Identity Portal',
       routes: {
@@ -32,4 +31,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class MsTeamsRoutingModule {}
+export class MsTeamsClinicMemberRoutingModule {}

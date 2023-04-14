@@ -13,7 +13,7 @@ import { PortalSectionAction } from '../portal-section-action.model';
 import { PortalSectionKey } from '../portal-section-key.type';
 import { IPortalSection } from '../portal-section.model';
 
-export class MsTeamsPortalSection implements IPortalSection {
+export class MsTeamsPrivacyOfficerPortalSection implements IPortalSection {
   public readonly key: PortalSectionKey;
   public heading: string;
   public description: string;
@@ -22,9 +22,9 @@ export class MsTeamsPortalSection implements IPortalSection {
     private profileStatus: ProfileStatus,
     private router: Router
   ) {
-    this.key = 'msTeams';
+    this.key = 'msTeamsPrivacyOfficer';
     this.heading = 'MS Teams for Clinical Use';
-    this.description = `Enrol here for clinic access for MS Teams with Fraser Health.`;
+    this.description = `Privacy Officer enrol here for clinic access for MS Teams with Fraser Health.`;
   }
 
   public get hint(): string {
@@ -39,7 +39,7 @@ export class MsTeamsPortalSection implements IPortalSection {
     const statusCode = this.getStatusCode();
     return {
       label: statusCode === StatusCode.COMPLETED ? 'View' : 'Request',
-      route: AccessRoutes.routePath(AccessRoutes.MS_TEAMS),
+      route: AccessRoutes.routePath(AccessRoutes.MS_TEAMS_PRIVACY_OFFICER),
       disabled: statusCode === StatusCode.NOT_AVAILABLE,
     };
   }
@@ -62,6 +62,6 @@ export class MsTeamsPortalSection implements IPortalSection {
   }
 
   private getStatusCode(): StatusCode {
-    return this.profileStatus.status.msTeams.statusCode;
+    return this.profileStatus.status.msTeamsPrivacyOfficer.statusCode;
   }
 }
