@@ -38,7 +38,17 @@ public class BCProviderClient : IBCProviderClient
             {
                 ForceChangePasswordNextSignIn = false,
                 Password = userRepresentation.Password
-            }
+            },
+            AdditionalData = new Dictionary<string, object>
+            {
+                {
+                    "bcproviderlab_additionalAttributes" , new
+                    {
+                        LOA = 3,
+                        HPDID = "thisisafakehpdid"
+                    }
+                },
+            },
         };
 
         try
@@ -75,6 +85,44 @@ public class BCProviderClient : IBCProviderClient
         {
             this.logger.LogPasswordUpdateFailure(userPrincipalName);
             return false;
+        }
+    }
+
+    public async Task<SchemaExtension?> RegisterSchemaExtension()
+    {
+        var schemaExtension = new SchemaExtension
+        {
+            Id = "bcproviderlab_additionalAttributes",
+            Description = "Additional User attributes",
+            TargetTypes = new List<string>
+            {
+                "user",
+            },
+            Properties = new List<ExtensionSchemaProperty>
+            {
+                new ExtensionSchemaProperty
+                {
+                    Name = "LOA",
+                    Type = "Integer",
+                },
+                new ExtensionSchemaProperty
+                {
+                    Name = "HPDID",
+                    Type = "String",
+                },
+            },
+        };
+
+        try
+        {
+            var result = await this.client.SchemaExtensions.Request().AddAsync(schemaExtension);
+            // TODO Do logging
+            return result;
+        }
+        catch
+        {
+            // TODO Do logging
+            return null;
         }
     }
 

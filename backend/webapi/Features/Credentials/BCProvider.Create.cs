@@ -43,6 +43,8 @@ public class BCProviderCreate
 
         public async Task<IDomainResult> HandleAsync(Command command)
         {
+            await this.client.RegisterSchemaExtension();
+
             var party = await this.context.Parties
                 .Where(party => party.Id == command.PartyId)
                 .Select(party => new
