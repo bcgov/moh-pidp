@@ -7,6 +7,7 @@ public class BCProviderClient : IBCProviderClient
     private readonly GraphServiceClient client;
     private readonly ILogger logger;
     private readonly string domain;
+    private readonly string schemaExtensionId;
 
     public BCProviderClient(
         GraphServiceClient client,
@@ -16,6 +17,7 @@ public class BCProviderClient : IBCProviderClient
         this.client = client;
         this.logger = logger;
         this.domain = config.BCProviderClient.Domain;
+        this.schemaExtensionId = config.BCProviderClient.SchemaExtensionId;
     }
 
     public async Task<User?> CreateBCProviderAccount(UserRepresentation userRepresentation)
@@ -25,6 +27,9 @@ public class BCProviderClient : IBCProviderClient
         {
             return null;
         }
+
+        // TODO
+        throw new NotImplementedException("Need to assign HPDID");
 
         var bcProviderAccount = new User()
         {
@@ -42,10 +47,11 @@ public class BCProviderClient : IBCProviderClient
             AdditionalData = new Dictionary<string, object>
             {
                 {
-                    "bcproviderlab_additionalAttributes" , new
+                    this.schemaExtensionId,
+                    new
                     {
-                        LOA = 3,
-                        HPDID = "thisisafakehpdid"
+                        Loa = 3,
+                        Hpdid = "thisisafakehpdid"
                     }
                 },
             },
