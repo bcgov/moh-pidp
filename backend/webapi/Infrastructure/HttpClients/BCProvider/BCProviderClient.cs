@@ -28,9 +28,6 @@ public class BCProviderClient : IBCProviderClient
             return null;
         }
 
-        // TODO
-        throw new NotImplementedException("Need to assign HPDID");
-
         var bcProviderAccount = new User()
         {
             AccountEnabled = true,
@@ -44,17 +41,7 @@ public class BCProviderClient : IBCProviderClient
                 ForceChangePasswordNextSignIn = false,
                 Password = userRepresentation.Password
             },
-            AdditionalData = new Dictionary<string, object>
-            {
-                {
-                    this.schemaExtensionId,
-                    new
-                    {
-                        Loa = 3,
-                        Hpdid = "thisisafakehpdid"
-                    }
-                },
-            },
+            AdditionalData = new BCProviderSchemaExtension(3, userRepresentation.Hpdid).AsAdditionalData(this.schemaExtensionId)
         };
 
         try
