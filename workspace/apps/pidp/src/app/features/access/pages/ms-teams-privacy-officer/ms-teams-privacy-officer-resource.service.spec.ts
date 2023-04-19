@@ -11,7 +11,10 @@ describe('MsTeamsPrivacyOfficerResource', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [provideAutoSpy(ApiHttpClient), provideAutoSpy(PortalResource)]
+      providers: [
+        provideAutoSpy(ApiHttpClient),
+        provideAutoSpy(PortalResource),
+      ]
     });
     service = TestBed.inject(MsTeamsPrivacyOfficerResource);
   });
