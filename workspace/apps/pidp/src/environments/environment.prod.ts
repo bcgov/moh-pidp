@@ -5,7 +5,7 @@ import {
   doctorsTechnologyOfficeEmail,
   doctorsTechnologyOfficeUrl,
   msTeamsSupportEmail,
-} from '@app/features/access/pages/ms-teams/ms-teams.constants';
+} from '@app/features/access/pages/ms-teams-privacy-officer/ms-teams.constants';
 import {
   phsaInformationAccessAndPrivacyOfficeEmail,
   prescriptionRefillRequestEformsSupportEmail,

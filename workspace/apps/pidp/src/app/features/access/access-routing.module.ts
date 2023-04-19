@@ -13,7 +13,8 @@ import { BcProviderEditComponent } from './pages/bc-provider-edit/bc-provider-ed
 import { DriverFitnessModule } from './pages/driver-fitness/driver-fitness.module';
 import { HcimAccountTransferModule } from './pages/hcim-account-transfer/hcim-account-transfer.module';
 import { HcimEnrolmentModule } from './pages/hcim-enrolment/hcim-enrolment.module';
-import { MsTeamsModule } from './pages/ms-teams/ms-teams.module';
+import { MsTeamsClinicMemberModule } from './pages/ms-teams-clinic-member/ms-teams-clinic-member.module';
+import { MsTeamsPrivacyOfficerModule } from './pages/ms-teams-privacy-officer/ms-teams-privacy-officer.module';
 import { PharmanetModule } from './pages/pharmanet/pharmanet.module';
 import { PrescriptionRefillEformsModule } from './pages/prescription-refill-eforms/prescription-refill-eforms.module';
 import { ProviderReportingPortalModule } from './pages/provider-reporting-portal/provider-reporting-portal.module';
@@ -114,13 +115,15 @@ const routes: Routes = [
       ),
   },
   {
-    path: AccessRoutes.MS_TEAMS,
+    path: AccessRoutes.MS_TEAMS_PRIVACY_OFFICER,
     canActivate: [PermissionsGuard],
     data: {
       roles: [Role.FEATURE_PIDP_DEMO],
     },
-    loadChildren: (): Promise<MsTeamsModule> =>
-      import('./pages/ms-teams/ms-teams.module').then((m) => m.MsTeamsModule),
+    loadChildren: (): Promise<MsTeamsPrivacyOfficerModule> =>
+      import(
+        './pages/ms-teams-privacy-officer/ms-teams-privacy-officer.module'
+      ).then((m) => m.MsTeamsPrivacyOfficerModule),
   },
   {
     path: AccessRoutes.PROVIDER_REPORTING_PORTAL,
@@ -128,6 +131,13 @@ const routes: Routes = [
       import(
         './pages/provider-reporting-portal/provider-reporting-portal.module'
       ).then((m) => m.ProviderReportingPortalModule),
+  },
+  {
+    path: AccessRoutes.MS_TEAMS_CLINIC_MEMBER,
+    loadChildren: (): Promise<MsTeamsClinicMemberModule> =>
+      import(
+        './pages/ms-teams-clinic-member/ms-teams-clinic-member.module'
+      ).then((m) => m.MsTeamsClinicMemberModule),
   },
 ];
 
