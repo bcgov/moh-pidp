@@ -9,3 +9,5 @@ public class UserRepresentation
 
     public string FullName => $"{this.FirstName} {this.LastName}";
 }
+
+// TODO define shema extension
