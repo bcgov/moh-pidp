@@ -85,8 +85,8 @@ public class BCProviderClient : IBCProviderClient
     {
         var schemaExtension = new SchemaExtension
         {
-            Id = "bcproviderlab_additionalAttributes",
-            Description = "Additional User attributes",
+            Id = "additionalAttributes",
+            Description = "Additional User attributes for a BC Provider user account",
             TargetTypes = new List<string>
             {
                 "user",
@@ -95,12 +95,12 @@ public class BCProviderClient : IBCProviderClient
             {
                 new ExtensionSchemaProperty
                 {
-                    Name = "LOA",
+                    Name = "Loa",
                     Type = "Integer",
                 },
                 new ExtensionSchemaProperty
                 {
-                    Name = "HPDID",
+                    Name = "Hpdid",
                     Type = "String",
                 },
             },
@@ -109,12 +109,12 @@ public class BCProviderClient : IBCProviderClient
         try
         {
             var result = await this.client.SchemaExtensions.Request().AddAsync(schemaExtension);
-            // TODO Do logging
+            this.logger.LogRegisteredNewSchemaExtension(schemaExtension.Id);
             return result;
         }
         catch
         {
-            // TODO Do logging
+            this.logger.LogSchemaExtensionRegistrationFailure(schemaExtension.Id);
             return null;
         }
     }
@@ -161,4 +161,10 @@ public static partial class BCProviderLoggingExtensions
 
     [LoggerMessage(5, LogLevel.Error, "Hit maximum retrys attempting to make a unique User Principal Name for user '{fullName}'.")]
     public static partial void LogNoUniqueUserPrincipalNameFound(this ILogger logger, string fullName);
+
+    [LoggerMessage(6, LogLevel.Information, "Registered new schema extension with Id '{schemaExtensionId}'.")]
+    public static partial void LogRegisteredNewSchemaExtension(this ILogger logger, string schemaExtensionId);
+
+    [LoggerMessage(7, LogLevel.Error, "Failed to register schema extension with Id '{schemaExtensionId}'.")]
+    public static partial void LogSchemaExtensionRegistrationFailure(this ILogger logger, string schemaExtensionId);
 }
