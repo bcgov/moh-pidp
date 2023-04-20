@@ -68,7 +68,7 @@ public class BCProviderCreate
                 FirstName = party.FirstName,
                 LastName = party.LastName,
                 Password = command.Password,
-                Hpdid = hpdid
+                Hpdid = hpdid ?? ""
             });
 
             if (createdUser == null)
