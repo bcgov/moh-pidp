@@ -3,12 +3,6 @@ import { TestBed } from '@angular/core/testing';
 import { APP_CONFIG, APP_DI_CONFIG } from '../../app.config';
 import { UtilsService } from './utils.service';
 
-interface Sortable {
-  code: number;
-  name: string;
-  weight: number;
-}
-
 describe('UtilsService', () => {
   beforeEach(() =>
     TestBed.configureTestingModule({

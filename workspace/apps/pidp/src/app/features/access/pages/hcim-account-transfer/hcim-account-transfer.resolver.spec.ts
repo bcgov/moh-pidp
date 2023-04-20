@@ -5,10 +5,10 @@ import { TestBed } from '@angular/core/testing';
 import {
   randEmail,
   randFirstName,
+  randFullName,
   randLastName,
   randNumber,
   randPhoneNumber,
-  randText,
 } from '@ngneat/falso';
 import { Spy, createSpyFromClass, provideAutoSpy } from 'jest-auto-spies';
 
@@ -50,6 +50,11 @@ describe('HcimAccountTransferResolver', () => {
     mockProfileStatus = {
       alerts: [],
       status: {
+        dashboardInfo: {
+          fullName: randFullName(),
+          collegeCode: randNumber(),
+          statusCode: StatusCode.AVAILABLE,
+        },
         demographics: {
           firstName: randFirstName(),
           lastName: randLastName(),
@@ -58,8 +63,8 @@ describe('HcimAccountTransferResolver', () => {
           statusCode: StatusCode.AVAILABLE,
         },
         collegeCertification: {
-          collegeCode: randNumber(),
-          licenceNumber: randText(),
+          hasCpn: false,
+          licenceDeclared: false,
           statusCode: StatusCode.AVAILABLE,
         },
         administratorInfo: {
@@ -68,10 +73,17 @@ describe('HcimAccountTransferResolver', () => {
         },
         organizationDetails: { statusCode: StatusCode.AVAILABLE },
         facilityDetails: { statusCode: StatusCode.AVAILABLE },
+        endorsements: { statusCode: StatusCode.AVAILABLE },
         userAccessAgreement: { statusCode: StatusCode.AVAILABLE },
-        saEforms: { statusCode: StatusCode.AVAILABLE },
+        saEforms: { statusCode: StatusCode.AVAILABLE, incorrectLicenceType: false },
+        prescriptionRefillEforms: { statusCode: StatusCode.AVAILABLE },
+        bcProvider: { statusCode: StatusCode.AVAILABLE },
         hcimAccountTransfer: { statusCode: StatusCode.AVAILABLE },
         hcimEnrolment: { statusCode: StatusCode.AVAILABLE },
+        driverFitness: { statusCode: StatusCode.AVAILABLE },
+        msTeamsPrivacyOfficer: { statusCode: StatusCode.AVAILABLE },
+        msTeamsClinicMember: { statusCode: StatusCode.AVAILABLE },
+        providerReportingPortal: { statusCode: StatusCode.AVAILABLE },
         sitePrivacySecurityChecklist: { statusCode: StatusCode.AVAILABLE },
         complianceTraining: { statusCode: StatusCode.AVAILABLE },
       },

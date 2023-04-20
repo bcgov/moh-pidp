@@ -24,10 +24,10 @@ describe('AdminDashboardComponent', () => {
       ],
     });
 
-    // component = TestBed.inject(AdminDashboardComponent);
+    component = TestBed.inject(AdminDashboardComponent);
   });
 
   it('should create', () => {
-    // expect(component).toBeTruthy();
+    expect(component).toBeTruthy();
   });
 });
