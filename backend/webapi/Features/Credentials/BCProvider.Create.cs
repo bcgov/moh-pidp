@@ -58,11 +58,17 @@ public class BCProviderCreate
                 return DomainResult.Failed();
             }
 
+            var hpdid = await this.context.Credentials
+                .Where(credential => credential.PartyId == command.PartyId && credential.IdentityProvider == "bcsc")
+                .Select(credential => credential.IdpId)
+                .SingleAsync();
+
             var createdUser = await this.client.CreateBCProviderAccount(new UserRepresentation
             {
                 FirstName = party.FirstName,
                 LastName = party.LastName,
-                Password = command.Password
+                Password = command.Password,
+                Hpdid = hpdid
             });
 
             if (createdUser == null)
