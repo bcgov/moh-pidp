@@ -167,4 +167,7 @@ public static partial class BCProviderLoggingExtensions
 
     [LoggerMessage(7, LogLevel.Error, "Failed to register schema extension with Id '{schemaExtensionId}'.")]
     public static partial void LogSchemaExtensionRegistrationFailure(this ILogger logger, string schemaExtensionId);
+
+    [LoggerMessage(8, LogLevel.Error, "User '{firstName}' '{lastName}' hpdid was found to have a null value.")]
+    public static partial void LogNullHpdid(this ILogger logger, string firstName, string lastName);
 }

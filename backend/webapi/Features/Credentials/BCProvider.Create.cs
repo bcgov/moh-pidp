@@ -34,11 +34,16 @@ public class BCProviderCreate
     {
         private readonly IBCProviderClient client;
         private readonly PidpDbContext context;
+        private readonly ILogger logger;
 
-        public CommandHandler(IBCProviderClient client, PidpDbContext context)
+        public CommandHandler(
+            IBCProviderClient client,
+            PidpDbContext context,
+            ILogger<BCProviderClient> logger)
         {
             this.client = client;
             this.context = context;
+            this.logger = logger;
         }
 
         public async Task<IDomainResult> HandleAsync(Command command)
@@ -49,7 +54,8 @@ public class BCProviderCreate
                 {
                     party.FirstName,
                     party.LastName,
-                    HasBCProviderCredential = party.Credentials.Any(credential => credential.IdentityProvider == IdentityProviders.BCProvider)
+                    HasBCProviderCredential = party.Credentials.Any(credential => credential.IdentityProvider == IdentityProviders.BCProvider),
+                    Hpdid = party.Credentials.Select(credential => credential.Hpdid).Single(hpdid => hpdid != null)
                 })
                 .SingleAsync();
 
@@ -58,17 +64,17 @@ public class BCProviderCreate
                 return DomainResult.Failed();
             }
 
-            var hpdid = await this.context.Credentials
-                .Where(credential => credential.PartyId == command.PartyId && credential.IdentityProvider == "bcsc")
-                .Select(credential => credential.IdpId)
-                .SingleAsync();
+            if (party.Hpdid == null)
+            {
+                this.logger.LogNullHpdid(party.FirstName, party.LastName);
+            }
 
             var createdUser = await this.client.CreateBCProviderAccount(new UserRepresentation
             {
                 FirstName = party.FirstName,
                 LastName = party.LastName,
                 Password = command.Password,
-                Hpdid = hpdid ?? ""
+                Hpdid = party.Hpdid
             });
 
             if (createdUser == null)
