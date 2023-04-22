@@ -18,7 +18,7 @@ public class Create
         [JsonIgnore]
         [HybridBindProperty(Source.Route)]
         public int PartyId { get; set; }
-        public string[]? RecipientEmails { get; set; }
+        public string RecipientEmail { get; set; } = string.Empty;
         public string? AdditionalInformation { get; set; }
     }
 
@@ -27,7 +27,7 @@ public class Create
         public CommandValidator()
         {
             this.RuleFor(x => x.PartyId).GreaterThan(0);
-            this.RuleFor(x => x.RecipientEmails).NotEmpty().ForEach(x => x.EmailAddress());
+            this.RuleFor(x => x.RecipientEmail).NotEmpty().EmailAddress();
         }
     }
 
@@ -52,27 +52,20 @@ public class Create
 
         public async Task HandleAsync(Command command)
         {
-            if (command.RecipientEmails is null || command.RecipientEmails.Length == 0)
-                return;
-
-            foreach (var recipientEmail in command.RecipientEmails)
+            var request = new EndorsementRequest
             {
-                var request = new EndorsementRequest
-                {
-                    RequestingPartyId = command.PartyId,
-                    Token = Guid.NewGuid(),
-                    RecipientEmail = recipientEmail,
-                    AdditionalInformation = command.AdditionalInformation,
-                    Status = EndorsementRequestStatus.Created,
-                    StatusDate = this.clock.GetCurrentInstant()
-                };
-
-                this.context.EndorsementRequests.Add(request);
-
-                await this.context.SaveChangesAsync();
-
-                await this.SendEndorsementRequestEmailAsync(request.RecipientEmail, request.Token);
+                RequestingPartyId = command.PartyId,
+                Token = Guid.NewGuid(),
+                RecipientEmail = command.RecipientEmail,
+                AdditionalInformation = command.AdditionalInformation,
+                Status = EndorsementRequestStatus.Created,
+                StatusDate = this.clock.GetCurrentInstant()
             };
+
+            this.context.EndorsementRequests.Add(request);
+            await this.context.SaveChangesAsync();
+
+            await this.SendEndorsementRequestEmailAsync(request.RecipientEmail, request.Token);
         }
 
         private async Task SendEndorsementRequestEmailAsync(string recipientEmail, Guid token)
