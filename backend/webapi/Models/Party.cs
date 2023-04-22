@@ -46,6 +46,12 @@ public class Party : BaseAuditable
     public ICollection<Credential> Credentials { get; set; } = new List<Credential>();
 
     /// <summary>
+    /// The First Name + Last Name of the Party.
+    /// </summary>
+    [Projectable]
+    public string FullName => $"{this.FirstName} {this.LastName}";
+
+    /// <summary>
     /// The "primary" Credential of a Party is the a) only, or b) BC Services Card Credential.
     /// As of now, the only Parties that have two Credentials are first BC Services Card and then later recieve a BC Provider Credential.
     /// </summary>

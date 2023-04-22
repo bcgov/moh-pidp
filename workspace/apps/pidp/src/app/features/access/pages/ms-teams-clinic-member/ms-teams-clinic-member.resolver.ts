@@ -7,15 +7,15 @@ import { PartyService } from '@app/core/party/party.service';
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
 import { ProfileStatus } from '@app/features/portal/models/profile-status.model';
 
-import { MsTeamsResource } from './ms-teams-resource.service';
+import { MsTeamsClinicMemberResource } from './ms-teams-clinic-member-resource.service';
 
 @Injectable({
   providedIn: 'root',
 })
-export class MsTeamsResolver implements Resolve<StatusCode | null> {
+export class MsTeamsClinicMemberResolver implements Resolve<StatusCode | null> {
   public constructor(
     private partyService: PartyService,
-    private resource: MsTeamsResource
+    private resource: MsTeamsClinicMemberResource
   ) {}
 
   public resolve(): Observable<StatusCode | null> {
@@ -29,7 +29,7 @@ export class MsTeamsResolver implements Resolve<StatusCode | null> {
           return null;
         }
 
-        return profileStatus.status.msTeams.statusCode;
+        return profileStatus.status.msTeamsClinicMember.statusCode;
       }),
       catchError(() => of(null))
     );

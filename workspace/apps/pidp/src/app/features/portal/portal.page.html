@@ -27,7 +27,9 @@
         </div>
       </div>
     </section>
-    <section class="organization-box section-box">
+    <section
+      *ngIf="state.organization.length"
+      class="organization-box section-box">
       <ui-scroll-target targetId="organization"></ui-scroll-target>
       <header>
         <h2>Organization Information</h2>
@@ -45,7 +47,7 @@
         </div>
       </div>
     </section>
-    <section class="access-box section-box">
+    <section *ngIf="state.access.length" class="access-box section-box">
       <ui-scroll-target targetId="access"></ui-scroll-target>
       <header>
         <h2>Access to Systems</h2>
@@ -62,7 +64,7 @@
         </div>
       </div>
     </section>
-    <section class="training-box section-box">
+    <section *ngIf="state.training.length" class="training-box section-box">
       <ui-scroll-target targetId="training"></ui-scroll-target>
       <header>
         <h2>Complete these trainings</h2>
@@ -84,7 +86,7 @@
         </ng-template>
       </div>
     </section>
-    <section class="history-box section-box">
+    <section *ngIf="state.history.length" class="history-box section-box">
       <ui-scroll-target targetId="history"></ui-scroll-target>
       <header>
         <h2>History</h2>

@@ -18,6 +18,36 @@
             email:
             <a uiAnchor scheme="mailto" [attr.href]="msTeamsSupportEmail"></a>
           </p>
+          <section class="endorsement-section">
+            <header>
+              <h2>
+                Would you like to endorse team members to give them access to MS
+                Teams?
+              </h2>
+            </header>
+            <div class="endorsement-card">
+              <h3>Endorsement</h3>
+              <p>
+                Request endorsement from the licenced practitioners you work
+                with to gain access to systems.
+              </p>
+              <p>1 minute to complete</p>
+              <div class="endorsement-spacer"></div>
+              <div class="learn-more-row">
+                <span
+                  id="ms-teams-privacy-officer-page-learn-more-label"
+                  class="learn-more-label"
+                  >Learn more</span
+                >
+                <button
+                  class="learn-more-button"
+                  routerLink="/organization-info/endorsements"
+                  aria-labelledby="ms-teams-privacy-officer-page-learn-more-label">
+                  +
+                </button>
+              </div>
+            </div>
+          </section>
         </section>
       </ng-container>
       <ng-template #notCompleted>

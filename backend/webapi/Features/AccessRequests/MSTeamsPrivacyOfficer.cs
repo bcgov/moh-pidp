@@ -17,7 +17,7 @@ using Pidp.Infrastructure.Services;
 using Pidp.Models;
 using Pidp.Models.Lookups;
 
-public class MSTeams
+public class MSTeamsPrivacyOfficer
 {
     public static IdentifierType[] AllowedIdentifierTypes => new[] { IdentifierType.PhysiciansAndSurgeons, IdentifierType.Nurse };
 
@@ -93,17 +93,21 @@ public class MSTeams
                     .With(AllowedIdentifierTypes)
                     .HasGoodStanding)
             {
-                this.logger.LogMSTeamsAccessRequestDenied();
+                this.logger.LogMSTeamsPrivacyOfficerAccessRequestDenied();
                 return DomainResult.Failed();
             }
 
-            this.context.MSTeamsEnrolments.Add(new MSTeamsEnrolment
+            this.context.AccessRequests.Add(new AccessRequest
             {
                 PartyId = command.PartyId,
-                AccessTypeCode = AccessTypeCode.MSTeams,
+                AccessTypeCode = AccessTypeCode.MSTeamsPrivacyOfficer,
                 RequestedOn = this.clock.GetCurrentInstant(),
-                ClinicName = command.ClinicName,
-                ClinicAddress = this.mapper.Map<MSTeamsClinicAddress>(command.ClinicAddress)
+            });
+            this.context.MSTeamsClinics.Add(new MSTeamsClinic
+            {
+                PrivacyOfficerId = command.PartyId,
+                Name = command.ClinicName,
+                Address = this.mapper.Map<MSTeamsClinicAddress>(command.ClinicAddress)
             });
 
             await this.context.SaveChangesAsync();
@@ -198,8 +202,8 @@ public class MSTeams
     }
 }
 
-public static partial class MSTeamsLoggingExtensions
+public static partial class MSTeamsPrivacyOfficerLoggingExtensions
 {
-    [LoggerMessage(1, LogLevel.Warning, "MS Teams Access Request denied due to the Party Record not meeting all prerequisites.")]
-    public static partial void LogMSTeamsAccessRequestDenied(this ILogger logger);
+    [LoggerMessage(1, LogLevel.Warning, "MS Teams Privacy Officer Access Request denied due to the Party Record not meeting all prerequisites.")]
+    public static partial void LogMSTeamsPrivacyOfficerAccessRequestDenied(this ILogger logger);
 }

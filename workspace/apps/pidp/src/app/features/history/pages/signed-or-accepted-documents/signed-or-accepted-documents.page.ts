@@ -118,7 +118,9 @@ export class SignedOrAcceptedDocumentsPage implements OnInit {
           case DocumentType.MS_TEAMS_DECLARATION_AGREEMENT:
           case DocumentType.MS_TEAMS_DETAILS_AGREEMENT:
           case DocumentType.MS_TEAMS_IT_SECURITY_AGREEMENT:
-            return status?.msTeams.statusCode === StatusCode.COMPLETED;
+            return (
+              status?.msTeamsPrivacyOfficer.statusCode === StatusCode.COMPLETED
+            );
 
           default:
             return false;

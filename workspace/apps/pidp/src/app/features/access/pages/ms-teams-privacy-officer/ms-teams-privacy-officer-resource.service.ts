@@ -9,12 +9,12 @@ import { ApiHttpClient } from '@app/core/resources/api-http-client.service';
 import { ProfileStatus } from '@app/features/portal/models/profile-status.model';
 import { PortalResource } from '@app/features/portal/portal-resource.service';
 
-import { MsTeamsClinicInfo } from './ms-teams.model';
+import { MsTeamsClinicInfo } from './ms-teams-privacy-officer.model';
 
 @Injectable({
   providedIn: 'root',
 })
-export class MsTeamsResource {
+export class MsTeamsPrivacyOfficerResource {
   public constructor(
     private apiResource: ApiHttpClient,
     private portalResource: PortalResource
@@ -30,7 +30,7 @@ export class MsTeamsResource {
   ): NoContent {
     return this.apiResource
       .post<NoContent>(
-        `parties/${partyId}/access-requests/ms-teams`,
+        `parties/${partyId}/access-requests/ms-teams-privacy-officer`,
         clinicInfo
       )
       .pipe(

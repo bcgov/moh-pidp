@@ -84,6 +84,8 @@ spec:
                 name: canada-post-addresscomplete-secrets
             - secretRef:
                 name: ches
+            - secretRef:
+                name: bc-provider
             - configMapRef:
                 name: mail-settings
           ports:
