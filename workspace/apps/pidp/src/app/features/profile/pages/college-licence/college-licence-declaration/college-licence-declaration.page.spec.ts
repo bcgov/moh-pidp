@@ -20,6 +20,7 @@ import { LoggerService } from '@core/services/logger.service';
 import { CollegeLicenceDeclarationResource } from './college-licence-declaration-resource.service';
 import { CollegeLicenceDeclarationPage } from './college-licence-declaration.page';
 import { PartyLicenceDeclarationInformation } from './party-licence-declaration-information.model';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('CollegeLicenceDeclarationPage', () => {
   let component: CollegeLicenceDeclarationPage;
@@ -45,6 +46,7 @@ describe('CollegeLicenceDeclarationPage', () => {
 
     TestBed.configureTestingModule({
       imports: [
+        BrowserAnimationsModule,
         HttpClientTestingModule,
         MatDialogModule,
         ReactiveFormsModule,
@@ -154,7 +156,7 @@ describe('CollegeLicenceDeclarationPage', () => {
 
       when('no validation errors exist', () => {
         formUtilsServiceSpy.checkValidity.mockReturnValue(true);
-        collegeLicenceDeclarationResourceSpy.update
+        collegeLicenceDeclarationResourceSpy.updateDeclaration
           .mustBeCalledWith(partyId, mockParty)
           .nextWith(void 0);
         component.onSubmit();
