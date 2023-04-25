@@ -33,7 +33,7 @@ public class EndorsementRequestIndexTests : InMemoryDbTest
         Assert.Equal(request.Id, model.Id);
         Assert.Equal(request.RecipientEmail, model.RecipientEmail);
         Assert.Equal(request.AdditionalInformation, model.AdditionalInformation);
-        Assert.True(string.IsNullOrEmpty(model.PartyName));
+        Assert.Null(model.PartyName);
         Assert.Null(model.CollegeCode);
         Assert.Equal(request.Status, model.Status);
         Assert.Equal(request.StatusDate, model.StatusDate);
