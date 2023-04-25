@@ -10,6 +10,7 @@ describe('LoggerService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
+        LoggerService,
         {
           provide: APP_CONFIG,
           useValue: APP_DI_CONFIG,
