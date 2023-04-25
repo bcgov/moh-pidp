@@ -8,6 +8,7 @@ import { PrescriptionRefillEformsResource } from './prescription-refill-eforms-r
 import { LoggerService } from '@app/core/services/logger.service';
 import { DocumentService } from '@app/core/services/document.service';
 import { randTextRange } from '@ngneat/falso';
+import { SafePipe } from '@bcgov/shared/ui';
 
 describe('PrescriptionRefillEformsPage', () => {
   let component: PrescriptionRefillEformsPage;
@@ -28,7 +29,7 @@ describe('PrescriptionRefillEformsPage', () => {
     };
 
     await TestBed.configureTestingModule({
-      declarations: [ PrescriptionRefillEformsPage ],
+      declarations: [ PrescriptionRefillEformsPage, SafePipe ],
       providers: [
         {
           provide: ActivatedRoute,
