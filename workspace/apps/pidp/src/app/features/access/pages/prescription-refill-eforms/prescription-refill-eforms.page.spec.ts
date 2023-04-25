@@ -7,16 +7,33 @@ import { PartyService } from '@app/core/party/party.service';
 import { PrescriptionRefillEformsResource } from './prescription-refill-eforms-resource.service';
 import { LoggerService } from '@app/core/services/logger.service';
 import { DocumentService } from '@app/core/services/document.service';
+import { randTextRange } from '@ngneat/falso';
 
 describe('PrescriptionRefillEformsPage', () => {
   let component: PrescriptionRefillEformsPage;
   let fixture: ComponentFixture<PrescriptionRefillEformsPage>;
 
+  let mockActivatedRoute: { snapshot: any };
+
   beforeEach(async () => {
+    mockActivatedRoute = {
+      snapshot: {
+        data: {
+          title: randTextRange({ min: 1, max: 4 }),
+          routes: {
+            root: '../../',
+          },
+        },
+      },
+    };
+
     await TestBed.configureTestingModule({
       declarations: [ PrescriptionRefillEformsPage ],
       providers: [
-        provideAutoSpy(ActivatedRoute),
+        {
+          provide: ActivatedRoute,
+          useValue: mockActivatedRoute,
+        },
         provideAutoSpy(Router),
         provideAutoSpy(PartyService),
         provideAutoSpy(PrescriptionRefillEformsResource),
