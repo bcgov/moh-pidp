@@ -1,6 +1,6 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 
-import { provideAutoSpy } from 'jest-auto-spies';
+import { createSpyFromClass, provideAutoSpy } from 'jest-auto-spies';
 
 import { ProviderReportingPortalPage } from './provider-reporting-portal.page';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -8,30 +8,47 @@ import { PartyService } from '@app/core/party/party.service';
 import { ProviderReportingPortalResource } from './provider-reporting-portal-resource.service';
 import { LoggerService } from '@app/core/services/logger.service';
 import { DocumentService } from '@app/core/services/document.service';
+import { randTextRange } from '@ngneat/falso';
 
 describe('ProviderReportingPortalPage', () => {
   let component: ProviderReportingPortalPage;
-  let fixture: ComponentFixture<ProviderReportingPortalPage>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [ ProviderReportingPortalPage ],
+  let mockActivatedRoute: { snapshot: any };
+
+  beforeEach(() => {
+    mockActivatedRoute = {
+      snapshot: {
+        data: {
+          title: randTextRange({ min: 1, max: 4 }),
+          routes: {
+            root: '../../',
+          },
+        },
+      },
+    };
+
+    TestBed.configureTestingModule({
       providers: [
-        provideAutoSpy(ActivatedRoute),
+        ProviderReportingPortalPage,
+        {
+          provide: ActivatedRoute,
+          useValue: mockActivatedRoute,
+        },
+        {
+          provide: PartyService,
+          useValue: createSpyFromClass(PartyService, {
+            gettersToSpyOn: ['partyId'],
+            settersToSpyOn: ['partyId'],
+          }),
+        },
         provideAutoSpy(Router),
-        provideAutoSpy(PartyService),
         provideAutoSpy(ProviderReportingPortalResource),
         provideAutoSpy(LoggerService),
         provideAutoSpy(DocumentService),
       ]
     })
-    .compileComponents();
-  });
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(ProviderReportingPortalPage);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+    component = TestBed.inject(ProviderReportingPortalPage);
   });
 
   it('should create', () => {
