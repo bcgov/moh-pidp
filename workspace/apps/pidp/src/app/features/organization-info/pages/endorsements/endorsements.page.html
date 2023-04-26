@@ -131,19 +131,15 @@
           each individual listed.
         </p>
         <mat-form-field appearance="outline">
-          <textarea
+          <input
             matInput
-            formControlName="recipientEmails"
-            cdkTextareaAutosize
-            #autosize="cdkTextareaAutosize"
-            cdkAutosizeMinRows="1"
-            cdkAutosizeMaxRows="5"
-            aria-label="One email address per line"></textarea>
-          <mat-error *ngIf="recipientEmails.hasError('required')"
+            placeholder="Email"
+            formControlName="recipientEmail" />
+          <mat-error *ngIf="recipientEmail.hasError('required')"
             >Required</mat-error
           >
-          <mat-error *ngIf="recipientEmails.hasError('multilineEmail')">
-            Must be valid email address(es), one per line
+          <mat-error *ngIf="recipientEmail.hasError('email')">
+            Must be a valid email address
           </mat-error>
         </mat-form-field>
       </section>

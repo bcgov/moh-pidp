@@ -98,8 +98,8 @@ export class EndorsementsPage
   public showTextLabels = false;
   public showIconLabels = true;
 
-  public get recipientEmails(): FormControl {
-    return this.formState.form.get('recipientEmails') as FormControl;
+  public get recipientEmail(): FormControl {
+    return this.formState.form.get('recipientEmail') as FormControl;
   }
 
   private onViewportChange(viewport: PidpViewport): void {
@@ -220,7 +220,6 @@ export class EndorsementsPage
 
   protected afterSubmitIsSuccessful(): void {
     this.formGroupDirective.resetForm();
-    this.formState.form.reset();
 
     this.nonActionableEndorsementRequests$ =
       this.getNonActionableEndorsementRequests(this.partyService.partyId);
