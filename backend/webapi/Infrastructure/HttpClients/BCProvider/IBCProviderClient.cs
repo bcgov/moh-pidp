@@ -20,9 +20,8 @@ public interface IBCProviderClient
     Task<bool> UpdatePassword(string userPrincipalName, string password);
 
     /// <summary>
-    /// Registers a schema extension for the AAD User
+    /// Registers the BC Provider Schema Extension.
     /// Returns the extension object if the operation was successful.
-    /// Only run once to register the desired schema extension and
-    /// afterwards remove references to method.
+    /// Only needed once per environment; this method is mostly just documentation.
     Task<SchemaExtension?> RegisterSchemaExtension();
 }

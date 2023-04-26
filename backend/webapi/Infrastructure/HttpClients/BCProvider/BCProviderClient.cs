@@ -109,12 +109,12 @@ public class BCProviderClient : IBCProviderClient
         try
         {
             var result = await this.client.SchemaExtensions.Request().AddAsync(schemaExtension);
-            this.logger.LogRegisteredNewSchemaExtension(schemaExtension.Id);
+            this.logger.LogRegisteredNewSchemaExtension(result.Id);
             return result;
         }
         catch
         {
-            this.logger.LogSchemaExtensionRegistrationFailure(schemaExtension.Id);
+            this.logger.LogSchemaExtensionRegistrationFailure();
             return null;
         }
     }
@@ -165,6 +165,6 @@ public static partial class BCProviderClientLoggingExtensions
     [LoggerMessage(6, LogLevel.Information, "Registered new schema extension with Id '{schemaExtensionId}'.")]
     public static partial void LogRegisteredNewSchemaExtension(this ILogger logger, string schemaExtensionId);
 
-    [LoggerMessage(7, LogLevel.Error, "Failed to register schema extension with Id '{schemaExtensionId}'.")]
-    public static partial void LogSchemaExtensionRegistrationFailure(this ILogger logger, string schemaExtensionId);
+    [LoggerMessage(7, LogLevel.Error, "Failed to register schema extension.")]
+    public static partial void LogSchemaExtensionRegistrationFailure(this ILogger logger);
 }
