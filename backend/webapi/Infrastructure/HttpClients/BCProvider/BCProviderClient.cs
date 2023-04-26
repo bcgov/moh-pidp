@@ -85,7 +85,7 @@ public class BCProviderClient : IBCProviderClient
     {
         var schemaExtension = new SchemaExtension
         {
-            Id = "additionalAttributes",
+            Id = "bcProviderAttributes",
             Description = "Additional User attributes for a BC Provider user account",
             TargetTypes = new List<string>
             {
