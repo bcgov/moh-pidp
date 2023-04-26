@@ -1,22 +1,23 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { provideAutoSpy } from 'jest-auto-spies';
+import { randTextRange } from '@ngneat/falso';
+
+import { ActivatedRoute, Router } from '@angular/router';
+import { APP_CONFIG, APP_DI_CONFIG } from '@app/app.config';
 
 import { PrescriptionRefillEformsPage } from './prescription-refill-eforms.page';
-import { ActivatedRoute, Router } from '@angular/router';
-import { PartyService } from '@app/core/party/party.service';
 import { PrescriptionRefillEformsResource } from './prescription-refill-eforms-resource.service';
+import { PartyService } from '@app/core/party/party.service';
 import { LoggerService } from '@app/core/services/logger.service';
 import { DocumentService } from '@app/core/services/document.service';
-import { randTextRange } from '@ngneat/falso';
 import { SafePipe } from '@bcgov/shared/ui';
 
 describe('PrescriptionRefillEformsPage', () => {
   let component: PrescriptionRefillEformsPage;
-  let fixture: ComponentFixture<PrescriptionRefillEformsPage>;
 
   let mockActivatedRoute: { snapshot: any };
 
-  beforeEach(async () => {
+  beforeEach(() => {
     mockActivatedRoute = {
       snapshot: {
         data: {
@@ -28,12 +29,17 @@ describe('PrescriptionRefillEformsPage', () => {
       },
     };
 
-    await TestBed.configureTestingModule({
-      declarations: [ PrescriptionRefillEformsPage, SafePipe ],
+    TestBed.configureTestingModule({
+      declarations: [SafePipe],
       providers: [
+        PrescriptionRefillEformsPage,
         {
           provide: ActivatedRoute,
           useValue: mockActivatedRoute,
+        },
+        {
+          provide: APP_CONFIG,
+          useValue: APP_DI_CONFIG,
         },
         provideAutoSpy(Router),
         provideAutoSpy(PartyService),
@@ -41,14 +47,9 @@ describe('PrescriptionRefillEformsPage', () => {
         provideAutoSpy(LoggerService),
         provideAutoSpy(DocumentService),
       ]
-    })
-    .compileComponents();
-  });
+    });
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(PrescriptionRefillEformsPage);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+    component = TestBed.inject(PrescriptionRefillEformsPage);
   });
 
   it('should create', () => {
