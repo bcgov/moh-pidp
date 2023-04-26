@@ -95,12 +95,12 @@ public class BCProviderClient : IBCProviderClient
             {
                 new ExtensionSchemaProperty
                 {
-                    Name = "Loa",
+                    Name = "loa",
                     Type = "Integer",
                 },
                 new ExtensionSchemaProperty
                 {
-                    Name = "Hpdid",
+                    Name = "hpdid",
                     Type = "String",
                 },
             },
