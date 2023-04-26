@@ -104,7 +104,7 @@
                   noticeText="Requested"
                   noticeColour="yellow"
                   [id]="endorsementRequest.id"
-                  [nameText]="endorsementRequest.recipientEmail"
+                  [nameText]="endorsementRequest.partyName ?? endorsementRequest.recipientEmail"
                   [collegeText]="getCollegeTextForEndorsementRequest(endorsementRequest)"></app-endorsement-card>
               </div>
             </ng-template>
@@ -123,12 +123,6 @@
           Identity Portal. Once they register, they can endorse your
           relationship request. In the future, endorsements from licenced
           providers will allow for delegated access.
-        </p>
-        <p>
-          If you have more than one member, feel free to enter a single, or as
-          many email addresses as you need. Include each email on a
-          <strong>new line</strong> and our system will send out instructions to
-          each individual listed.
         </p>
         <mat-form-field appearance="outline">
           <input
