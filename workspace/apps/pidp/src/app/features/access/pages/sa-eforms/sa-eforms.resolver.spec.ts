@@ -9,7 +9,6 @@ import {
   randLastName,
   randNumber,
   randPhoneNumber,
-  randText,
 } from '@ngneat/falso';
 import { Spy, createSpyFromClass, provideAutoSpy } from 'jest-auto-spies';
 
