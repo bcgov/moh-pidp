@@ -109,7 +109,7 @@ public class BCProviderClient : IBCProviderClient
         try
         {
             var result = await this.client.SchemaExtensions.Request().AddAsync(schemaExtension);
-            this.logger.LogRegisteredNewSchemaExtension(result.Id);
+            this.logger.LogRegisteredNewSchemaExtension(result.Id); // AAD prepends "ext########_" to the ID we specify, so we need to know the actual ID after creation.
             return result;
         }
         catch
