@@ -1,10 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { TestBed } from '@angular/core/testing';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, convertToParamMap } from '@angular/router';
 
 import {
   randEmail,
   randFirstName,
+  randFullName,
   randLastName,
   randNumber,
   randPhoneNumber,
@@ -29,6 +30,7 @@ import { PortalResource } from './portal-resource.service';
 import { PortalPage } from './portal.page';
 import { PortalService } from './portal.service';
 import { IPortalSection } from './state/portal-section.model';
+import { EndorsementsResource } from '../organization-info/pages/endorsements/endorsements-resource.service';
 
 describe('PortalPage', () => {
   let component: PortalPage;
@@ -43,6 +45,7 @@ describe('PortalPage', () => {
   beforeEach(() => {
     mockActivatedRoute = {
       snapshot: {
+        queryParamMap: convertToParamMap({ 'endorsement-token': '' }),
         data: {
           title: randTextRange({ min: 1, max: 4 }),
         },
@@ -77,6 +80,7 @@ describe('PortalPage', () => {
           }),
         },
         provideAutoSpy(DocumentService),
+        provideAutoSpy(EndorsementsResource),
       ],
     });
 
@@ -90,6 +94,11 @@ describe('PortalPage', () => {
     mockProfileStatusResponse = {
       alerts: [AlertCode.TRANSIENT_ERROR],
       status: {
+        dashboardInfo: {
+          fullName: randFullName(),
+          collegeCode: randNumber(),
+          statusCode: StatusCode.AVAILABLE,
+        },
         demographics: {
           firstName: randFirstName(),
           lastName: randLastName(),
@@ -98,8 +107,8 @@ describe('PortalPage', () => {
           statusCode: StatusCode.AVAILABLE,
         },
         collegeCertification: {
-          collegeCode: randNumber(),
-          licenceNumber: randText(),
+          hasCpn: false,
+          licenceDeclared: false,
           statusCode: StatusCode.AVAILABLE,
         },
         administratorInfo: {
@@ -108,10 +117,19 @@ describe('PortalPage', () => {
         },
         organizationDetails: { statusCode: StatusCode.AVAILABLE },
         facilityDetails: { statusCode: StatusCode.AVAILABLE },
+        endorsements: { statusCode: StatusCode.AVAILABLE },
         userAccessAgreement: { statusCode: StatusCode.AVAILABLE },
-        saEforms: { statusCode: StatusCode.AVAILABLE },
+        saEforms: { statusCode: StatusCode.AVAILABLE, incorrectLicenceType: false },
+        prescriptionRefillEforms: { statusCode: StatusCode.AVAILABLE },
+        'prescription-refill-eforms': { statusCode: StatusCode.AVAILABLE },
+        bcProvider: { statusCode: StatusCode.AVAILABLE },
         hcimAccountTransfer: { statusCode: StatusCode.AVAILABLE },
         hcimEnrolment: { statusCode: StatusCode.AVAILABLE },
+        driverFitness: { statusCode: StatusCode.AVAILABLE },
+        msTeamsPrivacyOfficer: { statusCode: StatusCode.AVAILABLE },
+        msTeamsClinicMember: { statusCode: StatusCode.AVAILABLE },
+        providerReportingPortal: { statusCode: StatusCode.AVAILABLE },
+        'provider-reporting-portal': { statusCode: StatusCode.AVAILABLE },
         sitePrivacySecurityChecklist: { statusCode: StatusCode.AVAILABLE },
         complianceTraining: { statusCode: StatusCode.AVAILABLE },
       },
@@ -128,7 +146,6 @@ describe('PortalPage', () => {
       );
 
       when('the component is initialized', () => {
-        expect(component.completedProfile).toEqual(false);
         expect(component.alerts.length).toEqual(0);
         component.ngOnInit();
 
@@ -139,9 +156,6 @@ describe('PortalPage', () => {
           );
           expect(portalServiceSpy.updateState).toHaveBeenCalledWith(
             mockProfileStatusResponse
-          );
-          expect(component.completedProfile).toEqual(
-            component.completedProfile
           );
           expect(component.alerts.length).toEqual(1);
         });
