@@ -1,6 +1,6 @@
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl } from '@angular/forms';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, FormControl, FormGroupDirective } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
 import {
@@ -58,6 +58,8 @@ export class EndorsementsPage
   extends AbstractFormPage<EndorsementsFormState>
   implements OnInit
 {
+  @ViewChild(FormGroupDirective) public formGroupDirective!: FormGroupDirective;
+
   public faUser = faUser;
   public faUserGroup = faUserGroup;
   public faArrowUp = faArrowUp;
@@ -217,8 +219,7 @@ export class EndorsementsPage
   }
 
   protected afterSubmitIsSuccessful(): void {
-    this.formState.form.reset();
-    this.formState.form.clearValidators();
+    this.formGroupDirective.resetForm();
 
     this.nonActionableEndorsementRequests$ =
       this.getNonActionableEndorsementRequests(this.partyService.partyId);
