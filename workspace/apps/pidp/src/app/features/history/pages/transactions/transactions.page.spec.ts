@@ -4,10 +4,12 @@ import { ActivatedRoute } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { randTextRange } from '@ngneat/falso';
-
-import { APP_CONFIG, APP_DI_CONFIG } from '@app/app.config';
+import { provideAutoSpy } from 'jest-auto-spies';
 
 import { TransactionsPage } from './transactions.page';
+import { TransactionsResource } from './transactions-resource.service';
+import { LoggerService } from '@app/core/services/logger.service';
+import { PartyService } from '@app/core/party/party.service';
 
 describe('TransactionsPage', () => {
   let component: TransactionsPage;
@@ -31,13 +33,12 @@ describe('TransactionsPage', () => {
       providers: [
         TransactionsPage,
         {
-          provide: APP_CONFIG,
-          useValue: APP_DI_CONFIG,
-        },
-        {
           provide: ActivatedRoute,
           useValue: mockActivatedRoute,
         },
+        provideAutoSpy(TransactionsResource),
+        provideAutoSpy(PartyService),
+        provideAutoSpy(LoggerService),
       ],
     });
 
