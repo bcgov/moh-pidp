@@ -42,6 +42,8 @@ p {
     & h3 {
       margin: var(--gap) var(--gap) var(--gap) 0;
       font-size: 1.25rem;
+      // Ensure long email addresses will wrap instead of making the card wider.
+      word-break: break-all;
     }
     & .school-box {
       padding-right: var(--gap);

@@ -34,11 +34,16 @@ public class BCProviderCreate
     {
         private readonly IBCProviderClient client;
         private readonly PidpDbContext context;
+        private readonly ILogger logger;
 
-        public CommandHandler(IBCProviderClient client, PidpDbContext context)
+        public CommandHandler(
+            IBCProviderClient client,
+            PidpDbContext context,
+            ILogger<CommandHandler> logger)
         {
             this.client = client;
             this.context = context;
+            this.logger = logger;
         }
 
         public async Task<IDomainResult> HandleAsync(Command command)
@@ -49,12 +54,20 @@ public class BCProviderCreate
                 {
                     party.FirstName,
                     party.LastName,
-                    HasBCProviderCredential = party.Credentials.Any(credential => credential.IdentityProvider == IdentityProviders.BCProvider)
+                    HasBCProviderCredential = party.Credentials.Any(credential => credential.IdentityProvider == IdentityProviders.BCProvider),
+                    Hpdid = party.Credentials.Select(credential => credential.Hpdid).Single(hpdid => hpdid != null)
                 })
                 .SingleAsync();
 
             if (party.HasBCProviderCredential)
             {
+                this.logger.LogPartyHasBCProviderCredential(command.PartyId);
+                return DomainResult.Failed();
+            }
+
+            if (party.Hpdid == null)
+            {
+                this.logger.LogNullHpdid(command.PartyId);
                 return DomainResult.Failed();
             }
 
@@ -62,7 +75,8 @@ public class BCProviderCreate
             {
                 FirstName = party.FirstName,
                 LastName = party.LastName,
-                Password = command.Password
+                Password = command.Password,
+                Hpdid = party.Hpdid
             });
 
             if (createdUser == null)
@@ -82,4 +96,13 @@ public class BCProviderCreate
             return DomainResult.Success();
         }
     }
+}
+
+public static partial class BCProviderCreateLoggingExtensions
+{
+    [LoggerMessage(1, LogLevel.Information, "Party {partyId} attempted to create a second BC Provider account.")]
+    public static partial void LogPartyHasBCProviderCredential(this ILogger logger, int partyId);
+
+    [LoggerMessage(2, LogLevel.Error, "Failed to create BC Provider for Party {partyId}, HPDID was null.")]
+    public static partial void LogNullHpdid(this ILogger logger, int partyId);
 }

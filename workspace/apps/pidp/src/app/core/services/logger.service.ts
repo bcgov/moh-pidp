@@ -7,7 +7,7 @@ import {
 } from '@bcgov/shared/utils';
 
 import { EnvironmentName } from '../../../environments/environment.model';
-import { APP_CONFIG, AppConfig } from '../../app.config';
+import { APP_CONFIG, AppConfig } from '@app/app.config';
 
 @Injectable({
   providedIn: 'root',

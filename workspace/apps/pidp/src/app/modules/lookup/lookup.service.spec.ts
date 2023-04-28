@@ -106,6 +106,10 @@ function getMockLookupConfig(): LookupConfig {
     .map((_, code) => code);
 
   return {
+    accessTypes: [...array].map((code) => ({
+      code,
+      name: randWord(),
+    })),
     colleges: [...array].map((code) => ({
       code,
       name: randSentence(),

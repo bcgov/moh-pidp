@@ -1,10 +1,10 @@
 import { TestBed } from '@angular/core/testing';
+import { HttpClient } from '@angular/common/http';
 
 import { provideAutoSpy } from 'jest-auto-spies';
 
-import { ResourceUtilsService } from '@bcgov/shared/data-access';
-
 import { AuthorizedUserService } from '@app/features/auth/services/authorized-user.service';
+import { APP_CONFIG, APP_DI_CONFIG } from '@app/app.config';
 
 import { ApiHttpClient } from '../resources/api-http-client.service';
 import { PartyResource } from './party-resource.service';
@@ -15,9 +15,12 @@ describe('PartyResource', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
-        PartyResource,
         provideAutoSpy(ApiHttpClient),
-        provideAutoSpy(ResourceUtilsService),
+        {
+          provide: APP_CONFIG,
+          useValue: APP_DI_CONFIG,
+        },
+        provideAutoSpy(HttpClient),
         provideAutoSpy(AuthorizedUserService),
       ],
     });

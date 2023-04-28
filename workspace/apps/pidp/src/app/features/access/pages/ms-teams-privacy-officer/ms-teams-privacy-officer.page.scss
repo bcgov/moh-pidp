@@ -3,6 +3,13 @@
 .viewport-all {
   --gap: 1rem;
   --font-size: 0.75rem;
+  --header-padding: 30px;
+  --endorsement-header-margin: 30px 0 30px;
+  --endorsement-card-header-font-size: 24px;
+  --endorsement-card-min-height: 300px;
+  --endorsement-card-learn-more-label-margin-right: 25px;
+  --endorsement-card-learn-more-button-length: 50px;
+  --endorsement-card-learn-more-button-font-size: 36px;
 }
 
 .viewport-small,
@@ -23,7 +30,7 @@
 
 .viewport-all {
   &.box {
-    padding: var(--header-padding) 0 var(--header-padding) var(--header-padding);
+    padding: var(--header-padding);
     & .title {
       background-color: pidp.$bcgov-color-background-grey;
       padding: 9px 24px;

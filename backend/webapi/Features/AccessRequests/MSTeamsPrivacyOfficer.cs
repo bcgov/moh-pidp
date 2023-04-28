@@ -113,7 +113,7 @@ public class MSTeamsPrivacyOfficer
             await this.context.SaveChangesAsync();
 
             await this.SendEnrolmentEmailAsync(dto, command);
-            await this.SendConfirmationEmailAsync(dto.Email, $"{dto.FirstName} {dto.LastName}");
+            await this.SendConfirmationEmailAsync(dto.Email, dto.FullName);
 
             return DomainResult.Success();
         }
@@ -158,8 +158,7 @@ public class MSTeamsPrivacyOfficer
 
         public class EnrolmentDto
         {
-            public string FirstName { get; set; } = string.Empty;
-            public string LastName { get; set; } = string.Empty;
+            public string FullName { get; set; } = string.Empty;
             public LocalDate? Birthdate { get; set; }
             public string? Email { get; set; }
             public string? Phone { get; set; }
@@ -190,7 +189,7 @@ public class MSTeamsPrivacyOfficer
             public EnrolmentEmailModel(EnrolmentDto enrolmentDto, Command command, Instant enrolmentDate, List<PlrRecord> plrRecords)
             {
                 this.EnrolmentDate = enrolmentDate.InZone(DateTimeZoneProviders.Tzdb.GetZoneOrNull("America/Vancouver")!).Date.ToString();
-                this.PrivacyOfficerName = $"{enrolmentDto.FirstName} {enrolmentDto.LastName}";
+                this.PrivacyOfficerName = enrolmentDto.FullName;
                 this.PrivacyOfficerBirthdate = enrolmentDto.Birthdate?.ToString();
                 this.PrivacyOfficerEmail = enrolmentDto.Email;
                 this.PrivacyOfficerPhone = enrolmentDto.Phone;
