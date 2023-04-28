@@ -6,6 +6,8 @@ import { provideAutoSpy } from 'jest-auto-spies';
 
 import { AdminResource } from '../../shared/resources/admin-resource.service';
 import { PartiesPage } from './parties.page';
+import { MatDialog } from '@angular/material/dialog';
+import { APP_CONFIG, APP_DI_CONFIG } from '@app/app.config';
 
 describe('PartiesComponent', () => {
   let component: PartiesPage;
@@ -31,7 +33,12 @@ describe('PartiesComponent', () => {
           provide: ActivatedRoute,
           useValue: mockActivatedRoute,
         },
+        {
+          provide: APP_CONFIG,
+          useValue: APP_DI_CONFIG,
+        },
         provideAutoSpy(AdminResource),
+        provideAutoSpy(MatDialog),
       ],
     });
 
