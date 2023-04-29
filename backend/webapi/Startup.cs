@@ -1,6 +1,7 @@
 namespace Pidp;
 
 using FluentValidation.AspNetCore;
+using MediatR;
 using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.EntityFrameworkCore;
@@ -19,6 +20,7 @@ using Pidp.Infrastructure;
 using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.HttpClients;
 using Pidp.Infrastructure.Services;
+using Pidp.Models.DomainEvents;
 
 public class Startup
 {
@@ -33,6 +35,7 @@ public class Startup
         services
             .AddAutoMapper(typeof(Startup))
             .AddHttpClients(config)
+            .AddMediatR(typeof(Startup))
             .AddKeycloakAuth(config)
             .AddScoped<IEmailService, EmailService>()
             .AddScoped<IPidpAuthorizationService, PidpAuthorizationService>()
