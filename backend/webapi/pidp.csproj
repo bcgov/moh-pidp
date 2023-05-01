@@ -18,7 +18,6 @@
     <PackageReference Include="HybridModelBinding" Version="0.18.0" />
     <PackageReference Include="IdentityModel" Version="6.0.0" />
     <PackageReference Include="MediatR" Version="12.0.1" />
-    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.1.0" />
     <PackageReference Include="MicroElements.Swashbuckle.FluentValidation" Version="5.7.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.2" />

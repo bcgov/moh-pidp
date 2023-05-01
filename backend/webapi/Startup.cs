@@ -20,7 +20,6 @@ using Pidp.Infrastructure;
 using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.HttpClients;
 using Pidp.Infrastructure.Services;
-using Pidp.Models.DomainEvents;
 
 public class Startup
 {
@@ -35,7 +34,7 @@ public class Startup
         services
             .AddAutoMapper(typeof(Startup))
             .AddHttpClients(config)
-            .AddMediatR(typeof(Startup))
+            .AddMediatR(opt => opt.RegisterServicesFromAssemblyContaining<Startup>())
             .AddKeycloakAuth(config)
             .AddScoped<IEmailService, EmailService>()
             .AddScoped<IPidpAuthorizationService, PidpAuthorizationService>()
