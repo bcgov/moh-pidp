@@ -7,7 +7,6 @@ using Pidp.Models.Lookups;
 
 public class MohKeycloakEnrolment
 {
-
     private static readonly List<MohKeycloakEnrolment> All = new();
     public static readonly MohKeycloakEnrolment DriverFitness = new("DMFT-WEBAPP", AccessTypeCode.DriverFitness, "DMFT_ENROLLED");
     public static readonly MohKeycloakEnrolment PrescriptionRefillEforms = new("SAT-EFORMS", AccessTypeCode.PrescriptionRefillEforms, "phsa_eforms_rxrefill");
