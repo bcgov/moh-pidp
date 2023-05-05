@@ -9,10 +9,12 @@ using NodaTime;
 using System.Reflection;
 
 using Pidp.Data;
+using Pidp.Models.DomainEvents;
 
 public class InMemoryDbTest : IDisposable
 {
     protected PidpDbContext TestDb { get; }
+    protected List<IDomainEvent> PublishedEvents { get; } = new();
 
     protected InMemoryDbTest()
     {
@@ -21,7 +23,11 @@ public class InMemoryDbTest : IDisposable
             .UseProjectables()
             .Options;
 
-        this.TestDb = new PidpDbContext(options, SystemClock.Instance, A.Fake<IMediator>());
+        var mediator = A.Fake<IMediator>();
+        A.CallTo(() => mediator.Publish(A<IDomainEvent>._, A<CancellationToken>._))
+           .Invokes(i => this.PublishedEvents.Add(i.GetArgument<IDomainEvent>(0)!));
+
+        this.TestDb = new PidpDbContext(options, SystemClock.Instance, mediator);
         this.TestDb.Database.EnsureCreated();
     }
 
