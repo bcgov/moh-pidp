@@ -175,7 +175,6 @@
         <ng-container
           *ngTemplateOutlet="rostering"></ng-container>
       </app-auth-system-card>
-      <ng-container *ngTemplateOutlet="comingSoon"></ng-container>
     </div>
   </div>
 </ng-template>
@@ -214,26 +213,6 @@
       which the primary care organization or provider is responsible and
       facilitates an ongoing relationship between the patient and provider.
     </p>
-  </div>
-</ng-template>
-<ng-template #comingSoon>
-  <div class="card-content card-coming-soon">
-    <header>
-      <div class="coming-soon-header-content">
-        <div><h2>Coming Soon</h2></div>
-        <div>
-          <mat-icon class="material-icons-outlined">verified</mat-icon>
-        </div>
-      </div>
-    </header>
-    <div class="coming-soon-text-container">
-      <div class="coming-soon-text">
-        <p>
-          For private clinics in the Fraser Health Authority region: Enrolment
-          to Microsoft Teams for Clinical Use.
-        </p>
-      </div>
-    </div>
   </div>
 </ng-template>
 <ng-template #admin>
