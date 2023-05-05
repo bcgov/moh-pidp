@@ -78,20 +78,9 @@ a {
     }
   }
 
-  & .card-pharmacare {
-    background-color: pidp.$bcgov-color-background-grey;
-  }
-  & .card-hcimweb {
-    background-color: pidp.$bcgov-color-primary;
-
-    & p {
-      color: #ffffff;
-    }
-
     & .hcimweb-arrows {
       color: pidp.$bcgov-color-semantic-success;
     }
-  }
   & .card-coming-soon {
     background-color: pidp.$bcgov-color-background-darker-grey;
 
@@ -177,18 +166,14 @@ a {
       & .card-content {
         padding: 30px;
       }
-
+      
+      & .card-rostering,
       & .card-pharmacare {
         padding: 0 30px 18px;
       }
 
       & .card-hcimweb {
-        padding: 30px;
-
-        & p {
-          font-size: 1.75em;
-          line-height: 1.6;
-        }
+        padding: 0 30px 18px;
 
         & .hcimweb-arrows {
           display: flex;
@@ -403,12 +388,6 @@ a {
         display: flex;
       }
       & .card-hcimweb {
-        padding: 30px;
-
-        & p {
-          font-size: 1.75em;
-          line-height: 2;
-        }
 
         & .hcimweb-arrows {
           display: flex;
@@ -562,12 +541,6 @@ a {
       }
 
       & .card-hcimweb {
-        padding: 10px;
-
-        & p {
-          font-size: 1em;
-          line-height: 1.6;
-        }
 
         & .hcimweb-arrows {
           mat-icon {
@@ -675,12 +648,6 @@ a {
       }
 
       & .card-hcimweb {
-        padding: 24px;
-
-        & p {
-          font-size: 1.5em;
-          line-height: 1.8;
-        }
 
         & .hcimweb-arrows {
           mat-icon {
