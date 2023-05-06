@@ -41,6 +41,7 @@ export class LoginPage {
   public isAdminLogin: boolean;
   public prescriptionRenewalSupportUrl: string;
   public bcscAppDownload: string;
+  public showOtherLogin: boolean;
 
   public IdentityProvider = IdentityProvider;
 
@@ -77,6 +78,7 @@ export class LoginPage {
     this.viewportService.viewportBroadcast$.subscribe((viewport) =>
       this.onViewportChange(viewport)
     );
+    this.showOtherLogin = false;
   }
   private onViewportChange(viewport: PidpViewport): void {
     this.viewport = viewport;
@@ -106,6 +108,10 @@ export class LoginPage {
       fragment: 'systems',
       queryParamsHandling: 'preserve',
     });
+  }
+
+  public onShowOtherLoginOptions(): void {
+    this.showOtherLogin = !this.showOtherLogin;
   }
 
   public onLogin(idpHint: IdentityProvider): void {

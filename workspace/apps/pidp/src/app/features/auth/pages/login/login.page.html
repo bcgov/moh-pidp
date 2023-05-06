@@ -48,7 +48,6 @@
               loading="lazy"
               aria-label="PIDP Logo" />
           </div>
-          <h1 id="welcome" class="welcome-title">Welcome</h1>
           <ng-container *ngTemplateOutlet="login"></ng-container>
         </div>
       </section>
@@ -77,40 +76,44 @@
       </div>
 
       <div class="login-continue-with">
-        <div class="login-line-container">
-          <hr class="login-line" />
-        </div>
-        <span class="login-continue-with-text">Or continue with</span>
-        <div class="login-line-container">
-          <hr class="login-line" />
-        </div>
+        <div class="login-line-container"></div>
+        <span class="login-continue-with-text">Other login options</span>
+        <button
+          class="other-login-button"
+          mat-icon-button
+          (click)="onShowOtherLoginOptions()">
+          <i class="material-icons">keyboard_double_arrow_down</i>
+        </button>
+        <div class="login-line-container"></div>
       </div>
 
-      <div class="login-secondary-container">
-        <button
-          class="login-button-secondary"
-          mat-stroked-button
-          (click)="onLogin(IdentityProvider.PHSA)">
-          Login with your Health Authority ID
-        </button>
-        <button
-          class="login-button-secondary"
-          mat-stroked-button
-          (click)="onLogin(IdentityProvider.BC_PROVIDER)">
-          Login with BC Provider
-        </button>
-      </div>
-      <div class="login-with-idir">
-        <small
-          >Do you have a IDIR account?
-          <a
-            href="javascript:"
-            role="button"
-            (click)="onLogin(IdentityProvider.IDIR)"
-            >Login</a
-          ></small
-        >
-      </div>
+      <ng-container *ngIf="showOtherLogin">
+        <div class="login-secondary-container">
+          <button
+            class="login-button-secondary"
+            mat-stroked-button
+            (click)="onLogin(IdentityProvider.PHSA)">
+            Health Authority ID
+          </button>
+          <button
+            class="login-button-secondary"
+            mat-stroked-button
+            (click)="onLogin(IdentityProvider.BC_PROVIDER)">
+            BC Provider
+          </button>
+        </div>
+        <div class="login-with-idir">
+          <small
+            >Do you have a IDIR account?
+            <a
+              href="javascript:"
+              role="button"
+              (click)="onLogin(IdentityProvider.IDIR)"
+              >Login</a
+            ></small
+          >
+        </div>
+      </ng-container>
     </div>
   </div>
 </ng-template>
