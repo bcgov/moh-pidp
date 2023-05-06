@@ -54,11 +54,9 @@ a {
         & .login-line-container {
           flex: 1;
         }
-        & hr {
-          margin-left: 20px;
-          margin-right: 20px;
-          height: 2px;
-          background-color: #000000;
+        & .other-login-button {
+          margin: 5px;
+          border: none;
         }
       }
 
@@ -144,6 +142,9 @@ a {
         text-align: center;
         font-size: 3.5em;
         letter-spacing: 0.15em;
+      }
+      & .login-container {
+        margin-top: 30px;
       }
       & .login-content {
         & button {
@@ -297,7 +298,7 @@ a {
       height: 100%;
       display: flex;
       justify-content: center;
-      align-items: center;
+      align-items: start;
       margin: auto;
 
       & .welcome-container {
@@ -307,6 +308,7 @@ a {
         & .welcome-pidp-logo {
           display: flex;
           justify-content: center;
+          margin-top: 180px;
           & img {
             width: 250px;
           }
