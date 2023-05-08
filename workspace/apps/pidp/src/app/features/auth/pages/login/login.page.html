@@ -124,18 +124,18 @@
         class="systems-card"
         titleText="Special Authority eForms"
         imageTitleText=""
-        [headerColor]="hcimWebHeaderColor"
+        headerColor="white"
         [webpImageUrls]="[
           '/assets/images/login-laptop-mobile-1200x200.webp',
-          '/assets/images/login-laptop-small-70x350.webp',
-          '/assets/images/login-laptop-medium-70x350.webp',
-          '/assets/images/login-laptop-desktop-140x600.webp'
+          '/assets/images/login-laptop-small-196x101.webp',
+          '/assets/images/login-laptop-medium-300x155.webp',
+          '/assets/images/login-laptop-desktop-386x200.webp'
         ]"
         [jpegImageUrls]="[
           '/assets/images/login-laptop-mobile-1200x200.jpg',
-          '/assets/images/login-laptop-small-70x350.jpg',
-          '/assets/images/login-laptop-medium-70x350.jpg',
-          '/assets/images/login-laptop-desktop-140x600.jpg'
+          '/assets/images/login-laptop-small-196x101.jpg',
+          '/assets/images/login-laptop-medium-300x155.jpg',
+          '/assets/images/login-laptop-desktop-386x200.jpg'
         ]">
         <ng-container *ngTemplateOutlet="pharmacareEforms"></ng-container>
       </app-auth-system-card>
@@ -146,39 +146,38 @@
         headerColor="white"
         [webpImageUrls]="[
           '/assets/images/login-people-mobile-1200x200.webp',
-          '/assets/images/login-people-small-70x350.webp',
-          '/assets/images/login-people-medium-70x350.webp',
-          '/assets/images/login-people-desktop-140x600.webp'
+          '/assets/images/login-people-small-196x101.webp',
+          '/assets/images/login-people-medium-300x155.webp',
+          '/assets/images/login-people-desktop-386x200.webp'
         ]"
         [jpegImageUrls]="[
           '/assets/images/login-people-mobile-1200x200.jpg',
-          '/assets/images/login-people-small-70x350.jpg',
-          '/assets/images/login-people-medium-70x350.jpg',
-          '/assets/images/login-people-desktop-140x600.jpg'
+          '/assets/images/login-people-small-196x101.jpg',
+          '/assets/images/login-people-medium-300x155.jpg',
+          '/assets/images/login-people-desktop-386x200.jpg'
         ]">
         <ng-container *ngTemplateOutlet="hcimWeb"></ng-container>
       </app-auth-system-card>
       <app-auth-system-card
         class="systems-card"
-        titleText="Provincial Prescription Renewal Support Service eForm"
+        titleText="Rostering B.C. healthcare"
         imageTitleText=""
         headerColor="white"
         [webpImageUrls]="[
-          '/assets/images/login-prescription-mobile-1200x200.webp',
-          '/assets/images/login-prescription-small-70x350.webp',
-          '/assets/images/login-prescription-medium-70x350.webp',
-          '/assets/images/login-prescription-desktop-140x600.webp'
+          '/assets/images/login-rostering-mobile-1200x200.webp',
+          '/assets/images/login-rostering-small-196x101.webp',
+          '/assets/images/login-rostering-medium-300x155.webp',
+          '/assets/images/login-rostering-desktop-386x200.webp'
         ]"
         [jpegImageUrls]="[
-          '/assets/images/login-prescription-mobile-1200x200.jpg',
-          '/assets/images/login-prescription-small-70x350.jpg',
-          '/assets/images/login-prescription-medium-70x350.jpg',
-          '/assets/images/login-prescription-desktop-140x600.jpg'
+          '/assets/images/login-rostering-mobile-1200x200.jpg',
+          '/assets/images/login-rostering-small-196x101.jpg',
+          '/assets/images/login-rostering-medium-300x155.jpg',
+          '/assets/images/login-rostering-desktop-386x200.jpg'
         ]">
         <ng-container
-          *ngTemplateOutlet="prescriptionRefillEforms"></ng-container>
+          *ngTemplateOutlet="rostering"></ng-container>
       </app-auth-system-card>
-      <ng-container *ngTemplateOutlet="comingSoon"></ng-container>
     </div>
   </div>
 </ng-template>
@@ -208,39 +207,15 @@
     </div>
   </div>
 </ng-template>
-<ng-template #prescriptionRefillEforms>
-  <div class="card-content card-pharmacare">
+<ng-template #rostering>
+  <div class="card-content card-rostering">
     <p>
-      Pharmacists can enrol for access to the Provincial Prescription Renewal
-      Support Service eForm. You need to set up the
-      <a uiAnchor [attr.href]="bcscAppDownload">BC Services Card app</a>
-      to enrol. You will use the app each time you access the Provincial
-      Prescription Renewal Support Service eForm. See
-      <a uiAnchor [attr.href]="prescriptionRenewalSupportUrl"
-        >Prescription Renewal Support</a
-      >
-      for more information.
+      Patient rostering in family practice is a process by which patients
+      register with a family practice, family physician, or team. Patient
+      rostering facilitates accountability by afining the population for
+      which the primary care organization or provider is responsible and
+      facilitates an ongoing relationship between the patient and provider.
     </p>
-  </div>
-</ng-template>
-<ng-template #comingSoon>
-  <div class="card-content card-coming-soon">
-    <header>
-      <div class="coming-soon-header-content">
-        <div><h2>Coming Soon</h2></div>
-        <div>
-          <mat-icon class="material-icons-outlined">verified</mat-icon>
-        </div>
-      </div>
-    </header>
-    <div class="coming-soon-text-container">
-      <div class="coming-soon-text">
-        <p>
-          For private clinics in the Fraser Health Authority region: Enrolment
-          to Microsoft Teams for Clinical Use.
-        </p>
-      </div>
-    </div>
   </div>
 </ng-template>
 <ng-template #admin>

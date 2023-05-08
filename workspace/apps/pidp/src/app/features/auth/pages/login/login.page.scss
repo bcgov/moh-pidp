@@ -76,27 +76,9 @@ a {
     }
   }
 
-  & .card-pharmacare {
-    background-color: pidp.$bcgov-color-background-grey;
-  }
-  & .card-hcimweb {
-    background-color: pidp.$bcgov-color-primary;
-
-    & p {
-      color: #ffffff;
-    }
-
     & .hcimweb-arrows {
       color: pidp.$bcgov-color-semantic-success;
     }
-  }
-  & .card-coming-soon {
-    background-color: pidp.$bcgov-color-background-darker-grey;
-
-    & mat-icon {
-      color: pidp.$bcgov-color-semantic-success;
-    }
-  }
 }
 
 // This section is optimized for iPhone SE
@@ -178,18 +160,14 @@ a {
       & .card-content {
         padding: 30px;
       }
-
+      
+      & .card-rostering,
       & .card-pharmacare {
         padding: 0 30px 18px;
       }
 
       & .card-hcimweb {
-        padding: 30px;
-
-        & p {
-          font-size: 1.75em;
-          line-height: 1.6;
-        }
+        padding: 0 30px 18px;
 
         & .hcimweb-arrows {
           display: flex;
@@ -200,36 +178,6 @@ a {
             height: 80px;
             width: 80px;
           }
-        }
-      }
-
-      & .card-coming-soon {
-        & header {
-          display: flex;
-          & h2 {
-            text-align: center;
-            font-size: 2em;
-            line-height: 1;
-            margin: 0;
-          }
-          & .coming-soon-header-content {
-            display: grid;
-            grid-template-columns: auto auto;
-            column-gap: 20px;
-
-            & div {
-              display: flex;
-              align-items: center;
-            }
-            & mat-icon {
-              font-size: 54px;
-              height: 54px;
-              width: 54px;
-            }
-          }
-        }
-        & .coming-soon-text-container {
-          margin-top: 20px;
         }
       }
     }
@@ -378,7 +326,7 @@ a {
       & .systems-title {
         margin: 25px;
         text-align: center;
-        font-size: 4em;
+        font-size: 3.125em;
         line-height: 1;
       }
 
@@ -405,12 +353,6 @@ a {
         display: flex;
       }
       & .card-hcimweb {
-        padding: 30px;
-
-        & p {
-          font-size: 1.75em;
-          line-height: 2;
-        }
 
         & .hcimweb-arrows {
           display: flex;
@@ -421,45 +363,6 @@ a {
             height: 100px;
             width: 100px;
           }
-        }
-      }
-
-      & .card-coming-soon {
-        grid-column-start: span 3;
-        border: solid 1px pidp.$bcgov-color-component;
-        display: flex;
-        flex-direction: column;
-        padding: 60px 40px 30px;
-
-        & header {
-          display: flex;
-          justify-content: center;
-          & h2 {
-            text-align: center;
-            font-size: 4em;
-            line-height: 1;
-            margin: 0;
-          }
-          & .coming-soon-header-content {
-            display: grid;
-            grid-template-columns: auto auto;
-            column-gap: 75px;
-
-            & div {
-              display: flex;
-              align-items: center;
-            }
-            & mat-icon {
-              font-size: 72px;
-              height: 72px;
-              width: 72px;
-            }
-          }
-        }
-        & .coming-soon-text-container {
-          display: flex;
-          justify-content: center;
-          margin-top: 20px;
         }
       }
     }
@@ -548,7 +451,7 @@ a {
     & .systems-section {
       & .systems-title {
         margin: 20px;
-        font-size: 2.5em;
+        font-size: 2em;
       }
 
       & .systems-content {
@@ -564,12 +467,6 @@ a {
       }
 
       & .card-hcimweb {
-        padding: 10px;
-
-        & p {
-          font-size: 1em;
-          line-height: 1.6;
-        }
 
         & .hcimweb-arrows {
           mat-icon {
@@ -578,28 +475,6 @@ a {
             height: 80px;
             width: 80px;
           }
-        }
-      }
-
-      & .card-coming-soon {
-        padding: 30px 20px 10px;
-
-        & header {
-          & h2 {
-            font-size: 1.75em;
-          }
-          & .coming-soon-header-content {
-            column-gap: 20px;
-
-            & mat-icon {
-              font-size: 32px;
-              height: 32px;
-              width: 32px;
-            }
-          }
-        }
-        & .coming-soon-text-container {
-          margin: 10px 40px;
         }
       }
     }
@@ -662,7 +537,7 @@ a {
     & .systems-section {
       & .systems-title {
         margin: 20px;
-        font-size: 3.5em;
+        font-size: 2.75em;
       }
 
       & .systems-content {
@@ -677,12 +552,6 @@ a {
       }
 
       & .card-hcimweb {
-        padding: 24px;
-
-        & p {
-          font-size: 1.5em;
-          line-height: 1.8;
-        }
 
         & .hcimweb-arrows {
           mat-icon {
@@ -690,28 +559,6 @@ a {
             height: 80px;
             width: 80px;
           }
-        }
-      }
-
-      & .card-coming-soon {
-        padding: 45px 30px 15px;
-
-        & header {
-          & h2 {
-            font-size: 3em;
-          }
-          & .coming-soon-header-content {
-            column-gap: 60px;
-
-            & mat-icon {
-              font-size: 64px;
-              height: 64px;
-              width: 64px;
-            }
-          }
-        }
-        & .coming-soon-text-container {
-          margin-top: 20px;
         }
       }
     }
