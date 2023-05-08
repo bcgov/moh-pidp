@@ -4,11 +4,10 @@ using FakeItEasy;
 using NodaTime;
 using Xunit;
 
+using static Pidp.Features.Parties.LicenceDeclaration;
 using Pidp.Models.DomainEvents;
 using Pidp.Models.Lookups;
-using Pidp.Infrastructure.HttpClients.Keycloak;
 using Pidp.Infrastructure.HttpClients.Plr;
-using static Pidp.Features.Parties.LicenceDeclaration;
 using PidpTests.TestingExtensions;
 
 public class LicenceDeclarationTests : InMemoryDbTest

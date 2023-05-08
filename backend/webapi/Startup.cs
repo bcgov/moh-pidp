@@ -1,7 +1,6 @@
 namespace Pidp;
 
 using FluentValidation.AspNetCore;
-using MediatR;
 using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.EntityFrameworkCore;
