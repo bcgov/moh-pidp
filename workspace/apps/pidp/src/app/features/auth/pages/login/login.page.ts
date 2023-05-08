@@ -1,3 +1,10 @@
+import {
+  animate,
+  state,
+  style,
+  transition,
+  trigger,
+} from '@angular/animations';
 import { Component, Inject } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -28,6 +35,19 @@ export interface LoginPageRouteData {
   selector: 'app-login',
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
+  animations: [
+    trigger('expandAnimation', [
+      state(
+        'true',
+        style({ maxHeight: '500px', opacity: 1, transform: 'translateY(0)' })
+      ),
+      state(
+        'false',
+        style({ maxHeight: '0', opacity: 0, transform: 'translateY(-10px)' })
+      ),
+      transition('true <=> false', animate('300ms ease-out')),
+    ]),
+  ],
 })
 export class LoginPage {
   public viewportOptions = PidpViewport;
@@ -41,7 +61,7 @@ export class LoginPage {
   public isAdminLogin: boolean;
   public prescriptionRenewalSupportUrl: string;
   public bcscAppDownload: string;
-  public showOtherLogin: boolean;
+  public showOtherLoginOptions: boolean;
 
   public IdentityProvider = IdentityProvider;
 
@@ -78,7 +98,7 @@ export class LoginPage {
     this.viewportService.viewportBroadcast$.subscribe((viewport) =>
       this.onViewportChange(viewport)
     );
-    this.showOtherLogin = false;
+    this.showOtherLoginOptions = false;
   }
   private onViewportChange(viewport: PidpViewport): void {
     this.viewport = viewport;
@@ -111,7 +131,7 @@ export class LoginPage {
   }
 
   public onShowOtherLoginOptions(): void {
-    this.showOtherLogin = !this.showOtherLogin;
+    this.showOtherLoginOptions = !this.showOtherLoginOptions;
   }
 
   public onLogin(idpHint: IdentityProvider): void {

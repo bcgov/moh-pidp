@@ -76,44 +76,47 @@
       </div>
 
       <div class="login-continue-with">
-        <div class="login-line-container"></div>
-        <span class="login-continue-with-text">Other login options</span>
-        <button
-          class="other-login-button"
-          mat-icon-button
-          (click)="onShowOtherLoginOptions()">
-          <i class="material-icons">keyboard_double_arrow_down</i>
-        </button>
-        <div class="login-line-container"></div>
+        <div>
+          <span class="login-continue-with-text">Other login options</span>
+          <button
+            class="other-login-button"
+            mat-icon-button
+            (click)="onShowOtherLoginOptions()">
+            <i class="material-icons">keyboard_double_arrow_down</i>
+          </button>
+        </div>
+        <div
+          class="other-login-panel"
+          [@expandAnimation]="showOtherLoginOptions">
+          <ng-container *ngIf="showOtherLoginOptions">
+            <div class="login-secondary-container">
+              <button
+                class="login-button-secondary"
+                mat-stroked-button
+                (click)="onLogin(IdentityProvider.PHSA)">
+                Health Authority ID
+              </button>
+              <button
+                class="login-button-secondary"
+                mat-stroked-button
+                (click)="onLogin(IdentityProvider.BC_PROVIDER)">
+                BC Provider
+              </button>
+            </div>
+            <div class="login-with-idir">
+              <small
+                >Do you have a IDIR account?
+                <a
+                  href="javascript:"
+                  role="button"
+                  (click)="onLogin(IdentityProvider.IDIR)"
+                  >Login</a
+                ></small
+              >
+            </div>
+          </ng-container>
+        </div>
       </div>
-
-      <ng-container *ngIf="showOtherLogin">
-        <div class="login-secondary-container">
-          <button
-            class="login-button-secondary"
-            mat-stroked-button
-            (click)="onLogin(IdentityProvider.PHSA)">
-            Health Authority ID
-          </button>
-          <button
-            class="login-button-secondary"
-            mat-stroked-button
-            (click)="onLogin(IdentityProvider.BC_PROVIDER)">
-            BC Provider
-          </button>
-        </div>
-        <div class="login-with-idir">
-          <small
-            >Do you have a IDIR account?
-            <a
-              href="javascript:"
-              role="button"
-              (click)="onLogin(IdentityProvider.IDIR)"
-              >Login</a
-            ></small
-          >
-        </div>
-      </ng-container>
     </div>
   </div>
 </ng-template>
@@ -175,8 +178,7 @@
           '/assets/images/login-rostering-medium-300x155.jpg',
           '/assets/images/login-rostering-desktop-386x200.jpg'
         ]">
-        <ng-container
-          *ngTemplateOutlet="rostering"></ng-container>
+        <ng-container *ngTemplateOutlet="rostering"></ng-container>
       </app-auth-system-card>
     </div>
   </div>
@@ -212,9 +214,9 @@
     <p>
       Patient rostering in family practice is a process by which patients
       register with a family practice, family physician, or team. Patient
-      rostering facilitates accountability by afining the population for
-      which the primary care organization or provider is responsible and
-      facilitates an ongoing relationship between the patient and provider.
+      rostering facilitates accountability by afining the population for which
+      the primary care organization or provider is responsible and facilitates
+      an ongoing relationship between the patient and provider.
     </p>
   </div>
 </ng-template>
