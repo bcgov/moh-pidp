@@ -29,6 +29,11 @@ a {
         & .login-continue-with {
           margin-bottom: 20px;
         }
+        & .other-login-panel {
+          overflow: hidden;
+          opacity: 0;
+          transition: opacity 0.3s ease-out, max-height 0.3s ease-out;
+        }
       }
 
       & .login-app-button {
@@ -47,18 +52,16 @@ a {
       & .login-continue-with {
         display: flex;
         margin-bottom: 20px;
+        flex-direction: column;
+        align-items: center;
 
         & .login-continue-with-text {
           margin: auto;
         }
-        & .login-line-container {
-          flex: 1;
-        }
-        & hr {
-          margin-left: 20px;
-          margin-right: 20px;
-          height: 2px;
-          background-color: #000000;
+
+        & .other-login-button {
+          margin: 5px;
+          border: none;
         }
       }
 
@@ -78,9 +81,9 @@ a {
     }
   }
 
-    & .hcimweb-arrows {
-      color: pidp.$bcgov-color-semantic-success;
-    }
+  & .hcimweb-arrows {
+    color: pidp.$bcgov-color-semantic-success;
+  }
 }
 
 // This section is optimized for iPhone SE
@@ -127,6 +130,9 @@ a {
         font-size: 3.5em;
         letter-spacing: 0.15em;
       }
+      & .login-container {
+        margin-top: 30px;
+      }
       & .login-content {
         & button {
           font-size: 1em;
@@ -159,7 +165,7 @@ a {
       & .card-content {
         padding: 30px;
       }
-      
+
       & .card-rostering,
       & .card-pharmacare {
         padding: 0 30px 18px;
@@ -197,7 +203,7 @@ a {
     padding: 50px 0;
 
     & .title-container {
-      background-image: url('/assets/images/login-bridge-desktop-830x920.jpg');
+      background-image: url('/assets/images/login-bridge-desktop-830x740.jpg');
       background-repeat: no-repeat;
       background-size: cover;
       background-position: center center;
@@ -245,7 +251,7 @@ a {
       height: 100%;
       display: flex;
       justify-content: center;
-      align-items: center;
+      align-items: start;
       margin: auto;
 
       & .welcome-container {
@@ -255,6 +261,7 @@ a {
         & .welcome-pidp-logo {
           display: flex;
           justify-content: center;
+          margin-top: 180px;
           & img {
             width: 250px;
           }
@@ -351,7 +358,6 @@ a {
         display: flex;
       }
       & .card-hcimweb {
-
         & .hcimweb-arrows {
           display: flex;
           justify-content: flex-end;
@@ -465,7 +471,6 @@ a {
       }
 
       & .card-hcimweb {
-
         & .hcimweb-arrows {
           mat-icon {
             margin-right: 20px;
@@ -550,7 +555,6 @@ a {
       }
 
       & .card-hcimweb {
-
         & .hcimweb-arrows {
           mat-icon {
             font-size: 80px;
