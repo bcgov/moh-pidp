@@ -31,6 +31,9 @@ export class PortalCardComponent {
   public get showLearnMore(): boolean {
     return !this.showCompleted && !this.section.action.disabled;
   }
+  public get showVisit(): boolean {
+    return !!this.section.action.openInNewTab;
+  }
   public get hasImageCssClass(): boolean {
     return (
       this.isFirst &&

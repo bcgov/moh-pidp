@@ -434,5 +434,24 @@ public partial class ProfileStatus
             }
         }
 
+        public class PrimaryCareRosteringSection : ProfileSection
+        {
+            internal override string SectionName => "primaryCareRostering";
+
+            protected override StatusCode Compute(ProfileData profile)
+            {
+                // TODO: Add primary care rostering requirements:
+                // * Doctor of Medicine (MD) or Registered Nurse Practitioner (RNP) provider role type
+                // * Endorsed by a regulated identity
+                // Should show as enrolled if you have a MOA, RNP or MD keycloak role essentially. (This is the minimal rostering requirement)
+                
+                // if (!profile.UserIsHighAssuranceIdentity)
+                // {
+                //     return StatusCode.Hidden;
+                // }
+
+                return StatusCode.Locked;
+            }
+        }
     }
 }

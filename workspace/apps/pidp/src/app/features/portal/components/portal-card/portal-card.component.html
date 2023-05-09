@@ -14,11 +14,11 @@
   <p class="hint">{{ section.hint }}</p>
   <div
     class="actions"
-    [ngClass]="{ center: showCompleted, right: showLearnMore }">
+    [ngClass]="{ center: showCompleted, right: showLearnMore || showVisit}">
     <ng-container *ngIf="showCompleted && this.hasImageCssClass">
       <div class="completed-badge">
-        <span class="completed-text">Completed</span
-        ><fa-icon [icon]="faThumbsUp"></fa-icon>
+        <span class="completed-text">Completed</span>
+        <fa-icon [icon]="faThumbsUp"></fa-icon>
       </div>
       <button
         *ngIf="!section.action.disabled"
@@ -53,6 +53,16 @@
         (click)="onClick(section)">
         <fa-icon [icon]="faPlus"></fa-icon>
       </button>
+    </ng-container>
+    <ng-container *ngIf="showVisit">
+      <a
+        mat-flat-button
+        aria-label="Visit B.C. Rostering website"
+        color="primary"
+        [href]="section.action.route"
+        target="_blank">
+        Visit
+      </a>
     </ng-container>
   </div>
 </div>
