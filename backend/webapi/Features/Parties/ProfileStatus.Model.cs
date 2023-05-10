@@ -2,6 +2,7 @@ namespace Pidp.Features.Parties;
 
 using NodaTime;
 using Pidp.Features.AccessRequests;
+using Pidp.Infrastructure.HttpClients.Plr;
 using Pidp.Models.Lookups;
 
 public partial class ProfileStatus
@@ -440,17 +441,17 @@ public partial class ProfileStatus
 
             protected override StatusCode Compute(ProfileData profile)
             {
-                // TODO: Add primary care rostering requirements:
-                // * Doctor of Medicine (MD) or Registered Nurse Practitioner (RNP) provider role type
-                // * Endorsed by a regulated identity
-                // Should show as enrolled if you have a MOA, RNP or MD keycloak role essentially. (This is the minimal rostering requirement)
-                
-                // if (!profile.UserIsHighAssuranceIdentity)
-                // {
-                //     return StatusCode.Hidden;
-                // }
+                if (profile.PartyPlrStanding
+                        .With(
+                            ProviderRoleType.MedicalDoctor,
+                            ProviderRoleType.MedicalOfficeAssistant,
+                            ProviderRoleType.RegisteredNursePractitioner)
+                        .HasGoodStanding)
+                {
+                    return StatusCode.Locked;
+                }
 
-                return StatusCode.Locked;
+                return StatusCode.Hidden;
             }
         }
     }
