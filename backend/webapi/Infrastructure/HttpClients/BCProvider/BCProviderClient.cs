@@ -7,7 +7,7 @@ public class BCProviderClient : IBCProviderClient
     private readonly GraphServiceClient client;
     private readonly ILogger logger;
     private readonly string domain;
-    private readonly string schemaExtensionId;
+    private readonly string clientId;
 
     public BCProviderClient(
         GraphServiceClient client,
@@ -17,7 +17,7 @@ public class BCProviderClient : IBCProviderClient
         this.client = client;
         this.logger = logger;
         this.domain = config.BCProviderClient.Domain;
-        this.schemaExtensionId = config.BCProviderClient.SchemaExtensionId;
+        this.clientId = config.BCProviderClient.ClientId;
     }
 
     public async Task<User?> CreateBCProviderAccount(UserRepresentation userRepresentation)
@@ -41,7 +41,7 @@ public class BCProviderClient : IBCProviderClient
                 ForceChangePasswordNextSignIn = false,
                 Password = userRepresentation.Password
             },
-            AdditionalData = new BCProviderDirectoryExtension(3, userRepresentation.Hpdid).AsAdditionalData(this.schemaExtensionId)
+            AdditionalData = new BCProviderDirectoryExtension(userRepresentation).AsAdditionalData(this.clientId)
         };
 
         try
