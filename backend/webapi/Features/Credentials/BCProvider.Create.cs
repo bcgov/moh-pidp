@@ -112,7 +112,7 @@ public static partial class BCProviderCreateLoggingExtensions
 
     [LoggerMessage(2, LogLevel.Error, "Failed to create BC Provider for Party {partyId}, HPDID was null.")]
     public static partial void LogNullHpdid(this ILogger logger, int partyId);
-}
+
     [LoggerMessage(3, LogLevel.Information, "Email for Party {partyId} was null.")]
     public static partial void LogNullEmail(this ILogger logger, int partyId);
 }
