@@ -441,9 +441,13 @@ public partial class ProfileStatus
 
             protected override StatusCode Compute(ProfileData profile)
             {
-                if (profile.UserIsInMOARole)
+                if (profile.EndorsementPlrStanding
+                        .With(
+                            ProviderRoleType.MedicalDoctor,
+                            ProviderRoleType.RegisteredNursePractitioner)
+                        .HasGoodStanding)
                 {
-                    return StatusCode.Locked;
+                    return StatusCode.Incomplete;
                 }
 
                 if (profile.PartyPlrStanding
@@ -452,10 +456,10 @@ public partial class ProfileStatus
                             ProviderRoleType.RegisteredNursePractitioner)
                         .HasGoodStanding)
                 {
-                    return StatusCode.Locked;
+                    return StatusCode.Incomplete;
                 }
 
-                return StatusCode.Hidden;
+                return StatusCode.Locked;
             }
         }
     }

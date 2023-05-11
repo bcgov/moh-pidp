@@ -29,7 +29,7 @@ export class PortalCardComponent {
     return show;
   }
   public get showLearnMore(): boolean {
-    return !this.showCompleted && !this.section.action.disabled;
+    return !this.showCompleted && !this.section.action.disabled && !this.section.action.openInNewTab;
   }
   public get showVisit(): boolean {
     return !!this.section.action.openInNewTab;

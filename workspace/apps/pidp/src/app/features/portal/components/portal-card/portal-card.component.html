@@ -56,6 +56,7 @@
     </ng-container>
     <ng-container *ngIf="showVisit">
       <a
+        *ngIf="!section.action.disabled"
         mat-flat-button
         aria-label="Visit B.C. Rostering website"
         color="primary"
