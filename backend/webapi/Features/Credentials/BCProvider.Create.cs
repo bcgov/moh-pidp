@@ -55,7 +55,8 @@ public class BCProviderCreate
                     party.FirstName,
                     party.LastName,
                     HasBCProviderCredential = party.Credentials.Any(credential => credential.IdentityProvider == IdentityProviders.BCProvider),
-                    Hpdid = party.Credentials.Select(credential => credential.Hpdid).Single(hpdid => hpdid != null)
+                    Hpdid = party.Credentials.Select(credential => credential.Hpdid).Single(hpdid => hpdid != null),
+                    party.Email
                 })
                 .SingleAsync();
 
@@ -71,12 +72,18 @@ public class BCProviderCreate
                 return DomainResult.Failed();
             }
 
+            if (party.Email == null)
+            {
+                this.logger.LogNullEmail(command.PartyId);
+            }
+
             var createdUser = await this.client.CreateBCProviderAccount(new UserRepresentation
             {
                 FirstName = party.FirstName,
                 LastName = party.LastName,
                 Password = command.Password,
-                Hpdid = party.Hpdid
+                Hpdid = party.Hpdid,
+                PidpEmail = party.Email
             });
 
             if (createdUser == null)
@@ -105,4 +112,7 @@ public static partial class BCProviderCreateLoggingExtensions
 
     [LoggerMessage(2, LogLevel.Error, "Failed to create BC Provider for Party {partyId}, HPDID was null.")]
     public static partial void LogNullHpdid(this ILogger logger, int partyId);
+}
+    [LoggerMessage(3, LogLevel.Information, "Email for Party {partyId} was null.")]
+    public static partial void LogNullEmail(this ILogger logger, int partyId);
 }

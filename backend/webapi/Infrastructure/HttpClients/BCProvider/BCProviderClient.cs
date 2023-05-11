@@ -41,7 +41,7 @@ public class BCProviderClient : IBCProviderClient
                 ForceChangePasswordNextSignIn = false,
                 Password = userRepresentation.Password
             },
-            AdditionalData = new BCProviderSchemaExtension(3, userRepresentation.Hpdid).AsAdditionalData(this.schemaExtensionId)
+            AdditionalData = new BCProviderDirectoryExtension(3, userRepresentation.Hpdid).AsAdditionalData(this.schemaExtensionId)
         };
 
         try
@@ -78,44 +78,6 @@ public class BCProviderClient : IBCProviderClient
         {
             this.logger.LogPasswordUpdateFailure(userPrincipalName);
             return false;
-        }
-    }
-
-    public async Task<SchemaExtension?> RegisterSchemaExtension()
-    {
-        var schemaExtension = new SchemaExtension
-        {
-            Id = "bcProviderAttributes",
-            Description = "Additional User attributes for a BC Provider user account",
-            TargetTypes = new List<string>
-            {
-                "user",
-            },
-            Properties = new List<ExtensionSchemaProperty>
-            {
-                new ExtensionSchemaProperty
-                {
-                    Name = "loa",
-                    Type = "Integer",
-                },
-                new ExtensionSchemaProperty
-                {
-                    Name = "hpdid",
-                    Type = "String",
-                },
-            },
-        };
-
-        try
-        {
-            var result = await this.client.SchemaExtensions.Request().AddAsync(schemaExtension);
-            this.logger.LogRegisteredNewSchemaExtension(result.Id); // AAD prepends "ext########_" to the ID we specify, so we need to know the actual ID after creation.
-            return result;
-        }
-        catch
-        {
-            this.logger.LogSchemaExtensionRegistrationFailure();
-            return null;
         }
     }
 
@@ -161,10 +123,4 @@ public static partial class BCProviderClientLoggingExtensions
 
     [LoggerMessage(5, LogLevel.Error, "Hit maximum retrys attempting to make a unique User Principal Name for user '{fullName}'.")]
     public static partial void LogNoUniqueUserPrincipalNameFound(this ILogger logger, string fullName);
-
-    [LoggerMessage(6, LogLevel.Information, "Registered new schema extension with Id '{schemaExtensionId}'.")]
-    public static partial void LogRegisteredNewSchemaExtension(this ILogger logger, string schemaExtensionId);
-
-    [LoggerMessage(7, LogLevel.Error, "Failed to register schema extension.")]
-    public static partial void LogSchemaExtensionRegistrationFailure(this ILogger logger);
 }
