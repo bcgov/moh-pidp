@@ -444,7 +444,6 @@ public partial class ProfileStatus
                 if (profile.PartyPlrStanding
                         .With(
                             ProviderRoleType.MedicalDoctor,
-                            ProviderRoleType.MedicalOfficeAssistant,
                             ProviderRoleType.RegisteredNursePractitioner)
                         .HasGoodStanding)
                 {

@@ -29,7 +29,6 @@ public class ProfileStatusPrimaryCareRosteringTests : ProfileStatusTest
     public static IEnumerable<object[]> PlrSuccessTestData()
     {
         yield return new object[] { AMock.StandingsDigest(true, IdentifierType.PhysiciansAndSurgeons, ProviderRoleType.MedicalDoctor) };
-        yield return new object[] { AMock.StandingsDigest(true, IdentifierType.PhysiciansAndSurgeons, ProviderRoleType.MedicalOfficeAssistant) };
         yield return new object[] { AMock.StandingsDigest(true, IdentifierType.PhysiciansAndSurgeons, ProviderRoleType.RegisteredNursePractitioner) };
     }
 
@@ -54,7 +53,6 @@ public class ProfileStatusPrimaryCareRosteringTests : ProfileStatusTest
         yield return new object[] { AMock.StandingsDigest(true, IdentifierType.PhysiciansAndSurgeons, "UnknowProviderRole") };
         yield return new object[] { AMock.StandingsDigest(true, IdentifierType.PhysiciansAndSurgeons, null) };
         yield return new object[] { AMock.StandingsDigest(false, IdentifierType.PhysiciansAndSurgeons, ProviderRoleType.MedicalDoctor) };
-        yield return new object[] { AMock.StandingsDigest(false, IdentifierType.PhysiciansAndSurgeons, ProviderRoleType.MedicalOfficeAssistant) };
         yield return new object[] { AMock.StandingsDigest(false, IdentifierType.PhysiciansAndSurgeons, ProviderRoleType.RegisteredNursePractitioner) };
     }
 }

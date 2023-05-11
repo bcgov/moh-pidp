@@ -21,7 +21,6 @@ public class IdentifierType
 public class ProviderRoleType
 {
     public static readonly ProviderRoleType MedicalDoctor = new("MD");
-    public static readonly ProviderRoleType MedicalOfficeAssistant = new("MOA");
     public static readonly ProviderRoleType RegisteredNursePractitioner = new("RNP");
 
 
