@@ -441,6 +441,11 @@ public partial class ProfileStatus
 
             protected override StatusCode Compute(ProfileData profile)
             {
+                if (profile.UserIsInMOARole)
+                {
+                    return StatusCode.Locked;
+                }
+
                 if (profile.PartyPlrStanding
                         .With(
                             ProviderRoleType.MedicalDoctor,

@@ -170,6 +170,7 @@ public partial class ProfileStatus
         public bool UserIsBCProvider => this.userIdentityProvider == IdentityProviders.BCProvider;
         public bool UserIsHighAssuranceIdentity => this.userIdentityProvider is IdentityProviders.BCServicesCard or IdentityProviders.BCProvider;
         public bool UserIsPhsa => this.userIdentityProvider == IdentityProviders.Phsa;
+        public bool UserIsInMOARole { get; set; }
 
         public async Task Finalize(
             PidpDbContext context,
@@ -177,6 +178,7 @@ public partial class ProfileStatus
             ClaimsPrincipal? user)
         {
             this.userIdentityProvider = user.GetIdentityProvider();
+            this.UserIsInMOARole = user?.IsInRole(MohKeycloakEnrolment.MoaLicenceStatus.AccessRoles.Single()) ?? false;
             this.PartyPlrStanding = await plrClient.GetStandingsDigestAsync(this.Cpn);
 
             var possiblePrpLicenceNumbers = this.PartyPlrStanding
