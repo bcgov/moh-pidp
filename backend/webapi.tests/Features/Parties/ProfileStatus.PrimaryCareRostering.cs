@@ -23,7 +23,7 @@ public class ProfileStatusPrimaryCareRosteringTests : ProfileStatusTest
 
         var rosteringSection = profile.Section<PrimaryCareRosteringSection>();
         rosteringSection.AssertNoAlerts();
-        Assert.Equal(StatusCode.Locked, rosteringSection.StatusCode);
+        Assert.Equal(StatusCode.Incomplete, rosteringSection.StatusCode);
     }
 
     public static IEnumerable<object[]> PlrSuccessTestData()
@@ -45,7 +45,7 @@ public class ProfileStatusPrimaryCareRosteringTests : ProfileStatusTest
 
         var rosteringSection = profile.Section<PrimaryCareRosteringSection>();
         rosteringSection.AssertNoAlerts();
-        Assert.Equal(StatusCode.Hidden, rosteringSection.StatusCode);
+        Assert.Equal(StatusCode.Locked, rosteringSection.StatusCode);
     }
 
     public static IEnumerable<object[]> PlrFailureTestData()
