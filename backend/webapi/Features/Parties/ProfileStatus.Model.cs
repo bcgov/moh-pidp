@@ -89,9 +89,14 @@ public partial class ProfileStatus
                     return StatusCode.Hidden;
                 }
 
-                return profile.HasBCProviderCredential
-                    ? StatusCode.Complete
-                    : StatusCode.Incomplete;
+                if (profile.HasBCProviderCredential)
+                {
+                    return StatusCode.Complete;
+                }
+
+                return profile.DemographicsComplete
+                    ? StatusCode.Incomplete
+                    : StatusCode.Locked;
             }
         }
 
