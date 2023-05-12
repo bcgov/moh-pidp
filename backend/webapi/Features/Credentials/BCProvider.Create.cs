@@ -54,9 +54,10 @@ public class BCProviderCreate
                 {
                     party.FirstName,
                     party.LastName,
+                    party.Cpn,
+                    party.Email,
                     HasBCProviderCredential = party.Credentials.Any(credential => credential.IdentityProvider == IdentityProviders.BCProvider),
                     Hpdid = party.Credentials.Select(credential => credential.Hpdid).Single(hpdid => hpdid != null),
-                    party.Email
                 })
                 .SingleAsync();
 
@@ -66,23 +67,19 @@ public class BCProviderCreate
                 return DomainResult.Failed();
             }
 
-            if (party.Hpdid == null)
+            if (party.Email == null
+                || party.Hpdid == null)
             {
-                this.logger.LogNullHpdid(command.PartyId);
+                this.logger.LogInvalidState(command.PartyId, party);
                 return DomainResult.Failed();
-            }
-
-            if (party.Email == null)
-            {
-                this.logger.LogNullEmail(command.PartyId);
             }
 
             var createdUser = await this.client.CreateBCProviderAccount(new UserRepresentation
             {
                 FirstName = party.FirstName,
                 LastName = party.LastName,
-                Password = command.Password,
                 Hpdid = party.Hpdid,
+                Password = command.Password,
                 PidpEmail = party.Email
             });
 
@@ -110,9 +107,6 @@ public static partial class BCProviderCreateLoggingExtensions
     [LoggerMessage(1, LogLevel.Information, "Party {partyId} attempted to create a second BC Provider account.")]
     public static partial void LogPartyHasBCProviderCredential(this ILogger logger, int partyId);
 
-    [LoggerMessage(2, LogLevel.Error, "Failed to create BC Provider for Party {partyId}, HPDID was null.")]
-    public static partial void LogNullHpdid(this ILogger logger, int partyId);
-
-    [LoggerMessage(3, LogLevel.Information, "Email for Party {partyId} was null.")]
-    public static partial void LogNullEmail(this ILogger logger, int partyId);
+    [LoggerMessage(2, LogLevel.Error, "Failed to create BC Provider for Party {partyId}, one or more requirements were not met. Party state: {state}.")]
+    public static partial void LogInvalidState(this ILogger logger, int partyId, object state);
 }
