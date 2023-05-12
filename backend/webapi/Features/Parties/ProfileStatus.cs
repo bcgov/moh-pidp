@@ -119,8 +119,8 @@ public partial class ProfileStatus
                     ProfileSection.Create<MSTeamsPrivacyOfficerSection>(data),
                     ProfileSection.Create<PrescriptionRefillEformsSection>(data),
                     ProfileSection.Create<ProviderReportingPortalSection>(data),
-                    ProfileSection.Create<SAEformsSection>(data),
-                    ProfileSection.Create<PrimaryCareRosteringSection>(data)
+                    ProfileSection.Create<PrimaryCareRosteringSection>(data),
+                    ProfileSection.Create<SAEformsSection>(data)
                 }
                 .ToDictionary(section => section.SectionName, section => section)
             };
