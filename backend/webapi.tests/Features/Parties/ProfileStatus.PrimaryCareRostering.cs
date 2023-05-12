@@ -12,7 +12,7 @@ public class ProfileStatusPrimaryCareRosteringTests : ProfileStatusTest
 {
     [Theory]
     [MemberData(nameof(PlrSuccessTestData))]
-    public async void HandleAsync_RosteringProviderRoleAuthorized_Locked(PlrStandingsDigest digest)
+    public async void HandleAsync_RosteringProviderRoleAuthorized_Incomplete(PlrStandingsDigest digest)
     {
         var party = this.TestDb.Has(AParty.WithLicenceDeclared());
         var client = A.Fake<IPlrClient>()
@@ -34,7 +34,7 @@ public class ProfileStatusPrimaryCareRosteringTests : ProfileStatusTest
 
     [Theory]
     [MemberData(nameof(PlrFailureTestData))]
-    public async void HandleAsync_RosteringProviderRoleUnauthorized_Hidden(PlrStandingsDigest digest)
+    public async void HandleAsync_RosteringProviderRoleUnauthorized_Locked(PlrStandingsDigest digest)
     {
         var party = this.TestDb.Has(AParty.WithLicenceDeclared());
         var client = A.Fake<IPlrClient>()
