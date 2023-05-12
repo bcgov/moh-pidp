@@ -14,7 +14,7 @@
   <p class="hint">{{ section.hint }}</p>
   <div
     class="actions"
-    [ngClass]="{ center: showCompleted, right: showLearnMore || showVisit}">
+    [ngClass]="{ center: showCompleted, right: showLearnMore || showVisit }">
     <ng-container *ngIf="showCompleted && this.hasImageCssClass">
       <div class="completed-badge">
         <span class="completed-text">Completed</span>
