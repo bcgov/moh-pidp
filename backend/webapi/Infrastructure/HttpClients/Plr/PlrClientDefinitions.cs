@@ -23,7 +23,6 @@ public class ProviderRoleType
     public static readonly ProviderRoleType MedicalDoctor = new("MD");
     public static readonly ProviderRoleType RegisteredNursePractitioner = new("RNP");
 
-
     public string Value { get; }
 
     private ProviderRoleType(string value) => this.Value = value;
@@ -82,7 +81,7 @@ public class PlrStandingsDigest
     }
 
     /// <summary>
-    /// Filters the digest to only include records of the given provider role type(s)
+    /// Filters the digest to only include records of the given Provider Role Type(s)
     /// </summary>
     /// <param name="providerRoleTypes"></param>
     public PlrStandingsDigest With(params ProviderRoleType[] providerRoleTypes)
