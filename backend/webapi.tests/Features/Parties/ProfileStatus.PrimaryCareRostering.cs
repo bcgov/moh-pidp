@@ -12,11 +12,12 @@ public class ProfileStatusPrimaryCareRosteringTests : ProfileStatusTest
 {
     [Theory]
     [MemberData(nameof(PlrSuccessTestData))]
-    public async void HandleAsync_RosteringProviderRoleAuthorized_Incomplete(PlrStandingsDigest digest)
+    public async void HandleAsync_RosteringProviderRoleAuthorized_Incomplete(PlrStandingsDigest digest, PlrStandingsDigest aggregateDigest)
     {
         var party = this.TestDb.Has(AParty.WithLicenceDeclared());
+
         var client = A.Fake<IPlrClient>()
-            .ReturningAStatandingsDigest(digest);
+                .ReturningAStatandingsDigest(digest, aggregateDigest);
 
         var handler = this.MockDependenciesFor<CommandHandler>(client);
         var profile = await handler.HandleAsync(new Command { Id = party.Id, User = AMock.BcscUser() });
@@ -28,17 +29,18 @@ public class ProfileStatusPrimaryCareRosteringTests : ProfileStatusTest
 
     public static IEnumerable<object[]> PlrSuccessTestData()
     {
-        yield return new object[] { AMock.StandingsDigest(true, IdentifierType.PhysiciansAndSurgeons, ProviderRoleType.MedicalDoctor) };
-        yield return new object[] { AMock.StandingsDigest(true, IdentifierType.PhysiciansAndSurgeons, ProviderRoleType.RegisteredNursePractitioner) };
+        yield return new object[] { AMock.StandingsDigest(true, IdentifierType.PhysiciansAndSurgeons, ProviderRoleType.MedicalDoctor), AMock.StandingsDigest(false) };
+        yield return new object[] { AMock.StandingsDigest(true, IdentifierType.PhysiciansAndSurgeons, ProviderRoleType.RegisteredNursePractitioner), AMock.StandingsDigest(false) };
+        yield return new object[] { AMock.StandingsDigest(true, IdentifierType.PhysiciansAndSurgeons), AMock.StandingsDigest(true) };
     }
 
     [Theory]
     [MemberData(nameof(PlrFailureTestData))]
-    public async void HandleAsync_RosteringProviderRoleUnauthorized_Locked(PlrStandingsDigest digest)
+    public async void HandleAsync_RosteringProviderRoleUnauthorized_Locked(PlrStandingsDigest digest, PlrStandingsDigest aggregateDigest)
     {
         var party = this.TestDb.Has(AParty.WithLicenceDeclared());
         var client = A.Fake<IPlrClient>()
-            .ReturningAStatandingsDigest(digest);
+            .ReturningAStatandingsDigest(digest, aggregateDigest);
 
         var handler = this.MockDependenciesFor<CommandHandler>(client);
         var profile = await handler.HandleAsync(new Command { Id = party.Id, User = AMock.BcscUser() });
@@ -50,9 +52,9 @@ public class ProfileStatusPrimaryCareRosteringTests : ProfileStatusTest
 
     public static IEnumerable<object[]> PlrFailureTestData()
     {
-        yield return new object[] { AMock.StandingsDigest(true, IdentifierType.PhysiciansAndSurgeons, "UnknowProviderRole") };
-        yield return new object[] { AMock.StandingsDigest(true, IdentifierType.PhysiciansAndSurgeons, null) };
-        yield return new object[] { AMock.StandingsDigest(false, IdentifierType.PhysiciansAndSurgeons, ProviderRoleType.MedicalDoctor) };
-        yield return new object[] { AMock.StandingsDigest(false, IdentifierType.PhysiciansAndSurgeons, ProviderRoleType.RegisteredNursePractitioner) };
+        yield return new object[] { AMock.StandingsDigest(true, IdentifierType.PhysiciansAndSurgeons, "UnknowProviderRole"), AMock.StandingsDigest(false) };
+        yield return new object[] { AMock.StandingsDigest(true, IdentifierType.PhysiciansAndSurgeons, null), AMock.StandingsDigest(false) };
+        yield return new object[] { AMock.StandingsDigest(false, IdentifierType.PhysiciansAndSurgeons, ProviderRoleType.MedicalDoctor), AMock.StandingsDigest(false) };
+        yield return new object[] { AMock.StandingsDigest(false, IdentifierType.PhysiciansAndSurgeons, ProviderRoleType.RegisteredNursePractitioner), AMock.StandingsDigest(false) };
     }
 }
