@@ -441,11 +441,7 @@ public partial class ProfileStatus
 
             protected override StatusCode Compute(ProfileData profile)
             {
-                if (profile.EndorsementPlrStanding
-                        .With(
-                            ProviderRoleType.MedicalDoctor,
-                            ProviderRoleType.RegisteredNursePractitioner)
-                        .HasGoodStanding)
+                if (profile.EndorsementPlrStanding.HasGoodStanding)
                 {
                     return StatusCode.Incomplete;
                 }
