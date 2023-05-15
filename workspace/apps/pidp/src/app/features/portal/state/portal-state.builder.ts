@@ -29,6 +29,7 @@ import { CollegeCertificationPortalSection } from './profile/college-certificati
 import { DemographicsPortalSection } from './profile/demographics-portal-section.class';
 import { UserAccessAgreementPortalSection } from './profile/user-access-agreement-portal-section.class';
 import { ComplianceTrainingPortalSection } from './training/compliance-training-portal-section.class';
+import { PrimaryCareRosteringPortalSection } from './access/primary-care-rostering-portal-section.class';
 
 /**
  * @description
@@ -190,6 +191,10 @@ export class PortalStateBuilder {
         this.insertSection('providerReportingPortal', profileStatus) &&
           this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
         () => [new ProviderReportingPortalSection(profileStatus, this.router)]
+      ),
+      ...ArrayUtils.insertResultIf<IPortalSection>(
+        this.insertSection('primaryCareRostering', profileStatus),
+        () => [new PrimaryCareRosteringPortalSection(profileStatus)]
       ),
     ];
   }

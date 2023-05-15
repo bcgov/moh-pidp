@@ -20,4 +20,11 @@ export interface PortalSectionAction {
    * typically based on state.
    */
   disabled: boolean;
+  /**
+   * @description
+   * Indicate whether the action navigate to
+   * is opened in new tab or same tab.
+   * Default: in same tab.
+   */
+  openInNewTab?: boolean;
 }

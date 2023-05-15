@@ -2,6 +2,7 @@ namespace Pidp.Features.Parties;
 
 using NodaTime;
 using Pidp.Features.AccessRequests;
+using Pidp.Infrastructure.HttpClients.Plr;
 using Pidp.Models.Lookups;
 
 public partial class ProfileStatus
@@ -434,5 +435,28 @@ public partial class ProfileStatus
             }
         }
 
+        public class PrimaryCareRosteringSection : ProfileSection
+        {
+            internal override string SectionName => "primaryCareRostering";
+
+            protected override StatusCode Compute(ProfileData profile)
+            {
+                if (profile.EndorsementPlrStanding.HasGoodStanding)
+                {
+                    return StatusCode.Incomplete;
+                }
+
+                if (profile.PartyPlrStanding
+                        .With(
+                            ProviderRoleType.MedicalDoctor,
+                            ProviderRoleType.RegisteredNursePractitioner)
+                        .HasGoodStanding)
+                {
+                    return StatusCode.Incomplete;
+                }
+
+                return StatusCode.Locked;
+            }
+        }
     }
 }
