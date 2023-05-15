@@ -42,7 +42,7 @@ public class BCProviderDirectoryExtension
 
     public Dictionary<string, object?> AsAdditionalData(string clientId)
     {
-        var keyPrefix = $"extension_{clientId}_";
+        var keyPrefix = $"extension_{clientId.Replace("-", "")}_";
 
         return this.GetType().GetProperties()
             .ToDictionary(prop => keyPrefix + JsonNamingPolicy.CamelCase.ConvertName(prop.Name), prop => prop.GetValue(this));
