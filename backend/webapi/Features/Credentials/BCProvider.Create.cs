@@ -79,15 +79,15 @@ public class BCProviderCreate
                 return DomainResult.Failed();
             }
 
-            var partyPlrStanding = await this.plrClient.GetStandingsDigestAsync(party.Cpn);
+            var plrStanding = await this.plrClient.GetStandingsDigestAsync(party.Cpn);
 
             var newUserRep = new NewUserRepresentation
             {
                 FirstName = party.FirstName,
                 LastName = party.LastName,
                 Hpdid = party.Hpdid,
-                IsRnp = partyPlrStanding.With(ProviderRoleType.RegisteredNursePractitioner).HasGoodStanding,
-                IsMd = partyPlrStanding.With(ProviderRoleType.MedicalDoctor).HasGoodStanding,
+                IsRnp = plrStanding.With(ProviderRoleType.RegisteredNursePractitioner).HasGoodStanding,
+                IsMd = plrStanding.With(ProviderRoleType.MedicalDoctor).HasGoodStanding,
                 Cpn = party.Cpn,
                 Password = command.Password,
                 PidpEmail = party.Email
