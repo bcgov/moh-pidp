@@ -71,8 +71,6 @@ public class BCProviderCreate
             var isMoa = false;
             var isRnp = false;
 
-            // if user has CPN, dont check endorsements
-            // if user doesnt have CPN, dont check licence
             if (party.Cpn == null)
             {
                 var endorsementDtos = await this.context.ActiveEndorsementRelationships(command.PartyId)
