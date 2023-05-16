@@ -41,7 +41,7 @@ public class BCProviderClient : IBCProviderClient
                 ForceChangePasswordNextSignIn = false,
                 Password = userRepresentation.Password
             },
-            AdditionalData = new BCProviderDirectoryExtension(userRepresentation).AsAdditionalData(this.clientId)
+            AdditionalData = BCProviderAttributes.FromNewUser(this.clientId, userRepresentation).AsAdditionalData()
         };
 
         try
