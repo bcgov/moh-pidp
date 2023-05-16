@@ -79,44 +79,31 @@ public class BCProviderCreate
                 return DomainResult.Failed();
             }
 
-            var isMd = false;
-            var isMoa = false;
-            var isRnp = false;
+            var partyPlrStanding = await this.plrClient.GetStandingsDigestAsync(party.Cpn);
 
-            if (party.Cpn == null)
-            {
-                var endorsementDtos = await this.context.ActiveEndorsementRelationships(command.PartyId)
-                    .Select(relationship => new
-                    {
-                        relationship.Party!.Cpn,
-                        IsMSTeamsPrivacyOfficer = this.context.MSTeamsClinics.Any(clinic => clinic.PrivacyOfficerId == relationship.PartyId)
-                    })
-                    .ToArrayAsync();
-                // We should defer this check if possible. See DriverFitnessSection.
-                var endorsementPlrStanding = await this.plrClient.GetAggregateStandingsDigestAsync(endorsementDtos.Select(dto => dto.Cpn));
-
-                isMoa = endorsementPlrStanding.HasGoodStanding;
-            }
-            else
-            {
-                var partyPlrStanding = await this.plrClient.GetStandingsDigestAsync(party.Cpn);
-
-                isRnp = partyPlrStanding.With(ProviderRoleType.RegisteredNursePractitioner).HasGoodStanding;
-                isMd = partyPlrStanding.With(ProviderRoleType.MedicalDoctor).HasGoodStanding;
-            }
-
-            var createdUser = await this.client.CreateBCProviderAccount(new NewUserRepresentation
+            var newUserRep = new NewUserRepresentation
             {
                 FirstName = party.FirstName,
                 LastName = party.LastName,
                 Hpdid = party.Hpdid,
-                IsRnp = isRnp,
-                IsMd = isMd,
+                IsRnp = partyPlrStanding.With(ProviderRoleType.RegisteredNursePractitioner).HasGoodStanding,
+                IsMd = partyPlrStanding.With(ProviderRoleType.MedicalDoctor).HasGoodStanding,
                 Cpn = party.Cpn,
-                IsMoa = isMoa,
                 Password = command.Password,
                 PidpEmail = party.Email
-            });
+            };
+
+            if (party.Cpn == null)
+            {
+                var endorsementCpns = await this.context.ActiveEndorsementRelationships(command.PartyId)
+                    .Select(relationship => relationship.Party!.Cpn)
+                    .ToListAsync();
+                var endorsementPlrStanding = await this.plrClient.GetAggregateStandingsDigestAsync(endorsementCpns);
+
+                newUserRep.IsMoa = endorsementPlrStanding.HasGoodStanding;
+            }
+
+            var createdUser = await this.client.CreateBCProviderAccount(newUserRep);
 
             if (createdUser == null)
             {
