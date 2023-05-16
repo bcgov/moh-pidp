@@ -9,8 +9,9 @@ public class UserRepresentation
     public bool IsMd { get; set; }
     public bool IsMoa { get; set; }
     public bool IsRnp { get; set; }
-    public string Password { get; set; } = string.Empty;
     public string PidpEmail { get; set; } = string.Empty;
+
+    public string Password { get; set; } = string.Empty;
 
     public string FullName => $"{this.FirstName} {this.LastName}";
 }

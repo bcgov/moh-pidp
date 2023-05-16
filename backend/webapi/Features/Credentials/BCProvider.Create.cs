@@ -10,6 +10,9 @@ using Pidp.Data;
 using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.HttpClients.BCProvider;
 using Pidp.Models;
+using static Pidp.Features.Parties.ProfileStatus;
+using Pidp.Infrastructure.HttpClients.Plr;
+using Pidp.Extensions;
 
 public class BCProviderCreate
 {
@@ -35,15 +38,18 @@ public class BCProviderCreate
         private readonly IBCProviderClient client;
         private readonly PidpDbContext context;
         private readonly ILogger logger;
+        private readonly IPlrClient plrClient;
 
         public CommandHandler(
             IBCProviderClient client,
             PidpDbContext context,
-            ILogger<CommandHandler> logger)
+            ILogger<CommandHandler> logger,
+            IPlrClient plrClient)
         {
             this.client = client;
             this.context = context;
             this.logger = logger;
+            this.plrClient = plrClient;
         }
 
         public async Task<IDomainResult> HandleAsync(Command command)
@@ -61,6 +67,35 @@ public class BCProviderCreate
                 })
                 .SingleAsync();
 
+            var isMd = false;
+            var isMoa = false;
+            var isRnp = false;
+
+            // if user has CPN, dont check endorsements
+            // if user doesnt have CPN, dont check licence
+            if (party.Cpn == null)
+            {
+                var endorsementDtos = await this.context.ActiveEndorsementRelationships(command.PartyId)
+                    .Select(relationship => new
+                    {
+                        relationship.Party!.Cpn,
+                        IsMSTeamsPrivacyOfficer = this.context.MSTeamsClinics.Any(clinic => clinic.PrivacyOfficerId == relationship.PartyId)
+                    })
+                    .ToArrayAsync();
+                // We should defer this check if possible. See DriverFitnessSection.
+                var endorsementPlrStanding = await this.plrClient.GetAggregateStandingsDigestAsync(endorsementDtos.Select(dto => dto.Cpn));
+
+                isMoa = endorsementPlrStanding.HasGoodStanding;
+            }
+            else
+            {
+                var partyPlrStanding = await this.plrClient.GetStandingsDigestAsync(party.Cpn);
+
+                isRnp = partyPlrStanding.With(ProviderRoleType.RegisteredNursePractitioner).HasGoodStanding;
+                isMd = partyPlrStanding.With(ProviderRoleType.MedicalDoctor).HasGoodStanding;
+            }
+
+
             if (party.HasBCProviderCredential)
             {
                 this.logger.LogPartyHasBCProviderCredential(command.PartyId);
@@ -68,7 +103,8 @@ public class BCProviderCreate
             }
 
             if (party.Email == null
-                || party.Hpdid == null)
+                || party.Hpdid == null
+                || party.Cpn == null)
             {
                 this.logger.LogInvalidState(command.PartyId, party);
                 return DomainResult.Failed();
@@ -79,6 +115,10 @@ public class BCProviderCreate
                 FirstName = party.FirstName,
                 LastName = party.LastName,
                 Hpdid = party.Hpdid,
+                IsRnp = isRnp,
+                IsMd = isMd,
+                Cpn = party.Cpn,
+                IsMoa = isMoa,
                 Password = command.Password,
                 PidpEmail = party.Email
             });
