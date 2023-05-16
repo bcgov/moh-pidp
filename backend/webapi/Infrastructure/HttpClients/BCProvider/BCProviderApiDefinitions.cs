@@ -1,7 +1,5 @@
 namespace Pidp.Infrastructure.HttpClients.BCProvider;
 
-using System.Text.Json;
-
 public class UserRepresentation
 {
     public string Cpn { get; set; } = string.Empty;
