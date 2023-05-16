@@ -9,7 +9,7 @@ public interface IBCProviderClient
     /// Returns the account object if the operation was successful.
     /// </summary>
     /// <param name="userRepresentation"></param>
-    Task<User?> CreateBCProviderAccount(UserRepresentation userRepresentation);
+    Task<User?> CreateBCProviderAccount(NewUserRepresentation userRepresentation);
 
     /// <summary>
     /// Updates the password for a BC Provider account.

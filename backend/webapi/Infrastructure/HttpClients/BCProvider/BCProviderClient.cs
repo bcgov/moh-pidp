@@ -20,7 +20,7 @@ public class BCProviderClient : IBCProviderClient
         this.clientId = config.BCProviderClient.ClientId;
     }
 
-    public async Task<User?> CreateBCProviderAccount(UserRepresentation userRepresentation)
+    public async Task<User?> CreateBCProviderAccount(NewUserRepresentation userRepresentation)
     {
         var userPrincipal = await this.CreateUniqueUserPrincipalName(userRepresentation);
         if (userPrincipal == null)
@@ -81,7 +81,7 @@ public class BCProviderClient : IBCProviderClient
         }
     }
 
-    private async Task<string?> CreateUniqueUserPrincipalName(UserRepresentation user)
+    private async Task<string?> CreateUniqueUserPrincipalName(NewUserRepresentation user)
     {
         var joinedFullName = $"{user.FirstName}.{user.LastName}".Replace(" ", ""); // Cannot contain spaces.
 

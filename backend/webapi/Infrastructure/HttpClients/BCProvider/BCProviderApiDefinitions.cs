@@ -1,8 +1,8 @@
 namespace Pidp.Infrastructure.HttpClients.BCProvider;
 
-public class UserRepresentation
+public class NewUserRepresentation
 {
-    public string Cpn { get; set; } = string.Empty;
+    public string? Cpn { get; set; }
     public string FirstName { get; set; } = string.Empty;
     public string LastName { get; set; } = string.Empty;
     public string Hpdid { get; set; } = string.Empty;
@@ -26,16 +26,22 @@ public class BCProviderAttributes
 
     public BCProviderAttributes(string clientId) => this.extensionNamePrefix = $"extension_{clientId.Replace("-", "")}_";
 
-    public static BCProviderAttributes FromNewUser(string clientId, UserRepresentation representation)
+    public static BCProviderAttributes FromNewUser(string clientId, NewUserRepresentation representation)
     {
-        return new BCProviderAttributes(clientId)
-            .SetCpn(representation.Cpn)
+        var attributes = new BCProviderAttributes(clientId)
             .SetHpdid(representation.Hpdid)
             .SetIsMd(representation.IsMd)
             .SetIsMoa(representation.IsMoa)
             .SetIsRnp(representation.IsRnp)
             .SetLoa(3)
             .SetPidpEmail(representation.PidpEmail);
+
+        if (!string.IsNullOrWhiteSpace(representation.Cpn))
+        {
+            attributes.SetCpn(representation.Cpn);
+        }
+
+        return attributes;
     }
 
     public Dictionary<string, object> AsAdditionalData() => this.attributes;

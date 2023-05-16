@@ -105,7 +105,7 @@ public class BCProviderCreate
                 isMd = partyPlrStanding.With(ProviderRoleType.MedicalDoctor).HasGoodStanding;
             }
 
-            var createdUser = await this.client.CreateBCProviderAccount(new UserRepresentation
+            var createdUser = await this.client.CreateBCProviderAccount(new NewUserRepresentation
             {
                 FirstName = party.FirstName,
                 LastName = party.LastName,
