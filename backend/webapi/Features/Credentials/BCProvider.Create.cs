@@ -10,7 +10,6 @@ using Pidp.Data;
 using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.HttpClients.BCProvider;
 using Pidp.Models;
-using static Pidp.Features.Parties.ProfileStatus;
 using Pidp.Infrastructure.HttpClients.Plr;
 using Pidp.Extensions;
 
