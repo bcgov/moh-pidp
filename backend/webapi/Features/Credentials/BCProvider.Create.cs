@@ -93,7 +93,6 @@ public class BCProviderCreate
                 isMd = partyPlrStanding.With(ProviderRoleType.MedicalDoctor).HasGoodStanding;
             }
 
-
             if (party.HasBCProviderCredential)
             {
                 this.logger.LogPartyHasBCProviderCredential(command.PartyId);
