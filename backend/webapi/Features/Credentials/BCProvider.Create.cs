@@ -66,6 +66,19 @@ public class BCProviderCreate
                 })
                 .SingleAsync();
 
+            if (party.HasBCProviderCredential)
+            {
+                this.logger.LogPartyHasBCProviderCredential(command.PartyId);
+                return DomainResult.Failed();
+            }
+
+            if (party.Email == null
+                || party.Hpdid == null)
+            {
+                this.logger.LogInvalidState(command.PartyId, party);
+                return DomainResult.Failed();
+            }
+
             var isMd = false;
             var isMoa = false;
             var isRnp = false;
@@ -90,20 +103,6 @@ public class BCProviderCreate
 
                 isRnp = partyPlrStanding.With(ProviderRoleType.RegisteredNursePractitioner).HasGoodStanding;
                 isMd = partyPlrStanding.With(ProviderRoleType.MedicalDoctor).HasGoodStanding;
-            }
-
-            if (party.HasBCProviderCredential)
-            {
-                this.logger.LogPartyHasBCProviderCredential(command.PartyId);
-                return DomainResult.Failed();
-            }
-
-            if (party.Email == null
-                || party.Hpdid == null
-                || party.Cpn == null)
-            {
-                this.logger.LogInvalidState(command.PartyId, party);
-                return DomainResult.Failed();
             }
 
             var createdUser = await this.client.CreateBCProviderAccount(new UserRepresentation
