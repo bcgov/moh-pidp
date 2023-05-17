@@ -378,6 +378,24 @@ public partial class ProfileStatus
             }
         }
 
+        public class PrimaryCareRosteringSection : ProfileSection
+        {
+            internal override string SectionName => "primaryCareRostering";
+
+            protected override StatusCode Compute(ProfileData profile)
+            {
+                if (profile.EndorsementPlrStanding.HasGoodStanding
+                    || profile.PartyPlrStanding
+                        .With(ProviderRoleType.MedicalDoctor, ProviderRoleType.RegisteredNursePractitioner)
+                        .HasGoodStanding)
+                {
+                    return StatusCode.Incomplete;
+                }
+
+                return StatusCode.Locked;
+            }
+        }
+
         public class ProviderReportingPortalSection : ProfileSection
         {
             internal override string SectionName => "providerReportingPortal";
@@ -431,30 +449,6 @@ public partial class ProfileStatus
                 if (profile.DemographicsComplete
                     && profile.PartyPlrStanding
                         .Excluding(SAEforms.ExcludedIdentifierTypes)
-                        .HasGoodStanding)
-                {
-                    return StatusCode.Incomplete;
-                }
-
-                return StatusCode.Locked;
-            }
-        }
-
-        public class PrimaryCareRosteringSection : ProfileSection
-        {
-            internal override string SectionName => "primaryCareRostering";
-
-            protected override StatusCode Compute(ProfileData profile)
-            {
-                if (profile.EndorsementPlrStanding.HasGoodStanding)
-                {
-                    return StatusCode.Incomplete;
-                }
-
-                if (profile.PartyPlrStanding
-                        .With(
-                            ProviderRoleType.MedicalDoctor,
-                            ProviderRoleType.RegisteredNursePractitioner)
                         .HasGoodStanding)
                 {
                     return StatusCode.Incomplete;

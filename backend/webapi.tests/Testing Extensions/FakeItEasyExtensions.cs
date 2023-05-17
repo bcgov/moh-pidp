@@ -81,7 +81,7 @@ public static class FakeItEasyExtensions
         return client;
     }
 
-    public static IPlrClient ReturningAStatandingsDigest(this IPlrClient client, PlrStandingsDigest digest, PlrStandingsDigest aggregateDigest)
+    public static IPlrClient ReturningMultipleStatandingsDigests(this IPlrClient client, PlrStandingsDigest digest, PlrStandingsDigest aggregateDigest)
     {
         A.CallTo(() => client.GetStandingAsync(A<string?>._)).Returns(digest.HasGoodStanding);
         A.CallTo(() => client.GetStandingsDigestAsync(A<string?>._)).Returns(digest);
