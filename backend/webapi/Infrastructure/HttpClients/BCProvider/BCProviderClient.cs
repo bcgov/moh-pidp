@@ -21,10 +21,10 @@ public class BCProviderClient : IBCProviderClient
         this.clientId = config.BCProviderClient.ClientId;
     }
 
-    public string GetAdditionalAttributeKey(string attributeName) =>
+    public string GetAttributeKey(string attributeName) =>
         new BCProviderAttributes(this.clientId).GetBCProviderAttributeKey(attributeName);
 
-    public async Task<IDictionary<string, object?>?> GetAdditionalAttributes(string userPrincipalName)
+    public async Task<IDictionary<string, object?>?> GetAttributes(string userPrincipalName)
     {
         try
         {
@@ -32,7 +32,7 @@ public class BCProviderClient : IBCProviderClient
             {
                 return null;
             }
-            var attributesName = BCProviderAttributes.GetAdditionalDataKeys(this.clientId);
+            var attributesName = new BCProviderAttributes(this.clientId).GetBCProviderAttributeKeys();
 
             var result = await this.client.Users[userPrincipalName]
                 .GetAsync(request => request.QueryParameters.Select = attributesName);
@@ -83,6 +83,12 @@ public class BCProviderClient : IBCProviderClient
         }
     }
 
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="userPrincipalName"></param>
+    /// <param name="bcProviderAttributes"></param>
+    /// <returns></returns>
     public async Task<bool> UpdateAttributes(string userPrincipalName, IDictionary<string, object?> bcProviderAttributes)
     {
         try

@@ -1,5 +1,7 @@
 namespace Pidp.Infrastructure.HttpClients.BCProvider;
 
+using System.Reflection;
+
 public class NewUserRepresentation
 {
     public string? Cpn { get; set; }
@@ -14,6 +16,26 @@ public class NewUserRepresentation
     public string Password { get; set; } = string.Empty;
 
     public string FullName => $"{this.FirstName} {this.LastName}";
+}
+
+public static class BCProviderAttributeName
+{
+    public const string Cpn = "cpn";
+    public const string Hpdid = "hpdid";
+    public const string IsMd = "isMd";
+    public const string IsMoa = "isMoa";
+    public const string IsRnp = "isRnp";
+    public const string Loa = "loa";
+    public const string PidpEmail = "pidpEmail";
+
+    public static string[] GetValues()
+    {
+        return typeof(BCProviderAttributeName)
+            .GetFields(BindingFlags.Static | BindingFlags.Public)
+            .Where(f => f.FieldType == typeof(string))
+            .Select(f => (string)f.GetValue(null)!)
+            .ToArray();
+    }
 }
 
 /// <summary>
@@ -44,10 +66,11 @@ public class BCProviderAttributes
         return attributes;
     }
 
-    public static string[] GetAdditionalDataKeys(string clientId)
+    public string[] GetBCProviderAttributeKeys()
     {
-        return FromNewUser(clientId, new NewUserRepresentation())
-            .AsAdditionalData().Keys
+        return BCProviderAttributeName
+            .GetValues()
+            .Select(attributeName => this.GetBCProviderAttributeKey(attributeName))
             .ToArray();
     }
 
@@ -55,16 +78,16 @@ public class BCProviderAttributes
 
     public Dictionary<string, object> AsAdditionalData() => this.attributes;
 
-    public BCProviderAttributes SetCpn(string cpn) => this.SetProperty(nameof(cpn), cpn);
-    public BCProviderAttributes SetHpdid(string hpdid) => this.SetProperty(nameof(hpdid), hpdid);
-    public BCProviderAttributes SetIsMd(bool isMd) => this.SetProperty(nameof(isMd), isMd);
-    public BCProviderAttributes SetIsMoa(bool isMoa) => this.SetProperty(nameof(isMoa), isMoa);
-    public BCProviderAttributes SetIsRnp(bool isRnp) => this.SetProperty(nameof(isRnp), isRnp);
+    public BCProviderAttributes SetCpn(string cpn) => this.SetProperty(BCProviderAttributeName.Cpn, cpn);
+    public BCProviderAttributes SetHpdid(string hpdid) => this.SetProperty(BCProviderAttributeName.Hpdid, hpdid);
+    public BCProviderAttributes SetIsMd(bool isMd) => this.SetProperty(BCProviderAttributeName.IsMd, isMd);
+    public BCProviderAttributes SetIsMoa(bool isMoa) => this.SetProperty(BCProviderAttributeName.IsMoa, isMoa);
+    public BCProviderAttributes SetIsRnp(bool isRnp) => this.SetProperty(BCProviderAttributeName.IsRnp, isRnp);
     /// <summary>
     /// Level Of Assurance. Is 3 for a BC Provider created from a BC Services Card.
     /// </summary>
-    public BCProviderAttributes SetLoa(int loa) => this.SetProperty(nameof(loa), loa);
-    public BCProviderAttributes SetPidpEmail(string pidpEmail) => this.SetProperty(nameof(pidpEmail), pidpEmail);
+    public BCProviderAttributes SetLoa(int loa) => this.SetProperty(BCProviderAttributeName.Loa, loa);
+    public BCProviderAttributes SetPidpEmail(string pidpEmail) => this.SetProperty(BCProviderAttributeName.PidpEmail, pidpEmail);
 
     private BCProviderAttributes SetProperty(string propertyName, object value)
     {
