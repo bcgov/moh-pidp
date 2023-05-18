@@ -21,6 +21,31 @@ public class BCProviderClient : IBCProviderClient
         this.clientId = config.BCProviderClient.ClientId;
     }
 
+    public string GetAdditionalAttributeKey(string attributeName) =>
+        new BCProviderAttributes(this.clientId).GetBCProviderAttributeKey(attributeName);
+
+    public async Task<IDictionary<string, object?>?> GetAdditionalAttributes(string userPrincipalName)
+    {
+        try
+        {
+            if (string.IsNullOrEmpty(userPrincipalName))
+            {
+                return null;
+            }
+            var attributesName = BCProviderAttributes.GetAdditionalDataKeys(this.clientId);
+
+            var result = await this.client.Users[userPrincipalName]
+                .GetAsync(request => request.QueryParameters.Select = attributesName);
+
+            return result?.AdditionalData;
+        }
+        catch
+        {
+            this.logger.LogGetAdditionalAttributesFailure(userPrincipalName);
+            return null;
+        }
+    }
+
     public async Task<User?> CreateBCProviderAccount(NewUserRepresentation userRepresentation)
     {
         var userPrincipal = await this.CreateUniqueUserPrincipalName(userRepresentation);
@@ -55,6 +80,25 @@ public class BCProviderClient : IBCProviderClient
         {
             this.logger.LogAccountCreationFailure(userPrincipal);
             return null;
+        }
+    }
+
+    public async Task<bool> UpdateAttributes(string userPrincipalName, IDictionary<string, object?> bcProviderAttributes)
+    {
+        try
+        {
+            await this.client.Users[userPrincipalName]
+                .PatchAsync(new User
+                {
+                    AdditionalData = bcProviderAttributes
+                });
+
+            return true;
+        }
+        catch
+        {
+            this.logger.LogAttributesUpdateFailure(userPrincipalName);
+            return false;
         }
     }
 
@@ -125,4 +169,10 @@ public static partial class BCProviderClientLoggingExtensions
 
     [LoggerMessage(5, LogLevel.Error, "Hit maximum retrys attempting to make a unique User Principal Name for user '{fullName}'.")]
     public static partial void LogNoUniqueUserPrincipalNameFound(this ILogger logger, string fullName);
+
+    [LoggerMessage(6, LogLevel.Error, "Failed to update the attributes of user '{userPrincipalName}'.")]
+    public static partial void LogAttributesUpdateFailure(this ILogger logger, string userPrincipalName);
+
+    [LoggerMessage(7, LogLevel.Error, "Failed to get the attributes of user '{userPrincipalName}'.")]
+    public static partial void LogGetAdditionalAttributesFailure(this ILogger logger, string userPrincipalName);
 }

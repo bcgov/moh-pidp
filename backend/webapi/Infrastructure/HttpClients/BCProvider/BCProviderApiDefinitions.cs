@@ -44,6 +44,15 @@ public class BCProviderAttributes
         return attributes;
     }
 
+    public static string[] GetAdditionalDataKeys(string clientId)
+    {
+        return FromNewUser(clientId, new NewUserRepresentation())
+            .AsAdditionalData().Keys
+            .ToArray();
+    }
+
+    public string GetBCProviderAttributeKey(string attributeName) => this.extensionNamePrefix + attributeName;
+
     public Dictionary<string, object> AsAdditionalData() => this.attributes;
 
     public BCProviderAttributes SetCpn(string cpn) => this.SetProperty(nameof(cpn), cpn);
