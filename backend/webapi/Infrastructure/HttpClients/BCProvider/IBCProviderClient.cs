@@ -1,6 +1,6 @@
 namespace Pidp.Infrastructure.HttpClients.BCProvider;
 
-using Microsoft.Graph;
+using Microsoft.Graph.Models;
 
 public interface IBCProviderClient
 {

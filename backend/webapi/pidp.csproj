@@ -25,7 +25,7 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="6.0.2" />
-    <PackageReference Include="Microsoft.Graph" Version="4.49.0" />
+    <PackageReference Include="Microsoft.Graph" Version="5.11.0" />
     <PackageReference Include="Microsoft.Identity.Web.MicrosoftGraph" Version="1.25.10" />
     <PackageReference Include="NodaTime" Version="3.1.6" />
     <PackageReference Include="NodaTime.Serialization.SystemTextJson" Version="1.0.0" />

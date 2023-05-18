@@ -1,6 +1,7 @@
 namespace Pidp.Infrastructure.HttpClients.BCProvider;
 
 using Microsoft.Graph;
+using Microsoft.Graph.Models;
 
 public class BCProviderClient : IBCProviderClient
 {
@@ -46,9 +47,9 @@ public class BCProviderClient : IBCProviderClient
 
         try
         {
-            var user = await this.client.Users.Request().AddAsync(bcProviderAccount);
-            this.logger.LogNewBCProviderUserCreated(user.UserPrincipalName);
-            return user;
+            var createdUser = await this.client.Users.PostAsync(bcProviderAccount);
+            this.logger.LogNewBCProviderUserCreated(createdUser?.UserPrincipalName!);
+            return createdUser;
         }
         catch
         {
@@ -62,8 +63,7 @@ public class BCProviderClient : IBCProviderClient
         try
         {
             await this.client.Users[userPrincipalName]
-                .Request()
-                .UpdateAsync(new User
+                .PatchAsync(new User
                 {
                     PasswordProfile = new PasswordProfile
                     {
@@ -101,12 +101,14 @@ public class BCProviderClient : IBCProviderClient
 
     private async Task<bool> UserExists(string userPrincipalName)
     {
-        var result = await this.client.Users.Request()
-            .Select("UserPrincipalName")
-            .Filter($"UserPrincipalName eq '{userPrincipalName}'")
-            .GetAsync();
+        var result = await this.client.Users.Count
+            .GetAsync(request =>
+            {
+                request.QueryParameters.Filter = $"userPrincipalName eq '{userPrincipalName}'";
+                request.Headers.Add("ConsistencyLevel", "eventual"); // Required for advanced queries such as "count"
+            });
 
-        return result.Count > 0;
+        return result > 0;
     }
 }
 
