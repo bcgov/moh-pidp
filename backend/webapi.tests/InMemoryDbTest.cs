@@ -1,16 +1,20 @@
 namespace PidpTests;
 
 using AutoMapper;
+using FakeItEasy;
 using FakeItEasy.Sdk;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using NodaTime;
 using System.Reflection;
 
 using Pidp.Data;
+using Pidp.Models.DomainEvents;
 
 public class InMemoryDbTest : IDisposable
 {
     protected PidpDbContext TestDb { get; }
+    protected List<IDomainEvent> PublishedEvents { get; } = new();
 
     protected InMemoryDbTest()
     {
@@ -19,7 +23,11 @@ public class InMemoryDbTest : IDisposable
             .UseProjectables()
             .Options;
 
-        this.TestDb = new PidpDbContext(options, SystemClock.Instance);
+        var mediator = A.Fake<IMediator>();
+        A.CallTo(() => mediator.Publish(A<IDomainEvent>._, A<CancellationToken>._))
+           .Invokes(i => this.PublishedEvents.Add(i.GetArgument<IDomainEvent>(0)!));
+
+        this.TestDb = new PidpDbContext(options, SystemClock.Instance, mediator);
         this.TestDb.Database.EnsureCreated();
     }
 
@@ -39,7 +47,6 @@ public class InMemoryDbTest : IDisposable
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <param name="dependencyOverrides"></param>
-    /// <returns></returns>
     public T MockDependenciesFor<T>(params object[] dependencyOverrides)
     {
         var ctor = typeof(T).GetConstructors().Single();

@@ -104,7 +104,7 @@ public class ProfileStatusSAEformsTests : ProfileStatusTest
         var party = this.TestDb.Has(AParty.WithLicenceDeclared(cpn: cpn));
         var client = A.Fake<IPlrClient>()
             .ReturningAStatandingsDigest(digest);
-        A.CallTo(() => client.FindCpnAsync(A<CollegeCode>._, A<string>._, A<LocalDate>._)).Returns((string?)null);
+        A.CallTo(() => client.FindCpnAsync(A<CollegeCode>._, A<string>._, A<LocalDate>._)).Returns<string?>(null);
         var handler = this.MockDependenciesFor<CommandHandler>(client);
 
         var profile = await handler.HandleAsync(new Command { Id = party.Id, User = AMock.BcscUser() });
