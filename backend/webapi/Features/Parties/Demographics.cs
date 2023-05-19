@@ -8,6 +8,10 @@ using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
 
 using Pidp.Data;
+using Pidp.Infrastructure.HttpClients.BCProvider;
+using Pidp.Infrastructure.Auth;
+using Microsoft.Graph.Models;
+using Microsoft.Graph;
 
 public class Demographics
 {
@@ -67,9 +71,16 @@ public class Demographics
 
     public class CommandHandler : ICommandHandler<Command>
     {
+        private readonly IBCProviderClient bcProviderClient;
+        private readonly string bcProviderClientId;
         private readonly PidpDbContext context;
 
-        public CommandHandler(PidpDbContext context) => this.context = context;
+        public CommandHandler(IBCProviderClient bcProviderClient, PidpDbContext context, PidpConfiguration config)
+        {
+            this.bcProviderClient = bcProviderClient;
+            this.bcProviderClientId = config.BCProviderClient.ClientId;
+            this.context = context;
+        }
 
         public async Task HandleAsync(Command command)
         {
@@ -83,6 +94,18 @@ public class Demographics
             party.Phone = command.Phone;
 
             await this.context.SaveChangesAsync();
+
+            var bcProviderId = await this.context.Credentials
+                .Where(credential => credential.PartyId == command.Id
+                    && credential.IdentityProvider == IdentityProviders.BCProvider)
+                .Select(credential => credential.IdpId)
+                .SingleOrDefaultAsync();
+
+            if (!string.IsNullOrEmpty(bcProviderId))
+            {
+                var bcProviderAttributes = new BCProviderAttributes(this.bcProviderClientId).SetPidpEmail(command.Email ?? string.Empty);
+                await this.bcProviderClient.UpdateAttributes(bcProviderId, bcProviderAttributes.AsAdditionalData());
+            }
         }
     }
 }

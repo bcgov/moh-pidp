@@ -12,20 +12,12 @@ public interface IBCProviderClient
     Task<User?> CreateBCProviderAccount(NewUserRepresentation userRepresentation);
 
     /// <summary>
-    /// Get attribute key for an attribute name.
-    /// Example: For the attribute name "isMd" the function will
-    /// return "extension_{unique_identifier}_isMd".
-    /// </summary>
-    /// <param name="attributeName"></param>
-    /// <returns></returns>
-    string GetAttributeKey(string attributeName);
-
-    /// <summary>
     /// Get all additional attributes for a BC Provider account.
     /// </summary>
     /// <param name="userPrincipalName"></param>
+    /// <param name="attributesName"></param>
     /// <returns>If the BC provider account is not found return null</returns>
-    Task<IDictionary<string, object?>?> GetAttributes(string userPrincipalName);
+    Task<IDictionary<string, object?>?> GetAttributes(string userPrincipalName, string[] attributesName);
 
     /// <summary>
     /// Updates AAD attributes for a BC Provider account.
@@ -33,7 +25,7 @@ public interface IBCProviderClient
     /// </summary>
     /// <param name="userPrincipalName"></param>
     /// <param name="bcProviderAttributes">Set the value to null to remove the attribute</param>
-    Task<bool> UpdateAttributes(string userPrincipalName, IDictionary<string, object?> bcProviderAttributes);
+    Task<bool> UpdateAttributes(string userPrincipalName, IDictionary<string, object> bcProviderAttributes);
 
     /// <summary>
     /// Updates the password for a BC Provider account.
