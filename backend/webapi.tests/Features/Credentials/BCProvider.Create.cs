@@ -1,17 +1,16 @@
 namespace PidpTests.Features.Credentials;
 
 using FakeItEasy;
+using Microsoft.Graph.Models;
 using NodaTime;
 using Xunit;
 
 using static Pidp.Features.Credentials.BCProviderCreate;
-using Pidp.Infrastructure.HttpClients.Plr;
 using Pidp.Infrastructure.Auth;
-
-using PidpTests.TestingExtensions;
 using Pidp.Infrastructure.HttpClients.BCProvider;
-using Microsoft.Graph;
+using Pidp.Infrastructure.HttpClients.Plr;
 using Pidp.Models;
+using PidpTests.TestingExtensions;
 
 public class BcProviderCreateTests : InMemoryDbTest
 {
