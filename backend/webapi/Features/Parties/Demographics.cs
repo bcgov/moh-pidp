@@ -10,8 +10,7 @@ using System.Text.Json.Serialization;
 using Pidp.Data;
 using Pidp.Infrastructure.HttpClients.BCProvider;
 using Pidp.Infrastructure.Auth;
-using Microsoft.Graph.Models;
-using Microsoft.Graph;
+
 
 public class Demographics
 {
