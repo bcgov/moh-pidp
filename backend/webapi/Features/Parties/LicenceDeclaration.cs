@@ -138,7 +138,7 @@ public class LicenceDeclaration
                 .Where(credential => credential.PartyId == partyId
                     && credential.IdentityProvider == IdentityProviders.BCProvider)
                 .Select(credential => credential.IdpId)
-                .SingleAsync();
+                .SingleOrDefaultAsync();
 
             if (userPrincipalName != null)
             {
