@@ -41,7 +41,7 @@ public class MSTeamsPrivacyOfficerTests : InMemoryDbTest
             }
         };
         var client = A.Fake<IPlrClient>()
-            .ReturningAStatandingsDigest(true, identifierType);
+            .ReturningAStandingsDigest(true, identifierType);
         var handler = this.MockDependenciesFor<CommandHandler>(client);
 
         var result = await handler.HandleAsync(command);
@@ -81,7 +81,7 @@ public class MSTeamsPrivacyOfficerTests : InMemoryDbTest
             }
         };
         var client = A.Fake<IPlrClient>()
-            .ReturningAStatandingsDigest(true, AllowedIdentifierTypes[0]);
+            .ReturningAStandingsDigest(true, AllowedIdentifierTypes[0]);
         var emailService = A.Fake<IEmailService>();
         var capturedEmails = new List<Email>();
         A.CallTo(() => emailService.SendAsync(An<Email>._))

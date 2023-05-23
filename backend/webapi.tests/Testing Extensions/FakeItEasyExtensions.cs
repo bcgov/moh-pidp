@@ -69,10 +69,10 @@ public static class FakeItEasyExtensions
         }
     }
 
-    public static IPlrClient ReturningAStatandingsDigest(this IPlrClient client, bool goodStanding, string? identifierType = null)
-        => client.ReturningAStatandingsDigest(AMock.StandingsDigest(goodStanding, identifierType));
+    public static IPlrClient ReturningAStandingsDigest(this IPlrClient client, bool goodStanding, string? identifierType = null)
+        => client.ReturningAStandingsDigest(AMock.StandingsDigest(goodStanding, identifierType));
 
-    public static IPlrClient ReturningAStatandingsDigest(this IPlrClient client, PlrStandingsDigest digest)
+    public static IPlrClient ReturningAStandingsDigest(this IPlrClient client, PlrStandingsDigest digest)
     {
         A.CallTo(() => client.GetStandingAsync(A<string?>._)).Returns(digest.HasGoodStanding);
         A.CallTo(() => client.GetStandingsDigestAsync(A<string?>._)).Returns(digest);
@@ -81,7 +81,7 @@ public static class FakeItEasyExtensions
         return client;
     }
 
-    public static IPlrClient ReturningMultipleStatandingsDigests(this IPlrClient client, PlrStandingsDigest digest, PlrStandingsDigest aggregateDigest)
+    public static IPlrClient ReturningMultipleStandingsDigests(this IPlrClient client, PlrStandingsDigest digest, PlrStandingsDigest aggregateDigest)
     {
         A.CallTo(() => client.GetStandingAsync(A<string?>._)).Returns(digest.HasGoodStanding);
         A.CallTo(() => client.GetStandingsDigestAsync(A<string?>._)).Returns(digest);

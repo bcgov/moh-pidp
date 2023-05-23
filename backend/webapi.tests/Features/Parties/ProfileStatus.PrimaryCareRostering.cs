@@ -16,7 +16,7 @@ public class ProfileStatusPrimaryCareRosteringTests : ProfileStatusTest
     {
         var party = this.TestDb.Has(AParty.WithLicenceDeclared());
         var client = A.Fake<IPlrClient>()
-            .ReturningMultipleStatandingsDigests(digest, aggregateDigest);
+            .ReturningMultipleStandingsDigests(digest, aggregateDigest);
         var handler = this.MockDependenciesFor<CommandHandler>(client);
 
         var profile = await handler.HandleAsync(new Command { Id = party.Id, User = AMock.BcscUser() });
@@ -41,7 +41,7 @@ public class ProfileStatusPrimaryCareRosteringTests : ProfileStatusTest
     {
         var party = this.TestDb.Has(AParty.WithLicenceDeclared());
         var client = A.Fake<IPlrClient>()
-            .ReturningMultipleStatandingsDigests(digest, aggregateDigest);
+            .ReturningMultipleStandingsDigests(digest, aggregateDigest);
         var handler = this.MockDependenciesFor<CommandHandler>(client);
 
         var profile = await handler.HandleAsync(new Command { Id = party.Id, User = AMock.BcscUser() });

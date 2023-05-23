@@ -40,8 +40,8 @@ public class BcProviderCreateTests : InMemoryDbTest
         A.CallTo(() => bcProviderClient.CreateBCProviderAccount(A<NewUserRepresentation>._))
             .Invokes(i => capturedNewUser = i.GetArgument<NewUserRepresentation>(0))
             .Returns(new User());
-        var plrClient = A.Fake<PlrClient>()
-            .ReturningAStatandingsDigest(plrStanding);
+        var plrClient = A.Fake<IPlrClient>()
+            .ReturningAStandingsDigest(plrStanding);
         var handler = this.MockDependenciesFor<CommandHandler>(bcProviderClient, plrClient);
 
         var result = await handler.HandleAsync(new Command { PartyId = party.Id, Password = expectedPassword });
