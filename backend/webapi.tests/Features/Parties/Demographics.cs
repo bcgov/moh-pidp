@@ -1,57 +1,96 @@
 namespace PidpTests.Features.Parties;
 
-using FakeItEasy;
-using NodaTime;
-using Pidp.Features.Parties;
-using Pidp.Infrastructure.Auth;
-using Pidp.Infrastructure.HttpClients.BCProvider;
-using Pidp.Models;
-using PidpTests.TestingExtensions;
 using Xunit;
+
+using static Pidp.Features.Parties.Demographics;
+using Pidp.Models.DomainEvents;
+using PidpTests.TestingExtensions;
 
 public class DemographicsTests : InMemoryDbTest
 {
     [Fact]
-    public async void UpdatePartyDemographics_UpdateEmail_Success()
+    public async void UpdatePartyDemographics_NewParty_PropertiesUpdatedNoDomainEvent()
     {
         var party = this.TestDb.HasAParty(party =>
         {
-            party.Id = 1;
             party.FirstName = "partyfirst";
             party.LastName = "partylast";
-            party.Birthdate = LocalDate.FromDateTime(DateTime.Today);
-            party.Email = "partyemail@testemail.com";
-            party.Phone = "5555545555";
-            party.Cpn = "aCpnn";
-            party.Credentials.Add(new Credential
-            {
-                IdentityProvider = IdentityProviders.BCProvider,
-                IdpId = "AnIdpId1123123",
-                UserId = Guid.NewGuid()
-            });
         });
-
-        var command = new Demographics.Command
+        var command = new Command
         {
+            Id = party.Id,
             Email = "pidp.test@goh.com",
-            Id = 1,
+            Phone = "5555555555",
+            PreferredFirstName = "PFirst",
+            PreferredMiddleName = "PMid",
+            PreferredLastName = "PLast"
         };
-
-        var bcProviderClient = A.Fake<IBCProviderClient>();
-
-        var handler = this.MockDependenciesFor<Demographics.CommandHandler>(bcProviderClient);
+        var handler = this.MockDependenciesFor<CommandHandler>();
 
         await handler.HandleAsync(command);
 
-        var partyUpdated = this.TestDb.Parties.SingleOrDefault(request => request.Id == command.Id);
-        Assert.NotNull(partyUpdated);
-        Assert.Equal("pidp.test@goh.com", partyUpdated.Email);
+        var updatedParty = this.TestDb.Parties.Single(p => p.Id == party.Id);
+        Assert.Equal(command.Email, updatedParty.Email);
+        Assert.Equal(command.Phone, updatedParty.Phone);
+        Assert.Equal(command.PreferredFirstName, updatedParty.PreferredFirstName);
+        Assert.Equal(command.PreferredMiddleName, updatedParty.PreferredMiddleName);
+        Assert.Equal(command.PreferredLastName, updatedParty.PreferredLastName);
 
-        A.CallTo(() => bcProviderClient
-            .UpdateAttributes(
-                "AnIdpId1123123",
-                A<Dictionary<string, object>>._
-            )
-        ).MustHaveHappenedOnceExactly();
+        Assert.Empty(this.PublishedEvents.OfType<PartyEmailUpdated>());
+    }
+
+    [Fact]
+    public async void UpdatePartyDemographics_ExistingParty_PropertiesUpdatedDomainEvent()
+    {
+        var party = this.TestDb.HasAParty(party =>
+        {
+            party.FirstName = "partyfirst";
+            party.LastName = "partylast";
+            party.Email = "existing@email.com";
+            party.Phone = "5555555555";
+            party.PreferredFirstName = "ExistingFirst";
+            party.PreferredMiddleName = "ExistingMid";
+            party.PreferredLastName = "ExistingLast";
+        });
+        var command = new Command
+        {
+            Id = party.Id,
+            Email = "new@emzlez.com",
+            Phone = "4444444444",
+            PreferredFirstName = "PFirst",
+            PreferredMiddleName = "PMid",
+            PreferredLastName = "PLast"
+        };
+        var handler = this.MockDependenciesFor<CommandHandler>();
+
+        await handler.HandleAsync(command);
+
+        var updatedParty = this.TestDb.Parties.Single(p => p.Id == party.Id);
+        Assert.Equal(command.Email, updatedParty.Email);
+        Assert.Equal(command.Phone, updatedParty.Phone);
+        Assert.Equal(command.PreferredFirstName, updatedParty.PreferredFirstName);
+        Assert.Equal(command.PreferredMiddleName, updatedParty.PreferredMiddleName);
+        Assert.Equal(command.PreferredLastName, updatedParty.PreferredLastName);
+
+        Assert.Single(this.PublishedEvents.OfType<PartyEmailUpdated>());
+        var emailEvent = this.PublishedEvents.OfType<PartyEmailUpdated>().Single();
+        Assert.Equal(party.Id, emailEvent.PartyId);
+        Assert.Equal(command.Email, emailEvent.NewEmail);
+    }
+
+    [Fact]
+    public async void UpdatePartyDemographics_ExistingPartySameEmail_NoDomainEvent()
+    {
+        var party = this.TestDb.HasAParty(party => party.Email = "existing@email.com");
+        var command = new Command
+        {
+            Id = party.Id,
+            Email = party.Email
+        };
+        var handler = this.MockDependenciesFor<CommandHandler>();
+
+        await handler.HandleAsync(command);
+
+        Assert.Empty(this.PublishedEvents.OfType<PartyEmailUpdated>());
     }
 }
