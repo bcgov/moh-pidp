@@ -10,13 +10,14 @@ using Pidp.Infrastructure.HttpClients.Plr;
 
 public static class FakeItEasyExtensions
 {
-    public static IReturnValueConfiguration<Task<HttpResponseMessage>> InvokingSendAsyncWith(this IWhereConfiguration<IAnyCallConfigurationWithNoReturnTypeSpecified> configuration, HttpMethod method, string url, HttpContent? content = null)
+    public static IReturnValueConfiguration<Task<HttpResponseMessage>> InvokingSendAsyncWith(this IWhereConfiguration<IAnyCallConfigurationWithNoReturnTypeSpecified> configuration, HttpMethod method, string? url = null, HttpContent? content = null)
     {
         return configuration
             .Where(x => x.Method.Name == "SendAsync")
             .WithReturnType<Task<HttpResponseMessage>>()
             .WhenArgumentsMatch((HttpRequestMessage message, CancellationToken token) => message.Method == method
-                && message.RequestUri == new Uri(url)
+                && (url == null
+                    || message.RequestUri == new Uri(url))
                 && (content == null
                     || content.Equals(message.Content)));
     }
