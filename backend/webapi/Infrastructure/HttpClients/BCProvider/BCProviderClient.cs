@@ -56,7 +56,7 @@ public class BCProviderClient : IBCProviderClient
             AccountEnabled = true,
             DisplayName = userRepresentation.FullName, // Required
             GivenName = userRepresentation.FirstName,
-            MailNickname = userRepresentation.FullName.Replace(" ", ""), // Required, cannot contain spaces
+            MailNickname = this.RemoveMailNicknameInvalidCharacters(userRepresentation.FullName), // Required
             Surname = userRepresentation.LastName,
             UserPrincipalName = userPrincipal,
             PasswordProfile = new PasswordProfile
@@ -125,26 +125,46 @@ public class BCProviderClient : IBCProviderClient
     private async Task<string?> CreateUniqueUserPrincipalName(NewUserRepresentation user)
     {
         var joinedFullName = $"{user.FirstName}.{user.LastName}";
-        // According to the Microsoft Graph docs, User Principal Name can only include A - Z, a - z, 0 - 9, and the characters ' . - _ ! # ^ ~
-        var fullNameLegalCharacters = Regex.Replace(joinedFullName, @"[^a-zA-Z0-9'\.\-_!\#\^~]", string.Empty);
-
-        if (joinedFullName.Length != fullNameLegalCharacters.Length)
-        {
-            this.logger.LogPartyNameContainsInvalidCharacters(joinedFullName, fullNameLegalCharacters);
-        }
+        var legalCharacters = this.RemoveUpnInvalidCharacters(joinedFullName);
 
         for (var i = 1; i <= 100; i++)
         {
             // Generates First.Last@domain instead of First.Last1@domain for the first instance of a name.
-            var proposedName = $"{fullNameLegalCharacters}{(i < 2 ? string.Empty : i)}@{this.domain}";
+            var proposedName = $"{legalCharacters}{(i < 2 ? string.Empty : i)}@{this.domain}";
             if (!await this.UserExists(proposedName))
             {
                 return proposedName;
             }
         }
 
-        this.logger.LogNoUniqueUserPrincipalNameFound(fullNameLegalCharacters);
+        this.logger.LogNoUniqueUserPrincipalNameFound(legalCharacters);
         return null;
+    }
+
+    private string RemoveMailNicknameInvalidCharacters(string mailNickname)
+    {
+        // Mail Nickname can include ASCII values 32 - 127 except the following: @ () \ [] " ; : . <> , SPACE
+        var legalCharacters = Regex.Replace(mailNickname, @"[^a-zA-Z0-9!#$%&'*+\-\/=?\^_`{|}~]", string.Empty);
+
+        if (mailNickname.Length != legalCharacters.Length)
+        {
+            this.logger.LogPartyNameContainsMailNicknameInvalidCharacters(mailNickname, legalCharacters);
+        }
+
+        return legalCharacters;
+    }
+
+    private string RemoveUpnInvalidCharacters(string userPrincipalName)
+    {
+        // According to the Microsoft Graph docs, User Principal Name can only include A - Z, a - z, 0 - 9, and the characters ' . - _ ! # ^ ~
+        var legalCharacters = Regex.Replace(userPrincipalName, @"[^a-zA-Z0-9'\.\-_!\#\^~]", string.Empty);
+
+        if (userPrincipalName.Length != legalCharacters.Length)
+        {
+            this.logger.LogPartyNameContainsUpnInvalidCharacters(userPrincipalName, legalCharacters);
+        }
+
+        return legalCharacters;
     }
 
     private async Task<bool> UserExists(string userPrincipalName)
@@ -180,6 +200,9 @@ public static partial class BCProviderClientLoggingExtensions
     [LoggerMessage(7, LogLevel.Error, "Failed to get the attributes of user '{userPrincipalName}'.")]
     public static partial void LogGetAdditionalAttributesFailure(this ILogger logger, string userPrincipalName);
 
-    [LoggerMessage(8, LogLevel.Warning, "Party's full name contained characters invalid for an AAD User Principal Name. '{partyFullName}' was shortened to '{partyShortenedName}'.")]
-    public static partial void LogPartyNameContainsInvalidCharacters(this ILogger logger, string partyFullName, string partyShortenedName);
+    [LoggerMessage(8, LogLevel.Warning, "Party's full name contained characters invalid for an AAD Mail Nickname. '{partyFullName}' was shortened to '{partyShortenedName}'.")]
+    public static partial void LogPartyNameContainsMailNicknameInvalidCharacters(this ILogger logger, string partyFullName, string partyShortenedName);
+
+    [LoggerMessage(9, LogLevel.Warning, "Party's full name contained characters invalid for an AAD User Principal Name. '{partyFullName}' was shortened to '{partyShortenedName}'.")]
+    public static partial void LogPartyNameContainsUpnInvalidCharacters(this ILogger logger, string partyFullName, string partyShortenedName);
 }
