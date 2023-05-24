@@ -7,7 +7,8 @@ export class AccessRoutes {
   public static DRIVER_FITNESS = 'driver-fitness';
   public static HCIM_ACCOUNT_TRANSFER = 'hcim-account-transfer';
   public static HCIM_ENROLMENT = 'hcim-enrolment';
-  public static MS_TEAMS = 'ms-teams';
+  public static MS_TEAMS_PRIVACY_OFFICER = 'ms-teams-privacy-officer';
+  public static MS_TEAMS_CLINIC_MEMBER = 'ms-teams-clinic-member';
   public static PHARMANET = 'pharmanet';
   public static PRESCRIPTION_REFILL_EFORMS = 'prescription-refill-eforms';
   public static PROVIDER_REPORTING_PORTAL = 'provider-reporting-portal';

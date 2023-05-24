@@ -18,6 +18,18 @@ public class IdentifierType
     public static implicit operator string(IdentifierType type) => type.Value;
 }
 
+public class ProviderRoleType
+{
+    public static readonly ProviderRoleType MedicalDoctor = new("MD");
+    public static readonly ProviderRoleType RegisteredNursePractitioner = new("RNP");
+
+    public string Value { get; }
+
+    private ProviderRoleType(string value) => this.Value = value;
+
+    public static implicit operator string(ProviderRoleType type) => type.Value;
+}
+
 public class PlrRecord
 {
     public string Cpn { get; set; } = string.Empty;
@@ -69,6 +81,19 @@ public class PlrStandingsDigest
     }
 
     /// <summary>
+    /// Filters the digest to only include records of the given Provider Role Type(s)
+    /// </summary>
+    /// <param name="providerRoleTypes"></param>
+    public PlrStandingsDigest With(params ProviderRoleType[] providerRoleTypes)
+    {
+        return new PlrStandingsDigest
+        (
+            this.Error,
+            this.records.IntersectBy(providerRoleTypes.Select(t => (string)t), record => record.ProviderRoleType)
+        );
+    }
+
+    /// <summary>
     /// Filters the digest to exclude records of the given Identifier Type(s)
     /// </summary>
     /// <param name="identifierTypes"></param>
@@ -88,6 +113,7 @@ public class PlrStandingsDigest
         return new(false, records.Select(record => new DigestRecord
         {
             IdentifierType = record.IdentifierType,
+            ProviderRoleType = record.ProviderRoleType,
             LicenceNumber = record.CollegeId,
             IsGoodStanding = record.IsGoodStanding()
         }));
@@ -96,6 +122,7 @@ public class PlrStandingsDigest
     private class DigestRecord
     {
         public string? IdentifierType { get; set; }
+        public string? ProviderRoleType { get; set; }
         public string? LicenceNumber { get; set; }
         public bool IsGoodStanding { get; set; }
     }

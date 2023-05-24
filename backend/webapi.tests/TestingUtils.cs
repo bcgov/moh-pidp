@@ -48,17 +48,17 @@ public static class AMock
     /// </summary>
     /// <param name="goodStanding"></param>
     /// <param name="identifierType"></param>
-    public static PlrStandingsDigest StandingsDigest(bool goodStanding, string? identifierType = null) => StandingsDigest((goodStanding, identifierType));
+    public static PlrStandingsDigest StandingsDigest(bool goodStanding, string? identifierType = null, string? providerRoleType = null) => StandingsDigest((goodStanding, identifierType, providerRoleType));
 
     /// <summary>
     /// Creates a digest containing multiple records with properties as indicated.
     /// </summary>
     /// <param name="records"></param>
-    public static PlrStandingsDigest StandingsDigest(params (bool GoodStanding, string? IdentifierType)[] records)
+    public static PlrStandingsDigest StandingsDigest(params (bool GoodStanding, string? IdentifierType, string? providerRoleType)[] records)
     {
         return PlrStandingsDigest.FromRecords
         (
-            records.Select(record => new PlrRecordMock(record.GoodStanding, record.IdentifierType))
+            records.Select(record => new PlrRecordMock(record.GoodStanding, record.IdentifierType, record.providerRoleType))
         );
     }
 
@@ -76,10 +76,11 @@ public class PlrRecordMock : PlrRecord
 {
     private readonly bool goodStanding;
 
-    public PlrRecordMock(bool goodStanding, string? identifierType = null)
+    public PlrRecordMock(bool goodStanding, string? identifierType = null, string? providerRoleType = null)
     {
         this.goodStanding = goodStanding;
         this.IdentifierType = identifierType;
+        this.ProviderRoleType = providerRoleType;
     }
 
     public override bool IsGoodStanding() => this.goodStanding;

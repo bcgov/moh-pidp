@@ -33,21 +33,21 @@ h2 {
 }
 .card-container.viewport-small {
   display: flex;
+  flex-direction: column;
 }
 .card-container.viewport-medium,
 .card-container.viewport-large {
   display: flex;
   flex: 1;
+  flex-direction: column;
 
-  .card-image {
-  }
   .card-content-container {
     display: flex;
     flex-direction: column;
     flex: 1;
 
     & header {
-      padding: 30px 20px 20px;
+      padding: 30px 18px 18px;
     }
     & h2.card-header-text {
       font-size: 1.6em;
@@ -64,9 +64,6 @@ h2 {
 }
 // Adjust for small and medium, which have a layout very similar to large.
 .card-container.viewport-medium {
-  .card-image {
-    min-height: 510px;
-  }
   .card-content-container {
     & header {
       padding: 25px 14px 14px;
@@ -77,9 +74,6 @@ h2 {
   }
 }
 .card-container.viewport-small {
-  .card-image {
-    min-height: 229px;
-  }
   .card-content-container {
     display: flex;
     flex-direction: column;

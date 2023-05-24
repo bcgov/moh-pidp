@@ -6,7 +6,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { randNumber } from '@ngneat/falso';
 import { Spy, createSpyFromClass, provideAutoSpy } from 'jest-auto-spies';
 
-import { RootRoutes } from '@bcgov/shared/ui';
+import { ShellRoutes } from '@app/features/shell/shell.routes';
 
 import { APP_CONFIG, APP_DI_CONFIG } from '@app/app.config';
 
@@ -86,7 +86,7 @@ describe('PartyResolver', () => {
 
         then('response will provide the party ID', () => {
           expect(partyResourceSpy.firstOrCreate).toHaveBeenCalledTimes(1);
-          expect(router.navigateByUrl).toHaveBeenCalledWith(RootRoutes.DENIED);
+          expect(router.navigateByUrl).toHaveBeenCalledWith(ShellRoutes.SUPPORT_ERROR_PAGE);
           expect(actualResult).toBe(null);
         });
       });

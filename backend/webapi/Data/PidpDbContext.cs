@@ -1,5 +1,6 @@
 namespace Pidp.Data;
 
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using NodaTime;
 
@@ -8,8 +9,17 @@ using Pidp.Models;
 public class PidpDbContext : DbContext
 {
     private readonly IClock clock;
+    private readonly IMediator mediator;
 
-    public PidpDbContext(DbContextOptions<PidpDbContext> options, IClock clock) : base(options) => this.clock = clock;
+    public PidpDbContext(
+        DbContextOptions<PidpDbContext> options,
+        IClock clock,
+        IMediator mediator)
+        : base(options)
+    {
+        this.clock = clock;
+        this.mediator = mediator;
+    }
 
     public DbSet<AccessRequest> AccessRequests { get; set; } = default!;
     public DbSet<BusinessEvent> BusinessEvents { get; set; } = default!;
@@ -22,22 +32,22 @@ public class PidpDbContext : DbContext
     public DbSet<Facility> Facilities { get; set; } = default!;
     public DbSet<HcimAccountTransfer> HcimAccountTransfers { get; set; } = default!;
     public DbSet<HcimEnrolment> HcimEnrolments { get; set; } = default!;
-    public DbSet<MSTeamsEnrolment> MSTeamsEnrolments { get; set; } = default!;
+    public DbSet<MSTeamsClinic> MSTeamsClinics { get; set; } = default!;
+    public DbSet<MSTeamsClinicMemberEnrolment> MSTeamsClinicMemberEnrolments { get; set; } = default!;
     public DbSet<PartyLicenceDeclaration> PartyLicenceDeclarations { get; set; } = default!;
     public DbSet<Party> Parties { get; set; } = default!;
     public DbSet<PartyAccessAdministrator> PartyAccessAdministrators { get; set; } = default!;
     public DbSet<PartyOrgainizationDetail> PartyOrgainizationDetails { get; set; } = default!;
     public DbSet<PrpAuthorizedLicence> PrpAuthorizedLicences { get; set; } = default!;
 
-    public override int SaveChanges()
-    {
-        this.ApplyAudits();
-
-        return base.SaveChanges();
-    }
+    /// <summary>
+    /// Do not use. Use SaveChangesAsync Instead.
+    /// </summary>
+    public override int SaveChanges() => this.SaveChangesAsync().GetAwaiter().GetResult();
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
+        await this.DispatchDomainEventsAsync();
         this.ApplyAudits();
 
         return await base.SaveChangesAsync(cancellationToken);
@@ -49,6 +59,24 @@ public class PidpDbContext : DbContext
 
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(PidpDbContext).Assembly);
         modelBuilder.Entity<PartyNotInPlr>(); // We must make the context aware of types. Since business events are not referenced on any models and we don't want to make a DB Set for each type of event; here we are.
+    }
+
+    private async Task DispatchDomainEventsAsync()
+    {
+        var eventEntities = this.ChangeTracker.Entries<BaseEntity>()
+            .Select(x => x.Entity)
+            .Where(entity => entity.DomainEvents.Any());
+
+        foreach (var entity in eventEntities)
+        {
+            var events = entity.DomainEvents.ToArray();
+            entity.DomainEvents.Clear();
+
+            foreach (var domainEvent in events)
+            {
+                await this.mediator.Publish(domainEvent);
+            }
+        }
     }
 
     private void ApplyAudits()

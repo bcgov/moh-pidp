@@ -40,15 +40,6 @@ h1 {
 }
 
 .viewport-all {
-  & .content-body-box {
-    // This is a hack to prevent a horizontal scrollbar from appearing in v1 page content
-    // that uses bootstrap. The bug may caused by bootstrap but it not yet known.
-    // This should be removed as soon as possible.
-    overflow-x: hidden;
-  }
-}
-
-.viewport-all {
   width: 100%;
   display: flex;
   & .content-header-box {
@@ -103,7 +94,7 @@ h1 {
         margin: var(--sidenav-panel-box-margin);
         background-color: #fff;
         & .sidenav-bar {
-          border-top: 20px solid #09c;
+          border-top: 20px solid #38598A;
         }
         & .sidenav-panel-content {
           padding: var(--sidenav-panel-content-padding);
@@ -177,7 +168,7 @@ h1 {
       position: sticky;
       top: 64px;
       & .sidenav-panel-box {
-        border: 1px solid #ccc;
+        border: 1px solid #B2B2B2;
 
         & .sidenav-panel-content {
           & .sidenav-header {

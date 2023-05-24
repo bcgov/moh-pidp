@@ -33,6 +33,7 @@ public class Startup
         services
             .AddAutoMapper(typeof(Startup))
             .AddHttpClients(config)
+            .AddMediatR(opt => opt.RegisterServicesFromAssemblyContaining<Startup>())
             .AddKeycloakAuth(config)
             .AddScoped<IEmailService, EmailService>()
             .AddScoped<IPidpAuthorizationService, PidpAuthorizationService>()
