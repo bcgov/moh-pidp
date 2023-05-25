@@ -1,5 +1,6 @@
 namespace Pidp;
 
+using Pidp.Infrastructure.Services;
 using Serilog;
 using Serilog.Events;
 using Serilog.Formatting.Json;
@@ -15,9 +16,12 @@ public class Program
         try
         {
             Log.Information("Starting web host");
-            CreateHostBuilder(args)
-                .Build()
-                .Run();
+            var host = CreateHostBuilder(args).Build();
+
+            var taskSchedulerService = host.Services.GetRequiredService<IScheduledPlrStatusChangeTaskService>();
+            taskSchedulerService.Start();
+
+            host.Run();
             return 0;
         }
         catch (Exception ex)

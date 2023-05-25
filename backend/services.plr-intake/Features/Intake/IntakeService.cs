@@ -130,7 +130,8 @@ public class IntakeService : IIntakeService
                 OldStatusCode = existingRecord.StatusCode,
                 OldStatusReasonCode = existingRecord.StatusReasonCode,
                 NewStatusCode = newRecord.StatusCode,
-                NewStatusReasonCode = newRecord.StatusReasonCode
+                NewStatusReasonCode = newRecord.StatusReasonCode,
+                SouldBeProcessed = true
             });
         }
     }

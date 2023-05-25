@@ -127,3 +127,23 @@ public class PlrStandingsDigest
         public bool IsGoodStanding { get; set; }
     }
 }
+
+
+public class PlrStatusChangeLog
+{
+    public int Id { get; set; }
+
+    public int PlrRecordId { get; set; }
+
+    public string? OldStatusCode { get; set; }
+
+    public string? OldStatusReasonCode { get; set; }
+
+    public string? NewStatusCode { get; set; }
+
+    public string? NewStatusReasonCode { get; set; }
+
+    public bool SouldBeProcessed { get; set; }
+
+    public string Cpn { get; set; } = string.Empty;
+}

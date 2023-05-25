@@ -36,9 +36,22 @@ public interface IPlrClient
     /// <param name="cpn"></param>
     Task<PlrStandingsDigest> GetStandingsDigestAsync(string? cpn);
 
+    /// <summary>
+    /// Get a list of PLR status changed to be processed.
+    /// </summary>
+    /// <returns></returns>
+    Task<IList<PlrStatusChangeLog>> GetStatusChangeToPocess();
+
     /// Creates a summary of the status of all PLR Records for all of the given CPNs.
     /// The digest indicates an error on HTTP failure.
     /// </summary>
     /// <param name="cpns"></param>
     Task<PlrStandingsDigest> GetAggregateStandingsDigestAsync(IEnumerable<string?> cpns);
+
+    /// <summary>
+    /// Set the status change to "processed".
+    /// </summary>
+    /// <param name="statusChangeLogId"></param>
+    /// <returns></returns>
+    Task<bool> UpdateStatusChangeLog(int statusChangeLogId);
 }

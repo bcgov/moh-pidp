@@ -79,6 +79,12 @@ public class PlrClient : BaseClient, IPlrClient
         return PlrStandingsDigest.FromRecords(records);
     }
 
+    public async Task<IList<PlrStatusChangeLog>> GetStatusChangeToPocess()
+    {
+        var result = await this.GetAsync<IList<PlrStatusChangeLog>>("records/status-changes");
+        return result.Value;
+    }
+
     public async Task<PlrStandingsDigest> GetAggregateStandingsDigestAsync(IEnumerable<string?> cpns)
     {
         var records = await this.GetRecordsAsync(cpns.ToArray());
@@ -93,6 +99,12 @@ public class PlrClient : BaseClient, IPlrClient
         }
 
         return PlrStandingsDigest.FromRecords(records);
+    }
+
+    public async Task<bool> UpdateStatusChangeLog(int statusChangeLogId)
+    {
+        var response = await this.PutAsync($"status-changes/{statusChangeLogId}/processed");
+        return response.IsSuccess;
     }
 
     /// <summary>
