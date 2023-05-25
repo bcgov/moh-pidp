@@ -1,6 +1,6 @@
 namespace Pidp.Infrastructure.HttpClients.BCProvider;
 
-using Microsoft.Graph;
+using Microsoft.Graph.Models;
 
 public interface IBCProviderClient
 {
@@ -9,7 +9,23 @@ public interface IBCProviderClient
     /// Returns the account object if the operation was successful.
     /// </summary>
     /// <param name="userRepresentation"></param>
-    Task<User?> CreateBCProviderAccount(UserRepresentation userRepresentation);
+    Task<User?> CreateBCProviderAccount(NewUserRepresentation userRepresentation);
+
+    /// <summary>
+    /// Get all additional attributes for a BC Provider account.
+    /// </summary>
+    /// <param name="userPrincipalName"></param>
+    /// <param name="attributesName"></param>
+    /// <returns>If the BC provider account is not found return null</returns>
+    Task<IDictionary<string, object?>?> GetAttributes(string userPrincipalName, string[] attributesName);
+
+    /// <summary>
+    /// Updates AAD attributes for a BC Provider account.
+    /// Returns true if the operation was successful.
+    /// </summary>
+    /// <param name="userPrincipalName"></param>
+    /// <param name="bcProviderAttributes">Set the value to null to remove the attribute</param>
+    Task<bool> UpdateAttributes(string userPrincipalName, IDictionary<string, object> bcProviderAttributes);
 
     /// <summary>
     /// Updates the password for a BC Provider account.
@@ -18,10 +34,4 @@ public interface IBCProviderClient
     /// <param name="userPrincipalName"></param>
     /// <param name="password"></param>
     Task<bool> UpdatePassword(string userPrincipalName, string password);
-
-    /// <summary>
-    /// Registers the BC Provider Schema Extension.
-    /// Returns the extension object if the operation was successful.
-    /// Only needed once per environment; this method is mostly just documentation.
-    Task<SchemaExtension?> RegisterSchemaExtension();
 }

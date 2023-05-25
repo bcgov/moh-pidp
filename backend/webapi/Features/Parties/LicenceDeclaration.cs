@@ -16,6 +16,8 @@ using Pidp.Infrastructure.HttpClients.Plr;
 using Pidp.Models;
 using Pidp.Models.DomainEvents;
 using Pidp.Models.Lookups;
+using Pidp.Infrastructure.Auth;
+using Pidp.Infrastructure.HttpClients.BCProvider;
 
 public class LicenceDeclaration
 {

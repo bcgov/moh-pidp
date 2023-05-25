@@ -118,7 +118,7 @@ public class EndorsementApproveTests : InMemoryDbTest
         var keycloakClient = A.Fake<IKeycloakAdministrationClient>()
             .ReturningTrueWhenAssigingClientRoles();
         var plrClient = A.Fake<IPlrClient>()
-            .ReturningAStatandingsDigest(true);
+            .ReturningAStandingsDigest(true);
         var handler = this.MockDependenciesFor<Approve.CommandHandler>(keycloakClient, plrClient);
 
         var result = await handler.HandleAsync(new Approve.Command { EndorsementRequestId = request.Id, PartyId = RequestingPartyId });

@@ -7,8 +7,10 @@ using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
 
 using Pidp.Data;
+using Pidp.Extensions;
 using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.HttpClients.BCProvider;
+using Pidp.Infrastructure.HttpClients.Plr;
 using Pidp.Models;
 
 public class BCProviderCreate
@@ -35,15 +37,18 @@ public class BCProviderCreate
         private readonly IBCProviderClient client;
         private readonly PidpDbContext context;
         private readonly ILogger logger;
+        private readonly IPlrClient plrClient;
 
         public CommandHandler(
             IBCProviderClient client,
             PidpDbContext context,
-            ILogger<CommandHandler> logger)
+            ILogger<CommandHandler> logger,
+            IPlrClient plrClient)
         {
             this.client = client;
             this.context = context;
             this.logger = logger;
+            this.plrClient = plrClient;
         }
 
         public async Task<IDomainResult> HandleAsync(Command command)
@@ -54,8 +59,10 @@ public class BCProviderCreate
                 {
                     party.FirstName,
                     party.LastName,
+                    party.Cpn,
+                    party.Email,
                     HasBCProviderCredential = party.Credentials.Any(credential => credential.IdentityProvider == IdentityProviders.BCProvider),
-                    Hpdid = party.Credentials.Select(credential => credential.Hpdid).Single(hpdid => hpdid != null)
+                    Hpdid = party.Credentials.Select(credential => credential.Hpdid).Single(hpdid => hpdid != null),
                 })
                 .SingleAsync();
 
@@ -65,19 +72,38 @@ public class BCProviderCreate
                 return DomainResult.Failed();
             }
 
-            if (party.Hpdid == null)
+            if (party.Email == null
+                || party.Hpdid == null)
             {
-                this.logger.LogNullHpdid(command.PartyId);
+                this.logger.LogInvalidState(command.PartyId, party);
                 return DomainResult.Failed();
             }
 
-            var createdUser = await this.client.CreateBCProviderAccount(new UserRepresentation
+            var plrStanding = await this.plrClient.GetStandingsDigestAsync(party.Cpn);
+
+            var newUserRep = new NewUserRepresentation
             {
                 FirstName = party.FirstName,
                 LastName = party.LastName,
+                Hpdid = party.Hpdid,
+                IsRnp = plrStanding.With(ProviderRoleType.RegisteredNursePractitioner).HasGoodStanding,
+                IsMd = plrStanding.With(ProviderRoleType.MedicalDoctor).HasGoodStanding,
+                Cpn = party.Cpn,
                 Password = command.Password,
-                Hpdid = party.Hpdid
-            });
+                PidpEmail = party.Email
+            };
+
+            if (party.Cpn == null)
+            {
+                var endorsementCpns = await this.context.ActiveEndorsementRelationships(command.PartyId)
+                    .Select(relationship => relationship.Party!.Cpn)
+                    .ToListAsync();
+                var endorsementPlrStanding = await this.plrClient.GetAggregateStandingsDigestAsync(endorsementCpns);
+
+                newUserRep.IsMoa = endorsementPlrStanding.HasGoodStanding;
+            }
+
+            var createdUser = await this.client.CreateBCProviderAccount(newUserRep);
 
             if (createdUser == null)
             {
@@ -103,6 +129,6 @@ public static partial class BCProviderCreateLoggingExtensions
     [LoggerMessage(1, LogLevel.Information, "Party {partyId} attempted to create a second BC Provider account.")]
     public static partial void LogPartyHasBCProviderCredential(this ILogger logger, int partyId);
 
-    [LoggerMessage(2, LogLevel.Error, "Failed to create BC Provider for Party {partyId}, HPDID was null.")]
-    public static partial void LogNullHpdid(this ILogger logger, int partyId);
+    [LoggerMessage(2, LogLevel.Error, "Failed to create BC Provider for Party {partyId}, one or more requirements were not met. Party state: {state}.")]
+    public static partial void LogInvalidState(this ILogger logger, int partyId, object state);
 }
