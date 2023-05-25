@@ -57,7 +57,7 @@ public class ScheduledPlrStatusChangeTaskService : IScheduledPlrStatusChangeTask
 
                         if (!party.HasBCProviderCredential)
                         {
-                            return;
+                            await this.plrClient.SetStatusChangeLogToProcessed(status.Id);
                         }
 
                         var plrStanding = await this.plrClient.GetStandingsDigestAsync(status.Cpn);
@@ -67,7 +67,7 @@ public class ScheduledPlrStatusChangeTaskService : IScheduledPlrStatusChangeTask
 #endif
 
                         // update the status to "processed"
-                        await this.plrClient.UpdateStatusChangeLog(status.Id);
+                        await this.plrClient.SetStatusChangeLogToProcessed(status.Id);
 #if DEBUG
                         Console.WriteLine($"cpn {status.Cpn}, status processed");
 #endif
