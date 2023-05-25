@@ -103,7 +103,7 @@ public class PlrClient : BaseClient, IPlrClient
 
     public async Task<bool> UpdateStatusChangeLog(int statusChangeLogId)
     {
-        var response = await this.PutAsync($"status-changes/{statusChangeLogId}/processed");
+        var response = await this.PutAsync($"records/status-changes/{statusChangeLogId}/processed");
         return response.IsSuccess;
     }
 

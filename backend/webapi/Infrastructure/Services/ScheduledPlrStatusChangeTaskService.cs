@@ -29,15 +29,23 @@ public class ScheduledPlrStatusChangeTaskService : IScheduledPlrStatusChangeTask
             while (await this.timer.WaitForNextTickAsync(this.cts.Token))
             {
                 var statusChange = await this.plrClient.GetStatusChangeToPocess();
+#if DEBUG
+                Console.WriteLine($"{DateTime.Now} - {statusChange?.Count} Status change");
+#endif
                 if (statusChange != null)
                 {
                     foreach (var status in statusChange)
                     {
                         // perform business rules
-                        Console.WriteLine($"Status change from {status.OldStatusCode} to {status.NewStatusCode} for the cpn {status.Cpn}");
+#if DEBUG
+                        Console.WriteLine($"cpn {status.Cpn}, status change from {status.OldStatusCode} to {status.NewStatusCode} - StatusId {status.Id}");
+#endif
 
                         // update the status to "processed"
                         await this.plrClient.UpdateStatusChangeLog(status.Id);
+#if DEBUG
+                        Console.WriteLine($"cpn {status.Cpn}, status processed");
+#endif
                     }
                 }
             }
