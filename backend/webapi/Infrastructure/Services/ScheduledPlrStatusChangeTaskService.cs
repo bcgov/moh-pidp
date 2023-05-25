@@ -14,18 +14,18 @@ public class ScheduledPlrStatusChangeTaskService : IScheduledPlrStatusChangeTask
     private readonly TimeSpan interval;
     private readonly IPlrClient plrClient;
     private readonly PidpDbContext context;
-    private readonly IBCProviderClient bCProviderClient;
+    private readonly IBCProviderClient bcProviderClient;
 
     public ScheduledPlrStatusChangeTaskService(
         IPlrClient plrClient,
         PidpDbContext context,
-        IBCProviderClient bCProviderClient)
+        IBCProviderClient bcProviderClient)
     {
         this.interval = TimeSpan.FromSeconds(10);
         this.timer = new PeriodicTimer(this.interval);
         this.plrClient = plrClient;
         this.context = context;
-        this.bCProviderClient = bCProviderClient;
+        this.bcProviderClient = bcProviderClient;
     }
 
     public void Start()
@@ -51,6 +51,7 @@ public class ScheduledPlrStatusChangeTaskService : IScheduledPlrStatusChangeTask
                             .Where(party => party.Cpn == status.Cpn)
                             .Select(party => new
                             {
+                                PartyId = party.Id,
                                 HasBCProviderCredential = party.Credentials.Any(credential => credential.IdentityProvider == IdentityProviders.BCProvider),
                             })
                             .SingleAsync();
@@ -62,6 +63,18 @@ public class ScheduledPlrStatusChangeTaskService : IScheduledPlrStatusChangeTask
 
                         var plrStanding = await this.plrClient.GetStandingsDigestAsync(status.Cpn);
                         // perform business rules
+                        var userPrincipalName = await this.context.Credentials
+                            .Where(credential => credential.PartyId == party.PartyId
+                                && credential.IdentityProvider == IdentityProviders.BCProvider)
+                            .Select(credential => credential.IdpId)
+                            .SingleOrDefaultAsync();
+
+                        var isRnp = plrStanding.With(ProviderRoleType.RegisteredNursePractitioner).HasGoodStanding;
+                        var isMd = plrStanding.With(ProviderRoleType.MedicalDoctor).HasGoodStanding;
+                        // IsMoa logic TBDeveloped
+
+                        var bcProviderAttributes = new BCProviderAttributes(userPrincipalName).SetIsRnp(isRnp).SetIsMd(isMd);
+                        await this.bcProviderClient.UpdateAttributes(userPrincipalName, bcProviderAttributes.AsAdditionalData());
 #if DEBUG
                         Console.WriteLine($"cpn {status.Cpn}, status change from {status.OldStatusCode} to {status.NewStatusCode} - StatusId {status.Id}");
 #endif
