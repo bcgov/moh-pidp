@@ -3,7 +3,6 @@ namespace PlrIntake.Features.Records;
 using DomainResults.Common;
 using DomainResults.Mvc;
 using Microsoft.AspNetCore.Mvc;
-using PlrIntake.Models;
 
 [Produces("application/json")]
 [Route("api/[controller]")]
