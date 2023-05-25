@@ -53,5 +53,5 @@ public interface IPlrClient
     /// </summary>
     /// <param name="statusChangeLogId"></param>
     /// <returns></returns>
-    Task<bool> UpdateStatusChangeLog(int statusChangeLogId);
+    Task<bool> SetStatusChangeLogToProcessed(int statusChangeLogId);
 }

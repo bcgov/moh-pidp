@@ -101,7 +101,7 @@ public class PlrClient : BaseClient, IPlrClient
         return PlrStandingsDigest.FromRecords(records);
     }
 
-    public async Task<bool> UpdateStatusChangeLog(int statusChangeLogId)
+    public async Task<bool> SetStatusChangeLogToProcessed(int statusChangeLogId)
     {
         var response = await this.PutAsync($"records/status-changes/{statusChangeLogId}/processed");
         return response.IsSuccess;

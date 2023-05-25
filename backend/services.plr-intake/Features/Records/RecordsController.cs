@@ -24,7 +24,7 @@ public class RecordsController : ControllerBase
         => await handler.HandleAsync(new StatusLog.Query());
 
     [HttpPut("status-changes/{statusChangeLogId}/processed")]
-    public async Task<IActionResult> UpdateProcessed([FromServices] ICommandHandler<StatusLog.Command, IDomainResult> handler,
-                                                     [FromRoute] StatusLog.Command command)
+    public async Task<IActionResult> SetStatusChangeLogToProcessed([FromServices] ICommandHandler<StatusLog.Command, IDomainResult> handler,
+                                                                   [FromRoute] StatusLog.Command command)
         => await handler.HandleAsync(command).ToActionResult();
 }
