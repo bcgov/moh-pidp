@@ -1,9 +1,12 @@
 namespace Pidp.Features.CommonDomainEventHandlers;
 
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using NodaTime;
 
 using Pidp.Data;
+using Pidp.Infrastructure.Auth;
+using Pidp.Infrastructure.HttpClients.BCProvider;
 using Pidp.Infrastructure.HttpClients.Keycloak;
 using Pidp.Infrastructure.HttpClients.Plr;
 using Pidp.Models;
@@ -59,5 +62,39 @@ public class AssignKeycloakRolesAfterPlrCpnLookupFound : INotificationHandler<Pl
                 this.context.BusinessEvents.Add(LicenceStatusRoleAssigned.Create(notification.PartyId, MohKeycloakEnrolment.PractitionerLicenceStatus, this.clock.GetCurrentInstant()));
             };
         }
+    }
+}
+
+public class UpdateBCProviderAfterPlrCpnLookupFound : INotificationHandler<PlrCpnLookupFound>
+{
+    private readonly IBCProviderClient bcProviderClient;
+    private readonly PidpDbContext context;
+    private readonly string clientId;
+
+    public UpdateBCProviderAfterPlrCpnLookupFound(
+        IBCProviderClient bcProviderClient,
+        PidpDbContext context,
+        PidpConfiguration config)
+    {
+        this.bcProviderClient = bcProviderClient;
+        this.context = context;
+        this.clientId = config.BCProviderClient.ClientId;
+    }
+
+    public async Task Handle(PlrCpnLookupFound notification, CancellationToken cancellationToken)
+    {
+        var userPrincipalName = await this.context.Credentials
+            .Where(credential => credential.PartyId == notification.PartyId
+                && credential.IdentityProvider == IdentityProviders.BCProvider)
+            .Select(credential => credential.IdpId)
+            .SingleOrDefaultAsync(cancellationToken);
+
+        if (userPrincipalName == null)
+        {
+            return;
+        }
+
+        var attribute = new BCProviderAttributes(this.clientId).SetCpn(notification.Cpn);
+        await this.bcProviderClient.UpdateAttributes(userPrincipalName, attribute.AsAdditionalData());
     }
 }

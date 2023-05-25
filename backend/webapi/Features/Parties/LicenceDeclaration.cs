@@ -78,19 +78,11 @@ public class LicenceDeclaration
 
     public class CommandHandler : ICommandHandler<Command, IDomainResult<string?>>
     {
-        private readonly IBCProviderClient bcProviderClient;
-        private readonly string bcProviderClientId;
         private readonly IPlrClient plrClient;
         private readonly PidpDbContext context;
 
-        public CommandHandler(
-            IBCProviderClient bcProviderClient,
-            IPlrClient plrClient,
-            PidpDbContext context,
-            PidpConfiguration config)
+        public CommandHandler(IPlrClient plrClient, PidpDbContext context)
         {
-            this.bcProviderClient = bcProviderClient;
-            this.bcProviderClientId = config.BCProviderClient.ClientId;
             this.plrClient = plrClient;
             this.context = context;
         }
@@ -123,29 +115,12 @@ public class LicenceDeclaration
                 else
                 {
                     party.DomainEvents.Add(new PlrCpnLookupFound(party.Id, party.PrimaryUserId, party.Cpn));
-                    await this.HandleBcProviderAttributeCpnUpdate(party.Id, party.Cpn);
                 }
             }
 
             await this.context.SaveChangesAsync();
 
             return DomainResult.Success(party.Cpn);
-        }
-
-        private async Task HandleBcProviderAttributeCpnUpdate(int partyId, string cpn)
-        {
-            var userPrincipalName = await this.context.Credentials
-                .Where(credential => credential.PartyId == partyId
-                    && credential.IdentityProvider == IdentityProviders.BCProvider)
-                .Select(credential => credential.IdpId)
-                .SingleOrDefaultAsync();
-
-            if (userPrincipalName != null)
-            {
-                var attribute = new BCProviderAttributes(this.bcProviderClientId).SetCpn(cpn);
-
-                await this.bcProviderClient.UpdateAttributes(userPrincipalName, attribute.AsAdditionalData());
-            }
         }
     }
 
