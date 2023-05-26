@@ -138,6 +138,7 @@ public class PlrStatusChangeLog
     public string? OldStatusReasonCode { get; set; }
     public string? NewStatusCode { get; set; }
     public string? NewStatusReasonCode { get; set; }
+    public string? ProviderRoleType { get; set; }
 
     public bool NewIsGoodStanding => PlrRecord.ComputeGoodStanding(this.NewStatusCode, this.NewStatusReasonCode);
 }
