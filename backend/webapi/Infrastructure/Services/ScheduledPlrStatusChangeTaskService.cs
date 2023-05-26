@@ -82,7 +82,6 @@ public class ScheduledPlrStatusChangeTaskService : IScheduledPlrStatusChangeTask
                             foreach (var endorsementCpn in endorsementCpns)
                             {
                                 var endorseePlrStanding = await this.plrClient.GetStandingsDigestAsync(endorsementCpn);
-                                var endorseeIsMoa = endorseePlrStanding.HasGoodStanding;
 
                                 var endorsee = await this.context.Parties
                                     .Where(party => party.Cpn == endorsementCpn)
@@ -105,6 +104,7 @@ public class ScheduledPlrStatusChangeTaskService : IScheduledPlrStatusChangeTask
                                         .Select(credential => credential.IdpId)
                                         .SingleOrDefaultAsync();
 
+                                    var endorseeIsMoa = endorseePlrStanding.HasGoodStanding;
                                     var endorseeBcProviderAttributes = new BCProviderAttributes(endorseeUserPrincipalName).SetIsMoa(endorseeIsMoa);
                                     await this.bcProviderClient.UpdateAttributes(endorseeUserPrincipalName, endorseeBcProviderAttributes.AsAdditionalData());
                                 }
