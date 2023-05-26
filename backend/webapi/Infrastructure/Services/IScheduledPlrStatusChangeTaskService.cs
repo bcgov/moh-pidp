@@ -1,6 +1,6 @@
 namespace Pidp.Infrastructure.Services;
 
-public interface IScheduledPlrStatusChangeTaskService
+public interface IScheduledPlrStatusChangeTaskService : IDisposable
 {
     Task DoWorkAsync(CancellationToken stoppingToken);
 }

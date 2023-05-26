@@ -1,6 +1,7 @@
 namespace Pidp.Infrastructure.Services;
 
 using Microsoft.EntityFrameworkCore;
+
 using Pidp.Data;
 using Pidp.Extensions;
 using Pidp.Infrastructure.Auth;
@@ -118,5 +119,11 @@ public class ScheduledPlrStatusChangeTaskService : IScheduledPlrStatusChangeTask
         catch (OperationCanceledException)
         {
         }
+    }
+
+    public void Dispose()
+    {
+        this.timer.Dispose();
+        GC.SuppressFinalize(this);
     }
 }
