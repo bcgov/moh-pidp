@@ -40,12 +40,14 @@ public class PlrRecord
     public DateTime? StatusStartDate { get; set; }
     public string? StatusReasonCode { get; set; }
 
-    public virtual bool IsGoodStanding()
+    public static bool ComputeGoodStanding(string? statusCode, string? statusReasonCode)
     {
         var goodStatndingReasons = new[] { "GS", "PRAC", "TEMPPER" };
-        return this.StatusCode == "ACTIVE"
-            && goodStatndingReasons.Contains(this.StatusReasonCode);
+        return statusCode == "ACTIVE"
+            && goodStatndingReasons.Contains(statusReasonCode);
     }
+
+    public virtual bool IsGoodStanding() => ComputeGoodStanding(this.StatusCode, this.StatusReasonCode);
 }
 
 public class PlrStandingsDigest
@@ -128,22 +130,14 @@ public class PlrStandingsDigest
     }
 }
 
-
 public class PlrStatusChangeLog
 {
     public int Id { get; set; }
-
-    public int PlrRecordId { get; set; }
-
+    public string Cpn { get; set; } = string.Empty;
     public string? OldStatusCode { get; set; }
-
     public string? OldStatusReasonCode { get; set; }
-
     public string? NewStatusCode { get; set; }
-
     public string? NewStatusReasonCode { get; set; }
 
-    public bool ShouldBeProcessed { get; set; }
-
-    public string Cpn { get; set; } = string.Empty;
+    public bool NewIsGoodStanding => PlrRecord.ComputeGoodStanding(this.NewStatusCode, this.NewStatusReasonCode);
 }
