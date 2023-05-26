@@ -14,15 +14,18 @@ public class ScheduledPlrStatusChangeTaskService : IScheduledPlrStatusChangeTask
     private readonly IPlrClient plrClient;
     private readonly PidpDbContext context;
     private readonly IBCProviderClient bcProviderClient;
+    private readonly PidpConfiguration config;
 
     public ScheduledPlrStatusChangeTaskService(
         IPlrClient plrClient,
         PidpDbContext context,
-        IBCProviderClient bcProviderClient)
+        IBCProviderClient bcProviderClient,
+        PidpConfiguration config)
     {
         this.plrClient = plrClient;
         this.context = context;
         this.bcProviderClient = bcProviderClient;
+        this.config = config;
     }
 
     public async Task DoWorkAsync(CancellationToken stoppingToken)
@@ -48,7 +51,12 @@ public class ScheduledPlrStatusChangeTaskService : IScheduledPlrStatusChangeTask
                             })
                             .SingleOrDefaultAsync(stoppingToken);
 
-                        var plrStanding = await this.plrClient.GetStandingsDigestAsync(status.Cpn);
+                        if (party == null)
+                        {
+                            await this.plrClient.SetStatusChangeLogToProcessed(status.Id);
+                            continue;
+                        }
+
 
                         var userPrincipalName = await this.context.Credentials
                             .Where(credential => credential.PartyId == party.PartyId
@@ -56,10 +64,8 @@ public class ScheduledPlrStatusChangeTaskService : IScheduledPlrStatusChangeTask
                             .Select(credential => credential.IdpId)
                             .SingleOrDefaultAsync(stoppingToken);
 
-                        var isRnp = plrStanding.With(ProviderRoleType.RegisteredNursePractitioner).HasGoodStanding;
-                        var isMd = plrStanding.With(ProviderRoleType.MedicalDoctor).HasGoodStanding;
-
-
+                        var isMd = status.ProviderRoleType == "MD" && status.NewIsGoodStanding;
+                        var isRnp = status.ProviderRoleType == "RNP" && status.NewIsGoodStanding;
 
                         var endorsementCpns = await this.context.ActiveEndorsementRelationships(party.PartyId)
                             .Select(relationship => relationship.Party!.Cpn)
@@ -67,7 +73,7 @@ public class ScheduledPlrStatusChangeTaskService : IScheduledPlrStatusChangeTask
 
                         var endorsementPlrStanding = await this.plrClient.GetAggregateStandingsDigestAsync(endorsementCpns);
                         var isMoa = endorsementPlrStanding.HasGoodStanding;
-                        var bcProviderAttributes = new BCProviderAttributes(userPrincipalName).SetIsRnp(isRnp).SetIsMd(isMd).SetIsMoa(isMoa);
+                        var bcProviderAttributes = new BCProviderAttributes(this.config.BCProviderClient.ClientId).SetIsRnp(isRnp).SetIsMd(isMd).SetIsMoa(isMoa);
                         await this.bcProviderClient.UpdateAttributes(userPrincipalName, bcProviderAttributes.AsAdditionalData());
 
                         // Update all people this Cpn holder has an endorsement relationship
@@ -96,7 +102,7 @@ public class ScheduledPlrStatusChangeTaskService : IScheduledPlrStatusChangeTask
                                     .Select(credential => credential.IdpId)
                                     .SingleOrDefaultAsync(stoppingToken);
                                 var endorseeIsMoa = endorseePlrStanding.HasGoodStanding;
-                                var endorseeBcProviderAttributes = new BCProviderAttributes(endorseeUserPrincipalName).SetIsMoa(endorseeIsMoa);
+                                var endorseeBcProviderAttributes = new BCProviderAttributes(this.config.BCProviderClient.ClientId).SetIsMoa(endorseeIsMoa);
                                 await this.bcProviderClient.UpdateAttributes(endorseeUserPrincipalName, endorseeBcProviderAttributes.AsAdditionalData());
                             }
                         }
