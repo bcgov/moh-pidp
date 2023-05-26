@@ -9,10 +9,7 @@ using Pidp.Infrastructure.HttpClients.Plr;
 
 public class ScheduledPlrStatusChangeTaskService : IScheduledPlrStatusChangeTaskService
 {
-    private Task? timerTask;
-    private readonly PeriodicTimer timer;
-    private readonly CancellationTokenSource cts = new();
-    private readonly TimeSpan interval;
+    private readonly PeriodicTimer timer = new(TimeSpan.FromSeconds(10));
     private readonly IPlrClient plrClient;
     private readonly PidpDbContext context;
     private readonly IBCProviderClient bcProviderClient;
@@ -22,28 +19,21 @@ public class ScheduledPlrStatusChangeTaskService : IScheduledPlrStatusChangeTask
         PidpDbContext context,
         IBCProviderClient bcProviderClient)
     {
-        this.interval = TimeSpan.FromSeconds(10);
-        this.timer = new PeriodicTimer(this.interval);
         this.plrClient = plrClient;
         this.context = context;
         this.bcProviderClient = bcProviderClient;
     }
 
-    public void Start()
-    {
-        this.timerTask = this.DoWorkAsync();
-    }
-
-    private async Task DoWorkAsync()
+    public async Task DoWorkAsync(CancellationToken stoppingToken)
     {
         try
         {
-            while (await this.timer.WaitForNextTickAsync(this.cts.Token))
+            while (await this.timer.WaitForNextTickAsync(stoppingToken)
+                && !stoppingToken.IsCancellationRequested)
             {
                 var statusChange = await this.plrClient.GetStatusChangeToPocess();
-#if DEBUG
                 Console.WriteLine($"{DateTime.Now} - {statusChange?.Count} Status change");
-#endif
+
                 if (statusChange != null)
                 {
                     foreach (var status in statusChange)
@@ -55,7 +45,7 @@ public class ScheduledPlrStatusChangeTaskService : IScheduledPlrStatusChangeTask
                                 PartyId = party.Id,
                                 HasBCProviderCredential = party.Credentials.Any(credential => credential.IdentityProvider == IdentityProviders.BCProvider),
                             })
-                            .SingleAsync();
+                            .SingleAsync(stoppingToken);
 
                         if (!party.HasBCProviderCredential)
                         {
@@ -69,7 +59,7 @@ public class ScheduledPlrStatusChangeTaskService : IScheduledPlrStatusChangeTask
                                 .Where(credential => credential.PartyId == party.PartyId
                                     && credential.IdentityProvider == IdentityProviders.BCProvider)
                                 .Select(credential => credential.IdpId)
-                                .SingleOrDefaultAsync();
+                                .SingleOrDefaultAsync(stoppingToken);
 
                             var isRnp = plrStanding.With(ProviderRoleType.RegisteredNursePractitioner).HasGoodStanding;
                             var isMd = plrStanding.With(ProviderRoleType.MedicalDoctor).HasGoodStanding;
@@ -77,7 +67,7 @@ public class ScheduledPlrStatusChangeTaskService : IScheduledPlrStatusChangeTask
                             // Update all people this Cpn holder has an endorsement relationship
                             var endorsementCpns = await this.context.ActiveEndorsementRelationships(party.PartyId)
                                 .Select(relationship => relationship.Party!.Cpn)
-                                .ToListAsync();
+                                .ToListAsync(stoppingToken);
 
                             foreach (var endorsementCpn in endorsementCpns)
                             {
@@ -90,7 +80,7 @@ public class ScheduledPlrStatusChangeTaskService : IScheduledPlrStatusChangeTask
                                         PartyId = party.Id,
                                         HasBCProviderCredential = party.Credentials.Any(credential => credential.IdentityProvider == IdentityProviders.BCProvider),
                                     })
-                                    .SingleAsync();
+                                    .SingleAsync(stoppingToken);
 
                                 if (!endorsee.HasBCProviderCredential)
                                 {
@@ -102,7 +92,7 @@ public class ScheduledPlrStatusChangeTaskService : IScheduledPlrStatusChangeTask
                                         .Where(credential => credential.PartyId == endorsee.PartyId
                                             && credential.IdentityProvider == IdentityProviders.BCProvider)
                                         .Select(credential => credential.IdpId)
-                                        .SingleOrDefaultAsync();
+                                        .SingleOrDefaultAsync(stoppingToken);
 
                                     var endorseeIsMoa = endorseePlrStanding.HasGoodStanding;
                                     var endorseeBcProviderAttributes = new BCProviderAttributes(endorseeUserPrincipalName).SetIsMoa(endorseeIsMoa);
@@ -116,15 +106,11 @@ public class ScheduledPlrStatusChangeTaskService : IScheduledPlrStatusChangeTask
                             var bcProviderAttributes = new BCProviderAttributes(userPrincipalName).SetIsRnp(isRnp).SetIsMd(isMd).SetIsMoa(isMoa);
                             await this.bcProviderClient.UpdateAttributes(userPrincipalName, bcProviderAttributes.AsAdditionalData());
                         }
-#if DEBUG
                         Console.WriteLine($"cpn {status.Cpn}, status change from {status.OldStatusCode} to {status.NewStatusCode} - StatusId {status.Id}");
-#endif
 
                         // update the status to "processed"
                         await this.plrClient.SetStatusChangeLogToProcessed(status.Id);
-#if DEBUG
                         Console.WriteLine($"cpn {status.Cpn}, status processed");
-#endif
                     }
                 }
             }
@@ -132,24 +118,5 @@ public class ScheduledPlrStatusChangeTaskService : IScheduledPlrStatusChangeTask
         catch (OperationCanceledException)
         {
         }
-    }
-
-    public async Task StopAsync()
-    {
-        if (this.timerTask is null)
-        {
-            return;
-        }
-
-        this.cts.Cancel();
-        await this.timerTask;
-        this.cts.Dispose();
-    }
-
-    public void Dispose()
-    {
-        this.timer.Dispose();
-        this.cts.Dispose();
-        GC.SuppressFinalize(this);
     }
 }
