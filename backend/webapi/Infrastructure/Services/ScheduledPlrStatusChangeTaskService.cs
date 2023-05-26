@@ -46,12 +46,7 @@ public class ScheduledPlrStatusChangeTaskService : IScheduledPlrStatusChangeTask
                                 PartyId = party.Id,
                                 HasBCProviderCredential = party.Credentials.Any(credential => credential.IdentityProvider == IdentityProviders.BCProvider),
                             })
-                            .SingleAsync(stoppingToken);
-
-                        if (!party.HasBCProviderCredential)
-                        {
-                            await this.plrClient.SetStatusChangeLogToProcessed(status.Id);
-                        }
+                            .SingleOrDefaultAsync(stoppingToken);
 
                         var plrStanding = await this.plrClient.GetStandingsDigestAsync(status.Cpn);
 
