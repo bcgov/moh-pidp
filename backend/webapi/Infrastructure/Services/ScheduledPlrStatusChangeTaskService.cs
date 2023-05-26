@@ -2,6 +2,7 @@ namespace Pidp.Infrastructure.Services;
 
 using Microsoft.EntityFrameworkCore;
 using Pidp.Data;
+using Pidp.Extensions;
 using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.HttpClients.BCProvider;
 using Pidp.Infrastructure.HttpClients.Plr;
@@ -62,7 +63,7 @@ public class ScheduledPlrStatusChangeTaskService : IScheduledPlrStatusChangeTask
                         }
 
                         var plrStanding = await this.plrClient.GetStandingsDigestAsync(status.Cpn);
-                        // perform business rules
+
                         var userPrincipalName = await this.context.Credentials
                             .Where(credential => credential.PartyId == party.PartyId
                                 && credential.IdentityProvider == IdentityProviders.BCProvider)
@@ -71,9 +72,45 @@ public class ScheduledPlrStatusChangeTaskService : IScheduledPlrStatusChangeTask
 
                         var isRnp = plrStanding.With(ProviderRoleType.RegisteredNursePractitioner).HasGoodStanding;
                         var isMd = plrStanding.With(ProviderRoleType.MedicalDoctor).HasGoodStanding;
-                        // IsMoa logic TBDeveloped
 
-                        var bcProviderAttributes = new BCProviderAttributes(userPrincipalName).SetIsRnp(isRnp).SetIsMd(isMd);
+                        // Update all people this Cpn holder has an endorsement relationship
+                        var endorsementCpns = await this.context.ActiveEndorsementRelationships(party.PartyId)
+                            .Select(relationship => relationship.Party!.Cpn)
+                            .ToListAsync();
+
+                        foreach (var endorsementCpn in endorsementCpns)
+                        {
+                            var endorseePlrStanding = await this.plrClient.GetStandingsDigestAsync(endorsementCpn);
+                            var endorseeIsMoa = endorseePlrStanding.HasGoodStanding;
+
+                            var endorsee = await this.context.Parties
+                                .Where(party => party.Cpn == endorsementCpn)
+                                .Select(party => new
+                                {
+                                    PartyId = party.Id,
+                                    HasBCProviderCredential = party.Credentials.Any(credential => credential.IdentityProvider == IdentityProviders.BCProvider),
+                                })
+                                .SingleAsync();
+
+                            if (!endorsee.HasBCProviderCredential)
+                            {
+                                await this.plrClient.SetStatusChangeLogToProcessed(status.Id);
+                            }
+
+                            var endorseeUserPrincipalName = await this.context.Credentials
+                                .Where(credential => credential.PartyId == endorsee.PartyId
+                                    && credential.IdentityProvider == IdentityProviders.BCProvider)
+                                .Select(credential => credential.IdpId)
+                                .SingleOrDefaultAsync();
+
+                            var endorseeBcProviderAttributes = new BCProviderAttributes(endorseeUserPrincipalName).SetIsMoa(endorseeIsMoa);
+                            await this.bcProviderClient.UpdateAttributes(endorseeUserPrincipalName, endorseeBcProviderAttributes.AsAdditionalData());
+                        }
+
+                        var endorsementPlrStanding = await this.plrClient.GetAggregateStandingsDigestAsync(endorsementCpns);
+                        var isMoa = endorsementPlrStanding.HasGoodStanding;
+
+                        var bcProviderAttributes = new BCProviderAttributes(userPrincipalName).SetIsRnp(isRnp).SetIsMd(isMd).SetIsMoa(isMoa);
                         await this.bcProviderClient.UpdateAttributes(userPrincipalName, bcProviderAttributes.AsAdditionalData());
 #if DEBUG
                         Console.WriteLine($"cpn {status.Cpn}, status change from {status.OldStatusCode} to {status.NewStatusCode} - StatusId {status.Id}");
