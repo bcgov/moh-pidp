@@ -32,7 +32,7 @@ public class ScheduledPlrStatusChangeTaskService : IScheduledPlrStatusChangeTask
             while (await this.timer.WaitForNextTickAsync(stoppingToken)
                 && !stoppingToken.IsCancellationRequested)
             {
-                var statusChange = await this.plrClient.GetStatusChangeToPocess();
+                var statusChange = await this.plrClient.GetStatusChangeToProcess();
                 Console.WriteLine($"{DateTime.Now} - {statusChange?.Count} Status change");
 
                 if (statusChange != null)

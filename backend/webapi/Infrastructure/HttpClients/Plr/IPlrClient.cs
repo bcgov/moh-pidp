@@ -40,7 +40,7 @@ public interface IPlrClient
     /// Get a list of PLR status changed to be processed.
     /// </summary>
     /// <returns></returns>
-    Task<IList<PlrStatusChangeLog>> GetStatusChangeToPocess();
+    Task<IList<PlrStatusChangeLog>> GetStatusChangeToProcess();
 
     /// Creates a summary of the status of all PLR Records for all of the given CPNs.
     /// The digest indicates an error on HTTP failure.

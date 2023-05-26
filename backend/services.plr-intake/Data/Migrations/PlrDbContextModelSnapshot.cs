@@ -319,7 +319,7 @@ namespace PlrIntake.Data.Migrations
                     b.Property<int>("PlrRecordId")
                         .HasColumnType("integer");
 
-                    b.Property<bool>("SouldBeProcessed")
+                    b.Property<bool>("ShouldBeProcessed")
                         .HasColumnType("boolean");
 
                     b.HasKey("Id");

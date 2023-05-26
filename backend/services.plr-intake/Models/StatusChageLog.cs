@@ -21,5 +21,5 @@ public class StatusChageLog : BaseAuditable
 
     public string? NewStatusReasonCode { get; set; }
 
-    public bool SouldBeProcessed { get; set; }
+    public bool ShouldBeProcessed { get; set; }
 }

@@ -20,7 +20,7 @@ public class StatusLog
         public string? NewStatusReasonCode { get; set; }
         public string? OldStatusCode { get; set; }
         public string? OldStatusReasonCode { get; set; }
-        public bool SouldBeProcessed { get; set; }
+        public bool ShouldBeProcessed { get; set; }
         public string? Cpn { get; set; }
     }
 
@@ -49,7 +49,7 @@ public class StatusLog
         public async Task<List<Model>> HandleAsync(Query query)
         {
             return await this.context.StatusChageLogs
-                .Where(log => log.SouldBeProcessed)
+                .Where(log => log.ShouldBeProcessed)
                 .OrderBy(log => log.Created)
                 .Take(query.Limit)
                 .Select(query => new Model()
@@ -59,7 +59,7 @@ public class StatusLog
                     NewStatusReasonCode = query.NewStatusReasonCode,
                     OldStatusCode = query.OldStatusCode,
                     OldStatusReasonCode = query.OldStatusReasonCode,
-                    SouldBeProcessed = query.SouldBeProcessed,
+                    ShouldBeProcessed = query.ShouldBeProcessed,
                     Cpn = query.PlrRecord!.Cpn,
                 })
                 .ToListAsync();
@@ -82,7 +82,7 @@ public class StatusLog
                 return DomainResult.NotFound();
             }
 
-            statusChangeLog.SouldBeProcessed = false;
+            statusChangeLog.ShouldBeProcessed = false;
 
             await this.context.SaveChangesAsync();
             return DomainResult.Success();

@@ -4,12 +4,12 @@
 
 namespace PlrIntake.Data.Migrations
 {
-    public partial class Plr_SouldBeProcessed : Migration
+    public partial class ShouldBeProcessed : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<bool>(
-                name: "SouldBeProcessed",
+                name: "ShouldBeProcessed",
                 table: "Plr_StatusChageLog",
                 type: "boolean",
                 nullable: false,
@@ -19,7 +19,7 @@ namespace PlrIntake.Data.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "SouldBeProcessed",
+                name: "ShouldBeProcessed",
                 table: "Plr_StatusChageLog");
         }
     }

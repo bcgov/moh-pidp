@@ -143,7 +143,7 @@ public class PlrStatusChangeLog
 
     public string? NewStatusReasonCode { get; set; }
 
-    public bool SouldBeProcessed { get; set; }
+    public bool ShouldBeProcessed { get; set; }
 
     public string Cpn { get; set; } = string.Empty;
 }
