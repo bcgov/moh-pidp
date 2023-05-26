@@ -79,9 +79,9 @@ public class PlrClient : BaseClient, IPlrClient
         return PlrStandingsDigest.FromRecords(records);
     }
 
-    public async Task<IList<PlrStatusChangeLog>> GetStatusChangeToProcess()
+    public async Task<List<PlrStatusChangeLog>> GetStatusChangeToPocess()
     {
-        var result = await this.GetAsync<IList<PlrStatusChangeLog>>("records/status-changes");
+        var result = await this.GetAsync<List<PlrStatusChangeLog>>("records/status-changes");
         return result.Value;
     }
 
