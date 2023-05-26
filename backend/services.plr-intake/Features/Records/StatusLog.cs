@@ -16,12 +16,12 @@ public class StatusLog
     public class Model
     {
         public int Id { get; set; }
+        public string? Cpn { get; set; }
         public string? NewStatusCode { get; set; }
         public string? NewStatusReasonCode { get; set; }
         public string? OldStatusCode { get; set; }
         public string? OldStatusReasonCode { get; set; }
-        public bool ShouldBeProcessed { get; set; }
-        public string? Cpn { get; set; }
+        public string? ProviderRoleType { get; set; }
     }
 
     public class Command : ICommand<IDomainResult>
@@ -52,15 +52,15 @@ public class StatusLog
                 .Where(log => log.ShouldBeProcessed)
                 .OrderBy(log => log.Created)
                 .Take(query.Limit)
-                .Select(query => new Model()
+                .Select(log => new Model()
                 {
-                    Id = query.Id,
-                    NewStatusCode = query.NewStatusCode,
-                    NewStatusReasonCode = query.NewStatusReasonCode,
-                    OldStatusCode = query.OldStatusCode,
-                    OldStatusReasonCode = query.OldStatusReasonCode,
-                    ShouldBeProcessed = query.ShouldBeProcessed,
-                    Cpn = query.PlrRecord!.Cpn,
+                    Id = log.Id,
+                    Cpn = log.PlrRecord!.Cpn,
+                    NewStatusCode = log.NewStatusCode,
+                    NewStatusReasonCode = log.NewStatusReasonCode,
+                    OldStatusCode = log.OldStatusCode,
+                    OldStatusReasonCode = log.OldStatusReasonCode,
+                    ProviderRoleType = log.PlrRecord.ProviderRoleType
                 })
                 .ToListAsync();
         }
