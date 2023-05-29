@@ -10,7 +10,7 @@ using Pidp.Infrastructure.HttpClients.Plr;
 
 public class ScheduledPlrStatusChangeTaskService : IScheduledPlrStatusChangeTaskService
 {
-    private readonly PeriodicTimer timer = new(TimeSpan.FromSeconds(10));
+    private readonly PeriodicTimer timer = new(TimeSpan.FromSeconds(30));
     private readonly IPlrClient plrClient;
     private readonly PidpDbContext context;
     private readonly IBCProviderClient bcProviderClient;
@@ -71,7 +71,6 @@ public class ScheduledPlrStatusChangeTaskService : IScheduledPlrStatusChangeTask
                             var isMd = status.ProviderRoleType == ProviderRoleType.MedicalDoctor && status.NewIsGoodStanding;
                             var isRnp = status.ProviderRoleType == ProviderRoleType.RegisteredNursePractitioner && status.NewIsGoodStanding;
 
-
                             var endorsementPlrStanding = await this.plrClient.GetAggregateStandingsDigestAsync(endorsementCpns);
                             var isMoa = endorsementPlrStanding.HasGoodStanding;
                             var bcProviderAttributes = new BCProviderAttributes(this.config.BCProviderClient.ClientId).SetIsRnp(isRnp).SetIsMd(isMd).SetIsMoa(isMoa);
@@ -108,7 +107,6 @@ public class ScheduledPlrStatusChangeTaskService : IScheduledPlrStatusChangeTask
                         // update the status to "processed"
                         await this.plrClient.SetStatusChangeLogToProcessed(status.Id);
                     }
-
                 }
             }
         }
