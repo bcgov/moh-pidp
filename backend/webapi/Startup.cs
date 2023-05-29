@@ -37,7 +37,7 @@ public class Startup
             .AddKeycloakAuth(config)
             .AddScoped<IEmailService, EmailService>()
             .AddScoped<IPidpAuthorizationService, PidpAuthorizationService>()
-            .AddHostedService<ScopedServiceHostedService>()
+            .AddHostedService<ScheduledPlrStatusChangeTaskHostService>()
             .AddScoped<IScheduledPlrStatusChangeTaskService, ScheduledPlrStatusChangeTaskService>()
             .AddSingleton<IClock>(SystemClock.Instance);
 
