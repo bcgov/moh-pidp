@@ -20,8 +20,9 @@ public class RecordsController : ControllerBase
         => await handler.HandleAsync(query);
 
     [HttpGet("status-changes")]
-    public async Task<ActionResult<List<StatusLog.Model>>> GetStatusChanges([FromServices] IQueryHandler<StatusLog.Query, List<StatusLog.Model>> handler)
-        => await handler.HandleAsync(new StatusLog.Query());
+    public async Task<ActionResult<List<StatusLog.Model>>> GetStatusChanges([FromServices] IQueryHandler<StatusLog.Query, List<StatusLog.Model>> handler,
+                                                                            [FromQuery] StatusLog.Query query)
+        => await handler.HandleAsync(query);
 
     [HttpPut("status-changes/{statusChangeLogId}/processed")]
     public async Task<IActionResult> SetStatusChangeLogToProcessed([FromServices] ICommandHandler<StatusLog.Command, IDomainResult> handler,
