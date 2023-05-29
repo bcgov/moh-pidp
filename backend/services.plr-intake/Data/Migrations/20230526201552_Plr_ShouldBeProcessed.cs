@@ -4,7 +4,7 @@
 
 namespace PlrIntake.Data.Migrations
 {
-    public partial class ShouldBeProcessed : Migration
+    public partial class Plr_ShouldBeProcessed : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

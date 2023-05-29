@@ -12,8 +12,8 @@ using PlrIntake.Data;
 namespace PlrIntake.Data.Migrations
 {
     [DbContext(typeof(PlrDbContext))]
-    [Migration("20230526201552_ShouldBeProcessed")]
-    partial class ShouldBeProcessed
+    [Migration("20230526201552_Plr_ShouldBeProcessed")]
+    partial class Plr_ShouldBeProcessed
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
