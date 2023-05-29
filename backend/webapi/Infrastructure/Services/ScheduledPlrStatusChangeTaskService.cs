@@ -35,14 +35,14 @@ public class ScheduledPlrStatusChangeTaskService : IScheduledPlrStatusChangeTask
             while (await this.timer.WaitForNextTickAsync(stoppingToken)
                 && !stoppingToken.IsCancellationRequested)
             {
-                var statusChange = await this.plrClient.GetStatusChangeToProcess();
-                if (statusChange == null)
+                var statusChanges = await this.plrClient.GetStatusChangeToProcess();
+                if (statusChanges == null)
                 {
                     // TODO: handle error
                     continue;
                 }
 
-                foreach (var status in statusChange)
+                foreach (var status in statusChanges)
                 {
                     var party = await this.context.Parties
                         .Where(party => party.Cpn == status.Cpn)
