@@ -36,8 +36,6 @@ public class ScheduledPlrStatusChangeTaskService : IScheduledPlrStatusChangeTask
                 && !stoppingToken.IsCancellationRequested)
             {
                 var statusChange = await this.plrClient.GetStatusChangeToProcess();
-                Console.WriteLine($"{DateTime.Now} - {statusChange?.Count} Status change");
-
                 if (statusChange != null)
                 {
                     foreach (var status in statusChange)
@@ -53,10 +51,10 @@ public class ScheduledPlrStatusChangeTaskService : IScheduledPlrStatusChangeTask
 
                         if (party == null)
                         {
+                            // Unknow PidP user
                             await this.plrClient.SetStatusChangeLogToProcessed(status.Id);
                             continue;
                         }
-
 
                         var userPrincipalName = await this.context.Credentials
                             .Where(credential => credential.PartyId == party.PartyId
@@ -64,8 +62,8 @@ public class ScheduledPlrStatusChangeTaskService : IScheduledPlrStatusChangeTask
                             .Select(credential => credential.IdpId)
                             .SingleOrDefaultAsync(stoppingToken);
 
-                        var isMd = status.ProviderRoleType == "MD" && status.NewIsGoodStanding;
-                        var isRnp = status.ProviderRoleType == "RNP" && status.NewIsGoodStanding;
+                        var isMd = status.ProviderRoleType == ProviderRoleType.MedicalDoctor && status.NewIsGoodStanding;
+                        var isRnp = status.ProviderRoleType == ProviderRoleType.RegisteredNursePractitioner && status.NewIsGoodStanding;
 
                         var endorsementCpns = await this.context.ActiveEndorsementRelationships(party.PartyId)
                             .Select(relationship => relationship.Party!.Cpn)
@@ -90,11 +88,7 @@ public class ScheduledPlrStatusChangeTaskService : IScheduledPlrStatusChangeTask
                                 })
                                 .SingleAsync(stoppingToken);
 
-                            if (!endorsee.HasBCProviderCredential)
-                            {
-                                await this.plrClient.SetStatusChangeLogToProcessed(status.Id);
-                            }
-                            else
+                            if (endorsee.HasBCProviderCredential)
                             {
                                 var endorseeUserPrincipalName = await this.context.Credentials
                                     .Where(credential => credential.PartyId == endorsee.PartyId
@@ -106,11 +100,9 @@ public class ScheduledPlrStatusChangeTaskService : IScheduledPlrStatusChangeTask
                                 await this.bcProviderClient.UpdateAttributes(endorseeUserPrincipalName, endorseeBcProviderAttributes.AsAdditionalData());
                             }
                         }
-                        Console.WriteLine($"cpn {status.Cpn}, status change from {status.OldStatusCode} to {status.NewStatusCode} - StatusId {status.Id}");
 
                         // update the status to "processed"
                         await this.plrClient.SetStatusChangeLogToProcessed(status.Id);
-                        Console.WriteLine($"cpn {status.Cpn}, status processed");
                     }
 
                 }
