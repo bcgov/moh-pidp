@@ -1,11 +1,11 @@
 namespace Pidp.Infrastructure.Services;
 
-public class ScopedServiceHostedService : BackgroundService
+public class ScheduledPlrStatusChangeTaskHostService : BackgroundService
 {
-    private readonly ILogger<ScopedServiceHostedService> logger;
+    private readonly ILogger<ScheduledPlrStatusChangeTaskHostService> logger;
 
-    public ScopedServiceHostedService(IServiceProvider services,
-        ILogger<ScopedServiceHostedService> logger)
+    public ScheduledPlrStatusChangeTaskHostService(IServiceProvider services,
+        ILogger<ScheduledPlrStatusChangeTaskHostService> logger)
     {
         this.Services = services;
         this.logger = logger;
