@@ -56,23 +56,27 @@ public class ScheduledPlrStatusChangeTaskService : IScheduledPlrStatusChangeTask
                             continue;
                         }
 
-                        var userPrincipalName = await this.context.Credentials
-                            .Where(credential => credential.PartyId == party.PartyId
-                                && credential.IdentityProvider == IdentityProviders.BCProvider)
-                            .Select(credential => credential.IdpId)
-                            .SingleOrDefaultAsync(stoppingToken);
-
-                        var isMd = status.ProviderRoleType == ProviderRoleType.MedicalDoctor && status.NewIsGoodStanding;
-                        var isRnp = status.ProviderRoleType == ProviderRoleType.RegisteredNursePractitioner && status.NewIsGoodStanding;
-
                         var endorsementCpns = await this.context.ActiveEndorsementRelationships(party.PartyId)
                             .Select(relationship => relationship.Party!.Cpn)
                             .ToListAsync(stoppingToken);
 
-                        var endorsementPlrStanding = await this.plrClient.GetAggregateStandingsDigestAsync(endorsementCpns);
-                        var isMoa = endorsementPlrStanding.HasGoodStanding;
-                        var bcProviderAttributes = new BCProviderAttributes(this.config.BCProviderClient.ClientId).SetIsRnp(isRnp).SetIsMd(isMd).SetIsMoa(isMoa);
-                        await this.bcProviderClient.UpdateAttributes(userPrincipalName, bcProviderAttributes.AsAdditionalData());
+                        if (party.HasBCProviderCredential)
+                        {
+                            var userPrincipalName = await this.context.Credentials
+                                .Where(credential => credential.PartyId == party.PartyId
+                                    && credential.IdentityProvider == IdentityProviders.BCProvider)
+                                .Select(credential => credential.IdpId)
+                                .SingleOrDefaultAsync(stoppingToken);
+
+                            var isMd = status.ProviderRoleType == ProviderRoleType.MedicalDoctor && status.NewIsGoodStanding;
+                            var isRnp = status.ProviderRoleType == ProviderRoleType.RegisteredNursePractitioner && status.NewIsGoodStanding;
+
+
+                            var endorsementPlrStanding = await this.plrClient.GetAggregateStandingsDigestAsync(endorsementCpns);
+                            var isMoa = endorsementPlrStanding.HasGoodStanding;
+                            var bcProviderAttributes = new BCProviderAttributes(this.config.BCProviderClient.ClientId).SetIsRnp(isRnp).SetIsMd(isMd).SetIsMoa(isMoa);
+                            await this.bcProviderClient.UpdateAttributes(userPrincipalName, bcProviderAttributes.AsAdditionalData());
+                        }
 
                         // Update all people this Cpn holder has an endorsement relationship
                         foreach (var endorsementCpn in endorsementCpns)
