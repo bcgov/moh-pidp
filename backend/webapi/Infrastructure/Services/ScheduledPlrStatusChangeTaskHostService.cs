@@ -15,14 +15,21 @@ public class ScheduledPlrStatusChangeTaskHostService : BackgroundService
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        this.logger.ServiceIsRunning();
+        try
+        {
+            this.logger.LogServiceIsRunning();
 
-        await this.DoWork(stoppingToken);
+            await this.DoWork(stoppingToken);
+        }
+        catch (Exception e)
+        {
+            this.logger.LogServiceIsStoppedUnexpectedly(e);
+        }
     }
 
     private async Task DoWork(CancellationToken stoppingToken)
     {
-        this.logger.ServiceIsWorking();
+        this.logger.LogServiceIsWorking();
 
         using (var scope = this.Services.CreateScope())
         {
@@ -36,19 +43,20 @@ public class ScheduledPlrStatusChangeTaskHostService : BackgroundService
 
     public override async Task StopAsync(CancellationToken cancellationToken)
     {
-        this.logger.ServiceIsStopping();
+        this.logger.LogServiceIsStopping();
 
         await base.StopAsync(cancellationToken);
     }
 }
 
-
-public static partial class ScopedServiceHostedServiceLoggingExtensions
+public static partial class ScheduledPlrStatusChangeTaskHostServiceLoggingExtensions
 {
     [LoggerMessage(1, LogLevel.Information, "Scoped Service Hosted Service for scheduled PLR status change running.")]
-    public static partial void ServiceIsRunning(this ILogger logger);
+    public static partial void LogServiceIsRunning(this ILogger logger);
     [LoggerMessage(2, LogLevel.Information, "Scoped Service Hosted Service for scheduled PLR status change is working.")]
-    public static partial void ServiceIsWorking(this ILogger logger);
+    public static partial void LogServiceIsWorking(this ILogger logger);
     [LoggerMessage(3, LogLevel.Information, "Scoped Service Hosted Service for scheduled PLR status change is stopping.")]
-    public static partial void ServiceIsStopping(this ILogger logger);
+    public static partial void LogServiceIsStopping(this ILogger logger);
+    [LoggerMessage(4, LogLevel.Critical, "Unhandled exception when scheduled PLR status change is running. Service stopped.")]
+    public static partial void LogServiceIsStoppedUnexpectedly(this ILogger logger, Exception e);
 }
