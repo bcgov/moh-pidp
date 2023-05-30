@@ -19,7 +19,7 @@ public class ProfileStatusTests : InMemoryDbTest
         var collegeCode = CollegeCode.Optometrists;
         var party = this.TestDb.Has(AParty.WithLicenceDeclared(cpn: null, collegeCode, licenceNumber));
         var client = A.Fake<IPlrClient>()
-            .ReturningAStatandingsDigest(false);
+            .ReturningAStandingsDigest(false);
         A.CallTo(() => client.FindCpnAsync(A<CollegeCode>._, A<string>._, A<LocalDate>._)).Returns<string?>(null);
         var handler = this.MockDependenciesFor<CommandHandler>(client);
 
@@ -39,7 +39,7 @@ public class ProfileStatusTests : InMemoryDbTest
         var expectedCpn = "CPN11";
         var party = this.TestDb.Has(AParty.WithLicenceDeclared(cpn: null, collegeCode, licenceNumber));
         var client = A.Fake<IPlrClient>()
-            .ReturningAStatandingsDigest(false);
+            .ReturningAStandingsDigest(false);
         A.CallTo(() => client.FindCpnAsync(A<CollegeCode>._, A<string>._, A<LocalDate>._)).Returns(expectedCpn);
         var handler = this.MockDependenciesFor<CommandHandler>(client);
 

@@ -1,13 +1,15 @@
 namespace Pidp.Infrastructure.HttpClients.BCProvider;
 
 using Microsoft.Graph;
+using Microsoft.Graph.Models;
+using System.Text.RegularExpressions;
 
 public class BCProviderClient : IBCProviderClient
 {
     private readonly GraphServiceClient client;
     private readonly ILogger logger;
     private readonly string domain;
-    private readonly string schemaExtensionId;
+    private readonly string clientId;
 
     public BCProviderClient(
         GraphServiceClient client,
@@ -17,10 +19,31 @@ public class BCProviderClient : IBCProviderClient
         this.client = client;
         this.logger = logger;
         this.domain = config.BCProviderClient.Domain;
-        this.schemaExtensionId = config.BCProviderClient.SchemaExtensionId;
+        this.clientId = config.BCProviderClient.ClientId;
     }
 
-    public async Task<User?> CreateBCProviderAccount(UserRepresentation userRepresentation)
+    public async Task<IDictionary<string, object?>?> GetAttributes(string userPrincipalName, string[] attributesName)
+    {
+        try
+        {
+            if (string.IsNullOrEmpty(userPrincipalName))
+            {
+                return null;
+            }
+
+            var result = await this.client.Users[userPrincipalName]
+                .GetAsync(request => request.QueryParameters.Select = attributesName);
+
+            return result?.AdditionalData;
+        }
+        catch
+        {
+            this.logger.LogGetAdditionalAttributesFailure(userPrincipalName);
+            return null;
+        }
+    }
+
+    public async Task<User?> CreateBCProviderAccount(NewUserRepresentation userRepresentation)
     {
         var userPrincipal = await this.CreateUniqueUserPrincipalName(userRepresentation);
         if (userPrincipal == null)
@@ -33,7 +56,7 @@ public class BCProviderClient : IBCProviderClient
             AccountEnabled = true,
             DisplayName = userRepresentation.FullName, // Required
             GivenName = userRepresentation.FirstName,
-            MailNickname = userRepresentation.FullName.Replace(" ", ""), // Required, cannot contain spaces
+            MailNickname = this.RemoveMailNicknameInvalidCharacters(userRepresentation.FullName), // Required
             Surname = userRepresentation.LastName,
             UserPrincipalName = userPrincipal,
             PasswordProfile = new PasswordProfile
@@ -41,14 +64,14 @@ public class BCProviderClient : IBCProviderClient
                 ForceChangePasswordNextSignIn = false,
                 Password = userRepresentation.Password
             },
-            AdditionalData = new BCProviderSchemaExtension(3, userRepresentation.Hpdid).AsAdditionalData(this.schemaExtensionId)
+            AdditionalData = BCProviderAttributes.FromNewUser(this.clientId, userRepresentation).AsAdditionalData()
         };
 
         try
         {
-            var user = await this.client.Users.Request().AddAsync(bcProviderAccount);
-            this.logger.LogNewBCProviderUserCreated(user.UserPrincipalName);
-            return user;
+            var createdUser = await this.client.Users.PostAsync(bcProviderAccount);
+            this.logger.LogNewBCProviderUserCreated(createdUser?.UserPrincipalName!);
+            return createdUser;
         }
         catch
         {
@@ -57,13 +80,31 @@ public class BCProviderClient : IBCProviderClient
         }
     }
 
+    public async Task<bool> UpdateAttributes(string userPrincipalName, IDictionary<string, object> bcProviderAttributes)
+    {
+        try
+        {
+            await this.client.Users[userPrincipalName]
+                .PatchAsync(new User
+                {
+                    AdditionalData = bcProviderAttributes
+                });
+
+            return true;
+        }
+        catch
+        {
+            this.logger.LogAttributesUpdateFailure(userPrincipalName);
+            return false;
+        }
+    }
+
     public async Task<bool> UpdatePassword(string userPrincipalName, string password)
     {
         try
         {
             await this.client.Users[userPrincipalName]
-                .Request()
-                .UpdateAsync(new User
+                .PatchAsync(new User
                 {
                     PasswordProfile = new PasswordProfile
                     {
@@ -81,70 +122,61 @@ public class BCProviderClient : IBCProviderClient
         }
     }
 
-    public async Task<SchemaExtension?> RegisterSchemaExtension()
+    private async Task<string?> CreateUniqueUserPrincipalName(NewUserRepresentation user)
     {
-        var schemaExtension = new SchemaExtension
-        {
-            Id = "bcProviderAttributes",
-            Description = "Additional User attributes for a BC Provider user account",
-            TargetTypes = new List<string>
-            {
-                "user",
-            },
-            Properties = new List<ExtensionSchemaProperty>
-            {
-                new ExtensionSchemaProperty
-                {
-                    Name = "loa",
-                    Type = "Integer",
-                },
-                new ExtensionSchemaProperty
-                {
-                    Name = "hpdid",
-                    Type = "String",
-                },
-            },
-        };
-
-        try
-        {
-            var result = await this.client.SchemaExtensions.Request().AddAsync(schemaExtension);
-            this.logger.LogRegisteredNewSchemaExtension(result.Id); // AAD prepends "ext########_" to the ID we specify, so we need to know the actual ID after creation.
-            return result;
-        }
-        catch
-        {
-            this.logger.LogSchemaExtensionRegistrationFailure();
-            return null;
-        }
-    }
-
-    private async Task<string?> CreateUniqueUserPrincipalName(UserRepresentation user)
-    {
-        var joinedFullName = $"{user.FirstName}.{user.LastName}".Replace(" ", ""); // Cannot contain spaces.
+        var joinedFullName = $"{user.FirstName}.{user.LastName}";
+        var legalCharacters = this.RemoveUpnInvalidCharacters(joinedFullName);
 
         for (var i = 1; i <= 100; i++)
         {
             // Generates First.Last@domain instead of First.Last1@domain for the first instance of a name.
-            var proposedName = $"{joinedFullName}{(i < 2 ? string.Empty : i)}@{this.domain}";
+            var proposedName = $"{legalCharacters}{(i < 2 ? string.Empty : i)}@{this.domain}";
             if (!await this.UserExists(proposedName))
             {
                 return proposedName;
             }
         }
 
-        this.logger.LogNoUniqueUserPrincipalNameFound(joinedFullName);
+        this.logger.LogNoUniqueUserPrincipalNameFound(legalCharacters);
         return null;
+    }
+
+    private string RemoveMailNicknameInvalidCharacters(string mailNickname)
+    {
+        // Mail Nickname can include ASCII values 32 - 127 except the following: @ () \ [] " ; : . <> , SPACE
+        var legalCharacters = Regex.Replace(mailNickname, @"[^a-zA-Z0-9!#$%&'*+\-\/=?\^_`{|}~]", string.Empty);
+
+        if (mailNickname.Length != legalCharacters.Length)
+        {
+            this.logger.LogPartyNameContainsMailNicknameInvalidCharacters(mailNickname, legalCharacters);
+        }
+
+        return legalCharacters;
+    }
+
+    private string RemoveUpnInvalidCharacters(string userPrincipalName)
+    {
+        // According to the Microsoft Graph docs, User Principal Name can only include A - Z, a - z, 0 - 9, and the characters ' . - _ ! # ^ ~
+        var legalCharacters = Regex.Replace(userPrincipalName, @"[^a-zA-Z0-9'\.\-_!\#\^~]", string.Empty);
+
+        if (userPrincipalName.Length != legalCharacters.Length)
+        {
+            this.logger.LogPartyNameContainsUpnInvalidCharacters(userPrincipalName, legalCharacters);
+        }
+
+        return legalCharacters;
     }
 
     private async Task<bool> UserExists(string userPrincipalName)
     {
-        var result = await this.client.Users.Request()
-            .Select("UserPrincipalName")
-            .Filter($"UserPrincipalName eq '{userPrincipalName}'")
-            .GetAsync();
+        var result = await this.client.Users.Count
+            .GetAsync(request =>
+            {
+                request.QueryParameters.Filter = $"userPrincipalName eq '{userPrincipalName}'";
+                request.Headers.Add("ConsistencyLevel", "eventual"); // Required for advanced queries such as "count"
+            });
 
-        return result.Count > 0;
+        return result > 0;
     }
 }
 
@@ -162,9 +194,15 @@ public static partial class BCProviderClientLoggingExtensions
     [LoggerMessage(5, LogLevel.Error, "Hit maximum retrys attempting to make a unique User Principal Name for user '{fullName}'.")]
     public static partial void LogNoUniqueUserPrincipalNameFound(this ILogger logger, string fullName);
 
-    [LoggerMessage(6, LogLevel.Information, "Registered new schema extension with Id '{schemaExtensionId}'.")]
-    public static partial void LogRegisteredNewSchemaExtension(this ILogger logger, string schemaExtensionId);
+    [LoggerMessage(6, LogLevel.Error, "Failed to update the attributes of user '{userPrincipalName}'.")]
+    public static partial void LogAttributesUpdateFailure(this ILogger logger, string userPrincipalName);
 
-    [LoggerMessage(7, LogLevel.Error, "Failed to register schema extension.")]
-    public static partial void LogSchemaExtensionRegistrationFailure(this ILogger logger);
+    [LoggerMessage(7, LogLevel.Error, "Failed to get the attributes of user '{userPrincipalName}'.")]
+    public static partial void LogGetAdditionalAttributesFailure(this ILogger logger, string userPrincipalName);
+
+    [LoggerMessage(8, LogLevel.Warning, "Party's full name contained characters invalid for an AAD Mail Nickname. '{partyFullName}' was shortened to '{partyShortenedName}'.")]
+    public static partial void LogPartyNameContainsMailNicknameInvalidCharacters(this ILogger logger, string partyFullName, string partyShortenedName);
+
+    [LoggerMessage(9, LogLevel.Warning, "Party's full name contained characters invalid for an AAD User Principal Name. '{partyFullName}' was shortened to '{partyShortenedName}'.")]
+    public static partial void LogPartyNameContainsUpnInvalidCharacters(this ILogger logger, string partyFullName, string partyShortenedName);
 }

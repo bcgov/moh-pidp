@@ -33,7 +33,7 @@ public class DriverFitnessTests : InMemoryDbTest
             party.LicenceDeclaration = new PartyLicenceDeclaration();
         });
         var client = A.Fake<IPlrClient>()
-            .ReturningAStatandingsDigest(true, identifierType);
+            .ReturningAStandingsDigest(true, identifierType);
         var keycloakClient = A.Fake<IKeycloakAdministrationClient>()
             .ReturningTrueWhenAssigingClientRoles();
         var handler = this.MockDependenciesFor<DriverFitness.CommandHandler>(client, keycloakClient);
@@ -57,7 +57,7 @@ public class DriverFitnessTests : InMemoryDbTest
             party.LicenceDeclaration = new PartyLicenceDeclaration();
         });
         var client = A.Fake<IPlrClient>()
-            .ReturningAStatandingsDigest(PlrStandingsDigest.FromEmpty());
+            .ReturningAStandingsDigest(PlrStandingsDigest.FromEmpty());
         var keycloakClient = A.Fake<IKeycloakAdministrationClient>()
             .ReturningTrueWhenAssigingClientRoles();
         var handler = this.MockDependenciesFor<DriverFitness.CommandHandler>(client, keycloakClient);
@@ -101,7 +101,7 @@ public class DriverFitnessTests : InMemoryDbTest
             }
         });
         var client = A.Fake<IPlrClient>()
-            .ReturningAStatandingsDigest(true, otherPartyIdentifierType);
+            .ReturningAStandingsDigest(true, otherPartyIdentifierType);
         var keycloakClient = A.Fake<IKeycloakAdministrationClient>()
             .ReturningTrueWhenAssigingClientRoles();
         var handler = this.MockDependenciesFor<DriverFitness.CommandHandler>(client, keycloakClient);
