@@ -131,7 +131,7 @@ public class IntakeService : IIntakeService
                 OldStatusReasonCode = existingRecord.StatusReasonCode,
                 NewStatusCode = newRecord.StatusCode,
                 NewStatusReasonCode = newRecord.StatusReasonCode,
-                ShouldBeProcessed = true
+                ShouldBeProcessed = existingRecord.IsGoodStanding != newRecord.IsGoodStanding
             });
         }
     }

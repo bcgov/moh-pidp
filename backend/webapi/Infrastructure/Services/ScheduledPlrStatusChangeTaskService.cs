@@ -77,8 +77,8 @@ public class ScheduledPlrStatusChangeTaskService : IScheduledPlrStatusChangeTask
                                 .Select(credential => credential.IdpId)
                                 .SingleOrDefaultAsync(stoppingToken);
 
-                            var isMd = status.ProviderRoleType == ProviderRoleType.MedicalDoctor && status.NewIsGoodStanding;
-                            var isRnp = status.ProviderRoleType == ProviderRoleType.RegisteredNursePractitioner && status.NewIsGoodStanding;
+                            var isMd = status.ProviderRoleType == ProviderRoleType.MedicalDoctor && status.IsGoodStanding;
+                            var isRnp = status.ProviderRoleType == ProviderRoleType.RegisteredNursePractitioner && status.IsGoodStanding;
 
                             var endorsementPlrStanding = await this.plrClient.GetAggregateStandingsDigestAsync(endorsementCpns);
                             var isMoa = endorsementPlrStanding.HasGoodStanding;

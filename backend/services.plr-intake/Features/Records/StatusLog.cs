@@ -5,6 +5,7 @@ using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 
 using PlrIntake.Data;
+using PlrIntake.Models;
 
 public class StatusLog
 {
@@ -19,9 +20,9 @@ public class StatusLog
         public string? Cpn { get; set; }
         public string? NewStatusCode { get; set; }
         public string? NewStatusReasonCode { get; set; }
-        public string? OldStatusCode { get; set; }
-        public string? OldStatusReasonCode { get; set; }
         public string? ProviderRoleType { get; set; }
+
+        public bool IsGoodStanding => PlrRecord.ComputeGoodStanding(this.NewStatusCode, this.NewStatusReasonCode);
     }
 
     public class Command : ICommand<IDomainResult>
@@ -58,8 +59,6 @@ public class StatusLog
                     Cpn = log.PlrRecord!.Cpn,
                     NewStatusCode = log.NewStatusCode,
                     NewStatusReasonCode = log.NewStatusReasonCode,
-                    OldStatusCode = log.OldStatusCode,
-                    OldStatusReasonCode = log.OldStatusReasonCode,
                     ProviderRoleType = log.PlrRecord.ProviderRoleType
                 })
                 .ToListAsync();
