@@ -10,13 +10,14 @@ using Pidp.Infrastructure.HttpClients.Plr;
 
 public static class FakeItEasyExtensions
 {
-    public static IReturnValueConfiguration<Task<HttpResponseMessage>> InvokingSendAsyncWith(this IWhereConfiguration<IAnyCallConfigurationWithNoReturnTypeSpecified> configuration, HttpMethod method, string url, HttpContent? content = null)
+    public static IReturnValueConfiguration<Task<HttpResponseMessage>> InvokingSendAsyncWith(this IWhereConfiguration<IAnyCallConfigurationWithNoReturnTypeSpecified> configuration, HttpMethod method, string? url = null, HttpContent? content = null)
     {
         return configuration
             .Where(x => x.Method.Name == "SendAsync")
             .WithReturnType<Task<HttpResponseMessage>>()
             .WhenArgumentsMatch((HttpRequestMessage message, CancellationToken token) => message.Method == method
-                && message.RequestUri == new Uri(url)
+                && (url == null
+                    || message.RequestUri == new Uri(url))
                 && (content == null
                     || content.Equals(message.Content)));
     }
@@ -69,14 +70,23 @@ public static class FakeItEasyExtensions
         }
     }
 
-    public static IPlrClient ReturningAStatandingsDigest(this IPlrClient client, bool goodStanding, string? identifierType = null)
-        => client.ReturningAStatandingsDigest(AMock.StandingsDigest(goodStanding, identifierType));
+    public static IPlrClient ReturningAStandingsDigest(this IPlrClient client, bool goodStanding, string? identifierType = null)
+        => client.ReturningAStandingsDigest(AMock.StandingsDigest(goodStanding, identifierType));
 
-    public static IPlrClient ReturningAStatandingsDigest(this IPlrClient client, PlrStandingsDigest digest)
+    public static IPlrClient ReturningAStandingsDigest(this IPlrClient client, PlrStandingsDigest digest)
     {
         A.CallTo(() => client.GetStandingAsync(A<string?>._)).Returns(digest.HasGoodStanding);
         A.CallTo(() => client.GetStandingsDigestAsync(A<string?>._)).Returns(digest);
         A.CallTo(() => client.GetAggregateStandingsDigestAsync(A<IEnumerable<string?>>._)).Returns(digest);
+
+        return client;
+    }
+
+    public static IPlrClient ReturningMultipleStandingsDigests(this IPlrClient client, PlrStandingsDigest digest, PlrStandingsDigest aggregateDigest)
+    {
+        A.CallTo(() => client.GetStandingAsync(A<string?>._)).Returns(digest.HasGoodStanding);
+        A.CallTo(() => client.GetStandingsDigestAsync(A<string?>._)).Returns(digest);
+        A.CallTo(() => client.GetAggregateStandingsDigestAsync(A<IEnumerable<string?>>._)).Returns(aggregateDigest);
 
         return client;
     }

@@ -75,7 +75,7 @@ export class BcProviderPortalSection implements IPortalSection {
       case StatusCode.AVAILABLE:
         return AccessRoutes.routePath(AccessRoutes.BC_PROVIDER_APPLICATION);
       default:
-        throw 'not implemented: ' + statusCode;
+        return '';
     }
   }
 }

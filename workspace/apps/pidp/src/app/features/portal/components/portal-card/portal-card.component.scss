@@ -107,8 +107,13 @@
     & .learn-more {
       font-size: var(--font-size-small);
     }
+    & a,
     & button {
       margin-left: calc(0.75 * var(--gap));
+      & .fa-plus-link-icon {
+        text-align: center;
+        display: block;
+      }
     }
     & .learn-more-button {
       height: 3rem;
