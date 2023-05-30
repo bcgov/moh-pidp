@@ -40,7 +40,7 @@ public class ScheduledPlrStatusChangeTaskService : IScheduledPlrStatusChangeTask
             {
                 try
                 {
-                    var statusChanges = await this.plrClient.GetStatusChangeToProcess();
+                    var statusChanges = await this.plrClient.GetProcessableStatusChanges();
                     if (statusChanges == null)
                     {
                         // TODO: handle error
