@@ -82,6 +82,11 @@ public class BCProviderClient : IBCProviderClient
 
     public async Task<bool> UpdateAttributes(string userPrincipalName, IDictionary<string, object> bcProviderAttributes)
     {
+        if (bcProviderAttributes.Count == 0)
+        {
+            return true;
+        }
+
         try
         {
             await this.client.Users[userPrincipalName]
