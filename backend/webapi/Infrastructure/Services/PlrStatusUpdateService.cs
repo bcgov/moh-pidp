@@ -83,8 +83,6 @@ public sealed class PlrStatusUpdateService : IPlrStatusUpdateService
         // Update all people this Cpn holder has an endorsement relationship
         foreach (var endorsementCpn in endorsementCpns)
         {
-            var endorseePlrStanding = await this.plrClient.GetStandingsDigestAsync(endorsementCpn);
-
             var endorsee = await this.context.Parties
                 .Where(party => party.Cpn == endorsementCpn)
                 .Select(party => new
@@ -96,6 +94,12 @@ public sealed class PlrStatusUpdateService : IPlrStatusUpdateService
 
             if (endorsee.HasBCProviderCredential)
             {
+                var endorseeCpns = await this.context.ActiveEndorsementRelationships(endorsee.PartyId)
+                    .Select(relationship => relationship.Party!.Cpn)
+                    .ToListAsync(stoppingToken);
+
+                var endorseePlrStanding = await this.plrClient.GetAggregateStandingsDigestAsync(endorseeCpns);
+
                 var endorseeUserPrincipalName = await this.context.Credentials
                     .Where(credential => credential.PartyId == endorsee.PartyId
                         && credential.IdentityProvider == IdentityProviders.BCProvider)
