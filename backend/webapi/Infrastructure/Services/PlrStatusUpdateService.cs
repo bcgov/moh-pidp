@@ -80,14 +80,15 @@ public sealed class PlrStatusUpdateService : IPlrStatusUpdateService
         {
             var bcProviderAttributes = new BCProviderAttributes(this.config.BCProviderClient.ClientId);
 
-            if (status.IsGoodStanding)
-            {
-                bcProviderAttributes.SetIsMoa(false);
-            }
-            else
+            if (!status.IsGoodStanding
+                && !await this.plrClient.GetStandingAsync(status.Cpn))
             {
                 var endorsementPlrStanding = await this.plrClient.GetAggregateStandingsDigestAsync(endorsementRelations.Select(relation => relation.Cpn));
                 bcProviderAttributes.SetIsMoa(endorsementPlrStanding.HasGoodStanding);
+            }
+            else
+            {
+                bcProviderAttributes.SetIsMoa(false);
             }
 
             if (status.ProviderRoleType == ProviderRoleType.MedicalDoctor)
@@ -117,7 +118,6 @@ public sealed class PlrStatusUpdateService : IPlrStatusUpdateService
                 .Select(relationship => relationship.Party!.Cpn)
                 .ToListAsync(stoppingToken);
 
-            //TODO get rid of foreach with plr calls inside it
             var endorseePlrStanding = await this.plrClient.GetAggregateStandingsDigestAsync(endorsingCpns);
 
             var endorseeIsMoa = endorseePlrStanding.HasGoodStanding;
