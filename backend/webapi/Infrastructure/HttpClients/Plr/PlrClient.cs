@@ -42,7 +42,7 @@ public class PlrClient : BaseClient, IPlrClient
 
     public async Task<List<PlrStatusChangeLog>> GetProcessableStatusChangesAsync(int limit = 10)
     {
-        var result = await this.GetWithQueryParamsAsync<List<PlrStatusChangeLog>>("records/status-changes", new { limit = 10 });
+        var result = await this.GetWithQueryParamsAsync<List<PlrStatusChangeLog>>("records/status-changes", new { limit });
         if (result.IsSuccess)
         {
             return result.Value;
