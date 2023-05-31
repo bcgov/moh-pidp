@@ -117,6 +117,4 @@ public static partial class PlrStatusUpdateServiceLoggingExtensions
 {
     [LoggerMessage(1, LogLevel.Information, "Status update {statusId} is for a PLR record not associated to a PidP user.")]
     public static partial void LogPlrRecordNotAssociatedToPidpUser(this ILogger logger, int statusId);
-    [LoggerMessage(2, LogLevel.Information, "Endorsement CPN {endorsementCpn} is for a PLR record not associated to a PidP user.")]
-    public static partial void LogEndorsementCpnNotAssociatedToPidpUser(this ILogger logger, string? endorsementCpn);
 }
