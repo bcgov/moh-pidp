@@ -59,8 +59,7 @@ public sealed class PlrStatusUpdateService : IPlrStatusUpdateService
 
         if (party == null)
         {
-            // Status update is for a PLR record not associated to a PidP user.
-            // TODO: Log
+            this.logger.LogPlrRecordNotAssociatedToPidpUser(status.Id);
             await this.plrClient.UpdateStatusChangeLogAsync(status.Id);
             return;
         }
@@ -99,7 +98,7 @@ public sealed class PlrStatusUpdateService : IPlrStatusUpdateService
             if (endorsee == null)
             {
                 // Status update is for a PLR record not associated to a PidP user.
-                // TODO: Log
+                this.logger.LogEndorsementCpnNotAssociatedToPidpUser(endorsementCpn);
                 await this.plrClient.UpdateStatusChangeLogAsync(status.Id);
                 return;
             }
@@ -122,8 +121,10 @@ public sealed class PlrStatusUpdateService : IPlrStatusUpdateService
     }
 }
 
-public static partial class ScheduledPlrStatusChangeTaskServiceLoggingExtensions
+public static partial class PlrStatusUpdateServiceLoggingExtensions
 {
-    [LoggerMessage(1, LogLevel.Error, "Unhandled exception when scheduled PLR status change is processing.")]
-    public static partial void LogUnhandledExeption(this ILogger logger, Exception e);
+    [LoggerMessage(1, LogLevel.Information, "Status update {statusId} is for a PLR record not associated to a PidP user.")]
+    public static partial void LogPlrRecordNotAssociatedToPidpUser(this ILogger logger, int statusId);
+    [LoggerMessage(2, LogLevel.Information, "Endorsement CPN {endorsementCpn} is for a PLR record not associated to a PidP user.")]
+    public static partial void LogEndorsementCpnNotAssociatedToPidpUser(this ILogger logger, string? endorsementCpn);
 }
