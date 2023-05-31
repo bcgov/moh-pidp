@@ -35,7 +35,7 @@ public sealed class PlrStatusUpdateService : IPlrStatusUpdateService
         var statusChanges = await this.plrClient.GetProcessableStatusChangesAsync(1);
         if (statusChanges == null)
         {
-            // TODO: handle error
+            // TODO: handle error?
             return;
         }
         if (!statusChanges.Any())
@@ -64,8 +64,16 @@ public sealed class PlrStatusUpdateService : IPlrStatusUpdateService
             return;
         }
 
-        var endorsementCpns = await this.context.ActiveEndorsementRelationships(party.PartyId)
-            .Select(relationship => relationship.Party!.Cpn)
+        var endorsementRelations = await this.context.ActiveEndorsementRelationships(party.PartyId)
+            .Select(relationship => new
+            {
+                relationship.PartyId,
+                relationship.Party!.Cpn,
+                UserPrincipalName = relationship.Party!.Credentials
+                    .Where(credential => credential.IdentityProvider == IdentityProviders.BCProvider)
+                    .Select(credential => credential.IdpId)
+                    .SingleOrDefault()
+            })
             .ToListAsync(stoppingToken);
 
         if (party.UserPrincipalName != null)
@@ -73,48 +81,32 @@ public sealed class PlrStatusUpdateService : IPlrStatusUpdateService
             var isMd = status.ProviderRoleType == ProviderRoleType.MedicalDoctor && status.IsGoodStanding;
             var isRnp = status.ProviderRoleType == ProviderRoleType.RegisteredNursePractitioner && status.IsGoodStanding;
 
-            var endorsementPlrStanding = await this.plrClient.GetAggregateStandingsDigestAsync(endorsementCpns);
+            var endorsementPlrStanding = await this.plrClient.GetAggregateStandingsDigestAsync(endorsementRelations.Select(relation => relation.Cpn));
             var isMoa = endorsementPlrStanding.HasGoodStanding;
             var bcProviderAttributes = new BCProviderAttributes(this.config.BCProviderClient.ClientId).SetIsRnp(isRnp).SetIsMd(isMd).SetIsMoa(isMoa);
             await this.bcProviderClient.UpdateAttributes(party.UserPrincipalName, bcProviderAttributes.AsAdditionalData());
         }
 
-        // Update all people this Cpn holder has an endorsement relationship
-        foreach (var endorsementCpn in endorsementCpns)
-        //TODO get rid of foreach with plr calls inside it
+        // Update the MOA flag for all people this Party has endorsed
+        foreach (var relation in endorsementRelations)
         {
-            var endorsee = await this.context.Parties
-                .Where(party => party.Cpn == endorsementCpn)
-                .Select(party => new
-                {
-                    PartyId = party.Id,
-                    UserPrincipalName = party.Credentials
-                        .Where(credential => credential.IdentityProvider == IdentityProviders.BCProvider)
-                        .Select(credential => credential.IdpId)
-                        .SingleOrDefault(),
-                })
-                .SingleOrDefaultAsync(stoppingToken);
-
-            if (endorsee == null)
+            if (!string.IsNullOrWhiteSpace(relation.Cpn)
+                || string.IsNullOrWhiteSpace(relation.UserPrincipalName))
             {
-                // Status update is for a PLR record not associated to a PidP user.
-                this.logger.LogEndorsementCpnNotAssociatedToPidpUser(endorsementCpn);
-                await this.plrClient.UpdateStatusChangeLogAsync(status.Id);
-                return;
+                // We have nothing to update if the relation has a Licence or doesn't have a BC Provider credential
+                continue;
             }
 
-            if (endorsee.UserPrincipalName != null)
-            {
-                var endorseeCpns = await this.context.ActiveEndorsementRelationships(endorsee.PartyId)
-                    .Select(relationship => relationship.Party!.Cpn)
-                    .ToListAsync(stoppingToken);
+            var endorsingCpns = await this.context.ActiveEndorsementRelationships(relation.PartyId)
+                .Select(relationship => relationship.Party!.Cpn)
+                .ToListAsync(stoppingToken);
 
-                var endorseePlrStanding = await this.plrClient.GetAggregateStandingsDigestAsync(endorseeCpns);
+            //TODO get rid of foreach with plr calls inside it
+            var endorseePlrStanding = await this.plrClient.GetAggregateStandingsDigestAsync(endorsingCpns);
 
-                var endorseeIsMoa = endorseePlrStanding.HasGoodStanding;
-                var endorseeBcProviderAttributes = new BCProviderAttributes(this.config.BCProviderClient.ClientId).SetIsMoa(endorseeIsMoa);
-                await this.bcProviderClient.UpdateAttributes(endorsee.UserPrincipalName, endorseeBcProviderAttributes.AsAdditionalData());
-            }
+            var endorseeIsMoa = endorseePlrStanding.HasGoodStanding;
+            var endorseeBcProviderAttributes = new BCProviderAttributes(this.config.BCProviderClient.ClientId).SetIsMoa(endorseeIsMoa);
+            await this.bcProviderClient.UpdateAttributes(relation.UserPrincipalName, endorseeBcProviderAttributes.AsAdditionalData());
         }
 
         await this.plrClient.UpdateStatusChangeLogAsync(status.Id);
