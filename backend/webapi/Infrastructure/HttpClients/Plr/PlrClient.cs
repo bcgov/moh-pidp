@@ -40,7 +40,7 @@ public class PlrClient : BaseClient, IPlrClient
         };
     }
 
-    public async Task<List<PlrStatusChangeLog>> GetProcessableStatusChanges(int limit = 10)
+    public async Task<List<PlrStatusChangeLog>> GetProcessableStatusChangesAsync(int limit = 10)
     {
         var result = await this.GetWithQueryParamsAsync<List<PlrStatusChangeLog>>("records/status-changes", new { limit = 10 });
         if (result.IsSuccess)
@@ -49,7 +49,7 @@ public class PlrClient : BaseClient, IPlrClient
         }
         else
         {
-            this.Logger.LogPlrError(nameof(GetProcessableStatusChanges));
+            this.Logger.LogPlrError(nameof(GetProcessableStatusChangesAsync));
             return new();
         }
     }
@@ -109,7 +109,7 @@ public class PlrClient : BaseClient, IPlrClient
         return PlrStandingsDigest.FromRecords(records);
     }
 
-    public async Task<bool> SetStatusChangeLogToProcessed(int statusChangeLogId)
+    public async Task<bool> UpdateStatusChangeLogAsync(int statusChangeLogId)
     {
         var response = await this.PutAsync($"records/status-changes/{statusChangeLogId}/processed");
         return response.IsSuccess;

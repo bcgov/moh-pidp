@@ -19,7 +19,7 @@ public interface IPlrClient
     /// Get a list of PLR status changes to be processed.
     /// </summary>
     /// <returns></returns>
-    Task<List<PlrStatusChangeLog>> GetProcessableStatusChanges(int limit = 10);
+    Task<List<PlrStatusChangeLog>> GetProcessableStatusChangesAsync(int limit = 10);
 
     /// <summary>
     /// Fetches the PLR record(s) corresponding to the given CPN(s).
@@ -49,9 +49,9 @@ public interface IPlrClient
     Task<PlrStandingsDigest> GetAggregateStandingsDigestAsync(IEnumerable<string?> cpns);
 
     /// <summary>
-    /// Set the status change to "processed".
+    /// Update the Status Change Log to "processed".
     /// </summary>
     /// <param name="statusChangeLogId"></param>
     /// <returns></returns>
-    Task<bool> SetStatusChangeLogToProcessed(int statusChangeLogId);
+    Task<bool> UpdateStatusChangeLogAsync(int statusChangeLogId);
 }

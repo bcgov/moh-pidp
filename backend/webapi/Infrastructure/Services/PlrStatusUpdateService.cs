@@ -32,7 +32,7 @@ public sealed class PlrStatusUpdateService : IPlrStatusUpdateService
 
     public async Task DoWorkAsync(CancellationToken stoppingToken)
     {
-        var statusChanges = await this.plrClient.GetProcessableStatusChanges(1);
+        var statusChanges = await this.plrClient.GetProcessableStatusChangesAsync(1);
         if (statusChanges == null)
         {
             // TODO: handle error
@@ -50,15 +50,18 @@ public sealed class PlrStatusUpdateService : IPlrStatusUpdateService
             .Select(party => new
             {
                 PartyId = party.Id,
-                HasBCProviderCredential = party.Credentials.Any(credential => credential.IdentityProvider == IdentityProviders.BCProvider),
+                UserPrincipalName = party.Credentials
+                    .Where(credential => credential.IdentityProvider == IdentityProviders.BCProvider)
+                    .Select(credential => credential.IdpId)
+                    .SingleOrDefault(),
             })
             .SingleOrDefaultAsync(stoppingToken);
 
         if (party == null)
         {
-            // Unknow PidP user
+            // Status update is for a PLR record not associated to a PidP user.
             // TODO: Log
-            await this.plrClient.SetStatusChangeLogToProcessed(status.Id);
+            await this.plrClient.UpdateStatusChangeLogAsync(status.Id);
             return;
         }
 
@@ -66,21 +69,15 @@ public sealed class PlrStatusUpdateService : IPlrStatusUpdateService
             .Select(relationship => relationship.Party!.Cpn)
             .ToListAsync(stoppingToken);
 
-        if (party.HasBCProviderCredential)
+        if (party.UserPrincipalName != null)
         {
-            var userPrincipalName = await this.context.Credentials
-                .Where(credential => credential.PartyId == party.PartyId
-                    && credential.IdentityProvider == IdentityProviders.BCProvider)
-                .Select(credential => credential.IdpId)
-                .SingleOrDefaultAsync(stoppingToken);
-
             var isMd = status.ProviderRoleType == ProviderRoleType.MedicalDoctor && status.IsGoodStanding;
             var isRnp = status.ProviderRoleType == ProviderRoleType.RegisteredNursePractitioner && status.IsGoodStanding;
 
             var endorsementPlrStanding = await this.plrClient.GetAggregateStandingsDigestAsync(endorsementCpns);
             var isMoa = endorsementPlrStanding.HasGoodStanding;
             var bcProviderAttributes = new BCProviderAttributes(this.config.BCProviderClient.ClientId).SetIsRnp(isRnp).SetIsMd(isMd).SetIsMoa(isMoa);
-            await this.bcProviderClient.UpdateAttributes(userPrincipalName, bcProviderAttributes.AsAdditionalData());
+            await this.bcProviderClient.UpdateAttributes(party.UserPrincipalName, bcProviderAttributes.AsAdditionalData());
         }
 
         // Update all people this Cpn holder has an endorsement relationship
@@ -110,8 +107,7 @@ public sealed class PlrStatusUpdateService : IPlrStatusUpdateService
             }
         }
 
-        // update the status to "processed"
-        await this.plrClient.SetStatusChangeLogToProcessed(status.Id);
+        await this.plrClient.UpdateStatusChangeLogAsync(status.Id);
     }
 }
 
