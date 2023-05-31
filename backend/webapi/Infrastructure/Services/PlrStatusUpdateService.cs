@@ -89,11 +89,22 @@ public sealed class PlrStatusUpdateService : IPlrStatusUpdateService
                 .Select(party => new
                 {
                     PartyId = party.Id,
-                    HasBCProviderCredential = party.Credentials.Any(credential => credential.IdentityProvider == IdentityProviders.BCProvider),
+                    UserPrincipalName = party.Credentials
+                        .Where(credential => credential.IdentityProvider == IdentityProviders.BCProvider)
+                        .Select(credential => credential.IdpId)
+                        .SingleOrDefault(),
                 })
-                .SingleAsync(stoppingToken);
+                .SingleOrDefaultAsync(stoppingToken);
 
-            if (endorsee.HasBCProviderCredential)
+            if (endorsee == null)
+            {
+                // Status update is for a PLR record not associated to a PidP user.
+                // TODO: Log
+                await this.plrClient.UpdateStatusChangeLogAsync(status.Id);
+                return;
+            }
+
+            if (endorsee.UserPrincipalName != null)
             {
                 var endorseeCpns = await this.context.ActiveEndorsementRelationships(endorsee.PartyId)
                     .Select(relationship => relationship.Party!.Cpn)
@@ -101,15 +112,9 @@ public sealed class PlrStatusUpdateService : IPlrStatusUpdateService
 
                 var endorseePlrStanding = await this.plrClient.GetAggregateStandingsDigestAsync(endorseeCpns);
 
-                var endorseeUserPrincipalName = await this.context.Credentials
-                    .Where(credential => credential.PartyId == endorsee.PartyId
-                        && credential.IdentityProvider == IdentityProviders.BCProvider)
-                    .Select(credential => credential.IdpId)
-                    .SingleOrDefaultAsync(stoppingToken);
-
                 var endorseeIsMoa = endorseePlrStanding.HasGoodStanding;
                 var endorseeBcProviderAttributes = new BCProviderAttributes(this.config.BCProviderClient.ClientId).SetIsMoa(endorseeIsMoa);
-                await this.bcProviderClient.UpdateAttributes(endorseeUserPrincipalName, endorseeBcProviderAttributes.AsAdditionalData());
+                await this.bcProviderClient.UpdateAttributes(endorsee.UserPrincipalName, endorseeBcProviderAttributes.AsAdditionalData());
             }
         }
 
