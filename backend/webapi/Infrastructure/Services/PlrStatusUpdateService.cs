@@ -80,7 +80,11 @@ public sealed class PlrStatusUpdateService : IPlrStatusUpdateService
         {
             var bcProviderAttributes = new BCProviderAttributes(this.config.BCProviderClient.ClientId);
 
-            if (!status.IsGoodStanding)
+            if (status.IsGoodStanding)
+            {
+                bcProviderAttributes.SetIsMoa(false);
+            }
+            else
             {
                 var endorsementPlrStanding = await this.plrClient.GetAggregateStandingsDigestAsync(endorsementRelations.Select(relation => relation.Cpn));
                 bcProviderAttributes.SetIsMoa(endorsementPlrStanding.HasGoodStanding);
