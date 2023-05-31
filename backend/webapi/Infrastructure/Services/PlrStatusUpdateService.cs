@@ -82,6 +82,7 @@ public sealed class PlrStatusUpdateService : IPlrStatusUpdateService
 
         // Update all people this Cpn holder has an endorsement relationship
         foreach (var endorsementCpn in endorsementCpns)
+        //TODO get rid of foreach with plr calls inside it
         {
             var endorsee = await this.context.Parties
                 .Where(party => party.Cpn == endorsementCpn)
@@ -105,6 +106,7 @@ public sealed class PlrStatusUpdateService : IPlrStatusUpdateService
                         && credential.IdentityProvider == IdentityProviders.BCProvider)
                     .Select(credential => credential.IdpId)
                     .SingleOrDefaultAsync(stoppingToken);
+
                 var endorseeIsMoa = endorseePlrStanding.HasGoodStanding;
                 var endorseeBcProviderAttributes = new BCProviderAttributes(this.config.BCProviderClient.ClientId).SetIsMoa(endorseeIsMoa);
                 await this.bcProviderClient.UpdateAttributes(endorseeUserPrincipalName, endorseeBcProviderAttributes.AsAdditionalData());
