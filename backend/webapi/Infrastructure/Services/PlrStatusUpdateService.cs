@@ -78,12 +78,24 @@ public sealed class PlrStatusUpdateService : IPlrStatusUpdateService
 
         if (party.UserPrincipalName != null)
         {
-            var isMd = status.ProviderRoleType == ProviderRoleType.MedicalDoctor && status.IsGoodStanding;
-            var isRnp = status.ProviderRoleType == ProviderRoleType.RegisteredNursePractitioner && status.IsGoodStanding;
+            var bcProviderAttributes = new BCProviderAttributes(this.config.BCProviderClient.ClientId);
 
-            var endorsementPlrStanding = await this.plrClient.GetAggregateStandingsDigestAsync(endorsementRelations.Select(relation => relation.Cpn));
-            var isMoa = endorsementPlrStanding.HasGoodStanding;
-            var bcProviderAttributes = new BCProviderAttributes(this.config.BCProviderClient.ClientId).SetIsRnp(isRnp).SetIsMd(isMd).SetIsMoa(isMoa);
+            if (!status.IsGoodStanding)
+            {
+                var endorsementPlrStanding = await this.plrClient.GetAggregateStandingsDigestAsync(endorsementRelations.Select(relation => relation.Cpn));
+                bcProviderAttributes.SetIsMoa(endorsementPlrStanding.HasGoodStanding);
+            }
+
+            if (status.ProviderRoleType == ProviderRoleType.MedicalDoctor)
+            {
+                bcProviderAttributes.SetIsMd(status.IsGoodStanding);
+            }
+
+            if (status.ProviderRoleType == ProviderRoleType.RegisteredNursePractitioner)
+            {
+                bcProviderAttributes.SetIsRnp(status.IsGoodStanding);
+            }
+
             await this.bcProviderClient.UpdateAttributes(party.UserPrincipalName, bcProviderAttributes.AsAdditionalData());
         }
 
