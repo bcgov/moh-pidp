@@ -32,11 +32,13 @@ public class Startup
 
         services
             .AddAutoMapper(typeof(Startup))
+            .AddHostedService<PlrStatusUpdateSchedulingService>()
             .AddHttpClients(config)
-            .AddMediatR(opt => opt.RegisterServicesFromAssemblyContaining<Startup>())
             .AddKeycloakAuth(config)
+            .AddMediatR(opt => opt.RegisterServicesFromAssemblyContaining<Startup>())
             .AddScoped<IEmailService, EmailService>()
             .AddScoped<IPidpAuthorizationService, PidpAuthorizationService>()
+            .AddScoped<IPlrStatusUpdateService, PlrStatusUpdateService>()
             .AddSingleton<IClock>(SystemClock.Instance);
 
         services.AddControllers(options => options.Conventions.Add(new RouteTokenTransformerConvention(new KabobCaseParameterTransformer())))

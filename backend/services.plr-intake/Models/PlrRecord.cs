@@ -84,4 +84,13 @@ public class PlrRecord : BaseAuditable
     public DateTime? ConditionStartDate { get; set; }
 
     public DateTime? ConditionEndDate { get; set; }
+
+    public bool IsGoodStanding => ComputeGoodStanding(this.StatusCode, this.StatusReasonCode);
+
+    public static bool ComputeGoodStanding(string? statusCode, string? statusReasonCode)
+    {
+        var goodStandingReasons = new[] { "GS", "PRAC", "TEMPPER" };
+        return statusCode == "ACTIVE"
+            && goodStandingReasons.Contains(statusReasonCode);
+    }
 }
