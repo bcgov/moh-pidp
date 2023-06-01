@@ -6,6 +6,8 @@ using Microsoft.EntityFrameworkCore;
 using NodaTime;
 
 using Pidp.Data;
+using Pidp.Infrastructure.Auth;
+using Pidp.Infrastructure.HttpClients.BCProvider;
 using Pidp.Infrastructure.HttpClients.Keycloak;
 using Pidp.Infrastructure.HttpClients.Plr;
 using Pidp.Models;
@@ -29,23 +31,29 @@ public class Approve
 
     public class CommandHandler : ICommandHandler<Command, IDomainResult>
     {
+        private readonly IBCProviderClient bcProviderClient;
         private readonly IClock clock;
         private readonly IKeycloakAdministrationClient keycloakClient;
         private readonly ILogger logger;
         private readonly IPlrClient plrClient;
+        private readonly PidpConfiguration config;
         private readonly PidpDbContext context;
 
         public CommandHandler(
+            IBCProviderClient bcProviderClient,
             IClock clock,
             IKeycloakAdministrationClient keycloakClient,
             ILogger<CommandHandler> logger,
             IPlrClient plrClient,
+            PidpConfiguration config,
             PidpDbContext context)
         {
+            this.bcProviderClient = bcProviderClient;
             this.clock = clock;
             this.keycloakClient = keycloakClient;
             this.logger = logger;
             this.plrClient = plrClient;
+            this.config = config;
             this.context = context;
         }
 
@@ -87,7 +95,11 @@ public class Approve
                 {
                     party.Id,
                     UserId = party.PrimaryUserId,
-                    party.Cpn
+                    party.Cpn,
+                    UserPrincipalName = party.Credentials
+                        .Where(credential => credential.IdentityProvider == IdentityProviders.BCProvider)
+                        .Select(credential => credential.IdpId)
+                        .SingleOrDefault(),
                 })
                 .ToListAsync();
 
@@ -108,11 +120,16 @@ public class Approve
             if (await this.keycloakClient.AssignAccessRoles(unLicencedParty.UserId, MohKeycloakEnrolment.MoaLicenceStatus))
             {
                 this.context.BusinessEvents.Add(LicenceStatusRoleAssigned.Create(unLicencedParty.Id, MohKeycloakEnrolment.MoaLicenceStatus, this.clock.GetCurrentInstant()));
+                if (!string.IsNullOrWhiteSpace(unLicencedParty.UserPrincipalName))
+                {
+                    var endorseeBcProviderAttributes = new BCProviderAttributes(this.config.BCProviderClient.ClientId).SetIsMoa(true);
+                    await this.bcProviderClient.UpdateAttributes(unLicencedParty.UserPrincipalName, endorseeBcProviderAttributes.AsAdditionalData());
+                }
             }
             else
             {
                 this.logger.LogMoaRoleAssignmentError(unLicencedParty.Id);
-            };
+            }
         }
     }
 }
