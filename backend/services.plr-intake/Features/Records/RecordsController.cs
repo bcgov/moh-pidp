@@ -1,5 +1,7 @@
 namespace PlrIntake.Features.Records;
 
+using DomainResults.Common;
+using DomainResults.Mvc;
 using Microsoft.AspNetCore.Mvc;
 
 [Produces("application/json")]
@@ -16,4 +18,14 @@ public class RecordsController : ControllerBase
     public async Task<ActionResult<List<string>>> SearchCpns([FromServices] IQueryHandler<Search.Query, List<string>> handler,
                                                              [FromQuery] Search.Query query)
         => await handler.HandleAsync(query);
+
+    [HttpGet("status-changes")]
+    public async Task<ActionResult<List<StatusLog.Model>>> GetStatusChanges([FromServices] IQueryHandler<StatusLog.Query, List<StatusLog.Model>> handler,
+                                                                            [FromQuery] StatusLog.Query query)
+        => await handler.HandleAsync(query);
+
+    [HttpPut("status-changes/{statusChangeLogId}/processed")]
+    public async Task<IActionResult> SetStatusChangeLogToProcessed([FromServices] ICommandHandler<StatusLog.Command, IDomainResult> handler,
+                                                                   [FromRoute] StatusLog.Command command)
+        => await handler.HandleAsync(command).ToActionResult();
 }
