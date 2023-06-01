@@ -130,33 +130,33 @@ public class BCProviderClient : IBCProviderClient
     private async Task<string?> CreateUniqueUserPrincipalName(NewUserRepresentation user)
     {
         var joinedFullName = $"{user.FirstName}.{user.LastName}";
-        var legalCharacters = this.RemoveUpnInvalidCharacters(joinedFullName);
+        var validCharacters = this.RemoveUpnInvalidCharacters(joinedFullName);
 
         for (var i = 1; i <= 100; i++)
         {
             // Generates First.Last@domain instead of First.Last1@domain for the first instance of a name.
-            var proposedName = $"{legalCharacters}{(i < 2 ? string.Empty : i)}@{this.domain}";
+            var proposedName = $"{validCharacters}{(i < 2 ? string.Empty : i)}@{this.domain}";
             if (!await this.UserExists(proposedName))
             {
                 return proposedName;
             }
         }
 
-        this.logger.LogNoUniqueUserPrincipalNameFound(legalCharacters);
+        this.logger.LogNoUniqueUserPrincipalNameFound(validCharacters);
         return null;
     }
 
     private string RemoveMailNicknameInvalidCharacters(string mailNickname)
     {
         // Mail Nickname can include ASCII values 32 - 127 except the following: @ () \ [] " ; : . <> , SPACE
-        var legalCharacters = Regex.Replace(mailNickname, @"[^a-zA-Z0-9!#$%&'*+\-\/=?\^_`{|}~]", string.Empty);
+        var validCharacters = Regex.Replace(mailNickname, @"[^a-zA-Z0-9!#$%&'*+\-\/=?\^_`{|}~]", string.Empty);
 
-        if (mailNickname.Length != legalCharacters.Length)
+        if (mailNickname.Length != validCharacters.Length)
         {
-            this.logger.LogPartyNameContainsMailNicknameInvalidCharacters(mailNickname, legalCharacters);
+            this.logger.LogPartyNameContainsMailNicknameInvalidCharacters(mailNickname, validCharacters);
         }
 
-        return legalCharacters;
+        return validCharacters;
     }
 
     private string RemoveUpnInvalidCharacters(string userPrincipalName)
