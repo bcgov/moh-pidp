@@ -118,11 +118,11 @@ public sealed class PlrStatusUpdateService : IPlrStatusUpdateService
                 .Select(relationship => relationship.Party!.Cpn)
                 .ToListAsync(stoppingToken);
 
-            var endorseePlrStanding = await this.plrClient.GetAggregateStandingsDigestAsync(endorsingCpns);
+            var relationPlrStanding = await this.plrClient.GetAggregateStandingsDigestAsync(endorsingCpns);
 
-            var endorseeIsMoa = endorseePlrStanding.HasGoodStanding;
-            var endorseeBcProviderAttributes = new BCProviderAttributes(this.config.BCProviderClient.ClientId).SetIsMoa(endorseeIsMoa);
-            await this.bcProviderClient.UpdateAttributes(relation.UserPrincipalName, endorseeBcProviderAttributes.AsAdditionalData());
+            var relationIsMoa = relationPlrStanding.HasGoodStanding;
+            var relationBcProviderAttributes = new BCProviderAttributes(this.config.BCProviderClient.ClientId).SetIsMoa(relationIsMoa);
+            await this.bcProviderClient.UpdateAttributes(relation.UserPrincipalName, relationBcProviderAttributes.AsAdditionalData());
         }
 
         this.logger.LogStatusUpdateProcessed(status.Id);
