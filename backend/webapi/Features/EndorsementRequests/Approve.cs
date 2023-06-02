@@ -120,15 +120,16 @@ public class Approve
             if (await this.keycloakClient.AssignAccessRoles(unLicencedParty.UserId, MohKeycloakEnrolment.MoaLicenceStatus))
             {
                 this.context.BusinessEvents.Add(LicenceStatusRoleAssigned.Create(unLicencedParty.Id, MohKeycloakEnrolment.MoaLicenceStatus, this.clock.GetCurrentInstant()));
-                if (!string.IsNullOrWhiteSpace(unLicencedParty.UserPrincipalName))
-                {
-                    var endorseeBcProviderAttributes = new BCProviderAttributes(this.config.BCProviderClient.ClientId).SetIsMoa(true);
-                    await this.bcProviderClient.UpdateAttributes(unLicencedParty.UserPrincipalName, endorseeBcProviderAttributes.AsAdditionalData());
-                }
             }
             else
             {
                 this.logger.LogMoaRoleAssignmentError(unLicencedParty.Id);
+            }
+
+            if (!string.IsNullOrWhiteSpace(unLicencedParty.UserPrincipalName))
+            {
+                var endorseeBcProviderAttributes = new BCProviderAttributes(this.config.BCProviderClient.ClientId).SetIsMoa(true);
+                await this.bcProviderClient.UpdateAttributes(unLicencedParty.UserPrincipalName, endorseeBcProviderAttributes.AsAdditionalData());
             }
         }
     }
