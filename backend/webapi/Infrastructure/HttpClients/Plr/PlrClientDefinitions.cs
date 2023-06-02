@@ -70,6 +70,19 @@ public class PlrStandingsDigest
     }
 
     /// <summary>
+    /// Filters the digest to exclude records of the given Identifier Type(s)
+    /// </summary>
+    /// <param name="identifierTypes"></param>
+    public PlrStandingsDigest Excluding(params IdentifierType[] identifierTypes)
+    {
+        return new PlrStandingsDigest
+        (
+            this.Error,
+            this.records.ExceptBy(identifierTypes.Select(t => (string)t), record => record.IdentifierType)
+        );
+    }
+
+    /// <summary>
     /// Filters the digest to only include records of the given Identifier Type(s)
     /// </summary>
     /// <param name="identifierTypes"></param>
@@ -96,15 +109,14 @@ public class PlrStandingsDigest
     }
 
     /// <summary>
-    /// Filters the digest to exclude records of the given Identifier Type(s)
+    /// Filters the digest to only include records in good standing.
     /// </summary>
-    /// <param name="identifierTypes"></param>
-    public PlrStandingsDigest Excluding(params IdentifierType[] identifierTypes)
+    public PlrStandingsDigest WithGoodStanding()
     {
         return new PlrStandingsDigest
         (
             this.Error,
-            this.records.ExceptBy(identifierTypes.Select(t => (string)t), record => record.IdentifierType)
+            this.records.Where(record => record.IsGoodStanding)
         );
     }
 

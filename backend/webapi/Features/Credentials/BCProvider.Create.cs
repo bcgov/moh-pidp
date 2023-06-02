@@ -98,11 +98,13 @@ public class BCProviderCreate
                 var endorsementCpns = await this.context.ActiveEndorsementRelationships(command.PartyId)
                     .Select(relationship => relationship.Party!.Cpn)
                     .ToListAsync();
-                var endorsementPlrStanding = await this.plrClient.GetAggregateStandingsDigestAsync(endorsementCpns);
+                var endorsementPlrDigest = await this.plrClient.GetAggregateStandingsDigestAsync(endorsementCpns);
 
-                // TOOD: not correct, need to check status of licences as well
-                newUserRep.EndorserData = endorsementPlrStanding.With(IdentifierType.PhysiciansAndSurgeons, IdentifierType.Nurse, IdentifierType.Midwife).Cpns;
-                newUserRep.IsMoa = endorsementPlrStanding.HasGoodStanding;
+                newUserRep.EndorserData = endorsementPlrDigest
+                    .WithGoodStanding()
+                    .With(IdentifierType.PhysiciansAndSurgeons, IdentifierType.Nurse, IdentifierType.Midwife)
+                    .Cpns;
+                newUserRep.IsMoa = endorsementPlrDigest.HasGoodStanding;
             }
 
             var createdUser = await this.client.CreateBCProviderAccount(newUserRep);
