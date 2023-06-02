@@ -100,6 +100,8 @@ public class BCProviderCreate
                     .ToListAsync();
                 var endorsementPlrStanding = await this.plrClient.GetAggregateStandingsDigestAsync(endorsementCpns);
 
+                // TOOD: not correct, need to check status of licences as well
+                newUserRep.EndorserData = endorsementPlrStanding.With(IdentifierType.PhysiciansAndSurgeons, IdentifierType.Nurse, IdentifierType.Midwife).Cpns;
                 newUserRep.IsMoa = endorsementPlrStanding.HasGoodStanding;
             }
 

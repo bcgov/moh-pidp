@@ -3,6 +3,7 @@ namespace Pidp.Infrastructure.HttpClients.BCProvider;
 public class NewUserRepresentation
 {
     public string? Cpn { get; set; }
+    public IEnumerable<string> EndorserData { get; set; } = Enumerable.Empty<string>();
     public string FirstName { get; set; } = string.Empty;
     public string LastName { get; set; } = string.Empty;
     public string Hpdid { get; set; } = string.Empty;
@@ -10,7 +11,6 @@ public class NewUserRepresentation
     public bool IsMoa { get; set; }
     public bool IsRnp { get; set; }
     public string PidpEmail { get; set; } = string.Empty;
-    public string[] EndorserData { get; set; } = Array.Empty<string>();
 
     public string Password { get; set; } = string.Empty;
 
@@ -30,13 +30,13 @@ public class BCProviderAttributes
     public static BCProviderAttributes FromNewUser(string clientId, NewUserRepresentation representation)
     {
         var attributes = new BCProviderAttributes(clientId)
+            .SetEndorserData(representation.EndorserData)
             .SetHpdid(representation.Hpdid)
             .SetIsMd(representation.IsMd)
             .SetIsMoa(representation.IsMoa)
             .SetIsRnp(representation.IsRnp)
             .SetLoa(3)
-            .SetPidpEmail(representation.PidpEmail)
-            .SetEndorserData(representation.EndorserData);
+            .SetPidpEmail(representation.PidpEmail);
 
         if (!string.IsNullOrWhiteSpace(representation.Cpn))
         {
@@ -52,7 +52,7 @@ public class BCProviderAttributes
     /// <summary>
     /// A comma-separated list containing the CPN(s) of Parties Endorsing the User, who have licences from the College of Physicians and Surgeons and the College of Nurses and Midwives.
     /// </summary>
-    public BCProviderAttributes SetEndorserData(string[] endorserData) => this.SetProperty(nameof(endorserData), string.Join(",", endorserData));
+    public BCProviderAttributes SetEndorserData(IEnumerable<string> endorserData) => this.SetProperty(nameof(endorserData), string.Join(",", endorserData));
     public BCProviderAttributes SetHpdid(string hpdid) => this.SetProperty(nameof(hpdid), hpdid);
     public BCProviderAttributes SetIsMd(bool isMd) => this.SetProperty(nameof(isMd), isMd);
     public BCProviderAttributes SetIsMoa(bool isMoa) => this.SetProperty(nameof(isMoa), isMoa);

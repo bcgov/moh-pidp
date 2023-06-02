@@ -61,6 +61,8 @@ public class PlrStandingsDigest
 
     public IEnumerable<string> LicenceNumbers => this.records.Where(record => record.LicenceNumber != null).Select(record => record.LicenceNumber!);
 
+    public IEnumerable<string> Cpns => this.records.Select(record => record.Cpn);
+
     private PlrStandingsDigest(bool error, IEnumerable<DigestRecord>? records = null)
     {
         this.Error = error;
@@ -112,18 +114,21 @@ public class PlrStandingsDigest
     {
         return new(false, records.Select(record => new DigestRecord
         {
+            Cpn = record.Cpn,
             IdentifierType = record.IdentifierType,
-            ProviderRoleType = record.ProviderRoleType,
             LicenceNumber = record.CollegeId,
+            ProviderRoleType = record.ProviderRoleType,
             IsGoodStanding = record.IsGoodStanding()
         }));
     }
 
     private class DigestRecord
     {
+        public string Cpn { get; set; } = string.Empty;
         public string? IdentifierType { get; set; }
-        public string? ProviderRoleType { get; set; }
         public string? LicenceNumber { get; set; }
+        public string? ProviderRoleType { get; set; }
+
         public bool IsGoodStanding { get; set; }
     }
 }
