@@ -22,23 +22,23 @@ public class BCProviderClient : IBCProviderClient
         this.clientId = config.BCProviderClient.ClientId;
     }
 
-    public async Task<IDictionary<string, object?>?> GetAttributes(string userPrincipalName, string[] attributesName)
+    public async Task<object?> GetAttribute(string userPrincipalName, string attributeName)
     {
+        if (string.IsNullOrEmpty(userPrincipalName))
+        {
+            return null;
+        }
+
         try
         {
-            if (string.IsNullOrEmpty(userPrincipalName))
-            {
-                return null;
-            }
-
             var result = await this.client.Users[userPrincipalName]
-                .GetAsync(request => request.QueryParameters.Select = attributesName);
+                .GetAsync(request => request.QueryParameters.Select = new[] { attributeName });
 
-            return result?.AdditionalData;
+            return result?.AdditionalData[attributeName];
         }
         catch
         {
-            this.logger.LogGetAdditionalAttributesFailure(userPrincipalName);
+            this.logger.LogGetAttributeFailure(userPrincipalName);
             return null;
         }
     }
@@ -202,8 +202,8 @@ public static partial class BCProviderClientLoggingExtensions
     [LoggerMessage(6, LogLevel.Error, "Failed to update the attributes of user '{userPrincipalName}'.")]
     public static partial void LogAttributesUpdateFailure(this ILogger logger, string userPrincipalName);
 
-    [LoggerMessage(7, LogLevel.Error, "Failed to get the attributes of user '{userPrincipalName}'.")]
-    public static partial void LogGetAdditionalAttributesFailure(this ILogger logger, string userPrincipalName);
+    [LoggerMessage(7, LogLevel.Error, "Failed to get an attribute of user '{userPrincipalName}'.")]
+    public static partial void LogGetAttributeFailure(this ILogger logger, string userPrincipalName);
 
     [LoggerMessage(8, LogLevel.Warning, "Party's full name contained characters invalid for an AAD Mail Nickname. '{partyFullName}' was shortened to '{partyShortenedName}'.")]
     public static partial void LogPartyNameContainsMailNicknameInvalidCharacters(this ILogger logger, string partyFullName, string partyShortenedName);

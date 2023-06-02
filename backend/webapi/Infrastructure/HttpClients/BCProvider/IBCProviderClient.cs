@@ -12,12 +12,12 @@ public interface IBCProviderClient
     Task<User?> CreateBCProviderAccount(NewUserRepresentation userRepresentation);
 
     /// <summary>
-    /// Get all additional attributes for a BC Provider account.
+    /// Gets an additional attribute for a BC Provider account.
+    /// Returns null on an error.
     /// </summary>
     /// <param name="userPrincipalName"></param>
     /// <param name="attributesName"></param>
-    /// <returns>If the BC provider account is not found return null</returns>
-    Task<IDictionary<string, object?>?> GetAttributes(string userPrincipalName, string[] attributesName);
+    Task<object?> GetAttribute(string userPrincipalName, string attributeName);
 
     /// <summary>
     /// Updates AAD attributes for a BC Provider account.
