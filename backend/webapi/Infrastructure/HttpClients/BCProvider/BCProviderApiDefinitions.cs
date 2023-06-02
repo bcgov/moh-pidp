@@ -10,6 +10,7 @@ public class NewUserRepresentation
     public bool IsMoa { get; set; }
     public bool IsRnp { get; set; }
     public string PidpEmail { get; set; } = string.Empty;
+    public string[] EndorserData { get; set; } = Array.Empty<string>();
 
     public string Password { get; set; } = string.Empty;
 
@@ -34,7 +35,8 @@ public class BCProviderAttributes
             .SetIsMoa(representation.IsMoa)
             .SetIsRnp(representation.IsRnp)
             .SetLoa(3)
-            .SetPidpEmail(representation.PidpEmail);
+            .SetPidpEmail(representation.PidpEmail)
+            .SetEndorserData(representation.EndorserData);
 
         if (!string.IsNullOrWhiteSpace(representation.Cpn))
         {
@@ -60,6 +62,7 @@ public class BCProviderAttributes
     /// </summary>
     public BCProviderAttributes SetLoa(int loa) => this.SetProperty(nameof(loa), loa);
     public BCProviderAttributes SetPidpEmail(string pidpEmail) => this.SetProperty(nameof(pidpEmail), pidpEmail);
+    public BCProviderAttributes SetEndorserData(string[] endorserData) => this.SetProperty(nameof(endorserData), string.Join(',', endorserData));
 
     private BCProviderAttributes SetProperty(string propertyName, object value)
     {
