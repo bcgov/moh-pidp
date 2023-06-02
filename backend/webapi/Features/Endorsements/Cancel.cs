@@ -3,12 +3,15 @@ namespace Pidp.Features.Endorsements;
 using DomainResults.Common;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
+using NodaTime;
 
 using Pidp.Data;
 using Pidp.Extensions;
 using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.HttpClients.BCProvider;
+using Pidp.Infrastructure.HttpClients.Keycloak;
 using Pidp.Infrastructure.HttpClients.Plr;
+using Pidp.Models;
 
 public class Cancel
 {
@@ -30,17 +33,26 @@ public class Cancel
     public class CommandHandler : ICommandHandler<Command, IDomainResult>
     {
         private readonly IBCProviderClient bcProviderClient;
+        private readonly IClock clock;
+        private readonly IKeycloakAdministrationClient keycloakClient;
+        private readonly ILogger logger;
         private readonly IPlrClient plrClient;
         private readonly PidpConfiguration config;
         private readonly PidpDbContext context;
 
         public CommandHandler(
             IBCProviderClient bcProviderClient,
+            IClock clock,
+            IKeycloakAdministrationClient keycloakClient,
+            ILogger<CommandHandler> logger,
             IPlrClient plrClient,
             PidpConfiguration config,
             PidpDbContext context)
         {
             this.bcProviderClient = bcProviderClient;
+            this.clock = clock;
+            this.keycloakClient = keycloakClient;
+            this.logger = logger;
             this.config = config;
             this.context = context;
             this.plrClient = plrClient;
@@ -67,28 +79,55 @@ public class Cancel
                     && string.IsNullOrWhiteSpace(relationship.Party!.Cpn))
                 .Select(relationship => new
                 {
+                    relationship.Party!.Id,
+                    UserId = relationship.Party.PrimaryUserId,
                     relationship.PartyId,
                     UserPrincipalName = relationship.Party!.Credentials
                         .Where(credential => credential.IdentityProvider == IdentityProviders.BCProvider)
                         .Select(credential => credential.IdpId)
                         .SingleOrDefault(),
                 })
-                .SingleAsync();
+                .SingleOrDefaultAsync();
 
-            if (!string.IsNullOrWhiteSpace(unLicencedParty.UserPrincipalName))
+            if (unLicencedParty == null)
             {
-                var endorsingCpns = await this.context.ActiveEndorsementRelationships(unLicencedParty.PartyId)
-                    .Select(relationship => relationship.Party!.Cpn)
-                    .ToListAsync();
+                return DomainResult.Success();
+            }
 
-                var endorseePlrStanding = await this.plrClient.GetAggregateStandingsDigestAsync(endorsingCpns);
+            var endorsingCpns = await this.context.ActiveEndorsementRelationships(unLicencedParty.PartyId)
+                .Select(relationship => relationship.Party!.Cpn)
+                .ToListAsync();
 
-                var endorseeIsMoa = endorseePlrStanding.HasGoodStanding;
-                var endorseeBcProviderAttributes = new BCProviderAttributes(this.config.BCProviderClient.ClientId).SetIsMoa(endorseeIsMoa);
-                await this.bcProviderClient.UpdateAttributes(unLicencedParty.UserPrincipalName, endorseeBcProviderAttributes.AsAdditionalData());
+            var endorseePlrStanding = await this.plrClient.GetAggregateStandingsDigestAsync(endorsingCpns);
+            var endorseeIsMoa = endorseePlrStanding.HasGoodStanding;
+
+            if (!endorseeIsMoa)
+            {
+                var moaLicenceStatus = MohKeycloakEnrolment.MoaLicenceStatus;
+                var role = await this.keycloakClient.GetClientRole(moaLicenceStatus.ClientId, moaLicenceStatus.AccessRoles.First());
+                if (await this.keycloakClient.RemoveClientRole(unLicencedParty.UserId, role!))
+                {
+                    this.context.BusinessEvents.Add(LicenceStatusRoleUnassigned.Create(unLicencedParty.Id, MohKeycloakEnrolment.MoaLicenceStatus, this.clock.GetCurrentInstant()));
+                }
+                else
+                {
+                    this.logger.LogMoaRoleAssignmentError(unLicencedParty.Id);
+                }
+
+                if (!string.IsNullOrWhiteSpace(unLicencedParty.UserPrincipalName))
+                {
+                    var endorseeBcProviderAttributes = new BCProviderAttributes(this.config.BCProviderClient.ClientId).SetIsMoa(endorseeIsMoa);
+                    await this.bcProviderClient.UpdateAttributes(unLicencedParty.UserPrincipalName, endorseeBcProviderAttributes.AsAdditionalData());
+                }
             }
 
             return DomainResult.Success();
         }
     }
+}
+
+public static partial class EndorsementCancelLoggingExtensions
+{
+    [LoggerMessage(1, LogLevel.Error, "Error when unassigning the MOA role to Party #{partyId}.")]
+    public static partial void LogMoaRoleAssignmentError(this ILogger logger, int partyId);
 }
