@@ -93,7 +93,7 @@ public class BCProviderCreate
                 PidpEmail = party.Email
             };
 
-            if (party.Cpn == null)
+            if (!plrStanding.HasGoodStanding)
             {
                 var endorsementCpns = await this.context.ActiveEndorsementRelationships(command.PartyId)
                     .Select(relationship => relationship.Party!.Cpn)
