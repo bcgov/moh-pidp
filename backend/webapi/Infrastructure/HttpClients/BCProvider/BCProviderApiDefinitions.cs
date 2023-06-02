@@ -52,7 +52,7 @@ public class BCProviderAttributes
     /// <summary>
     /// A comma-separated list containing the CPN(s) of Parties Endorsing the User, who have licences from the College of Physicians and Surgeons and the College of Nurses and Midwives.
     /// </summary>
-    public BCProviderAttributes SetEndorserData(string[] endorserData) => this.SetProperty(nameof(endorserData), string.Join(',', endorserData));
+    public BCProviderAttributes SetEndorserData(string[] endorserData) => this.SetProperty(nameof(endorserData), string.Join(",", endorserData));
     public BCProviderAttributes SetHpdid(string hpdid) => this.SetProperty(nameof(hpdid), hpdid);
     public BCProviderAttributes SetIsMd(bool isMd) => this.SetProperty(nameof(isMd), isMd);
     public BCProviderAttributes SetIsMoa(bool isMoa) => this.SetProperty(nameof(isMoa), isMoa);
