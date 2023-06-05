@@ -52,3 +52,21 @@ public class LicenceStatusRoleAssigned : BusinessEvent
         };
     }
 }
+
+public class LicenceStatusRoleUnassigned : BusinessEvent
+{
+    public int PartyId { get; set; }
+    public Party? Party { get; set; }
+
+    public static LicenceStatusRoleUnassigned Create(int partyId, MohKeycloakEnrolment enrolmentAssigned, Instant recordedOn)
+    {
+        return new LicenceStatusRoleUnassigned
+        {
+            PartyId = partyId,
+            Description = $"Party was unassigned the {enrolmentAssigned.AccessRoles.Single()} role.",
+            Severity = LogLevel.Information,
+            RecordedOn = recordedOn
+        };
+    }
+}
+
