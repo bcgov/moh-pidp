@@ -3,8 +3,15 @@ namespace Pidp.Features.Endorsements;
 using DomainResults.Common;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
+using NodaTime;
 
 using Pidp.Data;
+using Pidp.Extensions;
+using Pidp.Infrastructure.Auth;
+using Pidp.Infrastructure.HttpClients.BCProvider;
+using Pidp.Infrastructure.HttpClients.Keycloak;
+using Pidp.Infrastructure.HttpClients.Plr;
+using Pidp.Models;
 
 public class Cancel
 {
@@ -25,9 +32,31 @@ public class Cancel
 
     public class CommandHandler : ICommandHandler<Command, IDomainResult>
     {
+        private readonly IBCProviderClient bcProviderClient;
+        private readonly IClock clock;
+        private readonly IKeycloakAdministrationClient keycloakClient;
+        private readonly ILogger logger;
+        private readonly IPlrClient plrClient;
+        private readonly PidpConfiguration config;
         private readonly PidpDbContext context;
 
-        public CommandHandler(PidpDbContext context) => this.context = context;
+        public CommandHandler(
+            IBCProviderClient bcProviderClient,
+            IClock clock,
+            IKeycloakAdministrationClient keycloakClient,
+            ILogger<CommandHandler> logger,
+            IPlrClient plrClient,
+            PidpConfiguration config,
+            PidpDbContext context)
+        {
+            this.bcProviderClient = bcProviderClient;
+            this.clock = clock;
+            this.keycloakClient = keycloakClient;
+            this.logger = logger;
+            this.config = config;
+            this.context = context;
+            this.plrClient = plrClient;
+        }
 
         public async Task<IDomainResult> HandleAsync(Command command)
         {
@@ -43,9 +72,70 @@ public class Cancel
             }
 
             endorsement.Active = false;
-
             await this.context.SaveChangesAsync();
+
+            var involvedParties = await this.context.EndorsementRelationships
+                .Where(relationship => relationship.EndorsementId == command.EndorsementId)
+                .Select(relationship => new
+                {
+                    relationship.PartyId,
+                    relationship.Party!.Cpn,
+                    UserId = relationship.Party.PrimaryUserId,
+                    UserPrincipalName = relationship.Party!.Credentials
+                        .Where(credential => credential.IdentityProvider == IdentityProviders.BCProvider)
+                        .Select(credential => credential.IdpId)
+                        .SingleOrDefault(),
+                })
+                .ToListAsync();
+
+            if (involvedParties.Count(party => party.Cpn == null) != 1)
+            {
+                // Either both parties have licences or both don't.
+                return DomainResult.Success();
+            }
+
+            var unlicencedParty = involvedParties.Single(party => party.Cpn == null);
+
+            var endorsingCpns = await this.context.ActiveEndorsementRelationships(unlicencedParty.PartyId)
+                .Select(relationship => relationship.Party!.Cpn)
+                .ToListAsync();
+
+            var endorsingPlrDigest = await this.plrClient.GetAggregateStandingsDigestAsync(endorsingCpns);
+
+            var unlicencedPartyBCProviderAttributes = new BCProviderAttributes(this.config.BCProviderClient.ClientId)
+                .SetEndorserData(endorsingPlrDigest
+                    .WithGoodStanding()
+                    .With(IdentifierType.PhysiciansAndSurgeons, IdentifierType.Nurse, IdentifierType.Midwife)
+                    .Cpns);
+
+            if (!endorsingPlrDigest.HasGoodStanding)
+            {
+                var role = await this.keycloakClient.GetClientRole(MohKeycloakEnrolment.MoaLicenceStatus.ClientId, MohKeycloakEnrolment.MoaLicenceStatus.AccessRoles.First());
+                if (await this.keycloakClient.RemoveClientRole(unlicencedParty.UserId, role!))
+                {
+                    this.context.BusinessEvents.Add(LicenceStatusRoleUnassigned.Create(unlicencedParty.PartyId, MohKeycloakEnrolment.MoaLicenceStatus, this.clock.GetCurrentInstant()));
+                    await this.context.SaveChangesAsync();
+                }
+                else
+                {
+                    this.logger.LogMoaRoleAssignmentError(unlicencedParty.PartyId);
+                }
+
+                unlicencedPartyBCProviderAttributes.SetIsMoa(false);
+            }
+
+            if (!string.IsNullOrWhiteSpace(unlicencedParty.UserPrincipalName))
+            {
+                await this.bcProviderClient.UpdateAttributes(unlicencedParty.UserPrincipalName, unlicencedPartyBCProviderAttributes.AsAdditionalData());
+            }
+
             return DomainResult.Success();
         }
     }
+}
+
+public static partial class EndorsementCancelLoggingExtensions
+{
+    [LoggerMessage(1, LogLevel.Error, "Error when unassigning the MOA role to Party #{partyId}.")]
+    public static partial void LogMoaRoleAssignmentError(this ILogger logger, int partyId);
 }

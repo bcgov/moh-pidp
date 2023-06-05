@@ -80,11 +80,20 @@ public sealed class PlrStatusUpdateService : IPlrStatusUpdateService
         {
             var bcProviderAttributes = new BCProviderAttributes(this.config.BCProviderClient.ClientId);
 
+
             if (!status.IsGoodStanding
                 && !await this.plrClient.GetStandingAsync(status.Cpn))
             {
                 var endorsementPlrStanding = await this.plrClient.GetAggregateStandingsDigestAsync(endorsementRelations.Select(relation => relation.Cpn));
                 bcProviderAttributes.SetIsMoa(endorsementPlrStanding.HasGoodStanding);
+
+                // TODO: should probably remove this data if the current Party becomes licenced.
+                var endorserData = endorsementPlrStanding
+                    .WithGoodStanding()
+                    .With(IdentifierType.PhysiciansAndSurgeons, IdentifierType.Nurse, IdentifierType.Midwife)
+                    .Cpns;
+
+                bcProviderAttributes.SetEndorserData(endorserData);
             }
             else
             {
@@ -100,6 +109,7 @@ public sealed class PlrStatusUpdateService : IPlrStatusUpdateService
             {
                 bcProviderAttributes.SetIsRnp(status.IsGoodStanding);
             }
+
 
             await this.bcProviderClient.UpdateAttributes(party.UserPrincipalName, bcProviderAttributes.AsAdditionalData());
         }
@@ -118,11 +128,11 @@ public sealed class PlrStatusUpdateService : IPlrStatusUpdateService
                 .Select(relationship => relationship.Party!.Cpn)
                 .ToListAsync(stoppingToken);
 
-            var endorseePlrStanding = await this.plrClient.GetAggregateStandingsDigestAsync(endorsingCpns);
+            var relationPlrStanding = await this.plrClient.GetAggregateStandingsDigestAsync(endorsingCpns);
 
-            var endorseeIsMoa = endorseePlrStanding.HasGoodStanding;
-            var endorseeBcProviderAttributes = new BCProviderAttributes(this.config.BCProviderClient.ClientId).SetIsMoa(endorseeIsMoa);
-            await this.bcProviderClient.UpdateAttributes(relation.UserPrincipalName, endorseeBcProviderAttributes.AsAdditionalData());
+            var relationIsMoa = relationPlrStanding.HasGoodStanding;
+            var relationBcProviderAttributes = new BCProviderAttributes(this.config.BCProviderClient.ClientId).SetIsMoa(relationIsMoa);
+            await this.bcProviderClient.UpdateAttributes(relation.UserPrincipalName, relationBcProviderAttributes.AsAdditionalData());
         }
 
         this.logger.LogStatusUpdateProcessed(status.Id);
@@ -135,6 +145,6 @@ public static partial class PlrStatusUpdateServiceLoggingExtensions
     [LoggerMessage(1, LogLevel.Information, "Status update {statusId} is for a PLR record not associated to a PIdP user.")]
     public static partial void LogPlrRecordNotAssociatedToPidpUser(this ILogger logger, int statusId);
 
-    [LoggerMessage(1, LogLevel.Information, "Status update {statusId} has been proccessed.")]
+    [LoggerMessage(2, LogLevel.Information, "Status update {statusId} has been proccessed.")]
     public static partial void LogStatusUpdateProcessed(this ILogger logger, int statusId);
 }

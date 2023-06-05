@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using NodaTime;
 
 using Pidp.Data;
+using Pidp.Extensions;
 using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.HttpClients.BCProvider;
 using Pidp.Infrastructure.HttpClients.Keycloak;
@@ -68,21 +69,31 @@ public class AssignKeycloakRolesAfterPlrCpnLookupFound : INotificationHandler<Pl
 public class UpdateBCProviderAfterPlrCpnLookupFound : INotificationHandler<PlrCpnLookupFound>
 {
     private readonly IBCProviderClient bcProviderClient;
+    private readonly IPlrClient plrClient;
     private readonly PidpDbContext context;
     private readonly string clientId;
 
     public UpdateBCProviderAfterPlrCpnLookupFound(
         IBCProviderClient bcProviderClient,
+        IPlrClient plrClient,
         PidpDbContext context,
         PidpConfiguration config)
     {
         this.bcProviderClient = bcProviderClient;
+        this.plrClient = plrClient;
         this.context = context;
         this.clientId = config.BCProviderClient.ClientId;
     }
 
     public async Task Handle(PlrCpnLookupFound notification, CancellationToken cancellationToken)
     {
+        if ((await this.plrClient.GetStandingsDigestAsync(notification.Cpn))
+            .With(IdentifierType.PhysiciansAndSurgeons, IdentifierType.Nurse, IdentifierType.Midwife)
+            .HasGoodStanding)
+        {
+            await this.UpdateEndorserData(notification);
+        }
+
         var userPrincipalName = await this.context.Credentials
             .Where(credential => credential.PartyId == notification.PartyId
                 && credential.IdentityProvider == IdentityProviders.BCProvider)
@@ -96,5 +107,38 @@ public class UpdateBCProviderAfterPlrCpnLookupFound : INotificationHandler<PlrCp
 
         var attribute = new BCProviderAttributes(this.clientId).SetCpn(notification.Cpn);
         await this.bcProviderClient.UpdateAttributes(userPrincipalName, attribute.AsAdditionalData());
+    }
+
+    private async Task UpdateEndorserData(PlrCpnLookupFound notification)
+    {
+        var endorsementRelations = await this.context.ActiveEndorsementRelationships(notification.PartyId)
+            .Select(relationship => new
+            {
+                relationship.Party!.Cpn,
+                UserPrincipalName = relationship.Party.Credentials
+                    .Where(credential => credential.IdentityProvider == IdentityProviders.BCProvider)
+                    .Select(credential => credential.IdpId)
+                    .SingleOrDefault(),
+            })
+            .ToListAsync();
+
+        foreach (var relation in endorsementRelations)
+        {
+            if (string.IsNullOrWhiteSpace(relation.UserPrincipalName)
+                || await this.plrClient.GetStandingAsync(relation.Cpn))
+            {
+                // User either has no BC Provider or has a licence in good standing and so can't be an MOA.
+                continue;
+            }
+
+            // TODO: refactor BCProviderClient.GetAttribute
+            var existingEndorserData = (string?)await this.bcProviderClient.GetAttribute(relation.UserPrincipalName, $"extension_{this.clientId}_endorserData");
+
+            var newEndorserData = string.IsNullOrWhiteSpace(existingEndorserData)
+                ? notification.Cpn
+                : string.Join(",", existingEndorserData, notification.Cpn);
+
+            await this.bcProviderClient.UpdateAttributes(relation.UserPrincipalName, new BCProviderAttributes(this.clientId).SetEndorserData(new[] { newEndorserData }).AsAdditionalData());
+        }
     }
 }
