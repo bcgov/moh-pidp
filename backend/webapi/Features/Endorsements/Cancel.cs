@@ -100,16 +100,15 @@ public class Cancel
                 .Select(relationship => relationship.Party!.Cpn)
                 .ToListAsync();
 
-            var endorseePlrStanding = await this.plrClient.GetAggregateStandingsDigestAsync(endorsingCpns);
-            var endorseeIsMoa = endorseePlrStanding.HasGoodStanding;
+            var endorsingPlrDigest = await this.plrClient.GetAggregateStandingsDigestAsync(endorsingCpns);
 
-            if (!endorseeIsMoa)
+            if (!endorsingPlrDigest.HasGoodStanding)
             {
-                var moaLicenceStatus = MohKeycloakEnrolment.MoaLicenceStatus;
-                var role = await this.keycloakClient.GetClientRole(moaLicenceStatus.ClientId, moaLicenceStatus.AccessRoles.First());
+                var role = await this.keycloakClient.GetClientRole(MohKeycloakEnrolment.MoaLicenceStatus.ClientId, MohKeycloakEnrolment.MoaLicenceStatus.AccessRoles.First());
                 if (await this.keycloakClient.RemoveClientRole(unlicencedParty.UserId, role!))
                 {
                     this.context.BusinessEvents.Add(LicenceStatusRoleUnassigned.Create(unlicencedParty.PartyId, MohKeycloakEnrolment.MoaLicenceStatus, this.clock.GetCurrentInstant()));
+                    await this.context.SaveChangesAsync();
                 }
                 else
                 {
@@ -118,7 +117,7 @@ public class Cancel
 
                 if (!string.IsNullOrWhiteSpace(unlicencedParty.UserPrincipalName))
                 {
-                    var endorseeBcProviderAttributes = new BCProviderAttributes(this.config.BCProviderClient.ClientId).SetIsMoa(endorseeIsMoa);
+                    var endorseeBcProviderAttributes = new BCProviderAttributes(this.config.BCProviderClient.ClientId).SetIsMoa(false);
                     await this.bcProviderClient.UpdateAttributes(unlicencedParty.UserPrincipalName, endorseeBcProviderAttributes.AsAdditionalData());
                 }
             }
