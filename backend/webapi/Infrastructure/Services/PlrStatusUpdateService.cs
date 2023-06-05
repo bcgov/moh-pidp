@@ -145,6 +145,6 @@ public static partial class PlrStatusUpdateServiceLoggingExtensions
     [LoggerMessage(1, LogLevel.Information, "Status update {statusId} is for a PLR record not associated to a PIdP user.")]
     public static partial void LogPlrRecordNotAssociatedToPidpUser(this ILogger logger, int statusId);
 
-    [LoggerMessage(1, LogLevel.Information, "Status update {statusId} has been proccessed.")]
+    [LoggerMessage(2, LogLevel.Information, "Status update {statusId} has been proccessed.")]
     public static partial void LogStatusUpdateProcessed(this ILogger logger, int statusId);
 }
