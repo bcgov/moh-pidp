@@ -128,8 +128,16 @@ public class Approve
 
             if (!string.IsNullOrWhiteSpace(unLicencedParty.UserPrincipalName))
             {
-                var endorseeBcProviderAttributes = new BCProviderAttributes(this.config.BCProviderClient.ClientId).SetIsMoa(true);
-                await this.bcProviderClient.UpdateAttributes(unLicencedParty.UserPrincipalName, endorseeBcProviderAttributes.AsAdditionalData());
+                // TODO: refactor BCProviderClient.GetAttribute
+                var existingEndorserData = (string?)await this.bcProviderClient.GetAttribute(unLicencedParty.UserPrincipalName, $"extension_{this.config.BCProviderClient.ClientId}_endorserData");
+                var newEndorserData = string.IsNullOrWhiteSpace(existingEndorserData)
+                    ? licencedParty.Cpn!
+                    : string.Join(",", existingEndorserData, licencedParty.Cpn);
+
+                var unlicencedPartyBCProviderAttributes = new BCProviderAttributes(this.config.BCProviderClient.ClientId)
+                    .SetIsMoa(true)
+                    .SetEndorserData(new[] { newEndorserData });
+                await this.bcProviderClient.UpdateAttributes(unLicencedParty.UserPrincipalName, unlicencedPartyBCProviderAttributes.AsAdditionalData());
             }
         }
     }

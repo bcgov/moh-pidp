@@ -131,7 +131,7 @@ public class UpdateBCProviderAfterPlrCpnLookupFound : INotificationHandler<PlrCp
                 continue;
             }
 
-            // TODO: fix this
+            // TODO: refactor BCProviderClient.GetAttribute
             var existingEndorserData = (string?)await this.bcProviderClient.GetAttribute(relation.UserPrincipalName, $"extension_{this.clientId}_endorserData");
 
             var newEndorserData = string.IsNullOrWhiteSpace(existingEndorserData)
