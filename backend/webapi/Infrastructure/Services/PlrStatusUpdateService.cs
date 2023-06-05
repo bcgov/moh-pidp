@@ -80,12 +80,20 @@ public sealed class PlrStatusUpdateService : IPlrStatusUpdateService
         {
             var bcProviderAttributes = new BCProviderAttributes(this.config.BCProviderClient.ClientId);
 
-            var endorsementPlrStanding = await this.plrClient.GetAggregateStandingsDigestAsync(endorsementRelations.Select(relation => relation.Cpn));
 
             if (!status.IsGoodStanding
                 && !await this.plrClient.GetStandingAsync(status.Cpn))
             {
+                var endorsementPlrStanding = await this.plrClient.GetAggregateStandingsDigestAsync(endorsementRelations.Select(relation => relation.Cpn));
                 bcProviderAttributes.SetIsMoa(endorsementPlrStanding.HasGoodStanding);
+
+                // TODO: should probably remove this data if the current Party becomes licenced.
+                var endorserData = endorsementPlrStanding
+                    .WithGoodStanding()
+                    .With(IdentifierType.PhysiciansAndSurgeons, IdentifierType.Nurse, IdentifierType.Midwife)
+                    .Cpns;
+
+                bcProviderAttributes.SetEndorserData(endorserData);
             }
             else
             {
@@ -102,12 +110,6 @@ public sealed class PlrStatusUpdateService : IPlrStatusUpdateService
                 bcProviderAttributes.SetIsRnp(status.IsGoodStanding);
             }
 
-            var endorserData = endorsementPlrStanding
-                .WithGoodStanding()
-                .With(IdentifierType.PhysiciansAndSurgeons, IdentifierType.Nurse, IdentifierType.Midwife)
-                .Cpns;
-
-            bcProviderAttributes.SetEndorserData(endorserData);
 
             await this.bcProviderClient.UpdateAttributes(party.UserPrincipalName, bcProviderAttributes.AsAdditionalData());
         }
