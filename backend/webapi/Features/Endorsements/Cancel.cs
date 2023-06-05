@@ -74,7 +74,7 @@ public class Cancel
             endorsement.Active = false;
             await this.context.SaveChangesAsync();
 
-            var parties = await this.context.EndorsementRelationships
+            var involvedParties = await this.context.EndorsementRelationships
                 .Where(relationship => relationship.EndorsementId == command.EndorsementId)
                 .Select(relationship => new
                 {
@@ -88,19 +88,25 @@ public class Cancel
                 })
                 .ToListAsync();
 
-            if (parties.Count(party => party.Cpn == null) != 1)
+            if (involvedParties.Count(party => party.Cpn == null) != 1)
             {
                 // Either both parties have licences or both don't.
                 return DomainResult.Success();
             }
 
-            var unlicencedParty = parties.Single(party => party.Cpn == null);
+            var unlicencedParty = involvedParties.Single(party => party.Cpn == null);
 
             var endorsingCpns = await this.context.ActiveEndorsementRelationships(unlicencedParty.PartyId)
                 .Select(relationship => relationship.Party!.Cpn)
                 .ToListAsync();
 
             var endorsingPlrDigest = await this.plrClient.GetAggregateStandingsDigestAsync(endorsingCpns);
+
+            var unlicencedPartyBCProviderAttributes = new BCProviderAttributes(this.config.BCProviderClient.ClientId)
+                .SetEndorserData(endorsingPlrDigest
+                    .WithGoodStanding()
+                    .With(IdentifierType.PhysiciansAndSurgeons, IdentifierType.Nurse, IdentifierType.Midwife)
+                    .Cpns);
 
             if (!endorsingPlrDigest.HasGoodStanding)
             {
@@ -115,11 +121,12 @@ public class Cancel
                     this.logger.LogMoaRoleAssignmentError(unlicencedParty.PartyId);
                 }
 
-                if (!string.IsNullOrWhiteSpace(unlicencedParty.UserPrincipalName))
-                {
-                    var endorseeBcProviderAttributes = new BCProviderAttributes(this.config.BCProviderClient.ClientId).SetIsMoa(false);
-                    await this.bcProviderClient.UpdateAttributes(unlicencedParty.UserPrincipalName, endorseeBcProviderAttributes.AsAdditionalData());
-                }
+                unlicencedPartyBCProviderAttributes.SetIsMoa(false);
+            }
+
+            if (!string.IsNullOrWhiteSpace(unlicencedParty.UserPrincipalName))
+            {
+                await this.bcProviderClient.UpdateAttributes(unlicencedParty.UserPrincipalName, unlicencedPartyBCProviderAttributes.AsAdditionalData());
             }
 
             return DomainResult.Success();
