@@ -1,9 +1,12 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { Observable, map } from 'rxjs';
+import { EMPTY, Observable, map } from 'rxjs';
 
+import { PartyService } from '@app/core/party/party.service';
 import { AccessTokenService } from '@app/features/auth/services/access-token.service';
+
+import { UserAccessAgreementResourceService } from './user-access-agreement-resource.service';
 
 @Component({
   selector: 'app-user-access-agreement',
@@ -17,6 +20,8 @@ export class UserAccessAgreementPage {
   public constructor(
     private route: ActivatedRoute,
     private router: Router,
+    private partyService: PartyService,
+    private resource: UserAccessAgreementResourceService,
     accessTokenService: AccessTokenService
   ) {
     this.title = this.route.snapshot.data.title;
@@ -26,7 +31,9 @@ export class UserAccessAgreementPage {
   }
 
   public onSubmit(): void {
-    this.navigateToRoot();
+    const partyId = this.partyService.partyId;
+
+    partyId ? this.resource.acceptAgreement(partyId).subscribe() : EMPTY;
   }
 
   public onBack(): void {
