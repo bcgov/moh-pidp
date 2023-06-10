@@ -25,6 +25,11 @@ public class BCProviderAttributes
     private readonly string extensionNamePrefix;
     private readonly Dictionary<string, object> attributes = new();
 
+    /// <summary>
+    /// Always use to CRUD attributes in AAD, as clientId contains dashes
+    /// that AAD does not expect
+    /// </summary>
+    /// <param name="clientId"></param>
     public BCProviderAttributes(string clientId) => this.extensionNamePrefix = $"extension_{clientId.Replace("-", "")}_";
 
     public static BCProviderAttributes FromNewUser(string clientId, NewUserRepresentation representation)
