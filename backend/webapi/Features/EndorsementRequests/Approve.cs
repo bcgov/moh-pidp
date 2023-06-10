@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using NodaTime;
 
 using Pidp.Data;
+using Pidp.Extensions;
 using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.HttpClients.BCProvider;
 using Pidp.Infrastructure.HttpClients.Keycloak;
@@ -128,15 +129,18 @@ public class Approve
 
             if (!string.IsNullOrWhiteSpace(unLicencedParty.UserPrincipalName))
             {
-                // TODO: refactor BCProviderClient.GetAttribute
-                var existingEndorserData = (string?)await this.bcProviderClient.GetAttribute(unLicencedParty.UserPrincipalName, $"extension_{this.config.BCProviderClient.ClientId}_endorserData");
-                var newEndorserData = string.IsNullOrWhiteSpace(existingEndorserData)
-                    ? licencedParty.Cpn!
-                    : string.Join(",", existingEndorserData, licencedParty.Cpn);
+                var endorsingCpns = await this.context.ActiveEndorsementRelationships(unLicencedParty.Id)
+                    .Select(relationship => relationship.Party!.Cpn)
+                    .ToListAsync();
+
+                var endorsingPartiesStanding = await this.plrClient.GetAggregateStandingsDigestAsync(endorsingCpns);
 
                 var unlicencedPartyBCProviderAttributes = new BCProviderAttributes(this.config.BCProviderClient.ClientId)
                     .SetIsMoa(true)
-                    .SetEndorserData(new[] { newEndorserData });
+                    .SetEndorserData(endorsingPartiesStanding
+                        .WithGoodStanding()
+                        .With(IdentifierType.PhysiciansAndSurgeons, IdentifierType.Nurse, IdentifierType.Midwife)
+                        .Cpns);
                 await this.bcProviderClient.UpdateAttributes(unLicencedParty.UserPrincipalName, unlicencedPartyBCProviderAttributes.AsAdditionalData());
             }
         }
