@@ -114,6 +114,7 @@ public class UpdateBCProviderAfterPlrCpnLookupFound : INotificationHandler<PlrCp
         var endorsementRelations = await this.context.ActiveEndorsementRelationships(notification.PartyId)
             .Select(relationship => new
             {
+                relationship.PartyId,
                 relationship.Party!.Cpn,
                 UserPrincipalName = relationship.Party.Credentials
                     .Where(credential => credential.IdentityProvider == IdentityProviders.BCProvider)
@@ -131,14 +132,19 @@ public class UpdateBCProviderAfterPlrCpnLookupFound : INotificationHandler<PlrCp
                 continue;
             }
 
-            // TODO: refactor BCProviderClient.GetAttribute
-            var existingEndorserData = (string?)await this.bcProviderClient.GetAttribute(relation.UserPrincipalName, $"extension_{this.clientId}_endorserData");
+            var endorsingCpns = await this.context.ActiveEndorsementRelationships(relation.PartyId)
+                .Select(relationship => relationship.Party!.Cpn)
+                .ToListAsync();
 
-            var newEndorserData = string.IsNullOrWhiteSpace(existingEndorserData)
-                ? notification.Cpn
-                : string.Join(",", existingEndorserData, notification.Cpn);
+            var endorsingPartiesStanding = await this.plrClient.GetAggregateStandingsDigestAsync(endorsingCpns);
 
-            await this.bcProviderClient.UpdateAttributes(relation.UserPrincipalName, new BCProviderAttributes(this.clientId).SetEndorserData(new[] { newEndorserData }).AsAdditionalData());
+            var relationBCProviderAttributes = new BCProviderAttributes(this.clientId)
+                .SetIsMoa(true)
+                .SetEndorserData(endorsingPartiesStanding
+                    .WithGoodStanding()
+                    .With(IdentifierType.PhysiciansAndSurgeons, IdentifierType.Nurse, IdentifierType.Midwife)
+                    .Cpns);
+            await this.bcProviderClient.UpdateAttributes(relation.UserPrincipalName, relationBCProviderAttributes.AsAdditionalData());
         }
     }
 }
