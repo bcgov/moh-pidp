@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using NodaTime;
 
 using Pidp.Data;
+using Pidp.Extensions;
 using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.HttpClients.BCProvider;
 using Pidp.Infrastructure.HttpClients.Keycloak;
@@ -110,7 +111,8 @@ public class Approve
             }
 
             var licencedParty = parties.Single(party => !string.IsNullOrWhiteSpace(party.Cpn));
-            if (!await this.plrClient.GetStandingAsync(licencedParty.Cpn))
+            var licencedPartyStanding = await this.plrClient.GetStandingsDigestAsync(licencedParty.Cpn);
+            if (!licencedPartyStanding.HasGoodStanding)
             {
                 // TODO: Log / other behaviour when in bad standing?
                 return;
@@ -126,17 +128,24 @@ public class Approve
                 this.logger.LogMoaRoleAssignmentError(unLicencedParty.Id);
             }
 
-            if (!string.IsNullOrWhiteSpace(unLicencedParty.UserPrincipalName))
+            if (!string.IsNullOrWhiteSpace(unLicencedParty.UserPrincipalName)
+                && licencedPartyStanding
+                    .With(IdentifierType.PhysiciansAndSurgeons, IdentifierType.Nurse, IdentifierType.Midwife)
+                    .HasGoodStanding)
             {
-                // TODO: refactor BCProviderClient.GetAttribute
-                var existingEndorserData = (string?)await this.bcProviderClient.GetAttribute(unLicencedParty.UserPrincipalName, $"extension_{this.config.BCProviderClient.ClientId}_endorserData");
-                var newEndorserData = string.IsNullOrWhiteSpace(existingEndorserData)
-                    ? licencedParty.Cpn!
-                    : string.Join(",", existingEndorserData, licencedParty.Cpn);
+                var endorsingCpns = await this.context.ActiveEndorsementRelationships(unLicencedParty.Id)
+                    .Select(relationship => relationship.Party!.Cpn)
+                    .ToListAsync();
+
+                var endorsingPartiesStanding = await this.plrClient.GetAggregateStandingsDigestAsync(endorsingCpns);
 
                 var unlicencedPartyBCProviderAttributes = new BCProviderAttributes(this.config.BCProviderClient.ClientId)
                     .SetIsMoa(true)
-                    .SetEndorserData(new[] { newEndorserData });
+                    .SetEndorserData(endorsingPartiesStanding
+                        .WithGoodStanding()
+                        .With(IdentifierType.PhysiciansAndSurgeons, IdentifierType.Nurse, IdentifierType.Midwife)
+                        .Cpns
+                        .Append(licencedParty.Cpn!));
                 await this.bcProviderClient.UpdateAttributes(unLicencedParty.UserPrincipalName, unlicencedPartyBCProviderAttributes.AsAdditionalData());
             }
         }
