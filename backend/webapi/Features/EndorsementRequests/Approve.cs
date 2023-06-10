@@ -111,7 +111,8 @@ public class Approve
             }
 
             var licencedParty = parties.Single(party => !string.IsNullOrWhiteSpace(party.Cpn));
-            if (!await this.plrClient.GetStandingAsync(licencedParty.Cpn))
+            var licencedPartyStanding = await this.plrClient.GetStandingsDigestAsync(licencedParty.Cpn);
+            if (!licencedPartyStanding.HasGoodStanding)
             {
                 // TODO: Log / other behaviour when in bad standing?
                 return;
@@ -127,22 +128,28 @@ public class Approve
                 this.logger.LogMoaRoleAssignmentError(unLicencedParty.Id);
             }
 
-            if (!string.IsNullOrWhiteSpace(unLicencedParty.UserPrincipalName))
+            if (string.IsNullOrWhiteSpace(unLicencedParty.UserPrincipalName)
+                || !licencedPartyStanding
+                    .With(IdentifierType.PhysiciansAndSurgeons, IdentifierType.Nurse, IdentifierType.Midwife)
+                    .HasGoodStanding)
             {
-                var endorsingCpns = await this.context.ActiveEndorsementRelationships(unLicencedParty.Id)
-                    .Select(relationship => relationship.Party!.Cpn)
-                    .ToListAsync();
-
-                var endorsingPartiesStanding = await this.plrClient.GetAggregateStandingsDigestAsync(endorsingCpns);
-
-                var unlicencedPartyBCProviderAttributes = new BCProviderAttributes(this.config.BCProviderClient.ClientId)
-                    .SetIsMoa(true)
-                    .SetEndorserData(endorsingPartiesStanding
-                        .WithGoodStanding()
-                        .With(IdentifierType.PhysiciansAndSurgeons, IdentifierType.Nurse, IdentifierType.Midwife)
-                        .Cpns);
-                await this.bcProviderClient.UpdateAttributes(unLicencedParty.UserPrincipalName, unlicencedPartyBCProviderAttributes.AsAdditionalData());
+                return;
             }
+
+            var endorsingCpns = await this.context.ActiveEndorsementRelationships(unLicencedParty.Id)
+                .Select(relationship => relationship.Party!.Cpn)
+                .ToListAsync();
+
+            var endorsingPartiesStanding = await this.plrClient.GetAggregateStandingsDigestAsync(endorsingCpns);
+
+            var unlicencedPartyBCProviderAttributes = new BCProviderAttributes(this.config.BCProviderClient.ClientId)
+                .SetIsMoa(true)
+                .SetEndorserData(endorsingPartiesStanding
+                    .WithGoodStanding()
+                    .With(IdentifierType.PhysiciansAndSurgeons, IdentifierType.Nurse, IdentifierType.Midwife)
+                    .Cpns
+                    .Append(licencedParty.Cpn!));
+            await this.bcProviderClient.UpdateAttributes(unLicencedParty.UserPrincipalName, unlicencedPartyBCProviderAttributes.AsAdditionalData());
         }
     }
 }
