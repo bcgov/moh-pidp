@@ -128,28 +128,26 @@ public class Approve
                 this.logger.LogMoaRoleAssignmentError(unLicencedParty.Id);
             }
 
-            if (string.IsNullOrWhiteSpace(unLicencedParty.UserPrincipalName)
-                || !licencedPartyStanding
+            if (!string.IsNullOrWhiteSpace(unLicencedParty.UserPrincipalName)
+                && licencedPartyStanding
                     .With(IdentifierType.PhysiciansAndSurgeons, IdentifierType.Nurse, IdentifierType.Midwife)
                     .HasGoodStanding)
             {
-                return;
+                var endorsingCpns = await this.context.ActiveEndorsementRelationships(unLicencedParty.Id)
+                    .Select(relationship => relationship.Party!.Cpn)
+                    .ToListAsync();
+
+                var endorsingPartiesStanding = await this.plrClient.GetAggregateStandingsDigestAsync(endorsingCpns);
+
+                var unlicencedPartyBCProviderAttributes = new BCProviderAttributes(this.config.BCProviderClient.ClientId)
+                    .SetIsMoa(true)
+                    .SetEndorserData(endorsingPartiesStanding
+                        .WithGoodStanding()
+                        .With(IdentifierType.PhysiciansAndSurgeons, IdentifierType.Nurse, IdentifierType.Midwife)
+                        .Cpns
+                        .Append(licencedParty.Cpn!));
+                await this.bcProviderClient.UpdateAttributes(unLicencedParty.UserPrincipalName, unlicencedPartyBCProviderAttributes.AsAdditionalData());
             }
-
-            var endorsingCpns = await this.context.ActiveEndorsementRelationships(unLicencedParty.Id)
-                .Select(relationship => relationship.Party!.Cpn)
-                .ToListAsync();
-
-            var endorsingPartiesStanding = await this.plrClient.GetAggregateStandingsDigestAsync(endorsingCpns);
-
-            var unlicencedPartyBCProviderAttributes = new BCProviderAttributes(this.config.BCProviderClient.ClientId)
-                .SetIsMoa(true)
-                .SetEndorserData(endorsingPartiesStanding
-                    .WithGoodStanding()
-                    .With(IdentifierType.PhysiciansAndSurgeons, IdentifierType.Nurse, IdentifierType.Midwife)
-                    .Cpns
-                    .Append(licencedParty.Cpn!));
-            await this.bcProviderClient.UpdateAttributes(unLicencedParty.UserPrincipalName, unlicencedPartyBCProviderAttributes.AsAdditionalData());
         }
     }
 }
