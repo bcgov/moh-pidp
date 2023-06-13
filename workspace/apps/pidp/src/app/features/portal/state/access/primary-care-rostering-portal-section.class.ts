@@ -12,13 +12,11 @@ export class PrimaryCareRosteringPortalSection implements IPortalSection {
   public description: string;
   private readonly primaryCareRosteringWebsite: string;
 
-  public constructor(
-    private profileStatus: ProfileStatus
-  ) {
+  public constructor(private profileStatus: ProfileStatus) {
     this.key = 'primaryCareRostering';
     this.heading = 'Rostering B.C. Healthcare';
     this.description = `Patient rostering in family practice is a process by which patients regiser with a family practice, family physician, or team.`;
-    this.primaryCareRosteringWebsite = 'https://news.gov.bc.ca/releases/2022HLTH0212-001619';
+    this.primaryCareRosteringWebsite = 'https://bchealthprovider.ca';
   }
 
   /**
