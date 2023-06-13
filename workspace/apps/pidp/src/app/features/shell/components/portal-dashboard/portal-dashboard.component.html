@@ -1,12 +1,5 @@
-<ui-dashboard
-  [username]="(username | async)!"
-  [headerConfig]="headerConfig"
-  [showMenuItemIcons]="showMenuItemIcons"
+<ui-dashboard-v2
+  [dashboardState]="(dashboardState$ | async)!"
   [menuItems]="menuItems"
-  [responsiveMenuItems]="responsiveMenuItems"
-  [logoutRedirectUrl]="logoutRedirectUrl"
   (logout)="onLogout()">
-  <ui-dashboard-image
-    [brandConfig]="brandConfig"
-    [responsiveMenuItems]="responsiveMenuItems"></ui-dashboard-image>
-</ui-dashboard>
+</ui-dashboard-v2>

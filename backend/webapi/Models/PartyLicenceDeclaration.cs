@@ -19,5 +19,5 @@ public class PartyLicenceDeclaration : BaseAuditable
 
     public College? College { get; set; }
 
-    public string? LicenceNumber { get; set; } = string.Empty;
+    public string? LicenceNumber { get; set; }
 }

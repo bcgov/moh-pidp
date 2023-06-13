@@ -1,0 +1,25 @@
+FROM sonarqube:9.9.0-community
+
+ARG SONAR_LOGIN="login"
+ARG SONAR_PROJECT="webapi"
+ARG SONAR_ZAP_REPORTPATH="webapi-zap-report.xml"
+ARG SONAR_BUILDSTRING="a1b2c3d"
+ARG SONAR_PROJECTVERSION="dev"
+
+# # Install java, needed for sonar-scanner
+USER root
+RUN apt update
+RUN apt install default-jre -y
+RUN apt install -y dotnet-sdk-6.0
+
+
+ENV DOTNET_CLI_HOME="/opt"
+ENV PATH="$PATH:/opt/.dotnet/tools"
+
+# Install sonar-scanner
+RUN dotnet tool install --global dotnet-sonarscanner
+RUN dotnet tool install --global dotnet-coverage
+
+WORKDIR /source
+COPY . .
+

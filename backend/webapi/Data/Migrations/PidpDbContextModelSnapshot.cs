@@ -102,6 +102,41 @@ namespace Pidp.Data.Migrations
                     b.HasDiscriminator<string>("Discriminator").HasValue("Address");
                 });
 
+            modelBuilder.Entity("Pidp.Models.BusinessEvent", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<Instant>("Created")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<Instant>("Modified")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Instant>("RecordedOn")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("Severity")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("BusinessEvent");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("BusinessEvent");
+                });
+
             modelBuilder.Entity("Pidp.Models.ClientLog", b =>
                 {
                     b.Property<int>("Id")
@@ -129,6 +164,45 @@ namespace Pidp.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("ClientLog");
+                });
+
+            modelBuilder.Entity("Pidp.Models.Credential", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<Instant>("Created")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("IdentityProvider")
+                        .HasColumnType("text");
+
+                    b.Property<string>("IdpId")
+                        .HasColumnType("text");
+
+                    b.Property<Instant>("Modified")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("PartyId")
+                        .HasColumnType("integer");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PartyId");
+
+                    b.HasIndex("UserId")
+                        .IsUnique()
+                        .HasFilter("\"UserId\" != '00000000-0000-0000-0000-000000000000'");
+
+                    b.ToTable("Credential");
+
+                    b.HasCheckConstraint("CHK_Credential_AtLeastOneIdentifier", "((\"UserId\" != '00000000-0000-0000-0000-000000000000') or (\"IdpId\" is not null))");
                 });
 
             modelBuilder.Entity("Pidp.Models.EmailLog", b =>
@@ -350,17 +424,22 @@ namespace Pidp.Data.Migrations
                         new
                         {
                             Code = 5,
-                            Name = "Fraser Health UCI"
+                            Name = "MS Teams for Clinical Use - Privacy Officer"
                         },
                         new
                         {
                             Code = 6,
-                            Name = "MS Teams for Clinical Use"
+                            Name = "Prescription Refill eForm for Pharmacists"
                         },
                         new
                         {
                             Code = 7,
-                            Name = "Prescription Refill eForm for Pharmacists"
+                            Name = "Provider Reporting Portal"
+                        },
+                        new
+                        {
+                            Code = 8,
+                            Name = "MS Teams for Clinical Use - Clinic Member"
                         });
                 });
 
@@ -978,6 +1057,34 @@ namespace Pidp.Data.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Pidp.Models.MSTeamsClinic", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<Instant>("Created")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Instant>("Modified")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("PrivacyOfficerId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PrivacyOfficerId");
+
+                    b.ToTable("MSTeamsClinic");
+                });
+
             modelBuilder.Entity("Pidp.Models.Party", b =>
                 {
                     b.Property<int>("Id")
@@ -1002,9 +1109,6 @@ namespace Pidp.Data.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("Hpdid")
-                        .HasColumnType("text");
-
                     b.Property<string>("JobTitle")
                         .HasColumnType("text");
 
@@ -1027,16 +1131,7 @@ namespace Pidp.Data.Migrations
                     b.Property<string>("PreferredMiddleName")
                         .HasColumnType("text");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("Hpdid")
-                        .IsUnique();
-
-                    b.HasIndex("UserId")
-                        .IsUnique();
 
                     b.ToTable("Party");
                 });
@@ -1138,6 +1233,29 @@ namespace Pidp.Data.Migrations
                     b.ToTable("PartyOrgainizationDetail");
                 });
 
+            modelBuilder.Entity("Pidp.Models.PrpAuthorizedLicence", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("Claimed")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("LicenceNumber")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LicenceNumber")
+                        .IsUnique();
+
+                    b.ToTable("PrpAuthorizedLicence");
+                });
+
             modelBuilder.Entity("Pidp.Models.FacilityAddress", b =>
                 {
                     b.HasBaseType("Pidp.Models.Address");
@@ -1187,10 +1305,10 @@ namespace Pidp.Data.Migrations
                 {
                     b.HasBaseType("Pidp.Models.Address");
 
-                    b.Property<int>("MSTeamsEnrolmentId")
+                    b.Property<int>("ClinicId")
                         .HasColumnType("integer");
 
-                    b.HasIndex("MSTeamsEnrolmentId")
+                    b.HasIndex("ClinicId")
                         .IsUnique();
 
                     b.ToTable("Address");
@@ -1198,15 +1316,30 @@ namespace Pidp.Data.Migrations
                     b.HasDiscriminator().HasValue("MSTeamsClinicAddress");
                 });
 
-            modelBuilder.Entity("Pidp.Models.MSTeamsEnrolment", b =>
+            modelBuilder.Entity("Pidp.Models.MSTeamsClinicMemberEnrolment", b =>
                 {
                     b.HasBaseType("Pidp.Models.AccessRequest");
 
-                    b.Property<string>("ClinicName")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<int>("ClinicId")
+                        .HasColumnType("integer");
 
-                    b.ToTable("MSTeamsEnrolment");
+                    b.HasIndex("ClinicId");
+
+                    b.ToTable("MSTeamsClinicMemberEnrolment");
+                });
+
+            modelBuilder.Entity("Pidp.Models.PartyNotInPlr", b =>
+                {
+                    b.HasBaseType("Pidp.Models.BusinessEvent");
+
+                    b.Property<int>("PartyId")
+                        .HasColumnType("integer");
+
+                    b.HasIndex("PartyId");
+
+                    b.ToTable("BusinessEvent");
+
+                    b.HasDiscriminator().HasValue("PartyNotInPlr");
                 });
 
             modelBuilder.Entity("Pidp.Models.AccessRequest", b =>
@@ -1237,6 +1370,17 @@ namespace Pidp.Data.Migrations
                     b.Navigation("Country");
 
                     b.Navigation("Province");
+                });
+
+            modelBuilder.Entity("Pidp.Models.Credential", b =>
+                {
+                    b.HasOne("Pidp.Models.Party", "Party")
+                        .WithMany("Credentials")
+                        .HasForeignKey("PartyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Party");
                 });
 
             modelBuilder.Entity("Pidp.Models.EndorsementRelationship", b =>
@@ -1285,6 +1429,17 @@ namespace Pidp.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Party");
+                });
+
+            modelBuilder.Entity("Pidp.Models.MSTeamsClinic", b =>
+                {
+                    b.HasOne("Pidp.Models.Party", "PrivacyOfficer")
+                        .WithMany()
+                        .HasForeignKey("PrivacyOfficerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("PrivacyOfficer");
                 });
 
             modelBuilder.Entity("Pidp.Models.PartyAccessAdministrator", b =>
@@ -1357,22 +1512,41 @@ namespace Pidp.Data.Migrations
 
             modelBuilder.Entity("Pidp.Models.MSTeamsClinicAddress", b =>
                 {
-                    b.HasOne("Pidp.Models.MSTeamsEnrolment", "MSTeamsEnrolment")
-                        .WithOne("ClinicAddress")
-                        .HasForeignKey("Pidp.Models.MSTeamsClinicAddress", "MSTeamsEnrolmentId")
+                    b.HasOne("Pidp.Models.MSTeamsClinic", "Clinic")
+                        .WithOne("Address")
+                        .HasForeignKey("Pidp.Models.MSTeamsClinicAddress", "ClinicId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("MSTeamsEnrolment");
+                    b.Navigation("Clinic");
                 });
 
-            modelBuilder.Entity("Pidp.Models.MSTeamsEnrolment", b =>
+            modelBuilder.Entity("Pidp.Models.MSTeamsClinicMemberEnrolment", b =>
                 {
-                    b.HasOne("Pidp.Models.AccessRequest", null)
-                        .WithOne()
-                        .HasForeignKey("Pidp.Models.MSTeamsEnrolment", "Id")
+                    b.HasOne("Pidp.Models.MSTeamsClinic", "Clinic")
+                        .WithMany()
+                        .HasForeignKey("ClinicId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("Pidp.Models.AccessRequest", null)
+                        .WithOne()
+                        .HasForeignKey("Pidp.Models.MSTeamsClinicMemberEnrolment", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Clinic");
+                });
+
+            modelBuilder.Entity("Pidp.Models.PartyNotInPlr", b =>
+                {
+                    b.HasOne("Pidp.Models.Party", "Party")
+                        .WithMany()
+                        .HasForeignKey("PartyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Party");
                 });
 
             modelBuilder.Entity("Pidp.Models.Endorsement", b =>
@@ -1385,23 +1559,25 @@ namespace Pidp.Data.Migrations
                     b.Navigation("PhysicalAddress");
                 });
 
+            modelBuilder.Entity("Pidp.Models.MSTeamsClinic", b =>
+                {
+                    b.Navigation("Address")
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Pidp.Models.Party", b =>
                 {
                     b.Navigation("AccessAdministrator");
 
                     b.Navigation("AccessRequests");
 
+                    b.Navigation("Credentials");
+
                     b.Navigation("Facility");
 
                     b.Navigation("LicenceDeclaration");
 
                     b.Navigation("OrgainizationDetail");
-                });
-
-            modelBuilder.Entity("Pidp.Models.MSTeamsEnrolment", b =>
-                {
-                    b.Navigation("ClinicAddress")
-                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

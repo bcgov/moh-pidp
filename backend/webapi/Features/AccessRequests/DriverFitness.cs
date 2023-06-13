@@ -6,12 +6,15 @@ using Microsoft.EntityFrameworkCore;
 using NodaTime;
 
 using Pidp.Data;
+using Pidp.Infrastructure.HttpClients.Keycloak;
 using Pidp.Infrastructure.HttpClients.Plr;
 using Pidp.Models;
 using Pidp.Models.Lookups;
 
 public class DriverFitness
 {
+    public static IdentifierType[] AllowedIdentifierTypes => new[] { IdentifierType.PhysiciansAndSurgeons };
+
     public class Command : ICommand<IDomainResult>
     {
         public int PartyId { get; set; }
@@ -25,17 +28,20 @@ public class DriverFitness
     public class CommandHandler : ICommandHandler<Command, IDomainResult>
     {
         private readonly IClock clock;
+        private readonly IKeycloakAdministrationClient keycloakClient;
         private readonly ILogger logger;
         private readonly IPlrClient plrClient;
         private readonly PidpDbContext context;
 
         public CommandHandler(
             IClock clock,
+            IKeycloakAdministrationClient keycloakClient,
             ILogger<CommandHandler> logger,
             IPlrClient plrClient,
             PidpDbContext context)
         {
             this.clock = clock;
+            this.keycloakClient = keycloakClient;
             this.logger = logger;
             this.plrClient = plrClient;
             this.context = context;
@@ -48,6 +54,8 @@ public class DriverFitness
                 .Select(party => new
                 {
                     AlreadyEnroled = party.AccessRequests.Any(request => request.AccessTypeCode == AccessTypeCode.DriverFitness),
+                    LicenceDeclarationCompleted = party.LicenceDeclaration != null,
+                    UserId = party.PrimaryUserId,
                     party.Cpn,
                     party.Email
                 })
@@ -55,17 +63,46 @@ public class DriverFitness
 
             if (dto.AlreadyEnroled
                 || dto.Email == null
-                || !await this.plrClient.GetStandingAsync(dto.Cpn))
+                || !dto.LicenceDeclarationCompleted)
             {
                 this.logger.LogDriverFitnessAccessRequestDenied();
                 return DomainResult.Failed();
             }
 
-            // TODO assign role?
-            // if (!await this.keycloakClient.AssignClientRole(dto.UserId, ?, ?))
-            // {
-            //     return DomainResult.Failed();
-            // }
+            if (dto.Cpn == null)
+            {
+                // Check status of Endorsements
+                var endorsementCpns = await this.context.Endorsements
+                    .Where(endorsement => endorsement.Active
+                        && endorsement.EndorsementRelationships.Any(relationship => relationship.PartyId == command.PartyId))
+                    .SelectMany(endorsement => endorsement.EndorsementRelationships)
+                    .Where(relationship => relationship.PartyId != command.PartyId)
+                    .Select(relationship => relationship.Party!.Cpn)
+                    .ToListAsync();
+
+                var endorsementPlrStanding = await this.plrClient.GetAggregateStandingsDigestAsync(endorsementCpns);
+                if (!endorsementPlrStanding.HasGoodStanding)
+                {
+                    this.logger.LogDriverFitnessAccessRequestDenied();
+                    return DomainResult.Failed();
+                }
+            }
+            else
+            {
+                // Check status of College Licence
+                if (!(await this.plrClient.GetStandingsDigestAsync(dto.Cpn))
+                    .With(AllowedIdentifierTypes)
+                    .HasGoodStanding)
+                {
+                    this.logger.LogDriverFitnessAccessRequestDenied();
+                    return DomainResult.Failed();
+                }
+            }
+
+            if (!await this.keycloakClient.AssignAccessRoles(dto.UserId, MohKeycloakEnrolment.DriverFitness))
+            {
+                return DomainResult.Failed();
+            }
 
             this.context.AccessRequests.Add(new AccessRequest
             {

@@ -5,14 +5,16 @@ using AutoMapper.QueryableExtensions;
 using DomainResults.Common;
 using FluentValidation;
 using HybridModelBinding;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
+using NodaTime;
 using System.Text.Json.Serialization;
 
 using Pidp.Data;
 using Pidp.Features;
-using Pidp.Infrastructure.HttpClients.Keycloak;
 using Pidp.Infrastructure.HttpClients.Plr;
 using Pidp.Models;
+using Pidp.Models.DomainEvents;
 using Pidp.Models.Lookups;
 
 public class LicenceDeclaration
@@ -74,16 +76,11 @@ public class LicenceDeclaration
 
     public class CommandHandler : ICommandHandler<Command, IDomainResult<string?>>
     {
-        private readonly IKeycloakAdministrationClient keycloakClient;
         private readonly IPlrClient plrClient;
         private readonly PidpDbContext context;
 
-        public CommandHandler(
-            IKeycloakAdministrationClient keycloakClient,
-            IPlrClient plrClient,
-            PidpDbContext context)
+        public CommandHandler(IPlrClient plrClient, PidpDbContext context)
         {
-            this.keycloakClient = keycloakClient;
             this.plrClient = plrClient;
             this.context = context;
         }
@@ -91,6 +88,7 @@ public class LicenceDeclaration
         public async Task<IDomainResult<string?>> HandleAsync(Command command)
         {
             var party = await this.context.Parties
+                .Include(party => party.Credentials)
                 .Include(party => party.LicenceDeclaration)
                 .SingleAsync(party => party.Id == command.PartyId);
 
@@ -104,15 +102,42 @@ public class LicenceDeclaration
             party.LicenceDeclaration.CollegeCode = command.CollegeCode;
             party.LicenceDeclaration.LicenceNumber = command.LicenceNumber;
 
-            party.Cpn = command.CollegeCode == null || command.LicenceNumber == null || party.Birthdate == null
-                ? null // Declared "No Licence"
-                : await this.plrClient.FindCpnAsync(command.CollegeCode.Value, command.LicenceNumber, party.Birthdate.Value);
+            if (command.CollegeCode.HasValue && command.LicenceNumber != null && party.Birthdate.HasValue)
+            {
+                party.Cpn = await this.plrClient.FindCpnAsync(command.CollegeCode.Value, command.LicenceNumber, party.Birthdate!.Value);
+
+                if (party.Cpn == null)
+                {
+                    party.DomainEvents.Add(new PlrCpnLookupNotFound(party.Id));
+                }
+                else
+                {
+                    party.DomainEvents.Add(new PlrCpnLookupFound(party.Id, party.PrimaryUserId, party.Cpn));
+                }
+            }
 
             await this.context.SaveChangesAsync();
 
-            await this.keycloakClient.UpdateUserCpn(party.UserId, party.Cpn);
-
             return DomainResult.Success(party.Cpn);
+        }
+    }
+
+    public class PlrCpnLookupNotFoundHandler : INotificationHandler<PlrCpnLookupNotFound>
+    {
+        private readonly IClock clock;
+        private readonly PidpDbContext context;
+
+        public PlrCpnLookupNotFoundHandler(IClock clock, PidpDbContext context)
+        {
+            this.clock = clock;
+            this.context = context;
+        }
+
+        public Task Handle(PlrCpnLookupNotFound notification, CancellationToken cancellationToken)
+        {
+            this.context.BusinessEvents.Add(PartyNotInPlr.Create(notification.PartyId, this.clock.GetCurrentInstant()));
+
+            return Task.CompletedTask;
         }
     }
 }

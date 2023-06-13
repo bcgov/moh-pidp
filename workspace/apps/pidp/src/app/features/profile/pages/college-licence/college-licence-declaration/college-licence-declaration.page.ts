@@ -1,14 +1,19 @@
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { EMPTY, Observable, catchError, of, tap } from 'rxjs';
 
-import { AbstractFormPage } from '@app/core/classes/abstract-form-page.class';
+import { DashboardStateModel, PidpStateName } from '@pidp/data-model';
+import { RegisteredCollege } from '@pidp/data-model';
+import { AppStateService } from '@pidp/presentation';
+
+import {
+  AbstractFormDependenciesService,
+  AbstractFormPage,
+} from '@app/core/classes/abstract-form-page.class';
 import { PartyService } from '@app/core/party/party.service';
-import { FormUtilsService } from '@app/core/services/form-utils.service';
 import { LoggerService } from '@app/core/services/logger.service';
 import { ProfileRoutes } from '@app/features/profile/profile.routes';
 import { LookupService } from '@app/modules/lookup/lookup.service';
@@ -31,19 +36,26 @@ export class CollegeLicenceDeclarationPage
   public title: string;
   public formState: CollegeLicenceDeclarationFormState;
   public colleges: CollegeLookup[];
+  public showOverlayOnSubmit = true;
+
+  public get showNurseValidationInfo(): boolean {
+    const isNurse =
+      this.formState.collegeCode.value === RegisteredCollege.Bccnm;
+    return isNurse;
+  }
 
   public constructor(
-    protected dialog: MatDialog,
-    protected formUtilsService: FormUtilsService,
+    dependenciesService: AbstractFormDependenciesService,
     private route: ActivatedRoute,
     private router: Router,
     private partyService: PartyService,
     private resource: CollegeLicenceDeclarationResource,
     private logger: LoggerService,
-    lookupService: LookupService,
+    private lookupService: LookupService,
+    private stateService: AppStateService,
     fb: FormBuilder
   ) {
-    super(dialog, formUtilsService);
+    super(dependenciesService);
 
     this.title = this.route.snapshot.data.title;
     this.formState = new CollegeLicenceDeclarationFormState(fb);
@@ -86,6 +98,20 @@ export class CollegeLicenceDeclarationPage
   }
 
   protected afterSubmitIsSuccessful(cpn: string | null): void {
+    // Set college on the left navigation.
+    const collegeCode = this.formState.collegeCode.value as number;
+    const college = this.lookupService.getCollege(collegeCode);
+    const collegeName = college?.name ?? '';
+
+    const oldState = this.stateService.getNamedState<DashboardStateModel>(
+      PidpStateName.dashboard
+    );
+    const newState: DashboardStateModel = {
+      ...oldState,
+      userProfileCollegeNameText: collegeName,
+    };
+    this.stateService.setNamedState(PidpStateName.dashboard, newState);
+
     if (!cpn) {
       this.navigateToRoot();
     } else {

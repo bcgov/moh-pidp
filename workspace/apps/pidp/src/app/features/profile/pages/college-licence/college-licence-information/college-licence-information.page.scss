@@ -1,0 +1,121 @@
+@use 'pidp-variables' as pidp;
+$lightgrey: #f2f2f2;
+$darkgrey: pidp.$bcgov-color-text;
+
+.viewport-all {
+  flex: 1;
+  .header {
+    background-color: $lightgrey;
+  }
+  & .licences-box {
+    & .licences-licence-box {
+      border: solid 1px $darkgrey;
+      border-radius: 4px;
+      & .licence-icon-box {
+        background-color: $lightgrey;
+        border-radius: 4px;
+      }
+    }
+  }
+  & .actions {
+    & button {
+      margin-top: 1rem;
+    }
+  }
+}
+.viewport-large,
+.viewport-medium,
+.viewport-small {
+  display: flex;
+  flex-direction: column;
+  max-width: 800px;
+  & .header {
+    padding: 6px 20px;
+  }
+  & .info-box {
+    margin: 10px 0;
+    & .info-here {
+      margin-bottom: 6px;
+    }
+  }
+  & .licences-box {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    & .licences-licence-box {
+      display: flex;
+      height: 125px;
+      & .licence-icon-box {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 125px;
+        & .licence-icon-image {
+          font-size: 50px;
+        }
+      }
+
+      & .licence-detail-box {
+        flex: 1;
+        padding: 20px 30px;
+        display: flex;
+        align-items: center;
+
+        & .licence-detail-content {
+          flex: 1;
+          display: grid;
+          grid-template-columns: 50% 50%;
+          grid-gap: 3px;
+        }
+      }
+    }
+  }
+}
+.viewport-xsmall {
+  display: flex;
+  flex-direction: column;
+  max-width: 640px;
+  padding-top: 20px;
+  & .header {
+    padding: 6px 20px;
+  }
+  & .info-box {
+    margin: 5px 0;
+    padding: 0 15px;
+    & .info-here {
+      margin-bottom: 6px;
+    }
+  }
+  & .licences-box {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin: 15px;
+    & .licences-licence-box {
+      display: flex;
+      flex-direction: column;
+      & .licence-icon-box {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 15px 0;
+        & .licence-icon-image {
+          font-size: 36px;
+        }
+      }
+
+      & .licence-detail-box {
+        flex: 1;
+        padding: 20px 15px;
+        display: flex;
+        align-items: center;
+
+        & .licence-detail-content {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+        }
+      }
+    }
+  }
+}

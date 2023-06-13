@@ -1,67 +1,65 @@
-<ui-page [form]="formState.form" (submitted)="onSubmit()">
-  <ui-page-header>{{ title }}</ui-page-header>
-
-  <div class="row">
-    <ui-page-section>
-      <ui-page-section-subheader
-        icon="assignment_ind"
-        heading="College Licence Information">
-        <ng-container uiPageSectionSubheaderDesc>
-          Provide the following information to complete your Provider Identity
-          Profile.
-        </ng-container>
-      </ui-page-section-subheader>
-    </ui-page-section>
-
-    <ng-container [formGroup]="formState.form">
-      <ui-page-section>
-        <ui-page-section-subheader heading="College Licence">
-          <ng-container uiPageSectionSubheaderDesc>
-            Provide details for your active college licence.
-          </ng-container>
-        </ui-page-section-subheader>
-
-        <div class="row">
-          <div class="col-12">
-            <mat-form-field class="w-100">
-              <mat-select
-                placeholder="College Licence"
-                formControlName="collegeCode">
-                <mat-option [value]="0">None</mat-option>
-                <mat-option
-                  *ngFor="let college of colleges"
-                  [value]="college.code">
-                  {{ college.name }}
-                </mat-option>
-              </mat-select>
-              <mat-error>Required</mat-error>
-            </mat-form-field>
-          </div>
-          <div *ngIf="formState.collegeCode.value" class="col-12">
-            <mat-form-field class="w-100">
-              <input
-                matInput
-                placeholder="Licence Number"
-                formControlName="licenceNumber" />
-              <mat-error>Required</mat-error>
-            </mat-form-field>
-          </div>
-        </div>
-      </ui-page-section>
-    </ng-container>
-  </div>
-
-  <ui-page-footer>
-    <button
-      mat-stroked-button
-      uiPageFooterAction
-      type="button"
-      color="primary"
-      (click)="onBack()">
-      Back Home
-    </button>
-    <button mat-flat-button uiPageFooterAction type="submit" color="primary">
-      Save Information
-    </button>
-  </ui-page-footer>
-</ui-page>
+<div class="box" uiPidpInjectViewportCss>
+  <form novalidate [formGroup]="formState.form" (ngSubmit)="onSubmit()">
+    <section>
+      <h2 class="header">College Licence</h2>
+      <div class="content">
+        <p>Provide details for your active college licence.</p>
+        <label
+          id="college-licence-declaration-college-licence"
+          class="field-label"
+          >College Licence</label
+        >
+        <mat-form-field appearance="outline">
+          <mat-select
+            formControlName="collegeCode"
+            aria-labelledby="college-licence-declaration-college-licence">
+            <mat-option [value]="0">None</mat-option>
+            <mat-option *ngFor="let college of colleges" [value]="college.code">
+              {{ college.name }}
+            </mat-option>
+          </mat-select>
+          <mat-error>Required</mat-error>
+        </mat-form-field>
+        <label
+          *ngIf="formState.collegeCode.value"
+          id="college-licence-declaration-licence-number"
+          class="field-label"
+          >Licence Number</label
+        >
+        <p *ngIf="showNurseValidationInfo">
+          If you are a nurse, this number may be referred to as your "Nurse ID".
+          You can confirm you have the correct number by checking it
+          <a
+            target="_blank"
+            rel="noopener"
+            href="https://registry.bccnp.ca/ElasticSearch/Search"
+            aria-label="BC College of Nurses and Midwives Search"
+            >here</a
+          >.
+        </p>
+        <mat-form-field
+          *ngIf="formState.collegeCode.value"
+          appearance="outline">
+          <input
+            matInput
+            formControlName="licenceNumber"
+            aria-labelledby="college-licence-declaration-licence-number" />
+          <mat-error>Required</mat-error>
+        </mat-form-field>
+      </div>
+    </section>
+    <div class="actions">
+      <button
+        mat-stroked-button
+        uiPageFooterAction
+        type="button"
+        color="primary"
+        (click)="onBack()">
+        Back Home
+      </button>
+      <button mat-flat-button uiPageFooterAction type="submit" color="primary">
+        Save Information
+      </button>
+    </div>
+  </form>
+</div>

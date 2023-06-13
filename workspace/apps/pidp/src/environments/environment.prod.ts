@@ -5,7 +5,7 @@ import {
   doctorsTechnologyOfficeEmail,
   doctorsTechnologyOfficeUrl,
   msTeamsSupportEmail,
-} from '@app/features/access/pages/ms-teams/ms-teams.constants';
+} from '@app/features/access/pages/ms-teams-privacy-officer/ms-teams.constants';
 import {
   phsaInformationAccessAndPrivacyOfficeEmail,
   prescriptionRefillRequestEformsSupportEmail,
@@ -15,7 +15,6 @@ import {
   specialAuthorityEformsSupportEmail,
   specialAuthorityUrl,
 } from '@app/features/access/pages/sa-eforms/sa-eforms.constants';
-import { uciSupportEmail } from '@app/features/access/pages/uci/uci.constants';
 
 import { AppEnvironment, EnvironmentName } from './environment.model';
 
@@ -34,6 +33,9 @@ export const environment: AppEnvironment = {
   apiEndpoint: 'http://localhost:5000',
   environmentName: EnvironmentName.LOCAL,
   applicationUrl: 'http://localhost:4200',
+  featureFlags: {
+    isLayoutV2Enabled: false,
+  },
   emails: {
     providerIdentitySupport: 'provideridentityportal@gov.bc.ca',
     specialAuthorityEformsSupport: specialAuthorityEformsSupportEmail,
@@ -42,7 +44,6 @@ export const environment: AppEnvironment = {
     prescriptionRefillRequestEformsSupport:
       prescriptionRefillRequestEformsSupportEmail,
     driverFitnessSupport: driverFitnessSupportEmail,
-    uciSupport: uciSupportEmail,
     msTeamsSupport: msTeamsSupportEmail,
     doctorsTechnologyOfficeSupport: doctorsTechnologyOfficeEmail,
     phsaInformationAccessAndPrivacyOffice:

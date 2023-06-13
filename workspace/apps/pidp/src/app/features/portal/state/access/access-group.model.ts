@@ -14,8 +14,10 @@ export const accessSectionKeys = [
   'hcimEnrolment',
   'sitePrivacySecurityChecklist',
   'driverFitness',
-  'uci',
-  'msTeams',
+  'msTeamsPrivacyOfficer',
+  'msTeamsClinicMember',
+  'provider-reporting-portal',
+  'primaryCareRostering',
 ] as const;
 
 /**
@@ -35,10 +37,13 @@ export type IAccessGroup = {
 export interface AccessGroup extends IAccessGroup {
   saEforms: SaEformsSection;
   prescriptionRefillEforms: Section;
+  bcProvider: Section;
   hcimAccountTransfer: Section;
   hcimEnrolment: Section;
   sitePrivacySecurityChecklist: Section;
   driverFitness: Section;
-  uci: Section;
-  msTeams: Section;
+  msTeamsPrivacyOfficer: Section;
+  msTeamsClinicMember: Section;
+  providerReportingPortal: Section;
+  primaryCareRostering: Section;
 }

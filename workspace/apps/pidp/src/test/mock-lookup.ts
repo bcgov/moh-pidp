@@ -5,6 +5,7 @@ export class MockLookup {
     /* eslint-disable */
     // Export of /lookups response copied from PostMan:
     return {
+      accessTypes: [],
       colleges: [
         {
           code: 1,
@@ -384,6 +385,8 @@ export class MockLookup {
           name: 'Nevada',
         },
       ],
+      organizations: [],
+      healthAuthorities: [],
     };
     /* eslint-enable */
   }

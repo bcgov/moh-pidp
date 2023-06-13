@@ -1,0 +1,116 @@
+<div class="box" uiPidpInjectViewportCss>
+  <form [formGroup]="formState.form" (ngSubmit)="onSubmit()">
+    <div class="content">
+      <app-enrolment-error *ngIf="enrolmentError"></app-enrolment-error>
+      <ng-container *ngIf="completed; else notCompleted">
+        <header>
+          <h2 class="title">Thank you for enrolling for MS Teams access.</h2>
+        </header>
+        <section class="completed">
+          <p>
+            Your clinic will be provided with instructions via email on how to
+            setup and use MS Teams for Clinical Use.
+          </p>
+          <p>
+            If you have any additional questions contact the FH mHealth team via
+            email:
+            <a uiAnchor scheme="mailto" [attr.href]="msTeamsSupportEmail"></a>
+          </p></section
+      ></ng-container>
+
+      <ng-template #notCompleted>
+        <section class="intro-card">
+          <div class="intro-text">
+            <header>
+              <h1 class="title"><strong>MS Teams</strong></h1>
+              <h3 class="subtitle">Collaborate all in one place</h3>
+            </header>
+            <p class="privacy-text">
+              Because you have a working relationship through endorsements, the
+              setup is quick and easy. All we need from you is to enrol for MS
+              Teams by choosing the Privacy Officer to request access to their
+              clinic's MS Teams. We will send off all the necessary information
+              and complete the procedure automatically.
+            </p>
+          </div>
+          <picture class="image">
+            <source
+              type="image/webp"
+              srcset="/assets/images/ms-teams-458x400.webp" />
+            <!-- Use png as a fallback when webp is not supported by the browser. -->
+            <source
+              type="image/jpg"
+              srcset="/assets/images/ms-teams-458X400.png" />
+            <img title="woman" loading="lazy" aria-labelledby="" />
+          </picture>
+        </section>
+        <section class="clinic-info">
+          <header>
+            <h3>Clinic Information</h3>
+          </header>
+          <div *ngIf="privacyOfficers" class="form">
+            <div class="field">
+              <label id="ms-teams-clinic">FHA Clinic Privacy Officer</label>
+              <mat-form-field class="slender" appearance="outline">
+                <mat-select
+                  [ngModelOptions]="{standalone: true}"
+                  [(ngModel)]="selectedPrivacyOfficer"
+                  (selectionChange)="onSelectPrivacyOfficer($event)">
+                  <mat-option
+                    *ngFor="let privacyOfficer of privacyOfficers"
+                    [value]="privacyOfficer"
+                    >{{ privacyOfficer.fullName }}</mat-option
+                  >
+                </mat-select>
+              </mat-form-field>
+              <div *ngIf="selectedPrivacyOfficer">
+                <fieldset [disabled]="!selectedPrivacyOfficer">
+                  <div class="field slender">
+                    <label>Clinic Name:</label>
+                    <mat-form-field appearance="outline">
+                      <input
+                        matInput
+                        type="text"
+                        readonly
+                        [value]="selectedPrivacyOfficer.clinicName" />
+                    </mat-form-field>
+                  </div>
+                  <div class="field">
+                    <label>Clinic Address:</label>
+                    <mat-form-field appearance="outline">
+                      <input
+                        matInput
+                        type="text"
+                        readonly
+                        [value]="selectedPrivacyOfficer.clinicAddress.street + ', ' + selectedPrivacyOfficer.clinicAddress.provinceCode + ', ' + selectedPrivacyOfficer.clinicAddress.city + ', ' + selectedPrivacyOfficer.clinicAddress.postal + ', ' + selectedPrivacyOfficer.clinicAddress.countryCode" />
+                    </mat-form-field>
+                  </div>
+                </fieldset>
+              </div>
+            </div>
+          </div></section
+      ></ng-template>
+    </div>
+
+    <section class="actions">
+      <button
+        mat-stroked-button
+        uiPageFooterAction
+        type="button"
+        color="primary"
+        (click)="onBack()">
+        {{ completed ? 'Back Home' : 'Cancel Back Home' }}
+      </button>
+      <button
+        *ngIf="!completed"
+        mat-flat-button
+        uiPageFooterAction
+        type="button"
+        color="primary"
+        [disabled]="!clinicId"
+        (click)="onRequestAccess()">
+        Next
+      </button>
+    </section>
+  </form>
+</div>

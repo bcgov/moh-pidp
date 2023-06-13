@@ -1,86 +1,149 @@
 namespace Pidp.Features.Parties;
 
 using NodaTime;
-
+using Pidp.Features.AccessRequests;
+using Pidp.Infrastructure.HttpClients.Plr;
 using Pidp.Models.Lookups;
 
 public partial class ProfileStatus
 {
     public partial class Model
     {
-        public class AccessAdministrator : ProfileSection
+        public enum Alert
+        {
+            TransientError = 1,
+            PlrBadStanding
+        }
+
+        public enum StatusCode
+        {
+            Incomplete = 1,
+            Complete,
+            Locked,
+            Error,
+            Hidden
+        }
+
+        public abstract class ProfileSection
+        {
+            internal abstract string SectionName { get; }
+            public HashSet<Alert> Alerts { get; set; } = new();
+            public StatusCode StatusCode { get; set; }
+
+            public bool IsComplete => this.StatusCode == StatusCode.Complete;
+
+            protected ProfileSection() { }
+
+            protected abstract StatusCode Compute(ProfileData profile);
+
+            public static TSection Create<TSection>(ProfileData profile) where TSection : ProfileSection, new()
+            {
+                var section = new TSection();
+                section.StatusCode = section.Compute(profile);
+                return section;
+            }
+        }
+
+        public class DashboardInfoSection : ProfileSection
+        {
+            internal override string SectionName => "dashboardInfo";
+            public string FullName { get; set; } = string.Empty;
+            public CollegeCode? CollegeCode { get; set; }
+
+            protected override StatusCode Compute(ProfileData profile)
+            {
+                this.FullName = $"{profile.FirstName} {profile.LastName}";
+                this.CollegeCode = profile.LicenceDeclaration?.CollegeCode;
+
+                return StatusCode.Complete; // Unused
+            }
+        }
+
+        public class AccessAdministratorSection : ProfileSection
         {
             internal override string SectionName => "administratorInfo";
             public string? Email { get; set; }
 
-            public AccessAdministrator(ProfileStatusDto profile) : base(profile) => this.Email = profile.AccessAdministratorEmail;
-
-            protected override void SetAlertsAndStatus(ProfileStatusDto profile)
+            protected override StatusCode Compute(ProfileData profile)
             {
+                this.Email = profile.AccessAdministratorEmail;
+
                 if (!profile.UserIsPhsa)
                 {
-                    this.StatusCode = StatusCode.Hidden;
-                    return;
+                    return StatusCode.Hidden;
                 }
 
-                this.StatusCode = string.IsNullOrWhiteSpace(profile.AccessAdministratorEmail)
+                return string.IsNullOrWhiteSpace(profile.AccessAdministratorEmail)
                     ? StatusCode.Incomplete
                     : StatusCode.Complete;
             }
         }
 
-        public class CollegeCertification : ProfileSection
+        public class BCProviderSection : ProfileSection
+        {
+            internal override string SectionName => "bcProvider";
+
+            protected override StatusCode Compute(ProfileData profile)
+            {
+                if (!profile.UserIsHighAssuranceIdentity)
+                {
+                    return StatusCode.Hidden;
+                }
+
+                if (profile.HasBCProviderCredential)
+                {
+                    return StatusCode.Complete;
+                }
+
+                return profile.DemographicsComplete
+                    ? StatusCode.Incomplete
+                    : StatusCode.Locked;
+            }
+        }
+
+        public class CollegeCertificationSection : ProfileSection
         {
             internal override string SectionName => "collegeCertification";
             public bool HasCpn { get; set; }
             public bool LicenceDeclared { get; set; }
 
-            public CollegeCertification(ProfileStatusDto profile) : base(profile)
+            protected override StatusCode Compute(ProfileData profile)
             {
                 this.HasCpn = !string.IsNullOrWhiteSpace(profile.Cpn);
-                this.LicenceDeclared = profile.HasDeclaredLicence;
-            }
+                this.LicenceDeclared = profile.CollegeLicenceDeclared;
 
-            protected override void SetAlertsAndStatus(ProfileStatusDto profile)
-            {
-                if (!profile.UserIsBcServicesCard)
+                if (!profile.UserIsHighAssuranceIdentity)
                 {
-                    this.StatusCode = StatusCode.Hidden;
-                    return;
+                    return StatusCode.Hidden;
                 }
 
-                if (!profile.DemographicsEntered)
+                if (!profile.DemographicsComplete)
                 {
-                    this.StatusCode = StatusCode.Locked;
-                    return;
+                    return StatusCode.Locked;
                 }
 
-                if (profile.LicenceDeclaration == null)
+                if (!profile.LicenceDeclarationComplete)
                 {
-                    this.StatusCode = StatusCode.Incomplete;
-                    return;
+                    return StatusCode.Incomplete;
                 }
 
-                if (profile.LicenceDeclaration.HasNoLicence
-                    || profile.PlrStanding.HasGoodStanding)
+                if (profile.LicenceDeclaration.HasNoLicence || profile.PartyPlrStanding.HasGoodStanding)
                 {
-                    this.StatusCode = StatusCode.Complete;
-                    return;
+                    return StatusCode.Complete;
                 }
 
-                if (profile.PlrStanding.Error)
+                if (profile.PartyPlrStanding.Error)
                 {
                     this.Alerts.Add(Alert.TransientError);
-                    this.StatusCode = StatusCode.Error;
-                    return;
+                    return StatusCode.Error;
                 }
 
                 this.Alerts.Add(Alert.PlrBadStanding);
-                this.StatusCode = StatusCode.Error;
+                return StatusCode.Error;
             }
         }
 
-        public class Demographics : ProfileSection
+        public class DemographicsSection : ProfileSection
         {
             internal override string SectionName => "demographics";
             public string FirstName { get; set; } = string.Empty;
@@ -89,82 +152,98 @@ public partial class ProfileStatus
             public string? Email { get; set; }
             public string? Phone { get; set; }
 
-            public Demographics(ProfileStatusDto profile) : base(profile)
+            protected override StatusCode Compute(ProfileData profile)
             {
                 this.FirstName = profile.FirstName;
                 this.LastName = profile.LastName;
                 this.Birthdate = profile.Birthdate;
                 this.Email = profile.Email;
                 this.Phone = profile.Phone;
-            }
 
-            protected override void SetAlertsAndStatus(ProfileStatusDto profile) => this.StatusCode = profile.DemographicsEntered ? StatusCode.Complete : StatusCode.Incomplete;
-        }
-
-        public class OrganizationDetails : ProfileSection
-        {
-            internal override string SectionName => "organizationDetails";
-
-            public OrganizationDetails(ProfileStatusDto profile) : base(profile) { }
-
-            protected override void SetAlertsAndStatus(ProfileStatusDto profile)
-            {
-                if (!profile.UserIsPhsa)
-                {
-                    this.StatusCode = StatusCode.Hidden;
-                    return;
-                }
-
-                if (!profile.DemographicsEntered)
-                {
-                    this.StatusCode = StatusCode.Locked;
-                    return;
-                }
-
-                this.StatusCode = profile.OrganizationDetailEntered
+                return profile.DemographicsComplete
                     ? StatusCode.Complete
                     : StatusCode.Incomplete;
             }
         }
 
-        public class DriverFitness : ProfileSection
+        public class EndorsementsSection : ProfileSection
+        {
+            internal override string SectionName => "endorsements";
+
+            protected override StatusCode Compute(ProfileData profile)
+            {
+                if (!profile.UserIsHighAssuranceIdentity)
+                {
+                    return StatusCode.Hidden;
+                }
+
+                return profile.DemographicsComplete && profile.LicenceDeclarationComplete
+                    ? StatusCode.Incomplete
+                    : StatusCode.Locked;
+            }
+        }
+
+        public class OrganizationDetailsSection : ProfileSection
+        {
+            internal override string SectionName => "organizationDetails";
+
+            protected override StatusCode Compute(ProfileData profile)
+            {
+                if (!profile.UserIsPhsa)
+                {
+                    return StatusCode.Hidden;
+                }
+
+                if (!profile.DemographicsComplete)
+                {
+                    return StatusCode.Locked;
+                }
+
+                return profile.OrganizationDetailEntered
+                    ? StatusCode.Complete
+                    : StatusCode.Incomplete;
+            }
+        }
+
+        public class DriverFitnessSection : ProfileSection
         {
             internal override string SectionName => "driverFitness";
 
-            public DriverFitness(ProfileStatusDto profile) : base(profile) { }
-
-            protected override void SetAlertsAndStatus(ProfileStatusDto profile)
+            protected override StatusCode Compute(ProfileData profile)
             {
-                if (!profile.UserIsBcServicesCard)
+                if (!profile.UserIsHighAssuranceIdentity)
                 {
-                    this.StatusCode = StatusCode.Hidden;
-                    return;
+                    return StatusCode.Hidden;
                 }
 
                 if (profile.CompletedEnrolments.Contains(AccessTypeCode.DriverFitness))
                 {
-                    this.StatusCode = StatusCode.Complete;
-                    return;
+                    return StatusCode.Complete;
                 }
 
-                if (!profile.DemographicsEntered
-                    || !profile.PlrStanding.HasGoodStanding)
+                if (!profile.DemographicsComplete || !profile.LicenceDeclarationComplete)
                 {
-                    this.StatusCode = StatusCode.Locked;
-                    return;
+                    return StatusCode.Locked;
                 }
 
-                this.StatusCode = StatusCode.Incomplete;
+                if (profile.PartyPlrStanding
+                    .With(DriverFitness.AllowedIdentifierTypes)
+                    .HasGoodStanding
+                    || (profile.LicenceDeclaration.HasNoLicence && profile.EndorsementPlrStanding.HasGoodStanding)) // TODO: We should defer this calcualtion until this step if possible
+                {
+                    return StatusCode.Incomplete;
+                }
+
+                return StatusCode.Locked;
             }
         }
 
-        public class HcimAccountTransfer : ProfileSection
+
+        public class HcimAccountTransferSection : ProfileSection
         {
             internal override string SectionName => "hcimAccountTransfer";
 
-            public HcimAccountTransfer(ProfileStatusDto profile) : base(profile) { }
-
-            protected override void SetAlertsAndStatus(ProfileStatusDto profile)
+            protected override StatusCode Compute(ProfileData profile)
             {
                 // TODO revert [
                 // if (profile.CompletedEnrolments.Contains(AccessTypeCode.HcimAccountTransfer)
@@ -175,30 +254,26 @@ public partial class ProfileStatus
                 // }
                 if (profile.CompletedEnrolments.Contains(AccessTypeCode.HcimAccountTransfer))
                 {
-                    this.StatusCode = StatusCode.Complete;
-                    return;
+                    return StatusCode.Complete;
                 }
 
                 if (profile.CompletedEnrolments.Contains(AccessTypeCode.HcimEnrolment))
                 {
-                    this.StatusCode = StatusCode.Hidden;
-                    return;
+                    return StatusCode.Hidden;
                 }
                 // ]
 
-                this.StatusCode = profile.DemographicsEntered
+                return profile.DemographicsComplete
                     ? StatusCode.Incomplete
                     : StatusCode.Locked;
             }
         }
 
-        public class HcimEnrolment : ProfileSection
+        public class HcimEnrolmentSection : ProfileSection
         {
             internal override string SectionName => "hcimEnrolment";
 
-            public HcimEnrolment(ProfileStatusDto profile) : base(profile) { }
-
-            protected override void SetAlertsAndStatus(ProfileStatusDto profile)
+            protected override StatusCode Compute(ProfileData profile)
             {
                 // TODO revert [
                 // if (profile.CompletedEnrolments.Contains(AccessTypeCode.HcimAccountTransfer)
@@ -210,158 +285,176 @@ public partial class ProfileStatus
 
                 if (profile.CompletedEnrolments.Contains(AccessTypeCode.HcimAccountTransfer))
                 {
-                    this.StatusCode = StatusCode.Hidden;
-                    return;
+                    return StatusCode.Hidden;
                 }
 
                 if (profile.CompletedEnrolments.Contains(AccessTypeCode.HcimEnrolment))
                 {
-                    this.StatusCode = StatusCode.Complete;
-                    return;
+                    return StatusCode.Complete;
                 }
                 // ]
 
-                this.StatusCode = !profile.DemographicsEntered || string.IsNullOrWhiteSpace(profile.AccessAdministratorEmail)
+                return !profile.DemographicsComplete || string.IsNullOrWhiteSpace(profile.AccessAdministratorEmail)
                     ? StatusCode.Locked
                     : StatusCode.Incomplete;
             }
         }
 
-        public class MSTeams : ProfileSection
+        public class MSTeamsClinicMemberSection : ProfileSection
         {
-            internal override string SectionName => "msTeams";
+            internal override string SectionName => "msTeamsClinicMember";
 
-            public MSTeams(ProfileStatusDto profile) : base(profile) { }
-
-            protected override void SetAlertsAndStatus(ProfileStatusDto profile)
+            protected override StatusCode Compute(ProfileData profile)
             {
-                if (!profile.UserIsBcServicesCard)
+                if (!profile.UserIsHighAssuranceIdentity)
                 {
-                    this.StatusCode = StatusCode.Hidden;
-                    return;
+                    return StatusCode.Hidden;
                 }
 
-                if (profile.CompletedEnrolments.Contains(AccessTypeCode.MSTeams))
+                if (profile.CompletedEnrolments.Contains(AccessTypeCode.MSTeamsClinicMember))
                 {
-                    this.StatusCode = StatusCode.Complete;
-                    return;
+                    return StatusCode.Complete;
                 }
 
-                if (!profile.DemographicsEntered
-                    || !profile.PlrStanding
-                        .With(AccessRequests.MSTeams.AllowedIdentifierTypes)
-                        .HasGoodStanding)
-                {
-                    this.StatusCode = StatusCode.Locked;
-                    return;
-                }
-
-                this.StatusCode = StatusCode.Incomplete;
+                return profile.DemographicsComplete && profile.HasMSTeamsClinicEndorsement
+                    ? StatusCode.Incomplete
+                    : StatusCode.Locked;
             }
         }
 
-        public class PrescriptionRefillEforms : ProfileSection
+        public class MSTeamsPrivacyOfficerSection : ProfileSection
+        {
+            internal override string SectionName => "msTeamsPrivacyOfficer";
+
+            protected override StatusCode Compute(ProfileData profile)
+            {
+                if (!profile.UserIsHighAssuranceIdentity)
+                {
+                    return StatusCode.Hidden;
+                }
+
+                if (profile.CompletedEnrolments.Contains(AccessTypeCode.MSTeamsPrivacyOfficer))
+                {
+                    return StatusCode.Complete;
+                }
+
+                if (!profile.DemographicsComplete
+                    || !profile.PartyPlrStanding
+                        .With(MSTeamsPrivacyOfficer.AllowedIdentifierTypes)
+                        .HasGoodStanding)
+                {
+                    return StatusCode.Locked;
+                }
+
+                return StatusCode.Incomplete;
+            }
+        }
+
+        public class PrescriptionRefillEformsSection : ProfileSection
         {
             internal override string SectionName => "prescriptionRefillEforms";
 
-            public PrescriptionRefillEforms(ProfileStatusDto profile) : base(profile) { }
-
-            protected override void SetAlertsAndStatus(ProfileStatusDto profile)
+            protected override StatusCode Compute(ProfileData profile)
             {
-                if (!profile.UserIsBcServicesCard)
+                if (!profile.UserIsHighAssuranceIdentity)
                 {
-                    this.StatusCode = StatusCode.Hidden;
-                    return;
+                    return StatusCode.Hidden;
                 }
 
                 if (profile.CompletedEnrolments.Contains(AccessTypeCode.PrescriptionRefillEforms))
                 {
-                    this.StatusCode = StatusCode.Complete;
-                    return;
+                    return StatusCode.Complete;
                 }
 
-                if (profile.DemographicsEntered
-                    && profile.PlrStanding
-                        .With(AccessRequests.PrescriptionRefillEforms.AllowedIdentifierTypes)
+                if (profile.DemographicsComplete
+                    && profile.PartyPlrStanding
+                        .With(PrescriptionRefillEforms.AllowedIdentifierTypes)
                         .HasGoodStanding)
                 {
-                    this.StatusCode = StatusCode.Incomplete;
-                    return;
+                    return StatusCode.Incomplete;
                 }
 
-                this.StatusCode = StatusCode.Locked;
+                return StatusCode.Locked;
             }
         }
 
-        public class SAEforms : ProfileSection
+        public class PrimaryCareRosteringSection : ProfileSection
+        {
+            internal override string SectionName => "primaryCareRostering";
+
+            protected override StatusCode Compute(ProfileData profile)
+            {
+                if (profile.EndorsementPlrStanding.HasGoodStanding
+                    || profile.PartyPlrStanding
+                        .With(ProviderRoleType.MedicalDoctor, ProviderRoleType.RegisteredNursePractitioner)
+                        .HasGoodStanding)
+                {
+                    return StatusCode.Incomplete;
+                }
+
+                return StatusCode.Locked;
+            }
+        }
+
+        public class ProviderReportingPortalSection : ProfileSection
+        {
+            internal override string SectionName => "providerReportingPortal";
+
+            protected override StatusCode Compute(ProfileData profile)
+            {
+                if (!profile.UserIsBCProvider || !profile.HasPrpAuthorizedLicence)
+                {
+                    return StatusCode.Hidden;
+                }
+
+                if (profile.CompletedEnrolments.Contains(AccessTypeCode.ProviderReportingPortal))
+                {
+                    return StatusCode.Complete;
+                }
+
+                if (profile.DemographicsComplete
+                    && profile.PartyPlrStanding
+                        .With(ProviderReportingPortal.AllowedIdentifierTypes)
+                        .HasGoodStanding)
+                {
+                    return StatusCode.Incomplete;
+                }
+
+                return StatusCode.Locked;
+            }
+        }
+
+        public class SAEformsSection : ProfileSection
         {
             internal override string SectionName => "saEforms";
-
             public bool IncorrectLicenceType { get; set; }
 
-            public SAEforms(ProfileStatusDto profile) : base(profile)
+            protected override StatusCode Compute(ProfileData profile)
             {
-                this.IncorrectLicenceType = profile.PlrStanding.HasGoodStanding
-                    && !profile.PlrStanding
-                        .Excluding(AccessRequests.SAEforms.ExcludedIdentifierTypes)
+                this.IncorrectLicenceType = profile.PartyPlrStanding.HasGoodStanding
+                    && !profile.PartyPlrStanding
+                        .Excluding(SAEforms.ExcludedIdentifierTypes)
                         .HasGoodStanding;
-            }
 
-            protected override void SetAlertsAndStatus(ProfileStatusDto profile)
-            {
-                if (!profile.UserIsBcServicesCard)
+                if (!profile.UserIsHighAssuranceIdentity)
                 {
-                    this.StatusCode = StatusCode.Hidden;
-                    return;
+                    return StatusCode.Hidden;
                 }
 
                 if (profile.CompletedEnrolments.Contains(AccessTypeCode.SAEforms))
                 {
-                    this.StatusCode = StatusCode.Complete;
-                    return;
+                    return StatusCode.Complete;
                 }
 
-                if (profile.DemographicsEntered
-                    && profile.PlrStanding
-                        .Excluding(AccessRequests.SAEforms.ExcludedIdentifierTypes)
+                if (profile.DemographicsComplete
+                    && profile.PartyPlrStanding
+                        .Excluding(SAEforms.ExcludedIdentifierTypes)
                         .HasGoodStanding)
                 {
-                    this.StatusCode = StatusCode.Incomplete;
-                    return;
+                    return StatusCode.Incomplete;
                 }
 
-                this.StatusCode = StatusCode.Locked;
-            }
-        }
-
-        public class Uci : ProfileSection
-        {
-            internal override string SectionName => "uci";
-
-            public Uci(ProfileStatusDto profile) : base(profile) { }
-
-            protected override void SetAlertsAndStatus(ProfileStatusDto profile)
-            {
-                if (!profile.UserIsBcServicesCard)
-                {
-                    this.StatusCode = StatusCode.Hidden;
-                    return;
-                }
-
-                if (profile.CompletedEnrolments.Contains(AccessTypeCode.Uci))
-                {
-                    this.StatusCode = StatusCode.Complete;
-                    return;
-                }
-
-                if (!profile.DemographicsEntered
-                    || !profile.PlrStanding.HasGoodStanding)
-                {
-                    this.StatusCode = StatusCode.Locked;
-                    return;
-                }
-
-                this.StatusCode = StatusCode.Incomplete;
+                return StatusCode.Locked;
             }
         }
     }

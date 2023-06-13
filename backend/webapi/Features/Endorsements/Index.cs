@@ -1,10 +1,12 @@
 namespace Pidp.Features.Endorsements;
+using Pidp.Models.Lookups;
 
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using NodaTime;
 
 using Pidp.Data;
+using Pidp.Extensions;
 
 public class Index
 {
@@ -17,7 +19,7 @@ public class Index
     {
         public int Id { get; set; }
         public string PartyName { get; set; } = string.Empty;
-        public bool Active { get; set; }
+        public CollegeCode? CollegeCode { get; set; }
         public Instant CreatedOn { get; set; }
     }
 
@@ -34,18 +36,14 @@ public class Index
 
         public async Task<List<Model>> HandleAsync(Query query)
         {
-            return await this.context.EndorsementRelationships
-                .Where(relationship => relationship.PartyId == query.PartyId)
-                .SelectMany(relationship => relationship.Endorsement!.EndorsementRelationships)
-                .Where(relationship => relationship.PartyId != query.PartyId)
+            return await this.context.ActiveEndorsementRelationships(query.PartyId)
                 .Select(relationship => new Model
                 {
                     Id = relationship.EndorsementId,
-                    PartyName = $"{relationship.Party!.FirstName} {relationship.Party.LastName}",
-                    Active = relationship.Endorsement!.Active,
-                    CreatedOn = relationship.Endorsement.CreatedOn
+                    PartyName = relationship.Party!.FullName,
+                    CollegeCode = relationship.Party.LicenceDeclaration!.CollegeCode,
+                    CreatedOn = relationship.Endorsement!.CreatedOn
                 })
-                .Where(relationship => relationship.Active)
                 .ToListAsync();
         }
     }

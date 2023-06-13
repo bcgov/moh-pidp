@@ -10,13 +10,14 @@ using Pidp.Extensions;
 using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.Services;
 using static Pidp.Infrastructure.HttpClients.Ldap.HcimAuthorizationStatus;
+using HybridModelBinding;
 
-[Route("api/[controller]")]
+[Route("api/parties/{partyId}/[controller]")]
 public class AccessRequestsController : PidpControllerBase
 {
     public AccessRequestsController(IPidpAuthorizationService authorizationService) : base(authorizationService) { }
 
-    [HttpGet("{partyId}")]
+    [HttpGet]
     [Authorize(Policy = Policies.AnyPartyIdentityProvider)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -26,11 +27,11 @@ public class AccessRequestsController : PidpControllerBase
             .ToActionResultOfT();
 
     [HttpPost("driver-fitness")]
-    [Authorize(Policy = Policies.BcscAuthentication)]
+    [Authorize(Policy = Policies.HighAssuranceIdentityProvider)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> CreateDriverFitnessEnrolment([FromServices] ICommandHandler<DriverFitness.Command, IDomainResult> handler,
-                                                                  [FromBody] DriverFitness.Command command)
+                                                                  [FromRoute] DriverFitness.Command command)
         => await this.AuthorizePartyBeforeHandleAsync(command.PartyId, handler, command)
             .ToActionResult();
 
@@ -41,7 +42,7 @@ public class AccessRequestsController : PidpControllerBase
     [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
     [ProducesResponseType(StatusCodes.Status423Locked)]
     public async Task<IActionResult> CreateHcimAccountTransfer([FromServices] ICommandHandler<HcimAccountTransfer.Command, IDomainResult<HcimAccountTransfer.Model>> handler,
-                                                               [FromBody] HcimAccountTransfer.Command command)
+                                                               [FromHybrid] HcimAccountTransfer.Command command)
     {
         var access = await this.AuthorizationService.CheckPartyAccessibility(command.PartyId, this.User);
         if (!access.IsSuccess)
@@ -78,43 +79,52 @@ public class AccessRequestsController : PidpControllerBase
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> CreateHcimEnrolment([FromServices] ICommandHandler<HcimEnrolment.Command, IDomainResult> handler,
-                                                         [FromBody] HcimEnrolment.Command command)
+                                                         [FromHybrid] HcimEnrolment.Command command)
         => await this.AuthorizePartyBeforeHandleAsync(command.PartyId, handler, command)
             .ToActionResult();
 
-    [HttpPost("ms-teams")]
-    [Authorize(Policy = Policies.BcscAuthentication)]
+    [HttpPost("ms-teams-clinic-member")]
+    [Authorize(Policy = Policies.HighAssuranceIdentityProvider)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> CreateMSTeamsEnrolment([FromServices] ICommandHandler<MSTeams.Command, IDomainResult> handler,
-                                                            [FromBody] MSTeams.Command command)
+    public async Task<IActionResult> CreateMSTeamsClinicMemberEnrolment([FromServices] ICommandHandler<MSTeamsClinicMember.Command, IDomainResult> handler,
+                                                                        [FromHybrid] MSTeamsClinicMember.Command command)
+        => await this.AuthorizePartyBeforeHandleAsync(command.PartyId, handler, command)
+            .ToActionResult();
+
+    [HttpPost("ms-teams-privacy-officer")]
+    [Authorize(Policy = Policies.HighAssuranceIdentityProvider)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> CreateMSTeamsPrivacyOfficerEnrolment([FromServices] ICommandHandler<MSTeamsPrivacyOfficer.Command, IDomainResult> handler,
+                                                                          [FromHybrid] MSTeamsPrivacyOfficer.Command command)
         => await this.AuthorizePartyBeforeHandleAsync(command.PartyId, handler, command)
             .ToActionResult();
 
     [HttpPost("prescription-refill-eforms")]
-    [Authorize(Policy = Policies.BcscAuthentication)]
+    [Authorize(Policy = Policies.HighAssuranceIdentityProvider)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> CreatePrescriptionRefillEformsEnrolment([FromServices] ICommandHandler<PrescriptionRefillEforms.Command, IDomainResult> handler,
-                                                                             [FromBody] PrescriptionRefillEforms.Command command)
+                                                                             [FromRoute] PrescriptionRefillEforms.Command command)
+        => await this.AuthorizePartyBeforeHandleAsync(command.PartyId, handler, command)
+            .ToActionResult();
+
+    [HttpPost("provider-reporting-portal")]
+    [Authorize(Policy = Policies.BCProviderAuthentication)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> CreateProviderReportingPortalEnrolment([FromServices] ICommandHandler<ProviderReportingPortal.Command, IDomainResult> handler,
+                                                                            [FromRoute] ProviderReportingPortal.Command command)
         => await this.AuthorizePartyBeforeHandleAsync(command.PartyId, handler, command)
             .ToActionResult();
 
     [HttpPost("sa-eforms")]
-    [Authorize(Policy = Policies.BcscAuthentication)]
+    [Authorize(Policy = Policies.HighAssuranceIdentityProvider)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> CreateSAEformsEnrolment([FromServices] ICommandHandler<SAEforms.Command, IDomainResult> handler,
-                                                             [FromBody] SAEforms.Command command)
-        => await this.AuthorizePartyBeforeHandleAsync(command.PartyId, handler, command)
-            .ToActionResult();
-
-    [HttpPost("uci")]
-    [Authorize(Policy = Policies.BcscAuthentication)]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> CreateUciEnrolment([FromServices] ICommandHandler<Uci.Command, IDomainResult> handler,
-                                                        [FromBody] Uci.Command command)
+                                                             [FromRoute] SAEforms.Command command)
         => await this.AuthorizePartyBeforeHandleAsync(command.PartyId, handler, command)
             .ToActionResult();
 }

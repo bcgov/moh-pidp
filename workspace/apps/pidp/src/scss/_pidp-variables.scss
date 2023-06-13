@@ -1,0 +1,35 @@
+// These are from BC Gov style guides.
+// https://developer.gov.bc.ca/components
+$bcgov-font-family: 'BCSans', 'Noto Sans', Verdana, Arial, sans-serif;
+$bcgov-color-primary: #003366;
+$bcgov-color-accent: #fcba19;
+$bcgov-color-text: #313132;
+$bcgov-color-links: #1a5a96;
+$bcgov-color-background-grey: #f2f2f2;
+$bcgov-color-background-darker-grey: #e6e3e3;
+$bcgov-color-background-blue: #38598a;
+$bcgov-color-component: #606060;
+$bcgov-color-semantic-error: #d8292f;
+$bcgov-color-semantic-success: #2e8540;
+$bcgov-color-button-focus-outline: #3b99fc;
+
+$blue-10: $bcgov-color-button-focus-outline;
+$blue-20: $bcgov-color-links;
+$blue-30: $bcgov-color-background-blue;
+$blue-40: $bcgov-color-primary;
+$blue-primary: $bcgov-color-primary;
+$grey-10: #f2f2f2;
+$grey-20: #ccc;
+$grey-30: #999;
+$grey-40: #666;
+$lightgrey: $grey-20;
+$mediumgrey: $grey-30;
+$green: $bcgov-color-semantic-success;
+$green-10: #d5e7d9;
+$yellow: $bcgov-color-accent;
+$red: $bcgov-color-semantic-error;
+
+$page-header-background-color: #f2f2f2;
+
+$font-color-default: rgba(0, 0, 0, 0.87);
+$font-color-disabled: $grey-40;

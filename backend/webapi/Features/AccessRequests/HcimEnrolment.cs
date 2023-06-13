@@ -2,8 +2,10 @@ namespace Pidp.Features.AccessRequests;
 
 using DomainResults.Common;
 using FluentValidation;
+using HybridModelBinding;
 using Microsoft.EntityFrameworkCore;
 using NodaTime;
+using System.Text.Json.Serialization;
 
 using Pidp.Data;
 // using Pidp.Infrastructure.Auth;
@@ -16,6 +18,8 @@ public class HcimEnrolment
 {
     public class Command : ICommand<IDomainResult>
     {
+        [JsonIgnore]
+        [HybridBindProperty(Source.Route)]
         public int PartyId { get; set; }
         public bool ManagesTasks { get; set; }
         public bool ModifiesPhns { get; set; }

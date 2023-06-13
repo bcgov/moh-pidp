@@ -24,8 +24,8 @@ export class PrescriptionRefillEformsPortalSection implements IPortalSection {
     private router: Router
   ) {
     this.key = 'prescriptionRefillEforms';
-    this.heading = 'Prescription Renewal Support eForm';
-    this.description = `Enrol here for access to the Prescription Renewal Support eForm`;
+    this.heading = 'Provincial Prescription Renewal Support Service eForm';
+    this.description = `Enrol here for access to the Provincial Prescription Renewal Support Service eForm`;
   }
 
   public get hint(): string {
@@ -52,7 +52,7 @@ export class PrescriptionRefillEformsPortalSection implements IPortalSection {
   public get status(): string {
     switch (this.getSectionStatus().statusCode) {
       case StatusCode.AVAILABLE:
-        return 'You are eligible to use the Prescription Renewal Support eForm';
+        return 'You are eligible to use the Provincial Prescription Renewal Support Service eForm';
       case StatusCode.COMPLETED:
         return 'Completed';
       default:

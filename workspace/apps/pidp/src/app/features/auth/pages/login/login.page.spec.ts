@@ -9,9 +9,8 @@ import { provideAutoSpy } from 'jest-auto-spies';
 import { APP_CONFIG, APP_DI_CONFIG } from '@app/app.config';
 import { DocumentService } from '@app/core/services/document.service';
 
-import { IdentityProvider } from '../../enums/identity-provider.enum';
 import { AuthService } from '../../services/auth.service';
-import { LoginPage } from './login.page';
+import { LoginPage, LoginPageRouteData } from './login.page';
 
 describe('LoginPage', () => {
   let component: LoginPage;
@@ -23,8 +22,10 @@ describe('LoginPage', () => {
       snapshot: {
         queryParams: { action: '' },
         data: {
-          title: randTextRange({ min: 1, max: 4 }),
-          idpHint: IdentityProvider.BCSC,
+          loginPageData: {
+            title: randTextRange({ min: 1, max: 4 }),
+            isAdminLogin: true,
+          } as LoginPageRouteData,
         },
       },
     };

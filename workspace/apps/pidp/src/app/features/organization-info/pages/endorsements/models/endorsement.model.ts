@@ -1,6 +1,6 @@
 export interface Endorsement {
   id: number;
   partyName: string;
-  active: boolean;
+  collegeCode: number | null;
   createdOn: string;
 }

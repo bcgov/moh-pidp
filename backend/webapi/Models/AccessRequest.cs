@@ -36,11 +36,10 @@ public class HcimEnrolment : AccessRequest
     public bool SearchesIdentifiers { get; set; }
 }
 
-[Table(nameof(MSTeamsEnrolment))]
-public class MSTeamsEnrolment : AccessRequest
+[Table(nameof(MSTeamsClinicMemberEnrolment))]
+public class MSTeamsClinicMemberEnrolment : AccessRequest
 {
-    public string ClinicName { get; set; } = string.Empty;
+    public int ClinicId { get; set; }
 
-    [Required]
-    public MSTeamsClinicAddress? ClinicAddress { get; set; } = new();
+    public MSTeamsClinic? Clinic { get; set; }
 }

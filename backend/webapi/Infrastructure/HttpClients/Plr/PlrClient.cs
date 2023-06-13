@@ -40,6 +40,20 @@ public class PlrClient : BaseClient, IPlrClient
         };
     }
 
+    public async Task<List<PlrStatusChangeLog>> GetProcessableStatusChangesAsync(int limit = 10)
+    {
+        var result = await this.GetWithQueryParamsAsync<List<PlrStatusChangeLog>>("records/status-changes", new { limit });
+        if (result.IsSuccess)
+        {
+            return result.Value;
+        }
+        else
+        {
+            this.Logger.LogPlrError(nameof(GetProcessableStatusChangesAsync));
+            return new();
+        }
+    }
+
     public async Task<IEnumerable<PlrRecord>?> GetRecordsAsync(params string?[] cpns)
     {
         cpns = cpns
@@ -69,14 +83,36 @@ public class PlrClient : BaseClient, IPlrClient
             return PlrStandingsDigest.FromEmpty();
         }
 
-        var result = await this.GetWithQueryParamsAsync<IEnumerable<PlrRecord>>("records", new { Cpns = new[] { cpn } });
-        if (!result.IsSuccess
-            || !result.Value.Any())
+        var records = await this.GetRecordsAsync(cpn);
+        if (records == null
+            || !records.Any())
         {
             return PlrStandingsDigest.FromError();
         }
 
-        return PlrStandingsDigest.FromRecords(result.Value);
+        return PlrStandingsDigest.FromRecords(records);
+    }
+
+    public async Task<PlrStandingsDigest> GetAggregateStandingsDigestAsync(IEnumerable<string?> cpns)
+    {
+        var records = await this.GetRecordsAsync(cpns.ToArray());
+
+        if (records == null)
+        {
+            return PlrStandingsDigest.FromError();
+        }
+        if (!records.Any())
+        {
+            return PlrStandingsDigest.FromEmpty();
+        }
+
+        return PlrStandingsDigest.FromRecords(records);
+    }
+
+    public async Task<bool> UpdateStatusChangeLogAsync(int statusChangeLogId)
+    {
+        var response = await this.PutAsync($"records/status-changes/{statusChangeLogId}/processed");
+        return response.IsSuccess;
     }
 
     /// <summary>
@@ -105,4 +141,7 @@ public static partial class PlrClientLoggingExtensions
 
     [LoggerMessage(2, LogLevel.Warning, "Multiple matching Records found in PLR with CollegeId = {licenceNumber}, Birthdate = {birthdate}, and any of {identifierTypes} Identifier Types.")]
     public static partial void LogMultipleRecordsFound(this ILogger logger, string licenceNumber, string birthdate, string[] identifierTypes);
+
+    [LoggerMessage(3, LogLevel.Error, "Error when calling PLR API in method {methodName}.")]
+    public static partial void LogPlrError(this ILogger logger, string methodName);
 }

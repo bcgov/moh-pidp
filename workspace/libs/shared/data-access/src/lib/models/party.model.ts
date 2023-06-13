@@ -8,7 +8,6 @@ export enum AccessTypeCode {
   HcimAccountTransfer,
   HcimEnrolment,
   DriverFitness,
-  Uci,
   MSTeams,
 }
 

@@ -1,0 +1,148 @@
+<div class="container-box" uiPidpInjectViewportCss>
+  <div class="content-box">
+    <header>
+      <h2>BC Provider Account Information</h2>
+    </header>
+    <div class="content">
+      <section class="error-card" [class.show-card]="showErrorCard">
+        <p>{{ errorCardText }}</p>
+      </section>
+      <section class="message-card" [class.show-card]="showMessageCard">
+        <p>{{ messageCardText }}</p>
+      </section>
+      <section class="form-card">
+        <div class="password-form">
+          <ng-container *ngTemplateOutlet="passwordForm"></ng-container>
+        </div>
+        <div class="password-splash">
+          <div class="password-splash-content">
+            <div class="text-box">
+              <div>
+                <span class="lets">Let's get started</span>
+              </div>
+              <div>
+                <span class="using">using BC Provider today!</span>
+              </div>
+            </div>
+            <picture class="image">
+              <source
+                type="image/webp"
+                srcset="/assets/images/bc-provider-account-457x759.webp" />
+              <!-- Use jpg as a fallback when webp is not supported by the browser. -->
+              <source
+                type="image/jpg"
+                srcset="/assets/images/bc-provider-account-457x759.jpg" />
+              <img title="woman" loading="lazy" aria-labelledby="" />
+            </picture>
+
+            <div *ngIf="false" class="text-box">
+              <div>
+                <span class="lets">Let's get started</span>
+              </div>
+              <div>
+                <span class="using">using BC Provider today!</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="actions">
+        <button
+          mat-stroked-button
+          type="button"
+          color="primary"
+          (click)="onBack()">
+          Back
+        </button>
+      </section>
+    </div>
+  </div>
+</div>
+
+<ng-template #passwordForm>
+  <form novalidate [formGroup]="formState.form" (ngSubmit)="onSubmit()">
+    <h3>Password reset</h3>
+    <div class="username">
+      <h4><strong>Provided username</strong></h4>
+      <h5>{{ username }}</h5>
+    </div>
+    <div class="form-content">
+      <div class="field">
+        <label id="bc-provider-application-new-password"
+          >Choose new password</label
+        >
+        <mat-form-field appearance="outline">
+          <input
+            matInput
+            formControlName="newPassword"
+            type="password"
+            aria-labelledby="bc-provider-application-new-password" />
+          <mat-error *ngIf="formState.newPassword.hasError('required')"
+            >Required</mat-error
+          >
+        </mat-form-field>
+        <mat-error class="error" [class.error-show]="hasPasswordRuleError()"
+          >Your password must be between 8 and 256 characters and satisfy 3 out
+          of the 4 following requirements:
+          <ul>
+            <li>At least one uppercase letter</li>
+            <li>At least one lowercase letter</li>
+            <li>At least one number</li>
+            <li>At least one symbol</li>
+          </ul></mat-error
+        >
+      </div>
+      <div class="field">
+        <label id="bc-provider-application-confirm-password"
+          >Confirm new password</label
+        >
+        <mat-form-field appearance="outline">
+          <input
+            matInput
+            formControlName="confirmPassword"
+            type="password"
+            aria-labelledby="bc-provider-application-confirm-password" />
+          <mat-error *ngIf="formState.confirmPassword.invalid"
+            >Must match the new password entered above</mat-error
+          >
+        </mat-form-field>
+      </div>
+      <div class="form-button-box">
+        <button
+          mat-flat-button
+          type="submit"
+          color="primary"
+          [disabled]="!isResetButtonEnabled">
+          Reset password
+        </button>
+      </div>
+      <div class="help-link"><a href="">Need help?</a></div>
+    </div>
+  </form>
+</ng-template>
+
+<!-- NOTE: It is not yet clear whether this dialog will be in the "final" UX. If it is, it is a candidate
+to be refactored into a separate component. -->
+<ng-template #successDialog>
+  <div class="dialog-box" uiPidpInjectViewportCss>
+    <div class="dialog-header">
+      <button
+        type="button"
+        aria-label="Close dialog"
+        (click)="onSuccessDialogClose()">
+        <fa-icon [icon]="faXmark"></fa-icon>
+      </button>
+    </div>
+    <div class="dialog-content">
+      <div class="dialog-icon">
+        <fa-icon [icon]="faCircleCheck"></fa-icon>
+      </div>
+      <h3>Password reset completed</h3>
+      <p>
+        Password reset for <strong>{{ username }}</strong> has been created. You
+        will now have the option to sign in to our system with these
+        credentials.
+      </p>
+    </div>
+  </div>
+</ng-template>

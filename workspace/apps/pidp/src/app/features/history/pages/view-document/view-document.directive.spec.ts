@@ -1,8 +1,23 @@
+import { TestBed } from '@angular/core/testing';
 import { ViewDocumentDirective } from './view-document.directive';
+import { Component } from '@angular/core';
+
+@Component({ selector: 'app-stub', template: '' })
+class StubComponent {}
 
 describe('ViewDocumentDirective', () => {
+  beforeEach(async() => {
+    TestBed.configureTestingModule({
+      declarations: [StubComponent],
+    })
+    .compileComponents();
+  });
+
   it('should create an instance', () => {
-    const directive = new ViewDocumentDirective();
+    const fixture = TestBed.createComponent(StubComponent);
+    const component = fixture.debugElement.componentInstance;
+
+    const directive = new ViewDocumentDirective(component);
     expect(directive).toBeTruthy();
   });
 });

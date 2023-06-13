@@ -4,10 +4,14 @@ using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using FluentValidation;
 using HybridModelBinding;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
 
 using Pidp.Data;
+using Pidp.Infrastructure.Auth;
+using Pidp.Infrastructure.HttpClients.BCProvider;
+using Pidp.Models.DomainEvents;
 
 public class Demographics
 {
@@ -76,6 +80,12 @@ public class Demographics
             var party = await this.context.Parties
                 .SingleAsync(party => party.Id == command.Id);
 
+            if (party.Email != null
+                && party.Email != command.Email)
+            {
+                party.DomainEvents.Add(new PartyEmailUpdated(party.Id, command.Email!));
+            }
+
             party.PreferredFirstName = command.PreferredFirstName;
             party.PreferredMiddleName = command.PreferredMiddleName;
             party.PreferredLastName = command.PreferredLastName;
@@ -83,6 +93,38 @@ public class Demographics
             party.Phone = command.Phone;
 
             await this.context.SaveChangesAsync();
+        }
+    }
+
+    public class PartyEmailUpdatedHandler : INotificationHandler<PartyEmailUpdated>
+    {
+        private readonly IBCProviderClient client;
+        private readonly PidpDbContext context;
+        private readonly string bcProviderClientId;
+
+        public PartyEmailUpdatedHandler(IBCProviderClient client, PidpConfiguration config, PidpDbContext context)
+        {
+            this.client = client;
+            this.context = context;
+            this.bcProviderClientId = config.BCProviderClient.ClientId;
+        }
+
+        public async Task Handle(PartyEmailUpdated notification, CancellationToken cancellationToken)
+        {
+            var bcProviderId = await this.context.Credentials
+                .Where(credential => credential.PartyId == notification.PartyId
+                    && credential.IdentityProvider == IdentityProviders.BCProvider)
+                .Select(credential => credential.IdpId)
+                .SingleOrDefaultAsync(cancellationToken);
+
+            if (string.IsNullOrEmpty(bcProviderId))
+            {
+                return;
+            }
+
+            var bcProviderAttributes = new BCProviderAttributes(this.bcProviderClientId).SetPidpEmail(notification.NewEmail);
+            await this.client.UpdateAttributes(bcProviderId, bcProviderAttributes.AsAdditionalData());
+            // TODO: Log Failure?
         }
     }
 }

@@ -24,7 +24,7 @@ public class PidpDbContextAuditTests : InMemoryDbTest
     [Fact]
     public async void SaveChangesAsync_Update_UpdatesModified()
     {
-        var party = this.TestDb.Has(new Party());
+        var party = this.TestDb.HasAParty();
         var initialCreated = party.Created;
         var initialModified = party.Modified;
 
@@ -38,7 +38,7 @@ public class PidpDbContextAuditTests : InMemoryDbTest
     [Fact]
     public async void SaveChangesAsync_ManualAuditUpdate_ImmutableCreated()
     {
-        var party = this.TestDb.Has(new Party());
+        var party = this.TestDb.HasAParty();
         var initialCreated = party.Created;
 
         party.Created = party.Created.PlusTicks(1000);

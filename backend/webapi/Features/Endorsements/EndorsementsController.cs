@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.Services;
 
-[Route("api/Parties/{partyId}/[controller]")]
+[Route("api/parties/{partyId}/[controller]")]
 [Authorize(Policy = Policies.AnyPartyIdentityProvider)]
 public class EndorsementsController : PidpControllerBase
 {
@@ -20,6 +20,15 @@ public class EndorsementsController : PidpControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<List<Index.Model>>> GetEndorsements([FromServices] IQueryHandler<Index.Query, List<Index.Model>> handler,
                                                                        [FromRoute] Index.Query query)
+        => await this.AuthorizePartyBeforeHandleAsync(query.PartyId, handler, query)
+            .ToActionResultOfT();
+
+    [HttpGet("ms-teams-privacy-officers")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<List<MSTeamsPrivacyOfficers.Model>>> GetMSTeamsPrivacyOfficers([FromServices] IQueryHandler<MSTeamsPrivacyOfficers.Query, IDomainResult<List<MSTeamsPrivacyOfficers.Model>>> handler,
+                                                                                                  [FromRoute] MSTeamsPrivacyOfficers.Query query)
         => await this.AuthorizePartyBeforeHandleAsync(query.PartyId, handler, query)
             .ToActionResultOfT();
 

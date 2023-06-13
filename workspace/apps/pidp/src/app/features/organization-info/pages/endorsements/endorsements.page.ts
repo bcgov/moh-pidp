@@ -1,8 +1,7 @@
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, FormControl, FormGroupDirective } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 
 import {
   EMPTY,
@@ -14,24 +13,42 @@ import {
   switchMap,
 } from 'rxjs';
 
+import {
+  faArrowDown,
+  faArrowUp,
+  faUser,
+  faUserGroup,
+} from '@fortawesome/free-solid-svg-icons';
+import { NavigationService } from '@pidp/presentation';
+
 import { NoContent } from '@bcgov/shared/data-access';
 import {
   ConfirmDialogComponent,
   DialogOptions,
   HtmlComponent,
+  PidpViewport,
+  ViewportService,
 } from '@bcgov/shared/ui';
 
-import { AbstractFormPage } from '@app/core/classes/abstract-form-page.class';
+import {
+  AbstractFormDependenciesService,
+  AbstractFormPage,
+} from '@app/core/classes/abstract-form-page.class';
 import { PartyService } from '@app/core/party/party.service';
-import { FormUtilsService } from '@app/core/services/form-utils.service';
 import { LoggerService } from '@app/core/services/logger.service';
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
+import { LookupService } from '@app/modules/lookup/lookup.service';
 
 import { EndorsementsFormState } from './endorsements-form-state';
 import { EndorsementsResource } from './endorsements-resource.service';
 import { EndorsementRequest } from './models/endorsement-request.model';
 import { Endorsement } from './models/endorsement.model';
 
+export enum EndorsementType {
+  WorkingRelationship,
+  IncomingRequest,
+  OutgoingRequest,
+}
 @Component({
   selector: 'app-endorsements',
   templateUrl: './endorsements.page.html',
@@ -41,38 +58,62 @@ export class EndorsementsPage
   extends AbstractFormPage<EndorsementsFormState>
   implements OnInit
 {
-  public title: string;
+  @ViewChild(FormGroupDirective) public formGroupDirective!: FormGroupDirective;
+
+  public faUser = faUser;
+  public faUserGroup = faUserGroup;
+  public faArrowUp = faArrowUp;
+  public faArrowDown = faArrowDown;
+
   public formState: EndorsementsFormState;
   public completed: boolean | null;
   public actionableEndorsementRequests$!: Observable<EndorsementRequest[]>;
   public nonActionableEndorsementRequests$!: Observable<EndorsementRequest[]>;
   public endorsements$!: Observable<Endorsement[]>;
 
+  public showOverlayOnSubmit = true;
+
   public constructor(
-    protected dialog: MatDialog,
-    protected formUtilsService: FormUtilsService,
+    dependenciesService: AbstractFormDependenciesService,
     private route: ActivatedRoute,
-    private router: Router,
     private partyService: PartyService,
     private resource: EndorsementsResource,
     private logger: LoggerService,
+    private navigationService: NavigationService,
+    private lookupService: LookupService,
+    viewportService: ViewportService,
     fb: FormBuilder
   ) {
-    super(dialog, formUtilsService);
+    super(dependenciesService);
 
     const routeData = this.route.snapshot.data;
-    this.title = routeData.title;
     this.formState = new EndorsementsFormState(fb);
     this.completed =
       routeData.endorsementRequestStatusCode === StatusCode.COMPLETED;
+    viewportService.viewportBroadcast$.subscribe((viewport) =>
+      this.onViewportChange(viewport)
+    );
   }
+
+  public showTextLabels = false;
+  public showIconLabels = true;
 
   public get recipientEmail(): FormControl {
     return this.formState.form.get('recipientEmail') as FormControl;
   }
 
+  private onViewportChange(viewport: PidpViewport): void {
+    if (viewport === PidpViewport.xsmall) {
+      this.showIconLabels = true;
+      this.showTextLabels = false;
+    } else {
+      this.showIconLabels = false;
+      this.showTextLabels = true;
+    }
+  }
+
   public onBack(): void {
-    this.navigateToRoot();
+    this.navigationService.navigateToRoot();
   }
 
   public onApprove(requestId: number): void {
@@ -153,6 +194,22 @@ export class EndorsementsPage
       this.getNonActionableEndorsementRequests(partyId);
   }
 
+  public getCollegeTextForEndorsement(endorsement: Endorsement): string {
+    const college = this.lookupService.colleges.find(
+      (x) => x.code === endorsement.id
+    );
+    return college?.name ?? '';
+  }
+
+  public getCollegeTextForEndorsementRequest(
+    endorsementRequest: EndorsementRequest
+  ): string {
+    const college = this.lookupService.colleges.find(
+      (x) => x.code === endorsementRequest.collegeCode
+    );
+    return college?.name ?? '';
+  }
+
   protected performSubmission(): NoContent {
     const partyId = this.partyService.partyId;
 
@@ -162,15 +219,14 @@ export class EndorsementsPage
   }
 
   protected afterSubmitIsSuccessful(): void {
-    this.formState.form.reset();
-    this.formState.form.clearValidators();
+    this.formGroupDirective.resetForm();
 
     this.nonActionableEndorsementRequests$ =
       this.getNonActionableEndorsementRequests(this.partyService.partyId);
   }
 
   private navigateToRoot(): void {
-    this.router.navigate([this.route.snapshot.data.routes.root]);
+    this.navigationService.navigateToRoot();
   }
 
   private getEndorsements(partyId: number): Observable<Endorsement[]> {

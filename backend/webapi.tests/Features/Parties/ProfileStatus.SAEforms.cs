@@ -22,14 +22,14 @@ public class ProfileStatusSAEformsTests : ProfileStatusTest
     {
         var party = this.TestDb.Has(AParty.WithNoProfile(user.GetIdentityProvider()));
         var client = A.Fake<IPlrClient>()
-            .ReturningAStatandingsDigest(PlrStandingsDigest.FromEmpty());
+            .ReturningAStandingsDigest(PlrStandingsDigest.FromEmpty());
         var handler = this.MockDependenciesFor<CommandHandler>(client);
 
         var profile = await handler.HandleAsync(new Command { Id = party.Id, User = user });
 
-        var eforms = profile.Section<SAEforms>();
+        var eforms = profile.Section<SAEformsSection>();
         eforms.AssertNoAlerts();
-        var expected = user.GetIdentityProvider() == ClaimValues.BCServicesCard
+        var expected = user.GetIdentityProvider() == IdentityProviders.BCServicesCard
             ? StatusCode.Locked
             : StatusCode.Hidden;
         Assert.Equal(expected, eforms.StatusCode);
@@ -42,14 +42,14 @@ public class ProfileStatusSAEformsTests : ProfileStatusTest
     {
         var party = this.TestDb.Has(AParty.WithDemographics(user.GetIdentityProvider()));
         var client = A.Fake<IPlrClient>()
-            .ReturningAStatandingsDigest(PlrStandingsDigest.FromEmpty());
+            .ReturningAStandingsDigest(PlrStandingsDigest.FromEmpty());
         var handler = this.MockDependenciesFor<CommandHandler>(client);
 
         var profile = await handler.HandleAsync(new Command { Id = party.Id, User = user });
 
-        var eforms = profile.Section<SAEforms>();
+        var eforms = profile.Section<SAEformsSection>();
         eforms.AssertNoAlerts();
-        var expected = user.GetIdentityProvider() == ClaimValues.BCServicesCard
+        var expected = user.GetIdentityProvider() == IdentityProviders.BCServicesCard
             ? StatusCode.Locked
             : StatusCode.Hidden;
         Assert.Equal(expected, eforms.StatusCode);
@@ -62,12 +62,12 @@ public class ProfileStatusSAEformsTests : ProfileStatusTest
     {
         var party = this.TestDb.Has(AParty.WithLicenceDeclared());
         var client = A.Fake<IPlrClient>()
-            .ReturningAStatandingsDigest(true, identifierType);
+            .ReturningAStandingsDigest(true, identifierType);
         var handler = this.MockDependenciesFor<CommandHandler>(client);
 
         var profile = await handler.HandleAsync(new Command { Id = party.Id, User = AMock.BcscUser() });
 
-        var eforms = profile.Section<SAEforms>();
+        var eforms = profile.Section<SAEformsSection>();
         eforms.AssertNoAlerts();
         if (identifierType == IdentifierType.PharmacyTech)
         {
@@ -84,14 +84,14 @@ public class ProfileStatusSAEformsTests : ProfileStatusTest
     [Fact]
     public async void HandleAsync_BcscNoLicenceDeclared_Locked()
     {
-        var party = this.TestDb.Has(AParty.WithNoLicenceDeclared(ClaimValues.BCServicesCard));
+        var party = this.TestDb.Has(AParty.WithNoLicenceDeclared(IdentityProviders.BCServicesCard));
         var client = A.Fake<IPlrClient>()
-            .ReturningAStatandingsDigest(PlrStandingsDigest.FromEmpty());
+            .ReturningAStandingsDigest(PlrStandingsDigest.FromEmpty());
         var handler = this.MockDependenciesFor<CommandHandler>(client);
 
         var profile = await handler.HandleAsync(new Command { Id = party.Id, User = AMock.BcscUser() });
 
-        var eforms = profile.Section<SAEforms>();
+        var eforms = profile.Section<SAEformsSection>();
         eforms.AssertNoAlerts();
         Assert.Equal(StatusCode.Locked, eforms.StatusCode);
         Assert.False(eforms.IncorrectLicenceType);
@@ -103,13 +103,13 @@ public class ProfileStatusSAEformsTests : ProfileStatusTest
     {
         var party = this.TestDb.Has(AParty.WithLicenceDeclared(cpn: cpn));
         var client = A.Fake<IPlrClient>()
-            .ReturningAStatandingsDigest(digest);
-        A.CallTo(() => client.FindCpnAsync(A<CollegeCode>._, A<string>._, A<LocalDate>._)).Returns((string?)null);
+            .ReturningAStandingsDigest(digest);
+        A.CallTo(() => client.FindCpnAsync(A<CollegeCode>._, A<string>._, A<LocalDate>._)).Returns<string?>(null);
         var handler = this.MockDependenciesFor<CommandHandler>(client);
 
         var profile = await handler.HandleAsync(new Command { Id = party.Id, User = AMock.BcscUser() });
 
-        var eforms = profile.Section<SAEforms>();
+        var eforms = profile.Section<SAEformsSection>();
         eforms.AssertNoAlerts();
         Assert.Equal(StatusCode.Locked, eforms.StatusCode);
         Assert.False(eforms.IncorrectLicenceType);
@@ -135,12 +135,12 @@ public class ProfileStatusSAEformsTests : ProfileStatusTest
         party.AccessRequests = new[] { new AccessRequest { AccessTypeCode = AccessTypeCode.SAEforms } };
         this.TestDb.SaveChanges();
         var client = A.Fake<IPlrClient>()
-            .ReturningAStatandingsDigest(standing);
+            .ReturningAStandingsDigest(standing);
         var handler = this.MockDependenciesFor<CommandHandler>(client);
 
         var profile = await handler.HandleAsync(new Command { Id = party.Id, User = AMock.BcscUser() });
 
-        var eforms = profile.Section<SAEforms>();
+        var eforms = profile.Section<SAEformsSection>();
         eforms.AssertNoAlerts();
         Assert.Equal(StatusCode.Complete, eforms.StatusCode);
         Assert.False(eforms.IncorrectLicenceType);

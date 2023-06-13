@@ -100,16 +100,27 @@ export class SignedOrAcceptedDocumentsPage implements OnInit {
               status?.userAccessAgreement.statusCode === StatusCode.COMPLETED
             );
 
+          case DocumentType.PRESCRIPTION_REFILL_EFORMS_COLLECTION_NOTICE:
+            return (
+              status?.prescriptionRefillEforms.statusCode ===
+              StatusCode.COMPLETED
+            );
+
+          case DocumentType.PROVIDER_REPORTING_PORTAL_COLLECTION_NOTICE:
+            return (
+              status?.providerReportingPortal.statusCode ===
+              StatusCode.COMPLETED
+            );
+
           case DocumentType.SA_EFORMS_COLLECTION_NOTICE:
             return status?.saEforms.statusCode === StatusCode.COMPLETED;
-
-          case DocumentType.UCI_COLLECTION_NOTICE:
-            return status?.uci.statusCode === StatusCode.COMPLETED;
 
           case DocumentType.MS_TEAMS_DECLARATION_AGREEMENT:
           case DocumentType.MS_TEAMS_DETAILS_AGREEMENT:
           case DocumentType.MS_TEAMS_IT_SECURITY_AGREEMENT:
-            return status?.msTeams.statusCode === StatusCode.COMPLETED;
+            return (
+              status?.msTeamsPrivacyOfficer.statusCode === StatusCode.COMPLETED
+            );
 
           default:
             return false;
