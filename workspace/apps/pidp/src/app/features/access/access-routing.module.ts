@@ -48,6 +48,7 @@ const routes: Routes = [
         titleText: 'BC Provider Application',
         titleDescriptionText: '',
       },
+      roles: [Role.FEATURE_PIDP_DEMO],
     },
   },
   {
@@ -59,6 +60,7 @@ const routes: Routes = [
         titleText: 'BC Provider Application',
         titleDescriptionText: '',
       },
+      roles: [Role.FEATURE_PIDP_DEMO],
     },
   },
   {

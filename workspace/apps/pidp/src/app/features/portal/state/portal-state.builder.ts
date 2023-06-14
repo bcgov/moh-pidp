@@ -142,7 +142,9 @@ export class PortalStateBuilder {
         ]
       ),
       ...ArrayUtils.insertResultIf<IPortalSection>(
-        this.insertSection('bcProvider', profileStatus),
+        // TODO remove permissions when ready for production
+        this.insertSection('bcProvider', profileStatus) &&
+          this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
         () => [new BcProviderPortalSection(profileStatus, this.router)]
       ),
       ...ArrayUtils.insertResultIf<IPortalSection>(
