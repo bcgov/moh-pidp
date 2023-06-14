@@ -35,12 +35,12 @@ public class Search
         public async Task<List<string>> HandleAsync(Query query)
         {
             var paddedId = query.CollegeId
-                .PadLeft(5, '0')
-                [^5..];
+                .PadLeft(6, '0')
+                [^6..];
 
             return await this.context.PlrRecords
                 .ExcludeDeleted()
-                .Where(record => record.CollegeId!.PadLeft(5, '0').EndsWith(paddedId)
+                .Where(record => record.CollegeId!.PadLeft(6, '0').EndsWith(paddedId)
                     && record.DateOfBirth!.Value.Date == query.Birthdate.Date
                     && query.IdentifierTypes.Contains(record.IdentifierType!))
                 .Select(record => record.Cpn!) // All valid PLR records will have CPNs
