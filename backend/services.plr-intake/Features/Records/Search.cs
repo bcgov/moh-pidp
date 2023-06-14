@@ -40,7 +40,7 @@ public class Search
 
             return await this.context.PlrRecords
                 .ExcludeDeleted()
-                .Where(record => record.CollegeId!.PadLeft(5, '0').EndsWith(paddedId)
+                .Where(record => record.CollegeId!.PadLeft(8, '0').EndsWith(paddedId) // .PadLeft gets translated into lpad in SQL, which also *truncates* to the specified length. No CollegeIDs longer than 7 characters have been seen, so lpad(8) should be sufficient.
                     && record.DateOfBirth!.Value.Date == query.Birthdate.Date
                     && query.IdentifierTypes.Contains(record.IdentifierType!))
                 .Select(record => record.Cpn!) // All valid PLR records will have CPNs

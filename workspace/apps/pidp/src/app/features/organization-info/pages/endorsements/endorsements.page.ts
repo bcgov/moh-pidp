@@ -196,7 +196,7 @@ export class EndorsementsPage
 
   public getCollegeTextForEndorsement(endorsement: Endorsement): string {
     const college = this.lookupService.colleges.find(
-      (x) => x.code === endorsement.id
+      (x) => x.code === endorsement.collegeCode
     );
     return college?.name ?? '';
   }
