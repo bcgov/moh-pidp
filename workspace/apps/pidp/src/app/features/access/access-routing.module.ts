@@ -106,9 +106,6 @@ const routes: Routes = [
   {
     path: AccessRoutes.DRIVER_FITNESS,
     canActivate: [PermissionsGuard],
-    data: {
-      roles: [Role.FEATURE_PIDP_DEMO],
-    },
     loadChildren: (): Promise<DriverFitnessModule> =>
       import('./pages/driver-fitness/driver-fitness.module').then(
         (m) => m.DriverFitnessModule
