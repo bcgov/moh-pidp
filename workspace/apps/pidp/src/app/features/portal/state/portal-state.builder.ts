@@ -169,17 +169,13 @@ export class PortalStateBuilder {
         () => [new DriverFitnessPortalSection(profileStatus, this.router)]
       ),
       ...ArrayUtils.insertResultIf<IPortalSection>(
-        // TODO remove permissions when ready for production
-        this.insertSection('msTeamsPrivacyOfficer', profileStatus) &&
-          this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
+        this.insertSection('msTeamsPrivacyOfficer', profileStatus),
         () => [
           new MsTeamsPrivacyOfficerPortalSection(profileStatus, this.router),
         ]
       ),
       ...ArrayUtils.insertResultIf<IPortalSection>(
-        // TODO remove permissions when ready for production
-        this.insertSection('msTeamsClinicMember', profileStatus) &&
-          this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
+        this.insertSection('msTeamsClinicMember', profileStatus),
         () => [new MsTeamsClinicMemberPortalSection(profileStatus, this.router)]
       ),
       ...ArrayUtils.insertResultIf<IPortalSection>(

@@ -114,9 +114,6 @@ const routes: Routes = [
   {
     path: AccessRoutes.MS_TEAMS_PRIVACY_OFFICER,
     canActivate: [PermissionsGuard],
-    data: {
-      roles: [Role.FEATURE_PIDP_DEMO],
-    },
     loadChildren: (): Promise<MsTeamsPrivacyOfficerModule> =>
       import(
         './pages/ms-teams-privacy-officer/ms-teams-privacy-officer.module'
