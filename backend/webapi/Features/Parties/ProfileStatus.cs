@@ -100,6 +100,7 @@ public partial class ProfileStatus
                     ProfileSection.Create<CollegeCertificationSection>(data),
                     ProfileSection.Create<DemographicsSection>(data),
                     ProfileSection.Create<EndorsementsSection>(data),
+                    ProfileSection.Create<UserAccessAgreementSection>(data),
                     ProfileSection.Create<OrganizationDetailsSection>(data),
                     ProfileSection.Create<DriverFitnessSection>(data),
                     ProfileSection.Create<HcimAccountTransferSection>(data),
@@ -137,6 +138,7 @@ public partial class ProfileStatus
         public string? Email { get; set; }
         public string? Phone { get; set; }
         public string? Cpn { get; set; }
+        public Instant? UserAccessAgreementDate { get; set; }
         public bool HasBCProviderCredential { get; set; }
         public LicenceDeclarationDto? LicenceDeclaration { get; set; }
         public string? AccessAdministratorEmail { get; set; }

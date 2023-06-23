@@ -1,7 +1,7 @@
-<ui-page mode="medium">
+<ui-page mode="medium" [form]="formState.form" (submitted)="onSubmit()">
   <app-user-access-agreement-document></app-user-access-agreement-document>
 
-  <p>
+  <p *ngIf="!completed">
     <strong>
       I <span class="signature">{{ username | async }}</span>, represent and
       warrant that all information provided in connection with my application
@@ -19,11 +19,11 @@
       Back Home
     </button>
     <button
+      *ngIf="!completed"
       mat-flat-button
       uiPageFooterAction
       color="primary"
-      type="submit"
-      (click)="onSubmit()">
+      type="submit">
       Accept Agreement
     </button>
   </ui-page-footer>

@@ -33,6 +33,8 @@ public class Party : BaseAuditable
 
     public string? Cpn { get; set; }
 
+    public Instant? UserAccessAgreementDate { get; set; }
+
     public PartyLicenceDeclaration? LicenceDeclaration { get; set; }
 
     public string? JobTitle { get; set; }

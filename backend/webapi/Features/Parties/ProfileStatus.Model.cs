@@ -183,6 +183,18 @@ public partial class ProfileStatus
             }
         }
 
+        public class UserAccessAgreementSection : ProfileSection
+        {
+            internal override string SectionName => "userAccessAgreement";
+
+            protected override StatusCode Compute(ProfileData profile)
+            {
+                return profile.UserAccessAgreementDate != null
+                    ? StatusCode.Complete
+                    : StatusCode.Incomplete;
+            }
+        }
+
         public class OrganizationDetailsSection : ProfileSection
         {
             internal override string SectionName => "organizationDetails";

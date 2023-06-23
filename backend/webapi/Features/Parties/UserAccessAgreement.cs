@@ -2,12 +2,12 @@ namespace Pidp.Features.Parties;
 
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
-
+using NodaTime;
 using Pidp.Data;
 
 public partial class UserAccessAgreement
 {
-    public class Command : ICommand<Model>
+    public class Command : ICommand
     {
         public int Id { get; set; }
     }
@@ -17,20 +17,30 @@ public partial class UserAccessAgreement
         public CommandValidator() => this.RuleFor(x => x.Id).GreaterThan(0);
     }
 
-    public class CommandHandler : ICommandHandler<Command, Model>
+    public class CommandHandler : ICommandHandler<Command>
     {
+        private readonly IClock clock;
         private readonly PidpDbContext context;
 
-        public CommandHandler(PidpDbContext context) => this.context = context;
-
-        public async Task<Model> HandleAsync(Command command)
+        public CommandHandler(IClock clock, PidpDbContext context)
         {
-            Console.WriteLine($"User access agreement has been accepted. PartyId = {command.Id}");
-            return await Task.Run(() => new Model());
+            this.clock = clock;
+            this.context = context;
         }
-    }
 
-    public partial class Model
-    {
+        public async Task HandleAsync(Command command)
+        {
+            var party = await this.context.Parties
+                .SingleAsync(party => party.Id == command.Id);
+
+            if (party.UserAccessAgreementDate != null)
+            {
+                return;
+            }
+
+            party.UserAccessAgreementDate = this.clock.GetCurrentInstant();
+
+            await this.context.SaveChangesAsync();
+        }
     }
 }

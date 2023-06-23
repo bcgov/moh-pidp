@@ -116,10 +116,10 @@ public class PartiesController : PidpControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<UserAccessAgreement.Model>> AcceptUserAccessAgreement([FromServices] ICommandHandler<UserAccessAgreement.Command, UserAccessAgreement.Model> handler,
-                                                                                         [FromRoute] UserAccessAgreement.Command command)
+    public async Task<IActionResult> AcceptUserAccessAgreement([FromServices] ICommandHandler<UserAccessAgreement.Command> handler,
+                                                               [FromRoute] UserAccessAgreement.Command command)
         => await this.AuthorizePartyBeforeHandleAsync(command.Id, handler, command)
-            .ToActionResultOfT();
+            .ToActionResult();
 
     [HttpGet("{id}/work-setting")]
     [ProducesResponseType(StatusCodes.Status200OK)]

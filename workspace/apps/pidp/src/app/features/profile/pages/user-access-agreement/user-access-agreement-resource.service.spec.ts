@@ -1,13 +1,24 @@
 import { TestBed } from '@angular/core/testing';
 
-import { UserAccessAgreementResourceService } from './user-access-agreement-resource.service';
+import { provideAutoSpy } from 'jest-auto-spies';
 
-describe('UserAccessAgreementResourceService', () => {
-  let service: UserAccessAgreementResourceService;
+import { ApiHttpClient } from '@app/core/resources/api-http-client.service';
+import { ToastService } from '@app/core/services/toast.service';
+
+import { UserAccessAgreementResource } from './user-access-agreement-resource.service';
+
+describe('UserAccessAgreementResource', () => {
+  let service: UserAccessAgreementResource;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
-    service = TestBed.inject(UserAccessAgreementResourceService);
+    TestBed.configureTestingModule({
+      providers: [
+        UserAccessAgreementResource,
+        provideAutoSpy(ApiHttpClient),
+        provideAutoSpy(ToastService),
+      ],
+    });
+    service = TestBed.inject(UserAccessAgreementResource);
   });
 
   it('should be created', () => {
