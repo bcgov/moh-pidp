@@ -13,8 +13,7 @@ public class BusinessEventConfiguration : IEntityTypeConfiguration<BusinessEvent
         var businessEventTypes = Assembly.GetAssembly(typeof(BusinessEvent))!
             .GetTypes()
             .Where(type => type.IsSubclassOf(typeof(BusinessEvent))
-                && !type.IsAbstract)
-            .Where(type => !type.IsAbstract);
+                && !type.IsAbstract);
 
         var discriminatorBuilder = builder.HasDiscriminator();
 
