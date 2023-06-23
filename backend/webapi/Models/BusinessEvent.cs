@@ -21,6 +21,8 @@ public abstract class BusinessEvent : BaseAuditable
 
 public class PartyNotInPlr : BusinessEvent
 {
+    // Normally EF would map this column to "PartyNotInPlr_PartyId" but we would like all derived types to share the column where applicable.
+    [Column(nameof(PartyId))]
     public int PartyId { get; set; }
     public Party? Party { get; set; }
 
@@ -38,6 +40,7 @@ public class PartyNotInPlr : BusinessEvent
 
 public class LicenceStatusRoleAssigned : BusinessEvent
 {
+    [Column(nameof(PartyId))]
     public int PartyId { get; set; }
     public Party? Party { get; set; }
 
@@ -55,6 +58,7 @@ public class LicenceStatusRoleAssigned : BusinessEvent
 
 public class LicenceStatusRoleUnassigned : BusinessEvent
 {
+    [Column(nameof(PartyId))]
     public int PartyId { get; set; }
     public Party? Party { get; set; }
 
