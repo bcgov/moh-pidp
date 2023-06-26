@@ -58,7 +58,6 @@ public class PidpDbContext : DbContext
         base.OnModelCreating(modelBuilder);
 
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(PidpDbContext).Assembly);
-        modelBuilder.Entity<PartyNotInPlr>(); // We must make the context aware of types. Since business events are not referenced on any models and we don't want to make a DB Set for each type of event; here we are.
     }
 
     private async Task DispatchDomainEventsAsync()
