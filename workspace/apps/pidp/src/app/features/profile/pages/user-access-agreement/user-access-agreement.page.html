@@ -1,4 +1,4 @@
-<ui-page mode="medium" [form]="formState.form" (submitted)="onSubmit()">
+<ui-page mode="medium">
   <app-user-access-agreement-document></app-user-access-agreement-document>
 
   <p *ngIf="!completed">
@@ -9,7 +9,7 @@
     </strong>
   </p>
 
-  <ui-page-footer>
+  <ui-page-footer [mode]="completed ? 'reverse' : 'normal'">
     <button
       mat-stroked-button
       uiPageFooterAction
@@ -23,7 +23,8 @@
       mat-flat-button
       uiPageFooterAction
       color="primary"
-      type="submit">
+      type="button"
+      (click)="onAcceptAgreement()">
       Accept Agreement
     </button>
   </ui-page-footer>

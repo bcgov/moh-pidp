@@ -1,12 +1,11 @@
-import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
+import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
-import { Observable, catchError, of, tap, throwError } from 'rxjs';
+import { Observable, catchError, throwError } from 'rxjs';
 
 import { NoContent, NoContentResponse } from '@bcgov/shared/data-access';
 
 import { ApiHttpClient } from '@app/core/resources/api-http-client.service';
-import { ToastService } from '@app/core/services/toast.service';
 import { ProfileStatus } from '@app/features/portal/models/profile-status.model';
 import { PortalResource } from '@app/features/portal/portal-resource.service';
 
@@ -16,8 +15,7 @@ import { PortalResource } from '@app/features/portal/portal-resource.service';
 export class UserAccessAgreementResource {
   public constructor(
     protected apiResource: ApiHttpClient,
-    private portalResource: PortalResource,
-    private toastService: ToastService
+    private portalResource: PortalResource
   ) {}
 
   public getProfileStatus(partyId: number): Observable<ProfileStatus | null> {
@@ -29,22 +27,13 @@ export class UserAccessAgreementResource {
       .post<NoContent>(this.getResourcePath(id), null)
       .pipe(
         NoContentResponse,
-        tap(() =>
-          this.toastService.openSuccessToast(
-            'User access agreement has been accepted'
-          )
-        ),
         catchError((error: HttpErrorResponse) => {
-          if (error.status === HttpStatusCode.BadRequest) {
-            return of(void 0);
-          }
-
           return throwError(() => error);
         })
       );
   }
 
-  protected getResourcePath(id: number): string {
-    return `parties/${id}/user-access-agreement`;
+  protected getResourcePath(partyId: number): string {
+    return `parties/${partyId}/access-requests/user-access-agreement`;
   }
 }

@@ -13,7 +13,7 @@ using Pidp.Data;
 namespace Pidp.Data.Migrations
 {
     [DbContext(typeof(PidpDbContext))]
-    [Migration("20230623174344_UserAccessAgreement")]
+    [Migration("20230626224416_UserAccessAgreement")]
     partial class UserAccessAgreement
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -442,6 +442,11 @@ namespace Pidp.Data.Migrations
                         {
                             Code = 8,
                             Name = "MS Teams for Clinical Use - Clinic Member"
+                        },
+                        new
+                        {
+                            Code = 9,
+                            Name = "Access Harmonization User Access Agreement"
                         });
                 });
 
@@ -1133,9 +1138,6 @@ namespace Pidp.Data.Migrations
                     b.Property<string>("PreferredMiddleName")
                         .HasColumnType("text");
 
-                    b.Property<Instant?>("UserAccessAgreementDate")
-                        .HasColumnType("timestamp with time zone");
-
                     b.HasKey("Id");
 
                     b.ToTable("Party");
@@ -1306,6 +1308,38 @@ namespace Pidp.Data.Migrations
                     b.ToTable("HcimEnrolment");
                 });
 
+            modelBuilder.Entity("Pidp.Models.LicenceStatusRoleAssigned", b =>
+                {
+                    b.HasBaseType("Pidp.Models.BusinessEvent");
+
+                    b.Property<int>("PartyId")
+                        .ValueGeneratedOnUpdateSometimes()
+                        .HasColumnType("integer")
+                        .HasColumnName("PartyId");
+
+                    b.HasIndex("PartyId");
+
+                    b.ToTable("BusinessEvent");
+
+                    b.HasDiscriminator().HasValue("LicenceStatusRoleAssigned");
+                });
+
+            modelBuilder.Entity("Pidp.Models.LicenceStatusRoleUnassigned", b =>
+                {
+                    b.HasBaseType("Pidp.Models.BusinessEvent");
+
+                    b.Property<int>("PartyId")
+                        .ValueGeneratedOnUpdateSometimes()
+                        .HasColumnType("integer")
+                        .HasColumnName("PartyId");
+
+                    b.HasIndex("PartyId");
+
+                    b.ToTable("BusinessEvent");
+
+                    b.HasDiscriminator().HasValue("LicenceStatusRoleUnassigned");
+                });
+
             modelBuilder.Entity("Pidp.Models.MSTeamsClinicAddress", b =>
                 {
                     b.HasBaseType("Pidp.Models.Address");
@@ -1338,7 +1372,9 @@ namespace Pidp.Data.Migrations
                     b.HasBaseType("Pidp.Models.BusinessEvent");
 
                     b.Property<int>("PartyId")
-                        .HasColumnType("integer");
+                        .ValueGeneratedOnUpdateSometimes()
+                        .HasColumnType("integer")
+                        .HasColumnName("PartyId");
 
                     b.HasIndex("PartyId");
 
@@ -1513,6 +1549,28 @@ namespace Pidp.Data.Migrations
                         .HasForeignKey("Pidp.Models.HcimEnrolment", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Pidp.Models.LicenceStatusRoleAssigned", b =>
+                {
+                    b.HasOne("Pidp.Models.Party", "Party")
+                        .WithMany()
+                        .HasForeignKey("PartyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Party");
+                });
+
+            modelBuilder.Entity("Pidp.Models.LicenceStatusRoleUnassigned", b =>
+                {
+                    b.HasOne("Pidp.Models.Party", "Party")
+                        .WithMany()
+                        .HasForeignKey("PartyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Party");
                 });
 
             modelBuilder.Entity("Pidp.Models.MSTeamsClinicAddress", b =>

@@ -55,7 +55,11 @@ public static class AParty
     public static Party WithUserAccessAgreementAccepted(string? identityProvider = null)
     {
         var party = WithNoProfile(identityProvider);
-        party.UserAccessAgreementDate = Instant.FromDateTimeOffset(DateTimeOffset.Now);
+        party.AccessRequests.Add(new AccessRequest
+        {
+            AccessTypeCode = AccessTypeCode.UserAccessAgreement,
+            RequestedOn = Instant.FromDateTimeOffset(DateTimeOffset.Now)
+        });
         return party;
     }
 

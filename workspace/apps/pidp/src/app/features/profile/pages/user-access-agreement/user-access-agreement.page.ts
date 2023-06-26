@@ -1,18 +1,15 @@
-import { Component } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { EMPTY, Observable, map } from 'rxjs';
+import { Observable, catchError, map, noop, of, tap } from 'rxjs';
 
-import {
-  AbstractFormDependenciesService,
-  AbstractFormPage,
-} from '@app/core/classes/abstract-form-page.class';
 import { PartyService } from '@app/core/party/party.service';
+import { LoggerService } from '@app/core/services/logger.service';
+import { ToastService } from '@app/core/services/toast.service';
 import { AccessTokenService } from '@app/features/auth/services/access-token.service';
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
 
-import { UserAccessAgreementFormState } from './user-access-agreement-form-state';
 import { UserAccessAgreementResource } from './user-access-agreement-resource.service';
 
 @Component({
@@ -20,44 +17,69 @@ import { UserAccessAgreementResource } from './user-access-agreement-resource.se
   templateUrl: './user-access-agreement.page.html',
   styleUrls: ['./user-access-agreement.page.scss'],
 })
-export class UserAccessAgreementPage extends AbstractFormPage<any> {
+export class UserAccessAgreementPage implements OnInit {
   public title: string;
   public username: Observable<string>;
   public completed: boolean | null;
-  public formState: any;
-
-  // ui-page is handling this.
-  public showOverlayOnSubmit = false;
+  public accessRequestFailed: boolean;
+  public enrolmentError: boolean;
 
   public constructor(
-    dependenciesService: AbstractFormDependenciesService,
     private route: ActivatedRoute,
     private router: Router,
     private partyService: PartyService,
     private resource: UserAccessAgreementResource,
-    accessTokenService: AccessTokenService,
-    fb: FormBuilder
+    private logger: LoggerService,
+    private toastService: ToastService,
+    accessTokenService: AccessTokenService
   ) {
-    super(dependenciesService);
-
     this.title = this.route.snapshot.data.title;
-    this.formState = new UserAccessAgreementFormState(fb);
     this.username = accessTokenService
       .decodeToken()
       .pipe(map((token) => token?.name ?? ''));
 
     const routeData = this.route.snapshot.data;
     this.completed = routeData.userAccessAgreementCode === StatusCode.COMPLETED;
+    this.accessRequestFailed = false;
+    this.enrolmentError = false;
   }
 
-  protected performSubmission(): Observable<void> {
+  public ngOnInit(): void {
     const partyId = this.partyService.partyId;
 
-    return partyId ? this.resource.acceptAgreement(partyId) : EMPTY;
+    if (!partyId) {
+      this.logger.error('No party ID was provided');
+      return this.navigateToRoot();
+    }
+
+    if (this.completed === null) {
+      this.logger.error('No status code was provided');
+      return this.navigateToRoot();
+    }
   }
 
-  protected afterSubmitIsSuccessful(): void {
-    this.navigateToRoot();
+  public onAcceptAgreement(): void {
+    this.resource
+      .acceptAgreement(this.partyService.partyId)
+      .pipe(
+        tap(() => {
+          this.completed = true;
+          this.enrolmentError = false;
+          this.toastService.openSuccessToast(
+            'User access agreement has been accepted'
+          );
+        }),
+        catchError((error: HttpErrorResponse) => {
+          if (error.status === HttpStatusCode.BadRequest) {
+            this.completed = false;
+            this.enrolmentError = true;
+            return of(noop());
+          }
+          this.accessRequestFailed = true;
+          return of(noop());
+        })
+      )
+      .subscribe();
   }
 
   public onBack(): void {

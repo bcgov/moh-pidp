@@ -189,9 +189,12 @@ public partial class ProfileStatus
 
             protected override StatusCode Compute(ProfileData profile)
             {
-                return profile.UserAccessAgreementDate != null
-                    ? StatusCode.Complete
-                    : StatusCode.Incomplete;
+                if (profile.CompletedEnrolments.Contains(AccessTypeCode.UserAccessAgreement))
+                {
+                    return StatusCode.Complete;
+                }
+
+                return StatusCode.Incomplete;
             }
         }
 

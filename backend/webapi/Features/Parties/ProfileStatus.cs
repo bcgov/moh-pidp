@@ -138,7 +138,6 @@ public partial class ProfileStatus
         public string? Email { get; set; }
         public string? Phone { get; set; }
         public string? Cpn { get; set; }
-        public Instant? UserAccessAgreementDate { get; set; }
         public bool HasBCProviderCredential { get; set; }
         public LicenceDeclarationDto? LicenceDeclaration { get; set; }
         public string? AccessAdministratorEmail { get; set; }

@@ -440,6 +440,11 @@ namespace Pidp.Data.Migrations
                         {
                             Code = 8,
                             Name = "MS Teams for Clinical Use - Clinic Member"
+                        },
+                        new
+                        {
+                            Code = 9,
+                            Name = "Access Harmonization User Access Agreement"
                         });
                 });
 
@@ -1130,9 +1135,6 @@ namespace Pidp.Data.Migrations
 
                     b.Property<string>("PreferredMiddleName")
                         .HasColumnType("text");
-
-                    b.Property<Instant?>("UserAccessAgreementDate")
-                        .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
 
