@@ -52,7 +52,7 @@ public static class AParty
         return party;
     }
 
-    public static Party WithUserAcessAgreementAccepted(string? identityProvider = null)
+    public static Party WithUserAccessAgreementAccepted(string? identityProvider = null)
     {
         var party = WithNoProfile(identityProvider);
         party.UserAccessAgreementDate = Instant.FromDateTimeOffset(DateTimeOffset.Now);

@@ -28,7 +28,7 @@ public class ProfileStatusUserAccessAgreementTests : ProfileStatusTest
     [Fact]
     public async void HandleAsync_UserAccessAgreementAccepted_Complete()
     {
-        var party = this.TestDb.Has(AParty.WithUserAcessAgreementAccepted());
+        var party = this.TestDb.Has(AParty.WithUserAccessAgreementAccepted());
         var client = A.Fake<IPlrClient>()
             .ReturningAStandingsDigest(PlrStandingsDigest.FromEmpty());
         var handler = this.MockDependenciesFor<CommandHandler>(client);
