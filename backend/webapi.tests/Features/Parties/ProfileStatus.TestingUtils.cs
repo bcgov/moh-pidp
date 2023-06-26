@@ -52,6 +52,13 @@ public static class AParty
         return party;
     }
 
+    public static Party WithUserAcessAgreementAccepted(string? identityProvider = null)
+    {
+        var party = WithNoProfile(identityProvider);
+        party.UserAccessAgreementDate = Instant.FromDateTimeOffset(DateTimeOffset.Now);
+        return party;
+    }
+
     public static Party WithDemographics(string? identityProvider = null)
     {
         var party = WithNoProfile(identityProvider);
