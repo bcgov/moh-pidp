@@ -18,7 +18,6 @@ import { Spy, provideAutoSpy } from 'jest-auto-spies';
 import { ApiHttpClient } from '@app/core/resources/api-http-client.service';
 import { FormUtilsService } from '@app/core/services/form-utils.service';
 import { LoggerService } from '@app/core/services/logger.service';
-import { ToastService } from '@app/core/services/toast.service';
 import { IdentityProvider } from '@app/features/auth/enums/identity-provider.enum';
 import { AccessTokenParsed } from '@app/features/auth/models/access-token-parsed.model';
 import { AccessTokenService } from '@app/features/auth/services/access-token.service';
@@ -58,7 +57,6 @@ describe('UserAccessAgreementPage', () => {
         provideAutoSpy(FormUtilsService),
         provideAutoSpy(LoggerService),
         provideAutoSpy(Router),
-        provideAutoSpy(ToastService),
         provideAutoSpy(UserAccessAgreementResource),
       ],
     });

@@ -6,7 +6,6 @@ import { Observable, catchError, map, noop, of, tap } from 'rxjs';
 
 import { PartyService } from '@app/core/party/party.service';
 import { LoggerService } from '@app/core/services/logger.service';
-import { ToastService } from '@app/core/services/toast.service';
 import { UtilsService } from '@app/core/services/utils.service';
 import { specialAuthorityEformsSupportEmail } from '@app/features/access/pages/sa-eforms/sa-eforms.constants';
 import { AccessTokenService } from '@app/features/auth/services/access-token.service';
@@ -32,7 +31,6 @@ export class UserAccessAgreementPage implements OnInit {
     private partyService: PartyService,
     private resource: UserAccessAgreementResource,
     private logger: LoggerService,
-    private toastService: ToastService,
     private utilsService: UtilsService,
     accessTokenService: AccessTokenService
   ) {
@@ -68,10 +66,7 @@ export class UserAccessAgreementPage implements OnInit {
         tap(() => {
           this.completed = true;
           this.navigateToRoot();
-          this.utilsService.scrollTop();
-          this.toastService.openSuccessToast(
-            'User access agreement has been accepted'
-          );
+          this.utilsService.scrollTopWithDelay();
         }),
         catchError((error: HttpErrorResponse) => {
           if (error.status === HttpStatusCode.BadRequest) {
