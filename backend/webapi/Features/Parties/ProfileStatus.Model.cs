@@ -95,7 +95,7 @@ public partial class ProfileStatus
                     return StatusCode.Complete;
                 }
 
-                return profile.DemographicsComplete && profile.CompletedEnrolments.Contains(AccessTypeCode.UserAccessAgreement)
+                return profile.DemographicsComplete
                     ? StatusCode.Incomplete
                     : StatusCode.Locked;
             }

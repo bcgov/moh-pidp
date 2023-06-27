@@ -24,6 +24,7 @@ export class UserAccessAgreementPage implements OnInit {
   public completed: boolean | null;
   public accessRequestFailed: boolean;
   public specialAuthoritySupportEmail: string;
+  public redirectUrl: string | null = null;
 
   public constructor(
     private route: ActivatedRoute,
@@ -57,6 +58,10 @@ export class UserAccessAgreementPage implements OnInit {
       this.logger.error('No status code was provided');
       return this.navigateToRoot();
     }
+
+    if (this.route.snapshot.queryParamMap.has('redirect-url')) {
+      this.redirectUrl = this.route.snapshot.queryParamMap.get('redirect-url');
+    }
   }
 
   public onAcceptAgreement(): void {
@@ -65,7 +70,11 @@ export class UserAccessAgreementPage implements OnInit {
       .pipe(
         tap(() => {
           this.completed = true;
-          this.navigateToRoot();
+          if (!this.redirectUrl) {
+            this.navigateToRoot();
+          } else {
+            this.router.navigate([this.redirectUrl]);
+          }
           this.utilsService.scrollTopWithDelay();
         }),
         catchError((error: HttpErrorResponse) => {
