@@ -7,6 +7,8 @@ import { Observable, catchError, map, noop, of, tap } from 'rxjs';
 import { PartyService } from '@app/core/party/party.service';
 import { LoggerService } from '@app/core/services/logger.service';
 import { ToastService } from '@app/core/services/toast.service';
+import { UtilsService } from '@app/core/services/utils.service';
+import { specialAuthorityEformsSupportEmail } from '@app/features/access/pages/sa-eforms/sa-eforms.constants';
 import { AccessTokenService } from '@app/features/auth/services/access-token.service';
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
 
@@ -22,7 +24,7 @@ export class UserAccessAgreementPage implements OnInit {
   public username: Observable<string>;
   public completed: boolean | null;
   public accessRequestFailed: boolean;
-  public enrolmentError: boolean;
+  public specialAuthoritySupportEmail: string;
 
   public constructor(
     private route: ActivatedRoute,
@@ -31,6 +33,7 @@ export class UserAccessAgreementPage implements OnInit {
     private resource: UserAccessAgreementResource,
     private logger: LoggerService,
     private toastService: ToastService,
+    private utilsService: UtilsService,
     accessTokenService: AccessTokenService
   ) {
     this.title = this.route.snapshot.data.title;
@@ -41,7 +44,7 @@ export class UserAccessAgreementPage implements OnInit {
     const routeData = this.route.snapshot.data;
     this.completed = routeData.userAccessAgreementCode === StatusCode.COMPLETED;
     this.accessRequestFailed = false;
-    this.enrolmentError = false;
+    this.specialAuthoritySupportEmail = specialAuthorityEformsSupportEmail;
   }
 
   public ngOnInit(): void {
@@ -64,7 +67,8 @@ export class UserAccessAgreementPage implements OnInit {
       .pipe(
         tap(() => {
           this.completed = true;
-          this.enrolmentError = false;
+          this.navigateToRoot();
+          this.utilsService.scrollTop();
           this.toastService.openSuccessToast(
             'User access agreement has been accepted'
           );
@@ -72,7 +76,6 @@ export class UserAccessAgreementPage implements OnInit {
         catchError((error: HttpErrorResponse) => {
           if (error.status === HttpStatusCode.BadRequest) {
             this.completed = false;
-            this.enrolmentError = true;
             return of(noop());
           }
           this.accessRequestFailed = true;
