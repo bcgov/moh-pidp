@@ -54,9 +54,9 @@ public class BCProviderClient : IBCProviderClient
         var bcProviderAccount = new User()
         {
             AccountEnabled = true,
-            DisplayName = userRepresentation.FullName, // Required
+            DisplayName = $"{userRepresentation.FirstName} {userRepresentation.LastName}", // Required
             GivenName = userRepresentation.FirstName,
-            MailNickname = this.RemoveMailNicknameInvalidCharacters(userRepresentation.FullName), // Required
+            MailNickname = this.RemoveMailNicknameInvalidCharacters($"{userRepresentation.FirstName}{userRepresentation.LastName}"), // Required
             Surname = userRepresentation.LastName,
             UserPrincipalName = userPrincipal,
             PasswordProfile = new PasswordProfile
@@ -162,14 +162,14 @@ public class BCProviderClient : IBCProviderClient
     private string RemoveUpnInvalidCharacters(string userPrincipalName)
     {
         // According to the Microsoft Graph docs, User Principal Name can only include A - Z, a - z, 0 - 9, and the characters ' . - _ ! # ^ ~
-        var legalCharacters = Regex.Replace(userPrincipalName, @"[^a-zA-Z0-9'\.\-_!\#\^~]", string.Empty);
+        var validCharacters = Regex.Replace(userPrincipalName, @"[^a-zA-Z0-9'\.\-_!\#\^~]", string.Empty);
 
-        if (userPrincipalName.Length != legalCharacters.Length)
+        if (userPrincipalName.Length != validCharacters.Length)
         {
-            this.logger.LogPartyNameContainsUpnInvalidCharacters(userPrincipalName, legalCharacters);
+            this.logger.LogPartyNameContainsUpnInvalidCharacters(userPrincipalName, validCharacters);
         }
 
-        return legalCharacters;
+        return validCharacters;
     }
 
     private async Task<bool> UserExists(string userPrincipalName)

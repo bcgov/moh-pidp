@@ -13,8 +13,6 @@ public class NewUserRepresentation
     public string PidpEmail { get; set; } = string.Empty;
 
     public string Password { get; set; } = string.Empty;
-
-    public string FullName => $"{this.FirstName} {this.LastName}";
 }
 
 /// <summary>
