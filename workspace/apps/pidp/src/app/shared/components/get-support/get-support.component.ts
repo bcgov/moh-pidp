@@ -25,7 +25,7 @@ interface SupportProps {
 export class GetSupportComponent implements OnInit {
   public providedSupport: SupportProps[];
   public additionalSupportEmail: string;
-  public additionalSupportPhone = '250-857-1969';
+  public additionalSupportPhone: string;
 
   public constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
@@ -33,6 +33,7 @@ export class GetSupportComponent implements OnInit {
   ) {
     this.providedSupport = [];
     this.additionalSupportEmail = this.config.emails.additionalSupport;
+    this.additionalSupportPhone = this.config.phones.additionalSupport;
   }
 
   public ngOnInit(): void {

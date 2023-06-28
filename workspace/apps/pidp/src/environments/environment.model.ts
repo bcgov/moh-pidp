@@ -33,4 +33,7 @@ export interface AppEnvironment extends EnvironmentConfig {
     doctorsTechnologyOffice: string;
     prescriptionRenewal: string;
   };
+  phones: {
+    additionalSupport: string;
+  };
 }

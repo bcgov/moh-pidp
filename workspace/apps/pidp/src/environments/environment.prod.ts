@@ -58,6 +58,9 @@ export const environment: AppEnvironment = {
     doctorsTechnologyOffice: doctorsTechnologyOfficeUrl,
     prescriptionRenewal: prescriptionRenewalEformsSupportUrl,
   },
+  phones: {
+    additionalSupport: '250-857-1969',
+  },
   keycloakConfig: {
     config: {
       url: 'https://common-logon-dev.hlth.gov.bc.ca/auth',
