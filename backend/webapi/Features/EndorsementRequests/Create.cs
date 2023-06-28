@@ -3,13 +3,13 @@ namespace Pidp.Features.EndorsementRequests;
 using FluentValidation;
 using Flurl;
 using HybridModelBinding;
+using NodaTime;
 using System.Text.Json.Serialization;
 
 using Pidp.Data;
-using Pidp.Infrastructure.Services;
 using Pidp.Infrastructure.HttpClients.Mail;
+using Pidp.Infrastructure.Services;
 using Pidp.Models;
-using NodaTime;
 
 public class Create
 {
@@ -76,8 +76,24 @@ public class Create
                 from: EmailService.PidpEmail,
                 to: recipientEmail,
                 subject: "You Have Received an Endorsement Request in PIdP",
-                body: $"You have a new endorsement in the Provider Identity Portal. Please use {link} and log in to the Provider Identity Portal to complete your enrolment(s)"
-            );
+                body: $@"Hello,
+<br>You are receiving this email because a user requested an endorsement from you.
+<br>
+<br>To complete the endorsement process, use {link} to log into the Provider Identity Portal with your BC Services Card.
+<br>
+<br>After logging in, please:
+<br>&emsp;1. Complete the “Contact Information” tile.
+<br>&emsp;2. Declare your college information (even if you do not have a college licence).
+<br>&emsp;3. Click on the “Endorsements” tile in the “Organization Information” section, and follow the prompts.
+<br>
+<br>For additional support, contact the OneHealthID Service desk:
+<br>
+<br>&emsp;• By email at AMSSPOC.vic@CGI.com
+<br>
+<br>&emsp;• By phone at 250-857-1969
+<br>
+<br>Thank you.");
+
             await this.emailService.SendAsync(email);
         }
     }
