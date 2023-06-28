@@ -39,16 +39,13 @@ public class UserAccessAgreement
 
         public async Task<IDomainResult> HandleAsync(Command command)
         {
-            var alreadyEnroled = await this.context.Parties
-                .Where(party => party.Id == command.PartyId)
-                .Select(party =>
-                    party.AccessRequests.Any(request
-                        => request.AccessTypeCode == AccessTypeCode.UserAccessAgreement))
-                .SingleAsync();
+            var alreadyEnrolled = await this.context.AccessRequests
+                .AnyAsync(request => request.PartyId == command.PartyId
+                    && request.AccessTypeCode == AccessTypeCode.UserAccessAgreement);
 
-            if (alreadyEnroled)
+            if (alreadyEnrolled)
             {
-                this.logger.LogUserAccessAgreementHasAlreadyBeenAccepted();
+                this.logger.LogUserAccessAgreementHasAlreadyBeenAccepted(command.PartyId);
                 return DomainResult.Failed();
             }
 
@@ -68,6 +65,6 @@ public class UserAccessAgreement
 
 public static partial class UserAccessAgreementLoggingExtensions
 {
-    [LoggerMessage(1, LogLevel.Warning, "The user access agreement has already been accepted.")]
-    public static partial void LogUserAccessAgreementHasAlreadyBeenAccepted(this ILogger logger);
+    [LoggerMessage(1, LogLevel.Warning, "User {partyId} has already accepted the user access agreement.")]
+    public static partial void LogUserAccessAgreementHasAlreadyBeenAccepted(this ILogger logger, int partyId);
 }
