@@ -1,4 +1,5 @@
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
+import { MatStepperModule } from '@angular/material/stepper';
 
 import { LookupModule } from '@app/modules/lookup/lookup.module';
 import { PermissionsModule } from '@app/modules/permissions/permissions.module';
@@ -23,6 +24,7 @@ import { PortalPage } from './portal.page';
     SharedModule,
     LookupModule.forChild(),
     PermissionsModule,
+    MatStepperModule,
   ],
   schemas: [
     // This causes the compiler to allow the non-angular swiper html tags.
