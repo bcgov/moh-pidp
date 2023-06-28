@@ -20,6 +20,7 @@
               <button
                 mat-flat-button
                 aria-labelledby="complete-personal-information"
+                [disabled]="demographics$ | async"
                 (click)="navigateTo()">
                 Enter your contact details
               </button></ng-template
@@ -30,6 +31,7 @@
               <button
                 mat-flat-button
                 aria-labelledby="complete-college-licence"
+                [disabled]="collegeLicence$ | async"
                 (click)="navigateTo()">
                 Enter your College Licence
               </button></ng-template
@@ -40,6 +42,7 @@
               <button
                 mat-flat-button
                 aria-labelledby="complete-bcprovider"
+                [disabled]="bcProvider$ | async"
                 (click)="navigateTo()">
                 Create a BC Provider Credential
               </button></ng-template
