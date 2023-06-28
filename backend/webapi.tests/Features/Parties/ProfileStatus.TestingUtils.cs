@@ -52,6 +52,17 @@ public static class AParty
         return party;
     }
 
+    public static Party WithUserAccessAgreementAccepted(string? identityProvider = null)
+    {
+        var party = WithNoProfile(identityProvider);
+        party.AccessRequests.Add(new AccessRequest
+        {
+            AccessTypeCode = AccessTypeCode.UserAccessAgreement,
+            RequestedOn = Instant.FromDateTimeOffset(DateTimeOffset.Now)
+        });
+        return party;
+    }
+
     public static Party WithDemographics(string? identityProvider = null)
     {
         var party = WithNoProfile(identityProvider);

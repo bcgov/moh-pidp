@@ -127,4 +127,12 @@ public class AccessRequestsController : PidpControllerBase
                                                              [FromRoute] SAEforms.Command command)
         => await this.AuthorizePartyBeforeHandleAsync(command.PartyId, handler, command)
             .ToActionResult();
+
+    [HttpPost("user-access-agreement")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> AcceptUserAccessAgreement([FromServices] ICommandHandler<UserAccessAgreement.Command, IDomainResult> handler,
+                                                               [FromRoute] UserAccessAgreement.Command command)
+        => await this.AuthorizePartyBeforeHandleAsync(command.PartyId, handler, command)
+            .ToActionResult();
 }

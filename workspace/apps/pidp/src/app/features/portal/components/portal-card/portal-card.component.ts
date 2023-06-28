@@ -29,7 +29,11 @@ export class PortalCardComponent {
     return show;
   }
   public get showLearnMore(): boolean {
-    return !this.showCompleted && !this.section.action.disabled && !this.section.action.openInNewTab;
+    return (
+      !this.showCompleted &&
+      !this.section.action.disabled &&
+      !this.section.action.openInNewTab
+    );
   }
   public get showVisit(): boolean {
     return !!this.section.action.openInNewTab;
@@ -46,7 +50,10 @@ export class PortalCardComponent {
   public constructor(private router: Router) {}
 
   public onClick(section: IPortalSection): void {
-    this.router.navigateByUrl(section.action.route);
+    this.router.navigate(
+      [section.action.route],
+      section.action.navigationExtras
+    );
   }
   public get isProfileCardCategory(): boolean {
     return this.portalCategoryName === 'profile';
