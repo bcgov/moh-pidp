@@ -50,6 +50,9 @@
 
 .rostering-banner {
   margin-bottom: 10px;
+  & mat-icon {
+    margin: 0 5px;
+  }
 }
 
 .adjust-text {
