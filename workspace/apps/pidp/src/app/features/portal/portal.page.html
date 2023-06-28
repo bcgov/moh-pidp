@@ -7,7 +7,7 @@
       <p>{{ alert.content }}</p>
     </div>
   </section>
-  <section class="section-box">
+  <section class="section-box rostering-banner">
     <mat-expansion-panel>
       <mat-expansion-panel-header>
         <strong>Looking to access Rostering?</strong>
@@ -45,7 +45,10 @@
                 [disabled]="bcProvider$ | async"
                 (click)="navigateTo()">
                 Create a BC Provider Credential
-              </button></ng-template
+              </button>
+              <p *ngIf="bcProviderStatusCode === 2" class="adjust-text">
+                {{ bcProviderUsername }}
+              </p></ng-template
             >
           </mat-step>
           <mat-step>

@@ -6,6 +6,8 @@ import { BehaviorSubject, Observable, map, of, switchMap, tap } from 'rxjs';
 import { PartyService } from '@app/core/party/party.service';
 import { Role } from '@app/shared/enums/roles.enum';
 
+import { BcProviderEditInitialStateModel } from '../access/pages/bc-provider-edit/bc-provider-edit.component';
+import { BcProviderEditResource } from '../access/pages/bc-provider-edit/bc-provider-edit.resource';
 import { EndorsementsResource } from '../organization-info/pages/endorsements/endorsements-resource.service';
 import { ProfileStatusAlert } from './models/profile-status-alert.model';
 import { ProfileStatus } from './models/profile-status.model';
@@ -45,8 +47,10 @@ export class PortalPage implements OnInit {
   public demographicsStatusCode!: number | undefined;
   public collegeLicenceStatusCode!: number | undefined;
   public bcProviderStatusCode!: number | undefined;
+  public bcProviderUsername = '';
 
   public constructor(
+    private bcProviderResource: BcProviderEditResource,
     private router: Router,
     private partyService: PartyService,
     private portalResource: PortalResource,
@@ -132,6 +136,12 @@ export class PortalPage implements OnInit {
         if (this.bcProviderStatusCode === 2) {
           this.bcProvider$.next(true);
         }
+      });
+
+    this.bcProviderResource
+      .get(this.partyService.partyId)
+      .subscribe((bcProviderObject: BcProviderEditInitialStateModel) => {
+        this.bcProviderUsername = bcProviderObject.bcProviderId;
       });
   }
 
