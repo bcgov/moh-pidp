@@ -62,6 +62,7 @@ export class UserAccessAgreementPage implements OnInit {
     if (this.route.snapshot.queryParamMap.has('redirect-url')) {
       this.redirectUrl = this.route.snapshot.queryParamMap.get('redirect-url');
     }
+    this.utilsService.scrollTop();
   }
 
   public onAcceptAgreement(): void {
