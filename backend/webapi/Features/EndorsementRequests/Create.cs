@@ -77,23 +77,22 @@ public class Create
                 to: recipientEmail,
                 subject: "You Have Received an Endorsement Request in PIdP",
                 body: $@"Hello,
-You are receiving this email because a user requested an endorsement from you.
-
-To complete the endorsement process, use {link} and log in to the Provider Identity Portal to complete your enrolment(s)
-
-After logging in with your verified BC Services Card, please:
-
-    1. Complete contact information.
-    2. Declare your college information (or specify that you don't have one).
-    3. Click on the “Endorsements” tile in the “Organization Information” section, and follow the prompts.
-
-For additional support, contact the OneHealthID Service desk:
-
-    • By email at AMSSPOC.vic@CGI.com
-
-    • By phone at 250-857-1969
-
-Thank you.");
+<br>You are receiving this email because a user requested an endorsement from you.
+<br>
+<br>To complete the endorsement process, use {link} to log into the Provider Identity Portal with your BC Services Card.
+<br>
+<br>After logging in, please:
+<br>&emsp;1. Complete the “Contact Information” tile.
+<br>&emsp;2. Declare your college information (even if you do not have a college licence).
+<br>&emsp;3. Click on the “Endorsements” tile in the “Organization Information” section, and follow the prompts.
+<br>
+<br>For additional support, contact the OneHealthID Service desk:
+<br>
+<br>&emsp;• By email at AMSSPOC.vic@CGI.com
+<br>
+<br>&emsp;• By phone at 250-857-1969
+<br>
+<br>Thank you.");
 
             await this.emailService.SendAsync(email);
         }
