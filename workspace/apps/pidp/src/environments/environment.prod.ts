@@ -48,6 +48,7 @@ export const environment: AppEnvironment = {
     doctorsTechnologyOfficeSupport: doctorsTechnologyOfficeEmail,
     phsaInformationAccessAndPrivacyOffice:
       phsaInformationAccessAndPrivacyOfficeEmail,
+    additionalSupport: 'AMSSPOC.vic@CGI.com',
   },
   urls: {
     bcscAppDownload: `https://www2.gov.bc.ca/gov/content/governments/government-id/bcservicescardapp/download-app`,
