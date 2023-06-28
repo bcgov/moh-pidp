@@ -24,6 +24,8 @@ interface SupportProps {
 })
 export class GetSupportComponent implements OnInit {
   public providedSupport: SupportProps[];
+  public additionalSupportEmail = 'AMSSPOC.vic@CGI.com';
+  public additionalSupportPhone = '250-857-1969';
 
   public constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
