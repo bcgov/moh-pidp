@@ -47,6 +47,40 @@ export class PortalPage implements OnInit {
     this.alerts = [];
   }
 
+  public navigateTo(): void {
+    this.getProfileStatus(this.partyService.partyId).subscribe(
+      (profileStatus: ProfileStatus | null) => {
+        const demographicsStatusCode =
+          profileStatus?.status.demographics.statusCode;
+        const collegeLicenceStatusCode =
+          profileStatus?.status.collegeCertification.statusCode;
+        const bcProviderStatusCode =
+          profileStatus?.status.bcProvider.statusCode;
+
+        if (demographicsStatusCode !== 2) {
+          this.router.navigateByUrl('/profile/personal-information');
+        } else if (
+          demographicsStatusCode === 2 &&
+          collegeLicenceStatusCode !== 2
+        ) {
+          this.router.navigateByUrl('/profile/college-licence-declaration');
+        } else if (
+          demographicsStatusCode === 2 &&
+          collegeLicenceStatusCode === 2 &&
+          bcProviderStatusCode !== 2
+        ) {
+          this.router.navigateByUrl('/access/bc-provider-application');
+        } else if (
+          demographicsStatusCode === 2 &&
+          collegeLicenceStatusCode === 2 &&
+          bcProviderStatusCode === 2
+        ) {
+          this.navigateToExternalUrl('https://bchealthprovider.ca');
+        }
+      }
+    );
+  }
+
   public onScrollToAnchor(): void {
     this.router.navigate([], {
       fragment: 'access',
@@ -56,6 +90,10 @@ export class PortalPage implements OnInit {
 
   public onCardAction(section: IPortalSection): void {
     section.performAction();
+  }
+
+  public getProfileStatus(partyId: number): Observable<ProfileStatus | null> {
+    return this.portalResource.getProfileStatus(partyId);
   }
 
   public ngOnInit(): void {
@@ -92,5 +130,10 @@ export class PortalPage implements OnInit {
           });
         })
       );
+  }
+
+  private navigateToExternalUrl(url: string): void {
+    window.open(url, '_blank');
+    this.router.navigateByUrl('/');
   }
 }

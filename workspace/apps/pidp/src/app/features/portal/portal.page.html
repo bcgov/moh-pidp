@@ -10,11 +10,52 @@
   <section class="section-box">
     <mat-expansion-panel>
       <mat-expansion-panel-header>
-        This is the expansion title
+        <strong>Looking to access Rostering?</strong>
       </mat-expansion-panel-header>
 
       <ng-template matExpansionPanelContent>
-        Some deferred content
+        <mat-stepper orientation="vertical" #stepper>
+          <mat-step>
+            <ng-template matStepLabel>
+              <button
+                mat-flat-button
+                aria-labelledby="complete-personal-information"
+                (click)="navigateTo()">
+                Enter your contact details
+              </button></ng-template
+            >
+          </mat-step>
+          <mat-step>
+            <ng-template matStepLabel>
+              <button
+                mat-flat-button
+                aria-labelledby="complete-college-licence"
+                (click)="navigateTo()">
+                Enter your College Licence
+              </button></ng-template
+            >
+          </mat-step>
+          <mat-step>
+            <ng-template matStepLabel>
+              <button
+                mat-flat-button
+                aria-labelledby="complete-bcprovider"
+                (click)="navigateTo()">
+                Create a BC Provider Credential
+              </button></ng-template
+            >
+          </mat-step>
+          <mat-step>
+            <ng-template matStepLabel>
+              <button
+                mat-flat-button
+                aria-labelledby="navigate-to-rostering"
+                (click)="navigateTo()">
+                Login to Rostering with your BC Provider
+              </button></ng-template
+            >
+          </mat-step>
+        </mat-stepper>
       </ng-template>
     </mat-expansion-panel>
   </section>
