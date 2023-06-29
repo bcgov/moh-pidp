@@ -39,10 +39,6 @@ const routes: Routes = [
   },
   {
     path: ProfileRoutes.USER_ACCESS_AGREEMENT,
-    canLoad: [PermissionsGuard],
-    data: {
-      roles: [Role.FEATURE_PIDP_DEMO],
-    },
     loadChildren: (): Promise<UserAccessAgreementModule> =>
       import('./pages/user-access-agreement/user-access-agreement.module').then(
         (m) => m.UserAccessAgreementModule
