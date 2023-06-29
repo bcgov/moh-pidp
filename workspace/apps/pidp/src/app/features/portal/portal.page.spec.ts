@@ -19,10 +19,11 @@ import {
   provideAutoSpy,
 } from 'jest-auto-spies';
 
-import { APP_CONFIG, APP_DI_CONFIG } from '@app/app.config';
 import { PartyService } from '@app/core/party/party.service';
-import { DocumentService } from '@app/core/services/document.service';
 
+import { BcProviderEditInitialStateModel } from '../access/pages/bc-provider-edit/bc-provider-edit.component';
+import { BcProviderEditResource } from '../access/pages/bc-provider-edit/bc-provider-edit.resource';
+import { EndorsementsResource } from '../organization-info/pages/endorsements/endorsements-resource.service';
 import { AlertCode } from './enums/alert-code.enum';
 import { StatusCode } from './enums/status-code.enum';
 import { ProfileStatus } from './models/profile-status.model';
@@ -30,17 +31,18 @@ import { PortalResource } from './portal-resource.service';
 import { PortalPage } from './portal.page';
 import { PortalService } from './portal.service';
 import { IPortalSection } from './state/portal-section.model';
-import { EndorsementsResource } from '../organization-info/pages/endorsements/endorsements-resource.service';
 
 describe('PortalPage', () => {
   let component: PortalPage;
   let partyServiceSpy: Spy<PartyService>;
   let portalResourceSpy: Spy<PortalResource>;
   let portalServiceSpy: Spy<PortalService>;
+  let bcProviderResourceSpy: Spy<BcProviderEditResource>;
   let router: Router;
 
   let mockActivatedRoute;
   let mockProfileStatusResponse: ProfileStatus;
+  let mockBcProviderEditInitialStateResponse: BcProviderEditInitialStateModel;
 
   beforeEach(() => {
     mockActivatedRoute = {
@@ -55,10 +57,6 @@ describe('PortalPage', () => {
     TestBed.configureTestingModule({
       providers: [
         PortalPage,
-        {
-          provide: APP_CONFIG,
-          useValue: APP_DI_CONFIG,
-        },
         {
           provide: ActivatedRoute,
           useValue: mockActivatedRoute,
@@ -79,7 +77,7 @@ describe('PortalPage', () => {
             settersToSpyOn: ['alerts'],
           }),
         },
-        provideAutoSpy(DocumentService),
+        provideAutoSpy(BcProviderEditResource),
         provideAutoSpy(EndorsementsResource),
       ],
     });
@@ -89,6 +87,7 @@ describe('PortalPage', () => {
     partyServiceSpy = TestBed.inject<any>(PartyService);
     portalResourceSpy = TestBed.inject<any>(PortalResource);
     portalServiceSpy = TestBed.inject<any>(PortalService);
+    bcProviderResourceSpy = TestBed.inject<any>(BcProviderEditResource);
     router = TestBed.inject(Router);
 
     mockProfileStatusResponse = {
@@ -119,7 +118,10 @@ describe('PortalPage', () => {
         facilityDetails: { statusCode: StatusCode.AVAILABLE },
         endorsements: { statusCode: StatusCode.AVAILABLE },
         userAccessAgreement: { statusCode: StatusCode.AVAILABLE },
-        saEforms: { statusCode: StatusCode.AVAILABLE, incorrectLicenceType: false },
+        saEforms: {
+          statusCode: StatusCode.AVAILABLE,
+          incorrectLicenceType: false,
+        },
         prescriptionRefillEforms: { statusCode: StatusCode.AVAILABLE },
         'prescription-refill-eforms': { statusCode: StatusCode.AVAILABLE },
         bcProvider: { statusCode: StatusCode.AVAILABLE },
@@ -135,6 +137,10 @@ describe('PortalPage', () => {
         primaryCareRostering: { statusCode: StatusCode.AVAILABLE },
       },
     };
+
+    mockBcProviderEditInitialStateResponse = {
+      bcProviderId: 'Id',
+    };
   });
 
   describe('INIT', () => {
@@ -142,6 +148,9 @@ describe('PortalPage', () => {
       const partyId = randNumber({ min: 1 });
       partyServiceSpy.accessorSpies.getters.partyId.mockReturnValue(partyId);
       portalResourceSpy.getProfileStatus.nextWith(mockProfileStatusResponse);
+      bcProviderResourceSpy.get.nextWith(
+        mockBcProviderEditInitialStateResponse
+      );
       portalServiceSpy.accessorSpies.getters.alerts.mockReturnValue(
         mockProfileStatusResponse.alerts
       );
@@ -169,6 +178,9 @@ describe('PortalPage', () => {
       const partyId = randNumber({ min: 1 });
       partyServiceSpy.accessorSpies.getters.partyId.mockReturnValue(partyId);
       portalResourceSpy.getProfileStatus.nextWith(mockProfileStatusResponse);
+      bcProviderResourceSpy.get.nextWith(
+        mockBcProviderEditInitialStateResponse
+      );
       component.ngOnInit();
 
       when('the scroll to anchor method is invoked', () => {
@@ -189,6 +201,9 @@ describe('PortalPage', () => {
       const partyId = randNumber({ min: 1 });
       partyServiceSpy.accessorSpies.getters.partyId.mockReturnValue(partyId);
       portalResourceSpy.getProfileStatus.nextWith(mockProfileStatusResponse);
+      bcProviderResourceSpy.get.nextWith(
+        mockBcProviderEditInitialStateResponse
+      );
       component.ngOnInit();
 
       when('the card action method is invoked', () => {

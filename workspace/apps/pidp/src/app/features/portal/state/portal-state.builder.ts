@@ -90,10 +90,7 @@ export class PortalStateBuilder {
         ]
       ),
       ...ArrayUtils.insertResultIf<IPortalSection>(
-        // TODO add insertSection call when it exists in the ProfileStatus API
-        // TODO remove permissions when ready for production
-        // this.insertSection('userAccessAgreement', profileStatus) &&
-        this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
+        this.insertSection('userAccessAgreement', profileStatus),
         () => [new UserAccessAgreementPortalSection(profileStatus, this.router)]
       ),
     ];
