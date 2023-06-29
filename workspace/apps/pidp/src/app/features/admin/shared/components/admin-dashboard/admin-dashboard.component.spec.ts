@@ -1,16 +1,22 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { TestBed } from '@angular/core/testing';
 
+import {
+  randFirstName,
+  randFullName,
+  randLastName,
+  randPastDate,
+  randUserName,
+} from '@ngneat/falso';
 import { Spy, provideAutoSpy } from 'jest-auto-spies';
 
 import { APP_CONFIG, APP_DI_CONFIG } from '@app/app.config';
+import { IdentityProvider } from '@app/features/auth/enums/identity-provider.enum';
 import { AccessTokenParsed } from '@app/features/auth/models/access-token-parsed.model';
 import { AccessTokenService } from '@app/features/auth/services/access-token.service';
 import { AuthService } from '@app/features/auth/services/auth.service';
-import { IdentityProvider } from '@app/features/auth/enums/identity-provider.enum';
 
 import { AdminDashboardComponent } from './admin-dashboard.component';
-import { randFirstName, randFullName, randLastName, randPastDate, randUserName } from '@ngneat/falso';
 
 describe('AdminDashboardComponent', () => {
   let component: AdminDashboardComponent;
@@ -33,9 +39,9 @@ describe('AdminDashboardComponent', () => {
 
     accessTokenServiceSpy = TestBed.inject<any>(AccessTokenService);
     mockAccessTokenParsed = {
-      "allowed-origins": [],
+      'allowed-origins': [],
       acr: '',
-      aud: [],
+      aud: '',
       auth_time: 0,
       azp: '',
       iss: '',
