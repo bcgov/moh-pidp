@@ -1,7 +1,5 @@
 namespace Pidp.Infrastructure.HttpClients.BCProvider;
 
-using NodaTime;
-
 public class NewUserRepresentation
 {
     public string? Cpn { get; set; }
@@ -17,7 +15,6 @@ public class NewUserRepresentation
     public string Password { get; set; } = string.Empty;
 
     public DateTimeOffset UaaDate { get; set; }
-
 }
 
 /// <summary>
