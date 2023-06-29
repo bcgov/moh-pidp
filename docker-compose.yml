@@ -20,7 +20,7 @@ services:
       - pidp-net
 
   ###############################################################################
-  ###                     PIdP API Backend Definition                         ###
+  ###                       PIdP API Backend Definition                       ###
   ###############################################################################
   pidp-webapi:
     container_name: pidp-webapi
@@ -67,7 +67,7 @@ services:
     ]
 
   ###############################################################################
-  ###                        PLR Intake Definition                            ###
+  ###                          PLR Intake Definition                          ###
   ###############################################################################
   pidp-plr-intake:
     container_name: pidp-plr-intake
@@ -108,7 +108,23 @@ services:
     ]
 
   ###############################################################################
-  ###                                Mailhog                                  ###
+  ###                                RabbitMQ                                 ###
+  ###############################################################################
+  pidp-rabbitmq:
+    container_name: 'pidp-rabbitmq'
+    restart: always
+    image: rabbitmq:3-management-alpine
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+    ports:
+      - 5672:5672
+      - 15672:15672
+    networks:
+      - pidp-net
+
+  ###############################################################################
+  ###                                 Mailhog                                 ###
   ###############################################################################
   mailhog:
     container_name: mailhog
@@ -147,7 +163,7 @@ networks:
     driver: bridge
 
 ###############################################################################
-###                            Volumes Definition                           ###
+###                           Volumes Definition                            ###
 ###############################################################################
 volumes:
   local_pidp_postgress_data: null
