@@ -55,16 +55,16 @@
       </button>
     </ng-container>
     <ng-container *ngIf="showVisit">
-      <a
+      <button
         *ngIf="!section.action.disabled"
         mat-flat-button
         color="primary"
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Visit B.C. Rostering website"
-        [href]="section.action.route">
+        (click)="onClickVisit(section)">
         Visit
-      </a>
+      </button>
     </ng-container>
   </div>
 </div>
