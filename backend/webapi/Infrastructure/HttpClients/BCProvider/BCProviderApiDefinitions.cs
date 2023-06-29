@@ -1,5 +1,7 @@
 namespace Pidp.Infrastructure.HttpClients.BCProvider;
 
+using NodaTime;
+
 public class NewUserRepresentation
 {
     public string? Cpn { get; set; }
@@ -13,6 +15,9 @@ public class NewUserRepresentation
     public string PidpEmail { get; set; } = string.Empty;
 
     public string Password { get; set; } = string.Empty;
+
+    public DateTimeOffset UaaDate { get; set; }
+
 }
 
 /// <summary>
@@ -24,7 +29,7 @@ public class BCProviderAttributes
     private readonly Dictionary<string, object> attributes = new();
 
     /// <summary>
-    /// Always use to CRUD attributes in AAD, as clientId contains dashes
+    /// Always use to create or update attributes in AAD, as clientId contains dashes
     /// that AAD does not expect
     /// </summary>
     /// <param name="clientId"></param>
@@ -39,7 +44,8 @@ public class BCProviderAttributes
             .SetIsMoa(representation.IsMoa)
             .SetIsRnp(representation.IsRnp)
             .SetLoa(3)
-            .SetPidpEmail(representation.PidpEmail);
+            .SetPidpEmail(representation.PidpEmail)
+            .SetUaaDate(representation.UaaDate);
 
         if (!string.IsNullOrWhiteSpace(representation.Cpn))
         {
@@ -65,6 +71,7 @@ public class BCProviderAttributes
     /// </summary>
     public BCProviderAttributes SetLoa(int loa) => this.SetProperty(nameof(loa), loa);
     public BCProviderAttributes SetPidpEmail(string pidpEmail) => this.SetProperty(nameof(pidpEmail), pidpEmail);
+    public BCProviderAttributes SetUaaDate(DateTimeOffset uaaDate) => this.SetProperty(nameof(uaaDate), uaaDate);
 
     private BCProviderAttributes SetProperty(string propertyName, object value)
     {

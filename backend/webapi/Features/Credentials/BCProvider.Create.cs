@@ -12,6 +12,7 @@ using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.HttpClients.BCProvider;
 using Pidp.Infrastructure.HttpClients.Plr;
 using Pidp.Models;
+using Pidp.Models.Lookups;
 
 public class BCProviderCreate
 {
@@ -66,6 +67,11 @@ public class BCProviderCreate
                 })
                 .SingleAsync();
 
+            var uaaAgreementDate = await this.context.AccessRequests
+                .Where(accessRequest => accessRequest.PartyId == command.PartyId && accessRequest.AccessTypeCode == AccessTypeCode.UserAccessAgreement)
+                .Select(accessRequest => accessRequest.RequestedOn)
+                .SingleOrDefaultAsync();
+
             if (party.HasBCProviderCredential)
             {
                 this.logger.LogPartyHasBCProviderCredential(command.PartyId);
@@ -90,7 +96,8 @@ public class BCProviderCreate
                 IsMd = plrStanding.With(ProviderRoleType.MedicalDoctor).HasGoodStanding,
                 Cpn = party.Cpn,
                 Password = command.Password,
-                PidpEmail = party.Email
+                PidpEmail = party.Email,
+                UaaDate = uaaAgreementDate.ToDateTimeOffset()
             };
 
             if (!plrStanding.HasGoodStanding)
