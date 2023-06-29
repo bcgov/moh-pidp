@@ -4,7 +4,6 @@ import { Router } from '@angular/router';
 import { faPlus, faThumbsUp } from '@fortawesome/free-solid-svg-icons';
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';
-import { AdminRoutes } from '@app/features/admin/admin.routes';
 import { AuthService } from '@app/features/auth/services/auth.service';
 
 import { IPortalSection } from '../../state/portal-section.model';
@@ -57,7 +56,7 @@ export class PortalCardComponent {
     private router: Router,
     private authService: AuthService
   ) {
-    this.logoutRedirectUrl = `${this.config.applicationUrl}/${this.config.routes.auth}/${AdminRoutes.MODULE_PATH}`;
+    this.logoutRedirectUrl = `${this.config.applicationUrl}/`;
   }
 
   public onClick(section: IPortalSection): void {
