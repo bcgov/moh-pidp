@@ -64,13 +64,12 @@ public class BCProviderCreate
                     party.Email,
                     HasBCProviderCredential = party.Credentials.Any(credential => credential.IdentityProvider == IdentityProviders.BCProvider),
                     Hpdid = party.Credentials.Select(credential => credential.Hpdid).Single(hpdid => hpdid != null),
+                    UaaAgreementDate = party.AccessRequests
+                        .Where(request => request.AccessTypeCode == AccessTypeCode.UserAccessAgreement)
+                        .Select(request => request.RequestedOn)
+                        .SingleOrDefault()
                 })
                 .SingleAsync();
-
-            var uaaAgreementDate = await this.context.AccessRequests
-                .Where(accessRequest => accessRequest.PartyId == command.PartyId && accessRequest.AccessTypeCode == AccessTypeCode.UserAccessAgreement)
-                .Select(accessRequest => accessRequest.RequestedOn)
-                .SingleOrDefaultAsync();
 
             if (party.HasBCProviderCredential)
             {
@@ -79,7 +78,8 @@ public class BCProviderCreate
             }
 
             if (party.Email == null
-                || party.Hpdid == null)
+                || party.Hpdid == null
+                || party.UaaAgreementDate == default)
             {
                 this.logger.LogInvalidState(command.PartyId, party);
                 return DomainResult.Failed();
@@ -97,7 +97,7 @@ public class BCProviderCreate
                 Cpn = party.Cpn,
                 Password = command.Password,
                 PidpEmail = party.Email,
-                UaaDate = uaaAgreementDate.ToDateTimeOffset()
+                UaaDate = party.UaaAgreementDate.ToDateTimeOffset()
             };
 
             if (!plrStanding.HasGoodStanding)
