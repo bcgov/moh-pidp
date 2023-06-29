@@ -13,6 +13,9 @@ import {
 } from '@ngneat/falso';
 import { provideAutoSpy } from 'jest-auto-spies';
 
+import { APP_CONFIG, APP_DI_CONFIG } from '@app/app.config';
+import { AuthService } from '@app/features/auth/services/auth.service';
+
 import { StatusCode } from '../../enums/status-code.enum';
 import { ProfileStatus } from '../../models/profile-status.model';
 import { PrimaryCareRosteringPortalSection } from '../../state/access/primary-care-rostering-portal-section.class';
@@ -28,7 +31,14 @@ describe('PortalCardComponent', () => {
     await TestBed.configureTestingModule({
       imports: [RouterTestingModule],
       declarations: [PortalCardComponent],
-      providers: [provideAutoSpy(Router)],
+      providers: [
+        provideAutoSpy(Router),
+        {
+          provide: APP_CONFIG,
+          useValue: APP_DI_CONFIG,
+        },
+        provideAutoSpy(AuthService),
+      ],
     }).compileComponents();
 
     router = TestBed.inject(Router);
@@ -99,9 +109,6 @@ describe('PortalCardComponent', () => {
           expect(component.showVisit).toBeTruthy();
           expect(component.section.action.disabled).toBeTruthy();
           expect(component.showCompleted).toBeFalsy();
-
-          const linkVisit = fixture.debugElement.query(By.css('a'));
-          expect(linkVisit).toBeNull();
         });
       });
     });
@@ -124,11 +131,8 @@ describe('PortalCardComponent', () => {
             expect(component.section.action.disabled).toBeFalsy();
             expect(component.showCompleted).toBeFalsy();
 
-            const linkVisit = fixture.debugElement.query(By.css('a'));
+            const linkVisit = fixture.debugElement.query(By.css('button'));
             expect(linkVisit).not.toBeNull();
-            expect(linkVisit.attributes.href).toEqual(
-              'https://bchealthprovider.ca'
-            );
           }
         );
       });
