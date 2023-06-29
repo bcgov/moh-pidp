@@ -48,6 +48,7 @@ export const environment: AppEnvironment = {
     doctorsTechnologyOfficeSupport: doctorsTechnologyOfficeEmail,
     phsaInformationAccessAndPrivacyOffice:
       phsaInformationAccessAndPrivacyOfficeEmail,
+    additionalSupport: 'AMSSPOC.vic@CGI.com',
   },
   urls: {
     bcscAppDownload: `https://www2.gov.bc.ca/gov/content/governments/government-id/bcservicescardapp/download-app`,
@@ -56,6 +57,9 @@ export const environment: AppEnvironment = {
     specialAuthority: specialAuthorityUrl,
     doctorsTechnologyOffice: doctorsTechnologyOfficeUrl,
     prescriptionRenewal: prescriptionRenewalEformsSupportUrl,
+  },
+  phones: {
+    additionalSupport: '250-857-1969',
   },
   keycloakConfig: {
     config: {

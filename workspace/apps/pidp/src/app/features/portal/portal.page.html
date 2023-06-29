@@ -7,6 +7,65 @@
       <p>{{ alert.content }}</p>
     </div>
   </section>
+  <section class="section-box rostering-banner">
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-icon>location_on</mat-icon>
+        <strong>Looking to access Rostering?</strong>
+      </mat-expansion-panel-header>
+
+      <ng-template matExpansionPanelContent>
+        <mat-stepper orientation="vertical" #stepper>
+          <mat-step>
+            <ng-template matStepLabel>
+              <button
+                mat-flat-button
+                aria-labelledby="complete-personal-information"
+                [disabled]="demographics$ | async"
+                (click)="navigateTo()">
+                Enter your contact details
+              </button></ng-template
+            >
+          </mat-step>
+          <mat-step>
+            <ng-template matStepLabel>
+              <button
+                mat-flat-button
+                aria-labelledby="complete-college-licence"
+                [disabled]="collegeLicence$ | async"
+                (click)="navigateTo()">
+                Enter your College Licence
+              </button></ng-template
+            >
+          </mat-step>
+          <mat-step>
+            <ng-template matStepLabel>
+              <button
+                mat-flat-button
+                aria-labelledby="complete-bcprovider"
+                [disabled]="bcProvider$ | async"
+                (click)="navigateTo()">
+                Create a BC Provider Credential
+              </button>
+              <p *ngIf="bcProviderStatusCode === 2" class="adjust-text">
+                {{ bcProviderUsername }}
+              </p></ng-template
+            >
+          </mat-step>
+          <mat-step>
+            <ng-template matStepLabel>
+              <button
+                mat-flat-button
+                aria-labelledby="navigate-to-rostering"
+                (click)="navigateTo()">
+                Login to Rostering with your BC Provider
+              </button></ng-template
+            >
+          </mat-step>
+        </mat-stepper>
+      </ng-template>
+    </mat-expansion-panel>
+  </section>
   <ng-container *ngIf="state$ | async as state">
     <section class="profile-box section-box">
       <ui-scroll-target targetId="profile"></ui-scroll-target>

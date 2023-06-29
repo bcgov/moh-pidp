@@ -2889,12 +2889,7 @@ balanced-match@^1.0.0:
   resolved "https://registry.yarnpkg.com/balanced-match/-/balanced-match-1.0.2.tgz#e83e3a7e3f300b34cb9d87f615fa0cbf357690ee"
   integrity sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==
 
-base64-js@1.3.1:
-  version "1.3.1"
-  resolved "https://registry.yarnpkg.com/base64-js/-/base64-js-1.3.1.tgz#58ece8cb75dd07e71ed08c736abc5fac4dbf8df1"
-  integrity sha512-mLQ4i2QO1ytvGWFWmcngKO//JXAQueZvwEKtjgQFM4jIK0kU+ytMfplL8j+n5mspOfjHwoAg+9yhb7BwAHm36g==
-
-base64-js@^1.2.0, base64-js@^1.3.1:
+base64-js@^1.2.0, base64-js@^1.3.1, base64-js@^1.5.1:
   version "1.5.1"
   resolved "https://registry.yarnpkg.com/base64-js/-/base64-js-1.5.1.tgz#1b1b440160a5bf7ad40b650f095963481903930a"
   integrity sha512-AKpaYlHn8t4SVbOHCy+b5+KKgvR4vrsD8vbvrbiQJps7fKDTkjkDry6ji0rUJjC0kzbNePLwzxq8iypo41qeWA==
@@ -6221,7 +6216,7 @@ jest@27.2.3:
     import-local "^3.0.2"
     jest-cli "^27.2.3"
 
-js-sha256@0.9.0:
+js-sha256@^0.9.0:
   version "0.9.0"
   resolved "https://registry.yarnpkg.com/js-sha256/-/js-sha256-0.9.0.tgz#0b89ac166583e91ef9123644bd3c5334ce9d0966"
   integrity sha512-sga3MHh9sgQN2+pJ9VYZ+1LPwXOxuBJBA5nrR5/ofPfuiJBE2hnjsaN8se8JznOmGLN2p49Pe5U/ttafcs/apA==
@@ -6367,20 +6362,20 @@ karma-source-map-support@1.4.0:
   dependencies:
     source-map-support "^0.5.5"
 
-keycloak-angular@^9.0.0:
-  version "9.0.0"
-  resolved "https://registry.yarnpkg.com/keycloak-angular/-/keycloak-angular-9.0.0.tgz#079934d826158db5b7327d15d5f6d8a8ee57db1a"
-  integrity sha512-47ugycwEuheoVmeyQMnkW+s3dHzx3ipJ+88iDxhP+gPjVtV2s7lyNtUCw3dErHVTSbhqEhZJ8CrWwPk1qyiE5w==
+keycloak-angular@10.0.2:
+  version "10.0.2"
+  resolved "https://registry.yarnpkg.com/keycloak-angular/-/keycloak-angular-10.0.2.tgz#79fc4c68591b130cb59e366bb6a7631ad5b5d17b"
+  integrity sha512-gPYW/0jeLeMDG4X03mzeAqvpG8xcRk3Q7pwlfqp+q2PZddIPLjB0tXODtorC5DghARsv3OmClRLUS5KF/mSrgA==
   dependencies:
-    tslib "^2.0.0"
+    tslib "^2.3.0"
 
-keycloak-js@15.0.2:
-  version "15.0.2"
-  resolved "https://registry.yarnpkg.com/keycloak-js/-/keycloak-js-15.0.2.tgz#9d12dd8860953a267b9b18f351ad2e76b8e94a9c"
-  integrity sha512-dv2a4NcPSH3AzGWG3ZtB+VrHpuQLdFBYXtQBj/+oBzm6XNwnVAMdL6LIC0OzCLQpn3rKTQJtNSATAGhbKJgewQ==
+keycloak-js@18.0.1:
+  version "18.0.1"
+  resolved "https://registry.yarnpkg.com/keycloak-js/-/keycloak-js-18.0.1.tgz#0c6dedfa8bbb266bac1b16a14b032d65c6afd2d2"
+  integrity sha512-IRXToYpbIrkyfLeNNJly2OjUCf11ncx2Sdsg257NVDwjOYE923osu47w8pfxEVWpTaS14/Y2QjbTHciuBK0RBQ==
   dependencies:
-    base64-js "1.3.1"
-    js-sha256 "0.9.0"
+    base64-js "^1.5.1"
+    js-sha256 "^0.9.0"
 
 kind-of@^6.0.2:
   version "6.0.3"

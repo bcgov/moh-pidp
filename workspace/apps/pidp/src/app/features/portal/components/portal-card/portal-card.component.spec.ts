@@ -1,15 +1,22 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { By } from '@angular/platform-browser';
+import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 
-import { PortalCardComponent } from './portal-card.component';
-import { PrimaryCareRosteringPortalSection } from '../../state/access/primary-care-rostering-portal-section.class';
-import { ProfileStatus } from '../../models/profile-status.model';
-import { randEmail, randFirstName, randFullName, randLastName, randNumber, randPhoneNumber } from '@ngneat/falso';
-import { StatusCode } from '../../enums/status-code.enum';
-import { Router } from '@angular/router';
+import {
+  randEmail,
+  randFirstName,
+  randFullName,
+  randLastName,
+  randNumber,
+  randPhoneNumber,
+} from '@ngneat/falso';
 import { provideAutoSpy } from 'jest-auto-spies';
-import { By } from '@angular/platform-browser';
+
+import { StatusCode } from '../../enums/status-code.enum';
+import { ProfileStatus } from '../../models/profile-status.model';
+import { PrimaryCareRosteringPortalSection } from '../../state/access/primary-care-rostering-portal-section.class';
+import { PortalCardComponent } from './portal-card.component';
 
 describe('PortalCardComponent', () => {
   let component: PortalCardComponent;
@@ -22,8 +29,7 @@ describe('PortalCardComponent', () => {
       imports: [RouterTestingModule],
       declarations: [PortalCardComponent],
       providers: [provideAutoSpy(Router)],
-    })
-      .compileComponents();
+    }).compileComponents();
 
     router = TestBed.inject(Router);
 
@@ -58,7 +64,10 @@ describe('PortalCardComponent', () => {
         facilityDetails: { statusCode: StatusCode.AVAILABLE },
         endorsements: { statusCode: StatusCode.AVAILABLE },
         userAccessAgreement: { statusCode: StatusCode.AVAILABLE },
-        saEforms: { statusCode: StatusCode.AVAILABLE, incorrectLicenceType: false },
+        saEforms: {
+          statusCode: StatusCode.AVAILABLE,
+          incorrectLicenceType: false,
+        },
         prescriptionRefillEforms: { statusCode: StatusCode.AVAILABLE },
         'prescription-refill-eforms': { statusCode: StatusCode.AVAILABLE },
         bcProvider: { statusCode: StatusCode.AVAILABLE },
@@ -78,7 +87,9 @@ describe('PortalCardComponent', () => {
 
   describe('Primary Rostering Card', () => {
     given('the status code is NOT_AVAILABLE (locked in the backend)', () => {
-      component.section = new PrimaryCareRosteringPortalSection(mockProfileStatus);
+      component.section = new PrimaryCareRosteringPortalSection(
+        mockProfileStatus
+      );
 
       when('the component has been initialized', () => {
         fixture.detectChanges();
@@ -96,22 +107,30 @@ describe('PortalCardComponent', () => {
     });
 
     given('the status code is AVAILABLE (Incomplete in the backend)', () => {
-      mockProfileStatus.status.primaryCareRostering.statusCode = StatusCode.AVAILABLE;
-      component.section = new PrimaryCareRosteringPortalSection(mockProfileStatus);
+      mockProfileStatus.status.primaryCareRostering.statusCode =
+        StatusCode.AVAILABLE;
+      component.section = new PrimaryCareRosteringPortalSection(
+        mockProfileStatus
+      );
 
       when('the component has been initialized', () => {
         fixture.detectChanges();
 
-        then('the "Learn more" button should be hidden and the "Visit" button shown', () => {
-          expect(component.showLearnMore).toBeFalsy();
-          expect(component.showVisit).toBeTruthy();
-          expect(component.section.action.disabled).toBeFalsy();
-          expect(component.showCompleted).toBeFalsy();
+        then(
+          'the "Learn more" button should be hidden and the "Visit" button shown',
+          () => {
+            expect(component.showLearnMore).toBeFalsy();
+            expect(component.showVisit).toBeTruthy();
+            expect(component.section.action.disabled).toBeFalsy();
+            expect(component.showCompleted).toBeFalsy();
 
-          const linkVisit = fixture.debugElement.query(By.css('a'));
-          expect(linkVisit).not.toBeNull();
-          expect(linkVisit.attributes.href).toEqual('https://news.gov.bc.ca/releases/2022HLTH0212-001619');
-        });
+            const linkVisit = fixture.debugElement.query(By.css('a'));
+            expect(linkVisit).not.toBeNull();
+            expect(linkVisit.attributes.href).toEqual(
+              'https://bchealthprovider.ca'
+            );
+          }
+        );
       });
     });
   });

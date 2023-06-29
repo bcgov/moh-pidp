@@ -36,14 +36,10 @@ export class UserAccessAgreementPortalSection implements IPortalSection {
    * Get the properties that define the action on the section.
    */
   public get action(): PortalSectionAction {
-    const demographicsStatusCode =
-      this.profileStatus.status.demographics.statusCode;
     return {
       label: this.getStatusCode() === StatusCode.COMPLETED ? 'View' : 'Sign',
       route: ProfileRoutes.routePath(ProfileRoutes.USER_ACCESS_AGREEMENT),
-      disabled:
-        demographicsStatusCode !== StatusCode.COMPLETED ||
-        this.getStatusCode() === StatusCode.NOT_AVAILABLE,
+      disabled: this.getStatusCode() === StatusCode.NOT_AVAILABLE,
     };
   }
 
