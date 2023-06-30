@@ -10,6 +10,7 @@ using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.HttpClients.BCProvider;
 using Pidp.Infrastructure.HttpClients.Plr;
 using Pidp.Models;
+using Pidp.Models.Lookups;
 using PidpTests.TestingExtensions;
 
 public class BcProviderCreateTests : InMemoryDbTest
@@ -33,6 +34,11 @@ public class BcProviderCreateTests : InMemoryDbTest
                 IdentityProvider = IdentityProviders.BCServicesCard,
                 IdpId = expectedHpdid,
                 UserId = Guid.NewGuid()
+            });
+            party.AccessRequests.Add(new AccessRequest
+            {
+                AccessTypeCode = AccessTypeCode.UserAccessAgreement,
+                RequestedOn = Instant.FromDateTimeOffset(DateTimeOffset.Now)
             });
         });
         NewUserRepresentation? capturedNewUser = null;

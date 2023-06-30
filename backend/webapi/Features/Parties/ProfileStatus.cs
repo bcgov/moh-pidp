@@ -100,6 +100,7 @@ public partial class ProfileStatus
                     ProfileSection.Create<CollegeCertificationSection>(data),
                     ProfileSection.Create<DemographicsSection>(data),
                     ProfileSection.Create<EndorsementsSection>(data),
+                    ProfileSection.Create<UserAccessAgreementSection>(data),
                     ProfileSection.Create<OrganizationDetailsSection>(data),
                     ProfileSection.Create<DriverFitnessSection>(data),
                     ProfileSection.Create<HcimAccountTransferSection>(data),

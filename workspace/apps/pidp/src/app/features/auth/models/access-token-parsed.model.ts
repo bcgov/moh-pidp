@@ -5,7 +5,7 @@ import { IdentityProvider } from '../enums/identity-provider.enum';
 export interface AccessTokenParsed extends KeycloakTokenParsed {
   acr: string;
   'allowed-origins': string[];
-  aud: string[];
+  aud: string;
   auth_time: number;
   azp: string;
   iss: string;

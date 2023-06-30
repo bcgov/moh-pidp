@@ -1,3 +1,5 @@
+import { NavigationExtras } from '@angular/router';
+
 /**
  * @description
  * Properties of a portal section action.
@@ -14,6 +16,11 @@ export interface PortalSectionAction {
    * when invoked.
    */
   route: string;
+  /**
+   * @description
+   * URL parameters
+   */
+  navigationExtras?: NavigationExtras;
   /**
    * @description
    * Whether the action is enable or disabled
