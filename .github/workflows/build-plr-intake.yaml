@@ -1,10 +1,10 @@
-name: Build Frontend
+name: PLR Intake Backend
 
 on:
   push:
     branches: [workflows]
     paths:
-      - "workspace/**"
+      - "backend/**"
   workflow_dispatch:
 
 # This will terminate builds that are previously, but continuing to run.  Saves GHA hours.
@@ -13,32 +13,19 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build-and-deploy-frontend:
-    name: Frontend Build and Deploy
+  build-and-deploy-plr-intake:
+    name: PLR Intake Backend Build and Deploy
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: "./workspace"
+        working-directory: "./backend/services.plr-intake"
     steps:
       - name: "Checkout Code"
         uses: actions/checkout@master
 
-      - name: Use Node.js 16.x
-        uses: actions/setup-node@v2
-        with:
-          node-version: 16.x
-
-      - name: YARN Install
-        run: |
-          yarn install
-
-      - name: YARN Build
-        run: |
-          yarn build
-
       - name: "Docker Build"
         run: |
-          docker build -t image-registry.apps.silver.devops.gov.bc.ca/d8a8f9-tools/pidp-frontend:chris .
+          docker build -t image-registry.apps.silver.devops.gov.bc.ca/d8a8f9-tools/pidp-lpr-intake:chris .
 
       # Uses the builder service account token
       - name: "Docker Login to Silver OCP"
@@ -50,4 +37,4 @@ jobs:
 
       - name: "Push image"
         run: |
-          docker push image-registry.apps.silver.devops.gov.bc.ca/d8a8f9-tools/pidp-frontend:chris
+          docker push image-registry.apps.silver.devops.gov.bc.ca/d8a8f9-tools/pidp-lpr-intake:chris
