@@ -17,8 +17,8 @@ jobs:
     name: Frontend Build and Deploy
     runs-on: ubuntu-latest
     strategy:
-        os: [ubuntu-latest]
-        node-version: [16.x]
+      os: [ubuntu-latest]
+      node-version: [16.x]
     steps:
       - name: "Checkout Code"
         uses: actions/checkout@master
