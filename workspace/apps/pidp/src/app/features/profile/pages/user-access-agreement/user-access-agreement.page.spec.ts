@@ -65,7 +65,7 @@ describe('UserAccessAgreementPage', () => {
     mockAccessTokenParsed = {
       'allowed-origins': [],
       acr: '',
-      aud: [],
+      aud: '',
       auth_time: 0,
       azp: '',
       iss: '',
