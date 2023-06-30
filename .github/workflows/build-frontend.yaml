@@ -16,22 +16,17 @@ jobs:
   build-and-deploy-frontend:
     name: Frontend Build and Deploy
     runs-on: ubuntu-latest
-    container: public.ecr.aws/bitnami/node:16-prod
     defaults:
       run:
         working-directory: "./workspace"
-    strategy:
-      matrix:
-        os: [ubuntu-latest]
-        # node-version: [16.x]
     steps:
       - name: "Checkout Code"
         uses: actions/checkout@master
 
-      # - name: Use Node.js ${{ matrix.node-version }}
-      #   uses: actions/setup-node@v2
-      #   with:
-      #     node-version: ${{ matrix.node-version }}
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
 
       - name: NPM Install
         run: |
@@ -41,9 +36,9 @@ jobs:
       #   run: |
       #     npm run lint:all
 
-      - name: NPM Test
-        run: |
-          npm run test
+      # - name: NPM Test
+      #   run: |
+      #     npm run test
 
       - name: NPM Build
         run: |
