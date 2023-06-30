@@ -33,15 +33,15 @@ jobs:
           npm install
 
       - name: NPM Lint
-      run: |
+        run: |
         npm run lint:all
 
       - name: NPM Test
-      run: |
+        run: |
         npm run test
 
       - name: NPM Build
-      run: |
+        run: |
         npm run build
 
       - name: "Docker Build"
