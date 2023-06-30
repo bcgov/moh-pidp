@@ -28,21 +28,13 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
-      - name: NPM Install
+      - name: YARN Install
         run: |
-          npm install --legacy-peer-deps
+          yarn install
 
-      # - name: NPM Lint
-      #   run: |
-      #     npm run lint:all
-
-      # - name: NPM Test
-      #   run: |
-      #     npm run test
-
-      - name: NPM Build
+      - name: YARN Build
         run: |
-          npm run build
+          yarn build
 
       - name: "Docker Build"
         run: |
