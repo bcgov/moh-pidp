@@ -1,13 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { BehaviorSubject, Observable, map, of, switchMap, tap } from 'rxjs';
 
+import { APP_CONFIG, AppConfig } from '@app/app.config';
 import { PartyService } from '@app/core/party/party.service';
 import { Role } from '@app/shared/enums/roles.enum';
 
 import { BcProviderEditInitialStateModel } from '../access/pages/bc-provider-edit/bc-provider-edit.component';
 import { BcProviderEditResource } from '../access/pages/bc-provider-edit/bc-provider-edit.resource';
+import { AuthService } from '../auth/services/auth.service';
 import { EndorsementsResource } from '../organization-info/pages/endorsements/endorsements-resource.service';
 import { ProfileStatusAlert } from './models/profile-status-alert.model';
 import { ProfileStatus } from './models/profile-status.model';
@@ -48,18 +50,22 @@ export class PortalPage implements OnInit {
   public collegeLicenceStatusCode!: number | undefined;
   public bcProviderStatusCode!: number | undefined;
   public bcProviderUsername = '';
+  public logoutRedirectUrl: string;
 
   public constructor(
+    @Inject(APP_CONFIG) private config: AppConfig,
     private bcProviderResource: BcProviderEditResource,
     private router: Router,
     private partyService: PartyService,
     private portalResource: PortalResource,
     private portalService: PortalService,
     private endorsementsResource: EndorsementsResource,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private authService: AuthService
   ) {
     this.state$ = this.portalService.state$;
     this.alerts = [];
+    this.logoutRedirectUrl = `${this.config.applicationUrl}/`;
   }
 
   public navigateTo(): void {
@@ -90,6 +96,7 @@ export class PortalPage implements OnInit {
           this.bcProviderStatusCode === 2
         ) {
           this.navigateToExternalUrl('https://bchealthprovider.ca');
+          this.authService.logout(this.logoutRedirectUrl);
         }
       }
     );
