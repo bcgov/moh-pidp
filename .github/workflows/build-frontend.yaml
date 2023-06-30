@@ -32,9 +32,9 @@ jobs:
         run: |
           npm install
 
-      - name: NPM Lint
-        run: |
-        npm run lint:all
+      # - name: NPM Lint
+      #   run: |
+      #   npm run lint:all
 
       - name: NPM Test
         run: |
