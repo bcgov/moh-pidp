@@ -32,11 +32,11 @@ public class CredentialsController : PidpControllerBase
 
     [HttpPost("bc-provider")]
     [Authorize(Policy = Policies.BcscAuthentication)]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<string>> CreateBCProviderCredential([FromServices] ICommandHandler<BCProviderCreate.Command, IDomainResult<string>> handler,
-                                                                [FromHybrid] BCProviderCreate.Command command)
+                                                                       [FromHybrid] BCProviderCreate.Command command)
         => await this.AuthorizePartyBeforeHandleAsync(command.PartyId, handler, command)
             .ToActionResultOfT();
 
