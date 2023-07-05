@@ -130,7 +130,7 @@ public class BCProviderCreate
 
             await this.context.SaveChangesAsync();
 
-            return DomainResult.Success(createdUser.UserPrincipalName);
+            return DomainResult.Success(createdUser.UserPrincipalName!);
         }
     }
 }
