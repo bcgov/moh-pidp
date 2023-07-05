@@ -19,6 +19,7 @@ using Pidp.Infrastructure;
 using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.HttpClients;
 using Pidp.Infrastructure.Services;
+using MassTransit;
 
 public class Startup
 {
@@ -75,6 +76,18 @@ public class Startup
             options.CustomSchemaIds(x => x.FullName);
         });
         services.AddFluentValidationRulesToSwagger();
+
+        services.AddMassTransit(x =>
+            x.UsingRabbitMq((context, cfg) =>
+            {
+                cfg.Host("localhost", "/", h =>
+                {
+                    h.Username("guest");
+                    h.Password("guest");
+                });
+
+                cfg.ConfigureEndpoints(context);
+            }));
     }
 
     private PidpConfiguration InitializeConfiguration(IServiceCollection services)
