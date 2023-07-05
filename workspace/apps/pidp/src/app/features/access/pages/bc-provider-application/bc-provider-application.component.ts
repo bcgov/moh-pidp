@@ -1,3 +1,4 @@
+import { Element } from '@angular/compiler';
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { MatDialogConfig } from '@angular/material/dialog';
@@ -46,8 +47,7 @@ export class BcProviderApplicationComponent
   public showOverlayOnSubmit = false;
 
   @ViewChild('successDialog')
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  public successDialogTemplate!: TemplateRef<any>;
+  public successDialogTemplate!: TemplateRef<Element>;
 
   public get isEnrolButtonEnabled(): boolean {
     return this.formState.form.valid;
