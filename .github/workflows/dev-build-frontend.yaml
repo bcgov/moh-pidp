@@ -1,4 +1,4 @@
-name: Build Frontend
+name: Build Frontend - Dev
 
 on:
   pull_request:
@@ -54,6 +54,7 @@ jobs:
           docker push image-registry.apps.silver.devops.gov.bc.ca/d8a8f9-tools/pidp-frontend:dev
 
   helm-deployment:
+    needs: [build-and-deploy-frontend]
     runs-on: 'ubuntu-latest'
     steps:
     - uses: actions/checkout@v1

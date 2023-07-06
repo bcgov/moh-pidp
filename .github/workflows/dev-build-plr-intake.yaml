@@ -1,4 +1,4 @@
-name: Build PLR-Intake Backend
+name: Build PLR-Intake Backend - Dev
 
 on:
   push:
@@ -41,6 +41,7 @@ jobs:
           docker push image-registry.apps.silver.devops.gov.bc.ca/d8a8f9-tools/pidp-plr-intake:dev
   
   helm-deployment:
+    needs: [build-and-deploy-plr-intake]
     runs-on: 'ubuntu-latest'
     steps:
     - uses: actions/checkout@v1

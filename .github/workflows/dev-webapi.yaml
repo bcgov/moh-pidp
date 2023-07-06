@@ -1,4 +1,4 @@
-name: Build WebAPI
+name: Build WebAPI - Dev
 
 on:
   push:
@@ -41,6 +41,7 @@ jobs:
           docker push image-registry.apps.silver.devops.gov.bc.ca/d8a8f9-tools/pidp-webapi:dev
   
   helm-deployment:
+    needs: [build-and-deploy-webapi]
     runs-on: 'ubuntu-latest'
     steps:
     - uses: actions/checkout@v1
