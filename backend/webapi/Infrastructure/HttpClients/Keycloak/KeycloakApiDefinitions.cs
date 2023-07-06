@@ -67,7 +67,7 @@ public class Role
 }
 
 /// <summary>
-/// This is not the entire Keycloak User Representation! See https://www.keycloak.org/docs-api/5.0/rest-api/index.html#_userrepresentation.
+/// This is not the entire Keycloak User Representation! See https://www.keycloak.org/docs-api/18.0/rest-api/index.html#_userrepresentation.
 /// This is a sub-set of the properties so we don't accidentally overwrite anything when doing the PUT.
 /// </summary>
 public class UserRepresentation
@@ -78,6 +78,8 @@ public class UserRepresentation
     internal void SetLdapOrgDetails(LdapLoginResponse.OrgDetails orgDetails) => this.SetAttribute("org_details", JsonSerializer.Serialize(orgDetails, new JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }));
 
     public void SetCpn(string cpn) => this.SetAttribute("common_provider_number", cpn);
+
+    public void SetEmail(string email) => this.SetAttribute("pidp_email", email);
 
     public void SetPhone(string phone) => this.SetAttribute("phone", phone);
 

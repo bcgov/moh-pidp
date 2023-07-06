@@ -4,6 +4,7 @@ using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using FluentValidation;
 using HybridModelBinding;
+using MassTransit;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
@@ -11,6 +12,7 @@ using System.Text.Json.Serialization;
 using Pidp.Data;
 using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.HttpClients.BCProvider;
+using Pidp.Infrastructure.HttpClients.Keycloak;
 using Pidp.Models.DomainEvents;
 
 public class Demographics
@@ -78,12 +80,13 @@ public class Demographics
         public async Task HandleAsync(Command command)
         {
             var party = await this.context.Parties
+                .Include(party => party.Credentials)
                 .SingleAsync(party => party.Id == command.Id);
 
             if (party.Email != null
                 && party.Email != command.Email)
             {
-                party.DomainEvents.Add(new PartyEmailUpdated(party.Id, command.Email!));
+                party.DomainEvents.Add(new PartyEmailUpdated(party.Id, command.Email!, party.PrimaryUserId));
             }
 
             party.PreferredFirstName = command.PreferredFirstName;
@@ -99,14 +102,20 @@ public class Demographics
     public class PartyEmailUpdatedHandler : INotificationHandler<PartyEmailUpdated>
     {
         private readonly IBCProviderClient client;
+        private readonly IBus bus;
         private readonly PidpDbContext context;
         private readonly string bcProviderClientId;
 
-        public PartyEmailUpdatedHandler(IBCProviderClient client, PidpConfiguration config, PidpDbContext context)
+        public PartyEmailUpdatedHandler(
+            IBCProviderClient client,
+            IBus bus,
+            PidpConfiguration config,
+            PidpDbContext context)
         {
             this.client = client;
             this.context = context;
             this.bcProviderClientId = config.BCProviderClient.ClientId;
+            this.bus = bus;
         }
 
         public async Task Handle(PartyEmailUpdated notification, CancellationToken cancellationToken)
@@ -125,6 +134,37 @@ public class Demographics
             var bcProviderAttributes = new BCProviderAttributes(this.bcProviderClientId).SetPidpEmail(notification.NewEmail);
             await this.client.UpdateAttributes(bcProviderId, bcProviderAttributes.AsAdditionalData());
             // TODO: Log Failure?
+
+            await this.bus.Publish(notification, cancellationToken);
         }
     }
+
+    public class PartyEmailUpdatedConsumer : IConsumer<PartyEmailUpdated>
+    {
+        private readonly IKeycloakAdministrationClient keycloakClient;
+        private readonly ILogger<PartyEmailUpdatedConsumer> logger;
+
+        public PartyEmailUpdatedConsumer(
+            IKeycloakAdministrationClient keycloakClient,
+            ILogger<PartyEmailUpdatedConsumer> logger)
+        {
+            this.keycloakClient = keycloakClient;
+            this.logger = logger;
+        }
+
+        public async Task Consume(ConsumeContext<PartyEmailUpdated> context)
+        {
+            if (!await this.keycloakClient.UpdateUser(context.Message.userId, (user) => user.SetEmail(context.Message.NewEmail)))
+            {
+                this.logger.LogKeycloakEmailUpdateFailed(context.Message.userId);
+                // TODO: put the message in the queue again
+            }
+        }
+    }
+}
+
+public static partial class PartyEmailUpdatedConsumerLoggingExtensions
+{
+    [LoggerMessage(1, LogLevel.Error, "Error when updating the email to User #{userId}.")]
+    public static partial void LogKeycloakEmailUpdateFailed(this ILogger logger, Guid userId);
 }

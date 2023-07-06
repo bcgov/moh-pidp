@@ -20,6 +20,7 @@ using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.HttpClients;
 using Pidp.Infrastructure.Services;
 using MassTransit;
+using static Pidp.Features.Parties.Demographics;
 
 public class Startup
 {
@@ -78,6 +79,7 @@ public class Startup
         services.AddFluentValidationRulesToSwagger();
 
         services.AddMassTransit(x =>
+        {
             x.UsingRabbitMq((context, cfg) =>
             {
                 cfg.Host("localhost", "/", h =>
@@ -87,7 +89,9 @@ public class Startup
                 });
 
                 cfg.ConfigureEndpoints(context);
-            }));
+            });
+            x.AddConsumer<PartyEmailUpdatedConsumer>();
+        });
     }
 
     private PidpConfiguration InitializeConfiguration(IServiceCollection services)
