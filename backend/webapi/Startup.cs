@@ -80,6 +80,10 @@ public class Startup
 
         services.AddMassTransit(x =>
         {
+            x.SetKebabCaseEndpointNameFormatter();
+
+            x.AddConsumer<PartyEmailUpdatedConsumer, PartyEmailUpdatedConsumerDefinition>();
+
             x.UsingRabbitMq((context, cfg) =>
             {
                 cfg.Host("localhost", "/", h =>
@@ -90,7 +94,6 @@ public class Startup
 
                 cfg.ConfigureEndpoints(context);
             });
-            x.AddConsumer<PartyEmailUpdatedConsumer>();
         });
     }
 

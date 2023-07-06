@@ -135,7 +135,8 @@ public class Demographics
             await this.client.UpdateAttributes(bcProviderId, bcProviderAttributes.AsAdditionalData());
             // TODO: Log Failure?
 
-            await this.bus.Publish(notification, cancellationToken);
+            var endpoint = await this.bus.GetSendEndpoint(new Uri("queue:party-email-updated"));
+            await endpoint.Send(notification, cancellationToken);
         }
     }
 
@@ -157,8 +158,18 @@ public class Demographics
             if (!await this.keycloakClient.UpdateUser(context.Message.userId, (user) => user.SetEmail(context.Message.NewEmail)))
             {
                 this.logger.LogKeycloakEmailUpdateFailed(context.Message.userId);
-                // TODO: put the message in the queue again
+                throw new InvalidOperationException("Error Comunicating with Keycloak");
             }
+        }
+    }
+
+    public class PartyEmailUpdatedConsumerDefinition : ConsumerDefinition<PartyEmailUpdatedConsumer>
+    {
+        protected override void ConfigureConsumer(IReceiveEndpointConfigurator endpointConfigurator,
+            IConsumerConfigurator<PartyEmailUpdatedConsumer> consumerConfigurator)
+        {
+            endpointConfigurator.UseMessageRetry(r => r.Incremental(5, TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(30)));
+            endpointConfigurator.UseInMemoryOutbox();
         }
     }
 }
