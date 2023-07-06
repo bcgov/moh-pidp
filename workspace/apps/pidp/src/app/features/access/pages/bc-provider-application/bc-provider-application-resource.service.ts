@@ -2,8 +2,6 @@ import { Injectable } from '@angular/core';
 
 import { Observable, map } from 'rxjs';
 
-import { NoContent } from '@bcgov/shared/data-access';
-
 import { ApiHttpClient } from '@app/core/resources/api-http-client.service';
 import { ProfileStatus } from '@app/features/portal/models/profile-status.model';
 import { PortalResource } from '@app/features/portal/portal-resource.service';
@@ -26,10 +24,10 @@ export class BcProviderApplicationResource {
     password: string
   ): Observable<string> {
     return this.apiResource
-      .post<NoContent>(`${this.getResourcePath(partyId)}/bc-provider`, {
+      .post<string>(`${this.getResourcePath(partyId)}/bc-provider`, {
         password,
       })
-      .pipe(map((_) => ''));
+      .pipe(map((upn) => upn));
   }
 
   private getResourcePath(partyId: number): string {

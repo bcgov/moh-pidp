@@ -123,3 +123,28 @@
     </div>
   </form>
 </ng-template>
+
+<!-- TODO: Refactor into a separate component. -->
+<ng-template #successDialog>
+  <div class="dialog-box" uiPidpInjectViewportCss>
+    <div class="dialog-header">
+      <button
+        type="button"
+        aria-label="Close dialog"
+        (click)="onSuccessDialogClose()">
+        <fa-icon [icon]="faXmark"></fa-icon>
+      </button>
+    </div>
+    <div class="dialog-content">
+      <div class="dialog-icon">
+        <fa-icon [icon]="faCircleCheck"></fa-icon>
+      </div>
+      <h3>BC Provider account created</h3>
+      <p>
+        BC Provider account <strong>{{ username }}</strong> has been created.
+        You will now have the option to sign in to our system with these
+        credentials.
+      </p>
+    </div>
+  </div>
+</ng-template>
