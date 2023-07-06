@@ -11,7 +11,7 @@
     <mat-expansion-panel>
       <mat-expansion-panel-header>
         <mat-icon>location_on</mat-icon>
-        <strong>Looking to access Rostering?</strong>
+        <strong>Looking to access Provincial Attachment System?</strong>
       </mat-expansion-panel-header>
 
       <ng-template matExpansionPanelContent>
@@ -42,6 +42,17 @@
             <ng-template matStepLabel>
               <button
                 mat-flat-button
+                aria-labelledby="complete-uaa"
+                [disabled]="uaa$ | async"
+                (click)="navigateTo()">
+                Accept the User Access Agreement
+              </button></ng-template
+            >
+          </mat-step>
+          <mat-step>
+            <ng-template matStepLabel>
+              <button
+                mat-flat-button
                 aria-labelledby="complete-bcprovider"
                 [disabled]="bcProvider$ | async"
                 (click)="navigateTo()">
@@ -57,8 +68,9 @@
               <button
                 mat-flat-button
                 aria-labelledby="navigate-to-rostering"
+                [disabled]="rostering$ | async"
                 (click)="navigateTo()">
-                Login to Rostering with your BC Provider
+                Login to Provincial Attachment System with your BC Provider
               </button></ng-template
             >
           </mat-step>

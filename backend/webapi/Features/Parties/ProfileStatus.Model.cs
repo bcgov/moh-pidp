@@ -399,10 +399,12 @@ public partial class ProfileStatus
 
             protected override StatusCode Compute(ProfileData profile)
             {
-                if (profile.EndorsementPlrStanding.HasGoodStanding
+                if ((profile.EndorsementPlrStanding.HasGoodStanding
                     || profile.PartyPlrStanding
                         .With(ProviderRoleType.MedicalDoctor, ProviderRoleType.RegisteredNursePractitioner)
                         .HasGoodStanding)
+                    && profile.HasBCProviderCredential
+                    && profile.CompletedEnrolments.Contains(AccessTypeCode.UserAccessAgreement))
                 {
                     return StatusCode.Incomplete;
                 }
