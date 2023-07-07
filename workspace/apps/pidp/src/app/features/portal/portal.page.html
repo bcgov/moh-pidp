@@ -148,32 +148,8 @@
 
           <mat-step>
             <ng-template matStepLabel>
-              Login to Provincial Attachment System with your BCProvider
-            </ng-template>
-            <div>
-              <p class="guide-information">
-                Use your newly created BCProvider to login to the Provincial
-                Attachment System
-              </p>
-              <button
-                mat-flat-button
-                type="button"
-                color="primary"
-                aria-labelledby="navigate-to-rostering"
-                [disabled]="rostering$ | async"
-                (click)="navigateTo()">
-                Login to Provincial Attachment System with your BCProvider
-              </button>
-            </div>
-            <div class="stepper-buttons">
-              <button mat-button matStepperPrevious>Back</button>
-              <button mat-button matStepperNext>Next</button>
-            </div>
-          </mat-step>
-
-          <mat-step>
-            <ng-template matStepLabel>
               Invite non-licensed (MOA) to Provincial Attachment System
+              (Optional)
             </ng-template>
             <div>
               <ol class="guide-information" type="I">
@@ -199,6 +175,31 @@
                 aria-labelledby="navigate-to-endorsements"
                 [disabled]="rostering$ | async">
                 Endorsements
+              </button>
+            </div>
+            <div class="stepper-buttons">
+              <button mat-button matStepperPrevious>Back</button>
+              <button mat-button matStepperNext>Next</button>
+            </div>
+          </mat-step>
+
+          <mat-step>
+            <ng-template matStepLabel>
+              Login to Provincial Attachment System with your BCProvider
+            </ng-template>
+            <div>
+              <p class="guide-information">
+                Use your newly created BCProvider to login to the Provincial
+                Attachment System
+              </p>
+              <button
+                mat-flat-button
+                type="button"
+                color="primary"
+                aria-labelledby="navigate-to-rostering"
+                [disabled]="rostering$ | async"
+                (click)="navigateTo()">
+                Login to Provincial Attachment System with your BCProvider
               </button>
             </div>
             <div class="stepper-buttons">
