@@ -14,6 +14,12 @@ import { EndorsementsResource } from '../organization-info/pages/endorsements/en
 import { ProfileStatusAlert } from './models/profile-status-alert.model';
 import { ProfileStatus } from './models/profile-status.model';
 import { PortalResource } from './portal-resource.service';
+import {
+  bcProviderTutorialLink,
+  collegeLicenceTutorialLink,
+  personalInfoTutorialLink,
+  uaaTutorialLink,
+} from './portal.constants';
 import { PortalService } from './portal.service';
 import { IPortalSection } from './state/portal-section.model';
 import { PortalState } from './state/portal-state.builder';
@@ -57,6 +63,10 @@ export class PortalPage implements OnInit {
   public rosteringStatusCode!: number | undefined;
   public bcProviderUsername = '';
   public logoutRedirectUrl: string;
+  public personalInfoTutorial: string;
+  public collegeLicenceTutorial: string;
+  public uaaTutorial: string;
+  public bcProviderTutorial: string;
 
   public constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
@@ -72,6 +82,10 @@ export class PortalPage implements OnInit {
     this.state$ = this.portalService.state$;
     this.alerts = [];
     this.logoutRedirectUrl = `${this.config.applicationUrl}/`;
+    this.personalInfoTutorial = personalInfoTutorialLink;
+    this.collegeLicenceTutorial = collegeLicenceTutorialLink;
+    this.uaaTutorial = uaaTutorialLink;
+    this.bcProviderTutorial = bcProviderTutorialLink;
   }
 
   public navigateTo(): void {
