@@ -6,3 +6,4 @@ import { Component } from '@angular/core';
   styleUrls: ['./faq.component.scss'],
 })
 export class FaqComponent {}
+//TODO probably trash this
