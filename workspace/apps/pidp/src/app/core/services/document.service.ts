@@ -127,8 +127,15 @@ export class DocumentService {
       The Provider Identity Portal collects personal information for the purposes of verification and access
       to participating health systems. This is collected by the Ministry of Health under sections 26(c) and
       27(1)(b) of the Freedom of Information and Protection of Privacy Act. Should you have any questions
-      about the collection of this personal information, contact
-      <a href="mailto:${this.config.emails.providerIdentitySupport}">${this.config.emails.providerIdentitySupport}</a>.
+      about the collection of this personal information, contact the OneHealthID Service desk:
+      <ul>
+        <li>
+          By email at <a href="mailto:${this.config.emails.additionalSupport}">${this.config.emails.additionalSupport}</a>
+        </li>
+        <li>
+          By phone at <a href="tel:${this.config.phones.additionalSupport}">${this.config.phones.additionalSupport}</a>
+        </li>
+      </ul>
     `;
   }
 

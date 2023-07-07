@@ -37,7 +37,7 @@ export const environment: AppEnvironment = {
     isLayoutV2Enabled: false,
   },
   emails: {
-    providerIdentitySupport: 'provideridentityportal@gov.bc.ca',
+    providerIdentitySupport: 'AMSSPOC.vic@CGI.com',
     specialAuthorityEformsSupport: specialAuthorityEformsSupportEmail,
     hcimAccountTransferSupport: hcimWebAccountTransferSupport,
     hcimEnrolmentSupport: hcimWebEnrolmentSupport,
