@@ -79,6 +79,8 @@ public class UserRepresentation
 
     public void SetCpn(string cpn) => this.SetAttribute("common_provider_number", cpn);
 
+    public void SetEmail(string email) => this.SetAttribute("pidp_email", email);
+
     public void SetPhone(string phone) => this.SetAttribute("phone", phone);
 
     public void SetPhoneNumber(string phoneNumber) => this.SetAttribute("phoneNumber", phoneNumber);
