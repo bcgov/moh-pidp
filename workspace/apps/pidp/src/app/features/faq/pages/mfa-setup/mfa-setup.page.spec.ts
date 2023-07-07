@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { MfaSetupComponent } from './mfa-setup.component';
+import { MfaSetupPage } from './mfa-setup.page';
 
-describe('MfaSetupComponent', () => {
-  let component: MfaSetupComponent;
-  let fixture: ComponentFixture<MfaSetupComponent>;
+describe('MfaSetupPage', () => {
+  let component: MfaSetupPage;
+  let fixture: ComponentFixture<MfaSetupPage>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ MfaSetupComponent ]
+      declarations: [ MfaSetupPage ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(MfaSetupComponent);
+    fixture = TestBed.createComponent(MfaSetupPage);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

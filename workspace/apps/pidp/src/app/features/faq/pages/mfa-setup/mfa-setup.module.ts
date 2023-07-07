@@ -1,17 +1,12 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
+import { SharedModule } from '@app/shared/shared.module';
 
 import { MfaSetupRoutingModule } from './mfa-setup-routing.module';
-import { MfaSetupComponent } from './mfa-setup.component';
-
+import { MfaSetupPage } from './mfa-setup.page';
 
 @NgModule({
-  declarations: [
-    MfaSetupComponent
-  ],
-  imports: [
-    CommonModule,
-    MfaSetupRoutingModule
-  ]
+  declarations: [MfaSetupPage],
+  imports: [SharedModule, MfaSetupRoutingModule],
 })
-export class MfaSetupModule { }
+export class MfaSetupModule {}
