@@ -11,8 +11,8 @@ using System.Text.Json.Serialization;
 using Pidp.Data;
 using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.HttpClients.BCProvider;
-using Pidp.Models.DomainEvents;
 using Pidp.Infrastructure.HttpClients.Keycloak;
+using Pidp.Models.DomainEvents;
 
 public class Demographics
 {
