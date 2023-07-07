@@ -1,14 +1,9 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-
-
 import { SetDashboardTitleGuard } from '@pidp/presentation';
 
-
-
 import { MfaSetupPage } from './mfa-setup.page';
-
 
 const routes: Routes = [
   {
@@ -16,7 +11,7 @@ const routes: Routes = [
     component: MfaSetupPage,
     canActivate: [SetDashboardTitleGuard],
     data: {
-      title: 'BCProvider AD Multi-factor Authentication (MFA) Setup',
+      title: 'Provider Identity Portal',
       routes: {
         root: '../../',
       },

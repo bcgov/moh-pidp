@@ -7,11 +7,7 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrls: ['./mfa-setup.page.scss'],
 })
 export class MfaSetupPage {
-  public title: string;
-
-  public constructor(private route: ActivatedRoute, private router: Router) {
-    this.title = route.snapshot.data.title;
-  }
+  public constructor(private route: ActivatedRoute, private router: Router) {}
 
   public onBack(): void {
     this.navigateToRoot();
