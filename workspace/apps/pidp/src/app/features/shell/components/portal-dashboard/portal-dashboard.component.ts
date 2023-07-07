@@ -178,6 +178,15 @@ export class PortalDashboardComponent implements IDashboard, OnInit {
         },
         'help_outline'
       ),
+      new DashboardRouteMenuItem(
+        'FAQ',
+        {
+          commands: PortalRoutes.MODULE_PATH,
+          extras: { fragment: 'faq' },
+          linkActiveOptions,
+        },
+        'help_outline'
+      ),
     ];
   }
   private getUserFullNameText(profileStatus: ProfileStatus | null): string {
