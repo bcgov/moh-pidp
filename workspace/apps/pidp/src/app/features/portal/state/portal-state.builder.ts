@@ -18,6 +18,7 @@ import { PrimaryCareRosteringPortalSection } from './access/primary-care-rosteri
 import { ProviderReportingPortalSection } from './access/provider-reporting-portal-section.class';
 import { SaEformsPortalSection } from './access/sa-eforms-portal-section.class';
 import { SitePrivacySecurityPortalSection } from './access/site-privacy-security-checklist-portal-section.class';
+import { MfaSetupPortalSection } from './faq/mfa-setup-portal-section.class';
 import { SignedAcceptedDocumentsPortalSection } from './history/signed-accepted-documents-portal-section.class';
 import { TransactionsPortalSection } from './history/transactions-portal-section.class';
 import { AdministratorInfoPortalSection } from './organization/administrator-information-portal-section';
@@ -42,6 +43,7 @@ export const portalStateGroupKeys = [
   'organization',
   'training',
   'history',
+  'faq',
 ] as const;
 
 /**
@@ -68,6 +70,7 @@ export class PortalStateBuilder {
       organization: this.createOrganizationGroup(profileStatus),
       training: this.createTrainingGroup(profileStatus),
       history: this.createHistoryGroup(),
+      faq: this.createFaqGroup(),
     };
   }
 
@@ -200,6 +203,10 @@ export class PortalStateBuilder {
       new SignedAcceptedDocumentsPortalSection(this.router),
       new TransactionsPortalSection(this.router),
     ];
+  }
+
+  private createFaqGroup(): IPortalSection[] {
+    return [new MfaSetupPortalSection(this.router)];
   }
 
   private insertSection(

@@ -1,11 +1,16 @@
 namespace PidpTests.Features.Parties;
 
 using FakeItEasy;
+using NodaTime;
 using Xunit;
 
 using static Pidp.Features.Parties.ProfileStatus;
 using static Pidp.Features.Parties.ProfileStatus.Model;
+using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.HttpClients.Plr;
+using Pidp.Models;
+using Pidp.Models.Lookups;
+
 using PidpTests.TestingExtensions;
 
 public class ProfileStatusPrimaryCareRosteringTests : ProfileStatusTest
@@ -15,6 +20,19 @@ public class ProfileStatusPrimaryCareRosteringTests : ProfileStatusTest
     public async void HandleAsync_RosteringProviderRoleAuthorized_Incomplete(PlrStandingsDigest digest, PlrStandingsDigest aggregateDigest)
     {
         var party = this.TestDb.Has(AParty.WithLicenceDeclared());
+        this.TestDb.Has(new AccessRequest
+        {
+            AccessTypeCode = AccessTypeCode.UserAccessAgreement,
+            RequestedOn = Instant.FromDateTimeOffset(DateTimeOffset.Now),
+            PartyId = party.Id
+        });
+        this.TestDb.Has(new Credential
+        {
+            UserId = Guid.NewGuid(),
+            IdentityProvider = IdentityProviders.BCProvider,
+            IdpId = "idpId",
+            PartyId = party.Id
+        });
         var client = A.Fake<IPlrClient>()
             .ReturningMultipleStandingsDigests(digest, aggregateDigest);
         var handler = this.MockDependenciesFor<CommandHandler>(client);
