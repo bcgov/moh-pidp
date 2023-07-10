@@ -3,10 +3,18 @@
   [allowMobileToggle]="headerConfig.allowMobileToggle"></ui-dashboard-header>
 <div>
   <h1>An error has occurred</h1>
-  <p>
-    Need support? Contact
-    <a uiAnchor scheme="mailto" [href]="providerIdentitySupportEmail"></a>
-  </p>
+  For additional support, contact the OneHealthID Service desk:
+  <ul>
+    <li>
+      By email at
+      <a uiAnchor scheme="mailto" [attr.href]="additionalSupportEmail"></a>
+    </li>
+
+    <li>
+      By phone at
+      <a uiAnchor scheme="tel" [attr.href]="additionalSupportPhone"></a>
+    </li>
+  </ul>
 
   <span>
     <button mat-flat-button type="button" color="primary" (click)="onBack()">

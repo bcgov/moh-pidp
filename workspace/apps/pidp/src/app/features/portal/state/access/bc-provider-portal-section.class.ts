@@ -25,7 +25,7 @@ export class BcProviderPortalSection implements IPortalSection {
   ) {
     this.key = 'bcProvider';
     this.heading = 'BC Provider';
-    this.description = ``;
+    this.description = `A reusable credential for access to health data in BC.`;
   }
 
   public get hint(): string {
