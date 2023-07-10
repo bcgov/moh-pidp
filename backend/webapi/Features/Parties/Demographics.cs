@@ -155,7 +155,7 @@ public class Demographics
 
         public async Task Consume(ConsumeContext<PartyEmailUpdated> context)
         {
-            if (!await this.keycloakClient.UpdateUser(context.Message.userId, (user) => user.SetEmail(context.Message.NewEmail)))
+            if (!await this.keycloakClient.UpdateUser(context.Message.userId, (user) => user.SetPidpEmail(context.Message.NewEmail)))
             {
                 this.logger.LogKeycloakEmailUpdateFailed(context.Message.userId);
                 throw new InvalidOperationException("Error Comunicating with Keycloak");
