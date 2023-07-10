@@ -11,6 +11,7 @@ using System.Text.Json.Serialization;
 using Pidp.Data;
 using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.HttpClients.BCProvider;
+using Pidp.Infrastructure.HttpClients.Keycloak;
 using Pidp.Models.DomainEvents;
 
 public class Demographics
@@ -78,12 +79,13 @@ public class Demographics
         public async Task HandleAsync(Command command)
         {
             var party = await this.context.Parties
+                .Include(party => party.Credentials)
                 .SingleAsync(party => party.Id == command.Id);
 
             if (party.Email != null
                 && party.Email != command.Email)
             {
-                party.DomainEvents.Add(new PartyEmailUpdated(party.Id, command.Email!));
+                party.DomainEvents.Add(new PartyEmailUpdated(party.Id, party.PrimaryUserId, command.Email!));
             }
 
             party.PreferredFirstName = command.PreferredFirstName;
@@ -98,13 +100,19 @@ public class Demographics
 
     public class PartyEmailUpdatedHandler : INotificationHandler<PartyEmailUpdated>
     {
-        private readonly IBCProviderClient client;
+        private readonly IBCProviderClient bcProviderClient;
+        private readonly IKeycloakAdministrationClient keycloakClient;
         private readonly PidpDbContext context;
         private readonly string bcProviderClientId;
 
-        public PartyEmailUpdatedHandler(IBCProviderClient client, PidpConfiguration config, PidpDbContext context)
+        public PartyEmailUpdatedHandler(
+            IBCProviderClient bcProviderClient,
+            IKeycloakAdministrationClient keycloakClient,
+            PidpConfiguration config,
+            PidpDbContext context)
         {
-            this.client = client;
+            this.bcProviderClient = bcProviderClient;
+            this.keycloakClient = keycloakClient;
             this.context = context;
             this.bcProviderClientId = config.BCProviderClient.ClientId;
         }
@@ -123,8 +131,9 @@ public class Demographics
             }
 
             var bcProviderAttributes = new BCProviderAttributes(this.bcProviderClientId).SetPidpEmail(notification.NewEmail);
-            await this.client.UpdateAttributes(bcProviderId, bcProviderAttributes.AsAdditionalData());
-            // TODO: Log Failure?
+            await this.bcProviderClient.UpdateAttributes(bcProviderId, bcProviderAttributes.AsAdditionalData());
+
+            await this.keycloakClient.UpdateUser(notification.UserId, (user) => user.SetPidpEmail(notification.NewEmail));
         }
     }
 }
