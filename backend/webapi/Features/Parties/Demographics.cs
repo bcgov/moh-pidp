@@ -86,7 +86,7 @@ public class Demographics
             if (party.Email != null
                 && party.Email != command.Email)
             {
-                party.DomainEvents.Add(new PartyEmailUpdated(party.Id, command.Email!, party.PrimaryUserId));
+                party.DomainEvents.Add(new PartyEmailUpdated(party.Id, party.PrimaryUserId, command.Email!));
             }
 
             party.PreferredFirstName = command.PreferredFirstName;
@@ -101,18 +101,19 @@ public class Demographics
 
     public class PartyEmailUpdatedHandler : INotificationHandler<PartyEmailUpdated>
     {
-        private readonly IBCProviderClient client;
         private readonly IBus bus;
+        private readonly IBCProviderClient bcProviderClient;
         private readonly PidpDbContext context;
         private readonly string bcProviderClientId;
 
         public PartyEmailUpdatedHandler(
-            IBCProviderClient client,
+            IBCProviderClient bcProviderClient,
             IBus bus,
             PidpConfiguration config,
             PidpDbContext context)
         {
-            this.client = client;
+            this.bcProviderClient = bcProviderClient;
+            this.keycloakClient = keycloakClient;
             this.context = context;
             this.bcProviderClientId = config.BCProviderClient.ClientId;
             this.bus = bus;
