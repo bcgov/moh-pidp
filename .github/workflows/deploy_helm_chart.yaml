@@ -1,0 +1,143 @@
+
+
+# From pipeline file
+
+## Pipeline global params
+
+params:
+    - name: git-url
+    - name: git-revision
+      default: develop
+    - name: git-short-sha
+    - name: image-registry
+      default: image-registry.openshift-image-registry.svc:5000/d8a8f9-tools
+    - name: image-tag
+      default: develop
+    - name: release_name
+      default: dev
+    - name: release_namespace
+      default: d8a8f9-dev
+    - name: release_version
+      default: "v0.1.0"
+    - name: values_file
+      default: deploy/dev_values.yaml
+
+## Task params
+- name: install-upgrade
+workspaces:
+  - name: source
+    workspace: source
+params:
+- name: charts_dir
+  value: ./moh-pidp/charts/pidp
+- name: release_version
+  value: $(params.release_version)
+- name: release_name
+  value: $(params.release_name)
+- name: release_namespace
+  value: $(params.release_namespace)
+- name: overwrite_values
+  value: global.image.tag=$(params.image-tag),global.commit_sha=$(params.git-short-sha)
+- name: values_file
+  value: moh-pidp/$(params.values_file)
+taskRef:
+  name: helm-upgrade-from-source
+runAfter: 
+  - git-clone
+  - build-plr-intake
+  - build-frontend-image
+  - build-webapi
+
+# From task file
+
+params:
+    - name: charts_dir
+      description: The directory in source that contains the helm chart
+    - name: release_version
+      description: The helm release version in semantic versioning format
+      default: "v1.0.0"
+    - name: release_name
+      description: The helm release name
+      default: "helm-release"
+    - name: release_namespace
+      description: The helm release namespace
+      default: ""
+    - name: overwrite_values
+      description: "Specify the values you want to overwrite, comma separated: autoscaling.enabled=true,replicas=1"
+      default: ""
+    - name: values_file
+      description: "The values file to be used"
+      default: "values.yaml"
+    - name: helm_image
+      description: "helm image to be used"
+      default: "docker.io/lachlanevenson/k8s-helm@sha256:5c792f29950b388de24e7448d378881f68b3df73a7b30769a6aa861061fd08ae" #tag: v3.6.0
+    - name: upgrade_extra_params
+      description: "Extra parameters passed for the helm upgrade command"
+      default: ""
+  workspaces:
+    - name: source
+  steps:
+    - name: upgrade
+      image: $(params.helm_image)
+      workingDir: /workspace/source
+      script: |
+        echo current installed helm releases
+        helm list --namespace "$(params.release_namespace)"
+
+        echo installing helm chart...
+        helm upgrade --install --wait --values "$(params.values_file)" --namespace "$(params.release_namespace)" --version "$(params.release_version)" "$(params.release_name)" "$(params.charts_dir)" --debug --set "$(params.overwrite_values)" $(params.upgrade_extra_params)
+
+
+# Ideas
+
+# i) We have to have a build and install process based on github release numbers (corresponding to PR releases) and build/install process based on merges to branches
+
+# ii) We should be promoting images, rather than building the application image multiple times. This will drastically reduce build / deploy times
+
+
+
+
+# 1) We have a single helm install script, that on any trigger to any environment, merges to that env: total of 3 build scripts and 1 helm script
+
+# This would not work. It would violate rule i), since there would not be a way to build / deploy for PRs and for merges to dev/test/main
+
+
+# 2) We embed the helm install into each build script, and base it on the branch to merge into the env: total of 3 build scripts
+
+# This wouldn't work for the same reason as #1
+
+
+# 3) We embed the helm install into each build script, one for each service for each env, and then merge into the appropriate env: total of 9 build scripts
+
+
+
+# 4) We have a single helm install script that watches for changes from each build script for each environment and installs to the appropriate env: 9 build scripts and 3 helm scripts
+
+
+
+
+
+# 5) We have a helm install script for each service for each environment: 9 build scripts and 9 helm install scripts
+
+
+## How to do PR vs. env deploys
+
+
+# 6) 1 build script for building Prs, 1 build script for each service for each env
+
+
+# 7) build scripts for each service in prs, build scripts for each service per env 
+
+
+# 8) 1 build script to build all services for pr, 1 build script to build all services for each env: total of 1 pr script, 3 build/install scripts
+
+
+
+
+# Proposed setup
+
+# 1 script per service per env: 3 scripts for pr, 3 scripts for dev, 3 scripts for test, 3 scripts for prod
+
+# Each script contains the helm install step
+
+# The pr scripts and the dev scripts contain the step to build the artifact, the test and prod scripts will promote the dev and test images respectively. 

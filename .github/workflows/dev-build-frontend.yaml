@@ -64,10 +64,14 @@ jobs:
         release: 'frontend'
         namespace: 'd8a8f9-dev'
         chart: 'charts/pidp/frontend**'
-        # token: '${{ github.token }}'
-        # values: |
-        #   name: foobar
         value-files: "deploy/dev_values.yaml"
+    
+    
+    - name: Helm install command
+      run: |
+        echo current installed helm releases
+        helm list --namespace d8a8f9-dev
 
-  #     env:
-  #       KUBECONFIG_FILE: '${{ secrets.KUBECONFIG }}'
+        echo installing helm chart...
+        helm upgrade --install --wait --values deploy/dev_values.yaml --namespace d8a8f9-dev --version 1.0 \
+        frontend charts/pidp/ --debug 

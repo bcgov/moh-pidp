@@ -39,6 +39,11 @@ jobs:
       run: |
         helm uninstall pr-${{ github.event.number }}
 
+    - name: Remove PR imagestream
+      run: |
+        oc tag -d pr-${{ github.event.number }}
+
+
   merge_job:
       # this job will only run if the PR has been merged
       if: github.event.pull_request.merged == true
