@@ -18,7 +18,9 @@ import {
   createSpyFromClass,
   provideAutoSpy,
 } from 'jest-auto-spies';
+import { KeycloakService } from 'keycloak-angular';
 
+import { APP_CONFIG, APP_DI_CONFIG } from '@app/app.config';
 import { PartyService } from '@app/core/party/party.service';
 
 import { BcProviderEditInitialStateModel } from '../access/pages/bc-provider-edit/bc-provider-edit.component';
@@ -58,6 +60,10 @@ describe('PortalPage', () => {
       providers: [
         PortalPage,
         {
+          provide: APP_CONFIG,
+          useValue: APP_DI_CONFIG,
+        },
+        {
           provide: ActivatedRoute,
           useValue: mockActivatedRoute,
         },
@@ -79,6 +85,7 @@ describe('PortalPage', () => {
         },
         provideAutoSpy(BcProviderEditResource),
         provideAutoSpy(EndorsementsResource),
+        provideAutoSpy(KeycloakService),
       ],
     });
 
