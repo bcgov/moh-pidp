@@ -57,7 +57,15 @@ jobs:
     needs: [build-and-deploy-frontend]
     runs-on: 'ubuntu-latest'
     steps:
-    #- uses: actions/checkout@v1    
+    #- uses: actions/checkout@v1 
+
+    - name: Authenticate and set context
+      uses: redhat-actions/oc-login@v1.1
+      with:
+        openshift_server_url: ${{secrets.OPENSHIFT_CLUSTER_URL}}
+        openshift_token: ${{secrets.OPENSHIFT_TOKEN}}
+        namespace: d8a8f9-dev
+
     - name: Helm Deploy / install command
       run: |
         echo current installed helm releases
