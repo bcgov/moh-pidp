@@ -133,7 +133,7 @@ public class Demographics
             var bcProviderAttributes = new BCProviderAttributes(this.bcProviderClientId).SetPidpEmail(notification.NewEmail);
             await this.bcProviderClient.UpdateAttributes(bcProviderId, bcProviderAttributes.AsAdditionalData());
 
-            await this.keycloakClient.UpdateUser(notification.UserId, (user) => user.SetEmail(notification.NewEmail));
+            await this.keycloakClient.UpdateUser(notification.UserId, (user) => user.SetPidpEmail(notification.NewEmail));
         }
     }
 }
