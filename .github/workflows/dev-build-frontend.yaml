@@ -57,17 +57,8 @@ jobs:
     needs: [build-and-deploy-frontend]
     runs-on: 'ubuntu-latest'
     steps:
-    - uses: actions/checkout@v1
-    - name: 'Deploy'
-      uses: 'deliverybot/helm@v1'
-      with:
-        release: 'frontend'
-        namespace: 'd8a8f9-dev'
-        chart: 'charts/pidp/frontend**'
-        value-files: "deploy/dev_values.yaml"
-    
-    
-    - name: Helm install command
+    #- uses: actions/checkout@v1    
+    - name: Helm Deploy / install command
       run: |
         echo current installed helm releases
         helm list --namespace d8a8f9-dev
