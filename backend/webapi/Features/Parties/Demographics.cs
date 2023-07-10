@@ -113,7 +113,6 @@ public class Demographics
             PidpDbContext context)
         {
             this.bcProviderClient = bcProviderClient;
-            this.keycloakClient = keycloakClient;
             this.context = context;
             this.bcProviderClientId = config.BCProviderClient.ClientId;
             this.bus = bus;
@@ -133,8 +132,7 @@ public class Demographics
             }
 
             var bcProviderAttributes = new BCProviderAttributes(this.bcProviderClientId).SetPidpEmail(notification.NewEmail);
-            await this.client.UpdateAttributes(bcProviderId, bcProviderAttributes.AsAdditionalData());
-            // TODO: Log Failure?
+            await this.bcProviderClient.UpdateAttributes(bcProviderId, bcProviderAttributes.AsAdditionalData());
 
             var endpoint = await this.bus.GetSendEndpoint(new Uri("queue:party-email-updated"));
             await endpoint.Send(notification, cancellationToken);
@@ -156,9 +154,9 @@ public class Demographics
 
         public async Task Consume(ConsumeContext<PartyEmailUpdated> context)
         {
-            if (!await this.keycloakClient.UpdateUser(context.Message.userId, (user) => user.SetPidpEmail(context.Message.NewEmail)))
+            if (!await this.keycloakClient.UpdateUser(context.Message.UserId, (user) => user.SetPidpEmail(context.Message.NewEmail)))
             {
-                this.logger.LogKeycloakEmailUpdateFailed(context.Message.userId);
+                this.logger.LogKeycloakEmailUpdateFailed(context.Message.UserId);
                 throw new InvalidOperationException("Error Comunicating with Keycloak");
             }
         }
