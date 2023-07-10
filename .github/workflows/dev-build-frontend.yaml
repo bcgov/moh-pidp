@@ -72,5 +72,4 @@ jobs:
         helm list --namespace d8a8f9-dev
 
         echo installing helm chart...
-        helm upgrade --install --wait --values deploy/dev_values.yaml --namespace d8a8f9-dev --version 1.0 \
-        frontend charts/pidp/ --debug 
+        helm upgrade --install --wait --values deploy/dev_values.yaml --namespace d8a8f9-dev --version v1.0.0 frontend charts/pidp/charts/ --debug 
