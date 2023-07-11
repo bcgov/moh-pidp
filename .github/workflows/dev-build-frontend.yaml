@@ -53,23 +53,6 @@ jobs:
         run: |
           docker push image-registry.apps.silver.devops.gov.bc.ca/d8a8f9-tools/pidp-frontend:dev
 
-  helm-deployment:
+  call-helm-install-workflow:    
     needs: [build-and-deploy-frontend]
-    runs-on: 'ubuntu-latest'
-    steps:
-    - uses: actions/checkout@v1 
-
-    - name: Authenticate and set context
-      uses: redhat-actions/oc-login@v1.1
-      with:
-        openshift_server_url: ${{secrets.OPENSHIFT_CLUSTER_URL}}
-        openshift_token: ${{secrets.OPENSHIFT_TOKEN}}
-        namespace: d8a8f9-dev
-
-    - name: Helm Deploy / install command
-      run: |
-        echo current installed helm releases
-        helm list --namespace d8a8f9-dev
-
-        echo installing helm chart...
-        helm upgrade --install --wait --values ./deploy/dev_values.yaml --namespace d8a8f9-dev dev charts/pidp --debug 
+    uses: ./.github/workflows/dev-deploy_helm_chart.yaml  
