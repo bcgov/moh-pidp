@@ -78,23 +78,7 @@ public class Startup
         });
         services.AddFluentValidationRulesToSwagger();
 
-        services.AddMassTransit(x =>
-        {
-            x.SetKebabCaseEndpointNameFormatter();
-
-            x.AddConsumer<PartyEmailUpdatedConsumer, PartyEmailUpdatedConsumerDefinition>();
-
-            x.UsingRabbitMq((context, cfg) =>
-            {
-                cfg.Host("localhost", "/", h =>
-                {
-                    h.Username("guest");
-                    h.Password("guest");
-                });
-
-                cfg.ConfigureEndpoints(context);
-            });
-        });
+        ConfigureMassTransit(services, config);
     }
 
     private PidpConfiguration InitializeConfiguration(IServiceCollection services)
@@ -136,6 +120,29 @@ public class Startup
         {
             endpoints.MapControllers();
             endpoints.MapHealthChecks("/health/liveness").AllowAnonymous();
+        });
+    }
+
+    private static void ConfigureMassTransit(IServiceCollection services, PidpConfiguration config)
+    {
+        services.AddMassTransit(x =>
+        {
+            x.SetKebabCaseEndpointNameFormatter();
+
+            // TODO: reuse the same ConsumerDefinition
+            x.AddConsumer<PartyEmailUpdatedKeycloakConsumer, PartyEmailUpdatedConsumerDefinition>();
+            x.AddConsumer<PartyEmailUpdatedBcProviderConsumer>();
+
+            x.UsingRabbitMq((context, cfg) =>
+            {
+                cfg.Host(new Uri(config.RabbitMQ.HostAddress));
+
+                cfg.ReceiveEndpoint("party-email-updated", ep =>
+                {
+                    ep.ConfigureConsumer<PartyEmailUpdatedKeycloakConsumer>(context);
+                    ep.ConfigureConsumer<PartyEmailUpdatedBcProviderConsumer>(context);
+                });
+            });
         });
     }
 }
