@@ -73,9 +73,16 @@ public class Demographics
 
     public class CommandHandler : ICommandHandler<Command>
     {
+        private readonly IBus bus;
         private readonly PidpDbContext context;
 
-        public CommandHandler(PidpDbContext context) => this.context = context;
+        public CommandHandler(
+            IBus bus,
+            PidpDbContext context)
+        {
+            this.bus = bus;
+            this.context = context;
+        }
 
         public async Task HandleAsync(Command command)
         {
@@ -86,7 +93,7 @@ public class Demographics
             if (party.Email != null
                 && party.Email != command.Email)
             {
-                party.DomainEvents.Add(new PartyEmailUpdated(party.Id, party.PrimaryUserId, command.Email!));
+                await this.bus.Publish(new PartyEmailUpdated(party.Id, party.PrimaryUserId, command.Email!), CancellationToken.None);
             }
 
             party.PreferredFirstName = command.PreferredFirstName;
@@ -99,62 +106,56 @@ public class Demographics
         }
     }
 
-    public class PartyEmailUpdatedHandler : INotificationHandler<PartyEmailUpdated>
+    public class PartyEmailUpdatedBcProviderConsumer : IConsumer<PartyEmailUpdated>
     {
-        private readonly IBus bus;
-        private readonly IBCProviderClient bcProviderClient;
+        private readonly IBCProviderClient client;
         private readonly PidpDbContext context;
         private readonly string bcProviderClientId;
 
-        public PartyEmailUpdatedHandler(
-            IBCProviderClient bcProviderClient,
-            IBus bus,
+        public PartyEmailUpdatedBcProviderConsumer(
+            IBCProviderClient client,
             PidpConfiguration config,
             PidpDbContext context)
         {
-            this.bcProviderClient = bcProviderClient;
+            this.client = client;
             this.context = context;
             this.bcProviderClientId = config.BCProviderClient.ClientId;
-            this.bus = bus;
         }
 
-        public async Task Handle(PartyEmailUpdated notification, CancellationToken cancellationToken)
+        public async Task Consume(ConsumeContext<PartyEmailUpdated> context)
         {
             var bcProviderId = await this.context.Credentials
-                .Where(credential => credential.PartyId == notification.PartyId
+                .Where(credential => credential.PartyId == context.Message.PartyId
                     && credential.IdentityProvider == IdentityProviders.BCProvider)
                 .Select(credential => credential.IdpId)
-                .SingleOrDefaultAsync(cancellationToken);
+                .SingleOrDefaultAsync();
 
             if (string.IsNullOrEmpty(bcProviderId))
             {
                 return;
             }
 
-            var bcProviderAttributes = new BCProviderAttributes(this.bcProviderClientId).SetPidpEmail(notification.NewEmail);
-            await this.bcProviderClient.UpdateAttributes(bcProviderId, bcProviderAttributes.AsAdditionalData());
-
-            var endpoint = await this.bus.GetSendEndpoint(new Uri("queue:party-email-updated"));
-            await endpoint.Send(notification, cancellationToken);
+            var bcProviderAttributes = new BCProviderAttributes(this.bcProviderClientId).SetPidpEmail(context.Message.NewEmail);
+            await this.client.UpdateAttributes(bcProviderId, bcProviderAttributes.AsAdditionalData());
         }
     }
 
-    public class PartyEmailUpdatedConsumer : IConsumer<PartyEmailUpdated>
+    public class PartyEmailUpdatedKeycloakConsumer : IConsumer<PartyEmailUpdated>
     {
-        private readonly IKeycloakAdministrationClient keycloakClient;
-        private readonly ILogger<PartyEmailUpdatedConsumer> logger;
+        private readonly IKeycloakAdministrationClient client;
+        private readonly ILogger<PartyEmailUpdatedKeycloakConsumer> logger;
 
-        public PartyEmailUpdatedConsumer(
-            IKeycloakAdministrationClient keycloakClient,
-            ILogger<PartyEmailUpdatedConsumer> logger)
+        public PartyEmailUpdatedKeycloakConsumer(
+            IKeycloakAdministrationClient client,
+            ILogger<PartyEmailUpdatedKeycloakConsumer> logger)
         {
-            this.keycloakClient = keycloakClient;
+            this.client = client;
             this.logger = logger;
         }
 
         public async Task Consume(ConsumeContext<PartyEmailUpdated> context)
         {
-            if (!await this.keycloakClient.UpdateUser(context.Message.UserId, (user) => user.SetPidpEmail(context.Message.NewEmail)))
+            if (!await this.client.UpdateUser(context.Message.UserId, (user) => user.SetPidpEmail(context.Message.NewEmail)))
             {
                 this.logger.LogKeycloakEmailUpdateFailed(context.Message.UserId);
                 throw new InvalidOperationException("Error Comunicating with Keycloak");
@@ -162,10 +163,10 @@ public class Demographics
         }
     }
 
-    public class PartyEmailUpdatedConsumerDefinition : ConsumerDefinition<PartyEmailUpdatedConsumer>
+    public class PartyEmailUpdatedConsumerDefinition : ConsumerDefinition<PartyEmailUpdatedKeycloakConsumer>
     {
         protected override void ConfigureConsumer(IReceiveEndpointConfigurator endpointConfigurator,
-            IConsumerConfigurator<PartyEmailUpdatedConsumer> consumerConfigurator)
+            IConsumerConfigurator<PartyEmailUpdatedKeycloakConsumer> consumerConfigurator)
         {
             endpointConfigurator.UseMessageRetry(r => r.Incremental(5, TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(30)));
             endpointConfigurator.UseInMemoryOutbox();
