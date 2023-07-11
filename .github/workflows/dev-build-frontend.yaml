@@ -54,9 +54,9 @@ jobs:
           docker push image-registry.apps.silver.devops.gov.bc.ca/d8a8f9-tools/pidp-frontend:dev
 
   # call-helm-install-workflow:    
-  #   needs: [build-and-deploy-frontend]
   #   uses: ./.github/workflows/dev-deploy_helm_chart.yaml
   helm-deployment:
+    needs: [build-and-deploy-frontend]
     runs-on: 'ubuntu-latest'
     steps:
       - uses: actions/checkout@v1 
