@@ -75,11 +75,6 @@ jobs:
     #     # helm upgrade --install --wait --values deploy/dev_values.yaml --namespace d8a8f9-dev --version v1.0.0 dev charts/pidp --debug 
 
 
-  deployment:
-    runs-on: 'ubuntu-latest'
-    steps:
-    - uses: actions/checkout@v1
-
     - name: 'Deploy'
       uses: 'deliverybot/helm@v1'
       with:
