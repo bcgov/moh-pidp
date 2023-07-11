@@ -66,22 +66,22 @@ jobs:
         openshift_token: ${{secrets.OPENSHIFT_TOKEN}}
         namespace: d8a8f9-dev
 
-    # - name: Helm Deploy / install command
-    #   run: |
-    #     echo current installed helm releases
-    #     helm list --namespace d8a8f9-dev
+    - name: Helm Deploy / install command
+      run: |
+        echo current installed helm releases
+        helm list --namespace d8a8f9-dev
 
-    #     # echo installing helm chart...
-    #     # helm upgrade --install --wait --values deploy/dev_values.yaml --namespace d8a8f9-dev --version v1.0.0 dev charts/pidp --debug 
+        echo installing helm chart...
+        helm upgrade --install --wait --values deploy/dev_values.yaml --namespace d8a8f9-dev --version v0.1.0 dev charts/pidp --debug 
 
 
-    - name: 'Deploy'
-      uses: 'deliverybot/helm@master'
-      with:
-        release: 'dev'
-        namespace: 'd8a8f9-dev'
-        chart: 'app'
-        # token: '${{ github.token }}'
-        # values: |
-        #   name: foobar
-        value-files: "deploy/dev_values.yaml"
+    # - name: 'Deploy'
+    #   uses: 'deliverybot/helm@master'
+    #   with:
+    #     release: 'dev'
+    #     namespace: 'd8a8f9-dev'
+    #     chart: 'app'
+    #     # token: '${{ github.token }}'
+    #     # values: |
+    #     #   name: foobar
+    #     value-files: "deploy/dev_values.yaml"
