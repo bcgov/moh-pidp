@@ -1,12 +1,12 @@
-name: Build PLR-Intake Backend - Dev
+name: Build WebAPI - Dev
 
 on:
   pull_request:
   push:
     branches: [develop]
     paths:
-      - "backend/services.plr-intake/**"
-      - "backend/services.plr-intake.tests/**"
+      - "backend/webapi/**"
+      - "backend/webapi.tests/**"
   workflow_dispatch:
 
 # This will terminate builds that are previously, but continuing to run.  Saves GHA hours.
@@ -15,19 +15,19 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build-and-deploy-plr-intake:
-    name: PLR Intake Backend Build and Deploy
+  build-and-deploy-webapi:
+    name: WebAPI Backend Build and Deploy
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: "./backend/services.plr-intake"
+        working-directory: "./backend/webapi"
     steps:
       - name: "Checkout Code"
         uses: actions/checkout@master
 
       - name: "Docker Build"
         run: |
-          docker build -t image-registry.apps.silver.devops.gov.bc.ca/d8a8f9-tools/pidp-plr-intake:dev .
+          docker build -t image-registry.apps.silver.devops.gov.bc.ca/d8a8f9-tools/pidp-webapi:dev .
 
       # Uses the builder service account token
       - name: "Docker Login to Silver OCP"
@@ -39,10 +39,10 @@ jobs:
 
       - name: "Push image"
         run: |
-          docker push image-registry.apps.silver.devops.gov.bc.ca/d8a8f9-tools/pidp-plr-intake:dev
+          docker push image-registry.apps.silver.devops.gov.bc.ca/d8a8f9-tools/pidp-webapi:dev
   
   helm-deployment:
-    needs: [build-and-deploy-plr-intake]
+    needs: [build-and-deploy-webapi]
     runs-on: 'ubuntu-latest'
     steps:
       - uses: actions/checkout@v1 

@@ -73,15 +73,3 @@ jobs:
 
         echo installing helm chart...
         helm upgrade --install --wait --values ./deploy/dev_values.yaml --namespace d8a8f9-dev dev charts/pidp --debug 
-
-
-    # - name: 'Deploy'
-    #   uses: 'deliverybot/helm@master'
-    #   with:
-    #     release: 'dev'
-    #     namespace: 'd8a8f9-dev'
-    #     chart: 'app'
-    #     # token: '${{ github.token }}'
-    #     # values: |
-    #     #   name: foobar
-    #     value-files: "deploy/dev_values.yaml"
