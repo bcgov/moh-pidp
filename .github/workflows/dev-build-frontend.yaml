@@ -76,7 +76,7 @@ jobs:
 
 
     - name: 'Deploy'
-      uses: 'deliverybot/helm@v1'
+      uses: 'deliverybot/helm@master'
       with:
         release: 'dev'
         namespace: 'd8a8f9-dev'
