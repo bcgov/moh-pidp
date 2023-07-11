@@ -72,7 +72,7 @@ jobs:
         helm list --namespace d8a8f9-dev
 
         echo installing helm chart...
-        helm upgrade --install --wait --values ${{ github.workspace }}/deploy/dev_values.yaml --namespace d8a8f9-dev dev . --debug 
+        helm upgrade --install --wait --values ./deploy/dev_values.yaml --namespace d8a8f9-dev dev . --debug 
 
 
     # - name: 'Deploy'
