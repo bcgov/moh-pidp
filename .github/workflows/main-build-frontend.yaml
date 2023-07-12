@@ -2,10 +2,14 @@ name: Build Frontend
 
 on:
   push:
-    branches: [workflows]
+    branches: [main]
     paths:
       - "workspace/**"
   workflow_dispatch:
+
+env:
+  ORIG_TAG: test
+  PROMOTE_TAG: main
 
 # This will terminate builds that are previously, but continuing to run.  Saves GHA hours.
 concurrency:
@@ -13,41 +17,21 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build-and-deploy-frontend:
-    name: Frontend Build and Deploy
+  promote-image-to-prod:
+    name: WebAPI Backend Promote to prod
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: "./workspace"
-    steps:
-      - name: "Checkout Code"
-        uses: actions/checkout@master
-
-      - name: Use Node.js 16.x
-        uses: actions/setup-node@v2
+    steps:     
+      - name: Install oc
+        uses: redhat-actions/openshift-tools-installer@v1
         with:
-          node-version: 16.x
+          oc: "4.7"
 
-      - name: YARN Install
+      - name: oc login
         run: |
-          yarn install
+          oc login --token=${{ secrets.SILVER_TOOLS_BUILDER_TOKEN }} --server=${{ secrets.OPENSHIFT_CLUSTER_URL }}
 
-      - name: YARN Build
+      - name: Promote core-api from test to prod
         run: |
-          yarn build
-
-      - name: "Docker Build"
-        run: |
-          docker build -t image-registry.apps.silver.devops.gov.bc.ca/d8a8f9-tools/pidp-frontend:main .
-
-      # Uses the builder service account token
-      - name: "Docker Login to Silver OCP"
-        uses: docker/login-action@v2
-        with:
-          registry: image-registry.apps.silver.devops.gov.bc.ca
-          username: builder
-          password: ${{ secrets.SILVER_TOOLS_BUILDER_TOKEN }}
-
-      - name: "Push image"
-        run: |
-          docker push image-registry.apps.silver.devops.gov.bc.ca/d8a8f9-tools/pidp-frontend:main
+          oc -n d8a8f9-tools tag \
+          d8a8f9-tools/pidp-frontend:${{ env.ORIG_TAG }} \
+          d8a8f9-tools/pidp-frontend:${{ env.PROMOTE_TAG }}

@@ -40,6 +40,3 @@ jobs:
       - name: "Push image"
         run: |
           docker push image-registry.apps.silver.devops.gov.bc.ca/d8a8f9-tools/pidp-webapi:develop
-
-# TODO: Annotations on deployments to update based on image changes
-# Separate script for changes to helm charts 

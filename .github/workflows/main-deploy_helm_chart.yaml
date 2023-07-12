@@ -1,8 +1,8 @@
-name: Deploy Helm Charts - Dev
+name: Deploy Helm Charts - Prod
 
 on:
   push:
-    branches: [develop]
+    branches: [main]
     paths:
       - "charts/**"
   workflow_dispatch:
@@ -24,12 +24,12 @@ jobs:
         with:
           openshift_server_url: ${{secrets.OPENSHIFT_CLUSTER_URL}}
           openshift_token: ${{secrets.OPENSHIFT_TOKEN}}
-          namespace: d8a8f9-dev
+          namespace: d8a8f9-prod
   
       - name: Helm Deploy / install command
         run: |
           echo current installed helm releases
-          helm list --namespace d8a8f9-dev
+          helm list --namespace d8a8f9-prod
   
           echo installing helm chart...
-          helm upgrade --wait --values ./deploy/dev_values.yaml --namespace d8a8f9-dev dev charts/pidp --debug 
+          helm upgrade --wait --values ./deploy/prod_values.yaml --namespace d8a8f9-prod prod charts/pidp --debug 
