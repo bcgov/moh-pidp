@@ -111,15 +111,18 @@ public class Demographics
         private readonly IBCProviderClient client;
         private readonly PidpDbContext context;
         private readonly string bcProviderClientId;
+        private readonly ILogger<PartyEmailUpdatedBcProviderConsumer> logger;
 
         public PartyEmailUpdatedBcProviderConsumer(
             IBCProviderClient client,
             PidpConfiguration config,
-            PidpDbContext context)
+            PidpDbContext context,
+            ILogger<PartyEmailUpdatedBcProviderConsumer> logger)
         {
             this.client = client;
             this.context = context;
             this.bcProviderClientId = config.BCProviderClient.ClientId;
+            this.logger = logger;
         }
 
         public async Task Consume(ConsumeContext<PartyEmailUpdated> context)
@@ -136,7 +139,11 @@ public class Demographics
             }
 
             var bcProviderAttributes = new BCProviderAttributes(this.bcProviderClientId).SetPidpEmail(context.Message.NewEmail);
-            await this.client.UpdateAttributes(bcProviderId, bcProviderAttributes.AsAdditionalData());
+            if (!await this.client.UpdateAttributes(bcProviderId, bcProviderAttributes.AsAdditionalData()))
+            {
+                this.logger.LogBCProviderEmailUpdateFailed(context.Message.UserId);
+                throw new InvalidOperationException("Error Comunicating with Azure AD");
+            }
         }
     }
 
@@ -162,20 +169,16 @@ public class Demographics
             }
         }
     }
-
-    public class PartyEmailUpdatedConsumerDefinition : ConsumerDefinition<PartyEmailUpdatedKeycloakConsumer>
-    {
-        protected override void ConfigureConsumer(IReceiveEndpointConfigurator endpointConfigurator,
-            IConsumerConfigurator<PartyEmailUpdatedKeycloakConsumer> consumerConfigurator)
-        {
-            endpointConfigurator.UseMessageRetry(r => r.Incremental(5, TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(30)));
-            endpointConfigurator.UseInMemoryOutbox();
-        }
-    }
 }
 
-public static partial class PartyEmailUpdatedConsumerLoggingExtensions
+public static partial class PartyEmailUpdatedKeycloakConsumerLoggingExtensions
 {
-    [LoggerMessage(1, LogLevel.Error, "Error when updating the email to User #{userId}.")]
+    [LoggerMessage(1, LogLevel.Error, "Error when updating the email to User #{userId} in Keycloak.")]
     public static partial void LogKeycloakEmailUpdateFailed(this ILogger logger, Guid userId);
+}
+
+public static partial class PartyEmailUpdatedBcProviderConsumerLoggingExtensions
+{
+    [LoggerMessage(2, LogLevel.Error, "Error when updating the email to User #{userId} in Azure AD.")]
+    public static partial void LogBCProviderEmailUpdateFailed(this ILogger logger, Guid userId);
 }

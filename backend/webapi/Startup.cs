@@ -129,13 +129,16 @@ public class Startup
         {
             x.SetKebabCaseEndpointNameFormatter();
 
-            // TODO : reuse the same ConsumerDefinition
-            x.AddConsumer<PartyEmailUpdatedKeycloakConsumer, PartyEmailUpdatedConsumerDefinition>();
+            x.AddConsumer<PartyEmailUpdatedKeycloakConsumer>();
             x.AddConsumer<PartyEmailUpdatedBcProviderConsumer>();
 
             x.UsingRabbitMq((context, cfg) =>
             {
                 cfg.Host(new Uri(config.RabbitMQ.HostAddress));
+
+                // retry policy
+                cfg.UseMessageRetry(r => r.Incremental(5, TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(30)));
+                cfg.UseInMemoryOutbox();
 
                 cfg.ReceiveEndpoint("party-email-updated", ep =>
                 {
