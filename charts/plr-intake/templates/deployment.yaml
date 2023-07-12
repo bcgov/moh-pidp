@@ -10,6 +10,18 @@ metadata:
   name: {{ include "plr-intake.fullname" . }}
   labels:
     {{- include "plr-intake.labels" . | nindent 4 }}
+  annotations:
+    image.openshift.io/triggers: |-
+      [
+        {
+          "from": {
+            "kind": "ImageStreamTag",
+            "name": "pidp-plr-intake:{{ .Values.global.image.tag }}"
+          },
+          "fieldPath": "spec.template.spec.containers[0].image",
+          "paused": false
+        }
+      ]
 spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}

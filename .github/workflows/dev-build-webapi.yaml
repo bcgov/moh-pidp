@@ -40,26 +40,6 @@ jobs:
       - name: "Push image"
         run: |
           docker push image-registry.apps.silver.devops.gov.bc.ca/d8a8f9-tools/pidp-webapi:dev
-  
-  # call-helm-install-workflow:
-    #   uses: ./.github/workflows/dev-deploy_helm_chart.yaml
-  helm-deployment:
-    needs: [build-and-deploy-webapi]
-    runs-on: 'ubuntu-latest'
-    steps:
-      - uses: actions/checkout@v1 
-  
-      - name: Authenticate and set context
-        uses: redhat-actions/oc-login@v1.1
-        with:
-          openshift_server_url: ${{secrets.OPENSHIFT_CLUSTER_URL}}
-          openshift_token: ${{secrets.OPENSHIFT_TOKEN}}
-          namespace: d8a8f9-dev
-  
-      - name: Helm Deploy / install command
-        run: |
-          echo current installed helm releases
-          helm list --namespace d8a8f9-dev
-  
-          echo installing helm chart...
-          helm upgrade --install --wait --values ./deploy/dev_values.yaml --namespace d8a8f9-dev dev charts/pidp --debug 
+
+# TODO: Annotations on deployments to update based on image changes
+# Separate script for changes to helm charts 

@@ -12,6 +12,18 @@ metadata:
   name: {{ include "webapi.fullname" . }}
   labels:
     {{- include "webapi.labels" . | nindent 4 }}
+  annotations:
+    image.openshift.io/triggers: |-
+      [
+        {
+          "from": {
+            "kind": "ImageStreamTag",
+            "name": "pidp-webapi:{{ .Values.global.image.tag }}"
+          },
+          "fieldPath": "spec.template.spec.containers[0].image",
+          "paused": false
+        }
+      ]
 spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
