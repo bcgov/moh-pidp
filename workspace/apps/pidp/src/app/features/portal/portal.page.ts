@@ -113,11 +113,7 @@ export class PortalPage implements OnInit {
           this.collegeLicenceStatusCode === 2 &&
           this.uaaStatusCode !== 2
         ) {
-          let url = '/profile/user-access-agreement';
-          if (this.bcProviderStatusCode !== 2) {
-            url += '?redirect-url=/access/bc-provider-application';
-          }
-          this.router.navigateByUrl(url);
+          this.router.navigateByUrl('/profile/user-access-agreement');
         } else if (
           this.demographicsStatusCode === 2 &&
           this.collegeLicenceStatusCode === 2 &&
