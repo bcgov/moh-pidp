@@ -5,7 +5,6 @@ on:
     branches: [develop]
     paths:
       - "charts/**"
-  workflow_call:
   workflow_dispatch:
 
 # This will terminate builds that are previously, but continuing to run.  Saves GHA hours.
