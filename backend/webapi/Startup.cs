@@ -140,9 +140,17 @@ public class Startup
                 cfg.UseMessageRetry(r => r.Incremental(5, TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(30)));
                 cfg.UseInMemoryOutbox();
 
-                cfg.ReceiveEndpoint("party-email-updated", ep =>
+                cfg.ReceiveEndpoint("party-email-updated-keycloak-queue", ep =>
                 {
+                    ep.PublishFaults = false;
+                    ep.Bind("party-email-updated");
                     ep.ConfigureConsumer<PartyEmailUpdatedKeycloakConsumer>(context);
+                });
+
+                cfg.ReceiveEndpoint("party-email-updated-bc-provider-queue", ep =>
+                {
+                    ep.PublishFaults = false;
+                    ep.Bind("party-email-updated");
                     ep.ConfigureConsumer<PartyEmailUpdatedBcProviderConsumer>(context);
                 });
             });
