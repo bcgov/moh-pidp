@@ -129,7 +129,7 @@ public class Startup
         {
             x.SetKebabCaseEndpointNameFormatter();
 
-            // TODO: reuse the same ConsumerDefinition
+            // TODO : reuse the same ConsumerDefinition
             x.AddConsumer<PartyEmailUpdatedKeycloakConsumer, PartyEmailUpdatedConsumerDefinition>();
             x.AddConsumer<PartyEmailUpdatedBcProviderConsumer>();
 
