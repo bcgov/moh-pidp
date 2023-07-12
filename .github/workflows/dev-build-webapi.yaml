@@ -1,7 +1,6 @@
 name: Build WebAPI - Dev
 
 on:
-  pull_request:
   push:
     branches: [develop]
     paths:

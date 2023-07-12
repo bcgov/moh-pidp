@@ -1,7 +1,6 @@
 name: Build PLR-Intake Backend - Dev
 
 on:
-  pull_request:
   push:
     branches: [develop]
     paths:
