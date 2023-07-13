@@ -29,7 +29,7 @@ jobs:
 
       - name: oc login
         run: |
-          oc login --token=${{ secrets.SILVER_TOOLS_BUILDER_TOKEN }} --server=${{ secrets.OPENSHIFT_CLUSTER_URL }}
+          oc login --token=${{ secrets.OPENSHIFT_GHA_SERVICE_ACCOUNT_TOKEN }} --server=${{ secrets.OPENSHIFT_CLUSTER_URL }}
 
       - name: Promote webapi from dev to test
         run: |
