@@ -1,4 +1,4 @@
-name: Deploy Helm Charts - Test
+name: Deploy Helm Charts - Demo
 
 # Keeping this manual so changes can be verified in production before deploying
 on:
