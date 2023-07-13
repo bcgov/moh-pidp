@@ -4,21 +4,18 @@
     <div *ngIf="!isAdminLogin; else admin" class="content-container">
       <header *ngIf="isMobileTitleVisible" class="title-container">
         <h1 class="title">
-          <span class="title-text">
-            <span class="title-provider">Provider</span>
-            <span class="title-portal">Identity Portal</span>
-          </span>
+          <span class="title-text">OneHealthID Service</span>
         </h1>
       </header>
       <header *ngIf="isWebTitleVisible" class="title-container">
         <div class="title-content-container">
           <h1 class="title">
-            <span class="title-text">Provider<br />Identity Portal</span>
+            <span class="title-text">OneHealthID Service</span>
           </h1>
           <section class="title-site-description">
             <p>
-              A portal for healthcare professionals in British Columbia to enrol
-              for access to participating health systems
+              A suite of identity-related products and services for healthcare
+              providers in BC.
             </p>
           </section>
           <section class="title-bcgov">
@@ -166,7 +163,7 @@
       </app-auth-system-card>
       <app-auth-system-card
         class="systems-card"
-        titleText="Rostering B.C. healthcare"
+        titleText="Provincial Attachment System"
         imageTitleText=""
         headerColor="white"
         [webpImageUrls]="[
@@ -215,11 +212,11 @@
 <ng-template #rostering>
   <div class="card-content card-rostering">
     <p>
-      Patient rostering in family practice is a process by which patients
-      register with a family practice, family physician, or team. Patient
-      rostering facilitates accountability by afining the population for which
-      the primary care organization or provider is responsible and facilitates
-      an ongoing relationship between the patient and provider.
+      Provincial Attachment System is a process by which patients register with
+      a family practice, family physician, or team. Provincial Attachment System
+      facilitates accountability by afining the population for which the primary
+      care organization or provider is responsible and facilitates an ongoing
+      relationship between the patient and provider.
     </p>
   </div>
 </ng-template>

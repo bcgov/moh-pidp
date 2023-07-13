@@ -14,8 +14,8 @@ export class PrimaryCareRosteringPortalSection implements IPortalSection {
 
   public constructor(private profileStatus: ProfileStatus) {
     this.key = 'primaryCareRostering';
-    this.heading = 'Rostering B.C. Healthcare';
-    this.description = `Patient rostering in family practice is a process by which patients regiser with a family practice, family physician, or team.`;
+    this.heading = 'Provincial Attachment System';
+    this.description = `Provincial Attachment System is a process by which patients register with a family practice, family physician, or team.`;
     this.primaryCareRosteringWebsite = 'https://bchealthprovider.ca';
   }
 

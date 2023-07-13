@@ -27,7 +27,7 @@ a {
         justify-content: center;
         flex-direction: column;
         & .login-continue-with {
-          margin-bottom: 20px;
+          margin-bottom: 10px;
         }
         & .other-login-panel {
           overflow: hidden;
@@ -51,7 +51,7 @@ a {
 
       & .login-continue-with {
         display: flex;
-        margin-bottom: 20px;
+        margin-bottom: 10px;
         flex-direction: column;
         align-items: center;
 
@@ -108,18 +108,6 @@ a {
           margin: auto;
           display: flex;
           flex-direction: column;
-
-          & .title-provider {
-            font-size: 1.75em;
-            font-weight: 700;
-            letter-spacing: 0.05em;
-            margin: 0 auto 30px;
-          }
-          & .title-portal {
-            font-size: 1.25em;
-            font-weight: normal;
-            letter-spacing: 0.05em;
-          }
         }
       }
     }
@@ -234,13 +222,12 @@ a {
           margin-right: 20%;
           margin-bottom: 10px;
           padding: 10px 40px 10px 20px;
-          border: solid 1px pidp.$bcgov-color-component;
-          background-color: #d1d1d1;
+          background-color: #00000000;
           line-height: 1.6;
           & p {
             font-size: 1.15em;
             margin: 0;
-            color: pidp.$bcgov-color-text;
+            color: #ffffff;
           }
         }
 

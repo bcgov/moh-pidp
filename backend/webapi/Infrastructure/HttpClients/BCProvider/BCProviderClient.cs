@@ -177,11 +177,17 @@ public class BCProviderClient : IBCProviderClient
         var result = await this.client.Users.Count
             .GetAsync(request =>
             {
-                request.QueryParameters.Filter = $"userPrincipalName eq '{userPrincipalName}'";
+                request.QueryParameters.Filter = GetQueryParametersFilter(userPrincipalName);
                 request.Headers.Add("ConsistencyLevel", "eventual"); // Required for advanced queries such as "count"
             });
 
         return result > 0;
+    }
+
+    private static string GetQueryParametersFilter(string userPrincipalName)
+    {
+        var searchValue = Regex.Replace(userPrincipalName, "'", "''");
+        return $"userPrincipalName eq '{searchValue}'";
     }
 }
 

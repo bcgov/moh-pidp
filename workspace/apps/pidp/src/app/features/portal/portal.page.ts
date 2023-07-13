@@ -14,6 +14,12 @@ import { EndorsementsResource } from '../organization-info/pages/endorsements/en
 import { ProfileStatusAlert } from './models/profile-status-alert.model';
 import { ProfileStatus } from './models/profile-status.model';
 import { PortalResource } from './portal-resource.service';
+import {
+  bcProviderTutorialLink,
+  collegeLicenceTutorialLink,
+  personalInfoTutorialLink,
+  uaaTutorialLink,
+} from './portal.constants';
 import { PortalService } from './portal.service';
 import { IPortalSection } from './state/portal-section.model';
 import { PortalState } from './state/portal-state.builder';
@@ -43,14 +49,24 @@ export class PortalPage implements OnInit {
   );
   public collegeLicence$: BehaviorSubject<boolean> =
     new BehaviorSubject<boolean>(false);
+  public uaa$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   public bcProvider$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
     false
   );
+  public rostering$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
+    true
+  );
   public demographicsStatusCode!: number | undefined;
   public collegeLicenceStatusCode!: number | undefined;
+  public uaaStatusCode!: number | undefined;
   public bcProviderStatusCode!: number | undefined;
+  public rosteringStatusCode!: number | undefined;
   public bcProviderUsername = '';
   public logoutRedirectUrl: string;
+  public personalInfoTutorial: string;
+  public collegeLicenceTutorial: string;
+  public uaaTutorial: string;
+  public bcProviderTutorial: string;
 
   public constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
@@ -66,6 +82,10 @@ export class PortalPage implements OnInit {
     this.state$ = this.portalService.state$;
     this.alerts = [];
     this.logoutRedirectUrl = `${this.config.applicationUrl}/`;
+    this.personalInfoTutorial = personalInfoTutorialLink;
+    this.collegeLicenceTutorial = collegeLicenceTutorialLink;
+    this.uaaTutorial = uaaTutorialLink;
+    this.bcProviderTutorial = bcProviderTutorialLink;
   }
 
   public navigateTo(): void {
@@ -75,7 +95,11 @@ export class PortalPage implements OnInit {
           profileStatus?.status.demographics.statusCode;
         this.collegeLicenceStatusCode =
           profileStatus?.status.collegeCertification.statusCode;
+        this.uaaStatusCode =
+          profileStatus?.status.userAccessAgreement.statusCode;
         this.bcProviderStatusCode = profileStatus?.status.bcProvider.statusCode;
+        this.rosteringStatusCode =
+          profileStatus?.status.primaryCareRostering.statusCode;
 
         if (this.demographicsStatusCode !== 2) {
           this.router.navigateByUrl('/profile/personal-information');
@@ -87,13 +111,21 @@ export class PortalPage implements OnInit {
         } else if (
           this.demographicsStatusCode === 2 &&
           this.collegeLicenceStatusCode === 2 &&
+          this.uaaStatusCode !== 2
+        ) {
+          this.router.navigateByUrl('/profile/user-access-agreement');
+        } else if (
+          this.demographicsStatusCode === 2 &&
+          this.collegeLicenceStatusCode === 2 &&
+          this.uaaStatusCode === 2 &&
           this.bcProviderStatusCode !== 2
         ) {
           this.router.navigateByUrl('/access/bc-provider-application');
         } else if (
           this.demographicsStatusCode === 2 &&
           this.collegeLicenceStatusCode === 2 &&
-          this.bcProviderStatusCode === 2
+          this.bcProviderStatusCode === 2 &&
+          this.rosteringStatusCode === 1
         ) {
           this.navigateToExternalUrl('https://bchealthprovider.ca');
           this.authService.logout(this.logoutRedirectUrl);
@@ -139,9 +171,19 @@ export class PortalPage implements OnInit {
         if (this.collegeLicenceStatusCode === 2) {
           this.collegeLicence$.next(true);
         }
+        this.uaaStatusCode =
+          profileStatus?.status.userAccessAgreement.statusCode;
+        if (this.uaaStatusCode === 2) {
+          this.uaa$.next(true);
+        }
         this.bcProviderStatusCode = profileStatus?.status.bcProvider.statusCode;
         if (this.bcProviderStatusCode === 2) {
           this.bcProvider$.next(true);
+        }
+        this.rosteringStatusCode =
+          profileStatus?.status.primaryCareRostering.statusCode;
+        if (this.rosteringStatusCode === 1) {
+          this.rostering$.next(false);
         }
       });
 
