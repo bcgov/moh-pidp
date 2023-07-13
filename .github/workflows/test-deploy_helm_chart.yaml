@@ -1,0 +1,36 @@
+name: Deploy Helm Charts - Test
+
+on:
+  push:
+    branches: [test]
+    paths:
+      - "charts/**"
+      - "./deploy/test_values.yaml"
+  workflow_dispatch:
+
+# This will terminate builds that are previously, but continuing to run.  Saves GHA hours.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+
+  helm-deployment:
+    runs-on: 'ubuntu-latest'
+    steps:
+      - uses: actions/checkout@v1 
+  
+      - name: Authenticate and set context
+        uses: redhat-actions/oc-login@v1.1
+        with:
+          openshift_server_url: ${{secrets.OPENSHIFT_CLUSTER_URL}}
+          openshift_token: ${{secrets.OPENSHIFT_TEST_DEPLOYER_TOKEN}}
+          namespace: d8a8f9-test
+  
+      - name: Helm Deploy / install command
+        run: |
+          echo current installed helm releases
+          helm list --namespace d8a8f9-test
+  
+          echo installing helm chart...
+          helm upgrade --wait --values ./deploy/test_values.yaml --namespace d8a8f9-test test charts/pidp --debug 
