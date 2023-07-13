@@ -103,7 +103,6 @@ const routes: Routes = [
   },
   {
     path: AccessRoutes.DRIVER_FITNESS,
-    canActivate: [PermissionsGuard],
     loadChildren: (): Promise<DriverFitnessModule> =>
       import('./pages/driver-fitness/driver-fitness.module').then(
         (m) => m.DriverFitnessModule
@@ -111,7 +110,6 @@ const routes: Routes = [
   },
   {
     path: AccessRoutes.MS_TEAMS_PRIVACY_OFFICER,
-    canActivate: [PermissionsGuard],
     loadChildren: (): Promise<MsTeamsPrivacyOfficerModule> =>
       import(
         './pages/ms-teams-privacy-officer/ms-teams-privacy-officer.module'
