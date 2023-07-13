@@ -31,7 +31,7 @@ jobs:
         run: |
           oc login --token=${{ secrets.SILVER_TOOLS_BUILDER_TOKEN }} --server=${{ secrets.OPENSHIFT_CLUSTER_URL }}
 
-      - name: Promote core-api from dev to test
+      - name: Promote webapi from dev to test
         run: |
           oc -n d8a8f9-tools tag \
           d8a8f9-tools/pidp-webapi:${{ env.ORIG_TAG }} \

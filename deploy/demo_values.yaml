@@ -3,12 +3,12 @@ global:
   vanityURL: "healthprovideridentityportal.gov.bc.ca"
   commit_sha: ""
   image:
-    tag: master
+    tag: main
 
 database:
   autoCreate: false
   # databaseHost: dev-patroni
-  # existingSecret: dev-patroni-secret
+# existingSecret: dev-patroni-secret
 
 redis:
   enabled: false
