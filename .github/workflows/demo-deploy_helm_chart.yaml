@@ -1,4 +1,4 @@
-name: Deploy Helm Charts - Test
+name: Deploy Helm Charts - Demo
 
 # Keeping this manual so changes can be verified in production before deploying
 on:
@@ -24,8 +24,7 @@ jobs:
         uses: redhat-actions/oc-login@v1.1
         with:
           openshift_server_url: ${{secrets.OPENSHIFT_CLUSTER_URL}}
-          openshift_token: ${{secrets.OPENSHIFT_TOKEN}}
-          namespace: d8a8f9-test
+          openshift_token: ${{secrets.OPENSHIFT_PIPELINE_SERVICE_ACCOUNT_TOKEN}}
   
       - name: Helm Deploy / install command
         run: |

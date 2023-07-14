@@ -179,18 +179,17 @@ export class PortalPage implements OnInit {
         this.bcProviderStatusCode = profileStatus?.status.bcProvider.statusCode;
         if (this.bcProviderStatusCode === 2) {
           this.bcProvider$.next(true);
+          this.bcProviderResource
+            .get(this.partyService.partyId)
+            .subscribe((bcProviderObject: BcProviderEditInitialStateModel) => {
+              this.bcProviderUsername = bcProviderObject.bcProviderId;
+            });
         }
         this.rosteringStatusCode =
           profileStatus?.status.primaryCareRostering.statusCode;
         if (this.rosteringStatusCode === 1) {
           this.rostering$.next(false);
         }
-      });
-
-    this.bcProviderResource
-      .get(this.partyService.partyId)
-      .subscribe((bcProviderObject: BcProviderEditInitialStateModel) => {
-        this.bcProviderUsername = bcProviderObject.bcProviderId;
       });
   }
 

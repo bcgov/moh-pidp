@@ -24,8 +24,7 @@ jobs:
         uses: redhat-actions/oc-login@v1.1
         with:
           openshift_server_url: ${{secrets.OPENSHIFT_CLUSTER_URL}}
-          openshift_token: ${{secrets.OPENSHIFT_TOKEN}}
-          namespace: d8a8f9-dev
+          openshift_token: ${{secrets.OPENSHIFT_PIPELINE_SERVICE_ACCOUNT_TOKEN}}
   
       - name: Helm Deploy / install command
         run: |
