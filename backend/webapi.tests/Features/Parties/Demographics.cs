@@ -11,7 +11,7 @@ using PidpTests.TestingExtensions;
 public class DemographicsTests : InMemoryDbTest
 {
     [Fact]
-    public async void UpdatePartyDemographics_NewParty_PropertiesUpdatedNoDomainEvent()
+    public async void UpdatePartyDemographics_NewParty_NoMessagePublished()
     {
         var party = this.TestDb.HasAParty(party =>
         {
@@ -27,7 +27,9 @@ public class DemographicsTests : InMemoryDbTest
             PreferredMiddleName = "PMid",
             PreferredLastName = "PLast"
         };
-        var handler = this.MockDependenciesFor<CommandHandler>();
+        var bus = A.Fake<IBus>();
+
+        var handler = this.MockDependenciesFor<CommandHandler>(bus);
 
         await handler.HandleAsync(command);
 
@@ -38,11 +40,11 @@ public class DemographicsTests : InMemoryDbTest
         Assert.Equal(command.PreferredMiddleName, updatedParty.PreferredMiddleName);
         Assert.Equal(command.PreferredLastName, updatedParty.PreferredLastName);
 
-        Assert.Empty(this.PublishedEvents.OfType<PartyEmailUpdated>());
+        A.CallTo(() => bus.Publish(new PartyEmailUpdated(party.Id, party.PrimaryUserId, command.Email!), CancellationToken.None)).MustNotHaveHappened();
     }
 
     [Fact]
-    public async void UpdatePartyDemographics_ExistingParty_PropertiesUpdatedDomainEvent()
+    public async void UpdatePartyDemographics_ExistingParty_MessagePublished()
     {
         var party = this.TestDb.HasAParty(party =>
         {
@@ -80,7 +82,7 @@ public class DemographicsTests : InMemoryDbTest
     }
 
     [Fact]
-    public async void UpdatePartyDemographics_ExistingPartySameEmail_NoDomainEvent()
+    public async void UpdatePartyDemographics_ExistingPartySameEmail_NoMessagePublished()
     {
         var party = this.TestDb.HasAParty(party => party.Email = "existing@email.com");
         var command = new Command
@@ -88,10 +90,12 @@ public class DemographicsTests : InMemoryDbTest
             Id = party.Id,
             Email = party.Email
         };
-        var handler = this.MockDependenciesFor<CommandHandler>();
+        var bus = A.Fake<IBus>();
+
+        var handler = this.MockDependenciesFor<CommandHandler>(bus);
 
         await handler.HandleAsync(command);
 
-        Assert.Empty(this.PublishedEvents.OfType<PartyEmailUpdated>());
+        A.CallTo(() => bus.Publish(new PartyEmailUpdated(party.Id, party.PrimaryUserId, command.Email!), CancellationToken.None)).MustNotHaveHappened();
     }
 }
