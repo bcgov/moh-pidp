@@ -73,16 +73,9 @@ public class Demographics
 
     public class CommandHandler : ICommandHandler<Command>
     {
-        private readonly IBus bus;
         private readonly PidpDbContext context;
 
-        public CommandHandler(
-            IBus bus,
-            PidpDbContext context)
-        {
-            this.bus = bus;
-            this.context = context;
-        }
+        public CommandHandler(PidpDbContext context) => this.context = context;
 
         public async Task HandleAsync(Command command)
         {
@@ -93,7 +86,7 @@ public class Demographics
             if (party.Email != null
                 && party.Email != command.Email)
             {
-                await this.bus.Publish(new PartyEmailUpdated(party.Id, party.PrimaryUserId, command.Email!), CancellationToken.None);
+                party.DomainEvents.Add(new PartyEmailUpdated(party.Id, party.PrimaryUserId, command.Email!));
             }
 
             party.PreferredFirstName = command.PreferredFirstName;
@@ -104,6 +97,16 @@ public class Demographics
 
             await this.context.SaveChangesAsync();
         }
+    }
+
+    public class PartyEmailUpdatedHandler : INotificationHandler<PartyEmailUpdated>
+    {
+        private readonly IBus bus;
+
+        public PartyEmailUpdatedHandler(IBus bus) => this.bus = bus;
+
+        public async Task Handle(PartyEmailUpdated notification, CancellationToken cancellationToken)
+            => await this.bus.Publish(notification, CancellationToken.None);
     }
 
     public class PartyEmailUpdatedBcProviderConsumer : IConsumer<PartyEmailUpdated>

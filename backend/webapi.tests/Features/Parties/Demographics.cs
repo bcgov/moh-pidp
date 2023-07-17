@@ -1,7 +1,5 @@
 namespace PidpTests.Features.Parties;
 
-using FakeItEasy;
-using MassTransit;
 using Xunit;
 
 using static Pidp.Features.Parties.Demographics;
@@ -11,7 +9,7 @@ using PidpTests.TestingExtensions;
 public class DemographicsTests : InMemoryDbTest
 {
     [Fact]
-    public async void UpdatePartyDemographics_NewParty_NoMessagePublished()
+    public async void UpdatePartyDemographics_NewParty_PropertiesUpdatedNoDomainEvent()
     {
         var party = this.TestDb.HasAParty(party =>
         {
@@ -27,9 +25,7 @@ public class DemographicsTests : InMemoryDbTest
             PreferredMiddleName = "PMid",
             PreferredLastName = "PLast"
         };
-        var bus = A.Fake<IBus>();
-
-        var handler = this.MockDependenciesFor<CommandHandler>(bus);
+        var handler = this.MockDependenciesFor<CommandHandler>();
 
         await handler.HandleAsync(command);
 
@@ -40,11 +36,11 @@ public class DemographicsTests : InMemoryDbTest
         Assert.Equal(command.PreferredMiddleName, updatedParty.PreferredMiddleName);
         Assert.Equal(command.PreferredLastName, updatedParty.PreferredLastName);
 
-        A.CallTo(() => bus.Publish(new PartyEmailUpdated(party.Id, party.PrimaryUserId, command.Email!), CancellationToken.None)).MustNotHaveHappened();
+        Assert.Empty(this.PublishedEvents.OfType<PartyEmailUpdated>());
     }
 
     [Fact]
-    public async void UpdatePartyDemographics_ExistingParty_MessagePublished()
+    public async void UpdatePartyDemographics_ExistingParty_PropertiesUpdatedDomainEvent()
     {
         var party = this.TestDb.HasAParty(party =>
         {
@@ -65,9 +61,7 @@ public class DemographicsTests : InMemoryDbTest
             PreferredMiddleName = "PMid",
             PreferredLastName = "PLast"
         };
-        var bus = A.Fake<IBus>();
-
-        var handler = this.MockDependenciesFor<CommandHandler>(bus);
+        var handler = this.MockDependenciesFor<CommandHandler>();
 
         await handler.HandleAsync(command);
 
@@ -78,11 +72,15 @@ public class DemographicsTests : InMemoryDbTest
         Assert.Equal(command.PreferredMiddleName, updatedParty.PreferredMiddleName);
         Assert.Equal(command.PreferredLastName, updatedParty.PreferredLastName);
 
-        A.CallTo(() => bus.Publish(new PartyEmailUpdated(party.Id, party.PrimaryUserId, command.Email), CancellationToken.None)).MustHaveHappened();
+        Assert.Single(this.PublishedEvents.OfType<PartyEmailUpdated>());
+        var emailEvent = this.PublishedEvents.OfType<PartyEmailUpdated>().Single();
+        Assert.Equal(party.Id, emailEvent.PartyId);
+        Assert.Equal(command.Email, emailEvent.NewEmail);
+
     }
 
     [Fact]
-    public async void UpdatePartyDemographics_ExistingPartySameEmail_NoMessagePublished()
+    public async void UpdatePartyDemographics_ExistingPartySameEmail_NoDomainEvent()
     {
         var party = this.TestDb.HasAParty(party => party.Email = "existing@email.com");
         var command = new Command
@@ -90,12 +88,10 @@ public class DemographicsTests : InMemoryDbTest
             Id = party.Id,
             Email = party.Email
         };
-        var bus = A.Fake<IBus>();
-
-        var handler = this.MockDependenciesFor<CommandHandler>(bus);
+        var handler = this.MockDependenciesFor<CommandHandler>();
 
         await handler.HandleAsync(command);
 
-        A.CallTo(() => bus.Publish(new PartyEmailUpdated(party.Id, party.PrimaryUserId, command.Email!), CancellationToken.None)).MustNotHaveHappened();
+        Assert.Empty(this.PublishedEvents.OfType<PartyEmailUpdated>());
     }
 }
