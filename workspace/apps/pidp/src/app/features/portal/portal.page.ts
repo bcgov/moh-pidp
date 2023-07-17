@@ -89,49 +89,35 @@ export class PortalPage implements OnInit {
   }
 
   public navigateTo(): void {
-    this.getProfileStatus(this.partyService.partyId).subscribe(
-      (profileStatus: ProfileStatus | null) => {
-        this.demographicsStatusCode =
-          profileStatus?.status.demographics.statusCode;
-        this.collegeLicenceStatusCode =
-          profileStatus?.status.collegeCertification.statusCode;
-        this.uaaStatusCode =
-          profileStatus?.status.userAccessAgreement.statusCode;
-        this.bcProviderStatusCode = profileStatus?.status.bcProvider.statusCode;
-        this.rosteringStatusCode =
-          profileStatus?.status.primaryCareRostering.statusCode;
-
-        if (this.demographicsStatusCode !== 2) {
-          this.router.navigateByUrl('/profile/personal-information');
-        } else if (
-          this.demographicsStatusCode === 2 &&
-          this.collegeLicenceStatusCode !== 2
-        ) {
-          this.router.navigateByUrl('/profile/college-licence-declaration');
-        } else if (
-          this.demographicsStatusCode === 2 &&
-          this.collegeLicenceStatusCode === 2 &&
-          this.uaaStatusCode !== 2
-        ) {
-          this.router.navigateByUrl('/profile/user-access-agreement');
-        } else if (
-          this.demographicsStatusCode === 2 &&
-          this.collegeLicenceStatusCode === 2 &&
-          this.uaaStatusCode === 2 &&
-          this.bcProviderStatusCode !== 2
-        ) {
-          this.router.navigateByUrl('/access/bc-provider-application');
-        } else if (
-          this.demographicsStatusCode === 2 &&
-          this.collegeLicenceStatusCode === 2 &&
-          this.bcProviderStatusCode === 2 &&
-          this.rosteringStatusCode === 1
-        ) {
-          this.navigateToExternalUrl('https://bchealthprovider.ca');
-          this.authService.logout(this.logoutRedirectUrl);
-        }
-      }
-    );
+    if (this.demographicsStatusCode !== 2) {
+      this.router.navigateByUrl('/profile/personal-information');
+    } else if (
+      this.demographicsStatusCode === 2 &&
+      this.collegeLicenceStatusCode !== 2
+    ) {
+      this.router.navigateByUrl('/profile/college-licence-declaration');
+    } else if (
+      this.demographicsStatusCode === 2 &&
+      this.collegeLicenceStatusCode === 2 &&
+      this.uaaStatusCode !== 2
+    ) {
+      this.router.navigateByUrl('/profile/user-access-agreement');
+    } else if (
+      this.demographicsStatusCode === 2 &&
+      this.collegeLicenceStatusCode === 2 &&
+      this.uaaStatusCode === 2 &&
+      this.bcProviderStatusCode !== 2
+    ) {
+      this.router.navigateByUrl('/access/bc-provider-application');
+    } else if (
+      this.demographicsStatusCode === 2 &&
+      this.collegeLicenceStatusCode === 2 &&
+      this.bcProviderStatusCode === 2 &&
+      this.rosteringStatusCode === 1
+    ) {
+      this.navigateToExternalUrl('https://bchealthprovider.ca');
+      this.authService.logout(this.logoutRedirectUrl);
+    }
   }
 
   public onScrollToAnchor(): void {
