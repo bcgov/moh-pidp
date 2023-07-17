@@ -1,5 +1,7 @@
 namespace PidpTests.Features.Parties;
 
+using FakeItEasy;
+using MassTransit;
 using Xunit;
 
 using static Pidp.Features.Parties.Demographics;
@@ -61,7 +63,9 @@ public class DemographicsTests : InMemoryDbTest
             PreferredMiddleName = "PMid",
             PreferredLastName = "PLast"
         };
-        var handler = this.MockDependenciesFor<CommandHandler>();
+        var bus = A.Fake<IBus>();
+
+        var handler = this.MockDependenciesFor<CommandHandler>(bus);
 
         await handler.HandleAsync(command);
 
@@ -72,10 +76,7 @@ public class DemographicsTests : InMemoryDbTest
         Assert.Equal(command.PreferredMiddleName, updatedParty.PreferredMiddleName);
         Assert.Equal(command.PreferredLastName, updatedParty.PreferredLastName);
 
-        Assert.Single(this.PublishedEvents.OfType<PartyEmailUpdated>());
-        var emailEvent = this.PublishedEvents.OfType<PartyEmailUpdated>().Single();
-        Assert.Equal(party.Id, emailEvent.PartyId);
-        Assert.Equal(command.Email, emailEvent.NewEmail);
+        A.CallTo(() => bus.Publish(new PartyEmailUpdated(party.Id, party.PrimaryUserId, command.Email), CancellationToken.None)).MustHaveHappened();
     }
 
     [Fact]
