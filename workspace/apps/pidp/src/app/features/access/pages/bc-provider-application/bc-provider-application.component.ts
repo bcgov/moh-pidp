@@ -4,7 +4,7 @@ import { FormBuilder } from '@angular/forms';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 
-import { Observable, catchError, map } from 'rxjs';
+import { Observable, catchError, tap } from 'rxjs';
 
 import {
   faCircleCheck,
@@ -107,7 +107,7 @@ export class BcProviderApplicationComponent
     this.loadingOverlayService.open(LOADING_OVERLAY_DEFAULT_MESSAGE);
 
     return this.resource.createBcProviderAccount(partyId, this.password).pipe(
-      map((upn: string) => {
+      tap((upn: string) => {
         this.username = upn;
         this.completed = true;
         this.loadingOverlayService.close();
