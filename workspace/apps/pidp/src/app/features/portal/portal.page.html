@@ -8,7 +8,10 @@
     </div>
   </section>
   <section class="section-box rostering-banner">
-    <mat-expansion-panel>
+    <mat-expansion-panel
+      [expanded]="pasPanelExpanded$ | async"
+      (afterCollapse)="onExpansionPanelToggle(false)"
+      (afterExpand)="onExpansionPanelToggle(true)">
       <mat-expansion-panel-header>
         <mat-icon>location_on</mat-icon>
         <strong>Looking to access Provincial Attachment System?</strong>

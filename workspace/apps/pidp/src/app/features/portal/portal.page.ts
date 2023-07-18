@@ -56,6 +56,7 @@ export class PortalPage implements OnInit {
   public rostering$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
     true
   );
+  public pasPanelExpanded$: BehaviorSubject<boolean>;
   public demographicsStatusCode!: number | undefined;
   public collegeLicenceStatusCode!: number | undefined;
   public uaaStatusCode!: number | undefined;
@@ -80,6 +81,7 @@ export class PortalPage implements OnInit {
     private authService: AuthService
   ) {
     this.state$ = this.portalService.state$;
+    this.pasPanelExpanded$ = this.portalService.pasPanelExpanded$;
     this.alerts = [];
     this.logoutRedirectUrl = `${this.config.applicationUrl}/`;
     this.personalInfoTutorial = personalInfoTutorialLink;
@@ -133,6 +135,10 @@ export class PortalPage implements OnInit {
 
   public getProfileStatus(partyId: number): Observable<ProfileStatus | null> {
     return this.portalResource.getProfileStatus(partyId);
+  }
+
+  public onExpansionPanelToggle(expanded: boolean): void {
+    this.portalService.updateIsPASExpanded(expanded);
   }
 
   public ngOnInit(): void {
