@@ -62,6 +62,9 @@
 
 .stepper-buttons {
   margin-top: 10px;
+  & button:last-child {
+    margin-left: 10px;
+  }
 }
 
 .guide-information {
