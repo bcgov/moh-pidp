@@ -10,8 +10,11 @@
   <section class="section-box rostering-banner">
     <mat-expansion-panel>
       <mat-expansion-panel-header>
-        <mat-icon>location_on</mat-icon>
-        <strong>Looking to access Provincial Attachment System?</strong>
+        <mat-panel-title>
+          <mat-icon>location_on</mat-icon>
+
+          <strong>Looking to access Provincial Attachment System?</strong>
+        </mat-panel-title>
       </mat-expansion-panel-header>
 
       <ng-template matExpansionPanelContent>
@@ -42,7 +45,7 @@
               >
             </div>
             <div class="stepper-buttons">
-              <button mat-flat-button matStepperNext>Next</button>
+              <button mat-stroked-button matStepperNext>Next</button>
             </div>
           </mat-step>
 
@@ -73,8 +76,8 @@
               >
             </div>
             <div class="stepper-buttons">
-              <button mat-button matStepperPrevious>Back</button>
-              <button mat-button matStepperNext>Next</button>
+              <button mat-stroked-button matStepperPrevious>Back</button>
+              <button mat-stroked-button matStepperNext>Next</button>
             </div>
           </mat-step>
 
@@ -104,8 +107,8 @@
               >
             </div>
             <div class="stepper-buttons">
-              <button mat-button matStepperPrevious>Back</button>
-              <button mat-button matStepperNext>Next</button>
+              <button mat-stroked-button matStepperPrevious>Back</button>
+              <button mat-stroked-button matStepperNext>Next</button>
             </div>
           </mat-step>
 
@@ -141,8 +144,8 @@
               >
             </div>
             <div class="stepper-buttons">
-              <button mat-button matStepperPrevious>Back</button>
-              <button mat-button matStepperNext>Next</button>
+              <button mat-stroked-button matStepperPrevious>Back</button>
+              <button mat-stroked-button matStepperNext>Next</button>
             </div>
           </mat-step>
 
@@ -178,8 +181,8 @@
               </button>
             </div>
             <div class="stepper-buttons">
-              <button mat-button matStepperPrevious>Back</button>
-              <button mat-button matStepperNext>Next</button>
+              <button mat-stroked-button matStepperPrevious>Back</button>
+              <button mat-stroked-button matStepperNext>Next</button>
             </div>
           </mat-step>
 
@@ -210,8 +213,10 @@
               </div>
             </div>
             <div class="stepper-buttons">
-              <button mat-button matStepperPrevious>Back</button>
-              <button mat-button (click)="stepper.reset()">Reset</button>
+              <button mat-stroked-button matStepperPrevious>Back</button>
+              <button mat-stroked-button (click)="stepper.reset()">
+                Reset
+              </button>
             </div>
           </mat-step>
         </mat-stepper>
