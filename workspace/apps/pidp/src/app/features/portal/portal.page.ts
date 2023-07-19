@@ -1,3 +1,4 @@
+import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { Component, Inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -28,6 +29,12 @@ import { PortalState } from './state/portal-state.builder';
   selector: 'app-portal',
   templateUrl: './portal.page.html',
   styleUrls: ['./portal.page.scss'],
+  providers: [
+    {
+      provide: STEPPER_GLOBAL_OPTIONS,
+      useValue: { displayDefaultIndicatorType: false },
+    },
+  ],
 })
 export class PortalPage implements OnInit {
   /**
