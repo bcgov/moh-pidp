@@ -25,3 +25,12 @@
 .mat-drawer-container {
   color: theme-palette(blue);
 }
+
+//
+// Stepper
+//
+
+.mat-step-header .mat-step-icon-state-done {
+  // Force stepper header icon to turn green when state=done
+  background-color: $bcgov-color-semantic-success;
+}
