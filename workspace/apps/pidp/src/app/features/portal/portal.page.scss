@@ -51,8 +51,12 @@
 .rostering-banner {
   margin-bottom: 10px;
 
-  & mat-panel-title mat-icon {
-    margin: 0 5px;
+  & .mat-expansion-panel-header {
+    padding: 24px;
+
+    & mat-panel-title mat-icon {
+      margin: 0 5px;
+    }
   }
 
   & .mat-stroked-button {
