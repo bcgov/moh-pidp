@@ -50,8 +50,25 @@
 
 .rostering-banner {
   margin-bottom: 10px;
-  & mat-icon {
-    margin: 0 5px;
+
+  & .mat-expansion-panel-header,
+  .mat-expansion-panel-header:hover {
+    height: 10vh;
+    padding: 24px;
+    background-color: pidp.$bcgov-color-information-box;
+
+    & mat-panel-title mat-icon {
+      margin: 0 5px;
+    }
+
+    & mat-panel-title mat-icon,
+    .start-here {
+      color: pidp.$bcgov-color-links;
+    }
+  }
+
+  & .mat-stroked-button {
+    border: 1px solid #000;
   }
 }
 
@@ -62,6 +79,14 @@
 
 .stepper-buttons {
   margin-top: 10px;
+
+  & button:last-child {
+    margin-left: 10px;
+  }
+
+  & button.top-button {
+    margin-left: 0;
+  }
 }
 
 .guide-information {
