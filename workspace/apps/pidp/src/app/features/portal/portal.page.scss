@@ -51,17 +51,6 @@
 .rostering-banner {
   margin-bottom: 10px;
 
-  & .mat-expansion-panel-header,
-  .mat-expansion-panel-header:hover {
-    height: 10vh;
-    padding: 24px;
-    background-color: pidp.$bcgov-color-information-box;
-
-    & mat-panel-title mat-icon {
-      margin: 0 5px;
-    }
-  }
-
   & .mat-stroked-button {
     border: 1px solid #000;
   }

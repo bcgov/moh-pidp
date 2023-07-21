@@ -1,0 +1,8 @@
+<div [ngStyle]="{ backgroundImage: backgroundImageSrc }">
+  <h1>{{ title }}</h1>
+  <h3>{{ description }}</h3>
+  <button mat-flat-button color="primary" (click)="toggle()">
+    Get Started
+  </button>
+</div>
+<ng-content *ngIf="expanded"></ng-content>

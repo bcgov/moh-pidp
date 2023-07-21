@@ -11,6 +11,7 @@ import { PortalCarouselComponent } from './components/portal-carousel/portal-car
 import { ProfileCardSummaryContentComponent } from './components/profile-card-summary-content/profile-card-summary-content.component';
 import { PortalRoutingModule } from './portal-routing.module';
 import { PortalPage } from './portal.page';
+import { ExpansionPanelComponent } from './components/expansion-panel/expansion-panel.component';
 
 @NgModule({
   declarations: [
@@ -18,6 +19,7 @@ import { PortalPage } from './portal.page';
     ProfileCardSummaryContentComponent,
     PortalCardComponent,
     PortalCarouselComponent,
+    ExpansionPanelComponent,
   ],
   imports: [
     PortalRoutingModule,
