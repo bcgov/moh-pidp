@@ -17,7 +17,6 @@ export class ExpansionPanelComponent {
     this.expanded = false;
     this.title = 'Looking to access';
     this.description = 'Provincial Attachment System?';
-    this.backgroundImageSrc = `url('/assets/images/stethoscope.png')`;
   }
 
   public toggle(): void {

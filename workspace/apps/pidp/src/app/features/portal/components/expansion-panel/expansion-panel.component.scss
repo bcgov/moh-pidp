@@ -1,24 +1,57 @@
-div {
+@use 'pidp-variables' as pidp;
+
+div.viewport-all {
   height: 25vh;
+  min-height: 150px;
+  background-image: url('/assets/images/provential-attachment-system-banner-866x233-desktop.jpg');
+  background-repeat: no-repeat;
   background-size: cover;
+  background-position: center center;
   border-radius: var(--card-border-radius);
-  padding: 40px;
+  padding: var(--gap) calc(var(--gap) * 2);
   position: relative;
 
-  h1 {
+  & h2 {
     font-weight: 900;
     font-size: 2.5rem;
     color: #1a284f;
   }
 
-  h3 {
+  & h3 {
     font-weight: 900;
     font-size: 1.75rem;
     color: #245483;
   }
 
-  button {
+  & button {
     position: absolute;
-    bottom: 40px;
+    bottom: var(--gap);
+  }
+}
+
+div.viewport-medium,
+div.viewport-small {
+  background-image: url('/assets/images/provential-attachment-system-banner-780x210-small.jpg');
+
+  & h2 {
+    font-size: 2rem;
+  }
+
+  & h3 {
+    font-size: 1.25rem;
+  }
+}
+
+// This section is optimized for iPhone SE
+div.viewport-xsmall {
+  background-image: none;
+  background-color: pidp.$bcgov-color-information-box;
+
+  & h2 {
+    font-size: 1.75rem;
+  }
+
+  & h3 {
+    font-size: 1rem;
   }
 }
