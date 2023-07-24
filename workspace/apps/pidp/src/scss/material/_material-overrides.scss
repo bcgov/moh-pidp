@@ -25,3 +25,23 @@
 .mat-drawer-container {
   color: theme-palette(blue);
 }
+
+//
+// Stepper
+//
+
+.mat-step-header .mat-step-icon-state-done {
+  // Force stepper header icon to turn green when state=done
+  background-color: $bcgov-color-semantic-success;
+}
+
+//
+// Expansion Panel
+//
+
+.mat-expansion-indicator,
+.mat-expansion-indicator::after {
+  border-width: 0 5px 5px 0 !important;
+  padding: 5px !important;
+  margin-bottom: 10px;
+}
