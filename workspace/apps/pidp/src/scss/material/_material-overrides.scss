@@ -35,6 +35,11 @@
   background-color: $bcgov-color-semantic-success;
 }
 
+.mat-step .mat-button-wrapper,
+.mat-step .mat-step-label {
+  white-space: normal;
+}
+
 //
 // Expansion Panel
 //
