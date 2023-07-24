@@ -5,4 +5,10 @@
     Get Started
   </button>
 </div>
-<ng-content *ngIf="expanded"></ng-content>
+<ng-container *ngTemplateOutlet="content"></ng-container>
+
+<ng-template #content>
+  <div *ngIf="expanded">
+    <ng-content></ng-content>
+  </div>
+</ng-template>
