@@ -56,6 +56,9 @@ export class PortalService {
 
   public state$: Observable<PortalState>;
 
+  public pasPanelExpanded$: BehaviorSubject<boolean> =
+    new BehaviorSubject<boolean>(false);
+
   public get alerts(): ProfileStatusAlert[] {
     return this._alerts;
   }
@@ -87,6 +90,10 @@ export class PortalService {
       this.permissionsService
     );
     this._state$.next(builder.createState(profileStatus));
+  }
+
+  public updateIsPASExpanded(expanded: boolean): void {
+    this.pasPanelExpanded$.next(expanded);
   }
 
   private getAlerts(profileStatus: ProfileStatus): ProfileStatusAlert[] {
