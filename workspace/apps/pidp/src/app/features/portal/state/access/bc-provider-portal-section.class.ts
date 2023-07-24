@@ -1,10 +1,11 @@
-import { Router } from '@angular/router';
+import { NavigationExtras, Router } from '@angular/router';
 
 import { Observable } from 'rxjs';
 
 import { AlertType } from '@bcgov/shared/ui';
 
 import { AccessRoutes } from '@app/features/access/access.routes';
+import { ProfileRoutes } from '@app/features/profile/profile.routes';
 import { ShellRoutes } from '@app/features/shell/shell.routes';
 
 import { StatusCode } from '../../enums/status-code.enum';
@@ -24,7 +25,7 @@ export class BcProviderPortalSection implements IPortalSection {
   ) {
     this.key = 'bcProvider';
     this.heading = 'BC Provider';
-    this.description = ``;
+    this.description = `A reusable credential for access to health data in BC.`;
   }
 
   public get hint(): string {
@@ -38,9 +39,11 @@ export class BcProviderPortalSection implements IPortalSection {
   public get action(): PortalSectionAction {
     const statusCode = this.getStatusCode();
     const route = this.getRoute();
+    const navigationExtras = this.getNavigationExtras();
     return {
       label: statusCode === StatusCode.COMPLETED ? 'Edit' : 'Request',
       route: route,
+      navigationExtras: navigationExtras,
       disabled: statusCode === StatusCode.NOT_AVAILABLE,
     };
   }
@@ -65,7 +68,27 @@ export class BcProviderPortalSection implements IPortalSection {
   private getStatusCode(): StatusCode {
     return this.profileStatus.status.bcProvider.statusCode;
   }
+  private getUserAccessAgreementStatusCode(): StatusCode {
+    return this.profileStatus.status.userAccessAgreement.statusCode;
+  }
+  private getNavigationExtras(): NavigationExtras | undefined {
+    if (this.getUserAccessAgreementStatusCode() === StatusCode.AVAILABLE) {
+      return {
+        queryParams: {
+          'redirect-url': this.getBCProviderRoute(),
+        },
+      };
+    }
+    return undefined;
+  }
   private getRoute(): string {
+    if (this.getUserAccessAgreementStatusCode() === StatusCode.AVAILABLE) {
+      return ProfileRoutes.routePath(ProfileRoutes.USER_ACCESS_AGREEMENT);
+    }
+
+    return this.getBCProviderRoute();
+  }
+  private getBCProviderRoute(): string {
     const statusCode = this.getStatusCode();
     switch (statusCode) {
       case StatusCode.COMPLETED:
@@ -75,7 +98,7 @@ export class BcProviderPortalSection implements IPortalSection {
       case StatusCode.AVAILABLE:
         return AccessRoutes.routePath(AccessRoutes.BC_PROVIDER_APPLICATION);
       default:
-        throw 'not implemented: ' + statusCode;
+        return '';
     }
   }
 }

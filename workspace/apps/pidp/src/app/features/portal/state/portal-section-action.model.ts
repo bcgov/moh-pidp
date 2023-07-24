@@ -1,3 +1,5 @@
+import { NavigationExtras } from '@angular/router';
+
 /**
  * @description
  * Properties of a portal section action.
@@ -16,8 +18,20 @@ export interface PortalSectionAction {
   route: string;
   /**
    * @description
+   * URL parameters
+   */
+  navigationExtras?: NavigationExtras;
+  /**
+   * @description
    * Whether the action is enable or disabled
    * typically based on state.
    */
   disabled: boolean;
+  /**
+   * @description
+   * Indicate whether the action navigate to
+   * is opened in new tab or same tab.
+   * Default: in same tab.
+   */
+  openInNewTab?: boolean;
 }

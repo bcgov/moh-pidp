@@ -4,21 +4,18 @@
     <div *ngIf="!isAdminLogin; else admin" class="content-container">
       <header *ngIf="isMobileTitleVisible" class="title-container">
         <h1 class="title">
-          <span class="title-text">
-            <span class="title-provider">Provider</span>
-            <span class="title-portal">Identity Portal</span>
-          </span>
+          <span class="title-text">OneHealthID Service</span>
         </h1>
       </header>
       <header *ngIf="isWebTitleVisible" class="title-container">
         <div class="title-content-container">
           <h1 class="title">
-            <span class="title-text">Provider<br />Identity Portal</span>
+            <span class="title-text">OneHealthID Service</span>
           </h1>
           <section class="title-site-description">
             <p>
-              A portal for healthcare professionals in British Columbia to enrol
-              for access to participating health systems
+              A suite of identity-related products and services for healthcare
+              providers in BC.
             </p>
           </section>
           <section class="title-bcgov">
@@ -48,7 +45,9 @@
               loading="lazy"
               aria-label="PIDP Logo" />
           </div>
-          <h1 id="welcome" class="welcome-title">Welcome</h1>
+          <div class="pidp-branding">
+            <h2><strong>Provider Identity Portal (PIdP)</strong></h2>
+          </div>
           <ng-container *ngTemplateOutlet="login"></ng-container>
         </div>
       </section>
@@ -77,39 +76,46 @@
       </div>
 
       <div class="login-continue-with">
-        <div class="login-line-container">
-          <hr class="login-line" />
+        <div>
+          <span class="login-continue-with-text">Other login options</span>
+          <button
+            class="other-login-button"
+            mat-icon-button
+            (click)="onShowOtherLoginOptions()">
+            <i class="material-icons">keyboard_double_arrow_down</i>
+          </button>
         </div>
-        <span class="login-continue-with-text">Or continue with</span>
-        <div class="login-line-container">
-          <hr class="login-line" />
+        <div
+          class="other-login-panel"
+          [@expandAnimation]="showOtherLoginOptions">
+          <ng-container *ngIf="showOtherLoginOptions">
+            <div class="login-secondary-container">
+              <button
+                class="login-button-secondary"
+                mat-stroked-button
+                (click)="onLogin(IdentityProvider.PHSA)">
+                Health Authority ID
+              </button>
+              <button
+                class="login-button-secondary"
+                mat-stroked-button
+                (click)="onLogin(IdentityProvider.BC_PROVIDER)">
+                BC Provider
+              </button>
+            </div>
+            <div class="login-with-idir">
+              <small
+                >Do you have a IDIR account?
+                <a
+                  href="javascript:"
+                  role="button"
+                  (click)="onLogin(IdentityProvider.IDIR)"
+                  >Login</a
+                ></small
+              >
+            </div>
+          </ng-container>
         </div>
-      </div>
-
-      <div class="login-secondary-container">
-        <button
-          class="login-button-secondary"
-          mat-stroked-button
-          (click)="onLogin(IdentityProvider.PHSA)">
-          Login with your Health Authority ID
-        </button>
-        <button
-          class="login-button-secondary"
-          mat-stroked-button
-          (click)="onLogin(IdentityProvider.BC_PROVIDER)">
-          Login with BC Provider
-        </button>
-      </div>
-      <div class="login-with-idir">
-        <small
-          >Do you have a IDIR account?
-          <a
-            href="javascript:"
-            role="button"
-            (click)="onLogin(IdentityProvider.IDIR)"
-            >Login</a
-          ></small
-        >
       </div>
     </div>
   </div>
@@ -121,18 +127,18 @@
         class="systems-card"
         titleText="Special Authority eForms"
         imageTitleText=""
-        [headerColor]="hcimWebHeaderColor"
+        headerColor="white"
         [webpImageUrls]="[
           '/assets/images/login-laptop-mobile-1200x200.webp',
-          '/assets/images/login-laptop-small-70x350.webp',
-          '/assets/images/login-laptop-medium-70x350.webp',
-          '/assets/images/login-laptop-desktop-140x600.webp'
+          '/assets/images/login-laptop-small-196x101.webp',
+          '/assets/images/login-laptop-medium-300x155.webp',
+          '/assets/images/login-laptop-desktop-386x200.webp'
         ]"
         [jpegImageUrls]="[
           '/assets/images/login-laptop-mobile-1200x200.jpg',
-          '/assets/images/login-laptop-small-70x350.jpg',
-          '/assets/images/login-laptop-medium-70x350.jpg',
-          '/assets/images/login-laptop-desktop-140x600.jpg'
+          '/assets/images/login-laptop-small-196x101.jpg',
+          '/assets/images/login-laptop-medium-300x155.jpg',
+          '/assets/images/login-laptop-desktop-386x200.jpg'
         ]">
         <ng-container *ngTemplateOutlet="pharmacareEforms"></ng-container>
       </app-auth-system-card>
@@ -143,39 +149,37 @@
         headerColor="white"
         [webpImageUrls]="[
           '/assets/images/login-people-mobile-1200x200.webp',
-          '/assets/images/login-people-small-70x350.webp',
-          '/assets/images/login-people-medium-70x350.webp',
-          '/assets/images/login-people-desktop-140x600.webp'
+          '/assets/images/login-people-small-196x101.webp',
+          '/assets/images/login-people-medium-300x155.webp',
+          '/assets/images/login-people-desktop-386x200.webp'
         ]"
         [jpegImageUrls]="[
           '/assets/images/login-people-mobile-1200x200.jpg',
-          '/assets/images/login-people-small-70x350.jpg',
-          '/assets/images/login-people-medium-70x350.jpg',
-          '/assets/images/login-people-desktop-140x600.jpg'
+          '/assets/images/login-people-small-196x101.jpg',
+          '/assets/images/login-people-medium-300x155.jpg',
+          '/assets/images/login-people-desktop-386x200.jpg'
         ]">
         <ng-container *ngTemplateOutlet="hcimWeb"></ng-container>
       </app-auth-system-card>
       <app-auth-system-card
         class="systems-card"
-        titleText="Provincial Prescription Renewal Support Service eForm"
+        titleText="Provincial Attachment System"
         imageTitleText=""
         headerColor="white"
         [webpImageUrls]="[
-          '/assets/images/login-prescription-mobile-1200x200.webp',
-          '/assets/images/login-prescription-small-70x350.webp',
-          '/assets/images/login-prescription-medium-70x350.webp',
-          '/assets/images/login-prescription-desktop-140x600.webp'
+          '/assets/images/login-rostering-mobile-1200x200.webp',
+          '/assets/images/login-rostering-small-196x101.webp',
+          '/assets/images/login-rostering-medium-300x155.webp',
+          '/assets/images/login-rostering-desktop-386x200.webp'
         ]"
         [jpegImageUrls]="[
-          '/assets/images/login-prescription-mobile-1200x200.jpg',
-          '/assets/images/login-prescription-small-70x350.jpg',
-          '/assets/images/login-prescription-medium-70x350.jpg',
-          '/assets/images/login-prescription-desktop-140x600.jpg'
+          '/assets/images/login-rostering-mobile-1200x200.jpg',
+          '/assets/images/login-rostering-small-196x101.jpg',
+          '/assets/images/login-rostering-medium-300x155.jpg',
+          '/assets/images/login-rostering-desktop-386x200.jpg'
         ]">
-        <ng-container
-          *ngTemplateOutlet="prescriptionRefillEforms"></ng-container>
+        <ng-container *ngTemplateOutlet="rostering"></ng-container>
       </app-auth-system-card>
-      <ng-container *ngTemplateOutlet="comingSoon"></ng-container>
     </div>
   </div>
 </ng-template>
@@ -205,39 +209,15 @@
     </div>
   </div>
 </ng-template>
-<ng-template #prescriptionRefillEforms>
-  <div class="card-content card-pharmacare">
+<ng-template #rostering>
+  <div class="card-content card-rostering">
     <p>
-      Pharmacists can enrol for access to the Provincial Prescription Renewal
-      Support Service eForm. You need to set up the
-      <a uiAnchor [attr.href]="bcscAppDownload">BC Services Card app</a>
-      to enrol. You will use the app each time you access the Provincial
-      Prescription Renewal Support Service eForm. See
-      <a uiAnchor [attr.href]="prescriptionRenewalSupportUrl"
-        >Prescription Renewal Support</a
-      >
-      for more information.
+      Provincial Attachment System is a process by which patients register with
+      a family practice, family physician, or team. Provincial Attachment System
+      facilitates accountability by afining the population for which the primary
+      care organization or provider is responsible and facilitates an ongoing
+      relationship between the patient and provider.
     </p>
-  </div>
-</ng-template>
-<ng-template #comingSoon>
-  <div class="card-content card-coming-soon">
-    <header>
-      <div class="coming-soon-header-content">
-        <div><h2>Coming Soon</h2></div>
-        <div>
-          <mat-icon class="material-icons-outlined">verified</mat-icon>
-        </div>
-      </div>
-    </header>
-    <div class="coming-soon-text-container">
-      <div class="coming-soon-text">
-        <p>
-          For private clinics in the Fraser Health Authority region: Enrolment
-          to Microsoft Teams for Clinical Use.
-        </p>
-      </div>
-    </div>
   </div>
 </ng-template>
 <ng-template #admin>

@@ -40,6 +40,20 @@ public class PlrClient : BaseClient, IPlrClient
         };
     }
 
+    public async Task<List<PlrStatusChangeLog>> GetProcessableStatusChangesAsync(int limit = 10)
+    {
+        var result = await this.GetWithQueryParamsAsync<List<PlrStatusChangeLog>>("records/status-changes", new { limit });
+        if (result.IsSuccess)
+        {
+            return result.Value;
+        }
+        else
+        {
+            this.Logger.LogPlrError(nameof(GetProcessableStatusChangesAsync));
+            return new();
+        }
+    }
+
     public async Task<IEnumerable<PlrRecord>?> GetRecordsAsync(params string?[] cpns)
     {
         cpns = cpns
@@ -95,6 +109,12 @@ public class PlrClient : BaseClient, IPlrClient
         return PlrStandingsDigest.FromRecords(records);
     }
 
+    public async Task<bool> UpdateStatusChangeLogAsync(int statusChangeLogId)
+    {
+        var response = await this.PutAsync($"records/status-changes/{statusChangeLogId}/processed");
+        return response.IsSuccess;
+    }
+
     /// <summary>
     /// Returns the PLR Identifier Types(s) that correspond to the given College.
     /// </summary>
@@ -121,4 +141,7 @@ public static partial class PlrClientLoggingExtensions
 
     [LoggerMessage(2, LogLevel.Warning, "Multiple matching Records found in PLR with CollegeId = {licenceNumber}, Birthdate = {birthdate}, and any of {identifierTypes} Identifier Types.")]
     public static partial void LogMultipleRecordsFound(this ILogger logger, string licenceNumber, string birthdate, string[] identifierTypes);
+
+    [LoggerMessage(3, LogLevel.Error, "Error when calling PLR API in method {methodName}.")]
+    public static partial void LogPlrError(this ILogger logger, string methodName);
 }

@@ -16,6 +16,12 @@ public interface IPlrClient
     Task<string?> FindCpnAsync(CollegeCode collegeCode, string licenceNumber, LocalDate birthdate);
 
     /// <summary>
+    /// Get a list of PLR status changes to be processed.
+    /// </summary>
+    /// <returns></returns>
+    Task<List<PlrStatusChangeLog>> GetProcessableStatusChangesAsync(int limit = 10);
+
+    /// <summary>
     /// Fetches the PLR record(s) corresponding to the given CPN(s).
     /// Returns null on an error.
     /// </summary>
@@ -41,4 +47,11 @@ public interface IPlrClient
     /// </summary>
     /// <param name="cpns"></param>
     Task<PlrStandingsDigest> GetAggregateStandingsDigestAsync(IEnumerable<string?> cpns);
+
+    /// <summary>
+    /// Update the Status Change Log to "processed".
+    /// </summary>
+    /// <param name="statusChangeLogId"></param>
+    /// <returns></returns>
+    Task<bool> UpdateStatusChangeLogAsync(int statusChangeLogId);
 }

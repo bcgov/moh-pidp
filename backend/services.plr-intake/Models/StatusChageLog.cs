@@ -20,4 +20,6 @@ public class StatusChageLog : BaseAuditable
     public string? NewStatusCode { get; set; }
 
     public string? NewStatusReasonCode { get; set; }
+
+    public bool ShouldBeProcessed { get; set; }
 }

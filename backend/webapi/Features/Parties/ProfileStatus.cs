@@ -12,13 +12,12 @@ using System.Text.Json.Serialization;
 using Pidp.Data;
 using Pidp.Extensions;
 using Pidp.Features.AccessRequests;
+using static Pidp.Features.Parties.ProfileStatus.Model;
 using Pidp.Infrastructure;
 using Pidp.Infrastructure.Auth;
-using Pidp.Infrastructure.HttpClients.Keycloak;
 using Pidp.Infrastructure.HttpClients.Plr;
-using Pidp.Models;
+using Pidp.Models.DomainEvents;
 using Pidp.Models.Lookups;
-using static Pidp.Features.Parties.ProfileStatus.Model;
 
 public partial class ProfileStatus
 {
@@ -49,21 +48,15 @@ public partial class ProfileStatus
 
     public class CommandHandler : ICommandHandler<Command, Model>
     {
-        private readonly IClock clock;
-        private readonly IKeycloakAdministrationClient keycloakClient;
         private readonly IMapper mapper;
         private readonly IPlrClient plrClient;
         private readonly PidpDbContext context;
 
         public CommandHandler(
-            IClock clock,
-            IKeycloakAdministrationClient keycloakClient,
             IMapper mapper,
             IPlrClient plrClient,
             PidpDbContext context)
         {
-            this.clock = clock;
-            this.keycloakClient = keycloakClient;
             this.mapper = mapper;
             this.plrClient = plrClient;
             this.context = context;
@@ -88,11 +81,7 @@ public partial class ProfileStatus
                         .Include(party => party.Credentials)
                         .SingleAsync(party => party.Id == command.Id);
                     party.Cpn = newCpn;
-                    await this.keycloakClient.UpdateUserCpn(party.PrimaryUserId, newCpn);
-                    if (await this.keycloakClient.AssignAccessRoles(party.PrimaryUserId, MohKeycloakEnrolment.PractitionerLicenceStatus))
-                    {
-                        this.context.BusinessEvents.Add(LicenceStatusRoleAssigned.Create(party.Id, MohKeycloakEnrolment.PractitionerLicenceStatus, this.clock.GetCurrentInstant()));
-                    };
+                    party.DomainEvents.Add(new PlrCpnLookupFound(party.Id, party.PrimaryUserId, party.Cpn));
                     await this.context.SaveChangesAsync();
                 }
 
@@ -111,6 +100,7 @@ public partial class ProfileStatus
                     ProfileSection.Create<CollegeCertificationSection>(data),
                     ProfileSection.Create<DemographicsSection>(data),
                     ProfileSection.Create<EndorsementsSection>(data),
+                    ProfileSection.Create<UserAccessAgreementSection>(data),
                     ProfileSection.Create<OrganizationDetailsSection>(data),
                     ProfileSection.Create<DriverFitnessSection>(data),
                     ProfileSection.Create<HcimAccountTransferSection>(data),
@@ -119,6 +109,7 @@ public partial class ProfileStatus
                     ProfileSection.Create<MSTeamsPrivacyOfficerSection>(data),
                     ProfileSection.Create<PrescriptionRefillEformsSection>(data),
                     ProfileSection.Create<ProviderReportingPortalSection>(data),
+                    ProfileSection.Create<PrimaryCareRosteringSection>(data),
                     ProfileSection.Create<SAEformsSection>(data)
                 }
                 .ToDictionary(section => section.SectionName, section => section)

@@ -1,10 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { TestBed } from '@angular/core/testing';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, convertToParamMap } from '@angular/router';
 
 import {
   randEmail,
   randFirstName,
+  randFullName,
   randLastName,
   randNumber,
   randPhoneNumber,
@@ -17,11 +18,14 @@ import {
   createSpyFromClass,
   provideAutoSpy,
 } from 'jest-auto-spies';
+import { KeycloakService } from 'keycloak-angular';
 
 import { APP_CONFIG, APP_DI_CONFIG } from '@app/app.config';
 import { PartyService } from '@app/core/party/party.service';
-import { DocumentService } from '@app/core/services/document.service';
 
+import { BcProviderEditInitialStateModel } from '../access/pages/bc-provider-edit/bc-provider-edit.component';
+import { BcProviderEditResource } from '../access/pages/bc-provider-edit/bc-provider-edit.resource';
+import { EndorsementsResource } from '../organization-info/pages/endorsements/endorsements-resource.service';
 import { AlertCode } from './enums/alert-code.enum';
 import { StatusCode } from './enums/status-code.enum';
 import { ProfileStatus } from './models/profile-status.model';
@@ -35,14 +39,17 @@ describe('PortalPage', () => {
   let partyServiceSpy: Spy<PartyService>;
   let portalResourceSpy: Spy<PortalResource>;
   let portalServiceSpy: Spy<PortalService>;
+  let bcProviderResourceSpy: Spy<BcProviderEditResource>;
   let router: Router;
 
   let mockActivatedRoute;
   let mockProfileStatusResponse: ProfileStatus;
+  let mockBcProviderEditInitialStateResponse: BcProviderEditInitialStateModel;
 
   beforeEach(() => {
     mockActivatedRoute = {
       snapshot: {
+        queryParamMap: convertToParamMap({ 'endorsement-token': '' }),
         data: {
           title: randTextRange({ min: 1, max: 4 }),
         },
@@ -76,7 +83,9 @@ describe('PortalPage', () => {
             settersToSpyOn: ['alerts'],
           }),
         },
-        provideAutoSpy(DocumentService),
+        provideAutoSpy(BcProviderEditResource),
+        provideAutoSpy(EndorsementsResource),
+        provideAutoSpy(KeycloakService),
       ],
     });
 
@@ -85,11 +94,17 @@ describe('PortalPage', () => {
     partyServiceSpy = TestBed.inject<any>(PartyService);
     portalResourceSpy = TestBed.inject<any>(PortalResource);
     portalServiceSpy = TestBed.inject<any>(PortalService);
+    bcProviderResourceSpy = TestBed.inject<any>(BcProviderEditResource);
     router = TestBed.inject(Router);
 
     mockProfileStatusResponse = {
       alerts: [AlertCode.TRANSIENT_ERROR],
       status: {
+        dashboardInfo: {
+          fullName: randFullName(),
+          collegeCode: randNumber(),
+          statusCode: StatusCode.AVAILABLE,
+        },
         demographics: {
           firstName: randFirstName(),
           lastName: randLastName(),
@@ -98,8 +113,8 @@ describe('PortalPage', () => {
           statusCode: StatusCode.AVAILABLE,
         },
         collegeCertification: {
-          collegeCode: randNumber(),
-          licenceNumber: randText(),
+          hasCpn: false,
+          licenceDeclared: false,
           statusCode: StatusCode.AVAILABLE,
         },
         administratorInfo: {
@@ -108,13 +123,30 @@ describe('PortalPage', () => {
         },
         organizationDetails: { statusCode: StatusCode.AVAILABLE },
         facilityDetails: { statusCode: StatusCode.AVAILABLE },
+        endorsements: { statusCode: StatusCode.AVAILABLE },
         userAccessAgreement: { statusCode: StatusCode.AVAILABLE },
-        saEforms: { statusCode: StatusCode.AVAILABLE },
+        saEforms: {
+          statusCode: StatusCode.AVAILABLE,
+          incorrectLicenceType: false,
+        },
+        prescriptionRefillEforms: { statusCode: StatusCode.AVAILABLE },
+        'prescription-refill-eforms': { statusCode: StatusCode.AVAILABLE },
+        bcProvider: { statusCode: StatusCode.AVAILABLE },
         hcimAccountTransfer: { statusCode: StatusCode.AVAILABLE },
         hcimEnrolment: { statusCode: StatusCode.AVAILABLE },
+        driverFitness: { statusCode: StatusCode.AVAILABLE },
+        msTeamsPrivacyOfficer: { statusCode: StatusCode.AVAILABLE },
+        msTeamsClinicMember: { statusCode: StatusCode.AVAILABLE },
+        providerReportingPortal: { statusCode: StatusCode.AVAILABLE },
+        'provider-reporting-portal': { statusCode: StatusCode.AVAILABLE },
         sitePrivacySecurityChecklist: { statusCode: StatusCode.AVAILABLE },
         complianceTraining: { statusCode: StatusCode.AVAILABLE },
+        primaryCareRostering: { statusCode: StatusCode.AVAILABLE },
       },
+    };
+
+    mockBcProviderEditInitialStateResponse = {
+      bcProviderId: 'Id',
     };
   });
 
@@ -123,12 +155,14 @@ describe('PortalPage', () => {
       const partyId = randNumber({ min: 1 });
       partyServiceSpy.accessorSpies.getters.partyId.mockReturnValue(partyId);
       portalResourceSpy.getProfileStatus.nextWith(mockProfileStatusResponse);
+      bcProviderResourceSpy.get.nextWith(
+        mockBcProviderEditInitialStateResponse
+      );
       portalServiceSpy.accessorSpies.getters.alerts.mockReturnValue(
         mockProfileStatusResponse.alerts
       );
 
       when('the component is initialized', () => {
-        expect(component.completedProfile).toEqual(false);
         expect(component.alerts.length).toEqual(0);
         component.ngOnInit();
 
@@ -139,9 +173,6 @@ describe('PortalPage', () => {
           );
           expect(portalServiceSpy.updateState).toHaveBeenCalledWith(
             mockProfileStatusResponse
-          );
-          expect(component.completedProfile).toEqual(
-            component.completedProfile
           );
           expect(component.alerts.length).toEqual(1);
         });
@@ -154,6 +185,9 @@ describe('PortalPage', () => {
       const partyId = randNumber({ min: 1 });
       partyServiceSpy.accessorSpies.getters.partyId.mockReturnValue(partyId);
       portalResourceSpy.getProfileStatus.nextWith(mockProfileStatusResponse);
+      bcProviderResourceSpy.get.nextWith(
+        mockBcProviderEditInitialStateResponse
+      );
       component.ngOnInit();
 
       when('the scroll to anchor method is invoked', () => {
@@ -174,6 +208,9 @@ describe('PortalPage', () => {
       const partyId = randNumber({ min: 1 });
       partyServiceSpy.accessorSpies.getters.partyId.mockReturnValue(partyId);
       portalResourceSpy.getProfileStatus.nextWith(mockProfileStatusResponse);
+      bcProviderResourceSpy.get.nextWith(
+        mockBcProviderEditInitialStateResponse
+      );
       component.ngOnInit();
 
       when('the card action method is invoked', () => {

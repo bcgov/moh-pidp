@@ -170,6 +170,15 @@ export class PortalDashboardComponent implements IDashboard, OnInit {
         'restore'
       ),
       new DashboardRouteMenuItem(
+        'FAQ',
+        {
+          commands: PortalRoutes.MODULE_PATH,
+          extras: { fragment: 'faq' },
+          linkActiveOptions,
+        },
+        'help_outline'
+      ),
+      new DashboardRouteMenuItem(
         'Get Support',
         {
           commands: PortalRoutes.MODULE_PATH,

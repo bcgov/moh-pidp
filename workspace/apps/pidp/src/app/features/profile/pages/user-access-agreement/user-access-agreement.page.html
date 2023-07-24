@@ -1,7 +1,26 @@
 <ui-page mode="medium">
+  <ui-alert
+    *ngIf="accessRequestFailed"
+    type="danger"
+    icon="error_outline"
+    iconType="outlined"
+    heading="Error Accept Agreement">
+    <ng-container uiAlertContent>
+      <p>
+        Your acceptance of the agreement could not be processed at this time. If
+        this issue persists, contact
+        <a
+          uiAnchor
+          scheme="mailto"
+          [attr.href]="specialAuthoritySupportEmail"></a>
+        for assistance.
+      </p>
+    </ng-container>
+  </ui-alert>
+
   <app-user-access-agreement-document></app-user-access-agreement-document>
 
-  <p>
+  <p *ngIf="!completed">
     <strong>
       I <span class="signature">{{ username | async }}</span>, represent and
       warrant that all information provided in connection with my application
@@ -9,7 +28,7 @@
     </strong>
   </p>
 
-  <ui-page-footer>
+  <ui-page-footer [mode]="completed ? 'reverse' : 'normal'">
     <button
       mat-stroked-button
       uiPageFooterAction
@@ -19,11 +38,12 @@
       Back Home
     </button>
     <button
+      *ngIf="!completed"
       mat-flat-button
       uiPageFooterAction
       color="primary"
-      type="submit"
-      (click)="onSubmit()">
+      type="button"
+      (click)="onAcceptAgreement()">
       Accept Agreement
     </button>
   </ui-page-footer>

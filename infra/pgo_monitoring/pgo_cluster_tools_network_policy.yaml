@@ -1,0 +1,18 @@
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: allow-crunchydb-monitoring
+  labels:
+    postgres-operator.crunchydata.com/cluster: test-postgres-cluster
+spec:
+  podSelector:
+    matchLabels:
+      postgres-operator.crunchydata.com/cluster: test-postgres-cluster
+  ingress:
+  - from:
+    - namespaceSelector:
+        name: d8a8f9
+        environment: tools
+    ports:
+    - protocol: TCP
+      port: 9187

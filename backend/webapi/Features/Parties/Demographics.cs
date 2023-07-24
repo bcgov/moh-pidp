@@ -4,10 +4,15 @@ using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using FluentValidation;
 using HybridModelBinding;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
 
 using Pidp.Data;
+using Pidp.Infrastructure.Auth;
+using Pidp.Infrastructure.HttpClients.BCProvider;
+using Pidp.Infrastructure.HttpClients.Keycloak;
+using Pidp.Models.DomainEvents;
 
 public class Demographics
 {
@@ -74,7 +79,14 @@ public class Demographics
         public async Task HandleAsync(Command command)
         {
             var party = await this.context.Parties
+                .Include(party => party.Credentials)
                 .SingleAsync(party => party.Id == command.Id);
+
+            if (party.Email != null
+                && party.Email != command.Email)
+            {
+                party.DomainEvents.Add(new PartyEmailUpdated(party.Id, party.PrimaryUserId, command.Email!));
+            }
 
             party.PreferredFirstName = command.PreferredFirstName;
             party.PreferredMiddleName = command.PreferredMiddleName;
@@ -83,6 +95,45 @@ public class Demographics
             party.Phone = command.Phone;
 
             await this.context.SaveChangesAsync();
+        }
+    }
+
+    public class PartyEmailUpdatedHandler : INotificationHandler<PartyEmailUpdated>
+    {
+        private readonly IBCProviderClient bcProviderClient;
+        private readonly IKeycloakAdministrationClient keycloakClient;
+        private readonly PidpDbContext context;
+        private readonly string bcProviderClientId;
+
+        public PartyEmailUpdatedHandler(
+            IBCProviderClient bcProviderClient,
+            IKeycloakAdministrationClient keycloakClient,
+            PidpConfiguration config,
+            PidpDbContext context)
+        {
+            this.bcProviderClient = bcProviderClient;
+            this.keycloakClient = keycloakClient;
+            this.context = context;
+            this.bcProviderClientId = config.BCProviderClient.ClientId;
+        }
+
+        public async Task Handle(PartyEmailUpdated notification, CancellationToken cancellationToken)
+        {
+            var bcProviderId = await this.context.Credentials
+                .Where(credential => credential.PartyId == notification.PartyId
+                    && credential.IdentityProvider == IdentityProviders.BCProvider)
+                .Select(credential => credential.IdpId)
+                .SingleOrDefaultAsync(cancellationToken);
+
+            if (string.IsNullOrEmpty(bcProviderId))
+            {
+                return;
+            }
+
+            var bcProviderAttributes = new BCProviderAttributes(this.bcProviderClientId).SetPidpEmail(notification.NewEmail);
+            await this.bcProviderClient.UpdateAttributes(bcProviderId, bcProviderAttributes.AsAdditionalData());
+
+            await this.keycloakClient.UpdateUser(notification.UserId, (user) => user.SetPidpEmail(notification.NewEmail));
         }
     }
 }

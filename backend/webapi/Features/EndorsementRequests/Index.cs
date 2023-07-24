@@ -40,33 +40,44 @@ public class Index
 
         public async Task<List<Model>> HandleAsync(Query query)
         {
-            // TODO: do this better?
-            return await this.context.EndorsementRequests
+            var requested = await this.context.EndorsementRequests
                 .Where(request => request.RequestingPartyId == query.PartyId
-                    || request.ReceivingPartyId == query.PartyId)
-                .Where(request => request.Status != EndorsementRequestStatus.Completed) // Endorsement Requests that successfully complete are now full Endorsements
-                .Select(request => new
+                    && request.Status != EndorsementRequestStatus.Completed) // Endorsement Requests that successfully complete are now full Endorsements
+                .Select(request => new Model
                 {
-                    PartyIsRequester = request.RequestingPartyId == query.PartyId,
-                    OtherParty = request.RequestingPartyId == query.PartyId
-                        ? request.ReceivingParty
-                        : request.RequestingParty,
-                    Request = request
+                    Id = request.Id,
+                    RecipientEmail = request.RecipientEmail,
+                    AdditionalInformation = request.AdditionalInformation,
+                    PartyName = request.ReceivingParty == null
+                        ? null
+                        : request.ReceivingParty.FullName,
+                    CollegeCode = request.ReceivingParty!.LicenceDeclaration!.CollegeCode,
+                    Status = request.Status,
+                    StatusDate = request.StatusDate,
+                    Actionable = request.Status == EndorsementRequestStatus.Approved
                 })
-                .Select(dto => new Model
+                .ToArrayAsync();
+
+            var recieved = await this.context.EndorsementRequests
+                .Where(request => request.ReceivingPartyId == query.PartyId
+                    && request.Status != EndorsementRequestStatus.Completed)
+                .Select(request => new Model
                 {
-                    Id = dto.Request.Id,
-                    RecipientEmail = dto.Request.RecipientEmail,
-                    AdditionalInformation = dto.Request.AdditionalInformation,
-                    PartyName = dto.OtherParty == null ? null : $"{dto.OtherParty.FirstName} {dto.OtherParty.LastName}",
-                    CollegeCode = dto.OtherParty!.LicenceDeclaration!.CollegeCode,
-                    Status = dto.Request.Status,
-                    StatusDate = dto.Request.StatusDate,
-                    Actionable = (dto.PartyIsRequester && dto.Request.Status == EndorsementRequestStatus.Approved)
-                        || (!dto.PartyIsRequester && dto.Request.Status == EndorsementRequestStatus.Received)
+                    Id = request.Id,
+                    RecipientEmail = request.RecipientEmail,
+                    AdditionalInformation = request.AdditionalInformation,
+                    PartyName = request.RequestingParty!.FullName,
+                    CollegeCode = request.RequestingParty!.LicenceDeclaration!.CollegeCode,
+                    Status = request.Status,
+                    StatusDate = request.StatusDate,
+                    Actionable = request.Status == EndorsementRequestStatus.Received
                 })
+                .ToArrayAsync();
+
+            return requested
+                .Concat(recieved)
                 .OrderByDescending(model => model.StatusDate)
-                .ToListAsync();
+                .ToList();
         }
     }
 }

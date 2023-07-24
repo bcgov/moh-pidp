@@ -14,9 +14,11 @@ import { HcimEnrolmentPortalSection } from './access/hcim-enrolment-portal-secti
 import { MsTeamsClinicMemberPortalSection } from './access/ms-teams-clinic-member-portal-section.class';
 import { MsTeamsPrivacyOfficerPortalSection } from './access/ms-teams-privacy-officer-portal-section.class';
 import { PrescriptionRefillEformsPortalSection } from './access/prescription-refill-eforms-portal-section.class';
+import { PrimaryCareRosteringPortalSection } from './access/primary-care-rostering-portal-section.class';
 import { ProviderReportingPortalSection } from './access/provider-reporting-portal-section.class';
 import { SaEformsPortalSection } from './access/sa-eforms-portal-section.class';
 import { SitePrivacySecurityPortalSection } from './access/site-privacy-security-checklist-portal-section.class';
+import { MfaSetupPortalSection } from './faq/mfa-setup-portal-section.class';
 import { SignedAcceptedDocumentsPortalSection } from './history/signed-accepted-documents-portal-section.class';
 import { TransactionsPortalSection } from './history/transactions-portal-section.class';
 import { AdministratorInfoPortalSection } from './organization/administrator-information-portal-section';
@@ -41,6 +43,7 @@ export const portalStateGroupKeys = [
   'organization',
   'training',
   'history',
+  'faq',
 ] as const;
 
 /**
@@ -67,6 +70,7 @@ export class PortalStateBuilder {
       organization: this.createOrganizationGroup(profileStatus),
       training: this.createTrainingGroup(profileStatus),
       history: this.createHistoryGroup(),
+      faq: this.createFaqGroup(),
     };
   }
 
@@ -89,10 +93,7 @@ export class PortalStateBuilder {
         ]
       ),
       ...ArrayUtils.insertResultIf<IPortalSection>(
-        // TODO add insertSection call when it exists in the ProfileStatus API
-        // TODO remove permissions when ready for production
-        // this.insertSection('userAccessAgreement', profileStatus) &&
-        this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
+        this.insertSection('userAccessAgreement', profileStatus),
         () => [new UserAccessAgreementPortalSection(profileStatus, this.router)]
       ),
     ];
@@ -122,9 +123,7 @@ export class PortalStateBuilder {
         () => [new AdministratorInfoPortalSection(profileStatus, this.router)]
       ),
       ...ArrayUtils.insertResultIf<IPortalSection>(
-        // TODO remove permissions when ready for production
-        this.insertSection('endorsements', profileStatus) &&
-          this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
+        this.insertSection('endorsements', profileStatus),
         () => [new EndorsementsPortalSection(profileStatus, this.router)]
       ),
     ];
@@ -143,9 +142,7 @@ export class PortalStateBuilder {
         ]
       ),
       ...ArrayUtils.insertResultIf<IPortalSection>(
-        // TODO remove permissions when ready for production
-        this.insertSection('bcProvider', profileStatus) &&
-          this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
+        this.insertSection('bcProvider', profileStatus),
         () => [new BcProviderPortalSection(profileStatus, this.router)]
       ),
       ...ArrayUtils.insertResultIf<IPortalSection>(
@@ -166,23 +163,17 @@ export class PortalStateBuilder {
         () => [new SitePrivacySecurityPortalSection(profileStatus, this.router)]
       ),
       ...ArrayUtils.insertResultIf<IPortalSection>(
-        // TODO remove permissions when ready for production
-        this.insertSection('driverFitness', profileStatus) &&
-          this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
+        this.insertSection('driverFitness', profileStatus),
         () => [new DriverFitnessPortalSection(profileStatus, this.router)]
       ),
       ...ArrayUtils.insertResultIf<IPortalSection>(
-        // TODO remove permissions when ready for production
-        this.insertSection('msTeamsPrivacyOfficer', profileStatus) &&
-          this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
+        this.insertSection('msTeamsPrivacyOfficer', profileStatus),
         () => [
           new MsTeamsPrivacyOfficerPortalSection(profileStatus, this.router),
         ]
       ),
       ...ArrayUtils.insertResultIf<IPortalSection>(
-        // TODO remove permissions when ready for production
-        this.insertSection('msTeamsClinicMember', profileStatus) &&
-          this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
+        this.insertSection('msTeamsClinicMember', profileStatus),
         () => [new MsTeamsClinicMemberPortalSection(profileStatus, this.router)]
       ),
       ...ArrayUtils.insertResultIf<IPortalSection>(
@@ -190,6 +181,10 @@ export class PortalStateBuilder {
         this.insertSection('providerReportingPortal', profileStatus) &&
           this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
         () => [new ProviderReportingPortalSection(profileStatus, this.router)]
+      ),
+      ...ArrayUtils.insertResultIf<IPortalSection>(
+        this.insertSection('primaryCareRostering', profileStatus),
+        () => [new PrimaryCareRosteringPortalSection(profileStatus)]
       ),
     ];
   }
@@ -208,6 +203,10 @@ export class PortalStateBuilder {
       new SignedAcceptedDocumentsPortalSection(this.router),
       new TransactionsPortalSection(this.router),
     ];
+  }
+
+  private createFaqGroup(): IPortalSection[] {
+    return [new MfaSetupPortalSection(this.router)];
   }
 
   private insertSection(

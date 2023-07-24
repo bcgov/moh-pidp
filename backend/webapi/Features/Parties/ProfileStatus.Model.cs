@@ -2,6 +2,7 @@ namespace Pidp.Features.Parties;
 
 using NodaTime;
 using Pidp.Features.AccessRequests;
+using Pidp.Infrastructure.HttpClients.Plr;
 using Pidp.Models.Lookups;
 
 public partial class ProfileStatus
@@ -89,9 +90,14 @@ public partial class ProfileStatus
                     return StatusCode.Hidden;
                 }
 
-                return profile.HasBCProviderCredential
-                    ? StatusCode.Complete
-                    : StatusCode.Incomplete;
+                if (profile.HasBCProviderCredential)
+                {
+                    return StatusCode.Complete;
+                }
+
+                return profile.DemographicsComplete
+                    ? StatusCode.Incomplete
+                    : StatusCode.Locked;
             }
         }
 
@@ -174,6 +180,21 @@ public partial class ProfileStatus
                 return profile.DemographicsComplete && profile.LicenceDeclarationComplete
                     ? StatusCode.Incomplete
                     : StatusCode.Locked;
+            }
+        }
+
+        public class UserAccessAgreementSection : ProfileSection
+        {
+            internal override string SectionName => "userAccessAgreement";
+
+            protected override StatusCode Compute(ProfileData profile)
+            {
+                if (profile.CompletedEnrolments.Contains(AccessTypeCode.UserAccessAgreement))
+                {
+                    return StatusCode.Complete;
+                }
+
+                return StatusCode.Incomplete;
             }
         }
 
@@ -372,6 +393,26 @@ public partial class ProfileStatus
             }
         }
 
+        public class PrimaryCareRosteringSection : ProfileSection
+        {
+            internal override string SectionName => "primaryCareRostering";
+
+            protected override StatusCode Compute(ProfileData profile)
+            {
+                if ((profile.EndorsementPlrStanding.HasGoodStanding
+                    || profile.PartyPlrStanding
+                        .With(ProviderRoleType.MedicalDoctor, ProviderRoleType.RegisteredNursePractitioner)
+                        .HasGoodStanding)
+                    && profile.HasBCProviderCredential
+                    && profile.CompletedEnrolments.Contains(AccessTypeCode.UserAccessAgreement))
+                {
+                    return StatusCode.Incomplete;
+                }
+
+                return StatusCode.Locked;
+            }
+        }
+
         public class ProviderReportingPortalSection : ProfileSection
         {
             internal override string SectionName => "providerReportingPortal";
@@ -433,6 +474,5 @@ public partial class ProfileStatus
                 return StatusCode.Locked;
             }
         }
-
     }
 }

@@ -3,6 +3,28 @@
 .viewport-all {
   --gap: 1rem;
   --font-size: 0.75rem;
+  --header-padding: 30px;
+  --endorsement-header-margin: 30px 0 30px;
+  --endorsement-card-header-font-size: 24px;
+  --endorsement-card-width: 300px;
+  --endorsement-card-min-height: 300px;
+  --endorsement-card-padding: 30px;
+  --endorsement-card-learn-more-label-margin-right: 25px;
+  --endorsement-card-learn-more-button-length: 50px;
+  --endorsement-card-learn-more-button-font-size: 36px;
+}
+
+.viewport-medium {
+  --button-margin-right: 20px;
+  --endorsement-card-width: 320px;
+  --endorsement-card-min-height: 320px;
+}
+
+.viewport-large {
+  --header-padding: 40px;
+  --button-margin-right: 20px;
+  --endorsement-card-width: 320px;
+  --endorsement-card-min-height: 320px;
 }
 
 .viewport-small,
@@ -18,7 +40,7 @@
 .viewport-small,
 .viewport-medium,
 .viewport-large {
-  --content-padding: var(--gap) 0;
+  --content-padding: 0;
 }
 
 .viewport-all {
@@ -68,10 +90,7 @@
       }
     }
   }
-  & .agreement-text,
-  & .completed {
-    margin: 0 var(--gap) var(--gap);
-  }
+
   & .actions {
     display: flex;
     margin: var(--gap) var(--gap) 0;
@@ -95,8 +114,8 @@
     & .endorsement-card {
       display: flex;
       flex-direction: column;
-      padding: 50px;
-      width: 350px;
+      padding: var(--endorsement-card-padding);
+      width: var(--endorsement-card-width);
       min-height: var(--endorsement-card-min-height);
       background-image: url('/assets/images/endorsements-card-320x320.jpg');
       background-color: rgba(0, 51, 102, 0.6);

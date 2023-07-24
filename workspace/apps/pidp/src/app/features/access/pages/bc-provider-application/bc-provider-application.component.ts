@@ -1,11 +1,21 @@
-import { Component, OnInit } from '@angular/core';
+import { Element } from '@angular/compiler';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
+import { MatDialogConfig } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 
 import { Observable, catchError, tap } from 'rxjs';
 
-import { faUser } from '@fortawesome/free-solid-svg-icons';
-import { NavigationService } from '@pidp/presentation';
+import {
+  faCircleCheck,
+  faUser,
+  faXmark,
+} from '@fortawesome/free-solid-svg-icons';
+import {
+  LOADING_OVERLAY_DEFAULT_MESSAGE,
+  LoadingOverlayService,
+  NavigationService,
+} from '@pidp/presentation';
 
 import {
   AbstractFormDependenciesService,
@@ -28,14 +38,20 @@ export class BcProviderApplicationComponent
   implements OnInit
 {
   public faUser = faUser;
+  public faCircleCheck = faCircleCheck;
+  public faXmark = faXmark;
   public formState: BcProviderApplicationFormState;
   public showErrorCard = false;
   public errorCardText = '';
   public showMessageCard = false;
   public messageCardText = '';
   public completed: boolean | null;
+  public username = '';
   public password = '';
-  public showOverlayOnSubmit = true;
+  public showOverlayOnSubmit = false;
+
+  @ViewChild('successDialog')
+  public successDialogTemplate!: TemplateRef<Element>;
 
   public get isEnrolButtonEnabled(): boolean {
     return this.formState.form.valid;
@@ -48,6 +64,7 @@ export class BcProviderApplicationComponent
     private navigationService: NavigationService,
     private partyService: PartyService,
     private resource: BcProviderApplicationResource,
+    private loadingOverlayService: LoadingOverlayService,
     private logger: LoggerService
   ) {
     super(dependenciesService);
@@ -65,6 +82,11 @@ export class BcProviderApplicationComponent
     return this.formState.password.hasError('invalidRequirements');
   }
 
+  public onSuccessDialogClose(): void {
+    this.dialog.closeAll();
+    this.navigationService.navigateToRoot();
+  }
+
   public ngOnInit(): void {
     const partyId = this.partyService.partyId;
 
@@ -79,13 +101,20 @@ export class BcProviderApplicationComponent
     }
   }
 
-  protected performSubmission(): Observable<string | null> {
+  protected performSubmission(): Observable<string | void> {
     const partyId = this.partyService.partyId;
     this.password = this.formState.password.value;
+    this.loadingOverlayService.open(LOADING_OVERLAY_DEFAULT_MESSAGE);
 
     return this.resource.createBcProviderAccount(partyId, this.password).pipe(
-      tap(() => (this.completed = true)),
+      tap((upn: string) => {
+        this.username = upn;
+        this.completed = true;
+        this.loadingOverlayService.close();
+        this.showSuccessDialog();
+      }),
       catchError(() => {
+        this.loadingOverlayService.close();
         const message = 'An error occurred.';
         this.setError(message);
         this.setMessage('');
@@ -106,5 +135,12 @@ export class BcProviderApplicationComponent
   private setMessage(message: string): void {
     this.showMessageCard = !!message;
     this.messageCardText = message;
+  }
+
+  private showSuccessDialog(): void {
+    const config: MatDialogConfig = {
+      disableClose: true,
+    };
+    this.dialog.open(this.successDialogTemplate, config);
   }
 }

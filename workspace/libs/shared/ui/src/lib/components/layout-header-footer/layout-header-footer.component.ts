@@ -9,6 +9,7 @@ import { PidpViewport, ViewportService } from '../../services';
 })
 export class LayoutHeaderFooterComponent {
   public isMobile = true;
+  public providerIdentitySupport = 'AMSSPOC.vic@CGI.com';
 
   public constructor(viewportService: ViewportService) {
     viewportService.viewportBroadcast$.subscribe((viewport) =>

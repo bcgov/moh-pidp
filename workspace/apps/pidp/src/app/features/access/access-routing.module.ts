@@ -48,7 +48,6 @@ const routes: Routes = [
         titleText: 'BC Provider Application',
         titleDescriptionText: '',
       },
-      roles: [Role.FEATURE_PIDP_DEMO],
     },
   },
   {
@@ -60,7 +59,6 @@ const routes: Routes = [
         titleText: 'BC Provider Application',
         titleDescriptionText: '',
       },
-      roles: [Role.FEATURE_PIDP_DEMO],
     },
   },
   {
@@ -105,10 +103,6 @@ const routes: Routes = [
   },
   {
     path: AccessRoutes.DRIVER_FITNESS,
-    canActivate: [PermissionsGuard],
-    data: {
-      roles: [Role.FEATURE_PIDP_DEMO],
-    },
     loadChildren: (): Promise<DriverFitnessModule> =>
       import('./pages/driver-fitness/driver-fitness.module').then(
         (m) => m.DriverFitnessModule
@@ -116,10 +110,6 @@ const routes: Routes = [
   },
   {
     path: AccessRoutes.MS_TEAMS_PRIVACY_OFFICER,
-    canActivate: [PermissionsGuard],
-    data: {
-      roles: [Role.FEATURE_PIDP_DEMO],
-    },
     loadChildren: (): Promise<MsTeamsPrivacyOfficerModule> =>
       import(
         './pages/ms-teams-privacy-officer/ms-teams-privacy-officer.module'

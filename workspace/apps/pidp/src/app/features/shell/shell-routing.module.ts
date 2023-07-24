@@ -13,6 +13,8 @@ import { AdminRoutes } from '../admin/admin.routes';
 import { AuthModule } from '../auth/auth.module';
 import { AuthRoutes } from '../auth/auth.routes';
 import { AuthenticationGuard } from '../auth/guards/authentication.guard';
+import { FaqModule } from '../faq/faq.module';
+import { FaqRoutes } from '../faq/faq.routes';
 import { HistoryModule } from '../history/history.module';
 import { HistoryRoutes } from '../history/history.routes';
 import { OrganizationInfoModule } from '../organization-info/organization-info.module';
@@ -94,6 +96,11 @@ const routes: Routes = [
         path: HistoryRoutes.MODULE_PATH,
         loadChildren: (): Promise<HistoryModule> =>
           import('../history/history.module').then((m) => m.HistoryModule),
+      },
+      {
+        path: FaqRoutes.MODULE_PATH,
+        loadChildren: (): Promise<FaqModule> =>
+          import('../faq/faq.module').then((m) => m.FaqModule),
       },
       {
         path: '',

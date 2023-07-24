@@ -25,7 +25,7 @@ public class SAEformsTests : InMemoryDbTest
             party.Cpn = "Cpn";
         });
         var client = A.Fake<IPlrClient>()
-            .ReturningAStatandingsDigest(true, identifierType);
+            .ReturningAStandingsDigest(true, identifierType);
         var keycloak = A.Fake<IKeycloakAdministrationClient>()
             .ReturningTrueWhenAssigingClientRoles();
         var handler = this.MockDependenciesFor<SAEforms.CommandHandler>(client, keycloak);

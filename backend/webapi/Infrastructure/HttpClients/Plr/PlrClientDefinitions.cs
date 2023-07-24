@@ -18,6 +18,18 @@ public class IdentifierType
     public static implicit operator string(IdentifierType type) => type.Value;
 }
 
+public class ProviderRoleType
+{
+    public static readonly ProviderRoleType MedicalDoctor = new("MD");
+    public static readonly ProviderRoleType RegisteredNursePractitioner = new("RNP");
+
+    public string Value { get; }
+
+    private ProviderRoleType(string value) => this.Value = value;
+
+    public static implicit operator string(ProviderRoleType type) => type.Value;
+}
+
 public class PlrRecord
 {
     public string Cpn { get; set; } = string.Empty;
@@ -49,10 +61,25 @@ public class PlrStandingsDigest
 
     public IEnumerable<string> LicenceNumbers => this.records.Where(record => record.LicenceNumber != null).Select(record => record.LicenceNumber!);
 
+    public IEnumerable<string> Cpns => this.records.Select(record => record.Cpn);
+
     private PlrStandingsDigest(bool error, IEnumerable<DigestRecord>? records = null)
     {
         this.Error = error;
         this.records = records ?? Enumerable.Empty<DigestRecord>();
+    }
+
+    /// <summary>
+    /// Filters the digest to exclude records of the given Identifier Type(s)
+    /// </summary>
+    /// <param name="identifierTypes"></param>
+    public PlrStandingsDigest Excluding(params IdentifierType[] identifierTypes)
+    {
+        return new PlrStandingsDigest
+        (
+            this.Error,
+            this.records.ExceptBy(identifierTypes.Select(t => (string)t), record => record.IdentifierType)
+        );
     }
 
     /// <summary>
@@ -69,15 +96,27 @@ public class PlrStandingsDigest
     }
 
     /// <summary>
-    /// Filters the digest to exclude records of the given Identifier Type(s)
+    /// Filters the digest to only include records of the given Provider Role Type(s)
     /// </summary>
-    /// <param name="identifierTypes"></param>
-    public PlrStandingsDigest Excluding(params IdentifierType[] identifierTypes)
+    /// <param name="providerRoleTypes"></param>
+    public PlrStandingsDigest With(params ProviderRoleType[] providerRoleTypes)
     {
         return new PlrStandingsDigest
         (
             this.Error,
-            this.records.ExceptBy(identifierTypes.Select(t => (string)t), record => record.IdentifierType)
+            this.records.IntersectBy(providerRoleTypes.Select(t => (string)t), record => record.ProviderRoleType)
+        );
+    }
+
+    /// <summary>
+    /// Filters the digest to only include records in good standing.
+    /// </summary>
+    public PlrStandingsDigest WithGoodStanding()
+    {
+        return new PlrStandingsDigest
+        (
+            this.Error,
+            this.records.Where(record => record.IsGoodStanding)
         );
     }
 
@@ -87,16 +126,29 @@ public class PlrStandingsDigest
     {
         return new(false, records.Select(record => new DigestRecord
         {
+            Cpn = record.Cpn,
             IdentifierType = record.IdentifierType,
             LicenceNumber = record.CollegeId,
+            ProviderRoleType = record.ProviderRoleType,
             IsGoodStanding = record.IsGoodStanding()
         }));
     }
 
     private class DigestRecord
     {
+        public string Cpn { get; set; } = string.Empty;
         public string? IdentifierType { get; set; }
         public string? LicenceNumber { get; set; }
+        public string? ProviderRoleType { get; set; }
+
         public bool IsGoodStanding { get; set; }
     }
+}
+
+public class PlrStatusChangeLog
+{
+    public int Id { get; set; }
+    public string Cpn { get; set; } = string.Empty;
+    public bool IsGoodStanding { get; set; }
+    public string? ProviderRoleType { get; set; }
 }

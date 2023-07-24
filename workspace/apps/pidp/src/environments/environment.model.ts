@@ -23,6 +23,7 @@ export interface AppEnvironment extends EnvironmentConfig {
     msTeamsSupport: string;
     doctorsTechnologyOfficeSupport: string;
     phsaInformationAccessAndPrivacyOffice: string;
+    additionalSupport: string;
   };
   urls: {
     bcscAppDownload: string;
@@ -31,5 +32,8 @@ export interface AppEnvironment extends EnvironmentConfig {
     specialAuthority: string;
     doctorsTechnologyOffice: string;
     prescriptionRenewal: string;
+  };
+  phones: {
+    additionalSupport: string;
   };
 }

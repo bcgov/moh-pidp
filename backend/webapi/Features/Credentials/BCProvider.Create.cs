@@ -7,13 +7,16 @@ using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
 
 using Pidp.Data;
+using Pidp.Extensions;
 using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.HttpClients.BCProvider;
+using Pidp.Infrastructure.HttpClients.Plr;
 using Pidp.Models;
+using Pidp.Models.Lookups;
 
 public class BCProviderCreate
 {
-    public class Command : ICommand<IDomainResult>
+    public class Command : ICommand<IDomainResult<string>>
     {
         [JsonIgnore]
         [HybridBindProperty(Source.Route)]
@@ -30,18 +33,26 @@ public class BCProviderCreate
         }
     }
 
-    public class CommandHandler : ICommandHandler<Command, IDomainResult>
+    public class CommandHandler : ICommandHandler<Command, IDomainResult<string>>
     {
         private readonly IBCProviderClient client;
         private readonly PidpDbContext context;
+        private readonly ILogger logger;
+        private readonly IPlrClient plrClient;
 
-        public CommandHandler(IBCProviderClient client, PidpDbContext context)
+        public CommandHandler(
+            IBCProviderClient client,
+            PidpDbContext context,
+            ILogger<CommandHandler> logger,
+            IPlrClient plrClient)
         {
             this.client = client;
             this.context = context;
+            this.logger = logger;
+            this.plrClient = plrClient;
         }
 
-        public async Task<IDomainResult> HandleAsync(Command command)
+        public async Task<IDomainResult<string>> HandleAsync(Command command)
         {
             var party = await this.context.Parties
                 .Where(party => party.Id == command.PartyId)
@@ -49,25 +60,65 @@ public class BCProviderCreate
                 {
                     party.FirstName,
                     party.LastName,
-                    HasBCProviderCredential = party.Credentials.Any(credential => credential.IdentityProvider == IdentityProviders.BCProvider)
+                    party.Cpn,
+                    party.Email,
+                    HasBCProviderCredential = party.Credentials.Any(credential => credential.IdentityProvider == IdentityProviders.BCProvider),
+                    Hpdid = party.Credentials.Select(credential => credential.Hpdid).Single(hpdid => hpdid != null),
+                    UaaAgreementDate = party.AccessRequests
+                        .Where(request => request.AccessTypeCode == AccessTypeCode.UserAccessAgreement)
+                        .Select(request => request.RequestedOn)
+                        .SingleOrDefault()
                 })
                 .SingleAsync();
 
             if (party.HasBCProviderCredential)
             {
-                return DomainResult.Failed();
+                this.logger.LogPartyHasBCProviderCredential(command.PartyId);
+                return DomainResult.Failed<string>();
             }
 
-            var createdUser = await this.client.CreateBCProviderAccount(new UserRepresentation
+            if (party.Email == null
+                || party.Hpdid == null
+                || party.UaaAgreementDate == default)
+            {
+                this.logger.LogInvalidState(command.PartyId, party);
+                return DomainResult.Failed<string>();
+            }
+
+            var plrStanding = await this.plrClient.GetStandingsDigestAsync(party.Cpn);
+
+            var newUserRep = new NewUserRepresentation
             {
                 FirstName = party.FirstName,
                 LastName = party.LastName,
-                Password = command.Password
-            });
+                Hpdid = party.Hpdid,
+                IsRnp = plrStanding.With(ProviderRoleType.RegisteredNursePractitioner).HasGoodStanding,
+                IsMd = plrStanding.With(ProviderRoleType.MedicalDoctor).HasGoodStanding,
+                Cpn = party.Cpn,
+                Password = command.Password,
+                PidpEmail = party.Email,
+                UaaDate = party.UaaAgreementDate.ToDateTimeOffset()
+            };
+
+            if (!plrStanding.HasGoodStanding)
+            {
+                var endorsementCpns = await this.context.ActiveEndorsementRelationships(command.PartyId)
+                    .Select(relationship => relationship.Party!.Cpn)
+                    .ToListAsync();
+                var endorsementPlrDigest = await this.plrClient.GetAggregateStandingsDigestAsync(endorsementCpns);
+
+                newUserRep.EndorserData = endorsementPlrDigest
+                    .WithGoodStanding()
+                    .With(IdentifierType.PhysiciansAndSurgeons, IdentifierType.Nurse, IdentifierType.Midwife)
+                    .Cpns;
+                newUserRep.IsMoa = endorsementPlrDigest.HasGoodStanding;
+            }
+
+            var createdUser = await this.client.CreateBCProviderAccount(newUserRep);
 
             if (createdUser == null)
             {
-                return DomainResult.Failed();
+                return DomainResult.Failed<string>();
             }
 
             this.context.Credentials.Add(new Credential
@@ -79,7 +130,16 @@ public class BCProviderCreate
 
             await this.context.SaveChangesAsync();
 
-            return DomainResult.Success();
+            return DomainResult.Success(createdUser.UserPrincipalName!);
         }
     }
+}
+
+public static partial class BCProviderCreateLoggingExtensions
+{
+    [LoggerMessage(1, LogLevel.Information, "Party {partyId} attempted to create a second BC Provider account.")]
+    public static partial void LogPartyHasBCProviderCredential(this ILogger logger, int partyId);
+
+    [LoggerMessage(2, LogLevel.Error, "Failed to create BC Provider for Party {partyId}, one or more requirements were not met. Party state: {state}.")]
+    public static partial void LogInvalidState(this ILogger logger, int partyId, object state);
 }

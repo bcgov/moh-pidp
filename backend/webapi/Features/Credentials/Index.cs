@@ -5,6 +5,7 @@ using System.Security.Claims;
 
 using Pidp.Data;
 using Pidp.Extensions;
+using Pidp.Infrastructure.Auth;
 using Pidp.Models;
 
 public class Index
@@ -31,6 +32,15 @@ public class Index
         public async Task<List<Model>> HandleAsync(Query query)
         {
             var lowerIdpId = query.User.GetIdpId()?.ToLowerInvariant();
+
+            // TODO: consider a more general approach for this; maybe in User.GetIdpId()?
+            if (query.User.GetIdentityProvider() == IdentityProviders.BCProvider
+                && lowerIdpId != null
+                && lowerIdpId.EndsWith("@bcp", StringComparison.InvariantCulture))
+            {
+                // Keycloak adds "@bcp" at the end of the IDP ID, and so won't match what we have in the DB if we don't trim it.
+                lowerIdpId = lowerIdpId[..^4];
+            }
 
 #pragma warning disable CA1304 // ToLower() is Locale Dependant
             var credential = await this.context.Credentials

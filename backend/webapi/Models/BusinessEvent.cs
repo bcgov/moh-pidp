@@ -19,11 +19,15 @@ public abstract class BusinessEvent : BaseAuditable
     public Instant RecordedOn { get; set; }
 }
 
-public class PartyNotInPlr : BusinessEvent
+public abstract class PartyBusinessEvent : BusinessEvent
 {
+    [Column(nameof(PartyId))]
     public int PartyId { get; set; }
     public Party? Party { get; set; }
+}
 
+public class PartyNotInPlr : PartyBusinessEvent
+{
     public static PartyNotInPlr Create(int partyId, Instant recordedOn)
     {
         return new PartyNotInPlr
@@ -36,11 +40,8 @@ public class PartyNotInPlr : BusinessEvent
     }
 }
 
-public class LicenceStatusRoleAssigned : BusinessEvent
+public class LicenceStatusRoleAssigned : PartyBusinessEvent
 {
-    public int PartyId { get; set; }
-    public Party? Party { get; set; }
-
     public static LicenceStatusRoleAssigned Create(int partyId, MohKeycloakEnrolment enrolmentAssigned, Instant recordedOn)
     {
         return new LicenceStatusRoleAssigned
@@ -52,3 +53,18 @@ public class LicenceStatusRoleAssigned : BusinessEvent
         };
     }
 }
+
+public class LicenceStatusRoleUnassigned : PartyBusinessEvent
+{
+    public static LicenceStatusRoleUnassigned Create(int partyId, MohKeycloakEnrolment enrolmentAssigned, Instant recordedOn)
+    {
+        return new LicenceStatusRoleUnassigned
+        {
+            PartyId = partyId,
+            Description = $"Party was unassigned the {enrolmentAssigned.AccessRoles.Single()} role.",
+            Severity = LogLevel.Information,
+            RecordedOn = recordedOn
+        };
+    }
+}
+
