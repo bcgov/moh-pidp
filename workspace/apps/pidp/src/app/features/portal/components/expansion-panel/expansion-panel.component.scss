@@ -8,7 +8,7 @@ div.viewport-all {
   background-size: cover;
   background-position: center center;
   border-radius: var(--card-border-radius);
-  padding: var(--gap) calc(var(--gap) * 2);
+  padding: calc(var(--gap) * 2); // calc(var(--gap) * 2)
   position: relative;
 
   & h2 {
@@ -25,7 +25,7 @@ div.viewport-all {
 
   & button {
     position: absolute;
-    bottom: var(--gap);
+    bottom: calc(var(--gap) * 2);
   }
 }
 
@@ -53,5 +53,9 @@ div.viewport-xsmall {
 
   & h3 {
     font-size: 1rem;
+  }
+
+  & button {
+    bottom: var(--gap);
   }
 }
