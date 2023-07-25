@@ -1,9 +1,11 @@
 <div uiPidpInjectViewportCss>
-  <h2>{{ title }}</h2>
-  <h3>{{ description }}</h3>
-  <button mat-flat-button color="primary" (click)="toggle()">
-    Get Started
-  </button>
+  <div class="expansion-panel-banner">
+    <h2>{{ title }}</h2>
+    <h3>{{ description }}</h3>
+    <button mat-flat-button color="primary" (click)="toggle()">
+      Get Started
+    </button>
+  </div>
 </div>
 <ng-container *ngTemplateOutlet="content"></ng-container>
 

@@ -2,13 +2,13 @@
 
 div.viewport-all {
   height: 25vh;
-  min-height: 150px;
+  min-height: 200px;
   background-image: url('/assets/images/provential-attachment-system-banner-866x233-desktop.jpg');
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center center;
   border-radius: var(--card-border-radius);
-  padding: calc(var(--gap) * 2); // calc(var(--gap) * 2)
+  padding: calc(var(--gap) * 2);
   position: relative;
 
   & h2 {
@@ -44,11 +44,17 @@ div.viewport-small {
 
 // This section is optimized for iPhone SE
 div.viewport-xsmall {
-  background-image: none;
-  background-color: pidp.$bcgov-color-information-box;
+  background-image: url('/assets/images/provential-attachment-system-banner-350x180-mobile.jpg');
+  padding: var(--gap);
+  min-height: 180px;
+
+  .expansion-panel-banner {
+    width: 70%;
+  }
 
   & h2 {
-    font-size: 1.75rem;
+    margin-bottom: 8px;
+    font-size: 1.5rem;
   }
 
   & h3 {
