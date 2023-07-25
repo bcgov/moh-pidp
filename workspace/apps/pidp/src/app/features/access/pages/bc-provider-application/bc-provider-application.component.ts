@@ -4,14 +4,18 @@ import { FormBuilder } from '@angular/forms';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 
-import { Observable, catchError, map } from 'rxjs';
+import { Observable, catchError, tap } from 'rxjs';
 
 import {
   faCircleCheck,
   faUser,
   faXmark,
 } from '@fortawesome/free-solid-svg-icons';
-import { NavigationService } from '@pidp/presentation';
+import {
+  LOADING_OVERLAY_DEFAULT_MESSAGE,
+  LoadingOverlayService,
+  NavigationService,
+} from '@pidp/presentation';
 
 import {
   AbstractFormDependenciesService,
@@ -60,6 +64,7 @@ export class BcProviderApplicationComponent
     private navigationService: NavigationService,
     private partyService: PartyService,
     private resource: BcProviderApplicationResource,
+    private loadingOverlayService: LoadingOverlayService,
     private logger: LoggerService
   ) {
     super(dependenciesService);
@@ -99,14 +104,17 @@ export class BcProviderApplicationComponent
   protected performSubmission(): Observable<string | void> {
     const partyId = this.partyService.partyId;
     this.password = this.formState.password.value;
+    this.loadingOverlayService.open(LOADING_OVERLAY_DEFAULT_MESSAGE);
 
     return this.resource.createBcProviderAccount(partyId, this.password).pipe(
-      map((upn: string) => {
+      tap((upn: string) => {
         this.username = upn;
         this.completed = true;
+        this.loadingOverlayService.close();
         this.showSuccessDialog();
       }),
       catchError(() => {
+        this.loadingOverlayService.close();
         const message = 'An error occurred.';
         this.setError(message);
         this.setMessage('');

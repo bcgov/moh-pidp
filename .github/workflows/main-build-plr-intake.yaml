@@ -30,9 +30,9 @@ jobs:
 
       - name: oc login
         run: |
-          oc login --token=${{ secrets.SILVER_TOOLS_BUILDER_TOKEN }} --server=${{ secrets.OPENSHIFT_CLUSTER_URL }}
+          oc login --token=${{ secrets.OPENSHIFT_GHA_SERVICE_ACCOUNT_TOKEN }} --server=${{ secrets.OPENSHIFT_CLUSTER_URL }}
 
-      - name: Promote core-api from test to prod
+      - name: Promote plr-intake from test to prod
         run: |
           oc -n d8a8f9-tools tag \
           d8a8f9-tools/pidp-plr-intake:${{ env.ORIG_TAG }} \
