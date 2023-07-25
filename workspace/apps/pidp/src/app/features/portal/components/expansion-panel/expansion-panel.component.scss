@@ -44,21 +44,19 @@ div.viewport-small {
 
 // This section is optimized for iPhone SE
 div.viewport-xsmall {
-  background-image: url('/assets/images/provential-attachment-system-banner-350x180-mobile.jpg');
+  background-image: url('/assets/images/provential-attachment-system-banner-345x166-mobile.jpg');
   padding: var(--gap);
-  min-height: 180px;
-
-  .expansion-panel-banner {
-    width: 70%;
-  }
+  min-height: 170px;
+  max-height: 180px;
 
   & h2 {
     margin-bottom: 8px;
-    font-size: 1.5rem;
+    font-size: 1.75rem;
   }
 
   & h3 {
     font-size: 1rem;
+    width: 70%;
   }
 
   & button {
