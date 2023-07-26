@@ -8,15 +8,27 @@
     </div>
   </section>
   <section class="section-box rostering-banner">
-    <mat-expansion-panel>
+    <mat-expansion-panel
+      [expanded]="pasPanelExpanded$ | async"
+      (afterCollapse)="onExpansionPanelToggle(false)"
+      (afterExpand)="onExpansionPanelToggle(true)">
       <mat-expansion-panel-header>
-        <mat-icon>location_on</mat-icon>
-        <strong>Looking to access Provincial Attachment System?</strong>
+        <mat-panel-title>
+          <mat-icon>location_on</mat-icon>
+          <strong
+            >Start here to access the Provincial Attachment System (PAS)</strong
+          >
+        </mat-panel-title>
       </mat-expansion-panel-header>
 
       <ng-template matExpansionPanelContent>
-        <mat-stepper orientation="vertical" #stepper>
-          <mat-step>
+        <mat-stepper
+          orientation="vertical"
+          #stepper
+          [selectedIndex]="selectedIndex">
+          <mat-step
+            [state]="demographicsStatusCode === 2 ? 'done' : 'number'"
+            [completed]="demographicsStatusCode === 2">
             <ng-template matStepLabel>Enter your contact details</ng-template>
             <div>
               <p class="guide-information">
@@ -42,11 +54,15 @@
               >
             </div>
             <div class="stepper-buttons">
-              <button mat-flat-button matStepperNext>Next</button>
+              <button class="top-button" mat-stroked-button matStepperNext>
+                Next
+              </button>
             </div>
           </mat-step>
 
-          <mat-step>
+          <mat-step
+            [state]="collegeLicenceStatusCode === 2 ? 'done' : 'number'"
+            [completed]="collegeLicenceStatusCode === 2">
             <ng-template matStepLabel>Enter your College Licence</ng-template>
             <div>
               <p class="guide-information">
@@ -73,12 +89,14 @@
               >
             </div>
             <div class="stepper-buttons">
-              <button mat-button matStepperPrevious>Back</button>
-              <button mat-button matStepperNext>Next</button>
+              <button mat-stroked-button matStepperPrevious>Back</button>
+              <button mat-stroked-button matStepperNext>Next</button>
             </div>
           </mat-step>
 
-          <mat-step>
+          <mat-step
+            [state]="uaaStatusCode === 2 ? 'done' : 'number'"
+            [completed]="uaaStatusCode === 2">
             <ng-template matStepLabel
               >Accept the User Access Agreement</ng-template
             >
@@ -104,12 +122,14 @@
               >
             </div>
             <div class="stepper-buttons">
-              <button mat-button matStepperPrevious>Back</button>
-              <button mat-button matStepperNext>Next</button>
+              <button mat-stroked-button matStepperPrevious>Back</button>
+              <button mat-stroked-button matStepperNext>Next</button>
             </div>
           </mat-step>
 
-          <mat-step>
+          <mat-step
+            [state]="bcProviderStatusCode === 2 ? 'done' : 'number'"
+            [completed]="bcProviderStatusCode === 2">
             <ng-template matStepLabel>
               Create a BCProvider Credential
               <p *ngIf="bcProviderStatusCode === 2" class="adjust-text">
@@ -141,12 +161,12 @@
               >
             </div>
             <div class="stepper-buttons">
-              <button mat-button matStepperPrevious>Back</button>
-              <button mat-button matStepperNext>Next</button>
+              <button mat-stroked-button matStepperPrevious>Back</button>
+              <button mat-stroked-button matStepperNext>Next</button>
             </div>
           </mat-step>
 
-          <mat-step>
+          <mat-step [completed]="false">
             <ng-template matStepLabel>
               Invite non-licensed (MOA) to Provincial Attachment System
               (Optional)
@@ -178,12 +198,12 @@
               </button>
             </div>
             <div class="stepper-buttons">
-              <button mat-button matStepperPrevious>Back</button>
-              <button mat-button matStepperNext>Next</button>
+              <button mat-stroked-button matStepperPrevious>Back</button>
+              <button mat-stroked-button matStepperNext>Next</button>
             </div>
           </mat-step>
 
-          <mat-step>
+          <mat-step [completed]="false">
             <ng-template matStepLabel>
               Login to Provincial Attachment System with your BCProvider
             </ng-template>
@@ -210,8 +230,10 @@
               </div>
             </div>
             <div class="stepper-buttons">
-              <button mat-button matStepperPrevious>Back</button>
-              <button mat-button (click)="stepper.reset()">Reset</button>
+              <button mat-stroked-button matStepperPrevious>Back</button>
+              <button mat-stroked-button (click)="stepper.reset()">
+                Reset
+              </button>
             </div>
           </mat-step>
         </mat-stepper>
