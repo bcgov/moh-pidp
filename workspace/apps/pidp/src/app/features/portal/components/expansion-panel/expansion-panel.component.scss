@@ -1,5 +1,9 @@
 @use 'pidp-variables' as pidp;
 
+.expansion-panel-content {
+  overflow: hidden;
+}
+
 div.viewport-all {
   height: 25vh;
   min-height: 200px;

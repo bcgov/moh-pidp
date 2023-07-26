@@ -8,7 +8,10 @@
 <ng-container *ngTemplateOutlet="content"></ng-container>
 
 <ng-template #content>
-  <div [@expandAnimation]="expanded">
+  <div
+    class="expansion-panel-content"
+    [@bodyExpansion]="_getExpandedState()"
+    (@bodyExpansion.done)="_bodyAnimationDone.next($event)">
     <ng-content></ng-content>
   </div>
 </ng-template>
