@@ -70,9 +70,9 @@ export class ExpansionPanelComponent implements OnDestroy {
       )
       .subscribe((event: AnimationEvent) => {
         if (event.fromState !== 'void') {
-          if (event.toState === 'expanded') {
+          if (event.toState === 'expanded' && this._expanded) {
             this.expandedChanged.next(true);
-          } else if (event.toState === 'collapsed') {
+          } else if (event.toState === 'collapsed' && !this._expanded) {
             this.expandedChanged.next(false);
           }
         }
