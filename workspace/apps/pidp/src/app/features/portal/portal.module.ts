@@ -1,3 +1,4 @@
+import { ClipboardModule } from '@angular/cdk/clipboard';
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { MatStepperModule } from '@angular/material/stepper';
 
@@ -6,12 +7,12 @@ import { PermissionsModule } from '@app/modules/permissions/permissions.module';
 
 import { SharedModule } from '@shared/shared.module';
 
+import { ExpansionPanelComponent } from './components/expansion-panel/expansion-panel.component';
 import { PortalCardComponent } from './components/portal-card/portal-card.component';
 import { PortalCarouselComponent } from './components/portal-carousel/portal-carousel.component';
 import { ProfileCardSummaryContentComponent } from './components/profile-card-summary-content/profile-card-summary-content.component';
 import { PortalRoutingModule } from './portal-routing.module';
 import { PortalPage } from './portal.page';
-import { ExpansionPanelComponent } from './components/expansion-panel/expansion-panel.component';
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import { ExpansionPanelComponent } from './components/expansion-panel/expansion-
     LookupModule.forChild(),
     PermissionsModule,
     MatStepperModule,
+    ClipboardModule,
   ],
   schemas: [
     // This causes the compiler to allow the non-angular swiper html tags.

@@ -6,6 +6,7 @@ import { BehaviorSubject, Observable, map, of, switchMap, tap } from 'rxjs';
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';
 import { PartyService } from '@app/core/party/party.service';
+import { ToastService } from '@app/core/services/toast.service';
 import { Role } from '@app/shared/enums/roles.enum';
 
 import { BcProviderEditInitialStateModel } from '../access/pages/bc-provider-edit/bc-provider-edit.component';
@@ -86,7 +87,8 @@ export class PortalPage implements OnInit {
     private portalService: PortalService,
     private endorsementsResource: EndorsementsResource,
     private activatedRoute: ActivatedRoute,
-    private authService: AuthService
+    private authService: AuthService,
+    private toastService: ToastService
   ) {
     this.state$ = this.portalService.state$;
     this.pasPanelExpanded$ = this.portalService.pasPanelExpanded$;
@@ -139,6 +141,12 @@ export class PortalPage implements OnInit {
 
   public onCardAction(section: IPortalSection): void {
     section.performAction();
+  }
+
+  public onCopy(): void {
+    this.toastService.openSuccessToast(
+      'You have copied your BCProvider Username to clipboard.'
+    );
   }
 
   public getProfileStatus(partyId: number): Observable<ProfileStatus | null> {

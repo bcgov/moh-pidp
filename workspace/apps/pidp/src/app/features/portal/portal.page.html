@@ -121,10 +121,7 @@
           [completed]="bcProviderStatusCode === 2">
           <ng-template matStepLabel>
             Create a BCProvider Credential
-            <p *ngIf="bcProviderStatusCode === 2" class="adjust-text">
-              {{ bcProviderUsername }}
-            </p></ng-template
-          >
+          </ng-template>
           <div>
             <p class="guide-information">
               A BCProvider is a credential used to access health applications.
@@ -199,6 +196,18 @@
             <p class="guide-information">
               Use your newly created BCProvider to login to the Provincial
               Attachment System
+            </p>
+            <p *ngIf="bcProviderStatusCode === 2" class="bcprovider-username">
+              <strong>{{ bcProviderUsername }}</strong>
+              <button
+                mat-icon-button
+                type="button"
+                matTooltip="Copy your BCProvider to clipboard"
+                aria-label="Copy your BCProvider to clipboard"
+                [cdkCopyToClipboard]="bcProviderUsername"
+                (cdkCopyToClipboardCopied)="onCopy()">
+                <mat-icon>content_paste</mat-icon>
+              </button>
             </p>
             <button
               mat-flat-button
