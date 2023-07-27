@@ -1,0 +1,17 @@
+<div uiPidpInjectViewportCss>
+  <h2>{{ title }}</h2>
+  <h3>{{ description }}</h3>
+  <button mat-flat-button color="primary" (click)="toggle()">
+    Get Started
+  </button>
+</div>
+<ng-container *ngTemplateOutlet="content"></ng-container>
+
+<ng-template #content>
+  <div
+    class="expansion-panel-content"
+    [@bodyExpansion]="_getExpandedState()"
+    (@bodyExpansion.done)="_bodyAnimationDone.next($event)">
+    <ng-content></ng-content>
+  </div>
+</ng-template>
