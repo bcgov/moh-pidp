@@ -126,6 +126,7 @@ jobs:
           docker push image-registry.apps.silver.devops.gov.bc.ca/d8a8f9-tools/pidp-webapi:pr-${{ github.event.issue.number }}
   
   helm-deployment:
+    needs: [build-and-deploy-webapi, build-and-deploy-plr-intake, build-and-deploy-frontend]
     runs-on: 'ubuntu-latest'
     steps:
       - uses: actions/checkout@v1 
