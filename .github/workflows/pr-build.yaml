@@ -175,6 +175,10 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   
+      - name: echo val
+        run: |
+          echo ${{ steps.pr.outputs.pull_request_number }}
+
       - name: Helm Deploy / install command
         run: |
           echo current installed helm releases
@@ -182,3 +186,13 @@ jobs:
   
           echo installing helm chart...
           helm upgrade --install --wait --values ./deploy/pr_values.yaml --namespace d8a8f9-dev "pr-${{ steps.pr.outputs.pull_request_number }}" charts/pidp --set global.image.tag="pr-${{ steps.pr.outputs.pull_request_number }}"
+
+
+        # helm upgrade --install --wait --values ./deploy/pr_values.yaml --namespace d8a8f9-dev 
+        # --version "v0.1.0" "pr-${{ steps.pr.outputs.pull_request_number }}" 
+        # charts/pidp --set global.image.tag="pr-${{ steps.pr.outputs.pull_request_number }}"
+
+
+        # helm upgrade --install --wait --values "moh-pidp/deploy/pr_values.yaml" --namespace "d8a8f9-dev" 
+        # --version "v0.1.0" "pr-289" "./moh-pidp/charts/pidp" --debug --set
+        # "global.image.tag=pr-289,global.commit_sha=b5a051c"
