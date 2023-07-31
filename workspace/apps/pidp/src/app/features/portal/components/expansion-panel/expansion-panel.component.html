@@ -2,7 +2,7 @@
   <h2>{{ title }}</h2>
   <h3>{{ description }}</h3>
   <button mat-flat-button color="primary" (click)="toggle()">
-    Get Started
+    {{ expanded ? 'Hide Steps' : 'Get Started' }}
   </button>
 </div>
 <ng-container *ngTemplateOutlet="content"></ng-container>
