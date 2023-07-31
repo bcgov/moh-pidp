@@ -84,7 +84,7 @@ jobs:
 
       - name: "Docker Build"
         run: |
-          docker build -t image-registry.apps.silver.devops.gov.bc.ca/d8a8f9-tools/pidp-plr-intake:pr-${{ github.event.number }} .
+          docker build -t image-registry.apps.silver.devops.gov.bc.ca/d8a8f9-tools/pidp-plr-intake:pr-${{ github.event.issue.number }} .
 
       # Uses the builder service account token
       - name: "Docker Login to Silver OCP"
@@ -96,7 +96,7 @@ jobs:
 
       - name: "Push image"
         run: |
-          docker push image-registry.apps.silver.devops.gov.bc.ca/d8a8f9-tools/pidp-plr-intake:pr-${{ github.event.number }}
+          docker push image-registry.apps.silver.devops.gov.bc.ca/d8a8f9-tools/pidp-plr-intake:pr-${{ github.event.issue.number }}
 
 
   build-and-deploy-webapi:
@@ -111,7 +111,7 @@ jobs:
 
       - name: "Docker Build"
         run: |
-          docker build -t image-registry.apps.silver.devops.gov.bc.ca/d8a8f9-tools/pidp-webapi:pr-${{ github.event.number }} .
+          docker build -t image-registry.apps.silver.devops.gov.bc.ca/d8a8f9-tools/pidp-webapi:pr-${{ github.event.issue.number }} .
 
       # Uses the builder service account token
       - name: "Docker Login to Silver OCP"
@@ -123,4 +123,23 @@ jobs:
 
       - name: "Push image"
         run: |
-          docker push image-registry.apps.silver.devops.gov.bc.ca/d8a8f9-tools/pidp-webapi:pr-${{ github.event.number }}
+          docker push image-registry.apps.silver.devops.gov.bc.ca/d8a8f9-tools/pidp-webapi:pr-${{ github.event.issue.number }}
+  
+  helm-deployment:
+    runs-on: 'ubuntu-latest'
+    steps:
+      - uses: actions/checkout@v1 
+  
+      - name: Authenticate and set context
+        uses: redhat-actions/oc-login@v1.1
+        with:
+          openshift_server_url: ${{secrets.OPENSHIFT_CLUSTER_URL}}
+          openshift_token: ${{secrets.OPENSHIFT_PIPELINE_SERVICE_ACCOUNT_TOKEN}}
+  
+      - name: Helm Deploy / install command
+        run: |
+          echo current installed helm releases
+          helm list --namespace d8a8f9-dev
+  
+          echo installing helm chart...
+          helm upgrade --install --wait --values ./deploy/pr_values.yaml --namespace d8a8f9-dev pr-${{ github.event.issue.number }} charts/pidp --debug --set global.image.tag=pr-${{ github.event.number }}
