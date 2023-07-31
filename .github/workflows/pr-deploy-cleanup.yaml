@@ -19,13 +19,19 @@ jobs:
         openshift_server_url: ${{secrets.OPENSHIFT_CLUSTER_URL}}
         openshift_token: ${{secrets.OPENSHIFT_PIPELINE_SERVICE_ACCOUNT_TOKEN}}
 
+    - name: Get Pull Request Number
+      id: pr
+      run: echo "::set-output name=pull_request_number::$(gh pr view --json number -q .number || echo "")"
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
     - name: Remove Helm deployment
       run: |
-        helm uninstall pr-${{ github.event.number }} --namespace d8a8f9-dev
+        helm uninstall pr-${{ steps.pr.outputs.pull_request_number }} --namespace d8a8f9-dev
 
     - name: Remove PR imagestream
       run: |
-        oc tag -d pr-${{ github.event.number }} -n d8a8f9-tools
+        oc tag -d pr-${{ steps.pr.outputs.pull_request_number }} -n d8a8f9-tools
 
   merge_job:
       # this job will only run if the PR has been merged
@@ -33,7 +39,7 @@ jobs:
       runs-on: ubuntu-latest
       steps:
       - run: |
-          echo PR #${{ github.event.number }} has been merged
+          echo PR #${{ steps.pr.outputs.pull_request_number }} has been merged
 
   close_job:
     # this job will only run if the PR has been closed without being merged
@@ -41,4 +47,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - run: |
-        echo PR #${{ github.event.number }} has been closed without being merged
+        echo PR #${{ steps.pr.outputs.pull_request_number }} has been closed without being merged
