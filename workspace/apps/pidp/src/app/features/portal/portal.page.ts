@@ -1,3 +1,4 @@
+import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { Component, Inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -5,6 +6,7 @@ import { BehaviorSubject, Observable, map, of, switchMap, tap } from 'rxjs';
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';
 import { PartyService } from '@app/core/party/party.service';
+import { ToastService } from '@app/core/services/toast.service';
 import { Role } from '@app/shared/enums/roles.enum';
 
 import { BcProviderEditInitialStateModel } from '../access/pages/bc-provider-edit/bc-provider-edit.component';
@@ -28,6 +30,12 @@ import { PortalState } from './state/portal-state.builder';
   selector: 'app-portal',
   templateUrl: './portal.page.html',
   styleUrls: ['./portal.page.scss'],
+  providers: [
+    {
+      provide: STEPPER_GLOBAL_OPTIONS,
+      useValue: { displayDefaultIndicatorType: false },
+    },
+  ],
 })
 export class PortalPage implements OnInit {
   /**
@@ -56,6 +64,7 @@ export class PortalPage implements OnInit {
   public rostering$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
     true
   );
+  public pasPanelExpanded$: BehaviorSubject<boolean>;
   public demographicsStatusCode!: number | undefined;
   public collegeLicenceStatusCode!: number | undefined;
   public uaaStatusCode!: number | undefined;
@@ -67,6 +76,7 @@ export class PortalPage implements OnInit {
   public collegeLicenceTutorial: string;
   public uaaTutorial: string;
   public bcProviderTutorial: string;
+  public selectedIndex = 5;
 
   public constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
@@ -77,9 +87,11 @@ export class PortalPage implements OnInit {
     private portalService: PortalService,
     private endorsementsResource: EndorsementsResource,
     private activatedRoute: ActivatedRoute,
-    private authService: AuthService
+    private authService: AuthService,
+    private toastService: ToastService
   ) {
     this.state$ = this.portalService.state$;
+    this.pasPanelExpanded$ = this.portalService.pasPanelExpanded$;
     this.alerts = [];
     this.logoutRedirectUrl = `${this.config.applicationUrl}/`;
     this.personalInfoTutorial = personalInfoTutorialLink;
@@ -131,8 +143,18 @@ export class PortalPage implements OnInit {
     section.performAction();
   }
 
+  public onCopy(): void {
+    this.toastService.openSuccessToast(
+      'You have copied your BCProvider Username to clipboard.'
+    );
+  }
+
   public getProfileStatus(partyId: number): Observable<ProfileStatus | null> {
     return this.portalResource.getProfileStatus(partyId);
+  }
+
+  public onExpansionPanelToggle(expanded: boolean): void {
+    this.portalService.updateIsPASExpanded(expanded);
   }
 
   public ngOnInit(): void {
@@ -147,20 +169,27 @@ export class PortalPage implements OnInit {
         })
       )
       .subscribe((profileStatus) => {
+        let selectedIndex = 5;
         this.demographicsStatusCode =
           profileStatus?.status.demographics.statusCode;
         if (this.demographicsStatusCode === 2) {
           this.demographics$.next(true);
+        } else if (selectedIndex === 5) {
+          selectedIndex = 0;
         }
         this.collegeLicenceStatusCode =
           profileStatus?.status.collegeCertification.statusCode;
         if (this.collegeLicenceStatusCode === 2) {
           this.collegeLicence$.next(true);
+        } else if (selectedIndex === 5) {
+          selectedIndex = 1;
         }
         this.uaaStatusCode =
           profileStatus?.status.userAccessAgreement.statusCode;
         if (this.uaaStatusCode === 2) {
           this.uaa$.next(true);
+        } else if (selectedIndex === 5) {
+          selectedIndex = 2;
         }
         this.bcProviderStatusCode = profileStatus?.status.bcProvider.statusCode;
         if (this.bcProviderStatusCode === 2) {
@@ -170,12 +199,17 @@ export class PortalPage implements OnInit {
             .subscribe((bcProviderObject: BcProviderEditInitialStateModel) => {
               this.bcProviderUsername = bcProviderObject.bcProviderId;
             });
+        } else if (selectedIndex === 5) {
+          selectedIndex = 3;
         }
         this.rosteringStatusCode =
           profileStatus?.status.primaryCareRostering.statusCode;
         if (this.rosteringStatusCode === 1) {
           this.rostering$.next(false);
+        } else if (selectedIndex === 5) {
+          selectedIndex = 4;
         }
+        this.selectedIndex = selectedIndex;
       });
   }
 
