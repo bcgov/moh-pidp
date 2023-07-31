@@ -53,6 +53,12 @@ jobs:
           pull_number=$(echo $GITHUB_REF | awk 'BEGIN { FS = "/" } ; { print $3 }')
           echo $pull_number
       
+      - name: Get Pull Request Number
+        id: pr
+        run: echo "::set-output name=pull_request_number::$(gh pr view --json number -q .number || echo "")"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: YARN Install
         run: |
           yarn install
@@ -63,7 +69,7 @@ jobs:
 
       - name: "Docker Build"
         run: |
-          docker build -t image-registry.apps.silver.devops.gov.bc.ca/d8a8f9-tools/pidp-frontend:pr-${{ github.event.number }} .
+          docker build -t image-registry.apps.silver.devops.gov.bc.ca/d8a8f9-tools/pidp-frontend:pr-${{ steps.pr.outputs.pull_request_number }} .
 
       # Uses the builder service account token
       - name: "Docker Login to Silver OCP"
