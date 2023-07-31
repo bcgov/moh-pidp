@@ -47,6 +47,11 @@ jobs:
         with:
           node-version: 16.x
 
+      - name: Print ref info
+        run: |
+          pull_number=$(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")
+          echo $pull_number
+      
       - name: YARN Install
         run: |
           yarn install
