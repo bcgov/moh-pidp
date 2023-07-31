@@ -14,12 +14,12 @@ on:
     - 'test'
     - 'main'
   pull_request:
-    paths:
-      - "workspace/**"
-      - "backend/services.plr-intake/**"
-      - "backend/services.plr-intake.tests/**"
-      - "backend/webapi/**"
-      - "backend/webapi.tests/**"
+    # paths:
+    #   - "workspace/**"
+    #   - "backend/services.plr-intake/**"
+    #   - "backend/services.plr-intake.tests/**"
+    #   - "backend/webapi/**"
+    #   - "backend/webapi.tests/**"
     branches-ignore:
     - 'develop'
     - 'test'
