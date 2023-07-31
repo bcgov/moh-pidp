@@ -181,4 +181,4 @@ jobs:
           helm list --namespace d8a8f9-dev
   
           echo installing helm chart...
-          helm upgrade --install --wait --values ./deploy/pr_values.yaml --namespace d8a8f9-dev pr-${{ steps.pr.outputs.pull_request_number }} charts/pidp --debug --set global.image.tag=pr-${{ steps.pr.outputs.pull_request_number }}
+          helm upgrade --install --wait --values ./deploy/pr_values.yaml --namespace d8a8f9-dev "pr-${{ steps.pr.outputs.pull_request_number }}" charts/pidp --set global.image.tag="pr-${{ steps.pr.outputs.pull_request_number }}"
