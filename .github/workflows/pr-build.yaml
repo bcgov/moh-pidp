@@ -161,7 +161,7 @@ jobs:
     needs: [build-and-deploy-webapi, build-and-deploy-plr-intake, build-and-deploy-frontend]
     runs-on: 'ubuntu-latest'
     steps:
-      - uses: actions/checkout@v1 
+      - uses: actions/checkout@master 
   
       - name: Authenticate and set context
         uses: redhat-actions/oc-login@v1.1
