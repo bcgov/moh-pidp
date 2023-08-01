@@ -1,7 +1,11 @@
 <div uiPidpInjectViewportCss>
   <h2>{{ title }}</h2>
   <h3>{{ description }}</h3>
-  <button mat-flat-button color="primary" (click)="toggle()">
+  <button
+    class="pas-banner-button"
+    mat-flat-button
+    color="primary"
+    (click)="toggle()">
     {{ expanded ? 'Hide Steps' : 'Get Started' }}
   </button>
 </div>

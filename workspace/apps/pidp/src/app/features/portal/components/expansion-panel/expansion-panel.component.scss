@@ -31,6 +31,10 @@ div.viewport-all {
     position: absolute;
     bottom: calc(var(--gap) * 2);
   }
+
+  & .pas-banner-button {
+    width: 7rem;
+  }
 }
 
 div.viewport-medium,
