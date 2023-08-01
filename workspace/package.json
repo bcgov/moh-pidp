@@ -36,6 +36,7 @@
     "keycloak-angular": "10.0.2",
     "keycloak-js": "18.0.1",
     "luxon": "^2.1.1",
+    "ngx-cookie-service": "13",
     "ngx-mask": "^13.0.0",
     "ngx-progressbar": "^7.0.0",
     "rxjs": "~7.4.0",
@@ -91,4 +92,3 @@
     "titleTemplate": "{title}"
   }
 }
-

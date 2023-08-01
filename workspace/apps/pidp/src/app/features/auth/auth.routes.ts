@@ -2,6 +2,7 @@ export class AuthRoutes {
   public static MODULE_PATH = 'auth';
 
   public static PORTAL_LOGIN = 'login';
+  public static BC_PROVIDER_UPLIFT = 'bc-provider-uplift';
   public static ADMIN_LOGIN = 'admin';
 
   /**

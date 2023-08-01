@@ -1,11 +1,14 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { Resolve, Router } from '@angular/router';
 
 import { Observable, catchError, exhaustMap, of, throwError } from 'rxjs';
 
+import { CookieService } from 'ngx-cookie-service';
+
 import { RootRoutes } from '@bcgov/shared/ui';
 
+import { APP_CONFIG, AppConfig } from '@app/app.config';
 import { ShellRoutes } from '@app/features/shell/shell.routes';
 
 import { LoggerService } from '../services/logger.service';
@@ -26,12 +29,18 @@ import { PartyService } from './party.service';
   providedIn: 'root',
 })
 export class PartyResolver implements Resolve<number | null> {
+  public logoutRedirectUrl: string;
+
   public constructor(
+    @Inject(APP_CONFIG) private config: AppConfig,
     private router: Router,
     private partyResource: PartyResource,
     private partyService: PartyService,
-    private logger: LoggerService
-  ) {}
+    private logger: LoggerService,
+    private cookieService: CookieService
+  ) {
+    this.logoutRedirectUrl = `${this.config.applicationUrl}/auth/bc-provider-uplift`;
+  }
 
   public resolve(): Observable<number | null> {
     return this.partyResource.firstOrCreate().pipe(
@@ -42,9 +51,15 @@ export class PartyResolver implements Resolve<number | null> {
       ),
       catchError((error: HttpErrorResponse) => {
         this.logger.error(error.message);
-        error.status === 403
-          ? this.router.navigateByUrl(RootRoutes.DENIED)
-          : this.router.navigateByUrl(ShellRoutes.SUPPORT_ERROR_PAGE);
+
+        if (error.status === 403) {
+          this.router.navigateByUrl(RootRoutes.DENIED);
+        } else if (this.cookieService.get('bcprovider_aad_userid')) {
+          // redirect user
+          this.router.navigateByUrl('/auth/bc-provider-uplift');
+        } else {
+          this.router.navigateByUrl(ShellRoutes.SUPPORT_ERROR_PAGE);
+        }
         return of(null);
       })
     );

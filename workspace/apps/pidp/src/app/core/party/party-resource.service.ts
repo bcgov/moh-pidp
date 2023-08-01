@@ -3,7 +3,10 @@ import { Injectable } from '@angular/core';
 
 import { Observable, catchError, exhaustMap, map, of, throwError } from 'rxjs';
 
+import { CookieService } from 'ngx-cookie-service';
+
 import { ApiHttpClient } from '@app/core/resources/api-http-client.service';
+import { IdentityProvider } from '@app/features/auth/enums/identity-provider.enum';
 import { User } from '@app/features/auth/models/user.model';
 import { AuthorizedUserService } from '@app/features/auth/services/authorized-user.service';
 
@@ -15,7 +18,8 @@ import { PartyCreate } from './party-create.model';
 export class PartyResource {
   public constructor(
     private apiResource: ApiHttpClient,
-    private authorizedUserService: AuthorizedUserService
+    private authorizedUserService: AuthorizedUserService,
+    private cookieService: CookieService
   ) {}
 
   /**
@@ -37,11 +41,21 @@ export class PartyResource {
                 )
             )
       ),
-      exhaustMap((partyIdOrUser: number | User | null) =>
-        typeof partyIdOrUser === 'number' || !partyIdOrUser
-          ? of(partyIdOrUser)
-          : this.createParty(partyIdOrUser)
-      )
+      exhaustMap((partyIdOrUser: number | User | null) => {
+        if (typeof partyIdOrUser === 'number' || !partyIdOrUser) {
+          return of(partyIdOrUser);
+        }
+        if (partyIdOrUser.identityProvider === IdentityProvider.BC_PROVIDER) {
+          // set a cookie with user's informations
+          this.cookieService.set(
+            'bcprovider_aad_userid',
+            partyIdOrUser.userId,
+            1
+          );
+          return of(null);
+        }
+        return this.createParty(partyIdOrUser);
+      })
     );
   }
 
