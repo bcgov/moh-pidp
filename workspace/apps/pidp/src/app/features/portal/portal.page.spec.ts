@@ -22,6 +22,7 @@ import { KeycloakService } from 'keycloak-angular';
 
 import { APP_CONFIG, APP_DI_CONFIG } from '@app/app.config';
 import { PartyService } from '@app/core/party/party.service';
+import { ToastService } from '@app/core/services/toast.service';
 
 import { BcProviderEditInitialStateModel } from '../access/pages/bc-provider-edit/bc-provider-edit.component';
 import { BcProviderEditResource } from '../access/pages/bc-provider-edit/bc-provider-edit.resource';
@@ -86,6 +87,7 @@ describe('PortalPage', () => {
         provideAutoSpy(BcProviderEditResource),
         provideAutoSpy(EndorsementsResource),
         provideAutoSpy(KeycloakService),
+        provideAutoSpy(ToastService),
       ],
     });
 
