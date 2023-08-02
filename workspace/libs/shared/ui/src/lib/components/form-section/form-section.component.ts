@@ -6,6 +6,7 @@ import {
   Input,
   Output,
   QueryList,
+  forwardRef,
 } from '@angular/core';
 
 import {
@@ -37,9 +38,13 @@ export class FormSectionComponent {
    * Detect whether the section is being used to display contextual
    * help for a specific form section, or removing a control (default)
    */
-  @ContentChildren(ContextHelpTitleDirective, { descendants: false })
+  @ContentChildren(forwardRef(() => ContextHelpTitleDirective), {
+    descendants: false,
+  })
   public contextHelpTitleChildren?: QueryList<ContextHelpTitleDirective>;
-  @ContentChildren(ContextHelpContentDirective, { descendants: false })
+  @ContentChildren(forwardRef(() => ContextHelpContentDirective), {
+    descendants: false,
+  })
   public contextHelpContentChildren?: QueryList<ContextHelpContentDirective>;
 
   public constructor() {
