@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
@@ -6,7 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router';
   templateUrl: './compliance-training.page.html',
   styleUrls: ['./compliance-training.page.scss'],
 })
-export class ComplianceTrainingPage implements OnInit {
+export class ComplianceTrainingPage {
   public title: string;
 
   public constructor(private route: ActivatedRoute, private router: Router) {
@@ -20,8 +20,6 @@ export class ComplianceTrainingPage implements OnInit {
   public onBack(): void {
     this.navigateToRoot();
   }
-
-  public ngOnInit(): void {}
 
   private navigateToRoot(): void {
     this.router.navigate([this.route.snapshot.data.routes.root]);
