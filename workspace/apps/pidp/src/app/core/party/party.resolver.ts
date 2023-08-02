@@ -49,10 +49,10 @@ export class PartyResolver implements Resolve<number | null> {
           ? of((this.partyService.partyId = partyId))
           : throwError(() => new Error('Party could not be found or created'))
       ),
-      catchError((error: HttpErrorResponse) => {
+      catchError((error: HttpErrorResponse | Error) => {
         this.logger.error(error.message);
 
-        if (error.status === 403) {
+        if (error instanceof HttpErrorResponse && error.status === 403) {
           this.router.navigateByUrl(RootRoutes.DENIED);
         } else if (this.cookieService.get('bcprovider_aad_userid')) {
           // redirect user
