@@ -57,8 +57,8 @@ export class ExpansionPanelComponent implements OnDestroy {
 
   public constructor() {
     this._expanded = false;
-    this.title = 'Looking to access';
-    this.description = 'Provincial Attachment System?';
+    this.title = 'Start here to access';
+    this.description = 'Provincial Attachment System';
 
     // We need a Subject with distinctUntilChanged, because the `done` event
     // fires twice on some browsers. See https://github.com/angular/angular/issues/24084
