@@ -19,7 +19,7 @@ export class AutoLoginPage implements OnInit {
     private router: Router
   ) {}
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     const idpHint = this.route.snapshot.queryParamMap.get('idp_hint') ?? '';
 
     if (Object.values<string>(IdentityProvider).includes(idpHint)) {
