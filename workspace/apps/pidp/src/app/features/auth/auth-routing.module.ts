@@ -5,6 +5,7 @@ import { SetDashboardTitleGuard } from '@pidp/presentation';
 
 import { AuthRoutes } from './auth.routes';
 import { AuthorizationRedirectGuard } from './guards/authorization-redirect.guard';
+import { AutoLoginPage } from './pages/auto-login/auto-login.page';
 import { LoginPage } from './pages/login/login.page';
 
 const routes: Routes = [
@@ -35,6 +36,10 @@ const routes: Routes = [
         auth: AuthRoutes.routePath(AuthRoutes.ADMIN_LOGIN),
       },
     },
+  },
+  {
+    path: AuthRoutes.AUTO_LOGIN,
+    component: AutoLoginPage,
   },
   {
     path: '',
