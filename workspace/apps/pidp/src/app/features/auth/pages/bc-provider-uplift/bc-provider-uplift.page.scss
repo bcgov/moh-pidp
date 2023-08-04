@@ -1,0 +1,50 @@
+@use 'pidp-variables' as pidp;
+
+div.viewport-all {
+  height: 60vh;
+  min-height: 200px;
+  background-image: url('/assets/images/bcprovider-uplift-850x600-desktop.png');
+  background-repeat: no-repeat;
+  background-position: bottom right;
+  border-radius: var(--card-border-radius);
+  padding: calc(var(--gap) * 2);
+  position: relative;
+  align-self: center;
+  border-radius: 15px;
+  border: 2px solid pidp.$bcgov-color-accent;
+
+  & .section-box {
+    padding: 150px;
+    width: 40vw;
+
+    & h1 {
+      margin-bottom: 36px;
+      font-weight: 400;
+      font-size: 3.5rem;
+    }
+
+    & h2 {
+      font-weight: 900;
+      font-size: 2.5rem;
+      color: #1a284f;
+    }
+
+    & h3 {
+      font-weight: 900;
+      font-size: 1.75rem;
+      color: #245483;
+    }
+
+    & button {
+      width: fit-content;
+      padding: 0 15px;
+    }
+
+    & .buttons-container {
+      display: flex;
+      flex-direction: column;
+      height: 20vh;
+      justify-content: space-around;
+    }
+  }
+}

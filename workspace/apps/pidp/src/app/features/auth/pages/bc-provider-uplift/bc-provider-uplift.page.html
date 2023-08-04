@@ -1,26 +1,38 @@
 <ui-layout-header-footer>
-  <div class="main-container" uiPidpInjectViewportCss>
-    <h1>Fist time setup</h1>
-    <p>
-      We noticed this is your first time in our system using BC Provider. This
-      will be a one-time setup, then you can log in with BC Provider
-      credentials. All you need for security authentication is to log in with
-      your BC Services Card, then we will automatically verify your clearance to
-      use BC Provider as a login option.
-    </p>
+  <div class="container" uiPidpInjectViewportCss>
+    <div class="section-box">
+      <header class="title-container">
+        <h1>First time setup?</h1>
+      </header>
+      <p>
+        We noticed this is your first time in our system using BC Provider. This
+        will be a one-time setup, then you can log in with BC Provider
+        credentials. All you need for security authentication is to log in with
+        your BC Services Card, then we will automatically verify your clearance
+        to use BC Provider as a login option.
+      </p>
 
-    <button mat-flat-button color="primary" (click)="onLogin()">
-      Log in with the BC Services Card
-    </button>
-    <div class="login-setup">
-      <small>
-        Need an account?
-        <a uiAnchor [href]="bcscMobileSetupUrl">Register</a>
-      </small>
+      <div class="buttons-container">
+        <div class="buttons-content">
+          <button mat-flat-button color="primary" (click)="onLogin()">
+            Log in with the BC Services Card
+          </button>
+          <div class="login-setup">
+            <small>
+              Need an account?
+              <a uiAnchor [href]="bcscMobileSetupUrl">Register</a>
+            </small>
+          </div>
+        </div>
+
+        <button
+          mat-stroked-button
+          type="button"
+          color="primary"
+          (click)="onBack()">
+          Back to login page
+        </button>
+      </div>
     </div>
-
-    <button mat-stroked-button type="button" color="primary" (click)="onBack()">
-      Back to login page
-    </button>
   </div>
 </ui-layout-header-footer>
