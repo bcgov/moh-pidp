@@ -14,13 +14,16 @@ div.viewport-all {
   border: 2px solid pidp.$bcgov-color-accent;
 
   & .section-box {
-    padding: 150px;
+    display: flex;
+    flex-direction: column;
+    padding: 134px;
     width: 40vw;
 
     & h1 {
       margin-bottom: 36px;
       font-weight: 400;
       font-size: 3.5rem;
+      line-height: 1;
     }
 
     & h2 {
@@ -37,14 +40,14 @@ div.viewport-all {
 
     & button {
       width: fit-content;
-      padding: 0 15px;
+      padding: 10px 15px;
     }
 
     & .buttons-container {
       display: flex;
       flex-direction: column;
-      height: 20vh;
       justify-content: space-around;
+      height: 20vh;
     }
   }
 }
