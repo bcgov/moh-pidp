@@ -190,6 +190,22 @@
 
         <mat-step [completed]="false">
           <ng-template matStepLabel>
+            Multi-Factor Authentication (MFA) Set-Up Guide
+          </ng-template>
+          <p class="guide-information">
+            If you need help setting up your Multi-Factor Authentication (MFA),
+            please
+            <a href="assets/mfa.pdf" download>download this PDF</a>
+          </p>
+
+          <div class="stepper-buttons">
+            <button mat-stroked-button matStepperPrevious>Back</button>
+            <button mat-stroked-button matStepperNext>Next</button>
+          </div>
+        </mat-step>
+
+        <mat-step [completed]="false">
+          <ng-template matStepLabel>
             Login to Provincial Attachment System with your BCProvider
           </ng-template>
           <div>
@@ -218,13 +234,6 @@
               (click)="navigateTo()">
               Login to Provincial Attachment System with your BCProvider
             </button>
-            <div class="adjust-text">
-              <em
-                >Have you already setup Multi-factor authentication (MFA)? If
-                you need help,
-                <a href="assets/mfa.pdf" download>download this PDF</a>
-              </em>
-            </div>
           </div>
           <div class="stepper-buttons">
             <button mat-stroked-button matStepperPrevious>Back</button>
