@@ -76,7 +76,8 @@ export class PortalPage implements OnInit {
   public collegeLicenceTutorial: string;
   public uaaTutorial: string;
   public bcProviderTutorial: string;
-  public selectedIndex = 5;
+  public selectedIndex: number;
+  private readonly lastSelectedIndex: number;
 
   public constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
@@ -98,6 +99,8 @@ export class PortalPage implements OnInit {
     this.collegeLicenceTutorial = collegeLicenceTutorialLink;
     this.uaaTutorial = uaaTutorialLink;
     this.bcProviderTutorial = bcProviderTutorialLink;
+    this.lastSelectedIndex = 6;
+    this.selectedIndex = this.lastSelectedIndex;
   }
 
   public navigateTo(): void {
@@ -169,26 +172,26 @@ export class PortalPage implements OnInit {
         })
       )
       .subscribe((profileStatus) => {
-        let selectedIndex = 5;
+        let selectedIndex = this.lastSelectedIndex;
         this.demographicsStatusCode =
           profileStatus?.status.demographics.statusCode;
         if (this.demographicsStatusCode === 2) {
           this.demographics$.next(true);
-        } else if (selectedIndex === 5) {
+        } else if (selectedIndex === this.lastSelectedIndex) {
           selectedIndex = 0;
         }
         this.collegeLicenceStatusCode =
           profileStatus?.status.collegeCertification.statusCode;
         if (this.collegeLicenceStatusCode === 2) {
           this.collegeLicence$.next(true);
-        } else if (selectedIndex === 5) {
+        } else if (selectedIndex === this.lastSelectedIndex) {
           selectedIndex = 1;
         }
         this.uaaStatusCode =
           profileStatus?.status.userAccessAgreement.statusCode;
         if (this.uaaStatusCode === 2) {
           this.uaa$.next(true);
-        } else if (selectedIndex === 5) {
+        } else if (selectedIndex === this.lastSelectedIndex) {
           selectedIndex = 2;
         }
         this.bcProviderStatusCode = profileStatus?.status.bcProvider.statusCode;
@@ -199,14 +202,14 @@ export class PortalPage implements OnInit {
             .subscribe((bcProviderObject: BcProviderEditInitialStateModel) => {
               this.bcProviderUsername = bcProviderObject.bcProviderId;
             });
-        } else if (selectedIndex === 5) {
+        } else if (selectedIndex === this.lastSelectedIndex) {
           selectedIndex = 3;
         }
         this.rosteringStatusCode =
           profileStatus?.status.primaryCareRostering.statusCode;
         if (this.rosteringStatusCode === 1) {
           this.rostering$.next(false);
-        } else if (selectedIndex === 5) {
+        } else if (selectedIndex === this.lastSelectedIndex) {
           selectedIndex = 4;
         }
         this.selectedIndex = selectedIndex;
