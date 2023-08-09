@@ -1,22 +1,38 @@
 @use 'pidp-variables' as pidp;
 
+.viewport-all {
+  --gap: 1rem;
+  --font-size: 1em;
+  --card-border-radius: var(--gap);
+}
+
 div.viewport-all {
-  height: 60vh;
-  min-height: 200px;
-  background-image: url('/assets/images/bcprovider-uplift-850x600-desktop.png');
-  background-repeat: no-repeat;
-  background-position: bottom right;
+  height: 70vh;
+  min-height: 480px;
   border-radius: var(--card-border-radius);
-  padding: calc(var(--gap) * 2);
+  padding: calc(var(--gap) * 4);
   position: relative;
   align-self: center;
-  border-radius: 15px;
   border: 2px solid pidp.$bcgov-color-accent;
+
+  & .background-image-container {
+    position: absolute;
+    height: 60vh;
+    width: 60%;
+    right: 0;
+    bottom: 0;
+    z-index: -1;
+
+    & img {
+      border-bottom-right-radius: var(--card-border-radius);
+      object-position: bottom right;
+    }
+  }
 
   & .section-box {
     display: flex;
     flex-direction: column;
-    padding: 134px;
+    padding: var(--gap);
     width: 40vw;
 
     & h1 {
@@ -26,21 +42,9 @@ div.viewport-all {
       line-height: 1;
     }
 
-    & h2 {
-      font-weight: 900;
-      font-size: 2.5rem;
-      color: #1a284f;
-    }
-
-    & h3 {
-      font-weight: 900;
-      font-size: 1.75rem;
-      color: #245483;
-    }
-
     & button {
       width: fit-content;
-      padding: 10px 15px;
+      padding: 0 10px;
     }
 
     & .buttons-container {
@@ -48,6 +52,92 @@ div.viewport-all {
       flex-direction: column;
       justify-content: space-around;
       height: 20vh;
+    }
+  }
+}
+
+div.viewport-medium {
+  --gap: 0.85rem;
+
+  & .section-box {
+    & h1 {
+      font-size: 3em;
+      margin-bottom: 25px;
+      line-height: 1.4;
+    }
+
+    & p {
+      font-size: 0.85em;
+    }
+  }
+}
+
+// Adjust sizing for small screens.
+div.viewport-small {
+  --gap: 0.65rem;
+  border: none;
+  height: auto;
+  align-self: normal;
+  max-width: none;
+
+  & .background-image-container {
+    & img {
+      border-radius: unset;
+    }
+  }
+
+  & .section-box {
+    width: 65vw;
+
+    & h1 {
+      font-size: 2em;
+      margin-bottom: 25px;
+    }
+
+    & p,
+    small {
+      font-size: 0.9rem;
+      line-height: 1.25rem;
+    }
+
+    & button {
+      padding: 0 10px;
+    }
+  }
+}
+
+// This section is optimized for iPhone SE
+div.viewport-xsmall {
+  --gap: 0.5rem;
+  border: none;
+  height: auto;
+  align-self: normal;
+  padding: calc(var(--gap) * 2);
+  max-width: none;
+
+  & .background-image-container {
+    height: 40vh;
+    width: 100%;
+    & img {
+      border-radius: unset;
+    }
+  }
+
+  & .section-box {
+    width: 80vw;
+    & h1 {
+      font-size: 2em;
+      margin-bottom: 25px;
+    }
+
+    & p,
+    small {
+      font-size: 0.9rem;
+      line-height: 1.25rem;
+    }
+
+    & button {
+      padding: 0 10px;
     }
   }
 }
