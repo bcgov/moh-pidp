@@ -6,6 +6,15 @@
   --card-border-radius: var(--gap);
 }
 
+.header-right {
+  & mat-icon {
+    color: #fff;
+  }
+  & .signout-text {
+    margin-right: 10px;
+  }
+}
+
 div.viewport-all {
   height: 70vh;
   min-height: 480px;

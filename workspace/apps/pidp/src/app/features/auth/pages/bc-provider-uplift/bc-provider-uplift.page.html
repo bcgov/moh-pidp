@@ -1,4 +1,16 @@
 <ui-layout-header-footer>
+  <div class="header-right" page-header-right>
+    <div>
+      <span class="signout-text">sign out</span>
+      <button
+        mat-icon-button
+        matTooltip="Logout"
+        aria-label="logout"
+        (click)="onLogout()">
+        <mat-icon>logout</mat-icon>
+      </button>
+    </div>
+  </div>
   <div class="container" uiPidpInjectViewportCss>
     <div class="section-box">
       <div class="background-image-container">
@@ -32,14 +44,6 @@
             </small>
           </div>
         </div>
-
-        <button
-          mat-stroked-button
-          type="button"
-          color="primary"
-          (click)="onBack()">
-          Back to login page
-        </button>
       </div>
     </div>
   </div>
