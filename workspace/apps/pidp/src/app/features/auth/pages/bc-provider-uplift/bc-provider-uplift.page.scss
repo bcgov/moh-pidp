@@ -15,6 +15,29 @@ div.viewport-all {
   align-self: center;
   border: 2px solid pidp.$bcgov-color-accent;
 
+  & .buttons-content {
+    & button.login-app-button {
+      border-radius: 8px;
+      padding: 8px 35px;
+      font-size: 18px;
+      font-weight: 700;
+
+      &:hover {
+        opacity: 0.8;
+        text-decoration: underline;
+        background-color: pidp.$bcgov-color-primary;
+        color: #ffffff;
+      }
+      &:focus {
+        outline-offset: 1px;
+        outline: 4px solid pidp.$bcgov-color-button-focus-outline;
+      }
+      &:active {
+        opacity: 1;
+      }
+    }
+  }
+
   & .background-image-container {
     position: absolute;
     height: 60vh;
@@ -114,6 +137,13 @@ div.viewport-xsmall {
   align-self: normal;
   padding: calc(var(--gap) * 2);
   max-width: none;
+
+  & .buttons-content {
+    & button.login-app-button {
+      font-size: 0.9em;
+      padding: 6px 15px;
+    }
+  }
 
   & .background-image-container {
     height: 40vh;
