@@ -1,12 +1,12 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Inject, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Resolve, Router } from '@angular/router';
 
 import { Observable, catchError, exhaustMap, of, throwError } from 'rxjs';
 
 import { RootRoutes } from '@bcgov/shared/ui';
 
-import { APP_CONFIG, AppConfig } from '@app/app.config';
+import { AuthRoutes } from '@app/features/auth/auth.routes';
 import { ShellRoutes } from '@app/features/shell/shell.routes';
 
 import { LoggerService } from '../services/logger.service';
@@ -27,17 +27,12 @@ import { PartyService } from './party.service';
   providedIn: 'root',
 })
 export class PartyResolver implements Resolve<number | null> {
-  public logoutRedirectUrl: string;
-
   public constructor(
-    @Inject(APP_CONFIG) private config: AppConfig,
     private router: Router,
     private partyResource: PartyResource,
     private partyService: PartyService,
     private logger: LoggerService
-  ) {
-    this.logoutRedirectUrl = `${this.config.applicationUrl}/auth/bc-provider-uplift`;
-  }
+  ) {}
 
   public resolve(): Observable<number | null> {
     return this.partyResource.firstOrCreate().pipe(
@@ -56,7 +51,7 @@ export class PartyResolver implements Resolve<number | null> {
           error.message === 'Unknown BC Provider account'
         ) {
           // redirect user
-          this.router.navigateByUrl('/auth/bc-provider-uplift');
+          this.router.navigateByUrl(AuthRoutes.BC_PROVIDER_UPLIFT);
         } else {
           this.router.navigateByUrl(ShellRoutes.SUPPORT_ERROR_PAGE);
         }
