@@ -14,9 +14,9 @@ import { SystemCardComponent } from './pages/system-card/system-card.page';
 @NgModule({
   declarations: [
     AutoLoginPage,
+    BcProviderUpliftPage,
     LoginPage,
     SystemCardComponent,
-    BcProviderUpliftPage,
   ],
   imports: [AuthRoutingModule, DashboardModule, SharedModule, LayoutModule],
 })
