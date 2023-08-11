@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
@@ -6,7 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router';
   templateUrl: './site-privacy-security-checklist.page.html',
   styleUrls: ['./site-privacy-security-checklist.page.scss'],
 })
-export class SitePrivacySecurityChecklistPage implements OnInit {
+export class SitePrivacySecurityChecklistPage {
   public title: string;
 
   public constructor(private route: ActivatedRoute, private router: Router) {
@@ -20,8 +20,6 @@ export class SitePrivacySecurityChecklistPage implements OnInit {
   public onBack(): void {
     this.navigateToRoot();
   }
-
-  public ngOnInit(): void {}
 
   private navigateToRoot(): void {
     this.router.navigate([this.route.snapshot.data.routes.root]);

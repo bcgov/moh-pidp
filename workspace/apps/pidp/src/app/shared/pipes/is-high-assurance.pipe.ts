@@ -6,7 +6,7 @@ import { IdentityProvider } from '@app/features/auth/enums/identity-provider.enu
   name: 'isHighAssurance',
 })
 export class IsHighAssurancePipe implements PipeTransform {
-  transform(value: IdentityProvider | null): boolean {
+  public transform(value: IdentityProvider | null): boolean {
     return (
       value === IdentityProvider.BCSC || value === IdentityProvider.BC_PROVIDER
     );
