@@ -1,9 +1,9 @@
 import { Component, Inject } from '@angular/core';
 
-import { CookieService } from 'ngx-cookie-service';
-
 import { APP_CONFIG, AppConfig } from '@app/app.config';
 
+import { AuthRoutes } from '../../auth.routes';
+import { IdentityProvider } from '../../enums/identity-provider.enum';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
@@ -14,22 +14,26 @@ import { AuthService } from '../../services/auth.service';
 export class BcProviderUpliftPage {
   public bcscMobileSetupUrl: string;
   public logoutRedirectUrl: string;
+  public loginRedirectUrl: string;
 
   public constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
-    private cookieService: CookieService,
     private authService: AuthService
   ) {
     this.bcscMobileSetupUrl = this.config.urls.bcscMobileSetup;
     this.logoutRedirectUrl = `${this.config.applicationUrl}/`;
+    this.loginRedirectUrl = `${
+      this.config.applicationUrl
+    }/${AuthRoutes.routePath(AuthRoutes.AUTO_LOGIN)}?idp_hint=${
+      IdentityProvider.BCSC
+    }`;
   }
 
   public onLogin(): void {
-    throw new Error('onLogin function not implemented');
+    this.authService.logout(this.loginRedirectUrl);
   }
 
-  public onBack(): void {
-    this.cookieService.delete('bcprovider_aad_userid');
+  public onLogout(): void {
     this.authService.logout(this.logoutRedirectUrl);
   }
 }

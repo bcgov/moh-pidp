@@ -7091,13 +7091,6 @@ neo-async@^2.6.2:
   resolved "https://registry.yarnpkg.com/neo-async/-/neo-async-2.6.2.tgz#b4aafb93e3aeb2d8174ca53cf163ab7d7308305f"
   integrity sha512-Yd3UES5mWCSqR+qNT93S3UoYUkqAZ9lLg8a7g9rimsWmYGK8cVToA4/sF3RrshdyV3sAGMXVUmpMYOw+dLpOuw==
 
-ngx-cookie-service@13:
-  version "13.2.1"
-  resolved "https://registry.yarnpkg.com/ngx-cookie-service/-/ngx-cookie-service-13.2.1.tgz#4b62263b855c4d938f4f0be00ef0bff1c0b251be"
-  integrity sha512-whl7sYcSlAmPa12zoBfBeSn+9ENxRjKAzuwRPRTL6Oe/f9dtSui2lBmOgoPfSD1umiTV38JpJee9nu3WbGsgwg==
-  dependencies:
-    tslib "^2.0.0"
-
 ngx-mask@^13.0.0:
   version "13.0.0"
   resolved "https://registry.yarnpkg.com/ngx-mask/-/ngx-mask-13.0.0.tgz#03a3b0bb2f1d271141946a443d2af625216eacaf"

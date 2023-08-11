@@ -2,7 +2,6 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { provideAutoSpy } from 'jest-auto-spies';
-import { CookieService } from 'ngx-cookie-service';
 
 import { APP_CONFIG, APP_DI_CONFIG } from '@app/app.config';
 
@@ -18,7 +17,6 @@ describe('BcProviderUpliftPage', () => {
       imports: [RouterTestingModule],
       declarations: [BcProviderUpliftPage],
       providers: [
-        provideAutoSpy(CookieService),
         {
           provide: APP_CONFIG,
           useValue: APP_DI_CONFIG,

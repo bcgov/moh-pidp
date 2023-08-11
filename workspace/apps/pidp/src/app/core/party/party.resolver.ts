@@ -4,8 +4,6 @@ import { Resolve, Router } from '@angular/router';
 
 import { Observable, catchError, exhaustMap, of, throwError } from 'rxjs';
 
-import { CookieService } from 'ngx-cookie-service';
-
 import { RootRoutes } from '@bcgov/shared/ui';
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';
@@ -36,8 +34,7 @@ export class PartyResolver implements Resolve<number | null> {
     private router: Router,
     private partyResource: PartyResource,
     private partyService: PartyService,
-    private logger: LoggerService,
-    private cookieService: CookieService
+    private logger: LoggerService
   ) {
     this.logoutRedirectUrl = `${this.config.applicationUrl}/auth/bc-provider-uplift`;
   }
@@ -54,7 +51,10 @@ export class PartyResolver implements Resolve<number | null> {
 
         if (error instanceof HttpErrorResponse && error.status === 403) {
           this.router.navigateByUrl(RootRoutes.DENIED);
-        } else if (this.cookieService.get('bcprovider_aad_userid')) {
+        } else if (
+          error instanceof Error &&
+          error.message === 'Unknown BC Provider account'
+        ) {
           // redirect user
           this.router.navigateByUrl('/auth/bc-provider-uplift');
         } else {
