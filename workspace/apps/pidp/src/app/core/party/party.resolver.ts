@@ -51,7 +51,9 @@ export class PartyResolver implements Resolve<number | null> {
           error.message === 'Unknown BC Provider account'
         ) {
           // redirect user
-          this.router.navigateByUrl(AuthRoutes.BC_PROVIDER_UPLIFT);
+          this.router.navigateByUrl(
+            AuthRoutes.routePath(AuthRoutes.BC_PROVIDER_UPLIFT)
+          );
         } else {
           this.router.navigateByUrl(ShellRoutes.SUPPORT_ERROR_PAGE);
         }
