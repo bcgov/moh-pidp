@@ -1,0 +1,50 @@
+<ui-layout-header-footer>
+  <div class="header-right" page-header-right>
+    <div>
+      <span class="signout-text">sign out</span>
+      <button
+        mat-icon-button
+        matTooltip="Logout"
+        aria-label="logout"
+        (click)="onLogout()">
+        <mat-icon>logout</mat-icon>
+      </button>
+    </div>
+  </div>
+  <div class="container" uiPidpInjectViewportCss>
+    <div class="section-box">
+      <div class="background-image-container">
+        <img
+          ngSrc="/assets/images/bcprovider-uplift-850x600-desktop.png"
+          fill />
+      </div>
+      <header class="title-container">
+        <h1>Keeping you safe</h1>
+      </header>
+      <p>
+        Your BC Provider account is currently missing a key component which lets
+        us know it is you.<br />
+        You will need to perform a one-time setup with your BC Services Card.<br />
+        Once complete, please continue using your BC Provider account.
+      </p>
+
+      <div class="buttons-container">
+        <div class="buttons-content">
+          <button
+            class="login-app-button"
+            mat-flat-button
+            color="primary"
+            (click)="onLogin()">
+            Log in with the BC Services Card
+          </button>
+          <div class="login-setup">
+            <small>
+              Need an account?
+              <a uiAnchor [href]="bcscMobileSetupUrl">Register</a>
+            </small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ui-layout-header-footer>
