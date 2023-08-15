@@ -65,13 +65,17 @@
             background: white;
           }
         }
-        & button {
+        & button.mat-flat-button {
           width: fit-content;
         }
-        & .red {
+        & button.icon-button {
           background-color: #c24115;
-          color: pidp.$grey-10;
+          font-size: 1.5rem;
+          position: absolute;
+          bottom: 30px;
+          right: 30px;
         }
+
         & img {
           z-index: -1;
           border-radius: var(--card-border-radius);

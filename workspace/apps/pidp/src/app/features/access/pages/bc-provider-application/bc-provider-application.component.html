@@ -64,11 +64,13 @@
             <strong>Uplift your existing BC Provider account</strong>
           </div>
           <button
-            class="red"
-            mat-icon-button
+            class="icon-button"
+            mat-mini-fab
+            color="primary"
             matTooltip="Uplift your BC Provider account"
-            aria-label="Uplift your BC Provider account">
-            <!-- <fa-icon [icon]="faCircleRight"></fa-icon> -->
+            aria-label="Uplift your BC Provider account"
+            (click)="UpliftBCProviderAccount()">
+            <fa-icon [icon]="faCircleRight"></fa-icon>
           </button>
         </div>
         <div class="card advantage-card">

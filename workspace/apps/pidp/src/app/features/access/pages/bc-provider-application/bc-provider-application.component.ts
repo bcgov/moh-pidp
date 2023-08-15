@@ -105,6 +105,10 @@ export class BcProviderApplicationComponent
     }
   }
 
+  public UpliftBCProviderAccount(): void {
+    throw new Error('Not implemented');
+  }
+
   protected performSubmission(): Observable<string | void> {
     const partyId = this.partyService.partyId;
     this.password = this.formState.password.value;
