@@ -1,9 +1,9 @@
-import { HttpContext, HttpErrorResponse } from '@angular/common/http';
+import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 import { Observable, catchError, tap, throwError } from 'rxjs';
 
-import { CrudResource, SHOW_LOADING_MESSAGE } from '@bcgov/shared/data-access';
+import { CrudResource } from '@bcgov/shared/data-access';
 
 import { ApiHttpClient } from '@app/core/resources/api-http-client.service';
 
