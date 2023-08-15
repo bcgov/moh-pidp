@@ -3,6 +3,7 @@
 .viewport-all {
   --gap: 1rem;
   --font-size: 0.75rem;
+  --card-border-radius: calc(var(--gap) * 0.375);
 }
 
 .viewport-small,
@@ -40,6 +41,59 @@
     font-size: var(--font-size);
     display: flex;
     flex-direction: column;
+
+    & .cards {
+      display: grid;
+      grid-template-columns: calc(40% - 15px) calc(27% - 15px) calc(33% - 15px);
+      gap: 20px;
+      width: 98%;
+      & .card {
+        display: flex;
+        flex-direction: column;
+        padding: 10px;
+        position: relative;
+
+        & .card-content {
+          position: relative;
+          & .card-badge {
+            position: absolute;
+            right: -30px;
+            top: -30px;
+            border: solid 1px blue;
+            border-radius: 50px;
+            padding: 15px;
+            background: white;
+          }
+        }
+        & button {
+          width: fit-content;
+        }
+        & .red {
+          background-color: #c24115;
+          color: pidp.$grey-10;
+        }
+        & img {
+          z-index: -1;
+          border-radius: var(--card-border-radius);
+        }
+      }
+
+      & .advantage-card {
+        border: solid 1px pidp.$grey-20;
+        border-radius: var(--card-border-radius);
+        box-shadow: 0 0 10px pidp.$grey-20;
+      }
+
+      & .card-uplifting {
+        color: #9a3611;
+      }
+    }
+
+    & .bcgov-logo img {
+      height: 122px;
+      width: 240px;
+      margin-left: -20px;
+    }
 
     & .error-card {
       background-color: #ffdfdf;

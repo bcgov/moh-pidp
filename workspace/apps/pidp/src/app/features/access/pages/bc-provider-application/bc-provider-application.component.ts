@@ -6,8 +6,10 @@ import { ActivatedRoute } from '@angular/router';
 
 import { Observable, catchError, tap } from 'rxjs';
 
+import { faCircleRight } from '@fortawesome/free-regular-svg-icons';
 import {
   faCircleCheck,
+  faLockOpen,
   faUser,
   faXmark,
 } from '@fortawesome/free-solid-svg-icons';
@@ -37,8 +39,10 @@ export class BcProviderApplicationComponent
   extends AbstractFormPage<BcProviderApplicationFormState>
   implements OnInit
 {
-  public faUser = faUser;
   public faCircleCheck = faCircleCheck;
+  public faCircleRight = faCircleRight;
+  public faLockOpen = faLockOpen;
+  public faUser = faUser;
   public faXmark = faXmark;
   public formState: BcProviderApplicationFormState;
   public showErrorCard = false;

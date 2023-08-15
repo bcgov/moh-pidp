@@ -1,11 +1,94 @@
 <div class="container-box" uiPidpInjectViewportCss>
   <div class="content-box">
     <header>
-      <h2>Create BC Provider Account</h2>
+      <h2>BC Provider account information</h2>
     </header>
     <div class="content">
-      <p class="welcome">Welcome to your BC Provider account setup.</p>
-      <p class="password-info">
+      <h3>
+        <strong
+          >Welcome {{ username }} to your BC Provider knowledge center!</strong
+        >
+      </h3>
+      <p>
+        Whether you are existing, or new to BC Provider, we have you covered.
+      </p>
+      <p class="welcome">
+        OneHealthID is looking for a one-time setup if you are an existing BC
+        Provider account holder, and have not uplifted your account by logging
+        in with your BC Services Card credentials. <br />
+        After this quick uplift you will have the flexability to then login to
+        OneHealthID with your BC Provider, or your BC Services Card account
+        info. All you have to do is log into BC Provider with your existing
+        information, and we will automatically take care of the secure uplift.
+      </p>
+      <p>
+        <strong
+          >Do you not have a BC Provider account? setup is quick and
+          easy.</strong
+        >
+      </p>
+      <div class="cards">
+        <div class="card">
+          <div class="card-content">
+            <strong>Interested in BC Provider?</strong>
+            <p>
+              For brand new users that are looking for the flexibility and
+              security of BC Services card and a BC Provider account.
+            </p>
+            <button mat-flat-button type="button" color="primary">
+              First time setup
+            </button>
+            <a uiAnchor href="/">need help?</a>
+            <hr />
+            <div class="bcgov-logo">
+              <picture>
+                <source
+                  type="image/webp"
+                  srcset="/assets/images/BC_HLTH_H_CMYK_pos.webp" />
+                <source
+                  type="image/png"
+                  srcset="/assets/images/BC_HLTH_H_CMYK_pos.png" />
+                <img
+                  title="BC Government Logo"
+                  loading="lazy"
+                  aria-label="BC Ministry of Health Logo" />
+              </picture>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <img
+            ngSrc="/assets/images/bc-provider-uplifit-account-300x451.jpg"
+            fill />
+          <div class="card-content card-uplifting">
+            <strong>Uplift your existing BC Provider account</strong>
+          </div>
+          <button
+            class="red"
+            mat-icon-button
+            matTooltip="Uplift your BC Provider account"
+            aria-label="Uplift your BC Provider account">
+            <!-- <fa-icon [icon]="faCircleRight"></fa-icon> -->
+          </button>
+        </div>
+        <div class="card advantage-card">
+          <div class="card-content">
+            <div class="card-badge">
+              <fa-icon [icon]="faLockOpen"></fa-icon>
+            </div>
+            <strong>Advantage with BC Provier</strong>
+            <p>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+              Vestibulum ac euismod dui, et aliquam neque. Fusce at tincidunt
+              ipsum. Integer eget malesuada sem, nec hendrerit dolor.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- <p class="password-info">
         Your password must be 8 to 256 characters long, with at least one letter
         and one number or special character. Strong passwords include both
         upper- and lower-case letters, as well as special characters (such as an
@@ -36,9 +119,9 @@
             <picture class="image">
               <source
                 type="image/webp"
-                srcset="/assets/images/bc-provider-account-457x759.webp" />
-              <!-- Use jpg as a fallback when webp is not supported by the browser. -->
-              <source
+                srcset="/assets/images/bc-provider-account-457x759.webp" /> -->
+  <!-- Use jpg as a fallback when webp is not supported by the browser. -->
+  <!--<source
                 type="image/jpg"
                 srcset="/assets/images/bc-provider-account-457x759.jpg" />
               <img title="woman" loading="lazy" aria-labelledby="" />
@@ -63,11 +146,8 @@
           (click)="onBack()">
           Back
         </button>
-      </section>
-    </div>
-  </div>
+      </section> -->
 </div>
-
 <ng-template #passwordForm>
   <form novalidate [formGroup]="formState.form" (ngSubmit)="onSubmit()">
     <h3>Create an account</h3>
