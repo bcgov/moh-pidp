@@ -34,7 +34,7 @@ concurrency:
 jobs:
   
   set-pr-number-event-number-empty:
-    name: Set pr number
+    name: Set pr number - empty
     runs-on: ubuntu-latest
     if: github.event.number == ''
     steps:
@@ -44,7 +44,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   set-pr-number-event-number-not-empty:       
-    name: Set pr number
+    name: Set pr number - non-empty
     runs-on: ubuntu-latest
     if: github.event.number != ''
     steps:
