@@ -34,11 +34,12 @@ concurrency:
 
 jobs:
   
-  set-pr-number-event:
-
+  auth:
     name: Set pr number
-
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
 
     steps:
 
