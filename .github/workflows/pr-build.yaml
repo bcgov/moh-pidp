@@ -69,10 +69,6 @@ jobs:
         with:
           node-version: 16.x
       
-      - name: Remove Helm deployment
-        run: |
-          helm uninstall pr-${{ env.pr_number }} --namespace d8a8f9-dev
-
       - name: YARN Install
         run: |
           yarn install
