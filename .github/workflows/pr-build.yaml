@@ -39,7 +39,7 @@ jobs:
     if: github.event.number == ''
     steps:
       - name: Get pr number
-        run: echo "pull_request_number=$(gh pr view --json number -q .number || echo "")" >> "$GITHUB_ENV"
+        run: echo "pr_number=$(gh pr view --json number -q .number || echo "")" >> "$GITHUB_ENV"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
