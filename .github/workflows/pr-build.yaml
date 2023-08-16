@@ -25,6 +25,7 @@ on:
     - 'test'
     - 'main'
 
+permissions: read-all
 
 # This will terminate builds that are previously, but continuing to run.  Saves GHA hours.
 concurrency:
@@ -32,12 +33,18 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  
   build-and-deploy-frontend:
     name: Frontend Build and Deploy
     runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: "./workspace"
+    
+    permissions:
+      contents: read
+      id-token: write
+
     steps:
       - name: "Checkout Code"
         uses: actions/checkout@master
@@ -47,22 +54,6 @@ jobs:
         with:
           node-version: 16.x
       
-      - name: Get Pull Request Number
-        id: pr
-        run: echo "::set-output name=pull_request_number::$(gh pr view --json number -q .number || echo "")"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      # - name: Set value for Pull Request Number
-      #   id: step_one
-      #   run: |
-      #     echo "action_state=yellow" >> "$GITHUB_ENV"
-      # - name: Use the value
-      #   id: step_two
-      #   run: |
-    
-      #     echo "${{ env.action_state }}" # This will output 'yellow'
-
       - name: YARN Install
         run: |
           yarn install
@@ -71,9 +62,30 @@ jobs:
         run: |
           yarn build
 
+
+      - name: Get pr number from GH cli command (pushing to pr) 
+        if: ${{ github.event.number == ''}}
+
+        run: echo "pr_number=$(gh pr view --json number -q .number || echo "")" >> "$GITHUB_ENV"
+
+        env:
+
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  
+      - name: Get pr number from github.event.number (opening a pr)
+        if: ${{ github.event.number != ''}}
+
+        run: echo "pr_number=${{ github.event.number }}" >> "$GITHUB_ENV"
+
+        env:
+
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+
       - name: "Docker Build"
         run: |
-          docker build -t image-registry.apps.silver.devops.gov.bc.ca/d8a8f9-tools/pidp-frontend:pr-${{ steps.pr.outputs.pull_request_number }} .
+          docker build -t image-registry.apps.silver.devops.gov.bc.ca/d8a8f9-tools/pidp-frontend:pr-${{ env.pr_number }} .
 
       # Uses the builder service account token
       - name: "Docker Login to Silver OCP"
@@ -85,7 +97,7 @@ jobs:
 
       - name: "Push image"
         run: |
-          docker push image-registry.apps.silver.devops.gov.bc.ca/d8a8f9-tools/pidp-frontend:pr-${{ steps.pr.outputs.pull_request_number }}
+          docker push image-registry.apps.silver.devops.gov.bc.ca/d8a8f9-tools/pidp-frontend:pr-${{ env.pr_number }}
 
      
   build-and-deploy-plr-intake:
@@ -94,21 +106,38 @@ jobs:
     defaults:
       run:
         working-directory: "./backend/services.plr-intake"
+    permissions:
+      contents: read
+      id-token: write
+    
     steps:
       - name: "Checkout Code"
         uses: actions/checkout@master
 
 
-      - name: Get Pull Request Number
-        id: pr
-        run: echo "::set-output name=pull_request_number::$(gh pr view --json number -q .number || echo "")"
+      - name: Get pr number from GH cli command (pushing to pr)
+        if: ${{ github.event.number == ''}}
+
+        run: echo "pr_number=$(gh pr view --json number -q .number || echo "")" >> "$GITHUB_ENV"
+
         env:
+
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  
+      - name: Get pr number from github.event.number (opening a pr)
+        if: ${{ github.event.number != ''}}
+
+        run: echo "pr_number=${{ github.event.number }}" >> "$GITHUB_ENV"
+
+        env:
+
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 
       - name: "Docker Build"
         run: |
-          docker build -t image-registry.apps.silver.devops.gov.bc.ca/d8a8f9-tools/pidp-plr-intake:pr-${{ steps.pr.outputs.pull_request_number }} .
+          docker build -t image-registry.apps.silver.devops.gov.bc.ca/d8a8f9-tools/pidp-plr-intake:pr-${{ env.pr_number }} .
 
       # Uses the builder service account token
       - name: "Docker Login to Silver OCP"
@@ -120,7 +149,7 @@ jobs:
 
       - name: "Push image"
         run: |
-          docker push image-registry.apps.silver.devops.gov.bc.ca/d8a8f9-tools/pidp-plr-intake:pr-${{ steps.pr.outputs.pull_request_number }}
+          docker push image-registry.apps.silver.devops.gov.bc.ca/d8a8f9-tools/pidp-plr-intake:pr-${{ env.pr_number }}
 
 
   build-and-deploy-webapi:
@@ -129,21 +158,38 @@ jobs:
     defaults:
       run:
         working-directory: "./backend/webapi"
+    permissions:
+      contents: read
+      id-token: write
+
     steps:
       - name: "Checkout Code"
         uses: actions/checkout@master
 
 
-      - name: Get Pull Request Number
-        id: pr
-        run: echo "::set-output name=pull_request_number::$(gh pr view --json number -q .number || echo "")"
+      - name: Get pr number from GH cli command (pushing to pr)
+        if: ${{ github.event.number == ''}}
+
+        run: echo "pr_number=$(gh pr view --json number -q .number || echo "")" >> "$GITHUB_ENV"
+
         env:
+
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  
+      - name: Get pr number from github.event.number (opening a pr)
+        if: ${{ github.event.number != ''}}
+
+        run: echo "pr_number=${{ github.event.number }}" >> "$GITHUB_ENV"
+
+        env:
+
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 
       - name: "Docker Build"
         run: |
-          docker build -t image-registry.apps.silver.devops.gov.bc.ca/d8a8f9-tools/pidp-webapi:pr-${{ steps.pr.outputs.pull_request_number }} .
+          docker build -t image-registry.apps.silver.devops.gov.bc.ca/d8a8f9-tools/pidp-webapi:pr-${{ env.pr_number }} .
 
       # Uses the builder service account token
       - name: "Docker Login to Silver OCP"
@@ -155,11 +201,14 @@ jobs:
 
       - name: "Push image"
         run: |
-          docker push image-registry.apps.silver.devops.gov.bc.ca/d8a8f9-tools/pidp-webapi:pr-${{ steps.pr.outputs.pull_request_number }}
+          docker push image-registry.apps.silver.devops.gov.bc.ca/d8a8f9-tools/pidp-webapi:pr-${{ env.pr_number }}
   
   helm-deployment:
     needs: [build-and-deploy-webapi, build-and-deploy-plr-intake, build-and-deploy-frontend]
     runs-on: 'ubuntu-latest'
+    permissions:
+      contents: read
+      id-token: write
     steps:
       - uses: actions/checkout@master 
   
@@ -169,20 +218,30 @@ jobs:
           openshift_server_url: ${{secrets.OPENSHIFT_CLUSTER_URL}}
           openshift_token: ${{secrets.OPENSHIFT_PIPELINE_SERVICE_ACCOUNT_TOKEN}}
 
-      - name: Get Pull Request Number
-        id: pr
-        run: echo "::set-output name=pull_request_number::$(gh pr view --json number -q .number || echo "")"
+      - name: Get pr number from GH cli command (pushing to pr)
+        if: ${{ github.event.number == ''}}
+
+        run: echo "pr_number=$(gh pr view --json number -q .number || echo "")" >> "$GITHUB_ENV"
+
         env:
+
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    
+      - name: Get pr number from github.event.number (opening a pr)
+        if: ${{ github.event.number != ''}}
+
+        run: echo "pr_number=${{ github.event.number }}" >> "$GITHUB_ENV"
+
+        env:
+
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   
-      - name: echo val
-        run: |
-          echo ${{ steps.pr.outputs.pull_request_number }}
-
+  
       - name: Helm Deploy / install command
         run: |
           echo current installed helm releases
           helm list --namespace d8a8f9-dev
   
           echo installing helm chart...
-          helm upgrade --install --wait --values ./deploy/pr_values.yaml --namespace d8a8f9-dev pr-${{ steps.pr.outputs.pull_request_number }} charts/pidp --debug --set global.image.tag=pr-${{ steps.pr.outputs.pull_request_number }}
+          helm upgrade --install --wait --values ./deploy/pr_values.yaml --namespace d8a8f9-dev pr-${{ env.pr_number }} charts/pidp --debug --set global.image.tag=pr-${{ env.pr_number }}
