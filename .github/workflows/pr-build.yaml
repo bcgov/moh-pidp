@@ -47,21 +47,22 @@ jobs:
         with:
           node-version: 16.x
       
-      - name: Get Pull Request Number
-        id: pr
+      - name: Get pr number
         run: echo "::set-output name=pull_request_number::$(gh pr view --json number -q .number || echo "")"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      # - name: Set value for Pull Request Number
-      #   id: step_one
-      #   run: |
-      #     echo "action_state=yellow" >> "$GITHUB_ENV"
-      # - name: Use the value
-      #   id: step_two
-      #   run: |
     
-      #     echo "${{ env.action_state }}" # This will output 'yellow'
+      - name: Set env pr_number
+        run: |
+          if [[ ${{ github.event.number }} == '' ]]; then
+              echo "pr_number=${{ steps.pr.outputs.pull_request_number }}" >> "$GITHUB_ENV"
+          else
+              echo "pr_number=${{ github.event.number }}" >> "$GITHUB_ENV"
+          fi
+
+      - name: Remove Helm deployment
+        run: |
+          helm uninstall pr-${{ env.pr_number }} --namespace d8a8f9-dev
 
       - name: YARN Install
         run: |
@@ -73,7 +74,7 @@ jobs:
 
       - name: "Docker Build"
         run: |
-          docker build -t image-registry.apps.silver.devops.gov.bc.ca/d8a8f9-tools/pidp-frontend:pr-${{ steps.pr.outputs.pull_request_number }} .
+          docker build -t image-registry.apps.silver.devops.gov.bc.ca/d8a8f9-tools/pidp-frontend:pr-${{ env.pr_number }} .
 
       # Uses the builder service account token
       - name: "Docker Login to Silver OCP"
@@ -85,7 +86,7 @@ jobs:
 
       - name: "Push image"
         run: |
-          docker push image-registry.apps.silver.devops.gov.bc.ca/d8a8f9-tools/pidp-frontend:pr-${{ steps.pr.outputs.pull_request_number }}
+          docker push image-registry.apps.silver.devops.gov.bc.ca/d8a8f9-tools/pidp-frontend:pr-${{ env.pr_number }}
 
      
   build-and-deploy-plr-intake:
@@ -99,16 +100,23 @@ jobs:
         uses: actions/checkout@master
 
 
-      - name: Get Pull Request Number
-        id: pr
+      - name: Get pr number
         run: echo "::set-output name=pull_request_number::$(gh pr view --json number -q .number || echo "")"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    
+      - name: Set env pr_number
+        run: |
+          if [[ ${{ github.event.number }} == '' ]]; then
+              echo "pr_number=${{ steps.pr.outputs.pull_request_number }}" >> "$GITHUB_ENV"
+          else
+              echo "pr_number=${{ github.event.number }}" >> "$GITHUB_ENV"
+          fi
 
 
       - name: "Docker Build"
         run: |
-          docker build -t image-registry.apps.silver.devops.gov.bc.ca/d8a8f9-tools/pidp-plr-intake:pr-${{ steps.pr.outputs.pull_request_number }} .
+          docker build -t image-registry.apps.silver.devops.gov.bc.ca/d8a8f9-tools/pidp-plr-intake:pr-${{ env.pr_number }} .
 
       # Uses the builder service account token
       - name: "Docker Login to Silver OCP"
@@ -120,7 +128,7 @@ jobs:
 
       - name: "Push image"
         run: |
-          docker push image-registry.apps.silver.devops.gov.bc.ca/d8a8f9-tools/pidp-plr-intake:pr-${{ steps.pr.outputs.pull_request_number }}
+          docker push image-registry.apps.silver.devops.gov.bc.ca/d8a8f9-tools/pidp-plr-intake:pr-${{ env.pr_number }}
 
 
   build-and-deploy-webapi:
@@ -133,17 +141,22 @@ jobs:
       - name: "Checkout Code"
         uses: actions/checkout@master
 
-
-      - name: Get Pull Request Number
-        id: pr
+      - name: Get pr number
         run: echo "::set-output name=pull_request_number::$(gh pr view --json number -q .number || echo "")"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
+    
+      - name: Set env pr_number
+        run: |
+          if [[ ${{ github.event.number }} == '' ]]; then
+              echo "pr_number=${{ steps.pr.outputs.pull_request_number }}" >> "$GITHUB_ENV"
+          else
+              echo "pr_number=${{ github.event.number }}" >> "$GITHUB_ENV"
+          fi
 
       - name: "Docker Build"
         run: |
-          docker build -t image-registry.apps.silver.devops.gov.bc.ca/d8a8f9-tools/pidp-webapi:pr-${{ steps.pr.outputs.pull_request_number }} .
+          docker build -t image-registry.apps.silver.devops.gov.bc.ca/d8a8f9-tools/pidp-webapi:pr-${{ env.pr_number }} .
 
       # Uses the builder service account token
       - name: "Docker Login to Silver OCP"
@@ -155,7 +168,7 @@ jobs:
 
       - name: "Push image"
         run: |
-          docker push image-registry.apps.silver.devops.gov.bc.ca/d8a8f9-tools/pidp-webapi:pr-${{ steps.pr.outputs.pull_request_number }}
+          docker push image-registry.apps.silver.devops.gov.bc.ca/d8a8f9-tools/pidp-webapi:pr-${{ env.pr_number }}
   
   helm-deployment:
     needs: [build-and-deploy-webapi, build-and-deploy-plr-intake, build-and-deploy-frontend]
@@ -169,20 +182,23 @@ jobs:
           openshift_server_url: ${{secrets.OPENSHIFT_CLUSTER_URL}}
           openshift_token: ${{secrets.OPENSHIFT_PIPELINE_SERVICE_ACCOUNT_TOKEN}}
 
-      - name: Get Pull Request Number
-        id: pr
+      - name: Get pr number
         run: echo "::set-output name=pull_request_number::$(gh pr view --json number -q .number || echo "")"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  
-      - name: echo val
+    
+      - name: Set env pr_number
         run: |
-          echo ${{ steps.pr.outputs.pull_request_number }}
-
+          if [[ ${{ github.event.number }} == '' ]]; then
+              echo "pr_number=${{ steps.pr.outputs.pull_request_number }}" >> "$GITHUB_ENV"
+          else
+              echo "pr_number=${{ github.event.number }}" >> "$GITHUB_ENV"
+          fi
+  
       - name: Helm Deploy / install command
         run: |
           echo current installed helm releases
           helm list --namespace d8a8f9-dev
   
           echo installing helm chart...
-          helm upgrade --install --wait --values ./deploy/pr_values.yaml --namespace d8a8f9-dev pr-${{ steps.pr.outputs.pull_request_number }} charts/pidp --debug --set global.image.tag=pr-${{ steps.pr.outputs.pull_request_number }}
+          helm upgrade --install --wait --values ./deploy/pr_values.yaml --namespace d8a8f9-dev pr-${{ env.pr_number }} charts/pidp --debug --set global.image.tag=pr-${{ env.pr_number }}

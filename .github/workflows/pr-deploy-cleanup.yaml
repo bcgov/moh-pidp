@@ -19,15 +19,28 @@ jobs:
         openshift_server_url: ${{secrets.OPENSHIFT_CLUSTER_URL}}
         openshift_token: ${{secrets.OPENSHIFT_PIPELINE_SERVICE_ACCOUNT_TOKEN}}
 
+    - name: Get pr number
+      run: echo "::set-output name=pull_request_number::$(gh pr view --json number -q .number || echo "")"
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    
+    - name: Set env pr_number
+      run: |
+        if [[ ${{ github.event.number }} == '' ]]; then
+            echo "pr_number=${{ steps.pr.outputs.pull_request_number }}" >> "$GITHUB_ENV"
+        else
+            echo "pr_number=${{ github.event.number }}" >> "$GITHUB_ENV"
+        fi
+
     - name: Remove Helm deployment
       run: |
-        helm uninstall pr-${{ github.event.number }} --namespace d8a8f9-dev
+        helm uninstall pr-${{ env.pr_number }} --namespace d8a8f9-dev
 
     - name: Remove PR imagestream
       run: |
-        oc tag -d pidp-frontend:pr-${{ github.event.number }} -n d8a8f9-tools
-        oc tag -d pidp-plr-intake:pr-${{ github.event.number }} -n d8a8f9-tools
-        oc tag -d pidp-pidp-webapi:pr-${{ github.event.number }} -n d8a8f9-tools
+        oc tag -d pidp-frontend:pr-${{ env.pr_number }} -n d8a8f9-tools
+        oc tag -d pidp-plr-intake:pr-${{ env.pr_number }} -n d8a8f9-tools
+        oc tag -d pidp-pidp-webapi:pr-${{ env.pr_number }} -n d8a8f9-tools
 
   merge_job:
       # this job will only run if the PR has been merged
@@ -35,7 +48,7 @@ jobs:
       runs-on: ubuntu-latest
       steps:
       - run: |
-          echo PR #${{ github.event.number }} has been merged
+          echo PR #${{ env.pr_number }} has been merged
 
   close_job:
     # this job will only run if the PR has been closed without being merged
@@ -43,4 +56,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - run: |
-        echo PR #${{ github.event.number }} has been closed without being merged
+        echo PR #${{ env.pr_number }} has been closed without being merged
