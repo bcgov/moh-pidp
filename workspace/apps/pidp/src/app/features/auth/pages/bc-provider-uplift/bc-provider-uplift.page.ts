@@ -23,10 +23,8 @@ export class BcProviderUpliftPage {
     this.bcscMobileSetupUrl = this.config.urls.bcscMobileSetup;
     this.logoutRedirectUrl = `${this.config.applicationUrl}/`;
     this.loginRedirectUrl = `${
-      this.config.applicationUrl
-    }/${AuthRoutes.routePath(AuthRoutes.AUTO_LOGIN)}?idp_hint=${
-      IdentityProvider.BCSC
-    }`;
+      this.config.applicationUrl + AuthRoutes.routePath(AuthRoutes.AUTO_LOGIN)
+    }?idp_hint=${IdentityProvider.BCSC}`;
   }
 
   public onLogin(): void {

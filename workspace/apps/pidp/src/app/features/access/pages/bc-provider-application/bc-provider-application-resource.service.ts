@@ -1,6 +1,9 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
-import { Observable, map } from 'rxjs';
+import { Observable, catchError, map, throwError } from 'rxjs';
+
+import { NoContent, NoContentResponse } from '@bcgov/shared/data-access';
 
 import { ApiHttpClient } from '@app/core/resources/api-http-client.service';
 import { ProfileStatus } from '@app/features/portal/models/profile-status.model';
@@ -28,6 +31,17 @@ export class BcProviderApplicationResource {
         password,
       })
       .pipe(map((upn) => upn));
+  }
+
+  public createLinkRequest(partyId: number): NoContent {
+    return this.apiResource
+      .post<NoContent>(`${this.getResourcePath(partyId)}/link-request`, null)
+      .pipe(
+        NoContentResponse,
+        catchError((error: HttpErrorResponse) => {
+          return throwError(() => error);
+        })
+      );
   }
 
   private getResourcePath(partyId: number): string {

@@ -2,6 +2,7 @@ namespace Pidp.Features;
 
 using DomainResults.Common;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.Json;
 
 using Pidp.Infrastructure.Services;
 
@@ -9,6 +10,28 @@ using Pidp.Infrastructure.Services;
 [ApiController]
 public class PidpControllerBase : ControllerBase
 {
+    internal static class Cookies
+    {
+        public static class CredentialLinkToken
+        {
+            public const string Key = "credential-link-token";
+
+            public record Values(int PartyId, Guid CredentialLinkRequestId);
+
+            public static Values? DecodeValues(string? values)
+            {
+                if (string.IsNullOrWhiteSpace(values))
+                {
+                    return null;
+                }
+
+                return JsonSerializer.Deserialize<Values>(values);
+            }
+
+            public static string EncodeValues(int partyId, Guid credentialLinkRequestId) => JsonSerializer.Serialize(new Values(partyId, credentialLinkRequestId));
+        }
+    }
+
     protected IPidpAuthorizationService AuthorizationService { get; }
 
     protected PidpControllerBase(IPidpAuthorizationService authService) => this.AuthorizationService = authService;

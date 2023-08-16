@@ -5,20 +5,19 @@ using DomainResults.Mvc;
 using HybridModelBinding;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using NodaTime;
 
 using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.Services;
+using Pidp.Models;
 
 [Route("api/parties/{partyId}/[controller]")]
 [Authorize(Policy = Policies.AnyPartyIdentityProvider)]
 public class CredentialsController : PidpControllerBase
 {
-    public CredentialsController(IPidpAuthorizationService authorizationService) : base(authorizationService) { }
+    private readonly IClock clock;
 
-    [HttpGet("/api/[controller]")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult<List<Index.Model>>> GetCredentials([FromServices] IQueryHandler<Index.Query, List<Index.Model>> handler)
-        => await handler.HandleAsync(new Index.Query { User = this.User });
+    public CredentialsController(IClock clock, IPidpAuthorizationService authorizationService) : base(authorizationService) => this.clock = clock;
 
     [HttpGet("bc-provider")]
     [Authorize(Policy = Policies.HighAssuranceIdentityProvider)]
@@ -49,4 +48,38 @@ public class CredentialsController : PidpControllerBase
                                                               [FromHybrid] BCProviderPassword.Command command)
         => await this.AuthorizePartyBeforeHandleAsync(command.PartyId, handler, command)
             .ToActionResult();
+
+    [HttpPost("link-request")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> CreateCredentialLinkRequest([FromServices] ICommandHandler<LinkRequestCreate.Command, IDomainResult<Guid>> handler,
+                                                                 [FromHybrid] LinkRequestCreate.Command command)
+    {
+        var result = await this.AuthorizePartyBeforeHandleAsync(command.PartyId, handler, command);
+        if (result.IsSuccess)
+        {
+            this.Response.Cookies.Append(
+                Cookies.CredentialLinkToken.Key,
+                Cookies.CredentialLinkToken.EncodeValues(command.PartyId, result.Value),
+                new CookieOptions
+                {
+                    Expires = this.clock.GetCurrentInstant().Plus(CredentialLinkRequest.Expiry).ToDateTimeOffset(),
+                    HttpOnly = true
+                });
+
+            return this.Ok();
+        }
+
+        return result.ToActionResult();
+    }
+
+    [HttpPost("link-request/{credentialLinkRequestId}/complete")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<int>> CompleteCredentialLinkRequest([FromServices] ICommandHandler<LinkRequestComplete.Command, IDomainResult<int>> handler,
+                                                                       [FromRoute] LinkRequestComplete.Command command)
+        => await this.AuthorizePartyBeforeHandleAsync(command.PartyId, handler, command)
+           .ToActionResultOfT();
 }
