@@ -27,7 +27,7 @@ jobs:
       run: |
         oc tag -d pidp-frontend:pr-${{ github.event.number }} -n d8a8f9-tools
         oc tag -d pidp-plr-intake:pr-${{ github.event.number }} -n d8a8f9-tools
-        oc tag -d pidp-pidp-webapi:pr-${{ github.event.number }} -n d8a8f9-tools
+        oc tag -d pidp-webapi:pr-${{ github.event.number }} -n d8a8f9-tools
 
   merge_job:
     
