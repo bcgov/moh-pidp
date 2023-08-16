@@ -34,26 +34,35 @@ concurrency:
 
 jobs:
   
-  set-pr-number-event-number-empty:
-    name: Set pr number - empty
+  set-pr-number-event:
+
+    name: Set pr number
+
     runs-on: ubuntu-latest
-    if: github.event.number == ''
+
     steps:
-      - name: Get pr number
+
+      - name: Get pr number from github event
+
+        if: ${{ github.event.number == ''}}
+
         run: echo "pr_number=$(gh pr view --json number -q .number || echo "")" >> "$GITHUB_ENV"
+
         env:
+
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-  set-pr-number-event-number-not-empty:       
-    name: Set pr number - non-empty
-    runs-on: ubuntu-latest
-    if: github.event.number != ''
-    steps:
-      - name: Get pr number
+ 
+      - name: Get pr number from pull request
+
+        if: ${{ github.event.number != ''}}
+
         run: echo "pr_number=${{ github.event.number }}" >> "$GITHUB_ENV"
+
         env:
+
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    
+
   build-and-deploy-frontend:
     name: Frontend Build and Deploy
     runs-on: ubuntu-latest
