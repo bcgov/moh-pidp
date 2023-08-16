@@ -25,9 +25,12 @@ jobs:
 
     - name: Remove PR imagestream
       run: |
-        oc tag -d pr-${{ github.event.number }} -n d8a8f9-tools
+        oc tag -d pidp-frontend:pr-${{ github.event.number }} -n d8a8f9-tools
+        oc tag -d pidp-plr-intake:pr-${{ github.event.number }} -n d8a8f9-tools
+        oc tag -d pidp-pidp-webapi:pr-${{ github.event.number }} -n d8a8f9-tools
 
   merge_job:
+    
       # this job will only run if the PR has been merged
       if: github.event.pull_request.merged == true
       runs-on: ubuntu-latest
