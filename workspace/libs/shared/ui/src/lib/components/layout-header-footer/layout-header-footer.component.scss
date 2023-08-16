@@ -54,6 +54,12 @@
         white-space: nowrap;
       }
     }
+
+    & .header-right {
+      display: flex;
+      align-items: center;
+      justify-content: right;
+    }
   }
   .content {
     // Ensure this div stretches to fit vertically.

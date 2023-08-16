@@ -144,7 +144,6 @@ div.viewport-xsmall {
   border: none;
   height: auto;
   align-self: normal;
-  padding: calc(var(--gap) * 2);
   max-width: none;
 
   & .buttons-content {
@@ -155,7 +154,7 @@ div.viewport-xsmall {
   }
 
   & .background-image-container {
-    height: 22vh;
+    height: 24vh;
     width: 55%;
     & img {
       border-radius: unset;
