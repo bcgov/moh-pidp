@@ -25,6 +25,7 @@ on:
     - 'test'
     - 'main'
 
+permissions: read-all
 
 # This will terminate builds that are previously, but continuing to run.  Saves GHA hours.
 concurrency:
