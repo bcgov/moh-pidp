@@ -1,10 +1,16 @@
 import { Element } from '@angular/compiler';
-import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import {
+  Component,
+  Inject,
+  OnInit,
+  TemplateRef,
+  ViewChild,
+} from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 
-import { Observable, catchError, tap } from 'rxjs';
+import { Observable, catchError, of, switchMap, tap } from 'rxjs';
 
 import { faCircleRight } from '@fortawesome/free-regular-svg-icons';
 import {
@@ -19,12 +25,16 @@ import {
   NavigationService,
 } from '@pidp/presentation';
 
+import { APP_CONFIG, AppConfig } from '@app/app.config';
 import {
   AbstractFormDependenciesService,
   AbstractFormPage,
 } from '@app/core/classes/abstract-form-page.class';
 import { PartyService } from '@app/core/party/party.service';
 import { LoggerService } from '@app/core/services/logger.service';
+import { AuthRoutes } from '@app/features/auth/auth.routes';
+import { IdentityProvider } from '@app/features/auth/enums/identity-provider.enum';
+import { AuthService } from '@app/features/auth/services/auth.service';
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
 
 import { BcProviderApplicationFormState } from './bc-provider-application-form-state';
@@ -62,11 +72,13 @@ export class BcProviderApplicationComponent
   }
 
   public constructor(
+    @Inject(APP_CONFIG) private config: AppConfig,
     private route: ActivatedRoute,
     dependenciesService: AbstractFormDependenciesService,
     fb: FormBuilder,
     private navigationService: NavigationService,
     private partyService: PartyService,
+    private authService: AuthService,
     private resource: BcProviderApplicationResource,
     private loadingOverlayService: LoadingOverlayService,
     private logger: LoggerService
@@ -103,6 +115,28 @@ export class BcProviderApplicationComponent
       this.logger.error('No status code was provided');
       return this.navigationService.navigateToRoot();
     }
+  }
+
+  public onUplift() {
+    this.resource
+      .createLinkTicket(this.partyService.partyId)
+      .pipe(
+        switchMap(() =>
+          this.authService.logout(
+            `${
+              this.config.applicationUrl +
+              AuthRoutes.routePath(AuthRoutes.AUTO_LOGIN)
+            }?idp_hint=${IdentityProvider.BC_PROVIDER}`
+          )
+        ),
+        catchError(() => {
+          // TODO: what to do on error?
+          this.logger.error('Link Request creation failed');
+
+          return of(null);
+        })
+      )
+      .subscribe();
   }
 
   public UpliftBCProviderAccount(): void {
