@@ -119,7 +119,7 @@ export class BcProviderApplicationComponent
 
   public onUplift() {
     this.resource
-      .createLinkRequest(this.partyService.partyId)
+      .createLinkTicket(this.partyService.partyId)
       .pipe(
         switchMap(() =>
           this.authService.logout(

@@ -29,13 +29,15 @@ public class DiscoveryController : PidpControllerBase
             return result.ToActionResultOfT();
         }
 
-        if (this.Request.Cookies[Cookies.CredentialLinkToken.Key] is string credentialLinkTokenValue)
+        // TODO: make an extension method for this pattern
+        var credentialLinkTicket = Cookies.CredentialLinkTicket.DecodeValues(this.Request.Cookies[Cookies.CredentialLinkTicket.Key]);
+        if (credentialLinkTicket != null)
         {
             return this.RedirectToActionPreserveMethod
             (
-                nameof(CredentialsController.CompleteCredentialLinkRequest),
+                nameof(CredentialsController.CreateCredential),
                 nameof(CredentialsController).Replace("Controller", ""),
-                Cookies.CredentialLinkToken.DecodeValues(credentialLinkTokenValue)
+                new { credentialLinkTicket.PartyId }
             );
         }
 

@@ -12,11 +12,11 @@ public class PidpControllerBase : ControllerBase
 {
     internal static class Cookies
     {
-        public static class CredentialLinkToken
+        public static class CredentialLinkTicket
         {
-            public const string Key = "credential-link-token";
+            public const string Key = "credential-link-ticket";
 
-            public record Values(int PartyId, Guid CredentialLinkRequestId);
+            public record Values(int PartyId, Guid CredentialLinkToken);
 
             public static Values? DecodeValues(string? values)
             {
@@ -28,7 +28,8 @@ public class PidpControllerBase : ControllerBase
                 return JsonSerializer.Deserialize<Values>(values);
             }
 
-            public static string EncodeValues(int partyId, Guid credentialLinkRequestId) => JsonSerializer.Serialize(new Values(partyId, credentialLinkRequestId));
+            // TODO: we should be signing these values
+            public static string EncodeValues(int partyId, Guid credentialLinkToken) => JsonSerializer.Serialize(new Values(partyId, credentialLinkToken));
         }
     }
 

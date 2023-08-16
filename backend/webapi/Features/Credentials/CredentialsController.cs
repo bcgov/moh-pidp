@@ -5,7 +5,6 @@ using DomainResults.Mvc;
 using HybridModelBinding;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using NodaTime;
 
 using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.Services;
@@ -15,9 +14,34 @@ using Pidp.Models;
 [Authorize(Policy = Policies.AnyPartyIdentityProvider)]
 public class CredentialsController : PidpControllerBase
 {
-    private readonly IClock clock;
+    public CredentialsController(IPidpAuthorizationService authorizationService) : base(authorizationService) { }
 
-    public CredentialsController(IClock clock, IPidpAuthorizationService authorizationService) : base(authorizationService) => this.clock = clock;
+    /// <summary>
+    /// Directly creating a new Credential on an existing Party requires a valid CredentialLinkTicket and associated cookie to link the Accounts.
+    /// </summary>
+    [HttpPost]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<int>> CreateCredential([FromServices] ICommandHandler<Create.Command, IDomainResult<int>> handler,
+                                                          [FromRoute] Create.Command command)
+    {
+        var cookieValues = Cookies.CredentialLinkTicket.DecodeValues(this.Request.Cookies[Cookies.CredentialLinkTicket.Key]);
+        if (cookieValues == null)
+        {
+            return this.BadRequest("A Credential Link Ticket is required to link accounts.");
+        }
+        if (cookieValues.PartyId != command.PartyId)
+        {
+            return this.BadRequest("Party ID in cookie does not match route value.");
+        }
+
+        command.CredentialLinkToken = cookieValues.CredentialLinkToken;
+        command.User = this.User;
+
+        return await handler.HandleAsync(command)
+            .ToActionResultOfT();
+    }
 
     [HttpGet("bc-provider")]
     [Authorize(Policy = Policies.HighAssuranceIdentityProvider)]
@@ -49,22 +73,23 @@ public class CredentialsController : PidpControllerBase
         => await this.AuthorizePartyBeforeHandleAsync(command.PartyId, handler, command)
             .ToActionResult();
 
-    [HttpPost("link-request")]
+    [HttpPost("link-ticket")]
+    [Authorize(Policy = Policies.BcscAuthentication)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> CreateCredentialLinkRequest([FromServices] ICommandHandler<LinkRequestCreate.Command, IDomainResult<Guid>> handler,
-                                                                 [FromHybrid] LinkRequestCreate.Command command)
+    public async Task<IActionResult> CreateCredentialLinkTicket([FromServices] ICommandHandler<LinkTicketCreate.Command, IDomainResult<CredentialLinkTicket>> handler,
+                                                                [FromHybrid] LinkTicketCreate.Command command)
     {
         var result = await this.AuthorizePartyBeforeHandleAsync(command.PartyId, handler, command);
         if (result.IsSuccess)
         {
             this.Response.Cookies.Append(
-                Cookies.CredentialLinkToken.Key,
-                Cookies.CredentialLinkToken.EncodeValues(command.PartyId, result.Value),
+                Cookies.CredentialLinkTicket.Key,
+                Cookies.CredentialLinkTicket.EncodeValues(command.PartyId, result.Value.Token),
                 new CookieOptions
                 {
-                    Expires = this.clock.GetCurrentInstant().Plus(CredentialLinkRequest.Expiry).ToDateTimeOffset(),
+                    Expires = result.Value.ExpiresAt.ToDateTimeOffset(),
                     HttpOnly = true
                 });
 
@@ -73,13 +98,4 @@ public class CredentialsController : PidpControllerBase
 
         return result.ToActionResult();
     }
-
-    [HttpPost("link-request/{credentialLinkRequestId}/complete")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<int>> CompleteCredentialLinkRequest([FromServices] ICommandHandler<LinkRequestComplete.Command, IDomainResult<int>> handler,
-                                                                       [FromRoute] LinkRequestComplete.Command command)
-        => await this.AuthorizePartyBeforeHandleAsync(command.PartyId, handler, command)
-           .ToActionResultOfT();
 }

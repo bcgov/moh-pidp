@@ -6,6 +6,7 @@ import { Observable, catchError, map, throwError } from 'rxjs';
 import { NoContent, NoContentResponse } from '@bcgov/shared/data-access';
 
 import { ApiHttpClient } from '@app/core/resources/api-http-client.service';
+import { IdentityProvider } from '@app/features/auth/enums/identity-provider.enum';
 import { ProfileStatus } from '@app/features/portal/models/profile-status.model';
 import { PortalResource } from '@app/features/portal/portal-resource.service';
 
@@ -33,9 +34,12 @@ export class BcProviderApplicationResource {
       .pipe(map((upn) => upn));
   }
 
-  public createLinkRequest(partyId: number): NoContent {
+  // Currently automatically links to BC Provider
+  public createLinkTicket(partyId: number): NoContent {
     return this.apiResource
-      .post<NoContent>(`${this.getResourcePath(partyId)}/link-request`, null)
+      .post<NoContent>(`${this.getResourcePath(partyId)}/link-ticket`, {
+        linkToIdp: IdentityProvider.BC_PROVIDER,
+      })
       .pipe(
         NoContentResponse,
         catchError((error: HttpErrorResponse) => {
