@@ -34,36 +34,6 @@ concurrency:
 
 jobs:
   
-  auth:
-    name: Set pr number
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      id-token: write
-
-    steps:
-
-      - name: Get pr number from github event
-
-        if: ${{ github.event.number == ''}}
-
-        run: echo "pr_number=$(gh pr view --json number -q .number || echo "")" >> "$GITHUB_ENV"
-
-        env:
-
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
- 
-      - name: Get pr number from pull request
-
-        if: ${{ github.event.number != ''}}
-
-        run: echo "pr_number=${{ github.event.number }}" >> "$GITHUB_ENV"
-
-        env:
-
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
   build-and-deploy-frontend:
     name: Frontend Build and Deploy
     runs-on: ubuntu-latest
@@ -71,6 +41,10 @@ jobs:
       run:
         working-directory: "./workspace"
     
+    permissions:
+      contents: read
+      id-token: write
+
     steps:
       - name: "Checkout Code"
         uses: actions/checkout@master
@@ -87,6 +61,27 @@ jobs:
       - name: YARN Build
         run: |
           yarn build
+
+
+      - name: Get pr number from github event
+        if: ${{ github.event.number == ''}}
+
+        run: echo "pr_number=$(gh pr view --json number -q .number || echo "")" >> "$GITHUB_ENV"
+
+        env:
+
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  
+      - name: Get pr number from pull request
+        if: ${{ github.event.number != ''}}
+
+        run: echo "pr_number=${{ github.event.number }}" >> "$GITHUB_ENV"
+
+        env:
+
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
 
       - name: "Docker Build"
         run: |
@@ -111,9 +106,34 @@ jobs:
     defaults:
       run:
         working-directory: "./backend/services.plr-intake"
+    permissions:
+      contents: read
+      id-token: write
+    
     steps:
       - name: "Checkout Code"
         uses: actions/checkout@master
+
+
+      - name: Get pr number from github event
+        if: ${{ github.event.number == ''}}
+
+        run: echo "pr_number=$(gh pr view --json number -q .number || echo "")" >> "$GITHUB_ENV"
+
+        env:
+
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  
+      - name: Get pr number from pull request
+        if: ${{ github.event.number != ''}}
+
+        run: echo "pr_number=${{ github.event.number }}" >> "$GITHUB_ENV"
+
+        env:
+
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
 
       - name: "Docker Build"
         run: |
@@ -138,9 +158,34 @@ jobs:
     defaults:
       run:
         working-directory: "./backend/webapi"
+    permissions:
+      contents: read
+      id-token: write
+
     steps:
       - name: "Checkout Code"
         uses: actions/checkout@master
+
+
+      - name: Get pr number from github event
+        if: ${{ github.event.number == ''}}
+
+        run: echo "pr_number=$(gh pr view --json number -q .number || echo "")" >> "$GITHUB_ENV"
+
+        env:
+
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  
+      - name: Get pr number from pull request
+        if: ${{ github.event.number != ''}}
+
+        run: echo "pr_number=${{ github.event.number }}" >> "$GITHUB_ENV"
+
+        env:
+
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
 
       - name: "Docker Build"
         run: |
@@ -161,6 +206,9 @@ jobs:
   helm-deployment:
     needs: [build-and-deploy-webapi, build-and-deploy-plr-intake, build-and-deploy-frontend]
     runs-on: 'ubuntu-latest'
+    permissions:
+      contents: read
+      id-token: write
     steps:
       - uses: actions/checkout@master 
   
@@ -169,6 +217,26 @@ jobs:
         with:
           openshift_server_url: ${{secrets.OPENSHIFT_CLUSTER_URL}}
           openshift_token: ${{secrets.OPENSHIFT_PIPELINE_SERVICE_ACCOUNT_TOKEN}}
+
+      - name: Get pr number from github event
+        if: ${{ github.event.number == ''}}
+
+        run: echo "pr_number=$(gh pr view --json number -q .number || echo "")" >> "$GITHUB_ENV"
+
+        env:
+
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    
+      - name: Get pr number from pull request
+        if: ${{ github.event.number != ''}}
+
+        run: echo "pr_number=${{ github.event.number }}" >> "$GITHUB_ENV"
+
+        env:
+
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  
   
       - name: Helm Deploy / install command
         run: |
