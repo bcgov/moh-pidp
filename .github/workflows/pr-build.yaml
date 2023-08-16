@@ -63,7 +63,7 @@ jobs:
           yarn build
 
 
-      - name: Get pr number from github event
+      - name: Get pr number from GH cli command (pushing to pr) 
         if: ${{ github.event.number == ''}}
 
         run: echo "pr_number=$(gh pr view --json number -q .number || echo "")" >> "$GITHUB_ENV"
@@ -73,7 +73,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   
-      - name: Get pr number from pull request
+      - name: Get pr number from github.event.number (opening a pr)
         if: ${{ github.event.number != ''}}
 
         run: echo "pr_number=${{ github.event.number }}" >> "$GITHUB_ENV"
@@ -115,7 +115,7 @@ jobs:
         uses: actions/checkout@master
 
 
-      - name: Get pr number from github event
+      - name: Get pr number from GH cli command (pushing to pr)
         if: ${{ github.event.number == ''}}
 
         run: echo "pr_number=$(gh pr view --json number -q .number || echo "")" >> "$GITHUB_ENV"
@@ -125,7 +125,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   
-      - name: Get pr number from pull request
+      - name: Get pr number from github.event.number (opening a pr)
         if: ${{ github.event.number != ''}}
 
         run: echo "pr_number=${{ github.event.number }}" >> "$GITHUB_ENV"
@@ -167,7 +167,7 @@ jobs:
         uses: actions/checkout@master
 
 
-      - name: Get pr number from github event
+      - name: Get pr number from GH cli command (pushing to pr)
         if: ${{ github.event.number == ''}}
 
         run: echo "pr_number=$(gh pr view --json number -q .number || echo "")" >> "$GITHUB_ENV"
@@ -177,7 +177,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   
-      - name: Get pr number from pull request
+      - name: Get pr number from github.event.number (opening a pr)
         if: ${{ github.event.number != ''}}
 
         run: echo "pr_number=${{ github.event.number }}" >> "$GITHUB_ENV"
@@ -218,7 +218,7 @@ jobs:
           openshift_server_url: ${{secrets.OPENSHIFT_CLUSTER_URL}}
           openshift_token: ${{secrets.OPENSHIFT_PIPELINE_SERVICE_ACCOUNT_TOKEN}}
 
-      - name: Get pr number from github event
+      - name: Get pr number from GH cli command (pushing to pr)
         if: ${{ github.event.number == ''}}
 
         run: echo "pr_number=$(gh pr view --json number -q .number || echo "")" >> "$GITHUB_ENV"
@@ -228,7 +228,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     
-      - name: Get pr number from pull request
+      - name: Get pr number from github.event.number (opening a pr)
         if: ${{ github.event.number != ''}}
 
         run: echo "pr_number=${{ github.event.number }}" >> "$GITHUB_ENV"
