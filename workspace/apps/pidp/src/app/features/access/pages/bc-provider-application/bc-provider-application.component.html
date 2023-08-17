@@ -69,23 +69,16 @@
             color="primary"
             matTooltip="Uplift your BC Provider account"
             aria-label="Uplift your BC Provider account"
-            (click)="UpliftBCProviderAccount()">
+            (click)="showUplift()">
             <fa-icon [icon]="faCircleRight"></fa-icon>
-          </button>
-          <button
-            mat-stroked-button
-            type="button"
-            color="primary"
-            (click)="onUplift()">
-            UPLIFT!
           </button>
         </div>
         <div class="card advantage-card">
           <div class="card-content">
             <div class="card-badge">
-              <fa-icon [icon]="faLockOpen"></fa-icon>
+              <fa-icon class="fa-2x" [icon]="faLockOpen"></fa-icon>
             </div>
-            <strong>Advantage with BC Provier</strong>
+            <strong>Advantage with BC Provider</strong>
             <p>
               Lorem ipsum dolor sit amet, consectetur adipiscing elit.
               Vestibulum ac euismod dui, et aliquam neque. Fusce at tincidunt
@@ -97,6 +90,42 @@
     </div>
   </div>
 
+  <!-- TODO: Add in template -->
+  <div *ngIf="showUpliftWizard" class="info-timeline">
+    <ol>
+      <li>
+        Go to Microsoft account and select
+        <strong>Sign in</strong>.
+      </li>
+      <li>
+        Type the email, phone number, or Skype sign-in that you use for other
+        services(Outlook, Excel, etc.), then select <strong>Next</strong>. If
+        you don't have a Microsoft account, you can select
+        <strong>No account? Create one!</strong> Note that we recommand using an
+        email you already have and use regularly.
+      </li>
+      <li>
+        Type your password and select the
+        <strong>Keep me signed in box</strong> if you want to go straight into
+        your account next time (not recommended for shared computers).
+      </li>
+      <li>Select <strong>Sign in</strong>.</li>
+      <li>
+        At this point OneHealthID will have all the necessary information need,
+        and you will <strong>automatically be redirected</strong> back into
+        OneHealthID application.
+      </li>
+      <li>
+        <button
+          mat-flat-button
+          type="button"
+          color="primary"
+          (click)="onUplift()">
+          Get started!
+        </button>
+      </li>
+    </ol>
+  </div>
   <!-- <p class="password-info">
         Your password must be 8 to 256 characters long, with at least one letter
         and one number or special character. Strong passwords include both

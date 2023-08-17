@@ -1,5 +1,28 @@
 @use 'pidp-variables' as pidp;
 
+ol {
+  list-style: none;
+  counter-reset: li;
+  margin-left: 1rem;
+}
+li {
+  counter-increment: li;
+  margin-bottom: 10px;
+  line-height: 1.5rem;
+}
+li:before {
+  content: counter(li);
+  margin-left: -3rem;
+  margin-right: 20px;
+  width: 1.5rem;
+  height: 1.5rem;
+  background: pidp.$grey-40;
+  color: pidp.$bcgov-color-background-grey;
+  border-radius: 50%;
+  text-align: center;
+  display: inline-block;
+}
+
 .viewport-all {
   --gap: 1rem;
   --font-size: 0.75rem;
@@ -50,19 +73,21 @@
       & .card {
         display: flex;
         flex-direction: column;
-        padding: 10px;
+        padding: var(--gap);
         position: relative;
 
         & .card-content {
           position: relative;
           & .card-badge {
             position: absolute;
-            right: -30px;
-            top: -30px;
-            border: solid 1px blue;
-            border-radius: 50px;
-            padding: 15px;
+            right: -40px;
+            top: -40px;
+            width: 70px;
+            height: 70px;
+            border: solid 1px pidp.$bcgov-color-primary;
+            border-radius: 50%;
             background: white;
+            padding: 15px;
           }
         }
         & button.mat-flat-button {

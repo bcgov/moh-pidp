@@ -63,6 +63,7 @@ export class BcProviderApplicationComponent
   public username = '';
   public password = '';
   public showOverlayOnSubmit = false;
+  public showUpliftWizard = false;
 
   @ViewChild('successDialog')
   public successDialogTemplate!: TemplateRef<Element>;
@@ -117,7 +118,7 @@ export class BcProviderApplicationComponent
     }
   }
 
-  public onUplift() {
+  public onUplift(): void {
     this.resource
       .createLinkTicket(this.partyService.partyId)
       .pipe(
@@ -139,8 +140,8 @@ export class BcProviderApplicationComponent
       .subscribe();
   }
 
-  public UpliftBCProviderAccount(): void {
-    throw new Error('Not implemented');
+  public showUplift(): void {
+    this.showUpliftWizard = !this.showUpliftWizard;
   }
 
   protected performSubmission(): Observable<string | void> {
