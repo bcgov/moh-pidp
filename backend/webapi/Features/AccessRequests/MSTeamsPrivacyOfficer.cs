@@ -138,7 +138,7 @@ public class MSTeamsPrivacyOfficer
 
             var email = new Email(
                 from: EmailService.PidpEmail,
-                to: "enrolment_securemessagingsupport@fraserhealth.ca",
+                to: "enrolment_securemessaging@fraserhealth.ca",
                 subject: "New MS Teams for Clinical Use Enrolment",
                 body: $"<pre>{JsonSerializer.Serialize(model, new JsonSerializerOptions { WriteIndented = true })}</pre>"
             );
