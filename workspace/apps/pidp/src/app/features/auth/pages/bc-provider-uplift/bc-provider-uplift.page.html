@@ -1,21 +1,20 @@
 <ui-layout-header-footer>
   <div class="header-right" page-header-right>
-    <div>
-      <span class="signout-text">sign out</span>
-      <button
-        mat-icon-button
-        matTooltip="Logout"
-        aria-label="logout"
-        (click)="onLogout()">
-        <mat-icon>logout</mat-icon>
-      </button>
-    </div>
+    <span class="signout-text">sign out</span>
+    <button
+      mat-icon-button
+      matTooltip="Logout"
+      aria-label="logout"
+      (click)="onLogout()">
+      <mat-icon>logout</mat-icon>
+    </button>
   </div>
   <div class="container" uiPidpInjectViewportCss>
     <div class="section-box">
       <div class="background-image-container">
         <img
           ngSrc="/assets/images/bcprovider-uplift-850x600-desktop.png"
+          priority
           fill />
       </div>
       <header class="title-container">
