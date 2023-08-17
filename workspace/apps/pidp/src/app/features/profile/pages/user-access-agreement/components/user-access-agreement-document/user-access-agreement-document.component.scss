@@ -18,7 +18,8 @@ ul {
   display: flex;
   margin-bottom: 1rem;
 
-  .uaa-section-bullet-inside {
+  p.uaa-section-bullet-inside {
+    margin-bottom: 0;
     margin-left: 2rem;
   }
 }
