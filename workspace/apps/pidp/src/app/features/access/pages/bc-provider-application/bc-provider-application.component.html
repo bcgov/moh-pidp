@@ -39,10 +39,16 @@
               For brand new users that are looking for the flexibility and
               security of BC Services card and a BC Provider account.
             </p>
-            <button mat-flat-button type="button" color="primary">
-              First time setup
-            </button>
-            <a uiAnchor href="/">need help?</a>
+            <div class="form-button-box">
+              <button
+                mat-flat-button
+                type="button"
+                color="primary"
+                (click)="setLayout('createAccount')">
+                First time setup
+              </button>
+            </div>
+            <div class="help-link"><a uiAnchor href="">Need help?</a></div>
             <hr />
             <div class="bcgov-logo">
               <picture>
@@ -72,7 +78,7 @@
             color="primary"
             matTooltip="Uplift your BC Provider account"
             aria-label="Uplift your BC Provider account"
-            (click)="showUplift()">
+            (click)="setLayout('upliftAccount')">
             <fa-icon [icon]="faCircleRight"></fa-icon>
           </button>
         </div>
@@ -81,7 +87,7 @@
             <div class="card-badge">
               <fa-icon class="fa-2x" [icon]="faLockOpen"></fa-icon>
             </div>
-            <strong>Advantage with BC Provider</strong>
+            <h3>Advantage with BC Provider</h3>
             <p>
               Lorem ipsum dolor sit amet, consectetur adipiscing elit.
               Vestibulum ac euismod dui, et aliquam neque. Fusce at tincidunt
@@ -90,105 +96,116 @@
           </div>
         </div>
       </div>
+
+      <ng-container [ngSwitch]="activeLayout">
+        <ng-container
+          *ngSwitchCase="'upliftAccount'"
+          [ngTemplateOutlet]="upliftAccount"></ng-container>
+        <ng-container
+          *ngSwitchCase="'createAccount'"
+          [ngTemplateOutlet]="createAccount"></ng-container>
+        <ng-container
+          *ngSwitchDefault
+          [ngTemplateOutlet]="default"></ng-container>
+      </ng-container>
     </div>
   </div>
+</div>
 
-  <!-- TODO: Add in template -->
-  <div *ngIf="showUpliftWizard" class="info-timeline">
-    <ol>
-      <li>
-        Go to Microsoft account and select
-        <strong>Sign in</strong>.
-      </li>
-      <li>
-        Type the email, phone number, or Skype sign-in that you use for other
-        services(Outlook, Excel, etc.), then select <strong>Next</strong>. If
-        you don't have a Microsoft account, you can select
-        <strong>No account? Create one!</strong> Note that we recommand using an
-        email you already have and use regularly.
-      </li>
-      <li>
-        Type your password and select the
-        <strong>Keep me signed in box</strong> if you want to go straight into
-        your account next time (not recommended for shared computers).
-      </li>
-      <li>Select <strong>Sign in</strong>.</li>
-      <li>
-        At this point OneHealthID will have all the necessary information need,
-        and you will <strong>automatically be redirected</strong> back into
-        OneHealthID application.
-      </li>
-      <li>
-        <button
-          mat-flat-button
-          type="button"
-          color="primary"
-          (click)="onUplift()">
-          Get started!
-        </button>
-      </li>
-    </ol>
-  </div>
-  <!-- <p class="password-info">
-        Your password must be 8 to 256 characters long, with at least one letter
-        and one number or special character. Strong passwords include both
-        upper- and lower-case letters, as well as special characters (such as an
-        exclamation point, question mark or ampersand). Do not use a password
-        that you use anywhere else.
-      </p>
+<ng-template class="info-timeline" #upliftAccount>
+  <ol>
+    <li>
+      Go to Microsoft account and select
+      <strong>Sign in</strong>.
+    </li>
+    <li>
+      Type the email, phone number, or Skype sign-in that you use for other
+      services(Outlook, Excel, etc.), then select
+      <strong>Next</strong>. If you don't have a Microsoft account, you can
+      select <strong>No account? Create one!</strong> Note that we recommand
+      using an email you already have and use regularly.
+    </li>
+    <li>
+      Type your password and select the
+      <strong>Keep me signed in box</strong> if you want to go straight into
+      your account next time (not recommended for shared computers).
+    </li>
+    <li>Select <strong>Sign in</strong>.</li>
+    <li>
+      At this point OneHealthID will have all the necessary information need,
+      and you will <strong>automatically be redirected</strong> back into
+      OneHealthID application.
+    </li>
+    <li>
+      <button
+        mat-flat-button
+        type="button"
+        color="primary"
+        (click)="onUplift()">
+        Get started!
+      </button>
+    </li>
+  </ol>
+</ng-template>
 
-      <section class="error-card" [class.show-card]="showErrorCard">
-        <p>{{ errorCardText }}</p>
-      </section>
-      <section class="message-card" [class.show-card]="showMessageCard">
-        <p>{{ messageCardText }}</p>
-      </section>
-      <section class="form-card">
-        <div class="password-form">
-          <ng-container *ngTemplateOutlet="passwordForm"></ng-container>
-        </div>
-        <div class="password-splash">
-          <div class="password-splash-content">
-            <div class="text-box">
-              <div>
-                <span class="lets">Let's get started</span>
-              </div>
-              <div>
-                <span class="using">using BC Provider today!</span>
-              </div>
-            </div>
-            <picture class="image">
-              <source
-                type="image/webp"
-                srcset="/assets/images/bc-provider-account-457x759.webp" /> -->
-  <!-- Use jpg as a fallback when webp is not supported by the browser. -->
-  <!--<source
-                type="image/jpg"
-                srcset="/assets/images/bc-provider-account-457x759.jpg" />
-              <img title="woman" loading="lazy" aria-labelledby="" />
-            </picture>
+<ng-template #createAccount>
+  <p class="password-info">
+    Your password must be 8 to 256 characters long, with at least one letter and
+    one number or special character. Strong passwords include both upper- and
+    lower-case letters, as well as special characters (such as an exclamation
+    point, question mark or ampersand). Do not use a password that you use
+    anywhere else.
+  </p>
 
-            <div *ngIf="false" class="text-box">
-              <div>
-                <span class="lets">Let's get started</span>
-              </div>
-              <div>
-                <span class="using">using BC Provider today!</span>
-              </div>
-            </div>
+  <section class="error-card" [class.show-card]="showErrorCard">
+    <p>{{ errorCardText }}</p>
+  </section>
+  <section class="message-card" [class.show-card]="showMessageCard">
+    <p>{{ messageCardText }}</p>
+  </section>
+  <section class="form-card">
+    <div class="password-form">
+      <ng-container *ngTemplateOutlet="passwordForm"></ng-container>
+    </div>
+    <div class="password-splash">
+      <div class="password-splash-content">
+        <div class="text-box">
+          <div>
+            <span class="lets">Let's get started</span>
+          </div>
+          <div>
+            <span class="using">using BC Provider today!</span>
           </div>
         </div>
-      </section>
-      <section class="actions">
-        <button
-          mat-stroked-button
-          type="button"
-          color="primary"
-          (click)="onBack()">
-          Back
-        </button>
-      </section> -->
-</div>
+        <picture class="image">
+          <source
+            type="image/webp"
+            srcset="/assets/images/bc-provider-account-457x759.webp" />
+          <!-- Use jpg as a fallback when webp is not supported by the browser. -->
+          <source
+            type="image/jpg"
+            srcset="/assets/images/bc-provider-account-457x759.jpg" />
+          <img title="woman" loading="lazy" aria-labelledby="" />
+        </picture>
+
+        <div *ngIf="false" class="text-box">
+          <div>
+            <span class="lets">Let's get started</span>
+          </div>
+          <div>
+            <span class="using">using BC Provider today!</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="actions">
+    <button mat-stroked-button type="button" color="primary" (click)="onBack()">
+      Back
+    </button>
+  </section>
+</ng-template>
+
 <ng-template #passwordForm>
   <form novalidate [formGroup]="formState.form" (ngSubmit)="onSubmit()">
     <h3>Create an account</h3>
@@ -244,6 +261,8 @@
     </div>
   </form>
 </ng-template>
+
+<ng-template #default></ng-template>
 
 <!-- TODO: Refactor into a separate component. -->
 <ng-template #successDialog>

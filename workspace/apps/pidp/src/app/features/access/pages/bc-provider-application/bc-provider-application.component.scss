@@ -89,6 +89,12 @@ li:before {
             background: white;
             padding: 15px;
           }
+
+          & h3 {
+            font-size: var(--font-size);
+            font-weight: bolder;
+            margin-bottom: calc(var(--gap) * 2);
+          }
         }
         & button.mat-flat-button {
           width: fit-content;
@@ -248,9 +254,6 @@ li:before {
             flex: 1;
           }
         }
-        & .help-link {
-          font-size: 0.75rem;
-        }
         & .error {
           font-size: 0.75rem;
           overflow: hidden;
@@ -266,6 +269,10 @@ li:before {
     & .actions {
       margin-top: var(--gap);
     }
+  }
+
+  & .help-link {
+    font-size: 0.75rem;
   }
 }
 .viewport-all.dialog-box {

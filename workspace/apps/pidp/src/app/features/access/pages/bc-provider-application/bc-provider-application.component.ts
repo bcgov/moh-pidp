@@ -63,7 +63,8 @@ export class BcProviderApplicationComponent
   public username = '';
   public password = '';
   public showOverlayOnSubmit = false;
-  public showUpliftWizard = false;
+
+  public activeLayout: 'upliftAccount' | 'createAccount' | '';
 
   @ViewChild('successDialog')
   public successDialogTemplate!: TemplateRef<Element>;
@@ -89,6 +90,8 @@ export class BcProviderApplicationComponent
     const routeData = this.route.snapshot.data;
     this.completed =
       routeData.bcProviderApplicationStatusCode == StatusCode.COMPLETED;
+
+    this.activeLayout = '';
   }
 
   public onBack(): void {
@@ -140,8 +143,12 @@ export class BcProviderApplicationComponent
       .subscribe();
   }
 
-  public showUplift(): void {
-    this.showUpliftWizard = !this.showUpliftWizard;
+  public setLayout(activeLayout: 'upliftAccount' | 'createAccount'): void {
+    if (this.activeLayout !== activeLayout) {
+      this.activeLayout = activeLayout;
+    } else {
+      this.activeLayout = '';
+    }
   }
 
   protected performSubmission(): Observable<string | void> {
