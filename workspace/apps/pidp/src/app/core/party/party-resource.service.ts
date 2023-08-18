@@ -4,6 +4,7 @@ import { Injectable } from '@angular/core';
 import { Observable, catchError, exhaustMap, map, of, throwError } from 'rxjs';
 
 import { ApiHttpClient } from '@app/core/resources/api-http-client.service';
+import { IdentityProvider } from '@app/features/auth/enums/identity-provider.enum';
 import { User } from '@app/features/auth/models/user.model';
 import { AuthorizedUserService } from '@app/features/auth/services/authorized-user.service';
 
@@ -37,11 +38,15 @@ export class PartyResource {
                 )
             )
       ),
-      exhaustMap((partyIdOrUser: number | User | null) =>
-        typeof partyIdOrUser === 'number' || !partyIdOrUser
-          ? of(partyIdOrUser)
-          : this.createParty(partyIdOrUser)
-      )
+      exhaustMap((partyIdOrUser: number | User | null) => {
+        if (typeof partyIdOrUser === 'number' || !partyIdOrUser) {
+          return of(partyIdOrUser);
+        }
+        if (partyIdOrUser.identityProvider === IdentityProvider.BC_PROVIDER) {
+          return throwError(() => new Error('Unknown BC Provider account'));
+        }
+        return this.createParty(partyIdOrUser);
+      })
     );
   }
 

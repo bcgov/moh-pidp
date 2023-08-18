@@ -50,8 +50,9 @@
 
 .rostering-banner {
   margin-bottom: 10px;
-  & mat-icon {
-    margin: 0 5px;
+
+  & .mat-stroked-button {
+    border: 1px solid #000;
   }
 }
 
@@ -60,8 +61,20 @@
   margin: 0 10px;
 }
 
+.bcprovider-username {
+  font-size: smaller;
+}
+
 .stepper-buttons {
   margin-top: 10px;
+
+  & button:last-child {
+    margin-left: 10px;
+  }
+
+  & button.top-button {
+    margin-left: 0;
+  }
 }
 
 .guide-information {

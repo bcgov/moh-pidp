@@ -1,0 +1,38 @@
+name: Promote PLR-Intake image - test
+
+on:
+  push:
+    branches: [test]
+    paths:
+      - "backend/services.plr-intake/**"
+      - "backend/services.plr-intake.tests/**"
+  workflow_dispatch:
+
+env:
+  ORIG_TAG: develop
+  PROMOTE_TAG: test
+
+  # This will terminate builds that are previously, but continuing to run.  Saves GHA hours.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  promote-image-to-test:
+    name: WebAPI Backend Promote to test
+    runs-on: ubuntu-latest
+    steps:     
+      - name: Install oc
+        uses: redhat-actions/openshift-tools-installer@v1
+        with:
+          oc: "4.7"
+
+      - name: oc login
+        run: |
+          oc login --token=${{ secrets.OPENSHIFT_GHA_SERVICE_ACCOUNT_TOKEN }} --server=${{ secrets.OPENSHIFT_CLUSTER_URL }}
+
+      - name: Promote plr-intake from dev to test
+        run: |
+          oc -n d8a8f9-tools tag \
+          d8a8f9-tools/pidp-plr-intake:${{ env.ORIG_TAG }} \
+          d8a8f9-tools/pidp-plr-intake:${{ env.PROMOTE_TAG }}

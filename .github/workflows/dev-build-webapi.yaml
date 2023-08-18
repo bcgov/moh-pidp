@@ -1,8 +1,8 @@
-name: Build WebAPI
+name: Build WebAPI - Dev
 
 on:
   push:
-    branches: [workflows]
+    branches: [develop]
     paths:
       - "backend/webapi/**"
       - "backend/webapi.tests/**"
@@ -26,7 +26,7 @@ jobs:
 
       - name: "Docker Build"
         run: |
-          docker build -t image-registry.apps.silver.devops.gov.bc.ca/d8a8f9-tools/pidp-webapi:chris .
+          docker build -t image-registry.apps.silver.devops.gov.bc.ca/d8a8f9-tools/pidp-webapi:develop .
 
       # Uses the builder service account token
       - name: "Docker Login to Silver OCP"
@@ -38,4 +38,4 @@ jobs:
 
       - name: "Push image"
         run: |
-          docker push image-registry.apps.silver.devops.gov.bc.ca/d8a8f9-tools/pidp-webapi:chris
+          docker push image-registry.apps.silver.devops.gov.bc.ca/d8a8f9-tools/pidp-webapi:develop
