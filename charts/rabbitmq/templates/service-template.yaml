@@ -1,0 +1,76 @@
+apiVersion: template.openshift.io/v1
+kind: Template
+metadata:
+  name: rabbitmq-cluster
+  annotations:
+    description: "Deploys a RabbitMQ cluster"
+    iconClass: icon-rabbitmq
+    tags: rabbitmq,mq,messaging
+
+parameters:
+- name: NAMESPACE
+  description: "OpenShift project (current namespace)"
+  required: true
+- name: CLUSTER_NAME
+  description: "Name of the RabbitMQ cluster"
+  value: rabbitmq-cluster
+- name: ISTAG
+  description: "Image to deploy"
+  value: rabbitmq:3.7-management
+- name: RABBITMQ_USER
+  description: "Username for the RabbitMQ instance"
+  value: rabbitmq
+- name: RABBITMQ_PASS
+  description: "Password securing the RabbitMQ instance"
+  generate: expression
+  from: "[a-zA-Z0-9]{16}"
+- name: ERLANG_COOKIE
+  description: "Cookie used for authentication of cluster nodes"
+  generate: expression
+  from: "[a-zA-Z0-9]{16}"
+- name: SERVICE_ACCOUNT
+  description: "Name of the service account used by RabbitMQ k8s plugin"
+  value: rabbitmq-discovery
+- name: VOLUME_SIZE
+  description: "Size of the RabbitMQ data volume"
+  value: 5Gi
+
+objects:
+
+# Load balancer
+- kind: Service
+  apiVersion: v1
+  metadata:
+    name: ${CLUSTER_NAME}-balancer
+    labels:
+      app: ${CLUSTER_NAME}
+      type: ClusterIP
+  spec:
+    type: ClusterIP
+    ports:
+    - name: http
+      protocol: TCP
+      port: 80
+      targetPort: 15672
+    - name: amqp
+      protocol: TCP
+      port: 5672
+      targetPort: 5672
+    selector:
+      app: ${CLUSTER_NAME}
+
+# Headless service that makes it possible to lookup individual rabbitmq nodes
+- apiVersion: v1
+  kind: Service
+  metadata:
+    name: ${CLUSTER_NAME}
+    labels:
+      app: ${CLUSTER_NAME}
+  spec:
+    selector:
+      app: ${CLUSTER_NAME}
+    clusterIP: None
+    ports:
+    - name: amqp
+      port: 5672
+      targetPort: 5672

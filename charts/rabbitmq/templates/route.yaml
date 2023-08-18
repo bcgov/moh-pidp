@@ -1,0 +1,26 @@
+- apiVersion: route.openshift.io/v1
+  kind: Route
+  metadata:
+    name: ${CLUSTER_NAME}
+    labels:
+      app: ${CLUSTER_NAME}
+  spec:
+    host: ${RABBIT_HOST}
+    port:
+      targetPort: http
+    tls:
+      insecureEdgeTerminationPolicy: Redirect
+      termination: edge
+    to:
+      kind: Service
+      name: rabbitmq-cluster-balancer
+      weight: 100
+    wildcardPolicy: None
+  status:
+    ingress:
+      - conditions:
+            status: 'True'
+            type: Admitted
+        host: ${RABBIT_HOST}
+        routerName: router
+        wildcardPolicy: None

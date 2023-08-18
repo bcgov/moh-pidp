@@ -1,0 +1,120 @@
+- apiVersion: apps/v1
+  kind: StatefulSet
+  metadata:
+    name: ${CLUSTER_NAME}
+    labels:
+      app: ${CLUSTER_NAME}
+  spec:
+    serviceName: ${CLUSTER_NAME}
+    replicas: 2
+    selector:
+      matchLabels:
+        app: ${CLUSTER_NAME}
+    template:
+      metadata:
+        labels:
+          app: ${CLUSTER_NAME}
+      spec:
+        serviceAccountName: ${SERVICE_ACCOUNT}
+        terminationGracePeriodSeconds: 30
+        containers:
+        - name: rabbitmq
+          command:
+          - sh
+          args:
+          - -c
+          - cp -v /etc/rabbitmq/rabbitmq.conf ${RABBITMQ_CONFIG_FILE}.conf; exec docker-entrypoint.sh rabbitmq-server
+          image: ${ISTAG}
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+          - name: config-volume
+            mountPath: /etc/rabbitmq
+          - name: rabbitmq-storage
+            mountPath: /var/lib/rabbitmq
+          lifecycle:
+            preStop:
+              exec:
+                command:
+                - rabbitmqctl
+                - shutdown
+          ports:
+          - name: http
+            protocol: TCP
+            containerPort: 15672
+          - name: amqp
+            protocol: TCP
+            containerPort: 5672
+          livenessProbe:
+            exec:
+              command: ["rabbitmqctl", "status"]
+            initialDelaySeconds: 30
+            timeoutSeconds: 10
+          readinessProbe:
+            exec:
+              command: ["rabbitmqctl", "status"]
+            initialDelaySeconds: 10
+            timeoutSeconds: 10
+          lifecycle:
+            preStop:
+              exec:
+                command: ['rabbitmqctl', 'shutdown']
+          resources:
+            limits:
+              cpu: '1'
+              memory: 2Gi
+            requests:
+              cpu: '1'
+              memory: 2Gi
+          env:
+          - name: RABBITMQ_DEFAULT_USER
+            valueFrom:
+              secretKeyRef:
+                name: ${CLUSTER_NAME}-secret
+                key: username
+          - name: RABBITMQ_DEFAULT_PASS
+            valueFrom:
+              secretKeyRef:
+                name: ${CLUSTER_NAME}-secret
+                key: password
+          - name: RABBITMQ_ERLANG_COOKIE
+            valueFrom:
+              secretKeyRef:
+                name: ${CLUSTER_NAME}-secret
+                key: cookie
+          - name: K8S_SERVICE_NAME
+            value: ${CLUSTER_NAME}
+          - name: POD_IP
+            valueFrom:
+              fieldRef:
+                fieldPath: status.podIP
+          - name: POD_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.name
+          - name: POD_NAMESPACE
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.namespace
+          - name: RABBITMQ_USE_LONGNAME
+            value: "true"
+          - name: RABBITMQ_NODENAME
+            value: "rabbit@$(POD_NAME).${CLUSTER_NAME}.$(POD_NAMESPACE).svc.cluster.local"
+          - name: RABBITMQ_CONFIG_FILE
+            value: /var/lib/rabbitmq/rabbitmq
+        volumes:
+        - name: config-volume
+          configMap:
+            name: ${CLUSTER_NAME}-config
+            items:
+            - key: rabbitmq.conf
+              path: rabbitmq.conf
+            - key: enabled_plugins
+              path: enabled_plugins
+    volumeClaimTemplates:
+    - metadata:
+        name: rabbitmq-storage
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: ${VOLUME_SIZE}
