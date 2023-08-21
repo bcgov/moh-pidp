@@ -77,7 +77,10 @@ li:before {
         padding: calc(var(--gap) * 0.9);
         position: relative;
         line-height: 1.5rem;
-
+        & img {
+          z-index: -1;
+          border-radius: var(--card-border-radius);
+        }
         & .card-container {
           position: relative;
           & .card-badge {
@@ -92,39 +95,17 @@ li:before {
             padding: 15px;
           }
 
-          // & h3 {
-          //   font-size: var(--font-size);
-          //   font-weight: bolder;
-          //   margin-bottom: calc(var(--gap) * 2);
-          // }
-
           & hr {
             margin-bottom: 0;
           }
-        }
-        & button.mat-flat-button {
-          width: fit-content;
-        }
-        & button.icon-button {
-          background-color: #c24115;
-          font-size: 1.5rem;
-          position: absolute;
-          bottom: 30px;
-          right: 30px;
-          color: white;
-          border: none;
-          border-radius: 50%;
-          width: 40px;
-          height: 40px;
-        }
 
-        & img {
-          z-index: -1;
-          border-radius: var(--card-border-radius);
+          & button.mat-flat-button {
+            width: fit-content;
+          }
         }
       }
 
-      & .advantage-card {
+      & .card.card-advantage {
         border: solid 1px pidp.$grey-20;
         border-radius: var(--card-border-radius);
         box-shadow: 0 0 10px pidp.$grey-20;
@@ -148,8 +129,28 @@ li:before {
         }
       }
 
-      & .card-uplifting {
+      & .card.card-uplifting {
         color: #9a3611;
+        & .card-container {
+          display: flex;
+          flex-direction: column;
+          height: 100%;
+          & .card-footer {
+            display: flex;
+            flex: 1;
+            align-items: flex-end;
+            align-self: flex-end;
+            & button.icon-button {
+              background-color: #c24115;
+              font-size: 1.5rem;
+              color: white;
+              border: none;
+              border-radius: 50%;
+              width: 40px;
+              height: 40px;
+            }
+          }
+        }
       }
     }
 

@@ -33,56 +33,64 @@
       </p>
       <div class="cards">
         <div class="card">
-          <div class="card-content">
-            <strong>Interested in BC Provider?</strong>
-            <p>
-              For brand new users that are looking for the flexibility and
-              security of BC Services card and a BC Provider account.
-            </p>
-            <div class="form-button-box">
-              <button
-                mat-flat-button
-                type="button"
-                color="primary"
-                (click)="setLayout('createAccount')">
-                First time setup
-              </button>
+          <div class="card-container">
+            <div class="card-header">
+              <strong>Interested in BC Provider?</strong>
             </div>
-            <div class="help-link"><a uiAnchor href="">Need help?</a></div>
-            <hr />
-            <div class="bcgov-logo">
-              <picture>
-                <source
-                  type="image/webp"
-                  srcset="/assets/images/BC_HLTH_H_CMYK_pos.webp" />
-                <source
-                  type="image/png"
-                  srcset="/assets/images/BC_HLTH_H_CMYK_pos.png" />
-                <img
-                  title="BC Government Logo"
-                  loading="lazy"
-                  aria-label="BC Ministry of Health Logo" />
-              </picture>
+            <div class="card-content">
+              <p>
+                For brand new users that are looking for the flexibility and
+                security of BC Services card and a BC Provider account.
+              </p>
+              <div class="form-button-box">
+                <button
+                  mat-flat-button
+                  type="button"
+                  color="primary"
+                  (click)="setLayout('createAccount')">
+                  First time setup
+                </button>
+              </div>
+              <div class="help-link"><a uiAnchor href="">Need help?</a></div>
+              <hr />
+              <div class="bcgov-logo">
+                <picture>
+                  <source
+                    type="image/webp"
+                    srcset="/assets/images/BC_HLTH_H_CMYK_pos.webp" />
+                  <source
+                    type="image/png"
+                    srcset="/assets/images/BC_HLTH_H_CMYK_pos.png" />
+                  <img
+                    title="BC Government Logo"
+                    loading="lazy"
+                    aria-label="BC Ministry of Health Logo" />
+                </picture>
+              </div>
             </div>
           </div>
         </div>
-        <div class="card">
+        <div class="card card-uplifting">
           <img
             ngSrc="/assets/images/bc-provider-uplifit-account-300x451.jpg"
             fill />
-          <div class="card-content card-uplifting">
-            <strong>Uplift your existing BC Provider account</strong>
+          <div class="card-container">
+            <div class="card-header">
+              <strong>Uplift your existing BC Provider account</strong>
+            </div>
+            <div class="card-footer">
+              <button
+                class="icon-button"
+                color="primary"
+                matTooltip="Uplift your BC Provider account"
+                aria-label="Uplift your BC Provider account"
+                (click)="setLayout('upliftAccount')">
+                <fa-icon [icon]="faCircleRight"></fa-icon>
+              </button>
+            </div>
           </div>
-          <button
-            class="icon-button"
-            color="primary"
-            matTooltip="Uplift your BC Provider account"
-            aria-label="Uplift your BC Provider account"
-            (click)="setLayout('upliftAccount')">
-            <fa-icon [icon]="faCircleRight"></fa-icon>
-          </button>
         </div>
-        <div class="card advantage-card">
+        <div class="card card-advantage">
           <div class="card-container">
             <div class="card-badge">
               <fa-icon class="fa-2x" [icon]="faLockOpen"></fa-icon>
