@@ -73,10 +73,12 @@ li:before {
       & .card {
         display: flex;
         flex-direction: column;
-        padding: var(--gap);
+        // TODO: calc 0.9 to try may be to be removed
+        padding: calc(var(--gap) * 0.9);
         position: relative;
+        line-height: 1.5rem;
 
-        & .card-content {
+        & .card-container {
           position: relative;
           & .card-badge {
             position: absolute;
@@ -90,10 +92,14 @@ li:before {
             padding: 15px;
           }
 
-          & h3 {
-            font-size: var(--font-size);
-            font-weight: bolder;
-            margin-bottom: calc(var(--gap) * 2);
+          // & h3 {
+          //   font-size: var(--font-size);
+          //   font-weight: bolder;
+          //   margin-bottom: calc(var(--gap) * 2);
+          // }
+
+          & hr {
+            margin-bottom: 0;
           }
         }
         & button.mat-flat-button {
@@ -122,6 +128,24 @@ li:before {
         border: solid 1px pidp.$grey-20;
         border-radius: var(--card-border-radius);
         box-shadow: 0 0 10px pidp.$grey-20;
+        & .card-container {
+          display: flex;
+          flex-direction: column;
+          height: 100%;
+          & .card-header {
+            & strong {
+              margin-right: 28px;
+            }
+          }
+          & .card-content {
+            display: flex;
+            flex: 1;
+            align-items: center;
+            & p {
+              color: pidp.$grey-30;
+            }
+          }
+        }
       }
 
       & .card-uplifting {
@@ -130,9 +154,9 @@ li:before {
     }
 
     & .bcgov-logo img {
-      height: 122px;
-      width: 240px;
-      margin-left: -20px;
+      height: 97px;
+      width: 190px;
+      margin-left: -10px;
     }
 
     & .error-card {

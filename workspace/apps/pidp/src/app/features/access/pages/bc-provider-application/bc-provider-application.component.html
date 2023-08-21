@@ -83,16 +83,20 @@
           </button>
         </div>
         <div class="card advantage-card">
-          <div class="card-content">
+          <div class="card-container">
             <div class="card-badge">
               <fa-icon class="fa-2x" [icon]="faLockOpen"></fa-icon>
             </div>
-            <h3>Advantage with BC Provider</h3>
-            <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-              Vestibulum ac euismod dui, et aliquam neque. Fusce at tincidunt
-              ipsum. Integer eget malesuada sem, nec hendrerit dolor.
-            </p>
+            <div class="card-header">
+              <strong>Advantage with BC Provider</strong>
+            </div>
+            <div class="card-content">
+              <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                Vestibulum ac euismod dui, et aliquam neque. Fusce at tincidunt
+                ipsum. Integer eget malesuada sem, nec hendrerit dolor.
+              </p>
+            </div>
           </div>
         </div>
       </div>
@@ -113,7 +117,7 @@
 </div>
 
 <ng-template class="info-timeline" #upliftAccount>
-  <ol>
+  <ol id="upliftAccount">
     <li>
       Go to Microsoft account and select
       <strong>Sign in</strong>.
@@ -149,7 +153,7 @@
 </ng-template>
 
 <ng-template #createAccount>
-  <p class="password-info">
+  <p id="createAccount" class="password-info">
     Your password must be 8 to 256 characters long, with at least one letter and
     one number or special character. Strong passwords include both upper- and
     lower-case letters, as well as special characters (such as an exclamation

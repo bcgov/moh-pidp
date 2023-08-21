@@ -32,6 +32,7 @@ import {
 } from '@app/core/classes/abstract-form-page.class';
 import { PartyService } from '@app/core/party/party.service';
 import { LoggerService } from '@app/core/services/logger.service';
+import { UtilsService } from '@app/core/services/utils.service';
 import { AuthRoutes } from '@app/features/auth/auth.routes';
 import { IdentityProvider } from '@app/features/auth/enums/identity-provider.enum';
 import { AuthService } from '@app/features/auth/services/auth.service';
@@ -83,7 +84,8 @@ export class BcProviderApplicationComponent
     private authService: AuthService,
     private resource: BcProviderApplicationResource,
     private loadingOverlayService: LoadingOverlayService,
-    private logger: LoggerService
+    private logger: LoggerService,
+    private utilsService: UtilsService
   ) {
     super(dependenciesService);
     this.formState = new BcProviderApplicationFormState(fb);
@@ -146,6 +148,7 @@ export class BcProviderApplicationComponent
   public setLayout(activeLayout: 'upliftAccount' | 'createAccount'): void {
     if (this.activeLayout !== activeLayout) {
       this.activeLayout = activeLayout;
+      this.utilsService.scrollToAnchorWithDelay(activeLayout);
     } else {
       this.activeLayout = '';
     }
