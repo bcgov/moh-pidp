@@ -4,23 +4,23 @@ ol {
   list-style: none;
   counter-reset: li;
   margin-left: 1rem;
-}
-li {
-  counter-increment: li;
-  margin-bottom: 10px;
-  line-height: 1.5rem;
-}
-li:before {
-  content: counter(li);
-  margin-left: -3rem;
-  margin-right: 20px;
-  width: 1.5rem;
-  height: 1.5rem;
-  background: pidp.$grey-40;
-  color: pidp.$bcgov-color-background-grey;
-  border-radius: 50%;
-  text-align: center;
-  display: inline-block;
+  li {
+    counter-increment: li;
+    margin-bottom: 10px;
+    line-height: 1.5rem;
+  }
+  li:before {
+    content: counter(li);
+    margin-left: -3rem;
+    margin-right: 20px;
+    width: 1.5rem;
+    height: 1.5rem;
+    background: pidp.$grey-40;
+    color: pidp.$bcgov-color-background-grey;
+    border-radius: 50%;
+    text-align: center;
+    display: inline-block;
+  }
 }
 
 .viewport-all {
