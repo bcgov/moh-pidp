@@ -15,7 +15,7 @@
         labels:
           app: ${CLUSTER_NAME}
       spec:
-        serviceAccountName: ${SERVICE_ACCOUNT}
+        serviceAccountName: {{ .Values.serviceAccount.name }}
         terminationGracePeriodSeconds: 30
         containers:
         - name: rabbitmq
@@ -24,8 +24,8 @@
           args:
           - -c
           - cp -v /etc/rabbitmq/rabbitmq.conf ${RABBITMQ_CONFIG_FILE}.conf; exec docker-entrypoint.sh rabbitmq-server
-          image: ${ISTAG}
-          imagePullPolicy: IfNotPresent
+          image: {{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
           volumeMounts:
           - name: config-volume
             mountPath: /etc/rabbitmq
@@ -117,4 +117,4 @@
         accessModes: ["ReadWriteOnce"]
         resources:
           requests:
-            storage: ${VOLUME_SIZE}
+            storage: {{ .Values.persistence.size }}

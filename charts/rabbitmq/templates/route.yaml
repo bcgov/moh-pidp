@@ -5,7 +5,7 @@
     labels:
       app: ${CLUSTER_NAME}
   spec:
-    host: ${RABBIT_HOST}
+    host: {{ .Values.ingress.hostname }}
     port:
       targetPort: http
     tls:
@@ -21,6 +21,6 @@
       - conditions:
             status: 'True'
             type: Admitted
-        host: ${RABBIT_HOST}
+        host: {{ .Values.ingress.hostname }}
         routerName: router
         wildcardPolicy: None
