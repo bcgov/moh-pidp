@@ -70,7 +70,9 @@ ol {
       grid-template-columns: calc(40% - 15px) calc(27% - 15px) calc(33% - 15px);
       gap: 20px;
       width: 98%;
-      min-height: 350px;
+      min-height: 340px;
+      margin-top: calc(var(--gap) * 2);
+
       & .card {
         display: flex;
         flex-direction: column;
@@ -101,7 +103,9 @@ ol {
           }
 
           & .card-body {
+            display: flex;
             flex: 1;
+            flex-direction: column;
           }
 
           & .card-footer {
@@ -137,8 +141,7 @@ ol {
             }
           }
           & .card-body {
-            display: flex;
-            align-items: center;
+            justify-content: center;
             & p {
               color: pidp.$grey-30;
             }
