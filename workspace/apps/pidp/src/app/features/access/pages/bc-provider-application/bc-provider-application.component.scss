@@ -338,6 +338,7 @@ ol {
         & .error-show {
           transition: max-height 0.5s ease-in-out;
           max-height: 250px;
+          padding: 10px;
         }
         & .error-triangle {
           position: absolute;
