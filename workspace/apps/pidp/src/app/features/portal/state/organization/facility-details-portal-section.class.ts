@@ -32,7 +32,7 @@ export class FacilityDetailsPortalSection implements IPortalSection {
       this.getStatusCode()
     )
       ? ''
-      : '2 min to complete';
+      : '2 minutes to complete';
   }
 
   /**

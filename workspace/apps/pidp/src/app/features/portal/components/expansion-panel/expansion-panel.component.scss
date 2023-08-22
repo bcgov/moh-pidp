@@ -10,7 +10,7 @@ div.viewport-all {
   background-image: url('/assets/images/provential-attachment-system-banner-866x233-desktop.jpg');
   background-repeat: no-repeat;
   background-size: cover;
-  background-position: center center;
+  background-position: bottom right;
   border-radius: var(--card-border-radius);
   padding: calc(var(--gap) * 2);
   position: relative;
@@ -30,6 +30,10 @@ div.viewport-all {
   & button {
     position: absolute;
     bottom: calc(var(--gap) * 2);
+  }
+
+  & .pas-banner-button {
+    width: 7rem;
   }
 }
 

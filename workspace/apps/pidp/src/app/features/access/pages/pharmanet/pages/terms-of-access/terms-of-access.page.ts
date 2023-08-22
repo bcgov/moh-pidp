@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
@@ -6,12 +6,10 @@ import { ActivatedRoute } from '@angular/router';
   templateUrl: './terms-of-access.page.html',
   styleUrls: ['./terms-of-access.page.scss'],
 })
-export class TermsOfAccessPage implements OnInit {
+export class TermsOfAccessPage {
   public title: string;
 
   public constructor(private route: ActivatedRoute) {
     this.title = this.route.snapshot.data.title;
   }
-
-  public ngOnInit(): void {}
 }

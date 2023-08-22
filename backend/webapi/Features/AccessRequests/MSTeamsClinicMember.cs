@@ -101,7 +101,7 @@ public class MSTeamsClinicMember
             var body = new EnrolmentEmailModel(enrolment, clinic, this.clock.GetCurrentInstant());
             var email = new Email(
                 from: EmailService.PidpEmail,
-                to: "enrolment_securemessagingsupport@fraserhealth.ca",
+                to: "enrolment_securemessaging@fraserhealth.ca",
                 subject: $"Add User to MS Teams (Privacy Officer: {clinic.PrivacyOfficerName})",
                 body: $"<pre>{JsonSerializer.Serialize(body, new JsonSerializerOptions { WriteIndented = true })}</pre>"
             );
