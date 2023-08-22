@@ -28,7 +28,7 @@ export class SitePrivacySecurityPortalSection implements IPortalSection {
   }
 
   public get hint(): string {
-    return '10 min to complete';
+    return '10 minutes to complete';
   }
 
   /**

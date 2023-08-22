@@ -22,7 +22,7 @@
 
   <p *ngIf="!completed">
     <strong>
-      I <span class="signature">{{ username | async }}</span>, represent and
+      I, <span class="signature">{{ username | async }}</span>, represent and
       warrant that all information provided in connection with my application
       for access to the System(s), is true and correct.
     </strong>
@@ -30,6 +30,7 @@
 
   <ui-page-footer [mode]="completed ? 'reverse' : 'normal'">
     <button
+      class="back-button"
       mat-stroked-button
       uiPageFooterAction
       color="primary"
