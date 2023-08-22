@@ -70,16 +70,23 @@ ol {
       grid-template-columns: calc(40% - 15px) calc(27% - 15px) calc(33% - 15px);
       gap: 20px;
       width: 98%;
+      min-height: 340px;
+      margin: calc(var(--gap) * 2) 0;
+
       & .card {
         display: flex;
         flex-direction: column;
-        // TODO: calc 0.9 to try may be to be removed
+        // TODO: padding "calc 0.9" was a try may be to be removed
         padding: calc(var(--gap) * 0.9);
         position: relative;
         line-height: 1.5rem;
 
         & .card-container {
           position: relative;
+          display: flex;
+          flex-direction: column;
+          height: 100%;
+
           & .card-badge {
             position: absolute;
             right: -40px;
@@ -92,8 +99,10 @@ ol {
             padding: 15px;
           }
 
-          & hr {
-            margin-bottom: 0;
+          & .card-body {
+            display: flex;
+            flex: 1;
+            flex-direction: column;
           }
         }
         & button.mat-flat-button {
@@ -115,26 +124,40 @@ ol {
         & img {
           z-index: -1;
           border-radius: var(--card-border-radius);
+          & .card-footer {
+            width: 100%;
+          }
+
+          & button.mat-flat-button {
+            width: fit-content;
+          }
         }
       }
 
-      & .advantage-card {
+      & .card.card-basic {
+        padding: 0;
+        & .card-container {
+          & .card-footer {
+            & hr {
+              margin-bottom: 0;
+            }
+          }
+        }
+      }
+
+      & .card.card-advantage {
         border: solid 1px pidp.$grey-20;
         border-radius: var(--card-border-radius);
         box-shadow: 0 0 10px pidp.$grey-20;
         & .card-container {
           display: flex;
-          flex-direction: column;
-          height: 100%;
           & .card-header {
             & strong {
               margin-right: 28px;
             }
           }
-          & .card-content {
-            display: flex;
-            flex: 1;
-            align-items: center;
+          & .card-body {
+            justify-content: center;
             & p {
               color: pidp.$grey-30;
             }
@@ -144,6 +167,28 @@ ol {
 
       & .card-uplifting {
         color: #9a3611;
+        & .card-container {
+          & .card-footer {
+            width: auto;
+            align-self: flex-end;
+            & button.icon-button {
+              background-color: #c24115;
+              font-size: 1.5rem;
+              color: white;
+              border: none;
+              border-radius: 50%;
+              width: 40px;
+              height: 40px;
+            }
+          }
+        }
+      }
+    }
+
+    & .active-layout {
+      & h3 {
+        font-weight: bolder;
+        font-size: var(--font-size);
       }
     }
 
