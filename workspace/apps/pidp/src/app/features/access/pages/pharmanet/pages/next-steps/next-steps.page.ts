@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
@@ -6,14 +6,14 @@ import { ActivatedRoute } from '@angular/router';
   templateUrl: './next-steps.page.html',
   styleUrls: ['./next-steps.page.scss'],
 })
-export class NextStepsPage implements OnInit {
+export class NextStepsPage {
   public title: string;
 
   public constructor(private route: ActivatedRoute) {
     this.title = this.route.snapshot.data.title;
   }
 
-  public onSubmit(): void {}
-
-  public ngOnInit(): void {}
+  public onSubmit(): void {
+    return;
+  }
 }

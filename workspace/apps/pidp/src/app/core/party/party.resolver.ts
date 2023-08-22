@@ -6,6 +6,7 @@ import { Observable, catchError, exhaustMap, of, throwError } from 'rxjs';
 
 import { RootRoutes } from '@bcgov/shared/ui';
 
+import { AuthRoutes } from '@app/features/auth/auth.routes';
 import { ShellRoutes } from '@app/features/shell/shell.routes';
 
 import { LoggerService } from '../services/logger.service';
@@ -40,11 +41,22 @@ export class PartyResolver implements Resolve<number | null> {
           ? of((this.partyService.partyId = partyId))
           : throwError(() => new Error('Party could not be found or created'))
       ),
-      catchError((error: HttpErrorResponse) => {
+      catchError((error: HttpErrorResponse | Error) => {
         this.logger.error(error.message);
-        error.status === 403
-          ? this.router.navigateByUrl(RootRoutes.DENIED)
-          : this.router.navigateByUrl(ShellRoutes.SUPPORT_ERROR_PAGE);
+
+        if (error instanceof HttpErrorResponse && error.status === 403) {
+          this.router.navigateByUrl(RootRoutes.DENIED);
+        } else if (
+          error instanceof Error &&
+          error.message === 'Unknown BC Provider account'
+        ) {
+          // redirect user
+          this.router.navigateByUrl(
+            AuthRoutes.routePath(AuthRoutes.BC_PROVIDER_UPLIFT)
+          );
+        } else {
+          this.router.navigateByUrl(ShellRoutes.SUPPORT_ERROR_PAGE);
+        }
         return of(null);
       })
     );
