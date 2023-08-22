@@ -34,7 +34,7 @@ export class AdministratorInfoPortalSection implements IPortalSection {
       this.getStatusCode()
     )
       ? ''
-      : '1 min to complete';
+      : '1 minute to complete';
   }
 
   public get properties(): PortalSectionProperty[] {

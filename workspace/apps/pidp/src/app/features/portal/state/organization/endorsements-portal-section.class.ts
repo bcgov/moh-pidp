@@ -25,11 +25,11 @@ export class EndorsementsPortalSection implements IPortalSection {
     this.key = 'endorsements';
     this.heading = 'Endorsements';
     this.description =
-      'View and make changes to your care team. Request endorsement from the licenced practitioners you work with to gain access to systems.';
+      'View and make changes to your care team. Endorse or request endorsements from colleagues on your health care team to access various systems.';
   }
 
   public get hint(): string {
-    return '1 min to complete';
+    return '1 minute to complete';
   }
 
   /**
