@@ -28,7 +28,7 @@ export class HcimAccountTransferPortalSection implements IPortalSection {
   }
 
   public get hint(): string {
-    return '3 min to complete';
+    return '3 minutes to complete';
   }
 
   /**
