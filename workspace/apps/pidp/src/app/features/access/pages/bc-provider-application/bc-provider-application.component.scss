@@ -330,7 +330,7 @@ ol {
           font-size: 0.75rem;
           overflow: hidden;
           transition: max-height 0.5s ease-in-out;
-          top: calc(64% + 5px);
+          top: calc(67% + 5px);
           left: 20%;
           transform: translateX(-50%);
           background: pidp.$grey-10;
@@ -341,7 +341,7 @@ ol {
         }
         & .error-triangle {
           position: absolute;
-          top: calc(63% + 5px);
+          top: calc(66% + 5px);
           left: 10%;
           transform: translateX(-50%);
           width: 0;
