@@ -71,7 +71,7 @@ ol {
       gap: 20px;
       width: 98%;
       min-height: 340px;
-      margin-top: calc(var(--gap) * 2);
+      margin: calc(var(--gap) * 2) 0;
 
       & .card {
         display: flex;
@@ -166,6 +166,13 @@ ol {
             }
           }
         }
+      }
+    }
+
+    & .active-layout {
+      & h3 {
+        font-weight: bolder;
+        font-size: var(--font-size);
       }
     }
 
