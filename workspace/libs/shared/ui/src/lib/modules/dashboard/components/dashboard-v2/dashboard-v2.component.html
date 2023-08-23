@@ -82,7 +82,7 @@
             [routerLink]="getRouterLink(menuItem)"
             [routerLinkActiveOptions]="getRouterLinkActiveOptions(menuItem)"
             [fragment]="getRouterLinkFragment(menuItem)"
-            (click)="sidenav.close()"
+            (click)="onMenuItemClicked()"
             >{{ menuItem.label }}
           </a>
           <a
