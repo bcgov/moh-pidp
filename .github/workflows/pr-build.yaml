@@ -242,6 +242,9 @@ jobs:
         run: |
           echo current installed helm releases
           helm list --namespace d8a8f9-dev
+
+          echo installing helm dependency...
+          helm dependency build
   
           echo installing helm chart...
           helm upgrade --install --wait --values ./deploy/pr_values.yaml --values ./deploy/rabbitmq_values.yaml --namespace d8a8f9-dev pr-${{ env.pr_number }} charts/pidp --debug --set global.image.tag=pr-${{ env.pr_number }}
