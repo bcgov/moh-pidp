@@ -38,3 +38,6 @@ dependencies:
   - name: nginx
     repository: "file://../nginx"
     version: "9.7.3"
+  - name: rabbitmq
+    repository: "https://charts.bitnami.com/bitnami"
+    version: "11.10.0"
