@@ -11,7 +11,7 @@ using Pidp.Models;
 
 public class EmailService : IEmailService
 {
-    public const string PidpEmail = "AMSSPOC.vic@CGI.com";
+    public const string PidpEmail = "provideridentityportal@gov.bc.ca";
 
     private readonly IChesClient chesClient;
     private readonly IClock clock;
