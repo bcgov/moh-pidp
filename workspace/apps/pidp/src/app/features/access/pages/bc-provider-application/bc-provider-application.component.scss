@@ -319,37 +319,14 @@ ol {
         }
         & .error {
           font-size: 0.75rem;
-          transition: max-height 0.5s ease-in-out;
-          max-height: 0;
-          position: absolute;
-          color: red;
-          border-radius: 8px;
-          z-index: 1;
-          width: 250px;
-          text-align: center;
-          font-size: 0.75rem;
           overflow: hidden;
           transition: max-height 0.5s ease-in-out;
-          top: calc(67% + 5px);
-          left: 20%;
-          transform: translateX(-50%);
-          background: pidp.$grey-10;
+          max-height: 0;
         }
         & .error-show {
           transition: max-height 0.5s ease-in-out;
           max-height: 250px;
           padding: 10px;
-        }
-        & .error-triangle {
-          position: absolute;
-          top: calc(66% + 5px);
-          left: 10%;
-          transform: translateX(-50%);
-          width: 0;
-          height: 0;
-          border-left: 10px solid transparent;
-          border-right: 10px solid transparent;
-          border-bottom: 20px solid pidp.$grey-10;
         }
       }
     }

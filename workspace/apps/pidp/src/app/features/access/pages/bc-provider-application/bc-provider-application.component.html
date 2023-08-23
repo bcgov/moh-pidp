@@ -250,10 +250,7 @@
             >Required</mat-error
           >
         </mat-form-field>
-        <div
-          class="error-triangle"
-          [class.error-triangle]="hasPasswordRuleError()"></div>
-        <div class="error" [class.error-show]="hasPasswordRuleError()">
+        <mat-error class="error" [class.error-show]="hasPasswordRuleError()">
           Your password must be between 8 and 256 characters and satisfy 3 out
           of the 4 following requirements:
           <ul>
@@ -262,7 +259,7 @@
             <li>At least one number</li>
             <li>At least one symbol</li>
           </ul>
-        </div>
+        </mat-error>
       </div>
       <div class="field">
         <label id="bc-provider-application-confirm-password"
