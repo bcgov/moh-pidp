@@ -14,7 +14,7 @@ import { ShellRoutes } from '../../shell.routes';
 })
 export class SupportErrorPage {
   public headerConfig: DashboardHeaderConfig;
-  public providerIdentitySupportEmail: string;
+  public providerIdentitySupport: string;
   public additionalSupportPhone: string;
 
   public constructor(
@@ -22,8 +22,7 @@ export class SupportErrorPage {
     @Inject(APP_CONFIG) private config: AppConfig
   ) {
     this.headerConfig = { theme: 'light', allowMobileToggle: false };
-    this.providerIdentitySupportEmail =
-      this.config.emails.providerIdentitySupport;
+    this.providerIdentitySupport = this.config.emails.providerIdentitySupport;
     this.additionalSupportPhone = this.config.phones.additionalSupport;
   }
 

@@ -24,7 +24,7 @@ interface SupportProps {
 })
 export class GetSupportComponent implements OnInit {
   public providedSupport: SupportProps[];
-  public providedSupportEmail: string;
+  public providerIdentitySupport: string;
   public additionalSupportPhone: string;
 
   public constructor(
@@ -32,7 +32,7 @@ export class GetSupportComponent implements OnInit {
     private permissionsService: PermissionsService
   ) {
     this.providedSupport = [];
-    this.providedSupportEmail = this.config.emails.providerIdentitySupport;
+    this.providerIdentitySupport = this.config.emails.providerIdentitySupport;
     this.additionalSupportPhone = this.config.phones.additionalSupport;
   }
 
