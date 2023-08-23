@@ -88,7 +88,7 @@ public class Create
 <br>
 <br>For additional support, contact the OneHealthID Service desk:
 <br>
-<br>&emsp;• By email at AMSSPOC.vic@CGI.com
+<br>&emsp;• By email at provideridentityportal@gov.bc.ca
 <br>
 <br>&emsp;• By phone at 250-857-1969
 <br>
