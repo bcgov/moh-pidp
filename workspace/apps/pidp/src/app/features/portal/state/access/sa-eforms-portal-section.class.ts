@@ -29,7 +29,7 @@ export class SaEformsPortalSection implements IPortalSection {
   }
 
   public get hint(): string {
-    return '1 min to complete';
+    return '1 minute to complete';
   }
 
   /**

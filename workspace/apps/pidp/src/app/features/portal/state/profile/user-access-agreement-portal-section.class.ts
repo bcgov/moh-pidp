@@ -28,7 +28,7 @@ export class UserAccessAgreementPortalSection implements IPortalSection {
   }
 
   public get hint(): string {
-    return '8 min to complete';
+    return '8 minutes to complete';
   }
 
   /**

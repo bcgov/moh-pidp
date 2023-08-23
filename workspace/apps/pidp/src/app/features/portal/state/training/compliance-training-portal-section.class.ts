@@ -28,7 +28,7 @@ export class ComplianceTrainingPortalSection implements IPortalSection {
   }
 
   public get hint(): string {
-    return '15 min to complete';
+    return '15 minutes to complete';
   }
 
   /**
