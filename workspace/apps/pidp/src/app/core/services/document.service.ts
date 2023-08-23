@@ -130,7 +130,7 @@ export class DocumentService {
       about the collection of this personal information, contact the OneHealthID Service desk:
       <ul>
         <li>
-          By email at <a href="mailto:${this.config.emails.additionalSupport}">${this.config.emails.additionalSupport}</a>
+          By email at <a href="mailto:${this.config.emails.providerIdentitySupport}">${this.config.emails.providerIdentitySupport}</a>
         </li>
         <li>
           By phone at <a href="tel:${this.config.phones.additionalSupport}">${this.config.phones.additionalSupport}</a>

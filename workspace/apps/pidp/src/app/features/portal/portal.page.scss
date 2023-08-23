@@ -38,12 +38,28 @@
 
     & p {
       padding-left: calc(var(--gap) * 2);
+      padding-right: calc(var(--gap) * 2);
     }
 
     & .carousel-box {
       & .card-box {
         display: flex;
       }
+    }
+  }
+}
+
+.viewport-xsmall {
+  & header {
+    & h2 {
+      padding: calc(var(--gap) / 2) var(--gap);
+    }
+  }
+
+  & .section-content-box {
+    & p {
+      padding-left: var(--gap);
+      padding-right: var(--gap);
     }
   }
 }
@@ -80,4 +96,9 @@
 .guide-information {
   font-size: smaller;
   margin-bottom: 10px;
+}
+
+.pas-step-label {
+  margin: unset;
+  line-height: 1.3;
 }
