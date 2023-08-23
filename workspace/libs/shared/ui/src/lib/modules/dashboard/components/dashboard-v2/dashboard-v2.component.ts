@@ -5,8 +5,9 @@ import {
   OnChanges,
   Output,
   SimpleChanges,
+  ViewChild,
 } from '@angular/core';
-import { MatDrawerMode } from '@angular/material/sidenav';
+import { MatDrawerMode, MatSidenav } from '@angular/material/sidenav';
 import { IsActiveMatchOptions } from '@angular/router';
 
 import { DashboardStateModel } from '@pidp/data-model';
@@ -25,6 +26,7 @@ export class DashboardV2Component implements OnChanges {
   @Input() public dashboardState!: DashboardStateModel;
   @Input() public menuItems!: DashboardMenuItem[];
   @Output() public logout = new EventEmitter<void>();
+  @ViewChild('sidenav') public sidenav!: MatSidenav;
 
   private viewport = PidpViewport.xsmall;
   public showMiniMenuButton = true;
@@ -110,6 +112,11 @@ export class DashboardV2Component implements OnChanges {
   }
   public onLogout(): void {
     this.logout.emit();
+  }
+  public onMenuItemClicked(): void {
+    if (this.sidenavMode === 'over') {
+      this.sidenav.close();
+    }
   }
 
   private onViewportChange(viewport: PidpViewport): void {

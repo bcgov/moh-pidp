@@ -37,7 +37,7 @@ export const environment: AppEnvironment = {
     isLayoutV2Enabled: false,
   },
   emails: {
-    providerIdentitySupport: 'AMSSPOC.vic@CGI.com',
+    providerIdentitySupport: 'provideridentityportal@gov.bc.ca',
     specialAuthorityEformsSupport: specialAuthorityEformsSupportEmail,
     hcimAccountTransferSupport: hcimWebAccountTransferSupport,
     hcimEnrolmentSupport: hcimWebEnrolmentSupport,
@@ -48,7 +48,6 @@ export const environment: AppEnvironment = {
     doctorsTechnologyOfficeSupport: doctorsTechnologyOfficeEmail,
     phsaInformationAccessAndPrivacyOffice:
       phsaInformationAccessAndPrivacyOfficeEmail,
-    additionalSupport: 'AMSSPOC.vic@CGI.com',
   },
   urls: {
     bcscAppDownload: `https://www2.gov.bc.ca/gov/content/governments/government-id/bcservicescardapp/download-app`,

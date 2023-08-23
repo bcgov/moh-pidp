@@ -100,7 +100,7 @@ export class PortalPage implements OnInit {
     this.uaaTutorial = uaaTutorialLink;
     this.bcProviderTutorial = bcProviderTutorialLink;
     this.lastSelectedIndex = 6;
-    this.selectedIndex = this.lastSelectedIndex;
+    this.selectedIndex = -1;
   }
 
   public navigateTo(): void {
