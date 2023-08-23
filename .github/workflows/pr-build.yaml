@@ -244,6 +244,7 @@ jobs:
           helm list --namespace d8a8f9-dev
 
           echo installing helm dependency...
+          helm repo add bitnami https://charts.bitnami.com/bitnami
           helm dependency build ./charts/pidp
   
           echo installing helm chart...
