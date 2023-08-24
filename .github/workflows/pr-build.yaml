@@ -248,4 +248,4 @@ jobs:
           helm dependency build ./charts/pidp
   
           echo installing helm chart...
-          helm upgrade --install --wait --values ./deploy/pr_values.yaml --namespace d8a8f9-dev pr-${{ env.pr_number }} charts/pidp --debug --set global.image.tag=pr-${{ env.pr_number }}
+          helm upgrade --install --wait --values ./deploy/pr_values.yaml --values ./deploy/rabbitmq_values.yaml --namespace d8a8f9-dev pr-${{ env.pr_number }} charts/pidp --debug --set global.image.tag=pr-${{ env.pr_number }} --set rabbitmq.auth.password=rabbitmq
