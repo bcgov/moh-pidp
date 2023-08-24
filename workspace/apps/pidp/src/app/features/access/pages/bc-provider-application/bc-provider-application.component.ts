@@ -2,7 +2,6 @@ import { Element } from '@angular/compiler';
 import {
   Component,
   Inject,
-  OnDestroy,
   OnInit,
   TemplateRef,
   ViewChild,
@@ -11,7 +10,7 @@ import { FormBuilder } from '@angular/forms';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 
-import { Observable, Subscription, catchError, of, switchMap, tap } from 'rxjs';
+import { Observable, catchError, of, switchMap, tap } from 'rxjs';
 
 import { faCircleRight } from '@fortawesome/free-regular-svg-icons';
 import {
@@ -33,7 +32,6 @@ import {
 } from '@app/core/classes/abstract-form-page.class';
 import { PartyService } from '@app/core/party/party.service';
 import { LoggerService } from '@app/core/services/logger.service';
-import { ToastService } from '@app/core/services/toast.service';
 import { UtilsService } from '@app/core/services/utils.service';
 import { AuthRoutes } from '@app/features/auth/auth.routes';
 import { IdentityProvider } from '@app/features/auth/enums/identity-provider.enum';
@@ -50,7 +48,7 @@ import { BcProviderApplicationResource } from './bc-provider-application-resourc
 })
 export class BcProviderApplicationComponent
   extends AbstractFormPage<BcProviderApplicationFormState>
-  implements OnInit, OnDestroy
+  implements OnInit
 {
   public faCircleCheck = faCircleCheck;
   public faCircleRight = faCircleRight;
@@ -66,7 +64,6 @@ export class BcProviderApplicationComponent
   public username = '';
   public password = '';
   public showOverlayOnSubmit = false;
-  public toastSubscription: Subscription;
 
   public activeLayout: 'upliftAccount' | 'createAccount' | '';
 
@@ -88,7 +85,6 @@ export class BcProviderApplicationComponent
     private resource: BcProviderApplicationResource,
     private loadingOverlayService: LoadingOverlayService,
     private logger: LoggerService,
-    private toastService: ToastService,
     private utilsService: UtilsService
   ) {
     super(dependenciesService);
@@ -96,21 +92,6 @@ export class BcProviderApplicationComponent
     const routeData = this.route.snapshot.data;
     this.completed =
       routeData.bcProviderApplicationStatusCode == StatusCode.COMPLETED;
-    this.toastSubscription = this.formState.form.valueChanges.subscribe(() => {
-      if (this.formState.form.invalid) {
-        this.toastService.openErrorToast(
-          `Your password must be between 8 and 256 characters and satisfy 3 out
-          of the 4 following requirements:
-
-            At least one uppercase letter
-            At least one lowercase letter
-            At least one number
-            At least one symbol
-          `,
-          `Dismiss`
-        );
-      }
-    });
 
     this.activeLayout = '';
   }
@@ -121,20 +102,6 @@ export class BcProviderApplicationComponent
 
   public hasPasswordRuleError(): boolean {
     return this.formState.password.hasError('invalidRequirements');
-  }
-
-  public getFormValidationErrors(): void {
-    this.hasPasswordRuleError()
-      ? this.toastService
-          .openErrorToast(`Your password must be between 8 and 256 characters and satisfy 3 out
-          of the 4 following requirements:
-          <ul>
-            <li>At least one uppercase letter</li>
-            <li>At least one lowercase letter</li>
-            <li>At least one number</li>
-            <li>At least one symbol</li>
-          </ul>`)
-      : ``;
   }
 
   public onSuccessDialogClose(): void {
@@ -185,10 +152,6 @@ export class BcProviderApplicationComponent
     } else {
       this.activeLayout = '';
     }
-  }
-
-  public ngOnDestroy(): void {
-    this.toastSubscription.unsubscribe();
   }
 
   protected performSubmission(): Observable<string | void> {
