@@ -14,6 +14,10 @@ export interface BcProviderApplicationFormData {
 }
 
 export class BcProviderApplicationFormState extends AbstractFormState<BcProviderApplicationFormData> {
+  private upper = /[A-Z]/;
+  private lower = /[a-z]/;
+  private numbers = /[0-9]/;
+  private symbols = /[^A-Za-z0-9]/;
   public constructor(private fb: FormBuilder) {
     super();
 
@@ -50,18 +54,34 @@ export class BcProviderApplicationFormState extends AbstractFormState<BcProvider
     this.formInstance = this.fb.group({
       password: [
         '',
-        [
-          Validators.required,
-          Validators.minLength(8),
-          Validators.maxLength(256),
-          this.validatePassword(),
-        ],
+        [this.passwordValidator(), this.validateRequirementsPassword()],
       ],
       confirmPassword: [
         '',
         [Validators.required, this.isEqualToControlValue('password')],
       ],
     });
+  }
+
+  public getErrorMessage(): string {
+    const errors = this.password.errors;
+    console.log(errors);
+    if (errors) {
+      if (errors.required) {
+        return 'Required';
+      } else if (errors.uppercase) {
+        return 'Must contain at least one uppercase letter';
+      } else if (errors.lowercase) {
+        return 'Must contain at least one lowercase letter';
+      } else if (errors.number) {
+        return 'Must contain at least one number';
+      } else if (errors.symbol) {
+        return 'Must contain at least one symbol';
+      } else if (errors.invalidRequirements) {
+        return 'Must be between 8 and 256 characters';
+      }
+    }
+    return '';
   }
 
   private isEqualToControlValue(otherControlName: string): ValidatorFn {
@@ -87,9 +107,9 @@ export class BcProviderApplicationFormState extends AbstractFormState<BcProvider
     };
   }
 
-  // Password requirements as per Azure Active Directory
-  // https://learn.microsoft.com/en-us/azure/active-directory/authentication/concept-sspr-policy
-  private validatePassword(): ValidatorFn {
+  // Validate password to return appropriate validation error for cases
+  // required, uppercase, lowercase, number and symbol
+  private passwordValidator(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       // hide validation errors until control is dirty
       if (control.pristine) {
@@ -97,22 +117,38 @@ export class BcProviderApplicationFormState extends AbstractFormState<BcProvider
       }
 
       const password = control.value;
-      const upper = /[A-Z]/;
-      const lower = /[a-z]/;
-      const numbers = /[0-9]/;
-      const symbols = /[^A-Za-z0-9]/;
 
+      if (!password) return { required: true };
+      if (!this.upper.test(password)) return { uppercase: true };
+      if (!this.lower.test(password)) return { lowercase: true };
+      if (!this.numbers.test(password)) return { number: true };
+      if (!this.symbols.test(password)) return { symbol: true };
+
+      return null;
+    };
+  }
+
+  // Password requirements as per Azure Active Directory
+  // https://learn.microsoft.com/en-us/azure/active-directory/authentication/concept-sspr-policy
+  private validateRequirementsPassword(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      // hide validation errors until control is dirty
+      if (control.pristine) {
+        return null;
+      }
+
+      const password = control.value;
       let requirementCounter = 0;
 
       if (password.length > 7) {
         // Password requirements 3 out of 4 of these to match
-        if (upper.test(password)) requirementCounter++;
+        if (this.upper.test(password)) requirementCounter++;
 
-        if (lower.test(password)) requirementCounter++;
+        if (this.lower.test(password)) requirementCounter++;
 
-        if (numbers.test(password)) requirementCounter++;
+        if (this.numbers.test(password)) requirementCounter++;
 
-        if (symbols.test(password)) requirementCounter++;
+        if (this.symbols.test(password)) requirementCounter++;
       }
 
       if (requirementCounter < 3) {

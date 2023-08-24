@@ -246,20 +246,8 @@
             formControlName="password"
             type="password"
             aria-labelledby="bc-provider-application-password" />
-          <mat-error *ngIf="formState.password.hasError('required')"
-            >Required</mat-error
-          >
+          <mat-error>{{ formState.getErrorMessage() }}</mat-error>
         </mat-form-field>
-        <!-- <mat-error class="error" [class.error-show]="hasPasswordRuleError()">
-          Your password must be between 8 and 256 characters and satisfy 3 out
-          of the 4 following requirements:
-          <ul>
-            <li>At least one uppercase letter</li>
-            <li>At least one lowercase letter</li>
-            <li>At least one number</li>
-            <li>At least one symbol</li>
-          </ul>
-        </mat-error> -->
       </div>
       <div class="field">
         <label id="bc-provider-application-confirm-password"
