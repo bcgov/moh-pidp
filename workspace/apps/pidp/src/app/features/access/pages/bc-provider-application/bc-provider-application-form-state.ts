@@ -52,10 +52,7 @@ export class BcProviderApplicationFormState extends AbstractFormState<BcProvider
 
   public buildForm(): void {
     this.formInstance = this.fb.group({
-      password: [
-        '',
-        [this.passwordValidator(), this.validateRequirementsPassword()],
-      ],
+      password: ['', [this.validateRequirementsPassword()]],
       confirmPassword: [
         '',
         [Validators.required, this.isEqualToControlValue('password')],
@@ -106,27 +103,6 @@ export class BcProviderApplicationFormState extends AbstractFormState<BcProvider
     };
   }
 
-  // Validate password to return appropriate validation error for cases
-  // required, uppercase, lowercase, number and symbol
-  private passwordValidator(): ValidatorFn {
-    return (control: AbstractControl): ValidationErrors | null => {
-      // hide validation errors until control is dirty
-      if (control.pristine) {
-        return null;
-      }
-
-      const password = control.value;
-
-      if (!password) return { required: true };
-      if (!this.upper.test(password)) return { uppercase: true };
-      if (!this.lower.test(password)) return { lowercase: true };
-      if (!this.numbers.test(password)) return { number: true };
-      if (!this.symbols.test(password)) return { symbol: true };
-
-      return null;
-    };
-  }
-
   // Password requirements as per Azure Active Directory
   // https://learn.microsoft.com/en-us/azure/active-directory/authentication/concept-sspr-policy
   private validateRequirementsPassword(): ValidatorFn {
@@ -139,6 +115,7 @@ export class BcProviderApplicationFormState extends AbstractFormState<BcProvider
       const password = control.value;
       let requirementCounter = 0;
 
+      if (!password) return { required: true };
       if (password.length > 7) {
         // Password requirements 3 out of 4 of these to match
         if (this.upper.test(password)) requirementCounter++;
@@ -151,6 +128,10 @@ export class BcProviderApplicationFormState extends AbstractFormState<BcProvider
       }
 
       if (requirementCounter < 3) {
+        if (!this.upper.test(password)) return { uppercase: true };
+        if (!this.lower.test(password)) return { lowercase: true };
+        if (!this.numbers.test(password)) return { number: true };
+        if (!this.symbols.test(password)) return { symbol: true };
         return { invalidRequirements: true };
       }
 
