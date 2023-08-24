@@ -106,14 +106,18 @@ ol {
 
           & .card-badge {
             position: absolute;
-            right: -40px;
-            top: -40px;
-            width: 70px;
-            height: 70px;
+            right: -2.5em;
+            top: -2.5em;
+            width: 4.25em;
+            height: 4.25em;
             border: solid 1px pidp.$bcgov-color-primary;
             border-radius: 50%;
             background: white;
-            padding: 15px;
+            padding: 1em;
+          }
+
+          & .card-header {
+            font-size: 1rem;
           }
 
           & .card-body {
@@ -128,9 +132,6 @@ ol {
         & button.icon-button {
           background-color: #c24115;
           font-size: 1.5rem;
-          position: absolute;
-          bottom: 10px;
-          right: 10px;
           color: white;
           border: none;
           border-radius: 50%;
@@ -141,6 +142,8 @@ ol {
         & img {
           z-index: -1;
           border-radius: var(--card-border-radius);
+          object-fit: cover;
+          object-position: 50% 30%;
           & .card-footer {
             width: 100%;
           }
@@ -169,9 +172,7 @@ ol {
         & .card-container {
           display: flex;
           & .card-header {
-            & strong {
-              margin-right: 28px;
-            }
+            margin-right: 1.5em;
           }
           & .card-body {
             justify-content: center;
@@ -185,6 +186,9 @@ ol {
       & .card-uplifting {
         color: #9a3611;
         & .card-container {
+          & .card-body {
+            min-height: 100px;
+          }
           & .card-footer {
             width: auto;
             align-self: flex-end;
@@ -392,6 +396,14 @@ ol {
         width: 10rem;
         color: pidp.$green;
       }
+    }
+  }
+}
+
+.viewport-xsmall {
+  & .content {
+    & .cards {
+      grid-template-columns: unset;
     }
   }
 }
