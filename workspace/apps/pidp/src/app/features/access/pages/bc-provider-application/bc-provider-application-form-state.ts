@@ -65,7 +65,6 @@ export class BcProviderApplicationFormState extends AbstractFormState<BcProvider
 
   public getErrorMessage(): string {
     const errors = this.password.errors;
-    console.log(errors);
     if (errors) {
       if (errors.required) {
         return 'Required';
