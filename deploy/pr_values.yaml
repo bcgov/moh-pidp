@@ -31,3 +31,13 @@ webapi:
 
 plr-intake:
   replicaCount: 1
+
+rabbitmq:
+  fullnameOverride: "rabbitmq"
+  auth.username: rabbitmq
+  auth.password: rabbitmq
+  clustering.enabled: false
+  loadDefinition.enabled: true
+  loadDefinition.existingSecret: {{ .Release.Name }}-rabbitmq-load-definition
+  configuration.default_pass = rabbitmq
+  persistence.size: 5Gi
