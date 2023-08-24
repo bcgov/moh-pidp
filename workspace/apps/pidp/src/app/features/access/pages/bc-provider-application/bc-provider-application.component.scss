@@ -5,21 +5,38 @@ ol {
   counter-reset: li;
   margin-left: 1rem;
   li {
+    position: relative;
     counter-increment: li;
     margin-bottom: 10px;
     line-height: 1.5rem;
+    min-height: 4.5rem;
   }
   li:before {
+    background: pidp.$grey-20;
+    content: '';
+    position: absolute;
+    top: 2rem;
+    left: -20px;
+    width: 1px;
+    height: calc(100% - 2rem);
+  }
+  li:last-child:before {
+    display: none;
+  }
+  li:after {
+    background: pidp.$grey-40;
+    color: white;
+    border-radius: 50%;
     content: counter(li);
-    margin-left: -3rem;
-    margin-right: 20px;
+    text-align: center;
+    position: absolute;
+    top: 0;
+    left: -2rem;
     width: 1.5rem;
     height: 1.5rem;
-    background: pidp.$grey-40;
-    color: pidp.$bcgov-color-background-grey;
-    border-radius: 50%;
-    text-align: center;
-    display: inline-block;
+  }
+  li:last-child:after {
+    top: 6px;
   }
 }
 
