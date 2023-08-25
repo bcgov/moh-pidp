@@ -7,9 +7,8 @@ See [Installing Helm](https://helm.sh/docs/intro/install/)
 
 ## RabbitMQ
 
-```
 
-#### Deploy
+### Deploy
 
 To install from `tgz`, use the regular helm install/upgrade command and specify the chart using local path.
 You will need to supply the correct values file for your environemtn.
@@ -22,7 +21,6 @@ To install from remote repository , use helm install/upgrade command and specify
 `helm install -f .\rabbitmq-values.yaml rabbitmq https://charts.bitnami.com/bitnami/rabbitmq-11.10.0.tgz`
 
 
-```
 
 
 
