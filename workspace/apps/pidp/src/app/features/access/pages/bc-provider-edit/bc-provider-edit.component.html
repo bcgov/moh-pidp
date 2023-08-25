@@ -27,11 +27,11 @@
             <picture class="image">
               <source
                 type="image/webp"
-                srcset="/assets/images/bc-provider-account-457x759.webp" />
-              <!-- Use jpg as a fallback when webp is not supported by the browser. -->
+                srcset="/assets/images/bcprovider-account-1000x1103.webp" />
+              <!-- Use png as a fallback when webp is not supported by the browser. -->
               <source
-                type="image/jpg"
-                srcset="/assets/images/bc-provider-account-457x759.jpg" />
+                type="image/png"
+                srcset="/assets/images/bcprovider-account-1000x1103.png" />
               <img title="woman" loading="lazy" aria-labelledby="" />
             </picture>
 
@@ -61,7 +61,7 @@
 
 <ng-template #passwordForm>
   <form novalidate [formGroup]="formState.form" (ngSubmit)="onSubmit()">
-    <h3>Password reset</h3>
+    <h2>Password reset</h2>
     <div class="username">
       <h4><strong>Provided username</strong></h4>
       <h5>{{ username }}</h5>

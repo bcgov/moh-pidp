@@ -16,8 +16,6 @@
   --avatar-size: 4rem;
   --content-padding: var(--gap);
   --password-splash-display: none;
-  --password-image-width: 500px;
-  --password-image-height: 759px;
 }
 .viewport-medium,
 .viewport-large {
@@ -81,6 +79,11 @@
           margin: var(--gap) 0;
           padding: 0;
         }
+        & h2 {
+          text-align: center;
+          margin: var(--gap) 0;
+          padding: 0;
+        }
       }
       & .password-splash {
         flex: 1;
@@ -96,10 +99,11 @@
           & .image {
             flex: 1;
             display: flex;
+            height: 100%;
             img {
               flex: 1;
-              width: var(--password-image-width);
-              height: var(--password-image-height);
+              width: 100%;
+              height: auto;
             }
           }
           & .text-box {
@@ -152,6 +156,9 @@
           }
           & .mat-form-field {
             margin-bottom: 0;
+          }
+          & .mat-error {
+            font-size: 0.75rem;
           }
         }
         & .form-button-box {
