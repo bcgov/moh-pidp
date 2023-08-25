@@ -22,5 +22,3 @@ To install from remote repository , use helm install/upgrade command and specify
 
 
 
-
-
