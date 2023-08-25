@@ -52,6 +52,11 @@ ol {
   --gap: 1.25rem;
   --font-size: 1rem;
 }
+.viewport-xsmall {
+  --gap: 2rem;
+  --font-size: 1rem;
+}
+
 .viewport-all {
   --header-margin: unset;
   --avatar-size: 4rem;
@@ -86,7 +91,6 @@ ol {
       display: grid;
       grid-template-columns: calc(40% - 15px) calc(27% - 15px) calc(33% - 15px);
       gap: 20px;
-      width: 98%;
       min-height: 340px;
       margin: calc(var(--gap) * 2) 0;
 
@@ -126,18 +130,6 @@ ol {
             flex-direction: column;
           }
         }
-        & button.mat-flat-button {
-          width: fit-content;
-        }
-        & button.icon-button {
-          background-color: #c24115;
-          font-size: 1.5rem;
-          color: white;
-          border: none;
-          border-radius: 50%;
-          width: 40px;
-          height: 40px;
-        }
 
         & img {
           z-index: -1;
@@ -172,7 +164,7 @@ ol {
         & .card-container {
           display: flex;
           & .card-header {
-            margin-right: 1.5em;
+            margin-right: 1.5rem;
           }
           & .card-body {
             justify-content: center;
@@ -187,19 +179,22 @@ ol {
         color: #9a3611;
         & .card-container {
           & .card-body {
-            min-height: 100px;
+            min-height: 250px;
           }
           & .card-footer {
             width: auto;
             align-self: flex-end;
+            & button.mat-flat-button {
+              width: fit-content;
+            }
             & button.icon-button {
               background-color: #c24115;
               font-size: 1.5rem;
               color: white;
               border: none;
               border-radius: 50%;
-              width: 40px;
-              height: 40px;
+              width: 2.5rem;
+              height: 2.5rem;
             }
           }
         }
@@ -401,9 +396,21 @@ ol {
 }
 
 .viewport-xsmall {
+  & header {
+    & h2 {
+      padding: calc(var(--gap) / 2) var(--gap);
+    }
+  }
   & .content {
     & .cards {
       grid-template-columns: unset;
+      & .card {
+        & .card-container {
+          & .card-header {
+            font-size: 1.5rem;
+          }
+        }
+      }
     }
   }
 }
