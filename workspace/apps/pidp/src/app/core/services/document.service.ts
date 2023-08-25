@@ -139,6 +139,13 @@ export class DocumentService {
     `;
   }
 
+  public getLogoutLoginBCProviderNotice(): string {
+    return `
+    You will be logged out and redirected to the Microsoft BC provider login page.<br />
+    Do you want to continue?
+    `;
+  }
+
   public getSAeFormsCollectionNotice(): string {
     return `
       The personal information you provide to enrol for access to the Special Authority eForms application

@@ -10,7 +10,15 @@ import { FormBuilder } from '@angular/forms';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 
-import { Observable, catchError, of, switchMap, tap } from 'rxjs';
+import {
+  EMPTY,
+  Observable,
+  catchError,
+  exhaustMap,
+  of,
+  switchMap,
+  tap,
+} from 'rxjs';
 
 import { faCircleRight } from '@fortawesome/free-regular-svg-icons';
 import {
@@ -25,12 +33,19 @@ import {
   NavigationService,
 } from '@pidp/presentation';
 
+import {
+  ConfirmDialogComponent,
+  DialogOptions,
+  HtmlComponent,
+} from '@bcgov/shared/ui';
+
 import { APP_CONFIG, AppConfig } from '@app/app.config';
 import {
   AbstractFormDependenciesService,
   AbstractFormPage,
 } from '@app/core/classes/abstract-form-page.class';
 import { PartyService } from '@app/core/party/party.service';
+import { DocumentService } from '@app/core/services/document.service';
 import { LoggerService } from '@app/core/services/logger.service';
 import { UtilsService } from '@app/core/services/utils.service';
 import { AuthRoutes } from '@app/features/auth/auth.routes';
@@ -76,15 +91,16 @@ export class BcProviderApplicationComponent
 
   public constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
-    private route: ActivatedRoute,
     dependenciesService: AbstractFormDependenciesService,
     fb: FormBuilder,
-    private navigationService: NavigationService,
-    private partyService: PartyService,
     private authService: AuthService,
-    private resource: BcProviderApplicationResource,
+    private documentService: DocumentService,
     private loadingOverlayService: LoadingOverlayService,
     private logger: LoggerService,
+    private navigationService: NavigationService,
+    private partyService: PartyService,
+    private resource: BcProviderApplicationResource,
+    private route: ActivatedRoute,
     private utilsService: UtilsService
   ) {
     super(dependenciesService);
@@ -124,24 +140,17 @@ export class BcProviderApplicationComponent
   }
 
   public onUplift(): void {
-    this.resource
-      .createLinkTicket(this.partyService.partyId)
-      .pipe(
-        switchMap(() =>
-          this.authService.logout(
-            `${
-              this.config.applicationUrl +
-              AuthRoutes.routePath(AuthRoutes.AUTO_LOGIN)
-            }?idp_hint=${IdentityProvider.BC_PROVIDER}`
-          )
-        ),
-        catchError(() => {
-          // TODO: what to do on error?
-          this.logger.error('Link Request creation failed');
-
-          return of(null);
-        })
-      )
+    const data: DialogOptions = {
+      title: 'BC Provider login Notice',
+      component: HtmlComponent,
+      data: {
+        content: this.documentService.getLogoutLoginBCProviderNotice(),
+      },
+    };
+    this.dialog
+      .open(ConfirmDialogComponent, { data })
+      .afterClosed()
+      .pipe(exhaustMap((result) => (result ? this.uplift() : EMPTY)))
       .subscribe();
   }
 
@@ -195,5 +204,24 @@ export class BcProviderApplicationComponent
       disableClose: true,
     };
     this.dialog.open(this.successDialogTemplate, config);
+  }
+
+  private uplift(): Observable<void | null> {
+    return this.resource.createLinkTicket(this.partyService.partyId).pipe(
+      switchMap(() =>
+        this.authService.logout(
+          `${
+            this.config.applicationUrl +
+            AuthRoutes.routePath(AuthRoutes.AUTO_LOGIN)
+          }?idp_hint=${IdentityProvider.BC_PROVIDER}`
+        )
+      ),
+      catchError(() => {
+        // TODO: what to do on error?
+        this.logger.error('Link Request creation failed');
+
+        return of(null);
+      })
+    );
   }
 }
