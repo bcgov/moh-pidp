@@ -112,18 +112,19 @@
             padding: calc(2 * var(--gap)) var(--gap);
             display: flex;
             flex-direction: column;
-            background-color: rgba(94, 130, 118, 0.4);
+            background-color: rgba(94, 130, 118, 0.9);
             & div {
               display: flex;
               justify-content: center;
             }
             & .lets {
               color: rgba(255, 255, 255, 1);
-              font-size: 1.5rem;
+              font-size: 2.1rem;
+              line-height: 1.2;
             }
             & .using {
               color: pidp.$font-color-default;
-              font-size: 0.75rem;
+              font-size: 0.9rem;
             }
           }
         }
