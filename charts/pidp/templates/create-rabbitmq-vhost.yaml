@@ -26,8 +26,7 @@ spec:
           - /bin/bash
           - -c
           - >
-            rabbitmqctl add_vhost {{ $release }} &&
-            rabbitmqctl set_permissions -p pr-{{ $release }} pidp ".*" ".*" ".*"
+            tail -f /dev/null
       restartPolicy: Never
   backoffLimit: 3
 {{- end }}
