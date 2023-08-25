@@ -11,7 +11,7 @@ metadata:
   name: {{ include "pidp.fullname" . }}-deleterabbitmqhost
   annotations:
     helm.sh/hook: post-delete
-     helm.sh/hook-delete-policy: hook-succeeded
+    helm.sh/hook-delete-policy: hook-succeeded
   labels:
     {{- include "pidp.labels" . | nindent 4 }}
 spec:
@@ -26,7 +26,6 @@ spec:
           - -c
           - >
             echo "delete the pr-{{ $release }} vhost and remove permissions for the pidp user to use it." ;
-    
             curl -u rabbitmq:rabbitmq -X DELETE http://rabbitmq:15672/api/vhosts/{{ $release }}
       restartPolicy: Never
   backoffLimit: 3
