@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
       - name: create-rabbitmq-vhost
-        image: docker.io/bitnami/rabbitmq:3.11.9-debian-11-r1
+        image: "docker.io/bitnami/rabbitmq:3.11.9-debian-11-r1"
         imagePullPolicy: Always
         command:
           - /bin/bash
