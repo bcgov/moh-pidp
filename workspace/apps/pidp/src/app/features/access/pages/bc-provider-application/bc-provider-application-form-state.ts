@@ -14,10 +14,6 @@ export interface BcProviderApplicationFormData {
 }
 
 export class BcProviderApplicationFormState extends AbstractFormState<BcProviderApplicationFormData> {
-  private upper = /[A-Z]/;
-  private lower = /[a-z]/;
-  private numbers = /[0-9]/;
-  private symbols = /[^A-Za-z0-9]/;
   public constructor(private fb: FormBuilder) {
     super();
 
@@ -113,25 +109,29 @@ export class BcProviderApplicationFormState extends AbstractFormState<BcProvider
       }
 
       const password = control.value;
+      const upper = /[A-Z]/;
+      const lower = /[a-z]/;
+      const numbers = /[0-9]/;
+      const symbols = /[^A-Za-z0-9]/;
       let requirementCounter = 0;
 
       if (!password) return { required: true };
       if (password.length > 7) {
         // Password requirements 3 out of 4 of these to match
-        if (this.upper.test(password)) requirementCounter++;
+        if (upper.test(password)) requirementCounter++;
 
-        if (this.lower.test(password)) requirementCounter++;
+        if (lower.test(password)) requirementCounter++;
 
-        if (this.numbers.test(password)) requirementCounter++;
+        if (numbers.test(password)) requirementCounter++;
 
-        if (this.symbols.test(password)) requirementCounter++;
+        if (symbols.test(password)) requirementCounter++;
       }
 
       if (requirementCounter < 3) {
-        if (!this.upper.test(password)) return { uppercase: true };
-        if (!this.lower.test(password)) return { lowercase: true };
-        if (!this.numbers.test(password)) return { number: true };
-        if (!this.symbols.test(password)) return { symbol: true };
+        if (!upper.test(password)) return { uppercase: true };
+        if (!lower.test(password)) return { lowercase: true };
+        if (!numbers.test(password)) return { number: true };
+        if (!symbols.test(password)) return { symbol: true };
         return { invalidRequirements: true };
       }
 
