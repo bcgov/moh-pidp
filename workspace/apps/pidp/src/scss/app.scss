@@ -70,3 +70,7 @@
 // Vendors is used to include customized vendor styles into the
 // application.
 @import './vendors/vendors';
+
+* {
+  scroll-margin-top: 43px;
+}
