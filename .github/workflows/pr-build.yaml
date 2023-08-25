@@ -33,14 +33,14 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  
+
   build-and-deploy-frontend:
     name: Frontend Build and Deploy
     runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: "./workspace"
-    
+
     permissions:
       contents: read
       id-token: write
@@ -50,10 +50,10 @@ jobs:
         uses: actions/checkout@master
 
       - name: Use Node.js 16.x
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: 16.x
-      
+
       - name: YARN Install
         run: |
           yarn install
@@ -63,7 +63,7 @@ jobs:
           yarn build
 
 
-      - name: Get pr number from GH cli command (pushing to pr) 
+      - name: Get pr number from GH cli command (pushing to pr)
         if: ${{ github.event.number == ''}}
 
         run: echo "pr_number=$(gh pr view --json number -q .number || echo "")" >> "$GITHUB_ENV"
@@ -72,7 +72,7 @@ jobs:
 
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-  
+
       - name: Get pr number from github.event.number (opening a pr)
         if: ${{ github.event.number != ''}}
 
@@ -99,7 +99,7 @@ jobs:
         run: |
           docker push image-registry.apps.silver.devops.gov.bc.ca/d8a8f9-tools/pidp-frontend:pr-${{ env.pr_number }}
 
-     
+
   build-and-deploy-plr-intake:
     name: PLR Intake Backend Build and Deploy
     runs-on: ubuntu-latest
@@ -109,7 +109,7 @@ jobs:
     permissions:
       contents: read
       id-token: write
-    
+
     steps:
       - name: "Checkout Code"
         uses: actions/checkout@master
@@ -124,7 +124,7 @@ jobs:
 
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-  
+
       - name: Get pr number from github.event.number (opening a pr)
         if: ${{ github.event.number != ''}}
 
@@ -176,7 +176,7 @@ jobs:
 
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-  
+
       - name: Get pr number from github.event.number (opening a pr)
         if: ${{ github.event.number != ''}}
 
@@ -202,7 +202,7 @@ jobs:
       - name: "Push image"
         run: |
           docker push image-registry.apps.silver.devops.gov.bc.ca/d8a8f9-tools/pidp-webapi:pr-${{ env.pr_number }}
-  
+
   helm-deployment:
     needs: [build-and-deploy-webapi, build-and-deploy-plr-intake, build-and-deploy-frontend]
     runs-on: 'ubuntu-latest'
@@ -210,8 +210,8 @@ jobs:
       contents: read
       id-token: write
     steps:
-      - uses: actions/checkout@master 
-  
+      - uses: actions/checkout@master
+
       - name: Authenticate and set context
         uses: redhat-actions/oc-login@v1.1
         with:
@@ -227,7 +227,7 @@ jobs:
 
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-    
+
       - name: Get pr number from github.event.number (opening a pr)
         if: ${{ github.event.number != ''}}
 
@@ -236,12 +236,12 @@ jobs:
         env:
 
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  
-  
+
+
       - name: Helm Deploy / install command
         run: |
           echo current installed helm releases
           helm list --namespace d8a8f9-dev
-  
+
           echo installing helm chart...
           helm upgrade --install --wait --values ./deploy/pr_values.yaml --namespace d8a8f9-dev pr-${{ env.pr_number }} charts/pidp --debug --set global.image.tag=pr-${{ env.pr_number }}
