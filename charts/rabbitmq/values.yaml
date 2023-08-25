@@ -874,7 +874,7 @@ pdb:
 serviceAccount:
   ## @param serviceAccount.create Enable creation of ServiceAccount for RabbitMQ pods
   ##
-  create: true
+  create: false
   ## @param serviceAccount.name Name of the created serviceAccount
   ## If not set and create is true, a name is generated using the rabbitmq.fullname template
   ##
@@ -937,7 +937,7 @@ persistence:
   ## @param persistence.size PVC Storage Request for RabbitMQ data volume
   ## If you change this value, you might have to adjust `rabbitmq.diskFreeLimit` as well
   ##
-  size: 5Gi
+  size: 1Gi
   ## @param persistence.annotations Persistence annotations. Evaluated as a template
   ## Example:
   ## annotations:
