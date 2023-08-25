@@ -20,13 +20,15 @@ spec:
     spec:
       containers:
       - name: create-rabbitmq-vhost
-        image: "docker.io/bitnami/rabbitmq:3.11.9-debian-11-r1"
+        image: ghcr.io/bashbang/util:release
         imagePullPolicy: Always
         command:
           - /bin/bash
           - -c
           - >
-            tail -f /dev/null
+            echo "Create the pr-{{ $release }} vhost and grant permissions for the pidp user to use it." ;
+            curl --request PUT --user rabbitmq:rabbitmq --header 'content-type: application/json' --url http://rabbitmq:15672/api/vhosts/{{ $release }} --write-out "%{http_code}" &&
+            curl --request PUT --user rabbitmq:rabbitmq --header 'content-type: application/json' --url http://rabbitmq:15672/api/permissions/{{ $release }}/pidp -XPUT -d '{"configure":".*","write":".*","read":".*"}'
       restartPolicy: Never
   backoffLimit: 3
 {{- end }}
