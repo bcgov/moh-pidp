@@ -76,29 +76,6 @@ export class BcProviderApplicationFormState extends AbstractFormState<BcProvider
     return '';
   }
 
-  private isEqualToControlValue(otherControlName: string): ValidatorFn {
-    return (control: AbstractControl): ValidationErrors | null => {
-      if (!control.parent) {
-        return { isEqualToControlValue: true };
-      }
-      const thisValue = control.value;
-      if (!thisValue) {
-        return null;
-      }
-      const otherControl = control.parent.get(otherControlName);
-      const otherValue = otherControl?.value;
-      if (!otherValue) {
-        return { isEqualToControlValue: true };
-      }
-
-      const areEqual = thisValue === otherValue;
-      if (areEqual) {
-        return null;
-      }
-      return { isEqualToControlValue: true };
-    };
-  }
-
   // Password requirements as per Azure Active Directory
   // https://learn.microsoft.com/en-us/azure/active-directory/authentication/concept-sspr-policy
   private validateRequirementsPassword(): ValidatorFn {

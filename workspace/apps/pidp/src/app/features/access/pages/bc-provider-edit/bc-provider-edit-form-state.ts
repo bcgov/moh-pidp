@@ -7,7 +7,7 @@ import {
   Validators,
 } from '@angular/forms';
 
-import { AbstractFormState } from '@bcgov/shared/ui';
+import { AbstractFormState, FormGroupValidators } from '@bcgov/shared/ui';
 
 export interface BcProviderEditFormData {
   newPassword: string;
@@ -48,13 +48,15 @@ export class BcProviderEditFormState extends AbstractFormState<BcProviderEditFor
   }
 
   public buildForm(): void {
-    this.formInstance = this.fb.group({
-      newPassword: ['', [this.validateRequirementsPassword()]],
-      confirmPassword: [
-        '',
-        [Validators.required, this.isEqualToControlValue('newPassword')],
-      ],
-    });
+    this.formInstance = this.fb.group(
+      {
+        newPassword: ['', [this.validateRequirementsPassword()]],
+        confirmPassword: ['', [Validators.required]],
+      },
+      {
+        validators: FormGroupValidators.match('newPassword', 'confirmPassword'),
+      }
+    );
   }
 
   public getErrorMessage(): string {
@@ -75,29 +77,6 @@ export class BcProviderEditFormState extends AbstractFormState<BcProviderEditFor
       }
     }
     return '';
-  }
-
-  private isEqualToControlValue(otherControlName: string): ValidatorFn {
-    return (control: AbstractControl): ValidationErrors | null => {
-      if (!control.parent) {
-        return { isEqualToControlValue: true };
-      }
-      const thisValue = control.value;
-      if (!thisValue) {
-        return null;
-      }
-      const otherControl = control.parent.get(otherControlName);
-      const otherValue = otherControl?.value;
-      if (!otherValue) {
-        return { isEqualToControlValue: true };
-      }
-
-      const areEqual = thisValue === otherValue;
-      if (areEqual) {
-        return null;
-      }
-      return { isEqualToControlValue: true };
-    };
   }
 
   // Password requirements as per Azure Active Directory
