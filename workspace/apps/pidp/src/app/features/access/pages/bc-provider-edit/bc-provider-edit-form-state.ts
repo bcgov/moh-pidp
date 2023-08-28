@@ -80,7 +80,7 @@ export class BcProviderEditFormState extends AbstractFormState<BcProviderEditFor
   private isEqualToControlValue(otherControlName: string): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       if (!control.parent) {
-        return null;
+        return { isEqualToControlValue: true };
       }
       const thisValue = control.value;
       if (!thisValue) {
@@ -89,7 +89,7 @@ export class BcProviderEditFormState extends AbstractFormState<BcProviderEditFor
       const otherControl = control.parent.get(otherControlName);
       const otherValue = otherControl?.value;
       if (!otherValue) {
-        return null;
+        return { isEqualToControlValue: true };
       }
 
       const areEqual = thisValue === otherValue;
