@@ -71,6 +71,5 @@
 // application.
 @import './vendors/vendors';
 
-* {
-  scroll-margin-top: 43px;
-}
+// Global OneHealthID style
+@import './global.scss';
