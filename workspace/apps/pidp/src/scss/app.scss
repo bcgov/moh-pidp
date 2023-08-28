@@ -71,6 +71,5 @@
 // application.
 @import './vendors/vendors';
 
-* {
-  scroll-margin-top: 43px;
-}
+// Global PIdP style
+@import './global.scss';
