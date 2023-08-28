@@ -9,20 +9,15 @@ See [Installing Helm](https://helm.sh/docs/intro/install/)
 
 ### Create load definition secret 
 
-rabbitmqsecret.yaml file was created to add a user other than rabbitmq and quest to rabbitmq-management, and set the permission.
+rabbitmqsecret.yaml file was created to add a user other than rabbitmq and guest to rabbitmq-management, and set the permission.
 
 `oc create -f ./rabbitmqsecret.yaml`
 
 
 ### Install helm chart
 
-To install from `tgz`, use the regular helm install/upgrade command and specify the chart using local path.
-You will need to supply the correct values file for your environemtn.
 
-
-`helm install rabbitmq .\rabbitmq-11.10.0.tgz --values .\rabbitmq-values.yaml`
-
-To install from remote repository , use helm install/upgrade command and specify the chart using url (bitnami website or docker hub) considering the version. You will need to supply the correct values file for your environemtn.
+To install abbitmq chart from remote repository , use the regular helm install/upgrade command and specify the chart using url (bitnami website or docker hub) and obsolete the downloaded version (e.g. 11.10.0). You will need to supply the correct values file for your environemtn (using local path).
 
 `helm install -f ./rabbitmq-values.yaml rabbitmq https://charts.bitnami.com/bitnami/rabbitmq-11.10.0.tgz`
 

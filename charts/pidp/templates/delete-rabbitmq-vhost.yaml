@@ -1,9 +1,5 @@
 {{- if hasPrefix "pr-" .Release.Name }}
 {{ $release := .Release.Name }}
-{{ $ocEnv := regexFind "([^-]*$)" .Release.Namespace }}
-{{ $isPR := hasPrefix "pr-" .Release.Name }}
-## Derived release name
-{{ $drn := ternary $release $ocEnv $isPR }}
 #
 apiVersion: batch/v1
 kind: Job

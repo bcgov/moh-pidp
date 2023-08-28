@@ -244,4 +244,4 @@ tolerations: []
 affinity: {}
 
 rabbitmq:
-  autoCreate: true
+  autoCreate: false
