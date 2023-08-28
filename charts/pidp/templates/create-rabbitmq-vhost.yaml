@@ -1,0 +1,32 @@
+{{- if .Values.rabbitmq.autoCreate }}
+{{ $release := .Release.Name }}
+{{ $ocEnv := regexFind "([^-]*$)" .Release.Namespace }}
+{{ $isPR := hasPrefix "pr-" .Release.Name }}
+#
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "pidp.fullname" . }}-createrabbitmqhost
+  annotations:
+    helm.sh/hook: pre-install
+    helm.sh/hook-weight: "-5"
+    helm.sh/hook-delete-policy: hook-succeeded
+  labels:
+    {{- include "pidp.labels" . | nindent 4 }}
+spec:
+  template:
+    spec:
+      containers:
+      - name: create-rabbitmq-vhost
+        image: ghcr.io/bashbang/util:release
+        imagePullPolicy: Always
+        command:
+          - /bin/bash
+          - -c
+          - >
+            echo "Create the pr-{{ $release }} vhost and grant permissions for the pidp user to use it." ;
+            curl --request PUT --user rabbitmq:rabbitmq --header 'content-type: application/json' --url http://rabbitmq:15672/api/vhosts/{{ $release }} --write-out "%{http_code}" &&
+            curl --request PUT --user rabbitmq:rabbitmq --header 'content-type: application/json' --url http://rabbitmq:15672/api/permissions/{{ $release }}/pidp -XPUT -d '{"configure":".*","write":".*","read":".*"}'
+      restartPolicy: Never
+  backoffLimit: 3
+{{- end }}

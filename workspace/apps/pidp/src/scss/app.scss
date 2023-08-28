@@ -71,7 +71,5 @@
 // application.
 @import './vendors/vendors';
 
-* {
-  // add a scroll margin top of the height of the header banner
-  scroll-margin-top: 49px; // mobile //67px;
-}
+// Global PIdP style
+@import './global.scss';

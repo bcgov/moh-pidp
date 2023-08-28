@@ -31,3 +31,6 @@ webapi:
 
 plr-intake:
   replicaCount: 1
+
+rabbitmq:
+  autoCreate: true

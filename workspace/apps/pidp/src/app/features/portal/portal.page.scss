@@ -65,7 +65,7 @@
 }
 
 .rostering-banner {
-  margin-bottom: 10px;
+  margin-bottom: var(--gap);
 
   & .mat-stroked-button {
     border: 1px solid #000;
