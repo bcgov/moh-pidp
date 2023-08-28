@@ -35,6 +35,7 @@ import {
 
 import {
   ConfirmDialogComponent,
+  CrossFieldErrorMatcher,
   DialogOptions,
   HtmlComponent,
 } from '@bcgov/shared/ui';
@@ -79,6 +80,7 @@ export class BcProviderApplicationComponent
   public username = '';
   public password = '';
   public showOverlayOnSubmit = false;
+  public errorMatcher = new CrossFieldErrorMatcher();
 
   public activeLayout: 'upliftAccount' | 'createAccount' | '';
 

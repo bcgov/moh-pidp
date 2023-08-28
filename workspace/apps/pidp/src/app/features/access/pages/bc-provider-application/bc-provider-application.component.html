@@ -245,8 +245,7 @@
             matInput
             formControlName="password"
             type="password"
-            aria-labelledby="bc-provider-application-password"
-            (keyup)="formState.confirmPassword.updateValueAndValidity()" />
+            aria-labelledby="bc-provider-application-password" />
           <mat-error>{{ formState.getErrorMessage() }}</mat-error>
         </mat-form-field>
       </div>
@@ -260,10 +259,10 @@
             formControlName="confirmPassword"
             type="password"
             aria-labelledby="bc-provider-application-confirm-password"
-            (keyup)="formState.password.updateValueAndValidity()" />
-          <mat-error *ngIf="formState.confirmPassword.invalid"
-            >Must match the password entered above</mat-error
-          >
+            [errorStateMatcher]="errorMatcher" />
+          <mat-error *ngIf="formState.form.hasError('nomatch')">
+            Must match the password entered above
+          </mat-error>
         </mat-form-field>
       </div>
       <div class="form-button-box">

@@ -7,7 +7,7 @@ import {
   Validators,
 } from '@angular/forms';
 
-import { AbstractFormState } from '@bcgov/shared/ui';
+import { AbstractFormState, FormGroupValidators } from '@bcgov/shared/ui';
 
 export interface BcProviderApplicationFormData {
   password: string;
@@ -47,13 +47,13 @@ export class BcProviderApplicationFormState extends AbstractFormState<BcProvider
   }
 
   public buildForm(): void {
-    this.formInstance = this.fb.group({
-      password: ['', [this.validateRequirementsPassword()]],
-      confirmPassword: [
-        '',
-        [Validators.required, this.isEqualToControlValue('password')],
-      ],
-    });
+    this.formInstance = this.fb.group(
+      {
+        password: ['', [this.validateRequirementsPassword()]],
+        confirmPassword: ['', [Validators.required]],
+      },
+      { validators: FormGroupValidators.match('password', 'confirmPassword') }
+    );
   }
 
   public getErrorMessage(): string {
