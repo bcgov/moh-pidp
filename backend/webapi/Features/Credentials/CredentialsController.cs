@@ -6,6 +6,7 @@ using HybridModelBinding;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
+using Pidp.Extensions;
 using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.Services;
 using Pidp.Models;
@@ -26,17 +27,17 @@ public class CredentialsController : PidpControllerBase
     public async Task<ActionResult<int>> CreateCredential([FromServices] ICommandHandler<Create.Command, IDomainResult<int>> handler,
                                                           [FromRoute] Create.Command command)
     {
-        var cookieValues = Cookies.CredentialLinkTicket.DecodeValues(this.Request.Cookies[Cookies.CredentialLinkTicket.Key]);
-        if (cookieValues == null)
+        var credentialLinkTicket = await this.AuthorizationService.VerifyTokenAsync<Cookies.CredentialLinkTicket.Values>(this.Request.Cookies.GetCredentialLinkTicket());
+        if (credentialLinkTicket == null)
         {
-            return this.BadRequest("A Credential Link Ticket is required to link accounts.");
+            return this.BadRequest("A valid Credential Link Ticket is required to link accounts.");
         }
-        if (cookieValues.PartyId != command.PartyId)
+        if (credentialLinkTicket.PartyId != command.PartyId)
         {
             return this.BadRequest("Party ID in cookie does not match route value.");
         }
 
-        command.CredentialLinkToken = cookieValues.CredentialLinkToken;
+        command.CredentialLinkToken = credentialLinkTicket.CredentialLinkToken;
         command.User = this.User;
 
         return await handler.HandleAsync(command)
@@ -86,7 +87,7 @@ public class CredentialsController : PidpControllerBase
         {
             this.Response.Cookies.Append(
                 Cookies.CredentialLinkTicket.Key,
-                Cookies.CredentialLinkTicket.EncodeValues(command.PartyId, result.Value.Token),
+                await this.AuthorizationService.SignTokenAsync(new Cookies.CredentialLinkTicket.Values(command.PartyId, result.Value.Token)),
                 new CookieOptions
                 {
                     Expires = result.Value.ExpiresAt.ToDateTimeOffset(),

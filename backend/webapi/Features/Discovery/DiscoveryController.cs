@@ -29,8 +29,7 @@ public class DiscoveryController : PidpControllerBase
             return result.ToActionResultOfT();
         }
 
-        // TODO: make an extension method for this pattern
-        var credentialLinkTicket = Cookies.CredentialLinkTicket.DecodeValues(this.Request.Cookies[Cookies.CredentialLinkTicket.Key]);
+        var credentialLinkTicket = await this.AuthorizationService.VerifyTokenAsync<Cookies.CredentialLinkTicket.Values>(this.Request.Cookies.GetCredentialLinkTicket());
         if (credentialLinkTicket != null)
         {
             return this.RedirectToActionPreserveMethod
