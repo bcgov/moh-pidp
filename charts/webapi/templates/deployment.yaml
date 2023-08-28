@@ -62,8 +62,8 @@ spec:
               value: http://{{ $release }}-plr-intake:8080/api
             - name: ASPNETCORE_ENVIRONMENT
               value: {{ .Values.aspnetcore.environment }}
-            - name: ReleaseName:
-              value: {{ $release }}
+            - name: RabbitMQ__hostAddress:
+              value: rabbitmq://pidp:password@rabbitmq:5672/{{ $release }}
             - name: DB_HOST
               valueFrom:
                 configMapKeyRef:
