@@ -1,0 +1,6 @@
+@use 'pidp-variables' as pidp;
+
+* {
+  // add a scroll margin top of the height of the header banner
+  scroll-margin-top: pidp.$header-height;
+}
