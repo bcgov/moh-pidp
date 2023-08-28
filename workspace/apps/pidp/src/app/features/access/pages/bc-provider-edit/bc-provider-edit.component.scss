@@ -11,12 +11,22 @@
   --gap: 1.25rem;
   --font-size: 1rem;
 }
+
+.viewport-xsmall {
+  .form-button-box {
+    & button {
+      margin-top: 20px;
+    }
+  }
+}
+
 .viewport-all {
   --header-margin: unset;
   --avatar-size: 4rem;
   --content-padding: var(--gap);
   --password-splash-display: none;
 }
+
 .viewport-medium,
 .viewport-large {
   --header-margin: var(--gap) 0 0;

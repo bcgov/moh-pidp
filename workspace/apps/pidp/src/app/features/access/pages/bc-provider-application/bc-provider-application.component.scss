@@ -55,6 +55,12 @@ ol {
 .viewport-xsmall {
   --gap: 2rem;
   --font-size: 1rem;
+
+  .form-button-box {
+    & button {
+      margin-top: 20px;
+    }
+  }
 }
 
 .viewport-all {
