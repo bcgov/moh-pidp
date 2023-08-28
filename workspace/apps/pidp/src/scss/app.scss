@@ -72,5 +72,6 @@
 @import './vendors/vendors';
 
 * {
-  scroll-margin-top: 43px;
+  // add a scroll margin top of the height of the header banner
+  scroll-margin-top: 49px; // mobile //67px;
 }
