@@ -116,27 +116,9 @@ export class BcProviderApplicationComponent
     this.navigationService.navigateToRoot();
   }
 
-  public hasPasswordRuleError(): boolean {
-    return this.formState.password.hasError('invalidRequirements');
-  }
-
   public onSuccessDialogClose(): void {
     this.dialog.closeAll();
     this.navigationService.navigateToRoot();
-  }
-
-  public ngOnInit(): void {
-    const partyId = this.partyService.partyId;
-
-    if (!partyId) {
-      this.logger.error('No party ID was provided');
-      return this.navigationService.navigateToRoot();
-    }
-
-    if (this.completed === null) {
-      this.logger.error('No status code was provided');
-      return this.navigationService.navigateToRoot();
-    }
   }
 
   public onUplift(): void {
@@ -160,6 +142,20 @@ export class BcProviderApplicationComponent
       this.utilsService.scrollToAnchorWithDelay(activeLayout);
     } else {
       this.activeLayout = '';
+    }
+  }
+
+  public ngOnInit(): void {
+    const partyId = this.partyService.partyId;
+
+    if (!partyId) {
+      this.logger.error('No party ID was provided');
+      return this.navigationService.navigateToRoot();
+    }
+
+    if (this.completed === null) {
+      this.logger.error('No status code was provided');
+      return this.navigationService.navigateToRoot();
     }
   }
 
