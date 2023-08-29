@@ -15,7 +15,7 @@ public class PidpControllerBase : ControllerBase
         {
             public const string Key = "credential-link-ticket";
 
-            public record Values(int PartyId, Guid CredentialLinkToken);
+            public record Values(Guid CredentialLinkToken);
         }
     }
 

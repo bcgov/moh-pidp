@@ -20,27 +20,19 @@ public class CredentialsController : PidpControllerBase
     /// <summary>
     /// Directly creating a new Credential on an existing Party requires a valid CredentialLinkTicket and associated cookie to link the Accounts.
     /// </summary>
-    [HttpPost]
+    [HttpPost("api/[controller]")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<int>> CreateCredential([FromServices] ICommandHandler<Create.Command, IDomainResult<int>> handler,
-                                                          [FromRoute] Create.Command command)
+    public async Task<ActionResult<int>> CreateCredential([FromServices] ICommandHandler<Create.Command, IDomainResult<int>> handler)
     {
         var credentialLinkTicket = await this.AuthorizationService.VerifyTokenAsync<Cookies.CredentialLinkTicket.Values>(this.Request.Cookies.GetCredentialLinkTicket());
         if (credentialLinkTicket == null)
         {
             return this.BadRequest("A valid Credential Link Ticket is required to link accounts.");
         }
-        if (credentialLinkTicket.PartyId != command.PartyId)
-        {
-            return this.BadRequest("Party ID in cookie does not match route value.");
-        }
 
-        command.CredentialLinkToken = credentialLinkTicket.CredentialLinkToken;
-        command.User = this.User;
-
-        return await handler.HandleAsync(command)
+        return await handler.HandleAsync(new Create.Command { CredentialLinkToken = credentialLinkTicket.CredentialLinkToken, User = this.User })
             .ToActionResultOfT();
     }
 
@@ -87,7 +79,7 @@ public class CredentialsController : PidpControllerBase
         {
             this.Response.Cookies.Append(
                 Cookies.CredentialLinkTicket.Key,
-                await this.AuthorizationService.SignTokenAsync(new Cookies.CredentialLinkTicket.Values(command.PartyId, result.Value.Token)),
+                await this.AuthorizationService.SignTokenAsync(new Cookies.CredentialLinkTicket.Values(result.Value.Token)),
                 new CookieOptions
                 {
                     Expires = result.Value.ExpiresAt.ToDateTimeOffset(),

@@ -35,8 +35,7 @@ public class DiscoveryController : PidpControllerBase
             return this.RedirectToActionPreserveMethod
             (
                 nameof(CredentialsController.CreateCredential),
-                nameof(CredentialsController).Replace("Controller", ""),
-                new { credentialLinkTicket.PartyId }
+                nameof(CredentialsController).Replace("Controller", "")
             );
         }
 
