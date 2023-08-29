@@ -205,15 +205,17 @@ export class BcProviderApplicationComponent
   }
 
   private uplift(): Observable<void | null> {
+    this.loadingOverlayService.open(LOADING_OVERLAY_DEFAULT_MESSAGE);
     return this.resource.createLinkTicket(this.partyService.partyId).pipe(
-      switchMap(() =>
-        this.authService.logout(
+      switchMap(() => {
+        this.loadingOverlayService.close();
+        return this.authService.logout(
           `${
             this.config.applicationUrl +
             AuthRoutes.routePath(AuthRoutes.AUTO_LOGIN)
           }?idp_hint=${IdentityProvider.BC_PROVIDER}`
-        )
-      ),
+        );
+      }),
       catchError(() => {
         // TODO: what to do on error?
         this.logger.error('Link Request creation failed');
