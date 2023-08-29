@@ -1,4 +1,4 @@
-# Provider Identity Portal (PIDP)
+# Provider Identity Portal (PIDP) / Rebranded as OneHealthID Service
 
 ## Table of Contents
 
