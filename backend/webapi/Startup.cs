@@ -20,7 +20,7 @@ using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.HttpClients;
 using Pidp.Infrastructure.Services;
 using MassTransit;
-using static Pidp.Features.Parties.Demographics;
+using Pidp.Infrastructure.Queue;
 
 public class Startup
 {
@@ -37,6 +37,7 @@ public class Startup
             .AddHostedService<PlrStatusUpdateSchedulingService>()
             .AddHttpClients(config)
             .AddKeycloakAuth(config)
+            .AddRabbitMQ(config)
             .AddMediatR(opt => opt.RegisterServicesFromAssemblyContaining<Startup>())
             .AddScoped<IEmailService, EmailService>()
             .AddScoped<IPidpAuthorizationService, PidpAuthorizationService>()
@@ -77,8 +78,6 @@ public class Startup
             options.CustomSchemaIds(x => x.FullName);
         });
         services.AddFluentValidationRulesToSwagger();
-
-        ConfigureMassTransit(services, config);
     }
 
     private PidpConfiguration InitializeConfiguration(IServiceCollection services)
@@ -120,40 +119,6 @@ public class Startup
         {
             endpoints.MapControllers();
             endpoints.MapHealthChecks("/health/liveness").AllowAnonymous();
-        });
-    }
-
-    private static void ConfigureMassTransit(IServiceCollection services, PidpConfiguration config)
-    {
-        services.AddMassTransit(x =>
-        {
-            x.SetKebabCaseEndpointNameFormatter();
-
-            x.AddConsumer<PartyEmailUpdatedKeycloakConsumer>();
-            x.AddConsumer<PartyEmailUpdatedBcProviderConsumer>();
-
-            x.UsingRabbitMq((context, cfg) =>
-            {
-                cfg.Host(new Uri(config.RabbitMQ.HostAddress));
-
-                // retry policy
-                cfg.UseMessageRetry(r => r.Incremental(5, TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(30)));
-                cfg.UseInMemoryOutbox();
-
-                cfg.ReceiveEndpoint("party-email-updated-keycloak-queue", ep =>
-                {
-                    ep.PublishFaults = false;
-                    ep.Bind("party-email-updated");
-                    ep.ConfigureConsumer<PartyEmailUpdatedKeycloakConsumer>(context);
-                });
-
-                cfg.ReceiveEndpoint("party-email-updated-bc-provider-queue", ep =>
-                {
-                    ep.PublishFaults = false;
-                    ep.Bind("party-email-updated");
-                    ep.ConfigureConsumer<PartyEmailUpdatedBcProviderConsumer>(context);
-                });
-            });
         });
     }
 }
