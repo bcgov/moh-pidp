@@ -20,7 +20,7 @@ public class CredentialsController : PidpControllerBase
     /// <summary>
     /// Directly creating a new Credential on an existing Party requires a valid CredentialLinkTicket and associated cookie to link the Accounts.
     /// </summary>
-    [HttpPost("api/[controller]")]
+    [HttpPost("/api/[controller]")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
