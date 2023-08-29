@@ -3,23 +3,11 @@ name: Build All - PR
 on:
   workflow_dispatch:
   push:
-    # paths:
-      # - "workspace/**"
-      # - "backend/services.plr-intake/**"
-      # - "backend/services.plr-intake.tests/**"
-      # - "backend/webapi/**"
-      # - "backend/webapi.tests/**"
     branches-ignore:
     - 'develop'
     - 'test'
     - 'main'
   pull_request:
-    # paths:
-    #   - "workspace/**"
-    #   - "backend/services.plr-intake/**"
-    #   - "backend/services.plr-intake.tests/**"
-    #   - "backend/webapi/**"
-    #   - "backend/webapi.tests/**"
     branches-ignore:
     - 'develop'
     - 'test'
@@ -28,14 +16,46 @@ on:
 permissions: read-all
 
 # This will terminate builds that are previously, but continuing to run.  Saves GHA hours.
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+# TODO: This will cause future pr problems. It's an edge case. Need to be discussed
+# If this is the first time a workflow occurs there's some init actions within the helm chart (eg: init a DB and init a rabbitmq)
+# If a PR is submitted immediatly after the createion of a PR the creation PR will be cancled and the init functions triggered by it will be termintated (or never run).
+# concurrency:
+#   group: ${{ github.workflow }}-${{ github.ref }}
+#   cancel-in-progress: true
 
 jobs:
 
+  paths-tests:
+    # This job is designed to look for changes in specific folders which will be used by future jobs to determin if they should be executed or skipped.
+    name: Check for Changes
+    runs-on: ubuntu-latest
+    outputs:
+      frontend: ${{ steps.filter.outputs.frontend}}
+      plrintake: ${{ steps.filter.outputs.plrintake}}
+      webapi: ${{ steps.filter.outputs.webapi}}
+      helmdeployment: ${{ steps.filter.outputs.helmdeployment}}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: dorny/paths-filter@v2
+        id: filter
+        with:
+          filters: |
+            frontend:
+              - './workspace/**'
+            plrintake:
+              - './backend/services.plr-intake/**'
+              - './backend/services.plr-intake.tests/**'
+            webapi:
+              - './backend/webapi/**'
+              - './backend/webapi/tests/**'
+            helmdeployment:
+              - './charts/**'
+              - './deploy/**'
+
   build-and-deploy-frontend:
     name: Frontend Build and Deploy
+    needs: [paths-tests]
+    if: ${{ needs.paths-tests.outputs.frontend == 'true' }}
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -104,6 +124,8 @@ jobs:
 
   build-and-deploy-plr-intake:
     name: PLR Intake Backend Build and Deploy
+    needs: [paths-tests]
+    if: ${{ needs.paths-tests.outputs.plrintake == 'true' }}
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -156,6 +178,8 @@ jobs:
 
   build-and-deploy-webapi:
     name: WebAPI Backend Build and Deploy
+    needs: [paths-tests]
+    if: ${{ needs.paths-tests.outputs.webapi == 'true' }}
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -205,8 +229,11 @@ jobs:
         run: |
           docker push image-registry.apps.silver.devops.gov.bc.ca/d8a8f9-tools/pidp-webapi:pr-${{ env.pr_number }}
 
+
   helm-deployment:
-    needs: [build-and-deploy-webapi, build-and-deploy-plr-intake, build-and-deploy-frontend]
+    name: Helm Deployment
+    needs: [build-and-deploy-webapi, build-and-deploy-plr-intake, build-and-deploy-frontend, paths-tests]
+    if: ${{ needs.paths-tests.outputs.helmdeployment == 'true' }}
     runs-on: 'ubuntu-latest'
     permissions:
       contents: read
