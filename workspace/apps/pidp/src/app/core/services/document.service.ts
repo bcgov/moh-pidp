@@ -139,10 +139,9 @@ export class DocumentService {
     `;
   }
 
-  public getLogoutLoginBCProviderNotice(): string {
+  public getRedirectingToSignInNotice(): string {
     return `
-    You will be logged out and redirected to the Microsoft BC provider login page.<br />
-    Do you want to continue?
+    We're taking you to your organization's sign-in page.
     `;
   }
 

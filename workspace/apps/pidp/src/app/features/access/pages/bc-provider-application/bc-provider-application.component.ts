@@ -125,10 +125,10 @@ export class BcProviderApplicationComponent
 
   public onUplift(): void {
     const data: DialogOptions = {
-      title: 'BC Provider login Notice',
+      title: 'Redirecting',
       component: HtmlComponent,
       data: {
-        content: this.documentService.getLogoutLoginBCProviderNotice(),
+        content: this.documentService.getRedirectingToSignInNotice(),
       },
     };
     this.dialog
