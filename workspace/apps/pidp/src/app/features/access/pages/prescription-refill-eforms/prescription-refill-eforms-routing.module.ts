@@ -12,7 +12,7 @@ const routes: Routes = [
       prescriptionRefillEformsStatusCode: PrescriptionRefillEformsResolver,
     },
     data: {
-      title: 'Provider Identity Portal',
+      title: 'OneHealthID Service',
       routes: {
         root: '../../',
       },
