@@ -63,7 +63,7 @@ spec:
             - name: ASPNETCORE_ENVIRONMENT
               value: {{ .Values.aspnetcore.environment }}
             - name: RabbitMQ__hostAddress
-              value: {{ .Values.rabbitmq.host }}
+              value: {{ .Values.rabbitmq.host }}{{ $release }}
             - name: DB_HOST
               valueFrom:
                 configMapKeyRef:
