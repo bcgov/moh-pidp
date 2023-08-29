@@ -30,6 +30,10 @@ jobs:
     name: Check for Changes
     runs-on: ubuntu-latest
     outputs:
+
+if: github.event_name != 'pull_request'
+
+
       frontend: ${{ steps.filter.outputs.frontend}}
       plrintake: ${{ steps.filter.outputs.plrintake}}
       webapi: ${{ steps.filter.outputs.webapi}}
@@ -55,7 +59,7 @@ jobs:
   build-and-deploy-frontend:
     name: Frontend Build and Deploy
     needs: [paths-tests]
-    if: ${{ needs.paths-tests.outputs.frontend == 'true' }}
+    if: github.event_name != 'pull_request' && needs.paths-tests.outputs.frontend == 'true'
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -125,7 +129,7 @@ jobs:
   build-and-deploy-plr-intake:
     name: PLR Intake Backend Build and Deploy
     needs: [paths-tests]
-    if: ${{ needs.paths-tests.outputs.plrintake == 'true' }}
+    if: github.event_name != 'pull_request' && needs.paths-tests.outputs.plrintake == 'true'
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -179,7 +183,7 @@ jobs:
   build-and-deploy-webapi:
     name: WebAPI Backend Build and Deploy
     needs: [paths-tests]
-    if: ${{ needs.paths-tests.outputs.webapi == 'true' }}
+    if: github.event_name != 'pull_request' && needs.paths-tests.outputs.webapi == 'true'
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -233,7 +237,7 @@ jobs:
   helm-deployment:
     name: Helm Deployment
     needs: [build-and-deploy-webapi, build-and-deploy-plr-intake, build-and-deploy-frontend, paths-tests]
-    if: ${{ needs.paths-tests.outputs.helmdeployment == 'true' }}
+    if: github.event_name != 'pull_request' && needs.paths-tests.outputs.helmdeployment == 'true'
     runs-on: 'ubuntu-latest'
     permissions:
       contents: read
