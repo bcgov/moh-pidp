@@ -38,7 +38,7 @@ export class AdminDashboardComponent implements IDashboard {
     this.headerConfig = { theme: 'dark', allowMobileToggle: false };
     this.brandConfig = {
       imgSrc: '/assets/images/pidp-logo-white.svg',
-      imgAlt: 'Provider Identity Portal Logo',
+      imgAlt: 'OneHealthID Service Logo',
     };
     this.showMenuItemIcons = true;
     this.responsiveMenuItems = true;

@@ -11,7 +11,7 @@ const routes: Routes = [
     component: CollegeLicenceInformationPage,
     canActivate: [SetDashboardTitleGuard],
     data: {
-      title: 'Provider Identity Portal',
+      title: 'OneHealthID Service',
       routes: {
         root: '../../',
       },

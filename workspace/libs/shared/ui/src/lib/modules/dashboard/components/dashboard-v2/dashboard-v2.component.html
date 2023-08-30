@@ -23,7 +23,7 @@
     <div class="header-bar-left"></div>
     <div class="content">
       <mat-sidenav-container class="sidenav-container">
-        <mat-sidenav #sidenav [mode]="sidenavMode" [opened]="isSidenavOpened">
+        <mat-sidenav #sidenav [mode]="sidenavMode" [(opened)]="isSidenavOpened">
           <div class="sidenav-header-box"></div>
           <div class="sidenav-body-box">
             <ng-container *ngTemplateOutlet="menu"></ng-container>
@@ -50,14 +50,14 @@
           {{ dashboardState.titleDescriptionText }}
         </p>
       </div>
-      <div *ngIf="isHeaderImageVisible" class="header-image-container">
+      <!-- <div *ngIf="isHeaderImageVisible" class="header-image-container">
         <img
           src="/assets/images/pidp-logo-white.svg"
           title="PIDP Logo"
           loading="lazy"
           aria-label="PIDP Logo"
           aria-hidden="true" />
-      </div>
+      </div> -->
     </header>
   </ng-template>
 
@@ -82,6 +82,7 @@
             [routerLink]="getRouterLink(menuItem)"
             [routerLinkActiveOptions]="getRouterLinkActiveOptions(menuItem)"
             [fragment]="getRouterLinkFragment(menuItem)"
+            (click)="onMenuItemClicked()"
             >{{ menuItem.label }}
           </a>
           <a

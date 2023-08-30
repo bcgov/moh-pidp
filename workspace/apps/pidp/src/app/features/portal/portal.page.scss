@@ -38,6 +38,7 @@
 
     & p {
       padding-left: calc(var(--gap) * 2);
+      padding-right: calc(var(--gap) * 2);
     }
 
     & .carousel-box {
@@ -48,8 +49,23 @@
   }
 }
 
+.viewport-xsmall {
+  & header {
+    & h2 {
+      padding: calc(var(--gap) / 2) var(--gap);
+    }
+  }
+
+  & .section-content-box {
+    & p {
+      padding-left: var(--gap);
+      padding-right: var(--gap);
+    }
+  }
+}
+
 .rostering-banner {
-  margin-bottom: 10px;
+  margin-bottom: var(--gap);
 
   & .mat-stroked-button {
     border: 1px solid #000;

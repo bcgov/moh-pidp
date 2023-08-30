@@ -75,11 +75,11 @@ public class Create
             var email = new Email(
                 from: EmailService.PidpEmail,
                 to: recipientEmail,
-                subject: "You Have Received an Endorsement Request in PIdP",
+                subject: "You Have Received an Endorsement Request in OneHealthID Service",
                 body: $@"Hello,
 <br>You are receiving this email because a user requested an endorsement from you.
 <br>
-<br>To complete the endorsement process, use {link} to log into the Provider Identity Portal with your BC Services Card.
+<br>To complete the endorsement process, use {link} to log into the OneHealthID Service with your BC Services Card.
 <br>
 <br>After logging in, please:
 <br>&emsp;1. Complete the “Contact Information” tile.
@@ -88,7 +88,7 @@ public class Create
 <br>
 <br>For additional support, contact the OneHealthID Service desk:
 <br>
-<br>&emsp;• By email at AMSSPOC.vic@CGI.com
+<br>&emsp;• By email at provideridentityportal@gov.bc.ca
 <br>
 <br>&emsp;• By phone at 250-857-1969
 <br>

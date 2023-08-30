@@ -76,7 +76,7 @@ ingress:
   #    hosts:
   #      - chart-example.local
 
-resources: 
+resources:
   limits:
     cpu: 100m
     memory: 128Mi
@@ -96,3 +96,6 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
+rabbitmq:
+  host: rabbitmq://pidp:password@rabbitmq:5672/
