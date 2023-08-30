@@ -12,7 +12,7 @@ const routes: Routes = [
       hcimEnrolmentStatusCode: HcimEnrolmentResolver,
     },
     data: {
-      title: 'Provider Identity Portal',
+      title: 'OneHealthID Service',
       routes: {
         root: '../../',
       },

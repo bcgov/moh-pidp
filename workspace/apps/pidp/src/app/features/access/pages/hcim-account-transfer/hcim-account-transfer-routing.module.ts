@@ -15,7 +15,7 @@ const routes: Routes = [
       hcimAccountTransferStatusCode: HcimAccountTransferResolver,
     },
     data: {
-      title: 'Provider Identity Portal',
+      title: 'OneHealthID Service',
       routes: {
         root: '../../',
       },

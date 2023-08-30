@@ -14,7 +14,7 @@ const routes: Routes = [
     canActivate: [SetDashboardTitleGuard],
     canDeactivate: [CanDeactivateFormGuard],
     data: {
-      title: 'Provider Identity Portal',
+      title: 'OneHealthID Service',
       routes: {
         root: '../../',
       },

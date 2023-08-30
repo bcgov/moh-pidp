@@ -15,7 +15,7 @@ const routes: Routes = [
       saEformsStatusCode: SaEformsResolver,
     },
     data: {
-      title: 'Provider Identity Portal',
+      title: 'OneHealthID Service',
       routes: {
         root: '../../',
       },

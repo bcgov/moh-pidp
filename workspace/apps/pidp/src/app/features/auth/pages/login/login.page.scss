@@ -112,10 +112,6 @@ a {
       }
     }
     & .welcome-section {
-      & .pidp-branding {
-        display: flex;
-        justify-content: center;
-      }
       & h1.welcome-title {
         margin: 60px 25px;
         text-align: center;
@@ -256,10 +252,6 @@ a {
           & img {
             width: 250px;
           }
-        }
-        & .pidp-branding {
-          display: flex;
-          justify-content: center;
         }
         & h1.welcome-title {
           margin: 25px;

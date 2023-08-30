@@ -24,7 +24,7 @@ const routes: Routes = [
       {
         path: AdminRoutes.PARTIES,
         component: PartiesPage,
-        data: { title: 'Provider Identity Portal' },
+        data: { title: 'OneHealthID Service' },
       },
       {
         path: '',
