@@ -13,7 +13,6 @@ using Pidp.Extensions;
 using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.HttpClients.BCProvider;
 using Pidp.Models;
-using Pidp.Models.Lookups;
 using Pidp.Models.DomainEvents;
 
 public class Create
@@ -113,19 +112,36 @@ public class Create
 
         public async Task Handle(CredentialLinked notification, CancellationToken cancellationToken)
         {
-            // TODO: update AAD
-            // var bcProviderId = await this.context.Credentials
-            //     .Where(credential => credential.PartyId == notification.PartyId
-            //         && credential.IdentityProvider == IdentityProviders.BCProvider)
-            //     .Select(credential => credential.IdpId)
-            //     .SingleOrDefaultAsync(cancellationToken);
+            var credential = notification.Credential;
 
-            // if (string.IsNullOrEmpty(bcProviderId))
-            // {
-            //     return;
-            // }
+            if (credential.IdentityProvider != IdentityProviders.BCProvider
+                || string.IsNullOrWhiteSpace(credential.IdpId))
+            {
+                return;
+            }
 
+            var party = await this.context.Parties
+                .Where(party => party.Id == credential.PartyId)
+                .Select(party => new
+                {
+                    party.Cpn,
+                    party.Email,
+                    Hpdid = party.Credentials
+                        .Select(cred => cred.Hpdid)
+                        .Single(hpdid => hpdid != null)
+                })
+                .SingleAsync(cancellationToken);
 
+            var attributes = new BCProviderAttributes(this.bcProviderClientId)
+                .SetHpdid(party.Hpdid!)
+                .SetLoa(3)
+                .SetPidpEmail(party.Email!);
+            if (party.Cpn != null)
+            {
+                attributes.SetCpn(party.Cpn);
+            }
+
+            await this.bcProviderClient.UpdateAttributes(credential.IdpId, attributes.AsAdditionalData());
         }
     }
 }
