@@ -50,7 +50,7 @@ jobs:
         uses: actions/checkout@master
 
       - name: Use Node.js 16.x
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: 16.x
 
@@ -116,26 +116,17 @@ jobs:
       - name: "Checkout Code"
         uses: actions/checkout@master
 
-
       - name: Get pr number from GH cli command (pushing to pr)
         if: ${{ github.event.number == ''}}
-
         run: echo "pr_number=$(gh pr view --json number -q .number || echo "")" >> "$GITHUB_ENV"
-
         env:
-
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
 
       - name: Get pr number from github.event.number (opening a pr)
         if: ${{ github.event.number != ''}}
-
         run: echo "pr_number=${{ github.event.number }}" >> "$GITHUB_ENV"
-
         env:
-
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
 
       - name: "Docker Build"
         run: |
@@ -168,26 +159,18 @@ jobs:
       - name: "Checkout Code"
         uses: actions/checkout@master
 
-
       - name: Get pr number from GH cli command (pushing to pr)
         if: ${{ github.event.number == ''}}
-
         run: echo "pr_number=$(gh pr view --json number -q .number || echo "")" >> "$GITHUB_ENV"
-
         env:
-
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 
       - name: Get pr number from github.event.number (opening a pr)
         if: ${{ github.event.number != ''}}
-
         run: echo "pr_number=${{ github.event.number }}" >> "$GITHUB_ENV"
-
         env:
-
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
 
       - name: "Docker Build"
         run: |
@@ -222,23 +205,15 @@ jobs:
 
       - name: Get pr number from GH cli command (pushing to pr)
         if: ${{ github.event.number == ''}}
-
         run: echo "pr_number=$(gh pr view --json number -q .number || echo "")" >> "$GITHUB_ENV"
-
         env:
-
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
 
       - name: Get pr number from github.event.number (opening a pr)
         if: ${{ github.event.number != ''}}
-
         run: echo "pr_number=${{ github.event.number }}" >> "$GITHUB_ENV"
-
         env:
-
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
 
       - name: Helm Deploy / install command
         run: |
