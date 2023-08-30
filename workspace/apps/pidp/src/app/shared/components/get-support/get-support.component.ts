@@ -1,15 +1,15 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  Inject,
-  OnInit,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, Inject, OnInit } from '@angular/core';
+
+
 
 import { ArrayUtils } from '@bcgov/shared/utils';
+
+
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';
 import { PermissionsService } from '@app/modules/permissions/permissions.service';
 import { Role } from '@app/shared/enums/roles.enum';
+
 
 interface SupportProps {
   name: string;
@@ -46,7 +46,7 @@ export class GetSupportComponent implements OnInit {
   private setupSupport(): void {
     this.providedSupport = [
       {
-        name: 'Provider Identity Portal',
+        name: 'OneHealthID Service',
         email: this.config.emails.providerIdentitySupport,
       },
       {

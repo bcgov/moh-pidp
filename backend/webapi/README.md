@@ -1,4 +1,4 @@
-# Provider Identity Portal (PIdP) API
+# Provider Identity Portal (PIdP) API / Rebranded as OneHealthID Service
 
 ## Local Development Secrets
 
