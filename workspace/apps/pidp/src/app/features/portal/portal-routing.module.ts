@@ -11,9 +11,9 @@ const routes: Routes = [
     component: PortalPage,
     canActivate: [SetDashboardTitleGuard],
     data: {
-      title: 'Provider Identity Portal',
+      title: 'OneHealthID Service',
       setDashboardTitleGuard: {
-        titleText: 'Welcome to Provider Identity Portal',
+        titleText: 'Welcome to OneHealthID Service',
         titleDescriptionText:
           'Complete your profile to gain access to the systems you are eligible for',
       },

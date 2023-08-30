@@ -71,7 +71,7 @@ export class PortalDashboardComponent implements IDashboard, OnInit {
     this.headerConfig = { theme: 'light', allowMobileToggle: true };
     this.brandConfig = {
       imgSrc: '/assets/images/pidp-logo-white.svg',
-      imgAlt: 'Provider Identity Portal Logo',
+      imgAlt: 'OneHealthID Service Logo',
     };
     this.showMenuItemIcons = true;
     this.responsiveMenuItems = false;

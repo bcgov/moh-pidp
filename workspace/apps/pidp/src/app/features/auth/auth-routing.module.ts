@@ -34,7 +34,7 @@ const routes: Routes = [
     component: LoginPage,
     data: {
       loginPageData: {
-        title: 'Provider Identity Portal',
+        title: 'OneHealthID Service',
         isAdminLogin: true,
       },
       routes: {

@@ -8,7 +8,7 @@ const routes: Routes = [
     path: '',
     component: SitePrivacySecurityChecklistPage,
     data: {
-      title: 'Provider Identity Portal',
+      title: 'OneHealthID Service',
       routes: {
         root: '../../',
       },
