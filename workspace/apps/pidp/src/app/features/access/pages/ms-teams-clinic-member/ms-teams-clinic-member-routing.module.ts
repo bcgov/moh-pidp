@@ -19,7 +19,7 @@ const routes: Routes = [
         titleText: 'MS Teams Clinic Member',
         titleDescriptionText: 'Stay connected with team members',
       },
-      title: 'Provider Identity Portal',
+      title: 'OneHealthID Service',
       routes: {
         root: '../../',
       },

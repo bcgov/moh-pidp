@@ -11,7 +11,7 @@ const routes: Routes = [
     component: ViewDocumentPage,
     canActivate: [SetDashboardTitleGuard],
     data: {
-      title: 'Provider Identity Portal',
+      title: 'OneHealthID Service',
       setDashboardTitleGuard: {
         titleText: '',
         titleDescriptionText: '',
