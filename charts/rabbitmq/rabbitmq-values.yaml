@@ -215,7 +215,7 @@ extraPlugins: ""
 clustering:
   ## @param clustering.enabled Enable RabbitMQ clustering
   ##
-  enabled: false
+  enabled: true
   ## @param clustering.addressType Switch clustering mode. Either `ip` or `hostname`
   ##
   addressType: hostname
@@ -318,7 +318,7 @@ extraContainerPorts: []
 ## @param configuration [string] RabbitMQ Configuration file content: required cluster configuration
 ## Do not override unless you know what you are doing.
 ## To add more configuration, use `extraConfiguration` of `advancedConfiguration` instead
-##
+##partitionHandling
 configuration: |-
   ## Username and password
   ##
@@ -524,7 +524,7 @@ extraSecretsPrependReleaseName: false
 
 ## @param replicaCount Number of RabbitMQ replicas to deploy
 ##
-replicaCount: 1
+replicaCount: 3
 ## @param schedulerName Use an alternate scheduler, e.g. "stork".
 ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
 ##
@@ -765,11 +765,11 @@ pdb:
 serviceAccount:
   ## @param serviceAccount.create Enable creation of ServiceAccount for RabbitMQ pods
   ##
-  create: false
+  create: true
   ## @param serviceAccount.name Name of the created serviceAccount
   ## If not set and create is true, a name is generated using the rabbitmq.fullname template
   ##
-  name: ""
+  name: "rabbitmq"
   ## @param serviceAccount.automountServiceAccountToken Auto-mount the service account token in the pod
   ##
   automountServiceAccountToken: true
@@ -785,7 +785,7 @@ rbac:
   ## binding RabbitMQ ServiceAccount to a role
   ## that allows RabbitMQ pods querying the K8s API
   ##
-  create: false
+  create: true
 
 ## @section Persistence parameters
 ##
@@ -828,7 +828,7 @@ persistence:
   ## @param persistence.size PVC Storage Request for RabbitMQ data volume
   ## If you change this value, you might have to adjust `rabbitmq.diskFreeLimit` as well
   ##
-  size: 5Gi
+  size: 1Gi
   ## @param persistence.annotations Persistence annotations. Evaluated as a template
   ## Example:
   ## annotations:
@@ -1285,17 +1285,15 @@ volumePermissions:
   ##
   resources:
     ## Example:
-    ## limits:
-    ##    cpu: 100m
-    ##    memory: 128Mi
-    ##
-    limits: {}
+    limits:
+       cpu: 300m
+       memory: 500Mi
+
     ## Examples:
-    ## requests:
-    ##    cpu: 100m
-    ##    memory: 128Mi
-    ##
-    requests: {}
+    requests:
+       cpu: 200m
+       memory: 250Mi
+
   ## Init container' Security Context
   ## Note: the chown of the data folder is done to containerSecurityContext.runAsUser
   ## and not the below volumePermissions.containerSecurityContext.runAsUser
