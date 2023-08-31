@@ -645,19 +645,17 @@ containerSecurityContext:
 ## @param resources.limits The resources limits for RabbitMQ containers
 ## @param resources.requests The requested resources for RabbitMQ containers
 ##
+
 resources:
-  ## Example:
-  ## limits:
-  ##    cpu: 1000m
-  ##    memory: 2Gi
-  ##
-  limits: {}
-  ## Examples:
-  ## requests:
-  ##    cpu: 1000m
-  ##    memory: 2Gi
-  ##
-  requests: {}
+    ## Example:
+    limits:
+      cpu: 300m
+      memory: 500Mi
+
+    ## Examples:
+    requests:
+      cpu: 200m
+      memory: 250Mi
 
 ## Configure RabbitMQ containers' extra options for liveness probe
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
