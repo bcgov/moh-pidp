@@ -12,6 +12,7 @@ using Pidp.Data;
 using Pidp.Extensions;
 using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.HttpClients.BCProvider;
+using Pidp.Infrastructure.HttpClients.Plr;
 using Pidp.Models;
 using Pidp.Models.DomainEvents;
 
@@ -97,15 +98,18 @@ public class Create
     public class CredentailLinkedHandler : INotificationHandler<CredentialLinked>
     {
         private readonly IBCProviderClient bcProviderClient;
+        private readonly IPlrClient plrClient;
         private readonly PidpDbContext context;
         private readonly string bcProviderClientId;
 
         public CredentailLinkedHandler(
             IBCProviderClient bcProviderClient,
+            IPlrClient plrClient,
             PidpConfiguration config,
             PidpDbContext context)
         {
             this.bcProviderClient = bcProviderClient;
+            this.plrClient = plrClient;
             this.context = context;
             this.bcProviderClientId = config.BCProviderClient.ClientId;
         }
@@ -140,6 +144,27 @@ public class Create
             {
                 attributes.SetCpn(party.Cpn);
             }
+
+            var plrStanding = await this.plrClient.GetStandingsDigestAsync(party.Cpn);
+
+            if (!plrStanding.HasGoodStanding)
+            {
+                var endorsementCpns = await this.context.ActiveEndorsementRelationships(credential.PartyId)
+                    .Select(relationship => relationship.Party!.Cpn)
+                    .ToListAsync(cancellationToken);
+                var endorsementPlrDigest = await this.plrClient.GetAggregateStandingsDigestAsync(endorsementCpns);
+
+                attributes
+                    .SetEndorserData(endorsementPlrDigest
+                        .WithGoodStanding()
+                        .With(IdentifierType.PhysiciansAndSurgeons, IdentifierType.Nurse, IdentifierType.Midwife)
+                        .Cpns)
+                    .SetIsMoa(endorsementPlrDigest.HasGoodStanding);
+            }
+
+            attributes
+                .SetIsRnp(plrStanding.With(ProviderRoleType.RegisteredNursePractitioner).HasGoodStanding)
+                .SetIsMd(plrStanding.With(ProviderRoleType.MedicalDoctor).HasGoodStanding);
 
             await this.bcProviderClient.UpdateAttributes(credential.IdpId, attributes.AsAdditionalData());
         }

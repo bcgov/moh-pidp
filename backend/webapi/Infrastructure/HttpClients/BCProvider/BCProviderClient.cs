@@ -73,9 +73,9 @@ public class BCProviderClient : IBCProviderClient
             this.logger.LogNewBCProviderUserCreated(createdUser?.UserPrincipalName!);
             return createdUser;
         }
-        catch
+        catch (Exception e)
         {
-            this.logger.LogAccountCreationFailure(userPrincipal);
+            this.logger.LogAccountCreationFailure(userPrincipal, e);
             return null;
         }
     }
@@ -197,7 +197,7 @@ public static partial class BCProviderClientLoggingExtensions
     public static partial void LogNewBCProviderUserCreated(this ILogger logger, string userPrincipalName);
 
     [LoggerMessage(2, LogLevel.Error, "Failed to create account '{userPrincipalName}'.")]
-    public static partial void LogAccountCreationFailure(this ILogger logger, string userPrincipalName);
+    public static partial void LogAccountCreationFailure(this ILogger logger, string userPrincipalName, Exception e);
 
     [LoggerMessage(4, LogLevel.Error, "Failed to update the password of user '{userPrincipalName}'.")]
     public static partial void LogPasswordUpdateFailure(this ILogger logger, string userPrincipalName);
