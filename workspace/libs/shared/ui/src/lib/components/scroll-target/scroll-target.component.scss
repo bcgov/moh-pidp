@@ -8,7 +8,7 @@
     //
     // NOTE: The offset applied is equal to the default spacing
     // that should be applied between containers.
-    top: -2rem;
+    top: calc(-1 * var(--gap));
     left: 0;
   }
 }

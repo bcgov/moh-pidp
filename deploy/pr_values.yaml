@@ -31,3 +31,7 @@ webapi:
 
 plr-intake:
   replicaCount: 1
+
+rabbitmq:
+  autoCreate: true
+  host: rabbitmq://pidp:password@rabbitmq:5672/

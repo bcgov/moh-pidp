@@ -12,7 +12,7 @@ const routes: Routes = [
       providerReportingPortalStatusCode: ProviderReportingPortalResolver,
     },
     data: {
-      title: 'Provider Identity Portal',
+      title: 'OneHealthID Service',
       routes: {
         root: '../../',
       },
