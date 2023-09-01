@@ -2,21 +2,26 @@ namespace Pidp.Infrastructure.HttpClients.BCProvider;
 
 using Microsoft.Graph;
 using Microsoft.Graph.Models;
+using Pidp.Infrastructure.HttpClients.Mail;
+using Pidp.Infrastructure.Services;
 using System.Text.RegularExpressions;
 
 public class BCProviderClient : IBCProviderClient
 {
     private readonly GraphServiceClient client;
+    private readonly IEmailService emailService;
     private readonly ILogger logger;
     private readonly string domain;
     private readonly string clientId;
 
     public BCProviderClient(
+        IEmailService emailService,
         GraphServiceClient client,
         ILogger<BCProviderClient> logger,
         PidpConfiguration config)
     {
         this.client = client;
+        this.emailService = emailService;
         this.logger = logger;
         this.domain = config.BCProviderClient.Domain;
         this.clientId = config.BCProviderClient.ClientId;
@@ -70,6 +75,7 @@ public class BCProviderClient : IBCProviderClient
         try
         {
             var createdUser = await this.client.Users.PostAsync(bcProviderAccount);
+            await this.SendBCProviderCreationEmail(userRepresentation.PidpEmail, userPrincipal);
             this.logger.LogNewBCProviderUserCreated(createdUser?.UserPrincipalName!);
             return createdUser;
         }
@@ -182,6 +188,18 @@ public class BCProviderClient : IBCProviderClient
             });
 
         return result > 0;
+    }
+
+    private async Task SendBCProviderCreationEmail(string partyEmail, string userPrincipalName)
+    {
+        var email = new Email(
+            from: EmailService.PidpEmail,
+            to: partyEmail,
+            subject: "BCProvider Account Creation in Confirmation",
+            body: $"You have successfully created a BCProvider account in OneHealthID Service. For your reference, your BCProvider username is {userPrincipalName}. You may now login to OneHealthID Service and access the BCProvider card to update your BCProvider password."
+        );
+
+        await this.emailService.SendAsync(email);
     }
 
     private static string GetQueryParametersFilter(string userPrincipalName)
