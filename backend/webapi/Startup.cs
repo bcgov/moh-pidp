@@ -19,6 +19,8 @@ using Pidp.Infrastructure;
 using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.HttpClients;
 using Pidp.Infrastructure.Services;
+using MassTransit;
+using Pidp.Infrastructure.Queue;
 
 public class Startup
 {
@@ -35,6 +37,7 @@ public class Startup
             .AddHostedService<PlrStatusUpdateSchedulingService>()
             .AddHttpClients(config)
             .AddKeycloakAuth(config)
+            .AddRabbitMQ(config)
             .AddMediatR(opt => opt.RegisterServicesFromAssemblyContaining<Startup>())
             .AddScoped<IEmailService, EmailService>()
             .AddScoped<IPidpAuthorizationService, PidpAuthorizationService>()
