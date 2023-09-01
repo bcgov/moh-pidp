@@ -1,4 +1,4 @@
-import { CommonModule, NgOptimizedImageModule } from '@angular/common';
+import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 
@@ -148,7 +148,7 @@ import { SafePipe } from './pipes/safe.pipe';
     // TODO: NgOptimizedImage is a backported version of the NgOptimizedImage directive present in Angular 15.
     // This module should be removed in Angular 15 in favor of the NgOptimizedImage directive.
     // NgOptimizedImage directive will have to be added in each component which uses "ngSrc" directive in their HTML template.
-    NgOptimizedImageModule,
+    // NgOptimizedImage,
   ],
 })
 export class SharedUiModule {}

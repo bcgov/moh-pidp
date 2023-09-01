@@ -1,0 +1,18 @@
+{
+  "migrations": [
+    {
+      "version": "14.0.0-0",
+      "description": "Updates the Angular Material to v14",
+      "factory": "./ng-update/index#updateToV14",
+      "package": "@angular/material",
+      "name": "migration-v14"
+    },
+    {
+      "version": "14.0.0-0",
+      "description": "Updates the Angular CDK to v14",
+      "factory": "./ng-update/index#updateToV14",
+      "package": "@angular/cdk",
+      "name": "migration-v14"
+    }
+  ]
+}
