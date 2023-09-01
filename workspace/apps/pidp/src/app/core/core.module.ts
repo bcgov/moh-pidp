@@ -1,6 +1,7 @@
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule, Optional, SkipSelf } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
+import { MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -21,6 +22,8 @@ const modules = [
   NgxProgressBarModule,
   // TODO only applied to allow for a few core services until moved
   ReactiveFormsModule,
+  // TODO only applied to allow for a few core services until moved
+  MatDialogModule,
   // TODO only applied to allow for a few core services until moved
   MatSnackBarModule,
   LookupModule.forRoot(),
