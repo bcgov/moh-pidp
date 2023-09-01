@@ -194,20 +194,14 @@ containerPorts:
 ## @param resources.requests The requested resources for the NGINX container
 ##
 resources:
+  ## Example:
   limits:
     cpu: 100m
     memory: 250Mi
+
   requests:
     cpu: 50m
-    memory: 128Mi
-
-  ## limits:
-  ##    cpu: 100m
-  ##    memory: 128Mi
- 
-  ## requests:
-  ##    cpu: 100m
-  ##    memory: 128Mi
+    memory: 100Mi
 ## NGINX containers' liveness probe.
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
 ## @param livenessProbe.enabled Enable livenessProbe
@@ -821,20 +815,12 @@ metrics:
   ##
   resources:
     ## Example:
-    ## limits:
-    ##    cpu: 100m
-    ##    memory: 128Mi
     limits:
       cpu: 100m
       memory: 250Mi
     requests:
       cpu: 50m
       memory: 100Mi
-
-    ## Examples:
-    ## requests:
-    ##    cpu: 100m
-    ##    memory: 128Mi
   ## Prometheus Operator ServiceMonitor configuration
   ##
   serviceMonitor:
