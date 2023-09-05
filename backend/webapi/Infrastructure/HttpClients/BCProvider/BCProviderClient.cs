@@ -195,7 +195,7 @@ public class BCProviderClient : IBCProviderClient
         var email = new Email(
             from: EmailService.PidpEmail,
             to: partyEmail,
-            subject: "BCProvider Account Creation in Confirmation",
+            subject: "BCProvider Account Creation in OneHealthID Confirmation",
             body: $"You have successfully created a BCProvider account in OneHealthID Service. For your reference, your BCProvider username is {userPrincipalName}. You may now login to OneHealthID Service and access the BCProvider card to update your BCProvider password."
         );
 
