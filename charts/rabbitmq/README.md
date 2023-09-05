@@ -25,7 +25,7 @@ in this deployment, the Clustering and Service Account are enabled in order to m
 
 ### Create router for rabbitmq-management console
 
-After installing RabbitMQ helm chart, manually create a new router in OCP for rabbitmq service with following config:
+After installing RabbitMQ helm chart, manually create a new route in OCP for rabbitmq service with following config:
 
 Path: /
 Target port: 15672
