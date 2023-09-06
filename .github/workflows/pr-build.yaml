@@ -38,13 +38,14 @@ jobs:
         name: Returns true if its not the initial push
         if: ${{ github.event.pull_request.number == ''}}
         run: |
-          echo "::set-output name=initial_push::false"
+          echo "initial_push=false" >> $GITHUB_OUTPUT
 
 
   build-and-deploy-frontend:
     name: Frontend Build and Deploy
     runs-on: ubuntu-latest
-    
+    needs: get-pr-number
+    if: ${{ always() && !cancelled() && needs.get-pr-number.outputs.initial_push == 'false' }}
     defaults:
       run:
         working-directory: "./workspace"
