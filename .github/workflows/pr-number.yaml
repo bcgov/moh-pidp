@@ -1,0 +1,77 @@
+name: Get PR Number
+
+on:
+  workflow_dispatch:
+  push:
+    # paths:
+      # - "workspace/**"
+      # - "backend/services.plr-intake/**"
+      # - "backend/services.plr-intake.tests/**"
+      # - "backend/webapi/**"
+      # - "backend/webapi.tests/**"
+    branches-ignore:
+    - 'develop'
+    - 'test'
+    - 'main'
+  pull_request:
+    # paths:
+    #   - "workspace/**"
+    #   - "backend/services.plr-intake/**"
+    #   - "backend/services.plr-intake.tests/**"
+    #   - "backend/webapi/**"
+    #   - "backend/webapi.tests/**"
+    branches-ignore:
+    - 'develop'
+    - 'test'
+    - 'main'
+
+permissions: read-all
+
+# This will terminate builds that are previously, but continuing to run.  Saves GHA hours.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+
+  build-and-deploy-frontend:
+    name: Frontend Build and Deploy
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: "./workspace"
+
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - name: "Checkout Code"
+        uses: actions/checkout@master
+
+      - name: Use Node.js 16.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.x
+
+
+
+      - name: Get pr number from github.event.number (opening a pr)
+        run: |
+          echo " github.event.number = ${{ github.event.number }}"
+          echo "pr_number=${{ github.event.number }}" >> "$GITHUB_ENV"
+          echo " pr_number = ${{ env.pr_number }}"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Get pr number from GH cli command (pushing to pr)
+        if: ${{ github.event.number == ''}}
+        # TODO: In some cases this action produces an incorrect pr number. eg: it results in 319 when the PR triggering the action is #324.
+        # TODO: This event has been triggered on an opening of a pr. both the "pushing on pr" and "opening a pr" needs to be further investigated. The if condition isn't always a valid test.
+        run: |
+          echo " github.event.number = ${{ github.event.number }}"
+          echo "pr_number=$(gh pr view --json number -q .number || echo "")" >> "$GITHUB_ENV"
+          echo " pr_number = ${{ env.pr_number }}"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
