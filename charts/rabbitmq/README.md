@@ -27,6 +27,7 @@ in this deployment, the Clustering and Service Account are enabled in order to m
 
 After installing RabbitMQ helm chart, manually create a new route in OCP for rabbitmq service with following config:
 
+Service: Rabbitmq
 Path: /
 Target port: 15672
 Security: Enabled
