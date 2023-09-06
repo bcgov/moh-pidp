@@ -32,20 +32,19 @@ jobs:
     if: github.event_name == 'push'
     runs-on: ubuntu-latest
     outputs:
-      initial_push: ${{ steps.step1.outputs.initial_push }}
+      initial_push: ${{ steps.step1.outputs.pr_number }}
     steps:
       - id: step1 
-        name: Returns true if its not the initial push
-        if: ${{ github.event.pull_request.number == ''}}
+        name: Returns empty if its the initial push
         run: |
-          echo "initial_push=false" >> $GITHUB_OUTPUT
+          echo "pr_number=$(gh pr view --json number -q .number || echo "")" >> $GITHUB_OUTPUT
 
 
   build-and-deploy-frontend:
     name: Frontend Build and Deploy
     runs-on: ubuntu-latest
     needs: get-pr-number
-    if: ${{ always() && !cancelled() && needs.get-pr-number.outputs.initial_push == 'false' }}
+    if: ${{ always() && !cancelled() && needs.get-pr-number.outputs.pr_number != '' }}
     defaults:
       run:
         working-directory: "./workspace"
