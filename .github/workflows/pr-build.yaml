@@ -33,8 +33,10 @@ jobs:
     defaults:
       run:
         working-directory: "./workspace"
+
     outputs:
       pr_number: ${{ steps.step1.outputs.pr_number }}
+
     steps:
       - name: "Checkout Code"
         uses: actions/checkout@master
@@ -45,6 +47,7 @@ jobs:
         run: echo "pr_number=$(gh pr view --json number -q .number || echo "")" >> "$GITHUB_OUTPUT"
         if: github.event_name == 'pull_request'
         run: echo "pr_number=${{ github.event.number }}" >> "$GITHUB_OUTPUT"
+
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -162,7 +165,6 @@ jobs:
       - name: "Push image"
         run: |
           docker push image-registry.apps.silver.devops.gov.bc.ca/d8a8f9-tools/pidp-plr-intake:pr-${{ env.pr_number }}
-
 
   build-and-deploy-webapi:
     name: WebAPI Backend Build and Deploy
