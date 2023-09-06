@@ -2,7 +2,7 @@
   routerLinkActive="ng-active"
   [routerLink]="routeMenuItem.commands"
   [routerLinkActiveOptions]="routeMenuItem.linkActiveOptions"
-  [fragment]="routeMenuItem.extras?.fragment"
+  [fragment]="routeMenuItem.extras.fragment"
   [class]="routeMenuItem.getOptions()"
   (click)="onRoute(routeMenuItem)">
   <ng-container
