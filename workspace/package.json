@@ -37,7 +37,7 @@
     "keycloak-js": "18.0.1",
     "luxon": "3.4.3",
     "ngx-mask": "14.2.4",
-    "ngx-progressbar": "^7.0.0",
+    "ngx-progressbar": "9.0.0",
     "rxjs": "~7.4.0",
     "swiper": "^9.1.0",
     "tslib": "^2.0.0",
