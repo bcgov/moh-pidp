@@ -29,11 +29,8 @@ concurrency:
 jobs:
 
   get-pr-number:
-    if: github.event_name == 'push'
+    if: ${{ github.event_name == 'push' }}
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: "./workspace"
     outputs:
       initial_push: ${{ steps.step1.outputs.pr_number }}
     steps:
