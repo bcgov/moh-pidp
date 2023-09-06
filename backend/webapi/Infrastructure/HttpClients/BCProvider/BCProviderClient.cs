@@ -2,7 +2,6 @@ namespace Pidp.Infrastructure.HttpClients.BCProvider;
 
 using Microsoft.Graph;
 using Microsoft.Graph.Models;
-using Pidp.Infrastructure.Services;
 using System.Text.RegularExpressions;
 
 public class BCProviderClient : IBCProviderClient
