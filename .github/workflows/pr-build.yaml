@@ -37,7 +37,7 @@ jobs:
       - id: step1 
         name: Returns empty if its the initial push
         run: |
-          echo "pr_number=$(gh pr view --json number -q .number || echo "")" >> $GITHUB_OUTPUT
+          echo "pr_number=$(gh pr view --json number -q .number || echo "")" >> "$GITHUB_OUTPUT"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
