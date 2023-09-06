@@ -38,6 +38,8 @@ jobs:
         name: Returns empty if its the initial push
         run: |
           echo "pr_number=$(gh pr view --json number -q .number || echo "")" >> $GITHUB_OUTPUT
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 
   build-and-deploy-frontend:
@@ -112,6 +114,8 @@ jobs:
 
   build-and-deploy-plr-intake:
     name: PLR Intake Backend Build and Deploy
+    needs: get-pr-number
+    if: ${{ always() && !cancelled() && needs.get-pr-number.outputs.pr_number != '' }}
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -155,6 +159,8 @@ jobs:
 
   build-and-deploy-webapi:
     name: WebAPI Backend Build and Deploy
+    needs: get-pr-number
+    if: ${{ always() && !cancelled() && needs.get-pr-number.outputs.pr_number != '' }}
     runs-on: ubuntu-latest
     defaults:
       run:
