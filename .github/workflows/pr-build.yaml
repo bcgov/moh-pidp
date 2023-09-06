@@ -68,7 +68,8 @@ jobs:
         # TODO: In some cases this action produces an incorrect pr number. eg: it results in 319 when the PR triggering the action is #324.
         # TODO: This event has been triggered on an opening of a pr. both the "pushing on pr" and "opening a pr" needs to be further investigated. The if condition isn't always a valid test.
         run: |
-          echo " github.event.number = ${{ github.event.number == ''}}"
+          echo " github.event.number = ${{ github.event.number }}"
+          echo " github.event.pull_request.number = ${{ github.event.pull_request.number }}"
           echo "pr_number=$(gh pr view --json number -q .number || echo "")" >> "$GITHUB_ENV"
           echo " pr_number = ${{ env.pr_number }}"
         env:
@@ -76,9 +77,9 @@ jobs:
 
 
       - name: Get pr number from github.event.number (opening a pr)
-        if: ${{ github.event.number != ''}}
+        if: ${{ github.event.number }}
         run: |
-          echo " github.event.number = ${{ github.event.number == ''}}"
+          echo " github.event.number = ${{ github.event.number }}"
           echo "pr_number=${{ github.event.number }}" >> "$GITHUB_ENV"
           echo " pr_number = ${{ env.pr_number }}"
         env:
