@@ -31,9 +31,20 @@ jobs:
   get-pr-number:
     if: ${{ github.event_name == 'push' }}
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: "./workspace"
     outputs:
       initial_push: ${{ steps.step1.outputs.pr_number }}
     steps:
+      - name: "Checkout Code"
+        uses: actions/checkout@master
+
+      - name: Use Node.js 16.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.x
+      
       - id: step1 
         name: Returns empty if its the initial push
         run: |
