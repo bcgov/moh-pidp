@@ -86,15 +86,9 @@ jobs:
           yarn build
 
 
-      - name: Get pr number from GH cli command (pushing to pr)
-        env:
-          :pr_number: ${{ needs.get-pr-number.outputs.pr_number }}
-
-
-
       - name: "Docker Build"
         run: |
-          docker build -t image-registry.apps.silver.devops.gov.bc.ca/d8a8f9-tools/pidp-frontend:pr-${{ env.pr_number }} .
+          docker build -t image-registry.apps.silver.devops.gov.bc.ca/d8a8f9-tools/pidp-frontend:pr- ${{ needs.get-pr-number.outputs.pr_number }} .
 
       # Uses the builder service account token
       - name: "Docker Login to Silver OCP"
@@ -106,7 +100,7 @@ jobs:
 
       - name: "Push image"
         run: |
-          docker push image-registry.apps.silver.devops.gov.bc.ca/d8a8f9-tools/pidp-frontend:pr-${{ env.pr_number }}
+          docker push image-registry.apps.silver.devops.gov.bc.ca/d8a8f9-tools/pidp-frontend:pr- ${{ needs.get-pr-number.outputs.pr_number }}
 
 
   build-and-deploy-plr-intake:
