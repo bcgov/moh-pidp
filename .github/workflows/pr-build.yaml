@@ -28,9 +28,23 @@ concurrency:
 
 jobs:
 
+  get-pr-number:
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    outputs:
+      initial_push: ${{ steps.step1.outputs.initial_push }}
+    steps:
+      - id: step1 
+        name: Returns true if its not the initial push
+        if: ${{ github.event.pull_request.number == ''}}
+        run: |
+          echo "::set-output name=initial_push::false"
+
+
   build-and-deploy-frontend:
     name: Frontend Build and Deploy
     runs-on: ubuntu-latest
+    
     defaults:
       run:
         working-directory: "./workspace"
