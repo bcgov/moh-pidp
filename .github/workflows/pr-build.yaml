@@ -29,7 +29,6 @@ concurrency:
 jobs:
 
   get-pr-number:
-    if: github.event_name == 'push'
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -42,8 +41,10 @@ jobs:
       
       - id: step1 
         name: Returns empty if its the initial push
-        run: |
-          echo "pr_number=$(gh pr view --json number -q .number || echo "")" >> "$GITHUB_OUTPUT"
+        if: github.event_name == 'push'
+        run: echo "pr_number=$(gh pr view --json number -q .number || echo "")" >> "$GITHUB_OUTPUT"
+        if: github.event_name == 'pull_request'
+        run: echo "pr_number=${{ github.event.number }}" >> "$GITHUB_OUTPUT"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
