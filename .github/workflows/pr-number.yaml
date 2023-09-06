@@ -59,7 +59,7 @@ jobs:
       - name: Get pr number from github.event.number (opening a pr)
         run: |
           echo " github.event.number = ${{ github.event.number }}"
-          echo "pr_number=${{ github.event.number }}" >> "$GITHUB_ENV"
+          echo "pr_number=$(echo "$GITHUB_REF" | awk -F / '{print $3}')" >> $GITHUB_ENV
           echo " pr_number = ${{ env.pr_number }}"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
