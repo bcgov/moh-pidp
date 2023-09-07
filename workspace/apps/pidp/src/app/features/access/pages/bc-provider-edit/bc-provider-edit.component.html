@@ -27,11 +27,11 @@
             <picture class="image">
               <source
                 type="image/webp"
-                srcset="/assets/images/bc-provider-account-457x759.webp" />
-              <!-- Use jpg as a fallback when webp is not supported by the browser. -->
+                srcset="/assets/images/bcprovider-account-1000x1103.webp" />
+              <!-- Use png as a fallback when webp is not supported by the browser. -->
               <source
-                type="image/jpg"
-                srcset="/assets/images/bc-provider-account-457x759.jpg" />
+                type="image/png"
+                srcset="/assets/images/bcprovider-account-1000x1103.png" />
               <img title="woman" loading="lazy" aria-labelledby="" />
             </picture>
 
@@ -61,7 +61,7 @@
 
 <ng-template #passwordForm>
   <form novalidate [formGroup]="formState.form" (ngSubmit)="onSubmit()">
-    <h3>Password reset</h3>
+    <h2>Password reset</h2>
     <div class="username">
       <h4><strong>Provided username</strong></h4>
       <h5>{{ username }}</h5>
@@ -77,20 +77,8 @@
             formControlName="newPassword"
             type="password"
             aria-labelledby="bc-provider-application-new-password" />
-          <mat-error *ngIf="formState.newPassword.hasError('required')"
-            >Required</mat-error
-          >
+          <mat-error>{{ formState.getErrorMessage() }}</mat-error>
         </mat-form-field>
-        <mat-error class="error" [class.error-show]="hasPasswordRuleError()"
-          >Your password must be between 8 and 256 characters and satisfy 3 out
-          of the 4 following requirements:
-          <ul>
-            <li>At least one uppercase letter</li>
-            <li>At least one lowercase letter</li>
-            <li>At least one number</li>
-            <li>At least one symbol</li>
-          </ul></mat-error
-        >
       </div>
       <div class="field">
         <label id="bc-provider-application-confirm-password"
@@ -101,8 +89,9 @@
             matInput
             formControlName="confirmPassword"
             type="password"
-            aria-labelledby="bc-provider-application-confirm-password" />
-          <mat-error *ngIf="formState.confirmPassword.invalid"
+            aria-labelledby="bc-provider-application-confirm-password"
+            [errorStateMatcher]="errorMatcher" />
+          <mat-error *ngIf="formState.form.hasError('nomatch')"
             >Must match the new password entered above</mat-error
           >
         </mat-form-field>
@@ -116,7 +105,8 @@
           Reset password
         </button>
       </div>
-      <div class="help-link"><a href="">Need help?</a></div>
+      <!-- TODO: What's the target URL for the help-link?
+        <div class="help-link"><a href="">Need help?</a></div> -->
     </div>
   </form>
 </ng-template>

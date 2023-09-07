@@ -1,10 +1,9 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
-import { Observable, catchError, exhaustMap, map, of, throwError } from 'rxjs';
+import { Observable, catchError, switchMap, throwError } from 'rxjs';
 
 import { ApiHttpClient } from '@app/core/resources/api-http-client.service';
-import { IdentityProvider } from '@app/features/auth/enums/identity-provider.enum';
 import { User } from '@app/features/auth/models/user.model';
 import { AuthorizedUserService } from '@app/features/auth/services/authorized-user.service';
 
@@ -24,50 +23,24 @@ export class PartyResource {
    * Get a party ID based on the access token user ID, and
    * create a party if one does not already exist.
    */
-  public firstOrCreate(): Observable<number | null> {
-    return this.authorizedUserService.user$.pipe(
-      exhaustMap((user: User) =>
-        user
-          ? this.getCredentials().pipe(
-              map((partyId: number | null) => partyId ?? user)
-            )
-          : throwError(
-              () =>
-                new Error(
-                  'Not authenticated or access token could not be parsed'
-                )
-            )
-      ),
-      exhaustMap((partyIdOrUser: number | User | null) => {
-        if (typeof partyIdOrUser === 'number' || !partyIdOrUser) {
-          return of(partyIdOrUser);
-        }
-        if (partyIdOrUser.identityProvider === IdentityProvider.BC_PROVIDER) {
-          return throwError(() => new Error('Unknown BC Provider account'));
-        }
-        return this.createParty(partyIdOrUser);
-      })
-    );
-  }
-
-  /**
-   * @description
-   * Discovery endpoint for checking the existence of a Party
-   * based on a UserId, which provides a PartyId in response.
-   */
-  private getCredentials(): Observable<number | null> {
-    return this.apiResource.get<{ partyId: number }[]>('credentials').pipe(
-      map((parties: { partyId: number }[]) =>
-        parties?.length ? parties.shift()?.partyId ?? null : null
-      ),
+  public firstOrCreate(): Observable<number> {
+    return this.apiResource.post<number>('discovery', null).pipe(
       catchError((error: HttpErrorResponse) => {
-        if (error.status === 400) {
-          return of(null);
+        if (error.status !== 404) {
+          return throwError(() => error);
         }
 
-        return throwError(
-          () =>
-            new Error(`Error occurred attempting to retrieve Party Credentials`)
+        return this.authorizedUserService.user$.pipe(
+          switchMap((user: User) => {
+            return user
+              ? this.createParty(user)
+              : throwError(
+                  () =>
+                    new Error(
+                      'Not authenticated or access token could not be parsed'
+                    )
+                );
+          })
         );
       })
     );
@@ -78,15 +51,7 @@ export class PartyResource {
    * Create a new party from information provided from the
    * access token.
    */
-  private createParty(partyCreate: PartyCreate): Observable<number | null> {
-    return this.apiResource.post<number>('parties', partyCreate).pipe(
-      catchError((error: HttpErrorResponse) => {
-        if (error.status === 400) {
-          return of(null);
-        }
-
-        return throwError(() => new Error('Party could not be created'));
-      })
-    );
+  private createParty(partyCreate: PartyCreate): Observable<number> {
+    return this.apiResource.post<number>('parties', partyCreate);
   }
 }

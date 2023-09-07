@@ -94,7 +94,7 @@ h1 {
         margin: var(--sidenav-panel-box-margin);
         background-color: #fff;
         & .sidenav-bar {
-          border-top: 20px solid #38598A;
+          border-top: 20px solid #38598a;
         }
         & .sidenav-panel-content {
           padding: var(--sidenav-panel-content-padding);
@@ -128,6 +128,10 @@ h1 {
   & .signout-text {
     margin-right: 10px;
   }
+}
+
+.custom-mat-sidenav-content {
+  overflow: visible;
 }
 
 // All additional formatting for wide-style views
@@ -168,7 +172,7 @@ h1 {
       position: sticky;
       top: 64px;
       & .sidenav-panel-box {
-        border: 1px solid #B2B2B2;
+        border: 1px solid #b2b2b2;
 
         & .sidenav-panel-content {
           & .sidenav-header {
