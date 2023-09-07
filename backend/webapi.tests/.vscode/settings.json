@@ -1,4 +1,5 @@
 {
+  "dotnet.defaultSolution": "../pidp-backend.sln",
   "editor.bracketPairColorization.enabled": true,
   "editor.formatOnPaste": true,
   "editor.formatOnType": true,
@@ -10,7 +11,6 @@
   "files.trimTrailingWhitespace": true,
   "git.ignoreLimitWarning": true,
   "omnisharp.enableEditorConfigSupport": true,
-  "omnisharp.enableRoslynAnalyzers": true,
   "search.exclude": {
     "**/bin": true,
     "**/logs": true,
