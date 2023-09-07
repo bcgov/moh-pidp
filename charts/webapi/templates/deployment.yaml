@@ -62,8 +62,13 @@ spec:
               value: http://{{ $release }}-plr-intake:8080/api
             - name: ASPNETCORE_ENVIRONMENT
               value: {{ .Values.aspnetcore.environment }}
+            - name: RabbitMQ__Password
+              valueFrom:
+                secretKeyRef:
+                  name: rabbitmq-password
+                  key: password
             - name: RabbitMQ__HostAddress
-              value: {{ .Values.rabbitmq.host }}{{ $release }}
+              value: rabbitmq://pidp:$(RabbitMQ__Password)@rabbitmq:5672/{{ $release }}
             - name: DB_HOST
               valueFrom:
                 configMapKeyRef:
