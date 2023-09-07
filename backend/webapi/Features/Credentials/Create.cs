@@ -4,9 +4,10 @@ using DomainResults.Common;
 using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Graph.Models;
 using NodaTime;
-using System.Text.Json.Serialization;
 using System.Security.Claims;
+using System.Text.Json.Serialization;
 
 using Pidp.Data;
 using Pidp.Extensions;
@@ -15,6 +16,7 @@ using Pidp.Infrastructure.HttpClients.BCProvider;
 using Pidp.Infrastructure.HttpClients.Plr;
 using Pidp.Models;
 using Pidp.Models.DomainEvents;
+using Pidp.Models.Lookups;
 
 public class Create
 {
@@ -128,11 +130,17 @@ public class Create
                 .Where(party => party.Id == credential.PartyId)
                 .Select(party => new
                 {
+                    party.FirstName,
+                    party.LastName,
                     party.Cpn,
                     party.Email,
                     Hpdid = party.Credentials
                         .Select(cred => cred.Hpdid)
-                        .Single(hpdid => hpdid != null)
+                        .Single(hpdid => hpdid != null),
+                    UaaAgreementDate = party.AccessRequests
+                        .Where(request => request.AccessTypeCode == AccessTypeCode.UserAccessAgreement)
+                        .Select(request => request.RequestedOn)
+                        .SingleOrDefault()
                 })
                 .SingleAsync(cancellationToken);
 
@@ -143,6 +151,10 @@ public class Create
             if (party.Cpn != null)
             {
                 attributes.SetCpn(party.Cpn);
+            }
+            if (party.UaaAgreementDate != default)
+            {
+                attributes.SetUaaDate(party.UaaAgreementDate.ToDateTimeOffset());
             }
 
             var plrStanding = await this.plrClient.GetStandingsDigestAsync(party.Cpn);
@@ -166,7 +178,14 @@ public class Create
                 .SetIsRnp(plrStanding.With(ProviderRoleType.RegisteredNursePractitioner).HasGoodStanding)
                 .SetIsMd(plrStanding.With(ProviderRoleType.MedicalDoctor).HasGoodStanding);
 
-            await this.bcProviderClient.UpdateAttributes(credential.IdpId, attributes.AsAdditionalData());
+            var user = new User
+            {
+                GivenName = party.FirstName,
+                Surname = party.LastName,
+                AdditionalData = attributes.AsAdditionalData()
+            };
+
+            await this.bcProviderClient.UpdateUser(credential.IdpId, user);
         }
     }
 }

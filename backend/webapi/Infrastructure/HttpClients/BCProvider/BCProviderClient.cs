@@ -127,6 +127,22 @@ public class BCProviderClient : IBCProviderClient
         }
     }
 
+    public async Task<bool> UpdateUser(string userPrincipalName, User user)
+    {
+        try
+        {
+            await this.client.Users[userPrincipalName]
+                .PatchAsync(user);
+
+            return true;
+        }
+        catch
+        {
+            this.logger.LogUserUpdateFailure(userPrincipalName);
+            return false;
+        }
+    }
+
     private async Task<string?> CreateUniqueUserPrincipalName(NewUserRepresentation user)
     {
         var joinedFullName = $"{user.FirstName}.{user.LastName}";
@@ -216,4 +232,7 @@ public static partial class BCProviderClientLoggingExtensions
 
     [LoggerMessage(9, LogLevel.Warning, "Party's full name contained characters invalid for an AAD User Principal Name. '{partyFullName}' was shortened to '{partyShortenedName}'.")]
     public static partial void LogPartyNameContainsUpnInvalidCharacters(this ILogger logger, string partyFullName, string partyShortenedName);
+
+    [LoggerMessage(10, LogLevel.Error, "Failed to update the user '{userPrincipalName}'.")]
+    public static partial void LogUserUpdateFailure(this ILogger logger, string userPrincipalName);
 }
