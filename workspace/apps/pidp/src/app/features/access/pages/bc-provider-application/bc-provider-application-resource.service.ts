@@ -1,8 +1,12 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
-import { Observable, map } from 'rxjs';
+import { Observable, catchError, map, throwError } from 'rxjs';
+
+import { NoContent, NoContentResponse } from '@bcgov/shared/data-access';
 
 import { ApiHttpClient } from '@app/core/resources/api-http-client.service';
+import { IdentityProvider } from '@app/features/auth/enums/identity-provider.enum';
 import { ProfileStatus } from '@app/features/portal/models/profile-status.model';
 import { PortalResource } from '@app/features/portal/portal-resource.service';
 
@@ -28,6 +32,20 @@ export class BcProviderApplicationResource {
         password,
       })
       .pipe(map((upn) => upn));
+  }
+
+  // Currently automatically links to BC Provider
+  public createLinkTicket(partyId: number): NoContent {
+    return this.apiResource
+      .post<NoContent>(`${this.getResourcePath(partyId)}/link-ticket`, {
+        linkToIdp: IdentityProvider.BC_PROVIDER,
+      })
+      .pipe(
+        NoContentResponse,
+        catchError((error: HttpErrorResponse) => {
+          return throwError(() => error);
+        })
+      );
   }
 
   private getResourcePath(partyId: number): string {

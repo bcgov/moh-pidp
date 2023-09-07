@@ -139,6 +139,12 @@ export class DocumentService {
     `;
   }
 
+  public getRedirectingToSignInNotice(): string {
+    return `
+    We're taking you to your organization's sign-in page.
+    `;
+  }
+
   public getSAeFormsCollectionNotice(): string {
     return `
       The personal information you provide to enrol for access to the Special Authority eForms application
