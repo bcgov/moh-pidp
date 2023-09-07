@@ -1,5 +1,6 @@
-namespace Pidp.Features.Credentials;
+namespace Pidp.Features.Discovery;
 
+using DomainResults.Common;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 
@@ -8,33 +9,25 @@ using Pidp.Extensions;
 using Pidp.Infrastructure.Auth;
 using Pidp.Models;
 
-public class Index
+public class Discovery
 {
-    public class Query : IQuery<List<Model>>
+    public class Command : ICommand<IDomainResult<int>>
     {
         public ClaimsPrincipal User { get; set; } = new();
     }
 
-    public class Model
-    {
-        public Guid UserId { get; set; }
-        public int PartyId { get; set; }
-        public string IdentityProvider { get; set; } = string.Empty;
-        public string IdpId { get; set; } = string.Empty;
-    }
-
-    public class QueryHandler : IQueryHandler<Query, List<Model>>
+    public class CommandHandler : ICommandHandler<Command, IDomainResult<int>>
     {
         private readonly PidpDbContext context;
 
-        public QueryHandler(PidpDbContext context) => this.context = context;
+        public CommandHandler(PidpDbContext context) => this.context = context;
 
-        public async Task<List<Model>> HandleAsync(Query query)
+        public async Task<IDomainResult<int>> HandleAsync(Command command)
         {
-            var lowerIdpId = query.User.GetIdpId()?.ToLowerInvariant();
+            var lowerIdpId = command.User.GetIdpId()?.ToLowerInvariant();
 
             // TODO: consider a more general approach for this; maybe in User.GetIdpId()?
-            if (query.User.GetIdentityProvider() == IdentityProviders.BCProvider
+            if (command.User.GetIdentityProvider() == IdentityProviders.BCProvider
                 && lowerIdpId != null
                 && lowerIdpId.EndsWith("@bcp", StringComparison.InvariantCulture))
             {
@@ -44,36 +37,27 @@ public class Index
 
 #pragma warning disable CA1304 // ToLower() is Locale Dependant
             var credential = await this.context.Credentials
-                .SingleOrDefaultAsync(credential => credential.UserId == query.User.GetUserId()
-                    || (credential.IdentityProvider == query.User.GetIdentityProvider()
+                .SingleOrDefaultAsync(credential => credential.UserId == command.User.GetUserId()
+                    || (credential.IdentityProvider == command.User.GetIdentityProvider()
                         && credential.IdpId!.ToLower() == lowerIdpId));
 #pragma warning restore CA1304
 
             if (credential == null)
             {
-                return new();
+                return DomainResult.NotFound<int>();
             }
 
             if (credential.UserId == default)
             {
-                await this.UpdateUserId(credential, query.User.GetUserId());
+                await this.UpdateUserId(credential, command.User.GetUserId());
             }
             if (credential.IdentityProvider == null
                 || credential.IdpId == null)
             {
-                await this.UpdateIncompleteRecord(credential, query.User);
+                await this.UpdateIncompleteRecord(credential, command.User);
             }
 
-            return new List<Model>
-            {
-                new Model
-                {
-                    UserId = credential.UserId,
-                    PartyId = credential.PartyId,
-                    IdentityProvider = credential.IdentityProvider!,
-                    IdpId = credential.IdpId!
-                }
-            };
+            return DomainResult.Success(credential.PartyId);
         }
 
         // BC Provider Credentials are created in our app without UserIds (since the user has not logged into Keycloak yet).

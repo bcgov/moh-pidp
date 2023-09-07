@@ -64,6 +64,14 @@ export class UtilsService {
       ?.scrollIntoView({ behavior: 'smooth' });
   }
 
+  public scrollToAnchorWithDelay(elementId: string | null): void {
+    of(true)
+      .pipe(delay(250))
+      .subscribe(() => {
+        this.scrollToAnchor(elementId);
+      });
+  }
+
   /**
    * @description
    * Download a document.
