@@ -2324,10 +2324,10 @@
   resolved "https://registry.yarnpkg.com/@gar/promisify/-/promisify-1.1.3.tgz#555193ab2e3bb3b6adc3d551c9c030d9e860daf6"
   integrity sha512-k2Ty1JcVojjJFwrg/ThKi2ujJ7XNLYaFGNB/bWT9wGR+oSMJHMa5w+CUq6p/pVrKeNNgA7pCqEcjSnHVoqJQFw==
 
-"@hirez_io/auto-spies-core@3.0.0":
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/@hirez_io/auto-spies-core/-/auto-spies-core-3.0.0.tgz#316b206b5f143ce3f24da21af4f3454c1aa26d5e"
-  integrity sha512-au7s7/AqPU5CJhv0slVjmZqEv5Uaf2nj7pYFepp5g3B7EocEeNy7bZ74x5RJldHYtW0R8OptV2mZfwaDOfcNCA==
+"@hirez_io/auto-spies-core@1.6.7":
+  version "1.6.7"
+  resolved "https://registry.yarnpkg.com/@hirez_io/auto-spies-core/-/auto-spies-core-1.6.7.tgz#432c9628625b2407d5a8277c465928b734524257"
+  integrity sha512-y+Rzu/+92nXBUO03GJmUhUiCFMSWEVGNvi6s8mJNpac41t1rEkhqePJoDA08pK1/or4JjQnNeFPnA+45mrkVnw==
   dependencies:
     javascript-stringify "2.1.0"
 
@@ -7843,12 +7843,12 @@ javascript-stringify@2.1.0:
   resolved "https://registry.yarnpkg.com/javascript-stringify/-/javascript-stringify-2.1.0.tgz#27c76539be14d8bd128219a2d731b09337904e79"
   integrity sha512-JVAfqNPTvNq3sB/VHQJAFxN/sPgKnsKrCwyRt15zwNCdrMMJDdcEOdubuy+DuJYYdm0ox1J4uzEuYKkN+9yhVg==
 
-jest-auto-spies@^3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/jest-auto-spies/-/jest-auto-spies-3.0.0.tgz#29ebff558880d8a5f691c5c9a5e14e6bbf834b81"
-  integrity sha512-8CAszt3ngbL0fRZ2uOUPeduVJ7AV2VCnwWDh3f5aysdUlWiLw1tVgn70YapSdskDAW7w0UIYlbjIlYnt79c9Zw==
+jest-auto-spies@1.6.10:
+  version "1.6.10"
+  resolved "https://registry.yarnpkg.com/jest-auto-spies/-/jest-auto-spies-1.6.10.tgz#f1f138111d029cbeead9ff2976c796075a8b1b4d"
+  integrity sha512-/rAlagwd7nGuJHiEpQqNwR5tqV1yS5iHcSj69foBhKuF4xDg/u7v3m2nEULwKqikjOowzylyYkKoVK9kLhC4PQ==
   dependencies:
-    "@hirez_io/auto-spies-core" "3.0.0"
+    "@hirez_io/auto-spies-core" "1.6.7"
 
 jest-changed-files@^28.1.3:
   version "28.1.3"
