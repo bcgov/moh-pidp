@@ -44,7 +44,7 @@ public class AccessRequestsController : PidpControllerBase
     public async Task<IActionResult> CreateHcimAccountTransfer([FromServices] ICommandHandler<HcimAccountTransfer.Command, IDomainResult<HcimAccountTransfer.Model>> handler,
                                                                [FromHybrid] HcimAccountTransfer.Command command)
     {
-        var access = await this.AuthorizationService.CheckPartyAccessibility(command.PartyId, this.User);
+        var access = await this.AuthorizationService.CheckPartyAccessibilityAsync(command.PartyId, this.User);
         if (!access.IsSuccess)
         {
             return access.ToActionResult();

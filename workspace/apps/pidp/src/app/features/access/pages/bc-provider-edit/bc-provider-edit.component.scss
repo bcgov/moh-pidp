@@ -11,14 +11,22 @@
   --gap: 1.25rem;
   --font-size: 1rem;
 }
+
+.viewport-xsmall {
+  .form-button-box {
+    & button {
+      margin-top: 20px;
+    }
+  }
+}
+
 .viewport-all {
   --header-margin: unset;
   --avatar-size: 4rem;
   --content-padding: var(--gap);
   --password-splash-display: none;
-  --password-image-width: 500px;
-  --password-image-height: 759px;
 }
+
 .viewport-medium,
 .viewport-large {
   --header-margin: var(--gap) 0 0;
@@ -81,6 +89,11 @@
           margin: var(--gap) 0;
           padding: 0;
         }
+        & h2 {
+          text-align: center;
+          margin: var(--gap) 0;
+          padding: 0;
+        }
       }
       & .password-splash {
         flex: 1;
@@ -96,10 +109,11 @@
           & .image {
             flex: 1;
             display: flex;
+            height: 100%;
             img {
               flex: 1;
-              width: var(--password-image-width);
-              height: var(--password-image-height);
+              width: 100%;
+              height: auto;
             }
           }
           & .text-box {
@@ -108,18 +122,19 @@
             padding: calc(2 * var(--gap)) var(--gap);
             display: flex;
             flex-direction: column;
-            background-color: rgba(94, 130, 118, 0.4);
+            background-color: rgba(94, 130, 118, 0.9);
             & div {
               display: flex;
               justify-content: center;
             }
             & .lets {
               color: rgba(255, 255, 255, 1);
-              font-size: 1.5rem;
+              font-size: 2.1rem;
+              line-height: 1.2;
             }
             & .using {
               color: pidp.$font-color-default;
-              font-size: 0.75rem;
+              font-size: 0.9rem;
             }
           }
         }
@@ -152,6 +167,9 @@
           }
           & .mat-form-field {
             margin-bottom: 0;
+          }
+          & .mat-error {
+            font-size: 0.75rem;
           }
         }
         & .form-button-box {

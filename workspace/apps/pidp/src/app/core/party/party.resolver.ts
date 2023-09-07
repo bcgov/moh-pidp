@@ -2,7 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Resolve, Router } from '@angular/router';
 
-import { Observable, catchError, exhaustMap, of, throwError } from 'rxjs';
+import { Observable, catchError, exhaustMap, of } from 'rxjs';
 
 import { RootRoutes } from '@bcgov/shared/ui';
 
@@ -36,27 +36,23 @@ export class PartyResolver implements Resolve<number | null> {
 
   public resolve(): Observable<number | null> {
     return this.partyResource.firstOrCreate().pipe(
-      exhaustMap((partyId: number | null) =>
-        partyId
-          ? of((this.partyService.partyId = partyId))
-          : throwError(() => new Error('Party could not be found or created'))
+      exhaustMap((response: number) =>
+        of((this.partyService.partyId = response))
       ),
       catchError((error: HttpErrorResponse | Error) => {
         this.logger.error(error.message);
 
-        if (error instanceof HttpErrorResponse && error.status === 403) {
-          this.router.navigateByUrl(RootRoutes.DENIED);
-        } else if (
-          error instanceof Error &&
-          error.message === 'Unknown BC Provider account'
-        ) {
-          // redirect user
+        if (error instanceof HttpErrorResponse && error.status == 409) {
+          // User is an unlinked BC Provider.
           this.router.navigateByUrl(
             AuthRoutes.routePath(AuthRoutes.BC_PROVIDER_UPLIFT)
           );
+        } else if (error instanceof HttpErrorResponse && error.status === 403) {
+          this.router.navigateByUrl(RootRoutes.DENIED);
         } else {
           this.router.navigateByUrl(ShellRoutes.SUPPORT_ERROR_PAGE);
         }
+
         return of(null);
       })
     );

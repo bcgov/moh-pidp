@@ -9,6 +9,16 @@ using Pidp.Infrastructure.Services;
 [ApiController]
 public class PidpControllerBase : ControllerBase
 {
+    internal static class Cookies
+    {
+        public static class CredentialLinkTicket
+        {
+            public const string Key = "credential-link-ticket";
+
+            public record Values(Guid CredentialLinkToken);
+        }
+    }
+
     protected IPidpAuthorizationService AuthorizationService { get; }
 
     protected PidpControllerBase(IPidpAuthorizationService authService) => this.AuthorizationService = authService;
@@ -22,7 +32,7 @@ public class PidpControllerBase : ControllerBase
     /// <param name="request"></param>
     protected async Task<IDomainResult> AuthorizePartyBeforeHandleAsync<TRequest>(int partyId, IRequestHandler<TRequest, IDomainResult> handler, TRequest request)
     {
-        var access = await this.AuthorizationService.CheckPartyAccessibility(partyId, this.User);
+        var access = await this.AuthorizationService.CheckPartyAccessibilityAsync(partyId, this.User);
         if (access.IsSuccess)
         {
             return await handler.HandleAsync(request);
@@ -41,7 +51,7 @@ public class PidpControllerBase : ControllerBase
     /// <param name="request"></param>
     protected async Task<IDomainResult<TResult>> AuthorizePartyBeforeHandleAsync<TRequest, TResult>(int partyId, IRequestHandler<TRequest, IDomainResult<TResult>> handler, TRequest request)
     {
-        var access = await this.AuthorizationService.CheckPartyAccessibility(partyId, this.User);
+        var access = await this.AuthorizationService.CheckPartyAccessibilityAsync(partyId, this.User);
         if (access.IsSuccess)
         {
             return await handler.HandleAsync(request);
@@ -59,7 +69,7 @@ public class PidpControllerBase : ControllerBase
     /// <param name="request"></param>
     protected async Task<IDomainResult> AuthorizePartyBeforeHandleAsync<TRequest>(int partyId, IRequestHandler<TRequest> handler, TRequest request)
     {
-        var access = await this.AuthorizationService.CheckPartyAccessibility(partyId, this.User);
+        var access = await this.AuthorizationService.CheckPartyAccessibilityAsync(partyId, this.User);
         if (access.IsSuccess)
         {
             await handler.HandleAsync(request);
@@ -79,7 +89,7 @@ public class PidpControllerBase : ControllerBase
     /// <param name="request"></param>
     protected async Task<IDomainResult<TResult>> AuthorizePartyBeforeHandleAsync<TRequest, TResult>(int partyId, IRequestHandler<TRequest, TResult> handler, TRequest request)
     {
-        var access = await this.AuthorizationService.CheckPartyAccessibility(partyId, this.User);
+        var access = await this.AuthorizationService.CheckPartyAccessibilityAsync(partyId, this.User);
         if (access.IsSuccess)
         {
             return DomainResult.Success(await handler.HandleAsync(request));
