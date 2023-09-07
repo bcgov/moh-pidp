@@ -9,6 +9,7 @@ import { faCircleCheck, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { NavigationService } from '@pidp/presentation';
 
 import { NoContent } from '@bcgov/shared/data-access';
+import { CrossFieldErrorMatcher } from '@bcgov/shared/ui';
 
 import {
   AbstractFormDependenciesService,
@@ -43,6 +44,7 @@ export class BcProviderEditComponent
   public showMessageCard = false;
   public messageCardText = '';
   public username = '';
+  public errorMatcher = new CrossFieldErrorMatcher();
 
   // ui-page is handling this.
   public showOverlayOnSubmit = false;

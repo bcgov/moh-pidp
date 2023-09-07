@@ -73,9 +73,9 @@ public class BCProviderClient : IBCProviderClient
             this.logger.LogNewBCProviderUserCreated(createdUser?.UserPrincipalName!);
             return createdUser;
         }
-        catch
+        catch (Exception e)
         {
-            this.logger.LogAccountCreationFailure(userPrincipal);
+            this.logger.LogAccountCreationFailure(userPrincipal, e);
             return null;
         }
     }
@@ -123,6 +123,22 @@ public class BCProviderClient : IBCProviderClient
         catch
         {
             this.logger.LogPasswordUpdateFailure(userPrincipalName);
+            return false;
+        }
+    }
+
+    public async Task<bool> UpdateUser(string userPrincipalName, User user)
+    {
+        try
+        {
+            await this.client.Users[userPrincipalName]
+                .PatchAsync(user);
+
+            return true;
+        }
+        catch
+        {
+            this.logger.LogUserUpdateFailure(userPrincipalName);
             return false;
         }
     }
@@ -197,7 +213,7 @@ public static partial class BCProviderClientLoggingExtensions
     public static partial void LogNewBCProviderUserCreated(this ILogger logger, string userPrincipalName);
 
     [LoggerMessage(2, LogLevel.Error, "Failed to create account '{userPrincipalName}'.")]
-    public static partial void LogAccountCreationFailure(this ILogger logger, string userPrincipalName);
+    public static partial void LogAccountCreationFailure(this ILogger logger, string userPrincipalName, Exception e);
 
     [LoggerMessage(4, LogLevel.Error, "Failed to update the password of user '{userPrincipalName}'.")]
     public static partial void LogPasswordUpdateFailure(this ILogger logger, string userPrincipalName);
@@ -216,4 +232,7 @@ public static partial class BCProviderClientLoggingExtensions
 
     [LoggerMessage(9, LogLevel.Warning, "Party's full name contained characters invalid for an AAD User Principal Name. '{partyFullName}' was shortened to '{partyShortenedName}'.")]
     public static partial void LogPartyNameContainsUpnInvalidCharacters(this ILogger logger, string partyFullName, string partyShortenedName);
+
+    [LoggerMessage(10, LogLevel.Error, "Failed to update the user '{userPrincipalName}'.")]
+    public static partial void LogUserUpdateFailure(this ILogger logger, string userPrincipalName);
 }

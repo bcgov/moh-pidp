@@ -45,7 +45,7 @@ const routes: Routes = [
     component: BcProviderApplicationComponent,
     data: {
       setDashboardTitleGuard: {
-        titleText: 'BC Provider Application',
+        titleText: 'BC Provider and OneHealthID',
         titleDescriptionText: '',
       },
     },
@@ -56,7 +56,7 @@ const routes: Routes = [
     component: BcProviderEditComponent,
     data: {
       setDashboardTitleGuard: {
-        titleText: 'BC Provider Application',
+        titleText: 'BC Provider and OneHealthID',
         titleDescriptionText: '',
       },
     },
