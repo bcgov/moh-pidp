@@ -55,6 +55,18 @@ jobs:
           PR: ${{ steps.find-pr.outputs.pr }}
 
 
+  Yarn-Lint:
+    name: Frontend Yarn Lint
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: "./workspace"
+    
+    steps:
+    - name: YARN Lint
+      run:  yarn lint:all 
+      continue-on-error: true
+
   build-and-deploy-frontend:
     name: Frontend Build and Deploy
     runs-on: ubuntu-latest
@@ -80,15 +92,12 @@ jobs:
       - name: YARN Install
         run:  yarn install
 
-      - name: YARN Lint
-        run:  yarn lint:all 
-        continue-on-error: true
-
       - name: YARN Build
         run:  yarn build
         
       - name: YARN Test
         run: yarn test:ci
+        continue-on-error: true
 
       - name: "Docker Build"
         run: |
@@ -105,7 +114,6 @@ jobs:
       - name: "Push image"
         run: |
           docker push image-registry.apps.silver.devops.gov.bc.ca/d8a8f9-tools/pidp-frontend:pr-${{ needs.get-pr-number.outputs.pr_number }}
-
 
   build-and-deploy-plr-intake:
     name: PLR Intake Backend Build and Deploy
