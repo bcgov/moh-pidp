@@ -78,7 +78,6 @@ jobs:
 
       - name: YARN Lint
         run:  yarn lint:all 
-        continue-on-error: true
 
   build-and-deploy-frontend:
     name: Frontend Build and Deploy
