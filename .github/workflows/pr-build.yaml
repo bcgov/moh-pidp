@@ -58,14 +58,27 @@ jobs:
   Yarn-Lint:
     name: Frontend Yarn Lint
     runs-on: ubuntu-latest
+    needs: get-pr-number
+    if: ${{ always() && !cancelled() && needs.get-pr-number.outputs.pr_number != '' }}
     defaults:
       run:
         working-directory: "./workspace"
     
     steps:
-    - name: YARN Lint
-      run:  yarn lint:all 
-      continue-on-error: true
+      - name: "Checkout Code"
+        uses: actions/checkout@master
+
+      - name: Use Node.js 18.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.x
+     
+      - name: YARN Install
+        run:  yarn install
+
+      - name: YARN Lint
+        run:  yarn lint:all 
+        continue-on-error: true
 
   build-and-deploy-frontend:
     name: Frontend Build and Deploy
