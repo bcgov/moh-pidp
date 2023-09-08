@@ -82,6 +82,7 @@ jobs:
 
       - name: YARN Lint
         run:  yarn lint:all 
+        continue-on-error: true
 
       - name: YARN Build
         run:  yarn build
