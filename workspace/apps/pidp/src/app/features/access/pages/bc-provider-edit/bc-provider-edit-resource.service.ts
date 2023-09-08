@@ -7,7 +7,7 @@ import { NoContent, NoContentResponse } from '@bcgov/shared/data-access';
 
 import { ApiHttpClient } from '@app/core/resources/api-http-client.service';
 
-import { BcProviderEditInitialStateModel } from './bc-provider-edit.component';
+import { BcProviderEditInitialStateModel } from './bc-provider-edit.page';
 
 export interface BcProviderChangePasswordRequest {
   partyId: number;

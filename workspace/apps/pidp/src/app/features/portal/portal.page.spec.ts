@@ -24,8 +24,8 @@ import { APP_CONFIG, APP_DI_CONFIG } from '@app/app.config';
 import { PartyService } from '@app/core/party/party.service';
 import { ToastService } from '@app/core/services/toast.service';
 
+import { BcProviderEditResource } from '../access/pages/bc-provider-edit/bc-provider-edit-resource.service';
 import { BcProviderEditInitialStateModel } from '../access/pages/bc-provider-edit/bc-provider-edit.component';
-import { BcProviderEditResource } from '../access/pages/bc-provider-edit/bc-provider-edit.resource';
 import { EndorsementsResource } from '../organization-info/pages/endorsements/endorsements-resource.service';
 import { AlertCode } from './enums/alert-code.enum';
 import { StatusCode } from './enums/status-code.enum';
