@@ -108,8 +108,8 @@ jobs:
         run:  yarn build
         
       - name: YARN Test
-        run: yarn test:ci
-        continue-on-error: true
+        run: |
+          yarn test:ci
 
       - name: "Docker Build"
         run: |
