@@ -35,14 +35,14 @@ const routes: Routes = [
   },
   {
     path: AccessRoutes.BC_PROVIDER_APPLICATION,
-    loadChildren: (): Promise<BcProviderApplicationModule> =>
+    loadChildren: (): Promise<Type<BcProviderApplicationModule>> =>
       import(
         './pages/bc-provider-application/bc-provider-application.module'
       ).then((m) => m.BcProviderApplicationModule),
   },
   {
     path: AccessRoutes.BC_PROVIDER_EDIT,
-    loadChildren: (): Promise<BcProviderEditModule> =>
+    loadChildren: (): Promise<Type<BcProviderEditModule>> =>
       import('./pages/bc-provider-edit/bc-provider-edit.module').then(
         (m) => m.BcProviderEditModule
       ),
