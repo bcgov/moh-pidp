@@ -1,10 +1,9 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { provideAutoSpy } from 'jest-auto-spies';
 
 import { APP_CONFIG, APP_DI_CONFIG } from '@app/app.config';
-import { SharedModule } from '@app/shared/shared.module';
 
 import { AuthService } from '../../services/auth.service';
 import { BcProviderUpliftPage } from './bc-provider-uplift.page';
