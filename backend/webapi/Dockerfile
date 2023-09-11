@@ -11,7 +11,9 @@ RUN dotnet restore -r linux-musl-x64 /p:PublishReadyToRun=true
 
 COPY ../webapi.tests/pidp.tests.csproj webapi.tests/pidp.tests.csproj
 RUN dotnet restore -r linux-musl-x64 /p:PublishReadyToRun=true
-RUN dotnet test /webapi.tests  -c Release
+
+COPY ../webapi.tests webapi.tests 
+RUN dotnet test webapi.tests  -c Release
 
 COPY . .
 RUN dotnet publish -c Release -o /app -r linux-musl-x64 --self-contained false --no-restore
