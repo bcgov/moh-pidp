@@ -1,11 +1,10 @@
-import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 
-import { SharedUiModule } from '@bcgov/shared/ui';
+import { SharedModule } from '@app/shared/shared.module';
 
 import { FaqRoutingModule } from './faq-routing.module';
 
 @NgModule({
-  imports: [CommonModule, SharedUiModule, FaqRoutingModule],
+  imports: [SharedModule, FaqRoutingModule],
 })
 export class FaqModule {}
