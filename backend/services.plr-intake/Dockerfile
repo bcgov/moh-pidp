@@ -9,6 +9,8 @@ RUN dotnet tool install --global dotnet-ef
 COPY *.csproj .
 RUN dotnet restore -r linux-musl-x64 /p:PublishReadyToRun=true
 
+RUN dotnet test
+
 COPY . .
 RUN dotnet publish -c Release -o /app -r linux-musl-x64 --self-contained false --no-restore
 
