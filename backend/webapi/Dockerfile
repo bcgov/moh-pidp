@@ -6,9 +6,13 @@ ENV PATH="$PATH:/opt/.dotnet/tools"
 
 RUN dotnet tool install --global dotnet-ef
 
-COPY . .
+COPY *.csproj .
 RUN dotnet restore -r linux-musl-x64 /p:PublishReadyToRun=true
 
+COPY ./webapi.tests/pidp.tests.csproj .
+RUN dotnet restore -r linux-musl-x64 /p:PublishReadyToRun=true
+
+COPY . .
 RUN dotnet test /webapi.tests  -c Release
 RUN dotnet publish -c Release -o /app -r linux-musl-x64 --self-contained false --no-restore
 
