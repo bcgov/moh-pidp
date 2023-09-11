@@ -59,10 +59,10 @@ import { BcProviderApplicationResource } from './bc-provider-application-resourc
 
 @Component({
   selector: 'app-bc-provider-application',
-  templateUrl: './bc-provider-application.component.html',
-  styleUrls: ['./bc-provider-application.component.scss'],
+  templateUrl: './bc-provider-application.page.html',
+  styleUrls: ['./bc-provider-application.page.scss'],
 })
-export class BcProviderApplicationComponent
+export class BcProviderApplicationPage
   extends AbstractFormPage<BcProviderApplicationFormState>
   implements OnInit
 {

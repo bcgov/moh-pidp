@@ -1,15 +1,12 @@
 import { NgModule, Type } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { SetDashboardTitleGuard } from '@pidp/presentation';
-
 import { PermissionsGuard } from '@app/modules/permissions/permissions.guard';
 import { Role } from '@app/shared/enums/roles.enum';
 
 import { AccessRoutes } from './access.routes';
-import { BcProviderApplicationComponent } from './pages/bc-provider-application/bc-provider-application.component';
-import { BcProviderApplicationResolver } from './pages/bc-provider-application/bc-provider-application.resolver';
-import { BcProviderEditComponent } from './pages/bc-provider-edit/bc-provider-edit.component';
+import { BcProviderApplicationModule } from './pages/bc-provider-application/bc-provider-application.module';
+import { BcProviderEditModule } from './pages/bc-provider-edit/bc-provider-edit.module';
 import { DriverFitnessModule } from './pages/driver-fitness/driver-fitness.module';
 import { HcimAccountTransferModule } from './pages/hcim-account-transfer/hcim-account-transfer.module';
 import { HcimEnrolmentModule } from './pages/hcim-enrolment/hcim-enrolment.module';
@@ -38,28 +35,17 @@ const routes: Routes = [
   },
   {
     path: AccessRoutes.BC_PROVIDER_APPLICATION,
-    resolve: {
-      bcProviderApplicationStatusCode: BcProviderApplicationResolver,
-    },
-    canActivate: [SetDashboardTitleGuard],
-    component: BcProviderApplicationComponent,
-    data: {
-      setDashboardTitleGuard: {
-        titleText: 'BC Provider and OneHealthID',
-        titleDescriptionText: '',
-      },
-    },
+    loadChildren: (): Promise<Type<BcProviderApplicationModule>> =>
+      import(
+        './pages/bc-provider-application/bc-provider-application.module'
+      ).then((m) => m.BcProviderApplicationModule),
   },
   {
-    path: AccessRoutes.BC_PROVIDER_APPLICATION_CHANGE_PASSWORD,
-    canActivate: [SetDashboardTitleGuard],
-    component: BcProviderEditComponent,
-    data: {
-      setDashboardTitleGuard: {
-        titleText: 'BC Provider and OneHealthID',
-        titleDescriptionText: '',
-      },
-    },
+    path: AccessRoutes.BC_PROVIDER_EDIT,
+    loadChildren: (): Promise<Type<BcProviderEditModule>> =>
+      import('./pages/bc-provider-edit/bc-provider-edit.module').then(
+        (m) => m.BcProviderEditModule
+      ),
   },
   {
     path: AccessRoutes.HCIM_ACCOUNT_TRANSFER,
