@@ -9,8 +9,10 @@ RUN dotnet tool install --global dotnet-ef
 COPY *.csproj .
 RUN dotnet restore -r linux-musl-x64 /p:PublishReadyToRun=true
 
-COPY . ./
-RUN dotnet test webapi.tests  -c Release
+COPY *.tests .
+RUN dotnet test -c Release
+
+COPY . .
 RUN dotnet publish -c Release -o /app -r linux-musl-x64 --self-contained false --no-restore
 
 RUN dotnet ef migrations bundle
