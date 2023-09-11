@@ -19,7 +19,7 @@ import { IsHighAssurancePipe } from './pipes/is-high-assurance.pipe';
     GetSupportComponent,
     IsHighAssurancePipe,
   ],
-  imports: [CommonModule, SharedUiModule, LookupModule.forChild()],
+  imports: [CommonModule, LookupModule.forChild(), SharedUiModule],
   exports: [
     CommonModule,
     SharedUiModule,
