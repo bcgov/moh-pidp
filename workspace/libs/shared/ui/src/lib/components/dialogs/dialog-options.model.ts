@@ -1,3 +1,7 @@
+import { Type } from '@angular/core';
+
+import { IDialogContent } from './dialog-content.model';
+
 export interface DialogOptions {
   icon?: string;
   iconType?: 'outlined' | 'round' | 'sharp';
@@ -13,6 +17,7 @@ export interface DialogOptions {
   };
   cancelText?: string;
   cancelHide?: boolean;
-  component?: any;
+  component?: Type<IDialogContent>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   data?: { [key: string]: any };
 }
