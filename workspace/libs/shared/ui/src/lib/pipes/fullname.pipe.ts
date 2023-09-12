@@ -9,6 +9,7 @@ export class FullnamePipe implements PipeTransform {
       | {
           firstName: string;
           lastName: string;
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           [key: string]: any;
         }
       | null

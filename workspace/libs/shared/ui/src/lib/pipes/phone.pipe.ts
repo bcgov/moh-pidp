@@ -4,7 +4,7 @@ import { Pipe, PipeTransform } from '@angular/core';
   name: 'phone',
 })
 export class PhonePipe implements PipeTransform {
-  public transform(phoneNumber: string | number): any {
+  public transform(phoneNumber: string | number): string {
     phoneNumber = `${phoneNumber}`;
     if (!phoneNumber || /[a-zA-Z]/g.test(phoneNumber)) {
       return phoneNumber;
