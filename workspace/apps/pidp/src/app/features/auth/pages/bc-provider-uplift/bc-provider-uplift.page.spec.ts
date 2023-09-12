@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { provideAutoSpy } from 'jest-auto-spies';
@@ -10,26 +10,21 @@ import { BcProviderUpliftPage } from './bc-provider-uplift.page';
 
 describe('BcProviderUpliftPage', () => {
   let component: BcProviderUpliftPage;
-  let fixture: ComponentFixture<BcProviderUpliftPage>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
+  beforeEach(() => {
+    TestBed.configureTestingModule({
       imports: [RouterTestingModule],
-      declarations: [BcProviderUpliftPage],
       providers: [
+        BcProviderUpliftPage,
         {
           provide: APP_CONFIG,
           useValue: APP_DI_CONFIG,
         },
         provideAutoSpy(AuthService),
       ],
-    }).compileComponents();
-  });
+    });
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(BcProviderUpliftPage);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+    component = TestBed.inject(BcProviderUpliftPage);
   });
 
   it('should create', () => {
