@@ -18,7 +18,7 @@ describe('ConfirmDialogComponent', () => {
           {
             provide: MatDialogRef,
             useValue: {
-              close: (dialogResult: any): any => null,
+              close: (): any => null,
             },
           },
           {
