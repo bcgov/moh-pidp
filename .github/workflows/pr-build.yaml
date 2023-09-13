@@ -191,6 +191,34 @@ jobs:
         run: |
           docker push image-registry.apps.silver.devops.gov.bc.ca/d8a8f9-tools/pidp-webapi:pr-${{ needs.get-pr-number.outputs.pr_number }}
 
+  unit-test-backend:
+    name: Backend Unit Test
+    needs: [build-and-deploy-webapi, build-and-deploy-plr-intake]
+    if: ${{ always() && !cancelled() && needs.get-pr-number.outputs.pr_number != '' }}
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: "./backend"
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - name: "Checkout Code"
+        uses: actions/checkout@master
+
+      - name: "Docker Build"
+        run: |
+          docker build -t pidp-backend-unittest:pr-${{ needs.get-pr-number.outputs.pr_number }} .
+
+      # Uses the builder service account token
+      - name: "Docker Login to Silver OCP"
+        uses: docker/login-action@v2
+        with:
+          registry: image-registry.apps.silver.devops.gov.bc.ca
+          username: builder
+          password: ${{ secrets.SILVER_TOOLS_BUILDER_TOKEN }}
+        
   helm-deployment:
     needs: [build-and-deploy-webapi, build-and-deploy-plr-intake, build-and-deploy-frontend]
     runs-on: 'ubuntu-latest'
