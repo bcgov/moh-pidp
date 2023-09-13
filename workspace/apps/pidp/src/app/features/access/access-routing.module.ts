@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, Type } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { PermissionsGuard } from '@app/modules/permissions/permissions.guard';
@@ -21,35 +21,35 @@ import { SitePrivacySecurityChecklistModule } from './pages/site-privacy-securit
 const routes: Routes = [
   {
     path: AccessRoutes.SPECIAL_AUTH_EFORMS,
-    loadChildren: (): Promise<SaEformsModule> =>
+    loadChildren: (): Promise<Type<SaEformsModule>> =>
       import('./pages/sa-eforms/sa-eforms-routing.module').then(
         (m) => m.SaEformsRoutingModule
       ),
   },
   {
     path: AccessRoutes.PRESCRIPTION_REFILL_EFORMS,
-    loadChildren: (): Promise<PrescriptionRefillEformsModule> =>
+    loadChildren: (): Promise<Type<PrescriptionRefillEformsModule>> =>
       import(
         './pages/prescription-refill-eforms/prescription-refill-eforms.module'
       ).then((m) => m.PrescriptionRefillEformsModule),
   },
   {
     path: AccessRoutes.BC_PROVIDER_APPLICATION,
-    loadChildren: (): Promise<BcProviderApplicationModule> =>
+    loadChildren: (): Promise<Type<BcProviderApplicationModule>> =>
       import(
         './pages/bc-provider-application/bc-provider-application.module'
       ).then((m) => m.BcProviderApplicationModule),
   },
   {
     path: AccessRoutes.BC_PROVIDER_EDIT,
-    loadChildren: (): Promise<BcProviderEditModule> =>
+    loadChildren: (): Promise<Type<BcProviderEditModule>> =>
       import('./pages/bc-provider-edit/bc-provider-edit.module').then(
         (m) => m.BcProviderEditModule
       ),
   },
   {
     path: AccessRoutes.HCIM_ACCOUNT_TRANSFER,
-    loadChildren: (): Promise<HcimAccountTransferModule> =>
+    loadChildren: (): Promise<Type<HcimAccountTransferModule>> =>
       import('./pages/hcim-account-transfer/hcim-account-transfer.module').then(
         (m) => m.HcimAccountTransferModule
       ),
@@ -60,7 +60,7 @@ const routes: Routes = [
     data: {
       roles: [Role.FEATURE_PIDP_DEMO],
     },
-    loadChildren: (): Promise<HcimEnrolmentModule> =>
+    loadChildren: (): Promise<Type<HcimEnrolmentModule>> =>
       import('./pages/hcim-enrolment/hcim-enrolment.module').then(
         (m) => m.HcimEnrolmentModule
       ),
@@ -71,7 +71,7 @@ const routes: Routes = [
     data: {
       roles: [Role.FEATURE_PIDP_DEMO],
     },
-    loadChildren: (): Promise<PharmanetModule> =>
+    loadChildren: (): Promise<Type<PharmanetModule>> =>
       import('./pages/pharmanet/pharmanet.module').then(
         (m) => m.PharmanetModule
       ),
@@ -82,35 +82,35 @@ const routes: Routes = [
     data: {
       roles: [Role.FEATURE_PIDP_DEMO],
     },
-    loadChildren: (): Promise<SitePrivacySecurityChecklistModule> =>
+    loadChildren: (): Promise<Type<SitePrivacySecurityChecklistModule>> =>
       import(
         './pages/site-privacy-security-checklist/site-privacy-security-checklist.module'
       ).then((m) => m.SitePrivacySecurityChecklistModule),
   },
   {
     path: AccessRoutes.DRIVER_FITNESS,
-    loadChildren: (): Promise<DriverFitnessModule> =>
+    loadChildren: (): Promise<Type<DriverFitnessModule>> =>
       import('./pages/driver-fitness/driver-fitness.module').then(
         (m) => m.DriverFitnessModule
       ),
   },
   {
     path: AccessRoutes.MS_TEAMS_PRIVACY_OFFICER,
-    loadChildren: (): Promise<MsTeamsPrivacyOfficerModule> =>
+    loadChildren: (): Promise<Type<MsTeamsPrivacyOfficerModule>> =>
       import(
         './pages/ms-teams-privacy-officer/ms-teams-privacy-officer.module'
       ).then((m) => m.MsTeamsPrivacyOfficerModule),
   },
   {
     path: AccessRoutes.PROVIDER_REPORTING_PORTAL,
-    loadChildren: (): Promise<ProviderReportingPortalModule> =>
+    loadChildren: (): Promise<Type<ProviderReportingPortalModule>> =>
       import(
         './pages/provider-reporting-portal/provider-reporting-portal.module'
       ).then((m) => m.ProviderReportingPortalModule),
   },
   {
     path: AccessRoutes.MS_TEAMS_CLINIC_MEMBER,
-    loadChildren: (): Promise<MsTeamsClinicMemberModule> =>
+    loadChildren: (): Promise<Type<MsTeamsClinicMemberModule>> =>
       import(
         './pages/ms-teams-clinic-member/ms-teams-clinic-member.module'
       ).then((m) => m.MsTeamsClinicMemberModule),
