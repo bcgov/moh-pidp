@@ -1,5 +1,10 @@
 import { Location } from '@angular/common';
-import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
+import {
+  ActivatedRoute,
+  NavigationExtras,
+  Params,
+  Router,
+} from '@angular/router';
 
 export type RoutePath = string | (string | number)[];
 
@@ -118,7 +123,7 @@ export class RouteUtils {
    * to a view. Query parameters are merged, but can be removed by
    * setting the keys value to `null`.
    */
-  public updateQueryParams(queryParams: { [key: string]: any }): void {
+  public updateQueryParams(queryParams: Params): void {
     // Passing `null` values removes the query parameter from the URL
     queryParams = { ...this.route.snapshot.queryParams, ...queryParams };
     this.router.navigate([], { queryParams });
@@ -129,7 +134,7 @@ export class RouteUtils {
    * Remove every query parameter on the current route without routing
    * to a view.
    */
-  public removeQueryParams(queryParams: { [key: string]: any } = {}): void {
+  public removeQueryParams(queryParams: Params = {}): void {
     this.router.navigate([], { queryParams });
   }
 
