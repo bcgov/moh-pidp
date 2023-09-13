@@ -12,7 +12,7 @@ import {
 import {
   ContextHelpContentDirective,
   ContextHelpTitleDirective,
-} from '../../modules';
+} from '../../modules/context-help';
 
 @Component({
   selector: 'ui-form-section',
