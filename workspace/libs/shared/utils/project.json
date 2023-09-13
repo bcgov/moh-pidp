@@ -1,6 +1,6 @@
 {
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "projectType": "library",
-  "root": "libs/shared/utils",
   "sourceRoot": "libs/shared/utils/src",
   "prefix": "workspace",
   "targets": {
@@ -8,7 +8,7 @@
       "executor": "@nrwl/jest:jest",
       "outputs": ["coverage/libs/shared/utils"],
       "options": {
-        "jestConfig": "libs/shared/utils/jest.config.js",
+        "jestConfig": "libs/shared/utils/jest.config.ts",
         "passWithNoTests": true
       }
     },
