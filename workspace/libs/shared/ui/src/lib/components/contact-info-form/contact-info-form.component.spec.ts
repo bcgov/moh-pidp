@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormControl, FormGroup } from '@angular/forms';
 
 import { ContactFormComponent } from './contact-info-form.component';
 
@@ -15,6 +16,11 @@ describe('ContactInfoFormComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(ContactFormComponent);
     component = fixture.componentInstance;
+    component.form = new FormGroup({
+      phone: new FormControl(''),
+      email: new FormControl(''),
+    });
+
     fixture.detectChanges();
   });
 
