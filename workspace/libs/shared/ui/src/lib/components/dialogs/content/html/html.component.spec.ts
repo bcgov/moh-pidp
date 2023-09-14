@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
+import { SafePipe } from '../../../../pipes';
 import { HtmlComponent } from './html.component';
 
 describe('HtmlComponent', () => {
@@ -8,13 +9,14 @@ describe('HtmlComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [HtmlComponent],
+      declarations: [HtmlComponent, SafePipe],
     }).compileComponents();
   });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(HtmlComponent);
     component = fixture.componentInstance;
+    component.data = { content: '' };
     fixture.detectChanges();
   });
 
