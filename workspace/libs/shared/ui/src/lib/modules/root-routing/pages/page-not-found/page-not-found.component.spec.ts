@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { randTextRange } from '@ngneat/falso';
 import { provideAutoSpy } from 'jest-auto-spies';
 
+import { RootRouteContainerComponent } from '../../shared/root-route-container/root-route-container.component';
 import { PageNotFoundComponent } from './page-not-found.component';
 
 describe('PageNotFoundComponent', () => {
@@ -26,7 +27,7 @@ describe('PageNotFoundComponent', () => {
     };
 
     await TestBed.configureTestingModule({
-      declarations: [PageNotFoundComponent],
+      declarations: [PageNotFoundComponent, RootRouteContainerComponent],
       providers: [
         {
           provide: ActivatedRoute,
