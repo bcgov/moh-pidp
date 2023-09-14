@@ -144,7 +144,7 @@ jobs:
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: 6.0.x
+          dotnet-version: 6.0.0
       - name: Build backend
         run: dotnet build --configuration Release
       - name: Run Tests
@@ -154,6 +154,7 @@ jobs:
   build-and-deploy-plr-intake:
     name: PLR Intake Backend Build and Deploy
     needs: [get-pr-number, unit-test-backend]
+    if: ${{ !(contains(needs.*.result, 'failure')) && needs.get-pr-number.outputs.pr_number != '' }}
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -185,7 +186,7 @@ jobs:
   build-and-deploy-webapi:
     name: WebAPI Backend Build and Deploy
     needs: [get-pr-number, unit-test-backend]
-    if: ${{ always() && !cancelled() && needs.get-pr-number.outputs.pr_number != '' }}
+    if: ${{ !(contains(needs.*.result, 'failure')) && needs.get-pr-number.outputs.pr_number != '' }}
     runs-on: ubuntu-latest
     defaults:
       run:
