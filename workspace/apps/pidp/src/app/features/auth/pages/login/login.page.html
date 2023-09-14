@@ -7,9 +7,9 @@
           <span class="title-text">OneHealthID Service</span>
         </h1>
       </header>
-      <header *ngIf="isWebTitleVisible" class="title-container">
-        <div class="title-content-container">
-          <h1 class="title">
+
+      <!-- <div class="title-container"> -->
+      <!-- <h1 class="title">
             <span class="title-text">OneHealthID Service</span>
           </h1>
           <section class="title-site-description">
@@ -17,8 +17,8 @@
               A suite of identity-related products and services for healthcare
               providers in BC.
             </p>
-          </section>
-          <section class="title-bcgov">
+          </section> -->
+      <!-- <section class="title-bcgov">
             <div class="title-bcgov-logo">
               <picture>
                 <source
@@ -26,31 +26,39 @@
                   srcset="/assets/images/BC_HLTH_H_RGB_rev.webp" />
                 <source
                   type="image/png"
-                  srcset="/assets/images/BC_HLTH_H_RGB_rev.png" />
+                  srcset="/assets/images/login-image-desktop.png" />
                 <img
                   title="BC Government Logo"
                   loading="lazy"
                   aria-label="BC Ministry of Health Logo" />
               </picture>
             </div>
-          </section>
-        </div>
-      </header>
+          </section> -->
+      <!-- </div> -->
+      <div class="background-image-container">
+        <img
+          ngSrc="/assets/images/login-image-giant-1920x1280.jpg"
+          priority
+          fill />
+      </div>
+
       <section class="welcome-section">
         <div class="welcome-container">
-          <div *ngIf="isPidpLogoVisible" class="welcome-pidp-logo">
-            <img
-              src="/assets/images/pidp-logo-blue.svg"
-              title="PIDP Logo"
-              loading="lazy"
-              aria-label="PIDP Logo" />
+          <div class="title-content-container">
+            <h1 class="title">
+              <span class="title-text"
+                ><strong>OneHealthID Service</strong></span
+              >
+            </h1>
+            <section class="title-site-description">
+              <p>
+                A suite of identity-related products and services for healthcare
+                providers in BC.
+              </p>
+            </section>
           </div>
           <ng-container *ngTemplateOutlet="login"></ng-container>
         </div>
-      </section>
-      <section class="systems-section">
-        <h1 class="systems-title">Systems Available</h1>
-        <ng-container *ngTemplateOutlet="systems"></ng-container>
       </section>
     </div>
   </div>
@@ -58,13 +66,15 @@
 
 <ng-template #login>
   <div class="login-container">
-    <div class="login-content">
+    <div class="login-container-app-button">
       <button
         class="login-app-button"
         mat-stroked-button
         (click)="onLogin(IdentityProvider.BCSC)">
         Login with the BC Services Card app
       </button>
+    </div>
+    <div class="login-content">
       <div class="login-setup">
         <small>
           Don't have an account?
@@ -79,45 +89,54 @@
             class="other-login-button"
             mat-icon-button
             (click)="onShowOtherLoginOptions()">
-            <i class="material-icons">keyboard_double_arrow_down</i>
+            <i class="material-icons-outlined">add_box</i>
           </button>
-        </div>
-        <div
-          class="other-login-panel"
-          [@expandAnimation]="showOtherLoginOptions">
-          <ng-container *ngIf="showOtherLoginOptions">
-            <div class="login-secondary-container">
-              <button
-                class="login-button-secondary"
-                mat-stroked-button
-                (click)="onLogin(IdentityProvider.PHSA)">
-                Health Authority ID
-              </button>
-              <button
-                class="login-button-secondary"
-                mat-stroked-button
-                (click)="onLogin(IdentityProvider.BC_PROVIDER)">
-                BC Provider
-              </button>
-            </div>
-            <div class="login-with-idir">
-              <small
-                >Do you have a IDIR account?
-                <a
-                  href="javascript:"
-                  role="button"
-                  (click)="onLogin(IdentityProvider.IDIR)"
-                  >Login</a
-                ></small
-              >
-            </div>
-          </ng-container>
         </div>
       </div>
     </div>
+
+    <div class="other-login-panel" [@expandAnimation]="showOtherLoginOptions">
+      <ng-container *ngIf="showOtherLoginOptions">
+        <div class="login-secondary-container">
+          <button
+            class="login-button-secondary"
+            mat-stroked-button
+            (click)="onLogin(IdentityProvider.PHSA)">
+            Health Authority ID
+          </button>
+          <button
+            class="login-button-secondary"
+            mat-stroked-button
+            (click)="onLogin(IdentityProvider.BC_PROVIDER)">
+            BC Provider
+          </button>
+        </div>
+        <div class="login-with-idir">
+          <small
+            >Do you have a IDIR account?
+            <a
+              href="javascript:"
+              role="button"
+              (click)="onLogin(IdentityProvider.IDIR)"
+              >Login</a
+            ></small
+          >
+        </div>
+      </ng-container>
+    </div>
   </div>
+  <!-- <div class="links">
+    <div class="need-help"></div>
+    <div class="about">
+      <a
+        uiAnchor
+        [href]="'https://www2.gov.bc.ca/gov/content/health/practitioner-professional-resources/onehealthid-service'"
+        >About OneHealthID Services</a
+      >
+    </div>
+  </div> -->
 </ng-template>
-<ng-template #systems>
+<!-- <ng-template #systems>
   <div class="systems-container">
     <div class="systems-content">
       <app-auth-system-card
@@ -216,7 +235,7 @@
       ongoing relationship between the patient and provider.
     </p>
   </div>
-</ng-template>
+</ng-template> -->
 <ng-template #admin>
   <div class="admin-container">
     <img
