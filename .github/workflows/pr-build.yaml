@@ -144,7 +144,7 @@ jobs:
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: 6.0.0
+          dotnet-version: 6.0.x
       - name: Build backend
         run: dotnet build --configuration Release
       - name: Run Tests
