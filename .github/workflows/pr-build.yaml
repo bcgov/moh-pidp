@@ -54,7 +54,6 @@ jobs:
         env:
           PR: ${{ steps.find-pr.outputs.pr }}
 
-
   Yarn-Lint:
     name: Frontend Yarn Lint
     runs-on: ubuntu-latest
@@ -79,8 +78,8 @@ jobs:
       - name: YARN Lint
         run:  yarn lint:all 
 
-  build-and-deploy-frontend:
-    name: Frontend Build and Deploy
+  build-and-push-frontend:
+    name: Frontend Build & Push
     runs-on: ubuntu-latest
     needs: get-pr-number
     if: ${{ always() && !cancelled() && needs.get-pr-number.outputs.pr_number != '' }}
@@ -150,9 +149,8 @@ jobs:
       - name: Run Tests
         run: dotnet test --configuration Release
 
-
-  build-and-deploy-plr-intake:
-    name: PLR Intake Backend Build and Deploy
+  build-and-push-plr-intake:
+    name: PLR Intake Backend Build & Push
     needs: [get-pr-number, unit-test-backend]
     if: ${{ !(contains(needs.*.result, 'failure')) && needs.get-pr-number.outputs.pr_number != '' }}
     runs-on: ubuntu-latest
@@ -183,8 +181,8 @@ jobs:
         run: |
           docker push image-registry.apps.silver.devops.gov.bc.ca/d8a8f9-tools/pidp-plr-intake:pr-${{ needs.get-pr-number.outputs.pr_number }}
 
-  build-and-deploy-webapi:
-    name: WebAPI Backend Build and Deploy
+  build-and-push-webapi:
+    name: WebAPI Backend Build & Push
     needs: [get-pr-number, unit-test-backend]
     if: ${{ !(contains(needs.*.result, 'failure')) && needs.get-pr-number.outputs.pr_number != '' }}
     runs-on: ubuntu-latest
@@ -216,7 +214,7 @@ jobs:
           docker push image-registry.apps.silver.devops.gov.bc.ca/d8a8f9-tools/pidp-webapi:pr-${{ needs.get-pr-number.outputs.pr_number }}
      
   helm-deployment:
-    needs: [build-and-deploy-webapi, build-and-deploy-plr-intake, build-and-deploy-frontend]
+    needs: [build-and-push-webapi, build-and-push-plr-intake, build-and-push-frontend]
     runs-on: 'ubuntu-latest'
     permissions:
       contents: read
@@ -225,7 +223,7 @@ jobs:
       - uses: actions/checkout@master
 
       - name: Authenticate and set context
-        uses: redhat-actions/oc-login@v1.1
+        uses: redhat-actions/oc-login@v1.2
         with:
           openshift_server_url: ${{secrets.OPENSHIFT_CLUSTER_URL}}
           openshift_token: ${{secrets.OPENSHIFT_PIPELINE_SERVICE_ACCOUNT_TOKEN}}
