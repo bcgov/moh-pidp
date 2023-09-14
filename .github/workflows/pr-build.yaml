@@ -142,9 +142,9 @@ jobs:
       - name: "Checkout Code"
         uses: actions/checkout@master
       - name: Setup .NET Core
-        uses: actions/setup-dotnet@v1
+        uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: 6.0.0
+          dotnet-version: 6.0.x
       - name: Build backend
         run: dotnet build --configuration Release
       - name: Run Tests
@@ -154,7 +154,6 @@ jobs:
   build-and-deploy-plr-intake:
     name: PLR Intake Backend Build and Deploy
     needs: [get-pr-number, unit-test-backend]
-    if: ${{ always() && !cancelled() && needs.get-pr-number.outputs.pr_number != '' }}
     runs-on: ubuntu-latest
     defaults:
       run:
