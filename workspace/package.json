@@ -7,7 +7,8 @@
     "build": "nx build",
     "lint:all": "nx run-many --all --target=lint",
     "test": "nx test",
-    "test:ci": "nx test --ci --reporters=default --reporters=jest-junit",
+    "test:all": "nx run-many --all --target=test",
+    "test:ci": "nx run-many --all --target=test --ci --reporters=default --reporters=jest-junit",
     "analyze": "nx build pidp --stats-json && webpack-bundle-analyzer dist/apps/pidp/stats.json",
     "postinstall": "ngcc --properties es2020 browser module main"
   },
@@ -96,4 +97,3 @@
     "titleTemplate": "{title}"
   }
 }
-

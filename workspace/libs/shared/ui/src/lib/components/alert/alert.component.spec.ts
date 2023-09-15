@@ -1,5 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatCardModule } from '@angular/material/card';
 
+import { CardComponent } from '../card/card.component';
 import { AlertComponent } from './alert.component';
 
 describe('AlertComponent', () => {
@@ -8,7 +10,8 @@ describe('AlertComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [AlertComponent],
+      declarations: [AlertComponent, CardComponent],
+      imports: [MatCardModule],
     }).compileComponents();
   });
 

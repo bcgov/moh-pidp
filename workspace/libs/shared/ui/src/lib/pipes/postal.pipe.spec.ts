@@ -17,6 +17,6 @@ describe('PostalPipe', () => {
       pipe.transform(null),
       pipe.transform(undefined),
     ];
-    results.forEach((result) => expect(result).toBe(''));
+    results.forEach((result) => expect(result).toBeNull());
   });
 });

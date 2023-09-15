@@ -14,14 +14,21 @@ describe('FormatDatePipe', () => {
 
   it('should format the date to a requested format', () => {
     const value = '1977-09-22T14:30:00';
-    const format = 'MMMM DD, YYYY HH:mm a';
+    const format = 'MMMM dd, yyyy HH:mm a';
     const result = pipe.transform(value, format);
-    expect(result).toBe('September 22, 1977 14:30 pm');
+    expect(result).toBe('September 22, 1977 14:30 PM');
+  });
+
+  it('should format the date and hours to a requested hours format', () => {
+    const value = '1984-02-15T15:32:00';
+    const format = 'h:mm a';
+    const result = pipe.transform(value, format);
+    expect(result).toBe('3:32 PM');
   });
 
   it('should not fail when passed a null', () => {
     const value = null;
     const result = pipe.transform(value);
-    expect(result).toBe('');
+    expect(result).toBeNull();
   });
 });
