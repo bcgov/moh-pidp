@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatListModule } from '@angular/material/list';
 
 import { DashboardMenuComponent } from './dashboard-menu.component';
 
@@ -9,6 +10,7 @@ describe('DashboardMenuComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [DashboardMenuComponent],
+      imports: [MatListModule],
     }).compileComponents();
   });
 

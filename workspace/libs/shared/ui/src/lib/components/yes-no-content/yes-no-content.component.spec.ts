@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatRadioModule } from '@angular/material/radio';
 
 import { YesNoContentComponent } from './yes-no-content.component';
 
@@ -9,6 +10,7 @@ describe('YesNoContentComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [YesNoContentComponent],
+      imports: [MatRadioModule],
     }).compileComponents();
   });
 
