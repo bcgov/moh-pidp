@@ -76,7 +76,6 @@ public class DemographicsTests : InMemoryDbTest
         var emailEvent = this.PublishedEvents.OfType<PartyEmailUpdated>().Single();
         Assert.Equal(party.Id, emailEvent.PartyId);
         Assert.Equal(command.Email, emailEvent.NewEmail);
-
     }
 
     [Fact]
