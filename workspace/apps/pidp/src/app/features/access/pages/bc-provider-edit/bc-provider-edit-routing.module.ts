@@ -3,20 +3,16 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { SetDashboardTitleGuard } from '@pidp/presentation';
 
-import { DriverFitnessPage } from './driver-fitness.page';
-import { DriverFitnessResolver } from './driver-fitness.resolver';
+import { BcProviderEditPage } from './bc-provider-edit.page';
 
 const routes: Routes = [
   {
     path: '',
-    component: DriverFitnessPage,
     canActivate: [SetDashboardTitleGuard],
-    resolve: {
-      driverFitnessStatusCode: DriverFitnessResolver,
-    },
+    component: BcProviderEditPage,
     data: {
       setDashboardTitleGuard: {
-        titleText: 'Driver Fitness Practitioner Portal Application',
+        titleText: 'BC Provider and OneHealthID',
         titleDescriptionText: '',
       },
     },
@@ -27,4 +23,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class DriverFitnessRoutingModule {}
+export class BcProviderEditRoutingModule {}

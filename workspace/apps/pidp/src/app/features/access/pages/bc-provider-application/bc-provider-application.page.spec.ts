@@ -14,10 +14,10 @@ import { APP_CONFIG, APP_DI_CONFIG } from '@app/app.config';
 import { PartyService } from '@app/core/party/party.service';
 import { FormUtilsService } from '@app/core/services/form-utils.service';
 
-import { BcProviderApplicationComponent } from './bc-provider-application.component';
+import { BcProviderApplicationPage } from './bc-provider-application.page';
 
-describe('BcProviderApplicationComponent', () => {
-  let component: BcProviderApplicationComponent;
+describe('BcProviderApplicationPage', () => {
+  let component: BcProviderApplicationPage;
   let partyServiceSpy: Spy<PartyService>;
   let formUtilsServiceSpy: Spy<FormUtilsService>;
   let navigationServiceSpy: Spy<NavigationService>;
@@ -40,7 +40,7 @@ describe('BcProviderApplicationComponent', () => {
     TestBed.configureTestingModule({
       imports: [MatDialogModule, ReactiveFormsModule],
       providers: [
-        BcProviderApplicationComponent,
+        BcProviderApplicationPage,
         { provide: APP_CONFIG, useValue: APP_DI_CONFIG },
         {
           provide: ActivatedRoute,
@@ -60,7 +60,7 @@ describe('BcProviderApplicationComponent', () => {
         provideAutoSpy(Router),
       ],
     });
-    component = TestBed.inject(BcProviderApplicationComponent);
+    component = TestBed.inject(BcProviderApplicationPage);
     formUtilsServiceSpy = TestBed.inject<any>(FormUtilsService);
     navigationServiceSpy = TestBed.inject<any>(NavigationService);
     partyServiceSpy = TestBed.inject<any>(PartyService);

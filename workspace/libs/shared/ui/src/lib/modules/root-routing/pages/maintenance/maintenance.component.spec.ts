@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
+import { RootRouteContainerComponent } from '../../shared/root-route-container/root-route-container.component';
 import { MaintenanceComponent } from './maintenance.component';
 
 describe('MaintenanceComponent', () => {
@@ -8,7 +9,7 @@ describe('MaintenanceComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [MaintenanceComponent],
+      declarations: [MaintenanceComponent, RootRouteContainerComponent],
     }).compileComponents();
   });
 

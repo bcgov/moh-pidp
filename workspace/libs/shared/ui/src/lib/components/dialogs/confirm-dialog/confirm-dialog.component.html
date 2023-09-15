@@ -2,9 +2,9 @@
   <mat-icon
     *ngIf="options.icon && !options.imageSrc"
     [class]="{
-      'material-icons-outlined': options?.iconType === 'outlined',
-      'material-icons-round': options?.iconType === 'round',
-      'material-icons-sharp': options?.iconType === 'sharp'
+      'material-icons-outlined': options.iconType === 'outlined',
+      'material-icons-round': options.iconType === 'round',
+      'material-icons-sharp': options.iconType === 'sharp'
     }"
     [color]="options.actionType">
     {{ options.icon }}
@@ -38,6 +38,6 @@
   <span></span>
 
   <a *ngIf="options.actionLink" uiAnchor [attr.href]="options.actionLink.href">
-    {{ options.actionLink?.text }}
+    {{ options.actionLink.text }}
   </a>
 </mat-dialog-actions>

@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, Type } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { ShellModule } from './features/shell/shell.module';
@@ -7,7 +7,7 @@ import { ShellRoutes } from './features/shell/shell.routes';
 const routes: Routes = [
   {
     path: ShellRoutes.MODULE_PATH,
-    loadChildren: (): Promise<ShellModule> =>
+    loadChildren: (): Promise<Type<ShellModule>> =>
       import('./features/shell/shell.module').then((m) => m.ShellModule),
   },
 ];
