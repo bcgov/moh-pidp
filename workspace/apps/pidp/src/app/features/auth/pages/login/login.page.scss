@@ -258,6 +258,7 @@ a {
       width: 50%;
       height: 100%;
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
       margin: auto;
@@ -337,6 +338,31 @@ a {
               opacity: 1;
             }
           }
+        }
+      }
+    }
+
+    & .links {
+      display: flex;
+      justify-content: space-evenly;
+      width: 600px;
+      & .need-help {
+        cursor: pointer;
+      }
+      & .need-help a,
+      .about a {
+        display: flex;
+        align-items: center;
+
+        text-decoration: none;
+      }
+    }
+    & .show-need-help {
+      width: 500px;
+      & .need-help-container {
+        display: flex;
+        & .need-help-list {
+          list-style: none;
         }
       }
     }

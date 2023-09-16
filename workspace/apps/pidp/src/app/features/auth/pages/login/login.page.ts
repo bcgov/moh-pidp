@@ -62,6 +62,7 @@ export class LoginPage {
   public prescriptionRenewalSupportUrl: string;
   public bcscAppDownload: string;
   public showOtherLoginOptions: boolean;
+  public showNeedHelp: boolean;
 
   public IdentityProvider = IdentityProvider;
 
@@ -99,6 +100,7 @@ export class LoginPage {
       this.onViewportChange(viewport)
     );
     this.showOtherLoginOptions = false;
+    this.showNeedHelp = false;
   }
   private onViewportChange(viewport: PidpViewport): void {
     this.viewport = viewport;
@@ -132,6 +134,10 @@ export class LoginPage {
 
   public onShowOtherLoginOptions(): void {
     this.showOtherLoginOptions = !this.showOtherLoginOptions;
+  }
+
+  public onShowNeedHelp(): void {
+    this.showNeedHelp = !this.showNeedHelp;
   }
 
   public onLogin(idpHint: IdentityProvider): void {

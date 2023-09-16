@@ -59,6 +59,33 @@
           </div>
           <ng-container *ngTemplateOutlet="login"></ng-container>
         </div>
+        <div class="links">
+          <div class="need-help">
+            <a (click)="onShowNeedHelp()">
+              Need Help?
+              <i class="material-icons-outlined">arrow_circle_right</i></a
+            >
+          </div>
+          <div class="about">
+            <a
+              uiAnchor
+              [href]="'https://www2.gov.bc.ca/gov/content/health/practitioner-professional-resources/onehealthid-service'"
+              >About OneHealthID Services<i class="material-icons-outlined"
+                >arrow_circle_right</i
+              ></a
+            >
+          </div>
+        </div>
+        <div class="show-need-help" [@expandAnimation]="showNeedHelp">
+          <ng-container *ngIf="showNeedHelp"
+            ><div class="need-help-container">
+              <ul class="need-help-list">
+                <li>By email at AMSSPOC.vic@CGI.com</li>
+                <li>By phone at 250-857-1969</li>
+              </ul>
+            </div></ng-container
+          >
+        </div>
       </section>
     </div>
   </div>
@@ -125,16 +152,6 @@
       </ng-container>
     </div>
   </div>
-  <!-- <div class="links">
-    <div class="need-help"></div>
-    <div class="about">
-      <a
-        uiAnchor
-        [href]="'https://www2.gov.bc.ca/gov/content/health/practitioner-professional-resources/onehealthid-service'"
-        >About OneHealthID Services</a
-      >
-    </div>
-  </div> -->
 </ng-template>
 <!-- <ng-template #systems>
   <div class="systems-container">
