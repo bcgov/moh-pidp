@@ -1,6 +1,7 @@
 namespace Pidp;
 
 using FluentValidation.AspNetCore;
+using MassTransit;
 using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.EntityFrameworkCore;
@@ -19,7 +20,6 @@ using Pidp.Infrastructure;
 using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.HttpClients;
 using Pidp.Infrastructure.Services;
-using MassTransit;
 using Pidp.Infrastructure.Queue;
 
 public class Startup
