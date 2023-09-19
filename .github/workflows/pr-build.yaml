@@ -59,6 +59,12 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          projectBaseDir: workspace/
+          args: >
+            -Dsonar.organization=bcgov-sonarcloud
+            -Dsonar.projectKey=bcgov_moh-pidp
+            -Dsonar.sources=workspace/apps,
 
   Yarn-Lint:
     name: Frontend Yarn Lint
