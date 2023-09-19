@@ -110,6 +110,20 @@ jobs:
         run: |
           yarn test:ci
 
+      - name: Sonar Scan
+        run : |
+          cd ../sonar-runner
+          ./gradlew sonarqube --stacktrace --info \
+            -Dsonar.verbose=true \
+            -Dsonar.login=f606bc25f190b5ed59cb813a728cbcf30c849726 \
+            -Dsonar.host.url='https://sonarqube-d8a8f9-tools.apps.silver.devops.gov.bc.ca/' \
+            -Dsonar.projectName='webapi' \
+            -Dsonar.projectKey=webapi \
+            -Dsonar.projectVersion='pr-300' \
+            -Dsonar.qualitygate.wait=true \
+            -Dsonar.projectBaseDir='../workspace' \
+            -Dsonar.sources='../backend/webapi' 
+
       - name: "Docker Build"
         run: |
           docker build -t image-registry.apps.silver.devops.gov.bc.ca/d8a8f9-tools/pidp-frontend:pr-${{ needs.get-pr-number.outputs.pr_number }} .
