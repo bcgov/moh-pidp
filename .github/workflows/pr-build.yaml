@@ -43,7 +43,7 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
   SonarScan-net:
-    name: onarScan for c#
+    name: SonarScan for c#
     runs-on: windows-latest
     steps:
       - name: Set up JDK 17
@@ -81,8 +81,7 @@ jobs:
         run: |
           dotnet tool install --global dotnet-sonarscanner
           .\.sonar\scanner\dotnet-sonarscanner begin /k:"bcgov_moh-pidp" /o:"bcgov-sonarcloud" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.verbose=true
-          dotnet build --no-incremental -v:n
-          dotnet-coverage collect "dotnet test" -f xml -o "coverage.xml"
+          dotnet build backend\pidp-backend.sln
           .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
               
   get-pr-number:
