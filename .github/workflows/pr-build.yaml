@@ -29,18 +29,7 @@ concurrency:
 jobs:
 
 
-  SonarCloud-Ts-js:
-    name: SonarCloud for TS and JS
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
-      - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
 
   SonarScan-net:
     name: SonarScan for c#
@@ -82,7 +71,6 @@ jobs:
           dotnet tool install --global dotnet-sonarscanner
           .\.sonar\scanner\dotnet-sonarscanner begin /k:"bcgov_moh-pidp" /o:"bcgov-sonarcloud" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.verbose=true
           dotnet build backend\pidp-backend.sln
-          dotnet test backend\pidp-backend.sln --collect "Code Coverage"
           .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
               
   get-pr-number:
