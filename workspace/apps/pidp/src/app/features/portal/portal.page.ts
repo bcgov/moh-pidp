@@ -61,6 +61,9 @@ export class PortalPage implements OnInit {
   public bcProvider$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
     false
   );
+  public endorsement$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
+    true
+  );
   public rostering$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
     true
   );
@@ -184,6 +187,7 @@ export class PortalPage implements OnInit {
           profileStatus?.status.collegeCertification.statusCode;
         if (this.collegeLicenceStatusCode === 2) {
           this.collegeLicence$.next(true);
+          this.endorsement$.next(false);
         } else if (selectedIndex === this.lastSelectedIndex) {
           selectedIndex = 1;
         }

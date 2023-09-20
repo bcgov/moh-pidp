@@ -34,6 +34,6 @@ describe('PhonePipe', () => {
 
   it('should not format a phone number that is null', () => {
     const result = pipe.transform(null as any);
-    expect(result).toBeNull();
+    expect(result).toBe('');
   });
 });

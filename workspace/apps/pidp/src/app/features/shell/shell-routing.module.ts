@@ -1,5 +1,5 @@
 import { PortalModule } from '@angular/cdk/portal';
-import { NgModule } from '@angular/core';
+import { NgModule, Type } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { PartyResolver } from '@app/core/party/party.resolver';
@@ -31,18 +31,18 @@ import { ShellRoutes } from './shell.routes';
 const routes: Routes = [
   {
     path: AuthRoutes.MODULE_PATH,
-    loadChildren: (): Promise<AuthModule> =>
+    loadChildren: (): Promise<Type<AuthModule>> =>
       import('../auth/auth.module').then((m) => m.AuthModule),
   },
   {
     path: AdminRoutes.MODULE_PATH,
     canLoad: [AuthenticationGuard],
-    loadChildren: (): Promise<AdminModule> =>
+    loadChildren: (): Promise<Type<AdminModule>> =>
       import('../admin/admin.module').then((m) => m.AdminModule),
   },
   {
     path: ShellRoutes.SUPPORT_ERROR_PAGE,
-    loadChildren: (): Promise<SupportErrorModule> =>
+    loadChildren: (): Promise<Type<SupportErrorModule>> =>
       import('../shell/pages/support-error/support-error.module').then(
         (m) => m.SupportErrorModule
       ),
@@ -63,24 +63,24 @@ const routes: Routes = [
     children: [
       {
         path: PortalRoutes.MODULE_PATH,
-        loadChildren: (): Promise<PortalModule> =>
+        loadChildren: (): Promise<Type<PortalModule>> =>
           import('../portal/portal.module').then((m) => m.PortalModule),
       },
       {
         path: ProfileRoutes.MODULE_PATH,
-        loadChildren: (): Promise<ProfileModule> =>
+        loadChildren: (): Promise<Type<ProfileModule>> =>
           import('../profile/profile.module').then((m) => m.ProfileModule),
       },
       {
         path: OrganizationInfoRoutes.MODULE_PATH,
-        loadChildren: (): Promise<OrganizationInfoModule> =>
+        loadChildren: (): Promise<Type<OrganizationInfoModule>> =>
           import('../organization-info/organization-info.module').then(
             (m) => m.OrganizationInfoModule
           ),
       },
       {
         path: AccessRoutes.MODULE_PATH,
-        loadChildren: (): Promise<AccessModule> =>
+        loadChildren: (): Promise<Type<AccessModule>> =>
           import('../access/access.module').then((m) => m.AccessModule),
       },
       {
@@ -89,17 +89,17 @@ const routes: Routes = [
         data: {
           roles: [Role.FEATURE_PIDP_DEMO],
         },
-        loadChildren: (): Promise<TrainingModule> =>
+        loadChildren: (): Promise<Type<TrainingModule>> =>
           import('../training/training.module').then((m) => m.TrainingModule),
       },
       {
         path: HistoryRoutes.MODULE_PATH,
-        loadChildren: (): Promise<HistoryModule> =>
+        loadChildren: (): Promise<Type<HistoryModule>> =>
           import('../history/history.module').then((m) => m.HistoryModule),
       },
       {
         path: FaqRoutes.MODULE_PATH,
-        loadChildren: (): Promise<FaqModule> =>
+        loadChildren: (): Promise<Type<FaqModule>> =>
           import('../faq/faq.module').then((m) => m.FaqModule),
       },
       {

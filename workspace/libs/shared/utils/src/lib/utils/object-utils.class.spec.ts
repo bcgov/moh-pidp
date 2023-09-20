@@ -19,14 +19,14 @@ describe('ObjectUtils', () => {
       util.keyMapping(object, { username: 'email', name: 'fullName' });
 
       expect(object).toEqual(
-        jasmine.objectContaining({
+        expect.objectContaining({
           id: 1,
           email: 'giant@chicken.com',
           fullName: 'Foghorn Leghorn',
         })
       );
       expect(object).not.toEqual(
-        jasmine.objectContaining({
+        expect.objectContaining({
           username: 'giant@chicken.com',
           name: 'Foghorn Leghorn',
         })
@@ -41,14 +41,14 @@ describe('ObjectUtils', () => {
       });
 
       expect(object).toEqual(
-        jasmine.objectContaining({
+        expect.objectContaining({
           id: 1,
           email: 'giant@chicken.com',
           fullName: 'Foghorn Leghorn',
         })
       );
       expect(object as any).not.toEqual(
-        jasmine.objectContaining({
+        expect.objectContaining({
           notMapped: 'true',
         })
       );
@@ -58,7 +58,7 @@ describe('ObjectUtils', () => {
       util.keyMapping(null as any, { username: 'email', name: 'fullName' });
 
       expect(object).toEqual(
-        jasmine.objectContaining({
+        expect.objectContaining({
           id: 1,
           username: 'giant@chicken.com',
           name: 'Foghorn Leghorn',
@@ -70,7 +70,7 @@ describe('ObjectUtils', () => {
       util.keyMapping(object, null as any);
 
       expect(object).toEqual(
-        jasmine.objectContaining({
+        expect.objectContaining({
           id: 1,
           username: 'giant@chicken.com',
           name: 'Foghorn Leghorn',
@@ -96,7 +96,7 @@ describe('ObjectUtils', () => {
       });
 
       expect(result).toEqual(
-        jasmine.objectContaining({
+        expect.objectContaining({
           name: 'Foghorn Leghorn',
           quote: "Now who's, I say who's responsible for this",
         })
