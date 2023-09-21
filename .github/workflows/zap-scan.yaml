@@ -13,7 +13,10 @@ on:
   push:
     branches: ['develop','zapscan']
 
-permissions: write-all
+
+permissions:
+    contents: read
+    issues: write
 
 # This will terminate builds that are previously, but continuing to run.  Saves GHA hours.
 concurrency:
@@ -41,13 +44,7 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           docker_name: "owasp/zap2docker-stable"
-          issue_title: "ZAP Scan Report"
+          issue_title: "ZAP Scan Reports"
           fail_action: false
           target: "https://dev.healthprovideridentityportal.gov.bc.ca/auth/login"
           cmd_options: '-a'
-
-      - name: Upload Report as Artifact
-        uses: actions/upload-artifact@v3
-        with:
-            name: ZAP SCAN - Full Application Report
-            path: report_html.html
