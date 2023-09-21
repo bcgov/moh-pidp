@@ -6,10 +6,11 @@ on:
       environment:
         description: "Environment:"
         type: choice
+        default: 'DEV'
         required: true
         options:
-        - DEV
-        - TEST
+          - DEV
+          - TEST
   push:
     branches: ['develop']
 
