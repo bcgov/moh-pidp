@@ -1,7 +1,7 @@
 name: ZAP Scanner
 on:
   push:
-    branches: [develop]
+    branches: ['develop','zapscan']
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
     inputs:
@@ -39,3 +39,8 @@ jobs:
           target: ${{ env.ZAP_URL }}
           cmd_options: '-a'
 
+      - name: Upload Report as Artifact
+        uses: actions/upload-artifact@v3
+        with:
+            name: OWASP ZAP - MSP Direct UAT Front End Report
+            path: report_html.html
