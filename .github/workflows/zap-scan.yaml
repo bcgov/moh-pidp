@@ -13,7 +13,7 @@ on:
   push:
     branches: ['develop','zapscan']
 
-permissions: read-all
+permissions: read-all|write-all
 
 # This will terminate builds that are previously, but continuing to run.  Saves GHA hours.
 concurrency:
@@ -49,5 +49,5 @@ jobs:
       - name: Upload Report as Artifact
         uses: actions/upload-artifact@v3
         with:
-            name: OWASP ZAP - MSP Direct UAT Front End Report
+            name: ZAP SCAN - Full Application Report
             path: report_html.html
