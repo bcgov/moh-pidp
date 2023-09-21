@@ -1,7 +1,5 @@
 name: ZAP Scanner
 on:
-  push:
-    branches: ['develop','zapscan']
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
     inputs:
@@ -12,6 +10,15 @@ on:
         options:
         - PR
         - DEV
+  push:
+    branches: ['develop','zapscan']
+
+permissions: read-all
+
+# This will terminate builds that are previously, but continuing to run.  Saves GHA hours.
+concurrency:
+    group: ${{ github.workflow }}-${{ github.ref }}
+    cancel-in-progress: true
 
 jobs:
   zap_scan:
@@ -36,7 +43,7 @@ jobs:
           docker_name: "owasp/zap2docker-stable"
           issue_title: "ZAP Scan Report"
           fail_action: false
-          target: ${{ env.ZAP_URL }}
+          target: "https://dev.healthprovideridentityportal.gov.bc.ca/auth/login"
           cmd_options: '-a'
 
       - name: Upload Report as Artifact
