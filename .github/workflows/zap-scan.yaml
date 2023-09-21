@@ -12,8 +12,9 @@ on:
           - DEV
           - TEST
   push:
-    branches: ['develop']
-
+    branches:
+      - 'develop'
+      - 'test'
 
 permissions:
     contents: read
