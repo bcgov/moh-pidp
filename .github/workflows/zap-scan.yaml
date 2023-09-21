@@ -1,0 +1,29 @@
+name: ZAP Scanner
+on:
+  workflow_run:
+    workflows: ["Build All - PR"]
+    types:
+      - completed
+jobs:
+  zap_scan:
+    runs-on: ubuntu-latest
+    name: Scan the application
+    steps:
+      - name: Checkout
+        uses: actions/checkout@master
+
+      - name: ZAP Scan
+        uses: zaproxy/action-full-scan@v0.7.0
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          docker_name: "owasp/zap2docker-stable"
+          issue_title: "ZAP Scan Report"
+          fail_action: false
+          target: "dev.healthprovideridentityportal.gov.bc.ca/auth/login"
+          cmd_options: '-a'
+
+      - name: Upload Report as Artifact
+        uses: actions/upload-artifact@v3
+        with:
+            name: OWASP ZAP - MSP Direct UAT Front End Report
+            path: report_html.html
