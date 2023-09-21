@@ -21,10 +21,15 @@ a {
     }
   }
   & .welcome-section {
+    & .title-content-container {
+      display: flex;
+      flex-direction: column;
+    }
     & .login-container {
       display: flex;
       flex-direction: column;
       width: 100%;
+      flex-grow: 1;
       & .login-content {
         display: flex;
         justify-content: center;
@@ -208,52 +213,52 @@ a {
       }
     }
 
-    // & .title-container {
-    // background-image: url('/assets/images/login-image-giant.jpg');
-    // background-repeat: no-repeat;
-    // background-size: cover;
-    // background-position: center center;
-    // height: 648px;
-    // width: 585px;
-    // display: flex;
-    // justify-content: center;
-    // align-items: center;
-    // margin: auto;
+    & .title-container {
+      // background-image: url('/assets/images/login-image-giant.jpg');
+      // background-repeat: no-repeat;
+      // background-size: cover;
+      // background-position: center center;
+      // height: 648px;
+      // width: 585px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: auto;
 
-    // & .title-content-container {
-    //   display: flex;
-    //   flex-direction: column;
-    //   padding: 30px;
-    //   height: auto;
-    //   width: 100%;
+      & .title-content-container {
+        display: flex;
+        flex-direction: column;
+        padding: 30px;
+        height: auto;
+        width: 100%;
 
-    //   & h1.title {
-    //     font-size: 4.25em;
-    //     font-weight: 700;
-    //     line-height: 1.4;
-    //   }
+        //   & h1.title {
+        //     font-size: 4.25em;
+        //     font-weight: 700;
+        //     line-height: 1.4;
+        //   }
 
-    //   & .title-site-description {
-    //     width: 80%;
-    //     margin-right: 20%;
-    //     margin-bottom: 10px;
-    //     padding: 10px 40px 10px 20px;
-    //     background-color: #00000000;
-    //     line-height: 1.6;
-    //     & p {
-    //       font-size: 1.15em;
-    //       margin: 0;
-    //       color: #ffffff;
-    //     }
-    //   }
+        //   & .title-site-description {
+        //     width: 80%;
+        //     margin-right: 20%;
+        //     margin-bottom: 10px;
+        //     padding: 10px 40px 10px 20px;
+        //     background-color: #00000000;
+        //     line-height: 1.6;
+        //     & p {
+        //       font-size: 1.15em;
+        //       margin: 0;
+        //       color: #ffffff;
+        //     }
+        //   }
 
-    //   & .title-bcgov img {
-    //     height: 122px;
-    //     width: 240px;
-    //     margin-left: -20px;
-    //   }
-    // }
-    // }
+        //   & .title-bcgov img {
+        //     height: 122px;
+        //     width: 240px;
+        //     margin-left: -20px;
+        //   }
+      }
+    }
     & .welcome-section {
       width: 50%;
       height: 100%;
@@ -267,12 +272,13 @@ a {
         display: flex;
         flex-direction: column;
         justify-content: center;
-        align-items: center;
-        height: 40%;
-        width: 50%;
+        height: 70%;
+        width: 70%;
         border: 3px solid pidp.$bcgov-color-background-darker-grey;
-        padding: 50px;
+        padding: 100px;
         border-radius: 10px;
+        gap: 20px;
+        flex-grow: 2;
 
         & .welcome-pidp-logo {
           display: flex;
@@ -345,7 +351,10 @@ a {
     & .links {
       display: flex;
       justify-content: space-evenly;
+      flex-grow: 1;
+      height: 30%;
       width: 600px;
+      margin-top: 100px;
       & .need-help {
         cursor: pointer;
       }
@@ -358,7 +367,7 @@ a {
       }
     }
     & .show-need-help {
-      width: 500px;
+      width: 100px;
       & .need-help-container {
         display: flex;
         & .need-help-list {

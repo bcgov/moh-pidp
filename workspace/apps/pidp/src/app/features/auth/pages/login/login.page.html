@@ -65,6 +65,16 @@
               Need Help?
               <i class="material-icons-outlined">arrow_circle_right</i></a
             >
+            <div class="show-need-help" [@expandAnimation]="showNeedHelp">
+              <ng-container *ngIf="showNeedHelp"
+                ><div class="need-help-container">
+                  <ul class="need-help-list">
+                    <li>By email at OneHealthID@gov.bc.ca</li>
+                    <li>By phone at 250-857-1969</li>
+                  </ul>
+                </div></ng-container
+              >
+            </div>
           </div>
           <div class="about">
             <a
@@ -75,16 +85,6 @@
               ></a
             >
           </div>
-        </div>
-        <div class="show-need-help" [@expandAnimation]="showNeedHelp">
-          <ng-container *ngIf="showNeedHelp"
-            ><div class="need-help-container">
-              <ul class="need-help-list">
-                <li>By email at OneHealthID@gov.bc.ca</li>
-                <li>By phone at 250-857-1969</li>
-              </ul>
-            </div></ng-container
-          >
         </div>
       </section>
     </div>
