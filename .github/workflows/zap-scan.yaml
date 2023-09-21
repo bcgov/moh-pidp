@@ -1,9 +1,7 @@
 name: ZAP Scanner
 on:
-  workflow_run:
-    workflows: ["Build All - PR"]
-    types:
-      - completed
+  push:
+    branches: [develop]
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
     inputs:

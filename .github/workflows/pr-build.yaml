@@ -54,6 +54,16 @@ jobs:
         env:
           PR: ${{ steps.find-pr.outputs.pr }}
 
+      - name: ZAP Scan
+        uses: zaproxy/action-full-scan@v0.7.0
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          docker_name: "owasp/zap2docker-stable"
+          issue_title: "ZAP Scan Report"
+          fail_action: false
+          target: "dev.healthprovideridentityportal.gov.bc.ca/auth/login"
+          cmd_options: '-a'
+
   Yarn-Lint:
     name: Frontend Yarn Lint
     runs-on: ubuntu-latest
