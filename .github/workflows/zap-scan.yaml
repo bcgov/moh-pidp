@@ -2,6 +2,14 @@ name: ZAP Scanner
 on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
+    inputs:
+      environment:
+        description: "Environment:"
+        type: choice
+        required: true
+        options:
+        - DEV
+        - TEST
   push:
     branches: ['develop']
 
@@ -23,12 +31,19 @@ jobs:
       - name: Checkout
         uses: actions/checkout@master
 
+      - name: Set environment
+        run: |
+            echo "ZAP_URL=https://dev.healthprovideridentityportal.gov.bc.ca/auth/login" >> $GITHUB_ENV
+            if [ ${{ github.event.inputs.Environment }} == 'TEST' ]; then
+            echo "ZAP_URL=https://test.healthprovideridentityportal.gov.bc.ca/auth/login" >> $GITHUB_ENV
+            fi
+
       - name: ZAP Scan
         uses: zaproxy/action-full-scan@v0.7.0
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           docker_name: "owasp/zap2docker-stable"
-          issue_title: "ZAP Scan Reports"
+          issue_title: "ZAP Scan Report"
           fail_action: false
-          target: "https://dev.healthprovideridentityportal.gov.bc.ca/auth/login"
+          target: ${{ env.ZAP_URL }}
           cmd_options: '-a'
