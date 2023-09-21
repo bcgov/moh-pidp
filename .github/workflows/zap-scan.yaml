@@ -24,9 +24,9 @@ jobs:
       - name: Set environment
         run: |
             if [ ${{ github.event.inputs.Environment }} == 'PR' ]; then
-            echo "ZAP_URL=dev.healthprovideridentityportal.gov.bc.ca/auth/login" >> $GITHUB_ENV
+            echo "ZAP_URL=https://dev.healthprovideridentityportal.gov.bc.ca/auth/login" >> $GITHUB_ENV
             elif [ ${{ github.event.inputs.Environment }} == 'DEV' ]; then
-            echo "ZAP_URL=dev.healthprovideridentityportal.gov.bc.ca/auth/login" >> $GITHUB_ENV
+            echo "ZAP_URL=https://dev.healthprovideridentityportal.gov.bc.ca/auth/login" >> $GITHUB_ENV
             fi
 
       - name: ZAP Scan

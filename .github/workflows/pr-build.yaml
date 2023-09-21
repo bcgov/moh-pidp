@@ -61,7 +61,7 @@ jobs:
           docker_name: "owasp/zap2docker-stable"
           issue_title: "ZAP Scan Report"
           fail_action: false
-          target: "dev.healthprovideridentityportal.gov.bc.ca/auth/login"
+          target: "https://dev.healthprovideridentityportal.gov.bc.ca/auth/login"
           cmd_options: '-a'
 
   Yarn-Lint:
