@@ -13,7 +13,7 @@ on:
   push:
     branches: ['develop','zapscan']
 
-permissions: read-all|write-all
+permissions: write-all
 
 # This will terminate builds that are previously, but continuing to run.  Saves GHA hours.
 concurrency:
