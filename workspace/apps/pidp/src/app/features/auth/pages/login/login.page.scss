@@ -30,9 +30,11 @@ a {
       flex-direction: column;
       width: 100%;
       flex-grow: 1;
+      margin-top: 40px;
       & .login-content {
         display: flex;
-        justify-content: center;
+        flex-wrap: wrap;
+        // justify-content: center;
         // flex-direction: column;
         & .login-continue-with {
           margin-bottom: 10px;
@@ -74,8 +76,8 @@ a {
       }
 
       & button.login-button-secondary {
-        margin-left: auto;
-        margin-right: auto;
+        // margin-left: auto;
+        // margin-right: auto;
         margin-bottom: 20px;
         padding: 10px 15px;
         border-color: pidp.$bcgov-color-primary;
@@ -84,7 +86,7 @@ a {
       }
       & .login-with-idir {
         display: flex;
-        justify-content: center;
+        // justify-content: center;
       }
     }
   }
@@ -274,11 +276,13 @@ a {
         justify-content: center;
         height: 70%;
         width: 70%;
+        max-width: 700px;
         border: 3px solid pidp.$bcgov-color-background-darker-grey;
         padding: 100px;
         border-radius: 10px;
         gap: 20px;
         flex-grow: 2;
+        margin-top: 100px;
 
         & .welcome-pidp-logo {
           display: flex;
@@ -322,8 +326,8 @@ a {
         }
         & .login-secondary-container {
           display: flex;
-          justify-content: space-evenly;
-          padding: 0 20px;
+          // justify-content: space-evenly;
+          // padding: 0 20px;
           gap: 20px;
 
           & .login-button-secondary {
@@ -368,10 +372,15 @@ a {
     }
     & .show-need-help {
       width: 100px;
+
       & .need-help-container {
         display: flex;
+        width: max-content;
+        margin-top: 20px;
+
         & .need-help-list {
           list-style: none;
+          padding: 0;
         }
       }
     }
