@@ -10,9 +10,11 @@ using Pidp.Data;
 using Pidp.Extensions;
 using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.HttpClients.BCProvider;
+using Pidp.Infrastructure.HttpClients.Mail;
 using Pidp.Infrastructure.HttpClients.Plr;
 using Pidp.Models;
 using Pidp.Models.Lookups;
+using Pidp.Infrastructure.Services;
 
 public class BCProviderCreate
 {
@@ -36,18 +38,21 @@ public class BCProviderCreate
     public class CommandHandler : ICommandHandler<Command, IDomainResult<string>>
     {
         private readonly IBCProviderClient client;
+        private readonly IEmailService emailService;
         private readonly PidpDbContext context;
         private readonly ILogger logger;
         private readonly IPlrClient plrClient;
 
         public CommandHandler(
             IBCProviderClient client,
+            IEmailService emailService,
             PidpDbContext context,
             ILogger<CommandHandler> logger,
             IPlrClient plrClient)
         {
             this.client = client;
             this.context = context;
+            this.emailService = emailService;
             this.logger = logger;
             this.plrClient = plrClient;
         }
@@ -116,7 +121,7 @@ public class BCProviderCreate
 
             var createdUser = await this.client.CreateBCProviderAccount(newUserRep);
 
-            if (createdUser == null)
+            if (createdUser == null || createdUser.UserPrincipalName == null)
             {
                 return DomainResult.Failed<string>();
             }
@@ -129,8 +134,21 @@ public class BCProviderCreate
             });
 
             await this.context.SaveChangesAsync();
+            await this.SendBCProviderCreationEmail(newUserRep.PidpEmail, createdUser.UserPrincipalName);
 
             return DomainResult.Success(createdUser.UserPrincipalName!);
+        }
+
+        private async Task SendBCProviderCreationEmail(string partyEmail, string userPrincipalName)
+        {
+            var email = new Email(
+                from: EmailService.PidpEmail,
+                to: partyEmail,
+                subject: "BCProvider Account Creation in OneHealthID Confirmation",
+                body: $"You have successfully created a BCProvider account in OneHealthID Service. For your reference, your BCProvider username is {userPrincipalName}. You may now login to OneHealthID Service and access the BCProvider card to update your BCProvider password."
+            );
+
+            await this.emailService.SendAsync(email);
         }
     }
 }

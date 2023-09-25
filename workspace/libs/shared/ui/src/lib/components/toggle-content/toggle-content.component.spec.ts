@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 import { ToggleContentComponent } from './toggle-content.component';
 
@@ -8,9 +9,9 @@ describe('ToggleContentComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ToggleContentComponent ]
-    })
-    .compileComponents();
+      declarations: [ToggleContentComponent],
+      imports: [MatSlideToggleModule],
+    }).compileComponents();
   });
 
   beforeEach(() => {

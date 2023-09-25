@@ -9,6 +9,7 @@ import { faCircleCheck, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { NavigationService } from '@pidp/presentation';
 
 import { NoContent } from '@bcgov/shared/data-access';
+import { CrossFieldErrorMatcher } from '@bcgov/shared/ui';
 
 import {
   AbstractFormDependenciesService,
@@ -20,7 +21,7 @@ import { BcProviderEditFormState } from './bc-provider-edit-form-state';
 import {
   BcProviderChangePasswordRequest,
   BcProviderEditResource,
-} from './bc-provider-edit.resource';
+} from './bc-provider-edit-resource.service';
 
 export interface BcProviderEditInitialStateModel {
   bcProviderId: string;
@@ -28,10 +29,10 @@ export interface BcProviderEditInitialStateModel {
 
 @Component({
   selector: 'app-bc-provider-edit',
-  templateUrl: './bc-provider-edit.component.html',
-  styleUrls: ['./bc-provider-edit.component.scss'],
+  templateUrl: './bc-provider-edit.page.html',
+  styleUrls: ['./bc-provider-edit.page.scss'],
 })
-export class BcProviderEditComponent
+export class BcProviderEditPage
   extends AbstractFormPage<BcProviderEditFormState>
   implements OnInit
 {
@@ -43,6 +44,7 @@ export class BcProviderEditComponent
   public showMessageCard = false;
   public messageCardText = '';
   public username = '';
+  public errorMatcher = new CrossFieldErrorMatcher();
 
   // ui-page is handling this.
   public showOverlayOnSubmit = false;

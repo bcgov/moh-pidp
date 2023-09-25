@@ -14,16 +14,10 @@ on:
     - 'test'
     - 'main'
   pull_request:
-    # paths:
-    #   - "workspace/**"
-    #   - "backend/services.plr-intake/**"
-    #   - "backend/services.plr-intake.tests/**"
-    #   - "backend/webapi/**"
-    #   - "backend/webapi.tests/**"
+    types: [opened]
     branches-ignore:
-    - 'develop'
-    - 'test'
-    - 'main'
+      - 'test'
+      - 'master'
 
 permissions: read-all
 
@@ -34,9 +28,61 @@ concurrency:
 
 jobs:
 
-  build-and-deploy-frontend:
-    name: Frontend Build and Deploy
+  get-pr-number:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: "./workspace"
+
+    outputs:
+      pr_number: ${{ steps.find-pr.outputs.pr }}
+
+    steps:
+      - name: "Checkout Code"
+        uses: actions/checkout@master
+      
+      - name: find-pr
+        id: find-pr
+        uses: jwalton/gh-find-current-pr@v1
+        with:
+          state: open
+
+      - name: job1
+        id: job1
+        run: echo "Your PR is ${PR}"
+        if: success() && steps.find-pr.outputs.number
+        env:
+          PR: ${{ steps.find-pr.outputs.pr }}
+
+  Yarn-Lint:
+    name: Frontend Yarn Lint
+    runs-on: ubuntu-latest
+    needs: get-pr-number
+    if: ${{ always() && !cancelled() && needs.get-pr-number.outputs.pr_number != '' }}
+    defaults:
+      run:
+        working-directory: "./workspace"
+    
+    steps:
+      - name: "Checkout Code"
+        uses: actions/checkout@master
+
+      - name: Use Node.js 18.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.x
+     
+      - name: YARN Install
+        run:  yarn install
+
+      - name: YARN Lint
+        run:  yarn lint:all 
+
+  build-and-push-frontend:
+    name: Frontend Build & Push
+    runs-on: ubuntu-latest
+    needs: get-pr-number
+    if: ${{ always() && !cancelled() && needs.get-pr-number.outputs.pr_number != '' }}
     defaults:
       run:
         working-directory: "./workspace"
@@ -49,46 +95,25 @@ jobs:
       - name: "Checkout Code"
         uses: actions/checkout@master
 
-      - name: Use Node.js 16.x
+      - name: Use Node.js 18.x
         uses: actions/setup-node@v3
         with:
-          node-version: 16.x
+          node-version: 18.x
 
       - name: YARN Install
-        run: |
-          yarn install
+        run:  yarn install
 
       - name: YARN Build
+        run:  yarn build
+        
+      - name: YARN Test
         run: |
-          yarn build
-
-
-      - name: Get pr number from GH cli command (pushing to pr)
-        if: ${{ github.event.number == ''}}
-        # TODO: In some cases this action produces an incorrect pr number. eg: it results in 319 when the PR triggering the action is #324.
-        # TODO: This event has been triggered on an opening of a pr. both the "pushing on pr" and "opening a pr" needs to be further investigated. The if condition isn't always a valid test.
-        run: |
-          echo " github.event.number = ${{ github.event.number == ''}}"
-          echo "pr_number=$(gh pr view --json number -q .number || echo "")" >> "$GITHUB_ENV"
-          echo " pr_number = ${{ env.pr_number }}"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-
-      - name: Get pr number from github.event.number (opening a pr)
-        if: ${{ github.event.number != ''}}
-        run: |
-          echo " github.event.number = ${{ github.event.number == ''}}"
-          echo "pr_number=${{ github.event.number }}" >> "$GITHUB_ENV"
-          echo " pr_number = ${{ env.pr_number }}"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
+          yarn test:ci
 
       - name: "Docker Build"
         run: |
-          docker build -t image-registry.apps.silver.devops.gov.bc.ca/d8a8f9-tools/pidp-frontend:pr-${{ env.pr_number }} .
-
+          docker build -t image-registry.apps.silver.devops.gov.bc.ca/d8a8f9-tools/pidp-frontend:pr-${{ needs.get-pr-number.outputs.pr_number }} .
+          
       # Uses the builder service account token
       - name: "Docker Login to Silver OCP"
         uses: docker/login-action@v2
@@ -96,14 +121,38 @@ jobs:
           registry: image-registry.apps.silver.devops.gov.bc.ca
           username: builder
           password: ${{ secrets.SILVER_TOOLS_BUILDER_TOKEN }}
-
+  
       - name: "Push image"
         run: |
-          docker push image-registry.apps.silver.devops.gov.bc.ca/d8a8f9-tools/pidp-frontend:pr-${{ env.pr_number }}
+          docker push image-registry.apps.silver.devops.gov.bc.ca/d8a8f9-tools/pidp-frontend:pr-${{ needs.get-pr-number.outputs.pr_number }}
 
+  unit-test-backend:
+    needs: get-pr-number
+    if: ${{ always() && !cancelled() && needs.get-pr-number.outputs.pr_number != '' }}
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: "./backend"
+    permissions:
+      contents: read
+      id-token: write
 
-  build-and-deploy-plr-intake:
-    name: PLR Intake Backend Build and Deploy
+    steps:
+      - name: "Checkout Code"
+        uses: actions/checkout@master
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 6.0.x
+      - name: Build backend
+        run: dotnet build --configuration Release
+      - name: Run Tests
+        run: dotnet test --configuration Release
+
+  build-and-push-plr-intake:
+    name: PLR Intake Backend Build & Push
+    needs: [get-pr-number, unit-test-backend]
+    if: ${{ !(contains(needs.*.result, 'failure')) && needs.get-pr-number.outputs.pr_number != '' }}
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -116,21 +165,9 @@ jobs:
       - name: "Checkout Code"
         uses: actions/checkout@master
 
-      - name: Get pr number from GH cli command (pushing to pr)
-        if: ${{ github.event.number == ''}}
-        run: echo "pr_number=$(gh pr view --json number -q .number || echo "")" >> "$GITHUB_ENV"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Get pr number from github.event.number (opening a pr)
-        if: ${{ github.event.number != ''}}
-        run: echo "pr_number=${{ github.event.number }}" >> "$GITHUB_ENV"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
       - name: "Docker Build"
         run: |
-          docker build -t image-registry.apps.silver.devops.gov.bc.ca/d8a8f9-tools/pidp-plr-intake:pr-${{ env.pr_number }} .
+          docker build -t image-registry.apps.silver.devops.gov.bc.ca/d8a8f9-tools/pidp-plr-intake:pr-${{ needs.get-pr-number.outputs.pr_number }} .
 
       # Uses the builder service account token
       - name: "Docker Login to Silver OCP"
@@ -142,11 +179,12 @@ jobs:
 
       - name: "Push image"
         run: |
-          docker push image-registry.apps.silver.devops.gov.bc.ca/d8a8f9-tools/pidp-plr-intake:pr-${{ env.pr_number }}
+          docker push image-registry.apps.silver.devops.gov.bc.ca/d8a8f9-tools/pidp-plr-intake:pr-${{ needs.get-pr-number.outputs.pr_number }}
 
-
-  build-and-deploy-webapi:
-    name: WebAPI Backend Build and Deploy
+  build-and-push-webapi:
+    name: WebAPI Backend Build & Push
+    needs: [get-pr-number, unit-test-backend]
+    if: ${{ !(contains(needs.*.result, 'failure')) && needs.get-pr-number.outputs.pr_number != '' }}
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -159,22 +197,9 @@ jobs:
       - name: "Checkout Code"
         uses: actions/checkout@master
 
-      - name: Get pr number from GH cli command (pushing to pr)
-        if: ${{ github.event.number == ''}}
-        run: echo "pr_number=$(gh pr view --json number -q .number || echo "")" >> "$GITHUB_ENV"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-
-      - name: Get pr number from github.event.number (opening a pr)
-        if: ${{ github.event.number != ''}}
-        run: echo "pr_number=${{ github.event.number }}" >> "$GITHUB_ENV"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
       - name: "Docker Build"
         run: |
-          docker build -t image-registry.apps.silver.devops.gov.bc.ca/d8a8f9-tools/pidp-webapi:pr-${{ env.pr_number }} .
+          docker build -t image-registry.apps.silver.devops.gov.bc.ca/d8a8f9-tools/pidp-webapi:pr-${{ needs.get-pr-number.outputs.pr_number }} .
 
       # Uses the builder service account token
       - name: "Docker Login to Silver OCP"
@@ -186,10 +211,10 @@ jobs:
 
       - name: "Push image"
         run: |
-          docker push image-registry.apps.silver.devops.gov.bc.ca/d8a8f9-tools/pidp-webapi:pr-${{ env.pr_number }}
-
+          docker push image-registry.apps.silver.devops.gov.bc.ca/d8a8f9-tools/pidp-webapi:pr-${{ needs.get-pr-number.outputs.pr_number }}
+     
   helm-deployment:
-    needs: [build-and-deploy-webapi, build-and-deploy-plr-intake, build-and-deploy-frontend]
+    needs: [build-and-push-webapi, build-and-push-plr-intake, build-and-push-frontend]
     runs-on: 'ubuntu-latest'
     permissions:
       contents: read
@@ -198,7 +223,7 @@ jobs:
       - uses: actions/checkout@master
 
       - name: Authenticate and set context
-        uses: redhat-actions/oc-login@v1.1
+        uses: redhat-actions/oc-login@v1.2
         with:
           openshift_server_url: ${{secrets.OPENSHIFT_CLUSTER_URL}}
           openshift_token: ${{secrets.OPENSHIFT_PIPELINE_SERVICE_ACCOUNT_TOKEN}}

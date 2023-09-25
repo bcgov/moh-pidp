@@ -56,7 +56,7 @@ public class SearchTests : InMemoryDbTest
 
     [Theory]
     [MemberData(nameof(IdMatchTestData))]
-    public async void SearchRecords_TrimsTo5DigitsAndLeadingZeros_Match(string dbId, string searchId)
+    public async void SearchRecords_TrimsSpacesTrimsTo5DigitsAndLeadingZeros_Match(string dbId, string searchId)
     {
         var record = this.TestDb.Has(new PlrRecord
         {
@@ -98,6 +98,10 @@ public class SearchTests : InMemoryDbTest
         yield return new[] { "00005", "9900005" };
         yield return new[] { "5", "9900005" };
         yield return new[] { "1234", "9901234" };
+
+        // Should trim leading and trailing spaces.
+        yield return new[] { "00012", "          12     " };
+        yield return new[] { "12345", "  99912345  " };
     }
 
     [Theory]

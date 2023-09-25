@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
+import { PageSubheaderComponent } from '../page-subheader/page-subheader.component';
 import { PageSectionSubheaderComponent } from './page-section-subheader.component';
 
 describe('PageSectionSubheaderComponent', () => {
@@ -8,9 +9,8 @@ describe('PageSectionSubheaderComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ PageSectionSubheaderComponent ]
-    })
-    .compileComponents();
+      declarations: [PageSectionSubheaderComponent, PageSubheaderComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

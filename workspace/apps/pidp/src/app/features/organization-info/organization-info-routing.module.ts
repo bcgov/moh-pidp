@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, Type } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { OrganizationInfoRoutes } from './organization-info.routes';
@@ -10,28 +10,28 @@ import { OrganizationDetailsModule } from './pages/organization-details/organiza
 const routes: Routes = [
   {
     path: OrganizationInfoRoutes.ORGANIZATION_DETAILS,
-    loadChildren: (): Promise<OrganizationDetailsModule> =>
+    loadChildren: (): Promise<Type<OrganizationDetailsModule>> =>
       import('./pages/organization-details/organization-details.module').then(
         (m) => m.OrganizationDetailsModule
       ),
   },
   {
     path: OrganizationInfoRoutes.FACILITY_DETAILS,
-    loadChildren: (): Promise<FacilityDetailsModule> =>
+    loadChildren: (): Promise<Type<FacilityDetailsModule>> =>
       import('./pages/facility-details/facility-details.module').then(
         (m) => m.FacilityDetailsModule
       ),
   },
   {
     path: OrganizationInfoRoutes.ADMINISTRATOR_INFO,
-    loadChildren: (): Promise<AdministratorInformationModule> =>
+    loadChildren: (): Promise<Type<AdministratorInformationModule>> =>
       import(
         './pages/administrator-information/administrator-information.module'
       ).then((m) => m.AdministratorInformationModule),
   },
   {
     path: OrganizationInfoRoutes.ENDORSEMENTS,
-    loadChildren: (): Promise<EndorsementsModule> =>
+    loadChildren: (): Promise<Type<EndorsementsModule>> =>
       import('./pages/endorsements/endorsements.module').then(
         (m) => m.EndorsementsModule
       ),

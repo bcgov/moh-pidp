@@ -1,16 +1,20 @@
-module.exports = {
-  displayName: 'pidp-presentation',
+/* eslint-disable */
+export default {
+  displayName: 'shared-data-access',
   preset: '../../../jest.preset.js',
-  setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
+  setupFilesAfterEnv: [
+    '<rootDir>/src/test-setup.ts',
+    '../../../node_modules/@hirez_io/jest-single/dist/jest-single.js',
+  ],
   globals: {
     'ts-jest': {
       tsconfig: '<rootDir>/tsconfig.spec.json',
       stringifyContentPathRegex: '\\.(html|svg)$',
     },
   },
-  coverageDirectory: '../../../coverage/libs/pidp/presentation',
+  coverageDirectory: '../../../coverage/libs/shared/data-access',
   transform: {
-    '^.+\\.(ts|mjs|js|html)$': 'jest-preset-angular',
+    '^.+\\.(ts|mjs|js|html|svg)$': 'jest-preset-angular',
   },
   transformIgnorePatterns: ['node_modules/(?!.*\\.mjs$)'],
   snapshotSerializers: [

@@ -37,6 +37,7 @@ describe('PortalCardComponent', () => {
   let fixture: ComponentFixture<PortalCardComponent>;
   let router: Router;
   let mockProfileStatus: ProfileStatus;
+  let windowSpy: Spy<any>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -113,6 +114,8 @@ describe('PortalCardComponent', () => {
         primaryCareRostering: { statusCode: StatusCode.NOT_AVAILABLE },
       },
     };
+
+    windowSpy = jest.spyOn(window, 'window', 'get');
   });
 
   describe('Primary Rostering Card', () => {
@@ -187,6 +190,11 @@ describe('PortalCardComponent', () => {
       } as IPortalSection;
 
       when('the onClickVisit method is invoked', () => {
+        windowSpy.mockImplementation(() => ({
+          open: (): void => {
+            return;
+          },
+        }));
         component.onClickVisit(section);
 
         then('the router should navigate', () => {

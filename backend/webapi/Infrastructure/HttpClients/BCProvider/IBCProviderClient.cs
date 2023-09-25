@@ -34,4 +34,12 @@ public interface IBCProviderClient
     /// <param name="userPrincipalName"></param>
     /// <param name="password"></param>
     Task<bool> UpdatePassword(string userPrincipalName, string password);
+
+    /// <summary>
+    /// Patches the given BC Provider account.
+    /// Returns true if the operation was successful.
+    /// </summary>
+    /// <param name="userPrincipalName"></param>
+    /// <param name="user"></param>
+    Task<bool> UpdateUser(string userPrincipalName, User user);
 }

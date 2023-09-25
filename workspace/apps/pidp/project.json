@@ -1,6 +1,6 @@
 {
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "projectType": "application",
-  "root": "apps/pidp",
   "sourceRoot": "apps/pidp/src",
   "prefix": "app",
   "targets": {
@@ -91,7 +91,7 @@
       "executor": "@nrwl/jest:jest",
       "outputs": ["coverage/apps/pidp"],
       "options": {
-        "jestConfig": "apps/pidp/jest.config.js",
+        "jestConfig": "apps/pidp/jest.config.ts",
         "passWithNoTests": true
       }
     }

@@ -35,6 +35,7 @@ public class Search
         public async Task<List<string>> HandleAsync(Query query)
         {
             var paddedId = query.CollegeId
+                .Trim()
                 .PadLeft(5, '0')
                 [^5..];
 

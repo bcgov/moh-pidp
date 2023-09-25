@@ -24,7 +24,7 @@ export class BcProviderPortalSection implements IPortalSection {
     private router: Router
   ) {
     this.key = 'bcProvider';
-    this.heading = 'BC Provider';
+    this.heading = 'BC Provider Account';
     this.description = `A reusable credential for access to health data in BC.`;
   }
 
@@ -92,9 +92,7 @@ export class BcProviderPortalSection implements IPortalSection {
     const statusCode = this.getStatusCode();
     switch (statusCode) {
       case StatusCode.COMPLETED:
-        return AccessRoutes.routePath(
-          AccessRoutes.BC_PROVIDER_APPLICATION_CHANGE_PASSWORD
-        );
+        return AccessRoutes.routePath(AccessRoutes.BC_PROVIDER_EDIT);
       case StatusCode.AVAILABLE:
         return AccessRoutes.routePath(AccessRoutes.BC_PROVIDER_APPLICATION);
       default:

@@ -17,7 +17,7 @@ public class PidpAuthorizationServiceTests : InMemoryDbTest
         this.TestDb.HasAParty(party => party.Id = 1);
         var service = this.MockDependenciesFor<PidpAuthorizationService>();
 
-        var result = await service.CheckPartyAccessibility(2, A.Fake<ClaimsPrincipal>());
+        var result = await service.CheckPartyAccessibilityAsync(2, A.Fake<ClaimsPrincipal>());
 
         Assert.Equal(DomainOperationStatus.NotFound, result.Status);
     }
@@ -30,7 +30,7 @@ public class PidpAuthorizationServiceTests : InMemoryDbTest
         A.CallTo(() => user.FindFirst(Claims.Subject)).Returns(new Claim(Claims.Subject, party.PrimaryUserId.ToString()));
         var service = this.MockDependenciesFor<PidpAuthorizationService>();
 
-        var result = await service.CheckPartyAccessibility(party.Id, user);
+        var result = await service.CheckPartyAccessibilityAsync(party.Id, user);
 
         Assert.Equal(DomainOperationStatus.Success, result.Status);
     }
@@ -43,7 +43,7 @@ public class PidpAuthorizationServiceTests : InMemoryDbTest
         A.CallTo(() => user.FindFirst(Claims.Subject)).Returns(new Claim(Claims.Subject, Guid.NewGuid().ToString()));
         var service = this.MockDependenciesFor<PidpAuthorizationService>();
 
-        var result = await service.CheckPartyAccessibility(party.Id, user);
+        var result = await service.CheckPartyAccessibilityAsync(party.Id, user);
 
         Assert.Equal(DomainOperationStatus.Unauthorized, result.Status);
     }
