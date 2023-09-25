@@ -9,8 +9,8 @@ import { PartyService } from '@app/core/party/party.service';
 import { ToastService } from '@app/core/services/toast.service';
 import { Role } from '@app/shared/enums/roles.enum';
 
-import { BcProviderEditInitialStateModel } from '../access/pages/bc-provider-edit/bc-provider-edit.component';
-import { BcProviderEditResource } from '../access/pages/bc-provider-edit/bc-provider-edit.resource';
+import { BcProviderEditResource } from '../access/pages/bc-provider-edit/bc-provider-edit-resource.service';
+import { BcProviderEditInitialStateModel } from '../access/pages/bc-provider-edit/bc-provider-edit.page';
 import { AuthService } from '../auth/services/auth.service';
 import { EndorsementsResource } from '../organization-info/pages/endorsements/endorsements-resource.service';
 import { ProfileStatusAlert } from './models/profile-status-alert.model';
@@ -60,6 +60,9 @@ export class PortalPage implements OnInit {
   public uaa$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   public bcProvider$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
     false
+  );
+  public endorsement$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
+    true
   );
   public rostering$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
     true
@@ -184,6 +187,7 @@ export class PortalPage implements OnInit {
           profileStatus?.status.collegeCertification.statusCode;
         if (this.collegeLicenceStatusCode === 2) {
           this.collegeLicence$.next(true);
+          this.endorsement$.next(false);
         } else if (selectedIndex === this.lastSelectedIndex) {
           selectedIndex = 1;
         }

@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, Type } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { HistoryRoutes } from './history.routes';
@@ -9,21 +9,21 @@ import { ViewDocumentModule } from './pages/view-document/view-document.module';
 const routes: Routes = [
   {
     path: HistoryRoutes.TRANSACTIONS,
-    loadChildren: (): Promise<TransactionsModule> =>
+    loadChildren: (): Promise<Type<TransactionsModule>> =>
       import('./pages/transactions/transactions.module').then(
         (m) => m.TransactionsModule
       ),
   },
   {
     path: HistoryRoutes.SIGNED_ACCEPTED_DOCUMENTS,
-    loadChildren: (): Promise<SignedOrAcceptedDocumentsModule> =>
+    loadChildren: (): Promise<Type<SignedOrAcceptedDocumentsModule>> =>
       import(
         './pages/signed-or-accepted-documents/signed-or-accepted-documents.module'
       ).then((m) => m.SignedOrAcceptedDocumentsModule),
   },
   {
     path: `${HistoryRoutes.VIEW_DOCUMENT}/:doctype`,
-    loadChildren: (): Promise<ViewDocumentModule> =>
+    loadChildren: (): Promise<Type<ViewDocumentModule>> =>
       import('./pages/view-document/view-document.module').then(
         (m) => m.ViewDocumentModule
       ),

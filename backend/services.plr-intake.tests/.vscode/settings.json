@@ -10,7 +10,6 @@
   "files.trimTrailingWhitespace": true,
   "git.ignoreLimitWarning": true,
   "omnisharp.enableEditorConfigSupport": true,
-  "omnisharp.enableRoslynAnalyzers": true,
   "search.exclude": {
     "**/bin": true,
     "**/logs": true,

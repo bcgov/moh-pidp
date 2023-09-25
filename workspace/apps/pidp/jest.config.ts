@@ -1,4 +1,5 @@
-module.exports = {
+/* eslint-disable */
+export default {
   displayName: 'pidp',
   preset: '../../jest.preset.js',
   setupFilesAfterEnv: [
@@ -15,7 +16,9 @@ module.exports = {
   transform: {
     '^.+\\.(ts|mjs|js|html|svg)$': 'jest-preset-angular',
   },
-  transformIgnorePatterns: ['node_modules/(?!.*\\.mjs$|swiper|ssr-window|dom7)'],
+  transformIgnorePatterns: [
+    'node_modules/(?!.*\\.mjs$|swiper|ssr-window|dom7)',
+  ],
   snapshotSerializers: [
     'jest-preset-angular/build/serializers/no-ng-attributes',
     'jest-preset-angular/build/serializers/ng-snapshot',

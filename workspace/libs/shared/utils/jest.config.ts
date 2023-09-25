@@ -1,5 +1,6 @@
-module.exports = {
-  displayName: 'shared-data-access',
+/* eslint-disable */
+export default {
+  displayName: 'shared-utils',
   preset: '../../../jest.preset.js',
   setupFilesAfterEnv: [
     '<rootDir>/src/test-setup.ts',
@@ -11,7 +12,7 @@ module.exports = {
       stringifyContentPathRegex: '\\.(html|svg)$',
     },
   },
-  coverageDirectory: '../../../coverage/libs/shared/data-access',
+  coverageDirectory: '../../../coverage/libs/shared/utils',
   transform: {
     '^.+\\.(ts|mjs|js|html|svg)$': 'jest-preset-angular',
   },

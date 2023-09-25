@@ -1,19 +1,17 @@
-module.exports = {
-  displayName: 'shared-ui',
+/* eslint-disable */
+export default {
+  displayName: 'pidp-presentation',
   preset: '../../../jest.preset.js',
-  setupFilesAfterEnv: [
-    '<rootDir>/src/test-setup.ts',
-    '../../../node_modules/@hirez_io/jest-single/dist/jest-single.js',
-  ],
+  setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   globals: {
     'ts-jest': {
       tsconfig: '<rootDir>/tsconfig.spec.json',
       stringifyContentPathRegex: '\\.(html|svg)$',
     },
   },
-  coverageDirectory: '../../../coverage/libs/shared/ui',
+  coverageDirectory: '../../../coverage/libs/pidp/presentation',
   transform: {
-    '^.+\\.(ts|mjs|js|html|svg)$': 'jest-preset-angular',
+    '^.+\\.(ts|mjs|js|html)$': 'jest-preset-angular',
   },
   transformIgnorePatterns: ['node_modules/(?!.*\\.mjs$)'],
   snapshotSerializers: [
