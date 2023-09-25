@@ -1,0 +1,51 @@
+name: ZAP Scanner
+on:
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Environment:"
+        type: choice
+        default: 'DEV'
+        required: true
+        options:
+          - DEV
+          - TEST
+  push:
+    branches:
+      - 'develop'
+      - 'test'
+
+permissions:
+    contents: read
+    issues: write
+
+# This will terminate builds that are previously, but continuing to run.  Saves GHA hours.
+concurrency:
+    group: ${{ github.workflow }}-${{ github.ref }}
+    cancel-in-progress: true
+
+jobs:
+  zap_scan:
+    runs-on: ubuntu-latest
+    name: Scan the application
+    steps:
+      - name: Checkout
+        uses: actions/checkout@master
+
+      - name: Set environment
+        run: |
+            echo "ZAP_URL=https://dev.healthprovideridentityportal.gov.bc.ca/auth/login" >> $GITHUB_ENV
+            if [ ${{ github.event.inputs.Environment }} == 'TEST' ]; then
+            echo "ZAP_URL=https://test.healthprovideridentityportal.gov.bc.ca/auth/login" >> $GITHUB_ENV
+            fi
+
+      - name: ZAP Scan
+        uses: zaproxy/action-full-scan@v0.7.0
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          docker_name: "owasp/zap2docker-stable"
+          issue_title: "ZAP Scan Report"
+          fail_action: false
+          target: ${{ env.ZAP_URL }}
+          cmd_options: '-a'
