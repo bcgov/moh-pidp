@@ -68,6 +68,10 @@ nginx:
         proxy_pass http://{{ .Release.Name }}-frontend:8080/;
       }
 
+      location ^~ /api/ {
+        proxy_pass http://{{ .Release.Name }}-webapi:8080/api/;
+      }
+
       location ^~ /api/v1/ {
         proxy_pass http://{{ .Release.Name }}-webapi:8080/api/;
       }
@@ -115,6 +119,10 @@ nginx:
 
       location / {
         proxy_pass http://{{ .Release.Name }}-frontend:8080/;
+      }
+
+      location ^~ /api/ {
+        proxy_pass http://{{ .Release.Name }}-webapi:8080/api/;
       }
 
       location ^~ /api/v1/ {
