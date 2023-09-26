@@ -32,6 +32,10 @@ a {
       flex-grow: 1;
       margin-top: 40px;
 
+      & .login-container-app-button {
+        display: flex;
+      }
+
       & .login-content {
         display: flex;
         flex-wrap: wrap;
@@ -135,6 +139,10 @@ a {
       }
       & .login-container {
         margin-top: 30px;
+
+        & .login-container-app-button {
+          display: unset;
+        }
       }
       & .login-content {
         align-items: baseline;
@@ -388,6 +396,9 @@ a {
           margin: 12px;
           font-size: 2.5em;
         }
+        & .login-container-app-button {
+          display: unset;
+        }
         & .login-content {
           align-items: baseline;
 
@@ -473,6 +484,9 @@ a {
         }
         & h1.welcome-title {
           font-size: 4.5em;
+        }
+        & .login-container-app-button {
+          display: unset;
         }
         & .login-content {
           & button {
