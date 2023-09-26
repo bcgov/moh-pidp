@@ -1,6 +1,9 @@
 {
   "extends": "./tsconfig.json",
-  "include": ["**/*.ts"],
+  "include": [
+    "**/*.ts",
+    "../../libs/shared/ui/src/lib/components/expansion-panel/expansion-animation.ts"
+  ],
   "compilerOptions": {
     "types": ["jest", "node", "@hirez_io/jest-single"]
   }

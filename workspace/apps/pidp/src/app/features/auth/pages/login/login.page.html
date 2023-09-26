@@ -19,9 +19,9 @@
         <div class="welcome-container">
           <div class="title-content-container">
             <h1 class="title">
-              <span class="title-text"
-                ><strong>OneHealthID Service</strong></span
-              >
+              <span class="title-text">
+                <strong>OneHealthID Service</strong>
+              </span>
             </h1>
             <section class="title-site-description">
               <p>
@@ -33,22 +33,7 @@
           <ng-container *ngTemplateOutlet="login"></ng-container>
         </div>
         <div class="links">
-          <div class="need-help">
-            <a (click)="onShowNeedHelp()">
-              Need Help?
-              <i class="material-icons-outlined">arrow_circle_right</i></a
-            >
-            <div class="show-need-help" [@expandAnimation]="showNeedHelp">
-              <ng-container *ngIf="showNeedHelp"
-                ><div class="need-help-container">
-                  <ul class="need-help-list">
-                    <li>By email at OneHealthID@gov.bc.ca</li>
-                    <li>By phone at 250-857-1969</li>
-                  </ul>
-                </div></ng-container
-              >
-            </div>
-          </div>
+          <app-need-help></app-need-help>
           <div class="about">
             <a
               uiAnchor
@@ -117,10 +102,10 @@
             <a
               href="javascript:"
               role="button"
-              (click)="onLogin(IdentityProvider.IDIR)"
-              >Login</a
-            ></small
-          >
+              (click)="onLogin(IdentityProvider.IDIR)">
+              Login
+            </a>
+          </small>
         </div>
       </ng-container>
     </div>

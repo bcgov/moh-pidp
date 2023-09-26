@@ -1,0 +1,18 @@
+<div class="need-help">
+  <div class="need-help-header">
+    <a (click)="onShowNeedHelp()">
+      Need Help?
+      <i class="material-icons-outlined">arrow_circle_right</i>
+    </a>
+  </div>
+  <div class="show-need-help">
+    <ui-expansion-panel [expanded]="showNeedHelp">
+      <div class="need-help-container">
+        <ul class="need-help-list">
+          <li>By email at {{ providerIdentitySupport }}</li>
+          <li>By phone at {{ additionalSupportPhone }}</li>
+        </ul>
+      </div>
+    </ui-expansion-panel>
+  </div>
+</div>
