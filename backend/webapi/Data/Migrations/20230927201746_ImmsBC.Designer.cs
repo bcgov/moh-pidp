@@ -13,7 +13,7 @@ using Pidp.Data;
 namespace Pidp.Data.Migrations
 {
     [DbContext(typeof(PidpDbContext))]
-    [Migration("20230927010441_ImmsBC")]
+    [Migration("20230927201746_ImmsBC")]
     partial class ImmsBC
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -488,7 +488,7 @@ namespace Pidp.Data.Migrations
                         new
                         {
                             Code = 10,
-                            Name = "ImmsBC eForms"
+                            Name = "Immunization Entry eForm"
                         });
                 });
 

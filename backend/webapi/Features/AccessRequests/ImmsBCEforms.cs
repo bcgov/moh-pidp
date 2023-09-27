@@ -97,7 +97,7 @@ public class ImmsBCEforms
             var email = new Email(
                 from: EmailService.PidpEmail,
                 to: partyEmail,
-                subject: "ImmsBC eForms Enrolment Confirmation",
+                subject: "Immunization Entry eForm Enrolment Confirmation",
                 body: $"Hi {firstName},<br><br>You will need to visit this {link} each time you want to submit an eForm. It may be helpful to bookmark this {link} for future use."
             );
             await this.emailService.SendAsync(email);
