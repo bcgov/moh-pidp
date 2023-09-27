@@ -315,6 +315,28 @@ public partial class ProfileStatus
             }
         }
 
+        public class ImmsBCEformsSection : ProfileSection
+        {
+            internal override string SectionName => "immsBCEforms";
+
+            protected override StatusCode Compute(ProfileData profile)
+            {
+                if (!profile.UserIsHighAssuranceIdentity)
+                {
+                    return StatusCode.Hidden;
+                }
+
+                if (profile.CompletedEnrolments.Contains(AccessTypeCode.ImmsBCEforms))
+                {
+                    return StatusCode.Complete;
+                }
+
+                return profile.DemographicsComplete && profile.PartyPlrStanding.HasGoodStanding
+                    ? StatusCode.Incomplete
+                    : StatusCode.Locked;
+            }
+        }
+
         public class MSTeamsClinicMemberSection : ProfileSection
         {
             internal override string SectionName => "msTeamsClinicMember";
