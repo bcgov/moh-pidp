@@ -23,8 +23,8 @@ export class ImmsBCEformsPortalSection implements IPortalSection {
     private router: Router
   ) {
     this.key = 'immsBCEforms';
-    this.heading = 'ImmsBC eForms';
-    this.description = `Enrol here for access to the ImmsBC eForms application.`;
+    this.heading = 'Immunization Entry eForm';
+    this.description = `Enrol here for access to the Immunization Entry eForm application.`;
   }
 
   public get hint(): string {
@@ -53,7 +53,7 @@ export class ImmsBCEformsPortalSection implements IPortalSection {
 
     switch (statusCode) {
       case StatusCode.AVAILABLE:
-        return 'You are eligible to use ImmsBC eForms';
+        return 'You are eligible to use Immunization Entry eForm';
       case StatusCode.COMPLETED:
         return 'Completed';
       default:

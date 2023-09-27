@@ -71,7 +71,7 @@ export class DocumentService {
       },
       {
         type: DocumentType.IMMSBC_EFORMS_COLLECTION_NOTICE,
-        title: 'ImmsBC eForms Collection Notice',
+        title: 'Immunization Entry eForm Collection Notice',
       },
     ];
   }
@@ -351,10 +351,10 @@ export class DocumentService {
 
   public getImmsBCEformsCollectionNotice(): string {
     return `
-      The personal information you provide to enrol for access to the ImmsBC eForms application
+      The personal information you provide to enrol for access to the Immunization Entry eForm application
       is collected by the British Columbia Ministry of Health under the authority of s. 26(a) and 26(c) of
       the Freedom of Information and Protection of Privacy Act (FOIPPA) and s. 22(1)(b) of the Pharmaceutical
-      Services Act for the purpose of managing your access to, and use of, the ImmsBC eForms
+      Services Act for the purpose of managing your access to, and use of, the Immunization Entry eForm
       application. If you have any questions about the collection or use of this information, contact
       <a href="mailto:${this.config.emails.immsBCEformsSupport}">${this.config.emails.immsBCEformsSupport}</a>.
     `;

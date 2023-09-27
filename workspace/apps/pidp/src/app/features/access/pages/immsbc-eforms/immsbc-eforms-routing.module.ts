@@ -15,7 +15,7 @@ const routes: Routes = [
       immsBCEformsStatusCode: ImmsBCEformsResolver,
     },
     data: {
-      title: 'ImmsBC eForms and OneHealthID',
+      title: 'Immunization Entry eForm and OneHealthID',
       routes: {
         root: '../../',
       },

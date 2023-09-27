@@ -9,8 +9,8 @@
     heading="Error Requesting Access">
     <ng-container uiAlertContent>
       <p>
-        Your request for access to ImmsBC eForms could not be processed at this
-        time. If this issue persists, contact
+        Your request for access to Immunization Entry eForm could not be
+        processed at this time. If this issue persists, contact
         <a uiAnchor scheme="mailto" [attr.href]="immsBCEformsSupportEmail"></a>
         for assistance.
       </p>
@@ -20,7 +20,9 @@
   <app-enrolment-error *ngIf="enrolmentError"></app-enrolment-error>
 
   <ui-page-section>
-    <ui-page-section-subheader icon="assignment" heading="ImmsBC eForms">
+    <ui-page-section-subheader
+      icon="assignment"
+      heading="Immunization Entry eForm">
       <ng-container uiPageSectionSubheaderDesc>
         {{ completed ? 'Enrolment Complete.' : 'Collection Notice.' }}
       </ng-container>
@@ -35,11 +37,11 @@
       heading="You have access">
       <ng-container uiAlertContent>
         <p>
-          You now have access to the ImmsBC eForms application. You can log into
-          the application using your BC Services Card app.
+          You now have access to the Immunization Entry eForm application. You
+          can log into the application using your BC Services Card app.
         </p>
         <p>
-          Follow this link to ImmsBC eForms:<br />
+          Follow this link to Immunization Entry eForm:<br />
           <a uiAnchor [attr.href]="immsBCEformsUrl"></a>
         </p>
         <p>
