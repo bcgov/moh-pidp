@@ -92,7 +92,7 @@ describe('UserAccessAgreementResolver', () => {
         sitePrivacySecurityChecklist: { statusCode: StatusCode.AVAILABLE },
         complianceTraining: { statusCode: StatusCode.AVAILABLE },
         primaryCareRostering: { statusCode: StatusCode.AVAILABLE },
-        immsBCEforms: { statusCode: StatusCode.NOT_AVAILABLE },
+        immsBCEforms: { statusCode: StatusCode.AVAILABLE },
       },
     };
   });
