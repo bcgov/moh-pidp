@@ -105,6 +105,7 @@ public partial class ProfileStatus
                     ProfileSection.Create<DriverFitnessSection>(data),
                     ProfileSection.Create<HcimAccountTransferSection>(data),
                     ProfileSection.Create<HcimEnrolmentSection>(data),
+                    ProfileSection.Create<ImmsBCEformsSection>(data),
                     ProfileSection.Create<MSTeamsClinicMemberSection>(data),
                     ProfileSection.Create<MSTeamsPrivacyOfficerSection>(data),
                     ProfileSection.Create<PrescriptionRefillEformsSection>(data),
