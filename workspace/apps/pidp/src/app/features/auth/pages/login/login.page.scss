@@ -192,23 +192,28 @@ a {
     width: 100%;
     gap: 30px;
     display: flex;
-    padding: 50px 0;
+    flex-direction: row;
+    flex-wrap: wrap;
 
     & .background-image-container {
-      height: 100%;
-      width: 50%;
-      left: 0;
-      bottom: 0;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      flex-basis: 100%;
+      flex: 1;
       z-index: -1;
 
       img {
-        width: 50% !important;
         object-fit: cover;
       }
     }
 
     & .title-container {
       display: flex;
+      flex-direction: column;
+      flex-basis: 100%;
+      flex: 1;
+      height: 100%;
       justify-content: center;
       align-items: center;
       margin: auto;
