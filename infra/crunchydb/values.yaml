@@ -14,7 +14,7 @@ instances:
     memory: 256Mi
   limits:
     cpu: 400m
-    memory: 512Mi
+    memory: 1024Mi
   replicaCertCopy:
     requests:
       cpu: 1m
@@ -64,7 +64,7 @@ patroni:
 
 proxy:
   pgBouncer:
-    image: # it's not necessary to specify an image as the images specified in the Crunchy Postgres Operator will be pulled by default
+    image: registry.developers.crunchydata.com/crunchydata/crunchy-pgbouncer:ubi8-1.18-0 # it's not necessary to specify an image as the images specified in the Crunchy Postgres Operator will be pulled by default
     replicas: 2
     requests:
       cpu: 1m
