@@ -486,7 +486,7 @@ namespace Pidp.Data.Migrations
                         new
                         {
                             Code = 10,
-                            Name = "ImmsBC eForms"
+                            Name = "Immunization Entry eForm"
                         });
                 });
 
