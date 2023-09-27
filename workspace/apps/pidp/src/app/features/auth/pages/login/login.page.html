@@ -37,11 +37,10 @@
           <div class="about">
             <a
               uiAnchor
-              href="https://www2.gov.bc.ca/gov/content/health/practitioner-professional-resources/onehealthid-service"
-              >About, FAQs, Guides<i class="material-icons-outlined"
-                >arrow_circle_right</i
-              ></a
-            >
+              href="https://www2.gov.bc.ca/gov/content/health/practitioner-professional-resources/onehealthid-service">
+              About, FAQs, Guides
+              <i class="material-icons-outlined">arrow_circle_right</i>
+            </a>
           </div>
         </div>
       </section>
@@ -62,7 +61,7 @@
     <div class="login-content">
       <div class="login-setup">
         <small>
-          Don't have an account?
+          Need an account?
           <a uiAnchor [href]="bcscMobileSetupUrl">Set up</a>
         </small>
       </div>
@@ -74,7 +73,7 @@
             class="other-login-button"
             mat-icon-button
             (click)="onShowOtherLoginOptions()">
-            <i class="material-icons-outlined">add_box</i>
+            <i class="material-icons-outlined">{{otherLoginOptionsIcon}}</i>
           </button>
         </div>
       </div>

@@ -72,6 +72,10 @@ export class LoginPage {
   public isPidpLogoVisible = this.viewport !== PidpViewport.xsmall;
   public hcimWebHeaderColor: 'white' | 'grey' = 'grey';
 
+  public get otherLoginOptionsIcon(): string {
+    return this.showOtherLoginOptions ? 'indeterminate_check_box' : 'add_box';
+  }
+
   public constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
     private authService: AuthService,
