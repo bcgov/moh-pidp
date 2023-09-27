@@ -11,6 +11,7 @@ import { BcProviderPortalSection } from './access/bc-provider-portal-section.cla
 import { DriverFitnessPortalSection } from './access/driver-fitness-portal-section.class';
 import { HcimAccountTransferPortalSection } from './access/hcim-account-transfer-portal-section.class';
 import { HcimEnrolmentPortalSection } from './access/hcim-enrolment-portal-section.class';
+import { ImmsBCEformsPortalSection } from './access/immsbc-eforms-portal-section.class';
 import { MsTeamsClinicMemberPortalSection } from './access/ms-teams-clinic-member-portal-section.class';
 import { MsTeamsPrivacyOfficerPortalSection } from './access/ms-teams-privacy-officer-portal-section.class';
 import { PrescriptionRefillEformsPortalSection } from './access/prescription-refill-eforms-portal-section.class';
@@ -185,6 +186,10 @@ export class PortalStateBuilder {
       ...ArrayUtils.insertResultIf<IPortalSection>(
         this.insertSection('primaryCareRostering', profileStatus),
         () => [new PrimaryCareRosteringPortalSection(profileStatus)]
+      ),
+      ...ArrayUtils.insertResultIf<IPortalSection>(
+        this.insertSection('immsBCEforms', profileStatus),
+        () => [new ImmsBCEformsPortalSection(profileStatus, this.router)]
       ),
     ];
   }

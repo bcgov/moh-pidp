@@ -10,6 +10,7 @@ import { BcProviderEditModule } from './pages/bc-provider-edit/bc-provider-edit.
 import { DriverFitnessModule } from './pages/driver-fitness/driver-fitness.module';
 import { HcimAccountTransferModule } from './pages/hcim-account-transfer/hcim-account-transfer.module';
 import { HcimEnrolmentModule } from './pages/hcim-enrolment/hcim-enrolment.module';
+import { ImmsBCEformsModule } from './pages/immsbc-eforms/immsbc-eforms.module';
 import { MsTeamsClinicMemberModule } from './pages/ms-teams-clinic-member/ms-teams-clinic-member.module';
 import { MsTeamsPrivacyOfficerModule } from './pages/ms-teams-privacy-officer/ms-teams-privacy-officer.module';
 import { PharmanetModule } from './pages/pharmanet/pharmanet.module';
@@ -114,6 +115,13 @@ const routes: Routes = [
       import(
         './pages/ms-teams-clinic-member/ms-teams-clinic-member.module'
       ).then((m) => m.MsTeamsClinicMemberModule),
+  },
+  {
+    path: AccessRoutes.IMMSBC_EFORMS,
+    loadChildren: (): Promise<Type<ImmsBCEformsModule>> =>
+      import('./pages/immsbc-eforms/immsbc-eforms.module').then(
+        (m) => m.ImmsBCEformsModule
+      ),
   },
 ];
 

@@ -73,7 +73,10 @@ describe('SaEformsResolver', () => {
         facilityDetails: { statusCode: StatusCode.AVAILABLE },
         endorsements: { statusCode: StatusCode.AVAILABLE },
         userAccessAgreement: { statusCode: StatusCode.AVAILABLE },
-        saEforms: { statusCode: StatusCode.AVAILABLE, incorrectLicenceType: false },
+        saEforms: {
+          statusCode: StatusCode.AVAILABLE,
+          incorrectLicenceType: false,
+        },
         prescriptionRefillEforms: { statusCode: StatusCode.AVAILABLE },
         'prescription-refill-eforms': { statusCode: StatusCode.AVAILABLE },
         bcProvider: { statusCode: StatusCode.AVAILABLE },
@@ -87,6 +90,7 @@ describe('SaEformsResolver', () => {
         sitePrivacySecurityChecklist: { statusCode: StatusCode.AVAILABLE },
         complianceTraining: { statusCode: StatusCode.AVAILABLE },
         primaryCareRostering: { statusCode: StatusCode.AVAILABLE },
+        immsBCEforms: { statusCode: StatusCode.AVAILABLE },
       },
     };
   });
