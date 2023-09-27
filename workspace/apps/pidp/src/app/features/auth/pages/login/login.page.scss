@@ -33,6 +33,13 @@ a {
 
       & .login-container-app-button {
         display: flex;
+
+        & .login-app-button {
+          margin-left: auto;
+          margin-right: auto;
+          color: #ffffff;
+          background-color: pidp.$bcgov-color-primary;
+        }
       }
 
       & .login-content {
@@ -40,63 +47,48 @@ a {
         flex-wrap: wrap;
         flex-direction: column;
 
-        & .login-continue-with {
-          margin-bottom: 10px;
-        }
-        & .other-login-panel {
-          overflow: hidden;
-          opacity: 0;
-          transition: opacity 0.3s ease-out, max-height 0.3s ease-out;
-        }
-      }
-
-      & .login-app-button {
-        margin-left: auto;
-        margin-right: auto;
-        color: #ffffff;
-        background-color: pidp.$bcgov-color-primary;
-      }
-
-      & .login-setup {
-        margin-right: auto;
-        margin-left: auto;
-      }
-
-      & .login-continue-with {
-        display: flex;
-        margin-bottom: 10px;
-        flex-direction: column;
-        align-items: center;
-
-        & .login-continue-with-text {
-          margin: auto;
-        }
-
-        & .other-login-button {
-          margin: 5px;
-          border: none;
-        }
-      }
-
-      & button.login-button-secondary {
-        margin-bottom: 20px;
-        padding: 10px 15px;
-        border-color: pidp.$bcgov-color-primary;
-        white-space: pre-wrap;
-        line-height: 1.6;
-      }
-      & .login-with-idir {
-        display: flex;
-        & small {
+        & .login-setup {
           margin-right: auto;
           margin-left: auto;
         }
+
+        & .login-continue-with {
+          margin-bottom: 10px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+
+          & .other-login-button {
+            margin: 5px;
+            border: none;
+          }
+        }
+      }
+
+      & .other-login-panel {
+        overflow: hidden;
+        opacity: 0;
+        transition: opacity 0.3s ease-out, max-height 0.3s ease-out;
+
+        & .login-secondary-container {
+          & button.login-button-secondary {
+            margin-bottom: 20px;
+            padding: 10px 15px;
+            border-color: pidp.$bcgov-color-primary;
+            white-space: pre-wrap;
+            line-height: 1.6;
+          }
+        }
+
+        & .login-with-idir {
+          display: flex;
+          & small {
+            margin-right: auto;
+            margin-left: auto;
+          }
+        }
       }
     }
-  }
-
-  & .hcimweb-arrows {
-    color: pidp.$bcgov-color-semantic-success;
   }
 }
 
