@@ -1,19 +1,62 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { TestBed } from '@angular/core/testing';
+import { ActivatedRoute } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
 
+import { randTextRange } from '@ngneat/falso';
+import { createSpyFromClass, provideAutoSpy } from 'jest-auto-spies';
+
+import { APP_CONFIG, APP_DI_CONFIG } from '@app/app.config';
+import { PartyService } from '@app/core/party/party.service';
+import { DocumentService } from '@app/core/services/document.service';
+import { LoggerService } from '@app/core/services/logger.service';
+
+import { ImmsBCEformsResource } from './immsbc-eforms-resource.service';
 import { ImmsBCEformsPage } from './immsbc-eforms.page';
 
 describe('ImmsBCEformsPage', () => {
   let component: ImmsBCEformsPage;
-  let fixture: ComponentFixture<ImmsBCEformsPage>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [ImmsBCEformsPage],
-    }).compileComponents();
+  let mockActivatedRoute: { snapshot: any };
 
-    fixture = TestBed.createComponent(ImmsBCEformsPage);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+  beforeEach(() => {
+    mockActivatedRoute = {
+      snapshot: {
+        data: {
+          title: randTextRange({ min: 1, max: 4 }),
+          routes: {
+            root: '../../',
+          },
+        },
+      },
+    };
+
+    TestBed.configureTestingModule({
+      imports: [RouterTestingModule],
+      providers: [
+        ImmsBCEformsPage,
+        {
+          provide: APP_CONFIG,
+          useValue: APP_DI_CONFIG,
+        },
+        {
+          provide: ActivatedRoute,
+          useValue: mockActivatedRoute,
+        },
+        {
+          provide: PartyService,
+          useValue: createSpyFromClass(PartyService, {
+            gettersToSpyOn: ['partyId'],
+            settersToSpyOn: ['partyId'],
+          }),
+        },
+        provideAutoSpy(ImmsBCEformsResource),
+        provideAutoSpy(LoggerService),
+        provideAutoSpy(DocumentService),
+      ],
+    });
+
+    component = TestBed.inject(ImmsBCEformsPage);
   });
 
   it('should create', () => {
