@@ -356,7 +356,7 @@ export class DocumentService {
       the Freedom of Information and Protection of Privacy Act (FOIPPA) and s. 22(1)(b) of the Pharmaceutical
       Services Act for the purpose of managing your access to, and use of, the ImmsBC eForms
       application. If you have any questions about the collection or use of this information, contact
-      <a href="mailto:"></a>.
+      <a href="mailto:${this.config.emails.immsBCEformsSupport}">${this.config.emails.immsBCEformsSupport}</a>.
     `;
   }
 

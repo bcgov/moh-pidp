@@ -10,7 +10,10 @@ import { LoggerService } from '@app/core/services/logger.service';
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
 
 import { ImmsBCEformsResource } from './immsbc-eforms-resource.service';
-import { immsBCEformsUrl } from './immsbc-eforms.constants';
+import {
+  immsBCEformsSupportEmail,
+  immsBCEformsUrl,
+} from './immsbc-eforms.constants';
 
 @Component({
   selector: 'app-immsbc-eforms',
@@ -23,6 +26,7 @@ export class ImmsBCEformsPage implements OnInit {
   public completed: boolean | null;
   public accessRequestFailed: boolean;
   public immsBCEformsUrl: string;
+  public immsBCEformsSupportEmail: string;
   public enrolmentError: boolean;
 
   public constructor(
@@ -39,6 +43,7 @@ export class ImmsBCEformsPage implements OnInit {
     this.completed = routeData.immsBCEformsStatusCode === StatusCode.COMPLETED;
     this.accessRequestFailed = false;
     this.immsBCEformsUrl = immsBCEformsUrl;
+    this.immsBCEformsSupportEmail = immsBCEformsSupportEmail;
     this.enrolmentError = false;
   }
 
