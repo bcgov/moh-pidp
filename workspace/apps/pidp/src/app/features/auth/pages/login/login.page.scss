@@ -127,12 +127,6 @@ a {
       }
     }
     & .welcome-section {
-      & h1.welcome-title {
-        margin: 60px 25px;
-        text-align: center;
-        font-size: 3.5em;
-        letter-spacing: 0.15em;
-      }
       & .login-container {
         margin-top: 30px;
       }
@@ -237,12 +231,6 @@ a {
           }
         }
 
-        & h1.welcome-title {
-          margin: 25px;
-          text-align: center;
-          font-size: 5.5em;
-          line-height: 1;
-        }
         & .login-content {
           & button.login-app-button {
             border-radius: 8px;
@@ -345,10 +333,7 @@ a {
             width: 100px;
           }
         }
-        & h1.welcome-title {
-          margin: 12px;
-          font-size: 2.5em;
-        }
+
         & .login-content {
           align-items: baseline;
 
@@ -431,9 +416,7 @@ a {
             width: 200px;
           }
         }
-        & h1.welcome-title {
-          font-size: 4.5em;
-        }
+
         & .login-content {
           & button {
             border-radius: 12px;
