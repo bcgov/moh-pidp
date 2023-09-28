@@ -192,6 +192,9 @@ a {
       height: 30%;
       width: 600px;
       margin-top: 30px;
+      i {
+        padding-left: 10px;
+      }
       & .about a {
         display: flex;
         align-items: center;
