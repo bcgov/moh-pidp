@@ -49,9 +49,13 @@ a {
           margin-left: auto;
           margin-right: auto;
 
-          & .other-login-button {
-            margin: 5px;
-            border: none;
+          & .login-continue-with-container {
+            margin-left: 30px;
+
+            & .other-login-button {
+              margin: 5px;
+              border: none;
+            }
           }
         }
       }
@@ -233,6 +237,7 @@ a {
           }
           & .login-continue-with {
             margin-bottom: 10px;
+
             & .login-continue-with-text {
               font-size: 1.05em;
             }
