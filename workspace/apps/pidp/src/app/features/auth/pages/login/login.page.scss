@@ -89,7 +89,7 @@ a {
   & .content-container {
     // NOTE: This section will always show as 2 columns in desktop (= no wrapping).
     width: 100%;
-    gap: 30px;
+    // gap: 30px;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
