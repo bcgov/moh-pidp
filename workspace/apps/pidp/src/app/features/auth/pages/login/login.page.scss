@@ -159,7 +159,7 @@ a {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    background-color: pidp.$lightgrey;
+    background-color: pidp.$bcgov-color-background-grey;
 
     & .background-image-container {
       position: relative;
@@ -192,7 +192,7 @@ a {
         border-radius: 10px;
         gap: 20px;
         flex-grow: 2;
-        background-color: pidp.$bcgov-color-background-grey;
+        background-color: #fff;
 
         & .title-content-container {
           & h1.title {
