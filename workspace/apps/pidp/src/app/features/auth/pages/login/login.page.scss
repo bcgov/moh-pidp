@@ -84,67 +84,6 @@ a {
   }
 }
 
-// This section is optimized for iPhone SE
-.viewport-xsmall {
-  flex: 1;
-  & .content-container {
-    & .background-image-container {
-      height: 0;
-      width: 0;
-
-      img {
-        display: none;
-        width: 0;
-      }
-    }
-    & .title-container {
-      background-image: url('/assets/images/login-image-mobile.png');
-      background-repeat: no-repeat;
-      background-size: 100% 100%;
-      min-height: 280px;
-      display: flex;
-      justify-content: center;
-    }
-    & .welcome-section {
-      & .login-container {
-        margin-top: 30px;
-      }
-      & .login-content {
-        align-items: baseline;
-
-        & button {
-          font-size: 1em;
-        }
-        & button.login-app-button {
-          padding: 15px 25px;
-        }
-        & .login-setup {
-          font-size: 1em;
-        }
-        & .login-continue-with {
-          & .login-continue-with-text {
-            font-size: 1em;
-          }
-        }
-      }
-      & .login-secondary-container {
-        display: flex;
-        flex-direction: column;
-      }
-    }
-    & .links {
-      display: flex;
-      flex-direction: row;
-      justify-content: space-evenly;
-      & .about a {
-        display: flex;
-        align-items: center;
-        text-decoration: none;
-        justify-content: center;
-      }
-    }
-  }
-}
 // NOTE: Layout for small/medium is refined further below.
 .viewport-small,
 .viewport-medium,
@@ -330,29 +269,63 @@ a {
   }
 }
 
-// Adjust sizing for medium screens.
-.viewport-medium {
+// This section is optimized for iPhone SE
+.viewport-xsmall {
+  flex: 1;
   & .content-container {
-    gap: 20px;
+    & .background-image-container {
+      height: 0;
+      width: 0;
 
+      img {
+        display: none;
+        width: 0;
+      }
+    }
+    & .title-container {
+      background-image: url('/assets/images/login-image-mobile.png');
+      background-repeat: no-repeat;
+      background-size: 100% 100%;
+      min-height: 280px;
+      display: flex;
+      justify-content: center;
+    }
     & .welcome-section {
-      & .welcome-container {
-        & .welcome-pidp-logo {
-          & img {
-            width: 200px;
-          }
-        }
+      & .login-container {
+        margin-top: 30px;
+      }
+      & .login-content {
+        align-items: baseline;
 
-        & .login-content {
-          & button {
-            border-radius: 12px;
-            padding: 10px 10px;
+        & button {
+          font-size: 1em;
+        }
+        & button.login-app-button {
+          padding: 15px 25px;
+        }
+        & .login-setup {
+          font-size: 1em;
+        }
+        & .login-continue-with {
+          & .login-continue-with-text {
+            font-size: 1em;
           }
         }
-        & .login-secondary-container {
-          padding: 0 20px;
-          gap: 15px;
-        }
+      }
+      & .login-secondary-container {
+        display: flex;
+        flex-direction: column;
+      }
+    }
+    & .links {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-evenly;
+      & .about a {
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+        justify-content: center;
       }
     }
   }
