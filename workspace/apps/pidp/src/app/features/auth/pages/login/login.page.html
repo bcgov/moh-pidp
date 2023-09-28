@@ -2,11 +2,7 @@
   <div class="main-container" uiPidpInjectViewportCss>
     <span page-v2-title></span>
     <div *ngIf="!isAdminLogin; else admin" class="content-container">
-      <header *ngIf="isMobileTitleVisible" class="title-container">
-        <h1 class="title">
-          <span class="title-text">OneHealthID Service</span>
-        </h1>
-      </header>
+      <header *ngIf="isMobileTitleVisible" class="title-container"></header>
 
       <div class="background-image-container">
         <img

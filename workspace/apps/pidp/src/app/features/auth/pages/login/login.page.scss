@@ -12,14 +12,6 @@ a {
   color: pidp.$bcgov-color-links;
 }
 .viewport-all {
-  & .title-container {
-    & p,
-    & h1,
-    & .title-text,
-    & .title-text span {
-      color: #ffffff;
-    }
-  }
   & .welcome-section {
     & .title-content-container {
       display: flex;
@@ -112,19 +104,6 @@ a {
       min-height: 280px;
       display: flex;
       justify-content: center;
-
-      & h1 {
-        margin: 0;
-        color: #ffffff;
-        display: flex;
-        align-content: center;
-
-        & .title-text {
-          margin: auto;
-          display: flex;
-          flex-direction: column;
-        }
-      }
     }
     & .welcome-section {
       & .login-container {
@@ -194,16 +173,6 @@ a {
       }
     }
 
-    & .title-container {
-      display: flex;
-      flex-direction: column;
-      flex-basis: 100%;
-      flex: 1;
-      height: 100%;
-      justify-content: center;
-      align-items: center;
-      margin: auto;
-    }
     & .welcome-section {
       width: 50%;
       display: flex;
@@ -304,26 +273,6 @@ a {
     // Total width including padding is 640px.
     gap: 10px;
 
-    & .title-container {
-      height: 327px;
-      width: 295px;
-      & .title-content-container {
-        padding: 30px;
-
-        & h1.title {
-          font-size: 1.75em;
-          line-height: 1.4;
-        }
-
-        & .title-site-description {
-          margin-bottom: 10px;
-          padding: 10px 20px;
-          & p {
-            font-size: 0.65em;
-          }
-        }
-      }
-    }
     & .welcome-section {
       width: auto;
       & .welcome-container {
@@ -386,29 +335,6 @@ a {
   & .content-container {
     gap: 20px;
 
-    & .title-container {
-      height: 523px;
-      width: 472px;
-
-      & .title-content-container {
-        padding: 30px;
-
-        & h1.title {
-          font-size: 3em;
-          line-height: 1.4;
-        }
-
-        & .title-site-description {
-          margin-bottom: 10px;
-          padding: 10px 20px;
-          font-size: 0.85em;
-        }
-        & .title-bcgov img {
-          height: 82px;
-          width: 160px;
-        }
-      }
-    }
     & .welcome-section {
       & .welcome-container {
         & .welcome-pidp-logo {
