@@ -271,7 +271,7 @@ a {
 .viewport-small {
   & .content-container {
     // Total width including padding is 640px.
-    gap: 10px;
+    gap: 0;
 
     & .welcome-section {
       width: auto;
