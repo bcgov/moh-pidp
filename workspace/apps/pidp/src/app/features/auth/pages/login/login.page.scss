@@ -46,9 +46,8 @@ a {
 
         & .login-continue-with {
           margin-bottom: 10px;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
+          margin-left: auto;
+          margin-right: auto;
 
           & .other-login-button {
             margin: 5px;
@@ -249,7 +248,7 @@ a {
         & .login-secondary-container {
           padding: 0 10px;
           gap: 6px;
-          flex-direction: column;
+
           & .login-button-secondary {
             margin-bottom: 10px;
             padding: 6px 10px;
