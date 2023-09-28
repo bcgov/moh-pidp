@@ -166,7 +166,7 @@ a {
           display: flex;
           gap: 20px;
 
-          & .login-button-secondary {
+          & button.login-button-secondary {
             border-radius: 8px;
             padding: 12px;
             width: 150px;
@@ -223,8 +223,6 @@ a {
         }
 
         & .login-content {
-          align-items: baseline;
-
           & button {
             font-size: 0.65em;
             border-radius: 12px;
@@ -250,9 +248,10 @@ a {
           padding: 0 10px;
           gap: 6px;
           flex-direction: column;
-          & .login-button-secondary {
+          & button.login-button-secondary {
             margin-bottom: 10px;
             padding: 6px 10px;
+            width: auto;
           }
         }
         & .login-with-idir {
