@@ -210,7 +210,6 @@ a {
     & .welcome-section {
       width: auto;
       & .welcome-container {
-        border: unset;
         & .welcome-pidp-logo {
           & img {
             width: 100px;
@@ -253,12 +252,6 @@ a {
           font-size: 0.9em;
         }
       }
-    }
-    & .links {
-      flex-direction: column;
-      width: max-content;
-      height: auto;
-      margin-left: 30px;
     }
   }
 }
