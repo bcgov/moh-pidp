@@ -75,8 +75,8 @@
       </div>
     </div>
 
-    <div class="other-login-panel" [@expandAnimation]="showOtherLoginOptions">
-      <ng-container *ngIf="showOtherLoginOptions">
+    <ui-expansion-panel [expanded]="showOtherLoginOptions">
+      <div class="other-login-panel">
         <div class="login-secondary-container">
           <button
             class="login-button-secondary"
@@ -102,8 +102,8 @@
             </a>
           </small>
         </div>
-      </ng-container>
-    </div>
+      </div>
+    </ui-expansion-panel>
   </div>
 </ng-template>
 

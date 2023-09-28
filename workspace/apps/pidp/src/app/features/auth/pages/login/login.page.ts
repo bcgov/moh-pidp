@@ -1,10 +1,3 @@
-import {
-  animate,
-  state,
-  style,
-  transition,
-  trigger,
-} from '@angular/animations';
 import { Component, Inject } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -35,19 +28,6 @@ export interface LoginPageRouteData {
   selector: 'app-login',
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
-  animations: [
-    trigger('expandAnimation', [
-      state(
-        'true',
-        style({ maxHeight: '500px', opacity: 1, transform: 'translateY(0)' })
-      ),
-      state(
-        'false',
-        style({ maxHeight: '0', opacity: 0, transform: 'translateY(-10px)' })
-      ),
-      transition('true <=> false', animate('300ms ease-out')),
-    ]),
-  ],
 })
 export class LoginPage {
   public viewportOptions = PidpViewport;

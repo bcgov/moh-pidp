@@ -57,10 +57,6 @@ a {
       }
 
       & .other-login-panel {
-        overflow: hidden;
-        opacity: 0;
-        transition: opacity 0.3s ease-out, max-height 0.3s ease-out;
-
         & .login-secondary-container {
           & button.login-button-secondary {
             margin-bottom: 20px;
