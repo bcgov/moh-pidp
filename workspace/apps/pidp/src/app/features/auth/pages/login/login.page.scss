@@ -89,7 +89,6 @@ a {
   & .content-container {
     // NOTE: This section will always show as 2 columns in desktop (= no wrapping).
     width: 100%;
-    // gap: 30px;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -99,7 +98,6 @@ a {
       position: relative;
       display: flex;
       flex-direction: column;
-      flex-basis: 100%;
       flex: 1;
 
       img {
@@ -125,7 +123,6 @@ a {
         padding: 50px;
         border-radius: 10px;
         gap: 20px;
-        flex-grow: 2;
         background-color: #fff;
 
         & .title-content-container {
