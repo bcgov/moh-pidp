@@ -9,8 +9,17 @@
     <ui-expansion-panel [expanded]="showNeedHelp">
       <div class="need-help-container">
         <ul class="need-help-list">
-          <li>By email at {{ providerIdentitySupport }}</li>
-          <li>By phone at {{ additionalSupportPhone }}</li>
+          <li>
+            By email at
+            <a
+              uiAnchor
+              scheme="mailto"
+              [attr.href]="providerIdentitySupport"></a>
+          </li>
+          <li>
+            By phone at
+            <a uiAnchor scheme="tel" [attr.href]="additionalSupportPhone"></a>
+          </li>
         </ul>
       </div>
     </ui-expansion-panel>
