@@ -1,6 +1,6 @@
 import { Component, Inject } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
 import { EMPTY, Observable, exhaustMap } from 'rxjs';
 
@@ -47,7 +47,6 @@ export class LoginPage {
     @Inject(APP_CONFIG) private config: AppConfig,
     private authService: AuthService,
     private route: ActivatedRoute,
-    private router: Router,
     private dialog: MatDialog,
     private documentService: DocumentService,
     private viewportService: ViewportService
@@ -80,13 +79,6 @@ export class LoginPage {
       default:
         throw 'not implemented: ' + this.viewport;
     }
-  }
-
-  public onScrollToAnchor(): void {
-    this.router.navigate([], {
-      fragment: 'systems',
-      queryParamsHandling: 'preserve',
-    });
   }
 
   public onShowOtherLoginOptions(): void {
