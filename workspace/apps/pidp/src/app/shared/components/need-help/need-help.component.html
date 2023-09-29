@@ -1,8 +1,8 @@
-<div class="need-help">
+<div [ngClass]="getClasses()">
   <div class="need-help-header">
-    <a (click)="onShowNeedHelp()">
+    <a href="javascript:;" (click)="onShowNeedHelp()">
       Need Help?
-      <i class="material-icons-outlined">arrow_circle_right</i>
+      <i *ngIf="showIcon" class="material-icons-outlined">arrow_circle_right</i>
     </a>
   </div>
   <div class="show-need-help">
