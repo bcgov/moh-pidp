@@ -38,7 +38,7 @@ export const environment: AppEnvironment = {
     isLayoutV2Enabled: false,
   },
   emails: {
-    providerIdentitySupport: 'provideridentityportal@gov.bc.ca',
+    providerIdentitySupport: 'OneHealthID@gov.bc.ca',
     specialAuthorityEformsSupport: specialAuthorityEformsSupportEmail,
     hcimAccountTransferSupport: hcimWebAccountTransferSupport,
     hcimEnrolmentSupport: hcimWebEnrolmentSupport,
