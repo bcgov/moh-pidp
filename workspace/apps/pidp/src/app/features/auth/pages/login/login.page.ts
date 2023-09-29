@@ -5,7 +5,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { EMPTY, Observable, exhaustMap } from 'rxjs';
 
 import {
-  DashboardHeaderConfig,
   DialogOptions,
   HtmlComponent,
   PidpViewport,
@@ -32,16 +31,9 @@ export interface LoginPageRouteData {
 export class LoginPage {
   public viewportOptions = PidpViewport;
 
-  public headerConfig: DashboardHeaderConfig;
-  public loginCancelled: boolean;
-  public bcscSupportUrl: string;
   public bcscMobileSetupUrl: string;
-  public specialAuthorityUrl: string;
-  public providerIdentitySupportEmail: string;
   public isAdminLogin: boolean;
   public showOtherLoginOptions: boolean;
-  public showNeedHelp: boolean;
-
   public IdentityProvider = IdentityProvider;
 
   public viewport = PidpViewport.xsmall;
@@ -64,21 +56,15 @@ export class LoginPage {
 
     const routeData = routeSnapshot.data.loginPageData as LoginPageRouteData;
 
-    this.headerConfig = { theme: 'dark', allowMobileToggle: false };
-    this.loginCancelled = routeSnapshot.queryParams.action === 'cancelled';
-    this.bcscSupportUrl = this.config.urls.bcscSupport;
     this.bcscMobileSetupUrl = this.config.urls.bcscMobileSetup;
-    this.specialAuthorityUrl = this.config.urls.specialAuthority;
-    this.providerIdentitySupportEmail =
-      this.config.emails.providerIdentitySupport;
     this.isAdminLogin = routeData.isAdminLogin;
 
     this.viewportService.viewportBroadcast$.subscribe((viewport) =>
       this.onViewportChange(viewport)
     );
     this.showOtherLoginOptions = false;
-    this.showNeedHelp = false;
   }
+
   private onViewportChange(viewport: PidpViewport): void {
     this.viewport = viewport;
 
@@ -105,10 +91,6 @@ export class LoginPage {
 
   public onShowOtherLoginOptions(): void {
     this.showOtherLoginOptions = !this.showOtherLoginOptions;
-  }
-
-  public onShowNeedHelp(): void {
-    this.showNeedHelp = !this.showNeedHelp;
   }
 
   public onLogin(idpHint: IdentityProvider): void {
