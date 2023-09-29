@@ -154,9 +154,6 @@ a {
               background-color: #ffffff;
             }
           }
-          & .login-app-button {
-            padding: 10px 40px;
-          }
         }
         & .login-secondary-container {
           display: flex;
@@ -220,12 +217,6 @@ a {
       margin-top: 30px;
 
       & .welcome-container {
-        & .welcome-pidp-logo {
-          & img {
-            width: 100px;
-          }
-        }
-
         & .login-content {
           & button {
             font-size: 0.65em;
@@ -291,37 +282,39 @@ a {
     & .welcome-section {
       & .login-container {
         margin-top: 30px;
-      }
-      & .login-content {
-        & button {
-          font-size: 1em;
-        }
-        & button.login-app-button {
-          padding: 15px 25px;
-        }
-        & .login-setup {
-          font-size: 1em;
-        }
-        & .login-continue-with {
-          & .login-continue-with-text {
+
+        & .login-content {
+          & button {
             font-size: 1em;
           }
+          & button.login-app-button {
+            padding: 15px 25px;
+          }
+          & .login-setup {
+            font-size: 1em;
+          }
+          & .login-continue-with {
+            & .login-continue-with-text {
+              font-size: 1em;
+            }
+          }
+        }
+
+        & .login-secondary-container {
+          display: flex;
+          flex-direction: column;
         }
       }
-      & .login-secondary-container {
+      & .links {
         display: flex;
-        flex-direction: column;
-      }
-    }
-    & .links {
-      display: flex;
-      flex-direction: row;
-      justify-content: space-evenly;
-      & .about a {
-        display: flex;
-        align-items: center;
-        text-decoration: none;
-        justify-content: center;
+        flex-direction: row;
+        justify-content: space-evenly;
+        & .about a {
+          display: flex;
+          align-items: center;
+          text-decoration: none;
+          justify-content: center;
+        }
       }
     }
   }
