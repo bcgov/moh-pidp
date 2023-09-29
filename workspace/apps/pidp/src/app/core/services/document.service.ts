@@ -355,7 +355,7 @@ export class DocumentService {
       26(c) of the Freedom of Information Protection of Privacy Act. All data will be securely stored at PHSA
       and will not be used for any other purpose other than the one stated above. If you have any questions
       about the collection of this personal information please contact PHSA's Information Access & Privacy
-      Office at 1-855-229-9800 or at <a href="mailto:${this.config.emails.phsaInformationAccessAndPrivacyOffice}">${this.config.emails.phsaInformationAccessAndPrivacyOffice}</a>.
+      Office at 1-855-229-9800 or at <a href="mailto:${this.config.emails.immsBCEformsSupport}">${this.config.emails.immsBCEformsSupport}</a>.
     `;
   }
 
