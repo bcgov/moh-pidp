@@ -39,8 +39,6 @@ export class LoginPage {
   public specialAuthorityUrl: string;
   public providerIdentitySupportEmail: string;
   public isAdminLogin: boolean;
-  public prescriptionRenewalSupportUrl: string;
-  public bcscAppDownload: string;
   public showOtherLoginOptions: boolean;
   public showNeedHelp: boolean;
 
@@ -48,9 +46,6 @@ export class LoginPage {
 
   public viewport = PidpViewport.xsmall;
   public isMobileTitleVisible = this.viewport === PidpViewport.xsmall;
-  public isWebTitleVisible = this.viewport !== PidpViewport.xsmall;
-  public isPidpLogoVisible = this.viewport !== PidpViewport.xsmall;
-  public hcimWebHeaderColor: 'white' | 'grey' = 'grey';
 
   public get otherLoginOptionsIcon(): string {
     return this.showOtherLoginOptions ? 'indeterminate_check_box' : 'add_box';
@@ -77,8 +72,6 @@ export class LoginPage {
     this.providerIdentitySupportEmail =
       this.config.emails.providerIdentitySupport;
     this.isAdminLogin = routeData.isAdminLogin;
-    this.prescriptionRenewalSupportUrl = this.config.urls.prescriptionRenewal;
-    this.bcscAppDownload = this.config.urls.bcscAppDownload;
 
     this.viewportService.viewportBroadcast$.subscribe((viewport) =>
       this.onViewportChange(viewport)
@@ -92,17 +85,11 @@ export class LoginPage {
     switch (this.viewport) {
       case PidpViewport.xsmall:
         this.isMobileTitleVisible = true;
-        this.isWebTitleVisible = false;
-        this.isPidpLogoVisible = false;
-        this.hcimWebHeaderColor = 'grey';
         break;
       case PidpViewport.small:
       case PidpViewport.medium:
       case PidpViewport.large:
         this.isMobileTitleVisible = false;
-        this.isWebTitleVisible = true;
-        this.isPidpLogoVisible = true;
-        this.hcimWebHeaderColor = 'white';
         break;
       default:
         throw 'not implemented: ' + this.viewport;
