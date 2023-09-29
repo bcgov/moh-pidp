@@ -209,9 +209,16 @@ a {
   & .content-container {
     // Total width including padding is 640px.
     gap: 0;
+    flex: 1;
+    flex-direction: column;
+    & .background-image-container {
+      max-height: 250px;
+    }
 
     & .welcome-section {
       width: auto;
+      margin-top: 30px;
+
       & .welcome-container {
         & .welcome-pidp-logo {
           & img {
@@ -335,7 +342,7 @@ a {
 
 @media screen and (max-width: 1743px) {
   .welcome-container {
-    padding: 50px !important;
+    padding: 40px !important;
     margin-top: 20px !important;
   }
 
