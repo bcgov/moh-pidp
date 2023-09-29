@@ -190,7 +190,6 @@ a {
       display: flex;
       justify-content: space-evenly;
       flex-grow: 1;
-      height: 30%;
       width: 600px;
       margin-top: 30px;
       i {
@@ -350,5 +349,13 @@ a {
     display: flex !important;
     flex-direction: column !important;
     justify-content: center !important;
+  }
+}
+
+@media screen and (max-height: 1079px) {
+  .welcome-section {
+    margin: unset !important;
+    margin-top: 10% !important;
+    margin-bottom: 10% !important;
   }
 }
