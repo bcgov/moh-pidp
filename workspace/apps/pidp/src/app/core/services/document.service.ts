@@ -351,12 +351,11 @@ export class DocumentService {
 
   public getImmsBCEformsCollectionNotice(): string {
     return `
-      The personal information you provide to enrol for access to the Immunization Entry eForm application
-      is collected by the British Columbia Ministry of Health under the authority of s. 26(a) and 26(c) of
-      the Freedom of Information and Protection of Privacy Act (FOIPPA) and s. 22(1)(b) of the Pharmaceutical
-      Services Act for the purpose of managing your access to, and use of, the Immunization Entry eForm
-      application. If you have any questions about the collection or use of this information, contact
-      <a href="mailto:${this.config.emails.immsBCEformsSupport}">${this.config.emails.immsBCEformsSupport}</a>.
+      Personal information is protected under BC privacy laws and is collected under the authority of section
+      26(c) of the Freedom of Information Protection of Privacy Act. All data will be securely stored at PHSA
+      and will not be used for any other purpose other than the one stated above. If you have any questions
+      about the collection of this personal information please contact PHSA's Information Access & Privacy
+      Office at 1-855-229-9800 or at <a href="mailto:${this.config.emails.immsBCEformsSupport}">${this.config.emails.immsBCEformsSupport}</a>.
     `;
   }
 
