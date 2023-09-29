@@ -23,6 +23,7 @@ export interface AppEnvironment extends EnvironmentConfig {
     msTeamsSupport: string;
     doctorsTechnologyOfficeSupport: string;
     phsaInformationAccessAndPrivacyOffice: string;
+    immsBCEformsSupport: string;
   };
   urls: {
     bcscAppDownload: string;
