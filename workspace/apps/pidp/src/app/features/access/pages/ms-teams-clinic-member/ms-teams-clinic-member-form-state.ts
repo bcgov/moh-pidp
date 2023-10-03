@@ -18,7 +18,7 @@ export class MsTeamsClinicMemberFormState extends AbstractFormState<ClinicId> {
 
   public get json(): ClinicId | undefined {
     if (!this.formInstance) {
-      return;
+      return undefined;
     }
 
     return this.formInstance.getRawValue();
