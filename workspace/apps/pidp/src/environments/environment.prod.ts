@@ -1,6 +1,7 @@
 import { driverFitnessSupportEmail } from '@app/features/access/pages/driver-fitness/driver-fitness.constants';
 import { hcimWebAccountTransferSupport } from '@app/features/access/pages/hcim-account-transfer/hcim-account-transfer-constants';
 import { hcimWebEnrolmentSupport } from '@app/features/access/pages/hcim-enrolment/hcim-enrolment-constants';
+import { immsBCEformsSupportEmail } from '@app/features/access/pages/immsbc-eforms/immsbc-eforms.constants';
 import {
   doctorsTechnologyOfficeEmail,
   doctorsTechnologyOfficeUrl,
@@ -37,7 +38,7 @@ export const environment: AppEnvironment = {
     isLayoutV2Enabled: false,
   },
   emails: {
-    providerIdentitySupport: 'provideridentityportal@gov.bc.ca',
+    providerIdentitySupport: 'OneHealthID@gov.bc.ca',
     specialAuthorityEformsSupport: specialAuthorityEformsSupportEmail,
     hcimAccountTransferSupport: hcimWebAccountTransferSupport,
     hcimEnrolmentSupport: hcimWebEnrolmentSupport,
@@ -48,6 +49,7 @@ export const environment: AppEnvironment = {
     doctorsTechnologyOfficeSupport: doctorsTechnologyOfficeEmail,
     phsaInformationAccessAndPrivacyOffice:
       phsaInformationAccessAndPrivacyOfficeEmail,
+    immsBCEformsSupport: immsBCEformsSupportEmail,
   },
   urls: {
     bcscAppDownload: `https://www2.gov.bc.ca/gov/content/governments/government-id/bcservicescardapp/download-app`,

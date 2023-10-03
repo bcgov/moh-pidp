@@ -6,7 +6,7 @@ import { PermissionsModule } from '@app/modules/permissions/permissions.module';
 
 import { SharedModule } from '@shared/shared.module';
 
-import { ExpansionPanelComponent } from './components/expansion-panel/expansion-panel.component';
+import { BannerExpansionPanelComponent } from './components/banner-expansion-panel/banner-expansion-panel.component';
 import { PortalCardComponent } from './components/portal-card/portal-card.component';
 import { PortalCarouselComponent } from './components/portal-carousel/portal-carousel.component';
 import { ProfileCardSummaryContentComponent } from './components/profile-card-summary-content/profile-card-summary-content.component';
@@ -19,7 +19,7 @@ import { PortalPage } from './portal.page';
     ProfileCardSummaryContentComponent,
     PortalCardComponent,
     PortalCarouselComponent,
-    ExpansionPanelComponent,
+    BannerExpansionPanelComponent,
   ],
   imports: [
     PortalRoutingModule,

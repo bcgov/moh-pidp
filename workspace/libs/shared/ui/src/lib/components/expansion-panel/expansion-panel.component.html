@@ -1,0 +1,8 @@
+<div
+  class="expansion-panel-content"
+  [@bodyExpansion]="_getExpandedState()"
+  (@bodyExpansion.done)="_bodyAnimationDone.next($event)">
+  <div class="expansion-panel-body">
+    <ng-content></ng-content>
+  </div>
+</div>
