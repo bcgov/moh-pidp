@@ -70,8 +70,9 @@
               </mat-form-field>
               <div *ngIf="selectedPrivacyOfficer">
                 <fieldset [disabled]="!selectedPrivacyOfficer">
+                  <legend>Clinic overview</legend>
                   <div class="field slender">
-                    <label>Clinic Name:</label>
+                    <label>Name</label>
                     <mat-form-field appearance="outline">
                       <input
                         matInput
@@ -81,7 +82,7 @@
                     </mat-form-field>
                   </div>
                   <div class="field">
-                    <label>Clinic Address:</label>
+                    <label>Address</label>
                     <mat-form-field appearance="outline">
                       <input
                         matInput
