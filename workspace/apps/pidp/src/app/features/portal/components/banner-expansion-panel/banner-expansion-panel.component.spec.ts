@@ -1,21 +1,21 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
-import { ExpansionPanelComponent } from './expansion-panel.component';
+import { BannerExpansionPanelComponent } from './banner-expansion-panel.component';
 
-describe('ExpansionPanelComponent', () => {
-  let component: ExpansionPanelComponent;
-  let fixture: ComponentFixture<ExpansionPanelComponent>;
+describe('BannerExpansionPanelComponent', () => {
+  let component: BannerExpansionPanelComponent;
+  let fixture: ComponentFixture<BannerExpansionPanelComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ExpansionPanelComponent],
+      declarations: [BannerExpansionPanelComponent],
       imports: [NoopAnimationsModule],
     }).compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ExpansionPanelComponent);
+    fixture = TestBed.createComponent(BannerExpansionPanelComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

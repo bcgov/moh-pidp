@@ -15,8 +15,9 @@
             If you have any additional questions contact the FH mHealth team via
             email:
             <a uiAnchor scheme="mailto" [attr.href]="msTeamsSupportEmail"></a>
-          </p></section
-      ></ng-container>
+          </p>
+        </section>
+      </ng-container>
 
       <ng-template #notCompleted>
         <section class="intro-card">
@@ -41,7 +42,11 @@
             <source
               type="image/jpg"
               srcset="/assets/images/ms-teams-458X400.png" />
-            <img title="woman" loading="lazy" aria-labelledby="" />
+            <img
+              alt="MS teams woman"
+              title="woman"
+              loading="lazy"
+              aria-labelledby="" />
           </picture>
         </section>
         <section class="clinic-info">
@@ -65,8 +70,9 @@
               </mat-form-field>
               <div *ngIf="selectedPrivacyOfficer">
                 <fieldset [disabled]="!selectedPrivacyOfficer">
+                  <legend>Clinic overview</legend>
                   <div class="field slender">
-                    <label>Clinic Name:</label>
+                    <label>Name</label>
                     <mat-form-field appearance="outline">
                       <input
                         matInput
@@ -76,20 +82,25 @@
                     </mat-form-field>
                   </div>
                   <div class="field">
-                    <label>Clinic Address:</label>
+                    <label>Address</label>
                     <mat-form-field appearance="outline">
                       <input
                         matInput
                         type="text"
                         readonly
-                        [value]="selectedPrivacyOfficer.clinicAddress.street + ', ' + selectedPrivacyOfficer.clinicAddress.provinceCode + ', ' + selectedPrivacyOfficer.clinicAddress.city + ', ' + selectedPrivacyOfficer.clinicAddress.postal + ', ' + selectedPrivacyOfficer.clinicAddress.countryCode" />
+                        [value]="selectedPrivacyOfficer.clinicAddress.street +
+                          ', ' + selectedPrivacyOfficer.clinicAddress.provinceCode +
+                          ', ' + selectedPrivacyOfficer.clinicAddress.city +
+                          ', ' + selectedPrivacyOfficer.clinicAddress.postal +
+                          ', ' + selectedPrivacyOfficer.clinicAddress.countryCode" />
                     </mat-form-field>
                   </div>
                 </fieldset>
               </div>
             </div>
-          </div></section
-      ></ng-template>
+          </div>
+        </section>
+      </ng-template>
     </div>
 
     <section class="actions">
