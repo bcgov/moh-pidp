@@ -482,6 +482,11 @@ namespace Pidp.Data.Migrations
                         {
                             Code = 9,
                             Name = "Access Harmonization User Access Agreement"
+                        },
+                        new
+                        {
+                            Code = 10,
+                            Name = "Immunization Entry eForm"
                         });
                 });
 

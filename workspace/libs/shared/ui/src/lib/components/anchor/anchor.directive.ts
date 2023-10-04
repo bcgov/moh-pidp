@@ -52,7 +52,7 @@ export class AnchorDirective implements OnInit {
     }
 
     // Provide a display value when none exists
-    if (!nativeElement.innerText.trim().length && this.scheme !== 'scroll') {
+    if (!nativeElement.innerText?.trim()?.length && this.scheme !== 'scroll') {
       nativeElement.innerText = value;
     }
   }
