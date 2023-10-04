@@ -61,7 +61,7 @@ public class AssignKeycloakRolesAfterPlrCpnLookupFound : INotificationHandler<Pl
             if (await this.keycloakClient.AssignAccessRoles(userId, MohKeycloakEnrolment.PractitionerLicenceStatus))
             {
                 this.context.BusinessEvents.Add(LicenceStatusRoleAssigned.Create(notification.PartyId, MohKeycloakEnrolment.PractitionerLicenceStatus, this.clock.GetCurrentInstant()));
-            };
+            }
         }
     }
 }
