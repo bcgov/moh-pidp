@@ -19,8 +19,10 @@ public static class MassTransitSetup
             {
                 cfg.Host(new Uri(config.RabbitMQ.HostAddress));
 
-                // retry policy
-                cfg.UseMessageRetry(r => r.Incremental(5, TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(30)));
+                // Configure redelivery
+                cfg.UseDelayedRedelivery(r => r.Intervals(TimeSpan.FromHours(1), TimeSpan.FromHours(3), TimeSpan.FromHours(6), TimeSpan.FromHours(12)));
+                // Configure retry policy
+                cfg.UseMessageRetry(r => r.Interval(2, TimeSpan.FromSeconds(5)));
                 cfg.UseInMemoryOutbox();
 
                 cfg.ReceiveEndpoint("party-email-updated-keycloak-queue", ep =>
