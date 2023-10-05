@@ -59,7 +59,7 @@ $theme-typography: mat.define-typography-config();
 
     .mat-card-title {
       margin-top: 0.5rem;
-      @include mat.typography-level($theme-typography, 'title');
+      @include mat.typography-level($theme-typography, 'headline-6');
     }
 
     // TODO split out to improve useability this is too strict for base

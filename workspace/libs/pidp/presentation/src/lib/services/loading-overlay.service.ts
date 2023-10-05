@@ -53,14 +53,14 @@ interface PidpLoadingDialogData {
   </div>`,
   styles: [
     `
-      .spinner {
-        display: flex;
-        justify-content: center;
-      }
-      .message {
-        margin-top: 1rem;
-      }
-    `,
+           .spinner {
+             display: flex;
+             justify-content: center;
+           }
+           .message {
+             margin-top: 1rem;
+           }
+         `,
   ],
 })
 export class PidpLoadingDialogComponent {
