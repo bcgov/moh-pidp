@@ -40,6 +40,12 @@
   white-space: normal;
 }
 
+.moa-message-steps .mat-horizontal-stepper-header-container {
+  background-color: $bcgov-color-background-darker-grey;
+  padding: 15px;
+  border: 1px solid #000;
+}
+
 //
 // Expansion Panel
 //

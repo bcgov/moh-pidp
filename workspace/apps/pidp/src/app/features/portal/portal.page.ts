@@ -81,6 +81,8 @@ export class PortalPage implements OnInit {
   public bcProviderTutorial: string;
   public selectedIndex: number;
   private readonly lastSelectedIndex: number;
+  public hasCpn!: boolean | undefined;
+  public collegeLicenceDeclared!: boolean | undefined;
 
   public constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
@@ -176,6 +178,10 @@ export class PortalPage implements OnInit {
       )
       .subscribe((profileStatus) => {
         let selectedIndex = this.lastSelectedIndex;
+        this.hasCpn = profileStatus?.status.collegeCertification.hasCpn;
+        this.collegeLicenceDeclared =
+          profileStatus?.status.collegeCertification.licenceDeclared;
+
         this.demographicsStatusCode =
           profileStatus?.status.demographics.statusCode;
         if (this.demographicsStatusCode === 2) {
@@ -216,6 +222,14 @@ export class PortalPage implements OnInit {
         } else if (selectedIndex === this.lastSelectedIndex) {
           selectedIndex = 4;
         }
+        if (
+          this.selectedNoCollegeLicence(
+            this.hasCpn,
+            this.collegeLicenceDeclared
+          )
+        ) {
+          selectedIndex = 5;
+        }
         this.selectedIndex = selectedIndex;
       });
   }
@@ -240,6 +254,13 @@ export class PortalPage implements OnInit {
           });
         })
       );
+  }
+
+  public selectedNoCollegeLicence(
+    hasCpn: boolean | undefined,
+    isComplete: boolean | undefined
+  ): boolean {
+    return !hasCpn && isComplete ? true : false;
   }
 
   private navigateToExternalUrl(url: string): void {
