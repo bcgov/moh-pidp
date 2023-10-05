@@ -33,7 +33,7 @@ public class BCProviderAttributes
 
     public static BCProviderAttributes FromNewUser(string clientId, NewUserRepresentation representation)
     {
-        var attributes = new BCProviderAttributes(clientId)
+        var newAttributes = new BCProviderAttributes(clientId)
             .SetEndorserData(representation.EndorserData)
             .SetHpdid(representation.Hpdid)
             .SetIsMd(representation.IsMd)
@@ -45,10 +45,10 @@ public class BCProviderAttributes
 
         if (!string.IsNullOrWhiteSpace(representation.Cpn))
         {
-            attributes.SetCpn(representation.Cpn);
+            newAttributes.SetCpn(representation.Cpn);
         }
 
-        return attributes;
+        return newAttributes;
     }
 
     public Dictionary<string, object> AsAdditionalData() => this.attributes;
