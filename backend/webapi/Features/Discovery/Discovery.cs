@@ -6,7 +6,6 @@ using System.Security.Claims;
 
 using Pidp.Data;
 using Pidp.Extensions;
-using Pidp.Infrastructure.Auth;
 using Pidp.Models;
 
 public class Discovery
@@ -25,15 +24,6 @@ public class Discovery
         public async Task<IDomainResult<int>> HandleAsync(Command command)
         {
             var lowerIdpId = command.User.GetIdpId()?.ToLowerInvariant();
-
-            // TODO: consider a more general approach for this; maybe in User.GetIdpId()?
-            if (command.User.GetIdentityProvider() == IdentityProviders.BCProvider
-                && lowerIdpId != null
-                && lowerIdpId.EndsWith("@bcp", StringComparison.InvariantCulture))
-            {
-                // Keycloak adds "@bcp" at the end of the IDP ID, and so won't match what we have in the DB if we don't trim it.
-                lowerIdpId = lowerIdpId[..^4];
-            }
 
 #pragma warning disable CA1304 // ToLower() is Locale Dependant
             var credential = await this.context.Credentials
