@@ -161,7 +161,7 @@
           </ng-template>
           <div>
             <div
-              *ngIf="selectedNoCollegeLicence; else licenced"
+              *ngIf="!hasCpn && isComplete; else licenced"
               class="moa-message">
               <p>
                 <i

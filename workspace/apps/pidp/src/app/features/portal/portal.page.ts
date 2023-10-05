@@ -83,6 +83,7 @@ export class PortalPage implements OnInit {
   private readonly lastSelectedIndex: number;
   public hasCpn!: boolean | undefined;
   public collegeLicenceDeclared!: boolean | undefined;
+  public isComplete!: boolean | undefined;
 
   public constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
@@ -181,6 +182,7 @@ export class PortalPage implements OnInit {
         this.hasCpn = profileStatus?.status.collegeCertification.hasCpn;
         this.collegeLicenceDeclared =
           profileStatus?.status.collegeCertification.licenceDeclared;
+        this.isComplete = profileStatus?.status.collegeCertification.isComplete;
 
         this.demographicsStatusCode =
           profileStatus?.status.demographics.statusCode;
@@ -225,7 +227,8 @@ export class PortalPage implements OnInit {
         if (
           this.selectedNoCollegeLicence(
             this.hasCpn,
-            this.collegeLicenceDeclared
+            this.collegeLicenceDeclared,
+            this.isComplete
           )
         ) {
           selectedIndex = 5;
@@ -256,11 +259,12 @@ export class PortalPage implements OnInit {
       );
   }
 
-  public selectedNoCollegeLicence(
+  private selectedNoCollegeLicence(
     hasCpn: boolean | undefined,
+    licenceDeclared: boolean | undefined,
     isComplete: boolean | undefined
-  ): boolean {
-    return !hasCpn && isComplete ? true : false;
+  ): boolean | undefined {
+    return !hasCpn && licenceDeclared && isComplete;
   }
 
   private navigateToExternalUrl(url: string): void {
