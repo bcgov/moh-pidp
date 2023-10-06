@@ -68,11 +68,11 @@ export class PortalPage implements OnInit {
     true
   );
   public pasPanelExpanded$: BehaviorSubject<boolean>;
-  public demographicsStatusCode!: number | undefined;
-  public collegeLicenceStatusCode!: number | undefined;
-  public uaaStatusCode!: number | undefined;
-  public bcProviderStatusCode!: number | undefined;
-  public rosteringStatusCode!: number | undefined;
+  public demographicsStatusCode: number | undefined;
+  public collegeLicenceStatusCode: number | undefined;
+  public uaaStatusCode: number | undefined;
+  public bcProviderStatusCode: number | undefined;
+  public rosteringStatusCode: number | undefined;
   public bcProviderUsername = '';
   public logoutRedirectUrl: string;
   public personalInfoTutorial: string;
