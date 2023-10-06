@@ -39,7 +39,7 @@ describe('NeedHelpComponent', () => {
           'the help section should contain "Need help?" text and help panel hidden',
           () => {
             const needHelpLink = fixture.debugElement.query(
-              By.css('.need-help-header a')
+              By.css('.need-help-header button.pidp-btn-link')
             );
             expect(needHelpLink.nativeElement.innerHTML).toContain(
               'Need Help?'
@@ -86,6 +86,69 @@ describe('NeedHelpComponent', () => {
             By.css('.expansion-panel-content')
           );
           expect(expansionPanelContent.styles.visibility).toBe('hidden');
+        });
+      });
+    });
+  });
+
+  describe('show or hide the icon', () => {
+    given('the icon is hidden', () => {
+      component.showIcon = false;
+
+      when('the component has been initialized', () => {
+        fixture.detectChanges();
+
+        then('the icon should be hidden', () => {
+          expect(component.showIcon).toBeFalsy();
+          const icon = fixture.debugElement.query(
+            By.css('.need-help-header button i')
+          );
+          expect(icon).toBeNull();
+        });
+      });
+    });
+
+    given('the icon is shown', () => {
+      component.showIcon = true;
+
+      when('the component has been initialized', () => {
+        fixture.detectChanges();
+
+        then('the icon should be shown', () => {
+          expect(component.showIcon).toBeTruthy();
+          const icon = fixture.debugElement.query(
+            By.css('.need-help-header button i')
+          );
+          expect(icon).toBeDefined();
+        });
+      });
+    });
+  });
+
+  describe('PROPERTY: set customClass', () => {
+    given('there is no custom class', () => {
+      when('the component has been initialized', () => {
+        fixture.detectChanges();
+
+        then('should return 1 class', () => {
+          const classes = component.customClasses;
+          expect(classes.length).toBe(1);
+          expect(classes[0]).toBe('need-help');
+        });
+      });
+    });
+
+    given('there is "need-help-large" custom class', () => {
+      component.customClass = 'need-help-large';
+
+      when('the component has been initialized', () => {
+        fixture.detectChanges();
+
+        then('should return 2 classes', () => {
+          const classes = component.customClasses;
+          expect(classes.length).toBe(2);
+          expect(classes[0]).toBe('need-help');
+          expect(classes[1]).toBe('need-help-large');
         });
       });
     });
