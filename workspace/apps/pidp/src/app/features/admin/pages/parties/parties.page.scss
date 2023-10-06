@@ -16,7 +16,12 @@ mat-icon {
     color: palette.theme-palette(green);
   }
 
-  &.not-requested {
+  &.not-requested,
+  &.delete {
     color: palette.theme-palette(red);
+  }
+
+  &.delete {
+    cursor: pointer;
   }
 }
