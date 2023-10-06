@@ -11,7 +11,7 @@
       mat-stroked-button
       type="button"
       color="warn"
-      (click)="onDeleteAll()">
+      (click)="onDeleteParties()">
       Delete all
     </button>
   </ng-container>
@@ -53,7 +53,7 @@
   <ng-container *ngIf="environment !== production" matColumnDef="delete">
     <th *matHeaderCellDef scope="col" mat-header-cell></th>
     <td *matCellDef="let element" mat-cell>
-      <mat-icon class="delete" (click)="onDeleteSingle(element.id)"
+      <mat-icon class="delete" (click)="onDeleteParty(element.id)"
         >delete</mat-icon
       >
     </td>

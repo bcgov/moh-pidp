@@ -49,11 +49,11 @@ export class PartiesPage implements OnInit {
     this.production = EnvironmentName.PRODUCTION;
   }
 
-  public onDeleteSingle(partyId: number): void {
+  public onDeleteParty(partyId: number): void {
     console.log("In the future, I'll be deleting user with ID ", partyId);
   }
 
-  public onDeleteAll(): void {
+  public onDeleteParties(): void {
     const data: DialogOptions = {
       title: 'Delete all parties',
       component: HtmlComponent,
