@@ -23,9 +23,9 @@ export const EXPANSION_PANEL_ANIMATION_TIMING =
 export type ExpansionPanelState = 'expanded' | 'collapsed';
 
 @Component({
-  selector: 'app-expansion-panel',
-  templateUrl: './expansion-panel.component.html',
-  styleUrls: ['./expansion-panel.component.scss'],
+  selector: 'app-banner-expansion-panel',
+  templateUrl: './banner-expansion-panel.component.html',
+  styleUrls: ['./banner-expansion-panel.component.scss'],
   animations: [
     trigger('bodyExpansion', [
       state('collapsed, void', style({ height: '0', visibility: 'hidden' })),
@@ -37,7 +37,7 @@ export type ExpansionPanelState = 'expanded' | 'collapsed';
     ]),
   ],
 })
-export class ExpansionPanelComponent implements OnDestroy {
+export class BannerExpansionPanelComponent implements OnDestroy {
   private _expanded: boolean;
   @Output() public expandedChanged = new EventEmitter<boolean>();
 

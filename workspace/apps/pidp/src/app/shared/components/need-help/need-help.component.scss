@@ -1,0 +1,34 @@
+@use 'pidp-variables' as pidp;
+
+.need-help {
+  .need-help-header {
+    cursor: pointer;
+
+    a {
+      color: pidp.$bcgov-color-links;
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      justify-content: center;
+
+      i {
+        padding-left: 10px;
+      }
+    }
+  }
+
+  & .show-need-help {
+    width: 100px;
+
+    & .need-help-container {
+      display: flex;
+      width: max-content;
+      margin-top: 20px;
+
+      & .need-help-list {
+        list-style: none;
+        padding: 0;
+      }
+    }
+  }
+}
