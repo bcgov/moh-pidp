@@ -51,7 +51,7 @@
   </ng-container>
 
   <ng-container *ngIf="environment !== production" matColumnDef="delete">
-    <th *matHeaderCellDef scope="col" mat-header-cell>Trash</th>
+    <th *matHeaderCellDef scope="col" mat-header-cell></th>
     <td *matCellDef="let element" mat-cell>
       <mat-icon class="delete" (click)="onDeleteSingle(element.id)"
         >delete</mat-icon
