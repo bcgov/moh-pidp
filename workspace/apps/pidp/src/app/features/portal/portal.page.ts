@@ -81,9 +81,9 @@ export class PortalPage implements OnInit {
   public bcProviderTutorial: string;
   public selectedIndex: number;
   private readonly lastSelectedIndex: number;
-  public hasCpn!: boolean | undefined;
-  public collegeLicenceDeclared!: boolean | undefined;
-  public isComplete!: boolean | undefined;
+  public hasCpn: boolean | undefined;
+  public collegeLicenceDeclared: boolean | undefined;
+  public isComplete: boolean | undefined;
 
   public constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
