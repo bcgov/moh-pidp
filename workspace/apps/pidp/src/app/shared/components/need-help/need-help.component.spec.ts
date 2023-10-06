@@ -125,13 +125,13 @@ describe('NeedHelpComponent', () => {
     });
   });
 
-  describe('METHOD: getClasses', () => {
+  describe('PROPERTY: set customClass', () => {
     given('there is no custom class', () => {
       when('the component has been initialized', () => {
         fixture.detectChanges();
 
         then('should return 1 class', () => {
-          const classes = component.getClasses();
+          const classes = component.customClasses;
           expect(classes.length).toBe(1);
           expect(classes[0]).toBe('need-help');
         });
@@ -145,7 +145,7 @@ describe('NeedHelpComponent', () => {
         fixture.detectChanges();
 
         then('should return 2 classes', () => {
-          const classes = component.getClasses();
+          const classes = component.customClasses;
           expect(classes.length).toBe(2);
           expect(classes[0]).toBe('need-help');
           expect(classes[1]).toBe('need-help-large');
