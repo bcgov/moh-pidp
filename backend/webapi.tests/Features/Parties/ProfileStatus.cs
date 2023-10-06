@@ -21,9 +21,9 @@ public class ProfileStatusTests : InMemoryDbTest
         var client = A.Fake<IPlrClient>()
             .ReturningAStandingsDigest(false);
         A.CallTo(() => client.FindCpnAsync(A<CollegeCode>._, A<string>._, A<LocalDate>._)).Returns<string?>(null);
-        var handler = this.MockDependenciesFor<CommandHandler>(client);
+        var handler = this.MockDependenciesFor<QueryHandler>(client);
 
-        var profile = await handler.HandleAsync(new Command { Id = party.Id, User = AMock.BcscUser() });
+        var profile = await handler.HandleAsync(new Query { Id = party.Id, User = AMock.BcscUser() });
 
         Assert.NotNull(profile);
         Assert.Null(party.Cpn);
@@ -41,9 +41,9 @@ public class ProfileStatusTests : InMemoryDbTest
         var client = A.Fake<IPlrClient>()
             .ReturningAStandingsDigest(false);
         A.CallTo(() => client.FindCpnAsync(A<CollegeCode>._, A<string>._, A<LocalDate>._)).Returns(expectedCpn);
-        var handler = this.MockDependenciesFor<CommandHandler>(client);
+        var handler = this.MockDependenciesFor<QueryHandler>(client);
 
-        var profile = await handler.HandleAsync(new Command { Id = party.Id, User = AMock.BcscUser() });
+        var profile = await handler.HandleAsync(new Query { Id = party.Id, User = AMock.BcscUser() });
 
         Assert.NotNull(profile);
         Assert.Equal(expectedCpn, party.Cpn);

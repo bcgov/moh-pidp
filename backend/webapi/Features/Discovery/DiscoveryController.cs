@@ -1,7 +1,5 @@
 namespace Pidp.Features.Discovery;
 
-using DomainResults.Common;
-using DomainResults.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,32 +17,23 @@ public class DiscoveryController : PidpControllerBase
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status307TemporaryRedirect)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(StatusCodes.Status409Conflict)]
-    public async Task<ActionResult<int>> Discovery([FromServices] ICommandHandler<Discovery.Command, IDomainResult<int>> handler)
+    public async Task<ActionResult<Discovery.Model>> Discovery([FromServices] IQueryHandler<Discovery.Query, Discovery.Model> handler)
     {
-        var result = await handler.HandleAsync(new Discovery.Command { User = this.User });
-        if (result.IsSuccess)
+        var result = await handler.HandleAsync(new Discovery.Query { User = this.User });
+
+        if (result.CheckCookie)
         {
-            return result.ToActionResultOfT();
+            var credentialLinkTicket = await this.AuthorizationService.VerifyTokenAsync<Cookies.CredentialLinkTicket.Values>(this.Request.Cookies.GetCredentialLinkTicket());
+            if (credentialLinkTicket != null)
+            {
+                return this.RedirectToActionPreserveMethod
+                (
+                    nameof(CredentialsController.CreateCredential),
+                    nameof(CredentialsController).Replace("Controller", "")
+                );
+            }
         }
 
-        var credentialLinkTicket = await this.AuthorizationService.VerifyTokenAsync<Cookies.CredentialLinkTicket.Values>(this.Request.Cookies.GetCredentialLinkTicket());
-        if (credentialLinkTicket != null)
-        {
-            return this.RedirectToActionPreserveMethod
-            (
-                nameof(CredentialsController.CreateCredential),
-                nameof(CredentialsController).Replace("Controller", "")
-            );
-        }
-
-        if (this.User.GetIdentityProvider() == IdentityProviders.BCProvider)
-        {
-            // BC Provider Users cannot create Parties (they can only link).
-            return this.Conflict();
-        }
-
-        return this.NotFound();
+        return result;
     }
 }
