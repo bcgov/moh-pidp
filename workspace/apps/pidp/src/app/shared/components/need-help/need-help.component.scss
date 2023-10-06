@@ -20,7 +20,7 @@
   font-size: initial;
   .need-help-header {
     cursor: pointer;
-    a {
+    button.pidp-btn-link {
       color: pidp.$bcgov-color-links;
       display: flex;
       align-items: center;

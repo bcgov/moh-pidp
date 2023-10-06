@@ -1,9 +1,9 @@
 <div [ngClass]="customClasses">
   <div class="need-help-header">
-    <a href="javascript:;" (click)="onShowNeedHelp()">
+    <button class="pidp-btn-link" (click)="onShowNeedHelp()">
       Need Help?
       <i *ngIf="showIcon" class="material-icons-outlined">arrow_circle_right</i>
-    </a>
+    </button>
   </div>
   <div class="show-need-help">
     <ui-expansion-panel [expanded]="showNeedHelp">

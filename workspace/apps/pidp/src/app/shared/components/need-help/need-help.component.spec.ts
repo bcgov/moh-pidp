@@ -39,7 +39,7 @@ describe('NeedHelpComponent', () => {
           'the help section should contain "Need help?" text and help panel hidden',
           () => {
             const needHelpLink = fixture.debugElement.query(
-              By.css('.need-help-header a')
+              By.css('.need-help-header button.pidp-btn-link')
             );
             expect(needHelpLink.nativeElement.innerHTML).toContain(
               'Need Help?'
@@ -101,7 +101,7 @@ describe('NeedHelpComponent', () => {
         then('the icon should be hidden', () => {
           expect(component.showIcon).toBeFalsy();
           const icon = fixture.debugElement.query(
-            By.css('.need-help-header a i')
+            By.css('.need-help-header button i')
           );
           expect(icon).toBeNull();
         });
@@ -117,7 +117,7 @@ describe('NeedHelpComponent', () => {
         then('the icon should be shown', () => {
           expect(component.showIcon).toBeTruthy();
           const icon = fixture.debugElement.query(
-            By.css('.need-help-header a i')
+            By.css('.need-help-header button i')
           );
           expect(icon).toBeDefined();
         });
