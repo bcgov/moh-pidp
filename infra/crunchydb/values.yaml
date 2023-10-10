@@ -1,0 +1,4 @@
+crunchy-postgres:
+  patroni:
+    postgresql:
+      pg_hba: "hostssl all all all md5"

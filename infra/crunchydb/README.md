@@ -28,17 +28,17 @@
 
 3. Copy zip files from the old pod to the local directory on your machine. In terminal on your local machine, run:
 
-<code>oc rsync pod-name:remote-directory local-directory</code>
+<code>oc rsync old-pod-name:remote-directory local-directory</code>
 
 4. Copy zip files from your local directory to the destination pod.
 
-<code>oc rsync local-directory pod-name:remote-directory</code>
+<code>oc rsync local-directory new-pod-name:remote-directory</code>
 
 5. Unzip zip files in the destination pod
 
 <code>gzip -d {outputDirectory/DB_Name.sql.gz}</code>
 
-6. Restore databases and roles in the destination pod
+6. Restore Roles and Databases respectively in the destination pod
 
 <code>DROP DATABASE IF EXISTS {DB_NAME}</code>
 
