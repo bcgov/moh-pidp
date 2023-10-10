@@ -12,6 +12,7 @@
 
 3. Install crunchy-postgres helm chart
 
+
 <code>helm upgrade --install --values ./values.yaml --namespace d8a8f9-dev crunchy-postgres .</code>
 
 # Steps to Migrate Databases and Roles from the old Crunchy/Patroni to the new Crunchy
@@ -28,11 +29,13 @@
 
 3. Copy zip files from the old pod to the local directory on your machine. In terminal on your local machine, run:
 
+
 <code>oc rsync old-pod-name:remote-directory local-directory</code>
 
 4. Copy zip files from your local directory to the destination pod.
 
 <code>oc rsync local-directory new-pod-name:remote-directory</code>
+
 
 5. Unzip zip files in the destination pod
 
