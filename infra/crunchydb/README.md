@@ -12,7 +12,7 @@
 
 3. Install crunchy-postgres helm chart
 
-<code>helm upgrade --install --namespace d8a8f9-dev crunchy-postgres .</code>
+<code>helm upgrade --install --values ./values.yaml --namespace d8a8f9-dev crunchy-postgres .</code>
 
 # Steps to Migrate Databases and Roles from the old Crunchy/Patroni to the new Crunchy
 
