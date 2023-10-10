@@ -7,4 +7,5 @@ import { Section } from '../section.model';
 export interface CollegeCertificationSection extends Section {
   hasCpn: boolean;
   licenceDeclared: boolean;
+  isComplete: boolean;
 }
