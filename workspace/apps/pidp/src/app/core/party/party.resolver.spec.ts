@@ -6,9 +6,8 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { randNumber } from '@ngneat/falso';
 import { Spy, createSpyFromClass, provideAutoSpy } from 'jest-auto-spies';
 
-import { ShellRoutes } from '@app/features/shell/shell.routes';
-
 import { APP_CONFIG, APP_DI_CONFIG } from '@app/app.config';
+import { ShellRoutes } from '@app/features/shell/shell.routes';
 
 import { DocumentService } from '../services/document.service';
 import { LoggerService } from '../services/logger.service';
@@ -57,14 +56,14 @@ describe('PartyResolver', () => {
 
       when('attempting to resolve the party is successful', () => {
         const partyId = randNumber();
-        partyResourceSpy.firstOrCreate.nextOneTimeWith(partyId);
+        partyResourceSpy.discover.nextOneTimeWith(partyId);
         let actualResult: number | null;
         resolver
           .resolve()
           .subscribe((partyId: number | null) => (actualResult = partyId));
 
         then('response will provide the party ID', () => {
-          expect(partyResourceSpy.firstOrCreate).toHaveBeenCalledTimes(1);
+          expect(partyResourceSpy.discover).toHaveBeenCalledTimes(1);
           expect(actualResult).toBe(partyId);
         });
       });
@@ -74,7 +73,7 @@ describe('PartyResolver', () => {
       partyServiceSpy.accessorSpies.setters.partyId(null);
 
       when('attempting to resolve the party is unsuccessful', () => {
-        partyResourceSpy.firstOrCreate.nextWithValues([
+        partyResourceSpy.discover.nextWithValues([
           {
             errorValue: new Error('Anonymous error of any type'),
           },
@@ -85,8 +84,10 @@ describe('PartyResolver', () => {
           .subscribe((partyId: number | null) => (actualResult = partyId));
 
         then('response will provide the party ID', () => {
-          expect(partyResourceSpy.firstOrCreate).toHaveBeenCalledTimes(1);
-          expect(router.navigateByUrl).toHaveBeenCalledWith(ShellRoutes.SUPPORT_ERROR_PAGE);
+          expect(partyResourceSpy.discover).toHaveBeenCalledTimes(1);
+          expect(router.navigateByUrl).toHaveBeenCalledWith(
+            ShellRoutes.SUPPORT_ERROR_PAGE
+          );
           expect(actualResult).toBe(null);
         });
       });
