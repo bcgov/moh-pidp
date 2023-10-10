@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { SetDashboardTitleGuard } from '@pidp/presentation';
+import { setDashboardTitleGuard } from '@pidp/presentation';
 
 import { AuthRoutes } from './auth.routes';
 import { AuthorizationRedirectGuard } from './guards/authorization-redirect.guard';
@@ -12,7 +12,7 @@ import { LoginPage } from './pages/login/login.page';
 const routes: Routes = [
   {
     path: AuthRoutes.PORTAL_LOGIN,
-    canActivate: [AuthorizationRedirectGuard, SetDashboardTitleGuard],
+    canActivate: [AuthorizationRedirectGuard, setDashboardTitleGuard],
     component: LoginPage,
     data: {
       loginPageData: {

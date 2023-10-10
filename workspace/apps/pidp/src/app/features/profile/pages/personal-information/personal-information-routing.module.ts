@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { SetDashboardTitleGuard } from '@pidp/presentation';
+import { setDashboardTitleGuard } from '@pidp/presentation';
 
 import { canDeactivateFormGuard } from '@app/core/guards/can-deactivate-form.guard';
 
@@ -11,7 +11,7 @@ const routes: Routes = [
   {
     path: '',
     component: PersonalInformationPage,
-    canActivate: [SetDashboardTitleGuard],
+    canActivate: [setDashboardTitleGuard],
     canDeactivate: [canDeactivateFormGuard],
     data: {
       title: 'OneHealthID Service',
