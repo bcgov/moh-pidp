@@ -1,7 +1,7 @@
 import { NgModule, Type } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { canMatchPermissionsGuard } from '@app/modules/permissions/permissions.guard';
+import { PermissionsGuard } from '@app/modules/permissions/permissions.guard';
 import { Role } from '@app/shared/enums/roles.enum';
 
 import { CollegeLicenceDeclarationModule } from './pages/college-licence/college-licence-declaration/college-licence-declaration.module';
@@ -28,7 +28,7 @@ const routes: Routes = [
   },
   {
     path: ProfileRoutes.WORK_AND_ROLE_INFO,
-    canMatch: [canMatchPermissionsGuard],
+    canMatch: [PermissionsGuard.canMatch],
     data: {
       roles: [Role.FEATURE_PIDP_DEMO],
     },

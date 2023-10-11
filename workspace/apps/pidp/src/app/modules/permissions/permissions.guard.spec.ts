@@ -1,16 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 import { CanActivateChildFn, CanActivateFn, CanMatchFn } from '@angular/router';
 
-import {
-  canActivateChildPermissionsGuard,
-  canActivatePermissionsGuard,
-  canMatchPermissionsGuard,
-} from './permissions.guard';
+import { PermissionsGuard } from './permissions.guard';
 
-describe('canActivatePermissionsGuard', () => {
+describe('PermissionsGuard canActivate', () => {
   const executeGuard: CanActivateFn = (...guardParameters) =>
     TestBed.runInInjectionContext(() =>
-      canActivatePermissionsGuard(...guardParameters)
+      PermissionsGuard.canActivate(...guardParameters)
     );
 
   beforeEach(() => {
@@ -22,10 +18,10 @@ describe('canActivatePermissionsGuard', () => {
   });
 });
 
-describe('canActivateChildPermissionsGuard', () => {
+describe('PermissionsGuard canActivateChild', () => {
   const executeGuard: CanActivateChildFn = (...guardParameters) =>
     TestBed.runInInjectionContext(() =>
-      canActivateChildPermissionsGuard(...guardParameters)
+      PermissionsGuard.canActivateChild(...guardParameters)
     );
 
   beforeEach(() => {
@@ -37,10 +33,10 @@ describe('canActivateChildPermissionsGuard', () => {
   });
 });
 
-describe('canMatchPermissionsGuard', () => {
+describe('PermissionsGuard CanMatchFn', () => {
   const executeGuard: CanMatchFn = (...guardParameters) =>
     TestBed.runInInjectionContext(() =>
-      canMatchPermissionsGuard(...guardParameters)
+      PermissionsGuard.canMatch(...guardParameters)
     );
 
   beforeEach(() => {

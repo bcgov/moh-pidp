@@ -13,33 +13,35 @@ import { Observable } from 'rxjs';
 
 import { PermissionsService } from './permissions.service';
 
-const checkPermissions = (
-  route: Route | ActivatedRouteSnapshot
-):
-  | Observable<boolean | UrlTree>
-  | Promise<boolean | UrlTree>
-  | boolean
-  | UrlTree => {
-  const router = inject(Router);
-  const permissionsService = inject(PermissionsService);
-  return (
-    permissionsService.hasRole(route.data?.roles ?? []) ||
-    router.createUrlTree(['/'])
-  );
-};
+export abstract class PermissionsGuard {
+  public static canActivate: CanActivateFn = (
+    route: ActivatedRouteSnapshot
+  ) => {
+    return this.checkPermissions(route);
+  };
 
-export const canActivatePermissionsGuard: CanActivateFn = (
-  route: ActivatedRouteSnapshot
-) => {
-  return checkPermissions(route);
-};
+  public static canActivateChild: CanActivateChildFn = (
+    childRoute: ActivatedRouteSnapshot
+  ) => {
+    return this.checkPermissions(childRoute);
+  };
 
-export const canActivateChildPermissionsGuard: CanActivateChildFn = (
-  childRoute: ActivatedRouteSnapshot
-) => {
-  return checkPermissions(childRoute);
-};
+  public static canMatch: CanMatchFn = (route: Route) => {
+    return this.checkPermissions(route);
+  };
 
-export const canMatchPermissionsGuard: CanMatchFn = (route: Route) => {
-  return checkPermissions(route);
-};
+  private static checkPermissions(
+    route: Route | ActivatedRouteSnapshot
+  ):
+    | Observable<boolean | UrlTree>
+    | Promise<boolean | UrlTree>
+    | boolean
+    | UrlTree {
+    const router = inject(Router);
+    const permissionsService = inject(PermissionsService);
+    return (
+      permissionsService.hasRole(route.data?.roles ?? []) ||
+      router.createUrlTree(['/'])
+    );
+  }
+}
