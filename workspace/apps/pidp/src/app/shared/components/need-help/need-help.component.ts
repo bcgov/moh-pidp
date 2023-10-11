@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, Input } from '@angular/core';
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';
 
@@ -8,12 +8,27 @@ import { APP_CONFIG, AppConfig } from '@app/app.config';
   styleUrls: ['./need-help.component.scss'],
 })
 export class NeedHelpComponent {
+  @Input() public showIcon: boolean;
   public showNeedHelp: boolean;
   public providerIdentitySupport: string;
   public additionalSupportPhone: string;
 
+  public get customClasses(): string[] {
+    return this._customClasses;
+  }
+
+  private _customClasses: string[] = ['need-help'];
+
+  @Input() public set customClass(value: 'need-help-large' | undefined) {
+    if (value && this._customClasses.length === 1) {
+      this._customClasses.push(value);
+    }
+  }
+
   public constructor(@Inject(APP_CONFIG) private config: AppConfig) {
+    this.showIcon = false;
     this.showNeedHelp = false;
+
     this.providerIdentitySupport = this.config.emails.providerIdentitySupport;
     this.additionalSupportPhone = this.config.phones.additionalSupport;
   }
