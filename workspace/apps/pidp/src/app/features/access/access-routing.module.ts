@@ -1,7 +1,7 @@
 import { NgModule, Type } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { PermissionsGuard } from '@app/modules/permissions/permissions.guard';
+import { canActivatePermissionsGuard } from '@app/modules/permissions/permissions.guard';
 import { Role } from '@app/shared/enums/roles.enum';
 
 import { AccessRoutes } from './access.routes';
@@ -57,7 +57,7 @@ const routes: Routes = [
   },
   {
     path: AccessRoutes.HCIM_ENROLMENT,
-    canActivate: [PermissionsGuard],
+    canActivate: [canActivatePermissionsGuard],
     data: {
       roles: [Role.FEATURE_PIDP_DEMO],
     },
@@ -68,7 +68,7 @@ const routes: Routes = [
   },
   {
     path: AccessRoutes.PHARMANET,
-    canActivate: [PermissionsGuard],
+    canActivate: [canActivatePermissionsGuard],
     data: {
       roles: [Role.FEATURE_PIDP_DEMO],
     },
@@ -79,7 +79,7 @@ const routes: Routes = [
   },
   {
     path: AccessRoutes.SITE_PRIVACY_SECURITY_CHECKLIST,
-    canActivate: [PermissionsGuard],
+    canActivate: [canActivatePermissionsGuard],
     data: {
       roles: [Role.FEATURE_PIDP_DEMO],
     },

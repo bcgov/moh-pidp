@@ -1,9 +1,9 @@
-import { Injectable } from '@angular/core';
+import { inject } from '@angular/core';
 import {
   ActivatedRouteSnapshot,
-  CanActivate,
-  CanActivateChild,
-  CanLoad,
+  CanActivateChildFn,
+  CanActivateFn,
+  CanMatchFn,
   Route,
   Router,
   UrlTree,
@@ -13,57 +13,33 @@ import { Observable } from 'rxjs';
 
 import { PermissionsService } from './permissions.service';
 
-@Injectable({
-  providedIn: 'root',
-})
-export class PermissionsGuard
-  implements CanActivate, CanActivateChild, CanLoad
-{
-  public constructor(
-    private router: Router,
-    private permissionsService: PermissionsService
-  ) {}
+const checkPermissions = (
+  route: Route | ActivatedRouteSnapshot
+):
+  | Observable<boolean | UrlTree>
+  | Promise<boolean | UrlTree>
+  | boolean
+  | UrlTree => {
+  const router = inject(Router);
+  const permissionsService = inject(PermissionsService);
+  return (
+    permissionsService.hasRole(route.data?.roles ?? []) ||
+    router.createUrlTree(['/'])
+  );
+};
 
-  public canActivate(
-    route: ActivatedRouteSnapshot
-  ):
-    | Observable<boolean | UrlTree>
-    | Promise<boolean | UrlTree>
-    | boolean
-    | UrlTree {
-    return this.checkPermissions(route);
-  }
+export const canActivatePermissionsGuard: CanActivateFn = (
+  route: ActivatedRouteSnapshot
+) => {
+  return checkPermissions(route);
+};
 
-  public canActivateChild(
-    childRoute: ActivatedRouteSnapshot
-  ):
-    | Observable<boolean | UrlTree>
-    | Promise<boolean | UrlTree>
-    | boolean
-    | UrlTree {
-    return this.checkPermissions(childRoute);
-  }
+export const canActivateChildPermissionsGuard: CanActivateChildFn = (
+  childRoute: ActivatedRouteSnapshot
+) => {
+  return checkPermissions(childRoute);
+};
 
-  public canLoad(
-    route: Route
-  ):
-    | Observable<boolean | UrlTree>
-    | Promise<boolean | UrlTree>
-    | boolean
-    | UrlTree {
-    return this.checkPermissions(route);
-  }
-
-  private checkPermissions(
-    route: Route | ActivatedRouteSnapshot
-  ):
-    | Observable<boolean | UrlTree>
-    | Promise<boolean | UrlTree>
-    | boolean
-    | UrlTree {
-    return (
-      this.permissionsService.hasRole(route.data?.roles ?? []) ||
-      this.router.createUrlTree(['/'])
-    );
-  }
-}
+export const canMatchPermissionsGuard: CanMatchFn = (route: Route) => {
+  return checkPermissions(route);
+};

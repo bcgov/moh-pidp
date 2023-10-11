@@ -1,24 +1,53 @@
 import { TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
+import { CanActivateChildFn, CanActivateFn, CanMatchFn } from '@angular/router';
 
-import { provideAutoSpy } from 'jest-auto-spies';
+import {
+  canActivateChildPermissionsGuard,
+  canActivatePermissionsGuard,
+  canMatchPermissionsGuard,
+} from './permissions.guard';
 
-import { PermissionsGuard } from './permissions.guard';
-import { PermissionsService } from './permissions.service';
-
-describe('PermissionsGuard', () => {
-  let guard: PermissionsGuard;
+describe('canActivatePermissionsGuard', () => {
+  const executeGuard: CanActivateFn = (...guardParameters) =>
+    TestBed.runInInjectionContext(() =>
+      canActivatePermissionsGuard(...guardParameters)
+    );
 
   beforeEach(() => {
-    TestBed.configureTestingModule({
-      imports: [RouterTestingModule],
-      providers: [PermissionsGuard, provideAutoSpy(PermissionsService)],
-    });
-
-    guard = TestBed.inject(PermissionsGuard);
+    TestBed.configureTestingModule({});
   });
 
   it('should be created', () => {
-    expect(guard).toBeTruthy();
+    expect(executeGuard).toBeTruthy();
+  });
+});
+
+describe('canActivateChildPermissionsGuard', () => {
+  const executeGuard: CanActivateChildFn = (...guardParameters) =>
+    TestBed.runInInjectionContext(() =>
+      canActivateChildPermissionsGuard(...guardParameters)
+    );
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({});
+  });
+
+  it('should be created', () => {
+    expect(executeGuard).toBeTruthy();
+  });
+});
+
+describe('canMatchPermissionsGuard', () => {
+  const executeGuard: CanMatchFn = (...guardParameters) =>
+    TestBed.runInInjectionContext(() =>
+      canMatchPermissionsGuard(...guardParameters)
+    );
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({});
+  });
+
+  it('should be created', () => {
+    expect(executeGuard).toBeTruthy();
   });
 });
