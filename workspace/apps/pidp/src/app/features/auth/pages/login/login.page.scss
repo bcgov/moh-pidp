@@ -354,9 +354,19 @@ button.pidp-btn-link {
 }
 
 @media screen and (max-height: 1079px) {
-  .welcome-section {
-    margin: unset !important;
-    margin-top: 10% !important;
-    margin-bottom: 10% !important;
+  .content-container {
+    background-color: #fff !important;
+
+    .welcome-section {
+      margin: unset !important;
+      // margin-top: 10% !important;
+      // margin-bottom: 10% !important;
+
+      .welcome-container {
+        border: unset !important;
+        padding: 0 !important;
+        margin-top: 0 !important;
+      }
+    }
   }
 }
