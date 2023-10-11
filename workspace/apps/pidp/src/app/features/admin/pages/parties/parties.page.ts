@@ -50,7 +50,10 @@ export class PartiesPage implements OnInit {
   }
 
   public onDeleteParty(partyId: number): void {
-    console.log("In the future, I'll be deleting user with ID ", partyId);
+    this.adminResource
+      .deleteParty(partyId)
+      .pipe(switchMap(() => of(this.getParties())))
+      .subscribe();
   }
 
   public onDeleteParties(): void {
