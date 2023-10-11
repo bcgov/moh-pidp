@@ -13,8 +13,8 @@ const routes: Routes = [
   {
     path: '',
     component: AdminDashboardComponent,
-    canActivate: [AuthenticationGuard, adminGuard],
-    canActivateChild: [AuthenticationGuard],
+    canActivate: [AuthenticationGuard.canActivate, adminGuard],
+    canActivateChild: [AuthenticationGuard.canActivateChild],
     data: {
       routes: {
         auth: AuthRoutes.routePath(AuthRoutes.ADMIN_LOGIN),

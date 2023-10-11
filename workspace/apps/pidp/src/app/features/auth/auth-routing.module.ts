@@ -4,7 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { setDashboardTitleGuard } from '@pidp/presentation';
 
 import { AuthRoutes } from './auth.routes';
-import { AuthorizationRedirectGuard } from './guards/authorization-redirect.guard';
+import { authorizationRedirectGuard } from './guards/authorization-redirect.guard';
 import { AutoLoginPage } from './pages/auto-login/auto-login.page';
 import { BcProviderUpliftPage } from './pages/bc-provider-uplift/bc-provider-uplift.page';
 import { LoginPage } from './pages/login/login.page';
@@ -12,7 +12,7 @@ import { LoginPage } from './pages/login/login.page';
 const routes: Routes = [
   {
     path: AuthRoutes.PORTAL_LOGIN,
-    canActivate: [AuthorizationRedirectGuard, setDashboardTitleGuard],
+    canActivate: [authorizationRedirectGuard, setDashboardTitleGuard],
     component: LoginPage,
     data: {
       loginPageData: {
@@ -30,7 +30,7 @@ const routes: Routes = [
   },
   {
     path: AuthRoutes.ADMIN_LOGIN,
-    canActivate: [AuthorizationRedirectGuard],
+    canActivate: [authorizationRedirectGuard],
     component: LoginPage,
     data: {
       loginPageData: {
