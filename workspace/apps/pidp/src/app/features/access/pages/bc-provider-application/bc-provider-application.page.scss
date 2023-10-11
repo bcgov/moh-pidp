@@ -139,7 +139,7 @@ ol {
           z-index: -1;
           border-radius: var(--card-border-radius);
           object-fit: cover;
-          object-position: 50% 30%;
+          object-position: 100% 50%;
           & .card-footer {
             width: 100%;
           }
@@ -171,8 +171,8 @@ ol {
             margin-right: 1.5rem;
           }
           & .card-body {
-            justify-content: center;
             & p {
+              margin-top: 12px;
               color: pidp.$grey-30;
             }
           }
@@ -213,7 +213,7 @@ ol {
     }
 
     & .bcgov-logo img {
-      height: 97px;
+      height: 100%;
       width: 190px;
       margin-left: -10px;
     }

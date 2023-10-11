@@ -1,0 +1,7 @@
+crunchy-postgres:
+  patroni:
+    postgresql:
+      pg_hba: "hostssl all all all md5"
+  instances:
+    dataVolumeClaimSpec:
+      storage: 1Gi
