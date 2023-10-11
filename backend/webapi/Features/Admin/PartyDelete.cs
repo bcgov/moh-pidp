@@ -3,12 +3,16 @@ namespace Pidp.Features.Admin;
 using Microsoft.EntityFrameworkCore;
 
 using Pidp.Data;
+using Pidp.Extensions;
 using Pidp.Infrastructure.HttpClients.Keycloak;
 using Pidp.Models;
 
 public class PartyDelete
 {
-    public class Command : ICommand { }
+    public class Command : ICommand
+    {
+        public int? PartyId { get; set; }
+    }
 
     public class CommandHandler : ICommandHandler<Command>
     {
@@ -31,6 +35,8 @@ public class PartyDelete
             var parties = await this.context.Parties
                 .Include(party => party.Credentials)
                 .Include(party => party.AccessRequests)
+                .If(command.PartyId.HasValue, q => q
+                    .Where(party => party.Id == command.PartyId))
                 .ToListAsync();
 
             if (!parties.Any())
