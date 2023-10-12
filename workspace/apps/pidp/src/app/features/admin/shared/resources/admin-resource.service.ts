@@ -29,6 +29,16 @@ export class AdminResource {
     );
   }
 
+  public deleteParty(id: number): NoContent {
+    return this.apiResource.delete<PartyList[]>(this.getResourcePath(id)).pipe(
+      NoContentResponse,
+      catchError((error: HttpErrorResponse) => {
+        // TODO add logging and toast messaging around specific errors when the admin starts getting a bit of attention
+        throw error;
+      })
+    );
+  }
+
   public deleteParties(): NoContent {
     return this.apiResource.delete<PartyList[]>('/admin/parties').pipe(
       NoContentResponse,
@@ -37,5 +47,9 @@ export class AdminResource {
         throw error;
       })
     );
+  }
+
+  protected getResourcePath(partyId: number): string {
+    return `/admin/parties/${partyId}`;
   }
 }
