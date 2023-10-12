@@ -1,6 +1,7 @@
 namespace Pidp;
 
 using FluentValidation.AspNetCore;
+using MassTransit;
 using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.EntityFrameworkCore;
@@ -19,6 +20,7 @@ using Pidp.Infrastructure;
 using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.HttpClients;
 using Pidp.Infrastructure.Services;
+using Pidp.Infrastructure.Queue;
 
 public class Startup
 {
@@ -35,6 +37,7 @@ public class Startup
             .AddHostedService<PlrStatusUpdateSchedulingService>()
             .AddHttpClients(config)
             .AddKeycloakAuth(config)
+            .AddRabbitMQ(config)
             .AddMediatR(opt => opt.RegisterServicesFromAssemblyContaining<Startup>())
             .AddScoped<IEmailService, EmailService>()
             .AddScoped<IPidpAuthorizationService, PidpAuthorizationService>()
