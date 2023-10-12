@@ -366,6 +366,38 @@ button.pidp-btn-link {
         border: unset !important;
         padding: 0 !important;
         margin-top: 0 !important;
+
+        .title-content-container {
+          .title-text {
+            font-size: 16px;
+          }
+          .title-site-description {
+            font-size: smaller;
+          }
+        }
+        button.login-app-button {
+          font-size: 10px !important;
+        }
+
+        .login-content {
+          .login-setup {
+            font-size: 10px;
+          }
+
+          .login-continue-with {
+            .login-continue-with-container {
+              .login-continue-with-text {
+                font-size: 12px;
+              }
+              .other-login-button {
+                i {
+                  font-size: 14px;
+                  vertical-align: text-top;
+                }
+              }
+            }
+          }
+        }
       }
     }
   }
