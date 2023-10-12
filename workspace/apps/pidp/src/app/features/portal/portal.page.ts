@@ -68,11 +68,11 @@ export class PortalPage implements OnInit {
     true
   );
   public pasPanelExpanded$: BehaviorSubject<boolean>;
-  public demographicsStatusCode!: number | undefined;
-  public collegeLicenceStatusCode!: number | undefined;
-  public uaaStatusCode!: number | undefined;
-  public bcProviderStatusCode!: number | undefined;
-  public rosteringStatusCode!: number | undefined;
+  public demographicsStatusCode: number | undefined;
+  public collegeLicenceStatusCode: number | undefined;
+  public uaaStatusCode: number | undefined;
+  public bcProviderStatusCode: number | undefined;
+  public rosteringStatusCode: number | undefined;
   public bcProviderUsername = '';
   public logoutRedirectUrl: string;
   public personalInfoTutorial: string;
@@ -81,6 +81,9 @@ export class PortalPage implements OnInit {
   public bcProviderTutorial: string;
   public selectedIndex: number;
   private readonly lastSelectedIndex: number;
+  public hasCpn: boolean | undefined;
+  public collegeLicenceDeclared: boolean | undefined;
+  public isComplete: boolean | undefined;
 
   public constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
@@ -176,6 +179,11 @@ export class PortalPage implements OnInit {
       )
       .subscribe((profileStatus) => {
         let selectedIndex = this.lastSelectedIndex;
+        this.hasCpn = profileStatus?.status.collegeCertification.hasCpn;
+        this.collegeLicenceDeclared =
+          profileStatus?.status.collegeCertification.licenceDeclared;
+        this.isComplete = profileStatus?.status.collegeCertification.isComplete;
+
         this.demographicsStatusCode =
           profileStatus?.status.demographics.statusCode;
         if (this.demographicsStatusCode === 2) {
@@ -216,6 +224,15 @@ export class PortalPage implements OnInit {
         } else if (selectedIndex === this.lastSelectedIndex) {
           selectedIndex = 4;
         }
+        if (
+          this.selectedNoCollegeLicence(
+            this.hasCpn,
+            this.collegeLicenceDeclared,
+            this.isComplete
+          )
+        ) {
+          selectedIndex = 5;
+        }
         this.selectedIndex = selectedIndex;
       });
   }
@@ -240,6 +257,14 @@ export class PortalPage implements OnInit {
           });
         })
       );
+  }
+
+  private selectedNoCollegeLicence(
+    hasCpn: boolean | undefined,
+    licenceDeclared: boolean | undefined,
+    isComplete: boolean | undefined
+  ): boolean | undefined {
+    return !hasCpn && licenceDeclared && isComplete;
   }
 
   private navigateToExternalUrl(url: string): void {

@@ -17,6 +17,7 @@
     <PackageReference Include="Flurl" Version="3.0.7" />
     <PackageReference Include="HybridModelBinding" Version="0.18.0" />
     <PackageReference Include="IdentityModel" Version="6.0.0" />
+    <PackageReference Include="MassTransit.RabbitMQ" Version="8.0.16" />
     <PackageReference Include="MediatR" Version="12.0.1" />
     <PackageReference Include="MicroElements.Swashbuckle.FluentValidation" Version="5.7.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.16" />

@@ -160,13 +160,38 @@
             </p>
           </ng-template>
           <div>
-            <p class="guide-information">
-              Do you work with others who need access to the PAS? For example,
-              assistants or other members of your Care Team, who may or may not
-              have a professional license? <br />If you do, then you can send
-              trusted colleagues a OneHealthID access invitation by clicking the
-              “Endorsements” button below.
-            </p>
+            <div
+              *ngIf="!hasCpn && isComplete; else licenced"
+              class="moa-message">
+              <p>
+                <i
+                  >Because you are MOA or do <strong>not</strong> have a college
+                  licence, then this step will become part of the process.</i
+                >
+              </p>
+              <mat-stepper class="moa-message-steps">
+                <mat-step editable="false" [completed]="false">
+                  <ng-template matStepLabel>Start endorsement</ng-template>
+                </mat-step>
+                <mat-step editable="false" [completed]="false">
+                  <ng-template matStepLabel>Pending Approval</ng-template>
+                </mat-step>
+                <mat-step editable="false" [completed]="false">
+                  <ng-template matStepLabel
+                    >Completion and PAS login available</ng-template
+                  >
+                </mat-step>
+              </mat-stepper>
+            </div>
+            <ng-template #licenced>
+              <p class="guide-information">
+                Do you work with others who need access to the PAS? For example,
+                assistants or other members of your Care Team, who may or may
+                not have a professional license? <br />If you do, then you can
+                send trusted colleagues a OneHealthID access invitation by
+                clicking the “Endorsements” button below.
+              </p>
+            </ng-template>
             <button
               mat-flat-button
               type="button"
