@@ -117,7 +117,6 @@ button.pidp-btn-link {
       justify-content: center;
       align-items: center;
       margin: auto;
-      margin-top: 230px;
 
       & .welcome-container {
         display: flex;
@@ -188,7 +187,6 @@ button.pidp-btn-link {
       display: flex;
       justify-content: space-evenly;
       flex-grow: 1;
-      width: 600px;
       margin-top: 30px;
       i {
         padding-left: 10px;
@@ -202,6 +200,22 @@ button.pidp-btn-link {
   }
 }
 
+.viewport-large {
+  & .content-container {
+    .welcome-section {
+      margin-top: 8% !important;
+    }
+  }
+}
+
+.viewport-medium {
+  & .content-container {
+    .welcome-section {
+      margin-top: 13% !important;
+    }
+  }
+}
+
 // Adjust sizing for small screens.
 .viewport-small {
   & .content-container {
@@ -211,48 +225,56 @@ button.pidp-btn-link {
     flex-direction: column;
     & .background-image-container {
       max-height: 250px;
+      min-height: 250px;
+      flex-direction: row;
     }
 
     & .welcome-section {
       width: auto;
       margin-top: 30px;
+      flex-direction: row;
 
-      & .welcome-container {
-        & .login-content {
-          & button {
-            font-size: 0.65em;
-            border-radius: 12px;
-            padding: 0 10px;
-          }
-          & button.login-app-button {
-            padding: 0 24px;
-            font-size: 0.65em;
-          }
-          & .login-setup {
-            margin-top: 6px;
-            margin-bottom: 0;
-            font-size: 0.85em;
-          }
-          & .login-continue-with {
-            margin-bottom: 10px;
+      .welcome-section-container {
+        display: flex;
+        flex-direction: column;
 
-            & .login-continue-with-text {
-              font-size: 1.05em;
+        & .welcome-container {
+          & .login-content {
+            & button {
+              font-size: 0.65em;
+              border-radius: 12px;
+              padding: 0 10px;
+            }
+            & button.login-app-button {
+              padding: 0 24px;
+              font-size: 0.65em;
+            }
+            & .login-setup {
+              margin-top: 6px;
+              margin-bottom: 0;
+              font-size: 0.85em;
+            }
+            & .login-continue-with {
+              margin-bottom: 10px;
+
+              & .login-continue-with-text {
+                font-size: 1.05em;
+              }
             }
           }
-        }
-        & .login-secondary-container {
-          padding: 0 10px;
-          gap: 6px;
-          flex-direction: column;
-          & button.login-button-secondary {
-            margin-bottom: 10px;
-            padding: 6px 10px;
-            width: auto;
+          & .login-secondary-container {
+            padding: 0 10px;
+            gap: 6px;
+            flex-direction: column;
+            & button.login-button-secondary {
+              margin-bottom: 10px;
+              padding: 6px 10px;
+              width: auto;
+            }
           }
-        }
-        & .login-with-idir {
-          font-size: 0.9em;
+          & .login-with-idir {
+            font-size: 0.9em;
+          }
         }
       }
     }
@@ -331,32 +353,5 @@ button.pidp-btn-link {
     margin: 3rem auto;
     width: 275px;
     height: auto;
-  }
-}
-
-@media screen and (max-width: 1743px) {
-  .welcome-container {
-    padding: 40px !important;
-    margin-top: 20px !important;
-  }
-
-  .links {
-    margin-top: 20px !important;
-  }
-}
-
-@media screen and (max-width: 373px) {
-  .links {
-    display: flex !important;
-    flex-direction: column !important;
-    justify-content: center !important;
-  }
-}
-
-@media screen and (max-height: 1079px) {
-  .welcome-section {
-    margin: unset !important;
-    margin-top: 10% !important;
-    margin-bottom: 10% !important;
   }
 }

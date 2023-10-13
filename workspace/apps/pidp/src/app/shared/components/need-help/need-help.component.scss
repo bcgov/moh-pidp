@@ -41,3 +41,11 @@
     }
   }
 }
+
+@media screen and (max-width: 375px) {
+  .show-need-help {
+    .need-help-container {
+      width: min-content !important;
+    }
+  }
+}
