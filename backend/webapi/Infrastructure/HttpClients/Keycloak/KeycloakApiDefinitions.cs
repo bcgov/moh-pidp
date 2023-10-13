@@ -68,7 +68,7 @@ public class Role
 }
 
 /// <summary>
-/// This is not the entire Keycloak User Representation! See https://www.keycloak.org/docs-api/5.0/rest-api/index.html#_userrepresentation.
+/// This is not the entire Keycloak User Representation! See https://www.keycloak.org/docs-api/18.0/rest-api/index.html#_userrepresentation.
 /// This is a sub-set of the properties so we don't accidentally overwrite anything when doing the PUT.
 /// </summary>
 public class UserRepresentation

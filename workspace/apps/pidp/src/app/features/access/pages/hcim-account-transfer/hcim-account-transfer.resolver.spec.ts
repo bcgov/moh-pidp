@@ -66,6 +66,7 @@ describe('HcimAccountTransferResolver', () => {
           hasCpn: false,
           licenceDeclared: false,
           statusCode: StatusCode.AVAILABLE,
+          isComplete: false,
         },
         administratorInfo: {
           email: randEmail(),

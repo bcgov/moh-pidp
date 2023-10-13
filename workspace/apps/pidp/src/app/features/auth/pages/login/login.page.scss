@@ -8,7 +8,8 @@ span {
   color: pidp.$bcgov-color-text;
   box-sizing: border-box;
 }
-a {
+a,
+button.pidp-btn-link {
   color: pidp.$bcgov-color-links;
 }
 .viewport-all {
@@ -348,14 +349,66 @@ a {
   .links {
     display: flex !important;
     flex-direction: column !important;
-    justify-content: center !important;
+    align-items: center !important;
   }
 }
 
-@media screen and (max-height: 1079px) {
-  .welcome-section {
-    margin: unset !important;
-    margin-top: 10% !important;
-    margin-bottom: 10% !important;
+@media screen and (min-width: 1024px) and (max-height: 1079px) {
+  .content-container {
+    background-color: #fff !important;
+
+    .welcome-section {
+      margin: unset !important;
+
+      .welcome-container {
+        border: unset !important;
+        padding: 0 !important;
+        margin-top: 20 !important;
+
+        .title-content-container {
+          .title-text {
+            font-size: 22px;
+          }
+          .title-site-description {
+            font-size: smaller;
+          }
+        }
+        button.login-app-button {
+          font-size: 10px !important;
+        }
+
+        .login-content {
+          .login-setup {
+            font-size: 10px;
+          }
+
+          .login-continue-with {
+            .login-continue-with-container {
+              .login-continue-with-text {
+                font-size: 12px;
+              }
+              .other-login-button {
+                i {
+                  font-size: 14px;
+                  vertical-align: text-top;
+                }
+              }
+            }
+          }
+        }
+
+        .other-login-panel {
+          font-size: 10px;
+
+          .login-secondary-container {
+            button.login-button-secondary {
+              font-size: 10px;
+              line-height: 1.1;
+              margin-bottom: 5px;
+            }
+          }
+        }
+      }
+    }
   }
 }

@@ -4,6 +4,7 @@ using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using FluentValidation;
 using HybridModelBinding;
+using MassTransit;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
@@ -100,40 +101,87 @@ public class Demographics
 
     public class PartyEmailUpdatedHandler : INotificationHandler<PartyEmailUpdated>
     {
-        private readonly IBCProviderClient bcProviderClient;
-        private readonly IKeycloakAdministrationClient keycloakClient;
-        private readonly PidpDbContext context;
-        private readonly string bcProviderClientId;
+        private readonly IBus bus;
 
-        public PartyEmailUpdatedHandler(
-            IBCProviderClient bcProviderClient,
-            IKeycloakAdministrationClient keycloakClient,
-            PidpConfiguration config,
-            PidpDbContext context)
-        {
-            this.bcProviderClient = bcProviderClient;
-            this.keycloakClient = keycloakClient;
-            this.context = context;
-            this.bcProviderClientId = config.BCProviderClient.ClientId;
-        }
+        public PartyEmailUpdatedHandler(IBus bus) => this.bus = bus;
 
         public async Task Handle(PartyEmailUpdated notification, CancellationToken cancellationToken)
+            => await this.bus.Publish(notification, CancellationToken.None);
+    }
+
+    public class PartyEmailUpdatedBcProviderConsumer : IConsumer<PartyEmailUpdated>
+    {
+        private readonly IBCProviderClient client;
+        private readonly PidpDbContext context;
+        private readonly string bcProviderClientId;
+        private readonly ILogger<PartyEmailUpdatedBcProviderConsumer> logger;
+
+        public PartyEmailUpdatedBcProviderConsumer(
+            IBCProviderClient client,
+            PidpConfiguration config,
+            PidpDbContext context,
+            ILogger<PartyEmailUpdatedBcProviderConsumer> logger)
+        {
+            this.client = client;
+            this.context = context;
+            this.bcProviderClientId = config.BCProviderClient.ClientId;
+            this.logger = logger;
+        }
+
+        public async Task Consume(ConsumeContext<PartyEmailUpdated> context)
         {
             var bcProviderId = await this.context.Credentials
-                .Where(credential => credential.PartyId == notification.PartyId
+                .Where(credential => credential.PartyId == context.Message.PartyId
                     && credential.IdentityProvider == IdentityProviders.BCProvider)
                 .Select(credential => credential.IdpId)
-                .SingleOrDefaultAsync(cancellationToken);
+                .SingleOrDefaultAsync();
 
             if (string.IsNullOrEmpty(bcProviderId))
             {
                 return;
             }
 
-            var bcProviderAttributes = new BCProviderAttributes(this.bcProviderClientId).SetPidpEmail(notification.NewEmail);
-            await this.bcProviderClient.UpdateAttributes(bcProviderId, bcProviderAttributes.AsAdditionalData());
-
-            await this.keycloakClient.UpdateUser(notification.UserId, (user) => user.SetPidpEmail(notification.NewEmail));
+            var bcProviderAttributes = new BCProviderAttributes(this.bcProviderClientId).SetPidpEmail(context.Message.NewEmail);
+            if (!await this.client.UpdateAttributes(bcProviderId, bcProviderAttributes.AsAdditionalData()))
+            {
+                this.logger.LogBCProviderEmailUpdateFailed(context.Message.UserId);
+                throw new InvalidOperationException("Error Comunicating with Azure AD");
+            }
         }
     }
+
+    public class PartyEmailUpdatedKeycloakConsumer : IConsumer<PartyEmailUpdated>
+    {
+        private readonly IKeycloakAdministrationClient client;
+        private readonly ILogger<PartyEmailUpdatedKeycloakConsumer> logger;
+
+        public PartyEmailUpdatedKeycloakConsumer(
+            IKeycloakAdministrationClient client,
+            ILogger<PartyEmailUpdatedKeycloakConsumer> logger)
+        {
+            this.client = client;
+            this.logger = logger;
+        }
+
+        public async Task Consume(ConsumeContext<PartyEmailUpdated> context)
+        {
+            if (!await this.client.UpdateUser(context.Message.UserId, (user) => user.SetPidpEmail(context.Message.NewEmail)))
+            {
+                this.logger.LogKeycloakEmailUpdateFailed(context.Message.UserId);
+                throw new InvalidOperationException("Error Comunicating with Keycloak");
+            }
+        }
+    }
+}
+
+public static partial class PartyEmailUpdatedKeycloakConsumerLoggingExtensions
+{
+    [LoggerMessage(1, LogLevel.Error, "Error when updating the email to User #{userId} in Keycloak.")]
+    public static partial void LogKeycloakEmailUpdateFailed(this ILogger logger, Guid userId);
+}
+
+public static partial class PartyEmailUpdatedBcProviderConsumerLoggingExtensions
+{
+    [LoggerMessage(2, LogLevel.Error, "Error when updating the email to User #{userId} in Azure AD.")]
+    public static partial void LogBCProviderEmailUpdateFailed(this ILogger logger, Guid userId);
 }

@@ -64,6 +64,7 @@ describe('DriverFitnessResolver', () => {
           hasCpn: false,
           licenceDeclared: false,
           statusCode: StatusCode.AVAILABLE,
+          isComplete: false,
         },
         administratorInfo: {
           email: randEmail(),

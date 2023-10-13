@@ -32,6 +32,7 @@ export class PartiesPage implements OnInit {
     'providerName',
     'providerCollegeCode',
     'saEforms',
+    'delete',
   ];
   public environment: string;
   public production: string;
@@ -48,7 +49,14 @@ export class PartiesPage implements OnInit {
     this.production = EnvironmentName.PRODUCTION;
   }
 
-  public onDelete(): void {
+  public onDeleteParty(partyId: number): void {
+    this.adminResource
+      .deleteParty(partyId)
+      .pipe(switchMap(() => of(this.getParties())))
+      .subscribe();
+  }
+
+  public onDeleteParties(): void {
     const data: DialogOptions = {
       title: 'Delete all parties',
       component: HtmlComponent,
