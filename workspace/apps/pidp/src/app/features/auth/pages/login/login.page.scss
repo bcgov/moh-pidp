@@ -353,23 +353,21 @@ button.pidp-btn-link {
   }
 }
 
-@media screen and (max-height: 1079px) {
+@media screen and (min-width: 1024px) and (max-height: 1079px) {
   .content-container {
     background-color: #fff !important;
 
     .welcome-section {
       margin: unset !important;
-      // margin-top: 10% !important;
-      // margin-bottom: 10% !important;
 
       .welcome-container {
         border: unset !important;
         padding: 0 !important;
-        margin-top: 0 !important;
+        margin-top: 20 !important;
 
         .title-content-container {
           .title-text {
-            font-size: 16px;
+            font-size: 22px;
           }
           .title-site-description {
             font-size: smaller;
@@ -395,6 +393,18 @@ button.pidp-btn-link {
                   vertical-align: text-top;
                 }
               }
+            }
+          }
+        }
+
+        .other-login-panel {
+          font-size: 10px;
+
+          .login-secondary-container {
+            button.login-button-secondary {
+              font-size: 10px;
+              line-height: 1.1;
+              margin-bottom: 5px;
             }
           }
         }
