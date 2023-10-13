@@ -5,6 +5,7 @@
 // MATERIAL FORMS
 //
 .mat-form-field-appearance-outline {
+  /*TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
   .mat-form-field-infix {
     padding: 0.5rem 0 0.75rem;
   }
@@ -26,11 +27,13 @@
   margin-right: 1rem;
 }
 
+/*TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version.*/
 .mat-checkbox-layout .mat-checkbox-label {
   // Reduced to improve the appearance of labels that are line wrapped
   line-height: 1.4rem;
 }
 
+/*TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version.*/
 .mat-checkbox-label {
   line-height: 0.5rem;
 }
