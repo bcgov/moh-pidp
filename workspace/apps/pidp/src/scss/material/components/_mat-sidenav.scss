@@ -44,7 +44,7 @@ $menuListDividerColor: theme-palette(blue);
     z-index: 1;
   }
 
-  .mat-list-item {
+  .mat-mdc-list-item {
     .mat-list-item-content {
       // Add a border for spacing to prevent the sidenav from jumping
       // if the navigation applies an active border on menu items

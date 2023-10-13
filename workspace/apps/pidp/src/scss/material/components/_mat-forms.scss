@@ -9,15 +9,17 @@
     padding: 0.5rem 0 0.75rem;
   }
 }
-.mat-input-element,
+/*TODO(mdc-migration): The following rule targets internal classes of select that may no longer apply for the MDC version.*/
+.mat-mdc-input-element,
 .mat-select-value {
   color: pidp.$font-color-default !important;
 }
-.mat-input-element:disabled {
+.mat-mdc-input-element:disabled {
   color: pidp.$font-color-disabled !important;
 }
 
-.mat-checkbox .mat-checkbox-inner-container {
+/*TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version.*/
+.mat-mdc-checkbox .mat-checkbox-inner-container {
   // Enforce a white background to avoid transparency when
   // placed when placed on coloured backgrounds
   background-color: white;

@@ -15,13 +15,6 @@
 // Forms
 //
 
-.mat-checkbox-layout,
-.mat-slide-toggle-content {
-  // Force checkbox and slide labels to line wrap if required
-  // instead of overflowing their container
-  white-space: normal !important;
-}
-
 .mat-drawer-container {
   color: theme-palette(blue);
 }
@@ -35,7 +28,7 @@
   background-color: $bcgov-color-semantic-success;
 }
 
-.mat-step .mat-button-wrapper,
+/*TODO(mdc-migration): CHECKED The following rule targets internal classes of button that may no longer apply for the MDC version.*/
 .mat-step .mat-step-label {
   white-space: normal;
 }

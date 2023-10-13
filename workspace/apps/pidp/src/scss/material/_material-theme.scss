@@ -47,7 +47,7 @@ $pidp-typography: mat.define-typography-config(
     mat.define-typography-level(var.$mat-theme-body-1-font-size, 1.75rem, 400),
   // Native element: None
   $body-2:
-    mat.define-typography-level(var.$mat-theme-body-2-font-size, 1.75rem, 700),
+    mat.define-typography-level(var.$mat-theme-body-2-font-size, 1.75rem, 400),
   // Native element: <button>
   $button:
     mat.define-typography-level(var.$mat-theme-button-font-size, 0.875rem, 400),
@@ -73,3 +73,5 @@ $pidp-theme: mat.define-light-theme(
 // Alternatively, you can import and @include the theme mixins for each component
 // that you are using.
 @include mat.all-component-themes($pidp-theme);
+
+@include mat.all-component-typographies($pidp-typography);

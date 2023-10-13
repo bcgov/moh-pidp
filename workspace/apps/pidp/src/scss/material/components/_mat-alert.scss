@@ -20,7 +20,7 @@
     // Apply alert specific styles to actions, but allow buttons
     // to maintain default (inherited) styles if required by using
     // the .inherit class
-    .mat-card-actions {
+    .mat-mdc-card-actions {
       button:not(.inherit),
       a:not(.inherit) {
         background-color: white;
