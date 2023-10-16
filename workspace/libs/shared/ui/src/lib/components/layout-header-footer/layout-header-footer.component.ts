@@ -1,6 +1,4 @@
-import { Component, Inject } from '@angular/core';
-
-import { APP_CONFIG, AppConfig } from '@app/app.config';
+import { Component, Input } from '@angular/core';
 
 import { PidpViewport, ViewportService } from '../../services';
 
@@ -10,17 +8,13 @@ import { PidpViewport, ViewportService } from '../../services';
   styleUrls: ['./layout-header-footer.component.scss'],
 })
 export class LayoutHeaderFooterComponent {
+  @Input() public providerIdentitySupport!: string;
   public isMobile = true;
-  public providerIdentitySupport: string;
 
-  public constructor(
-    @Inject(APP_CONFIG) private config: AppConfig,
-    viewportService: ViewportService
-  ) {
+  public constructor(viewportService: ViewportService) {
     viewportService.viewportBroadcast$.subscribe((viewport) =>
       this.onViewportChange(viewport)
     );
-    this.providerIdentitySupport = this.config.emails.providerIdentitySupport;
   }
   private onViewportChange(viewport: PidpViewport): void {
     this.isMobile = viewport === PidpViewport.xsmall;

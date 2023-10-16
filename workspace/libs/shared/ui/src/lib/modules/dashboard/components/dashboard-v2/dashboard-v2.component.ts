@@ -25,6 +25,7 @@ import { DashboardMenuItem, DashboardRouteMenuItem } from '../../models';
 export class DashboardV2Component implements OnChanges {
   @Input() public dashboardState!: DashboardStateModel;
   @Input() public menuItems!: DashboardMenuItem[];
+  @Input() public providerIdentitySupport!: string;
   @Output() public logout = new EventEmitter<void>();
   @ViewChild('sidenav') public sidenav!: MatSidenav;
 
