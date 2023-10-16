@@ -161,12 +161,9 @@
           </ng-container>
         </ui-page-section-subheader>
 
-        <mat-form-field class="w-100">
-          <input
-            matInput
-            placeholder="HealthNetBC Username"
-            tabindex="1"
-            formControlName="ldapUsername" />
+        <mat-form-field class="w-100" appearance="outline">
+          <mat-label>HealthNetBC Username</mat-label>
+          <input matInput tabindex="1" formControlName="ldapUsername" />
           <mat-error>Required</mat-error>
         </mat-form-field>
 
@@ -178,11 +175,11 @@
           </ng-container>
         </ui-page-section-subheader>
 
-        <mat-form-field class="w-100">
+        <mat-form-field class="w-100" appearance="outline">
+          <mat-label>HealthNetBC Password</mat-label>
           <input
             matInput
             type="password"
-            placeholder="HealthNetBC Password"
             tabindex="2"
             formControlName="ldapPassword" />
           <mat-error>Required</mat-error>
