@@ -8,7 +8,7 @@ import { PidpViewport, ViewportService } from '../../services';
   styleUrls: ['./layout-header-footer.component.scss'],
 })
 export class LayoutHeaderFooterComponent {
-  @Input() public providerIdentitySupport!: string;
+  @Input() public emailSupport!: string;
   public isMobile = true;
 
   public constructor(viewportService: ViewportService) {
