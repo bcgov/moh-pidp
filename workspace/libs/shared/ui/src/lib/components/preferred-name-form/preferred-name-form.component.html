@@ -1,7 +1,7 @@
 <div class="row" [formGroup]="form">
   <ng-container *ngFor="let control of formControlConfig">
     <div [class.col-12]="mode === 'column'" [class.col-6]="mode === 'columns'">
-      <mat-form-field class="w-100" appearance="outline">
+      <mat-form-field class="w-100">
         <mat-label>{{ control.label }}</mat-label>
         <input matInput [formControlName]="control.name" />
         <mat-error>Required</mat-error>
