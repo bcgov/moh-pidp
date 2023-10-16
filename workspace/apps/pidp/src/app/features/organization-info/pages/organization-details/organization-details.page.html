@@ -15,10 +15,9 @@
         <ui-page-subheader>Organization Type</ui-page-subheader>
         <p>Select your organization type.</p>
 
-        <mat-form-field class="w-100">
-          <mat-select
-            placeholder="Organization Type"
-            formControlName="organizationCode">
+        <mat-form-field class="w-100" appearance="outline">
+          <mat-label>Organization Type</mat-label>
+          <mat-select formControlName="organizationCode">
             <mat-option
               *ngFor="let organization of organizations"
               [value]="organization.code"
@@ -35,10 +34,9 @@
           <ui-page-subheader>Health Authority</ui-page-subheader>
           <p>Select what Health Authority you work in.</p>
 
-          <mat-form-field class="w-100">
-            <mat-select
-              placeholder="Health Authority"
-              formControlName="healthAuthorityCode">
+          <mat-form-field class="w-100" appearance="outline">
+            <mat-label>Health Authority</mat-label>
+            <mat-select formControlName="healthAuthorityCode">
               <mat-option
                 *ngFor="let healthAuthority of healthAuthorities"
                 [value]="healthAuthority.code">
@@ -53,11 +51,9 @@
           <ui-page-subheader>Health Authority Employee ID</ui-page-subheader>
           <p>Provide your Health Authority employee ID.</p>
 
-          <mat-form-field class="w-100">
-            <input
-              matInput
-              placeholder="Health Authority Employee ID"
-              formControlName="employeeIdentifier" />
+          <mat-form-field class="w-100" appearance="outline">
+            <mat-label>Health Authority Employee ID</mat-label>
+            <input matInput formControlName="employeeIdentifier" />
             <mat-error>Required</mat-error>
           </mat-form-field>
         </section>
