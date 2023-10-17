@@ -38,6 +38,7 @@ export class PortalDashboardComponent implements IDashboard, OnInit {
   public showMenuItemIcons: boolean;
   public responsiveMenuItems: boolean;
   public menuItems: DashboardMenuItem[];
+  public providerIdentitySupport: string;
 
   public dashboardState$ = this.stateService.stateBroadcast$.pipe(
     map((state) => {
@@ -76,6 +77,7 @@ export class PortalDashboardComponent implements IDashboard, OnInit {
     this.showMenuItemIcons = true;
     this.responsiveMenuItems = false;
     this.menuItems = this.createMenuItems();
+    this.providerIdentitySupport = this.config.emails.providerIdentitySupport;
   }
   public ngOnInit(): void {
     // Get profile status and college info.
