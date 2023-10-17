@@ -28,7 +28,7 @@
   background-color: $bcgov-color-semantic-success;
 }
 
-/*TODO(mdc-migration): CHECKED The following rule targets internal classes of button that may no longer apply for the MDC version.*/
+/*TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version.*/
 .mat-step .mat-step-label {
   white-space: normal;
 }

@@ -50,7 +50,7 @@ $theme-typography: mat.define-typography-config();
         // font-size: 2rem;
       }
     }
-    /* TODO(mdc-migration): CHECKED The following rule targets internal classes of card that may no longer apply for the MDC version.*/
+    /* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version.*/
     .mat-mdc-card-header-text {
       // Remove margin so the mat-card-avatar controls the
       // spacing based on the existence of an icon
@@ -174,7 +174,7 @@ $types: success, info, warn, danger, muted;
 
   // Offset the addition of a border on the card so they
   // are not shown outside top and right boundaries
-  /* TODO(mdc-migration): CHECKED The following rule targets internal classes of card that may no longer apply for the MDC version.*/
+  /* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version.*/
   mat-card {
     margin-top: -1px;
     margin-right: -1px;
