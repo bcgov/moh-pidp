@@ -11,7 +11,9 @@ import { Role } from '@app/shared/enums/roles.enum';
 
 import { BcProviderEditResource } from '../access/pages/bc-provider-edit/bc-provider-edit-resource.service';
 import { BcProviderEditInitialStateModel } from '../access/pages/bc-provider-edit/bc-provider-edit.page';
+import { IdentityProvider } from '../auth/enums/identity-provider.enum';
 import { AuthService } from '../auth/services/auth.service';
+import { AuthorizedUserService } from '../auth/services/authorized-user.service';
 import { EndorsementsResource } from '../organization-info/pages/endorsements/endorsements-resource.service';
 import { ProfileStatusAlert } from './models/profile-status-alert.model';
 import { ProfileStatus } from './models/profile-status.model';
@@ -84,17 +86,21 @@ export class PortalPage implements OnInit {
   public hasCpn: boolean | undefined;
   public collegeLicenceDeclared: boolean | undefined;
   public isComplete: boolean | undefined;
+  public identityProvider!: IdentityProvider;
+  public IdentityProvider = IdentityProvider;
 
   public constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
     private bcProviderResource: BcProviderEditResource,
     private router: Router,
+    private route: ActivatedRoute,
     private partyService: PartyService,
     private portalResource: PortalResource,
     private portalService: PortalService,
     private endorsementsResource: EndorsementsResource,
     private activatedRoute: ActivatedRoute,
     private authService: AuthService,
+    private authorizedUserService: AuthorizedUserService,
     private toastService: ToastService
   ) {
     this.state$ = this.portalService.state$;
@@ -167,6 +173,10 @@ export class PortalPage implements OnInit {
   }
 
   public ngOnInit(): void {
+    this.authorizedUserService.identityProvider$.subscribe(
+      (user) => (this.identityProvider = user)
+    );
+
     this.handleLandingActions$()
       .pipe(
         switchMap(() =>
