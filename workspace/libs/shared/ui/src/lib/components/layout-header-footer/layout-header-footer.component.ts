@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 import { PidpViewport, ViewportService } from '../../services';
 
@@ -8,8 +8,8 @@ import { PidpViewport, ViewportService } from '../../services';
   styleUrls: ['./layout-header-footer.component.scss'],
 })
 export class LayoutHeaderFooterComponent {
+  @Input() public emailSupport!: string;
   public isMobile = true;
-  public providerIdentitySupport = 'provideridentityportal@gov.bc.ca';
 
   public constructor(viewportService: ViewportService) {
     viewportService.viewportBroadcast$.subscribe((viewport) =>

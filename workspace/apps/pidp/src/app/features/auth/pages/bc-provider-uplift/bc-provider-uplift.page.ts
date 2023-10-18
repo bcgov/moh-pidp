@@ -15,6 +15,7 @@ export class BcProviderUpliftPage {
   public bcscMobileSetupUrl: string;
   public logoutRedirectUrl: string;
   public loginRedirectUrl: string;
+  public providerIdentitySupport: string;
 
   public constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
@@ -25,6 +26,7 @@ export class BcProviderUpliftPage {
     this.loginRedirectUrl = `${
       this.config.applicationUrl + AuthRoutes.routePath(AuthRoutes.AUTO_LOGIN)
     }?idp_hint=${IdentityProvider.BCSC}`;
+    this.providerIdentitySupport = this.config.emails.providerIdentitySupport;
   }
 
   public onLogin(): void {
