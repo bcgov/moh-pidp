@@ -86,8 +86,8 @@ export class PortalPage implements OnInit {
   public hasCpn: boolean | undefined;
   public collegeLicenceDeclared: boolean | undefined;
   public isComplete: boolean | undefined;
-  public identityProvider!: IdentityProvider;
   public IdentityProvider = IdentityProvider;
+  public identityProvider$: Observable<IdentityProvider>;
 
   public constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
@@ -112,6 +112,7 @@ export class PortalPage implements OnInit {
     this.bcProviderTutorial = bcProviderTutorialLink;
     this.lastSelectedIndex = 6;
     this.selectedIndex = -1;
+    this.identityProvider$ = this.authorizedUserService.identityProvider$;
   }
 
   public navigateTo(): void {
@@ -172,10 +173,6 @@ export class PortalPage implements OnInit {
   }
 
   public ngOnInit(): void {
-    this.authorizedUserService.identityProvider$.subscribe(
-      (user) => (this.identityProvider = user)
-    );
-
     this.handleLandingActions$()
       .pipe(
         switchMap(() =>

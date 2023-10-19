@@ -8,7 +8,7 @@
     </div>
   </section>
   <section
-    *ngIf="identityProvider === IdentityProvider.BCSC; else nonBcsc"
+    *ngIf="(identityProvider$ | async) === IdentityProvider.BCSC; else nonBcsc"
     class="section-box rostering-banner">
     <app-banner-expansion-panel
       [expanded]="pasPanelExpanded$ | async"
