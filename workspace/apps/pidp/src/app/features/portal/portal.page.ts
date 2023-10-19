@@ -93,7 +93,6 @@ export class PortalPage implements OnInit {
     @Inject(APP_CONFIG) private config: AppConfig,
     private bcProviderResource: BcProviderEditResource,
     private router: Router,
-    private route: ActivatedRoute,
     private partyService: PartyService,
     private portalResource: PortalResource,
     private portalService: PortalService,
