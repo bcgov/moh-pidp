@@ -4,15 +4,7 @@ import { By } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 
-import {
-  randEmail,
-  randFirstName,
-  randFullName,
-  randLastName,
-  randNumber,
-  randPhoneNumber,
-  randText,
-} from '@ngneat/falso';
+import { randEmail, randFullName, randNumber, randText } from '@ngneat/falso';
 import {
   Spy,
   createFunctionSpy,
@@ -71,15 +63,11 @@ describe('PortalCardComponent', () => {
       alerts: [],
       status: {
         dashboardInfo: {
-          fullName: randFullName(),
+          displayFullName: randFullName(),
           collegeCode: randNumber(),
           statusCode: StatusCode.AVAILABLE,
         },
         demographics: {
-          firstName: randFirstName(),
-          lastName: randLastName(),
-          email: randEmail(),
-          phone: randPhoneNumber(),
           statusCode: StatusCode.AVAILABLE,
         },
         collegeCertification: {

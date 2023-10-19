@@ -2,14 +2,7 @@
 import { HttpStatusCode } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 
-import {
-  randEmail,
-  randFirstName,
-  randFullName,
-  randLastName,
-  randNumber,
-  randPhoneNumber,
-} from '@ngneat/falso';
+import { randEmail, randFullName, randNumber } from '@ngneat/falso';
 import { Spy, createSpyFromClass, provideAutoSpy } from 'jest-auto-spies';
 
 import { PartyService } from '@app/core/party/party.service';
@@ -51,15 +44,11 @@ describe('HcimAccountTransferResolver', () => {
       alerts: [],
       status: {
         dashboardInfo: {
-          fullName: randFullName(),
+          displayFullName: randFullName(),
           collegeCode: randNumber(),
           statusCode: StatusCode.AVAILABLE,
         },
         demographics: {
-          firstName: randFirstName(),
-          lastName: randLastName(),
-          email: randEmail(),
-          phone: randPhoneNumber(),
           statusCode: StatusCode.AVAILABLE,
         },
         collegeCertification: {

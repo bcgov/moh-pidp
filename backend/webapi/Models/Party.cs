@@ -52,6 +52,27 @@ public class Party : BaseAuditable
     public string FullName => $"{this.FirstName} {this.LastName}";
 
     /// <summary>
+    /// First name to display.
+    /// The preferred first name if provided otherwise the first name.
+    /// </summary>
+    [Projectable]
+    public string DisplayFirstName => !string.IsNullOrWhiteSpace(this.PreferredFirstName) ? this.PreferredFirstName : this.FirstName;
+
+    /// <summary>
+    /// Last name to display.
+    /// The preferred last name if provided otherwise the last name.
+    /// </summary>
+    [Projectable]
+    public string DisplayLastName => !string.IsNullOrWhiteSpace(this.PreferredLastName) ? this.PreferredLastName : this.LastName;
+
+    /// <summary>
+    /// The full name to display.
+    /// The display first name + display last name.
+    /// </summary>
+    [Projectable]
+    public string DisplayFullName => $"{this.DisplayFirstName} {this.DisplayLastName}";
+
+    /// <summary>
     /// The "primary" Credential of a Party is the a) only, or b) BC Services Card Credential.
     /// As of now, the only Parties that have two Credentials are first BC Services Card and then later recieve a BC Provider Credential.
     /// </summary>

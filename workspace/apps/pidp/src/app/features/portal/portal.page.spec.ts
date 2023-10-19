@@ -4,11 +4,8 @@ import { ActivatedRoute, Router, convertToParamMap } from '@angular/router';
 
 import {
   randEmail,
-  randFirstName,
   randFullName,
-  randLastName,
   randNumber,
-  randPhoneNumber,
   randText,
   randTextRange,
 } from '@ngneat/falso';
@@ -103,15 +100,11 @@ describe('PortalPage', () => {
       alerts: [AlertCode.TRANSIENT_ERROR],
       status: {
         dashboardInfo: {
-          fullName: randFullName(),
+          displayFullName: randFullName(),
           collegeCode: randNumber(),
           statusCode: StatusCode.AVAILABLE,
         },
         demographics: {
-          firstName: randFirstName(),
-          lastName: randLastName(),
-          email: randEmail(),
-          phone: randPhoneNumber(),
           statusCode: StatusCode.AVAILABLE,
         },
         collegeCertification: {
