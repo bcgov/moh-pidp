@@ -1,11 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 import { CanActivateFn } from '@angular/router';
 
-import { userGuard } from './user.guard';
+import { setDashboardTitleGuard } from './set-dashboard-title.guard';
 
-describe('userGuard', () => {
+describe('setDashboardTitleGuard', () => {
   const executeGuard: CanActivateFn = (...guardParameters) =>
-    TestBed.runInInjectionContext(() => userGuard(...guardParameters));
+    TestBed.runInInjectionContext(() =>
+      setDashboardTitleGuard(...guardParameters)
+    );
 
   beforeEach(() => {
     TestBed.configureTestingModule({});

@@ -31,7 +31,7 @@
       "@bcgov/shared/ui": ["libs/shared/ui/src/index.ts"],
       "@bcgov/shared/utils": ["libs/shared/utils/src/index.ts"]
     },
-    "target": "es2020"
+    "target": "es2022"
   },
   "angularCompilerOptions": {
     "strictInjectionParameters": true,

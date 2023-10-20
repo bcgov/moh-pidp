@@ -57,7 +57,7 @@ const routes: Routes = [
   },
   {
     path: AccessRoutes.HCIM_ENROLMENT,
-    canActivate: [PermissionsGuard],
+    canActivate: [PermissionsGuard.canActivate],
     data: {
       roles: [Role.FEATURE_PIDP_DEMO],
     },
@@ -68,7 +68,7 @@ const routes: Routes = [
   },
   {
     path: AccessRoutes.PHARMANET,
-    canActivate: [PermissionsGuard],
+    canActivate: [PermissionsGuard.canActivate],
     data: {
       roles: [Role.FEATURE_PIDP_DEMO],
     },
@@ -79,7 +79,7 @@ const routes: Routes = [
   },
   {
     path: AccessRoutes.SITE_PRIVACY_SECURITY_CHECKLIST,
-    canActivate: [PermissionsGuard],
+    canActivate: [PermissionsGuard.canActivate],
     data: {
       roles: [Role.FEATURE_PIDP_DEMO],
     },

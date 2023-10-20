@@ -1,11 +1,8 @@
 <div class="row" [formGroup]="form">
   <div class="col">
     <mat-form-field class="w-100 email">
-      <input
-        matInput
-        placeholder="Email"
-        formControlName="email"
-        (keyup)="onKeyUp()" />
+      <mat-label>Email</mat-label>
+      <input matInput formControlName="email" (keyup)="onKeyUp()" />
       <mat-error *ngIf="email.hasError('required')">Required</mat-error>
       <mat-error *ngIf="email.hasError('email')">
         Must be a valid email address
@@ -14,9 +11,9 @@
   </div>
   <div class="col">
     <mat-form-field class="w-100">
+      <mat-label>Phone Number</mat-label>
       <input
         matInput
-        placeholder="Phone Number"
         formControlName="phone"
         mask="(000) 000-0000"
         [showMaskTyped]="false" />
