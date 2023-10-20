@@ -4,31 +4,38 @@
 //
 // MATERIAL FORMS
 //
+.mat-mdc-form-field {
+  margin-top: 0.5rem;
+}
+
 .mat-form-field-appearance-outline {
-  .mat-form-field-infix {
-    padding: 0.5rem 0 0.75rem;
+  /*TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
+  .mat-mdc-form-field-infix {
+    padding: 0.6rem 0 0.6rem !important;
+    min-height: auto;
   }
 }
-.mat-input-element,
-.mat-select-value {
+
+/*TODO(mdc-migration): The following rule targets internal classes of select that may no longer apply for the MDC version.*/
+.mat-mdc-input-element,
+.mat-mdc-select-value {
   color: pidp.$font-color-default !important;
 }
-.mat-input-element:disabled {
+.mat-mdc-input-element:disabled {
   color: pidp.$font-color-disabled !important;
 }
 
-.mat-checkbox .mat-checkbox-inner-container {
-  // Enforce a white background to avoid transparency when
-  // placed when placed on coloured backgrounds
-  background-color: white;
-  margin-right: 1rem;
-}
+/*TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version.*/
+.mat-mdc-checkbox {
+  & .mdc-checkbox {
+    // Enforce a white background to avoid transparency when
+    // placed when placed on coloured backgrounds
+    background-color: white;
+  }
 
-.mat-checkbox-layout .mat-checkbox-label {
-  // Reduced to improve the appearance of labels that are line wrapped
-  line-height: 1.4rem;
-}
-
-.mat-checkbox-label {
-  line-height: 0.5rem;
+  /*TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version.*/
+  & .mdc-form-field label {
+    // Reduced to improve the appearance of labels that are line wrapped
+    line-height: 1.4rem;
+  }
 }

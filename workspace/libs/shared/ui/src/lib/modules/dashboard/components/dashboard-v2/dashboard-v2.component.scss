@@ -122,11 +122,15 @@ h1 {
 }
 
 .header-right {
-  & mat-icon {
-    color: #fff;
-  }
-  & .signout-text {
-    margin-right: 10px;
+  .logout-button-group {
+    display: flex;
+    align-items: center;
+    & mat-icon {
+      color: #fff;
+    }
+    & .signout-text {
+      margin-right: 10px;
+    }
   }
 }
 

@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { SetDashboardTitleGuard } from '@pidp/presentation';
+import { setDashboardTitleGuard } from '@pidp/presentation';
 
 import { EndorsementsPage } from './endorsements.page';
 
@@ -9,7 +9,7 @@ const routes: Routes = [
   {
     path: '',
     component: EndorsementsPage,
-    canActivate: [SetDashboardTitleGuard],
+    canActivate: [setDashboardTitleGuard],
     data: {
       setDashboardTitleGuard: {
         titleText: 'Welcome to your endorsements',

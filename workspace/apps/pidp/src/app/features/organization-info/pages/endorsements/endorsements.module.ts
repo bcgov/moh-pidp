@@ -1,5 +1,4 @@
 import { NgModule } from '@angular/core';
-import { FlexLayoutModule } from '@angular/flex-layout';
 
 import { SharedModule } from '@app/shared/shared.module';
 
@@ -9,6 +8,6 @@ import { EndorsementsPage } from './endorsements.page';
 
 @NgModule({
   declarations: [EndorsementsPage, EndorsementCardComponent],
-  imports: [EndorsementsRoutingModule, SharedModule, FlexLayoutModule],
+  imports: [EndorsementsRoutingModule, SharedModule],
 })
 export class EndorsementsModule {}

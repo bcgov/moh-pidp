@@ -1,11 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 import { CanActivateFn } from '@angular/router';
 
-import { userGuard } from './user.guard';
+import { redirectOnFeatureFlagConfigGuard } from './redirect-on-feature-flag.guard';
 
-describe('userGuard', () => {
+describe('redirectOnFeatureFlagConfigGuard', () => {
   const executeGuard: CanActivateFn = (...guardParameters) =>
-    TestBed.runInInjectionContext(() => userGuard(...guardParameters));
+    TestBed.runInInjectionContext(() =>
+      redirectOnFeatureFlagConfigGuard(...guardParameters)
+    );
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
