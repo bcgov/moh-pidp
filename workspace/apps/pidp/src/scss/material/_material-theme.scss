@@ -4,6 +4,17 @@
 @use './material-variables' as var;
 @use 'pidp-variables' as pidp;
 
+// Include the common styles for Angular Material. We include this here so that you only
+// have to load a single css file for Angular Material in your app.
+// Be sure that you only ever include this mixin once!
+@include mat.core();
+
+// Define the palettes for your theme using the Material Design palettes available in palette.scss
+// (imported above). For each palette, you can optionally specify a default, lighter, and darker
+// hue. Available color palettes: https://material.io/design/color/
+$pidp-primary: mat.define-palette($material-theme-primary, 500);
+$pidp-accent: mat.define-palette($material-theme-secondary, 500);
+
 // Define typography for headings and body found within the mat-typography class.
 // Available typography classes: https://material.angular.io/guide/typography#using-typography-styles-in-your-application
 // Typography with corresponding native elements have been provided with the
@@ -12,23 +23,20 @@
 $pidp-typography: mat.define-typography-config(
   $font-family: pidp.$bcgov-font-family,
   // Native element: <h1>
-  $headline:
+  $headline-5:
     mat.define-typography-level(var.$mat-theme-headline-font-size, 2.5rem, 500),
   // Native element: <h2>
-  $title: mat.define-typography-level(
-      var.$mat-theme-title-font-size,
-      2rem,
-      500
-    ),
+  $headline-6:
+    mat.define-typography-level(var.$mat-theme-title-font-size, 2rem, 500),
   // Native element: <h3>
-  $subheading-2:
+  $subtitle-1:
     mat.define-typography-level(
       var.$mat-theme-subheading-2-font-size,
       1.5rem,
       500
     ),
   // Native element: <h4>
-  $subheading-1:
+  $subtitle-2:
     mat.define-typography-level(
       var.$mat-theme-subheading-1-font-size,
       1.5rem,
@@ -39,22 +47,11 @@ $pidp-typography: mat.define-typography-config(
     mat.define-typography-level(var.$mat-theme-body-1-font-size, 1.75rem, 400),
   // Native element: None
   $body-2:
-    mat.define-typography-level(var.$mat-theme-body-2-font-size, 1.75rem, 700),
+    mat.define-typography-level(var.$mat-theme-body-2-font-size, 1.75rem, 400),
   // Native element: <button>
   $button:
     mat.define-typography-level(var.$mat-theme-button-font-size, 0.875rem, 400),
 );
-
-// Include the common styles for Angular Material. We include this here so that you only
-// have to load a single css file for Angular Material in your app.
-// Be sure that you only ever include this mixin once!
-@include mat.core($pidp-typography);
-
-// Define the palettes for your theme using the Material Design palettes available in palette.scss
-// (imported above). For each palette, you can optionally specify a default, lighter, and darker
-// hue. Available color palettes: https://material.io/design/color/
-$pidp-primary: mat.define-palette($material-theme-primary, 500);
-$pidp-accent: mat.define-palette($material-theme-secondary, 500);
 
 // The warn palette is optional (defaults to red).
 $pidp-warn: mat.define-palette($bcgov-red, 800);
@@ -68,6 +65,7 @@ $pidp-theme: mat.define-light-theme(
       accent: $pidp-accent,
       warn: $pidp-warn,
     ),
+    typography: $pidp-typography,
   )
 );
 
@@ -75,3 +73,5 @@ $pidp-theme: mat.define-light-theme(
 // Alternatively, you can import and @include the theme mixins for each component
 // that you are using.
 @include mat.all-component-themes($pidp-theme);
+
+@include mat.all-component-typographies($pidp-typography);

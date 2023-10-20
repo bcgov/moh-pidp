@@ -88,7 +88,8 @@ export class LookupService implements ILookupService {
    * Make a copy of the lookup so it won't be overwritten by
    * reference within the service, and then sort by key.
    */
-  private copyAndSortByKey<T = Lookup>(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  private copyAndSortByKey<T extends { [key: string]: any } = Lookup>(
     lookup: T[] | undefined,
     sortBy: keyof T = 'code' as keyof T
   ): T[] {

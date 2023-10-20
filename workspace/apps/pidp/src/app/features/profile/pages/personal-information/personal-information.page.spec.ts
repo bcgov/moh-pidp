@@ -174,8 +174,9 @@ describe('PersonalInformationPage', () => {
       when('no validation errors exist', () => {
         formUtilsServiceSpy.checkValidity.mockReturnValue(true);
         personalInfoResourceSpy.update
-          .mustBeCalledWith(partyId, mockForm)
+          .mustBeCalledWith(partyId, mockForm as PersonalInformation)
           .nextWith(void 0);
+
         component.onSubmit();
 
         then('user will be updated and router navigate to root route', () => {

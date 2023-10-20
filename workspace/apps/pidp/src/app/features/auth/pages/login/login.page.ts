@@ -35,6 +35,7 @@ export class LoginPage {
   public isAdminLogin: boolean;
   public showOtherLoginOptions: boolean;
   public IdentityProvider = IdentityProvider;
+  public providerIdentitySupport: string;
 
   public viewport = PidpViewport.xsmall;
   public isMobileTitleVisible = this.viewport === PidpViewport.xsmall;
@@ -62,6 +63,7 @@ export class LoginPage {
       this.onViewportChange(viewport)
     );
     this.showOtherLoginOptions = false;
+    this.providerIdentitySupport = this.config.emails.providerIdentitySupport;
   }
 
   private onViewportChange(viewport: PidpViewport): void {

@@ -1,19 +1,10 @@
-import {
-  ActivatedRouteSnapshot,
-  CanActivate,
-  CanActivateChild,
-  CanLoad,
-  Route,
-  UrlTree,
-} from '@angular/router';
+import { ActivatedRouteSnapshot, Route, UrlTree } from '@angular/router';
 
 import { Observable, catchError, map, of } from 'rxjs';
 
-import { AuthService } from '../services/auth.service';
+import { AuthService } from '../../services/auth.service';
 
-export abstract class AuthGuard
-  implements CanActivate, CanActivateChild, CanLoad
-{
+export abstract class AuthGuardService {
   public constructor(protected authService: AuthService) {}
 
   public canActivate(
@@ -36,7 +27,7 @@ export abstract class AuthGuard
     return this.checkAccess(childRoute.data?.routes?.auth);
   }
 
-  public canLoad(
+  public canMatch(
     route: Route
   ):
     | Observable<boolean | UrlTree>

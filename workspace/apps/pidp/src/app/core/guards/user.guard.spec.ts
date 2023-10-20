@@ -1,32 +1,17 @@
 import { TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
+import { CanActivateFn } from '@angular/router';
 
-import { provideAutoSpy } from 'jest-auto-spies';
+import { userGuard } from './user.guard';
 
-import { APP_CONFIG, APP_DI_CONFIG } from '@app/app.config';
-import { AuthorizedUserService } from '@app/features/auth/services/authorized-user.service';
-
-import { UserGuard } from './user.guard';
-
-describe('UserGuard', () => {
-  let guard: UserGuard;
+describe('userGuard', () => {
+  const executeGuard: CanActivateFn = (...guardParameters) =>
+    TestBed.runInInjectionContext(() => userGuard(...guardParameters));
 
   beforeEach(() => {
-    TestBed.configureTestingModule({
-      imports: [RouterTestingModule],
-      providers: [
-        UserGuard,
-        {
-          provide: APP_CONFIG,
-          useValue: APP_DI_CONFIG,
-        },
-        provideAutoSpy(AuthorizedUserService),
-      ],
-    });
-    guard = TestBed.inject(UserGuard);
+    TestBed.configureTestingModule({});
   });
 
   it('should be created', () => {
-    expect(guard).toBeTruthy();
+    expect(executeGuard).toBeTruthy();
   });
 });

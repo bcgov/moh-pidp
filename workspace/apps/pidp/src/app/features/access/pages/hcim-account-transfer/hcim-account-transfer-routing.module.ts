@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { SetDashboardTitleGuard } from '@pidp/presentation';
+import { setDashboardTitleGuard } from '@pidp/presentation';
 
 import { HcimAccountTransferPage } from './hcim-account-transfer.page';
 import { HcimAccountTransferResolver } from './hcim-account-transfer.resolver';
@@ -10,7 +10,7 @@ const routes: Routes = [
   {
     path: '',
     component: HcimAccountTransferPage,
-    canActivate: [SetDashboardTitleGuard],
+    canActivate: [setDashboardTitleGuard],
     resolve: {
       hcimAccountTransferStatusCode: HcimAccountTransferResolver,
     },

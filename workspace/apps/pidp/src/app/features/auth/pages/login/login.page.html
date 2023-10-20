@@ -1,4 +1,4 @@
-<ui-layout-header-footer>
+<ui-layout-header-footer [emailSupport]="providerIdentitySupport">
   <div class="main-container" uiPidpInjectViewportCss>
     <div *ngIf="!isAdminLogin; else admin" class="content-container">
       <header *ngIf="isMobileTitleVisible" class="title-container"></header>
@@ -11,33 +11,35 @@
       </div>
 
       <section class="welcome-section">
-        <div class="welcome-container">
-          <div class="title-content-container">
-            <h1 class="title">
-              <span class="title-text">
-                <strong>OneHealthID Service</strong>
-              </span>
-            </h1>
-            <section class="title-site-description">
-              <p>
-                A suite of identity-related products and services for healthcare
-                providers in BC.
-              </p>
-            </section>
+        <div class="welcome-section-container">
+          <div class="welcome-container">
+            <div class="title-content-container">
+              <h1 class="title">
+                <span class="title-text">
+                  <strong>OneHealthID Service</strong>
+                </span>
+              </h1>
+              <section class="title-site-description">
+                <p>
+                  A suite of identity-related products and services for
+                  healthcare providers in BC.
+                </p>
+              </section>
+            </div>
+            <ng-container *ngTemplateOutlet="login"></ng-container>
           </div>
-          <ng-container *ngTemplateOutlet="login"></ng-container>
-        </div>
-        <div class="links">
-          <app-need-help
-            customClass="need-help-large"
-            [showIcon]="true"></app-need-help>
-          <div class="about">
-            <a
-              uiAnchor
-              href="https://www2.gov.bc.ca/gov/content/health/practitioner-professional-resources/onehealthid-service">
-              About, FAQs, Guides
-              <i class="material-icons-outlined">arrow_circle_right</i>
-            </a>
+          <div class="links">
+            <app-need-help
+              customClass="need-help-large"
+              [showIcon]="true"></app-need-help>
+            <div class="about">
+              <a
+                uiAnchor
+                href="https://www2.gov.bc.ca/gov/content/health/practitioner-professional-resources/onehealthid-service">
+                About, FAQs, Guides
+                <i class="material-icons-outlined">arrow_circle_right</i>
+              </a>
+            </div>
           </div>
         </div>
       </section>

@@ -1,23 +1,49 @@
 import { TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
+import { CanActivateChildFn, CanActivateFn, CanMatchFn } from '@angular/router';
 
-import { provideAutoSpy } from 'jest-auto-spies';
-
-import { AuthService } from '../services/auth.service';
 import { AuthenticationGuard } from './authentication.guard';
 
-describe('AuthenticationGuard', () => {
-  let guard: AuthenticationGuard;
+describe('AuthenticationGuard canActivate', () => {
+  const executeGuard: CanActivateFn = (...guardParameters) =>
+    TestBed.runInInjectionContext(() =>
+      AuthenticationGuard.canActivate(...guardParameters)
+    );
 
   beforeEach(() => {
-    TestBed.configureTestingModule({
-      imports: [RouterTestingModule],
-      providers: [AuthenticationGuard, provideAutoSpy(AuthService)],
-    });
-    guard = TestBed.inject(AuthenticationGuard);
+    TestBed.configureTestingModule({});
   });
 
   it('should be created', () => {
-    expect(guard).toBeTruthy();
+    expect(executeGuard).toBeTruthy();
+  });
+});
+
+describe('AuthenticationGuard canActivateChild', () => {
+  const executeGuard: CanActivateChildFn = (...guardParameters) =>
+    TestBed.runInInjectionContext(() =>
+      AuthenticationGuard.canActivateChild(...guardParameters)
+    );
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({});
+  });
+
+  it('should be created', () => {
+    expect(executeGuard).toBeTruthy();
+  });
+});
+
+describe('AuthenticationGuard CanMatchFn', () => {
+  const executeGuard: CanMatchFn = (...guardParameters) =>
+    TestBed.runInInjectionContext(() =>
+      AuthenticationGuard.canMatch(...guardParameters)
+    );
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({});
+  });
+
+  it('should be created', () => {
+    expect(executeGuard).toBeTruthy();
   });
 });

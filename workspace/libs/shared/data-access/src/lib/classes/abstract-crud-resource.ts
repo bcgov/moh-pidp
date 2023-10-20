@@ -9,7 +9,10 @@ import {
   NoContentResponse,
 } from './abstract-http-client';
 
-export abstract class CrudResource<T> implements ICrudResource<T> {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export abstract class CrudResource<T extends { [key: string]: any } | null>
+  implements ICrudResource<T>
+{
   protected constructor(protected resource: AbstractHttpClient) {}
 
   /**
