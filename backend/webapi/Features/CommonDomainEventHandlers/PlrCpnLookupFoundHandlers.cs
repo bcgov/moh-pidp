@@ -112,7 +112,7 @@ public class UpdateBCProviderAfterPlrCpnLookupFound : INotificationHandler<PlrCp
             .SetCpn(notification.Cpn)
             .SetIsRnp(plrStanding.With(ProviderRoleType.RegisteredNursePractitioner).HasGoodStanding)
             .SetIsMd(plrStanding.With(ProviderRoleType.MedicalDoctor).HasGoodStanding)
-            .SetIsMoa(!plrStanding.HasGoodStanding);
+            .SetIsMoa(false);
         ;
         await this.bcProviderClient.UpdateAttributes(userPrincipalName, attributes.AsAdditionalData());
     }
