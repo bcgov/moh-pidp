@@ -87,7 +87,9 @@ public class UpdateBCProviderAfterPlrCpnLookupFound : INotificationHandler<PlrCp
 
     public async Task Handle(PlrCpnLookupFound notification, CancellationToken cancellationToken)
     {
-        if ((await this.plrClient.GetStandingsDigestAsync(notification.Cpn))
+        var plrStanding = await this.plrClient.GetStandingsDigestAsync(notification.Cpn);
+
+        if (plrStanding
             .With(IdentifierType.PhysiciansAndSurgeons, IdentifierType.Nurse, IdentifierType.Midwife)
             .HasGoodStanding)
         {
@@ -105,8 +107,13 @@ public class UpdateBCProviderAfterPlrCpnLookupFound : INotificationHandler<PlrCp
             return;
         }
 
-        var attribute = new BCProviderAttributes(this.clientId).SetCpn(notification.Cpn);
-        await this.bcProviderClient.UpdateAttributes(userPrincipalName, attribute.AsAdditionalData());
+
+        var attributes = new BCProviderAttributes(this.clientId)
+            .SetCpn(notification.Cpn)
+            .SetIsRnp(plrStanding.With(ProviderRoleType.RegisteredNursePractitioner).HasGoodStanding)
+            .SetIsMd(plrStanding.With(ProviderRoleType.MedicalDoctor).HasGoodStanding);
+        ;
+        await this.bcProviderClient.UpdateAttributes(userPrincipalName, attributes.AsAdditionalData());
     }
 
     private async Task UpdateEndorserData(PlrCpnLookupFound notification)
