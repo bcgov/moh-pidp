@@ -22,10 +22,12 @@
 
   <p *ngIf="!completed">
     <strong>
-      I, <span class="signature">{{ username | async }}</span>, represent and
-      warrant that all information provided in connection with my application
-      for access to the System(s), is true and correct.
-    </strong>
+      I,
+      <span class="signature"
+        >{{ (dashboardState$ | async)?.userProfileFullNameText }}</span
+      >, represent and warrant that all information provided in connection with
+      my application for access to the System(s), is true and correct. </strong
+    >yarn
   </p>
 
   <ui-page-footer [mode]="completed ? 'reverse' : 'normal'">
