@@ -107,13 +107,21 @@ public class UpdateBCProviderAfterPlrCpnLookupFound : INotificationHandler<PlrCp
             return;
         }
 
+        // If the user becomes regulated, they lose their MOA status
+        if (plrStanding.HasGoodStanding)
+        {
+            var attribute = new BCProviderAttributes(this.clientId)
+                .SetIsMoa(false);
+
+            await this.bcProviderClient.UpdateAttributes(userPrincipalName, attribute.AsAdditionalData());
+        }
+
 
         var attributes = new BCProviderAttributes(this.clientId)
             .SetCpn(notification.Cpn)
             .SetIsRnp(plrStanding.With(ProviderRoleType.RegisteredNursePractitioner).HasGoodStanding)
-            .SetIsMd(plrStanding.With(ProviderRoleType.MedicalDoctor).HasGoodStanding)
-            .SetIsMoa(false);
-        ;
+            .SetIsMd(plrStanding.With(ProviderRoleType.MedicalDoctor).HasGoodStanding);
+
         await this.bcProviderClient.UpdateAttributes(userPrincipalName, attributes.AsAdditionalData());
     }
 
