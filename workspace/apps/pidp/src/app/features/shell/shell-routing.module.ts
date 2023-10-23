@@ -36,7 +36,7 @@ const routes: Routes = [
   },
   {
     path: AdminRoutes.MODULE_PATH,
-    canLoad: [AuthenticationGuard],
+    canMatch: [AuthenticationGuard.canMatch],
     loadChildren: (): Promise<Type<AdminModule>> =>
       import('../admin/admin.module').then((m) => m.AdminModule),
   },
@@ -50,8 +50,8 @@ const routes: Routes = [
   {
     path: '',
     component: PortalDashboardComponent,
-    canActivate: [AuthenticationGuard],
-    canActivateChild: [AuthenticationGuard],
+    canActivate: [AuthenticationGuard.canActivate],
+    canActivateChild: [AuthenticationGuard.canActivateChild],
     resolve: {
       partyId: PartyResolver,
     },
@@ -85,7 +85,7 @@ const routes: Routes = [
       },
       {
         path: TrainingRoutes.MODULE_PATH,
-        canActivate: [PermissionsGuard],
+        canActivate: [PermissionsGuard.canActivate],
         data: {
           roles: [Role.FEATURE_PIDP_DEMO],
         },

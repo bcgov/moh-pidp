@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { SetDashboardTitleGuard } from '@pidp/presentation';
+import { setDashboardTitleGuard } from '@pidp/presentation';
 
 import { MsTeamsClinicMemberPage } from './ms-teams-clinic-member.page';
 import { MsTeamsClinicMemberResolver } from './ms-teams-clinic-member.resolver';
@@ -13,7 +13,7 @@ const routes: Routes = [
     resolve: {
       msTeamsClinicMemberStatusCode: MsTeamsClinicMemberResolver,
     },
-    canActivate: [SetDashboardTitleGuard],
+    canActivate: [setDashboardTitleGuard],
     data: {
       setDashboardTitleGuard: {
         titleText: 'MS Teams Clinic Member',

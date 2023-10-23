@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { SetDashboardTitleGuard } from '@pidp/presentation';
+import { setDashboardTitleGuard } from '@pidp/presentation';
 
 import { BcProviderApplicationPage } from './bc-provider-application.page';
 import { BcProviderApplicationResolver } from './bc-provider-application.resolver';
@@ -12,7 +12,7 @@ const routes: Routes = [
     resolve: {
       bcProviderApplicationStatusCode: BcProviderApplicationResolver,
     },
-    canActivate: [SetDashboardTitleGuard],
+    canActivate: [setDashboardTitleGuard],
     component: BcProviderApplicationPage,
     data: {
       setDashboardTitleGuard: {

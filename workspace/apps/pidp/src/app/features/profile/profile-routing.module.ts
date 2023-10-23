@@ -28,7 +28,7 @@ const routes: Routes = [
   },
   {
     path: ProfileRoutes.WORK_AND_ROLE_INFO,
-    canLoad: [PermissionsGuard],
+    canMatch: [PermissionsGuard.canMatch],
     data: {
       roles: [Role.FEATURE_PIDP_DEMO],
     },

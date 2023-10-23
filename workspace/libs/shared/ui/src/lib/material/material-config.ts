@@ -32,6 +32,7 @@ const appPaginatorCustomOptions = {
 };
 
 const matFormFieldCustomOptions: MatFormFieldDefaultOptions = {
+  appearance: 'outline',
   hideRequiredMarker: true,
   floatLabel: 'always',
 };
