@@ -89,9 +89,9 @@ public class Demographics
                 party.DomainEvents.Add(new PartyEmailUpdated(party.Id, party.PrimaryUserId, command.Email!));
             }
 
-            party.PreferredFirstName = command.PreferredFirstName;
-            party.PreferredMiddleName = command.PreferredMiddleName;
-            party.PreferredLastName = command.PreferredLastName;
+            party.PreferredFirstName = string.IsNullOrWhiteSpace(command.PreferredFirstName) ? null : command.PreferredFirstName;
+            party.PreferredMiddleName = string.IsNullOrWhiteSpace(command.PreferredMiddleName) ? null : command.PreferredMiddleName;
+            party.PreferredLastName = string.IsNullOrWhiteSpace(command.PreferredLastName) ? null : command.PreferredLastName;
             party.Email = command.Email;
             party.Phone = command.Phone;
 
