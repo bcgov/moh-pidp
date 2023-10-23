@@ -2,7 +2,7 @@
 import { HttpStatusCode } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 
-import { randEmail, randFullName, randNumber } from '@ngneat/falso';
+import { randNumber } from '@ngneat/falso';
 import { Spy, createSpyFromClass, provideAutoSpy } from 'jest-auto-spies';
 
 import { PartyService } from '@app/core/party/party.service';
@@ -11,6 +11,7 @@ import { ProfileStatus } from '@app/features/portal/models/profile-status.model'
 
 import { DriverFitnessResource } from './driver-fitness-resource.service';
 import { DriverFitnessResolver } from './driver-fitness.resolver';
+import { MockProfileStatus } from '@test/mock-profile-status';
 
 describe('DriverFitnessResolver', () => {
   let resolver: DriverFitnessResolver;
@@ -38,51 +39,7 @@ describe('DriverFitnessResolver', () => {
     driverFitnessResourceSpy = TestBed.inject<any>(DriverFitnessResource);
     partyServiceSpy = TestBed.inject<any>(PartyService);
 
-    mockProfileStatus = {
-      alerts: [],
-      status: {
-        dashboardInfo: {
-          displayFullName: randFullName(),
-          collegeCode: randNumber(),
-          statusCode: StatusCode.AVAILABLE,
-        },
-        demographics: {
-          statusCode: StatusCode.AVAILABLE,
-        },
-        collegeCertification: {
-          hasCpn: false,
-          licenceDeclared: false,
-          statusCode: StatusCode.AVAILABLE,
-          isComplete: false,
-        },
-        administratorInfo: {
-          email: randEmail(),
-          statusCode: StatusCode.AVAILABLE,
-        },
-        organizationDetails: { statusCode: StatusCode.AVAILABLE },
-        facilityDetails: { statusCode: StatusCode.AVAILABLE },
-        endorsements: { statusCode: StatusCode.AVAILABLE },
-        userAccessAgreement: { statusCode: StatusCode.AVAILABLE },
-        saEforms: {
-          statusCode: StatusCode.AVAILABLE,
-          incorrectLicenceType: false,
-        },
-        prescriptionRefillEforms: { statusCode: StatusCode.AVAILABLE },
-        'prescription-refill-eforms': { statusCode: StatusCode.AVAILABLE },
-        bcProvider: { statusCode: StatusCode.AVAILABLE },
-        hcimAccountTransfer: { statusCode: StatusCode.AVAILABLE },
-        hcimEnrolment: { statusCode: StatusCode.AVAILABLE },
-        driverFitness: { statusCode: StatusCode.AVAILABLE },
-        msTeamsPrivacyOfficer: { statusCode: StatusCode.AVAILABLE },
-        msTeamsClinicMember: { statusCode: StatusCode.AVAILABLE },
-        providerReportingPortal: { statusCode: StatusCode.AVAILABLE },
-        'provider-reporting-portal': { statusCode: StatusCode.AVAILABLE },
-        sitePrivacySecurityChecklist: { statusCode: StatusCode.AVAILABLE },
-        complianceTraining: { statusCode: StatusCode.AVAILABLE },
-        primaryCareRostering: { statusCode: StatusCode.AVAILABLE },
-        immsBCEforms: { statusCode: StatusCode.AVAILABLE },
-      },
-    };
+    mockProfileStatus = MockProfileStatus.get();
   });
 
   describe('METHOD: resolve', () => {
@@ -98,15 +55,16 @@ describe('DriverFitnessResolver', () => {
         resolver
           .resolve()
           .subscribe(
-            (profileStatus: StatusCode | null) => (actualResult = profileStatus)
+            (profileStatus: StatusCode | null) =>
+              (actualResult = profileStatus),
           );
 
         then('response will provide the status code for SA eForms', () => {
           expect(
-            driverFitnessResourceSpy.getProfileStatus
+            driverFitnessResourceSpy.getProfileStatus,
           ).toHaveBeenCalledTimes(1);
           expect(actualResult).toBe(
-            mockProfileStatus.status.driverFitness.statusCode
+            mockProfileStatus.status.driverFitness.statusCode,
           );
         });
       });
@@ -129,12 +87,13 @@ describe('DriverFitnessResolver', () => {
         resolver
           .resolve()
           .subscribe(
-            (profileStatus: StatusCode | null) => (actualResult = profileStatus)
+            (profileStatus: StatusCode | null) =>
+              (actualResult = profileStatus),
           );
 
         then('response will provide null as status code for SA eForms', () => {
           expect(
-            driverFitnessResourceSpy.getProfileStatus
+            driverFitnessResourceSpy.getProfileStatus,
           ).toHaveBeenCalledTimes(1);
           expect(actualResult).toBe(null);
         });
@@ -150,7 +109,8 @@ describe('DriverFitnessResolver', () => {
         resolver
           .resolve()
           .subscribe(
-            (profileStatus: StatusCode | null) => (actualResult = profileStatus)
+            (profileStatus: StatusCode | null) =>
+              (actualResult = profileStatus),
           );
 
         then('response will provide null as status code for SA eForms', () => {
