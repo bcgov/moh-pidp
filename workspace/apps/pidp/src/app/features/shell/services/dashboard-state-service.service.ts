@@ -16,12 +16,11 @@ export class DashboardStateService {
     private partyService: PartyService,
     private portalResourceService: PortalResource,
     private lookupService: LookupService,
-    private stateService: AppStateService
+    private stateService: AppStateService,
   ) {}
 
   public refreshDashboardState(): void {
     // Get profile status and college info.
-    // TODO: Insert a caching layer so a full get is not always required.
     const partyId = this.partyService.partyId;
 
     // Use forkJoin to wait for both to return.
@@ -33,7 +32,7 @@ export class DashboardStateService {
 
         // Set the user name and college on the dashboard.
         const oldState = this.stateService.getNamedState<DashboardStateModel>(
-          PidpStateName.dashboard
+          PidpStateName.dashboard,
         );
         const newState: DashboardStateModel = {
           ...oldState,
@@ -49,7 +48,7 @@ export class DashboardStateService {
   }
 
   private getCollegeName(profileStatus: ProfileStatus | null): string {
-    if (!profileStatus || !profileStatus.status?.dashboardInfo) {
+    if (!profileStatus?.status?.dashboardInfo) {
       return '';
     }
 

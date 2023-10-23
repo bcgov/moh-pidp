@@ -29,7 +29,7 @@ export class AppStateService {
     const state = this.getState();
     const childState = state.all.find((x) => x.stateName === name);
     if (!childState) {
-      throw `unknown named state '${name}'`;
+      throw new Error(`unknown named state '${name}'`);
     }
     const typedState = childState as TNamedState;
     return typedState;
@@ -47,7 +47,7 @@ export class AppStateService {
 
     const index = appState.all.findIndex((x) => x.stateName === name);
     if (index === -1) {
-      throw `cannot find named state '${name}'`;
+      throw new Error(`cannot find named state '${name}'`);
     }
 
     newAppState.all.splice(index, 1, { ...state });
@@ -61,7 +61,7 @@ export class AppStateService {
       map((state) => {
         const namedState = state.all.find((x) => x.stateName === name);
         if (!namedState) {
-          throw `'${name}' state not found`;
+          throw new Error(`'${name}' state not found`);
         }
         const typedState = namedState as TNamedState;
         return typedState;
