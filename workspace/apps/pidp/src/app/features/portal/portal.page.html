@@ -8,262 +8,268 @@
     </div>
   </section>
   <section
-    *ngIf="(identityProvider$ | async) === IdentityProvider.BCSC || (identityProvider$ | async) === IdentityProvider.BC_PROVIDER; else nonBcsc"
+    *ngIf="identityProvider$ | async as identityProviderLoggedIn"
     class="section-box rostering-banner">
-    <app-banner-expansion-panel
-      [expanded]="pasPanelExpanded$ | async"
-      (expandedChanged)="onExpansionPanelToggle($event)">
-      <mat-stepper
-        orientation="vertical"
-        #stepper
-        [selectedIndex]="selectedIndex">
-        <mat-step
-          [state]="demographicsStatusCode === 2 ? 'done' : 'number'"
-          [completed]="demographicsStatusCode === 2">
-          <ng-template matStepLabel>Enter your contact details</ng-template>
-          <div>
-            <p class="guide-information">
-              Please enter your email and phone number in case we need to
-              contact you.
-            </p>
-            <button
-              mat-flat-button
-              type="button"
-              color="primary"
-              aria-labelledby="complete-personal-information"
-              [disabled]="demographics$ | async"
-              (click)="navigateTo()">
-              Enter your contact details
-            </button>
-          </div>
-          <div class="adjust-text">
-            <em
-              >Need help? Try this
-              <a uiAnchor [attr.href]="personalInfoTutorial"
-                >video tutorial</a
-              ></em
-            >
-          </div>
-          <div class="stepper-buttons">
-            <button class="top-button" mat-stroked-button matStepperNext>
-              Next
-            </button>
-          </div>
-        </mat-step>
-
-        <mat-step
-          [state]="collegeLicenceStatusCode === 2 ? 'done' : 'number'"
-          [completed]="collegeLicenceStatusCode === 2">
-          <ng-template matStepLabel>Enter your College Licence</ng-template>
-          <div>
-            <p class="guide-information">
-              Please provide your college license so we can give you access to
-              the appropriate systems. If you don't have a college license
-              (example MOA) you need to select NONE for your college license.
-            </p>
-            <button
-              mat-flat-button
-              type="button"
-              color="primary"
-              aria-labelledby="complete-college-licence"
-              [disabled]="collegeLicence$ | async"
-              (click)="navigateTo()">
-              Enter your College Licence
-            </button>
-          </div>
-          <div class="adjust-text">
-            <em
-              >Need help? Try this
-              <a uiAnchor [attr.href]="collegeLicenceTutorial"
-                >video tutorial</a
-              ></em
-            >
-          </div>
-          <div class="stepper-buttons">
-            <button mat-stroked-button matStepperPrevious>Back</button>
-            <button mat-stroked-button matStepperNext>Next</button>
-          </div>
-        </mat-step>
-
-        <mat-step
-          [state]="uaaStatusCode === 2 ? 'done' : 'number'"
-          [completed]="uaaStatusCode === 2">
-          <ng-template matStepLabel
-            >Accept the User Access Agreement</ng-template
-          >
-          <div>
-            <p class="guide-information">
-              The user access agreement is a general agreement on acceptable use
-              of the services you are enrolling in.
-            </p>
-            <button
-              mat-flat-button
-              type="button"
-              color="primary"
-              aria-labelledby="complete-uaa"
-              [disabled]="uaa$ | async"
-              (click)="navigateTo()">
-              Accept the User Access Agreement
-            </button>
-          </div>
-          <div class="adjust-text">
-            <em
-              >Need help? Try this
-              <a uiAnchor [attr.href]="uaaTutorial">video tutorial</a></em
-            >
-          </div>
-          <div class="stepper-buttons">
-            <button mat-stroked-button matStepperPrevious>Back</button>
-            <button mat-stroked-button matStepperNext>Next</button>
-          </div>
-        </mat-step>
-
-        <mat-step
-          [state]="bcProviderStatusCode === 2 ? 'done' : 'number'"
-          [completed]="bcProviderStatusCode === 2">
-          <ng-template matStepLabel>
-            Create a BCProvider Credential
-          </ng-template>
-          <div>
-            <p class="guide-information">
-              A BCProvider is a credential used to access health applications.
-              In the future the BCProvider will be integrated with multiple
-              health authorities, EMRs and other government health services.
-            </p>
-            <button
-              mat-flat-button
-              type="button"
-              color="primary"
-              aria-labelledby="complete-bcprovider"
-              [disabled]="bcProvider$ | async"
-              (click)="navigateTo()">
-              Create a BCProvider Credential
-            </button>
-          </div>
-          <div class="adjust-text">
-            <em
-              >Need help? Try this
-              <a uiAnchor [attr.href]="bcProviderTutorial"
-                >video tutorial</a
-              ></em
-            >
-          </div>
-          <div class="stepper-buttons">
-            <button mat-stroked-button matStepperPrevious>Back</button>
-            <button mat-stroked-button matStepperNext>Next</button>
-          </div>
-        </mat-step>
-
-        <mat-step [completed]="false">
-          <ng-template matStepLabel>
-            <p class="pas-step-label">
-              Invite others to the Provincial Attachment System (PAS)<br />
-              (Optional)
-            </p>
-          </ng-template>
-          <div>
-            <div
-              *ngIf="!hasCpn && isComplete; else licenced"
-              class="moa-message">
-              <p>
-                <i
-                  >Because you are MOA or do <strong>not</strong> have a college
-                  licence, then this step will become part of the process.</i
-                >
-              </p>
-              <mat-stepper class="moa-message-steps">
-                <mat-step editable="false" [completed]="false">
-                  <ng-template matStepLabel>Start endorsement</ng-template>
-                </mat-step>
-                <mat-step editable="false" [completed]="false">
-                  <ng-template matStepLabel>Pending Approval</ng-template>
-                </mat-step>
-                <mat-step editable="false" [completed]="false">
-                  <ng-template matStepLabel
-                    >Completion and PAS login available</ng-template
-                  >
-                </mat-step>
-              </mat-stepper>
-            </div>
-            <ng-template #licenced>
+    <div
+      *ngIf="pasAllowedProviders.includes(identityProviderLoggedIn); else nonBcsc">
+      <app-banner-expansion-panel
+        [expanded]="pasPanelExpanded$ | async"
+        (expandedChanged)="onExpansionPanelToggle($event)">
+        <mat-stepper
+          orientation="vertical"
+          #stepper
+          [selectedIndex]="selectedIndex">
+          <mat-step
+            [state]="demographicsStatusCode === 2 ? 'done' : 'number'"
+            [completed]="demographicsStatusCode === 2">
+            <ng-template matStepLabel>Enter your contact details</ng-template>
+            <div>
               <p class="guide-information">
-                Do you work with others who need access to the PAS? For example,
-                assistants or other members of your Care Team, who may or may
-                not have a professional license? <br />If you do, then you can
-                send trusted colleagues a OneHealthID access invitation by
-                clicking the “Endorsements” button below.
+                Please enter your email and phone number in case we need to
+                contact you.
+              </p>
+              <button
+                mat-flat-button
+                type="button"
+                color="primary"
+                aria-labelledby="complete-personal-information"
+                [disabled]="demographics$ | async"
+                (click)="navigateTo()">
+                Enter your contact details
+              </button>
+            </div>
+            <div class="adjust-text">
+              <em
+                >Need help? Try this
+                <a uiAnchor [attr.href]="personalInfoTutorial"
+                  >video tutorial</a
+                ></em
+              >
+            </div>
+            <div class="stepper-buttons">
+              <button class="top-button" mat-stroked-button matStepperNext>
+                Next
+              </button>
+            </div>
+          </mat-step>
+
+          <mat-step
+            [state]="collegeLicenceStatusCode === 2 ? 'done' : 'number'"
+            [completed]="collegeLicenceStatusCode === 2">
+            <ng-template matStepLabel>Enter your College Licence</ng-template>
+            <div>
+              <p class="guide-information">
+                Please provide your college license so we can give you access to
+                the appropriate systems. If you don't have a college license
+                (example MOA) you need to select NONE for your college license.
+              </p>
+              <button
+                mat-flat-button
+                type="button"
+                color="primary"
+                aria-labelledby="complete-college-licence"
+                [disabled]="collegeLicence$ | async"
+                (click)="navigateTo()">
+                Enter your College Licence
+              </button>
+            </div>
+            <div class="adjust-text">
+              <em
+                >Need help? Try this
+                <a uiAnchor [attr.href]="collegeLicenceTutorial"
+                  >video tutorial</a
+                ></em
+              >
+            </div>
+            <div class="stepper-buttons">
+              <button mat-stroked-button matStepperPrevious>Back</button>
+              <button mat-stroked-button matStepperNext>Next</button>
+            </div>
+          </mat-step>
+
+          <mat-step
+            [state]="uaaStatusCode === 2 ? 'done' : 'number'"
+            [completed]="uaaStatusCode === 2">
+            <ng-template matStepLabel
+              >Accept the User Access Agreement</ng-template
+            >
+            <div>
+              <p class="guide-information">
+                The user access agreement is a general agreement on acceptable
+                use of the services you are enrolling in.
+              </p>
+              <button
+                mat-flat-button
+                type="button"
+                color="primary"
+                aria-labelledby="complete-uaa"
+                [disabled]="uaa$ | async"
+                (click)="navigateTo()">
+                Accept the User Access Agreement
+              </button>
+            </div>
+            <div class="adjust-text">
+              <em
+                >Need help? Try this
+                <a uiAnchor [attr.href]="uaaTutorial">video tutorial</a></em
+              >
+            </div>
+            <div class="stepper-buttons">
+              <button mat-stroked-button matStepperPrevious>Back</button>
+              <button mat-stroked-button matStepperNext>Next</button>
+            </div>
+          </mat-step>
+
+          <mat-step
+            [state]="bcProviderStatusCode === 2 ? 'done' : 'number'"
+            [completed]="bcProviderStatusCode === 2">
+            <ng-template matStepLabel>
+              Create a BCProvider Credential
+            </ng-template>
+            <div>
+              <p class="guide-information">
+                A BCProvider is a credential used to access health applications.
+                In the future the BCProvider will be integrated with multiple
+                health authorities, EMRs and other government health services.
+              </p>
+              <button
+                mat-flat-button
+                type="button"
+                color="primary"
+                aria-labelledby="complete-bcprovider"
+                [disabled]="bcProvider$ | async"
+                (click)="navigateTo()">
+                Create a BCProvider Credential
+              </button>
+            </div>
+            <div class="adjust-text">
+              <em
+                >Need help? Try this
+                <a uiAnchor [attr.href]="bcProviderTutorial"
+                  >video tutorial</a
+                ></em
+              >
+            </div>
+            <div class="stepper-buttons">
+              <button mat-stroked-button matStepperPrevious>Back</button>
+              <button mat-stroked-button matStepperNext>Next</button>
+            </div>
+          </mat-step>
+
+          <mat-step [completed]="false">
+            <ng-template matStepLabel>
+              <p class="pas-step-label">
+                Invite others to the Provincial Attachment System (PAS)<br />
+                (Optional)
               </p>
             </ng-template>
-            <button
-              mat-flat-button
-              type="button"
-              color="primary"
-              routerLink="/organization-info/endorsements"
-              aria-labelledby="navigate-to-endorsements"
-              [disabled]="endorsement$ | async">
-              Endorsements
-            </button>
-          </div>
-          <div class="stepper-buttons">
-            <button mat-stroked-button matStepperPrevious>Back</button>
-            <button mat-stroked-button matStepperNext>Next</button>
-          </div>
-        </mat-step>
-
-        <mat-step [completed]="false">
-          <ng-template matStepLabel>
-            Multi-Factor Authentication (MFA) Set-Up Guide
-          </ng-template>
-          <p class="guide-information">
-            If you need help setting up your Multi-Factor Authentication (MFA),
-            please
-            <a href="assets/documents/mfa.pdf" download>download this PDF</a>
-          </p>
-
-          <div class="stepper-buttons">
-            <button mat-stroked-button matStepperPrevious>Back</button>
-            <button mat-stroked-button matStepperNext>Next</button>
-          </div>
-        </mat-step>
-
-        <mat-step [completed]="false">
-          <ng-template matStepLabel>
-            Login to Provincial Attachment System with your BCProvider
-          </ng-template>
-          <div>
-            <p class="guide-information">
-              Use your newly created BCProvider to login to the Provincial
-              Attachment System
-            </p>
-            <p *ngIf="bcProviderStatusCode === 2" class="bcprovider-username">
-              <strong>{{ bcProviderUsername }}</strong>
+            <div>
+              <div
+                *ngIf="!hasCpn && isComplete; else licenced"
+                class="moa-message">
+                <p>
+                  <i
+                    >Because you are MOA or do <strong>not</strong> have a
+                    college licence, then this step will become part of the
+                    process.</i
+                  >
+                </p>
+                <mat-stepper class="moa-message-steps">
+                  <mat-step editable="false" [completed]="false">
+                    <ng-template matStepLabel>Start endorsement</ng-template>
+                  </mat-step>
+                  <mat-step editable="false" [completed]="false">
+                    <ng-template matStepLabel>Pending Approval</ng-template>
+                  </mat-step>
+                  <mat-step editable="false" [completed]="false">
+                    <ng-template matStepLabel
+                      >Completion and PAS login available</ng-template
+                    >
+                  </mat-step>
+                </mat-stepper>
+              </div>
+              <ng-template #licenced>
+                <p class="guide-information">
+                  Do you work with others who need access to the PAS? For
+                  example, assistants or other members of your Care Team, who
+                  may or may not have a professional license? <br />If you do,
+                  then you can send trusted colleagues a OneHealthID access
+                  invitation by clicking the “Endorsements” button below.
+                </p>
+              </ng-template>
               <button
-                mat-icon-button
+                mat-flat-button
                 type="button"
-                matTooltip="Copy your BCProvider to clipboard"
-                aria-label="Copy your BCProvider to clipboard"
-                [cdkCopyToClipboard]="bcProviderUsername"
-                (cdkCopyToClipboardCopied)="onCopy()">
-                <mat-icon>content_paste</mat-icon>
+                color="primary"
+                routerLink="/organization-info/endorsements"
+                aria-labelledby="navigate-to-endorsements"
+                [disabled]="endorsement$ | async">
+                Endorsements
               </button>
+            </div>
+            <div class="stepper-buttons">
+              <button mat-stroked-button matStepperPrevious>Back</button>
+              <button mat-stroked-button matStepperNext>Next</button>
+            </div>
+          </mat-step>
+
+          <mat-step [completed]="false">
+            <ng-template matStepLabel>
+              Multi-Factor Authentication (MFA) Set-Up Guide
+            </ng-template>
+            <p class="guide-information">
+              If you need help setting up your Multi-Factor Authentication
+              (MFA), please
+              <a href="assets/documents/mfa.pdf" download>download this PDF</a>
             </p>
-            <button
-              mat-flat-button
-              type="button"
-              color="primary"
-              aria-labelledby="navigate-to-rostering"
-              [disabled]="rostering$ | async"
-              (click)="navigateTo()">
+
+            <div class="stepper-buttons">
+              <button mat-stroked-button matStepperPrevious>Back</button>
+              <button mat-stroked-button matStepperNext>Next</button>
+            </div>
+          </mat-step>
+
+          <mat-step [completed]="false">
+            <ng-template matStepLabel>
               Login to Provincial Attachment System with your BCProvider
-            </button>
-          </div>
-          <div class="stepper-buttons">
-            <button mat-stroked-button matStepperPrevious>Back</button>
-            <button mat-stroked-button (click)="stepper.reset()">Reset</button>
-          </div>
-        </mat-step>
-      </mat-stepper>
-    </app-banner-expansion-panel>
+            </ng-template>
+            <div>
+              <p class="guide-information">
+                Use your newly created BCProvider to login to the Provincial
+                Attachment System
+              </p>
+              <p *ngIf="bcProviderStatusCode === 2" class="bcprovider-username">
+                <strong>{{ bcProviderUsername }}</strong>
+                <button
+                  mat-icon-button
+                  type="button"
+                  matTooltip="Copy your BCProvider to clipboard"
+                  aria-label="Copy your BCProvider to clipboard"
+                  [cdkCopyToClipboard]="bcProviderUsername"
+                  (cdkCopyToClipboardCopied)="onCopy()">
+                  <mat-icon>content_paste</mat-icon>
+                </button>
+              </p>
+              <button
+                mat-flat-button
+                type="button"
+                color="primary"
+                aria-labelledby="navigate-to-rostering"
+                [disabled]="rostering$ | async"
+                (click)="navigateTo()">
+                Login to Provincial Attachment System with your BCProvider
+              </button>
+            </div>
+            <div class="stepper-buttons">
+              <button mat-stroked-button matStepperPrevious>Back</button>
+              <button mat-stroked-button (click)="stepper.reset()">
+                Reset
+              </button>
+            </div>
+          </mat-step>
+        </mat-stepper>
+      </app-banner-expansion-panel>
+    </div>
   </section>
 
   <ng-template #nonBcsc>
