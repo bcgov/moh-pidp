@@ -36,7 +36,13 @@ export class AccessTokenService implements IAccessTokenService {
 
   public decodeToken(): Observable<AccessTokenParsed> {
     return this.token().pipe(
-      map((token: string) => this.jwtHelper.decodeToken(token))
+      map((token: string) => {
+        const accessToken = this.jwtHelper.decodeToken(token);
+        if (accessToken == null) {
+          throw new Error('Token could not be decoded');
+        }
+        return accessToken;
+      })
     );
   }
 
