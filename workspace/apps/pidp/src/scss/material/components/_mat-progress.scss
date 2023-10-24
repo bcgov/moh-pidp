@@ -1,12 +1,12 @@
-.mat-progress-bar {
+.mat-mdc-progress-bar {
   height: 5px;
   margin-bottom: 7px;
-
+  /* TODO(mdc-migration): The following rule targets internal classes of progress-bar that may no longer apply for the MDC version. */
   &,
   .mat-progress-bar-buffer {
     border-radius: 5px;
   }
-
+  /* TODO(mdc-migration): The following rule targets internal classes of progress-bar that may no longer apply for the MDC version. */
   &.mat-accent .mat-progress-bar-buffer {
     background-color: theme-palette(blue);
   }

@@ -52,6 +52,9 @@ button.pidp-btn-link {
 
           & .login-continue-with-container {
             margin-left: 30px;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
 
             & .other-login-button {
               margin: 5px;
@@ -138,7 +141,7 @@ button.pidp-btn-link {
         & .login-container-app-button {
           & button.login-app-button {
             border-radius: 8px;
-            padding: 5px 15px;
+            padding: 8px 15px;
             font-size: 14px;
             font-weight: 700;
 

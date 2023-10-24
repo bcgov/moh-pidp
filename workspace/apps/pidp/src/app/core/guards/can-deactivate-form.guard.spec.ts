@@ -1,19 +1,20 @@
 import { TestBed } from '@angular/core/testing';
+import { CanDeactivateFn } from '@angular/router';
 
-import { CanDeactivateFormGuard } from './can-deactivate-form.guard';
+import { IFormPage } from '../classes/abstract-form-page.class';
+import { canDeactivateFormGuard } from './can-deactivate-form.guard';
 
-describe('CanDeactivateFormGuard', () => {
-  let guard: CanDeactivateFormGuard;
+describe('canDeactivateFormGuard', () => {
+  const executeGuard: CanDeactivateFn<IFormPage> = (...guardParameters) =>
+    TestBed.runInInjectionContext(() =>
+      canDeactivateFormGuard(...guardParameters)
+    );
 
   beforeEach(() => {
-    TestBed.configureTestingModule({
-      providers: [CanDeactivateFormGuard],
-    });
-
-    guard = TestBed.inject(CanDeactivateFormGuard);
+    TestBed.configureTestingModule({});
   });
 
   it('should be created', () => {
-    expect(guard).toBeTruthy();
+    expect(executeGuard).toBeTruthy();
   });
 });

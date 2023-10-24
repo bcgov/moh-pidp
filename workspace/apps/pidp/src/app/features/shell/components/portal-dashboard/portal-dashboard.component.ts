@@ -40,18 +40,7 @@ export class PortalDashboardComponent implements IDashboard, OnInit {
   public menuItems: DashboardMenuItem[];
   public providerIdentitySupport: string;
 
-  public dashboardState$ = this.stateService.stateBroadcast$.pipe(
-    map((state) => {
-      const dashboardNamedState = state.all.find(
-        (x) => x.stateName === PidpStateName.dashboard
-      );
-      if (!dashboardNamedState) {
-        throw 'dashboard state not found';
-      }
-      const dashboardState = dashboardNamedState as DashboardStateModel;
-      return dashboardState;
-    })
-  );
+  public dashboardState$: Observable<DashboardStateModel>;
 
   public constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
@@ -78,6 +67,19 @@ export class PortalDashboardComponent implements IDashboard, OnInit {
     this.responsiveMenuItems = false;
     this.menuItems = this.createMenuItems();
     this.providerIdentitySupport = this.config.emails.providerIdentitySupport;
+
+    this.dashboardState$ = this.stateService.stateBroadcast$.pipe(
+      map((state) => {
+        const dashboardNamedState = state.all.find(
+          (x) => x.stateName === PidpStateName.dashboard
+        );
+        if (!dashboardNamedState) {
+          throw 'dashboard state not found';
+        }
+        const dashboardState = dashboardNamedState as DashboardStateModel;
+        return dashboardState;
+      })
+    );
   }
   public ngOnInit(): void {
     // Get profile status and college info.

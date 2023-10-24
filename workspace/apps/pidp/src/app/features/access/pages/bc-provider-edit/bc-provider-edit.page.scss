@@ -165,10 +165,10 @@
           & label {
             font-weight: bold;
           }
-          & .mat-form-field {
+          & .mat-mdc-form-field {
             margin-bottom: 0;
           }
-          & .mat-error {
+          & .mat-mdc-form-field-error {
             font-size: 0.75rem;
           }
         }
@@ -199,6 +199,8 @@
   }
 }
 .viewport-all.dialog-box {
+  padding: 24px;
+
   & .dialog-header {
     display: flex;
     justify-content: flex-end;

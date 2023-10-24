@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { SetDashboardTitleGuard } from '@pidp/presentation';
+import { setDashboardTitleGuard } from '@pidp/presentation';
 
 import { DriverFitnessPage } from './driver-fitness.page';
 import { DriverFitnessResolver } from './driver-fitness.resolver';
@@ -10,7 +10,7 @@ const routes: Routes = [
   {
     path: '',
     component: DriverFitnessPage,
-    canActivate: [SetDashboardTitleGuard],
+    canActivate: [setDashboardTitleGuard],
     resolve: {
       driverFitnessStatusCode: DriverFitnessResolver,
     },

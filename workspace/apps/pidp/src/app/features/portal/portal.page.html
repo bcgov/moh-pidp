@@ -7,7 +7,9 @@
       <p>{{ alert.content }}</p>
     </div>
   </section>
-  <section class="section-box rostering-banner">
+  <section
+    *ngIf="(identityProvider$ | async) === IdentityProvider.BCSC; else nonBcsc"
+    class="section-box rostering-banner">
     <app-banner-expansion-panel
       [expanded]="pasPanelExpanded$ | async"
       (expandedChanged)="onExpansionPanelToggle($event)">
@@ -263,6 +265,22 @@
       </mat-stepper>
     </app-banner-expansion-panel>
   </section>
+
+  <ng-template #nonBcsc>
+    <ui-alert
+      type="info"
+      icon="info"
+      iconType="outlined"
+      heading="Looking for access to PAS?">
+      <ng-container uiAlertContent>
+        <p>
+          To access the Provincial Attachment System enrolment, login to
+          OneHealthID with your BC Services Card.
+        </p>
+      </ng-container>
+    </ui-alert>
+  </ng-template>
+
   <ng-container *ngIf="state$ | async as state">
     <section class="profile-box section-box">
       <ui-scroll-target targetId="profile"></ui-scroll-target>
