@@ -9,7 +9,7 @@
           class="field-label"
           >College Licence</label
         >
-        <mat-form-field appearance="outline">
+        <mat-form-field>
           <mat-select
             formControlName="collegeCode"
             aria-labelledby="college-licence-declaration-college-licence">
@@ -37,9 +37,7 @@
             >here</a
           >.
         </p>
-        <mat-form-field
-          *ngIf="formState.collegeCode.value"
-          appearance="outline">
+        <mat-form-field *ngIf="formState.collegeCode.value">
           <input
             matInput
             formControlName="licenceNumber"

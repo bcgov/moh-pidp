@@ -1,24 +1,17 @@
 import { TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
+import { CanActivateFn } from '@angular/router';
 
-import { provideAutoSpy } from 'jest-auto-spies';
+import { adminGuard } from './admin.guard';
 
-import { AuthorizedUserService } from '@app/features/auth/services/authorized-user.service';
-
-import { AdminGuard } from './admin.guard';
-
-describe('AdminGuard', () => {
-  let guard: AdminGuard;
+describe('adminGuard', () => {
+  const executeGuard: CanActivateFn = (...guardParameters) =>
+    TestBed.runInInjectionContext(() => adminGuard(...guardParameters));
 
   beforeEach(() => {
-    TestBed.configureTestingModule({
-      imports: [RouterTestingModule],
-      providers: [AdminGuard, provideAutoSpy(AuthorizedUserService)],
-    });
-    guard = TestBed.inject(AdminGuard);
+    TestBed.configureTestingModule({});
   });
 
   it('should be created', () => {
-    expect(guard).toBeTruthy();
+    expect(executeGuard).toBeTruthy();
   });
 });

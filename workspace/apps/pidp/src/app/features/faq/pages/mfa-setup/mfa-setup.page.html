@@ -3,6 +3,45 @@
     >BCProvider Active Directory Multi-factor Authentication (MFA)
     Setup</ui-page-header
   >
+  <ui-page-section>
+    <p>
+      If you are reading this document, it is assumed you have successfully
+      logged into OneHealthID services and created a BCProvider. If you have not
+      yet created a BCProvider, please do so first by accessing the BCProvider
+      account under
+      <a uiAnchor scheme="url" href="/portal#access"> Access to Systems</a>.
+    </p>
+    <p>
+      After you have created your BCProvider, you have to link it to your phone
+      using Multi-factor authentication.
+    </p>
+    <p>
+      If you have questions during or after the tutorial, please contact us at
+      <a uiAnchor scheme="mailto" [attr.href]="providerIdentitySupport"></a>.
+    </p>
+    <p>
+      The BCprovider uses Multi-Factor Authentication (MFA) is an additional
+      layer of security that helps protect your online accounts and sensitive
+      information. It enhances the traditional username and password login
+      process by requiring at least two or more forms of verification. This
+      guide aims to explain the significance of MFA and provide instructions on
+      how to set it up for the first time.
+    </p>
+    <ul>
+      <li>
+        MFA significantly reduces the risk of unauthorized access to your
+        accounts by adding an extra layer of verification.
+      </li>
+      <li>
+        Even if someone manages to obtain your password, they won't be able to
+        access your account without the second factor of authentication
+      </li>
+    </ul>
+    <p>
+      The first time you login to BChealthprovider.ca you may be asked to setup
+      MFA. If you are requested, please follow the steps below
+    </p></ui-page-section
+  >
 
   <ui-page-section>
     <ui-page-section-subheader
@@ -54,8 +93,14 @@
         <a
           uiAnchor
           href="https://www.microsoft.com/en-ca/security/mobile-authenticator-app"
-          >Microsoft Authenticator</a
-        >.
+          >Microsoft Authenticator App</a
+        >
+        or Google Authenticator App.
+      </li>
+      <li class="mfa-section">
+        If you are using the Google Authenticator App, do not click Next. Click
+        "I want to use a different authenticator app". Go to Appendix A in this
+        document and skip steps 7-15.
         <picture class="image">
           <source
             type="image/webp"
@@ -101,6 +146,8 @@
             loading="lazy"
             aria-label="mfa click next" />
         </picture>
+        <u>Do not take a picture with your photo app</u>, use the authenticator
+        app.
       </li>
       <li class="mfa-section">
         On your mobile device, launch the Microsoft Authenticator app.
@@ -153,8 +200,9 @@
         </picture>
       </li>
       <li class="mfa-section">
-        Scan the QR code that is presented to you with Authenticator on your
-        mobile device.
+        Scan the QR code that is presented to you with your mobile device. Do
+        not scan using your photo application. You must scan the QR code in the
+        Microsoft Authenticator app.
         <picture class="image">
           <source
             type="image/webp"
@@ -222,24 +270,23 @@
               aria-label="mfa enter code and url and click finish" />
           </picture>
         </p>
-        <p class="mfa-section">
-          Whether you scanned the QR code or had to enter the code and URL
-          manually, if successful, your account should now be listed in the
-          Authenticator app.
-          <picture class="image">
-            <source
-              type="image/webp"
-              srcset="/assets/images/mfa-setup/image13.webp" />
-            <source
-              type="image/jpg"
-              srcset="/assets/images/mfa-setup/image13.jpg" />
-            <img
-              alt="Your account listed in the Microsoft Authenticator app screenshot"
-              title="Your account listed in the Microsoft Authenticator app screenshot"
-              loading="lazy"
-              aria-label="mfa account added to authenticator successfully" />
-          </picture>
-        </p>
+      </li>
+      <li class="mfa-section">
+        If successful, your account should now be listed in the Authenticator
+        app.
+        <picture class="image">
+          <source
+            type="image/webp"
+            srcset="/assets/images/mfa-setup/image13.webp" />
+          <source
+            type="image/jpg"
+            srcset="/assets/images/mfa-setup/image13.jpg" />
+          <img
+            alt="Your account is listed in the Microsoft Authenticator app screenshot"
+            title="Your account is listed in the Microsoft Authenticator app screenshot"
+            loading="lazy"
+            aria-label="mfa account added to authenticator successfully" />
+        </picture>
       </li>
       <li class="mfa-section">
         Now the Authenticator app is configured, you can go back to the
@@ -311,6 +358,59 @@
       <li class="mfa-section">
         You should now be logged into BCHealthProvider.
       </li>
+    </ol>
+  </ui-page-section>
+  <ui-page-section>
+    <p>
+      If you have questions during or after the tutorial, please contact us at
+      <a uiAnchor scheme="mailto" [attr.href]="providerIdentitySupport"></a>.
+    </p>
+  </ui-page-section>
+  <ui-page-section>
+    <h2><strong>Appendix A</strong></h2>
+  </ui-page-section>
+  <ui-page-section>
+    <ui-page-section-subheader
+      icon="question_answer"
+      heading="Setting up Google Authenticator on your smartphone">
+    </ui-page-section-subheader>
+  </ui-page-section>
+  <ui-page-section>
+    <ol>
+      <li>
+        Download the Google Authenticator app from the Play Store or App Store
+        and click Install.
+        <picture class="image">
+          <source
+            type="image/webp"
+            srcset="/assets/images/mfa-setup/image18.webp" />
+          <source
+            type="image/jpg"
+            srcset="/assets/images/mfa-setup/image18.jpg" />
+          <img
+            alt="Google authenticator app in store"
+            title="Google authenticator app in store"
+            loading="lazy"
+            aria-label="download google authenticator app" />
+        </picture>
+      </li>
+      <li>Install the Google Authenticator app on your smartphone.</li>
+      <li>
+        Launch the app and select Scan a QR code in the dialog window. To scan,
+        the app needs access to your smartphone's camera.
+      </li>
+      <li>
+        You will then be presented with a QR code and a 32-digit code (also
+        known as a security key). To proceed, tap the "+" icon in the bottom
+        right of the Google Authenticator app and select "Scan a QR code" to use
+        with your mobile camera. Alternatively, you can manually enter your 2FA
+        codes by choosing to "Enter a setup key".
+      </li>
+      <li>
+        With your 2-factor authentication now successfully set up, you can begin
+        to use your Google Authenticator codes.
+      </li>
+      <li>Return to step 15 in the guide.</li>
     </ol>
   </ui-page-section>
 
