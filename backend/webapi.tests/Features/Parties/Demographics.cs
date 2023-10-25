@@ -79,7 +79,7 @@ public class DemographicsTests : InMemoryDbTest
     }
 
     [Fact]
-    public async void UpdatePartyDemographics_ExistingParty_EmptyOrWhitespacePreferredNames()
+    public async void UpdatePartyDemographics_ExistingParty_TrimPreferredNames()
     {
         var party = this.TestDb.HasAParty(party =>
         {
@@ -94,18 +94,18 @@ public class DemographicsTests : InMemoryDbTest
         var command = new Command
         {
             Id = party.Id,
-            PreferredFirstName = "  ",
-            PreferredMiddleName = "",
-            PreferredLastName = "  "
+            PreferredFirstName = " Jean Charles  ",
+            PreferredMiddleName = " jr.  ",
+            PreferredLastName = " Downey "
         };
         var handler = this.MockDependenciesFor<CommandHandler>();
 
         await handler.HandleAsync(command);
 
         var updatedParty = this.TestDb.Parties.Single(p => p.Id == party.Id);
-        Assert.Null(updatedParty.PreferredFirstName);
-        Assert.Null(updatedParty.PreferredMiddleName);
-        Assert.Null(updatedParty.PreferredLastName);
+        Assert.Equal("Jean Charles", updatedParty.PreferredFirstName);
+        Assert.Equal("jr.", updatedParty.PreferredMiddleName);
+        Assert.Equal("Downey", updatedParty.PreferredLastName);
 
         Assert.Single(this.PublishedEvents.OfType<PartyEmailUpdated>());
         var emailEvent = this.PublishedEvents.OfType<PartyEmailUpdated>().Single();
