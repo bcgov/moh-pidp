@@ -111,7 +111,7 @@ spec:
           #   failureThreshold: 30
           readinessProbe:
             httpGet:
-              path: /
+              path: /health/liveness
               port: http
             timeoutSeconds: 1
             periodSeconds: 10
