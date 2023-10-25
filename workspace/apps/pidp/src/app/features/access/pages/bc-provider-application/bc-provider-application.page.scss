@@ -144,7 +144,7 @@ ol {
             width: 100%;
           }
 
-          & button.mat-flat-button {
+          & button.mat-mdc-unelevated-button {
             width: fit-content;
           }
         }
@@ -188,7 +188,7 @@ ol {
           & .card-footer {
             width: auto;
             align-self: flex-end;
-            & button.mat-flat-button {
+            & button.mat-mdc-unelevated-button {
               width: fit-content;
             }
             & button.icon-button {
@@ -333,7 +333,7 @@ ol {
           & label {
             font-weight: bold;
           }
-          & .mat-form-field {
+          & .mat-mdc-form-field {
             margin-bottom: 0;
           }
         }
@@ -366,6 +366,8 @@ ol {
   }
 }
 .viewport-all.dialog-box {
+  padding: 24px;
+
   & .dialog-header {
     display: flex;
     justify-content: flex-end;

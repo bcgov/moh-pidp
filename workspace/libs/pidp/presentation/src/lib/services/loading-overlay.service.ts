@@ -43,7 +43,7 @@ interface PidpLoadingDialogData {
  */
 @Component({
   // Putting template and css inline for simplicity.
-  template: `<div>
+  template: `<div class="loader-container">
     <div class="spinner">
       <mat-spinner color="primary" mode="indeterminate"></mat-spinner>
     </div>
@@ -53,6 +53,9 @@ interface PidpLoadingDialogData {
   </div>`,
   styles: [
     `
+      .loader-container {
+        padding: 24px;
+      }
       .spinner {
         display: flex;
         justify-content: center;
@@ -66,6 +69,6 @@ interface PidpLoadingDialogData {
 export class PidpLoadingDialogComponent {
   public constructor(
     public dialogRef: MatDialogRef<PidpLoadingDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: PidpLoadingDialogData
+    @Inject(MAT_DIALOG_DATA) public data: PidpLoadingDialogData,
   ) {}
 }

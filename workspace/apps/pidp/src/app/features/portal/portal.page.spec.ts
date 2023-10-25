@@ -26,6 +26,7 @@ import { ToastService } from '@app/core/services/toast.service';
 
 import { BcProviderEditResource } from '../access/pages/bc-provider-edit/bc-provider-edit-resource.service';
 import { BcProviderEditInitialStateModel } from '../access/pages/bc-provider-edit/bc-provider-edit.page';
+import { AuthorizedUserService } from '../auth/services/authorized-user.service';
 import { EndorsementsResource } from '../organization-info/pages/endorsements/endorsements-resource.service';
 import { AlertCode } from './enums/alert-code.enum';
 import { StatusCode } from './enums/status-code.enum';
@@ -88,6 +89,7 @@ describe('PortalPage', () => {
         provideAutoSpy(EndorsementsResource),
         provideAutoSpy(KeycloakService),
         provideAutoSpy(ToastService),
+        provideAutoSpy(AuthorizedUserService),
       ],
     });
 

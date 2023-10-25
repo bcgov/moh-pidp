@@ -1,14 +1,14 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { SetDashboardTitleGuard } from '@pidp/presentation';
+import { setDashboardTitleGuard } from '@pidp/presentation';
 
 import { BcProviderEditPage } from './bc-provider-edit.page';
 
 const routes: Routes = [
   {
     path: '',
-    canActivate: [SetDashboardTitleGuard],
+    canActivate: [setDashboardTitleGuard],
     component: BcProviderEditPage,
     data: {
       setDashboardTitleGuard: {

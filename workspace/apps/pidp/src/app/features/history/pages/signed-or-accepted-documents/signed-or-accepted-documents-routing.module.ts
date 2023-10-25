@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { SetDashboardTitleGuard } from '@pidp/presentation';
+import { setDashboardTitleGuard } from '@pidp/presentation';
 
 import { SignedOrAcceptedDocumentsPage } from './signed-or-accepted-documents.page';
 
@@ -9,7 +9,7 @@ const routes: Routes = [
   {
     path: '',
     component: SignedOrAcceptedDocumentsPage,
-    canActivate: [SetDashboardTitleGuard],
+    canActivate: [setDashboardTitleGuard],
     data: {
       title: 'OneHealthID Service',
       routes: {

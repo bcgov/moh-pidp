@@ -11,7 +11,9 @@ import { Role } from '@app/shared/enums/roles.enum';
 
 import { BcProviderEditResource } from '../access/pages/bc-provider-edit/bc-provider-edit-resource.service';
 import { BcProviderEditInitialStateModel } from '../access/pages/bc-provider-edit/bc-provider-edit.page';
+import { IdentityProvider } from '../auth/enums/identity-provider.enum';
 import { AuthService } from '../auth/services/auth.service';
+import { AuthorizedUserService } from '../auth/services/authorized-user.service';
 import { EndorsementsResource } from '../organization-info/pages/endorsements/endorsements-resource.service';
 import { ProfileStatusAlert } from './models/profile-status-alert.model';
 import { ProfileStatus } from './models/profile-status.model';
@@ -84,6 +86,9 @@ export class PortalPage implements OnInit {
   public hasCpn: boolean | undefined;
   public collegeLicenceDeclared: boolean | undefined;
   public isComplete: boolean | undefined;
+  public IdentityProvider = IdentityProvider;
+  public identityProvider$: Observable<IdentityProvider>;
+  public pasAllowedProviders: IdentityProvider[];
 
   public constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
@@ -95,6 +100,7 @@ export class PortalPage implements OnInit {
     private endorsementsResource: EndorsementsResource,
     private activatedRoute: ActivatedRoute,
     private authService: AuthService,
+    private authorizedUserService: AuthorizedUserService,
     private toastService: ToastService
   ) {
     this.state$ = this.portalService.state$;
@@ -107,6 +113,11 @@ export class PortalPage implements OnInit {
     this.bcProviderTutorial = bcProviderTutorialLink;
     this.lastSelectedIndex = 6;
     this.selectedIndex = -1;
+    this.identityProvider$ = this.authorizedUserService.identityProvider$;
+    this.pasAllowedProviders = [
+      IdentityProvider.BCSC,
+      IdentityProvider.BC_PROVIDER,
+    ];
   }
 
   public navigateTo(): void {

@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { SetDashboardTitleGuard } from '@pidp/presentation';
+import { setDashboardTitleGuard } from '@pidp/presentation';
 
 import { MsTeamsPrivacyOfficerPage } from './ms-teams-privacy-officer.page';
 import { MsTeamsPrivacyOfficerResolver } from './ms-teams-privacy-officer.resolver';
@@ -13,7 +13,7 @@ const routes: Routes = [
     resolve: {
       msTeamsPrivacyOfficerStatusCode: MsTeamsPrivacyOfficerResolver,
     },
-    canActivate: [SetDashboardTitleGuard],
+    canActivate: [setDashboardTitleGuard],
     data: {
       setDashboardTitleGuard: {
         titleText: 'MS Teams Privacy Officer',

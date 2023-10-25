@@ -15,13 +15,6 @@
 // Forms
 //
 
-.mat-checkbox-layout,
-.mat-slide-toggle-content {
-  // Force checkbox and slide labels to line wrap if required
-  // instead of overflowing their container
-  white-space: normal !important;
-}
-
 .mat-drawer-container {
   color: theme-palette(blue);
 }
@@ -35,7 +28,7 @@
   background-color: $bcgov-color-semantic-success;
 }
 
-.mat-step .mat-button-wrapper,
+/*TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version.*/
 .mat-step .mat-step-label {
   white-space: normal;
 }
@@ -59,4 +52,12 @@
   border-width: 0 5px 5px 0 !important;
   padding: 5px !important;
   margin-bottom: 10px;
+}
+
+//
+// Icons
+//
+
+.mat-icon {
+  overflow: visible !important;
 }

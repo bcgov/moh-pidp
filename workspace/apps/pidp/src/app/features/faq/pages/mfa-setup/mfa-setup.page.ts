@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
+import { APP_CONFIG, AppConfig } from '@app/app.config';
 import { UtilsService } from '@app/core/services/utils.service';
 
 @Component({
@@ -9,11 +10,16 @@ import { UtilsService } from '@app/core/services/utils.service';
   styleUrls: ['./mfa-setup.page.scss'],
 })
 export class MfaSetupPage implements OnInit {
+  public providerIdentitySupport: string;
+
   public constructor(
+    @Inject(APP_CONFIG) private config: AppConfig,
     private route: ActivatedRoute,
     private router: Router,
     private utilsService: UtilsService
-  ) {}
+  ) {
+    this.providerIdentitySupport = this.config.emails.providerIdentitySupport;
+  }
 
   public onBack(): void {
     this.navigateToRoot();
