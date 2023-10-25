@@ -56,14 +56,14 @@ public class Party : BaseAuditable
     /// The preferred first name if provided otherwise the first name.
     /// </summary>
     [Projectable]
-    public string DisplayFirstName => !string.IsNullOrWhiteSpace(this.PreferredFirstName) ? this.PreferredFirstName : this.FirstName;
+    public string DisplayFirstName => this.PreferredFirstName ?? this.FirstName;
 
     /// <summary>
     /// Last name to display.
     /// The preferred last name if provided otherwise the last name.
     /// </summary>
     [Projectable]
-    public string DisplayLastName => !string.IsNullOrWhiteSpace(this.PreferredLastName) ? this.PreferredLastName : this.LastName;
+    public string DisplayLastName => this.PreferredLastName ?? this.LastName;
 
     /// <summary>
     /// The full name to display.
