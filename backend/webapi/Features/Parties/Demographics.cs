@@ -48,6 +48,14 @@ public class Demographics
             this.RuleFor(x => x.Id).GreaterThan(0);
             this.RuleFor(x => x.Email).NotEmpty().EmailAddress(); // TODO Custom email validation?
             this.RuleFor(x => x.Phone).NotEmpty();
+            this.RuleFor(x => x.PreferredFirstName)
+                .NotEmpty()
+                .When(x => !string.IsNullOrWhiteSpace(x.PreferredLastName))
+                .WithMessage("The preferred first name is required when the preferred last name has been entered");
+            this.RuleFor(x => x.PreferredLastName)
+                .NotEmpty()
+                .When(x => !string.IsNullOrWhiteSpace(x.PreferredFirstName))
+                .WithMessage("The preferred last name is required when the preferred first name has been entered");
         }
     }
 
