@@ -46,7 +46,7 @@ spec:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       volumes:
         - name: frontend-config
-          configMap: 
+          configMap:
             name: {{ include "frontend.fullname" . }}
       containers:
         - name: {{ .Chart.Name }}
@@ -66,15 +66,15 @@ spec:
             periodSeconds: 10
             successThreshold: 1
             failureThreshold: 3
-            initialDelaySeconds: 30 
-          readinessProbe:
-            httpGet:
-              path: /
-              port: http
-            timeoutSeconds: 1
-            periodSeconds: 10
-            successThreshold: 1
-            failureThreshold: 3              
+            initialDelaySeconds: 30
+          # readinessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: http
+          #   timeoutSeconds: 1
+          #   periodSeconds: 10
+          #   successThreshold: 1
+          #   failureThreshold: 3
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           volumeMounts:
