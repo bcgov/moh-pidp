@@ -80,7 +80,7 @@ public class MSTeamsClinicMemberTests : InMemoryDbTest
         {
             party.FirstName = "partyfirst";
             party.LastName = "partylast";
-            party.Birthdate = LocalDate.FromDateTime(DateTime.Today);
+            party.Birthdate = LocalDate.FromDateTime(DateTime.Today).PlusYears(-20);
             party.Email = "partyemail@testemail.com";
             party.Phone = "5555545555";
         });
@@ -116,7 +116,10 @@ public class MSTeamsClinicMemberTests : InMemoryDbTest
         var capturedEmails = new List<Email>();
         A.CallTo(() => emailService.SendAsync(An<Email>._))
             .Invokes(i => capturedEmails.Add(i.GetArgument<Email>(0)!));
-        var handler = this.MockDependenciesFor<CommandHandler>(emailService);
+        var testClock = A.Fake<IClock>();
+        A.CallTo(() => testClock.GetCurrentInstant()).Returns(Instant.FromUnixTimeSeconds(123456));
+
+        var handler = this.MockDependenciesFor<CommandHandler>(emailService, testClock);
 
         var result = await handler.HandleAsync(new Command { PartyId = party.Id, ClinicId = clinic.Id });
 
@@ -133,7 +136,7 @@ public class MSTeamsClinicMemberTests : InMemoryDbTest
         Assert.Contains(party.FullName, privacyOfficerEmail.Body);
 
         var enrolmentEmailBody = capturedEmails.Single(email => email != privacyOfficerEmail).Body;
-        var expectedEnrolmentDate = SystemClock.Instance.GetCurrentInstant().InZone(DateTimeZoneProviders.Tzdb.GetZoneOrNull("America/Vancouver")!).Date;
+        var expectedEnrolmentDate = testClock.GetCurrentInstant().InZone(DateTimeZoneProviders.Tzdb.GetZoneOrNull("America/Vancouver")!).Date;
         Assert.Contains(expectedEnrolmentDate.ToString(), enrolmentEmailBody);
         Assert.Contains(privacyOfficer.FullName, enrolmentEmailBody);
         Assert.Contains(party.FirstName, enrolmentEmailBody);

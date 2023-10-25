@@ -88,6 +88,7 @@ export class PortalPage implements OnInit {
   public isComplete: boolean | undefined;
   public IdentityProvider = IdentityProvider;
   public identityProvider$: Observable<IdentityProvider>;
+  public pasAllowedProviders: IdentityProvider[];
 
   public constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
@@ -113,6 +114,10 @@ export class PortalPage implements OnInit {
     this.lastSelectedIndex = 6;
     this.selectedIndex = -1;
     this.identityProvider$ = this.authorizedUserService.identityProvider$;
+    this.pasAllowedProviders = [
+      IdentityProvider.BCSC,
+      IdentityProvider.BC_PROVIDER,
+    ];
   }
 
   public navigateTo(): void {

@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
 
 using Pidp.Data;
+using Pidp.Extensions;
 using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.HttpClients.BCProvider;
 using Pidp.Infrastructure.HttpClients.Keycloak;
@@ -49,12 +50,15 @@ public class Demographics
             this.RuleFor(x => x.Email).NotEmpty().EmailAddress(); // TODO Custom email validation?
             this.RuleFor(x => x.Phone).NotEmpty();
             this.RuleFor(x => x.PreferredFirstName)
+                .NotWhiteSpace()
                 .NotEmpty()
-                .When(x => !string.IsNullOrWhiteSpace(x.PreferredLastName))
+                .When(x => !string.IsNullOrWhiteSpace(x.PreferredLastName), ApplyConditionTo.CurrentValidator)
                 .WithMessage("The preferred first name is required when the preferred last name has been entered");
+            this.RuleFor(x => x.PreferredMiddleName).NotWhiteSpace();
             this.RuleFor(x => x.PreferredLastName)
+                .NotWhiteSpace()
                 .NotEmpty()
-                .When(x => !string.IsNullOrWhiteSpace(x.PreferredFirstName))
+                .When(x => !string.IsNullOrWhiteSpace(x.PreferredFirstName), ApplyConditionTo.CurrentValidator)
                 .WithMessage("The preferred last name is required when the preferred first name has been entered");
         }
     }
@@ -97,9 +101,9 @@ public class Demographics
                 party.DomainEvents.Add(new PartyEmailUpdated(party.Id, party.PrimaryUserId, command.Email!));
             }
 
-            party.PreferredFirstName = string.IsNullOrWhiteSpace(command.PreferredFirstName) ? null : command.PreferredFirstName.Trim();
-            party.PreferredMiddleName = string.IsNullOrWhiteSpace(command.PreferredMiddleName) ? null : command.PreferredMiddleName.Trim();
-            party.PreferredLastName = string.IsNullOrWhiteSpace(command.PreferredLastName) ? null : command.PreferredLastName.Trim();
+            party.PreferredFirstName = command.PreferredFirstName?.Trim();
+            party.PreferredMiddleName = command.PreferredMiddleName?.Trim();
+            party.PreferredLastName = command.PreferredLastName?.Trim();
             party.Email = command.Email;
             party.Phone = command.Phone;
 
