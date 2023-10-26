@@ -12,10 +12,12 @@ export class TrimDirective {
   ) {}
 
   @HostListener('blur') public onBlur(): void {
+    let value: string | null = this.el.nativeElement.value.trim();
     if (this.ngControl?.control) {
-      this.ngControl.control.setValue(this.el.nativeElement.value.trim());
+      value = value === '' ? null : value;
+      this.ngControl.control.setValue(value);
     } else {
-      this.el.nativeElement.value = this.el.nativeElement.value.trim();
+      this.el.nativeElement.value = value;
     }
   }
 }
