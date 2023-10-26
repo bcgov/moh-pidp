@@ -1,5 +1,6 @@
 namespace Pidp.Features.Discovery;
 
+using DomainResults.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -21,7 +22,7 @@ public class DiscoveryController : PidpControllerBase
     {
         var result = await handler.HandleAsync(new Discovery.Query { User = this.User });
 
-        if (result.CheckCookie)
+        if (result.NewBCProvider)
         {
             var credentialLinkTicket = await this.AuthorizationService.VerifyTokenAsync<Cookies.CredentialLinkTicket.Values>(this.Request.Cookies.GetCredentialLinkTicket());
             if (credentialLinkTicket != null)
@@ -36,4 +37,11 @@ public class DiscoveryController : PidpControllerBase
 
         return result;
     }
+
+    [HttpGet("{partyId}/destination")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<ActionResult<Destination.Model>> GetDestination([FromServices] IQueryHandler<Destination.Query, Destination.Model> handler,
+                                                                      [FromRoute] Destination.Query query)
+        => await this.AuthorizePartyBeforeHandleAsync(query.PartyId, handler, query.WithIdentityProvider(this.User.GetIdentityProvider()))
+            .ToActionResultOfT();
 }

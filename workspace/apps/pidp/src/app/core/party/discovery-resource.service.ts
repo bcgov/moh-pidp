@@ -8,37 +8,37 @@ import { AuthorizedUserService } from '@app/features/auth/services/authorized-us
 
 import { PartyCreate } from './party-create.model';
 
-export enum Destination {
-  NEW_USER = 1,
-  NEW_BC_PROVIDER,
-  DEMOGRAPHICS,
-  USER_ACCESS_AGREEMENT,
-  PORTAL,
-}
-
 export interface DiscoveryResult {
   partyId?: number;
-  destination: Destination;
+  newBCProvider: boolean;
+}
+
+export enum Destination {
+  DEMOGRAPHICS = 1,
+  USER_ACCESS_AGREEMENT,
+  LICENCE_DECLARATION,
+  PORTAL,
 }
 
 @Injectable({
   providedIn: 'root',
 })
-export class PartyResource {
+export class DiscoveryResource {
   public constructor(
     private apiResource: ApiHttpClient,
-    private authorizedUserService: AuthorizedUserService
+    private authorizedUserService: AuthorizedUserService,
   ) {}
 
   /**
    * @description
-   * Get the party's ID based on the access token, as well as their destination / progress through the initial wizard.
-   * Creates a party if one does not already exist.
+   * Get the party's ID based on the access token user ID,
+   * creates a party if one does not already exist,
+   * or discovers that the User is a new BC Provider (and so cannot create a Party).
    */
   public discover(): Observable<DiscoveryResult> {
     return this.apiResource.post<DiscoveryResult>('discovery', null).pipe(
       switchMap((result) => {
-        return result.destination !== Destination.NEW_USER
+        return result.partyId || result.newBCProvider
           ? of(result)
           : this.authorizedUserService.user$.pipe(
               switchMap((user: User) => {
@@ -47,13 +47,19 @@ export class PartyResource {
                   : throwError(
                       () =>
                         new Error(
-                          'Not authenticated or access token could not be parsed'
-                        )
+                          'Not authenticated or access token could not be parsed',
+                        ),
                     );
-              })
+              }),
             );
-      })
+      }),
     );
+  }
+
+  public getDestination(partyId: number): Observable<Destination> {
+    return this.apiResource
+      .get<{ destination: Destination }>(`discovery/${partyId}/destination`)
+      .pipe(map((result) => result.destination));
   }
 
   /**
@@ -65,8 +71,8 @@ export class PartyResource {
     return this.apiResource.post<number>('parties', partyCreate).pipe(
       map((partyId) => ({
         partyId: partyId,
-        destination: Destination.DEMOGRAPHICS,
-      }))
+        newBCProvider: false,
+      })),
     );
   }
 }

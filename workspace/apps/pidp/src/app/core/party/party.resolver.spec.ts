@@ -11,13 +11,13 @@ import { ShellRoutes } from '@app/features/shell/shell.routes';
 
 import { DocumentService } from '../services/document.service';
 import { LoggerService } from '../services/logger.service';
-import { PartyResource } from './party-resource.service';
+import { DiscoveryResource } from './discovery-resource.service';
 import { PartyResolver } from './party.resolver';
 import { PartyService } from './party.service';
 
 describe('PartyResolver', () => {
   let resolver: PartyResolver;
-  let partyResourceSpy: Spy<PartyResource>;
+  let partyResourceSpy: Spy<DiscoveryResource>;
   let partyServiceSpy: Spy<PartyService>;
   let router: Router;
 
@@ -37,7 +37,7 @@ describe('PartyResolver', () => {
             settersToSpyOn: ['partyId'],
           }),
         },
-        provideAutoSpy(PartyResource),
+        provideAutoSpy(DiscoveryResource),
         provideAutoSpy(LoggerService),
         provideAutoSpy(DocumentService),
         provideAutoSpy(Router),
@@ -46,7 +46,7 @@ describe('PartyResolver', () => {
 
     router = TestBed.inject(Router);
     resolver = TestBed.inject(PartyResolver);
-    partyResourceSpy = TestBed.inject<any>(PartyResource);
+    partyResourceSpy = TestBed.inject<any>(DiscoveryResource);
     partyServiceSpy = TestBed.inject<any>(PartyService);
   });
 
@@ -86,7 +86,7 @@ describe('PartyResolver', () => {
         then('response will provide the party ID', () => {
           expect(partyResourceSpy.discover).toHaveBeenCalledTimes(1);
           expect(router.navigateByUrl).toHaveBeenCalledWith(
-            ShellRoutes.SUPPORT_ERROR_PAGE
+            ShellRoutes.SUPPORT_ERROR_PAGE,
           );
           expect(actualResult).toBe(null);
         });

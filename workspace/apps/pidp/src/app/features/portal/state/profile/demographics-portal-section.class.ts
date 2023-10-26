@@ -22,7 +22,7 @@ export class DemographicsPortalSection implements IPortalSection {
 
   public constructor(
     private profileStatus: ProfileStatus,
-    private router: Router
+    private router: Router,
   ) {
     this.key = 'demographics';
     this.heading = 'Personal Information';
@@ -31,7 +31,7 @@ export class DemographicsPortalSection implements IPortalSection {
 
   public get hint(): string {
     return [StatusCode.ERROR, StatusCode.COMPLETED].includes(
-      this.getStatusCode()
+      this.getStatusCode(),
     )
       ? ''
       : '1 minute to complete';
@@ -91,6 +91,7 @@ export class DemographicsPortalSection implements IPortalSection {
   }
 
   public performAction(): void | Observable<void> {
+    console.log(ShellRoutes.routePath(this.action.route));
     this.router.navigate([ShellRoutes.routePath(this.action.route)]);
   }
 

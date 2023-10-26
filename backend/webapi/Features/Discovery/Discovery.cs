@@ -9,7 +9,6 @@ using Pidp.Extensions;
 using Pidp.Models;
 using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.HttpClients.Plr;
-using Pidp.Models.Lookups;
 using Pidp.Models.DomainEvents;
 
 public class Discovery
@@ -22,20 +21,8 @@ public class Discovery
 
     public class Model
     {
-        public enum DestinationCode
-        {
-            NewUser = 1,
-            NewBCProvider,
-            Demographics,
-            UserAccessAgreement,
-            Portal,
-        }
-
         public int? PartyId { get; set; }
-        public DestinationCode Destination { get; set; }
-
-        [JsonIgnore]
-        public bool CheckCookie => this.Destination is DestinationCode.NewBCProvider;
+        public bool NewBCProvider { get; set; }
     }
 
     public class QueryHandler : IQueryHandler<Query, Model>
@@ -59,12 +46,10 @@ public class Discovery
                     || (credential.IdentityProvider == query.User.GetIdentityProvider()
                         && credential.IdpId!.ToLower() == idpId))
 #pragma warning restore CA1304
-                .Select(credential => new DiscoveryData
+                .Select(credential => new
                 {
                     Credential = credential,
-                    DemographicsComplete = credential.Party!.Email != null && credential.Party.Phone != null,
-                    UaaAccepted = credential.Party.AccessRequests.Any(request => request.AccessTypeCode == AccessTypeCode.UserAccessAgreement),
-                    CheckPlr = credential.Party.Cpn == null
+                    CheckPlr = credential.Party!.Cpn == null
                         && credential.Party.Birthdate != null
                         && credential.Party.LicenceDeclaration!.LicenceNumber != null
                         && credential.Party.LicenceDeclaration!.CollegeCode != null
@@ -75,35 +60,28 @@ public class Discovery
             {
                 return new Model
                 {
-                    Destination = query.User.GetIdentityProvider() == IdentityProviders.BCProvider
-                        ? Model.DestinationCode.NewBCProvider
-                        : Model.DestinationCode.NewUser
+                    NewBCProvider = query.User.GetIdentityProvider() == IdentityProviders.BCProvider
                 };
             }
 
-            await this.HandleUpdatesAsync(data, query.User);
+            await this.HandleUpdatesAsync(data.Credential, data.CheckPlr, query.User);
 
             return new Model
             {
-                PartyId = data.Credential.PartyId,
-                Destination = !data.DemographicsComplete
-                    ? Model.DestinationCode.Demographics
-                    : data.UaaAccepted
-                        ? Model.DestinationCode.Portal
-                        : Model.DestinationCode.UserAccessAgreement
+                PartyId = data.Credential.PartyId
             };
         }
 
-        private async Task HandleUpdatesAsync(DiscoveryData data, ClaimsPrincipal user)
+        private async Task HandleUpdatesAsync(Credential credential, bool checkPlr, ClaimsPrincipal user)
         {
             var saveChanges = false;
 
-            if (data.CheckPlr)
+            if (checkPlr)
             {
                 var party = await this.context.Parties
                     .Include(party => party.Credentials)
                     .Include(party => party.LicenceDeclaration)
-                    .SingleAsync(party => party.Id == data.Credential.PartyId);
+                    .SingleAsync(party => party.Id == credential.PartyId);
 
                 var cpn = await this.client.FindCpnAsync(party.LicenceDeclaration!.CollegeCode!.Value, party.LicenceDeclaration.LicenceNumber!, party.Birthdate!.Value);
                 if (!string.IsNullOrWhiteSpace(cpn))
@@ -116,20 +94,20 @@ public class Discovery
 
             // BC Provider Credentials are created in our app without UserIds (since the user has not logged into Keycloak yet).
             // Update them when we see them.
-            if (data.Credential.UserId == default)
+            if (credential.UserId == default)
             {
-                data.Credential.UserId = user.GetUserId();
+                credential.UserId = user.GetUserId();
                 saveChanges = true;
             }
 
             // This is to update old non-BCSC records we didn't originally capture the IDP info for.
             // One day, this should be removed entirely once all the records in the DB have IdentityProvider and IdpId (also, those properties can then be made non-nullable).
             // Additionally, we could then find the Credential using only IdentityProvider + IdpId.
-            if (data.Credential.IdentityProvider == null
-                || data.Credential.IdpId == null)
+            if (credential.IdentityProvider == null
+                || credential.IdpId == null)
             {
-                data.Credential.IdentityProvider ??= user.GetIdentityProvider();
-                data.Credential.IdpId ??= user.GetIdpId();
+                credential.IdentityProvider ??= user.GetIdentityProvider();
+                credential.IdpId ??= user.GetIdpId();
                 saveChanges = true;
             }
 
@@ -138,14 +116,5 @@ public class Discovery
                 await this.context.SaveChangesAsync();
             }
         }
-
-    }
-
-    public class DiscoveryData
-    {
-        public Credential Credential { get; set; } = new();
-        public bool DemographicsComplete { get; set; }
-        public bool UaaAccepted { get; set; }
-        public bool CheckPlr { get; set; }
     }
 }

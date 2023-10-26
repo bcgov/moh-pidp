@@ -2,7 +2,15 @@ import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { Component, Inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { BehaviorSubject, Observable, map, of, switchMap, tap } from 'rxjs';
+import {
+  BehaviorSubject,
+  EMPTY,
+  Observable,
+  map,
+  of,
+  switchMap,
+  tap,
+} from 'rxjs';
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';
 import { PartyService } from '@app/core/party/party.service';
@@ -15,6 +23,7 @@ import { IdentityProvider } from '../auth/enums/identity-provider.enum';
 import { AuthService } from '../auth/services/auth.service';
 import { AuthorizedUserService } from '../auth/services/authorized-user.service';
 import { EndorsementsResource } from '../organization-info/pages/endorsements/endorsements-resource.service';
+import { ProfileRoutes } from '../profile/profile.routes';
 import { ProfileStatusAlert } from './models/profile-status-alert.model';
 import { ProfileStatus } from './models/profile-status.model';
 import { PortalResource } from './portal-resource.service';
@@ -27,6 +36,7 @@ import {
 import { PortalService } from './portal.service';
 import { IPortalSection } from './state/portal-section.model';
 import { PortalState } from './state/portal-state.builder';
+import { Destination } from './state/profile/redirect-section.model';
 
 @Component({
   selector: 'app-portal',
@@ -169,9 +179,10 @@ export class PortalPage implements OnInit {
     );
   }
 
-  public getProfileStatus(partyId: number): Observable<ProfileStatus | null> {
-    return this.portalResource.getProfileStatus(partyId);
-  }
+  // public getProfileStatus(partyId: number): Observable<ProfileStatus | null> {
+  //   // return this.portalResource.getProfileStatus(partyId);
+  //   return of(null);
+  // }
 
   public onExpansionPanelToggle(expanded: boolean): void {
     this.portalService.updateIsPASExpanded(expanded);
@@ -183,6 +194,22 @@ export class PortalPage implements OnInit {
         switchMap(() =>
           this.portalResource.getProfileStatus(this.partyService.partyId)
         ),
+        switchMap((profileStatus: ProfileStatus | null) => {
+          let destination = profileStatus?.status.redirect?.destination;
+          if (destination === Destination.DEMOGRAPHICS) {
+            this.router.navigateByUrl(
+              ProfileRoutes.routePath(ProfileRoutes.PERSONAL_INFO)
+            );
+            return EMPTY;
+          } else if (destination === Destination.USER_ACCESS_AGREEMENT) {
+            this.router.navigateByUrl(
+              ProfileRoutes.routePath(ProfileRoutes.USER_ACCESS_AGREEMENT)
+            );
+            return EMPTY;
+          } else {
+            return of(profileStatus);
+          }
+        }),
         tap((profileStatus: ProfileStatus | null) => {
           this.portalService.updateState(profileStatus);
           this.alerts = this.portalService.alerts;
