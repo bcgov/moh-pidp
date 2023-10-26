@@ -1,8 +1,6 @@
 import { Section } from '../section.model';
 import { CollegeCertificationSection } from './college-certification-section.model';
 import { DashboardInfoSection } from './dashboard-info-section.model';
-import { DemographicsSection } from './demographic-section.model';
-import { RedirectSection } from './redirect-section.model';
 
 /**
  * @description
@@ -33,7 +31,7 @@ export type IProfileGroup = {
 export interface ProfileGroup extends IProfileGroup {
   redirect: RedirectSection;
   dashboardInfo: DashboardInfoSection;
-  demographics: DemographicsSection;
+  demographics: Section;
   collegeCertification: CollegeCertificationSection;
   userAccessAgreement: Section;
 }

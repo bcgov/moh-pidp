@@ -61,7 +61,7 @@ public class SAEforms
                     AlreadyEnroled = party.AccessRequests.Any(request => request.AccessTypeCode == AccessTypeCode.SAEforms),
                     UserId = party.PrimaryUserId,
                     party.Email,
-                    party.FirstName,
+                    party.DisplayFirstName,
                     party.Cpn,
                 })
                 .SingleAsync();
@@ -90,7 +90,7 @@ public class SAEforms
 
             await this.context.SaveChangesAsync();
 
-            await this.SendConfirmationEmailAsync(dto.Email, dto.FirstName);
+            await this.SendConfirmationEmailAsync(dto.Email, dto.DisplayFirstName);
 
             return DomainResult.Success();
         }
