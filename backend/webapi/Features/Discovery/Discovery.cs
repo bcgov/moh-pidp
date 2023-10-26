@@ -7,9 +7,9 @@ using System.Text.Json.Serialization;
 using Pidp.Data;
 using Pidp.Extensions;
 using Pidp.Models;
+using Pidp.Models.DomainEvents;
 using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.HttpClients.Plr;
-using Pidp.Models.DomainEvents;
 
 public class Discovery
 {
