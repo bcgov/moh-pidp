@@ -12,7 +12,7 @@ import { LookupResource } from './lookup-resource.service';
 import { LookupService } from './lookup.service';
 import { LookupConfig, lookupConfigKeys } from './lookup.types';
 
-describe('ConfigService', () => {
+describe('LookupService', () => {
   let lookupService: LookupService;
   let lookupResourceSpy: Spy<LookupResource>;
   let mockLookupConfig: LookupConfig;
@@ -35,7 +35,7 @@ describe('ConfigService', () => {
   describe('METHOD load', () => {
     given('the lookups have not been requested', () => {
       lookupConfigKeys.forEach((key) =>
-        expect(lookupService[key].length).toEqual(0)
+        expect(lookupService[key].length).toEqual(0),
       );
       lookupResourceSpy.getLookups.nextOneTimeWith(mockLookupConfig);
 
@@ -45,10 +45,10 @@ describe('ConfigService', () => {
         then('they should be loaded through an HTTP request', () => {
           expect(lookupResourceSpy.getLookups).toHaveBeenCalledTimes(1);
           lookups$.subscribe((lookups) =>
-            expect(lookups).toEqual(mockLookupConfig)
+            expect(lookups).toEqual(mockLookupConfig),
           );
           lookupConfigKeys.forEach((key) =>
-            expect(lookupService[key].length).toBeGreaterThan(1)
+            expect(lookupService[key].length).toBeGreaterThan(1),
           );
         });
       });
@@ -67,7 +67,7 @@ describe('ConfigService', () => {
         then('they should be loaded using the service', () => {
           expect(lookupResourceSpy.getLookups).toHaveBeenCalledTimes(1);
           lookups$.subscribe((lookups) =>
-            expect(lookups).toEqual(mockLookupConfig)
+            expect(lookups).toEqual(mockLookupConfig),
           );
         });
       });
@@ -77,12 +77,12 @@ describe('ConfigService', () => {
   describe('METHOD colleges', () => {
     given('the lookup exists and is not sorted by code', () => {
       const collegesSortedByName = [...mockLookupConfig.colleges].sort(
-        SortUtils.sortByKey('name')
+        SortUtils.sortByKey('name'),
       );
       const mockLookupConfigSortedByName = { ...mockLookupConfig };
       mockLookupConfigSortedByName.colleges = collegesSortedByName;
       lookupResourceSpy.getLookups.nextOneTimeWith(
-        mockLookupConfigSortedByName
+        mockLookupConfigSortedByName,
       );
 
       when('the lookup is accessed', () => {

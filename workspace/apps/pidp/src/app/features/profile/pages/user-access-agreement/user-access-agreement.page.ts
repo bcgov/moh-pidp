@@ -2,16 +2,17 @@ import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { Observable, catchError, map, noop, of, tap } from 'rxjs';
+import { Observable, catchError, noop, of, tap } from 'rxjs';
 
 import { PartyService } from '@app/core/party/party.service';
 import { LoggerService } from '@app/core/services/logger.service';
 import { UtilsService } from '@app/core/services/utils.service';
 import { specialAuthorityEformsSupportEmail } from '@app/features/access/pages/sa-eforms/sa-eforms.constants';
-import { AccessTokenService } from '@app/features/auth/services/access-token.service';
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
 
 import { UserAccessAgreementResource } from './user-access-agreement-resource.service';
+import { DashboardStateModel, PidpStateName } from '@pidp/data-model';
+import { AppStateService } from '@pidp/presentation';
 
 @Component({
   selector: 'app-user-access-agreement',
@@ -20,11 +21,11 @@ import { UserAccessAgreementResource } from './user-access-agreement-resource.se
 })
 export class UserAccessAgreementPage implements OnInit {
   public title: string;
-  public username: Observable<string>;
   public completed: boolean | null;
   public accessRequestFailed: boolean;
   public specialAuthoritySupportEmail: string;
   public redirectUrl: string | null = null;
+  public dashboardState$: Observable<DashboardStateModel>;
 
   public constructor(
     private route: ActivatedRoute,
@@ -33,12 +34,12 @@ export class UserAccessAgreementPage implements OnInit {
     private resource: UserAccessAgreementResource,
     private logger: LoggerService,
     private utilsService: UtilsService,
-    accessTokenService: AccessTokenService
+    private stateService: AppStateService,
   ) {
     this.title = this.route.snapshot.data.title;
-    this.username = accessTokenService
-      .decodeToken()
-      .pipe(map((token) => token?.name ?? ''));
+    this.dashboardState$ = this.stateService.getNamedStateBroadcast(
+      PidpStateName.dashboard,
+    );
 
     const routeData = this.route.snapshot.data;
     this.completed = routeData.userAccessAgreementCode === StatusCode.COMPLETED;
@@ -85,7 +86,7 @@ export class UserAccessAgreementPage implements OnInit {
           }
           this.accessRequestFailed = true;
           return of(noop());
-        })
+        }),
       )
       .subscribe();
   }

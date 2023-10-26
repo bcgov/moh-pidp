@@ -3,7 +3,7 @@
     <div [class.col-12]="mode === 'column'" [class.col-6]="mode === 'columns'">
       <mat-form-field class="w-100">
         <mat-label>{{ control.label }}</mat-label>
-        <input matInput [formControlName]="control.name" />
+        <input matInput uiTrim [formControlName]="control.name" />
         <mat-error>Required</mat-error>
       </mat-form-field>
     </div>

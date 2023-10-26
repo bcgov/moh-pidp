@@ -47,12 +47,12 @@ public partial class ProfileStatus
         public class DashboardInfoSection : ProfileSection
         {
             internal override string SectionName => "dashboardInfo";
-            public string FullName { get; set; } = string.Empty;
+            public string DisplayFullName { get; set; } = string.Empty;
             public CollegeCode? CollegeCode { get; set; }
 
             protected override StatusCode Compute(ProfileData profile)
             {
-                this.FullName = $"{profile.FirstName} {profile.LastName}";
+                this.DisplayFullName = profile.DisplayFullName;
                 this.CollegeCode = profile.LicenceDeclaration?.CollegeCode;
 
                 return StatusCode.Complete; // Unused
@@ -146,20 +146,9 @@ public partial class ProfileStatus
         public class DemographicsSection : ProfileSection
         {
             internal override string SectionName => "demographics";
-            public string FirstName { get; set; } = string.Empty;
-            public string LastName { get; set; } = string.Empty;
-            public LocalDate? Birthdate { get; set; }
-            public string? Email { get; set; }
-            public string? Phone { get; set; }
 
             protected override StatusCode Compute(ProfileData profile)
             {
-                this.FirstName = profile.FirstName;
-                this.LastName = profile.LastName;
-                this.Birthdate = profile.Birthdate;
-                this.Email = profile.Email;
-                this.Phone = profile.Phone;
-
                 return profile.DemographicsComplete
                     ? StatusCode.Complete
                     : StatusCode.Incomplete;

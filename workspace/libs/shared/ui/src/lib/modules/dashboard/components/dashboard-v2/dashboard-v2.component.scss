@@ -100,6 +100,9 @@ h1 {
           padding: var(--sidenav-panel-content-padding);
           & .sidenav-header {
             margin-bottom: var(--sidenav-header-margin-bottom);
+            & .sidenav-name {
+              word-break: break-word;
+            }
           }
           & .sidenav-line {
             margin-bottom: var(--sidenav-line-margin-bottom);
