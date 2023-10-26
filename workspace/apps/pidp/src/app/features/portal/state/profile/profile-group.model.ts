@@ -18,7 +18,7 @@ export const profileSectionKeys = [
  * @description
  * Union of keys generated from the tuple.
  */
-export type ProfileSectionKey = typeof profileSectionKeys[number];
+export type ProfileSectionKey = (typeof profileSectionKeys)[number];
 
 /**
  * @description
@@ -29,7 +29,6 @@ export type IProfileGroup = {
 };
 
 export interface ProfileGroup extends IProfileGroup {
-  redirect: RedirectSection;
   dashboardInfo: DashboardInfoSection;
   demographics: Section;
   collegeCertification: CollegeCertificationSection;

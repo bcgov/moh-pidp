@@ -65,19 +65,19 @@ export class PortalPage implements OnInit {
 
   public Role = Role;
   public demographics$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
-    false
+    false,
   );
   public collegeLicence$: BehaviorSubject<boolean> =
     new BehaviorSubject<boolean>(false);
   public uaa$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   public bcProvider$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
-    false
+    false,
   );
   public endorsement$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
-    true
+    true,
   );
   public rostering$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
-    true
+    true,
   );
   public pasPanelExpanded$: BehaviorSubject<boolean>;
   public demographicsStatusCode: number | undefined;
@@ -111,7 +111,7 @@ export class PortalPage implements OnInit {
     private activatedRoute: ActivatedRoute,
     private authService: AuthService,
     private authorizedUserService: AuthorizedUserService,
-    private toastService: ToastService
+    private toastService: ToastService,
   ) {
     this.state$ = this.portalService.state$;
     this.pasPanelExpanded$ = this.portalService.pasPanelExpanded$;
@@ -175,14 +175,9 @@ export class PortalPage implements OnInit {
 
   public onCopy(): void {
     this.toastService.openSuccessToast(
-      'You have copied your BCProvider Username to clipboard.'
+      'You have copied your BCProvider Username to clipboard.',
     );
   }
-
-  // public getProfileStatus(partyId: number): Observable<ProfileStatus | null> {
-  //   // return this.portalResource.getProfileStatus(partyId);
-  //   return of(null);
-  // }
 
   public onExpansionPanelToggle(expanded: boolean): void {
     this.portalService.updateIsPASExpanded(expanded);
@@ -192,28 +187,12 @@ export class PortalPage implements OnInit {
     this.handleLandingActions$()
       .pipe(
         switchMap(() =>
-          this.portalResource.getProfileStatus(this.partyService.partyId)
+          this.portalResource.getProfileStatus(this.partyService.partyId),
         ),
-        switchMap((profileStatus: ProfileStatus | null) => {
-          let destination = profileStatus?.status.redirect?.destination;
-          if (destination === Destination.DEMOGRAPHICS) {
-            this.router.navigateByUrl(
-              ProfileRoutes.routePath(ProfileRoutes.PERSONAL_INFO)
-            );
-            return EMPTY;
-          } else if (destination === Destination.USER_ACCESS_AGREEMENT) {
-            this.router.navigateByUrl(
-              ProfileRoutes.routePath(ProfileRoutes.USER_ACCESS_AGREEMENT)
-            );
-            return EMPTY;
-          } else {
-            return of(profileStatus);
-          }
-        }),
         tap((profileStatus: ProfileStatus | null) => {
           this.portalService.updateState(profileStatus);
           this.alerts = this.portalService.alerts;
-        })
+        }),
       )
       .subscribe((profileStatus) => {
         let selectedIndex = this.lastSelectedIndex;
@@ -266,7 +245,7 @@ export class PortalPage implements OnInit {
           this.selectedNoCollegeLicence(
             this.hasCpn,
             this.collegeLicenceDeclared,
-            this.isComplete
+            this.isComplete,
           )
         ) {
           selectedIndex = 5;
@@ -293,14 +272,14 @@ export class PortalPage implements OnInit {
             },
             queryParamsHandling: 'merge',
           });
-        })
+        }),
       );
   }
 
   private selectedNoCollegeLicence(
     hasCpn: boolean | undefined,
     licenceDeclared: boolean | undefined,
-    isComplete: boolean | undefined
+    isComplete: boolean | undefined,
   ): boolean | undefined {
     return !hasCpn && licenceDeclared && isComplete;
   }
