@@ -37,7 +37,6 @@ jobs:
           password: ${{ secrets.SILVER_TOOLS_BUILDER_TOKEN }}
 
       - name: Tag and Push Docker image
-        if: ${{ github.ref == 'refs/heads/main' }}
         run: |
           docker tag midas-probe image-registry.apps.silver.devops.gov.bc.ca/d8a8f9-tools/midas-probe:${{ github.event.inputs.Environment }}
           docker push image-registry.apps.silver.devops.gov.bc.ca/d8a8f9-tools/midas-probe --all-tags
