@@ -3,6 +3,7 @@
 This service is used to monitor several services running on Openshift (OCP). The main purpose of this dashboard is to:
 1. Display the results of the services (running or not) based on the availability of pods for that service. In essence it depends on the OCP deployment readiness probes. It runs on the SILVER cluster and if any of the services monitored by Midas does not have available pods, Midas will return a 500 code for a failover.
 
+
 ## How does it work
 The main function of this service is main.py. This python script uses a kubernetes library to look for any services with the tag: "midas=touch". For each of those services it determines if there's active pods for that service. If there are not, it will fail with a 500 code and display the list of service showing which one(s) failed.
 
