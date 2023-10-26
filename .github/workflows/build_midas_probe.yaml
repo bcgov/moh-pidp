@@ -39,7 +39,7 @@ jobs:
       - name: Tag and Push Docker image
         if: ${{ github.ref == 'refs/heads/main' }}
         run: |
-          docker tag midas-probe image-registry.apps.silver.devops.gov.bc.ca/d8a8f9-tools/midas-probe:develop
+          docker tag midas-probe image-registry.apps.silver.devops.gov.bc.ca/d8a8f9-tools/midas-probe:${{ github.event.inputs.Environment }}
           docker push image-registry.apps.silver.devops.gov.bc.ca/d8a8f9-tools/midas-probe --all-tags
       
       - name: helm deployment
@@ -48,4 +48,4 @@ jobs:
           echo installing midas-common helm chart...
           helm upgrade --install --values ./midas-common/values.yaml --set namespace=d8a8f9-${{ github.event.inputs.Environment }} --namespace d8a8f9-${{ github.event.inputs.Environment }} midas-common midas-common
           echo installing midas-probe helm chart...
-          helm upgrade --install --values ./midas-probe/values.yaml --namespace d8a8f9-${{ github.event.inputs.Environment }} midas-probe midas-probe
+          helm upgrade --install --values ./midas-probe/values.yaml --set imageStreamTag=${{ github.event.inputs.Environment }} --namespace d8a8f9-${{ github.event.inputs.Environment }} midas-probe midas-probe
