@@ -59,7 +59,7 @@ public class ImmsBCEforms
                     AlreadyEnroled = party.AccessRequests.Any(request => request.AccessTypeCode == AccessTypeCode.ImmsBCEforms),
                     UserId = party.PrimaryUserId,
                     party.Email,
-                    party.FirstName,
+                    party.DisplayFirstName,
                     party.Cpn,
                 })
                 .SingleAsync();
@@ -86,7 +86,7 @@ public class ImmsBCEforms
 
             await this.context.SaveChangesAsync();
 
-            await this.SendConfirmationEmailAsync(dto.Email, dto.FirstName);
+            await this.SendConfirmationEmailAsync(dto.Email, dto.DisplayFirstName);
 
             return DomainResult.Success();
         }
