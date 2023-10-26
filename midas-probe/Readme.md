@@ -1,4 +1,3 @@
-
 # Midas Probe - Dashboard for Monitoring Silver Services Failover
 
 This service is used to monitor several services running on Openshift (OCP). The main purpose of this dashboard is to:
