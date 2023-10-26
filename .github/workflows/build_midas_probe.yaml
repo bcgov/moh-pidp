@@ -50,6 +50,7 @@ jobs:
       - name: helm deployment
         working-directory: midas-probe/openshift/helm
         run: |
+          oc project d8a8f9-${{ github.event.inputs.Environment }}
           echo installing midas-common helm chart...
           helm upgrade --install --values ./midas-common/values.yaml --set namespace=d8a8f9-${{ github.event.inputs.Environment }} --namespace d8a8f9-${{ github.event.inputs.Environment }} midas-common midas-common
           echo installing midas-probe helm chart...
