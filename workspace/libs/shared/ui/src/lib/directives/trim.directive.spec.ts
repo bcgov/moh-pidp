@@ -79,4 +79,19 @@ describe('TrimDirective', () => {
       expect(formControl.value).toBe('test');
     });
   });
+
+  it('should set ngControl value to null if the value is an empty string', () => {
+    const nativeElement = des[1].nativeElement;
+    nativeElement.value = '';
+    expect(nativeElement.value).toBe('');
+
+    const inputEvent = new InputEvent('blur');
+    nativeElement.dispatchEvent(inputEvent);
+
+    fixture.detectChanges();
+    fixture.whenStable().then(() => {
+      const formControl = fixture.componentInstance.form.controls.name;
+      expect(formControl.value).toBe(null);
+    });
+  });
 });
