@@ -1,0 +1,40 @@
+name: Build Midas Probe
+
+on:
+  push:
+    paths: [midas-probe/openshift]
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build Midas Probe
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Build image with docker-compose
+        working-directory: midas-probe
+        run: |
+          docker-compose build midas-probe
+
+      - name: Login to Silver OCP
+        uses: docker/login-action@v2
+        with:
+          registry: image-registry.apps.silver.devops.gov.bc.ca
+          username: builder
+          password: ${{ secrets.SILVER_TOOLS_BUILDER_TOKEN }}
+
+      - name: Tag and Push Docker image
+        if: ${{ github.ref == 'refs/heads/main' }}
+        run: |
+          docker tag midas-probe image-registry.apps.silver.devops.gov.bc.ca/d8a8f9-tools/midas-probe:develop
+          docker push image-registry.apps.silver.devops.gov.bc.ca/d8a8f9-tools/midas-probe --all-tags
+      
+      - name: helm deployment
+        working-directory: midas-probe/openshift/helm
+        run: |
+          echo installing midas-common helm chart...
+          helm upgrade --install --wait --values ./midas-common/values.yaml --namespace d8a8f9-dev midas-common midas-common
+          echo installing midas-probe helm chart...
+          helm upgrade --install --wait --values ./midas-probe/values.yaml --namespace d8a8f9-dev midas-probe midas-probe
