@@ -1,2 +1,0 @@
-# This file will contain the TLS public ca certificate.
-# During the pipeline process the contents of this file will be overwritten.
