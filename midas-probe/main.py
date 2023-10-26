@@ -7,11 +7,14 @@
 
 from kubernetes import client, config
 from flask import Flask
+from flask_wtf import CSRFProtect
 from os import environ
 import requests
 import logging
 
 app = Flask(__name__)
+csrf = CSRFProtect()
+csrf.init_app(app) # Compliant
 
 def check_services(output_type):
     logging.basicConfig(format='%(message)s', level=logging.INFO)
