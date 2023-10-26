@@ -2,15 +2,7 @@ import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { Component, Inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import {
-  BehaviorSubject,
-  EMPTY,
-  Observable,
-  map,
-  of,
-  switchMap,
-  tap,
-} from 'rxjs';
+import { BehaviorSubject, Observable, map, of, switchMap, tap } from 'rxjs';
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';
 import { PartyService } from '@app/core/party/party.service';
@@ -23,7 +15,6 @@ import { IdentityProvider } from '../auth/enums/identity-provider.enum';
 import { AuthService } from '../auth/services/auth.service';
 import { AuthorizedUserService } from '../auth/services/authorized-user.service';
 import { EndorsementsResource } from '../organization-info/pages/endorsements/endorsements-resource.service';
-import { ProfileRoutes } from '../profile/profile.routes';
 import { ProfileStatusAlert } from './models/profile-status-alert.model';
 import { ProfileStatus } from './models/profile-status.model';
 import { PortalResource } from './portal-resource.service';
@@ -36,7 +27,6 @@ import {
 import { PortalService } from './portal.service';
 import { IPortalSection } from './state/portal-section.model';
 import { PortalState } from './state/portal-state.builder';
-import { Destination } from './state/profile/redirect-section.model';
 
 @Component({
   selector: 'app-portal',
