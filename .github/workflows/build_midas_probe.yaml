@@ -2,8 +2,19 @@ name: Build Midas Probe
 
 on:
   push:
+    branches:
+      - 'develop'
     paths: [midas-probe/openshift]
   workflow_dispatch:
+    inputs:
+      environment:
+        description: "Environment:"
+        type: choice
+        default: 'dev'
+        required: true
+        options:
+          - dev
+          - test
 
 jobs:
   build:
@@ -35,6 +46,6 @@ jobs:
         working-directory: midas-probe/openshift/helm
         run: |
           echo installing midas-common helm chart...
-          helm upgrade --install --wait --values ./midas-common/values.yaml --namespace d8a8f9-dev midas-common midas-common
+          helm upgrade --install --values ./midas-common/values.yaml --set namespace=d8a8f9-${{ github.event.inputs.Environment }} --namespace d8a8f9-${{ github.event.inputs.Environment }} midas-common midas-common
           echo installing midas-probe helm chart...
-          helm upgrade --install --wait --values ./midas-probe/values.yaml --namespace d8a8f9-dev midas-probe midas-probe
+          helm upgrade --install --values ./midas-probe/values.yaml --namespace d8a8f9-${{ github.event.inputs.Environment }} midas-probe midas-probe
