@@ -1,8 +1,9 @@
 namespace Pidp;
 
 using FluentValidation.AspNetCore;
-using MassTransit;
+using HealthChecks.UI.Client;
 using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
@@ -60,7 +61,25 @@ public class Startup
             .AsImplementedInterfaces()
             .WithTransientLifetime());
 
-        services.AddHealthChecks();
+        services.AddHealthChecks()
+            .AddNpgSql(config.ConnectionStrings.PidpDatabase)
+            .AddRabbitMQ(new Uri(config.RabbitMQ.HostAddress));
+
+        services
+            .AddHealthChecksUI(setupSettings: setup =>
+                {
+                    setup.AddHealthCheckEndpoint("localhost", "/healthz");
+
+                    //Only one active request will be executed at a time.
+                    //All the excedent requests will result in 429 (Too many requests)
+                    setup.SetApiMaxActiveRequests(1);
+
+                    // Configures the UI to poll for healthchecks updates every 10 seconds
+                    setup.SetEvaluationTimeInSeconds(10);
+                    // Set the maximum history entries by endpoint that will be served by the UI api middleware
+                    setup.MaximumHistoryEntriesPerEndpoint(50);
+                })
+            .AddInMemoryStorage();
 
         services.AddSwaggerGen(options =>
         {
@@ -118,7 +137,13 @@ public class Startup
         app.UseEndpoints(endpoints =>
         {
             endpoints.MapControllers();
-            endpoints.MapHealthChecks("/health/liveness").AllowAnonymous();
+            // endpoints.MapHealthChecks("/health/liveness").AllowAnonymous();
+            endpoints.MapHealthChecksUI().AllowAnonymous();
+            endpoints.MapHealthChecks("/healthz", new HealthCheckOptions
+            {
+                Predicate = _ => true,
+                ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+            }).AllowAnonymous();
         });
     }
 }
