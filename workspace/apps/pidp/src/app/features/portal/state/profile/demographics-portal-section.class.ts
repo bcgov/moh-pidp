@@ -69,7 +69,6 @@ export class DemographicsPortalSection implements IPortalSection {
   }
 
   public performAction(): void | Observable<void> {
-    console.log(ShellRoutes.routePath(this.action.route));
     this.router.navigate([ShellRoutes.routePath(this.action.route)]);
   }
 
