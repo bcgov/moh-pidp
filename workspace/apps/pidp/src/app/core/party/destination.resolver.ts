@@ -24,7 +24,6 @@ export class DestinationResolver implements Resolve<Destination | null> {
       switchMap((destination) => {
         switch (destination) {
           case Destination.DEMOGRAPHICS:
-            console.log(ProfileRoutes.routePath(ProfileRoutes.PERSONAL_INFO));
             this.router.navigateByUrl(
               ProfileRoutes.routePath(ProfileRoutes.PERSONAL_INFO),
             );
