@@ -1,7 +1,7 @@
 namespace Pidp;
 
 using FluentValidation.AspNetCore;
-using HealthChecks.UI.Client;
+using HealthChecks.ApplicationStatus.DependencyInjection;
 using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
@@ -62,24 +62,9 @@ public class Startup
             .WithTransientLifetime());
 
         services.AddHealthChecks()
-            .AddNpgSql(config.ConnectionStrings.PidpDatabase)
-            .AddRabbitMQ(new Uri(config.RabbitMQ.HostAddress));
-
-        services
-            .AddHealthChecksUI(setupSettings: setup =>
-                {
-                    setup.AddHealthCheckEndpoint("localhost", "/healthz");
-
-                    //Only one active request will be executed at a time.
-                    //All the excedent requests will result in 429 (Too many requests)
-                    setup.SetApiMaxActiveRequests(1);
-
-                    // Configures the UI to poll for healthchecks updates every 10 seconds
-                    setup.SetEvaluationTimeInSeconds(10);
-                    // Set the maximum history entries by endpoint that will be served by the UI api middleware
-                    setup.MaximumHistoryEntriesPerEndpoint(50);
-                })
-            .AddInMemoryStorage();
+            .AddApplicationStatus(tags: new[] { "ready" })
+            .AddNpgSql(config.ConnectionStrings.PidpDatabase, tags: new[] { "ready" })
+            .AddRabbitMQ(new Uri(config.RabbitMQ.HostAddress), tags: new[] { "ready" });
 
         services.AddSwaggerGen(options =>
         {
@@ -137,12 +122,13 @@ public class Startup
         app.UseEndpoints(endpoints =>
         {
             endpoints.MapControllers();
-            // endpoints.MapHealthChecks("/health/liveness").AllowAnonymous();
-            endpoints.MapHealthChecksUI().AllowAnonymous();
-            endpoints.MapHealthChecks("/healthz", new HealthCheckOptions
+            endpoints.MapHealthChecks("/health/liveness", new HealthCheckOptions
             {
-                Predicate = _ => true,
-                ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+                Predicate = _ => false
+            }).AllowAnonymous();
+            endpoints.MapHealthChecks("/health/readiness", new HealthCheckOptions
+            {
+                Predicate = registration => registration.Tags.Contains("ready"),
             }).AllowAnonymous();
         });
     }
