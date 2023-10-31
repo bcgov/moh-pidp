@@ -43,7 +43,8 @@ public class Startup
             .AddScoped<IEmailService, EmailService>()
             .AddScoped<IPidpAuthorizationService, PidpAuthorizationService>()
             .AddScoped<IPlrStatusUpdateService, PlrStatusUpdateService>()
-            .AddSingleton<IClock>(SystemClock.Instance);
+            .AddSingleton<IClock>(SystemClock.Instance)
+            .AddSingleton<StartupHealthCheck>();
 
         services.AddControllers(options => options.Conventions.Add(new RouteTokenTransformerConvention(new KabobCaseParameterTransformer())))
             .AddFluentValidation(options => options.RegisterValidatorsFromAssemblyContaining<Startup>())
@@ -62,9 +63,10 @@ public class Startup
             .WithTransientLifetime());
 
         services.AddHealthChecks()
-            .AddApplicationStatus(tags: new[] { "ready" })
-            .AddNpgSql(config.ConnectionStrings.PidpDatabase, tags: new[] { "ready" })
-            .AddRabbitMQ(new Uri(config.RabbitMQ.HostAddress), tags: new[] { "ready" });
+            .AddApplicationStatus(tags: new[] { "self" })
+            .AddCheck<StartupHealthCheck>("StartupBackgroundServices", tags: new[] { "services" })
+            .AddNpgSql(config.ConnectionStrings.PidpDatabase, tags: new[] { "services" })
+            .AddRabbitMQ(new Uri(config.RabbitMQ.HostAddress), tags: new[] { "services" });
 
         services.AddSwaggerGen(options =>
         {
@@ -124,11 +126,11 @@ public class Startup
             endpoints.MapControllers();
             endpoints.MapHealthChecks("/health/liveness", new HealthCheckOptions
             {
-                Predicate = _ => false
+                Predicate = registration => registration.Tags.Contains("self")
             }).AllowAnonymous();
             endpoints.MapHealthChecks("/health/readiness", new HealthCheckOptions
             {
-                Predicate = registration => registration.Tags.Contains("ready"),
+                Predicate = registration => registration.Tags.Contains("services"),
             }).AllowAnonymous();
         });
     }

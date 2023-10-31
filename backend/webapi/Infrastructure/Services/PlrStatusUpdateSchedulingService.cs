@@ -5,11 +5,13 @@ public class PlrStatusUpdateSchedulingService : BackgroundService
     private readonly ILogger<PlrStatusUpdateSchedulingService> logger;
     private readonly IServiceScopeFactory scopeFactory;
     private readonly PeriodicTimer timer = new(TimeSpan.FromSeconds(10));
+    private readonly StartupHealthCheck healthCheck;
 
-    public PlrStatusUpdateSchedulingService(IServiceScopeFactory scopeFactory, ILogger<PlrStatusUpdateSchedulingService> logger)
+    public PlrStatusUpdateSchedulingService(IServiceScopeFactory scopeFactory, ILogger<PlrStatusUpdateSchedulingService> logger, StartupHealthCheck healthCheck)
     {
         this.logger = logger;
         this.scopeFactory = scopeFactory;
+        this.healthCheck = healthCheck;
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -18,6 +20,7 @@ public class PlrStatusUpdateSchedulingService : BackgroundService
 
         try
         {
+            this.healthCheck.StartupCompleted = true;
             while (await this.timer.WaitForNextTickAsync(stoppingToken)
                 && !stoppingToken.IsCancellationRequested)
             {
@@ -29,6 +32,7 @@ public class PlrStatusUpdateSchedulingService : BackgroundService
         catch (Exception e)
         {
             this.logger.LogServiceHasStoppedUnexpectedly(e);
+            this.healthCheck.StartupCompleted = false;
         }
     }
 
