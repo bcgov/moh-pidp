@@ -19,6 +19,7 @@ using Pidp.Extensions;
 using Pidp.Features;
 using Pidp.Infrastructure;
 using Pidp.Infrastructure.Auth;
+using Pidp.Infrastructure.HealthChecks;
 using Pidp.Infrastructure.HttpClients;
 using Pidp.Infrastructure.Services;
 using Pidp.Infrastructure.Queue;
@@ -63,10 +64,10 @@ public class Startup
             .WithTransientLifetime());
 
         services.AddHealthChecks()
-            .AddApplicationStatus(tags: new[] { "self" })
-            .AddCheck<StartupHealthCheck>("StartupBackgroundServices", tags: new[] { "services" })
-            .AddNpgSql(config.ConnectionStrings.PidpDatabase, tags: new[] { "services" })
-            .AddRabbitMQ(new Uri(config.RabbitMQ.HostAddress), tags: new[] { "services" });
+            .AddApplicationStatus(tags: new[] { HealthCheckTag.Liveness.Value })
+            .AddCheck<StartupHealthCheck>("StartupBackgroundServices", tags: new[] { HealthCheckTag.Readiness.Value })
+            .AddNpgSql(config.ConnectionStrings.PidpDatabase, tags: new[] { HealthCheckTag.Readiness.Value })
+            .AddRabbitMQ(new Uri(config.RabbitMQ.HostAddress), tags: new[] { HealthCheckTag.Readiness.Value });
 
         services.AddSwaggerGen(options =>
         {
@@ -126,11 +127,11 @@ public class Startup
             endpoints.MapControllers();
             endpoints.MapHealthChecks("/health/liveness", new HealthCheckOptions
             {
-                Predicate = registration => registration.Tags.Contains("self")
+                Predicate = registration => registration.Tags.Contains(HealthCheckTag.Liveness.Value)
             }).AllowAnonymous();
             endpoints.MapHealthChecks("/health/readiness", new HealthCheckOptions
             {
-                Predicate = registration => registration.Tags.Contains("services"),
+                Predicate = registration => registration.Tags.Contains(HealthCheckTag.Readiness.Value),
             }).AllowAnonymous();
         });
     }

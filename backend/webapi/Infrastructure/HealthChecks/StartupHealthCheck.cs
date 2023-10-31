@@ -1,5 +1,5 @@
 
-namespace Pidp.Infrastructure.Services;
+namespace Pidp.Infrastructure.HealthChecks;
 
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 

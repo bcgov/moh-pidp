@@ -1,5 +1,7 @@
 namespace Pidp.Infrastructure.Services;
 
+using Pidp.Infrastructure.HealthChecks;
+
 public class PlrStatusUpdateSchedulingService : BackgroundService
 {
     private readonly ILogger<PlrStatusUpdateSchedulingService> logger;
