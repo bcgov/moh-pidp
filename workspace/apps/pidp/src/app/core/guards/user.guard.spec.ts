@@ -1,17 +1,75 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { TestBed } from '@angular/core/testing';
-import { CanActivateFn } from '@angular/router';
+import {
+  ActivatedRouteSnapshot,
+  Router,
+  RouterStateSnapshot,
+} from '@angular/router';
 
 import { userGuard } from './user.guard';
+import { Spy, createSpyFromClass, provideAutoSpy } from 'jest-auto-spies';
+import { AuthorizedUserService } from '@app/features/auth/services/authorized-user.service';
+import { APP_CONFIG, APP_DI_CONFIG } from '@app/app.config';
+import { Role } from '@app/shared/enums/roles.enum';
 
 describe('userGuard', () => {
-  const executeGuard: CanActivateFn = (...guardParameters) =>
-    TestBed.runInInjectionContext(() => userGuard(...guardParameters));
+  let activatedRouteSnapshotSpy: Spy<ActivatedRouteSnapshot>;
+  let routerStateSnapshotSpy: Spy<RouterStateSnapshot>;
+  let authorizedUserServiceSpy: Spy<AuthorizedUserService>;
+  let router: Router;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
+    TestBed.configureTestingModule({
+      providers: [
+        {
+          provide: AuthorizedUserService,
+          useValue: createSpyFromClass(AuthorizedUserService, {
+            gettersToSpyOn: ['roles'],
+          }),
+        },
+        {
+          provide: APP_CONFIG,
+          useValue: APP_DI_CONFIG,
+        },
+        provideAutoSpy(Router),
+      ],
+    });
+
+    authorizedUserServiceSpy = TestBed.inject<any>(AuthorizedUserService);
+    router = TestBed.inject(Router);
   });
 
-  it('should be created', () => {
-    expect(executeGuard).toBeTruthy();
+  describe('METHOD: CanActivateFn', () => {
+    given('the user has no role', () => {
+      authorizedUserServiceSpy.accessorSpies.getters.roles.mockReturnValue([]);
+
+      when('the guard is called', () => {
+        const result = TestBed.runInInjectionContext(() =>
+          userGuard(activatedRouteSnapshotSpy, routerStateSnapshotSpy),
+        );
+        then('the user should access the route', () => {
+          expect(result).toBeTruthy();
+        });
+      });
+    });
+
+    given('the user has the ADMIN role', () => {
+      authorizedUserServiceSpy.accessorSpies.getters.roles.mockReturnValue([
+        Role.ADMIN,
+      ]);
+
+      when('the guard is called', () => {
+        TestBed.runInInjectionContext(() =>
+          userGuard(activatedRouteSnapshotSpy, routerStateSnapshotSpy),
+        );
+        APP_DI_CONFIG.routes.admin;
+
+        then('the user should be redirected to the admin route', () => {
+          expect(router.createUrlTree).toHaveBeenCalledWith([
+            APP_DI_CONFIG.routes.admin,
+          ]);
+        });
+      });
+    });
   });
 });
