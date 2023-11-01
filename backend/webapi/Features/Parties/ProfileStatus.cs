@@ -70,6 +70,8 @@ public partial class ProfileStatus
 
             await data.Finalize(this.context, this.plrClient, query.User);
 
+            Thread.Sleep(1000);
+
             return new Model
             {
                 Status = new List<ProfileSection>

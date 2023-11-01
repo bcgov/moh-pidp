@@ -23,5 +23,5 @@ public class PartyLicenceDeclaration : BaseAuditable
     public string? LicenceNumber { get; set; }
 
     [Projectable]
-    public bool HasNoLicence => this.CollegeCode == null && this.LicenceNumber == null;
+    public bool IsUnlicensed => this.CollegeCode == null && this.LicenceNumber == null;
 }

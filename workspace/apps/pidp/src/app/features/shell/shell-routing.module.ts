@@ -28,6 +28,7 @@ import { TrainingRoutes } from '../training/training.routes';
 import { PortalDashboardComponent } from './components/portal-dashboard/portal-dashboard.component';
 import { ShellRoutes } from './shell.routes';
 import { DestinationResolver } from '@app/core/party/destination.resolver';
+import { LandingActionsResolver } from '@app/core/party/landing-actions.resolver';
 
 const routes: Routes = [
   {
@@ -65,6 +66,7 @@ const routes: Routes = [
       {
         path: PortalRoutes.MODULE_PATH,
         resolve: {
+          landing: LandingActionsResolver,
           destination: DestinationResolver,
         },
         loadChildren: (): Promise<Type<PortalModule>> =>

@@ -42,6 +42,6 @@ public class DiscoveryController : PidpControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<Destination.Model>> GetDestination([FromServices] IQueryHandler<Destination.Query, Destination.Model> handler,
                                                                       [FromRoute] Destination.Query query)
-        => await this.AuthorizePartyBeforeHandleAsync(query.PartyId, handler, query.WithIdentityProvider(this.User.GetIdentityProvider()))
+        => await this.AuthorizePartyBeforeHandleAsync(query.PartyId, handler, query)
             .ToActionResultOfT();
 }

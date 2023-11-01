@@ -1,16 +1,32 @@
 import { Injectable } from '@angular/core';
 import {
-  Router, Resolve,
+  Router,
+  Resolve,
   RouterStateSnapshot,
-  ActivatedRouteSnapshot
+  ActivatedRouteSnapshot,
 } from '@angular/router';
-import { Observable, of } from 'rxjs';
+import { PortalResource } from '@app/features/portal/portal-resource.service';
+import { Observable, of, switchMap } from 'rxjs';
+import { PartyService } from './party.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class LandingActionsResolver implements Resolve<boolean> {
-  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
-    return of(true);
+  public constructor(
+    private partyService: PartyService,
+    private resource: PortalResource,
+  ) {}
+
+  resolve(
+    route: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot,
+  ): Observable<boolean> {
+    return this.resource.getProfileStatus(this.partyService.partyId).pipe(
+      switchMap((result) => {
+        console.log(' ---------- done ---------');
+        return of(true);
+      }),
+    );
   }
 }
