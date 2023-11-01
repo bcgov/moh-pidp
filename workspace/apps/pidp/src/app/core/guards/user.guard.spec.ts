@@ -47,6 +47,7 @@ describe('userGuard', () => {
         const result = TestBed.runInInjectionContext(() =>
           userGuard(activatedRouteSnapshotSpy, routerStateSnapshotSpy),
         );
+
         then('the user should access the route', () => {
           expect(result).toBeTruthy();
         });
@@ -62,7 +63,6 @@ describe('userGuard', () => {
         TestBed.runInInjectionContext(() =>
           userGuard(activatedRouteSnapshotSpy, routerStateSnapshotSpy),
         );
-        APP_DI_CONFIG.routes.admin;
 
         then('the user should be redirected to the admin route', () => {
           expect(router.createUrlTree).toHaveBeenCalledWith([
