@@ -4,6 +4,11 @@ namespace Pidp.Infrastructure.HealthChecks;
 public class HealthCheckTag
 {
     /// <summary>
+    /// Represents a "backgroundServices" check.
+    /// </summary>
+    public static readonly HealthCheckTag BackgroundServices = new("background-services");
+
+    /// <summary>
     /// Represents a "liveness" check.
     /// A service that fails a liveness check is considered to be unrecoverable and has to be restarted by the orchestrator.
     /// </summary>

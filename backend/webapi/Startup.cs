@@ -45,7 +45,7 @@ public class Startup
             .AddScoped<IPidpAuthorizationService, PidpAuthorizationService>()
             .AddScoped<IPlrStatusUpdateService, PlrStatusUpdateService>()
             .AddSingleton<IClock>(SystemClock.Instance)
-            .AddSingleton<StartupHealthCheck>();
+            .AddSingleton<BackgroundWorkerHealthCheck>();
 
         services.AddControllers(options => options.Conventions.Add(new RouteTokenTransformerConvention(new KabobCaseParameterTransformer())))
             .AddFluentValidation(options => options.RegisterValidatorsFromAssemblyContaining<Startup>())
@@ -65,7 +65,7 @@ public class Startup
 
         services.AddHealthChecks()
             .AddApplicationStatus(tags: new[] { HealthCheckTag.Liveness.Value })
-            .AddCheck<StartupHealthCheck>("StartupBackgroundServices", tags: new[] { HealthCheckTag.Readiness.Value })
+            .AddCheck<BackgroundWorkerHealthCheck>("PlrStatusUpdateSchedulingService", tags: new[] { HealthCheckTag.BackgroundServices.Value })
             .AddNpgSql(config.ConnectionStrings.PidpDatabase, tags: new[] { HealthCheckTag.Readiness.Value })
             .AddRabbitMQ(new Uri(config.RabbitMQ.HostAddress), tags: new[] { HealthCheckTag.Readiness.Value });
 
@@ -125,13 +125,17 @@ public class Startup
         app.UseEndpoints(endpoints =>
         {
             endpoints.MapControllers();
+            endpoints.MapHealthChecks("/health/background-services", new HealthCheckOptions
+            {
+                Predicate = registration => registration.Tags.Contains(HealthCheckTag.BackgroundServices.Value)
+            }).AllowAnonymous();
             endpoints.MapHealthChecks("/health/liveness", new HealthCheckOptions
             {
                 Predicate = registration => registration.Tags.Contains(HealthCheckTag.Liveness.Value)
             }).AllowAnonymous();
             endpoints.MapHealthChecks("/health/readiness", new HealthCheckOptions
             {
-                Predicate = registration => registration.Tags.Contains(HealthCheckTag.Readiness.Value),
+                Predicate = registration => registration.Tags.Contains(HealthCheckTag.Readiness.Value)
             }).AllowAnonymous();
         });
     }

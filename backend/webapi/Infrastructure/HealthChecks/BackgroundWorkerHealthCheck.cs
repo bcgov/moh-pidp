@@ -3,11 +3,11 @@ namespace Pidp.Infrastructure.HealthChecks;
 
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
-public class StartupHealthCheck : IHealthCheck
+public class BackgroundWorkerHealthCheck : IHealthCheck
 {
     private volatile bool isReady;
 
-    public bool StartupCompleted
+    public bool IsReady
     {
         get => this.isReady;
         set => this.isReady = value;
@@ -16,11 +16,11 @@ public class StartupHealthCheck : IHealthCheck
     public Task<HealthCheckResult> CheckHealthAsync(
         HealthCheckContext context, CancellationToken cancellationToken = default)
     {
-        if (this.StartupCompleted)
+        if (this.IsReady)
         {
-            return Task.FromResult(HealthCheckResult.Healthy("The background startup task has completed."));
+            return Task.FromResult(HealthCheckResult.Healthy("The background service startup task has completed."));
         }
 
-        return Task.FromResult(HealthCheckResult.Unhealthy("That background startup task is still running."));
+        return Task.FromResult(HealthCheckResult.Unhealthy("That background service startup task is still running."));
     }
 }
