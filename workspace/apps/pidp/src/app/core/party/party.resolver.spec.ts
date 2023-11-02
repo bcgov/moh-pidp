@@ -55,8 +55,11 @@ describe('PartyResolver', () => {
       partyServiceSpy.accessorSpies.setters.partyId(null);
 
       when('attempting to resolve the party is successful', () => {
-        const partyId = randNumber();
-        partyResourceSpy.discover.nextOneTimeWith(partyId);
+        const discoveryResult = {
+          partyId: randNumber(),
+          newBCProvider: false,
+        };
+        partyResourceSpy.discover.nextOneTimeWith(discoveryResult);
         let actualResult: number | null;
         resolver
           .resolve()
@@ -64,7 +67,7 @@ describe('PartyResolver', () => {
 
         then('response will provide the party ID', () => {
           expect(partyResourceSpy.discover).toHaveBeenCalledTimes(1);
-          expect(actualResult).toBe(partyId);
+          expect(actualResult).toBe(discoveryResult.partyId);
         });
       });
     });
