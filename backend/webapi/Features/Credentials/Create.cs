@@ -159,19 +159,18 @@ public class Create
 
             var plrStanding = await this.plrClient.GetStandingsDigestAsync(party.Cpn);
 
-            if (!plrStanding.HasGoodStanding)
-            {
-                var endorsementCpns = await this.context.ActiveEndorsementRelationships(credential.PartyId)
-                    .Select(relationship => relationship.Party!.Cpn)
-                    .ToListAsync(cancellationToken);
-                var endorsementPlrDigest = await this.plrClient.GetAggregateStandingsDigestAsync(endorsementCpns);
-
-                attributes
-                    .SetEndorserData(endorsementPlrDigest
+            var endorsementCpns = await this.context.ActiveEndorsementRelationships(credential.PartyId)
+                                .Select(relationship => relationship.Party!.Cpn)
+                                .ToListAsync(cancellationToken);
+            var endorsementPlrDigest = await this.plrClient.GetAggregateStandingsDigestAsync(endorsementCpns);
+            attributes
+                .SetEndorserData(endorsementPlrDigest
                         .WithGoodStanding()
                         .With(IdentifierType.PhysiciansAndSurgeons, IdentifierType.Nurse, IdentifierType.Midwife)
-                        .Cpns)
-                    .SetIsMoa(endorsementPlrDigest.HasGoodStanding);
+                        .Cpns);
+            if (!plrStanding.HasGoodStanding)
+            {
+                attributes.SetIsMoa(endorsementPlrDigest.HasGoodStanding);
             }
 
             attributes
