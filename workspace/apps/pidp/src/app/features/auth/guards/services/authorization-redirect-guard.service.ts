@@ -7,16 +7,16 @@ import { AuthGuardService } from './abstract-auth-guard.service';
 @Injectable({
   providedIn: 'root',
 })
-export abstract class AuthorizationRedirectGuardService extends AuthGuardService {
+export class AuthorizationRedirectGuardService extends AuthGuardService {
   public constructor(
     protected authService: AuthService,
-    private router: Router
+    private router: Router,
   ) {
     super(authService);
   }
 
   protected handleAccessCheck(
-    routeRedirect: string
+    routeRedirect: string,
   ): (authenticated: boolean) => boolean | UrlTree {
     return (authenticated: boolean): boolean | UrlTree =>
       // Redirect to a route config defined route, or root route and
