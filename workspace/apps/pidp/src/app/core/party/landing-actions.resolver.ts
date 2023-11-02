@@ -18,7 +18,7 @@ export class LandingActionsResolver implements Resolve<boolean> {
     private resource: PortalResource,
   ) {}
 
-  resolve(
+  public resolve(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot,
   ): Observable<boolean> {
