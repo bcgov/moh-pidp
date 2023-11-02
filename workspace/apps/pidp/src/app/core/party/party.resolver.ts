@@ -44,6 +44,7 @@ export class PartyResolver implements Resolve<number | null> {
           return of(null);
         }
 
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         return of((this.partyService.partyId = discovery.partyId!));
       }),
       catchError((error: HttpErrorResponse | Error) => {

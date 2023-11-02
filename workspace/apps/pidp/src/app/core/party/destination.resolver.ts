@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Resolve, Router } from '@angular/router';
-import { EMPTY, Observable, catchError, map, of, switchMap, tap } from 'rxjs';
+import { EMPTY, Observable, catchError, of, switchMap } from 'rxjs';
 import { Destination, DiscoveryResource } from './discovery-resource.service';
 import { PartyService } from './party.service';
 import { ProfileRoutes } from '@app/features/profile/profile.routes';
