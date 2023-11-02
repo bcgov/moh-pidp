@@ -22,6 +22,7 @@ import { LoggerService } from '@app/core/services/logger.service';
 import { IdentityProvider } from '@app/features/auth/enums/identity-provider.enum';
 import { User } from '@app/features/auth/models/user.model';
 import { AuthorizedUserService } from '@app/features/auth/services/authorized-user.service';
+import { DashboardStateService } from '@app/features/shell/services/dashboard-state-service.service';
 import { LookupResource } from '@app/modules/lookup/lookup-resource.service';
 
 import {
@@ -67,6 +68,7 @@ export class PersonalInformationPage
     private logger: LoggerService,
     private _snackBar: MatSnackBar,
     private lookupResource: LookupResource,
+    private dashboardStateService: DashboardStateService,
     fb: FormBuilder
   ) {
     super(dependenciesService);
@@ -148,6 +150,8 @@ export class PersonalInformationPage
   }
 
   protected afterSubmitIsSuccessful(): void {
+    this.dashboardStateService.refreshDashboardState();
+
     this.navigateToRoot();
   }
 

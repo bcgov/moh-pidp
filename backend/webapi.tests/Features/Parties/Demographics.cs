@@ -79,6 +79,41 @@ public class DemographicsTests : InMemoryDbTest
     }
 
     [Fact]
+    public async void UpdatePartyDemographics_ExistingParty_TrimPreferredNames()
+    {
+        var party = this.TestDb.HasAParty(party =>
+        {
+            party.FirstName = "John";
+            party.LastName = "doe";
+            party.Email = "john.doe@email.com";
+            party.Phone = "5555555555";
+            party.PreferredFirstName = "Jo";
+            party.PreferredMiddleName = "jr.";
+            party.PreferredLastName = "Downey";
+        });
+        var command = new Command
+        {
+            Id = party.Id,
+            PreferredFirstName = " Jean Charles  ",
+            PreferredMiddleName = " jr.  ",
+            PreferredLastName = " Downey "
+        };
+        var handler = this.MockDependenciesFor<CommandHandler>();
+
+        await handler.HandleAsync(command);
+
+        var updatedParty = this.TestDb.Parties.Single(p => p.Id == party.Id);
+        Assert.Equal("Jean Charles", updatedParty.PreferredFirstName);
+        Assert.Equal("jr.", updatedParty.PreferredMiddleName);
+        Assert.Equal("Downey", updatedParty.PreferredLastName);
+
+        Assert.Single(this.PublishedEvents.OfType<PartyEmailUpdated>());
+        var emailEvent = this.PublishedEvents.OfType<PartyEmailUpdated>().Single();
+        Assert.Equal(party.Id, emailEvent.PartyId);
+        Assert.Equal(command.Email, emailEvent.NewEmail);
+    }
+
+    [Fact]
     public async void UpdatePartyDemographics_ExistingPartySameEmail_NoDomainEvent()
     {
         var party = this.TestDb.HasAParty(party => party.Email = "existing@email.com");

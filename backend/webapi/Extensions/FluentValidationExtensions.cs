@@ -29,4 +29,12 @@ public static class FluentValidationExtensions
             }
         });
     }
+
+    /// <summary>
+    /// Defines a validator on a Rule builder for a string property.
+    /// Validation will fail if the property is not null and contains only whitespace characters.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="ruleBuilder"></param>
+    public static IRuleBuilderOptions<T, string?> NotWhiteSpace<T>(this IRuleBuilder<T, string?> ruleBuilder) => ruleBuilder.Must(value => value == null || !string.IsNullOrWhiteSpace(value));
 }

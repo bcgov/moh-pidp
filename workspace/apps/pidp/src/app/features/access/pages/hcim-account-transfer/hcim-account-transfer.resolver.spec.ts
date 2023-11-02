@@ -2,14 +2,7 @@
 import { HttpStatusCode } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 
-import {
-  randEmail,
-  randFirstName,
-  randFullName,
-  randLastName,
-  randNumber,
-  randPhoneNumber,
-} from '@ngneat/falso';
+import { randNumber } from '@ngneat/falso';
 import { Spy, createSpyFromClass, provideAutoSpy } from 'jest-auto-spies';
 
 import { PartyService } from '@app/core/party/party.service';
@@ -18,6 +11,7 @@ import { ProfileStatus } from '@app/features/portal/models/profile-status.model'
 
 import { HcimAccountTransferResource } from './hcim-account-transfer-resource.service';
 import { HcimAccountTransferResolver } from './hcim-account-transfer.resolver';
+import { MockProfileStatus } from '@test/mock-profile-status';
 
 describe('HcimAccountTransferResolver', () => {
   let resolver: HcimAccountTransferResolver;
@@ -43,59 +37,11 @@ describe('HcimAccountTransferResolver', () => {
 
     resolver = TestBed.inject(HcimAccountTransferResolver);
     hcimAccountTransferResourceSpy = TestBed.inject<any>(
-      HcimAccountTransferResource
+      HcimAccountTransferResource,
     );
     partyServiceSpy = TestBed.inject<any>(PartyService);
 
-    mockProfileStatus = {
-      alerts: [],
-      status: {
-        dashboardInfo: {
-          fullName: randFullName(),
-          collegeCode: randNumber(),
-          statusCode: StatusCode.AVAILABLE,
-        },
-        demographics: {
-          firstName: randFirstName(),
-          lastName: randLastName(),
-          email: randEmail(),
-          phone: randPhoneNumber(),
-          statusCode: StatusCode.AVAILABLE,
-        },
-        collegeCertification: {
-          hasCpn: false,
-          licenceDeclared: false,
-          statusCode: StatusCode.AVAILABLE,
-          isComplete: false,
-        },
-        administratorInfo: {
-          email: randEmail(),
-          statusCode: StatusCode.AVAILABLE,
-        },
-        organizationDetails: { statusCode: StatusCode.AVAILABLE },
-        facilityDetails: { statusCode: StatusCode.AVAILABLE },
-        endorsements: { statusCode: StatusCode.AVAILABLE },
-        userAccessAgreement: { statusCode: StatusCode.AVAILABLE },
-        saEforms: {
-          statusCode: StatusCode.AVAILABLE,
-          incorrectLicenceType: false,
-        },
-        prescriptionRefillEforms: { statusCode: StatusCode.AVAILABLE },
-        'prescription-refill-eforms': { statusCode: StatusCode.AVAILABLE },
-        bcProvider: { statusCode: StatusCode.AVAILABLE },
-        hcimAccountTransfer: { statusCode: StatusCode.AVAILABLE },
-        hcimEnrolment: { statusCode: StatusCode.AVAILABLE },
-        driverFitness: { statusCode: StatusCode.AVAILABLE },
-        msTeamsPrivacyOfficer: { statusCode: StatusCode.AVAILABLE },
-        msTeamsClinicMember: { statusCode: StatusCode.AVAILABLE },
-        providerReportingPortal: { statusCode: StatusCode.AVAILABLE },
-        'provider-reporting-portal': { statusCode: StatusCode.AVAILABLE },
-        sitePrivacySecurityChecklist: { statusCode: StatusCode.AVAILABLE },
-        complianceTraining: { statusCode: StatusCode.AVAILABLE },
-        primaryCareRostering: { statusCode: StatusCode.AVAILABLE },
-        immsBCEforms: { statusCode: StatusCode.AVAILABLE },
-      },
-    };
+    mockProfileStatus = MockProfileStatus.get();
   });
 
   describe('METHOD: resolve', () => {
@@ -114,21 +60,21 @@ describe('HcimAccountTransferResolver', () => {
             .resolve()
             .subscribe(
               (profileStatus: StatusCode | null) =>
-                (actualResult = profileStatus)
+                (actualResult = profileStatus),
             );
 
           then(
             'response will provide the status code for HCIMWeb Account Transfer',
             () => {
               expect(
-                hcimAccountTransferResourceSpy.getProfileStatus
+                hcimAccountTransferResourceSpy.getProfileStatus,
               ).toHaveBeenCalledTimes(1);
               expect(actualResult).toBe(
-                mockProfileStatus.status.hcimAccountTransfer.statusCode
+                mockProfileStatus.status.hcimAccountTransfer.statusCode,
               );
-            }
+            },
           );
-        }
+        },
       );
     });
 
@@ -152,19 +98,19 @@ describe('HcimAccountTransferResolver', () => {
             .resolve()
             .subscribe(
               (profileStatus: StatusCode | null) =>
-                (actualResult = profileStatus)
+                (actualResult = profileStatus),
             );
 
           then(
             'response will provide null as status code for HCIMWeb Account Transfer',
             () => {
               expect(
-                hcimAccountTransferResourceSpy.getProfileStatus
+                hcimAccountTransferResourceSpy.getProfileStatus,
               ).toHaveBeenCalledTimes(1);
               expect(actualResult).toBe(null);
-            }
+            },
           );
-        }
+        },
       );
     });
 
@@ -177,17 +123,18 @@ describe('HcimAccountTransferResolver', () => {
         resolver
           .resolve()
           .subscribe(
-            (profileStatus: StatusCode | null) => (actualResult = profileStatus)
+            (profileStatus: StatusCode | null) =>
+              (actualResult = profileStatus),
           );
 
         then(
           'response will provide null as status code for HCIMWeb Account Transfer',
           () => {
             expect(
-              hcimAccountTransferResourceSpy.requestAccess
+              hcimAccountTransferResourceSpy.requestAccess,
             ).not.toHaveBeenCalled();
             expect(actualResult).toBe(null);
-          }
+          },
         );
       });
     });
