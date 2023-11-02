@@ -15,15 +15,13 @@ import {
 import { ArrayUtils } from '@bcgov/shared/utils';
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';
-import { PartyService } from '@app/core/party/party.service';
 import { AccessTokenService } from '@app/features/auth/services/access-token.service';
 import { AuthService } from '@app/features/auth/services/auth.service';
-import { ProfileStatus } from '@app/features/portal/models/profile-status.model';
-import { PortalResource } from '@app/features/portal/portal-resource.service';
 import { PortalRoutes } from '@app/features/portal/portal.routes';
-import { LookupService } from '@app/modules/lookup/lookup.service';
 import { PermissionsService } from '@app/modules/permissions/permissions.service';
 import { Role } from '@app/shared/enums/roles.enum';
+
+import { DashboardStateService } from '../../services/dashboard-state-service.service';
 
 @Component({
   selector: 'app-portal-dashboard',
@@ -47,9 +45,7 @@ export class PortalDashboardComponent implements IDashboard, OnInit {
     private authService: AuthService,
     private permissionsService: PermissionsService,
     accessTokenService: AccessTokenService,
-    private portalResourceService: PortalResource,
-    private partyService: PartyService,
-    private lookupService: LookupService,
+    private dashboardStateService: DashboardStateService,
     private stateService: AppStateService
   ) {
     this.logoutRedirectUrl = `${this.config.applicationUrl}/${this.config.routes.auth}`;
@@ -82,28 +78,7 @@ export class PortalDashboardComponent implements IDashboard, OnInit {
     );
   }
   public ngOnInit(): void {
-    // Get profile status and college info.
-    // TODO: Insert a caching layer so a full get is not always required.
-    const partyId = this.partyService.partyId;
-
-    // Use forkJoin to wait for both to return.
-    this.portalResourceService
-      .getProfileStatus(partyId)
-      .subscribe((profileStatus) => {
-        const fullNameText = this.getUserFullNameText(profileStatus);
-        const collegeName = this.getCollegeName(profileStatus);
-
-        // Set the user name and college on the dashboard.
-        const oldState = this.stateService.getNamedState<DashboardStateModel>(
-          PidpStateName.dashboard
-        );
-        const newState: DashboardStateModel = {
-          ...oldState,
-          userProfileFullNameText: fullNameText,
-          userProfileCollegeNameText: collegeName,
-        };
-        this.stateService.setNamedState(PidpStateName.dashboard, newState);
-      });
+    this.dashboardStateService.refreshDashboardState();
   }
 
   public onLogout(): void {
@@ -192,26 +167,5 @@ export class PortalDashboardComponent implements IDashboard, OnInit {
         'help_outline'
       ),
     ];
-  }
-  private getUserFullNameText(profileStatus: ProfileStatus | null): string {
-    if (profileStatus?.status.demographics.firstName) {
-      const fullName = `${profileStatus?.status.demographics.firstName} ${profileStatus?.status.demographics.lastName}`;
-      return fullName;
-    } else {
-      return '';
-    }
-  }
-  private getCollegeName(profileStatus: ProfileStatus | null): string {
-    if (!profileStatus || !profileStatus.status?.dashboardInfo) {
-      return '';
-    }
-
-    const collegeCode = profileStatus.status.dashboardInfo.collegeCode ?? null;
-    if (!collegeCode) {
-      return '';
-    }
-
-    const college = this.lookupService.getCollege(collegeCode);
-    return college?.name ?? '';
   }
 }

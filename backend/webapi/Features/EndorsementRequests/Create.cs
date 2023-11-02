@@ -10,6 +10,7 @@ using Pidp.Data;
 using Pidp.Infrastructure.HttpClients.Mail;
 using Pidp.Infrastructure.Services;
 using Pidp.Models;
+using Microsoft.EntityFrameworkCore;
 
 public class Create
 {
@@ -52,6 +53,11 @@ public class Create
 
         public async Task HandleAsync(Command command)
         {
+            var partyName = await this.context.Parties
+                .Where(party => party.Id == command.PartyId)
+                .Select(party => party.FullName)
+                .SingleAsync();
+
             var request = new EndorsementRequest
             {
                 RequestingPartyId = command.PartyId,
@@ -65,17 +71,17 @@ public class Create
             this.context.EndorsementRequests.Add(request);
             await this.context.SaveChangesAsync();
 
-            await this.SendEndorsementRequestEmailAsync(request.RecipientEmail, request.Token);
+            await this.SendEndorsementRequestEmailAsync(request.RecipientEmail, request.Token, partyName);
         }
 
-        private async Task SendEndorsementRequestEmailAsync(string recipientEmail, Guid token)
+        private async Task SendEndorsementRequestEmailAsync(string recipientEmail, Guid token, string partyName)
         {
             string url = this.applicationUrl.SetQueryParam("endorsement-token", token);
             var link = $"<a href=\"{url}\" target=\"_blank\" rel=\"noopener noreferrer\">this link</a>";
             var email = new Email(
                 from: EmailService.PidpEmail,
                 to: recipientEmail,
-                subject: "You Have Received an Endorsement Request in OneHealthID Service",
+                subject: $"OneHealthID Endorsement Request from {partyName}",
                 body: $@"Hello,
 <br>You are receiving this email because a user requested an endorsement from you.
 <br>

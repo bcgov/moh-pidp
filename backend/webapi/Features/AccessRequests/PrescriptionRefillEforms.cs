@@ -61,7 +61,7 @@ public class PrescriptionRefillEforms
                     AlreadyEnroled = party.AccessRequests.Any(request => request.AccessTypeCode == AccessTypeCode.PrescriptionRefillEforms),
                     UserId = party.PrimaryUserId,
                     party.Email,
-                    party.FirstName,
+                    party.DisplayFirstName,
                     party.Cpn,
                 })
                 .SingleAsync();
@@ -90,7 +90,7 @@ public class PrescriptionRefillEforms
 
             await this.context.SaveChangesAsync();
 
-            await this.SendConfirmationEmailAsync(dto.Email, dto.FirstName);
+            await this.SendConfirmationEmailAsync(dto.Email, dto.DisplayFirstName);
 
             return DomainResult.Success();
         }

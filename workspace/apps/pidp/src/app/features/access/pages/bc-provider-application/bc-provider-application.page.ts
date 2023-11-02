@@ -28,6 +28,7 @@ import {
   faXmark,
 } from '@fortawesome/free-solid-svg-icons';
 import {
+  AppStateService,
   LOADING_OVERLAY_DEFAULT_MESSAGE,
   LoadingOverlayService,
   NavigationService,
@@ -56,6 +57,7 @@ import { StatusCode } from '@app/features/portal/enums/status-code.enum';
 
 import { BcProviderApplicationFormState } from './bc-provider-application-form-state';
 import { BcProviderApplicationResource } from './bc-provider-application-resource.service';
+import { DashboardStateModel, PidpStateName } from '@pidp/data-model';
 
 @Component({
   selector: 'app-bc-provider-application',
@@ -84,6 +86,8 @@ export class BcProviderApplicationPage
 
   public activeLayout: 'upliftAccount' | 'createAccount' | '';
 
+  public dashboardState$: Observable<DashboardStateModel>;
+
   @ViewChild('successDialog')
   public successDialogTemplate!: TemplateRef<Element>;
 
@@ -103,7 +107,8 @@ export class BcProviderApplicationPage
     private partyService: PartyService,
     private resource: BcProviderApplicationResource,
     private route: ActivatedRoute,
-    private utilsService: UtilsService
+    private utilsService: UtilsService,
+    private stateService: AppStateService,
   ) {
     super(dependenciesService);
     this.formState = new BcProviderApplicationFormState(fb);
@@ -112,6 +117,10 @@ export class BcProviderApplicationPage
       routeData.bcProviderApplicationStatusCode == StatusCode.COMPLETED;
 
     this.activeLayout = '';
+
+    this.dashboardState$ = this.stateService.getNamedStateBroadcast(
+      PidpStateName.dashboard,
+    );
   }
 
   public onBack(): void {
@@ -179,7 +188,7 @@ export class BcProviderApplicationPage
         this.setError(message);
         this.setMessage('');
         return '';
-      })
+      }),
     );
   }
 
@@ -213,7 +222,7 @@ export class BcProviderApplicationPage
           `${
             this.config.applicationUrl +
             AuthRoutes.routePath(AuthRoutes.AUTO_LOGIN)
-          }?idp_hint=${IdentityProvider.BC_PROVIDER}`
+          }?idp_hint=${IdentityProvider.BC_PROVIDER}`,
         );
       }),
       catchError(() => {
@@ -221,7 +230,7 @@ export class BcProviderApplicationPage
         this.logger.error('Link Request creation failed');
 
         return of(null);
-      })
+      }),
     );
   }
 }

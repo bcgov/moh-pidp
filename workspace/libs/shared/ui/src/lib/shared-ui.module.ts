@@ -48,6 +48,7 @@ import { PhonePipe } from './pipes/phone.pipe';
 import { PostalPipe } from './pipes/postal.pipe';
 import { ReplacePipe } from './pipes/replace.pipe';
 import { SafePipe } from './pipes/safe.pipe';
+import { TrimDirective } from './directives/trim.directive';
 
 @NgModule({
   declarations: [
@@ -92,6 +93,7 @@ import { SafePipe } from './pipes/safe.pipe';
     ReplacePipe,
     SafePipe,
     InjectViewportCssClassDirective,
+    TrimDirective,
   ],
   imports: [
     CommonModule,
