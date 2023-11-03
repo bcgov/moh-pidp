@@ -4,6 +4,7 @@ using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 
 using Pidp.Data;
+using Pidp.Infrastructure.Auth;
 using Pidp.Models.Lookups;
 
 public class Destination
@@ -38,16 +39,15 @@ public class Destination
 
         public async Task<Model> HandleAsync(Query query)
         {
-
-
-            // TODO handle non-BCSC casrds
             var party = await this.context.Parties
                 .Where(party => party.Id == query.PartyId)
                 .Select(party => new
                 {
                     DemographicsCompleted = party.Email != null && party.Phone != null,
                     UaaCompleted = party.AccessRequests.Any(request => request.AccessTypeCode == AccessTypeCode.UserAccessAgreement),
-                    LicenceResolved =  party.Cpn != null || (party.LicenceDeclaration != null && party.LicenceDeclaration.IsUnlicensed)
+                    LicenceResolved = party.Credentials.All(credential => credential.IdentityProvider != IdentityProviders.BCServicesCard)
+                        || party.Cpn != null
+                        || (party.LicenceDeclaration != null && party.LicenceDeclaration.IsUnlicensed)
                 })
                 .SingleAsync();
 
