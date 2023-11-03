@@ -86,38 +86,17 @@ public class Approve
             return DomainResult.Success();
         }
 
-        private class PartyForEndorsement
-        {
-            public int Id { get; set; }
-            public Guid UserId { get; set; }
-            public string? Cpn { get; set; }
-            public string? UserPrincipalName { get; set; }
-        }
-
-        private class PartyWithPlrStandingsDigest
-        {
-            public PartyWithPlrStandingsDigest(PartyForEndorsement partyForEndorsement, PlrStandingsDigest plrStandingsDigest)
-            {
-                this.PartyForEndorsement = partyForEndorsement;
-                this.PlrStandingsDigest = plrStandingsDigest;
-            }
-
-            public PartyForEndorsement PartyForEndorsement { get; set; }
-            public PlrStandingsDigest PlrStandingsDigest { get; set; }
-        }
-
         // When a user with no College Licences is endorsed by a Licenced user in good standing, they recieve the "MOA" role.
         private async Task HandleMoaDesignation(EndorsementRequest request)
         {
-            // get 2 parties: requesting and receiving
             var parties = await this.context.Parties
                 .Where(party => party.Id == request.RequestingPartyId
                     || party.Id == request.ReceivingPartyId)
-                .Select(party => new PartyForEndorsement()
+                .Select(party => new
                 {
-                    Id = party.Id,
+                    party.Id,
                     UserId = party.PrimaryUserId,
-                    Cpn = party.Cpn,
+                    party.Cpn,
                     UserPrincipalName = party.Credentials
                         .Where(credential => credential.IdentityProvider == IdentityProviders.BCProvider)
                         .Select(credential => credential.IdpId)
@@ -125,59 +104,36 @@ public class Approve
                 })
                 .ToListAsync();
 
-            if (!parties.Any(party => string.IsNullOrWhiteSpace(party.Cpn)))
+            if (parties.Count(party => string.IsNullOrWhiteSpace(party.Cpn)) != 1)
             {
-                // both Parties are unlicenced
+                // Either both Parties are licenced or both Parties are unlicenced
                 return;
             }
 
-            // get all parties with a licence
-            var licencedParties = parties.FindAll(party => !string.IsNullOrWhiteSpace(party.Cpn));
-            var licencedPartiesInGoodStanding = new List<PartyWithPlrStandingsDigest>();
-            var licencedPartiesInBadStanding = new List<PartyWithPlrStandingsDigest>();
-            foreach (var licencedParty in licencedParties)
+            var licencedParty = parties.Single(party => !string.IsNullOrWhiteSpace(party.Cpn));
+            var licencedPartyStanding = await this.plrClient.GetStandingsDigestAsync(licencedParty.Cpn);
+            if (!licencedPartyStanding.HasGoodStanding)
             {
-                var licencedPartyStanding = await this.plrClient.GetStandingsDigestAsync(licencedParty.Cpn);
-                if (licencedPartyStanding.HasGoodStanding)
-                {
-                    licencedPartiesInGoodStanding.Add(new PartyWithPlrStandingsDigest(licencedParty, licencedPartyStanding));
-                }
-                else
-                {
-                    licencedPartiesInBadStanding.Add(new PartyWithPlrStandingsDigest(licencedParty, licencedPartyStanding));
-                }
-            }
-            if (licencedPartiesInGoodStanding.Count != 1)
-            {
-                // TODO: Log / other behaviour when either both Parties are in good standing or both Parties are in bad standing
+                // TODO: Log / other behaviour when in bad standing?
                 return;
             }
 
-            var regulatedParty = licencedPartiesInGoodStanding.First().PartyForEndorsement;
-            var regulatedPartyStanding = licencedPartiesInGoodStanding.First().PlrStandingsDigest;
-
-            var unregulatedParty = parties.SingleOrDefault(party => string.IsNullOrWhiteSpace(party.Cpn))
-                ?? licencedPartiesInBadStanding.SingleOrDefault()?.PartyForEndorsement;
-            if (unregulatedParty == null)
+            var unLicencedParty = parties.Single(party => string.IsNullOrWhiteSpace(party.Cpn));
+            if (await this.keycloakClient.AssignAccessRoles(unLicencedParty.UserId, MohKeycloakEnrolment.MoaLicenceStatus))
             {
-                return;
-            }
-
-            if (await this.keycloakClient.AssignAccessRoles(unregulatedParty.UserId, MohKeycloakEnrolment.MoaLicenceStatus))
-            {
-                this.context.BusinessEvents.Add(LicenceStatusRoleAssigned.Create(unregulatedParty.Id, MohKeycloakEnrolment.MoaLicenceStatus, this.clock.GetCurrentInstant()));
+                this.context.BusinessEvents.Add(LicenceStatusRoleAssigned.Create(unLicencedParty.Id, MohKeycloakEnrolment.MoaLicenceStatus, this.clock.GetCurrentInstant()));
             }
             else
             {
-                this.logger.LogMoaRoleAssignmentError(unregulatedParty.Id);
+                this.logger.LogMoaRoleAssignmentError(unLicencedParty.Id);
             }
 
-            if (!string.IsNullOrWhiteSpace(unregulatedParty.UserPrincipalName)
-                && regulatedPartyStanding
+            if (!string.IsNullOrWhiteSpace(unLicencedParty.UserPrincipalName)
+                && licencedPartyStanding
                     .With(IdentifierType.PhysiciansAndSurgeons, IdentifierType.Nurse, IdentifierType.Midwife)
                     .HasGoodStanding)
             {
-                var endorsingCpns = await this.context.ActiveEndorsementRelationships(unregulatedParty.Id)
+                var endorsingCpns = await this.context.ActiveEndorsementRelationships(unLicencedParty.Id)
                     .Select(relationship => relationship.Party!.Cpn)
                     .ToListAsync();
 
@@ -189,26 +145,8 @@ public class Approve
                         .WithGoodStanding()
                         .With(IdentifierType.PhysiciansAndSurgeons, IdentifierType.Nurse, IdentifierType.Midwife)
                         .Cpns
-                        .Append(regulatedParty.Cpn!));
-                await this.bcProviderClient.UpdateAttributes(unregulatedParty.UserPrincipalName, unlicencedPartyBCProviderAttributes.AsAdditionalData());
-            }
-
-            if (!string.IsNullOrWhiteSpace(regulatedParty.UserPrincipalName))
-            {
-                var endorserCpns = await this.context.ActiveEndorsementRelationships(regulatedParty.Id)
-                    .Select(relationship => relationship.Party!.Cpn)
-                    .ToListAsync();
-
-                var endorsingPartiesStanding = await this.plrClient.GetAggregateStandingsDigestAsync(endorserCpns);
-
-                var licencedPartyBCProviderAttributes = new BCProviderAttributes(this.config.BCProviderClient.ClientId)
-                    .SetIsMoa(true)
-                    .SetEndorserData(endorsingPartiesStanding
-                        .WithGoodStanding()
-                        .With(IdentifierType.PhysiciansAndSurgeons, IdentifierType.Nurse, IdentifierType.Midwife)
-                        .Cpns
-                        .Append(regulatedParty.Cpn!));
-                await this.bcProviderClient.UpdateAttributes(regulatedParty.UserPrincipalName, licencedPartyBCProviderAttributes.AsAdditionalData());
+                        .Append(licencedParty.Cpn!));
+                await this.bcProviderClient.UpdateAttributes(unLicencedParty.UserPrincipalName, unlicencedPartyBCProviderAttributes.AsAdditionalData());
             }
         }
     }
