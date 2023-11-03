@@ -20,7 +20,7 @@ using Pidp.Models.Lookups;
 
 public class Create
 {
-    public class Command : ICommand<IDomainResult>
+    public class Command : ICommand<IDomainResult<int>>
     {
         [JsonIgnore]
         public Guid CredentialLinkToken { get; set; }
@@ -28,7 +28,7 @@ public class Create
         public ClaimsPrincipal User { get; set; } = new();
     }
 
-    public class CommandHandler : ICommandHandler<Command, IDomainResult>
+    public class CommandHandler : ICommandHandler<Command, IDomainResult<int>>
     {
         private readonly IClock clock;
         private readonly ILogger logger;
@@ -44,7 +44,7 @@ public class Create
             this.context = context;
         }
 
-        public async Task<IDomainResult> HandleAsync(Command command)
+        public async Task<IDomainResult<int>> HandleAsync(Command command)
         {
             var userId = command.User.GetUserId();
             var userIdentityProvider = command.User.GetIdentityProvider();
@@ -54,7 +54,7 @@ public class Create
                 || string.IsNullOrWhiteSpace(userIdpId))
             {
                 this.logger.LogCredentialLinkTicketUserError(userId, userIdentityProvider, userIdpId);
-                return DomainResult.Failed();
+                return DomainResult.Failed<int>();
             }
 
             var ticket = await this.context.CredentialLinkTickets
@@ -65,17 +65,17 @@ public class Create
             if (ticket == null)
             {
                 this.logger.LogCredentialLinkTicketNotFound(command.CredentialLinkToken);
-                return DomainResult.NotFound();
+                return DomainResult.NotFound<int>();
             }
             if (ticket.ExpiresAt < this.clock.GetCurrentInstant())
             {
                 this.logger.LogCredentialLinkTicketExpired(ticket.Id);
-                return DomainResult.Failed();
+                return DomainResult.Failed<int>();
             }
             if (ticket.LinkToIdentityProvider != userIdentityProvider)
             {
                 this.logger.LogCredentialLinkTicketIdpError(ticket.Id, ticket.LinkToIdentityProvider, userIdentityProvider);
-                return DomainResult.Failed();
+                return DomainResult.Failed<int>();
             }
 
             var credential = new Credential
@@ -92,7 +92,7 @@ public class Create
 
             await this.context.SaveChangesAsync();
 
-            return DomainResult.Success();
+            return DomainResult.Success(ticket.PartyId);
         }
     }
 
