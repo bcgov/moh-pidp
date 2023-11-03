@@ -1,26 +1,18 @@
-
 namespace Pidp.Infrastructure.HealthChecks;
 
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 public class BackgroundWorkerHealthCheck : IHealthCheck
 {
-    private volatile bool isReady;
+    public bool IsRunning { get; set; }
 
-    public bool IsReady
+    public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
     {
-        get => this.isReady;
-        set => this.isReady = value;
-    }
-
-    public Task<HealthCheckResult> CheckHealthAsync(
-        HealthCheckContext context, CancellationToken cancellationToken = default)
-    {
-        if (this.IsReady)
+        if (this.IsRunning)
         {
-            return Task.FromResult(HealthCheckResult.Healthy("The background service startup task has completed."));
+            return Task.FromResult(HealthCheckResult.Healthy("The background service is running."));
         }
 
-        return Task.FromResult(HealthCheckResult.Unhealthy("That background service startup task is still running."));
+        return Task.FromResult(HealthCheckResult.Unhealthy("The background service has stopped."));
     }
 }

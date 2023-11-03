@@ -25,7 +25,7 @@ public class PlrStatusUpdateSchedulingService : BackgroundService
 
         try
         {
-            this.healthCheck.IsReady = true;
+            this.healthCheck.IsRunning = true;
             while (await this.timer.WaitForNextTickAsync(stoppingToken)
                 && !stoppingToken.IsCancellationRequested)
             {
@@ -37,7 +37,10 @@ public class PlrStatusUpdateSchedulingService : BackgroundService
         catch (Exception e)
         {
             this.logger.LogServiceHasStoppedUnexpectedly(e);
-            this.healthCheck.IsReady = false;
+        }
+        finally
+        {
+            this.healthCheck.IsRunning = false;
         }
     }
 
@@ -46,6 +49,7 @@ public class PlrStatusUpdateSchedulingService : BackgroundService
         this.logger.LogServiceIsStopping();
 
         await base.StopAsync(cancellationToken);
+        this.healthCheck.IsRunning = false;
     }
 }
 

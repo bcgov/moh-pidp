@@ -127,15 +127,15 @@ public class Startup
             endpoints.MapControllers();
             endpoints.MapHealthChecks("/health/background-services", new HealthCheckOptions
             {
-                Predicate = registration => registration.Tags.Contains(HealthCheckTag.BackgroundServices.Value)
+                Predicate = registration => registration.Tags.Contains(HealthCheckTag.BackgroundServices)
             }).AllowAnonymous();
             endpoints.MapHealthChecks("/health/liveness", new HealthCheckOptions
             {
-                Predicate = registration => registration.Tags.Contains(HealthCheckTag.Liveness.Value)
+                Predicate = registration => registration.Tags.Contains(HealthCheckTag.Liveness)
             }).AllowAnonymous();
             endpoints.MapHealthChecks("/health/readiness", new HealthCheckOptions
             {
-                Predicate = registration => registration.Tags.Contains(HealthCheckTag.Readiness.Value)
+                Predicate = registration => registration.Tags.Contains(HealthCheckTag.Readiness)
             }).AllowAnonymous();
         });
     }
