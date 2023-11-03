@@ -76,6 +76,7 @@ public class Approve
 
             if (endorsementRequest.Status == EndorsementRequestStatus.Completed)
             {
+                await this.SetEndorserData(endorsementRequest);
                 // Both parties have approved, Request handshake is complete.
                 await this.HandleMoaDesignation(endorsementRequest);
                 this.context.Endorsements.Add(Endorsement.FromCompletedRequest(endorsementRequest));
@@ -84,6 +85,57 @@ public class Approve
             await this.context.SaveChangesAsync();
 
             return DomainResult.Success();
+        }
+
+        private async Task SetEndorserData(EndorsementRequest request)
+        {
+            var parties = await this.context.Parties
+                .Where(party => party.Id == request.RequestingPartyId
+                    || party.Id == request.ReceivingPartyId)
+                .Select(party => new
+                {
+                    party.Id,
+                    party.Cpn,
+                    UserPrincipalName = party.Credentials
+                        .Where(credential => credential.IdentityProvider == IdentityProviders.BCProvider)
+                        .Select(credential => credential.IdpId)
+                        .SingleOrDefault(),
+                })
+                .ToListAsync();
+
+            var requestingParty = parties.Single(p => p.Id == request.RequestingPartyId);
+            var receivingParty = parties.Single(p => p.Id == request.ReceivingPartyId);
+
+            if (!string.IsNullOrWhiteSpace(requestingParty.UserPrincipalName)
+                && !string.IsNullOrWhiteSpace(receivingParty.Cpn))
+            {
+                var endorsementCpns = await this.context.ActiveEndorsementRelationships(requestingParty.Id)
+                    .Select(relationship => relationship.Party!.Cpn)
+                    .ToListAsync();
+                var endorsementPlrDigest = await this.plrClient.GetAggregateStandingsDigestAsync(endorsementCpns);
+
+                var requestingEndorserCpns = endorsementPlrDigest.Cpns;
+                await this.UpdateEndorserData(requestingParty.UserPrincipalName, receivingParty.Cpn, requestingEndorserCpns);
+            }
+
+            if (!string.IsNullOrWhiteSpace(receivingParty.UserPrincipalName)
+                && !string.IsNullOrWhiteSpace(requestingParty.Cpn))
+            {
+                var endorsementCpns = await this.context.ActiveEndorsementRelationships(receivingParty.Id)
+                    .Select(relationship => relationship.Party!.Cpn)
+                    .ToListAsync();
+                var endorsementPlrDigest = await this.plrClient.GetAggregateStandingsDigestAsync(endorsementCpns);
+
+                var receivingEndorserCpns = endorsementPlrDigest.Cpns;
+                await this.UpdateEndorserData(receivingParty.UserPrincipalName, requestingParty.Cpn, receivingEndorserCpns);
+            }
+        }
+
+        private async Task UpdateEndorserData(string upnToUpdate, string cpnToAdd, IEnumerable<string> existingCpns)
+        {
+            var bcProviderAttributes = new BCProviderAttributes(this.config.BCProviderClient.ClientId)
+                .SetEndorserData(existingCpns.Append(cpnToAdd));
+            await this.bcProviderClient.UpdateAttributes(upnToUpdate, bcProviderAttributes.AsAdditionalData());
         }
 
         // When a user with no College Licences is endorsed by a Licenced user in good standing, they recieve the "MOA" role.
@@ -133,19 +185,8 @@ public class Approve
                     .With(IdentifierType.PhysiciansAndSurgeons, IdentifierType.Nurse, IdentifierType.Midwife)
                     .HasGoodStanding)
             {
-                var endorsingCpns = await this.context.ActiveEndorsementRelationships(unLicencedParty.Id)
-                    .Select(relationship => relationship.Party!.Cpn)
-                    .ToListAsync();
-
-                var endorsingPartiesStanding = await this.plrClient.GetAggregateStandingsDigestAsync(endorsingCpns);
-
                 var unlicencedPartyBCProviderAttributes = new BCProviderAttributes(this.config.BCProviderClient.ClientId)
-                    .SetIsMoa(true)
-                    .SetEndorserData(endorsingPartiesStanding
-                        .WithGoodStanding()
-                        .With(IdentifierType.PhysiciansAndSurgeons, IdentifierType.Nurse, IdentifierType.Midwife)
-                        .Cpns
-                        .Append(licencedParty.Cpn!));
+                    .SetIsMoa(true);
                 await this.bcProviderClient.UpdateAttributes(unLicencedParty.UserPrincipalName, unlicencedPartyBCProviderAttributes.AsAdditionalData());
             }
         }
