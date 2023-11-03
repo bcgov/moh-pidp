@@ -5,6 +5,7 @@ import { setDashboardTitleGuard } from '@pidp/presentation';
 
 import { BcProviderApplicationPage } from './bc-provider-application.page';
 import { BcProviderApplicationResolver } from './bc-provider-application.resolver';
+import { highAssuranceCredentialGuard } from '@app/features/auth/guards/high-assurance-credential.guard';
 
 const routes: Routes = [
   {
@@ -12,7 +13,7 @@ const routes: Routes = [
     resolve: {
       bcProviderApplicationStatusCode: BcProviderApplicationResolver,
     },
-    canActivate: [setDashboardTitleGuard],
+    canActivate: [setDashboardTitleGuard, highAssuranceCredentialGuard],
     component: BcProviderApplicationPage,
     data: {
       setDashboardTitleGuard: {
