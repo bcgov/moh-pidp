@@ -42,6 +42,7 @@ public interface IPlrClient
     /// <param name="cpn"></param>
     Task<PlrStandingsDigest> GetStandingsDigestAsync(string? cpn);
 
+    /// <summary>
     /// Creates a summary of the status of all PLR Records for all of the given CPNs.
     /// The digest indicates an error on HTTP failure.
     /// </summary>
