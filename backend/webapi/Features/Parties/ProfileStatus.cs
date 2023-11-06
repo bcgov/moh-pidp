@@ -133,8 +133,7 @@ public partial class ProfileStatus
 
         // Mapped
         public int Id { get; set; }
-        public string FirstName { get; set; } = string.Empty;
-        public string LastName { get; set; } = string.Empty;
+        public string DisplayFullName { get; set; } = string.Empty;
         public LocalDate? Birthdate { get; set; }
         public string? Email { get; set; }
         public string? Phone { get; set; }
