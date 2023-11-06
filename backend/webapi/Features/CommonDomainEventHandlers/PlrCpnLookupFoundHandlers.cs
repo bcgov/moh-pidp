@@ -135,6 +135,28 @@ public class UpdateBCProviderAfterPlrCpnLookupFound : INotificationHandler<PlrCp
             })
             .ToListAsync();
 
+        var currentUpn = await this.context.Parties
+            .Where(party => party.Id == notification.PartyId)
+            .Select(party => party.Credentials
+                .Where(credential => credential.IdentityProvider == IdentityProviders.BCProvider)
+                .Select(credential => credential.IdpId)
+                .SingleOrDefault())
+            .SingleOrDefaultAsync();
+
+        if (!string.IsNullOrWhiteSpace(currentUpn))
+        {
+            var endorsementCpns = endorsementRelations
+                .Where(relation => !string.IsNullOrWhiteSpace(relation.Cpn))
+                .Select(relation => relation.Cpn);
+
+            var endorsementPlrDigest = await this.plrClient.GetAggregateStandingsDigestAsync(endorsementCpns);
+            var requestingEndorserCpns = endorsementPlrDigest.Cpns;
+
+            var bcProviderAttributes = new BCProviderAttributes(this.clientId)
+                            .SetEndorserData(requestingEndorserCpns);
+            await this.bcProviderClient.UpdateAttributes(currentUpn, bcProviderAttributes.AsAdditionalData());
+        }
+
         foreach (var relation in endorsementRelations)
         {
             if (string.IsNullOrWhiteSpace(relation.UserPrincipalName)
