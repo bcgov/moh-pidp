@@ -68,7 +68,7 @@ spec:
                   name: rabbitmq-password
                   key: password
             - name: RabbitMQ__HostAddress
-              value: "rabbitmq://pidp:$(RabbitMQ__Password)@rabbitmq:5672/{{ $release }}"
+              value: "amqp://pidp:$(RabbitMQ__Password)@rabbitmq:5672/{{ $release }}"
             - name: DB_HOST
               valueFrom:
                 configMapKeyRef:
@@ -119,22 +119,27 @@ spec:
             timeoutSeconds: 1
             periodSeconds: 10
             successThreshold: 1
-            failureThreshold: 3
-            initialDelaySeconds: 8            
-          startupProbe:
+            failureThreshold: 5
+            initialDelaySeconds: 30           
+          # startupProbe:
+          #   httpGet:
+          #     path: /health/liveness
+          #     port: http
+          #     scheme: HTTP
+          #   timeoutSeconds: 1
+          #   periodSeconds: 10
+          #   successThreshold: 1
+          #   failureThreshold: 30
+          #   initialDelaySeconds: 5
+          readinessProbe:
             httpGet:
-              path: /health/liveness
+              path: /health/readiness
               port: http
-              scheme: HTTP
             timeoutSeconds: 1
             periodSeconds: 10
             successThreshold: 1
-            failureThreshold: 30
-            initialDelaySeconds: 5
-          readinessProbe:
-            httpGet:
-              path: /health/liveness
-              port: http
+            failureThreshold: 5
+
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}
