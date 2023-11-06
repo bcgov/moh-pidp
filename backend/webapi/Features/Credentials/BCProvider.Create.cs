@@ -105,17 +105,17 @@ public class BCProviderCreate
                 UaaDate = party.UaaAgreementDate.ToDateTimeOffset()
             };
 
+            var endorsementCpns = await this.context.ActiveEndorsementRelationships(command.PartyId)
+                .Select(relationship => relationship.Party!.Cpn)
+                .ToListAsync();
+            var endorsementPlrDigest = await this.plrClient.GetAggregateStandingsDigestAsync(endorsementCpns);
+            newUserRep.EndorserData = endorsementPlrDigest
+                .WithGoodStanding()
+                .With(IdentifierType.PhysiciansAndSurgeons, IdentifierType.Nurse, IdentifierType.Midwife)
+                .Cpns;
+
             if (!plrStanding.HasGoodStanding)
             {
-                var endorsementCpns = await this.context.ActiveEndorsementRelationships(command.PartyId)
-                    .Select(relationship => relationship.Party!.Cpn)
-                    .ToListAsync();
-                var endorsementPlrDigest = await this.plrClient.GetAggregateStandingsDigestAsync(endorsementCpns);
-
-                newUserRep.EndorserData = endorsementPlrDigest
-                    .WithGoodStanding()
-                    .With(IdentifierType.PhysiciansAndSurgeons, IdentifierType.Nurse, IdentifierType.Midwife)
-                    .Cpns;
                 newUserRep.IsMoa = endorsementPlrDigest.HasGoodStanding;
             }
 
