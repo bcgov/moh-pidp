@@ -98,4 +98,4 @@ tolerations: []
 affinity: {}
 
 rabbitmq:
-  host: rabbitmq://pidp:password@rabbitmq:5672/
+  host: amqp://pidp:password@rabbitmq:5672/
