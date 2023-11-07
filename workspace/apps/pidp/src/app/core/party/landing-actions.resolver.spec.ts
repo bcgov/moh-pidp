@@ -1,9 +1,10 @@
 import { TestBed } from '@angular/core/testing';
 
 import { LandingActionsResolver } from './landing-actions.resolver';
-import { APP_CONFIG, APP_DI_CONFIG } from '@app/app.config';
-import { HttpClient } from '@angular/common/http';
 import { provideAutoSpy } from 'jest-auto-spies';
+import { PartyService } from './party.service';
+import { Router } from '@angular/router';
+import { EndorsementsResource } from '@app/features/organization-info/pages/endorsements/endorsements-resource.service';
 
 describe('LandingActionsResolver', () => {
   let resolver: LandingActionsResolver;
@@ -11,11 +12,9 @@ describe('LandingActionsResolver', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
-        {
-          provide: APP_CONFIG,
-          useValue: APP_DI_CONFIG,
-        },
-        provideAutoSpy(HttpClient),
+        provideAutoSpy(PartyService),
+        provideAutoSpy(Router),
+        provideAutoSpy(EndorsementsResource),
       ],
     });
     resolver = TestBed.inject(LandingActionsResolver);
