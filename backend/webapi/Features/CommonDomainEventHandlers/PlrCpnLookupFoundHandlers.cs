@@ -159,10 +159,9 @@ public class UpdateBCProviderAfterPlrCpnLookupFound : INotificationHandler<PlrCp
 
         foreach (var relation in endorsementRelations)
         {
-            if (string.IsNullOrWhiteSpace(relation.UserPrincipalName)
-                || await this.plrClient.GetStandingAsync(relation.Cpn))
+            if (string.IsNullOrWhiteSpace(relation.UserPrincipalName))
             {
-                // User either has no BC Provider or has a licence in good standing and so can't be an MOA.
+                // User has no BC Provider
                 continue;
             }
 
@@ -173,11 +172,16 @@ public class UpdateBCProviderAfterPlrCpnLookupFound : INotificationHandler<PlrCp
             var endorsingPartiesStanding = await this.plrClient.GetAggregateStandingsDigestAsync(endorsingCpns);
 
             var relationBCProviderAttributes = new BCProviderAttributes(this.clientId)
-                .SetIsMoa(true)
                 .SetEndorserData(endorsingPartiesStanding
                     .WithGoodStanding()
                     .With(IdentifierType.PhysiciansAndSurgeons, IdentifierType.Nurse, IdentifierType.Midwife)
                     .Cpns);
+
+            if (!await this.plrClient.GetStandingAsync(relation.Cpn))
+            {
+                // A user who has a licence in good standing can't be an MOA.
+                relationBCProviderAttributes.SetIsMoa(endorsingPartiesStanding.HasGoodStanding);
+            }
             await this.bcProviderClient.UpdateAttributes(relation.UserPrincipalName, relationBCProviderAttributes.AsAdditionalData());
         }
     }
