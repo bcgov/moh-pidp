@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Resolve, Router } from '@angular/router';
-import { EMPTY, Observable, catchError, of, switchMap } from 'rxjs';
+import { Observable, catchError, of, switchMap } from 'rxjs';
 import { Destination, DiscoveryResource } from './discovery-resource.service';
 import { PartyService } from './party.service';
 import { ProfileRoutes } from '@app/features/profile/profile.routes';
@@ -27,12 +27,12 @@ export class DestinationResolver implements Resolve<Destination | null> {
             this.router.navigateByUrl(
               ProfileRoutes.routePath(ProfileRoutes.PERSONAL_INFO),
             );
-            return EMPTY;
+            break;
           case Destination.USER_ACCESS_AGREEMENT:
             this.router.navigateByUrl(
               ProfileRoutes.routePath(ProfileRoutes.USER_ACCESS_AGREEMENT),
             );
-            return EMPTY;
+            break;
           // TODO: soon
           // case Destination.LICENCE_DECLARATION:
           //   this.router.navigateByUrl(
@@ -41,9 +41,9 @@ export class DestinationResolver implements Resolve<Destination | null> {
           //     ),
           //   );
           //   return EMPTY;
-          default:
-            return of(destination);
         }
+
+        return of(destination);
       }),
       catchError(() => of(null)),
     );
