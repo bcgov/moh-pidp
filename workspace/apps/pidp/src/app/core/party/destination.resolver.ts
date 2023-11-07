@@ -39,13 +39,13 @@ export class DestinationResolver implements Resolve<Destination | null> {
               ProfileRoutes.routePath(ProfileRoutes.USER_ACCESS_AGREEMENT),
             );
             break;
-          // TODO: soon
-          // case Destination.LICENCE_DECLARATION:
-          //   this.router.navigateByUrl(
-          //     ProfileRoutes.routePath(
-          //       ProfileRoutes.COLLEGE_LICENCE_DECLARATION,
-          //     ),
-          //   );
+          case Destination.LICENCE_DECLARATION:
+            this.router.navigateByUrl(
+              ProfileRoutes.routePath(
+                ProfileRoutes.COLLEGE_LICENCE_DECLARATION,
+              ),
+            );
+            break;
           case Destination.PORTAL:
             this.wizardComplete = true;
             break;
