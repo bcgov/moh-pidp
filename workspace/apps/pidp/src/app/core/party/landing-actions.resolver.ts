@@ -1,24 +1,44 @@
 import { Injectable } from '@angular/core';
-import { Resolve } from '@angular/router';
-import { PortalResource } from '@app/features/portal/portal-resource.service';
-import { Observable, of, switchMap } from 'rxjs';
+import { ActivatedRouteSnapshot, Resolve, Router } from '@angular/router';
+import { Observable, catchError, map, of } from 'rxjs';
 import { PartyService } from './party.service';
+import { EndorsementsResource } from '@app/features/organization-info/pages/endorsements/endorsements-resource.service';
 
 @Injectable({
   providedIn: 'root',
 })
-export class LandingActionsResolver implements Resolve<boolean> {
+export class LandingActionsResolver implements Resolve<null> {
   public constructor(
     private partyService: PartyService,
-    private resource: PortalResource,
+    private router: Router,
+    private resource: EndorsementsResource,
   ) {}
 
-  public resolve(): Observable<boolean> {
-    return this.resource.getProfileStatus(this.partyService.partyId).pipe(
-      switchMap(() => {
-        console.log(' ---------- done ---------');
-        return of(true);
-      }),
-    );
+  public resolve(route: ActivatedRouteSnapshot): Observable<null> {
+    const endorsementToken = route.queryParamMap.get('endorsement-token');
+    if (!endorsementToken) {
+      return of(null);
+    }
+
+    return this.resource
+      .receiveEndorsementRequest(this.partyService.partyId, endorsementToken)
+      .pipe(
+        map(() => {
+          this.router.navigate([], {
+            queryParams: {
+              'endorsement-token': null,
+            },
+            queryParamsHandling: 'merge',
+          });
+          return null;
+        }),
+        catchError((error) => {
+          console.error(
+            'Error occurred when receiving Endorsement Request: ',
+            error,
+          );
+          return of(null);
+        }),
+      );
   }
 }

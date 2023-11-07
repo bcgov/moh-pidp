@@ -174,11 +174,9 @@ export class PortalPage implements OnInit {
   }
 
   public ngOnInit(): void {
-    this.handleLandingActions$()
+    this.portalResource
+      .getProfileStatus(this.partyService.partyId)
       .pipe(
-        switchMap(() =>
-          this.portalResource.getProfileStatus(this.partyService.partyId),
-        ),
         tap((profileStatus: ProfileStatus | null) => {
           this.portalService.updateState(profileStatus);
           this.alerts = this.portalService.alerts;
@@ -242,28 +240,6 @@ export class PortalPage implements OnInit {
         }
         this.selectedIndex = selectedIndex;
       });
-  }
-
-  public handleLandingActions$(): Observable<void> {
-    const endorsementToken =
-      this.activatedRoute.snapshot.queryParamMap.get('endorsement-token');
-
-    if (!endorsementToken) {
-      return of(undefined);
-    }
-
-    return this.endorsementsResource
-      .receiveEndorsementRequest(this.partyService.partyId, endorsementToken)
-      .pipe(
-        map(() => {
-          this.router.navigate([], {
-            queryParams: {
-              'endorsement-token': null,
-            },
-            queryParamsHandling: 'merge',
-          });
-        }),
-      );
   }
 
   private selectedNoCollegeLicence(
