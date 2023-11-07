@@ -41,11 +41,12 @@ export class PartyResolver implements Resolve<number | null> {
           this.router.navigateByUrl(
             AuthRoutes.routePath(AuthRoutes.BC_PROVIDER_UPLIFT),
           );
+        }
+        if (!discovery.partyId) {
           return of(null);
         }
 
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        return of((this.partyService.partyId = discovery.partyId!));
+        return of((this.partyService.partyId = discovery.partyId));
       }),
       catchError((error: HttpErrorResponse | Error) => {
         this.logger.error(error.message);
