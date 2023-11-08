@@ -37,6 +37,7 @@ export class CollegeLicenceDeclarationPage
   public formState: CollegeLicenceDeclarationFormState;
   public colleges: CollegeLookup[];
   public showOverlayOnSubmit = true;
+  public licenceDeclarationFailed = false;
 
   public get showNurseValidationInfo(): boolean {
     const isNurse =
@@ -53,7 +54,7 @@ export class CollegeLicenceDeclarationPage
     private logger: LoggerService,
     private lookupService: LookupService,
     private stateService: AppStateService,
-    fb: FormBuilder
+    fb: FormBuilder,
   ) {
     super(dependenciesService);
 
@@ -77,14 +78,14 @@ export class CollegeLicenceDeclarationPage
       .get(partyId)
       .pipe(
         tap((model: PartyLicenceDeclarationInformation | null) =>
-          this.formState.patchValue(model)
+          this.formState.patchValue(model),
         ),
         catchError((error: HttpErrorResponse) => {
           if (error.status === HttpStatusCode.NotFound) {
             this.navigateToRoot();
           }
           return of(null);
-        })
+        }),
       )
       .subscribe();
   }
@@ -104,7 +105,7 @@ export class CollegeLicenceDeclarationPage
     const collegeName = college?.name ?? '';
 
     const oldState = this.stateService.getNamedState<DashboardStateModel>(
-      PidpStateName.dashboard
+      PidpStateName.dashboard,
     );
     const newState: DashboardStateModel = {
       ...oldState,
@@ -112,12 +113,14 @@ export class CollegeLicenceDeclarationPage
     };
     this.stateService.setNamedState(PidpStateName.dashboard, newState);
 
-    if (!cpn) {
+    if (!cpn && this.formState.collegeCode.value !== 0) {
+      this.licenceDeclarationFailed = true;
+    } else if (!cpn && this.formState.collegeCode.value === 0) {
       this.navigateToRoot();
     } else {
       this.router.navigate(
         [ProfileRoutes.routePath(ProfileRoutes.COLLEGE_LICENCE_INFO)],
-        { replaceUrl: true }
+        { replaceUrl: true },
       );
     }
   }
