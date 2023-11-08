@@ -56,9 +56,6 @@ export class PortalPage implements OnInit {
   public bcProvider$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
     false,
   );
-  public endorsement$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
-    true,
-  );
   public rostering$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
     true,
   );
