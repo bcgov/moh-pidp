@@ -109,25 +109,7 @@ export class PortalPage implements OnInit {
   }
 
   public navigateTo(): void {
-    if (this.demographicsStatusCode !== 2) {
-      this.router.navigateByUrl('/profile/personal-information');
-    } else if (
-      this.demographicsStatusCode === 2 &&
-      this.collegeLicenceStatusCode !== 2
-    ) {
-      this.router.navigateByUrl('/profile/college-licence-declaration');
-    } else if (
-      this.demographicsStatusCode === 2 &&
-      this.collegeLicenceStatusCode === 2 &&
-      this.uaaStatusCode !== 2
-    ) {
-      this.router.navigateByUrl('/profile/user-access-agreement');
-    } else if (
-      this.demographicsStatusCode === 2 &&
-      this.collegeLicenceStatusCode === 2 &&
-      this.uaaStatusCode === 2 &&
-      this.bcProviderStatusCode !== 2
-    ) {
+    if (this.bcProviderStatusCode !== 2) {
       this.router.navigateByUrl('/access/bc-provider-application');
     } else if (
       this.demographicsStatusCode === 2 &&
