@@ -99,7 +99,7 @@ export class PortalPage implements OnInit {
     this.collegeLicenceTutorial = collegeLicenceTutorialLink;
     this.uaaTutorial = uaaTutorialLink;
     this.bcProviderTutorial = bcProviderTutorialLink;
-    this.lastSelectedIndex = 6;
+    this.lastSelectedIndex = 3;
     this.selectedIndex = -1;
     this.identityProvider$ = this.authorizedUserService.identityProvider$;
     this.pasAllowedProviders = [
@@ -193,6 +193,7 @@ export class PortalPage implements OnInit {
               this.bcProviderUsername = bcProviderObject.bcProviderId;
             });
         } else if (selectedIndex === this.lastSelectedIndex) {
+          // BCrovider step
           selectedIndex = 0;
         }
         this.rosteringStatusCode =
@@ -200,6 +201,7 @@ export class PortalPage implements OnInit {
         if (this.rosteringStatusCode === 1) {
           this.rostering$.next(false);
         } else if (selectedIndex === this.lastSelectedIndex) {
+          // PAS step
           selectedIndex = 1;
         }
         if (
@@ -209,6 +211,7 @@ export class PortalPage implements OnInit {
             this.isComplete,
           )
         ) {
+          // MFA
           selectedIndex = 2;
         }
         this.selectedIndex = selectedIndex;
