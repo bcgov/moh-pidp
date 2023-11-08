@@ -24,7 +24,7 @@ public class CredentialsController : PidpControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<int>> CreateCredential([FromServices] ICommandHandler<Create.Command, IDomainResult<int>> handler)
+    public async Task<ActionResult<Create.Model>> CreateCredential([FromServices] ICommandHandler<Create.Command, IDomainResult<Create.Model>> handler)
     {
         var credentialLinkTicket = await this.AuthorizationService.VerifyTokenAsync<Cookies.CredentialLinkTicket.Values>(this.Request.Cookies.GetCredentialLinkTicket());
         if (credentialLinkTicket == null)

@@ -7,10 +7,10 @@ import { AuthorizedUserService } from '@app/features/auth/services/authorized-us
 import { APP_CONFIG, APP_DI_CONFIG } from '@app/app.config';
 
 import { ApiHttpClient } from '../resources/api-http-client.service';
-import { PartyResource } from './party-resource.service';
+import { DiscoveryResource } from './discovery-resource.service';
 
-describe('PartyResource', () => {
-  let service: PartyResource;
+describe('DiscoveryResource', () => {
+  let service: DiscoveryResource;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -25,7 +25,7 @@ describe('PartyResource', () => {
       ],
     });
 
-    service = TestBed.inject(PartyResource);
+    service = TestBed.inject(DiscoveryResource);
   });
 
   it('should be created', () => {

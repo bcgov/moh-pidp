@@ -1,19 +1,44 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { TestBed } from '@angular/core/testing';
-import { CanActivateFn } from '@angular/router';
+import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 
 import { authorizationRedirectGuard } from './authorization-redirect.guard';
+import { Spy, provideAutoSpy } from 'jest-auto-spies';
+import { AuthorizationRedirectGuardService } from './services/authorization-redirect-guard.service';
 
 describe('authorizationRedirectGuard', () => {
-  const executeGuard: CanActivateFn = (...guardParameters) =>
-    TestBed.runInInjectionContext(() =>
-      authorizationRedirectGuard(...guardParameters)
-    );
+  let activatedRouteSnapshotSpy: Spy<ActivatedRouteSnapshot>;
+  let routerStateSnapshotSpy: Spy<RouterStateSnapshot>;
+  let authorizationRedirectGuardServiceSpy: Spy<AuthorizationRedirectGuardService>;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
+    TestBed.configureTestingModule({
+      providers: [provideAutoSpy(AuthorizationRedirectGuardService)],
+    });
+
+    authorizationRedirectGuardServiceSpy = TestBed.inject<any>(
+      AuthorizationRedirectGuardService,
+    );
   });
 
-  it('should be created', () => {
-    expect(executeGuard).toBeTruthy();
+  describe('METHOD: CanActivateFn', () => {
+    given('the user is authorized', () => {
+      authorizationRedirectGuardServiceSpy.canActivate.mockReturnValueOnce(
+        true,
+      );
+
+      when('the guard is called', () => {
+        const result = TestBed.runInInjectionContext(() =>
+          authorizationRedirectGuard(
+            activatedRouteSnapshotSpy,
+            routerStateSnapshotSpy,
+          ),
+        );
+
+        then('the user should access the route', () => {
+          expect(result).toBeTruthy();
+        });
+      });
+    });
   });
 });
