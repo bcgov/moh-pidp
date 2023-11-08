@@ -46,7 +46,8 @@ export class PartyResolver implements Resolve<number | null> {
           return of(null);
         }
 
-        return of((this.partyService.partyId = discovery.partyId));
+        this.partyService.partyId = discovery.partyId;
+        return of(discovery.partyId);
       }),
       catchError((error: HttpErrorResponse | Error) => {
         this.logger.error(error.message);
