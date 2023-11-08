@@ -1,6 +1,6 @@
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { Component, Inject, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 
@@ -14,7 +14,6 @@ import { BcProviderEditInitialStateModel } from '../access/pages/bc-provider-edi
 import { IdentityProvider } from '../auth/enums/identity-provider.enum';
 import { AuthService } from '../auth/services/auth.service';
 import { AuthorizedUserService } from '../auth/services/authorized-user.service';
-import { EndorsementsResource } from '../organization-info/pages/endorsements/endorsements-resource.service';
 import { ProfileStatusAlert } from './models/profile-status-alert.model';
 import { ProfileStatus } from './models/profile-status.model';
 import { PortalResource } from './portal-resource.service';
@@ -54,12 +53,6 @@ export class PortalPage implements OnInit {
   public alerts: ProfileStatusAlert[];
 
   public Role = Role;
-  public demographics$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
-    false,
-  );
-  public collegeLicence$: BehaviorSubject<boolean> =
-    new BehaviorSubject<boolean>(false);
-  public uaa$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   public bcProvider$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
     false,
   );
@@ -97,8 +90,6 @@ export class PortalPage implements OnInit {
     private partyService: PartyService,
     private portalResource: PortalResource,
     private portalService: PortalService,
-    private endorsementsResource: EndorsementsResource,
-    private activatedRoute: ActivatedRoute,
     private authService: AuthService,
     private authorizedUserService: AuthorizedUserService,
     private toastService: ToastService,
@@ -191,26 +182,11 @@ export class PortalPage implements OnInit {
 
         this.demographicsStatusCode =
           profileStatus?.status.demographics.statusCode;
-        if (this.demographicsStatusCode === 2) {
-          this.demographics$.next(true);
-        } else if (selectedIndex === this.lastSelectedIndex) {
-          selectedIndex = 0;
-        }
         this.collegeLicenceStatusCode =
           profileStatus?.status.collegeCertification.statusCode;
-        if (this.collegeLicenceStatusCode === 2) {
-          this.collegeLicence$.next(true);
-          this.endorsement$.next(false);
-        } else if (selectedIndex === this.lastSelectedIndex) {
-          selectedIndex = 1;
-        }
         this.uaaStatusCode =
           profileStatus?.status.userAccessAgreement.statusCode;
-        if (this.uaaStatusCode === 2) {
-          this.uaa$.next(true);
-        } else if (selectedIndex === this.lastSelectedIndex) {
-          selectedIndex = 2;
-        }
+
         this.bcProviderStatusCode = profileStatus?.status.bcProvider.statusCode;
         if (this.bcProviderStatusCode === 2) {
           this.bcProvider$.next(true);
@@ -220,14 +196,14 @@ export class PortalPage implements OnInit {
               this.bcProviderUsername = bcProviderObject.bcProviderId;
             });
         } else if (selectedIndex === this.lastSelectedIndex) {
-          selectedIndex = 3;
+          selectedIndex = 0;
         }
         this.rosteringStatusCode =
           profileStatus?.status.primaryCareRostering.statusCode;
         if (this.rosteringStatusCode === 1) {
           this.rostering$.next(false);
         } else if (selectedIndex === this.lastSelectedIndex) {
-          selectedIndex = 4;
+          selectedIndex = 1;
         }
         if (
           this.selectedNoCollegeLicence(
@@ -236,7 +212,7 @@ export class PortalPage implements OnInit {
             this.isComplete,
           )
         ) {
-          selectedIndex = 5;
+          selectedIndex = 2;
         }
         this.selectedIndex = selectedIndex;
       });
