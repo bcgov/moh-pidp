@@ -113,15 +113,15 @@ export class CollegeLicenceDeclarationPage
     };
     this.stateService.setNamedState(PidpStateName.dashboard, newState);
 
-    if (!cpn && this.formState.collegeCode.value !== 0) {
-      this.licenceDeclarationFailed = true;
-    } else if (!cpn && this.formState.collegeCode.value === 0) {
-      this.navigateToRoot();
-    } else {
+    if (cpn) {
       this.router.navigate(
         [ProfileRoutes.routePath(ProfileRoutes.COLLEGE_LICENCE_INFO)],
         { replaceUrl: true },
       );
+    } else if (this.formState.collegeCode.value === 0) {
+      this.navigateToRoot();
+    } else {
+      this.licenceDeclarationFailed = true;
     }
   }
 
