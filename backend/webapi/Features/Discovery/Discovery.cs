@@ -1,72 +1,120 @@
 namespace Pidp.Features.Discovery;
 
-using DomainResults.Common;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
+using System.Text.Json.Serialization;
 
 using Pidp.Data;
 using Pidp.Extensions;
 using Pidp.Models;
+using Pidp.Models.DomainEvents;
+using Pidp.Infrastructure.Auth;
+using Pidp.Infrastructure.HttpClients.Plr;
 
 public class Discovery
 {
-    public class Command : ICommand<IDomainResult<int>>
+    public class Query : IQuery<Model>
     {
+        [JsonIgnore]
         public ClaimsPrincipal User { get; set; } = new();
     }
 
-    public class CommandHandler : ICommandHandler<Command, IDomainResult<int>>
+    public class Model
     {
+        public int? PartyId { get; set; }
+        public bool NewBCProvider { get; set; }
+    }
+
+    public class QueryHandler : IQueryHandler<Query, Model>
+    {
+        private readonly IPlrClient client;
         private readonly PidpDbContext context;
 
-        public CommandHandler(PidpDbContext context) => this.context = context;
-
-        public async Task<IDomainResult<int>> HandleAsync(Command command)
+        public QueryHandler(IPlrClient client, PidpDbContext context)
         {
-            var lowerIdpId = command.User.GetIdpId()?.ToLowerInvariant();
+            this.client = client;
+            this.context = context;
+        }
 
+        public async Task<Model> HandleAsync(Query query)
+        {
+            var idpId = query.User.GetIdpId()?.ToLowerInvariant();
+
+            var data = await this.context.Credentials
 #pragma warning disable CA1304 // ToLower() is Locale Dependant
-            var credential = await this.context.Credentials
-                .SingleOrDefaultAsync(credential => credential.UserId == command.User.GetUserId()
-                    || (credential.IdentityProvider == command.User.GetIdentityProvider()
-                        && credential.IdpId!.ToLower() == lowerIdpId));
+                .Where(credential => credential.UserId == query.User.GetUserId()
+                    || (credential.IdentityProvider == query.User.GetIdentityProvider()
+                        && credential.IdpId!.ToLower() == idpId))
 #pragma warning restore CA1304
+                .Select(credential => new
+                {
+                    Credential = credential,
+                    CheckPlr = credential.Party!.Cpn == null
+                        && credential.Party.Birthdate != null
+                        && credential.Party.LicenceDeclaration!.LicenceNumber != null
+                        && credential.Party.LicenceDeclaration!.CollegeCode != null
+                })
+                .SingleOrDefaultAsync();
 
-            if (credential == null)
+            if (data == null)
             {
-                return DomainResult.NotFound<int>();
+                return new Model
+                {
+                    NewBCProvider = query.User.GetIdentityProvider() == IdentityProviders.BCProvider
+                };
             }
 
+            await this.HandleUpdatesAsync(data.Credential, data.CheckPlr, query.User);
+
+            return new Model
+            {
+                PartyId = data.Credential.PartyId
+            };
+        }
+
+        private async Task HandleUpdatesAsync(Credential credential, bool checkPlr, ClaimsPrincipal user)
+        {
+            var saveChanges = false;
+
+            if (checkPlr)
+            {
+                var party = await this.context.Parties
+                    .Include(party => party.Credentials)
+                    .Include(party => party.LicenceDeclaration)
+                    .SingleAsync(party => party.Id == credential.PartyId);
+
+                var cpn = await this.client.FindCpnAsync(party.LicenceDeclaration!.CollegeCode!.Value, party.LicenceDeclaration.LicenceNumber!, party.Birthdate!.Value);
+                if (!string.IsNullOrWhiteSpace(cpn))
+                {
+                    party.Cpn = cpn;
+                    party.DomainEvents.Add(new PlrCpnLookupFound(party.Id, party.PrimaryUserId, cpn));
+                    saveChanges = true;
+                }
+            }
+
+            // BC Provider Credentials are created in our app without UserIds (since the user has not logged into Keycloak yet).
+            // Update them when we see them.
             if (credential.UserId == default)
             {
-                await this.UpdateUserId(credential, command.User.GetUserId());
+                credential.UserId = user.GetUserId();
+                saveChanges = true;
             }
+
+            // This is to update old non-BCSC records we didn't originally capture the IDP info for.
+            // One day, this should be removed entirely once all the records in the DB have IdentityProvider and IdpId (also, those properties can then be made non-nullable).
+            // Additionally, we could then find the Credential using only IdentityProvider + IdpId.
             if (credential.IdentityProvider == null
                 || credential.IdpId == null)
             {
-                await this.UpdateIncompleteRecord(credential, command.User);
+                credential.IdentityProvider ??= user.GetIdentityProvider();
+                credential.IdpId ??= user.GetIdpId();
+                saveChanges = true;
             }
 
-            return DomainResult.Success(credential.PartyId);
-        }
-
-        // BC Provider Credentials are created in our app without UserIds (since the user has not logged into Keycloak yet).
-        // Update them when we see them.
-        private async Task UpdateUserId(Credential credential, Guid userId)
-        {
-            credential.UserId = userId;
-            await this.context.SaveChangesAsync();
-        }
-
-        // This is to update old non-BCSC records we didn't originally capture the IDP info for.
-        // One day, this should be removed entirely once all the records in the DB have IdentityProvider and IdpId (also, those properties can then be made non-nullable).
-        // Additionally, we could then find the Credential using only IdentityProvider + IdpId.
-        private async Task UpdateIncompleteRecord(Credential credential, ClaimsPrincipal user)
-        {
-            credential.IdentityProvider ??= user.GetIdentityProvider();
-            credential.IdpId ??= user.GetIdpId();
-
-            await this.context.SaveChangesAsync();
+            if (saveChanges)
+            {
+                await this.context.SaveChangesAsync();
+            }
         }
     }
 }

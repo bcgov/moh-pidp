@@ -10,7 +10,7 @@ import { AuthRoutes } from '@app/features/auth/auth.routes';
 import { ShellRoutes } from '@app/features/shell/shell.routes';
 
 import { LoggerService } from '../services/logger.service';
-import { PartyResource } from './party-resource.service';
+import { DiscoveryResource } from './discovery-resource.service';
 import { PartyService } from './party.service';
 
 /**
@@ -29,32 +29,37 @@ import { PartyService } from './party.service';
 export class PartyResolver implements Resolve<number | null> {
   public constructor(
     private router: Router,
-    private partyResource: PartyResource,
+    private discoveryResource: DiscoveryResource,
     private partyService: PartyService,
-    private logger: LoggerService
+    private logger: LoggerService,
   ) {}
 
   public resolve(): Observable<number | null> {
-    return this.partyResource.firstOrCreate().pipe(
-      exhaustMap((response: number) =>
-        of((this.partyService.partyId = response))
-      ),
+    return this.discoveryResource.discover().pipe(
+      exhaustMap((discovery) => {
+        if (discovery.newBCProvider) {
+          this.router.navigateByUrl(
+            AuthRoutes.routePath(AuthRoutes.BC_PROVIDER_UPLIFT),
+          );
+        }
+        if (!discovery.partyId) {
+          return of(null);
+        }
+
+        this.partyService.partyId = discovery.partyId;
+        return of(discovery.partyId);
+      }),
       catchError((error: HttpErrorResponse | Error) => {
         this.logger.error(error.message);
 
-        if (error instanceof HttpErrorResponse && error.status == 409) {
-          // User is an unlinked BC Provider.
-          this.router.navigateByUrl(
-            AuthRoutes.routePath(AuthRoutes.BC_PROVIDER_UPLIFT)
-          );
-        } else if (error instanceof HttpErrorResponse && error.status === 403) {
+        if (error instanceof HttpErrorResponse && error.status === 403) {
           this.router.navigateByUrl(RootRoutes.DENIED);
         } else {
           this.router.navigateByUrl(ShellRoutes.SUPPORT_ERROR_PAGE);
         }
 
         return of(null);
-      })
+      }),
     );
   }
 }

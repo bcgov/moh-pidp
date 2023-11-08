@@ -6,19 +6,18 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { randNumber } from '@ngneat/falso';
 import { Spy, createSpyFromClass, provideAutoSpy } from 'jest-auto-spies';
 
-import { ShellRoutes } from '@app/features/shell/shell.routes';
-
 import { APP_CONFIG, APP_DI_CONFIG } from '@app/app.config';
+import { ShellRoutes } from '@app/features/shell/shell.routes';
 
 import { DocumentService } from '../services/document.service';
 import { LoggerService } from '../services/logger.service';
-import { PartyResource } from './party-resource.service';
+import { DiscoveryResource } from './discovery-resource.service';
 import { PartyResolver } from './party.resolver';
 import { PartyService } from './party.service';
 
 describe('PartyResolver', () => {
   let resolver: PartyResolver;
-  let partyResourceSpy: Spy<PartyResource>;
+  let partyResourceSpy: Spy<DiscoveryResource>;
   let partyServiceSpy: Spy<PartyService>;
   let router: Router;
 
@@ -38,7 +37,7 @@ describe('PartyResolver', () => {
             settersToSpyOn: ['partyId'],
           }),
         },
-        provideAutoSpy(PartyResource),
+        provideAutoSpy(DiscoveryResource),
         provideAutoSpy(LoggerService),
         provideAutoSpy(DocumentService),
         provideAutoSpy(Router),
@@ -47,7 +46,7 @@ describe('PartyResolver', () => {
 
     router = TestBed.inject(Router);
     resolver = TestBed.inject(PartyResolver);
-    partyResourceSpy = TestBed.inject<any>(PartyResource);
+    partyResourceSpy = TestBed.inject<any>(DiscoveryResource);
     partyServiceSpy = TestBed.inject<any>(PartyService);
   });
 
@@ -56,16 +55,19 @@ describe('PartyResolver', () => {
       partyServiceSpy.accessorSpies.setters.partyId(null);
 
       when('attempting to resolve the party is successful', () => {
-        const partyId = randNumber();
-        partyResourceSpy.firstOrCreate.nextOneTimeWith(partyId);
+        const discoveryResult = {
+          partyId: randNumber(),
+          newBCProvider: false,
+        };
+        partyResourceSpy.discover.nextOneTimeWith(discoveryResult);
         let actualResult: number | null;
         resolver
           .resolve()
           .subscribe((partyId: number | null) => (actualResult = partyId));
 
         then('response will provide the party ID', () => {
-          expect(partyResourceSpy.firstOrCreate).toHaveBeenCalledTimes(1);
-          expect(actualResult).toBe(partyId);
+          expect(partyResourceSpy.discover).toHaveBeenCalledTimes(1);
+          expect(actualResult).toBe(discoveryResult.partyId);
         });
       });
     });
@@ -74,7 +76,7 @@ describe('PartyResolver', () => {
       partyServiceSpy.accessorSpies.setters.partyId(null);
 
       when('attempting to resolve the party is unsuccessful', () => {
-        partyResourceSpy.firstOrCreate.nextWithValues([
+        partyResourceSpy.discover.nextWithValues([
           {
             errorValue: new Error('Anonymous error of any type'),
           },
@@ -85,8 +87,10 @@ describe('PartyResolver', () => {
           .subscribe((partyId: number | null) => (actualResult = partyId));
 
         then('response will provide the party ID', () => {
-          expect(partyResourceSpy.firstOrCreate).toHaveBeenCalledTimes(1);
-          expect(router.navigateByUrl).toHaveBeenCalledWith(ShellRoutes.SUPPORT_ERROR_PAGE);
+          expect(partyResourceSpy.discover).toHaveBeenCalledTimes(1);
+          expect(router.navigateByUrl).toHaveBeenCalledWith(
+            ShellRoutes.SUPPORT_ERROR_PAGE,
+          );
           expect(actualResult).toBe(null);
         });
       });
