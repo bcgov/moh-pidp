@@ -2,6 +2,7 @@ import { inject } from '@angular/core';
 import { ResolveFn, Router } from '@angular/router';
 import { PartyService } from '@app/core/party/party.service';
 import { AccessRoutes } from '@app/features/access/access.routes';
+import { StatusCode } from '@app/features/portal/enums/status-code.enum';
 import { ProfileStatus } from '@app/features/portal/models/profile-status.model';
 import { PortalResource } from '@app/features/portal/portal-resource.service';
 import { map } from 'rxjs';
@@ -19,7 +20,7 @@ export const bcProviderCompletedResolver: ResolveFn<
       }
 
       return (
-        profileStatus.status.bcProvider.statusCode !== 2 ||
+        profileStatus.status.bcProvider.statusCode !== StatusCode.COMPLETED ||
         router.navigateByUrl(
           `${AccessRoutes.MODULE_PATH}/${AccessRoutes.BC_PROVIDER_EDIT}`,
         )
