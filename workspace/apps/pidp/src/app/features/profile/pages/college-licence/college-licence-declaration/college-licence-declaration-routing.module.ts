@@ -7,6 +7,7 @@ import { canDeactivateFormGuard } from '@app/core/guards/can-deactivate-form.gua
 
 import { CollegeLicenceDeclarationPage } from './college-licence-declaration.page';
 import { highAssuranceCredentialGuard } from '@app/features/auth/guards/high-assurance-credential.guard';
+import { collegeLicenceCompletedResolver } from '@app/features/auth/resolvers/college-licence-completed.resolver';
 
 const routes: Routes = [
   {
@@ -14,6 +15,9 @@ const routes: Routes = [
     component: CollegeLicenceDeclarationPage,
     canActivate: [setDashboardTitleGuard, highAssuranceCredentialGuard],
     canDeactivate: [canDeactivateFormGuard],
+    resolve: {
+      hasCompletedDeclaration: collegeLicenceCompletedResolver,
+    },
     data: {
       title: 'OneHealthID Service',
       routes: {
