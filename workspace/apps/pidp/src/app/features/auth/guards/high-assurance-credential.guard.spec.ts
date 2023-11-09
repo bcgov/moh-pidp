@@ -10,35 +10,33 @@ import { highAssuranceCredentialGuard } from './high-assurance-credential.guard'
 import { Spy, createSpyFromClass, provideAutoSpy } from 'jest-auto-spies';
 import { AuthorizedUserService } from '../services/authorized-user.service';
 import { IdentityProvider } from '../enums/identity-provider.enum';
-import { KeycloakService } from 'keycloak-angular';
-import { of } from 'rxjs';
+import { Observable, of } from 'rxjs';
 
 describe('highAssuranceCredentialGuard', () => {
   let activatedRouteSnapshotSpy: Spy<ActivatedRouteSnapshot>;
   let routerStateSnapshotSpy: Spy<RouterStateSnapshot>;
   let authorizedUserServiceSpy: Spy<AuthorizedUserService>;
+  let router: Router;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
-        // provideAutoSpy(AuthorizedUserService),
         {
           provide: AuthorizedUserService,
           useValue: createSpyFromClass(AuthorizedUserService, {
             gettersToSpyOn: ['identityProvider$'],
-            settersToSpyOn: ['identityProvider$'],
           }),
         },
-        provideAutoSpy(KeycloakService),
         provideAutoSpy(Router),
       ],
     });
 
     authorizedUserServiceSpy = TestBed.inject<any>(AuthorizedUserService);
+    router = TestBed.inject(Router);
   });
 
   describe('METHOD: CanActivateFn', () => {
-    given('the user is authorized', () => {
+    given('the user is authenticated with a BC Services Card', (done) => {
       authorizedUserServiceSpy.accessorSpies.getters.identityProvider$.mockReturnValue(
         of(IdentityProvider.BCSC),
       );
@@ -52,12 +50,21 @@ describe('highAssuranceCredentialGuard', () => {
         );
 
         then('the user should access the route', () => {
-          expect(result).toBeTruthy();
+          if (result instanceof Observable) {
+            result.subscribe((value) => {
+              try {
+                expect(value).toBeTruthy();
+                done();
+              } catch (error: any) {
+                done(error);
+              }
+            });
+          }
         });
       });
     });
 
-    given('the user is authorized', () => {
+    given('the user is authenticated with a BC Provider', (done) => {
       authorizedUserServiceSpy.accessorSpies.getters.identityProvider$.mockReturnValue(
         of(IdentityProvider.BC_PROVIDER),
       );
@@ -71,7 +78,44 @@ describe('highAssuranceCredentialGuard', () => {
         );
 
         then('the user should access the route', () => {
-          expect(result).toBeTruthy();
+          if (result instanceof Observable) {
+            result.subscribe((value) => {
+              try {
+                expect(value).toBeTruthy();
+                done();
+              } catch (error: any) {
+                done(error);
+              }
+            });
+          }
+        });
+      });
+    });
+
+    given('the user is authenticated with IDIR', (done) => {
+      authorizedUserServiceSpy.accessorSpies.getters.identityProvider$.mockReturnValue(
+        of(IdentityProvider.IDIR),
+      );
+
+      when('the guard is called', () => {
+        const result = TestBed.runInInjectionContext(() =>
+          highAssuranceCredentialGuard(
+            activatedRouteSnapshotSpy,
+            routerStateSnapshotSpy,
+          ),
+        );
+
+        then('the user should be redirect to the root URL', () => {
+          if (result instanceof Observable) {
+            result.subscribe(() => {
+              try {
+                expect(router.createUrlTree).toHaveBeenCalledWith(['/']);
+                done();
+              } catch (error: any) {
+                done(error);
+              }
+            });
+          }
         });
       });
     });
