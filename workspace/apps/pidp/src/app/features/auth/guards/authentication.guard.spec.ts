@@ -1,49 +1,82 @@
 import { TestBed } from '@angular/core/testing';
-import { CanActivateChildFn, CanActivateFn, CanMatchFn } from '@angular/router';
+import {
+  ActivatedRouteSnapshot,
+  Route,
+  RouterStateSnapshot,
+  UrlSegment,
+} from '@angular/router';
 
 import { AuthenticationGuard } from './authentication.guard';
+import { AuthenticationGuardService } from './services/authentication-guard.service';
+import { Spy, provideAutoSpy } from 'jest-auto-spies';
 
-describe('AuthenticationGuard canActivate', () => {
-  const executeGuard: CanActivateFn = (...guardParameters) =>
-    TestBed.runInInjectionContext(() =>
-      AuthenticationGuard.canActivate(...guardParameters)
-    );
+describe('AuthenticationGuard', () => {
+  let activatedRouteSnapshotSpy: Spy<ActivatedRouteSnapshot>;
+  let routerStateSnapshotSpy: Spy<RouterStateSnapshot>;
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({});
-  });
-
-  it('should be created', () => {
-    expect(executeGuard).toBeTruthy();
-  });
-});
-
-describe('AuthenticationGuard canActivateChild', () => {
-  const executeGuard: CanActivateChildFn = (...guardParameters) =>
-    TestBed.runInInjectionContext(() =>
-      AuthenticationGuard.canActivateChild(...guardParameters)
-    );
+  let authenticationGuardServiceSpy: Spy<AuthenticationGuardService>;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
-  });
+    TestBed.configureTestingModule({
+      providers: [provideAutoSpy(AuthenticationGuardService)],
+    });
 
-  it('should be created', () => {
-    expect(executeGuard).toBeTruthy();
-  });
-});
-
-describe('AuthenticationGuard CanMatchFn', () => {
-  const executeGuard: CanMatchFn = (...guardParameters) =>
-    TestBed.runInInjectionContext(() =>
-      AuthenticationGuard.canMatch(...guardParameters)
+    authenticationGuardServiceSpy = TestBed.inject<any>(
+      AuthenticationGuardService,
     );
-
-  beforeEach(() => {
-    TestBed.configureTestingModule({});
   });
 
-  it('should be created', () => {
-    expect(executeGuard).toBeTruthy();
+  describe('METHOD: CanActivateFn', () => {
+    given('the user is authorized', () => {
+      authenticationGuardServiceSpy.canActivate.mockReturnValueOnce(true);
+      when('the guard is called', () => {
+        const result = TestBed.runInInjectionContext(() =>
+          AuthenticationGuard.canActivate(
+            activatedRouteSnapshotSpy,
+            routerStateSnapshotSpy,
+          ),
+        );
+        then('the user should access the route', () => {
+          expect(result).toBeTruthy();
+        });
+      });
+    });
+  });
+
+  describe('METHOD: canActivateChild', () => {
+    given('the user is authorized', () => {
+      authenticationGuardServiceSpy.canActivateChild.mockReturnValueOnce(true);
+
+      when('the guard is called', () => {
+        const result = TestBed.runInInjectionContext(() =>
+          AuthenticationGuard.canActivateChild(
+            activatedRouteSnapshotSpy,
+            routerStateSnapshotSpy,
+          ),
+        );
+        then('the user should access the child route', () => {
+          expect(result).toBeTruthy();
+        });
+      });
+    });
+  });
+
+  describe('METHOD: CanMatchFn', () => {
+    let route: Route;
+    let urlSegment: UrlSegment[];
+    given('the user is authorized', () => {
+      route = {};
+      urlSegment = [];
+      authenticationGuardServiceSpy.canMatch.mockReturnValueOnce(true);
+
+      when('the guard is called', () => {
+        const result = TestBed.runInInjectionContext(() =>
+          AuthenticationGuard.canMatch(route, urlSegment),
+        );
+        then('the user should access the route', () => {
+          expect(result).toBeTruthy();
+        });
+      });
+    });
   });
 });

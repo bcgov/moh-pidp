@@ -18,7 +18,7 @@ export const profileSectionKeys = [
  * @description
  * Union of keys generated from the tuple.
  */
-export type ProfileSectionKey = typeof profileSectionKeys[number];
+export type ProfileSectionKey = (typeof profileSectionKeys)[number];
 
 /**
  * @description
