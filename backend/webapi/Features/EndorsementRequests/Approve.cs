@@ -10,7 +10,9 @@ using Pidp.Extensions;
 using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.HttpClients.BCProvider;
 using Pidp.Infrastructure.HttpClients.Keycloak;
+using Pidp.Infrastructure.HttpClients.Mail;
 using Pidp.Infrastructure.HttpClients.Plr;
+using Pidp.Infrastructure.Services;
 using Pidp.Models;
 
 public class Approve
@@ -34,6 +36,7 @@ public class Approve
     {
         private readonly IBCProviderClient bcProviderClient;
         private readonly IClock clock;
+        private readonly IEmailService emailService;
         private readonly IKeycloakAdministrationClient keycloakClient;
         private readonly ILogger logger;
         private readonly IPlrClient plrClient;
@@ -43,6 +46,7 @@ public class Approve
         public CommandHandler(
             IBCProviderClient bcProviderClient,
             IClock clock,
+            IEmailService emailService,
             IKeycloakAdministrationClient keycloakClient,
             ILogger<CommandHandler> logger,
             IPlrClient plrClient,
@@ -51,6 +55,7 @@ public class Approve
         {
             this.bcProviderClient = bcProviderClient;
             this.clock = clock;
+            this.emailService = emailService;
             this.keycloakClient = keycloakClient;
             this.logger = logger;
             this.plrClient = plrClient;
@@ -79,6 +84,8 @@ public class Approve
                 // Both parties have approved, Request handshake is complete.
                 await this.HandleMoaDesignation(endorsementRequest);
                 this.context.Endorsements.Add(Endorsement.FromCompletedRequest(endorsementRequest));
+
+                await this.SendEndorsementApprovedEmailAsync(endorsementRequest);
             }
 
             await this.context.SaveChangesAsync();
@@ -148,6 +155,22 @@ public class Approve
                         .Append(licencedParty.Cpn!));
                 await this.bcProviderClient.UpdateAttributes(unLicencedParty.UserPrincipalName, unlicencedPartyBCProviderAttributes.AsAdditionalData());
             }
+        }
+
+        private async Task SendEndorsementApprovedEmailAsync(EndorsementRequest request)
+        {
+            var requestingPartyFullName = await this.context.Parties
+                                    .Where(party => party.Id == request.RequestingPartyId)
+                                    .Select(party => party.FullName)
+                                    .SingleAsync();
+
+            var email = new Email(
+                from: EmailService.PidpEmail,
+                to: request.RecipientEmail,
+                subject: $"OneHealthID Endorsement is approved",
+                body: $@"The endorsement is approved and the relationship is established with {requestingPartyFullName}");
+
+            await this.emailService.SendAsync(email);
         }
     }
 }
