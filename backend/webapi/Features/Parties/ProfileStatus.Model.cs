@@ -1,6 +1,6 @@
 namespace Pidp.Features.Parties;
 
-using NodaTime;
+using System;
 using Pidp.Features.AccessRequests;
 using Pidp.Infrastructure.HttpClients.Plr;
 using Pidp.Models.Lookups;
@@ -12,7 +12,8 @@ public partial class ProfileStatus
         public enum Alert
         {
             TransientError = 1,
-            PlrBadStanding
+            PlrBadStanding,
+            PendingEndorsementRequest
         }
 
         public enum StatusCode
@@ -164,6 +165,11 @@ public partial class ProfileStatus
                 if (!profile.UserIsHighAssuranceIdentity)
                 {
                     return StatusCode.Hidden;
+                }
+
+                if (profile.HasPendingEndorsementRequest)
+                {
+                    this.Alerts.Add(Alert.PendingEndorsementRequest);
                 }
 
                 return profile.DemographicsComplete && profile.LicenceDeclarationComplete
