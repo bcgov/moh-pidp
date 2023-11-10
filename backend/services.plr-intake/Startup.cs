@@ -15,7 +15,6 @@ using PlrIntake.Features;
 using PlrIntake.Features.Intake;
 using PlrIntake.Infrastructure.HealthChecks;
 
-
 public class Startup
 {
     public IConfiguration Configuration { get; }
