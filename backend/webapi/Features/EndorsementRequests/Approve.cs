@@ -160,13 +160,18 @@ public class Approve
         private async Task SendEndorsementApprovedEmailAsync(EndorsementRequest request)
         {
             var requestingPartyFullName = await this.context.Parties
-                                    .Where(party => party.Id == request.RequestingPartyId)
-                                    .Select(party => party.FullName)
-                                    .SingleAsync();
+                                            .Where(party => party.Id == request.RequestingPartyId)
+                                            .Select(party => party.FullName)
+                                            .SingleAsync();
+
+            var receivingPartyEmail = await this.context.Parties
+                                        .Where(party => party.Id == request.RequestingPartyId)
+                                        .Select(party => party.Email)
+                                        .SingleAsync();
 
             var email = new Email(
                 from: EmailService.PidpEmail,
-                to: request.RecipientEmail,
+                to: receivingPartyEmail!,
                 subject: $"OneHealthID Endorsement is approved",
                 body: $@"The endorsement is approved and the relationship is established with {requestingPartyFullName}");
 
