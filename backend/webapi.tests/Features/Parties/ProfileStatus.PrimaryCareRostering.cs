@@ -35,9 +35,9 @@ public class ProfileStatusPrimaryCareRosteringTests : ProfileStatusTest
         });
         var client = A.Fake<IPlrClient>()
             .ReturningMultipleStandingsDigests(digest, aggregateDigest);
-        var handler = this.MockDependenciesFor<CommandHandler>(client);
+        var handler = this.MockDependenciesFor<QueryHandler>(client);
 
-        var profile = await handler.HandleAsync(new Command { Id = party.Id, User = AMock.BcscUser() });
+        var profile = await handler.HandleAsync(new Query { Id = party.Id, User = AMock.BcscUser() });
 
         var rosteringSection = profile.Section<PrimaryCareRosteringSection>();
         rosteringSection.AssertNoAlerts();
@@ -60,9 +60,9 @@ public class ProfileStatusPrimaryCareRosteringTests : ProfileStatusTest
         var party = this.TestDb.Has(AParty.WithLicenceDeclared());
         var client = A.Fake<IPlrClient>()
             .ReturningMultipleStandingsDigests(digest, aggregateDigest);
-        var handler = this.MockDependenciesFor<CommandHandler>(client);
+        var handler = this.MockDependenciesFor<QueryHandler>(client);
 
-        var profile = await handler.HandleAsync(new Command { Id = party.Id, User = AMock.BcscUser() });
+        var profile = await handler.HandleAsync(new Query { Id = party.Id, User = AMock.BcscUser() });
 
         var rosteringSection = profile.Section<PrimaryCareRosteringSection>();
         rosteringSection.AssertNoAlerts();

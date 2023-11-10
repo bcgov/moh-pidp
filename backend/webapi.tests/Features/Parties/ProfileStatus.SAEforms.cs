@@ -23,9 +23,9 @@ public class ProfileStatusSAEformsTests : ProfileStatusTest
         var party = this.TestDb.Has(AParty.WithNoProfile(user.GetIdentityProvider()));
         var client = A.Fake<IPlrClient>()
             .ReturningAStandingsDigest(PlrStandingsDigest.FromEmpty());
-        var handler = this.MockDependenciesFor<CommandHandler>(client);
+        var handler = this.MockDependenciesFor<QueryHandler>(client);
 
-        var profile = await handler.HandleAsync(new Command { Id = party.Id, User = user });
+        var profile = await handler.HandleAsync(new Query { Id = party.Id, User = user });
 
         var eforms = profile.Section<SAEformsSection>();
         eforms.AssertNoAlerts();
@@ -43,9 +43,9 @@ public class ProfileStatusSAEformsTests : ProfileStatusTest
         var party = this.TestDb.Has(AParty.WithDemographics(user.GetIdentityProvider()));
         var client = A.Fake<IPlrClient>()
             .ReturningAStandingsDigest(PlrStandingsDigest.FromEmpty());
-        var handler = this.MockDependenciesFor<CommandHandler>(client);
+        var handler = this.MockDependenciesFor<QueryHandler>(client);
 
-        var profile = await handler.HandleAsync(new Command { Id = party.Id, User = user });
+        var profile = await handler.HandleAsync(new Query { Id = party.Id, User = user });
 
         var eforms = profile.Section<SAEformsSection>();
         eforms.AssertNoAlerts();
@@ -63,9 +63,9 @@ public class ProfileStatusSAEformsTests : ProfileStatusTest
         var party = this.TestDb.Has(AParty.WithLicenceDeclared());
         var client = A.Fake<IPlrClient>()
             .ReturningAStandingsDigest(true, identifierType);
-        var handler = this.MockDependenciesFor<CommandHandler>(client);
+        var handler = this.MockDependenciesFor<QueryHandler>(client);
 
-        var profile = await handler.HandleAsync(new Command { Id = party.Id, User = AMock.BcscUser() });
+        var profile = await handler.HandleAsync(new Query { Id = party.Id, User = AMock.BcscUser() });
 
         var eforms = profile.Section<SAEformsSection>();
         eforms.AssertNoAlerts();
@@ -87,9 +87,9 @@ public class ProfileStatusSAEformsTests : ProfileStatusTest
         var party = this.TestDb.Has(AParty.WithNoLicenceDeclared(IdentityProviders.BCServicesCard));
         var client = A.Fake<IPlrClient>()
             .ReturningAStandingsDigest(PlrStandingsDigest.FromEmpty());
-        var handler = this.MockDependenciesFor<CommandHandler>(client);
+        var handler = this.MockDependenciesFor<QueryHandler>(client);
 
-        var profile = await handler.HandleAsync(new Command { Id = party.Id, User = AMock.BcscUser() });
+        var profile = await handler.HandleAsync(new Query { Id = party.Id, User = AMock.BcscUser() });
 
         var eforms = profile.Section<SAEformsSection>();
         eforms.AssertNoAlerts();
@@ -105,9 +105,9 @@ public class ProfileStatusSAEformsTests : ProfileStatusTest
         var client = A.Fake<IPlrClient>()
             .ReturningAStandingsDigest(digest);
         A.CallTo(() => client.FindCpnAsync(A<CollegeCode>._, A<string>._, A<LocalDate>._)).Returns<string?>(null);
-        var handler = this.MockDependenciesFor<CommandHandler>(client);
+        var handler = this.MockDependenciesFor<QueryHandler>(client);
 
-        var profile = await handler.HandleAsync(new Command { Id = party.Id, User = AMock.BcscUser() });
+        var profile = await handler.HandleAsync(new Query { Id = party.Id, User = AMock.BcscUser() });
 
         var eforms = profile.Section<SAEformsSection>();
         eforms.AssertNoAlerts();
@@ -136,9 +136,9 @@ public class ProfileStatusSAEformsTests : ProfileStatusTest
         this.TestDb.SaveChanges();
         var client = A.Fake<IPlrClient>()
             .ReturningAStandingsDigest(standing);
-        var handler = this.MockDependenciesFor<CommandHandler>(client);
+        var handler = this.MockDependenciesFor<QueryHandler>(client);
 
-        var profile = await handler.HandleAsync(new Command { Id = party.Id, User = AMock.BcscUser() });
+        var profile = await handler.HandleAsync(new Query { Id = party.Id, User = AMock.BcscUser() });
 
         var eforms = profile.Section<SAEformsSection>();
         eforms.AssertNoAlerts();
