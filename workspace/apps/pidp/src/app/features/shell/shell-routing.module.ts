@@ -2,7 +2,6 @@ import { PortalModule } from '@angular/cdk/portal';
 import { NgModule, Type } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { PartyResolver } from '@app/core/party/party.resolver';
 import { PermissionsGuard } from '@app/modules/permissions/permissions.guard';
 import { Role } from '@app/shared/enums/roles.enum';
 
@@ -27,6 +26,8 @@ import { TrainingModule } from '../training/training.module';
 import { TrainingRoutes } from '../training/training.routes';
 import { PortalDashboardComponent } from './components/portal-dashboard/portal-dashboard.component';
 import { ShellRoutes } from './shell.routes';
+import { DestinationResolver } from '@app/core/party/destination.resolver';
+import { PartyActionsResolver } from '@app/core/party/party-actions.resolver';
 
 const routes: Routes = [
   {
@@ -44,7 +45,7 @@ const routes: Routes = [
     path: ShellRoutes.SUPPORT_ERROR_PAGE,
     loadChildren: (): Promise<Type<SupportErrorModule>> =>
       import('../shell/pages/support-error/support-error.module').then(
-        (m) => m.SupportErrorModule
+        (m) => m.SupportErrorModule,
       ),
   },
   {
@@ -53,7 +54,7 @@ const routes: Routes = [
     canActivate: [AuthenticationGuard.canActivate],
     canActivateChild: [AuthenticationGuard.canActivateChild],
     resolve: {
-      partyId: PartyResolver,
+      partyId: PartyActionsResolver,
     },
     data: {
       routes: {
@@ -63,6 +64,9 @@ const routes: Routes = [
     children: [
       {
         path: PortalRoutes.MODULE_PATH,
+        resolve: {
+          destination: DestinationResolver,
+        },
         loadChildren: (): Promise<Type<PortalModule>> =>
           import('../portal/portal.module').then((m) => m.PortalModule),
       },
@@ -75,7 +79,7 @@ const routes: Routes = [
         path: OrganizationInfoRoutes.MODULE_PATH,
         loadChildren: (): Promise<Type<OrganizationInfoModule>> =>
           import('../organization-info/organization-info.module').then(
-            (m) => m.OrganizationInfoModule
+            (m) => m.OrganizationInfoModule,
           ),
       },
       {

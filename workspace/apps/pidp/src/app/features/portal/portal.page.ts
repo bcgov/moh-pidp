@@ -1,8 +1,8 @@
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { Component, Inject, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 
-import { BehaviorSubject, Observable, map, of, switchMap, tap } from 'rxjs';
+import { BehaviorSubject, Observable, tap } from 'rxjs';
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';
 import { PartyService } from '@app/core/party/party.service';
@@ -14,7 +14,6 @@ import { BcProviderEditInitialStateModel } from '../access/pages/bc-provider-edi
 import { IdentityProvider } from '../auth/enums/identity-provider.enum';
 import { AuthService } from '../auth/services/auth.service';
 import { AuthorizedUserService } from '../auth/services/authorized-user.service';
-import { EndorsementsResource } from '../organization-info/pages/endorsements/endorsements-resource.service';
 import { ProfileStatusAlert } from './models/profile-status-alert.model';
 import { ProfileStatus } from './models/profile-status.model';
 import { PortalResource } from './portal-resource.service';
@@ -54,20 +53,11 @@ export class PortalPage implements OnInit {
   public alerts: ProfileStatusAlert[];
 
   public Role = Role;
-  public demographics$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
-    false
-  );
-  public collegeLicence$: BehaviorSubject<boolean> =
-    new BehaviorSubject<boolean>(false);
-  public uaa$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   public bcProvider$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
-    false
-  );
-  public endorsement$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
-    true
+    false,
   );
   public rostering$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
-    true
+    true,
   );
   public pasPanelExpanded$: BehaviorSubject<boolean>;
   public demographicsStatusCode: number | undefined;
@@ -97,11 +87,9 @@ export class PortalPage implements OnInit {
     private partyService: PartyService,
     private portalResource: PortalResource,
     private portalService: PortalService,
-    private endorsementsResource: EndorsementsResource,
-    private activatedRoute: ActivatedRoute,
     private authService: AuthService,
     private authorizedUserService: AuthorizedUserService,
-    private toastService: ToastService
+    private toastService: ToastService,
   ) {
     this.state$ = this.portalService.state$;
     this.pasPanelExpanded$ = this.portalService.pasPanelExpanded$;
@@ -111,7 +99,7 @@ export class PortalPage implements OnInit {
     this.collegeLicenceTutorial = collegeLicenceTutorialLink;
     this.uaaTutorial = uaaTutorialLink;
     this.bcProviderTutorial = bcProviderTutorialLink;
-    this.lastSelectedIndex = 6;
+    this.lastSelectedIndex = 3;
     this.selectedIndex = -1;
     this.identityProvider$ = this.authorizedUserService.identityProvider$;
     this.pasAllowedProviders = [
@@ -121,25 +109,7 @@ export class PortalPage implements OnInit {
   }
 
   public navigateTo(): void {
-    if (this.demographicsStatusCode !== 2) {
-      this.router.navigateByUrl('/profile/personal-information');
-    } else if (
-      this.demographicsStatusCode === 2 &&
-      this.collegeLicenceStatusCode !== 2
-    ) {
-      this.router.navigateByUrl('/profile/college-licence-declaration');
-    } else if (
-      this.demographicsStatusCode === 2 &&
-      this.collegeLicenceStatusCode === 2 &&
-      this.uaaStatusCode !== 2
-    ) {
-      this.router.navigateByUrl('/profile/user-access-agreement');
-    } else if (
-      this.demographicsStatusCode === 2 &&
-      this.collegeLicenceStatusCode === 2 &&
-      this.uaaStatusCode === 2 &&
-      this.bcProviderStatusCode !== 2
-    ) {
+    if (this.bcProviderStatusCode !== 2) {
       this.router.navigateByUrl('/access/bc-provider-application');
     } else if (
       this.demographicsStatusCode === 2 &&
@@ -165,12 +135,8 @@ export class PortalPage implements OnInit {
 
   public onCopy(): void {
     this.toastService.openSuccessToast(
-      'You have copied your BCProvider Username to clipboard.'
+      'You have copied your BCProvider Username to clipboard.',
     );
-  }
-
-  public getProfileStatus(partyId: number): Observable<ProfileStatus | null> {
-    return this.portalResource.getProfileStatus(partyId);
   }
 
   public onExpansionPanelToggle(expanded: boolean): void {
@@ -178,15 +144,13 @@ export class PortalPage implements OnInit {
   }
 
   public ngOnInit(): void {
-    this.handleLandingActions$()
+    this.portalResource
+      .getProfileStatus(this.partyService.partyId)
       .pipe(
-        switchMap(() =>
-          this.portalResource.getProfileStatus(this.partyService.partyId)
-        ),
         tap((profileStatus: ProfileStatus | null) => {
           this.portalService.updateState(profileStatus);
           this.alerts = this.portalService.alerts;
-        })
+        }),
       )
       .subscribe((profileStatus) => {
         let selectedIndex = this.lastSelectedIndex;
@@ -197,26 +161,11 @@ export class PortalPage implements OnInit {
 
         this.demographicsStatusCode =
           profileStatus?.status.demographics.statusCode;
-        if (this.demographicsStatusCode === 2) {
-          this.demographics$.next(true);
-        } else if (selectedIndex === this.lastSelectedIndex) {
-          selectedIndex = 0;
-        }
         this.collegeLicenceStatusCode =
           profileStatus?.status.collegeCertification.statusCode;
-        if (this.collegeLicenceStatusCode === 2) {
-          this.collegeLicence$.next(true);
-          this.endorsement$.next(false);
-        } else if (selectedIndex === this.lastSelectedIndex) {
-          selectedIndex = 1;
-        }
         this.uaaStatusCode =
           profileStatus?.status.userAccessAgreement.statusCode;
-        if (this.uaaStatusCode === 2) {
-          this.uaa$.next(true);
-        } else if (selectedIndex === this.lastSelectedIndex) {
-          selectedIndex = 2;
-        }
+
         this.bcProviderStatusCode = profileStatus?.status.bcProvider.statusCode;
         if (this.bcProviderStatusCode === 2) {
           this.bcProvider$.next(true);
@@ -226,54 +175,35 @@ export class PortalPage implements OnInit {
               this.bcProviderUsername = bcProviderObject.bcProviderId;
             });
         } else if (selectedIndex === this.lastSelectedIndex) {
-          selectedIndex = 3;
+          // BCrovider step
+          selectedIndex = 0;
         }
         this.rosteringStatusCode =
           profileStatus?.status.primaryCareRostering.statusCode;
         if (this.rosteringStatusCode === 1) {
           this.rostering$.next(false);
         } else if (selectedIndex === this.lastSelectedIndex) {
-          selectedIndex = 4;
+          // PAS step
+          selectedIndex = 1;
         }
         if (
           this.selectedNoCollegeLicence(
             this.hasCpn,
             this.collegeLicenceDeclared,
-            this.isComplete
+            this.isComplete,
           )
         ) {
-          selectedIndex = 5;
+          // MFA
+          selectedIndex = 2;
         }
         this.selectedIndex = selectedIndex;
       });
   }
 
-  public handleLandingActions$(): Observable<void> {
-    const endorsementToken =
-      this.activatedRoute.snapshot.queryParamMap.get('endorsement-token');
-
-    if (!endorsementToken) {
-      return of(undefined);
-    }
-
-    return this.endorsementsResource
-      .receiveEndorsementRequest(this.partyService.partyId, endorsementToken)
-      .pipe(
-        map(() => {
-          this.router.navigate([], {
-            queryParams: {
-              'endorsement-token': null,
-            },
-            queryParamsHandling: 'merge',
-          });
-        })
-      );
-  }
-
   private selectedNoCollegeLicence(
     hasCpn: boolean | undefined,
     licenceDeclared: boolean | undefined,
-    isComplete: boolean | undefined
+    isComplete: boolean | undefined,
   ): boolean | undefined {
     return !hasCpn && licenceDeclared && isComplete;
   }

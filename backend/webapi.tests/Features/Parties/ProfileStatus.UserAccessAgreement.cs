@@ -16,9 +16,9 @@ public class ProfileStatusUserAccessAgreementTests : ProfileStatusTest
         var party = this.TestDb.Has(AParty.WithNoProfile());
         var client = A.Fake<IPlrClient>()
             .ReturningAStandingsDigest(PlrStandingsDigest.FromEmpty());
-        var handler = this.MockDependenciesFor<CommandHandler>(client);
+        var handler = this.MockDependenciesFor<QueryHandler>(client);
 
-        var profile = await handler.HandleAsync(new Command { Id = party.Id, User = AMock.BcscUser() });
+        var profile = await handler.HandleAsync(new Query { Id = party.Id, User = AMock.BcscUser() });
 
         var uaaSection = profile.Section<UserAccessAgreementSection>();
         uaaSection.AssertNoAlerts();
@@ -31,9 +31,9 @@ public class ProfileStatusUserAccessAgreementTests : ProfileStatusTest
         var party = this.TestDb.Has(AParty.WithUserAccessAgreementAccepted());
         var client = A.Fake<IPlrClient>()
             .ReturningAStandingsDigest(PlrStandingsDigest.FromEmpty());
-        var handler = this.MockDependenciesFor<CommandHandler>(client);
+        var handler = this.MockDependenciesFor<QueryHandler>(client);
 
-        var profile = await handler.HandleAsync(new Command { Id = party.Id, User = AMock.BcscUser() });
+        var profile = await handler.HandleAsync(new Query { Id = party.Id, User = AMock.BcscUser() });
 
         var uaaSection = profile.Section<UserAccessAgreementSection>();
         uaaSection.AssertNoAlerts();

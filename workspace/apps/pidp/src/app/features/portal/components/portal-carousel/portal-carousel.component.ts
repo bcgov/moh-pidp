@@ -40,7 +40,10 @@ export class PortalCarouselComponent implements OnChanges {
     return this.cardsPerSlide > 1;
   }
 
-  public constructor(private router: Router, viewportService: ViewportService) {
+  public constructor(
+    private router: Router,
+    viewportService: ViewportService,
+  ) {
     viewportService.viewportBroadcast$.subscribe((viewport) => {
       if (viewport === PidpViewport.xsmall) {
         this.cardsPerSlide = 1;

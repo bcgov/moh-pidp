@@ -103,13 +103,13 @@ public class PartiesController : PidpControllerBase
         => await this.AuthorizePartyBeforeHandleAsync(command.PartyId, handler, command)
             .ToActionResult();
 
-    [HttpPost("{id}/profile-status")]
+    [HttpGet("{id}/profile-status")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<ProfileStatus.Model>> ComputePartyProfileStatus([FromServices] ICommandHandler<ProfileStatus.Command, ProfileStatus.Model> handler,
-                                                                                   [FromRoute] ProfileStatus.Command command)
-        => await this.AuthorizePartyBeforeHandleAsync(command.Id, handler, command.WithUser(this.User))
+    public async Task<ActionResult<ProfileStatus.Model>> ComputePartyProfileStatus([FromServices] IQueryHandler<ProfileStatus.Query, ProfileStatus.Model> handler,
+                                                                                   [FromRoute] ProfileStatus.Query query)
+        => await this.AuthorizePartyBeforeHandleAsync(query.Id, handler, query.WithUser(this.User))
             .ToActionResultOfT();
 
     [HttpGet("{id}/work-setting")]
