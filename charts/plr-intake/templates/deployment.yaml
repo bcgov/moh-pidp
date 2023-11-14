@@ -91,6 +91,14 @@ spec:
             - name: http
               containerPort: 8080
               protocol: TCP
+          readinessProbe:
+            httpGet:
+              path: /health/readiness
+              port: http
+            timeoutSeconds: 1
+            periodSeconds: 10
+            successThreshold: 1
+            failureThreshold: 3
           livenessProbe:
             httpGet:
               path: /health/liveness
@@ -100,23 +108,15 @@ spec:
             successThreshold: 1
             failureThreshold: 3
             initialDelaySeconds: 30                       
-          startupProbe:
-            httpGet:
-              path: /health/liveness
-              port: http
-              scheme: HTTP
-            timeoutSeconds: 1
-            periodSeconds: 10
-            successThreshold: 1
-            failureThreshold: 30
-          # readinessProbe:
+          # startupProbe:
           #   httpGet:
           #     path: /health/liveness
           #     port: http
+          #     scheme: HTTP
           #   timeoutSeconds: 1
           #   periodSeconds: 10
           #   successThreshold: 1
-          #   failureThreshold: 3
+          #   failureThreshold: 30  
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}
