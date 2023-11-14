@@ -11,6 +11,7 @@ import { DocumentService } from '@app/core/services/document.service';
 
 import { AuthService } from '../../services/auth.service';
 import { LoginPage, LoginPageRouteData } from './login.page';
+import { ClientLogsService } from '@app/core/services/client-logs.service';
 
 describe('LoginPage', () => {
   let component: LoginPage;
@@ -43,6 +44,7 @@ describe('LoginPage', () => {
           useValue: mockActivatedRoute,
         },
         provideAutoSpy(AuthService),
+        provideAutoSpy(ClientLogsService),
         provideAutoSpy(DocumentService),
       ],
     });
