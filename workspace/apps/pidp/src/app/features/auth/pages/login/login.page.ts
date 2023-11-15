@@ -109,17 +109,8 @@ export class LoginPage implements OnInit {
   }
 
   public onLogin(idpHint: IdentityProvider): void {
-    if (this.endorsementToken) {
-      this.clientLogsService
-        .createClientLog({
-          message: `A user has clicked on the login button with the endorsement request and the identity provider "${idpHint}"`,
-          logLevel: MicrosoftLogLevel.INFORMATION,
-          additionalInformation: this.endorsementToken,
-        })
-        .subscribe();
-    }
-
     if (idpHint === IdentityProvider.IDIR) {
+      this.createClientLogIfNeeded(idpHint);
       this.login(idpHint);
       return;
     }
@@ -134,8 +125,28 @@ export class LoginPage implements OnInit {
     this.dialog
       .open(ConfirmDialogComponent, { data })
       .afterClosed()
-      .pipe(exhaustMap((result) => (result ? this.login(idpHint) : EMPTY)))
+      .pipe(
+        exhaustMap((result) => {
+          if (result) {
+            this.createClientLogIfNeeded(idpHint);
+            return this.login(idpHint);
+          }
+          return EMPTY;
+        }),
+      )
       .subscribe();
+  }
+
+  private createClientLogIfNeeded(idpHint: IdentityProvider): void {
+    if (this.endorsementToken) {
+      this.clientLogsService
+        .createClientLog({
+          message: `A user has clicked on the login button with the endorsement request and the identity provider "${idpHint}"`,
+          logLevel: MicrosoftLogLevel.INFORMATION,
+          additionalInformation: this.endorsementToken,
+        })
+        .subscribe();
+    }
   }
 
   private login(idpHint: IdentityProvider): Observable<void> {
