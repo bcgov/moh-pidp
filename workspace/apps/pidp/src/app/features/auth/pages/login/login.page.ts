@@ -74,8 +74,10 @@ export class LoginPage implements OnInit {
   }
 
   public ngOnInit(): void {
-    this.endorsementToken =
-      this.route.snapshot.queryParamMap.get('endorsement-token');
+    if (this.route.snapshot.queryParamMap.has('endorsement-token')) {
+      this.endorsementToken =
+        this.route.snapshot.queryParamMap.get('endorsement-token');
+    }
     if (this.endorsementToken) {
       this.clientLogsService
         .createClientLog({
