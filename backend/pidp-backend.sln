@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "plr-intake", "services.plr-
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "plr-intake.tests", "services.plr-intake.tests\plr-intake.tests.csproj", "{6C64ACF9-73DD-4A52-926E-9AFC07555060}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "endorsement-reminder", "services.endorsement-reminder\endorsement-reminder.csproj", "{BBEAD4F7-BD9E-43F9-8AAD-D11FE22451E0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,5 +38,9 @@ Global
 		{6C64ACF9-73DD-4A52-926E-9AFC07555060}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6C64ACF9-73DD-4A52-926E-9AFC07555060}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6C64ACF9-73DD-4A52-926E-9AFC07555060}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BBEAD4F7-BD9E-43F9-8AAD-D11FE22451E0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BBEAD4F7-BD9E-43F9-8AAD-D11FE22451E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BBEAD4F7-BD9E-43F9-8AAD-D11FE22451E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BBEAD4F7-BD9E-43F9-8AAD-D11FE22451E0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
