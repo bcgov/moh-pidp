@@ -90,7 +90,7 @@ describe('bcProviderCompletedResolver', () => {
           ),
         );
 
-        then('should navigate to BC provider edit page', () => {
+        then('should navigate to portal page', () => {
           if (result instanceof Observable) {
             result.subscribe(() => {
               try {
