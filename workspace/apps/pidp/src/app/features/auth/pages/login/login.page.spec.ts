@@ -228,4 +228,42 @@ describe('LoginPage', () => {
       },
     );
   });
+
+  describe('METHOD: onShowOtherLoginOptions', () => {
+    given('"other login options" is collapsed', () => {
+      component.showOtherLoginOptions = false;
+      expect(component.otherLoginOptionsIcon).toBe('add_box');
+
+      when('the method is called', () => {
+        component.onShowOtherLoginOptions();
+
+        then(
+          '"other login options" is expanded and displays a collapse icon',
+          () => {
+            expect(component.showOtherLoginOptions).toBeTruthy();
+            expect(component.otherLoginOptionsIcon).toBe(
+              'indeterminate_check_box',
+            );
+          },
+        );
+      });
+    });
+
+    given('"other login options" is expanded', () => {
+      component.showOtherLoginOptions = true;
+      expect(component.otherLoginOptionsIcon).toBe('indeterminate_check_box');
+
+      when('the method is called', () => {
+        component.onShowOtherLoginOptions();
+
+        then(
+          '"other login options" is collapsed and displays an expand icon',
+          () => {
+            expect(component.showOtherLoginOptions).toBeFalsy();
+            expect(component.otherLoginOptionsIcon).toBe('add_box');
+          },
+        );
+      });
+    });
+  });
 });
