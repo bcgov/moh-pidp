@@ -20,7 +20,7 @@ export const bcProviderCompletedResolver: ResolveFn<
       }
 
       return (
-        profileStatus.status.bcProvider.statusCode !== StatusCode.COMPLETED ||
+        profileStatus.status.bcProvider.statusCode === StatusCode.AVAILABLE ||
         router.navigateByUrl(
           `${AccessRoutes.MODULE_PATH}/${AccessRoutes.BC_PROVIDER_EDIT}`,
         )
