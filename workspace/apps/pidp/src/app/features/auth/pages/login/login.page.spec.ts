@@ -28,12 +28,14 @@ describe('LoginPage', () => {
   let component: LoginPage;
 
   let clientLogsServiceSpy: Spy<ClientLogsService>;
+  let authServiceSpy: Spy<AuthService>;
   let matDialogSpy: Spy<MatDialog>;
 
   let mockActivatedRoute: {
     snapshot: {
       queryParamMap?: ParamMap;
       data: any;
+      routeConfig?: any;
     };
   };
 
@@ -73,6 +75,7 @@ describe('LoginPage', () => {
     component = TestBed.inject(LoginPage);
 
     clientLogsServiceSpy = TestBed.inject<any>(ClientLogsService);
+    authServiceSpy = TestBed.inject<any>(AuthService);
     matDialogSpy = TestBed.inject<any>(MatDialog);
   });
 
@@ -166,7 +169,60 @@ describe('LoginPage', () => {
               logLevel: MicrosoftLogLevel.INFORMATION,
               additionalInformation: '731c0b67-a475-4068-94e3-367e37a508ec',
             });
-            // TODO: expect for private login() function
+            expect(authServiceSpy.login).toHaveBeenCalledWith({
+              idpHint: idpHint,
+              redirectUri:
+                APP_DI_CONFIG.applicationUrl +
+                '?endorsement-token=731c0b67-a475-4068-94e3-367e37a508ec',
+            });
+          });
+        });
+      },
+    );
+
+    given('no endorsement-token and admin path', () => {
+      mockActivatedRoute.snapshot.routeConfig = { path: 'admin' };
+      const idpHint = IdentityProvider.BCSC;
+      clientLogsServiceSpy.createClientLog.mockReturnValue(of(void 0));
+      matDialogSpy.open.mockReturnValue({
+        afterClosed: () => of(true),
+      } as MatDialogRef<typeof component>);
+
+      component.ngOnInit();
+
+      when('the method is called', () => {
+        component.onLogin(idpHint);
+
+        then(
+          'the log object was not sent and the user is redirectes to the admin path',
+          () => {
+            expect(clientLogsServiceSpy.createClientLog).not.toHaveBeenCalled();
+            expect(authServiceSpy.login).toHaveBeenCalledWith({
+              idpHint: idpHint,
+              redirectUri: 'http://localhost:4200/admin',
+            });
+          },
+        );
+      });
+    });
+
+    given(
+      'the user logs in with BCSC and clicks the "Cancel" button in the Dialog box',
+      () => {
+        const idpHint = IdentityProvider.BCSC;
+        clientLogsServiceSpy.createClientLog.mockReturnValue(of(void 0));
+        matDialogSpy.open.mockReturnValue({
+          afterClosed: () => of(false),
+        } as MatDialogRef<typeof component>);
+
+        component.ngOnInit();
+
+        when('the method is called', () => {
+          component.onLogin(idpHint);
+
+          then('the user stays on the page and nothing is done', () => {
+            expect(clientLogsServiceSpy.createClientLog).not.toHaveBeenCalled();
+            expect(authServiceSpy.login).not.toHaveBeenCalled();
           });
         });
       },
