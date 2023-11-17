@@ -81,7 +81,7 @@ export class LoginPage implements OnInit {
     if (this.endorsementToken) {
       this.clientLogsService
         .createClientLog({
-          message: `A user has landed on the login page with the endorsement request`,
+          message: `A user has landed on the login page with an endorsement request`,
           logLevel: MicrosoftLogLevel.INFORMATION,
           additionalInformation: this.endorsementToken,
         })
