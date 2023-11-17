@@ -55,9 +55,6 @@ export class PortalPage implements OnInit {
     true,
   );
   public pasPanelExpanded$: BehaviorSubject<boolean>;
-  public demographicsStatusCode: number | undefined;
-  public collegeLicenceStatusCode: number | undefined;
-  public uaaStatusCode: number | undefined;
   public bcProviderStatusCode: number | undefined;
   public rosteringStatusCode: number | undefined;
   public bcProviderUsername = '';
@@ -101,8 +98,6 @@ export class PortalPage implements OnInit {
     if (this.bcProviderStatusCode !== 2) {
       this.router.navigateByUrl('/access/bc-provider-application');
     } else if (
-      this.demographicsStatusCode === 2 &&
-      this.collegeLicenceStatusCode === 2 &&
       this.bcProviderStatusCode === 2 &&
       this.rosteringStatusCode === 1
     ) {
@@ -147,13 +142,6 @@ export class PortalPage implements OnInit {
         this.collegeLicenceDeclared =
           profileStatus?.status.collegeCertification.licenceDeclared;
         this.isComplete = profileStatus?.status.collegeCertification.isComplete;
-
-        this.demographicsStatusCode =
-          profileStatus?.status.demographics.statusCode;
-        this.collegeLicenceStatusCode =
-          profileStatus?.status.collegeCertification.statusCode;
-        this.uaaStatusCode =
-          profileStatus?.status.userAccessAgreement.statusCode;
 
         this.bcProviderStatusCode = profileStatus?.status.bcProvider.statusCode;
         if (this.bcProviderStatusCode === 2) {
