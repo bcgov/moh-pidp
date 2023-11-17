@@ -1,8 +1,8 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 
-import { EMPTY, Observable, exhaustMap } from 'rxjs';
+import { EMPTY, Observable, exhaustMap, of, switchMap } from 'rxjs';
 
 import {
   DialogOptions,
@@ -18,6 +18,10 @@ import { AdminRoutes } from '@app/features/admin/admin.routes';
 
 import { IdentityProvider } from '../../enums/identity-provider.enum';
 import { AuthService } from '../../services/auth.service';
+import {
+  ClientLogsService,
+  MicrosoftLogLevel,
+} from '@app/core/services/client-logs.service';
 
 export interface LoginPageRouteData {
   title: string;
@@ -28,7 +32,7 @@ export interface LoginPageRouteData {
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
 })
-export class LoginPage {
+export class LoginPage implements OnInit {
   public viewportOptions = PidpViewport;
 
   public bcscMobileSetupUrl: string;
@@ -40,6 +44,8 @@ export class LoginPage {
   public viewport = PidpViewport.xsmall;
   public isMobileTitleVisible = this.viewport === PidpViewport.xsmall;
 
+  private endorsementToken: string | null = null;
+
   public get otherLoginOptionsIcon(): string {
     return this.showOtherLoginOptions ? 'indeterminate_check_box' : 'add_box';
   }
@@ -47,10 +53,11 @@ export class LoginPage {
   public constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
     private authService: AuthService,
+    private clientLogsService: ClientLogsService,
     private route: ActivatedRoute,
     private dialog: MatDialog,
     private documentService: DocumentService,
-    private viewportService: ViewportService
+    private viewportService: ViewportService,
   ) {
     const routeSnapshot = this.route.snapshot;
 
@@ -60,10 +67,24 @@ export class LoginPage {
     this.isAdminLogin = routeData.isAdminLogin;
 
     this.viewportService.viewportBroadcast$.subscribe((viewport) =>
-      this.onViewportChange(viewport)
+      this.onViewportChange(viewport),
     );
     this.showOtherLoginOptions = false;
     this.providerIdentitySupport = this.config.emails.providerIdentitySupport;
+  }
+
+  public ngOnInit(): void {
+    this.endorsementToken = this.route.snapshot.queryParamMap.get('endorsement-token');
+
+    if (this.endorsementToken) {
+      this.clientLogsService
+        .createClientLog({
+          message: `A user has landed on the login page with an endorsement request`,
+          logLevel: MicrosoftLogLevel.INFORMATION,
+          additionalInformation: this.endorsementToken,
+        })
+        .subscribe();
+    }
   }
 
   private onViewportChange(viewport: PidpViewport): void {
@@ -89,7 +110,7 @@ export class LoginPage {
 
   public onLogin(idpHint: IdentityProvider): void {
     if (idpHint === IdentityProvider.IDIR) {
-      this.login(idpHint);
+      this.login(idpHint).subscribe();
       return;
     }
 
@@ -107,17 +128,32 @@ export class LoginPage {
       .subscribe();
   }
 
+  private createClientLogIfNeeded(idpHint: IdentityProvider): Observable<void> {
+    return this.endorsementToken
+      ? this.clientLogsService.createClientLog({
+        message: `A user has clicked on the login button with an endorsement request and the identity provider "${idpHint}"`,
+        logLevel: MicrosoftLogLevel.INFORMATION,
+        additionalInformation: this.endorsementToken,
+      })
+      : of(undefined);
+  }
+
   private login(idpHint: IdentityProvider): Observable<void> {
-    const endorsementToken =
-      this.route.snapshot.queryParamMap.get('endorsement-token');
-    return this.authService.login({
-      idpHint: idpHint,
-      redirectUri:
-        this.config.applicationUrl +
-        (this.route.snapshot.routeConfig?.path === 'admin'
-          ? '/' + AdminRoutes.MODULE_PATH
-          : '') +
-        (endorsementToken ? `?endorsement-token=${endorsementToken}` : ''),
-    });
+    return this.createClientLogIfNeeded(idpHint)
+      .pipe(
+        switchMap(() =>
+          this.authService.login({
+            idpHint: idpHint,
+            redirectUri:
+              this.config.applicationUrl +
+              (this.route.snapshot.routeConfig?.path === 'admin'
+                ? '/' + AdminRoutes.MODULE_PATH
+                : '') +
+              (this.endorsementToken
+                ? `?endorsement-token=${this.endorsementToken}`
+                : ''),
+          }),
+        ),
+      );
   }
 }
