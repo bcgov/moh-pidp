@@ -74,10 +74,8 @@ export class LoginPage implements OnInit {
   }
 
   public ngOnInit(): void {
-    if (this.route.snapshot.queryParamMap.has('endorsement-token')) {
-      this.endorsementToken =
-        this.route.snapshot.queryParamMap.get('endorsement-token');
-    }
+    this.endorsementToken = this.route.snapshot.queryParamMap.get('endorsement-token');
+
     if (this.endorsementToken) {
       this.clientLogsService
         .createClientLog({
@@ -131,31 +129,31 @@ export class LoginPage implements OnInit {
   }
 
   private createClientLogIfNeeded(idpHint: IdentityProvider): Observable<void> {
-    if (this.endorsementToken) {
-      return this.clientLogsService.createClientLog({
-        message: `A user has clicked on the login button with the endorsement request and the identity provider "${idpHint}"`,
+    return this.endorsementToken
+      ? this.clientLogsService.createClientLog({
+        message: `A user has clicked on the login button with an endorsement request and the identity provider "${idpHint}"`,
         logLevel: MicrosoftLogLevel.INFORMATION,
         additionalInformation: this.endorsementToken,
-      });
-    }
-    return of(undefined);
+      })
+      : of(undefined);
   }
 
   private login(idpHint: IdentityProvider): Observable<void> {
-    return this.createClientLogIfNeeded(idpHint).pipe(
-      switchMap(() =>
-        this.authService.login({
-          idpHint: idpHint,
-          redirectUri:
-            this.config.applicationUrl +
-            (this.route.snapshot.routeConfig?.path === 'admin'
-              ? '/' + AdminRoutes.MODULE_PATH
-              : '') +
-            (this.endorsementToken
-              ? `?endorsement-token=${this.endorsementToken}`
-              : ''),
-        }),
-      ),
-    );
+    return this.createClientLogIfNeeded(idpHint)
+      .pipe(
+        switchMap(() =>
+          this.authService.login({
+            idpHint: idpHint,
+            redirectUri:
+              this.config.applicationUrl +
+              (this.route.snapshot.routeConfig?.path === 'admin'
+                ? '/' + AdminRoutes.MODULE_PATH
+                : '') +
+              (this.endorsementToken
+                ? `?endorsement-token=${this.endorsementToken}`
+                : ''),
+          }),
+        ),
+      );
   }
 }
