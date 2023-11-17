@@ -78,7 +78,7 @@ public class Create
         {
             string url = this.applicationUrl.SetQueryParam("endorsement-token", token);
             var link = $"<a href=\"{url}\" target=\"_blank\" rel=\"noopener noreferrer\">this link</a>";
-            var pidpSupportEmail = $"<a href=\"mailto:{EmailService.PidpEmail}\">${EmailService.PidpEmail}</a>";
+            var pidpSupportEmail = $"<a href=\"mailto:{EmailService.PidpEmail}\">{EmailService.PidpEmail}</a>";
             var pidpSupportPhone = $"<a href=\"tel:{EmailService.PidpSupportPhone}\">{EmailService.PidpSupportPhone}</a>";
 
             var email = new Email(

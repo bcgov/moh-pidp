@@ -11,7 +11,7 @@ using Pidp.Models;
 
 public class EmailService : IEmailService
 {
-    public const string PidpEmail = "onehealthid@gov.bc.ca";
+    public const string PidpEmail = "OneHealthID@gov.bc.ca";
     public const string PidpSupportPhone = "250-857-1969";
 
     private readonly IChesClient chesClient;

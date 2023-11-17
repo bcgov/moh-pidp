@@ -164,7 +164,7 @@ public class Approve
                                         .Select(party => party.Email)
                                         .SingleAsync();
             var applicationUrl = $"<a href=\"{this.config.ApplicationUrl}\" target=\"_blank\" rel=\"noopener noreferrer\">OneHealthID Service</a>";
-            var pidpSupportEmail = $"<a href=\"mailto:{EmailService.PidpEmail}\">${EmailService.PidpEmail}</a>";
+            var pidpSupportEmail = $"<a href=\"mailto:{EmailService.PidpEmail}\">{EmailService.PidpEmail}</a>";
             var pidpSupportPhone = $"<a href=\"tel:{EmailService.PidpSupportPhone}\">{EmailService.PidpSupportPhone}</a>";
 
             var email = new Email(
