@@ -1,24 +1,22 @@
 import { TestBed } from '@angular/core/testing';
 
 import { prescriptionRefillEformsResolver } from './prescription-refill-eforms.resolver';
-import { provideAutoSpy } from 'jest-auto-spies';
-import { PartyService } from '@app/core/party/party.service';
-import { PrescriptionRefillEformsResource } from './prescription-refill-eforms-resource.service';
+import { ResolveFn } from '@angular/router';
+import { StatusCode } from '@app/features/portal/enums/status-code.enum';
 
-describe('PrescriptionRefillEformsResolver', () => {
-  let resolver: PrescriptionRefillEformsResolver;
+describe('prescriptionRefillEformsResolver', () => {
+  const executeResolver: ResolveFn<StatusCode | null> = (
+    ...resolverParameters
+  ) =>
+    TestBed.runInInjectionContext(() =>
+      prescriptionRefillEformsResolver(...resolverParameters),
+    );
 
   beforeEach(() => {
-    TestBed.configureTestingModule({
-      providers: [
-        provideAutoSpy(PartyService),
-        provideAutoSpy(PrescriptionRefillEformsResource),
-      ],
-    });
-    resolver = TestBed.inject(prescriptionRefillEformsResolver);
+    TestBed.configureTestingModule({});
   });
 
   it('should be created', () => {
-    expect(resolver).toBeTruthy();
+    expect(executeResolver).toBeTruthy();
   });
 });

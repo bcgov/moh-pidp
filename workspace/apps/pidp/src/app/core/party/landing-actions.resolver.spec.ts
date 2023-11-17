@@ -1,26 +1,19 @@
 import { TestBed } from '@angular/core/testing';
 
 import { landingActionsResolver } from './landing-actions.resolver';
-import { provideAutoSpy } from 'jest-auto-spies';
-import { PartyService } from './party.service';
-import { Router } from '@angular/router';
-import { EndorsementsResource } from '@app/features/organization-info/pages/endorsements/endorsements-resource.service';
+import { ResolveFn } from '@angular/router';
 
-describe('LandingActionsResolver', () => {
-  let resolver: landingActionsResolver;
+describe('landingActionsResolver', () => {
+  const executeResolver: ResolveFn<null> = (...resolverParameters) =>
+    TestBed.runInInjectionContext(() =>
+      landingActionsResolver(...resolverParameters),
+    );
 
   beforeEach(() => {
-    TestBed.configureTestingModule({
-      providers: [
-        provideAutoSpy(PartyService),
-        provideAutoSpy(Router),
-        provideAutoSpy(EndorsementsResource),
-      ],
-    });
-    resolver = TestBed.inject(landingActionsResolver);
+    TestBed.configureTestingModule({});
   });
 
   it('should be created', () => {
-    expect(resolver).toBeTruthy();
+    expect(executeResolver).toBeTruthy();
   });
 });

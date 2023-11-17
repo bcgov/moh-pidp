@@ -13,7 +13,7 @@ import { HcimAccountTransferResource } from './hcim-account-transfer-resource.se
 import { hcimAccountTransferResolver } from './hcim-account-transfer.resolver';
 import { MockProfileStatus } from '@test/mock-profile-status';
 
-describe('HcimAccountTransferResolver', () => {
+describe('hcimAccountTransferResolver', () => {
   let resolver: hcimAccountTransferResolver;
   let hcimAccountTransferResourceSpy: Spy<HcimAccountTransferResource>;
   let partyServiceSpy: Spy<PartyService>;

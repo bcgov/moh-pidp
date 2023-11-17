@@ -1,24 +1,19 @@
 import { TestBed } from '@angular/core/testing';
 
-import { provideAutoSpy } from 'jest-auto-spies';
 import { partyActionsResolver } from './party-actions.resolver';
-import { partyResolver } from './party.resolver';
-import { landingActionsResolver } from './landing-actions.resolver';
+import { ResolveFn } from '@angular/router';
 
-describe('PartyActionsResolver', () => {
-  let resolver: partyActionsResolver;
+describe('partyActionsResolver', () => {
+  const executeResolver: ResolveFn<number | null> = (...resolverParameters) =>
+    TestBed.runInInjectionContext(() =>
+      partyActionsResolver(...resolverParameters),
+    );
 
   beforeEach(() => {
-    TestBed.configureTestingModule({
-      providers: [
-        provideAutoSpy(partyResolver),
-        provideAutoSpy(landingActionsResolver),
-      ],
-    });
-    resolver = TestBed.inject(partyActionsResolver);
+    TestBed.configureTestingModule({});
   });
 
   it('should be created', () => {
-    expect(resolver).toBeTruthy();
+    expect(executeResolver).toBeTruthy();
   });
 });
