@@ -10,11 +10,11 @@ import { StatusCode } from '@app/features/portal/enums/status-code.enum';
 import { ProfileStatus } from '@app/features/portal/models/profile-status.model';
 
 import { HcimAccountTransferResource } from './hcim-account-transfer-resource.service';
-import { HcimAccountTransferResolver } from './hcim-account-transfer.resolver';
+import { hcimAccountTransferResolver } from './hcim-account-transfer.resolver';
 import { MockProfileStatus } from '@test/mock-profile-status';
 
 describe('HcimAccountTransferResolver', () => {
-  let resolver: HcimAccountTransferResolver;
+  let resolver: hcimAccountTransferResolver;
   let hcimAccountTransferResourceSpy: Spy<HcimAccountTransferResource>;
   let partyServiceSpy: Spy<PartyService>;
 
@@ -23,7 +23,7 @@ describe('HcimAccountTransferResolver', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
-        HcimAccountTransferResolver,
+        hcimAccountTransferResolver,
         provideAutoSpy(HcimAccountTransferResource),
         {
           provide: PartyService,
@@ -35,7 +35,7 @@ describe('HcimAccountTransferResolver', () => {
       ],
     });
 
-    resolver = TestBed.inject(HcimAccountTransferResolver);
+    resolver = TestBed.inject(hcimAccountTransferResolver);
     hcimAccountTransferResourceSpy = TestBed.inject<any>(
       HcimAccountTransferResource,
     );

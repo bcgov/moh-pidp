@@ -1,21 +1,21 @@
 import { TestBed } from '@angular/core/testing';
 import { provideAutoSpy } from 'jest-auto-spies';
 
-import { BcProviderApplicationResolver } from './bc-provider-application.resolver';
+import { bcProviderApplicationResolver } from './bc-provider-application.resolver';
 import { PartyService } from '@app/core/party/party.service';
 import { BcProviderApplicationResource } from './bc-provider-application-resource.service';
 
 describe('BcProviderApplicationResolver', () => {
-  let resolver: BcProviderApplicationResolver;
+  let resolver: bcProviderApplicationResolver;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
         provideAutoSpy(PartyService),
         provideAutoSpy(BcProviderApplicationResource),
-      ]
+      ],
     });
-    resolver = TestBed.inject(BcProviderApplicationResolver);
+    resolver = TestBed.inject(bcProviderApplicationResolver);
   });
 
   it('should be created', () => {

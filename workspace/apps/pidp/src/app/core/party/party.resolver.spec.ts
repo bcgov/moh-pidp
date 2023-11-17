@@ -12,7 +12,7 @@ import { ShellRoutes } from '@app/features/shell/shell.routes';
 import { DocumentService } from '../services/document.service';
 import { LoggerService } from '../services/logger.service';
 import { DiscoveryResource } from './discovery-resource.service';
-import { PartyResolver } from './party.resolver';
+import { partyResolver } from './party.resolver';
 import { PartyService } from './party.service';
 
 describe('PartyResolver', () => {
@@ -25,7 +25,7 @@ describe('PartyResolver', () => {
     TestBed.configureTestingModule({
       imports: [RouterTestingModule],
       providers: [
-        PartyResolver,
+        partyResolver,
         {
           provide: APP_CONFIG,
           useValue: APP_DI_CONFIG,
@@ -45,7 +45,7 @@ describe('PartyResolver', () => {
     });
 
     router = TestBed.inject(Router);
-    resolver = TestBed.inject(PartyResolver);
+    resolver = TestBed.inject(partyResolver);
     partyResourceSpy = TestBed.inject<any>(DiscoveryResource);
     partyServiceSpy = TestBed.inject<any>(PartyService);
   });

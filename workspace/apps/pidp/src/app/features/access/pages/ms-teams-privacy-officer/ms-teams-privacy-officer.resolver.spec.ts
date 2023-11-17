@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { provideAutoSpy } from 'jest-auto-spies';
 
 import { PartyService } from '@app/core/party/party.service';
-import { MsTeamsPrivacyOfficerResolver } from './ms-teams-privacy-officer.resolver';
+import { msTeamsPrivacyOfficerResolver } from './ms-teams-privacy-officer.resolver';
 import { MsTeamsPrivacyOfficerResource } from './ms-teams-privacy-officer-resource.service';
 
 describe('MsTeamsPrivacyOfficerResolver', () => {
@@ -15,7 +15,7 @@ describe('MsTeamsPrivacyOfficerResolver', () => {
         provideAutoSpy(MsTeamsPrivacyOfficerResource),
       ],
     });
-    resolver = TestBed.inject(MsTeamsPrivacyOfficerResolver);
+    resolver = TestBed.inject(msTeamsPrivacyOfficerResolver);
   });
 
   it('should be created', () => {

@@ -2,14 +2,14 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { ProviderReportingPortalPage } from './provider-reporting-portal.page';
-import { ProviderReportingPortalResolver } from './provider-reporting-portal.resolver';
+import { providerReportingPortalResolver } from './provider-reporting-portal.resolver';
 
 const routes: Routes = [
   {
     path: '',
     component: ProviderReportingPortalPage,
     resolve: {
-      providerReportingPortalStatusCode: ProviderReportingPortalResolver,
+      providerReportingPortalStatusCode: providerReportingPortalResolver,
     },
     data: {
       title: 'OneHealthID Service',

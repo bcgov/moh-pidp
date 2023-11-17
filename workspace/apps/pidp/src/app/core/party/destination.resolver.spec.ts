@@ -1,12 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 
-import { DestinationResolver } from './destination.resolver';
+import { destinationResolver } from './destination.resolver';
 import { APP_CONFIG, APP_DI_CONFIG } from '@app/app.config';
 import { HttpClient } from '@angular/common/http';
 import { provideAutoSpy } from 'jest-auto-spies';
 import { KeycloakService } from 'keycloak-angular';
 
-describe('DestinationResolver', () => {
+describe('destinationResolver', () => {
   let resolver: DestinationResolver;
 
   beforeEach(() => {
@@ -20,7 +20,7 @@ describe('DestinationResolver', () => {
         provideAutoSpy(KeycloakService),
       ],
     });
-    resolver = TestBed.inject(DestinationResolver);
+    resolver = TestBed.inject(destinationResolver);
   });
 
   it('should be created', () => {

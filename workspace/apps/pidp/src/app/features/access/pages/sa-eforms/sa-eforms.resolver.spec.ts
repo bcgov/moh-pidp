@@ -10,7 +10,7 @@ import { StatusCode } from '@app/features/portal/enums/status-code.enum';
 import { ProfileStatus } from '@app/features/portal/models/profile-status.model';
 
 import { SaEformsResource } from './sa-eforms-resource.service';
-import { SaEformsResolver } from './sa-eforms.resolver';
+import { saEformsResolver } from './sa-eforms.resolver';
 import { MockProfileStatus } from '@test/mock-profile-status';
 
 describe('SaEformsResolver', () => {
@@ -23,7 +23,7 @@ describe('SaEformsResolver', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
-        SaEformsResolver,
+        saEformsResolver,
         provideAutoSpy(SaEformsResource),
         {
           provide: PartyService,
@@ -35,7 +35,7 @@ describe('SaEformsResolver', () => {
       ],
     });
 
-    resolver = TestBed.inject(SaEformsResolver);
+    resolver = TestBed.inject(saEformsResolver);
     saEformsResourceSpy = TestBed.inject<any>(SaEformsResource);
     partyServiceSpy = TestBed.inject<any>(PartyService);
 

@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { PrescriptionRefillEformsResolver } from './prescription-refill-eforms.resolver';
+import { prescriptionRefillEformsResolver } from './prescription-refill-eforms.resolver';
 import { provideAutoSpy } from 'jest-auto-spies';
 import { PartyService } from '@app/core/party/party.service';
 import { PrescriptionRefillEformsResource } from './prescription-refill-eforms-resource.service';
@@ -13,9 +13,9 @@ describe('PrescriptionRefillEformsResolver', () => {
       providers: [
         provideAutoSpy(PartyService),
         provideAutoSpy(PrescriptionRefillEformsResource),
-      ]
+      ],
     });
-    resolver = TestBed.inject(PrescriptionRefillEformsResolver);
+    resolver = TestBed.inject(prescriptionRefillEformsResolver);
   });
 
   it('should be created', () => {

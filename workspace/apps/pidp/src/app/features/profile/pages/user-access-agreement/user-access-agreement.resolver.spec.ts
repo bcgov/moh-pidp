@@ -10,7 +10,7 @@ import { StatusCode } from '@app/features/portal/enums/status-code.enum';
 import { ProfileStatus } from '@app/features/portal/models/profile-status.model';
 
 import { UserAccessAgreementResource } from './user-access-agreement-resource.service';
-import { UserAccessAgreementResolver } from './user-access-agreement.resolver';
+import { userAccessAgreementResolver } from './user-access-agreement.resolver';
 import { MockProfileStatus } from '@test/mock-profile-status';
 
 describe('UserAccessAgreementResolver', () => {
@@ -23,7 +23,7 @@ describe('UserAccessAgreementResolver', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
-        UserAccessAgreementResolver,
+        userAccessAgreementResolver,
         provideAutoSpy(UserAccessAgreementResource),
         {
           provide: PartyService,
@@ -35,7 +35,7 @@ describe('UserAccessAgreementResolver', () => {
       ],
     });
 
-    resolver = TestBed.inject(UserAccessAgreementResolver);
+    resolver = TestBed.inject(userAccessAgreementResolver);
     userAccessAgreementResourceSpy = TestBed.inject<any>(
       UserAccessAgreementResource,
     );

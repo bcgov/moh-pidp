@@ -10,11 +10,11 @@ import { StatusCode } from '@app/features/portal/enums/status-code.enum';
 import { ProfileStatus } from '@app/features/portal/models/profile-status.model';
 
 import { DriverFitnessResource } from './driver-fitness-resource.service';
-import { DriverFitnessResolver } from './driver-fitness.resolver';
+import { driverFitnessResolver } from './driver-fitness.resolver';
 import { MockProfileStatus } from '@test/mock-profile-status';
 
 describe('DriverFitnessResolver', () => {
-  let resolver: DriverFitnessResolver;
+  let resolver: driverFitnessResolver;
   let driverFitnessResourceSpy: Spy<DriverFitnessResource>;
   let partyServiceSpy: Spy<PartyService>;
 
@@ -23,7 +23,7 @@ describe('DriverFitnessResolver', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
-        DriverFitnessResolver,
+        driverFitnessResolver,
         provideAutoSpy(DriverFitnessResource),
         {
           provide: PartyService,
@@ -35,7 +35,7 @@ describe('DriverFitnessResolver', () => {
       ],
     });
 
-    resolver = TestBed.inject(DriverFitnessResolver);
+    resolver = TestBed.inject(driverFitnessResolver);
     driverFitnessResourceSpy = TestBed.inject<any>(DriverFitnessResource);
     partyServiceSpy = TestBed.inject<any>(PartyService);
 

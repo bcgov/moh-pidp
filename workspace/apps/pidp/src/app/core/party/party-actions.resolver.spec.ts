@@ -1,21 +1,21 @@
 import { TestBed } from '@angular/core/testing';
 
 import { provideAutoSpy } from 'jest-auto-spies';
-import { PartyActionsResolver } from './party-actions.resolver';
-import { PartyResolver } from './party.resolver';
-import { LandingActionsResolver } from './landing-actions.resolver';
+import { partyActionsResolver } from './party-actions.resolver';
+import { partyResolver } from './party.resolver';
+import { landingActionsResolver } from './landing-actions.resolver';
 
 describe('PartyActionsResolver', () => {
-  let resolver: PartyActionsResolver;
+  let resolver: partyActionsResolver;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
-        provideAutoSpy(PartyResolver),
-        provideAutoSpy(LandingActionsResolver),
+        provideAutoSpy(partyResolver),
+        provideAutoSpy(landingActionsResolver),
       ],
     });
-    resolver = TestBed.inject(PartyActionsResolver);
+    resolver = TestBed.inject(partyActionsResolver);
   });
 
   it('should be created', () => {
