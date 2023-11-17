@@ -159,21 +159,28 @@ public class Approve
 
         private async Task SendEndorsementApprovedEmailAsync(EndorsementRequest request)
         {
-            var requestingPartyFullName = await this.context.Parties
-                                            .Where(party => party.Id == request.RequestingPartyId)
-                                            .Select(party => party.FullName)
-                                            .SingleAsync();
-
             var receivingPartyEmail = await this.context.Parties
                                         .Where(party => party.Id == request.RequestingPartyId)
                                         .Select(party => party.Email)
                                         .SingleAsync();
+            var applicationUrl = $"<a href=\"{this.config.ApplicationUrl}\" target=\"_blank\" rel=\"noopener noreferrer\">OneHealthID Service</a>";
+            var pidpSupportEmail = $"<a href=\"mailto:{EmailService.PidpEmail}\">${EmailService.PidpEmail}</a>";
+            var pidpSupportPhone = $"<a href=\"tel:{EmailService.PidpSupportPhone}\">{EmailService.PidpSupportPhone}</a>";
 
             var email = new Email(
                 from: EmailService.PidpEmail,
                 to: receivingPartyEmail!,
                 subject: $"OneHealthID Endorsement is approved",
-                body: $@"The endorsement is approved and the relationship is established with {requestingPartyFullName}");
+                body: $@"Hello,
+<br>You are receiving this email because your endorsement is now complete in the {applicationUrl}. You should now be able to access and use the Provincial Attachment System. You can now continue enrolling in any services that required endorsement from a licensed provider.
+<br>
+<br>For additional support, contact the OneHealthID Service desk:
+<br>
+<br>&emsp;• By email at {pidpSupportEmail}
+<br>
+<br>&emsp;• By phone at {pidpSupportPhone}
+<br>
+<br>Thank you.");
 
             await this.emailService.SendAsync(email);
         }
