@@ -92,7 +92,7 @@ describe('LoginPage', () => {
 
         then('a log object was sent to the endpoint "client-logs"', () => {
           expect(clientLogsServiceSpy.createClientLog).toHaveBeenCalledWith({
-            message: `A user has landed on the login page with the endorsement request`,
+            message: `A user has landed on the login page with an endorsement request`,
             logLevel: MicrosoftLogLevel.INFORMATION,
             additionalInformation: '731c0b67-a475-4068-94e3-367e37a508ec',
           });
@@ -132,7 +132,7 @@ describe('LoginPage', () => {
             expect(
               clientLogsServiceSpy.createClientLog,
             ).toHaveBeenLastCalledWith({
-              message: `A user has clicked on the login button with the endorsement request and the identity provider "${idpHint}"`,
+              message: `A user has clicked on the login button with an endorsement request and the identity provider "${idpHint}"`,
               logLevel: MicrosoftLogLevel.INFORMATION,
               additionalInformation: '731c0b67-a475-4068-94e3-367e37a508ec',
             });
@@ -165,7 +165,7 @@ describe('LoginPage', () => {
             expect(
               clientLogsServiceSpy.createClientLog,
             ).toHaveBeenLastCalledWith({
-              message: `A user has clicked on the login button with the endorsement request and the identity provider "${idpHint}"`,
+              message: `A user has clicked on the login button with an endorsement request and the identity provider "${idpHint}"`,
               logLevel: MicrosoftLogLevel.INFORMATION,
               additionalInformation: '731c0b67-a475-4068-94e3-367e37a508ec',
             });
