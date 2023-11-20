@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { NgxMaskModule } from 'ngx-mask';
+import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
 
 import { AlertActionsDirective } from './components/alert/alert-actions.directive';
 import { AlertContentDirective } from './components/alert/alert-content.directive';
@@ -99,15 +99,15 @@ import { TrimDirective } from './directives/trim.directive';
     CommonModule,
     ContextHelpModule,
     MaterialModule,
-    NgxMaskModule.forRoot(),
     ReactiveFormsModule,
     FontAwesomeModule,
     NgOptimizedImage,
+    NgxMaskDirective,
+    NgxMaskPipe,
   ],
   exports: [
     ContextHelpModule,
     MaterialModule,
-    NgxMaskModule,
     ReactiveFormsModule,
     FontAwesomeModule,
     AlertComponent,
@@ -152,6 +152,9 @@ import { TrimDirective } from './directives/trim.directive';
     SafePipe,
     InjectViewportCssClassDirective,
     NgOptimizedImage,
+    NgxMaskDirective,
+    NgxMaskPipe,
   ],
+  providers: [provideNgxMask()],
 })
 export class SharedUiModule {}
