@@ -12,18 +12,30 @@ import { ProfileStatus } from '@app/features/portal/models/profile-status.model'
 import { SaEformsResource } from './sa-eforms-resource.service';
 import { saEformsResolver } from './sa-eforms.resolver';
 import { MockProfileStatus } from '@test/mock-profile-status';
+import {
+  ActivatedRouteSnapshot,
+  ResolveFn,
+  RouterStateSnapshot,
+} from '@angular/router';
+import { Observable } from 'rxjs';
 
-describe('SaEformsResolver', () => {
-  let resolver: SaEformsResolver;
+describe('saEformsResolver', () => {
+  const executeResolver: ResolveFn<StatusCode | null> = (
+    ...resolverParameters
+  ) =>
+    TestBed.runInInjectionContext(() =>
+      saEformsResolver(...resolverParameters),
+    );
   let saEformsResourceSpy: Spy<SaEformsResource>;
   let partyServiceSpy: Spy<PartyService>;
+  let activatedRouteSnapshotSpy: Spy<ActivatedRouteSnapshot>;
+  let routerStateSnapshotSpy: Spy<RouterStateSnapshot>;
 
   let mockProfileStatus: ProfileStatus;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
-        saEformsResolver,
         provideAutoSpy(SaEformsResource),
         {
           provide: PartyService,
@@ -35,7 +47,6 @@ describe('SaEformsResolver', () => {
       ],
     });
 
-    resolver = TestBed.inject(saEformsResolver);
     saEformsResourceSpy = TestBed.inject<any>(SaEformsResource);
     partyServiceSpy = TestBed.inject<any>(PartyService);
 
@@ -52,12 +63,14 @@ describe('SaEformsResolver', () => {
           .mustBeCalledWith(partyId)
           .nextOneTimeWith(mockProfileStatus);
         let actualResult: StatusCode | null;
-        resolver
-          .resolve()
-          .subscribe(
-            (profileStatus: StatusCode | null) =>
-              (actualResult = profileStatus),
-          );
+        (
+          executeResolver(
+            activatedRouteSnapshotSpy,
+            routerStateSnapshotSpy,
+          ) as Observable<StatusCode | null>
+        ).subscribe(
+          (profileStatus: StatusCode | null) => (actualResult = profileStatus),
+        );
 
         then('response will provide the status code for SA eForms', () => {
           expect(saEformsResourceSpy.getProfileStatus).toHaveBeenCalledTimes(1);
@@ -82,12 +95,14 @@ describe('SaEformsResolver', () => {
             },
           ]);
         let actualResult: StatusCode | null;
-        resolver
-          .resolve()
-          .subscribe(
-            (profileStatus: StatusCode | null) =>
-              (actualResult = profileStatus),
-          );
+        (
+          executeResolver(
+            activatedRouteSnapshotSpy,
+            routerStateSnapshotSpy,
+          ) as Observable<StatusCode | null>
+        ).subscribe(
+          (profileStatus: StatusCode | null) => (actualResult = profileStatus),
+        );
 
         then('response will provide null as status code for SA eForms', () => {
           expect(saEformsResourceSpy.getProfileStatus).toHaveBeenCalledTimes(1);
@@ -102,12 +117,14 @@ describe('SaEformsResolver', () => {
 
       when('attempting to resolve the status code', () => {
         let actualResult: StatusCode | null;
-        resolver
-          .resolve()
-          .subscribe(
-            (profileStatus: StatusCode | null) =>
-              (actualResult = profileStatus),
-          );
+        (
+          executeResolver(
+            activatedRouteSnapshotSpy,
+            routerStateSnapshotSpy,
+          ) as Observable<StatusCode | null>
+        ).subscribe(
+          (profileStatus: StatusCode | null) => (actualResult = profileStatus),
+        );
 
         then('response will provide null as status code for SA eForms', () => {
           expect(saEformsResourceSpy.requestAccess).not.toHaveBeenCalled();

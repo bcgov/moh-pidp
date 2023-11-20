@@ -12,18 +12,31 @@ import { ProfileStatus } from '@app/features/portal/models/profile-status.model'
 import { DriverFitnessResource } from './driver-fitness-resource.service';
 import { driverFitnessResolver } from './driver-fitness.resolver';
 import { MockProfileStatus } from '@test/mock-profile-status';
+import {
+  ActivatedRouteSnapshot,
+  ResolveFn,
+  RouterStateSnapshot,
+} from '@angular/router';
+import { Observable } from 'rxjs';
 
-describe('DriverFitnessResolver', () => {
-  let resolver: driverFitnessResolver;
+describe('driverFitnessResolver', () => {
+  const executeResolver: ResolveFn<StatusCode | null> = (
+    ...resolverParameters
+  ) =>
+    TestBed.runInInjectionContext(() =>
+      driverFitnessResolver(...resolverParameters),
+    );
+
   let driverFitnessResourceSpy: Spy<DriverFitnessResource>;
   let partyServiceSpy: Spy<PartyService>;
+  let activatedRouteSnapshotSpy: Spy<ActivatedRouteSnapshot>;
+  let routerStateSnapshotSpy: Spy<RouterStateSnapshot>;
 
   let mockProfileStatus: ProfileStatus;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
-        driverFitnessResolver,
         provideAutoSpy(DriverFitnessResource),
         {
           provide: PartyService,
@@ -35,7 +48,6 @@ describe('DriverFitnessResolver', () => {
       ],
     });
 
-    resolver = TestBed.inject(driverFitnessResolver);
     driverFitnessResourceSpy = TestBed.inject<any>(DriverFitnessResource);
     partyServiceSpy = TestBed.inject<any>(PartyService);
 
@@ -52,12 +64,14 @@ describe('DriverFitnessResolver', () => {
           .mustBeCalledWith(partyId)
           .nextOneTimeWith(mockProfileStatus);
         let actualResult: StatusCode | null;
-        resolver
-          .resolve()
-          .subscribe(
-            (profileStatus: StatusCode | null) =>
-              (actualResult = profileStatus),
-          );
+        (
+          executeResolver(
+            activatedRouteSnapshotSpy,
+            routerStateSnapshotSpy,
+          ) as Observable<StatusCode | null>
+        ).subscribe(
+          (profileStatus: StatusCode | null) => (actualResult = profileStatus),
+        );
 
         then('response will provide the status code for SA eForms', () => {
           expect(
@@ -84,12 +98,14 @@ describe('DriverFitnessResolver', () => {
             },
           ]);
         let actualResult: StatusCode | null;
-        resolver
-          .resolve()
-          .subscribe(
-            (profileStatus: StatusCode | null) =>
-              (actualResult = profileStatus),
-          );
+        (
+          executeResolver(
+            activatedRouteSnapshotSpy,
+            routerStateSnapshotSpy,
+          ) as Observable<StatusCode | null>
+        ).subscribe(
+          (profileStatus: StatusCode | null) => (actualResult = profileStatus),
+        );
 
         then('response will provide null as status code for SA eForms', () => {
           expect(
@@ -106,12 +122,14 @@ describe('DriverFitnessResolver', () => {
 
       when('attempting to resolve the status code', () => {
         let actualResult: StatusCode | null;
-        resolver
-          .resolve()
-          .subscribe(
-            (profileStatus: StatusCode | null) =>
-              (actualResult = profileStatus),
-          );
+        (
+          executeResolver(
+            activatedRouteSnapshotSpy,
+            routerStateSnapshotSpy,
+          ) as Observable<StatusCode | null>
+        ).subscribe(
+          (profileStatus: StatusCode | null) => (actualResult = profileStatus),
+        );
 
         then('response will provide null as status code for SA eForms', () => {
           expect(driverFitnessResourceSpy.requestAccess).not.toHaveBeenCalled();

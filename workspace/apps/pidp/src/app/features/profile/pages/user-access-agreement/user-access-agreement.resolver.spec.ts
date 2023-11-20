@@ -37,7 +37,6 @@ describe('userAccessAgreementResolver', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
-        userAccessAgreementResolver,
         provideAutoSpy(UserAccessAgreementResource),
         {
           provide: PartyService,
