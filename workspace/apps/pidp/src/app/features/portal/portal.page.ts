@@ -17,12 +17,7 @@ import { AuthorizedUserService } from '../auth/services/authorized-user.service'
 import { ProfileStatusAlert } from './models/profile-status-alert.model';
 import { ProfileStatus } from './models/profile-status.model';
 import { PortalResource } from './portal-resource.service';
-import {
-  bcProviderTutorialLink,
-  collegeLicenceTutorialLink,
-  personalInfoTutorialLink,
-  uaaTutorialLink,
-} from './portal.constants';
+import { bcProviderTutorialLink } from './portal.constants';
 import { PortalService } from './portal.service';
 import { IPortalSection } from './state/portal-section.model';
 import { PortalState } from './state/portal-state.builder';
@@ -60,16 +55,10 @@ export class PortalPage implements OnInit {
     true,
   );
   public pasPanelExpanded$: BehaviorSubject<boolean>;
-  public demographicsStatusCode: number | undefined;
-  public collegeLicenceStatusCode: number | undefined;
-  public uaaStatusCode: number | undefined;
   public bcProviderStatusCode: number | undefined;
   public rosteringStatusCode: number | undefined;
   public bcProviderUsername = '';
   public logoutRedirectUrl: string;
-  public personalInfoTutorial: string;
-  public collegeLicenceTutorial: string;
-  public uaaTutorial: string;
   public bcProviderTutorial: string;
   public selectedIndex: number;
   private readonly lastSelectedIndex: number;
@@ -95,9 +84,6 @@ export class PortalPage implements OnInit {
     this.pasPanelExpanded$ = this.portalService.pasPanelExpanded$;
     this.alerts = [];
     this.logoutRedirectUrl = `${this.config.applicationUrl}/`;
-    this.personalInfoTutorial = personalInfoTutorialLink;
-    this.collegeLicenceTutorial = collegeLicenceTutorialLink;
-    this.uaaTutorial = uaaTutorialLink;
     this.bcProviderTutorial = bcProviderTutorialLink;
     this.lastSelectedIndex = 3;
     this.selectedIndex = -1;
@@ -112,8 +98,6 @@ export class PortalPage implements OnInit {
     if (this.bcProviderStatusCode !== 2) {
       this.router.navigateByUrl('/access/bc-provider-application');
     } else if (
-      this.demographicsStatusCode === 2 &&
-      this.collegeLicenceStatusCode === 2 &&
       this.bcProviderStatusCode === 2 &&
       this.rosteringStatusCode === 1
     ) {
@@ -158,13 +142,6 @@ export class PortalPage implements OnInit {
         this.collegeLicenceDeclared =
           profileStatus?.status.collegeCertification.licenceDeclared;
         this.isComplete = profileStatus?.status.collegeCertification.isComplete;
-
-        this.demographicsStatusCode =
-          profileStatus?.status.demographics.statusCode;
-        this.collegeLicenceStatusCode =
-          profileStatus?.status.collegeCertification.statusCode;
-        this.uaaStatusCode =
-          profileStatus?.status.userAccessAgreement.statusCode;
 
         this.bcProviderStatusCode = profileStatus?.status.bcProvider.statusCode;
         if (this.bcProviderStatusCode === 2) {
