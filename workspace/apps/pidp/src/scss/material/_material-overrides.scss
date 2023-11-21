@@ -61,3 +61,12 @@
 .mat-icon {
   overflow: visible !important;
 }
+
+//
+// SideNav
+//
+
+app-admin-dashboard .mat-sidenav {
+  // menu background color for admin section
+  background-color: theme-palette(blue);
+}
