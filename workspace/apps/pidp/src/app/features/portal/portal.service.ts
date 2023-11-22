@@ -112,7 +112,8 @@ export class PortalService {
         case AlertCode.PENDING_ENDORSEMENT_REQUEST:
           return {
             heading: 'You have a pending endorsement request',
-            content: '<INSERT TEXT for notification>',
+            content:
+              'ACTION REQUIRED: <a uiAnchor href="/organization-info/endorsements">Click here</a> to complete endorsement process',
           };
       }
     });
