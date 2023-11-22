@@ -1,6 +1,7 @@
 namespace Pidp.Features.ClientLogs;
 
 using FluentValidation;
+
 using Pidp.Data;
 using Pidp.Models;
 

@@ -149,10 +149,24 @@ public class Create
                 })
                 .SingleAsync(cancellationToken);
 
+            var plrStanding = await this.plrClient.GetStandingsDigestAsync(party.Cpn);
+            var endorsingCpns = await this.context.ActiveEndorsingParties(credential.PartyId)
+                .Select(party => party.Cpn)
+                .ToListAsync(cancellationToken);
+            var endorsementPlrDigest = await this.plrClient.GetAggregateStandingsDigestAsync(endorsingCpns);
+
             var attributes = new BCProviderAttributes(this.bcProviderClientId)
                 .SetHpdid(party.Hpdid!)
                 .SetLoa(3)
-                .SetPidpEmail(party.Email!);
+                .SetPidpEmail(party.Email!)
+                .SetIsRnp(plrStanding.With(ProviderRoleType.RegisteredNursePractitioner).HasGoodStanding)
+                .SetIsMd(plrStanding.With(ProviderRoleType.MedicalDoctor).HasGoodStanding)
+                .SetIsMoa(!plrStanding.HasGoodStanding && endorsementPlrDigest.HasGoodStanding)
+                .SetEndorserData(endorsementPlrDigest
+                    .WithGoodStanding()
+                    .With(BCProviderAttributes.EndorserDataEligibleIdentifierTypes)
+                    .Cpns);
+
             if (party.Cpn != null)
             {
                 attributes.SetCpn(party.Cpn);
@@ -161,27 +175,6 @@ public class Create
             {
                 attributes.SetUaaDate(party.UaaAgreementDate.ToDateTimeOffset());
             }
-
-            var plrStanding = await this.plrClient.GetStandingsDigestAsync(party.Cpn);
-
-            if (!plrStanding.HasGoodStanding)
-            {
-                var endorsementCpns = await this.context.ActiveEndorsementRelationships(credential.PartyId)
-                    .Select(relationship => relationship.Party!.Cpn)
-                    .ToListAsync(cancellationToken);
-                var endorsementPlrDigest = await this.plrClient.GetAggregateStandingsDigestAsync(endorsementCpns);
-
-                attributes
-                    .SetEndorserData(endorsementPlrDigest
-                        .WithGoodStanding()
-                        .With(IdentifierType.PhysiciansAndSurgeons, IdentifierType.Nurse, IdentifierType.Midwife)
-                        .Cpns)
-                    .SetIsMoa(endorsementPlrDigest.HasGoodStanding);
-            }
-
-            attributes
-                .SetIsRnp(plrStanding.With(ProviderRoleType.RegisteredNursePractitioner).HasGoodStanding)
-                .SetIsMd(plrStanding.With(ProviderRoleType.MedicalDoctor).HasGoodStanding);
 
             var user = new User
             {
