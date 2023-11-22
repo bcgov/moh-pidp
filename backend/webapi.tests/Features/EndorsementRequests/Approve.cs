@@ -107,7 +107,7 @@ public class EndorsementApproveTests : InMemoryDbTest
         foreach (var partyId in licencedParties)
         {
             var party = this.TestDb.Parties.Single(party => party.Id == partyId);
-            party.Cpn = party.FirstName;
+            party.Cpn = "cpn";
         }
         var request = this.TestDb.Has(new EndorsementRequest
         {
@@ -118,7 +118,7 @@ public class EndorsementApproveTests : InMemoryDbTest
         var keycloakClient = A.Fake<IKeycloakAdministrationClient>()
             .ReturningTrueWhenAssigingClientRoles();
         var plrClient = A.Fake<IPlrClient>()
-            .ReturningAStandingsDigest(true);
+            .ReturningAStandingsDigestWhenCalledWithCpn("cpn", true);
         var handler = this.MockDependenciesFor<Approve.CommandHandler>(keycloakClient, plrClient);
 
         var result = await handler.HandleAsync(new Approve.Command { EndorsementRequestId = request.Id, PartyId = RequestingPartyId });
