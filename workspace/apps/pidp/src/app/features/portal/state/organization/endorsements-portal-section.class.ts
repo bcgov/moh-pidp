@@ -20,7 +20,7 @@ export class EndorsementsPortalSection implements IPortalSection {
 
   public constructor(
     private profileStatus: ProfileStatus,
-    private router: Router
+    private router: Router,
   ) {
     this.key = 'endorsements';
     this.heading = 'Endorsements';
@@ -40,14 +40,11 @@ export class EndorsementsPortalSection implements IPortalSection {
     return {
       label: 'View',
       route: OrganizationInfoRoutes.routePath(
-        OrganizationInfoRoutes.ENDORSEMENTS
+        OrganizationInfoRoutes.ENDORSEMENTS,
       ),
-      disabled: !(
-        this.profileStatus.status.demographics.statusCode ===
-          StatusCode.COMPLETED &&
-        this.profileStatus.status.collegeCertification.statusCode ===
-          StatusCode.COMPLETED
-      ),
+      disabled:
+        this.profileStatus.status.endorsements.statusCode ===
+        StatusCode.NOT_AVAILABLE,
     };
   }
 

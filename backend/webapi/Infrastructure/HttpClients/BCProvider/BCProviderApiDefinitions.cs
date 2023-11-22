@@ -1,5 +1,7 @@
 namespace Pidp.Infrastructure.HttpClients.BCProvider;
 
+using Pidp.Infrastructure.HttpClients.Plr;
+
 public class NewUserRepresentation
 {
     public string? Cpn { get; set; }
@@ -21,6 +23,8 @@ public class NewUserRepresentation
 /// </summary>
 public class BCProviderAttributes
 {
+    public static IdentifierType[] EndorserDataEligibleIdentifierTypes => new[] { IdentifierType.PhysiciansAndSurgeons, IdentifierType.Nurse, IdentifierType.Midwife };
+
     private readonly string extensionNamePrefix;
     private readonly Dictionary<string, object> attributes = new();
 

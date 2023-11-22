@@ -7,7 +7,6 @@ using System.Text.Json.Serialization;
 using Pidp.Data;
 using Pidp.Extensions;
 using Pidp.Models;
-using Pidp.Models.DomainEvents;
 using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.HttpClients.Plr;
 
@@ -83,11 +82,9 @@ public class Discovery
                     .Include(party => party.LicenceDeclaration)
                     .SingleAsync(party => party.Id == credential.PartyId);
 
-                var cpn = await this.client.FindCpnAsync(party.LicenceDeclaration!.CollegeCode!.Value, party.LicenceDeclaration.LicenceNumber!, party.Birthdate!.Value);
-                if (!string.IsNullOrWhiteSpace(cpn))
+                await party.HandleLicenceSearch(this.client, this.context);
+                if (!string.IsNullOrWhiteSpace(party.Cpn))
                 {
-                    party.Cpn = cpn;
-                    party.DomainEvents.Add(new PlrCpnLookupFound(party.Id, party.PrimaryUserId, cpn));
                     saveChanges = true;
                 }
             }
