@@ -6,14 +6,12 @@ using Microsoft.EntityFrameworkCore;
 using NodaTime;
 
 using Pidp.Data;
-using Pidp.Extensions;
-using Pidp.Infrastructure.Auth;
-using Pidp.Infrastructure.HttpClients.BCProvider;
 using Pidp.Infrastructure.HttpClients.Keycloak;
 using Pidp.Infrastructure.HttpClients.Mail;
 using Pidp.Infrastructure.HttpClients.Plr;
 using Pidp.Infrastructure.Services;
 using Pidp.Models;
+using Pidp.Models.DomainEvents;
 
 public class Approve
 {
@@ -34,32 +32,26 @@ public class Approve
 
     public class CommandHandler : ICommandHandler<Command, IDomainResult>
     {
-        private readonly IBCProviderClient bcProviderClient;
         private readonly IClock clock;
         private readonly IEmailService emailService;
         private readonly IKeycloakAdministrationClient keycloakClient;
         private readonly ILogger logger;
         private readonly IPlrClient plrClient;
-        private readonly PidpConfiguration config;
         private readonly PidpDbContext context;
 
         public CommandHandler(
-            IBCProviderClient bcProviderClient,
             IClock clock,
             IEmailService emailService,
             IKeycloakAdministrationClient keycloakClient,
             ILogger<CommandHandler> logger,
             IPlrClient plrClient,
-            PidpConfiguration config,
             PidpDbContext context)
         {
-            this.bcProviderClient = bcProviderClient;
             this.clock = clock;
             this.emailService = emailService;
             this.keycloakClient = keycloakClient;
             this.logger = logger;
             this.plrClient = plrClient;
-            this.config = config;
             this.context = context;
         }
 
@@ -82,8 +74,9 @@ public class Approve
             if (endorsementRequest.Status == EndorsementRequestStatus.Completed)
             {
                 // Both parties have approved, Request handshake is complete.
-                await this.HandleMoaDesignation(endorsementRequest);
                 this.context.Endorsements.Add(Endorsement.FromCompletedRequest(endorsementRequest));
+                await this.context.SaveChangesAsync(); // This double Save is deliberate; we need to persist the Endorsement Relationships in the database before we can calculate the EndorserData in the Domain Events.
+                await this.HandleMoaUpdates(endorsementRequest);
 
                 await this.SendEndorsementApprovedEmailAsync(endorsementRequest);
             }
@@ -93,67 +86,53 @@ public class Approve
             return DomainResult.Success();
         }
 
-        // When a user with no College Licences is endorsed by a Licenced user in good standing, they recieve the "MOA" role.
-        private async Task HandleMoaDesignation(EndorsementRequest request)
+        /// <summary>
+        /// When a user with no College Licences is endorsed by a Licenced user in good standing, they recieve the "MOA" role in Keycloak.
+        /// Also, the BC Provider for one or both Parties might need updating.
+        /// </summary>
+        private async Task HandleMoaUpdates(EndorsementRequest request)
         {
+            // TODO: We don't actually need the whole Party, just the Id, PrimaryUserId and Cpn.
+            // Consider a generic way of attaching domain events so we don't have to fetch the entire model.
             var parties = await this.context.Parties
+                .Include(party => party.Credentials)
                 .Where(party => party.Id == request.RequestingPartyId
                     || party.Id == request.ReceivingPartyId)
-                .Select(party => new
-                {
-                    party.Id,
-                    UserId = party.PrimaryUserId,
-                    party.Cpn,
-                    UserPrincipalName = party.Credentials
-                        .Where(credential => credential.IdentityProvider == IdentityProviders.BCProvider)
-                        .Select(credential => credential.IdpId)
-                        .SingleOrDefault(),
-                })
                 .ToListAsync();
 
-            if (parties.Count(party => string.IsNullOrWhiteSpace(party.Cpn)) != 1)
+            var party1 = parties[0];
+            var party2 = parties[1];
+
+            if (await this.plrClient.GetStandingAsync(party1.Cpn))
             {
-                // Either both Parties are licenced or both Parties are unlicenced
-                return;
+                party2.DomainEvents.Add(new EndorsementStandingUpdated(party2.Id));
+
+                if (string.IsNullOrEmpty(party2.Cpn))
+                {
+                    await this.AssignMoaRole(party2);
+                }
             }
 
-            var licencedParty = parties.Single(party => !string.IsNullOrWhiteSpace(party.Cpn));
-            var licencedPartyStanding = await this.plrClient.GetStandingsDigestAsync(licencedParty.Cpn);
-            if (!licencedPartyStanding.HasGoodStanding)
+            if (await this.plrClient.GetStandingAsync(party2.Cpn))
             {
-                // TODO: Log / other behaviour when in bad standing?
-                return;
-            }
+                party1.DomainEvents.Add(new EndorsementStandingUpdated(party1.Id));
 
-            var unLicencedParty = parties.Single(party => string.IsNullOrWhiteSpace(party.Cpn));
-            if (await this.keycloakClient.AssignAccessRoles(unLicencedParty.UserId, MohKeycloakEnrolment.MoaLicenceStatus))
+                if (string.IsNullOrEmpty(party1.Cpn))
+                {
+                    await this.AssignMoaRole(party1);
+                }
+            }
+        }
+
+        private async Task AssignMoaRole(Party party)
+        {
+            if (await this.keycloakClient.AssignAccessRoles(party.PrimaryUserId, MohKeycloakEnrolment.MoaLicenceStatus))
             {
-                this.context.BusinessEvents.Add(LicenceStatusRoleAssigned.Create(unLicencedParty.Id, MohKeycloakEnrolment.MoaLicenceStatus, this.clock.GetCurrentInstant()));
+                this.context.BusinessEvents.Add(LicenceStatusRoleAssigned.Create(party.Id, MohKeycloakEnrolment.MoaLicenceStatus, this.clock.GetCurrentInstant()));
             }
             else
             {
-                this.logger.LogMoaRoleAssignmentError(unLicencedParty.Id);
-            }
-
-            if (!string.IsNullOrWhiteSpace(unLicencedParty.UserPrincipalName)
-                && licencedPartyStanding
-                    .With(IdentifierType.PhysiciansAndSurgeons, IdentifierType.Nurse, IdentifierType.Midwife)
-                    .HasGoodStanding)
-            {
-                var endorsingCpns = await this.context.ActiveEndorsementRelationships(unLicencedParty.Id)
-                    .Select(relationship => relationship.Party!.Cpn)
-                    .ToListAsync();
-
-                var endorsingPartiesStanding = await this.plrClient.GetAggregateStandingsDigestAsync(endorsingCpns);
-
-                var unlicencedPartyBCProviderAttributes = new BCProviderAttributes(this.config.BCProviderClient.ClientId)
-                    .SetIsMoa(true)
-                    .SetEndorserData(endorsingPartiesStanding
-                        .WithGoodStanding()
-                        .With(IdentifierType.PhysiciansAndSurgeons, IdentifierType.Nurse, IdentifierType.Midwife)
-                        .Cpns
-                        .Append(licencedParty.Cpn!));
-                await this.bcProviderClient.UpdateAttributes(unLicencedParty.UserPrincipalName, unlicencedPartyBCProviderAttributes.AsAdditionalData());
+                this.logger.LogMoaRoleAssignmentError(party.Id);
             }
         }
 
