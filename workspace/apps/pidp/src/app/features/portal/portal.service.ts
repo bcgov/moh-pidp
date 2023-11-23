@@ -45,7 +45,7 @@ export class PortalService {
 
   public constructor(
     private router: Router,
-    private permissionsService: PermissionsService
+    private permissionsService: PermissionsService,
   ) {
     this._profileStatus = null;
     this._state$ = new BehaviorSubject<PortalState>(null);
@@ -72,7 +72,7 @@ export class PortalService {
 
     return (Object.keys(status) as PortalSectionStatusKey[]).filter(
       (key: PortalSectionStatusKey) =>
-        status[key].statusCode === StatusCode.HIDDEN
+        status[key].statusCode === StatusCode.HIDDEN,
     );
   }
 
@@ -87,7 +87,7 @@ export class PortalService {
 
     const builder = new PortalStateBuilder(
       this.router,
-      this.permissionsService
+      this.permissionsService,
     );
     this._state$.next(builder.createState(profileStatus));
   }
@@ -109,6 +109,12 @@ export class PortalService {
             heading: 'Having trouble verifying your college licence?',
             content: `Your licence may not be active yet. Try again in 24 hours. If this problem persists, contact your college.`,
           };
+        case AlertCode.PENDING_ENDORSEMENT_REQUEST:
+          return {
+            heading: 'You have a pending endorsement request',
+            content:
+              'ACTION REQUIRED: <a uiAnchor href="/organization-info/endorsements">Click here</a> to complete endorsement process',
+          };
       }
     });
   }
@@ -124,10 +130,10 @@ export class PortalService {
     // purposefully skipped in the profile completed check
     return (
       profileSectionKeys.every((key) =>
-        status[key] ? status[key].statusCode === StatusCode.COMPLETED : true
+        status[key] ? status[key].statusCode === StatusCode.COMPLETED : true,
       ) &&
       accessSectionKeys.every((key) =>
-        status[key] ? status[key].statusCode !== StatusCode.COMPLETED : true
+        status[key] ? status[key].statusCode !== StatusCode.COMPLETED : true,
       )
     );
   }
