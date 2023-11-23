@@ -7,7 +7,9 @@ using NodaTime;
 
 using Pidp.Data;
 using Pidp.Infrastructure.HttpClients.Keycloak;
+using Pidp.Infrastructure.HttpClients.Mail;
 using Pidp.Infrastructure.HttpClients.Plr;
+using Pidp.Infrastructure.Services;
 using Pidp.Models;
 using Pidp.Models.DomainEvents;
 
@@ -31,22 +33,28 @@ public class Approve
     public class CommandHandler : ICommandHandler<Command, IDomainResult>
     {
         private readonly IClock clock;
+        private readonly IEmailService emailService;
         private readonly IKeycloakAdministrationClient keycloakClient;
         private readonly ILogger logger;
         private readonly IPlrClient plrClient;
+        private readonly PidpConfiguration config;
         private readonly PidpDbContext context;
 
         public CommandHandler(
             IClock clock,
+            IEmailService emailService,
             IKeycloakAdministrationClient keycloakClient,
             ILogger<CommandHandler> logger,
             IPlrClient plrClient,
+            PidpConfiguration config,
             PidpDbContext context)
         {
             this.clock = clock;
+            this.emailService = emailService;
             this.keycloakClient = keycloakClient;
             this.logger = logger;
             this.plrClient = plrClient;
+            this.config = config;
             this.context = context;
         }
 
@@ -72,6 +80,8 @@ public class Approve
                 this.context.Endorsements.Add(Endorsement.FromCompletedRequest(endorsementRequest));
                 await this.context.SaveChangesAsync(); // This double Save is deliberate; we need to persist the Endorsement Relationships in the database before we can calculate the EndorserData in the Domain Events.
                 await this.HandleMoaUpdates(endorsementRequest);
+
+                await this.SendEndorsementApprovedEmailAsync(endorsementRequest);
             }
 
             await this.context.SaveChangesAsync();
@@ -127,6 +137,34 @@ public class Approve
             {
                 this.logger.LogMoaRoleAssignmentError(party.Id);
             }
+        }
+
+        private async Task SendEndorsementApprovedEmailAsync(EndorsementRequest request)
+        {
+            var receivingPartyEmail = await this.context.Parties
+                                        .Where(party => party.Id == request.RequestingPartyId)
+                                        .Select(party => party.Email)
+                                        .SingleAsync();
+            var applicationUrl = $"<a href=\"{this.config.ApplicationUrl}\" target=\"_blank\" rel=\"noopener noreferrer\">OneHealthID Service</a>";
+            var pidpSupportEmail = $"<a href=\"mailto:{EmailService.PidpEmail}\">{EmailService.PidpEmail}</a>";
+            var pidpSupportPhone = $"<a href=\"tel:{EmailService.PidpSupportPhone}\">{EmailService.PidpSupportPhone}</a>";
+
+            var email = new Email(
+                from: EmailService.PidpEmail,
+                to: receivingPartyEmail!,
+                subject: $"OneHealthID Endorsement is approved",
+                body: $@"Hello,
+<br>You are receiving this email because your endorsement is now complete in the {applicationUrl}. You should now be able to access and use the Provincial Attachment System. You can now continue enrolling in any services that required endorsement from a licensed provider.
+<br>
+<br>For additional support, contact the OneHealthID Service desk:
+<br>
+<br>&emsp;• By email at {pidpSupportEmail}
+<br>
+<br>&emsp;• By phone at {pidpSupportPhone}
+<br>
+<br>Thank you.");
+
+            await this.emailService.SendAsync(email);
         }
     }
 }
