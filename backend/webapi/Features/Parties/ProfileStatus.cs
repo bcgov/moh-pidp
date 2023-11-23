@@ -5,8 +5,8 @@ using AutoMapper.QueryableExtensions;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using NodaTime;
-using System.Security.Claims;
 using System.Diagnostics.CodeAnalysis;
+using System.Security.Claims;
 using System.Text.Json.Serialization;
 
 using Pidp.Data;
@@ -16,6 +16,7 @@ using static Pidp.Features.Parties.ProfileStatus.Model;
 using Pidp.Infrastructure;
 using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.HttpClients.Plr;
+using Pidp.Models;
 using Pidp.Models.Lookups;
 
 public partial class ProfileStatus
@@ -117,6 +118,7 @@ public partial class ProfileStatus
         public string? Phone { get; set; }
         public string? Cpn { get; set; }
         public bool HasBCProviderCredential { get; set; }
+        public bool HasPendingEndorsementRequest { get; set; }
         public LicenceDeclarationDto? LicenceDeclaration { get; set; }
         public string? AccessAdministratorEmail { get; set; }
         public bool OrganizationDetailEntered { get; set; }
@@ -167,6 +169,11 @@ public partial class ProfileStatus
             this.HasMSTeamsClinicEndorsement = endorsementDtos.Any(dto => dto.IsMSTeamsPrivacyOfficer);
             // We should defer this check if possible. See DriverFitnessSection.
             this.EndorsementPlrStanding = await plrClient.GetAggregateStandingsDigestAsync(endorsementDtos.Select(dto => dto.Cpn));
+
+            this.HasPendingEndorsementRequest = await context.EndorsementRequests
+                .Where(request => (request.ReceivingPartyId == this.Id && request.Status == EndorsementRequestStatus.Received)
+                    || (request.RequestingPartyId == this.Id && request.Status == EndorsementRequestStatus.Approved))
+                .AnyAsync();
         }
     }
 }
