@@ -37,6 +37,7 @@ public class Approve
         private readonly IKeycloakAdministrationClient keycloakClient;
         private readonly ILogger logger;
         private readonly IPlrClient plrClient;
+        private readonly PidpConfiguration config;
         private readonly PidpDbContext context;
 
         public CommandHandler(
@@ -45,6 +46,7 @@ public class Approve
             IKeycloakAdministrationClient keycloakClient,
             ILogger<CommandHandler> logger,
             IPlrClient plrClient,
+            PidpConfiguration config,
             PidpDbContext context)
         {
             this.clock = clock;
@@ -52,6 +54,7 @@ public class Approve
             this.keycloakClient = keycloakClient;
             this.logger = logger;
             this.plrClient = plrClient;
+            this.config = config;
             this.context = context;
         }
 
