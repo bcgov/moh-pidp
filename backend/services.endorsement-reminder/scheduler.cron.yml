@@ -1,0 +1,89 @@
+apiVersion: template.openshift.io/v1
+kind: Template
+metadata:
+  annotations:
+    description: Template for job that activates pod to send endorsement reminder emails
+    tags: cronjob
+  name: scheduler-pod-launcher
+objects:
+  - apiVersion: batch/v1
+    kind: CronJob
+    metadata:
+      name: '${CRON_NAME}'
+    spec:
+      concurrencyPolicy: Forbid
+      suspend: false
+      jobTemplate:
+        spec:
+          template:
+            spec:
+              containers:
+                - command:
+                  - bash
+                  - '-c'
+                  - >-
+                    echo -e "-------- STARTING CRON --------\n"
+
+                    echo -e "-------- Getting access_token --------\n"
+
+                    TOKEN=$(curl -X POST
+                    "${Keycloak__AdministrationUrl}/realms/${Keycloak__RealmUrl}/protocol/openid-connect/token"
+                    \
+                      -H "Content-Type: application/x-www-form-urlencoded" \
+                      -d "grant_type=client_credentials" \
+                      -d "client_id=${Keycloak__AdministrationClientId}" \
+                      -d "client_secret=${Keycloak__AdministrationClientSecret}" | jq -r '.access_token')
+
+                    echo -e ${TOKEN}
+
+                    echo -e "-------- Calling PIDP API --------\n"
+
+                    curl -v -X POST
+                    http://${ENV_NAME}-webapi:8080/api/endpoint
+                    \
+                      -H "Authorization: Bearer ${TOKEN}" \
+                      -H "Content-Length: 0"
+
+                    echo -e "-------- CRON COMPLETE --------\n"
+                  env:
+                    - name: Keycloak__AdministrationClientSecret
+                      valueFrom:
+                        secretKeyRef:
+                          key: keyclock_service_account_client_secret
+                          name: keyclock-service-account
+                    - name: Keycloak__AdministrationClientId
+                      valueFrom:
+                        secretKeyRef:
+                          key: keyclock_service_account_client_id
+                          name: keyclock-service-account
+                    - name: Keycloak__AdministrationUrl
+                      valueFrom:
+                        configMapKeyRef:
+                          name: keycloak
+                          key: Keycloak__AdministrationUrl
+                    - name: Keycloak__RealmUrl
+                      valueFrom:
+                        configMapKeyRef:
+                          name: keycloak
+                          key: Keycloak__RealmUrl
+                  image: >-
+                    image-registry.apps.silver.devops.gov.bc.ca/d8a8f9-tools/python-curl-psql:latest
+                  limits:
+                    cpu: 500m
+                    memory: 2Gi
+                  name: '${CRON_NAME}'
+                  requests:
+                    cpu: 100m
+                    memory: 512Mi
+                  resources: null
+              restartPolicy: Never
+      schedule: '${CRON_SCHEDULE}'
+parameters:
+  - description: 'Cron-like schedule expression. Default: Once a day at 8:00 AM.'
+    name: CRON_SCHEDULE
+    value: '0 8 * * *'
+  - name: CRON_NAME
+    value: scheduler-pod-launcher
+  - description: 'Environment name'
+    name: ENV_NAME
+    required: true
