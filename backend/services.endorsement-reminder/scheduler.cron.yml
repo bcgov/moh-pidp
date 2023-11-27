@@ -49,13 +49,13 @@ objects:
                     - name: Keycloak__AdministrationClientSecret
                       valueFrom:
                         secretKeyRef:
-                          # key: prime_service_account_client_secret
-                          # name: prime-service-account
+                          key: keyclock_service_account_client_secret
+                          name: keyclock-service-account
                     - name: Keycloak__AdministrationClientId
                       valueFrom:
                         secretKeyRef:
-                          # key: prime_service_account_client_id
-                          # name: prime-service-account
+                          key: keyclock_service_account_client_id
+                          name: keyclock-service-account
                     - name: Keycloak__AdministrationUrl
                       valueFrom:
                         configMapKeyRef:
@@ -67,7 +67,7 @@ objects:
                           name: keycloak
                           key: Keycloak__RealmUrl
                   image: >-
-                    public.ecr.aws/h0h9t7p1/alpine-bash-curl-jq:latest
+                    image-registry.apps.silver.devops.gov.bc.ca/d8a8f9-tools/python-curl-psql:latest
                   limits:
                     cpu: 500m
                     memory: 2Gi
