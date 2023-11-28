@@ -133,18 +133,11 @@ services:
     build:
       context: backend/services.endorsement-reminder/
       dockerfile: Dockerfile.local
-      args:
-        ASPNETCORE_HTTPS_PORT: "5001"
-        ASPNETCORE_ENVIRONMENT: "Development"
-        ASPNETCORE_URLS: "http://+:8080"
-        DOTNET_CLI_HOME: "/tmp/DOTNET_CLI_HOME"
     environment:
       ConnectionStrings__PlrDatabase: "host=pidpdb;port=5432;database=postgres;username=postgres;password=postgres"
     volumes:
       - ./backend/services.endorsement-reminder/:/app
-    ports:
-      - "5070:8080"
-      - "5071:5001"
+    profiles: ["full", "endorsement-reminder"]
 
   ###############################################################################
   ###                                 Mailhog                                 ###
