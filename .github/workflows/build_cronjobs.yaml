@@ -1,0 +1,40 @@
+name: Build CroneJobs
+
+on:
+  push:
+    branches:
+      - 'develop'
+      - 'test'
+      - 'main'
+    paths: [infra/cronjobs]
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Environment:"
+        type: choice
+        default: 'dev'
+        required: true
+        options:
+          - dev
+          - test
+
+jobs:
+  build:
+    name: Build Cron Job
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+              
+      - name: OC Login to Silver OCP
+        uses: redhat-actions/oc-login@v1.2
+        with:
+          openshift_server_url: ${{secrets.OPENSHIFT_CLUSTER_URL}}
+          openshift_token: ${{secrets.OPENSHIFT_PIPELINE_SERVICE_ACCOUNT_TOKEN}}
+
+      - name: helm deployment
+        working-directory: infra/cronjobs
+        run: |
+          oc project d8a8f9-${{ github.event.inputs.Environment }}
+          echo creating cron jobs...
+          oc process -f .\endorsement-reminder-scheduler.cron.yml -p CRON_NAME=endorsement-reminder-scheduler -p ENV_NAME=d8a8f9-dev -p CRON_SCHEDULE="0 8 * * *" | oc apply -f -

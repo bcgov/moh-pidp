@@ -13,6 +13,10 @@ objects:
     spec:
       concurrencyPolicy: Forbid
       suspend: false
+      schedule: '${CRON_SCHEDULE}' 
+      # Cleaning Up After a Cron Job
+      successfulJobsHistoryLimit: 3 
+      failedJobsHistoryLimit: 1    
       jobTemplate:
         spec:
           template:
@@ -77,7 +81,6 @@ objects:
                     memory: 512Mi
                   resources: null
               restartPolicy: Never
-      schedule: '${CRON_SCHEDULE}'
 parameters:
   - description: 'Cron-like schedule expression. Default: Once a day at 8:00 AM.'
     name: CRON_SCHEDULE
