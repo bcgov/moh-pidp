@@ -137,6 +137,8 @@ services:
       ConnectionStrings__PlrDatabase: "host=pidpdb;port=5432;database=postgres;username=postgres;password=postgres"
     volumes:
       - ./backend/services.endorsement-reminder/:/app
+    networks:
+      - pidp-net
     profiles: ["endorsement-reminder"]
 
   ###############################################################################
