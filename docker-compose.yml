@@ -137,7 +137,7 @@ services:
       ConnectionStrings__PlrDatabase: "host=pidpdb;port=5432;database=postgres;username=postgres;password=postgres"
     volumes:
       - ./backend/services.endorsement-reminder/:/app
-    profiles: ["full", "endorsement-reminder"]
+    profiles: ["endorsement-reminder"]
 
   ###############################################################################
   ###                                 Mailhog                                 ###
