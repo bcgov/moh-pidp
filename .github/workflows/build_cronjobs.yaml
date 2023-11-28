@@ -1,12 +1,6 @@
 name: Build CroneJobs
 
 on:
-  push:
-    branches:
-      - 'develop'
-      - 'test'
-      - 'main'
-    paths: [infra/cronjobs]
   workflow_dispatch:
     inputs:
       environment:
@@ -17,6 +11,7 @@ on:
         options:
           - dev
           - test
+          - prod
 
 jobs:
   build:
@@ -32,7 +27,7 @@ jobs:
           openshift_server_url: ${{secrets.OPENSHIFT_CLUSTER_URL}}
           openshift_token: ${{secrets.OPENSHIFT_PIPELINE_SERVICE_ACCOUNT_TOKEN}}
 
-      - name: helm deployment
+      - name: cron deployment
         working-directory: infra/cronjobs
         run: |
           oc project d8a8f9-${{ github.event.inputs.Environment }}
