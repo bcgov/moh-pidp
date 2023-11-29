@@ -7,6 +7,7 @@ ENV PATH="$PATH:/opt/.dotnet/tools"
 RUN dotnet tool install --global dotnet-ef --version "7.*"
 
 COPY *.csproj .
+COPY ./webapi/pidp.csproj
 RUN dotnet restore -r linux-musl-x64 /p:PublishReadyToRun=true
 
 COPY . .
