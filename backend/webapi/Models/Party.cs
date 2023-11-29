@@ -106,9 +106,11 @@ public class Party : BaseAuditable
             return;
         }
 
-        this.DomainEvents.Add(new PlrCpnLookupFound(this.Id, this.PrimaryUserId, this.Cpn));
+        var standingsDigest = await client.GetStandingsDigestAsync(this.Cpn);
 
-        if (await client.GetStandingAsync(this.Cpn))
+        this.DomainEvents.Add(new PlrCpnLookupFound(this.Id, this.PrimaryUserId, this.Cpn, standingsDigest));
+
+        if (standingsDigest.HasGoodStanding)
         {
             var endorsingPartyIds = await context.ActiveEndorsementRelationships(this.Id)
                 .Select(relationship => relationship.PartyId)

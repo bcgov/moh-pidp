@@ -32,25 +32,22 @@ public class AssignKeycloakRolesAfterPlrCpnLookupFound : INotificationHandler<Pl
 {
     private readonly IClock clock;
     private readonly IKeycloakAdministrationClient keycloakClient;
-    private readonly IPlrClient plrClient;
     private readonly PidpDbContext context;
 
     public AssignKeycloakRolesAfterPlrCpnLookupFound(
         IClock clock,
         IKeycloakAdministrationClient keycloakClient,
-        IPlrClient plrClient,
         PidpDbContext context)
     {
         this.clock = clock;
         this.keycloakClient = keycloakClient;
-        this.plrClient = plrClient;
         this.context = context;
     }
 
     public async Task Handle(PlrCpnLookupFound notification, CancellationToken cancellationToken)
     {
         // TODO: what to do if any of this fails?
-        if (!await this.plrClient.GetStandingAsync(notification.Cpn))
+        if (!notification.StandingsDigest.HasGoodStanding)
         {
             return;
         }
@@ -68,18 +65,15 @@ public class AssignKeycloakRolesAfterPlrCpnLookupFound : INotificationHandler<Pl
 public class UpdateBCProviderAfterPlrCpnLookupFound : INotificationHandler<PlrCpnLookupFound>
 {
     private readonly IBCProviderClient bcProviderClient;
-    private readonly IPlrClient plrClient;
     private readonly PidpDbContext context;
     private readonly string clientId;
 
     public UpdateBCProviderAfterPlrCpnLookupFound(
         IBCProviderClient bcProviderClient,
-        IPlrClient plrClient,
         PidpDbContext context,
         PidpConfiguration config)
     {
         this.bcProviderClient = bcProviderClient;
-        this.plrClient = plrClient;
         this.context = context;
         this.clientId = config.BCProviderClient.ClientId;
     }
@@ -97,14 +91,13 @@ public class UpdateBCProviderAfterPlrCpnLookupFound : INotificationHandler<PlrCp
             return;
         }
 
-        var plrStanding = await this.plrClient.GetStandingsDigestAsync(notification.Cpn);
         var attributes = new BCProviderAttributes(this.clientId)
             .SetCpn(notification.Cpn)
-            .SetIsRnp(plrStanding.With(ProviderRoleType.RegisteredNursePractitioner).HasGoodStanding)
-            .SetIsMd(plrStanding.With(ProviderRoleType.MedicalDoctor).HasGoodStanding);
+            .SetIsRnp(notification.StandingsDigest.With(ProviderRoleType.RegisteredNursePractitioner).HasGoodStanding)
+            .SetIsMd(notification.StandingsDigest.With(ProviderRoleType.MedicalDoctor).HasGoodStanding);
 
         // If the user becomes regulated, they lose their MOA status
-        if (plrStanding.HasGoodStanding)
+        if (notification.StandingsDigest.HasGoodStanding)
         {
             attributes.SetIsMoa(false);
         }
