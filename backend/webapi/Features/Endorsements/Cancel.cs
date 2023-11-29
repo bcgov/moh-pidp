@@ -71,9 +71,9 @@ public class Cancel
             // TODO: We don't actually need the whole Party, just the Id, PrimaryUserId and Cpn.
             // Consider a generic way of attaching domain events so we don't have to fetch the entire model.
             var parties = await this.context.EndorsementRelationships
+                .Include(relationship => relationship.Party!.Credentials)
                 .Where(relationship => relationship.EndorsementId == command.EndorsementId)
                 .Select(relationship => relationship.Party!)
-                .Include(party => party.Credentials)
                 .ToListAsync();
 
             var party1 = parties[0];
