@@ -128,7 +128,6 @@ services:
   ###############################################################################
   endorsement-reminder:
     container_name: endorsement-reminder
-    restart: never
     image: endorsement-reminder
     build:
       context: backend/services.endorsement-reminder/

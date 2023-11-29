@@ -12,14 +12,9 @@ RUN dotnet restore -r linux-musl-x64 /p:PublishReadyToRun=true
 COPY . .
 RUN dotnet publish -c Release -o /app -r linux-musl-x64 --self-contained false --no-restore
 
-RUN dotnet ef migrations bundle
-
 #----------------------------------------------------------------#
 FROM mcr.microsoft.com/dotnet/aspnet:6.0-alpine
 WORKDIR /app
-
-ENV ASPNETCORE_ENVIRONMENT="Production"
-ENV ASPNETCORE_URLS="http://+:8080"
 
 # ENV \
 #     DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=false \
@@ -29,7 +24,5 @@ ENV ASPNETCORE_URLS="http://+:8080"
 
 COPY --from=build-env /app .
 COPY --from=build-env /source/efbundle .
-
-EXPOSE 8080
 
 CMD ["./endorsement-reminder"]

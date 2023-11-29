@@ -92,6 +92,11 @@ public class BCProviderCreate
 
             var plrStanding = await this.plrClient.GetStandingsDigestAsync(party.Cpn);
 
+            var endorsingCpns = await this.context.ActiveEndorsingParties(command.PartyId)
+                .Select(party => party.Cpn)
+                .ToListAsync();
+            var endorsingPlrDigest = await this.plrClient.GetAggregateStandingsDigestAsync(endorsingCpns);
+
             var newUserRep = new NewUserRepresentation
             {
                 FirstName = party.FirstName,
@@ -102,22 +107,13 @@ public class BCProviderCreate
                 Cpn = party.Cpn,
                 Password = command.Password,
                 PidpEmail = party.Email,
-                UaaDate = party.UaaAgreementDate.ToDateTimeOffset()
-            };
-
-            if (!plrStanding.HasGoodStanding)
-            {
-                var endorsementCpns = await this.context.ActiveEndorsementRelationships(command.PartyId)
-                    .Select(relationship => relationship.Party!.Cpn)
-                    .ToListAsync();
-                var endorsementPlrDigest = await this.plrClient.GetAggregateStandingsDigestAsync(endorsementCpns);
-
-                newUserRep.EndorserData = endorsementPlrDigest
+                UaaDate = party.UaaAgreementDate.ToDateTimeOffset(),
+                IsMoa = !plrStanding.HasGoodStanding && endorsingPlrDigest.HasGoodStanding,
+                EndorserData = endorsingPlrDigest
                     .WithGoodStanding()
-                    .With(IdentifierType.PhysiciansAndSurgeons, IdentifierType.Nurse, IdentifierType.Midwife)
-                    .Cpns;
-                newUserRep.IsMoa = endorsementPlrDigest.HasGoodStanding;
-            }
+                    .With(BCProviderAttributes.EndorserDataEligibleIdentifierTypes)
+                    .Cpns
+            };
 
             var createdUser = await this.client.CreateBCProviderAccount(newUserRep);
 

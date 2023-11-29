@@ -1,11 +1,16 @@
 namespace Pidp.Models;
 
 using EntityFrameworkCore.Projectables;
+using Microsoft.EntityFrameworkCore;
 using NodaTime;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
+using Pidp.Data;
+using Pidp.Extensions;
 using Pidp.Infrastructure.Auth;
+using Pidp.Infrastructure.HttpClients.Plr;
+using Pidp.Models.DomainEvents;
 
 [Table(nameof(Party))]
 public class Party : BaseAuditable
@@ -80,4 +85,42 @@ public class Party : BaseAuditable
     public Guid PrimaryUserId => this.Credentials
         .Single(credential => credential.IdentityProvider != IdentityProviders.BCProvider)
         .UserId;
+
+    /// <summary>
+    /// Uses the Party's Licence Declaration to search PLR for records.
+    /// Must have Credentials and PartyLicenceDeclaration loaded.
+    /// </summary>
+    public async Task HandleLicenceSearch(IPlrClient client, PidpDbContext context)
+    {
+        // TODO: Check children are loaded?
+        if (this.Birthdate == null
+            || this.LicenceDeclaration?.CollegeCode == null
+            || string.IsNullOrWhiteSpace(this.LicenceDeclaration?.LicenceNumber))
+        {
+            return;
+        }
+
+        this.Cpn = await client.FindCpnAsync(this.LicenceDeclaration.CollegeCode.Value, this.LicenceDeclaration.LicenceNumber, this.Birthdate.Value);
+        if (string.IsNullOrWhiteSpace(this.Cpn))
+        {
+            return;
+        }
+
+        var standingsDigest = await client.GetStandingsDigestAsync(this.Cpn);
+
+        this.DomainEvents.Add(new PlrCpnLookupFound(this.Id, this.PrimaryUserId, this.Cpn, standingsDigest));
+
+        if (standingsDigest.HasGoodStanding)
+        {
+            var endorsingPartyIds = await context.ActiveEndorsementRelationships(this.Id)
+                .Select(relationship => relationship.PartyId)
+                .Distinct()
+                .ToListAsync();
+
+            foreach (var partyId in endorsingPartyIds)
+            {
+                this.DomainEvents.Add(new EndorsementStandingUpdated(partyId));
+            }
+        }
+    }
 }
