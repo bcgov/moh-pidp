@@ -46,7 +46,8 @@ public class EndorsementApproveTests : InMemoryDbTest
         {
             RequestingPartyId = RequestingPartyId,
             ReceivingPartyId = ReceivingPartyId,
-            Status = status
+            Status = status,
+            RecipientEmail = "name@example.com"
         });
         var expected = status == EndorsementRequestStatus.Approved; // Requester can only approve ER after approval by reciever.
         var handler = this.MockDependenciesFor<Approve.CommandHandler>();
@@ -113,7 +114,8 @@ public class EndorsementApproveTests : InMemoryDbTest
         {
             RequestingPartyId = RequestingPartyId,
             ReceivingPartyId = ReceivingPartyId,
-            Status = EndorsementRequestStatus.Approved
+            Status = EndorsementRequestStatus.Approved,
+            RecipientEmail = "name@example.com"
         });
         var keycloakClient = A.Fake<IKeycloakAdministrationClient>()
             .ReturningTrueWhenAssigingClientRoles();

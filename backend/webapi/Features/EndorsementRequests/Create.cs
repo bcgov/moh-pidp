@@ -78,6 +78,9 @@ public class Create
         {
             string url = this.applicationUrl.SetQueryParam("endorsement-token", token);
             var link = $"<a href=\"{url}\" target=\"_blank\" rel=\"noopener noreferrer\">this link</a>";
+            var pidpSupportEmail = $"<a href=\"mailto:{EmailService.PidpEmail}\">{EmailService.PidpEmail}</a>";
+            var pidpSupportPhone = $"<a href=\"tel:{EmailService.PidpSupportPhone}\">{EmailService.PidpSupportPhone}</a>";
+
             var email = new Email(
                 from: EmailService.PidpEmail,
                 to: recipientEmail,
@@ -94,9 +97,9 @@ public class Create
 <br>
 <br>For additional support, contact the OneHealthID Service desk:
 <br>
-<br>&emsp;• By email at provideridentityportal@gov.bc.ca
+<br>&emsp;• By email at {pidpSupportEmail}
 <br>
-<br>&emsp;• By phone at 250-857-1969
+<br>&emsp;• By phone at {pidpSupportPhone}
 <br>
 <br>Thank you.");
 
