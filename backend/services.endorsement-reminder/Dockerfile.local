@@ -6,10 +6,7 @@ RUN dotnet tool install --global dotnet-ef --version "7.*"
 ENV PATH="${PATH}:/root/.dotnet/tools"
 
 ENV DOTNET_USE_POLLING_FILE_WATCHER 1
-ENV API_PORT 8080
 
 WORKDIR /app
-
-EXPOSE 8080 5001 5000
 
 ENTRYPOINT dotnet watch run --urls=http://+:8080
