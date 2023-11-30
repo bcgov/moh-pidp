@@ -1,12 +1,17 @@
-FROM mcr.microsoft.com/dotnet/sdk:6.0
+FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
+WORKDIR /src
+COPY services.endorsement-reminder/endorsement-reminder.csproj ./services.endorsement-reminder/
+COPY webapi/pidp.csproj ./webapi/
+RUN dotnet restore "services.endorsement-reminder/endorsement-reminder.csproj"
 
-WORKDIR /vsdbg
+COPY services.endorsement-reminder/ ./services.endorsement-reminder/
+COPY webapi ./webapi/
 
-# RUN dotnet tool install --global dotnet-ef --version "7.*"
-ENV PATH="${PATH}:/root/.dotnet/tools"
+WORKDIR "/src/services.endorsement-reminder"
+FROM build as publish
+RUN dotnet publish "endorsement-reminder.csproj" -c Release -o /app/publish
 
-ENV DOTNET_USE_POLLING_FILE_WATCHER 1
-
+FROM mcr.microsoft.com/dotnet/sdk:6.0 AS final
 WORKDIR /app
-
-ENTRYPOINT dotnet watch run --urls=http://+:8080
+COPY --from=publish /app/publish .
+ENTRYPOINT ["dotnet", "endorsement-reminder.dll"]
