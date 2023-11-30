@@ -2,6 +2,8 @@ namespace EndorsementReminder;
 
 using Flurl;
 using Microsoft.EntityFrameworkCore;
+using NodaTime;
+
 using Pidp;
 using Pidp.Data;
 using Pidp.Infrastructure.HttpClients.Mail;
@@ -10,15 +12,18 @@ using Pidp.Models;
 
 public class EndorsementReminderService : IEndorsementReminderService
 {
+    private readonly IClock clock;
     private readonly IEmailService emailService;
     private readonly PidpDbContext context;
     private readonly string applicationUrl;
 
     public EndorsementReminderService(
+        IClock clock,
         IEmailService emailService,
         PidpConfiguration config,
         PidpDbContext context)
     {
+        this.clock = clock;
         this.emailService = emailService;
         this.context = context;
         this.applicationUrl = config.ApplicationUrl;
@@ -27,24 +32,38 @@ public class EndorsementReminderService : IEndorsementReminderService
     public async Task DoWorkAsync()
     {
         var reminderStatuses = new[] { EndorsementRequestStatus.Created, EndorsementRequestStatus.Received, EndorsementRequestStatus.Approved };
+        var now = this.clock.GetCurrentInstant();
         var emailDtos = await this.context.EndorsementRequests
-            .Where(request => reminderStatuses.Contains(request.Status))
+            .Where(request => reminderStatuses.Contains(request.Status)
+                && request.StatusDate < now - Duration.FromDays(7)
+                && request.StatusDate > now - Duration.FromDays(8))
+            .Where(request => !this.context.Endorsements
+                .Any(endorsement => endorsement.Active
+                    && endorsement.EndorsementRelationships
+                        .Any(relation => relation.PartyId == request.RequestingPartyId)
+                    && endorsement.EndorsementRelationships
+                        .Any(relation => relation.PartyId == request.ReceivingPartyId))) // We should not send an email if the Parties are currently in an Active Endorsement
+            .OrderByDescending(request => request.Status)
             .Select(request => new
             {
-                UnRecieved = request.Status == EndorsementRequestStatus.Created,
-                RequestingEmail = request.RequestingParty!.Email,
-                ReceivingEmail = request.ReceivingParty!.Email
+                Token = request.Status == EndorsementRequestStatus.Created
+                    ? (Guid?)request.Token
+                    : null,
+                Email = request.Status == EndorsementRequestStatus.Approved
+                    ? request.RequestingParty!.Email!
+                    : request.RecipientEmail,
             })
             .ToListAsync();
+
+        foreach (var recipient in emailDtos.DistinctBy(dto => dto.Email))
+        {
+            await this.SendEmailAsync(recipient.Email, recipient.Token);
+        }
     }
 
-    private async Task SendEmailAsync(string partyEmail, Guid? token = null)
+    private async Task SendEmailAsync(string partyEmail, Guid? token)
     {
-        var url = this.applicationUrl;
-        if (token.HasValue)
-        {
-            url.SetQueryParam("endorsement-token", token);
-        }
+        var url = this.applicationUrl.SetQueryParam("endorsement-token", token);
         var link = $"<a href=\"{url}\" target=\"_blank\" rel=\"noopener noreferrer\">{this.applicationUrl}</a>";
         var pidpSupportEmail = $"<a href=\"mailto:{EmailService.PidpEmail}\">{EmailService.PidpEmail}</a>";
         var pidpSupportPhone = $"<a href=\"tel:{EmailService.PidpSupportPhone}\">{EmailService.PidpSupportPhone}</a>";
