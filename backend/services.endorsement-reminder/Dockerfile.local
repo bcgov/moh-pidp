@@ -1,9 +1,8 @@
 FROM mcr.microsoft.com/dotnet/sdk:6.0
 
 WORKDIR /vsdbg
-COPY ./webapi/pidp.csproj
 
-RUN dotnet tool install --global dotnet-ef --version "7.*"
+# RUN dotnet tool install --global dotnet-ef --version "7.*"
 ENV PATH="${PATH}:/root/.dotnet/tools"
 
 ENV DOTNET_USE_POLLING_FILE_WATCHER 1
