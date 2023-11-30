@@ -27,6 +27,9 @@ objects:
                   - '-c'
                   - >-
                     echo -e "-------- RUNNING CRON --------\n"
+                env:
+                  - name: ConnectionStrings__PidpDatabase
+                    value: "Host=localhost;Port=5433;Database=postgres;Username=postgres;Password=postgres"
                 - image: >-
                     image-registry.apps.silver.devops.gov.bc.ca/d8a8f9-tools/endorsement-reminder:latest
                   limits:
