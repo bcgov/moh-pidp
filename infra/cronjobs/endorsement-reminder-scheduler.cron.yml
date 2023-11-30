@@ -22,6 +22,11 @@ objects:
           template:
             spec:
               containers:
+                - command:
+                  - bash
+                  - '-c'
+                  - >-
+                    echo -e "-------- RUNNING CRON --------\n"
                 - image: >-
                     image-registry.apps.silver.devops.gov.bc.ca/d8a8f9-tools/endorsement-reminder:latest
                   limits:
@@ -34,9 +39,9 @@ objects:
                   resources: null
               restartPolicy: Never
 parameters:
-  - description: 'Cron-like schedule expression. Default: Once a day at 8:00 AM.'
+  - description: 'Cron-like schedule expression. TEST SCHEDULE EVERY TWO MINUTES'
     name: CRON_SCHEDULE
-    value: '0 8 * * *'
+    value: '*/2 * * * *'
   - name: CRON_NAME
     value: scheduler-pod-launcher
   - description: 'Environment name'
