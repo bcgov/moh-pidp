@@ -2,14 +2,15 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using NodaTime;
 using System.Reflection;
 
+using EndorsementReminder;
 using Pidp;
 using Pidp.Data;
 using Pidp.Infrastructure.HttpClients;
 using Pidp.Infrastructure.HttpClients.Mail;
 using Pidp.Infrastructure.Services;
-using EndorsementReminder;
 
 
 await Host.CreateDefaultBuilder(args)
@@ -18,6 +19,7 @@ await Host.CreateDefaultBuilder(args)
     {
         var config = InitializeConfiguration(services);
 
+        services.AddHttpClient<IAccessTokenClient, AccessTokenClient>();
         services
             .AddTransient<ISmtpEmailClient, SmtpEmailClient>()
             .AddHttpClientWithBaseAddress<IChesClient, ChesClient>(config.ChesClient.Url)
@@ -29,6 +31,7 @@ await Host.CreateDefaultBuilder(args)
                 });
 
         services
+            .AddSingleton<IClock>(SystemClock.Instance)
             .AddMediatR(opt => opt.RegisterServicesFromAssemblyContaining<Startup>())
             .AddTransient<IEmailService, EmailService>()
             .AddTransient<IEndorsementReminderService, EndorsementReminderService>()
