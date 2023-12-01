@@ -1,12 +1,12 @@
-name: Build CroneJobs
+name: Build CronJobs
 
 on:
   push:
     branches:
-        - 'develop'
-        - 'test'
-        - 'main'
-    paths: 'infra/cronjobs'
+      - "develop"
+      - "test"
+      - "main"
+    paths: "infra/cronjobs"
 
 permissions: read-all
 
@@ -25,7 +25,7 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@master
-              
+
       - name: OC Login to Silver OCP
         uses: redhat-actions/oc-login@v1.2
         with:
