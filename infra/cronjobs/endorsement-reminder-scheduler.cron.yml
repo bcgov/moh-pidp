@@ -1,6 +1,8 @@
 {{ $release := .Release.Name }}
 {{ $domain := .Values.global.vanityURL }}
 {{ $isProd := contains "prod" $ocEnv }}
+{{ $ocEnv := regexFind "([^-]*$)" .Release.Namespace }}
+{{ $isPR := hasPrefix "pr-" .Release.Name }}
 
 apiVersion: template.openshift.io/v1
 kind: Template
@@ -32,8 +34,32 @@ objects:
                   - >-
                     echo -e "-------- RUNNING CRON --------\n"
                 env:
+                  - name: DB_HOST
+                    valueFrom:
+                      configMapKeyRef:
+                        name: database-cm
+                        key: database-host
+                  - name: POSTGRESQL_PASSWORD
+                    valueFrom:
+                      secretKeyRef:
+                        name: {{ ternary $ocEnv $release $isPR }}-patroni-secret
+                        key: app-db-password
+                  - name: POSTGRESQL_USER
+                    valueFrom:
+                      secretKeyRef:
+                        name: {{ ternary $ocEnv $release $isPR }}-patroni-secret
+                        key: app-db-username
+                  - name: POSTGRESQL_DATABASE
+                    {{- if $isPR }}
+                    value: pidp_{{ $drn }}
+                    {{ else }}
+                    valueFrom:
+                      secretKeyRef:
+                        name: {{ ternary $ocEnv $release $isPR }}-patroni-secret
+                        key: app-db-name
+                    {{- end }}
                   - name: ConnectionStrings__PidpDatabase
-                    value: "Host=localhost;Port=5433;Database=postgres;Username=postgres;Password=postgres"
+                    value: "Host=$(DB_HOST);Port=5432;Database=$(POSTGRESQL_DATABASE);Username=$(POSTGRESQL_USER);Password=$(POSTGRESQL_PASSWORD)"
                   - name: ChesClient__TokenUrl
                     valueFrom:
                       secretKeyRef:
