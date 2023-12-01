@@ -23,7 +23,7 @@ jobs:
       - name: "Docker Build"
         working-directory: "./backend"
         run: |
-            docker build -f ./services.endorsement-reminder/Dockerfile -t image-registry.apps.silver.devops.gov.bc.ca/d8a8f9-tools/endorsement-reminder:develop .
+          docker build -f ./services.endorsement-reminder/Dockerfile -t image-registry.apps.silver.devops.gov.bc.ca/d8a8f9-tools/endorsement-reminder:develop .
 
       # Uses the builder service account token
       - name: "Docker Login to Silver OCP"
