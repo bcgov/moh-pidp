@@ -1,0 +1,4 @@
+cron: 0 1 * * *
+environment: image-registry.openshift-image-registry.svc:5000/d8a8f9-tools/endorsement-reminder:develop
+env: dev
+applicationURL: https://dev.healthprovideridentityportal.gov.bc.ca
