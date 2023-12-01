@@ -1,4 +1,4 @@
-name: Deploy Helm Charts - Endorsement Reminder
+name: Deploy Dev Helm Charts - Endorsement Reminder
 
 on:
   push:
