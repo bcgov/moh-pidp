@@ -12,7 +12,7 @@ spec:
         spec:
           containers:
           - name: endorsement-reminder
-            image: image-registry.openshift-image-registry.svc:5000/d8a8f9-tools/pidp_backend:latest
+            image: image-registry.openshift-image-registry.svc:5000/d8a8f9-tools/pidp_backend:develop
             command: ['tail']
             args:
               - -f
