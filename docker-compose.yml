@@ -131,11 +131,9 @@ services:
     image: endorsement-reminder
     build:
       context: backend/
-      dockerfile: services.endorsement-reminder/Dockerfile.local
+      dockerfile: services.endorsement-reminder/Dockerfile
     environment:
       ConnectionStrings__PlrDatabase: "host=pidpdb;port=5432;database=postgres;username=postgres;password=postgres"
-    # volumes:
-    #   - ./backend/services.endorsement-reminder/:/app
     networks:
       - pidp-net
     profiles: ["endorsement-reminder"]
