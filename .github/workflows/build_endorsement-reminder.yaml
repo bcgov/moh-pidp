@@ -14,12 +14,12 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build-and-deploy-frontend:
+  build-and-deploy-endorsement-reminder:
     name: Endorsement Reminder Build and Deploy
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: "./workspace"
+        working-directory: "./backend/services.endorsement-reminder"
     steps:
       - name: "Checkout Code"
         uses: actions/checkout@master
