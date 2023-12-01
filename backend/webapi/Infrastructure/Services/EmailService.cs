@@ -16,7 +16,6 @@ public class EmailService : IEmailService
 
     private readonly IChesClient chesClient;
     private readonly IClock clock;
-    private readonly ILogger logger;
     private readonly ISmtpEmailClient smtpEmailClient;
     private readonly PidpConfiguration config;
     private readonly PidpDbContext context;
@@ -24,14 +23,12 @@ public class EmailService : IEmailService
     public EmailService(
         IChesClient chesClient,
         IClock clock,
-        ILogger<EmailService> logger,
         ISmtpEmailClient smtpEmailClient,
         PidpConfiguration config,
         PidpDbContext context)
     {
         this.chesClient = chesClient;
         this.clock = clock;
-        this.logger = logger;
         this.smtpEmailClient = smtpEmailClient;
         this.config = config;
         this.context = context;
