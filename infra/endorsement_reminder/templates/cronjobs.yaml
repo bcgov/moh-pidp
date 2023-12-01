@@ -1,0 +1,52 @@
+kind: CronJob
+apiVersion: batch/v1
+metadata:
+  name: endorsement-reminder
+spec:
+  schedule: 0 1 * * *
+  timeZone: America/Vancouver
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: endorsement-reminder
+            image: image-registry.openshift-image-registry.svc:5000/d8a8f9-tools/pidp_backend:latest
+            command: ['/pidp -endorsement_reminder']
+            env:
+              - name: ASPNETCORE_ENVIRONMENT
+                value: Staging
+              - name: DB_HOST
+                valueFrom:
+                  configMapKeyRef:
+                    name: database-cm
+                    key: database-host
+              - name: POSTGRESQL_PASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    name: dev-patroni-secret
+                    key: app-db-password
+              - name: POSTGRESQL_USER
+                valueFrom:
+                  secretKeyRef:
+                    name: dev-patroni-secret
+                    key: app-db-username
+              - name: POSTGRESQL_DATABASE
+                valueFrom:
+                  secretKeyRef:
+                    name: dev-patroni-secret
+                    key: app-db-name
+              - name: ConnectionStrings__PidpDatabase
+                value: >-
+                  Host=$(DB_HOST);Port=5432;Database=$(POSTGRESQL_DATABASE);Username=$(POSTGRESQL_USER);Password=$(POSTGRESQL_PASSWORD)
+              - name: ApplicationUrl
+                value: 'https://dev.healthprovideridentityportal.gov.bc.ca'
+            resources:
+                limits:
+                  cpu: 500m
+                  memory: 50Mi
+                requests:
+                  cpu: 50m
+                  memory: 50Mi
+          restartPolicy: Never
