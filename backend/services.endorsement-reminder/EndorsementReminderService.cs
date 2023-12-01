@@ -2,6 +2,7 @@ namespace EndorsementReminder;
 
 using Flurl;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using NodaTime;
 
 using Pidp;
@@ -14,17 +15,20 @@ public class EndorsementReminderService : IEndorsementReminderService
 {
     private readonly IClock clock;
     private readonly IEmailService emailService;
+    private readonly ILogger logger;
     private readonly PidpDbContext context;
     private readonly string applicationUrl;
 
     public EndorsementReminderService(
         IClock clock,
         IEmailService emailService,
+        ILogger<EndorsementReminderService> logger,
         PidpConfiguration config,
         PidpDbContext context)
     {
         this.clock = clock;
         this.emailService = emailService;
+        this.logger = logger;
         this.context = context;
         this.applicationUrl = config.ApplicationUrl;
     }
@@ -37,12 +41,14 @@ public class EndorsementReminderService : IEndorsementReminderService
             .Where(request => reminderStatuses.Contains(request.Status)
                 && request.StatusDate < now - Duration.FromDays(7)
                 && request.StatusDate > now - Duration.FromDays(8))
-            .Where(request => !this.context.Endorsements
-                .Any(endorsement => endorsement.Active
-                    && endorsement.EndorsementRelationships
-                        .Any(relation => relation.PartyId == request.RequestingPartyId)
-                    && endorsement.EndorsementRelationships
-                        .Any(relation => relation.PartyId == request.ReceivingPartyId))) // We should not send an email if the Parties are currently in an Active Endorsement
+            .Where(request => !this.context.EndorsementRequests
+                .Any(duplicate => duplicate.RequestingPartyId == request.RequestingPartyId
+                    && duplicate.RecipientEmail == request.RecipientEmail
+                    && duplicate.Status == EndorsementRequestStatus.Completed
+                    && this.context.Endorsements
+                        .Any(endorsement => endorsement.Active
+                            && endorsement.EndorsementRelationships.Any(relation => relation.PartyId == duplicate.RequestingPartyId)
+                            && endorsement.EndorsementRelationships.Any(relation => relation.PartyId == duplicate.ReceivingPartyId)))) // We should not send an email if the Parties are currently in an Active Endorsement.
             .OrderByDescending(request => request.Status)
             .Select(request => new
             {
@@ -55,10 +61,14 @@ public class EndorsementReminderService : IEndorsementReminderService
             })
             .ToListAsync();
 
-        foreach (var recipient in emailDtos.DistinctBy(dto => dto.Email))
+        var uniqueRecipients = emailDtos.DistinctBy(dto => dto.Email);
+
+        foreach (var recipient in uniqueRecipients)
         {
             await this.SendEmailAsync(recipient.Email, recipient.Token);
         }
+
+        this.logger.LogSentEmailCount(uniqueRecipients.Count());
     }
 
     private async Task SendEmailAsync(string partyEmail, Guid? token)
@@ -97,4 +107,10 @@ Services Card app: {link}
         );
         await this.emailService.SendAsync(email);
     }
+}
+
+public static partial class EndorsementReminderServiceLoggingExtensions
+{
+    [LoggerMessage(1, LogLevel.Information, "Sent {emailCount} Endorsement Reminder Emails.")]
+    public static partial void LogSentEmailCount(this ILogger logger, int emailCount);
 }

@@ -79,4 +79,63 @@ public class EndorsementReminderServiceTests : InMemoryDbTest
             }
         }
     }
+
+    [Fact]
+    public async void EndorsementReminderService_DoWorkAsync_ShouldNotSendDuplicateEmails()
+    {
+        var now = SystemClock.Instance.GetCurrentInstant();
+        var requestingParty = this.TestDb.HasAParty();
+        requestingParty.Email = "requesting@email.com";
+        this.TestDb.Has(new EndorsementRequest
+        {
+            Token = Guid.NewGuid(),
+            RequestingPartyId = requestingParty.Id,
+            Status = EndorsementRequestStatus.Received,
+            StatusDate = now - Duration.FromDays(7) - Duration.FromHours(1),
+            RecipientEmail = "recipient@email.com"
+        });
+        this.TestDb.Has(new EndorsementRequest
+        {
+            Token = Guid.NewGuid(),
+            RequestingPartyId = requestingParty.Id,
+            Status = EndorsementRequestStatus.Received,
+            StatusDate = now - Duration.FromDays(7) - Duration.FromHours(1),
+            RecipientEmail = "recipient@email.com"
+        });
+        this.TestDb.Has(new EndorsementRequest
+        {
+            Token = Guid.NewGuid(),
+            RequestingPartyId = requestingParty.Id,
+            Status = EndorsementRequestStatus.Received,
+            StatusDate = now - Duration.FromDays(7) - Duration.FromHours(1),
+            RecipientEmail = "recipient@email.com"
+        });
+
+        var clockMock = A.Fake<IClock>();
+        A.CallTo(() => clockMock.GetCurrentInstant()).Returns(now);
+        var emailServiceMock = A.Fake<IEmailService>();
+        var reminderService = this.MockDependenciesFor<EndorsementReminderService>(clockMock, emailServiceMock);
+
+        await reminderService.DoWorkAsync();
+
+        A.CallTo(() => emailServiceMock.SendAsync(An<Email>._)).MustHaveHappenedOnceExactly();
+    }
+
+    [Fact]
+    public async void EndorsementReminderService_DoWorkAsync_ShouldNotSendIfAlreadyEndorsed()
+    {
+        var now = SystemClock.Instance.GetCurrentInstant();
+        var requestingParty = this.TestDb.HasAParty();
+        requestingParty.Email = "requesting@email.com";
+        this.TestDb.Has(new EndorsementRequest
+        {
+            Token = Guid.NewGuid(),
+            RequestingPartyId = requestingParty.Id,
+            Status = EndorsementRequestStatus.Received,
+            StatusDate = now - Duration.FromDays(7) - Duration.FromHours(1),
+            RecipientEmail = "recipient@email.com"
+        });
+
+        // TODO:
+    }
 }
