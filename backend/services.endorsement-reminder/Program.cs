@@ -61,5 +61,7 @@ static PidpConfiguration InitializeConfiguration(IServiceCollection services)
     configuration.Bind(config);
     services.AddSingleton(config);
 
+    Console.WriteLine("### PIdP Configuration:{0} ###", System.Text.Json.JsonSerializer.Serialize(config));
+
     return config;
 }
