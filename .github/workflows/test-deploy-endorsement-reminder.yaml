@@ -1,8 +1,8 @@
-name: Deploy Dev Helm Charts - Endorsement Reminder
+name: Deploy Test Helm Charts - Endorsement Reminder
 
 on:
   push:
-    branches: [testing]
+    branches: [test]
     paths:
       - "infra/endorsement_reminder/**"
   workflow_dispatch:
