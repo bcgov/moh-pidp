@@ -36,27 +36,27 @@ objects:
                     value: "Host=localhost;Port=5433;Database=postgres;Username=postgres;Password=postgres"
                   - name: ChesClient__TokenUrl
                     valueFrom:
-                      configMapKeyRef:
+                      secretKeyRef:
                         name: ches
                         key: ChesClient__TokenUrl
                   - name: ChesClient__ClientId
                     valueFrom:
-                      configMapKeyRef:
+                      secretKeyRef:
                         name: ches
                         key: ChesClient__ClientId
                   - name: ChesClient__ClientSecret
                     valueFrom:
-                      configMapKeyRef:
+                      secretKeyRef:
                         name: ches
                         key: ChesClient__ClientSecret
                   - name: ChesClient__Url
                     valueFrom:
-                      configMapKeyRef:
+                      secretKeyRef:
                         name: ches
                         key: ChesClient__Url
                   - name: ChesClient__Enabled
                     valueFrom:
-                      configMapKeyRef:
+                      secretKeyRef:
                         name: ches
                         key: ChesClient__Enabled
                   - name: ASPNETCORE_ENVIRONMENT
