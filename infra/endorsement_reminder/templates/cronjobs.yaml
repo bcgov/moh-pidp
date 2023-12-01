@@ -13,7 +13,10 @@ spec:
           containers:
           - name: endorsement-reminder
             image: image-registry.openshift-image-registry.svc:5000/d8a8f9-tools/pidp_backend:latest
-            command: ['/pidp -endorsement_reminder']
+            command: ['tail']
+            args:
+              - -f
+              - /dev/null
             env:
               - name: ASPNETCORE_ENVIRONMENT
                 value: Staging
