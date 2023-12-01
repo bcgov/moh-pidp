@@ -1,8 +1,8 @@
-name: Deploy Dev Helm Charts - Endorsement Reminder
+name: Deploy Test Helm Charts - Endorsement Reminder
 
 on:
   push:
-    branches: [develop]
+    branches: [test]
     paths:
       - "infra/endorsement_reminder/**"
   workflow_dispatch:
@@ -28,7 +28,7 @@ jobs:
       - name: Helm Deploy Upgrade
         run: |
           echo current installed helm releases
-          helm list --namespace d8a8f9-dev
+          helm list --namespace d8a8f9-test
 
           echo installing helm chart...
-          helm upgrade --wait --namespace d8a8f9-dev endorsement-reminder infra/endorsement_reminder
+          helm upgrade --wait --namespace d8a8f9-test --values infra/endorsement_reminder/values-test.yaml endorsement-reminder infra/endorsement_reminder

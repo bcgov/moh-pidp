@@ -3,7 +3,7 @@ apiVersion: batch/v1
 metadata:
   name: endorsement-reminder
 spec:
-  schedule: 0 1 * * *
+  schedule: {{ .Values.cron }}
   timeZone: America/Vancouver
   concurrencyPolicy: Forbid
   jobTemplate:
@@ -12,11 +12,7 @@ spec:
         spec:
           containers:
           - name: endorsement-reminder
-            image: image-registry.openshift-image-registry.svc:5000/d8a8f9-tools/endorsement-reminder:develop
-            command: ['tail']
-            args:
-              - -f
-              - /dev/null
+            image: {{ .Values.image }}
             env:
               - name: ChesClient__TokenUrl
                 valueFrom:
@@ -68,23 +64,23 @@ spec:
               - name: POSTGRESQL_PASSWORD
                 valueFrom:
                   secretKeyRef:
-                    name: dev-patroni-secret
+                    name: {{ .Values.env }}-patroni-secret
                     key: app-db-password
               - name: POSTGRESQL_USER
                 valueFrom:
                   secretKeyRef:
-                    name: dev-patroni-secret
+                    name: {{ .Values.env }}-patroni-secret
                     key: app-db-username
               - name: POSTGRESQL_DATABASE
                 valueFrom:
                   secretKeyRef:
-                    name: dev-patroni-secret
+                    name: {{ .Values.env }}-patroni-secret
                     key: app-db-name
               - name: ConnectionStrings__PidpDatabase
                 value: >-
                   Host=$(DB_HOST);Port=5432;Database=$(POSTGRESQL_DATABASE);Username=$(POSTGRESQL_USER);Password=$(POSTGRESQL_PASSWORD)
               - name: ApplicationUrl
-                value: 'https://dev.healthprovideridentityportal.gov.bc.ca'
+                value: '{{ .Values.applicationURL }}'
             resources:
                 limits:
                   cpu: 500m
