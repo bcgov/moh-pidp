@@ -7,7 +7,7 @@ on:
       - "test"
       - "main"
     paths:
-      - "infra/cronjobs"
+      - "infra/cronjobs/**"
 
 permissions: read-all
 
