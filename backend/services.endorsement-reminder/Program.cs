@@ -50,7 +50,7 @@ static PidpConfiguration InitializeConfiguration(IServiceCollection services)
         .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
         .AddEnvironmentVariables();
 
-    if (Environment.GetEnvironmentVariable("NETCORE_ENVIRONMENT") is null or "Development")
+    if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") is null or "Development")
     {
         builder.AddUserSecrets<Program>();
     }
