@@ -1,0 +1,38 @@
+name: Build Endorsement Reminder - Dev
+
+on:
+  push:
+    branches: [develop]
+    paths:
+      - "backend/**"
+  workflow_dispatch:
+
+# This will terminate builds that are previously, but continuing to run.  Saves GHA hours.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-and-deploy-endorsement-reminder:
+    name: Endorsement Reminder Build and Deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Checkout Code"
+        uses: actions/checkout@master
+
+      - name: "Docker Build"
+        working-directory: "./backend"
+        run: |
+          docker build -f ./services.endorsement-reminder/Dockerfile -t image-registry.apps.silver.devops.gov.bc.ca/d8a8f9-tools/endorsement-reminder:develop .
+
+      # Uses the builder service account token
+      - name: "Docker Login to Silver OCP"
+        uses: docker/login-action@v2
+        with:
+          registry: image-registry.apps.silver.devops.gov.bc.ca
+          username: builder
+          password: ${{ secrets.SILVER_TOOLS_BUILDER_TOKEN }}
+
+      - name: "Push image"
+        run: |
+          docker push image-registry.apps.silver.devops.gov.bc.ca/d8a8f9-tools/endorsement-reminder:develop
