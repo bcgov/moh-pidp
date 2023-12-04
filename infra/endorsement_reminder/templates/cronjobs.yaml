@@ -55,7 +55,7 @@ spec:
                     name: mail-settings
                     key: MailServer__Port
               - name: ASPNETCORE_ENVIRONMENT
-                value: Staging
+                value: '{{ .Values.aspnetcoreEnvironment }}'
               - name: DB_HOST
                 valueFrom:
                   configMapKeyRef:
