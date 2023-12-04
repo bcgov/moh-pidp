@@ -4,7 +4,7 @@
       <h2>{{ alert.heading }}</h2>
     </header>
     <div class="section-content-box">
-      <p>{{ alert.content }}</p>
+      <p [innerHtml]="alert.content | safe: 'html'"></p>
     </div>
   </section>
   <section
@@ -58,9 +58,7 @@
             </p>
           </ng-template>
           <div>
-            <div
-              *ngIf="!hasCpn && isComplete; else licenced"
-              class="moa-message">
+            <div *ngIf="!hasCpn && isComplete; else licenced">
               <p>
                 <i
                   >Because you are MOA or do <strong>not</strong> have a college

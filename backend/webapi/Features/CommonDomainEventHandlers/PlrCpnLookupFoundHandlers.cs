@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore;
 using NodaTime;
 
 using Pidp.Data;
-using Pidp.Extensions;
 using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.HttpClients.BCProvider;
 using Pidp.Infrastructure.HttpClients.Keycloak;
@@ -33,25 +32,22 @@ public class AssignKeycloakRolesAfterPlrCpnLookupFound : INotificationHandler<Pl
 {
     private readonly IClock clock;
     private readonly IKeycloakAdministrationClient keycloakClient;
-    private readonly IPlrClient plrClient;
     private readonly PidpDbContext context;
 
     public AssignKeycloakRolesAfterPlrCpnLookupFound(
         IClock clock,
         IKeycloakAdministrationClient keycloakClient,
-        IPlrClient plrClient,
         PidpDbContext context)
     {
         this.clock = clock;
         this.keycloakClient = keycloakClient;
-        this.plrClient = plrClient;
         this.context = context;
     }
 
     public async Task Handle(PlrCpnLookupFound notification, CancellationToken cancellationToken)
     {
         // TODO: what to do if any of this fails?
-        if (!await this.plrClient.GetStandingAsync(notification.Cpn))
+        if (!notification.StandingsDigest.HasGoodStanding)
         {
             return;
         }
@@ -69,33 +65,21 @@ public class AssignKeycloakRolesAfterPlrCpnLookupFound : INotificationHandler<Pl
 public class UpdateBCProviderAfterPlrCpnLookupFound : INotificationHandler<PlrCpnLookupFound>
 {
     private readonly IBCProviderClient bcProviderClient;
-    private readonly IPlrClient plrClient;
     private readonly PidpDbContext context;
     private readonly string clientId;
 
     public UpdateBCProviderAfterPlrCpnLookupFound(
         IBCProviderClient bcProviderClient,
-        IPlrClient plrClient,
         PidpDbContext context,
         PidpConfiguration config)
     {
         this.bcProviderClient = bcProviderClient;
-        this.plrClient = plrClient;
         this.context = context;
         this.clientId = config.BCProviderClient.ClientId;
     }
 
     public async Task Handle(PlrCpnLookupFound notification, CancellationToken cancellationToken)
     {
-        var plrStanding = await this.plrClient.GetStandingsDigestAsync(notification.Cpn);
-
-        if (plrStanding
-            .With(IdentifierType.PhysiciansAndSurgeons, IdentifierType.Nurse, IdentifierType.Midwife)
-            .HasGoodStanding)
-        {
-            await this.UpdateEndorserData(notification);
-        }
-
         var userPrincipalName = await this.context.Credentials
             .Where(credential => credential.PartyId == notification.PartyId
                 && credential.IdentityProvider == IdentityProviders.BCProvider)
@@ -109,54 +93,15 @@ public class UpdateBCProviderAfterPlrCpnLookupFound : INotificationHandler<PlrCp
 
         var attributes = new BCProviderAttributes(this.clientId)
             .SetCpn(notification.Cpn)
-            .SetIsRnp(plrStanding.With(ProviderRoleType.RegisteredNursePractitioner).HasGoodStanding)
-            .SetIsMd(plrStanding.With(ProviderRoleType.MedicalDoctor).HasGoodStanding);
+            .SetIsRnp(notification.StandingsDigest.With(ProviderRoleType.RegisteredNursePractitioner).HasGoodStanding)
+            .SetIsMd(notification.StandingsDigest.With(ProviderRoleType.MedicalDoctor).HasGoodStanding);
 
         // If the user becomes regulated, they lose their MOA status
-        if (plrStanding.HasGoodStanding)
+        if (notification.StandingsDigest.HasGoodStanding)
         {
             attributes.SetIsMoa(false);
         }
 
         await this.bcProviderClient.UpdateAttributes(userPrincipalName, attributes.AsAdditionalData());
-    }
-
-    private async Task UpdateEndorserData(PlrCpnLookupFound notification)
-    {
-        var endorsementRelations = await this.context.ActiveEndorsementRelationships(notification.PartyId)
-            .Select(relationship => new
-            {
-                relationship.PartyId,
-                relationship.Party!.Cpn,
-                UserPrincipalName = relationship.Party.Credentials
-                    .Where(credential => credential.IdentityProvider == IdentityProviders.BCProvider)
-                    .Select(credential => credential.IdpId)
-                    .SingleOrDefault(),
-            })
-            .ToListAsync();
-
-        foreach (var relation in endorsementRelations)
-        {
-            if (string.IsNullOrWhiteSpace(relation.UserPrincipalName)
-                || await this.plrClient.GetStandingAsync(relation.Cpn))
-            {
-                // User either has no BC Provider or has a licence in good standing and so can't be an MOA.
-                continue;
-            }
-
-            var endorsingCpns = await this.context.ActiveEndorsementRelationships(relation.PartyId)
-                .Select(relationship => relationship.Party!.Cpn)
-                .ToListAsync();
-
-            var endorsingPartiesStanding = await this.plrClient.GetAggregateStandingsDigestAsync(endorsingCpns);
-
-            var relationBCProviderAttributes = new BCProviderAttributes(this.clientId)
-                .SetIsMoa(true)
-                .SetEndorserData(endorsingPartiesStanding
-                    .WithGoodStanding()
-                    .With(IdentifierType.PhysiciansAndSurgeons, IdentifierType.Nurse, IdentifierType.Midwife)
-                    .Cpns);
-            await this.bcProviderClient.UpdateAttributes(relation.UserPrincipalName, relationBCProviderAttributes.AsAdditionalData());
-        }
     }
 }
