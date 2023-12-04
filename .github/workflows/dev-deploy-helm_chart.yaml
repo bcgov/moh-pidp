@@ -1,0 +1,35 @@
+name: Deploy Helm Charts - Dev
+
+on:
+  push:
+    branches: [develop]
+    paths:
+      - "charts/**"
+      - "./deploy/dev_values.yaml"
+  workflow_dispatch:
+
+# This will terminate builds that are previously, but continuing to run.  Saves GHA hours.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+
+  helm-deployment:
+    runs-on: 'ubuntu-latest'
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Authenticate and set context
+        uses: redhat-actions/oc-login@v1.1
+        with:
+          openshift_server_url: ${{secrets.OPENSHIFT_CLUSTER_URL}}
+          openshift_token: ${{secrets.OPENSHIFT_PIPELINE_SERVICE_ACCOUNT_TOKEN}}
+
+      - name: Helm Deploy / install command
+        run: |
+          echo current installed helm releases
+          helm list --namespace d8a8f9-dev
+
+          echo installing helm chart...
+          helm upgrade --wait --values ./deploy/dev_values.yaml --namespace d8a8f9-dev dev charts/pidp --debug
