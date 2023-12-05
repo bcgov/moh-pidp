@@ -144,7 +144,7 @@ public class Approve
         private async Task SendEndorsementCompletedEmailAsync(EndorsementRequest request)
         {
             var receivingPartyEmail = await this.context.Parties
-                                        .Where(party => party.Id == request.RequestingPartyId)
+                                        .Where(party => party.Id == request.ReceivingPartyId)
                                         .Select(party => party.Email)
                                         .SingleAsync();
             var applicationUrl = $"<a href=\"{this.config.ApplicationUrl}\" target=\"_blank\" rel=\"noopener noreferrer\">OneHealthID Service</a>";
