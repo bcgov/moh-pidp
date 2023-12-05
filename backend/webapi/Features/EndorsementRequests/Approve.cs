@@ -81,7 +81,7 @@ public class Approve
                 await this.context.SaveChangesAsync(); // This double Save is deliberate; we need to persist the Endorsement Relationships in the database before we can calculate the EndorserData in the Domain Events.
                 await this.HandleMoaUpdates(endorsementRequest);
 
-                await this.SendEndorsementApprovedEmailAsync(endorsementRequest);
+                await this.SendEndorsementCompletedEmailAsync(endorsementRequest);
             }
 
             await this.context.SaveChangesAsync();
@@ -140,6 +140,8 @@ public class Approve
         }
 
         private async Task SendEndorsementApprovedEmailAsync(EndorsementRequest request)
+        {
+        private async Task SendEndorsementCompletedEmailAsync(EndorsementRequest request)
         {
             var receivingPartyEmail = await this.context.Parties
                                         .Where(party => party.Id == request.RequestingPartyId)
