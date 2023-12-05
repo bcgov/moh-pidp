@@ -74,6 +74,11 @@ public class Approve
                 return result;
             }
 
+            if (endorsementRequest.Status == EndorsementRequestStatus.Approved)
+            {
+                await this.SendEndorsementApprovedEmailAsync(endorsementRequest);
+            }
+
             if (endorsementRequest.Status == EndorsementRequestStatus.Completed)
             {
                 // Both parties have approved, Request handshake is complete.
@@ -139,8 +144,36 @@ public class Approve
             }
         }
 
+        // TODO: Update email text once it comes in
         private async Task SendEndorsementApprovedEmailAsync(EndorsementRequest request)
         {
+            var requestingPartyEmail = await this.context.Parties
+                            .Where(party => party.Id == request.RequestingPartyId)
+                            .Select(party => party.Email)
+                            .SingleAsync();
+            var applicationUrl = $"<a href=\"{this.config.ApplicationUrl}\" target=\"_blank\" rel=\"noopener noreferrer\">OneHealthID Service</a>";
+            var pidpSupportEmail = $"<a href=\"mailto:{EmailService.PidpEmail}\">{EmailService.PidpEmail}</a>";
+            var pidpSupportPhone = $"<a href=\"tel:{EmailService.PidpSupportPhone}\">{EmailService.PidpSupportPhone}</a>";
+
+            var email = new Email(
+                from: EmailService.PidpEmail,
+                to: requestingPartyEmail!,
+                subject: $"OneHealthID Endorsement - Action Required",
+                body: $@"Hello,
+<br>You are receiving this email because your endorsement request is now approved in the {applicationUrl}. There is one final step in the endorsement process. You can now login and verify the person's name on the endorsement request and complete the process by approving the endorsement request.
+<br>
+<br>For additional support, contact the OneHealthID Service desk:
+<br>
+<br>&emsp;• By email at {pidpSupportEmail}
+<br>
+<br>&emsp;• By phone at {pidpSupportPhone}
+<br>
+<br>Thank you.");
+
+            await this.emailService.SendAsync(email);
+
+        }
+
         private async Task SendEndorsementCompletedEmailAsync(EndorsementRequest request)
         {
             var receivingPartyEmail = await this.context.Parties
