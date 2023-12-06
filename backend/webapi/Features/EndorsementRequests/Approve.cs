@@ -154,15 +154,24 @@ public class Approve
             var applicationUrl = $"<a href=\"{this.config.ApplicationUrl}\" target=\"_blank\" rel=\"noopener noreferrer\">OneHealthID Service</a>";
             var pidpSupportEmail = $"<a href=\"mailto:{EmailService.PidpEmail}\">{EmailService.PidpEmail}</a>";
             var pidpSupportPhone = $"<a href=\"tel:{EmailService.PidpSupportPhone}\">{EmailService.PidpSupportPhone}</a>";
+            var licensedInitiated = $"<a href=\"https://www.doctorsofbc.ca/sites/default/files/endorsement_licensed_initiated_4.pdf\">Licensed Initiated</a>";
+            var unlicensedInitiated = $"<a href=\"https://www.doctorsofbc.ca/sites/default/files/endorsement_unlicensed_initiated_4.pdf\">Unlicensed Initiated</a>";
 
             var email = new Email(
                 from: EmailService.PidpEmail,
                 to: requestingPartyEmail!,
                 subject: $"OneHealthID Endorsement - Action Required",
                 body: $@"Hello,
-<br>You are receiving this email because your endorsement request is now approved in the {applicationUrl}. There is one final step in the endorsement process. You can now login and verify the person's name on the endorsement request and complete the process by approving the endorsement request.
+<br>You recently started an endorsement request with another individual in OneHealthID. They have since accepted and now you need to provide your confirmation to finalize the endorsement. Completing the endorsement process allows users who are not physicians or nurse practitioners to access common healthcare services, such as the Provincial Attachment System (PAS).
 <br>
-<br>For additional support, contact the OneHealthID Service desk:
+<br>To complete the pending endorsement(s), log into the OneHealthID Service with your BC Services Card app:
+<br>{applicationUrl}
+<br>
+<br>After logging in, please:
+<br><ol><li> Complete the mandatory first time login steps (if this is your first time logging in to OneHealthID).</li>
+<li> Review the pending endorsements in the “Endorsements” tile under “Organization Info.” </li>
+<li> Each pending endorsement will be listed under “Incoming Requests.” To confirm the endorsement, click “Approve” next to the request. </li></ol>
+<br>For additional support and information on the endorsement process, please refer to these infographics hosted on the Doctors of BC website here: {licensedInitiated} or {unlicensedInitiated}. Or contact the OneHealthID Service desk:
 <br>
 <br>&emsp;• By email at {pidpSupportEmail}
 <br>
