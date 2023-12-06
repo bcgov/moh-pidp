@@ -18,7 +18,7 @@ export class StringUtils {
     text: string,
     insertPosition: number,
     insertText: string,
-    removeCount: number = 0
+    removeCount = 0
   ): string {
     if (!text) {
       return text;

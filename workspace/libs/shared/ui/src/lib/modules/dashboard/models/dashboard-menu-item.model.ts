@@ -20,7 +20,7 @@ export abstract class DashboardMenuItem {
 
   public constructor(
     label: string,
-    icon: string = '',
+    icon = '',
     options: DashboardMenuItemOptions = {}
   ) {
     this.label = label;
@@ -77,7 +77,7 @@ export class DashboardRouteMenuItem
           }
         | IsActiveMatchOptions;
     },
-    icon: string = '',
+    icon = '',
     menuOptions: DashboardMenuItemOptions = {}
   ) {
     super(label, icon, menuOptions);
@@ -101,7 +101,7 @@ export class DashboardListMenuItem
   public constructor(
     label: string,
     children: DashboardMenuItem[],
-    icon: string = '',
+    icon = '',
     options: DashboardMenuItemOptions = {}
   ) {
     super(label, icon, options);

@@ -10,11 +10,25 @@ import { StatusCode } from '@app/features/portal/enums/status-code.enum';
 import { ProfileStatus } from '@app/features/portal/models/profile-status.model';
 
 import { UserAccessAgreementResource } from './user-access-agreement-resource.service';
-import { UserAccessAgreementResolver } from './user-access-agreement.resolver';
+import { userAccessAgreementResolver } from './user-access-agreement.resolver';
 import { MockProfileStatus } from '@test/mock-profile-status';
+import {
+  ActivatedRouteSnapshot,
+  ResolveFn,
+  RouterStateSnapshot,
+} from '@angular/router';
+import { Observable } from 'rxjs';
 
-describe('UserAccessAgreementResolver', () => {
-  let resolver: UserAccessAgreementResolver;
+describe('userAccessAgreementResolver', () => {
+  const executeResolver: ResolveFn<StatusCode | null> = (
+    ...resolverParameters
+  ) =>
+    TestBed.runInInjectionContext(() =>
+      userAccessAgreementResolver(...resolverParameters),
+    );
+
+  let activatedRouteSnapshotSpy: Spy<ActivatedRouteSnapshot>;
+  let routerStateSnapshotSpy: Spy<RouterStateSnapshot>;
   let userAccessAgreementResourceSpy: Spy<UserAccessAgreementResource>;
   let partyServiceSpy: Spy<PartyService>;
 
@@ -23,7 +37,6 @@ describe('UserAccessAgreementResolver', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
-        UserAccessAgreementResolver,
         provideAutoSpy(UserAccessAgreementResource),
         {
           provide: PartyService,
@@ -35,7 +48,6 @@ describe('UserAccessAgreementResolver', () => {
       ],
     });
 
-    resolver = TestBed.inject(UserAccessAgreementResolver);
     userAccessAgreementResourceSpy = TestBed.inject<any>(
       UserAccessAgreementResource,
     );
@@ -54,12 +66,14 @@ describe('UserAccessAgreementResolver', () => {
           .mustBeCalledWith(partyId)
           .nextOneTimeWith(mockProfileStatus);
         let actualResult: StatusCode | null;
-        resolver
-          .resolve()
-          .subscribe(
-            (profileStatus: StatusCode | null) =>
-              (actualResult = profileStatus),
-          );
+        (
+          executeResolver(
+            activatedRouteSnapshotSpy,
+            routerStateSnapshotSpy,
+          ) as Observable<StatusCode | null>
+        ).subscribe(
+          (profileStatus: StatusCode | null) => (actualResult = profileStatus),
+        );
 
         then(
           'response will provide the status code for user access agreement',
@@ -89,12 +103,14 @@ describe('UserAccessAgreementResolver', () => {
             },
           ]);
         let actualResult: StatusCode | null;
-        resolver
-          .resolve()
-          .subscribe(
-            (profileStatus: StatusCode | null) =>
-              (actualResult = profileStatus),
-          );
+        (
+          executeResolver(
+            activatedRouteSnapshotSpy,
+            routerStateSnapshotSpy,
+          ) as Observable<StatusCode | null>
+        ).subscribe(
+          (profileStatus: StatusCode | null) => (actualResult = profileStatus),
+        );
 
         then(
           'response will provide null as status code for user access agreement',
@@ -114,12 +130,14 @@ describe('UserAccessAgreementResolver', () => {
 
       when('attempting to resolve the status code', () => {
         let actualResult: StatusCode | null;
-        resolver
-          .resolve()
-          .subscribe(
-            (profileStatus: StatusCode | null) =>
-              (actualResult = profileStatus),
-          );
+        (
+          executeResolver(
+            activatedRouteSnapshotSpy,
+            routerStateSnapshotSpy,
+          ) as Observable<StatusCode | null>
+        ).subscribe(
+          (profileStatus: StatusCode | null) => (actualResult = profileStatus),
+        );
 
         then(
           'response will provide null as status code for user access agreement',
