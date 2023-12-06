@@ -6,7 +6,7 @@
   "prefix": "workspace",
   "targets": {
     "test": {
-      "executor": "@nrwl/jest:jest",
+      "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/libs/pidp/presentation"],
       "options": {
         "jestConfig": "libs/pidp/presentation/jest.config.ts",
@@ -14,7 +14,7 @@
       }
     },
     "lint": {
-      "executor": "@nrwl/linter:eslint",
+      "executor": "@nx/linter:eslint",
       "options": {
         "lintFilePatterns": [
           "libs/pidp/presentation/src/**/*.ts",

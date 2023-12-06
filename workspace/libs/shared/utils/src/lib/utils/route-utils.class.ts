@@ -35,7 +35,7 @@ export class RouteUtils {
    */
   public static currentModulePath(
     route: ActivatedRoute,
-    defaultRoutePath: string = '/'
+    defaultRoutePath = '/'
   ): string {
     const urlSegments = route.snapshot.url;
 

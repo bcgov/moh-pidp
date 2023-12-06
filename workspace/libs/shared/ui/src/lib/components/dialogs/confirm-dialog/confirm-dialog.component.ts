@@ -1,7 +1,6 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  ComponentFactoryResolver,
   Inject,
   OnInit,
   Type,
@@ -33,7 +32,6 @@ export class ConfirmDialogComponent implements OnInit {
     public dialogRef: MatDialogRef<ConfirmDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public customOptions: DialogOptions,
     @Inject(DIALOG_DEFAULT_OPTION) public defaultOptions: DialogDefaultOptions,
-    private componentFactoryResolver: ComponentFactoryResolver
   ) {
     this.options =
       typeof customOptions === 'string'
@@ -55,7 +53,7 @@ export class ConfirmDialogComponent implements OnInit {
     if (this.options.component) {
       this.loadDialogContentComponent(
         this.options.component,
-        this.options.data
+        this.options.data,
       );
     }
   }
@@ -77,16 +75,11 @@ export class ConfirmDialogComponent implements OnInit {
 
   private loadDialogContentComponent(
     component: Type<unknown>,
-    data: unknown
+    data: unknown,
   ): void {
-    const componentFactory =
-      this.componentFactoryResolver.resolveComponentFactory(component);
     this.dialogContentHost.clear();
 
-    // TODO dynamic component creation in v13 has an issue with rendering
-    //      the generate component vs the deprecated API
-    const componentRef =
-      this.dialogContentHost.createComponent(componentFactory);
+    const componentRef = this.dialogContentHost.createComponent(component);
     const componentInstance = componentRef.instance as IDialogContent;
     componentInstance.data = data;
     const output$ = componentInstance.output;
@@ -94,7 +87,7 @@ export class ConfirmDialogComponent implements OnInit {
     if (output$) {
       output$.subscribe(
         (value: DialogContentOutput<unknown> | null) =>
-          (this.dialogContentOutput = value)
+          (this.dialogContentOutput = value),
       );
     }
   }

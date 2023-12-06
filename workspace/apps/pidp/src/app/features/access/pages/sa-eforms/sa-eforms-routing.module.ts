@@ -4,7 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { setDashboardTitleGuard } from '@pidp/presentation';
 
 import { SaEformsPage } from './sa-eforms.page';
-import { SaEformsResolver } from './sa-eforms.resolver';
+import { saEformsResolver } from './sa-eforms.resolver';
 
 const routes: Routes = [
   {
@@ -12,7 +12,7 @@ const routes: Routes = [
     component: SaEformsPage,
     canActivate: [setDashboardTitleGuard],
     resolve: {
-      saEformsStatusCode: SaEformsResolver,
+      saEformsStatusCode: saEformsResolver,
     },
     data: {
       title: 'OneHealthID Service',

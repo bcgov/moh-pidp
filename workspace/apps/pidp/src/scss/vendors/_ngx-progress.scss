@@ -1,10 +1,10 @@
-@import 'material/material-variables';
+@import 'pidp-variables';
 
 // Wrapper for ng-progress that displays a yellow line, which is covered
 // by ng-progress when active to indicate loading
 .ngx-progress {
   background-color: theme-palette(yellow);
-  height: $mat-theme-dashboard-progress-bar-height;
+  height: $page-header-progress-bar-height;
 }
 
 .ng-bar-placeholder {
@@ -13,7 +13,7 @@
   // Change the height of the progress bar
   // to match the height of the top border
   // of the container
-  height: $mat-theme-dashboard-progress-bar-height !important;
+  height: $page-header-progress-bar-height !important;
 }
 
 .ng-bar {

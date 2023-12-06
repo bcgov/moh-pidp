@@ -1,8 +1,8 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { Resolve, Router } from '@angular/router';
+import { inject } from '@angular/core';
+import { ResolveFn, Router } from '@angular/router';
 
-import { Observable, catchError, exhaustMap, of } from 'rxjs';
+import { catchError, exhaustMap, of } from 'rxjs';
 
 import { RootRoutes } from '@bcgov/shared/ui';
 
@@ -23,43 +23,36 @@ import { PartyService } from './party.service';
  * containing guard(s) that manage access, otherwise will
  * redirect to access denied when unauthenticated.
  */
-@Injectable({
-  providedIn: 'root',
-})
-export class PartyResolver implements Resolve<number | null> {
-  public constructor(
-    private router: Router,
-    private discoveryResource: DiscoveryResource,
-    private partyService: PartyService,
-    private logger: LoggerService,
-  ) {}
+export const partyResolver: ResolveFn<number | null> = () => {
+  const router = inject(Router);
+  const discoveryResource = inject(DiscoveryResource);
+  const partyService = inject(PartyService);
+  const logger = inject(LoggerService);
 
-  public resolve(): Observable<number | null> {
-    return this.discoveryResource.discover().pipe(
-      exhaustMap((discovery) => {
-        if (discovery.newBCProvider) {
-          this.router.navigateByUrl(
-            AuthRoutes.routePath(AuthRoutes.BC_PROVIDER_UPLIFT),
-          );
-        }
-        if (!discovery.partyId) {
-          return of(null);
-        }
-
-        this.partyService.partyId = discovery.partyId;
-        return of(discovery.partyId);
-      }),
-      catchError((error: HttpErrorResponse | Error) => {
-        this.logger.error(error.message);
-
-        if (error instanceof HttpErrorResponse && error.status === 403) {
-          this.router.navigateByUrl(RootRoutes.DENIED);
-        } else {
-          this.router.navigateByUrl(ShellRoutes.SUPPORT_ERROR_PAGE);
-        }
-
+  return discoveryResource.discover().pipe(
+    exhaustMap((discovery) => {
+      if (discovery.newBCProvider) {
+        router.navigateByUrl(
+          AuthRoutes.routePath(AuthRoutes.BC_PROVIDER_UPLIFT),
+        );
+      }
+      if (!discovery.partyId) {
         return of(null);
-      }),
-    );
-  }
-}
+      }
+
+      partyService.partyId = discovery.partyId;
+      return of(discovery.partyId);
+    }),
+    catchError((error: HttpErrorResponse | Error) => {
+      logger.error(error.message);
+
+      if (error instanceof HttpErrorResponse && error.status === 403) {
+        router.navigateByUrl(RootRoutes.DENIED);
+      } else {
+        router.navigateByUrl(ShellRoutes.SUPPORT_ERROR_PAGE);
+      }
+
+      return of(null);
+    }),
+  );
+};

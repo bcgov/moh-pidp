@@ -1,28 +1,22 @@
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 
-import { APP_CONFIG, APP_DI_CONFIG } from '@app/app.config';
+import { hcimEnrolmentResolver } from './hcim-enrolment.resolver';
+import { ResolveFn } from '@angular/router';
+import { StatusCode } from '@app/features/portal/enums/status-code.enum';
 
-import { HcimEnrolmentResolver } from './hcim-enrolment.resolver';
-
-describe('HcimEnrolmentResolver', () => {
-  let resolver: HcimEnrolmentResolver;
+describe('hcimEnrolmentResolver', () => {
+  const executeResolver: ResolveFn<StatusCode | null> = (
+    ...resolverParameters
+  ) =>
+    TestBed.runInInjectionContext(() =>
+      hcimEnrolmentResolver(...resolverParameters),
+    );
 
   beforeEach(() => {
-    TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      providers: [
-        HcimEnrolmentResolver,
-        {
-          provide: APP_CONFIG,
-          useValue: APP_DI_CONFIG,
-        },
-      ],
-    });
-    resolver = TestBed.inject(HcimEnrolmentResolver);
+    TestBed.configureTestingModule({});
   });
 
   it('should be created', () => {
-    expect(resolver).toBeTruthy();
+    expect(executeResolver).toBeTruthy();
   });
 });

@@ -4,7 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { setDashboardTitleGuard } from '@pidp/presentation';
 
 import { ImmsBCEformsPage } from './immsbc-eforms.page';
-import { ImmsBCEformsResolver } from './immsbc-eforms.resolver';
+import { immsBCEformsResolver } from './immsbc-eforms.resolver';
 
 const routes: Routes = [
   {
@@ -12,7 +12,7 @@ const routes: Routes = [
     component: ImmsBCEformsPage,
     canActivate: [setDashboardTitleGuard],
     resolve: {
-      immsBCEformsStatusCode: ImmsBCEformsResolver,
+      immsBCEformsStatusCode: immsBCEformsResolver,
     },
     data: {
       title: 'Immunization Entry eForm and OneHealthID',
