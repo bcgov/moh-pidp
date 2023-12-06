@@ -30,11 +30,8 @@ public class EndorsementReminderServiceTests : InMemoryDbTest
             RecipientEmail = "recipient@email.com"
         });
 
-        var clockMock = A.Fake<IClock>();
-        A.CallTo(() => clockMock.GetCurrentInstant()).Returns(scheduleDate);
-        var emailServiceMock = A.Fake<IEmailService>();
-        Email capturedEmail = null!;
-        A.CallTo(() => emailServiceMock.SendAsync(A<Email>._)).Invokes(i => capturedEmail = i.GetArgument<Email>(0)!);
+        var clockMock = AMock.Clock(scheduleDate);
+        var emailServiceMock = AMock.EmailService();
         var reminderService = this.MockDependenciesFor<EndorsementReminderService>(clockMock, emailServiceMock);
 
         await reminderService.DoWorkAsync();
@@ -42,19 +39,21 @@ public class EndorsementReminderServiceTests : InMemoryDbTest
         if (emailExpected)
         {
             A.CallTo(() => emailServiceMock.SendAsync(An<Email>._)).MustHaveHappenedOnceExactly();
+            Assert.Single(emailServiceMock.SentEmails);
+            var sentEmail = emailServiceMock.SentEmails.Single();
 
             if (status == EndorsementRequestStatus.Created)
             {
-                Assert.Contains(endorsementRequest.Token.ToString(), capturedEmail.Body);
-                Assert.Equal(capturedEmail.To.Single(), endorsementRequest.RecipientEmail);
+                Assert.Contains(endorsementRequest.Token.ToString(), sentEmail.Body);
+                Assert.Equal(sentEmail.To.Single(), endorsementRequest.RecipientEmail);
             }
             else if (status == EndorsementRequestStatus.Received)
             {
-                Assert.Equal(capturedEmail.To.Single(), endorsementRequest.RecipientEmail);
+                Assert.Equal(sentEmail.To.Single(), endorsementRequest.RecipientEmail);
             }
             else
             {
-                Assert.Equal(capturedEmail.To.Single(), requestingParty.Email);
+                Assert.Equal(sentEmail.To.Single(), requestingParty.Email);
             }
         }
         else
@@ -111,8 +110,7 @@ public class EndorsementReminderServiceTests : InMemoryDbTest
             RecipientEmail = "recipient@email.com"
         });
 
-        var clockMock = A.Fake<IClock>();
-        A.CallTo(() => clockMock.GetCurrentInstant()).Returns(now);
+        var clockMock = AMock.Clock(now);
         var emailServiceMock = A.Fake<IEmailService>();
         var reminderService = this.MockDependenciesFor<EndorsementReminderService>(clockMock, emailServiceMock);
 
@@ -122,11 +120,13 @@ public class EndorsementReminderServiceTests : InMemoryDbTest
     }
 
     [Fact]
+    // If a 7 day old Endorsment Request is between two users currently in an Active Endorsement, they should not get an email
     public async void EndorsementReminderService_DoWorkAsync_ShouldNotSendIfAlreadyEndorsed()
     {
         var now = SystemClock.Instance.GetCurrentInstant();
         var requestingParty = this.TestDb.HasAParty();
         requestingParty.Email = "requesting@email.com";
+        var recievingParty = this.TestDb.HasAParty();
         this.TestDb.Has(new EndorsementRequest
         {
             Token = Guid.NewGuid(),
@@ -135,7 +135,31 @@ public class EndorsementReminderServiceTests : InMemoryDbTest
             StatusDate = now - Duration.FromDays(7) - Duration.FromHours(1),
             RecipientEmail = "recipient@email.com"
         });
+        this.TestDb.Has(new EndorsementRequest
+        {
+            Token = Guid.NewGuid(),
+            RequestingPartyId = requestingParty.Id,
+            ReceivingPartyId = recievingParty.Id,
+            Status = EndorsementRequestStatus.Completed,
+            StatusDate = now - Duration.FromDays(20),
+            RecipientEmail = "recipient@email.com"
+        });
+        this.TestDb.Has(new Endorsement
+        {
+            Active = true,
+            EndorsementRelationships = new List<EndorsementRelationship>
+            {
+                new() { PartyId = recievingParty.Id },
+                new() { PartyId = requestingParty.Id }
+            },
+        });
 
-        // TODO:
+        var clockMock = AMock.Clock(now);
+        var emailServiceMock = A.Fake<IEmailService>();
+        var reminderService = this.MockDependenciesFor<EndorsementReminderService>(clockMock, emailServiceMock);
+
+        await reminderService.DoWorkAsync();
+
+        A.CallTo(() => emailServiceMock.SendAsync(An<Email>._)).MustNotHaveHappened();
     }
 }
