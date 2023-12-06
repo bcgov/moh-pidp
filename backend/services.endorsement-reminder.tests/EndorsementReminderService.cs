@@ -1,12 +1,10 @@
 namespace EndorsementReminderTests;
 
 using FakeItEasy;
-using MassTransit;
 using NodaTime;
 using Xunit;
 
 using EndorsementReminder;
-using Pidp;
 using Pidp.Infrastructure.HttpClients.Mail;
 using Pidp.Infrastructure.Services;
 using Pidp.Models;
