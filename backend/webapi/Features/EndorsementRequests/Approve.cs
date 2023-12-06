@@ -144,7 +144,6 @@ public class Approve
             }
         }
 
-        // TODO: Update email text once it comes in
         private async Task SendEndorsementApprovedEmailAsync(EndorsementRequest request)
         {
             var requestingPartyEmail = await this.context.Parties
