@@ -1,31 +1,31 @@
-import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, Resolve } from '@angular/router';
+import {
+  ActivatedRouteSnapshot,
+  ResolveFn,
+  RouterStateSnapshot,
+} from '@angular/router';
 
 import { Observable, map, switchMap } from 'rxjs';
 
-import { PartyResolver } from './party.resolver';
-import { LandingActionsResolver } from './landing-actions.resolver';
+import { partyResolver } from './party.resolver';
+import { landingActionsResolver } from './landing-actions.resolver';
+import { Injector, inject, runInInjectionContext } from '@angular/core';
 
 /**
  * @description
  * Combination of the Party + Landing Actions resolvers.
  */
-@Injectable({
-  providedIn: 'root',
-})
-export class PartyActionsResolver implements Resolve<number | null> {
-  public constructor(
-    private partyResolver: PartyResolver,
-    private landingActionsResolver: LandingActionsResolver,
-  ) {}
-
-  public resolve(route: ActivatedRouteSnapshot): Observable<number | null> {
-    return this.partyResolver
-      .resolve()
-      .pipe(
-        switchMap((partyId) =>
-          this.landingActionsResolver.resolve(route).pipe(map(() => partyId)),
-        ),
-      );
-  }
-}
+export const partyActionsResolver: ResolveFn<number | null> = (
+  route: ActivatedRouteSnapshot,
+  state: RouterStateSnapshot,
+) => {
+  const injector = inject(Injector);
+  return (partyResolver(route, state) as Observable<number | null>).pipe(
+    switchMap((partyId) => {
+      return runInInjectionContext(injector, () => {
+        return (landingActionsResolver(route, state) as Observable<null>).pipe(
+          map(() => partyId),
+        );
+      });
+    }),
+  );
+};

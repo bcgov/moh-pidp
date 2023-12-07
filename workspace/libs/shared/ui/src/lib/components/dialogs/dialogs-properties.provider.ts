@@ -16,7 +16,7 @@ export const defaultDialogOptions: DialogDefaultOptions = {
     actionText: 'Leave this page',
     cancelText: 'Stay on this page',
   }),
-  delete: (modelName: string, supplementaryMessage: string = '') => {
+  delete: (modelName: string, supplementaryMessage = '') => {
     const capitalized = StringUtils.capitalize(modelName);
     return {
       title: `Delete ${capitalized}`,

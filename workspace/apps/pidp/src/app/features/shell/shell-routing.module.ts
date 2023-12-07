@@ -26,8 +26,8 @@ import { TrainingModule } from '../training/training.module';
 import { TrainingRoutes } from '../training/training.routes';
 import { PortalDashboardComponent } from './components/portal-dashboard/portal-dashboard.component';
 import { ShellRoutes } from './shell.routes';
-import { DestinationResolver } from '@app/core/party/destination.resolver';
-import { PartyActionsResolver } from '@app/core/party/party-actions.resolver';
+import { destinationResolver } from '@app/core/party/destination.resolver';
+import { partyActionsResolver } from '@app/core/party/party-actions.resolver';
 
 const routes: Routes = [
   {
@@ -54,7 +54,7 @@ const routes: Routes = [
     canActivate: [AuthenticationGuard.canActivate],
     canActivateChild: [AuthenticationGuard.canActivateChild],
     resolve: {
-      partyId: PartyActionsResolver,
+      partyId: partyActionsResolver,
     },
     data: {
       routes: {
@@ -65,7 +65,7 @@ const routes: Routes = [
       {
         path: PortalRoutes.MODULE_PATH,
         resolve: {
-          destination: DestinationResolver,
+          destination: destinationResolver,
         },
         loadChildren: (): Promise<Type<PortalModule>> =>
           import('../portal/portal.module').then((m) => m.PortalModule),

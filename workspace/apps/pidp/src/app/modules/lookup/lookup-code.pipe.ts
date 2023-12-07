@@ -12,7 +12,7 @@ export class LookupCodePipe implements PipeTransform {
   public transform<T extends string | number>(
     lookupCode: T | null | undefined,
     lookupKey: string,
-    key: string = 'name'
+    key = 'name'
   ): unknown | null {
     return lookupCode && lookupKey && key
       ? this.lookupValue<T>(lookupCode, lookupKey, key)

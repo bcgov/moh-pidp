@@ -4,7 +4,6 @@
 
 // TODO provide !default and allow override in theme to increase reuse without
 //      having to edit specific files only theme variables in isolated file
-$sideNavBackgroundColor: theme-palette(blue);
 $sideNavBorderRight: 0px solid transparent;
 $menuItemContentBorderWidth: 5px;
 $menuItemColor: white;
@@ -35,13 +34,11 @@ $menuListDividerColor: theme-palette(blue);
 }
 
 .mat-sidenav {
-  background-color: $sideNavBackgroundColor;
-  border-right: $sideNavBorderRight;
-
   &.mat-drawer.mat-drawer-side {
     // Reduced by 1 to allow overlays to cover the
     // sidenav to overcome decendent depth
     z-index: 1;
+    border-right: $sideNavBorderRight;
   }
 
   .mat-mdc-list-item {

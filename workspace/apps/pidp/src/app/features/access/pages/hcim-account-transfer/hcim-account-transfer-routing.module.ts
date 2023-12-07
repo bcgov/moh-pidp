@@ -4,7 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { setDashboardTitleGuard } from '@pidp/presentation';
 
 import { HcimAccountTransferPage } from './hcim-account-transfer.page';
-import { HcimAccountTransferResolver } from './hcim-account-transfer.resolver';
+import { hcimAccountTransferResolver } from './hcim-account-transfer.resolver';
 
 const routes: Routes = [
   {
@@ -12,7 +12,7 @@ const routes: Routes = [
     component: HcimAccountTransferPage,
     canActivate: [setDashboardTitleGuard],
     resolve: {
-      hcimAccountTransferStatusCode: HcimAccountTransferResolver,
+      hcimAccountTransferStatusCode: hcimAccountTransferResolver,
     },
     data: {
       title: 'OneHealthID Service',
