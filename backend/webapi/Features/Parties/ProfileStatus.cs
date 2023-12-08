@@ -4,8 +4,6 @@ using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
-using NodaTime;
-using System.Diagnostics.CodeAnalysis;
 using System.Security.Claims;
 using System.Text.Json.Serialization;
 
@@ -83,7 +81,6 @@ public partial class ProfileStatus
                     ProfileSection.Create<UserAccessAgreementSection>(data),
                     ProfileSection.Create<DriverFitnessSection>(data),
                     ProfileSection.Create<HcimAccountTransferSection>(data),
-                    ProfileSection.Create<HcimEnrolmentSection>(data),
                     ProfileSection.Create<ImmsBCEformsSection>(data),
                     ProfileSection.Create<MSTeamsClinicMemberSection>(data),
                     ProfileSection.Create<MSTeamsPrivacyOfficerSection>(data),
@@ -106,12 +103,12 @@ public partial class ProfileStatus
         public string? Cpn { get; set; }
         public string DisplayFullName { get; set; } = string.Empty;
         public bool HasBCProviderCredential { get; set; }
-        public bool HasPendingEndorsementRequest { get; set; }
 
         // Computed in Finalize()
         private string? userIdentityProvider;
         public PlrStandingsDigest EndorsementPlrStanding { get; set; } = default!;
         public bool HasMSTeamsClinicEndorsement { get; set; }
+        public bool HasPendingEndorsementRequest { get; set; }
         public bool HasPrpAuthorizedLicence { get; set; }
         public PlrStandingsDigest PartyPlrStanding { get; set; } = default!;
 
@@ -149,9 +146,8 @@ public partial class ProfileStatus
             this.EndorsementPlrStanding = await plrClient.GetAggregateStandingsDigestAsync(endorsementDtos.Select(dto => dto.Cpn));
 
             this.HasPendingEndorsementRequest = await context.EndorsementRequests
-                .Where(request => (request.ReceivingPartyId == this.Id && request.Status == EndorsementRequestStatus.Received)
-                    || (request.RequestingPartyId == this.Id && request.Status == EndorsementRequestStatus.Approved))
-                .AnyAsync();
+                .AnyAsync(request => (request.ReceivingPartyId == this.Id && request.Status == EndorsementRequestStatus.Received)
+                    || (request.RequestingPartyId == this.Id && request.Status == EndorsementRequestStatus.Approved));
         }
     }
 }
