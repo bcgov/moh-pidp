@@ -84,6 +84,7 @@ public partial class ProfileStatus
                     ProfileSection.Create<UserAccessAgreementSection>(data),
                     ProfileSection.Create<OrganizationDetailsSection>(data),
                     ProfileSection.Create<DriverFitnessSection>(data),
+                    ProfileSection.Create<EdrdEformsSection>(data),
                     ProfileSection.Create<HcimAccountTransferSection>(data),
                     ProfileSection.Create<HcimEnrolmentSection>(data),
                     ProfileSection.Create<ImmsBCEformsSection>(data),
