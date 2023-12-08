@@ -76,11 +76,10 @@ public class EdrdEforms
                 return DomainResult.Failed();
             }
 
-            // TODO: role
-            // if (!await this.keycloakClient.AssignAccessRoles(dto.UserId, MohKeycloakEnrolment.PrescriptionRefillEforms))
-            // {
-            //     return DomainResult.Failed();
-            // }
+            if (!await this.keycloakClient.AssignAccessRoles(dto.UserId, MohKeycloakEnrolment.EdrdEforms))
+            {
+                return DomainResult.Failed();
+            }
 
             this.context.AccessRequests.Add(new AccessRequest
             {
