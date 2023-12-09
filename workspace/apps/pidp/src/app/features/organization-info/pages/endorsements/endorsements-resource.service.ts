@@ -18,7 +18,7 @@ import { Endorsement } from './models/endorsement.model';
 export class EndorsementsResource {
   public constructor(
     private apiResource: ApiHttpClient,
-    private toastService: ToastService
+    private toastService: ToastService,
   ) {}
 
   public getEndorsements(partyId: number): Observable<Endorsement[] | null> {
@@ -31,7 +31,7 @@ export class EndorsementsResource {
           }
 
           throw error;
-        })
+        }),
       );
   }
 
@@ -39,7 +39,7 @@ export class EndorsementsResource {
     return this.apiResource
       .post<NoContent>(
         `${this.getEndorsementsResourcePath(partyId)}/${endorsementId}/cancel`,
-        null
+        null,
       )
       .pipe(
         NoContentResponse,
@@ -49,12 +49,12 @@ export class EndorsementsResource {
           }
 
           return throwError(() => error);
-        })
+        }),
       );
   }
 
   public getEndorsementRequests(
-    partyId: number
+    partyId: number,
   ): Observable<EndorsementRequest[] | null> {
     return this.apiResource
       .get<EndorsementRequest[]>(this.getRequestsResourcePath(partyId))
@@ -65,33 +65,35 @@ export class EndorsementsResource {
           }
 
           throw error;
-        })
+        }),
       );
   }
 
   public createEndorsementRequest(
     partyId: number,
-    endorsementRequest: EndorsementRequestInformation
+    endorsementRequest: EndorsementRequestInformation,
   ): NoContent {
     return this.apiResource
       .post<NoContent>(
         this.getRequestsResourcePath(partyId),
-        endorsementRequest
+        endorsementRequest,
       )
       .pipe(
         NoContentResponse,
         tap(() =>
           this.toastService.openSuccessToast(
-            'Endorsement Request has been created'
-          )
+            'Endorsement Request has been created',
+          ),
         ),
         catchError((error: HttpErrorResponse) => {
           if (error.status === HttpStatusCode.BadRequest) {
+            // TODO: check if it exists in the app a better way to display a backend error
+            this.toastService.openErrorToast(error.error.detail);
             return of(void 0);
           }
 
           return throwError(() => error);
-        })
+        }),
       );
   }
 
@@ -108,21 +110,21 @@ export class EndorsementsResource {
           }
 
           return throwError(() => error);
-        })
+        }),
       );
   }
 
   public approveEndorsementRequest(
     partyId: number,
-    endorsementRequestId: number
+    endorsementRequestId: number,
   ): NoContent {
     return this.apiResource
       .post<NoContent>(
         `${this.getRequestByIdResourcePath(
           partyId,
-          endorsementRequestId
+          endorsementRequestId,
         )}/approve`,
-        null
+        null,
       )
       .pipe(
         NoContentResponse,
@@ -132,21 +134,21 @@ export class EndorsementsResource {
           }
 
           return throwError(() => error);
-        })
+        }),
       );
   }
 
   public declineEndorsementRequest(
     partyId: number,
-    endorsementRequestId: number
+    endorsementRequestId: number,
   ): NoContent {
     return this.apiResource
       .post<NoContent>(
         `${this.getRequestByIdResourcePath(
           partyId,
-          endorsementRequestId
+          endorsementRequestId,
         )}/decline`,
-        null
+        null,
       )
       .pipe(
         NoContentResponse,
@@ -156,7 +158,7 @@ export class EndorsementsResource {
           }
 
           return throwError(() => error);
-        })
+        }),
       );
   }
 
@@ -170,7 +172,7 @@ export class EndorsementsResource {
 
   private getRequestByIdResourcePath(
     partyId: number,
-    endorsementRequestId: number
+    endorsementRequestId: number,
   ): string {
     return `${this.getRequestsResourcePath(partyId)}/${endorsementRequestId}`;
   }

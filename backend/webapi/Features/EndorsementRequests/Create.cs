@@ -11,10 +11,11 @@ using Pidp.Infrastructure.HttpClients.Mail;
 using Pidp.Infrastructure.Services;
 using Pidp.Models;
 using Microsoft.EntityFrameworkCore;
+using DomainResults.Common;
 
 public class Create
 {
-    public class Command : ICommand
+    public class Command : ICommand<IDomainResult>
     {
         [JsonIgnore]
         [HybridBindProperty(Source.Route)]
@@ -32,7 +33,7 @@ public class Create
         }
     }
 
-    public class CommandHandler : ICommandHandler<Command>
+    public class CommandHandler : ICommandHandler<Command, IDomainResult>
     {
         private readonly string applicationUrl;
         private readonly IClock clock;
@@ -51,8 +52,33 @@ public class Create
             this.context = context;
         }
 
-        public async Task HandleAsync(Command command)
+        public async Task<IDomainResult> HandleAsync(Command command)
         {
+            // TODO: refactor: look on reminder email moh-pidp\backend\services.endorsement-reminder\EndorsementReminderService.cs
+            var endorsementRequests = await this.context.EndorsementRequests
+                .Where(endorsementRequest => endorsementRequest.RecipientEmail == command.RecipientEmail
+                    && endorsementRequest.Status == EndorsementRequestStatus.Completed)
+                .Select(endorsementRequest => new
+                {
+                    endorsementRequest.ReceivingPartyId,
+                    endorsementRequest.RequestingPartyId
+                })
+                .ToListAsync();
+
+            foreach (var endorsementRequest in endorsementRequests)
+            {
+                var isAlreadyEndorsed = await this.context.Endorsements
+                                .Where(endorsement => endorsement.Active
+                                    && endorsement.EndorsementRelationships.Any(relationship => relationship.PartyId == endorsementRequest.RequestingPartyId
+                                        || relationship.PartyId == endorsementRequest.ReceivingPartyId))
+                                .SelectMany(endorsement => endorsement.EndorsementRelationships)
+                                .AnyAsync(relationship => relationship.PartyId != command.PartyId);
+                if (isAlreadyEndorsed)
+                {
+                    return DomainResult.Failed("You already have an active endorsement with this email address.");
+                }
+            }
+
             var partyName = await this.context.Parties
                 .Where(party => party.Id == command.PartyId)
                 .Select(party => party.FullName)
@@ -72,6 +98,8 @@ public class Create
             await this.context.SaveChangesAsync();
 
             await this.SendEndorsementRequestEmailAsync(request.RecipientEmail, request.Token, partyName);
+
+            return DomainResult.Success();
         }
 
         private async Task SendEndorsementRequestEmailAsync(string recipientEmail, Guid token, string partyName)
