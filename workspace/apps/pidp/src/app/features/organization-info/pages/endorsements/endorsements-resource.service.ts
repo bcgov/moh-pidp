@@ -86,9 +86,11 @@ export class EndorsementsResource {
           ),
         ),
         catchError((error: HttpErrorResponse) => {
-          if (error.status === HttpStatusCode.BadRequest) {
-            // TODO: check if it exists in the app a better way to display a backend error
+          if (error.status === HttpStatusCode.UnprocessableEntity) {
             this.toastService.openErrorToast(error.error.detail);
+          }
+
+          if (error.status === HttpStatusCode.BadRequest) {
             return of(void 0);
           }
 

@@ -54,29 +54,17 @@ public class Create
 
         public async Task<IDomainResult> HandleAsync(Command command)
         {
-            // TODO: refactor: look on reminder email moh-pidp\backend\services.endorsement-reminder\EndorsementReminderService.cs
-            var endorsementRequests = await this.context.EndorsementRequests
-                .Where(endorsementRequest => endorsementRequest.RecipientEmail == command.RecipientEmail
-                    && endorsementRequest.Status == EndorsementRequestStatus.Completed)
-                .Select(endorsementRequest => new
-                {
-                    endorsementRequest.ReceivingPartyId,
-                    endorsementRequest.RequestingPartyId
-                })
-                .ToListAsync();
-
-            foreach (var endorsementRequest in endorsementRequests)
+            var isAlreadyEndorsed = await this.context.EndorsementRequests
+                .AnyAsync(request => request.RequestingPartyId == command.PartyId
+                    && request.RecipientEmail == command.RecipientEmail
+                    && request.Status == EndorsementRequestStatus.Completed
+                    && this.context.Endorsements
+                        .Any(endorsement => endorsement.Active
+                            && endorsement.EndorsementRelationships.Any(relation => relation.PartyId == request.RequestingPartyId)
+                            && endorsement.EndorsementRelationships.Any(relation => relation.PartyId == request.ReceivingPartyId)));
+            if (isAlreadyEndorsed)
             {
-                var isAlreadyEndorsed = await this.context.Endorsements
-                                .Where(endorsement => endorsement.Active
-                                    && endorsement.EndorsementRelationships.Any(relationship => relationship.PartyId == endorsementRequest.RequestingPartyId
-                                        || relationship.PartyId == endorsementRequest.ReceivingPartyId))
-                                .SelectMany(endorsement => endorsement.EndorsementRelationships)
-                                .AnyAsync(relationship => relationship.PartyId != command.PartyId);
-                if (isAlreadyEndorsed)
-                {
-                    return DomainResult.Failed("You already have an active endorsement with this email address.");
-                }
+                return DomainResult.Failed("You already have an active endorsement with this email address");
             }
 
             var partyName = await this.context.Parties
