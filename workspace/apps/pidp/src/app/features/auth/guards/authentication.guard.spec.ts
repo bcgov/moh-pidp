@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { TestBed } from '@angular/core/testing';
 import {
   ActivatedRouteSnapshot,
@@ -6,9 +7,10 @@ import {
   UrlSegment,
 } from '@angular/router';
 
+import { Spy, provideAutoSpy } from 'jest-auto-spies';
+
 import { AuthenticationGuard } from './authentication.guard';
 import { AuthenticationGuardService } from './services/authentication-guard.service';
-import { Spy, provideAutoSpy } from 'jest-auto-spies';
 
 describe('AuthenticationGuard', () => {
   let activatedRouteSnapshotSpy: Spy<ActivatedRouteSnapshot>;
