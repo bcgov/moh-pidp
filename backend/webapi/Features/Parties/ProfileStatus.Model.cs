@@ -34,7 +34,7 @@ public partial class ProfileStatus
 
             protected ProfileSection() { }
 
-            protected virtual StatusCode Compute(ProfileData profile) => StatusCode.Complete;
+            protected abstract StatusCode Compute(ProfileData profile);
 
             public static TSection Create<TSection>(ProfileData profile) where TSection : ProfileSection, new()
             {
@@ -90,6 +90,11 @@ public partial class ProfileStatus
                     return StatusCode.Hidden;
                 }
 
+                if (!profile.LicenceDeclarationCompleted)
+                {
+                    return StatusCode.Incomplete;
+                }
+
                 if (profile.HasNoLicence || profile.PartyPlrStanding.HasGoodStanding)
                 {
                     return StatusCode.Complete;
@@ -106,6 +111,13 @@ public partial class ProfileStatus
         public class DemographicsSection : ProfileSection
         {
             internal override string SectionName => "demographics";
+
+            protected override StatusCode Compute(ProfileData profile)
+            {
+                return profile.DemographicsCompleted
+                    ? StatusCode.Complete
+                    : StatusCode.Incomplete;
+            }
         }
 
         public class EndorsementsSection : ProfileSection
@@ -128,6 +140,13 @@ public partial class ProfileStatus
         public class UserAccessAgreementSection : ProfileSection
         {
             internal override string SectionName => "userAccessAgreement";
+
+            protected override StatusCode Compute(ProfileData profile)
+            {
+                return profile.HasEnrolment(AccessTypeCode.UserAccessAgreement)
+                    ? StatusCode.Complete
+                    : StatusCode.Incomplete;
+            }
         }
 
         public class DriverFitnessSection : ProfileSection
