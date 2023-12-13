@@ -1,4 +1,5 @@
 import { inject } from '@angular/core';
+import { ResolveFn } from '@angular/router';
 
 import { catchError, map, of } from 'rxjs';
 
@@ -7,7 +8,6 @@ import { StatusCode } from '@app/features/portal/enums/status-code.enum';
 import { ProfileStatus } from '@app/features/portal/models/profile-status.model';
 
 import { DriverFitnessResource } from './driver-fitness-resource.service';
-import { ResolveFn } from '@angular/router';
 
 export const driverFitnessResolver: ResolveFn<StatusCode | null> = () => {
   const partyService = inject(PartyService);

@@ -24,7 +24,7 @@ const routes: Routes = [
     path: AccessRoutes.SPECIAL_AUTH_EFORMS,
     loadChildren: (): Promise<Type<SaEformsModule>> =>
       import('./pages/sa-eforms/sa-eforms-routing.module').then(
-        (m) => m.SaEformsRoutingModule
+        (m) => m.SaEformsRoutingModule,
       ),
   },
   {
@@ -45,14 +45,14 @@ const routes: Routes = [
     path: AccessRoutes.BC_PROVIDER_EDIT,
     loadChildren: (): Promise<Type<BcProviderEditModule>> =>
       import('./pages/bc-provider-edit/bc-provider-edit.module').then(
-        (m) => m.BcProviderEditModule
+        (m) => m.BcProviderEditModule,
       ),
   },
   {
     path: AccessRoutes.HCIM_ACCOUNT_TRANSFER,
     loadChildren: (): Promise<Type<HcimAccountTransferModule>> =>
       import('./pages/hcim-account-transfer/hcim-account-transfer.module').then(
-        (m) => m.HcimAccountTransferModule
+        (m) => m.HcimAccountTransferModule,
       ),
   },
   {
@@ -63,7 +63,7 @@ const routes: Routes = [
     },
     loadChildren: (): Promise<Type<HcimEnrolmentModule>> =>
       import('./pages/hcim-enrolment/hcim-enrolment.module').then(
-        (m) => m.HcimEnrolmentModule
+        (m) => m.HcimEnrolmentModule,
       ),
   },
   {
@@ -74,7 +74,7 @@ const routes: Routes = [
     },
     loadChildren: (): Promise<Type<PharmanetModule>> =>
       import('./pages/pharmanet/pharmanet.module').then(
-        (m) => m.PharmanetModule
+        (m) => m.PharmanetModule,
       ),
   },
   {
@@ -92,7 +92,7 @@ const routes: Routes = [
     path: AccessRoutes.DRIVER_FITNESS,
     loadChildren: (): Promise<Type<DriverFitnessModule>> =>
       import('./pages/driver-fitness/driver-fitness.module').then(
-        (m) => m.DriverFitnessModule
+        (m) => m.DriverFitnessModule,
       ),
   },
   {
@@ -120,7 +120,7 @@ const routes: Routes = [
     path: AccessRoutes.IMMSBC_EFORMS,
     loadChildren: (): Promise<Type<ImmsBCEformsModule>> =>
       import('./pages/immsbc-eforms/immsbc-eforms.module').then(
-        (m) => m.ImmsBCEformsModule
+        (m) => m.ImmsBCEformsModule,
       ),
   },
 ];

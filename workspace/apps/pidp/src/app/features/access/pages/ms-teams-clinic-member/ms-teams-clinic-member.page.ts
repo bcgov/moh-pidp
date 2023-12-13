@@ -54,7 +54,7 @@ export class MsTeamsClinicMemberPage
     private resource: MsTeamsClinicMemberResource,
     private logger: LoggerService,
     fb: FormBuilder,
-    private loadingOverlayService: LoadingOverlayService
+    private loadingOverlayService: LoadingOverlayService,
   ) {
     super(dependenciesService);
     const routeData = this.route.snapshot.data;
@@ -64,7 +64,7 @@ export class MsTeamsClinicMemberPage
 
     this.formState = new MsTeamsClinicMemberFormState(
       fb,
-      dependenciesService.formUtilsService
+      dependenciesService.formUtilsService,
     );
     this.selectedPrivacyOfficer = null;
   }
@@ -97,7 +97,7 @@ export class MsTeamsClinicMemberPage
           }
           this.accessRequestFailed = true;
           return of(noop());
-        })
+        }),
       )
       .subscribe();
   }
@@ -142,7 +142,7 @@ export class MsTeamsClinicMemberPage
                 return of(noop());
               }
               return of(noop());
-            })
+            }),
           )
       : EMPTY;
   }
