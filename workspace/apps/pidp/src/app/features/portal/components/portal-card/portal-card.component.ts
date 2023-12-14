@@ -54,7 +54,7 @@ export class PortalCardComponent {
   public constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
   ) {
     this.logoutRedirectUrl = `${this.config.applicationUrl}/`;
   }
@@ -62,7 +62,7 @@ export class PortalCardComponent {
   public onClick(section: IPortalSection): void {
     this.router.navigate(
       [section.action.route],
-      section.action.navigationExtras
+      section.action.navigationExtras,
     );
   }
 

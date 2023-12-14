@@ -55,8 +55,8 @@ export class DemographicsPortalSection implements IPortalSection {
     return statusCode === StatusCode.ERROR
       ? 'danger'
       : statusCode === StatusCode.COMPLETED
-      ? 'success'
-      : 'warn';
+        ? 'success'
+        : 'warn';
   }
 
   public get status(): string {
@@ -64,8 +64,8 @@ export class DemographicsPortalSection implements IPortalSection {
     return statusCode === StatusCode.ERROR
       ? ''
       : statusCode === StatusCode.COMPLETED
-      ? 'Completed'
-      : 'Incomplete';
+        ? 'Completed'
+        : 'Incomplete';
   }
 
   public performAction(): void | Observable<void> {

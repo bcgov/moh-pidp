@@ -32,7 +32,7 @@ export type ExpansionPanelState = 'expanded' | 'collapsed';
       state('expanded', style({ height: '*', visibility: '' })),
       transition(
         'expanded <=> collapsed, void => collapsed',
-        animate(EXPANSION_PANEL_ANIMATION_TIMING)
+        animate(EXPANSION_PANEL_ANIMATION_TIMING),
       ),
     ]),
   ],
@@ -66,7 +66,7 @@ export class BannerExpansionPanelComponent implements OnDestroy {
       .pipe(
         distinctUntilChanged((x, y) => {
           return x.fromState === y.fromState && x.toState === y.toState;
-        })
+        }),
       )
       .subscribe((event: AnimationEvent) => {
         if (event.fromState !== 'void') {
