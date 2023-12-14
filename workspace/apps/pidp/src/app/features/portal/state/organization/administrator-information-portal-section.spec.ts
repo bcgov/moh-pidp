@@ -59,4 +59,32 @@ describe('AdministratorInfoPortalSection', () => {
       });
     });
   });
+
+  describe('PROPERTY: get properties', () => {
+    given('StatusCode is AVAILABLE', () => {
+      mockProfileStatus.status.administratorInfo.statusCode =
+        StatusCode.AVAILABLE;
+      when('the class is instanciated', () => {
+        then('properties should return an empty array', () => {
+          expect(section.properties).toStrictEqual([]);
+        });
+      });
+    });
+
+    given('StatusCode is COMPLETED', () => {
+      mockProfileStatus.status.administratorInfo.statusCode =
+        StatusCode.COMPLETED;
+      when('the class is instanciated', () => {
+        then('properties should return an array with 1 property', () => {
+          expect(section.properties).toStrictEqual([
+            {
+              key: 'email',
+              value: mockProfileStatus.status.administratorInfo.email,
+              label: 'Access Administrator Email:',
+            },
+          ]);
+        });
+      });
+    });
+  });
 });
