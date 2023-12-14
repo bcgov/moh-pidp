@@ -29,20 +29,17 @@ public class EndorsementRequestsController : PidpControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> CreateEndorsementRequest([FromServices] ICommandHandler<Create.Command, IDomainResult> handler,
+    public async Task<IActionResult> CreateEndorsementRequest([FromServices] ICommandHandler<Create.Command, IDomainResult<Create.Model>> handler,
                                                               [FromHybrid] Create.Command command)
     {
-        return await this.AuthorizePartyBeforeHandleAsync(command.PartyId, handler, command).ToActionResult(
-            (problemDetails, state) =>
-            {
-                if (state.Errors?.Count == 1)
-                {
-                    problemDetails.Status = 422;
-                    problemDetails.Title = "Business error";
-                    problemDetails.Detail = state.Errors.First();
-                }
-                return;
-            });
+
+        var result = await this.AuthorizePartyBeforeHandleAsync(command.PartyId, handler, command);
+        if (result.Value.DuplicateEmailAddress)
+        {
+            return this.StatusCode(StatusCodes.Status422UnprocessableEntity);
+        }
+
+        return result.ToActionResult();
     }
 
     [HttpPost("receive")]
@@ -50,7 +47,8 @@ public class EndorsementRequestsController : PidpControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> ReceiveEndorsementRequest([FromServices] ICommandHandler<Receive.Command, IDomainResult> handler,
-                                                               [FromHybrid] Receive.Command command)
+                                                               [FromHybrid]
+    Receive.Command command)
         => await this.AuthorizePartyBeforeHandleAsync(command.PartyId, handler, command)
             .ToActionResult();
 
@@ -59,7 +57,8 @@ public class EndorsementRequestsController : PidpControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> ApproveEndorsementRequest([FromServices] ICommandHandler<Approve.Command, IDomainResult> handler,
-                                                               [FromRoute] Approve.Command command)
+                                                               [FromRoute]
+    Approve.Command command)
         => await this.AuthorizePartyBeforeHandleAsync(command.PartyId, handler, command)
             .ToActionResult();
 
@@ -68,7 +67,8 @@ public class EndorsementRequestsController : PidpControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeclineEndorsementRequest([FromServices] ICommandHandler<Decline.Command, IDomainResult> handler,
-                                                               [FromRoute] Decline.Command command)
+                                                               [FromRoute]
+    Decline.Command command)
         => await this.AuthorizePartyBeforeHandleAsync(command.PartyId, handler, command)
             .ToActionResult();
 }

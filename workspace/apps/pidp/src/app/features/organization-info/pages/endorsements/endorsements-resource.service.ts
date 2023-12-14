@@ -87,7 +87,9 @@ export class EndorsementsResource {
         ),
         catchError((error: HttpErrorResponse) => {
           if (error.status === HttpStatusCode.UnprocessableEntity) {
-            this.toastService.openErrorToast(error.error.detail);
+            this.toastService.openErrorToast(
+              'You already have an active endorsement with this email address',
+            );
           }
 
           if (error.status === HttpStatusCode.BadRequest) {

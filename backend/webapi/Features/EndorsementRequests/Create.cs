@@ -15,13 +15,22 @@ using DomainResults.Common;
 
 public class Create
 {
-    public class Command : ICommand<IDomainResult>
+    public class Command : ICommand<IDomainResult<Model>>
     {
         [JsonIgnore]
         [HybridBindProperty(Source.Route)]
         public int PartyId { get; set; }
         public string RecipientEmail { get; set; } = string.Empty;
         public string? AdditionalInformation { get; set; }
+    }
+
+    public class Model
+    {
+        public bool DuplicateEmailAddress { get; set; }
+
+        public Model() { }
+
+        public Model(bool duplicateEmailAddress) => this.DuplicateEmailAddress = duplicateEmailAddress;
     }
 
     public class CommandValidator : AbstractValidator<Command>
@@ -33,7 +42,7 @@ public class Create
         }
     }
 
-    public class CommandHandler : ICommandHandler<Command, IDomainResult>
+    public class CommandHandler : ICommandHandler<Command, IDomainResult<Model>>
     {
         private readonly string applicationUrl;
         private readonly IClock clock;
@@ -52,7 +61,7 @@ public class Create
             this.context = context;
         }
 
-        public async Task<IDomainResult> HandleAsync(Command command)
+        public async Task<IDomainResult<Model>> HandleAsync(Command command)
         {
             var isAlreadyEndorsed = await this.context.EndorsementRequests
                 .AnyAsync(request => request.RequestingPartyId == command.PartyId
@@ -64,7 +73,8 @@ public class Create
                             && endorsement.EndorsementRelationships.Any(relation => relation.PartyId == request.ReceivingPartyId)));
             if (isAlreadyEndorsed)
             {
-                return DomainResult.Failed("You already have an active endorsement with this email address");
+                // DomainResult can only pass a value on Success.
+                return DomainResult.Success(new Model(true));
             }
 
             var partyName = await this.context.Parties
@@ -87,7 +97,7 @@ public class Create
 
             await this.SendEndorsementRequestEmailAsync(request.RecipientEmail, request.Token, partyName);
 
-            return DomainResult.Success();
+            return DomainResult.Success(new Model(false));
         }
 
         private async Task SendEndorsementRequestEmailAsync(string recipientEmail, Guid token, string partyName)
