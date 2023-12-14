@@ -51,18 +51,18 @@ export const portalStateGroupKeys = [
  * @description
  * Union of keys generated from the tuple.
  */
-export type PortalStateGroupKey = typeof portalStateGroupKeys[number];
+export type PortalStateGroupKey = (typeof portalStateGroupKeys)[number];
 
 export type PortalState = Record<PortalStateGroupKey, IPortalSection[]> | null;
 
 export class PortalStateBuilder {
   public constructor(
     private router: Router,
-    private permissionsService: PermissionsService
+    private permissionsService: PermissionsService,
   ) {}
 
   public createState(
-    profileStatus: ProfileStatus
+    profileStatus: ProfileStatus,
   ): Record<PortalStateGroupKey, IPortalSection[]> {
     // TODO move registration into parent module
     return {
@@ -91,41 +91,45 @@ export class PortalStateBuilder {
         this.insertSection('collegeCertification', profileStatus),
         () => [
           new CollegeCertificationPortalSection(profileStatus, this.router),
-        ]
+        ],
       ),
       ...ArrayUtils.insertResultIf<IPortalSection>(
         this.insertSection('userAccessAgreement', profileStatus),
-        () => [new UserAccessAgreementPortalSection(profileStatus, this.router)]
+        () => [
+          new UserAccessAgreementPortalSection(profileStatus, this.router),
+        ],
       ),
     ];
   }
 
   private createOrganizationGroup(
-    profileStatus: ProfileStatus
+    profileStatus: ProfileStatus,
   ): IPortalSection[] {
     return [
       ...ArrayUtils.insertResultIf<IPortalSection>(
         // TODO remove permissions when ready for production
         this.insertSection('organizationDetails', profileStatus) &&
           this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
-        () => [new OrganizationDetailsPortalSection(profileStatus, this.router)]
+        () => [
+          new OrganizationDetailsPortalSection(profileStatus, this.router),
+        ],
       ),
       ...ArrayUtils.insertResultIf<IPortalSection>(
         // TODO add insertSection call when it exists in the ProfileStatus API
         // TODO remove permissions when ready for production
         // this.insertSection('facilityDetails', profileStatus) &&
         this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
-        () => [new FacilityDetailsPortalSection(profileStatus, this.router)]
+        () => [new FacilityDetailsPortalSection(profileStatus, this.router)],
       ),
       ...ArrayUtils.insertResultIf<IPortalSection>(
         // TODO remove permissions when ready for production
         this.insertSection('administratorInfo', profileStatus) &&
           this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
-        () => [new AdministratorInfoPortalSection(profileStatus, this.router)]
+        () => [new AdministratorInfoPortalSection(profileStatus, this.router)],
       ),
       ...ArrayUtils.insertResultIf<IPortalSection>(
         this.insertSection('endorsements', profileStatus),
-        () => [new EndorsementsPortalSection(profileStatus, this.router)]
+        () => [new EndorsementsPortalSection(profileStatus, this.router)],
       ),
     ];
   }
@@ -134,62 +138,68 @@ export class PortalStateBuilder {
     return [
       ...ArrayUtils.insertResultIf<IPortalSection>(
         this.insertSection('saEforms', profileStatus),
-        () => [new SaEformsPortalSection(profileStatus, this.router)]
+        () => [new SaEformsPortalSection(profileStatus, this.router)],
       ),
       ...ArrayUtils.insertResultIf<IPortalSection>(
         this.insertSection('prescriptionRefillEforms', profileStatus),
         () => [
           new PrescriptionRefillEformsPortalSection(profileStatus, this.router),
-        ]
+        ],
       ),
       ...ArrayUtils.insertResultIf<IPortalSection>(
         this.insertSection('bcProvider', profileStatus),
-        () => [new BcProviderPortalSection(profileStatus, this.router)]
+        () => [new BcProviderPortalSection(profileStatus, this.router)],
       ),
       ...ArrayUtils.insertResultIf<IPortalSection>(
         this.insertSection('hcimAccountTransfer', profileStatus),
-        () => [new HcimAccountTransferPortalSection(profileStatus, this.router)]
+        () => [
+          new HcimAccountTransferPortalSection(profileStatus, this.router),
+        ],
       ),
       ...ArrayUtils.insertResultIf<IPortalSection>(
         // TODO remove permissions when ready for production
         this.insertSection('hcimEnrolment', profileStatus) &&
           this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
-        () => [new HcimEnrolmentPortalSection(profileStatus, this.router)]
+        () => [new HcimEnrolmentPortalSection(profileStatus, this.router)],
       ),
       ...ArrayUtils.insertResultIf<IPortalSection>(
         // TODO add insertSection call when it exists in the ProfileStatus API
         // TODO remove permissions when ready for production
         // this.insertSection('sitePrivacySecurityChecklist', profileStatus) &&
         this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
-        () => [new SitePrivacySecurityPortalSection(profileStatus, this.router)]
+        () => [
+          new SitePrivacySecurityPortalSection(profileStatus, this.router),
+        ],
       ),
       ...ArrayUtils.insertResultIf<IPortalSection>(
         this.insertSection('driverFitness', profileStatus),
-        () => [new DriverFitnessPortalSection(profileStatus, this.router)]
+        () => [new DriverFitnessPortalSection(profileStatus, this.router)],
       ),
       ...ArrayUtils.insertResultIf<IPortalSection>(
         this.insertSection('msTeamsPrivacyOfficer', profileStatus),
         () => [
           new MsTeamsPrivacyOfficerPortalSection(profileStatus, this.router),
-        ]
+        ],
       ),
       ...ArrayUtils.insertResultIf<IPortalSection>(
         this.insertSection('msTeamsClinicMember', profileStatus),
-        () => [new MsTeamsClinicMemberPortalSection(profileStatus, this.router)]
+        () => [
+          new MsTeamsClinicMemberPortalSection(profileStatus, this.router),
+        ],
       ),
       ...ArrayUtils.insertResultIf<IPortalSection>(
         // TODO remove permissions when ready for production
         this.insertSection('providerReportingPortal', profileStatus) &&
           this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
-        () => [new ProviderReportingPortalSection(profileStatus, this.router)]
+        () => [new ProviderReportingPortalSection(profileStatus, this.router)],
       ),
       ...ArrayUtils.insertResultIf<IPortalSection>(
         this.insertSection('primaryCareRostering', profileStatus),
-        () => [new PrimaryCareRosteringPortalSection(profileStatus)]
+        () => [new PrimaryCareRosteringPortalSection(profileStatus)],
       ),
       ...ArrayUtils.insertResultIf<IPortalSection>(
         this.insertSection('immsBCEforms', profileStatus),
-        () => [new ImmsBCEformsPortalSection(profileStatus, this.router)]
+        () => [new ImmsBCEformsPortalSection(profileStatus, this.router)],
       ),
     ];
   }
@@ -198,7 +208,7 @@ export class PortalStateBuilder {
     return [
       ...ArrayUtils.insertResultIf<IPortalSection>(
         this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
-        () => [new ComplianceTrainingPortalSection(profileStatus, this.router)]
+        () => [new ComplianceTrainingPortalSection(profileStatus, this.router)],
       ),
     ];
   }
@@ -216,7 +226,7 @@ export class PortalStateBuilder {
 
   private insertSection(
     portalSectionKey: PortalSectionStatusKey,
-    profileStatus: ProfileStatus
+    profileStatus: ProfileStatus,
   ): boolean {
     const statusCode = profileStatus.status[portalSectionKey]?.statusCode;
     return statusCode && statusCode !== StatusCode.HIDDEN;

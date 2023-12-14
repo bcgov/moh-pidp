@@ -20,7 +20,7 @@ export class HcimEnrolmentPortalSection implements IPortalSection {
 
   public constructor(
     private profileStatus: ProfileStatus,
-    private router: Router
+    private router: Router,
   ) {
     this.key = 'hcimEnrolment';
     this.heading = 'HCIMWeb Enrolment';

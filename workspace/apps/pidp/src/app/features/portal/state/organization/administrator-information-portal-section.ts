@@ -22,7 +22,7 @@ export class AdministratorInfoPortalSection implements IPortalSection {
 
   public constructor(
     private profileStatus: ProfileStatus,
-    private router: Router
+    private router: Router,
   ) {
     this.key = 'facilityDetails';
     this.heading = 'Administrator Information';
@@ -31,7 +31,7 @@ export class AdministratorInfoPortalSection implements IPortalSection {
 
   public get hint(): string {
     return [StatusCode.ERROR, StatusCode.COMPLETED].includes(
-      this.getStatusCode()
+      this.getStatusCode(),
     )
       ? ''
       : '1 minute to complete';
@@ -61,7 +61,7 @@ export class AdministratorInfoPortalSection implements IPortalSection {
     return {
       label: 'Update',
       route: OrganizationInfoRoutes.routePath(
-        OrganizationInfoRoutes.ADMINISTRATOR_INFO
+        OrganizationInfoRoutes.ADMINISTRATOR_INFO,
       ),
       disabled: demographicsStatusCode !== StatusCode.COMPLETED,
     };
@@ -72,8 +72,8 @@ export class AdministratorInfoPortalSection implements IPortalSection {
     return statusCode === StatusCode.ERROR
       ? 'danger'
       : statusCode === StatusCode.COMPLETED
-      ? 'success'
-      : 'warn';
+        ? 'success'
+        : 'warn';
   }
 
   public get status(): string {
