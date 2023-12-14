@@ -52,7 +52,7 @@ export class BcProviderApplicationFormState extends AbstractFormState<BcProvider
         password: ['', [this.validateRequirementsPassword()]],
         confirmPassword: ['', [Validators.required]],
       },
-      { validators: FormGroupValidators.match('password', 'confirmPassword') }
+      { validators: FormGroupValidators.match('password', 'confirmPassword') },
     );
   }
 

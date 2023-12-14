@@ -36,7 +36,8 @@
   }
 }
 
-$assets: 'approval' '/assets/images/info-graphic/approval.svg'
+$assets:
+  'approval' '/assets/images/info-graphic/approval.svg'
     '/assets/images/info-graphic/approval-full.svg',
   'notification' '/assets/images/info-graphic/notification.svg'
     '/assets/images/info-graphic/notification-full.svg',

@@ -1,9 +1,11 @@
 import { TestBed } from '@angular/core/testing';
+
 import { provideAutoSpy } from 'jest-auto-spies';
 
-import { PrescriptionRefillEformsResource } from './prescription-refill-eforms-resource.service';
-import { PortalResource } from '@app/features/portal/portal-resource.service';
 import { ApiHttpClient } from '@app/core/resources/api-http-client.service';
+import { PortalResource } from '@app/features/portal/portal-resource.service';
+
+import { PrescriptionRefillEformsResource } from './prescription-refill-eforms-resource.service';
 
 describe('PrescriptionRefillEformsResource', () => {
   let service: PrescriptionRefillEformsResource;
@@ -13,7 +15,7 @@ describe('PrescriptionRefillEformsResource', () => {
       providers: [
         provideAutoSpy(ApiHttpClient),
         provideAutoSpy(PortalResource),
-      ]
+      ],
     });
     service = TestBed.inject(PrescriptionRefillEformsResource);
   });

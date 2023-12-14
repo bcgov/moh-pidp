@@ -54,7 +54,7 @@ export class HcimEnrolmentPage
     private partyService: PartyService,
     private resource: HcimEnrolmentResource,
     private logger: LoggerService,
-    fb: FormBuilder
+    fb: FormBuilder,
   ) {
     super(dependenciesService);
 
@@ -119,7 +119,7 @@ export class HcimEnrolmentPage
   }
 
   protected afterSubmitIsSuccessful(
-    accessResponse: HcimEnrolmentResponse
+    accessResponse: HcimEnrolmentResponse,
   ): void {
     const statusCode = accessResponse.statusCode;
     this.completed = statusCode === HcimEnrolmentStatusCode.ACCESS_GRANTED;

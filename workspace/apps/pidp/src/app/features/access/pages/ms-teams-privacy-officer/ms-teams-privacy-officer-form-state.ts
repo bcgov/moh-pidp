@@ -14,7 +14,7 @@ import { MsTeamsClinicInfo } from './ms-teams-privacy-officer.model';
 export class MsTeamsPrivacyOfficerFormState extends AbstractFormState<MsTeamsClinicInfo> {
   public constructor(
     private fb: FormBuilder,
-    private formUtilsService: FormUtilsService
+    private formUtilsService: FormUtilsService,
   ) {
     super();
 
