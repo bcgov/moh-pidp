@@ -83,7 +83,7 @@ public partial class ProfileStatus
             protected override StatusCode Compute(ProfileData profile)
             {
                 this.HasCpn = !string.IsNullOrWhiteSpace(profile.Cpn);
-                this.LicenceDeclared = !profile.HasNoLicence;
+                this.LicenceDeclared = profile.LicenceDeclarationCompleted && !profile.HasNoLicence;
 
                 if (!profile.UserIsHighAssuranceIdentity)
                 {
