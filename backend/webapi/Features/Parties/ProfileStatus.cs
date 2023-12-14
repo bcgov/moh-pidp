@@ -101,10 +101,10 @@ public partial class ProfileStatus
         public CollegeCode? CollegeCode { get; set; }
         public IEnumerable<AccessTypeCode> CompletedEnrolments { get; set; } = Enumerable.Empty<AccessTypeCode>();
         public string? Cpn { get; set; }
-        public bool DemographicsCompleted { get; set; }
+        public bool DemographicsComplete { get; set; }
         public string DisplayFullName { get; set; } = string.Empty;
         public bool HasBCProviderCredential { get; set; }
-        public bool LicenceDeclarationCompleted { get; set; }
+        public bool LicenceDeclarationComplete { get; set; }
 
         // Computed in Finalize()
         private string? userIdentityProvider;
@@ -115,7 +115,7 @@ public partial class ProfileStatus
         public PlrStandingsDigest PartyPlrStanding { get; set; } = default!;
 
         public bool HasEnrolment(AccessTypeCode accessTypeCode) => this.CompletedEnrolments.Contains(accessTypeCode);
-        public bool HasNoLicence => this.LicenceDeclarationCompleted && this.CollegeCode == null;
+        public bool HasNoLicence => this.LicenceDeclarationComplete && this.CollegeCode == null;
         public bool UserIsBCProvider => this.userIdentityProvider == IdentityProviders.BCProvider;
         public bool UserIsHighAssuranceIdentity => this.userIdentityProvider is IdentityProviders.BCServicesCard or IdentityProviders.BCProvider;
 

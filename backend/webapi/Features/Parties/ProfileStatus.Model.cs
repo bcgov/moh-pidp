@@ -83,14 +83,14 @@ public partial class ProfileStatus
             protected override StatusCode Compute(ProfileData profile)
             {
                 this.HasCpn = !string.IsNullOrWhiteSpace(profile.Cpn);
-                this.LicenceDeclared = profile.LicenceDeclarationCompleted && !profile.HasNoLicence;
+                this.LicenceDeclared = profile.LicenceDeclarationComplete && !profile.HasNoLicence;
 
                 if (!profile.UserIsHighAssuranceIdentity)
                 {
                     return StatusCode.Hidden;
                 }
 
-                if (!profile.LicenceDeclarationCompleted)
+                if (!profile.LicenceDeclarationComplete)
                 {
                     return StatusCode.Incomplete;
                 }
@@ -114,7 +114,7 @@ public partial class ProfileStatus
 
             protected override StatusCode Compute(ProfileData profile)
             {
-                return profile.DemographicsCompleted
+                return profile.DemographicsComplete
                     ? StatusCode.Complete
                     : StatusCode.Incomplete;
             }
