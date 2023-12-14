@@ -9,10 +9,10 @@ import {
 
 import { IdentityProvider } from '../enums/identity-provider.enum';
 import { AccessTokenParsed } from './access-token-parsed.model';
-import { BcscResolver, BcscUser } from './bcsc-user.model';
+import { BcProviderResolver, BcProviderUser } from './bc-provider-user.model';
 import { BrokerProfile } from './broker-profile.model';
 
-describe('BcscUser', () => {
+describe('BcProviderUser', () => {
   let mockAccessTokenParsed: AccessTokenParsed;
   let mockBrokerProfile: BrokerProfile;
 
@@ -30,7 +30,7 @@ describe('BcscUser', () => {
         sub: '685c87f8-ea2e-4efe-9b2e-8ef506110b4d',
         typ: '',
         // User specific attributes:
-        identity_provider: IdentityProvider.BCSC,
+        identity_provider: IdentityProvider.BC_PROVIDER,
         email_verified: true,
         family_name: randLastName(),
         given_name: randFirstName(),
@@ -50,7 +50,7 @@ describe('BcscUser', () => {
       };
 
       when('class is instanciated', () => {
-        const bcscUser = new BcscUser({
+        const bcscUser = new BcProviderUser({
           accessTokenParsed: mockAccessTokenParsed,
           brokerProfile: mockBrokerProfile,
         });
@@ -69,7 +69,7 @@ describe('BcscUser', () => {
   });
 });
 
-describe('BcscResolver', () => {
+describe('BcProviderResolver', () => {
   let mockAccessTokenParsed: AccessTokenParsed;
   let mockBrokerProfile: BrokerProfile;
 
@@ -105,22 +105,22 @@ describe('BcscResolver', () => {
           birthdate: mockAccessTokenParsed.birthdate,
         },
       };
-      const bcscResolver = new BcscResolver({
+      const bcProviderResolver = new BcProviderResolver({
         accessTokenParsed: mockAccessTokenParsed,
         brokerProfile: mockBrokerProfile,
       });
 
       when('method is called', () => {
-        const bcscUser = bcscResolver.resolve();
+        const bcProviderUser = bcProviderResolver.resolve();
 
         then('properties should be filled out', () => {
-          expect(bcscUser.identityProvider).toBe(
+          expect(bcProviderUser.identityProvider).toBe(
             mockAccessTokenParsed.identity_provider,
           );
-          expect(bcscUser.userId).toBe(mockAccessTokenParsed.sub);
-          expect(bcscUser.idpId).toBe(mockBrokerProfile.username);
-          expect(bcscUser.firstName).toBe(mockBrokerProfile.firstName);
-          expect(bcscUser.lastName).toBe(mockBrokerProfile.lastName);
+          expect(bcProviderUser.userId).toBe(mockAccessTokenParsed.sub);
+          expect(bcProviderUser.idpId).toBe(mockBrokerProfile.username);
+          expect(bcProviderUser.firstName).toBe(mockBrokerProfile.firstName);
+          expect(bcProviderUser.lastName).toBe(mockBrokerProfile.lastName);
         });
       });
     });
