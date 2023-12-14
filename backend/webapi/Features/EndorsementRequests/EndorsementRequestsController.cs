@@ -32,7 +32,6 @@ public class EndorsementRequestsController : PidpControllerBase
     public async Task<IActionResult> CreateEndorsementRequest([FromServices] ICommandHandler<Create.Command, IDomainResult<Create.Model>> handler,
                                                               [FromHybrid] Create.Command command)
     {
-
         var result = await this.AuthorizePartyBeforeHandleAsync(command.PartyId, handler, command);
         if (result.Value.DuplicateEmailAddress)
         {
