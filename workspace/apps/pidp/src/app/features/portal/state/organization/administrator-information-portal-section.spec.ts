@@ -39,7 +39,7 @@ describe('AdministratorInfoPortalSection', () => {
   });
 
   describe('PROPERTY: get hint', () => {
-    given('StatusCode is AVAILABLE', () => {
+    given('administratorInfo StatusCode is AVAILABLE', () => {
       mockProfileStatus.status.administratorInfo.statusCode =
         StatusCode.AVAILABLE;
       when('the class is instanciated', () => {
@@ -49,7 +49,7 @@ describe('AdministratorInfoPortalSection', () => {
       });
     });
 
-    given('StatusCode is COMPLETED', () => {
+    given('administratorInfo StatusCode is COMPLETED', () => {
       mockProfileStatus.status.administratorInfo.statusCode =
         StatusCode.COMPLETED;
       when('the class is instanciated', () => {
@@ -61,7 +61,7 @@ describe('AdministratorInfoPortalSection', () => {
   });
 
   describe('PROPERTY: get properties', () => {
-    given('StatusCode is AVAILABLE', () => {
+    given('administratorInfo StatusCode is AVAILABLE', () => {
       mockProfileStatus.status.administratorInfo.statusCode =
         StatusCode.AVAILABLE;
       when('the class is instanciated', () => {
@@ -71,7 +71,7 @@ describe('AdministratorInfoPortalSection', () => {
       });
     });
 
-    given('StatusCode is COMPLETED', () => {
+    given('administratorInfo StatusCode is COMPLETED', () => {
       mockProfileStatus.status.administratorInfo.statusCode =
         StatusCode.COMPLETED;
       when('the class is instanciated', () => {
@@ -84,6 +84,40 @@ describe('AdministratorInfoPortalSection', () => {
             },
           ]);
         });
+      });
+    });
+  });
+
+  describe('PROPERTY: get action', () => {
+    given('demographics StatusCode is AVAILABLE', () => {
+      mockProfileStatus.status.demographics.statusCode = StatusCode.AVAILABLE;
+      when('the class is instanciated', () => {
+        then(
+          'action should return a PortalSectionAction object with disabled property set to true',
+          () => {
+            expect(section.action).toStrictEqual({
+              label: 'Update',
+              route: '/organization-info/administrator-info',
+              disabled: true,
+            });
+          },
+        );
+      });
+    });
+
+    given('demographics StatusCode is COMPLETED', () => {
+      mockProfileStatus.status.demographics.statusCode = StatusCode.COMPLETED;
+      when('the class is instanciated', () => {
+        then(
+          'action should return a PortalSectionAction object with disabled property set to false',
+          () => {
+            expect(section.action).toStrictEqual({
+              label: 'Update',
+              route: '/organization-info/administrator-info',
+              disabled: false,
+            });
+          },
+        );
       });
     });
   });
