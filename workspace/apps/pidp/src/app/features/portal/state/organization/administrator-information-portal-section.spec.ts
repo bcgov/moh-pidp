@@ -121,4 +121,35 @@ describe('AdministratorInfoPortalSection', () => {
       });
     });
   });
+
+  describe('PROPERTY: get statusType', () => {
+    given('administratorInfo StatusCode is AVAILABLE', () => {
+      mockProfileStatus.status.administratorInfo.statusCode =
+        StatusCode.AVAILABLE;
+      when('the class is instanciated', () => {
+        then('should return a string "warn"', () => {
+          expect(section.statusType).toBe('warn');
+        });
+      });
+    });
+
+    given('administratorInfo StatusCode is COMPLETED', () => {
+      mockProfileStatus.status.administratorInfo.statusCode =
+        StatusCode.COMPLETED;
+      when('the class is instanciated', () => {
+        then('should return a string "success"', () => {
+          expect(section.statusType).toBe('success');
+        });
+      });
+    });
+
+    given('administratorInfo StatusCode is ERROR', () => {
+      mockProfileStatus.status.administratorInfo.statusCode = StatusCode.ERROR;
+      when('the class is instanciated', () => {
+        then('should return a string "danger"', () => {
+          expect(section.statusType).toBe('danger');
+        });
+      });
+    });
+  });
 });
