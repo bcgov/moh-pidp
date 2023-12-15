@@ -152,4 +152,26 @@ describe('AdministratorInfoPortalSection', () => {
       });
     });
   });
+
+  describe('PROPERTY: get status', () => {
+    given('administratorInfo StatusCode is AVAILABLE', () => {
+      mockProfileStatus.status.administratorInfo.statusCode =
+        StatusCode.AVAILABLE;
+      when('the class is instanciated', () => {
+        then('should return a string "Incomplete"', () => {
+          expect(section.status).toBe('Incomplete');
+        });
+      });
+    });
+
+    given('administratorInfo StatusCode is COMPLETED', () => {
+      mockProfileStatus.status.administratorInfo.statusCode =
+        StatusCode.COMPLETED;
+      when('the class is instanciated', () => {
+        then('should return a string "Completed"', () => {
+          expect(section.status).toBe('Completed');
+        });
+      });
+    });
+  });
 });
