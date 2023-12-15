@@ -174,4 +174,17 @@ describe('AdministratorInfoPortalSection', () => {
       });
     });
   });
+
+  describe('METHOD: performAction', () => {
+    given('the class is instanciated', () => {
+      when('performAction function is called', () => {
+        section.performAction();
+        then('the user navigate to administrator-info page', () => {
+          expect(router.navigate).toHaveBeenCalledWith([
+            '///organization-info/administrator-info',
+          ]);
+        });
+      });
+    });
+  });
 });
