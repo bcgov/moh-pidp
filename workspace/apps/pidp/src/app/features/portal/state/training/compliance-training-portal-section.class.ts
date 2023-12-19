@@ -20,7 +20,7 @@ export class ComplianceTrainingPortalSection implements IPortalSection {
 
   public constructor(
     private profileStatus: ProfileStatus,
-    private router: Router
+    private router: Router,
   ) {
     this.key = 'complianceTraining';
     this.heading = 'Compliance Training Video';

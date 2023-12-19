@@ -63,7 +63,7 @@ export class BcProviderEditPage
     private navigationService: NavigationService,
     private snackBar: MatSnackBar,
     private partyService: PartyService,
-    private resource: BcProviderEditResource
+    private resource: BcProviderEditResource,
   ) {
     super(dependenciesService);
     this.formState = new BcProviderEditFormState(fb);
@@ -111,7 +111,7 @@ export class BcProviderEditPage
         this.setError(message);
         this.setMessage('');
         return of(noop());
-      })
+      }),
     );
   }
 

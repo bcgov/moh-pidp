@@ -20,7 +20,7 @@ export class OrganizationDetailsPortalSection implements IPortalSection {
 
   public constructor(
     private profileStatus: ProfileStatus,
-    private router: Router
+    private router: Router,
   ) {
     this.key = 'organizationDetails';
     this.heading = 'Organization Details';
@@ -29,7 +29,7 @@ export class OrganizationDetailsPortalSection implements IPortalSection {
 
   public get hint(): string {
     return [StatusCode.ERROR, StatusCode.COMPLETED].includes(
-      this.getStatusCode()
+      this.getStatusCode(),
     )
       ? ''
       : '2 minutes to complete';
@@ -45,7 +45,7 @@ export class OrganizationDetailsPortalSection implements IPortalSection {
     return {
       label: 'Update',
       route: OrganizationInfoRoutes.routePath(
-        OrganizationInfoRoutes.ORGANIZATION_DETAILS
+        OrganizationInfoRoutes.ORGANIZATION_DETAILS,
       ),
       disabled: demographicsStatusCode !== StatusCode.COMPLETED,
     };
@@ -56,8 +56,8 @@ export class OrganizationDetailsPortalSection implements IPortalSection {
     return statusCode === StatusCode.ERROR
       ? 'danger'
       : statusCode === StatusCode.COMPLETED
-      ? 'success'
-      : 'warn';
+        ? 'success'
+        : 'warn';
   }
 
   public get status(): string {
