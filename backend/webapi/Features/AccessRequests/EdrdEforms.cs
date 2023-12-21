@@ -72,7 +72,7 @@ public class EdrdEforms
                     .With(AllowedRoleTypes)
                     .HasGoodStanding)
             {
-                this.logger.LogPrescriptionRefillEformsAccessRequestDenied();
+                this.logger.LogEdrdEformsAccessRequestDenied();
                 return DomainResult.Failed();
             }
 
