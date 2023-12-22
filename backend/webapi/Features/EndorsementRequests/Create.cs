@@ -3,6 +3,7 @@ namespace Pidp.Features.EndorsementRequests;
 using FluentValidation;
 using Flurl;
 using HybridModelBinding;
+using Microsoft.EntityFrameworkCore;
 using NodaTime;
 using System.Text.Json.Serialization;
 
@@ -10,12 +11,10 @@ using Pidp.Data;
 using Pidp.Infrastructure.HttpClients.Mail;
 using Pidp.Infrastructure.Services;
 using Pidp.Models;
-using Microsoft.EntityFrameworkCore;
-using DomainResults.Common;
 
 public class Create
 {
-    public class Command : ICommand<IDomainResult<Model>>
+    public class Command : ICommand<Model>
     {
         [JsonIgnore]
         [HybridBindProperty(Source.Route)]
@@ -26,11 +25,11 @@ public class Create
 
     public class Model
     {
-        public bool DuplicateEmailAddress { get; set; }
+        public bool DuplicateEndorsementRequest { get; set; }
 
         public Model() { }
 
-        public Model(bool duplicateEmailAddress) => this.DuplicateEmailAddress = duplicateEmailAddress;
+        public Model(bool duplicateEndorsementRequest) => this.DuplicateEndorsementRequest = duplicateEndorsementRequest;
     }
 
     public class CommandValidator : AbstractValidator<Command>
@@ -42,7 +41,7 @@ public class Create
         }
     }
 
-    public class CommandHandler : ICommandHandler<Command, IDomainResult<Model>>
+    public class CommandHandler : ICommandHandler<Command, Model>
     {
         private readonly string applicationUrl;
         private readonly IClock clock;
@@ -61,7 +60,7 @@ public class Create
             this.context = context;
         }
 
-        public async Task<IDomainResult<Model>> HandleAsync(Command command)
+        public async Task<Model> HandleAsync(Command command)
         {
             var isAlreadyEndorsed = await this.context.EndorsementRequests
                 .AnyAsync(request => request.RequestingPartyId == command.PartyId
@@ -73,8 +72,7 @@ public class Create
                             && endorsement.EndorsementRelationships.Any(relation => relation.PartyId == request.ReceivingPartyId)));
             if (isAlreadyEndorsed)
             {
-                // DomainResult can only pass a value on Success.
-                return DomainResult.Success(new Model(true));
+                return new(true);
             }
 
             var partyName = await this.context.Parties
@@ -97,7 +95,7 @@ public class Create
 
             await this.SendEndorsementRequestEmailAsync(request.RecipientEmail, request.Token, partyName);
 
-            return DomainResult.Success(new Model(false));
+            return new(false);
         }
 
         private async Task SendEndorsementRequestEmailAsync(string recipientEmail, Guid token, string partyName)
