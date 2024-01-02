@@ -94,6 +94,10 @@ export class PortalPage implements OnInit {
     ];
   }
 
+  public handleAlertClicked(route: string): void {
+    this.router.navigateByUrl(route);
+  }
+
   public navigateTo(): void {
     if (this.bcProviderStatusCode !== 2) {
       this.router.navigateByUrl('/access/bc-provider-application');

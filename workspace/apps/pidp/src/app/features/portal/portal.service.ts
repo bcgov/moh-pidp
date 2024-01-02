@@ -103,17 +103,21 @@ export class PortalService {
           return {
             heading: 'There is a problem with your college licence',
             content: 'Contact your college for more information.',
+            route: '',
           };
         case AlertCode.TRANSIENT_ERROR:
           return {
             heading: 'Having trouble verifying your college licence?',
             content: `Your licence may not be active yet. Try again in 24 hours. If this problem persists, contact your college.`,
+            route: '',
           };
         case AlertCode.PENDING_ENDORSEMENT_REQUEST:
           return {
             heading: 'You have a pending endorsement request',
-            content:
-              'ACTION REQUIRED: <a uiAnchor href="/organization-info/endorsements">Click here</a> to complete endorsement process',
+            content: `
+            <p>ACTION REQUIRED: <span style="cursor: pointer;text-decoration: underline;">Click here</span> to complete endorsement process</p>
+            `,
+            route: '/organization-info/endorsements',
           };
       }
     });
