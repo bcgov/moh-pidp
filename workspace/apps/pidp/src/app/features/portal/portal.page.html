@@ -3,8 +3,8 @@
     <app-portal-alert
       [heading]="alert.heading"
       [content]="alert.content"
-      [route]="alert.route"
-      (alertClicked)="handleAlertClicked($event)"></app-portal-alert>
+      [route]="alert.route"></app-portal-alert>
+    <!-- (alertClicked)="handleAlertClicked($event)"></app-portal-alert> -->
   </section>
   <section
     *ngIf="pasAllowedProviders.includes((identityProvider$ | async)!); else nonBcsc"
