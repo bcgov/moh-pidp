@@ -1,6 +1,7 @@
+import { randEmail, randFullName, randNumber } from '@ngneat/falso';
+
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
 import { ProfileStatus } from '@app/features/portal/models/profile-status.model';
-import { randEmail, randFullName, randNumber } from '@ngneat/falso';
 
 export class MockProfileStatus {
   public static get(): ProfileStatus {
@@ -47,6 +48,8 @@ export class MockProfileStatus {
         complianceTraining: { statusCode: StatusCode.AVAILABLE },
         primaryCareRostering: { statusCode: StatusCode.AVAILABLE },
         immsBCEforms: { statusCode: StatusCode.AVAILABLE },
+        edrdEforms: { statusCode: StatusCode.AVAILABLE },
+        'edrd-eforms': { statusCode: StatusCode.AVAILABLE },
       },
     };
   }
