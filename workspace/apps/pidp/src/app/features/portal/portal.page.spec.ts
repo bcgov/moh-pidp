@@ -3,6 +3,7 @@ import { TestBed } from '@angular/core/testing';
 import { ActivatedRoute, Router, convertToParamMap } from '@angular/router';
 
 import { randNumber, randText, randTextRange } from '@ngneat/falso';
+import { MockProfileStatus } from '@test/mock-profile-status';
 import {
   Spy,
   createFunctionSpy,
@@ -19,13 +20,12 @@ import { BcProviderEditResource } from '../access/pages/bc-provider-edit/bc-prov
 import { BcProviderEditInitialStateModel } from '../access/pages/bc-provider-edit/bc-provider-edit.page';
 import { AuthorizedUserService } from '../auth/services/authorized-user.service';
 import { EndorsementsResource } from '../organization-info/pages/endorsements/endorsements-resource.service';
+import { AlertCode } from './enums/alert-code.enum';
 import { ProfileStatus } from './models/profile-status.model';
 import { PortalResource } from './portal-resource.service';
 import { PortalPage } from './portal.page';
 import { PortalService } from './portal.service';
 import { IPortalSection } from './state/portal-section.model';
-import { MockProfileStatus } from '@test/mock-profile-status';
-import { AlertCode } from './enums/alert-code.enum';
 
 describe('PortalPage', () => {
   let component: PortalPage;

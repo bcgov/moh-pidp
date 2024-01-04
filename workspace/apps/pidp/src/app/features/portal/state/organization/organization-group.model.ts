@@ -18,7 +18,7 @@ export const organizationSectionKeys = [
  * @description
  * Union of keys generated from the tuple.
  */
-export type OrganizationSectionKey = typeof organizationSectionKeys[number];
+export type OrganizationSectionKey = (typeof organizationSectionKeys)[number];
 
 /**
  * @description

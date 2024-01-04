@@ -13,7 +13,7 @@ export const historySectionKeys = [
  * @description
  * Union of keys generated from the tuple.
  */
-export type HistorySectionKey = typeof historySectionKeys[number];
+export type HistorySectionKey = (typeof historySectionKeys)[number];
 
 // TODO not implemented since the history group is
 // different from the other groups as its sections do

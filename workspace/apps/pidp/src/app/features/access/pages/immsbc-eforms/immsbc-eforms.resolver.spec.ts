@@ -1,8 +1,9 @@
 import { TestBed } from '@angular/core/testing';
+import { ResolveFn } from '@angular/router';
+
+import { StatusCode } from '@app/features/portal/enums/status-code.enum';
 
 import { immsBCEformsResolver } from './immsbc-eforms.resolver';
-import { StatusCode } from '@app/features/portal/enums/status-code.enum';
-import { ResolveFn } from '@angular/router';
 
 describe('immsBCEformsResolver', () => {
   const executeResolver: ResolveFn<StatusCode | null> = (

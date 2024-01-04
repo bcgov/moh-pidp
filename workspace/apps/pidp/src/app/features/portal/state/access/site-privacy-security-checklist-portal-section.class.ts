@@ -20,7 +20,7 @@ export class SitePrivacySecurityPortalSection implements IPortalSection {
 
   public constructor(
     private profileStatus: ProfileStatus,
-    private router: Router
+    private router: Router,
   ) {
     this.key = 'sitePrivacySecurityChecklist';
     this.heading = 'Site Privacy and Security Readiness Checklist';
@@ -41,7 +41,7 @@ export class SitePrivacySecurityPortalSection implements IPortalSection {
     return {
       label: this.getStatusCode() === StatusCode.COMPLETED ? 'View' : 'Update',
       route: AccessRoutes.routePath(
-        AccessRoutes.SITE_PRIVACY_SECURITY_CHECKLIST
+        AccessRoutes.SITE_PRIVACY_SECURITY_CHECKLIST,
       ),
       disabled: demographicsStatusCode !== StatusCode.COMPLETED,
     };

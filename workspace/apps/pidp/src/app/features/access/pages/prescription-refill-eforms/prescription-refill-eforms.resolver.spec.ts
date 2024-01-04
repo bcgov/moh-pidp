@@ -1,8 +1,9 @@
 import { TestBed } from '@angular/core/testing';
+import { ResolveFn } from '@angular/router';
+
+import { StatusCode } from '@app/features/portal/enums/status-code.enum';
 
 import { prescriptionRefillEformsResolver } from './prescription-refill-eforms.resolver';
-import { ResolveFn } from '@angular/router';
-import { StatusCode } from '@app/features/portal/enums/status-code.enum';
 
 describe('prescriptionRefillEformsResolver', () => {
   const executeResolver: ResolveFn<StatusCode | null> = (

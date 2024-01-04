@@ -25,7 +25,7 @@ export const accessSectionKeys = [
  * @description
  * Union of keys generated from the tuple.
  */
-export type AccessSectionKey = typeof accessSectionKeys[number];
+export type AccessSectionKey = (typeof accessSectionKeys)[number];
 
 /**
  * @description
