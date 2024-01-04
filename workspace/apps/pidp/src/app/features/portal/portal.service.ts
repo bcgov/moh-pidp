@@ -5,6 +5,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 
 import { PermissionsService } from '@app/modules/permissions/permissions.service';
 
+import { PendingEndorsementComponent } from './components/portal-alert/components/pending-endorsement/pending-endorsement.component';
 import { AlertCode } from './enums/alert-code.enum';
 import { StatusCode } from './enums/status-code.enum';
 import { ProfileStatusAlert } from './models/profile-status-alert.model';
@@ -103,21 +104,16 @@ export class PortalService {
           return {
             heading: 'There is a problem with your college licence',
             content: 'Contact your college for more information.',
-            route: '',
           };
         case AlertCode.TRANSIENT_ERROR:
           return {
             heading: 'Having trouble verifying your college licence?',
             content: `Your licence may not be active yet. Try again in 24 hours. If this problem persists, contact your college.`,
-            route: '',
           };
         case AlertCode.PENDING_ENDORSEMENT_REQUEST:
           return {
             heading: 'You have a pending endorsement request',
-            content: `
-            <p>ACTION REQUIRED: <span style="cursor: pointer;text-decoration: underline;">Click here</span> to complete endorsement process</p>
-            `,
-            route: '/organization-info/endorsements',
+            content: PendingEndorsementComponent,
           };
       }
     });
