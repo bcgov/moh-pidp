@@ -53,7 +53,7 @@
     "@angular-eslint/template-parser": "~17.0.1",
     "@angular/compiler-cli": "~17.0.8",
     "@angular/language-service": "~17.0.8",
-    "@hirez_io/jest-single": "^1.1.8",
+    "@hirez_io/jest-single": "~1.1.8",
     "@ngneat/falso": "~7.1.1",
     "@nx/angular": "~17.2.8",
     "@nx/cypress": "~17.2.8",
@@ -97,4 +97,3 @@
     "titleTemplate": "{title}"
   }
 }
-
