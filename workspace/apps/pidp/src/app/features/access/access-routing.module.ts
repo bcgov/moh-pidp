@@ -126,6 +126,10 @@ const routes: Routes = [
   },
   {
     path: AccessRoutes.EDRD_EFORMS,
+    canActivate: [PermissionsGuard.canActivate],
+    data: {
+      roles: [Role.FEATURE_PIDP_DEMO],
+    },
     loadChildren: (): Promise<Type<EdrdEformsModule>> =>
       import('./pages/edrd-eforms/edrd-eforms.module').then(
         (m) => m.EdrdEformsModule,

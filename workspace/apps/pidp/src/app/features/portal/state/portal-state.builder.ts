@@ -203,7 +203,8 @@ export class PortalStateBuilder {
         () => [new ImmsBCEformsPortalSection(profileStatus, this.router)],
       ),
       ...ArrayUtils.insertResultIf<IPortalSection>(
-        this.insertSection('edrdEforms', profileStatus),
+        this.insertSection('edrdEforms', profileStatus) &&
+          this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
         () => [new EdrdEformsPortalSection(profileStatus, this.router)],
       ),
     ];
