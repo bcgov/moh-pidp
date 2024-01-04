@@ -14,6 +14,7 @@ export class AccessRoutes {
   public static PROVIDER_REPORTING_PORTAL = 'provider-reporting-portal';
   public static SITE_PRIVACY_SECURITY_CHECKLIST = `site-privacy-and-security-checklist`;
   public static SPECIAL_AUTH_EFORMS = 'sa-eforms';
+  public static EDRD_EFORMS = 'edrd-eforms';
 
   /**
    * @description
