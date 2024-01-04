@@ -13,6 +13,7 @@ export enum DocumentType {
   MS_TEAMS_IT_SECURITY_AGREEMENT = 'ms-teams-it-security-agreement',
   PROVIDER_REPORTING_PORTAL_COLLECTION_NOTICE = 'provider-reporting-portal-collection-notice',
   IMMSBC_EFORMS_COLLECTION_NOTICE = 'immsbc-eforms-collection-notice',
+  EDRD_EFORMS_COLLECTION_NOTICE = 'edrd-eforms-collection-notice',
 }
 
 export interface IDocumentMetaData {
@@ -73,6 +74,11 @@ export class DocumentService {
         type: DocumentType.IMMSBC_EFORMS_COLLECTION_NOTICE,
         title: 'Immunization Entry eForm Collection Notice',
       },
+      {
+        type: DocumentType.EDRD_EFORMS_COLLECTION_NOTICE,
+        title:
+          'Expensive Drugs for Rare Disease (EDRD) eForm Collection Notice',
+      },
     ];
   }
 
@@ -126,6 +132,11 @@ export class DocumentService {
         return {
           ...this.getDocumentMetaData(documentType),
           content: this.getImmsBCEformsCollectionNotice(),
+        };
+      case DocumentType.EDRD_EFORMS_COLLECTION_NOTICE:
+        return {
+          ...this.getDocumentMetaData(documentType),
+          content: this.getEdrdEformsCollectionNotice(),
         };
       default:
         throw new Error('Document type does not exist');
@@ -359,9 +370,17 @@ export class DocumentService {
     `;
   }
 
+  public getEdrdEformsCollectionNotice(): string {
+    return `
+      Snowman sleigh bells chimney unwrap frosty, icicle winter ornaments decorate reindeer poinsettia fir.
+      Carols wintry fireplace evergreen winter elf santa holiday Donner. Chimney stocking stuffers goodwill
+      garland Kris Kringle goose candy decorate.
+    `;
+  }
+
   private getDocumentMetaData(documentType: DocumentType): IDocumentMetaData {
     const metadata = this.documents.find(
-      (document) => document.type === documentType
+      (document) => document.type === documentType,
     );
 
     if (!metadata) {

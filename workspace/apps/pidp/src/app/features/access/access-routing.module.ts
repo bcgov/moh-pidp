@@ -8,6 +8,7 @@ import { AccessRoutes } from './access.routes';
 import { BcProviderApplicationModule } from './pages/bc-provider-application/bc-provider-application.module';
 import { BcProviderEditModule } from './pages/bc-provider-edit/bc-provider-edit.module';
 import { DriverFitnessModule } from './pages/driver-fitness/driver-fitness.module';
+import { EdrdEformsModule } from './pages/edrd-eforms/edrd-eforms.module';
 import { HcimAccountTransferModule } from './pages/hcim-account-transfer/hcim-account-transfer.module';
 import { HcimEnrolmentModule } from './pages/hcim-enrolment/hcim-enrolment.module';
 import { ImmsBCEformsModule } from './pages/immsbc-eforms/immsbc-eforms.module';
@@ -121,6 +122,17 @@ const routes: Routes = [
     loadChildren: (): Promise<Type<ImmsBCEformsModule>> =>
       import('./pages/immsbc-eforms/immsbc-eforms.module').then(
         (m) => m.ImmsBCEformsModule,
+      ),
+  },
+  {
+    path: AccessRoutes.EDRD_EFORMS,
+    canActivate: [PermissionsGuard.canActivate],
+    data: {
+      roles: [Role.FEATURE_PIDP_DEMO],
+    },
+    loadChildren: (): Promise<Type<EdrdEformsModule>> =>
+      import('./pages/edrd-eforms/edrd-eforms.module').then(
+        (m) => m.EdrdEformsModule,
       ),
   },
 ];

@@ -14,7 +14,8 @@ public enum AccessTypeCode
     ProviderReportingPortal,
     MSTeamsClinicMember,
     UserAccessAgreement,
-    ImmsBCEforms
+    ImmsBCEforms,
+    EdrdEforms
 }
 
 [Table("AccessTypeLookup")]
@@ -40,5 +41,6 @@ public class AccessTypeDataGenerator : ILookupDataGenerator<AccessType>
         new AccessType { Code = AccessTypeCode.MSTeamsClinicMember,      Name = "MS Teams for Clinical Use - Clinic Member"   },
         new AccessType { Code = AccessTypeCode.UserAccessAgreement,      Name = "Access Harmonization User Access Agreement"  },
         new AccessType { Code = AccessTypeCode.ImmsBCEforms,             Name = "Immunization Entry eForm"                    },
+        new AccessType { Code = AccessTypeCode.EdrdEforms,               Name = "EDRD eForm"                                  },
     };
 }
