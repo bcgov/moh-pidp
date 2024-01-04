@@ -29,7 +29,7 @@ export class ProviderReportingPortalPage implements OnInit {
     private partyService: PartyService,
     private resource: ProviderReportingPortalResource,
     private logger: LoggerService,
-    private documentService: DocumentService
+    private documentService: DocumentService,
   ) {
     const routeData = this.route.snapshot.data;
     this.title = routeData.title;
@@ -61,7 +61,7 @@ export class ProviderReportingPortalPage implements OnInit {
           }
           this.accessRequestFailed = true;
           return of(noop());
-        })
+        }),
       )
       .subscribe();
   }

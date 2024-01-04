@@ -29,7 +29,7 @@ export class BcProviderEditResource {
       NoContentResponse,
       catchError((error: HttpErrorResponse) => {
         return throwError(() => error);
-      })
+      }),
     );
   }
 }

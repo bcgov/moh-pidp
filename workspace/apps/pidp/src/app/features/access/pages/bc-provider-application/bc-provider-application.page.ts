@@ -27,6 +27,7 @@ import {
   faUser,
   faXmark,
 } from '@fortawesome/free-solid-svg-icons';
+import { DashboardStateModel, PidpStateName } from '@pidp/data-model';
 import {
   AppStateService,
   LOADING_OVERLAY_DEFAULT_MESSAGE,
@@ -57,7 +58,6 @@ import { StatusCode } from '@app/features/portal/enums/status-code.enum';
 
 import { BcProviderApplicationFormState } from './bc-provider-application-form-state';
 import { BcProviderApplicationResource } from './bc-provider-application-resource.service';
-import { DashboardStateModel, PidpStateName } from '@pidp/data-model';
 
 @Component({
   selector: 'app-bc-provider-application',

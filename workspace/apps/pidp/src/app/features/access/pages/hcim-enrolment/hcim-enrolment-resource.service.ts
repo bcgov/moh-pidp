@@ -25,7 +25,7 @@ export interface HcimEnrolmentResponse {
 export class HcimEnrolmentResource {
   public constructor(
     protected apiResource: ApiHttpClient,
-    private portalResource: PortalResource
+    private portalResource: PortalResource,
   ) {}
 
   public getProfileStatus(partyId: number): Observable<ProfileStatus | null> {
@@ -34,18 +34,18 @@ export class HcimEnrolmentResource {
 
   public requestAccess(
     partyId: number,
-    hcimEnrolment: HcimEnrolment
+    hcimEnrolment: HcimEnrolment,
   ): Observable<HcimEnrolmentResponse> {
     return this.apiResource
       .post<NoContent>(
         `parties/${partyId}/access-requests/hcim-enrolment`,
-        hcimEnrolment
+        hcimEnrolment,
       )
       .pipe(
         map(() => ({ statusCode: HcimEnrolmentStatusCode.ACCESS_GRANTED })),
         catchError(() =>
-          of({ statusCode: HcimEnrolmentStatusCode.ACCESS_FAILED })
-        )
+          of({ statusCode: HcimEnrolmentStatusCode.ACCESS_FAILED }),
+        ),
       );
   }
 }

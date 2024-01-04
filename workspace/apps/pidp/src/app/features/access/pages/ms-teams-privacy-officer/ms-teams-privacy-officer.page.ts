@@ -52,7 +52,7 @@ export class MsTeamsPrivacyOfficerPage
     private utilsService: UtilsService,
     private documentService: DocumentService,
     fb: FormBuilder,
-    private loadingOverlayService: LoadingOverlayService
+    private loadingOverlayService: LoadingOverlayService,
   ) {
     super(dependenciesService);
     const routeData = this.route.snapshot.data;
@@ -64,7 +64,7 @@ export class MsTeamsPrivacyOfficerPage
     this.submissionPage = documentService.getMsTeamsAgreementPageCount();
     this.formState = new MsTeamsPrivacyOfficerFormState(
       fb,
-      dependenciesService.formUtilsService
+      dependenciesService.formUtilsService,
     );
   }
 
@@ -124,14 +124,14 @@ export class MsTeamsPrivacyOfficerPage
                 return of(noop());
               }
               return of(noop());
-            })
+            }),
           )
       : EMPTY;
   }
 
   private validateFirstPage(): boolean {
     return this.checkValidity(
-      new FormArray([this.formState.clinicName, this.formState.clinicAddress])
+      new FormArray([this.formState.clinicName, this.formState.clinicAddress]),
     );
   }
 

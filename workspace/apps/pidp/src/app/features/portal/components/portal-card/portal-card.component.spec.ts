@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { randNumber, randText } from '@ngneat/falso';
+import { MockProfileStatus } from '@test/mock-profile-status';
 import {
   Spy,
   createFunctionSpy,
@@ -22,7 +23,6 @@ import { ProfileStatus } from '../../models/profile-status.model';
 import { PrimaryCareRosteringPortalSection } from '../../state/access/primary-care-rostering-portal-section.class';
 import { IPortalSection } from '../../state/portal-section.model';
 import { PortalCardComponent } from './portal-card.component';
-import { MockProfileStatus } from '@test/mock-profile-status';
 
 describe('PortalCardComponent', () => {
   let component: PortalCardComponent;
