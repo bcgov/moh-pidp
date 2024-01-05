@@ -1,7 +1,6 @@
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { MatDialogConfig } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { catchError, noop, of, tap } from 'rxjs';
 
@@ -61,7 +60,6 @@ export class BcProviderEditPage
     dependenciesService: AbstractFormDependenciesService,
     fb: FormBuilder,
     private navigationService: NavigationService,
-    private snackBar: MatSnackBar,
     private partyService: PartyService,
     private resource: BcProviderEditResource,
   ) {
