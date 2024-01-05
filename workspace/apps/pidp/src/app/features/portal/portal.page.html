@@ -1,11 +1,8 @@
 <div class="box" uiPidpInjectViewportCss>
   <section *ngFor="let alert of alerts" class="alert-box section-box">
-    <header>
-      <h2>{{ alert.heading }}</h2>
-    </header>
-    <div class="section-content-box">
-      <p [innerHtml]="alert.content | safe: 'html'"></p>
-    </div>
+    <app-portal-alert
+      [heading]="alert.heading"
+      [content]="alert.content"></app-portal-alert>
   </section>
   <section
     *ngIf="pasAllowedProviders.includes((identityProvider$ | async)!); else nonBcsc"
