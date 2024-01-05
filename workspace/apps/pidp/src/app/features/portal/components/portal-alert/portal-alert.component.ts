@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import {
   Component,
   Input,
@@ -23,7 +22,7 @@ import { PendingEndorsementComponent } from './components/pending-endorsement/pe
     </div>
   </div>`,
   styleUrls: ['./portal-alert.scss'],
-  imports: [CommonModule, SharedModule, PendingEndorsementComponent],
+  imports: [SharedModule, PendingEndorsementComponent],
 })
 export class PortalAlertComponent implements OnInit {
   @Input() public heading!: string;
