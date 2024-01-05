@@ -8,9 +8,6 @@ h2 {
 .section-content-box {
   --gap: 1rem;
   margin: var(--gap) 0;
-
-  & p {
-    padding-left: calc(var(--gap) * 2);
-    padding-right: calc(var(--gap) * 2);
-  }
+  padding-left: calc(var(--gap) * 2);
+  padding-right: calc(var(--gap) * 2);
 }

@@ -12,7 +12,8 @@ import { Router } from '@angular/router';
     to complete endorsement process
   </p>`,
   styles: [
-    'span { cursor: pointer; text-decoration: underline; color: #1a5a96; }',
+    'span { cursor: pointer; text-decoration: underline; color: #0d6efd; }',
+    'span:hover { color: #0a58ca; }',
   ],
 })
 export class PendingEndorsementComponent {
