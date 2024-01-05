@@ -12,11 +12,6 @@ import { HtmlComponent } from '@bcgov/shared/ui';
 import { SharedModule } from '../../../../shared/shared.module';
 import { PendingEndorsementComponent } from './components/pending-endorsement/pending-endorsement.component';
 
-export interface IAlertContent {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  data: any;
-}
-
 @Component({
   selector: 'app-portal-alert',
   standalone: true,
@@ -42,7 +37,7 @@ export class PortalAlertComponent implements OnInit {
     if (typeof this.content !== 'string' && this.content) {
       this.loadAlertContentComponent(this.content);
     } else if (this.content) {
-      this.loadAlertContentStatic({ content: this.content });
+      this.loadAlertContentStatic(this.content);
     }
   }
 
@@ -50,11 +45,9 @@ export class PortalAlertComponent implements OnInit {
     this.alertContentHost.createComponent<unknown>(componentType);
   }
 
-  private loadAlertContentStatic(data: unknown): void {
+  private loadAlertContentStatic(content: string): void {
     const componentRef =
-      this.alertContentHost.createComponent<unknown>(HtmlComponent);
-
-    const componentInstance = componentRef.instance as IAlertContent;
-    componentInstance.data = data;
+      this.alertContentHost.createComponent<HtmlComponent>(HtmlComponent);
+    componentRef.instance.data = { content };
   }
 }
