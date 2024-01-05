@@ -9,12 +9,8 @@ import {
 
 import { HtmlComponent } from '@bcgov/shared/ui';
 
-import { SharedModule } from '../../../../shared/shared.module';
-import { PendingEndorsementComponent } from './components/pending-endorsement/pending-endorsement.component';
-
 @Component({
   selector: 'app-portal-alert',
-  standalone: true,
   template: ` <div>
     <header>
       <h2>{{ heading }}</h2>
@@ -24,7 +20,6 @@ import { PendingEndorsementComponent } from './components/pending-endorsement/pe
     </div>
   </div>`,
   styleUrls: ['./portal-alert.scss'],
-  imports: [SharedModule, PendingEndorsementComponent],
 })
 export class PortalAlertComponent implements OnInit {
   @Input() public heading!: string;
