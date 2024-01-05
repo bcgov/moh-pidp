@@ -7,8 +7,15 @@ import {
   ViewContainerRef,
 } from '@angular/core';
 
+import { HtmlComponent } from '@bcgov/shared/ui';
+
 import { SharedModule } from '../../../../shared/shared.module';
 import { PendingEndorsementComponent } from './components/pending-endorsement/pending-endorsement.component';
+
+export interface IAlertContent {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  data: any;
+}
 
 @Component({
   selector: 'app-portal-alert',
@@ -34,10 +41,20 @@ export class PortalAlertComponent implements OnInit {
   public ngOnInit(): void {
     if (typeof this.content !== 'string' && this.content) {
       this.loadAlertContentComponent(this.content);
+    } else if (this.content) {
+      this.loadAlertContentStatic({ content: this.content });
     }
   }
 
   private loadAlertContentComponent(componentType: Type<unknown>): void {
     this.alertContentHost.createComponent<unknown>(componentType);
+  }
+
+  private loadAlertContentStatic(data: unknown): void {
+    const componentRef =
+      this.alertContentHost.createComponent<unknown>(HtmlComponent);
+
+    const componentInstance = componentRef.instance as IAlertContent;
+    componentInstance.data = data;
   }
 }
