@@ -15,7 +15,7 @@ import { Router } from '@angular/router';
 })
 export class PendingEndorsementComponent {
   public constructor(private router: Router) {}
-  public route = '/organization-info/endorsements';
+  private route = '/organization-info/endorsements';
 
   public onClick(): void {
     this.router.navigateByUrl(this.route);
