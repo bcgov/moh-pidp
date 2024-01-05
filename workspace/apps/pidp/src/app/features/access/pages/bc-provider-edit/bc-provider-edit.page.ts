@@ -72,13 +72,6 @@ export class BcProviderEditPage
   public onBack(): void {
     this.navigationService.navigateToRoot();
   }
-  public onGeneratePasswordCheckChange(): void {
-    this.snackBar.open('Not yet implemented', 'OK');
-  }
-
-  public hasPasswordRuleError(): boolean {
-    return this.formState.newPassword.hasError('invalidRequirements');
-  }
 
   public onSuccessDialogClose(): void {
     this.dialog.closeAll();
