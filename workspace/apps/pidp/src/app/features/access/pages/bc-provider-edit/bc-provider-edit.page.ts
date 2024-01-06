@@ -106,11 +106,13 @@ export class BcProviderEditPage
     );
   }
 
+  // Do I need this
   private setError(message: string): void {
     this.showErrorCard = !!message;
     this.errorCardText = message;
   }
 
+  // Do I need this
   private setMessage(message: string): void {
     this.showMessageCard = !!message;
     this.messageCardText = message;

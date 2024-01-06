@@ -10,6 +10,9 @@ import { AddressFormComponent } from './components/address-form/address-form.com
 import { AddressInfoComponent } from './components/address-info/address-info.component';
 import { GetSupportComponent } from './components/get-support/get-support.component';
 import { NeedHelpComponent } from './components/need-help/need-help.component';
+import { DialogParagraphBcproviderCreateComponent } from './components/success-dialog/components/dialog-paragraph-bcprovider-create.component';
+import { DialogParagraphBcproviderEditComponent } from './components/success-dialog/components/dialog-paragraph-bcprovider-edit.component';
+import { SuccessDialogComponent } from './components/success-dialog/success-dialog.component';
 import { IsHighAssurancePipe } from './pipes/is-high-assurance.pipe';
 
 @NgModule({
@@ -20,6 +23,9 @@ import { IsHighAssurancePipe } from './pipes/is-high-assurance.pipe';
     GetSupportComponent,
     IsHighAssurancePipe,
     NeedHelpComponent,
+    SuccessDialogComponent,
+    DialogParagraphBcproviderCreateComponent,
+    DialogParagraphBcproviderEditComponent,
   ],
   imports: [CommonModule, LookupModule.forChild(), SharedUiModule],
   exports: [
@@ -31,6 +37,9 @@ import { IsHighAssurancePipe } from './pipes/is-high-assurance.pipe';
     GetSupportComponent,
     IsHighAssurancePipe,
     NeedHelpComponent,
+    SuccessDialogComponent,
+    DialogParagraphBcproviderCreateComponent,
+    DialogParagraphBcproviderEditComponent,
   ],
 })
 export class SharedModule {}
