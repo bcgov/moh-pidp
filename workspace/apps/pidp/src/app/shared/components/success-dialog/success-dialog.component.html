@@ -1,0 +1,17 @@
+<div class="dialog-box" uiPidpInjectViewportCss>
+  <div class="dialog-header">
+    <button
+      type="button"
+      aria-label="Close dialog"
+      (click)="onSuccessDialogClose()">
+      <fa-icon [icon]="faXmark"></fa-icon>
+    </button>
+  </div>
+  <div class="dialog-content">
+    <div class="dialog-icon">
+      <fa-icon [icon]="faCircleCheck"></fa-icon>
+    </div>
+    <h3>{{ title }}</h3>
+    <ng-template #dialogParagraphHost></ng-template>
+  </div>
+</div>

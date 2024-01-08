@@ -1,0 +1,42 @@
+@use 'pidp-variables' as pidp;
+
+.dialog-box {
+  padding: 24px;
+
+  & .dialog-header {
+    display: flex;
+    justify-content: flex-end;
+    & button {
+      width: 2rem;
+      height: 2rem;
+      border-radius: 1rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border: solid 1px pidp.$grey-40;
+      background-color: transparent;
+      & fa-icon {
+        font-size: 1.5rem;
+        color: pidp.$grey-40;
+      }
+    }
+  }
+  & .dialog-content {
+    display: flex;
+    flex-direction: column;
+    & h3 {
+      text-align: center;
+    }
+    & .dialog-icon {
+      display: flex;
+      justify-content: center;
+      margin-bottom: var(--gap);
+      & fa-icon {
+        font-size: 10rem;
+        height: 10rem;
+        width: 10rem;
+        color: pidp.$green;
+      }
+    }
+  }
+}
