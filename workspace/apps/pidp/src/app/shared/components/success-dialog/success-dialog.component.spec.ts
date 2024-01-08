@@ -1,19 +1,26 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+
+import { NavigationService } from '@pidp/presentation';
+import { provideAutoSpy } from 'jest-auto-spies';
 
 import { SuccessDialogComponent } from './success-dialog.component';
 
 describe('SuccessDialogComponent', () => {
   let component: SuccessDialogComponent;
-  let fixture: ComponentFixture<SuccessDialogComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
+  beforeEach(() => {
+    TestBed.configureTestingModule({
       declarations: [SuccessDialogComponent],
+      imports: [MatDialogModule],
+      providers: [
+        SuccessDialogComponent,
+        provideAutoSpy(NavigationService),
+        provideAutoSpy(MatDialog),
+      ],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(SuccessDialogComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+    component = TestBed.inject(SuccessDialogComponent);
   });
 
   it('should create', () => {
