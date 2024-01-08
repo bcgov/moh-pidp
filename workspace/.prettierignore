@@ -3,3 +3,5 @@
 /dist
 /coverage
 /apps/**/assets/unsupported.html
+
+/.nx/cache

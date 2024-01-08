@@ -5,6 +5,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 
 import { PermissionsService } from '@app/modules/permissions/permissions.service';
 
+import { PendingEndorsementComponent } from './components/portal-alert/components/pending-endorsement/pending-endorsement.component';
 import { AlertCode } from './enums/alert-code.enum';
 import { StatusCode } from './enums/status-code.enum';
 import { ProfileStatusAlert } from './models/profile-status-alert.model';
@@ -112,8 +113,7 @@ export class PortalService {
         case AlertCode.PENDING_ENDORSEMENT_REQUEST:
           return {
             heading: 'You have a pending endorsement request',
-            content:
-              'ACTION REQUIRED: <a uiAnchor href="/organization-info/endorsements">Click here</a> to complete endorsement process',
+            content: PendingEndorsementComponent,
           };
       }
     });
