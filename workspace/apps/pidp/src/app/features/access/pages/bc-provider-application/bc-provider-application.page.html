@@ -276,9 +276,9 @@
 
 <ng-template #default></ng-template>
 
-<!-- TODO: Refactor into a separate component. -->
 <ng-template #successDialog>
   <app-success-dialog
     title="BC Provider account created"
-    [username]="username"></app-success-dialog>
+    [username]="username"
+    [componentType]="componentType"></app-success-dialog>
 </ng-template>

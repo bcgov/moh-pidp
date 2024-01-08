@@ -24,8 +24,7 @@
   & .dialog-content {
     display: flex;
     flex-direction: column;
-    & h3,
-    & p {
+    & h3 {
       text-align: center;
     }
     & .dialog-icon {

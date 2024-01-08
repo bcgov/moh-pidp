@@ -15,6 +15,7 @@ import {
   AbstractFormPage,
 } from '@app/core/classes/abstract-form-page.class';
 import { PartyService } from '@app/core/party/party.service';
+import { DialogBcproviderEditComponent } from '@app/shared/components/success-dialog/components/dialog-bcprovider-edit.component';
 
 import { BcProviderEditFormState } from './bc-provider-edit-form-state';
 import {
@@ -44,6 +45,7 @@ export class BcProviderEditPage
   public messageCardText = '';
   public username = '';
   public errorMatcher = new CrossFieldErrorMatcher();
+  public componentType = DialogBcproviderEditComponent;
 
   // ui-page is handling this.
   public showOverlayOnSubmit = false;

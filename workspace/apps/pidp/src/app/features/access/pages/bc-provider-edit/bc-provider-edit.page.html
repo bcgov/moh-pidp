@@ -110,10 +110,9 @@
   </form>
 </ng-template>
 
-<!-- NOTE: It is not yet clear whether this dialog will be in the "final" UX. If it is, it is a candidate
-to be refactored into a separate component. -->
 <ng-template #successDialog>
   <app-success-dialog
     title="Password reset completed"
-    [username]="username"></app-success-dialog>
+    [username]="username"
+    [componentType]="componentType"></app-success-dialog>
 </ng-template>
