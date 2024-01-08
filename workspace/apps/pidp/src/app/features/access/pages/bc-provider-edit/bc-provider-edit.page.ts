@@ -1,7 +1,6 @@
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { MatDialogConfig } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { catchError, noop, of, tap } from 'rxjs';
 
@@ -16,6 +15,7 @@ import {
   AbstractFormPage,
 } from '@app/core/classes/abstract-form-page.class';
 import { PartyService } from '@app/core/party/party.service';
+import { DialogBcproviderEditComponent } from '@app/shared/components/success-dialog/components/dialog-bcprovider-edit.component';
 
 import { BcProviderEditFormState } from './bc-provider-edit-form-state';
 import {
@@ -45,6 +45,7 @@ export class BcProviderEditPage
   public messageCardText = '';
   public username = '';
   public errorMatcher = new CrossFieldErrorMatcher();
+  public componentType = DialogBcproviderEditComponent;
 
   // ui-page is handling this.
   public showOverlayOnSubmit = false;
@@ -61,7 +62,6 @@ export class BcProviderEditPage
     dependenciesService: AbstractFormDependenciesService,
     fb: FormBuilder,
     private navigationService: NavigationService,
-    private snackBar: MatSnackBar,
     private partyService: PartyService,
     private resource: BcProviderEditResource,
   ) {
@@ -71,13 +71,6 @@ export class BcProviderEditPage
 
   public onBack(): void {
     this.navigationService.navigateToRoot();
-  }
-  public onGeneratePasswordCheckChange(): void {
-    this.snackBar.open('Not yet implemented', 'OK');
-  }
-
-  public hasPasswordRuleError(): boolean {
-    return this.formState.newPassword.hasError('invalidRequirements');
   }
 
   public onSuccessDialogClose(): void {
@@ -115,11 +108,13 @@ export class BcProviderEditPage
     );
   }
 
+  // Do I need this
   private setError(message: string): void {
     this.showErrorCard = !!message;
     this.errorCardText = message;
   }
 
+  // Do I need this
   private setMessage(message: string): void {
     this.showMessageCard = !!message;
     this.messageCardText = message;
