@@ -8,7 +8,7 @@ describe('PendingEndorsementComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [PendingEndorsementComponent],
+      imports: [],
     }).compileComponents();
 
     fixture = TestBed.createComponent(PendingEndorsementComponent);

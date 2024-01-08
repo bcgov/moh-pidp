@@ -8,7 +8,7 @@ describe('PortalAlertComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [PortalAlertComponent],
+      imports: [],
     }).compileComponents();
 
     fixture = TestBed.createComponent(PortalAlertComponent);
