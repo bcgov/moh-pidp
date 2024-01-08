@@ -2061,7 +2061,7 @@
   dependencies:
     javascript-stringify "2.1.0"
 
-"@hirez_io/jest-single@^1.1.8":
+"@hirez_io/jest-single@~1.1.8":
   version "1.1.8"
   resolved "https://registry.yarnpkg.com/@hirez_io/jest-single/-/jest-single-1.1.8.tgz#6b6438ac6872a6915ee3ff162b61aec84e07d8c4"
   integrity sha512-r8OmcCdmC84brhmqCQ8hDT06kimwFZFYfKnC6TQl4eYdoNd2gyySHple9TEccGjaD5psVSidPpD70yL7HERTdQ==
