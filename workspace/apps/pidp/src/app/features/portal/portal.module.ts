@@ -7,6 +7,8 @@ import { PermissionsModule } from '@app/modules/permissions/permissions.module';
 import { SharedModule } from '@shared/shared.module';
 
 import { BannerExpansionPanelComponent } from './components/banner-expansion-panel/banner-expansion-panel.component';
+import { PendingEndorsementComponent } from './components/portal-alert/components/pending-endorsement/pending-endorsement.component';
+import { PortalAlertComponent } from './components/portal-alert/portal-alert.component';
 import { PortalCardComponent } from './components/portal-card/portal-card.component';
 import { PortalCarouselComponent } from './components/portal-carousel/portal-carousel.component';
 import { ProfileCardSummaryContentComponent } from './components/profile-card-summary-content/profile-card-summary-content.component';
@@ -20,6 +22,8 @@ import { PortalPage } from './portal.page';
     PortalCardComponent,
     PortalCarouselComponent,
     BannerExpansionPanelComponent,
+    PortalAlertComponent,
+    PendingEndorsementComponent,
   ],
   imports: [
     PortalRoutingModule,
