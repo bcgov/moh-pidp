@@ -40,9 +40,6 @@ export class BcProviderEditPage
   public faXmark = faXmark;
   public formState: BcProviderEditFormState;
   public showErrorCard = false;
-  public errorCardText = '';
-  public showMessageCard = false;
-  public messageCardText = '';
   public username = '';
   public errorMatcher = new CrossFieldErrorMatcher();
   public componentType = DialogBcproviderEditComponent;
@@ -96,28 +93,13 @@ export class BcProviderEditPage
 
     return this.resource.changePassword(data).pipe(
       tap((_) => {
-        this.setError('');
         this.showSuccessDialog();
       }),
       catchError(() => {
-        const message = 'An error occurred.';
-        this.setError(message);
-        this.setMessage('');
+        this.showErrorCard = true;
         return of(noop());
       }),
     );
-  }
-
-  // Do I need this
-  private setError(message: string): void {
-    this.showErrorCard = !!message;
-    this.errorCardText = message;
-  }
-
-  // Do I need this
-  private setMessage(message: string): void {
-    this.showMessageCard = !!message;
-    this.messageCardText = message;
   }
 
   private showSuccessDialog(): void {
