@@ -55,6 +55,7 @@ import { AuthRoutes } from '@app/features/auth/auth.routes';
 import { IdentityProvider } from '@app/features/auth/enums/identity-provider.enum';
 import { AuthService } from '@app/features/auth/services/auth.service';
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
+import { DialogBcproviderCreateComponent } from '@app/shared/components/success-dialog/components/dialog-bcprovider-create.component';
 
 import { BcProviderApplicationFormState } from './bc-provider-application-form-state';
 import { BcProviderApplicationResource } from './bc-provider-application-resource.service';
@@ -83,6 +84,7 @@ export class BcProviderApplicationPage
   public password = '';
   public showOverlayOnSubmit = false;
   public errorMatcher = new CrossFieldErrorMatcher();
+  public componentType = DialogBcproviderCreateComponent;
 
   public activeLayout: 'upliftAccount' | 'createAccount' | '';
 
