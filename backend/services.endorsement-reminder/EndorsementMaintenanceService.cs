@@ -51,7 +51,7 @@ public class EndorsementMaintenanceService : IEndorsementMaintenanceService
         }
 
         await this.context.SaveChangesAsync();
-        this.logger.LogExpiredReminderCount(oldRequests.Count);
+        this.logger.LogExpiredRequestCount(oldRequests.Count);
     }
 
     public async Task SendReminderEmailsAsync()
@@ -136,5 +136,5 @@ public static partial class EndorsementReminderServiceLoggingExtensions
     public static partial void LogSentEmailCount(this ILogger logger, int emailCount);
 
     [LoggerMessage(2, LogLevel.Information, "Expired {expiryCount} Endorsement Requests.")]
-    public static partial void LogExpiredReminderCount(this ILogger logger, int expiryCount);
+    public static partial void LogExpiredRequestCount(this ILogger logger, int expiryCount);
 }
