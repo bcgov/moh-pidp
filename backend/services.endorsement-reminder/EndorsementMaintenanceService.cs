@@ -1,6 +1,7 @@
 namespace EndorsementReminder;
 
 using Flurl;
+using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using NodaTime;
@@ -33,9 +34,24 @@ public class EndorsementMaintenanceService : IEndorsementMaintenanceService
         this.applicationUrl = config.ApplicationUrl;
     }
 
-    public Task ExpireOldEndorsementRequestsAsync()
+    public async Task ExpireOldEndorsementRequestsAsync()
     {
-        throw new NotImplementedException();
+        var inProgressStatuses = new[] { EndorsementRequestStatus.Created, EndorsementRequestStatus.Received, EndorsementRequestStatus.Approved };
+        var now = this.clock.GetCurrentInstant();
+
+        var oldRequests = await this.context.EndorsementRequests
+            .Where(request => inProgressStatuses.Contains(request.Status)
+                && request.StatusDate < now - Duration.FromDays(30))
+            .ToListAsync();
+
+        foreach (var request in oldRequests)
+        {
+            request.Status = EndorsementRequestStatus.Expired;
+            request.StatusDate = now;
+        }
+
+        await this.context.SaveChangesAsync();
+        this.logger.LogExpiredReminderCount(oldRequests.Count);
     }
 
     public async Task SendReminderEmailsAsync()
@@ -118,4 +134,7 @@ public static partial class EndorsementReminderServiceLoggingExtensions
 {
     [LoggerMessage(1, LogLevel.Information, "Sent {emailCount} Endorsement Reminder Emails.")]
     public static partial void LogSentEmailCount(this ILogger logger, int emailCount);
+
+    [LoggerMessage(2, LogLevel.Information, "Expired {expiryCount} Endorsement Requests.")]
+    public static partial void LogExpiredReminderCount(this ILogger logger, int expiryCount);
 }
