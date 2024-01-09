@@ -11,7 +11,7 @@ using Pidp.Infrastructure.HttpClients.Mail;
 using Pidp.Infrastructure.Services;
 using Pidp.Models;
 
-public class EndorsementReminderService : IEndorsementReminderService
+public class EndorsementMaintenanceService : IEndorsementMaintenanceService
 {
     private readonly IClock clock;
     private readonly IEmailService emailService;
@@ -19,10 +19,10 @@ public class EndorsementReminderService : IEndorsementReminderService
     private readonly PidpDbContext context;
     private readonly string applicationUrl;
 
-    public EndorsementReminderService(
+    public EndorsementMaintenanceService(
         IClock clock,
         IEmailService emailService,
-        ILogger<EndorsementReminderService> logger,
+        ILogger<EndorsementMaintenanceService> logger,
         PidpConfiguration config,
         PidpDbContext context)
     {
@@ -33,7 +33,12 @@ public class EndorsementReminderService : IEndorsementReminderService
         this.applicationUrl = config.ApplicationUrl;
     }
 
-    public async Task DoWorkAsync()
+    public Task ExpireOldEndorsementRequestsAsync()
+    {
+        throw new NotImplementedException();
+    }
+
+    public async Task SendReminderEmailsAsync()
     {
         var reminderStatuses = new[] { EndorsementRequestStatus.Created, EndorsementRequestStatus.Received, EndorsementRequestStatus.Approved };
         var now = this.clock.GetCurrentInstant();

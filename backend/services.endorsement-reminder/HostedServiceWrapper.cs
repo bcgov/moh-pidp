@@ -5,13 +5,13 @@ using Microsoft.Extensions.Logging;
 
 internal sealed class HostedServiceWrapper : IHostedService
 {
-    private readonly IEndorsementReminderService service;
+    private readonly IEndorsementMaintenanceService service;
     private readonly IHostApplicationLifetime appLifetime;
     private readonly ILogger logger;
     private int? exitCode;
 
     public HostedServiceWrapper(
-        IEndorsementReminderService service,
+        IEndorsementMaintenanceService service,
         IHostApplicationLifetime appLifetime,
         ILogger<HostedServiceWrapper> logger)
     {
@@ -26,7 +26,8 @@ internal sealed class HostedServiceWrapper : IHostedService
         {
             try
             {
-                await this.service.DoWorkAsync();
+                await this.service.SendReminderEmailsAsync();
+                await this.service.ExpireOldEndorsementRequestsAsync();
                 this.exitCode = 0;
             }
             catch (Exception ex)

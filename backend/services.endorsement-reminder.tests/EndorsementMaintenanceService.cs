@@ -11,11 +11,11 @@ using Pidp.Models;
 using PidpTests;
 using PidpTests.TestingExtensions;
 
-public class EndorsementReminderServiceTests : InMemoryDbTest
+public class EndorsementMaintenanceServiceTests : InMemoryDbTest
 {
     [Theory]
     [MemberData(nameof(ScheduleTestCases))]
-    public async void EndorsementReminderService_DoWorkAsync_SendsEmailsOnSchedule(EndorsementRequestStatus status, Instant statusDate, Instant scheduleDate, bool emailExpected)
+    public async void EndorsementMaintenanceService_SendReminderEmailsAsync_SendsEmailsOnSchedule(EndorsementRequestStatus status, Instant statusDate, Instant scheduleDate, bool emailExpected)
     {
         var requestingParty = this.TestDb.HasAParty();
         requestingParty.Email = "requesting@email.com";
@@ -30,9 +30,9 @@ public class EndorsementReminderServiceTests : InMemoryDbTest
 
         var clockMock = AMock.Clock(scheduleDate);
         var emailServiceMock = AMock.EmailService();
-        var reminderService = this.MockDependenciesFor<EndorsementReminderService>(clockMock, emailServiceMock);
+        var service = this.MockDependenciesFor<EndorsementMaintenanceService>(clockMock, emailServiceMock);
 
-        await reminderService.DoWorkAsync();
+        await service.SendReminderEmailsAsync();
 
         if (emailExpected)
         {
@@ -78,7 +78,7 @@ public class EndorsementReminderServiceTests : InMemoryDbTest
     }
 
     [Fact]
-    public async void EndorsementReminderService_DoWorkAsync_ShouldNotSendDuplicateEmails()
+    public async void EndorsementMainenanceService_SendReminderEmailsAsync_ShouldNotSendDuplicateEmails()
     {
         var now = SystemClock.Instance.GetCurrentInstant();
         var requestingParty = this.TestDb.HasAParty();
@@ -110,16 +110,16 @@ public class EndorsementReminderServiceTests : InMemoryDbTest
 
         var clockMock = AMock.Clock(now);
         var emailServiceMock = A.Fake<IEmailService>();
-        var reminderService = this.MockDependenciesFor<EndorsementReminderService>(clockMock, emailServiceMock);
+        var service = this.MockDependenciesFor<EndorsementMaintenanceService>(clockMock, emailServiceMock);
 
-        await reminderService.DoWorkAsync();
+        await service.SendReminderEmailsAsync();
 
         A.CallTo(() => emailServiceMock.SendAsync(An<Email>._)).MustHaveHappenedOnceExactly();
     }
 
     [Fact]
     // If a 7 day old Endorsment Request is between two users currently in an Active Endorsement, they should not get an email
-    public async void EndorsementReminderService_DoWorkAsync_ShouldNotSendIfAlreadyEndorsed()
+    public async void EndorsementMaintenanceService_SendReminderEmailsAsync_ShouldNotSendIfAlreadyEndorsed()
     {
         var now = SystemClock.Instance.GetCurrentInstant();
         var requestingParty = this.TestDb.HasAParty();
@@ -154,9 +154,9 @@ public class EndorsementReminderServiceTests : InMemoryDbTest
 
         var clockMock = AMock.Clock(now);
         var emailServiceMock = A.Fake<IEmailService>();
-        var reminderService = this.MockDependenciesFor<EndorsementReminderService>(clockMock, emailServiceMock);
+        var service = this.MockDependenciesFor<EndorsementMaintenanceService>(clockMock, emailServiceMock);
 
-        await reminderService.DoWorkAsync();
+        await service.SendReminderEmailsAsync();
 
         A.CallTo(() => emailServiceMock.SendAsync(An<Email>._)).MustNotHaveHappened();
     }
