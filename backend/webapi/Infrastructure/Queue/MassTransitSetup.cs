@@ -2,6 +2,7 @@ namespace Pidp.Infrastructure.Queue;
 
 using MassTransit;
 using Pidp;
+using Pidp.Features.CommonDomainEventHandlers;
 using static Pidp.Features.Parties.Demographics;
 
 public static class MassTransitSetup
@@ -14,6 +15,7 @@ public static class MassTransitSetup
 
             x.AddConsumer<PartyEmailUpdatedKeycloakConsumer>();
             x.AddConsumer<PartyEmailUpdatedBcProviderConsumer>();
+            x.AddConsumer<UpdateAttributesBcProviderConsumer>();
 
             x.UsingRabbitMq((context, cfg) =>
             {
@@ -37,6 +39,13 @@ public static class MassTransitSetup
                     ep.PublishFaults = false;
                     ep.Bind("party-email-updated");
                     ep.ConfigureConsumer<PartyEmailUpdatedBcProviderConsumer>(context);
+                });
+
+                cfg.ReceiveEndpoint("update-attributes-bc-provider-queue", ep =>
+                {
+                    ep.PublishFaults = false;
+                    ep.Bind("party-email-updated");
+                    ep.ConfigureConsumer<UpdateAttributesBcProviderConsumer>(context);
                 });
             });
         });

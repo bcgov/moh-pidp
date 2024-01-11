@@ -1,5 +1,6 @@
 namespace Pidp.Features.CommonDomainEventHandlers;
 
+using MassTransit;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,21 +10,22 @@ using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.HttpClients.BCProvider;
 using Pidp.Infrastructure.HttpClients.Plr;
 using Pidp.Models.DomainEvents;
+using static Pidp.Features.CommonDomainEventHandlers.UpdateAttributesBcProviderConsumer;
 
 public class UpdateBCProviderAfterEndorsementStandingUpdated : INotificationHandler<EndorsementStandingUpdated>
 {
-    private readonly IBCProviderClient bcProviderClient;
+    private readonly IBus bus;
     private readonly IPlrClient plrClient;
     private readonly PidpDbContext context;
     private readonly string clientId;
 
     public UpdateBCProviderAfterEndorsementStandingUpdated(
-        IBCProviderClient bcProviderClient,
+        IBus bus,
         IPlrClient plrClient,
         PidpDbContext context,
         PidpConfiguration config)
     {
-        this.bcProviderClient = bcProviderClient;
+        this.bus = bus;
         this.plrClient = plrClient;
         this.context = context;
         this.clientId = config.BCProviderClient.ClientId;
@@ -61,6 +63,6 @@ public class UpdateBCProviderAfterEndorsementStandingUpdated : INotificationHand
                 .With(BCProviderAttributes.EndorserDataEligibleIdentifierTypes)
                 .Cpns);
 
-        await this.bcProviderClient.UpdateAttributes(party.Upn, attributes.AsAdditionalData());
+        await this.bus.Publish(new UpdateAttributesBcProvider(party.Upn, attributes.AsAdditionalData()), CancellationToken.None);
     }
 }
