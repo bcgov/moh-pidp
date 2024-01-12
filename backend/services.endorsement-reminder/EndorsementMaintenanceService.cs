@@ -1,7 +1,6 @@
 namespace EndorsementReminder;
 
 using Flurl;
-using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using NodaTime;
@@ -56,10 +55,10 @@ public class EndorsementMaintenanceService : IEndorsementMaintenanceService
 
     public async Task SendReminderEmailsAsync()
     {
-        var reminderStatuses = new[] { EndorsementRequestStatus.Created, EndorsementRequestStatus.Received, EndorsementRequestStatus.Approved };
+        var inProgressStatuses = new[] { EndorsementRequestStatus.Created, EndorsementRequestStatus.Received, EndorsementRequestStatus.Approved };
         var now = this.clock.GetCurrentInstant();
         var emailDtos = await this.context.EndorsementRequests
-            .Where(request => reminderStatuses.Contains(request.Status)
+            .Where(request => inProgressStatuses.Contains(request.Status)
                 && request.StatusDate < now - Duration.FromDays(7)
                 && request.StatusDate > now - Duration.FromDays(8))
             .Where(request => !this.context.EndorsementRequests
