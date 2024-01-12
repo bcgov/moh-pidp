@@ -76,9 +76,7 @@ export class BcProviderApplicationPage
   public faXmark = faXmark;
   public formState: BcProviderApplicationFormState;
   public showErrorCard = false;
-  public errorCardText = '';
   public showMessageCard = false;
-  public messageCardText = '';
   public completed: boolean | null;
   public username = '';
   public password = '';
@@ -186,9 +184,7 @@ export class BcProviderApplicationPage
       }),
       catchError(() => {
         this.loadingOverlayService.close();
-        const message = 'An error occurred.';
-        this.setError(message);
-        this.setMessage('');
+        this.showErrorCard = true;
         return '';
       }),
     );
@@ -196,16 +192,6 @@ export class BcProviderApplicationPage
 
   protected afterSubmitIsSuccessful(): void {
     this.navigationService.navigateToRoot();
-  }
-
-  private setError(message: string): void {
-    this.showErrorCard = !!message;
-    this.errorCardText = message;
-  }
-
-  private setMessage(message: string): void {
-    this.showMessageCard = !!message;
-    this.messageCardText = message;
   }
 
   private showSuccessDialog(): void {

@@ -2,6 +2,8 @@ import { PortalModule } from '@angular/cdk/portal';
 import { NgModule, Type } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
+import { destinationResolver } from '@app/core/party/destination.resolver';
+import { partyActionsResolver } from '@app/core/party/party-actions.resolver';
 import { PermissionsGuard } from '@app/modules/permissions/permissions.guard';
 import { Role } from '@app/shared/enums/roles.enum';
 
@@ -12,6 +14,7 @@ import { AdminRoutes } from '../admin/admin.routes';
 import { AuthModule } from '../auth/auth.module';
 import { AuthRoutes } from '../auth/auth.routes';
 import { AuthenticationGuard } from '../auth/guards/authentication.guard';
+import { wizardResolver } from '../auth/resolvers/wizard.resolver';
 import { FaqModule } from '../faq/faq.module';
 import { FaqRoutes } from '../faq/faq.routes';
 import { HistoryModule } from '../history/history.module';
@@ -26,8 +29,6 @@ import { TrainingModule } from '../training/training.module';
 import { TrainingRoutes } from '../training/training.routes';
 import { PortalDashboardComponent } from './components/portal-dashboard/portal-dashboard.component';
 import { ShellRoutes } from './shell.routes';
-import { destinationResolver } from '@app/core/party/destination.resolver';
-import { partyActionsResolver } from '@app/core/party/party-actions.resolver';
 
 const routes: Routes = [
   {
@@ -77,6 +78,9 @@ const routes: Routes = [
       },
       {
         path: OrganizationInfoRoutes.MODULE_PATH,
+        resolve: {
+          hasCompletedWizard: wizardResolver,
+        },
         loadChildren: (): Promise<Type<OrganizationInfoModule>> =>
           import('../organization-info/organization-info.module').then(
             (m) => m.OrganizationInfoModule,
@@ -84,11 +88,17 @@ const routes: Routes = [
       },
       {
         path: AccessRoutes.MODULE_PATH,
+        resolve: {
+          hasCompletedWizard: wizardResolver,
+        },
         loadChildren: (): Promise<Type<AccessModule>> =>
           import('../access/access.module').then((m) => m.AccessModule),
       },
       {
         path: TrainingRoutes.MODULE_PATH,
+        resolve: {
+          hasCompletedWizard: wizardResolver,
+        },
         canActivate: [PermissionsGuard.canActivate],
         data: {
           roles: [Role.FEATURE_PIDP_DEMO],
@@ -98,11 +108,17 @@ const routes: Routes = [
       },
       {
         path: HistoryRoutes.MODULE_PATH,
+        resolve: {
+          hasCompletedWizard: wizardResolver,
+        },
         loadChildren: (): Promise<Type<HistoryModule>> =>
           import('../history/history.module').then((m) => m.HistoryModule),
       },
       {
         path: FaqRoutes.MODULE_PATH,
+        resolve: {
+          hasCompletedWizard: wizardResolver,
+        },
         loadChildren: (): Promise<Type<FaqModule>> =>
           import('../faq/faq.module').then((m) => m.FaqModule),
       },
