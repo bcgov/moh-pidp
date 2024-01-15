@@ -1,4 +1,4 @@
-namespace Pidp.Features.CommonDomainEventHandlers;
+namespace Pidp.Features.CommonHandlers;
 
 using MassTransit;
 using MediatR;
@@ -10,7 +10,6 @@ using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.HttpClients.BCProvider;
 using Pidp.Infrastructure.HttpClients.Plr;
 using Pidp.Models.DomainEvents;
-using static Pidp.Features.CommonDomainEventHandlers.UpdateAttributesBcProviderConsumer;
 
 public class UpdateBCProviderAfterEndorsementStandingUpdated : INotificationHandler<EndorsementStandingUpdated>
 {
@@ -63,6 +62,6 @@ public class UpdateBCProviderAfterEndorsementStandingUpdated : INotificationHand
                 .With(BCProviderAttributes.EndorserDataEligibleIdentifierTypes)
                 .Cpns);
 
-        await this.bus.Publish(new UpdateAttributesBcProvider(party.Upn, attributes.AsAdditionalData()), CancellationToken.None);
+        await this.bus.Publish(new UpdateBcProviderAttributesConsumer.UpdateBcProviderAttributes(party.Upn, attributes.AsAdditionalData()), CancellationToken.None);
     }
 }
