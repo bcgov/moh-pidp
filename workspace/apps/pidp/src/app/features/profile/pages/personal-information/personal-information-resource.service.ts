@@ -17,7 +17,7 @@ import { PersonalInformation } from './personal-information.model';
 export class PersonalInformationResource extends CrudResource<PersonalInformation> {
   public constructor(
     protected apiResource: ApiHttpClient,
-    private toastService: ToastService
+    private toastService: ToastService,
   ) {
     super(apiResource);
   }
@@ -26,15 +26,15 @@ export class PersonalInformationResource extends CrudResource<PersonalInformatio
     return super.update(id, payload).pipe(
       tap(() =>
         this.toastService.openSuccessToast(
-          'Profile information has been updated'
-        )
+          'Profile information has been updated',
+        ),
       ),
       catchError((error: HttpErrorResponse) => {
         this.toastService.openErrorToast(
-          'Profile information could not be updated'
+          'Profile information could not be updated',
         );
         return throwError(() => error);
-      })
+      }),
     );
   }
 

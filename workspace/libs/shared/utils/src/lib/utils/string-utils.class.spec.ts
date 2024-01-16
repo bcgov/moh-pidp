@@ -27,7 +27,7 @@ describe('StringUtils', () => {
     it('should insert text at a specific position in the string', () => {
       const result = util.splice(strValue, 40, 'spotted ');
       expect(result).toBe(
-        'The quick brown fox jumps over the lazy spotted dog.'
+        'The quick brown fox jumps over the lazy spotted dog.',
       );
     });
 
@@ -45,7 +45,7 @@ describe('StringUtils', () => {
       const result = util.splice(
         strValue,
         strValue.length + 10,
-        '.. and then what?'
+        '.. and then what?',
       );
       expect(result).toBe(`${strValue}.. and then what?`);
     });

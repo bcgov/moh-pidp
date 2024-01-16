@@ -14,12 +14,12 @@ export class KeycloakInitService {
   public constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
     private router: Router,
-    private keycloakService: KeycloakService
+    private keycloakService: KeycloakService,
   ) {}
 
   public async load(): Promise<void> {
     const authenticated = await this.keycloakService.init(
-      this.getKeycloakOptions()
+      this.getKeycloakOptions(),
     );
 
     this.keycloakService.getKeycloakInstance().onTokenExpired = (): void => {

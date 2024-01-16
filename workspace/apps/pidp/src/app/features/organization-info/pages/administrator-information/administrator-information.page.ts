@@ -40,7 +40,7 @@ export class AdministratorInformationPage
     private partyService: PartyService,
     private resource: AdministratorInformationResource,
     private logger: LoggerService,
-    fb: FormBuilder
+    fb: FormBuilder,
   ) {
     super(dependenciesService);
 
@@ -64,14 +64,14 @@ export class AdministratorInformationPage
       .get(partyId)
       .pipe(
         tap((model: AdministratorInformation | null) =>
-          this.formState.patchValue(model)
+          this.formState.patchValue(model),
         ),
         catchError((error: HttpErrorResponse) => {
           if (error.status === HttpStatusCode.NotFound) {
             this.navigateToRoot();
           }
           return of(null);
-        })
+        }),
       )
       .subscribe();
   }

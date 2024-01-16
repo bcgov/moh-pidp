@@ -1,17 +1,17 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { TestBed } from '@angular/core/testing';
 
+import { DashboardStateModel, PidpStateName } from '@pidp/data-model';
 import { AppStateService } from '@pidp/presentation';
+import { MockProfileStatus } from '@test/mock-profile-status';
 import { Spy, createSpyFromClass, provideAutoSpy } from 'jest-auto-spies';
 
 import { PartyService } from '@app/core/party/party.service';
+import { ProfileStatus } from '@app/features/portal/models/profile-status.model';
 import { PortalResource } from '@app/features/portal/portal-resource.service';
 import { LookupService } from '@app/modules/lookup/lookup.service';
 
 import { DashboardStateService } from './dashboard-state-service.service';
-import { MockProfileStatus } from '@test/mock-profile-status';
-import { ProfileStatus } from '@app/features/portal/models/profile-status.model';
-import { DashboardStateModel, PidpStateName } from '@pidp/data-model';
 
 describe('DashboardStateService', () => {
   let appStateService: Spy<AppStateService>;

@@ -33,7 +33,7 @@ export class ToastService {
   public openSuccessToast(
     message: string,
     action?: string,
-    config?: MatSnackBarConfig
+    config?: MatSnackBarConfig,
   ): void {
     this.openToast(message, action, {
       ...this.defaultConfig,
@@ -49,7 +49,7 @@ export class ToastService {
   public openInfoToast(
     message: string,
     action?: string,
-    config?: MatSnackBarConfig
+    config?: MatSnackBarConfig,
   ): void {
     this.openToast(message, action, {
       ...this.defaultConfig,
@@ -65,7 +65,7 @@ export class ToastService {
   public openErrorToast(
     message: string,
     action?: string,
-    config?: MatSnackBarConfig
+    config?: MatSnackBarConfig,
   ): void {
     this.openToast(message, action, {
       ...this.defaultConfig,
@@ -77,7 +77,7 @@ export class ToastService {
   private openToast(
     message: string,
     action?: string,
-    config?: MatSnackBarConfig
+    config?: MatSnackBarConfig,
   ): void {
     this.snackBar.open(message, action, config);
   }

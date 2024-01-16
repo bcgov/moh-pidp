@@ -38,6 +38,7 @@ import { ScrollTargetComponent } from './components/scroll-target/scroll-target.
 import { ToggleContentComponent } from './components/toggle-content/toggle-content.component';
 import { UserInfoComponent } from './components/user-info/user-info.component';
 import { YesNoContentComponent } from './components/yes-no-content/yes-no-content.component';
+import { TrimDirective } from './directives/trim.directive';
 import { InjectViewportCssClassDirective } from './directives/viewport-css.directive';
 import { MaterialModule } from './material/material.module';
 import { ContextHelpModule } from './modules/context-help/context-help.module';
@@ -48,7 +49,6 @@ import { PhonePipe } from './pipes/phone.pipe';
 import { PostalPipe } from './pipes/postal.pipe';
 import { ReplacePipe } from './pipes/replace.pipe';
 import { SafePipe } from './pipes/safe.pipe';
-import { TrimDirective } from './directives/trim.directive';
 
 @NgModule({
   declarations: [

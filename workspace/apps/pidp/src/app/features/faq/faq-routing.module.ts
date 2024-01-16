@@ -9,7 +9,7 @@ const routes: Routes = [
     path: FaqRoutes.MFA_SETUP,
     loadChildren: (): Promise<Type<MfaSetupModule>> =>
       import('./pages/mfa-setup/mfa-setup.module').then(
-        (m) => m.MfaSetupModule
+        (m) => m.MfaSetupModule,
       ),
   },
 ];

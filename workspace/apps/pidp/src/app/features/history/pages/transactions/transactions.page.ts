@@ -23,7 +23,7 @@ export class TransactionsPage implements OnInit {
     private router: Router,
     private resource: TransactionsResource,
     private partyService: PartyService,
-    private logger: LoggerService
+    private logger: LoggerService,
   ) {
     this.title = this.route.snapshot.data.title;
   }

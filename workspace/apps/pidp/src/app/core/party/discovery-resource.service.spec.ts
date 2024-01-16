@@ -1,10 +1,10 @@
-import { TestBed } from '@angular/core/testing';
 import { HttpClient } from '@angular/common/http';
+import { TestBed } from '@angular/core/testing';
 
 import { provideAutoSpy } from 'jest-auto-spies';
 
-import { AuthorizedUserService } from '@app/features/auth/services/authorized-user.service';
 import { APP_CONFIG, APP_DI_CONFIG } from '@app/app.config';
+import { AuthorizedUserService } from '@app/features/auth/services/authorized-user.service';
 
 import { ApiHttpClient } from '../resources/api-http-client.service';
 import { DiscoveryResource } from './discovery-resource.service';

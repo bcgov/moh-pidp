@@ -1,9 +1,12 @@
 import { inject } from '@angular/core';
 import { ResolveFn, Router } from '@angular/router';
+
 import { catchError, of, tap } from 'rxjs';
+
+import { ProfileRoutes } from '@app/features/profile/profile.routes';
+
 import { Destination, DiscoveryResource } from './discovery-resource.service';
 import { PartyService } from './party.service';
-import { ProfileRoutes } from '@app/features/profile/profile.routes';
 
 export const destinationResolver: ResolveFn<Destination | null> = () => {
   const partyService = inject(PartyService);

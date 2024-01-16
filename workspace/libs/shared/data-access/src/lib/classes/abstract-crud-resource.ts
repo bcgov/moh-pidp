@@ -22,14 +22,14 @@ export abstract class CrudResource<T extends { [key: string]: any } | null>
   public create(
     id: number,
     payload: T,
-    options?: { [key: string]: unknown }
+    options?: { [key: string]: unknown },
   ): Observable<T | null> {
     return this.resource
       .post<T>(this.getResourcePath(id), payload, options)
       .pipe(
         catchError((error: HttpErrorResponse) => {
           throw error;
-        })
+        }),
       );
   }
 
@@ -39,7 +39,7 @@ export abstract class CrudResource<T extends { [key: string]: any } | null>
    */
   public get(
     id: number,
-    options?: { [key: string]: unknown }
+    options?: { [key: string]: unknown },
   ): Observable<T | null> {
     return this.resource.get<T>(this.getResourcePath(id), options).pipe(
       catchError((error: HttpErrorResponse) => {
@@ -48,7 +48,7 @@ export abstract class CrudResource<T extends { [key: string]: any } | null>
         }
 
         throw error;
-      })
+      }),
     );
   }
 
@@ -59,7 +59,7 @@ export abstract class CrudResource<T extends { [key: string]: any } | null>
   public update(
     id: number,
     payload: T,
-    options?: { [key: string]: unknown }
+    options?: { [key: string]: unknown },
   ): NoContent {
     return this.resource
       .put<NoContent>(this.getResourcePath(id), payload, options)
@@ -72,7 +72,7 @@ export abstract class CrudResource<T extends { [key: string]: any } | null>
    */
   public delete(
     id: number,
-    options?: { [key: string]: unknown }
+    options?: { [key: string]: unknown },
   ): Observable<number | null> {
     return this.resource.delete<number>(this.getResourcePath(id), options).pipe(
       catchError((error: HttpErrorResponse) => {
@@ -81,7 +81,7 @@ export abstract class CrudResource<T extends { [key: string]: any } | null>
         }
 
         throw error;
-      })
+      }),
     );
   }
 

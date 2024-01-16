@@ -8,21 +8,23 @@ import {
 import { ActivatedRoute, ParamMap, convertToParamMap } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 
+import { of } from 'rxjs';
+
 import { randTextRange } from '@ngneat/falso';
 import { Spy, provideAutoSpy } from 'jest-auto-spies';
 
-import { APP_CONFIG, APP_DI_CONFIG } from '@app/app.config';
-import { DocumentService } from '@app/core/services/document.service';
+import { ViewportService } from '@bcgov/shared/ui';
 
-import { AuthService } from '../../services/auth.service';
-import { LoginPage, LoginPageRouteData } from './login.page';
+import { APP_CONFIG, APP_DI_CONFIG } from '@app/app.config';
 import {
   ClientLogsService,
   MicrosoftLogLevel,
 } from '@app/core/services/client-logs.service';
-import { ViewportService } from '@bcgov/shared/ui';
-import { of } from 'rxjs';
+import { DocumentService } from '@app/core/services/document.service';
+
 import { IdentityProvider } from '../../enums/identity-provider.enum';
+import { AuthService } from '../../services/auth.service';
+import { LoginPage, LoginPageRouteData } from './login.page';
 
 describe('LoginPage', () => {
   let component: LoginPage;
