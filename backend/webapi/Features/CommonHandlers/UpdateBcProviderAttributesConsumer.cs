@@ -1,9 +1,11 @@
 namespace Pidp.Features.CommonHandlers;
 
 using MassTransit;
+
+using static Pidp.Features.CommonHandlers.UpdateBcProviderAttributesConsumer;
 using Pidp.Infrastructure.HttpClients.BCProvider;
 
-public class UpdateBcProviderAttributesConsumer : IConsumer<UpdateBcProviderAttributesConsumer.UpdateBcProviderAttributes>
+public class UpdateBcProviderAttributesConsumer : IConsumer<UpdateBcProviderAttributes>
 {
     public class UpdateBcProviderAttributes
     {
@@ -33,14 +35,14 @@ public class UpdateBcProviderAttributesConsumer : IConsumer<UpdateBcProviderAttr
         if (!await this.client.UpdateAttributes(context.Message.Upn, context.Message.Attributes))
         {
             this.logger.LogUpdateBcProviderAttributesFailed(context.Message.Upn);
-            throw new InvalidOperationException("Error Comunicating with Azure AD");
+            throw new InvalidOperationException("Error comunicating with Azure AD");
         }
     }
 }
 
 public static partial class UpdateBcProviderAttributesConsumerLoggingExtensions
 {
-    [LoggerMessage(1, LogLevel.Error, "Error when updating attributes to User #{Upn} in Azure AD.")]
-    public static partial void LogUpdateBcProviderAttributesFailed(this ILogger logger, string Upn);
+    [LoggerMessage(1, LogLevel.Error, "Error when updating attributes to User {upn} in Azure AD.")]
+    public static partial void LogUpdateBcProviderAttributesFailed(this ILogger logger, string upn);
 }
 

@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 using Pidp.Data;
 using Pidp.Extensions;
+using static Pidp.Features.CommonHandlers.UpdateBcProviderAttributesConsumer;
 using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.HttpClients.BCProvider;
 using Pidp.Infrastructure.HttpClients.Plr;
@@ -62,6 +63,6 @@ public class UpdateBCProviderAfterEndorsementStandingUpdated : INotificationHand
                 .With(BCProviderAttributes.EndorserDataEligibleIdentifierTypes)
                 .Cpns);
 
-        await this.bus.Publish(new UpdateBcProviderAttributesConsumer.UpdateBcProviderAttributes(party.Upn, attributes.AsAdditionalData()), CancellationToken.None);
+        await this.bus.Publish(new UpdateBcProviderAttributes(party.Upn, attributes.AsAdditionalData()), cancellationToken);
     }
 }
