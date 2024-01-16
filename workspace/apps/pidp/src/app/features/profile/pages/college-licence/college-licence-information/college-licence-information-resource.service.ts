@@ -18,7 +18,7 @@ export class CollegeLicenceInformationResource extends CrudResource<
 > {
   public constructor(
     protected apiResource: ApiHttpClient,
-    private toastService: ToastService
+    private toastService: ToastService,
   ) {
     super(apiResource);
   }
@@ -27,10 +27,10 @@ export class CollegeLicenceInformationResource extends CrudResource<
     return super.get(partyId).pipe(
       catchError((error: HttpErrorResponse) => {
         this.toastService.openErrorToast(
-          'College licence information could not be retrieved'
+          'College licence information could not be retrieved',
         );
         throw error;
-      })
+      }),
     );
   }
 

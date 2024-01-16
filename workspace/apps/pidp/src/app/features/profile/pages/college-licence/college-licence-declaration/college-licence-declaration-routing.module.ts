@@ -4,10 +4,10 @@ import { RouterModule, Routes } from '@angular/router';
 import { setDashboardTitleGuard } from '@pidp/presentation';
 
 import { canDeactivateFormGuard } from '@app/core/guards/can-deactivate-form.guard';
-
-import { CollegeLicenceDeclarationPage } from './college-licence-declaration.page';
 import { highAssuranceCredentialGuard } from '@app/features/auth/guards/high-assurance-credential.guard';
 import { collegeLicenceCompletedResolver } from '@app/features/auth/resolvers/college-licence-completed.resolver';
+
+import { CollegeLicenceDeclarationPage } from './college-licence-declaration.page';
 
 const routes: Routes = [
   {

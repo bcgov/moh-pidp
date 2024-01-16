@@ -4,8 +4,11 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatDialogModule } from '@angular/material/dialog';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
+
+import { of } from 'rxjs';
 
 import { randNumber, randTextRange } from '@ngneat/falso';
 import { Spy, createSpyFromClass, provideAutoSpy } from 'jest-auto-spies';
@@ -20,8 +23,6 @@ import { LoggerService } from '@core/services/logger.service';
 import { CollegeLicenceDeclarationResource } from './college-licence-declaration-resource.service';
 import { CollegeLicenceDeclarationPage } from './college-licence-declaration.page';
 import { PartyLicenceDeclarationInformation } from './party-licence-declaration-information.model';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { of } from 'rxjs';
 
 describe('CollegeLicenceDeclarationPage', () => {
   let component: CollegeLicenceDeclarationPage;

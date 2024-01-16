@@ -16,7 +16,7 @@ const routes: Routes = [
     path: ProfileRoutes.PERSONAL_INFO,
     loadChildren: (): Promise<Type<PersonalInformationModule>> =>
       import('./pages/personal-information/personal-information.module').then(
-        (m) => m.PersonalInformationModule
+        (m) => m.PersonalInformationModule,
       ),
   },
   {
@@ -41,7 +41,7 @@ const routes: Routes = [
     path: ProfileRoutes.USER_ACCESS_AGREEMENT,
     loadChildren: (): Promise<Type<UserAccessAgreementModule>> =>
       import('./pages/user-access-agreement/user-access-agreement.module').then(
-        (m) => m.UserAccessAgreementModule
+        (m) => m.UserAccessAgreementModule,
       ),
   },
   {

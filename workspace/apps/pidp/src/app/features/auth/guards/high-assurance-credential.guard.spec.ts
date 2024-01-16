@@ -6,11 +6,13 @@ import {
   RouterStateSnapshot,
 } from '@angular/router';
 
-import { highAssuranceCredentialGuard } from './high-assurance-credential.guard';
-import { Spy, createSpyFromClass, provideAutoSpy } from 'jest-auto-spies';
-import { AuthorizedUserService } from '../services/authorized-user.service';
-import { IdentityProvider } from '../enums/identity-provider.enum';
 import { Observable, of } from 'rxjs';
+
+import { Spy, createSpyFromClass, provideAutoSpy } from 'jest-auto-spies';
+
+import { IdentityProvider } from '../enums/identity-provider.enum';
+import { AuthorizedUserService } from '../services/authorized-user.service';
+import { highAssuranceCredentialGuard } from './high-assurance-credential.guard';
 
 describe('highAssuranceCredentialGuard', () => {
   let activatedRouteSnapshotSpy: Spy<ActivatedRouteSnapshot>;

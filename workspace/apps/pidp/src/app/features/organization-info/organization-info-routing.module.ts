@@ -12,14 +12,14 @@ const routes: Routes = [
     path: OrganizationInfoRoutes.ORGANIZATION_DETAILS,
     loadChildren: (): Promise<Type<OrganizationDetailsModule>> =>
       import('./pages/organization-details/organization-details.module').then(
-        (m) => m.OrganizationDetailsModule
+        (m) => m.OrganizationDetailsModule,
       ),
   },
   {
     path: OrganizationInfoRoutes.FACILITY_DETAILS,
     loadChildren: (): Promise<Type<FacilityDetailsModule>> =>
       import('./pages/facility-details/facility-details.module').then(
-        (m) => m.FacilityDetailsModule
+        (m) => m.FacilityDetailsModule,
       ),
   },
   {
@@ -33,7 +33,7 @@ const routes: Routes = [
     path: OrganizationInfoRoutes.ENDORSEMENTS,
     loadChildren: (): Promise<Type<EndorsementsModule>> =>
       import('./pages/endorsements/endorsements.module').then(
-        (m) => m.EndorsementsModule
+        (m) => m.EndorsementsModule,
       ),
   },
 ];

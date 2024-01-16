@@ -77,7 +77,7 @@ describe('WorkAndRoleInformationPage', () => {
     component = TestBed.inject(WorkAndRoleInformationPage);
     partyServiceSpy = TestBed.inject<any>(PartyService);
     workAndRoleInformationResourceSpy = TestBed.inject<any>(
-      WorkAndRoleInformationResource
+      WorkAndRoleInformationResource,
     );
     router = TestBed.inject(Router);
 
@@ -110,10 +110,10 @@ describe('WorkAndRoleInformationPage', () => {
         then('it should GET party work and role information', () => {
           expect(router.navigate).not.toHaveBeenCalled();
           expect(workAndRoleInformationResourceSpy.get).toHaveBeenCalledTimes(
-            1
+            1,
           );
           expect(workAndRoleInformationResourceSpy.get).toHaveBeenCalledWith(
-            partyId
+            partyId,
           );
         });
       });

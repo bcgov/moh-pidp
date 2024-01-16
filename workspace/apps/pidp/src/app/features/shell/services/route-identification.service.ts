@@ -25,7 +25,7 @@ export class RouteIdentificationService {
     routeName: '',
   };
   private routeNameSubject = new BehaviorSubject<RouteChangeDetectedEventArg>(
-    this.defaultRouteChangeDetectedEventArg
+    this.defaultRouteChangeDetectedEventArg,
   );
   public routeNameBroadcast$ = this.routeNameSubject.asObservable();
 

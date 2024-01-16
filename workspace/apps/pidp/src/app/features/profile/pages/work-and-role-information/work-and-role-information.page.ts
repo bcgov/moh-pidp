@@ -41,14 +41,14 @@ export class WorkAndRoleInformationPage
     private resource: WorkAndRoleInformationResource,
     private logger: LoggerService,
     fb: FormBuilder,
-    dependenciesService: AbstractFormDependenciesService
+    dependenciesService: AbstractFormDependenciesService,
   ) {
     super(dependenciesService);
 
     this.title = this.route.snapshot.data.title;
     this.formState = new WorkAndRoleInformationFormState(
       fb,
-      dependenciesService.formUtilsService
+      dependenciesService.formUtilsService,
     );
     this.hasFacilityAddress = false;
   }
@@ -68,18 +68,18 @@ export class WorkAndRoleInformationPage
       .get(partyId)
       .pipe(
         tap((model: WorkAndRoleInformation | null) =>
-          this.formState.patchValue(model)
+          this.formState.patchValue(model),
         ),
         catchError((error: HttpErrorResponse) => {
           if (error.status === HttpStatusCode.NotFound) {
             this.navigateToRoot();
           }
           return of(null);
-        })
+        }),
       )
       .subscribe(
         (model: WorkAndRoleInformation | null) =>
-          (this.hasFacilityAddress = !!model?.facilityAddress)
+          (this.hasFacilityAddress = !!model?.facilityAddress),
       );
   }
 

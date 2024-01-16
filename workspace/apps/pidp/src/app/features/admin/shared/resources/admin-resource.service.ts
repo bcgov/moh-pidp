@@ -25,7 +25,7 @@ export class AdminResource {
       catchError((_: HttpErrorResponse) => {
         // TODO add logging and toast messaging around specific errors when the admin starts getting a bit of attention
         return of([]);
-      })
+      }),
     );
   }
 
@@ -35,7 +35,7 @@ export class AdminResource {
       catchError((error: HttpErrorResponse) => {
         // TODO add logging and toast messaging around specific errors when the admin starts getting a bit of attention
         throw error;
-      })
+      }),
     );
   }
 
@@ -45,7 +45,7 @@ export class AdminResource {
       catchError((error: HttpErrorResponse) => {
         // TODO add logging and toast messaging around specific errors when the admin starts getting a bit of attention
         throw error;
-      })
+      }),
     );
   }
 

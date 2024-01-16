@@ -4,6 +4,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { Observable, catchError, noop, of, tap } from 'rxjs';
 
+import { DashboardStateModel, PidpStateName } from '@pidp/data-model';
+import { AppStateService } from '@pidp/presentation';
+
 import { PartyService } from '@app/core/party/party.service';
 import { LoggerService } from '@app/core/services/logger.service';
 import { UtilsService } from '@app/core/services/utils.service';
@@ -11,8 +14,6 @@ import { specialAuthorityEformsSupportEmail } from '@app/features/access/pages/s
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
 
 import { UserAccessAgreementResource } from './user-access-agreement-resource.service';
-import { DashboardStateModel, PidpStateName } from '@pidp/data-model';
-import { AppStateService } from '@pidp/presentation';
 
 @Component({
   selector: 'app-user-access-agreement',

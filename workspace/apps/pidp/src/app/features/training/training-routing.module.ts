@@ -9,7 +9,7 @@ const routes: Routes = [
     path: TrainingRoutes.COMPLIANCE_TRAINING,
     loadChildren: (): Promise<Type<ComplianceTrainingModule>> =>
       import('./pages/compliance-training/compliance-training.module').then(
-        (m) => m.ComplianceTrainingModule
+        (m) => m.ComplianceTrainingModule,
       ),
   },
 ];

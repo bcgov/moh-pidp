@@ -55,7 +55,7 @@ export class CollegeLicenceDeclarationFormState extends AbstractFormState<PartyL
     });
 
     this.collegeCode.valueChanges.subscribe((value) =>
-      this.onCollegeCodeValueChanged(value)
+      this.onCollegeCodeValueChanged(value),
     );
   }
 
