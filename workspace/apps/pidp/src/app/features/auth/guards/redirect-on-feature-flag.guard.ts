@@ -10,7 +10,7 @@ export interface RedirectOnFeatureFlagConfigGuardRouteData {
 }
 
 export const redirectOnFeatureFlagConfigGuard: CanActivateFn = (
-  route: ActivatedRouteSnapshot
+  route: ActivatedRouteSnapshot,
 ) => {
   const router = inject(Router);
   const config = inject(APP_CONFIG);

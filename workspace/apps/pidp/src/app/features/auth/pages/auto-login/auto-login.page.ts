@@ -17,7 +17,7 @@ export class AutoLoginPage implements OnInit {
     @Inject(APP_CONFIG) private config: AppConfig,
     private authService: AuthService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
   ) {}
 
   public ngOnInit(): void {

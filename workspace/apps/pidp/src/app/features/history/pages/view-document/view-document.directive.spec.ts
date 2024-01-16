@@ -1,16 +1,16 @@
-import { TestBed } from '@angular/core/testing';
-import { ViewDocumentDirective } from './view-document.directive';
 import { Component } from '@angular/core';
+import { TestBed } from '@angular/core/testing';
+
+import { ViewDocumentDirective } from './view-document.directive';
 
 @Component({ selector: 'app-stub', template: '' })
 class StubComponent {}
 
 describe('ViewDocumentDirective', () => {
-  beforeEach(async() => {
+  beforeEach(async () => {
     TestBed.configureTestingModule({
       declarations: [StubComponent],
-    })
-    .compileComponents();
+    }).compileComponents();
   });
 
   it('should create an instance', () => {

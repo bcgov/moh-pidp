@@ -76,7 +76,7 @@ describe('OrganizationDetailsPage', () => {
     component = TestBed.inject(OrganizationDetailsPage);
     partyServiceSpy = TestBed.inject<any>(PartyService);
     organizationDetailsResourceSpy = TestBed.inject<any>(
-      OrganizationDetailsResource
+      OrganizationDetailsResource,
     );
     formUtilsServiceSpy = TestBed.inject<any>(FormUtilsService);
 
@@ -100,7 +100,7 @@ describe('OrganizationDetailsPage', () => {
           expect(router.navigate).not.toHaveBeenCalled();
           expect(organizationDetailsResourceSpy.get).toHaveBeenCalledTimes(1);
           expect(organizationDetailsResourceSpy.get).toHaveBeenCalledWith(
-            partyId
+            partyId,
           );
         });
       });
@@ -159,7 +159,7 @@ describe('OrganizationDetailsPage', () => {
           'organization details will be updated and router navigate to root route',
           () => {
             expect(router.navigate).toHaveBeenCalled();
-          }
+          },
         );
       });
     });
@@ -177,7 +177,7 @@ describe('OrganizationDetailsPage', () => {
           'organization details should not be updated and router not navigate',
           () => {
             expect(router.navigate).not.toHaveBeenCalled();
-          }
+          },
         );
       });
     });

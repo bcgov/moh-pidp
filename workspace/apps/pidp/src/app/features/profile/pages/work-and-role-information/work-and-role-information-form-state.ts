@@ -9,7 +9,7 @@ import { WorkAndRoleInformation } from './work-and-role-information.model';
 export class WorkAndRoleInformationFormState extends AbstractFormState<WorkAndRoleInformation> {
   public constructor(
     private fb: FormBuilder,
-    private formUtilsService: FormUtilsService
+    private formUtilsService: FormUtilsService,
   ) {
     super();
 
