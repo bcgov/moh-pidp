@@ -24,7 +24,7 @@ describe('ExpansionPanelComponent', () => {
       when('the component has been initialized', () => {
         then('the panel is collapsed', () => {
           const expansionPanelContent = fixture.debugElement.query(
-            By.css('.expansion-panel-content')
+            By.css('.expansion-panel-content'),
           );
           expect(expansionPanelContent.styles.visibility).toBe('hidden');
           expect(component.expanded).toBeFalsy;
@@ -42,7 +42,7 @@ describe('ExpansionPanelComponent', () => {
 
         then('the panel is expanded', () => {
           const expansionPanelContent = fixture.debugElement.query(
-            By.css('.expansion-panel-content')
+            By.css('.expansion-panel-content'),
           );
           expect(expansionPanelContent.styles.visibility).toBe('');
           expect(component.expanded).toBeTruthy;
@@ -59,7 +59,7 @@ describe('ExpansionPanelComponent', () => {
 
         then('the panel is collapsed', () => {
           const expansionPanelContent = fixture.debugElement.query(
-            By.css('.expansion-panel-content')
+            By.css('.expansion-panel-content'),
           );
           expect(expansionPanelContent.styles.visibility).toBe('');
           expect(component.expanded).toBeTruthy;
@@ -75,7 +75,7 @@ describe('ExpansionPanelComponent', () => {
 
         then('the panel is collapsed', () => {
           const expansionPanelContent = fixture.debugElement.query(
-            By.css('.expansion-panel-content')
+            By.css('.expansion-panel-content'),
           );
           expect(expansionPanelContent.styles.visibility).toBe('hidden');
           expect(component.expanded).toBeFalsy;

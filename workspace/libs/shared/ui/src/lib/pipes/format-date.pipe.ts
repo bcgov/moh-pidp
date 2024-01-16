@@ -10,7 +10,7 @@ import { APP_DATE_FORMAT } from '../material/material-config';
 export class FormatDatePipe implements PipeTransform {
   public transform(
     date: string | null | undefined,
-    format: string = APP_DATE_FORMAT
+    format: string = APP_DATE_FORMAT,
   ): string | null {
     if (!date) {
       return null;

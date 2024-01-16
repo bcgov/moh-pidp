@@ -11,5 +11,5 @@ export enum Province {
   PRINCE_EDWARD_ISLAND = 'PE',
   QUEBEC = 'QC',
   SASKATCHEWAN = 'SK',
-  YUKON = 'YT'
+  YUKON = 'YT',
 }

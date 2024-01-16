@@ -32,5 +32,5 @@ export const DIALOG_DEFAULT_OPTION = new InjectionToken(
   {
     providedIn: 'root',
     factory: (): DialogDefaultOptions => defaultDialogOptions,
-  }
+  },
 );

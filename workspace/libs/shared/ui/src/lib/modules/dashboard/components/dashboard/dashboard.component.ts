@@ -115,7 +115,7 @@ export class DashboardComponent implements OnInit {
       .pipe(untilDestroyed(this))
       .subscribe(
         (result: BreakpointState) =>
-          (this.sideNavProps = this.getSideNavProperties(result))
+          (this.sideNavProps = this.getSideNavProperties(result)),
       );
   }
 
