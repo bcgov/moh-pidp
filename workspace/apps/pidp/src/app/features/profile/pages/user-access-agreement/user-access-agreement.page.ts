@@ -1,6 +1,6 @@
 import { AsyncPipe, NgIf } from '@angular/common';
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, forwardRef } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -28,7 +28,7 @@ import { UserAccessAgreementResource } from './user-access-agreement-resource.se
   imports: [
     SharedUiModule,
     NgIf,
-    UserAccessAgreementDocumentComponent,
+    forwardRef(() => UserAccessAgreementDocumentComponent),
     MatButtonModule,
     AsyncPipe,
   ],

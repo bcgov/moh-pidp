@@ -4,7 +4,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 
-import { ContextHelpModule, SharedUiModule } from '@bcgov/shared/ui';
+import { SharedUiModule } from '@bcgov/shared/ui';
 
 import { InfoGraphicComponent } from '../../shared/components/info-graphic/info-graphic.component';
 
@@ -16,12 +16,11 @@ import { InfoGraphicComponent } from '../../shared/components/info-graphic/info-
   imports: [
     SharedUiModule,
     InfoGraphicComponent,
-    ContextHelpModule,
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
     RouterLink,
-  ],
+],
 })
 export class NextStepsPage {
   public title: string;
