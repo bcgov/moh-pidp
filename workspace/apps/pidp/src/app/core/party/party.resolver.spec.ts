@@ -8,6 +8,8 @@ import {
 } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 
+import { Observable } from 'rxjs';
+
 import { randNumber } from '@ngneat/falso';
 import { Spy, createSpyFromClass, provideAutoSpy } from 'jest-auto-spies';
 
@@ -19,7 +21,6 @@ import { LoggerService } from '../services/logger.service';
 import { DiscoveryResource } from './discovery-resource.service';
 import { partyResolver } from './party.resolver';
 import { PartyService } from './party.service';
-import { Observable } from 'rxjs';
 
 describe('partyResolver', () => {
   const executeResolver: ResolveFn<number | null> = (...resolverParameters) =>

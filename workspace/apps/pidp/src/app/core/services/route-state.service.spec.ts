@@ -7,7 +7,7 @@ describe('RouteStateService', () => {
   beforeEach(() =>
     TestBed.configureTestingModule({
       imports: [RouterTestingModule],
-    })
+    }),
   );
 
   it('should create', () => {

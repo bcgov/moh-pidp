@@ -22,7 +22,10 @@ import { LoggerService } from './logger.service';
   providedIn: 'root',
 })
 export class FormUtilsService {
-  public constructor(private fb: FormBuilder, private logger: LoggerService) {}
+  public constructor(
+    private fb: FormBuilder,
+    private logger: LoggerService,
+  ) {}
 
   /**
    * @description
@@ -56,28 +59,31 @@ export class FormUtilsService {
    * Get all the errors contained within a form.
    */
   public getFormErrors(
-    form: FormGroup | FormArray
+    form: FormGroup | FormArray,
   ): { [key: string]: unknown } | null {
     if (!form) {
       return null;
     }
 
     let hasError = false;
-    const result = Object.keys(form?.controls).reduce((acc, key) => {
-      const control = form.get(key);
+    const result = Object.keys(form?.controls).reduce(
+      (acc, key) => {
+        const control = form.get(key);
 
-      const errors =
-        control instanceof FormGroup || control instanceof FormArray
-          ? this.getFormErrors(control)
-          : control?.errors;
+        const errors =
+          control instanceof FormGroup || control instanceof FormArray
+            ? this.getFormErrors(control)
+            : control?.errors;
 
-      if (errors) {
-        acc[key] = errors;
-        hasError = true;
-      }
+        if (errors) {
+          acc[key] = errors;
+          hasError = true;
+        }
 
-      return acc;
-    }, {} as { [key: string]: unknown });
+        return acc;
+      },
+      {} as { [key: string]: unknown },
+    );
     return hasError ? result : null;
   }
 
@@ -88,7 +94,7 @@ export class FormUtilsService {
   public setValidators(
     control: FormControl | FormGroup,
     validators: ValidatorFn | ValidatorFn[] = [Validators.required],
-    blacklist: string[] = []
+    blacklist: string[] = [],
   ): void {
     if (control instanceof FormGroup) {
       // Assumes that FormGroups will not be deeply nested
@@ -97,7 +103,7 @@ export class FormUtilsService {
           this.setValidators(
             control.controls[key] as FormControl,
             validators,
-            blacklist
+            blacklist,
           );
         }
       });
@@ -113,7 +119,7 @@ export class FormUtilsService {
    */
   public resetAndClearValidators(
     control: FormControl | FormGroup,
-    blacklist: string[] = []
+    blacklist: string[] = [],
   ): void {
     if (control instanceof FormGroup) {
       // Assumes that FormGroups will not be deeply nested
@@ -136,7 +142,7 @@ export class FormUtilsService {
   public setOrResetValidators(
     setOrReset: boolean,
     control: FormControl | FormGroup,
-    blacklist?: string[]
+    blacklist?: string[],
   ): void {
     setOrReset
       ? this.setValidators(control, [Validators.required], blacklist)
@@ -183,7 +189,7 @@ export class FormUtilsService {
       areDisabled?: AddressLine[];
       useDefaults?: Extract<AddressLine, 'provinceCode' | 'countryCode'>[];
       exclude?: AddressLine[];
-    } | null = null
+    } | null = null,
   ): FormGroup {
     const controlsConfig: AddressMap<unknown[]> = {
       street: [{ value: null, disabled: false }, []],

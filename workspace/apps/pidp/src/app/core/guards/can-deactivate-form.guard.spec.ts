@@ -1,11 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { TestBed } from '@angular/core/testing';
+import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+
+import { Spy, provideAutoSpy } from 'jest-auto-spies';
+
+import { AbstractFormState } from '@bcgov/shared/ui';
 
 import { IFormPage } from '../classes/abstract-form-page.class';
 import { canDeactivateFormGuard } from './can-deactivate-form.guard';
-import { AbstractFormState } from '@bcgov/shared/ui';
-import { Spy, provideAutoSpy } from 'jest-auto-spies';
-import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 
 describe('canDeactivateFormGuard', () => {
   let activatedRouteSnapshotSpy: Spy<ActivatedRouteSnapshot>;
