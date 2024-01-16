@@ -13,7 +13,7 @@ export class FullnamePipe implements PipeTransform {
           [key: string]: any;
         }
       | null
-      | undefined
+      | undefined,
   ): string | null {
     if (!model) {
       return null;

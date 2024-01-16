@@ -41,7 +41,7 @@ describe('SortUtils', () => {
 
       when('the team is sorted for morning standup', () => {
         const theOriginalPrimeTeamAtStandup = theOriginalPrimeTeam.sort(
-          utils.sortByKey('name')
+          utils.sortByKey('name'),
         );
 
         then('it should be in ascending order based on name', () => {

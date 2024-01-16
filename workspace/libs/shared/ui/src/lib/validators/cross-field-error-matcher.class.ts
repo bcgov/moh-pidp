@@ -4,7 +4,7 @@ import { ErrorStateMatcher } from '@angular/material/core';
 export class CrossFieldErrorMatcher implements ErrorStateMatcher {
   public isErrorState(
     control: AbstractControl | null,
-    form: FormGroupDirective | NgForm | null
+    form: FormGroupDirective | NgForm | null,
   ): boolean {
     return (
       ((control?.dirty && control.invalid) ||

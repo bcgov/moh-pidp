@@ -15,7 +15,7 @@ export class SortUtils {
    */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public static sortByKey<T extends { [key: string]: any }>(
-    key: keyof T
+    key: keyof T,
   ): (a: T, b: T) => SortWeight {
     return (a: T, b: T): SortWeight => this.sort<T>(a[key], b[key]);
   }
