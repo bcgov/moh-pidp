@@ -24,7 +24,7 @@ export class AbstractFormDependenciesService {
   public constructor(
     public dialog: MatDialog,
     public formUtilsService: FormUtilsService,
-    public loadingOverlayService: LoadingOverlayService
+    public loadingOverlayService: LoadingOverlayService,
   ) {}
 }
 export interface IFormPage {
@@ -82,7 +82,7 @@ export interface IFormPage {
  */
 export abstract class AbstractFormPage<
   T extends AbstractFormState<unknown> = AbstractFormState<unknown>,
-  S = unknown
+  S = unknown,
 > implements IFormPage
 {
   /**
@@ -132,7 +132,7 @@ export abstract class AbstractFormPage<
   protected canDeactivateAllowlist: string[];
 
   protected constructor(
-    protected dependencies: AbstractFormDependenciesService // protected dialog: MatDialog, // protected formUtilsService: FormUtilsService, // protected loadingOverlayService: LoadingOverlayService
+    protected dependencies: AbstractFormDependenciesService, // protected dialog: MatDialog, // protected formUtilsService: FormUtilsService, // protected loadingOverlayService: LoadingOverlayService
   ) {
     this.hasAttemptedSubmission = false;
     this.allowRoutingWhenDirty = false;
@@ -151,7 +151,7 @@ export abstract class AbstractFormPage<
       const showLoadingOverlay = this.showOverlayOnSubmit;
       if (showLoadingOverlay) {
         this.dependencies.loadingOverlayService.open(
-          this.loadingOverlayMessageText
+          this.loadingOverlayMessageText,
         );
       }
       this.performSubmission()
@@ -167,7 +167,7 @@ export abstract class AbstractFormPage<
               this.dependencies.loadingOverlayService.close();
             }
             return throwError(() => error);
-          })
+          }),
         )
         .subscribe((response?: S) => this.afterSubmitIsSuccessful(response));
     } else {
@@ -195,8 +195,8 @@ export abstract class AbstractFormPage<
           .afterClosed()
           .pipe(
             map((dialogResult: boolean) =>
-              this.handleDeactivation(dialogResult)
-            )
+              this.handleDeactivation(dialogResult),
+            ),
           )
       : true;
   }

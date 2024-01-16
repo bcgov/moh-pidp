@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
+import { ResolveFn } from '@angular/router';
 
 import { landingActionsResolver } from './landing-actions.resolver';
-import { ResolveFn } from '@angular/router';
 
 describe('landingActionsResolver', () => {
   const executeResolver: ResolveFn<null> = (...resolverParameters) =>

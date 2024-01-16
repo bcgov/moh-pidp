@@ -36,7 +36,7 @@ export class AddressAutocompleteComponent implements OnInit {
   public constructor(
     private fb: FormBuilder,
     private toastService: ToastService,
-    private addressAutocompleteResource: AddressAutocompleteResource
+    private addressAutocompleteResource: AddressAutocompleteResource,
   ) {
     this.inBc = false;
     this.autocompleteAddress = new EventEmitter<Address>();
@@ -61,7 +61,7 @@ export class AddressAutocompleteComponent implements OnInit {
             addressRetrieved.provinceCode,
             addressRetrieved.line1,
             addressRetrieved.city,
-            addressRetrieved.postalCode
+            addressRetrieved.postalCode,
           );
 
           !this.inBc || address.provinceCode === Province.BRITISH_COLUMBIA
@@ -86,11 +86,11 @@ export class AddressAutocompleteComponent implements OnInit {
         switchMap((value: string) => {
           this.addressAutocompleteFields = [];
           return value ? this.addressAutocompleteResource.find(value) : EMPTY;
-        })
+        }),
       )
       .subscribe(
         (response: AddressAutocompleteFindResponse[]) =>
-          (this.addressAutocompleteFields = response)
+          (this.addressAutocompleteFields = response),
       );
   }
 }

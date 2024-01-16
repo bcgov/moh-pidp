@@ -20,7 +20,7 @@ describe('UtilsService', () => {
           useValue: {},
         },
       ],
-    })
+    }),
   );
 
   it('should create', () => {

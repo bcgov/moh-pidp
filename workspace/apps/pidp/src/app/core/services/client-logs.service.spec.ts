@@ -1,16 +1,19 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { HttpErrorResponse } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 
+import { of, throwError } from 'rxjs';
+
+import { Spy, provideAutoSpy } from 'jest-auto-spies';
+
+import { NoContentResponse } from '@bcgov/shared/data-access';
+
+import { ApiHttpClient } from '../resources/api-http-client.service';
 import {
   ClientLog,
   ClientLogsService,
   MicrosoftLogLevel,
 } from './client-logs.service';
-import { Spy, provideAutoSpy } from 'jest-auto-spies';
-import { ApiHttpClient } from '../resources/api-http-client.service';
-import { of, throwError } from 'rxjs';
-import { HttpErrorResponse } from '@angular/common/http';
-import { NoContentResponse } from '@bcgov/shared/data-access';
 
 describe('ClientLogsService', () => {
   let service: ClientLogsService;

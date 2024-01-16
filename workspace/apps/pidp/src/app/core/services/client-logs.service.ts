@@ -1,8 +1,11 @@
-import { Injectable } from '@angular/core';
-import { ApiHttpClient } from '../resources/api-http-client.service';
-import { NoContent, NoContentResponse } from '@bcgov/shared/data-access';
-import { catchError, throwError } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+
+import { catchError, throwError } from 'rxjs';
+
+import { NoContent, NoContentResponse } from '@bcgov/shared/data-access';
+
+import { ApiHttpClient } from '../resources/api-http-client.service';
 
 export interface ClientLog {
   message: string;
