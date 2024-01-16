@@ -9,7 +9,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class ComplianceTrainingPage {
   public title: string;
 
-  public constructor(private route: ActivatedRoute, private router: Router) {
+  public constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+  ) {
     this.title = this.route.snapshot.data.title;
   }
 

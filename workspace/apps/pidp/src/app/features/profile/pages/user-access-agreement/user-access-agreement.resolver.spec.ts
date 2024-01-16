@@ -1,8 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { HttpStatusCode } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
+import {
+  ActivatedRouteSnapshot,
+  ResolveFn,
+  RouterStateSnapshot,
+} from '@angular/router';
+
+import { Observable } from 'rxjs';
 
 import { randNumber } from '@ngneat/falso';
+import { MockProfileStatus } from '@test/mock-profile-status';
 import { Spy, createSpyFromClass, provideAutoSpy } from 'jest-auto-spies';
 
 import { PartyService } from '@app/core/party/party.service';
@@ -11,13 +19,6 @@ import { ProfileStatus } from '@app/features/portal/models/profile-status.model'
 
 import { UserAccessAgreementResource } from './user-access-agreement-resource.service';
 import { userAccessAgreementResolver } from './user-access-agreement.resolver';
-import { MockProfileStatus } from '@test/mock-profile-status';
-import {
-  ActivatedRouteSnapshot,
-  ResolveFn,
-  RouterStateSnapshot,
-} from '@angular/router';
-import { Observable } from 'rxjs';
 
 describe('userAccessAgreementResolver', () => {
   const executeResolver: ResolveFn<StatusCode | null> = (

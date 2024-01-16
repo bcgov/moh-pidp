@@ -16,7 +16,7 @@ import { AdministratorInformation } from './administrator-information.model';
 export class AdministratorInformationResource extends CrudResource<AdministratorInformation> {
   public constructor(
     protected apiResource: ApiHttpClient,
-    private toastService: ToastService
+    private toastService: ToastService,
   ) {
     super(apiResource);
   }
@@ -25,15 +25,15 @@ export class AdministratorInformationResource extends CrudResource<Administrator
     return super.update(id, payload).pipe(
       tap(() =>
         this.toastService.openSuccessToast(
-          'Administrator information has been updated'
-        )
+          'Administrator information has been updated',
+        ),
       ),
       catchError((error: HttpErrorResponse) => {
         this.toastService.openErrorToast(
-          'Administrator information could not be updated'
+          'Administrator information could not be updated',
         );
         return throwError(() => error);
-      })
+      }),
     );
   }
 

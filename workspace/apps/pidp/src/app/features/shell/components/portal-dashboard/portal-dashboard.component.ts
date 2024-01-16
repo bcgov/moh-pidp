@@ -46,13 +46,13 @@ export class PortalDashboardComponent implements IDashboard, OnInit {
     private permissionsService: PermissionsService,
     accessTokenService: AccessTokenService,
     private dashboardStateService: DashboardStateService,
-    private stateService: AppStateService
+    private stateService: AppStateService,
   ) {
     this.logoutRedirectUrl = `${this.config.applicationUrl}/${this.config.routes.auth}`;
     this.username = accessTokenService.decodeToken().pipe(
       map((token) => {
         return token?.name ?? '';
-      })
+      }),
     );
     this.headerConfig = { theme: 'light', allowMobileToggle: true };
     this.brandConfig = {
@@ -67,14 +67,14 @@ export class PortalDashboardComponent implements IDashboard, OnInit {
     this.dashboardState$ = this.stateService.stateBroadcast$.pipe(
       map((state) => {
         const dashboardNamedState = state.all.find(
-          (x) => x.stateName === PidpStateName.dashboard
+          (x) => x.stateName === PidpStateName.dashboard,
         );
         if (!dashboardNamedState) {
           throw 'dashboard state not found';
         }
         const dashboardState = dashboardNamedState as DashboardStateModel;
         return dashboardState;
-      })
+      }),
     );
   }
   public ngOnInit(): void {
@@ -100,7 +100,7 @@ export class PortalDashboardComponent implements IDashboard, OnInit {
           extras: { fragment: 'profile' },
           linkActiveOptions,
         },
-        'assignment_ind'
+        'assignment_ind',
       ),
       ...ArrayUtils.insertResultIf<DashboardRouteMenuItem>(
         this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
@@ -112,9 +112,9 @@ export class PortalDashboardComponent implements IDashboard, OnInit {
               extras: { fragment: 'organization' },
               linkActiveOptions,
             },
-            'corporate_fare'
+            'corporate_fare',
           ),
-        ]
+        ],
       ),
       new DashboardRouteMenuItem(
         'Access to Systems',
@@ -123,7 +123,7 @@ export class PortalDashboardComponent implements IDashboard, OnInit {
           extras: { fragment: 'access' },
           linkActiveOptions,
         },
-        'assignment'
+        'assignment',
       ),
       ...ArrayUtils.insertResultIf<DashboardRouteMenuItem>(
         this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
@@ -135,9 +135,9 @@ export class PortalDashboardComponent implements IDashboard, OnInit {
               extras: { fragment: 'training' },
               linkActiveOptions,
             },
-            'school'
+            'school',
           ),
-        ]
+        ],
       ),
       new DashboardRouteMenuItem(
         'History',
@@ -146,7 +146,7 @@ export class PortalDashboardComponent implements IDashboard, OnInit {
           extras: { fragment: 'history' },
           linkActiveOptions,
         },
-        'restore'
+        'restore',
       ),
       new DashboardRouteMenuItem(
         'FAQ',
@@ -155,7 +155,7 @@ export class PortalDashboardComponent implements IDashboard, OnInit {
           extras: { fragment: 'faq' },
           linkActiveOptions,
         },
-        'help_outline'
+        'help_outline',
       ),
       new DashboardRouteMenuItem(
         'Get Support',
@@ -164,7 +164,7 @@ export class PortalDashboardComponent implements IDashboard, OnInit {
           extras: { fragment: 'support' },
           linkActiveOptions,
         },
-        'help_outline'
+        'help_outline',
       ),
     ];
   }

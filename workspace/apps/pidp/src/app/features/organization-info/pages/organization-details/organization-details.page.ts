@@ -45,7 +45,7 @@ export class OrganizationDetailsPage
     private resource: OrganizationDetailsResource,
     private logger: LoggerService,
     private lookupService: LookupService,
-    fb: FormBuilder
+    fb: FormBuilder,
   ) {
     super(dependenciesService);
 
@@ -56,7 +56,7 @@ export class OrganizationDetailsPage
       (organization) => ({
         ...organization,
         disabled: organization.code !== OrganizationCode.HealthAuthority,
-      })
+      }),
     );
     this.healthAuthorities = this.lookupService.healthAuthorities;
   }
@@ -76,14 +76,14 @@ export class OrganizationDetailsPage
       .get(partyId)
       .pipe(
         tap((model: OrganizationDetails | null) =>
-          this.formState.patchValue(model)
+          this.formState.patchValue(model),
         ),
         catchError((error: HttpErrorResponse) => {
           if (error.status === HttpStatusCode.NotFound) {
             this.navigateToRoot();
           }
           return of(null);
-        })
+        }),
       )
       .subscribe();
   }

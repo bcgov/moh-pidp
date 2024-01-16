@@ -19,7 +19,7 @@ export class SystemCardComponent {
 
   public constructor(private viewportService: ViewportService) {
     this.viewportService.viewportBroadcast$.subscribe((viewport) =>
-      this.onViewportChange(viewport)
+      this.onViewportChange(viewport),
     );
   }
   private onViewportChange(viewport: PidpViewport): void {
@@ -47,7 +47,7 @@ export class SystemCardComponent {
   }
   private getImageUrlFromFormat(
     index: number,
-    format: 'webp' | 'jpeg'
+    format: 'webp' | 'jpeg',
   ): string {
     switch (format) {
       case 'webp':

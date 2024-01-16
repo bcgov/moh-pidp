@@ -29,7 +29,7 @@ export class AdminDashboardComponent implements IDashboard {
   public constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
     private authService: AuthService,
-    accessTokenService: AccessTokenService
+    accessTokenService: AccessTokenService,
   ) {
     this.logoutRedirectUrl = `${this.config.applicationUrl}/${this.config.routes.auth}/${AdminRoutes.MODULE_PATH}`;
     this.username = accessTokenService

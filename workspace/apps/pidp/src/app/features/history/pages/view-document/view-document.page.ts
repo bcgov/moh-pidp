@@ -24,7 +24,7 @@ export class ViewDocumentPage implements OnInit {
   public constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private documentService: DocumentService
+    private documentService: DocumentService,
   ) {
     this.title = route.snapshot.data.title;
   }
@@ -38,7 +38,7 @@ export class ViewDocumentPage implements OnInit {
 
   public ngOnInit(): void {
     const document = this.documentService.getDocumentByType(
-      this.route.snapshot.params.doctype
+      this.route.snapshot.params.doctype,
     );
 
     if (typeof document.content !== 'string') {
