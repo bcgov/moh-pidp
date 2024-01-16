@@ -29,7 +29,7 @@ export class LoadingInterceptor implements HttpInterceptor {
 
   public intercept(
     request: HttpRequest<unknown>,
-    next: HttpHandler
+    next: HttpHandler,
   ): Observable<HttpEvent<unknown>> {
     const withMessage = request.context.get(SHOW_LOADING_MESSAGE);
 
@@ -43,7 +43,7 @@ export class LoadingInterceptor implements HttpInterceptor {
         if (this.totalRequests <= 0) {
           this.loadingService.hide();
         }
-      })
+      }),
     );
   }
 }

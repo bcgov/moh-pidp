@@ -69,7 +69,7 @@ export class DashboardMenuComponent {
    * Helper to assist with issues with type narrowing in templates.
    */
   public asDashboardRouteMenuItem(
-    menuItem: DashboardMenuItem
+    menuItem: DashboardMenuItem,
   ): DashboardRouteMenuItem {
     return menuItem as DashboardRouteMenuItem;
   }

@@ -22,7 +22,7 @@ export class LayoutHeaderFooterComponent {
 
   public constructor(viewportService: ViewportService) {
     viewportService.viewportBroadcast$.subscribe((viewport) =>
-      this.onViewportChange(viewport)
+      this.onViewportChange(viewport),
     );
   }
   private onViewportChange(viewport: PidpViewport): void {

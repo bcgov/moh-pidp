@@ -25,7 +25,7 @@ export class SafePipe implements PipeTransform {
   public transform(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     value: any,
-    type: DomSanitizerType
+    type: DomSanitizerType,
   ): SafeHtml | SafeStyle | SafeScript | SafeUrl | SafeResourceUrl {
     if (!value) {
       return value;

@@ -8,7 +8,7 @@ export class ReplacePipe implements PipeTransform {
   public transform(
     value: string,
     replace: string,
-    replaceWith: string
+    replaceWith: string,
   ): string {
     return value ? value.replace(new RegExp(replace, 'g'), replaceWith) : value;
   }

@@ -6,7 +6,7 @@ import { PermissionsGuard } from './permissions.guard';
 describe('PermissionsGuard canActivate', () => {
   const executeGuard: CanActivateFn = (...guardParameters) =>
     TestBed.runInInjectionContext(() =>
-      PermissionsGuard.canActivate(...guardParameters)
+      PermissionsGuard.canActivate(...guardParameters),
     );
 
   beforeEach(() => {
@@ -21,7 +21,7 @@ describe('PermissionsGuard canActivate', () => {
 describe('PermissionsGuard canActivateChild', () => {
   const executeGuard: CanActivateChildFn = (...guardParameters) =>
     TestBed.runInInjectionContext(() =>
-      PermissionsGuard.canActivateChild(...guardParameters)
+      PermissionsGuard.canActivateChild(...guardParameters),
     );
 
   beforeEach(() => {
@@ -36,7 +36,7 @@ describe('PermissionsGuard canActivateChild', () => {
 describe('PermissionsGuard CanMatchFn', () => {
   const executeGuard: CanMatchFn = (...guardParameters) =>
     TestBed.runInInjectionContext(() =>
-      PermissionsGuard.canMatch(...guardParameters)
+      PermissionsGuard.canMatch(...guardParameters),
     );
 
   beforeEach(() => {

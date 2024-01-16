@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
+import { ResolveFn } from '@angular/router';
 
 import { partyActionsResolver } from './party-actions.resolver';
-import { ResolveFn } from '@angular/router';
 
 describe('partyActionsResolver', () => {
   const executeResolver: ResolveFn<number | null> = (...resolverParameters) =>

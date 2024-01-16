@@ -15,7 +15,7 @@ import { LookupConfig } from './lookup.types';
 export class LookupResource {
   public constructor(
     private apiResource: ApiHttpClient,
-    private resourceUtilsService: ResourceUtilsService
+    private resourceUtilsService: ResourceUtilsService,
   ) {}
 
   /**
@@ -27,7 +27,7 @@ export class LookupResource {
       map((lookupConfig: LookupConfig) => lookupConfig),
       // Catch and release to allow the application to render
       // views regardless of the presence of the lookups
-      catchError((_) => of(null))
+      catchError((_) => of(null)),
     );
   }
 
@@ -43,7 +43,7 @@ export class LookupResource {
           }
 
           throw error;
-        })
+        }),
       );
   }
 }

@@ -30,7 +30,10 @@ import { RootRouteContainerComponent } from '../../shared/root-route-container/r
     imports: [RootRouteContainerComponent, MatButtonModule],
 })
 export class AccessDeniedComponent {
-  public constructor(private route: ActivatedRoute, private router: Router) {}
+  public constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+  ) {}
 
   public routeToRoot(): void {
     this.router.navigateByUrl(RouteUtils.currentModulePath(this.route));

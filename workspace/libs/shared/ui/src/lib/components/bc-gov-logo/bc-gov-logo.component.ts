@@ -63,7 +63,7 @@ export class BcGovLogoComponent implements OnInit {
 
   private getDimensions(
     size: svgSize,
-    viewbox: number[]
+    viewbox: number[],
   ): Pick<SvgConfig, 'width' | 'height'> {
     return {
       width: `${viewbox[2] * this.scale[size]}px`,
