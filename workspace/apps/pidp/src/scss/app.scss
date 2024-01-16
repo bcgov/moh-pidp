@@ -13,7 +13,8 @@
 @font-face {
   font-family: 'BCSans';
   font-style: normal;
-  src: local('BCSans'),
+  src:
+    local('BCSans'),
     url('../assets/fonts/BCSans/BCSans-Regular.woff2') format('woff2'),
     url('../assets/fonts/BCSans/BCSans-Regular.woff') format('woff');
   font-display: swap;
@@ -21,14 +22,16 @@
 @font-face {
   font-family: 'BCSans';
   font-style: italic;
-  src: local('BCSans-Italic'),
+  src:
+    local('BCSans-Italic'),
     url('../assets/fonts/BCSans/BCSans-Italic.woff2') format('woff2'),
     url('../assets/fonts/BCSans/BCSans-Italic.woff') format('woff');
 }
 @font-face {
   font-family: 'BCSans';
   font-weight: 700;
-  src: local('BCSans-Bold'),
+  src:
+    local('BCSans-Bold'),
     url('../assets/fonts/BCSans/BCSans-Bold.woff2') format('woff2'),
     url('../assets/fonts/BCSans/BCSans-Bold.woff') format('woff');
 }
@@ -36,7 +39,8 @@
   font-family: 'BCSans';
   font-style: italic;
   font-weight: 700;
-  src: local('BCSans-BoldItalic'),
+  src:
+    local('BCSans-BoldItalic'),
     url('../assets/fonts/BCSans/BCSans-BoldItalic.woff2') format('woff2'),
     url('../assets/fonts/BCSans/BCSans-BoldItalic.woff') format('woff');
 }

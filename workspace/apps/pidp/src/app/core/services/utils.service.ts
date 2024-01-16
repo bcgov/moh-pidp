@@ -13,7 +13,7 @@ export type SortWeight = -1 | 0 | 1;
 export class UtilsService {
   public constructor(
     @Inject(WINDOW) private window: Window,
-    @Inject(DOCUMENT) private document: Document
+    @Inject(DOCUMENT) private document: Document,
   ) {}
 
   /**

@@ -1,3 +1,4 @@
+import { Injector, inject, runInInjectionContext } from '@angular/core';
 import {
   ActivatedRouteSnapshot,
   ResolveFn,
@@ -6,9 +7,8 @@ import {
 
 import { Observable, map, switchMap } from 'rxjs';
 
-import { partyResolver } from './party.resolver';
 import { landingActionsResolver } from './landing-actions.resolver';
-import { Injector, inject, runInInjectionContext } from '@angular/core';
+import { partyResolver } from './party.resolver';
 
 /**
  * @description
