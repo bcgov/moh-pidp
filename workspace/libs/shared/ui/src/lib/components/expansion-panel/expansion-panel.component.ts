@@ -39,7 +39,7 @@ export class ExpansionPanelComponent {
       .pipe(
         distinctUntilChanged((x, y) => {
           return x.fromState === y.fromState && x.toState === y.toState;
-        })
+        }),
       )
       .subscribe((event: AnimationEvent) => {
         if (event.fromState !== 'void') {

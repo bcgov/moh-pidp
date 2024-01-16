@@ -24,7 +24,10 @@ import { RouteUtils } from '@bcgov/shared/utils';
   styleUrls: ['../../shared/root-route-page-styles.scss'],
 })
 export class PageNotFoundComponent {
-  public constructor(private route: ActivatedRoute, private router: Router) {}
+  public constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+  ) {}
 
   public routeToRoot(): void {
     this.router.navigateByUrl(RouteUtils.currentModulePath(this.route));

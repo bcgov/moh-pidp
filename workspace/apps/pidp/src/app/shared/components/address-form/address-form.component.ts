@@ -58,7 +58,7 @@ export class AddressFormComponent implements OnInit {
 
   public constructor(
     private lookupService: LookupService,
-    private formUtilsService: FormUtilsService
+    private formUtilsService: FormUtilsService,
   ) {
     this.formControlNames = [
       'countryCode',
@@ -137,7 +137,7 @@ export class AddressFormComponent implements OnInit {
 
   private setAddress(countryCode: string): void {
     this.filteredProvinces = this.provinces.filter(
-      (p) => p.countryCode === this.countryCode.value
+      (p) => p.countryCode === this.countryCode.value,
     );
     this.setAddressLabels(countryCode);
   }

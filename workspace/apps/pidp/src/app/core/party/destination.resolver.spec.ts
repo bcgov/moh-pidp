@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
+import { ResolveFn } from '@angular/router';
 
 import { destinationResolver } from './destination.resolver';
-import { ResolveFn } from '@angular/router';
 import { Destination } from './discovery-resource.service';
 
 describe('destinationResolver', () => {

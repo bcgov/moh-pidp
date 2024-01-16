@@ -1,8 +1,9 @@
 import { Component, DebugElement } from '@angular/core';
-import { TrimDirective } from './trim.directive';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { By } from '@angular/platform-browser';
+
+import { TrimDirective } from './trim.directive';
 
 @Component({
   selector: 'ui-input-test',

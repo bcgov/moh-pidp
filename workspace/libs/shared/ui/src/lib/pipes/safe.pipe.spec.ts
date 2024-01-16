@@ -6,17 +6,15 @@ import { DomSanitizerType, SafePipe } from './safe.pipe';
 describe('SafePipe', () => {
   let pipe: SafePipe;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        providers: [],
-      });
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      providers: [],
+    });
+  }));
 
   beforeEach(inject(
     [DomSanitizer],
-    (sanitizer: DomSanitizer) => (pipe = new SafePipe(sanitizer))
+    (sanitizer: DomSanitizer) => (pipe = new SafePipe(sanitizer)),
   ));
 
   it('create an instance', () => expect(pipe).toBeTruthy());
@@ -40,7 +38,7 @@ describe('SafePipe', () => {
     try {
       result = domSanitizerTypes.reduce(
         (finalResult, type) => finalResult && !!pipe.transform(value, type),
-        result
+        result,
       );
     } catch (e) {
       result = false;

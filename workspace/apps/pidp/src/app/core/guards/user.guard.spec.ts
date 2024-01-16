@@ -6,11 +6,13 @@ import {
   RouterStateSnapshot,
 } from '@angular/router';
 
-import { userGuard } from './user.guard';
 import { Spy, createSpyFromClass, provideAutoSpy } from 'jest-auto-spies';
-import { AuthorizedUserService } from '@app/features/auth/services/authorized-user.service';
+
 import { APP_CONFIG, APP_DI_CONFIG } from '@app/app.config';
+import { AuthorizedUserService } from '@app/features/auth/services/authorized-user.service';
 import { Role } from '@app/shared/enums/roles.enum';
+
+import { userGuard } from './user.guard';
 
 describe('userGuard', () => {
   let activatedRouteSnapshotSpy: Spy<ActivatedRouteSnapshot>;
