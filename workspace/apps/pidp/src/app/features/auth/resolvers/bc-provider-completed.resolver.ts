@@ -1,11 +1,13 @@
 import { inject } from '@angular/core';
 import { ResolveFn, Router } from '@angular/router';
+
+import { map } from 'rxjs';
+
 import { PartyService } from '@app/core/party/party.service';
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
 import { ProfileStatus } from '@app/features/portal/models/profile-status.model';
 import { PortalResource } from '@app/features/portal/portal-resource.service';
 import { PortalRoutes } from '@app/features/portal/portal.routes';
-import { map } from 'rxjs';
 
 export const bcProviderCompletedResolver: ResolveFn<
   boolean | null | Promise<boolean>

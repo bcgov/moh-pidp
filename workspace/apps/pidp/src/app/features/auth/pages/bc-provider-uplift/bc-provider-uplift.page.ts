@@ -19,7 +19,7 @@ export class BcProviderUpliftPage {
 
   public constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
-    private authService: AuthService
+    private authService: AuthService,
   ) {
     this.bcscMobileSetupUrl = this.config.urls.bcscMobileSetup;
     this.logoutRedirectUrl = `${this.config.applicationUrl}/`;

@@ -69,7 +69,7 @@ describe('ViewDocumentPage', () => {
               HistoryRoutes.MODULE_PATH,
               HistoryRoutes.SIGNED_ACCEPTED_DOCUMENTS,
             ]);
-          }
+          },
         );
       });
     });

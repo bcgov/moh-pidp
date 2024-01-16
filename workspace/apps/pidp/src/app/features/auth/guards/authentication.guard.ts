@@ -11,13 +11,13 @@ import { AuthenticationGuardService } from './services/authentication-guard.serv
 
 export abstract class AuthenticationGuard {
   public static canActivate: CanActivateFn = (
-    route: ActivatedRouteSnapshot
+    route: ActivatedRouteSnapshot,
   ) => {
     return inject(AuthenticationGuardService).canActivate(route);
   };
 
   public static canActivateChild: CanActivateChildFn = (
-    childRoute: ActivatedRouteSnapshot
+    childRoute: ActivatedRouteSnapshot,
   ) => {
     return inject(AuthenticationGuardService).canActivateChild(childRoute);
   };

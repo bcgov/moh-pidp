@@ -19,7 +19,7 @@ export class SupportErrorPage {
 
   public constructor(
     private router: Router,
-    @Inject(APP_CONFIG) private config: AppConfig
+    @Inject(APP_CONFIG) private config: AppConfig,
   ) {
     this.headerConfig = { theme: 'light', allowMobileToggle: false };
     this.providerIdentitySupport = this.config.emails.providerIdentitySupport;

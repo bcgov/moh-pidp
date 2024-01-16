@@ -6,12 +6,14 @@ import {
   RouterStateSnapshot,
 } from '@angular/router';
 
+import { Spy, createSpyFromClass, provideAutoSpy } from 'jest-auto-spies';
+
+import { APP_CONFIG, APP_DI_CONFIG } from '@app/app.config';
+
 import {
   RedirectOnFeatureFlagConfigGuardRouteData,
   redirectOnFeatureFlagConfigGuard,
 } from './redirect-on-feature-flag.guard';
-import { Spy, createSpyFromClass, provideAutoSpy } from 'jest-auto-spies';
-import { APP_CONFIG, APP_DI_CONFIG } from '@app/app.config';
 
 describe('redirectOnFeatureFlagConfigGuard', () => {
   let activatedRouteSnapshotSpy: Spy<ActivatedRouteSnapshot>;

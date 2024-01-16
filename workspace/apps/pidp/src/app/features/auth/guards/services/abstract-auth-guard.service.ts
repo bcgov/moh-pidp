@@ -8,7 +8,7 @@ export abstract class AuthGuardService {
   public constructor(protected authService: AuthService) {}
 
   public canActivate(
-    route: ActivatedRouteSnapshot
+    route: ActivatedRouteSnapshot,
   ):
     | Observable<boolean | UrlTree>
     | Promise<boolean | UrlTree>
@@ -18,7 +18,7 @@ export abstract class AuthGuardService {
   }
 
   public canActivateChild(
-    childRoute: ActivatedRouteSnapshot
+    childRoute: ActivatedRouteSnapshot,
   ):
     | Observable<boolean | UrlTree>
     | Promise<boolean | UrlTree>
@@ -28,7 +28,7 @@ export abstract class AuthGuardService {
   }
 
   public canMatch(
-    route: Route
+    route: Route,
   ):
     | Observable<boolean | UrlTree>
     | Promise<boolean | UrlTree>
@@ -38,14 +38,14 @@ export abstract class AuthGuardService {
   }
 
   protected checkAccess(
-    routeRedirect: string | undefined
+    routeRedirect: string | undefined,
   ): Observable<boolean | UrlTree> {
     return this.authService.isLoggedIn().pipe(
       map(this.handleAccessCheck(routeRedirect)),
       catchError((error) => {
         console.error('Error occurred during access validation: ', error);
         return of(this.handleAccessError());
-      })
+      }),
     );
   }
 
@@ -55,7 +55,7 @@ export abstract class AuthGuardService {
    * should be provided access or redirected.
    */
   protected abstract handleAccessCheck(
-    routeRedirect: string | undefined
+    routeRedirect: string | undefined,
   ): (authenticated: boolean) => boolean | UrlTree;
 
   /**
