@@ -7,7 +7,8 @@ import { PidpViewport, ViewportService } from '../services';
  * that can be used to indicate css for all viewports.
  */
 @Directive({
-  selector: '[uiPidpInjectViewportCss]',
+    selector: '[uiPidpInjectViewportCss]',
+    standalone: true,
 })
 export class InjectViewportCssClassDirective {
   @HostBinding('class.viewport-xsmall') public viewportXsClass = false;

@@ -1,5 +1,9 @@
+import { NgIf } from '@angular/common';
 import { Component, OnInit, Type, ViewChild } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
 import { ActivatedRoute, Router } from '@angular/router';
+
+import { SharedUiModule } from '@bcgov/shared/ui';
 
 import {
   DocumentService,
@@ -13,6 +17,8 @@ import { ViewDocumentDirective } from './view-document.directive';
   selector: 'app-view-document',
   templateUrl: './view-document.page.html',
   styleUrls: ['./view-document.page.scss'],
+  standalone: true,
+  imports: [SharedUiModule, NgIf, ViewDocumentDirective, MatButtonModule],
 })
 export class ViewDocumentPage implements OnInit {
   public title: string;
@@ -24,7 +30,7 @@ export class ViewDocumentPage implements OnInit {
   public constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private documentService: DocumentService
+    private documentService: DocumentService,
   ) {
     this.title = route.snapshot.data.title;
   }
@@ -38,7 +44,7 @@ export class ViewDocumentPage implements OnInit {
 
   public ngOnInit(): void {
     const document = this.documentService.getDocumentByType(
-      this.route.snapshot.params.doctype
+      this.route.snapshot.params.doctype,
     );
 
     if (typeof document.content !== 'string') {

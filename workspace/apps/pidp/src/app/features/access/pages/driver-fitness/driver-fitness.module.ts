@@ -7,7 +7,6 @@ import { DriverFitnessRoutingModule } from './driver-fitness-routing.module';
 import { DriverFitnessPage } from './driver-fitness.page';
 
 @NgModule({
-  declarations: [DriverFitnessPage],
-  imports: [DriverFitnessRoutingModule, SharedModule, AccessModule],
+    imports: [DriverFitnessRoutingModule, SharedModule, AccessModule, DriverFitnessPage],
 })
 export class DriverFitnessModule {}

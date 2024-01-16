@@ -1,6 +1,8 @@
+import { NgIf } from '@angular/common';
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { MatButtonModule } from '@angular/material/button';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
 import { catchError, noop, of, tap } from 'rxjs';
 
@@ -10,10 +12,13 @@ import {
   LoadingOverlayService,
 } from '@pidp/presentation';
 
+import { SharedUiModule } from '@bcgov/shared/ui';
+
 import { PartyService } from '@app/core/party/party.service';
 import { LoggerService } from '@app/core/services/logger.service';
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
 
+import { EnrolmentErrorComponent } from '../../components/enrolment-error/enrolment-error.component';
 import { DriverFitnessResource } from './driver-fitness-resource.service';
 import {
   driverFitnessSupportEmail,
@@ -25,6 +30,14 @@ import {
   selector: 'app-driver-fitness',
   templateUrl: './driver-fitness.page.html',
   styleUrls: ['./driver-fitness.page.scss'],
+  standalone: true,
+  imports: [
+    SharedUiModule,
+    NgIf,
+    EnrolmentErrorComponent,
+    RouterLink,
+    MatButtonModule,
+  ],
 })
 export class DriverFitnessPage implements OnInit {
   public driverFitnessUrl: string;

@@ -7,7 +7,6 @@ import { ViewDocumentPage } from './view-document.page';
 import { ViewDocumentDirective } from './view-document.directive';
 
 @NgModule({
-  declarations: [ViewDocumentPage, ViewDocumentDirective],
-  imports: [ViewDocumentRoutingModule, SharedModule],
+    imports: [ViewDocumentRoutingModule, SharedModule, ViewDocumentPage, ViewDocumentDirective],
 })
 export class ViewDocumentModule {}

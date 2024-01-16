@@ -5,7 +5,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { randTextRange } from '@ngneat/falso';
 import { provideAutoSpy } from 'jest-auto-spies';
 
-import { RootRouteContainerComponent } from '../../shared/root-route-container/root-route-container.component';
 import { AccessDeniedComponent } from './access-denied.component';
 
 describe('AccessDeniedComponent', () => {
@@ -27,7 +26,6 @@ describe('AccessDeniedComponent', () => {
     };
 
     await TestBed.configureTestingModule({
-      declarations: [AccessDeniedComponent, RootRouteContainerComponent],
       providers: [
         {
           provide: ActivatedRoute,

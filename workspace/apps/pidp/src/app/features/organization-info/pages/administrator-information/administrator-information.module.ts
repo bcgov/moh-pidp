@@ -6,7 +6,6 @@ import { AdministratorInformationRoutingModule } from './administrator-informati
 import { AdministratorInformationPage } from './administrator-information.page';
 
 @NgModule({
-  declarations: [AdministratorInformationPage],
-  imports: [AdministratorInformationRoutingModule, SharedModule],
+    imports: [AdministratorInformationRoutingModule, SharedModule, AdministratorInformationPage],
 })
 export class AdministratorInformationModule {}

@@ -9,7 +9,6 @@ describe('YesNoContentComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [YesNoContentComponent],
       imports: [MatRadioModule],
     }).compileComponents();
   });

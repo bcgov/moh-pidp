@@ -1,11 +1,17 @@
 import { Component, Input } from '@angular/core';
 
-import { PidpViewport, ViewportService } from '@bcgov/shared/ui';
+import {
+  PidpViewport,
+  SharedUiModule,
+  ViewportService,
+} from '@bcgov/shared/ui';
 
 @Component({
   selector: 'app-auth-system-card',
   templateUrl: './system-card.page.html',
   styleUrls: ['./system-card.page.scss'],
+  standalone: true,
+  imports: [SharedUiModule],
 })
 export class SystemCardComponent {
   @Input() public titleText = '';
@@ -19,7 +25,7 @@ export class SystemCardComponent {
 
   public constructor(private viewportService: ViewportService) {
     this.viewportService.viewportBroadcast$.subscribe((viewport) =>
-      this.onViewportChange(viewport)
+      this.onViewportChange(viewport),
     );
   }
   private onViewportChange(viewport: PidpViewport): void {
@@ -47,7 +53,7 @@ export class SystemCardComponent {
   }
   private getImageUrlFromFormat(
     index: number,
-    format: 'webp' | 'jpeg'
+    format: 'webp' | 'jpeg',
   ): string {
     switch (format) {
       case 'webp':

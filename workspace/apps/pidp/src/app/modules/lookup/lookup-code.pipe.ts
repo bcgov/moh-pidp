@@ -4,7 +4,8 @@ import { LookupService } from './lookup.service';
 import { Lookup, LookupConfig } from './lookup.types';
 
 @Pipe({
-  name: 'lookupCode',
+    name: 'lookupCode',
+    standalone: true,
 })
 export class LookupCodePipe implements PipeTransform {
   public constructor(private lookupService: LookupService) {}

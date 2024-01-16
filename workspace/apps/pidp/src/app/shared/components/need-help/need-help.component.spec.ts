@@ -14,7 +14,6 @@ describe('NeedHelpComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [NeedHelpComponent],
       imports: [NoopAnimationsModule, SharedUiModule],
       providers: [
         {
@@ -39,17 +38,17 @@ describe('NeedHelpComponent', () => {
           'the help section should contain "Need help?" text and help panel hidden',
           () => {
             const needHelpLink = fixture.debugElement.query(
-              By.css('.need-help-header button.pidp-btn-link')
+              By.css('.need-help-header button.pidp-btn-link'),
             );
             expect(needHelpLink.nativeElement.innerHTML).toContain(
-              'Need Help?'
+              'Need Help?',
             );
 
             const expansionPanelContent = fixture.debugElement.query(
-              By.css('.expansion-panel-content')
+              By.css('.expansion-panel-content'),
             );
             expect(expansionPanelContent.styles.visibility).toBe('hidden');
-          }
+          },
         );
       });
     });
@@ -66,7 +65,7 @@ describe('NeedHelpComponent', () => {
         then('the help panel should be visible', () => {
           expect(component.showNeedHelp).toBeTruthy();
           const expansionPanelContent = fixture.debugElement.query(
-            By.css('.expansion-panel-content')
+            By.css('.expansion-panel-content'),
           );
           expect(expansionPanelContent.styles.visibility).toBe('');
         });
@@ -83,7 +82,7 @@ describe('NeedHelpComponent', () => {
         then('the help panel should be hidden', () => {
           expect(component.showNeedHelp).toBeFalsy();
           const expansionPanelContent = fixture.debugElement.query(
-            By.css('.expansion-panel-content')
+            By.css('.expansion-panel-content'),
           );
           expect(expansionPanelContent.styles.visibility).toBe('hidden');
         });
@@ -101,7 +100,7 @@ describe('NeedHelpComponent', () => {
         then('the icon should be hidden', () => {
           expect(component.showIcon).toBeFalsy();
           const icon = fixture.debugElement.query(
-            By.css('.need-help-header button i')
+            By.css('.need-help-header button i'),
           );
           expect(icon).toBeNull();
         });
@@ -117,7 +116,7 @@ describe('NeedHelpComponent', () => {
         then('the icon should be shown', () => {
           expect(component.showIcon).toBeTruthy();
           const icon = fixture.debugElement.query(
-            By.css('.need-help-header button i')
+            By.css('.need-help-header button i'),
           );
           expect(icon).toBeDefined();
         });

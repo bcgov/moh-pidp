@@ -9,16 +9,13 @@ import { ContextHelpTitleDirective } from './context-help-title.directive';
 import { ContextHelpComponent } from './context-help/context-help.component';
 
 @NgModule({
-  declarations: [
-    ContextHelpComponent,
-    ContextHelpTitleDirective,
-    ContextHelpContentDirective,
-  ],
-  imports: [CommonModule, MatButtonModule, MatIconModule, MatMenuModule],
-  exports: [
-    ContextHelpComponent,
-    ContextHelpTitleDirective,
-    ContextHelpContentDirective,
-  ],
+    imports: [CommonModule, MatButtonModule, MatIconModule, MatMenuModule, ContextHelpComponent,
+        ContextHelpTitleDirective,
+        ContextHelpContentDirective],
+    exports: [
+        ContextHelpComponent,
+        ContextHelpTitleDirective,
+        ContextHelpContentDirective,
+    ],
 })
 export class ContextHelpModule {}

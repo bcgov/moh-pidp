@@ -1,11 +1,18 @@
+import { NgFor, NgIf } from '@angular/common';
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatOptionModule } from '@angular/material/core';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { EMPTY, catchError, of, tap } from 'rxjs';
 
 import { NoContent, OrganizationCode } from '@bcgov/shared/data-access';
+import { SharedUiModule } from '@bcgov/shared/ui';
 
 import {
   AbstractFormDependenciesService,
@@ -24,6 +31,18 @@ import { OrganizationDetails } from './organization-details.model';
   selector: 'app-organization-details',
   templateUrl: './organization-details.page.html',
   styleUrls: ['./organization-details.page.scss'],
+  standalone: true,
+  imports: [
+    SharedUiModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    NgFor,
+    MatOptionModule,
+    NgIf,
+    MatInputModule,
+    MatButtonModule,
+  ],
 })
 export class OrganizationDetailsPage
   extends AbstractFormPage<OrganizationDetailsFormState>
@@ -45,7 +64,7 @@ export class OrganizationDetailsPage
     private resource: OrganizationDetailsResource,
     private logger: LoggerService,
     private lookupService: LookupService,
-    fb: FormBuilder
+    fb: FormBuilder,
   ) {
     super(dependenciesService);
 
@@ -56,7 +75,7 @@ export class OrganizationDetailsPage
       (organization) => ({
         ...organization,
         disabled: organization.code !== OrganizationCode.HealthAuthority,
-      })
+      }),
     );
     this.healthAuthorities = this.lookupService.healthAuthorities;
   }
@@ -76,14 +95,14 @@ export class OrganizationDetailsPage
       .get(partyId)
       .pipe(
         tap((model: OrganizationDetails | null) =>
-          this.formState.patchValue(model)
+          this.formState.patchValue(model),
         ),
         catchError((error: HttpErrorResponse) => {
           if (error.status === HttpStatusCode.NotFound) {
             this.navigateToRoot();
           }
           return of(null);
-        })
+        }),
       )
       .subscribe();
   }

@@ -1,6 +1,7 @@
 import { Directive } from '@angular/core';
 
 @Directive({
-  selector: '[uiContextHelpContent]',
+    selector: '[uiContextHelpContent]',
+    standalone: true,
 })
 export class ContextHelpContentDirective {}

@@ -1,11 +1,15 @@
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { EMPTY, catchError, of, tap } from 'rxjs';
 
 import { NoContent } from '@bcgov/shared/data-access';
+import { SharedUiModule } from '@bcgov/shared/ui';
 
 import {
   AbstractFormDependenciesService,
@@ -22,6 +26,14 @@ import { AdministratorInformation } from './administrator-information.model';
   selector: 'app-administrator-information',
   templateUrl: './administrator-information.page.html',
   styleUrls: ['./administrator-information.page.scss'],
+  standalone: true,
+  imports: [
+    SharedUiModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+  ],
 })
 export class AdministratorInformationPage
   extends AbstractFormPage<AdministratorInformationFormState>
@@ -40,7 +52,7 @@ export class AdministratorInformationPage
     private partyService: PartyService,
     private resource: AdministratorInformationResource,
     private logger: LoggerService,
-    fb: FormBuilder
+    fb: FormBuilder,
   ) {
     super(dependenciesService);
 
@@ -64,14 +76,14 @@ export class AdministratorInformationPage
       .get(partyId)
       .pipe(
         tap((model: AdministratorInformation | null) =>
-          this.formState.patchValue(model)
+          this.formState.patchValue(model),
         ),
         catchError((error: HttpErrorResponse) => {
           if (error.status === HttpStatusCode.NotFound) {
             this.navigateToRoot();
           }
           return of(null);
-        })
+        }),
       )
       .subscribe();
   }

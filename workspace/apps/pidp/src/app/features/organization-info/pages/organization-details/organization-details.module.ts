@@ -6,7 +6,6 @@ import { OrganizationDetailsRoutingModule } from './organization-details-routing
 import { OrganizationDetailsPage } from './organization-details.page';
 
 @NgModule({
-  declarations: [OrganizationDetailsPage],
-  imports: [OrganizationDetailsRoutingModule, SharedModule],
+    imports: [OrganizationDetailsRoutingModule, SharedModule, OrganizationDetailsPage],
 })
 export class OrganizationDetailsModule {}

@@ -14,7 +14,6 @@ describe('ContactInfoFormComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ContactFormComponent],
       imports: [
         MatFormFieldModule,
         MatInputModule,

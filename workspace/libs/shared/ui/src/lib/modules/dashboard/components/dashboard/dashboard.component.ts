@@ -8,7 +8,7 @@ import {
   Output,
   ViewChild,
 } from '@angular/core';
-import { MatSidenav } from '@angular/material/sidenav';
+import { MatSidenav, MatSidenavModule } from '@angular/material/sidenav';
 
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
@@ -22,13 +22,23 @@ import {
   DashboardRouteMenuItem,
 } from '../../models/dashboard-menu-item.model';
 import { DashboardSidenavProps } from '../../models/dashboard-sidenav-props.model';
+import { RouterOutlet } from '@angular/router';
+import { DashboardMenuComponent } from '../dashboard-menu/dashboard-menu.component';
+import { DashboardHeaderComponent } from '../dashboard-header/dashboard-header.component';
 
 @UntilDestroy()
 @Component({
-  selector: 'ui-dashboard',
-  templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'ui-dashboard',
+    templateUrl: './dashboard.component.html',
+    styleUrls: ['./dashboard.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: true,
+    imports: [
+        DashboardHeaderComponent,
+        MatSidenavModule,
+        DashboardMenuComponent,
+        RouterOutlet,
+    ],
 })
 export class DashboardComponent implements OnInit {
   /**

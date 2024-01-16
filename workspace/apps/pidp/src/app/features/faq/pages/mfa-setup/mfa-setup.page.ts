@@ -1,5 +1,8 @@
 import { Component, Inject, OnInit } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
 import { ActivatedRoute, Router } from '@angular/router';
+
+import { SharedUiModule } from '@bcgov/shared/ui';
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';
 import { UtilsService } from '@app/core/services/utils.service';
@@ -8,6 +11,8 @@ import { UtilsService } from '@app/core/services/utils.service';
   selector: 'app-mfa-setup',
   templateUrl: './mfa-setup.page.html',
   styleUrls: ['./mfa-setup.page.scss'],
+  standalone: true,
+  imports: [SharedUiModule, MatButtonModule],
 })
 export class MfaSetupPage implements OnInit {
   public providerIdentitySupport: string;
@@ -16,7 +21,7 @@ export class MfaSetupPage implements OnInit {
     @Inject(APP_CONFIG) private config: AppConfig,
     private route: ActivatedRoute,
     private router: Router,
-    private utilsService: UtilsService
+    private utilsService: UtilsService,
   ) {
     this.providerIdentitySupport = this.config.emails.providerIdentitySupport;
   }

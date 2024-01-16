@@ -1,8 +1,14 @@
+import { NgIf } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { EMPTY, Observable } from 'rxjs';
+
+import { SharedUiModule } from '@bcgov/shared/ui';
 
 import {
   AbstractFormDependenciesService,
@@ -32,6 +38,15 @@ import {
   templateUrl: './hcim-account-transfer.page.html',
   styleUrls: ['./hcim-account-transfer.page.scss'],
   viewProviders: [HcimAccountTransferResource],
+  standalone: true,
+  imports: [
+    SharedUiModule,
+    NgIf,
+    MatButtonModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+  ],
 })
 export class HcimAccountTransferPage
   extends AbstractFormPage<HcimAccountTransferFormState>

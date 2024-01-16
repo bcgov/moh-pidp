@@ -43,14 +43,11 @@ export const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [
-    PageNotFoundComponent,
-    MaintenanceComponent,
-    AccessDeniedComponent,
-    RootRouteContainerComponent,
-  ],
-  imports: [CommonModule, RouterModule.forChild(routes), MatButtonModule],
-  exports: [PageNotFoundComponent, MaintenanceComponent, AccessDeniedComponent],
-  providers: [rootRouteConfigProvider],
+    imports: [CommonModule, RouterModule.forChild(routes), MatButtonModule, PageNotFoundComponent,
+        MaintenanceComponent,
+        AccessDeniedComponent,
+        RootRouteContainerComponent],
+    exports: [PageNotFoundComponent, MaintenanceComponent, AccessDeniedComponent],
+    providers: [rootRouteConfigProvider],
 })
 export class RootRoutingModule {}

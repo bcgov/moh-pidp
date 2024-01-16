@@ -10,12 +10,21 @@ import { IconType } from '../icon/icon.component';
 import { CardActionsDirective } from './card-actions.directive';
 import { CardContentDirective } from './card-content.directive';
 import { CardHintDirective } from './card-hint.directive';
+import { MatIconModule } from '@angular/material/icon';
+import { NgIf } from '@angular/common';
+import { MatCardModule } from '@angular/material/card';
 
 @Component({
-  selector: 'ui-card',
-  templateUrl: './card.component.html',
-  styleUrls: ['./card.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'ui-card',
+    templateUrl: './card.component.html',
+    styleUrls: ['./card.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: true,
+    imports: [
+        MatCardModule,
+        NgIf,
+        MatIconModule,
+    ],
 })
 export class CardComponent {
   @Input() public icon?: string;

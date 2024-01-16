@@ -1,6 +1,10 @@
+import { NgIf, NgTemplateOutlet } from '@angular/common';
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
 import { MatDialogConfig } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 import { catchError, noop, of, tap } from 'rxjs';
 
@@ -8,14 +12,16 @@ import { faCircleCheck, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { NavigationService } from '@pidp/presentation';
 
 import { NoContent } from '@bcgov/shared/data-access';
-import { CrossFieldErrorMatcher } from '@bcgov/shared/ui';
+import { CrossFieldErrorMatcher, SharedUiModule } from '@bcgov/shared/ui';
 
 import {
   AbstractFormDependenciesService,
   AbstractFormPage,
 } from '@app/core/classes/abstract-form-page.class';
 import { PartyService } from '@app/core/party/party.service';
+import { NeedHelpComponent } from '@app/shared/components/need-help/need-help.component';
 import { DialogBcproviderEditComponent } from '@app/shared/components/success-dialog/components/dialog-bcprovider-edit.component';
+import { SuccessDialogComponent } from '@app/shared/components/success-dialog/success-dialog.component';
 
 import { BcProviderEditFormState } from './bc-provider-edit-form-state';
 import {
@@ -31,6 +37,18 @@ export interface BcProviderEditInitialStateModel {
   selector: 'app-bc-provider-edit',
   templateUrl: './bc-provider-edit.page.html',
   styleUrls: ['./bc-provider-edit.page.scss'],
+  standalone: true,
+  imports: [
+    SharedUiModule,
+    NgTemplateOutlet,
+    NgIf,
+    MatButtonModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    NeedHelpComponent,
+    SuccessDialogComponent,
+  ],
 })
 export class BcProviderEditPage
   extends AbstractFormPage<BcProviderEditFormState>

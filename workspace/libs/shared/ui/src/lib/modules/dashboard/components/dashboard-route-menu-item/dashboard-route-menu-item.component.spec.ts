@@ -27,7 +27,6 @@ describe('DashboardRouteMenuItemComponent', () => {
     };
 
     await TestBed.configureTestingModule({
-      declarations: [DashboardRouteMenuItemComponent],
       imports: [SharedUiModule, RouterModule],
       providers: [
         {

@@ -6,7 +6,6 @@ import { FacilityDetailsRoutingModule } from './facility-details-routing.module'
 import { FacilityDetailsPage } from './facility-details.page';
 
 @NgModule({
-  declarations: [FacilityDetailsPage],
-  imports: [FacilityDetailsRoutingModule, SharedModule],
+    imports: [FacilityDetailsRoutingModule, SharedModule, FacilityDetailsPage],
 })
 export class FacilityDetailsModule {}

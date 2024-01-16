@@ -12,12 +12,9 @@ import { LoginPage } from './pages/login/login.page';
 import { SystemCardComponent } from './pages/system-card/system-card.page';
 
 @NgModule({
-  declarations: [
-    AutoLoginPage,
-    BcProviderUpliftPage,
-    LoginPage,
-    SystemCardComponent,
-  ],
-  imports: [AuthRoutingModule, DashboardModule, SharedModule, LayoutModule],
+    imports: [AuthRoutingModule, DashboardModule, SharedModule, LayoutModule, AutoLoginPage,
+        BcProviderUpliftPage,
+        LoginPage,
+        SystemCardComponent],
 })
 export class AuthModule {}

@@ -4,8 +4,8 @@ import { PermissionsDirective } from './permissions.directive';
 import { PermissionsService } from './permissions.service';
 
 @NgModule({
-  declarations: [PermissionsDirective],
-  exports: [PermissionsDirective],
+    imports: [PermissionsDirective],
+    exports: [PermissionsDirective],
 })
 export class PermissionsModule {
   public static forRoot(): ModuleWithProviders<PermissionsModule> {

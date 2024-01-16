@@ -7,7 +7,6 @@ import { ImmsBCEformsRoutingModule } from './immsbc-eforms-routing.module';
 import { ImmsBCEformsPage } from './immsbc-eforms.page';
 
 @NgModule({
-  declarations: [ImmsBCEformsPage],
-  imports: [SharedModule, ImmsBCEformsRoutingModule, AccessModule],
+    imports: [SharedModule, ImmsBCEformsRoutingModule, AccessModule, ImmsBCEformsPage],
 })
 export class ImmsBCEformsModule {}

@@ -3,8 +3,9 @@ import { Directive, ElementRef, Input, OnInit } from '@angular/core';
 import { PhonePipe } from '../../pipes';
 
 @Directive({
-  selector: '[uiAnchor]',
-  providers: [PhonePipe],
+    selector: '[uiAnchor]',
+    providers: [PhonePipe],
+    standalone: true,
 })
 export class AnchorDirective implements OnInit {
   /**

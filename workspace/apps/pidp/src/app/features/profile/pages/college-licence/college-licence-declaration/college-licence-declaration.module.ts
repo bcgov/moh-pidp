@@ -6,7 +6,6 @@ import { CollegeLicenceDeclarationRoutingModule } from './college-licence-declar
 import { CollegeLicenceDeclarationPage } from './college-licence-declaration.page';
 
 @NgModule({
-  declarations: [CollegeLicenceDeclarationPage],
-  imports: [CollegeLicenceDeclarationRoutingModule, SharedModule],
+    imports: [CollegeLicenceDeclarationRoutingModule, SharedModule, CollegeLicenceDeclarationPage],
 })
 export class CollegeLicenceDeclarationModule {}

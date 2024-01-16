@@ -6,7 +6,6 @@ import { MfaSetupRoutingModule } from './mfa-setup-routing.module';
 import { MfaSetupPage } from './mfa-setup.page';
 
 @NgModule({
-  declarations: [MfaSetupPage],
-  imports: [SharedModule, MfaSetupRoutingModule],
+    imports: [SharedModule, MfaSetupRoutingModule, MfaSetupPage],
 })
 export class MfaSetupModule {}

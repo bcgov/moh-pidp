@@ -1,10 +1,22 @@
 import { Component } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 import { ActivatedRoute, Router } from '@angular/router';
+
+import { SharedUiModule } from '@bcgov/shared/ui';
 
 @Component({
   selector: 'app-site-privacy-security-checklist',
   templateUrl: './site-privacy-security-checklist.page.html',
   styleUrls: ['./site-privacy-security-checklist.page.scss'],
+  standalone: true,
+  imports: [
+    SharedUiModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+  ],
 })
 export class SitePrivacySecurityChecklistPage {
   public title: string;

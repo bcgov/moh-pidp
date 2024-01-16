@@ -11,12 +11,12 @@ import { PidpLoadingDialogComponent } from './services/loading-overlay.service';
 register();
 
 @NgModule({
-  imports: [
-    CommonModule,
-    PidpDataModelModule,
-    MatDialogModule,
-    MatProgressSpinnerModule,
-  ],
-  declarations: [PidpLoadingDialogComponent],
+    imports: [
+        CommonModule,
+        PidpDataModelModule,
+        MatDialogModule,
+        MatProgressSpinnerModule,
+        PidpLoadingDialogComponent,
+    ],
 })
 export class PidpPresentationModule {}

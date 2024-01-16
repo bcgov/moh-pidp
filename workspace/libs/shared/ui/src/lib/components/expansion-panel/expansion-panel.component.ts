@@ -7,12 +7,15 @@ import {
   ExpansionPanelState,
   appExpansionAnimations,
 } from './expansion-animation';
+import { NgClass } from '@angular/common';
 
 @Component({
-  selector: 'ui-expansion-panel',
-  templateUrl: './expansion-panel.component.html',
-  styleUrls: ['./expansion-panel.component.scss'],
-  animations: [appExpansionAnimations.bodyExpansion],
+    selector: 'ui-expansion-panel',
+    templateUrl: './expansion-panel.component.html',
+    styleUrls: ['./expansion-panel.component.scss'],
+    animations: [appExpansionAnimations.bodyExpansion],
+    standalone: true,
+    imports: [NgClass],
 })
 export class ExpansionPanelComponent {
   private _expanded: boolean;

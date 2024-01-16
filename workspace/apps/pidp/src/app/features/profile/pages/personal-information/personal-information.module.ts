@@ -7,7 +7,6 @@ import { PersonalInformationRoutingModule } from './personal-information-routing
 import { PersonalInformationPage } from './personal-information.page';
 
 @NgModule({
-  declarations: [PersonalInformationPage, UserInfoComponent],
-  imports: [PersonalInformationRoutingModule, SharedModule],
+    imports: [PersonalInformationRoutingModule, SharedModule, PersonalInformationPage, UserInfoComponent],
 })
 export class PersonalInformationModule {}

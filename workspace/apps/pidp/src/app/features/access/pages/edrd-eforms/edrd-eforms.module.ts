@@ -7,7 +7,6 @@ import { EdrdEformsRoutingModule } from './edrd-eforms-routing.module';
 import { EdrdEformsPage } from './edrd-eforms.page';
 
 @NgModule({
-  declarations: [EdrdEformsPage],
-  imports: [SharedModule, EdrdEformsRoutingModule, AccessModule],
+    imports: [SharedModule, EdrdEformsRoutingModule, AccessModule, EdrdEformsPage],
 })
 export class EdrdEformsModule {}

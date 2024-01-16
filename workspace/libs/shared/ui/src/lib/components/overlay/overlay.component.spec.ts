@@ -7,10 +7,7 @@ describe('OverlayComponent', () => {
   let fixture: ComponentFixture<OverlayComponent>;
 
   beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [ OverlayComponent ]
-    })
-    .compileComponents();
+    await TestBed.configureTestingModule({}).compileComponents();
   });
 
   beforeEach(() => {

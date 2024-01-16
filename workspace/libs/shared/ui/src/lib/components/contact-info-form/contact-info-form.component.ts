@@ -1,10 +1,22 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { NgxMaskDirective } from 'ngx-mask';
+import { NgIf } from '@angular/common';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 @Component({
-  selector: 'ui-contact-info-form',
-  templateUrl: './contact-info-form.component.html',
-  styleUrls: ['./contact-info-form.component.scss'],
+    selector: 'ui-contact-info-form',
+    templateUrl: './contact-info-form.component.html',
+    styleUrls: ['./contact-info-form.component.scss'],
+    standalone: true,
+    imports: [
+        ReactiveFormsModule,
+        MatFormFieldModule,
+        MatInputModule,
+        NgIf,
+        NgxMaskDirective,
+    ],
 })
 export class ContactFormComponent {
   /**

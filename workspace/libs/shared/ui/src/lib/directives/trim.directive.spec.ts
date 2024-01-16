@@ -1,8 +1,9 @@
 import { Component, DebugElement } from '@angular/core';
-import { TrimDirective } from './trim.directive';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { By } from '@angular/platform-browser';
+
+import { TrimDirective } from './trim.directive';
 
 @Component({
   selector: 'ui-input-test',
@@ -10,6 +11,8 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
     <div [formGroup]="form">
       <input uiTrim formControlName="name" />
     </div>`,
+  standalone: true,
+  imports: [TrimDirective, ReactiveFormsModule],
 })
 class UnitTestComponent {
   public form: FormGroup;
@@ -26,10 +29,9 @@ describe('TrimDirective', () => {
   let des: DebugElement[]; // elements w/ the directive
 
   beforeEach(() => {
-    fixture = TestBed.configureTestingModule({
-      declarations: [UnitTestComponent, TrimDirective],
-      imports: [ReactiveFormsModule],
-    }).createComponent(UnitTestComponent);
+    fixture = TestBed.configureTestingModule({}).createComponent(
+      UnitTestComponent,
+    );
 
     fixture.detectChanges(); // initial binding
 

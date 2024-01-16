@@ -6,7 +6,6 @@ import { SignedOrAcceptedDocumentsRoutingModule } from './signed-or-accepted-doc
 import { SignedOrAcceptedDocumentsPage } from './signed-or-accepted-documents.page';
 
 @NgModule({
-  declarations: [SignedOrAcceptedDocumentsPage],
-  imports: [SignedOrAcceptedDocumentsRoutingModule, SharedModule],
+    imports: [SignedOrAcceptedDocumentsRoutingModule, SharedModule, SignedOrAcceptedDocumentsPage],
 })
 export class SignedOrAcceptedDocumentsModule {}

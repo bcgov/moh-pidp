@@ -6,7 +6,6 @@ import { SitePrivacySecurityChecklistRoutingModule } from './site-privacy-securi
 import { SitePrivacySecurityChecklistPage } from './site-privacy-security-checklist.page';
 
 @NgModule({
-  declarations: [SitePrivacySecurityChecklistPage],
-  imports: [SitePrivacySecurityChecklistRoutingModule, SharedModule],
+    imports: [SitePrivacySecurityChecklistRoutingModule, SharedModule, SitePrivacySecurityChecklistPage],
 })
 export class SitePrivacySecurityChecklistModule {}

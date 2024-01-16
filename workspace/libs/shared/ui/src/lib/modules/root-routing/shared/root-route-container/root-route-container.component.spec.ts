@@ -7,9 +7,7 @@ describe('RootRouteContainerComponent', () => {
   let fixture: ComponentFixture<RootRouteContainerComponent>;
 
   beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [RootRouteContainerComponent],
-    }).compileComponents();
+    await TestBed.configureTestingModule({}).compileComponents();
   });
 
   beforeEach(() => {

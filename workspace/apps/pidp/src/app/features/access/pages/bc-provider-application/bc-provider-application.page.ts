@@ -1,3 +1,12 @@
+import {
+  AsyncPipe,
+  NgIf,
+  NgOptimizedImage,
+  NgSwitch,
+  NgSwitchCase,
+  NgSwitchDefault,
+  NgTemplateOutlet,
+} from '@angular/common';
 import { Element } from '@angular/compiler';
 import {
   Component,
@@ -6,8 +15,12 @@ import {
   TemplateRef,
   ViewChild,
 } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
 import { MatDialogConfig } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { ActivatedRoute } from '@angular/router';
 
 import {
@@ -20,6 +33,7 @@ import {
   tap,
 } from 'rxjs';
 
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { faCircleRight } from '@fortawesome/free-regular-svg-icons';
 import {
   faCircleCheck,
@@ -40,6 +54,7 @@ import {
   CrossFieldErrorMatcher,
   DialogOptions,
   HtmlComponent,
+  SharedUiModule,
 } from '@bcgov/shared/ui';
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';
@@ -55,7 +70,9 @@ import { AuthRoutes } from '@app/features/auth/auth.routes';
 import { IdentityProvider } from '@app/features/auth/enums/identity-provider.enum';
 import { AuthService } from '@app/features/auth/services/auth.service';
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
+import { NeedHelpComponent } from '@app/shared/components/need-help/need-help.component';
 import { DialogBcproviderCreateComponent } from '@app/shared/components/success-dialog/components/dialog-bcprovider-create.component';
+import { SuccessDialogComponent } from '@app/shared/components/success-dialog/success-dialog.component';
 
 import { BcProviderApplicationFormState } from './bc-provider-application-form-state';
 import { BcProviderApplicationResource } from './bc-provider-application-resource.service';
@@ -64,6 +81,25 @@ import { BcProviderApplicationResource } from './bc-provider-application-resourc
   selector: 'app-bc-provider-application',
   templateUrl: './bc-provider-application.page.html',
   styleUrls: ['./bc-provider-application.page.scss'],
+  standalone: true,
+  imports: [
+    SharedUiModule,
+    MatButtonModule,
+    NeedHelpComponent,
+    NgOptimizedImage,
+    MatTooltipModule,
+    FaIconComponent,
+    NgSwitch,
+    NgSwitchCase,
+    NgTemplateOutlet,
+    NgSwitchDefault,
+    NgIf,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    SuccessDialogComponent,
+    AsyncPipe,
+  ],
 })
 export class BcProviderApplicationPage
   extends AbstractFormPage<BcProviderApplicationFormState>

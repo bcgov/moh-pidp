@@ -10,12 +10,23 @@ import {
   DashboardMenuItem,
   DashboardRouteMenuItem,
 } from '../../models/dashboard-menu-item.model';
+import { DashboardRouteMenuItemComponent } from '../dashboard-route-menu-item/dashboard-route-menu-item.component';
+import { NgFor, NgSwitch, NgSwitchCase } from '@angular/common';
+import { MatListModule } from '@angular/material/list';
 
 @Component({
-  selector: 'ui-dashboard-menu',
-  templateUrl: './dashboard-menu.component.html',
-  styleUrls: ['./dashboard-menu.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'ui-dashboard-menu',
+    templateUrl: './dashboard-menu.component.html',
+    styleUrls: ['./dashboard-menu.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: true,
+    imports: [
+        MatListModule,
+        NgFor,
+        NgSwitch,
+        NgSwitchCase,
+        DashboardRouteMenuItemComponent,
+    ],
 })
 export class DashboardMenuComponent {
   /**

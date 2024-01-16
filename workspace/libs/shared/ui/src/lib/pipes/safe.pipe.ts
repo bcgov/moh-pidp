@@ -16,7 +16,8 @@ export type DomSanitizerType =
   | 'resourceUrl';
 
 @Pipe({
-  name: 'safe',
+    name: 'safe',
+    standalone: true,
 })
 export class SafePipe implements PipeTransform {
   public constructor(private sanitizer: DomSanitizer) {}

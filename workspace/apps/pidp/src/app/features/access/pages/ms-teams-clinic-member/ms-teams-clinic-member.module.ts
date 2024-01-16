@@ -8,12 +8,12 @@ import { MsTeamsClinicMemberRoutingModule } from './ms-teams-clinic-member-routi
 import { MsTeamsClinicMemberPage } from './ms-teams-clinic-member.page';
 
 @NgModule({
-  declarations: [MsTeamsClinicMemberPage],
-  imports: [
-    MsTeamsClinicMemberRoutingModule,
-    SharedModule,
-    AccessModule,
-    FormsModule,
-  ],
+    imports: [
+        MsTeamsClinicMemberRoutingModule,
+        SharedModule,
+        AccessModule,
+        FormsModule,
+        MsTeamsClinicMemberPage,
+    ],
 })
 export class MsTeamsClinicMemberModule {}

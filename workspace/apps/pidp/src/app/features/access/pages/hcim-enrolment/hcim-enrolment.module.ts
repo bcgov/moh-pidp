@@ -6,7 +6,6 @@ import { HcimEnrolmentRoutingModule } from './hcim-enrolment-routing.module';
 import { HcimEnrolmentPage } from './hcim-enrolment.page';
 
 @NgModule({
-  declarations: [HcimEnrolmentPage],
-  imports: [HcimEnrolmentRoutingModule, SharedModule],
+    imports: [HcimEnrolmentRoutingModule, SharedModule, HcimEnrolmentPage],
 })
 export class HcimEnrolmentModule {}

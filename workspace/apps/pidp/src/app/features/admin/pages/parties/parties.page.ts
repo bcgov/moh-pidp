@@ -1,6 +1,9 @@
+import { NgIf } from '@angular/common';
 import { Component, Inject, OnInit } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
-import { MatTableDataSource } from '@angular/material/table';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
 
 import { EMPTY, exhaustMap, of, switchMap } from 'rxjs';
@@ -9,11 +12,13 @@ import {
   ConfirmDialogComponent,
   DialogOptions,
   HtmlComponent,
+  SharedUiModule,
 } from '@bcgov/shared/ui';
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';
 
 import { EnvironmentName } from '../../../../../environments/environment.model';
+import { LookupCodePipe } from '../../../../modules/lookup/lookup-code.pipe';
 import {
   AdminResource,
   PartyList,
@@ -23,6 +28,15 @@ import {
   selector: 'app-parties',
   templateUrl: './parties.page.html',
   styleUrls: ['./parties.page.scss'],
+  standalone: true,
+  imports: [
+    SharedUiModule,
+    NgIf,
+    MatButtonModule,
+    MatTableModule,
+    MatIconModule,
+    LookupCodePipe,
+  ],
 })
 export class PartiesPage implements OnInit {
   public title: string;
@@ -41,7 +55,7 @@ export class PartiesPage implements OnInit {
     @Inject(APP_CONFIG) private config: AppConfig,
     private adminResource: AdminResource,
     private dialog: MatDialog,
-    route: ActivatedRoute
+    route: ActivatedRoute,
   ) {
     this.title = route.snapshot.data.title;
     this.dataSource = new MatTableDataSource();
@@ -69,9 +83,9 @@ export class PartiesPage implements OnInit {
       .afterClosed()
       .pipe(
         exhaustMap((result) =>
-          result ? this.adminResource.deleteParties() : EMPTY
+          result ? this.adminResource.deleteParties() : EMPTY,
         ),
-        switchMap(() => of(this.getParties()))
+        switchMap(() => of(this.getParties())),
       )
       .subscribe();
   }
@@ -85,7 +99,7 @@ export class PartiesPage implements OnInit {
       .getParties()
       .subscribe(
         (parties: PartyList[]) =>
-          (this.dataSource.data = parties.sort((a, b) => a.id - b.id))
+          (this.dataSource.data = parties.sort((a, b) => a.id - b.id)),
       );
   }
 }

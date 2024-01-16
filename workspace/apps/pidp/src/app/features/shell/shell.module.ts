@@ -7,7 +7,6 @@ import { PortalDashboardComponent } from './components/portal-dashboard/portal-d
 import { ShellRoutingModule } from './shell-routing.module';
 
 @NgModule({
-  declarations: [PortalDashboardComponent],
-  imports: [ShellRoutingModule, DashboardModule, CommonModule],
+    imports: [ShellRoutingModule, DashboardModule, CommonModule, PortalDashboardComponent],
 })
 export class ShellModule {}

@@ -1,10 +1,27 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { ActivatedRoute, RouterLink } from '@angular/router';
+
+import { ContextHelpModule, SharedUiModule } from '@bcgov/shared/ui';
+
+import { InfoGraphicComponent } from '../../shared/components/info-graphic/info-graphic.component';
 
 @Component({
   selector: 'app-next-steps',
   templateUrl: './next-steps.page.html',
   styleUrls: ['./next-steps.page.scss'],
+  standalone: true,
+  imports: [
+    SharedUiModule,
+    InfoGraphicComponent,
+    ContextHelpModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+    RouterLink,
+  ],
 })
 export class NextStepsPage {
   public title: string;

@@ -1,6 +1,7 @@
 import { Directive } from '@angular/core';
 
 @Directive({
-  selector: '[uiCardActions]',
+    selector: '[uiCardActions]',
+    standalone: true,
 })
 export class CardActionsDirective {}

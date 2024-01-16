@@ -6,7 +6,6 @@ import { BcProviderEditRoutingModule } from './bc-provider-edit-routing.module';
 import { BcProviderEditPage } from './bc-provider-edit.page';
 
 @NgModule({
-  declarations: [BcProviderEditPage],
-  imports: [BcProviderEditRoutingModule, SharedModule],
+    imports: [BcProviderEditRoutingModule, SharedModule, BcProviderEditPage],
 })
 export class BcProviderEditModule {}

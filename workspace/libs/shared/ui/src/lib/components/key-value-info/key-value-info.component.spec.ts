@@ -7,10 +7,7 @@ describe('KeyValueInfoComponent', () => {
   let fixture: ComponentFixture<KeyValueInfoComponent>;
 
   beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [ KeyValueInfoComponent ]
-    })
-    .compileComponents();
+    await TestBed.configureTestingModule({}).compileComponents();
   });
 
   beforeEach(() => {

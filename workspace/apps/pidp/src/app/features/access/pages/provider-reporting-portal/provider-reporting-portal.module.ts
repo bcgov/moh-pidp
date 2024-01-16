@@ -7,7 +7,6 @@ import { ProviderReportingPortalRoutingModule } from './provider-reporting-porta
 import { ProviderReportingPortalPage } from './provider-reporting-portal.page';
 
 @NgModule({
-  declarations: [ProviderReportingPortalPage],
-  imports: [ProviderReportingPortalRoutingModule, SharedModule, AccessModule],
+    imports: [ProviderReportingPortalRoutingModule, SharedModule, AccessModule, ProviderReportingPortalPage],
 })
 export class ProviderReportingPortalModule {}

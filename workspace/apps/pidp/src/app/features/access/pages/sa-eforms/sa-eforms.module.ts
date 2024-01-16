@@ -7,7 +7,6 @@ import { SaEformsRoutingModule } from './sa-eforms-routing.module';
 import { SaEformsPage } from './sa-eforms.page';
 
 @NgModule({
-  declarations: [SaEformsPage],
-  imports: [SaEformsRoutingModule, SharedModule, AccessModule],
+    imports: [SaEformsRoutingModule, SharedModule, AccessModule, SaEformsPage],
 })
 export class SaEformsModule {}

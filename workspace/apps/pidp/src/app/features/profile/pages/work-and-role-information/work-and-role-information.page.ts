@@ -1,12 +1,18 @@
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { EMPTY, Observable, catchError, of, tap } from 'rxjs';
 
+import { SharedUiModule } from '@bcgov/shared/ui';
+
 import { PartyService } from '@app/core/party/party.service';
 import { LoggerService } from '@app/core/services/logger.service';
+import { AddressFormComponent } from '@app/shared/components/address-form/address-form.component';
 
 import {
   AbstractFormDependenciesService,
@@ -22,6 +28,15 @@ import { WorkAndRoleInformation } from './work-and-role-information.model';
   templateUrl: './work-and-role-information.page.html',
   styleUrls: ['./work-and-role-information.page.scss'],
   viewProviders: [WorkAndRoleInformationResource],
+  standalone: true,
+  imports: [
+    SharedUiModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    AddressFormComponent,
+    MatButtonModule,
+  ],
 })
 export class WorkAndRoleInformationPage
   extends AbstractFormPage<WorkAndRoleInformationFormState>
@@ -41,14 +56,14 @@ export class WorkAndRoleInformationPage
     private resource: WorkAndRoleInformationResource,
     private logger: LoggerService,
     fb: FormBuilder,
-    dependenciesService: AbstractFormDependenciesService
+    dependenciesService: AbstractFormDependenciesService,
   ) {
     super(dependenciesService);
 
     this.title = this.route.snapshot.data.title;
     this.formState = new WorkAndRoleInformationFormState(
       fb,
-      dependenciesService.formUtilsService
+      dependenciesService.formUtilsService,
     );
     this.hasFacilityAddress = false;
   }
@@ -68,18 +83,18 @@ export class WorkAndRoleInformationPage
       .get(partyId)
       .pipe(
         tap((model: WorkAndRoleInformation | null) =>
-          this.formState.patchValue(model)
+          this.formState.patchValue(model),
         ),
         catchError((error: HttpErrorResponse) => {
           if (error.status === HttpStatusCode.NotFound) {
             this.navigateToRoot();
           }
           return of(null);
-        })
+        }),
       )
       .subscribe(
         (model: WorkAndRoleInformation | null) =>
-          (this.hasFacilityAddress = !!model?.facilityAddress)
+          (this.hasFacilityAddress = !!model?.facilityAddress),
       );
   }
 

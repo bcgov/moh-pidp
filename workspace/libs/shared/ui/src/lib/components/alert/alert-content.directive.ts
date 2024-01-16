@@ -1,6 +1,7 @@
 import { Directive } from '@angular/core';
 
 @Directive({
-  selector: '[uiAlertContent]',
+    selector: '[uiAlertContent]',
+    standalone: true,
 })
 export class AlertContentDirective {}

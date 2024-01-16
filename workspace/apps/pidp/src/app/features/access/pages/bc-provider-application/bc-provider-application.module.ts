@@ -6,7 +6,6 @@ import { BcProviderApplicationRoutingModule } from './bc-provider-application-ro
 import { BcProviderApplicationPage } from './bc-provider-application.page';
 
 @NgModule({
-  declarations: [BcProviderApplicationPage],
-  imports: [BcProviderApplicationRoutingModule, SharedModule],
+    imports: [BcProviderApplicationRoutingModule, SharedModule, BcProviderApplicationPage],
 })
 export class BcProviderApplicationModule {}

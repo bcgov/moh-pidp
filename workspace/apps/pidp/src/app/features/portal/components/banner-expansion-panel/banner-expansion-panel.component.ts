@@ -6,6 +6,7 @@ import {
   transition,
   trigger,
 } from '@angular/animations';
+import { NgTemplateOutlet } from '@angular/common';
 import {
   Component,
   EventEmitter,
@@ -13,8 +14,11 @@ import {
   OnDestroy,
   Output,
 } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
 
 import { Subject, distinctUntilChanged } from 'rxjs';
+
+import { SharedUiModule } from '@bcgov/shared/ui';
 
 export const EXPANSION_PANEL_ANIMATION_TIMING =
   '500ms cubic-bezier(0.4,0.0,0.2,1)';
@@ -36,6 +40,8 @@ export type ExpansionPanelState = 'expanded' | 'collapsed';
       ),
     ]),
   ],
+  standalone: true,
+  imports: [SharedUiModule, MatButtonModule, NgTemplateOutlet],
 })
 export class BannerExpansionPanelComponent implements OnDestroy {
   private _expanded: boolean;
