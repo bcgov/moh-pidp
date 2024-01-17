@@ -17,7 +17,7 @@ async function fetchConfig(): Promise<Response> {
   return response;
 }
 function applySettingsToDefaultConfig(
-  settingsToApply: EnvironmentConfig
+  settingsToApply: EnvironmentConfig,
 ): AppConfig {
   let config = { ...APP_DI_CONFIG };
 

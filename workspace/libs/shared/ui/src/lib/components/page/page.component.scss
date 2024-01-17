@@ -1,4 +1,7 @@
-$maxWidths: 'page' 600px, 'medium' 750px, 'large' 1200px;
+$maxWidths:
+  'page' 600px,
+  'medium' 750px,
+  'large' 1200px;
 
 @each $class, $width in $maxWidths {
   .#{$class} {

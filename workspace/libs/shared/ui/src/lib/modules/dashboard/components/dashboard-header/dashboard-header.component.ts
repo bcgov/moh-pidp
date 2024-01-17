@@ -57,7 +57,7 @@ export class DashboardHeaderComponent {
       viewportService.isTabletBreakpoint$,
     ]).pipe(
       map(([isMobile, isTablet]: [boolean, boolean]) => isMobile || isTablet),
-      distinctUntilChanged()
+      distinctUntilChanged(),
     );
     this.usernameBreakpoint$ = viewportService.isTabletAndUpBreakpoint$;
   }

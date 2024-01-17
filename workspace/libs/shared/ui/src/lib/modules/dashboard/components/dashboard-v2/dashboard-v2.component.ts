@@ -73,7 +73,7 @@ export class DashboardV2Component implements OnChanges {
 
   public constructor(private viewportService: ViewportService) {
     this.viewportService.viewportBroadcast$.subscribe((viewport) =>
-      this.onViewportChange(viewport)
+      this.onViewportChange(viewport),
     );
   }
   public ngOnChanges(_: SimpleChanges): void {
@@ -85,7 +85,7 @@ export class DashboardV2Component implements OnChanges {
   }
 
   public getRouterLink(
-    item: DashboardMenuItem | string
+    item: DashboardMenuItem | string,
   ): RoutePath | undefined {
     if (item instanceof DashboardRouteMenuItem) {
       const routeItem = item as DashboardRouteMenuItem;

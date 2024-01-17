@@ -28,7 +28,7 @@ export class CollegeLicenceInformationPage implements OnInit {
     private router: Router,
     private partyService: PartyService,
     private resource: CollegeLicenceInformationResource,
-    private logger: LoggerService
+    private logger: LoggerService,
   ) {
     this.title = this.route.snapshot.data.title;
   }
@@ -51,7 +51,7 @@ export class CollegeLicenceInformationPage implements OnInit {
           this.navigateToRoot();
         }
         return of([]);
-      })
+      }),
     );
   }
 

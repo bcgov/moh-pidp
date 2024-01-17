@@ -2,8 +2,9 @@
 import { TestBed } from '@angular/core/testing';
 import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 
-import { authorizationRedirectGuard } from './authorization-redirect.guard';
 import { Spy, provideAutoSpy } from 'jest-auto-spies';
+
+import { authorizationRedirectGuard } from './authorization-redirect.guard';
 import { AuthorizationRedirectGuardService } from './services/authorization-redirect-guard.service';
 
 describe('authorizationRedirectGuard', () => {

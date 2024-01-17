@@ -1,8 +1,11 @@
 import { inject } from '@angular/core';
 import { ActivatedRouteSnapshot, ResolveFn, Router } from '@angular/router';
+
 import { catchError, map, of } from 'rxjs';
-import { PartyService } from './party.service';
+
 import { EndorsementsResource } from '@app/features/organization-info/pages/endorsements/endorsements-resource.service';
+
+import { PartyService } from './party.service';
 
 export const landingActionsResolver: ResolveFn<null> = (
   route: ActivatedRouteSnapshot,

@@ -15,13 +15,13 @@ import { PermissionsService } from './permissions.service';
 
 export abstract class PermissionsGuard {
   public static canActivate: CanActivateFn = (
-    route: ActivatedRouteSnapshot
+    route: ActivatedRouteSnapshot,
   ) => {
     return this.checkPermissions(route);
   };
 
   public static canActivateChild: CanActivateChildFn = (
-    childRoute: ActivatedRouteSnapshot
+    childRoute: ActivatedRouteSnapshot,
   ) => {
     return this.checkPermissions(childRoute);
   };
@@ -31,7 +31,7 @@ export abstract class PermissionsGuard {
   };
 
   private static checkPermissions(
-    route: Route | ActivatedRouteSnapshot
+    route: Route | ActivatedRouteSnapshot,
   ):
     | Observable<boolean | UrlTree>
     | Promise<boolean | UrlTree>

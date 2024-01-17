@@ -18,7 +18,7 @@ export class InjectViewportCssClassDirective {
 
   public constructor(viewportService: ViewportService) {
     viewportService.viewportBroadcast$.subscribe((viewport) =>
-      this.onViewportChange(viewport)
+      this.onViewportChange(viewport),
     );
   }
 

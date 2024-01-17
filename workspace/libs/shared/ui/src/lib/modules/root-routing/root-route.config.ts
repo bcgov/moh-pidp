@@ -3,7 +3,7 @@ import { InjectionToken, Provider } from '@angular/core';
 import { RootRoutes } from './root.routes';
 
 export const ROOT_ROUTE_CONFIG = new InjectionToken<RootRouteConfig>(
-  'root-route.config'
+  'root-route.config',
 );
 
 export interface RootRouteConfig {

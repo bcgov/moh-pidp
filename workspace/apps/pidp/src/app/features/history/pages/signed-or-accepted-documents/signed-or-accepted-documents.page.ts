@@ -37,7 +37,7 @@ export class SignedOrAcceptedDocumentsPage implements OnInit {
     private partyService: PartyService,
     private resource: SignedOrAcceptedDocumentsResource,
     private documentService: DocumentService,
-    private permissionsService: PermissionsService
+    private permissionsService: PermissionsService,
   ) {
     this.title = route.snapshot.data.title;
     this.documents = [];
@@ -66,8 +66,8 @@ export class SignedOrAcceptedDocumentsPage implements OnInit {
       .pipe(
         map(
           (profileStatus: ProfileStatus | null) =>
-            (this.documents = this.getDocuments(profileStatus))
-        )
+            (this.documents = this.getDocuments(profileStatus)),
+        ),
       )
       .subscribe();
   }

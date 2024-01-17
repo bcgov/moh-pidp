@@ -41,7 +41,7 @@ export class PartiesPage implements OnInit {
     @Inject(APP_CONFIG) private config: AppConfig,
     private adminResource: AdminResource,
     private dialog: MatDialog,
-    route: ActivatedRoute
+    route: ActivatedRoute,
   ) {
     this.title = route.snapshot.data.title;
     this.dataSource = new MatTableDataSource();
@@ -69,9 +69,9 @@ export class PartiesPage implements OnInit {
       .afterClosed()
       .pipe(
         exhaustMap((result) =>
-          result ? this.adminResource.deleteParties() : EMPTY
+          result ? this.adminResource.deleteParties() : EMPTY,
         ),
-        switchMap(() => of(this.getParties()))
+        switchMap(() => of(this.getParties())),
       )
       .subscribe();
   }
@@ -85,7 +85,7 @@ export class PartiesPage implements OnInit {
       .getParties()
       .subscribe(
         (parties: PartyList[]) =>
-          (this.dataSource.data = parties.sort((a, b) => a.id - b.id))
+          (this.dataSource.data = parties.sort((a, b) => a.id - b.id)),
       );
   }
 }

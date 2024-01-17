@@ -2,7 +2,7 @@
 import { PipeTransform } from '@angular/core';
 
 export function fromFunction<T extends (...args: any[]) => any>(
-  transform: T
+  transform: T,
 ): new () => PipeTransform {
   return class {
     public transform(value: any, ...params: Parameters<T>): ReturnType<T> {
