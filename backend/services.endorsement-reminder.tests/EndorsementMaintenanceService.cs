@@ -11,11 +11,55 @@ using Pidp.Models;
 using PidpTests;
 using PidpTests.TestingExtensions;
 
-public class EndorsementReminderServiceTests : InMemoryDbTest
+public class EndorsementMaintenanceServiceTests : InMemoryDbTest
 {
     [Theory]
+    [MemberData(nameof(ExpiryScheduleTestCases))]
+    public async void EndorsementMainenanceService_ExpireOldEndorsementRequestsAsync_ShouldNotSendDuplicateEmails(EndorsementRequestStatus status, Instant statusDate, Instant scheduleDate, bool expectedExpired)
+    {
+        var requestingParty = this.TestDb.HasAParty();
+        requestingParty.Email = "requesting@email.com";
+        var endorsementRequest = this.TestDb.Has(new EndorsementRequest
+        {
+            Token = Guid.NewGuid(),
+            RequestingPartyId = requestingParty.Id,
+            Status = status,
+            StatusDate = statusDate,
+            RecipientEmail = "recipient@email.com"
+        });
+
+        var clockMock = AMock.Clock(scheduleDate);
+        var service = this.MockDependenciesFor<EndorsementMaintenanceService>(clockMock);
+
+        await service.ExpireOldEndorsementRequestsAsync();
+
+        Assert.Equal(expectedExpired ? EndorsementRequestStatus.Expired : status, endorsementRequest.Status);
+        if (expectedExpired)
+        {
+            Assert.Equal(scheduleDate, endorsementRequest.StatusDate);
+        }
+    }
+
+    public static IEnumerable<object[]> ExpiryScheduleTestCases()
+    {
+        // Scheduler runs at 8 AM on a monday
+        var scheduleDate = new ZonedDateTime(new LocalDateTime(2023, 11, 13, 8, 0), DateTimeZoneProviders.Tzdb.GetZoneOrNull("America/Vancouver")!, Offset.FromHours(-8)).ToInstant();
+
+        foreach (var status in TestData.AllValuesOf<EndorsementRequestStatus>())
+        {
+            foreach (var daysOld in Enumerable.Range(0, 32))
+            {
+                // We expect that the request will be marked as expired when the Request is 30 days or more old.
+                var expected = daysOld >= 30 && status is EndorsementRequestStatus.Created or EndorsementRequestStatus.Received or EndorsementRequestStatus.Approved;
+
+                yield return new object[] { status, scheduleDate - Duration.FromHours(1) - Duration.FromDays(daysOld), scheduleDate, expected };
+            }
+        }
+    }
+
+    [Theory]
     [MemberData(nameof(ScheduleTestCases))]
-    public async void EndorsementReminderService_DoWorkAsync_SendsEmailsOnSchedule(EndorsementRequestStatus status, Instant statusDate, Instant scheduleDate, bool emailExpected)
+    public async void EndorsementMaintenanceService_SendReminderEmailsAsync_SendsEmailsOnSchedule(EndorsementRequestStatus status, Instant statusDate, Instant scheduleDate, bool emailExpected)
     {
         var requestingParty = this.TestDb.HasAParty();
         requestingParty.Email = "requesting@email.com";
@@ -30,9 +74,9 @@ public class EndorsementReminderServiceTests : InMemoryDbTest
 
         var clockMock = AMock.Clock(scheduleDate);
         var emailServiceMock = AMock.EmailService();
-        var reminderService = this.MockDependenciesFor<EndorsementReminderService>(clockMock, emailServiceMock);
+        var service = this.MockDependenciesFor<EndorsementMaintenanceService>(clockMock, emailServiceMock);
 
-        await reminderService.DoWorkAsync();
+        await service.SendReminderEmailsAsync();
 
         if (emailExpected)
         {
@@ -78,7 +122,7 @@ public class EndorsementReminderServiceTests : InMemoryDbTest
     }
 
     [Fact]
-    public async void EndorsementReminderService_DoWorkAsync_ShouldNotSendDuplicateEmails()
+    public async void EndorsementMainenanceService_SendReminderEmailsAsync_ShouldNotSendDuplicateEmails()
     {
         var now = SystemClock.Instance.GetCurrentInstant();
         var requestingParty = this.TestDb.HasAParty();
@@ -110,16 +154,16 @@ public class EndorsementReminderServiceTests : InMemoryDbTest
 
         var clockMock = AMock.Clock(now);
         var emailServiceMock = A.Fake<IEmailService>();
-        var reminderService = this.MockDependenciesFor<EndorsementReminderService>(clockMock, emailServiceMock);
+        var service = this.MockDependenciesFor<EndorsementMaintenanceService>(clockMock, emailServiceMock);
 
-        await reminderService.DoWorkAsync();
+        await service.SendReminderEmailsAsync();
 
         A.CallTo(() => emailServiceMock.SendAsync(An<Email>._)).MustHaveHappenedOnceExactly();
     }
 
     [Fact]
     // If a 7 day old Endorsment Request is between two users currently in an Active Endorsement, they should not get an email
-    public async void EndorsementReminderService_DoWorkAsync_ShouldNotSendIfAlreadyEndorsed()
+    public async void EndorsementMaintenanceService_SendReminderEmailsAsync_ShouldNotSendIfAlreadyEndorsed()
     {
         var now = SystemClock.Instance.GetCurrentInstant();
         var requestingParty = this.TestDb.HasAParty();
@@ -154,9 +198,9 @@ public class EndorsementReminderServiceTests : InMemoryDbTest
 
         var clockMock = AMock.Clock(now);
         var emailServiceMock = A.Fake<IEmailService>();
-        var reminderService = this.MockDependenciesFor<EndorsementReminderService>(clockMock, emailServiceMock);
+        var service = this.MockDependenciesFor<EndorsementMaintenanceService>(clockMock, emailServiceMock);
 
-        await reminderService.DoWorkAsync();
+        await service.SendReminderEmailsAsync();
 
         A.CallTo(() => emailServiceMock.SendAsync(An<Email>._)).MustNotHaveHappened();
     }
