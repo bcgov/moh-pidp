@@ -13,28 +13,28 @@ import { DashboardRouteMenuItemComponent } from './components/dashboard-route-me
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 
 @NgModule({
-    imports: [
-        CommonModule,
-        RouterModule,
-        // TODO attempt to reduce the need to include this in the application by having a default CoreModule in lib
-        // NOTE: must be included in the application to allow for
-        // the NgProgressHttpModule to attach to the HttpClient
-        NgxProgressBarModule,
-        SharedUiModule,
-        BcGovLogoComponent,
-        DashboardHeaderComponent,
-        DashboardImageComponent,
-        DashboardMenuComponent,
-        DashboardRouteMenuItemComponent,
-        DashboardComponent,
-        DashboardV2Component,
-    ],
-    exports: [
-        DashboardComponent,
-        DashboardHeaderComponent,
-        DashboardImageComponent,
-        DashboardV2Component,
-    ],
-    providers: [ViewportService],
+  imports: [
+    CommonModule,
+    RouterModule,
+    // TODO attempt to reduce the need to include this in the application by having a default CoreModule in lib
+    // NOTE: must be included in the application to allow for
+    // the NgProgressHttpModule to attach to the HttpClient
+    NgxProgressBarModule,
+    SharedUiModule,
+    BcGovLogoComponent,
+    DashboardHeaderComponent,
+    DashboardImageComponent,
+    DashboardMenuComponent,
+    DashboardRouteMenuItemComponent,
+    DashboardComponent,
+    DashboardV2Component,
+  ],
+  exports: [
+    DashboardComponent,
+    DashboardHeaderComponent,
+    DashboardImageComponent,
+    DashboardV2Component,
+  ],
+  providers: [ViewportService],
 })
 export class DashboardModule {}

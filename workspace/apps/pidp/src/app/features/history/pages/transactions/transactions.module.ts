@@ -8,6 +8,11 @@ import { TransactionsRoutingModule } from './transactions-routing.module';
 import { TransactionsPage } from './transactions.page';
 
 @NgModule({
-    imports: [TransactionsRoutingModule, SharedModule, LookupModule.forChild(), TransactionsPage],
+  imports: [
+    TransactionsRoutingModule,
+    SharedModule,
+    LookupModule.forChild(),
+    TransactionsPage,
+  ],
 })
 export class TransactionsModule {}

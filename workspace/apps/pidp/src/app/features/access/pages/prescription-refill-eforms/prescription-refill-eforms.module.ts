@@ -7,6 +7,11 @@ import { PrescriptionRefillEformsRoutingModule } from './prescription-refill-efo
 import { PrescriptionRefillEformsPage } from './prescription-refill-eforms.page';
 
 @NgModule({
-    imports: [PrescriptionRefillEformsRoutingModule, SharedModule, AccessModule, PrescriptionRefillEformsPage],
+  imports: [
+    PrescriptionRefillEformsRoutingModule,
+    SharedModule,
+    AccessModule,
+    PrescriptionRefillEformsPage,
+  ],
 })
 export class PrescriptionRefillEformsModule {}

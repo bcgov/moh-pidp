@@ -7,7 +7,11 @@ import { CollegeLicenceInformationPage } from './college-licence-information.pag
 import { CollegeLicenceInformationDetailComponent } from './components/college-licence-information-detail.component';
 
 @NgModule({
-    imports: [SharedModule, CollegeLicenceInformationRoutingModule, CollegeLicenceInformationPage,
-        CollegeLicenceInformationDetailComponent],
+  imports: [
+    SharedModule,
+    CollegeLicenceInformationRoutingModule,
+    CollegeLicenceInformationPage,
+    CollegeLicenceInformationDetailComponent,
+  ],
 })
 export class CollegeLicenceInformationModule {}

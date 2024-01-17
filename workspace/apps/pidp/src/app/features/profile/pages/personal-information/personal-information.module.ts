@@ -7,6 +7,11 @@ import { PersonalInformationRoutingModule } from './personal-information-routing
 import { PersonalInformationPage } from './personal-information.page';
 
 @NgModule({
-    imports: [PersonalInformationRoutingModule, SharedModule, PersonalInformationPage, UserInfoComponent],
+  imports: [
+    PersonalInformationRoutingModule,
+    SharedModule,
+    PersonalInformationPage,
+    UserInfoComponent,
+  ],
 })
 export class PersonalInformationModule {}

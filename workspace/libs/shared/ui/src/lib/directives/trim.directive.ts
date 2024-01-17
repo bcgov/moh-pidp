@@ -2,9 +2,9 @@ import { Directive, ElementRef, HostListener, Optional } from '@angular/core';
 import { NgControl } from '@angular/forms';
 
 @Directive({
-    selector: 'input[uiTrim]',
-    exportAs: 'uiTrim',
-    standalone: true,
+  selector: 'input[uiTrim]',
+  exportAs: 'uiTrim',
+  standalone: true,
 })
 export class TrimDirective {
   public constructor(

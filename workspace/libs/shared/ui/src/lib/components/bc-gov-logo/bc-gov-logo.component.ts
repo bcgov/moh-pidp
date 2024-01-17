@@ -14,11 +14,11 @@ interface SvgConfig {
 }
 
 @Component({
-    selector: 'ui-bc-gov-logo',
-    templateUrl: './bc-gov-logo.component.svg',
-    styleUrls: ['./bc-gov-logo.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: true,
+  selector: 'ui-bc-gov-logo',
+  templateUrl: './bc-gov-logo.component.svg',
+  styleUrls: ['./bc-gov-logo.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
 })
 export class BcGovLogoComponent implements OnInit {
   @Input() public size?: svgSize;

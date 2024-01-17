@@ -6,6 +6,10 @@ import { ComplianceTrainingRoutingModule } from './compliance-training-routing.m
 import { ComplianceTrainingPage } from './compliance-training.page';
 
 @NgModule({
-    imports: [ComplianceTrainingRoutingModule, SharedModule, ComplianceTrainingPage],
+  imports: [
+    ComplianceTrainingRoutingModule,
+    SharedModule,
+    ComplianceTrainingPage,
+  ],
 })
 export class ComplianceTrainingModule {}

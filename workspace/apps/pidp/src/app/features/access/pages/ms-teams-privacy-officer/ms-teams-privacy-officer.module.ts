@@ -7,6 +7,11 @@ import { MsTeamsPrivacyOfficerRoutingModule } from './ms-teams-privacy-officer-r
 import { MsTeamsPrivacyOfficerPage } from './ms-teams-privacy-officer.page';
 
 @NgModule({
-    imports: [SharedModule, MsTeamsPrivacyOfficerRoutingModule, AccessModule, MsTeamsPrivacyOfficerPage],
+  imports: [
+    SharedModule,
+    MsTeamsPrivacyOfficerRoutingModule,
+    AccessModule,
+    MsTeamsPrivacyOfficerPage,
+  ],
 })
 export class MsTeamsPrivacyOfficerModule {}

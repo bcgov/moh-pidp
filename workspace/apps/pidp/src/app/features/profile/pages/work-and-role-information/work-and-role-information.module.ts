@@ -6,6 +6,10 @@ import { WorkAndRoleInformationRoutingModule } from './work-and-role-information
 import { WorkAndRoleInformationPage } from './work-and-role-information.page';
 
 @NgModule({
-    imports: [WorkAndRoleInformationRoutingModule, SharedModule, WorkAndRoleInformationPage],
+  imports: [
+    WorkAndRoleInformationRoutingModule,
+    SharedModule,
+    WorkAndRoleInformationPage,
+  ],
 })
 export class WorkAndRoleInformationModule {}

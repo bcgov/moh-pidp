@@ -16,24 +16,24 @@ import { PortalRoutingModule } from './portal-routing.module';
 import { PortalPage } from './portal.page';
 
 @NgModule({
-    imports: [
-        PortalRoutingModule,
-        SharedModule,
-        LookupModule.forChild(),
-        PermissionsModule,
-        ClipboardModule,
-        PortalPage,
-        ProfileCardSummaryContentComponent,
-        PortalCardComponent,
-        PortalCarouselComponent,
-        BannerExpansionPanelComponent,
-        PortalAlertComponent,
-        PendingEndorsementComponent,
-    ],
-    schemas: [
-        // This causes the compiler to allow the non-angular swiper html tags.
-        // Without this schema, compiling will fail on the swiper tags.
-        CUSTOM_ELEMENTS_SCHEMA,
-    ],
+  imports: [
+    PortalRoutingModule,
+    SharedModule,
+    LookupModule.forChild(),
+    PermissionsModule,
+    ClipboardModule,
+    PortalPage,
+    ProfileCardSummaryContentComponent,
+    PortalCardComponent,
+    PortalCarouselComponent,
+    BannerExpansionPanelComponent,
+    PortalAlertComponent,
+    PendingEndorsementComponent,
+  ],
+  schemas: [
+    // This causes the compiler to allow the non-angular swiper html tags.
+    // Without this schema, compiling will fail on the swiper tags.
+    CUSTOM_ELEMENTS_SCHEMA,
+  ],
 })
 export class PortalModule {}

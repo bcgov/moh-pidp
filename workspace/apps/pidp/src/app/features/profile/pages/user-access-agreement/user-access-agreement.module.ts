@@ -7,6 +7,11 @@ import { UserAccessAgreementRoutingModule } from './user-access-agreement-routin
 import { UserAccessAgreementPage } from './user-access-agreement.page';
 
 @NgModule({
-    imports: [UserAccessAgreementRoutingModule, SharedModule, UserAccessAgreementPage, UserAccessAgreementDocumentComponent],
+  imports: [
+    UserAccessAgreementRoutingModule,
+    SharedModule,
+    UserAccessAgreementPage,
+    UserAccessAgreementDocumentComponent,
+  ],
 })
 export class UserAccessAgreementModule {}

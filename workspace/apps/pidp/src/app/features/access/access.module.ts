@@ -6,7 +6,7 @@ import { AccessRoutingModule } from './access-routing.module';
 import { EnrolmentErrorComponent } from './components/enrolment-error/enrolment-error.component';
 
 @NgModule({
-    imports: [AccessRoutingModule, SharedModule, EnrolmentErrorComponent],
-    exports: [EnrolmentErrorComponent],
+  imports: [AccessRoutingModule, SharedModule, EnrolmentErrorComponent],
+  exports: [EnrolmentErrorComponent],
 })
 export class AccessModule {}

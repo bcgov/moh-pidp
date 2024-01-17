@@ -1,3 +1,4 @@
+import { NgIf } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -6,24 +7,24 @@ import {
   Output,
 } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
+
 import { AlertActionsDirective } from '../alert/alert-actions.directive';
 import { AlertContentDirective } from '../alert/alert-content.directive';
 import { AlertComponent } from '../alert/alert.component';
-import { NgIf } from '@angular/common';
 
 @Component({
-    selector: 'ui-collection-notice',
-    templateUrl: './collection-notice.component.html',
-    styleUrls: ['./collection-notice.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: true,
-    imports: [
-        NgIf,
-        AlertComponent,
-        AlertContentDirective,
-        AlertActionsDirective,
-        MatButtonModule,
-    ],
+  selector: 'ui-collection-notice',
+  templateUrl: './collection-notice.component.html',
+  styleUrls: ['./collection-notice.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    NgIf,
+    AlertComponent,
+    AlertContentDirective,
+    AlertActionsDirective,
+    MatButtonModule,
+  ],
 })
 export class CollectionNoticeComponent {
   @Input() public show!: boolean;

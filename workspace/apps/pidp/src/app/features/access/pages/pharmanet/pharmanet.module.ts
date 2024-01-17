@@ -9,9 +9,13 @@ import { PharmanetRoutingModule } from './pharmanet-routing.module';
 import { InfoGraphicComponent } from './shared/components/info-graphic/info-graphic.component';
 
 @NgModule({
-    imports: [PharmanetRoutingModule, SharedModule, SelfDeclarationPage,
-        TermsOfAccessPage,
-        NextStepsPage,
-        InfoGraphicComponent],
+  imports: [
+    PharmanetRoutingModule,
+    SharedModule,
+    SelfDeclarationPage,
+    TermsOfAccessPage,
+    NextStepsPage,
+    InfoGraphicComponent,
+  ],
 })
 export class PharmanetModule {}

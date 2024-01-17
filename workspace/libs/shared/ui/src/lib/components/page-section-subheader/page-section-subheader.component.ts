@@ -1,3 +1,4 @@
+import { NgIf } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -7,18 +8,17 @@ import {
 } from '@angular/core';
 
 import { IconType } from '../icon/icon.component';
+import { PageSubheaderComponent } from '../page-subheader/page-subheader.component';
 import { PageSectionSubheaderDescDirective } from './page-section-subheader-desc.directive';
 import { PageSectionSubheaderHintDirective } from './page-section-subheader-hint.directive';
-import { NgIf } from '@angular/common';
-import { PageSubheaderComponent } from '../page-subheader/page-subheader.component';
 
 @Component({
-    selector: 'ui-page-section-subheader',
-    templateUrl: './page-section-subheader.component.html',
-    styleUrls: ['./page-section-subheader.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: true,
-    imports: [PageSubheaderComponent, NgIf],
+  selector: 'ui-page-section-subheader',
+  templateUrl: './page-section-subheader.component.html',
+  styleUrls: ['./page-section-subheader.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [PageSubheaderComponent, NgIf],
 })
 export class PageSectionSubheaderComponent {
   @Input() public icon?: string;

@@ -8,9 +8,9 @@ import { IdentityProvider } from '../../enums/identity-provider.enum';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
-    selector: 'app-auto-login',
-    templateUrl: './auto-login.page.html',
-    standalone: true,
+  selector: 'app-auto-login',
+  templateUrl: './auto-login.page.html',
+  standalone: true,
 })
 export class AutoLoginPage implements OnInit {
   public constructor(

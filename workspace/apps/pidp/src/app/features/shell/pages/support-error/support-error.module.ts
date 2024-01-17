@@ -8,6 +8,11 @@ import { SupportErrorRoutingModule } from './support-error-routing.module';
 import { SupportErrorPage } from './support-error.page';
 
 @NgModule({
-    imports: [SupportErrorRoutingModule, DashboardModule, SharedModule, SupportErrorPage],
+  imports: [
+    SupportErrorRoutingModule,
+    DashboardModule,
+    SharedModule,
+    SupportErrorPage,
+  ],
 })
 export class SupportErrorModule {}

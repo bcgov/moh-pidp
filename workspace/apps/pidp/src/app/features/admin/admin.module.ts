@@ -10,12 +10,13 @@ import { PartiesPage } from './pages/parties/parties.page';
 import { AdminDashboardComponent } from './shared/components/admin-dashboard/admin-dashboard.component';
 
 @NgModule({
-    imports: [
-        AdminRoutingModule,
-        DashboardModule,
-        SharedModule,
-        LookupModule.forChild(),
-        AdminDashboardComponent, PartiesPage,
-    ],
+  imports: [
+    AdminRoutingModule,
+    DashboardModule,
+    SharedModule,
+    LookupModule.forChild(),
+    AdminDashboardComponent,
+    PartiesPage,
+  ],
 })
 export class AdminModule {}

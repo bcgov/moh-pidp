@@ -1,3 +1,4 @@
+import { AsyncPipe, NgIf } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -5,35 +6,35 @@ import {
   Input,
   Output,
 } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 import { Observable, combineLatest, distinctUntilChanged, map } from 'rxjs';
 
+import { NgProgressComponent } from 'ngx-progressbar';
+
+import { BcGovLogoComponent } from '../../../../components/bc-gov-logo/bc-gov-logo.component';
 import { ViewportService } from '../../../../services/viewport.service';
 import { DashboardHeaderTheme } from '../../models/dashboard-header-config.model';
-import { NgProgressComponent } from 'ngx-progressbar';
-import { MatTooltipModule } from '@angular/material/tooltip';
-import { BcGovLogoComponent } from '../../../../components/bc-gov-logo/bc-gov-logo.component';
-import { MatIconModule } from '@angular/material/icon';
-import { MatButtonModule } from '@angular/material/button';
-import { NgIf, AsyncPipe } from '@angular/common';
-import { MatToolbarModule } from '@angular/material/toolbar';
 
 @Component({
-    selector: 'ui-dashboard-header',
-    templateUrl: './dashboard-header.component.html',
-    styleUrls: ['./dashboard-header.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: true,
-    imports: [
-        MatToolbarModule,
-        NgIf,
-        MatButtonModule,
-        MatIconModule,
-        BcGovLogoComponent,
-        MatTooltipModule,
-        NgProgressComponent,
-        AsyncPipe,
-    ],
+  selector: 'ui-dashboard-header',
+  templateUrl: './dashboard-header.component.html',
+  styleUrls: ['./dashboard-header.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    MatToolbarModule,
+    NgIf,
+    MatButtonModule,
+    MatIconModule,
+    BcGovLogoComponent,
+    MatTooltipModule,
+    NgProgressComponent,
+    AsyncPipe,
+  ],
 })
 export class DashboardHeaderComponent {
   /**

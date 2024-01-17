@@ -1,3 +1,4 @@
+import { NgIf } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -6,18 +7,20 @@ import {
   Output,
 } from '@angular/core';
 import { ThemePalette } from '@angular/material/core';
-import { MatSlideToggleChange, MatSlideToggleModule } from '@angular/material/slide-toggle';
+import {
+  MatSlideToggleChange,
+  MatSlideToggleModule,
+} from '@angular/material/slide-toggle';
 
 import { ToggleContentChange } from './toggle-content-change.model';
-import { NgIf } from '@angular/common';
 
 @Component({
-    selector: 'ui-toggle-content',
-    templateUrl: './toggle-content.component.html',
-    styleUrls: ['./toggle-content.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: true,
-    imports: [MatSlideToggleModule, NgIf],
+  selector: 'ui-toggle-content',
+  templateUrl: './toggle-content.component.html',
+  styleUrls: ['./toggle-content.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [MatSlideToggleModule, NgIf],
 })
 export class ToggleContentComponent {
   @Input() public color: ThemePalette;

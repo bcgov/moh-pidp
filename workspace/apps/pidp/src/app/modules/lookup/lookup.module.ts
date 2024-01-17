@@ -15,8 +15,8 @@ function configFactory(
 }
 
 @NgModule({
-    imports: [LookupCodePipe],
-    exports: [LookupCodePipe],
+  imports: [LookupCodePipe],
+  exports: [LookupCodePipe],
 })
 export class LookupModule {
   public static forRoot(): ModuleWithProviders<LookupModule> {

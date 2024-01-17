@@ -6,6 +6,10 @@ import { HcimAccountTransferRoutingModule } from './hcim-account-transfer-routin
 import { HcimAccountTransferPage } from './hcim-account-transfer.page';
 
 @NgModule({
-    imports: [HcimAccountTransferRoutingModule, SharedModule, HcimAccountTransferPage],
+  imports: [
+    HcimAccountTransferRoutingModule,
+    SharedModule,
+    HcimAccountTransferPage,
+  ],
 })
 export class HcimAccountTransferModule {}

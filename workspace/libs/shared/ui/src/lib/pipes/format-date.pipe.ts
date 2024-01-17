@@ -5,8 +5,8 @@ import { DateTime } from 'luxon';
 import { APP_DATE_FORMAT } from '../material/material-config';
 
 @Pipe({
-    name: 'formatDate',
-    standalone: true,
+  name: 'formatDate',
+  standalone: true,
 })
 export class FormatDatePipe implements PipeTransform {
   public transform(

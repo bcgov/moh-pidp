@@ -10,8 +10,8 @@ import {
 import { HtmlComponent } from '@bcgov/shared/ui';
 
 @Component({
-    selector: 'app-portal-alert',
-    template: ` <div>
+  selector: 'app-portal-alert',
+  template: ` <div>
     <header>
       <h2>{{ heading }}</h2>
     </header>
@@ -19,8 +19,8 @@ import { HtmlComponent } from '@bcgov/shared/ui';
       <ng-template #alertContentHost></ng-template>
     </div>
   </div>`,
-    styleUrls: ['./portal-alert.scss'],
-    standalone: true,
+  styleUrls: ['./portal-alert.scss'],
+  standalone: true,
 })
 export class PortalAlertComponent implements OnInit {
   @Input() public heading!: string;

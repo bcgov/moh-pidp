@@ -1,3 +1,4 @@
+import { NgIf } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -8,34 +9,33 @@ import {
   QueryList,
   forwardRef,
 } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 import {
   ContextHelpContentDirective,
   ContextHelpTitleDirective,
 } from '../../modules/context-help';
-import { MatTooltipModule } from '@angular/material/tooltip';
-import { MatIconModule } from '@angular/material/icon';
-import { MatButtonModule } from '@angular/material/button';
 import { ContextHelpContentDirective as ContextHelpContentDirective_1 } from '../../modules/context-help/context-help-content.directive';
 import { ContextHelpTitleDirective as ContextHelpTitleDirective_1 } from '../../modules/context-help/context-help-title.directive';
 import { ContextHelpComponent } from '../../modules/context-help/context-help/context-help.component';
-import { NgIf } from '@angular/common';
 
 @Component({
-    selector: 'ui-form-section',
-    templateUrl: './form-section.component.html',
-    styleUrls: ['./form-section.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: true,
-    imports: [
-        NgIf,
-        ContextHelpComponent,
-        ContextHelpTitleDirective_1,
-        ContextHelpContentDirective_1,
-        MatButtonModule,
-        MatIconModule,
-        MatTooltipModule,
-    ],
+  selector: 'ui-form-section',
+  templateUrl: './form-section.component.html',
+  styleUrls: ['./form-section.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    NgIf,
+    ContextHelpComponent,
+    ContextHelpTitleDirective_1,
+    ContextHelpContentDirective_1,
+    MatButtonModule,
+    MatIconModule,
+    MatTooltipModule,
+  ],
 })
 export class FormSectionComponent {
   /**

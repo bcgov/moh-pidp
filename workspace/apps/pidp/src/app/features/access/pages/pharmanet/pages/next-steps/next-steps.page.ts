@@ -20,7 +20,7 @@ import { InfoGraphicComponent } from '../../shared/components/info-graphic/info-
     MatInputModule,
     MatButtonModule,
     RouterLink,
-],
+  ],
 })
 export class NextStepsPage {
   public title: string;

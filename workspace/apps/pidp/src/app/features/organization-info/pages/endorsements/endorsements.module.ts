@@ -7,6 +7,11 @@ import { EndorsementsRoutingModule } from './endorsements-routing.module';
 import { EndorsementsPage } from './endorsements.page';
 
 @NgModule({
-    imports: [EndorsementsRoutingModule, SharedModule, EndorsementsPage, EndorsementCardComponent],
+  imports: [
+    EndorsementsRoutingModule,
+    SharedModule,
+    EndorsementsPage,
+    EndorsementCardComponent,
+  ],
 })
 export class EndorsementsModule {}
