@@ -2,15 +2,15 @@ namespace Pidp.Features.AccessRequests;
 
 using DomainResults.Common;
 using DomainResults.Mvc;
+using HybridModelBinding;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Globalization;
 
 using Pidp.Extensions;
 using Pidp.Infrastructure.Auth;
-using Pidp.Infrastructure.Services;
 using static Pidp.Infrastructure.HttpClients.Ldap.HcimAuthorizationStatus;
-using HybridModelBinding;
+using Pidp.Infrastructure.Services;
 
 [Route("api/parties/{partyId}/[controller]")]
 public class AccessRequestsController : PidpControllerBase
@@ -32,6 +32,15 @@ public class AccessRequestsController : PidpControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> CreateDriverFitnessEnrolment([FromServices] ICommandHandler<DriverFitness.Command, IDomainResult> handler,
                                                                   [FromRoute] DriverFitness.Command command)
+        => await this.AuthorizePartyBeforeHandleAsync(command.PartyId, handler, command)
+            .ToActionResult();
+
+    [HttpPost("edrd-eforms")]
+    [Authorize(Policy = Policies.HighAssuranceIdentityProvider)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> CreateEdrdEformsEnrolment([FromServices] ICommandHandler<EdrdEforms.Command, IDomainResult> handler,
+                                                               [FromRoute] EdrdEforms.Command command)
         => await this.AuthorizePartyBeforeHandleAsync(command.PartyId, handler, command)
             .ToActionResult();
 

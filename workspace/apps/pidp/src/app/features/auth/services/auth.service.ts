@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { Observable, from } from 'rxjs';
+import { Observable, from, of } from 'rxjs';
 
 import { KeycloakService } from 'keycloak-angular';
 import { KeycloakLoginOptions } from 'keycloak-js';
@@ -22,7 +22,7 @@ export class AuthService implements IAuthService {
   }
 
   public isLoggedIn(): Observable<boolean> {
-    return from(this.keycloakService.isLoggedIn());
+    return of(this.keycloakService.isLoggedIn());
   }
 
   public logout(redirectUri: string): Observable<void> {

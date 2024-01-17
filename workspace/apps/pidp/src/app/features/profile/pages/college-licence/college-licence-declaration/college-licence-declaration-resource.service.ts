@@ -15,29 +15,29 @@ import { PartyLicenceDeclarationInformation } from './party-licence-declaration-
 export class CollegeLicenceDeclarationResource extends CrudResource<PartyLicenceDeclarationInformation> {
   public constructor(
     protected apiResource: ApiHttpClient,
-    private toastService: ToastService
+    private toastService: ToastService,
   ) {
     super(apiResource);
   }
 
   public updateDeclaration(
     id: number,
-    payload: PartyLicenceDeclarationInformation
+    payload: PartyLicenceDeclarationInformation,
   ): Observable<string | null> {
     return this.resource
       .put<string | null>(this.getResourcePath(id), payload)
       .pipe(
         tap(() =>
           this.toastService.openSuccessToast(
-            'College licence information has been updated'
-          )
+            'College licence information has been updated',
+          ),
         ),
         catchError((error: HttpErrorResponse) => {
           this.toastService.openErrorToast(
-            'College licence information could not be updated'
+            'College licence information could not be updated',
           );
           return throwError(() => error);
-        })
+        }),
       );
   }
 

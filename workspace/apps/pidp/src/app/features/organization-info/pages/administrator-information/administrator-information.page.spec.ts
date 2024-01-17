@@ -76,7 +76,7 @@ describe('AdministratorInformationPage', () => {
     component = TestBed.inject(AdministratorInformationPage);
     partyServiceSpy = TestBed.inject<any>(PartyService);
     administratorInfoResourceSpy = TestBed.inject<any>(
-      AdministratorInformationResource
+      AdministratorInformationResource,
     );
     formUtilsServiceSpy = TestBed.inject<any>(FormUtilsService);
 
@@ -98,7 +98,7 @@ describe('AdministratorInformationPage', () => {
           expect(router.navigate).not.toHaveBeenCalled();
           expect(administratorInfoResourceSpy.get).toHaveBeenCalledTimes(1);
           expect(administratorInfoResourceSpy.get).toHaveBeenCalledWith(
-            partyId
+            partyId,
           );
         });
       });
@@ -157,7 +157,7 @@ describe('AdministratorInformationPage', () => {
           'access administrator will be updated and router navigate to root route',
           () => {
             expect(router.navigate).toHaveBeenCalled();
-          }
+          },
         );
       });
     });
@@ -175,7 +175,7 @@ describe('AdministratorInformationPage', () => {
           'access administrator should not be updated and router not navigate',
           () => {
             expect(router.navigate).not.toHaveBeenCalled();
-          }
+          },
         );
       });
     });

@@ -35,7 +35,7 @@ export class PrescriptionRefillEformsPage implements OnInit {
     private partyService: PartyService,
     private resource: PrescriptionRefillEformsResource,
     private logger: LoggerService,
-    private documentService: DocumentService
+    private documentService: DocumentService,
   ) {
     const routeData = this.route.snapshot.data;
     this.title = routeData.title;
@@ -70,7 +70,7 @@ export class PrescriptionRefillEformsPage implements OnInit {
           }
           this.accessRequestFailed = true;
           return of(noop());
-        })
+        }),
       )
       .subscribe();
   }

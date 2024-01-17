@@ -8,9 +8,8 @@ describe('KeyValueInfoComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ KeyValueInfoComponent ]
-    })
-    .compileComponents();
+      declarations: [KeyValueInfoComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

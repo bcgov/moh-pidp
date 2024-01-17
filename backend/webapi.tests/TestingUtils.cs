@@ -1,12 +1,15 @@
 namespace PidpTests;
 
 using FakeItEasy;
+using NodaTime;
 using System.Reflection;
 using System.Security.Claims;
 using Xunit;
 
 using Pidp.Infrastructure.Auth;
+using Pidp.Infrastructure.HttpClients.Mail;
 using Pidp.Infrastructure.HttpClients.Plr;
+using Pidp.Infrastructure.Services;
 
 public static class AssertThat
 {
@@ -43,6 +46,21 @@ public static class TestData
 
 public static class AMock
 {
+    public static IClock Clock(Instant currentInstant)
+    {
+        var clock = A.Fake<IClock>();
+        A.CallTo(() => clock.GetCurrentInstant()).Returns(currentInstant);
+        return clock;
+    }
+
+    public static IEmailServiceWithSentEmails EmailService()
+    {
+        var service = A.Fake<IEmailServiceWithSentEmails>();
+        A.CallTo(() => service.SendAsync(An<Email>._))
+            .Invokes(i => service.SentEmails.Add(i.GetArgument<Email>(0)!));
+        return service;
+    }
+
     /// <summary>
     /// Creates a digest containing a single record with the properties indicated.
     /// </summary>
@@ -84,4 +102,9 @@ public class PlrRecordMock : PlrRecord
     }
 
     public override bool IsGoodStanding() => this.goodStanding;
+}
+
+public interface IEmailServiceWithSentEmails : IEmailService
+{
+    public List<Email> SentEmails { get; }
 }

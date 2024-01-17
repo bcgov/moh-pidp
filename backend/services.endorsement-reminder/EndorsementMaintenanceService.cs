@@ -11,7 +11,7 @@ using Pidp.Infrastructure.HttpClients.Mail;
 using Pidp.Infrastructure.Services;
 using Pidp.Models;
 
-public class EndorsementReminderService : IEndorsementReminderService
+public class EndorsementMaintenanceService : IEndorsementMaintenanceService
 {
     private readonly IClock clock;
     private readonly IEmailService emailService;
@@ -19,10 +19,10 @@ public class EndorsementReminderService : IEndorsementReminderService
     private readonly PidpDbContext context;
     private readonly string applicationUrl;
 
-    public EndorsementReminderService(
+    public EndorsementMaintenanceService(
         IClock clock,
         IEmailService emailService,
-        ILogger<EndorsementReminderService> logger,
+        ILogger<EndorsementMaintenanceService> logger,
         PidpConfiguration config,
         PidpDbContext context)
     {
@@ -33,12 +33,32 @@ public class EndorsementReminderService : IEndorsementReminderService
         this.applicationUrl = config.ApplicationUrl;
     }
 
-    public async Task DoWorkAsync()
+    public async Task ExpireOldEndorsementRequestsAsync()
     {
-        var reminderStatuses = new[] { EndorsementRequestStatus.Created, EndorsementRequestStatus.Received, EndorsementRequestStatus.Approved };
+        var inProgressStatuses = new[] { EndorsementRequestStatus.Created, EndorsementRequestStatus.Received, EndorsementRequestStatus.Approved };
+        var now = this.clock.GetCurrentInstant();
+
+        var oldRequests = await this.context.EndorsementRequests
+            .Where(request => inProgressStatuses.Contains(request.Status)
+                && request.StatusDate < now - Duration.FromDays(30))
+            .ToListAsync();
+
+        foreach (var request in oldRequests)
+        {
+            request.Status = EndorsementRequestStatus.Expired;
+            request.StatusDate = now;
+        }
+
+        await this.context.SaveChangesAsync();
+        this.logger.LogExpiredRequestCount(oldRequests.Count);
+    }
+
+    public async Task SendReminderEmailsAsync()
+    {
+        var inProgressStatuses = new[] { EndorsementRequestStatus.Created, EndorsementRequestStatus.Received, EndorsementRequestStatus.Approved };
         var now = this.clock.GetCurrentInstant();
         var emailDtos = await this.context.EndorsementRequests
-            .Where(request => reminderStatuses.Contains(request.Status)
+            .Where(request => inProgressStatuses.Contains(request.Status)
                 && request.StatusDate < now - Duration.FromDays(7)
                 && request.StatusDate > now - Duration.FromDays(8))
             .Where(request => !this.context.EndorsementRequests
@@ -113,4 +133,7 @@ public static partial class EndorsementReminderServiceLoggingExtensions
 {
     [LoggerMessage(1, LogLevel.Information, "Sent {emailCount} Endorsement Reminder Emails.")]
     public static partial void LogSentEmailCount(this ILogger logger, int emailCount);
+
+    [LoggerMessage(2, LogLevel.Information, "Expired {expiryCount} Endorsement Requests.")]
+    public static partial void LogExpiredRequestCount(this ILogger logger, int expiryCount);
 }

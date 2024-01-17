@@ -69,7 +69,7 @@ export class PersonalInformationPage
     private _snackBar: MatSnackBar,
     private lookupResource: LookupResource,
     private dashboardStateService: DashboardStateService,
-    fb: FormBuilder
+    fb: FormBuilder,
   ) {
     super(dependenciesService);
 
@@ -114,8 +114,8 @@ export class PersonalInformationPage
         tap(() => this._snackBar.dismiss()),
         debounceTime(800),
         switchMap(() =>
-          this.lookupResource.hasCommonEmailDomain(this.userEmail)
-        )
+          this.lookupResource.hasCommonEmailDomain(this.userEmail),
+        ),
       )
       .subscribe((emailFound) => {
         if (!emailFound) {
@@ -127,17 +127,17 @@ export class PersonalInformationPage
       .get(partyId)
       .pipe(
         tap((model: PersonalInformation | null) =>
-          this.formState.patchValue(model)
+          this.formState.patchValue(model),
         ),
         catchError((error: HttpErrorResponse) => {
           if (error.status === HttpStatusCode.NotFound) {
             this.navigateToRoot();
           }
           return of(null);
-        })
+        }),
       )
       .subscribe((model: PersonalInformation | null) =>
-        this.handlePreferredNameChange(!!model?.preferredFirstName)
+        this.handlePreferredNameChange(!!model?.preferredFirstName),
       );
   }
 

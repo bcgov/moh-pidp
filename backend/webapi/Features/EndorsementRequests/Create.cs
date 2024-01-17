@@ -3,6 +3,7 @@ namespace Pidp.Features.EndorsementRequests;
 using FluentValidation;
 using Flurl;
 using HybridModelBinding;
+using Microsoft.EntityFrameworkCore;
 using NodaTime;
 using System.Text.Json.Serialization;
 
@@ -10,17 +11,25 @@ using Pidp.Data;
 using Pidp.Infrastructure.HttpClients.Mail;
 using Pidp.Infrastructure.Services;
 using Pidp.Models;
-using Microsoft.EntityFrameworkCore;
 
 public class Create
 {
-    public class Command : ICommand
+    public class Command : ICommand<Model>
     {
         [JsonIgnore]
         [HybridBindProperty(Source.Route)]
         public int PartyId { get; set; }
         public string RecipientEmail { get; set; } = string.Empty;
         public string? AdditionalInformation { get; set; }
+    }
+
+    public class Model
+    {
+        public bool DuplicateEndorsementRequest { get; set; }
+
+        public Model() { }
+
+        public Model(bool duplicateEndorsementRequest) => this.DuplicateEndorsementRequest = duplicateEndorsementRequest;
     }
 
     public class CommandValidator : AbstractValidator<Command>
@@ -32,7 +41,7 @@ public class Create
         }
     }
 
-    public class CommandHandler : ICommandHandler<Command>
+    public class CommandHandler : ICommandHandler<Command, Model>
     {
         private readonly string applicationUrl;
         private readonly IClock clock;
@@ -51,8 +60,21 @@ public class Create
             this.context = context;
         }
 
-        public async Task HandleAsync(Command command)
+        public async Task<Model> HandleAsync(Command command)
         {
+            var isAlreadyEndorsed = await this.context.EndorsementRequests
+                .AnyAsync(request => request.RequestingPartyId == command.PartyId
+                    && request.RecipientEmail == command.RecipientEmail
+                    && request.Status == EndorsementRequestStatus.Completed
+                    && this.context.Endorsements
+                        .Any(endorsement => endorsement.Active
+                            && endorsement.EndorsementRelationships.Any(relation => relation.PartyId == request.RequestingPartyId)
+                            && endorsement.EndorsementRelationships.Any(relation => relation.PartyId == request.ReceivingPartyId)));
+            if (isAlreadyEndorsed)
+            {
+                return new(true);
+            }
+
             var partyName = await this.context.Parties
                 .Where(party => party.Id == command.PartyId)
                 .Select(party => party.FullName)
@@ -72,6 +94,8 @@ public class Create
             await this.context.SaveChangesAsync();
 
             await this.SendEndorsementRequestEmailAsync(request.RecipientEmail, request.Token, partyName);
+
+            return new(false);
         }
 
         private async Task SendEndorsementRequestEmailAsync(string recipientEmail, Guid token, string partyName)

@@ -1,6 +1,10 @@
 {
   "singleQuote": true,
   "bracketSameLine": true,
+  "plugins": [
+    "prettier-plugin-organize-attributes",
+    "@trivago/prettier-plugin-sort-imports"
+  ],
   "attributeGroups": [
     "$ANGULAR_STRUCTURAL_DIRECTIVE",
     "^(id|name)$",

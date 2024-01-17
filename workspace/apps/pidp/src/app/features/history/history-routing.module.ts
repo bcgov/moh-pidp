@@ -11,7 +11,7 @@ const routes: Routes = [
     path: HistoryRoutes.TRANSACTIONS,
     loadChildren: (): Promise<Type<TransactionsModule>> =>
       import('./pages/transactions/transactions.module').then(
-        (m) => m.TransactionsModule
+        (m) => m.TransactionsModule,
       ),
   },
   {
@@ -25,7 +25,7 @@ const routes: Routes = [
     path: `${HistoryRoutes.VIEW_DOCUMENT}/:doctype`,
     loadChildren: (): Promise<Type<ViewDocumentModule>> =>
       import('./pages/view-document/view-document.module').then(
-        (m) => m.ViewDocumentModule
+        (m) => m.ViewDocumentModule,
       ),
   },
 ];

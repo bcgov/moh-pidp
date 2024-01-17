@@ -1,7 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { TestBed } from '@angular/core/testing';
-import { Router } from '@angular/router';
+import {
+  ActivatedRouteSnapshot,
+  ResolveFn,
+  Router,
+  RouterStateSnapshot,
+} from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
+
+import { Observable } from 'rxjs';
 
 import { randNumber } from '@ngneat/falso';
 import { Spy, createSpyFromClass, provideAutoSpy } from 'jest-auto-spies';
@@ -12,20 +19,23 @@ import { ShellRoutes } from '@app/features/shell/shell.routes';
 import { DocumentService } from '../services/document.service';
 import { LoggerService } from '../services/logger.service';
 import { DiscoveryResource } from './discovery-resource.service';
-import { PartyResolver } from './party.resolver';
+import { partyResolver } from './party.resolver';
 import { PartyService } from './party.service';
 
-describe('PartyResolver', () => {
-  let resolver: PartyResolver;
+describe('partyResolver', () => {
+  const executeResolver: ResolveFn<number | null> = (...resolverParameters) =>
+    TestBed.runInInjectionContext(() => partyResolver(...resolverParameters));
+
   let partyResourceSpy: Spy<DiscoveryResource>;
   let partyServiceSpy: Spy<PartyService>;
   let router: Router;
+  let activatedRouteSnapshotSpy: Spy<ActivatedRouteSnapshot>;
+  let routerStateSnapshotSpy: Spy<RouterStateSnapshot>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [RouterTestingModule],
       providers: [
-        PartyResolver,
         {
           provide: APP_CONFIG,
           useValue: APP_DI_CONFIG,
@@ -45,7 +55,6 @@ describe('PartyResolver', () => {
     });
 
     router = TestBed.inject(Router);
-    resolver = TestBed.inject(PartyResolver);
     partyResourceSpy = TestBed.inject<any>(DiscoveryResource);
     partyServiceSpy = TestBed.inject<any>(PartyService);
   });
@@ -61,9 +70,12 @@ describe('PartyResolver', () => {
         };
         partyResourceSpy.discover.nextOneTimeWith(discoveryResult);
         let actualResult: number | null;
-        resolver
-          .resolve()
-          .subscribe((partyId: number | null) => (actualResult = partyId));
+        (
+          executeResolver(
+            activatedRouteSnapshotSpy,
+            routerStateSnapshotSpy,
+          ) as Observable<number | null>
+        ).subscribe((partyId: number | null) => (actualResult = partyId));
 
         then('response will provide the party ID', () => {
           expect(partyResourceSpy.discover).toHaveBeenCalledTimes(1);
@@ -82,9 +94,12 @@ describe('PartyResolver', () => {
           },
         ]);
         let actualResult: number | null;
-        resolver
-          .resolve()
-          .subscribe((partyId: number | null) => (actualResult = partyId));
+        (
+          executeResolver(
+            activatedRouteSnapshotSpy,
+            routerStateSnapshotSpy,
+          ) as Observable<number | null>
+        ).subscribe((partyId: number | null) => (actualResult = partyId));
 
         then('response will provide the party ID', () => {
           expect(partyResourceSpy.discover).toHaveBeenCalledTimes(1);

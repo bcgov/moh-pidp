@@ -15,7 +15,7 @@ import { PortalResource } from '@app/features/portal/portal-resource.service';
 export class ProviderReportingPortalResource {
   public constructor(
     private apiResource: ApiHttpClient,
-    private portalResource: PortalResource
+    private portalResource: PortalResource,
   ) {}
 
   public getProfileStatus(partyId: number): Observable<ProfileStatus | null> {
@@ -26,13 +26,13 @@ export class ProviderReportingPortalResource {
     return this.apiResource
       .post<NoContent>(
         `parties/${partyId}/access-requests/provider-reporting-portal`,
-        {}
+        {},
       )
       .pipe(
         NoContentResponse,
         catchError((error: HttpErrorResponse) => {
           return throwError(() => error);
-        })
+        }),
       );
   }
 }

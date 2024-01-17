@@ -23,7 +23,7 @@ export class PortalResource {
           }
 
           throw error;
-        })
+        }),
       );
   }
 }

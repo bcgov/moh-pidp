@@ -6,14 +6,17 @@ import {
   RouterStateSnapshot,
 } from '@angular/router';
 
-import { collegeLicenceCompletedResolver } from './college-licence-completed.resolver';
-import { Spy, createSpyFromClass, provideAutoSpy } from 'jest-auto-spies';
-import { PartyService } from '@app/core/party/party.service';
-import { PortalResource } from '@app/features/portal/portal-resource.service';
-import { MockProfileStatus } from '@test/mock-profile-status';
-import { randNumber } from '@ngneat/falso';
 import { Observable, of } from 'rxjs';
+
+import { randNumber } from '@ngneat/falso';
+import { MockProfileStatus } from '@test/mock-profile-status';
+import { Spy, createSpyFromClass, provideAutoSpy } from 'jest-auto-spies';
+
+import { PartyService } from '@app/core/party/party.service';
 import { ProfileStatus } from '@app/features/portal/models/profile-status.model';
+import { PortalResource } from '@app/features/portal/portal-resource.service';
+
+import { collegeLicenceCompletedResolver } from './college-licence-completed.resolver';
 
 describe('collegeLicenceCompletedResolver', () => {
   let activatedRouteSnapshotSpy: Spy<ActivatedRouteSnapshot>;

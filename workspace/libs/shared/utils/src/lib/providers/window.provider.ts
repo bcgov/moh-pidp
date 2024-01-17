@@ -6,5 +6,5 @@ export const WINDOW = new InjectionToken<Window>(
   {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     factory: (): Window => inject(DOCUMENT).defaultView!,
-  }
+  },
 );

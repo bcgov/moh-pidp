@@ -18,7 +18,7 @@ export class PermissionsDirective implements OnInit {
   public constructor(
     private vcr: ViewContainerRef,
     private tpl: TemplateRef<unknown>,
-    private permissionsService: PermissionsService
+    private permissionsService: PermissionsService,
   ) {}
 
   public ngOnInit(): void {

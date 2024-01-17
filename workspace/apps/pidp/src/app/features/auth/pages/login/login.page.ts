@@ -13,15 +13,15 @@ import {
 import { ConfirmDialogComponent } from '@bcgov/shared/ui';
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';
+import {
+  ClientLogsService,
+  MicrosoftLogLevel,
+} from '@app/core/services/client-logs.service';
 import { DocumentService } from '@app/core/services/document.service';
 import { AdminRoutes } from '@app/features/admin/admin.routes';
 
 import { IdentityProvider } from '../../enums/identity-provider.enum';
 import { AuthService } from '../../services/auth.service';
-import {
-  ClientLogsService,
-  MicrosoftLogLevel,
-} from '@app/core/services/client-logs.service';
 
 export interface LoginPageRouteData {
   title: string;
@@ -74,7 +74,8 @@ export class LoginPage implements OnInit {
   }
 
   public ngOnInit(): void {
-    this.endorsementToken = this.route.snapshot.queryParamMap.get('endorsement-token');
+    this.endorsementToken =
+      this.route.snapshot.queryParamMap.get('endorsement-token');
 
     if (this.endorsementToken) {
       this.clientLogsService
@@ -131,29 +132,28 @@ export class LoginPage implements OnInit {
   private createClientLogIfNeeded(idpHint: IdentityProvider): Observable<void> {
     return this.endorsementToken
       ? this.clientLogsService.createClientLog({
-        message: `A user has clicked on the login button with an endorsement request and the identity provider "${idpHint}"`,
-        logLevel: MicrosoftLogLevel.INFORMATION,
-        additionalInformation: this.endorsementToken,
-      })
+          message: `A user has clicked on the login button with an endorsement request and the identity provider "${idpHint}"`,
+          logLevel: MicrosoftLogLevel.INFORMATION,
+          additionalInformation: this.endorsementToken,
+        })
       : of(undefined);
   }
 
   private login(idpHint: IdentityProvider): Observable<void> {
-    return this.createClientLogIfNeeded(idpHint)
-      .pipe(
-        switchMap(() =>
-          this.authService.login({
-            idpHint: idpHint,
-            redirectUri:
-              this.config.applicationUrl +
-              (this.route.snapshot.routeConfig?.path === 'admin'
-                ? '/' + AdminRoutes.MODULE_PATH
-                : '') +
-              (this.endorsementToken
-                ? `?endorsement-token=${this.endorsementToken}`
-                : ''),
-          }),
-        ),
-      );
+    return this.createClientLogIfNeeded(idpHint).pipe(
+      switchMap(() =>
+        this.authService.login({
+          idpHint: idpHint,
+          redirectUri:
+            this.config.applicationUrl +
+            (this.route.snapshot.routeConfig?.path === 'admin'
+              ? '/' + AdminRoutes.MODULE_PATH
+              : '') +
+            (this.endorsementToken
+              ? `?endorsement-token=${this.endorsementToken}`
+              : ''),
+        }),
+      ),
+    );
   }
 }

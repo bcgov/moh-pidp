@@ -15,7 +15,7 @@ import { WorkAndRoleInformation } from './work-and-role-information.model';
 export class WorkAndRoleInformationResource extends CrudResource<WorkAndRoleInformation> {
   public constructor(
     protected apiResource: ApiHttpClient,
-    private toastService: ToastService
+    private toastService: ToastService,
   ) {
     super(apiResource);
   }
@@ -24,15 +24,15 @@ export class WorkAndRoleInformationResource extends CrudResource<WorkAndRoleInfo
     return super.update(id, payload).pipe(
       tap(() =>
         this.toastService.openSuccessToast(
-          'College licence information has been updated'
-        )
+          'College licence information has been updated',
+        ),
       ),
       catchError((error: HttpErrorResponse) => {
         this.toastService.openErrorToast(
-          'College licence information could not be updated'
+          'College licence information could not be updated',
         );
         return throwError(() => error);
-      })
+      }),
     );
   }
 

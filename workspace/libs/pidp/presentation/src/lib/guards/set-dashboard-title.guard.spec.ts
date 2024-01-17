@@ -6,7 +6,7 @@ import { setDashboardTitleGuard } from './set-dashboard-title.guard';
 describe('setDashboardTitleGuard', () => {
   const executeGuard: CanActivateFn = (...guardParameters) =>
     TestBed.runInInjectionContext(() =>
-      setDashboardTitleGuard(...guardParameters)
+      setDashboardTitleGuard(...guardParameters),
     );
 
   beforeEach(() => {

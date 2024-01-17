@@ -23,13 +23,13 @@ describe('ObjectUtils', () => {
           id: 1,
           email: 'giant@chicken.com',
           fullName: 'Foghorn Leghorn',
-        })
+        }),
       );
       expect(object).not.toEqual(
         expect.objectContaining({
           username: 'giant@chicken.com',
           name: 'Foghorn Leghorn',
-        })
+        }),
       );
     });
 
@@ -45,12 +45,12 @@ describe('ObjectUtils', () => {
           id: 1,
           email: 'giant@chicken.com',
           fullName: 'Foghorn Leghorn',
-        })
+        }),
       );
       expect(object as any).not.toEqual(
         expect.objectContaining({
           notMapped: 'true',
-        })
+        }),
       );
     });
 
@@ -62,7 +62,7 @@ describe('ObjectUtils', () => {
           id: 1,
           username: 'giant@chicken.com',
           name: 'Foghorn Leghorn',
-        })
+        }),
       );
     });
 
@@ -74,7 +74,7 @@ describe('ObjectUtils', () => {
           id: 1,
           username: 'giant@chicken.com',
           name: 'Foghorn Leghorn',
-        })
+        }),
       );
     });
   });
@@ -99,7 +99,7 @@ describe('ObjectUtils', () => {
         expect.objectContaining({
           name: 'Foghorn Leghorn',
           quote: "Now who's, I say who's responsible for this",
-        })
+        }),
       );
     });
 

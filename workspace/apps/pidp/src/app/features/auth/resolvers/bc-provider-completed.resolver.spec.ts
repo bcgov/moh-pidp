@@ -6,15 +6,18 @@ import {
   RouterStateSnapshot,
 } from '@angular/router';
 
-import { bcProviderCompletedResolver } from './bc-provider-completed.resolver';
-import { Spy, createSpyFromClass, provideAutoSpy } from 'jest-auto-spies';
-import { PartyService } from '@app/core/party/party.service';
-import { PortalResource } from '@app/features/portal/portal-resource.service';
-import { randNumber } from '@ngneat/falso';
 import { Observable, of } from 'rxjs';
-import { ProfileStatus } from '@app/features/portal/models/profile-status.model';
+
+import { randNumber } from '@ngneat/falso';
 import { MockProfileStatus } from '@test/mock-profile-status';
+import { Spy, createSpyFromClass, provideAutoSpy } from 'jest-auto-spies';
+
+import { PartyService } from '@app/core/party/party.service';
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
+import { ProfileStatus } from '@app/features/portal/models/profile-status.model';
+import { PortalResource } from '@app/features/portal/portal-resource.service';
+
+import { bcProviderCompletedResolver } from './bc-provider-completed.resolver';
 
 describe('bcProviderCompletedResolver', () => {
   let activatedRouteSnapshotSpy: Spy<ActivatedRouteSnapshot>;

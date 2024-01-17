@@ -20,7 +20,7 @@ export class MsTeamsClinicMemberPortalSection implements IPortalSection {
 
   public constructor(
     private profileStatus: ProfileStatus,
-    private router: Router
+    private router: Router,
   ) {
     this.key = 'msTeamsClinicMember';
     this.heading = 'MS Teams for Clinic Members';
@@ -53,8 +53,8 @@ export class MsTeamsClinicMemberPortalSection implements IPortalSection {
     return statusCode === StatusCode.AVAILABLE
       ? 'Clinic members in the Fraser Health region may enrol for MS Teams access'
       : statusCode === StatusCode.COMPLETED
-      ? 'Completed'
-      : 'Incomplete';
+        ? 'Completed'
+        : 'Incomplete';
   }
 
   public performAction(): Observable<void> | void {

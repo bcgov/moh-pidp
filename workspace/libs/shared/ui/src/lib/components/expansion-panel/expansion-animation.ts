@@ -23,7 +23,7 @@ export const appExpansionAnimations: {
         visibility: '',
         opacity: 1,
         transform: 'translateY(0)',
-      })
+      }),
     ),
     state(
       'collapsed, void',
@@ -32,11 +32,11 @@ export const appExpansionAnimations: {
         visibility: 'hidden',
         opacity: 0,
         transform: 'translateY(-10px)',
-      })
+      }),
     ),
     transition(
       'expanded <=> collapsed',
-      animate(EXPANSION_PANEL_ANIMATION_TIMING)
+      animate(EXPANSION_PANEL_ANIMATION_TIMING),
     ),
   ]),
 };

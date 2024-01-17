@@ -41,7 +41,7 @@ export class DriverFitnessPage implements OnInit {
     private partyService: PartyService,
     private resource: DriverFitnessResource,
     private logger: LoggerService,
-    private applicationService: ApplicationService
+    private applicationService: ApplicationService,
   ) {
     const routeData = this.route.snapshot.data;
     this.driverFitnessUrl = driverFitnessUrl;
@@ -89,7 +89,7 @@ export class DriverFitnessPage implements OnInit {
           }
           this.accessRequestFailed = true;
           return of(noop());
-        })
+        }),
       )
       .subscribe((_) => {
         if (this.completed) {
@@ -100,7 +100,7 @@ export class DriverFitnessPage implements OnInit {
   private onAccessGranted(): void {
     this.applicationService.setDashboardTitleText(
       'Enrolment Completed',
-      'Your information has been submitted successfully'
+      'Your information has been submitted successfully',
     );
   }
 

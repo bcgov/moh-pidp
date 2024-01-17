@@ -18,7 +18,7 @@ export class AnchorDirective implements OnInit {
 
   public constructor(
     private el: ElementRef<HTMLAnchorElement>,
-    private phonePipe: PhonePipe
+    private phonePipe: PhonePipe,
   ) {
     this.scheme = 'url';
     this.countryCode = 1;
