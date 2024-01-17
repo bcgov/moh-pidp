@@ -1,4 +1,4 @@
-namespace Pidp.Features.CommonDomainEventHandlers;
+namespace Pidp.Features.CommonHandlers;
 
 using MediatR;
 using Microsoft.EntityFrameworkCore;
