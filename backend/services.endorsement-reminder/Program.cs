@@ -34,7 +34,7 @@ await Host.CreateDefaultBuilder(args)
             .AddSingleton<IClock>(SystemClock.Instance)
             .AddMediatR(opt => opt.RegisterServicesFromAssemblyContaining<Startup>())
             .AddTransient<IEmailService, EmailService>()
-            .AddTransient<IEndorsementReminderService, EndorsementReminderService>()
+            .AddTransient<IEndorsementMaintenanceService, EndorsementMaintenanceService>()
             .AddHostedService<HostedServiceWrapper>()
             .AddDbContext<PidpDbContext>(options => options
                 .UseNpgsql(config.ConnectionStrings.PidpDatabase, npg => npg.UseNodaTime())

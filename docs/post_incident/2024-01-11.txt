@@ -1,6 +1,7 @@
 Post Incident Report
 Project: PIDP
 Date of incident: Jan 10, 2024 9:34AM PST
+Environment Affected: d8a8f9-prod (Silver Cluster)
 
 9:34 - Nick Mailhot (Nic) posts in PIDP slack channel that there's an issue with Metabase no able to retrieve data.
 9:40 - Nic alerted Chris Mullin that there was a production issue with PIDP. Chris Mullin (Chris) responded and started his investigation
