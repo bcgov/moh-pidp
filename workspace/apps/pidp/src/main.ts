@@ -1,7 +1,8 @@
 import { enableProdMode, importProvidersFrom } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
+import { provideRouter, withRouterConfig } from '@angular/router';
 
-import { AppRoutingModule } from '@app/app-routing.module';
+import { routes } from '@app/app-routing.routes';
 
 import { CoreModule } from '@core/core.module';
 
@@ -83,7 +84,22 @@ fetchConfig()
           provide: APP_CONFIG,
           useValue: appConfig,
         },
-        importProvidersFrom(AppRoutingModule, CoreModule),
+        provideRouter(
+          routes,
+          withRouterConfig({
+            onSameUrlNavigation: 'reload',
+          }),
+          // WARNING: Does not work as expected with Material SideNav
+          // being the scrollable content container.
+          // @see app.component.ts for implementation
+          // withInMemoryScrolling({
+          //   scrollPositionRestoration: 'enabled',
+          //   anchorScrolling: 'enabled',
+          // }),
+          // disabled debug tracing
+          // withDebugTracing()
+        ),
+        importProvidersFrom(CoreModule),
       ],
     }).catch((err) => console.error(err));
   });
