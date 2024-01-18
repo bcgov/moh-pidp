@@ -5,6 +5,10 @@ import { Router } from '@angular/router';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';
+import {
+  Destination,
+  DiscoveryResource,
+} from '@app/core/party/discovery-resource.service';
 import { PartyService } from '@app/core/party/party.service';
 import { ToastService } from '@app/core/services/toast.service';
 import { Role } from '@app/shared/enums/roles.enum';
@@ -64,10 +68,11 @@ export class PortalPage implements OnInit {
   private readonly lastSelectedIndex: number;
   public hasCpn: boolean | undefined;
   public collegeLicenceDeclared: boolean | undefined;
-  public isComplete: boolean | undefined;
+  public isComplete$: Observable<Destination>;
   public IdentityProvider = IdentityProvider;
   public identityProvider$: Observable<IdentityProvider>;
   public pasAllowedProviders: IdentityProvider[];
+  public completedWizard = false;
 
   public constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
@@ -79,6 +84,7 @@ export class PortalPage implements OnInit {
     private authService: AuthService,
     private authorizedUserService: AuthorizedUserService,
     private toastService: ToastService,
+    private discoveryResource: DiscoveryResource,
   ) {
     this.state$ = this.portalService.state$;
     this.pasPanelExpanded$ = this.portalService.pasPanelExpanded$;
@@ -92,6 +98,9 @@ export class PortalPage implements OnInit {
       IdentityProvider.BCSC,
       IdentityProvider.BC_PROVIDER,
     ];
+    this.isComplete$ = this.discoveryResource.getDestination(
+      this.partyService.partyId,
+    );
   }
 
   public navigateTo(): void {
@@ -128,6 +137,9 @@ export class PortalPage implements OnInit {
   }
 
   public ngOnInit(): void {
+    this.isComplete$.subscribe((destination) => {
+      this.completedWizard = destination === 4;
+    });
     this.portalResource
       .getProfileStatus(this.partyService.partyId)
       .pipe(
@@ -141,7 +153,6 @@ export class PortalPage implements OnInit {
         this.hasCpn = profileStatus?.status.collegeCertification.hasCpn;
         this.collegeLicenceDeclared =
           profileStatus?.status.collegeCertification.licenceDeclared;
-        this.isComplete = profileStatus?.status.collegeCertification.isComplete;
 
         this.bcProviderStatusCode = profileStatus?.status.bcProvider.statusCode;
         if (this.bcProviderStatusCode === 2) {
@@ -167,7 +178,7 @@ export class PortalPage implements OnInit {
           this.selectedNoCollegeLicence(
             this.hasCpn,
             this.collegeLicenceDeclared,
-            this.isComplete,
+            this.completedWizard,
           )
         ) {
           // MFA
@@ -182,6 +193,8 @@ export class PortalPage implements OnInit {
     licenceDeclared: boolean | undefined,
     isComplete: boolean | undefined,
   ): boolean | undefined {
+    console.log('I is isComplete', isComplete);
+
     return !hasCpn && licenceDeclared && isComplete;
   }
 

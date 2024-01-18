@@ -55,7 +55,7 @@
             </p>
           </ng-template>
           <div>
-            <div *ngIf="!hasCpn && isComplete; else licenced">
+            <div *ngIf="!hasCpn && completedWizard; else licenced">
               <p>
                 <i
                   >Because you are MOA or do <strong>not</strong> have a college
