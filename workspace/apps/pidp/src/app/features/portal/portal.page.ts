@@ -138,7 +138,7 @@ export class PortalPage implements OnInit {
 
   public ngOnInit(): void {
     this.isComplete$.subscribe((destination) => {
-      this.completedWizard = destination === 4;
+      this.completedWizard = destination === Destination.PORTAL;
     });
     this.portalResource
       .getProfileStatus(this.partyService.partyId)
