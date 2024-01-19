@@ -38,7 +38,6 @@ import {
   DialogOptions,
   HtmlComponent,
   PidpViewport,
-  SharedUiModule,
   ViewportService,
 } from '@bcgov/shared/ui';
 
@@ -69,18 +68,17 @@ export enum EndorsementType {
   styleUrls: ['./endorsements.page.scss'],
   standalone: true,
   imports: [
-    ReactiveFormsModule,
-    SharedUiModule,
-    MatTabsModule,
-    NgIf,
-    FaIconComponent,
-    NgFor,
-    EndorsementCardComponent,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule,
     AsyncPipe,
     DatePipe,
+    EndorsementCardComponent,
+    FaIconComponent,
+    MatButtonModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatTabsModule,
+    NgFor,
+    NgIf,
+    ReactiveFormsModule,
   ],
 })
 export class EndorsementsPage

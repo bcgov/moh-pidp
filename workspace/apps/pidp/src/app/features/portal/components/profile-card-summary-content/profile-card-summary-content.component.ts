@@ -7,8 +7,6 @@ import {
 } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
-import { SharedUiModule } from '@bcgov/shared/ui';
-
 import { LookupCodePipe } from '@app/modules/lookup/lookup-code.pipe';
 
 @Component({
@@ -23,7 +21,6 @@ import { LookupCodePipe } from '@app/modules/lookup/lookup-code.pipe';
     NgSwitch,
     NgSwitchCase,
     NgSwitchDefault,
-    SharedUiModule,
     LookupCodePipe,
   ],
 })

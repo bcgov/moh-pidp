@@ -10,7 +10,7 @@ import { Router, RouterLink } from '@angular/router';
 
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 
-import { SharedUiModule } from '@bcgov/shared/ui';
+import { AlertComponent, ScrollTargetComponent } from '@bcgov/shared/ui';
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';
 import { PartyService } from '@app/core/party/party.service';
@@ -46,20 +46,21 @@ import { PortalState } from './state/portal-state.builder';
   ],
   standalone: true,
   imports: [
-    SharedUiModule,
-    NgFor,
-    PortalAlertComponent,
-    NgIf,
-    BannerExpansionPanelComponent,
-    MatStepperModule,
-    MatButtonModule,
-    RouterLink,
-    MatTooltipModule,
-    ClipboardModule,
-    MatIconModule,
-    PortalCarouselComponent,
-    GetSupportComponent,
+    AlertComponent,
     AsyncPipe,
+    BannerExpansionPanelComponent,
+    ClipboardModule,
+    GetSupportComponent,
+    MatButtonModule,
+    MatIconModule,
+    MatStepperModule,
+    MatTooltipModule,
+    NgFor,
+    NgIf,
+    PortalAlertComponent,
+    PortalCarouselComponent,
+    RouterLink,
+    ScrollTargetComponent,
   ],
 })
 export class PortalPage implements OnInit {

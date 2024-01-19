@@ -1,6 +1,10 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
-import { SharedUiModule } from '@bcgov/shared/ui';
+import {
+  PageHeaderComponent,
+  PageSectionComponent,
+  PageSubheaderComponent,
+} from '@bcgov/shared/ui';
 
 import { userAccessAgreementTitle } from '@app/features/profile/pages/user-access-agreement/user-access-agreement-routing.routes';
 
@@ -10,7 +14,7 @@ import { userAccessAgreementTitle } from '@app/features/profile/pages/user-acces
   styleUrls: ['./user-access-agreement-document.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
-  imports: [SharedUiModule],
+  imports: [PageHeaderComponent, PageSectionComponent, PageSubheaderComponent],
 })
 export class UserAccessAgreementDocumentComponent {
   public readonly title: string;

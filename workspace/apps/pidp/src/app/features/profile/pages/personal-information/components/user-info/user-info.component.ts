@@ -1,7 +1,7 @@
 import { NgIf } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
-import { SharedUiModule } from '@bcgov/shared/ui';
+import * as ui from '@bcgov/shared/ui';
 
 import { User } from '@app/features/auth/models/user.model';
 
@@ -11,7 +11,13 @@ import { User } from '@app/features/auth/models/user.model';
   styleUrls: ['./user-info.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
-  imports: [SharedUiModule, NgIf],
+  imports: [
+    ui.DefaultPipe,
+    ui.FormatDatePipe,
+    ui.KeyValueInfoComponent,
+    NgIf,
+    ui.UserInfoComponent,
+  ],
 })
 export class UserInfoComponent {
   @Input() public user: User | null | undefined;

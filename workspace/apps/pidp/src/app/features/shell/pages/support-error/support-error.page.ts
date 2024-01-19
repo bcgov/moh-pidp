@@ -2,11 +2,7 @@ import { Component, Inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { Router } from '@angular/router';
 
-import {
-  DashboardHeaderConfig,
-  DashboardModule,
-  SharedUiModule,
-} from '@bcgov/shared/ui';
+import { DashboardHeaderConfig, DashboardModule } from '@bcgov/shared/ui';
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';
 
@@ -17,7 +13,7 @@ import { ShellRoutes } from '../../shell.routes';
   templateUrl: './support-error.page.html',
   styleUrls: ['./support-error.page.scss'],
   standalone: true,
-  imports: [DashboardModule, SharedUiModule, MatButtonModule],
+  imports: [DashboardModule, MatButtonModule],
 })
 export class SupportErrorPage {
   public headerConfig: DashboardHeaderConfig;

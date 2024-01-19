@@ -15,7 +15,7 @@ import { DashboardStateModel, PidpStateName } from '@pidp/data-model';
 import { RegisteredCollege } from '@pidp/data-model';
 import { AppStateService } from '@pidp/presentation';
 
-import { SharedUiModule } from '@bcgov/shared/ui';
+import { AlertComponent } from '@bcgov/shared/ui';
 
 import {
   AbstractFormDependenciesService,
@@ -38,15 +38,15 @@ import { PartyLicenceDeclarationInformation } from './party-licence-declaration-
   viewProviders: [CollegeLicenceDeclarationResource],
   standalone: true,
   imports: [
-    SharedUiModule,
+    AlertComponent,
+    MatButtonModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatOptionModule,
+    MatSelectModule,
+    NgFor,
     NgIf,
     ReactiveFormsModule,
-    MatFormFieldModule,
-    MatSelectModule,
-    MatOptionModule,
-    NgFor,
-    MatInputModule,
-    MatButtonModule,
   ],
 })
 export class CollegeLicenceDeclarationPage

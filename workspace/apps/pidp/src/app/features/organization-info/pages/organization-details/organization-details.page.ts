@@ -12,7 +12,14 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { EMPTY, catchError, of, tap } from 'rxjs';
 
 import { NoContent, OrganizationCode } from '@bcgov/shared/data-access';
-import { SharedUiModule } from '@bcgov/shared/ui';
+import {
+  PageComponent,
+  PageFooterComponent,
+  PageHeaderComponent,
+  PageSectionComponent,
+  PageSectionSubheaderComponent,
+  PageSubheaderComponent,
+} from '@bcgov/shared/ui';
 
 import {
   AbstractFormDependenciesService,
@@ -33,15 +40,20 @@ import { OrganizationDetails } from './organization-details.model';
   styleUrls: ['./organization-details.page.scss'],
   standalone: true,
   imports: [
-    SharedUiModule,
-    ReactiveFormsModule,
+    MatButtonModule,
     MatFormFieldModule,
+    MatInputModule,
+    MatOptionModule,
     MatSelectModule,
     NgFor,
-    MatOptionModule,
     NgIf,
-    MatInputModule,
-    MatButtonModule,
+    PageComponent,
+    PageFooterComponent,
+    PageHeaderComponent,
+    PageSectionComponent,
+    PageSectionSubheaderComponent,
+    PageSubheaderComponent,
+    ReactiveFormsModule,
   ],
 })
 export class OrganizationDetailsPage

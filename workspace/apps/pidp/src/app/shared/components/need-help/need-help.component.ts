@@ -1,7 +1,7 @@
 import { NgClass, NgIf } from '@angular/common';
 import { Component, Inject, Input } from '@angular/core';
 
-import { SharedUiModule } from '@bcgov/shared/ui';
+import { ExpansionPanelComponent } from '@bcgov/shared/ui';
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';
 
@@ -10,7 +10,7 @@ import { APP_CONFIG, AppConfig } from '@app/app.config';
   templateUrl: './need-help.component.html',
   styleUrls: ['./need-help.component.scss'],
   standalone: true,
-  imports: [NgClass, NgIf, SharedUiModule],
+  imports: [ExpansionPanelComponent, NgClass, NgIf],
 })
 export class NeedHelpComponent {
   @Input() public showIcon: boolean;

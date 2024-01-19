@@ -12,7 +12,8 @@ import {
   ConfirmDialogComponent,
   DialogOptions,
   HtmlComponent,
-  SharedUiModule,
+  PageComponent,
+  PageHeaderComponent,
 } from '@bcgov/shared/ui';
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';
@@ -30,12 +31,13 @@ import {
   styleUrls: ['./parties.page.scss'],
   standalone: true,
   imports: [
-    SharedUiModule,
-    NgIf,
-    MatButtonModule,
-    MatTableModule,
-    MatIconModule,
     LookupCodePipe,
+    MatButtonModule,
+    MatIconModule,
+    MatTableModule,
+    NgIf,
+    PageComponent,
+    PageHeaderComponent,
   ],
 })
 export class PartiesPage implements OnInit {

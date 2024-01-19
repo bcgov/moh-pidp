@@ -17,7 +17,6 @@ import {
 } from '@pidp/presentation';
 
 import { NoContent } from '@bcgov/shared/data-access';
-import { SharedUiModule } from '@bcgov/shared/ui';
 
 import {
   AbstractFormDependenciesService,
@@ -39,17 +38,16 @@ import { PrivacyOfficer } from './ms-teams-clinic-member.model';
   styleUrls: ['./ms-teams-clinic-member.page.scss'],
   standalone: true,
   imports: [
-    SharedUiModule,
-    ReactiveFormsModule,
-    NgIf,
     EnrolmentErrorComponent,
-    MatFormFieldModule,
-    MatSelectModule,
     FormsModule,
-    NgFor,
-    MatOptionModule,
-    MatInputModule,
     MatButtonModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatOptionModule,
+    MatSelectModule,
+    NgFor,
+    NgIf,
+    ReactiveFormsModule,
   ],
 })
 export class MsTeamsClinicMemberPage

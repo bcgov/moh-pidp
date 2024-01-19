@@ -5,7 +5,14 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { map } from 'rxjs';
 
-import { SharedUiModule } from '@bcgov/shared/ui';
+import {
+  CardSummaryComponent,
+  PageComponent,
+  PageFooterComponent,
+  PageHeaderComponent,
+  PageSectionComponent,
+  PageSectionSubheaderComponent,
+} from '@bcgov/shared/ui';
 
 import { PartyService } from '@app/core/party/party.service';
 import {
@@ -31,7 +38,16 @@ export interface DocumentSection extends IDocumentMetaData {
   templateUrl: './signed-or-accepted-documents.page.html',
   styleUrls: ['./signed-or-accepted-documents.page.scss'],
   standalone: true,
-  imports: [SharedUiModule, NgFor, MatButtonModule],
+  imports: [
+    CardSummaryComponent,
+    MatButtonModule,
+    NgFor,
+    PageComponent,
+    PageFooterComponent,
+    PageHeaderComponent,
+    PageSectionComponent,
+    PageSectionSubheaderComponent,
+  ],
 })
 export class SignedOrAcceptedDocumentsPage implements OnInit {
   public title: string;

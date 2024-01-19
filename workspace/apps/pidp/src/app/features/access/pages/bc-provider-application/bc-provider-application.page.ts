@@ -54,7 +54,6 @@ import {
   CrossFieldErrorMatcher,
   DialogOptions,
   HtmlComponent,
-  SharedUiModule,
 } from '@bcgov/shared/ui';
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';
@@ -83,22 +82,21 @@ import { BcProviderApplicationResource } from './bc-provider-application-resourc
   styleUrls: ['./bc-provider-application.page.scss'],
   standalone: true,
   imports: [
-    SharedUiModule,
-    MatButtonModule,
-    NeedHelpComponent,
-    NgOptimizedImage,
-    MatTooltipModule,
+    AsyncPipe,
     FaIconComponent,
-    NgSwitch,
-    NgSwitchCase,
-    NgTemplateOutlet,
-    NgSwitchDefault,
-    NgIf,
-    ReactiveFormsModule,
+    MatButtonModule,
     MatFormFieldModule,
     MatInputModule,
+    MatTooltipModule,
+    NeedHelpComponent,
+    NgIf,
+    NgOptimizedImage,
+    NgSwitch,
+    NgSwitchCase,
+    NgSwitchDefault,
+    NgTemplateOutlet,
+    ReactiveFormsModule,
     SuccessDialogComponent,
-    AsyncPipe,
   ],
 })
 export class BcProviderApplicationPage

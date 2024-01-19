@@ -21,13 +21,13 @@ import { CardComponent } from '../card/card.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
   imports: [
-    NgTemplateOutlet,
-    NgIf,
-    CardComponent,
-    CardHintDirective,
-    CardContentDirective,
     CardActionsDirective,
+    CardComponent,
+    CardContentDirective,
+    CardHintDirective,
     MatButtonModule,
+    NgIf,
+    NgTemplateOutlet,
   ],
 })
 export class CardSummaryComponent {

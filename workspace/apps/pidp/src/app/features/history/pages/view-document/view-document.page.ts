@@ -3,7 +3,13 @@ import { Component, OnInit, Type, ViewChild } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { SharedUiModule } from '@bcgov/shared/ui';
+import {
+  PageComponent,
+  PageFooterComponent,
+  PageHeaderComponent,
+  PageSectionComponent,
+  SafePipe,
+} from '@bcgov/shared/ui';
 
 import {
   DocumentService,
@@ -18,7 +24,16 @@ import { ViewDocumentDirective } from './view-document.directive';
   templateUrl: './view-document.page.html',
   styleUrls: ['./view-document.page.scss'],
   standalone: true,
-  imports: [SharedUiModule, NgIf, ViewDocumentDirective, MatButtonModule],
+  imports: [
+    MatButtonModule,
+    NgIf,
+    PageComponent,
+    PageFooterComponent,
+    PageHeaderComponent,
+    PageSectionComponent,
+    SafePipe,
+    ViewDocumentDirective,
+  ],
 })
 export class ViewDocumentPage implements OnInit {
   public title: string;

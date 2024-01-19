@@ -4,7 +4,6 @@ import { ActivatedRoute, RouterModule } from '@angular/router';
 
 import { randTextRange } from '@ngneat/falso';
 
-import { SharedUiModule } from '../../../../shared-ui.module';
 import { DashboardRouteMenuItem } from '../../models/dashboard-menu-item.model';
 import { DashboardRouteMenuItemComponent } from './dashboard-route-menu-item.component';
 
@@ -27,7 +26,7 @@ describe('DashboardRouteMenuItemComponent', () => {
     };
 
     await TestBed.configureTestingModule({
-      imports: [SharedUiModule, RouterModule],
+      imports: [RouterModule],
       providers: [
         {
           provide: ActivatedRoute,

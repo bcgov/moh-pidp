@@ -4,7 +4,14 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 
-import { SharedUiModule } from '@bcgov/shared/ui';
+import {
+  PageComponent,
+  PageFooterComponent,
+  PageHeaderComponent,
+  PageSectionComponent,
+  PageSectionSubheaderComponent,
+  YesNoContentComponent,
+} from '@bcgov/shared/ui';
 
 import { selfDeclarationQuestions } from './self-declaration-questions';
 import { SelfDeclarationType } from './self-declaration.enum';
@@ -15,11 +22,16 @@ import { SelfDeclarationType } from './self-declaration.enum';
   styleUrls: ['./self-declaration.page.scss'],
   standalone: true,
   imports: [
-    SharedUiModule,
+    MatButtonModule,
     MatFormFieldModule,
     MatInputModule,
-    MatButtonModule,
+    PageComponent,
+    PageFooterComponent,
+    PageHeaderComponent,
+    PageSectionComponent,
+    PageSectionSubheaderComponent,
     RouterLink,
+    YesNoContentComponent,
   ],
 })
 export class SelfDeclarationPage {

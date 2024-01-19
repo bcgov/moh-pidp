@@ -2,14 +2,29 @@ import { Component } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { SharedUiModule } from '@bcgov/shared/ui';
+import {
+  AlertComponent,
+  PageComponent,
+  PageFooterComponent,
+  PageHeaderComponent,
+  PageSectionComponent,
+  PageSectionSubheaderComponent,
+} from '@bcgov/shared/ui';
 
 @Component({
   selector: 'app-compliance-training',
   templateUrl: './compliance-training.page.html',
   styleUrls: ['./compliance-training.page.scss'],
   standalone: true,
-  imports: [SharedUiModule, MatButtonModule],
+  imports: [
+    AlertComponent,
+    MatButtonModule,
+    PageComponent,
+    PageFooterComponent,
+    PageHeaderComponent,
+    PageSectionComponent,
+    PageSectionSubheaderComponent,
+  ],
 })
 export class ComplianceTrainingPage {
   public title: string;

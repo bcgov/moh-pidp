@@ -6,7 +6,15 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { catchError, noop, of, tap } from 'rxjs';
 
-import { SharedUiModule } from '@bcgov/shared/ui';
+import {
+  AlertComponent,
+  PageComponent,
+  PageFooterComponent,
+  PageHeaderComponent,
+  PageSectionComponent,
+  PageSectionSubheaderComponent,
+  SafePipe,
+} from '@bcgov/shared/ui';
 
 import { PartyService } from '@app/core/party/party.service';
 import { DocumentService } from '@app/core/services/document.service';
@@ -25,7 +33,18 @@ import {
   templateUrl: './prescription-refill-eforms.page.html',
   styleUrls: ['./prescription-refill-eforms.page.scss'],
   standalone: true,
-  imports: [SharedUiModule, NgIf, EnrolmentErrorComponent, MatButtonModule],
+  imports: [
+    AlertComponent,
+    EnrolmentErrorComponent,
+    MatButtonModule,
+    NgIf,
+    PageComponent,
+    PageFooterComponent,
+    PageHeaderComponent,
+    PageSectionComponent,
+    PageSectionSubheaderComponent,
+    SafePipe,
+  ],
 })
 export class PrescriptionRefillEformsPage implements OnInit {
   public title: string;

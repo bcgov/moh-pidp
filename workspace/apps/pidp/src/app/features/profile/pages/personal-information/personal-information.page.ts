@@ -17,7 +17,17 @@ import {
   tap,
 } from 'rxjs';
 
-import { SharedUiModule, ToggleContentChange } from '@bcgov/shared/ui';
+import {
+  ContactFormComponent,
+  PageComponent,
+  PageFooterComponent,
+  PageHeaderComponent,
+  PageSectionComponent,
+  PageSectionSubheaderComponent,
+  PreferredNameFormComponent,
+  ToggleContentChange,
+  ToggleContentComponent,
+} from '@bcgov/shared/ui';
 
 import { PartyService } from '@app/core/party/party.service';
 import { LoggerService } from '@app/core/services/logger.service';
@@ -45,12 +55,19 @@ import { PersonalInformation } from './personal-information.model';
   viewProviders: [PersonalInformationResource],
   standalone: true,
   imports: [
-    SharedUiModule,
-    NgIf,
-    UserInfoComponent,
-    MatButtonModule,
     AsyncPipe,
+    ContactFormComponent,
     IsHighAssurancePipe,
+    MatButtonModule,
+    NgIf,
+    PageComponent,
+    PageFooterComponent,
+    PageHeaderComponent,
+    PageSectionComponent,
+    PageSectionSubheaderComponent,
+    PreferredNameFormComponent,
+    ToggleContentComponent,
+    UserInfoComponent,
   ],
 })
 export class PersonalInformationPage

@@ -14,7 +14,6 @@ import { MatInputModule } from '@angular/material/input';
 import { EMPTY, debounceTime, switchMap } from 'rxjs';
 
 import { Address, Province } from '@bcgov/shared/data-access';
-import { SharedUiModule } from '@bcgov/shared/ui';
 
 import { AddressAutocompleteResource } from '@core/resources/address-autocomplete-resource.service';
 import { ToastService } from '@core/services/toast.service';
@@ -28,7 +27,6 @@ import { AddressAutocompleteRetrieveResponse } from './address-autocomplete-retr
   styleUrls: ['./address-autocomplete.component.scss'],
   standalone: true,
   imports: [
-    SharedUiModule,
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,

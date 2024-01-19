@@ -7,7 +7,14 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { EMPTY, Observable } from 'rxjs';
 
-import { SharedUiModule } from '@bcgov/shared/ui';
+import {
+  AlertComponent,
+  PageComponent,
+  PageFooterComponent,
+  PageHeaderComponent,
+  PageSectionComponent,
+  PageSectionSubheaderComponent,
+} from '@bcgov/shared/ui';
 
 import {
   AbstractFormDependenciesService,
@@ -35,12 +42,17 @@ import { HcimEnrolment } from './hcim-enrolment.model';
   styleUrls: ['./hcim-enrolment.page.scss'],
   standalone: true,
   imports: [
-    SharedUiModule,
-    NgIf,
-    ReactiveFormsModule,
+    AlertComponent,
     NgFor,
-    MatRadioModule,
+    NgIf,
     MatButtonModule,
+    MatRadioModule,
+    PageComponent,
+    PageFooterComponent,
+    PageHeaderComponent,
+    PageSectionComponent,
+    PageSectionSubheaderComponent,
+    ReactiveFormsModule,
   ],
 })
 export class HcimEnrolmentPage

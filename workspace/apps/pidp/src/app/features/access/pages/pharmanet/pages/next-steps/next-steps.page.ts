@@ -4,7 +4,15 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 
-import { SharedUiModule } from '@bcgov/shared/ui';
+import {
+  AlertComponent,
+  ContextHelpComponent,
+  PageComponent,
+  PageFooterComponent,
+  PageHeaderComponent,
+  PageSectionComponent,
+  PageSectionSubheaderComponent,
+} from '@bcgov/shared/ui';
 
 import { InfoGraphicComponent } from '../../shared/components/info-graphic/info-graphic.component';
 
@@ -14,11 +22,17 @@ import { InfoGraphicComponent } from '../../shared/components/info-graphic/info-
   styleUrls: ['./next-steps.page.scss'],
   standalone: true,
   imports: [
-    SharedUiModule,
+    AlertComponent,
+    ContextHelpComponent,
     InfoGraphicComponent,
+    MatButtonModule,
     MatFormFieldModule,
     MatInputModule,
-    MatButtonModule,
+    PageComponent,
+    PageFooterComponent,
+    PageHeaderComponent,
+    PageSectionComponent,
+    PageSectionSubheaderComponent,
     RouterLink,
   ],
 })

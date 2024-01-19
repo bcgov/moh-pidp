@@ -8,7 +8,15 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { EMPTY, Observable } from 'rxjs';
 
-import { SharedUiModule } from '@bcgov/shared/ui';
+import {
+  AlertComponent,
+  PageComponent,
+  PageFooterComponent,
+  PageHeaderComponent,
+  PageSectionComponent,
+  PageSectionSubheaderComponent,
+  PageSubheaderComponent,
+} from '@bcgov/shared/ui';
 
 import {
   AbstractFormDependenciesService,
@@ -40,12 +48,18 @@ import {
   viewProviders: [HcimAccountTransferResource],
   standalone: true,
   imports: [
-    SharedUiModule,
-    NgIf,
+    AlertComponent,
     MatButtonModule,
-    ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
+    NgIf,
+    PageComponent,
+    PageFooterComponent,
+    PageHeaderComponent,
+    PageSectionComponent,
+    PageSectionSubheaderComponent,
+    PageSubheaderComponent,
+    ReactiveFormsModule,
   ],
 })
 export class HcimAccountTransferPage

@@ -8,7 +8,13 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { EMPTY, Observable, catchError, of, tap } from 'rxjs';
 
-import { SharedUiModule } from '@bcgov/shared/ui';
+import {
+  PageComponent,
+  PageFooterComponent,
+  PageHeaderComponent,
+  PageSectionComponent,
+  PageSectionSubheaderComponent,
+} from '@bcgov/shared/ui';
 
 import { PartyService } from '@app/core/party/party.service';
 import { LoggerService } from '@app/core/services/logger.service';
@@ -30,12 +36,16 @@ import { WorkAndRoleInformation } from './work-and-role-information.model';
   viewProviders: [WorkAndRoleInformationResource],
   standalone: true,
   imports: [
-    SharedUiModule,
-    ReactiveFormsModule,
-    MatFormFieldModule,
-    MatInputModule,
     AddressFormComponent,
     MatButtonModule,
+    MatFormFieldModule,
+    MatInputModule,
+    PageComponent,
+    PageFooterComponent,
+    PageHeaderComponent,
+    PageSectionComponent,
+    PageSectionSubheaderComponent,
+    ReactiveFormsModule,
   ],
 })
 export class WorkAndRoleInformationPage

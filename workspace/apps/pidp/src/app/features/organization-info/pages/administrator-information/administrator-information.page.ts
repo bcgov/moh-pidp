@@ -9,7 +9,13 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { EMPTY, catchError, of, tap } from 'rxjs';
 
 import { NoContent } from '@bcgov/shared/data-access';
-import { SharedUiModule } from '@bcgov/shared/ui';
+import {
+  PageComponent,
+  PageFooterComponent,
+  PageHeaderComponent,
+  PageSectionComponent,
+  PageSectionSubheaderComponent,
+} from '@bcgov/shared/ui';
 
 import {
   AbstractFormDependenciesService,
@@ -28,11 +34,15 @@ import { AdministratorInformation } from './administrator-information.model';
   styleUrls: ['./administrator-information.page.scss'],
   standalone: true,
   imports: [
-    SharedUiModule,
-    ReactiveFormsModule,
+    MatButtonModule,
     MatFormFieldModule,
     MatInputModule,
-    MatButtonModule,
+    PageComponent,
+    PageFooterComponent,
+    PageHeaderComponent,
+    PageSectionComponent,
+    PageSectionSubheaderComponent,
+    ReactiveFormsModule,
   ],
 })
 export class AdministratorInformationPage

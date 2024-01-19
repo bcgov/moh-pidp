@@ -13,9 +13,10 @@ import { EMPTY, Observable, exhaustMap, of, switchMap } from 'rxjs';
 
 import {
   DialogOptions,
+  ExpansionPanelComponent,
   HtmlComponent,
+  LayoutHeaderFooterComponent,
   PidpViewport,
-  SharedUiModule,
   ViewportService,
 } from '@bcgov/shared/ui';
 import { ConfirmDialogComponent } from '@bcgov/shared/ui';
@@ -42,12 +43,13 @@ export interface LoginPageRouteData {
   styleUrls: ['./login.page.scss'],
   standalone: true,
   imports: [
-    SharedUiModule,
+    ExpansionPanelComponent,
+    LayoutHeaderFooterComponent,
+    MatButtonModule,
+    NeedHelpComponent,
     NgIf,
     NgOptimizedImage,
     NgTemplateOutlet,
-    NeedHelpComponent,
-    MatButtonModule,
     UpperCasePipe,
   ],
 })

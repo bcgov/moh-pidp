@@ -13,7 +13,6 @@ import { distinctUntilChanged, pairwise, startWith } from 'rxjs';
 import { NgxMaskDirective } from 'ngx-mask';
 
 import { Address, AddressLine, Country } from '@bcgov/shared/data-access';
-import { SharedUiModule } from '@bcgov/shared/ui';
 
 import { LookupService } from '@app/modules/lookup/lookup.service';
 import { Lookup, ProvinceLookup } from '@app/modules/lookup/lookup.types';
@@ -33,7 +32,6 @@ import { AddressAutocompleteComponent } from '../address-autocomplete/address-au
     MatButtonModule,
     MatIconModule,
     ReactiveFormsModule,
-    SharedUiModule,
     MatFormFieldModule,
     MatSelectModule,
     NgFor,

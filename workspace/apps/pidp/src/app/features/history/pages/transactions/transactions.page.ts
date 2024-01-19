@@ -5,7 +5,14 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { Observable } from 'rxjs';
 
-import { SharedUiModule } from '@bcgov/shared/ui';
+import {
+  FormatDatePipe,
+  PageComponent,
+  PageFooterComponent,
+  PageHeaderComponent,
+  PageSectionComponent,
+  PageSectionSubheaderComponent,
+} from '@bcgov/shared/ui';
 
 import { PartyService } from '@app/core/party/party.service';
 import { LoggerService } from '@app/core/services/logger.service';
@@ -20,12 +27,17 @@ import { TransactionsResource } from './transactions-resource.service';
   styleUrls: ['./transactions.page.scss'],
   standalone: true,
   imports: [
-    SharedUiModule,
+    AsyncPipe,
+    FormatDatePipe,
+    LookupCodePipe,
+    MatButtonModule,
     NgIf,
     NgFor,
-    MatButtonModule,
-    AsyncPipe,
-    LookupCodePipe,
+    PageComponent,
+    PageFooterComponent,
+    PageHeaderComponent,
+    PageSectionComponent,
+    PageSectionSubheaderComponent,
   ],
 })
 export class TransactionsPage implements OnInit {

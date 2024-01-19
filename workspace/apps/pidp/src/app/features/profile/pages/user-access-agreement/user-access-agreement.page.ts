@@ -9,7 +9,11 @@ import { Observable, catchError, noop, of, tap } from 'rxjs';
 import { DashboardStateModel, PidpStateName } from '@pidp/data-model';
 import { AppStateService } from '@pidp/presentation';
 
-import { SharedUiModule } from '@bcgov/shared/ui';
+import {
+  AlertComponent,
+  PageComponent,
+  PageFooterComponent,
+} from '@bcgov/shared/ui';
 
 import { PartyService } from '@app/core/party/party.service';
 import { LoggerService } from '@app/core/services/logger.service';
@@ -26,11 +30,13 @@ import { UserAccessAgreementResource } from './user-access-agreement-resource.se
   styleUrls: ['./user-access-agreement.page.scss'],
   standalone: true,
   imports: [
-    SharedUiModule,
-    NgIf,
+    AlertComponent,
+    AsyncPipe,
     forwardRef(() => UserAccessAgreementDocumentComponent),
     MatButtonModule,
-    AsyncPipe,
+    NgIf,
+    PageComponent,
+    PageFooterComponent,
   ],
 })
 export class UserAccessAgreementPage implements OnInit {

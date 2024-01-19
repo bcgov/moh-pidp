@@ -12,8 +12,6 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { faCircleCheck, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { NavigationService } from '@pidp/presentation';
 
-import { SharedUiModule } from '@bcgov/shared/ui';
-
 import { DialogBcproviderCreateComponent } from './components/dialog-bcprovider-create.component';
 import { DialogBcproviderEditComponent } from './components/dialog-bcprovider-edit.component';
 
@@ -22,7 +20,7 @@ import { DialogBcproviderEditComponent } from './components/dialog-bcprovider-ed
   templateUrl: './success-dialog.component.html',
   styleUrl: './success-dialog.component.scss',
   standalone: true,
-  imports: [SharedUiModule, FaIconComponent],
+  imports: [FaIconComponent],
 })
 export class SuccessDialogComponent implements OnInit {
   public faCircleCheck = faCircleCheck;

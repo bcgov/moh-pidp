@@ -12,8 +12,6 @@ import {
   LoadingOverlayService,
 } from '@pidp/presentation';
 
-import { SharedUiModule } from '@bcgov/shared/ui';
-
 import { PartyService } from '@app/core/party/party.service';
 import { LoggerService } from '@app/core/services/logger.service';
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
@@ -31,13 +29,7 @@ import {
   templateUrl: './driver-fitness.page.html',
   styleUrls: ['./driver-fitness.page.scss'],
   standalone: true,
-  imports: [
-    SharedUiModule,
-    NgIf,
-    EnrolmentErrorComponent,
-    RouterLink,
-    MatButtonModule,
-  ],
+  imports: [EnrolmentErrorComponent, MatButtonModule, NgIf, RouterLink],
 })
 export class DriverFitnessPage implements OnInit {
   public driverFitnessUrl: string;

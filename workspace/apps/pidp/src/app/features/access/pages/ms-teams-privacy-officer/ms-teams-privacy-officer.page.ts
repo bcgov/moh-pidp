@@ -12,7 +12,7 @@ import { EMPTY, catchError, noop, of, tap } from 'rxjs';
 import { LoadingOverlayService } from '@pidp/presentation';
 
 import { NoContent } from '@bcgov/shared/data-access';
-import { SharedUiModule } from '@bcgov/shared/ui';
+import { SafePipe } from '@bcgov/shared/ui';
 
 import {
   AbstractFormDependenciesService,
@@ -36,18 +36,18 @@ import { msTeamsSupportEmail } from './ms-teams.constants';
   styleUrls: ['./ms-teams-privacy-officer.page.scss'],
   standalone: true,
   imports: [
-    SharedUiModule,
-    NgIf,
+    AddressFormComponent,
     EnrolmentErrorComponent,
-    ReactiveFormsModule,
-    RouterLink,
-    NgSwitch,
-    NgSwitchCase,
+    MatButtonModule,
     MatFormFieldModule,
     MatInputModule,
-    AddressFormComponent,
+    NgIf,
+    NgSwitch,
+    NgSwitchCase,
     NgSwitchDefault,
-    MatButtonModule,
+    SafePipe,
+    ReactiveFormsModule,
+    RouterLink,
   ],
 })
 export class MsTeamsPrivacyOfficerPage

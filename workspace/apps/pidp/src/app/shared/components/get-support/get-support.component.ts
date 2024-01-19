@@ -6,7 +6,10 @@ import {
   OnInit,
 } from '@angular/core';
 
-import { SharedUiModule } from '@bcgov/shared/ui';
+import {
+  PageSectionComponent,
+  PageSectionSubheaderComponent,
+} from '@bcgov/shared/ui';
 import { ArrayUtils } from '@bcgov/shared/utils';
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';
@@ -24,7 +27,7 @@ interface SupportProps {
   styleUrls: ['./get-support.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
-  imports: [SharedUiModule, NgFor],
+  imports: [PageSectionComponent, PageSectionSubheaderComponent, NgFor],
 })
 export class GetSupportComponent implements OnInit {
   public providedSupport: SupportProps[];
