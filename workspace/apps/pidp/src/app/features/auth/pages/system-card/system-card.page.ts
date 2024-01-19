@@ -1,8 +1,8 @@
 import { Component, Input } from '@angular/core';
 
 import {
+  InjectViewportCssClassDirective,
   PidpViewport,
-  SharedUiModule,
   ViewportService,
 } from '@bcgov/shared/ui';
 
@@ -11,7 +11,7 @@ import {
   templateUrl: './system-card.page.html',
   styleUrls: ['./system-card.page.scss'],
   standalone: true,
-  imports: [SharedUiModule],
+  imports: [InjectViewportCssClassDirective],
 })
 export class SystemCardComponent {
   @Input() public titleText = '';

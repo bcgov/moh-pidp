@@ -13,6 +13,7 @@ import { distinctUntilChanged, pairwise, startWith } from 'rxjs';
 import { NgxMaskDirective } from 'ngx-mask';
 
 import { Address, AddressLine, Country } from '@bcgov/shared/data-access';
+import { InjectViewportCssClassDirective } from '@bcgov/shared/ui';
 
 import { LookupService } from '@app/modules/lookup/lookup.service';
 import { Lookup, ProvinceLookup } from '@app/modules/lookup/lookup.types';
@@ -28,16 +29,17 @@ import { AddressAutocompleteComponent } from '../address-autocomplete/address-au
   standalone: true,
   imports: [
     AddressAutocompleteComponent,
-    NgIf,
+    InjectViewportCssClassDirective,
     MatButtonModule,
-    MatIconModule,
-    ReactiveFormsModule,
     MatFormFieldModule,
+    MatIconModule,
+    MatInputModule,
+    MatOptionModule,
     MatSelectModule,
     NgFor,
-    MatOptionModule,
-    MatInputModule,
+    NgIf,
     NgxMaskDirective,
+    ReactiveFormsModule,
   ],
 })
 export class AddressFormComponent implements OnInit {

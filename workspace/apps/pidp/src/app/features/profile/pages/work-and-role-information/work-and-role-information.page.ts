@@ -9,6 +9,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { EMPTY, Observable, catchError, of, tap } from 'rxjs';
 
 import {
+  InjectViewportCssClassDirective,
   PageComponent,
   PageFooterComponent,
   PageHeaderComponent,
@@ -37,6 +38,7 @@ import { WorkAndRoleInformation } from './work-and-role-information.model';
   standalone: true,
   imports: [
     AddressFormComponent,
+    InjectViewportCssClassDirective,
     MatButtonModule,
     MatFormFieldModule,
     MatInputModule,

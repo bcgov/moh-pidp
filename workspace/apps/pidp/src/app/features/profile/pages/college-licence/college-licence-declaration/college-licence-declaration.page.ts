@@ -15,7 +15,10 @@ import { DashboardStateModel, PidpStateName } from '@pidp/data-model';
 import { RegisteredCollege } from '@pidp/data-model';
 import { AppStateService } from '@pidp/presentation';
 
-import { AlertComponent } from '@bcgov/shared/ui';
+import {
+  AlertComponent,
+  InjectViewportCssClassDirective,
+} from '@bcgov/shared/ui';
 
 import {
   AbstractFormDependenciesService,
@@ -39,6 +42,7 @@ import { PartyLicenceDeclarationInformation } from './party-licence-declaration-
   standalone: true,
   imports: [
     AlertComponent,
+    InjectViewportCssClassDirective,
     MatButtonModule,
     MatFormFieldModule,
     MatInputModule,

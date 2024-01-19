@@ -14,6 +14,7 @@ import { MatInputModule } from '@angular/material/input';
 import { EMPTY, debounceTime, switchMap } from 'rxjs';
 
 import { Address, Province } from '@bcgov/shared/data-access';
+import { InjectViewportCssClassDirective } from '@bcgov/shared/ui';
 
 import { AddressAutocompleteResource } from '@core/resources/address-autocomplete-resource.service';
 import { ToastService } from '@core/services/toast.service';
@@ -27,12 +28,13 @@ import { AddressAutocompleteRetrieveResponse } from './address-autocomplete-retr
   styleUrls: ['./address-autocomplete.component.scss'],
   standalone: true,
   imports: [
-    ReactiveFormsModule,
+    InjectViewportCssClassDirective,
+    MatAutocompleteModule,
     MatFormFieldModule,
     MatInputModule,
-    MatAutocompleteModule,
-    NgFor,
     MatOptionModule,
+    NgFor,
+    ReactiveFormsModule,
   ],
 })
 export class AddressAutocompleteComponent implements OnInit {

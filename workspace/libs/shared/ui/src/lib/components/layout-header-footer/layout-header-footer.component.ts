@@ -10,7 +10,7 @@ import { AnchorDirective } from '../anchor/anchor.directive';
   templateUrl: './layout-header-footer.component.html',
   styleUrls: ['./layout-header-footer.component.scss'],
   standalone: true,
-  imports: [InjectViewportCssClassDirective, NgIf, AnchorDirective],
+  imports: [AnchorDirective, InjectViewportCssClassDirective, NgIf],
 })
 export class LayoutHeaderFooterComponent {
   @Input() public emailSupport!: string;

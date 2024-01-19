@@ -17,6 +17,7 @@ import {
 } from '@pidp/presentation';
 
 import { NoContent } from '@bcgov/shared/data-access';
+import { InjectViewportCssClassDirective } from '@bcgov/shared/ui';
 
 import {
   AbstractFormDependenciesService,
@@ -39,6 +40,7 @@ import { PrivacyOfficer } from './ms-teams-clinic-member.model';
   standalone: true,
   imports: [
     EnrolmentErrorComponent,
+    InjectViewportCssClassDirective,
     FormsModule,
     MatButtonModule,
     MatFormFieldModule,

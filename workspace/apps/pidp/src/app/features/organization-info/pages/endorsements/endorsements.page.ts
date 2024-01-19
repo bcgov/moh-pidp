@@ -37,6 +37,7 @@ import {
   ConfirmDialogComponent,
   DialogOptions,
   HtmlComponent,
+  InjectViewportCssClassDirective,
   PidpViewport,
   ViewportService,
 } from '@bcgov/shared/ui';
@@ -72,6 +73,7 @@ export enum EndorsementType {
     DatePipe,
     EndorsementCardComponent,
     FaIconComponent,
+    InjectViewportCssClassDirective,
     MatButtonModule,
     MatFormFieldModule,
     MatInputModule,

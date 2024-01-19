@@ -2,6 +2,8 @@ import { enableProdMode, importProvidersFrom } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { provideRouter, withRouterConfig } from '@angular/router';
 
+import { provideEnvironmentNgxMask } from 'ngx-mask';
+
 import { routes } from '@app/app-routing.routes';
 
 import { CoreModule } from '@core/core.module';
@@ -84,6 +86,7 @@ fetchConfig()
           provide: APP_CONFIG,
           useValue: appConfig,
         },
+        provideEnvironmentNgxMask(),
         provideRouter(
           routes,
           withRouterConfig({

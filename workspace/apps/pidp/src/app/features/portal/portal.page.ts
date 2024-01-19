@@ -10,7 +10,11 @@ import { Router, RouterLink } from '@angular/router';
 
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 
-import { AlertComponent, ScrollTargetComponent } from '@bcgov/shared/ui';
+import {
+  AlertComponent,
+  InjectViewportCssClassDirective,
+  ScrollTargetComponent,
+} from '@bcgov/shared/ui';
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';
 import { PartyService } from '@app/core/party/party.service';
@@ -51,6 +55,7 @@ import { PortalState } from './state/portal-state.builder';
     BannerExpansionPanelComponent,
     ClipboardModule,
     GetSupportComponent,
+    InjectViewportCssClassDirective,
     MatButtonModule,
     MatIconModule,
     MatStepperModule,

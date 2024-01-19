@@ -15,6 +15,7 @@ import {
   DialogOptions,
   ExpansionPanelComponent,
   HtmlComponent,
+  InjectViewportCssClassDirective,
   LayoutHeaderFooterComponent,
   PidpViewport,
   ViewportService,
@@ -44,6 +45,7 @@ export interface LoginPageRouteData {
   standalone: true,
   imports: [
     ExpansionPanelComponent,
+    InjectViewportCssClassDirective,
     LayoutHeaderFooterComponent,
     MatButtonModule,
     NeedHelpComponent,

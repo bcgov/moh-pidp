@@ -6,12 +6,20 @@ import { MatIconModule } from '@angular/material/icon';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { faUserGroup } from '@fortawesome/free-solid-svg-icons';
 
+import { InjectViewportCssClassDirective } from '@bcgov/shared/ui';
+
 @Component({
   selector: 'app-endorsement-card',
   templateUrl: './endorsement-card.component.html',
   styleUrls: ['./endorsement-card.component.scss'],
   standalone: true,
-  imports: [FaIconComponent, MatButtonModule, MatIconModule, NgIf],
+  imports: [
+    FaIconComponent,
+    InjectViewportCssClassDirective,
+    MatButtonModule,
+    MatIconModule,
+    NgIf,
+  ],
 })
 export class EndorsementCardComponent {
   public faUserGroup = faUserGroup;

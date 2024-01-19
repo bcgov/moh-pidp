@@ -12,7 +12,10 @@ import { faCircleCheck, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { NavigationService } from '@pidp/presentation';
 
 import { NoContent } from '@bcgov/shared/data-access';
-import { CrossFieldErrorMatcher } from '@bcgov/shared/ui';
+import {
+  CrossFieldErrorMatcher,
+  InjectViewportCssClassDirective,
+} from '@bcgov/shared/ui';
 
 import {
   AbstractFormDependenciesService,
@@ -39,6 +42,7 @@ export interface BcProviderEditInitialStateModel {
   styleUrls: ['./bc-provider-edit.page.scss'],
   standalone: true,
   imports: [
+    InjectViewportCssClassDirective,
     MatButtonModule,
     MatFormFieldModule,
     MatInputModule,

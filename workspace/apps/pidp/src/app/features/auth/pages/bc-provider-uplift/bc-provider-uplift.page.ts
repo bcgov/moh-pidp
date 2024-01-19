@@ -4,7 +4,10 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
-import { LayoutHeaderFooterComponent } from '@bcgov/shared/ui';
+import {
+  InjectViewportCssClassDirective,
+  LayoutHeaderFooterComponent,
+} from '@bcgov/shared/ui';
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';
 
@@ -18,6 +21,7 @@ import { AuthService } from '../../services/auth.service';
   styleUrls: ['./bc-provider-uplift.page.scss'],
   standalone: true,
   imports: [
+    InjectViewportCssClassDirective,
     LayoutHeaderFooterComponent,
     MatButtonModule,
     MatIconModule,

@@ -6,6 +6,8 @@ import { Router } from '@angular/router';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { faPlus, faThumbsUp } from '@fortawesome/free-solid-svg-icons';
 
+import { InjectViewportCssClassDirective } from '@bcgov/shared/ui';
+
 import { APP_CONFIG, AppConfig } from '@app/app.config';
 import { AuthService } from '@app/features/auth/services/auth.service';
 
@@ -16,7 +18,13 @@ import { IPortalSection } from '../../state/portal-section.model';
   templateUrl: './portal-card.component.html',
   styleUrls: ['./portal-card.component.scss'],
   standalone: true,
-  imports: [NgClass, NgIf, FaIconComponent, MatButtonModule],
+  imports: [
+    FaIconComponent,
+    InjectViewportCssClassDirective,
+    MatButtonModule,
+    NgClass,
+    NgIf,
+  ],
 })
 export class PortalCardComponent {
   public faThumbsUp = faThumbsUp;

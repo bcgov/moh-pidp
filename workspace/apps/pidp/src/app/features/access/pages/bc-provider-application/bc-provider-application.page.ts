@@ -54,6 +54,7 @@ import {
   CrossFieldErrorMatcher,
   DialogOptions,
   HtmlComponent,
+  InjectViewportCssClassDirective,
 } from '@bcgov/shared/ui';
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';
@@ -84,6 +85,7 @@ import { BcProviderApplicationResource } from './bc-provider-application-resourc
   imports: [
     AsyncPipe,
     FaIconComponent,
+    InjectViewportCssClassDirective,
     MatButtonModule,
     MatFormFieldModule,
     MatInputModule,

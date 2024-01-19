@@ -14,7 +14,11 @@ import {
   faCircle,
 } from '@fortawesome/free-solid-svg-icons';
 
-import { PidpViewport, ViewportService } from '@bcgov/shared/ui';
+import {
+  InjectViewportCssClassDirective,
+  PidpViewport,
+  ViewportService,
+} from '@bcgov/shared/ui';
 
 import { IPortalSection } from '../../state/portal-section.model';
 import { PortalCardComponent } from '../portal-card/portal-card.component';
@@ -24,7 +28,7 @@ import { PortalCardComponent } from '../portal-card/portal-card.component';
   templateUrl: './portal-carousel.component.html',
   styleUrls: ['./portal-carousel.component.scss'],
   standalone: true,
-  imports: [NgFor, PortalCardComponent],
+  imports: [InjectViewportCssClassDirective, NgFor, PortalCardComponent],
   schemas: [
     // This causes the compiler to allow the non-angular swiper html tags.
     // Without this schema, compiling will fail on the swiper tags.

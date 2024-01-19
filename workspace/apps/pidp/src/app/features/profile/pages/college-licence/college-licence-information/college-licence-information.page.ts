@@ -9,6 +9,8 @@ import { Observable, catchError, map, of } from 'rxjs';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { faStethoscope } from '@fortawesome/free-solid-svg-icons';
 
+import { InjectViewportCssClassDirective } from '@bcgov/shared/ui';
+
 import { PartyService } from '@app/core/party/party.service';
 import { LoggerService } from '@app/core/services/logger.service';
 
@@ -25,6 +27,7 @@ import { CollegeLicenceInformationDetailComponent } from './components/college-l
     AsyncPipe,
     CollegeLicenceInformationDetailComponent,
     FaIconComponent,
+    InjectViewportCssClassDirective,
     MatButtonModule,
     NgFor,
   ],

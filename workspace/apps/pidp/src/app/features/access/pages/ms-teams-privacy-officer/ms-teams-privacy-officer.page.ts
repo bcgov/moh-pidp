@@ -12,7 +12,7 @@ import { EMPTY, catchError, noop, of, tap } from 'rxjs';
 import { LoadingOverlayService } from '@pidp/presentation';
 
 import { NoContent } from '@bcgov/shared/data-access';
-import { SafePipe } from '@bcgov/shared/ui';
+import { InjectViewportCssClassDirective, SafePipe } from '@bcgov/shared/ui';
 
 import {
   AbstractFormDependenciesService,
@@ -38,6 +38,7 @@ import { msTeamsSupportEmail } from './ms-teams.constants';
   imports: [
     AddressFormComponent,
     EnrolmentErrorComponent,
+    InjectViewportCssClassDirective,
     MatButtonModule,
     MatFormFieldModule,
     MatInputModule,
