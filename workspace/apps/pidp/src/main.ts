@@ -3,6 +3,8 @@ import { bootstrapApplication } from '@angular/platform-browser';
 import { provideRouter, withRouterConfig } from '@angular/router';
 
 import { provideEnvironmentNgxMask } from 'ngx-mask';
+// import function to register Swiper custom elements
+import { register } from 'swiper/element/bundle';
 
 import { routes } from '@app/app-routing.routes';
 
@@ -12,6 +14,9 @@ import { AppComponent } from './app/app.component';
 import { APP_CONFIG, APP_DI_CONFIG, AppConfig } from './app/app.config';
 import { environment } from './environments/environment';
 import { EnvironmentConfig } from './environments/environment-config.model';
+
+// register Swiper custom elements
+register();
 
 async function fetchConfig(): Promise<Response> {
   // Fetch environment.json.
