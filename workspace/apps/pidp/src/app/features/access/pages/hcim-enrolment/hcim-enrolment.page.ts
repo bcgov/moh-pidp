@@ -9,6 +9,7 @@ import { EMPTY, Observable } from 'rxjs';
 
 import {
   AlertComponent,
+  AnchorDirective,
   PageComponent,
   PageFooterComponent,
   PageHeaderComponent,
@@ -43,6 +44,7 @@ import { HcimEnrolment } from './hcim-enrolment.model';
   standalone: true,
   imports: [
     AlertComponent,
+    AnchorDirective,
     NgFor,
     NgIf,
     MatButtonModule,

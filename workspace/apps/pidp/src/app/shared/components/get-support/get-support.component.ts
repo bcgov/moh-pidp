@@ -7,6 +7,7 @@ import {
 } from '@angular/core';
 
 import {
+  AnchorDirective,
   PageSectionComponent,
   PageSectionSubheaderComponent,
 } from '@bcgov/shared/ui';
@@ -27,7 +28,12 @@ interface SupportProps {
   styleUrls: ['./get-support.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
-  imports: [PageSectionComponent, PageSectionSubheaderComponent, NgFor],
+  imports: [
+    AnchorDirective,
+    PageSectionComponent,
+    PageSectionSubheaderComponent,
+    NgFor,
+  ],
 })
 export class GetSupportComponent implements OnInit {
   public providedSupport: SupportProps[];

@@ -5,6 +5,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
 import {
+  AnchorDirective,
   InjectViewportCssClassDirective,
   LayoutHeaderFooterComponent,
 } from '@bcgov/shared/ui';
@@ -21,6 +22,7 @@ import { AuthService } from '../../services/auth.service';
   styleUrls: ['./bc-provider-uplift.page.scss'],
   standalone: true,
   imports: [
+    AnchorDirective,
     InjectViewportCssClassDirective,
     LayoutHeaderFooterComponent,
     MatButtonModule,

@@ -4,6 +4,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 
 import {
+  AnchorDirective,
   PageComponent,
   PageFooterComponent,
   PageHeaderComponent,
@@ -18,6 +19,7 @@ import {
   styleUrls: ['./terms-of-access.page.scss'],
   standalone: true,
   imports: [
+    AnchorDirective,
     MatButtonModule,
     MatCheckboxModule,
     PageComponent,

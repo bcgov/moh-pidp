@@ -6,6 +6,7 @@ export { HtmlComponent } from './dialogs/content/html/html.component';
 export { IDialogContent } from './dialogs/dialog-content.model';
 
 export { AlertComponent, AlertType } from './alert/alert.component';
+export { AnchorDirective } from './anchor/anchor.directive';
 export { CardSummaryComponent } from './card-summary/card-summary.component';
 export { ContactFormComponent } from './contact-info-form/contact-info-form.component';
 export { ExpansionPanelComponent } from './expansion-panel/expansion-panel.component';

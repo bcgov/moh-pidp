@@ -10,6 +10,7 @@ import { EMPTY, Observable } from 'rxjs';
 
 import {
   AlertComponent,
+  AnchorDirective,
   PageComponent,
   PageFooterComponent,
   PageHeaderComponent,
@@ -49,6 +50,7 @@ import {
   standalone: true,
   imports: [
     AlertComponent,
+    AnchorDirective,
     MatButtonModule,
     MatFormFieldModule,
     MatInputModule,

@@ -12,7 +12,10 @@ import {
   LoadingOverlayService,
 } from '@pidp/presentation';
 
-import { InjectViewportCssClassDirective } from '@bcgov/shared/ui';
+import {
+  AnchorDirective,
+  InjectViewportCssClassDirective,
+} from '@bcgov/shared/ui';
 
 import { PartyService } from '@app/core/party/party.service';
 import { LoggerService } from '@app/core/services/logger.service';
@@ -32,6 +35,7 @@ import {
   styleUrls: ['./driver-fitness.page.scss'],
   standalone: true,
   imports: [
+    AnchorDirective,
     EnrolmentErrorComponent,
     InjectViewportCssClassDirective,
     MatButtonModule,

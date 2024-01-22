@@ -3,6 +3,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import {
+  AnchorDirective,
   PageComponent,
   PageFooterComponent,
   PageHeaderComponent,
@@ -19,6 +20,7 @@ import { UtilsService } from '@app/core/services/utils.service';
   styleUrls: ['./mfa-setup.page.scss'],
   standalone: true,
   imports: [
+    AnchorDirective,
     MatButtonModule,
     PageComponent,
     PageFooterComponent,

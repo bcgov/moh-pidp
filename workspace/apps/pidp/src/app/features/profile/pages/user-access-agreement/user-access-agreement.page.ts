@@ -11,6 +11,7 @@ import { AppStateService } from '@pidp/presentation';
 
 import {
   AlertComponent,
+  AnchorDirective,
   PageComponent,
   PageFooterComponent,
 } from '@bcgov/shared/ui';
@@ -31,6 +32,7 @@ import { UserAccessAgreementResource } from './user-access-agreement-resource.se
   standalone: true,
   imports: [
     AlertComponent,
+    AnchorDirective,
     AsyncPipe,
     forwardRef(() => UserAccessAgreementDocumentComponent),
     MatButtonModule,

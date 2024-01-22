@@ -12,6 +12,7 @@ import { ActivatedRoute } from '@angular/router';
 import { EMPTY, Observable, exhaustMap, of, switchMap } from 'rxjs';
 
 import {
+  AnchorDirective,
   DialogOptions,
   ExpansionPanelComponent,
   HtmlComponent,
@@ -44,6 +45,7 @@ export interface LoginPageRouteData {
   styleUrls: ['./login.page.scss'],
   standalone: true,
   imports: [
+    AnchorDirective,
     ExpansionPanelComponent,
     InjectViewportCssClassDirective,
     LayoutHeaderFooterComponent,

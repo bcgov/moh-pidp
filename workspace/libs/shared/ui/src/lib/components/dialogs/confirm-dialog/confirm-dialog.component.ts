@@ -33,6 +33,7 @@ import { DIALOG_DEFAULT_OPTION } from '../dialogs-properties.provider';
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
   imports: [
+    AnchorDirective,
     MatDialogTitle,
     NgIf,
     MatIconModule,

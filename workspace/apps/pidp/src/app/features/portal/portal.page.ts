@@ -12,6 +12,7 @@ import { BehaviorSubject, Observable, tap } from 'rxjs';
 
 import {
   AlertComponent,
+  AnchorDirective,
   InjectViewportCssClassDirective,
   ScrollTargetComponent,
 } from '@bcgov/shared/ui';
@@ -51,6 +52,7 @@ import { PortalState } from './state/portal-state.builder';
   standalone: true,
   imports: [
     AlertComponent,
+    AnchorDirective,
     AsyncPipe,
     BannerExpansionPanelComponent,
     ClipboardModule,
