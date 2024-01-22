@@ -173,10 +173,6 @@ export class PortalPage implements OnInit {
           // PAS step
           selectedIndex = 1;
         }
-        if (!this.hasCpn && this.completedWizard) {
-          // MFA
-          selectedIndex = 2;
-        }
         this.selectedIndex = selectedIndex;
       });
   }
