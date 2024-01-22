@@ -3,8 +3,6 @@ import { HttpClient } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 import { ActivatedRoute, Router, convertToParamMap } from '@angular/router';
 
-import { of } from 'rxjs';
-
 import { randNumber, randText, randTextRange } from '@ngneat/falso';
 import { MockProfileStatus } from '@test/mock-profile-status';
 import {
@@ -16,10 +14,7 @@ import {
 import { KeycloakService } from 'keycloak-angular';
 
 import { APP_CONFIG, APP_DI_CONFIG } from '@app/app.config';
-import {
-  Destination,
-  DiscoveryResource,
-} from '@app/core/party/discovery-resource.service';
+import { DiscoveryResource } from '@app/core/party/discovery-resource.service';
 import { PartyService } from '@app/core/party/party.service';
 import { ToastService } from '@app/core/services/toast.service';
 
@@ -41,12 +36,10 @@ describe('PortalPage', () => {
   let portalServiceSpy: Spy<PortalService>;
   let bcProviderResourceSpy: Spy<BcProviderEditResource>;
   let router: Router;
-  let discoveryResource: Spy<DiscoveryResource>;
 
   let mockActivatedRoute;
   let mockProfileStatusResponse: ProfileStatus;
   let mockBcProviderEditInitialStateResponse: BcProviderEditInitialStateModel;
-  let mockDestination: Destination;
 
   beforeEach(() => {
     mockActivatedRoute = {
@@ -109,9 +102,6 @@ describe('PortalPage', () => {
     mockBcProviderEditInitialStateResponse = {
       bcProviderId: 'Id',
     };
-    discoveryResource = TestBed.inject(
-      DiscoveryResource,
-    ) as Spy<DiscoveryResource>;
   });
 
   describe('INIT', () => {
@@ -125,8 +115,6 @@ describe('PortalPage', () => {
       portalServiceSpy.accessorSpies.getters.alerts.mockReturnValue(
         mockProfileStatusResponse.alerts,
       );
-      mockDestination = 4;
-      discoveryResource.getDestination.mockReturnValueOnce(of(mockDestination));
 
       when('the component is initialized', () => {
         expect(component.alerts.length).toEqual(0);
