@@ -68,7 +68,7 @@ export class PortalPage implements OnInit {
   private readonly lastSelectedIndex: number;
   public hasCpn: boolean | undefined;
   public collegeLicenceDeclared: boolean | undefined;
-  public isComplete$: Observable<Destination>;
+  public destination$: Observable<Destination>;
   public IdentityProvider = IdentityProvider;
   public identityProvider$: Observable<IdentityProvider>;
   public pasAllowedProviders: IdentityProvider[];
@@ -98,7 +98,7 @@ export class PortalPage implements OnInit {
       IdentityProvider.BCSC,
       IdentityProvider.BC_PROVIDER,
     ];
-    this.isComplete$ = this.discoveryResource.getDestination(
+    this.destination$ = this.discoveryResource.getDestination(
       this.partyService.partyId,
     );
   }
@@ -137,9 +137,8 @@ export class PortalPage implements OnInit {
   }
 
   public ngOnInit(): void {
-    this.isComplete$.subscribe((destination) => {
-      this.completedWizard = destination === Destination.PORTAL;
-    });
+    this.hasCompletedWizard();
+
     this.portalResource
       .getProfileStatus(this.partyService.partyId)
       .pipe(
@@ -174,13 +173,7 @@ export class PortalPage implements OnInit {
           // PAS step
           selectedIndex = 1;
         }
-        if (
-          this.selectedNoCollegeLicence(
-            this.hasCpn,
-            this.collegeLicenceDeclared,
-            this.completedWizard,
-          )
-        ) {
+        if (!this.hasCpn && this.completedWizard) {
           // MFA
           selectedIndex = 2;
         }
@@ -188,14 +181,10 @@ export class PortalPage implements OnInit {
       });
   }
 
-  private selectedNoCollegeLicence(
-    hasCpn: boolean | undefined,
-    licenceDeclared: boolean | undefined,
-    isComplete: boolean | undefined,
-  ): boolean | undefined {
-    console.log('I is isComplete', isComplete);
-
-    return !hasCpn && licenceDeclared && isComplete;
+  private hasCompletedWizard(): void {
+    this.destination$.subscribe((destination) => {
+      this.completedWizard = destination === Destination.PORTAL;
+    });
   }
 
   private navigateToExternalUrl(url: string): void {
