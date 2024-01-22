@@ -72,7 +72,7 @@ export class PortalPage implements OnInit {
   public IdentityProvider = IdentityProvider;
   public identityProvider$: Observable<IdentityProvider>;
   public pasAllowedProviders: IdentityProvider[];
-  public completedWizard = false;
+  public Destination = Destination;
 
   public constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
@@ -137,8 +137,6 @@ export class PortalPage implements OnInit {
   }
 
   public ngOnInit(): void {
-    this.hasCompletedWizard();
-
     this.portalResource
       .getProfileStatus(this.partyService.partyId)
       .pipe(
@@ -175,12 +173,6 @@ export class PortalPage implements OnInit {
         }
         this.selectedIndex = selectedIndex;
       });
-  }
-
-  private hasCompletedWizard(): void {
-    this.destination$.subscribe((destination) => {
-      this.completedWizard = destination === Destination.PORTAL;
-    });
   }
 
   private navigateToExternalUrl(url: string): void {
