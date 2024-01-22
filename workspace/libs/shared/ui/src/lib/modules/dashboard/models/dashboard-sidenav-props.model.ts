@@ -25,7 +25,7 @@ export class DashboardSidenavProps {
   public constructor(
     mode: MatDrawerMode,
     opened: boolean,
-    fixedInViewport: boolean
+    fixedInViewport: boolean,
   ) {
     this.mode = mode;
     this.opened = opened;

@@ -35,7 +35,7 @@ export class SaEformsPage implements OnInit {
     private partyService: PartyService,
     private resource: SaEformsResource,
     private logger: LoggerService,
-    documentService: DocumentService
+    documentService: DocumentService,
   ) {
     const routeData = this.route.snapshot.data;
     this.title = routeData.title;
@@ -67,7 +67,7 @@ export class SaEformsPage implements OnInit {
           }
           this.accessRequestFailed = true;
           return of(noop());
-        })
+        }),
       )
       .subscribe();
   }

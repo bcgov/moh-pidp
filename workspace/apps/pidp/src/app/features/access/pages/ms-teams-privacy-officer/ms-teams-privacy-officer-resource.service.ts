@@ -17,7 +17,7 @@ import { MsTeamsClinicInfo } from './ms-teams-privacy-officer.model';
 export class MsTeamsPrivacyOfficerResource {
   public constructor(
     private apiResource: ApiHttpClient,
-    private portalResource: PortalResource
+    private portalResource: PortalResource,
   ) {}
 
   public getProfileStatus(partyId: number): Observable<ProfileStatus | null> {
@@ -26,18 +26,18 @@ export class MsTeamsPrivacyOfficerResource {
 
   public requestAccess(
     partyId: number,
-    clinicInfo: MsTeamsClinicInfo
+    clinicInfo: MsTeamsClinicInfo,
   ): NoContent {
     return this.apiResource
       .post<NoContent>(
         `parties/${partyId}/access-requests/ms-teams-privacy-officer`,
-        clinicInfo
+        clinicInfo,
       )
       .pipe(
         NoContentResponse,
         catchError((error: HttpErrorResponse) => {
           return throwError(() => error);
-        })
+        }),
       );
   }
 }

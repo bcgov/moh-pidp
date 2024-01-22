@@ -33,7 +33,7 @@ export class FormGroupValidators {
    */
   public static atLeastOne(
     validator: ValidatorFn = Validators.required,
-    allowlist: string[] = []
+    allowlist: string[] = [],
   ): ValidatorFn {
     return (group: AbstractControl): ValidationErrors | null => {
       if (!(group instanceof FormGroup)) {

@@ -105,7 +105,7 @@ nx affected:e2e
 When using Nx, you can create multiple applications and libraries in the same workspace. To generate an application run:
 
 ```bash
-nx g @nrwl/angular:app APP_NAME
+nx g @nx/angular:app APP_NAME
 ```
 
 #### Generate a library
@@ -113,17 +113,17 @@ nx g @nrwl/angular:app APP_NAME
 Libraries are shareable across libraries and applications. They can be imported from `@workspace/LIB_NAME`. To generate a library run:
 
 ```bash
-nx g @nrwl/angular:lib LIB_NAME
+nx g @nx/angular:lib LIB_NAME
 ```
 
 #### Code Scaffolding
 
 Generate code scaffolding for the application like modules, components, services, etc;
 
-Run `nx g @nrwl/angular:component my-component --project=my-app` to generate a new component.
+Run `nx g @nx/angular:component my-component --project=my-app` to generate a new component.
 
 ```bash
-nx g @nrwl/angular:component my-component --project=my-app
+nx g @nx/angular:component my-component --project=my-app
 ```
 
 ### Understand Your Workspace

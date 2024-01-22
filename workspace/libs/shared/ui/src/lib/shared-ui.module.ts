@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { NgxMaskModule } from 'ngx-mask';
+import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
 
 import { AlertActionsDirective } from './components/alert/alert-actions.directive';
 import { AlertContentDirective } from './components/alert/alert-content.directive';
@@ -38,6 +38,7 @@ import { ScrollTargetComponent } from './components/scroll-target/scroll-target.
 import { ToggleContentComponent } from './components/toggle-content/toggle-content.component';
 import { UserInfoComponent } from './components/user-info/user-info.component';
 import { YesNoContentComponent } from './components/yes-no-content/yes-no-content.component';
+import { TrimDirective } from './directives/trim.directive';
 import { InjectViewportCssClassDirective } from './directives/viewport-css.directive';
 import { MaterialModule } from './material/material.module';
 import { ContextHelpModule } from './modules/context-help/context-help.module';
@@ -48,7 +49,6 @@ import { PhonePipe } from './pipes/phone.pipe';
 import { PostalPipe } from './pipes/postal.pipe';
 import { ReplacePipe } from './pipes/replace.pipe';
 import { SafePipe } from './pipes/safe.pipe';
-import { TrimDirective } from './directives/trim.directive';
 
 @NgModule({
   declarations: [
@@ -99,15 +99,15 @@ import { TrimDirective } from './directives/trim.directive';
     CommonModule,
     ContextHelpModule,
     MaterialModule,
-    NgxMaskModule.forRoot(),
     ReactiveFormsModule,
     FontAwesomeModule,
     NgOptimizedImage,
+    NgxMaskDirective,
+    NgxMaskPipe,
   ],
   exports: [
     ContextHelpModule,
     MaterialModule,
-    NgxMaskModule,
     ReactiveFormsModule,
     FontAwesomeModule,
     AlertComponent,
@@ -152,6 +152,9 @@ import { TrimDirective } from './directives/trim.directive';
     SafePipe,
     InjectViewportCssClassDirective,
     NgOptimizedImage,
+    NgxMaskDirective,
+    NgxMaskPipe,
   ],
+  providers: [provideNgxMask()],
 })
 export class SharedUiModule {}

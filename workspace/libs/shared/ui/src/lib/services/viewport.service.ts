@@ -54,7 +54,7 @@ export class ViewportService {
 
   public constructor(
     private breakpointObserver: BreakpointObserver,
-    private pidpBreakpointObserver: BreakpointObserver
+    private pidpBreakpointObserver: BreakpointObserver,
   ) {
     this.breakpointObserver$ = breakpointObserver.observe([
       BootstrapBreakpoints.medium,
@@ -102,8 +102,8 @@ export class ViewportService {
     return this.breakpointObserver$.pipe(
       map(
         (result: BreakpointState) =>
-          result.matches && result.breakpoints[BootstrapBreakpoints.mobile]
-      )
+          result.matches && result.breakpoints[BootstrapBreakpoints.mobile],
+      ),
     );
   }
 
@@ -115,8 +115,8 @@ export class ViewportService {
     return this.breakpointObserver$.pipe(
       map(
         (result: BreakpointState) =>
-          result.matches && result.breakpoints[BootstrapBreakpoints.tablet]
-      )
+          result.matches && result.breakpoints[BootstrapBreakpoints.tablet],
+      ),
     );
   }
 
@@ -128,8 +128,8 @@ export class ViewportService {
     return this.breakpointObserver$.pipe(
       map(
         (result: BreakpointState) =>
-          result.matches && result.breakpoints[BootstrapBreakpoints.medium]
-      )
+          result.matches && result.breakpoints[BootstrapBreakpoints.medium],
+      ),
     );
   }
 
@@ -141,8 +141,8 @@ export class ViewportService {
     return this.breakpointObserver$.pipe(
       map(
         (result: BreakpointState) =>
-          result.matches && result.breakpoints[BootstrapBreakpoints.large]
-      )
+          result.matches && result.breakpoints[BootstrapBreakpoints.large],
+      ),
     );
   }
 }

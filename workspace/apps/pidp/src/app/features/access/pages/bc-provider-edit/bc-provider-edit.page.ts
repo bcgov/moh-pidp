@@ -1,7 +1,6 @@
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { MatDialogConfig } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { catchError, noop, of, tap } from 'rxjs';
 
@@ -16,6 +15,7 @@ import {
   AbstractFormPage,
 } from '@app/core/classes/abstract-form-page.class';
 import { PartyService } from '@app/core/party/party.service';
+import { DialogBcproviderEditComponent } from '@app/shared/components/success-dialog/components/dialog-bcprovider-edit.component';
 
 import { BcProviderEditFormState } from './bc-provider-edit-form-state';
 import {
@@ -40,11 +40,9 @@ export class BcProviderEditPage
   public faXmark = faXmark;
   public formState: BcProviderEditFormState;
   public showErrorCard = false;
-  public errorCardText = '';
-  public showMessageCard = false;
-  public messageCardText = '';
   public username = '';
   public errorMatcher = new CrossFieldErrorMatcher();
+  public componentType = DialogBcproviderEditComponent;
 
   // ui-page is handling this.
   public showOverlayOnSubmit = false;
@@ -61,9 +59,8 @@ export class BcProviderEditPage
     dependenciesService: AbstractFormDependenciesService,
     fb: FormBuilder,
     private navigationService: NavigationService,
-    private snackBar: MatSnackBar,
     private partyService: PartyService,
-    private resource: BcProviderEditResource
+    private resource: BcProviderEditResource,
   ) {
     super(dependenciesService);
     this.formState = new BcProviderEditFormState(fb);
@@ -71,13 +68,6 @@ export class BcProviderEditPage
 
   public onBack(): void {
     this.navigationService.navigateToRoot();
-  }
-  public onGeneratePasswordCheckChange(): void {
-    this.snackBar.open('Not yet implemented', 'OK');
-  }
-
-  public hasPasswordRuleError(): boolean {
-    return this.formState.newPassword.hasError('invalidRequirements');
   }
 
   public onSuccessDialogClose(): void {
@@ -103,26 +93,13 @@ export class BcProviderEditPage
 
     return this.resource.changePassword(data).pipe(
       tap((_) => {
-        this.setError('');
         this.showSuccessDialog();
       }),
       catchError(() => {
-        const message = 'An error occurred.';
-        this.setError(message);
-        this.setMessage('');
+        this.showErrorCard = true;
         return of(noop());
-      })
+      }),
     );
-  }
-
-  private setError(message: string): void {
-    this.showErrorCard = !!message;
-    this.errorCardText = message;
-  }
-
-  private setMessage(message: string): void {
-    this.showMessageCard = !!message;
-    this.messageCardText = message;
   }
 
   private showSuccessDialog(): void {

@@ -21,7 +21,7 @@ export class ProviderReportingPortalSection implements IPortalSection {
 
   public constructor(
     private profileStatus: ProfileStatus,
-    private router: Router
+    private router: Router,
   ) {
     this.key = 'providerReportingPortal';
     this.heading = 'Provider Reporting Portal';

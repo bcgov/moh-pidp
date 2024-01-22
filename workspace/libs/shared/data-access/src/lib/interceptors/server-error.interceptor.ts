@@ -20,7 +20,7 @@ export const MAX_HTTP_RETRY_ATTEMPTS = 1;
 export class ServerErrorInterceptor implements HttpInterceptor {
   public intercept(
     request: HttpRequest<unknown>,
-    next: HttpHandler
+    next: HttpHandler,
   ): Observable<HttpEvent<unknown>> {
     let httpRetryAttempts = 0;
     return next.handle(request).pipe(
@@ -38,9 +38,9 @@ export class ServerErrorInterceptor implements HttpInterceptor {
             }
 
             httpRetryAttempts++;
-          })
+          }),
         );
-      })
+      }),
     );
   }
 }

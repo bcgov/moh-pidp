@@ -1,8 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { HttpStatusCode } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
+import {
+  ActivatedRouteSnapshot,
+  ResolveFn,
+  RouterStateSnapshot,
+} from '@angular/router';
+
+import { Observable } from 'rxjs';
 
 import { randNumber } from '@ngneat/falso';
+import { MockProfileStatus } from '@test/mock-profile-status';
 import { Spy, createSpyFromClass, provideAutoSpy } from 'jest-auto-spies';
 
 import { PartyService } from '@app/core/party/party.service';
@@ -10,20 +18,26 @@ import { StatusCode } from '@app/features/portal/enums/status-code.enum';
 import { ProfileStatus } from '@app/features/portal/models/profile-status.model';
 
 import { DriverFitnessResource } from './driver-fitness-resource.service';
-import { DriverFitnessResolver } from './driver-fitness.resolver';
-import { MockProfileStatus } from '@test/mock-profile-status';
+import { driverFitnessResolver } from './driver-fitness.resolver';
 
-describe('DriverFitnessResolver', () => {
-  let resolver: DriverFitnessResolver;
+describe('driverFitnessResolver', () => {
+  const executeResolver: ResolveFn<StatusCode | null> = (
+    ...resolverParameters
+  ) =>
+    TestBed.runInInjectionContext(() =>
+      driverFitnessResolver(...resolverParameters),
+    );
+
   let driverFitnessResourceSpy: Spy<DriverFitnessResource>;
   let partyServiceSpy: Spy<PartyService>;
+  let activatedRouteSnapshotSpy: Spy<ActivatedRouteSnapshot>;
+  let routerStateSnapshotSpy: Spy<RouterStateSnapshot>;
 
   let mockProfileStatus: ProfileStatus;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
-        DriverFitnessResolver,
         provideAutoSpy(DriverFitnessResource),
         {
           provide: PartyService,
@@ -35,7 +49,6 @@ describe('DriverFitnessResolver', () => {
       ],
     });
 
-    resolver = TestBed.inject(DriverFitnessResolver);
     driverFitnessResourceSpy = TestBed.inject<any>(DriverFitnessResource);
     partyServiceSpy = TestBed.inject<any>(PartyService);
 
@@ -52,12 +65,14 @@ describe('DriverFitnessResolver', () => {
           .mustBeCalledWith(partyId)
           .nextOneTimeWith(mockProfileStatus);
         let actualResult: StatusCode | null;
-        resolver
-          .resolve()
-          .subscribe(
-            (profileStatus: StatusCode | null) =>
-              (actualResult = profileStatus),
-          );
+        (
+          executeResolver(
+            activatedRouteSnapshotSpy,
+            routerStateSnapshotSpy,
+          ) as Observable<StatusCode | null>
+        ).subscribe(
+          (profileStatus: StatusCode | null) => (actualResult = profileStatus),
+        );
 
         then('response will provide the status code for SA eForms', () => {
           expect(
@@ -84,12 +99,14 @@ describe('DriverFitnessResolver', () => {
             },
           ]);
         let actualResult: StatusCode | null;
-        resolver
-          .resolve()
-          .subscribe(
-            (profileStatus: StatusCode | null) =>
-              (actualResult = profileStatus),
-          );
+        (
+          executeResolver(
+            activatedRouteSnapshotSpy,
+            routerStateSnapshotSpy,
+          ) as Observable<StatusCode | null>
+        ).subscribe(
+          (profileStatus: StatusCode | null) => (actualResult = profileStatus),
+        );
 
         then('response will provide null as status code for SA eForms', () => {
           expect(
@@ -106,12 +123,14 @@ describe('DriverFitnessResolver', () => {
 
       when('attempting to resolve the status code', () => {
         let actualResult: StatusCode | null;
-        resolver
-          .resolve()
-          .subscribe(
-            (profileStatus: StatusCode | null) =>
-              (actualResult = profileStatus),
-          );
+        (
+          executeResolver(
+            activatedRouteSnapshotSpy,
+            routerStateSnapshotSpy,
+          ) as Observable<StatusCode | null>
+        ).subscribe(
+          (profileStatus: StatusCode | null) => (actualResult = profileStatus),
+        );
 
         then('response will provide null as status code for SA eForms', () => {
           expect(driverFitnessResourceSpy.requestAccess).not.toHaveBeenCalled();

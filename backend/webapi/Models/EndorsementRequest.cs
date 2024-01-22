@@ -14,7 +14,8 @@ public enum EndorsementRequestStatus
     Approved,
     Declined,
     Completed,
-    Cancelled
+    Cancelled,
+    Expired
 }
 
 [Table(nameof(EndorsementRequest))]

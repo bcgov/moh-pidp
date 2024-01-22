@@ -1,29 +1,22 @@
 import { TestBed } from '@angular/core/testing';
+import { ResolveFn } from '@angular/router';
 
-import { DestinationResolver } from './destination.resolver';
-import { APP_CONFIG, APP_DI_CONFIG } from '@app/app.config';
-import { HttpClient } from '@angular/common/http';
-import { provideAutoSpy } from 'jest-auto-spies';
-import { KeycloakService } from 'keycloak-angular';
+import { destinationResolver } from './destination.resolver';
+import { Destination } from './discovery-resource.service';
 
-describe('DestinationResolver', () => {
-  let resolver: DestinationResolver;
+describe('destinationResolver', () => {
+  const executeResolver: ResolveFn<Destination | null> = (
+    ...resolverParameters
+  ) =>
+    TestBed.runInInjectionContext(() =>
+      destinationResolver(...resolverParameters),
+    );
 
   beforeEach(() => {
-    TestBed.configureTestingModule({
-      providers: [
-        {
-          provide: APP_CONFIG,
-          useValue: APP_DI_CONFIG,
-        },
-        provideAutoSpy(HttpClient),
-        provideAutoSpy(KeycloakService),
-      ],
-    });
-    resolver = TestBed.inject(DestinationResolver);
+    TestBed.configureTestingModule({});
   });
 
   it('should be created', () => {
-    expect(resolver).toBeTruthy();
+    expect(executeResolver).toBeTruthy();
   });
 });

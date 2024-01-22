@@ -1,8 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { HttpStatusCode } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
+import {
+  ActivatedRouteSnapshot,
+  ResolveFn,
+  RouterStateSnapshot,
+} from '@angular/router';
+
+import { Observable } from 'rxjs';
 
 import { randNumber } from '@ngneat/falso';
+import { MockProfileStatus } from '@test/mock-profile-status';
 import { Spy, createSpyFromClass, provideAutoSpy } from 'jest-auto-spies';
 
 import { PartyService } from '@app/core/party/party.service';
@@ -10,20 +18,26 @@ import { StatusCode } from '@app/features/portal/enums/status-code.enum';
 import { ProfileStatus } from '@app/features/portal/models/profile-status.model';
 
 import { HcimAccountTransferResource } from './hcim-account-transfer-resource.service';
-import { HcimAccountTransferResolver } from './hcim-account-transfer.resolver';
-import { MockProfileStatus } from '@test/mock-profile-status';
+import { hcimAccountTransferResolver } from './hcim-account-transfer.resolver';
 
-describe('HcimAccountTransferResolver', () => {
-  let resolver: HcimAccountTransferResolver;
+describe('hcimAccountTransferResolver', () => {
+  const executeResolver: ResolveFn<StatusCode | null> = (
+    ...resolverParameters
+  ) =>
+    TestBed.runInInjectionContext(() =>
+      hcimAccountTransferResolver(...resolverParameters),
+    );
+
   let hcimAccountTransferResourceSpy: Spy<HcimAccountTransferResource>;
   let partyServiceSpy: Spy<PartyService>;
+  let activatedRouteSnapshotSpy: Spy<ActivatedRouteSnapshot>;
+  let routerStateSnapshotSpy: Spy<RouterStateSnapshot>;
 
   let mockProfileStatus: ProfileStatus;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
-        HcimAccountTransferResolver,
         provideAutoSpy(HcimAccountTransferResource),
         {
           provide: PartyService,
@@ -35,7 +49,6 @@ describe('HcimAccountTransferResolver', () => {
       ],
     });
 
-    resolver = TestBed.inject(HcimAccountTransferResolver);
     hcimAccountTransferResourceSpy = TestBed.inject<any>(
       HcimAccountTransferResource,
     );
@@ -56,12 +69,15 @@ describe('HcimAccountTransferResolver', () => {
             .mustBeCalledWith(partyId)
             .nextOneTimeWith(mockProfileStatus);
           let actualResult: StatusCode | null;
-          resolver
-            .resolve()
-            .subscribe(
-              (profileStatus: StatusCode | null) =>
-                (actualResult = profileStatus),
-            );
+          (
+            executeResolver(
+              activatedRouteSnapshotSpy,
+              routerStateSnapshotSpy,
+            ) as Observable<StatusCode | null>
+          ).subscribe(
+            (profileStatus: StatusCode | null) =>
+              (actualResult = profileStatus),
+          );
 
           then(
             'response will provide the status code for HCIMWeb Account Transfer',
@@ -94,12 +110,15 @@ describe('HcimAccountTransferResolver', () => {
               },
             ]);
           let actualResult: StatusCode | null;
-          resolver
-            .resolve()
-            .subscribe(
-              (profileStatus: StatusCode | null) =>
-                (actualResult = profileStatus),
-            );
+          (
+            executeResolver(
+              activatedRouteSnapshotSpy,
+              routerStateSnapshotSpy,
+            ) as Observable<StatusCode | null>
+          ).subscribe(
+            (profileStatus: StatusCode | null) =>
+              (actualResult = profileStatus),
+          );
 
           then(
             'response will provide null as status code for HCIMWeb Account Transfer',
@@ -120,12 +139,14 @@ describe('HcimAccountTransferResolver', () => {
 
       when('attempting to resolve the status code', () => {
         let actualResult: StatusCode | null;
-        resolver
-          .resolve()
-          .subscribe(
-            (profileStatus: StatusCode | null) =>
-              (actualResult = profileStatus),
-          );
+        (
+          executeResolver(
+            activatedRouteSnapshotSpy,
+            routerStateSnapshotSpy,
+          ) as Observable<StatusCode | null>
+        ).subscribe(
+          (profileStatus: StatusCode | null) => (actualResult = profileStatus),
+        );
 
         then(
           'response will provide null as status code for HCIMWeb Account Transfer',

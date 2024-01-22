@@ -62,7 +62,7 @@ export class HcimAccountTransferPage
     private partyService: PartyService,
     private resource: HcimAccountTransferResource,
     private logger: LoggerService,
-    fb: FormBuilder
+    fb: FormBuilder,
   ) {
     super(dependenciesService);
 
@@ -108,7 +108,7 @@ export class HcimAccountTransferPage
   }
 
   protected afterSubmitIsSuccessful(
-    accessResponse: HcimAccountTransferResponse
+    accessResponse: HcimAccountTransferResponse,
   ): void {
     const statusCode = accessResponse.statusCode;
     const remainingAttempts =

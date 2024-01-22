@@ -112,12 +112,8 @@ public class MSTeamsClinicMemberTests : InMemoryDbTest
                 new EndorsementRelationship { PartyId = privacyOfficer.Id }
             }
         });
-        var emailService = A.Fake<IEmailService>();
-        var capturedEmails = new List<Email>();
-        A.CallTo(() => emailService.SendAsync(An<Email>._))
-            .Invokes(i => capturedEmails.Add(i.GetArgument<Email>(0)!));
-        var testClock = A.Fake<IClock>();
-        A.CallTo(() => testClock.GetCurrentInstant()).Returns(Instant.FromUnixTimeSeconds(123456));
+        var emailService = AMock.EmailService();
+        var testClock = AMock.Clock(Instant.FromUnixTimeSeconds(123456));
 
         var handler = this.MockDependenciesFor<CommandHandler>(emailService, testClock);
 
@@ -130,12 +126,12 @@ public class MSTeamsClinicMemberTests : InMemoryDbTest
         Assert.Single(accessRequest);
         Assert.Equal(clinic.Id, accessRequest.Single().ClinicId);
 
-        Assert.Equal(2, capturedEmails.Count);
-        var privacyOfficerEmail = capturedEmails.SingleOrDefault(email => email.To.Contains(privacyOfficer.Email));
+        Assert.Equal(2, emailService.SentEmails.Count);
+        var privacyOfficerEmail = emailService.SentEmails.SingleOrDefault(email => email.To.Contains(privacyOfficer.Email));
         Assert.NotNull(privacyOfficerEmail);
         Assert.Contains(party.FullName, privacyOfficerEmail.Body);
 
-        var enrolmentEmailBody = capturedEmails.Single(email => email != privacyOfficerEmail).Body;
+        var enrolmentEmailBody = emailService.SentEmails.Single(email => email != privacyOfficerEmail).Body;
         var expectedEnrolmentDate = testClock.GetCurrentInstant().InZone(DateTimeZoneProviders.Tzdb.GetZoneOrNull("America/Vancouver")!).Date;
         Assert.Contains(expectedEnrolmentDate.ToString(), enrolmentEmailBody);
         Assert.Contains(privacyOfficer.FullName, enrolmentEmailBody);

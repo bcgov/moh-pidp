@@ -7,7 +7,7 @@ import { LookupService } from './lookup.service';
 import { LookupConfig } from './lookup.types';
 
 function configFactory(
-  lookupService: LookupService
+  lookupService: LookupService,
 ): () => Observable<LookupConfig | null> {
   // Ensure configuration is populated before the application
   // is fully initialized to prevent race conditions

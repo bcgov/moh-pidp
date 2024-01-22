@@ -33,8 +33,14 @@ export class OrganizationDetailsFormState extends AbstractFormState<Organization
 
   public buildForm(): void {
     this.formInstance = this.fb.group({
-      organizationCode: [0, [Validators.required, FormControlValidators.requiredIndex]],
-      healthAuthorityCode: [0, [Validators.required, FormControlValidators.requiredIndex]],
+      organizationCode: [
+        0,
+        [Validators.required, FormControlValidators.requiredIndex],
+      ],
+      healthAuthorityCode: [
+        0,
+        [Validators.required, FormControlValidators.requiredIndex],
+      ],
       employeeIdentifier: ['', [Validators.required]],
     });
   }

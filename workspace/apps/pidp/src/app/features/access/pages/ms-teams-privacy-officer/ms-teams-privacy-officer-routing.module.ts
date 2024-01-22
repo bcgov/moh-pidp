@@ -4,14 +4,14 @@ import { RouterModule, Routes } from '@angular/router';
 import { setDashboardTitleGuard } from '@pidp/presentation';
 
 import { MsTeamsPrivacyOfficerPage } from './ms-teams-privacy-officer.page';
-import { MsTeamsPrivacyOfficerResolver } from './ms-teams-privacy-officer.resolver';
+import { msTeamsPrivacyOfficerResolver } from './ms-teams-privacy-officer.resolver';
 
 const routes: Routes = [
   {
     path: '',
     component: MsTeamsPrivacyOfficerPage,
     resolve: {
-      msTeamsPrivacyOfficerStatusCode: MsTeamsPrivacyOfficerResolver,
+      msTeamsPrivacyOfficerStatusCode: msTeamsPrivacyOfficerResolver,
     },
     canActivate: [setDashboardTitleGuard],
     data: {

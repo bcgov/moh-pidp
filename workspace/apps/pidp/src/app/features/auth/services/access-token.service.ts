@@ -42,13 +42,13 @@ export class AccessTokenService implements IAccessTokenService {
           throw new Error('Token could not be decoded');
         }
         return accessToken;
-      })
+      }),
     );
   }
 
   public loadBrokerProfile(forceReload?: boolean): Observable<BrokerProfile> {
     return from(
-      this.keycloakService.loadUserProfile(forceReload)
+      this.keycloakService.loadUserProfile(forceReload),
     ) as Observable<BrokerProfile>;
   }
 

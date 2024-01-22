@@ -5,7 +5,7 @@ import { KeycloakAngularModule } from 'keycloak-angular';
 import { KeycloakInitService } from './keycloak-init.service';
 
 export function keycloakFactory(
-  keycloakInitService: KeycloakInitService
+  keycloakInitService: KeycloakInitService,
 ): () => Promise<void> {
   return (): Promise<void> => keycloakInitService.load();
 }

@@ -1,8 +1,10 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
-import { AuthorizedUserService } from '../services/authorized-user.service';
-import { IdentityProvider } from '../enums/identity-provider.enum';
+
 import { map } from 'rxjs';
+
+import { IdentityProvider } from '../enums/identity-provider.enum';
+import { AuthorizedUserService } from '../services/authorized-user.service';
 
 export const highAssuranceCredentialGuard: CanActivateFn = () => {
   const router = inject(Router);

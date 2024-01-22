@@ -19,7 +19,7 @@ export class AppComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private titleService: Title,
     private routeStateService: RouteStateService,
-    private utilsService: UtilsService
+    private utilsService: UtilsService,
   ) {}
 
   public ngOnInit(): void {
@@ -44,10 +44,10 @@ export class AppComponent implements OnInit {
           }
           return route;
         }),
-        mergeMap((route: ActivatedRoute) => route.data)
+        mergeMap((route: ActivatedRoute) => route.data),
       )
       .subscribe((routeData: Data) =>
-        this.titleService.setTitle(routeData.title)
+        this.titleService.setTitle(routeData.title),
       );
   }
 
@@ -60,12 +60,12 @@ export class AppComponent implements OnInit {
     scroll
       .pipe(
         map((event: Scroll) => event.anchor ?? null),
-        delay(500) // Provide settling time before triggering scroll
+        delay(500), // Provide settling time before triggering scroll
       )
       .subscribe((routeFragment: string | null) =>
         routeFragment
           ? this.utilsService.scrollToAnchor(routeFragment)
-          : this.utilsService.scrollTop(contentContainerSelector)
+          : this.utilsService.scrollTop(contentContainerSelector),
       );
   }
 }

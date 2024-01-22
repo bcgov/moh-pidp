@@ -13,7 +13,7 @@ export type SortWeight = -1 | 0 | 1;
 export class UtilsService {
   public constructor(
     @Inject(WINDOW) private window: Window,
-    @Inject(DOCUMENT) private document: Document
+    @Inject(DOCUMENT) private document: Document,
   ) {}
 
   /**
@@ -125,7 +125,7 @@ export class UtilsService {
    * @description
    * Conversion of Base64 encoded document to a Blob.
    */
-  private base64ToBlob(base64: string, type: string = 'application/pdf'): Blob {
+  private base64ToBlob(base64: string, type = 'application/pdf'): Blob {
     const decoded = window.atob(base64.replace(/\s/g, ''));
     const len = decoded.length;
     const buffer = new ArrayBuffer(len);

@@ -19,13 +19,14 @@ export const accessSectionKeys = [
   'msTeamsClinicMember',
   'provider-reporting-portal',
   'primaryCareRostering',
+  'edrd-eforms',
 ] as const;
 
 /**
  * @description
  * Union of keys generated from the tuple.
  */
-export type AccessSectionKey = typeof accessSectionKeys[number];
+export type AccessSectionKey = (typeof accessSectionKeys)[number];
 
 /**
  * @description
@@ -48,4 +49,5 @@ export interface AccessGroup extends IAccessGroup {
   msTeamsClinicMember: Section;
   providerReportingPortal: Section;
   primaryCareRostering: Section;
+  edrdEforms: Section;
 }

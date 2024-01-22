@@ -198,7 +198,7 @@ describe('PersonalInformationPage', () => {
           'party personal information should not be updated and router not navigate',
           () => {
             expect(router.navigate).not.toHaveBeenCalled();
-          }
+          },
         );
       });
     });

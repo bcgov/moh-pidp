@@ -36,6 +36,7 @@ import {
 } from '@app/core/classes/abstract-form-page.class';
 import { PartyService } from '@app/core/party/party.service';
 import { LoggerService } from '@app/core/services/logger.service';
+import { UtilsService } from '@app/core/services/utils.service';
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
 import { LookupService } from '@app/modules/lookup/lookup.service';
 
@@ -82,7 +83,8 @@ export class EndorsementsPage
     private navigationService: NavigationService,
     private lookupService: LookupService,
     viewportService: ViewportService,
-    fb: FormBuilder
+    private utilsService: UtilsService,
+    fb: FormBuilder,
   ) {
     super(dependenciesService);
 
@@ -91,7 +93,7 @@ export class EndorsementsPage
     this.completed =
       routeData.endorsementRequestStatusCode === StatusCode.COMPLETED;
     viewportService.viewportBroadcast$.subscribe((viewport) =>
-      this.onViewportChange(viewport)
+      this.onViewportChange(viewport),
     );
   }
 
@@ -123,8 +125,8 @@ export class EndorsementsPage
         switchMap(
           () =>
             (this.actionableEndorsementRequests$ =
-              this.getActionableEndorsementRequests(this.partyService.partyId))
-        )
+              this.getActionableEndorsementRequests(this.partyService.partyId)),
+        ),
       )
       .subscribe();
   }
@@ -136,8 +138,8 @@ export class EndorsementsPage
         switchMap(
           () =>
             (this.actionableEndorsementRequests$ =
-              this.getActionableEndorsementRequests(this.partyService.partyId))
-        )
+              this.getActionableEndorsementRequests(this.partyService.partyId)),
+        ),
       )
       .subscribe();
   }
@@ -162,17 +164,18 @@ export class EndorsementsPage
                   switchMap(
                     () =>
                       (this.endorsements$ = this.getEndorsements(
-                        this.partyService.partyId
-                      ))
-                  )
+                        this.partyService.partyId,
+                      )),
+                  ),
                 )
-            : EMPTY
-        )
+            : EMPTY,
+        ),
       )
       .subscribe();
   }
 
   public ngOnInit(): void {
+    this.utilsService.scrollTop();
     const partyId = this.partyService.partyId;
 
     if (!partyId) {
@@ -196,16 +199,16 @@ export class EndorsementsPage
 
   public getCollegeTextForEndorsement(endorsement: Endorsement): string {
     const college = this.lookupService.colleges.find(
-      (x) => x.code === endorsement.collegeCode
+      (x) => x.code === endorsement.collegeCode,
     );
     return college?.name ?? '';
   }
 
   public getCollegeTextForEndorsementRequest(
-    endorsementRequest: EndorsementRequest
+    endorsementRequest: EndorsementRequest,
   ): string {
     const college = this.lookupService.colleges.find(
-      (x) => x.code === endorsementRequest.collegeCode
+      (x) => x.code === endorsementRequest.collegeCode,
     );
     return college?.name ?? '';
   }
@@ -237,41 +240,41 @@ export class EndorsementsPage
           this.navigateToRoot();
         }
         return of([]);
-      })
+      }),
     );
   }
 
   private getActionableEndorsementRequests(
-    partyId: number
+    partyId: number,
   ): Observable<EndorsementRequest[]> {
     return this.resource.getEndorsementRequests(partyId).pipe(
       map((response: EndorsementRequest[] | null) => response ?? []),
       map((response: EndorsementRequest[]) =>
-        response.filter((res) => res.actionable === true)
+        response.filter((res) => res.actionable === true),
       ),
       catchError((error: HttpErrorResponse) => {
         if (error.status === HttpStatusCode.NotFound) {
           this.navigateToRoot();
         }
         return of([]);
-      })
+      }),
     );
   }
 
   private getNonActionableEndorsementRequests(
-    partyId: number
+    partyId: number,
   ): Observable<EndorsementRequest[]> {
     return this.resource.getEndorsementRequests(partyId).pipe(
       map((response: EndorsementRequest[] | null) => response ?? []),
       map((response: EndorsementRequest[]) =>
-        response.filter((res) => res.actionable === false)
+        response.filter((res) => res.actionable === false),
       ),
       catchError((error: HttpErrorResponse) => {
         if (error.status === HttpStatusCode.NotFound) {
           this.navigateToRoot();
         }
         return of([]);
-      })
+      }),
     );
   }
 }

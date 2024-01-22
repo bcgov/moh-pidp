@@ -27,6 +27,7 @@ import {
   faUser,
   faXmark,
 } from '@fortawesome/free-solid-svg-icons';
+import { DashboardStateModel, PidpStateName } from '@pidp/data-model';
 import {
   AppStateService,
   LOADING_OVERLAY_DEFAULT_MESSAGE,
@@ -54,10 +55,10 @@ import { AuthRoutes } from '@app/features/auth/auth.routes';
 import { IdentityProvider } from '@app/features/auth/enums/identity-provider.enum';
 import { AuthService } from '@app/features/auth/services/auth.service';
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
+import { DialogBcproviderCreateComponent } from '@app/shared/components/success-dialog/components/dialog-bcprovider-create.component';
 
 import { BcProviderApplicationFormState } from './bc-provider-application-form-state';
 import { BcProviderApplicationResource } from './bc-provider-application-resource.service';
-import { DashboardStateModel, PidpStateName } from '@pidp/data-model';
 
 @Component({
   selector: 'app-bc-provider-application',
@@ -75,14 +76,13 @@ export class BcProviderApplicationPage
   public faXmark = faXmark;
   public formState: BcProviderApplicationFormState;
   public showErrorCard = false;
-  public errorCardText = '';
   public showMessageCard = false;
-  public messageCardText = '';
   public completed: boolean | null;
   public username = '';
   public password = '';
   public showOverlayOnSubmit = false;
   public errorMatcher = new CrossFieldErrorMatcher();
+  public componentType = DialogBcproviderCreateComponent;
 
   public activeLayout: 'upliftAccount' | 'createAccount' | '';
 
@@ -184,9 +184,7 @@ export class BcProviderApplicationPage
       }),
       catchError(() => {
         this.loadingOverlayService.close();
-        const message = 'An error occurred.';
-        this.setError(message);
-        this.setMessage('');
+        this.showErrorCard = true;
         return '';
       }),
     );
@@ -194,16 +192,6 @@ export class BcProviderApplicationPage
 
   protected afterSubmitIsSuccessful(): void {
     this.navigationService.navigateToRoot();
-  }
-
-  private setError(message: string): void {
-    this.showErrorCard = !!message;
-    this.errorCardText = message;
-  }
-
-  private setMessage(message: string): void {
-    this.showMessageCard = !!message;
-    this.messageCardText = message;
   }
 
   private showSuccessDialog(): void {

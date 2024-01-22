@@ -15,7 +15,7 @@ export interface SetDashboardTitleGuardRouteData {
  * interface SetDashboardTitleGuardRouteData.
  */
 export const setDashboardTitleGuard: CanActivateFn = (
-  route: ActivatedRouteSnapshot
+  route: ActivatedRouteSnapshot,
 ) => {
   const applicationService = inject(ApplicationService);
 
@@ -27,7 +27,7 @@ export const setDashboardTitleGuard: CanActivateFn = (
 
   applicationService.setDashboardTitleText(
     data.titleText,
-    data.titleDescriptionText
+    data.titleDescriptionText,
   );
 
   return true;

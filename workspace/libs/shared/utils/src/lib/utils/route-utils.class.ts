@@ -18,7 +18,7 @@ export class RouteUtils {
     route: ActivatedRoute,
     router: Router,
     baseRoutePath: RoutePath,
-    location: Location
+    location: Location,
   ) {
     this.route = route;
     this.router = router;
@@ -35,7 +35,7 @@ export class RouteUtils {
    */
   public static currentModulePath(
     route: ActivatedRoute,
-    defaultRoutePath: string = '/'
+    defaultRoutePath = '/',
   ): string {
     const urlSegments = route.snapshot.url;
 
@@ -50,7 +50,7 @@ export class RouteUtils {
    */
   public static currentRoutePath(
     url: string,
-    blacklistedUriParams: string[] = []
+    blacklistedUriParams: string[] = [],
   ): string | null {
     const path = url.split('?').shift() ?? null;
 
@@ -77,7 +77,7 @@ export class RouteUtils {
    */
   public routeTo(
     routePath: RoutePath,
-    navigationExtras: NavigationExtras = {}
+    navigationExtras: NavigationExtras = {},
   ): void {
     const commands = Array.isArray(routePath) ? routePath : [routePath];
     this.router.navigate(commands, {
@@ -91,7 +91,7 @@ export class RouteUtils {
    */
   public routeRelativeTo(
     routePath: RoutePath,
-    navigationExtras: NavigationExtras = {}
+    navigationExtras: NavigationExtras = {},
   ): void {
     this.routeTo(routePath, {
       relativeTo: this.route.parent,
@@ -106,7 +106,7 @@ export class RouteUtils {
    */
   public routeWithin(
     routePath: RoutePath,
-    navigationExtras: NavigationExtras = {}
+    navigationExtras: NavigationExtras = {},
   ): void {
     let commands = Array.isArray(routePath) ? routePath : [routePath];
     commands = this.baseRoutePath

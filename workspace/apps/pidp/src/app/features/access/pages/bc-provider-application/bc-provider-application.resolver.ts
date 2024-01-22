@@ -1,7 +1,7 @@
-import { Injectable } from '@angular/core';
-import { Resolve } from '@angular/router';
+import { inject } from '@angular/core';
+import { ResolveFn } from '@angular/router';
 
-import { Observable, catchError, map, of } from 'rxjs';
+import { catchError, map, of } from 'rxjs';
 
 import { PartyService } from '@app/core/party/party.service';
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
@@ -9,31 +9,24 @@ import { ProfileStatus } from '@app/features/portal/models/profile-status.model'
 
 import { BcProviderApplicationResource } from './bc-provider-application-resource.service';
 
-@Injectable({
-  providedIn: 'root',
-})
-export class BcProviderApplicationResolver
-  implements Resolve<StatusCode | null>
-{
-  public constructor(
-    private partyService: PartyService,
-    private resource: BcProviderApplicationResource
-  ) {}
+export const bcProviderApplicationResolver: ResolveFn<
+  StatusCode | null
+> = () => {
+  const partyService = inject(PartyService);
+  const resource = inject(BcProviderApplicationResource);
 
-  public resolve(): Observable<StatusCode | null> {
-    if (!this.partyService.partyId) {
-      return of(null);
-    }
-
-    return this.resource.getProfileStatus(this.partyService.partyId).pipe(
-      map((profileStatus: ProfileStatus | null) => {
-        if (!profileStatus) {
-          return null;
-        }
-
-        return profileStatus.status.bcProvider.statusCode;
-      }),
-      catchError(() => of(null))
-    );
+  if (!partyService.partyId) {
+    return of(null);
   }
-}
+
+  return resource.getProfileStatus(partyService.partyId).pipe(
+    map((profileStatus: ProfileStatus | null) => {
+      if (!profileStatus) {
+        return null;
+      }
+
+      return profileStatus.status.bcProvider.statusCode;
+    }),
+    catchError(() => of(null)),
+  );
+};

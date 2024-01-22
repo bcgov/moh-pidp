@@ -37,14 +37,14 @@ export class LookupService implements ILookupService {
   public get countries(): Lookup<string>[] {
     return this.copyAndSortByKey<Lookup<string>>(
       this.lookupConfig?.countries,
-      'name'
+      'name',
     );
   }
 
   public get provinces(): ProvinceLookup[] {
     return this.copyAndSortByKey<ProvinceLookup>(
       this.lookupConfig?.provinces,
-      'name'
+      'name',
     );
   }
 
@@ -68,8 +68,8 @@ export class LookupService implements ILookupService {
           .pipe(
             map(
               (lookupConfig: LookupConfig | null) =>
-                (this.lookupConfig = lookupConfig)
-            )
+                (this.lookupConfig = lookupConfig),
+            ),
           )
       : of({ ...this.lookupConfig });
   }
@@ -91,7 +91,7 @@ export class LookupService implements ILookupService {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private copyAndSortByKey<T extends { [key: string]: any } = Lookup>(
     lookup: T[] | undefined,
-    sortBy: keyof T = 'code' as keyof T
+    sortBy: keyof T = 'code' as keyof T,
   ): T[] {
     return lookup?.length
       ? [...lookup].sort(SortUtils.sortByKey<T>(sortBy))

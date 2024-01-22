@@ -7,7 +7,7 @@ export class ObjectUtils {
    */
   public static keyMapping(
     object: { [key: string]: any },
-    mapping: { [key: string]: string }
+    mapping: { [key: string]: string },
   ): void {
     if (!object || !mapping) {
       return;
@@ -28,7 +28,7 @@ export class ObjectUtils {
    */
   public static keyMappingImmutable(
     object: { [key: string]: any },
-    mapping: { [key: string]: string }
+    mapping: { [key: string]: string },
   ): { [key: string]: unknown } | null {
     if (!object || !mapping) {
       return null;
@@ -38,7 +38,7 @@ export class ObjectUtils {
       (mapped: { [key: string]: unknown }, key: string) => (
         (mapped[mapping[key] ?? key] = object[key]), mapped
       ),
-      {} as { [key: string]: unknown }
+      {} as { [key: string]: unknown },
     );
   }
 
@@ -48,11 +48,11 @@ export class ObjectUtils {
    */
   public static toObjectKeys<T>(
     array: string[],
-    defaultValue?: T
+    defaultValue?: T,
   ): { [key: string]: T | null } {
     return array.reduce(
       (object, key: string) => ((object[key] = defaultValue ?? null), object),
-      {} as { [key: string]: T | null }
+      {} as { [key: string]: T | null },
     );
   }
 
@@ -64,7 +64,7 @@ export class ObjectUtils {
   public static mergeInto(
     key: string,
     refObject: { [key: string]: any },
-    mergeObject: { [key: string]: any } = {}
+    mergeObject: { [key: string]: any } = {},
   ): { [key: string]: any } {
     if (!key || !refObject || !mergeObject) {
       return mergeObject;
@@ -84,7 +84,7 @@ export class ObjectUtils {
     condition: boolean,
     key: string,
     refObject: { [key: string]: any },
-    mergeObject: { [key: string]: any } = {}
+    mergeObject: { [key: string]: any } = {},
   ): { [key: string]: any } {
     return condition
       ? this.mergeInto(key, refObject, mergeObject)

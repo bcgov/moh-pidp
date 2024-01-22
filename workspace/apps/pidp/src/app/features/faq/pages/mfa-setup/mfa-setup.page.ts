@@ -16,7 +16,7 @@ export class MfaSetupPage implements OnInit {
     @Inject(APP_CONFIG) private config: AppConfig,
     private route: ActivatedRoute,
     private router: Router,
-    private utilsService: UtilsService
+    private utilsService: UtilsService,
   ) {
     this.providerIdentitySupport = this.config.emails.providerIdentitySupport;
   }

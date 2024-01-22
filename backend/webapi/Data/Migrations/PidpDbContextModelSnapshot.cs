@@ -487,6 +487,11 @@ namespace Pidp.Data.Migrations
                         {
                             Code = 10,
                             Name = "Immunization Entry eForm"
+                        },
+                        new
+                        {
+                            Code = 11,
+                            Name = "EDRD eForm"
                         });
                 });
 
