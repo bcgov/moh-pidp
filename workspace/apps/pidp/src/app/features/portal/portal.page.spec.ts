@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { HttpClient } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 import { ActivatedRoute, Router, convertToParamMap } from '@angular/router';
 
@@ -13,6 +14,7 @@ import {
 import { KeycloakService } from 'keycloak-angular';
 
 import { APP_CONFIG, APP_DI_CONFIG } from '@app/app.config';
+import { DiscoveryResource } from '@app/core/party/discovery-resource.service';
 import { PartyService } from '@app/core/party/party.service';
 import { ToastService } from '@app/core/services/toast.service';
 
@@ -81,6 +83,8 @@ describe('PortalPage', () => {
         provideAutoSpy(KeycloakService),
         provideAutoSpy(ToastService),
         provideAutoSpy(AuthorizedUserService),
+        provideAutoSpy(HttpClient),
+        provideAutoSpy(DiscoveryResource),
       ],
     });
 
