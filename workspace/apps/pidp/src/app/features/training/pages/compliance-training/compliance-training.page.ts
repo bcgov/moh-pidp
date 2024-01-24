@@ -10,6 +10,7 @@ import {
   PageHeaderComponent,
   PageSectionComponent,
   PageSectionSubheaderComponent,
+  PageSectionSubheaderDescDirective,
 } from '@bcgov/shared/ui';
 
 @Component({
@@ -26,6 +27,7 @@ import {
     PageHeaderComponent,
     PageSectionComponent,
     PageSectionSubheaderComponent,
+    PageSectionSubheaderDescDirective,
   ],
 })
 export class ComplianceTrainingPage {

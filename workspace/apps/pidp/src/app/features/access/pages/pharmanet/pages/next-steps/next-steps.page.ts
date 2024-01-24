@@ -13,6 +13,7 @@ import {
   PageHeaderComponent,
   PageSectionComponent,
   PageSectionSubheaderComponent,
+  PageSectionSubheaderDescDirective,
 } from '@bcgov/shared/ui';
 
 import { InfoGraphicComponent } from '../../shared/components/info-graphic/info-graphic.component';
@@ -35,6 +36,7 @@ import { InfoGraphicComponent } from '../../shared/components/info-graphic/info-
     PageHeaderComponent,
     PageSectionComponent,
     PageSectionSubheaderComponent,
+    PageSectionSubheaderDescDirective,
     RouterLink,
   ],
 })

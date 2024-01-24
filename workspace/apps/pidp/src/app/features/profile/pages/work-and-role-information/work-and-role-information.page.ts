@@ -16,6 +16,7 @@ import {
   PageHeaderComponent,
   PageSectionComponent,
   PageSectionSubheaderComponent,
+  PageSectionSubheaderDescDirective,
 } from '@bcgov/shared/ui';
 
 import { PartyService } from '@app/core/party/party.service';
@@ -49,6 +50,7 @@ import { WorkAndRoleInformation } from './work-and-role-information.model';
     PageHeaderComponent,
     PageSectionComponent,
     PageSectionSubheaderComponent,
+    PageSectionSubheaderDescDirective,
     ReactiveFormsModule,
   ],
 })

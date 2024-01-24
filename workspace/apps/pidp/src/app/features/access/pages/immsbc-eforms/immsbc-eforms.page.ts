@@ -15,6 +15,7 @@ import {
   PageHeaderComponent,
   PageSectionComponent,
   PageSectionSubheaderComponent,
+  PageSectionSubheaderDescDirective,
   SafePipe,
 } from '@bcgov/shared/ui';
 
@@ -47,6 +48,7 @@ import {
     PageHeaderComponent,
     PageSectionComponent,
     PageSectionSubheaderComponent,
+    PageSectionSubheaderDescDirective,
     SafePipe,
   ],
 })

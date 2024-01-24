@@ -16,6 +16,7 @@ import {
   PageHeaderComponent,
   PageSectionComponent,
   PageSectionSubheaderComponent,
+  PageSectionSubheaderDescDirective,
 } from '@bcgov/shared/ui';
 
 import {
@@ -56,6 +57,7 @@ import { HcimEnrolment } from './hcim-enrolment.model';
     PageHeaderComponent,
     PageSectionComponent,
     PageSectionSubheaderComponent,
+    PageSectionSubheaderDescDirective,
     ReactiveFormsModule,
   ],
 })

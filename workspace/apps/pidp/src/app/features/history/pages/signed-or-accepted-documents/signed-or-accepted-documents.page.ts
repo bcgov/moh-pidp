@@ -13,6 +13,7 @@ import {
   PageHeaderComponent,
   PageSectionComponent,
   PageSectionSubheaderComponent,
+  PageSectionSubheaderDescDirective,
 } from '@bcgov/shared/ui';
 
 import { PartyService } from '@app/core/party/party.service';
@@ -49,6 +50,7 @@ export interface DocumentSection extends IDocumentMetaData {
     PageHeaderComponent,
     PageSectionComponent,
     PageSectionSubheaderComponent,
+    PageSectionSubheaderDescDirective,
   ],
 })
 export class SignedOrAcceptedDocumentsPage implements OnInit {

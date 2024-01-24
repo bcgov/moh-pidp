@@ -11,6 +11,7 @@ import {
   PageHeaderComponent,
   PageSectionComponent,
   PageSectionSubheaderComponent,
+  PageSectionSubheaderDescDirective,
   YesNoContentComponent,
 } from '@bcgov/shared/ui';
 
@@ -29,6 +30,7 @@ import {
     PageHeaderComponent,
     PageSectionComponent,
     PageSectionSubheaderComponent,
+    PageSectionSubheaderDescDirective,
     YesNoContentComponent,
   ],
 })

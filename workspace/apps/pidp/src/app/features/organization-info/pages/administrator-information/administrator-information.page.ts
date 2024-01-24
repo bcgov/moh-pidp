@@ -16,6 +16,7 @@ import {
   PageHeaderComponent,
   PageSectionComponent,
   PageSectionSubheaderComponent,
+  PageSectionSubheaderDescDirective,
 } from '@bcgov/shared/ui';
 
 import {
@@ -44,6 +45,7 @@ import { AdministratorInformation } from './administrator-information.model';
     PageHeaderComponent,
     PageSectionComponent,
     PageSectionSubheaderComponent,
+    PageSectionSubheaderDescDirective,
     ReactiveFormsModule,
   ],
 })

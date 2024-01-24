@@ -14,6 +14,7 @@ import {
   PageHeaderComponent,
   PageSectionComponent,
   PageSectionSubheaderComponent,
+  PageSectionSubheaderDescDirective,
   SafePipe,
 } from '@bcgov/shared/ui';
 
@@ -41,6 +42,7 @@ import { EdredEformsResource } from './edred-eforms-resource.service';
     PageHeaderComponent,
     PageSectionComponent,
     PageSectionSubheaderComponent,
+    PageSectionSubheaderDescDirective,
     SafePipe,
   ],
 })

@@ -11,6 +11,7 @@ import {
   PageHeaderComponent,
   PageSectionComponent,
   PageSectionSubheaderComponent,
+  PageSectionSubheaderDescDirective,
   YesNoContentComponent,
 } from '@bcgov/shared/ui';
 
@@ -32,6 +33,7 @@ import { SelfDeclarationType } from './self-declaration.enum';
     PageHeaderComponent,
     PageSectionComponent,
     PageSectionSubheaderComponent,
+    PageSectionSubheaderDescDirective,
     RouterLink,
     YesNoContentComponent,
   ],
