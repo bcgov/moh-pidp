@@ -22,6 +22,7 @@ export { PageHeaderComponent } from './page-header/page-header.component';
 export { PageSectionComponent } from './page-section/page-section.component';
 export { PageSectionSubheaderComponent } from './page-section-subheader/page-section-subheader.component';
 export { PageSectionSubheaderDescDirective } from './page-section-subheader/page-section-subheader-desc.directive';
+export { PageSectionSubheaderHintDirective } from './page-section-subheader/page-section-subheader-hint.directive';
 export { PageSubheaderComponent } from './page-subheader/page-subheader.component';
 export { PreferredNameFormComponent } from './preferred-name-form/preferred-name-form.component';
 export { ScrollTargetComponent } from './scroll-target/scroll-target.component';

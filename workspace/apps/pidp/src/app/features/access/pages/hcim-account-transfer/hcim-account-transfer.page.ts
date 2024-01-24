@@ -20,6 +20,7 @@ import {
   PageSectionComponent,
   PageSectionSubheaderComponent,
   PageSectionSubheaderDescDirective,
+  PageSectionSubheaderHintDirective,
   PageSubheaderComponent,
 } from '@bcgov/shared/ui';
 
@@ -68,6 +69,7 @@ import {
     PageSectionComponent,
     PageSectionSubheaderComponent,
     PageSectionSubheaderDescDirective,
+    PageSectionSubheaderHintDirective,
     PageSubheaderComponent,
     ReactiveFormsModule,
   ],
