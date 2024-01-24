@@ -14,6 +14,7 @@ import { EMPTY, catchError, of, tap } from 'rxjs';
 import { NoContent, OrganizationCode } from '@bcgov/shared/data-access';
 import {
   PageComponent,
+  PageFooterActionDirective,
   PageFooterComponent,
   PageHeaderComponent,
   PageSectionComponent,
@@ -48,6 +49,7 @@ import { OrganizationDetails } from './organization-details.model';
     NgFor,
     NgIf,
     PageComponent,
+    PageFooterActionDirective,
     PageFooterComponent,
     PageHeaderComponent,
     PageSectionComponent,

@@ -6,6 +6,7 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import {
   AnchorDirective,
   PageComponent,
+  PageFooterActionDirective,
   PageFooterComponent,
   PageHeaderComponent,
   PageSectionComponent,
@@ -23,6 +24,7 @@ import {
     MatButtonModule,
     MatCheckboxModule,
     PageComponent,
+    PageFooterActionDirective,
     PageFooterComponent,
     PageHeaderComponent,
     PageSectionComponent,

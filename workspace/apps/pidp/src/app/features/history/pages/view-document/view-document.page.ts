@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import {
   PageComponent,
+  PageFooterActionDirective,
   PageFooterComponent,
   PageHeaderComponent,
   PageSectionComponent,
@@ -28,6 +29,7 @@ import { ViewDocumentDirective } from './view-document.directive';
     MatButtonModule,
     NgIf,
     PageComponent,
+    PageFooterActionDirective,
     PageFooterComponent,
     PageHeaderComponent,
     PageSectionComponent,

@@ -16,6 +16,7 @@ export { IconType } from './icon/icon.component';
 export { KeyValueInfoComponent } from './key-value-info/key-value-info.component';
 export { LayoutHeaderFooterComponent } from './layout-header-footer/layout-header-footer.component';
 export { PageComponent } from './page/page.component';
+export { PageFooterActionDirective } from './page-footer/page-footer-action.directive';
 export { PageFooterComponent } from './page-footer/page-footer.component';
 export { PageHeaderComponent } from './page-header/page-header.component';
 export { PageSectionComponent } from './page-section/page-section.component';

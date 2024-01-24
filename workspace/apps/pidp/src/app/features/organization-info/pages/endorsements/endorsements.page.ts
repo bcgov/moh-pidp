@@ -38,6 +38,7 @@ import {
   DialogOptions,
   HtmlComponent,
   InjectViewportCssClassDirective,
+  PageFooterActionDirective,
   PidpViewport,
   ViewportService,
 } from '@bcgov/shared/ui';
@@ -80,6 +81,7 @@ export enum EndorsementType {
     MatTabsModule,
     NgFor,
     NgIf,
+    PageFooterActionDirective,
     ReactiveFormsModule,
   ],
 })

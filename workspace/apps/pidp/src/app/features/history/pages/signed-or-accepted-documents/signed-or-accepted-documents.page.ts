@@ -8,6 +8,7 @@ import { map } from 'rxjs';
 import {
   CardSummaryComponent,
   PageComponent,
+  PageFooterActionDirective,
   PageFooterComponent,
   PageHeaderComponent,
   PageSectionComponent,
@@ -43,6 +44,7 @@ export interface DocumentSection extends IDocumentMetaData {
     MatButtonModule,
     NgFor,
     PageComponent,
+    PageFooterActionDirective,
     PageFooterComponent,
     PageHeaderComponent,
     PageSectionComponent,

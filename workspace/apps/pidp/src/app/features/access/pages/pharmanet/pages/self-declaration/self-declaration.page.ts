@@ -6,6 +6,7 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 
 import {
   PageComponent,
+  PageFooterActionDirective,
   PageFooterComponent,
   PageHeaderComponent,
   PageSectionComponent,
@@ -26,6 +27,7 @@ import { SelfDeclarationType } from './self-declaration.enum';
     MatFormFieldModule,
     MatInputModule,
     PageComponent,
+    PageFooterActionDirective,
     PageFooterComponent,
     PageHeaderComponent,
     PageSectionComponent,

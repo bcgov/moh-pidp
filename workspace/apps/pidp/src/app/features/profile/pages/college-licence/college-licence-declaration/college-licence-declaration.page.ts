@@ -18,6 +18,7 @@ import { AppStateService } from '@pidp/presentation';
 import {
   AlertComponent,
   InjectViewportCssClassDirective,
+  PageFooterActionDirective,
 } from '@bcgov/shared/ui';
 
 import {
@@ -50,6 +51,7 @@ import { PartyLicenceDeclarationInformation } from './party-licence-declaration-
     MatSelectModule,
     NgFor,
     NgIf,
+    PageFooterActionDirective,
     ReactiveFormsModule,
   ],
 })

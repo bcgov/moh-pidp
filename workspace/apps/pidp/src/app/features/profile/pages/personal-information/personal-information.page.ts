@@ -20,6 +20,7 @@ import {
 import {
   ContactFormComponent,
   PageComponent,
+  PageFooterActionDirective,
   PageFooterComponent,
   PageHeaderComponent,
   PageSectionComponent,
@@ -61,6 +62,7 @@ import { PersonalInformation } from './personal-information.model';
     MatButtonModule,
     NgIf,
     PageComponent,
+    PageFooterActionDirective,
     PageFooterComponent,
     PageHeaderComponent,
     PageSectionComponent,

@@ -13,6 +13,7 @@ import {
   AlertComponent,
   AnchorDirective,
   PageComponent,
+  PageFooterActionDirective,
   PageFooterComponent,
 } from '@bcgov/shared/ui';
 
@@ -38,6 +39,7 @@ import { UserAccessAgreementResource } from './user-access-agreement-resource.se
     MatButtonModule,
     NgIf,
     PageComponent,
+    PageFooterActionDirective,
     PageFooterComponent,
   ],
 })

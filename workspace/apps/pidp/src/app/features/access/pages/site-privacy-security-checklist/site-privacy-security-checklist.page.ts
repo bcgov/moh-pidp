@@ -6,6 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import {
   PageComponent,
+  PageFooterActionDirective,
   PageFooterComponent,
   PageHeaderComponent,
   PageSectionComponent,
@@ -23,6 +24,7 @@ import {
     MatFormFieldModule,
     MatInputModule,
     PageComponent,
+    PageFooterActionDirective,
     PageFooterComponent,
     PageHeaderComponent,
     PageSectionComponent,

@@ -11,6 +11,7 @@ import { EMPTY, Observable, catchError, of, tap } from 'rxjs';
 import {
   InjectViewportCssClassDirective,
   PageComponent,
+  PageFooterActionDirective,
   PageFooterComponent,
   PageHeaderComponent,
   PageSectionComponent,
@@ -43,6 +44,7 @@ import { WorkAndRoleInformation } from './work-and-role-information.model';
     MatFormFieldModule,
     MatInputModule,
     PageComponent,
+    PageFooterActionDirective,
     PageFooterComponent,
     PageHeaderComponent,
     PageSectionComponent,

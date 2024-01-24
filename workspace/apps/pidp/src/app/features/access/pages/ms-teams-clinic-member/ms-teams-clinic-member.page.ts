@@ -20,6 +20,7 @@ import { NoContent } from '@bcgov/shared/data-access';
 import {
   AnchorDirective,
   InjectViewportCssClassDirective,
+  PageFooterActionDirective,
 } from '@bcgov/shared/ui';
 
 import {
@@ -53,6 +54,7 @@ import { PrivacyOfficer } from './ms-teams-clinic-member.model';
     MatSelectModule,
     NgFor,
     NgIf,
+    PageFooterActionDirective,
     ReactiveFormsModule,
   ],
 })

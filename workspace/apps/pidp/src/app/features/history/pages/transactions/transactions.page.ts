@@ -8,6 +8,7 @@ import { Observable } from 'rxjs';
 import {
   FormatDatePipe,
   PageComponent,
+  PageFooterActionDirective,
   PageFooterComponent,
   PageHeaderComponent,
   PageSectionComponent,
@@ -34,6 +35,7 @@ import { TransactionsResource } from './transactions-resource.service';
     NgIf,
     NgFor,
     PageComponent,
+    PageFooterActionDirective,
     PageFooterComponent,
     PageHeaderComponent,
     PageSectionComponent,

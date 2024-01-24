@@ -15,6 +15,7 @@ import {
 import {
   AnchorDirective,
   InjectViewportCssClassDirective,
+  PageFooterActionDirective,
 } from '@bcgov/shared/ui';
 
 import { PartyService } from '@app/core/party/party.service';
@@ -40,6 +41,7 @@ import {
     InjectViewportCssClassDirective,
     MatButtonModule,
     NgIf,
+    PageFooterActionDirective,
     RouterLink,
   ],
 })

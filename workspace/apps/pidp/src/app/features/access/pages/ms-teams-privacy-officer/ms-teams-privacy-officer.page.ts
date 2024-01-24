@@ -15,6 +15,7 @@ import { NoContent } from '@bcgov/shared/data-access';
 import {
   AnchorDirective,
   InjectViewportCssClassDirective,
+  PageFooterActionDirective,
   SafePipe,
 } from '@bcgov/shared/ui';
 
@@ -51,6 +52,7 @@ import { msTeamsSupportEmail } from './ms-teams.constants';
     NgSwitch,
     NgSwitchCase,
     NgSwitchDefault,
+    PageFooterActionDirective,
     SafePipe,
     ReactiveFormsModule,
     RouterLink,

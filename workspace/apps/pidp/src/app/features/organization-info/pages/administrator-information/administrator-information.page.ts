@@ -11,6 +11,7 @@ import { EMPTY, catchError, of, tap } from 'rxjs';
 import { NoContent } from '@bcgov/shared/data-access';
 import {
   PageComponent,
+  PageFooterActionDirective,
   PageFooterComponent,
   PageHeaderComponent,
   PageSectionComponent,
@@ -38,6 +39,7 @@ import { AdministratorInformation } from './administrator-information.model';
     MatFormFieldModule,
     MatInputModule,
     PageComponent,
+    PageFooterActionDirective,
     PageFooterComponent,
     PageHeaderComponent,
     PageSectionComponent,
