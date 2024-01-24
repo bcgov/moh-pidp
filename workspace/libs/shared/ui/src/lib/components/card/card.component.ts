@@ -20,7 +20,7 @@ import { CardHintDirective } from './card-hint.directive';
   styleUrls: ['./card.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
-  imports: [MatCardModule, NgIf, MatIconModule],
+  imports: [CardHintDirective, MatCardModule, NgIf, MatIconModule],
 })
 export class CardComponent {
   @Input() public icon?: string;
