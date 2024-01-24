@@ -19,11 +19,11 @@ import { AlertComponent } from '../alert/alert.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
   imports: [
-    NgIf,
+    AlertActionsDirective,
     AlertComponent,
     AlertContentDirective,
-    AlertActionsDirective,
     MatButtonModule,
+    NgIf,
   ],
 })
 export class CollectionNoticeComponent {

@@ -9,7 +9,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { EMPTY, Observable } from 'rxjs';
 
 import {
+  AlertActionsDirective,
   AlertComponent,
+  AlertContentDirective,
   AnchorDirective,
   PageComponent,
   PageFooterComponent,
@@ -49,7 +51,9 @@ import {
   viewProviders: [HcimAccountTransferResource],
   standalone: true,
   imports: [
+    AlertActionsDirective,
     AlertComponent,
+    AlertContentDirective,
     AnchorDirective,
     MatButtonModule,
     MatFormFieldModule,

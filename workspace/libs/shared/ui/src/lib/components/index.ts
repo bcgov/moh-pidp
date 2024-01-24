@@ -5,7 +5,9 @@ export { DialogOptions } from './dialogs/dialog-options.model';
 export { HtmlComponent } from './dialogs/content/html/html.component';
 export { IDialogContent } from './dialogs/dialog-content.model';
 
+export { AlertActionsDirective } from './alert/alert-actions.directive';
 export { AlertComponent, AlertType } from './alert/alert.component';
+export { AlertContentDirective } from './alert/alert-content.directive';
 export { AnchorDirective } from './anchor/anchor.directive';
 export { CardSummaryComponent } from './card-summary/card-summary.component';
 export { ContactFormComponent } from './contact-info-form/contact-info-form.component';
