@@ -17,8 +17,6 @@ import {
   ContextHelpContentDirective,
   ContextHelpTitleDirective,
 } from '../../modules/context-help';
-import { ContextHelpContentDirective as ContextHelpContentDirective_1 } from '../../modules/context-help/context-help-content.directive';
-import { ContextHelpTitleDirective as ContextHelpTitleDirective_1 } from '../../modules/context-help/context-help-title.directive';
 import { ContextHelpComponent } from '../../modules/context-help/context-help/context-help.component';
 
 @Component({
@@ -28,13 +26,13 @@ import { ContextHelpComponent } from '../../modules/context-help/context-help/co
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
   imports: [
-    NgIf,
     ContextHelpComponent,
-    ContextHelpTitleDirective_1,
-    ContextHelpContentDirective_1,
+    ContextHelpContentDirective,
+    ContextHelpTitleDirective,
     MatButtonModule,
     MatIconModule,
     MatTooltipModule,
+    NgIf,
   ],
 })
 export class FormSectionComponent {
