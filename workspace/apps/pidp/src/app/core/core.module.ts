@@ -1,6 +1,5 @@
 import { NgModule, Optional, SkipSelf } from '@angular/core';
 
-import { httpInterceptorProviders } from '@bcgov/shared/data-access';
 import { RootRoutingModule } from '@bcgov/shared/ui';
 import { EnsureModuleLoadedOnceGuard } from '@bcgov/shared/utils';
 
@@ -17,7 +16,6 @@ const modules = [
 
 @NgModule({
   imports: modules,
-  providers: [httpInterceptorProviders],
 })
 export class CoreModule extends EnsureModuleLoadedOnceGuard {
   public constructor(@Optional() @SkipSelf() parentModule: CoreModule) {

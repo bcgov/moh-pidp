@@ -14,6 +14,8 @@ import { Routes, provideRouter, withRouterConfig } from '@angular/router';
 
 import { provideEnvironmentNgxMask } from 'ngx-mask';
 
+import { provideHttpInterceptors } from '@bcgov/shared/data-access';
+
 export interface CoreOptions {
   routes: Routes;
 }
@@ -32,6 +34,7 @@ export function provideCore(
       // DI-based interceptors must be explicitly enabled.
       withInterceptorsFromDi(),
     ),
+    provideHttpInterceptors(),
     provideRouter(
       options.routes,
       withRouterConfig({
