@@ -1,4 +1,8 @@
 import {
+  provideHttpClient,
+  withInterceptorsFromDi,
+} from '@angular/common/http';
+import {
   ENVIRONMENT_INITIALIZER,
   EnvironmentProviders,
   InjectionToken,
@@ -18,12 +22,15 @@ export interface CoreOptions {
 export const CORE_GUARD = new InjectionToken<string>('CORE_GUARD');
 
 export function provideCore(): (Provider | EnvironmentProviders)[] {
-//options: CoreOptions,
+  //options: CoreOptions,
   return [
     { provide: CORE_GUARD, useValue: 'CORE_GUARD' },
     provideAnimations(),
     provideEnvironmentNgxMask(),
-    // provideHttpClient(),
+    provideHttpClient(
+      // DI-based interceptors must be explicitly enabled.
+      withInterceptorsFromDi(),
+    ),
     // provideRouter(
     //   options.routes,
     //   withRouterConfig({

@@ -1,4 +1,3 @@
-import { HttpClientModule } from '@angular/common/http';
 import { NgModule, Optional, SkipSelf } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -13,7 +12,6 @@ import { LookupModule } from '@app/modules/lookup/lookup.module';
 import { PermissionsModule } from '@app/modules/permissions/permissions.module';
 
 const modules = [
-  HttpClientModule,
   // TODO required at root to connect with HttpClientModule
   NgxProgressBarModule,
   // TODO only applied to allow for a few core services until moved
