@@ -2,13 +2,12 @@ import { enableProdMode, importProvidersFrom } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { provideRouter, withRouterConfig } from '@angular/router';
 
-import { provideEnvironmentNgxMask } from 'ngx-mask';
 // import function to register Swiper custom elements
 import { register } from 'swiper/element/bundle';
 
 import { routes } from '@app/app-routing.routes';
-
-import { CoreModule } from '@core/core.module';
+import { CoreModule } from '@app/core';
+import { provideCore } from '@app/core/core';
 
 import { AppComponent } from './app/app.component';
 import { APP_CONFIG, APP_DI_CONFIG, AppConfig } from './app/app.config';
@@ -91,7 +90,6 @@ fetchConfig()
           provide: APP_CONFIG,
           useValue: appConfig,
         },
-        provideEnvironmentNgxMask(),
         provideRouter(
           routes,
           withRouterConfig({
@@ -108,6 +106,8 @@ fetchConfig()
           // withDebugTracing()
         ),
         importProvidersFrom(CoreModule),
+        provideCore(),
+        //{ routes: routes },
       ],
     }).catch((err) => console.error(err));
   });

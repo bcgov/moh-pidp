@@ -3,8 +3,6 @@ import { NgModule, Optional, SkipSelf } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { BrowserModule } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { httpInterceptorProviders } from '@bcgov/shared/data-access';
 import { NgxProgressBarModule, RootRoutingModule } from '@bcgov/shared/ui';
@@ -15,8 +13,6 @@ import { LookupModule } from '@app/modules/lookup/lookup.module';
 import { PermissionsModule } from '@app/modules/permissions/permissions.module';
 
 const modules = [
-  BrowserModule,
-  BrowserAnimationsModule,
   HttpClientModule,
   // TODO required at root to connect with HttpClientModule
   NgxProgressBarModule,
