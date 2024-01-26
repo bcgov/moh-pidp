@@ -1,6 +1,5 @@
 import { NgModule, Optional, SkipSelf } from '@angular/core';
 
-import { RootRoutingModule } from '@bcgov/shared/ui';
 import { EnsureModuleLoadedOnceGuard } from '@bcgov/shared/utils';
 
 import { KeycloakModule } from '@app/modules/keycloak/keycloak.module';
@@ -11,7 +10,6 @@ const modules = [
   LookupModule.forRoot(),
   KeycloakModule,
   PermissionsModule.forRoot(),
-  RootRoutingModule,
 ];
 
 @NgModule({

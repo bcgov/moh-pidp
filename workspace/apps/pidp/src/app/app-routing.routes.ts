@@ -8,4 +8,9 @@ export const routes: Routes = [
     loadChildren: (): Promise<Routes> =>
       import('./features/shell/shell-routing.routes').then((m) => m.routes),
   },
+  {
+    path: '',
+    loadChildren: (): Promise<Routes> =>
+      import('@bcgov/shared/ui').then((m) => m.rootRoutes),
+  },
 ];
