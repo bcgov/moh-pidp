@@ -10,7 +10,7 @@ import {
   inject,
 } from '@angular/core';
 import { provideAnimations } from '@angular/platform-browser/animations';
-import { Routes } from '@angular/router';
+import { Routes, provideRouter, withRouterConfig } from '@angular/router';
 
 import { provideEnvironmentNgxMask } from 'ngx-mask';
 
@@ -21,8 +21,9 @@ export interface CoreOptions {
 // create unique injection token for the guard
 export const CORE_GUARD = new InjectionToken<string>('CORE_GUARD');
 
-export function provideCore(): (Provider | EnvironmentProviders)[] {
-  //options: CoreOptions,
+export function provideCore(
+  options: CoreOptions,
+): (Provider | EnvironmentProviders)[] {
   return [
     { provide: CORE_GUARD, useValue: 'CORE_GUARD' },
     provideAnimations(),
@@ -31,21 +32,21 @@ export function provideCore(): (Provider | EnvironmentProviders)[] {
       // DI-based interceptors must be explicitly enabled.
       withInterceptorsFromDi(),
     ),
-    // provideRouter(
-    //   options.routes,
-    //   withRouterConfig({
-    //     onSameUrlNavigation: 'reload',
-    //   }),
-    //   // WARNING: Does not work as expected with Material SideNav
-    //   // being the scrollable content container.
-    //   // @see app.component.ts for implementation
-    //   // withInMemoryScrolling({
-    //   //   scrollPositionRestoration: 'enabled',
-    //   //   anchorScrolling: 'enabled',
-    //   // }),
-    //   // disabled debug tracing
-    //   // withDebugTracing()
-    // ),
+    provideRouter(
+      options.routes,
+      withRouterConfig({
+        onSameUrlNavigation: 'reload',
+      }),
+      // WARNING: Does not work as expected with Material SideNav
+      // being the scrollable content container.
+      // @see app.component.ts for implementation
+      // withInMemoryScrolling({
+      //   scrollPositionRestoration: 'enabled',
+      //   anchorScrolling: 'enabled',
+      // }),
+      // disabled debug tracing
+      // withDebugTracing()
+    ),
     // order matters
     // (especially when accessing some of the above defined providers)
     // init has to be last

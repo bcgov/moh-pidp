@@ -1,6 +1,5 @@
 import { enableProdMode, importProvidersFrom } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
-import { provideRouter, withRouterConfig } from '@angular/router';
 
 // import function to register Swiper custom elements
 import { register } from 'swiper/element/bundle';
@@ -90,24 +89,8 @@ fetchConfig()
           provide: APP_CONFIG,
           useValue: appConfig,
         },
-        provideRouter(
-          routes,
-          withRouterConfig({
-            onSameUrlNavigation: 'reload',
-          }),
-          // WARNING: Does not work as expected with Material SideNav
-          // being the scrollable content container.
-          // @see app.component.ts for implementation
-          // withInMemoryScrolling({
-          //   scrollPositionRestoration: 'enabled',
-          //   anchorScrolling: 'enabled',
-          // }),
-          // disabled debug tracing
-          // withDebugTracing()
-        ),
+        provideCore({ routes: routes }),
         importProvidersFrom(CoreModule),
-        provideCore(),
-        //{ routes: routes },
       ],
     }).catch((err) => console.error(err));
   });
