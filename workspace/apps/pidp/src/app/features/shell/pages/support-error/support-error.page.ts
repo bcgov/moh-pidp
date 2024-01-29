@@ -4,8 +4,8 @@ import { Router } from '@angular/router';
 
 import {
   AnchorDirective,
+  DashboardHeaderComponent,
   DashboardHeaderConfig,
-  DashboardModule,
 } from '@bcgov/shared/ui';
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';
@@ -17,7 +17,7 @@ import { ShellRoutes } from '../../shell.routes';
   templateUrl: './support-error.page.html',
   styleUrls: ['./support-error.page.scss'],
   standalone: true,
-  imports: [AnchorDirective, DashboardModule, MatButtonModule],
+  imports: [AnchorDirective, DashboardHeaderComponent, MatButtonModule],
 })
 export class SupportErrorPage {
   public headerConfig: DashboardHeaderConfig;

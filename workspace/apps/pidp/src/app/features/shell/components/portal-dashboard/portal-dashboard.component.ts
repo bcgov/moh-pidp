@@ -10,8 +10,8 @@ import { AppStateService } from '@pidp/presentation';
 import {
   DashboardHeaderConfig,
   DashboardMenuItem,
-  DashboardModule,
   DashboardRouteMenuItem,
+  DashboardV2Component,
   IDashboard,
 } from '@bcgov/shared/ui';
 import { ArrayUtils } from '@bcgov/shared/utils';
@@ -30,7 +30,7 @@ import { DashboardStateService } from '../../services/dashboard-state-service.se
   templateUrl: './portal-dashboard.component.html',
   styleUrls: ['./portal-dashboard.component.scss'],
   standalone: true,
-  imports: [DashboardModule, AsyncPipe],
+  imports: [AsyncPipe, DashboardV2Component],
 })
 export class PortalDashboardComponent implements IDashboard, OnInit {
   public logoutRedirectUrl: string;

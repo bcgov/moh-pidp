@@ -4,8 +4,9 @@ import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
 import { Observable, map } from 'rxjs';
 
 import {
+  DashboardComponent,
   DashboardHeaderTheme,
-  DashboardModule,
+  DashboardImageComponent,
   IDashboard,
 } from '@bcgov/shared/ui';
 
@@ -20,7 +21,7 @@ import { AuthService } from '@app/features/auth/services/auth.service';
   styleUrls: ['./admin-dashboard.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
-  imports: [DashboardModule, AsyncPipe],
+  imports: [AsyncPipe, DashboardComponent, DashboardImageComponent],
 })
 export class AdminDashboardComponent implements IDashboard {
   public logoutRedirectUrl: string;
