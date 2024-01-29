@@ -15,6 +15,7 @@ import { Routes, provideRouter, withRouterConfig } from '@angular/router';
 import { provideEnvironmentNgxMask } from 'ngx-mask';
 
 import { provideHttpInterceptors } from '@bcgov/shared/data-access';
+import { provideNgxProgressBar } from '@bcgov/shared/ui';
 
 import { provideKeycloak } from '@app/modules/keycloak/keycloak.module';
 
@@ -30,6 +31,7 @@ export function provideCore(
 ): (Provider | EnvironmentProviders)[] {
   return [
     { provide: CORE_GUARD, useValue: 'CORE_GUARD' },
+    provideNgxProgressBar(),
     provideAnimations(),
     provideEnvironmentNgxMask(),
     provideHttpClient(
