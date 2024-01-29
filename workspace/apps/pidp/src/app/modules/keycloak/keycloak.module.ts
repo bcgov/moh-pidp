@@ -1,24 +1,35 @@
-import { APP_INITIALIZER, NgModule, Provider } from '@angular/core';
+import {
+  APP_INITIALIZER,
+  EnvironmentProviders,
+  Provider,
+  importProvidersFrom,
+} from '@angular/core';
 
-import { KeycloakAngularModule } from 'keycloak-angular';
+import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
 
+import { provideLookup } from '../lookup/lookup.module';
+import { PermissionsService } from '../permissions/permissions.service';
 import { KeycloakInitService } from './keycloak-init.service';
 
-export function keycloakFactory(
+function keycloakFactory(
   keycloakInitService: KeycloakInitService,
 ): () => Promise<void> {
   return (): Promise<void> => keycloakInitService.load();
 }
 
-export const keycloakProvider: Provider = {
-  provide: APP_INITIALIZER,
-  useFactory: keycloakFactory,
-  multi: true,
-  deps: [KeycloakInitService],
-};
-
-@NgModule({
-  imports: [KeycloakAngularModule],
-  providers: [keycloakProvider],
-})
-export class KeycloakModule {}
+export function provideKeycloak(): (Provider | EnvironmentProviders)[] {
+  return [
+    importProvidersFrom(
+      KeycloakService,
+      KeycloakAngularModule,
+      PermissionsService,
+    ),
+    provideLookup(),
+    {
+      provide: APP_INITIALIZER,
+      useFactory: keycloakFactory,
+      multi: true,
+      deps: [KeycloakInitService],
+    },
+  ];
+}

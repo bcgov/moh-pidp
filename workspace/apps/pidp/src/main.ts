@@ -1,11 +1,10 @@
-import { enableProdMode, importProvidersFrom } from '@angular/core';
+import { enableProdMode } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
 
 // import function to register Swiper custom elements
 import { register } from 'swiper/element/bundle';
 
 import { routes } from '@app/app-routing.routes';
-import { CoreModule } from '@app/core';
 import { provideCore } from '@app/core/core';
 
 import { AppComponent } from './app/app.component';
@@ -90,7 +89,6 @@ fetchConfig()
           useValue: appConfig,
         },
         provideCore({ routes: routes }),
-        importProvidersFrom(CoreModule),
       ],
     }).catch((err) => console.error(err));
   });

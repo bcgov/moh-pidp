@@ -16,6 +16,8 @@ import { provideEnvironmentNgxMask } from 'ngx-mask';
 
 import { provideHttpInterceptors } from '@bcgov/shared/data-access';
 
+import { provideKeycloak } from '@app/modules/keycloak/keycloak.module';
+
 export interface CoreOptions {
   routes: Routes;
 }
@@ -50,6 +52,7 @@ export function provideCore(
       // disabled debug tracing
       // withDebugTracing()
     ),
+    provideKeycloak(),
     // order matters
     // (especially when accessing some of the above defined providers)
     // init has to be last

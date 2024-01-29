@@ -1,8 +1,7 @@
-import { APP_INITIALIZER, ModuleWithProviders, NgModule } from '@angular/core';
+import { APP_INITIALIZER, Provider } from '@angular/core';
 
 import { Observable } from 'rxjs';
 
-import { LookupCodePipe } from './lookup-code.pipe';
 import { LookupService } from './lookup.service';
 import { LookupConfig } from './lookup.types';
 
@@ -14,30 +13,11 @@ function configFactory(
   return (): Observable<LookupConfig | null> => lookupService.load();
 }
 
-@NgModule({
-  imports: [LookupCodePipe],
-  exports: [LookupCodePipe],
-})
-export class LookupModule {
-  public static forRoot(): ModuleWithProviders<LookupModule> {
-    return {
-      ngModule: LookupModule,
-      providers: [
-        {
-          provide: APP_INITIALIZER,
-          useFactory: configFactory,
-          multi: true,
-          deps: [LookupService],
-        },
-        LookupCodePipe,
-      ],
-    };
-  }
-
-  public static forChild(): ModuleWithProviders<LookupModule> {
-    return {
-      ngModule: LookupModule,
-      providers: [LookupCodePipe],
-    };
-  }
+export function provideLookup(): Provider {
+  return {
+    provide: APP_INITIALIZER,
+    useFactory: configFactory,
+    multi: true,
+    deps: [LookupService],
+  };
 }
