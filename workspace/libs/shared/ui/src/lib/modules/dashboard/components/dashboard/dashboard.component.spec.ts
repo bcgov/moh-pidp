@@ -5,7 +5,6 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
 
-import { NgxProgressBarModule } from '../../../../modules/ngx-progress-bar/ngx-progress-bar.module';
 import { DashboardComponent } from './dashboard.component';
 
 describe('DashboardComponent', () => {
@@ -19,7 +18,6 @@ describe('DashboardComponent', () => {
         MatListModule,
         MatSidenavModule,
         MatToolbarModule,
-        NgxProgressBarModule,
         RouterModule,
       ],
     }).compileComponents();

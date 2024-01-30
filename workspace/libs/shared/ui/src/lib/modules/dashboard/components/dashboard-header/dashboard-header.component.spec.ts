@@ -1,7 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatToolbarModule } from '@angular/material/toolbar';
 
-import { NgxProgressBarModule } from '../../../ngx-progress-bar/ngx-progress-bar.module';
 import { DashboardHeaderComponent } from './dashboard-header.component';
 
 describe('DashboardHeaderComponent', () => {
@@ -10,7 +9,7 @@ describe('DashboardHeaderComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [MatToolbarModule, NgxProgressBarModule],
+      imports: [MatToolbarModule],
     }).compileComponents();
   });
 

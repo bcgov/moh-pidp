@@ -17,7 +17,7 @@ import { provideEnvironmentNgxMask } from 'ngx-mask';
 import { provideHttpInterceptors } from '@bcgov/shared/data-access';
 import { provideNgxProgressBar } from '@bcgov/shared/ui';
 
-import { provideKeycloak } from '@app/modules/keycloak/keycloak.module';
+import { provideKeycloak } from '@app/modules/keycloak/keycloak';
 
 export interface CoreOptions {
   routes: Routes;

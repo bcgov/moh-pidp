@@ -7,7 +7,7 @@ import {
 
 import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
 
-import { provideLookup } from '../lookup/lookup.module';
+import { provideLookup } from '../lookup/lookup';
 import { PermissionsService } from '../permissions/permissions.service';
 import { KeycloakInitService } from './keycloak-init.service';
 
