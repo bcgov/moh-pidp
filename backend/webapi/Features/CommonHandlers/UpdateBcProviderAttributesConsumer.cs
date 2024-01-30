@@ -22,9 +22,7 @@ public class UpdateBcProviderAttributesConsumer : IConsumer<UpdateBcProviderAttr
     private readonly IBCProviderClient client;
     private readonly ILogger<UpdateBcProviderAttributesConsumer> logger;
 
-    public UpdateBcProviderAttributesConsumer(
-        IBCProviderClient client,
-        ILogger<UpdateBcProviderAttributesConsumer> logger)
+    public UpdateBcProviderAttributesConsumer(IBCProviderClient client, ILogger<UpdateBcProviderAttributesConsumer> logger)
     {
         this.client = client;
         this.logger = logger;
