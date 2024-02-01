@@ -11,6 +11,8 @@ using Pidp.Extensions;
 using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.HttpClients.Plr;
 using Pidp.Models.DomainEvents;
+using Pidp.Infrastructure.HttpClients.Keycloak;
+
 
 [Table(nameof(Party))]
 public class Party : BaseAuditable
@@ -107,8 +109,25 @@ public class Party : BaseAuditable
         }
 
         var standingsDigest = await client.GetStandingsDigestAsync(this.Cpn);
+        // TODO possibly reduce the number calls to PLR?
+        var records = await client.GetRecordsAsync(this.Cpn);
 
-        this.DomainEvents.Add(new PlrCpnLookupFound(this.Id, this.PrimaryUserId, this.Cpn, standingsDigest));
+        var collegeLicenceInformationList = new List<CollegeLicenceInformation>();
+
+        foreach (var record in records ?? Enumerable.Empty<PlrRecord>())
+        {
+            var collegeLicenceInformation = new CollegeLicenceInformation
+            {
+                ProviderRoleType = record.ProviderRoleType,
+                StatusCode = record.StatusCode,
+                StatusReasonCode = record.StatusReasonCode,
+                MspId = record.MspId,
+                CollegeId = record.CollegeId
+            };
+            collegeLicenceInformationList.Add(collegeLicenceInformation);
+        }
+
+        this.DomainEvents.Add(new PlrCpnLookupFound(this.Id, this.PrimaryUserId, this.Cpn, standingsDigest, collegeLicenceInformationList));
 
         if (standingsDigest.HasGoodStanding)
         {

@@ -12,11 +12,11 @@ using Pidp.Infrastructure.HttpClients.Plr;
 using Pidp.Models;
 using Pidp.Models.DomainEvents;
 
-public class AssignCpnInKeycloakAfterPlrCpnLookupFound : INotificationHandler<PlrCpnLookupFound>
+public class AssignAttributesInKeycloakAfterPlrCpnLookupFound : INotificationHandler<PlrCpnLookupFound>
 {
     private readonly IKeycloakAdministrationClient client;
 
-    public AssignCpnInKeycloakAfterPlrCpnLookupFound(IKeycloakAdministrationClient client) => this.client = client;
+    public AssignAttributesInKeycloakAfterPlrCpnLookupFound(IKeycloakAdministrationClient client) => this.client = client;
 
     public async Task Handle(PlrCpnLookupFound notification, CancellationToken cancellationToken)
     {
@@ -24,6 +24,7 @@ public class AssignCpnInKeycloakAfterPlrCpnLookupFound : INotificationHandler<Pl
         foreach (var userId in notification.UserIds)
         {
             await this.client.UpdateUserCpn(userId, notification.Cpn);
+            await this.client.UpdateUserCollegeLicenceInformation(userId, notification.CollegeLicenceInformation);
         }
     }
 }
