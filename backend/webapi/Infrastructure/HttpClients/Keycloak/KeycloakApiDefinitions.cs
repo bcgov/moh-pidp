@@ -68,6 +68,15 @@ public class Role
     public string? Name { get; set; }
 }
 
+public class CollegeLicenceInformation
+{
+    public string? ProviderRoleType { get; set; }
+    public string? StatusCode { get; set; }
+    public string? StatusReasonCode { get; set; }
+    public string? MspId { get; set; }
+    public string? CollegeId { get; set; }
+}
+
 /// <summary>
 /// This is not the entire Keycloak User Representation! See https://www.keycloak.org/docs-api/18.0/rest-api/index.html#_userrepresentation.
 /// This is a sub-set of the properties so we don't accidentally overwrite anything when doing the PUT.
@@ -76,6 +85,7 @@ public class UserRepresentation
 {
     public string? Email { get; set; }
     public Dictionary<string, string[]> Attributes { get; set; } = new();
+    public void SetCollegeLicenceInformation(IEnumerable<CollegeLicenceInformation> collegeLicenceInformation) => this.SetAttribute("college_licence_info", JsonSerializer.Serialize(collegeLicenceInformation, new JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }));
 
     internal void SetLdapOrgDetails(LdapLoginResponse.OrgDetails orgDetails) => this.SetAttribute("org_details", JsonSerializer.Serialize(orgDetails, new JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }));
 
