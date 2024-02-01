@@ -201,6 +201,22 @@ public class KeycloakAdministrationClient : BaseClient, IKeycloakAdministrationC
 
         return result;
     }
+
+    public async Task<bool> UpdateUserCollegeLicenceInformation(Guid userId, IEnumerable<CollegeLicenceInformation> collegeLicenceInformation)
+    {
+        if (collegeLicenceInformation == null)
+        {
+            return true;
+        }
+
+        var result = await this.UpdateUser(userId, (user) => user.SetCollegeLicenceInformation(collegeLicenceInformation));
+        if (!result)
+        {
+            this.Logger.LogCollegeLicenceInformationUpdateFailure(userId, collegeLicenceInformation);
+        }
+
+        return result;
+    }
 }
 
 public static partial class KeycloakAdministrationClientLoggingExtensions
@@ -219,4 +235,7 @@ public static partial class KeycloakAdministrationClientLoggingExtensions
 
     [LoggerMessage(5, LogLevel.Error, "Failed to update user {userId} with CPN {cpn}.")]
     public static partial void LogCpnUpdateFailure(this ILogger logger, Guid userId, string cpn);
+
+    [LoggerMessage(6, LogLevel.Error, "Failed to update user {userId} with College Licence Information {collegeLicenceInformation}.")]
+    public static partial void LogCollegeLicenceInformationUpdateFailure(this ILogger logger, Guid userId, IEnumerable<CollegeLicenceInformation> collegeLicenceInformation);
 }
