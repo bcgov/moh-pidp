@@ -39,6 +39,7 @@ public class PlrRecord
     public string? StatusCode { get; set; }
     public DateTime? StatusStartDate { get; set; }
     public string? StatusReasonCode { get; set; }
+    public string? MspId { get; set; }
 
     public virtual bool IsGoodStanding()
     {
