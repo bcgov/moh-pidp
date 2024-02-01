@@ -21,13 +21,12 @@ public class UpdateKeycloakAttributesConsumer : IConsumer<UpdateKeycloakAttribut
         /// <summary>
         /// Will only update Attributes; will not update Email or any other Properties on the User Representation.
         /// </summary>
-        public UpdateKeycloakAttributes(Guid userId, Action<UserRepresentation> updateAction)
+        public static UpdateKeycloakAttributes FromUpdateAction(Guid userId, Action<UserRepresentation> updateAction)
         {
             UserRepresentation userRep = new();
             updateAction(new UserRepresentation());
 
-            this.UserId = userId;
-            this.Attributes = userRep.Attributes;
+            return new UpdateKeycloakAttributes(userId, userRep.Attributes);
         }
     }
 

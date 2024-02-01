@@ -123,7 +123,7 @@ public class Demographics
             // TODO: relace by pushing a generic Update BC Provider Attribute message.
             await this.bus.Publish(notification, cancellationToken);
 
-            await this.bus.Publish(new UpdateKeycloakAttributes(notification.UserId, user => user.SetPidpEmail(notification.NewEmail)), cancellationToken);
+            await this.bus.Publish(UpdateKeycloakAttributes.FromUpdateAction(notification.UserId, user => user.SetPidpEmail(notification.NewEmail)), cancellationToken);
         }
     }
 
