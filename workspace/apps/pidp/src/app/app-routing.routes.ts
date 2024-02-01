@@ -11,6 +11,6 @@ export const routes: Routes = [
   {
     path: '',
     loadChildren: (): Promise<Routes> =>
-      import('@bcgov/shared/ui').then((m) => m.rootRoutes),
+      import('@bcgov/shared/root-route').then((m) => m.rootRoutes),
   },
 ];
