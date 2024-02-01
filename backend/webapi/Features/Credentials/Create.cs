@@ -17,6 +17,8 @@ using Pidp.Infrastructure.HttpClients.Plr;
 using Pidp.Models;
 using Pidp.Models.DomainEvents;
 using Pidp.Models.Lookups;
+using Pidp.Infrastructure.HttpClients.Keycloak;
+
 
 public class Create
 {
@@ -185,6 +187,56 @@ public class Create
 
             await this.bcProviderClient.UpdateUser(credential.IdpId, user);
         }
+
+    }
+
+    public class KeycloakUpdateAttributesHandler : INotificationHandler<CredentialLinked>
+    {
+        private readonly IKeycloakAdministrationClient keycloakClient;
+        private readonly IPlrClient plrClient;
+
+        private readonly PidpDbContext context;
+
+        public KeycloakUpdateAttributesHandler(
+            IKeycloakAdministrationClient keycloakClient,
+            IPlrClient plrClient,
+            PidpDbContext context)
+        {
+            this.keycloakClient = keycloakClient;
+            this.plrClient = plrClient;
+            this.context = context;
+        }
+
+        public async Task Handle(CredentialLinked notification, CancellationToken cancellationToken)
+        {
+            var credential = notification.Credential;
+
+            var partyCpn = await this.context.Parties
+                .Where(party => party.Id == credential.PartyId)
+                .Select(party => party.Cpn)
+                .SingleAsync(cancellationToken);
+
+            var records = await this.plrClient.GetRecordsAsync(partyCpn);
+            var collegeLicenceInformationList = new List<CollegeLicenceInformation>();
+
+            foreach (var record in records ?? Enumerable.Empty<PlrRecord>())
+            {
+                var collegeLicenceInformation = new CollegeLicenceInformation
+                {
+                    ProviderRoleType = record.ProviderRoleType,
+                    StatusCode = record.StatusCode,
+                    StatusReasonCode = record.StatusReasonCode,
+                    MspId = record.MspId,
+                    CollegeId = record.CollegeId
+                };
+                collegeLicenceInformationList.Add(collegeLicenceInformation);
+            }
+
+            var userId = notification.Credential.UserId;
+
+            await this.keycloakClient.UpdateUserCollegeLicenceInformation(userId, collegeLicenceInformationList);
+        }
+
     }
 }
 
