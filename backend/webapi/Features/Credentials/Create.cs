@@ -102,14 +102,14 @@ public class Create
     }
 
 
-    public class CredentailLinkedHandler : INotificationHandler<CredentialLinked>
+    public class BCProviderUpdateAttributesHandler : INotificationHandler<CredentialLinked>
     {
         private readonly IBCProviderClient bcProviderClient;
         private readonly IPlrClient plrClient;
         private readonly PidpDbContext context;
         private readonly string bcProviderClientId;
 
-        public CredentailLinkedHandler(
+        public BCProviderUpdateAttributesHandler(
             IBCProviderClient bcProviderClient,
             IPlrClient plrClient,
             PidpConfiguration config,
