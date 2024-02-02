@@ -19,7 +19,7 @@ public class UpdateKeycloakAttributesConsumer : IConsumer<UpdateKeycloakAttribut
         }
 
         /// <summary>
-        /// Will only update Attributes; will not update Email or any other Properties on the User Representation.
+        /// Will only update Attributes; will not update Email or any other Properties modified on the User Representation.
         /// </summary>
         public static UpdateKeycloakAttributes FromUpdateAction(Guid userId, Action<UserRepresentation> updateAction)
         {
