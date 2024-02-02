@@ -11,9 +11,10 @@ using System.Text.Json.Serialization;
 
 using Pidp.Data;
 using Pidp.Extensions;
+using Pidp.Features.CommonHandlers;
+using static Pidp.Features.CommonHandlers.UpdateKeycloakAttributesConsumer;
 using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.HttpClients.BCProvider;
-using Pidp.Infrastructure.HttpClients.Keycloak;
 using Pidp.Models.DomainEvents;
 
 public class Demographics
@@ -118,7 +119,12 @@ public class Demographics
         public PartyEmailUpdatedHandler(IBus bus) => this.bus = bus;
 
         public async Task Handle(PartyEmailUpdated notification, CancellationToken cancellationToken)
-            => await this.bus.Publish(notification, CancellationToken.None);
+        {
+            // TODO: replace by pushing a generic Update BC Provider Attribute message.
+            await this.bus.Publish(notification, cancellationToken);
+
+            await this.bus.Publish(UpdateKeycloakAttributes.FromUpdateAction(notification.UserId, user => user.SetPidpEmail(notification.NewEmail)), cancellationToken);
+        }
     }
 
     public class PartyEmailUpdatedBcProviderConsumer : IConsumer<PartyEmailUpdated>
@@ -161,35 +167,6 @@ public class Demographics
             }
         }
     }
-
-    public class PartyEmailUpdatedKeycloakConsumer : IConsumer<PartyEmailUpdated>
-    {
-        private readonly IKeycloakAdministrationClient client;
-        private readonly ILogger<PartyEmailUpdatedKeycloakConsumer> logger;
-
-        public PartyEmailUpdatedKeycloakConsumer(
-            IKeycloakAdministrationClient client,
-            ILogger<PartyEmailUpdatedKeycloakConsumer> logger)
-        {
-            this.client = client;
-            this.logger = logger;
-        }
-
-        public async Task Consume(ConsumeContext<PartyEmailUpdated> context)
-        {
-            if (!await this.client.UpdateUser(context.Message.UserId, (user) => user.SetPidpEmail(context.Message.NewEmail)))
-            {
-                this.logger.LogKeycloakEmailUpdateFailed(context.Message.UserId);
-                throw new InvalidOperationException("Error Comunicating with Keycloak");
-            }
-        }
-    }
-}
-
-public static partial class PartyEmailUpdatedKeycloakConsumerLoggingExtensions
-{
-    [LoggerMessage(1, LogLevel.Error, "Error when updating the email to User #{userId} in Keycloak.")]
-    public static partial void LogKeycloakEmailUpdateFailed(this ILogger logger, Guid userId);
 }
 
 public static partial class PartyEmailUpdatedBcProviderConsumerLoggingExtensions

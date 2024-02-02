@@ -13,9 +13,9 @@ public static class MassTransitSetup
         {
             x.SetKebabCaseEndpointNameFormatter();
 
-            x.AddConsumer<PartyEmailUpdatedKeycloakConsumer>();
             x.AddConsumer<PartyEmailUpdatedBcProviderConsumer>();
             x.AddConsumer<UpdateBcProviderAttributesConsumer>();
+            x.AddConsumer<UpdateKeycloakAttributesConsumer>();
 
             x.UsingRabbitMq((context, cfg) =>
             {
@@ -26,13 +26,6 @@ public static class MassTransitSetup
                 // Configure retry policy
                 cfg.UseMessageRetry(r => r.Interval(2, TimeSpan.FromSeconds(5)));
                 cfg.UseInMemoryOutbox();
-
-                cfg.ReceiveEndpoint("party-email-updated-keycloak-queue", ep =>
-                {
-                    ep.PublishFaults = false;
-                    ep.Bind("party-email-updated");
-                    ep.ConfigureConsumer<PartyEmailUpdatedKeycloakConsumer>(context);
-                });
 
                 cfg.ReceiveEndpoint("party-email-updated-bc-provider-queue", ep =>
                 {
@@ -46,6 +39,13 @@ public static class MassTransitSetup
                     ep.PublishFaults = false;
                     ep.Bind("update-bc-provider-attributes");
                     ep.ConfigureConsumer<UpdateBcProviderAttributesConsumer>(context);
+                });
+
+                cfg.ReceiveEndpoint("update-keycloak-attributes-queue", ep =>
+                {
+                    ep.PublishFaults = false;
+                    ep.Bind("update-keycloak-attributes");
+                    ep.ConfigureConsumer<UpdateKeycloakAttributesConsumer>(context);
                 });
             });
         });
