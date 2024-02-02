@@ -20,7 +20,7 @@ import {
 import { provideEnvironmentNgxMask } from 'ngx-mask';
 
 import { provideHttpInterceptors } from '@bcgov/shared/data-access';
-import { provideNgxProgressBar } from '@bcgov/shared/ui';
+import { provideMaterialConfig, provideNgxProgressBar } from '@bcgov/shared/ui';
 
 import { provideKeycloak } from '@app/modules/keycloak/keycloak';
 
@@ -36,8 +36,9 @@ export function provideCore(
 ): (Provider | EnvironmentProviders)[] {
   return [
     { provide: CORE_GUARD, useValue: 'CORE_GUARD' },
-    provideNgxProgressBar(),
     provideAnimations(),
+    provideNgxProgressBar(),
+    provideMaterialConfig(),
     provideEnvironmentNgxMask(),
     provideHttpClient(
       // DI-based interceptors must be explicitly enabled.
