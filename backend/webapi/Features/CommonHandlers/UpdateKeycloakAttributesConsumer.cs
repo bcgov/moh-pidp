@@ -24,7 +24,7 @@ public class UpdateKeycloakAttributesConsumer : IConsumer<UpdateKeycloakAttribut
         public static UpdateKeycloakAttributes FromUpdateAction(Guid userId, Action<UserRepresentation> updateAction)
         {
             UserRepresentation userRep = new();
-            updateAction(new UserRepresentation());
+            updateAction(userRep);
 
             return new UpdateKeycloakAttributes(userId, userRep.Attributes);
         }
