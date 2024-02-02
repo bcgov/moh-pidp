@@ -10,7 +10,12 @@ import {
   inject,
 } from '@angular/core';
 import { provideAnimations } from '@angular/platform-browser/animations';
-import { Routes, provideRouter, withRouterConfig } from '@angular/router';
+import {
+  Routes,
+  provideRouter,
+  withInMemoryScrolling,
+  withRouterConfig,
+} from '@angular/router';
 
 import { provideEnvironmentNgxMask } from 'ngx-mask';
 
@@ -47,10 +52,9 @@ export function provideCore(
       // WARNING: Does not work as expected with Material SideNav
       // being the scrollable content container.
       // @see app.component.ts for implementation
-      // withInMemoryScrolling({
-      //   scrollPositionRestoration: 'enabled',
-      //   anchorScrolling: 'enabled',
-      // }),
+      // scrollPositionRestoration: 'enabled',
+      // anchorScrolling: 'enabled',
+      withInMemoryScrolling(),
       // disabled debug tracing
       // withDebugTracing()
     ),
