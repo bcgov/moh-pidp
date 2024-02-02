@@ -120,7 +120,7 @@ public class Demographics
 
         public async Task Handle(PartyEmailUpdated notification, CancellationToken cancellationToken)
         {
-            // TODO: relace by pushing a generic Update BC Provider Attribute message.
+            // TODO: replace by pushing a generic Update BC Provider Attribute message.
             await this.bus.Publish(notification, cancellationToken);
 
             await this.bus.Publish(UpdateKeycloakAttributes.FromUpdateAction(notification.UserId, user => user.SetPidpEmail(notification.NewEmail)), cancellationToken);
