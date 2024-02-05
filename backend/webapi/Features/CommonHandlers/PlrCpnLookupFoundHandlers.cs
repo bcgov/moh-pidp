@@ -24,7 +24,6 @@ public class AssignAttributesInKeycloakAfterPlrCpnLookupFound : INotificationHan
         foreach (var userId in notification.UserIds)
         {
             await this.client.UpdateUserCpn(userId, notification.Cpn);
-            await this.client.UpdateUserCollegeLicenceInformation(userId, notification.CollegeLicenceInformation);
         }
     }
 }
