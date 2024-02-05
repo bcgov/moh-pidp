@@ -52,7 +52,7 @@ export function provideMaterialConfig(): Provider[] {
     {
       provide: MAT_DIALOG_DEFAULT_OPTIONS,
       useValue: {
-        width: '500px',
+        maxWidth: '500px',
         hasBackdrop: true,
       },
     },
