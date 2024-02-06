@@ -47,9 +47,15 @@ public class UpdateKeycloakAfterCollegeLicenceUpdated : INotificationHandler<Col
             collegeLicenceInformationList.Add(collegeLicenceInformation);
         }
 
-        var userId = notification.UserId;
+        var userIds = await this.context.Credentials
+            .Where(credential => credential.PartyId == notification.PartyId)
+            .Select(credential => credential.UserId)
+            .ToListAsync(cancellationToken);
 
-        await this.keycloakClient.UpdateUserCollegeLicenceInformation(userId, collegeLicenceInformationList);
+        foreach (var userId in userIds)
+        {
+            await this.keycloakClient.UpdateUserCollegeLicenceInformation(userId, collegeLicenceInformationList);
+        }
     }
 
 }

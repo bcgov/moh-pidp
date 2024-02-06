@@ -92,7 +92,7 @@ public class Create
                 IdpId = userIdpId
             };
             credential.DomainEvents.Add(new CredentialLinked(credential));
-            credential.DomainEvents.Add(new CollegeLicenceUpdated(credential.PartyId, credential.UserId));
+            credential.DomainEvents.Add(new CollegeLicenceUpdated(credential.PartyId));
             this.context.Credentials.Add(credential);
 
             ticket.Claimed = true;

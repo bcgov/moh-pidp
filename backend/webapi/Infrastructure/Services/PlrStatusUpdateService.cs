@@ -58,7 +58,7 @@ public sealed class PlrStatusUpdateService : IPlrStatusUpdateService
             return;
         }
 
-        party.DomainEvents.Add(new CollegeLicenceUpdated(party.Id, party.PrimaryUserId));
+        party.DomainEvents.Add(new CollegeLicenceUpdated(party.Id));
 
         var endorsementRelations = await this.context.ActiveEndorsingParties(party.Id)
             .Select(party => new
