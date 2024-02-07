@@ -146,6 +146,7 @@ export class LoginPage implements OnInit {
       data: {
         content: this.documentService.getPIdPCollectionNotice(),
       },
+      width: '500px',
     };
     this.dialog
       .open(ConfirmDialogComponent, { data })
