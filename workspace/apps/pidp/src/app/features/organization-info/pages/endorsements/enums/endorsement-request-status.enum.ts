@@ -5,4 +5,5 @@ export enum EndorsementRequestStatus {
   DECLINED = 4,
   COMPLETED = 5,
   CANCELLED = 6,
+  EXPIRED = 7,
 }
