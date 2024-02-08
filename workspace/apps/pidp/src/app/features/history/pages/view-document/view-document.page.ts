@@ -54,7 +54,7 @@ export class ViewDocumentPage implements OnInit {
 
   public onBack(): void {
     this.router.navigate([
-      HistoryRoutes.MODULE_PATH,
+      HistoryRoutes.BASE_PATH,
       HistoryRoutes.SIGNED_ACCEPTED_DOCUMENTS,
     ]);
   }

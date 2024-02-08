@@ -4,7 +4,7 @@ import { ShellRoutes } from './features/shell/shell.routes';
 
 export const routes: Routes = [
   {
-    path: ShellRoutes.MODULE_PATH,
+    path: ShellRoutes.BASE_PATH,
     loadChildren: (): Promise<Routes> =>
       import('./features/shell/shell-routing.routes').then((m) => m.routes),
   },

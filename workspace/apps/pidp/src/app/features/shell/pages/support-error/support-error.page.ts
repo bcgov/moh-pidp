@@ -34,6 +34,6 @@ export class SupportErrorPage {
   }
 
   public onBack(): void {
-    this.router.navigate([ShellRoutes.MODULE_PATH]);
+    this.router.navigate([ShellRoutes.BASE_PATH]);
   }
 }

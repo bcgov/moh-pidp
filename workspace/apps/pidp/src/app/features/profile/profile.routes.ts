@@ -4,7 +4,7 @@ import { PermissionsGuard } from '@app/modules/permissions/permissions.guard';
 import { Role } from '@app/shared/enums/roles.enum';
 
 export class ProfileRoutes {
-  public static MODULE_PATH = 'profile';
+  public static BASE_PATH = 'profile';
 
   public static PERSONAL_INFO = 'personal-information';
   public static COLLEGE_LICENCE_DECLARATION = 'college-licence-declaration';
@@ -17,7 +17,7 @@ export class ProfileRoutes {
    * Useful for redirecting to module root-level routes.
    */
   public static routePath(route: string): string {
-    return `/${ProfileRoutes.MODULE_PATH}/${route}`;
+    return `/${ProfileRoutes.BASE_PATH}/${route}`;
   }
 }
 

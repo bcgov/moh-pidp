@@ -39,7 +39,7 @@ export class AdminDashboardComponent implements IDashboard {
     private authService: AuthService,
     accessTokenService: AccessTokenService,
   ) {
-    this.logoutRedirectUrl = `${this.config.applicationUrl}/${this.config.routes.auth}/${AdminRoutes.MODULE_PATH}`;
+    this.logoutRedirectUrl = `${this.config.applicationUrl}/${this.config.routes.auth}/${AdminRoutes.BASE_PATH}`;
     this.username = accessTokenService
       .decodeToken()
       .pipe(map((token) => token?.name ?? ''));

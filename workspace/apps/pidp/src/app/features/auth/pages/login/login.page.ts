@@ -173,7 +173,7 @@ export class LoginPage implements OnInit {
           redirectUri:
             this.config.applicationUrl +
             (this.route.snapshot.routeConfig?.path === 'admin'
-              ? '/' + AdminRoutes.MODULE_PATH
+              ? '/' + AdminRoutes.BASE_PATH
               : '') +
             (this.endorsementToken
               ? `?endorsement-token=${this.endorsementToken}`

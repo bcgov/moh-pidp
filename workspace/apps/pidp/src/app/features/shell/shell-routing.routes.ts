@@ -21,12 +21,12 @@ import { ShellRoutes } from './shell.routes';
 
 export const routes: Routes = [
   {
-    path: AuthRoutes.MODULE_PATH,
+    path: AuthRoutes.BASE_PATH,
     loadChildren: (): Promise<Routes> =>
       import('../auth/auth-routing.routes').then((m) => m.routes),
   },
   {
-    path: AdminRoutes.MODULE_PATH,
+    path: AdminRoutes.BASE_PATH,
     canMatch: [AuthenticationGuard.canMatch],
     loadChildren: (): Promise<Routes> =>
       import('../admin/admin-routing.routes').then((m) => m.routes),
@@ -48,12 +48,12 @@ export const routes: Routes = [
     },
     data: {
       routes: {
-        auth: `/${AuthRoutes.MODULE_PATH}`,
+        auth: `/${AuthRoutes.BASE_PATH}`,
       },
     },
     children: [
       {
-        path: PortalRoutes.MODULE_PATH,
+        path: PortalRoutes.BASE_PATH,
         resolve: {
           destination: destinationResolver,
         },
@@ -61,12 +61,12 @@ export const routes: Routes = [
           import('../portal/portal-routing.routes').then((m) => m.routes),
       },
       {
-        path: ProfileRoutes.MODULE_PATH,
+        path: ProfileRoutes.BASE_PATH,
         loadChildren: (): Promise<Routes> =>
           import('../profile/profile.routes').then((m) => m.routes),
       },
       {
-        path: OrganizationInfoRoutes.MODULE_PATH,
+        path: OrganizationInfoRoutes.BASE_PATH,
         resolve: {
           hasCompletedWizard: wizardResolver,
         },
@@ -76,7 +76,7 @@ export const routes: Routes = [
           ),
       },
       {
-        path: AccessRoutes.MODULE_PATH,
+        path: AccessRoutes.BASE_PATH,
         resolve: {
           hasCompletedWizard: wizardResolver,
         },
@@ -84,7 +84,7 @@ export const routes: Routes = [
           import('../access/access-routing.routes').then((m) => m.routes),
       },
       {
-        path: TrainingRoutes.MODULE_PATH,
+        path: TrainingRoutes.BASE_PATH,
         resolve: {
           hasCompletedWizard: wizardResolver,
         },
@@ -96,7 +96,7 @@ export const routes: Routes = [
           import('../training/training-routing.routes').then((m) => m.routes),
       },
       {
-        path: HistoryRoutes.MODULE_PATH,
+        path: HistoryRoutes.BASE_PATH,
         resolve: {
           hasCompletedWizard: wizardResolver,
         },
@@ -104,7 +104,7 @@ export const routes: Routes = [
           import('../history/history-routing.routes').then((m) => m.routes),
       },
       {
-        path: FaqRoutes.MODULE_PATH,
+        path: FaqRoutes.BASE_PATH,
         resolve: {
           hasCompletedWizard: wizardResolver,
         },
@@ -113,7 +113,7 @@ export const routes: Routes = [
       },
       {
         path: '',
-        redirectTo: PortalRoutes.MODULE_PATH,
+        redirectTo: PortalRoutes.BASE_PATH,
         pathMatch: 'full',
       },
     ],

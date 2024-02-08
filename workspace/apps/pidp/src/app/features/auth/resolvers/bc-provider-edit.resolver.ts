@@ -23,7 +23,7 @@ export const bcProviderEditResolver: ResolveFn<
 
       return (
         profileStatus.status.bcProvider.statusCode === StatusCode.COMPLETED ||
-        router.navigateByUrl(PortalRoutes.MODULE_PATH)
+        router.navigateByUrl(PortalRoutes.BASE_PATH)
       );
     }),
   );
