@@ -50,6 +50,8 @@ public class Party : BaseAuditable
 
     public ICollection<Credential> Credentials { get; set; } = new List<Credential>();
 
+    public string? OpId { get; set; }
+
     /// <summary>
     /// The First Name + Last Name of the Party.
     /// </summary>
