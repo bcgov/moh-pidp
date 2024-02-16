@@ -201,6 +201,17 @@ public class KeycloakAdministrationClient : BaseClient, IKeycloakAdministrationC
 
         return result;
     }
+
+    public async Task<bool> UpdateUserOpId(Guid userId, string opId)
+    {
+        var result = await this.UpdateUser(userId, (user) => user.SetOpId(opId));
+        if (!result)
+        {
+            this.Logger.LogOpIdUpdateFailure(userId, opId);
+        }
+
+        return result;
+    }
 }
 
 public static partial class KeycloakAdministrationClientLoggingExtensions
@@ -219,4 +230,7 @@ public static partial class KeycloakAdministrationClientLoggingExtensions
 
     [LoggerMessage(5, LogLevel.Error, "Failed to update user {userId} with CPN {cpn}.")]
     public static partial void LogCpnUpdateFailure(this ILogger logger, Guid userId, string cpn);
+
+    [LoggerMessage(7, LogLevel.Error, "Failed to update user {userId} with OpId {opId}.")]
+    public static partial void LogOpIdUpdateFailure(this ILogger logger, Guid userId, string opId);
 }

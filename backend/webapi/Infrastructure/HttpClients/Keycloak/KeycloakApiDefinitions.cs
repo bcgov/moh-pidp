@@ -83,6 +83,8 @@ public class UserRepresentation
 
     public void SetPidpEmail(string pidpEmail) => this.SetAttribute("pidp_email", pidpEmail);
 
+    public void SetOpId(string opId) => this.SetAttribute("opId", opId);
+
     public void SetPhone(string phone) => this.SetAttribute("phone", phone);
 
     public void SetPhoneNumber(string phoneNumber) => this.SetAttribute("phoneNumber", phoneNumber);
