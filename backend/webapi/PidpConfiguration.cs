@@ -10,6 +10,10 @@ public class PidpConfiguration
 
     public string ApplicationUrl { get; set; } = string.Empty;
 
+    public string LicensedInitiatedLink { get; set; } = string.Empty;
+
+    public string UnlicensedInitiatedLink { get; set; } = string.Empty;
+
     public AddressAutocompleteClientConfiguration AddressAutocompleteClient { get; set; } = new();
     public BCProviderClientConfiguration BCProviderClient { get; set; } = new();
     public ConnectionStringConfiguration ConnectionStrings { get; set; } = new();

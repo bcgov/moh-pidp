@@ -37,7 +37,6 @@ public class Startup
         services
             .AddAutoMapper(typeof(Startup))
             .AddHostedService<PlrStatusUpdateSchedulingService>()
-            .AddHostedService<NotificationSchedulingService>()
             .AddHttpClients(config)
             .AddKeycloakAuth(config)
             .AddRabbitMQ(config)
@@ -45,7 +44,6 @@ public class Startup
             .AddScoped<IEmailService, EmailService>()
             .AddScoped<IPidpAuthorizationService, PidpAuthorizationService>()
             .AddScoped<IPlrStatusUpdateService, PlrStatusUpdateService>()
-            .AddScoped<INotificationService, NotificationService>()
             .AddSingleton<IClock>(SystemClock.Instance)
             .AddSingleton<BackgroundWorkerHealthCheck>();
 
