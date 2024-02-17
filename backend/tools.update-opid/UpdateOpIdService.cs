@@ -20,13 +20,9 @@ public class UpdateOpIdService : IUpdateOpIdService
 
     public async Task UpdateOpIdAsync()
     {
-        var partyIds = await this.context.Credentials
-            .Where(credential => credential.IdentityProvider == IdentityProviders.BCServicesCard)
-            .Select(credential => credential.PartyId)
-            .ToListAsync();
-
         var parties = await this.context.Parties
-            .Where(party => partyIds.Any(partyId => partyId == party.Id))
+            .Include(party => party.Credentials)
+            .Where(party => party.Credentials.Any(credential => credential.IdentityProvider == IdentityProviders.BCServicesCard))
             .ToListAsync();
 
         foreach (var party in parties)
@@ -35,14 +31,10 @@ public class UpdateOpIdService : IUpdateOpIdService
             {
                 continue;
             }
+            //TODO Need to move business logic like generating OpID and guarantee uniqueness to the Party.cs model
             party.OpId = Nanoid.Generate("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ");
 
-            var userIds = await this.context.Credentials
-                .Where(credential => credential.PartyId == party.Id)
-                .Select(credential => credential.UserId)
-                .ToListAsync();
-
-            foreach (var userId in userIds)
+            foreach (var userId in party.Credentials.Select(credential => credential.UserId))
             {
                 await this.keycloakClient.UpdateUserOpId(userId, party.OpId);
             }
