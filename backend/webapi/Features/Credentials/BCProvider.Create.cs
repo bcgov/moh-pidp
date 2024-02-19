@@ -40,7 +40,7 @@ public class BCProviderCreate
         private readonly IBCProviderClient client;
         private readonly IEmailService emailService;
         private readonly PidpDbContext context;
-        private readonly ILogger logger;
+        private readonly ILogger<CommandHandler> logger;
         private readonly IPlrClient plrClient;
 
         public CommandHandler(
@@ -152,8 +152,8 @@ public class BCProviderCreate
 public static partial class BCProviderCreateLoggingExtensions
 {
     [LoggerMessage(1, LogLevel.Information, "Party {partyId} attempted to create a second BC Provider account.")]
-    public static partial void LogPartyHasBCProviderCredential(this ILogger logger, int partyId);
+    public static partial void LogPartyHasBCProviderCredential(this ILogger<BCProviderCreate.CommandHandler> logger, int partyId);
 
     [LoggerMessage(2, LogLevel.Error, "Failed to create BC Provider for Party {partyId}, one or more requirements were not met. Party state: {state}.")]
-    public static partial void LogInvalidState(this ILogger logger, int partyId, object state);
+    public static partial void LogInvalidState(this ILogger<BCProviderCreate.CommandHandler> logger, int partyId, object state);
 }
