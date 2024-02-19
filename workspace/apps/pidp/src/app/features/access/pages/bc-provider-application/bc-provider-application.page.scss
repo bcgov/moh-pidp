@@ -235,6 +235,7 @@ ol {
       margin-bottom: 0;
       width: var(--form-card-width);
       opacity: 0;
+      visibility: hidden;
 
       & p {
         margin: 0;
@@ -244,6 +245,7 @@ ol {
       padding: var(--gap);
       margin-bottom: var(--gap);
       opacity: 1;
+      visibility: visible;
       border: solid 1px pidp.$grey-30;
       border-radius: var(--card-border-radius);
     }
