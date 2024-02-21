@@ -20,6 +20,7 @@ import { HtmlComponent } from '@bcgov/shared/ui';
     </div>
   </div>`,
   styleUrls: ['./portal-alert.scss'],
+  standalone: true,
 })
 export class PortalAlertComponent implements OnInit {
   @Input() public heading!: string;

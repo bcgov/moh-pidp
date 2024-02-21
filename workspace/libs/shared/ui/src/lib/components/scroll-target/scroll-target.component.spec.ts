@@ -7,9 +7,7 @@ describe('ScrollTargetComponent', () => {
   let fixture: ComponentFixture<ScrollTargetComponent>;
 
   beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [ScrollTargetComponent],
-    }).compileComponents();
+    await TestBed.configureTestingModule({}).compileComponents();
   });
 
   beforeEach(() => {

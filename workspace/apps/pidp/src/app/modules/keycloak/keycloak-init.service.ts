@@ -25,7 +25,7 @@ export class KeycloakInitService {
     this.keycloakService.getKeycloakInstance().onTokenExpired = (): void => {
       this.keycloakService
         .updateToken()
-        .catch(() => this.router.navigateByUrl(AuthRoutes.MODULE_PATH));
+        .catch(() => this.router.navigateByUrl(AuthRoutes.BASE_PATH));
     };
 
     if (authenticated) {

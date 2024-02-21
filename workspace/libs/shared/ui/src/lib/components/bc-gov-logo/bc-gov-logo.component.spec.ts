@@ -7,9 +7,7 @@ describe('BcGovLogoComponent', () => {
   let fixture: ComponentFixture<BcGovLogoComponent>;
 
   beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [BcGovLogoComponent],
-    }).compileComponents();
+    await TestBed.configureTestingModule({}).compileComponents();
   });
 
   beforeEach(() => {

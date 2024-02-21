@@ -1,8 +1,21 @@
+import { ClipboardModule } from '@angular/cdk/clipboard';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
+import { AsyncPipe, NgFor, NgIf } from '@angular/common';
 import { Component, Inject, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatStepperModule } from '@angular/material/stepper';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { Router, RouterLink } from '@angular/router';
 
 import { BehaviorSubject, Observable, tap } from 'rxjs';
+
+import {
+  AlertComponent,
+  AnchorDirective,
+  InjectViewportCssClassDirective,
+  ScrollTargetComponent,
+} from '@bcgov/shared/ui';
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';
 import {
@@ -11,6 +24,7 @@ import {
 } from '@app/core/party/discovery-resource.service';
 import { PartyService } from '@app/core/party/party.service';
 import { ToastService } from '@app/core/services/toast.service';
+import { GetSupportComponent } from '@app/shared/components/get-support/get-support.component';
 import { Role } from '@app/shared/enums/roles.enum';
 
 import { BcProviderEditResource } from '../access/pages/bc-provider-edit/bc-provider-edit-resource.service';
@@ -18,6 +32,9 @@ import { BcProviderEditInitialStateModel } from '../access/pages/bc-provider-edi
 import { IdentityProvider } from '../auth/enums/identity-provider.enum';
 import { AuthService } from '../auth/services/auth.service';
 import { AuthorizedUserService } from '../auth/services/authorized-user.service';
+import { BannerExpansionPanelComponent } from './components/banner-expansion-panel/banner-expansion-panel.component';
+import { PortalAlertComponent } from './components/portal-alert/portal-alert.component';
+import { PortalCarouselComponent } from './components/portal-carousel/portal-carousel.component';
 import { ProfileStatusAlert } from './models/profile-status-alert.model';
 import { ProfileStatus } from './models/profile-status.model';
 import { PortalResource } from './portal-resource.service';
@@ -35,6 +52,26 @@ import { PortalState } from './state/portal-state.builder';
       provide: STEPPER_GLOBAL_OPTIONS,
       useValue: { displayDefaultIndicatorType: false },
     },
+  ],
+  standalone: true,
+  imports: [
+    AlertComponent,
+    AnchorDirective,
+    AsyncPipe,
+    BannerExpansionPanelComponent,
+    ClipboardModule,
+    GetSupportComponent,
+    InjectViewportCssClassDirective,
+    MatButtonModule,
+    MatIconModule,
+    MatStepperModule,
+    MatTooltipModule,
+    NgFor,
+    NgIf,
+    PortalAlertComponent,
+    PortalCarouselComponent,
+    RouterLink,
+    ScrollTargetComponent,
   ],
 })
 export class PortalPage implements OnInit {

@@ -1,3 +1,4 @@
+import { AsyncPipe } from '@angular/common';
 import { Component, Inject, OnInit } from '@angular/core';
 import { IsActiveMatchOptions } from '@angular/router';
 
@@ -10,6 +11,7 @@ import {
   DashboardHeaderConfig,
   DashboardMenuItem,
   DashboardRouteMenuItem,
+  DashboardV2Component,
   IDashboard,
 } from '@bcgov/shared/ui';
 import { ArrayUtils } from '@bcgov/shared/utils';
@@ -27,6 +29,8 @@ import { DashboardStateService } from '../../services/dashboard-state-service.se
   selector: 'app-portal-dashboard',
   templateUrl: './portal-dashboard.component.html',
   styleUrls: ['./portal-dashboard.component.scss'],
+  standalone: true,
+  imports: [AsyncPipe, DashboardV2Component],
 })
 export class PortalDashboardComponent implements IDashboard, OnInit {
   public logoutRedirectUrl: string;
@@ -96,7 +100,7 @@ export class PortalDashboardComponent implements IDashboard, OnInit {
       new DashboardRouteMenuItem(
         'Profile',
         {
-          commands: PortalRoutes.MODULE_PATH,
+          commands: PortalRoutes.BASE_PATH,
           extras: { fragment: 'profile' },
           linkActiveOptions,
         },
@@ -108,7 +112,7 @@ export class PortalDashboardComponent implements IDashboard, OnInit {
           new DashboardRouteMenuItem(
             'Organization Info',
             {
-              commands: PortalRoutes.MODULE_PATH,
+              commands: PortalRoutes.BASE_PATH,
               extras: { fragment: 'organization' },
               linkActiveOptions,
             },
@@ -119,7 +123,7 @@ export class PortalDashboardComponent implements IDashboard, OnInit {
       new DashboardRouteMenuItem(
         'Access to Systems',
         {
-          commands: PortalRoutes.MODULE_PATH,
+          commands: PortalRoutes.BASE_PATH,
           extras: { fragment: 'access' },
           linkActiveOptions,
         },
@@ -131,7 +135,7 @@ export class PortalDashboardComponent implements IDashboard, OnInit {
           new DashboardRouteMenuItem(
             'Training',
             {
-              commands: PortalRoutes.MODULE_PATH,
+              commands: PortalRoutes.BASE_PATH,
               extras: { fragment: 'training' },
               linkActiveOptions,
             },
@@ -142,7 +146,7 @@ export class PortalDashboardComponent implements IDashboard, OnInit {
       new DashboardRouteMenuItem(
         'History',
         {
-          commands: PortalRoutes.MODULE_PATH,
+          commands: PortalRoutes.BASE_PATH,
           extras: { fragment: 'history' },
           linkActiveOptions,
         },
@@ -151,7 +155,7 @@ export class PortalDashboardComponent implements IDashboard, OnInit {
       new DashboardRouteMenuItem(
         'FAQ',
         {
-          commands: PortalRoutes.MODULE_PATH,
+          commands: PortalRoutes.BASE_PATH,
           extras: { fragment: 'faq' },
           linkActiveOptions,
         },
@@ -160,7 +164,7 @@ export class PortalDashboardComponent implements IDashboard, OnInit {
       new DashboardRouteMenuItem(
         'Get Support',
         {
-          commands: PortalRoutes.MODULE_PATH,
+          commands: PortalRoutes.BASE_PATH,
           extras: { fragment: 'support' },
           linkActiveOptions,
         },

@@ -1,7 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DefaultPipe, FullnamePipe } from '../../pipes';
-import { KeyValueInfoComponent } from '../key-value-info/key-value-info.component';
 import { UserInfoComponent } from './user-info.component';
 
 describe('UserInfoComponent', () => {
@@ -9,14 +7,7 @@ describe('UserInfoComponent', () => {
   let fixture: ComponentFixture<UserInfoComponent>;
 
   beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [
-        UserInfoComponent,
-        DefaultPipe,
-        FullnamePipe,
-        KeyValueInfoComponent,
-      ],
-    }).compileComponents();
+    await TestBed.configureTestingModule({}).compileComponents();
   });
 
   beforeEach(() => {

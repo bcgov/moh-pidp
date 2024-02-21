@@ -20,7 +20,7 @@ export const wizardResolver: ResolveFn<
     map((destination: Destination) => {
       return (
         destination === Destination.PORTAL ||
-        router.navigateByUrl(PortalRoutes.MODULE_PATH)
+        router.navigateByUrl(PortalRoutes.BASE_PATH)
       );
     }),
   );
