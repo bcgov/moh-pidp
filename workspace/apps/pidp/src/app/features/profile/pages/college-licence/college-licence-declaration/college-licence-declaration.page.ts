@@ -17,6 +17,7 @@ import { AppStateService } from '@pidp/presentation';
 
 import {
   AlertComponent,
+  AlertContentDirective,
   InjectViewportCssClassDirective,
   PageFooterActionDirective,
 } from '@bcgov/shared/ui';
@@ -43,6 +44,7 @@ import { PartyLicenceDeclarationInformation } from './party-licence-declaration-
   standalone: true,
   imports: [
     AlertComponent,
+    AlertContentDirective,
     InjectViewportCssClassDirective,
     MatButtonModule,
     MatFormFieldModule,

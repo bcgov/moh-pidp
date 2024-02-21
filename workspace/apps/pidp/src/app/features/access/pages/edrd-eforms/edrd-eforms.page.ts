@@ -8,6 +8,7 @@ import { catchError, noop, of, tap } from 'rxjs';
 
 import {
   AlertComponent,
+  AlertContentDirective,
   PageComponent,
   PageFooterActionDirective,
   PageFooterComponent,
@@ -33,6 +34,7 @@ import { EdredEformsResource } from './edred-eforms-resource.service';
   standalone: true,
   imports: [
     AlertComponent,
+    AlertContentDirective,
     EnrolmentErrorComponent,
     MatButtonModule,
     NgIf,

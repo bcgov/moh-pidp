@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { AlertComponent } from '@bcgov/shared/ui';
+import { AlertComponent, AlertContentDirective } from '@bcgov/shared/ui';
 
 @Component({
   selector: 'app-enrolment-error',
@@ -17,6 +17,6 @@ import { AlertComponent } from '@bcgov/shared/ui';
   `,
   styles: [],
   standalone: true,
-  imports: [AlertComponent],
+  imports: [AlertComponent, AlertContentDirective],
 })
 export class EnrolmentErrorComponent {}
