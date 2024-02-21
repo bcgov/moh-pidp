@@ -1,7 +1,6 @@
 namespace Pidp.Features.Parties;
 
 using FluentValidation;
-using NanoidDotNet;
 using NodaTime;
 
 using Pidp.Data;
@@ -43,13 +42,8 @@ public class Create
     public class CommandHandler : ICommandHandler<Command, int>
     {
         private readonly PidpDbContext context;
-        private readonly ILogger logger;
 
-        public CommandHandler(PidpDbContext context, ILogger<CommandHandler> logger)
-        {
-            this.context = context;
-            this.logger = logger;
-        }
+        public CommandHandler(PidpDbContext context) => this.context = context;
 
         public async Task<int> HandleAsync(Command command)
         {
@@ -58,7 +52,6 @@ public class Create
                 Birthdate = command.Birthdate,
                 FirstName = command.FirstName,
                 LastName = command.LastName,
-                OpId = command.IdentityProvider == IdentityProviders.BCServicesCard ? Nanoid.Generate("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ") : string.Empty,
             };
             party.Credentials.Add(new Credential
             {
@@ -68,39 +61,10 @@ public class Create
             });
 
             this.context.Parties.Add(party);
+            await this.context.SaveChangesAsync();
 
-            bool saveFailed;
-            var maxAttempts = 100;
-            do
-            {
-                saveFailed = false;
-                try
-                {
-                    await this.context.SaveChangesAsync();
-                }
-                catch
-                {
-                    saveFailed = true;
-                    maxAttempts--;
-                    if (maxAttempts > 0)
-                    {
-                        party.OpId = Nanoid.Generate("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ");
-                    }
-                    else
-                    {
-                        this.logger.LogOpIdGenerationFailed(party.Id);
-                        throw new InvalidOperationException("Error Generating OPID.");
-                    }
-                }
-            } while (saveFailed && maxAttempts > 0);
-
+            party.GenerateOpId(this.context);
             return party.Id;
         }
     }
-}
-
-public static partial class PartyCreateLoggingExtensions
-{
-    [LoggerMessage(1, LogLevel.Warning, "OPID generation failed for {partyId}.")]
-    public static partial void LogOpIdGenerationFailed(this ILogger logger, int partyId);
 }

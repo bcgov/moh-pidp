@@ -2,6 +2,7 @@ namespace Pidp.Models;
 
 using EntityFrameworkCore.Projectables;
 using Microsoft.EntityFrameworkCore;
+using NanoidDotNet;
 using NodaTime;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -124,5 +125,33 @@ public class Party : BaseAuditable
                 this.DomainEvents.Add(new EndorsementStandingUpdated(partyId));
             }
         }
+    }
+
+    public void GenerateOpId(PidpDbContext context)
+    {
+        bool saveFailed;
+        var counter = 0;
+        var maxAttempts = 1000;
+
+        do
+        {
+            var opId = Nanoid.Generate("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ");
+            this.OpId = opId;
+            try
+            {
+                context.Parties.Update(this);
+                context.SaveChanges();
+                saveFailed = false;
+            }
+            catch (DbUpdateException)
+            {
+                saveFailed = true;
+                counter++;
+                if (counter >= maxAttempts)
+                {
+                    throw new InvalidOperationException("Maximum attempts to generate a unique OpId exceeded");
+                }
+            }
+        } while (saveFailed);
     }
 }

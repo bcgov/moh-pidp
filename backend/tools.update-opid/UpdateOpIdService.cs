@@ -1,7 +1,6 @@
 namespace UpdateOpId;
 
 using Microsoft.EntityFrameworkCore;
-using NanoidDotNet;
 
 using Pidp.Data;
 using Pidp.Infrastructure.Auth;
@@ -31,12 +30,15 @@ public class UpdateOpIdService : IUpdateOpIdService
             {
                 continue;
             }
-            //TODO Need to move business logic like generating OpID and guarantee uniqueness to the Party.cs model
-            party.OpId = Nanoid.Generate("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ");
+
+            party.GenerateOpId(this.context);
 
             foreach (var userId in party.Credentials.Select(credential => credential.UserId))
             {
-                await this.keycloakClient.UpdateUserOpId(userId, party.OpId);
+                if (party.OpId != null)
+                {
+                    await this.keycloakClient.UpdateUserOpId(userId, party.OpId);
+                }
             }
         }
 
