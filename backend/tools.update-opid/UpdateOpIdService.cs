@@ -1,6 +1,7 @@
 namespace UpdateOpId;
 
 using Microsoft.EntityFrameworkCore;
+using NanoidDotNet;
 
 using Pidp.Data;
 using Pidp.Infrastructure.Auth;
@@ -31,14 +32,11 @@ public class UpdateOpIdService : IUpdateOpIdService
                 continue;
             }
 
-            party.GenerateOpId(this.context);
+            party.OpId = party.GenerateOpId(this.context);
 
             foreach (var userId in party.Credentials.Select(credential => credential.UserId))
             {
-                if (party.OpId != null)
-                {
-                    await this.keycloakClient.UpdateUserOpId(userId, party.OpId);
-                }
+                await this.keycloakClient.UpdateUserOpId(userId, party.OpId);
             }
         }
 

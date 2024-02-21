@@ -61,9 +61,13 @@ public class Create
             });
 
             this.context.Parties.Add(party);
-            await this.context.SaveChangesAsync();
 
-            party.GenerateOpId(this.context);
+            if (command.IdentityProvider == IdentityProviders.BCServicesCard)
+            {
+                party.OpId = party.GenerateOpId(this.context);
+            }
+
+            await this.context.SaveChangesAsync();
             return party.Id;
         }
     }

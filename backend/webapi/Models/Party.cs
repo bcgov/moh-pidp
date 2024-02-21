@@ -127,31 +127,22 @@ public class Party : BaseAuditable
         }
     }
 
-    public void GenerateOpId(PidpDbContext context)
-    {
-        bool saveFailed;
-        var counter = 0;
-        var maxAttempts = 1000;
 
+    public string GenerateOpId(PidpDbContext context)
+    {
+        string opId;
+        var counter = 0;
+        var maxAttempts = 100;
         do
         {
-            var opId = Nanoid.Generate("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ");
-            this.OpId = opId;
-            try
+            opId = Nanoid.Generate("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ");
+            counter++;
+            if (counter > maxAttempts)
             {
-                context.Parties.Update(this);
-                context.SaveChanges();
-                saveFailed = false;
+                throw new InvalidOperationException("Maximum attempts to generate a unique OpId exceeded");
             }
-            catch (DbUpdateException)
-            {
-                saveFailed = true;
-                counter++;
-                if (counter >= maxAttempts)
-                {
-                    throw new InvalidOperationException("Maximum attempts to generate a unique OpId exceeded");
-                }
-            }
-        } while (saveFailed);
+        } while (context.Parties.Any(party => party.OpId == opId));
+
+        return opId;
     }
 }
