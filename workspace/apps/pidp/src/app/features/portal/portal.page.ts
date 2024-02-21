@@ -12,6 +12,7 @@ import { BehaviorSubject, Observable, tap } from 'rxjs';
 
 import {
   AlertComponent,
+  AlertContentDirective,
   AnchorDirective,
   InjectViewportCssClassDirective,
   ScrollTargetComponent,
@@ -56,6 +57,7 @@ import { PortalState } from './state/portal-state.builder';
   standalone: true,
   imports: [
     AlertComponent,
+    AlertContentDirective,
     AnchorDirective,
     AsyncPipe,
     BannerExpansionPanelComponent,

@@ -8,6 +8,7 @@ import { catchError, noop, of, tap } from 'rxjs';
 
 import {
   AlertComponent,
+  AlertContentDirective,
   AnchorDirective,
   PageComponent,
   PageFooterActionDirective,
@@ -34,6 +35,7 @@ import { ProviderReportingPortalResource } from './provider-reporting-portal-res
   standalone: true,
   imports: [
     AlertComponent,
+    AlertContentDirective,
     AnchorDirective,
     EnrolmentErrorComponent,
     MatButtonModule,

@@ -11,6 +11,7 @@ import { AppStateService } from '@pidp/presentation';
 
 import {
   AlertComponent,
+  AlertContentDirective,
   AnchorDirective,
   PageComponent,
   PageFooterActionDirective,
@@ -33,6 +34,7 @@ import { UserAccessAgreementResource } from './user-access-agreement-resource.se
   standalone: true,
   imports: [
     AlertComponent,
+    AlertContentDirective,
     AnchorDirective,
     AsyncPipe,
     forwardRef(() => UserAccessAgreementDocumentComponent),
