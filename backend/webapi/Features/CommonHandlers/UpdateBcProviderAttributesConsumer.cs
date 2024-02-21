@@ -22,7 +22,9 @@ public class UpdateBcProviderAttributesConsumer : IConsumer<UpdateBcProviderAttr
     private readonly IBCProviderClient client;
     private readonly ILogger<UpdateBcProviderAttributesConsumer> logger;
 
-    public UpdateBcProviderAttributesConsumer(IBCProviderClient client, ILogger<UpdateBcProviderAttributesConsumer> logger)
+    public UpdateBcProviderAttributesConsumer(
+        IBCProviderClient client,
+        ILogger<UpdateBcProviderAttributesConsumer> logger)
     {
         this.client = client;
         this.logger = logger;
@@ -41,6 +43,6 @@ public class UpdateBcProviderAttributesConsumer : IConsumer<UpdateBcProviderAttr
 public static partial class UpdateBcProviderAttributesConsumerLoggingExtensions
 {
     [LoggerMessage(1, LogLevel.Error, "Error when updating attributes to User {upn} in Azure AD.")]
-    public static partial void LogUpdateBcProviderAttributesFailed(this ILogger<UpdateBcProviderAttributesConsumer> logger, string upn);
+    public static partial void LogUpdateBcProviderAttributesFailed(this ILogger logger, string upn);
 }
 

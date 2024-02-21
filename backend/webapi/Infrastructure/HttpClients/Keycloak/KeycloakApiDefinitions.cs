@@ -89,16 +89,5 @@ public class UserRepresentation
 
     public void SetPhoneExtension(string phoneExtension) => this.SetAttribute("phoneExtension", phoneExtension);
 
-    /// <summary>
-    /// Adds the given attributes to this User Representation. Overrites any duplicate keys.
-    /// </summary>
-    public void SetAttributes(Dictionary<string, string[]> newAttributes)
-    {
-        foreach (var attribute in newAttributes)
-        {
-            this.Attributes[attribute.Key] = attribute.Value;
-        }
-    }
-
     private void SetAttribute(string key, string value) => this.Attributes[key] = new string[] { value };
 }
