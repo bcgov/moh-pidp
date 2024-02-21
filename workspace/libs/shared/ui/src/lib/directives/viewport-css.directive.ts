@@ -8,6 +8,7 @@ import { PidpViewport, ViewportService } from '../services';
  */
 @Directive({
   selector: '[uiPidpInjectViewportCss]',
+  standalone: true,
 })
 export class InjectViewportCssClassDirective {
   @HostBinding('class.viewport-xsmall') public viewportXsClass = false;

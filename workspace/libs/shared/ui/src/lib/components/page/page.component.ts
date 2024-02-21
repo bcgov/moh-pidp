@@ -1,3 +1,4 @@
+import { NgIf, NgTemplateOutlet } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -5,13 +6,17 @@ import {
   Input,
   Output,
 } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
+
+import { OverlayComponent } from '../overlay/overlay.component';
 
 @Component({
   selector: 'ui-page',
   templateUrl: './page.component.html',
   styleUrls: ['./page.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [OverlayComponent, NgIf, ReactiveFormsModule, NgTemplateOutlet],
 })
 export class PageComponent {
   /**

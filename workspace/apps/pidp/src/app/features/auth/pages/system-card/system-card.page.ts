@@ -1,11 +1,17 @@
 import { Component, Input } from '@angular/core';
 
-import { PidpViewport, ViewportService } from '@bcgov/shared/ui';
+import {
+  InjectViewportCssClassDirective,
+  PidpViewport,
+  ViewportService,
+} from '@bcgov/shared/ui';
 
 @Component({
   selector: 'app-auth-system-card',
   templateUrl: './system-card.page.html',
   styleUrls: ['./system-card.page.scss'],
+  standalone: true,
+  imports: [InjectViewportCssClassDirective],
 })
 export class SystemCardComponent {
   @Input() public titleText = '';

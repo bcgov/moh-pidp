@@ -1,5 +1,16 @@
 import { Component, Inject, OnInit } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
 import { ActivatedRoute, Router } from '@angular/router';
+
+import {
+  AnchorDirective,
+  PageComponent,
+  PageFooterActionDirective,
+  PageFooterComponent,
+  PageHeaderComponent,
+  PageSectionComponent,
+  PageSectionSubheaderComponent,
+} from '@bcgov/shared/ui';
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';
 import { UtilsService } from '@app/core/services/utils.service';
@@ -8,6 +19,17 @@ import { UtilsService } from '@app/core/services/utils.service';
   selector: 'app-mfa-setup',
   templateUrl: './mfa-setup.page.html',
   styleUrls: ['./mfa-setup.page.scss'],
+  standalone: true,
+  imports: [
+    AnchorDirective,
+    MatButtonModule,
+    PageComponent,
+    PageFooterActionDirective,
+    PageFooterComponent,
+    PageHeaderComponent,
+    PageSectionComponent,
+    PageSectionSubheaderComponent,
+  ],
 })
 export class MfaSetupPage implements OnInit {
   public providerIdentitySupport: string;

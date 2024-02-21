@@ -1,20 +1,50 @@
+import { NgIf } from '@angular/common';
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { catchError, noop, of, tap } from 'rxjs';
+
+import {
+  AlertComponent,
+  PageComponent,
+  PageFooterActionDirective,
+  PageFooterComponent,
+  PageHeaderComponent,
+  PageSectionComponent,
+  PageSectionSubheaderComponent,
+  PageSectionSubheaderDescDirective,
+  SafePipe,
+} from '@bcgov/shared/ui';
 
 import { PartyService } from '@app/core/party/party.service';
 import { DocumentService } from '@app/core/services/document.service';
 import { LoggerService } from '@app/core/services/logger.service';
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
 
+import { EnrolmentErrorComponent } from '../../components/enrolment-error/enrolment-error.component';
 import { EdredEformsResource } from './edred-eforms-resource.service';
 
 @Component({
   selector: 'app-edrd-eforms',
   templateUrl: './edrd-eforms.page.html',
   styleUrls: ['./edrd-eforms.page.scss'],
+  standalone: true,
+  imports: [
+    AlertComponent,
+    EnrolmentErrorComponent,
+    MatButtonModule,
+    NgIf,
+    PageComponent,
+    PageFooterActionDirective,
+    PageFooterComponent,
+    PageHeaderComponent,
+    PageSectionComponent,
+    PageSectionSubheaderComponent,
+    PageSectionSubheaderDescDirective,
+    SafePipe,
+  ],
 })
 export class EdrdEformsPage implements OnInit {
   public title: string;
