@@ -1,6 +1,9 @@
+import { NgIf } from '@angular/common';
 import { Component, Inject, OnInit } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
-import { MatTableDataSource } from '@angular/material/table';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
 
 import { EMPTY, exhaustMap, of, switchMap } from 'rxjs';
@@ -9,11 +12,14 @@ import {
   ConfirmDialogComponent,
   DialogOptions,
   HtmlComponent,
+  PageComponent,
+  PageHeaderComponent,
 } from '@bcgov/shared/ui';
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';
 
 import { EnvironmentName } from '../../../../../environments/environment.model';
+import { LookupCodePipe } from '../../../../modules/lookup/lookup-code.pipe';
 import {
   AdminResource,
   PartyList,
@@ -23,6 +29,16 @@ import {
   selector: 'app-parties',
   templateUrl: './parties.page.html',
   styleUrls: ['./parties.page.scss'],
+  standalone: true,
+  imports: [
+    LookupCodePipe,
+    MatButtonModule,
+    MatIconModule,
+    MatTableModule,
+    NgIf,
+    PageComponent,
+    PageHeaderComponent,
+  ],
 })
 export class PartiesPage implements OnInit {
   public title: string;

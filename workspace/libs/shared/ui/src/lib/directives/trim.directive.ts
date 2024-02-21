@@ -4,6 +4,7 @@ import { NgControl } from '@angular/forms';
 @Directive({
   selector: 'input[uiTrim]',
   exportAs: 'uiTrim',
+  standalone: true,
 })
 export class TrimDirective {
   public constructor(

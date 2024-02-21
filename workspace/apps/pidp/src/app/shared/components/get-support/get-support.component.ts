@@ -1,3 +1,4 @@
+import { NgFor } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -5,6 +6,11 @@ import {
   OnInit,
 } from '@angular/core';
 
+import {
+  AnchorDirective,
+  PageSectionComponent,
+  PageSectionSubheaderComponent,
+} from '@bcgov/shared/ui';
 import { ArrayUtils } from '@bcgov/shared/utils';
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';
@@ -21,6 +27,13 @@ interface SupportProps {
   templateUrl: './get-support.component.html',
   styleUrls: ['./get-support.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    AnchorDirective,
+    PageSectionComponent,
+    PageSectionSubheaderComponent,
+    NgFor,
+  ],
 })
 export class GetSupportComponent implements OnInit {
   public providedSupport: SupportProps[];
