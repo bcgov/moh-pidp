@@ -8,6 +8,7 @@ import { catchError, noop, of, tap } from 'rxjs';
 
 import {
   AlertComponent,
+  AlertContentDirective,
   AnchorDirective,
   PageComponent,
   PageFooterActionDirective,
@@ -38,6 +39,7 @@ import {
   standalone: true,
   imports: [
     AlertComponent,
+    AlertContentDirective,
     AnchorDirective,
     EnrolmentErrorComponent,
     MatButtonModule,
