@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import {
   AlertComponent,
+  AlertContentDirective,
   PageComponent,
   PageFooterActionDirective,
   PageFooterComponent,
@@ -20,6 +21,7 @@ import {
   standalone: true,
   imports: [
     AlertComponent,
+    AlertContentDirective,
     MatButtonModule,
     PageComponent,
     PageFooterActionDirective,

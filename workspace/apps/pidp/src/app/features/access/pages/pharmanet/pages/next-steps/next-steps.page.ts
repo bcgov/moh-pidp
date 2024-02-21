@@ -6,6 +6,7 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 
 import {
   AlertComponent,
+  AlertContentDirective,
   ContextHelpComponent,
   PageComponent,
   PageFooterActionDirective,
@@ -25,6 +26,7 @@ import { InfoGraphicComponent } from '../../shared/components/info-graphic/info-
   standalone: true,
   imports: [
     AlertComponent,
+    AlertContentDirective,
     ContextHelpComponent,
     InfoGraphicComponent,
     MatButtonModule,
