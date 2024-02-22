@@ -1,5 +1,5 @@
 export class AuthRoutes {
-  public static MODULE_PATH = 'auth';
+  public static BASE_PATH = 'auth';
 
   public static ADMIN_LOGIN = 'admin';
   public static AUTO_LOGIN = 'auto-login';
@@ -11,6 +11,6 @@ export class AuthRoutes {
    * Useful for redirecting to module root-level routes.
    */
   public static routePath(route: string): string {
-    return `/${AuthRoutes.MODULE_PATH}/${route}`;
+    return `/${AuthRoutes.BASE_PATH}/${route}`;
   }
 }

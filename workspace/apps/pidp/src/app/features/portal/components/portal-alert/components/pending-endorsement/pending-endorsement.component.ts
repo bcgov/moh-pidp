@@ -12,6 +12,7 @@ import { Router } from '@angular/router';
     'span { cursor: pointer; text-decoration: underline; color: #0d6efd; }',
     'span:hover { color: #0a58ca; }',
   ],
+  standalone: true,
 })
 export class PendingEndorsementComponent {
   public constructor(private router: Router) {}

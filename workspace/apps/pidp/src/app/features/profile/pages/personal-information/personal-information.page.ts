@@ -1,6 +1,8 @@
+import { AsyncPipe, NgIf } from '@angular/common';
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -15,7 +17,19 @@ import {
   tap,
 } from 'rxjs';
 
-import { ToggleContentChange } from '@bcgov/shared/ui';
+import {
+  ContactFormComponent,
+  PageComponent,
+  PageFooterActionDirective,
+  PageFooterComponent,
+  PageHeaderComponent,
+  PageSectionComponent,
+  PageSectionSubheaderComponent,
+  PageSectionSubheaderDescDirective,
+  PreferredNameFormComponent,
+  ToggleContentChange,
+  ToggleContentComponent,
+} from '@bcgov/shared/ui';
 
 import { PartyService } from '@app/core/party/party.service';
 import { LoggerService } from '@app/core/services/logger.service';
@@ -24,12 +38,14 @@ import { User } from '@app/features/auth/models/user.model';
 import { AuthorizedUserService } from '@app/features/auth/services/authorized-user.service';
 import { DashboardStateService } from '@app/features/shell/services/dashboard-state-service.service';
 import { LookupResource } from '@app/modules/lookup/lookup-resource.service';
+import { IsHighAssurancePipe } from '@app/shared/pipes/is-high-assurance.pipe';
 
 import {
   AbstractFormDependenciesService,
   AbstractFormPage,
 } from '@core/classes/abstract-form-page.class';
 
+import { UserInfoComponent } from './components/user-info/user-info.component';
 import { PersonalInformationFormState } from './personal-information-form-state';
 import { PersonalInformationResource } from './personal-information-resource.service';
 import { PersonalInformation } from './personal-information.model';
@@ -39,6 +55,24 @@ import { PersonalInformation } from './personal-information.model';
   templateUrl: './personal-information.page.html',
   styleUrls: ['./personal-information.page.scss'],
   viewProviders: [PersonalInformationResource],
+  standalone: true,
+  imports: [
+    AsyncPipe,
+    ContactFormComponent,
+    IsHighAssurancePipe,
+    MatButtonModule,
+    NgIf,
+    PageComponent,
+    PageFooterActionDirective,
+    PageFooterComponent,
+    PageHeaderComponent,
+    PageSectionComponent,
+    PageSectionSubheaderComponent,
+    PageSectionSubheaderDescDirective,
+    PreferredNameFormComponent,
+    ToggleContentComponent,
+    UserInfoComponent,
+  ],
 })
 export class PersonalInformationPage
   extends AbstractFormPage<PersonalInformationFormState>

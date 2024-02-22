@@ -5,3 +5,4 @@
 /apps/**/assets/unsupported.html
 
 /.nx/cache
+.angular

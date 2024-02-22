@@ -1,11 +1,23 @@
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { EMPTY, catchError, of, tap } from 'rxjs';
 
 import { NoContent } from '@bcgov/shared/data-access';
+import {
+  PageComponent,
+  PageFooterActionDirective,
+  PageFooterComponent,
+  PageHeaderComponent,
+  PageSectionComponent,
+  PageSectionSubheaderComponent,
+  PageSectionSubheaderDescDirective,
+} from '@bcgov/shared/ui';
 
 import {
   AbstractFormDependenciesService,
@@ -22,6 +34,20 @@ import { AdministratorInformation } from './administrator-information.model';
   selector: 'app-administrator-information',
   templateUrl: './administrator-information.page.html',
   styleUrls: ['./administrator-information.page.scss'],
+  standalone: true,
+  imports: [
+    MatButtonModule,
+    MatFormFieldModule,
+    MatInputModule,
+    PageComponent,
+    PageFooterActionDirective,
+    PageFooterComponent,
+    PageHeaderComponent,
+    PageSectionComponent,
+    PageSectionSubheaderComponent,
+    PageSectionSubheaderDescDirective,
+    ReactiveFormsModule,
+  ],
 })
 export class AdministratorInformationPage
   extends AbstractFormPage<AdministratorInformationFormState>

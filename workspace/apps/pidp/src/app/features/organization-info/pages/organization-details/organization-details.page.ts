@@ -1,11 +1,27 @@
+import { NgFor, NgIf } from '@angular/common';
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatOptionModule } from '@angular/material/core';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { EMPTY, catchError, of, tap } from 'rxjs';
 
 import { NoContent, OrganizationCode } from '@bcgov/shared/data-access';
+import {
+  PageComponent,
+  PageFooterActionDirective,
+  PageFooterComponent,
+  PageHeaderComponent,
+  PageSectionComponent,
+  PageSectionSubheaderComponent,
+  PageSectionSubheaderDescDirective,
+  PageSubheaderComponent,
+} from '@bcgov/shared/ui';
 
 import {
   AbstractFormDependenciesService,
@@ -24,6 +40,25 @@ import { OrganizationDetails } from './organization-details.model';
   selector: 'app-organization-details',
   templateUrl: './organization-details.page.html',
   styleUrls: ['./organization-details.page.scss'],
+  standalone: true,
+  imports: [
+    MatButtonModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatOptionModule,
+    MatSelectModule,
+    NgFor,
+    NgIf,
+    PageComponent,
+    PageFooterActionDirective,
+    PageFooterComponent,
+    PageHeaderComponent,
+    PageSectionComponent,
+    PageSectionSubheaderComponent,
+    PageSectionSubheaderDescDirective,
+    PageSubheaderComponent,
+    ReactiveFormsModule,
+  ],
 })
 export class OrganizationDetailsPage
   extends AbstractFormPage<OrganizationDetailsFormState>

@@ -18,6 +18,7 @@ interface SvgConfig {
   templateUrl: './bc-gov-logo.component.svg',
   styleUrls: ['./bc-gov-logo.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
 })
 export class BcGovLogoComponent implements OnInit {
   @Input() public size?: svgSize;

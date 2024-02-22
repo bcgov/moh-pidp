@@ -11,7 +11,6 @@ describe('SuccessDialogComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [SuccessDialogComponent],
       imports: [MatDialogModule],
       providers: [
         SuccessDialogComponent,

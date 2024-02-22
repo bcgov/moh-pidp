@@ -1,6 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
-import { ActivatedRoute, Data, Event, Scroll } from '@angular/router';
+import {
+  ActivatedRoute,
+  Data,
+  Event,
+  RouterOutlet,
+  Scroll,
+} from '@angular/router';
 
 import { Observable, delay, map, mergeMap } from 'rxjs';
 
@@ -13,6 +19,8 @@ import { UtilsService } from '@core/services/utils.service';
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
+  standalone: true,
+  imports: [RouterOutlet],
 })
 export class AppComponent implements OnInit {
   public constructor(

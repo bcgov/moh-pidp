@@ -4,8 +4,6 @@ import { ResolveFn, Router } from '@angular/router';
 
 import { catchError, exhaustMap, of } from 'rxjs';
 
-import { RootRoutes } from '@bcgov/shared/ui';
-
 import { AuthRoutes } from '@app/features/auth/auth.routes';
 import { ShellRoutes } from '@app/features/shell/shell.routes';
 
@@ -47,7 +45,7 @@ export const partyResolver: ResolveFn<number | null> = () => {
       logger.error(error.message);
 
       if (error instanceof HttpErrorResponse && error.status === 403) {
-        router.navigateByUrl(RootRoutes.DENIED);
+        router.navigateByUrl('denied');
       } else {
         router.navigateByUrl(ShellRoutes.SUPPORT_ERROR_PAGE);
       }

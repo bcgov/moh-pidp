@@ -11,6 +11,8 @@ import { TrimDirective } from './trim.directive';
     <div [formGroup]="form">
       <input uiTrim formControlName="name" />
     </div>`,
+  standalone: true,
+  imports: [TrimDirective, ReactiveFormsModule],
 })
 class UnitTestComponent {
   public form: FormGroup;
@@ -27,10 +29,9 @@ describe('TrimDirective', () => {
   let des: DebugElement[]; // elements w/ the directive
 
   beforeEach(() => {
-    fixture = TestBed.configureTestingModule({
-      declarations: [UnitTestComponent, TrimDirective],
-      imports: [ReactiveFormsModule],
-    }).createComponent(UnitTestComponent);
+    fixture = TestBed.configureTestingModule({}).createComponent(
+      UnitTestComponent,
+    );
 
     fixture.detectChanges(); // initial binding
 

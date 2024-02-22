@@ -1,3 +1,4 @@
+import { NgIf } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -7,8 +8,18 @@ import {
   ViewChild,
   ViewContainerRef,
 } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
+import {
+  MAT_DIALOG_DATA,
+  MatDialogActions,
+  MatDialogClose,
+  MatDialogContent,
+  MatDialogRef,
+  MatDialogTitle,
+} from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
 
+import { AnchorDirective } from '../../anchor/anchor.directive';
 import { IDialogContent } from '../dialog-content.model';
 import { DialogDefaultOptions } from '../dialog-default-options.model';
 import { DialogOptions } from '../dialog-options.model';
@@ -20,6 +31,18 @@ import { DIALOG_DEFAULT_OPTION } from '../dialogs-properties.provider';
   templateUrl: './confirm-dialog.component.html',
   styleUrls: ['./confirm-dialog.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    AnchorDirective,
+    MatDialogTitle,
+    NgIf,
+    MatIconModule,
+    MatDialogContent,
+    MatDialogActions,
+    MatButtonModule,
+    MatDialogClose,
+    AnchorDirective,
+  ],
 })
 export class ConfirmDialogComponent implements OnInit {
   public options: DialogOptions;
@@ -56,6 +79,8 @@ export class ConfirmDialogComponent implements OnInit {
         this.options.data,
       );
     }
+
+    this.dialogRef.updateSize(this.options.width, this.options.height);
   }
 
   private getOptions(dialogOptions: DialogOptions): DialogOptions {
