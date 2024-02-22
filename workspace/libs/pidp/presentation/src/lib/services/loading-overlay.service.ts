@@ -1,3 +1,4 @@
+import { NgIf } from '@angular/common';
 import { Component, Inject, Injectable } from '@angular/core';
 import {
   MAT_DIALOG_DATA,
@@ -5,6 +6,7 @@ import {
   MatDialogConfig,
   MatDialogRef,
 } from '@angular/material/dialog';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 export const LOADING_OVERLAY_DEFAULT_MESSAGE =
   'Your request is being processed';
@@ -65,6 +67,8 @@ interface PidpLoadingDialogData {
       }
     `,
   ],
+  standalone: true,
+  imports: [MatProgressSpinnerModule, NgIf],
 })
 export class PidpLoadingDialogComponent {
   public constructor(

@@ -35,7 +35,6 @@ describe('PortalCardComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [RouterTestingModule],
-      declarations: [PortalCardComponent],
       providers: [
         provideAutoSpy(ApiHttpClient),
         {

@@ -1,13 +1,23 @@
+import { NgIf, NgSwitch, NgSwitchCase, NgSwitchDefault } from '@angular/common';
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { FormArray, FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
 import { EMPTY, catchError, noop, of, tap } from 'rxjs';
 
 import { LoadingOverlayService } from '@pidp/presentation';
 
 import { NoContent } from '@bcgov/shared/data-access';
+import {
+  AnchorDirective,
+  InjectViewportCssClassDirective,
+  PageFooterActionDirective,
+  SafePipe,
+} from '@bcgov/shared/ui';
 
 import {
   AbstractFormDependenciesService,
@@ -18,7 +28,9 @@ import { DocumentService } from '@app/core/services/document.service';
 import { LoggerService } from '@app/core/services/logger.service';
 import { UtilsService } from '@app/core/services/utils.service';
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
+import { AddressFormComponent } from '@app/shared/components/address-form/address-form.component';
 
+import { EnrolmentErrorComponent } from '../../components/enrolment-error/enrolment-error.component';
 import { MsTeamsPrivacyOfficerFormState } from './ms-teams-privacy-officer-form-state';
 import { MsTeamsPrivacyOfficerResource } from './ms-teams-privacy-officer-resource.service';
 import { msTeamsSupportEmail } from './ms-teams.constants';
@@ -27,6 +39,24 @@ import { msTeamsSupportEmail } from './ms-teams.constants';
   selector: 'app-ms-teams',
   templateUrl: './ms-teams-privacy-officer.page.html',
   styleUrls: ['./ms-teams-privacy-officer.page.scss'],
+  standalone: true,
+  imports: [
+    AddressFormComponent,
+    AnchorDirective,
+    EnrolmentErrorComponent,
+    InjectViewportCssClassDirective,
+    MatButtonModule,
+    MatFormFieldModule,
+    MatInputModule,
+    NgIf,
+    NgSwitch,
+    NgSwitchCase,
+    NgSwitchDefault,
+    PageFooterActionDirective,
+    SafePipe,
+    ReactiveFormsModule,
+    RouterLink,
+  ],
 })
 export class MsTeamsPrivacyOfficerPage
   extends AbstractFormPage<MsTeamsPrivacyOfficerFormState>

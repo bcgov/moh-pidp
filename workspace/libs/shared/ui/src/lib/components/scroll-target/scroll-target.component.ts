@@ -5,6 +5,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
   templateUrl: './scroll-target.component.html',
   styleUrls: ['./scroll-target.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
 })
 export class ScrollTargetComponent {
   @Input() public targetId!: string;

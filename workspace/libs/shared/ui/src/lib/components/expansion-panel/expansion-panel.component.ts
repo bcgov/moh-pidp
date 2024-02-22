@@ -1,4 +1,5 @@
 import { AnimationEvent } from '@angular/animations';
+import { NgClass } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 import { Subject, distinctUntilChanged } from 'rxjs';
@@ -13,6 +14,8 @@ import {
   templateUrl: './expansion-panel.component.html',
   styleUrls: ['./expansion-panel.component.scss'],
   animations: [appExpansionAnimations.bodyExpansion],
+  standalone: true,
+  imports: [NgClass],
 })
 export class ExpansionPanelComponent {
   private _expanded: boolean;

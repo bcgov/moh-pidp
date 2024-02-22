@@ -1,3 +1,4 @@
+import { NgFor, NgIf, NgTemplateOutlet } from '@angular/common';
 import {
   Component,
   EventEmitter,
@@ -7,13 +8,27 @@ import {
   SimpleChanges,
   ViewChild,
 } from '@angular/core';
-import { MatDrawerMode, MatSidenav } from '@angular/material/sidenav';
-import { IsActiveMatchOptions } from '@angular/router';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import {
+  MatDrawerMode,
+  MatSidenav,
+  MatSidenavModule,
+} from '@angular/material/sidenav';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import {
+  IsActiveMatchOptions,
+  RouterLink,
+  RouterLinkActive,
+  RouterOutlet,
+} from '@angular/router';
 
 import { DashboardStateModel } from '@pidp/data-model';
 
 import { RoutePath } from '@bcgov/shared/utils';
 
+import { LayoutHeaderFooterComponent } from '../../../../components/layout-header-footer/layout-header-footer.component';
+import { InjectViewportCssClassDirective } from '../../../../directives/viewport-css.directive';
 import { PidpViewport, ViewportService } from '../../../../services';
 import { DashboardMenuItem, DashboardRouteMenuItem } from '../../models';
 
@@ -21,6 +36,21 @@ import { DashboardMenuItem, DashboardRouteMenuItem } from '../../models';
   selector: 'ui-dashboard-v2',
   templateUrl: './dashboard-v2.component.html',
   styleUrls: ['./dashboard-v2.component.scss'],
+  standalone: true,
+  imports: [
+    InjectViewportCssClassDirective,
+    LayoutHeaderFooterComponent,
+    MatButtonModule,
+    MatIconModule,
+    MatSidenavModule,
+    MatTooltipModule,
+    NgFor,
+    NgIf,
+    NgTemplateOutlet,
+    RouterLink,
+    RouterLinkActive,
+    RouterOutlet,
+  ],
 })
 export class DashboardV2Component implements OnChanges {
   @Input() public dashboardState!: DashboardStateModel;

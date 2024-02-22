@@ -2,8 +2,6 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
-import { SharedUiModule } from '@bcgov/shared/ui';
-
 import { APP_CONFIG, APP_DI_CONFIG } from '@app/app.config';
 
 import { NeedHelpComponent } from './need-help.component';
@@ -14,8 +12,7 @@ describe('NeedHelpComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [NeedHelpComponent],
-      imports: [NoopAnimationsModule, SharedUiModule],
+      imports: [NoopAnimationsModule],
       providers: [
         {
           provide: APP_CONFIG,

@@ -1,12 +1,23 @@
+import {
+  NgIf,
+  NgOptimizedImage,
+  NgTemplateOutlet,
+  UpperCasePipe,
+} from '@angular/common';
 import { Component, Inject, OnInit } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 
 import { EMPTY, Observable, exhaustMap, of, switchMap } from 'rxjs';
 
 import {
+  AnchorDirective,
   DialogOptions,
+  ExpansionPanelComponent,
   HtmlComponent,
+  InjectViewportCssClassDirective,
+  LayoutHeaderFooterComponent,
   PidpViewport,
   ViewportService,
 } from '@bcgov/shared/ui';
@@ -19,6 +30,7 @@ import {
 } from '@app/core/services/client-logs.service';
 import { DocumentService } from '@app/core/services/document.service';
 import { AdminRoutes } from '@app/features/admin/admin.routes';
+import { NeedHelpComponent } from '@app/shared/components/need-help/need-help.component';
 
 import { IdentityProvider } from '../../enums/identity-provider.enum';
 import { AuthService } from '../../services/auth.service';
@@ -31,6 +43,19 @@ export interface LoginPageRouteData {
   selector: 'app-login',
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
+  standalone: true,
+  imports: [
+    AnchorDirective,
+    ExpansionPanelComponent,
+    InjectViewportCssClassDirective,
+    LayoutHeaderFooterComponent,
+    MatButtonModule,
+    NeedHelpComponent,
+    NgIf,
+    NgOptimizedImage,
+    NgTemplateOutlet,
+    UpperCasePipe,
+  ],
 })
 export class LoginPage implements OnInit {
   public viewportOptions = PidpViewport;
@@ -121,6 +146,7 @@ export class LoginPage implements OnInit {
       data: {
         content: this.documentService.getPIdPCollectionNotice(),
       },
+      width: '500px',
     };
     this.dialog
       .open(ConfirmDialogComponent, { data })
@@ -147,7 +173,7 @@ export class LoginPage implements OnInit {
           redirectUri:
             this.config.applicationUrl +
             (this.route.snapshot.routeConfig?.path === 'admin'
-              ? '/' + AdminRoutes.MODULE_PATH
+              ? '/' + AdminRoutes.BASE_PATH
               : '') +
             (this.endorsementToken
               ? `?endorsement-token=${this.endorsementToken}`

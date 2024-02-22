@@ -22,7 +22,7 @@ export const collegeLicenceInfoResolver: ResolveFn<
 
       return (
         profileStatus.status.collegeCertification.hasCpn ||
-        router.navigateByUrl(PortalRoutes.MODULE_PATH)
+        router.navigateByUrl(PortalRoutes.BASE_PATH)
       );
     }),
   );

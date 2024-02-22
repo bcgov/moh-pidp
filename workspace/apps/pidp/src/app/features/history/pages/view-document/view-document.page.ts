@@ -1,5 +1,16 @@
+import { NgIf } from '@angular/common';
 import { Component, OnInit, Type, ViewChild } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
 import { ActivatedRoute, Router } from '@angular/router';
+
+import {
+  PageComponent,
+  PageFooterActionDirective,
+  PageFooterComponent,
+  PageHeaderComponent,
+  PageSectionComponent,
+  SafePipe,
+} from '@bcgov/shared/ui';
 
 import {
   DocumentService,
@@ -13,6 +24,18 @@ import { ViewDocumentDirective } from './view-document.directive';
   selector: 'app-view-document',
   templateUrl: './view-document.page.html',
   styleUrls: ['./view-document.page.scss'],
+  standalone: true,
+  imports: [
+    MatButtonModule,
+    NgIf,
+    PageComponent,
+    PageFooterActionDirective,
+    PageFooterComponent,
+    PageHeaderComponent,
+    PageSectionComponent,
+    SafePipe,
+    ViewDocumentDirective,
+  ],
 })
 export class ViewDocumentPage implements OnInit {
   public title: string;
@@ -31,7 +54,7 @@ export class ViewDocumentPage implements OnInit {
 
   public onBack(): void {
     this.router.navigate([
-      HistoryRoutes.MODULE_PATH,
+      HistoryRoutes.BASE_PATH,
       HistoryRoutes.SIGNED_ACCEPTED_DOCUMENTS,
     ]);
   }

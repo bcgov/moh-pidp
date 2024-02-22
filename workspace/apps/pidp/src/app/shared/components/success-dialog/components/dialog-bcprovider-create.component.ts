@@ -10,6 +10,7 @@ import { Component, Input } from '@angular/core';
     send or receive any emails from this credential.
   </p>`,
   styles: `p { text-align: center;}`,
+  standalone: true,
 })
 export class DialogBcproviderCreateComponent {
   @Input() public username!: string;

@@ -12,7 +12,6 @@ describe('PreferredNameFormComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [PreferredNameFormComponent],
       imports: [
         BrowserAnimationsModule,
         MatFormFieldModule,
