@@ -33,7 +33,7 @@ describe('PrescriptionRefillEformsPage', () => {
     };
 
     TestBed.configureTestingModule({
-      declarations: [SafePipe],
+      imports: [SafePipe],
       providers: [
         PrescriptionRefillEformsPage,
         {

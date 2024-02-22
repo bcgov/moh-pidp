@@ -1,3 +1,4 @@
+import { NgIf } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -8,17 +9,31 @@ import {
   QueryList,
   forwardRef,
 } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 import {
   ContextHelpContentDirective,
   ContextHelpTitleDirective,
 } from '../../modules/context-help';
+import { ContextHelpComponent } from '../../modules/context-help/context-help/context-help.component';
 
 @Component({
   selector: 'ui-form-section',
   templateUrl: './form-section.component.html',
   styleUrls: ['./form-section.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    ContextHelpComponent,
+    ContextHelpContentDirective,
+    ContextHelpTitleDirective,
+    MatButtonModule,
+    MatIconModule,
+    MatTooltipModule,
+    NgIf,
+  ],
 })
 export class FormSectionComponent {
   /**

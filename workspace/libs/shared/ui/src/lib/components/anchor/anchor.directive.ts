@@ -5,6 +5,7 @@ import { PhonePipe } from '../../pipes';
 @Directive({
   selector: '[uiAnchor]',
   providers: [PhonePipe],
+  standalone: true,
 })
 export class AnchorDirective implements OnInit {
   /**

@@ -1,8 +1,24 @@
+import { NgFor, NgIf } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatRadioModule } from '@angular/material/radio';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { EMPTY, Observable } from 'rxjs';
+
+import {
+  AlertComponent,
+  AlertContentDirective,
+  AnchorDirective,
+  PageComponent,
+  PageFooterActionDirective,
+  PageFooterComponent,
+  PageHeaderComponent,
+  PageSectionComponent,
+  PageSectionSubheaderComponent,
+  PageSectionSubheaderDescDirective,
+} from '@bcgov/shared/ui';
 
 import {
   AbstractFormDependenciesService,
@@ -28,6 +44,24 @@ import { HcimEnrolment } from './hcim-enrolment.model';
   selector: 'app-hcim-enrolment',
   templateUrl: './hcim-enrolment.page.html',
   styleUrls: ['./hcim-enrolment.page.scss'],
+  standalone: true,
+  imports: [
+    AlertComponent,
+    AlertContentDirective,
+    AnchorDirective,
+    NgFor,
+    NgIf,
+    MatButtonModule,
+    MatRadioModule,
+    PageComponent,
+    PageFooterActionDirective,
+    PageFooterComponent,
+    PageHeaderComponent,
+    PageSectionComponent,
+    PageSectionSubheaderComponent,
+    PageSectionSubheaderDescDirective,
+    ReactiveFormsModule,
+  ],
 })
 export class HcimEnrolmentPage
   extends AbstractFormPage<HcimEnrolmentFormState>
