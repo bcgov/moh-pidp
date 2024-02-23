@@ -2,6 +2,7 @@ namespace Pidp.Features.CommonHandlers;
 
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+
 using Pidp.Data;
 using Pidp.Infrastructure.HttpClients.Keycloak;
 using Pidp.Infrastructure.HttpClients.Plr;
