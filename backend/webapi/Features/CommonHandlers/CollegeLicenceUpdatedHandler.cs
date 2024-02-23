@@ -57,5 +57,4 @@ public class UpdateKeycloakAfterCollegeLicenceUpdated : INotificationHandler<Col
             await this.keycloakClient.UpdateUserCollegeLicenceInformation(userId, collegeLicenceInformationList);
         }
     }
-
 }
