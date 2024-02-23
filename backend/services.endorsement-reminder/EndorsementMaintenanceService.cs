@@ -17,8 +17,6 @@ public class EndorsementMaintenanceService : IEndorsementMaintenanceService
     private readonly ILogger logger;
     private readonly PidpDbContext context;
     private readonly string applicationUrl;
-    private readonly string licensedInitiatedLink;
-    private readonly string unLicensedInitiatedLink;
 
     public EndorsementMaintenanceService(
         IClock clock,
@@ -32,8 +30,6 @@ public class EndorsementMaintenanceService : IEndorsementMaintenanceService
         this.logger = logger;
         this.context = context;
         this.applicationUrl = config.ApplicationUrl;
-        this.licensedInitiatedLink = config.LicensedInitiatedLink;
-        this.unLicensedInitiatedLink = config.UnlicensedInitiatedLink;
     }
 
     public async Task ExpireOldEndorsementRequestsAsync()
@@ -42,6 +38,7 @@ public class EndorsementMaintenanceService : IEndorsementMaintenanceService
         var now = this.clock.GetCurrentInstant();
 
         var oldRequests = await this.context.EndorsementRequests
+            .Include(request => request.ReceivingParty)
             .Where(request => inProgressStatuses.Contains(request.Status)
                 && request.StatusDate < now - Duration.FromDays(30))
             .ToListAsync();
@@ -128,8 +125,8 @@ public class EndorsementMaintenanceService : IEndorsementMaintenanceService
     {
         var url = this.applicationUrl.SetQueryParam("endorsement-token", token);
         var link = $"<a href=\"{url}\" target=\"_blank\" rel=\"noopener noreferrer\">OneHealthID Service</a>";
-        var licensedlink = $"<a href=\"{this.licensedInitiatedLink}\" target=\"_blank\" rel=\"noopener noreferrer\">Licensed Initiated</a>";
-        var unLicensedlink = $"<a href=\"{this.unLicensedInitiatedLink}\" target=\"_blank\" rel=\"noopener noreferrer\">Unlicensed Initiated</a>";
+        var licensedlink = $"<a href=\"\"https://www.doctorsofbc.ca/sites/default/files/endorsement_licensed_initiated_4.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">Licensed Initiated</a>";
+        var unLicensedlink = $"<a href=\"https://www.doctorsofbc.ca/sites/default/files/endorsement_unlicensed_initiated_4.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">Unlicensed Initiated</a>";
         var pidpSupportEmail = $"<a href=\"mailto:{EmailService.PidpEmail}\">{EmailService.PidpEmail}</a>";
         var pidpSupportPhone = $"<a href=\"tel:{EmailService.PidpSupportPhone}\">{EmailService.PidpSupportPhone}</a>";
 
