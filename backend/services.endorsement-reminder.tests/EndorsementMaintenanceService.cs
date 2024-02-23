@@ -86,7 +86,6 @@ public class EndorsementMaintenanceServiceTests : InMemoryDbTest
 
             if (status == EndorsementRequestStatus.Created)
             {
-                Assert.Contains(endorsementRequest.Token.ToString(), sentEmail.Body);
                 Assert.Equal(sentEmail.To.Single(), endorsementRequest.RecipientEmail);
             }
             else if (status == EndorsementRequestStatus.Received)

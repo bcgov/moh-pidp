@@ -81,9 +81,6 @@ public class EndorsementMaintenanceService : IEndorsementMaintenanceService
             .OrderByDescending(request => request.Status)
             .Select(request => new
             {
-                Token = request.Status == EndorsementRequestStatus.Created
-                    ? (Guid?)request.Token
-                    : null,
                 Email = request.Status == EndorsementRequestStatus.Approved
                     ? request.RequestingParty!.Email!
                     : request.RecipientEmail,
@@ -94,7 +91,7 @@ public class EndorsementMaintenanceService : IEndorsementMaintenanceService
 
         foreach (var recipient in uniqueRecipients)
         {
-            await this.SendEmailAsync(recipient.Email, recipient.Token);
+            await this.SendEmailAsync(recipient.Email, null);
         }
 
         this.logger.LogSentEmailCount(uniqueRecipients.Count());
