@@ -2,6 +2,7 @@ namespace Pidp.Features.Credentials;
 
 using DomainResults.Common;
 using FluentValidation;
+using Flurl;
 using HybridModelBinding;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
@@ -16,7 +17,6 @@ using Pidp.Infrastructure.HttpClients.Plr;
 using Pidp.Models;
 using Pidp.Models.Lookups;
 using Pidp.Infrastructure.Services;
-using Flurl;
 
 public class BCProviderCreate
 {
