@@ -1,1 +1,29 @@
-<p>account-linking works!</p>
+<div class="box" uiPidpInjectViewportCss>
+  <div class="content">
+    <section class="link-main">
+      <header>
+        <h2>
+          Here you can link your other professional credentials you have in
+          OneHealthID
+        </h2>
+      </header>
+      <div class="link-main-text">
+        <p class="large">blah</p>
+      </div>
+    </section>
+    <section class="actions">
+      <button
+        mat-stroked-button
+        uiPageFooterAction
+        type="button"
+        color="primary"
+        (click)="onBack()">
+        Back Home
+      </button>
+
+      <button mat-flat-button uiPageFooterAction type="submit" color="primary">
+        Link
+      </button>
+    </section>
+  </div>
+</div>

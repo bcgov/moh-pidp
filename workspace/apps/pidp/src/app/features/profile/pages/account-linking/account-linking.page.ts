@@ -1,11 +1,14 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { Observable } from 'rxjs';
 
 import { DashboardStateModel, PidpStateName } from '@pidp/data-model';
 import { AppStateService } from '@pidp/presentation';
+
+import { InjectViewportCssClassDirective } from '@bcgov/shared/ui';
 
 import { PartyService } from '@app/core/party/party.service';
 import { LoggerService } from '@app/core/services/logger.service';
@@ -15,7 +18,7 @@ import { StatusCode } from '@app/features/portal/enums/status-code.enum';
 @Component({
   selector: 'app-account-linking',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, InjectViewportCssClassDirective, MatButtonModule],
   templateUrl: './account-linking.page.html',
   styleUrl: './account-linking.page.scss',
 })
