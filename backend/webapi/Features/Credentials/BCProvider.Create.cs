@@ -16,6 +16,7 @@ using Pidp.Infrastructure.HttpClients.Plr;
 using Pidp.Models;
 using Pidp.Models.Lookups;
 using Pidp.Infrastructure.Services;
+using Flurl;
 
 public class BCProviderCreate
 {
@@ -44,6 +45,7 @@ public class BCProviderCreate
         private readonly ILogger<CommandHandler> logger;
         private readonly IPlrClient plrClient;
         private readonly PidpDbContext context;
+        private readonly Url keycloakAdministrationUrl;
 
         public CommandHandler(
             IBCProviderClient client,
@@ -51,6 +53,7 @@ public class BCProviderCreate
             IKeycloakAdministrationClient keycloakClient,
             ILogger<CommandHandler> logger,
             IPlrClient plrClient,
+            PidpConfiguration config,
             PidpDbContext context)
         {
             this.client = client;
@@ -59,6 +62,7 @@ public class BCProviderCreate
             this.logger = logger;
             this.plrClient = plrClient;
             this.context = context;
+            this.keycloakAdministrationUrl = Url.Parse(config.Keycloak.AdministrationUrl);
         }
 
         public async Task<IDomainResult<string>> HandleAsync(Command command)
@@ -154,7 +158,7 @@ public class BCProviderCreate
                 Enabled = true,
                 FirstName = firstName,
                 LastName = lastName,
-                Username = GenerateMohKeycloakUsername(userPrincipalName)
+                Username = this.GenerateMohKeycloakUsername(userPrincipalName)
             };
             return await this.keycloakClient.CreateUser(newUser);
         }
@@ -165,11 +169,11 @@ public class BCProviderCreate
         /// However, we create BC Provider Credentials directly; so the User Principal Name is saved to the database without the suffix.
         /// There are also two inconsistencies with how the MOH Keycloak handles BCP usernames:
         /// 1. The username suffix is @bcp rather than @bcprovider_aad.
-        /// 2. This suffix is only added in Test and Production; there is no suffix at all for BCP Users in the Dev environment.
+        /// 2. This suffix is only added in Test and Production; there is no suffix at all for BCP Users in the Dev Keycloak.
         /// </summary>
-        private static string GenerateMohKeycloakUsername(string userPrincipalName)
+        private string GenerateMohKeycloakUsername(string userPrincipalName)
         {
-            if (PidpConfiguration.IsDevelopment())
+            if (this.keycloakAdministrationUrl.Host == "user-management-dev.api.hlth.gov.bc.ca")
             {
                 return userPrincipalName;
             }
