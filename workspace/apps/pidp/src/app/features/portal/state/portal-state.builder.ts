@@ -29,6 +29,7 @@ import { FacilityDetailsPortalSection } from './organization/facility-details-po
 import { OrganizationDetailsPortalSection } from './organization/organization-details-portal-section.class';
 import { PortalSectionStatusKey } from './portal-section-status-key.type';
 import { IPortalSection } from './portal-section.model';
+import { AccountLinkingPortalSection } from './profile/account-linking-portal-section.class';
 import { CollegeCertificationPortalSection } from './profile/college-certification-portal-section.class';
 import { DemographicsPortalSection } from './profile/demographics-portal-section.class';
 import { UserAccessAgreementPortalSection } from './profile/user-access-agreement-portal-section.class';
@@ -99,6 +100,10 @@ export class PortalStateBuilder {
         () => [
           new UserAccessAgreementPortalSection(profileStatus, this.router),
         ],
+      ),
+      ...ArrayUtils.insertResultIf<IPortalSection>(
+        this.insertSection('accountLinking', profileStatus),
+        () => [new AccountLinkingPortalSection(profileStatus, this.router)],
       ),
     ];
   }
