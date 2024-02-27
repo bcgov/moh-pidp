@@ -43,6 +43,13 @@
   }
 }
 
+.viewport-xsmall {
+  .mat-horizontal-stepper-header-container {
+    align-items: normal !important;
+    flex-direction: column !important;
+  }
+}
+
 //
 // Expansion Panel
 //

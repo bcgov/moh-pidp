@@ -138,7 +138,13 @@ h1 {
 }
 
 .custom-mat-sidenav-content {
-  overflow: hidden;
+  overflow: visible;
+}
+
+.viewport-xsmall {
+  .custom-mat-sidenav-content {
+    overflow: hidden;
+  }
 }
 
 // All additional formatting for wide-style views
