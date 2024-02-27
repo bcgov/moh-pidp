@@ -2,14 +2,17 @@ import { Routes } from '@angular/router';
 
 import { setDashboardTitleGuard } from '@pidp/presentation';
 
-import { PersonalInformationPage } from './personal-information.page';
+import { AccountLinkingPage } from './account-linking.page';
+import { accountLinkingResolver } from './account-linking.resolver';
 
 export const routes: Routes = [
   {
     path: '',
-    component: PersonalInformationPage,
+    component: AccountLinkingPage,
     canActivate: [setDashboardTitleGuard],
-    canDeactivate: [canDeactivateFormGuard],
+    resolve: {
+      accountLinkingStatusCode: accountLinkingResolver,
+    },
     data: {
       title: 'OneHealthID Service',
       routes: {
