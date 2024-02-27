@@ -8,6 +8,7 @@ import { Component, Input } from '@angular/core';
     credentials.
   </p>`,
   styles: `p { text-align: center;}`,
+  standalone: true,
 })
 export class DialogBcproviderEditComponent {
   @Input() public username!: string;

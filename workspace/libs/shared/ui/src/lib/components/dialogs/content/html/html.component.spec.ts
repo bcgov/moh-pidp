@@ -1,6 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SafePipe } from '../../../../pipes';
 import { HtmlComponent } from './html.component';
 
 describe('HtmlComponent', () => {
@@ -8,9 +7,7 @@ describe('HtmlComponent', () => {
   let fixture: ComponentFixture<HtmlComponent>;
 
   beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [HtmlComponent, SafePipe],
-    }).compileComponents();
+    await TestBed.configureTestingModule({}).compileComponents();
   });
 
   beforeEach(() => {

@@ -1,6 +1,16 @@
+import { AsyncPipe, DatePipe, NgFor, NgIf } from '@angular/common';
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormControl, FormGroupDirective } from '@angular/forms';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroupDirective,
+  ReactiveFormsModule,
+} from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatTabsModule } from '@angular/material/tabs';
 import { ActivatedRoute } from '@angular/router';
 
 import {
@@ -13,6 +23,7 @@ import {
   switchMap,
 } from 'rxjs';
 
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import {
   faArrowDown,
   faArrowUp,
@@ -26,6 +37,8 @@ import {
   ConfirmDialogComponent,
   DialogOptions,
   HtmlComponent,
+  InjectViewportCssClassDirective,
+  PageFooterActionDirective,
   PidpViewport,
   ViewportService,
 } from '@bcgov/shared/ui';
@@ -40,6 +53,7 @@ import { UtilsService } from '@app/core/services/utils.service';
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
 import { LookupService } from '@app/modules/lookup/lookup.service';
 
+import { EndorsementCardComponent } from './components/endorsement-card/endorsement-card.component';
 import { EndorsementsFormState } from './endorsements-form-state';
 import { EndorsementsResource } from './endorsements-resource.service';
 import { EndorsementRequest } from './models/endorsement-request.model';
@@ -54,6 +68,22 @@ export enum EndorsementType {
   selector: 'app-endorsements',
   templateUrl: './endorsements.page.html',
   styleUrls: ['./endorsements.page.scss'],
+  standalone: true,
+  imports: [
+    AsyncPipe,
+    DatePipe,
+    EndorsementCardComponent,
+    FaIconComponent,
+    InjectViewportCssClassDirective,
+    MatButtonModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatTabsModule,
+    NgFor,
+    NgIf,
+    PageFooterActionDirective,
+    ReactiveFormsModule,
+  ],
 })
 export class EndorsementsPage
   extends AbstractFormPage<EndorsementsFormState>

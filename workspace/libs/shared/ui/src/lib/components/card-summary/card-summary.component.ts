@@ -1,3 +1,4 @@
+import { NgIf, NgTemplateOutlet } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -5,14 +6,29 @@ import {
   Input,
   Output,
 } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
 
 import { AlertType } from '../alert/alert.component';
+import { CardActionsDirective } from '../card/card-actions.directive';
+import { CardContentDirective } from '../card/card-content.directive';
+import { CardHintDirective } from '../card/card-hint.directive';
+import { CardComponent } from '../card/card.component';
 
 @Component({
   selector: 'ui-card-summary',
   templateUrl: './card-summary.component.html',
   styleUrls: ['./card-summary.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    CardActionsDirective,
+    CardComponent,
+    CardContentDirective,
+    CardHintDirective,
+    MatButtonModule,
+    NgIf,
+    NgTemplateOutlet,
+  ],
 })
 export class CardSummaryComponent {
   @Input() public icon?: string;

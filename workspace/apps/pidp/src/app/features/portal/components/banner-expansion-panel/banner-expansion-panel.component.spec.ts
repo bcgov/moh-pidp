@@ -9,8 +9,7 @@ describe('BannerExpansionPanelComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [BannerExpansionPanelComponent],
-      imports: [NoopAnimationsModule],
+      imports: [BannerExpansionPanelComponent, NoopAnimationsModule],
     }).compileComponents();
   });
 

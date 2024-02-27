@@ -7,6 +7,7 @@ export type KeyValueInfoOrientation = 'vertical' | 'horizontal';
   templateUrl: './key-value-info.component.html',
   styleUrls: ['./key-value-info.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
 })
 export class KeyValueInfoComponent {
   @Input() public key!: string;

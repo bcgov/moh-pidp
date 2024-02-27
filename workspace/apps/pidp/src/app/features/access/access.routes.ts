@@ -1,5 +1,5 @@
 export class AccessRoutes {
-  public static MODULE_PATH = 'access';
+  public static BASE_PATH = 'access';
 
   public static BC_PROVIDER_APPLICATION = 'bc-provider-application';
   public static BC_PROVIDER_EDIT = 'bc-provider-edit';
@@ -21,6 +21,6 @@ export class AccessRoutes {
    * Useful for redirecting to module root-level routes.
    */
   public static routePath(route: string): string {
-    return `/${AccessRoutes.MODULE_PATH}/${route}`;
+    return `/${AccessRoutes.BASE_PATH}/${route}`;
   }
 }

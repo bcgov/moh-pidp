@@ -1,12 +1,31 @@
+import { ClipboardModule } from '@angular/cdk/clipboard';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
+import { AsyncPipe, NgFor, NgIf } from '@angular/common';
 import { Component, Inject, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatStepperModule } from '@angular/material/stepper';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { Router, RouterLink } from '@angular/router';
 
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 
+import {
+  AlertComponent,
+  AlertContentDirective,
+  AnchorDirective,
+  InjectViewportCssClassDirective,
+  ScrollTargetComponent,
+} from '@bcgov/shared/ui';
+
 import { APP_CONFIG, AppConfig } from '@app/app.config';
+import {
+  Destination,
+  DiscoveryResource,
+} from '@app/core/party/discovery-resource.service';
 import { PartyService } from '@app/core/party/party.service';
 import { ToastService } from '@app/core/services/toast.service';
+import { GetSupportComponent } from '@app/shared/components/get-support/get-support.component';
 import { Role } from '@app/shared/enums/roles.enum';
 
 import { BcProviderEditResource } from '../access/pages/bc-provider-edit/bc-provider-edit-resource.service';
@@ -14,6 +33,9 @@ import { BcProviderEditInitialStateModel } from '../access/pages/bc-provider-edi
 import { IdentityProvider } from '../auth/enums/identity-provider.enum';
 import { AuthService } from '../auth/services/auth.service';
 import { AuthorizedUserService } from '../auth/services/authorized-user.service';
+import { BannerExpansionPanelComponent } from './components/banner-expansion-panel/banner-expansion-panel.component';
+import { PortalAlertComponent } from './components/portal-alert/portal-alert.component';
+import { PortalCarouselComponent } from './components/portal-carousel/portal-carousel.component';
 import { ProfileStatusAlert } from './models/profile-status-alert.model';
 import { ProfileStatus } from './models/profile-status.model';
 import { PortalResource } from './portal-resource.service';
@@ -31,6 +53,27 @@ import { PortalState } from './state/portal-state.builder';
       provide: STEPPER_GLOBAL_OPTIONS,
       useValue: { displayDefaultIndicatorType: false },
     },
+  ],
+  standalone: true,
+  imports: [
+    AlertComponent,
+    AlertContentDirective,
+    AnchorDirective,
+    AsyncPipe,
+    BannerExpansionPanelComponent,
+    ClipboardModule,
+    GetSupportComponent,
+    InjectViewportCssClassDirective,
+    MatButtonModule,
+    MatIconModule,
+    MatStepperModule,
+    MatTooltipModule,
+    NgFor,
+    NgIf,
+    PortalAlertComponent,
+    PortalCarouselComponent,
+    RouterLink,
+    ScrollTargetComponent,
   ],
 })
 export class PortalPage implements OnInit {
@@ -64,10 +107,11 @@ export class PortalPage implements OnInit {
   private readonly lastSelectedIndex: number;
   public hasCpn: boolean | undefined;
   public collegeLicenceDeclared: boolean | undefined;
-  public isComplete: boolean | undefined;
+  public destination$: Observable<Destination>;
   public IdentityProvider = IdentityProvider;
   public identityProvider$: Observable<IdentityProvider>;
   public pasAllowedProviders: IdentityProvider[];
+  public Destination = Destination;
 
   public constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
@@ -79,6 +123,7 @@ export class PortalPage implements OnInit {
     private authService: AuthService,
     private authorizedUserService: AuthorizedUserService,
     private toastService: ToastService,
+    private discoveryResource: DiscoveryResource,
   ) {
     this.state$ = this.portalService.state$;
     this.pasPanelExpanded$ = this.portalService.pasPanelExpanded$;
@@ -92,6 +137,9 @@ export class PortalPage implements OnInit {
       IdentityProvider.BCSC,
       IdentityProvider.BC_PROVIDER,
     ];
+    this.destination$ = this.discoveryResource.getDestination(
+      this.partyService.partyId,
+    );
   }
 
   public navigateTo(): void {
@@ -141,7 +189,6 @@ export class PortalPage implements OnInit {
         this.hasCpn = profileStatus?.status.collegeCertification.hasCpn;
         this.collegeLicenceDeclared =
           profileStatus?.status.collegeCertification.licenceDeclared;
-        this.isComplete = profileStatus?.status.collegeCertification.isComplete;
 
         this.bcProviderStatusCode = profileStatus?.status.bcProvider.statusCode;
         if (this.bcProviderStatusCode === 2) {
@@ -163,26 +210,8 @@ export class PortalPage implements OnInit {
           // PAS step
           selectedIndex = 1;
         }
-        if (
-          this.selectedNoCollegeLicence(
-            this.hasCpn,
-            this.collegeLicenceDeclared,
-            this.isComplete,
-          )
-        ) {
-          // MFA
-          selectedIndex = 2;
-        }
         this.selectedIndex = selectedIndex;
       });
-  }
-
-  private selectedNoCollegeLicence(
-    hasCpn: boolean | undefined,
-    licenceDeclared: boolean | undefined,
-    isComplete: boolean | undefined,
-  ): boolean | undefined {
-    return !hasCpn && licenceDeclared && isComplete;
   }
 
   private navigateToExternalUrl(url: string): void {
