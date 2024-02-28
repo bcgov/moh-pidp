@@ -66,13 +66,60 @@ public class KeycloakAdministrationClient : BaseClient, IKeycloakAdministrationC
         }
 
         // Keycloak expects an array of roles.
-        var response = await this.PostAsync($"users/{userId}/role-mappings/realm", new[] { role });
-        if (response.IsSuccess)
+        var result = await this.PostAsync($"users/{userId}/role-mappings/realm", new[] { role });
+        if (result.IsSuccess)
         {
             this.Logger.LogRealmRoleAssigned(userId, roleName);
         }
 
-        return response.IsSuccess;
+        return result.IsSuccess;
+    }
+
+    public async Task<Guid?> CreateUser(UserRepresentation userRep)
+    {
+        if (userRep.Username == null)
+        {
+            return null;
+        }
+
+        var (status, location) = await this.PostWithLocationAsync("users", userRep);
+        if (!status.IsSuccess)
+        {
+            this.Logger.LogUserCreationError(userRep);
+            return null;
+        }
+
+        if (location != null)
+        {
+            var id = location.Segments.Last();
+            if (Guid.TryParse(id, out var userId))
+            {
+                return userId;
+            }
+        }
+
+        this.Logger.LogUserCreationLocationError(userRep.Username, location);
+
+        var user = await this.FindUser(userRep.Username);
+        if (Guid.TryParse(user?.Id, out var result))
+        {
+            return result;
+        }
+
+        this.Logger.LogCreatedUserNotFound();
+        return null;
+    }
+
+    public async Task<UserRepresentation?> FindUser(string username)
+    {
+        var result = await this.GetWithQueryParamsAsync<List<UserRepresentation>>("users", new { Username = username });
+        if (!result.IsSuccess || result.Value.Count > 1)
+        {
+            this.Logger.LogFindUserError(username);
+            return null;
+        }
+
+        return result.Value.SingleOrDefault();
     }
 
     public async Task<Client?> GetClient(string clientId)
@@ -84,7 +131,7 @@ public class KeycloakAdministrationClient : BaseClient, IKeycloakAdministrationC
             return null;
         }
 
-        var client = result.Value?.SingleOrDefault(c => c.ClientId == clientId);
+        var client = result.Value.SingleOrDefault(c => c.ClientId == clientId);
 
         if (client == null)
         {
@@ -186,21 +233,6 @@ public class KeycloakAdministrationClient : BaseClient, IKeycloakAdministrationC
         return await this.UpdateUser(userId, user);
     }
 
-    public async Task<bool> UpdateUserCpn(Guid userId, string? cpn)
-    {
-        if (cpn == null)
-        {
-            return true;
-        }
-
-        var result = await this.UpdateUser(userId, (user) => user.SetCpn(cpn));
-        if (!result)
-        {
-            this.Logger.LogCpnUpdateFailure(userId, cpn);
-        }
-
-        return result;
-    }
 
     public async Task<bool> UpdateUserOpId(Guid userId, string opId)
     {
@@ -227,10 +259,19 @@ public static partial class KeycloakAdministrationClientLoggingExtensions
 
     [LoggerMessage(4, LogLevel.Information, "User {userId} was assigned Realm Role {roleName}.")]
     public static partial void LogRealmRoleAssigned(this ILogger logger, Guid userId, string roleName);
+  
+    [LoggerMessage(5, LogLevel.Error, "Error when creating a User with the representation: {userRep}.")]
+    public static partial void LogUserCreationError(this ILogger logger, UserRepresentation userRep);
 
-    [LoggerMessage(5, LogLevel.Error, "Failed to update user {userId} with CPN {cpn}.")]
-    public static partial void LogCpnUpdateFailure(this ILogger logger, Guid userId, string cpn);
+    [LoggerMessage(6, LogLevel.Error, "Error when creating a User. Keycloak returned a success code but had a missing/malformed Location header. Username: {username}, Location header: {locationHeader}.")]
+    public static partial void LogUserCreationLocationError(this ILogger logger, string username, Uri? locationHeader);
 
-    [LoggerMessage(7, LogLevel.Error, "Failed to update user {userId} with OpId {opId}.")]
+    [LoggerMessage(7, LogLevel.Error, "Keycloak returned a success code but the user could not be found by either Location header or by searching for Username.")]
+    public static partial void LogCreatedUserNotFound(this ILogger logger);
+
+    [LoggerMessage(8, LogLevel.Error, "Error when finding user with username {username}.")]
+    public static partial void LogFindUserError(this ILogger logger, string username);
+  
+    [LoggerMessage(9, LogLevel.Error, "Failed to update user {userId} with OpId {opId}.")]
     public static partial void LogOpIdUpdateFailure(this ILogger logger, Guid userId, string opId);
 }
