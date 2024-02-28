@@ -19,6 +19,11 @@ public class Party : BaseAuditable
     [Key]
     public int Id { get; set; }
 
+    /// <summary>
+    /// A unique 20 digit alphanumeric identifier for a given Party accross all of their MoH accounts/credentials
+    /// </summary>
+    public string? OpId { get; set; }
+
     public LocalDate? Birthdate { get; set; }
 
     public string FirstName { get; set; } = string.Empty;
@@ -50,8 +55,6 @@ public class Party : BaseAuditable
     public ICollection<AccessRequest> AccessRequests { get; set; } = new List<AccessRequest>();
 
     public ICollection<Credential> Credentials { get; set; } = new List<Credential>();
-
-    public string? OpId { get; set; }
 
     /// <summary>
     /// The First Name + Last Name of the Party.
@@ -127,22 +130,30 @@ public class Party : BaseAuditable
         }
     }
 
-
-    public string GenerateOpId(PidpDbContext context)
+    /// <summary>
+    /// Assigns a unique OpId to this Party if it does not already have one.
+    /// </summary>
+    /// <param name="context"></param>
+    /// <exception cref="InvalidOperationException"></exception>
+    public async Task GenerateOpId(PidpDbContext context)
     {
+        if (this.OpId != null)
+        {
+            return;
+        }
+
         string opId;
-        var counter = 0;
-        var maxAttempts = 100;
+        var attempts = 100;
+
         do
         {
-            opId = Nanoid.Generate("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ");
-            counter++;
-            if (counter > maxAttempts)
+            if (--attempts == 0)
             {
                 throw new InvalidOperationException("Maximum attempts to generate a unique OpId exceeded");
             }
-        } while (context.Parties.Any(party => party.OpId == opId));
+            opId = Nanoid.Generate("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ", 20);
+        } while (await context.Parties.AnyAsync(party => party.OpId == opId)); // NOTE: case sensitive!
 
-        return opId;
+        this.OpId = opId;
     }
 }

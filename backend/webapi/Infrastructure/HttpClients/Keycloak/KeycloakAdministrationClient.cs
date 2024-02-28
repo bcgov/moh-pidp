@@ -259,7 +259,7 @@ public static partial class KeycloakAdministrationClientLoggingExtensions
 
     [LoggerMessage(4, LogLevel.Information, "User {userId} was assigned Realm Role {roleName}.")]
     public static partial void LogRealmRoleAssigned(this ILogger logger, Guid userId, string roleName);
-  
+
     [LoggerMessage(5, LogLevel.Error, "Error when creating a User with the representation: {userRep}.")]
     public static partial void LogUserCreationError(this ILogger logger, UserRepresentation userRep);
 
@@ -271,7 +271,7 @@ public static partial class KeycloakAdministrationClientLoggingExtensions
 
     [LoggerMessage(8, LogLevel.Error, "Error when finding user with username {username}.")]
     public static partial void LogFindUserError(this ILogger logger, string username);
-  
+
     [LoggerMessage(9, LogLevel.Error, "Failed to update user {userId} with OpId {opId}.")]
     public static partial void LogOpIdUpdateFailure(this ILogger logger, Guid userId, string opId);
 }

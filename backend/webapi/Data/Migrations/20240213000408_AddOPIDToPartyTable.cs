@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -18,8 +18,7 @@ namespace Pidp.Data.Migrations
                 name: "IX_Party_OpId",
                 table: "Party",
                 column: "OpId",
-                unique: true,
-                filter: "\"OpId\" != ''");
+                unique: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

@@ -1189,8 +1189,7 @@ namespace Pidp.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("OpId")
-                        .IsUnique()
-                        .HasFilter("\"OpId\" != ''");
+                        .IsUnique();
 
                     b.ToTable("Party");
                 });

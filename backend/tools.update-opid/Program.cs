@@ -8,6 +8,8 @@ using System.Reflection;
 using UpdateOpId;
 using Pidp;
 using Pidp.Data;
+using Pidp.Infrastructure.HttpClients;
+using Pidp.Infrastructure.HttpClients.Keycloak;
 
 
 await Host.CreateDefaultBuilder(args)
@@ -15,6 +17,15 @@ await Host.CreateDefaultBuilder(args)
     .ConfigureServices((hostContext, services) =>
     {
         var config = InitializeConfiguration(services);
+
+        services.AddHttpClient<IAccessTokenClient, AccessTokenClient>();
+        services.AddHttpClientWithBaseAddress<IKeycloakAdministrationClient, KeycloakAdministrationClient>(config.Keycloak.AdministrationUrl)
+             .WithBearerToken(new KeycloakAdministrationClientCredentials
+             {
+                 Address = config.Keycloak.TokenUrl,
+                 ClientId = config.Keycloak.AdministrationClientId,
+                 ClientSecret = config.Keycloak.AdministrationClientSecret
+             });
 
         services
             .AddSingleton<IClock>(SystemClock.Instance)
@@ -32,13 +43,7 @@ static PidpConfiguration InitializeConfiguration(IServiceCollection services)
 {
     var builder = new ConfigurationBuilder()
         .SetBasePath(Directory.GetCurrentDirectory())
-        .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-        .AddEnvironmentVariables();
-
-    if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") is null or "Development")
-    {
-        builder.AddUserSecrets<Program>();
-    }
+        .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
 
     var configuration = builder.Build();
 

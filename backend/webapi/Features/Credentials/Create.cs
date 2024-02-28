@@ -90,7 +90,7 @@ public class Create
                 IdentityProvider = userIdentityProvider,
                 IdpId = userIdpId
             };
-            credential.DomainEvents.Add(new CredentialLinked(credential));
+            credential.DomainEvents.Add(new CredentialLinked(credential)); // TODO: => set OpId
             this.context.Credentials.Add(credential);
 
             ticket.Claimed = true;

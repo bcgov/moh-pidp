@@ -14,5 +14,10 @@
   <ItemGroup>
     <PackageReference Include="Nanoid" Version="3.0.0" />
   </ItemGroup>
+  <ItemGroup>
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 
 </Project>

@@ -59,16 +59,17 @@ public class Create
                 IdentityProvider = command.IdentityProvider,
                 IdpId = command.IdpId,
             });
+            if (command.IdentityProvider == IdentityProviders.BCServicesCard)
+            {
+                await party.GenerateOpId(this.context);
+            }
 
             this.context.Parties.Add(party);
 
-            if (command.IdentityProvider == IdentityProviders.BCServicesCard)
-            {
-                party.OpId = party.GenerateOpId(this.context);
-            }
-
             await this.context.SaveChangesAsync();
+
             return party.Id;
+            // TODO: update Keycloak!
         }
     }
 }
