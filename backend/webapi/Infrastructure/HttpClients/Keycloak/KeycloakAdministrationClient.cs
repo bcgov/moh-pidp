@@ -112,7 +112,7 @@ public class KeycloakAdministrationClient : BaseClient, IKeycloakAdministrationC
 
     public async Task<UserRepresentation?> FindUser(string username)
     {
-        var result = await this.GetWithQueryParamsAsync<List<UserRepresentation>>("users", new { Username = username });
+        var result = await this.GetWithQueryParamsAsync<List<UserRepresentation>>("users", new { username });
         if (!result.IsSuccess || result.Value.Count > 1)
         {
             this.Logger.LogFindUserError(username);
