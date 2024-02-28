@@ -43,7 +43,8 @@
   }
 }
 
-.viewport-xsmall {
+.viewport-xsmall,
+.viewport-small {
   .mat-horizontal-stepper-header-container {
     align-items: normal !important;
     flex-direction: column !important;
