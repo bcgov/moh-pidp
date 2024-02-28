@@ -123,7 +123,7 @@ public class EndorsementMaintenanceService : IEndorsementMaintenanceService
     {
         var url = this.applicationUrl.SetQueryParam("endorsement-token", token);
         var link = $"<a href=\"{url}\" target=\"_blank\" rel=\"noopener noreferrer\">OneHealthID Service</a>";
-        var licensedlink = $"<a href=\"\"https://www.doctorsofbc.ca/sites/default/files/endorsement_licensed_initiated_4.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">Licensed Initiated</a>";
+        var licensedlink = $"<a href=\"https://www.doctorsofbc.ca/sites/default/files/endorsement_licensed_initiated_4.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">Licensed Initiated</a>";
         var unLicensedlink = $"<a href=\"https://www.doctorsofbc.ca/sites/default/files/endorsement_unlicensed_initiated_4.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">Unlicensed Initiated</a>";
         var pidpSupportEmail = $"<a href=\"mailto:{EmailService.PidpEmail}\">{EmailService.PidpEmail}</a>";
         var pidpSupportPhone = $"<a href=\"tel:{EmailService.PidpSupportPhone}\">{EmailService.PidpSupportPhone}</a>";
