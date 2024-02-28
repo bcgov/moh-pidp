@@ -200,5 +200,5 @@ public static partial class CredentialCreateLoggingExtensions
     public static partial void LogCredentialLinkTicketExpired(this ILogger logger, int credentialLinkTicketId);
 
     [LoggerMessage(4, LogLevel.Error, "Credential Link Ticket {credentialLinkTicketId} expected to link to IDP {expectedIdp}, user had IDP {actualIdp} instead.")]
-    public static partial void LogCredentialLinkTicketIdpError(this ILogger logger, int credentialLinkTicketId, string expectedIdp, string? actualIdp);
+    public static partial void LogCredentialLinkTicketIdpError(this ILogger logger, int credentialLinkTicketId, string expectedIdp, string actualIdp);
 }
