@@ -91,19 +91,19 @@ public class EndorsementMaintenanceService : IEndorsementMaintenanceService
 
         foreach (var recipient in uniqueRecipients)
         {
-            await this.SendEmailAsync(recipient.Email, null);
+            await this.SendEmailAsync(recipient.Email);
         }
 
         this.logger.LogSentEmailCount(uniqueRecipients.Count());
     }
 
-    private async Task SendEmailAsync(string partyEmail, Guid? token)
+    private async Task SendEmailAsync(string partyEmail)
     {
         var email = new Email(
             from: EmailService.PidpEmail,
             to: partyEmail,
             subject: "OneHealthID Endorsement - Action Required",
-            body: this.GetBodyString(token, true)
+            body: this.GetBodyString(is7DaysNotify: true)
         );
         await this.emailService.SendAsync(email);
     }
@@ -119,7 +119,7 @@ public class EndorsementMaintenanceService : IEndorsementMaintenanceService
         await this.emailService.SendAsync(email);
     }
 
-    private string GetBodyString(Guid? token, bool is7DaysNotify = false)
+    private string GetBodyString(Guid? token = null, bool is7DaysNotify = false)
     {
         var url = this.applicationUrl.SetQueryParam("endorsement-token", token);
         var link = $"<a href=\"{url}\" target=\"_blank\" rel=\"noopener noreferrer\">OneHealthID Service</a>";
