@@ -232,6 +232,7 @@ public class KeycloakAdministrationClient : BaseClient, IKeycloakAdministrationC
 
         return await this.UpdateUser(userId, user);
     }
+
 }
 
 public static partial class KeycloakAdministrationClientLoggingExtensions
@@ -259,4 +260,7 @@ public static partial class KeycloakAdministrationClientLoggingExtensions
 
     [LoggerMessage(8, LogLevel.Error, "Error when finding user with username {username}.")]
     public static partial void LogFindUserError(this ILogger logger, string username);
+
+    [LoggerMessage(9, LogLevel.Error, "Failed to update user {userId} with College Licence Information {collegeLicenceInformation}.")]
+    public static partial void LogCollegeLicenceInformationUpdateFailure(this ILogger logger, Guid userId, IEnumerable<CollegeLicenceInformation> collegeLicenceInformation);
 }

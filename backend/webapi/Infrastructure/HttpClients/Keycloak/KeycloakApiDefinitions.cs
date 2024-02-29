@@ -68,6 +68,15 @@ public class Role
     public string? Name { get; set; }
 }
 
+public class CollegeLicenceInformation
+{
+    public string? ProviderRoleType { get; set; }
+    public string? StatusCode { get; set; }
+    public string? StatusReasonCode { get; set; }
+    public string? MspId { get; set; }
+    public string? CollegeId { get; set; }
+}
+
 /// <summary>
 /// This is not the entire Keycloak User Representation! See https://www.keycloak.org/docs-api/22.0.1/rest-api/index.html#UserRepresentation.
 /// </summary>
@@ -82,7 +91,7 @@ public class UserRepresentation
     public string? Username { get; set; }
 
     internal void SetLdapOrgDetails(LdapLoginResponse.OrgDetails orgDetails) => this.SetAttribute("org_details", JsonSerializer.Serialize(orgDetails, new JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }));
-
+    public void SetCollegeLicenceInformation(IEnumerable<CollegeLicenceInformation> collegeLicenceInformation) => this.SetAttribute("college_licence_info", JsonSerializer.Serialize(collegeLicenceInformation, new JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }));
     public void SetCpn(string cpn) => this.SetAttribute("common_provider_number", cpn);
 
     public void SetPidpEmail(string pidpEmail) => this.SetAttribute("pidp_email", pidpEmail);
