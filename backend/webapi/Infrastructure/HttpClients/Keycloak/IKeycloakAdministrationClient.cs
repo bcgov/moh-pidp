@@ -95,13 +95,4 @@ public interface IKeycloakAdministrationClient
     /// <param name="userId"></param>
     /// <param name="cpn"></param>
     Task<bool> UpdateUserCpn(Guid userId, string? cpn);
-
-    /// <summary>
-    /// Fetches the User and updates their College Licence Information with the provided value. Does not update if the provided value is null.
-    /// A convenience method for UpdateUser.
-    /// Returns true if the operation was successful.
-    /// </summary>
-    /// <param name="userId"></param>
-    /// <param name="collegeLicenceInformation"></param>
-    Task<bool> UpdateUserCollegeLicenceInformation(Guid userId, IEnumerable<CollegeLicenceInformation> collegeLicenceInformation);
 }

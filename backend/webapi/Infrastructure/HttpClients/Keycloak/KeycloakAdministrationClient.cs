@@ -201,22 +201,6 @@ public class KeycloakAdministrationClient : BaseClient, IKeycloakAdministrationC
 
         return result;
     }
-
-    public async Task<bool> UpdateUserCollegeLicenceInformation(Guid userId, IEnumerable<CollegeLicenceInformation> collegeLicenceInformation)
-    {
-        if (collegeLicenceInformation == null)
-        {
-            return true;
-        }
-
-        var result = await this.UpdateUser(userId, (user) => user.SetCollegeLicenceInformation(collegeLicenceInformation));
-        if (!result)
-        {
-            this.Logger.LogCollegeLicenceInformationUpdateFailure(userId, collegeLicenceInformation);
-        }
-
-        return result;
-    }
 }
 
 public static partial class KeycloakAdministrationClientLoggingExtensions
