@@ -63,8 +63,8 @@ public class Create
             }
 
             var ticket = await this.context.CredentialLinkTickets
-                .Where(ticket => ticket.Token == command.CredentialLinkToken
-                    && !ticket.Claimed)
+                .Include(ticket => ticket.Party)
+                .Where(ticket => ticket.Token == command.CredentialLinkToken && !ticket.Claimed)
                 .SingleOrDefaultAsync();
 
             if (ticket == null)
@@ -90,8 +90,10 @@ public class Create
                 IdentityProvider = userIdentityProvider,
                 IdpId = userIdpId
             };
-            credential.DomainEvents.Add(new CredentialLinked(credential)); // TODO: => set OpId
+            credential.DomainEvents.Add(new CredentialLinked(credential));
             this.context.Credentials.Add(credential);
+
+            await ticket.Party!.GenerateOpId(this.context);
 
             ticket.Claimed = true;
 
