@@ -19,7 +19,6 @@ public class Create
         public LocalDate? Birthdate { get; set; }
         public string FirstName { get; set; } = string.Empty;
         public string LastName { get; set; } = string.Empty;
-        public string OpId { get; set; } = string.Empty;
     }
 
     public class CommandValidator : AbstractValidator<Command>
@@ -68,16 +67,12 @@ public class Create
             if (command.IdentityProvider == IdentityProviders.BCServicesCard)
             {
                 await party.GenerateOpId(this.context);
+                await this.keycloakClient.UpdateUser(command.UserId, user => user.SetOpId(party.OpId!));
             }
 
             this.context.Parties.Add(party);
 
             await this.context.SaveChangesAsync();
-
-            foreach (var userId in party.Credentials.Select(credential => credential.UserId))
-            {
-                await this.keycloakClient.UpdateUser(userId, user => user.SetOpId(party.OpId!));
-            }
 
             return party.Id;
         }
