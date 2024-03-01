@@ -98,7 +98,7 @@ public class Create
             credential.DomainEvents.Add(new CredentialLinked(credential));
             this.context.Credentials.Add(credential);
 
-            foreach (var myUserId in ticket.Party!.Credentials.Select(credential => credential.UserId))
+            foreach (var ticketUserId in ticket.Party!.Credentials.Select(credential => credential.UserId))
             {
                 await this.keycloakClient.UpdateUser(userId, user => user.SetOpId(ticket.Party.OpId!));
             }
