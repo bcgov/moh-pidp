@@ -64,6 +64,7 @@ public class Create
                 IdentityProvider = command.IdentityProvider,
                 IdpId = command.IdpId,
             });
+
             if (command.IdentityProvider == IdentityProviders.BCServicesCard)
             {
                 await party.GenerateOpId(this.context);

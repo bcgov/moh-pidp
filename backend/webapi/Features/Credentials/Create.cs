@@ -69,7 +69,8 @@ public class Create
 
             var ticket = await this.context.CredentialLinkTickets
                 .Include(ticket => ticket.Party)
-                .Where(ticket => ticket.Token == command.CredentialLinkToken && !ticket.Claimed)
+                .Where(ticket => ticket.Token == command.CredentialLinkToken
+                    && !ticket.Claimed)
                 .SingleOrDefaultAsync();
 
             if (ticket == null)
@@ -98,10 +99,7 @@ public class Create
             credential.DomainEvents.Add(new CredentialLinked(credential));
             this.context.Credentials.Add(credential);
 
-            foreach (var ticketUserId in ticket.Party!.Credentials.Select(credential => credential.UserId))
-            {
-                await this.keycloakClient.UpdateUser(userId, user => user.SetOpId(ticket.Party.OpId!));
-            }
+            await this.keycloakClient.UpdateUser(userId, user => user.SetOpId(ticket.Party!.OpId!));
 
             ticket.Claimed = true;
 
