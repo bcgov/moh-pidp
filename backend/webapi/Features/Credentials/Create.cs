@@ -17,6 +17,7 @@ using Pidp.Infrastructure.HttpClients.Plr;
 using Pidp.Models;
 using Pidp.Models.DomainEvents;
 using Pidp.Models.Lookups;
+using Pidp.Infrastructure.HttpClients.Keycloak;
 
 public class Create
 {
@@ -38,15 +39,19 @@ public class Create
         private readonly IClock clock;
         private readonly ILogger logger;
         private readonly PidpDbContext context;
+        private readonly IKeycloakAdministrationClient keycloakClient;
+
 
         public CommandHandler(
             IClock clock,
             ILogger<CommandHandler> logger,
-            PidpDbContext context)
+            PidpDbContext context,
+            IKeycloakAdministrationClient keycloakClient)
         {
             this.clock = clock;
             this.logger = logger;
             this.context = context;
+            this.keycloakClient = keycloakClient;
         }
 
         public async Task<IDomainResult<Model>> HandleAsync(Command command)
@@ -93,7 +98,10 @@ public class Create
             credential.DomainEvents.Add(new CredentialLinked(credential));
             this.context.Credentials.Add(credential);
 
-            await ticket.Party!.GenerateOpId(this.context);
+            foreach (var myUserId in ticket.Party!.Credentials.Select(credential => credential.UserId))
+            {
+                await this.keycloakClient.UpdateUser(userId, user => user.SetOpId(ticket.Party.OpId!));
+            }
 
             ticket.Claimed = true;
 
