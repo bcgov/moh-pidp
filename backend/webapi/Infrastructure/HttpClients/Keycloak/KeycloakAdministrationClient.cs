@@ -91,8 +91,7 @@ public class KeycloakAdministrationClient : BaseClient, IKeycloakAdministrationC
 
         if (location != null)
         {
-            var id = location.Segments.Last();
-            if (Guid.TryParse(id, out var userId))
+            if (Guid.TryParse(location.Segments.Last(), out var userId))
             {
                 return userId;
             }
@@ -113,13 +112,21 @@ public class KeycloakAdministrationClient : BaseClient, IKeycloakAdministrationC
     public async Task<UserRepresentation?> FindUser(string username)
     {
         var result = await this.GetWithQueryParamsAsync<List<UserRepresentation>>("users", new { username });
-        if (!result.IsSuccess || result.Value.Count > 1)
+        if (!result.IsSuccess)
         {
             this.Logger.LogFindUserError(username);
             return null;
         }
 
-        return result.Value.SingleOrDefault();
+        // Username query is a wildcard search, so would find both Bill and Maybill
+        var filtered = result.Value.Where(user => string.Equals(user.Username, username, StringComparison.OrdinalIgnoreCase));
+        if (filtered.Count() > 1)
+        {
+            this.Logger.LogFindMultipleUsersError(username);
+            return null;
+        }
+
+        return filtered.SingleOrDefault();
     }
 
     public async Task<Client?> GetClient(string clientId)
@@ -259,4 +266,7 @@ public static partial class KeycloakAdministrationClientLoggingExtensions
 
     [LoggerMessage(8, LogLevel.Error, "Error when finding user with username {username}.")]
     public static partial void LogFindUserError(this ILogger logger, string username);
+
+    [LoggerMessage(9, LogLevel.Error, "Error when finding user with username {username}: multiple matching usernames found.")]
+    public static partial void LogFindMultipleUsersError(this ILogger logger, string username);
 }
