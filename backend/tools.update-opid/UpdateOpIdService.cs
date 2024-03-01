@@ -19,6 +19,7 @@ public class UpdateOpIdService : IUpdateOpIdService
 
     public async Task UpdateOpIdAsync()
     {
+        Console.WriteLine(">>>>Start!");
         var parties = await this.context.Parties
             .Include(party => party.Credentials)
             .Take(1000)
@@ -35,6 +36,8 @@ public class UpdateOpIdService : IUpdateOpIdService
                 await this.keycloakClient.UpdateUser(userId, user => user.SetOpId(party.OpId!));
             }
         }
+
+        Console.WriteLine("<<<<End!");
 
         await this.context.SaveChangesAsync();
     }
