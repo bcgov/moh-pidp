@@ -239,18 +239,6 @@ public class KeycloakAdministrationClient : BaseClient, IKeycloakAdministrationC
 
         return await this.UpdateUser(userId, user);
     }
-
-
-    public async Task<bool> UpdateUserOpId(Guid userId, string opId)
-    {
-        var result = await this.UpdateUser(userId, (user) => user.SetOpId(opId));
-        if (!result)
-        {
-            this.Logger.LogOpIdUpdateFailure(userId, opId);
-        }
-
-        return result;
-    }
 }
 
 public static partial class KeycloakAdministrationClientLoggingExtensions
@@ -281,7 +269,4 @@ public static partial class KeycloakAdministrationClientLoggingExtensions
 
     [LoggerMessage(9, LogLevel.Error, "Error when finding user with username {username}: multiple matching usernames found.")]
     public static partial void LogFindMultipleUsersError(this ILogger logger, string username);
-
-    [LoggerMessage(10, LogLevel.Error, "Failed to update user {userId} with OpId {opId}.")]
-    public static partial void LogOpIdUpdateFailure(this ILogger logger, Guid userId, string opId);
 }

@@ -100,13 +100,4 @@ public interface IKeycloakAdministrationClient
     /// <param name="userId"></param>
     /// <param name="updateAction"></param>
     Task<bool> UpdateUser(Guid userId, Action<UserRepresentation> updateAction);
-
-    /// <summary>
-    /// Fetches the User and updates their OpId with the provided value, which is generated in OneHealthId.
-    /// A convenience method for UpdateUser.
-    /// Returns true if the operation was successful.
-    /// </summary>
-    /// <param name="userId"></param>
-    /// <param name="opId"></param>
-    Task<bool> UpdateUserOpId(Guid userId, string opId);
 }
