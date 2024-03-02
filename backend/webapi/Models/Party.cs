@@ -2,6 +2,7 @@ namespace Pidp.Models;
 
 using EntityFrameworkCore.Projectables;
 using Microsoft.EntityFrameworkCore;
+using NanoidDotNet;
 using NodaTime;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -17,6 +18,11 @@ public class Party : BaseAuditable
 {
     [Key]
     public int Id { get; set; }
+
+    /// <summary>
+    /// A unique 20 digit alphanumeric identifier for a given Party accross all of their MoH accounts/credentials
+    /// </summary>
+    public string? OpId { get; set; }
 
     public LocalDate? Birthdate { get; set; }
 
@@ -123,5 +129,32 @@ public class Party : BaseAuditable
                 this.DomainEvents.Add(new EndorsementStandingUpdated(partyId));
             }
         }
+    }
+
+    /// <summary>
+    /// Assigns a unique OpId to this Party if it does not already have one.
+    /// </summary>
+    /// <param name="context"></param>
+    /// <exception cref="InvalidOperationException"></exception>
+    public async Task GenerateOpId(PidpDbContext context)
+    {
+        if (this.OpId != null)
+        {
+            return;
+        }
+
+        string opId;
+        var attempts = 100;
+
+        do
+        {
+            if (--attempts == 0)
+            {
+                throw new InvalidOperationException("Maximum attempts to generate a unique OpId exceeded");
+            }
+            opId = Nanoid.Generate("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ", 20);
+        } while (await context.Parties.AnyAsync(party => party.OpId == opId)); // NOTE: case sensitive!
+
+        this.OpId = opId;
     }
 }

@@ -17,6 +17,7 @@ using Pidp.Infrastructure.HttpClients.Plr;
 using Pidp.Models;
 using Pidp.Models.DomainEvents;
 using Pidp.Models.Lookups;
+using Pidp.Infrastructure.HttpClients.Keycloak;
 
 public class Create
 {
@@ -38,15 +39,19 @@ public class Create
         private readonly IClock clock;
         private readonly ILogger logger;
         private readonly PidpDbContext context;
+        private readonly IKeycloakAdministrationClient keycloakClient;
+
 
         public CommandHandler(
             IClock clock,
             ILogger<CommandHandler> logger,
-            PidpDbContext context)
+            PidpDbContext context,
+            IKeycloakAdministrationClient keycloakClient)
         {
             this.clock = clock;
             this.logger = logger;
             this.context = context;
+            this.keycloakClient = keycloakClient;
         }
 
         public async Task<IDomainResult<Model>> HandleAsync(Command command)
@@ -63,6 +68,7 @@ public class Create
             }
 
             var ticket = await this.context.CredentialLinkTickets
+                .Include(ticket => ticket.Party)
                 .Where(ticket => ticket.Token == command.CredentialLinkToken
                     && !ticket.Claimed)
                 .SingleOrDefaultAsync();
@@ -93,6 +99,8 @@ public class Create
             credential.DomainEvents.Add(new CredentialLinked(credential));
             credential.DomainEvents.Add(new CollegeLicenceUpdated(credential.PartyId));
             this.context.Credentials.Add(credential);
+
+            await this.keycloakClient.UpdateUser(userId, user => user.SetOpId(ticket.Party!.OpId!));
 
             ticket.Claimed = true;
 
@@ -201,5 +209,5 @@ public static partial class CredentialCreateLoggingExtensions
     public static partial void LogCredentialLinkTicketExpired(this ILogger logger, int credentialLinkTicketId);
 
     [LoggerMessage(4, LogLevel.Error, "Credential Link Ticket {credentialLinkTicketId} expected to link to IDP {expectedIdp}, user had IDP {actualIdp} instead.")]
-    public static partial void LogCredentialLinkTicketIdpError(this ILogger logger, int credentialLinkTicketId, string expectedIdp, string? actualIdp);
+    public static partial void LogCredentialLinkTicketIdpError(this ILogger logger, int credentialLinkTicketId, string expectedIdp, string actualIdp);
 }

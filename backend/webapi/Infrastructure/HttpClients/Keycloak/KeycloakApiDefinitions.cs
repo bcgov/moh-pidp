@@ -38,7 +38,7 @@ public class MohKeycloakEnrolment
 }
 
 /// <summary>
-/// This is not the entire Keycloak Client Representation! See https://www.keycloak.org/docs-api/5.0/rest-api/index.html#_clientrepresentation.
+/// This is not the entire Keycloak Client Representation! See https://www.keycloak.org/docs-api/22.0.1/rest-api/index.html#ClientRepresentation.
 /// </summary>
 public class Client
 {
@@ -78,13 +78,18 @@ public class CollegeLicenceInformation
 }
 
 /// <summary>
-/// This is not the entire Keycloak User Representation! See https://www.keycloak.org/docs-api/18.0/rest-api/index.html#_userrepresentation.
-/// This is a sub-set of the properties so we don't accidentally overwrite anything when doing the PUT.
+/// This is not the entire Keycloak User Representation! See https://www.keycloak.org/docs-api/22.0.1/rest-api/index.html#UserRepresentation.
 /// </summary>
 public class UserRepresentation
 {
-    public string? Email { get; set; }
     public Dictionary<string, string[]> Attributes { get; set; } = new();
+    public string? Email { get; set; }
+    public bool? Enabled { get; set; }
+    public string? FirstName { get; set; }
+    public string? Id { get; set; }
+    public string? LastName { get; set; }
+    public string? Username { get; set; }
+
     public void SetCollegeLicenceInformation(IEnumerable<CollegeLicenceInformation> collegeLicenceInformation) => this.SetAttribute("college_licence_info", JsonSerializer.Serialize(collegeLicenceInformation, new JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }));
 
     internal void SetLdapOrgDetails(LdapLoginResponse.OrgDetails orgDetails) => this.SetAttribute("org_details", JsonSerializer.Serialize(orgDetails, new JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }));
@@ -93,14 +98,10 @@ public class UserRepresentation
 
     public void SetPidpEmail(string pidpEmail) => this.SetAttribute("pidp_email", pidpEmail);
 
-    public void SetPhone(string phone) => this.SetAttribute("phone", phone);
-
-    public void SetPhoneNumber(string phoneNumber) => this.SetAttribute("phoneNumber", phoneNumber);
-
-    public void SetPhoneExtension(string phoneExtension) => this.SetAttribute("phoneExtension", phoneExtension);
+    public void SetOpId(string opId) => this.SetAttribute("opId", opId);
 
     /// <summary>
-    /// Adds the given attributes to this User Representation. Overrites any duplicate keys.
+    /// Adds the given attributes to this User Representation. Overwrites any duplicate keys.
     /// </summary>
     public void SetAttributes(Dictionary<string, string[]> newAttributes)
     {
