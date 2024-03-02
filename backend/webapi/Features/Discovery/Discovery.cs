@@ -89,14 +89,6 @@ public class Discovery
                 }
             }
 
-            // BC Provider Credentials are created in our app without UserIds (since the user has not logged into Keycloak yet).
-            // Update them when we see them.
-            if (credential.UserId == default)
-            {
-                credential.UserId = user.GetUserId();
-                saveChanges = true;
-            }
-
             // This is to update old non-BCSC records we didn't originally capture the IDP info for.
             // One day, this should be removed entirely once all the records in the DB have IdentityProvider and IdpId (also, those properties can then be made non-nullable).
             // Additionally, we could then find the Credential using only IdentityProvider + IdpId.
