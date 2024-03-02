@@ -8,6 +8,8 @@ using System.Reflection;
 using MigrateCollegeLicenceJson;
 using Pidp;
 using Pidp.Data;
+using Pidp.Infrastructure.HttpClients;
+using Pidp.Infrastructure.HttpClients.Keycloak;
 
 
 await Host.CreateDefaultBuilder(args)
