@@ -23,7 +23,7 @@ public class AssignAttributesInKeycloakAfterPlrCpnLookupFound : INotificationHan
         // TODO: what to do if this fails?
         foreach (var userId in notification.UserIds)
         {
-            await this.client.UpdateUserCpn(userId, notification.Cpn);
+            await this.client.UpdateUser(userId, (user) => user.SetCpn(notification.Cpn));
         }
     }
 }
