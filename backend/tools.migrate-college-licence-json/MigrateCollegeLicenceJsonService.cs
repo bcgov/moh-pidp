@@ -2,7 +2,6 @@ namespace MigrateCollegeLicenceJson;
 
 using Microsoft.EntityFrameworkCore;
 using Pidp.Data;
-using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.HttpClients.Keycloak;
 using Pidp.Infrastructure.HttpClients.Plr;
 
@@ -56,5 +55,6 @@ public class MigrateCollegeLicenceJsonService : IMigrateCollegeLicenceJsonServic
                 }
             }
         }
+        Console.WriteLine(">>>>End!");
     }
 }
