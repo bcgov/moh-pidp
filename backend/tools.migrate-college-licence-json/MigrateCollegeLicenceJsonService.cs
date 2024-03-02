@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Pidp.Data;
 using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.HttpClients.Keycloak;
+using Pidp.Infrastructure.HttpClients.Plr;
 
 public class MigrateCollegeLicenceJsonService : IMigrateCollegeLicenceJsonService
 {
@@ -23,37 +24,36 @@ public class MigrateCollegeLicenceJsonService : IMigrateCollegeLicenceJsonServic
 
     public async Task MigrateCollegeLicenceJsonAsync()
     {
-        var partyCpn = await this.context.Parties
-                   .Where(party => party.Id == notification.PartyId)
-                   .Select(party => party.Cpn)
-                   .SingleAsync(cancellationToken);
+        Console.WriteLine(">>>>Start!");
+        var parties = await this.context.Parties
+            .Include(party => party.Credentials)
+            .Take(1000)
+            .ToListAsync();
 
-        var records = await this.plrClient.GetRecordsAsync(partyCpn);
-        var collegeLicenceInformationList = new List<CollegeLicenceInformation>();
-
-        foreach (var record in records ?? Enumerable.Empty<PlrRecord>())
+        foreach (var party in parties)
         {
-            var collegeLicenceInformation = new CollegeLicenceInformation
-            {
-                ProviderRoleType = record.ProviderRoleType,
-                StatusCode = record.StatusCode,
-                StatusReasonCode = record.StatusReasonCode,
-                MspId = record.MspId,
-                CollegeId = record.CollegeId
-            };
-            collegeLicenceInformationList.Add(collegeLicenceInformation);
-        }
+            var records = await this.plrClient.GetRecordsAsync(party.Cpn);
+            var collegeLicenceInformationList = new List<CollegeLicenceInformation>();
 
-        if (collegeLicenceInformationList != null)
-        {
-            var userIds = await this.context.Credentials
-                .Where(credential => credential.PartyId == notification.PartyId)
-                .Select(credential => credential.UserId)
-                .ToListAsync(cancellationToken);
-
-            foreach (var userId in userIds)
+            foreach (var record in records ?? Enumerable.Empty<PlrRecord>())
             {
-                await this.keycloakClient.UpdateUser(userId, (user) => user.SetCollegeLicenceInformation(collegeLicenceInformationList));
+                var collegeLicenceInformation = new CollegeLicenceInformation
+                {
+                    ProviderRoleType = record.ProviderRoleType,
+                    StatusCode = record.StatusCode,
+                    StatusReasonCode = record.StatusReasonCode,
+                    MspId = record.MspId,
+                    CollegeId = record.CollegeId
+                };
+                collegeLicenceInformationList.Add(collegeLicenceInformation);
+            }
+
+            if (collegeLicenceInformationList != null)
+            {
+                foreach (var userId in party.Credentials.Select(credential => credential.UserId))
+                {
+                    await this.keycloakClient.UpdateUser(userId, (user) => user.SetCollegeLicenceInformation(collegeLicenceInformationList));
+                }
             }
         }
     }
