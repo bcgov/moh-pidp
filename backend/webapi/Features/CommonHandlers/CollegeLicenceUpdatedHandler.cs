@@ -27,12 +27,12 @@ public class UpdateKeycloakAfterCollegeLicenceUpdated : INotificationHandler<Col
 
     public async Task Handle(CollegeLicenceUpdated notification, CancellationToken cancellationToken)
     {
-        var partyCpn = await this.context.Parties
+        var party = await this.context.Parties
+            .Include(party => party.Credentials)
             .Where(party => party.Id == notification.PartyId)
-            .Select(party => party.Cpn)
             .SingleAsync(cancellationToken);
 
-        var records = await this.plrClient.GetRecordsAsync(partyCpn);
+        var records = await this.plrClient.GetRecordsAsync(party.Cpn);
         var collegeLicenceInformationList = new List<CollegeLicenceInformation>();
 
         foreach (var record in records ?? Enumerable.Empty<PlrRecord>())
@@ -50,12 +50,7 @@ public class UpdateKeycloakAfterCollegeLicenceUpdated : INotificationHandler<Col
 
         if (collegeLicenceInformationList != null)
         {
-            var userIds = await this.context.Credentials
-                .Where(credential => credential.PartyId == notification.PartyId)
-                .Select(credential => credential.UserId)
-                .ToListAsync(cancellationToken);
-
-            foreach (var userId in userIds)
+            foreach (var userId in party.Credentials.Select(credential => credential.UserId))
             {
                 await this.keycloakClient.UpdateUser(userId, (user) => user.SetCollegeLicenceInformation(collegeLicenceInformationList));
             }
