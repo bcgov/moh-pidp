@@ -18,7 +18,6 @@ using Pidp.Models;
 using Pidp.Models.DomainEvents;
 using Pidp.Models.Lookups;
 
-
 public class Create
 {
     public class Command : ICommand<IDomainResult<Model>>
