@@ -1,15 +1,26 @@
 <div class="box" uiPidpInjectViewportCss>
   <div class="content">
-    <section class="link-main">
-      <header>
-        <h2>
-          Here you can link your other professional credentials you have in
-          OneHealthID
-        </h2>
-      </header>
-      <div class="link-main-text">
-        <p class="large">blah</p>
+    <header>
+      <h2>Account linking</h2>
+    </header>
+    <section class="link-intro">
+      <h3>
+        Here you can link your other professional credentials you have in
+        OneHealthID
+      </h3>
+      <div class="link-intro-text">
+        <p class="large">
+          If you've got more than one account, you can link them all to your
+          OneHealthID profile using a single username and password to view all
+          your services in one place.
+        </p>
       </div>
+    </section>
+    <section class="link-main">
+      <div class="link-how-to">
+        <ng-container *ngTemplateOutlet="linkHowTo"></ng-container>
+      </div>
+      <div class="link-button"></div>
     </section>
     <section class="actions">
       <button
@@ -27,3 +38,25 @@
     </section>
   </div>
 </div>
+
+<ng-template #linkHowTo>
+  <h3><strong> How to link an account </strong></h3>
+  <p class="link-steps"><strong>Starting steps:</strong></p>
+  <ol>
+    <li>Sign into OneHealthID</li>
+    <li>Select <strong>Link Account</strong></li>
+    <li>
+      In the <strong>Link Account</strong> section, choose the
+      <strong>account</strong> you wish to link
+    </li>
+    <li>
+      Start quick procedure of linking<br /><i
+        >-You might be prompted to login with those credentials</i
+      >
+    </li>
+    <li>
+      Your new linked account will display in our successfully linked accounts
+      section
+    </li>
+  </ol>
+</ng-template>

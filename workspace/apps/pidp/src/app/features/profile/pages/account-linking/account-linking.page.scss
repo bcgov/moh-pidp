@@ -1,0 +1,57 @@
+@use 'pidp-variables' as pidp;
+
+.viewport-all {
+  --gap: 1rem;
+  --font-size: 0.75rem;
+  --content-padding: var(--gap);
+  padding: var(--content-padding);
+  & header {
+    margin: var(--header-margin);
+    & h2 {
+      margin: 0;
+      padding: calc(var(--gap) / 2) calc(var(--gap) * 2);
+      background-color: pidp.$grey-10;
+    }
+  }
+  & .link-intro,
+  .link-main {
+    margin: var(--gap) 0;
+    & p {
+      padding-left: calc(var(--gap) * 2);
+      padding-right: calc(var(--gap) * 2);
+    }
+  }
+  & .link-main {
+    display: flex;
+    & ol {
+      padding-left: calc(var(--gap) * 2);
+      list-style: none;
+      counter-reset: step;
+      & li {
+        position: relative;
+        padding-left: 1.5rem;
+        margin-bottom: 0.5rem;
+        &::before {
+          content: counter(step);
+          counter-increment: step;
+          position: absolute;
+          top: 0;
+          left: -2rem;
+          width: 1.5rem;
+          height: 1.5rem;
+          line-height: 1.5rem;
+          text-align: center;
+          border: 1px solid pidp.$grey-20;
+          border-radius: 50%;
+          background-color: pidp.$grey-10;
+        }
+        &:last-child::after {
+          top: 6px;
+        }
+        & i {
+          color: pidp.$grey-30;
+        }
+      }
+    }
+  }
+}
