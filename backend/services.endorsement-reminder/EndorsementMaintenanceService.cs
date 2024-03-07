@@ -49,11 +49,8 @@ public class EndorsementMaintenanceService : IEndorsementMaintenanceService
             var email = request.Status == EndorsementRequestStatus.Approved
                     ? request.RequestingParty!.Email!
                     : request.RecipientEmail;
-            var token = request.Status == EndorsementRequestStatus.Created
-                    ? (Guid?)request.Token
-                    : null;
 
-            await this.SendExpireOldEndorsementRequestsEmailAsync(email, token);
+            await this.SendExpireOldEndorsementRequestsEmailAsync(email);
             request.Status = EndorsementRequestStatus.Expired;
             request.StatusDate = now;
         }
@@ -81,6 +78,9 @@ public class EndorsementMaintenanceService : IEndorsementMaintenanceService
             .OrderByDescending(request => request.Status)
             .Select(request => new
             {
+                Token = request.Status == EndorsementRequestStatus.Created
+                    ? (Guid?)request.Token
+                    : null,
                 Email = request.Status == EndorsementRequestStatus.Approved
                     ? request.RequestingParty!.Email!
                     : request.RecipientEmail,
@@ -91,30 +91,30 @@ public class EndorsementMaintenanceService : IEndorsementMaintenanceService
 
         foreach (var recipient in uniqueRecipients)
         {
-            await this.SendEmailAsync(recipient.Email);
+            await this.SendEmailAsync(recipient.Email, recipient.Token);
         }
 
         this.logger.LogSentEmailCount(uniqueRecipients.Count());
     }
 
-    private async Task SendEmailAsync(string partyEmail)
+    private async Task SendEmailAsync(string partyEmail, Guid? token)
     {
         var email = new Email(
             from: EmailService.PidpEmail,
             to: partyEmail,
             subject: "OneHealthID Endorsement - Action Required",
-            body: this.GetBodyString(is7DaysNotify: true)
+            body: this.GetBodyString(token, true)
         );
         await this.emailService.SendAsync(email);
     }
 
-    private async Task SendExpireOldEndorsementRequestsEmailAsync(string partyEmail, Guid? token)
+    private async Task SendExpireOldEndorsementRequestsEmailAsync(string partyEmail)
     {
         var email = new Email(
             from: EmailService.PidpEmail,
             to: partyEmail,
             subject: "OneHealthID Endorsement – Endorsement Request Expired",
-            body: this.GetBodyString(token)
+            body: this.GetBodyString()
         );
         await this.emailService.SendAsync(email);
     }
