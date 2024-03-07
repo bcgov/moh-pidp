@@ -39,21 +39,11 @@
         padding-right: 40px;
       }
       .link-button {
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        height: 80%;
-        max-width: 100%;
+        height: 67%;
 
         img {
-          position: absolute;
           -webkit-transform: scaleX(-1);
           transform: scaleX(-1);
-          top: 0;
-          left: 0;
-          width: 310px;
-          height: 250px;
           object-fit: cover;
           z-index: -2;
         }
@@ -91,6 +81,9 @@
   }
 
   & .link-how-to {
+    & .link-steps {
+      text-decoration: underline;
+    }
     & i {
       color: pidp.$grey-30;
     }
