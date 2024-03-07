@@ -13,45 +13,86 @@
       background-color: pidp.$grey-10;
     }
   }
-  & .link-intro,
-  .link-main {
-    margin: var(--gap) 0;
-    & p {
-      padding-left: calc(var(--gap) * 2);
-      padding-right: calc(var(--gap) * 2);
-    }
-  }
-  & .link-main {
+
+  & .content {
+    padding-top: var(--content-padding);
     display: flex;
-    & ol {
-      padding-left: calc(var(--gap) * 2);
-      list-style: none;
-      counter-reset: step;
-      & li {
+    flex-direction: column;
+    gap: var(--gap);
+
+    .link-main {
+      display: grid;
+      grid-template-columns: calc(40% - 15px) calc(60% - 15px);
+      gap: 20px;
+      min-height: 340px;
+      margin: calc(var(--gap) * 2) 0;
+
+      & .card {
+        display: flex;
+        flex-direction: column;
+        padding: calc(var(--gap) * 0.9);
         position: relative;
-        padding-left: 1.5rem;
-        margin-bottom: 0.5rem;
-        &::before {
-          content: counter(step);
-          counter-increment: step;
+        line-height: 1.5rem;
+      }
+      .link-how-to {
+        flex: 1;
+        padding-right: 40px;
+      }
+      .link-button {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        height: 80%;
+        max-width: 100%;
+
+        img {
           position: absolute;
+          -webkit-transform: scaleX(-1);
+          transform: scaleX(-1);
           top: 0;
-          left: -2rem;
-          width: 1.5rem;
-          height: 1.5rem;
-          line-height: 1.5rem;
-          text-align: center;
-          border: 1px solid pidp.$grey-20;
-          border-radius: 50%;
-          background-color: pidp.$grey-10;
+          left: 0;
+          width: 310px;
+          height: 250px;
+          object-fit: cover;
+          z-index: -2;
         }
-        &:last-child::after {
-          top: 6px;
-        }
-        & i {
-          color: pidp.$grey-30;
+
+        .card-container {
+          display: flex;
+          flex-direction: column;
+          height: 100%;
+          width: 100%;
+          align-items: flex-start;
+          padding: 20px;
+
+          .card-header,
+          .card-body,
+          .card-footer {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
+
+          .card-body {
+            img.logo {
+              z-index: -1;
+              -webkit-transform: none;
+              transform: none;
+              position: relative !important;
+              height: 30px !important;
+              width: 130px !important;
+            }
+          }
         }
       }
+    }
+  }
+
+  & .link-how-to {
+    & i {
+      color: pidp.$grey-30;
     }
   }
 }

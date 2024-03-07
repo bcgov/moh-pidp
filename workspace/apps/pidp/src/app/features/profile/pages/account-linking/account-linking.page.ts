@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -18,7 +18,12 @@ import { StatusCode } from '@app/features/portal/enums/status-code.enum';
 @Component({
   selector: 'app-account-linking',
   standalone: true,
-  imports: [CommonModule, InjectViewportCssClassDirective, MatButtonModule],
+  imports: [
+    CommonModule,
+    InjectViewportCssClassDirective,
+    MatButtonModule,
+    NgOptimizedImage,
+  ],
   templateUrl: './account-linking.page.html',
   styleUrl: './account-linking.page.scss',
 })

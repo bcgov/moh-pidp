@@ -1,41 +1,65 @@
-<div class="box" uiPidpInjectViewportCss>
-  <div class="content">
+<div class="container-box" uiPidpInjectViewportCss>
+  <div class="content-box">
     <header>
       <h2>Account linking</h2>
     </header>
-    <section class="link-intro">
-      <h3>
-        Here you can link your other professional credentials you have in
-        OneHealthID
-      </h3>
-      <div class="link-intro-text">
-        <p class="large">
-          If you've got more than one account, you can link them all to your
-          OneHealthID profile using a single username and password to view all
-          your services in one place.
-        </p>
-      </div>
-    </section>
-    <section class="link-main">
-      <div class="link-how-to">
-        <ng-container *ngTemplateOutlet="linkHowTo"></ng-container>
-      </div>
-      <div class="link-button"></div>
-    </section>
-    <section class="actions">
-      <button
-        mat-stroked-button
-        uiPageFooterAction
-        type="button"
-        color="primary"
-        (click)="onBack()">
-        Back Home
-      </button>
-
-      <button mat-flat-button uiPageFooterAction type="submit" color="primary">
-        Link
-      </button>
-    </section>
+    <div class="content">
+      <section class="link-intro">
+        <h3>
+          Here you can link your other professional credentials you have in
+          OneHealthID
+        </h3>
+        <div class="link-intro-text">
+          <p class="large">
+            If you've got more than one account, you can link them all to your
+            OneHealthID profile using a single username and password to view all
+            your services in one place.
+          </p>
+        </div>
+      </section>
+      <section class="link-main cards">
+        <div class="card link-how-to">
+          <ng-container *ngTemplateOutlet="linkHowTo"></ng-container>
+        </div>
+        <div class="card link-button">
+          <img
+            ngSrc="/assets/images/account-linking-plant.jpg"
+            alt="Account linking image of a plant"
+            fill />
+          <div class="card-container">
+            <div class="card-header">
+              <h3><strong>Health Authority ID</strong></h3>
+            </div>
+            <div class="card-body">
+              <img
+                class="logo"
+                ngSrc="/assets/images/phsa-logo.png"
+                alt="PHSA logo"
+                fill />
+            </div>
+            <div class="card-footer">
+              <button
+                mat-flat-button
+                uiPageFooterAction
+                type="submit"
+                color="primary">
+                Link
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="actions">
+        <button
+          mat-stroked-button
+          uiPageFooterAction
+          type="button"
+          color="primary"
+          (click)="onBack()">
+          Back Home
+        </button>
+      </section>
+    </div>
   </div>
 </div>
 
