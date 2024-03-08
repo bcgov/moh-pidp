@@ -137,3 +137,10 @@
     }
   }
 }
+
+div.viewport-xsmall {
+  .link-main {
+    display: flex !important;
+    flex-direction: column !important;
+  }
+}
