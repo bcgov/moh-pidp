@@ -80,8 +80,11 @@
     & .link-steps {
       text-decoration: underline;
     }
-    & i {
-      color: pidp.$grey-30;
+    & ol {
+      line-height: 2rem;
+      & i {
+        color: pidp.$grey-30;
+      }
     }
   }
 
