@@ -9,6 +9,11 @@ import { ApiHttpClient } from '@app/core/resources/api-http-client.service';
 import { ProfileStatus } from '@app/features/portal/models/profile-status.model';
 import { PortalResource } from '@app/features/portal/portal-resource.service';
 
+//TODO move to new file once we have shape for LinkedAccount
+export interface LinkedAccount {
+  id: number;
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -25,6 +30,19 @@ export class AccountLinkingResource {
   public linkAccounts(id: number): NoContent {
     return this.apiResource
       .post<NoContent>(this.getResourcePath(id), null)
+      .pipe(
+        NoContentResponse,
+        catchError((error: HttpErrorResponse) => {
+          return throwError(() => error);
+        }),
+      );
+  }
+
+  public getLinkedAccounts(
+    partyId: number,
+  ): Observable<LinkedAccount[] | undefined> {
+    return this.apiResource
+      .get<LinkedAccount[]>(`${this.getResourcePath(partyId)}/linked-accounts`)
       .pipe(
         NoContentResponse,
         catchError((error: HttpErrorResponse) => {
