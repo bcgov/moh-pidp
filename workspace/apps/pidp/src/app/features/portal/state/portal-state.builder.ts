@@ -96,14 +96,14 @@ export class PortalStateBuilder {
         ],
       ),
       ...ArrayUtils.insertResultIf<IPortalSection>(
+        this.insertSection('accountLinking', profileStatus),
+        () => [new AccountLinkingPortalSection(profileStatus, this.router)],
+      ),
+      ...ArrayUtils.insertResultIf<IPortalSection>(
         this.insertSection('userAccessAgreement', profileStatus),
         () => [
           new UserAccessAgreementPortalSection(profileStatus, this.router),
         ],
-      ),
-      ...ArrayUtils.insertResultIf<IPortalSection>(
-        this.insertSection('accountLinking', profileStatus),
-        () => [new AccountLinkingPortalSection(profileStatus, this.router)],
       ),
     ];
   }
