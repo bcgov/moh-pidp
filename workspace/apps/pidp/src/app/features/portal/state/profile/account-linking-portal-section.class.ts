@@ -25,7 +25,7 @@ export class AccountLinkingPortalSection implements IPortalSection {
     this.key = 'accountLinking';
     this.heading = 'Account Linking';
     this.description =
-      'Here you can link your other professional credentials you have in the OnehealthID.';
+      'Here you can link your other professional credentials you have in the OnehealthID. Please have your information available for our quick process.';
   }
 
   public get hint(): string {
