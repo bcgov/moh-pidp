@@ -44,13 +44,17 @@
           z-index: -2;
         }
 
+        img.imgplant{
+          object-position: -20px -55px;
+        }
+        
         .card-container {
           display: flex;
           flex-direction: column;
           height: 100%;
           width: 100%;
           align-items: flex-start;
-          padding: 20px;
+          padding: 10px 0px 25px 40px;
 
           .card-header,
           .card-body,
@@ -67,8 +71,8 @@
               -webkit-transform: none;
               transform: none;
               position: relative !important;
-              height: 30px !important;
-              width: 130px !important;
+              height: 45px !important;
+              width: 175px !important;
             }
           }
         }
