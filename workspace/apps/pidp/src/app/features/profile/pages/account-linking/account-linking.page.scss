@@ -48,13 +48,16 @@
           object-position: -20px -55px;
         }
         
+        div.auth-card{
+          padding: 20px 0px 55px 50px;
+        }
+
         .card-container {
           display: flex;
           flex-direction: column;
           height: 100%;
           width: 100%;
           align-items: flex-start;
-          padding: 10px 0px 25px 40px;
 
           .card-header,
           .card-body,
@@ -146,5 +149,70 @@ div.viewport-xsmall {
   .link-main {
     display: flex !important;
     flex-direction: column !important;
+
+    .link-button {
+      
+      img.imgplant{
+        height: 200px !important;
+        object-position: 0px -55px !important;
+      }
+      
+      div.auth-card{
+        padding: 20px 0px 0px 0px !important;
+      }
+
+      .card-container {
+
+        .auth-card-header{
+          padding-left: 20px;
+        }
+        
+        .auth-card-body{
+          padding-left: 15px;
+        }
+
+        .auth-card-footer{
+          padding:15px 0px 0px 30px;
+        }
+
+      }
+    }
+  }
+  .successfully-linked {
+    & .card {
+      width: 100%;
+    }
+  }
+}
+
+div.viewport-small {
+  .link-main {
+    .link-button {
+            
+      img.imgplant{
+        object-position: -15px -55px !important;
+      }
+
+      div.auth-card{
+        padding: 20px 0px 60px 20px !important;
+      }
+      .card-container {
+       
+        .auth-card-body{
+          padding-bottom: 15px;
+        }
+      }
+    }
+  }
+}
+
+div.viewport-medium {
+  .link-main {
+    .link-button {
+            
+      div.auth-card{
+        padding: 15px 0px 55px 15px !important;
+      }
+    }
   }
 }
