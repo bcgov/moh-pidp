@@ -46,13 +46,14 @@ public class EndorsementMaintenanceService : IEndorsementMaintenanceService
 
         foreach (var request in oldRequests)
         {
-            var email = request.Status == EndorsementRequestStatus.Approved
-                    ? request.RequestingParty!.Email!
-                    : request.RecipientEmail;
+            var email = request.RequestingParty!.Email;
 
-            await this.SendExpireOldEndorsementRequestsEmailAsync(email);
-            request.Status = EndorsementRequestStatus.Expired;
-            request.StatusDate = now;
+            if (!string.IsNullOrEmpty(email))
+            {
+                await this.SendExpireOldEndorsementRequestsEmailAsync(email);
+                request.Status = EndorsementRequestStatus.Expired;
+                request.StatusDate = now;
+            }
         }
 
         await this.context.SaveChangesAsync();
