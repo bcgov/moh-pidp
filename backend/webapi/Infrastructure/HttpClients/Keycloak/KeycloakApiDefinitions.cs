@@ -87,6 +87,8 @@ public class UserRepresentation
 
     public void SetPidpEmail(string pidpEmail) => this.SetAttribute("pidp_email", pidpEmail);
 
+    public void SetOpId(string opId) => this.SetAttribute("opId", opId);
+
     /// <summary>
     /// Adds the given attributes to this User Representation. Overwrites any duplicate keys.
     /// </summary>

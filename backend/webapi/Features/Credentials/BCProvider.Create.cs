@@ -71,6 +71,7 @@ public class BCProviderCreate
                 .Where(party => party.Id == command.PartyId)
                 .Select(party => new
                 {
+                    party.OpId,
                     party.FirstName,
                     party.LastName,
                     party.Cpn,
@@ -136,6 +137,7 @@ public class BCProviderCreate
             {
                 return DomainResult.Failed<string>();
             }
+            await this.keycloakClient.UpdateUser(userId.Value, user => user.SetOpId(party.OpId!));
 
             this.context.Credentials.Add(new Credential
             {
