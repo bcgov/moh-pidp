@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "endorsement-reminder", "ser
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "endorsement-reminder.tests", "services.endorsement-reminder.tests\endorsement-reminder.tests.csproj", "{1251BD7F-30CB-4333-87D3-A96912F86361}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "update-opid", "tools.update-opid\update-opid.csproj", "{631ECF6D-6E61-49EF-933B-B9423A068032}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -48,5 +50,9 @@ Global
 		{1251BD7F-30CB-4333-87D3-A96912F86361}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1251BD7F-30CB-4333-87D3-A96912F86361}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1251BD7F-30CB-4333-87D3-A96912F86361}.Release|Any CPU.Build.0 = Release|Any CPU
+		{631ECF6D-6E61-49EF-933B-B9423A068032}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{631ECF6D-6E61-49EF-933B-B9423A068032}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{631ECF6D-6E61-49EF-933B-B9423A068032}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{631ECF6D-6E61-49EF-933B-B9423A068032}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

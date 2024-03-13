@@ -6,6 +6,7 @@ using NodaTime;
 using Pidp.Data;
 using Pidp.Extensions;
 using Pidp.Infrastructure.Auth;
+using Pidp.Infrastructure.HttpClients.Keycloak;
 using Pidp.Models;
 
 public class Create
@@ -41,8 +42,13 @@ public class Create
     public class CommandHandler : ICommandHandler<Command, int>
     {
         private readonly PidpDbContext context;
+        private readonly IKeycloakAdministrationClient keycloakClient;
 
-        public CommandHandler(PidpDbContext context) => this.context = context;
+        public CommandHandler(PidpDbContext context, IKeycloakAdministrationClient keycloakClient)
+        {
+            this.context = context;
+            this.keycloakClient = keycloakClient;
+        }
 
         public async Task<int> HandleAsync(Command command)
         {
@@ -58,6 +64,12 @@ public class Create
                 IdentityProvider = command.IdentityProvider,
                 IdpId = command.IdpId,
             });
+
+            if (command.IdentityProvider == IdentityProviders.BCServicesCard)
+            {
+                await party.GenerateOpId(this.context);
+                await this.keycloakClient.UpdateUser(command.UserId, user => user.SetOpId(party.OpId!));
+            }
 
             this.context.Parties.Add(party);
 
