@@ -89,7 +89,7 @@ public class PlrRecord : BaseAuditable
 
     public static bool ComputeGoodStanding(string? statusCode, string? statusReasonCode)
     {
-        var goodStandingReasons = new[] { "GS", "PRAC", "TEMPPER" };
+        var goodStandingReasons = new[] { "GS", "PRAC", "TEMPPER", "TI" };
         return statusCode == "ACTIVE"
             && goodStandingReasons.Contains(statusReasonCode);
     }
