@@ -39,7 +39,7 @@ public class EndorsementMaintenanceService : IEndorsementMaintenanceService
         var now = this.clock.GetCurrentInstant();
 
         var oldRequests = await this.context.EndorsementRequests
-            .Include(request => request.ReceivingParty)
+            .Include(request => request.RequestingParty)
             .Where(request => inProgressStatuses.Contains(request.Status)
                 && request.StatusDate < now - Duration.FromDays(30))
             .ToListAsync();
