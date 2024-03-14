@@ -2,7 +2,7 @@ name: Deploy DB Migration - Dev
 
 on:
   push:
-    branches: [develop]
+    branches: [test]
   workflow_dispatch:
 
 # This will terminate builds that are previously, but continuing to run.  Saves GHA hours.
@@ -23,16 +23,18 @@ jobs:
           openshift_server_url: ${{secrets.OPENSHIFT_CLUSTER_URL}}
           openshift_token: ${{secrets.OPENSHIFT_PIPELINE_SERVICE_ACCOUNT_TOKEN}}
 
-      - name: deply db migration job
+      - name: deply db migration job into d8a8f9-test
         run: |
+          oc project d8a8f9-test
+
           echo deleting dev-webapi-migrations job
-          oc delete job/dev-webapi-migrations -n d8a8f9-dev
+          oc delete job/test-webapi-migrations -n d8a8f9-test
 
           echo applying web-api-migration template...
-          helm template dev charts/webapi -n d8a8f9-dev --values ./deploy/dev_values.yaml -s templates/migrations.yaml --wait --debug| oc apply -f -
+          helm template test charts/webapi -n d8a8f9-test --values ./deploy/test_values.yaml -s templates/migrations.yaml --wait --debug| oc apply -f -
 
-          echo deleting dev-plri-ntake-migrations job
-          oc delete job/dev-plr-intake-migrations -n d8a8f9-dev
+          echo deleting test-plri-ntake-migrations job
+          oc delete job/test-plr-intake-migrations -n d8a8f9-test
 
           echo applying plr-intake-migration template...
-          helm template dev charts/plr-intake -n d8a8f9-dev --values ./deploy/dev_values.yaml -s templates/migrations.yaml --wait --debug| oc apply -f -
+          helm template test charts/plr-intake -n d8a8f9-test --values ./deploy/test_values.yaml -s templates/migrations.yaml --wait --debug| oc apply -f -
