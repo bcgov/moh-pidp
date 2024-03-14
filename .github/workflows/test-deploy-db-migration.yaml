@@ -33,7 +33,7 @@ jobs:
           echo applying web-api-migration template...
           helm template test charts/webapi -n d8a8f9-test --values ./deploy/test_values.yaml -s templates/migrations.yaml --wait --debug| oc apply -f -
 
-          echo deleting test-plri-ntake-migrations job
+          echo deleting test-plr-intake-migrations job
           oc delete job/test-plr-intake-migrations -n d8a8f9-test
 
           echo applying plr-intake-migration template...
