@@ -1,4 +1,4 @@
-name: Deploy DB Migration - Dev
+name: Deploy DB Migration - Test
 
 on:
   push:
@@ -27,7 +27,7 @@ jobs:
         run: |
           oc project d8a8f9-test
 
-          echo deleting dev-webapi-migrations job
+          echo deleting test-webapi-migrations job
           oc delete job/test-webapi-migrations -n d8a8f9-test
 
           echo applying web-api-migration template...
