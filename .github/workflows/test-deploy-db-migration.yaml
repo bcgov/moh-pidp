@@ -34,7 +34,7 @@ jobs:
           helm template test charts/webapi -n d8a8f9-test --values ./deploy/test_values.yaml -s templates/migrations.yaml --wait --debug| oc apply -f -
 
           echo deleting test-plr-intake-migrations job
-          oc delete job/test-plr-intake-migrations  --ignore-not-found
+          oc delete job/test-plr-intake-migrations --ignore-not-found
 
           echo applying plr-intake-migration template...
           helm template test charts/plr-intake -n d8a8f9-test --values ./deploy/test_values.yaml -s templates/migrations.yaml --wait --debug| oc apply -f -
