@@ -28,13 +28,13 @@ jobs:
           oc project d8a8f9-prod
 
           echo deleting prod-webapi-migrations job
-          oc delete job/prod-webapi-migrations -n d8a8f9-prod
+          oc delete job/prod-webapi-migrations -n d8a8f9-prod --ignore-not-found
 
           echo applying web-api-migration template...
           helm template prod charts/webapi -n d8a8f9-prod --values ./deploy/prod_values.yaml -s templates/migrations.yaml --wait --debug| oc apply -n d8a8f9-prod -f -
 
           echo deleting prod-plr-intake-migrations job
-          oc delete job/prod-plr-intake-migrations -n d8a8f9-prod
+          oc delete job/prod-plr-intake-migrations -n d8a8f9-prod --ignore-not-found
 
           echo applying plr-intake-migration template...
           helm template prod charts/plr-intake -n d8a8f9-prod --values ./deploy/prod_values.yaml -s templates/migrations.yaml --wait --debug| oc apply -n d8a8f9-prod -f -
