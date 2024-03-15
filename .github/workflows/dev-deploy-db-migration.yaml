@@ -28,13 +28,13 @@ jobs:
           oc project d8a8f9-dev
 
           echo deleting dev-webapi-migrations job
-          oc delete job/dev-webapi-migrations -n d8a8f9-dev
+          oc delete job/dev-webapi-migrations --ignore-not-found
 
           echo applying web-api-migration template...
           helm template dev charts/webapi -n d8a8f9-dev --values ./deploy/dev_values.yaml -s templates/migrations.yaml --wait --debug| oc apply -n d8a8f9-dev -f -
 
           echo deleting dev-plr-intake-migrations job
-          oc delete job/dev-plr-intake-migrations -n d8a8f9-dev
+          oc delete job/dev-plr-intake-migrations --ignore-not-found 
 
           echo applying plr-intake-migration template...
           helm template dev charts/plr-intake -n d8a8f9-dev --values ./deploy/dev_values.yaml -s templates/migrations.yaml --wait --debug| oc apply -n d8a8f9-dev -f -

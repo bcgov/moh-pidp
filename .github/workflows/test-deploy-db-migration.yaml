@@ -28,13 +28,13 @@ jobs:
           oc project d8a8f9-test
 
           echo deleting test-webapi-migrations job
-          oc delete job/test-webapi-migrations -n d8a8f9-test
+          oc delete job/test-webapi-migrations --ignore-not-found
 
           echo applying web-api-migration template...
           helm template test charts/webapi -n d8a8f9-test --values ./deploy/test_values.yaml -s templates/migrations.yaml --wait --debug| oc apply -f -
 
           echo deleting test-plr-intake-migrations job
-          oc delete job/test-plr-intake-migrations -n d8a8f9-test
+          oc delete job/test-plr-intake-migrations --ignore-not-found
 
           echo applying plr-intake-migration template...
           helm template test charts/plr-intake -n d8a8f9-test --values ./deploy/test_values.yaml -s templates/migrations.yaml --wait --debug| oc apply -f -
