@@ -95,6 +95,7 @@ spec:
             httpGet:
               path: /health/readiness
               port: http
+            initialDelaySeconds: 5
             timeoutSeconds: 1
             periodSeconds: 10
             successThreshold: 1
