@@ -107,7 +107,6 @@ export class PortalPage implements OnInit {
   public selectedIndex: number;
   private readonly lastSelectedIndex: number;
   public hasCpn: boolean | undefined;
-  public collegeLicenceDeclared: boolean | undefined;
   public destination$: Observable<Destination>;
   public IdentityProvider = IdentityProvider;
   public identityProvider$: Observable<IdentityProvider>;
@@ -210,8 +209,6 @@ export class PortalPage implements OnInit {
           ): Observable<BcProviderEditInitialStateModel | null> => {
             let selectedIndex = this.lastSelectedIndex;
             this.hasCpn = profileStatus?.status.collegeCertification.hasCpn;
-            this.collegeLicenceDeclared =
-              profileStatus?.status.collegeCertification.licenceDeclared;
 
             this.bcProviderStatusCode =
               profileStatus?.status.bcProvider.statusCode;
