@@ -8,7 +8,7 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { Router, RouterLink } from '@angular/router';
 
-import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { BehaviorSubject, Observable, of, switchMap, tap } from 'rxjs';
 
 import {
   AlertComponent,
@@ -177,42 +177,85 @@ export class PortalPage implements OnInit {
   }
 
   public ngOnInit(): void {
-    this.portalResource
-      .getProfileStatus(this.partyService.partyId)
+    const profileStatus$ = this.portalResource.getProfileStatus(
+      this.partyService.partyId,
+    );
+
+    this.updateStateAndAlerts(profileStatus$);
+    this.handlePasBannerStatus(profileStatus$);
+    this.handlePasBannerRosteringStatus(profileStatus$);
+  }
+
+  private updateStateAndAlerts(
+    profileStatus$: Observable<ProfileStatus | null>,
+  ): void {
+    profileStatus$
       .pipe(
         tap((profileStatus: ProfileStatus | null) => {
           this.portalService.updateState(profileStatus);
           this.alerts = this.portalService.alerts;
         }),
       )
-      .subscribe((profileStatus) => {
-        let selectedIndex = this.lastSelectedIndex;
-        this.hasCpn = profileStatus?.status.collegeCertification.hasCpn;
-        this.collegeLicenceDeclared =
-          profileStatus?.status.collegeCertification.licenceDeclared;
+      .subscribe();
+  }
 
-        this.bcProviderStatusCode = profileStatus?.status.bcProvider.statusCode;
-        if (this.bcProviderStatusCode === StatusCode.COMPLETED) {
-          this.bcProvider$.next(true);
-          this.bcProviderResource
-            .get(this.partyService.partyId)
-            .subscribe((bcProviderObject: BcProviderEditInitialStateModel) => {
-              this.bcProviderUsername = bcProviderObject.bcProviderId;
-            });
-        } else if (selectedIndex === this.lastSelectedIndex) {
-          // BCrovider step
-          selectedIndex = 0;
-        }
-        this.rosteringStatusCode =
-          profileStatus?.status.primaryCareRostering.statusCode;
-        if (this.rosteringStatusCode === StatusCode.AVAILABLE) {
-          this.rostering$.next(false);
-        } else if (selectedIndex === this.lastSelectedIndex) {
-          // PAS step
-          selectedIndex = 1;
-        }
-        this.selectedIndex = selectedIndex;
-      });
+  private handlePasBannerStatus(
+    profileStatus$: Observable<ProfileStatus | null>,
+  ): void {
+    profileStatus$
+      .pipe(
+        switchMap(
+          (
+            profileStatus,
+          ): Observable<BcProviderEditInitialStateModel | null> => {
+            let selectedIndex = this.lastSelectedIndex;
+            this.hasCpn = profileStatus?.status.collegeCertification.hasCpn;
+            this.collegeLicenceDeclared =
+              profileStatus?.status.collegeCertification.licenceDeclared;
+
+            this.bcProviderStatusCode =
+              profileStatus?.status.bcProvider.statusCode;
+            if (this.bcProviderStatusCode === StatusCode.COMPLETED) {
+              this.bcProvider$.next(true);
+              return this.bcProviderResource.get(this.partyService.partyId);
+            } else {
+              if (selectedIndex === this.lastSelectedIndex) {
+                // BCProvider step
+                selectedIndex = 0;
+              }
+              this.selectedIndex = selectedIndex;
+              return of(null);
+            }
+          },
+        ),
+        tap((bcProviderObject: BcProviderEditInitialStateModel | null) => {
+          if (bcProviderObject) {
+            this.bcProviderUsername = bcProviderObject.bcProviderId;
+          }
+        }),
+      )
+      .subscribe();
+  }
+
+  private handlePasBannerRosteringStatus(
+    profileStatus$: Observable<ProfileStatus | null>,
+  ): void {
+    profileStatus$
+      .pipe(
+        tap((profileStatus: ProfileStatus | null) => {
+          let selectedIndex = this.lastSelectedIndex;
+          this.rosteringStatusCode =
+            profileStatus?.status.primaryCareRostering.statusCode;
+          if (this.rosteringStatusCode === StatusCode.AVAILABLE) {
+            this.rostering$.next(false);
+          } else if (selectedIndex === this.lastSelectedIndex) {
+            // PAS step
+            selectedIndex = 1;
+          }
+          this.selectedIndex = selectedIndex;
+        }),
+      )
+      .subscribe();
   }
 
   private navigateToExternalUrl(url: string): void {
