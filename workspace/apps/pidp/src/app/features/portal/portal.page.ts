@@ -36,6 +36,7 @@ import { AuthorizedUserService } from '../auth/services/authorized-user.service'
 import { BannerExpansionPanelComponent } from './components/banner-expansion-panel/banner-expansion-panel.component';
 import { PortalAlertComponent } from './components/portal-alert/portal-alert.component';
 import { PortalCarouselComponent } from './components/portal-carousel/portal-carousel.component';
+import { StatusCode } from './enums/status-code.enum';
 import { ProfileStatusAlert } from './models/profile-status-alert.model';
 import { ProfileStatus } from './models/profile-status.model';
 import { PortalResource } from './portal-resource.service';
@@ -143,11 +144,11 @@ export class PortalPage implements OnInit {
   }
 
   public navigateTo(): void {
-    if (this.bcProviderStatusCode !== 2) {
+    if (this.bcProviderStatusCode !== StatusCode.COMPLETED) {
       this.router.navigateByUrl('/access/bc-provider-application');
     } else if (
-      this.bcProviderStatusCode === 2 &&
-      this.rosteringStatusCode === 1
+      this.bcProviderStatusCode === StatusCode.COMPLETED &&
+      this.rosteringStatusCode === StatusCode.AVAILABLE
     ) {
       this.navigateToExternalUrl('https://bchealthprovider.ca');
       this.authService.logout(this.logoutRedirectUrl);
@@ -191,7 +192,7 @@ export class PortalPage implements OnInit {
           profileStatus?.status.collegeCertification.licenceDeclared;
 
         this.bcProviderStatusCode = profileStatus?.status.bcProvider.statusCode;
-        if (this.bcProviderStatusCode === 2) {
+        if (this.bcProviderStatusCode === StatusCode.COMPLETED) {
           this.bcProvider$.next(true);
           this.bcProviderResource
             .get(this.partyService.partyId)
@@ -204,7 +205,7 @@ export class PortalPage implements OnInit {
         }
         this.rosteringStatusCode =
           profileStatus?.status.primaryCareRostering.statusCode;
-        if (this.rosteringStatusCode === 1) {
+        if (this.rosteringStatusCode === StatusCode.AVAILABLE) {
           this.rostering$.next(false);
         } else if (selectedIndex === this.lastSelectedIndex) {
           // PAS step
