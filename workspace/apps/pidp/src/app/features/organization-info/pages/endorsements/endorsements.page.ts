@@ -30,7 +30,7 @@ import {
   faUser,
   faUserGroup,
 } from '@fortawesome/free-solid-svg-icons';
-import { NavigationService } from '@pidp/presentation';
+import { LOADING_OVERLAY_DEFAULT_MESSAGE, LoadingOverlayService, NavigationService } from '@pidp/presentation';
 
 import { NoContent } from '@bcgov/shared/data-access';
 import {
@@ -115,6 +115,7 @@ export class EndorsementsPage
     viewportService: ViewportService,
     private utilsService: UtilsService,
     fb: FormBuilder,
+    private loadingOverlayService: LoadingOverlayService,
   ) {
     super(dependenciesService);
 
@@ -149,6 +150,7 @@ export class EndorsementsPage
   }
 
   public onApprove(requestId: number): void {
+    this.loadingOverlayService.open(LOADING_OVERLAY_DEFAULT_MESSAGE);
     this.resource
       .approveEndorsementRequest(this.partyService.partyId, requestId)
       .pipe(
@@ -277,6 +279,7 @@ export class EndorsementsPage
   private getActionableEndorsementRequests(
     partyId: number,
   ): Observable<EndorsementRequest[]> {
+    this.loadingOverlayService.close();
     return this.resource.getEndorsementRequests(partyId).pipe(
       map((response: EndorsementRequest[] | null) => response ?? []),
       map((response: EndorsementRequest[]) =>
