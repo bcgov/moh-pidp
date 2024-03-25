@@ -1,6 +1,8 @@
 namespace Pidp.Features.Parties;
 
 using FluentValidation;
+using MassTransit;
+using MediatR;
 using NodaTime;
 
 using Pidp.Data;
@@ -8,6 +10,8 @@ using Pidp.Extensions;
 using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.HttpClients.Keycloak;
 using Pidp.Models;
+using Pidp.Models.DomainEvents;
+using static Pidp.Features.CommonHandlers.UpdateKeycloakAttributesConsumer;
 
 public class Create
 {
@@ -68,7 +72,7 @@ public class Create
             if (command.IdentityProvider == IdentityProviders.BCServicesCard)
             {
                 await party.GenerateOpId(this.context);
-                await this.keycloakClient.UpdateUser(command.UserId, user => user.SetOpId(party.OpId!));
+                party.DomainEvents.Add(new PartyCreated(command.UserId, party.OpId!));
             }
 
             this.context.Parties.Add(party);
@@ -77,5 +81,14 @@ public class Create
 
             return party.Id;
         }
+    }
+
+    public class PartyCreatedHandler : INotificationHandler<PartyCreated>
+    {
+        private readonly IBus bus;
+
+        public PartyCreatedHandler(IBus bus) => this.bus = bus;
+
+        public async Task Handle(PartyCreated notification, CancellationToken cancellationToken) => await this.bus.Publish(UpdateKeycloakAttributes.FromUpdateAction(notification.UserId, user => user.SetOpId(notification.OpId)), cancellationToken);
     }
 }
