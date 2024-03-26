@@ -9,7 +9,7 @@ The OneHealth ID app serves as a crucial tool for doctors, nurses, and various h
 **Database:** Postgres SQL Npgsql Entity Framework Core provider for PostgreSQL ([link](https://github.com/npgsql/efcore.pg))
 **Containerization:** Docker (Docker Desktop is an application installed to provide an Interface to manage the containers)**Version Control:** Git (GUI applications such as GitKraken, GH Desktop leverage)
 **IDE:** Visual Studio and Visual Studio code
-**Database Management Tool:** DBWeaver (for managing and interacting with the database)
+**Database Management Tool:** DBeaver (for managing and interacting with the database)
 **Hosting:** Red Hat OpenShift, deployed using GitHub Actions.
 ### Codebase Overview:
 #### Architecture Overview:
