@@ -65,7 +65,7 @@ public class Startup
 
         services.AddHealthChecks()
             .AddApplicationStatus(tags: new[] { HealthCheckTag.Liveness.Value })
-            .AddNpgSql(config.ConnectionStrings.PidpDatabase, tags: new[] { HealthCheckTag.Readiness.Value });
+            .AddCheck<LoggingNpgSqlHealthCheck>("PostgreSQL", tags: new[] { HealthCheckTag.Readiness.Value });
 
         services.AddSwaggerGen(options =>
         {
