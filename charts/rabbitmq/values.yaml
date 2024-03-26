@@ -247,7 +247,7 @@ memoryHighWatermark:
   value: 0.4
 ## @param plugins List of default plugins to enable (should only be altered to remove defaults; for additional plugins use `extraPlugins`)
 ##
-plugins: "rabbitmq_management rabbitmq_peer_discovery_k8s rabbitmq_shovel rabbitmq_shovel_management"
+plugins: "rabbitmq_management rabbitmq_peer_discovery_k8s rabbitmq_shovel rabbitmq_shovel_management rabbitmq_consistent_hash_exchange"
 ## @param communityPlugins List of Community plugins (URLs) to be downloaded during container initialization
 ## Combine it with extraPlugins to also enable them.
 ##
