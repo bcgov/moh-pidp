@@ -42,7 +42,7 @@ public class PlrRecord
 
     public virtual bool IsGoodStanding()
     {
-        var goodStatndingReasons = new[] { "GS", "PRAC", "TEMPPER" };
+        var goodStatndingReasons = new[] { "GS", "PRAC", "TEMPPER", "TI" };
         return this.StatusCode == "ACTIVE"
             && goodStatndingReasons.Contains(this.StatusReasonCode);
     }
