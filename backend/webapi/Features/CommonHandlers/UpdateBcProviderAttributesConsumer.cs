@@ -43,4 +43,3 @@ public static partial class UpdateBcProviderAttributesConsumerLoggingExtensions
     [LoggerMessage(1, LogLevel.Error, "Error when updating attributes to User {upn} in Azure AD.")]
     public static partial void LogUpdateBcProviderAttributesFailed(this ILogger<UpdateBcProviderAttributesConsumer> logger, string upn);
 }
-

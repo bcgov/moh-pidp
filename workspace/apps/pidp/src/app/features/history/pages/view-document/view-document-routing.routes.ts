@@ -12,8 +12,9 @@ export const routes: Routes = [
     data: {
       title: 'OneHealthID Service',
       setDashboardTitleGuard: {
-        titleText: '',
-        titleDescriptionText: '',
+        titleText: 'Welcome to OneHealthID Service',
+        titleDescriptionText:
+          'Complete your profile to gain access to the systems you are eligible for',
       },
     },
   },

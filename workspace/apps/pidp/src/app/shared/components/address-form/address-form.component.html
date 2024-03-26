@@ -1,6 +1,7 @@
 <app-address-autocomplete
   [inBc]="inBc"
   (autocompleteAddress)="onAutocomplete($event)">
+  <div class="address-button-box">
   <button
     *ngIf="showManualButton"
     mat-button
@@ -11,6 +12,7 @@
     <mat-icon>add</mat-icon>
     Add Address Manually
   </button>
+</div>
 </app-address-autocomplete>
 
 <ng-container *ngIf="showAddressLineFields" [formGroup]="form">
