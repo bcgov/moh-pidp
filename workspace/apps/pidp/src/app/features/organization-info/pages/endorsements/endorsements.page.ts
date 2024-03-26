@@ -21,6 +21,7 @@ import {
   map,
   of,
   switchMap,
+  tap,
 } from 'rxjs';
 
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
@@ -279,9 +280,9 @@ export class EndorsementsPage
   private getActionableEndorsementRequests(
     partyId: number,
   ): Observable<EndorsementRequest[]> {
-    this.loadingOverlayService.close();
     return this.resource.getEndorsementRequests(partyId).pipe(
       map((response: EndorsementRequest[] | null) => response ?? []),
+      tap((_) => this.loadingOverlayService.close()),
       map((response: EndorsementRequest[]) =>
         response.filter((res) => res.actionable === true),
       ),
