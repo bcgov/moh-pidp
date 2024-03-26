@@ -21,6 +21,7 @@ import {
   map,
   of,
   switchMap,
+  tap,
 } from 'rxjs';
 
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
@@ -30,7 +31,11 @@ import {
   faUser,
   faUserGroup,
 } from '@fortawesome/free-solid-svg-icons';
-import { NavigationService } from '@pidp/presentation';
+import {
+  LOADING_OVERLAY_DEFAULT_MESSAGE,
+  LoadingOverlayService,
+  NavigationService,
+} from '@pidp/presentation';
 
 import { NoContent } from '@bcgov/shared/data-access';
 import {
@@ -115,6 +120,7 @@ export class EndorsementsPage
     viewportService: ViewportService,
     private utilsService: UtilsService,
     fb: FormBuilder,
+    private loadingOverlayService: LoadingOverlayService,
   ) {
     super(dependenciesService);
 
@@ -149,6 +155,7 @@ export class EndorsementsPage
   }
 
   public onApprove(requestId: number): void {
+    this.loadingOverlayService.open(LOADING_OVERLAY_DEFAULT_MESSAGE);
     this.resource
       .approveEndorsementRequest(this.partyService.partyId, requestId)
       .pipe(
@@ -279,6 +286,7 @@ export class EndorsementsPage
   ): Observable<EndorsementRequest[]> {
     return this.resource.getEndorsementRequests(partyId).pipe(
       map((response: EndorsementRequest[] | null) => response ?? []),
+      tap((_) => this.loadingOverlayService.close()),
       map((response: EndorsementRequest[]) =>
         response.filter((res) => res.actionable === true),
       ),
