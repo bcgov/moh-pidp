@@ -31,7 +31,11 @@ import {
   faUser,
   faUserGroup,
 } from '@fortawesome/free-solid-svg-icons';
-import { LOADING_OVERLAY_DEFAULT_MESSAGE, LoadingOverlayService, NavigationService } from '@pidp/presentation';
+import {
+  LOADING_OVERLAY_DEFAULT_MESSAGE,
+  LoadingOverlayService,
+  NavigationService,
+} from '@pidp/presentation';
 
 import { NoContent } from '@bcgov/shared/data-access';
 import {
