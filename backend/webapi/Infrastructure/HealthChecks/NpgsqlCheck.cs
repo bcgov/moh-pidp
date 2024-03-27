@@ -26,7 +26,9 @@ public class LoggingNpgSqlHealthCheck : IHealthCheck
             using (var connection = new NpgsqlConnection(_config.ConnectionStrings.PidpDatabase))
             {
                 //_connectionAction?.Invoke(connection);
-
+                _logger.LogCritical("Connection open about to Start.");
+                _logger.LogCritical("Connection string: {0}", _config.ConnectionStrings.PidpDatabase);
+                _logger.LogCritical(cancellationToken.IsCancellationRequested.ToString());
                 await connection.OpenAsync(cancellationToken);
                 _logger.LogCritical("Connection opened.");
 
