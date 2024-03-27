@@ -80,6 +80,16 @@ public class Create
                 .Select(party => party.FullName)
                 .SingleAsync();
 
+            var licenceInfo = await this.context.Parties
+                .Where(party => party.Email != null && party.Email == command.RecipientEmail)
+                .Select(party => party.LicenceDeclaration).FirstOrDefaultAsync();
+
+            var isUnlicensed = true;
+            if (licenceInfo != null)
+            {
+                isUnlicensed = licenceInfo.IsUnlicensed;
+            }
+
             var request = new EndorsementRequest
             {
                 RequestingPartyId = command.PartyId,
@@ -93,24 +103,26 @@ public class Create
             this.context.EndorsementRequests.Add(request);
             await this.context.SaveChangesAsync();
 
-            await this.SendEndorsementRequestEmailAsync(request.RecipientEmail, request.Token, partyName);
+            await this.SendEndorsementRequestEmailAsync(request.RecipientEmail, request.Token, partyName, isUnlicensed);
 
             return new(false);
         }
 
-        private async Task SendEndorsementRequestEmailAsync(string recipientEmail, Guid token, string partyName)
+        private async Task SendEndorsementRequestEmailAsync(string recipientEmail, Guid token, string partyName, bool isUnlicensed)
         {
             string url = this.applicationUrl.SetQueryParam("endorsement-token", token);
             var link = $"<a href=\"{url}\" target=\"_blank\" rel=\"noopener noreferrer\">this link</a>";
             var pidpSupportEmail = $"<a href=\"mailto:{EmailService.PidpEmail}\">{EmailService.PidpEmail}</a>";
             var pidpSupportPhone = $"<a href=\"tel:{EmailService.PidpSupportPhone}\">{EmailService.PidpSupportPhone}</a>";
+            var templatetext = isUnlicensed ? "You are receiving this email because a user is requesting to endorse you."
+                                            : "You are receiving this email because a user requested an endorsement from you.";
 
             var email = new Email(
                 from: EmailService.PidpEmail,
                 to: recipientEmail,
                 subject: $"OneHealthID Endorsement Request from {partyName}",
                 body: $@"Hello,
-<br>You are receiving this email because a user requested an endorsement from you.
+<br>{templatetext}
 <br>
 <br>To complete the endorsement process, use {link} to log into the OneHealthID Service with your BC Services Card.
 <br>
