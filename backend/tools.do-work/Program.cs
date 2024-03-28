@@ -5,7 +5,7 @@ using Microsoft.Extensions.Hosting;
 using NodaTime;
 using System.Reflection;
 
-using UpdateOpId;
+using DoWork;
 using Pidp;
 using Pidp.Data;
 using Pidp.Infrastructure.HttpClients;
@@ -30,7 +30,7 @@ await Host.CreateDefaultBuilder(args)
         services
             .AddSingleton<IClock>(SystemClock.Instance)
             .AddMediatR(opt => opt.RegisterServicesFromAssemblyContaining<Startup>())
-            .AddTransient<IUpdateOpIdService, UpdateOpIdService>()
+            .AddTransient<IDoWorkService, DoWorkService>()
             .AddHostedService<HostedServiceWrapper>()
             .AddDbContext<PidpDbContext>(options => options
                 .UseNpgsql(config.ConnectionStrings.PidpDatabase, npg => npg.UseNodaTime())

@@ -1,4 +1,4 @@
-namespace UpdateOpId;
+namespace DoWork;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -6,18 +6,18 @@ using Pidp.Data;
 using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.HttpClients.Keycloak;
 
-public class UpdateOpIdService : IUpdateOpIdService
+public class DoWorkService : IDoWorkService
 {
     private readonly PidpDbContext context;
     private readonly IKeycloakAdministrationClient keycloakClient;
 
-    public UpdateOpIdService(PidpDbContext context, IKeycloakAdministrationClient keycloakClient)
+    public DoWorkService(PidpDbContext context, IKeycloakAdministrationClient keycloakClient)
     {
         this.context = context;
         this.keycloakClient = keycloakClient;
     }
 
-    public async Task UpdateOpIdAsync()
+    public async Task DoWorkAsync()
     {
         Console.WriteLine(">>>>Start!");
         var userIds = await this.context.Parties

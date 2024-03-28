@@ -1,17 +1,16 @@
-namespace UpdateOpId;
-
+namespace DoWork;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
 internal sealed class HostedServiceWrapper : IHostedService
 {
-    private readonly IUpdateOpIdService service;
+    private readonly IDoWorkService service;
     private readonly IHostApplicationLifetime appLifetime;
     private readonly ILogger logger;
     private int? exitCode;
 
     public HostedServiceWrapper(
-        IUpdateOpIdService service,
+        IDoWorkService service,
         IHostApplicationLifetime appLifetime,
         ILogger<HostedServiceWrapper> logger)
     {
@@ -26,7 +25,7 @@ internal sealed class HostedServiceWrapper : IHostedService
         {
             try
             {
-                await this.service.UpdateOpIdAsync();
+                await this.service.DoWorkAsync();
                 this.exitCode = 0;
             }
             catch (Exception ex)
