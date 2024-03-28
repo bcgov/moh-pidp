@@ -8,13 +8,13 @@ using Pidp.Infrastructure.HttpClients.Keycloak;
 
 public class DoWorkService : IDoWorkService
 {
-    private readonly PidpDbContext context;
     private readonly IKeycloakAdministrationClient keycloakClient;
+    private readonly PidpDbContext context;
 
-    public DoWorkService(PidpDbContext context, IKeycloakAdministrationClient keycloakClient)
+    public DoWorkService(IKeycloakAdministrationClient keycloakClient, PidpDbContext context)
     {
-        this.context = context;
         this.keycloakClient = keycloakClient;
+        this.context = context;
     }
 
     public async Task DoWorkAsync()
