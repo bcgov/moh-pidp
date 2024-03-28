@@ -37,7 +37,7 @@ public class HcimEnrolment
         private readonly IClock clock;
         private readonly IEmailService emailService;
         // private readonly IKeycloakAdministrationClient keycloakClient;
-        private readonly ILogger logger;
+        private readonly ILogger<CommandHandler> logger;
         private readonly PidpDbContext context;
 
         public CommandHandler(
@@ -71,7 +71,7 @@ public class HcimEnrolment
                 || !dto.DemographicsComplete
                 || dto.AdminEmail == null)
             {
-                this.logger.LogHcimEnrolmentAccessRequestDenied();
+                this.logger.LogAccessRequestDenied();
                 return DomainResult.Failed();
             }
 
@@ -117,5 +117,5 @@ public class HcimEnrolment
 public static partial class HcimEnrolmentLoggingExtensions
 {
     [LoggerMessage(1, LogLevel.Warning, "HCIM Enrolment Access Request denied due to the Party Record not meeting all prerequisites.")]
-    public static partial void LogHcimEnrolmentAccessRequestDenied(this ILogger logger);
+    public static partial void LogAccessRequestDenied(this ILogger<HcimEnrolment.CommandHandler> logger);
 }
