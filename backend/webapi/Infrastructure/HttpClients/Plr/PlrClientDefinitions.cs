@@ -42,9 +42,20 @@ public class PlrRecord
 
     public virtual bool IsGoodStanding()
     {
-        var goodStatndingReasons = new[] { "GS", "PRAC", "TEMPPER", "TI" };
-        return this.StatusCode == "ACTIVE"
-            && goodStatndingReasons.Contains(this.StatusReasonCode);
+        // A Licence is in good standing if the Status is "ACTIVE" and the StatusReason is one of a few allowable values.
+        // Additionally, "TI" (Temporary Inactive) and "VW" (Voluntary Withdrawn) are "SUSPENDED" in PLR rather than "ACTIVE", but are still considered to be in good standing. (We still consider )
+        var goodStandingReasons = new[] { "GS", "PRAC", "TEMPPER", "TI", "VW" };
+        var suspendedAllowed = new[] { "TI", "VW" };
+
+        if (this.StatusCode == "ACTIVE")
+        {
+            return goodStandingReasons.Contains(this.StatusReasonCode);
+        }
+        else if (this.StatusCode == "SUSPENDED")
+        {
+            return suspendedAllowed.Contains(this.StatusReasonCode);
+        }
+        return false;
     }
 }
 
