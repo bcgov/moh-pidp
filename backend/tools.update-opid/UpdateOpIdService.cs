@@ -22,18 +22,26 @@ public class UpdateOpIdService : IUpdateOpIdService
         Console.WriteLine(">>>>Start!");
         var parties = await this.context.Parties
             .Include(party => party.Credentials)
-            .Take(1000)
-            .Where(party => party.OpId == null
-                && party.Credentials.Any(credential => credential.IdentityProvider == IdentityProviders.BCServicesCard))
+            .Where(party => party.Credentials.Any(credential => credential.IdentityProvider == IdentityProviders.BCServicesCard))
             .ToListAsync();
 
         foreach (var party in parties)
         {
-            await party.GenerateOpId(this.context);
-
             foreach (var userId in party.Credentials.Select(credential => credential.UserId))
             {
-                await this.keycloakClient.UpdateUser(userId, user => user.SetOpId(party.OpId!));
+                try
+                {
+                    var user = await this.keycloakClient.GetUser(userId);
+                    if (user == null)
+                    {
+                        Console.WriteLine($"User with ID {userId} not found in Keycloak.");
+                        continue;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error finding user with ID {userId}: {ex.Message}");
+                }
             }
         }
 
