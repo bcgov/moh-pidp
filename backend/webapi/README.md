@@ -23,7 +23,7 @@ environment:
       ports:  - "5433:5432"
 (https://github.com/bcgov/moh-pidp/blob/develop/docker-compose.yml)
 
-#### Need to run the migrations to populate database with the tables(navigate to .\backend\services.webapi)
+#### Need to run the migrations to populate database with the tables(navigate to .backend\services.plr-intake)
 
 dotnet ef database update
 
