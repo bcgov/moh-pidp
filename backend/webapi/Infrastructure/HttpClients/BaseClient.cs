@@ -19,16 +19,16 @@ public class BaseClient
     private readonly HttpClient client;
     private readonly JsonSerializerOptions serializationOptions;
 
-    protected ILogger Logger { get; }
+    protected ILogger<BaseClient> Logger { get; }
 
     /// <summary>
     /// An HttpClient with default serialization options (camelCase)
     /// </summary>
     /// <param name="client"></param>
     /// <param name="logger"></param>
-    public BaseClient(HttpClient client, ILogger logger) : this(client, logger, PropertySerialization.CamelCase) { }
+    public BaseClient(HttpClient client, ILogger<BaseClient> logger) : this(client, logger, PropertySerialization.CamelCase) { }
 
-    public BaseClient(HttpClient client, ILogger logger, PropertySerialization option)
+    public BaseClient(HttpClient client, ILogger<BaseClient> logger, PropertySerialization option)
     {
         client.ThrowIfNull(nameof(client));
         this.client = client;
