@@ -30,7 +30,7 @@ dotnet ef database update
 #### Inserting Test Data in local PLR tables.(navigate to .\backend\tools.plr-test-data)
 dotnet build
 dotnet pack
-plr-test-data --add-source .\nupkg\
+dotnet tool install plr-test-data --add-source .\nupkg\
 The tool can be invoked with "dotnet plr-test-data" in any backend folder.
 (https://github.com/bcgov/moh-pidp/tree/develop/backend/tools.plr-test-data)
 
