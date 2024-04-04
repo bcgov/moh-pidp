@@ -201,20 +201,9 @@ public partial class ProfileStatus
 
             protected override StatusCode Compute(ProfileData profile)
             {
-                // TODO revert
-                // if (profile.CompletedEnrolments.Contains(AccessTypeCode.HcimAccountTransfer)
-                //    || profile.CompletedEnrolments.Contains(AccessTypeCode.HcimEnrolment))
-                // {
-                //     this.StatusCode = StatusCode.Hidden;
-                //     return;
-                // }
-
-                return profile switch
-                {
-                    _ when profile.HasEnrolment(AccessTypeCode.HcimAccountTransfer) => StatusCode.Complete,
-                    _ when profile.HasEnrolment(AccessTypeCode.HcimEnrolment) => StatusCode.Hidden,
-                    _ => StatusCode.Incomplete
-                };
+                return profile.HasEnrolment(AccessTypeCode.HcimAccountTransfer)
+                    ? StatusCode.Complete
+                    : StatusCode.Incomplete;
             }
         }
 

@@ -26,13 +26,6 @@ public abstract class Address : BaseAuditable
     public string Postal { get; set; } = string.Empty;
 }
 
-public class FacilityAddress : Address
-{
-    public int FacilityId { get; set; }
-
-    public Facility? Facility { get; set; }
-}
-
 public class MSTeamsClinicAddress : Address
 {
     public int ClinicId { get; set; }
