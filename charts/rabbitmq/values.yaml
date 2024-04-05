@@ -42,7 +42,7 @@ global:
 image:
   registry: docker.io
   repository: bitnami/rabbitmq
-  tag: 3.12.13-debian-12-r2
+  tag: 3.12.13-debian-12-r5
   digest: ""
   ## set to true if you would like to see extra information on logs
   ## It turns BASH and/or NAMI debugging in the image
@@ -69,7 +69,7 @@ image:
 nameOverride: ""
 ## @param fullnameOverride String to fully override rabbitmq.fullname template
 ##
-fullnameOverride: "rabbitmq"
+fullnameOverride: "rabbitmq13"
 ## @param namespaceOverride String to fully override common.names.namespace
 ##
 namespaceOverride: ""
@@ -143,7 +143,7 @@ auth:
   ## @param auth.username RabbitMQ application username
   ## ref: https://github.com/bitnami/containers/tree/main/bitnami/rabbitmq#environment-variables
   ##
-  username: "rabbitmq"
+  username: rabbitmq
   ## @param auth.password RabbitMQ application password
   ## ref: https://github.com/bitnami/containers/tree/main/bitnami/rabbitmq#environment-variables
   ##
@@ -151,7 +151,7 @@ auth:
   ## @param auth.securePassword Whether to set the RabbitMQ password securely. This is incompatible with loading external RabbitMQ definitions and 'true' when not setting the auth.password parameter.
   ## ref: https://github.com/bitnami/containers/tree/main/bitnami/rabbitmq#environment-variables
   ##
-  securePassword: true
+  securePassword: false
   ## @param auth.existingPasswordSecret Existing secret with RabbitMQ credentials (existing secret must contain a value for `rabbitmq-password` key or override with setting auth.existingSecretPasswordKey)
   ## e.g:
   ## existingPasswordSecret: name-of-existing-secret
@@ -247,15 +247,15 @@ memoryHighWatermark:
   value: 0.4
 ## @param plugins List of default plugins to enable (should only be altered to remove defaults; for additional plugins use `extraPlugins`)
 ##
-plugins: "rabbitmq_management rabbitmq_peer_discovery_k8s rabbitmq_shovel rabbitmq_shovel_management rabbitmq_consistent_hash_exchange"
+plugins: "rabbitmq_management rabbitmq_peer_discovery_k8s rabbitmq_shovel rabbitmq_shovel_management rabbitmq_federation rabbitmq_federation_management rabbitmq_consistent_hash_exchange"
 ## @param communityPlugins List of Community plugins (URLs) to be downloaded during container initialization
 ## Combine it with extraPlugins to also enable them.
 ##
-communityPlugins: "https://github.com/rabbitmq/rabbitmq-delayed-message-exchange/releases/download/v3.12.0/rabbitmq_delayed_message_exchange-3.12.0.ez"
+communityPlugins: "https://github.com/rabbitmq/rabbitmq-delayed-message-exchange/releases/download/v3.13.0/rabbitmq_delayed_message_exchange-3.13.0.ez"
 ## @param extraPlugins Extra plugins to enable (single string containing a space-separated list)
 ## Use this instead of `plugins` to add new plugins
 ##
-extraPlugins: "rabbitmq_delayed_message_exchange rabbitmq_auth_backend_ldap"
+extraPlugins: "rabbitmq_delayed_message_exchange"
 ## Clustering settings
 ##
 clustering:
@@ -764,10 +764,10 @@ containerSecurityContext:
   enabled: true
   seLinuxOptions: null
   runAsUser: 1001
-  runAsGroup: 1001
+  runAsGroup: 0
   runAsNonRoot: true
   allowPrivilegeEscalation: false
-  readOnlyRootFilesystem: true
+  readOnlyRootFilesystem: false
   capabilities:
     drop: ["ALL"]
   seccompProfile:
@@ -784,24 +784,18 @@ containerSecurityContext:
 resourcesPreset: "micro"
 ## @param resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
 ## Example:
-## resources:
-##   requests:
-##     cpu: 2
-##     memory: 512Mi
-##   limits:
-##     cpu: 3
-##     memory: 1024Mi
-##
 resources: 
- ## Example:
+    ## Example:
     limits:
-      cpu: 300m
+      cpu: 150m
       memory: 500Mi
 
     ## Examples:
     requests:
-      cpu: 200m
+      cpu: 100m
       memory: 250Mi
+##
+resources: {}
 ## Configure RabbitMQ containers' extra options for liveness probe
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
 ## @param livenessProbe.enabled Enable livenessProbe
@@ -814,7 +808,7 @@ resources:
 livenessProbe:
   enabled: true
   initialDelaySeconds: 120
-  timeoutSeconds: 30
+  timeoutSeconds: 20
   periodSeconds: 30
   failureThreshold: 6
   successThreshold: 1
@@ -846,7 +840,7 @@ readinessProbe:
 startupProbe:
   enabled: false
   initialDelaySeconds: 10
-  timeoutSeconds: 30
+  timeoutSeconds: 20
   periodSeconds: 30
   failureThreshold: 3
   successThreshold: 1
@@ -908,7 +902,7 @@ serviceAccount:
   ## @param serviceAccount.name Name of the created serviceAccount
   ## If not set and create is true, a name is generated using the rabbitmq.fullname template
   ##
-  name: "rabbitmq"
+  name: ""
   ## @param serviceAccount.automountServiceAccountToken Auto-mount the service account token in the pod
   ##
   automountServiceAccountToken: false
@@ -1456,7 +1450,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r16
+    tag: 12-debian-12-r18
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
