@@ -2,7 +2,6 @@ namespace Pidp.Features.Credentials;
 
 using DomainResults.Common;
 using FluentValidation;
-using Flurl;
 using HybridModelBinding;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
@@ -11,12 +10,14 @@ using Pidp.Data;
 using Pidp.Extensions;
 using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.HttpClients.BCProvider;
-using Pidp.Infrastructure.HttpClients.Keycloak;
 using Pidp.Infrastructure.HttpClients.Mail;
 using Pidp.Infrastructure.HttpClients.Plr;
 using Pidp.Models;
 using Pidp.Models.Lookups;
 using Pidp.Infrastructure.Services;
+using Pidp.Models.DomainEvents;
+using MediatR;
+using MassTransit;
 
 public class BCProviderCreate
 {
@@ -41,28 +42,22 @@ public class BCProviderCreate
     {
         private readonly IBCProviderClient client;
         private readonly IEmailService emailService;
-        private readonly IKeycloakAdministrationClient keycloakClient;
         private readonly ILogger<CommandHandler> logger;
         private readonly IPlrClient plrClient;
         private readonly PidpDbContext context;
-        private readonly Url keycloakAdministrationUrl;
 
         public CommandHandler(
             IBCProviderClient client,
             IEmailService emailService,
-            IKeycloakAdministrationClient keycloakClient,
             ILogger<CommandHandler> logger,
             IPlrClient plrClient,
-            PidpConfiguration config,
             PidpDbContext context)
         {
             this.client = client;
             this.emailService = emailService;
-            this.keycloakClient = keycloakClient;
             this.logger = logger;
             this.plrClient = plrClient;
             this.context = context;
-            this.keycloakAdministrationUrl = Url.Parse(config.Keycloak.AdministrationUrl);
         }
 
         public async Task<IDomainResult<string>> HandleAsync(Command command)
@@ -131,56 +126,19 @@ public class BCProviderCreate
                 return DomainResult.Failed<string>();
             }
 
-            // TODO: Domain Event! Probably should create this credential now and then Queue the keycloak User creation + updating the UserId
-            var userId = await this.CreateKeycloakUser(party.FirstName, party.LastName, createdUser.UserPrincipalName);
-            if (userId == null)
+            var credential = this.context.Credentials.Add(new Credential
             {
-                return DomainResult.Failed<string>();
-            }
-            await this.keycloakClient.UpdateUser(userId.Value, user => user.SetOpId(party.OpId!));
-
-            this.context.Credentials.Add(new Credential
-            {
-                UserId = userId.Value,
                 PartyId = command.PartyId,
                 IdpId = createdUser.UserPrincipalName,
                 IdentityProvider = IdentityProviders.BCProvider
-            });
+            }).Entity;
+
+            credential.DomainEvents.Add(new BCProviderCreated(command.PartyId, party.FirstName, party.LastName, createdUser.UserPrincipalName, party.OpId!));
 
             await this.context.SaveChangesAsync();
             await this.SendBCProviderCreationEmail(party.Email, createdUser.UserPrincipalName);
 
             return DomainResult.Success(createdUser.UserPrincipalName);
-        }
-
-        private async Task<Guid?> CreateKeycloakUser(string firstName, string lastName, string userPrincipalName)
-        {
-            var newUser = new UserRepresentation
-            {
-                Enabled = true,
-                FirstName = firstName,
-                LastName = lastName,
-                Username = this.GenerateMohKeycloakUsername(userPrincipalName)
-            };
-            return await this.keycloakClient.CreateUser(newUser);
-        }
-
-        /// <summary>
-        /// The expected Ministry of Health Keycloak username for this user. The schema is {IdentityProviderIdentifier}@{IdentityProvider}.
-        /// Most of our Credentials come to us from Keycloak and so the username is saved as-is in the column IdpId.
-        /// However, we create BC Provider Credentials directly; so the User Principal Name is saved to the database without the suffix.
-        /// There are also two inconsistencies with how the MOH Keycloak handles BCP usernames:
-        /// 1. The username suffix is @bcp rather than @bcprovider_aad.
-        /// 2. This suffix is only added in Test and Production; there is no suffix at all for BCP Users in the Dev Keycloak.
-        /// </summary>
-        private string GenerateMohKeycloakUsername(string userPrincipalName)
-        {
-            if (this.keycloakAdministrationUrl.Host == "user-management-dev.api.hlth.gov.bc.ca")
-            {
-                return userPrincipalName;
-            }
-
-            return userPrincipalName + "@bcp";
         }
 
         private async Task SendBCProviderCreationEmail(string partyEmail, string userPrincipalName)
@@ -194,6 +152,15 @@ public class BCProviderCreate
 
             await this.emailService.SendAsync(email);
         }
+    }
+
+    public class BCProviderCreatedHandler : INotificationHandler<BCProviderCreated>
+    {
+        private readonly IBus bus;
+
+        public BCProviderCreatedHandler(IBus bus) => this.bus = bus;
+
+        public async Task Handle(BCProviderCreated notification, CancellationToken cancellationToken) => await this.bus.Publish(notification, cancellationToken);
     }
 }
 

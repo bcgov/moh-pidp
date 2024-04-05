@@ -16,6 +16,7 @@ public static class MassTransitSetup
             x.AddConsumer<PartyEmailUpdatedBcProviderConsumer>();
             x.AddConsumer<UpdateBcProviderAttributesConsumer>();
             x.AddConsumer<UpdateKeycloakAttributesConsumer>();
+            x.AddConsumer<CreateBcProviderKeycloakAccountConsumer>();
 
             x.UsingRabbitMq((context, cfg) =>
             {
@@ -46,6 +47,13 @@ public static class MassTransitSetup
                     ep.PublishFaults = false;
                     ep.Bind("update-keycloak-attributes");
                     ep.ConfigureConsumer<UpdateKeycloakAttributesConsumer>(context);
+                });
+
+                cfg.ReceiveEndpoint("create-bc-provider-keycloak-account-queue", ep =>
+                {
+                    ep.PublishFaults = false;
+                    ep.Bind("create-bc-provider-keycloak-account");
+                    ep.ConfigureConsumer<CreateBcProviderKeycloakAccountConsumer>(context);
                 });
             });
         });

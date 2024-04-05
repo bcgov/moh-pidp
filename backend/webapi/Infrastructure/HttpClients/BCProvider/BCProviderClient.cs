@@ -143,6 +143,23 @@ public class BCProviderClient : IBCProviderClient
         }
     }
 
+    public async Task<bool> DeleteBCProviderAccount(string userPrincipalName)
+    {
+        try
+        {
+            await this.client.Users[userPrincipalName]
+                .DeleteAsync();
+            this.logger.LogUserDeleteSuccess(userPrincipalName);
+
+            return true;
+        }
+        catch
+        {
+            this.logger.LogUserDeleteFailure(userPrincipalName);
+            return false;
+        }
+    }
+
     private async Task<string?> CreateUniqueUserPrincipalName(NewUserRepresentation user)
     {
         var joinedFullName = $"{user.FirstName}.{user.LastName}";
@@ -235,4 +252,10 @@ public static partial class BCProviderClientLoggingExtensions
 
     [LoggerMessage(10, LogLevel.Error, "Failed to update the user '{userPrincipalName}'.")]
     public static partial void LogUserUpdateFailure(this ILogger logger, string userPrincipalName);
+
+    [LoggerMessage(11, LogLevel.Error, "Failed to delete the user '{userPrincipalName}'.")]
+    public static partial void LogUserDeleteFailure(this ILogger logger, string userPrincipalName);
+
+    [LoggerMessage(12, LogLevel.Error, "Successfully deleted the user '{userPrincipalName}'.")]
+    public static partial void LogUserDeleteSuccess(this ILogger logger, string userPrincipalName);
 }

@@ -42,4 +42,13 @@ public interface IBCProviderClient
     /// <param name="userPrincipalName"></param>
     /// <param name="user"></param>
     Task<bool> UpdateUser(string userPrincipalName, User user);
+
+    /// <summary>
+    /// Deletes the BC Provider account.
+    /// Only used specifically when the keycloak account associated with the BC Provider account
+    /// fails to create. This deletes the BC Provider account in AAD to prevent orphaned accounts.
+    /// </summary>
+    /// <param name="userPrincipalName"></param>
+
+    Task<bool> DeleteBCProviderAccount(string userPrincipalName);
 }
