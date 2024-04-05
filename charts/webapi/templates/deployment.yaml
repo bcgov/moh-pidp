@@ -68,7 +68,7 @@ spec:
                   name: rabbitmq-password
                   key: password
             - name: RabbitMQ__HostAddress
-              value: "amqp://pidp:$(RabbitMQ__Password)@rabbitmq:5672/{{ $release }}"
+              value: "amqp://pidp:$(RabbitMQ__Password)@rabbitmq13:5672/{{ $release }}"
             - name: DB_HOST
               valueFrom:
                 configMapKeyRef:
