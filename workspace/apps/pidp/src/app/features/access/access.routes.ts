@@ -5,7 +5,6 @@ export class AccessRoutes {
   public static BC_PROVIDER_EDIT = 'bc-provider-edit';
   public static DRIVER_FITNESS = 'driver-fitness';
   public static HCIM_ACCOUNT_TRANSFER = 'hcim-account-transfer';
-  public static HCIM_ENROLMENT = 'hcim-enrolment';
   public static IMMSBC_EFORMS = 'immsbc-eforms';
   public static MS_TEAMS_PRIVACY_OFFICER = 'ms-teams-privacy-officer';
   public static MS_TEAMS_CLINIC_MEMBER = 'ms-teams-clinic-member';

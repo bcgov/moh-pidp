@@ -42,17 +42,6 @@ export const routes: Routes = [
       ).then((m) => m.routes),
   },
   {
-    path: AccessRoutes.HCIM_ENROLMENT,
-    canActivate: [PermissionsGuard.canActivate],
-    data: {
-      roles: [Role.FEATURE_PIDP_DEMO],
-    },
-    loadChildren: (): Promise<Routes> =>
-      import('./pages/hcim-enrolment/hcim-enrolment-routing.routes').then(
-        (m) => m.routes,
-      ),
-  },
-  {
     path: AccessRoutes.PHARMANET,
     canActivate: [PermissionsGuard.canActivate],
     data: {
