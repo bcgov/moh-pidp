@@ -132,6 +132,11 @@ export class EndorsementsResource {
       )
       .pipe(
         NoContentResponse,
+        tap(() =>
+        this.toastService.openSuccessToast(
+          'Endorsement Request has been approved successfully',
+        ),
+      ),
         catchError((error: HttpErrorResponse) => {
           if (error.status === HttpStatusCode.BadRequest) {
             return of(void 0);
