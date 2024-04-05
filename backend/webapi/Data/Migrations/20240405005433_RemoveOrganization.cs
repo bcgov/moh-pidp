@@ -18,6 +18,9 @@ namespace Pidp.Data.Migrations
                 name: "Facility");
 
             migrationBuilder.DropTable(
+                name: "HcimEnrolment");
+
+            migrationBuilder.DropTable(
                 name: "HealthAuthorityLookup");
 
             migrationBuilder.DropTable(
@@ -74,6 +77,27 @@ namespace Pidp.Data.Migrations
                         name: "FK_Facility_Party_PartyId",
                         column: x => x.PartyId,
                         principalTable: "Party",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "HcimEnrolment",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false),
+                    ManagesTasks = table.Column<bool>(type: "boolean", nullable: false),
+                    ModifiesPhns = table.Column<bool>(type: "boolean", nullable: false),
+                    RecordsNewborns = table.Column<bool>(type: "boolean", nullable: false),
+                    SearchesIdentifiers = table.Column<bool>(type: "boolean", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_HcimEnrolment", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_HcimEnrolment_AccessRequest_Id",
+                        column: x => x.Id,
+                        principalTable: "AccessRequest",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });

@@ -31,7 +31,6 @@ public class PidpDbContext : DbContext
     public DbSet<EndorsementRequest> EndorsementRequests { get; set; } = default!;
     public DbSet<Endorsement> Endorsements { get; set; } = default!;
     public DbSet<HcimAccountTransfer> HcimAccountTransfers { get; set; } = default!;
-    public DbSet<HcimEnrolment> HcimEnrolments { get; set; } = default!;
     public DbSet<MSTeamsClinic> MSTeamsClinics { get; set; } = default!;
     public DbSet<MSTeamsClinicMemberEnrolment> MSTeamsClinicMemberEnrolments { get; set; } = default!;
     public DbSet<PartyLicenceDeclaration> PartyLicenceDeclarations { get; set; } = default!;

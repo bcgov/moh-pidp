@@ -13,7 +13,7 @@ using Pidp.Data;
 namespace Pidp.Data.Migrations
 {
     [DbContext(typeof(PidpDbContext))]
-    [Migration("20240404012940_RemoveOrganization")]
+    [Migration("20240405005433_RemoveOrganization")]
     partial class RemoveOrganization
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -1139,25 +1139,6 @@ namespace Pidp.Data.Migrations
                     b.ToTable("HcimAccountTransfer");
                 });
 
-            modelBuilder.Entity("Pidp.Models.HcimEnrolment", b =>
-                {
-                    b.HasBaseType("Pidp.Models.AccessRequest");
-
-                    b.Property<bool>("ManagesTasks")
-                        .HasColumnType("boolean");
-
-                    b.Property<bool>("ModifiesPhns")
-                        .HasColumnType("boolean");
-
-                    b.Property<bool>("RecordsNewborns")
-                        .HasColumnType("boolean");
-
-                    b.Property<bool>("SearchesIdentifiers")
-                        .HasColumnType("boolean");
-
-                    b.ToTable("HcimEnrolment");
-                });
-
             modelBuilder.Entity("Pidp.Models.LicenceStatusRoleAssigned", b =>
                 {
                     b.HasBaseType("Pidp.Models.BusinessEvent");
@@ -1355,15 +1336,6 @@ namespace Pidp.Data.Migrations
                     b.HasOne("Pidp.Models.AccessRequest", null)
                         .WithOne()
                         .HasForeignKey("Pidp.Models.HcimAccountTransfer", "Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Pidp.Models.HcimEnrolment", b =>
-                {
-                    b.HasOne("Pidp.Models.AccessRequest", null)
-                        .WithOne()
-                        .HasForeignKey("Pidp.Models.HcimEnrolment", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
