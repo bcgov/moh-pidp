@@ -42,17 +42,6 @@ export const routes: Routes = [
       ).then((m) => m.routes),
   },
   {
-    path: AccessRoutes.PHARMANET,
-    canActivate: [PermissionsGuard.canActivate],
-    data: {
-      roles: [Role.FEATURE_PIDP_DEMO],
-    },
-    loadChildren: (): Promise<Routes> =>
-      import('./pages/pharmanet/pharmanet-routing.routes').then(
-        (m) => m.routes,
-      ),
-  },
-  {
     path: AccessRoutes.SITE_PRIVACY_SECURITY_CHECKLIST,
     canActivate: [PermissionsGuard.canActivate],
     data: {

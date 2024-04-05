@@ -8,7 +8,6 @@ export class AccessRoutes {
   public static IMMSBC_EFORMS = 'immsbc-eforms';
   public static MS_TEAMS_PRIVACY_OFFICER = 'ms-teams-privacy-officer';
   public static MS_TEAMS_CLINIC_MEMBER = 'ms-teams-clinic-member';
-  public static PHARMANET = 'pharmanet';
   public static PRESCRIPTION_REFILL_EFORMS = 'prescription-refill-eforms';
   public static PROVIDER_REPORTING_PORTAL = 'provider-reporting-portal';
   public static SITE_PRIVACY_SECURITY_CHECKLIST = `site-privacy-and-security-checklist`;
