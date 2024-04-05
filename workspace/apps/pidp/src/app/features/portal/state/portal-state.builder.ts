@@ -24,7 +24,6 @@ import { MfaSetupPortalSection } from './faq/mfa-setup-portal-section.class';
 import { SignedAcceptedDocumentsPortalSection } from './history/signed-accepted-documents-portal-section.class';
 import { TransactionsPortalSection } from './history/transactions-portal-section.class';
 import { EndorsementsPortalSection } from './organization/endorsements-portal-section.class';
-import { OrganizationDetailsPortalSection } from './organization/organization-details-portal-section.class';
 import { PortalSectionStatusKey } from './portal-section-status-key.type';
 import { IPortalSection } from './portal-section.model';
 import { CollegeCertificationPortalSection } from './profile/college-certification-portal-section.class';
@@ -105,14 +104,6 @@ export class PortalStateBuilder {
     profileStatus: ProfileStatus,
   ): IPortalSection[] {
     return [
-      ...ArrayUtils.insertResultIf<IPortalSection>(
-        // TODO remove permissions when ready for production
-        this.insertSection('organizationDetails', profileStatus) &&
-          this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
-        () => [
-          new OrganizationDetailsPortalSection(profileStatus, this.router),
-        ],
-      ),
       ...ArrayUtils.insertResultIf<IPortalSection>(
         this.insertSection('endorsements', profileStatus),
         () => [new EndorsementsPortalSection(profileStatus, this.router)],

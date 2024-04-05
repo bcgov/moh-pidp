@@ -6,10 +6,7 @@ import { Section } from '../section.model';
  * over keys at runtime to allow filtering or grouping
  * sections.
  */
-export const organizationSectionKeys = [
-  'organizationDetails',
-  'endorsements',
-] as const;
+export const organizationSectionKeys = ['endorsements'] as const;
 
 /**
  * @description
@@ -26,6 +23,5 @@ export type IOrganizationGroup = {
 };
 
 export interface OrganizationGroup extends IOrganizationGroup {
-  organizationDetails: Section;
   endorsements: Section;
 }

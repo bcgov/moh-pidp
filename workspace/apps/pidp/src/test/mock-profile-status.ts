@@ -22,7 +22,6 @@ export class MockProfileStatus {
           statusCode: StatusCode.AVAILABLE,
           isComplete: false,
         },
-        organizationDetails: { statusCode: StatusCode.AVAILABLE },
         endorsements: { statusCode: StatusCode.AVAILABLE },
         userAccessAgreement: { statusCode: StatusCode.AVAILABLE },
         saEforms: {
