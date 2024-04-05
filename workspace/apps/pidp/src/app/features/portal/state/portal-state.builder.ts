@@ -18,7 +18,6 @@ import { PrescriptionRefillEformsPortalSection } from './access/prescription-ref
 import { PrimaryCareRosteringPortalSection } from './access/primary-care-rostering-portal-section.class';
 import { ProviderReportingPortalSection } from './access/provider-reporting-portal-section.class';
 import { SaEformsPortalSection } from './access/sa-eforms-portal-section.class';
-import { SitePrivacySecurityPortalSection } from './access/site-privacy-security-checklist-portal-section.class';
 import { MfaSetupPortalSection } from './faq/mfa-setup-portal-section.class';
 import { SignedAcceptedDocumentsPortalSection } from './history/signed-accepted-documents-portal-section.class';
 import { TransactionsPortalSection } from './history/transactions-portal-section.class';
@@ -130,15 +129,6 @@ export class PortalStateBuilder {
         this.insertSection('hcimAccountTransfer', profileStatus),
         () => [
           new HcimAccountTransferPortalSection(profileStatus, this.router),
-        ],
-      ),
-      ...ArrayUtils.insertResultIf<IPortalSection>(
-        // TODO add insertSection call when it exists in the ProfileStatus API
-        // TODO remove permissions when ready for production
-        // this.insertSection('sitePrivacySecurityChecklist', profileStatus) &&
-        this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
-        () => [
-          new SitePrivacySecurityPortalSection(profileStatus, this.router),
         ],
       ),
       ...ArrayUtils.insertResultIf<IPortalSection>(
