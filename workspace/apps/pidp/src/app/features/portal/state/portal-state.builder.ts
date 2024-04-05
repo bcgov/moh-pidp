@@ -23,9 +23,7 @@ import { SitePrivacySecurityPortalSection } from './access/site-privacy-security
 import { MfaSetupPortalSection } from './faq/mfa-setup-portal-section.class';
 import { SignedAcceptedDocumentsPortalSection } from './history/signed-accepted-documents-portal-section.class';
 import { TransactionsPortalSection } from './history/transactions-portal-section.class';
-import { AdministratorInfoPortalSection } from './organization/administrator-information-portal-section';
 import { EndorsementsPortalSection } from './organization/endorsements-portal-section.class';
-import { FacilityDetailsPortalSection } from './organization/facility-details-portal-section.class';
 import { OrganizationDetailsPortalSection } from './organization/organization-details-portal-section.class';
 import { PortalSectionStatusKey } from './portal-section-status-key.type';
 import { IPortalSection } from './portal-section.model';
@@ -114,19 +112,6 @@ export class PortalStateBuilder {
         () => [
           new OrganizationDetailsPortalSection(profileStatus, this.router),
         ],
-      ),
-      ...ArrayUtils.insertResultIf<IPortalSection>(
-        // TODO add insertSection call when it exists in the ProfileStatus API
-        // TODO remove permissions when ready for production
-        // this.insertSection('facilityDetails', profileStatus) &&
-        this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
-        () => [new FacilityDetailsPortalSection(profileStatus, this.router)],
-      ),
-      ...ArrayUtils.insertResultIf<IPortalSection>(
-        // TODO remove permissions when ready for production
-        this.insertSection('administratorInfo', profileStatus) &&
-          this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
-        () => [new AdministratorInfoPortalSection(profileStatus, this.router)],
       ),
       ...ArrayUtils.insertResultIf<IPortalSection>(
         this.insertSection('endorsements', profileStatus),

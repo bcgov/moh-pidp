@@ -1,5 +1,4 @@
 import { Section } from '../section.model';
-import { AdministratorInfoSection } from './administrator-information-section.model';
 
 /**
  * @description
@@ -9,8 +8,6 @@ import { AdministratorInfoSection } from './administrator-information-section.mo
  */
 export const organizationSectionKeys = [
   'organizationDetails',
-  'facilityDetails',
-  'administratorInfo',
   'endorsements',
 ] as const;
 
@@ -30,7 +27,5 @@ export type IOrganizationGroup = {
 
 export interface OrganizationGroup extends IOrganizationGroup {
   organizationDetails: Section;
-  facilityDetails: Section;
-  administratorInfo: AdministratorInfoSection;
   endorsements: Section;
 }

@@ -1,4 +1,4 @@
-import { randEmail, randFullName, randNumber } from '@ngneat/falso';
+import { randFullName, randNumber } from '@ngneat/falso';
 
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
 import { ProfileStatus } from '@app/features/portal/models/profile-status.model';
@@ -22,12 +22,7 @@ export class MockProfileStatus {
           statusCode: StatusCode.AVAILABLE,
           isComplete: false,
         },
-        administratorInfo: {
-          email: randEmail(),
-          statusCode: StatusCode.AVAILABLE,
-        },
         organizationDetails: { statusCode: StatusCode.AVAILABLE },
-        facilityDetails: { statusCode: StatusCode.AVAILABLE },
         endorsements: { statusCode: StatusCode.AVAILABLE },
         userAccessAgreement: { statusCode: StatusCode.AVAILABLE },
         saEforms: {
