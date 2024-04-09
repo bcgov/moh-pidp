@@ -62,6 +62,11 @@ To build, run, and open a local in memory development server which will run at `
 nx serve APP_NAME
 ```
 
+other way of running using npm is 
+```bash
+npm start
+```
+
 ### Build Application
 
 To build the project and have the build artifacts stored in the `dist/` directory type:
@@ -70,6 +75,10 @@ To build the project and have the build artifacts stored in the `dist/` director
 nx build APP_NAME
 ```
 
+other way of building using npm is 
+```bash
+npm run build
+```
 ### Running Unit Tests
 
 Execute the unit tests via [Jest](https://jestjs.io) by typing:
@@ -82,6 +91,12 @@ Execute the unit tests for affected by a change by typing:
 
 ```bash
 nx affected:test
+```
+
+Other way of running unit tests is
+
+```bash
+npm run test
 ```
 
 ### Running End-to-End Tests
