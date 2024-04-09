@@ -2,6 +2,7 @@ namespace DoWork;
 
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using System.Diagnostics;
 
 internal sealed class HostedServiceWrapper : IHostedService
 {
@@ -24,8 +25,10 @@ internal sealed class HostedServiceWrapper : IHostedService
     {
         this.appLifetime.ApplicationStarted.Register(async () =>
         {
+            var sw = Stopwatch.StartNew();
             try
             {
+                Console.WriteLine(">>>> Starting Work.");
                 await this.service.DoWorkAsync();
                 this.exitCode = 0;
             }
@@ -36,6 +39,8 @@ internal sealed class HostedServiceWrapper : IHostedService
             }
             finally
             {
+                sw.Stop();
+                Console.WriteLine($">>>> Work Stopped. Total Run Time: {(sw.ElapsedMilliseconds > 1000 ? sw.ElapsedMilliseconds / 1000 : sw.ElapsedMilliseconds + "m")}s.");
                 this.appLifetime.StopApplication();
             }
         });
