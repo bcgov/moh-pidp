@@ -30,8 +30,8 @@ public class UpdateKeycloakAfterCollegeLicenceUpdated : INotificationHandler<Col
 
     public async Task Handle(CollegeLicenceUpdated notification, CancellationToken cancellationToken)
     {
-        // If this domain event is reaised by a newly found CPN or newly created credential, the CPN / UserId will be uncommitted in the context.
-        // We must fetch the Party model (rather than .Select() a smaller model) to ensure the uncommited changes are included here.
+        // If this domain event is raised due to a newly found CPN or newly created credential, the CPN / UserId will be uncommitted in the context.
+        // We must fetch the whole Party model (rather than .Select() a smaller model) to ensure the uncommited changes are seen here.
         var party = await this.context.Parties
             .Include(party => party.Credentials)
             .Where(party => party.Id == notification.PartyId)
