@@ -83,8 +83,7 @@ public class HcimAccountTransfer
                 .Where(party => party.Id == command.PartyId)
                 .Select(party => new
                 {
-                    AlreadyEnroled = party.AccessRequests.Any(request => request.AccessTypeCode == AccessTypeCode.HcimAccountTransfer
-                        || request.AccessTypeCode == AccessTypeCode.HcimEnrolment),
+                    AlreadyEnroled = party.AccessRequests.Any(request => request.AccessTypeCode == AccessTypeCode.HcimAccountTransfer),
                     DemographicsComplete = party.Email != null && party.Phone != null,
                     UserId = party.PrimaryUserId,
                     party.Email
