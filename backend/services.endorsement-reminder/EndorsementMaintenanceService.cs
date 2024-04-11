@@ -39,14 +39,21 @@ public class EndorsementMaintenanceService : IEndorsementMaintenanceService
         var now = this.clock.GetCurrentInstant();
 
         var oldRequests = await this.context.EndorsementRequests
+            .Include(request => request.RequestingParty)
             .Where(request => inProgressStatuses.Contains(request.Status)
                 && request.StatusDate < now - Duration.FromDays(30))
             .ToListAsync();
 
         foreach (var request in oldRequests)
         {
-            request.Status = EndorsementRequestStatus.Expired;
-            request.StatusDate = now;
+            var email = request.RequestingParty!.Email;
+
+            if (!string.IsNullOrEmpty(email))
+            {
+                await this.SendExpireOldEndorsementRequestsEmailAsync(email);
+                request.Status = EndorsementRequestStatus.Expired;
+                request.StatusDate = now;
+            }
         }
 
         await this.context.SaveChangesAsync();
@@ -93,39 +100,76 @@ public class EndorsementMaintenanceService : IEndorsementMaintenanceService
 
     private async Task SendEmailAsync(string partyEmail, Guid? token)
     {
-        var url = this.applicationUrl.SetQueryParam("endorsement-token", token);
-        var link = $"<a href=\"{url}\" target=\"_blank\" rel=\"noopener noreferrer\">{this.applicationUrl}</a>";
-        var pidpSupportEmail = $"<a href=\"mailto:{EmailService.PidpEmail}\">{EmailService.PidpEmail}</a>";
-        var pidpSupportPhone = $"<a href=\"tel:{EmailService.PidpSupportPhone}\">{EmailService.PidpSupportPhone}</a>";
-
         var email = new Email(
             from: EmailService.PidpEmail,
             to: partyEmail,
             subject: "OneHealthID Endorsement - Action Required",
-            body: $@"Hello,
+            body: this.GetBodyString(token, true)
+        );
+        await this.emailService.SendAsync(email);
+    }
+
+    private async Task SendExpireOldEndorsementRequestsEmailAsync(string partyEmail)
+    {
+        var email = new Email(
+            from: EmailService.PidpEmail,
+            to: partyEmail,
+            subject: "OneHealthID Endorsement – Endorsement Request Expired",
+            body: this.GetBodyString()
+        );
+        await this.emailService.SendAsync(email);
+    }
+
+    private string GetBodyString(Guid? token = null, bool is7DaysNotify = false)
+    {
+        var url = this.applicationUrl.SetQueryParam("endorsement-token", token);
+        var link = $"<a href=\"{url}\" target=\"_blank\" rel=\"noopener noreferrer\">OneHealthID Service</a>";
+        var licensedlink = $"<a href=\"https://www.doctorsofbc.ca/sites/default/files/endorsement_licensed_initiated_4.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">Licensed Initiated</a>";
+        var unLicensedlink = $"<a href=\"https://www.doctorsofbc.ca/sites/default/files/endorsement_unlicensed_initiated_4.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">Unlicensed Initiated</a>";
+        var pidpSupportEmail = $"<a href=\"mailto:{EmailService.PidpEmail}\">{EmailService.PidpEmail}</a>";
+        var pidpSupportPhone = $"<a href=\"tel:{EmailService.PidpSupportPhone}\">{EmailService.PidpSupportPhone}</a>";
+
+        var bodyString = $@"Hello,
 <br>
-<br>Recently an endorsement for the OneHealthID was started either by you or another member of
-your clinic. This process has not been completed. Completing the endorsement process allows
-users who are not physicians or nurse practitioners to access common healthcare services, such
-as the Provincial Attachment System (PAS).
+<br>This email is to inform you that your endorsement request has now expired due to inactivity of 30 days or more.
 <br>
-<br>To complete the pending endorsement(s), log into the OneHealthID Service with your BC
-Services Card app: {link}
+<br>If you would like to restart the process and set up an endorsement, log into the OneHealthID Service with your BC Services Card app: {link}
 <br>
-<br>After logging in, please:
-<br>&emsp;1. Complete the mandatory first time login steps (if this is your first time logging in to OneHealthID).
-<br>&emsp;2. Review the pending endorsements in the “Endorsements” tile under “Organization Info”.
-<br>&emsp;3. Each pending endorsement will be listed under “Incoming Requests.” To confirm the endorsement, click “Approve” next to the request.
-<br>
-<br>For additional support, contact the OneHealthID Service desk:
+<br>For additional support and information on the endorsement process,
+please refer to these infographics hosted on the Doctors of BC website here: {licensedlink} or {unLicensedlink}.
+Or contact the OneHealthID Service desk:
 <br>
 <br>&emsp;• By email at {pidpSupportEmail}
 <br>
 <br>&emsp;• By phone at {pidpSupportPhone}
 <br>
-<br>Thank you."
-        );
-        await this.emailService.SendAsync(email);
+<br>Thank you.";
+
+        if (is7DaysNotify)
+        {
+            bodyString = $@"Hello,
+<br>
+<br>You recently started an endorsement request with another individual in OneHealthID.
+Users have 30 days to complete the endorsement process before it expires.
+Your request has been inactive for 7 days. To complete the pending endorsements,
+log into the OneHealthID Service with your BC Services Card app: {link}
+<br>
+<br>After logging in, please complete these steps, if applicable:
+<br>&emsp;1. Mandatory first-time login steps (if this is your first time logging in to OneHealthID).
+<br>&emsp;2. Review the pending endorsements in the “Endorsements” tile under “Organization Info”.
+<br>&emsp;3. Each pending endorsement will be listed under “Incoming Requests.” To confirm the endorsement, click “Approve” next to the request.
+<br>
+<br>For additional support and information on the endorsement process,
+please refer to these infographics hosted on the Doctors of BC website here: {licensedlink} or {unLicensedlink}.
+Or contact the OneHealthID Service desk:
+<br>
+<br>&emsp;• By email at {pidpSupportEmail}
+<br>
+<br>&emsp;• By phone at {pidpSupportPhone}
+<br>
+<br>Thank you.";
+        }
+        return bodyString;
     }
 }
 
