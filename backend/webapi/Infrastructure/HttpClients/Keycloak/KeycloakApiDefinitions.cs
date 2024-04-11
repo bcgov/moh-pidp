@@ -3,6 +3,7 @@ namespace Pidp.Infrastructure.HttpClients.Keycloak;
 using System.Text.Json;
 
 using Pidp.Infrastructure.HttpClients.Ldap;
+using Pidp.Infrastructure.HttpClients.Plr;
 using Pidp.Models.Lookups;
 
 public class MohKeycloakEnrolment
@@ -68,15 +69,6 @@ public class Role
     public string? Name { get; set; }
 }
 
-public class CollegeLicenceInformation
-{
-    public string? ProviderRoleType { get; set; }
-    public string? StatusCode { get; set; }
-    public string? StatusReasonCode { get; set; }
-    public string? MspId { get; set; }
-    public string? CollegeId { get; set; }
-}
-
 /// <summary>
 /// This is not the entire Keycloak User Representation! See https://www.keycloak.org/docs-api/22.0.1/rest-api/index.html#UserRepresentation.
 /// </summary>
@@ -90,15 +82,28 @@ public class UserRepresentation
     public string? LastName { get; set; }
     public string? Username { get; set; }
 
-    public void SetCollegeLicenceInformation(IEnumerable<CollegeLicenceInformation> collegeLicenceInformation) => this.SetAttribute("college_licence_info", JsonSerializer.Serialize(collegeLicenceInformation, new JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }));
+    public void SetCollegeLicenceInformation(IEnumerable<PlrRecord> plrRecords)
+    {
+        var data = plrRecords.Select(record => JsonSerializer.Serialize(new
+        {
+            record.CollegeId,
+            record.MspId,
+            record.ProviderRoleType,
+            record.StatusCode,
+            record.StatusReasonCode
+        },
+        new JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }));
 
-    internal void SetLdapOrgDetails(LdapLoginResponse.OrgDetails orgDetails) => this.SetAttribute("org_details", JsonSerializer.Serialize(orgDetails, new JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }));
+        this.SetAttribute("college_licence_info", data.ToArray());
+    }
 
     public void SetCpn(string cpn) => this.SetAttribute("common_provider_number", cpn);
 
-    public void SetPidpEmail(string pidpEmail) => this.SetAttribute("pidp_email", pidpEmail);
+    internal void SetLdapOrgDetails(LdapLoginResponse.OrgDetails orgDetails) => this.SetAttribute("org_details", JsonSerializer.Serialize(orgDetails, new JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }));
 
     public void SetOpId(string opId) => this.SetAttribute("opId", opId);
+
+    public void SetPidpEmail(string pidpEmail) => this.SetAttribute("pidp_email", pidpEmail);
 
     /// <summary>
     /// Adds the given attributes to this User Representation. Overwrites any duplicate keys.
@@ -111,5 +116,6 @@ public class UserRepresentation
         }
     }
 
-    private void SetAttribute(string key, string value) => this.Attributes[key] = new string[] { value };
+    private void SetAttribute(string key, string value) => this.Attributes[key] = new[] { value };
+    private void SetAttribute(string key, string[] values) => this.Attributes[key] = values;
 }

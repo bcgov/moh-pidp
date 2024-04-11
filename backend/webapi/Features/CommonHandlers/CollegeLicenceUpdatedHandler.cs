@@ -1,59 +1,59 @@
 namespace Pidp.Features.CommonHandlers;
 
+using MassTransit;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 using Pidp.Data;
-using Pidp.Infrastructure.HttpClients.Keycloak;
-using Pidp.Infrastructure.HttpClients.Plr;
+using static Pidp.Features.CommonHandlers.UpdateKeycloakAttributesConsumer;
 using Pidp.Models.DomainEvents;
+using Pidp.Infrastructure.HttpClients.Plr;
 
 public class UpdateKeycloakAfterCollegeLicenceUpdated : INotificationHandler<CollegeLicenceUpdated>
 {
-    private readonly IKeycloakAdministrationClient keycloakClient;
+    private readonly IBus bus;
+    private readonly ILogger<UpdateKeycloakAfterCollegeLicenceUpdated> logger;
     private readonly IPlrClient plrClient;
-
     private readonly PidpDbContext context;
 
     public UpdateKeycloakAfterCollegeLicenceUpdated(
-        IKeycloakAdministrationClient keycloakClient,
+        IBus bus,
+        ILogger<UpdateKeycloakAfterCollegeLicenceUpdated> logger,
         IPlrClient plrClient,
         PidpDbContext context)
     {
-        this.keycloakClient = keycloakClient;
+        this.bus = bus;
+        this.logger = logger;
         this.plrClient = plrClient;
         this.context = context;
     }
 
     public async Task Handle(CollegeLicenceUpdated notification, CancellationToken cancellationToken)
     {
+        // If this domain event is reaised by a newly found CPN or newly created credential, the CPN / UserId will be uncommitted in the context.
+        // We must fetch the Party model (rather than .Select() a smaller model) to ensure the uncommited changes are included here.
         var party = await this.context.Parties
             .Include(party => party.Credentials)
             .Where(party => party.Id == notification.PartyId)
             .SingleAsync(cancellationToken);
 
         var records = await this.plrClient.GetRecordsAsync(party.Cpn);
-        var collegeLicenceInformationList = new List<CollegeLicenceInformation>();
-
-        foreach (var record in records ?? Enumerable.Empty<PlrRecord>())
+        if (records == null || !records.Any())
         {
-            var collegeLicenceInformation = new CollegeLicenceInformation
-            {
-                ProviderRoleType = record.ProviderRoleType,
-                StatusCode = record.StatusCode,
-                StatusReasonCode = record.StatusReasonCode,
-                MspId = record.MspId,
-                CollegeId = record.CollegeId
-            };
-            collegeLicenceInformationList.Add(collegeLicenceInformation);
+            // TODO: error handling
+            this.logger.LogPlrError(notification.PartyId, party.Cpn);
+            return;
         }
 
-        if (collegeLicenceInformationList != null)
+        foreach (var userId in party.Credentials.Select(credenial => credenial.UserId))
         {
-            foreach (var userId in party.Credentials.Select(credential => credential.UserId))
-            {
-                await this.keycloakClient.UpdateUser(userId, (user) => user.SetCollegeLicenceInformation(collegeLicenceInformationList));
-            }
+            await this.bus.Publish(UpdateKeycloakAttributes.FromUpdateAction(userId, user => user.SetCollegeLicenceInformation(records)), cancellationToken);
         }
     }
+}
+
+public static partial class UpdateKeycloakAfterCollegeLicenceUpdatedLoggingExtensions
+{
+    [LoggerMessage(1, LogLevel.Error, "Error when updating Party {partyId}'s College JSON in keycloak: error talking to PLR. CPN = {cpn}.")]
+    public static partial void LogPlrError(this ILogger<UpdateKeycloakAfterCollegeLicenceUpdated> logger, int partyId, string? cpn);
 }
