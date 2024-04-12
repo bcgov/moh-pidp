@@ -8,7 +8,7 @@
       (click)="onMiniMenuButtonClick()">
       <mat-icon>menu</mat-icon>
     </button>
-    <div *ngIf="isLogoutButtonVisible" class="logout-button-group">
+    <!-- <div *ngIf="isLogoutButtonVisible" class="logout-button-group">
       <span class="signout-text">sign out</span>
       <button
         mat-icon-button
@@ -17,9 +17,45 @@
         (click)="onLogout()">
         <mat-icon>logout</mat-icon>
       </button>
-    </div>
+    </div> -->
   </div>
-  <div class="dashboard-v2" uiPidpInjectViewportCss>
+  <div class="container content-menu">
+    <ng-container *ngTemplateOutlet="menu"></ng-container>   
+  </div>
+  <div class="container">
+    <router-outlet></router-outlet>
+  </div>
+  <ng-template #menu>
+    <div class="main-menu">
+      <span  class="span-text">OneHealthID</span>
+      <a
+        *ngFor="let menuItem of menuItems"
+        class="main-menu-item"
+        routerLinkActive="main-menu-item-active"
+        [routerLink]="getRouterLink(menuItem)"
+        [routerLinkActiveOptions]="getRouterLinkActiveOptions(menuItem)"
+        [fragment]="getRouterLinkFragment(menuItem)"
+        (click)="onMenuItemClicked()"
+        >{{ menuItem.label }}
+      </a>
+      <!-- <a
+        *ngIf="isLogoutButtonVisible"
+        class="main-menu-item"
+        routerLinkActive="main-menu-item-active"
+        (click)="onLogout()">
+        Sign Out
+    </a> -->
+    <button
+        *ngIf="isLogoutButtonVisible"
+        mat-stroked-button
+        aria-label="Sign Out"
+        class="btn-signout"
+        (click)="onLogout()">
+        Sign Out
+      </button>
+    </div>
+  </ng-template>  
+  <!-- <div class="dashboard-v2" uiPidpInjectViewportCss>
     <div class="header-bar-left"></div>
     <div class="content">
       <mat-sidenav-container class="sidenav-container">
@@ -39,8 +75,8 @@
       </mat-sidenav-container>
     </div>
     <div class="header-bar-right"></div>
-  </div>
-  <ng-template #header>
+  </div> -->
+  <!-- <ng-template #header>
     <header>
       <div class="header-text-container">
         <h1 *ngIf="showTitle">
@@ -95,5 +131,5 @@
         </div>
       </div>
     </div>
-  </ng-template>
+  </ng-template> -->
 </ui-layout-header-footer>
