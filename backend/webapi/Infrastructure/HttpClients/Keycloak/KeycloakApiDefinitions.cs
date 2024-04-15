@@ -84,17 +84,16 @@ public class UserRepresentation
 
     public void SetCollegeLicenceInformation(IEnumerable<PlrRecord> plrRecords)
     {
-        var data = plrRecords.Select(record => JsonSerializer.Serialize(new
+        var data = plrRecords.Select(record => new
         {
             record.CollegeId,
             record.MspId,
             record.ProviderRoleType,
             record.StatusCode,
             record.StatusReasonCode
-        },
-        new JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }));
+        });
 
-        this.SetAttribute("college_licence_info", data.ToArray());
+        this.SetAttribute("college_licence_info", JsonSerializer.Serialize(data, new JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }));
     }
 
     public void SetCpn(string cpn) => this.SetAttribute("common_provider_number", cpn);
@@ -117,5 +116,4 @@ public class UserRepresentation
     }
 
     private void SetAttribute(string key, string value) => this.Attributes[key] = new[] { value };
-    private void SetAttribute(string key, string[] values) => this.Attributes[key] = values;
 }
