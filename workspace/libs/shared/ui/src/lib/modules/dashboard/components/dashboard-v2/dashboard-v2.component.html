@@ -19,15 +19,17 @@
       </button>
     </div> -->
   </div>
-  <div class="container content-menu">
+  <div class="content-menu">
+    <div  class="container">
     <ng-container *ngTemplateOutlet="menu"></ng-container>   
   </div>
-  <div class="container">
+  </div>
+  <div class="container content-body">
     <router-outlet></router-outlet>
   </div>
   <ng-template #menu>
+    <span  class="span-text">OneHealthID</span>
     <div class="main-menu">
-      <span  class="span-text">OneHealthID</span>
       <a
         *ngFor="let menuItem of menuItems"
         class="main-menu-item"

@@ -110,7 +110,7 @@ export class PortalDashboardComponent implements IDashboard, OnInit {
         this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
         () => [
           new DashboardRouteMenuItem(
-            'Organization Info',
+            'Organization',
             {
               commands: PortalRoutes.BASE_PATH,
               extras: { fragment: 'organization' },
@@ -120,49 +120,49 @@ export class PortalDashboardComponent implements IDashboard, OnInit {
           ),
         ],
       ),
+      // new DashboardRouteMenuItem(
+      //   'Access to Systems',
+      //   {
+      //     commands: PortalRoutes.BASE_PATH,
+      //     extras: { fragment: 'access' },
+      //     linkActiveOptions,
+      //   },
+      //   'assignment',
+      // ),
+      // ...ArrayUtils.insertResultIf<DashboardRouteMenuItem>(
+      //   this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
+      //   () => [
+      //     new DashboardRouteMenuItem(
+      //       'Training',
+      //       {
+      //         commands: PortalRoutes.BASE_PATH,
+      //         extras: { fragment: 'training' },
+      //         linkActiveOptions,
+      //       },
+      //       'school',
+      //     ),
+      //   ],
+      // ),
+      // new DashboardRouteMenuItem(
+      //   'History',
+      //   {
+      //     commands: PortalRoutes.BASE_PATH,
+      //     extras: { fragment: 'history' },
+      //     linkActiveOptions,
+      //   },
+      //   'restore',
+      // ),
+      // new DashboardRouteMenuItem(
+      //   'FAQ',
+      //   {
+      //     commands: PortalRoutes.BASE_PATH,
+      //     extras: { fragment: 'faq' },
+      //     linkActiveOptions,
+      //   },
+      //   'help_outline',
+      // ),
       new DashboardRouteMenuItem(
-        'Access to Systems',
-        {
-          commands: PortalRoutes.BASE_PATH,
-          extras: { fragment: 'access' },
-          linkActiveOptions,
-        },
-        'assignment',
-      ),
-      ...ArrayUtils.insertResultIf<DashboardRouteMenuItem>(
-        this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
-        () => [
-          new DashboardRouteMenuItem(
-            'Training',
-            {
-              commands: PortalRoutes.BASE_PATH,
-              extras: { fragment: 'training' },
-              linkActiveOptions,
-            },
-            'school',
-          ),
-        ],
-      ),
-      new DashboardRouteMenuItem(
-        'History',
-        {
-          commands: PortalRoutes.BASE_PATH,
-          extras: { fragment: 'history' },
-          linkActiveOptions,
-        },
-        'restore',
-      ),
-      new DashboardRouteMenuItem(
-        'FAQ',
-        {
-          commands: PortalRoutes.BASE_PATH,
-          extras: { fragment: 'faq' },
-          linkActiveOptions,
-        },
-        'help_outline',
-      ),
-      new DashboardRouteMenuItem(
-        'Get Support',
+        'Support',
         {
           commands: PortalRoutes.BASE_PATH,
           extras: { fragment: 'support' },
