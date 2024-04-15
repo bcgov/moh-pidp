@@ -22,3 +22,5 @@ ehthumbs_vista.db
 
 # Folder config file
 [Dd]esktop.ini
+package-lock.json
+yarn.lock
