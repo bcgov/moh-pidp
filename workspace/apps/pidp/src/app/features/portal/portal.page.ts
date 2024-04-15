@@ -8,7 +8,7 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { Router, RouterLink } from '@angular/router';
 
-import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { BehaviorSubject, Observable, of, switchMap, tap } from 'rxjs';
 
 import {
   AlertComponent,
@@ -36,6 +36,7 @@ import { AuthorizedUserService } from '../auth/services/authorized-user.service'
 import { BannerExpansionPanelComponent } from './components/banner-expansion-panel/banner-expansion-panel.component';
 import { PortalAlertComponent } from './components/portal-alert/portal-alert.component';
 import { PortalCarouselComponent } from './components/portal-carousel/portal-carousel.component';
+import { StatusCode } from './enums/status-code.enum';
 import { ProfileStatusAlert } from './models/profile-status-alert.model';
 import { ProfileStatus } from './models/profile-status.model';
 import { PortalResource } from './portal-resource.service';
@@ -106,7 +107,6 @@ export class PortalPage implements OnInit {
   public selectedIndex: number;
   private readonly lastSelectedIndex: number;
   public hasCpn: boolean | undefined;
-  public collegeLicenceDeclared: boolean | undefined;
   public destination$: Observable<Destination>;
   public IdentityProvider = IdentityProvider;
   public identityProvider$: Observable<IdentityProvider>;
@@ -143,11 +143,11 @@ export class PortalPage implements OnInit {
   }
 
   public navigateTo(): void {
-    if (this.bcProviderStatusCode !== 2) {
+    if (this.bcProviderStatusCode !== StatusCode.COMPLETED) {
       this.router.navigateByUrl('/access/bc-provider-application');
     } else if (
-      this.bcProviderStatusCode === 2 &&
-      this.rosteringStatusCode === 1
+      this.bcProviderStatusCode === StatusCode.COMPLETED &&
+      this.rosteringStatusCode === StatusCode.AVAILABLE
     ) {
       this.navigateToExternalUrl('https://bchealthprovider.ca');
       this.authService.logout(this.logoutRedirectUrl);
@@ -176,42 +176,83 @@ export class PortalPage implements OnInit {
   }
 
   public ngOnInit(): void {
-    this.portalResource
-      .getProfileStatus(this.partyService.partyId)
+    const profileStatus$ = this.portalResource.getProfileStatus(
+      this.partyService.partyId,
+    );
+
+    this.updateStateAndAlerts(profileStatus$);
+    this.handlePasBannerStatus(profileStatus$);
+    this.handlePasBannerRosteringStatus(profileStatus$);
+  }
+
+  private updateStateAndAlerts(
+    profileStatus$: Observable<ProfileStatus | null>,
+  ): void {
+    profileStatus$
       .pipe(
         tap((profileStatus: ProfileStatus | null) => {
           this.portalService.updateState(profileStatus);
           this.alerts = this.portalService.alerts;
         }),
       )
-      .subscribe((profileStatus) => {
-        let selectedIndex = this.lastSelectedIndex;
-        this.hasCpn = profileStatus?.status.collegeCertification.hasCpn;
-        this.collegeLicenceDeclared =
-          profileStatus?.status.collegeCertification.licenceDeclared;
+      .subscribe();
+  }
 
-        this.bcProviderStatusCode = profileStatus?.status.bcProvider.statusCode;
-        if (this.bcProviderStatusCode === 2) {
-          this.bcProvider$.next(true);
-          this.bcProviderResource
-            .get(this.partyService.partyId)
-            .subscribe((bcProviderObject: BcProviderEditInitialStateModel) => {
-              this.bcProviderUsername = bcProviderObject.bcProviderId;
-            });
-        } else if (selectedIndex === this.lastSelectedIndex) {
-          // BCrovider step
-          selectedIndex = 0;
-        }
-        this.rosteringStatusCode =
-          profileStatus?.status.primaryCareRostering.statusCode;
-        if (this.rosteringStatusCode === 1) {
-          this.rostering$.next(false);
-        } else if (selectedIndex === this.lastSelectedIndex) {
-          // PAS step
-          selectedIndex = 1;
-        }
-        this.selectedIndex = selectedIndex;
-      });
+  private handlePasBannerStatus(
+    profileStatus$: Observable<ProfileStatus | null>,
+  ): void {
+    profileStatus$
+      .pipe(
+        switchMap(
+          (
+            profileStatus,
+          ): Observable<BcProviderEditInitialStateModel | null> => {
+            let selectedIndex = this.lastSelectedIndex;
+            this.hasCpn = profileStatus?.status.collegeCertification.hasCpn;
+
+            this.bcProviderStatusCode =
+              profileStatus?.status.bcProvider.statusCode;
+            if (this.bcProviderStatusCode === StatusCode.COMPLETED) {
+              this.bcProvider$.next(true);
+              return this.bcProviderResource.get(this.partyService.partyId);
+            } else {
+              if (selectedIndex === this.lastSelectedIndex) {
+                // BCProvider step
+                selectedIndex = 0;
+              }
+              this.selectedIndex = selectedIndex;
+              return of(null);
+            }
+          },
+        ),
+        tap((bcProviderObject: BcProviderEditInitialStateModel | null) => {
+          if (bcProviderObject) {
+            this.bcProviderUsername = bcProviderObject.bcProviderId;
+          }
+        }),
+      )
+      .subscribe();
+  }
+
+  private handlePasBannerRosteringStatus(
+    profileStatus$: Observable<ProfileStatus | null>,
+  ): void {
+    profileStatus$
+      .pipe(
+        tap((profileStatus: ProfileStatus | null) => {
+          let selectedIndex = this.lastSelectedIndex;
+          this.rosteringStatusCode =
+            profileStatus?.status.primaryCareRostering.statusCode;
+          if (this.rosteringStatusCode === StatusCode.AVAILABLE) {
+            this.rostering$.next(false);
+          } else if (selectedIndex === this.lastSelectedIndex) {
+            // PAS step
+            selectedIndex = 1;
+          }
+          this.selectedIndex = selectedIndex;
+        }),
+      )
+      .subscribe();
   }
 
   private navigateToExternalUrl(url: string): void {
