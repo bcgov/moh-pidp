@@ -45,7 +45,7 @@ public class UpdateKeycloakAfterCollegeLicenceUpdated : INotificationHandler<Col
             return;
         }
 
-        foreach (var userId in party.Credentials.Select(credenial => credenial.UserId))
+        foreach (var userId in party.Credentials.Select(credential => credential.UserId))
         {
             await this.bus.Publish(UpdateKeycloakAttributes.FromUpdateAction(userId, user => user.SetCollegeLicenceInformation(records)), cancellationToken);
         }
