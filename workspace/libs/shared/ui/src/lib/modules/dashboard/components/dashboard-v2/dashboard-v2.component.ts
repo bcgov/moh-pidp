@@ -87,6 +87,7 @@ export class DashboardV2Component implements OnChanges {
   }
   public isLogoutButtonVisible = false;
   public isLogoutMenuItemVisible = false;
+  public isTopMenuVisible = false;
 
   public get showTitle(): boolean {
     return !!this.dashboardState.titleText;
@@ -163,13 +164,15 @@ export class DashboardV2Component implements OnChanges {
 
         this.isLogoutButtonVisible = false;
         this.isLogoutMenuItemVisible = true;
+        this.isTopMenuVisible = false;
         break;
       case PidpViewport.small:
-        this.showMiniMenuButton = true;
+        this.showMiniMenuButton = false;
         this.isSidenavOpened = false;
         this.sidenavMode = 'over';
-        this.isLogoutButtonVisible = false;
+        this.isLogoutButtonVisible = true;
         this.isLogoutMenuItemVisible = true;
+        this.isTopMenuVisible = true;
         break;
       case PidpViewport.medium:
         this.showMiniMenuButton = false;
@@ -177,6 +180,7 @@ export class DashboardV2Component implements OnChanges {
         this.sidenavMode = 'side';
         this.isLogoutButtonVisible = true;
         this.isLogoutMenuItemVisible = false;
+        this.isTopMenuVisible = true;
         break;
       case PidpViewport.large:
         this.showMiniMenuButton = false;
@@ -184,6 +188,7 @@ export class DashboardV2Component implements OnChanges {
         this.sidenavMode = 'side';
         this.isLogoutButtonVisible = true;
         this.isLogoutMenuItemVisible = false;
+        this.isTopMenuVisible = true;
         break;
       default:
         throw `Dashboard v2 not implemented: ${this.viewport}`;

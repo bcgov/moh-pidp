@@ -1,84 +1,60 @@
 <ui-layout-header-footer [emailSupport]="emailSupport">
   <div class="header-right" page-header-right>
-    <button
-      *ngIf="showMiniMenuButton"
-      class="menu"
-      title="menu"
-      mat-icon-button
-      (click)="onMiniMenuButtonClick()">
+    <button *ngIf="showMiniMenuButton" class="menu" title="menu" mat-icon-button (click)="onMiniMenuButtonClick()">
       <mat-icon>menu</mat-icon>
     </button>
-    <!-- <div *ngIf="isLogoutButtonVisible" class="logout-button-group">
+    <!-- <div *ngIf="!isLogoutButtonVisible" class="logout-button-group">
       <span class="signout-text">sign out</span>
-      <button
-        mat-icon-button
-        matTooltip="Logout"
-        aria-label="logout"
-        (click)="onLogout()">
+      <button mat-icon-button matTooltip="Logout" aria-label="logout" (click)="onLogout()">
         <mat-icon>logout</mat-icon>
       </button>
     </div> -->
   </div>
-  <div class="content-menu">
-    <div  class="container">
-    <ng-container *ngTemplateOutlet="menu"></ng-container>   
-  </div>
-  </div>
-  <div class="container content-body">
-    <router-outlet></router-outlet>
+  <div *ngIf="isTopMenuVisible" uiPidpInjectViewportCss>
+    <div class="content-menu">
+      <div class="container">
+        <ng-container *ngTemplateOutlet="menu"></ng-container>
+      </div>
+    </div>
+    <div class="container content-body">
+      <router-outlet></router-outlet>
+    </div>
   </div>
   <ng-template #menu>
-    <span  class="span-text">OneHealthID</span>
+    <span class="span-text">OneHealthID</span>
     <div class="main-menu">
-      <a
-        *ngFor="let menuItem of menuItems"
-        class="main-menu-item"
-        routerLinkActive="main-menu-item-active"
-        [routerLink]="getRouterLink(menuItem)"
-        [routerLinkActiveOptions]="getRouterLinkActiveOptions(menuItem)"
-        [fragment]="getRouterLinkFragment(menuItem)"
-        (click)="onMenuItemClicked()"
-        >{{ menuItem.label }}
+      <a *ngFor="let menuItem of menuItems" class="main-menu-item" routerLinkActive="main-menu-item-active"
+        [routerLink]="getRouterLink(menuItem)" [routerLinkActiveOptions]="getRouterLinkActiveOptions(menuItem)"
+        [fragment]="getRouterLinkFragment(menuItem)" (click)="onMenuItemClicked()">{{ menuItem.label }}
       </a>
-      <!-- <a
-        *ngIf="isLogoutButtonVisible"
-        class="main-menu-item"
-        routerLinkActive="main-menu-item-active"
-        (click)="onLogout()">
-        Sign Out
-    </a> -->
-    <button
-        *ngIf="isLogoutButtonVisible"
-        mat-stroked-button
-        aria-label="Sign Out"
-        class="btn-signout"
+      <button *ngIf="isLogoutButtonVisible" mat-stroked-button aria-label="Sign Out" class="btn-signout"
         (click)="onLogout()">
         Sign Out
       </button>
     </div>
-  </ng-template>  
-  <!-- <div class="dashboard-v2" uiPidpInjectViewportCss>
+  </ng-template>
+  <div *ngIf="!isTopMenuVisible" class="dashboard-v2" uiPidpInjectViewportCss>
     <div class="header-bar-left"></div>
     <div class="content">
       <mat-sidenav-container class="sidenav-container">
         <mat-sidenav #sidenav [mode]="sidenavMode" [(opened)]="isSidenavOpened">
           <div class="sidenav-header-box"></div>
           <div class="sidenav-body-box">
-            <ng-container *ngTemplateOutlet="menu"></ng-container>
+            <ng-container *ngTemplateOutlet="sidenavmenu"></ng-container>
           </div>
         </mat-sidenav>
 
         <mat-sidenav-content class="custom-mat-sidenav-content">
           <div class="content-header-box">
-            <ng-container *ngTemplateOutlet="header"></ng-container>
+            <ng-container *ngTemplateOutlet="sidenavheader"></ng-container>
           </div>
           <router-outlet></router-outlet>
         </mat-sidenav-content>
       </mat-sidenav-container>
     </div>
     <div class="header-bar-right"></div>
-  </div> -->
-  <!-- <ng-template #header>
+  </div>
+  <ng-template #sidenavheader>
     <header>
       <div class="header-text-container">
         <h1 *ngIf="showTitle">
@@ -89,17 +65,13 @@
         </p>
       </div>
       <div *ngIf="isHeaderImageVisible" class="header-image-container">
-        <img
-          src="/assets/images/pidp-logo-white.svg"
-          title="PIDP Logo"
-          loading="lazy"
-          aria-label="PIDP Logo"
+        <img src="/assets/images/pidp-logo-white.svg" title="PIDP Logo" loading="lazy" aria-label="PIDP Logo"
           aria-hidden="true" />
       </div>
     </header>
   </ng-template>
 
-  <ng-template #menu>
+  <ng-template #sidenavmenu>
     <div class="sidenav-panel-box">
       <div class="sidenav-bar"></div>
       <div class="sidenav-panel-content">
@@ -113,25 +85,15 @@
         </div>
         <div *ngIf="isMenuUserProfileVisible" class="sidenav-line"></div>
         <div class="sidenav-menu">
-          <a
-            *ngFor="let menuItem of menuItems"
-            class="sidenav-menu-item"
-            routerLinkActive="sidenav-menu-item-active"
-            [routerLink]="getRouterLink(menuItem)"
-            [routerLinkActiveOptions]="getRouterLinkActiveOptions(menuItem)"
-            [fragment]="getRouterLinkFragment(menuItem)"
-            (click)="onMenuItemClicked()"
-            >{{ menuItem.label }}
+          <a *ngFor="let menuItem of menuItems" class="sidenav-menu-item" routerLinkActive="sidenav-menu-item-active"
+            [routerLink]="getRouterLink(menuItem)" [routerLinkActiveOptions]="getRouterLinkActiveOptions(menuItem)"
+            [fragment]="getRouterLinkFragment(menuItem)" (click)="onMenuItemClicked()">{{ menuItem.label }}
           </a>
-          <a
-            *ngIf="isLogoutMenuItemVisible"
-            class="sidenav-menu-item"
-            routerLinkActive="sidenav-menu-item-active"
+          <a *ngIf="isLogoutMenuItemVisible" class="sidenav-menu-item" routerLinkActive="sidenav-menu-item-active"
             (click)="onLogout()">
-            Sign Out</a
-          >
+            Sign Out</a>
         </div>
       </div>
     </div>
-  </ng-template> -->
+  </ng-template>
 </ui-layout-header-footer>
