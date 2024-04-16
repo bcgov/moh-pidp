@@ -15,8 +15,9 @@ using PidpTests.TestingExtensions;
 
 public class UpdateKeycloakAfterCollegeLicenceUpdatedTests : InMemoryDbTest
 {
-    [Fact]
-    public async void UpdateKeycloakAfterCollegeLicenceUpdated_OneLicence_BusPushedWithMatchingJson()
+    [Theory]
+    [MemberData(nameof(RecordData))]
+    public async void UpdateKeycloakAfterCollegeLicenceUpdated_OneLicence_BusPushedWithMatchingJson(IEnumerable<PlrRecord> expectedRecords)
     {
         var party = this.TestDb.HasAParty(party =>
         {
@@ -27,21 +28,13 @@ public class UpdateKeycloakAfterCollegeLicenceUpdatedTests : InMemoryDbTest
                 CollegeCode = CollegeCode.Pharmacists
             };
         });
-        var expectedRecord = new PlrRecord
-        {
-            CollegeId = "12345",
-            MspId = "Msp123",
-            ProviderRoleType = "RoleType",
-            StatusCode = "ACTIVE",
-            StatusReasonCode = "GS"
-        };
 
         List<UpdateKeycloakAttributes> capturedMessages = new();
         var bus = A.Fake<IBus>();
         A.CallTo(() => bus.Publish(A<UpdateKeycloakAttributes>._, A<CancellationToken>._))
             .Invokes(i => capturedMessages.Add(i.GetArgument<UpdateKeycloakAttributes>(0)!));
         var plrClient = A.Fake<IPlrClient>();
-        A.CallTo(() => plrClient.GetRecordsAsync(A<string>._)).Returns(new[] { expectedRecord });
+        A.CallTo(() => plrClient.GetRecordsAsync(A<string>._)).Returns(expectedRecords);
 
         var consumer = this.MockDependenciesFor<UpdateKeycloakAfterCollegeLicenceUpdated>(plrClient, bus);
 
@@ -57,11 +50,49 @@ public class UpdateKeycloakAfterCollegeLicenceUpdatedTests : InMemoryDbTest
         Assert.Equal("college_licence_info", attribute.Key);
         Assert.Single(attribute.Value);
 
-        var attributeValue = JsonSerializer.Deserialize<PlrRecord>(attribute.Value[0], new JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase })!;
-        Assert.Equal(expectedRecord.CollegeId, attributeValue.CollegeId);
-        Assert.Equal(expectedRecord.MspId, attributeValue.MspId);
-        Assert.Equal(expectedRecord.ProviderRoleType, attributeValue.ProviderRoleType);
-        Assert.Equal(expectedRecord.StatusCode, attributeValue.StatusCode);
-        Assert.Equal(expectedRecord.StatusReasonCode, attributeValue.StatusReasonCode);
+        var busRecords = JsonSerializer.Deserialize<IEnumerable<PlrRecord>>(attribute.Value[0], new JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase })!;
+
+        AssertThat.CollectionsAreEquivalent(expectedRecords, busRecords, (expected, bus) =>
+            expected.CollegeId == bus.CollegeId
+            && expected.MspId == bus.MspId
+            && expected.ProviderRoleType == bus.ProviderRoleType
+            && expected.StatusCode == bus.StatusCode
+            && expected.StatusReasonCode == bus.StatusReasonCode
+        );
+    }
+
+    public static IEnumerable<object[]> RecordData()
+    {
+        yield return new object[] { new[]
+        {
+            new PlrRecord
+            {
+                CollegeId = "12345",
+                MspId = "Msp123",
+                ProviderRoleType = "RoleType",
+                StatusCode = "ACTIVE",
+                StatusReasonCode = "GS"
+            }
+        }};
+
+        yield return new object[] { new[]
+        {
+            new PlrRecord
+            {
+                CollegeId = "12345",
+                MspId = "Msp123",
+                ProviderRoleType = "RoleType",
+                StatusCode = "ACTIVE",
+                StatusReasonCode = "GS"
+            },
+            new PlrRecord
+            {
+                CollegeId = "54321",
+                MspId = "Msp222",
+                ProviderRoleType = "RoleType2",
+                StatusCode = "ACTIVE??",
+                StatusReasonCode = "GS??"
+            }
+        }};
     }
 }
