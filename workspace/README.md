@@ -140,7 +140,7 @@ main.ts is the application entry file. in this file the keycloak configuration i
 app.routing.ts has top level routing. which internally uses the shell routing.
 shell-routing.ts has routing for different sections like profile, training, faq and history...
 Taking profile section as an example:
-It has profile.route.ts which determined the routing for the profile routing. In the similar way faq, histroy... has route.ts files.
+It has profile.route.ts which determined the routing for the profile routing. In the similar way faq, history... has route.ts files.
 Inside the profile folder there are subfolders for different sections like college license, personal information...
 Inside these folders the components(pages for some folders) folder contains ts, html, css, spec(unit test) files.
 taking personal-information as example:
