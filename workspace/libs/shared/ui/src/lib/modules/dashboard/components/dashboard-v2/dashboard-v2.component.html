@@ -21,7 +21,8 @@
     </div>
   </div>
   <ng-template #menu>
-    <span class="span-text">OneHealthID</span>
+    <a class="logo-link" href="." title="Home" aria-label="Go home">
+    <span class="span-text">OneHealthID</span></a>
     <div class="main-menu">
       <a *ngFor="let menuItem of menuItems" class="main-menu-item" routerLinkActive="main-menu-item-active"
         [routerLink]="getRouterLink(menuItem)" [routerLinkActiveOptions]="getRouterLinkActiveOptions(menuItem)"
