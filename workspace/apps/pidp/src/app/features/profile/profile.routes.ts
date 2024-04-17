@@ -1,15 +1,11 @@
 import { Routes } from '@angular/router';
 
-import { PermissionsGuard } from '@app/modules/permissions/permissions.guard';
-import { Role } from '@app/shared/enums/roles.enum';
-
 export class ProfileRoutes {
   public static BASE_PATH = 'profile';
 
   public static PERSONAL_INFO = 'personal-information';
   public static COLLEGE_LICENCE_DECLARATION = 'college-licence-declaration';
   public static COLLEGE_LICENCE_INFO = 'college-licence-info';
-  public static WORK_AND_ROLE_INFO = 'work-and-role-information';
   public static USER_ACCESS_AGREEMENT = 'user-access-agreement';
 
   /**
@@ -34,17 +30,6 @@ export const routes: Routes = [
     loadChildren: (): Promise<Routes> =>
       import(
         './pages/college-licence/college-licence-declaration/college-licence-declaration-routing.routes'
-      ).then((m) => m.routes),
-  },
-  {
-    path: ProfileRoutes.WORK_AND_ROLE_INFO,
-    canMatch: [PermissionsGuard.canMatch],
-    data: {
-      roles: [Role.FEATURE_PIDP_DEMO],
-    },
-    loadChildren: (): Promise<Routes> =>
-      import(
-        './pages/work-and-role-information/work-and-role-information-routing.routes'
       ).then((m) => m.routes),
   },
   {

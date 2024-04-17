@@ -40,17 +40,9 @@ public class Party : BaseAuditable
 
     public string? Phone { get; set; }
 
-    public PartyAccessAdministrator? AccessAdministrator { get; set; }
-
     public string? Cpn { get; set; }
 
     public PartyLicenceDeclaration? LicenceDeclaration { get; set; }
-
-    public string? JobTitle { get; set; }
-
-    public Facility? Facility { get; set; }
-
-    public PartyOrgainizationDetail? OrgainizationDetail { get; set; }
 
     public ICollection<AccessRequest> AccessRequests { get; set; } = new List<AccessRequest>();
 
@@ -115,6 +107,7 @@ public class Party : BaseAuditable
         var standingsDigest = await client.GetStandingsDigestAsync(this.Cpn);
 
         this.DomainEvents.Add(new PlrCpnLookupFound(this.Id, this.PrimaryUserId, this.Cpn, standingsDigest));
+        this.DomainEvents.Add(new CollegeLicenceUpdated(this.Id));
 
         if (standingsDigest.HasGoodStanding)
         {
