@@ -15,6 +15,7 @@ using Pidp.Infrastructure.HttpClients.Keycloak;
 using Pidp.Infrastructure.HttpClients.Mail;
 using Pidp.Infrastructure.HttpClients.Plr;
 using Pidp.Models;
+using Pidp.Models.DomainEvents;
 using Pidp.Models.Lookups;
 using Pidp.Infrastructure.Services;
 
@@ -144,7 +145,8 @@ public class BCProviderCreate
                 UserId = userId.Value,
                 PartyId = command.PartyId,
                 IdpId = createdUser.UserPrincipalName,
-                IdentityProvider = IdentityProviders.BCProvider
+                IdentityProvider = IdentityProviders.BCProvider,
+                DomainEvents = new List<IDomainEvent> { new CollegeLicenceUpdated(command.PartyId) }
             });
 
             await this.context.SaveChangesAsync();

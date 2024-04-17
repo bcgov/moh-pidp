@@ -58,7 +58,7 @@ export const environment: AppEnvironment = {
     prescriptionRenewal: prescriptionRenewalEformsSupportUrl,
   },
   phones: {
-    additionalSupport: '250-857-1969',
+    additionalSupport: '250-448-1262',
   },
   keycloakConfig: {
     config: {

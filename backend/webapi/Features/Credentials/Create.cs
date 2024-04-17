@@ -97,6 +97,7 @@ public class Create
                 IdpId = userIdpId
             };
             credential.DomainEvents.Add(new CredentialLinked(credential));
+            credential.DomainEvents.Add(new CollegeLicenceUpdated(credential.PartyId));
             this.context.Credentials.Add(credential);
 
             await this.keycloakClient.UpdateUser(userId, user => user.SetOpId(ticket.Party!.OpId!));
@@ -110,14 +111,14 @@ public class Create
     }
 
 
-    public class CredentailLinkedHandler : INotificationHandler<CredentialLinked>
+    public class BCProviderUpdateAttributesHandler : INotificationHandler<CredentialLinked>
     {
         private readonly IBCProviderClient bcProviderClient;
         private readonly IPlrClient plrClient;
         private readonly PidpDbContext context;
         private readonly string bcProviderClientId;
 
-        public CredentailLinkedHandler(
+        public BCProviderUpdateAttributesHandler(
             IBCProviderClient bcProviderClient,
             IPlrClient plrClient,
             PidpConfiguration config,
