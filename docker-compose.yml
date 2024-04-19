@@ -113,7 +113,7 @@ services:
   pidp-rabbitmq:
     container_name: 'pidp-rabbitmq'
     restart: always
-    image: rabbitmq:3-management-alpine
+    image: masstransit/rabbitmq:3.12
     environment:
       - RABBITMQ_DEFAULT_USER=guest
       - RABBITMQ_DEFAULT_PASS=guest
