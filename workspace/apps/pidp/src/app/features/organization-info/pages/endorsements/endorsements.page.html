@@ -134,7 +134,7 @@
                 <app-endorsement-card
                   *ngFor="let endorsementRequest of nonActionableEndorsementRequests$ | async"
                   class="endorsement-card"
-                  noticeText="Requested"
+                  [noticeText]="GetStatus(endorsementRequest.status)" 
                   noticeColour="yellow"
                   [id]="endorsementRequest.id"
                   [nameText]="endorsementRequest.partyName ?? endorsementRequest.recipientEmail"

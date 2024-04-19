@@ -63,6 +63,7 @@ import { EndorsementsFormState } from './endorsements-form-state';
 import { EndorsementsResource } from './endorsements-resource.service';
 import { EndorsementRequest } from './models/endorsement-request.model';
 import { Endorsement } from './models/endorsement.model';
+import { EndorsementRequestStatus } from './enums/endorsement-request-status.enum';
 
 export enum EndorsementType {
   WorkingRelationship,
@@ -314,5 +315,17 @@ export class EndorsementsPage
         return of([]);
       }),
     );
+  }
+
+  public GetStatus(endorsementRequestStatus: EndorsementRequestStatus): string {
+    var statusText = "Requested";
+    if (endorsementRequestStatus === EndorsementRequestStatus.CANCELLED) {
+      statusText = "Cancelled";
+    } else if (endorsementRequestStatus === EndorsementRequestStatus.DECLINED) {
+      statusText = "Declined";
+    }else if (endorsementRequestStatus === EndorsementRequestStatus.APPROVED) {
+      statusText = "In progress";
+    }
+    return statusText;
   }
 }
