@@ -15,7 +15,8 @@
         *ngIf="noticeText"
         class="notice-box"
         [class.notice-green]="noticeColour === 'green'"
-        [class.notice-yellow]="noticeColour === 'yellow'">
+        [class.notice-yellow]="noticeColour === 'yellow'"
+        [class.notice-red]="noticeColour === 'red'">
         <span>{{ noticeText }}</span>
       </div>
       <div *ngIf="createdOnText" class="created-box">

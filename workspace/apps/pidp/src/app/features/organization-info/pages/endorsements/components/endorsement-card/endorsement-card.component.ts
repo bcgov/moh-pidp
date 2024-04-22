@@ -27,7 +27,7 @@ export class EndorsementCardComponent {
   @Input() public id!: number;
   @Input() public nameText!: string;
   @Input() public noticeText: string | null = null;
-  @Input() public noticeColour: 'green' | 'yellow' | null = null;
+  @Input() public noticeColour: 'green' | 'yellow' | 'red' | null = null;
   @Input() public collegeText = '';
   @Input() public createdOnText: string | null = null;
   @Input() public isCancelEnabled = false;

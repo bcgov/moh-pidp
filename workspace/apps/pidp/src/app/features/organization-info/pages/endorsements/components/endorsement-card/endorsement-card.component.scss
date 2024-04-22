@@ -60,6 +60,9 @@ p {
         &.notice-yellow {
           background-color: pidp.$yellow;
         }
+        &.notice-red {
+          background-color: #ee494fd6;
+        }
       }
       & .created-box {
         font-size: var(--created-font-size);

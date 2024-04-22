@@ -93,8 +93,7 @@ export enum EndorsementType {
 })
 export class EndorsementsPage
   extends AbstractFormPage<EndorsementsFormState>
-  implements OnInit
-{
+  implements OnInit {
   @ViewChild(FormGroupDirective) public formGroupDirective!: FormGroupDirective;
 
   public faUser = faUser;
@@ -162,8 +161,8 @@ export class EndorsementsPage
       .pipe(
         switchMap(
           () =>
-            (this.actionableEndorsementRequests$ =
-              this.getActionableEndorsementRequests(this.partyService.partyId)),
+          (this.actionableEndorsementRequests$ =
+            this.getActionableEndorsementRequests(this.partyService.partyId)),
         ),
       )
       .subscribe();
@@ -175,8 +174,8 @@ export class EndorsementsPage
       .pipe(
         switchMap(
           () =>
-            (this.actionableEndorsementRequests$ =
-              this.getActionableEndorsementRequests(this.partyService.partyId)),
+          (this.actionableEndorsementRequests$ =
+            this.getActionableEndorsementRequests(this.partyService.partyId)),
         ),
       )
       .subscribe();
@@ -197,15 +196,15 @@ export class EndorsementsPage
         exhaustMap((result) =>
           result
             ? this.resource
-                .cancelEndorsement(this.partyService.partyId, endorsementId)
-                .pipe(
-                  switchMap(
-                    () =>
-                      (this.endorsements$ = this.getEndorsements(
-                        this.partyService.partyId,
-                      )),
-                  ),
-                )
+              .cancelEndorsement(this.partyService.partyId, endorsementId)
+              .pipe(
+                switchMap(
+                  () =>
+                  (this.endorsements$ = this.getEndorsements(
+                    this.partyService.partyId,
+                  )),
+                ),
+              )
             : EMPTY,
         ),
       )
@@ -323,9 +322,18 @@ export class EndorsementsPage
       statusText = "Cancelled";
     } else if (endorsementRequestStatus === EndorsementRequestStatus.DECLINED) {
       statusText = "Declined";
-    }else if (endorsementRequestStatus === EndorsementRequestStatus.APPROVED) {
+    } else if (endorsementRequestStatus === EndorsementRequestStatus.APPROVED) {
       statusText = "In progress";
     }
     return statusText;
+  }
+
+  public IsEndorsementRequested(endorsementRequestStatus: EndorsementRequestStatus): boolean {
+    var endorsementRequested = true;
+    if (endorsementRequestStatus === EndorsementRequestStatus.CANCELLED ||
+      endorsementRequestStatus === EndorsementRequestStatus.DECLINED) {
+      endorsementRequested = false;
+    }
+    return endorsementRequested;
   }
 }
