@@ -74,6 +74,12 @@ p {
       & .notice-green {
         color: pidp.$green;
       }
+      & .notice-yellow {
+        color: pidp.$yellow;
+      }
+      & .notice-red {
+        color: #ee494fd6;
+      }
       & fa-icon {
         margin-right: calc(var(--gap) / 2);
       }
