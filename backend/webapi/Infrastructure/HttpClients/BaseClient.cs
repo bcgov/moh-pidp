@@ -216,11 +216,11 @@ public class BaseClient
 public static partial class BaseClientLoggingExtensions
 {
     [LoggerMessage(1, LogLevel.Error, "Received non-success status code {statusCode} with message: {responseMessage}.")]
-    public static partial void LogNonSuccessStatusCode(this ILogger logger, HttpStatusCode statusCode, string responseMessage);
+    public static partial void LogNonSuccessStatusCode(this ILogger<BaseClient> logger, HttpStatusCode statusCode, string responseMessage);
 
     [LoggerMessage(2, LogLevel.Error, "Response content was null.")]
-    public static partial void LogNullResponseContent(this ILogger logger);
+    public static partial void LogNullResponseContent(this ILogger<BaseClient> logger);
 
     [LoggerMessage(3, LogLevel.Error, "Unhandled exception when calling the API.")]
-    public static partial void LogBaseClientException(this ILogger logger, Exception e);
+    public static partial void LogBaseClientException(this ILogger<BaseClient> logger, Exception e);
 }
