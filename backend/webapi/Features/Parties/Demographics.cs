@@ -11,7 +11,6 @@ using System.Text.Json.Serialization;
 
 using Pidp.Data;
 using Pidp.Extensions;
-using Pidp.Features.CommonHandlers;
 using static Pidp.Features.CommonHandlers.UpdateKeycloakAttributesConsumer;
 using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.HttpClients.BCProvider;
