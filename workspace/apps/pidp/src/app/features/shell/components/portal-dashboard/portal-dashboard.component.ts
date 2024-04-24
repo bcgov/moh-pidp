@@ -11,8 +11,8 @@ import {
   DashboardHeaderConfig,
   DashboardMenuItem,
   DashboardRouteMenuItem,
-  DashboardV2Component,
   IDashboard,
+  NavMenuComponent,
 } from '@bcgov/shared/ui';
 import { ArrayUtils } from '@bcgov/shared/utils';
 
@@ -30,7 +30,7 @@ import { DashboardStateService } from '../../services/dashboard-state-service.se
   templateUrl: './portal-dashboard.component.html',
   styleUrls: ['./portal-dashboard.component.scss'],
   standalone: true,
-  imports: [AsyncPipe, DashboardV2Component],
+  imports: [AsyncPipe, NavMenuComponent],
 })
 export class PortalDashboardComponent implements IDashboard, OnInit {
   public logoutRedirectUrl: string;

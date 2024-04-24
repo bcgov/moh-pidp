@@ -33,9 +33,9 @@ import { PidpViewport, ViewportService } from '../../../../services';
 import { DashboardMenuItem, DashboardRouteMenuItem } from '../../models';
 
 @Component({
-  selector: 'ui-dashboard-v2',
-  templateUrl: './dashboard-v2.component.html',
-  styleUrls: ['./dashboard-v2.component.scss'],
+  selector: 'ui-nav-menu',
+  templateUrl: './nav-menu.html',
+  styleUrls: ['./nav-menu.scss'],
   standalone: true,
   imports: [
     InjectViewportCssClassDirective,
@@ -52,7 +52,7 @@ import { DashboardMenuItem, DashboardRouteMenuItem } from '../../models';
     RouterOutlet,
   ],
 })
-export class DashboardV2Component implements OnChanges {
+export class NavMenuComponent implements OnChanges {
   @Input() public dashboardState!: DashboardStateModel;
   @Input() public menuItems!: DashboardMenuItem[];
   @Input() public emailSupport!: string;

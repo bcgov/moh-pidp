@@ -3,12 +3,6 @@
     <button *ngIf="showMiniMenuButton" class="menu" title="menu" mat-icon-button (click)="onMiniMenuButtonClick()">
       <mat-icon>menu</mat-icon>
     </button>
-    <!-- <div *ngIf="!isLogoutButtonVisible" class="logout-button-group">
-      <span class="signout-text">sign out</span>
-      <button mat-icon-button matTooltip="Logout" aria-label="logout" (click)="onLogout()">
-        <mat-icon>logout</mat-icon>
-      </button>
-    </div> -->
   </div>
   <div *ngIf="isTopMenuVisible" uiPidpInjectViewportCss>
     <div class="content-menu">
@@ -34,7 +28,7 @@
       </button>
     </div>
   </ng-template>
-  <div *ngIf="!isTopMenuVisible" class="dashboard-v2" uiPidpInjectViewportCss>
+  <div *ngIf="!isTopMenuVisible" class="nav-menu" uiPidpInjectViewportCss>
     <div class="header-bar-left"></div>
     <div class="content">
       <mat-sidenav-container class="sidenav-container">
