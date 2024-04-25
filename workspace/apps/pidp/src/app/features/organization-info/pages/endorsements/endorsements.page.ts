@@ -61,9 +61,9 @@ import { LookupService } from '@app/modules/lookup/lookup.service';
 import { EndorsementCardComponent } from './components/endorsement-card/endorsement-card.component';
 import { EndorsementsFormState } from './endorsements-form-state';
 import { EndorsementsResource } from './endorsements-resource.service';
+import { EndorsementRequestStatus } from './enums/endorsement-request-status.enum';
 import { EndorsementRequest } from './models/endorsement-request.model';
 import { Endorsement } from './models/endorsement.model';
-import { EndorsementRequestStatus } from './enums/endorsement-request-status.enum';
 
 export enum EndorsementType {
   WorkingRelationship,
@@ -93,7 +93,8 @@ export enum EndorsementType {
 })
 export class EndorsementsPage
   extends AbstractFormPage<EndorsementsFormState>
-  implements OnInit {
+  implements OnInit
+{
   @ViewChild(FormGroupDirective) public formGroupDirective!: FormGroupDirective;
 
   public faUser = faUser;
@@ -161,8 +162,8 @@ export class EndorsementsPage
       .pipe(
         switchMap(
           () =>
-          (this.actionableEndorsementRequests$ =
-            this.getActionableEndorsementRequests(this.partyService.partyId)),
+            (this.actionableEndorsementRequests$ =
+              this.getActionableEndorsementRequests(this.partyService.partyId)),
         ),
       )
       .subscribe();
@@ -174,8 +175,8 @@ export class EndorsementsPage
       .pipe(
         switchMap(
           () =>
-          (this.actionableEndorsementRequests$ =
-            this.getActionableEndorsementRequests(this.partyService.partyId)),
+            (this.actionableEndorsementRequests$ =
+              this.getActionableEndorsementRequests(this.partyService.partyId)),
         ),
       )
       .subscribe();
@@ -196,15 +197,15 @@ export class EndorsementsPage
         exhaustMap((result) =>
           result
             ? this.resource
-              .cancelEndorsement(this.partyService.partyId, endorsementId)
-              .pipe(
-                switchMap(
-                  () =>
-                  (this.endorsements$ = this.getEndorsements(
-                    this.partyService.partyId,
-                  )),
-                ),
-              )
+                .cancelEndorsement(this.partyService.partyId, endorsementId)
+                .pipe(
+                  switchMap(
+                    () =>
+                      (this.endorsements$ = this.getEndorsements(
+                        this.partyService.partyId,
+                      )),
+                  ),
+                )
             : EMPTY,
         ),
       )
@@ -317,21 +318,25 @@ export class EndorsementsPage
   }
 
   public GetStatus(endorsementRequestStatus: EndorsementRequestStatus): string {
-    let statusText = "Requested";
+    let statusText = 'Requested';
     if (endorsementRequestStatus === EndorsementRequestStatus.CANCELLED) {
-      statusText = "Cancelled";
+      statusText = 'Cancelled';
     } else if (endorsementRequestStatus === EndorsementRequestStatus.DECLINED) {
-      statusText = "Declined";
+      statusText = 'Declined';
     } else if (endorsementRequestStatus === EndorsementRequestStatus.APPROVED) {
-      statusText = "In progress";
+      statusText = 'In progress';
     }
     return statusText;
   }
 
-  public IsEndorsementRequested(endorsementRequestStatus: EndorsementRequestStatus): boolean {
+  public IsEndorsementRequested(
+    endorsementRequestStatus: EndorsementRequestStatus,
+  ): boolean {
     let endorsementRequested = true;
-    if (endorsementRequestStatus === EndorsementRequestStatus.CANCELLED ||
-      endorsementRequestStatus === EndorsementRequestStatus.DECLINED) {
+    if (
+      endorsementRequestStatus === EndorsementRequestStatus.CANCELLED ||
+      endorsementRequestStatus === EndorsementRequestStatus.DECLINED
+    ) {
       endorsementRequested = false;
     }
     return endorsementRequested;
