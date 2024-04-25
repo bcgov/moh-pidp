@@ -59,7 +59,7 @@ public class MSTeamsPrivacyOfficer
     {
         private readonly IClock clock;
         private readonly IEmailService emailService;
-        private readonly ILogger logger;
+        private readonly ILogger<CommandHandler> logger;
         private readonly IMapper mapper;
         private readonly IPlrClient plrClient;
         private readonly PidpDbContext context;
@@ -93,7 +93,7 @@ public class MSTeamsPrivacyOfficer
                     .With(AllowedIdentifierTypes)
                     .HasGoodStanding)
             {
-                this.logger.LogMSTeamsPrivacyOfficerAccessRequestDenied();
+                this.logger.LogAccessRequestDenied();
                 return DomainResult.Failed();
             }
 
@@ -204,5 +204,5 @@ public class MSTeamsPrivacyOfficer
 public static partial class MSTeamsPrivacyOfficerLoggingExtensions
 {
     [LoggerMessage(1, LogLevel.Warning, "MS Teams Privacy Officer Access Request denied due to the Party Record not meeting all prerequisites.")]
-    public static partial void LogMSTeamsPrivacyOfficerAccessRequestDenied(this ILogger logger);
+    public static partial void LogAccessRequestDenied(this ILogger<MSTeamsPrivacyOfficer.CommandHandler> logger);
 }

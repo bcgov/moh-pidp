@@ -171,5 +171,5 @@ public class Demographics
 public static partial class PartyEmailUpdatedBcProviderConsumerLoggingExtensions
 {
     [LoggerMessage(2, LogLevel.Error, "Error when updating the email to User #{userId} in Azure AD.")]
-    public static partial void LogBCProviderEmailUpdateFailed(this ILogger logger, Guid userId);
+    public static partial void LogBCProviderEmailUpdateFailed(this ILogger<Demographics.PartyEmailUpdatedBcProviderConsumer> logger, Guid userId);
 }

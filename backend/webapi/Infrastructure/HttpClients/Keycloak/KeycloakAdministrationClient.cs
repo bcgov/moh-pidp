@@ -244,29 +244,29 @@ public class KeycloakAdministrationClient : BaseClient, IKeycloakAdministrationC
 public static partial class KeycloakAdministrationClientLoggingExtensions
 {
     [LoggerMessage(1, LogLevel.Error, "Could not find a Client with ClientId {clientId} in Keycloak response.")]
-    public static partial void LogClientNotFound(this ILogger logger, string clientId);
+    public static partial void LogClientNotFound(this ILogger<BaseClient> logger, string clientId);
 
     [LoggerMessage(2, LogLevel.Error, "Could not find a Client Role with name {roleName} from Client {clientId} in Keycloak response.")]
-    public static partial void LogClientRoleNotFound(this ILogger logger, string roleName, string clientId);
+    public static partial void LogClientRoleNotFound(this ILogger<BaseClient> logger, string roleName, string clientId);
 
     [LoggerMessage(3, LogLevel.Information, "User {userId} was assigned Role(s) {roleNames} in Client {clientId}.")]
-    public static partial void LogClientRolesAssigned(this ILogger logger, Guid userId, IEnumerable<string> roleNames, string clientId);
+    public static partial void LogClientRolesAssigned(this ILogger<BaseClient> logger, Guid userId, IEnumerable<string> roleNames, string clientId);
 
     [LoggerMessage(4, LogLevel.Information, "User {userId} was assigned Realm Role {roleName}.")]
-    public static partial void LogRealmRoleAssigned(this ILogger logger, Guid userId, string roleName);
+    public static partial void LogRealmRoleAssigned(this ILogger<BaseClient> logger, Guid userId, string roleName);
 
     [LoggerMessage(5, LogLevel.Error, "Error when creating a User with the representation: {userRep}.")]
-    public static partial void LogUserCreationError(this ILogger logger, UserRepresentation userRep);
+    public static partial void LogUserCreationError(this ILogger<BaseClient> logger, UserRepresentation userRep);
 
     [LoggerMessage(6, LogLevel.Error, "Error when creating a User. Keycloak returned a success code but had a missing/malformed Location header. Username: {username}, Location header: {locationHeader}.")]
-    public static partial void LogUserCreationLocationError(this ILogger logger, string username, Uri? locationHeader);
+    public static partial void LogUserCreationLocationError(this ILogger<BaseClient> logger, string username, Uri? locationHeader);
 
     [LoggerMessage(7, LogLevel.Error, "Keycloak returned a success code but the user could not be found by either Location header or by searching for Username.")]
-    public static partial void LogCreatedUserNotFound(this ILogger logger);
+    public static partial void LogCreatedUserNotFound(this ILogger<BaseClient> logger);
 
     [LoggerMessage(8, LogLevel.Error, "Error when finding user with username {username}.")]
-    public static partial void LogFindUserError(this ILogger logger, string username);
+    public static partial void LogFindUserError(this ILogger<BaseClient> logger, string username);
 
     [LoggerMessage(9, LogLevel.Error, "Error when finding user with username {username}: multiple matching usernames found.")]
-    public static partial void LogFindMultipleUsersError(this ILogger logger, string username);
+    public static partial void LogFindMultipleUsersError(this ILogger<BaseClient> logger, string username);
 }
