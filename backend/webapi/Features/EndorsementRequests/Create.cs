@@ -75,20 +75,25 @@ public class Create
                 return new(true);
             }
 
-            var partyName = await this.context.Parties
+            var parties = await this.context.Parties
+                .Where(party => party.Id == command.PartyId || (party.Email != null && party.Email == command.RecipientEmail))
+                .Select(party => new { party.Id, party.FullName, party.Email, party.LicenceDeclaration })
+                .ToListAsync();
+
+            var partyName = parties
                 .Where(party => party.Id == command.PartyId)
                 .Select(party => party.FullName)
-                .SingleAsync();
+                .Single();
 
-            var licenceInfo = await this.context.Parties
+            // This will be null on 2 occassions:
+            // - if the recipient does not exist as a party in PIDP
+            // - if the recipient has entered a different email address in PIDP
+            var licenceInfo = parties
                 .Where(party => party.Email != null && party.Email == command.RecipientEmail)
-                .Select(party => party.LicenceDeclaration).FirstOrDefaultAsync();
+                .Select(party => party.LicenceDeclaration)
+                .FirstOrDefault();
 
-            var isUnlicensed = true;
-            if (licenceInfo != null)
-            {
-                isUnlicensed = licenceInfo.IsUnlicensed;
-            }
+            var isUnlicensed = licenceInfo?.IsUnlicensed ?? true;
 
             var request = new EndorsementRequest
             {
