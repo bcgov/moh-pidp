@@ -32,7 +32,7 @@ public class EdrdEforms
         private readonly IClock clock;
         private readonly IEmailService emailService;
         private readonly IKeycloakAdministrationClient keycloakClient;
-        private readonly ILogger logger;
+        private readonly ILogger<CommandHandler> logger;
         private readonly IPlrClient plrClient;
         private readonly PidpDbContext context;
 
@@ -72,7 +72,7 @@ public class EdrdEforms
                     .With(AllowedRoleTypes)
                     .HasGoodStanding)
             {
-                this.logger.LogEdrdEformsAccessRequestDenied();
+                this.logger.LogAccessRequestDenied();
                 return DomainResult.Failed();
             }
 
@@ -112,5 +112,5 @@ public class EdrdEforms
 public static partial class EdrdEformsLoggingExtensions
 {
     [LoggerMessage(1, LogLevel.Warning, "EDRD eForm denied due to the Party Record not meeting all prerequisites.")]
-    public static partial void LogEdrdEformsAccessRequestDenied(this ILogger logger);
+    public static partial void LogAccessRequestDenied(this ILogger<EdrdEforms.CommandHandler> logger);
 }
