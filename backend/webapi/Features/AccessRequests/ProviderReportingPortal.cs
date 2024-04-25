@@ -30,7 +30,7 @@ public class ProviderReportingPortal
     {
         private readonly IClock clock;
         private readonly IKeycloakAdministrationClient keycloakClient;
-        private readonly ILogger logger;
+        private readonly ILogger<CommandHandler> logger;
         private readonly IPlrClient plrClient;
         private readonly PidpDbContext context;
 
@@ -67,7 +67,7 @@ public class ProviderReportingPortal
                 || !filteredPlrDigest
                     .HasGoodStanding)
             {
-                this.logger.LogProviderReportingPortalAccessRequestDenied();
+                this.logger.LogAccessRequestDenied();
                 return DomainResult.Failed();
             }
 
@@ -76,7 +76,7 @@ public class ProviderReportingPortal
 
             if (prpAuthorization == null)
             {
-                this.logger.LogProviderReportingPortalUnauthorizedLicence(command.PartyId, filteredPlrDigest.LicenceNumbers);
+                this.logger.LogUnauthorizedLicence(command.PartyId, filteredPlrDigest.LicenceNumbers);
                 return DomainResult.Failed();
             }
 
@@ -104,8 +104,8 @@ public class ProviderReportingPortal
 public static partial class ProviderReportingPortalLoggingExtensions
 {
     [LoggerMessage(1, LogLevel.Warning, "Provider Reporting Portal enrolment denied due to the Party Record not meeting all prerequisites.")]
-    public static partial void LogProviderReportingPortalAccessRequestDenied(this ILogger logger);
+    public static partial void LogAccessRequestDenied(this ILogger<ProviderReportingPortal.CommandHandler> logger);
 
     [LoggerMessage(2, LogLevel.Warning, "Provider Reporting Portal enrolment denied; Party #{partyId} with Licence Number(s) {licenceNumbers} are not pre-authorized.")]
-    public static partial void LogProviderReportingPortalUnauthorizedLicence(this ILogger logger, int partyId, IEnumerable<string> licenceNumbers);
+    public static partial void LogUnauthorizedLicence(this ILogger<ProviderReportingPortal.CommandHandler> logger, int partyId, IEnumerable<string> licenceNumbers);
 }
