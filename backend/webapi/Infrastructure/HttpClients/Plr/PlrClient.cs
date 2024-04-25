@@ -137,11 +137,11 @@ public class PlrClient : BaseClient, IPlrClient
 public static partial class PlrClientLoggingExtensions
 {
     [LoggerMessage(1, LogLevel.Warning, "No Records found in PLR with CollegeId = {licenceNumber}, Birthdate = {birthdate}, and any of {identifierTypes} Identifier Types.")]
-    public static partial void LogNoRecordsFound(this ILogger logger, string licenceNumber, string birthdate, string[] identifierTypes);
+    public static partial void LogNoRecordsFound(this ILogger<BaseClient> logger, string licenceNumber, string birthdate, string[] identifierTypes);
 
     [LoggerMessage(2, LogLevel.Warning, "Multiple matching Records found in PLR with CollegeId = {licenceNumber}, Birthdate = {birthdate}, and any of {identifierTypes} Identifier Types.")]
-    public static partial void LogMultipleRecordsFound(this ILogger logger, string licenceNumber, string birthdate, string[] identifierTypes);
+    public static partial void LogMultipleRecordsFound(this ILogger<BaseClient> logger, string licenceNumber, string birthdate, string[] identifierTypes);
 
     [LoggerMessage(3, LogLevel.Error, "Error when calling PLR API in method {methodName}.")]
-    public static partial void LogPlrError(this ILogger logger, string methodName);
+    public static partial void LogPlrError(this ILogger<BaseClient> logger, string methodName);
 }

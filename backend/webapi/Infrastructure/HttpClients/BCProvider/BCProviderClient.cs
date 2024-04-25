@@ -7,7 +7,7 @@ using System.Text.RegularExpressions;
 public class BCProviderClient : IBCProviderClient
 {
     private readonly GraphServiceClient client;
-    private readonly ILogger logger;
+    private readonly ILogger<BCProviderClient> logger;
     private readonly string domain;
     private readonly string clientId;
 
@@ -210,29 +210,29 @@ public class BCProviderClient : IBCProviderClient
 public static partial class BCProviderClientLoggingExtensions
 {
     [LoggerMessage(1, LogLevel.Information, "Created new BC Provider user '{userPrincipalName}'.")]
-    public static partial void LogNewBCProviderUserCreated(this ILogger logger, string userPrincipalName);
+    public static partial void LogNewBCProviderUserCreated(this ILogger<BCProviderClient> logger, string userPrincipalName);
 
     [LoggerMessage(2, LogLevel.Error, "Failed to create account '{userPrincipalName}'.")]
-    public static partial void LogAccountCreationFailure(this ILogger logger, string userPrincipalName, Exception e);
+    public static partial void LogAccountCreationFailure(this ILogger<BCProviderClient> logger, string userPrincipalName, Exception e);
 
     [LoggerMessage(4, LogLevel.Error, "Failed to update the password of user '{userPrincipalName}'.")]
-    public static partial void LogPasswordUpdateFailure(this ILogger logger, string userPrincipalName);
+    public static partial void LogPasswordUpdateFailure(this ILogger<BCProviderClient> logger, string userPrincipalName);
 
     [LoggerMessage(5, LogLevel.Error, "Hit maximum retrys attempting to make a unique User Principal Name for user '{fullName}'.")]
-    public static partial void LogNoUniqueUserPrincipalNameFound(this ILogger logger, string fullName);
+    public static partial void LogNoUniqueUserPrincipalNameFound(this ILogger<BCProviderClient> logger, string fullName);
 
     [LoggerMessage(6, LogLevel.Error, "Failed to update the attributes of user '{userPrincipalName}'.")]
-    public static partial void LogAttributesUpdateFailure(this ILogger logger, string userPrincipalName);
+    public static partial void LogAttributesUpdateFailure(this ILogger<BCProviderClient> logger, string userPrincipalName);
 
     [LoggerMessage(7, LogLevel.Error, "Failed to get an attribute of user '{userPrincipalName}'.")]
-    public static partial void LogGetAttributeFailure(this ILogger logger, string userPrincipalName);
+    public static partial void LogGetAttributeFailure(this ILogger<BCProviderClient> logger, string userPrincipalName);
 
     [LoggerMessage(8, LogLevel.Warning, "Party's full name contained characters invalid for an AAD Mail Nickname. '{partyFullName}' was shortened to '{partyShortenedName}'.")]
-    public static partial void LogPartyNameContainsMailNicknameInvalidCharacters(this ILogger logger, string partyFullName, string partyShortenedName);
+    public static partial void LogPartyNameContainsMailNicknameInvalidCharacters(this ILogger<BCProviderClient> logger, string partyFullName, string partyShortenedName);
 
     [LoggerMessage(9, LogLevel.Warning, "Party's full name contained characters invalid for an AAD User Principal Name. '{partyFullName}' was shortened to '{partyShortenedName}'.")]
-    public static partial void LogPartyNameContainsUpnInvalidCharacters(this ILogger logger, string partyFullName, string partyShortenedName);
+    public static partial void LogPartyNameContainsUpnInvalidCharacters(this ILogger<BCProviderClient> logger, string partyFullName, string partyShortenedName);
 
     [LoggerMessage(10, LogLevel.Error, "Failed to update the user '{userPrincipalName}'.")]
-    public static partial void LogUserUpdateFailure(this ILogger logger, string userPrincipalName);
+    public static partial void LogUserUpdateFailure(this ILogger<BCProviderClient> logger, string userPrincipalName);
 }

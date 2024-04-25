@@ -15,7 +15,7 @@ public class BaseClientTests : BaseClient
     private const string TestUrl = "http://www.example.com";
     private HttpMessageHandler MockedMessageHandler { get; }
 
-    public BaseClientTests() : base(HttpMessageHandlerInjector.CreateClient(), A.Fake<ILogger>()) => this.MockedMessageHandler = HttpMessageHandlerInjector.Handler;
+    public BaseClientTests() : base(HttpMessageHandlerInjector.CreateClient(), A.Fake<ILogger<BaseClient>>()) => this.MockedMessageHandler = HttpMessageHandlerInjector.Handler;
 
     private static class HttpMessageHandlerInjector
     {
