@@ -77,7 +77,13 @@ public class Create
 
             var parties = await this.context.Parties
                 .Where(party => party.Id == command.PartyId || (party.Email != null && party.Email == command.RecipientEmail))
-                .Select(party => new { party.Id, party.FullName, party.Email, party.LicenceDeclaration })
+                .Select(party => new
+                {
+                    party.Id,
+                    party.FullName,
+                    party.Email,
+                    party.LicenceDeclaration
+                })
                 .ToListAsync();
 
             var partyName = parties
