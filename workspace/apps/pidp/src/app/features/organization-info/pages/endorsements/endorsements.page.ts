@@ -317,7 +317,7 @@ export class EndorsementsPage
     );
   }
 
-  public GetStatus(endorsementRequestStatus: EndorsementRequestStatus): string {
+  public getStatus(endorsementRequestStatus: EndorsementRequestStatus): string {
     let statusText = 'Requested';
     if (endorsementRequestStatus === EndorsementRequestStatus.CANCELLED) {
       statusText = 'Cancelled';
@@ -329,7 +329,7 @@ export class EndorsementsPage
     return statusText;
   }
 
-  public IsEndorsementRequested(
+  public isEndorsementRequested(
     endorsementRequestStatus: EndorsementRequestStatus,
   ): boolean {
     let endorsementRequested = true;
