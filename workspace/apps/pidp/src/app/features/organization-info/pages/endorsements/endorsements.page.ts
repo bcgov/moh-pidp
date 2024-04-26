@@ -332,13 +332,9 @@ export class EndorsementsPage
   public isEndorsementRequested(
     endorsementRequestStatus: EndorsementRequestStatus,
   ): boolean {
-    let endorsementRequested = true;
-    if (
-      endorsementRequestStatus === EndorsementRequestStatus.CANCELLED ||
-      endorsementRequestStatus === EndorsementRequestStatus.DECLINED
-    ) {
-      endorsementRequested = false;
-    }
-    return endorsementRequested;
+    return (
+      endorsementRequestStatus !== EndorsementRequestStatus.CANCELLED &&
+      endorsementRequestStatus !== EndorsementRequestStatus.DECLINED
+    );
   }
 }
