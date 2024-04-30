@@ -62,9 +62,9 @@ To build, run, and open a local in memory development server which will run at `
 nx serve APP_NAME
 ```
 
-other way of running using npm is 
+other way of running using yarn is 
 ```bash
-npm start
+yarn nx serve pidp
 ```
 
 ### Build Application
@@ -75,9 +75,9 @@ To build the project and have the build artifacts stored in the `dist/` director
 nx build APP_NAME
 ```
 
-other way of building using npm is 
+other way of building using yarn is 
 ```bash
-npm run build
+yarn nx build pidp
 ```
 ### Running Unit Tests
 
@@ -96,7 +96,7 @@ nx affected:test
 Other way of running unit tests is
 
 ```bash
-npm run test
+yarn nx test
 ```
 
 ### Running End-to-End Tests
