@@ -332,9 +332,9 @@ export class EndorsementsPage
   public isEndorsementRequested(
     endorsementRequestStatus: EndorsementRequestStatus,
   ): boolean {
-    return (
-      endorsementRequestStatus !== EndorsementRequestStatus.CANCELLED &&
-      endorsementRequestStatus !== EndorsementRequestStatus.DECLINED
-    );
+    return ![
+      EndorsementRequestStatus.CANCELLED,
+      EndorsementRequestStatus.DECLINED,
+    ].includes(endorsementRequestStatus);
   }
 }
