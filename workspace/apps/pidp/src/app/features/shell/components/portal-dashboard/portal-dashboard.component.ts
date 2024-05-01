@@ -170,6 +170,15 @@ export class PortalDashboardComponent implements IDashboard, OnInit {
         },
         'help_outline',
       ),
+      new DashboardRouteMenuItem(
+        'Access',
+        {
+          commands:PortalRoutes.ACCESS_REQUEST_PAGE,
+          extras: { fragment: 'access' },
+          linkActiveOptions,
+        },
+        'assignment',
+      ),
     ];
   }
 }
