@@ -1,10 +1,6 @@
 var express = require('express');
 var router = express.Router();
-
-const Client = require('fhir-kit-client');
-const fhirClient = new Client({
-  baseUrl: 'http://localhost:8080/fhir'
-});
+const fhirClientHelper = require("../helpers/fhirClientHelper");
 
 router.post('/',async (req, res, next) => {
   try {
@@ -12,12 +8,13 @@ router.post('/',async (req, res, next) => {
       "resourceType": "AdverseEvent"
     };
     
-    // Using async
-    let response = await fhirClient.create({
+    // Create Payload
+    const payload = {
       resourceType: 'AdverseEvent',
       body: newEvent,
-    })
-    console.log(response);
+    };
+
+    let response = await fhirClientHelper.postData(payload); 
     return res.json(response);
   } catch(err) {
     console.log("error : ", err);
@@ -25,26 +22,21 @@ router.post('/',async (req, res, next) => {
   }
 });
 
-router.get('/', (req, res, next) => {
+router.get('/', async (req, res, next) => {
     try {
-      fhirClient.request('Bundle')
-      .then(response => {
-        console.log(response)
-        return res.json(response);
-      }).catch(err => {
-        console.log("error : ", err);
-        return res.json(err);
-      });
+      const response = await fhirClientHelper.get('Bundle');
+      return res.json(response);
    } catch(err) {
      console.log("error : ", err);
+     return res.json(err);
    }
   });
   
 router.get('/:id', async(req, res, next) => {
   try {
-    // Using async
-    let response = await fhirClient.read({ resourceType: 'AdverseEvent', id: req.params.id });
-    console.log(response);
+    // Get Payload
+    const payload = { resourceType: 'AdverseEvent', id: req.params.id }
+    let response = await fhirClientHelper.getByID(payload);
     return res.json(response);
   } catch(err) {
     console.log("error : ", err);
@@ -55,12 +47,13 @@ router.get('/:id', async(req, res, next) => {
 router.patch('/:id', async(req, res, next) => {
   try {
     const JSONPatch = [{ op: 'replace', path: '/resourceType', value: 'AdverseEvent' }];
-    let response = await fhirClient.patch({
+    // Patch Payload
+    const payload = {
       resourceType: 'AdverseEvent',
       id: req.params.id,
       JSONPatch
-    });
-    console.log(response);
+    };
+    let response = await fhirClientHelper.patchData(payload);
     return res.json(response);
   } catch(err) {
     console.log("error : ", err);
@@ -70,8 +63,11 @@ router.patch('/:id', async(req, res, next) => {
 
 router.delete('/:id', async(req, res, next) => {
   try {
-    let response = await fhirClient.delete({ resourceType: 'AdverseEvent', id: req.params.id });
-    console.log(response);
+    const payload = { 
+      resourceType: 'AdverseEvent', 
+      id: req.params.id 
+    };
+    let response = await fhirClientHelper.deleteData(payload);
     return res.json(response);
   } catch(err) {
     console.log("error : ", err);

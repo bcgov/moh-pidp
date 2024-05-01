@@ -1,55 +1,44 @@
 const express = require("express");
 const router = express.Router();
-
-const Client = require('fhir-kit-client');
-const fhirClient = new Client({
-  baseUrl: 'http://localhost:8080/fhir'
-});
+const fhirClientHelper = require("../helpers/fhirClientHelper");
 
 router.post('/',async (req, res, next) => {
-    try {
-        const newAppointment ={
-            "resourceType": "Appointment"
-          };
-          
-          // Using async
-          let response = await fhirClient.create({
-            resourceType: 'Appointment',
-            body: newAppointment,
-          })
-          console.log(response);
-          return res.json(response);
-    } catch(err) { 
-        console.log("error : ", err);
-        return res.json(err);
+  try {
+    const newAppointment ={
+        "resourceType": "Appointment"
+      };
+    // Create Payload
+    const payload = {
+      resourceType: 'Appointment',
+      body: newAppointment
     }
+    let response = await fhirClientHelper.postData(payload);
+    return res.json(response);
+  } catch(err) { 
+      console.log("error : ", err);
+      return res.json(err);
+  }
 });
 
-router.get('/', (req, res, next) => {
+router.get('/', async(req, res, next) => {
     try {
-        console.log("get apppointment route is called");
-      fhirClient.request('Appointment')
-      .then(response => {
-        console.log(response)
-        return res.json(response);
-      }).catch(err => {
-        console.log("error : ", err);
-        return res.json(err);
-      });
+      const response = await fhirClientHelper.get('Appointment');
+      return res.json(response);
    } catch(err) {
      console.log("error : ", err);
+     return res.json(err);
    }
 });
 
 router.patch('/:id', async(req, res, next) => {
     try {
       const JSONPatch = [{ op: 'replace', path: '/resourceType', value: 'Appointment' }];
-      let response = await fhirClient.patch({
+      const payload = {
         resourceType: 'Appointment',
         id: req.params.id,
         JSONPatch
-      });
-      console.log(response);
+      };
+      let response = await fhirClientHelper.patchData(payload);
       return res.json(response);
     } catch(err) {
       console.log("error : ", err);
