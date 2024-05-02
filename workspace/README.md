@@ -62,6 +62,11 @@ To build, run, and open a local in memory development server which will run at `
 nx serve APP_NAME
 ```
 
+other way of running using yarn is 
+```bash
+yarn nx serve pidp
+```
+
 ### Build Application
 
 To build the project and have the build artifacts stored in the `dist/` directory type:
@@ -70,6 +75,10 @@ To build the project and have the build artifacts stored in the `dist/` director
 nx build APP_NAME
 ```
 
+other way of building using yarn is 
+```bash
+yarn nx build pidp
+```
 ### Running Unit Tests
 
 Execute the unit tests via [Jest](https://jestjs.io) by typing:
@@ -82,6 +91,12 @@ Execute the unit tests for affected by a change by typing:
 
 ```bash
 nx affected:test
+```
+
+Other way of running unit tests is
+
+```bash
+yarn nx test
 ```
 
 ### Running End-to-End Tests
@@ -115,6 +130,27 @@ Libraries are shareable across libraries and applications. They can be imported 
 ```bash
 nx g @nx/angular:lib LIB_NAME
 ```
+
+### Components Structure
+
+In the workspace folder the app folder contains the applications. Every application has it's own folder.
+pidp is the folder for the pidp application. The folder for components is pidp->src->app->features. 
+features folder has nested folders like access, admin, auth, faq ... which determine the side menu options in the home page of the application. 
+main.ts is the application entry file. in this file the keycloak configuration is fetched.
+app.routing.ts has top level routing. which internally uses the shell routing.
+shell-routing.ts has routing for different sections like profile, training, faq and history...
+Taking profile section as an example:
+It has profile.route.ts which determined the routing for the profile routing. In the similar way faq, history... has route.ts files.
+Inside the profile folder there are subfolders for different sections like college license, personal information...
+Inside these folders the components(pages for some folders) folder contains ts, html, css, spec(unit test) files.
+taking personal-information as example:
+personal-information.state.ts has getter methods for the form elements.
+personal-information.resource.service.ts makes api calls to backend through http methods.
+personal-information-routing.route.ts has the routing
+personal-information.page.html has the template content
+personal-information.page.scss has the styling part
+personal-information.page.spec.ts has the unit test cases for the component
+personal-information.page.ts has the event handlers for the form elements.
 
 #### Code Scaffolding
 
