@@ -62,7 +62,7 @@ import { EndorsementCardComponent } from './components/endorsement-card/endorsem
 import {
   endorsementRequestsLabelText,
   endorsementRequestsRedStatus,
-} from './constants/endorsement-requests-label-text';
+} from './constants/endorsements.constants';
 import { EndorsementsFormState } from './endorsements-form-state';
 import { EndorsementsResource } from './endorsements-resource.service';
 import { EndorsementRequestStatus } from './enums/endorsement-request-status.enum';
