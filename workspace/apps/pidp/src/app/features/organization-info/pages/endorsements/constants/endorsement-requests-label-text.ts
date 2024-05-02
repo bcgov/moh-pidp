@@ -3,6 +3,7 @@ import { EndorsementRequestStatus } from '../enums/endorsement-request-status.en
 /**
  * @description
  * Mapping of endorsement request statuses to their respective labels.
+ * The text can be 'Cancelled', 'Declined', 'In progress', or 'Requested'.
  */
 export const endorsementRequestsLabelText: Partial<
   Record<EndorsementRequestStatus, string>
