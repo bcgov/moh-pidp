@@ -228,18 +228,11 @@ export class EndorsementsPage
     ].includes(endorsementRequestStatus);
   }
 
-  public getCollegeTextForEndorsement(endorsement: Endorsement): string {
-    const college = this.lookupService.colleges.find(
-      (x) => x.code === endorsement.collegeCode,
-    );
-    return college?.name ?? '';
-  }
-
-  public getCollegeTextForEndorsementRequest(
-    endorsementRequest: EndorsementRequest,
+  public getCollegeText(
+    endorsementCard: EndorsementRequest | Endorsement,
   ): string {
     const college = this.lookupService.colleges.find(
-      (x) => x.code === endorsementRequest.collegeCode,
+      (x) => x.code === endorsementCard.collegeCode,
     );
     return college?.name ?? '';
   }
