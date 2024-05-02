@@ -7,3 +7,7 @@ export const endorsementRequestsLabelText: Partial<
   [EndorsementRequestStatus.DECLINED]: 'Declined',
   [EndorsementRequestStatus.APPROVED]: 'In progress',
 };
+export const endorsementRequestsRedStatus: EndorsementRequestStatus[] = [
+  EndorsementRequestStatus.CANCELLED,
+  EndorsementRequestStatus.DECLINED,
+];

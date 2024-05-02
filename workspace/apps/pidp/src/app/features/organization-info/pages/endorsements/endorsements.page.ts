@@ -59,7 +59,10 @@ import { StatusCode } from '@app/features/portal/enums/status-code.enum';
 import { LookupService } from '@app/modules/lookup/lookup.service';
 
 import { EndorsementCardComponent } from './components/endorsement-card/endorsement-card.component';
-import { endorsementRequestsLabelText } from './constants/endorsement-requests-label-text';
+import {
+  endorsementRequestsLabelText,
+  endorsementRequestsRedStatus,
+} from './constants/endorsement-requests-label-text';
 import { EndorsementsFormState } from './endorsements-form-state';
 import { EndorsementsResource } from './endorsements-resource.service';
 import { EndorsementRequestStatus } from './enums/endorsement-request-status.enum';
@@ -222,10 +225,7 @@ export class EndorsementsPage
   public isEndorsementRequested(
     endorsementRequestStatus: EndorsementRequestStatus,
   ): boolean {
-    return ![
-      EndorsementRequestStatus.CANCELLED,
-      EndorsementRequestStatus.DECLINED,
-    ].includes(endorsementRequestStatus);
+    return !endorsementRequestsRedStatus.includes(endorsementRequestStatus);
   }
 
   public getCollegeText(
