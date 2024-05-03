@@ -59,9 +59,11 @@ p {
         }
         &.notice-yellow {
           background-color: pidp.$yellow;
+          color: #fff;
         }
         &.notice-red {
           background-color: pidp.$red;
+          color: #fff;
         }
       }
       & .created-box {
