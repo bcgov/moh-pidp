@@ -68,6 +68,7 @@ Agile methodology is followed, with the team working during a 2-week sprint.
  - Reviewers provide feedback through comments or during a call.
  - After addressing any feedback and ensuring the code meets the projects standards, the PR is approved.
  - Upon approval, the changes are merged into the develop branch.
+ - Developers may add the `Ready For Review` label on the PR when codes changes are awaiting review. If the PR is blocked or is not production code, the `DO NOT MERGE` label is added to the PR.
 #### Deployment Process:
 - After merging into the develop branch, changes are deployed to the test environment for further testing.
 - Upon successful testing, changes are deployed to the production environment.
