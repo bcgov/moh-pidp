@@ -22,6 +22,7 @@ public class Index
         public string? StatusCode { get; set; }
         public DateTime? StatusStartDate { get; set; }
         public string? StatusReasonCode { get; set; }
+        public string? MspId { get; set; }
     }
 
     public class QueryValidator : AbstractValidator<Query>
@@ -53,7 +54,8 @@ public class Index
                     ProviderRoleType = record.ProviderRoleType,
                     StatusCode = record.StatusCode,
                     StatusStartDate = record.StatusStartDate,
-                    StatusReasonCode = record.StatusReasonCode
+                    StatusReasonCode = record.StatusReasonCode,
+                    MspId = record.MspId
                 })
                 .ToListAsync();
         }

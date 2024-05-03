@@ -32,7 +32,7 @@ public class SAEforms
         private readonly IClock clock;
         private readonly IEmailService emailService;
         private readonly IKeycloakAdministrationClient keycloakClient;
-        private readonly ILogger logger;
+        private readonly ILogger<CommandHandler> logger;
         private readonly IPlrClient plrClient;
         private readonly PidpDbContext context;
 
@@ -72,7 +72,7 @@ public class SAEforms
                     .Excluding(ExcludedIdentifierTypes)
                     .HasGoodStanding)
             {
-                this.logger.LogSAEformsAccessRequestDenied();
+                this.logger.LogAccessRequestDenied();
                 return DomainResult.Failed();
             }
 
@@ -112,5 +112,5 @@ public class SAEforms
 public static partial class SAEformsLoggingExtensions
 {
     [LoggerMessage(1, LogLevel.Warning, "SA eForms Access Request denied due to the Party Record not meeting all prerequisites.")]
-    public static partial void LogSAEformsAccessRequestDenied(this ILogger logger);
+    public static partial void LogAccessRequestDenied(this ILogger<SAEforms.CommandHandler> logger);
 }

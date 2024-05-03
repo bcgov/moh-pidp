@@ -17,7 +17,7 @@ public class PartyDelete
     public class CommandHandler : ICommandHandler<Command>
     {
         private readonly IKeycloakAdministrationClient client;
-        private readonly ILogger logger;
+        private readonly ILogger<CommandHandler> logger;
         private readonly PidpDbContext context;
 
         public CommandHandler(
@@ -62,9 +62,9 @@ public class PartyDelete
     {
         private readonly Dictionary<MohKeycloakEnrolment, IEnumerable<Role>> roleCache;
         private readonly IKeycloakAdministrationClient client;
-        private readonly ILogger logger;
+        private readonly ILogger<CommandHandler> logger;
 
-        public RoleRemover(IKeycloakAdministrationClient client, ILogger logger)
+        public RoleRemover(IKeycloakAdministrationClient client, ILogger<CommandHandler> logger)
         {
             this.client = client;
             this.logger = logger;
@@ -137,8 +137,8 @@ public class PartyDelete
 public static partial class PartyDeleteLoggingExtensions
 {
     [LoggerMessage(1, LogLevel.Error, "Could not remove {roleName} from {userId}.")]
-    public static partial void LogRemoveFailure(this ILogger logger, string roleName, Guid userId);
+    public static partial void LogRemoveFailure(this ILogger<PartyDelete.CommandHandler> logger, string roleName, Guid userId);
 
     [LoggerMessage(2, LogLevel.Error, "Could not find a Client Role with name {roleName} in Client {clientId}.")]
-    public static partial void LogClientRoleNotFound(this ILogger logger, string roleName, string clientId);
+    public static partial void LogClientRoleNotFound(this ILogger<PartyDelete.CommandHandler> logger, string roleName, string clientId);
 }

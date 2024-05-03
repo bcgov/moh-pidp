@@ -59,6 +59,11 @@ p {
         }
         &.notice-yellow {
           background-color: pidp.$yellow;
+          color: #fff;
+        }
+        &.notice-red {
+          background-color: pidp.$red;
+          color: #fff;
         }
       }
       & .created-box {
@@ -70,6 +75,12 @@ p {
       padding-top: var(--gap);
       & .notice-green {
         color: pidp.$green;
+      }
+      & .notice-yellow {
+        color: pidp.$yellow;
+      }
+      & .notice-red {
+        color: pidp.$red;
       }
       & fa-icon {
         margin-right: calc(var(--gap) / 2);
