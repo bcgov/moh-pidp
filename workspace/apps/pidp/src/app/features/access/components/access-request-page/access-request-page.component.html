@@ -1,4 +1,11 @@
 <div class="container" uiPidpInjectViewportCss>
+  <nav class="breadcrumb">
+    <ul>
+      <li><a href='/'>Home</a></li>
+      <li>  <fa-icon [icon]="faAngleRight" class="fa-duotone"></fa-icon> </li>
+      <li> <a href="#" class="active">Active Page</a></li>
+    </ul>
+  </nav>
   <div class="content-header">
     <h3>
       PRODUCTS
@@ -12,11 +19,11 @@
   </div>
   <div class="search-content">
     <span>Total results: 7</span>
-    <input matInput placeholder="search">
+    <input matInput placeholder="search for a service or use key words">
     <button type="button" mat-flat-button color="primary">Search</button>
   </div>
 
-  <div class="card-container " >
+  <div class="card-container">
     <div class="card ">
       <div class="card-header card-header-text">
         <fa-icon [icon]="faFileLines"></fa-icon> Special Authority e-forms
@@ -26,7 +33,7 @@
       </div>
     </div>
   </div>
-  <div class="card-container" >
+  <div class="card-container">
     <div class="card ">
       <div class="card-header card-header-text">
 
@@ -37,7 +44,7 @@
       </div>
     </div>
   </div>
-  <div class="card-container" >
+  <div class="card-container">
     <div class="card ">
       <div class="card-header card-header-text">
         <fa-icon class="fa-light" [icon]="faFileLines"></fa-icon> BC Provider Account
@@ -47,7 +54,7 @@
       </div>
     </div>
   </div>
-  <div class="card-container" >
+  <div class="card-container">
     <div class="card ">
       <div class="card-header card-header-text">
         <fa-icon [icon]="faFileLines"></fa-icon> BC Provider Account
@@ -57,7 +64,7 @@
       </div>
     </div>
   </div>
-  <div class="card-container" >
+  <div class="card-container">
     <div class="card ">
       <div class="card-header card-header-text">
         <fa-icon [icon]="faFileLines"></fa-icon> BC Provider Account
@@ -67,7 +74,7 @@
       </div>
     </div>
   </div>
-  <div class="card-container" >
+  <div class="card-container">
     <div class="card ">
       <div class="card-header card-header-text">
         <fa-icon [icon]="faFileLines"></fa-icon> BC Provider Account
@@ -77,7 +84,7 @@
       </div>
     </div>
   </div>
-  <div class="card-container" >
+  <div class="card-container">
     <div class="card ">
       <div class="card-header card-header-text">
         <fa-icon [icon]="faFileLines"></fa-icon> BC Provider Account
@@ -87,10 +94,101 @@
       </div>
     </div>
   </div>
-  <div>
-    <button class="back-to-top" (click)="scrollToTop()">
+  <div class="card-container">
+    <div class="card ">
+      <div class="card-header card-header-text">
+        <fa-icon [icon]="faFileLines"></fa-icon> BC Provider Account
+      </div>
+      <div class="card-body">
+        A reusable credential for access to health data in BC.
+      </div>
+    </div>
+  </div>
+  <div class="card-container">
+    <div class="card ">
+      <div class="card-header card-header-text">
+        <fa-icon [icon]="faFileLines"></fa-icon> BC Provider Account
+      </div>
+      <div class="card-body">
+        A reusable credential for access to health data in BC.
+      </div>
+    </div>
+  </div>
+  <div class="card-container">
+    <div class="card ">
+      <div class="card-header card-header-text">
+        <fa-icon [icon]="faFileLines"></fa-icon> BC Provider Account
+      </div>
+      <div class="card-body">
+        A reusable credential for access to health data in BC.
+      </div>
+    </div>
+  </div>
+  <div class="card-container">
+    <div class="card ">
+      <div class="card-header card-header-text">
+        <fa-icon [icon]="faFileLines"></fa-icon> BC Provider Account
+      </div>
+      <div class="card-body">
+        A reusable credential for access to health data in BC.
+      </div>
+    </div>
+  </div>
+  <div class="card-container">
+    <div class="card ">
+      <div class="card-header card-header-text">
+        <fa-icon [icon]="faFileLines"></fa-icon> BC Provider Account
+      </div>
+      <div class="card-body">
+        A reusable credential for access to health data in BC.
+      </div>
+    </div>
+  </div>
+  <div class="card-container">
+    <div class="card ">
+      <div class="card-header card-header-text">
+        <fa-icon [icon]="faFileLines"></fa-icon> BC Provider Account
+      </div>
+      <div class="card-body">
+        A reusable credential for access to health data in BC.
+      </div>
+    </div>
+  </div>
+  <div class="card-container">
+    <div class="card ">
+      <div class="card-header card-header-text">
+        <fa-icon [icon]="faFileLines"></fa-icon> BC Provider Account
+      </div>
+      <div class="card-body">
+        A reusable credential for access to health data in BC.
+      </div>
+    </div>
+  </div>
+  <div class="card-container">
+    <div class="card ">
+      <div class="card-header card-header-text">
+        <fa-icon [icon]="faFileLines"></fa-icon> BC Provider Account
+      </div>
+      <div class="card-body">
+        A reusable credential for access to health data in BC.
+      </div>
+    </div>
+  </div>
+  <div class="card-container">
+    <div class="card ">
+      <div class="card-header card-header-text">
+        <fa-icon [icon]="faFileLines"></fa-icon> BC Provider Account
+      </div>
+      <div class="card-body">
+        A reusable credential for access to health data in BC.
+      </div>
+    </div>
+  </div>
+  <div class="back-to-top-container">
+    <button class="back-to-top" (click)="scrollToTop()" *ngIf="showBackToTopButton">
       <fa-icon [icon]="faArrowUp"></fa-icon>
     </button>
+    <div class="back-to-top-text" *ngIf="showBackToTopButton">Back to top</div>
   </div> 
   </div>
   
