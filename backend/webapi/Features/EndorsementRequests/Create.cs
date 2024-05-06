@@ -125,7 +125,7 @@ public class Create
             var link = $"<a href=\"{url}\" target=\"_blank\" rel=\"noopener noreferrer\">this link</a>";
             var pidpSupportEmail = $"<a href=\"mailto:{EmailService.PidpEmail}\">{EmailService.PidpEmail}</a>";
             var pidpSupportPhone = $"<a href=\"tel:{EmailService.PidpSupportPhone}\">{EmailService.PidpSupportPhone}</a>";
-            var templatetext = isUnlicensed ? "You are receiving this email because a user is requesting to endorse you."
+            var templatetext = isUnlicensed ? "You are receiving this email because a user has started an endorsement request with you."
                                             : "You are receiving this email because a user requested an endorsement from you.";
 
             var email = new Email(
