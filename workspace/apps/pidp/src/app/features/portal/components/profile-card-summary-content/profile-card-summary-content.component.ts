@@ -7,6 +7,8 @@ import {
 } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
+import { PhonePipe } from 'libs/shared/ui/src/lib/pipes/phone.pipe';
+
 import { LookupCodePipe } from '@app/modules/lookup/lookup-code.pipe';
 
 @Component({
@@ -22,6 +24,7 @@ import { LookupCodePipe } from '@app/modules/lookup/lookup-code.pipe';
     NgSwitchCase,
     NgSwitchDefault,
     LookupCodePipe,
+    PhonePipe,
   ],
 })
 export class ProfileCardSummaryContentComponent {
