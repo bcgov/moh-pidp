@@ -64,13 +64,13 @@ public class Discovery
                 })
                 .SingleOrDefaultAsync();
 
-            // if (data == null)
-            // {
-            //     return new Model
-            //     {
-            //         NewBCProvider = query.User.GetIdentityProvider() == IdentityProviders.BCProvider
-            //     };
-            // }
+            if (data == null)
+            {
+                return new Model
+                {
+                    // NewBCProvider = query.User.GetIdentityProvider() == IdentityProviders.BCProvider
+                };
+            }
 
             await this.HandleUpdatesAsync(data.Credential, data.CheckPlr, query.User);
 
