@@ -75,16 +75,6 @@ export class NavMenuComponent implements OnChanges {
     return true;
   }
 
-  public get isMenuUserProfileVisible(): boolean {
-    // NOTE: The user name section is always hidden in xsmall and small views
-    if (
-      this.viewport === PidpViewport.small ||
-      this.viewport === PidpViewport.xsmall
-    ) {
-      return false;
-    }
-    return !!this.dashboardState.userProfileFullNameText;
-  }
   public isLogoutButtonVisible = false;
   public isLogoutMenuItemVisible = false;
   public isTopMenuVisible = false;
@@ -94,12 +84,6 @@ export class NavMenuComponent implements OnChanges {
   }
   public get showTitleDescription(): boolean {
     return !!this.dashboardState.titleDescriptionText;
-  }
-  public get isCollegeInfoVisible(): boolean {
-    return (
-      this.isMenuUserProfileVisible &&
-      !!this.dashboardState.userProfileCollegeNameText
-    );
   }
 
   public constructor(private viewportService: ViewportService) {

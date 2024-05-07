@@ -1,6 +1,11 @@
 <ui-layout-header-footer [emailSupport]="emailSupport">
   <div class="header-right" page-header-right>
-    <button *ngIf="showMiniMenuButton" class="menu" title="menu" mat-icon-button (click)="onMiniMenuButtonClick()">
+    <button
+      *ngIf="showMiniMenuButton"
+      class="menu"
+      title="menu"
+      mat-icon-button
+      (click)="onMiniMenuButtonClick()">
       <mat-icon>menu</mat-icon>
     </button>
   </div>
@@ -16,13 +21,24 @@
   </div>
   <ng-template #menu>
     <a class="logo-link" href="." title="Home" aria-label="Go home">
-    <span class="span-text">OneHealthID</span></a>
+      <span class="span-text">OneHealthID</span></a
+    >
     <div class="main-menu">
-      <a *ngFor="let menuItem of menuItems" class="main-menu-item" routerLinkActive="main-menu-item-active"
-        [routerLink]="getRouterLink(menuItem)" [routerLinkActiveOptions]="getRouterLinkActiveOptions(menuItem)"
-        [fragment]="getRouterLinkFragment(menuItem)" (click)="onMenuItemClicked()">{{ menuItem.label }}
+      <a
+        *ngFor="let menuItem of menuItems"
+        class="main-menu-item"
+        routerLinkActive="main-menu-item-active"
+        [routerLink]="getRouterLink(menuItem)"
+        [routerLinkActiveOptions]="getRouterLinkActiveOptions(menuItem)"
+        [fragment]="getRouterLinkFragment(menuItem)"
+        (click)="onMenuItemClicked()"
+        >{{ menuItem.label }}
       </a>
-      <button *ngIf="isLogoutButtonVisible" mat-stroked-button aria-label="Sign Out" class="btn-signout"
+      <button
+        *ngIf="isLogoutButtonVisible"
+        class="btn-signout"
+        mat-stroked-button
+        aria-label="Sign Out"
         (click)="onLogout()">
         Sign Out
       </button>
@@ -52,15 +68,17 @@
   <ng-template #sidenavheader>
     <header>
       <div class="header-text-container">
-        <h1 *ngIf="showTitle">
-          {{ dashboardState.titleText }}
-        </h1>
+        <h1 *ngIf="showTitle">{{ dashboardState.titleText }}</h1>
         <p *ngIf="showTitleDescription">
           {{ dashboardState.titleDescriptionText }}
         </p>
       </div>
       <div *ngIf="isHeaderImageVisible" class="header-image-container">
-        <img src="/assets/images/pidp-logo-white.svg" title="PIDP Logo" loading="lazy" aria-label="PIDP Logo"
+        <img
+          src="/assets/images/pidp-logo-white.svg"
+          title="PIDP Logo"
+          loading="lazy"
+          aria-label="PIDP Logo"
           aria-hidden="true" />
       </div>
     </header>
@@ -70,23 +88,24 @@
     <div class="sidenav-panel-box">
       <div class="sidenav-bar"></div>
       <div class="sidenav-panel-content">
-        <div *ngIf="isMenuUserProfileVisible" class="sidenav-header">
-          <p class="sidenav-name">
-            {{ dashboardState.userProfileFullNameText }}
-          </p>
-          <p *ngIf="isCollegeInfoVisible" class="sidenav-college">
-            {{ dashboardState.userProfileCollegeNameText }}
-          </p>
-        </div>
-        <div *ngIf="isMenuUserProfileVisible" class="sidenav-line"></div>
         <div class="sidenav-menu">
-          <a *ngFor="let menuItem of menuItems" class="sidenav-menu-item" routerLinkActive="sidenav-menu-item-active"
-            [routerLink]="getRouterLink(menuItem)" [routerLinkActiveOptions]="getRouterLinkActiveOptions(menuItem)"
-            [fragment]="getRouterLinkFragment(menuItem)" (click)="onMenuItemClicked()">{{ menuItem.label }}
+          <a
+            *ngFor="let menuItem of menuItems"
+            class="sidenav-menu-item"
+            routerLinkActive="sidenav-menu-item-active"
+            [routerLink]="getRouterLink(menuItem)"
+            [routerLinkActiveOptions]="getRouterLinkActiveOptions(menuItem)"
+            [fragment]="getRouterLinkFragment(menuItem)"
+            (click)="onMenuItemClicked()"
+            >{{ menuItem.label }}
           </a>
-          <a *ngIf="isLogoutMenuItemVisible" class="sidenav-menu-item" routerLinkActive="sidenav-menu-item-active"
+          <a
+            *ngIf="isLogoutMenuItemVisible"
+            class="sidenav-menu-item"
+            routerLinkActive="sidenav-menu-item-active"
             (click)="onLogout()">
-            Sign Out</a>
+            Sign Out</a
+          >
         </div>
       </div>
     </div>
