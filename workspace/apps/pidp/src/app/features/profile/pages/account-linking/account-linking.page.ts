@@ -13,6 +13,8 @@ import { InjectViewportCssClassDirective } from '@bcgov/shared/ui';
 import { PartyService } from '@app/core/party/party.service';
 import { LoggerService } from '@app/core/services/logger.service';
 import { UtilsService } from '@app/core/services/utils.service';
+import { IdentityProvider } from '@app/features/auth/enums/identity-provider.enum';
+import { AuthorizedUserService } from '@app/features/auth/services/authorized-user.service';
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
 
 @Component({
@@ -32,6 +34,8 @@ export class AccountLinkingPage implements OnInit {
   public completed: boolean | null;
   public redirectUrl: string | null = null;
   public dashboardState$: Observable<DashboardStateModel>;
+  public identityProvider$: Observable<IdentityProvider>;
+  public IdentityProvider = IdentityProvider;
 
   public constructor(
     private route: ActivatedRoute,
@@ -40,6 +44,7 @@ export class AccountLinkingPage implements OnInit {
     private logger: LoggerService,
     private utilsService: UtilsService,
     private stateService: AppStateService,
+    private authorizedUserService: AuthorizedUserService,
   ) {
     this.title = this.route.snapshot.data.title;
     this.dashboardState$ = this.stateService.getNamedStateBroadcast(
@@ -48,6 +53,7 @@ export class AccountLinkingPage implements OnInit {
 
     const routeData = this.route.snapshot.data;
     this.completed = routeData.accountLinking === StatusCode.COMPLETED;
+    this.identityProvider$ = this.authorizedUserService.identityProvider$;
   }
 
   public ngOnInit(): void {

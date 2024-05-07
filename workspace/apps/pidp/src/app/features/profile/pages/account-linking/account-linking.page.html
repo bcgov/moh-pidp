@@ -21,8 +21,11 @@
         <div class="card link-how-to">
           <ng-container *ngTemplateOutlet="linkHowTo"></ng-container>
         </div>
-        <div class="card link-button">
-          <img class="imgplant"
+        <div
+          *ngIf="(identityProvider$ | async) === IdentityProvider.BCSC"
+          class="card link-button">
+          <img
+            class="imgplant"
             ngSrc="/assets/images/account-linking-plant.jpg"
             alt="Account linking image of a plant"
             fill />
@@ -42,7 +45,32 @@
                 mat-flat-button
                 uiPageFooterAction
                 type="submit"
-                color="primary">
+                color="primary"
+                (click)="onLinkAccount()">
+                Link
+              </button>
+            </div>
+          </div>
+        </div>
+        <div
+          *ngIf="(identityProvider$ | async) === IdentityProvider.PHSA"
+          class="card link-button">
+          <img
+            class="imgplant"
+            ngSrc="/assets/images/account-linking-plant.jpg"
+            alt="Account linking image of a plant"
+            fill />
+          <div class="card-container auth-card">
+            <div class="card-header auth-card-header">
+              <h3><strong>BC Services Card</strong></h3>
+            </div>
+            <div class="card-footer auth-card-footer">
+              <button
+                mat-flat-button
+                uiPageFooterAction
+                type="submit"
+                color="primary"
+                (click)="onLinkAccount()">
                 Link
               </button>
             </div>
