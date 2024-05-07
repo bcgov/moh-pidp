@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 using Pidp.Extensions;
+using Pidp.Features.Discovery;
 using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.Services;
 using Pidp.Models;
@@ -24,7 +25,7 @@ public class CredentialsController : PidpControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<Create.Model>> CreateCredential([FromServices] ICommandHandler<Create.Command, IDomainResult<Create.Model>> handler)
+    public async Task<IActionResult> CreateCredential([FromServices] ICommandHandler<Create.Command, IDomainResult<Create.Model>> handler)
     {
         var credentialLinkTicket = await this.AuthorizationService.VerifyTokenAsync<Cookies.CredentialLinkTicket.Values>(this.Request.Cookies.GetCredentialLinkTicket());
         if (credentialLinkTicket == null)
@@ -32,8 +33,31 @@ public class CredentialsController : PidpControllerBase
             return this.BadRequest("A valid Credential Link Ticket is required to link accounts.");
         }
 
-        return await handler.HandleAsync(new Create.Command { CredentialLinkToken = credentialLinkTicket.CredentialLinkToken, User = this.User })
-            .ToActionResultOfT();
+        var result = await handler.HandleAsync(new Create.Command { CredentialLinkToken = credentialLinkTicket.CredentialLinkToken, User = this.User });
+        if (!result.IsSuccess)
+        {
+            return result.ToActionResult();
+        }
+
+        if (result.Value.Hint != Create.Model.Hints.TicketExpired)
+        {
+            // Remove the Credential Link Ticket cookie unless it was expired. This will block an expired user from accedentially creating a Party.
+            this.Response.Cookies.Append(
+                Cookies.CredentialLinkTicket.Key,
+                string.Empty,
+                new CookieOptions
+                {
+                    Expires = DateTimeOffset.Now.AddDays(-1),
+                    HttpOnly = true
+                });
+        }
+
+        return this.RedirectToActionPreserveMethod
+        (
+            nameof(DiscoveryController.Discovery),
+            nameof(DiscoveryController).Replace("Controller", ""),
+            new { hint = result.Value.Hint }
+        );
     }
 
     [HttpGet("bc-provider")]

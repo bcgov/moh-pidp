@@ -18,22 +18,24 @@ public class DiscoveryController : PidpControllerBase
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status307TemporaryRedirect)]
-    public async Task<ActionResult<Discovery.Model>> Discovery([FromServices] IQueryHandler<Discovery.Query, Discovery.Model> handler)
+    public async Task<ActionResult<Discovery.Model>> Discovery([FromServices] IQueryHandler<Discovery.Query, Discovery.Model> handler,
+                                                               [FromQuery] string? hint)
     {
-        var result = await handler.HandleAsync(new Discovery.Query { User = this.User });
-
-        if (result.NewBCProvider)
+        var credentialLinkTicket = await this.AuthorizationService.VerifyTokenAsync<Cookies.CredentialLinkTicket.Values>(this.Request.Cookies.GetCredentialLinkTicket());
+        if (credentialLinkTicket != null)
         {
-            var credentialLinkTicket = await this.AuthorizationService.VerifyTokenAsync<Cookies.CredentialLinkTicket.Values>(this.Request.Cookies.GetCredentialLinkTicket());
-            if (credentialLinkTicket != null)
-            {
-                return this.RedirectToActionPreserveMethod
-                (
-                    nameof(CredentialsController.CreateCredential),
-                    nameof(CredentialsController).Replace("Controller", "")
-                );
-            }
+            return this.RedirectToActionPreserveMethod
+            (
+                nameof(CredentialsController.CreateCredential),
+                nameof(CredentialsController).Replace("Controller", "")
+            );
         }
+
+        if (hint == Create.Model.Hints.TicketExpired)
+        {
+            return new Discovery.Model { Status = Features.Discovery.Discovery.Model.StatusCode.ExpiredCredentialLinkTicketError };
+        }
+        var result = await handler.HandleAsync(new Discovery.Query { User = this.User });
 
         return result;
     }

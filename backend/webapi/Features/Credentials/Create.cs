@@ -31,7 +31,16 @@ public class Create
 
     public class Model
     {
-        public int PartyId { get; set; }
+        public static class Hints
+        {
+            public static readonly string AlreadyLinked = "already-linked";
+            public static readonly string TicketExpired = "ticket-expired";
+            public static readonly string CredentialExists = "credential-exists";
+        }
+
+        public string? Hint { get; set; }
+
+        public Model(string? hint = null) => this.Hint = hint;
     }
 
     public class CommandHandler : ICommandHandler<Command, IDomainResult<Model>>
@@ -39,19 +48,15 @@ public class Create
         private readonly IClock clock;
         private readonly ILogger<CommandHandler> logger;
         private readonly PidpDbContext context;
-        private readonly IKeycloakAdministrationClient keycloakClient;
-
 
         public CommandHandler(
             IClock clock,
             ILogger<CommandHandler> logger,
-            PidpDbContext context,
-            IKeycloakAdministrationClient keycloakClient)
+            PidpDbContext context)
         {
             this.clock = clock;
             this.logger = logger;
             this.context = context;
-            this.keycloakClient = keycloakClient;
         }
 
         public async Task<IDomainResult<Model>> HandleAsync(Command command)
@@ -68,25 +73,50 @@ public class Create
             }
 
             var ticket = await this.context.CredentialLinkTickets
-                .Include(ticket => ticket.Party)
-                .Where(ticket => ticket.Token == command.CredentialLinkToken
-                    && !ticket.Claimed)
-                .SingleOrDefaultAsync();
+                .SingleOrDefaultAsync(ticket => ticket.Token == command.CredentialLinkToken
+                    && !ticket.Claimed);
 
             if (ticket == null)
             {
                 this.logger.LogTicketNotFound(command.CredentialLinkToken);
                 return DomainResult.NotFound<Model>();
             }
-            if (ticket.ExpiresAt < this.clock.GetCurrentInstant())
-            {
-                this.logger.LogTicketExpired(ticket.Id);
-                return DomainResult.Failed<Model>();
-            }
             if (ticket.LinkToIdentityProvider != userIdentityProvider)
             {
                 this.logger.LogTicketIdpError(ticket.Id, ticket.LinkToIdentityProvider, userIdentityProvider);
                 return DomainResult.Failed<Model>();
+            }
+            if (ticket.ExpiresAt < this.clock.GetCurrentInstant())
+            {
+                this.logger.LogTicketExpired(ticket.Id);
+                return DomainResult.Success(new Model(Model.Hints.TicketExpired));
+            }
+
+            var existingCredential = await this.context.Credentials
+                .Where(credential => credential.UserId == userId
+                    || (credential.IdentityProvider == userIdentityProvider
+                        && credential.IdpId == userIdpId))
+                .SingleOrDefaultAsync();
+
+            if (existingCredential != null)
+            {
+                if (existingCredential.PartyId == ticket.PartyId)
+                {
+                    this.logger.LogCredentialAlreadyLinked(ticket.Id, existingCredential.Id);
+                    return DomainResult.Success(new Model(Model.Hints.AlreadyLinked));
+                }
+                else
+                {
+                    this.context.CredentialLinkErrorLogs.Add(new CredentialLinkErrorLog
+                    {
+                        CredentialLinkTicketId = ticket.Id,
+                        ExistingCredentialId = existingCredential.Id
+                    });
+                    await this.context.SaveChangesAsync();
+
+                    this.logger.LogCredentialAlreadyExists(ticket.Id, existingCredential.Id);
+                    return DomainResult.Success(new Model(Model.Hints.CredentialExists));
+                }
             }
 
             var credential = new Credential
@@ -100,13 +130,11 @@ public class Create
             credential.DomainEvents.Add(new CollegeLicenceUpdated(credential.PartyId));
             this.context.Credentials.Add(credential);
 
-            await this.keycloakClient.UpdateUser(userId, user => user.SetOpId(ticket.Party!.OpId!));
-
             ticket.Claimed = true;
 
             await this.context.SaveChangesAsync();
 
-            return DomainResult.Success(new Model { PartyId = ticket.PartyId });
+            return DomainResult.Success(new Model());
         }
     }
 
@@ -195,6 +223,44 @@ public class Create
             await this.bcProviderClient.UpdateUser(credential.IdpId, user);
         }
     }
+
+    public class UpdateOpIdHandler : INotificationHandler<CredentialLinked>
+    {
+        private readonly IKeycloakAdministrationClient keycloakClient;
+        private readonly PidpDbContext context;
+
+        public UpdateOpIdHandler(
+            IKeycloakAdministrationClient keycloakClient,
+            PidpDbContext context)
+        {
+            this.keycloakClient = keycloakClient;
+            this.context = context;
+        }
+
+        public async Task Handle(CredentialLinked notification, CancellationToken cancellationToken)
+        {
+            var newCredential = notification.Credential;
+
+            var party = await this.context.Parties
+                .Include(party => party.Credentials)
+                .SingleAsync(party => party.Id == newCredential.PartyId, cancellationToken);
+
+            if (newCredential.IdentityProvider == IdentityProviders.BCProvider)
+            {
+                await party.GenerateOpId(this.context);
+                await this.context.SaveChangesAsync(cancellationToken);
+
+                foreach (var credential in party.Credentials)
+                {
+                    await this.keycloakClient.UpdateUser(credential.UserId, user => user.SetOpId(party.OpId!));
+                }
+            }
+            else
+            {
+                await this.keycloakClient.UpdateUser(newCredential.UserId, user => user.SetOpId(party.OpId!));
+            }
+        }
+    }
 }
 
 public static partial class CredentialCreateLoggingExtensions
@@ -210,4 +276,10 @@ public static partial class CredentialCreateLoggingExtensions
 
     [LoggerMessage(4, LogLevel.Error, "Credential Link Ticket {credentialLinkTicketId} expected to link to IDP {expectedIdp}, user had IDP {actualIdp} instead.")]
     public static partial void LogTicketIdpError(this ILogger<Create.CommandHandler> logger, int credentialLinkTicketId, string expectedIdp, string actualIdp);
+
+    [LoggerMessage(5, LogLevel.Error, "Credential Link Ticket {credentialLinkTicketId} redemption failed, the new Credential already exists on a different party. Credential Id {existingCredentialId}.")]
+    public static partial void LogCredentialAlreadyExists(this ILogger<Create.CommandHandler> logger, int credentialLinkTicketId, int existingCredentialId);
+
+    [LoggerMessage(6, LogLevel.Error, "Credential Link Ticket {credentialLinkTicketId} redemption failed, the new Credential is already linked to the Party. Credential ID {existingCredentialId}.")]
+    public static partial void LogCredentialAlreadyLinked(this ILogger<Create.CommandHandler> logger, int credentialLinkTicketId, int existingCredentialId);
 }
