@@ -1,21 +1,39 @@
-import { CommonModule, NgOptimizedImage } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { AsyncPipe, CommonModule, NgOptimizedImage } from '@angular/common';
+import { Component, Inject, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
+import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { Observable } from 'rxjs';
+import {
+  EMPTY,
+  Observable,
+  catchError,
+  exhaustMap,
+  map,
+  of,
+  switchMap,
+} from 'rxjs';
 
-import { DashboardStateModel, PidpStateName } from '@pidp/data-model';
-import { AppStateService } from '@pidp/presentation';
+import {
+  ConfirmDialogComponent,
+  DialogOptions,
+  HtmlComponent,
+  InjectViewportCssClassDirective,
+} from '@bcgov/shared/ui';
 
-import { InjectViewportCssClassDirective } from '@bcgov/shared/ui';
-
+import { APP_CONFIG, AppConfig } from '@app/app.config';
 import { PartyService } from '@app/core/party/party.service';
+import { DocumentService } from '@app/core/services/document.service';
 import { LoggerService } from '@app/core/services/logger.service';
 import { UtilsService } from '@app/core/services/utils.service';
+import { AuthRoutes } from '@app/features/auth/auth.routes';
 import { IdentityProvider } from '@app/features/auth/enums/identity-provider.enum';
+import { AuthService } from '@app/features/auth/services/auth.service';
 import { AuthorizedUserService } from '@app/features/auth/services/authorized-user.service';
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
+import { SuccessDialogComponent } from '@app/shared/components/success-dialog/success-dialog.component';
+
+import { AccountLinkingResource } from './account-linking-resource.service';
 
 @Component({
   selector: 'app-account-linking',
@@ -25,6 +43,8 @@ import { StatusCode } from '@app/features/portal/enums/status-code.enum';
     InjectViewportCssClassDirective,
     MatButtonModule,
     NgOptimizedImage,
+    SuccessDialogComponent,
+    AsyncPipe,
   ],
   templateUrl: './account-linking.page.html',
   styleUrl: './account-linking.page.scss',
@@ -33,23 +53,23 @@ export class AccountLinkingPage implements OnInit {
   public title: string;
   public completed: boolean | null;
   public redirectUrl: string | null = null;
-  public dashboardState$: Observable<DashboardStateModel>;
   public identityProvider$: Observable<IdentityProvider>;
   public IdentityProvider = IdentityProvider;
 
   public constructor(
+    @Inject(APP_CONFIG) private config: AppConfig,
     private route: ActivatedRoute,
     private router: Router,
     private partyService: PartyService,
     private logger: LoggerService,
     private utilsService: UtilsService,
-    private stateService: AppStateService,
     private authorizedUserService: AuthorizedUserService,
+    private documentService: DocumentService,
+    private resource: AccountLinkingResource,
+    private authService: AuthService,
+    private dialog: MatDialog,
   ) {
     this.title = this.route.snapshot.data.title;
-    this.dashboardState$ = this.stateService.getNamedStateBroadcast(
-      PidpStateName.dashboard,
-    );
 
     const routeData = this.route.snapshot.data;
     this.completed = routeData.accountLinking === StatusCode.COMPLETED;
@@ -73,35 +93,55 @@ export class AccountLinkingPage implements OnInit {
       this.redirectUrl = this.route.snapshot.queryParamMap.get('redirect-url');
     }
     this.utilsService.scrollTop();
+    const accounts = this.resource.getLinkedAccounts(partyId).pipe(
+      map((response) => {
+        console.log('response', response);
+        return response;
+      }),
+    );
+    console.log('I have this many linked accounts, ', accounts);
   }
 
-  public onLinkAccount(): void {
-    // this.resource
-    //   .acceptAgreement(this.partyService.partyId)
-    //   .pipe(
-    //     tap(() => {
-    //       this.completed = true;
-    //       if (!this.redirectUrl) {
-    //         this.navigateToRoot();
-    //       } else {
-    //         this.router.navigate([this.redirectUrl]);
-    //       }
-    //       this.utilsService.scrollTopWithDelay();
-    //     }),
-    //     catchError((error: HttpErrorResponse) => {
-    //       if (error.status === HttpStatusCode.BadRequest) {
-    //         this.completed = false;
-    //         return of(noop());
-    //       }
-    //       this.accessRequestFailed = true;
-    //       return of(noop());
-    //     }),
-    //   )
-    //   .subscribe();
+  public onLinkAccount(idpHint: IdentityProvider): void {
+    const data: DialogOptions = {
+      title: 'Redirecting',
+      component: HtmlComponent,
+      data: {
+        content: this.documentService.getRedirectingToSignInNotice(),
+      },
+    };
+    this.dialog
+      .open(ConfirmDialogComponent, { data })
+      .afterClosed()
+      .pipe(
+        exhaustMap((result) => (result ? this.linkRequest(idpHint) : EMPTY)),
+      )
+      .subscribe();
   }
 
   public onBack(): void {
     this.navigateToRoot();
+  }
+
+  private linkRequest(idpHint: IdentityProvider): Observable<void | null> {
+    return this.resource
+      .createLinkTicket(this.partyService.partyId, idpHint)
+      .pipe(
+        switchMap(() => {
+          return this.authService.logout(
+            `${
+              this.config.applicationUrl +
+              AuthRoutes.routePath(AuthRoutes.AUTO_LOGIN)
+            }?idp_hint=${idpHint}`,
+          );
+        }),
+        catchError(() => {
+          // TODO: what to do on error?
+          this.logger.error('Link Request creation failed');
+
+          return of(null);
+        }),
+      );
   }
 
   private navigateToRoot(): void {

@@ -21,6 +21,7 @@
         <div class="card link-how-to">
           <ng-container *ngTemplateOutlet="linkHowTo"></ng-container>
         </div>
+        <!-- TODO show only if not linked -->
         <div
           *ngIf="(identityProvider$ | async) === IdentityProvider.BCSC"
           class="card link-button">
@@ -47,12 +48,13 @@
                 uiPageFooterAction
                 type="submit"
                 color="primary"
-                (click)="onLinkAccount()">
+                (click)="onLinkAccount(IdentityProvider.PHSA)">
                 Link
               </button>
             </div>
           </div>
         </div>
+        <!-- TODO show only if not linked -->
         <div
           *ngIf="(identityProvider$ | async) === IdentityProvider.PHSA"
           class="card link-button">
@@ -72,7 +74,7 @@
                 uiPageFooterAction
                 type="submit"
                 color="primary"
-                (click)="onLinkAccount()">
+                (click)="onLinkAccount(IdentityProvider.BCSC)">
                 Link
               </button>
             </div>
