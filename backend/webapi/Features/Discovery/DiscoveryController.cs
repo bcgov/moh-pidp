@@ -21,6 +21,11 @@ public class DiscoveryController : PidpControllerBase
     public async Task<ActionResult<Discovery.Model>> Discovery([FromServices] IQueryHandler<Discovery.Query, Discovery.Model> handler,
                                                                [FromQuery] string? hint)
     {
+        if (hint == Create.Model.Hints.TicketExpired)
+        {
+            return new Discovery.Model { Status = Features.Discovery.Discovery.Model.StatusCode.ExpiredCredentialLinkTicketError };
+        }
+
         var credentialLinkTicket = await this.AuthorizationService.VerifyTokenAsync<Cookies.CredentialLinkTicket.Values>(this.Request.Cookies.GetCredentialLinkTicket());
         if (credentialLinkTicket != null)
         {
@@ -29,11 +34,6 @@ public class DiscoveryController : PidpControllerBase
                 nameof(CredentialsController.CreateCredential),
                 nameof(CredentialsController).Replace("Controller", "")
             );
-        }
-
-        if (hint == Create.Model.Hints.TicketExpired)
-        {
-            return new Discovery.Model { Status = Features.Discovery.Discovery.Model.StatusCode.ExpiredCredentialLinkTicketError };
         }
         var result = await handler.HandleAsync(new Discovery.Query { User = this.User });
 
