@@ -60,6 +60,15 @@ public class CredentialsController : PidpControllerBase
         );
     }
 
+    [HttpGet]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<List<Index.Model>>> GetCredentials([FromServices] IQueryHandler<Index.Query, List<Index.Model>> handler,
+                                                                      [FromRoute] Index.Query query)
+        => await this.AuthorizePartyBeforeHandleAsync(query.PartyId, handler, query)
+            .ToActionResultOfT();
+
     [HttpGet("bc-provider")]
     [Authorize(Policy = Policies.HighAssuranceIdentityProvider)]
     [ProducesResponseType(StatusCodes.Status200OK)]
