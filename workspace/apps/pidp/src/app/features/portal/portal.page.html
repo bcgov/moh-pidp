@@ -212,6 +212,76 @@
         </div>
       </div>
     </section>
+    <section *ngIf="state.access.length" class="access-box section-box">
+      <ui-scroll-target targetId="access"></ui-scroll-target>
+      <header>
+        <h2>Access to Systems</h2>
+      </header>
+      <div class="section-content-box">
+        <p>
+          Complete your profile to gain access to the systems you are eligible
+          for.
+        </p>
+        <div class="carousel-box">
+          <app-portal-carousel
+            portalCategoryName="access-to-systems"
+            [sections]="state.access"></app-portal-carousel>
+        </div>
+      </div>
+    </section>
+    <section *ngIf="state.training.length" class="training-box section-box">
+      <ui-scroll-target targetId="training"></ui-scroll-target>
+      <header>
+        <h2>Complete these trainings</h2>
+      </header>
+      <div class="section-content-box">
+        <ng-container *ngIf="state?.training?.length; else noTraining">
+          <p>
+            Complete your profile to gain access to the systems you are eligible
+            for.
+          </p>
+          <div class="carousel-box">
+            <app-portal-carousel
+              portalCategoryName="training"
+              [sections]="state.training"></app-portal-carousel>
+          </div>
+        </ng-container>
+        <ng-template #noTraining>
+          <p class="lead">No training available at this time.</p>
+        </ng-template>
+      </div>
+    </section>
+    <section *ngIf="state.history.length" class="history-box section-box">
+      <ui-scroll-target targetId="history"></ui-scroll-target>
+      <header>
+        <h2>History</h2>
+      </header>
+      <div class="section-content-box">
+        <p>
+          View information pertaining to your profile and interaction with the
+          systems you use for work.
+        </p>
+        <div class="carousel-box">
+          <app-portal-carousel
+            portalCategoryName="history"
+            [sections]="state.history"></app-portal-carousel>
+        </div>
+      </div>
+    </section>
+    <section *ngIf="state.faq.length" class="section-box">
+      <ui-scroll-target targetId="faq"></ui-scroll-target>
+      <header>
+        <h2>FAQ</h2>
+      </header>
+      <div class="section-content-box">
+        <p>View answers to frequently asked questions.</p>
+        <div class="carousel-box">
+          <app-portal-carousel
+            portalCategoryName="faq"
+            [sections]="state.faq"></app-portal-carousel>
+        </div>
+      </div>
+    </section>
   </ng-container>
   <app-get-support>
     <ui-scroll-target targetId="support"></ui-scroll-target>
