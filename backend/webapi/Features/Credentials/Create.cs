@@ -245,7 +245,7 @@ public class Create
                 .Include(party => party.Credentials)
                 .SingleAsync(party => party.Id == newCredential.PartyId, cancellationToken);
 
-            if (newCredential.IdentityProvider == IdentityProviders.BCProvider)
+            if (newCredential.IdentityProvider == IdentityProviders.BCServicesCard)
             {
                 await party.GenerateOpId(this.context);
                 await this.context.SaveChangesAsync(cancellationToken);
