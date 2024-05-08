@@ -2,7 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { ResolveFn, Router } from '@angular/router';
 
-import { catchError, exhaustMap, of } from 'rxjs';
+import { catchError, exhaustMap, of, switchMap } from 'rxjs';
 
 import { AuthRoutes } from '@app/features/auth/auth.routes';
 import { ShellRoutes } from '@app/features/shell/shell.routes';
@@ -10,16 +10,7 @@ import { ShellRoutes } from '@app/features/shell/shell.routes';
 import { LoggerService } from '../services/logger.service';
 import { DiscoveryResource, StatusCode } from './discovery-resource.service';
 import { PartyService } from './party.service';
-
-const linkedAccountErrorStatusCodes: [
-  StatusCode,
-  StatusCode,
-  StatusCode | undefined,
-] = [
-  StatusCode.AlreadyLinkedError,
-  StatusCode.CredentialExistsError,
-  StatusCode.ExpiredCredentialLinkTicketError,
-];
+import { AuthorizedUserService } from '@app/features/auth/services/authorized-user.service';
 
 /**
  * @description
@@ -36,15 +27,20 @@ export const partyResolver: ResolveFn<number | null> = () => {
   const discoveryResource = inject(DiscoveryResource);
   const partyService = inject(PartyService);
   const logger = inject(LoggerService);
+  const authorizedUserService = inject(AuthorizedUserService);
 
   return discoveryResource.discover().pipe(
+    switchMap((discovery) => discovery.status === StatusCode.NewUser
+      ? authorizedUserService.user$.pipe(switchMap((user) => discoveryResource.createParty(user)))
+      : of(discovery)
+    ),
     exhaustMap((discovery) => {
-      if (discovery.newBCProvider) {
+      if (discovery.status === StatusCode.NewBCProviderError) {
         router.navigateByUrl(
           AuthRoutes.routePath(AuthRoutes.BC_PROVIDER_UPLIFT),
         );
       }
-      if (linkedAccountErrorStatusCodes.includes(discovery.status)) {
+      if (discovery.status === StatusCode.CredentialExistsError) {
         router.navigateByUrl(
           AuthRoutes.routePath(AuthRoutes.LINK_ACCOUNT_ERROR),
         );
