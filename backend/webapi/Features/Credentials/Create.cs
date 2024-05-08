@@ -136,7 +136,7 @@ public class Create
                 IdentityProvider = userIdentityProvider,
                 IdpId = userIdpId
             };
-            credential.DomainEvents.Add(new CredentialLinked(credential));
+            credential.DomainEvents.Add(new CredentialLinked(credential, command.User));
             credential.DomainEvents.Add(new CollegeLicenceUpdated(credential.PartyId));
             this.context.Credentials.Add(credential);
 
@@ -238,12 +238,12 @@ public class Create
         }
     }
 
-    public class UpdateOpIdHandler : INotificationHandler<CredentialLinked>
+    public class UpdateBCServicesCardAttributesHandler : INotificationHandler<CredentialLinked>
     {
         private readonly IKeycloakAdministrationClient keycloakClient;
         private readonly PidpDbContext context;
 
-        public UpdateOpIdHandler(
+        public UpdateBCServicesCardAttributesHandler(
             IKeycloakAdministrationClient keycloakClient,
             PidpDbContext context)
         {
@@ -261,6 +261,7 @@ public class Create
 
             if (newCredential.IdentityProvider == IdentityProviders.BCServicesCard)
             {
+                party.Birthdate = notification.User.GetBirthdate();
                 await party.GenerateOpId(this.context);
                 await this.context.SaveChangesAsync(cancellationToken);
 
