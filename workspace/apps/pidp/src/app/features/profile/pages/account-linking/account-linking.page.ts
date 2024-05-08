@@ -138,6 +138,14 @@ export class AccountLinkingPage implements OnInit, OnDestroy {
     }
     this.utilsService.scrollTop();
 
+    this.handleLinkedAccounts();
+  }
+
+  public ngOnDestroy(): void {
+    this.linkedAccounts$.unsubscribe();
+  }
+
+  private handleLinkedAccounts(): void {
     this.linkedAccounts$ = combineLatest([
       this.identityProvider$,
       this.credentials$,
@@ -160,10 +168,6 @@ export class AccountLinkingPage implements OnInit, OnDestroy {
           this.linkedAccountsIdp.push(linkedAccount.identityProvider),
         );
       });
-  }
-
-  public ngOnDestroy(): void {
-    this.linkedAccounts$.unsubscribe();
   }
 
   private linkRequest(idpHint: IdentityProvider): Observable<void | null> {
