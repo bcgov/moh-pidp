@@ -1,9 +1,9 @@
 import { NgClass, NgIf } from '@angular/common';
-import { Component, Inject, HostListener } from '@angular/core';
+import { Component, Inject, HostListener, Input } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { faPlus, faThumbsUp, faFileLines, faArrowUp, faAngleRight } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faThumbsUp, faFileLines, faArrowUp, faAngleRight, faMagnifyingGlass, faL } from '@fortawesome/free-solid-svg-icons';
 import { InjectViewportCssClassDirective } from '@bcgov/shared/ui';
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';
@@ -28,7 +28,9 @@ export class AccessRequestPageComponent {
   public logoutRedirectUrl: string;
   public faArrowUp = faArrowUp;
   public faAngleRight = faAngleRight;
+  public faMagnifyingGlass = faMagnifyingGlass;
   showBackToTopButton: Boolean = false;
+  showSearrchIcon: boolean = true;
 
   public constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
@@ -45,5 +47,9 @@ export class AccessRequestPageComponent {
 
   scrollToTop() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  onSearch(event: KeyboardEvent) {
+    this.showSearrchIcon = (<HTMLInputElement>event.target).value == '';
   }
 }

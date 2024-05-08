@@ -19,8 +19,11 @@
   </div>
   <div class="search-content">
     <span>Total results: 7</span>
-    <input matInput placeholder="search for a service or use key words">
-    <button type="button" mat-flat-button color="primary">Search</button>
+    <div class="div-search">
+      <fa-icon [icon]="faMagnifyingGlass" class="search-icon" *ngIf="showSearrchIcon"></fa-icon>
+      <input matInput (keyup)="onSearch($event)"> 
+     <button type="button" mat-flat-button color="primary">Search</button>
+    </div>
   </div>
 
   <div class="card-container">

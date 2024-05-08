@@ -77,27 +77,42 @@
     padding: 5px;
   }
 
+  .div-search {
+    width: 70%;
+    // padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    outline: none;
+    float: right;
+  }
+
   .search-content {
     position: relative;
-    margin: 20px;
+    margin: 30px 45px 50px 0px;
     text-align: right;
   }
 
   .search-content input {
-    width: 70%;
+     width: 99%;
+     padding: 10px;
+    // border: 1px solid #ccc;
+    // border-radius: 5px;
+    border: none;
+  }
+
+  .search-icon {
     padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    outline: none;
+    float: left;
+    position: absolute;
   }
 
   .search-content button {
-    position: absolute;
-    // top: 0;
+     position: absolute;
     right: 0;
     padding: 10px;
     width: 100px;
     border: none;
+    margin-top: -1px;
   }
 
   .search-content span {
@@ -116,7 +131,7 @@
     flex-direction: column;
     align-items: center;
   }
-  
+
   .back-to-top {
     background-color: #38598A;
     color: #FFFFFF;
@@ -126,29 +141,29 @@
     text-align: center;
     cursor: pointer;
   }
-  
+
   .back-to-top-text {
     color: #38598A;
     font-size: 13px;
     word-wrap: break-word
   }
-  
+
   .back-to-top:hover {
     background-color: #003366;
   }
-  
+
   .breadcrumb ul {
     list-style: none;
     top: 0;
     right: 0;
     padding: 0px;
-  
+
   }
-  
+
   .breadcrumb ul li {
     display: inline;
   }
-  
+
   .breadcrumb a {
     text-decoration: none;
     color: #1A5A96;
@@ -166,8 +181,26 @@
     flex-direction: column;
   }
 
+  .content-header {
+    margin: 0px 20px 0px 20px;
+  }
+
+  .content-header h1 {
+    font-size: 40px;
+  }
+
+  .breadcrumb {
+    margin: 0px 20px 0px 20px;
+  }
+
+  .search-content {
+    margin: 30px 20px 70px 20px;
+  }
+  .div-search {
+    width: 100%;
+  }
   .search-content input {
-    width: 90%;
+    width: 100%;
   }
 
   .search-content button {
@@ -188,9 +221,28 @@
   .card-container {
     display: inline-flex;
     flex-direction: column;
-    width: 45%;
+    width: 46%;
   }
-  
+
+  .content-header h1 {
+    font-size: 40px;
+  }
+
+  .content-header {
+    margin: 0px 20px 0px 20px;
+  }
+  .div-search {
+    width: 100%;
+  }
+
+  .breadcrumb {
+    margin: 0px 20px 0px 20px;
+  }
+
+  .search-content {
+    margin: 30px 20px 70px 10px;
+  }
+
   .back-to-top {
     width: 30PX;
     height: 30PX;
@@ -208,5 +260,9 @@
     flex: 1;
     flex-direction: column;
     width: 30%;
+  }
+
+  .search-content {
+    margin: 30px 37px 50px 20px;
   }
 }
