@@ -6,6 +6,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { Router } from '@angular/router';
 
 import {
+  AnchorDirective,
   InjectViewportCssClassDirective,
   LayoutHeaderFooterComponent,
 } from '@bcgov/shared/ui';
@@ -21,6 +22,7 @@ import { AuthService } from '../../services/auth.service';
   styleUrls: ['./link-existing-account.page.scss'],
   standalone: true,
   imports: [
+    AnchorDirective,
     InjectViewportCssClassDirective,
     LayoutHeaderFooterComponent,
     MatButtonModule,
