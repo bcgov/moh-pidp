@@ -23,9 +23,7 @@ public class Discovery
         public enum StatusCode
         {
             Success,
-            AlreadyLinkedError,
-            CredentialExistsError,
-            ExpiredCredentialLinkTicketError,
+            NewUser,
             NewBCProviderError
         }
 
@@ -68,7 +66,9 @@ public class Discovery
             {
                 return new Model
                 {
-                    // NewBCProvider = query.User.GetIdentityProvider() == IdentityProviders.BCProvider
+                    Status = query.User.GetIdentityProvider() == IdentityProviders.BCProvider
+                        ? Model.StatusCode.NewBCProviderError
+                        : Model.StatusCode.NewUser
                 };
             }
 
@@ -76,7 +76,8 @@ public class Discovery
 
             return new Model
             {
-                PartyId = data.Credential.PartyId
+                PartyId = data.Credential.PartyId,
+                Status = Model.StatusCode.Success
             };
         }
 
