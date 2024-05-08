@@ -23,6 +23,11 @@ import {
 } from 'rxjs';
 
 import {
+  LOADING_OVERLAY_DEFAULT_MESSAGE,
+  LoadingOverlayService,
+} from 'libs/pidp/presentation/src/lib/services/loading-overlay.service';
+
+import {
   ConfirmDialogComponent,
   DialogOptions,
   HtmlComponent,
@@ -83,6 +88,7 @@ export class AccountLinkingPage implements OnInit, OnDestroy {
     private resource: AccountLinkingResource,
     private authService: AuthService,
     private dialog: MatDialog,
+    private loadingOverlayService: LoadingOverlayService,
   ) {
     this.title = this.route.snapshot.data.title;
     const partyId = this.partyService.partyId;
@@ -161,10 +167,12 @@ export class AccountLinkingPage implements OnInit, OnDestroy {
   }
 
   private linkRequest(idpHint: IdentityProvider): Observable<void | null> {
+    this.loadingOverlayService.open(LOADING_OVERLAY_DEFAULT_MESSAGE);
     return this.resource
       .createLinkTicket(this.partyService.partyId, idpHint)
       .pipe(
         switchMap(() => {
+          this.loadingOverlayService.close();
           return this.authService.logout(
             `${
               this.config.applicationUrl +
