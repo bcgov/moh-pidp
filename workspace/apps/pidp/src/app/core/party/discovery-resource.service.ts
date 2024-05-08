@@ -1,10 +1,8 @@
 import { Injectable } from '@angular/core';
 
-import { Observable, map, of, switchMap, throwError } from 'rxjs';
+import { Observable, map } from 'rxjs';
 
 import { ApiHttpClient } from '@app/core/resources/api-http-client.service';
-import { User } from '@app/features/auth/models/user.model';
-import { AuthorizedUserService } from '@app/features/auth/services/authorized-user.service';
 
 import { PartyCreate } from './party-create.model';
 
@@ -32,10 +30,7 @@ export enum StatusCode {
   providedIn: 'root',
 })
 export class DiscoveryResource {
-  public constructor(
-    private apiResource: ApiHttpClient,
-    private authorizedUserService: AuthorizedUserService,
-  ) { }
+  public constructor(private apiResource: ApiHttpClient) {}
 
   /**
    * @description
