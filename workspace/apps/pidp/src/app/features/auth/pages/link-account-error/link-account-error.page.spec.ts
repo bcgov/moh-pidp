@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { LinkExistingAccountPage } from './link-existing-account.page';
+import { LinkAccountErrorPage } from './link-account-error.page';
 
-describe('LinkExistingAccountPage', () => {
-  let component: LinkExistingAccountPage;
-  let fixture: ComponentFixture<LinkExistingAccountPage>;
+describe('LinkAccountErrorPage', () => {
+  let component: LinkAccountErrorPage;
+  let fixture: ComponentFixture<LinkAccountErrorPage>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [LinkExistingAccountPage],
+      imports: [LinkAccountErrorPage],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(LinkExistingAccountPage);
+    fixture = TestBed.createComponent(LinkAccountErrorPage);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

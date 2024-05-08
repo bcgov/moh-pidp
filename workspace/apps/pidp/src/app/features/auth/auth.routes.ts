@@ -5,7 +5,7 @@ export class AuthRoutes {
   public static AUTO_LOGIN = 'auto-login';
   public static BC_PROVIDER_UPLIFT = 'bc-provider-uplift';
   public static PORTAL_LOGIN = 'login';
-  public static LINK_EXISTING_ACCOUNT = 'link-existing-account';
+  public static LINK_ACCOUNT_ERROR = 'link-account-error';
 
   /**
    * @description

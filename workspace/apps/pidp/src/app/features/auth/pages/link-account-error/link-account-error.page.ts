@@ -17,9 +17,9 @@ import { ShellRoutes } from '@app/features/shell/shell.routes';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
-  selector: 'app-link-existing-account',
-  templateUrl: './link-existing-account.page.html',
-  styleUrls: ['./link-existing-account.page.scss'],
+  selector: 'app-link-account-error',
+  templateUrl: './link-account-error.page.html',
+  styleUrls: ['./link-account-error.page.scss'],
   standalone: true,
   imports: [
     AnchorDirective,
@@ -31,7 +31,7 @@ import { AuthService } from '../../services/auth.service';
     NgOptimizedImage,
   ],
 })
-export class LinkExistingAccountPage {
+export class LinkAccountErrorPage {
   public logoutRedirectUrl: string;
   public providerIdentitySupport: string;
 
