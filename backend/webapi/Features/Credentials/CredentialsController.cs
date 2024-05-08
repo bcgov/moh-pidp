@@ -36,18 +36,20 @@ public class CredentialsController : PidpControllerBase
         var result = await handler.HandleAsync(new Create.Command { CredentialLinkToken = credentialLinkTicket.CredentialLinkToken, User = this.User });
 
         if (result.IsSuccess
-            && result.Value.Status is Create.Model.StatusCodes.AlreadyLinked or Create.Model.StatusCodes.CredentialExists)
+            && result.Value.Status == Create.Model.StatusCodes.TicketExpired)
         {
-            // Remove the Credential Link Ticket on a "soft failure", where we want to allow the user into the app to show them an error message.
-            this.Response.Cookies.Append(
-                Cookies.CredentialLinkTicket.Key,
-                string.Empty,
-                new CookieOptions
-                {
-                    Expires = DateTimeOffset.Now.AddDays(-1),
-                    HttpOnly = true
-                });
+            // Keep the Credential Link Ticket cookie to prevent the user from accedentially entering the app and creating a Party.
+            return result.ToActionResultOfT();
         }
+
+        this.Response.Cookies.Append(
+            Cookies.CredentialLinkTicket.Key,
+            string.Empty,
+            new CookieOptions
+            {
+                Expires = DateTimeOffset.Now.AddDays(-1),
+                HttpOnly = true
+            });
 
         return result.ToActionResultOfT();
     }
@@ -106,7 +108,8 @@ public class CredentialsController : PidpControllerBase
                 await this.AuthorizationService.SignTokenAsync(new Cookies.CredentialLinkTicket.Values(result.Value.Token)),
                 new CookieOptions
                 {
-                    Expires = result.Value.ExpiresAt.ToDateTimeOffset(),
+                    // The cookie has a much longer expiry than the CredentialLinkTicket to block the user from accedentailly entering the app and creating a Party if the ticket expires.
+                    Expires = result.Value.ExpiresAt.ToDateTimeOffset().AddHours(6),
                     HttpOnly = true
                 });
 
