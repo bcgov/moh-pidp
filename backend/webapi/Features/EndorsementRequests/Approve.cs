@@ -35,7 +35,7 @@ public class Approve
         private readonly IClock clock;
         private readonly IEmailService emailService;
         private readonly IKeycloakAdministrationClient keycloakClient;
-        private readonly ILogger logger;
+        private readonly ILogger<CommandHandler> logger;
         private readonly IPlrClient plrClient;
         private readonly PidpConfiguration config;
         private readonly PidpDbContext context;
@@ -215,5 +215,5 @@ public class Approve
 public static partial class EndorsementRequestApprovalLoggingExtensions
 {
     [LoggerMessage(1, LogLevel.Error, "Error when assigning the MOA role to Party #{partyId}.")]
-    public static partial void LogMoaRoleAssignmentError(this ILogger logger, int partyId);
+    public static partial void LogMoaRoleAssignmentError(this ILogger<Approve.CommandHandler> logger, int partyId);
 }

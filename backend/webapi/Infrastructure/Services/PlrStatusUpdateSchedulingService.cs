@@ -56,11 +56,11 @@ public class PlrStatusUpdateSchedulingService : BackgroundService
 public static partial class PlrStatusUpdateSchedulingServiceLoggingExtensions
 {
     [LoggerMessage(1, LogLevel.Information, "PLR Status Update Scheduling Service is executing.")]
-    public static partial void LogServiceIsExecuting(this ILogger logger);
+    public static partial void LogServiceIsExecuting(this ILogger<PlrStatusUpdateSchedulingService> logger);
 
     [LoggerMessage(2, LogLevel.Information, "PLR Status Update Scheduling Service is stopping.")]
-    public static partial void LogServiceIsStopping(this ILogger logger);
+    public static partial void LogServiceIsStopping(this ILogger<PlrStatusUpdateSchedulingService> logger);
 
     [LoggerMessage(3, LogLevel.Critical, "Unhandled exception in PLR Status Update Scheduling Service. Service stopped.")]
-    public static partial void LogServiceHasStoppedUnexpectedly(this ILogger logger, Exception e);
+    public static partial void LogServiceHasStoppedUnexpectedly(this ILogger<PlrStatusUpdateSchedulingService> logger, Exception e);
 }

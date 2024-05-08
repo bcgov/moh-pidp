@@ -40,7 +40,7 @@ public class MSTeamsClinicMember
     {
         private readonly IClock clock;
         private readonly IEmailService emailService;
-        private readonly ILogger logger;
+        private readonly ILogger<CommandHandler> logger;
         private readonly IMapper mapper;
         private readonly PidpDbContext context;
 
@@ -76,7 +76,7 @@ public class MSTeamsClinicMember
                 || enrolmentDto.Email == null
                 || clinicDto == null)
             {
-                this.logger.LogMSTeamsClinicMemberAccessRequestDenied();
+                this.logger.LogAccessRequestDenied();
                 return DomainResult.Failed();
             }
 
@@ -191,5 +191,5 @@ public class MSTeamsClinicMember
 public static partial class MSTeamsClinicMemberLoggingExtensions
 {
     [LoggerMessage(1, LogLevel.Warning, "MS Teams Clinic Member Access Request denied due to the Party Record not meeting all prerequisites.")]
-    public static partial void LogMSTeamsClinicMemberAccessRequestDenied(this ILogger logger);
+    public static partial void LogAccessRequestDenied(this ILogger<MSTeamsClinicMember.CommandHandler> logger);
 }

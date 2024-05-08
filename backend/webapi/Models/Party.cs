@@ -107,6 +107,7 @@ public class Party : BaseAuditable
         var standingsDigest = await client.GetStandingsDigestAsync(this.Cpn);
 
         this.DomainEvents.Add(new PlrCpnLookupFound(this.Id, this.PrimaryUserId, this.Cpn, standingsDigest));
+        this.DomainEvents.Add(new CollegeLicenceUpdated(this.Id));
 
         if (standingsDigest.HasGoodStanding)
         {
