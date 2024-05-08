@@ -28,6 +28,10 @@ export const routes: Routes = [
     component: BcProviderUpliftPage,
   },
   {
+    path: AuthRoutes.LINK_EXISTING_ACCOUNT,
+    component: LinkExistingAccountPage,
+  },
+  {
     path: AuthRoutes.ADMIN_LOGIN,
     canActivate: [authorizationRedirectGuard],
     component: LoginPage,
