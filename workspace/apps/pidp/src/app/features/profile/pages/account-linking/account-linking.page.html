@@ -21,9 +21,8 @@
         <div class="card link-how-to">
           <ng-container *ngTemplateOutlet="linkHowTo"></ng-container>
         </div>
-        <!-- TODO show only if not linked -->
         <div
-          *ngIf="(identityProvider$ | async) === IdentityProvider.BCSC"
+          *ngIf="(identityProvider$ | async) === IdentityProvider.BCSC && !linkedAccountsIdp.includes(IdentityProvider.PHSA)"
           class="card link-button">
           <img
             class="imgplant"
@@ -54,9 +53,8 @@
             </div>
           </div>
         </div>
-        <!-- TODO show only if not linked -->
         <div
-          *ngIf="(identityProvider$ | async) === IdentityProvider.PHSA"
+          *ngIf="(identityProvider$ | async) === IdentityProvider.PHSA && !linkedAccountsIdp.includes(IdentityProvider.BCSC)"
           class="card link-button">
           <img
             class="imgplant"
@@ -67,6 +65,15 @@
           <div class="card-container auth-card">
             <div class="card-header auth-card-header">
               <h3><strong>BC Services Card</strong></h3>
+            </div>
+            <!-- TODO Get logo for BCSC -->
+            <div class="card-body auth-card-body">
+              <img
+                class="logo"
+                ngSrc="/assets/images/phsa-logo.png"
+                alt="PHSA logo"
+                priority
+                fill />
             </div>
             <div class="card-footer auth-card-footer">
               <button
@@ -81,23 +88,34 @@
           </div>
         </div>
       </section>
-      <div class="content-box successfully-linked">
+      <!-- To display all current credentials a user has
+        uncomment below and comment out the following div -->
+      <!-- <div
+        *ngIf="(credentials$ | async) as linkedAccounts"
+        class="content-box successfully-linked"> -->
+      <div
+        *ngIf="linkedAccounts.length > 0"
+        class="content-box successfully-linked">
         <div class="content">
           <h2>Successfully linked accounts</h2>
-          <!-- TODO NgFor each linked account -->
-          <div class="card">
-            <div class="card-container">
-              <div class="card-header">
-                <h3><strong>Health Authority ID</strong></h3>
+          <div class="successfully-linked-accounts">
+            <div *ngFor="let credential of linkedAccounts" class="card">
+              <div class="card-container">
+                <div class="card-header">
+                  <h3><strong>{{credential.identityProvider}}</strong></h3>
+                </div>
+                <!-- TODO Get logo for BCSC -->
+                <!-- TODO toggle card img based on identityProvider -->
+                <!-- *ngIf="credential.identityProvider === IdentityProvider.PHSA" -->
+                <div class="card-body">
+                  <img
+                    class="logo"
+                    ngSrc="/assets/images/phsa-logo.png"
+                    alt="PHSA logo"
+                    fill />
+                </div>
+                <div class="card-footer"></div>
               </div>
-              <div class="card-body">
-                <img
-                  class="logo"
-                  ngSrc="/assets/images/phsa-logo.png"
-                  alt="PHSA logo"
-                  fill />
-              </div>
-              <div class="card-footer"></div>
             </div>
           </div>
         </div>

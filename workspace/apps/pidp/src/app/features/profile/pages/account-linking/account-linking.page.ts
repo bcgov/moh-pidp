@@ -1,5 +1,11 @@
-import { AsyncPipe, CommonModule, NgOptimizedImage } from '@angular/common';
-import { Component, Inject, OnInit } from '@angular/core';
+import {
+  AsyncPipe,
+  CommonModule,
+  NgFor,
+  NgIf,
+  NgOptimizedImage,
+} from '@angular/common';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -7,7 +13,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import {
   EMPTY,
   Observable,
+  Subscription,
   catchError,
+  combineLatest,
   exhaustMap,
   map,
   of,
@@ -34,6 +42,7 @@ import { StatusCode } from '@app/features/portal/enums/status-code.enum';
 import { SuccessDialogComponent } from '@app/shared/components/success-dialog/success-dialog.component';
 
 import { AccountLinkingResource } from './account-linking-resource.service';
+import { Credential } from './account-linking.model';
 
 @Component({
   selector: 'app-account-linking',
@@ -45,16 +54,22 @@ import { AccountLinkingResource } from './account-linking-resource.service';
     NgOptimizedImage,
     SuccessDialogComponent,
     AsyncPipe,
+    NgFor,
+    NgIf,
   ],
   templateUrl: './account-linking.page.html',
   styleUrl: './account-linking.page.scss',
 })
-export class AccountLinkingPage implements OnInit {
+export class AccountLinkingPage implements OnInit, OnDestroy {
   public title: string;
   public completed: boolean | null;
   public redirectUrl: string | null = null;
   public identityProvider$: Observable<IdentityProvider>;
   public IdentityProvider = IdentityProvider;
+  public credentials$: Observable<Credential[]>;
+  public linkedAccounts$!: Subscription;
+  public linkedAccounts: Credential[] = [];
+  public linkedAccountsIdp: IdentityProvider[] = [];
 
   public constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
@@ -70,10 +85,12 @@ export class AccountLinkingPage implements OnInit {
     private dialog: MatDialog,
   ) {
     this.title = this.route.snapshot.data.title;
+    const partyId = this.partyService.partyId;
 
     const routeData = this.route.snapshot.data;
     this.completed = routeData.accountLinking === StatusCode.COMPLETED;
     this.identityProvider$ = this.authorizedUserService.identityProvider$;
+    this.credentials$ = this.resource.getCredentials(partyId);
   }
 
   public ngOnInit(): void {
@@ -93,13 +110,29 @@ export class AccountLinkingPage implements OnInit {
       this.redirectUrl = this.route.snapshot.queryParamMap.get('redirect-url');
     }
     this.utilsService.scrollTop();
-    const accounts = this.resource.getLinkedAccounts(partyId).pipe(
-      map((response) => {
-        console.log('response', response);
-        return response;
-      }),
-    );
-    console.log('I have this many linked accounts, ', accounts);
+
+    this.linkedAccounts$ = combineLatest([
+      this.identityProvider$,
+      this.credentials$,
+    ])
+      .pipe(
+        map(([identityProvider, credentials]) => {
+          return credentials.filter(
+            //TODO when we add IdpId to the Credential, also filter out by IdpId
+            // so that we filter out the credential that the user is currently logged in with
+            (credential) => credential.identityProvider !== identityProvider,
+          );
+        }),
+      )
+      .subscribe((linkedAccounts) => {
+        if (!linkedAccounts) {
+          return;
+        }
+        this.linkedAccounts = linkedAccounts;
+        linkedAccounts.forEach((linkedAccount) =>
+          this.linkedAccountsIdp.push(linkedAccount.identityProvider),
+        );
+      });
   }
 
   public onLinkAccount(idpHint: IdentityProvider): void {
@@ -121,6 +154,10 @@ export class AccountLinkingPage implements OnInit {
 
   public onBack(): void {
     this.navigateToRoot();
+  }
+
+  public ngOnDestroy(): void {
+    this.linkedAccounts$.unsubscribe();
   }
 
   private linkRequest(idpHint: IdentityProvider): Observable<void | null> {

@@ -10,6 +10,8 @@ import { IdentityProvider } from '@app/features/auth/enums/identity-provider.enu
 import { ProfileStatus } from '@app/features/portal/models/profile-status.model';
 import { PortalResource } from '@app/features/portal/portal-resource.service';
 
+import { Credential } from './account-linking.model';
+
 @Injectable({
   providedIn: 'root',
 })
@@ -39,13 +41,10 @@ export class AccountLinkingResource {
       );
   }
 
-  public getLinkedAccounts(
-    partyId: number,
-  ): Observable<Credential[] | undefined> {
+  public getCredentials(partyId: number): Observable<Credential[]> {
     return this.apiResource
       .get<Credential[]>(this.getResourcePath(partyId))
       .pipe(
-        NoContentResponse,
         catchError((error: HttpErrorResponse) => {
           return throwError(() => error);
         }),
