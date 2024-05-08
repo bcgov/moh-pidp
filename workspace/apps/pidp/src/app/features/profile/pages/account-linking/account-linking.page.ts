@@ -25,7 +25,7 @@ import {
 import {
   LOADING_OVERLAY_DEFAULT_MESSAGE,
   LoadingOverlayService,
-} from 'libs/pidp/presentation/src/lib/services/loading-overlay.service';
+} from '@pidp/presentation';
 
 import {
   ConfirmDialogComponent,
