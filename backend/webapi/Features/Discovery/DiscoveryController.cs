@@ -18,14 +18,8 @@ public class DiscoveryController : PidpControllerBase
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status307TemporaryRedirect)]
-    public async Task<ActionResult<Discovery.Model>> Discovery([FromServices] IQueryHandler<Discovery.Query, Discovery.Model> handler,
-                                                               [FromQuery] string? hint)
+    public async Task<ActionResult<Discovery.Model>> Discovery([FromServices] IQueryHandler<Discovery.Query, Discovery.Model> handler)
     {
-        if (hint == Create.Model.Hints.TicketExpired)
-        {
-            return new Discovery.Model { Status = Features.Discovery.Discovery.Model.StatusCode.ExpiredCredentialLinkTicketError };
-        }
-
         var credentialLinkTicket = await this.AuthorizationService.VerifyTokenAsync<Cookies.CredentialLinkTicket.Values>(this.Request.Cookies.GetCredentialLinkTicket());
         if (credentialLinkTicket != null)
         {
@@ -35,9 +29,8 @@ public class DiscoveryController : PidpControllerBase
                 nameof(CredentialsController).Replace("Controller", "")
             );
         }
-        var result = await handler.HandleAsync(new Discovery.Query { User = this.User });
 
-        return result;
+        return await handler.HandleAsync(new Discovery.Query { User = this.User });
     }
 
     [HttpGet("{partyId}/destination")]

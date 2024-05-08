@@ -31,16 +31,16 @@ public class Create
 
     public class Model
     {
-        public static class Hints
+        public enum StatusCodes
         {
-            public static readonly string AlreadyLinked = "already-linked";
-            public static readonly string TicketExpired = "ticket-expired";
-            public static readonly string CredentialExists = "credential-exists";
+            Success,
+            AlreadyLinked,
+            CredentialExists,
+            TicketExpired
         }
 
-        public string? Hint { get; set; }
-
-        public Model(string? hint = null) => this.Hint = hint;
+        public int? PartyId { get; set; }
+        public StatusCodes Status { get; set; }
     }
 
     public class CommandHandler : ICommandHandler<Command, IDomainResult<Model>>
@@ -89,21 +89,27 @@ public class Create
             if (ticket.ExpiresAt < this.clock.GetCurrentInstant())
             {
                 this.logger.LogTicketExpired(ticket.Id);
-                return DomainResult.Success(new Model(Model.Hints.TicketExpired));
+                return DomainResult.Success(new Model { Status = Model.StatusCodes.TicketExpired });
             }
 
+#pragma warning disable CA1304 // ToLower() is Locale Dependant
             var existingCredential = await this.context.Credentials
                 .Where(credential => credential.UserId == userId
                     || (credential.IdentityProvider == userIdentityProvider
-                        && credential.IdpId == userIdpId))
+                        && credential.IdpId!.ToLower() == userIdpId.ToLower()))
                 .SingleOrDefaultAsync();
+#pragma warning restore CA1304
 
             if (existingCredential != null)
             {
                 if (existingCredential.PartyId == ticket.PartyId)
                 {
                     this.logger.LogCredentialAlreadyLinked(ticket.Id, existingCredential.Id);
-                    return DomainResult.Success(new Model(Model.Hints.AlreadyLinked));
+                    return DomainResult.Success(new Model
+                    {
+                        PartyId = existingCredential.PartyId,
+                        Status = Model.StatusCodes.AlreadyLinked
+                    });
                 }
                 else
                 {
@@ -115,7 +121,11 @@ public class Create
                     await this.context.SaveChangesAsync();
 
                     this.logger.LogCredentialAlreadyExists(ticket.Id, existingCredential.Id);
-                    return DomainResult.Success(new Model(Model.Hints.CredentialExists));
+                    return DomainResult.Success(new Model
+                    {
+                        PartyId = existingCredential.PartyId,
+                        Status = Model.StatusCodes.CredentialExists
+                    });
                 }
             }
 
@@ -134,7 +144,11 @@ public class Create
 
             await this.context.SaveChangesAsync();
 
-            return DomainResult.Success(new Model());
+            return DomainResult.Success(new Model
+            {
+                PartyId = credential.PartyId,
+                Status = Model.StatusCodes.Success
+            });
         }
     }
 

@@ -25,7 +25,7 @@ public class CredentialsController : PidpControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> CreateCredential([FromServices] ICommandHandler<Create.Command, IDomainResult<Create.Model>> handler)
+    public async Task<ActionResult<Create.Model>> CreateCredential([FromServices] ICommandHandler<Create.Command, IDomainResult<Create.Model>> handler)
     {
         var credentialLinkTicket = await this.AuthorizationService.VerifyTokenAsync<Cookies.CredentialLinkTicket.Values>(this.Request.Cookies.GetCredentialLinkTicket());
         if (credentialLinkTicket == null)
@@ -34,14 +34,11 @@ public class CredentialsController : PidpControllerBase
         }
 
         var result = await handler.HandleAsync(new Create.Command { CredentialLinkToken = credentialLinkTicket.CredentialLinkToken, User = this.User });
-        if (!result.IsSuccess)
-        {
-            return result.ToActionResult();
-        }
 
-        if (result.Value.Hint != Create.Model.Hints.TicketExpired)
+        if (result.IsSuccess
+            && result.Value.Status is Create.Model.StatusCodes.AlreadyLinked or Create.Model.StatusCodes.CredentialExists)
         {
-            // Remove the Credential Link Ticket cookie unless it was expired. This will block an expired user from accedentially creating a Party.
+            // Remove the Credential Link Ticket on a "soft failure", where we want to allow the user into the app to show them an error message.
             this.Response.Cookies.Append(
                 Cookies.CredentialLinkTicket.Key,
                 string.Empty,
@@ -52,12 +49,7 @@ public class CredentialsController : PidpControllerBase
                 });
         }
 
-        return this.RedirectToActionPreserveMethod
-        (
-            nameof(DiscoveryController.Discovery),
-            nameof(DiscoveryController).Replace("Controller", ""),
-            new { hint = result.Value.Hint }
-        );
+        return result.ToActionResultOfT();
     }
 
     [HttpGet]
