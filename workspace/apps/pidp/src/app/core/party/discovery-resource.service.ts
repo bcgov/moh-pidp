@@ -22,10 +22,11 @@ export enum Destination {
 }
 export enum StatusCode {
   Success = 1,
+  NewUser,
+  NewBCProviderError,
   AlreadyLinkedError,
   CredentialExistsError,
   ExpiredCredentialLinkTicketError,
-  NewBCProviderError,
 }
 
 @Injectable({
@@ -35,7 +36,7 @@ export class DiscoveryResource {
   public constructor(
     private apiResource: ApiHttpClient,
     private authorizedUserService: AuthorizedUserService,
-  ) {}
+  ) { }
 
   /**
    * @description
@@ -49,17 +50,17 @@ export class DiscoveryResource {
         return result.partyId || result.newBCProvider
           ? of(result)
           : this.authorizedUserService.user$.pipe(
-              switchMap((user: User) => {
-                return user
-                  ? this.createParty(user)
-                  : throwError(
-                      () =>
-                        new Error(
-                          'Not authenticated or access token could not be parsed',
-                        ),
-                    );
-              }),
-            );
+            switchMap((user: User) => {
+              return user
+                ? this.createParty(user)
+                : throwError(
+                  () =>
+                    new Error(
+                      'Not authenticated or access token could not be parsed',
+                    ),
+                );
+            }),
+          );
       }),
     );
   }

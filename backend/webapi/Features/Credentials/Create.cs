@@ -33,10 +33,10 @@ public class Create
     {
         public enum StatusCodes
         {
-            Success,
-            AlreadyLinked,
-            CredentialExists,
-            TicketExpired
+            Success = 1,
+            AlreadyLinked = 4,
+            CredentialExists = 5,
+            TicketExpired = 6
         }
 
         public int? PartyId { get; set; }

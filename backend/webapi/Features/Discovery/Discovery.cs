@@ -22,7 +22,7 @@ public class Discovery
     {
         public enum StatusCode
         {
-            Success,
+            Success = 1,
             NewUser,
             NewBCProviderError
         }
