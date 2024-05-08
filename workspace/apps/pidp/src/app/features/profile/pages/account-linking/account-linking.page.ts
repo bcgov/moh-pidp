@@ -99,6 +99,27 @@ export class AccountLinkingPage implements OnInit, OnDestroy {
     this.credentials$ = this.resource.getCredentials(partyId);
   }
 
+  public onLinkAccount(idpHint: IdentityProvider): void {
+    const data: DialogOptions = {
+      title: 'Redirecting',
+      component: HtmlComponent,
+      data: {
+        content: this.documentService.getRedirectingToSignInNotice(),
+      },
+    };
+    this.dialog
+      .open(ConfirmDialogComponent, { data })
+      .afterClosed()
+      .pipe(
+        exhaustMap((result) => (result ? this.linkRequest(idpHint) : EMPTY)),
+      )
+      .subscribe();
+  }
+
+  public onBack(): void {
+    this.navigateToRoot();
+  }
+
   public ngOnInit(): void {
     const partyId = this.partyService.partyId;
 
@@ -139,27 +160,6 @@ export class AccountLinkingPage implements OnInit, OnDestroy {
           this.linkedAccountsIdp.push(linkedAccount.identityProvider),
         );
       });
-  }
-
-  public onLinkAccount(idpHint: IdentityProvider): void {
-    const data: DialogOptions = {
-      title: 'Redirecting',
-      component: HtmlComponent,
-      data: {
-        content: this.documentService.getRedirectingToSignInNotice(),
-      },
-    };
-    this.dialog
-      .open(ConfirmDialogComponent, { data })
-      .afterClosed()
-      .pipe(
-        exhaustMap((result) => (result ? this.linkRequest(idpHint) : EMPTY)),
-      )
-      .subscribe();
-  }
-
-  public onBack(): void {
-    this.navigateToRoot();
   }
 
   public ngOnDestroy(): void {
