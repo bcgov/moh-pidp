@@ -1,0 +1,44 @@
+<ui-layout-header-footer [emailSupport]="providerIdentitySupport">
+  <div class="header-right" page-header-right>
+    <span class="signout-text">sign out</span>
+    <button
+      mat-icon-button
+      matTooltip="Logout"
+      aria-label="logout"
+      (click)="onLogout()">
+      <mat-icon>logout</mat-icon>
+    </button>
+  </div>
+  <div class="container" uiPidpInjectViewportCss>
+    <div class="section-box">
+      <div class="background-image-container">
+        <img
+          alt="BC Provider uplift"
+          ngSrc="/assets/images/bcprovider-uplift-850x600-desktop.png"
+          priority
+          fill />
+      </div>
+      <header class="title-container">
+        <h1>Account already exists</h1>
+      </header>
+      <p>
+        We apologize but your account already exists and requires manual
+        merging. Please contact support blah and we would be happy to assist
+        you.<br />
+        Please mention that this is a linked account merge request.
+      </p>
+
+      <div class="button-container">
+        <span>
+          <button
+            mat-flat-button
+            type="button"
+            color="primary"
+            (click)="onBack()">
+            Back to OneHealthID Service
+          </button>
+        </span>
+      </div>
+    </div>
+  </div>
+</ui-layout-header-footer>

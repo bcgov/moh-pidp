@@ -1,0 +1,151 @@
+@use 'pidp-variables' as pidp;
+
+.viewport-all {
+  --gap: 1rem;
+  --font-size: 1em;
+  --card-border-radius: var(--gap);
+}
+
+.header-right {
+  & mat-icon {
+    color: #fff;
+  }
+  & .signout-text {
+    margin-right: 10px;
+  }
+}
+
+div.viewport-all {
+  height: 70vh;
+  min-height: 480px;
+  border-radius: var(--card-border-radius);
+  padding: calc(var(--gap) * 4);
+  position: relative;
+  align-self: center;
+  border: 2px solid pidp.$bcgov-color-accent;
+
+  & .background-image-container {
+    position: absolute;
+    height: 60vh;
+    width: 60%;
+    right: 0;
+    bottom: 0;
+    z-index: -1;
+
+    & img {
+      border-bottom-right-radius: var(--card-border-radius);
+      object-position: bottom right;
+    }
+  }
+
+  & .section-box {
+    display: flex;
+    flex-direction: column;
+    padding: var(--gap);
+    width: 40vw;
+
+    & h1 {
+      margin-bottom: 36px;
+      font-weight: 400;
+      font-size: 3.5rem;
+      line-height: 1;
+    }
+
+    & button {
+      width: fit-content;
+      padding: 0 10px;
+    }
+
+    & .button-container {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      height: 20vh;
+    }
+  }
+}
+
+div.viewport-medium {
+  --gap: 0.85rem;
+
+  & .section-box {
+    & h1 {
+      font-size: 3em;
+      margin-bottom: 25px;
+      line-height: 1.4;
+    }
+
+    & p {
+      font-size: 0.85em;
+    }
+  }
+}
+
+// Adjust sizing for small screens.
+div.viewport-small {
+  --gap: 0.65rem;
+  border: none;
+  height: auto;
+  align-self: normal;
+  max-width: none;
+
+  & .background-image-container {
+    & img {
+      border-radius: unset;
+    }
+  }
+
+  & .section-box {
+    width: 65vw;
+
+    & h1 {
+      font-size: 2em;
+      margin-bottom: 25px;
+    }
+
+    & p,
+    small {
+      font-size: 0.9rem;
+      line-height: 1.25rem;
+    }
+
+    & button {
+      padding: 0 10px;
+    }
+  }
+}
+
+// This section is optimized for iPhone SE
+div.viewport-xsmall {
+  --gap: 0.5rem;
+  border: none;
+  height: auto;
+  align-self: normal;
+  max-width: none;
+
+  & .background-image-container {
+    height: 24vh;
+    width: 55%;
+    & img {
+      border-radius: unset;
+    }
+  }
+
+  & .section-box {
+    width: 80vw;
+    & h1 {
+      font-size: 2em;
+      margin-bottom: 25px;
+    }
+
+    & p,
+    small {
+      font-size: 0.9rem;
+      line-height: 1.5rem;
+    }
+
+    & button {
+      padding: 0 10px;
+    }
+  }
+}
