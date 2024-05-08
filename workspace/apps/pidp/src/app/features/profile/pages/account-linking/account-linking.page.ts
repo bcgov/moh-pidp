@@ -47,6 +47,7 @@ import { StatusCode } from '@app/features/portal/enums/status-code.enum';
 import { SuccessDialogComponent } from '@app/shared/components/success-dialog/success-dialog.component';
 
 import { AccountLinkingResource } from './account-linking-resource.service';
+import { linkedAccountCardText } from './account-linking.constants';
 import { Credential } from './account-linking.model';
 
 @Component({
@@ -118,6 +119,10 @@ export class AccountLinkingPage implements OnInit, OnDestroy {
 
   public onBack(): void {
     this.navigateToRoot();
+  }
+
+  public getCardText(idp: IdentityProvider): string {
+    return linkedAccountCardText[idp] ?? '';
   }
 
   public ngOnInit(): void {

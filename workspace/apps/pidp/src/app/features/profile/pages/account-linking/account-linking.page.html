@@ -102,7 +102,11 @@
             <div *ngFor="let credential of linkedAccounts" class="card">
               <div class="card-container">
                 <div class="card-header">
-                  <h3><strong>{{credential.identityProvider}}</strong></h3>
+                  <h3>
+                    <strong
+                      >{{getCardText(credential.identityProvider)}}</strong
+                    >
+                  </h3>
                 </div>
                 <!-- TODO Get logo for BCSC -->
                 <!-- TODO toggle card img based on identityProvider -->
