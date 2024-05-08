@@ -16,6 +16,7 @@ public class Index
     {
         public int Id { get; set; }
         public string? IdentityProvider { get; set; }
+        public string? IdpId { get; set; }
     }
 
     public class QueryValidator : AbstractValidator<Query>
@@ -36,7 +37,8 @@ public class Index
                 .Select(credential => new Model
                 {
                     Id = credential.Id,
-                    IdentityProvider = credential.IdentityProvider
+                    IdentityProvider = credential.IdentityProvider,
+                    IdpId = credential.IdpId
                 })
                 .ToListAsync();
         }
