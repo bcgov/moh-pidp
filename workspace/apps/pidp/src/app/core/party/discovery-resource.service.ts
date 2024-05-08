@@ -11,6 +11,7 @@ import { PartyCreate } from './party-create.model';
 export interface DiscoveryResult {
   partyId?: number;
   newBCProvider: boolean;
+  status?: StatusCode;
 }
 
 export enum Destination {
@@ -18,6 +19,13 @@ export enum Destination {
   USER_ACCESS_AGREEMENT,
   LICENCE_DECLARATION,
   PORTAL,
+}
+export enum StatusCode {
+  Success = 1,
+  AlreadyLinkedError,
+  CredentialExistsError,
+  ExpiredCredentialLinkTicketError,
+  NewBCProviderError,
 }
 
 @Injectable({

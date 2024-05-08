@@ -8,8 +8,18 @@ import { AuthRoutes } from '@app/features/auth/auth.routes';
 import { ShellRoutes } from '@app/features/shell/shell.routes';
 
 import { LoggerService } from '../services/logger.service';
-import { DiscoveryResource } from './discovery-resource.service';
+import { DiscoveryResource, StatusCode } from './discovery-resource.service';
 import { PartyService } from './party.service';
+
+const linkedAccountErrorStatusCodes: [
+  StatusCode,
+  StatusCode,
+  StatusCode | undefined,
+] = [
+  StatusCode.AlreadyLinkedError,
+  StatusCode.CredentialExistsError,
+  StatusCode.ExpiredCredentialLinkTicketError,
+];
 
 /**
  * @description
@@ -32,6 +42,11 @@ export const partyResolver: ResolveFn<number | null> = () => {
       if (discovery.newBCProvider) {
         router.navigateByUrl(
           AuthRoutes.routePath(AuthRoutes.BC_PROVIDER_UPLIFT),
+        );
+      }
+      if (linkedAccountErrorStatusCodes.includes(discovery.status)) {
+        router.navigateByUrl(
+          AuthRoutes.routePath(AuthRoutes.LINK_ACCOUNT_ERROR),
         );
       }
       if (!discovery.partyId) {
