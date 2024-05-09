@@ -66,7 +66,6 @@
             <div class="card-header auth-card-header">
               <h3><strong>BC Services Card</strong></h3>
             </div>
-            <!-- TODO Get logo for BCSC -->
             <div class="card-body auth-card-body">
               <img
                 class="bcsc-logo"
@@ -88,11 +87,6 @@
           </div>
         </div>
       </section>
-      <!-- To display all current credentials a user has
-        uncomment below and comment out the following div -->
-      <!-- <div
-        *ngIf="(credentials$ | async) as linkedAccounts"
-        class="content-box successfully-linked"> -->
       <div
         *ngIf="linkedAccounts.length > 0"
         class="content-box successfully-linked">
