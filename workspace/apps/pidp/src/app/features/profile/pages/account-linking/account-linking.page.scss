@@ -77,6 +77,14 @@
               height: 45px !important;
               width: 175px !important;
             }
+            img.bcsc-logo {
+              z-index: -1;
+              -webkit-transform: none;
+              transform: none;
+              position: relative !important;
+              height: 63px !important;
+              width: 100px !important;
+            }
           }
         }
       }
@@ -112,7 +120,7 @@
         margin: 5px;
         position: relative;
         line-height: 1.5rem;
-        width: max-content;
+        width: 240px;
         box-shadow:
           0 4px 5px 0 rgba(0, 0, 0, 0.14),
           0 1px 10px 0 rgba(0, 0, 0, 0.12),
@@ -123,7 +131,7 @@
           flex-direction: column;
           height: 100%;
           width: 100%;
-          align-items: flex-start;
+          align-items: center;
           padding: 20px;
 
           .card-header,
@@ -143,6 +151,12 @@
               position: relative !important;
               height: 30px !important;
               width: 130px !important;
+            }
+            img.mini-logo {
+              z-index: -1;
+              -webkit-transform: none;
+              transform: none;
+              position: relative !important;
             }
           }
         }
@@ -182,8 +196,9 @@ div.viewport-xsmall {
     }
   }
   .successfully-linked {
-    & .card {
-      width: 100%;
+    .successfully-linked-accounts {
+      flex-direction: column;
+      align-items: center;
     }
   }
 }
