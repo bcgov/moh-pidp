@@ -33,10 +33,10 @@ public class Create
     {
         public enum StatusCodes
         {
-            Success = 1,
-            AlreadyLinked = 4,
-            CredentialExists = 5,
-            TicketExpired = 6
+            AccountLinkSuccess = 11,
+            AlreadyLinked,
+            CredentialExists,
+            TicketExpired
         }
 
         public int? PartyId { get; set; }
@@ -147,7 +147,7 @@ public class Create
             return DomainResult.Success(new Model
             {
                 PartyId = credential.PartyId,
-                Status = Model.StatusCodes.Success
+                Status = Model.StatusCodes.AccountLinkSuccess
             });
         }
     }

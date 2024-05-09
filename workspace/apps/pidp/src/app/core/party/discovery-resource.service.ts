@@ -21,6 +21,7 @@ export enum StatusCode {
   Success = 1,
   NewUser,
   NewBCProviderError,
+  AccountLinkSuccess = 11,
   AlreadyLinkedError,
   CredentialExistsError,
   ExpiredCredentialLinkTicketError,
@@ -30,7 +31,7 @@ export enum StatusCode {
   providedIn: 'root',
 })
 export class DiscoveryResource {
-  public constructor(private apiResource: ApiHttpClient) {}
+  public constructor(private apiResource: ApiHttpClient) { }
 
   /**
    * @description
