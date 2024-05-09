@@ -24,7 +24,11 @@ public class Discovery
         {
             Success = 1,
             NewUser,
-            NewBCProviderError
+            NewBCProviderError,
+            AccountLinkSuccess,
+            AlreadyLinked,
+            CredentialExists,
+            TicketExpired
         }
 
         public int? PartyId { get; set; }

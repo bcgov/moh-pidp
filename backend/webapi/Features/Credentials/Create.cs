@@ -11,6 +11,7 @@ using System.Text.Json.Serialization;
 
 using Pidp.Data;
 using Pidp.Extensions;
+using Pidp.Features.Discovery;
 using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.HttpClients.BCProvider;
 using Pidp.Infrastructure.HttpClients.Plr;
@@ -21,7 +22,7 @@ using Pidp.Infrastructure.HttpClients.Keycloak;
 
 public class Create
 {
-    public class Command : ICommand<IDomainResult<Model>>
+    public class Command : ICommand<IDomainResult<Discovery.Model>>
     {
         [JsonIgnore]
         public Guid CredentialLinkToken { get; set; }
@@ -29,21 +30,7 @@ public class Create
         public ClaimsPrincipal User { get; set; } = new();
     }
 
-    public class Model
-    {
-        public enum StatusCodes
-        {
-            AccountLinkSuccess = 11,
-            AlreadyLinked,
-            CredentialExists,
-            TicketExpired
-        }
-
-        public int? PartyId { get; set; }
-        public StatusCodes Status { get; set; }
-    }
-
-    public class CommandHandler : ICommandHandler<Command, IDomainResult<Model>>
+    public class CommandHandler : ICommandHandler<Command, IDomainResult<Discovery.Model>>
     {
         private readonly IClock clock;
         private readonly ILogger<CommandHandler> logger;
@@ -59,7 +46,7 @@ public class Create
             this.context = context;
         }
 
-        public async Task<IDomainResult<Model>> HandleAsync(Command command)
+        public async Task<IDomainResult<Discovery.Model>> HandleAsync(Command command)
         {
             var userId = command.User.GetUserId();
             var userIdentityProvider = command.User.GetIdentityProvider();
@@ -69,7 +56,7 @@ public class Create
                 || string.IsNullOrWhiteSpace(userIdpId))
             {
                 this.logger.LogUserError(userId, userIdentityProvider, userIdpId);
-                return DomainResult.Failed<Model>();
+                return DomainResult.Failed<Discovery.Model>();
             }
 
             var ticket = await this.context.CredentialLinkTickets
@@ -79,17 +66,17 @@ public class Create
             if (ticket == null)
             {
                 this.logger.LogTicketNotFound(command.CredentialLinkToken);
-                return DomainResult.NotFound<Model>();
+                return DomainResult.NotFound<Discovery.Model>();
             }
             if (ticket.LinkToIdentityProvider != userIdentityProvider)
             {
                 this.logger.LogTicketIdpError(ticket.Id, ticket.LinkToIdentityProvider, userIdentityProvider);
-                return DomainResult.Failed<Model>();
+                return DomainResult.Failed<Discovery.Model>();
             }
             if (ticket.ExpiresAt < this.clock.GetCurrentInstant())
             {
                 this.logger.LogTicketExpired(ticket.Id);
-                return DomainResult.Success(new Model { Status = Model.StatusCodes.TicketExpired });
+                return DomainResult.Success(new Discovery.Model { Status = Discovery.Model.StatusCode.TicketExpired });
             }
 
 #pragma warning disable CA1304 // ToLower() is Locale Dependant
@@ -105,10 +92,10 @@ public class Create
                 if (existingCredential.PartyId == ticket.PartyId)
                 {
                     this.logger.LogCredentialAlreadyLinked(ticket.Id, existingCredential.Id);
-                    return DomainResult.Success(new Model
+                    return DomainResult.Success(new Discovery.Model
                     {
                         PartyId = existingCredential.PartyId,
-                        Status = Model.StatusCodes.AlreadyLinked
+                        Status = Discovery.Model.StatusCode.AlreadyLinked
                     });
                 }
                 else
@@ -121,10 +108,10 @@ public class Create
                     await this.context.SaveChangesAsync();
 
                     this.logger.LogCredentialAlreadyExists(ticket.Id, existingCredential.Id);
-                    return DomainResult.Success(new Model
+                    return DomainResult.Success(new Discovery.Model
                     {
                         PartyId = existingCredential.PartyId,
-                        Status = Model.StatusCodes.CredentialExists
+                        Status = Discovery.Model.StatusCode.CredentialExists
                     });
                 }
             }
@@ -144,10 +131,10 @@ public class Create
 
             await this.context.SaveChangesAsync();
 
-            return DomainResult.Success(new Model
+            return DomainResult.Success(new Discovery.Model
             {
                 PartyId = credential.PartyId,
-                Status = Model.StatusCodes.AccountLinkSuccess
+                Status = Discovery.Model.StatusCode.AccountLinkSuccess
             });
         }
     }

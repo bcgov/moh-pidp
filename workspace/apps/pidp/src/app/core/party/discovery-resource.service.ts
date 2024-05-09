@@ -21,7 +21,7 @@ export enum StatusCode {
   Success = 1,
   NewUser,
   NewBCProviderError,
-  AccountLinkSuccess = 11,
+  AccountLinkSuccess,
   AlreadyLinkedError,
   CredentialExistsError,
   ExpiredCredentialLinkTicketError,
