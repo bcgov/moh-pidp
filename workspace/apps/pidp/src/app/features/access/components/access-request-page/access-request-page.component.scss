@@ -61,20 +61,31 @@
     display: inline-flex;
     margin: var(--margin-style);
     padding: var(--card-padding);
+    height: 185px;
   }
 
   & .card-header-text {
     color: #003366;
     font-size: 18px;
-    font-family: BC Sans;
     font-weight: 700;
-    word-wrap: break-word
+    word-wrap: break-word;
+    float: right;
+    width: 90%;
   }
 
-  .card-header-text fa-icon {
+  .card-header fa-icon {
     border: 1px solid #FCBA19;
-    border-radius: 10px;
+    border-radius: 20px;
     padding: 5px;
+  }
+
+  // .card-header-icon {
+  //   width: 10%;
+  //   float: left;
+  // }
+
+  .card-body {
+    padding: 15px 0px 0px 34px;
   }
 
   .div-search {
@@ -93,10 +104,8 @@
   }
 
   .search-content input {
-     width: 99%;
-     padding: 10px;
-    // border: 1px solid #ccc;
-    // border-radius: 5px;
+    width: 99%;
+    padding: 10px;
     border: none;
   }
 
@@ -107,12 +116,11 @@
   }
 
   .search-content button {
-     position: absolute;
+    position: absolute;
     right: 0;
     padding: 10px;
     width: 100px;
     border: none;
-    margin-top: -1px;
   }
 
   .search-content span {
@@ -179,10 +187,16 @@
   .card-container {
     display: inline-flex;
     flex-direction: column;
+    height: 235px;
   }
 
   .content-header {
     margin: 0px 20px 0px 20px;
+  }
+
+  .card-header-text {
+    padding-left: 5px;
+    width: 89%;
   }
 
   .content-header h1 {
@@ -196,9 +210,15 @@
   .search-content {
     margin: 30px 20px 70px 20px;
   }
+
   .div-search {
     width: 100%;
   }
+
+  .card-body {
+    padding: 15px 0px 0px 35px;
+  }
+
   .search-content input {
     width: 100%;
   }
@@ -231,6 +251,11 @@
   .content-header {
     margin: 0px 20px 0px 20px;
   }
+
+  .card-body {
+    padding: 15px 0px 0px 30px;
+  }
+
   .div-search {
     width: 100%;
   }
@@ -264,5 +289,18 @@
 
   .search-content {
     margin: 30px 37px 50px 20px;
+  }
+}
+
+.container.viewport-medium {
+  .card-body {
+    padding: 40px 0px 0px 30px;
+  }
+  .card-container {
+    height: 250px;
+  }
+
+  .card-header-text {
+    padding-left: 5px;
   }
 }

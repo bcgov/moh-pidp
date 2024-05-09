@@ -30,7 +30,7 @@ export class AccessRequestPageComponent {
   public faAngleRight = faAngleRight;
   public faMagnifyingGlass = faMagnifyingGlass;
   showBackToTopButton: Boolean = false;
-  showSearrchIcon: boolean = true;
+  showSearchIcon: boolean = true;
 
   public constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
@@ -49,7 +49,8 @@ export class AccessRequestPageComponent {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  onSearch(event: KeyboardEvent) {
-    this.showSearrchIcon = (<HTMLInputElement>event.target).value == '';
+  onSearch(event: Event) {
+    this.showSearchIcon = ( event.target as HTMLInputElement).value ==='';
   }
+ 
 }
