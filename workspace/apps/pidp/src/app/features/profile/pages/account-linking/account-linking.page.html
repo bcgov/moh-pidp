@@ -69,9 +69,9 @@
             <!-- TODO Get logo for BCSC -->
             <div class="card-body auth-card-body">
               <img
-                class="logo"
-                ngSrc="/assets/images/phsa-logo.png"
-                alt="PHSA logo"
+                class="bcsc-logo"
+                ngSrc="/assets/images/bcsc-logo.png"
+                alt="BCSC logo"
                 priority
                 fill />
             </div>
@@ -108,15 +108,12 @@
                     >
                   </h3>
                 </div>
-                <!-- TODO Get logo for BCSC -->
-                <!-- TODO toggle card img based on identityProvider -->
-                <!-- *ngIf="credential.identityProvider === IdentityProvider.PHSA" -->
                 <div class="card-body">
                   <img
-                    class="logo"
-                    ngSrc="/assets/images/phsa-logo.png"
-                    alt="PHSA logo"
-                    fill />
+                    alt="logo"
+                    fill
+                    [ngClass]="credential.identityProvider === IdentityProvider.BCSC ? 'mini-logo' : 'logo'"
+                    [src]="credential.identityProvider === IdentityProvider.BCSC ? '/assets/images/bcsc-logo.png' :  '/assets/images/phsa-logo.png'" />
                 </div>
                 <div class="card-footer"></div>
               </div>
