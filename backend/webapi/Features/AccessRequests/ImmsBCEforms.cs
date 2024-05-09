@@ -30,7 +30,7 @@ public class ImmsBCEforms
         private readonly IClock clock;
         private readonly IEmailService emailService;
         private readonly IKeycloakAdministrationClient keycloakClient;
-        private readonly ILogger logger;
+        private readonly ILogger<CommandHandler> logger;
         private readonly IPlrClient plrClient;
         private readonly PidpDbContext context;
 
@@ -68,7 +68,7 @@ public class ImmsBCEforms
                 || dto.Email == null
                 || !await this.plrClient.GetStandingAsync(dto.Cpn))
             {
-                this.logger.LogImmsBCEformsAccessRequestDenied(command.PartyId);
+                this.logger.LogAccessRequestDenied(command.PartyId);
                 return DomainResult.Failed();
             }
 
@@ -108,5 +108,5 @@ public class ImmsBCEforms
 public static partial class ImmsBCEformsLoggingExtensions
 {
     [LoggerMessage(1, LogLevel.Warning, "ImmsBC eForms Access Request for Party {partyId} denied; did not meet all prerequisites.")]
-    public static partial void LogImmsBCEformsAccessRequestDenied(this ILogger logger, int partyId);
+    public static partial void LogAccessRequestDenied(this ILogger<ImmsBCEforms.CommandHandler> logger, int partyId);
 }

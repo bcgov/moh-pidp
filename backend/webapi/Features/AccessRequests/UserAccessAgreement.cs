@@ -28,7 +28,7 @@ public class UserAccessAgreement
         private readonly string bcProviderClientId;
         private readonly IBCProviderClient client;
         private readonly IClock clock;
-        private readonly ILogger logger;
+        private readonly ILogger<CommandHandler> logger;
         private readonly PidpDbContext context;
 
         public CommandHandler(
@@ -61,7 +61,7 @@ public class UserAccessAgreement
 
             if (party.AlreadyEnrolled)
             {
-                this.logger.LogUserAccessAgreementHasAlreadyBeenAccepted(command.PartyId);
+                this.logger.LogAgreementHasAlreadyBeenAccepted(command.PartyId);
                 return DomainResult.Failed();
             }
 
@@ -95,5 +95,5 @@ public class UserAccessAgreement
 public static partial class UserAccessAgreementLoggingExtensions
 {
     [LoggerMessage(1, LogLevel.Warning, "User {partyId} has already accepted the user access agreement.")]
-    public static partial void LogUserAccessAgreementHasAlreadyBeenAccepted(this ILogger logger, int partyId);
+    public static partial void LogAgreementHasAlreadyBeenAccepted(this ILogger<UserAccessAgreement.CommandHandler> logger, int partyId);
 }
