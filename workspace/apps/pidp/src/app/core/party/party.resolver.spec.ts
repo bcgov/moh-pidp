@@ -137,8 +137,11 @@ describe('partyResolver', () => {
             ) as Observable<number | null>
           ).subscribe((partyId: number | null) => (actualResult = partyId));
           then('navigate user to credential exists screen', () => {
-            expect(router.navigateByUrl).toHaveBeenCalledWith(
-              `/${AuthRoutes.BASE_PATH}/${AuthRoutes.LINK_ACCOUNT_ERROR}`,
+            expect(router.navigate).toHaveBeenCalledWith(
+              [`/${AuthRoutes.BASE_PATH}/${AuthRoutes.LINK_ACCOUNT_ERROR}`],
+              {
+                queryParams: { status: discoveryResult.status },
+              },
             );
             expect(actualResult).toBe(partyId);
           });

@@ -15,6 +15,12 @@ import {
 } from './discovery-resource.service';
 import { PartyService } from './party.service';
 
+const linkedAccountErrorStatus: DiscoveryStatus[] = [
+  DiscoveryStatus.AlreadyLinkedError,
+  DiscoveryStatus.CredentialExistsError,
+  DiscoveryStatus.ExpiredCredentialLinkTicketError,
+];
+
 /**
  * @description
  * Gets a Party from the API based on the access token, and
@@ -46,10 +52,10 @@ export const partyResolver: ResolveFn<number | null> = () => {
           AuthRoutes.routePath(AuthRoutes.BC_PROVIDER_UPLIFT),
         );
       }
-      if (discovery.status === DiscoveryStatus.CredentialExistsError) {
-        router.navigateByUrl(
-          AuthRoutes.routePath(AuthRoutes.LINK_ACCOUNT_ERROR),
-        );
+      if (linkedAccountErrorStatus.includes(discovery.status)) {
+        router.navigate([AuthRoutes.routePath(AuthRoutes.LINK_ACCOUNT_ERROR)], {
+          queryParams: { status: discovery.status },
+        });
       }
       if (!discovery.partyId) {
         return of(null);
