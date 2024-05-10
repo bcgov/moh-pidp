@@ -3,6 +3,8 @@ import { TestBed } from '@angular/core/testing';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 
+import { of } from 'rxjs';
+
 import { randTextRange } from '@ngneat/falso';
 import { provideAutoSpy } from 'jest-auto-spies';
 import { KeycloakService } from 'keycloak-angular';
@@ -14,7 +16,7 @@ import { LinkAccountErrorPage } from './link-account-error.page';
 
 describe('LinkAccountErrorPage', () => {
   let component: LinkAccountErrorPage;
-  let mockActivatedRoute: { snapshot: any };
+  let mockActivatedRoute: { snapshot: any; queryParams: any };
   let router: Router;
 
   beforeEach(async () => {
@@ -27,6 +29,7 @@ describe('LinkAccountErrorPage', () => {
           },
         },
       },
+      queryParams: of({ param1: 'value1' }),
     };
 
     TestBed.configureTestingModule({
@@ -41,6 +44,7 @@ describe('LinkAccountErrorPage', () => {
           provide: ActivatedRoute,
           useValue: mockActivatedRoute,
         },
+
         provideAutoSpy(Router),
         provideAutoSpy(KeycloakService),
       ],
