@@ -73,7 +73,7 @@ export class AccountLinkingPage implements OnInit, OnDestroy {
   public identityProvider$: Observable<IdentityProvider>;
   public IdentityProvider = IdentityProvider;
   public credentials$: Observable<Credential[]>;
-  public linkedAccounts$!: Subscription;
+  public linkedAccounts$?: Subscription;
   public linkedAccounts: Credential[] = [];
   public linkedAccountsIdp: IdentityProvider[] = [];
 
