@@ -45,6 +45,7 @@ import { AuthService } from '../../services/auth.service';
 export class LinkAccountErrorPage implements OnInit {
   public logoutRedirectUrl: string;
   public providerIdentitySupport: string;
+  public additionalSupportPhone: string;
   public activeLayout = '';
   public status = '';
   public DiscoveryStatus = DiscoveryStatus;
@@ -57,6 +58,7 @@ export class LinkAccountErrorPage implements OnInit {
   ) {
     this.logoutRedirectUrl = `${this.config.applicationUrl}/`;
     this.providerIdentitySupport = this.config.emails.providerIdentitySupport;
+    this.additionalSupportPhone = this.config.phones.additionalSupport;
     this.route.queryParams.subscribe((params) => {
       this.status = params['status'];
     });
