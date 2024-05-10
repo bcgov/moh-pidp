@@ -140,6 +140,7 @@ describe('partyResolver', () => {
             expect(router.navigateByUrl).toHaveBeenCalledWith(
               `/${AuthRoutes.BASE_PATH}/${AuthRoutes.LINK_ACCOUNT_ERROR}`,
             );
+            expect(actualResult).toBe(partyId);
           });
         });
       },
