@@ -74,7 +74,9 @@
       We apologize, but both accounts you are trying to link already exist in
       the OneHealthId system and will require manual merging. Please contact
       support at
-      <a uiAnchor scheme="mailto" [attr.href]="providerIdentitySupport"></a>
+      <a uiAnchor scheme="mailto" [attr.href]="providerIdentitySupport"></a> or
+      by phone at
+      <a uiAnchor scheme="tel" [attr.href]="additionalSupportPhone"></a>
       and we would be happy to assist you.<br />
       Please mention that this is a linked account merge request.
     </p>
@@ -100,8 +102,19 @@
 <ng-template #default>
   <div class="active-layout">
     <header class="title-container">
-      <h1>Nothing to see here</h1>
+      <h1>An error has occurred</h1>
     </header>
-    <p>Move along.</p>
+    <p>For additional support, contact the OneHealthID Service desk:</p>
+    <ul>
+      <li>
+        By email at
+        <a uiAnchor scheme="mailto" [attr.href]="providerIdentitySupport"></a>
+      </li>
+
+      <li>
+        By phone at
+        <a uiAnchor scheme="tel" [attr.href]="additionalSupportPhone"></a>
+      </li>
+    </ul>
   </div>
 </ng-template>
