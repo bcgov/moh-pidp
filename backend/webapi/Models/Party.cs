@@ -76,12 +76,11 @@ public class Party : BaseAuditable
     public string DisplayFullName => $"{this.DisplayFirstName} {this.DisplayLastName}";
 
     /// <summary>
-    /// The "primary" Credential of a Party is the a) BC Services Card Credential or b) the first non-BC Services Card Credential.
+    /// The "primary" Credential of a Party is the a) BC Services Card Credential or b) the only non-BC Services Card Credential.
     /// </summary>
     [Projectable]
     public Guid PrimaryUserId => this.Credentials
         .OrderByDescending(credential => credential.IdentityProvider == IdentityProviders.BCServicesCard)
-        .ThenBy(credential => credential.Created)
         .Select(credential => credential.UserId)
         .First();
 
