@@ -5,12 +5,15 @@ import { ResolveFn, Router } from '@angular/router';
 import { catchError, exhaustMap, of, switchMap } from 'rxjs';
 
 import { AuthRoutes } from '@app/features/auth/auth.routes';
+import { AuthorizedUserService } from '@app/features/auth/services/authorized-user.service';
 import { ShellRoutes } from '@app/features/shell/shell.routes';
 
 import { LoggerService } from '../services/logger.service';
-import { DiscoveryResource, StatusCode } from './discovery-resource.service';
+import {
+  DiscoveryResource,
+  DiscoveryStatus,
+} from './discovery-resource.service';
 import { PartyService } from './party.service';
-import { AuthorizedUserService } from '@app/features/auth/services/authorized-user.service';
 
 /**
  * @description
@@ -30,17 +33,20 @@ export const partyResolver: ResolveFn<number | null> = () => {
   const authorizedUserService = inject(AuthorizedUserService);
 
   return discoveryResource.discover().pipe(
-    switchMap((discovery) => discovery.status === StatusCode.NewUser
-      ? authorizedUserService.user$.pipe(switchMap((user) => discoveryResource.createParty(user)))
-      : of(discovery)
+    switchMap((discovery) =>
+      discovery.status === DiscoveryStatus.NewUser
+        ? authorizedUserService.user$.pipe(
+            switchMap((user) => discoveryResource.createParty(user)),
+          )
+        : of(discovery),
     ),
     exhaustMap((discovery) => {
-      if (discovery.status === StatusCode.NewBCProviderError) {
+      if (discovery.status === DiscoveryStatus.NewBCProviderError) {
         router.navigateByUrl(
           AuthRoutes.routePath(AuthRoutes.BC_PROVIDER_UPLIFT),
         );
       }
-      if (discovery.status === StatusCode.CredentialExistsError) {
+      if (discovery.status === DiscoveryStatus.CredentialExistsError) {
         router.navigateByUrl(
           AuthRoutes.routePath(AuthRoutes.LINK_ACCOUNT_ERROR),
         );
