@@ -8,7 +8,7 @@ import { PartyCreate } from './party-create.model';
 
 export interface DiscoveryResult {
   partyId?: number;
-  status: StatusCode;
+  status: DiscoveryStatus;
 }
 
 export enum Destination {
@@ -17,7 +17,7 @@ export enum Destination {
   LICENCE_DECLARATION,
   PORTAL,
 }
-export enum StatusCode {
+export enum DiscoveryStatus {
   Success = 1,
   NewUser,
   NewBCProviderError,
@@ -31,7 +31,7 @@ export enum StatusCode {
   providedIn: 'root',
 })
 export class DiscoveryResource {
-  public constructor(private apiResource: ApiHttpClient) { }
+  public constructor(private apiResource: ApiHttpClient) {}
 
   /**
    * @description
@@ -58,7 +58,7 @@ export class DiscoveryResource {
     return this.apiResource.post<number>('parties', partyCreate).pipe(
       map((partyId) => ({
         partyId: partyId,
-        status: StatusCode.Success,
+        status: DiscoveryStatus.Success,
       })),
     );
   }
