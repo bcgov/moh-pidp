@@ -147,7 +147,9 @@ export class AccountLinkingPage implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy(): void {
-    this.linkedAccounts$.unsubscribe();
+    if (this.linkedAccounts$) {
+      this.linkedAccounts$.unsubscribe();
+    }
   }
 
   private handleLinkedAccounts(): void {

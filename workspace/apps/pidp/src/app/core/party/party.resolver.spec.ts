@@ -12,13 +12,17 @@ import { Observable } from 'rxjs';
 
 import { randNumber } from '@ngneat/falso';
 import { Spy, createSpyFromClass, provideAutoSpy } from 'jest-auto-spies';
+import { KeycloakService } from 'keycloak-angular';
 
 import { APP_CONFIG, APP_DI_CONFIG } from '@app/app.config';
 import { ShellRoutes } from '@app/features/shell/shell.routes';
 
 import { DocumentService } from '../services/document.service';
 import { LoggerService } from '../services/logger.service';
-import { DiscoveryResource } from './discovery-resource.service';
+import {
+  DiscoveryResource,
+  DiscoveryStatus,
+} from './discovery-resource.service';
 import { partyResolver } from './party.resolver';
 import { PartyService } from './party.service';
 
@@ -51,6 +55,7 @@ describe('partyResolver', () => {
         provideAutoSpy(LoggerService),
         provideAutoSpy(DocumentService),
         provideAutoSpy(Router),
+        provideAutoSpy(KeycloakService),
       ],
     });
 
@@ -66,7 +71,7 @@ describe('partyResolver', () => {
       when('attempting to resolve the party is successful', () => {
         const discoveryResult = {
           partyId: randNumber(),
-          newBCProvider: false,
+          status: DiscoveryStatus.Success,
         };
         partyResourceSpy.discover.nextOneTimeWith(discoveryResult);
         let actualResult: number | null;
