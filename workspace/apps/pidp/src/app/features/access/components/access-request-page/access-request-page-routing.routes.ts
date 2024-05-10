@@ -5,6 +5,6 @@ import { AccessRequestPageComponent } from './access-request-page.component';
 export const routes: Routes = [
   {
     path: '',
-    component: AccessRequestPageComponent,
+    component: AccessRequestPageComponent
   },
 ];

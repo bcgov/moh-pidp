@@ -7,19 +7,21 @@ import { faPlus, faThumbsUp, faFileLines, faArrowUp, faAngleRight, faMagnifyingG
 import { InjectViewportCssClassDirective } from '@bcgov/shared/ui';
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';
+import { LayoutHeaderFooterComponent } from "../../../../../../../../libs/shared/ui/src/lib/components/layout-header-footer/layout-header-footer.component";
 
 @Component({
-  selector: 'app-access-request-page',
-  templateUrl: './access-request-page.component.html',
-  styleUrls: ['./access-request-page.component.scss'],
-  standalone: true,
-  imports: [
-    FaIconComponent,
-    InjectViewportCssClassDirective,
-    MatButtonModule,
-    NgClass,
-    NgIf,
-  ],
+    selector: 'app-access-request-page',
+    templateUrl: './access-request-page.component.html',
+    styleUrls: ['./access-request-page.component.scss'],
+    standalone: true,
+    imports: [
+        FaIconComponent,
+        InjectViewportCssClassDirective,
+        MatButtonModule,
+        NgClass,
+        NgIf,
+        LayoutHeaderFooterComponent
+    ]
 })
 export class AccessRequestPageComponent {
   public faThumbsUp = faThumbsUp;
@@ -31,10 +33,13 @@ export class AccessRequestPageComponent {
   public faMagnifyingGlass = faMagnifyingGlass;
   showBackToTopButton: Boolean = false;
   showSearchIcon: boolean = true;
+  public isMobile = true;
+  public providerIdentitySupport: string;
 
   public constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
   ) {
+    this.providerIdentitySupport = this.config.emails.providerIdentitySupport;
     this.logoutRedirectUrl = `${this.config.applicationUrl}/`;
   }
 
