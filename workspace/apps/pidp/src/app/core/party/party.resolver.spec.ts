@@ -15,6 +15,7 @@ import { Spy, createSpyFromClass, provideAutoSpy } from 'jest-auto-spies';
 import { KeycloakService } from 'keycloak-angular';
 
 import { APP_CONFIG, APP_DI_CONFIG } from '@app/app.config';
+import { AuthRoutes } from '@app/features/auth/auth.routes';
 import { ShellRoutes } from '@app/features/shell/shell.routes';
 
 import { DocumentService } from '../services/document.service';
@@ -115,5 +116,33 @@ describe('partyResolver', () => {
         });
       });
     });
+
+    given(
+      'a party ID exists and attempts to link to a credential with an existing party ID',
+      () => {
+        const partyId = randNumber({ min: 1 });
+        partyServiceSpy.accessorSpies.getters.partyId.mockReturnValue(partyId);
+
+        when('attempt to resolve the party is successful', () => {
+          const discoveryResult = {
+            partyId,
+            status: DiscoveryStatus.CredentialExistsError,
+          };
+          partyResourceSpy.discover.nextOneTimeWith(discoveryResult);
+          let actualResult: number | null;
+          (
+            executeResolver(
+              activatedRouteSnapshotSpy,
+              routerStateSnapshotSpy,
+            ) as Observable<number | null>
+          ).subscribe((partyId: number | null) => (actualResult = partyId));
+          then('navigate user to credential exists screen', () => {
+            expect(router.navigateByUrl).toHaveBeenCalledWith(
+              `/${AuthRoutes.BASE_PATH}/${AuthRoutes.LINK_ACCOUNT_ERROR}`,
+            );
+          });
+        });
+      },
+    );
   });
 });

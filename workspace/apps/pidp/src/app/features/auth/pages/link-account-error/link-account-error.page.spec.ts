@@ -8,12 +8,14 @@ import { provideAutoSpy } from 'jest-auto-spies';
 import { KeycloakService } from 'keycloak-angular';
 
 import { APP_CONFIG, APP_DI_CONFIG } from '@app/app.config';
+import { ShellRoutes } from '@app/features/shell/shell.routes';
 
 import { LinkAccountErrorPage } from './link-account-error.page';
 
 describe('LinkAccountErrorPage', () => {
   let component: LinkAccountErrorPage;
   let mockActivatedRoute: { snapshot: any };
+  let router: Router;
 
   beforeEach(async () => {
     mockActivatedRoute = {
@@ -44,9 +46,22 @@ describe('LinkAccountErrorPage', () => {
       ],
     });
     component = TestBed.inject(LinkAccountErrorPage);
+    router = TestBed.inject(Router);
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  describe('METHOD: onBack', () => {
+    given('user wants to go back to the previous page', () => {
+      when('onBack is invoked', () => {
+        component.onBack();
+
+        then('router should navigate to root route', () => {
+          expect(router.navigate).toHaveBeenCalledWith([ShellRoutes.BASE_PATH]);
+        });
+      });
+    });
   });
 });

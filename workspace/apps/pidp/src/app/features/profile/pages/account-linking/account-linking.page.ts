@@ -25,6 +25,7 @@ import {
 import {
   LOADING_OVERLAY_DEFAULT_MESSAGE,
   LoadingOverlayService,
+  NavigationService,
 } from '@pidp/presentation';
 
 import {
@@ -90,6 +91,7 @@ export class AccountLinkingPage implements OnInit, OnDestroy {
     private authService: AuthService,
     private dialog: MatDialog,
     private loadingOverlayService: LoadingOverlayService,
+    private navigationService: NavigationService,
   ) {
     this.title = this.route.snapshot.data.title;
     const partyId = this.partyService.partyId;
@@ -201,6 +203,6 @@ export class AccountLinkingPage implements OnInit, OnDestroy {
   }
 
   private navigateToRoot(): void {
-    this.router.navigate([this.route.snapshot.data.routes.root]);
+    this.navigationService.navigateToRoot();
   }
 }
