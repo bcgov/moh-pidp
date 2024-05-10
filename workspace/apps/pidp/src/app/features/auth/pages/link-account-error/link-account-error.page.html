@@ -18,17 +18,21 @@
           priority
           fill />
       </div>
-      <header class="title-container">
-        <h1>Account already exists</h1>
-      </header>
-      <p>
-        We apologize, but both accounts you are trying to link already exist in
-        the OneHealthId system and will require manual merging. Please contact
-        support at
-        <a uiAnchor scheme="mailto" [attr.href]="providerIdentitySupport"></a>
-        and we would be happy to assist you.<br />
-        Please mention that this is a linked account merge request.
-      </p>
+
+      <ng-container [ngSwitch]="activeLayout">
+        <ng-container
+          *ngSwitchCase="DiscoveryStatus.AlreadyLinkedError.toString()"
+          [ngTemplateOutlet]="alreadyLinked"></ng-container>
+        <ng-container
+          *ngSwitchCase="DiscoveryStatus.CredentialExistsError.toString()"
+          [ngTemplateOutlet]="credentialExists"></ng-container>
+        <ng-container
+          *ngSwitchCase="DiscoveryStatus.ExpiredCredentialLinkTicketError.toString()"
+          [ngTemplateOutlet]="ticketExpired"></ng-container>
+        <ng-container
+          *ngSwitchDefault
+          [ngTemplateOutlet]="default"></ng-container>
+      </ng-container>
 
       <div class="button-container">
         <span>
@@ -44,3 +48,60 @@
     </div>
   </div>
 </ui-layout-header-footer>
+
+<ng-template #alreadyLinked>
+  <div class="active-layout">
+    <header class="title-container">
+      <h1>Already entered these credentials.</h1>
+    </header>
+    <p>
+      Happy Lorum Mother's Day to all of you who are ipsum mothers! A lot of my
+      friends are mothers these days. To all of you who are, or have been, or
+      expect or hope to be: Happy Mother's Day! Mothers are awesome. And once
+      again sympathies to those who would like to be celebrating Mother's Day as
+      mothers but aren't or can't, and to those who for whatever reason can't or
+      don't want to celebrate it with their own mothers.
+    </p>
+  </div>
+</ng-template>
+
+<ng-template #credentialExists>
+  <div class="active-layout">
+    <header class="title-container">
+      <h1>Account already exists</h1>
+    </header>
+    <p>
+      We apologize, but both accounts you are trying to link already exist in
+      the OneHealthId system and will require manual merging. Please contact
+      support at
+      <a uiAnchor scheme="mailto" [attr.href]="providerIdentitySupport"></a>
+      and we would be happy to assist you.<br />
+      Please mention that this is a linked account merge request.
+    </p>
+  </div>
+</ng-template>
+
+<ng-template #ticketExpired>
+  <div class="active-layout">
+    <header class="title-container">
+      <h1>Ticket expired</h1>
+    </header>
+    <p>
+      Happy Lorum Mother's Day to all of you who are ipsum mothers! A lot of my
+      friends are mothers these days. To all of you who are, or have been, or
+      expect or hope to be: Happy Mother's Day! Mothers are awesome. And once
+      again sympathies to those who would like to be celebrating Mother's Day as
+      mothers but aren't or can't, and to those who for whatever reason can't or
+      don't want to celebrate it with their own mothers.
+    </p>
+  </div>
+</ng-template>
+
+<ng-template #default>
+  <div class="active-layout">
+    <header class="title-container">
+      <h1>Nothing to see here</h1>
+    </header>
+    <p>Move along.</p>
+  </div>
+</ng-template>
