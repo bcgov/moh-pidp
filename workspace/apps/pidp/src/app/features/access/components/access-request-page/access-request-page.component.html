@@ -1,169 +1,172 @@
 <ui-layout-header-footer [emailSupport]="providerIdentitySupport">
-<div class="container" uiPidpInjectViewportCss>
-  <nav class="breadcrumb">
-    <ul>
-      <li><a href='/'>Home</a></li>
-      <li> <fa-icon [icon]="faAngleRight" class="fa-duotone"></fa-icon> </li>
-      <li> <a href="#" class="active">Active Page</a></li>
-    </ul>
-  </nav>
-  <div class="content-header">
-    <h3>
-      PRODUCTS
-    </h3>
-    <h1>
-      Explore all the workplace tools available
-    </h1>
-    <p>
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse non tortor eu nisi mollis tincidunt a blandit
-      quis, tristique a justo. Curabitur eget aliquet libero. Nunc tincidunt augue vitae metus accumsan, ac ullamcorper
-      orci viverra. In consequat lacus eu turpis lacinia, at imperdiet leo commodo. Pellentesque habitant morbi
-      tristique senectus et netus et malesuada fames ac turpis egestas. Sed a justo odio. Nullam dictum, quam eu mattis
-      gravida, lacus purus gravida ligula, sit amet aliquet arcu mi sed purus. Aliquam rutrum mi quam, vitae pretium
-      justo pharetra vel. Vivamus eget iaculis risus. Nulla ac nisl convallis, viverra neque sed, feugiat quam. Nulla
-      vitae nibh quis elit congue porta. Mauris maximus orci non quam hendrerit viverra. Aliquam erat volutpat.
-    </p>
-  </div>
-  <div class="search-content">
-    <span>Total results: 7</span>
-    <div class="div-search">
-      <fa-icon [icon]="faMagnifyingGlass" class="search-icon" *ngIf="showSearchIcon"></fa-icon>
-      <input matInput (focusout)="onSearch($event)" (focus)="showSearchIcon=false">
-      <button type="button" mat-flat-button color="primary">Search</button>
+  <div class="container" uiPidpInjectViewportCss>
+    <nav class="breadcrumb">
+      <ul>
+        <li><a href='/'>Home</a></li>
+        <li> <fa-icon [icon]="faAngleRight" class="fa-duotone"></fa-icon> </li>
+        <li> <a href="#" class="active">Active Page</a></li>
+      </ul>
+    </nav>
+    <div class="content-header">
+      <h3>
+        PRODUCTS
+      </h3>
+      <h1>
+        Explore all the workplace tools available
+      </h1>
+      <p>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse non tortor eu nisi mollis tincidunt a
+        blandit
+        quis, tristique a justo. Curabitur eget aliquet libero. Nunc tincidunt augue vitae metus accumsan, ac
+        ullamcorper
+        orci viverra. In consequat lacus eu turpis lacinia, at imperdiet leo commodo. Pellentesque habitant morbi
+        tristique senectus et netus et malesuada fames ac turpis egestas. Sed a justo odio. Nullam dictum, quam eu
+        mattis
+        gravida, lacus purus gravida ligula, sit amet aliquet arcu mi sed purus. Aliquam rutrum mi quam, vitae pretium
+        justo pharetra vel. Vivamus eget iaculis risus. Nulla ac nisl convallis, viverra neque sed, feugiat quam. Nulla
+        vitae nibh quis elit congue porta. Mauris maximus orci non quam hendrerit viverra. Aliquam erat volutpat.
+      </p>
     </div>
-  </div>
+    <div class="search-content">
+      <span>Total results: 7</span>
+      <div class="div-search">
+        <fa-icon [icon]="faMagnifyingGlass" class="search-icon" *ngIf="showSearchIcon"></fa-icon>
+        <input matInput (focusout)="onSearch($event)" (focus)="showSearchIcon=false">
+        <button type="button" mat-flat-button color="primary">Search</button>
+      </div>
+    </div>
 
-  <div class="card-container">
-    <div class="card ">
-      <div class="card-header">
-        <div class="card-header-icon"> <fa-icon [icon]="faFileLines"></fa-icon>
-          <p class="card-header-text"> Provisional prescription renewal support</p>
-        </div>        
+    <div class="card-container">
+      <div class="card ">
+        <div class="card-header">
+          <div class="card-header-check-icon"> <fa-icon [icon]="faCheck"></fa-icon>
+            <p class="card-header-text">Special authority eForms</p>
+          </div>
         </div>
-      <div class="card-body">
-        Enrol here for access to the Provincial Prescription Renewal Support Service eForm
-      </div>
-    </div>
-  </div>
-  
-  <div class="card-container">
-    <div class="card ">
-      <div class="card-header">
-        <div class="card-header-icon"> <fa-icon [icon]="faFileLines"></fa-icon>
-          <p class="card-header-text">BC Provider Account</p>
-        </div>   
-      </div>
-      <div class="card-body">
-        Enrol here for access to PharmaCare's Special Authority eForms application.
-      </div>
-    </div>
-  </div>
-
-  <div class="card-container">
-    <div class="card ">
-      <div class="card-header">
-        <div class="card-header-icon"> <fa-icon [icon]="faFileLines"></fa-icon>
-          <p class="card-header-text"> Provisional prescription renewal support</p>
-        </div>   
-      </div>
-      <div class="card-body">
-        Enrol here for access to PharmaCare's Special Authority eForms application.
-      </div>
-    </div>
-  </div>
-  <div class="card-container">
-    <div class="card ">
-      <div class="card-header">
-        <div class="card-header-icon"> <fa-icon [icon]="faFileLines"></fa-icon>
-          <p class="card-header-text">BC Provider Account support</p>
-        </div>   
-      </div>
-      <div class="card-body">
-        Enrol here for access to the Provincial Prescription Renewal Support Service eForm
-      </div>
-    </div>
-  </div>
-  <div class="card-container">
-    <div class="card ">
-      <div class="card-header">
-        <div class="card-header-icon"> <fa-icon [icon]="faFileLines"></fa-icon>
-          <p class="card-header-text"> Provisional prescription renewal support</p>
-        </div>   
-      </div>
-      <div class="card-body">
-        A reusable credential for access to health data in BC.
-      </div>
-    </div>
-  </div>
- 
-  <div class="card-container">
-    <div class="card ">
-      <div class="card-header">
-        <div class="card-header-icon"> <fa-icon [icon]="faFileLines"></fa-icon>
-          <p class="card-header-text"> Provisional prescription renewal support</p>
-        </div>        
+        <div class="card-body">
+          Enrol here for access to the special authority eForms Service eForm
         </div>
-      <div class="card-body">
-        Enrol here for access to the Provincial Prescription Renewal Support Service eForm
       </div>
     </div>
-  </div>
-  
-  <div class="card-container">
-    <div class="card ">
-      <div class="card-header">
-        <div class="card-header-icon"> <fa-icon [icon]="faFileLines"></fa-icon>
-          <p class="card-header-text">BC Provider Account</p>
-        </div>   
-      </div>
-      <div class="card-body">
-        Enrol here for access to PharmaCare's Special Authority eForms application.
-      </div>
-    </div>
-  </div>
 
-  <div class="card-container">
-    <div class="card ">
-      <div class="card-header">
-        <div class="card-header-icon"> <fa-icon [icon]="faFileLines"></fa-icon>
-          <p class="card-header-text"> Provisional prescription renewal support</p>
-        </div>   
-      </div>
-      <div class="card-body">
-        Enrol here for access to PharmaCare's Special Authority eForms application.
-      </div>
-    </div>
-  </div>
-  <div class="card-container">
-    <div class="card ">
-      <div class="card-header">
-        <div class="card-header-icon"> <fa-icon [icon]="faFileLines"></fa-icon>
-          <p class="card-header-text">BC Provider Account support</p>
-        </div>   
-      </div>
-      <div class="card-body">
-        Enrol here for access to the Provincial Prescription Renewal Support Service eForm
+    <div class="card-container">
+      <div class="card ">
+        <div class="card-header">
+          <div class="card-header-icon"> <fa-icon [icon]="faFileLines"></fa-icon>
+            <p class="card-header-text">BC Provider Account</p>
+          </div>
+        </div>
+        <div class="card-body">
+          Enrol here for access to PharmaCare's Special Authority eForms application.
+        </div>
       </div>
     </div>
-  </div>
-  <div class="card-container">
-    <div class="card ">
-      <div class="card-header">
-        <div class="card-header-icon"> <fa-icon [icon]="faFileLines"></fa-icon>
-          <p class="card-header-text"> Provisional prescription renewal support</p>
-        </div>   
-      </div>
-      <div class="card-body">
-        A reusable credential for access to health data in BC.
+
+    <div class="card-container">
+      <div class="card ">
+        <div class="card-header">
+          <div class="card-header-icon"> <fa-icon [icon]="faFileLines"></fa-icon>
+            <p class="card-header-text"> Site privacy and security readiness checklist</p>
+          </div>
+        </div>
+        <div class="card-body">
+          Enrol here for access to PharmaCare's .
+        </div>
       </div>
     </div>
+    <div class="card-container">
+      <div class="card ">
+        <div class="card-header">
+          <div class="card-header-icon"> <fa-icon [icon]="faFileLines"></fa-icon>
+            <p class="card-header-text">BC Provider Account support</p>
+          </div>
+        </div>
+        <div class="card-body">
+          Enrol here for access to the Provincial Prescription Renewal Support Service eForm
+        </div>
+      </div>
+    </div>
+    <div class="card-container">
+      <div class="card ">
+        <div class="card-header">
+          <div class="card-header-icon"> <fa-icon [icon]="faFileLines"></fa-icon>
+            <p class="card-header-text"> HCIMWeb account transfer</p>
+          </div>
+        </div>
+        <div class="card-body">
+          A reusable credential for access to  HCIMWeb account transfer.
+        </div>
+      </div>
+    </div>
+
+    <div class="card-container">
+      <div class="card ">
+        <div class="card-header">
+          <div class="card-header-icon"> <fa-icon [icon]="faFileLines"></fa-icon>
+            <p class="card-header-text"> Provisional prescription renewal support</p>
+          </div>
+        </div>
+        <div class="card-body">
+          Enrol here for access to the Provincial Prescription Renewal Support Service eForm
+        </div>
+      </div>
+    </div>
+
+    <div class="card-container">
+      <div class="card ">
+        <div class="card-header">
+          <div class="card-header-icon"> <fa-icon [icon]="faFileLines"></fa-icon>
+            <p class="card-header-text">HCIMWeb enrolment</p>
+          </div>
+        </div>
+        <div class="card-body">
+          Enrol here for access to PharmaCare's Special Authority eForms application.
+        </div>
+      </div>
+    </div>
+
+    <div class="card-container">
+      <div class="card ">
+        <div class="card-header">
+          <div class="card-header-icon"> <fa-icon [icon]="faFileLines"></fa-icon>
+            <p class="card-header-text"> Provisional prescription renewal support</p>
+          </div>
+        </div>
+        <div class="card-body">
+          Enrol here for access to PharmaCare's Special Authority eForms application.
+        </div>
+      </div>
+    </div>
+    <div class="card-container">
+      <div class="card ">
+        <div class="card-header">
+          <div class="card-header-icon"> <fa-icon [icon]="faFileLines"></fa-icon>
+            <p class="card-header-text">Site privacy and security readines checklist</p>
+          </div>
+        </div>
+        <div class="card-body">
+          Enrol here for access to the Provincial Prescription Renewal Support Service eForm
+        </div>
+      </div>
+    </div>
+    <div class="card-container">
+      <div class="card ">
+        <div class="card-header">
+          <div class="card-header-icon"> <fa-icon [icon]="faFileLines"></fa-icon>
+            <p class="card-header-text"> Provisional prescription renewal support</p>
+          </div>
+        </div>
+        <div class="card-body">
+          A reusable credential for access to health data in BC.
+        </div>
+      </div>
+    </div>
+
+    <div class="back-to-top-container">
+      <button class="back-to-top" (click)="scrollToTop()" *ngIf="showBackToTopButton">
+        <fa-icon [icon]="faArrowUp"></fa-icon>
+      </button>
+      <div class="back-to-top-text" *ngIf="showBackToTopButton">Back to top</div>
+    </div>
   </div>
- 
-  <div class="back-to-top-container">
-    <button class="back-to-top" (click)="scrollToTop()" *ngIf="showBackToTopButton">
-      <fa-icon [icon]="faArrowUp"></fa-icon>
-    </button>
-    <div class="back-to-top-text" *ngIf="showBackToTopButton">Back to top</div>
-  </div>
-</div>
 </ui-layout-header-footer>

@@ -3,7 +3,7 @@ import { Component, Inject, HostListener, Input } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { faPlus, faThumbsUp, faFileLines, faArrowUp, faAngleRight, faMagnifyingGlass, faL } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faThumbsUp, faFileLines, faArrowUp, faAngleRight, faMagnifyingGlass,faCheck } from '@fortawesome/free-solid-svg-icons';
 import { InjectViewportCssClassDirective } from '@bcgov/shared/ui';
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';
@@ -27,11 +27,12 @@ export class AccessRequestPageComponent {
   public faThumbsUp = faThumbsUp;
   public faPlus = faPlus;
   public faFileLines = faFileLines;
+  public faCheck = faCheck;
   public logoutRedirectUrl: string;
   public faArrowUp = faArrowUp;
   public faAngleRight = faAngleRight;
   public faMagnifyingGlass = faMagnifyingGlass;
-  showBackToTopButton: Boolean = false;
+  showBackToTopButton: boolean = false;
   showSearchIcon: boolean = true;
   public isMobile = true;
   public providerIdentitySupport: string;

@@ -72,17 +72,23 @@
     float: right;
     width: 90%;
   }
+  .card-container:hover {
+    box-shadow: 2px 2px 2px rgb(194, 194, 196);
+    transform:scale(1.1);
+  }
 
   .card-header fa-icon {
     border: 1px solid #FCBA19;
     border-radius: 20px;
     padding: 5px;
   }
+  .card-header-check-icon{
+    color:pidp.$green;
+  }
 
-  // .card-header-icon {
-  //   width: 10%;
-  //   float: left;
-  // }
+  .card-header-check-icon fa-icon {
+    border: 1px solid pidp.$green;
+  }
 
   .card-body {
     padding: 15px 0px 0px 34px;
@@ -90,7 +96,6 @@
 
   .div-search {
     width: 70%;
-    // padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
     outline: none;
@@ -101,6 +106,7 @@
     position: relative;
     margin: 30px 45px 50px 0px;
     text-align: right;
+    height: 50px;
   }
 
   .search-content input {
@@ -125,6 +131,7 @@
 
   .search-content span {
     margin: 10px;
+
   }
 
   .search-content p {
@@ -133,7 +140,7 @@
 
   .back-to-top-container {
     position: fixed;
-    bottom: 20px;
+    bottom: 70px;
     right: 5px;
     display: flex;
     flex-direction: column;
@@ -189,6 +196,7 @@
     flex-direction: column;
     height: 235px;
   }
+  
 
   .content-header {
     margin: 0px 20px 0px 20px;
@@ -209,6 +217,7 @@
 
   .search-content {
     margin: 30px 20px 70px 20px;
+    height: 50px;
   }
 
   .div-search {
@@ -234,6 +243,9 @@
 
   .back-to-top-text {
     font-size: 9px;
+  }
+  .back-to-top-container {
+    bottom: 135px;
   }
 }
 
@@ -266,6 +278,7 @@
 
   .search-content {
     margin: 30px 20px 70px 10px;
+    height: 50px;
   }
 
   .back-to-top {
@@ -275,6 +288,9 @@
 
   .back-to-top-text {
     font-size: 9px;
+  }
+  .back-to-top-container {
+    bottom: 70px;
   }
 }
 
@@ -289,6 +305,7 @@
 
   .search-content {
     margin: 30px 37px 50px 20px;
+    height: 50px;
   }
 }
 
@@ -296,10 +313,11 @@
   .card-body {
     padding: 40px 0px 0px 30px;
   }
+
   .card-container {
     height: 250px;
   }
-  
+
   .card-header-text {
     padding-left: 5px;
     width: 89%;
