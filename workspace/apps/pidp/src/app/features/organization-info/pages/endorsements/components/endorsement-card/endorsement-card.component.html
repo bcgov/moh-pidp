@@ -15,7 +15,8 @@
         *ngIf="noticeText"
         class="notice-box"
         [class.notice-green]="noticeColour === 'green'"
-        [class.notice-yellow]="noticeColour === 'yellow'">
+        [class.notice-yellow]="noticeColour === 'yellow'"
+        [class.notice-red]="noticeColour === 'red'">
         <span>{{ noticeText }}</span>
       </div>
       <div *ngIf="createdOnText" class="created-box">
@@ -28,13 +29,17 @@
       <fa-icon
         *ngIf="showMobileNoticeIcon"
         [class.notice-green]="noticeColour === 'green'"
+        [class.notice-yellow]="noticeColour === 'yellow'"
+        [class.notice-red]="noticeColour === 'red'"
         [icon]="faUserGroup"></fa-icon>
       <span
         *ngIf="createdOnText"
         [class.notice-green]="noticeColour === 'green'"
         >{{ createdOnText }}</span
       >
-      <span *ngIf="showMobileNoticeText">
+      <span *ngIf="showMobileNoticeText"
+      [class.notice-yellow]="noticeColour === 'yellow'"
+      [class.notice-red]="noticeColour === 'red'">
         {{ noticeText }}
       </span>
     </div>
