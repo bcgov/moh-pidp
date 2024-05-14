@@ -104,7 +104,7 @@ p {
         flex-direction: var(--tab-content-flex-direction);
 
         & .endorsement-card {
-          flex-basis: calc((100% - (var(--gap))) / 2);
+          flex-basis: calc((100% - (var(--gap))) / 3);
           display: flex;
         }
       }
