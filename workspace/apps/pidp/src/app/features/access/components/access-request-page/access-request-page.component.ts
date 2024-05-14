@@ -1,5 +1,5 @@
 import { NgClass, NgIf } from '@angular/common';
-import { Component, Inject, HostListener, Input } from '@angular/core';
+import { Component, Inject, HostListener } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';

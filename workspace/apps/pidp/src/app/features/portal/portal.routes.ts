@@ -1,6 +1,6 @@
 export class PortalRoutes {
   public static BASE_PATH = 'portal';
-  public static ACCESS_REQUEST_PAGE = 'accessrequest';
+  public static readonly ACCESS_REQUEST_PAGE = 'accessrequest';
 
   /**
    * @description
