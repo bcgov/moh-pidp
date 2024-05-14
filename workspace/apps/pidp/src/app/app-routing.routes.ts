@@ -13,4 +13,9 @@ export const routes: Routes = [
     loadChildren: (): Promise<Routes> =>
       import('@bcgov/shared/root-route').then((m) => m.rootRoutes),
   },
+  {
+    path: ShellRoutes.ACCESS_REQUEST_PAGE,
+    loadChildren: (): Promise<Routes> =>
+      import('./features/access/access-routing.routes').then((m) => m.routes),
+  },
 ];
