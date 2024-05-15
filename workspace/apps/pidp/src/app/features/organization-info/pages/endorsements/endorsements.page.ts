@@ -59,8 +59,13 @@ import { StatusCode } from '@app/features/portal/enums/status-code.enum';
 import { LookupService } from '@app/modules/lookup/lookup.service';
 
 import { EndorsementCardComponent } from './components/endorsement-card/endorsement-card.component';
+import {
+  endorsementRequestsLabelText,
+  endorsementRequestsRedStatus,
+} from './constants/endorsements.constants';
 import { EndorsementsFormState } from './endorsements-form-state';
 import { EndorsementsResource } from './endorsements-resource.service';
+import { EndorsementRequestStatus } from './enums/endorsement-request-status.enum';
 import { EndorsementRequest } from './models/endorsement-request.model';
 import { Endorsement } from './models/endorsement.model';
 
@@ -211,6 +216,27 @@ export class EndorsementsPage
       .subscribe();
   }
 
+  public getStatus(endorsementRequestStatus: EndorsementRequestStatus): string {
+    return (
+      endorsementRequestsLabelText[endorsementRequestStatus] ?? 'Requested'
+    );
+  }
+
+  public isEndorsementRequested(
+    endorsementRequestStatus: EndorsementRequestStatus,
+  ): boolean {
+    return !endorsementRequestsRedStatus.includes(endorsementRequestStatus);
+  }
+
+  public getCollegeText(
+    endorsementCard: EndorsementRequest | Endorsement,
+  ): string {
+    const college = this.lookupService.colleges.find(
+      (x) => x.code === endorsementCard.collegeCode,
+    );
+    return college?.name ?? '';
+  }
+
   public ngOnInit(): void {
     this.utilsService.scrollTop();
     const partyId = this.partyService.partyId;
@@ -232,22 +258,6 @@ export class EndorsementsPage
 
     this.nonActionableEndorsementRequests$ =
       this.getNonActionableEndorsementRequests(partyId);
-  }
-
-  public getCollegeTextForEndorsement(endorsement: Endorsement): string {
-    const college = this.lookupService.colleges.find(
-      (x) => x.code === endorsement.collegeCode,
-    );
-    return college?.name ?? '';
-  }
-
-  public getCollegeTextForEndorsementRequest(
-    endorsementRequest: EndorsementRequest,
-  ): string {
-    const college = this.lookupService.colleges.find(
-      (x) => x.code === endorsementRequest.collegeCode,
-    );
-    return college?.name ?? '';
   }
 
   protected performSubmission(): NoContent {

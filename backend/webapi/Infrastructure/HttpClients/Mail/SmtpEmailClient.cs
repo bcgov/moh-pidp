@@ -6,7 +6,7 @@ using static Pidp.PidpConfiguration;
 
 public class SmtpEmailClient : ISmtpEmailClient
 {
-    private readonly ILogger logger;
+    private readonly ILogger<SmtpEmailClient> logger;
     private readonly MailServerConfiguration config;
 
     public SmtpEmailClient(ILogger<SmtpEmailClient> logger, PidpConfiguration config)
@@ -65,5 +65,5 @@ public class SmtpEmailClient : ISmtpEmailClient
 public static partial class SmtpClientLoggingExtensions
 {
     [LoggerMessage(1, LogLevel.Error, "Unhandled exception when sending Email via SMTP.")]
-    public static partial void LogSmtpClientException(this ILogger logger, Exception e);
+    public static partial void LogSmtpClientException(this ILogger<SmtpEmailClient> logger, Exception e);
 }

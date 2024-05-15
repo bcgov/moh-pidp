@@ -58,6 +58,8 @@ public sealed class PlrStatusUpdateService : IPlrStatusUpdateService
             return;
         }
 
+        party.DomainEvents.Add(new CollegeLicenceUpdated(party.Id));
+
         var endorsementRelations = await this.context.ActiveEndorsingParties(party.Id)
             .Select(party => new
             {
@@ -113,8 +115,8 @@ public sealed class PlrStatusUpdateService : IPlrStatusUpdateService
 public static partial class PlrStatusUpdateServiceLoggingExtensions
 {
     [LoggerMessage(1, LogLevel.Information, "Status update {statusId} is for a PLR record not associated to a PIdP user.")]
-    public static partial void LogPlrRecordNotAssociatedToPidpUser(this ILogger logger, int statusId);
+    public static partial void LogPlrRecordNotAssociatedToPidpUser(this ILogger<PlrStatusUpdateService> logger, int statusId);
 
     [LoggerMessage(2, LogLevel.Information, "Status update {statusId} has been proccessed.")]
-    public static partial void LogStatusUpdateProcessed(this ILogger logger, int statusId);
+    public static partial void LogStatusUpdateProcessed(this ILogger<PlrStatusUpdateService> logger, int statusId);
 }

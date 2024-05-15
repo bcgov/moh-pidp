@@ -1,6 +1,5 @@
 import { driverFitnessSupportEmail } from '@app/features/access/pages/driver-fitness/driver-fitness.constants';
 import { hcimWebAccountTransferSupport } from '@app/features/access/pages/hcim-account-transfer/hcim-account-transfer-constants';
-import { hcimWebEnrolmentSupport } from '@app/features/access/pages/hcim-enrolment/hcim-enrolment-constants';
 import { immsBCEformsSupportEmail } from '@app/features/access/pages/immsbc-eforms/immsbc-eforms.constants';
 import {
   doctorsTechnologyOfficeEmail,
@@ -41,7 +40,6 @@ export const environment: AppEnvironment = {
     providerIdentitySupport: 'OneHealthID@gov.bc.ca',
     specialAuthorityEformsSupport: specialAuthorityEformsSupportEmail,
     hcimAccountTransferSupport: hcimWebAccountTransferSupport,
-    hcimEnrolmentSupport: hcimWebEnrolmentSupport,
     prescriptionRefillRequestEformsSupport:
       prescriptionRefillRequestEformsSupportEmail,
     driverFitnessSupport: driverFitnessSupportEmail,
@@ -60,7 +58,7 @@ export const environment: AppEnvironment = {
     prescriptionRenewal: prescriptionRenewalEformsSupportUrl,
   },
   phones: {
-    additionalSupport: '250-857-1969',
+    additionalSupport: '250-448-1262',
   },
   keycloakConfig: {
     config: {

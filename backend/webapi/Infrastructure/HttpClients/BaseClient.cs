@@ -19,16 +19,16 @@ public class BaseClient
     private readonly HttpClient client;
     private readonly JsonSerializerOptions serializationOptions;
 
-    protected ILogger Logger { get; }
+    protected ILogger<BaseClient> Logger { get; }
 
     /// <summary>
     /// An HttpClient with default serialization options (camelCase)
     /// </summary>
     /// <param name="client"></param>
     /// <param name="logger"></param>
-    public BaseClient(HttpClient client, ILogger logger) : this(client, logger, PropertySerialization.CamelCase) { }
+    public BaseClient(HttpClient client, ILogger<BaseClient> logger) : this(client, logger, PropertySerialization.CamelCase) { }
 
-    public BaseClient(HttpClient client, ILogger logger, PropertySerialization option)
+    public BaseClient(HttpClient client, ILogger<BaseClient> logger, PropertySerialization option)
     {
         client.ThrowIfNull(nameof(client));
         this.client = client;
@@ -216,11 +216,11 @@ public class BaseClient
 public static partial class BaseClientLoggingExtensions
 {
     [LoggerMessage(1, LogLevel.Error, "Received non-success status code {statusCode} with message: {responseMessage}.")]
-    public static partial void LogNonSuccessStatusCode(this ILogger logger, HttpStatusCode statusCode, string responseMessage);
+    public static partial void LogNonSuccessStatusCode(this ILogger<BaseClient> logger, HttpStatusCode statusCode, string responseMessage);
 
     [LoggerMessage(2, LogLevel.Error, "Response content was null.")]
-    public static partial void LogNullResponseContent(this ILogger logger);
+    public static partial void LogNullResponseContent(this ILogger<BaseClient> logger);
 
     [LoggerMessage(3, LogLevel.Error, "Unhandled exception when calling the API.")]
-    public static partial void LogBaseClientException(this ILogger logger, Exception e);
+    public static partial void LogBaseClientException(this ILogger<BaseClient> logger, Exception e);
 }

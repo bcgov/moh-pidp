@@ -1,5 +1,4 @@
 import { Section } from '../section.model';
-import { AdministratorInfoSection } from './administrator-information-section.model';
 
 /**
  * @description
@@ -7,12 +6,7 @@ import { AdministratorInfoSection } from './administrator-information-section.mo
  * over keys at runtime to allow filtering or grouping
  * sections.
  */
-export const organizationSectionKeys = [
-  'organizationDetails',
-  'facilityDetails',
-  'administratorInfo',
-  'endorsements',
-] as const;
+export const organizationSectionKeys = ['endorsements'] as const;
 
 /**
  * @description
@@ -29,8 +23,5 @@ export type IOrganizationGroup = {
 };
 
 export interface OrganizationGroup extends IOrganizationGroup {
-  organizationDetails: Section;
-  facilityDetails: Section;
-  administratorInfo: AdministratorInfoSection;
   endorsements: Section;
 }

@@ -34,7 +34,7 @@ public class Cancel
     {
         private readonly IClock clock;
         private readonly IKeycloakAdministrationClient keycloakClient;
-        private readonly ILogger logger;
+        private readonly ILogger<CommandHandler> logger;
         private readonly IPlrClient plrClient;
         private readonly PidpDbContext context;
 
@@ -125,5 +125,5 @@ public class Cancel
 public static partial class EndorsementCancelLoggingExtensions
 {
     [LoggerMessage(1, LogLevel.Error, "Error when unassigning the MOA role to Party #{partyId}.")]
-    public static partial void LogMoaRoleAssignmentError(this ILogger logger, int partyId);
+    public static partial void LogMoaRoleAssignmentError(this ILogger<Cancel.CommandHandler> logger, int partyId);
 }

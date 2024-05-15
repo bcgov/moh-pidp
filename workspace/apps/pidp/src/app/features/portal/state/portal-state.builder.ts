@@ -11,7 +11,6 @@ import { BcProviderPortalSection } from './access/bc-provider-portal-section.cla
 import { DriverFitnessPortalSection } from './access/driver-fitness-portal-section.class';
 import { EdrdEformsPortalSection } from './access/edrd-eforms-portal-section.class';
 import { HcimAccountTransferPortalSection } from './access/hcim-account-transfer-portal-section.class';
-import { HcimEnrolmentPortalSection } from './access/hcim-enrolment-portal-section.class';
 import { ImmsBCEformsPortalSection } from './access/immsbc-eforms-portal-section.class';
 import { MsTeamsClinicMemberPortalSection } from './access/ms-teams-clinic-member-portal-section.class';
 import { MsTeamsPrivacyOfficerPortalSection } from './access/ms-teams-privacy-officer-portal-section.class';
@@ -19,14 +18,10 @@ import { PrescriptionRefillEformsPortalSection } from './access/prescription-ref
 import { PrimaryCareRosteringPortalSection } from './access/primary-care-rostering-portal-section.class';
 import { ProviderReportingPortalSection } from './access/provider-reporting-portal-section.class';
 import { SaEformsPortalSection } from './access/sa-eforms-portal-section.class';
-import { SitePrivacySecurityPortalSection } from './access/site-privacy-security-checklist-portal-section.class';
 import { MfaSetupPortalSection } from './faq/mfa-setup-portal-section.class';
 import { SignedAcceptedDocumentsPortalSection } from './history/signed-accepted-documents-portal-section.class';
 import { TransactionsPortalSection } from './history/transactions-portal-section.class';
-import { AdministratorInfoPortalSection } from './organization/administrator-information-portal-section';
 import { EndorsementsPortalSection } from './organization/endorsements-portal-section.class';
-import { FacilityDetailsPortalSection } from './organization/facility-details-portal-section.class';
-import { OrganizationDetailsPortalSection } from './organization/organization-details-portal-section.class';
 import { PortalSectionStatusKey } from './portal-section-status-key.type';
 import { IPortalSection } from './portal-section.model';
 import { CollegeCertificationPortalSection } from './profile/college-certification-portal-section.class';
@@ -108,27 +103,6 @@ export class PortalStateBuilder {
   ): IPortalSection[] {
     return [
       ...ArrayUtils.insertResultIf<IPortalSection>(
-        // TODO remove permissions when ready for production
-        this.insertSection('organizationDetails', profileStatus) &&
-          this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
-        () => [
-          new OrganizationDetailsPortalSection(profileStatus, this.router),
-        ],
-      ),
-      ...ArrayUtils.insertResultIf<IPortalSection>(
-        // TODO add insertSection call when it exists in the ProfileStatus API
-        // TODO remove permissions when ready for production
-        // this.insertSection('facilityDetails', profileStatus) &&
-        this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
-        () => [new FacilityDetailsPortalSection(profileStatus, this.router)],
-      ),
-      ...ArrayUtils.insertResultIf<IPortalSection>(
-        // TODO remove permissions when ready for production
-        this.insertSection('administratorInfo', profileStatus) &&
-          this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
-        () => [new AdministratorInfoPortalSection(profileStatus, this.router)],
-      ),
-      ...ArrayUtils.insertResultIf<IPortalSection>(
         this.insertSection('endorsements', profileStatus),
         () => [new EndorsementsPortalSection(profileStatus, this.router)],
       ),
@@ -155,21 +129,6 @@ export class PortalStateBuilder {
         this.insertSection('hcimAccountTransfer', profileStatus),
         () => [
           new HcimAccountTransferPortalSection(profileStatus, this.router),
-        ],
-      ),
-      ...ArrayUtils.insertResultIf<IPortalSection>(
-        // TODO remove permissions when ready for production
-        this.insertSection('hcimEnrolment', profileStatus) &&
-          this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
-        () => [new HcimEnrolmentPortalSection(profileStatus, this.router)],
-      ),
-      ...ArrayUtils.insertResultIf<IPortalSection>(
-        // TODO add insertSection call when it exists in the ProfileStatus API
-        // TODO remove permissions when ready for production
-        // this.insertSection('sitePrivacySecurityChecklist', profileStatus) &&
-        this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
-        () => [
-          new SitePrivacySecurityPortalSection(profileStatus, this.router),
         ],
       ),
       ...ArrayUtils.insertResultIf<IPortalSection>(

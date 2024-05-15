@@ -19,7 +19,7 @@ rabbitmqsecret.yaml file was created to add a user other than rabbitmq and guest
 
 To install rabbitmq chart from remote repository , use the regular helm install/upgrade command and specify the chart using url (bitnami website or docker hub) and obsolete the downloaded version (e.g. 11.10.0). You will need to supply the correct values file for your environment (using local path).
 
-`helm install -f ./rabbitmq-values.yaml rabbitmq https://charts.bitnami.com/bitnami/rabbitmq-11.10.0.tgz`
+`helm install -f ./values.yaml rabbitmq ./rabbitmq-13.0.2.tgz`
 
 in this deployment, the Clustering and Service Account are enabled in order to make it HA and the replica count is set to 3.
 

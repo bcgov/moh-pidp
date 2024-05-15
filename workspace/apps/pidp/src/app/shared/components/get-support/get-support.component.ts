@@ -77,13 +77,6 @@ export class GetSupportComponent implements OnInit {
       ...ArrayUtils.insertIf<SupportProps>(
         this.permissionsService.hasRole(Role.FEATURE_PIDP_DEMO),
         {
-          name: 'HCIMWeb Enrolment',
-          email: this.config.emails.hcimEnrolmentSupport,
-        },
-      ),
-      ...ArrayUtils.insertIf<SupportProps>(
-        this.permissionsService.hasRole(Role.FEATURE_PIDP_DEMO),
-        {
           name: 'Driver Medical Fitness',
           email: this.config.emails.driverFitnessSupport,
         },

@@ -30,15 +30,11 @@ public class PidpDbContext : DbContext
     public DbSet<EndorsementRelationship> EndorsementRelationships { get; set; } = default!;
     public DbSet<EndorsementRequest> EndorsementRequests { get; set; } = default!;
     public DbSet<Endorsement> Endorsements { get; set; } = default!;
-    public DbSet<Facility> Facilities { get; set; } = default!;
     public DbSet<HcimAccountTransfer> HcimAccountTransfers { get; set; } = default!;
-    public DbSet<HcimEnrolment> HcimEnrolments { get; set; } = default!;
     public DbSet<MSTeamsClinic> MSTeamsClinics { get; set; } = default!;
     public DbSet<MSTeamsClinicMemberEnrolment> MSTeamsClinicMemberEnrolments { get; set; } = default!;
     public DbSet<PartyLicenceDeclaration> PartyLicenceDeclarations { get; set; } = default!;
     public DbSet<Party> Parties { get; set; } = default!;
-    public DbSet<PartyAccessAdministrator> PartyAccessAdministrators { get; set; } = default!;
-    public DbSet<PartyOrgainizationDetail> PartyOrgainizationDetails { get; set; } = default!;
     public DbSet<PrpAuthorizedLicence> PrpAuthorizedLicences { get; set; } = default!;
 
     /// <summary>

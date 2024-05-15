@@ -29,7 +29,7 @@ public class DriverFitness
     {
         private readonly IClock clock;
         private readonly IKeycloakAdministrationClient keycloakClient;
-        private readonly ILogger logger;
+        private readonly ILogger<CommandHandler> logger;
         private readonly IPlrClient plrClient;
         private readonly PidpDbContext context;
 
@@ -65,7 +65,7 @@ public class DriverFitness
                 || dto.Email == null
                 || !dto.LicenceDeclarationCompleted)
             {
-                this.logger.LogDriverFitnessAccessRequestDenied();
+                this.logger.LogAccessRequestDenied();
                 return DomainResult.Failed();
             }
 
@@ -83,7 +83,7 @@ public class DriverFitness
                 var endorsementPlrStanding = await this.plrClient.GetAggregateStandingsDigestAsync(endorsementCpns);
                 if (!endorsementPlrStanding.HasGoodStanding)
                 {
-                    this.logger.LogDriverFitnessAccessRequestDenied();
+                    this.logger.LogAccessRequestDenied();
                     return DomainResult.Failed();
                 }
             }
@@ -94,7 +94,7 @@ public class DriverFitness
                     .With(AllowedIdentifierTypes)
                     .HasGoodStanding)
                 {
-                    this.logger.LogDriverFitnessAccessRequestDenied();
+                    this.logger.LogAccessRequestDenied();
                     return DomainResult.Failed();
                 }
             }
@@ -121,5 +121,5 @@ public class DriverFitness
 public static partial class DriverFitnessLoggingExtensions
 {
     [LoggerMessage(1, LogLevel.Warning, "Driver Fitness Access Request denied due to the Party Record not meeting all prerequisites.")]
-    public static partial void LogDriverFitnessAccessRequestDenied(this ILogger logger);
+    public static partial void LogAccessRequestDenied(this ILogger<DriverFitness.CommandHandler> logger);
 }

@@ -34,7 +34,7 @@ public class LinkTicketCreate
     public class CommandHandler : ICommandHandler<Command, IDomainResult<CredentialLinkTicket>>
     {
         private readonly IClock clock;
-        private readonly ILogger logger;
+        private readonly ILogger<CommandHandler> logger;
         private readonly PidpDbContext context;
 
         public CommandHandler(
@@ -85,8 +85,8 @@ public class LinkTicketCreate
 public static partial class CredentialLinkTicketCreateLoggingExtensions
 {
     [LoggerMessage(1, LogLevel.Error, "Party {partyId} initiated account linking but does not have a BC Services Card Creential.")]
-    public static partial void LogPartyDoesNotHaveBCServicesCard(this ILogger logger, int partyId);
+    public static partial void LogPartyDoesNotHaveBCServicesCard(this ILogger<LinkTicketCreate.CommandHandler> logger, int partyId);
 
     [LoggerMessage(2, LogLevel.Error, "Party {partyId} attempted to link a second BC Provider account.")]
-    public static partial void LogPartyHasExistingLinkedBCProviderCredential(this ILogger logger, int partyId);
+    public static partial void LogPartyHasExistingLinkedBCProviderCredential(this ILogger<LinkTicketCreate.CommandHandler> logger, int partyId);
 }

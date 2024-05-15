@@ -7,7 +7,7 @@ public enum AccessTypeCode
 {
     SAEforms = 1,
     HcimAccountTransfer,
-    HcimEnrolment,
+    HcimEnrolment, // Currently Unused
     DriverFitness,
     MSTeamsPrivacyOfficer,
     PrescriptionRefillEforms,

@@ -83,15 +83,6 @@ public class AccessRequestsController : PidpControllerBase
         }
     }
 
-    [HttpPost("hcim-enrolment")]
-    [Authorize(Policy = Policies.AnyPartyIdentityProvider)]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> CreateHcimEnrolment([FromServices] ICommandHandler<HcimEnrolment.Command, IDomainResult> handler,
-                                                         [FromHybrid] HcimEnrolment.Command command)
-        => await this.AuthorizePartyBeforeHandleAsync(command.PartyId, handler, command)
-            .ToActionResult();
-
     [HttpPost("immsbc-eforms")]
     [Authorize(Policy = Policies.HighAssuranceIdentityProvider)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]

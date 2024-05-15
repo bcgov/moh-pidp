@@ -1,8 +1,5 @@
 import { Routes } from '@angular/router';
 
-import { PermissionsGuard } from '@app/modules/permissions/permissions.guard';
-import { Role } from '@app/shared/enums/roles.enum';
-
 import { ProfileRoutes } from './profile.routes';
 
 export const routes: Routes = [
@@ -18,17 +15,6 @@ export const routes: Routes = [
     loadChildren: (): Promise<Routes> =>
       import(
         './pages/college-licence/college-licence-declaration/college-licence-declaration-routing.routes'
-      ).then((m) => m.routes),
-  },
-  {
-    path: ProfileRoutes.WORK_AND_ROLE_INFO,
-    canMatch: [PermissionsGuard.canMatch],
-    data: {
-      roles: [Role.FEATURE_PIDP_DEMO],
-    },
-    loadChildren: (): Promise<Routes> =>
-      import(
-        './pages/work-and-role-information/work-and-role-information-routing.routes'
       ).then((m) => m.routes),
   },
   {

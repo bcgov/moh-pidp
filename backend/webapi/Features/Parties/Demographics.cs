@@ -11,7 +11,6 @@ using System.Text.Json.Serialization;
 
 using Pidp.Data;
 using Pidp.Extensions;
-using Pidp.Features.CommonHandlers;
 using static Pidp.Features.CommonHandlers.UpdateKeycloakAttributesConsumer;
 using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.HttpClients.BCProvider;
@@ -172,5 +171,5 @@ public class Demographics
 public static partial class PartyEmailUpdatedBcProviderConsumerLoggingExtensions
 {
     [LoggerMessage(2, LogLevel.Error, "Error when updating the email to User #{userId} in Azure AD.")]
-    public static partial void LogBCProviderEmailUpdateFailed(this ILogger logger, Guid userId);
+    public static partial void LogBCProviderEmailUpdateFailed(this ILogger<Demographics.PartyEmailUpdatedBcProviderConsumer> logger, Guid userId);
 }
