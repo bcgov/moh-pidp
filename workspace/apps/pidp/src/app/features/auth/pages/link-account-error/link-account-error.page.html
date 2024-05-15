@@ -34,20 +34,32 @@
           [ngTemplateOutlet]="default"></ng-container>
       </ng-container>
 
-      <div class="button-container">
+      <div
+        *ngIf="activeLayout === DiscoveryStatus.ExpiredCredentialLinkTicketError.toString(); else backButton"
+        class="button-container">
         <span>
           <button
             mat-flat-button
             type="button"
             color="primary"
-            (click)="onBack()">
-            Back to OneHealthID Service
+            (click)="onLogout()">
+            Click here
           </button>
         </span>
       </div>
     </div>
   </div>
 </ui-layout-header-footer>
+
+<ng-template #backButton>
+  <div class="button-container">
+    <span>
+      <button mat-flat-button type="button" color="primary" (click)="onBack()">
+        Back to OneHealthID Service
+      </button>
+    </span>
+  </div>
+</ng-template>
 
 <ng-template #alreadyLinked>
   <div class="active-layout">

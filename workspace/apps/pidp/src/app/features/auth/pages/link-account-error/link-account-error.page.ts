@@ -1,4 +1,5 @@
 import {
+  NgIf,
   NgOptimizedImage,
   NgSwitch,
   NgSwitchCase,
@@ -37,6 +38,7 @@ import { AuthService } from '../../services/auth.service';
     MatIconModule,
     MatTooltipModule,
     NgOptimizedImage,
+    NgIf,
     NgSwitch,
     NgSwitchCase,
     NgSwitchDefault,
