@@ -4,7 +4,6 @@ import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { MockProfileStatus } from '@test/mock-profile-status';
 import {
-  Spy,
   createSpyFromClass,
   provideAutoSpy,
 } from 'jest-auto-spies';
@@ -19,12 +18,9 @@ import { ProfileStatus } from '@app/features/portal/models/profile-status.model'
 import { PortalCardComponent } from '@app/features/portal/components/portal-card/portal-card.component';
 
 describe('PortalCardComponent', () => {
-  let component: PortalCardComponent;
-  let partyServiceSpy: Spy<PartyService>;
   let fixture: ComponentFixture<PortalCardComponent>;
-  let router: Router;
   let mockProfileStatus: ProfileStatus;
-  let windowSpy: Spy<any>;
+
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -46,17 +42,11 @@ describe('PortalCardComponent', () => {
         provideAutoSpy(AuthService),
       ],
     }).compileComponents();
-
-    partyServiceSpy = TestBed.inject<any>(PartyService);
-    router = TestBed.inject(Router);
-
+ 
     fixture = TestBed.createComponent(PortalCardComponent);
-    component = fixture.componentInstance;
-
+ 
     mockProfileStatus = MockProfileStatus.get();
     mockProfileStatus.status.primaryCareRostering.statusCode =
       StatusCode.NOT_AVAILABLE;
-
-    windowSpy = jest.spyOn(window, 'window', 'get');
   });
 });
