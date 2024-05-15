@@ -1,106 +1,90 @@
-@use 'pidp-variables' as pidp;
-
-.viewport-all {
-  --gap: 1rem;
-  --font-size: 0.75rem;
+.header-container {
+  height: 20vh;
+  overflow-y: auto;
+  transition: all 0.5s;
+  background-image: url('/assets/images/national-cancer-institute-L8tWZT4CcVQ-unsplash.png');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: bottom right;
+  border-radius: var(--card-border-radius);
+  padding: calc(var(--gap) * 2);
+  position: relative;
+}
+.banner-mask{
+  height: 120px;
+  flex-shrink: 0;
+  border-radius: 8px;
+  background: rgba(1, 51, 102, 0.70);
+  margin: 20px 50px 20px 50px;
+}
+.banner-mask h2{
+  width: 100%;
+  text-align: center;
+  color: var(--Colours-primary, #FFF);
+  font-family: "BC Sans";
+  font-size: 25px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+}
+.banner-mask h2 span{
+  color: var(--Colours-primary, #FCBA19);
+}
+.banner-mask p{
+  width: 100%;
+  text-align: center;
+  color: #E4E4E4;
+  font-family: "BC Sans";
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+}
+ 
+.card-grid {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 2rem;
+}
+.card {
+  width: 30%;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  transition: 0.3s;
 }
 
-.viewport-small,
-.viewport-medium,
-.viewport-large {
-  --gap: 1.25rem;
-  --font-size: 1rem;
-}
-.viewport-all {
-  --header-margin: unset;
-  --card-border-radius: calc(var(--gap) * 0.375);
-  --content-padding: var(--gap);
-  --form-card-width: unset;
-}
-.viewport-medium,
-.viewport-large {
-  --header-margin: var(--gap) 0 0;
-  --content-padding: var(--gap) 0;
-  --form-card-width: 25rem;
-}
-.viewport-all {
-  padding: var(--content-padding);
-  & header {
-    margin: var(--header-margin);
-    & h2 {
-      margin: 0;
-      padding: calc(var(--gap) / 2) calc(var(--gap) * 2);
-      background-color: pidp.$grey-10;
-    }
-  }
-  & .section-content-box {
-    margin: var(--gap) 0;
-
-    & p {
-      padding-left: calc(var(--gap) * 2);
-      padding-right: calc(var(--gap) * 2);
-    }
-
-    & .carousel-box {
-      & .card-box {
-        display: flex;
-      }
-    }
-  }
-}
-.viewport-small{
-  --content-padding: var(--gap) 0;
-}
-.viewport-xsmall {
-  & header {
-    & h2 {
-      padding: calc(var(--gap) / 2) var(--gap);
-    }
-  }
-
-  & .section-content-box {
-    & p {
-      padding-left: var(--gap);
-      padding-right: var(--gap);
-    }
-  }
+.card img {
+  width: 100%;
+  height: auto;
+  height: 200px;
 }
 
-.rostering-banner {
-  margin-bottom: var(--gap);
-
-  & .mat-mdc-outlined-button {
-    border: 1px solid #000;
-  }
+.card-content {
+  padding: 1rem;
+}
+.card-content h2 {
+  color: var(--Main-font-colour, var(--Colours-font, #313132));
+  font-family: "BC Sans";
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 36px; 
 }
 
-.adjust-text {
-  font-size: smaller;
-  margin: 0 10px;
+.card-content a {
+  color: var(--Links, #1A5A96);
+  font-family: "BC Sans";
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 27px; 
+  text-decoration: none;
+}
+.card:hover {
+  box-shadow: 2px 2px 2px rgb(194, 194, 196);
+  transform:scale(1.1);
 }
 
-.bcprovider-username {
-  font-size: smaller;
-}
 
-.stepper-buttons {
-  margin-top: 10px;
-
-  & button:last-child {
-    margin-left: 10px;
-  }
-
-  & button.top-button {
-    margin-left: 0;
-  }
-}
-
-.guide-information {
-  font-size: smaller;
-  margin-bottom: 10px;
-}
-
-.pas-step-label {
-  margin: unset;
-  line-height: 1.3;
+.card-content a:hover {
+  text-decoration: none;
 }
