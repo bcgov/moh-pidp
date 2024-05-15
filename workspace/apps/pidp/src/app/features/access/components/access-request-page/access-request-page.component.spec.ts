@@ -1,14 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
-
-import { randNumber, randText } from '@ngneat/falso';
 import { MockProfileStatus } from '@test/mock-profile-status';
 import {
   Spy,
-  createFunctionSpy,
   createSpyFromClass,
   provideAutoSpy,
 } from 'jest-auto-spies';
@@ -20,8 +16,6 @@ import { AuthService } from '@app/features/auth/services/auth.service';
 
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
 import { ProfileStatus } from '@app/features/portal/models/profile-status.model';
-import { PrimaryCareRosteringPortalSection } from '../../../portal/state/access/primary-care-rostering-portal-section.class';
-import { IPortalSection } from '../../../portal/state/portal-section.model';
 import { PortalCardComponent } from '@app/features/portal/components/portal-card/portal-card.component';
 
 describe('PortalCardComponent', () => {
@@ -64,91 +58,5 @@ describe('PortalCardComponent', () => {
       StatusCode.NOT_AVAILABLE;
 
     windowSpy = jest.spyOn(window, 'window', 'get');
-  });
-
-  describe('Primary Rostering Card', () => {
-    given('the status code is NOT_AVAILABLE (locked in the backend)', () => {
-      component.section = new PrimaryCareRosteringPortalSection(
-        mockProfileStatus,
-      );
-
-      when('the component has been initialized', () => {
-        fixture.detectChanges();
-
-        then('should hide the "Learn more" and "Visit" buttons.', () => {
-          expect(component.showLearnMore).toBeFalsy();
-          expect(component.showVisit).toBeTruthy();
-          expect(component.section.action.disabled).toBeTruthy();
-          expect(component.showCompleted).toBeFalsy();
-        });
-      });
-    });
-
-    given('the status code is AVAILABLE (Incomplete in the backend)', () => {
-      mockProfileStatus.status.primaryCareRostering.statusCode =
-        StatusCode.AVAILABLE;
-      component.section = new PrimaryCareRosteringPortalSection(
-        mockProfileStatus,
-      );
-
-      when('the component has been initialized', () => {
-        fixture.detectChanges();
-
-        then(
-          'the "Learn more" button should be hidden and the "Visit" button shown',
-          () => {
-            expect(component.showLearnMore).toBeFalsy();
-            expect(component.showVisit).toBeTruthy();
-            expect(component.section.action.disabled).toBeFalsy();
-            expect(component.showCompleted).toBeFalsy();
-
-            const linkVisit = fixture.debugElement.query(By.css('button'));
-            expect(linkVisit).not.toBeNull();
-          },
-        );
-      });
-    });
-  });
-
-  describe('METHOD: onClickVisit', () => {
-    given('the component has been initialized', () => {
-      const partyId = randNumber({ min: 1 });
-      partyServiceSpy.accessorSpies.getters.partyId.mockReturnValue(partyId);
-      const performAction = (): void => {
-        return;
-      };
-
-      const performActionSpy =
-        createFunctionSpy<typeof performAction>('performAction');
-
-      const section = {
-        key: 'demographics',
-        heading: randText(),
-        hint: randText(),
-        description: randText(),
-        properties: [],
-        action: {
-          label: '',
-          route: '',
-          disabled: false,
-        },
-        statusType: 'success',
-        status: randText(),
-        performAction: performActionSpy,
-      } as IPortalSection;
-
-      when('the onClickVisit method is invoked', () => {
-        windowSpy.mockImplementation(() => ({
-          open: (): void => {
-            return;
-          },
-        }));
-        component.onClickVisit(section);
-
-        then('the router should navigate', () => {
-          expect(router.navigateByUrl).toHaveBeenCalledWith('/');
-        });
-      });
-    });
   });
 });
