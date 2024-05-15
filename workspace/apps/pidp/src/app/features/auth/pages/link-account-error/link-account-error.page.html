@@ -55,10 +55,10 @@
       <h1>These Credentials are Already Linked</h1>
     </header>
     <p>
-      The account you are currently signed into is already linked to your
-      OneHealthId profile; your profile has not been updated. If you still have
-      accounts you wish to link, please restart the account linking process and
-      ensure you enter the correct credentials.
+      The account you are currently signed into is already linked and so your
+      OneHealthID profile has not been updated. If you have any other accounts
+      you wish to link, please restart the account linking process and ensure
+      the correct credentials are entered.
     </p>
   </div>
 </ng-template>
@@ -70,13 +70,12 @@
     </header>
     <p>
       We apologize, but both accounts you are trying to link already exist in
-      the OneHealthId system and will require manual merging. Please contact
-      support at
+      the OneHealthID system and so this request will require manual merging.
+      Contact our support desk at
       <a uiAnchor scheme="mailto" [attr.href]="providerIdentitySupport"></a> or
       by phone at
-      <a uiAnchor scheme="tel" [attr.href]="additionalSupportPhone"></a>
-      and we would be happy to assist you.<br />
-      Please mention that this is a linked account merge request.
+      <a uiAnchor scheme="tel" [attr.href]="additionalSupportPhone"></a>.<br />
+      Please mention that this is an account linking merge request.
     </p>
   </div>
 </ng-template>
@@ -87,9 +86,8 @@
       <h1>Account Linking request expired</h1>
     </header>
     <p>
-      You recently started a linked account process, but did not complete the
-      process in time for our system to validate the request. Please return to
-      OneHealthID and start the process again.
+      Your session expired due to inactivity. Please return to OneHealthID to
+      restart the account linking process.
     </p>
   </div>
 </ng-template>
