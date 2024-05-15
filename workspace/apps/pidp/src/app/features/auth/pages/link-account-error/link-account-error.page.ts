@@ -20,6 +20,7 @@ import {
 import { APP_CONFIG, AppConfig } from '@app/app.config';
 import { DiscoveryStatus } from '@app/core/party/discovery-resource.service';
 import { ShellRoutes } from '@app/features/shell/shell.routes';
+import { NeedHelpComponent } from '@app/shared/components/need-help/need-help.component';
 
 import { AuthService } from '../../services/auth.service';
 
@@ -40,6 +41,7 @@ import { AuthService } from '../../services/auth.service';
     NgSwitchCase,
     NgSwitchDefault,
     NgTemplateOutlet,
+    NeedHelpComponent,
   ],
 })
 export class LinkAccountErrorPage implements OnInit {
