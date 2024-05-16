@@ -147,7 +147,7 @@ spec:
               value: {{ ternary "true" "false" .Values.image.debug | quote }}
             {{- if .Values.fluentbit.enabled }}
             - name: SERVER_LOGFILE
-              value: /tmp/error_fluentbit.log
+              value: /tmp/*.log
             {{- end }}
             {{- if .Values.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
@@ -309,7 +309,7 @@ spec:
           {{- end }}
           env:
             - name: SERVER_LOGFILE
-              value: /tmp/error_fluentbit.log
+              value: /tmp/*.log
           ports:
             - name: metrics
               containerPort: 2020

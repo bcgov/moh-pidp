@@ -5,6 +5,8 @@ metadata:
   labels: {{- include "common.labels.standard" . | nindent 4 }}
 data:
   server-blocks-paths.conf: |-
+    error_log         "/opt/bitnami/nginx/logs/error.log"; 
+    error_log         "/tmp/error_fluentbit.log";
     include  "/opt/bitnami/nginx/conf/server_blocks/ldap/*.conf";
     include  "/opt/bitnami/nginx/conf/server_blocks/common/*.conf";
 {{- if and .Values.serverBlock (not .Values.existingServerBlockConfigmap) }}

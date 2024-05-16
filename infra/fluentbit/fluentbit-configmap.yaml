@@ -29,7 +29,7 @@ objects:
         [INPUT]
           # get logs from file written by nginx app
           Name        tail
-          Path        /tmp/error_fluentbit.log
+          Path        /tmp/*.log
           Tag         app
       
         [FILTER]

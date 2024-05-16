@@ -46,8 +46,7 @@ public class Program
             if (PidpConfiguration.IsDevelopment())
             {
                 Directory.CreateDirectory(path);
-            }
-            
+            }     
         }
         catch (Exception e)
         {
