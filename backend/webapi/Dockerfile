@@ -31,7 +31,7 @@ COPY --from=build-env /app .
 COPY --from=build-env /source/efbundle .
 
 RUN cd /app && mkdir logs \
-    chmod -R 755 /app/logs
+    chmod 755 /app/logs/
 
 
 EXPOSE 8080

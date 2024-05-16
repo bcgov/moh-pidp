@@ -99,7 +99,7 @@ spec:
               value: "https://{{ if $isProd }}{{else}}{{ $release }}.{{end}}{{ $domain }}"
             {{- if .Values.fluentbit.enabled }}
             - name: SERVER_LOGFILE
-              value: /logs/*.log
+              value: /app/logs/*.log
             {{- end }}
           envFrom:
             - secretRef:
@@ -160,7 +160,7 @@ spec:
           {{- end }}
           env:
             - name: SERVER_LOGFILE
-              value: /tmp/*.log
+              value: /app/logs/*.log
           ports:
             - name: metrics
               containerPort: 2020

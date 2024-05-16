@@ -108,7 +108,7 @@ objects:
         [INPUT]
           # get logs from file written by webapi app
           Name        tail
-          Path        /opt/app-root/app/logs/*.log
+          Path        /app/logs/*.log
           Tag         app
 
         [FILTER]
