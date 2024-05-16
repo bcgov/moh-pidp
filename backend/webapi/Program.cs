@@ -43,8 +43,9 @@ public class Program
 
         try
         {
+            Console.WriteLine($"EnvironmentName={PidpConfiguration.EnvironmentName}, path={path}");
             if (PidpConfiguration.IsDevelopment())
-            {
+            { 
                 Directory.CreateDirectory(path);
             }
         }
@@ -54,7 +55,7 @@ public class Program
         }
 
         var name = Assembly.GetExecutingAssembly().GetName();
-        var outputTemplate = "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}";
+        var outputTemplate = "[{Timestamp:yyyy-MM-dd HH:mm:ss} {Level:u5}] {Message:lj}{NewLine}{Exception}";
 
         Log.Logger = new LoggerConfiguration()
             .MinimumLevel.Information()

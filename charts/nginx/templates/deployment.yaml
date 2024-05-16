@@ -145,6 +145,10 @@ spec:
           env:
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" .Values.image.debug | quote }}
+            {{- if .Values.fluentbit.enabled }}
+            - name: SERVER_LOGFILE
+              value: /tmp/error_fluentbit.log
+            {{- end }}
             {{- if .Values.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
@@ -213,6 +217,10 @@ spec:
             {{- end }}
             {{- if .Values.extraVolumeMounts }}
             {{- include "common.tplvalues.render" ( dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
+            {{- if .Values.fluentbit.enabled }}
+            - name: log-storage
+              mountPath: /tmp/
             {{- end }}
         {{- if .Values.ldapDaemon.enabled }}
         - name: ldap-daemon
@@ -292,6 +300,50 @@ spec:
           resources: {{- toYaml .Values.metrics.resources | nindent 12 }}
           {{- end }}
         {{- end }}
+        {{- if .Values.fluentbit.enabled }}
+        - name: fluentbit
+          image: {{ .Values.fluentbit.imageRegistry }}
+          imagePullPolicy: {{ .Values.fluentbit.imagePullPolicy }}
+          {{- if .Values.fluentbit.securityContext.enabled }}
+          securityContext: {{- omit .Values.fluentbit.securityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          env:
+            - name: SERVER_LOGFILE
+              value: /tmp/error_fluentbit.log
+          ports:
+            - name: metrics
+              containerPort: 2020
+              protocol: TCP
+            - name: http-plugin
+              containerPort: 80
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /
+              port: metrics
+            initialDelaySeconds: 10
+            timeoutSeconds: 1
+            periodSeconds: 60
+            successThreshold: 1
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /
+              port: metrics
+            initialDelaySeconds: 10
+            timeoutSeconds: 1
+            periodSeconds: 60
+            successThreshold: 1
+            failureThreshold: 3
+          {{- if .Values.fluentbit.resources }}
+          resources: {{- toYaml .Values.fluentbit.resources | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: fluentbit-config
+              mountPath: /fluent-bit/etc
+            - name: log-storage
+              mountPath: /tmp/
+        {{- end }}
         {{- with .Values.sidecars }}
         {{- include "common.tplvalues.render" ( dict "value" . "context" $ ) | nindent 8 }}
         {{- end }}
@@ -325,4 +377,11 @@ spec:
         - name: nginx-server-block-ldap
           secret:
             secretName: {{ include "ldap.nginxServerBlockSecret" . }}
+        {{- end }}
+        {{- if .Values.fluentbit.enabled }}
+        - name: log-storage
+          emptyDir: {}
+        - name: fluentbit-config
+          configMap:
+            name: nginx-fluentbit-config
         {{- end }}
