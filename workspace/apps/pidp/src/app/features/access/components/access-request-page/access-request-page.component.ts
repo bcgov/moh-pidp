@@ -49,14 +49,17 @@ export class AccessRequestPageComponent {
     const scrollPosition = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop || 0;
     const scrollThreshold = 200;
     this.showBackToTopButton = scrollPosition > scrollThreshold;
+    return;
   }
 
  public  scrollToTop() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
+    return;
   }
 
   public onSearch(event: Event) {
     this.showSearchIcon = ( event.target as HTMLInputElement).value ==='';
+    return;
   }
  
 }
