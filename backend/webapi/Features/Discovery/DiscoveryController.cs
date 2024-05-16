@@ -20,22 +20,17 @@ public class DiscoveryController : PidpControllerBase
     [ProducesResponseType(StatusCodes.Status307TemporaryRedirect)]
     public async Task<ActionResult<Discovery.Model>> Discovery([FromServices] IQueryHandler<Discovery.Query, Discovery.Model> handler)
     {
-        var result = await handler.HandleAsync(new Discovery.Query { User = this.User });
-
-        if (result.NewBCProvider)
+        var credentialLinkTicket = await this.AuthorizationService.VerifyTokenAsync<Cookies.CredentialLinkTicket.Values>(this.Request.Cookies.GetCredentialLinkTicket());
+        if (credentialLinkTicket != null)
         {
-            var credentialLinkTicket = await this.AuthorizationService.VerifyTokenAsync<Cookies.CredentialLinkTicket.Values>(this.Request.Cookies.GetCredentialLinkTicket());
-            if (credentialLinkTicket != null)
-            {
-                return this.RedirectToActionPreserveMethod
-                (
-                    nameof(CredentialsController.CreateCredential),
-                    nameof(CredentialsController).Replace("Controller", "")
-                );
-            }
+            return this.RedirectToActionPreserveMethod
+            (
+                nameof(CredentialsController.CreateCredential),
+                nameof(CredentialsController).Replace("Controller", "")
+            );
         }
 
-        return result;
+        return await handler.HandleAsync(new Discovery.Query { User = this.User });
     }
 
     [HttpGet("{partyId}/destination")]

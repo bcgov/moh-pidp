@@ -149,6 +149,13 @@ public partial class ProfileStatus
             }
         }
 
+        public class AccountLinkingSection : ProfileSection
+        {
+            internal override string SectionName => "accountLinking";
+
+            protected override StatusCode Compute(ProfileData profile) => StatusCode.Incomplete;
+        }
+
         public class DriverFitnessSection : ProfileSection
         {
             internal override string SectionName => "driverFitness";
