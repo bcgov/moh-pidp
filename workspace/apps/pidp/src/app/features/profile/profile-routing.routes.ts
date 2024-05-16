@@ -31,4 +31,11 @@ export const routes: Routes = [
         './pages/college-licence/college-licence-information/college-licence-information-routing.routes'
       ).then((m) => m.routes),
   },
+  {
+    path: ProfileRoutes.ACCOUNT_LINKING,
+    loadChildren: (): Promise<Routes> =>
+      import('./pages/account-linking/account-linking-routing.routes').then(
+        (m) => m.routes,
+      ),
+  },
 ];
