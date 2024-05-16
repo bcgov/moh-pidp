@@ -70,7 +70,7 @@ public class Program
                 outputTemplate: outputTemplate,
                 theme: AnsiConsoleTheme.Code)
             .WriteTo.Async(a => a.File(
-                "/tmp/pidp.log",
+                $@"{path}/pidp.log",
                 outputTemplate: outputTemplate,
                 rollingInterval: RollingInterval.Day,
                 shared: true))
