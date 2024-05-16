@@ -234,3 +234,16 @@ h1 {
   font-weight: 400;
   line-height: normal;
 }
+.viewport-small {
+  .span-text {
+    padding: 12px 25px 0px 0px;
+    font-size: 25px;
+  }
+  .content-menu {
+     a {
+        font-size: 15px;
+        font-weight: 400px;
+      }
+  }
+}
+
