@@ -58,7 +58,7 @@ objects:
           # add namespace
           Record namespace ${NAMESPACE}
           # add container name
-          Record product ${OC_ENV}-ingress
+          Record container ${OC_ENV}-ingress
 
         [FILTER]
           Name          rewrite_tag
@@ -131,7 +131,7 @@ objects:
           # add namespace
           Record namespace ${NAMESPACE}
           # add container name
-          Record product ${OC_ENV}-webapi
+          Record container ${OC_ENV}-webapi
 
         [FILTER]
           Name          rewrite_tag

@@ -45,7 +45,7 @@ public class Program
         {
                 Console.WriteLine("Creating the logging directory");
                 Directory.CreateDirectory(path);
-                Console.WriteLine("Created the logging directory);
+                Console.WriteLine("Created the logging directory");
             
         }
         catch (Exception e)
