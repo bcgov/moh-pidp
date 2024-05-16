@@ -27,6 +27,10 @@ ENV ASPNETCORE_URLS="http://+:8080"
 #     LANG=en_US.UTF-8
 # RUN apk add --no-cache icu-libs
 
+RUN apt-get update && \
+    chmod -R 755 /app \
+    chmod -R 755 /app/logs/.*
+
 COPY --from=build-env /app .
 COPY --from=build-env /source/efbundle .
 
