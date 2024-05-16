@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { MockProfileStatus } from '@test/mock-profile-status';
@@ -15,10 +15,8 @@ import { AuthService } from '@app/features/auth/services/auth.service';
 
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
 import { ProfileStatus } from '@app/features/portal/models/profile-status.model';
-import { PortalCardComponent } from '@app/features/portal/components/portal-card/portal-card.component';
 
 describe('PortalCardComponent', () => {
-  let fixture: ComponentFixture<PortalCardComponent>;
   let mockProfileStatus: ProfileStatus;
 
 
@@ -42,8 +40,6 @@ describe('PortalCardComponent', () => {
         provideAutoSpy(AuthService),
       ],
     }).compileComponents();
- 
-    fixture = TestBed.createComponent(PortalCardComponent);
  
     mockProfileStatus = MockProfileStatus.get();
     mockProfileStatus.status.primaryCareRostering.statusCode =

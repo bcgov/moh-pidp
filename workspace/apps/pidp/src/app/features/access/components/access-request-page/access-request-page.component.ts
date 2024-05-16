@@ -32,8 +32,8 @@ export class AccessRequestPageComponent {
   public faArrowUp = faArrowUp;
   public faAngleRight = faAngleRight;
   public faMagnifyingGlass = faMagnifyingGlass;
-  showBackToTopButton: boolean = false;
-  showSearchIcon: boolean = true;
+  public showBackToTopButton: boolean = false;
+  public showSearchIcon: boolean = true;
   public isMobile = true;
   public providerIdentitySupport: string;
 
@@ -45,17 +45,17 @@ export class AccessRequestPageComponent {
   }
 
   @HostListener('window:scroll', [])
-  onWindowScroll() {
+ public onWindowScroll() {
     const scrollPosition = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop || 0;
     const scrollThreshold = 200;
     this.showBackToTopButton = scrollPosition > scrollThreshold;
   }
 
-  scrollToTop() {
+ public  scrollToTop() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  onSearch(event: Event) {
+  public onSearch(event: Event) {
     this.showSearchIcon = ( event.target as HTMLInputElement).value ==='';
   }
  
