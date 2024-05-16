@@ -43,11 +43,10 @@ public class Program
 
         try
         {
-            Console.WriteLine($"EnvironmentName={PidpConfiguration.EnvironmentName}, path={path}");
-            if (PidpConfiguration.IsDevelopment())
-            { 
+                Console.WriteLine("Creating the logging directory");
                 Directory.CreateDirectory(path);
-            }
+                Console.WriteLine("Created the logging directory);
+            
         }
         catch (Exception e)
         {

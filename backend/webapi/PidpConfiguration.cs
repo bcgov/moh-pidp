@@ -6,7 +6,7 @@ public class PidpConfiguration
 {
     public static bool IsProduction() => EnvironmentName == Environments.Production;
     public static bool IsDevelopment() => EnvironmentName == Environments.Development;
-    public static readonly string? EnvironmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+    private static readonly string? EnvironmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
 
     public string ApplicationUrl { get; set; } = string.Empty;
 

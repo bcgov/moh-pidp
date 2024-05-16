@@ -882,6 +882,8 @@ metrics:
     ##
     rules: []
 
+## @section fluentbit parameters
+
 fluentbit:
   enabled: true
   imageRegistry: docker.io/fluent/fluent-bit:3.0.3-debug
@@ -890,7 +892,6 @@ fluentbit:
     enabled: false
     runAsUser: 1001
   resources:
-    ## Example:
     limits:
       cpu: 100m
       memory: 64Mi
