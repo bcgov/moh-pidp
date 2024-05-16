@@ -20,8 +20,19 @@ public class Discovery
 
     public class Model
     {
+        public enum StatusCode
+        {
+            Success = 1,
+            NewUser,
+            NewBCProviderError,
+            AccountLinkSuccess,
+            AlreadyLinked,
+            CredentialExists,
+            TicketExpired
+        }
+
         public int? PartyId { get; set; }
-        public bool NewBCProvider { get; set; }
+        public StatusCode Status { get; set; }
     }
 
     public class QueryHandler : IQueryHandler<Query, Model>
@@ -59,7 +70,9 @@ public class Discovery
             {
                 return new Model
                 {
-                    NewBCProvider = query.User.GetIdentityProvider() == IdentityProviders.BCProvider
+                    Status = query.User.GetIdentityProvider() == IdentityProviders.BCProvider
+                        ? Model.StatusCode.NewBCProviderError
+                        : Model.StatusCode.NewUser
                 };
             }
 
@@ -67,7 +80,8 @@ public class Discovery
 
             return new Model
             {
-                PartyId = data.Credential.PartyId
+                PartyId = data.Credential.PartyId,
+                Status = Model.StatusCode.Success
             };
         }
 

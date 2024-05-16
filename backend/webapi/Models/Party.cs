@@ -76,13 +76,13 @@ public class Party : BaseAuditable
     public string DisplayFullName => $"{this.DisplayFirstName} {this.DisplayLastName}";
 
     /// <summary>
-    /// The "primary" Credential of a Party is the a) only, or b) BC Services Card Credential.
-    /// As of now, the only Parties that have two Credentials are first BC Services Card and then later recieve a BC Provider Credential.
+    /// The "primary" Credential of a Party is the a) BC Services Card Credential or b) the only non-BC Services Card Credential.
     /// </summary>
     [Projectable]
     public Guid PrimaryUserId => this.Credentials
-        .Single(credential => credential.IdentityProvider != IdentityProviders.BCProvider)
-        .UserId;
+        .OrderByDescending(credential => credential.IdentityProvider == IdentityProviders.BCServicesCard)
+        .Select(credential => credential.UserId)
+        .First();
 
     /// <summary>
     /// Uses the Party's Licence Declaration to search PLR for records.
@@ -106,7 +106,7 @@ public class Party : BaseAuditable
 
         var standingsDigest = await client.GetStandingsDigestAsync(this.Cpn);
 
-        this.DomainEvents.Add(new PlrCpnLookupFound(this.Id, this.PrimaryUserId, this.Cpn, standingsDigest));
+        this.DomainEvents.Add(new PlrCpnLookupFound(this.Id, this.Credentials.Select(credential => credential.UserId), this.Cpn, standingsDigest));
         this.DomainEvents.Add(new CollegeLicenceUpdated(this.Id));
 
         if (standingsDigest.HasGoodStanding)
