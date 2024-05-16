@@ -1,5 +1,6 @@
 .header-container {
-  height: 20vh;
+  width: 99vw; 
+  height: 30vh;
   overflow-y: auto;
   transition: all 0.5s;
   background-image: url('/assets/images/national-cancer-institute-L8tWZT4CcVQ-unsplash.png');
@@ -9,23 +10,26 @@
   border-radius: var(--card-border-radius);
   padding: calc(var(--gap) * 2);
   position: relative;
+  margin-left: -115px;
+  
 }
 .banner-mask{
-  height: 120px;
+  height: 25vh;
   flex-shrink: 0;
   border-radius: 8px;
   background: rgba(1, 51, 102, 0.70);
-  margin: 20px 50px 20px 50px;
+  margin: 20px 80px 20px 80px;
 }
+
 .banner-mask h2{
   width: 100%;
   text-align: center;
   color: var(--Colours-primary, #FFF);
-  font-family: "BC Sans";
-  font-size: 25px;
+  font-size: 45px;
   font-style: normal;
   font-weight: 700;
   line-height: normal;
+  padding-top: 5vh;
 }
 .banner-mask h2 span{
   color: var(--Colours-primary, #FCBA19);
@@ -34,8 +38,7 @@
   width: 100%;
   text-align: center;
   color: #E4E4E4;
-  font-family: "BC Sans";
-  font-size: 15px;
+  font-size: 20px;
   font-style: normal;
   font-weight: 700;
   line-height: normal;
@@ -55,7 +58,7 @@
 .card img {
   width: 100%;
   height: auto;
-  height: 200px;
+  height: 150px;
 }
 
 .card-content {
@@ -63,16 +66,15 @@
 }
 .card-content h2 {
   color: var(--Main-font-colour, var(--Colours-font, #313132));
-  font-family: "BC Sans";
   font-size: 24px;
   font-style: normal;
   font-weight: 700;
   line-height: 36px; 
+  height: 60px;
 }
 
 .card-content a {
   color: var(--Links, #1A5A96);
-  font-family: "BC Sans";
   font-size: 16px;
   font-style: normal;
   font-weight: 400;
