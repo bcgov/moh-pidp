@@ -30,7 +30,7 @@ ENV ASPNETCORE_URLS="http://+:8080"
 COPY --from=build-env /app .
 COPY --from=build-env /source/efbundle .
 
-RUN cd /app && mkdir logs \
+RUN cd /app && mkdir -p logs \
     chmod 755 /app/logs/
 
 
