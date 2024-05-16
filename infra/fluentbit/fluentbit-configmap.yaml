@@ -168,7 +168,7 @@ parameters:
     description: Namespace
     displayName: Namespace
     required: true
-    value: 9c33a9-dev
+    value: d8a8f9-dev
   - name: OC_ENV
     description: OpenShift Environment
     displayName: OpenShift Environment
