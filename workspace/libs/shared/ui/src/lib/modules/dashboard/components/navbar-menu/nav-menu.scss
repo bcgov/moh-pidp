@@ -179,10 +179,7 @@ h1 {
     overflow: hidden;
   }
 }
-
-.viewport-small {
-  overflow: hidden;
-}
+ 
 
 .content-menu {
   background-color: #fff;
@@ -235,11 +232,12 @@ h1 {
   line-height: normal;
 }
 .viewport-small {
-  .span-text {
+  overflow: hidden;
+  & .span-text {
     padding: 12px 25px 0px 0px;
     font-size: 25px;
   }
-  .content-menu {
+  & .content-menu {
      a {
         font-size: 15px;
         font-weight: 400px;

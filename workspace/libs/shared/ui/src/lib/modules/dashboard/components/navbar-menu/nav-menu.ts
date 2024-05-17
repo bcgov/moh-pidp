@@ -103,7 +103,7 @@ export class NavMenuComponent implements OnChanges {
     item: DashboardMenuItem | string,
   ): RoutePath | undefined {
     if (item instanceof DashboardRouteMenuItem) {
-      const routeItem = item as DashboardRouteMenuItem;
+      const routeItem: DashboardRouteMenuItem = item ;
       return routeItem.commands;
     }
     return undefined;
@@ -114,14 +114,14 @@ export class NavMenuComponent implements OnChanges {
       }
     | IsActiveMatchOptions {
     if (item instanceof DashboardRouteMenuItem) {
-      const routeItem = item as DashboardRouteMenuItem;
+      const routeItem:DashboardRouteMenuItem = item ;
       return routeItem.linkActiveOptions;
     }
     throw 'getRouterLinkActiveOptions: not implemented';
   }
   public getRouterLinkFragment(item: DashboardMenuItem): string | undefined {
     if (item instanceof DashboardRouteMenuItem) {
-      const routeItem = item as DashboardRouteMenuItem;
+      const routeItem: DashboardRouteMenuItem = item;
       return routeItem.extras?.fragment;
     }
     return undefined;
@@ -158,15 +158,8 @@ export class NavMenuComponent implements OnChanges {
         this.isLogoutMenuItemVisible = true;
         this.isTopMenuVisible = true;
         break;
-      case PidpViewport.medium:
-        this.showMiniMenuButton = false;
-        this.isSidenavOpened = true;
-        this.sidenavMode = 'side';
-        this.isLogoutButtonVisible = true;
-        this.isLogoutMenuItemVisible = false;
-        this.isTopMenuVisible = true;
-        break;
-      case PidpViewport.large:
+      case PidpViewport.medium,
+        PidpViewport.large:
         this.showMiniMenuButton = false;
         this.isSidenavOpened = true;
         this.sidenavMode = 'side';
