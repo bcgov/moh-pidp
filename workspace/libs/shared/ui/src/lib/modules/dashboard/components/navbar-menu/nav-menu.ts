@@ -158,8 +158,8 @@ export class NavMenuComponent implements OnChanges {
         this.isLogoutMenuItemVisible = true;
         this.isTopMenuVisible = true;
         break;
-      case PidpViewport.medium,
-        PidpViewport.large:
+      case PidpViewport.medium:
+      case  PidpViewport.large:
         this.showMiniMenuButton = false;
         this.isSidenavOpened = true;
         this.sidenavMode = 'side';
