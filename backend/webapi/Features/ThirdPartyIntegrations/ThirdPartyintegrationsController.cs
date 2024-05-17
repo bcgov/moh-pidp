@@ -1,3 +1,5 @@
+using Microsoft.Graph.Education.Classes.Item.Assignments.Item.Submissions.Item.Return;
+
 namespace Pidp.Features.ThirdPartyIntegrations;
 
 using DomainResults.Common;
@@ -22,4 +24,15 @@ public class ThirdPartyintegrationsController : PidpControllerBase
                                                                                    [FromRoute] EndorsementData.Query query)
         => await handler.HandleAsync(query)
             .ToActionResultOfT();
+
+    [HttpPost("fhir/message")]
+    [Authorize(Roles = Roles.ViewEndorsements)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult> PostFHIRMessage<T>(T obj)
+    {
+        Console.WriteLine(obj);
+        return this.Ok();
+    }
 }
