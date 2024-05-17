@@ -6,6 +6,7 @@ import { AuthRoutes } from './auth.routes';
 import { authorizationRedirectGuard } from './guards/authorization-redirect.guard';
 import { AutoLoginPage } from './pages/auto-login/auto-login.page';
 import { BcProviderUpliftPage } from './pages/bc-provider-uplift/bc-provider-uplift.page';
+import { LinkAccountErrorPage } from './pages/link-account-error/link-account-error.page';
 import { LoginPage } from './pages/login/login.page';
 
 export const routes: Routes = [
@@ -26,6 +27,10 @@ export const routes: Routes = [
   {
     path: AuthRoutes.BC_PROVIDER_UPLIFT,
     component: BcProviderUpliftPage,
+  },
+  {
+    path: AuthRoutes.LINK_ACCOUNT_ERROR,
+    component: LinkAccountErrorPage,
   },
   {
     path: AuthRoutes.ADMIN_LOGIN,

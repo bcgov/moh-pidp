@@ -25,6 +25,7 @@ public class PidpDbContext : DbContext
     public DbSet<BusinessEvent> BusinessEvents { get; set; } = default!;
     public DbSet<ClientLog> ClientLogs { get; set; } = default!;
     public DbSet<Credential> Credentials { get; set; } = default!;
+    public DbSet<CredentialLinkErrorLog> CredentialLinkErrorLogs { get; set; } = default!;
     public DbSet<CredentialLinkTicket> CredentialLinkTickets { get; set; } = default!;
     public DbSet<EmailLog> EmailLogs { get; set; } = default!;
     public DbSet<EndorsementRelationship> EndorsementRelationships { get; set; } = default!;

@@ -1,3 +1,5 @@
 namespace Pidp.Models.DomainEvents;
 
-public record CredentialLinked(Credential Credential) : IDomainEvent;
+using System.Security.Claims;
+
+public record CredentialLinked(Credential Credential, ClaimsPrincipal User) : IDomainEvent;
