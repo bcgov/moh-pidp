@@ -1,5 +1,3 @@
-using Microsoft.Graph.Education.Classes.Item.Assignments.Item.Submissions.Item.Return;
-
 namespace Pidp.Features.ThirdPartyIntegrations;
 
 using DomainResults.Common;
