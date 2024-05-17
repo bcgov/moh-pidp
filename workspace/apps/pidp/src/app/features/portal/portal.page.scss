@@ -1,7 +1,43 @@
+.viewport-all {
+  --gap: 1rem;
+  --font-size: 0.75rem;
+  --card-border-radius: calc(var(--gap) * 0.375);
+}
+
+.viewport-small,
+.viewport-medium,
+.viewport-large {
+  --gap: 1.25rem;
+  --font-size: 1rem;
+}
+.viewport-xsmall {
+  --gap: 2rem;
+  --font-size: 1rem;
+
+  .form-button-box {
+    & button {
+      margin-top: 20px;
+    }
+  }
+}
+
+.viewport-all {
+  --header-margin: unset;
+  --avatar-size: 4rem;
+  --content-padding: var(--gap);
+  --password-splash-display: none;
+}
+.viewport-medium,
+.viewport-large {
+  --header-margin: var(--gap) 0 0;
+  --content-padding: var(--gap) 0;
+  --password-splash-display: unset;
+}
+
 .header-container {
   width: 99vw; 
   height: 30vh;
-  overflow-y: auto;
+ // overflow-y: auto;
   transition: all 0.5s;
   background-image: url('/assets/images/national-cancer-institute-L8tWZT4CcVQ-unsplash.png');
   background-repeat: no-repeat;
@@ -13,37 +49,33 @@
   margin-left: -115px;
   
 }
-.banner-mask{
-  height: 25vh;
+ .banner-mask {
+  height: 20vh;
   flex-shrink: 0;
   border-radius: 8px;
   background: rgba(1, 51, 102, 0.70);
-  margin: 20px 80px 20px 80px;
+  margin: 1px 80px 20px 80px;
 }
 
-.banner-mask h2{
+.banner-mask h5{
   width: 100%;
   text-align: center;
   color: var(--Colours-primary, #FFF);
-  font-size: 45px;
   font-style: normal;
   font-weight: 700;
   line-height: normal;
-  padding-top: 5vh;
 }
-.banner-mask h2 span{
+.banner-mask h5 span{
   color: var(--Colours-primary, #FCBA19);
 }
 .banner-mask p{
   width: 100%;
-  text-align: center;
   color: #E4E4E4;
   font-size: 20px;
   font-style: normal;
   font-weight: 700;
   line-height: normal;
 }
- 
 .card-grid {
   display: flex;
   justify-content: space-around;
@@ -57,14 +89,13 @@
 
 .card img {
   width: 100%;
-  height: auto;
   height: 150px;
 }
 
 .card-content {
   padding: 1rem;
 }
-.card-content h2 {
+ .card-content h2 {
   color: var(--Main-font-colour, var(--Colours-font, #313132));
   font-size: 24px;
   font-style: normal;
@@ -81,12 +112,247 @@
   line-height: 27px; 
   text-decoration: none;
 }
-.card:hover {
+ .card:hover {
   box-shadow: 2px 2px 2px rgb(194, 194, 196);
   transform:scale(1.1);
 }
 
-
 .card-content a:hover {
   text-decoration: none;
 }
+
+.card-content a  fa-icon{
+  color: var(--Links, #1A5A96);
+float: right;
+}
+
+.viewport-all {
+  & .header-container {
+    width: 99vw; 
+    height: 30vh;
+    margin-left: -115px;
+    
+  }
+  & .banner-mask {
+    height: 20vh;
+    margin: 1px 80px 20px 80px;
+  }
+
+  & .banner-mask h5{
+    text-align: center;
+    padding-top: 20px;
+    font-size: 43px;
+  }
+  & .banner-mask h5 span{
+    color: var(--Colours-primary, #FCBA19);
+  }
+  & .banner-mask p{
+    font-size: 15px;
+    padding-left: 110px;
+    padding-top:0px;
+  }
+  
+  
+  & .card-grid {
+    margin-top: 2rem;
+    flex-direction: column;
+    display: inline-flex;
+    margin: var(--margin-style);
+    padding: var(--card-padding);
+  }
+  & .card {
+    width: 30%;
+  }
+
+  & .card img {
+    height: 150px;
+  }
+
+  & .card-content {
+    padding: 1rem;
+  }
+  & .card-content h2 {
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 36px; 
+    height: 60px;
+  }
+
+  & .card-content a {
+    font-size: 16px;
+    line-height: 27px; 
+    text-decoration: none;
+  }
+}
+
+// laptap
+.viewport-medium {
+  & .header-container {
+    width: 99vw; 
+    height: 25vh;
+    margin-left: -35px;
+    
+  }
+  & .banner-mask {
+    height: 20vh;
+    margin: -20px 15px 20px 15px;
+  }
+
+  & .banner-mask h5{
+    text-align: center;
+    padding-top: 35px;
+    font-size: 30px;
+  }
+  & .banner-mask h5 span{
+    color: var(--Colours-primary, #FCBA19);
+  }
+  & .banner-mask p{
+    font-size: 12px;
+    padding-left: 85px;
+    padding-top: 0px;
+  }
+  
+  & .card-grid {
+    margin-top: 2rem;
+  }
+  & .card {
+    width: 30%;
+  }
+
+  & .card img {
+    height: 120px;
+  }
+
+  & .card-content {
+    padding: 1rem;
+  }
+  & .card-content h2 {
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 30px; 
+    height: 60px;
+  }
+
+  & .card-content a {
+    font-size: 15px;
+    line-height: 25px; 
+    text-decoration: none;
+  }
+}
+
+// tab
+.viewport-small {
+  & .header-container {
+    width: 99vw; 
+    height: 25vh;
+    margin-left: -35px;
+    
+  }
+  & .banner-mask {
+    height: 20vh;
+    margin: -20px 15px 20px 15px;
+  }
+
+  & .banner-mask h5{
+    text-align: center;
+    padding-top: 35px;
+    font-size: 23px;
+  }
+  & .banner-mask h5 span{
+    color: var(--Colours-primary, #FCBA19);
+  }
+  & .banner-mask p{
+    font-size: 12px;
+    padding-left: 45px;
+    padding-top: 0px;
+  }
+  
+  & .card-grid {
+    margin-top: 2rem;
+  }
+  & .card {
+    width: 30%;
+  }
+
+  & .card img {
+    height: 110px;
+  }
+
+  & .card-content {
+    padding: 1rem;
+  }
+  & .card-content h2 {
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 25px; 
+    height: 60px;
+  }
+
+  & .card-content a {
+    font-size: 15px;
+    line-height: 25px; 
+    text-decoration: none;
+  }
+}
+
+// mobile
+.viewport-xsmall {
+  & .header-container {
+    width: 99vw; 
+    height: 1vh;
+    margin-left: -8px;
+    
+  }
+  & .banner-mask {
+    height: 14vh;
+    margin: -53px -45px 5px -45px
+  }
+
+  & .banner-mask h5{
+    padding-top: 0px;
+    font-size: 20px;
+  }
+  & .banner-mask h5 span{
+    color: var(--Colours-primary, #FCBA19);
+  }
+  & .banner-mask p{
+    font-size: 11px;
+    padding-left: 15px;
+    padding-top: 0px;
+  }
+  
+  & .card-grid {
+    margin-top: 2rem;
+  }
+  & .card {
+    width: 98%;
+    padding:10px;
+  }
+
+  & .card img {
+    height: 110px;
+  }
+
+  & .card-content {
+    padding: 1rem;
+  }
+  & .card-content h2 {
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 15px; 
+    height: 35px;
+  }
+
+  & .card-content a {
+    font-size: 15px;
+    line-height: 25px; 
+    text-decoration: none;
+  }
+}
+
+
+
