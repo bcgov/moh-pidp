@@ -7,7 +7,7 @@ import {
 } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
-import { PhonePipe } from 'libs/shared/ui/src/lib/pipes/phone.pipe';
+import { PhonePipe } from '@bcgov/shared/ui';
 
 import { LookupCodePipe } from '@app/modules/lookup/lookup-code.pipe';
 
