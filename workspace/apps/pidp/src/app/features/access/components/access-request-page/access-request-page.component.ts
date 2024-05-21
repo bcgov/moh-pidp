@@ -3,7 +3,7 @@ import { Component, Inject, HostListener } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { faPlus, faThumbsUp, faFileLines, faArrowUp, faAngleRight, faMagnifyingGlass,faCheck } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faThumbsUp, faFileLines, faArrowUp, faAngleRight, faMagnifyingGlass,faCheck, faCircleCheck } from '@fortawesome/free-solid-svg-icons';
 import { InjectViewportCssClassDirective } from '@bcgov/shared/ui';
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';
@@ -28,6 +28,7 @@ export class AccessRequestPageComponent {
   public faPlus = faPlus;
   public faFileLines = faFileLines;
   public faCheck = faCheck;
+  public faCircleCheck = faCircleCheck;
   public logoutRedirectUrl: string;
   public faArrowUp = faArrowUp;
   public faAngleRight = faAngleRight;
