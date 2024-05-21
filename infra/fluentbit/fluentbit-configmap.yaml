@@ -39,7 +39,7 @@ objects:
           regex  log error
             
         [FILTER]
-          # exclude "No such file or directory" error from app logs
+          #ignore "No such file or directory" error from app logs
           name     grep
           match    app
           Exclude  log No\ssuch\sfile\sor\sdirectory
@@ -110,17 +110,18 @@ objects:
           Tag         app
 
         [FILTER]
-          # filter logs based on certain keyword(s)
+          # Filter logs based on certain keyword(e.g. ERR)
           name   grep
           match  app
           regex  log ERR
         
         [FILTER]
-          # exclude "500 and 503" error from app logs
+          # Ignore "500 and 503" HTTP Status code errors, exclude from fluentbit output
           name     grep
           match    app
           Exclude  log 500
           Exclude  log 503
+          Exclude  log npgsql
 
         [FILTER]
           name          parser
