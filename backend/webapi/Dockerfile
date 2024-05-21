@@ -30,6 +30,10 @@ ENV ASPNETCORE_URLS="http://+:8080"
 COPY --from=build-env /app .
 COPY --from=build-env /source/efbundle .
 
+RUN cd /app && mkdir -p logs \
+    chmod 755 /app/logs/
+
+
 EXPOSE 8080
 
 CMD ["./pidp"]
