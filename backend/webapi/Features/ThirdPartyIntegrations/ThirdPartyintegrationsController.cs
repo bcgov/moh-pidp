@@ -24,7 +24,7 @@ public class ThirdPartyintegrationsController : PidpControllerBase
             .ToActionResultOfT();
 
     [HttpPost("fhir/message")]
-    [Authorize(Roles = Roles.ViewEndorsements)]
+    [AllowAnonymous]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
