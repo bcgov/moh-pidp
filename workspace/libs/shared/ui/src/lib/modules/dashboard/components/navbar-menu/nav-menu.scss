@@ -244,38 +244,4 @@ h1 {
       }
   }
 }
-@media (max-width: 767.98px) and (min-width: 640px) {
-  .content-menu .span-text {
-   font-size: 20px;
-   padding: 15px 0px 0px 0px;
-   margin-right: auto;
-  }
-  .content-menu .main-menu  {
-   display: flex;
-    text-align: center;
-   flex-wrap: nowrap;
-   flex-grow: 1;
-   justify-content: flex-end;
-   overflow: hidden;
-   padding: 10px 0px 0px 0px;
-  }
-  .content-menu .main-menu a {
-    padding: 12px;
-    text-align: center;
-    font-size: 12px;
-    white-space: nowrap;
-    flex-shrink: 0;
-    height: 38px;
-  }
-  .btn-signout{
-    margin-left: 0px;
-    padding: 1px 1px;
-    font-size: 12px;
-    white-space: nowrap;
-    flex-shrink: 0;
-    width: 80px;
-    margin-top: 3px;
-  }
- }
- 
 
