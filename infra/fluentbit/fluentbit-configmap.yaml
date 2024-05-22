@@ -38,8 +38,9 @@ objects:
           match  app
           Logical_Op or
           regex  log error
-          regex  log fatal
+          regex  log crit
           regex  log alert
+          regex  log emerg
             
         [FILTER]
           #ignore "No such file or directory" error from app logs
