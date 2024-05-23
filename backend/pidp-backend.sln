@@ -1,11 +1,11 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30114.105
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "pidp", "webapi\pidp.csproj", "{690CB0B5-518B-443E-9E5C-B5A63A3F9E13}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "pidp", "webapi\pidp.csproj", "{690CB0B5-518B-443E-9E5C-B5A63A3F9E13}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "pidp.tests", "webapi.tests\pidp.tests.csproj", "{BC7BAF1F-4C48-4DB2-A704-EBB4DD2CFBFA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "pidp.tests", "webapi.tests\pidp.tests.csproj", "{BC7BAF1F-4C48-4DB2-A704-EBB4DD2CFBFA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "plr-intake", "services.plr-intake\plr-intake.csproj", "{8682A94E-4E90-4846-A7E8-E4CECB55DF79}"
 EndProject
