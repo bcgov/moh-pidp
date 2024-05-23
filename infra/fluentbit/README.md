@@ -14,11 +14,11 @@ We deploy a Fluent-bit sidecar container in both backend/webapi and ingress/ngin
 ### Fluent-bit for nginx/ingress app
 
 Our nginx app outputs error logs to a configurable path (`/tmp/error.log`) that can be set in [server-block-configmap](../../charts/nginx/templates/server-block-configmap.yaml). Our Fluent-bit container will mount the directory `/tmp/` from nginx app and read the log file `error.log`.
-Fluent-bit has its own configuration file that we can create using an OpenShift [configmap template](./fluentbit-configmap.yaml). This config of the Fluent-bit uses `tail` plugin in the `INPUT` section to receive logs from nginx log file (/tmp/error_flentbit.log), and uses a `parsers` to define the log formats by providing a Path in the SERVICE section that links to a separate file parser.conf `(Parsers_File  parsers.conf)`. It also uses `grep` plugin in the `FILTER` section to filter logs based on specific keywords (e.g. error). At the end it uses the `SLACK` plugin in the `OUTPUT` section to communicate with our Slack webhook and outputs error notifications to the PRIME Team's Slack channel.
+Fluent-bit has its own configuration file that we can create using an OpenShift [configmap template](./fluentbit-configmap.yaml). This config of the Fluent-bit uses `tail` plugin in the `INPUT` section to receive logs from nginx log file (/tmp/error_flentbit.log), and uses a `parsers` to define the log formats by providing a Path in the SERVICE section that links to a separate file parser.conf `(Parsers_File  parsers.conf)`. It also uses `grep` plugin in the `FILTER` section to filter logs based on specific keywords (e.g. error). At the end it uses the `SLACK` plugin in the `OUTPUT` section to communicate with our Slack webhook and outputs error notifications to the PIDP Team's Slack channel.
 
 ### Fluent-bit for backend/webapi app
 
-Our webapi app outputs logs to a configurable directory (`/app/logs/`) and the Fluent-bit container will mount this directory to a log-storage path. A [Fluent-bit configmap](./fluentbit-configmap.yaml) with the same configuration is used to read the log files `*.log` from mounted path, filter the log streams based on keyword `ERR` and output the logs to the PRIME Team's Slack channel. 
+Our webapi app outputs logs to a configurable directory (`/app/logs/`) and the Fluent-bit container will mount this directory to a log-storage path. A [Fluent-bit configmap](./fluentbit-configmap.yaml) with the same configuration is used to read the log files `*.log` from the mounted path, filter the log streams for the keywords `ERR` and `FTL`, and output the logs to the PIDP Team's Slack channel. 
 
 ### create the configmaps for nginx and webapi apps using the [fluentbit-configmap template](./fluentbit-configmap.yaml)
 
