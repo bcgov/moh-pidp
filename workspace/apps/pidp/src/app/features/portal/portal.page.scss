@@ -141,9 +141,11 @@
 
 .viewport-all {
   & .header-container {
-    width: 99.62vw; 
+    width: 100vw;
+    margin-left: -120px;
     height: 30vh;
-    margin-left: -114px;
+    // width: 99.62vw; 
+    // margin-left: -114px;
   }
   & .banner-mask {
     height: 20vh;
@@ -174,6 +176,7 @@
   & .card {
     width: 30%;
     margin-top: 20px;
+    padding: 20px;
   }
 
   & .card img {
@@ -181,7 +184,7 @@
   }
 
   & .card-content {
-    padding: 1rem;
+    padding: 30px 0px 0px 0px;
   }
   & .card-content h2 {
     font-size: 22px;
@@ -196,16 +199,20 @@
     line-height: 27px; 
     text-decoration: none;
   }
-
-  
+}
+ 
+@media (max-width: 1440.98px) and (min-width: 1440px) {
+  .header-container {
+    margin-left: -72px !important;
+  }
 }
 
 // laptap large
 .viewport-large {
-  & .header-container {
-    width: 99.62vw; 
-    margin-left: -114px;
-  }
+  // .header-container {
+  //   width: 99.98vw;
+  //   margin-left: -120px !important;
+  // }
   & .banner-mask {
     height: 20vh;
     margin: 10px 90px 20px 80px;
@@ -223,6 +230,11 @@
     font-size: 15px;
     padding-left: 160px;
     padding-top:0px;
+  }
+  & .card-grid {
+    padding-top: 2ch;
+    margin-top: 4rem;
+    margin: var(--margin-style);
   }
   .card:hover {
     box-shadow: 2px 2px 2px rgb(194, 194, 196);
@@ -244,7 +256,7 @@
 
   & .banner-mask h5{
     text-align: center;
-    padding-top: 35px;
+    padding-top: 25px;
     font-size: 30px;
   }
   & .banner-mask h5 span{
@@ -256,20 +268,20 @@
     padding-top: 0px;
   }
   
-  & .card-grid {
-    margin-top: 1rem;
-  }
+  // & .card-grid {
+  //   margin-top: 1rem;
+  // }
   & .card {
     width: 30%;
   }
 
   & .card img {
-    height: 120px;
+    height: 90px;
   }
 
-  & .card-content {
-    padding: 1rem;
-  }
+  // & .card-content {
+  //   padding: 1rem;
+  // }
   & .card-content h2 {
     font-size: 20px;
     font-style: normal;
@@ -315,26 +327,26 @@
     padding-top: 0px;
   }
   
-  & .card-grid {
-    margin-top: 2rem;
-  }
+  // & .card-grid {
+  //   margin-top: 2rem;
+  // }
   & .card {
     width: 30%;
   }
 
   & .card img {
-    height: 110px;
+    height: 75px;
   }
 
-  & .card-content {
-    padding: 1rem;
-  }
+  // & .card-content {
+  //   padding: 1rem;
+  // }
   & .card-content h2 {
-    font-size: 16px;
+    font-size: 15px;
     font-style: normal;
     font-weight: 700;
-    line-height: 25px; 
-    height: 60px;
+    line-height: 20px; 
+    height: 40px;
   }
 
   & .card-content a {
@@ -391,7 +403,7 @@
   }
   & .card {
     width: 90vw;
-    margin: 10px 10px 10px 5px;
+    margin: 10px 10px 10px 10px;
   }
 
   & .card img {
@@ -399,18 +411,19 @@
   }
 
   & .card-content {
-    padding: 1rem;
+    height: 180px;
   }
   & .card-content h2 {
-    font-size: 16px;
+    font-size: 20px;
     font-style: normal;
     font-weight: 700;
-    line-height: 15px; 
-    height: 35px;
+    line-height: 40px;
+    height: 95px;
+    padding-top: 15px
   }
 
   & .card-content a {
-    font-size: 15px;
+    font-size: 18px;
     line-height: 25px; 
     text-decoration: none;
   }
@@ -434,7 +447,6 @@
   .back-to-top-text {
     font-size: 10px;
   }
- 
 }
 
 
