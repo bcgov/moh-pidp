@@ -189,13 +189,13 @@ h1 {
   color: #ffffff;
   border-bottom: 2px solid #00000040;
   box-shadow: 6px 2px 8px #888888;
-  height: 70px;
+  height: 60px;
   position: fixed;
   z-index: 100;
   width: 100%;
 
   & .main-menu {
-    padding: 10px;
+    padding: 5px;
 
     & a {
       color: #313132;
@@ -221,14 +221,14 @@ h1 {
 .content-body {
   width: 100%;
   margin: 0px;
-  padding: 70px 0px 0px 0px; 
+  padding: 60px 0px 0px 0px; 
 }
 
 .span-text {
   text-decoration: none;
   display: block;
   text-align: center;
-  padding: 10px 55px 0px 0px;
+  padding: 5px 55px 0px 0px;
   float: left;
   color: #313132;
   font-size: 30px;

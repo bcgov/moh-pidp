@@ -3,8 +3,7 @@ import { NgIf } from '@angular/common';
 import { Component, Inject, OnInit, HostListener } from '@angular/core';
 
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { faArrowAltCircleRight  } from '@fortawesome/free-regular-svg-icons';
-import {  faArrowUp, faArrowAltCircleUp} from '@fortawesome/free-solid-svg-icons';
+import {  faArrowUp, faArrowRight} from '@fortawesome/free-solid-svg-icons';
 import {
   InjectViewportCssClassDirective
 } from '@bcgov/shared/ui';
@@ -32,9 +31,8 @@ import { APP_CONFIG, AppConfig } from '@app/app.config';
 })
 export class PortalPage implements OnInit {
  
-  public faArrowAltCircleRight = faArrowAltCircleRight;
+  public faArrowRight = faArrowRight;
   public faArrowUp = faArrowUp;
-  public faArrowAltCircleUp = faArrowAltCircleUp;
   public showBackToTopButton: boolean = false;
 
   public constructor(

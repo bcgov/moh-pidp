@@ -45,6 +45,7 @@
   background-position: bottom right;
   position: relative;
   margin-left: -115px;
+  object-fit: cover;
 }
  .banner-mask {
   height: 20vh;
@@ -70,7 +71,6 @@
   color: #E4E4E4;
   font-size: 20px;
   font-style: normal;
-  font-weight: 700;
   line-height: normal;
 }
 .card-grid {
@@ -87,6 +87,7 @@
 .card img {
   width: 100%;
   height: 150px;
+  object-fit: cover;
 }
 
 .card-content {
@@ -117,6 +118,7 @@
 .card-content a  fa-icon{
   color: var(--Links, #1A5A96);
   float: right;
+  padding-right: 3px;
 }
  
 .back-to-top {
@@ -144,8 +146,6 @@
     width: 100vw;
     margin-left: -120px;
     height: 30vh;
-    // width: 99.62vw; 
-    // margin-left: -114px;
   }
   & .banner-mask {
     height: 20vh;
@@ -175,8 +175,8 @@
   }
   & .card {
     width: 30%;
-    margin-top: 20px;
-    padding: 20px;
+    margin-top: 10px;
+    padding: 15px;
   }
 
   & .card img {
@@ -209,10 +209,6 @@
 
 // laptap large
 .viewport-large {
-  // .header-container {
-  //   width: 99.98vw;
-  //   margin-left: -120px !important;
-  // }
   & .banner-mask {
     height: 20vh;
     margin: 10px 90px 20px 80px;
@@ -228,7 +224,7 @@
   }
   & .banner-mask p{
     font-size: 15px;
-    padding-left: 160px;
+    padding-left: 112px;
     padding-top:0px;
   }
   & .card-grid {
@@ -247,7 +243,6 @@
   & .header-container { 
     height: 25vh;
     margin-left: -43px;
-    
   }
   & .banner-mask {
     height: 20vh;
@@ -268,9 +263,6 @@
     padding-top: 0px;
   }
   
-  // & .card-grid {
-  //   margin-top: 1rem;
-  // }
   & .card {
     width: 30%;
   }
@@ -279,9 +271,6 @@
     height: 90px;
   }
 
-  // & .card-content {
-  //   padding: 1rem;
-  // }
   & .card-content h2 {
     font-size: 20px;
     font-style: normal;
@@ -326,10 +315,7 @@
     padding-left: 72px;
     padding-top: 0px;
   }
-  
-  // & .card-grid {
-  //   margin-top: 2rem;
-  // }
+
   & .card {
     width: 30%;
   }
@@ -338,9 +324,6 @@
     height: 75px;
   }
 
-  // & .card-content {
-  //   padding: 1rem;
-  // }
   & .card-content h2 {
     font-size: 15px;
     font-style: normal;
@@ -376,30 +359,30 @@
 // mobile
 .viewport-xsmall {
   & .header-container {
-    height: 20vh;
+    height: 25vh;
     margin-left: -12px;
-    
   }
   & .banner-mask {
-    height: 15vh;
+    height: 20vh;
     margin: -9px 20px 5px 20px
   }
 
   & .banner-mask h5{
-    padding: 3px 5px;
-    font-size: 2.5vh;
+    padding: 7px 5px;
+    font-size: 25px;
   }
   & .banner-mask h5 span{
     color: var(--Colours-primary, #FCBA19);
   }
   & .banner-mask p{
-    font-size: 11px;
-    padding: 0px 5px 2px 20px
+    font-size: 15px;
+    padding: 0px 5px 2px 31px
   }
   
   & .card-grid {
     flex-direction: column;
     display: inline-flex;
+
   }
   & .card {
     width: 90vw;
@@ -429,7 +412,7 @@
   }
   .back-to-top-container {
     position: fixed;
-    bottom: 150px;
+    bottom: 170px;
     right: 25px;
     display: flex;
     flex-direction: column;
@@ -437,8 +420,8 @@
   }
 
   .back-to-top {
-    width: 25PX;
-    height: 25PX;
+    width: 30PX;
+    height: 30PX;
   }
   .back-to-top fa-icon{
     padding-top: 2px;
@@ -447,7 +430,32 @@
   .back-to-top-text {
     font-size: 10px;
   }
+ }
+ .back-to-top-container {
+  position: fixed;
+  bottom: 170px;
+  right: 25px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
+.back-to-top {
+  background-color: #38598A;
+  color: #FFFFFF;
+  width: 40PX;
+  height: 40PX;
+  border-radius: 50%;
+  text-align: center;
+  cursor: pointer;
+}
 
+.back-to-top-text {
+  color: #38598A;
+  font-size: 13px;
+  word-wrap: break-word
+}
 
+.back-to-top:hover {
+  background-color: #003366;
+}
