@@ -66,7 +66,7 @@ public class Startup
         services.AddHealthChecks()
             .AddApplicationStatus(tags: new[] { HealthCheckTag.Liveness.Value })
             .AddCheck<BackgroundWorkerHealthCheck>("PlrStatusUpdateSchedulingService", tags: new[] { HealthCheckTag.BackgroundServices.Value })
-            .AddDbContextCheck<PidpDbContext>(tags: new[] { HealthCheckTag.Readiness.Value })
+            .AddNpgSql(config.ConnectionStrings.PidpDatabase, tags: new[] { HealthCheckTag.Readiness.Value })
             .AddRabbitMQ(new Uri(config.RabbitMQ.HostAddress), tags: new[] { HealthCheckTag.Readiness.Value });
 
         services.AddSwaggerGen(options =>
