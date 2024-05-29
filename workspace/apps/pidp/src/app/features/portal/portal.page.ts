@@ -1,5 +1,5 @@
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
-import { NgIf } from '@angular/common';
+import { NgIf, NgOptimizedImage } from '@angular/common';
 import { Component, Inject, OnInit, HostListener } from '@angular/core';
 
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
@@ -26,7 +26,8 @@ import { APP_CONFIG, AppConfig } from '@app/app.config';
   imports: [
     FaIconComponent,
     InjectViewportCssClassDirective,
-    NgIf
+    NgIf,
+    NgOptimizedImage
   ],
 })
 export class PortalPage implements OnInit {

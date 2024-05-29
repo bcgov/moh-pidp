@@ -10,6 +10,7 @@
   --gap: 1.25rem;
   --font-size: 1rem;
 }
+
 .viewport-xsmall {
   --gap: 2rem;
   --font-size: 1rem;
@@ -27,60 +28,77 @@
   --content-padding: var(--gap);
   --password-splash-display: none;
 }
+
 .viewport-medium,
 .viewport-large {
   --header-margin: var(--gap) 0 0;
   --content-padding: var(--gap) 0;
   --password-splash-display: unset;
 }
- 
-.header-container {
-  width: 99vw; 
-  height: 30vh;
-  overflow-y: auto;
-  transition: all 0.5s;
-  background-image: url('/assets/images/national-cancer-institute-L8tWZT4CcVQ-unsplash.png');
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: bottom right;
-  position: relative;
-  margin-left: -115px;
-  object-fit: cover;
-}
- .banner-mask {
-  height: 20vh;
-  flex-shrink: 0;
-  border-radius: 8px;
-  background: rgba(1, 51, 102, 0.70);
-  margin: 1px 80px 20px 80px;
+
+.page-container {
+  padding: 0;
 }
 
-.banner-mask h5{
+.header-container {
+  width: auto;
+  height: 27vh;
+  overflow-y: auto;
+  background-image: url('/assets/images/national-cancer-institute-L8tWZT4CcVQ-unsplash.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: top;
+  position: relative;
+  object-fit: cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.banner-mask {
+  width: 88.85vw;
+  height: 18.165vh;
+  border-radius: 8px;
+  background: rgba(1, 51, 102, 0.70);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.banner-mask h5 {
   width: 100%;
-  text-align: center;
+  text-align: left;
   color: var(--Colours-primary, #FFF);
   font-style: normal;
   font-weight: 700;
   line-height: normal;
+  font-size: 2.8rem;
 }
-.banner-mask h5 span{
+
+.banner-mask h5 span {
   color: var(--Colours-primary, #FCBA19);
 }
-.banner-mask p{
+
+.banner-mask p {
   width: 100%;
   color: #E4E4E4;
-  font-size: 20px;
+  font-size: 1.25rem;
+  font-weight: 700;
   font-style: normal;
   line-height: normal;
+  text-align: left;
+  padding-top: 0.1rem;
 }
+
 .card-grid {
   display: flex;
   justify-content: space-around;
   margin-top: 2rem;
 }
+
 .card {
   width: 30%;
-  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
   transition: 0.3s;
 }
 
@@ -93,12 +111,13 @@
 .card-content {
   padding: 1rem;
 }
- .card-content h2 {
+
+.card-content h2 {
   color: var(--Main-font-colour, var(--Colours-font, #313132));
   font-size: 24px;
   font-style: normal;
   font-weight: 700;
-  line-height: 36px; 
+  line-height: 36px;
   height: 60px;
 }
 
@@ -107,7 +126,7 @@
   font-size: 16px;
   font-style: normal;
   font-weight: 400;
-  line-height: 27px; 
+  line-height: 27px;
   text-decoration: none;
 }
 
@@ -115,12 +134,12 @@
   text-decoration: none;
 }
 
-.card-content a  fa-icon{
+.card-content a fa-icon {
   color: var(--Links, #1A5A96);
   float: right;
   padding-right: 3px;
 }
- 
+
 .back-to-top {
   background-color: #38598A;
   color: #FFFFFF;
@@ -142,37 +161,25 @@
 }
 
 .viewport-all {
-  & .header-container {
-    width: 100vw;
-    margin-left: -120px;
-    height: 30vh;
-  }
   & .banner-mask {
     height: 20vh;
-    margin: 1px 80px 20px 80px;
   }
 
-  & .banner-mask h5{
-    text-align: center;
-    padding-top: 20px;
-    font-size: 43px;
+  & .banner-mask h5 {
+    text-align: left;
   }
-  & .banner-mask h5 span{
+
+  & .banner-mask h5 span {
     color: var(--Colours-primary, #FCBA19);
   }
-  & .banner-mask p{
-    font-size: 15px;
-    padding-left: 110px;
-    padding-top:0px;
-  }
-  
-  
+
   & .card-grid {
     padding-top: 2ch;
     margin-top: 4rem;
     margin: var(--margin-style);
     padding: var(--card-padding);
   }
+
   & .card {
     width: 30%;
     margin-top: 10px;
@@ -186,83 +193,65 @@
   & .card-content {
     padding: 30px 0px 0px 0px;
   }
+
   & .card-content h2 {
     font-size: 22px;
     font-style: normal;
     font-weight: 700;
-    line-height: 30px; 
+    line-height: 30px;
     height: 50px;
   }
 
   & .card-content a {
     font-size: 16px;
-    line-height: 27px; 
+    line-height: 27px;
     text-decoration: none;
   }
 }
- 
-@media (max-width: 1440.98px) and (min-width: 1440px) {
-  .header-container {
-    margin-left: -72px !important;
-  }
-}
+
+@media (max-width: 1440.98px) and (min-width: 1440px) {}
 
 // laptap large
 .viewport-large {
-  & .banner-mask {
-    height: 20vh;
-    margin: 10px 90px 20px 80px;
-    flex-shrink: 0;
-  }
-  & .banner-mask h5{
-    padding-top: 30px;
-    font-size: 43px;
-    padding-bottom:0px;
-  }
-  & .banner-mask h5 span{
+  & .banner-mask h5 span {
     color: var(--Colours-primary, #FCBA19);
-  }
-  & .banner-mask p{
-    font-size: 15px;
-    padding-left: 112px;
-    padding-top:0px;
   }
   & .card-grid {
     padding-top: 2ch;
     margin-top: 4rem;
     margin: var(--margin-style);
   }
+
   .card:hover {
     box-shadow: 2px 2px 2px rgb(194, 194, 196);
-    transform:scale(1.1);
+    transform: scale(1.03);
   }
 }
 
 // laptap
 .viewport-medium {
-  & .header-container { 
+  & .header-container {
     height: 25vh;
-    margin-left: -43px;
-  }
-  & .banner-mask {
-    height: 20vh;
-    margin: -11px 60px 20px 60px;
+
   }
 
-  & .banner-mask h5{
-    text-align: center;
-    padding-top: 25px;
-    font-size: 30px;
+  & .banner-mask {
+    padding-left: 2rem;
+    height: 18vh;
   }
-  & .banner-mask h5 span{
+
+  & .banner-mask h5 {
+    font-size: 2.2rem;
+  }
+
+  & .banner-mask h5 span {
     color: var(--Colours-primary, #FCBA19);
   }
-  & .banner-mask p{
-    font-size: 12px;
-    padding-left: 88px;
-    padding-top: 0px;
+
+  & .banner-mask p {
+    font-size: 1.3rem;
   }
-  
+
   & .card {
     width: 30%;
   }
@@ -275,18 +264,19 @@
     font-size: 20px;
     font-style: normal;
     font-weight: 700;
-    line-height: 30px; 
+    line-height: 30px;
     height: 60px;
   }
 
   & .card-content a {
     font-size: 15px;
-    line-height: 25px; 
+    line-height: 25px;
     text-decoration: none;
   }
+
   .card:hover {
     box-shadow: 2px 2px 2px rgb(194, 194, 196);
-    transform:scale(1.1);
+    transform: scale(1.03);
   }
 }
 
@@ -294,26 +284,23 @@
 .viewport-small {
   & .header-container {
     height: 25vh;
-    margin-left: -36px;
-    
-  }
-  & .banner-mask {
-    height: 17vh;
-    margin: 0px 30px 20px 30px
   }
 
-  & .banner-mask h5{
-    text-align: center;
-    padding-top: 30px;
-    font-size: 23px;
+  & .banner-mask {
+    padding: 0 2rem;
+    height: 20vh;
   }
-  & .banner-mask h5 span{
+
+  & .banner-mask h5 {
+    font-size: 2.3rem;
+  }
+
+  & .banner-mask h5 span {
     color: var(--Colours-primary, #FCBA19);
   }
-  & .banner-mask p{
-    font-size: 12px;
-    padding-left: 72px;
-    padding-top: 0px;
+
+  & .banner-mask p {
+    font-size: 1rem;
   }
 
   & .card {
@@ -328,15 +315,16 @@
     font-size: 15px;
     font-style: normal;
     font-weight: 700;
-    line-height: 20px; 
+    line-height: 20px;
     height: 40px;
   }
 
   & .card-content a {
     font-size: 15px;
-    line-height: 25px; 
+    line-height: 25px;
     text-decoration: none;
   }
+
   .back-to-top-container {
     position: fixed;
     bottom: 100px;
@@ -359,34 +347,36 @@
 // mobile
 .viewport-xsmall {
   & .header-container {
-    height: 25vh;
-    margin-left: -12px;
-  }
-  & .banner-mask {
-    height: 20vh;
-    margin: -9px 20px 5px 20px
+    height: 30vh;
+    background-size: 200vw 100vh;
   }
 
-  & .banner-mask h5{
-    padding: 7px 5px;
-    font-size: 25px;
+  & .banner-mask {
+    padding-left: 1rem;
+    height: 25vh;
   }
-  & .banner-mask h5 span{
+
+  & .banner-mask h5 {
+    font-size: 1.75rem;
+  }
+
+  & .banner-mask h5 span {
     color: var(--Colours-primary, #FCBA19);
   }
-  & .banner-mask p{
-    font-size: 15px;
-    padding: 0px 5px 2px 31px
+
+  & .banner-mask p {
+    font-size: 1rem;
   }
-  
+
   & .card-grid {
     flex-direction: column;
-    display: inline-flex;
-
+    display: flex;
+    align-items: center;
+    padding-bottom: 2rem;
   }
+
   & .card {
     width: 90vw;
-    margin: 10px 10px 10px 10px;
   }
 
   & .card img {
@@ -396,6 +386,7 @@
   & .card-content {
     height: 180px;
   }
+
   & .card-content h2 {
     font-size: 20px;
     font-style: normal;
@@ -407,9 +398,10 @@
 
   & .card-content a {
     font-size: 18px;
-    line-height: 25px; 
+    line-height: 25px;
     text-decoration: none;
   }
+
   .back-to-top-container {
     position: fixed;
     bottom: 170px;
@@ -417,21 +409,24 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    opacity: 0.5;
   }
 
   .back-to-top {
     width: 30PX;
     height: 30PX;
   }
-  .back-to-top fa-icon{
+
+  .back-to-top fa-icon {
     padding-top: 2px;
   }
 
   .back-to-top-text {
     font-size: 10px;
   }
- }
- .back-to-top-container {
+}
+
+.back-to-top-container {
   position: fixed;
   bottom: 170px;
   right: 25px;
