@@ -1,10 +1,10 @@
-FROM mcr.microsoft.com/dotnet/sdk:6.0-alpine as build-env
+FROM mcr.microsoft.com/dotnet/sdk:8.0-alpine as build-env
 WORKDIR /source
 
 ENV DOTNET_CLI_HOME="/opt"
 ENV PATH="$PATH:/opt/.dotnet/tools"
 
-RUN dotnet tool install --global dotnet-ef --version "7.*"
+RUN dotnet tool install --global dotnet-ef --version "8.*"
 
 COPY *.csproj .
 RUN dotnet restore -r linux-musl-x64 /p:PublishReadyToRun=true
@@ -15,7 +15,7 @@ RUN dotnet publish -c Release -o /app -r linux-musl-x64 --self-contained false -
 RUN dotnet ef migrations bundle
 
 #----------------------------------------------------------------#
-FROM mcr.microsoft.com/dotnet/aspnet:6.0-alpine
+FROM mcr.microsoft.com/dotnet/aspnet:8.0-alpine
 WORKDIR /app
 
 ENV ASPNETCORE_ENVIRONMENT="Production"
@@ -32,7 +32,6 @@ COPY --from=build-env /source/efbundle .
 
 RUN cd /app && mkdir -p logs \
     chmod 755 /app/logs/
-
 
 EXPOSE 8080
 
