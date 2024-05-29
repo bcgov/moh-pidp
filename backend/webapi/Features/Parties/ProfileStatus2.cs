@@ -17,7 +17,7 @@ using Pidp.Infrastructure.HttpClients.Plr;
 using Pidp.Models;
 using Pidp.Models.Lookups;
 
-public partial class ProfileStatus
+public partial class ProfileStatus2
 {
     public class Query : IQuery<Model>
     {
@@ -64,13 +64,14 @@ public partial class ProfileStatus
         {
             var sw = System.Diagnostics.Stopwatch.StartNew();
             var data = await this.context.Parties
+                .AsNoTracking()
                 .Where(party => party.Id == query.Id)
-                .ProjectTo<ProfileData>(this.mapper.ConfigurationProvider)
+                .ProjectTo<ProfileStatus.ProfileData>(this.mapper.ConfigurationProvider)
                 .SingleAsync();
 
             await data.Finalize(this.context, this.plrClient, query.User);
             sw.Stop();
-            Console.WriteLine($"ProfileStatus.QueryHandler.HandleAsync: {sw.ElapsedMilliseconds}ms");
+            Console.WriteLine($"ProfileStatus2.QueryHandler.HandleAsync: {sw.ElapsedMilliseconds}ms");
 
             return new Model
             {

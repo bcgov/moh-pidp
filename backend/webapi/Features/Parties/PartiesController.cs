@@ -75,4 +75,13 @@ public class PartiesController : PidpControllerBase
                                                                                    [FromRoute] ProfileStatus.Query query)
         => await this.AuthorizePartyBeforeHandleAsync(query.Id, handler, query.WithUser(this.User))
             .ToActionResultOfT();
+
+    [HttpGet("{id}/profile-status2")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<ProfileStatus2.Model>> ComputePartyProfileStatus2([FromServices] IQueryHandler<ProfileStatus2.Query, ProfileStatus2.Model> handler,
+                                                                                   [FromRoute] ProfileStatus2.Query query)
+        => await this.AuthorizePartyBeforeHandleAsync(query.Id, handler, query.WithUser(this.User))
+            .ToActionResultOfT();
 }
