@@ -1,4 +1,4 @@
 export class Constants {
-    public static scrollThreshold = 200;
+    public static readonly scrollThreshold = 200;
 
 }

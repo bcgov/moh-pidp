@@ -48,17 +48,14 @@ export class AccessRequestPageComponent {
  public onWindowScroll(): void {
     const scrollPosition = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop || 0;
     this.showBackToTopButton = scrollPosition > Constants.scrollThreshold;
-    return;
   }
 
  public  scrollToTop(): void {
     window.scrollTo({ top: 0, behavior: 'smooth' });
-    return;
   }
 
   public onSearch(event: Event): void {
     this.showSearchIcon = ( event.target as HTMLInputElement).value ==='';
-    return;
   }
  
 }
