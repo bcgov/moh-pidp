@@ -14,42 +14,8 @@
   --sidenav-line-margin-bottom: 20px;
   --sidenav-menu-padding-left: 0;
   --sidenav-menu-item-padding-bottom: 20px;
-}
-
-.viewport-medium {
-  --header-padding: 0;
-  --header-height: 160px;
-  --content-flex: 0 0 994px;
-  --mat-sidenav-width: 240px;
-  --sidenav-panel-box-margin: -60px 30px 0 15px;
-  --sidenav-panel-box-width: 200px;
-  --sidenav-panel-content-padding: 15px;
-  --sidenav-header-margin-bottom: 15px;
-  --sidenav-line-margin-bottom: 15px;
-}
-
-.viewport-large {
-  --header-padding: 0;
-  --header-height: 160px;
-  --content-flex: 0 0 1200px;
-  --sidenav-panel-box-margin: -60px 50px 0 80px;
-  --sidenav-panel-box-width: 240px;
-}
-
-a,
-p,
-h1 {
-  font-family: pidp.$bcgov-font-family;
-}
-
-.viewport-all {
   width: 100%;
   display: flex;
-
-  & .content-header-box {
-    background-color: #036;
-    min-height: var(--header-height);
-  }
 
   & .content {
     // Ensure the sidenav will stretch to fit vertically
@@ -61,6 +27,8 @@ h1 {
 
   & .content-header-box {
     display: flex;
+    background-color: #036;
+    min-height: var(--header-height);
 
     & header {
       flex: 1;
@@ -140,6 +108,32 @@ h1 {
       }
     }
   }
+}
+
+.viewport-medium {
+  --header-padding: 0;
+  --header-height: 160px;
+  --content-flex: 0 0 994px;
+  --mat-sidenav-width: 240px;
+  --sidenav-panel-box-margin: -60px 30px 0 15px;
+  --sidenav-panel-box-width: 200px;
+  --sidenav-panel-content-padding: 15px;
+  --sidenav-header-margin-bottom: 15px;
+  --sidenav-line-margin-bottom: 15px;
+}
+
+.viewport-large {
+  --header-padding: 0;
+  --header-height: 160px;
+  --content-flex: 0 0 1200px;
+  --sidenav-panel-box-margin: -60px 50px 0 80px;
+  --sidenav-panel-box-width: 240px;
+}
+
+a,
+p,
+h1 {
+  font-family: pidp.$bcgov-font-family;
 }
 
 .header-right {

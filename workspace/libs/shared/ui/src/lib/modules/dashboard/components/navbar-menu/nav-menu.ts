@@ -117,7 +117,7 @@ export class NavMenuComponent implements OnChanges {
       const routeItem:DashboardRouteMenuItem = item ;
       return routeItem.linkActiveOptions;
     }
-    throw 'getRouterLinkActiveOptions: not implemented';
+    throw new Error('getRouterLinkActiveOptions: not implemented');
   }
   public getRouterLinkFragment(item: DashboardMenuItem): string | undefined {
     if (item instanceof DashboardRouteMenuItem) {
@@ -168,7 +168,7 @@ export class NavMenuComponent implements OnChanges {
         this.isTopMenuVisible = true;
         break;
       default:
-        throw `Dashboard v2 not implemented: ${this.viewport}`;
+        throw new Error(`Nav Menu not implemented: ${this.viewport}`);
     }
   }
 }
