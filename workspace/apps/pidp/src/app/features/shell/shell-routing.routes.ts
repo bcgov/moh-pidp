@@ -39,6 +39,13 @@ export const routes: Routes = [
       ),
   },
   {
+   path: ShellRoutes.ACCOUNT_LINKING_MOCK_PAGE,
+   loadChildren: (): Promise<Routes> => 
+    import('./pages/account-linking-mock/account-linking-mock-routing.routes').then(
+      (m) => m.routes,
+    )
+  },
+  {
     path: '',
     component: PortalDashboardComponent,
     canActivate: [AuthenticationGuard.canActivate],
