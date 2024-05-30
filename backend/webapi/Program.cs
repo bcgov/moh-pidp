@@ -57,10 +57,11 @@ public class Program
         var outputTemplate = "[{Timestamp:yyyy/MM/dd HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}";
 
         Log.Logger = new LoggerConfiguration()
-            .MinimumLevel.Information()
-            .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
-            .MinimumLevel.Override("Microsoft.Hosting.Lifetime", LogEventLevel.Information)
-            .MinimumLevel.Override("System", LogEventLevel.Warning)
+            .MinimumLevel.Debug()
+            // .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
+            // .MinimumLevel.Override("Microsoft.Hosting.Lifetime", LogEventLevel.Information)
+            // .MinimumLevel.Override("System", LogEventLevel.Warning)
+            // .MinimumLevel.Override("Microsoft.AspNetCore.HttpLogging.HttpLoggingMiddleware": , LogEventLevel.)
             .Enrich.FromLogContext()
             .Enrich.WithMachineName()
             .Enrich.WithProperty("Assembly", $"{name.Name}")
