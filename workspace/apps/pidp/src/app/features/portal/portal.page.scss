@@ -89,11 +89,19 @@
   text-align: left;
   padding-top: 0.1rem;
 }
-
+.body-container{
+  width: auto;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 .card-grid {
   display: flex;
   justify-content: space-around;
   margin-top: 2rem;
+  padding-bottom: 2rem;
+  width: 91.5vw;
 }
 
 .card {
@@ -357,7 +365,7 @@
   }
 
   & .banner-mask h5 {
-    font-size: 1.75rem;
+    font-size: 1.3rem;
   }
 
   & .banner-mask h5 span {
@@ -365,14 +373,14 @@
   }
 
   & .banner-mask p {
-    font-size: 1rem;
+    font-size: 0.75rem;
   }
 
   & .card-grid {
     flex-direction: column;
     display: flex;
     align-items: center;
-    padding-bottom: 2rem;
+    
   }
 
   & .card {
