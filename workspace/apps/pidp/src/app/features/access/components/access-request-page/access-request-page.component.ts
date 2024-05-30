@@ -4,10 +4,10 @@ import { MatButtonModule } from '@angular/material/button';
 
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { faPlus, faThumbsUp, faFileLines, faArrowUp, faAngleRight, faMagnifyingGlass,faCheck } from '@fortawesome/free-solid-svg-icons';
-import { InjectViewportCssClassDirective } from '@bcgov/shared/ui';
+import { InjectViewportCssClassDirective, LayoutHeaderFooterComponent } from '@bcgov/shared/ui';
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';
-import { LayoutHeaderFooterComponent } from "../../../../../../../../libs/shared/ui/src/lib/components/layout-header-footer/layout-header-footer.component";
+import { Constants } from '@app/shared/constants';
 
 @Component({
     selector: 'app-access-request-page',
@@ -45,19 +45,18 @@ export class AccessRequestPageComponent {
   }
 
   @HostListener('window:scroll', [])
- public onWindowScroll() {
+ public onWindowScroll(): void {
     const scrollPosition = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop || 0;
-    const scrollThreshold = 200;
-    this.showBackToTopButton = scrollPosition > scrollThreshold;
+    this.showBackToTopButton = scrollPosition > Constants.scrollThreshold;
     return;
   }
 
- public  scrollToTop() {
+ public  scrollToTop(): void {
     window.scrollTo({ top: 0, behavior: 'smooth' });
     return;
   }
 
-  public onSearch(event: Event) {
+  public onSearch(event: Event): void {
     this.showSearchIcon = ( event.target as HTMLInputElement).value ==='';
     return;
   }

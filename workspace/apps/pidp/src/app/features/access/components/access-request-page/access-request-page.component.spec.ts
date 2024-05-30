@@ -1,48 +1,32 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { TestBed } from '@angular/core/testing';
-import { Router } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
-import { MockProfileStatus } from '@test/mock-profile-status';
-import {
-  createSpyFromClass,
-  provideAutoSpy,
-} from 'jest-auto-spies';
-
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { AccessRequestPageComponent } from './access-request-page.component';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { APP_CONFIG, APP_DI_CONFIG } from '@app/app.config';
-import { PartyService } from '@app/core/party/party.service';
-import { ApiHttpClient } from '@app/core/resources/api-http-client.service';
-import { AuthService } from '@app/features/auth/services/auth.service';
-
-import { StatusCode } from '@app/features/portal/enums/status-code.enum';
-import { ProfileStatus } from '@app/features/portal/models/profile-status.model';
 
 describe('PortalCardComponent', () => {
-  let mockProfileStatus: ProfileStatus;
-
+  let component: AccessRequestPageComponent;
+  let fixture: ComponentFixture<AccessRequestPageComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [RouterTestingModule],
+      imports: [AccessRequestPageComponent, NoopAnimationsModule],
       providers: [
-        provideAutoSpy(ApiHttpClient),
-        {
-          provide: PartyService,
-          useValue: createSpyFromClass(PartyService, {
-            gettersToSpyOn: ['partyId'],
-            settersToSpyOn: ['partyId'],
-          }),
-        },
-        provideAutoSpy(Router),
         {
           provide: APP_CONFIG,
           useValue: APP_DI_CONFIG,
         },
-        provideAutoSpy(AuthService),
       ],
     }).compileComponents();
- 
-    mockProfileStatus = MockProfileStatus.get();
-    mockProfileStatus.status.primaryCareRostering.statusCode =
-      StatusCode.NOT_AVAILABLE;
+  });
+
+  beforeEach(() => {
+    fixture = TestBed.createComponent(AccessRequestPageComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
   });
 });

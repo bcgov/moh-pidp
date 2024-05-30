@@ -118,16 +118,6 @@ export const routes: Routes = [
         loadChildren: (): Promise<Routes> =>
           import('../faq/faq-routing.routes').then((m) => m.routes),
       },
-      // {
-      //   path: ShellRoutes.ACCESS_REQUEST_PAGE,
-      //    resolve: {
-      //     hasCompletedWizard: wizardResolver,
-      //   },
-      //   loadChildren: (): Promise<Routes> =>
-      //     import('../access/components/access-request-page/access-request-page-routing.routes').then(
-      //       (m) => m.routes,
-      //     ),
-      // },
       {
         path: '',
         redirectTo: PortalRoutes.BASE_PATH,
