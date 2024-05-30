@@ -57,7 +57,7 @@ public class Program
         var outputTemplate = "[{Timestamp:yyyy/MM/dd HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}";
 
         Log.Logger = new LoggerConfiguration()
-            .MinimumLevel.Debug()
+            .MinimumLevel.Verbose()
             // .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
             // .MinimumLevel.Override("Microsoft.Hosting.Lifetime", LogEventLevel.Information)
             // .MinimumLevel.Override("System", LogEventLevel.Warning)

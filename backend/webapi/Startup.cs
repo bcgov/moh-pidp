@@ -85,8 +85,6 @@ public class Startup
             options.CustomSchemaIds(x => x.FullName);
         });
         services.AddFluentValidationRulesToSwagger();
-
-        services.AddHttpLogging(options => { });
     }
 
     private PidpConfiguration InitializeConfiguration(IServiceCollection services)
@@ -109,7 +107,6 @@ public class Startup
             app.UseDeveloperExceptionPage();
         }
 
-        app.UseHttpLogging();
         app.UseSwagger();
         app.UseSwaggerUI(options => options.SwaggerEndpoint("/swagger/v1/swagger.json", "PIdP Web API"));
 
