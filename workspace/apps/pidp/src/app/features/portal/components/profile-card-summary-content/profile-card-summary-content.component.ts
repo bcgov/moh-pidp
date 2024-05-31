@@ -9,7 +9,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 import { PhonePipe } from 'libs/shared/ui/src/lib/pipes/phone.pipe';
 
-import { LookupCodePipe } from '@app/modules/lookup/lookup-code.pipe';
+import { LookupCodePipe } from '../../../../modules/lookup/lookup-code.pipe';
 
 @Component({
   selector: 'app-profile-card-summary-content',
