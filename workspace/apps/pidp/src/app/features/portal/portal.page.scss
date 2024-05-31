@@ -2,6 +2,10 @@
   --gap: 1rem;
   --font-size: 0.75rem;
   --card-border-radius: calc(var(--gap) * 0.375);
+  --header-margin: unset;
+  --avatar-size: 4rem;
+  --content-padding: var(--gap);
+  --password-splash-display: none;
 }
 
 .viewport-small,
@@ -9,24 +13,6 @@
 .viewport-large {
   --gap: 1.25rem;
   --font-size: 1rem;
-}
-
-.viewport-xsmall {
-  --gap: 2rem;
-  --font-size: 1rem;
-
-  .form-button-box {
-    & button {
-      margin-top: 20px;
-    }
-  }
-}
-
-.viewport-all {
-  --header-margin: unset;
-  --avatar-size: 4rem;
-  --content-padding: var(--gap);
-  --password-splash-display: none;
 }
 
 .viewport-medium,
@@ -148,6 +134,15 @@
   padding-right: 3px;
 }
 
+.back-to-top-container {
+  position: fixed;
+  bottom: 170px;
+  right: 25px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 .back-to-top {
   background-color: #38598A;
   color: #FFFFFF;
@@ -183,9 +178,7 @@
 
   & .card-grid {
     padding-top: 2ch;
-    margin-top: 4rem;
     margin: var(--margin-style);
-    padding: var(--card-padding);
   }
 
   & .card {
@@ -217,19 +210,12 @@
   }
 }
 
-@media (max-width: 1440.98px) and (min-width: 1440px) {}
-
 // laptap large
 .viewport-large {
   & .banner-mask h5 span {
     color: var(--Colours-primary, #FCBA19);
   }
-  & .card-grid {
-    padding-top: 2ch;
-    margin-top: 4rem;
-    margin: var(--margin-style);
-  }
-
+ 
   .card:hover {
     box-shadow: 2px 2px 2px rgb(194, 194, 196);
     transform: scale(1.03);
@@ -354,6 +340,15 @@
 
 // mobile
 .viewport-xsmall {
+  --gap: 2rem;
+  --font-size: 1rem;
+
+  .form-button-box {
+    & button {
+      margin-top: 20px;
+    }
+  }
+
   & .header-container {
     height: 30vh;
     background-size: 200vw 100vh;
@@ -380,7 +375,6 @@
     flex-direction: column;
     display: flex;
     align-items: center;
-    
   }
 
   & .card {
@@ -432,33 +426,4 @@
   .back-to-top-text {
     font-size: 10px;
   }
-}
-
-.back-to-top-container {
-  position: fixed;
-  bottom: 170px;
-  right: 25px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.back-to-top {
-  background-color: #38598A;
-  color: #FFFFFF;
-  width: 40PX;
-  height: 40PX;
-  border-radius: 50%;
-  text-align: center;
-  cursor: pointer;
-}
-
-.back-to-top-text {
-  color: #38598A;
-  font-size: 13px;
-  word-wrap: break-word
-}
-
-.back-to-top:hover {
-  background-color: #003366;
 }

@@ -2,20 +2,6 @@
 // @see ./scss/material/components/_mat-sidenav.scss
 @use 'pidp-variables' as pidp;
 
-.viewport-all {
-  --header-padding: 20px 30px;
-  --header-height: 100px;
-  --content-flex: 1;
-  --mat-sidenav-width: 360px;
-  --sidenav-panel-content-padding: 20px;
-  --sidenav-panel-box-margin: unset;
-  --sidenav-panel-box-width: unset;
-  --sidenav-header-margin-bottom: 20px;
-  --sidenav-line-margin-bottom: 20px;
-  --sidenav-menu-padding-left: 0;
-  --sidenav-menu-item-padding-bottom: 20px;
-}
-
 .viewport-medium {
   --header-padding: 0;
   --header-height: 160px;
@@ -43,13 +29,19 @@ h1 {
 }
 
 .viewport-all {
+  --header-padding: 20px 30px;
+  --header-height: 100px;
+  --content-flex: 1;
+  --mat-sidenav-width: 360px;
+  --sidenav-panel-content-padding: 20px;
+  --sidenav-panel-box-margin: unset;
+  --sidenav-panel-box-width: unset;
+  --sidenav-header-margin-bottom: 20px;
+  --sidenav-line-margin-bottom: 20px;
+  --sidenav-menu-padding-left: 0;
+  --sidenav-menu-item-padding-bottom: 20px;
   width: 100%;
   display: flex;
-
-  & .content-header-box {
-    background-color: #036;
-    min-height: var(--header-height);
-  }
 
   & .content {
     // Ensure the sidenav will stretch to fit vertically
@@ -60,6 +52,8 @@ h1 {
   }
 
   & .content-header-box {
+    background-color: #036;
+    min-height: var(--header-height);
     display: flex;
 
     & header {
@@ -178,10 +172,6 @@ h1 {
   .custom-mat-sidenav-content {
     overflow: hidden;
   }
-}
-
-.viewport-small {
-  overflow: hidden;
 }
 
 .content-menu {

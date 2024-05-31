@@ -18,12 +18,12 @@ import {
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';
 
-import { EnvironmentName } from '../../../../../environments/environment.model';
-import { LookupCodePipe } from '../../../../modules/lookup/lookup-code.pipe';
 import {
   AdminResource,
   PartyList,
 } from '../../shared/resources/admin-resource.service';
+import { LookupCodePipe } from '@app/modules/lookup/lookup-code.pipe';
+import { EnvironmentName } from 'apps/pidp/src/environments/environment.model';
 
 @Component({
   selector: 'app-parties',
