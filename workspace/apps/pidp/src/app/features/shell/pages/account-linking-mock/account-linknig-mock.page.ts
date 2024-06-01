@@ -1,9 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { PortalDashboardComponent } from '../../components/portal-dashboard/portal-dashboard.component';
-import { PidpViewport, ViewportService } from '@bcgov/shared/ui';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmDialogComponent, DialogOptions, HtmlComponent, PidpViewport, ViewportService } from '@bcgov/shared/ui';
 import { NgIf } from '@angular/common';
-
+import { PortalDashboardComponent } from '../../components/portal-dashboard/portal-dashboard.component';
 
 @Component({
   selector: 'account-linking-mock-page',
@@ -15,7 +15,7 @@ import { NgIf } from '@angular/common';
     PortalDashboardComponent
 ],
 })
-export class AccountLinkingMockPage {
+export class AccountLinkingMockPage implements OnInit{
 
   public viewport = PidpViewport.xsmall;
   public isMobileView = false;
@@ -25,13 +25,29 @@ export class AccountLinkingMockPage {
 
   public constructor(
     private router: Router,
-    private viewportService: ViewportService
+    private viewportService: ViewportService,
+    private dialog: MatDialog,
   ) {
     this.viewportService.viewportBroadcast$.subscribe((viewport) =>
         this.onViewportChange(viewport),
       ); 
   }
 
+  ngOnInit(): void {
+    const data: DialogOptions = {
+      title: 'Account linking',
+      component: HtmlComponent,
+      data: {
+        content: `Your testuser@phsa.c is about
+        to be linked to BCSC testuser
+        is the information correct`,
+      },
+      width: '500px',
+    };
+    this.dialog
+      .open(ConfirmDialogComponent, { data })
+      .afterClosed()
+  }
   private onViewportChange(viewport: PidpViewport): void {
     this.viewport = viewport;
     this.isMobileView = false;
