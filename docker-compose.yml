@@ -40,7 +40,8 @@ services:
       ASPNETCORE_URLS: "http://+:8080"
       DOTNET_CLI_HOME: "/tmp/DOTNET_CLI_HOME"
       ConnectionStrings__PidpDatabase: "host=pidpdb;port=5432;database=postgres;username=postgres;password=postgres"
-      PlrClient__Url: "pidp-plr-intake:8080/api" # Assuming the PLR intake microservice is also running in Docker
+      PlrClient__Url: "http://pidp-plr-intake:8080/api" # Assuming the PLR intake microservice is also running in Docker
+      RabbitMQ__HostAddress: "amqp://guest:guest@pidp-rabbitmq:5672/"
     volumes:
       - ./backend/webapi/:/app
       - pidp-webapi-bin:/app/bin
