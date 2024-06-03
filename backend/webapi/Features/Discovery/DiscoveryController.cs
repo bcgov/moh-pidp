@@ -17,15 +17,25 @@ public class DiscoveryController : PidpControllerBase
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status307TemporaryRedirect)]
-    public async Task<ActionResult<Discovery.Model>> Discovery([FromServices] IQueryHandler<Discovery.Query, Discovery.Model> handler)
+    public async Task<ActionResult<Discovery.Model>> PartyDiscovery([FromServices] IQueryHandler<Discovery.Query, Discovery.Model> handler)
     {
         var credentialLinkTicket = await this.AuthorizationService.VerifyTokenAsync<Cookies.CredentialLinkTicket.Values>(this.Request.Cookies.GetCredentialLinkTicket());
 
-        return await handler.HandleAsync(new Discovery.Query { CredentialLinkToken = credentialLinkTicket?.CredentialLinkToken, User = this.User });
+        var result = await handler.HandleAsync(new Discovery.Query { CredentialLinkToken = credentialLinkTicket?.CredentialLinkToken, User = this.User });
 
+        if (result.Status is not Discovery.Model.StatusCode.TicketExpired)
+        {
+            this.Response.Cookies.Append(
+                Cookies.CredentialLinkTicket.Key,
+                string.Empty,
+                new CookieOptions
+                {
+                    Expires = DateTimeOffset.Now.AddDays(-1),
+                    HttpOnly = true
+                });
+        }
 
-        // TODO: clear cookie
-
+        return result;
     }
 
     [HttpGet("{partyId}/destination")]
