@@ -3,7 +3,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 
-import { EMPTY, Observable, exhaustMap, of, switchMap } from 'rxjs';
+import { Observable, exhaustMap, of, switchMap } from 'rxjs';
 
 import { NavigationService } from '@pidp/presentation';
 
