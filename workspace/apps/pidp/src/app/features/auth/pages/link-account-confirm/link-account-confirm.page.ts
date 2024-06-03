@@ -60,15 +60,14 @@ export class LinkAccountConfirmPage implements OnInit {
     this.user$
       .pipe(
         switchMap((user) => {
-          console.log('User: ', user);
+          const accountName = user.email ? `, email: ${user.email}` : '';
           const data: DialogOptions = {
             title: 'Confirmation Required',
             component: HtmlComponent,
             data: {
               content: `Are you sure you want to link to
               ${user.identityProvider === 'bcsc' ? 'BCSC' : ''}
-              ${user.firstName} ${user.lastName}
-              ${user.email ? `, email: ${user.email}` : ''}?`,
+              ${user.firstName} ${user.lastName}${accountName}?`,
             },
           };
           return this.dialog
