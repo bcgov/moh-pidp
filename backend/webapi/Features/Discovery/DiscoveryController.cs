@@ -22,7 +22,7 @@ public class DiscoveryController : PidpControllerBase
 
         var result = await handler.HandleAsync(new Discovery.Query { CredentialLinkToken = credentialLinkTicket?.CredentialLinkToken, User = this.User });
 
-        if (result.Status is not Discovery.Model.StatusCode.TicketExpired)
+        if (result.Status != Discovery.Model.StatusCode.TicketExpired)
         {
             this.Response.Cookies.Append(
                 Cookies.CredentialLinkTicket.Key,
