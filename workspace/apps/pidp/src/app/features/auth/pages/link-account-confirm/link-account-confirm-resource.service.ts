@@ -1,6 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
-import { Router } from '@angular/router';
 
 import { Observable, catchError, map, tap, throwError } from 'rxjs';
 
@@ -20,7 +19,6 @@ export class LinkAccountConfirmResource {
     private apiResource: ApiHttpClient,
     private authService: AuthService,
     private toastService: ToastService,
-    private router: Router,
   ) {
     this.logoutRedirectUrl = `${this.config.applicationUrl}/`;
   }
