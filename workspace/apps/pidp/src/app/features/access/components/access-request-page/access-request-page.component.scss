@@ -61,7 +61,7 @@
     display: inline-flex;
     margin: var(--margin-style);
     padding: var(--card-padding);
-    height: 185px;
+    height: 15rem;
   }
 
   & .card-header-text {
@@ -85,7 +85,9 @@
     justify-content: center;
     align-items: center;
   }
-   
+   .card-footer{
+    margin-top: auto;
+   }
  
   .card-header-check-icon{
     color:pidp.$green;
@@ -96,7 +98,8 @@
   }
 
   .card-body {
-    padding: 15px 0px 0px 34px;
+    float: left;
+    padding-top: 1rem;
   }
 
   .div-search {
@@ -124,6 +127,7 @@
     padding: 10px;
     float: left;
     position: absolute;
+    color: pidp.$lightgrey;
   }
 
   .search-content button {
@@ -201,11 +205,15 @@
   }
 }
 
+.learn-more {
+  text-decoration: none;
+}
+
 .container.viewport-xsmall {
   .card-container {
     display: inline-flex;
     flex-direction: column;
-    height: 235px;
+    height: 17rem;
   }
   
 
@@ -239,10 +247,6 @@
 
   .div-search {
     width: 100%;
-  }
-
-  .card-body {
-    padding: 15px 0px 0px 35px;
   }
 
   .search-content input {
@@ -280,10 +284,6 @@
 
   .content-header {
     margin: 0px 20px 0px 20px;
-  }
- 
-  .card-body {
-    padding: 15px 0px 0px 30px;
   }
 
   .div-search {
@@ -333,12 +333,9 @@
 }
 
 .container.viewport-medium {
-  .card-body {
-    padding: 40px 0px 0px 30px;
-  }
 
   .card-container {
-    height: 250px;
+    height: 20rem;
   }
   
   .card-header-text {
