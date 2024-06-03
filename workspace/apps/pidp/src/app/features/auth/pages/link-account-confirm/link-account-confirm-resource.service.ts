@@ -14,13 +14,16 @@ import { AuthService } from '../../services/auth.service';
   providedIn: 'root',
 })
 export class LinkAccountConfirmResource {
+  public logoutRedirectUrl: string;
   public constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
     private apiResource: ApiHttpClient,
     private authService: AuthService,
     private toastService: ToastService,
     private router: Router,
-  ) {}
+  ) {
+    this.logoutRedirectUrl = `${this.config.applicationUrl}/`;
+  }
 
   public linkAccount(): Observable<number> {
     return this.apiResource.post<number>('credentials', {}).pipe(
@@ -38,9 +41,9 @@ export class LinkAccountConfirmResource {
     );
   }
 
-  public cancelLink(): Observable<void | boolean> {
+  public cancelLink(): Observable<Observable<void> | boolean> {
     return this.apiResource.delete('credentials').pipe(
-      tap(() => this.authService.logout('')),
+      map(() => this.authService.logout(this.logoutRedirectUrl)),
       catchError((error: HttpErrorResponse) => {
         this.toastService.openErrorToast(
           'Something went wrong. Please try again.',

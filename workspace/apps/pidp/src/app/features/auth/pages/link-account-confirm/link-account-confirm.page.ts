@@ -1,5 +1,5 @@
 import { CommonModule, NgOptimizedImage } from '@angular/common';
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
@@ -19,12 +19,10 @@ import {
   InjectViewportCssClassDirective,
 } from '@bcgov/shared/ui';
 
-import { APP_CONFIG, AppConfig } from '@app/app.config';
 import { User } from '@app/features/auth/models/user.model';
 import { ProfileRoutes } from '@app/features/profile/profile.routes';
 import { SuccessDialogComponent } from '@app/shared/components/success-dialog/success-dialog.component';
 
-import { AuthService } from '../../services/auth.service';
 import { AuthorizedUserService } from '../../services/authorized-user.service';
 import { LinkAccountConfirmResource } from './link-account-confirm-resource.service';
 
@@ -44,9 +42,7 @@ import { LinkAccountConfirmResource } from './link-account-confirm-resource.serv
 export class LinkAccountConfirmPage implements OnInit {
   public user$: Observable<User>;
   public constructor(
-    @Inject(APP_CONFIG) private config: AppConfig,
     private dialog: MatDialog,
-    private authService: AuthService,
     private authorizedUserService: AuthorizedUserService,
     private navigationService: NavigationService,
     private linkAccountConfirmResource: LinkAccountConfirmResource,
