@@ -110,4 +110,22 @@ public class CredentialsController : PidpControllerBase
 
         return result.ToActionResult();
     }
+
+    [HttpDelete("/api/[controller]")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult> DeleteCredential()
+    {
+        this.Response.Cookies.Append(
+            Cookies.CredentialLinkTicket.Key,
+            string.Empty,
+            new CookieOptions
+            {
+                Expires = DateTimeOffset.Now.AddDays(-1),
+                HttpOnly = true
+            });
+
+        return this.Ok();
+    }
 }
