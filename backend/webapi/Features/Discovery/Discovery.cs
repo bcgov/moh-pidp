@@ -42,15 +42,18 @@ public class Discovery
     public class QueryHandler : IQueryHandler<Query, Model>
     {
         private readonly IClock clock;
+        private readonly ILogger<QueryHandler> logger;
         private readonly IPlrClient client;
         private readonly PidpDbContext context;
 
         public QueryHandler(
             IClock clock,
+            ILogger<QueryHandler> logger,
             IPlrClient client,
             PidpDbContext context)
         {
             this.clock = clock;
+            this.logger = logger;
             this.client = client;
             this.context = context;
         }
@@ -107,17 +110,17 @@ public class Discovery
 
             if (ticket == null)
             {
-                // this.logger.LogTicketNotFound(command.CredentialLinkToken);
+                this.logger.LogTicketNotFound(query.User.GetUserId(), query.CredentialLinkToken!.Value);
                 return new Model { Status = Model.StatusCode.AccountLinkingError };
             }
             if (ticket.LinkToIdentityProvider != query.User.GetIdentityProvider())
             {
-                // this.logger.LogTicketIdpError(ticket.Id, ticket.LinkToIdentityProvider, userIdentityProvider);
+                this.logger.LogTicketIdpError(query.User.GetUserId(), ticket.Id, ticket.LinkToIdentityProvider, query.User.GetIdentityProvider());
                 return new Model { Status = Model.StatusCode.AccountLinkingError };
             }
             if (ticket.ExpiresAt < this.clock.GetCurrentInstant())
             {
-                // this.logger.LogTicketExpired(ticket.Id);
+                this.logger.LogTicketExpired(query.User.GetUserId(), ticket.Id);
                 return new Model { Status = Model.StatusCode.TicketExpired };
             }
 
@@ -131,7 +134,7 @@ public class Discovery
 
             if (credential.PartyId == ticket.PartyId)
             {
-                // this.logger.LogCredentialAlreadyLinked(ticket.Id, existingCredential.Id);
+                this.logger.LogCredentialAlreadyLinked(query.User.GetUserId(), ticket.Id, credential.Id);
                 return new Model
                 {
                     PartyId = credential.PartyId,
@@ -147,7 +150,7 @@ public class Discovery
                 });
                 await this.context.SaveChangesAsync();
 
-                // this.logger.LogCredentialAlreadyExists(ticket.Id, existingCredential.Id);
+                this.logger.LogCredentialAlreadyExists(query.User.GetUserId(), ticket.Id, credential.Id);
                 return new Model
                 {
                     PartyId = credential.PartyId,
@@ -191,4 +194,23 @@ public class Discovery
             }
         }
     }
+}
+
+
+public static partial class DiscoveryLoggingExtensions
+{
+    [LoggerMessage(1, LogLevel.Error, "User {userId} Discovery: no unclaimed Credential Link Ticket with token {credentialLinkToken} was found.")]
+    public static partial void LogTicketNotFound(this ILogger<Discovery.QueryHandler> logger, Guid userId, Guid credentialLinkToken);
+
+    [LoggerMessage(2, LogLevel.Error, "User {userId} Discovery: Credential Link Ticket {credentialLinkTicketId} is expired.")]
+    public static partial void LogTicketExpired(this ILogger<Discovery.QueryHandler> logger, Guid userId, int credentialLinkTicketId);
+
+    [LoggerMessage(3, LogLevel.Error, "User {userId} Discovery: Credential Link Ticket {credentialLinkTicketId} expected to link to IDP {expectedIdp}, user had IDP {actualIdp} instead.")]
+    public static partial void LogTicketIdpError(this ILogger<Discovery.QueryHandler> logger, Guid userId, int credentialLinkTicketId, string expectedIdp, string? actualIdp);
+
+    [LoggerMessage(4, LogLevel.Error, "User {userId} Discovery: Credential Link Ticket {credentialLinkTicketId} redemption failed, the new Credential is already linked to the Party. Credential ID {existingCredentialId}.")]
+    public static partial void LogCredentialAlreadyLinked(this ILogger<Discovery.QueryHandler> logger, Guid userId, int credentialLinkTicketId, int existingCredentialId);
+
+    [LoggerMessage(5, LogLevel.Error, "User {userId} Discovery: Credential Link Ticket {credentialLinkTicketId} redemption failed, the new Credential already exists on a different party. Credential Id {existingCredentialId}.")]
+    public static partial void LogCredentialAlreadyExists(this ILogger<Discovery.QueryHandler> logger, Guid userId, int credentialLinkTicketId, int existingCredentialId);
 }
