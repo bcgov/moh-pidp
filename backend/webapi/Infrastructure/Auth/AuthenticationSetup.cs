@@ -3,7 +3,7 @@ namespace Pidp.Infrastructure.Auth;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection;
-using System.IdentityModel.Tokens.Jwt;
+using Microsoft.IdentityModel.JsonWebTokens;
 using System.Security.Claims;
 
 using Pidp.Extensions;
@@ -15,9 +15,9 @@ public static class AuthenticationSetup
         services.ThrowIfNull(nameof(services));
         config.ThrowIfNull(nameof(config));
 
-        JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+        JsonWebTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
-        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+        services.AddAuthentication()
         .AddJwtBearer(options =>
         {
             options.Authority = config.Keycloak.RealmUrl;
