@@ -16,7 +16,6 @@ public class DiscoveryController : PidpControllerBase
 
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status307TemporaryRedirect)]
     public async Task<ActionResult<Discovery.Model>> PartyDiscovery([FromServices] IQueryHandler<Discovery.Query, Discovery.Model> handler)
     {
         var credentialLinkTicket = await this.AuthorizationService.VerifyTokenAsync<Cookies.CredentialLinkTicket.Values>(this.Request.Cookies.GetCredentialLinkTicket());
