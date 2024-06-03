@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 using Pidp.Extensions;
-using Pidp.Features.Credentials;
 using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.Services;
 
@@ -21,16 +20,12 @@ public class DiscoveryController : PidpControllerBase
     public async Task<ActionResult<Discovery.Model>> Discovery([FromServices] IQueryHandler<Discovery.Query, Discovery.Model> handler)
     {
         var credentialLinkTicket = await this.AuthorizationService.VerifyTokenAsync<Cookies.CredentialLinkTicket.Values>(this.Request.Cookies.GetCredentialLinkTicket());
-        if (credentialLinkTicket != null)
-        {
-            return this.RedirectToActionPreserveMethod
-            (
-                nameof(CredentialsController.CreateCredential),
-                nameof(CredentialsController).Replace("Controller", "")
-            );
-        }
 
-        return await handler.HandleAsync(new Discovery.Query { User = this.User });
+        return await handler.HandleAsync(new Discovery.Query { CredentialLinkToken = credentialLinkTicket?.CredentialLinkToken, User = this.User });
+
+
+        // TODO: clear cookie
+
     }
 
     [HttpGet("{partyId}/destination")]
