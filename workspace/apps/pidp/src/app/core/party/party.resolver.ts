@@ -19,7 +19,7 @@ const linkedAccountErrorStatus: DiscoveryStatus[] = [
   DiscoveryStatus.AlreadyLinkedError,
   DiscoveryStatus.CredentialExistsError,
   DiscoveryStatus.ExpiredCredentialLinkTicketError,
-  DiscoveryStatus.AccountLinkingError
+  DiscoveryStatus.AccountLinkingError,
 ];
 
 /**
@@ -43,8 +43,8 @@ export const partyResolver: ResolveFn<number | null> = () => {
     switchMap((discovery) =>
       discovery.status === DiscoveryStatus.NewUser
         ? authorizedUserService.user$.pipe(
-          switchMap((user) => discoveryResource.createParty(user)),
-        )
+            switchMap((user) => discoveryResource.createParty(user)),
+          )
         : of(discovery),
     ),
     exhaustMap((discovery) => {
@@ -55,8 +55,7 @@ export const partyResolver: ResolveFn<number | null> = () => {
       }
       if (discovery.status === DiscoveryStatus.AccountLinkInProgress) {
         router.navigateByUrl(
-          // TODO: redirect to new account linking page
-          AuthRoutes.routePath("account-linking"),
+          AuthRoutes.routePath(AuthRoutes.LINK_ACCOUNT_CONFIRM),
         );
       }
       if (linkedAccountErrorStatus.includes(discovery.status)) {

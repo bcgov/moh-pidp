@@ -3,7 +3,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 
-import { Observable, exhaustMap, of, switchMap } from 'rxjs';
+import { Observable, exhaustMap, switchMap, tap } from 'rxjs';
 
 import { NavigationService } from '@pidp/presentation';
 
@@ -20,6 +20,7 @@ import { SuccessDialogComponent } from '@app/shared/components/success-dialog/su
 
 import { AuthService } from '../../services/auth.service';
 import { AuthorizedUserService } from '../../services/authorized-user.service';
+import { LinkAccountConfirmResourceService } from './link-account-confirm-resource.service';
 
 @Component({
   selector: 'app-link-account-confirm',
@@ -42,6 +43,7 @@ export class LinkAccountConfirmPage implements OnInit {
     private authService: AuthService,
     private authorizedUserService: AuthorizedUserService,
     private navigationService: NavigationService,
+    private linkAccountConfirmResource: LinkAccountConfirmResourceService,
   ) {
     this.user$ = this.authorizedUserService.user$;
   }
@@ -54,11 +56,13 @@ export class LinkAccountConfirmPage implements OnInit {
     this.user$
       .pipe(
         switchMap((user) => {
+          console.log(user);
           const data: DialogOptions = {
             title: 'Confirmation Required',
             component: HtmlComponent,
             data: {
-              content: `Are you sure you want to link ${user.firstName} ${user.lastName} to ${user.email}?`,
+              content: `Are you sure you want to link to
+              ${user.firstName} ${user.lastName} ${user.email ?? ''}?`,
             },
           };
           return this.dialog
@@ -76,8 +80,10 @@ export class LinkAccountConfirmPage implements OnInit {
       .subscribe();
   }
 
-  private link(): Observable<void | null> {
-    return of(null);
+  private link(): Observable<number> {
+    return this.linkAccountConfirmResource
+      .linkAccount()
+      .pipe(tap(() => this.navigateToRoot()));
   }
 
   private navigateToRoot(): void {
