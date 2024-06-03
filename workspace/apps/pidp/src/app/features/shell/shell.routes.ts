@@ -1,7 +1,6 @@
 export class ShellRoutes {
   public static BASE_PATH = '';
   public static SUPPORT_ERROR_PAGE = 'support';
-  public static ACCOUNT_LINKING_MOCK_PAGE = 'account-linking-mock'
 
   /**
    * @description
