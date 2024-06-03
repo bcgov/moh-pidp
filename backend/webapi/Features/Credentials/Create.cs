@@ -89,8 +89,7 @@ public class Create
 
             if (existingCredential != null)
             {
-                // TODO: rename
-                this.logger.LogCredentialAlreadyLinked(ticket.Id, existingCredential.Id);
+                this.logger.LogCredentialAlreadyExists(ticket.Id, existingCredential.Id);
                 return DomainResult.Failed<int>();
             }
 
@@ -252,6 +251,6 @@ public static partial class CredentialCreateLoggingExtensions
     [LoggerMessage(4, LogLevel.Error, "Credential Link Ticket {credentialLinkTicketId} expected to link to IDP {expectedIdp}, user had IDP {actualIdp} instead.")]
     public static partial void LogTicketIdpError(this ILogger<Create.CommandHandler> logger, int credentialLinkTicketId, string expectedIdp, string actualIdp);
 
-    [LoggerMessage(5, LogLevel.Error, "Credential Link Ticket {credentialLinkTicketId} redemption failed, the new Credential is already linked to the Party. Credential ID {existingCredentialId}.")]
-    public static partial void LogCredentialAlreadyLinked(this ILogger<Create.CommandHandler> logger, int credentialLinkTicketId, int existingCredentialId);
+    [LoggerMessage(5, LogLevel.Error, "Credential Link Ticket {credentialLinkTicketId} redemption failed, the Credential with ID {existingCredentialId} already exists.")]
+    public static partial void LogCredentialAlreadyExists(this ILogger<Create.CommandHandler> logger, int credentialLinkTicketId, int existingCredentialId);
 }
