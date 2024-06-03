@@ -2,10 +2,15 @@ import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
+import { Router } from '@angular/router';
 
 import { Observable, exhaustMap, switchMap, tap } from 'rxjs';
 
-import { NavigationService } from '@pidp/presentation';
+import {
+  LOADING_OVERLAY_DEFAULT_MESSAGE,
+  LoadingOverlayService,
+  NavigationService,
+} from '@pidp/presentation';
 
 import {
   ConfirmDialogComponent,
@@ -16,6 +21,7 @@ import {
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';
 import { User } from '@app/features/auth/models/user.model';
+import { ProfileRoutes } from '@app/features/profile/profile.routes';
 import { SuccessDialogComponent } from '@app/shared/components/success-dialog/success-dialog.component';
 
 import { AuthService } from '../../services/auth.service';
@@ -44,6 +50,8 @@ export class LinkAccountConfirmPage implements OnInit {
     private authorizedUserService: AuthorizedUserService,
     private navigationService: NavigationService,
     private linkAccountConfirmResource: LinkAccountConfirmResourceService,
+    private router: Router,
+    private loadingOverlayService: LoadingOverlayService,
   ) {
     this.user$ = this.authorizedUserService.user$;
   }
@@ -56,13 +64,13 @@ export class LinkAccountConfirmPage implements OnInit {
     this.user$
       .pipe(
         switchMap((user) => {
-          console.log(user);
           const data: DialogOptions = {
             title: 'Confirmation Required',
             component: HtmlComponent,
             data: {
               content: `Are you sure you want to link to
-              ${user.firstName} ${user.lastName} ${user.email ?? ''}?`,
+              ${user.firstName} ${user.lastName}
+              ${user.email ? `, email: ${user.email}` : ''}?`,
             },
           };
           return this.dialog
@@ -81,9 +89,15 @@ export class LinkAccountConfirmPage implements OnInit {
   }
 
   private link(): Observable<number> {
-    return this.linkAccountConfirmResource
-      .linkAccount()
-      .pipe(tap(() => this.navigateToRoot()));
+    this.loadingOverlayService.open(LOADING_OVERLAY_DEFAULT_MESSAGE);
+    return this.linkAccountConfirmResource.linkAccount().pipe(
+      tap(() => {
+        this.loadingOverlayService.close();
+        this.router.navigate([
+          ProfileRoutes.routePath(ProfileRoutes.ACCOUNT_LINKING),
+        ]);
+      }),
+    );
   }
 
   private navigateToRoot(): void {
