@@ -21,10 +21,11 @@ export enum DiscoveryStatus {
   Success = 1,
   NewUser,
   NewBCProviderError,
-  AccountLinkSuccess,
+  AccountLinkInProgress,
   AlreadyLinkedError,
   CredentialExistsError,
   ExpiredCredentialLinkTicketError,
+  AccountLinkingError
 }
 
 @Injectable({

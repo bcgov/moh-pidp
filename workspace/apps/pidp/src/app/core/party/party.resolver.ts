@@ -19,6 +19,7 @@ const linkedAccountErrorStatus: DiscoveryStatus[] = [
   DiscoveryStatus.AlreadyLinkedError,
   DiscoveryStatus.CredentialExistsError,
   DiscoveryStatus.ExpiredCredentialLinkTicketError,
+  DiscoveryStatus.AccountLinkingError,
 ];
 
 /**
@@ -50,6 +51,11 @@ export const partyResolver: ResolveFn<number | null> = () => {
       if (discovery.status === DiscoveryStatus.NewBCProviderError) {
         router.navigateByUrl(
           AuthRoutes.routePath(AuthRoutes.BC_PROVIDER_UPLIFT),
+        );
+      }
+      if (discovery.status === DiscoveryStatus.AccountLinkInProgress) {
+        router.navigateByUrl(
+          AuthRoutes.routePath(AuthRoutes.LINK_ACCOUNT_CONFIRM),
         );
       }
       if (linkedAccountErrorStatus.includes(discovery.status)) {
