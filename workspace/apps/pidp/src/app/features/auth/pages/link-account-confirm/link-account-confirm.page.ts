@@ -26,7 +26,7 @@ import { SuccessDialogComponent } from '@app/shared/components/success-dialog/su
 
 import { AuthService } from '../../services/auth.service';
 import { AuthorizedUserService } from '../../services/authorized-user.service';
-import { LinkAccountConfirmResourceService } from './link-account-confirm-resource.service';
+import { LinkAccountConfirmResource } from './link-account-confirm-resource.service';
 
 @Component({
   selector: 'app-link-account-confirm',
@@ -49,7 +49,7 @@ export class LinkAccountConfirmPage implements OnInit {
     private authService: AuthService,
     private authorizedUserService: AuthorizedUserService,
     private navigationService: NavigationService,
-    private linkAccountConfirmResource: LinkAccountConfirmResourceService,
+    private linkAccountConfirmResource: LinkAccountConfirmResource,
     private router: Router,
     private loadingOverlayService: LoadingOverlayService,
   ) {
@@ -64,11 +64,13 @@ export class LinkAccountConfirmPage implements OnInit {
     this.user$
       .pipe(
         switchMap((user) => {
+          console.log('User: ', user);
           const data: DialogOptions = {
             title: 'Confirmation Required',
             component: HtmlComponent,
             data: {
               content: `Are you sure you want to link to
+              ${user.identityProvider === 'bcsc' ? 'BCSC' : ''}
               ${user.firstName} ${user.lastName}
               ${user.email ? `, email: ${user.email}` : ''}?`,
             },
@@ -80,7 +82,7 @@ export class LinkAccountConfirmPage implements OnInit {
               exhaustMap((result) =>
                 result
                   ? this.link()
-                  : this.authService.logout(`${this.config.applicationUrl}`),
+                  : this.linkAccountConfirmResource.cancelLink(),
               ),
             );
         }),

@@ -1,18 +1,25 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 
-import { Observable, catchError, tap, throwError } from 'rxjs';
+import { Observable, catchError, map, tap, throwError } from 'rxjs';
 
+import { APP_CONFIG, AppConfig } from '@app/app.config';
 import { ApiHttpClient } from '@app/core/resources/api-http-client.service';
 import { ToastService } from '@app/core/services/toast.service';
+
+import { AuthService } from '../../services/auth.service';
 
 @Injectable({
   providedIn: 'root',
 })
-export class LinkAccountConfirmResourceService {
+export class LinkAccountConfirmResource {
   public constructor(
+    @Inject(APP_CONFIG) private config: AppConfig,
     private apiResource: ApiHttpClient,
+    private authService: AuthService,
     private toastService: ToastService,
+    private router: Router,
   ) {}
 
   public linkAccount(): Observable<number> {
@@ -25,6 +32,18 @@ export class LinkAccountConfirmResourceService {
       catchError((error: HttpErrorResponse) => {
         this.toastService.openErrorToast(
           'Your account could not be linked. Please try again.',
+        );
+        return throwError(() => error);
+      }),
+    );
+  }
+
+  public cancelLink(): Observable<void | boolean> {
+    return this.apiResource.delete('credentials').pipe(
+      tap(() => this.authService.logout('')),
+      catchError((error: HttpErrorResponse) => {
+        this.toastService.openErrorToast(
+          'Something went wrong. Please try again.',
         );
         return throwError(() => error);
       }),
