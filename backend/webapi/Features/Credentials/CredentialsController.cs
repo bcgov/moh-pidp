@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 using Pidp.Extensions;
-using Pidp.Features.Discovery;
 using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.Services;
 using Pidp.Models;
@@ -26,21 +25,12 @@ public class CredentialsController : PidpControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<Discovery.Model>> CreateCredential([FromServices] ICommandHandler<Create.Command, IDomainResult<Discovery.Model>> handler)
+    public async Task<ActionResult<int>> CreateCredential([FromServices] ICommandHandler<Create.Command, IDomainResult<int>> handler)
     {
         var credentialLinkTicket = await this.AuthorizationService.VerifyTokenAsync<Cookies.CredentialLinkTicket.Values>(this.Request.Cookies.GetCredentialLinkTicket());
         if (credentialLinkTicket == null)
         {
             return this.BadRequest("A valid Credential Link Ticket is required to link accounts.");
-        }
-
-        var result = await handler.HandleAsync(new Create.Command { CredentialLinkToken = credentialLinkTicket.CredentialLinkToken, User = this.User });
-
-        if (result.IsSuccess
-            && result.Value.Status == Discovery.Model.StatusCode.TicketExpired)
-        {
-            // Keep the Credential Link Ticket cookie to prevent the user from accedentially entering the app and creating a Party.
-            return result.ToActionResultOfT();
         }
 
         this.Response.Cookies.Append(
@@ -52,7 +42,8 @@ public class CredentialsController : PidpControllerBase
                 HttpOnly = true
             });
 
-        return result.ToActionResultOfT();
+        return await handler.HandleAsync(new Create.Command { CredentialLinkToken = credentialLinkTicket.CredentialLinkToken, User = this.User })
+            .ToActionResultOfT();
     }
 
     [HttpGet]
