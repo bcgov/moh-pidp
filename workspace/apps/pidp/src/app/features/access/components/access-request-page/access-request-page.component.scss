@@ -74,13 +74,6 @@
     margin-top: -28px;
   }
 
-  .card-icon {
-    display: flex;
-    .card-header-text {
-      margin-top: 0;
-    }
-  }
-
   .card-container:hover {
     box-shadow: 2px 2px 2px rgb(194, 194, 196);
     transform: scale(1.1);
@@ -104,12 +97,22 @@
   }
 
   .card-icon {
+    display: flex;
+
+    .card-header-text {
+      margin-top: 0;
+    }
+
     img {
       border: 1px solid #FCBA19;
       border-radius: 50%;
-      padding: 0.35rem;
-      width: 31.24px;
-      height: 29.6px;
+      padding: 0.1rem;
+      width: 26.24px;
+      height: 22.6px;
+    }
+
+    p {
+      margin-left: 0.5rem;
     }
   }
 
