@@ -71,7 +71,12 @@ export class LinkAccountConfirmPage implements OnInit {
             },
           };
           return this.dialog
-            .open(ConfirmDialogComponent, { data, disableClose: true })
+            .open(ConfirmDialogComponent, {
+              data,
+              disableClose: true,
+              width: '500px',
+              maxWidth: '500px',
+            })
             .afterClosed()
             .pipe(
               exhaustMap((result) =>
