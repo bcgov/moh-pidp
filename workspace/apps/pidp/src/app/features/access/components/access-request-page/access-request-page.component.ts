@@ -3,7 +3,8 @@ import { Component, Inject, HostListener } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { faPlus, faThumbsUp, faFileLines, faArrowUp, faAngleRight, faMagnifyingGlass,faCheck } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faThumbsUp, faFileLines, faArrowUp, faAngleRight, faMagnifyingGlass,
+        faCheck,faHandshake,faLink,faCar,faFileMedical,faBookMedical,faArrowsLeftRightToLine,faPeopleGroup,faRightLeft } from '@fortawesome/free-solid-svg-icons';
 import { InjectViewportCssClassDirective, LayoutHeaderFooterComponent } from '@bcgov/shared/ui';
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';
@@ -32,6 +33,14 @@ export class AccessRequestPageComponent {
   public faArrowUp = faArrowUp;
   public faAngleRight = faAngleRight;
   public faMagnifyingGlass = faMagnifyingGlass;
+  public faHandshake=faHandshake;
+  public faLink=faLink;
+  public faCar=faCar;
+  public faFileMedical=faFileMedical;
+  public faBookMedical=faBookMedical;
+  public faArrowsLeftRightToLine=faArrowsLeftRightToLine;
+  public faPeopleGroup=faPeopleGroup;
+  public faRightLeft=faRightLeft;
   public showBackToTopButton: boolean = false;
   public showSearchIcon: boolean = true;
   public isMobile = true;

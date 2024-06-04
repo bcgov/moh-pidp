@@ -71,13 +71,21 @@
     word-wrap: break-word;
     float: right;
     width: 88%;
-    margin-top:-28px;
+    margin-top: -28px;
   }
+
+  .card-icon {
+    display: flex;
+    .card-header-text {
+      margin-top: 0;
+    }
+  }
+
   .card-container:hover {
     box-shadow: 2px 2px 2px rgb(194, 194, 196);
-    transform:scale(1.1);
+    transform: scale(1.1);
   }
-   
+
   .card-header fa-icon {
     border: 1px solid #FCBA19;
     border-radius: 50%;
@@ -85,16 +93,28 @@
     justify-content: center;
     align-items: center;
   }
-   .card-footer{
+
+  .card-footer {
     margin-top: auto;
-   }
- 
-  .card-header-check-icon{
-    color:pidp.$green;
   }
 
-  .card-header-check-icon fa-icon {
-    border: 1px solid pidp.$green;
+  .card-header-check-icon {
+    color: pidp.$green;
+    display: flex;
+  }
+
+  .card-icon {
+    img {
+      border: 1px solid #FCBA19;
+      border-radius: 50%;
+      padding: 0.35rem;
+      width: 31.24px;
+      height: 29.6px;
+    }
+  }
+
+  .checked {
+    border: 2px solid pidp.$green !important;
   }
 
   .card-body {
@@ -140,7 +160,7 @@
 
   .search-content span {
     margin: 10px;
-
+    line-height: 3rem;
   }
 
   .search-content p {
@@ -215,12 +235,13 @@
     flex-direction: column;
     height: 17rem;
   }
-  
+
 
   .content-header {
     margin: 0px 20px 0px 20px;
   }
-  .card-header fa-icon { 
+
+  .card-header fa-icon {
     padding: 5px;
     width: 12%;
     height: 15%;
@@ -229,7 +250,13 @@
   .card-header-text {
     padding-left: 5px;
     width: 86%;
-    margin-top:-28px;
+    margin-top: -28px;
+  }
+
+  .card-icon {
+    .card-header-text {
+      margin-top: 0;
+    }
   }
 
   .content-header h1 {
@@ -265,6 +292,7 @@
   .back-to-top-text {
     font-size: 9px;
   }
+
   .back-to-top-container {
     bottom: 135px;
   }
@@ -307,10 +335,12 @@
   .back-to-top-text {
     font-size: 9px;
   }
+
   .back-to-top-container {
     bottom: 70px;
   }
-  .card-header fa-icon { 
+
+  .card-header fa-icon {
     padding: 6px;
     width: 11%;
     height: 15%;
@@ -337,14 +367,20 @@
   .card-container {
     height: 20rem;
   }
-  
+
   .card-header-text {
     padding-left: 5px;
     width: 88%;
-    margin-top:-28px;
+    margin-top: -28px;
   }
 
-  .card-header fa-icon { 
+  .card-icon {
+    .card-header-text {
+      margin-top: 0;
+    }
+  }
+
+  .card-header fa-icon {
     padding: 6px;
     width: 13%;
     height: 15%;
@@ -352,10 +388,9 @@
 }
 
 .container.viewport-large {
-  .card-header fa-icon { 
+  .card-header fa-icon {
     padding: 6px;
     width: 9%;
     height: 15%;
   }
 }
- 
