@@ -97,6 +97,10 @@ spec:
               value: "Host=$(DB_HOST);Port=5432;Database=$(POSTGRESQL_DATABASE);Username=$(POSTGRESQL_USER);Password=$(POSTGRESQL_PASSWORD)"
             - name: ApplicationUrl
               value: "https://{{ if $isProd }}{{else}}{{ $release }}.{{end}}{{ $domain }}"
+            {{- if .Values.fluentbit.enabled }}
+            - name: SERVER_LOGFILE
+              value: /app/logs/*.log
+            {{- end }}
           envFrom:
             - secretRef:
                 name: keycloak-secrets
@@ -140,9 +144,57 @@ spec:
             successThreshold: 1
             failureThreshold: 5
             initialDelaySeconds: 5
-
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+            {{- if .Values.fluentbit.enabled }}
+            - name: log-storage
+              mountPath: /app/logs
+            {{- end }}
+        {{- if .Values.fluentbit.enabled }}
+        - name: fluentbit
+          image: {{ .Values.fluentbit.imageRegistry }}
+          imagePullPolicy: {{ .Values.fluentbit.imagePullPolicy }}
+          {{- if .Values.fluentbit.securityContext.enabled }}
+          securityContext: {{- omit .Values.fluentbit.securityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          env:
+            - name: SERVER_LOGFILE
+              value: /app/logs/*.log
+          ports:
+            - name: metrics
+              containerPort: 2020
+              protocol: TCP
+            - name: http-plugin
+              containerPort: 80
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /
+              port: metrics
+            initialDelaySeconds: 10
+            timeoutSeconds: 1
+            periodSeconds: 60
+            successThreshold: 1
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /
+              port: metrics
+            initialDelaySeconds: 10
+            timeoutSeconds: 1
+            periodSeconds: 60
+            successThreshold: 1
+            failureThreshold: 3
+          {{- if .Values.fluentbit.resources }}
+          resources: {{- toYaml .Values.fluentbit.resources | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: fluentbit-config
+              mountPath: /fluent-bit/etc
+            - name: log-storage
+              mountPath: /app/logs
+        {{- end }}      
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
@@ -155,3 +207,11 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+      volumes:
+        {{- if .Values.fluentbit.enabled }}
+        - name: log-storage
+          emptyDir: {}
+        - name: fluentbit-config
+          configMap:
+            name: webapi-fluentbit-config
+        {{- end }}
