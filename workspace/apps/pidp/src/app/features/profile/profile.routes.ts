@@ -7,6 +7,7 @@ export class ProfileRoutes {
   public static COLLEGE_LICENCE_DECLARATION = 'college-licence-declaration';
   public static COLLEGE_LICENCE_INFO = 'college-licence-info';
   public static USER_ACCESS_AGREEMENT = 'user-access-agreement';
+  public static ACCOUNT_LINKING = 'account-linking';
 
   /**
    * @description
@@ -45,5 +46,12 @@ export const routes: Routes = [
       import(
         './pages/college-licence/college-licence-information/college-licence-information-routing.routes'
       ).then((m) => m.routes),
+  },
+  {
+    path: ProfileRoutes.ACCOUNT_LINKING,
+    loadChildren: (): Promise<Routes> =>
+      import('./pages/account-linking/account-linking-routing.routes').then(
+        (m) => m.routes,
+      ),
   },
 ];

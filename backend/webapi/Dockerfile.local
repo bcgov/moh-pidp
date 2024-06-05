@@ -1,8 +1,8 @@
-FROM mcr.microsoft.com/dotnet/sdk:6.0
+FROM mcr.microsoft.com/dotnet/sdk:8.0
 
 WORKDIR /vsdbg
 
-RUN dotnet tool install --global dotnet-ef --version 6
+RUN dotnet tool install --global dotnet-ef --version "8.*"
 ENV PATH="${PATH}:/root/.dotnet/tools"
 
 ENV DOTNET_USE_POLLING_FILE_WATCHER 1

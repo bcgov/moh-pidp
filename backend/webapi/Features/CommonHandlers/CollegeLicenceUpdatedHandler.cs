@@ -34,8 +34,7 @@ public class UpdateKeycloakAfterCollegeLicenceUpdated : INotificationHandler<Col
         // We must fetch the whole Party model (rather than .Select() a smaller model) to ensure the uncommited changes are seen here.
         var party = await this.context.Parties
             .Include(party => party.Credentials)
-            .Where(party => party.Id == notification.PartyId)
-            .SingleAsync(cancellationToken);
+            .SingleAsync(party => party.Id == notification.PartyId, cancellationToken);
 
         var records = await this.plrClient.GetRecordsAsync(party.Cpn);
         if (records == null || !records.Any())
