@@ -6,6 +6,7 @@ export class AuthRoutes {
   public static BC_PROVIDER_UPLIFT = 'bc-provider-uplift';
   public static PORTAL_LOGIN = 'login';
   public static LINK_ACCOUNT_ERROR = 'link-account-error';
+  public static LINK_ACCOUNT_CONFIRM = 'link-account-confirm';
 
   /**
    * @description

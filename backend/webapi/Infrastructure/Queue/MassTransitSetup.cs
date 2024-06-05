@@ -25,7 +25,7 @@ public static class MassTransitSetup
                 cfg.UseDelayedRedelivery(r => r.Intervals(TimeSpan.FromHours(1), TimeSpan.FromHours(3), TimeSpan.FromHours(6), TimeSpan.FromHours(12)));
                 // Configure retry policy
                 cfg.UseMessageRetry(r => r.Interval(2, TimeSpan.FromSeconds(5)));
-                cfg.UseInMemoryOutbox();
+                cfg.UseInMemoryOutbox(context);
 
                 cfg.ReceiveEndpoint("party-email-updated-bc-provider-queue", ep =>
                 {
