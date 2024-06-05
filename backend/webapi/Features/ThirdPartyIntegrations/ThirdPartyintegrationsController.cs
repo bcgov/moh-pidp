@@ -28,7 +28,7 @@ public class ThirdPartyintegrationsController : PidpControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult> PostFHIRMessage(object obj)
+    public async Task<ActionResult> PostFHIRMessage([FromBody] object obj)
     {
         Console.WriteLine(obj);
         return this.Ok();
