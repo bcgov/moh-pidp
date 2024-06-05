@@ -14,13 +14,14 @@ import { contentContainerSelector } from '@bcgov/shared/ui';
 
 import { RouteStateService } from '@core/services/route-state.service';
 import { UtilsService } from '@core/services/utils.service';
+import { PortalDashboardComponent } from './features/shell/components/portal-dashboard/portal-dashboard.component';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
   standalone: true,
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, PortalDashboardComponent],
 })
 export class AppComponent implements OnInit {
   public constructor(

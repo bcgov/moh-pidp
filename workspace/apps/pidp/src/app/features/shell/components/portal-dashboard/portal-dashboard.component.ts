@@ -137,7 +137,7 @@ export class PortalDashboardComponent implements IDashboard, OnInit {
           extras: { fragment: 'access' },
           linkActiveOptions,
         },
-        'assignment',
+        'access_request',
       ),
     ];
   }

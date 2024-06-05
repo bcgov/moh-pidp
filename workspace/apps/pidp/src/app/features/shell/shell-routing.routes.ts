@@ -47,7 +47,7 @@ export const routes: Routes = [
   },
   {
     path: '',
-    component: PortalDashboardComponent,
+    
     canActivate: [AuthenticationGuard.canActivate],
     canActivateChild: [AuthenticationGuard.canActivateChild],
     resolve: {
