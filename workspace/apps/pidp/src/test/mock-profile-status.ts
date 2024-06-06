@@ -41,8 +41,6 @@ export class MockProfileStatus {
         complianceTraining: { statusCode: StatusCode.AVAILABLE },
         primaryCareRostering: { statusCode: StatusCode.AVAILABLE },
         immsBCEforms: { statusCode: StatusCode.AVAILABLE },
-        edrdEforms: { statusCode: StatusCode.AVAILABLE },
-        'edrd-eforms': { statusCode: StatusCode.AVAILABLE },
       },
     };
   }
