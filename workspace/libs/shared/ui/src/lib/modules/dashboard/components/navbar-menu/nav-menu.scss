@@ -211,6 +211,10 @@ h1 {
     & a:hover {
       border-bottom: solid 4px #fcba19;
     }
+
+   a:last-of-type{
+      margin-right: 2rem;
+    }
   }
 }
 
