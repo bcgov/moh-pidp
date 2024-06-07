@@ -98,7 +98,7 @@ tolerations: []
 affinity: {}
 
 rabbitmq:
-  host: "amqp://pidp:" + System.getenv("AMQP_PASSWORD") + "@rabbitmq:5672/"
+  host: ""
 
 
 fluentbit:
