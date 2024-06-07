@@ -11,7 +11,6 @@ export class AccessRoutes {
   public static PRESCRIPTION_REFILL_EFORMS = 'prescription-refill-eforms';
   public static PROVIDER_REPORTING_PORTAL = 'provider-reporting-portal';
   public static SPECIAL_AUTH_EFORMS = 'sa-eforms';
-  public static EDRD_EFORMS = 'edrd-eforms';
 
   /**
    * @description
