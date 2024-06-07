@@ -140,35 +140,24 @@ export class NavMenuComponent implements OnChanges {
     this.refresh();
   }
   private refresh(): void {
-    switch (this.viewport) {
-      case PidpViewport.xsmall:
-        this.showMiniMenuButton = true;
-        this.isSidenavOpened = false;
-        this.sidenavMode = 'over';
-
-        this.isLogoutButtonVisible = false;
-        this.isLogoutMenuItemVisible = true;
-        this.isTopMenuVisible = false;
-        break;
-      case PidpViewport.small:
-        this.showMiniMenuButton = false;
-        this.isSidenavOpened = false;
-        this.sidenavMode = 'over';
-        this.isLogoutButtonVisible = true;
-        this.isLogoutMenuItemVisible = true;
-        this.isTopMenuVisible = true;
-        break;
-      case PidpViewport.medium:
-      case  PidpViewport.large:
-        this.showMiniMenuButton = false;
-        this.isSidenavOpened = true;
-        this.sidenavMode = 'side';
-        this.isLogoutButtonVisible = true;
-        this.isLogoutMenuItemVisible = false;
-        this.isTopMenuVisible = true;
-        break;
-      default:
-        throw new Error(`Nav Menu not implemented: ${this.viewport}`);
+    if(!([PidpViewport.xsmall, PidpViewport.small, PidpViewport.medium, PidpViewport.large].includes(this.viewport))) {
+      throw new Error(`Nav Menu not implemented: ${this.viewport}`);
     }
+    // Initializing all the show flags to flase initially
+    this.showMiniMenuButton = false;
+    this.isSidenavOpened = false;
+    this.sidenavMode = 'over';
+    this.isLogoutButtonVisible = false;
+    this.isLogoutMenuItemVisible = false;
+    this.isTopMenuVisible = false;
+
+    // updating the show flags accoring to the view port
+    this.showMiniMenuButton = (this.viewport == PidpViewport.xsmall);
+    this.isSidenavOpened = (this.viewport == PidpViewport.medium || this.viewport == PidpViewport.large);
+    this.sidenavMode = (this.viewport == PidpViewport.medium || this.viewport == PidpViewport.large) ? 'side' : 'over';
+    this.isLogoutButtonVisible = (this.viewport == PidpViewport.small || this.viewport == PidpViewport.medium || this.viewport == PidpViewport.large);
+    this.isLogoutMenuItemVisible = (this.viewport == PidpViewport.xsmall || this.viewport == PidpViewport.small);
+    this.isTopMenuVisible = (this.viewport == PidpViewport.small || this.viewport == PidpViewport.medium || this.viewport == PidpViewport.large);
+
   }
 }
