@@ -41,9 +41,9 @@ export const routes: Routes = [
   {
     path: ShellRoutes.ACCESS_REQUEST_PAGE,
     loadChildren: (): Promise<Routes> =>
-      import('../access/components/access-request-page/access-request-page-routing.routes').then(
-        (m) => m.routes,
-      ),
+      import(
+        '../access/pages/access-requests-page/access-request-page-routing.routes'
+      ).then((m) => m.routes),
   },
   {
     path: '',

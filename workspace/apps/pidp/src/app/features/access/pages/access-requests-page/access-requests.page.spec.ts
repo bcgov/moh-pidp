@@ -1,16 +1,18 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { AccessRequestPageComponent } from './access-request-page.component';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+
 import { APP_CONFIG, APP_DI_CONFIG } from '@app/app.config';
 
+import { AccessRequestsPage } from './access-requests.page';
+
 describe('PortalCardComponent', () => {
-  let component: AccessRequestPageComponent;
-  let fixture: ComponentFixture<AccessRequestPageComponent>;
+  let component: AccessRequestsPage;
+  let fixture: ComponentFixture<AccessRequestsPage>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AccessRequestPageComponent, NoopAnimationsModule],
+      imports: [AccessRequestsPage, NoopAnimationsModule],
       providers: [
         {
           provide: APP_CONFIG,
@@ -21,7 +23,7 @@ describe('PortalCardComponent', () => {
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(AccessRequestPageComponent);
+    fixture = TestBed.createComponent(AccessRequestsPage);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
