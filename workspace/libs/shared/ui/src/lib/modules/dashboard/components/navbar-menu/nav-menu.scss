@@ -1,0 +1,251 @@
+// NOTE: mat-sidenav is modified globally
+// @see ./scss/material/components/_mat-sidenav.scss
+@use 'pidp-variables' as pidp;
+
+.viewport-medium {
+  --header-padding: 0;
+  --header-height: 160px;
+  --content-flex: 0 0 994px;
+  --mat-sidenav-width: 240px;
+  --sidenav-panel-box-margin: -60px 30px 0 15px;
+  --sidenav-panel-box-width: 200px;
+  --sidenav-panel-content-padding: 15px;
+  --sidenav-header-margin-bottom: 15px;
+  --sidenav-line-margin-bottom: 15px;
+.main-menu {
+    float: right;
+  }
+}
+
+.viewport-large {
+  --header-padding: 0;
+  --header-height: 160px;
+  --content-flex: 0 0 1200px;
+  --sidenav-panel-box-margin: -60px 50px 0 80px;
+  --sidenav-panel-box-width: 240px;
+  .main-menu {
+      float: right;
+    }
+}
+
+a,
+p,
+h1 {
+  font-family: pidp.$bcgov-font-family;
+}
+
+.viewport-all {
+  --header-padding: 20px 30px;
+  --header-height: 100px;
+  --content-flex: 1;
+  --mat-sidenav-width: 360px;
+  --sidenav-panel-content-padding: 20px;
+  --sidenav-panel-box-margin: unset;
+  --sidenav-panel-box-width: unset;
+  --sidenav-header-margin-bottom: 20px;
+  --sidenav-line-margin-bottom: 20px;
+  --sidenav-menu-padding-left: 0;
+  --sidenav-menu-item-padding-bottom: 20px;
+  width: 100%;
+  display: flex;
+
+  & .content {
+    // Ensure the sidenav will stretch to fit vertically
+    display: flex;
+    flex-direction: column;
+    // Expand to fit horizontally
+    flex: var(--content-flex);
+  }
+
+  & .content-header-box {
+    background-color: #036;
+    min-height: var(--header-height);
+    display: flex;
+
+    & header {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      padding: var(--header-padding);
+
+      & .header-text-container {
+        flex: 1;
+        color: #fff;
+
+        & h1,
+        & p {
+          margin: 0;
+        }
+      }
+
+      & .header-image-container {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+    }
+  }
+
+  // Sidenav layout is separated into different sections below
+  // as the layout is very different between larger and smaller screen sizes.
+  & .sidenav-container {
+    flex: 1;
+
+    & .mat-sidenav {
+      width: var(--mat-sidenav-width);
+      background-color: #fff;
+    }
+
+    & .sidenav-body-box {
+      & .sidenav-panel-box {
+        display: flex;
+        flex-direction: column;
+        width: var(--sidenav-panel-box-width);
+        margin: var(--sidenav-panel-box-margin);
+        background-color: #fff;
+
+        & .sidenav-bar {
+          border-top: 20px solid #38598a;
+        }
+
+        & .sidenav-panel-content {
+          padding: var(--sidenav-panel-content-padding);
+
+          & .sidenav-header {
+            margin-bottom: var(--sidenav-header-margin-bottom);
+
+            & .sidenav-name {
+              word-break: break-word;
+            }
+          }
+
+          & .sidenav-line {
+            margin-bottom: var(--sidenav-line-margin-bottom);
+            border-top: 1px solid #999;
+          }
+
+          & .sidenav-menu {
+            display: flex;
+            flex-direction: column;
+            padding-left: var(--sidenav-menu-padding-left);
+
+            & .sidenav-menu-item {
+              color: #000;
+              text-decoration: none;
+              padding-bottom: var(--sidenav-menu-item-padding-bottom);
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.header-right {
+  .logout-button-group {
+    display: flex;
+    align-items: center;
+
+    & mat-icon {
+      color: #fff;
+    }
+
+    & .signout-text {
+      margin-right: 10px;
+    }
+  }
+}
+
+.btn-signout {
+  text-align: center;
+  width: 115px;
+  float: right;
+  border-radius: 4px;
+  border: 2px solid #036 !important;
+  background: #fff;
+  margin-top: 5px;
+}
+
+.custom-mat-sidenav-content {
+  overflow: visible;
+}
+
+.viewport-xsmall,
+.viewport-small {
+  display: block;
+
+  .custom-mat-sidenav-content {
+    overflow: hidden;
+  }
+}
+
+.content-menu {
+  background-color: #fff;
+  color: #ffffff;
+  border-bottom: 2px solid #00000040;
+  box-shadow: 6px 2px 8px #888888;
+  height: 60px;
+  position: fixed;
+  z-index: 100;
+  width: 100%;
+
+  & .main-menu {
+    padding: 5px;
+
+    & a {
+      color: #313132;
+      text-decoration: none;
+      display: block;
+      float: left;
+      position: relative;
+      letter-spacing: 0.5px;
+      padding: 10px 10px;
+      transform: 0.3s;
+      font-size: 18px;
+      font-style: normal;
+      font-weight: 700;
+      line-height: normal;
+    }
+
+    & a:hover {
+      border-bottom: solid 4px #fcba19;
+    }
+
+   a:last-of-type{
+      margin-right: 2rem;
+    }
+  }
+}
+
+.content-body {
+  width: 100%;
+  margin: 0px;
+  padding: 60px 0px 0px 0px; 
+}
+
+.span-text {
+  text-decoration: none;
+  display: block;
+  text-align: center;
+  padding: 5px 55px 0px 0px;
+  float: left;
+  color: #313132;
+  font-size: 30px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+.viewport-small {
+  overflow: hidden;
+  & .span-text {
+    padding: 12px 25px 0px 0px;
+    font-size: 25px;
+  }
+  & .content-menu {
+     a {
+        font-size: 15px;
+        font-weight: 400px;
+      }
+  }
+}
