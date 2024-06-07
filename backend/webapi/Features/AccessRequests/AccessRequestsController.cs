@@ -35,15 +35,6 @@ public class AccessRequestsController : PidpControllerBase
         => await this.AuthorizePartyBeforeHandleAsync(command.PartyId, handler, command)
             .ToActionResult();
 
-    [HttpPost("edrd-eforms")]
-    [Authorize(Policy = Policies.HighAssuranceIdentityProvider)]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> CreateEdrdEformsEnrolment([FromServices] ICommandHandler<EdrdEforms.Command, IDomainResult> handler,
-                                                               [FromRoute] EdrdEforms.Command command)
-        => await this.AuthorizePartyBeforeHandleAsync(command.PartyId, handler, command)
-            .ToActionResult();
-
     [HttpPost("hcim-account-transfer")]
     [Authorize(Policy = Policies.AnyPartyIdentityProvider)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
