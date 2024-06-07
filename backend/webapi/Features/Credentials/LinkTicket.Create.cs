@@ -25,9 +25,11 @@ public class LinkTicketCreate
     {
         public CommandValidator()
         {
+            var allowedIdps = new[] { IdentityProviders.BCProvider, IdentityProviders.BCServicesCard, IdentityProviders.Phsa };
+
             this.RuleFor(x => x.PartyId).GreaterThan(0);
             this.RuleFor(x => x.LinkToIdp).NotEmpty()
-                .Equal(IdentityProviders.BCProvider).WithMessage("Currently, only linking from BC Services Card to BC Provider is supported.");
+                .Must(x => allowedIdps.Contains(x)).WithMessage($"Only the following IDPs are supported: {string.Join(", ", allowedIdps)}.");
         }
     }
 
@@ -54,15 +56,23 @@ public class LinkTicketCreate
                 .Select(credential => credential.IdentityProvider)
                 .ToListAsync();
 
-            if (!idps.Contains(IdentityProviders.BCServicesCard))
+            if (idps.Contains(IdentityProviders.Idir))
             {
+                return DomainResult.Failed<CredentialLinkTicket>("IDIR accounts cannot link Credentials.");
+            }
+
+            if (!idps.Contains(IdentityProviders.BCServicesCard)
+                && command.LinkToIdp != IdentityProviders.BCServicesCard)
+            {
+                // If the party does not have a BC Services Card Credential, only linking to BCSC is allowed.
                 this.logger.LogPartyDoesNotHaveBCServicesCard(command.PartyId);
                 return DomainResult.Failed<CredentialLinkTicket>("Party does not have a BC Services Card Credential.");
             }
-            if (idps.Contains(IdentityProviders.BCProvider))
+
+            if (idps.Contains(command.LinkToIdp))
             {
-                this.logger.LogPartyHasExistingLinkedBCProviderCredential(command.PartyId);
-                return DomainResult.Failed<CredentialLinkTicket>("Party already has a linked BC Provider Credential.");
+                this.logger.LogPartyHasExistingLinkedCredential(command.PartyId, command.LinkToIdp);
+                return DomainResult.Failed<CredentialLinkTicket>($"Party already has a linked {command.LinkToIdp}.");
             }
 
             var ticket = new CredentialLinkTicket
@@ -84,9 +94,9 @@ public class LinkTicketCreate
 
 public static partial class CredentialLinkTicketCreateLoggingExtensions
 {
-    [LoggerMessage(1, LogLevel.Error, "Party {partyId} initiated account linking but does not have a BC Services Card Creential.")]
+    [LoggerMessage(1, LogLevel.Error, "Party {partyId} initiated account linking but does not have a BC Services Card Credential.")]
     public static partial void LogPartyDoesNotHaveBCServicesCard(this ILogger<LinkTicketCreate.CommandHandler> logger, int partyId);
 
-    [LoggerMessage(2, LogLevel.Error, "Party {partyId} attempted to link a second BC Provider account.")]
-    public static partial void LogPartyHasExistingLinkedBCProviderCredential(this ILogger<LinkTicketCreate.CommandHandler> logger, int partyId);
+    [LoggerMessage(2, LogLevel.Error, "Party {partyId} attempted to link a second Credential of type {linkToIdp}.")]
+    public static partial void LogPartyHasExistingLinkedCredential(this ILogger<LinkTicketCreate.CommandHandler> logger, int partyId, string linkToIdp);
 }

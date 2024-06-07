@@ -17,7 +17,6 @@ export const accessSectionKeys = [
   'msTeamsClinicMember',
   'provider-reporting-portal',
   'primaryCareRostering',
-  'edrd-eforms',
 ] as const;
 
 /**
@@ -45,5 +44,4 @@ export interface AccessGroup extends IAccessGroup {
   msTeamsClinicMember: Section;
   providerReportingPortal: Section;
   primaryCareRostering: Section;
-  edrdEforms: Section;
 }

@@ -1,0 +1,152 @@
+<div class="container-box" uiPidpInjectViewportCss>
+  <div class="content-box">
+    <header>
+      <h2>Account linking</h2>
+    </header>
+    <div class="content">
+      <section class="link-intro">
+        <h3>
+          Here you can link your other professional credentials you have in
+          OneHealthID
+        </h3>
+        <div class="link-intro-text">
+          <p class="large">
+            If you've got more than one account, you can link them all to your
+            OneHealthID profile using a single username and password to view all
+            your services in one place.
+          </p>
+        </div>
+      </section>
+      <section class="cards link-main">
+        <div class="card link-how-to">
+          <ng-container *ngTemplateOutlet="linkHowTo"></ng-container>
+        </div>
+        <div
+          *ngIf="(identityProvider$ | async) === IdentityProvider.BCSC && !linkedAccountsIdp.includes(IdentityProvider.PHSA)"
+          class="card link-button">
+          <img
+            class="imgplant"
+            ngSrc="/assets/images/account-linking-plant.jpg"
+            alt="Illustration of a plant symbolizing growth, used as a metaphor for account linking"
+            fill />
+          <div class="card-container auth-card">
+            <div class="card-header auth-card-header">
+              <h3><strong>Health Authority ID</strong></h3>
+            </div>
+            <div class="card-body auth-card-body">
+              <img
+                class="logo"
+                ngSrc="/assets/images/phsa-logo.png"
+                alt="PHSA logo"
+                priority
+                fill />
+            </div>
+            <div class="card-footer auth-card-footer">
+              <button
+                mat-flat-button
+                uiPageFooterAction
+                type="submit"
+                color="primary"
+                (click)="onLinkAccount(IdentityProvider.PHSA)">
+                Link
+              </button>
+            </div>
+          </div>
+        </div>
+        <div
+          *ngIf="(identityProvider$ | async) === IdentityProvider.PHSA && !linkedAccountsIdp.includes(IdentityProvider.BCSC)"
+          class="card link-button">
+          <img
+            class="imgplant"
+            ngSrc="/assets/images/account-linking-plant.jpg"
+            alt="Illustration of a plant symbolizing growth, used as a metaphor for account linking"
+            priority
+            fill />
+          <div class="card-container auth-card">
+            <div class="card-header auth-card-header">
+              <h3><strong>BC Services Card</strong></h3>
+            </div>
+            <div class="card-body auth-card-body">
+              <img
+                class="bcsc-logo"
+                ngSrc="/assets/images/bcsc-logo.png"
+                alt="BCSC logo"
+                priority
+                fill />
+            </div>
+            <div class="card-footer auth-card-footer">
+              <button
+                mat-flat-button
+                uiPageFooterAction
+                type="submit"
+                color="primary"
+                (click)="onLinkAccount(IdentityProvider.BCSC)">
+                Link
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+      <div
+        *ngIf="linkedAccounts.length > 0"
+        class="content-box successfully-linked">
+        <div class="content">
+          <h2>Successfully linked accounts</h2>
+          <div class="successfully-linked-accounts">
+            <div *ngFor="let credential of linkedAccounts" class="card">
+              <div class="card-container">
+                <div class="card-header">
+                  <h3>
+                    <strong
+                      >{{getCardText(credential.identityProvider)}}</strong
+                    >
+                  </h3>
+                </div>
+                <div class="card-body">
+                  <img
+                    alt="logo"
+                    fill
+                    [ngClass]="credential.identityProvider === IdentityProvider.BCSC ? 'mini-logo' : 'logo'"
+                    [src]="credential.identityProvider === IdentityProvider.BCSC ? '/assets/images/bcsc-logo.png' :  '/assets/images/phsa-logo.png'" />
+                </div>
+                <div class="card-footer"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <section class="actions">
+        <button
+          mat-stroked-button
+          uiPageFooterAction
+          type="button"
+          color="primary"
+          (click)="onBack()">
+          Back Home
+        </button>
+      </section>
+    </div>
+  </div>
+</div>
+
+<ng-template #linkHowTo>
+  <h3><strong> How to link an account </strong></h3>
+  <p class="link-steps"><strong>Starting steps:</strong></p>
+  <ol>
+    <li>Sign into OneHealthID</li>
+    <li>Select <strong>Link Account</strong></li>
+    <li>
+      In the <strong>Link Account</strong> section, choose the
+      <strong>account</strong> you wish to link
+    </li>
+    <li>
+      Start quick procedure of linking<br /><i
+        >-You might be prompted to login with those credentials</i
+      >
+    </li>
+    <li>
+      Your new linked account will display in our successfully linked accounts
+      section
+    </li>
+  </ol>
+</ng-template>

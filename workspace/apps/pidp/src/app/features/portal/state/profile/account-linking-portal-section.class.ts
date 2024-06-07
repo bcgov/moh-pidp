@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 
 import { AlertType } from '@bcgov/shared/ui';
 
-import { AccessRoutes } from '@app/features/access/access.routes';
+import { ProfileRoutes } from '@app/features/profile/profile.routes';
 import { ShellRoutes } from '@app/features/shell/shell.routes';
 
 import { StatusCode } from '../../enums/status-code.enum';
@@ -12,9 +12,8 @@ import { ProfileStatus } from '../../models/profile-status.model';
 import { PortalSectionAction } from '../portal-section-action.model';
 import { PortalSectionKey } from '../portal-section-key.type';
 import { IPortalSection } from '../portal-section.model';
-import { Section } from '../section.model';
 
-export class EdrdEformsPortalSection implements IPortalSection {
+export class AccountLinkingPortalSection implements IPortalSection {
   public readonly key: PortalSectionKey;
   public heading: string;
   public description: string;
@@ -23,13 +22,18 @@ export class EdrdEformsPortalSection implements IPortalSection {
     private profileStatus: ProfileStatus,
     private router: Router,
   ) {
-    this.key = 'edrdEforms';
-    this.heading = 'Expensive Drugs for Rare Disease (EDRD) eForm';
-    this.description = `Enrol here for access to the Expensive Drugs for Rare Disease (EDRD) eForm`;
+    this.key = 'accountLinking';
+    this.heading = 'Account Linking';
+    this.description =
+      'Here you can link your other professional credentials you have in the OnehealthID. Please have your information available for our quick process.';
   }
 
   public get hint(): string {
-    return '1 minute to complete';
+    return [StatusCode.ERROR, StatusCode.COMPLETED].includes(
+      this.getStatusCode(),
+    )
+      ? ''
+      : '1 minute to complete';
   }
 
   /**
@@ -39,36 +43,35 @@ export class EdrdEformsPortalSection implements IPortalSection {
   public get action(): PortalSectionAction {
     const statusCode = this.getStatusCode();
     return {
-      label: statusCode === StatusCode.COMPLETED ? 'View' : 'Signup',
-      route: AccessRoutes.routePath(AccessRoutes.EDRD_EFORMS),
+      label: statusCode === StatusCode.COMPLETED ? 'View' : 'Update',
+      route: ProfileRoutes.routePath(ProfileRoutes.ACCOUNT_LINKING),
       disabled: statusCode === StatusCode.NOT_AVAILABLE,
     };
   }
 
   public get statusType(): AlertType {
-    return this.getStatusCode() === StatusCode.COMPLETED ? 'success' : 'warn';
+    const statusCode = this.getStatusCode();
+    return statusCode === StatusCode.ERROR
+      ? 'danger'
+      : statusCode === StatusCode.COMPLETED
+        ? 'success'
+        : 'warn';
   }
 
   public get status(): string {
-    switch (this.getSectionStatus().statusCode) {
-      case StatusCode.AVAILABLE:
-        return 'You are eligible to use the Expensive Drugs for Rare Disease (EDRD) eForm';
-      case StatusCode.COMPLETED:
-        return 'Completed';
-      default:
-        return 'Incomplete';
-    }
+    const statusCode = this.getStatusCode();
+    return statusCode === StatusCode.ERROR
+      ? ''
+      : statusCode === StatusCode.COMPLETED
+        ? 'Completed'
+        : 'Incomplete';
   }
 
-  public performAction(): Observable<void> | void {
+  public performAction(): void | Observable<void> {
     this.router.navigate([ShellRoutes.routePath(this.action.route)]);
   }
 
-  private getSectionStatus(): Section {
-    return this.profileStatus.status.edrdEforms;
-  }
-
   private getStatusCode(): StatusCode {
-    return this.profileStatus.status.edrdEforms.statusCode;
+    return this.profileStatus.status.accountLinking.statusCode;
   }
 }

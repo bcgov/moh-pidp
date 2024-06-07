@@ -7,11 +7,11 @@ import { PartyService } from '@app/core/party/party.service';
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
 import { ProfileStatus } from '@app/features/portal/models/profile-status.model';
 
-import { EdredEformsResource } from './edred-eforms-resource.service';
+import { AccountLinkingResource } from './account-linking-resource.service';
 
-export const edrdEformsResolver: ResolveFn<StatusCode | null> = () => {
+export const accountLinkingResolver: ResolveFn<StatusCode | null> = () => {
   const partyService = inject(PartyService);
-  const resource = inject(EdredEformsResource);
+  const resource = inject(AccountLinkingResource);
 
   if (!partyService.partyId) {
     return of(null);
@@ -23,7 +23,7 @@ export const edrdEformsResolver: ResolveFn<StatusCode | null> = () => {
         return null;
       }
 
-      return profileStatus.status.edrdEforms.statusCode;
+      return profileStatus.status.accountLinking.statusCode;
     }),
     catchError(() => of(null)),
   );

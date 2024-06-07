@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 using Pidp.Extensions;
-using Pidp.Features.Credentials;
 using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.Services;
 
@@ -17,22 +16,24 @@ public class DiscoveryController : PidpControllerBase
 
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status307TemporaryRedirect)]
-    public async Task<ActionResult<Discovery.Model>> Discovery([FromServices] IQueryHandler<Discovery.Query, Discovery.Model> handler)
+    public async Task<ActionResult<Discovery.Model>> PartyDiscovery([FromServices] IQueryHandler<Discovery.Query, Discovery.Model> handler)
     {
-        var result = await handler.HandleAsync(new Discovery.Query { User = this.User });
+        var credentialLinkTicket = await this.AuthorizationService.VerifyTokenAsync<Cookies.CredentialLinkTicket.Values>(this.Request.Cookies.GetCredentialLinkTicket());
 
-        if (result.NewBCProvider)
+        var result = await handler.HandleAsync(new Discovery.Query { CredentialLinkToken = credentialLinkTicket?.CredentialLinkToken, User = this.User });
+
+        if (result.Status is Discovery.Model.StatusCode.AlreadyLinked
+            or Discovery.Model.StatusCode.CredentialExists
+            or Discovery.Model.StatusCode.AccountLinkingError)
         {
-            var credentialLinkTicket = await this.AuthorizationService.VerifyTokenAsync<Cookies.CredentialLinkTicket.Values>(this.Request.Cookies.GetCredentialLinkTicket());
-            if (credentialLinkTicket != null)
-            {
-                return this.RedirectToActionPreserveMethod
-                (
-                    nameof(CredentialsController.CreateCredential),
-                    nameof(CredentialsController).Replace("Controller", "")
-                );
-            }
+            this.Response.Cookies.Append(
+                Cookies.CredentialLinkTicket.Key,
+                string.Empty,
+                new CookieOptions
+                {
+                    Expires = DateTimeOffset.Now.AddDays(-1),
+                    HttpOnly = true
+                });
         }
 
         return result;

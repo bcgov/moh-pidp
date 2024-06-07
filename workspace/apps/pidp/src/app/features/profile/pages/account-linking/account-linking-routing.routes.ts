@@ -1,14 +1,17 @@
 import { Routes } from '@angular/router';
 
-import { EdrdEformsPage } from './edrd-eforms.page';
-import { edrdEformsResolver } from './edrd-eforms.resolver';
+import { setDashboardTitleGuard } from '@pidp/presentation';
+
+import { AccountLinkingPage } from './account-linking.page';
+import { accountLinkingResolver } from './account-linking.resolver';
 
 export const routes: Routes = [
   {
     path: '',
-    component: EdrdEformsPage,
+    component: AccountLinkingPage,
+    canActivate: [setDashboardTitleGuard],
     resolve: {
-      edrdEformsStatusCode: edrdEformsResolver,
+      accountLinkingStatusCode: accountLinkingResolver,
     },
     data: {
       title: 'OneHealthID Service',
