@@ -50,11 +50,14 @@ import { SuccessDialogComponent } from '@app/shared/components/success-dialog/su
 import { AccountLinkingResource } from './account-linking-resource.service';
 import { linkedAccountCardText } from './account-linking.constants';
 import { Credential } from './account-linking.model';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { faAngleRight } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-account-linking',
   standalone: true,
   imports: [
+    FaIconComponent,
     CommonModule,
     InjectViewportCssClassDirective,
     MatButtonModule,
@@ -77,6 +80,8 @@ export class AccountLinkingPage implements OnInit, OnDestroy {
   public linkedAccounts$?: Subscription;
   public linkedAccounts: Credential[] = [];
   public linkedAccountsIdp: IdentityProvider[] = [];
+  public faAngleRight = faAngleRight;
+  public showInstructions:boolean=false;
 
   public constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
@@ -102,13 +107,29 @@ export class AccountLinkingPage implements OnInit, OnDestroy {
     this.credentials$ = this.resource.getCredentials(partyId);
   }
 
+public toggleInstructions(): void {
+  this.showInstructions= !this.showInstructions;
+}
+
+
   public onLinkAccount(idpHint: IdentityProvider): void {
     const data: DialogOptions = {
-      title: 'Redirecting',
+      // title: 'Account Linking',
+      // message: 'Your BCSC Hawkeye Pierce is about to be linked to hawkeyepierce@phsa.ca is this information correct ?',
+      title: 'You will be redirected',
+      titlePosition: 'center',
+      bodyTextPosition: 'center',
       component: HtmlComponent,
       data: {
-        content: this.documentService.getRedirectingToSignInNotice(),
+        content: 'You will need to sign in with the credentials of the account you want to link.',
       },
+      imageSrc: '../../../assets/images/online-marketing-hIgeoQjS_iE-unsplash.jpg',
+      imageType: 'banner',
+      width: '31.25rem',
+      height: '26rem',
+      actionText:'Continue',
+      actionTypePosition: 'center'
+
     };
     this.dialog
       .open(ConfirmDialogComponent, { data })

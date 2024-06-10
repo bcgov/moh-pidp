@@ -4,25 +4,68 @@
   --gap: 1rem;
   --font-size: 0.75rem;
   --content-padding: var(--gap);
-  padding: var(--content-padding);
+  padding: calc(var(--gap)) calc(var(--gap) * 4) 0 calc(var(--gap) * 4);
+
+  .breadcrumb ul {
+    list-style: none;
+    top: 0;
+    right: 0;
+    padding: 0px;
+  }
+
+  .breadcrumb fa-icon {
+    height: 12px;
+    padding-left: 5px;
+    padding-right: 5px;
+  }
+
+  .breadcrumb ul li {
+    display: inline;
+  }
+
+  .breadcrumb a {
+    text-decoration: none;
+    color: #1a5a96;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 27px;
+    word-wrap: break-word;
+  }
+
   & header {
     margin: var(--header-margin);
-    & h2 {
+
+    & h1 {
       margin: 0;
-      padding: calc(var(--gap) / 2) calc(var(--gap) * 2);
-      background-color: pidp.$grey-10;
+      color: #003366;
+      font-size: 50px;
+      font-weight: 700;
+      word-wrap: break-word;
     }
   }
 
   & .content {
-    padding: var(--content-padding) 0;
+    padding-top: var(--content-padding);
     display: flex;
     flex-direction: column;
     gap: var(--gap);
 
+    .link-intro-text {
+      padding-top: 1rem;
+    }
+
+    .option-text {
+      padding-left: 0;
+      padding-top: 1rem;
+
+      li {
+        margin-left: calc(var(--gap) * 1.5);
+      }
+    }
+
     .link-main {
       display: grid;
-      grid-template-columns: calc(50% - 15px) calc(50% - 15px);
+      grid-template-columns: calc(33% - 15px) calc(33% - 15px) calc(33% - 15px);
       gap: 20px;
       min-height: 340px;
       margin: calc(var(--gap) * 2) 0;
@@ -33,6 +76,146 @@
         padding-right: calc(var(--gap) * 0.9);
         position: relative;
         line-height: 1.5rem;
+      }
+
+      & .card-styles {
+        border-radius: 1.25rem;
+        border: 1px solid #ccc;
+        background: #fff;
+        box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+        width: 24.9375rem;
+        height: 11.875rem;
+        padding: 1.25rem;
+
+        h2 {
+          color: #036;
+          font-size: 1.5rem;
+          font-weight: 700;
+          padding-top: 0.25rem;
+          margin-bottom: 0;
+        }
+
+        p {
+          color: #000;
+          font-size: 1rem;
+          font-weight: 400;
+          padding-top: 0;
+          margin-bottom: 0;
+        }
+
+        a {
+          color: var(--Links, #1a5a96);
+          font-size: 16px;
+          font-weight: 400;
+          line-height: 27px;
+          text-decoration: underline;
+        }
+      }
+
+      & .instructions-card-layout {
+        width: 25.3rem;
+        height: 25rem;
+        border-radius: 1.25rem;
+        border: 1px solid #ccc;
+        background-color: #ebebeb;
+        box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+
+        .instructions-container {
+          padding: 1.5rem 0.5rem 0 1rem;
+
+          h2 {
+            color: var(--Colours-font, #313132);
+            font-size: 24px;
+            font-weight: 700;
+          }
+
+          ol {
+            color: #333;
+            font-size: 12px;
+            font-weight: 400;
+          }
+
+          .list-item {
+            padding-bottom: 0.5rem;
+          }
+
+          .sublist {
+            list-style-type: '-';
+            li {
+              padding-left: 0.25rem;
+            }
+          }
+        }
+
+        button {
+          border-radius: 0.25rem;
+          border: 2px solid #ccc;
+          background: #f3f3f3;
+          display: flex;
+          width: 9.3125rem;
+          height: 3.0625rem;
+          padding: 0.75rem 1.25rem;
+          justify-content: center;
+          align-items: center;
+          color: #313132;
+          font-size: 1.125rem;
+          letter-spacing: 0.0625rem;
+          margin: 0.5rem 0 1rem 1.88rem;
+        }
+      }
+
+      & .instructions-card {
+        background-image: url('/assets/images/account-linking-plant.jpg');
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: right;
+        background-position-x: center;
+
+        h2 {
+          color: #313132;
+          width: 17.5625rem;
+          font-size: 2rem;
+          font-weight: 700;
+          padding: 1.88rem 0 0 1.88rem;
+          line-height: 1.25;
+        }
+
+        p {
+          width: 14.1875rem;
+          color: #474543;
+          font-size: 1rem;
+          padding-left: 1.88rem;
+        }
+
+        button {
+          margin: 3rem 0 1rem 1.88rem;
+        }
+      }
+
+      .card-header-icon {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .card-icon {
+          display: flex;
+          border-radius: 0.625rem;
+          border: 1px solid rgba(0, 51, 102, 0.2);
+          width: 2.5rem;
+          height: 2.5rem;
+          justify-content: center;
+          align-items: center;
+        }
+
+        img {
+          width: 1.5rem;
+          height: 1.5rem;
+        }
+      }
+
+      .bc-provider,
+      .idir-account {
+        margin-top: 1.19rem;
       }
       .link-button {
         height: 67%;
@@ -77,6 +260,7 @@
               height: 45px !important;
               width: 175px !important;
             }
+
             img.bcsc-logo {
               z-index: -1;
               -webkit-transform: none;
@@ -95,8 +279,10 @@
     & .link-steps {
       text-decoration: underline;
     }
+
     & ol {
       line-height: 2rem;
+
       & i {
         color: pidp.$grey-30;
       }
@@ -109,6 +295,7 @@
       padding: calc(var(--gap) / 2) calc(var(--gap) * 2);
       background-color: pidp.$green-10;
     }
+
     & .successfully-linked-accounts {
       display: flex;
       flex-direction: row;
@@ -152,6 +339,7 @@
               height: 30px !important;
               width: 130px !important;
             }
+
             img.mini-logo {
               z-index: -1;
               -webkit-transform: none;
@@ -195,6 +383,7 @@ div.viewport-xsmall {
       }
     }
   }
+
   .successfully-linked {
     .successfully-linked-accounts {
       flex-direction: column;
@@ -213,6 +402,7 @@ div.viewport-small {
       div.auth-card {
         padding: 20px 0px 60px 20px !important;
       }
+
       .card-container {
         .auth-card-body {
           padding-bottom: 15px;

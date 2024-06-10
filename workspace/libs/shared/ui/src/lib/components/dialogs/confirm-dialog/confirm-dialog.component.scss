@@ -1,5 +1,31 @@
 @import 'palette';
 
+.banner-image-container {
+  display: flex;
+
+  img {
+    width: 440px;
+    height: 150px;
+    margin: 2rem 2rem 0 2rem;
+  }
+}
+
+.heading-centered {
+  text-align: center;
+}
+
+.body-text-centered {
+  text-align: center;
+}
+
+.action-type-centered{
+  align-self: center;
+  button{
+    margin: 0 1rem;
+    padding: 0.3rem 2rem;
+  }
+}
+
 h2 {
   display: flex;
   color: theme-palette(blue);
