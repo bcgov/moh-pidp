@@ -4,6 +4,13 @@ import { AccessRoutes } from './access.routes';
 
 export const routes: Routes = [
   {
+    path: AccessRoutes.ACCESS_REQUESTS,
+    loadChildren: (): Promise<Routes> =>
+      import(
+        '../access/pages/access-requests-page/access-request-page-routing.routes'
+      ).then((m) => m.routes),
+  },
+  {
     path: AccessRoutes.SPECIAL_AUTH_EFORMS,
     loadChildren: (): Promise<Routes> =>
       import('./pages/sa-eforms/sa-eforms-routing.routes').then(
