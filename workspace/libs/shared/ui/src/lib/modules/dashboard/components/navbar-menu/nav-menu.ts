@@ -33,9 +33,9 @@ import { PidpViewport, ViewportService } from '../../../../services';
 import { DashboardMenuItem, DashboardRouteMenuItem } from '../../models';
 
 @Component({
-  selector: 'ui-dashboard-v2',
-  templateUrl: './dashboard-v2.component.html',
-  styleUrls: ['./dashboard-v2.component.scss'],
+  selector: 'ui-nav-menu',
+  templateUrl: './nav-menu.html',
+  styleUrls: ['./nav-menu.scss'],
   standalone: true,
   imports: [
     InjectViewportCssClassDirective,
@@ -52,7 +52,7 @@ import { DashboardMenuItem, DashboardRouteMenuItem } from '../../models';
     RouterOutlet,
   ],
 })
-export class DashboardV2Component implements OnChanges {
+export class NavMenuComponent implements OnChanges {
   @Input() public dashboardState!: DashboardStateModel;
   @Input() public menuItems!: DashboardMenuItem[];
   @Input() public emailSupport!: string;
@@ -75,30 +75,15 @@ export class DashboardV2Component implements OnChanges {
     return true;
   }
 
-  public get isMenuUserProfileVisible(): boolean {
-    // NOTE: The user name section is always hidden in xsmall and small views
-    if (
-      this.viewport === PidpViewport.small ||
-      this.viewport === PidpViewport.xsmall
-    ) {
-      return false;
-    }
-    return !!this.dashboardState.userProfileFullNameText;
-  }
   public isLogoutButtonVisible = false;
   public isLogoutMenuItemVisible = false;
+  public isTopMenuVisible = false;
 
   public get showTitle(): boolean {
     return !!this.dashboardState.titleText;
   }
   public get showTitleDescription(): boolean {
     return !!this.dashboardState.titleDescriptionText;
-  }
-  public get isCollegeInfoVisible(): boolean {
-    return (
-      this.isMenuUserProfileVisible &&
-      !!this.dashboardState.userProfileCollegeNameText
-    );
   }
 
   public constructor(private viewportService: ViewportService) {
@@ -118,7 +103,7 @@ export class DashboardV2Component implements OnChanges {
     item: DashboardMenuItem | string,
   ): RoutePath | undefined {
     if (item instanceof DashboardRouteMenuItem) {
-      const routeItem = item as DashboardRouteMenuItem;
+      const routeItem: DashboardRouteMenuItem = item ;
       return routeItem.commands;
     }
     return undefined;
@@ -129,14 +114,14 @@ export class DashboardV2Component implements OnChanges {
       }
     | IsActiveMatchOptions {
     if (item instanceof DashboardRouteMenuItem) {
-      const routeItem = item as DashboardRouteMenuItem;
+      const routeItem:DashboardRouteMenuItem = item ;
       return routeItem.linkActiveOptions;
     }
-    throw 'getRouterLinkActiveOptions: not implemented';
+    throw new Error('getRouterLinkActiveOptions: not implemented');
   }
   public getRouterLinkFragment(item: DashboardMenuItem): string | undefined {
     if (item instanceof DashboardRouteMenuItem) {
-      const routeItem = item as DashboardRouteMenuItem;
+      const routeItem: DashboardRouteMenuItem = item;
       return routeItem.extras?.fragment;
     }
     return undefined;
@@ -163,30 +148,27 @@ export class DashboardV2Component implements OnChanges {
 
         this.isLogoutButtonVisible = false;
         this.isLogoutMenuItemVisible = true;
+        this.isTopMenuVisible = false;
         break;
       case PidpViewport.small:
-        this.showMiniMenuButton = true;
+        this.showMiniMenuButton = false;
         this.isSidenavOpened = false;
         this.sidenavMode = 'over';
-        this.isLogoutButtonVisible = false;
+        this.isLogoutButtonVisible = true;
         this.isLogoutMenuItemVisible = true;
+        this.isTopMenuVisible = true;
         break;
       case PidpViewport.medium:
+      case  PidpViewport.large:
         this.showMiniMenuButton = false;
         this.isSidenavOpened = true;
         this.sidenavMode = 'side';
         this.isLogoutButtonVisible = true;
         this.isLogoutMenuItemVisible = false;
-        break;
-      case PidpViewport.large:
-        this.showMiniMenuButton = false;
-        this.isSidenavOpened = true;
-        this.sidenavMode = 'side';
-        this.isLogoutButtonVisible = true;
-        this.isLogoutMenuItemVisible = false;
+        this.isTopMenuVisible = true;
         break;
       default:
-        throw `Dashboard v2 not implemented: ${this.viewport}`;
+        throw new Error(`Nav Menu not implemented: ${this.viewport}`);
     }
   }
 }
