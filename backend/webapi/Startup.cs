@@ -1,6 +1,6 @@
 namespace Pidp;
 
-using FluentValidation.AspNetCore;
+using FluentValidation;
 using HealthChecks.ApplicationStatus.DependencyInjection;
 using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
@@ -10,6 +10,7 @@ using Microsoft.OpenApi.Models;
 using NodaTime;
 using NodaTime.Serialization.SystemTextJson;
 using Serilog;
+using SharpGrip.FluentValidation.AutoValidation.Mvc.Extensions;
 using Swashbuckle.AspNetCore.Filters;
 using System.Reflection;
 using System.Text.Json;
@@ -38,6 +39,7 @@ public class Startup
             .AddAutoMapper(typeof(Startup))
             .AddHostedService<PlrStatusUpdateSchedulingService>()
             .AddHttpClients(config)
+            .AddHttpContextAccessor()
             .AddKeycloakAuth(config)
             .AddRabbitMQ(config)
             .AddMediatR(opt => opt.RegisterServicesFromAssemblyContaining<Startup>())
@@ -48,9 +50,11 @@ public class Startup
             .AddSingleton<BackgroundWorkerHealthCheck>();
 
         services.AddControllers(options => options.Conventions.Add(new RouteTokenTransformerConvention(new KabobCaseParameterTransformer())))
-            .AddFluentValidation(options => options.RegisterValidatorsFromAssemblyContaining<Startup>())
             .AddJsonOptions(options => options.JsonSerializerOptions.ConfigureForNodaTime(DateTimeZoneProviders.Tzdb))
             .AddHybridModelBinder();
+
+        services.AddValidatorsFromAssemblyContaining<Startup>()
+            .AddFluentValidationAutoValidation(options => options.EnablePathBindingSourceAutomaticValidation = true);
 
         services.AddDbContext<PidpDbContext>(options => options
             .UseNpgsql(config.ConnectionStrings.PidpDatabase, npg => npg.UseNodaTime())
