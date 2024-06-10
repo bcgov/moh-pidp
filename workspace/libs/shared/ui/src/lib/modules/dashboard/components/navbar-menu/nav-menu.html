@@ -8,31 +8,56 @@
       (click)="onMiniMenuButtonClick()">
       <mat-icon>menu</mat-icon>
     </button>
-    <div *ngIf="isLogoutButtonVisible" class="logout-button-group">
-      <span class="signout-text">sign out</span>
-      <button
-        mat-icon-button
-        matTooltip="Logout"
-        aria-label="logout"
-        (click)="onLogout()">
-        <mat-icon>logout</mat-icon>
-      </button>
+  </div>
+  <div *ngIf="isTopMenuVisible" uiPidpInjectViewportCss>
+    <div class="content-menu">
+      <div class="container">
+        <ng-container *ngTemplateOutlet="menu"></ng-container>
+      </div>
+    </div>
+    <div class="container content-body">
+      <router-outlet></router-outlet>
     </div>
   </div>
-  <div class="dashboard-v2" uiPidpInjectViewportCss>
+  <ng-template #menu>
+    <a class="logo-link" href="." title="Home" aria-label="Go home">
+      <span class="span-text">OneHealthID</span></a
+    >
+    <div class="main-menu">
+      <a
+        *ngFor="let menuItem of menuItems"
+        class="main-menu-item"
+        routerLinkActive="main-menu-item-active"
+        [routerLink]="getRouterLink(menuItem)"
+        [routerLinkActiveOptions]="getRouterLinkActiveOptions(menuItem)"
+        [fragment]="getRouterLinkFragment(menuItem)"
+        (click)="onMenuItemClicked()"
+        >{{ menuItem.label }}
+      </a>
+      <button
+        *ngIf="isLogoutButtonVisible"
+        class="btn-signout"
+        mat-stroked-button
+        aria-label="Sign Out"
+        (click)="onLogout()">
+        Sign Out
+      </button>
+    </div>
+  </ng-template>
+  <div *ngIf="!isTopMenuVisible" class="nav-menu" uiPidpInjectViewportCss>
     <div class="header-bar-left"></div>
     <div class="content">
       <mat-sidenav-container class="sidenav-container">
         <mat-sidenav #sidenav [mode]="sidenavMode" [(opened)]="isSidenavOpened">
           <div class="sidenav-header-box"></div>
           <div class="sidenav-body-box">
-            <ng-container *ngTemplateOutlet="menu"></ng-container>
+            <ng-container *ngTemplateOutlet="sidenavmenu"></ng-container>
           </div>
         </mat-sidenav>
 
         <mat-sidenav-content class="custom-mat-sidenav-content">
           <div class="content-header-box">
-            <ng-container *ngTemplateOutlet="header"></ng-container>
+            <ng-container *ngTemplateOutlet="sidenavheader"></ng-container>
           </div>
           <router-outlet></router-outlet>
         </mat-sidenav-content>
@@ -40,12 +65,10 @@
     </div>
     <div class="header-bar-right"></div>
   </div>
-  <ng-template #header>
+  <ng-template #sidenavheader>
     <header>
       <div class="header-text-container">
-        <h1 *ngIf="showTitle">
-          {{ dashboardState.titleText }}
-        </h1>
+        <h1 *ngIf="showTitle">{{ dashboardState.titleText }}</h1>
         <p *ngIf="showTitleDescription">
           {{ dashboardState.titleDescriptionText }}
         </p>
@@ -54,6 +77,7 @@
         <img
           src="/assets/images/pidp-logo-white.svg"
           title="PIDP Logo"
+          alt="PIDP Logo"
           loading="lazy"
           aria-label="PIDP Logo"
           aria-hidden="true" />
@@ -61,19 +85,10 @@
     </header>
   </ng-template>
 
-  <ng-template #menu>
+  <ng-template #sidenavmenu>
     <div class="sidenav-panel-box">
       <div class="sidenav-bar"></div>
       <div class="sidenav-panel-content">
-        <div *ngIf="isMenuUserProfileVisible" class="sidenav-header">
-          <p class="sidenav-name">
-            {{ dashboardState.userProfileFullNameText }}
-          </p>
-          <p *ngIf="isCollegeInfoVisible" class="sidenav-college">
-            {{ dashboardState.userProfileCollegeNameText }}
-          </p>
-        </div>
-        <div *ngIf="isMenuUserProfileVisible" class="sidenav-line"></div>
         <div class="sidenav-menu">
           <a
             *ngFor="let menuItem of menuItems"

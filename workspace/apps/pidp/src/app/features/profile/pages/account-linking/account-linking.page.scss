@@ -35,7 +35,6 @@
         line-height: 1.5rem;
       }
       .link-button {
-        height: 67%;
 
         img {
           -webkit-transform: scaleX(-1);
@@ -45,7 +44,7 @@
         }
 
         img.imgplant {
-          object-position: -20px -55px;
+          object-position: -10px -100px;
         }
 
         div.auth-card {
@@ -55,7 +54,7 @@
         .card-container {
           display: flex;
           flex-direction: column;
-          height: 100%;
+          height: 95%;
           width: 100%;
           align-items: flex-start;
 
@@ -74,8 +73,8 @@
               -webkit-transform: none;
               transform: none;
               position: relative !important;
-              height: 45px !important;
-              width: 175px !important;
+              height: 45px ;
+              width: 175px ;
             }
             img.bcsc-logo {
               z-index: -1;
@@ -129,7 +128,7 @@
         .card-container {
           display: flex;
           flex-direction: column;
-          height: 100%;
+          height: 95%;
           width: 100%;
           align-items: center;
           padding: 20px;
@@ -172,8 +171,8 @@ div.viewport-xsmall {
 
     .link-button {
       img.imgplant {
-        height: 200px !important;
-        object-position: 0px -55px !important;
+        height: 15rem !important;
+        object-position: -12px -72px !important;
       }
 
       div.auth-card {
@@ -181,6 +180,7 @@ div.viewport-xsmall {
       }
 
       .card-container {
+        height: 50% !important;
         .auth-card-header {
           padding-left: 20px;
         }
@@ -201,23 +201,60 @@ div.viewport-xsmall {
       align-items: center;
     }
   }
+
+  .card-body {
+    img.logo {
+      z-index: -1;
+      -webkit-transform: none;
+      transform: none;
+      position: relative !important;
+      height: 40px !important;
+      width: 175px !important;
+      padding-left: 5px;
+    }
+    img.mini-logo {
+      z-index: -1;
+      -webkit-transform: none;
+      transform: none;
+      position: relative !important;
+    }
+  }
 }
 
 div.viewport-small {
   .link-main {
     .link-button {
       img.imgplant {
-        object-position: -15px -55px !important;
+        height: 52% !important;
+        width: 100% !important;
+        object-position: -22px -55px !important;
       }
 
       div.auth-card {
         padding: 20px 0px 60px 20px !important;
       }
       .card-container {
+        height: 50% !important;
         .auth-card-body {
           padding-bottom: 15px;
         }
       }
+    }
+  }
+  .card-body {
+    img.logo {
+      z-index: -1;
+      -webkit-transform: none;
+      transform: none;
+      position: relative !important;
+      height: 30px !important;
+      width: 130px !important;
+    }
+    img.mini-logo {
+      z-index: -1;
+      -webkit-transform: none;
+      transform: none;
+      position: relative !important;
     }
   }
 }
@@ -225,9 +262,72 @@ div.viewport-small {
 div.viewport-medium {
   .link-main {
     .link-button {
-      div.auth-card {
-        padding: 15px 0px 55px 15px !important;
+      img.imgplant {
+        height: 80% !important;
+        width: 85% !important;
+        object-position: -15px -80px !important;
       }
+      div.auth-card {
+        padding: 20px 0px 18px 15px !important;
+      }
+      .card-container {
+        height: 55% !important;
+        .auth-card-body {
+          padding-bottom: 15px !important;
+        }
+      }
+    }
+  }
+
+  .card-body {
+    img.logo {
+      z-index: -1;
+      -webkit-transform: none;
+      transform: none;
+      position: relative !important;
+      height: 37px !important;
+      width: 145px !important;
+    }
+    img.mini-logo {
+      z-index: -1;
+      -webkit-transform: none;
+      transform: none;
+      position: relative !important;
+    }
+  }
+}
+
+div.viewport-large {
+  .link-main {
+    .link-button {
+      img.imgplant {
+        height: 70% !important;
+        width: 70% !important;
+        object-position: -15px -80px !important;
+      }
+ 
+      .card-container {
+        height: 70% !important;
+        .auth-card-body {
+          padding-bottom: 15px;
+        }
+      }
+    }
+  }
+  .card-body {
+    img.logo {
+      z-index: -1;
+      -webkit-transform: none;
+      transform: none;
+      position: relative !important;
+      height: 42px !important;
+      width: 170px !important;
+    }
+    img.mini-logo {
+      z-index: -1;
+      -webkit-transform: none;
+      transform: none;
+      position: relative !important;
     }
   }
 }
