@@ -1,3 +1,5 @@
+@import 'bootstrap/bootstrap-imports';
+
 .scroll-target {
   position: relative;
 
@@ -10,5 +12,9 @@
     // that should be applied between containers.
     top: calc(-1 * var(--gap));
     left: 0;
+
+    @include media-breakpoint-up(sm) {
+      top: calc(-3.75 * var(--gap));
+    }
   }
 }
