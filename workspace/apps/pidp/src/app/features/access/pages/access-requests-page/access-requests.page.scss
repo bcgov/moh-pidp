@@ -204,27 +204,29 @@
     top: 0;
     right: 0;
     padding: 0px;
-
   }
 
   .breadcrumb fa-icon {
     height: 12px;
     padding-left: 5px;
     padding-right: 5px;
-
   }
 
   .breadcrumb ul li {
     display: inline;
   }
 
-  .breadcrumb a {
+  .breadcrumb a,
+  span {
     text-decoration: none;
-    color: #1A5A96;
+    color: #1a5a96;
     font-size: 12px;
     font-weight: 400;
     line-height: 27px;
-    word-wrap: break-word
+    word-wrap: break-word;
+  }
+  span {
+    cursor: pointer;
   }
 }
 

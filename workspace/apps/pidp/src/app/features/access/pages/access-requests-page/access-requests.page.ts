@@ -20,6 +20,7 @@ import {
   faRightLeft,
   faThumbsUp,
 } from '@fortawesome/free-solid-svg-icons';
+import { NavigationService } from '@pidp/presentation';
 
 import {
   InjectViewportCssClassDirective,
@@ -65,7 +66,10 @@ export class AccessRequestsPage {
   public isMobile = true;
   public providerIdentitySupport: string;
 
-  public constructor(@Inject(APP_CONFIG) private config: AppConfig) {
+  public constructor(
+    @Inject(APP_CONFIG) private config: AppConfig,
+    private navigationService: NavigationService,
+  ) {
     this.providerIdentitySupport = this.config.emails.providerIdentitySupport;
     this.logoutRedirectUrl = `${this.config.applicationUrl}/`;
   }
@@ -86,5 +90,9 @@ export class AccessRequestsPage {
 
   public onSearch(event: Event): void {
     this.showSearchIcon = (event.target as HTMLInputElement).value === '';
+  }
+
+  public onBack(): void {
+    this.navigationService.navigateToRoot();
   }
 }
