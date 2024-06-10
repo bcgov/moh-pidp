@@ -23,6 +23,7 @@ import {
 import { NavigationService } from '@pidp/presentation';
 
 import {
+  BreadcrumbButtonDirective,
   InjectViewportCssClassDirective,
   LayoutHeaderFooterComponent,
 } from '@bcgov/shared/ui';
@@ -42,6 +43,7 @@ import { Constants } from '@app/shared/constants';
     NgClass,
     NgIf,
     LayoutHeaderFooterComponent,
+    BreadcrumbButtonDirective,
   ],
 })
 export class AccessRequestsPage {

@@ -216,16 +216,13 @@
   }
 
   .breadcrumb a,
-  span {
+  .text-button {
     text-decoration: none;
     color: #1a5a96;
     font-size: 12px;
     font-weight: 400;
     line-height: 27px;
     word-wrap: break-word;
-  }
-  span {
-    cursor: pointer;
   }
 }
 

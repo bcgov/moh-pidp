@@ -2,7 +2,7 @@
   <div class="container" uiPidpInjectViewportCss>
     <nav class="breadcrumb">
       <ul>
-        <li><span (click)="onBack()">Home</span></li>
+        <li><button uiBreadcrumbButton (click)="onBack()">Home</button></li>
         <li><fa-icon class="fa-duotone" [icon]="faAngleRight"></fa-icon></li>
         <li><a class="active" href="accessrequest#access">Active Page</a></li>
       </ul>
