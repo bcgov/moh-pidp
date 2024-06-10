@@ -12,7 +12,7 @@ export class ErrorHandlerService implements ErrorHandler {
   public constructor(
     // Can't use DI in constructor of the error handler as it's loaded
     // first during bootstrapping therefore have to use the injector
-    private injector: Injector
+    private injector: Injector,
   ) {}
 
   public handleError(error: Error | HttpErrorResponse): void {

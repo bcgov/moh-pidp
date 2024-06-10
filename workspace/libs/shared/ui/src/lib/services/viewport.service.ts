@@ -18,8 +18,8 @@ export const BootstrapBreakpoints = {
   tablet: '(min-width: 768px) and (max-width: 991.98px)',
 };
 export const PidpBreakpoints = {
-  xsmall: '(min-width: 0px) and (max-width: 640px)',
-  small: '(min-width: 641px) and (max-width: 1023px)',
+  xsmall: '(min-width: 0px) and (max-width: 767px)',
+  small: '(min-width: 768px) and (max-width: 1023px)',
   medium: '(min-width: 1024px) and (max-width: 1199px)',
   large: '(min-width: 1200px)',
 };
@@ -54,7 +54,7 @@ export class ViewportService {
 
   public constructor(
     private breakpointObserver: BreakpointObserver,
-    private pidpBreakpointObserver: BreakpointObserver
+    private pidpBreakpointObserver: BreakpointObserver,
   ) {
     this.breakpointObserver$ = breakpointObserver.observe([
       BootstrapBreakpoints.medium,
@@ -102,8 +102,8 @@ export class ViewportService {
     return this.breakpointObserver$.pipe(
       map(
         (result: BreakpointState) =>
-          result.matches && result.breakpoints[BootstrapBreakpoints.mobile]
-      )
+          result.matches && result.breakpoints[BootstrapBreakpoints.mobile],
+      ),
     );
   }
 
@@ -115,8 +115,8 @@ export class ViewportService {
     return this.breakpointObserver$.pipe(
       map(
         (result: BreakpointState) =>
-          result.matches && result.breakpoints[BootstrapBreakpoints.tablet]
-      )
+          result.matches && result.breakpoints[BootstrapBreakpoints.tablet],
+      ),
     );
   }
 
@@ -128,8 +128,8 @@ export class ViewportService {
     return this.breakpointObserver$.pipe(
       map(
         (result: BreakpointState) =>
-          result.matches && result.breakpoints[BootstrapBreakpoints.medium]
-      )
+          result.matches && result.breakpoints[BootstrapBreakpoints.medium],
+      ),
     );
   }
 
@@ -141,8 +141,8 @@ export class ViewportService {
     return this.breakpointObserver$.pipe(
       map(
         (result: BreakpointState) =>
-          result.matches && result.breakpoints[BootstrapBreakpoints.large]
-      )
+          result.matches && result.breakpoints[BootstrapBreakpoints.large],
+      ),
     );
   }
 }

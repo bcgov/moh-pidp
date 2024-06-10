@@ -55,7 +55,7 @@ export class BcProviderEditFormState extends AbstractFormState<BcProviderEditFor
       },
       {
         validators: FormGroupValidators.match('newPassword', 'confirmPassword'),
-      }
+      },
     );
   }
 

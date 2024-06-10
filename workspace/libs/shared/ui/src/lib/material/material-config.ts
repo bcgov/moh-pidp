@@ -1,3 +1,4 @@
+import { Provider } from '@angular/core';
 import { LuxonDateAdapter } from '@angular/material-luxon-adapter';
 import {
   DateAdapter,
@@ -32,33 +33,35 @@ const appPaginatorCustomOptions = {
 };
 
 const matFormFieldCustomOptions: MatFormFieldDefaultOptions = {
+  appearance: 'outline',
   hideRequiredMarker: true,
   floatLabel: 'always',
 };
 
-export const materialConfig = [
-  {
-    provide: MAT_DATE_FORMATS,
-    useValue: APP_DATE_FORMATS,
-  },
-  {
-    provide: DateAdapter,
-    useClass: LuxonDateAdapter,
-    deps: [MAT_DATE_LOCALE],
-  },
-  {
-    provide: MAT_DIALOG_DEFAULT_OPTIONS,
-    useValue: {
-      width: '500px',
-      hasBackdrop: true,
+export function provideMaterialConfig(): Provider[] {
+  return [
+    {
+      provide: MAT_DATE_FORMATS,
+      useValue: APP_DATE_FORMATS,
     },
-  },
-  {
-    provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
-    useValue: matFormFieldCustomOptions,
-  },
-  {
-    provide: MAT_PAGINATOR_DEFAULT_OPTIONS,
-    useValue: appPaginatorCustomOptions,
-  },
-];
+    {
+      provide: DateAdapter,
+      useClass: LuxonDateAdapter,
+      deps: [MAT_DATE_LOCALE],
+    },
+    {
+      provide: MAT_DIALOG_DEFAULT_OPTIONS,
+      useValue: {
+        hasBackdrop: true,
+      },
+    },
+    {
+      provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
+      useValue: matFormFieldCustomOptions,
+    },
+    {
+      provide: MAT_PAGINATOR_DEFAULT_OPTIONS,
+      useValue: appPaginatorCustomOptions,
+    },
+  ];
+}

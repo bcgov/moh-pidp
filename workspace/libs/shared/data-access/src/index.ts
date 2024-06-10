@@ -1,4 +1,3 @@
-export * from './lib/shared-data-access.module';
 export * from './lib/classes';
 export * from './lib/enums';
 export * from './lib/interceptors';

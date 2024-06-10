@@ -1,6 +1,8 @@
+import { NgIf } from '@angular/common';
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { MatButtonModule } from '@angular/material/button';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
 import { catchError, noop, of, tap } from 'rxjs';
 
@@ -10,10 +12,17 @@ import {
   LoadingOverlayService,
 } from '@pidp/presentation';
 
+import {
+  AnchorDirective,
+  InjectViewportCssClassDirective,
+  PageFooterActionDirective,
+} from '@bcgov/shared/ui';
+
 import { PartyService } from '@app/core/party/party.service';
 import { LoggerService } from '@app/core/services/logger.service';
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
 
+import { EnrolmentErrorComponent } from '../../components/enrolment-error/enrolment-error.component';
 import { DriverFitnessResource } from './driver-fitness-resource.service';
 import {
   driverFitnessSupportEmail,
@@ -25,6 +34,16 @@ import {
   selector: 'app-driver-fitness',
   templateUrl: './driver-fitness.page.html',
   styleUrls: ['./driver-fitness.page.scss'],
+  standalone: true,
+  imports: [
+    AnchorDirective,
+    EnrolmentErrorComponent,
+    InjectViewportCssClassDirective,
+    MatButtonModule,
+    NgIf,
+    PageFooterActionDirective,
+    RouterLink,
+  ],
 })
 export class DriverFitnessPage implements OnInit {
   public driverFitnessUrl: string;
@@ -41,7 +60,7 @@ export class DriverFitnessPage implements OnInit {
     private partyService: PartyService,
     private resource: DriverFitnessResource,
     private logger: LoggerService,
-    private applicationService: ApplicationService
+    private applicationService: ApplicationService,
   ) {
     const routeData = this.route.snapshot.data;
     this.driverFitnessUrl = driverFitnessUrl;
@@ -89,7 +108,7 @@ export class DriverFitnessPage implements OnInit {
           }
           this.accessRequestFailed = true;
           return of(noop());
-        })
+        }),
       )
       .subscribe((_) => {
         if (this.completed) {
@@ -100,7 +119,7 @@ export class DriverFitnessPage implements OnInit {
   private onAccessGranted(): void {
     this.applicationService.setDashboardTitleText(
       'Enrolment Completed',
-      'Your information has been submitted successfully'
+      'Your information has been submitted successfully',
     );
   }
 

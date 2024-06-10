@@ -4,12 +4,17 @@
 // MATERIAL BUTTON
 //
 
-.mat-stroked-button {
-  &.mat-button-base.mat-primary {
-    // Stroked button default has a grey border
-    border-color: theme-palette(blue);
-  }
-  &.mat-button-base.mat-primary.mat-button-disabled {
+.mat-mdc-button.mat-mdc-button-base,
+.mat-mdc-raised-button.mat-mdc-button-base,
+.mat-mdc-unelevated-button.mat-mdc-button-base,
+.mat-mdc-outlined-button.mat-mdc-button-base {
+  height: auto;
+  min-height: 36px;
+}
+.mat-mdc-outlined-button.mat-mdc-button-base.mat-primary {
+  // Stroked button default has a grey border
+  border-color: theme-palette(blue);
+  &:disabled {
     // Return to default style when disabled
     border-color: inherit;
   }

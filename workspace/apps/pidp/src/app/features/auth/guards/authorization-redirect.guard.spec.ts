@@ -1,24 +1,45 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
+import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 
-import { provideAutoSpy } from 'jest-auto-spies';
+import { Spy, provideAutoSpy } from 'jest-auto-spies';
 
-import { AuthService } from '../services/auth.service';
-import { AuthorizationRedirectGuard } from './authorization-redirect.guard';
+import { authorizationRedirectGuard } from './authorization-redirect.guard';
+import { AuthorizationRedirectGuardService } from './services/authorization-redirect-guard.service';
 
-describe('AuthorizationRedirectGuard', () => {
-  let guard: AuthorizationRedirectGuard;
+describe('authorizationRedirectGuard', () => {
+  let activatedRouteSnapshotSpy: Spy<ActivatedRouteSnapshot>;
+  let routerStateSnapshotSpy: Spy<RouterStateSnapshot>;
+  let authorizationRedirectGuardServiceSpy: Spy<AuthorizationRedirectGuardService>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [RouterTestingModule],
-      providers: [AuthorizationRedirectGuard, provideAutoSpy(AuthService)],
+      providers: [provideAutoSpy(AuthorizationRedirectGuardService)],
     });
 
-    guard = TestBed.inject(AuthorizationRedirectGuard);
+    authorizationRedirectGuardServiceSpy = TestBed.inject<any>(
+      AuthorizationRedirectGuardService,
+    );
   });
 
-  it('should be created', () => {
-    expect(guard).toBeTruthy();
+  describe('METHOD: CanActivateFn', () => {
+    given('the user is authorized', () => {
+      authorizationRedirectGuardServiceSpy.canActivate.mockReturnValueOnce(
+        true,
+      );
+
+      when('the guard is called', () => {
+        const result = TestBed.runInInjectionContext(() =>
+          authorizationRedirectGuard(
+            activatedRouteSnapshotSpy,
+            routerStateSnapshotSpy,
+          ),
+        );
+
+        then('the user should access the route', () => {
+          expect(result).toBeTruthy();
+        });
+      });
+    });
   });
 });

@@ -1,24 +1,23 @@
 import { TestBed } from '@angular/core/testing';
+import { ResolveFn } from '@angular/router';
 
-import { MsTeamsClinicMemberResolver } from './ms-teams-clinic-member.resolver';
-import { provideAutoSpy } from 'jest-auto-spies';
-import { MsTeamsClinicMemberResource } from './ms-teams-clinic-member-resource.service';
-import { PartyService } from '@app/core/party/party.service';
+import { StatusCode } from '@app/features/portal/enums/status-code.enum';
 
-describe('MsTeamsClinicMemberResolver', () => {
-  let resolver: MsTeamsClinicMemberResolver;
+import { msTeamsClinicMemberResolver } from './ms-teams-clinic-member.resolver';
+
+describe('msTeamsClinicMemberResolver', () => {
+  const executeResolver: ResolveFn<StatusCode | null> = (
+    ...resolverParameters
+  ) =>
+    TestBed.runInInjectionContext(() =>
+      msTeamsClinicMemberResolver(...resolverParameters),
+    );
 
   beforeEach(() => {
-    TestBed.configureTestingModule({
-      providers: [
-        provideAutoSpy(PartyService),
-        provideAutoSpy(MsTeamsClinicMemberResource),
-      ]
-    });
-    resolver = TestBed.inject(MsTeamsClinicMemberResolver);
+    TestBed.configureTestingModule({});
   });
 
   it('should be created', () => {
-    expect(resolver).toBeTruthy();
+    expect(executeResolver).toBeTruthy();
   });
 });

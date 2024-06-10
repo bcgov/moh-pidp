@@ -1,5 +1,40 @@
 # Provider Identity Portal (PIdP) API / Rebranded as OneHealthID Service
 
+#### Visual Studio
+
+[Download](https://visualstudio.microsoft.com/) install and sign-in
+
+### Entity Framework (open CLI )
+dotnet tool install --gloabal dotnet-ef
+
+#####  Docker Desktop
+[Download](https://www.docker.com/products/docker-desktop/) install and sign-in
+
+### In the root of the project (CLI)
+docker compose up
+
+#### Install DBeaver
+[Download](https://dbeaver.io/download/) install
+-Open Dbeaver -> New Database connection->Select Postgres
+environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USERNAME: postgres
+      POSTGRES_DB: postgres
+      ports:  - "5433:5432"
+(https://github.com/bcgov/moh-pidp/blob/develop/docker-compose.yml)
+
+#### Need to run the migrations to populate database with the PLR tables(navigate to .backend\services.plr-intake)
+dotnet ef database update
+#### Need to run the migrations to populate database with the tables(navigate to .backend\webapi)
+dotnet ef database update
+
+#### Inserting Test Data in local PLR tables.(navigate to .\backend\tools.plr-test-data)
+dotnet build
+dotnet pack
+dotnet tool install plr-test-data --add-source .\nupkg\
+The tool can be invoked with "dotnet plr-test-data" in any backend folder.
+(https://github.com/bcgov/moh-pidp/tree/develop/backend/tools.plr-test-data)
+
 ## Local Development Secrets
 
 [ASP.NET Core User Secrets](https://docs.microsoft.com/en-us/aspnet/core/security/app-secrets?view=aspnetcore-5.0&tabs=windows)

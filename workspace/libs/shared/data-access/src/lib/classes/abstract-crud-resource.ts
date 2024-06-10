@@ -9,7 +9,10 @@ import {
   NoContentResponse,
 } from './abstract-http-client';
 
-export abstract class CrudResource<T> implements ICrudResource<T> {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export abstract class CrudResource<T extends { [key: string]: any } | null>
+  implements ICrudResource<T>
+{
   protected constructor(protected resource: AbstractHttpClient) {}
 
   /**
@@ -19,14 +22,14 @@ export abstract class CrudResource<T> implements ICrudResource<T> {
   public create(
     id: number,
     payload: T,
-    options?: { [key: string]: unknown }
+    options?: { [key: string]: unknown },
   ): Observable<T | null> {
     return this.resource
       .post<T>(this.getResourcePath(id), payload, options)
       .pipe(
         catchError((error: HttpErrorResponse) => {
           throw error;
-        })
+        }),
       );
   }
 
@@ -36,7 +39,7 @@ export abstract class CrudResource<T> implements ICrudResource<T> {
    */
   public get(
     id: number,
-    options?: { [key: string]: unknown }
+    options?: { [key: string]: unknown },
   ): Observable<T | null> {
     return this.resource.get<T>(this.getResourcePath(id), options).pipe(
       catchError((error: HttpErrorResponse) => {
@@ -45,7 +48,7 @@ export abstract class CrudResource<T> implements ICrudResource<T> {
         }
 
         throw error;
-      })
+      }),
     );
   }
 
@@ -56,7 +59,7 @@ export abstract class CrudResource<T> implements ICrudResource<T> {
   public update(
     id: number,
     payload: T,
-    options?: { [key: string]: unknown }
+    options?: { [key: string]: unknown },
   ): NoContent {
     return this.resource
       .put<NoContent>(this.getResourcePath(id), payload, options)
@@ -69,7 +72,7 @@ export abstract class CrudResource<T> implements ICrudResource<T> {
    */
   public delete(
     id: number,
-    options?: { [key: string]: unknown }
+    options?: { [key: string]: unknown },
   ): Observable<number | null> {
     return this.resource.delete<number>(this.getResourcePath(id), options).pipe(
       catchError((error: HttpErrorResponse) => {
@@ -78,7 +81,7 @@ export abstract class CrudResource<T> implements ICrudResource<T> {
         }
 
         throw error;
-      })
+      }),
     );
   }
 

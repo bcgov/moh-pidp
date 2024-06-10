@@ -1,0 +1,13 @@
+h2 {
+  --gap: 1rem;
+  --grey-10: #f2f2f2;
+  margin: 0;
+  padding: calc(var(--gap) / 2) calc(var(--gap) * 2);
+  background-color: var(--grey-10);
+}
+.section-content-box {
+  --gap: 1rem;
+  margin: var(--gap) 0;
+  padding-left: calc(var(--gap) * 2);
+  padding-right: calc(var(--gap) * 2);
+}

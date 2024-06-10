@@ -4,7 +4,7 @@ WORKDIR /source
 ENV DOTNET_CLI_HOME="/opt"
 ENV PATH="$PATH:/opt/.dotnet/tools"
 
-RUN dotnet tool install --global dotnet-ef
+RUN dotnet tool install --global dotnet-ef --version "7.*"
 
 COPY *.csproj .
 RUN dotnet restore -r linux-musl-x64 /p:PublishReadyToRun=true

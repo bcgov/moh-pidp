@@ -1,17 +1,26 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { Resolve, Router } from '@angular/router';
+import { inject } from '@angular/core';
+import { ResolveFn, Router } from '@angular/router';
 
-import { Observable, catchError, exhaustMap, of } from 'rxjs';
-
-import { RootRoutes } from '@bcgov/shared/ui';
+import { catchError, exhaustMap, of, switchMap } from 'rxjs';
 
 import { AuthRoutes } from '@app/features/auth/auth.routes';
+import { AuthorizedUserService } from '@app/features/auth/services/authorized-user.service';
 import { ShellRoutes } from '@app/features/shell/shell.routes';
 
 import { LoggerService } from '../services/logger.service';
-import { PartyResource } from './party-resource.service';
+import {
+  DiscoveryResource,
+  DiscoveryStatus,
+} from './discovery-resource.service';
 import { PartyService } from './party.service';
+
+const linkedAccountErrorStatus: DiscoveryStatus[] = [
+  DiscoveryStatus.AlreadyLinkedError,
+  DiscoveryStatus.CredentialExistsError,
+  DiscoveryStatus.ExpiredCredentialLinkTicketError,
+  DiscoveryStatus.AccountLinkingError,
+];
 
 /**
  * @description
@@ -23,38 +32,54 @@ import { PartyService } from './party.service';
  * containing guard(s) that manage access, otherwise will
  * redirect to access denied when unauthenticated.
  */
-@Injectable({
-  providedIn: 'root',
-})
-export class PartyResolver implements Resolve<number | null> {
-  public constructor(
-    private router: Router,
-    private partyResource: PartyResource,
-    private partyService: PartyService,
-    private logger: LoggerService
-  ) {}
+export const partyResolver: ResolveFn<number | null> = () => {
+  const router = inject(Router);
+  const discoveryResource = inject(DiscoveryResource);
+  const partyService = inject(PartyService);
+  const logger = inject(LoggerService);
+  const authorizedUserService = inject(AuthorizedUserService);
 
-  public resolve(): Observable<number | null> {
-    return this.partyResource.firstOrCreate().pipe(
-      exhaustMap((response: number) =>
-        of((this.partyService.partyId = response))
-      ),
-      catchError((error: HttpErrorResponse | Error) => {
-        this.logger.error(error.message);
-
-        if (error instanceof HttpErrorResponse && error.status == 409) {
-          // User is an unlinked BC Provider.
-          this.router.navigateByUrl(
-            AuthRoutes.routePath(AuthRoutes.BC_PROVIDER_UPLIFT)
-          );
-        } else if (error instanceof HttpErrorResponse && error.status === 403) {
-          this.router.navigateByUrl(RootRoutes.DENIED);
-        } else {
-          this.router.navigateByUrl(ShellRoutes.SUPPORT_ERROR_PAGE);
-        }
-
+  return discoveryResource.discover().pipe(
+    switchMap((discovery) =>
+      discovery.status === DiscoveryStatus.NewUser
+        ? authorizedUserService.user$.pipe(
+            switchMap((user) => discoveryResource.createParty(user)),
+          )
+        : of(discovery),
+    ),
+    exhaustMap((discovery) => {
+      if (discovery.status === DiscoveryStatus.NewBCProviderError) {
+        router.navigateByUrl(
+          AuthRoutes.routePath(AuthRoutes.BC_PROVIDER_UPLIFT),
+        );
+      }
+      if (discovery.status === DiscoveryStatus.AccountLinkInProgress) {
+        router.navigateByUrl(
+          AuthRoutes.routePath(AuthRoutes.LINK_ACCOUNT_CONFIRM),
+        );
+      }
+      if (linkedAccountErrorStatus.includes(discovery.status)) {
+        router.navigate([AuthRoutes.routePath(AuthRoutes.LINK_ACCOUNT_ERROR)], {
+          queryParams: { status: discovery.status },
+        });
+      }
+      if (!discovery.partyId) {
         return of(null);
-      })
-    );
-  }
-}
+      }
+
+      partyService.partyId = discovery.partyId;
+      return of(discovery.partyId);
+    }),
+    catchError((error: HttpErrorResponse | Error) => {
+      logger.error(error.message);
+
+      if (error instanceof HttpErrorResponse && error.status === 403) {
+        router.navigateByUrl('denied');
+      } else {
+        router.navigateByUrl(ShellRoutes.SUPPORT_ERROR_PAGE);
+      }
+
+      return of(null);
+    }),
+  );
+};

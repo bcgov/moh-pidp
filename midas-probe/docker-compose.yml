@@ -1,0 +1,15 @@
+version: "3.7"
+services:
+    midas-probe:
+        container_name: midas-probe
+        image: midas-probe:latest
+        build:
+            context: .
+            dockerfile: Dockerfile
+        ports:
+            - 8080:8080
+        networks:
+            - midas-probe
+networks:
+    midas-probe:
+        driver: bridge

@@ -4,7 +4,6 @@
 
 // TODO provide !default and allow override in theme to increase reuse without
 //      having to edit specific files only theme variables in isolated file
-$sideNavBackgroundColor: theme-palette(blue);
 $sideNavBorderRight: 0px solid transparent;
 $menuItemContentBorderWidth: 5px;
 $menuItemColor: white;
@@ -35,17 +34,16 @@ $menuListDividerColor: theme-palette(blue);
 }
 
 .mat-sidenav {
-  background-color: $sideNavBackgroundColor;
-  border-right: $sideNavBorderRight;
-
   &.mat-drawer.mat-drawer-side {
     // Reduced by 1 to allow overlays to cover the
     // sidenav to overcome decendent depth
     z-index: 1;
+    border-right: $sideNavBorderRight;
   }
 
-  .mat-list-item {
-    .mat-list-item-content {
+  .mat-mdc-list-item {
+    /*TODO(mdc-migration): The following rule targets internal classes of list that may no longer apply for the MDC version.*/
+    .mdc-list-item__content {
       // Add a border for spacing to prevent the sidenav from jumping
       // if the navigation applies an active border on menu items
       border-right: $menuItemContentBorderWidth solid transparent !important;
@@ -100,8 +98,8 @@ $menuListDividerColor: theme-palette(blue);
     // can be customized to be a different class
     &.ng-active {
       background-color: mix(white, theme-palette(blue), 5%) !important;
-
-      .mat-list-item-content {
+      /*TODO(mdc-migration): The following rule targets internal classes of list that may no longer apply for the MDC version.*/
+      .mdc-list-item__content {
         border-right: $menuItemContentBorderWidth solid
           $menuItemAnchorBorderActiveColor !important;
       }

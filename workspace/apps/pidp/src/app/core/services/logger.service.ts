@@ -6,8 +6,9 @@ import {
   LogParams,
 } from '@bcgov/shared/utils';
 
-import { EnvironmentName } from '../../../environments/environment.model';
 import { APP_CONFIG, AppConfig } from '@app/app.config';
+
+import { EnvironmentName } from '../../../environments/environment.model';
 
 @Injectable({
   providedIn: 'root',

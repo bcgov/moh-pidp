@@ -1,3 +1,4 @@
+import { NgIf } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -5,6 +6,8 @@ import {
   Input,
   QueryList,
 } from '@angular/core';
+import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
 
 import { IconType } from '../icon/icon.component';
 import { CardActionsDirective } from './card-actions.directive';
@@ -16,6 +19,8 @@ import { CardHintDirective } from './card-hint.directive';
   templateUrl: './card.component.html',
   styleUrls: ['./card.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [CardHintDirective, MatCardModule, NgIf, MatIconModule],
 })
 export class CardComponent {
   @Input() public icon?: string;

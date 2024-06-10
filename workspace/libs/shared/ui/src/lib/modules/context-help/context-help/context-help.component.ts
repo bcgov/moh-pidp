@@ -1,3 +1,4 @@
+import { NgIf } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -7,8 +8,14 @@ import {
   Output,
   QueryList,
 } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
 import { ThemePalette } from '@angular/material/core';
-import { MenuPositionX, MenuPositionY } from '@angular/material/menu';
+import { MatIconModule } from '@angular/material/icon';
+import {
+  MatMenuModule,
+  MenuPositionX,
+  MenuPositionY,
+} from '@angular/material/menu';
 
 import { ContextHelpContentDirective } from '../context-help-content.directive';
 import { ContextHelpTitleDirective } from '../context-help-title.directive';
@@ -18,6 +25,8 @@ import { ContextHelpTitleDirective } from '../context-help-title.directive';
   templateUrl: './context-help.component.html',
   styleUrls: ['./context-help.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [MatButtonModule, MatMenuModule, MatIconModule, NgIf],
 })
 export class ContextHelpComponent {
   @Input() public xPosition: MenuPositionX;

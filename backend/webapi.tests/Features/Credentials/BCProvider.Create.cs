@@ -9,6 +9,7 @@ using static Pidp.Features.Credentials.BCProviderCreate;
 using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.HttpClients.BCProvider;
 using Pidp.Infrastructure.HttpClients.Plr;
+using Pidp.Infrastructure.HttpClients.Keycloak;
 using Pidp.Models;
 using Pidp.Models.Lookups;
 using PidpTests.TestingExtensions;
@@ -21,6 +22,7 @@ public class BcProviderCreateTests : InMemoryDbTest
     {
         var expectedPassword = "p4ssw@rD";
         var expectedHpdid = "AnHpdid1123123";
+        var expectedNewUserId = Guid.NewGuid();
         var party = this.TestDb.HasAParty(party =>
         {
             party.FirstName = "partyfirst";
@@ -48,11 +50,18 @@ public class BcProviderCreateTests : InMemoryDbTest
             .Returns(new User { UserPrincipalName = "aname" });
         var plrClient = A.Fake<IPlrClient>()
             .ReturningAStandingsDigest(plrStanding);
-        var handler = this.MockDependenciesFor<CommandHandler>(bcProviderClient, plrClient);
+        UserRepresentation? capturedNewKeycloakUser = null;
+        var keycloakClient = A.Fake<IKeycloakAdministrationClient>();
+        A.CallTo(() => keycloakClient.CreateUser(A<UserRepresentation>._))
+            .Invokes(i => capturedNewKeycloakUser = i.GetArgument<UserRepresentation>(0))
+            .Returns(expectedNewUserId);
+
+        var handler = this.MockDependenciesFor<CommandHandler>(bcProviderClient, plrClient, keycloakClient);
 
         var result = await handler.HandleAsync(new Command { PartyId = party.Id, Password = expectedPassword });
 
         Assert.True(result.IsSuccess);
+
         Assert.NotNull(capturedNewUser);
         Assert.Equal(party.Cpn, capturedNewUser.Cpn);
         Assert.Equal(party.FirstName, capturedNewUser.FirstName);
@@ -63,6 +72,14 @@ public class BcProviderCreateTests : InMemoryDbTest
         Assert.Equal(expectedRnp, capturedNewUser.IsRnp);
         Assert.Equal(party.Email, capturedNewUser.PidpEmail);
         Assert.Equal(expectedPassword, capturedNewUser.Password);
+
+        Assert.NotNull(capturedNewKeycloakUser);
+        Assert.True(capturedNewKeycloakUser.Enabled);
+        Assert.Equal(party.FirstName, capturedNewKeycloakUser.FirstName);
+        Assert.Equal(party.LastName, capturedNewKeycloakUser.LastName);
+
+        Assert.Single(party.Credentials.Where(credential => credential.IdentityProvider == IdentityProviders.BCProvider));
+        Assert.Equal(expectedNewUserId, party.Credentials.Single(credential => credential.IdentityProvider == IdentityProviders.BCProvider).UserId);
     }
 
     public static IEnumerable<object[]> LicenceTestCases()

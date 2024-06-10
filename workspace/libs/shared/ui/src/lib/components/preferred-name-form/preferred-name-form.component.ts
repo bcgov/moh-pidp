@@ -1,10 +1,23 @@
+import { NgFor } from '@angular/common';
 import { Component, Input } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+
+import { TrimDirective } from '../../directives/trim.directive';
 
 @Component({
   selector: 'ui-preferred-name-form',
   templateUrl: './preferred-name-form.component.html',
   styleUrls: ['./preferred-name-form.component.scss'],
+  standalone: true,
+  imports: [
+    ReactiveFormsModule,
+    NgFor,
+    MatFormFieldModule,
+    MatInputModule,
+    TrimDirective,
+  ],
 })
 export class PreferredNameFormComponent {
   /**

@@ -55,7 +55,7 @@ public class HcimAccountTransfer
         private readonly IEmailService emailService;
         private readonly IKeycloakAdministrationClient keycloakClient;
         private readonly ILdapClient ldapClient;
-        private readonly ILogger logger;
+        private readonly ILogger<CommandHandler> logger;
         private readonly PidpDbContext context;
         private readonly string hcimClientId;
 
@@ -83,8 +83,7 @@ public class HcimAccountTransfer
                 .Where(party => party.Id == command.PartyId)
                 .Select(party => new
                 {
-                    AlreadyEnroled = party.AccessRequests.Any(request => request.AccessTypeCode == AccessTypeCode.HcimAccountTransfer
-                        || request.AccessTypeCode == AccessTypeCode.HcimEnrolment),
+                    AlreadyEnroled = party.AccessRequests.Any(request => request.AccessTypeCode == AccessTypeCode.HcimAccountTransfer),
                     DemographicsComplete = party.Email != null && party.Phone != null,
                     UserId = party.PrimaryUserId,
                     party.Email
@@ -94,7 +93,7 @@ public class HcimAccountTransfer
             if (dto.AlreadyEnroled
                 || !dto.DemographicsComplete)
             {
-                this.logger.LogHcimAccountTransferRequestDenied();
+                this.logger.LogAccessRequestDenied();
                 return DomainResult.Failed<Model>();
             }
 
@@ -165,5 +164,5 @@ public class HcimAccountTransfer
 public static partial class HcimAccountTransferLoggingExtensions
 {
     [LoggerMessage(1, LogLevel.Warning, "HCIM Account Transfer Request denied due to the Party Record not meeting all prerequisites.")]
-    public static partial void LogHcimAccountTransferRequestDenied(this ILogger logger);
+    public static partial void LogAccessRequestDenied(this ILogger<HcimAccountTransfer.CommandHandler> logger);
 }

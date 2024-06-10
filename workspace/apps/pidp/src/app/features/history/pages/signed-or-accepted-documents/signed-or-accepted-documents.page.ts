@@ -1,7 +1,20 @@
+import { NgFor } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { map } from 'rxjs';
+
+import {
+  CardSummaryComponent,
+  PageComponent,
+  PageFooterActionDirective,
+  PageFooterComponent,
+  PageHeaderComponent,
+  PageSectionComponent,
+  PageSectionSubheaderComponent,
+  PageSectionSubheaderDescDirective,
+} from '@bcgov/shared/ui';
 
 import { PartyService } from '@app/core/party/party.service';
 import {
@@ -26,6 +39,19 @@ export interface DocumentSection extends IDocumentMetaData {
   selector: 'app-signed-or-accepted-documents',
   templateUrl: './signed-or-accepted-documents.page.html',
   styleUrls: ['./signed-or-accepted-documents.page.scss'],
+  standalone: true,
+  imports: [
+    CardSummaryComponent,
+    MatButtonModule,
+    NgFor,
+    PageComponent,
+    PageFooterActionDirective,
+    PageFooterComponent,
+    PageHeaderComponent,
+    PageSectionComponent,
+    PageSectionSubheaderComponent,
+    PageSectionSubheaderDescDirective,
+  ],
 })
 export class SignedOrAcceptedDocumentsPage implements OnInit {
   public title: string;
@@ -37,7 +63,7 @@ export class SignedOrAcceptedDocumentsPage implements OnInit {
     private partyService: PartyService,
     private resource: SignedOrAcceptedDocumentsResource,
     private documentService: DocumentService,
-    private permissionsService: PermissionsService
+    private permissionsService: PermissionsService,
   ) {
     this.title = route.snapshot.data.title;
     this.documents = [];
@@ -45,7 +71,7 @@ export class SignedOrAcceptedDocumentsPage implements OnInit {
 
   public onViewDocument(documentType: DocumentType): void {
     this.router.navigate([
-      HistoryRoutes.MODULE_PATH,
+      HistoryRoutes.BASE_PATH,
       HistoryRoutes.VIEW_DOCUMENT,
       documentType,
     ]);
@@ -66,8 +92,8 @@ export class SignedOrAcceptedDocumentsPage implements OnInit {
       .pipe(
         map(
           (profileStatus: ProfileStatus | null) =>
-            (this.documents = this.getDocuments(profileStatus))
-        )
+            (this.documents = this.getDocuments(profileStatus)),
+        ),
       )
       .subscribe();
   }

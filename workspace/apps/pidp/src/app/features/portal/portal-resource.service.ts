@@ -15,7 +15,7 @@ export class PortalResource {
 
   public getProfileStatus(partyId: number): Observable<ProfileStatus | null> {
     return this.apiResource
-      .post<ProfileStatus>(`parties/${partyId}/profile-status`, {})
+      .get<ProfileStatus>(`parties/${partyId}/profile-status`)
       .pipe(
         catchError((error: HttpErrorResponse) => {
           if (error.status === HttpStatusCode.NotFound) {
@@ -23,7 +23,7 @@ export class PortalResource {
           }
 
           throw error;
-        })
+        }),
       );
   }
 }

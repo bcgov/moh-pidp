@@ -1,3 +1,4 @@
+import { NgFor, NgSwitch, NgSwitchCase } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -5,17 +6,27 @@ import {
   Input,
   Output,
 } from '@angular/core';
+import { MatListModule } from '@angular/material/list';
 
 import {
   DashboardMenuItem,
   DashboardRouteMenuItem,
 } from '../../models/dashboard-menu-item.model';
+import { DashboardRouteMenuItemComponent } from '../dashboard-route-menu-item/dashboard-route-menu-item.component';
 
 @Component({
   selector: 'ui-dashboard-menu',
   templateUrl: './dashboard-menu.component.html',
   styleUrls: ['./dashboard-menu.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    MatListModule,
+    NgFor,
+    NgSwitch,
+    NgSwitchCase,
+    DashboardRouteMenuItemComponent,
+  ],
 })
 export class DashboardMenuComponent {
   /**
@@ -58,7 +69,7 @@ export class DashboardMenuComponent {
    * Helper to assist with issues with type narrowing in templates.
    */
   public asDashboardRouteMenuItem(
-    menuItem: DashboardMenuItem
+    menuItem: DashboardMenuItem,
   ): DashboardRouteMenuItem {
     return menuItem as DashboardRouteMenuItem;
   }

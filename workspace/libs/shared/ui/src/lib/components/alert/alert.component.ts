@@ -1,3 +1,4 @@
+import { NgIf } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -6,6 +7,9 @@ import {
   QueryList,
 } from '@angular/core';
 
+import { CardActionsDirective } from '../card/card-actions.directive';
+import { CardContentDirective } from '../card/card-content.directive';
+import { CardComponent } from '../card/card.component';
 import { IconType } from '../icon/icon.component';
 import { AlertActionsDirective } from './alert-actions.directive';
 import { AlertContentDirective } from './alert-content.directive';
@@ -17,6 +21,8 @@ export type AlertType = 'success' | 'info' | 'warn' | 'danger' | 'muted';
   templateUrl: './alert.component.html',
   styleUrls: ['./alert.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [CardComponent, NgIf, CardContentDirective, CardActionsDirective],
 })
 export class AlertComponent {
   @Input() public type!: AlertType;

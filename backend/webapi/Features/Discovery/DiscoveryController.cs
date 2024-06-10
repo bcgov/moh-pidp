@@ -1,12 +1,10 @@
 namespace Pidp.Features.Discovery;
 
-using DomainResults.Common;
 using DomainResults.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 using Pidp.Extensions;
-using Pidp.Features.Credentials;
 using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.Services;
 
@@ -18,33 +16,33 @@ public class DiscoveryController : PidpControllerBase
 
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status307TemporaryRedirect)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(StatusCodes.Status409Conflict)]
-    public async Task<ActionResult<int>> Discovery([FromServices] ICommandHandler<Discovery.Command, IDomainResult<int>> handler)
+    public async Task<ActionResult<Discovery.Model>> PartyDiscovery([FromServices] IQueryHandler<Discovery.Query, Discovery.Model> handler)
     {
-        var result = await handler.HandleAsync(new Discovery.Command { User = this.User });
-        if (result.IsSuccess)
-        {
-            return result.ToActionResultOfT();
-        }
-
         var credentialLinkTicket = await this.AuthorizationService.VerifyTokenAsync<Cookies.CredentialLinkTicket.Values>(this.Request.Cookies.GetCredentialLinkTicket());
-        if (credentialLinkTicket != null)
+
+        var result = await handler.HandleAsync(new Discovery.Query { CredentialLinkToken = credentialLinkTicket?.CredentialLinkToken, User = this.User });
+
+        if (result.Status is Discovery.Model.StatusCode.AlreadyLinked
+            or Discovery.Model.StatusCode.CredentialExists
+            or Discovery.Model.StatusCode.AccountLinkingError)
         {
-            return this.RedirectToActionPreserveMethod
-            (
-                nameof(CredentialsController.CreateCredential),
-                nameof(CredentialsController).Replace("Controller", "")
-            );
+            this.Response.Cookies.Append(
+                Cookies.CredentialLinkTicket.Key,
+                string.Empty,
+                new CookieOptions
+                {
+                    Expires = DateTimeOffset.Now.AddDays(-1),
+                    HttpOnly = true
+                });
         }
 
-        if (this.User.GetIdentityProvider() == IdentityProviders.BCProvider)
-        {
-            // BC Provider Users cannot create Parties (they can only link).
-            return this.Conflict();
-        }
-
-        return this.NotFound();
+        return result;
     }
+
+    [HttpGet("{partyId}/destination")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<ActionResult<Destination.Model>> GetDestination([FromServices] IQueryHandler<Destination.Query, Destination.Model> handler,
+                                                                      [FromRoute] Destination.Query query)
+        => await this.AuthorizePartyBeforeHandleAsync(query.PartyId, handler, query)
+            .ToActionResultOfT();
 }

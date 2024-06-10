@@ -85,7 +85,7 @@ public class EndorsementRequestIndexTests : InMemoryDbTest
 
         var results = await handler.HandleAsync(new Query { PartyId = party.Id });
 
-        if (status == EndorsementRequestStatus.Completed)
+        if (status is EndorsementRequestStatus.Completed or EndorsementRequestStatus.Expired)
         {
             Assert.Empty(results);
             return;

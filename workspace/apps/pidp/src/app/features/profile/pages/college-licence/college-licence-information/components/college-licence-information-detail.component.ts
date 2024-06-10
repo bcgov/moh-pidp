@@ -9,6 +9,7 @@ import { Component, Input } from '@angular/core';
     >
   `,
   styles: [''],
+  standalone: true,
 })
 export class CollegeLicenceInformationDetailComponent {
   @Input() public labelText = '';

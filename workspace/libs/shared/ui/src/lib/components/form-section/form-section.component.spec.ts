@@ -7,9 +7,7 @@ describe('FormSectionComponent', () => {
   let fixture: ComponentFixture<FormSectionComponent>;
 
   beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [FormSectionComponent],
-    }).compileComponents();
+    await TestBed.configureTestingModule({}).compileComponents();
   });
 
   beforeEach(() => {

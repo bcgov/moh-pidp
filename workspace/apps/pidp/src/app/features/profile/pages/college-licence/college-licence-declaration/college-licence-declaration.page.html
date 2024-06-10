@@ -1,4 +1,18 @@
 <div class="box" uiPidpInjectViewportCss>
+  <ui-alert
+    *ngIf="licenceDeclarationFailed"
+    type="muted"
+    icon="error_outline"
+    iconType="outlined"
+    heading="Error finding your licence">
+    <ng-container uiAlertContent>
+      <p>
+        Your request to submit your college licence was unsuccessful. Check the
+        college and college licence number and try again.
+      </p>
+    </ng-container>
+  </ui-alert>
+
   <form novalidate [formGroup]="formState.form" (ngSubmit)="onSubmit()">
     <section>
       <h2 class="header">College Licence</h2>
@@ -9,7 +23,7 @@
           class="field-label"
           >College Licence</label
         >
-        <mat-form-field appearance="outline">
+        <mat-form-field>
           <mat-select
             formControlName="collegeCode"
             aria-labelledby="college-licence-declaration-college-licence">
@@ -37,9 +51,7 @@
             >here</a
           >.
         </p>
-        <mat-form-field
-          *ngIf="formState.collegeCode.value"
-          appearance="outline">
+        <mat-form-field *ngIf="formState.collegeCode.value">
           <input
             matInput
             formControlName="licenceNumber"

@@ -8,6 +8,7 @@ import { PidpViewport, ViewportService } from '../services';
  */
 @Directive({
   selector: '[uiPidpInjectViewportCss]',
+  standalone: true,
 })
 export class InjectViewportCssClassDirective {
   @HostBinding('class.viewport-xsmall') public viewportXsClass = false;
@@ -18,7 +19,7 @@ export class InjectViewportCssClassDirective {
 
   public constructor(viewportService: ViewportService) {
     viewportService.viewportBroadcast$.subscribe((viewport) =>
-      this.onViewportChange(viewport)
+      this.onViewportChange(viewport),
     );
   }
 

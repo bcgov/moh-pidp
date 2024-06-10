@@ -32,7 +32,7 @@ public class PrescriptionRefillEforms
         private readonly IClock clock;
         private readonly IEmailService emailService;
         private readonly IKeycloakAdministrationClient keycloakClient;
-        private readonly ILogger logger;
+        private readonly ILogger<CommandHandler> logger;
         private readonly IPlrClient plrClient;
         private readonly PidpDbContext context;
 
@@ -61,7 +61,7 @@ public class PrescriptionRefillEforms
                     AlreadyEnroled = party.AccessRequests.Any(request => request.AccessTypeCode == AccessTypeCode.PrescriptionRefillEforms),
                     UserId = party.PrimaryUserId,
                     party.Email,
-                    party.FirstName,
+                    party.DisplayFirstName,
                     party.Cpn,
                 })
                 .SingleAsync();
@@ -72,7 +72,7 @@ public class PrescriptionRefillEforms
                     .With(AllowedIdentifierTypes)
                     .HasGoodStanding)
             {
-                this.logger.LogPrescriptionRefillEformsAccessRequestDenied();
+                this.logger.LogAccessRequestDenied();
                 return DomainResult.Failed();
             }
 
@@ -90,7 +90,7 @@ public class PrescriptionRefillEforms
 
             await this.context.SaveChangesAsync();
 
-            await this.SendConfirmationEmailAsync(dto.Email, dto.FirstName);
+            await this.SendConfirmationEmailAsync(dto.Email, dto.DisplayFirstName);
 
             return DomainResult.Success();
         }
@@ -112,5 +112,5 @@ public class PrescriptionRefillEforms
 public static partial class PrescriptionRefillEformsLoggingExtensions
 {
     [LoggerMessage(1, LogLevel.Warning, "Prescription Refill eForm for Pharmacists denied due to the Party Record not meeting all prerequisites.")]
-    public static partial void LogPrescriptionRefillEformsAccessRequestDenied(this ILogger logger);
+    public static partial void LogAccessRequestDenied(this ILogger<PrescriptionRefillEforms.CommandHandler> logger);
 }

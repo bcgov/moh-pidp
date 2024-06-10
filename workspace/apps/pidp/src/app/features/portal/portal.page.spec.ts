@@ -1,17 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { HttpClient } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 import { ActivatedRoute, Router, convertToParamMap } from '@angular/router';
 
-import {
-  randEmail,
-  randFirstName,
-  randFullName,
-  randLastName,
-  randNumber,
-  randPhoneNumber,
-  randText,
-  randTextRange,
-} from '@ngneat/falso';
+import { randNumber, randText, randTextRange } from '@ngneat/falso';
+import { MockProfileStatus } from '@test/mock-profile-status';
 import {
   Spy,
   createFunctionSpy,
@@ -21,14 +14,15 @@ import {
 import { KeycloakService } from 'keycloak-angular';
 
 import { APP_CONFIG, APP_DI_CONFIG } from '@app/app.config';
+import { DiscoveryResource } from '@app/core/party/discovery-resource.service';
 import { PartyService } from '@app/core/party/party.service';
 import { ToastService } from '@app/core/services/toast.service';
 
 import { BcProviderEditResource } from '../access/pages/bc-provider-edit/bc-provider-edit-resource.service';
 import { BcProviderEditInitialStateModel } from '../access/pages/bc-provider-edit/bc-provider-edit.page';
+import { AuthorizedUserService } from '../auth/services/authorized-user.service';
 import { EndorsementsResource } from '../organization-info/pages/endorsements/endorsements-resource.service';
 import { AlertCode } from './enums/alert-code.enum';
-import { StatusCode } from './enums/status-code.enum';
 import { ProfileStatus } from './models/profile-status.model';
 import { PortalResource } from './portal-resource.service';
 import { PortalPage } from './portal.page';
@@ -88,6 +82,9 @@ describe('PortalPage', () => {
         provideAutoSpy(EndorsementsResource),
         provideAutoSpy(KeycloakService),
         provideAutoSpy(ToastService),
+        provideAutoSpy(AuthorizedUserService),
+        provideAutoSpy(HttpClient),
+        provideAutoSpy(DiscoveryResource),
       ],
     });
 
@@ -99,53 +96,8 @@ describe('PortalPage', () => {
     bcProviderResourceSpy = TestBed.inject<any>(BcProviderEditResource);
     router = TestBed.inject(Router);
 
-    mockProfileStatusResponse = {
-      alerts: [AlertCode.TRANSIENT_ERROR],
-      status: {
-        dashboardInfo: {
-          fullName: randFullName(),
-          collegeCode: randNumber(),
-          statusCode: StatusCode.AVAILABLE,
-        },
-        demographics: {
-          firstName: randFirstName(),
-          lastName: randLastName(),
-          email: randEmail(),
-          phone: randPhoneNumber(),
-          statusCode: StatusCode.AVAILABLE,
-        },
-        collegeCertification: {
-          hasCpn: false,
-          licenceDeclared: false,
-          statusCode: StatusCode.AVAILABLE,
-        },
-        administratorInfo: {
-          email: randEmail(),
-          statusCode: StatusCode.AVAILABLE,
-        },
-        organizationDetails: { statusCode: StatusCode.AVAILABLE },
-        facilityDetails: { statusCode: StatusCode.AVAILABLE },
-        endorsements: { statusCode: StatusCode.AVAILABLE },
-        userAccessAgreement: { statusCode: StatusCode.AVAILABLE },
-        saEforms: {
-          statusCode: StatusCode.AVAILABLE,
-          incorrectLicenceType: false,
-        },
-        prescriptionRefillEforms: { statusCode: StatusCode.AVAILABLE },
-        'prescription-refill-eforms': { statusCode: StatusCode.AVAILABLE },
-        bcProvider: { statusCode: StatusCode.AVAILABLE },
-        hcimAccountTransfer: { statusCode: StatusCode.AVAILABLE },
-        hcimEnrolment: { statusCode: StatusCode.AVAILABLE },
-        driverFitness: { statusCode: StatusCode.AVAILABLE },
-        msTeamsPrivacyOfficer: { statusCode: StatusCode.AVAILABLE },
-        msTeamsClinicMember: { statusCode: StatusCode.AVAILABLE },
-        providerReportingPortal: { statusCode: StatusCode.AVAILABLE },
-        'provider-reporting-portal': { statusCode: StatusCode.AVAILABLE },
-        sitePrivacySecurityChecklist: { statusCode: StatusCode.AVAILABLE },
-        complianceTraining: { statusCode: StatusCode.AVAILABLE },
-        primaryCareRostering: { statusCode: StatusCode.AVAILABLE },
-      },
-    };
+    mockProfileStatusResponse = MockProfileStatus.get();
+    mockProfileStatusResponse.alerts = [AlertCode.TRANSIENT_ERROR];
 
     mockBcProviderEditInitialStateResponse = {
       bcProviderId: 'Id',
@@ -158,10 +110,10 @@ describe('PortalPage', () => {
       partyServiceSpy.accessorSpies.getters.partyId.mockReturnValue(partyId);
       portalResourceSpy.getProfileStatus.nextWith(mockProfileStatusResponse);
       bcProviderResourceSpy.get.nextWith(
-        mockBcProviderEditInitialStateResponse
+        mockBcProviderEditInitialStateResponse,
       );
       portalServiceSpy.accessorSpies.getters.alerts.mockReturnValue(
-        mockProfileStatusResponse.alerts
+        mockProfileStatusResponse.alerts,
       );
 
       when('the component is initialized', () => {
@@ -171,10 +123,10 @@ describe('PortalPage', () => {
         then('a request should be made to get the profile status', () => {
           expect(portalResourceSpy.getProfileStatus).toHaveBeenCalledTimes(1);
           expect(portalResourceSpy.getProfileStatus).toHaveBeenCalledWith(
-            partyId
+            partyId,
           );
           expect(portalServiceSpy.updateState).toHaveBeenCalledWith(
-            mockProfileStatusResponse
+            mockProfileStatusResponse,
           );
           expect(component.alerts.length).toEqual(1);
         });
@@ -188,7 +140,7 @@ describe('PortalPage', () => {
       partyServiceSpy.accessorSpies.getters.partyId.mockReturnValue(partyId);
       portalResourceSpy.getProfileStatus.nextWith(mockProfileStatusResponse);
       bcProviderResourceSpy.get.nextWith(
-        mockBcProviderEditInitialStateResponse
+        mockBcProviderEditInitialStateResponse,
       );
       component.ngOnInit();
 
@@ -211,7 +163,7 @@ describe('PortalPage', () => {
       partyServiceSpy.accessorSpies.getters.partyId.mockReturnValue(partyId);
       portalResourceSpy.getProfileStatus.nextWith(mockProfileStatusResponse);
       bcProviderResourceSpy.get.nextWith(
-        mockBcProviderEditInitialStateResponse
+        mockBcProviderEditInitialStateResponse,
       );
       component.ngOnInit();
 

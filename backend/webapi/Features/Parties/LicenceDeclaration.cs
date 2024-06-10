@@ -102,18 +102,11 @@ public class LicenceDeclaration
             party.LicenceDeclaration.CollegeCode = command.CollegeCode;
             party.LicenceDeclaration.LicenceNumber = command.LicenceNumber;
 
-            if (command.CollegeCode.HasValue && command.LicenceNumber != null && party.Birthdate.HasValue)
-            {
-                party.Cpn = await this.plrClient.FindCpnAsync(command.CollegeCode.Value, command.LicenceNumber, party.Birthdate!.Value);
+            await party.HandleLicenceSearch(this.plrClient, this.context);
 
-                if (party.Cpn == null)
-                {
-                    party.DomainEvents.Add(new PlrCpnLookupNotFound(party.Id));
-                }
-                else
-                {
-                    party.DomainEvents.Add(new PlrCpnLookupFound(party.Id, party.PrimaryUserId, party.Cpn));
-                }
+            if (party.Cpn == null)
+            {
+                party.DomainEvents.Add(new PlrCpnLookupNotFound(party.Id));
             }
 
             await this.context.SaveChangesAsync();

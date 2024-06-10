@@ -28,6 +28,20 @@ public interface IKeycloakAdministrationClient
     Task<bool> AssignRealmRole(Guid userId, string roleName);
 
     /// <summary>
+    /// Creates a new User in Keycloak. Username must be unique.
+    /// Returns the User's UserId if successful.
+    /// </summary>
+    /// <param name="userRep"></param>
+    Task<Guid?> CreateUser(UserRepresentation userRep);
+
+    /// <summary>
+    /// Finds a User by Username.
+    /// Returns null on a failure or if no User is found.
+    /// </summary>
+    /// <param name="username"></param>
+    Task<UserRepresentation?> FindUser(string username);
+
+    /// <summary>
     /// Gets the Keycloak Client representation by ClientId.
     /// Returns null if unsuccessful.
     /// </summary>
@@ -86,13 +100,4 @@ public interface IKeycloakAdministrationClient
     /// <param name="userId"></param>
     /// <param name="updateAction"></param>
     Task<bool> UpdateUser(Guid userId, Action<UserRepresentation> updateAction);
-
-    /// <summary>
-    /// Fetches the User and updates their CPN with the provided value. Does not update if the provided cpn is null.
-    /// A convenience method for UpdateUser.
-    /// Returns true if the operation was successful.
-    /// </summary>
-    /// <param name="userId"></param>
-    /// <param name="cpn"></param>
-    Task<bool> UpdateUserCpn(Guid userId, string? cpn);
 }

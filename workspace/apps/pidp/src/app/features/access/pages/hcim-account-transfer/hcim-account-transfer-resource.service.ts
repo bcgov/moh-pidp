@@ -29,7 +29,7 @@ export interface HcimAccountTransferResponse {
 export class HcimAccountTransferResource {
   public constructor(
     protected apiResource: ApiHttpClient,
-    private portalResource: PortalResource
+    private portalResource: PortalResource,
   ) {}
 
   public getProfileStatus(partyId: number): Observable<ProfileStatus | null> {
@@ -38,12 +38,12 @@ export class HcimAccountTransferResource {
 
   public requestAccess(
     partyId: number,
-    ldapCredentials: HcimAccountTransfer
+    ldapCredentials: HcimAccountTransfer,
   ): Observable<HcimAccountTransferResponse> {
     return this.apiResource
       .post<NoContent>(
         `parties/${partyId}/access-requests/hcim-account-transfer`,
-        ldapCredentials
+        ldapCredentials,
       )
       .pipe(
         map(() => ({
@@ -67,7 +67,7 @@ export class HcimAccountTransferResource {
           }
 
           return throwError(() => error);
-        })
+        }),
       );
   }
 }

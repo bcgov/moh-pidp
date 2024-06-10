@@ -14,19 +14,13 @@ public class MappingProfile : Profile
     {
         this.CreateProjection<Party, Demographics.Command>();
         this.CreateProjection<Party, ProfileStatus.ProfileData>()
+            .ForMember(dest => dest.CollegeCode, opt => opt.MapFrom(src => src.LicenceDeclaration!.CollegeCode))
             .ForMember(dest => dest.CompletedEnrolments, opt => opt.MapFrom(src => src.AccessRequests.Select(x => x.AccessTypeCode)))
+            .ForMember(dest => dest.DemographicsComplete, opt => opt.MapFrom(src => src.Email != null && src.Phone != null))
             .ForMember(dest => dest.HasBCProviderCredential, opt => opt.MapFrom(src => src.Credentials.Any(x => x.IdentityProvider == IdentityProviders.BCProvider)))
-            .ForMember(dest => dest.OrganizationDetailEntered, opt => opt.MapFrom(src => src.OrgainizationDetail != null))
-            .ForMember(dest => dest.EndorsementPlrStanding, opt => opt.Ignore())
-            .ForMember(dest => dest.PartyPlrStanding, opt => opt.Ignore());
-        this.CreateProjection<Party, WorkSetting.Command>()
-            .ForMember(dest => dest.PhysicalAddress, opt => opt.MapFrom(src => src.Facility!.PhysicalAddress));
+            .ForMember(dest => dest.LicenceDeclarationComplete, opt => opt.MapFrom(src => src.LicenceDeclaration != null));
 
-        this.CreateProjection<FacilityAddress, WorkSetting.Command.Address>();
-        this.CreateProjection<PartyAccessAdministrator, AccessAdministrator.Command>();
         this.CreateProjection<PartyLicenceDeclaration, LicenceDeclaration.Command>();
-        this.CreateProjection<PartyLicenceDeclaration, ProfileStatus.ProfileData.LicenceDeclarationDto>();
-        this.CreateProjection<PartyOrgainizationDetail, OrganizationDetails.Command>();
 
         this.CreateMap<PlrRecord, CollegeCertifications.Model>()
             .ForMember(dest => dest.IsGoodStanding, opt => opt.MapFrom(src => src.IsGoodStanding()))

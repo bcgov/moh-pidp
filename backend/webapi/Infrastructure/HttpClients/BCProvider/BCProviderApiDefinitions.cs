@@ -1,5 +1,7 @@
 namespace Pidp.Infrastructure.HttpClients.BCProvider;
 
+using Pidp.Infrastructure.HttpClients.Plr;
+
 public class NewUserRepresentation
 {
     public string? Cpn { get; set; }
@@ -21,6 +23,8 @@ public class NewUserRepresentation
 /// </summary>
 public class BCProviderAttributes
 {
+    public static IdentifierType[] EndorserDataEligibleIdentifierTypes => new[] { IdentifierType.PhysiciansAndSurgeons, IdentifierType.Nurse, IdentifierType.Midwife };
+
     private readonly string extensionNamePrefix;
     private readonly Dictionary<string, object> attributes = new();
 
@@ -33,7 +37,7 @@ public class BCProviderAttributes
 
     public static BCProviderAttributes FromNewUser(string clientId, NewUserRepresentation representation)
     {
-        var attributes = new BCProviderAttributes(clientId)
+        var newAttributes = new BCProviderAttributes(clientId)
             .SetEndorserData(representation.EndorserData)
             .SetHpdid(representation.Hpdid)
             .SetIsMd(representation.IsMd)
@@ -45,10 +49,10 @@ public class BCProviderAttributes
 
         if (!string.IsNullOrWhiteSpace(representation.Cpn))
         {
-            attributes.SetCpn(representation.Cpn);
+            newAttributes.SetCpn(representation.Cpn);
         }
 
-        return attributes;
+        return newAttributes;
     }
 
     public Dictionary<string, object> AsAdditionalData() => this.attributes;

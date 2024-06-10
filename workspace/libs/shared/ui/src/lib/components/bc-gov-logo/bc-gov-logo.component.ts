@@ -18,6 +18,7 @@ interface SvgConfig {
   templateUrl: './bc-gov-logo.component.svg',
   styleUrls: ['./bc-gov-logo.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
 })
 export class BcGovLogoComponent implements OnInit {
   @Input() public size?: svgSize;
@@ -62,7 +63,7 @@ export class BcGovLogoComponent implements OnInit {
 
   private getDimensions(
     size: svgSize,
-    viewbox: number[]
+    viewbox: number[],
   ): Pick<SvgConfig, 'width' | 'height'> {
     return {
       width: `${viewbox[2] * this.scale[size]}px`,

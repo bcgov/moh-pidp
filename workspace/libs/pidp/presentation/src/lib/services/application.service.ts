@@ -11,7 +11,7 @@ export class ApplicationService {
   public constructor(private stateService: AppStateService) {}
   public setDashboardTitleText(titleText: string, subtitleText: string): void {
     const oldState = this.stateService.getNamedState<DashboardStateModel>(
-      PidpStateName.dashboard
+      PidpStateName.dashboard,
     );
     const newState: DashboardStateModel = {
       ...oldState,

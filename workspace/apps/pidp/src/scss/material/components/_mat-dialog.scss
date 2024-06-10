@@ -4,6 +4,17 @@
 // MATERIAL DIALOG
 //
 
-.mat-dialog-container {
-  color: palette.theme-palette(blue);
+.mat-mdc-dialog-container {
+  & .mat-mdc-dialog-title.mdc-dialog__title {
+    padding: 24px 24px 0;
+  }
+
+  & .mat-mdc-dialog-title.mdc-dialog__title,
+  .mat-mdc-dialog-content.mdc-dialog__content {
+    color: palette.theme-palette(blue);
+  }
+
+  & .mat-mdc-dialog-actions.mdc-dialog__actions {
+    padding: 0 24px 16px;
+  }
 }

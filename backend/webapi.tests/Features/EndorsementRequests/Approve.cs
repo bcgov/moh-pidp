@@ -6,6 +6,7 @@ using Xunit;
 
 using Pidp.Features.EndorsementRequests;
 using Pidp.Infrastructure.HttpClients.Keycloak;
+using Pidp.Infrastructure.HttpClients.Mail;
 using Pidp.Infrastructure.HttpClients.Plr;
 using Pidp.Models;
 
@@ -46,7 +47,8 @@ public class EndorsementApproveTests : InMemoryDbTest
         {
             RequestingPartyId = RequestingPartyId,
             ReceivingPartyId = ReceivingPartyId,
-            Status = status
+            Status = status,
+            RecipientEmail = "name@example.com"
         });
         var expected = status == EndorsementRequestStatus.Approved; // Requester can only approve ER after approval by reciever.
         var handler = this.MockDependenciesFor<Approve.CommandHandler>();
@@ -107,18 +109,19 @@ public class EndorsementApproveTests : InMemoryDbTest
         foreach (var partyId in licencedParties)
         {
             var party = this.TestDb.Parties.Single(party => party.Id == partyId);
-            party.Cpn = party.FirstName;
+            party.Cpn = "cpn";
         }
         var request = this.TestDb.Has(new EndorsementRequest
         {
             RequestingPartyId = RequestingPartyId,
             ReceivingPartyId = ReceivingPartyId,
-            Status = EndorsementRequestStatus.Approved
+            Status = EndorsementRequestStatus.Approved,
+            RecipientEmail = "name@example.com"
         });
         var keycloakClient = A.Fake<IKeycloakAdministrationClient>()
             .ReturningTrueWhenAssigingClientRoles();
         var plrClient = A.Fake<IPlrClient>()
-            .ReturningAStandingsDigest(true);
+            .ReturningAStandingsDigestWhenCalledWithCpn("cpn", true);
         var handler = this.MockDependenciesFor<Approve.CommandHandler>(keycloakClient, plrClient);
 
         var result = await handler.HandleAsync(new Approve.Command { EndorsementRequestId = request.Id, PartyId = RequestingPartyId });
@@ -136,6 +139,25 @@ public class EndorsementApproveTests : InMemoryDbTest
                 .Single();
             A.CallTo(() => keycloakClient.AssignAccessRoles(expectedUserId, MohKeycloakEnrolment.MoaLicenceStatus)).MustHaveHappened();
         }
+    }
+
+    [Fact]
+    public async void Approve_AsReceivingParty_Send_Email_to_RequestingParty()
+    {
+        var request = this.TestDb.Has(new EndorsementRequest
+        {
+            RequestingPartyId = RequestingPartyId,
+            ReceivingPartyId = ReceivingPartyId,
+            Status = EndorsementRequestStatus.Received,
+            RecipientEmail = "Email1@email.com"
+        });
+
+        var emailService = AMock.EmailService();
+        var handler = this.MockDependenciesFor<Approve.CommandHandler>(emailService);
+
+        var result = await handler.HandleAsync(new Approve.Command { EndorsementRequestId = request.Id, PartyId = ReceivingPartyId });
+        Assert.True(result.IsSuccess);
+        A.CallTo(() => emailService.SendAsync(An<Email>._)).MustHaveHappenedOnceExactly();
     }
 
     public static IEnumerable<object?[]> MoaRoleTestCases()

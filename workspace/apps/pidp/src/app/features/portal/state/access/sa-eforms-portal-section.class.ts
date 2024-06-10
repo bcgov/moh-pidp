@@ -21,7 +21,7 @@ export class SaEformsPortalSection implements IPortalSection {
 
   public constructor(
     private profileStatus: ProfileStatus,
-    private router: Router
+    private router: Router,
   ) {
     this.key = 'saEforms';
     this.heading = 'Special Authority eForms';

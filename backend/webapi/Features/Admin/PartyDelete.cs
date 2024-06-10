@@ -3,17 +3,21 @@ namespace Pidp.Features.Admin;
 using Microsoft.EntityFrameworkCore;
 
 using Pidp.Data;
+using Pidp.Extensions;
 using Pidp.Infrastructure.HttpClients.Keycloak;
 using Pidp.Models;
 
 public class PartyDelete
 {
-    public class Command : ICommand { }
+    public class Command : ICommand
+    {
+        public int? PartyId { get; set; }
+    }
 
     public class CommandHandler : ICommandHandler<Command>
     {
         private readonly IKeycloakAdministrationClient client;
-        private readonly ILogger logger;
+        private readonly ILogger<CommandHandler> logger;
         private readonly PidpDbContext context;
 
         public CommandHandler(
@@ -31,6 +35,8 @@ public class PartyDelete
             var parties = await this.context.Parties
                 .Include(party => party.Credentials)
                 .Include(party => party.AccessRequests)
+                .If(command.PartyId.HasValue, q => q
+                    .Where(party => party.Id == command.PartyId))
                 .ToListAsync();
 
             if (!parties.Any())
@@ -56,9 +62,9 @@ public class PartyDelete
     {
         private readonly Dictionary<MohKeycloakEnrolment, IEnumerable<Role>> roleCache;
         private readonly IKeycloakAdministrationClient client;
-        private readonly ILogger logger;
+        private readonly ILogger<CommandHandler> logger;
 
-        public RoleRemover(IKeycloakAdministrationClient client, ILogger logger)
+        public RoleRemover(IKeycloakAdministrationClient client, ILogger<CommandHandler> logger)
         {
             this.client = client;
             this.logger = logger;
@@ -131,8 +137,8 @@ public class PartyDelete
 public static partial class PartyDeleteLoggingExtensions
 {
     [LoggerMessage(1, LogLevel.Error, "Could not remove {roleName} from {userId}.")]
-    public static partial void LogRemoveFailure(this ILogger logger, string roleName, Guid userId);
+    public static partial void LogRemoveFailure(this ILogger<PartyDelete.CommandHandler> logger, string roleName, Guid userId);
 
     [LoggerMessage(2, LogLevel.Error, "Could not find a Client Role with name {roleName} in Client {clientId}.")]
-    public static partial void LogClientRoleNotFound(this ILogger logger, string roleName, string clientId);
+    public static partial void LogClientRoleNotFound(this ILogger<PartyDelete.CommandHandler> logger, string roleName, string clientId);
 }

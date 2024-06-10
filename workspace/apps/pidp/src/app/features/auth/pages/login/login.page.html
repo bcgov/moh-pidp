@@ -1,56 +1,47 @@
-<ui-layout-header-footer>
+<ui-layout-header-footer [emailSupport]="providerIdentitySupport">
   <div class="main-container" uiPidpInjectViewportCss>
-    <span page-v2-title></span>
     <div *ngIf="!isAdminLogin; else admin" class="content-container">
-      <header *ngIf="isMobileTitleVisible" class="title-container">
-        <h1 class="title">
-          <span class="title-text">OneHealthID Service</span>
-        </h1>
-      </header>
-      <header *ngIf="isWebTitleVisible" class="title-container">
-        <div class="title-content-container">
-          <h1 class="title">
-            <span class="title-text">OneHealthID Service</span>
-          </h1>
-          <section class="title-site-description">
-            <p>
-              A suite of identity-related products and services for healthcare
-              providers in BC.
-            </p>
-          </section>
-          <section class="title-bcgov">
-            <div class="title-bcgov-logo">
-              <picture>
-                <source
-                  type="image/webp"
-                  srcset="/assets/images/BC_HLTH_H_RGB_rev.webp" />
-                <source
-                  type="image/png"
-                  srcset="/assets/images/BC_HLTH_H_RGB_rev.png" />
-                <img
-                  title="BC Government Logo"
-                  loading="lazy"
-                  aria-label="BC Ministry of Health Logo" />
-              </picture>
-            </div>
-          </section>
-        </div>
-      </header>
+      <header *ngIf="isMobileTitleVisible" class="title-container"></header>
+
+      <div class="background-image-container">
+        <img
+          ngSrc="/assets/images/login-image-giant-1920x1280.jpg"
+          priority
+          fill />
+      </div>
+
       <section class="welcome-section">
-        <div class="welcome-container">
-          <div *ngIf="isPidpLogoVisible" class="welcome-pidp-logo">
-            <img
-              src="/assets/images/pidp-logo-blue.svg"
-              title="PIDP Logo"
-              loading="lazy"
-              aria-label="PIDP Logo" />
+        <div class="welcome-section-container">
+          <div class="welcome-container">
+            <div class="title-content-container">
+              <h1 class="title">
+                <span class="title-text">
+                  <strong>OneHealthID Service</strong>
+                </span>
+              </h1>
+              <section class="title-site-description">
+                <p>
+                  A suite of identity-related products and services for
+                  healthcare providers in BC.
+                </p>
+              </section>
+            </div>
+            <ng-container *ngTemplateOutlet="login"></ng-container>
           </div>
-          <ng-container *ngTemplateOutlet="login"></ng-container>
+          <div class="links">
+            <app-need-help
+              customClass="need-help-large"
+              [showIcon]="true"></app-need-help>
+            <div class="about">
+              <a
+                uiAnchor
+                href="https://www2.gov.bc.ca/gov/content/health/practitioner-professional-resources/onehealthid-service">
+                About, FAQs, Guides
+                <i class="material-icons-outlined">arrow_circle_right</i>
+              </a>
+            </div>
+          </div>
         </div>
-      </section>
-      <section class="systems-section">
-        <h1 class="systems-title">Systems Available</h1>
-        <ng-container *ngTemplateOutlet="systems"></ng-container>
       </section>
     </div>
   </div>
@@ -58,165 +49,67 @@
 
 <ng-template #login>
   <div class="login-container">
-    <div class="login-content">
+    <div class="login-container-app-button">
       <button
         class="login-app-button"
         mat-stroked-button
         (click)="onLogin(IdentityProvider.BCSC)">
         Login with the BC Services Card app
       </button>
+    </div>
+    <div class="login-content">
       <div class="login-setup">
         <small>
-          Don't have an account?
+          Need an account?
           <a uiAnchor [href]="bcscMobileSetupUrl">Set up</a>
         </small>
       </div>
 
       <div class="login-continue-with">
-        <div>
+        <div class="login-continue-with-container">
           <span class="login-continue-with-text">Other login options</span>
           <button
             class="other-login-button"
             mat-icon-button
             (click)="onShowOtherLoginOptions()">
-            <i class="material-icons">keyboard_double_arrow_down</i>
+            <i class="material-icons-outlined">{{otherLoginOptionsIcon}}</i>
           </button>
-        </div>
-        <div
-          class="other-login-panel"
-          [@expandAnimation]="showOtherLoginOptions">
-          <ng-container *ngIf="showOtherLoginOptions">
-            <div class="login-secondary-container">
-              <button
-                class="login-button-secondary"
-                mat-stroked-button
-                (click)="onLogin(IdentityProvider.PHSA)">
-                Health Authority ID
-              </button>
-              <button
-                class="login-button-secondary"
-                mat-stroked-button
-                (click)="onLogin(IdentityProvider.BC_PROVIDER)">
-                BC Provider
-              </button>
-            </div>
-            <div class="login-with-idir">
-              <small
-                >Do you have a IDIR account?
-                <a
-                  href="javascript:"
-                  role="button"
-                  (click)="onLogin(IdentityProvider.IDIR)"
-                  >Login</a
-                ></small
-              >
-            </div>
-          </ng-container>
         </div>
       </div>
     </div>
+
+    <ui-expansion-panel [expanded]="showOtherLoginOptions">
+      <div class="other-login-panel">
+        <div class="login-secondary-container">
+          <button
+            class="login-button-secondary"
+            mat-stroked-button
+            (click)="onLogin(IdentityProvider.PHSA)">
+            Health Authority ID
+          </button>
+          <button
+            class="login-button-secondary"
+            mat-stroked-button
+            (click)="onLogin(IdentityProvider.BC_PROVIDER)">
+            BC Provider
+          </button>
+        </div>
+        <div class="login-with-idir">
+          <small>
+            Do you have a IDIR account?
+            <a
+              href="javascript:"
+              role="button"
+              (click)="onLogin(IdentityProvider.IDIR)">
+              Login
+            </a>
+          </small>
+        </div>
+      </div>
+    </ui-expansion-panel>
   </div>
 </ng-template>
-<ng-template #systems>
-  <div class="systems-container">
-    <div class="systems-content">
-      <app-auth-system-card
-        class="systems-card"
-        titleText="Special Authority eForms"
-        imageTitleText=""
-        headerColor="white"
-        [webpImageUrls]="[
-          '/assets/images/login-laptop-mobile-1200x200.webp',
-          '/assets/images/login-laptop-small-196x101.webp',
-          '/assets/images/login-laptop-medium-300x155.webp',
-          '/assets/images/login-laptop-desktop-386x200.webp'
-        ]"
-        [jpegImageUrls]="[
-          '/assets/images/login-laptop-mobile-1200x200.jpg',
-          '/assets/images/login-laptop-small-196x101.jpg',
-          '/assets/images/login-laptop-medium-300x155.jpg',
-          '/assets/images/login-laptop-desktop-386x200.jpg'
-        ]">
-        <ng-container *ngTemplateOutlet="pharmacareEforms"></ng-container>
-      </app-auth-system-card>
-      <app-auth-system-card
-        class="systems-card"
-        titleText="HCIMWeb Account Transfer"
-        imageTitleText=""
-        headerColor="white"
-        [webpImageUrls]="[
-          '/assets/images/login-people-mobile-1200x200.webp',
-          '/assets/images/login-people-small-196x101.webp',
-          '/assets/images/login-people-medium-300x155.webp',
-          '/assets/images/login-people-desktop-386x200.webp'
-        ]"
-        [jpegImageUrls]="[
-          '/assets/images/login-people-mobile-1200x200.jpg',
-          '/assets/images/login-people-small-196x101.jpg',
-          '/assets/images/login-people-medium-300x155.jpg',
-          '/assets/images/login-people-desktop-386x200.jpg'
-        ]">
-        <ng-container *ngTemplateOutlet="hcimWeb"></ng-container>
-      </app-auth-system-card>
-      <app-auth-system-card
-        class="systems-card"
-        titleText="Provincial Attachment System"
-        imageTitleText=""
-        headerColor="white"
-        [webpImageUrls]="[
-          '/assets/images/login-rostering-mobile-1200x200.webp',
-          '/assets/images/login-rostering-small-196x101.webp',
-          '/assets/images/login-rostering-medium-300x155.webp',
-          '/assets/images/login-rostering-desktop-386x200.webp'
-        ]"
-        [jpegImageUrls]="[
-          '/assets/images/login-rostering-mobile-1200x200.jpg',
-          '/assets/images/login-rostering-small-196x101.jpg',
-          '/assets/images/login-rostering-medium-300x155.jpg',
-          '/assets/images/login-rostering-desktop-386x200.jpg'
-        ]">
-        <ng-container *ngTemplateOutlet="rostering"></ng-container>
-      </app-auth-system-card>
-    </div>
-  </div>
-</ng-template>
-<ng-template #pharmacareEforms>
-  <div class="card-content card-pharmacare">
-    <p>
-      B.C. healthcare professionals can enrol for access to PharmaCare's Special
-      Authority eForms application.
-    </p>
-    <p>
-      You need to set up the
-      <a uiAnchor [attr.href]="bcscMobileSetupUrl"> BC Services Card app </a>
-      to enrol. You will use the app each time you access the eForms
-      application. If you are not eligible for the BC Services Card, or cannot
-      set up the app, you can
-      <a uiAnchor [attr.href]="specialAuthorityUrl">
-        submit SA requests by fax</a
-      >.
-    </p>
-  </div>
-</ng-template>
-<ng-template #hcimWeb>
-  <div class="card-content card-hcimweb">
-    <p>For existing users of the HCIMWeb Application.</p>
-    <div class="hcimweb-arrows">
-      <mat-icon>swap_horiz</mat-icon>
-    </div>
-  </div>
-</ng-template>
-<ng-template #rostering>
-  <div class="card-content card-rostering">
-    <p>
-      Provincial Attachment System is a process by which patients register with
-      a family practice, family physician, or team. Provincial Attachment System
-      facilitates accountability by defining the population for which the
-      primary care organization or provider is responsible and facilitates an
-      ongoing relationship between the patient and provider.
-    </p>
-  </div>
-</ng-template>
+
 <ng-template #admin>
   <div class="admin-container">
     <img

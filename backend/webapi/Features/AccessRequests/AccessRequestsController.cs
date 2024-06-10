@@ -2,15 +2,15 @@ namespace Pidp.Features.AccessRequests;
 
 using DomainResults.Common;
 using DomainResults.Mvc;
+using HybridModelBinding;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Globalization;
 
 using Pidp.Extensions;
 using Pidp.Infrastructure.Auth;
-using Pidp.Infrastructure.Services;
 using static Pidp.Infrastructure.HttpClients.Ldap.HcimAuthorizationStatus;
-using HybridModelBinding;
+using Pidp.Infrastructure.Services;
 
 [Route("api/parties/{partyId}/[controller]")]
 public class AccessRequestsController : PidpControllerBase
@@ -74,12 +74,12 @@ public class AccessRequestsController : PidpControllerBase
         }
     }
 
-    [HttpPost("hcim-enrolment")]
-    [Authorize(Policy = Policies.AnyPartyIdentityProvider)]
+    [HttpPost("immsbc-eforms")]
+    [Authorize(Policy = Policies.HighAssuranceIdentityProvider)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> CreateHcimEnrolment([FromServices] ICommandHandler<HcimEnrolment.Command, IDomainResult> handler,
-                                                         [FromHybrid] HcimEnrolment.Command command)
+    public async Task<IActionResult> CreateImmsBCEformsEnrolment([FromServices] ICommandHandler<ImmsBCEforms.Command, IDomainResult> handler,
+                                                                 [FromRoute] ImmsBCEforms.Command command)
         => await this.AuthorizePartyBeforeHandleAsync(command.PartyId, handler, command)
             .ToActionResult();
 

@@ -1,24 +1,49 @@
 import { TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
-
-import { provideAutoSpy } from 'jest-auto-spies';
+import { CanActivateChildFn, CanActivateFn, CanMatchFn } from '@angular/router';
 
 import { PermissionsGuard } from './permissions.guard';
-import { PermissionsService } from './permissions.service';
 
-describe('PermissionsGuard', () => {
-  let guard: PermissionsGuard;
+describe('PermissionsGuard canActivate', () => {
+  const executeGuard: CanActivateFn = (...guardParameters) =>
+    TestBed.runInInjectionContext(() =>
+      PermissionsGuard.canActivate(...guardParameters),
+    );
 
   beforeEach(() => {
-    TestBed.configureTestingModule({
-      imports: [RouterTestingModule],
-      providers: [PermissionsGuard, provideAutoSpy(PermissionsService)],
-    });
-
-    guard = TestBed.inject(PermissionsGuard);
+    TestBed.configureTestingModule({});
   });
 
   it('should be created', () => {
-    expect(guard).toBeTruthy();
+    expect(executeGuard).toBeTruthy();
+  });
+});
+
+describe('PermissionsGuard canActivateChild', () => {
+  const executeGuard: CanActivateChildFn = (...guardParameters) =>
+    TestBed.runInInjectionContext(() =>
+      PermissionsGuard.canActivateChild(...guardParameters),
+    );
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({});
+  });
+
+  it('should be created', () => {
+    expect(executeGuard).toBeTruthy();
+  });
+});
+
+describe('PermissionsGuard CanMatchFn', () => {
+  const executeGuard: CanMatchFn = (...guardParameters) =>
+    TestBed.runInInjectionContext(() =>
+      PermissionsGuard.canMatch(...guardParameters),
+    );
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({});
+  });
+
+  it('should be created', () => {
+    expect(executeGuard).toBeTruthy();
   });
 });

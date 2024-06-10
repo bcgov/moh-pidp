@@ -1,3 +1,4 @@
+import { NgIf } from '@angular/common';
 import { Component, Inject, Injectable } from '@angular/core';
 import {
   MAT_DIALOG_DATA,
@@ -5,6 +6,7 @@ import {
   MatDialogConfig,
   MatDialogRef,
 } from '@angular/material/dialog';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 export const LOADING_OVERLAY_DEFAULT_MESSAGE =
   'Your request is being processed';
@@ -43,7 +45,7 @@ interface PidpLoadingDialogData {
  */
 @Component({
   // Putting template and css inline for simplicity.
-  template: `<div>
+  template: `<div class="loader-container">
     <div class="spinner">
       <mat-spinner color="primary" mode="indeterminate"></mat-spinner>
     </div>
@@ -53,6 +55,9 @@ interface PidpLoadingDialogData {
   </div>`,
   styles: [
     `
+      .loader-container {
+        padding: 24px;
+      }
       .spinner {
         display: flex;
         justify-content: center;
@@ -62,10 +67,12 @@ interface PidpLoadingDialogData {
       }
     `,
   ],
+  standalone: true,
+  imports: [MatProgressSpinnerModule, NgIf],
 })
 export class PidpLoadingDialogComponent {
   public constructor(
     public dialogRef: MatDialogRef<PidpLoadingDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: PidpLoadingDialogData
+    @Inject(MAT_DIALOG_DATA) public data: PidpLoadingDialogData,
   ) {}
 }

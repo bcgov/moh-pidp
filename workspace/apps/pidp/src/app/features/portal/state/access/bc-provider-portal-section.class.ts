@@ -21,7 +21,7 @@ export class BcProviderPortalSection implements IPortalSection {
 
   public constructor(
     private profileStatus: ProfileStatus,
-    private router: Router
+    private router: Router,
   ) {
     this.key = 'bcProvider';
     this.heading = 'BC Provider Account';
@@ -57,8 +57,8 @@ export class BcProviderPortalSection implements IPortalSection {
     return statusCode === StatusCode.AVAILABLE
       ? ''
       : statusCode === StatusCode.COMPLETED
-      ? 'Completed'
-      : 'Incomplete';
+        ? 'Completed'
+        : 'Incomplete';
   }
 
   public performAction(): void | Observable<void> {

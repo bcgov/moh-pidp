@@ -1,10 +1,19 @@
 import { enableProdMode } from '@angular/core';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { bootstrapApplication } from '@angular/platform-browser';
 
+// import function to register Swiper custom elements
+import { register } from 'swiper/element/bundle';
+
+import { routes } from '@app/app-routing.routes';
+import { provideCore } from '@app/core/core';
+
+import { AppComponent } from './app/app.component';
 import { APP_CONFIG, APP_DI_CONFIG, AppConfig } from './app/app.config';
-import { AppModule } from './app/app.module';
 import { environment } from './environments/environment';
 import { EnvironmentConfig } from './environments/environment-config.model';
+
+// register Swiper custom elements
+register();
 
 async function fetchConfig(): Promise<Response> {
   // Fetch environment.json.
@@ -17,7 +26,7 @@ async function fetchConfig(): Promise<Response> {
   return response;
 }
 function applySettingsToDefaultConfig(
-  settingsToApply: EnvironmentConfig
+  settingsToApply: EnvironmentConfig,
 ): AppConfig {
   let config = { ...APP_DI_CONFIG };
 
@@ -73,13 +82,13 @@ fetchConfig()
     if (appConfig.environmentName === 'dev') {
       console.log('pidp.config', appConfig);
     }
-
-    platformBrowserDynamic([
-      {
-        provide: APP_CONFIG,
-        useValue: appConfig,
-      },
-    ])
-      .bootstrapModule(AppModule)
-      .catch((err) => console.error(err));
+    bootstrapApplication(AppComponent, {
+      providers: [
+        {
+          provide: APP_CONFIG,
+          useValue: appConfig,
+        },
+        provideCore({ routes: routes }),
+      ],
+    }).catch((err) => console.error(err));
   });

@@ -4,8 +4,11 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatDialogModule } from '@angular/material/dialog';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
+
+import { of } from 'rxjs';
 
 import { randNumber, randTextRange } from '@ngneat/falso';
 import { Spy, createSpyFromClass, provideAutoSpy } from 'jest-auto-spies';
@@ -20,7 +23,6 @@ import { LoggerService } from '@core/services/logger.service';
 import { CollegeLicenceDeclarationResource } from './college-licence-declaration-resource.service';
 import { CollegeLicenceDeclarationPage } from './college-licence-declaration.page';
 import { PartyLicenceDeclarationInformation } from './party-licence-declaration-information.model';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('CollegeLicenceDeclarationPage', () => {
   let component: CollegeLicenceDeclarationPage;
@@ -81,7 +83,7 @@ describe('CollegeLicenceDeclarationPage', () => {
     component = TestBed.inject(CollegeLicenceDeclarationPage);
     partyServiceSpy = TestBed.inject<any>(PartyService);
     collegeLicenceDeclarationResourceSpy = TestBed.inject<any>(
-      CollegeLicenceDeclarationResource
+      CollegeLicenceDeclarationResource,
     );
     formUtilsServiceSpy = TestBed.inject<any>(FormUtilsService);
 
@@ -103,10 +105,10 @@ describe('CollegeLicenceDeclarationPage', () => {
         then('should GET party college licence information', () => {
           expect(router.navigate).not.toHaveBeenCalled();
           expect(
-            collegeLicenceDeclarationResourceSpy.get
+            collegeLicenceDeclarationResourceSpy.get,
           ).toHaveBeenCalledTimes(1);
           expect(collegeLicenceDeclarationResourceSpy.get).toHaveBeenCalledWith(
-            partyId
+            partyId,
           );
         });
       });
@@ -149,23 +151,22 @@ describe('CollegeLicenceDeclarationPage', () => {
   });
 
   describe('METHOD: onSubmit', () => {
-    given('a form submission', () => {
+    given('a form submission when user selects no college licence', () => {
       const partyId = randNumber({ min: 1 });
       partyServiceSpy.accessorSpies.getters.partyId.mockReturnValue(partyId);
-      component.formState.form.patchValue(mockParty);
 
       when('no validation errors exist', () => {
         formUtilsServiceSpy.checkValidity.mockReturnValue(true);
-        collegeLicenceDeclarationResourceSpy.updateDeclaration
-          .mustBeCalledWith(partyId, mockParty)
-          .nextWith(void 0);
+        collegeLicenceDeclarationResourceSpy.updateDeclaration.mockReturnValue(
+          of(null),
+        );
         component.onSubmit();
 
         then(
           'college info will be updated and router navigate to root route',
           () => {
             expect(router.navigate).toHaveBeenCalled();
-          }
+          },
         );
       });
     });
@@ -182,7 +183,7 @@ describe('CollegeLicenceDeclarationPage', () => {
           'college licence information should not be updated and router not navigate',
           () => {
             expect(router.navigate).not.toHaveBeenCalled();
-          }
+          },
         );
       });
     });

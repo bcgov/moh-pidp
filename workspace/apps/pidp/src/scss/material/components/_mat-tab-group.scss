@@ -7,23 +7,39 @@
 // @description
 // Applies general theme styles to Material Tab Group components
 
+$pidp-mat-tab-group-border: solid 1px pidp.$grey-30;
+
+/*TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version.*/
 mat-tab-group {
-  border: solid 1px pidp.$grey-30;
-  & .mat-tab-header {
-    border-style: none;
-  }
-  & .mat-tab-labels {
+  border: $pidp-mat-tab-group-border;
+
+  /*TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version.*/
+  // Tabs header background color
+  & .mat-mdc-tab-labels {
     background-color: pidp.$blue-primary;
-  }
-  // Line below active tab
-  &.mat-primary .mat-ink-bar {
-    border-bottom: solid 4px pidp.$yellow;
-  }
-  & .mat-tab-label {
-    color: #fff;
-    opacity: 1;
-    &:not(:last-of-type) {
-      border-right: solid 1px pidp.$grey-30;
+
+    // Line below active tab
+    & .mat-mdc-tab {
+      &.mdc-tab--active:hover,
+      &.mdc-tab--active:focus,
+      &:not(.mat-mdc-tab-disabled) {
+        & .mdc-tab-indicator__content--underline {
+          border: solid 2px pidp.$yellow;
+        }
+      }
+
+      /*TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version.*/
+      // Tabs header text color
+      &:not(.mat-mdc-tab-disabled).mdc-tab--active .mdc-tab__text-label,
+      & .mdc-tab__text-label {
+        color: #fff;
+        opacity: 1;
+      }
+
+      // Tabs header separator
+      &:not(:last-of-type) {
+        border-right: $pidp-mat-tab-group-border;
+      }
     }
   }
 }

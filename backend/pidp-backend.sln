@@ -1,15 +1,21 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30114.105
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "pidp", "webapi\pidp.csproj", "{690CB0B5-518B-443E-9E5C-B5A63A3F9E13}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "pidp", "webapi\pidp.csproj", "{690CB0B5-518B-443E-9E5C-B5A63A3F9E13}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "pidp.tests", "webapi.tests\pidp.tests.csproj", "{BC7BAF1F-4C48-4DB2-A704-EBB4DD2CFBFA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "pidp.tests", "webapi.tests\pidp.tests.csproj", "{BC7BAF1F-4C48-4DB2-A704-EBB4DD2CFBFA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "plr-intake", "services.plr-intake\plr-intake.csproj", "{8682A94E-4E90-4846-A7E8-E4CECB55DF79}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "plr-intake.tests", "services.plr-intake.tests\plr-intake.tests.csproj", "{6C64ACF9-73DD-4A52-926E-9AFC07555060}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "endorsement-reminder", "services.endorsement-reminder\endorsement-reminder.csproj", "{BBEAD4F7-BD9E-43F9-8AAD-D11FE22451E0}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "endorsement-reminder.tests", "services.endorsement-reminder.tests\endorsement-reminder.tests.csproj", "{1251BD7F-30CB-4333-87D3-A96912F86361}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "do-work", "tools.do-work\do-work.csproj", "{631ECF6D-6E61-49EF-933B-B9423A068032}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -36,5 +42,17 @@ Global
 		{6C64ACF9-73DD-4A52-926E-9AFC07555060}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6C64ACF9-73DD-4A52-926E-9AFC07555060}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6C64ACF9-73DD-4A52-926E-9AFC07555060}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BBEAD4F7-BD9E-43F9-8AAD-D11FE22451E0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BBEAD4F7-BD9E-43F9-8AAD-D11FE22451E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BBEAD4F7-BD9E-43F9-8AAD-D11FE22451E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BBEAD4F7-BD9E-43F9-8AAD-D11FE22451E0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1251BD7F-30CB-4333-87D3-A96912F86361}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1251BD7F-30CB-4333-87D3-A96912F86361}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1251BD7F-30CB-4333-87D3-A96912F86361}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1251BD7F-30CB-4333-87D3-A96912F86361}.Release|Any CPU.Build.0 = Release|Any CPU
+		{631ECF6D-6E61-49EF-933B-B9423A068032}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{631ECF6D-6E61-49EF-933B-B9423A068032}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{631ECF6D-6E61-49EF-933B-B9423A068032}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{631ECF6D-6E61-49EF-933B-B9423A068032}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

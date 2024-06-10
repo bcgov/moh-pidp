@@ -17,6 +17,11 @@
     flex-direction: column;
   }
 }
+.address-button-box {
+  & button {
+    margin-top: 45px;
+  }
+}
 
 /* Two column layout for everything else */
 .viewport-small,

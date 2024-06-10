@@ -15,7 +15,7 @@ import { PortalResource } from '@app/features/portal/portal-resource.service';
 export class SaEformsResource {
   public constructor(
     private apiResource: ApiHttpClient,
-    private portalResource: PortalResource
+    private portalResource: PortalResource,
   ) {}
 
   public getProfileStatus(partyId: number): Observable<ProfileStatus | null> {
@@ -29,7 +29,7 @@ export class SaEformsResource {
         NoContentResponse,
         catchError((error: HttpErrorResponse) => {
           return throwError(() => error);
-        })
+        }),
       );
   }
 }

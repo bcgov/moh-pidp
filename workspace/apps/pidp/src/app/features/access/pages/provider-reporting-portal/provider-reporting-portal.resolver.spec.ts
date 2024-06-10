@@ -1,24 +1,23 @@
 import { TestBed } from '@angular/core/testing';
+import { ResolveFn } from '@angular/router';
 
-import { ProviderReportingPortalResolver } from './provider-reporting-portal.resolver';
-import { provideAutoSpy } from 'jest-auto-spies';
-import { PartyService } from '@app/core/party/party.service';
-import { ProviderReportingPortalResource } from './provider-reporting-portal-resource.service';
+import { StatusCode } from '@app/features/portal/enums/status-code.enum';
 
-describe('ProviderReportingPortalResolver', () => {
-  let resolver: ProviderReportingPortalResolver;
+import { providerReportingPortalResolver } from './provider-reporting-portal.resolver';
+
+describe('providerReportingPortalResolver', () => {
+  const executeResolver: ResolveFn<StatusCode | null> = (
+    ...resolverParameters
+  ) =>
+    TestBed.runInInjectionContext(() =>
+      providerReportingPortalResolver(...resolverParameters),
+    );
 
   beforeEach(() => {
-    TestBed.configureTestingModule({
-      providers: [
-        provideAutoSpy(PartyService),
-        provideAutoSpy(ProviderReportingPortalResource),
-      ]
-    });
-    resolver = TestBed.inject(ProviderReportingPortalResolver);
+    TestBed.configureTestingModule({});
   });
 
   it('should be created', () => {
-    expect(resolver).toBeTruthy();
+    expect(executeResolver).toBeTruthy();
   });
 });

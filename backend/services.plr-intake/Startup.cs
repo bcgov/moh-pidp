@@ -1,6 +1,8 @@
 namespace PlrIntake;
 
 using FluentValidation.AspNetCore;
+using HealthChecks.ApplicationStatus.DependencyInjection;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 using SoapCore;
@@ -11,6 +13,7 @@ using System.Text.Json;
 using PlrIntake.Data;
 using PlrIntake.Features;
 using PlrIntake.Features.Intake;
+using PlrIntake.Infrastructure.HealthChecks;
 
 public class Startup
 {
@@ -40,7 +43,9 @@ public class Startup
         services.AddSoapServiceOperationTuner(new IntakeServiceOperationTuner(config));
         services.AddSoapCore();
 
-        services.AddHealthChecks();
+        services.AddHealthChecks()
+            .AddApplicationStatus(tags: new[] { HealthCheckTag.Liveness.Value })
+            .AddNpgSql(config.ConnectionStrings.PlrDatabase, tags: new[] { HealthCheckTag.Readiness.Value });
     }
 
     private PlrIntakeConfiguration InitializeConfiguration(IServiceCollection services)
@@ -85,7 +90,14 @@ public class Startup
         {
             endpoints.UseSoapEndpoint<IIntakeService>("/api/PLRHL7", intakeBinding, SoapSerializer.XmlSerializer);
             endpoints.MapControllers();
-            endpoints.MapHealthChecks("/health/liveness").AllowAnonymous();
+            endpoints.MapHealthChecks("/health/liveness", new HealthCheckOptions
+            {
+                Predicate = registration => registration.Tags.Contains(HealthCheckTag.Liveness)
+            }).AllowAnonymous();
+            endpoints.MapHealthChecks("/health/readiness", new HealthCheckOptions
+            {
+                Predicate = registration => registration.Tags.Contains(HealthCheckTag.Readiness)
+            }).AllowAnonymous();
         });
     }
 }

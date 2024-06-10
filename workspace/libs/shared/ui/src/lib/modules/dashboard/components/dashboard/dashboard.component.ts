@@ -8,7 +8,8 @@ import {
   Output,
   ViewChild,
 } from '@angular/core';
-import { MatSidenav } from '@angular/material/sidenav';
+import { MatSidenav, MatSidenavModule } from '@angular/material/sidenav';
+import { RouterOutlet } from '@angular/router';
 
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
@@ -22,6 +23,8 @@ import {
   DashboardRouteMenuItem,
 } from '../../models/dashboard-menu-item.model';
 import { DashboardSidenavProps } from '../../models/dashboard-sidenav-props.model';
+import { DashboardHeaderComponent } from '../dashboard-header/dashboard-header.component';
+import { DashboardMenuComponent } from '../dashboard-menu/dashboard-menu.component';
 
 @UntilDestroy()
 @Component({
@@ -29,6 +32,13 @@ import { DashboardSidenavProps } from '../../models/dashboard-sidenav-props.mode
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    DashboardHeaderComponent,
+    MatSidenavModule,
+    DashboardMenuComponent,
+    RouterOutlet,
+  ],
 })
 export class DashboardComponent implements OnInit {
   /**
@@ -115,7 +125,7 @@ export class DashboardComponent implements OnInit {
       .pipe(untilDestroyed(this))
       .subscribe(
         (result: BreakpointState) =>
-          (this.sideNavProps = this.getSideNavProperties(result))
+          (this.sideNavProps = this.getSideNavProperties(result)),
       );
   }
 

@@ -54,7 +54,7 @@ describe('LookupCodePipe', () => {
         const actualResult = pipe.transform(
           province.code,
           'provinces',
-          'countryCode'
+          'countryCode',
         );
 
         then('a province country code should be returned', () => {

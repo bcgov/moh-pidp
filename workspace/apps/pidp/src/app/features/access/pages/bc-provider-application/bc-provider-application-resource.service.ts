@@ -16,7 +16,7 @@ import { PortalResource } from '@app/features/portal/portal-resource.service';
 export class BcProviderApplicationResource {
   public constructor(
     private apiResource: ApiHttpClient,
-    private portalResource: PortalResource
+    private portalResource: PortalResource,
   ) {}
 
   public getProfileStatus(partyId: number): Observable<ProfileStatus | null> {
@@ -25,7 +25,7 @@ export class BcProviderApplicationResource {
 
   public createBcProviderAccount(
     partyId: number,
-    password: string
+    password: string,
   ): Observable<string> {
     return this.apiResource
       .post<string>(`${this.getResourcePath(partyId)}/bc-provider`, {
@@ -44,7 +44,7 @@ export class BcProviderApplicationResource {
         NoContentResponse,
         catchError((error: HttpErrorResponse) => {
           return throwError(() => error);
-        })
+        }),
       );
   }
 

@@ -4,6 +4,8 @@ import { RouterTestingModule } from '@angular/router/testing';
 
 import { randTextRange } from '@ngneat/falso';
 
+import { APP_CONFIG, APP_DI_CONFIG } from '@app/app.config';
+
 import { MfaSetupPage } from './mfa-setup.page';
 
 describe('MfaSetupPage', () => {
@@ -23,6 +25,10 @@ describe('MfaSetupPage', () => {
       imports: [RouterTestingModule],
       providers: [
         MfaSetupPage,
+        {
+          provide: APP_CONFIG,
+          useValue: APP_DI_CONFIG,
+        },
         {
           provide: ActivatedRoute,
           useValue: mockActivatedRoute,

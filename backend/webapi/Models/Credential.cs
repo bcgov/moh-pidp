@@ -16,6 +16,10 @@ public class Credential : BaseAuditable
 
     public Party? Party { get; set; }
 
+    /// <summary>
+    /// The Id of the User in Keycloak.
+    /// Will only be all zeros in the very short window between when a new BC Provider account + Credential is created and when the corresponding Keycloak account is created and the DB is updated.
+    /// </summary>
     public Guid UserId { get; set; }
 
     public string? IdentityProvider { get; set; }

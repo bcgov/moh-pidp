@@ -11,9 +11,7 @@ import { StatusCode } from '../../enums/status-code.enum';
 import { ProfileStatus } from '../../models/profile-status.model';
 import { PortalSectionAction } from '../portal-section-action.model';
 import { PortalSectionKey } from '../portal-section-key.type';
-import { PortalSectionProperty } from '../portal-section-property.model';
 import { IPortalSection } from '../portal-section.model';
-import { DemographicsSection } from './demographic-section.model';
 
 export class DemographicsPortalSection implements IPortalSection {
   public readonly key: PortalSectionKey;
@@ -22,7 +20,7 @@ export class DemographicsPortalSection implements IPortalSection {
 
   public constructor(
     private profileStatus: ProfileStatus,
-    private router: Router
+    private router: Router,
   ) {
     this.key = 'demographics';
     this.heading = 'Personal Information';
@@ -31,30 +29,10 @@ export class DemographicsPortalSection implements IPortalSection {
 
   public get hint(): string {
     return [StatusCode.ERROR, StatusCode.COMPLETED].includes(
-      this.getStatusCode()
+      this.getStatusCode(),
     )
       ? ''
       : '1 minute to complete';
-  }
-
-  public get properties(): PortalSectionProperty[] {
-    const { firstName, lastName, email, phone } = this.getSectionStatus();
-    return this.getStatusCode() === StatusCode.COMPLETED
-      ? [
-          {
-            key: 'fullName',
-            value: `${firstName} ${lastName}`,
-          },
-          {
-            key: 'email',
-            value: email,
-          },
-          {
-            key: 'phone',
-            value: phone,
-          },
-        ]
-      : [];
   }
 
   /**
@@ -77,8 +55,8 @@ export class DemographicsPortalSection implements IPortalSection {
     return statusCode === StatusCode.ERROR
       ? 'danger'
       : statusCode === StatusCode.COMPLETED
-      ? 'success'
-      : 'warn';
+        ? 'success'
+        : 'warn';
   }
 
   public get status(): string {
@@ -86,19 +64,15 @@ export class DemographicsPortalSection implements IPortalSection {
     return statusCode === StatusCode.ERROR
       ? ''
       : statusCode === StatusCode.COMPLETED
-      ? 'Completed'
-      : 'Incomplete';
+        ? 'Completed'
+        : 'Incomplete';
   }
 
   public performAction(): void | Observable<void> {
     this.router.navigate([ShellRoutes.routePath(this.action.route)]);
   }
 
-  private getSectionStatus(): DemographicsSection {
-    return this.profileStatus.status.demographics;
-  }
-
   private getStatusCode(): StatusCode {
-    return this.getSectionStatus().statusCode;
+    return this.profileStatus.status.demographics.statusCode;
   }
 }

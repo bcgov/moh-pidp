@@ -2,6 +2,7 @@ namespace Pidp.Features.Credentials;
 
 using DomainResults.Common;
 using FluentValidation;
+using Flurl;
 using HybridModelBinding;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
@@ -10,9 +11,11 @@ using Pidp.Data;
 using Pidp.Extensions;
 using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.HttpClients.BCProvider;
+using Pidp.Infrastructure.HttpClients.Keycloak;
 using Pidp.Infrastructure.HttpClients.Mail;
 using Pidp.Infrastructure.HttpClients.Plr;
 using Pidp.Models;
+using Pidp.Models.DomainEvents;
 using Pidp.Models.Lookups;
 using Pidp.Infrastructure.Services;
 
@@ -39,22 +42,28 @@ public class BCProviderCreate
     {
         private readonly IBCProviderClient client;
         private readonly IEmailService emailService;
-        private readonly PidpDbContext context;
-        private readonly ILogger logger;
+        private readonly IKeycloakAdministrationClient keycloakClient;
+        private readonly ILogger<CommandHandler> logger;
         private readonly IPlrClient plrClient;
+        private readonly PidpDbContext context;
+        private readonly Url keycloakAdministrationUrl;
 
         public CommandHandler(
             IBCProviderClient client,
             IEmailService emailService,
-            PidpDbContext context,
+            IKeycloakAdministrationClient keycloakClient,
             ILogger<CommandHandler> logger,
-            IPlrClient plrClient)
+            IPlrClient plrClient,
+            PidpConfiguration config,
+            PidpDbContext context)
         {
             this.client = client;
-            this.context = context;
             this.emailService = emailService;
+            this.keycloakClient = keycloakClient;
             this.logger = logger;
             this.plrClient = plrClient;
+            this.context = context;
+            this.keycloakAdministrationUrl = Url.Parse(config.Keycloak.AdministrationUrl);
         }
 
         public async Task<IDomainResult<string>> HandleAsync(Command command)
@@ -63,6 +72,7 @@ public class BCProviderCreate
                 .Where(party => party.Id == command.PartyId)
                 .Select(party => new
                 {
+                    party.OpId,
                     party.FirstName,
                     party.LastName,
                     party.Cpn,
@@ -92,6 +102,11 @@ public class BCProviderCreate
 
             var plrStanding = await this.plrClient.GetStandingsDigestAsync(party.Cpn);
 
+            var endorsingCpns = await this.context.ActiveEndorsingParties(command.PartyId)
+                .Select(party => party.Cpn)
+                .ToListAsync();
+            var endorsingPlrDigest = await this.plrClient.GetAggregateStandingsDigestAsync(endorsingCpns);
+
             var newUserRep = new NewUserRepresentation
             {
                 FirstName = party.FirstName,
@@ -102,22 +117,13 @@ public class BCProviderCreate
                 Cpn = party.Cpn,
                 Password = command.Password,
                 PidpEmail = party.Email,
-                UaaDate = party.UaaAgreementDate.ToDateTimeOffset()
-            };
-
-            if (!plrStanding.HasGoodStanding)
-            {
-                var endorsementCpns = await this.context.ActiveEndorsementRelationships(command.PartyId)
-                    .Select(relationship => relationship.Party!.Cpn)
-                    .ToListAsync();
-                var endorsementPlrDigest = await this.plrClient.GetAggregateStandingsDigestAsync(endorsementCpns);
-
-                newUserRep.EndorserData = endorsementPlrDigest
+                UaaDate = party.UaaAgreementDate.ToDateTimeOffset(),
+                IsMoa = !plrStanding.HasGoodStanding && endorsingPlrDigest.HasGoodStanding,
+                EndorserData = endorsingPlrDigest
                     .WithGoodStanding()
-                    .With(IdentifierType.PhysiciansAndSurgeons, IdentifierType.Nurse, IdentifierType.Midwife)
-                    .Cpns;
-                newUserRep.IsMoa = endorsementPlrDigest.HasGoodStanding;
-            }
+                    .With(BCProviderAttributes.EndorserDataEligibleIdentifierTypes)
+                    .Cpns
+            };
 
             var createdUser = await this.client.CreateBCProviderAccount(newUserRep);
 
@@ -126,17 +132,57 @@ public class BCProviderCreate
                 return DomainResult.Failed<string>();
             }
 
+            // TODO: Domain Event! Probably should create this credential now and then Queue the keycloak User creation + updating the UserId
+            var userId = await this.CreateKeycloakUser(party.FirstName, party.LastName, createdUser.UserPrincipalName);
+            if (userId == null)
+            {
+                return DomainResult.Failed<string>();
+            }
+            await this.keycloakClient.UpdateUser(userId.Value, user => user.SetOpId(party.OpId!));
+
             this.context.Credentials.Add(new Credential
             {
+                UserId = userId.Value,
                 PartyId = command.PartyId,
                 IdpId = createdUser.UserPrincipalName,
-                IdentityProvider = IdentityProviders.BCProvider
+                IdentityProvider = IdentityProviders.BCProvider,
+                DomainEvents = new List<IDomainEvent> { new CollegeLicenceUpdated(command.PartyId) }
             });
 
             await this.context.SaveChangesAsync();
-            await this.SendBCProviderCreationEmail(newUserRep.PidpEmail, createdUser.UserPrincipalName);
+            await this.SendBCProviderCreationEmail(party.Email, createdUser.UserPrincipalName);
 
-            return DomainResult.Success(createdUser.UserPrincipalName!);
+            return DomainResult.Success(createdUser.UserPrincipalName);
+        }
+
+        private async Task<Guid?> CreateKeycloakUser(string firstName, string lastName, string userPrincipalName)
+        {
+            var newUser = new UserRepresentation
+            {
+                Enabled = true,
+                FirstName = firstName,
+                LastName = lastName,
+                Username = this.GenerateMohKeycloakUsername(userPrincipalName)
+            };
+            return await this.keycloakClient.CreateUser(newUser);
+        }
+
+        /// <summary>
+        /// The expected Ministry of Health Keycloak username for this user. The schema is {IdentityProviderIdentifier}@{IdentityProvider}.
+        /// Most of our Credentials come to us from Keycloak and so the username is saved as-is in the column IdpId.
+        /// However, we create BC Provider Credentials directly; so the User Principal Name is saved to the database without the suffix.
+        /// There are also two inconsistencies with how the MOH Keycloak handles BCP usernames:
+        /// 1. The username suffix is @bcp rather than @bcprovider_aad.
+        /// 2. This suffix is only added in Test and Production; there is no suffix at all for BCP Users in the Dev Keycloak.
+        /// </summary>
+        private string GenerateMohKeycloakUsername(string userPrincipalName)
+        {
+            if (this.keycloakAdministrationUrl.Host == "user-management-dev.api.hlth.gov.bc.ca")
+            {
+                return userPrincipalName;
+            }
+
+            return userPrincipalName + "@bcp";
         }
 
         private async Task SendBCProviderCreationEmail(string partyEmail, string userPrincipalName)
@@ -156,8 +202,11 @@ public class BCProviderCreate
 public static partial class BCProviderCreateLoggingExtensions
 {
     [LoggerMessage(1, LogLevel.Information, "Party {partyId} attempted to create a second BC Provider account.")]
-    public static partial void LogPartyHasBCProviderCredential(this ILogger logger, int partyId);
+    public static partial void LogPartyHasBCProviderCredential(this ILogger<BCProviderCreate.CommandHandler> logger, int partyId);
 
     [LoggerMessage(2, LogLevel.Error, "Failed to create BC Provider for Party {partyId}, one or more requirements were not met. Party state: {state}.")]
-    public static partial void LogInvalidState(this ILogger logger, int partyId, object state);
+    public static partial void LogInvalidState(this ILogger<BCProviderCreate.CommandHandler> logger, int partyId, object state);
+
+    [LoggerMessage(3, LogLevel.Error, "Error when attempting to create a Keycloak User for Party {partyId} with username {username}.")]
+    public static partial void LogKeycloakUserCreationError(this ILogger<BCProviderCreate.CommandHandler> logger, int partyId, string username);
 }

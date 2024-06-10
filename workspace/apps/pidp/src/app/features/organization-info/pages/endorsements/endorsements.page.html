@@ -80,7 +80,7 @@
                   class="endorsement-card"
                   [id]="endorsementRequest.id"
                   [nameText]="endorsementRequest.partyName ?? ''"
-                  [collegeText]="getCollegeTextForEndorsementRequest(endorsementRequest)"
+                  [collegeText]="getCollegeText(endorsementRequest)"
                   [isApproveEnabled]="true"
                   [isCancelEnabled]="true"
                   (approveClick)="onApprove($event)"
@@ -106,7 +106,7 @@
                   noticeColour="green"
                   [id]="endorsement.id"
                   [nameText]="endorsement.partyName"
-                  [collegeText]="getCollegeTextForEndorsement(endorsement)"
+                  [collegeText]="getCollegeText(endorsement)"
                   [createdOnText]="endorsement.createdOn | date"
                   [isCancelEnabled]="true"
                   (cancelClick)="onCancelEndorsement($event)"></app-endorsement-card>
@@ -134,11 +134,11 @@
                 <app-endorsement-card
                   *ngFor="let endorsementRequest of nonActionableEndorsementRequests$ | async"
                   class="endorsement-card"
-                  noticeText="Requested"
-                  noticeColour="yellow"
+                  [noticeText]="getStatus(endorsementRequest.status)"
+                  [noticeColour]="isEndorsementRequested(endorsementRequest.status) ? 'yellow' : 'red'"
                   [id]="endorsementRequest.id"
                   [nameText]="endorsementRequest.partyName ?? endorsementRequest.recipientEmail"
-                  [collegeText]="getCollegeTextForEndorsementRequest(endorsementRequest)"></app-endorsement-card>
+                  [collegeText]="getCollegeText(endorsementRequest)"></app-endorsement-card>
               </div>
             </ng-template>
           </mat-tab>
@@ -153,9 +153,12 @@
           with below and click "Send." This person will receive an email
           invitation from OneHealthID. Once registered, they can endorse your
           work relationship request. In the future, licensed health care
-          providers will be able to pick which systems to endorse (if any).
+          providers will be able to pick which systems to endorse (if any). All
+          requests left inactive at any point while completing the endorsement
+          process for more than 30 days will expire and the user will have to
+          restart the process.
         </p>
-        <mat-form-field appearance="outline">
+        <mat-form-field>
           <input
             matInput
             placeholder="Email"

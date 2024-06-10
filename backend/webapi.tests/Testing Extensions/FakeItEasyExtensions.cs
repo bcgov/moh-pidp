@@ -90,4 +90,12 @@ public static class FakeItEasyExtensions
 
         return client;
     }
+
+    public static IPlrClient ReturningAStandingsDigestWhenCalledWithCpn(this IPlrClient client, string cpn, bool goodStanding)
+    {
+        A.CallTo(() => client.GetStandingAsync(cpn)).Returns(goodStanding);
+        A.CallTo(() => client.GetStandingsDigestAsync(cpn)).Returns(AMock.StandingsDigest(goodStanding));
+
+        return client;
+    }
 }

@@ -18,7 +18,7 @@ export class ResourceUtilsService {
             !queryParams[key] !== null && !queryParams[key] !== undefined
               ? this.createHttpParam(httpParams, key, queryParams[key])
               : httpParams,
-          new HttpParams()
+          new HttpParams(),
         )
       : null;
   }
@@ -30,7 +30,7 @@ export class ResourceUtilsService {
   private createHttpParam(
     httpParams: HttpParams,
     key: string,
-    value: unknown
+    value: unknown,
   ): HttpParams {
     return Array.isArray(value)
       ? value.reduce((h, b) => this.createHttpParam(h, key, b), httpParams)

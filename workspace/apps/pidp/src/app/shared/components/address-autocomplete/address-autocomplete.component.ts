@@ -1,9 +1,23 @@
+import { NgFor } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+} from '@angular/forms';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatOptionModule } from '@angular/material/core';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 import { EMPTY, debounceTime, switchMap } from 'rxjs';
 
 import { Address, Province } from '@bcgov/shared/data-access';
+import {
+  AnchorDirective,
+  InjectViewportCssClassDirective,
+} from '@bcgov/shared/ui';
 
 import { AddressAutocompleteResource } from '@core/resources/address-autocomplete-resource.service';
 import { ToastService } from '@core/services/toast.service';
@@ -15,6 +29,17 @@ import { AddressAutocompleteRetrieveResponse } from './address-autocomplete-retr
   selector: 'app-address-autocomplete',
   templateUrl: './address-autocomplete.component.html',
   styleUrls: ['./address-autocomplete.component.scss'],
+  standalone: true,
+  imports: [
+    AnchorDirective,
+    InjectViewportCssClassDirective,
+    MatAutocompleteModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatOptionModule,
+    NgFor,
+    ReactiveFormsModule,
+  ],
 })
 export class AddressAutocompleteComponent implements OnInit {
   /**
@@ -36,7 +61,7 @@ export class AddressAutocompleteComponent implements OnInit {
   public constructor(
     private fb: FormBuilder,
     private toastService: ToastService,
-    private addressAutocompleteResource: AddressAutocompleteResource
+    private addressAutocompleteResource: AddressAutocompleteResource,
   ) {
     this.inBc = false;
     this.autocompleteAddress = new EventEmitter<Address>();
@@ -61,7 +86,7 @@ export class AddressAutocompleteComponent implements OnInit {
             addressRetrieved.provinceCode,
             addressRetrieved.line1,
             addressRetrieved.city,
-            addressRetrieved.postalCode
+            addressRetrieved.postalCode,
           );
 
           !this.inBc || address.provinceCode === Province.BRITISH_COLUMBIA
@@ -86,11 +111,11 @@ export class AddressAutocompleteComponent implements OnInit {
         switchMap((value: string) => {
           this.addressAutocompleteFields = [];
           return value ? this.addressAutocompleteResource.find(value) : EMPTY;
-        })
+        }),
       )
       .subscribe(
         (response: AddressAutocompleteFindResponse[]) =>
-          (this.addressAutocompleteFields = response)
+          (this.addressAutocompleteFields = response),
       );
   }
 }

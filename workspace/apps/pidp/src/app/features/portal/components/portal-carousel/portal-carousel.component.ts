@@ -1,4 +1,11 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { NgFor } from '@angular/common';
+import {
+  CUSTOM_ELEMENTS_SCHEMA,
+  Component,
+  Input,
+  OnChanges,
+  SimpleChanges,
+} from '@angular/core';
 import { Router } from '@angular/router';
 
 import {
@@ -7,14 +14,26 @@ import {
   faCircle,
 } from '@fortawesome/free-solid-svg-icons';
 
-import { PidpViewport, ViewportService } from '@bcgov/shared/ui';
+import {
+  InjectViewportCssClassDirective,
+  PidpViewport,
+  ViewportService,
+} from '@bcgov/shared/ui';
 
 import { IPortalSection } from '../../state/portal-section.model';
+import { PortalCardComponent } from '../portal-card/portal-card.component';
 
 @Component({
   selector: 'app-portal-carousel',
   templateUrl: './portal-carousel.component.html',
   styleUrls: ['./portal-carousel.component.scss'],
+  standalone: true,
+  imports: [InjectViewportCssClassDirective, NgFor, PortalCardComponent],
+  schemas: [
+    // This causes the compiler to allow the non-angular swiper html tags.
+    // Without this schema, compiling will fail on the swiper tags.
+    CUSTOM_ELEMENTS_SCHEMA,
+  ],
 })
 export class PortalCarouselComponent implements OnChanges {
   public faCaretLeft = faCaretLeft;
@@ -40,7 +59,10 @@ export class PortalCarouselComponent implements OnChanges {
     return this.cardsPerSlide > 1;
   }
 
-  public constructor(private router: Router, viewportService: ViewportService) {
+  public constructor(
+    private router: Router,
+    viewportService: ViewportService,
+  ) {
     viewportService.viewportBroadcast$.subscribe((viewport) => {
       if (viewport === PidpViewport.xsmall) {
         this.cardsPerSlide = 1;

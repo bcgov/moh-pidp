@@ -1,4 +1,5 @@
-import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { MatIconModule } from '@angular/material/icon';
 
 /**
  * @description
@@ -14,6 +15,8 @@ export type IconType = 'filled' | 'outlined' | 'round' | 'sharp';
   templateUrl: './icon.component.html',
   styleUrls: ['./icon.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [MatIconModule],
 })
 export class IconComponent {
   @Input() public color: 'primary' | 'accent' | 'warn';

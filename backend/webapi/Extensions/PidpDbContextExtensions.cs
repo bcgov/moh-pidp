@@ -16,4 +16,15 @@ public static class PidpDbContextExtensions
             .SelectMany(endorsement => endorsement.EndorsementRelationships)
             .Where(relationship => relationship.PartyId != partyId);
     }
+
+    /// <summary>
+    /// Builds the IQueryable for all Parties in an active Endorsement Relationship with the given Party.
+    /// Removes duplicates if the Party is endorsed by the same Party multiple times.
+    /// </summary>
+    public static IQueryable<Party> ActiveEndorsingParties(this PidpDbContext context, int partyId)
+    {
+        return context.ActiveEndorsementRelationships(partyId)
+            .Select(relationship => relationship.Party!)
+            .Distinct();
+    }
 }

@@ -89,8 +89,19 @@ public class PlrRecord : BaseAuditable
 
     public static bool ComputeGoodStanding(string? statusCode, string? statusReasonCode)
     {
-        var goodStandingReasons = new[] { "GS", "PRAC", "TEMPPER" };
-        return statusCode == "ACTIVE"
-            && goodStandingReasons.Contains(statusReasonCode);
+        // A Licence is in good standing if the Status is "ACTIVE" and the StatusReason is one of a few allowable values.
+        // Additionally, "TI" (Temporary Inactive) and "VW" (Voluntary Withdrawn) are "SUSPENDED" in PLR rather than "ACTIVE", but are still considered to be in good standing.
+        var goodStandingReasons = new[] { "GS", "PRAC", "TEMPPER", "TI", "VW" };
+        var suspendedAllowed = new[] { "TI", "VW" };
+
+        if (statusCode == "ACTIVE")
+        {
+            return goodStandingReasons.Contains(statusReasonCode);
+        }
+        else if (statusCode == "SUSPENDED")
+        {
+            return suspendedAllowed.Contains(statusReasonCode);
+        }
+        return false;
     }
 }

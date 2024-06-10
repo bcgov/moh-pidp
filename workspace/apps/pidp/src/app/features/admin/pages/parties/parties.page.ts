@@ -1,6 +1,9 @@
+import { NgIf } from '@angular/common';
 import { Component, Inject, OnInit } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
-import { MatTableDataSource } from '@angular/material/table';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
 
 import { EMPTY, exhaustMap, of, switchMap } from 'rxjs';
@@ -9,11 +12,14 @@ import {
   ConfirmDialogComponent,
   DialogOptions,
   HtmlComponent,
+  PageComponent,
+  PageHeaderComponent,
 } from '@bcgov/shared/ui';
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';
 
 import { EnvironmentName } from '../../../../../environments/environment.model';
+import { LookupCodePipe } from '../../../../modules/lookup/lookup-code.pipe';
 import {
   AdminResource,
   PartyList,
@@ -23,6 +29,16 @@ import {
   selector: 'app-parties',
   templateUrl: './parties.page.html',
   styleUrls: ['./parties.page.scss'],
+  standalone: true,
+  imports: [
+    LookupCodePipe,
+    MatButtonModule,
+    MatIconModule,
+    MatTableModule,
+    NgIf,
+    PageComponent,
+    PageHeaderComponent,
+  ],
 })
 export class PartiesPage implements OnInit {
   public title: string;
@@ -32,6 +48,7 @@ export class PartiesPage implements OnInit {
     'providerName',
     'providerCollegeCode',
     'saEforms',
+    'delete',
   ];
   public environment: string;
   public production: string;
@@ -40,7 +57,7 @@ export class PartiesPage implements OnInit {
     @Inject(APP_CONFIG) private config: AppConfig,
     private adminResource: AdminResource,
     private dialog: MatDialog,
-    route: ActivatedRoute
+    route: ActivatedRoute,
   ) {
     this.title = route.snapshot.data.title;
     this.dataSource = new MatTableDataSource();
@@ -48,7 +65,14 @@ export class PartiesPage implements OnInit {
     this.production = EnvironmentName.PRODUCTION;
   }
 
-  public onDelete(): void {
+  public onDeleteParty(partyId: number): void {
+    this.adminResource
+      .deleteParty(partyId)
+      .pipe(switchMap(() => of(this.getParties())))
+      .subscribe();
+  }
+
+  public onDeleteParties(): void {
     const data: DialogOptions = {
       title: 'Delete all parties',
       component: HtmlComponent,
@@ -61,9 +85,9 @@ export class PartiesPage implements OnInit {
       .afterClosed()
       .pipe(
         exhaustMap((result) =>
-          result ? this.adminResource.deleteParties() : EMPTY
+          result ? this.adminResource.deleteParties() : EMPTY,
         ),
-        switchMap(() => of(this.getParties()))
+        switchMap(() => of(this.getParties())),
       )
       .subscribe();
   }
@@ -77,7 +101,7 @@ export class PartiesPage implements OnInit {
       .getParties()
       .subscribe(
         (parties: PartyList[]) =>
-          (this.dataSource.data = parties.sort((a, b) => a.id - b.id))
+          (this.dataSource.data = parties.sort((a, b) => a.id - b.id)),
       );
   }
 }

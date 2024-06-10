@@ -5,10 +5,7 @@
     </header>
     <div class="content">
       <section class="error-card" [class.show-card]="showErrorCard">
-        <p>{{ errorCardText }}</p>
-      </section>
-      <section class="message-card" [class.show-card]="showMessageCard">
-        <p>{{ messageCardText }}</p>
+        <p>An error occurred.</p>
       </section>
       <section class="form-card">
         <div class="password-form">
@@ -71,7 +68,7 @@
         <label id="bc-provider-application-new-password"
           >Choose new password</label
         >
-        <mat-form-field appearance="outline">
+        <mat-form-field>
           <input
             matInput
             formControlName="newPassword"
@@ -84,7 +81,7 @@
         <label id="bc-provider-application-confirm-password"
           >Confirm new password</label
         >
-        <mat-form-field appearance="outline">
+        <mat-form-field>
           <input
             matInput
             formControlName="confirmPassword"
@@ -105,34 +102,14 @@
           Reset password
         </button>
       </div>
-      <!-- TODO: What's the target URL for the help-link?
-        <div class="help-link"><a href="">Need help?</a></div> -->
+      <app-need-help></app-need-help>
     </div>
   </form>
 </ng-template>
 
-<!-- NOTE: It is not yet clear whether this dialog will be in the "final" UX. If it is, it is a candidate
-to be refactored into a separate component. -->
 <ng-template #successDialog>
-  <div class="dialog-box" uiPidpInjectViewportCss>
-    <div class="dialog-header">
-      <button
-        type="button"
-        aria-label="Close dialog"
-        (click)="onSuccessDialogClose()">
-        <fa-icon [icon]="faXmark"></fa-icon>
-      </button>
-    </div>
-    <div class="dialog-content">
-      <div class="dialog-icon">
-        <fa-icon [icon]="faCircleCheck"></fa-icon>
-      </div>
-      <h3>Password reset completed</h3>
-      <p>
-        Password reset for <strong>{{ username }}</strong> has been created.<br />
-        You will now have the option to sign in to our system with these
-        credentials.
-      </p>
-    </div>
-  </div>
+  <app-success-dialog
+    title="Password reset completed"
+    [username]="username"
+    [componentType]="componentType"></app-success-dialog>
 </ng-template>

@@ -1,0 +1,28 @@
+Post Incident Report
+Project: PIDP
+Date of incident: Jan 10, 2024 9:34AM PST
+Environment Affected: d8a8f9-prod (Silver Cluster)
+
+9:34 - Nick Mailhot (Nic) posts in PIDP slack channel that there's an issue with Metabase no able to retrieve data.
+9:40 - Nic alerted Chris Mullin that there was a production issue with PIDP. Chris Mullin (Chris) responded and started his investigation
+9:43 - Chris validated the CrunchyDB was behaving normally. Also confirmed that none of the web-api pods were not in a ready state. Health checks are intermittently failing.
+9:47 - PVCs validated to be ok, queries to the Crunchy PSQL returned reasonable results in a timely fashion. Metabase returning timeouts
+9:50 - Chris suspects Silver Upgrade may be causing issues with network.  Engaged with Platform Services support
+10:15 - Tim Baker and Steven Barre at platform services checked pods in question.  Confirmed some of them are on new nods.  Also pointed out that web-api pods were connecting to prod-patroni NOT CrunchyDB.
+10:24 - Chris confirmed findings and switched to investigating prod-patroni. Confirmed Patroni is unhealthy.
+10:30 to 11:54 - Worked the patroni problem. Dug into the pyhton error of the patroni missing the yaml library. Image investigation shows the image does not appear to have been altered.  Platform services version of Patroni (which is what's being used) doesn't appear to have been updated in 2 years. Looked at corresponding git repository to confirm.  Considered forking and rebuilding. Tried different version of Patroni image found in Tools namespace that turned out to not actually exist (Image stream was there but no image). Added Panos as admin to Prod namespace. Increased the service timeouts to 30 seconds to reduce readiness probe alerts.
+11:54 - engaged Tyler Krys (BC Government GDX) and Cailey Jones (Platform Services Support) on Rocket Chat in the patroni channel. Tyler suggested on possible solution which was a dead end.  Cailey  recommended switching to using the images from Artifactory and upgrade to the newer version of Patroni. Said that the risks are low for a Patroni upgrade. The PSQL version is unchanged with 12.4.
+12:13 to 1:30(ish) - Configured prod-patroni service account with ability top pull images from Artifactory. https://developer.gov.bc.ca/Developer-Tools/Artifact-Repositories-(Artifactory). Upgrade prod-patroni-0 to use patroni-postgres:2.0.1-12.4-latest which was successful. Looking at data in various tables showed data from Jan 8th. Added a Utility pod to prod to help with diagnostics. Discussed risks with data loss and possible data corruption with standing up prod-patroni-1 and prod-patroni-2. Confirmed that prod-patroni-2 was designated as master pod. Manually backed up db into .sql file and validated data in .sql contained reasonable table definitions and data.
+2:00ish - Discussed risks with team in including Nic and proceeded with upgrade of prod-patroni-1 and prod-patroni-2 to the newest version. There was concern that prod-patroni-2 (master) may have older data than prod-patroni-0 which may clobber newer data. Decision was to proceed with upgrade of other pods and rely on the manual backup as a last resort. Conversations also took place as to the location of this backup as there's PII. The pg_dump.sql file was stored in the root folder of the prod-patroni-0 PVC next to the pg_data folder to address this PII concern.
+2:23 - upgraded prod-patroni-1 and prod-patroni-2.
+2:23 to 2:40 - After all three pods were upgraded prod-patroni-2 data was searched and determined that it's data was newer (it included data from the morning of Jan 10). It was also confirmed (threw a few samples) that prod-patroni-0 had synced and now contained the same dataset as prod-patroni-2
+2:40 - back online
+2:40 to 3:30 - a short debrief with the team as well as removing the manual pg_dump.sql backup off prod-patroni-0. The utility pod was also turned down to 0 pods (but kept the deployment for future use).
+
+Takeaways
+ - we don't know why the patroni image started to throw import yaml errors. The Silver upgrade may have been a catalyst for the restart of the pod, but this upgrade should not have affected the image.
+ - almost an hour of time was wasted investigating CrunchyDB and the web-api connection that didn't exist. It's STRONGLY encouraged to commit to one or the other and remove the unused one.
+ - the psql image in use was quite old. Platform services have come out with 4 versions since this was released and had switched to the Artifactory repository. Consider keeping up to date with the images as normal maintenance.
+ - not all members of the team know the full tech stack in prod, nor do all members of the team have production access. It's understood that we need to be restrictive particularly in regards to PII, however it does limit response ability. Please reconsider production access. Panos is still in the prod admin namespace...although not confirmed to actually work.
+ - Architectural documentation was not readily available.  Consider having arch docs included in the git repo that's easily discoverable with straignt forward technical illustrations. In times of an outage there are high stresses and anxiety, having simple illustrations can go a long way to helping understand the problem.
+ - Chris was unable to find the psql backups. This should be straightforward to find.

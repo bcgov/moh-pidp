@@ -6,10 +6,11 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { randTextRange } from '@ngneat/falso';
 import { provideAutoSpy } from 'jest-auto-spies';
 
-import { TransactionsPage } from './transactions.page';
-import { TransactionsResource } from './transactions-resource.service';
-import { LoggerService } from '@app/core/services/logger.service';
 import { PartyService } from '@app/core/party/party.service';
+import { LoggerService } from '@app/core/services/logger.service';
+
+import { TransactionsResource } from './transactions-resource.service';
+import { TransactionsPage } from './transactions.page';
 
 describe('TransactionsPage', () => {
   let component: TransactionsPage;

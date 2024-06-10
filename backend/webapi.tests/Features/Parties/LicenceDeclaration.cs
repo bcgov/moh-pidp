@@ -27,7 +27,8 @@ public class LicenceDeclarationTests : InMemoryDbTest
             party.Phone = "5555555555";
         });
 
-        var plrClient = A.Fake<IPlrClient>();
+        var plrClient = A.Fake<IPlrClient>()
+            .ReturningAStandingsDigest(true);
         A.CallTo(() => plrClient.FindCpnAsync(collegeCode, licenceNumber, party.Birthdate!.Value)).Returns(expectedCpn);
         var handler = this.MockDependenciesFor<CommandHandler>(plrClient);
 

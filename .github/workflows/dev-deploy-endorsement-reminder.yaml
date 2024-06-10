@@ -1,0 +1,34 @@
+name: Deploy Dev Helm Charts - Endorsement Reminder
+
+on:
+  push:
+    branches: [develop]
+    paths:
+      - "infra/endorsement_reminder/**"
+  workflow_dispatch:
+
+# This will terminate builds that are previously, but continuing to run.  Saves GHA hours.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+
+  helm-deployment-endorsement-reminder:
+    runs-on: 'ubuntu-latest'
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Authenticate and set context
+        uses: redhat-actions/oc-login@v1.2
+        with:
+          openshift_server_url: ${{secrets.OPENSHIFT_CLUSTER_URL}}
+          openshift_token: ${{secrets.OPENSHIFT_PIPELINE_SERVICE_ACCOUNT_TOKEN}}
+
+      - name: Helm Deploy Upgrade
+        run: |
+          echo current installed helm releases
+          helm list --namespace d8a8f9-dev
+
+          echo installing helm chart...
+          helm upgrade --wait --namespace d8a8f9-dev --values infra/endorsement_reminder/values-dev.yaml endorsement-reminder infra/endorsement_reminder

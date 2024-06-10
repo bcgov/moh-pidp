@@ -1,0 +1,27 @@
+<div [ngClass]="customClasses">
+  <div class="need-help-header">
+    <button class="pidp-btn-link" (click)="onShowNeedHelp()">
+      Need Help?
+      <i *ngIf="showIcon" class="material-icons-outlined">arrow_circle_right</i>
+    </button>
+  </div>
+  <div class="show-need-help">
+    <ui-expansion-panel [expanded]="showNeedHelp">
+      <div class="need-help-container">
+        <ul class="need-help-list">
+          <li>
+            By email at
+            <a
+              uiAnchor
+              scheme="mailto"
+              [attr.href]="providerIdentitySupport"></a>
+          </li>
+          <li>
+            By phone at
+            <a uiAnchor scheme="tel" [attr.href]="additionalSupportPhone"></a>
+          </li>
+        </ul>
+      </div>
+    </ui-expansion-panel>
+  </div>
+</div>

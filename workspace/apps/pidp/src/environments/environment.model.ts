@@ -17,12 +17,12 @@ export interface AppEnvironment extends EnvironmentConfig {
     providerIdentitySupport: string;
     specialAuthorityEformsSupport: string;
     hcimAccountTransferSupport: string;
-    hcimEnrolmentSupport: string;
     prescriptionRefillRequestEformsSupport: string;
     driverFitnessSupport: string;
     msTeamsSupport: string;
     doctorsTechnologyOfficeSupport: string;
     phsaInformationAccessAndPrivacyOffice: string;
+    immsBCEformsSupport: string;
   };
   urls: {
     bcscAppDownload: string;

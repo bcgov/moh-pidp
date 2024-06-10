@@ -10,4 +10,4 @@ export const faqSectionKeys = ['mfaSetup'] as const;
  * @description
  * Union of keys generated from the tuple.
  */
-export type FaqSectionKey = typeof faqSectionKeys[number];
+export type FaqSectionKey = (typeof faqSectionKeys)[number];

@@ -40,7 +40,7 @@ export abstract class AbstractHttpClient implements IHttpClient {
 
   public get<T>(
     path: string,
-    options?: { [key: string]: unknown }
+    options?: { [key: string]: unknown },
   ): Observable<T> {
     return this.http
       .get<T>(`${this.uri}/${path}`, {
@@ -51,7 +51,7 @@ export abstract class AbstractHttpClient implements IHttpClient {
 
   public head<T>(
     path: string,
-    options?: { [key: string]: unknown }
+    options?: { [key: string]: unknown },
   ): Observable<T> {
     return this.http
       .head<T>(`${this.uri}/${path}`, {
@@ -63,7 +63,7 @@ export abstract class AbstractHttpClient implements IHttpClient {
   public post<T>(
     path: string,
     body: { [key: string]: any } | null,
-    options?: { [key: string]: unknown }
+    options?: { [key: string]: unknown },
   ): Observable<T> {
     return this.http
       .post<T>(`${this.uri}/${path}`, body, {
@@ -75,7 +75,7 @@ export abstract class AbstractHttpClient implements IHttpClient {
   public put<T>(
     path: string,
     body: { [key: string]: any } | null,
-    options?: { [key: string]: unknown }
+    options?: { [key: string]: unknown },
   ): Observable<T> {
     return this.http
       .put<T>(`${this.uri}/${path}`, body, {
@@ -86,7 +86,7 @@ export abstract class AbstractHttpClient implements IHttpClient {
 
   public delete<T>(
     path: string,
-    options?: { [key: string]: unknown }
+    options?: { [key: string]: unknown },
   ): Observable<T> {
     return this.http
       .delete<T>(`${this.uri}/${path}`, {

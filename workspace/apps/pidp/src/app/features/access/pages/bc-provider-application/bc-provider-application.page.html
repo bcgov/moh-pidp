@@ -5,9 +5,10 @@
     </header>
     <div class="content">
       <h3>
-        <strong
-          >Welcome {{ username }} to your BC Provider knowledge center!</strong
-        >
+        <strong>
+          Welcome {{ (dashboardState$ | async)?.userProfileFullNameText }} to
+          your BC Provider knowledge center!
+        </strong>
       </h3>
       <p>
         The OneHealthID Service is designed to use the digital identity created
@@ -22,10 +23,9 @@
         in with your BC Services Card credentials.
       </p>
       <p>
-        <strong
-          >Do you not have a BC Provider account? setup is quick and
-          easy.</strong
-        >
+        <strong>
+          Do you not have a BC Provider account? setup is quick and easy.
+        </strong>
       </p>
       <div class="cards">
         <div class="card card-basic">
@@ -47,9 +47,7 @@
                   First time setup
                 </button>
               </div>
-              <!-- TODO: What's the target URL for the help-link?
-              <div class="help-link"><a uiAnchor href="">Need help?</a></div>
-              -->
+              <app-need-help></app-need-help>
             </div>
             <div class="card-footer">
               <hr />
@@ -63,6 +61,7 @@
                     srcset="/assets/images/BC_HLTH_H_CMYK_pos.png" />
                   <img
                     title="BC Government Logo"
+                    alt="BC Ministry of Health Logo"
                     loading="lazy"
                     aria-label="BC Ministry of Health Logo" />
                 </picture>
@@ -72,7 +71,8 @@
         </div>
         <div class="card card-uplifting">
           <img
-            ngSrc="/assets/images/bc-provider-uplifit-account-300x451.jpg"
+            ngSrc="/assets/images/bc-provider-uplift-account-300x451.jpg"
+            alt="BC Provider uplifting account"
             fill />
           <div class="card-container">
             <div class="card-header">
@@ -107,10 +107,7 @@
                 with your existing information, and we will automatically take
                 care of the secure uplift.
               </p>
-              <!-- TODO: What's the target URL for the help-link?
-                <div class="help-link">
-                  <a uiAnchor href="">Need to know more?</a>
-                </div> -->
+              <app-need-help></app-need-help>
             </div>
           </div>
         </div>
@@ -180,10 +177,7 @@
     </p>
 
     <section class="error-card" [class.show-card]="showErrorCard">
-      <p>{{ errorCardText }}</p>
-    </section>
-    <section class="message-card" [class.show-card]="showMessageCard">
-      <p>{{ messageCardText }}</p>
+      <p>An error occurred.</p>
     </section>
     <section class="form-card">
       <div class="password-form">
@@ -239,7 +233,7 @@
     <div class="form-content">
       <div class="field">
         <label id="bc-provider-application-password">Choose a password</label>
-        <mat-form-field appearance="outline">
+        <mat-form-field>
           <input
             matInput
             formControlName="password"
@@ -252,7 +246,7 @@
         <label id="bc-provider-application-confirm-password"
           >Confirm password</label
         >
-        <mat-form-field appearance="outline">
+        <mat-form-field>
           <input
             matInput
             formControlName="confirmPassword"
@@ -273,38 +267,15 @@
           Enrol now
         </button>
       </div>
-      <!-- TODO: What's the target URL for the help-link?
-      <div class="help-link"><a href="">Need help?</a></div>
-      -->
     </div>
   </form>
 </ng-template>
 
 <ng-template #default></ng-template>
 
-<!-- TODO: Refactor into a separate component. -->
 <ng-template #successDialog>
-  <div class="dialog-box" uiPidpInjectViewportCss>
-    <div class="dialog-header">
-      <button
-        type="button"
-        aria-label="Close dialog"
-        (click)="onSuccessDialogClose()">
-        <fa-icon [icon]="faXmark"></fa-icon>
-      </button>
-    </div>
-    <div class="dialog-content">
-      <div class="dialog-icon">
-        <fa-icon [icon]="faCircleCheck"></fa-icon>
-      </div>
-      <h3>BC Provider account created</h3>
-      <p>
-        BC Provider account <strong>{{ username }}</strong> has been created.<br />
-        You will now have the option to sign in to our system with these
-        credentials.<br />
-        Please note, this is not an email address. <br />You will not be able to
-        send or receive any emails from this credential.
-      </p>
-    </div>
-  </div>
+  <app-success-dialog
+    title="BC Provider account created"
+    [username]="username"
+    [componentType]="componentType"></app-success-dialog>
 </ng-template>

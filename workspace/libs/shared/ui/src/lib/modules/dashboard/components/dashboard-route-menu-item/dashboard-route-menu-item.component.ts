@@ -1,3 +1,4 @@
+import { AsyncPipe, NgIf } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -5,6 +6,9 @@ import {
   Input,
   Output,
 } from '@angular/core';
+import { MatIconModule } from '@angular/material/icon';
+import { MatListModule } from '@angular/material/list';
+import { RouterLink, RouterLinkActive } from '@angular/router';
 
 import { Observable } from 'rxjs';
 
@@ -16,6 +20,15 @@ import { DashboardRouteMenuItem } from '../../models/dashboard-menu-item.model';
   templateUrl: './dashboard-route-menu-item.component.html',
   styleUrls: ['./dashboard-route-menu-item.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    MatListModule,
+    RouterLinkActive,
+    RouterLink,
+    NgIf,
+    MatIconModule,
+    AsyncPipe,
+  ],
 })
 export class DashboardRouteMenuItemComponent {
   /**

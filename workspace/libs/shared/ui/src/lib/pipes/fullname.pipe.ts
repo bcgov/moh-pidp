@@ -2,6 +2,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
   name: 'fullname',
+  standalone: true,
 })
 export class FullnamePipe implements PipeTransform {
   public transform(
@@ -13,7 +14,7 @@ export class FullnamePipe implements PipeTransform {
           [key: string]: any;
         }
       | null
-      | undefined
+      | undefined,
   ): string | null {
     if (!model) {
       return null;

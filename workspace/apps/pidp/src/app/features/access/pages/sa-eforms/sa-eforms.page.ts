@@ -1,14 +1,31 @@
+import { NgIf } from '@angular/common';
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { catchError, noop, of, tap } from 'rxjs';
+
+import {
+  AlertComponent,
+  AlertContentDirective,
+  AnchorDirective,
+  PageComponent,
+  PageFooterActionDirective,
+  PageFooterComponent,
+  PageHeaderComponent,
+  PageSectionComponent,
+  PageSectionSubheaderComponent,
+  PageSectionSubheaderDescDirective,
+  SafePipe,
+} from '@bcgov/shared/ui';
 
 import { PartyService } from '@app/core/party/party.service';
 import { DocumentService } from '@app/core/services/document.service';
 import { LoggerService } from '@app/core/services/logger.service';
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
 
+import { EnrolmentErrorComponent } from '../../components/enrolment-error/enrolment-error.component';
 import { SaEformsResource } from './sa-eforms-resource.service';
 import {
   specialAuthorityEformsSupportEmail,
@@ -19,6 +36,23 @@ import {
   selector: 'app-sa-eforms',
   templateUrl: './sa-eforms.page.html',
   styleUrls: ['./sa-eforms.page.scss'],
+  standalone: true,
+  imports: [
+    AlertComponent,
+    AlertContentDirective,
+    AnchorDirective,
+    EnrolmentErrorComponent,
+    MatButtonModule,
+    NgIf,
+    PageComponent,
+    PageFooterActionDirective,
+    PageFooterComponent,
+    PageHeaderComponent,
+    PageSectionComponent,
+    PageSectionSubheaderComponent,
+    PageSectionSubheaderDescDirective,
+    SafePipe,
+  ],
 })
 export class SaEformsPage implements OnInit {
   public title: string;
@@ -35,7 +69,7 @@ export class SaEformsPage implements OnInit {
     private partyService: PartyService,
     private resource: SaEformsResource,
     private logger: LoggerService,
-    documentService: DocumentService
+    documentService: DocumentService,
   ) {
     const routeData = this.route.snapshot.data;
     this.title = routeData.title;
@@ -67,7 +101,7 @@ export class SaEformsPage implements OnInit {
           }
           this.accessRequestFailed = true;
           return of(noop());
-        })
+        }),
       )
       .subscribe();
   }

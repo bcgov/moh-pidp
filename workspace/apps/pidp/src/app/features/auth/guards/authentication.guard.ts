@@ -1,33 +1,28 @@
-import { Injectable } from '@angular/core';
-import { Router, UrlTree } from '@angular/router';
+import { inject } from '@angular/core';
+import {
+  ActivatedRouteSnapshot,
+  CanActivateChildFn,
+  CanActivateFn,
+  CanMatchFn,
+  Route,
+} from '@angular/router';
 
-import { AuthService } from '../services/auth.service';
-import { AuthGuard } from './abstract-auth.guard';
+import { AuthenticationGuardService } from './services/authentication-guard.service';
 
-@Injectable({
-  providedIn: 'root',
-})
-export abstract class AuthenticationGuard extends AuthGuard {
-  public constructor(
-    protected authService: AuthService,
-    private router: Router
-  ) {
-    super(authService);
-  }
+export abstract class AuthenticationGuard {
+  public static canActivate: CanActivateFn = (
+    route: ActivatedRouteSnapshot,
+  ) => {
+    return inject(AuthenticationGuardService).canActivate(route);
+  };
 
-  protected handleAccessCheck(
-    routeRedirect: string | undefined
-  ): (authenticated: boolean) => boolean | UrlTree {
-    return (authenticated: boolean): boolean | UrlTree =>
-      authenticated
-        ? true
-        : this.router.createUrlTree([routeRedirect ?? '/'], {
-          queryParams: this.router.getCurrentNavigation()?.extractedUrl.queryParams,
-          queryParamsHandling: 'merge'
-        });
-  }
+  public static canActivateChild: CanActivateChildFn = (
+    childRoute: ActivatedRouteSnapshot,
+  ) => {
+    return inject(AuthenticationGuardService).canActivateChild(childRoute);
+  };
 
-  protected handleAccessError(): boolean {
-    return false;
-  }
+  public static canMatch: CanMatchFn = (route: Route) => {
+    return inject(AuthenticationGuardService).canMatch(route);
+  };
 }

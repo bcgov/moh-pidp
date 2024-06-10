@@ -11,7 +11,6 @@ describe('ContextHelpComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ContextHelpComponent],
       imports: [MatButtonModule, MatIconModule, MatMenuModule],
     }).compileComponents();
   });

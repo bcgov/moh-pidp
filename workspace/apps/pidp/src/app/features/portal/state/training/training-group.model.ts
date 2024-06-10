@@ -12,7 +12,7 @@ export const trainingSectionKeys = ['complianceTraining'] as const;
  * @description
  * Union of keys generated from the tuple.
  */
-export type TrainingSectionKey = typeof trainingSectionKeys[number];
+export type TrainingSectionKey = (typeof trainingSectionKeys)[number];
 
 /**
  * @description

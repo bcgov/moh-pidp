@@ -9,7 +9,6 @@ describe('DashboardMenuComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [DashboardMenuComponent],
       imports: [MatListModule],
     }).compileComponents();
   });

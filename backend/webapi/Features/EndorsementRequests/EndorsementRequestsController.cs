@@ -28,10 +28,22 @@ public class EndorsementRequestsController : PidpControllerBase
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> CreateEndorsementRequest([FromServices] ICommandHandler<Create.Command> handler,
+    [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
+    public async Task<IActionResult> CreateEndorsementRequest([FromServices] ICommandHandler<Create.Command, Create.Model> handler,
                                                               [FromHybrid] Create.Command command)
-        => await this.AuthorizePartyBeforeHandleAsync(command.PartyId, handler, command)
-            .ToActionResult();
+    {
+        var result = await this.AuthorizePartyBeforeHandleAsync(command.PartyId, handler, command);
+        if (!result.IsSuccess)
+        {
+            return result.ToActionResult();
+        }
+        if (result.Value.DuplicateEndorsementRequest)
+        {
+            return this.StatusCode(StatusCodes.Status422UnprocessableEntity);
+        }
+
+        return this.NoContent();
+    }
 
     [HttpPost("receive")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]

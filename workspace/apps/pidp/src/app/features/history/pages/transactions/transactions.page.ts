@@ -1,10 +1,24 @@
+import { AsyncPipe, NgFor, NgIf } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { Observable } from 'rxjs';
 
+import {
+  FormatDatePipe,
+  PageComponent,
+  PageFooterActionDirective,
+  PageFooterComponent,
+  PageHeaderComponent,
+  PageSectionComponent,
+  PageSectionSubheaderComponent,
+  PageSectionSubheaderDescDirective,
+} from '@bcgov/shared/ui';
+
 import { PartyService } from '@app/core/party/party.service';
 import { LoggerService } from '@app/core/services/logger.service';
+import { LookupCodePipe } from '@app/modules/lookup/lookup-code.pipe';
 
 import { Transaction } from './transaction.model';
 import { TransactionsResource } from './transactions-resource.service';
@@ -13,6 +27,22 @@ import { TransactionsResource } from './transactions-resource.service';
   selector: 'app-transactions',
   templateUrl: './transactions.page.html',
   styleUrls: ['./transactions.page.scss'],
+  standalone: true,
+  imports: [
+    AsyncPipe,
+    FormatDatePipe,
+    LookupCodePipe,
+    MatButtonModule,
+    NgIf,
+    NgFor,
+    PageComponent,
+    PageFooterActionDirective,
+    PageFooterComponent,
+    PageHeaderComponent,
+    PageSectionComponent,
+    PageSectionSubheaderComponent,
+    PageSectionSubheaderDescDirective,
+  ],
 })
 export class TransactionsPage implements OnInit {
   public title: string;
@@ -23,7 +53,7 @@ export class TransactionsPage implements OnInit {
     private router: Router,
     private resource: TransactionsResource,
     private partyService: PartyService,
-    private logger: LoggerService
+    private logger: LoggerService,
   ) {
     this.title = this.route.snapshot.data.title;
   }

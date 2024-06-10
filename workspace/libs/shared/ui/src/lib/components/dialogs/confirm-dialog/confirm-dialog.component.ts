@@ -1,15 +1,25 @@
+import { NgIf } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
-  ComponentFactoryResolver,
   Inject,
   OnInit,
   Type,
   ViewChild,
   ViewContainerRef,
 } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
+import {
+  MAT_DIALOG_DATA,
+  MatDialogActions,
+  MatDialogClose,
+  MatDialogContent,
+  MatDialogRef,
+  MatDialogTitle,
+} from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
 
+import { AnchorDirective } from '../../anchor/anchor.directive';
 import { IDialogContent } from '../dialog-content.model';
 import { DialogDefaultOptions } from '../dialog-default-options.model';
 import { DialogOptions } from '../dialog-options.model';
@@ -21,6 +31,18 @@ import { DIALOG_DEFAULT_OPTION } from '../dialogs-properties.provider';
   templateUrl: './confirm-dialog.component.html',
   styleUrls: ['./confirm-dialog.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    AnchorDirective,
+    MatDialogTitle,
+    NgIf,
+    MatIconModule,
+    MatDialogContent,
+    MatDialogActions,
+    MatButtonModule,
+    MatDialogClose,
+    AnchorDirective,
+  ],
 })
 export class ConfirmDialogComponent implements OnInit {
   public options: DialogOptions;
@@ -33,7 +55,6 @@ export class ConfirmDialogComponent implements OnInit {
     public dialogRef: MatDialogRef<ConfirmDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public customOptions: DialogOptions,
     @Inject(DIALOG_DEFAULT_OPTION) public defaultOptions: DialogDefaultOptions,
-    private componentFactoryResolver: ComponentFactoryResolver
   ) {
     this.options =
       typeof customOptions === 'string'
@@ -55,9 +76,11 @@ export class ConfirmDialogComponent implements OnInit {
     if (this.options.component) {
       this.loadDialogContentComponent(
         this.options.component,
-        this.options.data
+        this.options.data,
       );
     }
+
+    this.dialogRef.updateSize(this.options.width, this.options.height);
   }
 
   private getOptions(dialogOptions: DialogOptions): DialogOptions {
@@ -77,16 +100,11 @@ export class ConfirmDialogComponent implements OnInit {
 
   private loadDialogContentComponent(
     component: Type<unknown>,
-    data: unknown
+    data: unknown,
   ): void {
-    const componentFactory =
-      this.componentFactoryResolver.resolveComponentFactory(component);
     this.dialogContentHost.clear();
 
-    // TODO dynamic component creation in v13 has an issue with rendering
-    //      the generate component vs the deprecated API
-    const componentRef =
-      this.dialogContentHost.createComponent(componentFactory);
+    const componentRef = this.dialogContentHost.createComponent(component);
     const componentInstance = componentRef.instance as IDialogContent;
     componentInstance.data = data;
     const output$ = componentInstance.output;
@@ -94,7 +112,7 @@ export class ConfirmDialogComponent implements OnInit {
     if (output$) {
       output$.subscribe(
         (value: DialogContentOutput<unknown> | null) =>
-          (this.dialogContentOutput = value)
+          (this.dialogContentOutput = value),
       );
     }
   }

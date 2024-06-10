@@ -14,18 +14,18 @@ export class KeycloakInitService {
   public constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
     private router: Router,
-    private keycloakService: KeycloakService
+    private keycloakService: KeycloakService,
   ) {}
 
   public async load(): Promise<void> {
     const authenticated = await this.keycloakService.init(
-      this.getKeycloakOptions()
+      this.getKeycloakOptions(),
     );
 
     this.keycloakService.getKeycloakInstance().onTokenExpired = (): void => {
       this.keycloakService
         .updateToken()
-        .catch(() => this.router.navigateByUrl(AuthRoutes.MODULE_PATH));
+        .catch(() => this.router.navigateByUrl(AuthRoutes.BASE_PATH));
     };
 
     if (authenticated) {

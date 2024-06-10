@@ -13,6 +13,7 @@ import { PageFooterActionDirective } from './page-footer-action.directive';
   templateUrl: './page-footer.component.html',
   styleUrls: ['./page-footer.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
 })
 export class PageFooterComponent {
   @Input() public mode: 'normal' | 'reverse';

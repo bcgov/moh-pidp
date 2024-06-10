@@ -6,5 +6,5 @@ export const NAVIGATOR = new InjectionToken<Navigator>(
   'An abstraction over window.navigator object',
   {
     factory: (): Navigator => inject(WINDOW).navigator,
-  }
+  },
 );

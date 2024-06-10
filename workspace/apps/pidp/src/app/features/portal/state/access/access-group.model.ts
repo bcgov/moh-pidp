@@ -11,8 +11,7 @@ export const accessSectionKeys = [
   'saEforms',
   'prescription-refill-eforms',
   'hcimAccountTransfer',
-  'hcimEnrolment',
-  'sitePrivacySecurityChecklist',
+  'immsBCEforms',
   'driverFitness',
   'msTeamsPrivacyOfficer',
   'msTeamsClinicMember',
@@ -24,7 +23,7 @@ export const accessSectionKeys = [
  * @description
  * Union of keys generated from the tuple.
  */
-export type AccessSectionKey = typeof accessSectionKeys[number];
+export type AccessSectionKey = (typeof accessSectionKeys)[number];
 
 /**
  * @description
@@ -39,8 +38,7 @@ export interface AccessGroup extends IAccessGroup {
   prescriptionRefillEforms: Section;
   bcProvider: Section;
   hcimAccountTransfer: Section;
-  hcimEnrolment: Section;
-  sitePrivacySecurityChecklist: Section;
+  immsBCEforms: Section;
   driverFitness: Section;
   msTeamsPrivacyOfficer: Section;
   msTeamsClinicMember: Section;

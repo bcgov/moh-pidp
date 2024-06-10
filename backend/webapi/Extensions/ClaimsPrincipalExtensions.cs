@@ -45,9 +45,23 @@ public static class ClaimsPrincipalExtensions
     public static string? GetIdentityProvider(this ClaimsPrincipal? user) => user?.FindFirstValue(Claims.IdentityProvider);
 
     /// <summary>
-    /// Returns the Identity Provider ID of the User, or null if User is null
+    /// Returns the Identity Provider ID of the User, or null if User is null.
+    /// Trims "@bcp" off the end if the Identity Provider is BC Provider.
     /// </summary>
-    public static string? GetIdpId(this ClaimsPrincipal? user) => user?.FindFirstValue(Claims.PreferredUsername);
+    public static string? GetIdpId(this ClaimsPrincipal? user)
+    {
+        var idpId = user?.FindFirstValue(Claims.PreferredUsername);
+
+        if (idpId != null
+            && user.GetIdentityProvider() == IdentityProviders.BCProvider
+            && idpId.EndsWith("@bcp", StringComparison.InvariantCultureIgnoreCase))
+        {
+            // Keycloak adds "@<identity provider>" at the end of the IDP ID, and for BC Providers this won't match what we have in the DB if we don't trim it.
+            idpId = idpId[..^4];
+        }
+
+        return idpId;
+    }
 
     /// <summary>
     /// Parses the Resource Access claim and returns the roles for the given resource

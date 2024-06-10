@@ -1,19 +1,46 @@
+import { NgFor, NgIf } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatOptionModule } from '@angular/material/core';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
 
 import { distinctUntilChanged, pairwise, startWith } from 'rxjs';
 
+import { NgxMaskDirective } from 'ngx-mask';
+
 import { Address, AddressLine, Country } from '@bcgov/shared/data-access';
+import { InjectViewportCssClassDirective } from '@bcgov/shared/ui';
 
 import { LookupService } from '@app/modules/lookup/lookup.service';
 import { Lookup, ProvinceLookup } from '@app/modules/lookup/lookup.types';
 
 import { FormUtilsService } from '@core/services/form-utils.service';
 
+import { AddressAutocompleteComponent } from '../address-autocomplete/address-autocomplete.component';
+
 @Component({
   selector: 'app-address-form',
   templateUrl: './address-form.component.html',
   styleUrls: ['./address-form.component.scss'],
+  standalone: true,
+  imports: [
+    AddressAutocompleteComponent,
+    InjectViewportCssClassDirective,
+    MatButtonModule,
+    MatFormFieldModule,
+    MatIconModule,
+    MatInputModule,
+    MatOptionModule,
+    MatSelectModule,
+    NgFor,
+    NgIf,
+    NgxMaskDirective,
+    ReactiveFormsModule,
+  ],
 })
 export class AddressFormComponent implements OnInit {
   /**
@@ -58,7 +85,7 @@ export class AddressFormComponent implements OnInit {
 
   public constructor(
     private lookupService: LookupService,
-    private formUtilsService: FormUtilsService
+    private formUtilsService: FormUtilsService,
   ) {
     this.formControlNames = [
       'countryCode',
@@ -137,7 +164,7 @@ export class AddressFormComponent implements OnInit {
 
   private setAddress(countryCode: string): void {
     this.filteredProvinces = this.provinces.filter(
-      (p) => p.countryCode === this.countryCode.value
+      (p) => p.countryCode === this.countryCode.value,
     );
     this.setAddressLabels(countryCode);
   }

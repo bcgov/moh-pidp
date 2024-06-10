@@ -1,121 +1,19 @@
 <div class="box" uiPidpInjectViewportCss>
   <section *ngFor="let alert of alerts" class="alert-box section-box">
-    <header>
-      <h2>{{ alert.heading }}</h2>
-    </header>
-    <div class="section-content-box">
-      <p>{{ alert.content }}</p>
-    </div>
+    <app-portal-alert
+      [heading]="alert.heading"
+      [content]="alert.content"></app-portal-alert>
   </section>
-  <section class="section-box rostering-banner">
-    <app-expansion-panel
+  <section
+    *ngIf="pasAllowedProviders.includes((identityProvider$ | async)!); else nonBcsc"
+    class="section-box rostering-banner">
+    <app-banner-expansion-panel
       [expanded]="pasPanelExpanded$ | async"
       (expandedChanged)="onExpansionPanelToggle($event)">
       <mat-stepper
         orientation="vertical"
         #stepper
         [selectedIndex]="selectedIndex">
-        <mat-step
-          [state]="demographicsStatusCode === 2 ? 'done' : 'number'"
-          [completed]="demographicsStatusCode === 2">
-          <ng-template matStepLabel>Enter your contact details</ng-template>
-          <div>
-            <p class="guide-information">
-              Please enter your email and phone number in case we need to
-              contact you.
-            </p>
-            <button
-              mat-flat-button
-              type="button"
-              color="primary"
-              aria-labelledby="complete-personal-information"
-              [disabled]="demographics$ | async"
-              (click)="navigateTo()">
-              Enter your contact details
-            </button>
-          </div>
-          <div class="adjust-text">
-            <em
-              >Need help? Try this
-              <a uiAnchor [attr.href]="personalInfoTutorial"
-                >video tutorial</a
-              ></em
-            >
-          </div>
-          <div class="stepper-buttons">
-            <button class="top-button" mat-stroked-button matStepperNext>
-              Next
-            </button>
-          </div>
-        </mat-step>
-
-        <mat-step
-          [state]="collegeLicenceStatusCode === 2 ? 'done' : 'number'"
-          [completed]="collegeLicenceStatusCode === 2">
-          <ng-template matStepLabel>Enter your College Licence</ng-template>
-          <div>
-            <p class="guide-information">
-              Please provide your college license so we can give you access to
-              the appropriate systems. If you don't have a college license
-              (example MOA) you need to select NONE for your college license.
-            </p>
-            <button
-              mat-flat-button
-              type="button"
-              color="primary"
-              aria-labelledby="complete-college-licence"
-              [disabled]="collegeLicence$ | async"
-              (click)="navigateTo()">
-              Enter your College Licence
-            </button>
-          </div>
-          <div class="adjust-text">
-            <em
-              >Need help? Try this
-              <a uiAnchor [attr.href]="collegeLicenceTutorial"
-                >video tutorial</a
-              ></em
-            >
-          </div>
-          <div class="stepper-buttons">
-            <button mat-stroked-button matStepperPrevious>Back</button>
-            <button mat-stroked-button matStepperNext>Next</button>
-          </div>
-        </mat-step>
-
-        <mat-step
-          [state]="uaaStatusCode === 2 ? 'done' : 'number'"
-          [completed]="uaaStatusCode === 2">
-          <ng-template matStepLabel
-            >Accept the User Access Agreement</ng-template
-          >
-          <div>
-            <p class="guide-information">
-              The user access agreement is a general agreement on acceptable use
-              of the services you are enrolling in.
-            </p>
-            <button
-              mat-flat-button
-              type="button"
-              color="primary"
-              aria-labelledby="complete-uaa"
-              [disabled]="uaa$ | async"
-              (click)="navigateTo()">
-              Accept the User Access Agreement
-            </button>
-          </div>
-          <div class="adjust-text">
-            <em
-              >Need help? Try this
-              <a uiAnchor [attr.href]="uaaTutorial">video tutorial</a></em
-            >
-          </div>
-          <div class="stepper-buttons">
-            <button mat-stroked-button matStepperPrevious>Back</button>
-            <button mat-stroked-button matStepperNext>Next</button>
-          </div>
-        </mat-step>
-
         <mat-step
           [state]="bcProviderStatusCode === 2 ? 'done' : 'number'"
           [completed]="bcProviderStatusCode === 2">
@@ -141,13 +39,10 @@
           <div class="adjust-text">
             <em
               >Need help? Try this
-              <a uiAnchor [attr.href]="bcProviderTutorial"
-                >video tutorial</a
-              ></em
-            >
+              <a uiAnchor [attr.href]="bcProviderTutorial">video tutorial</a>
+            </em>
           </div>
           <div class="stepper-buttons">
-            <button mat-stroked-button matStepperPrevious>Back</button>
             <button mat-stroked-button matStepperNext>Next</button>
           </div>
         </mat-step>
@@ -160,20 +55,43 @@
             </p>
           </ng-template>
           <div>
-            <p class="guide-information">
-              Do you work with others who need access to the PAS? For example,
-              assistants or other members of your Care Team, who may or may not
-              have a professional license? <br />If you do, then you can send
-              trusted colleagues a OneHealthID access invitation by clicking the
-              “Endorsements” button below.
-            </p>
+            <div
+              *ngIf="!hasCpn && (destination$ | async) === Destination.PORTAL; else licenced">
+              <p>
+                <i
+                  >Because you are MOA or do <strong>not</strong> have a college
+                  licence, then this step will become part of the process.</i
+                >
+              </p>
+              <mat-stepper class="moa-message-steps">
+                <mat-step editable="false" [completed]="false">
+                  <ng-template matStepLabel>Start endorsement</ng-template>
+                </mat-step>
+                <mat-step editable="false" [completed]="false">
+                  <ng-template matStepLabel>Pending Approval</ng-template>
+                </mat-step>
+                <mat-step editable="false" [completed]="false">
+                  <ng-template matStepLabel
+                    >Completion and PAS login available</ng-template
+                  >
+                </mat-step>
+              </mat-stepper>
+            </div>
+            <ng-template #licenced>
+              <p class="guide-information">
+                Do you work with others who need access to the PAS? For example,
+                assistants or other members of your Care Team, who may or may
+                not have a professional license? <br />If you do, then you can
+                send trusted colleagues a OneHealthID access invitation by
+                clicking the “Endorsements” button below.
+              </p>
+            </ng-template>
             <button
               mat-flat-button
               type="button"
               color="primary"
               routerLink="/organization-info/endorsements"
-              aria-labelledby="navigate-to-endorsements"
-              [disabled]="endorsement$ | async">
+              aria-labelledby="navigate-to-endorsements">
               Endorsements
             </button>
           </div>
@@ -236,8 +154,24 @@
           </div>
         </mat-step>
       </mat-stepper>
-    </app-expansion-panel>
+    </app-banner-expansion-panel>
   </section>
+
+  <ng-template #nonBcsc>
+    <ui-alert
+      type="info"
+      icon="info"
+      iconType="outlined"
+      heading="Looking for access to PAS?">
+      <ng-container uiAlertContent>
+        <p>
+          To access the Provincial Attachment System enrolment, login to
+          OneHealthID with your BC Services Card.
+        </p>
+      </ng-container>
+    </ui-alert>
+  </ng-template>
+
   <ng-container *ngIf="state$ | async as state">
     <section class="profile-box section-box">
       <ui-scroll-target targetId="profile"></ui-scroll-target>

@@ -20,7 +20,7 @@ export class DriverFitnessPortalSection implements IPortalSection {
 
   public constructor(
     private profileStatus: ProfileStatus,
-    private router: Router
+    private router: Router,
   ) {
     this.key = 'driverFitness';
     this.heading = 'Driver Fitness Practitioner Portal';

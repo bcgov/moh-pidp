@@ -1,25 +1,19 @@
 {
+  "name": "pidp-data-model",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "projectType": "library",
   "sourceRoot": "libs/pidp/data-model/src",
   "prefix": "workspace",
   "targets": {
     "test": {
-      "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/pidp/data-model"],
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/libs/pidp/data-model"],
       "options": {
-        "jestConfig": "libs/pidp/data-model/jest.config.ts",
-        "passWithNoTests": true
+        "jestConfig": "libs/pidp/data-model/jest.config.ts"
       }
     },
     "lint": {
-      "executor": "@nrwl/linter:eslint",
-      "options": {
-        "lintFilePatterns": [
-          "libs/pidp/data-model/src/**/*.ts",
-          "libs/pidp/data-model/src/**/*.html"
-        ]
-      }
+      "executor": "@nx/eslint:lint"
     }
   },
   "tags": ["scope:pidp", "scope:shared"]

@@ -1,0 +1,13 @@
+//
+// MATERIAL RADIO BUTTON
+//
+
+.mat-mdc-radio-group {
+  display: flex;
+  flex-direction: row;
+  margin: 1rem 0;
+
+  & .mat-mdc-radio-button {
+    margin: 0.25rem 1rem 0.25rem 0;
+  }
+}

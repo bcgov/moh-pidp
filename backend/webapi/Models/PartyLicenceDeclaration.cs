@@ -1,5 +1,6 @@
 namespace Pidp.Models;
 
+using EntityFrameworkCore.Projectables;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -20,4 +21,7 @@ public class PartyLicenceDeclaration : BaseAuditable
     public College? College { get; set; }
 
     public string? LicenceNumber { get; set; }
+
+    [Projectable]
+    public bool IsUnlicensed => this.CollegeCode == null && this.LicenceNumber == null;
 }

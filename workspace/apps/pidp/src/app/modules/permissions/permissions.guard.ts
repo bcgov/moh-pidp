@@ -1,9 +1,9 @@
-import { Injectable } from '@angular/core';
+import { inject } from '@angular/core';
 import {
   ActivatedRouteSnapshot,
-  CanActivate,
-  CanActivateChild,
-  CanLoad,
+  CanActivateChildFn,
+  CanActivateFn,
+  CanMatchFn,
   Route,
   Router,
   UrlTree,
@@ -13,57 +13,35 @@ import { Observable } from 'rxjs';
 
 import { PermissionsService } from './permissions.service';
 
-@Injectable({
-  providedIn: 'root',
-})
-export class PermissionsGuard
-  implements CanActivate, CanActivateChild, CanLoad
-{
-  public constructor(
-    private router: Router,
-    private permissionsService: PermissionsService
-  ) {}
-
-  public canActivate(
-    route: ActivatedRouteSnapshot
-  ):
-    | Observable<boolean | UrlTree>
-    | Promise<boolean | UrlTree>
-    | boolean
-    | UrlTree {
+export abstract class PermissionsGuard {
+  public static canActivate: CanActivateFn = (
+    route: ActivatedRouteSnapshot,
+  ) => {
     return this.checkPermissions(route);
-  }
+  };
 
-  public canActivateChild(
-    childRoute: ActivatedRouteSnapshot
-  ):
-    | Observable<boolean | UrlTree>
-    | Promise<boolean | UrlTree>
-    | boolean
-    | UrlTree {
+  public static canActivateChild: CanActivateChildFn = (
+    childRoute: ActivatedRouteSnapshot,
+  ) => {
     return this.checkPermissions(childRoute);
-  }
+  };
 
-  public canLoad(
-    route: Route
-  ):
-    | Observable<boolean | UrlTree>
-    | Promise<boolean | UrlTree>
-    | boolean
-    | UrlTree {
+  public static canMatch: CanMatchFn = (route: Route) => {
     return this.checkPermissions(route);
-  }
+  };
 
-  private checkPermissions(
-    route: Route | ActivatedRouteSnapshot
+  private static checkPermissions(
+    route: Route | ActivatedRouteSnapshot,
   ):
     | Observable<boolean | UrlTree>
     | Promise<boolean | UrlTree>
     | boolean
     | UrlTree {
+    const router = inject(Router);
+    const permissionsService = inject(PermissionsService);
     return (
-      this.permissionsService.hasRole(route.data?.roles ?? []) ||
-      this.router.createUrlTree(['/'])
+      permissionsService.hasRole(route.data?.roles ?? []) ||
+      router.createUrlTree(['/'])
     );
   }
 }

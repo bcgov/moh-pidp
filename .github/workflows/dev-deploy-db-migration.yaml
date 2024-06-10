@@ -1,0 +1,40 @@
+name: Deploy DB Migration - Dev
+
+on:
+  push:
+    branches: [develop]
+  workflow_dispatch:
+
+# This will terminate builds that are previously, but continuing to run.  Saves GHA hours.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+
+  helm-deployment:
+    runs-on: 'ubuntu-latest'
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Authenticate and set context
+        uses: redhat-actions/oc-login@v1.1
+        with:
+          openshift_server_url: ${{secrets.OPENSHIFT_CLUSTER_URL}}
+          openshift_token: ${{secrets.OPENSHIFT_PIPELINE_SERVICE_ACCOUNT_TOKEN}}
+
+      - name: deply db migration job
+        run: |
+          oc project d8a8f9-dev
+
+          echo deleting dev-webapi-migrations job
+          oc delete job/dev-webapi-migrations --ignore-not-found
+
+          echo applying web-api-migration template...
+          helm template dev charts/webapi -n d8a8f9-dev --values ./deploy/dev_values.yaml -s templates/migrations.yaml --wait --debug| oc apply -n d8a8f9-dev -f -
+
+          echo deleting dev-plr-intake-migrations job
+          oc delete job/dev-plr-intake-migrations --ignore-not-found 
+
+          echo applying plr-intake-migration template...
+          helm template dev charts/plr-intake -n d8a8f9-dev --values ./deploy/dev_values.yaml -s templates/migrations.yaml --wait --debug| oc apply -n d8a8f9-dev -f -

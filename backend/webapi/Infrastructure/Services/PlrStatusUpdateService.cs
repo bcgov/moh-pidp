@@ -7,14 +7,15 @@ using Pidp.Extensions;
 using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.HttpClients.BCProvider;
 using Pidp.Infrastructure.HttpClients.Plr;
+using Pidp.Models.DomainEvents;
 
 public sealed class PlrStatusUpdateService : IPlrStatusUpdateService
 {
     private readonly IBCProviderClient bcProviderClient;
     private readonly IPlrClient plrClient;
     private readonly ILogger<PlrStatusUpdateService> logger;
-    private readonly PidpConfiguration config;
     private readonly PidpDbContext context;
+    private readonly string clientId;
 
     public PlrStatusUpdateService(
         IBCProviderClient bcProviderClient,
@@ -27,7 +28,7 @@ public sealed class PlrStatusUpdateService : IPlrStatusUpdateService
         this.plrClient = plrClient;
         this.logger = logger;
         this.context = context;
-        this.config = config;
+        this.clientId = config.BCProviderClient.ClientId;
     }
 
     public async Task DoWorkAsync(CancellationToken stoppingToken)
@@ -46,15 +47,8 @@ public sealed class PlrStatusUpdateService : IPlrStatusUpdateService
         var status = statusChanges.Single();
 
         var party = await this.context.Parties
+            .Include(party => party.Credentials)
             .Where(party => party.Cpn == status.Cpn)
-            .Select(party => new
-            {
-                PartyId = party.Id,
-                UserPrincipalName = party.Credentials
-                    .Where(credential => credential.IdentityProvider == IdentityProviders.BCProvider)
-                    .Select(credential => credential.IdpId)
-                    .SingleOrDefault(),
-            })
             .SingleOrDefaultAsync(stoppingToken);
 
         if (party == null)
@@ -64,36 +58,35 @@ public sealed class PlrStatusUpdateService : IPlrStatusUpdateService
             return;
         }
 
-        var endorsementRelations = await this.context.ActiveEndorsementRelationships(party.PartyId)
-            .Select(relationship => new
+        party.DomainEvents.Add(new CollegeLicenceUpdated(party.Id));
+
+        var endorsementRelations = await this.context.ActiveEndorsingParties(party.Id)
+            .Select(party => new
             {
-                relationship.PartyId,
-                relationship.Party!.Cpn,
-                UserPrincipalName = relationship.Party!.Credentials
-                    .Where(credential => credential.IdentityProvider == IdentityProviders.BCProvider)
-                    .Select(credential => credential.IdpId)
-                    .SingleOrDefault()
+                PartyId = party.Id,
+                party.Cpn,
             })
             .ToListAsync(stoppingToken);
 
-        if (party.UserPrincipalName != null)
+        foreach (var relation in endorsementRelations)
         {
-            var bcProviderAttributes = new BCProviderAttributes(this.config.BCProviderClient.ClientId);
+            party.DomainEvents.Add(new EndorsementStandingUpdated(relation.PartyId));
+        }
 
+        var upn = party.Credentials
+             .Where(credential => credential.IdentityProvider == IdentityProviders.BCProvider)
+             .Select(credential => credential.IdpId)
+             .SingleOrDefault();
+
+        if (upn != null)
+        {
+            var bcProviderAttributes = new BCProviderAttributes(this.clientId);
 
             if (!status.IsGoodStanding
                 && !await this.plrClient.GetStandingAsync(status.Cpn))
             {
                 var endorsementPlrStanding = await this.plrClient.GetAggregateStandingsDigestAsync(endorsementRelations.Select(relation => relation.Cpn));
                 bcProviderAttributes.SetIsMoa(endorsementPlrStanding.HasGoodStanding);
-
-                // TODO: should probably remove this data if the current Party becomes licenced.
-                var endorserData = endorsementPlrStanding
-                    .WithGoodStanding()
-                    .With(IdentifierType.PhysiciansAndSurgeons, IdentifierType.Nurse, IdentifierType.Midwife)
-                    .Cpns;
-
-                bcProviderAttributes.SetEndorserData(endorserData);
             }
             else
             {
@@ -104,36 +97,15 @@ public sealed class PlrStatusUpdateService : IPlrStatusUpdateService
             {
                 bcProviderAttributes.SetIsMd(status.IsGoodStanding);
             }
-
             if (status.ProviderRoleType == ProviderRoleType.RegisteredNursePractitioner)
             {
                 bcProviderAttributes.SetIsRnp(status.IsGoodStanding);
             }
 
-
-            await this.bcProviderClient.UpdateAttributes(party.UserPrincipalName, bcProviderAttributes.AsAdditionalData());
+            await this.bcProviderClient.UpdateAttributes(upn, bcProviderAttributes.AsAdditionalData());
         }
 
-        // Update the MOA flag for all people this Party has endorsed
-        foreach (var relation in endorsementRelations)
-        {
-            if (!string.IsNullOrWhiteSpace(relation.Cpn)
-                || string.IsNullOrWhiteSpace(relation.UserPrincipalName))
-            {
-                // We have nothing to update if the relation has a Licence or doesn't have a BC Provider credential
-                continue;
-            }
-
-            var endorsingCpns = await this.context.ActiveEndorsementRelationships(relation.PartyId)
-                .Select(relationship => relationship.Party!.Cpn)
-                .ToListAsync(stoppingToken);
-
-            var relationPlrStanding = await this.plrClient.GetAggregateStandingsDigestAsync(endorsingCpns);
-
-            var relationIsMoa = relationPlrStanding.HasGoodStanding;
-            var relationBcProviderAttributes = new BCProviderAttributes(this.config.BCProviderClient.ClientId).SetIsMoa(relationIsMoa);
-            await this.bcProviderClient.UpdateAttributes(relation.UserPrincipalName, relationBcProviderAttributes.AsAdditionalData());
-        }
+        await this.context.SaveChangesAsync(stoppingToken);
 
         this.logger.LogStatusUpdateProcessed(status.Id);
         await this.plrClient.UpdateStatusChangeLogAsync(status.Id);
@@ -143,8 +115,8 @@ public sealed class PlrStatusUpdateService : IPlrStatusUpdateService
 public static partial class PlrStatusUpdateServiceLoggingExtensions
 {
     [LoggerMessage(1, LogLevel.Information, "Status update {statusId} is for a PLR record not associated to a PIdP user.")]
-    public static partial void LogPlrRecordNotAssociatedToPidpUser(this ILogger logger, int statusId);
+    public static partial void LogPlrRecordNotAssociatedToPidpUser(this ILogger<PlrStatusUpdateService> logger, int statusId);
 
     [LoggerMessage(2, LogLevel.Information, "Status update {statusId} has been proccessed.")]
-    public static partial void LogStatusUpdateProcessed(this ILogger logger, int statusId);
+    public static partial void LogStatusUpdateProcessed(this ILogger<PlrStatusUpdateService> logger, int statusId);
 }

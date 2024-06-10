@@ -1,7 +1,9 @@
 namespace Pidp;
 
 using FluentValidation.AspNetCore;
+using HealthChecks.ApplicationStatus.DependencyInjection;
 using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
@@ -17,8 +19,10 @@ using Pidp.Extensions;
 using Pidp.Features;
 using Pidp.Infrastructure;
 using Pidp.Infrastructure.Auth;
+using Pidp.Infrastructure.HealthChecks;
 using Pidp.Infrastructure.HttpClients;
 using Pidp.Infrastructure.Services;
+using Pidp.Infrastructure.Queue;
 
 public class Startup
 {
@@ -35,11 +39,13 @@ public class Startup
             .AddHostedService<PlrStatusUpdateSchedulingService>()
             .AddHttpClients(config)
             .AddKeycloakAuth(config)
+            .AddRabbitMQ(config)
             .AddMediatR(opt => opt.RegisterServicesFromAssemblyContaining<Startup>())
             .AddScoped<IEmailService, EmailService>()
             .AddScoped<IPidpAuthorizationService, PidpAuthorizationService>()
             .AddScoped<IPlrStatusUpdateService, PlrStatusUpdateService>()
-            .AddSingleton<IClock>(SystemClock.Instance);
+            .AddSingleton<IClock>(SystemClock.Instance)
+            .AddSingleton<BackgroundWorkerHealthCheck>();
 
         services.AddControllers(options => options.Conventions.Add(new RouteTokenTransformerConvention(new KabobCaseParameterTransformer())))
             .AddFluentValidation(options => options.RegisterValidatorsFromAssemblyContaining<Startup>())
@@ -57,7 +63,11 @@ public class Startup
             .AsImplementedInterfaces()
             .WithTransientLifetime());
 
-        services.AddHealthChecks();
+        services.AddHealthChecks()
+            .AddApplicationStatus(tags: new[] { HealthCheckTag.Liveness.Value })
+            .AddCheck<BackgroundWorkerHealthCheck>("PlrStatusUpdateSchedulingService", tags: new[] { HealthCheckTag.BackgroundServices.Value })
+            .AddNpgSql(config.ConnectionStrings.PidpDatabase, tags: new[] { HealthCheckTag.Readiness.Value })
+            .AddRabbitMQ(new Uri(config.RabbitMQ.HostAddress), tags: new[] { HealthCheckTag.Readiness.Value });
 
         services.AddSwaggerGen(options =>
         {
@@ -115,7 +125,18 @@ public class Startup
         app.UseEndpoints(endpoints =>
         {
             endpoints.MapControllers();
-            endpoints.MapHealthChecks("/health/liveness").AllowAnonymous();
+            endpoints.MapHealthChecks("/health/background-services", new HealthCheckOptions
+            {
+                Predicate = registration => registration.Tags.Contains(HealthCheckTag.BackgroundServices)
+            }).AllowAnonymous();
+            endpoints.MapHealthChecks("/health/liveness", new HealthCheckOptions
+            {
+                Predicate = registration => registration.Tags.Contains(HealthCheckTag.Liveness)
+            }).AllowAnonymous();
+            endpoints.MapHealthChecks("/health/readiness", new HealthCheckOptions
+            {
+                Predicate = registration => registration.Tags.Contains(HealthCheckTag.Readiness)
+            }).AllowAnonymous();
         });
     }
 }

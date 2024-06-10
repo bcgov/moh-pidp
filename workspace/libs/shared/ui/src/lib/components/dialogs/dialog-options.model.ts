@@ -20,4 +20,8 @@ export interface DialogOptions {
   component?: Type<IDialogContent>;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   data?: { [key: string]: any };
+  /** overload the dialog width, if undefined the default value will be used */
+  width?: string;
+  /** overload the dialog height, if undefined the default value will be used */
+  height?: string;
 }

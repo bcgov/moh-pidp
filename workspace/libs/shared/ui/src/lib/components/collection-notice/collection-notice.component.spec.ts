@@ -7,9 +7,7 @@ describe('CollectionNoticeCardComponent', () => {
   let fixture: ComponentFixture<CollectionNoticeComponent>;
 
   beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [CollectionNoticeComponent],
-    }).compileComponents();
+    await TestBed.configureTestingModule({}).compileComponents();
   });
 
   beforeEach(() => {

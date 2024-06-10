@@ -1,7 +1,10 @@
+import { NgIf, NgTemplateOutlet } from '@angular/common';
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
 import { MatDialogConfig } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 import { catchError, noop, of, tap } from 'rxjs';
 
@@ -9,13 +12,19 @@ import { faCircleCheck, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { NavigationService } from '@pidp/presentation';
 
 import { NoContent } from '@bcgov/shared/data-access';
-import { CrossFieldErrorMatcher } from '@bcgov/shared/ui';
+import {
+  CrossFieldErrorMatcher,
+  InjectViewportCssClassDirective,
+} from '@bcgov/shared/ui';
 
 import {
   AbstractFormDependenciesService,
   AbstractFormPage,
 } from '@app/core/classes/abstract-form-page.class';
 import { PartyService } from '@app/core/party/party.service';
+import { NeedHelpComponent } from '@app/shared/components/need-help/need-help.component';
+import { DialogBcproviderEditComponent } from '@app/shared/components/success-dialog/components/dialog-bcprovider-edit.component';
+import { SuccessDialogComponent } from '@app/shared/components/success-dialog/success-dialog.component';
 
 import { BcProviderEditFormState } from './bc-provider-edit-form-state';
 import {
@@ -31,6 +40,18 @@ export interface BcProviderEditInitialStateModel {
   selector: 'app-bc-provider-edit',
   templateUrl: './bc-provider-edit.page.html',
   styleUrls: ['./bc-provider-edit.page.scss'],
+  standalone: true,
+  imports: [
+    InjectViewportCssClassDirective,
+    MatButtonModule,
+    MatFormFieldModule,
+    MatInputModule,
+    NeedHelpComponent,
+    NgIf,
+    NgTemplateOutlet,
+    ReactiveFormsModule,
+    SuccessDialogComponent,
+  ],
 })
 export class BcProviderEditPage
   extends AbstractFormPage<BcProviderEditFormState>
@@ -40,11 +61,9 @@ export class BcProviderEditPage
   public faXmark = faXmark;
   public formState: BcProviderEditFormState;
   public showErrorCard = false;
-  public errorCardText = '';
-  public showMessageCard = false;
-  public messageCardText = '';
   public username = '';
   public errorMatcher = new CrossFieldErrorMatcher();
+  public componentType = DialogBcproviderEditComponent;
 
   // ui-page is handling this.
   public showOverlayOnSubmit = false;
@@ -61,9 +80,8 @@ export class BcProviderEditPage
     dependenciesService: AbstractFormDependenciesService,
     fb: FormBuilder,
     private navigationService: NavigationService,
-    private snackBar: MatSnackBar,
     private partyService: PartyService,
-    private resource: BcProviderEditResource
+    private resource: BcProviderEditResource,
   ) {
     super(dependenciesService);
     this.formState = new BcProviderEditFormState(fb);
@@ -71,13 +89,6 @@ export class BcProviderEditPage
 
   public onBack(): void {
     this.navigationService.navigateToRoot();
-  }
-  public onGeneratePasswordCheckChange(): void {
-    this.snackBar.open('Not yet implemented', 'OK');
-  }
-
-  public hasPasswordRuleError(): boolean {
-    return this.formState.newPassword.hasError('invalidRequirements');
   }
 
   public onSuccessDialogClose(): void {
@@ -103,26 +114,13 @@ export class BcProviderEditPage
 
     return this.resource.changePassword(data).pipe(
       tap((_) => {
-        this.setError('');
         this.showSuccessDialog();
       }),
       catchError(() => {
-        const message = 'An error occurred.';
-        this.setError(message);
-        this.setMessage('');
+        this.showErrorCard = true;
         return of(noop());
-      })
+      }),
     );
-  }
-
-  private setError(message: string): void {
-    this.showErrorCard = !!message;
-    this.errorCardText = message;
-  }
-
-  private setMessage(message: string): void {
-    this.showMessageCard = !!message;
-    this.messageCardText = message;
   }
 
   private showSuccessDialog(): void {

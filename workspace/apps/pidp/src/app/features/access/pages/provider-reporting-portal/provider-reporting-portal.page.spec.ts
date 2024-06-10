@@ -1,15 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { TestBed } from '@angular/core/testing';
+import { ActivatedRoute, Router } from '@angular/router';
+
+import { randTextRange } from '@ngneat/falso';
 import { createSpyFromClass, provideAutoSpy } from 'jest-auto-spies';
 
-import { ActivatedRoute, Router } from '@angular/router';
-import { randTextRange } from '@ngneat/falso';
-
-import { ProviderReportingPortalPage } from './provider-reporting-portal.page';
 import { PartyService } from '@app/core/party/party.service';
-import { ProviderReportingPortalResource } from './provider-reporting-portal-resource.service';
-import { LoggerService } from '@app/core/services/logger.service';
 import { DocumentService } from '@app/core/services/document.service';
+import { LoggerService } from '@app/core/services/logger.service';
+
+import { ProviderReportingPortalResource } from './provider-reporting-portal-resource.service';
+import { ProviderReportingPortalPage } from './provider-reporting-portal.page';
 
 describe('ProviderReportingPortalPage', () => {
   let component: ProviderReportingPortalPage;
@@ -46,8 +47,8 @@ describe('ProviderReportingPortalPage', () => {
         provideAutoSpy(ProviderReportingPortalResource),
         provideAutoSpy(LoggerService),
         provideAutoSpy(DocumentService),
-      ]
-    })
+      ],
+    });
 
     component = TestBed.inject(ProviderReportingPortalPage);
   });

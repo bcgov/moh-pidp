@@ -4,6 +4,7 @@ import { IdentityProvider } from '@app/features/auth/enums/identity-provider.enu
 
 @Pipe({
   name: 'isHighAssurance',
+  standalone: true,
 })
 export class IsHighAssurancePipe implements PipeTransform {
   public transform(value: IdentityProvider | null): boolean {

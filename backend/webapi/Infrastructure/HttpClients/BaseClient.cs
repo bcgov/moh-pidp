@@ -3,6 +3,7 @@ namespace Pidp.Infrastructure.HttpClients;
 using DomainResults.Common;
 using Flurl;
 using System.Net;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 
@@ -18,16 +19,16 @@ public class BaseClient
     private readonly HttpClient client;
     private readonly JsonSerializerOptions serializationOptions;
 
-    protected ILogger Logger { get; }
+    protected ILogger<BaseClient> Logger { get; }
 
     /// <summary>
     /// An HttpClient with default serialization options (camelCase)
     /// </summary>
     /// <param name="client"></param>
     /// <param name="logger"></param>
-    public BaseClient(HttpClient client, ILogger logger) : this(client, logger, PropertySerialization.CamelCase) { }
+    public BaseClient(HttpClient client, ILogger<BaseClient> logger) : this(client, logger, PropertySerialization.CamelCase) { }
 
-    public BaseClient(HttpClient client, ILogger logger, PropertySerialization option)
+    public BaseClient(HttpClient client, ILogger<BaseClient> logger, PropertySerialization option)
     {
         client.ThrowIfNull(nameof(client));
         this.client = client;
@@ -74,6 +75,18 @@ public class BaseClient
     protected async Task<IDomainResult<T>> PostAsync<T>(string url, object? data = null) => await this.SendCoreAsync<T>(HttpMethod.Post, url, data == null ? null : this.CreateStringContent(data), default);
 
     /// <summary>
+    /// Performs a POST to the supplied Url with an optional JSON StringContent body as per the serialization settings set in the constructor.
+    /// Produces a DomainResult and the value of the Location response header.
+    /// </summary>
+    /// <param name="url"></param>
+    /// <param name="data"></param>
+    protected async Task<(IDomainResult Status, Uri? Location)> PostWithLocationAsync(string url, object? data = null)
+    {
+        var (status, headers) = await this.SendCoreWithHeadersAsync(HttpMethod.Post, url, data == null ? null : this.CreateStringContent(data), default);
+        return (status, headers?.Location);
+    }
+
+    /// <summary>
     /// Performs a PUT to the supplied Url with an optional JSON StringContent body as per the serialization settings set in the constructor
     /// </summary>
     /// <param name="url"></param>
@@ -91,13 +104,13 @@ public class BaseClient
     /// <param name="cancellationToken"></param>
     protected async Task<IDomainResult> SendCoreAsync(HttpMethod method, string url, HttpContent? content, CancellationToken cancellationToken)
     {
-        var result = await this.SendCoreInternalAsync<object>(method, url, content, true, cancellationToken);
-        result.Deconstruct(out _, out var details);
+        var (status, _) = await this.SendCoreInternalAsync<object>(method, url, content, true, cancellationToken);
+        status.Deconstruct(out _, out var details);
         return details;
     }
 
     /// <summary>
-    /// Send an HTTTP message to the API; returning:
+    /// Send an HTTP message to the API; returning:
     ///  a) a Success result with a (non-null) value of the indicated type, or
     ///  b) a Failure result in the case of errors, non-success status codes, or a missing/null response value.
     /// </summary>
@@ -106,9 +119,25 @@ public class BaseClient
     /// <param name="url"></param>
     /// <param name="content"></param>
     /// <param name="cancellationToken"></param>
-    protected async Task<IDomainResult<T>> SendCoreAsync<T>(HttpMethod method, string url, HttpContent? content, CancellationToken cancellationToken) => await this.SendCoreInternalAsync<T>(method, url, content, false, cancellationToken);
+    protected async Task<IDomainResult<T>> SendCoreAsync<T>(HttpMethod method, string url, HttpContent? content, CancellationToken cancellationToken) => (await this.SendCoreInternalAsync<T>(method, url, content, false, cancellationToken)).Status;
 
-    private async Task<IDomainResult<T>> SendCoreInternalAsync<T>(HttpMethod method, string url, HttpContent? content, bool ignoreResponseContent, CancellationToken cancellationToken)
+    /// <summary>
+    /// Sends an HTTP message to the API; returning the response headers as well as:
+    ///  a) a Success result, or
+    ///  b) a Failure result in the case of errors or a non-success status code
+    /// </summary>
+    /// <param name="method"></param>
+    /// <param name="url"></param>
+    /// <param name="content"></param>
+    /// <param name="cancellationToken"></param>
+    protected async Task<(IDomainResult Status, HttpResponseHeaders? Headers)> SendCoreWithHeadersAsync(HttpMethod method, string url, HttpContent? content, CancellationToken cancellationToken)
+    {
+        var (status, headers) = await this.SendCoreInternalAsync<object>(method, url, content, true, cancellationToken);
+        status.Deconstruct(out _, out var details);
+        return (details, headers);
+    }
+
+    private async Task<(IDomainResult<T> Status, HttpResponseHeaders? Headers)> SendCoreInternalAsync<T>(HttpMethod method, string url, HttpContent? content, bool ignoreResponseContent, CancellationToken cancellationToken)
     {
         try
         {
@@ -131,55 +160,55 @@ public class BaseClient
                     : "";
 
                 this.Logger.LogNonSuccessStatusCode(response.StatusCode, responseMessage);
-                return DomainResult.Failed<T>(response.StatusCode == HttpStatusCode.NotFound
+                return (DomainResult.Failed<T>(response.StatusCode == HttpStatusCode.NotFound
                     ? $"The URL {url} was not found"
-                    : "Did not receive a successful status code");
+                    : "Did not receive a successful status code"), response.Headers);
             }
 
             if (ignoreResponseContent)
             {
-                return DomainResult.Success<T>(default!);
+                return (DomainResult.Success<T>(default!), response.Headers);
             }
 
             if (response.Content == null)
             {
                 this.Logger.LogNullResponseContent();
-                return DomainResult.Failed<T>("Response content was null");
+                return (DomainResult.Failed<T>("Response content was null"), response.Headers);
             }
 
             var deserializationResult = await response.Content.ReadFromJsonAsync<T>(cancellationToken: cancellationToken);
             if (deserializationResult == null)
             {
                 this.Logger.LogNullResponseContent();
-                return DomainResult.Failed<T>("Response content was null");
+                return (DomainResult.Failed<T>("Response content was null"), response.Headers);
             }
 
-            return DomainResult.Success(deserializationResult);
+            return (DomainResult.Success(deserializationResult), response.Headers);
         }
         catch (HttpRequestException exception)
         {
             this.Logger.LogBaseClientException(exception);
-            return DomainResult.Failed<T>("HttpRequestException during call to API");
+            return (DomainResult.Failed<T>("HttpRequestException during call to API"), null);
         }
         catch (TimeoutException exception)
         {
             this.Logger.LogBaseClientException(exception);
-            return DomainResult.Failed<T>("TimeoutException during call to API");
+            return (DomainResult.Failed<T>("TimeoutException during call to API"), null);
         }
         catch (OperationCanceledException exception)
         {
             this.Logger.LogBaseClientException(exception);
-            return DomainResult.Failed<T>("Task was canceled during call to API");
+            return (DomainResult.Failed<T>("Task was canceled during call to API"), null);
         }
         catch (JsonException exception)
         {
             this.Logger.LogBaseClientException(exception);
-            return DomainResult.Failed<T>("Could not deserialize API response");
+            return (DomainResult.Failed<T>("Could not deserialize API response"), null);
         }
         catch (Exception exception)
         {
             this.Logger.LogBaseClientException(exception);
-            return DomainResult.Failed<T>("Unhandled exception when calling the API");
+            return (DomainResult.Failed<T>("Unhandled exception when calling the API"), null);
         }
     }
 }
@@ -187,11 +216,11 @@ public class BaseClient
 public static partial class BaseClientLoggingExtensions
 {
     [LoggerMessage(1, LogLevel.Error, "Received non-success status code {statusCode} with message: {responseMessage}.")]
-    public static partial void LogNonSuccessStatusCode(this ILogger logger, HttpStatusCode statusCode, string responseMessage);
+    public static partial void LogNonSuccessStatusCode(this ILogger<BaseClient> logger, HttpStatusCode statusCode, string responseMessage);
 
     [LoggerMessage(2, LogLevel.Error, "Response content was null.")]
-    public static partial void LogNullResponseContent(this ILogger logger);
+    public static partial void LogNullResponseContent(this ILogger<BaseClient> logger);
 
     [LoggerMessage(3, LogLevel.Error, "Unhandled exception when calling the API.")]
-    public static partial void LogBaseClientException(this ILogger logger, Exception e);
+    public static partial void LogBaseClientException(this ILogger<BaseClient> logger, Exception e);
 }

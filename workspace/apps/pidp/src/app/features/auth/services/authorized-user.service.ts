@@ -52,7 +52,7 @@ export class AuthorizedUserService {
       accessTokenParsed: this.accessTokenService.decodeToken(),
       brokerProfile: this.accessTokenService.loadBrokerProfile(),
     }).pipe(
-      map((userIdentity: UserIdentity) => this.getUserResolver(userIdentity))
+      map((userIdentity: UserIdentity) => this.getUserResolver(userIdentity)),
     );
   }
 

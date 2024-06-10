@@ -19,7 +19,7 @@ export class MsTeamsClinicMemberResource {
   public constructor(
     protected apiResource: ApiHttpClient,
     private portalResource: PortalResource,
-    private toastService: ToastService
+    private toastService: ToastService,
   ) {}
 
   public getProfileStatus(partyId: number): Observable<ProfileStatus | null> {
@@ -30,30 +30,30 @@ export class MsTeamsClinicMemberResource {
     return this.apiResource
       .post<NoContent>(
         `parties/${partyId}/access-requests/ms-teams-clinic-member`,
-        { clinicId }
+        { clinicId },
       )
       .pipe(
         NoContentResponse,
         catchError((error: HttpErrorResponse) => {
           return throwError(() => error);
-        })
+        }),
       );
   }
 
   public getPrivacyOfficers(
-    partyId: number
+    partyId: number,
   ): Observable<PrivacyOfficer[] | null> {
     return this.apiResource
       .get<PrivacyOfficer[]>(
-        `parties/${partyId}/endorsements/ms-teams-privacy-officers`
+        `parties/${partyId}/endorsements/ms-teams-privacy-officers`,
       )
       .pipe(
         catchError((error: HttpErrorResponse) => {
           this.toastService.openErrorToast(
-            'MS Teams Privacy Officer information could not be retrieved'
+            'MS Teams Privacy Officer information could not be retrieved',
           );
           throw error;
-        })
+        }),
       );
   }
 }

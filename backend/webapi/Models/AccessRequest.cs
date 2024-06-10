@@ -27,15 +27,6 @@ public class HcimAccountTransfer : AccessRequest
     public string LdapUsername { get; set; } = string.Empty;
 }
 
-[Table(nameof(HcimEnrolment))]
-public class HcimEnrolment : AccessRequest
-{
-    public bool ManagesTasks { get; set; }
-    public bool ModifiesPhns { get; set; }
-    public bool RecordsNewborns { get; set; }
-    public bool SearchesIdentifiers { get; set; }
-}
-
 [Table(nameof(MSTeamsClinicMemberEnrolment))]
 public class MSTeamsClinicMemberEnrolment : AccessRequest
 {

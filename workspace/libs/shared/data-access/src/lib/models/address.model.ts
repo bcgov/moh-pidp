@@ -21,7 +21,7 @@ export class Address {
     public provinceCode: string | null = null,
     public street: string | null = null,
     public city: string | null = null,
-    public postal: string | null = null
+    public postal: string | null = null,
   ) {
     this.street = street;
     this.city = city;
@@ -54,7 +54,7 @@ export class Address {
    */
   public static isEmpty(
     address: Address,
-    omitList: (keyof Address)[] = optionalAddressLineItems
+    omitList: (keyof Address)[] = optionalAddressLineItems,
   ): boolean {
     return address
       ? (Object.keys(address) as AddressLine[])
@@ -69,7 +69,7 @@ export class Address {
    */
   public static isNotEmpty(
     address: Address,
-    omitList: (keyof Address)[] = optionalAddressLineItems
+    omitList: (keyof Address)[] = optionalAddressLineItems,
   ): boolean {
     return address ? !this.isEmpty(address, omitList) : false;
   }

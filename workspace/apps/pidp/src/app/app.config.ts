@@ -21,9 +21,9 @@ export interface AppConfig extends AppEnvironment {
 export const APP_DI_CONFIG: AppConfig = {
   ...environment,
   routes: {
-    auth: AuthRoutes.MODULE_PATH,
-    portal: PortalRoutes.MODULE_PATH,
-    admin: AdminRoutes.MODULE_PATH,
+    auth: AuthRoutes.BASE_PATH,
+    portal: PortalRoutes.BASE_PATH,
+    admin: AdminRoutes.BASE_PATH,
   },
   featureFlags: {
     isLayoutV2Enabled: true,

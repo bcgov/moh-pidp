@@ -10,13 +10,18 @@ table {
 
 mat-icon {
   color: #999;
-  padding-top: 0.5rem;
+  vertical-align: middle;
 
   &.has-requested {
     color: palette.theme-palette(green);
   }
 
-  &.not-requested {
+  &.not-requested,
+  &.delete {
     color: palette.theme-palette(red);
+  }
+
+  &.delete {
+    cursor: pointer;
   }
 }

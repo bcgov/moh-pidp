@@ -3,6 +3,7 @@ namespace Pidp.Features.EndorsementRequests;
 using FluentValidation;
 using Flurl;
 using HybridModelBinding;
+using Microsoft.EntityFrameworkCore;
 using NodaTime;
 using System.Text.Json.Serialization;
 
@@ -13,13 +14,22 @@ using Pidp.Models;
 
 public class Create
 {
-    public class Command : ICommand
+    public class Command : ICommand<Model>
     {
         [JsonIgnore]
         [HybridBindProperty(Source.Route)]
         public int PartyId { get; set; }
         public string RecipientEmail { get; set; } = string.Empty;
         public string? AdditionalInformation { get; set; }
+    }
+
+    public class Model
+    {
+        public bool DuplicateEndorsementRequest { get; set; }
+
+        public Model() { }
+
+        public Model(bool duplicateEndorsementRequest) => this.DuplicateEndorsementRequest = duplicateEndorsementRequest;
     }
 
     public class CommandValidator : AbstractValidator<Command>
@@ -31,7 +41,7 @@ public class Create
         }
     }
 
-    public class CommandHandler : ICommandHandler<Command>
+    public class CommandHandler : ICommandHandler<Command, Model>
     {
         private readonly string applicationUrl;
         private readonly IClock clock;
@@ -50,8 +60,26 @@ public class Create
             this.context = context;
         }
 
-        public async Task HandleAsync(Command command)
+        public async Task<Model> HandleAsync(Command command)
         {
+            var isAlreadyEndorsed = await this.context.EndorsementRequests
+                .AnyAsync(request => request.RequestingPartyId == command.PartyId
+                    && request.RecipientEmail == command.RecipientEmail
+                    && request.Status == EndorsementRequestStatus.Completed
+                    && this.context.Endorsements
+                        .Any(endorsement => endorsement.Active
+                            && endorsement.EndorsementRelationships.Any(relation => relation.PartyId == request.RequestingPartyId)
+                            && endorsement.EndorsementRelationships.Any(relation => relation.PartyId == request.ReceivingPartyId)));
+            if (isAlreadyEndorsed)
+            {
+                return new(true);
+            }
+
+            var partyName = await this.context.Parties
+                .Where(party => party.Id == command.PartyId)
+                .Select(party => party.FullName)
+                .SingleAsync();
+
             var request = new EndorsementRequest
             {
                 RequestingPartyId = command.PartyId,
@@ -65,17 +93,22 @@ public class Create
             this.context.EndorsementRequests.Add(request);
             await this.context.SaveChangesAsync();
 
-            await this.SendEndorsementRequestEmailAsync(request.RecipientEmail, request.Token);
+            await this.SendEndorsementRequestEmailAsync(request.RecipientEmail, request.Token, partyName);
+
+            return new(false);
         }
 
-        private async Task SendEndorsementRequestEmailAsync(string recipientEmail, Guid token)
+        private async Task SendEndorsementRequestEmailAsync(string recipientEmail, Guid token, string partyName)
         {
             string url = this.applicationUrl.SetQueryParam("endorsement-token", token);
             var link = $"<a href=\"{url}\" target=\"_blank\" rel=\"noopener noreferrer\">this link</a>";
+            var pidpSupportEmail = $"<a href=\"mailto:{EmailService.PidpEmail}\">{EmailService.PidpEmail}</a>";
+            var pidpSupportPhone = $"<a href=\"tel:{EmailService.PidpSupportPhone}\">{EmailService.PidpSupportPhone}</a>";
+
             var email = new Email(
                 from: EmailService.PidpEmail,
                 to: recipientEmail,
-                subject: "You Have Received an Endorsement Request in OneHealthID Service",
+                subject: $"OneHealthID Endorsement Request from {partyName}",
                 body: $@"Hello,
 <br>You are receiving this email because a user requested an endorsement from you.
 <br>
@@ -88,9 +121,9 @@ public class Create
 <br>
 <br>For additional support, contact the OneHealthID Service desk:
 <br>
-<br>&emsp;• By email at provideridentityportal@gov.bc.ca
+<br>&emsp;• By email at {pidpSupportEmail}
 <br>
-<br>&emsp;• By phone at 250-857-1969
+<br>&emsp;• By phone at {pidpSupportPhone}
 <br>
 <br>Thank you.");
 

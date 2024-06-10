@@ -5,7 +5,7 @@
 // NOTE: Used to fix issues OR augment Material components
 // that are not theme related
 
-// Remove all outlines from all elements.  This is very aggressive! and should
+// Remove all outlines from all elements. This is very aggressive! and should
 // be removed once supported by Angular Material.
 * {
   outline: none !important;
@@ -14,13 +14,6 @@
 //
 // Forms
 //
-
-.mat-checkbox-layout,
-.mat-slide-toggle-content {
-  // Force checkbox and slide labels to line wrap if required
-  // instead of overflowing their container
-  white-space: normal !important;
-}
 
 .mat-drawer-container {
   color: theme-palette(blue);
@@ -35,9 +28,27 @@
   background-color: $bcgov-color-semantic-success;
 }
 
-.mat-step .mat-button-wrapper,
+/*TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version.*/
 .mat-step .mat-step-label {
   white-space: normal;
+}
+
+.moa-message-steps .mat-horizontal-stepper-header-container {
+  background-color: $bcgov-color-background-darker-grey;
+  padding: 15px;
+  border: 1px solid #000;
+
+  .mat-horizontal-stepper-header {
+    pointer-events: none;
+  }
+}
+
+.viewport-xsmall,
+.viewport-small {
+  .mat-horizontal-stepper-header-container {
+    align-items: normal !important;
+    flex-direction: column !important;
+  }
 }
 
 //
@@ -49,4 +60,21 @@
   border-width: 0 5px 5px 0 !important;
   padding: 5px !important;
   margin-bottom: 10px;
+}
+
+//
+// Icons
+//
+
+.mat-icon {
+  overflow: visible !important;
+}
+
+//
+// SideNav
+//
+
+app-admin-dashboard .mat-sidenav {
+  // menu background color for admin section
+  background-color: theme-palette(blue);
 }

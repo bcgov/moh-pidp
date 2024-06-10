@@ -1,6 +1,6 @@
 import { driverFitnessSupportEmail } from '@app/features/access/pages/driver-fitness/driver-fitness.constants';
 import { hcimWebAccountTransferSupport } from '@app/features/access/pages/hcim-account-transfer/hcim-account-transfer-constants';
-import { hcimWebEnrolmentSupport } from '@app/features/access/pages/hcim-enrolment/hcim-enrolment-constants';
+import { immsBCEformsSupportEmail } from '@app/features/access/pages/immsbc-eforms/immsbc-eforms.constants';
 import {
   doctorsTechnologyOfficeEmail,
   doctorsTechnologyOfficeUrl,
@@ -37,10 +37,9 @@ export const environment: AppEnvironment = {
     isLayoutV2Enabled: false,
   },
   emails: {
-    providerIdentitySupport: 'provideridentityportal@gov.bc.ca',
+    providerIdentitySupport: 'OneHealthID@gov.bc.ca',
     specialAuthorityEformsSupport: specialAuthorityEformsSupportEmail,
     hcimAccountTransferSupport: hcimWebAccountTransferSupport,
-    hcimEnrolmentSupport: hcimWebEnrolmentSupport,
     prescriptionRefillRequestEformsSupport:
       prescriptionRefillRequestEformsSupportEmail,
     driverFitnessSupport: driverFitnessSupportEmail,
@@ -48,6 +47,7 @@ export const environment: AppEnvironment = {
     doctorsTechnologyOfficeSupport: doctorsTechnologyOfficeEmail,
     phsaInformationAccessAndPrivacyOffice:
       phsaInformationAccessAndPrivacyOfficeEmail,
+    immsBCEformsSupport: immsBCEformsSupportEmail,
   },
   urls: {
     bcscAppDownload: `https://www2.gov.bc.ca/gov/content/governments/government-id/bcservicescardapp/download-app`,
@@ -58,7 +58,7 @@ export const environment: AppEnvironment = {
     prescriptionRenewal: prescriptionRenewalEformsSupportUrl,
   },
   phones: {
-    additionalSupport: '250-857-1969',
+    additionalSupport: '250-448-1262',
   },
   keycloakConfig: {
     config: {

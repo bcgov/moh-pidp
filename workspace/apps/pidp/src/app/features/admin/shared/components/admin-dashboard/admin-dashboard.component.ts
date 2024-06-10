@@ -1,8 +1,14 @@
+import { AsyncPipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
 
 import { Observable, map } from 'rxjs';
 
-import { DashboardHeaderTheme, IDashboard } from '@bcgov/shared/ui';
+import {
+  DashboardComponent,
+  DashboardHeaderTheme,
+  DashboardImageComponent,
+  IDashboard,
+} from '@bcgov/shared/ui';
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';
 import { AdminRoutes } from '@app/features/admin/admin.routes';
@@ -14,6 +20,8 @@ import { AuthService } from '@app/features/auth/services/auth.service';
   templateUrl: './admin-dashboard.component.html',
   styleUrls: ['./admin-dashboard.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [AsyncPipe, DashboardComponent, DashboardImageComponent],
 })
 export class AdminDashboardComponent implements IDashboard {
   public logoutRedirectUrl: string;
@@ -29,9 +37,9 @@ export class AdminDashboardComponent implements IDashboard {
   public constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
     private authService: AuthService,
-    accessTokenService: AccessTokenService
+    accessTokenService: AccessTokenService,
   ) {
-    this.logoutRedirectUrl = `${this.config.applicationUrl}/${this.config.routes.auth}/${AdminRoutes.MODULE_PATH}`;
+    this.logoutRedirectUrl = `${this.config.applicationUrl}/${this.config.routes.auth}/${AdminRoutes.BASE_PATH}`;
     this.username = accessTokenService
       .decodeToken()
       .pipe(map((token) => token?.name ?? ''));

@@ -1,17 +1,16 @@
 @import 'palette';
 @import 'material/material-variables';
 @import 'bootstrap/bootstrap-imports';
+@import 'pidp-variables';
 
 // NOTE: mat-sidenav is modified globally
 // @see ./scss/material/components/_mat-sidenav.scss
-
 .dashboard-sidenav-container {
   position: absolute;
   // Compensate for the application header, and the
   // progress indicator for HTTP requests and routing
   // @see dashboard-header.component.scss
-  top: $mat-theme-dashboard-header-height +
-    $mat-theme-dashboard-progress-bar-height; // .mat-toolbar height + .ngx-progress height
+  top: $mat-theme-dashboard-header-height + $page-header-progress-bar-height; // .mat-toolbar height + .ngx-progress height
   bottom: 0;
   left: 0;
   right: 0;

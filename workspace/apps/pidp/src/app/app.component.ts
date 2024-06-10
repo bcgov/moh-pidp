@@ -1,6 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
-import { ActivatedRoute, Data, Event, Scroll } from '@angular/router';
+import {
+  ActivatedRoute,
+  Data,
+  Event,
+  RouterOutlet,
+  Scroll,
+} from '@angular/router';
 
 import { Observable, delay, map, mergeMap } from 'rxjs';
 
@@ -13,13 +19,15 @@ import { UtilsService } from '@core/services/utils.service';
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
+  standalone: true,
+  imports: [RouterOutlet],
 })
 export class AppComponent implements OnInit {
   public constructor(
     private activatedRoute: ActivatedRoute,
     private titleService: Title,
     private routeStateService: RouteStateService,
-    private utilsService: UtilsService
+    private utilsService: UtilsService,
   ) {}
 
   public ngOnInit(): void {
@@ -44,10 +52,10 @@ export class AppComponent implements OnInit {
           }
           return route;
         }),
-        mergeMap((route: ActivatedRoute) => route.data)
+        mergeMap((route: ActivatedRoute) => route.data),
       )
       .subscribe((routeData: Data) =>
-        this.titleService.setTitle(routeData.title)
+        this.titleService.setTitle(routeData.title),
       );
   }
 
@@ -60,12 +68,12 @@ export class AppComponent implements OnInit {
     scroll
       .pipe(
         map((event: Scroll) => event.anchor ?? null),
-        delay(500) // Provide settling time before triggering scroll
+        delay(500), // Provide settling time before triggering scroll
       )
       .subscribe((routeFragment: string | null) =>
         routeFragment
           ? this.utilsService.scrollToAnchor(routeFragment)
-          : this.utilsService.scrollTop(contentContainerSelector)
+          : this.utilsService.scrollTop(contentContainerSelector),
       );
   }
 }

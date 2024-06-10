@@ -1,7 +1,12 @@
+import { NgFor, NgIf } from '@angular/common';
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
-import { MatSelectChange } from '@angular/material/select';
+import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatOptionModule } from '@angular/material/core';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectChange, MatSelectModule } from '@angular/material/select';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { EMPTY, catchError, noop, of, tap } from 'rxjs';
@@ -12,6 +17,11 @@ import {
 } from '@pidp/presentation';
 
 import { NoContent } from '@bcgov/shared/data-access';
+import {
+  AnchorDirective,
+  InjectViewportCssClassDirective,
+  PageFooterActionDirective,
+} from '@bcgov/shared/ui';
 
 import {
   AbstractFormDependenciesService,
@@ -21,6 +31,7 @@ import { PartyService } from '@app/core/party/party.service';
 import { LoggerService } from '@app/core/services/logger.service';
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
 
+import { EnrolmentErrorComponent } from '../../components/enrolment-error/enrolment-error.component';
 import { msTeamsSupportEmail } from '../ms-teams-privacy-officer/ms-teams.constants';
 import { MsTeamsClinicMemberFormState } from './ms-teams-clinic-member-form-state';
 import { MsTeamsClinicMemberResource } from './ms-teams-clinic-member-resource.service';
@@ -30,6 +41,22 @@ import { PrivacyOfficer } from './ms-teams-clinic-member.model';
   selector: 'app-ms-teams-clinic-member',
   templateUrl: './ms-teams-clinic-member.page.html',
   styleUrls: ['./ms-teams-clinic-member.page.scss'],
+  standalone: true,
+  imports: [
+    AnchorDirective,
+    EnrolmentErrorComponent,
+    InjectViewportCssClassDirective,
+    FormsModule,
+    MatButtonModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatOptionModule,
+    MatSelectModule,
+    NgFor,
+    NgIf,
+    PageFooterActionDirective,
+    ReactiveFormsModule,
+  ],
 })
 export class MsTeamsClinicMemberPage
   extends AbstractFormPage<MsTeamsClinicMemberFormState>
@@ -54,7 +81,7 @@ export class MsTeamsClinicMemberPage
     private resource: MsTeamsClinicMemberResource,
     private logger: LoggerService,
     fb: FormBuilder,
-    private loadingOverlayService: LoadingOverlayService
+    private loadingOverlayService: LoadingOverlayService,
   ) {
     super(dependenciesService);
     const routeData = this.route.snapshot.data;
@@ -64,7 +91,7 @@ export class MsTeamsClinicMemberPage
 
     this.formState = new MsTeamsClinicMemberFormState(
       fb,
-      dependenciesService.formUtilsService
+      dependenciesService.formUtilsService,
     );
     this.selectedPrivacyOfficer = null;
   }
@@ -97,7 +124,7 @@ export class MsTeamsClinicMemberPage
           }
           this.accessRequestFailed = true;
           return of(noop());
-        })
+        }),
       )
       .subscribe();
   }
@@ -142,7 +169,7 @@ export class MsTeamsClinicMemberPage
                 return of(noop());
               }
               return of(noop());
-            })
+            }),
           )
       : EMPTY;
   }

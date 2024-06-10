@@ -15,7 +15,7 @@ import { PortalResource } from '@app/features/portal/portal-resource.service';
 export class PrescriptionRefillEformsResource {
   public constructor(
     private apiResource: ApiHttpClient,
-    private portalResource: PortalResource
+    private portalResource: PortalResource,
   ) {}
 
   public getProfileStatus(partyId: number): Observable<ProfileStatus | null> {
@@ -26,13 +26,13 @@ export class PrescriptionRefillEformsResource {
     return this.apiResource
       .post<NoContent>(
         `parties/${partyId}/access-requests/prescription-refill-eforms`,
-        {}
+        {},
       )
       .pipe(
         NoContentResponse,
         catchError((error: HttpErrorResponse) => {
           return throwError(() => error);
-        })
+        }),
       );
   }
 }

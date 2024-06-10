@@ -10,13 +10,14 @@ import { AuthService } from '../../services/auth.service';
 @Component({
   selector: 'app-auto-login',
   templateUrl: './auto-login.page.html',
+  standalone: true,
 })
 export class AutoLoginPage implements OnInit {
   public constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
     private authService: AuthService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
   ) {}
 
   public ngOnInit(): void {

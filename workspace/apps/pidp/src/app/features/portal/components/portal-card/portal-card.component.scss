@@ -6,6 +6,7 @@
   --font-size: 1rem;
   --card-header-font-size: calc(2 * var(--font-size));
   --card-header-line-height: calc(var(--card-header-font-size) + 0.5rem);
+  --margin-bottom-style: 1.5rem;
 }
 .viewport-small,
 .viewport-medium {
@@ -13,13 +14,14 @@
   --font-size: 0.75rem;
   --card-header-font-size: unset;
   --card-header-line-height: unset;
+  --margin-bottom-style: 1.1rem;
 }
-
 .viewport-large {
   --gap: 1.25rem;
   --font-size: 1rem;
   --card-header-font-size: inherit;
   --card-header-line-height: unset;
+  --margin-bottom-style: 1.1rem;
 }
 
 // Set child variables
@@ -98,6 +100,7 @@
     padding-top: var(--gap);
     display: flex;
     align-items: center;
+    margin-bottom: var(--margin-bottom-style);
     &.center {
       justify-content: center;
     }

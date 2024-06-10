@@ -1,6 +1,16 @@
+import { AsyncPipe, DatePipe, NgFor, NgIf } from '@angular/common';
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormControl, FormGroupDirective } from '@angular/forms';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroupDirective,
+  ReactiveFormsModule,
+} from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatTabsModule } from '@angular/material/tabs';
 import { ActivatedRoute } from '@angular/router';
 
 import {
@@ -11,21 +21,29 @@ import {
   map,
   of,
   switchMap,
+  tap,
 } from 'rxjs';
 
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import {
   faArrowDown,
   faArrowUp,
   faUser,
   faUserGroup,
 } from '@fortawesome/free-solid-svg-icons';
-import { NavigationService } from '@pidp/presentation';
+import {
+  LOADING_OVERLAY_DEFAULT_MESSAGE,
+  LoadingOverlayService,
+  NavigationService,
+} from '@pidp/presentation';
 
 import { NoContent } from '@bcgov/shared/data-access';
 import {
   ConfirmDialogComponent,
   DialogOptions,
   HtmlComponent,
+  InjectViewportCssClassDirective,
+  PageFooterActionDirective,
   PidpViewport,
   ViewportService,
 } from '@bcgov/shared/ui';
@@ -36,11 +54,18 @@ import {
 } from '@app/core/classes/abstract-form-page.class';
 import { PartyService } from '@app/core/party/party.service';
 import { LoggerService } from '@app/core/services/logger.service';
+import { UtilsService } from '@app/core/services/utils.service';
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
 import { LookupService } from '@app/modules/lookup/lookup.service';
 
+import { EndorsementCardComponent } from './components/endorsement-card/endorsement-card.component';
+import {
+  endorsementRequestsLabelText,
+  endorsementRequestsRedStatus,
+} from './constants/endorsements.constants';
 import { EndorsementsFormState } from './endorsements-form-state';
 import { EndorsementsResource } from './endorsements-resource.service';
+import { EndorsementRequestStatus } from './enums/endorsement-request-status.enum';
 import { EndorsementRequest } from './models/endorsement-request.model';
 import { Endorsement } from './models/endorsement.model';
 
@@ -53,6 +78,22 @@ export enum EndorsementType {
   selector: 'app-endorsements',
   templateUrl: './endorsements.page.html',
   styleUrls: ['./endorsements.page.scss'],
+  standalone: true,
+  imports: [
+    AsyncPipe,
+    DatePipe,
+    EndorsementCardComponent,
+    FaIconComponent,
+    InjectViewportCssClassDirective,
+    MatButtonModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatTabsModule,
+    NgFor,
+    NgIf,
+    PageFooterActionDirective,
+    ReactiveFormsModule,
+  ],
 })
 export class EndorsementsPage
   extends AbstractFormPage<EndorsementsFormState>
@@ -82,7 +123,9 @@ export class EndorsementsPage
     private navigationService: NavigationService,
     private lookupService: LookupService,
     viewportService: ViewportService,
-    fb: FormBuilder
+    private utilsService: UtilsService,
+    fb: FormBuilder,
+    private loadingOverlayService: LoadingOverlayService,
   ) {
     super(dependenciesService);
 
@@ -91,7 +134,7 @@ export class EndorsementsPage
     this.completed =
       routeData.endorsementRequestStatusCode === StatusCode.COMPLETED;
     viewportService.viewportBroadcast$.subscribe((viewport) =>
-      this.onViewportChange(viewport)
+      this.onViewportChange(viewport),
     );
   }
 
@@ -117,14 +160,15 @@ export class EndorsementsPage
   }
 
   public onApprove(requestId: number): void {
+    this.loadingOverlayService.open(LOADING_OVERLAY_DEFAULT_MESSAGE);
     this.resource
       .approveEndorsementRequest(this.partyService.partyId, requestId)
       .pipe(
         switchMap(
           () =>
             (this.actionableEndorsementRequests$ =
-              this.getActionableEndorsementRequests(this.partyService.partyId))
-        )
+              this.getActionableEndorsementRequests(this.partyService.partyId)),
+        ),
       )
       .subscribe();
   }
@@ -136,8 +180,8 @@ export class EndorsementsPage
         switchMap(
           () =>
             (this.actionableEndorsementRequests$ =
-              this.getActionableEndorsementRequests(this.partyService.partyId))
-        )
+              this.getActionableEndorsementRequests(this.partyService.partyId)),
+        ),
       )
       .subscribe();
   }
@@ -162,17 +206,39 @@ export class EndorsementsPage
                   switchMap(
                     () =>
                       (this.endorsements$ = this.getEndorsements(
-                        this.partyService.partyId
-                      ))
-                  )
+                        this.partyService.partyId,
+                      )),
+                  ),
                 )
-            : EMPTY
-        )
+            : EMPTY,
+        ),
       )
       .subscribe();
   }
 
+  public getStatus(endorsementRequestStatus: EndorsementRequestStatus): string {
+    return (
+      endorsementRequestsLabelText[endorsementRequestStatus] ?? 'Requested'
+    );
+  }
+
+  public isEndorsementRequested(
+    endorsementRequestStatus: EndorsementRequestStatus,
+  ): boolean {
+    return !endorsementRequestsRedStatus.includes(endorsementRequestStatus);
+  }
+
+  public getCollegeText(
+    endorsementCard: EndorsementRequest | Endorsement,
+  ): string {
+    const college = this.lookupService.colleges.find(
+      (x) => x.code === endorsementCard.collegeCode,
+    );
+    return college?.name ?? '';
+  }
+
   public ngOnInit(): void {
+    this.utilsService.scrollTop();
     const partyId = this.partyService.partyId;
 
     if (!partyId) {
@@ -192,22 +258,6 @@ export class EndorsementsPage
 
     this.nonActionableEndorsementRequests$ =
       this.getNonActionableEndorsementRequests(partyId);
-  }
-
-  public getCollegeTextForEndorsement(endorsement: Endorsement): string {
-    const college = this.lookupService.colleges.find(
-      (x) => x.code === endorsement.collegeCode
-    );
-    return college?.name ?? '';
-  }
-
-  public getCollegeTextForEndorsementRequest(
-    endorsementRequest: EndorsementRequest
-  ): string {
-    const college = this.lookupService.colleges.find(
-      (x) => x.code === endorsementRequest.collegeCode
-    );
-    return college?.name ?? '';
   }
 
   protected performSubmission(): NoContent {
@@ -237,41 +287,42 @@ export class EndorsementsPage
           this.navigateToRoot();
         }
         return of([]);
-      })
+      }),
     );
   }
 
   private getActionableEndorsementRequests(
-    partyId: number
+    partyId: number,
   ): Observable<EndorsementRequest[]> {
     return this.resource.getEndorsementRequests(partyId).pipe(
       map((response: EndorsementRequest[] | null) => response ?? []),
+      tap((_) => this.loadingOverlayService.close()),
       map((response: EndorsementRequest[]) =>
-        response.filter((res) => res.actionable === true)
+        response.filter((res) => res.actionable === true),
       ),
       catchError((error: HttpErrorResponse) => {
         if (error.status === HttpStatusCode.NotFound) {
           this.navigateToRoot();
         }
         return of([]);
-      })
+      }),
     );
   }
 
   private getNonActionableEndorsementRequests(
-    partyId: number
+    partyId: number,
   ): Observable<EndorsementRequest[]> {
     return this.resource.getEndorsementRequests(partyId).pipe(
       map((response: EndorsementRequest[] | null) => response ?? []),
       map((response: EndorsementRequest[]) =>
-        response.filter((res) => res.actionable === false)
+        response.filter((res) => res.actionable === false),
       ),
       catchError((error: HttpErrorResponse) => {
         if (error.status === HttpStatusCode.NotFound) {
           this.navigateToRoot();
         }
         return of([]);
-      })
+      }),
     );
   }
 }

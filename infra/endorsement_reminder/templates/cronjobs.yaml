@@ -1,0 +1,91 @@
+kind: CronJob
+apiVersion: batch/v1
+metadata:
+  name: endorsement-reminder
+spec:
+  schedule: {{ .Values.cron }}
+  timeZone: America/Vancouver
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: endorsement-reminder
+            image: {{ .Values.image }}
+            env:
+              - name: ChesClient__TokenUrl
+                valueFrom:
+                  secretKeyRef:
+                    name: ches
+                    key: ChesClient__TokenUrl
+              - name: ChesClient__ClientId
+                valueFrom:
+                  secretKeyRef:
+                    name: ches
+                    key: ChesClient__ClientId
+              - name: ChesClient__ClientSecret
+                valueFrom:
+                  secretKeyRef:
+                    name: ches
+                    key: ChesClient__ClientSecret
+              - name: ChesClient__Url
+                valueFrom:
+                  secretKeyRef:
+                    name: ches
+                    key: ChesClient__Url
+              - name: ChesClient__Enabled
+                valueFrom:
+                  secretKeyRef:
+                    name: ches
+                    key: ChesClient__Enabled
+              - name: MailServer__EnableSsl
+                valueFrom:
+                  configMapKeyRef:
+                    name: mail-settings
+                    key: MailServer__EnableSsl
+              - name: MailServer__Url
+                valueFrom:
+                  configMapKeyRef:
+                    name: mail-settings
+                    key: MailServer__Url
+              - name: MailServer__Port
+                valueFrom:
+                  configMapKeyRef:
+                    name: mail-settings
+                    key: MailServer__Port
+              - name: ASPNETCORE_ENVIRONMENT
+                value: '{{ .Values.aspnetcoreEnvironment }}'
+              - name: DB_HOST
+                valueFrom:
+                  configMapKeyRef:
+                    name: database-cm
+                    key: database-host
+              - name: POSTGRESQL_PASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    name: {{ .Values.env }}-patroni-secret
+                    key: app-db-password
+              - name: POSTGRESQL_USER
+                valueFrom:
+                  secretKeyRef:
+                    name: {{ .Values.env }}-patroni-secret
+                    key: app-db-username
+              - name: POSTGRESQL_DATABASE
+                valueFrom:
+                  secretKeyRef:
+                    name: {{ .Values.env }}-patroni-secret
+                    key: app-db-name
+              - name: ConnectionStrings__PidpDatabase
+                value: >-
+                  Host=$(DB_HOST);Port=5432;Database=$(POSTGRESQL_DATABASE);Username=$(POSTGRESQL_USER);Password=$(POSTGRESQL_PASSWORD)
+              - name: ApplicationUrl
+                value: '{{ .Values.applicationURL }}'
+            resources:
+                limits:
+                  cpu: 500m
+                  memory: 500Mi
+                requests:
+                  cpu: 50m
+                  memory: 50Mi
+          restartPolicy: Never

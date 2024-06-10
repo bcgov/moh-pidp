@@ -62,7 +62,7 @@ public class MSTeamsPrivacyOfficerTests : InMemoryDbTest
         {
             party.FirstName = "Privacci";
             party.LastName = "Offiker";
-            party.Birthdate = LocalDate.FromDateTime(DateTime.Today);
+            party.Birthdate = LocalDate.FromDateTime(DateTime.Today).PlusYears(-20);
             party.Email = "Email@domain.com";
             party.Phone = "5551234567";
             party.Cpn = "Cpn7";
@@ -82,12 +82,10 @@ public class MSTeamsPrivacyOfficerTests : InMemoryDbTest
         };
         var client = A.Fake<IPlrClient>()
             .ReturningAStandingsDigest(true, AllowedIdentifierTypes[0]);
-        var emailService = A.Fake<IEmailService>();
-        var capturedEmails = new List<Email>();
-        A.CallTo(() => emailService.SendAsync(An<Email>._))
-            .Invokes(i => capturedEmails.Add(i.GetArgument<Email>(0)!));
+        var emailService = AMock.EmailService();
+        var testClock = AMock.Clock(Instant.FromUnixTimeSeconds(123456));
 
-        var handler = this.MockDependenciesFor<CommandHandler>(client, emailService);
+        var handler = this.MockDependenciesFor<CommandHandler>(client, emailService, testClock);
 
         var result = await handler.HandleAsync(command);
 
@@ -107,13 +105,13 @@ public class MSTeamsPrivacyOfficerTests : InMemoryDbTest
         Assert.Equal(command.ClinicAddress.Postal, clinic.Address.Postal);
         Assert.Equal(command.ClinicAddress.City, clinic.Address.City);
 
-        Assert.Equal(2, capturedEmails.Count);
-        var confirmationEmail = capturedEmails.SingleOrDefault(email => email.To.Contains(party.Email));
+        Assert.Equal(2, emailService.SentEmails.Count);
+        var confirmationEmail = emailService.SentEmails.SingleOrDefault(email => email.To.Contains(party.Email));
         Assert.NotNull(confirmationEmail);
         Assert.Contains(party.FullName, confirmationEmail.Body);
 
-        var enrolmentEmailBody = capturedEmails.Single(email => email != confirmationEmail).Body;
-        var expectedEnrolmentDate = SystemClock.Instance.GetCurrentInstant().InZone(DateTimeZoneProviders.Tzdb.GetZoneOrNull("America/Vancouver")!).Date;
+        var enrolmentEmailBody = emailService.SentEmails.Single(email => email != confirmationEmail).Body;
+        var expectedEnrolmentDate = testClock.GetCurrentInstant().InZone(DateTimeZoneProviders.Tzdb.GetZoneOrNull("America/Vancouver")!).Date;
         Assert.Contains(expectedEnrolmentDate.ToString(), enrolmentEmailBody);
         Assert.Contains(party.FirstName, enrolmentEmailBody);
         Assert.Contains(party.LastName, enrolmentEmailBody);

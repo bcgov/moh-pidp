@@ -61,7 +61,7 @@ describe('AppComponent', () => {
       const navigationEnd = new NavigationEnd(0, '/', '/');
       routeStateServiceSpy.onNavigationEnd.nextOneTimeWith(navigationEnd);
       routeStateServiceSpy.onScrollEvent.nextOneTimeWith(
-        new Scroll(navigationEnd, [0, 0], null)
+        new Scroll(navigationEnd, [0, 0], null),
       );
 
       when('the component has been initialized', () => {
@@ -72,7 +72,7 @@ describe('AppComponent', () => {
           setTimeout(() => {
             expect(titleServiceSpy.setTitle).toHaveBeenCalledTimes(1);
             expect(titleServiceSpy.setTitle).toHaveBeenCalledWith(
-              mockActivatedRoute.snapshot.data.title
+              mockActivatedRoute.snapshot.data.title,
             );
           }, 0);
         });
@@ -83,7 +83,7 @@ describe('AppComponent', () => {
       const navigationEnd = new NavigationEnd(0, '/', '/');
       routeStateServiceSpy.onNavigationEnd.nextOneTimeWith(navigationEnd);
       routeStateServiceSpy.onScrollEvent.nextOneTimeWith(
-        new Scroll(navigationEnd, [0, 0], null)
+        new Scroll(navigationEnd, [0, 0], null),
       );
 
       when('the component has been initialized', () => {
@@ -94,7 +94,7 @@ describe('AppComponent', () => {
           setTimeout(() => {
             expect(utilsServiceSpy.scrollTop).toHaveBeenCalledTimes(1);
             expect(utilsServiceSpy.scrollTop).toHaveBeenCalledWith(
-              contentContainerSelector
+              contentContainerSelector,
             );
           }, 0);
         });
@@ -107,7 +107,7 @@ describe('AppComponent', () => {
       const navigationEnd = new NavigationEnd(0, '/', '/');
       routeStateServiceSpy.onNavigationEnd.nextOneTimeWith(navigationEnd);
       routeStateServiceSpy.onScrollEvent.nextOneTimeWith(
-        new Scroll(navigationEnd, [0, 0], anchor)
+        new Scroll(navigationEnd, [0, 0], anchor),
       );
 
       when('the component has been initialized', () => {

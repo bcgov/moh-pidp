@@ -5,6 +5,7 @@ import { Lookup, LookupConfig } from './lookup.types';
 
 @Pipe({
   name: 'lookupCode',
+  standalone: true,
 })
 export class LookupCodePipe implements PipeTransform {
   public constructor(private lookupService: LookupService) {}
@@ -12,7 +13,7 @@ export class LookupCodePipe implements PipeTransform {
   public transform<T extends string | number>(
     lookupCode: T | null | undefined,
     lookupKey: string,
-    key: string = 'name'
+    key = 'name',
   ): unknown | null {
     return lookupCode && lookupKey && key
       ? this.lookupValue<T>(lookupCode, lookupKey, key)
@@ -22,11 +23,11 @@ export class LookupCodePipe implements PipeTransform {
   private lookupValue<T extends number | string>(
     lookupCode: T,
     lookupKey: string,
-    key: string
+    key: string,
   ): unknown | null {
     const lookupConfig = this.lookupService[lookupKey as keyof LookupConfig];
     const lookup = (lookupConfig as Lookup[])?.find(
-      (l: Lookup) => l.code === lookupCode
+      (l: Lookup) => l.code === lookupCode,
     );
 
     return lookup && Object.prototype.hasOwnProperty.call(lookup, key)

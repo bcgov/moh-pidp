@@ -1,4 +1,4 @@
-<ui-page mode="medium">
+<ui-page mode="full">
   <ui-alert
     *ngIf="accessRequestFailed"
     type="danger"
@@ -22,9 +22,11 @@
 
   <p *ngIf="!completed">
     <strong>
-      I, <span class="signature">{{ username | async }}</span>, represent and
-      warrant that all information provided in connection with my application
-      for access to the System(s), is true and correct.
+      I,
+      <span class="signature"
+        >{{ (dashboardState$ | async)?.userProfileFullNameText }}</span
+      >, represent and warrant that all information provided in connection with
+      my application for access to the System(s), is true and correct.
     </strong>
   </p>
 

@@ -7,10 +7,7 @@ describe('PageSubheaderComponent', () => {
   let fixture: ComponentFixture<PageSubheaderComponent>;
 
   beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [ PageSubheaderComponent ]
-    })
-    .compileComponents();
+    await TestBed.configureTestingModule({}).compileComponents();
   });
 
   beforeEach(() => {

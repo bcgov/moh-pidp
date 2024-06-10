@@ -25,7 +25,17 @@ export class AdminResource {
       catchError((_: HttpErrorResponse) => {
         // TODO add logging and toast messaging around specific errors when the admin starts getting a bit of attention
         return of([]);
-      })
+      }),
+    );
+  }
+
+  public deleteParty(id: number): NoContent {
+    return this.apiResource.delete<PartyList[]>(this.getResourcePath(id)).pipe(
+      NoContentResponse,
+      catchError((error: HttpErrorResponse) => {
+        // TODO add logging and toast messaging around specific errors when the admin starts getting a bit of attention
+        throw error;
+      }),
     );
   }
 
@@ -35,7 +45,11 @@ export class AdminResource {
       catchError((error: HttpErrorResponse) => {
         // TODO add logging and toast messaging around specific errors when the admin starts getting a bit of attention
         throw error;
-      })
+      }),
     );
+  }
+
+  protected getResourcePath(partyId: number): string {
+    return `/admin/parties/${partyId}`;
   }
 }

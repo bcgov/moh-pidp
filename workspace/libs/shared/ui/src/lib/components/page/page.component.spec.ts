@@ -1,6 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { OverlayComponent } from '../overlay/overlay.component';
 import { PageComponent } from './page.component';
 
 describe('PageComponent', () => {
@@ -8,9 +7,7 @@ describe('PageComponent', () => {
   let fixture: ComponentFixture<PageComponent>;
 
   beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [PageComponent, OverlayComponent],
-    }).compileComponents();
+    await TestBed.configureTestingModule({}).compileComponents();
   });
 
   beforeEach(() => {

@@ -12,6 +12,7 @@ export enum DocumentType {
   MS_TEAMS_DETAILS_AGREEMENT = 'ms-teams-details-agreement',
   MS_TEAMS_IT_SECURITY_AGREEMENT = 'ms-teams-it-security-agreement',
   PROVIDER_REPORTING_PORTAL_COLLECTION_NOTICE = 'provider-reporting-portal-collection-notice',
+  IMMSBC_EFORMS_COLLECTION_NOTICE = 'immsbc-eforms-collection-notice',
 }
 
 export interface IDocumentMetaData {
@@ -68,6 +69,10 @@ export class DocumentService {
         type: DocumentType.PROVIDER_REPORTING_PORTAL_COLLECTION_NOTICE,
         title: 'Provider Reporting Portal Collection Notice',
       },
+      {
+        type: DocumentType.IMMSBC_EFORMS_COLLECTION_NOTICE,
+        title: 'Immunization Entry eForm Collection Notice',
+      },
     ];
   }
 
@@ -116,6 +121,11 @@ export class DocumentService {
         return {
           ...this.getDocumentMetaData(documentType),
           content: this.getProviderReportingPortalCollectionNotice(),
+        };
+      case DocumentType.IMMSBC_EFORMS_COLLECTION_NOTICE:
+        return {
+          ...this.getDocumentMetaData(documentType),
+          content: this.getImmsBCEformsCollectionNotice(),
         };
       default:
         throw new Error('Document type does not exist');
@@ -339,9 +349,19 @@ export class DocumentService {
     `;
   }
 
+  public getImmsBCEformsCollectionNotice(): string {
+    return `
+      Personal information is protected under BC privacy laws and is collected under the authority of section
+      26(c) of the Freedom of Information Protection of Privacy Act. All data will be securely stored at PHSA
+      and will not be used for any other purpose other than the one stated above. If you have any questions
+      about the collection of this personal information please contact PHSA's Information Access & Privacy
+      Office at 1-855-229-9800 or at <a href="mailto:${this.config.emails.immsBCEformsSupport}">${this.config.emails.immsBCEformsSupport}</a>.
+    `;
+  }
+
   private getDocumentMetaData(documentType: DocumentType): IDocumentMetaData {
     const metadata = this.documents.find(
-      (document) => document.type === documentType
+      (document) => document.type === documentType,
     );
 
     if (!metadata) {

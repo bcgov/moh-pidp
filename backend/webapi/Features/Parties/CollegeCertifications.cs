@@ -35,7 +35,7 @@ public class CollegeCertifications
 
     public class QueryHandler : IQueryHandler<Query, IDomainResult<List<Model>>>
     {
-        private readonly ILogger logger;
+        private readonly ILogger<QueryHandler> logger;
         private readonly IMapper mapper;
         private readonly IPlrClient client;
         private readonly PidpDbContext context;
@@ -83,5 +83,5 @@ public class CollegeCertifications
 public static partial class CollegeCertificationLoggingExtensions
 {
     [LoggerMessage(1, LogLevel.Warning, "Unexpected result of no Records in PLR for user with CPN = {cpn}.")]
-    public static partial void LogNoCertsFound(this ILogger logger, string cpn);
+    public static partial void LogNoCertsFound(this ILogger<CollegeCertifications.QueryHandler> logger, string cpn);
 }

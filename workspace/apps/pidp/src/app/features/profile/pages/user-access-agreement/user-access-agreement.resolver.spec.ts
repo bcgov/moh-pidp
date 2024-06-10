@@ -1,15 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { HttpStatusCode } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
-
 import {
-  randEmail,
-  randFirstName,
-  randFullName,
-  randLastName,
-  randNumber,
-  randPhoneNumber,
-} from '@ngneat/falso';
+  ActivatedRouteSnapshot,
+  ResolveFn,
+  RouterStateSnapshot,
+} from '@angular/router';
+
+import { Observable } from 'rxjs';
+
+import { randNumber } from '@ngneat/falso';
+import { MockProfileStatus } from '@test/mock-profile-status';
 import { Spy, createSpyFromClass, provideAutoSpy } from 'jest-auto-spies';
 
 import { PartyService } from '@app/core/party/party.service';
@@ -17,10 +18,18 @@ import { StatusCode } from '@app/features/portal/enums/status-code.enum';
 import { ProfileStatus } from '@app/features/portal/models/profile-status.model';
 
 import { UserAccessAgreementResource } from './user-access-agreement-resource.service';
-import { UserAccessAgreementResolver } from './user-access-agreement.resolver';
+import { userAccessAgreementResolver } from './user-access-agreement.resolver';
 
-describe('UserAccessAgreementResolver', () => {
-  let resolver: UserAccessAgreementResolver;
+describe('userAccessAgreementResolver', () => {
+  const executeResolver: ResolveFn<StatusCode | null> = (
+    ...resolverParameters
+  ) =>
+    TestBed.runInInjectionContext(() =>
+      userAccessAgreementResolver(...resolverParameters),
+    );
+
+  let activatedRouteSnapshotSpy: Spy<ActivatedRouteSnapshot>;
+  let routerStateSnapshotSpy: Spy<RouterStateSnapshot>;
   let userAccessAgreementResourceSpy: Spy<UserAccessAgreementResource>;
   let partyServiceSpy: Spy<PartyService>;
 
@@ -29,7 +38,6 @@ describe('UserAccessAgreementResolver', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
-        UserAccessAgreementResolver,
         provideAutoSpy(UserAccessAgreementResource),
         {
           provide: PartyService,
@@ -41,59 +49,12 @@ describe('UserAccessAgreementResolver', () => {
       ],
     });
 
-    resolver = TestBed.inject(UserAccessAgreementResolver);
     userAccessAgreementResourceSpy = TestBed.inject<any>(
-      UserAccessAgreementResource
+      UserAccessAgreementResource,
     );
     partyServiceSpy = TestBed.inject<any>(PartyService);
 
-    mockProfileStatus = {
-      alerts: [],
-      status: {
-        dashboardInfo: {
-          fullName: randFullName(),
-          collegeCode: randNumber(),
-          statusCode: StatusCode.AVAILABLE,
-        },
-        demographics: {
-          firstName: randFirstName(),
-          lastName: randLastName(),
-          email: randEmail(),
-          phone: randPhoneNumber(),
-          statusCode: StatusCode.AVAILABLE,
-        },
-        collegeCertification: {
-          hasCpn: false,
-          licenceDeclared: false,
-          statusCode: StatusCode.AVAILABLE,
-        },
-        administratorInfo: {
-          email: randEmail(),
-          statusCode: StatusCode.AVAILABLE,
-        },
-        organizationDetails: { statusCode: StatusCode.AVAILABLE },
-        facilityDetails: { statusCode: StatusCode.AVAILABLE },
-        endorsements: { statusCode: StatusCode.AVAILABLE },
-        userAccessAgreement: { statusCode: StatusCode.AVAILABLE },
-        saEforms: {
-          statusCode: StatusCode.AVAILABLE,
-          incorrectLicenceType: false,
-        },
-        prescriptionRefillEforms: { statusCode: StatusCode.AVAILABLE },
-        'prescription-refill-eforms': { statusCode: StatusCode.AVAILABLE },
-        bcProvider: { statusCode: StatusCode.AVAILABLE },
-        hcimAccountTransfer: { statusCode: StatusCode.AVAILABLE },
-        hcimEnrolment: { statusCode: StatusCode.AVAILABLE },
-        driverFitness: { statusCode: StatusCode.AVAILABLE },
-        msTeamsPrivacyOfficer: { statusCode: StatusCode.AVAILABLE },
-        msTeamsClinicMember: { statusCode: StatusCode.AVAILABLE },
-        providerReportingPortal: { statusCode: StatusCode.AVAILABLE },
-        'provider-reporting-portal': { statusCode: StatusCode.AVAILABLE },
-        sitePrivacySecurityChecklist: { statusCode: StatusCode.AVAILABLE },
-        complianceTraining: { statusCode: StatusCode.AVAILABLE },
-        primaryCareRostering: { statusCode: StatusCode.AVAILABLE },
-      },
-    };
+    mockProfileStatus = MockProfileStatus.get();
   });
 
   describe('METHOD: resolve', () => {
@@ -106,22 +67,25 @@ describe('UserAccessAgreementResolver', () => {
           .mustBeCalledWith(partyId)
           .nextOneTimeWith(mockProfileStatus);
         let actualResult: StatusCode | null;
-        resolver
-          .resolve()
-          .subscribe(
-            (profileStatus: StatusCode | null) => (actualResult = profileStatus)
-          );
+        (
+          executeResolver(
+            activatedRouteSnapshotSpy,
+            routerStateSnapshotSpy,
+          ) as Observable<StatusCode | null>
+        ).subscribe(
+          (profileStatus: StatusCode | null) => (actualResult = profileStatus),
+        );
 
         then(
           'response will provide the status code for user access agreement',
           () => {
             expect(
-              userAccessAgreementResourceSpy.getProfileStatus
+              userAccessAgreementResourceSpy.getProfileStatus,
             ).toHaveBeenCalledTimes(1);
             expect(actualResult).toBe(
-              mockProfileStatus.status.userAccessAgreement.statusCode
+              mockProfileStatus.status.userAccessAgreement.statusCode,
             );
-          }
+          },
         );
       });
     });
@@ -140,20 +104,23 @@ describe('UserAccessAgreementResolver', () => {
             },
           ]);
         let actualResult: StatusCode | null;
-        resolver
-          .resolve()
-          .subscribe(
-            (profileStatus: StatusCode | null) => (actualResult = profileStatus)
-          );
+        (
+          executeResolver(
+            activatedRouteSnapshotSpy,
+            routerStateSnapshotSpy,
+          ) as Observable<StatusCode | null>
+        ).subscribe(
+          (profileStatus: StatusCode | null) => (actualResult = profileStatus),
+        );
 
         then(
           'response will provide null as status code for user access agreement',
           () => {
             expect(
-              userAccessAgreementResourceSpy.getProfileStatus
+              userAccessAgreementResourceSpy.getProfileStatus,
             ).toHaveBeenCalledTimes(1);
             expect(actualResult).toBe(null);
-          }
+          },
         );
       });
     });
@@ -164,20 +131,23 @@ describe('UserAccessAgreementResolver', () => {
 
       when('attempting to resolve the status code', () => {
         let actualResult: StatusCode | null;
-        resolver
-          .resolve()
-          .subscribe(
-            (profileStatus: StatusCode | null) => (actualResult = profileStatus)
-          );
+        (
+          executeResolver(
+            activatedRouteSnapshotSpy,
+            routerStateSnapshotSpy,
+          ) as Observable<StatusCode | null>
+        ).subscribe(
+          (profileStatus: StatusCode | null) => (actualResult = profileStatus),
+        );
 
         then(
           'response will provide null as status code for user access agreement',
           () => {
             expect(
-              userAccessAgreementResourceSpy.getProfileStatus
+              userAccessAgreementResourceSpy.getProfileStatus,
             ).not.toHaveBeenCalled();
             expect(actualResult).toBe(null);
-          }
+          },
         );
       });
     });

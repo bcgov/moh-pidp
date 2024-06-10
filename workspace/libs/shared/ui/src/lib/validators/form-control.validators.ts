@@ -24,7 +24,7 @@ export class FormControlValidators {
    * Checks the form control value is letters or numerals.
    */
   public static alphanumeric(
-    control: AbstractControl
+    control: AbstractControl,
   ): ValidationErrors | null {
     if (!control.value) {
       return null;
@@ -93,7 +93,7 @@ export class FormControlValidators {
    * list of email address(es).
    */
   public static multipleEmails(
-    control: AbstractControl
+    control: AbstractControl,
   ): ValidationErrors | null {
     if (!control.value) {
       return null;
@@ -168,7 +168,7 @@ export class FormControlValidators {
    */
   public static atLeast(
     control: AbstractControl,
-    minNumber: number
+    minNumber: number,
   ): ValidationErrors | null {
     if (!Array.isArray(control.value)) {
       return null;
@@ -194,7 +194,7 @@ export class FormControlValidators {
    * Checks a form control is a non-zero index (eg. database record ID).
    */
   public static requiredIndex(
-    control: AbstractControl
+    control: AbstractControl,
   ): ValidationErrors | null {
     const regExp = /^[1-9]\d*$/;
     const valid = control.valid && regExp.test(control.value);
@@ -206,7 +206,7 @@ export class FormControlValidators {
    * Checks a form control is non-empty or false.
    */
   public static requiredTruthful(
-    control: AbstractControl
+    control: AbstractControl,
   ): ValidationErrors | null {
     // Not checking the control value on purpose!
     return typeof control.value === 'boolean'
@@ -219,7 +219,7 @@ export class FormControlValidators {
    * Checks a form control is a boolean.
    */
   public static requiredBoolean(
-    control: AbstractControl
+    control: AbstractControl,
   ): ValidationErrors | null {
     // Not checking the control value on purpose!
     return typeof control.value === 'boolean' ? null : { boolean: true };
@@ -232,7 +232,7 @@ export class FormControlValidators {
    */
   public static requiredLength(
     minLength: number,
-    maxLength?: number
+    maxLength?: number,
   ): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       if (!control.value) {

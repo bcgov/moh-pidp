@@ -66,10 +66,10 @@ describe('ViewDocumentPage', () => {
           'router should navigate to signed or accepted documents route',
           () => {
             expect(router.navigate).toHaveBeenCalledWith([
-              HistoryRoutes.MODULE_PATH,
+              HistoryRoutes.BASE_PATH,
               HistoryRoutes.SIGNED_ACCEPTED_DOCUMENTS,
             ]);
-          }
+          },
         );
       });
     });

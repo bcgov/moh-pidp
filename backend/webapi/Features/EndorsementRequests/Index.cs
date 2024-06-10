@@ -42,6 +42,7 @@ public class Index
         {
             var requested = await this.context.EndorsementRequests
                 .Where(request => request.RequestingPartyId == query.PartyId
+                    && request.Status != EndorsementRequestStatus.Expired
                     && request.Status != EndorsementRequestStatus.Completed) // Endorsement Requests that successfully complete are now full Endorsements
                 .Select(request => new Model
                 {
@@ -60,6 +61,7 @@ public class Index
 
             var recieved = await this.context.EndorsementRequests
                 .Where(request => request.ReceivingPartyId == query.PartyId
+                    && request.Status != EndorsementRequestStatus.Expired
                     && request.Status != EndorsementRequestStatus.Completed)
                 .Select(request => new Model
                 {

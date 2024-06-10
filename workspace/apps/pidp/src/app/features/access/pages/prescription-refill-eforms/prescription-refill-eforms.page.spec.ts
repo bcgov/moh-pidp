@@ -1,17 +1,19 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { TestBed } from '@angular/core/testing';
-import { provideAutoSpy } from 'jest-auto-spies';
-import { randTextRange } from '@ngneat/falso';
-
 import { ActivatedRoute, Router } from '@angular/router';
-import { APP_CONFIG, APP_DI_CONFIG } from '@app/app.config';
 
-import { PrescriptionRefillEformsPage } from './prescription-refill-eforms.page';
-import { PrescriptionRefillEformsResource } from './prescription-refill-eforms-resource.service';
-import { PartyService } from '@app/core/party/party.service';
-import { LoggerService } from '@app/core/services/logger.service';
-import { DocumentService } from '@app/core/services/document.service';
+import { randTextRange } from '@ngneat/falso';
+import { provideAutoSpy } from 'jest-auto-spies';
+
 import { SafePipe } from '@bcgov/shared/ui';
+
+import { APP_CONFIG, APP_DI_CONFIG } from '@app/app.config';
+import { PartyService } from '@app/core/party/party.service';
+import { DocumentService } from '@app/core/services/document.service';
+import { LoggerService } from '@app/core/services/logger.service';
+
+import { PrescriptionRefillEformsResource } from './prescription-refill-eforms-resource.service';
+import { PrescriptionRefillEformsPage } from './prescription-refill-eforms.page';
 
 describe('PrescriptionRefillEformsPage', () => {
   let component: PrescriptionRefillEformsPage;
@@ -31,7 +33,7 @@ describe('PrescriptionRefillEformsPage', () => {
     };
 
     TestBed.configureTestingModule({
-      declarations: [SafePipe],
+      imports: [SafePipe],
       providers: [
         PrescriptionRefillEformsPage,
         {
@@ -47,7 +49,7 @@ describe('PrescriptionRefillEformsPage', () => {
         provideAutoSpy(PrescriptionRefillEformsResource),
         provideAutoSpy(LoggerService),
         provideAutoSpy(DocumentService),
-      ]
+      ],
     });
 
     component = TestBed.inject(PrescriptionRefillEformsPage);

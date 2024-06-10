@@ -19,17 +19,17 @@ export class AddressAutocompleteResource extends AbstractResource {
   public constructor(
     private apiResource: ApiHttpClient,
     private toastService: ToastService,
-    private logger: LoggerService
+    private logger: LoggerService,
   ) {
     super('address-autocomplete');
   }
 
   public find(
-    searchTerm: string
+    searchTerm: string,
   ): Observable<AddressAutocompleteFindResponse[]> {
     return this.apiResource
       .get<AddressAutocompleteFindResponse[]>(
-        `${this.resourceBaseUri}?searchTerm=${searchTerm}`
+        `${this.resourceBaseUri}?searchTerm=${searchTerm}`,
       )
       .pipe(
         map((response: AddressAutocompleteFindResponse[]) => response ?? []),
@@ -37,34 +37,34 @@ export class AddressAutocompleteResource extends AbstractResource {
           this.toastService.openErrorToast('Address could not be found');
           this.logger.error(
             '[AddressAutocompleteResource::find] error has occurred: ',
-            error
+            error,
           );
 
           return of([]);
-        })
+        }),
       );
   }
 
   public retrieve(
-    id: string
+    id: string,
   ): Observable<AddressAutocompleteRetrieveResponse[]> {
     return this.apiResource
       .get<AddressAutocompleteRetrieveResponse[]>(
-        `${this.resourceBaseUri}/${id}`
+        `${this.resourceBaseUri}/${id}`,
       )
       .pipe(
         map(
-          (response: AddressAutocompleteRetrieveResponse[]) => response ?? []
+          (response: AddressAutocompleteRetrieveResponse[]) => response ?? [],
         ),
         catchError((error: HttpErrorResponse) => {
           this.toastService.openErrorToast('Address could not be retrieved');
           this.logger.error(
             '[AddressAutocompleteResource::retrieve] error has occurred: ',
-            error
+            error,
           );
 
           return of([]);
-        })
+        }),
       );
   }
 }

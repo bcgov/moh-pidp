@@ -15,8 +15,8 @@ export class FormArrayValidators {
   public static atLeast(
     minNumber: number,
     predicate: (control: AbstractControl) => boolean = (
-      control: AbstractControl
-    ): boolean => !!control
+      control: AbstractControl,
+    ): boolean => !!control,
   ): ValidatorFn {
     return (array: AbstractControl): ValidationErrors | null => {
       if (!(array instanceof FormArray)) {

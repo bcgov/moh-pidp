@@ -78,7 +78,7 @@ describe('HcimAccountTransferPage', () => {
     component = TestBed.inject(HcimAccountTransferPage);
     partyServiceSpy = TestBed.inject<any>(PartyService);
     hcimAccounTransferResourceSpy = TestBed.inject<any>(
-      HcimAccountTransferResource
+      HcimAccountTransferResource,
     );
     formUtilsServiceSpy = TestBed.inject<any>(FormUtilsService);
 
@@ -154,7 +154,7 @@ describe('HcimAccountTransferPage', () => {
           expect(component.completed).toBe(true);
           expect(component.accessRequestStatusCode).toBe(response.statusCode);
           expect(component.loginAttempts).toBe(
-            component.maxLoginAttempts - response.remainingAttempts
+            component.maxLoginAttempts - response.remainingAttempts,
           );
         });
       });

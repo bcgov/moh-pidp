@@ -32,7 +32,7 @@ public class Receive
     public class CommandHandler : ICommandHandler<Command, IDomainResult>
     {
         private readonly IClock clock;
-        private readonly ILogger logger;
+        private readonly ILogger<CommandHandler> logger;
         private readonly PidpDbContext context;
 
         public CommandHandler(
@@ -79,5 +79,5 @@ public class Receive
 public static partial class EndorsementRequestReceiveLoggingExtensions
 {
     [LoggerMessage(1, LogLevel.Warning, "Possible fraudulent behaviour: Party {partyId} received an Endorsement Request from themselves.")]
-    public static partial void LogSelfEndorsementAttempt(this ILogger logger, int partyId);
+    public static partial void LogSelfEndorsementAttempt(this ILogger<Receive.CommandHandler> logger, int partyId);
 }

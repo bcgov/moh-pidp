@@ -9,7 +9,6 @@ describe('ToggleContentComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ToggleContentComponent],
       imports: [MatSlideToggleModule],
     }).compileComponents();
   });

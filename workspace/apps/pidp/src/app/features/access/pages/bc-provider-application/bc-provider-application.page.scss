@@ -139,12 +139,12 @@ ol {
           z-index: -1;
           border-radius: var(--card-border-radius);
           object-fit: cover;
-          object-position: 50% 30%;
+          object-position: 100% 50%;
           & .card-footer {
             width: 100%;
           }
 
-          & button.mat-flat-button {
+          & button.mat-mdc-unelevated-button {
             width: fit-content;
           }
         }
@@ -171,8 +171,8 @@ ol {
             margin-right: 1.5rem;
           }
           & .card-body {
-            justify-content: center;
             & p {
+              margin-top: 12px;
               color: pidp.$grey-30;
             }
           }
@@ -188,7 +188,7 @@ ol {
           & .card-footer {
             width: auto;
             align-self: flex-end;
-            & button.mat-flat-button {
+            & button.mat-mdc-unelevated-button {
               width: fit-content;
             }
             & button.icon-button {
@@ -213,7 +213,7 @@ ol {
     }
 
     & .bcgov-logo img {
-      height: 97px;
+      height: 100%;
       width: 190px;
       margin-left: -10px;
     }
@@ -333,7 +333,7 @@ ol {
           & label {
             font-weight: bold;
           }
-          & .mat-form-field {
+          & .mat-mdc-form-field {
             margin-bottom: 0;
           }
         }
@@ -366,6 +366,8 @@ ol {
   }
 }
 .viewport-all.dialog-box {
+  padding: 24px;
+
   & .dialog-header {
     display: flex;
     justify-content: flex-end;

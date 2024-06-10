@@ -1,4 +1,4 @@
-<ui-layout-header-footer>
+<ui-layout-header-footer [emailSupport]="providerIdentitySupport">
   <div class="header-right" page-header-right>
     <span class="signout-text">sign out</span>
     <button
@@ -13,6 +13,7 @@
     <div class="section-box">
       <div class="background-image-container">
         <img
+          alt="BC Provider uplift"
           ngSrc="/assets/images/bcprovider-uplift-850x600-desktop.png"
           priority
           fill />

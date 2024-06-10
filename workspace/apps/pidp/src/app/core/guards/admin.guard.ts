@@ -1,27 +1,15 @@
-import { Injectable } from '@angular/core';
-import { CanActivate, Router, UrlTree } from '@angular/router';
-
-import { Observable } from 'rxjs';
+import { inject } from '@angular/core';
+import { Router } from '@angular/router';
+import { CanActivateFn } from '@angular/router';
 
 import { AuthorizedUserService } from '@app/features/auth/services/authorized-user.service';
 import { Role } from '@app/shared/enums/roles.enum';
 
-@Injectable({
-  providedIn: 'root',
-})
-export class AdminGuard implements CanActivate {
-  public constructor(
-    private router: Router,
-    private authorizedUserService: AuthorizedUserService
-  ) {}
+export const adminGuard: CanActivateFn = () => {
+  const router = inject(Router);
+  const authorizedUserService = inject(AuthorizedUserService);
 
-  public canActivate():
-    | Observable<boolean | UrlTree>
-    | Promise<boolean | UrlTree>
-    | boolean
-    | UrlTree {
-    return this.authorizedUserService.roles.includes(Role.ADMIN)
-      ? true
-      : this.router.createUrlTree(['/']);
-  }
-}
+  return authorizedUserService.roles.includes(Role.ADMIN)
+    ? true
+    : router.createUrlTree(['/']);
+};

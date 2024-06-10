@@ -4,3 +4,16 @@
   // add a scroll margin top of the height of the header banner
   scroll-margin-top: pidp.$header-height;
 }
+
+button.pidp-btn-link {
+  background: none;
+  border: none;
+  padding: 0;
+  color: rgba(var(--bs-link-color-rgb), var(--bs-link-opacity, 1));
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+button.pidp-btn-link:hover {
+  --bs-link-color-rgb: var(--bs-link-hover-color-rgb);
+}

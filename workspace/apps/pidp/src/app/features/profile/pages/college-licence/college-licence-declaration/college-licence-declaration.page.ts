@@ -1,6 +1,12 @@
+import { NgFor, NgIf } from '@angular/common';
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatOptionModule } from '@angular/material/core';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { EMPTY, Observable, catchError, of, tap } from 'rxjs';
@@ -8,6 +14,13 @@ import { EMPTY, Observable, catchError, of, tap } from 'rxjs';
 import { DashboardStateModel, PidpStateName } from '@pidp/data-model';
 import { RegisteredCollege } from '@pidp/data-model';
 import { AppStateService } from '@pidp/presentation';
+
+import {
+  AlertComponent,
+  AlertContentDirective,
+  InjectViewportCssClassDirective,
+  PageFooterActionDirective,
+} from '@bcgov/shared/ui';
 
 import {
   AbstractFormDependenciesService,
@@ -28,6 +41,21 @@ import { PartyLicenceDeclarationInformation } from './party-licence-declaration-
   templateUrl: './college-licence-declaration.page.html',
   styleUrls: ['./college-licence-declaration.page.scss'],
   viewProviders: [CollegeLicenceDeclarationResource],
+  standalone: true,
+  imports: [
+    AlertComponent,
+    AlertContentDirective,
+    InjectViewportCssClassDirective,
+    MatButtonModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatOptionModule,
+    MatSelectModule,
+    NgFor,
+    NgIf,
+    PageFooterActionDirective,
+    ReactiveFormsModule,
+  ],
 })
 export class CollegeLicenceDeclarationPage
   extends AbstractFormPage<CollegeLicenceDeclarationFormState>
@@ -37,6 +65,7 @@ export class CollegeLicenceDeclarationPage
   public formState: CollegeLicenceDeclarationFormState;
   public colleges: CollegeLookup[];
   public showOverlayOnSubmit = true;
+  public licenceDeclarationFailed = false;
 
   public get showNurseValidationInfo(): boolean {
     const isNurse =
@@ -53,7 +82,7 @@ export class CollegeLicenceDeclarationPage
     private logger: LoggerService,
     private lookupService: LookupService,
     private stateService: AppStateService,
-    fb: FormBuilder
+    fb: FormBuilder,
   ) {
     super(dependenciesService);
 
@@ -77,14 +106,14 @@ export class CollegeLicenceDeclarationPage
       .get(partyId)
       .pipe(
         tap((model: PartyLicenceDeclarationInformation | null) =>
-          this.formState.patchValue(model)
+          this.formState.patchValue(model),
         ),
         catchError((error: HttpErrorResponse) => {
           if (error.status === HttpStatusCode.NotFound) {
             this.navigateToRoot();
           }
           return of(null);
-        })
+        }),
       )
       .subscribe();
   }
@@ -104,7 +133,7 @@ export class CollegeLicenceDeclarationPage
     const collegeName = college?.name ?? '';
 
     const oldState = this.stateService.getNamedState<DashboardStateModel>(
-      PidpStateName.dashboard
+      PidpStateName.dashboard,
     );
     const newState: DashboardStateModel = {
       ...oldState,
@@ -112,13 +141,15 @@ export class CollegeLicenceDeclarationPage
     };
     this.stateService.setNamedState(PidpStateName.dashboard, newState);
 
-    if (!cpn) {
-      this.navigateToRoot();
-    } else {
+    if (cpn) {
       this.router.navigate(
         [ProfileRoutes.routePath(ProfileRoutes.COLLEGE_LICENCE_INFO)],
-        { replaceUrl: true }
+        { replaceUrl: true },
       );
+    } else if (this.formState.collegeCode.value === 0) {
+      this.navigateToRoot();
+    } else {
+      this.licenceDeclarationFailed = true;
     }
   }
 

@@ -25,7 +25,7 @@ export class ArrayUtils {
    */
   public static insertResultIf<T>(
     condition: boolean,
-    callback: () => any[]
+    callback: () => any[],
   ): T[] {
     return condition ? callback() : [];
   }

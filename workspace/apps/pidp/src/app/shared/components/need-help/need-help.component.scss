@@ -1,0 +1,51 @@
+@use 'pidp-variables' as pidp;
+
+.need-help {
+  font-size: 0.75rem;
+
+  & .show-need-help {
+    & .need-help-container {
+      display: flex;
+      width: max-content;
+
+      & .need-help-list {
+        list-style: none;
+        padding: 0;
+      }
+    }
+  }
+}
+
+.need-help.need-help-large {
+  font-size: initial;
+  .need-help-header {
+    cursor: pointer;
+    button.pidp-btn-link {
+      color: pidp.$bcgov-color-links;
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      justify-content: center;
+
+      i {
+        padding-left: 10px;
+      }
+    }
+  }
+
+  & .show-need-help {
+    width: 100px;
+
+    & .need-help-container {
+      margin-top: 20px;
+    }
+  }
+}
+
+@media screen and (max-width: 375px) {
+  .show-need-help {
+    .need-help-container {
+      width: min-content !important;
+    }
+  }
+}

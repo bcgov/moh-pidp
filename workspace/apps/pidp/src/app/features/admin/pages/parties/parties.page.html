@@ -7,7 +7,11 @@
     <strong>List of users in OneHealthID Service.</strong>
   </p>
   <ng-container *ngIf="environment !== production">
-    <button mat-stroked-button type="button" color="warn" (click)="onDelete()">
+    <button
+      mat-stroked-button
+      type="button"
+      color="warn"
+      (click)="onDeleteParties()">
       Delete all
     </button>
   </ng-container>
@@ -43,6 +47,15 @@
         ">
         {{ element.saEformsAccessRequest ? 'check_circle' : 'block' }}
       </mat-icon>
+    </td>
+  </ng-container>
+
+  <ng-container *ngIf="environment !== production" matColumnDef="delete">
+    <th *matHeaderCellDef scope="col" mat-header-cell></th>
+    <td *matCellDef="let element" mat-cell>
+      <mat-icon class="delete" (click)="onDeleteParty(element.id)"
+        >delete</mat-icon
+      >
     </td>
   </ng-container>
 

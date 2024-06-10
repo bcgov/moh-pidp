@@ -1,6 +1,7 @@
 <app-address-autocomplete
   [inBc]="inBc"
   (autocompleteAddress)="onAutocomplete($event)">
+  <div class="address-button-box">
   <button
     *ngIf="showManualButton"
     mat-button
@@ -11,6 +12,7 @@
     <mat-icon>add</mat-icon>
     Add Address Manually
   </button>
+</div>
 </app-address-autocomplete>
 
 <ng-container *ngIf="showAddressLineFields" [formGroup]="form">
@@ -20,7 +22,7 @@
       class="field country"
       [class]="getFormControlOrder('countryCode')">
       <label id="address-form-street-country">Country</label>
-      <mat-form-field appearance="outline">
+      <mat-form-field>
         <mat-select
           formControlName="countryCode"
           aria-labelledby="address-form-street-country"
@@ -37,7 +39,7 @@
       class="field province"
       [class]="getFormControlOrder('provinceCode')">
       <label id="address-form-street-province">{{ provinceLabel }}</label>
-      <mat-form-field appearance="outline">
+      <mat-form-field>
         <mat-select
           formControlName="provinceCode"
           aria-labelledby="address-form-street-province"
@@ -56,7 +58,7 @@
       class="field street"
       [class]="getFormControlOrder('street')">
       <label id="address-form-street-label">Street Address</label>
-      <mat-form-field appearance="outline">
+      <mat-form-field>
         <input
           matInput
           formControlName="street"
@@ -70,7 +72,7 @@
       class="field city"
       [class]="getFormControlOrder('city')">
       <label id="address-form-street-city">City</label>
-      <mat-form-field appearance="outline">
+      <mat-form-field>
         <input
           matInput
           formControlName="city"
@@ -84,7 +86,7 @@
       class="field postal"
       [class]="getFormControlOrder('postal')">
       <label id="address-form-street-postal">{{ postalLabel }}</label>
-      <mat-form-field appearance="outline">
+      <mat-form-field>
         <input
           matInput
           formControlName="postal"

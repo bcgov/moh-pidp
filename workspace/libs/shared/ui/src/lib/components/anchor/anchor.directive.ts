@@ -5,6 +5,7 @@ import { PhonePipe } from '../../pipes';
 @Directive({
   selector: '[uiAnchor]',
   providers: [PhonePipe],
+  standalone: true,
 })
 export class AnchorDirective implements OnInit {
   /**
@@ -18,7 +19,7 @@ export class AnchorDirective implements OnInit {
 
   public constructor(
     private el: ElementRef<HTMLAnchorElement>,
-    private phonePipe: PhonePipe
+    private phonePipe: PhonePipe,
   ) {
     this.scheme = 'url';
     this.countryCode = 1;
@@ -52,7 +53,7 @@ export class AnchorDirective implements OnInit {
     }
 
     // Provide a display value when none exists
-    if (!nativeElement.innerText.trim().length && this.scheme !== 'scroll') {
+    if (!nativeElement.innerText?.trim()?.length && this.scheme !== 'scroll') {
       nativeElement.innerText = value;
     }
   }

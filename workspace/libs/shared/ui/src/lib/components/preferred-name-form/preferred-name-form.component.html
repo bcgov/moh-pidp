@@ -2,10 +2,8 @@
   <ng-container *ngFor="let control of formControlConfig">
     <div [class.col-12]="mode === 'column'" [class.col-6]="mode === 'columns'">
       <mat-form-field class="w-100">
-        <input
-          matInput
-          [placeholder]="control.label"
-          [formControlName]="control.name" />
+        <mat-label>{{ control.label }}</mat-label>
+        <input matInput uiTrim [formControlName]="control.name" />
         <mat-error>Required</mat-error>
       </mat-form-field>
     </div>

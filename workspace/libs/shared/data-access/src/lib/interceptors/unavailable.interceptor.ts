@@ -18,7 +18,7 @@ export class UnavailableInterceptor implements HttpInterceptor {
 
   public intercept(
     request: HttpRequest<unknown>,
-    next: HttpHandler
+    next: HttpHandler,
   ): Observable<HttpEvent<unknown>> {
     return next.handle(request).pipe(
       catchError((error: HttpResponse<Record<string, string>>) => {
@@ -29,7 +29,7 @@ export class UnavailableInterceptor implements HttpInterceptor {
         }
 
         return throwError(() => error);
-      })
+      }),
     );
   }
 }

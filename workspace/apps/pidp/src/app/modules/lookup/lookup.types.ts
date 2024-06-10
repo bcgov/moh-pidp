@@ -6,7 +6,7 @@ export const lookupConfigKeys = [
   'healthAuthorities',
 ] as const;
 
-export type LookupConfigKey = typeof lookupConfigKeys[number];
+export type LookupConfigKey = (typeof lookupConfigKeys)[number];
 
 export type ILookupConfig = {
   [K in LookupConfigKey]: Lookup<string | number>[];

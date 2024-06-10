@@ -11,11 +11,11 @@ using Pidp.Models;
 
 public class EmailService : IEmailService
 {
-    public const string PidpEmail = "provideridentityportal@gov.bc.ca";
+    public const string PidpEmail = "OneHealthID@gov.bc.ca";
+    public const string PidpSupportPhone = "250-448-1262";
 
     private readonly IChesClient chesClient;
     private readonly IClock clock;
-    private readonly ILogger logger;
     private readonly ISmtpEmailClient smtpEmailClient;
     private readonly PidpConfiguration config;
     private readonly PidpDbContext context;
@@ -23,14 +23,12 @@ public class EmailService : IEmailService
     public EmailService(
         IChesClient chesClient,
         IClock clock,
-        ILogger<EmailService> logger,
         ISmtpEmailClient smtpEmailClient,
         PidpConfiguration config,
         PidpDbContext context)
     {
         this.chesClient = chesClient;
         this.clock = clock;
-        this.logger = logger;
         this.smtpEmailClient = smtpEmailClient;
         this.config = config;
         this.context = context;

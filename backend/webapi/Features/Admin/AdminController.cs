@@ -14,7 +14,7 @@ public class AdminController : PidpControllerBase
 
     [HttpDelete("parties")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
-    public async Task<IActionResult> DeleteParties([FromServices] ICommandHandler<PartyDelete.Command> handler)
+    public async Task<IActionResult> DeleteAllParties([FromServices] ICommandHandler<PartyDelete.Command> handler)
     {
         if (PidpConfiguration.IsProduction())
         {
@@ -22,6 +22,20 @@ public class AdminController : PidpControllerBase
         }
 
         await handler.HandleAsync(new PartyDelete.Command());
+        return this.NoContent();
+    }
+
+    [HttpDelete("parties/{partyId}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    public async Task<IActionResult> DeleteParty([FromServices] ICommandHandler<PartyDelete.Command> handler,
+                                                 [FromRoute] PartyDelete.Command command)
+    {
+        if (PidpConfiguration.IsProduction())
+        {
+            return this.Forbid();
+        }
+
+        await handler.HandleAsync(command);
         return this.NoContent();
     }
 

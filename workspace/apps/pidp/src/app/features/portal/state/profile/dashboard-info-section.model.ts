@@ -6,6 +6,6 @@ import { Section } from '../section.model';
  * actually correspond to any cards on the Portal page.
  */
 export interface DashboardInfoSection extends Section {
-  fullName: string;
+  displayFullName: string;
   collegeCode?: number;
 }

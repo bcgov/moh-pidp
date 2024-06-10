@@ -22,7 +22,7 @@ export class CollegeCertificationPortalSection implements IPortalSection {
 
   public constructor(
     private profileStatus: ProfileStatus,
-    private router: Router
+    private router: Router,
   ) {
     this.key = 'collegeCertification';
     this.heading = 'College Licence Information';
@@ -31,7 +31,7 @@ export class CollegeCertificationPortalSection implements IPortalSection {
 
   public get hint(): string {
     return [StatusCode.ERROR, StatusCode.COMPLETED].includes(
-      this.getStatusCode()
+      this.getStatusCode(),
     )
       ? ''
       : '1 minute to complete';
@@ -66,7 +66,7 @@ export class CollegeCertificationPortalSection implements IPortalSection {
       route: ProfileRoutes.routePath(
         this.getSectionStatus().hasCpn
           ? ProfileRoutes.COLLEGE_LICENCE_INFO
-          : ProfileRoutes.COLLEGE_LICENCE_DECLARATION
+          : ProfileRoutes.COLLEGE_LICENCE_DECLARATION,
       ),
       disabled: statusCode === StatusCode.NOT_AVAILABLE,
     };
@@ -77,8 +77,8 @@ export class CollegeCertificationPortalSection implements IPortalSection {
     return statusCode === StatusCode.ERROR
       ? 'danger'
       : statusCode === StatusCode.COMPLETED
-      ? 'success'
-      : 'warn';
+        ? 'success'
+        : 'warn';
   }
 
   public get status(): string {
@@ -86,8 +86,8 @@ export class CollegeCertificationPortalSection implements IPortalSection {
     return statusCode === StatusCode.ERROR
       ? 'Licence validation error'
       : statusCode === StatusCode.COMPLETED
-      ? 'Completed'
-      : 'Incomplete';
+        ? 'Completed'
+        : 'Incomplete';
   }
 
   public performAction(): void | Observable<void> {
