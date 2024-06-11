@@ -4,7 +4,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 
-import { Observable, exhaustMap, switchMap, tap } from 'rxjs';
+import { EMPTY, Observable, exhaustMap, switchMap, tap } from 'rxjs';
 
 import {
   LOADING_OVERLAY_DEFAULT_MESSAGE,
@@ -25,11 +25,16 @@ import { SuccessDialogComponent } from '@app/shared/components/success-dialog/su
 
 import { AuthorizedUserService } from '../../services/authorized-user.service';
 import { LinkAccountConfirmResource } from './link-account-confirm-resource.service';
+import { IdentityProvider } from '../../enums/identity-provider.enum';
+import { faAngleRight } from '@fortawesome/free-solid-svg-icons';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+
 
 @Component({
   selector: 'app-link-account-confirm',
   standalone: true,
   imports: [
+    FaIconComponent,
     CommonModule,
     InjectViewportCssClassDirective,
     MatButtonModule,
@@ -41,6 +46,9 @@ import { LinkAccountConfirmResource } from './link-account-confirm-resource.serv
 })
 export class LinkAccountConfirmPage implements OnInit {
   public user$: Observable<User>;
+  public IdentityProvider = IdentityProvider;
+  public faAngleRight = faAngleRight;
+  public showInstructions:boolean=false;
   public constructor(
     private dialog: MatDialog,
     private authorizedUserService: AuthorizedUserService,
@@ -110,5 +118,39 @@ export class LinkAccountConfirmPage implements OnInit {
 
   private navigateToRoot(): void {
     this.navigationService.navigateToRoot();
+  }
+
+public toggleInstructions(): void {
+  this.showInstructions= !this.showInstructions;
+}
+
+
+public onLinkAccount(idpHint: IdentityProvider): void {
+    const data: DialogOptions = {
+      // title: 'Account Linking',
+      // message: 'Your BCSC Hawkeye Pierce is about to be linked to hawkeyepierce@phsa.ca is this information correct ?',
+      title: 'You will be redirected',
+      bottomBorder: false,
+      titlePosition: 'center',
+      bodyTextPosition: 'center',
+      component: HtmlComponent,
+      data: {
+        content: 'You will need to sign in with the credentials of the account you want to link.',
+      },
+      imageSrc: '../../../assets/images/online-marketing-hIgeoQjS_iE-unsplash.jpg',
+      imageType: 'banner',
+      width: '31.25rem',
+      height: '26rem',
+      actionText:'Continue',
+      actionTypePosition: 'center'
+
+    };
+    this.dialog
+      .open(ConfirmDialogComponent, { data })
+      .afterClosed()
+      .pipe(
+        exhaustMap((result) => (result ? '' : EMPTY)),
+      )
+      .subscribe();
   }
 }

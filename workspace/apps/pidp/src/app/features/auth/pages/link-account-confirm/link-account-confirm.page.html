@@ -1,89 +1,106 @@
 <div class="container-box" uiPidpInjectViewportCss>
+  <nav class="breadcrumb">
+    <ul>
+      <li><a href='/'>Home</a></li>
+      <li> <fa-icon [icon]="faAngleRight" class="fa-duotone"></fa-icon> </li>
+      <li> <a href="access">Previous Page</a></li>
+      <li> <fa-icon [icon]="faAngleRight" class="fa-duotone"></fa-icon> </li>
+      <li> <a class="active">Active Page</a></li>
+    </ul>
+  </nav>
   <div class="content-box">
     <header>
-      <h2>Account linking</h2>
+      <h1>Account linking</h1>
     </header>
     <div class="content">
       <section class="link-intro">
-        <h3>
-          Here you can link your other professional credentials you have in
-          OneHealthID
-        </h3>
         <div class="link-intro-text">
           <p class="large">
-            If you've got more than one account, you can link them all to your
-            OneHealthID profile using a single username and password to view all
-            your services in one place.
+            Account linking is a step to enabling a Single Sign On (SSO) experience by associating multiple,
+            high-assurance accounts to the OneHealthID BCProvider account.<br> This furthers the options for reducing
+            the number of accounts for access to  health systems.
           </p>
+          <ul class="option-text"><b>You will now have the option, where supported, to use</b>
+            <li>Your BCProvider account to login to multiple health systems</li>
+            <li>Your organization account to login to health systems instead of using your BC Services Card app</li>
+          </ul>
         </div>
       </section>
+
       <section class="cards link-main">
-        <div class="card link-how-to">
-          <ng-container *ngTemplateOutlet="linkHowTo"></ng-container>
+        <div class="card instructions-card-layout" [class.instructions-card]="!showInstructions">
+          <div *ngIf="!showInstructions">
+          <h2>Procedure for linking an account</h2>
+          <p>Choose the available account displayed to the right to start the quick process </p>
         </div>
-        <div class="card link-button">
-          <img
-            class="imgplant"
-            ngSrc="/assets/images/account-linking-plant.jpg"
-            alt="Illustration of a plant symbolizing growth, used as a metaphor for account linking"
-            priority
-            fill />
-          <div class="card-container auth-card">
-            <div class="card-header auth-card-header">
-              <h3><strong>Health Authority ID</strong></h3>
+        <div class="instructions-container"  *ngIf="showInstructions">
+          <h2>How to link an account</h2>
+          <ol type="1">
+            <li class="list-item">Click the Link button.</li>
+            <li class="list-item"><b>For PHSA accounts</b></li>
+            <ul class="sublist">
+              <li class="list-item"> {{"Select login with PHSA account (username@phsa.ca)"}}</li>
+            </ul>
+            <li class="list-item"><b>For BC Services Card accounts</b></li>
+            <ul class="sublist">
+              <li class="list-item"> Select login with BC Services Card app.</li>
+            </ul>
+            <li class="list-item">Confirm login with your mobile device.</li>
+            <li class="list-item">Confirm account linking in OneHealthID.</li>
+          </ol>
+        </div>
+          <button [class.instructions-text]="!showInstructions" (click)="toggleInstructions()">{{!showInstructions ? 'Instructions' : 'Back'}}</button>
+        </div>
+
+        <div class="second-column-cards">
+          <div class="bc-service card-styles">
+            <div class="card-header-icon">
+              <div class="card-icon">
+                <img src="/assets/images/icons/landscape.svg" alt="landscape">
+              </div>
+              <img src="/assets/images/icons/light-lock.svg" alt="lock">
             </div>
-            <div class="card-body auth-card-body">
-              <img
-                class="logo"
-                ngSrc="/assets/images/phsa-logo.png"
-                alt="PHSA logo"
-                priority
-                fill />
+            <h2>BC Services Card</h2>
+            <p>Access to government services for B.C. residents</p>
+            <a (click)="onLinkAccount(IdentityProvider.BCSC)">Link Account</a>
+          </div>
+          <div class="bc-provider card-styles">
+            <div class="card-header-icon">
+              <div class="card-icon">
+                <img src="/assets/images/icons/perm-contact-calendar.svg" alt="contact">
+              </div>
             </div>
-            <div class="card-footer auth-card-footer">
-              <button
-                mat-flat-button
-                uiPageFooterAction
-                type="submit"
-                color="primary">
-                Link
-              </button>
-            </div>
+            <h2>BC Provider</h2>
+            <p>Access a growing number of provincial health applications</p>
+              <p>Available soon!</p>
           </div>
         </div>
+        <div class="third-column-cards">
+        <div class="health-authority card-styles">
+          <div class="card-header-icon">
+            <div class="card-icon">
+              <img src="/assets/images/icons/health-safety.svg" alt="healthSafety">
+            </div>
+          </div>
+          <h2>Health Authority</h2>
+          <p>Healthcare professional network account that is tied to the health authority</p>
+          <a (click)="onLinkAccount(IdentityProvider.PHSA)">Link Account</a>
+        </div>
+
+        <div class="idir-account card-styles">
+          <div class="card-header-icon">
+            <div class="card-icon">
+              <img src="/assets/images/icons/credit-card.svg" alt="creditcard">
+            </div>
+          </div>
+          <h2>IDIR account</h2>
+          <p>Used by people who work in the B.C. public sector</p>
+          <p>Available soon!</p>
+        </div>
+        </div>
+
       </section>
-      <section class="actions">
-        <button
-          mat-stroked-button
-          uiPageFooterAction
-          type="button"
-          color="primary"
-          (click)="onBack()">
-          Back Home
-        </button>
-      </section>
+
     </div>
   </div>
 </div>
-
-<ng-template #linkHowTo>
-  <h3><strong> How to link an account </strong></h3>
-  <p class="link-steps"><strong>Starting steps:</strong></p>
-  <ol>
-    <li>Sign into OneHealthID</li>
-    <li>Select <strong>Link Account</strong></li>
-    <li>
-      In the <strong>Link Account</strong> section, choose the
-      <strong>account</strong> you wish to link
-    </li>
-    <li>
-      Start quick procedure of linking<br /><i
-        >-You might be prompted to login with those credentials</i
-      >
-    </li>
-    <li>
-      Your new linked account will display in our successfully linked accounts
-      section
-    </li>
-  </ol>
-</ng-template>
