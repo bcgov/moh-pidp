@@ -60,22 +60,28 @@ export class LinkAccountConfirmPage implements OnInit {
     this.user$
       .pipe(
         switchMap((user) => {
-          const accountName = user.email ? `, email: ${user.email}` : '';
           const data: DialogOptions = {
-            title: 'Confirmation Required',
+            title: 'Account linking',
+            titlePosition: 'center',
+            bottomBorder: false,
+            bodyTextPosition: 'center',
             component: HtmlComponent,
             data: {
-              content: `Are you sure you want to link to
+              content: `Your ${user.email} is about to be linked to
               ${user.identityProvider === 'bcsc' ? 'BCSC' : ''}
-              ${user.firstName} ${user.lastName}${accountName}?`,
+              ${user.firstName} ${user.lastName} is this information correct?`,
             },
+            imageSrc: '../../../assets/images/online-marketing-hIgeoQjS_iE-unsplash.jpg',
+            imageType: 'banner',
+            width: '31.25rem',
+            height: '26rem',
+            actionText:'Confirm',
+            actionTypePosition: 'center'
           };
           return this.dialog
             .open(ConfirmDialogComponent, {
               data,
               disableClose: true,
-              width: '500px',
-              maxWidth: '500px',
             })
             .afterClosed()
             .pipe(

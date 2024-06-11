@@ -4,6 +4,7 @@
 
 <h2 mat-dialog-title [class]="{
   'heading-centered': options.titlePosition === 'center',
+  'heading-no-bottom-border': options.bottomBorder === false
 }">
   <mat-icon
     *ngIf="options.icon && !options.imageSrc"

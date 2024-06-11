@@ -73,7 +73,7 @@
       & .card {
         display: flex;
         flex-direction: column;
-        padding-right: calc(var(--gap) * 0.9);
+        padding-right: calc(var(--gap) * 0.5);
         position: relative;
         line-height: 1.5rem;
       }
@@ -83,7 +83,7 @@
         border: 1px solid #ccc;
         background: #fff;
         box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
-        width: 24.9375rem;
+        width: auto;
         height: 11.875rem;
         padding: 1.25rem;
 
@@ -113,7 +113,7 @@
       }
 
       & .instructions-card-layout {
-        width: 25.3rem;
+        width: auto;
         height: 25rem;
         border-radius: 1.25rem;
         border: 1px solid #ccc;
@@ -125,7 +125,7 @@
 
           h2 {
             color: var(--Colours-font, #313132);
-            font-size: 24px;
+            font-size: 1.3rem;
             font-weight: 700;
           }
 
@@ -413,10 +413,63 @@ div.viewport-small {
 }
 
 div.viewport-medium {
-  .link-main {
-    .link-button {
-      div.auth-card {
-        padding: 15px 0px 55px 15px !important;
+  & .content {
+    & .link-main {
+      & .instructions-card {
+        h2 {
+          padding: 1.5rem 0 0 1.5rem;
+          font-size: 1.8rem;
+        }
+
+        p {
+          padding-left: 1.5rem;
+        }
+      }
+      .instructions-card-layout {
+        button {
+          margin: 0rem 0 1rem 1.5rem;
+        }
+        .instructions-text {
+          margin: 5rem 0 1rem 1.5rem;
+        }
+        & .instructions-container {
+          padding: 1rem 0rem 0 1rem;
+          h2 {
+            margin-bottom: 0.25rem;
+          }
+          ol,
+          ul {
+            margin-left: 0rem;
+          }
+          .list-item {
+            padding-bottom: 0.25rem;
+          }
+        }
+      }
+      .card-styles {
+        padding: 1rem;
+
+        h2 {
+          font-size: 1.25rem;
+        }
+
+        p{
+          font-size: 0.8rem;
+        }
+
+        a {
+          font-size: 0.9rem;
+        }
+      }
+
+      .card-header-icon .card-icon {
+        width: 2rem;
+        height: 2rem;
+
+        img{
+          width: 1.2rem;
+          height: 1.2rem;
+        }
       }
     }
   }

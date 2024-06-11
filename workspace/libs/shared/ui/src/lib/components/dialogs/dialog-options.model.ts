@@ -9,6 +9,7 @@ export interface DialogOptions {
   imageType?: 'icon' | 'banner';
   title?: string;
   titlePosition?: 'center' | 'left' | 'right';
+  bottomBorder?: boolean;
   message?: string;
   bodyTextPosition?: 'center' | 'left' | 'right';
   actionType?: 'primary' | 'accent' | 'warn';

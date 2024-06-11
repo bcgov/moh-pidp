@@ -49,7 +49,7 @@
             <li class="list-item">Confirm account linking in OneHealthID.</li>
           </ol>
         </div>
-          <button (click)="toggleInstructions()">{{!showInstructions ? 'Instructions' : 'Back'}}</button>
+          <button [class.instructions-text]="!showInstructions" (click)="toggleInstructions()">{{!showInstructions ? 'Instructions' : 'Back'}}</button>
         </div>
 
         <div class="second-column-cards">

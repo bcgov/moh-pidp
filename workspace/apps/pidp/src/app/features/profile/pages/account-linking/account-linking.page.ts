@@ -117,6 +117,7 @@ public toggleInstructions(): void {
       // title: 'Account Linking',
       // message: 'Your BCSC Hawkeye Pierce is about to be linked to hawkeyepierce@phsa.ca is this information correct ?',
       title: 'You will be redirected',
+      bottomBorder: false,
       titlePosition: 'center',
       bodyTextPosition: 'center',
       component: HtmlComponent,
