@@ -1,10 +1,10 @@
 import { Directive, ElementRef, OnInit } from '@angular/core';
 
 @Directive({
-  selector: '[uiBreadcrumbButton]',
+  selector: '[uiTextButton]',
   standalone: true,
 })
-export class BreadcrumbButtonDirective implements OnInit {
+export class TextButtonDirective implements OnInit {
   public constructor(private el: ElementRef<HTMLButtonElement>) {}
 
   public ngOnInit(): void {
