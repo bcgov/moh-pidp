@@ -3,14 +3,14 @@ import { ResolveFn } from '@angular/router';
 
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
 
-import { edrdEformsResolver } from './edrd-eforms.resolver';
+import { accountLinkingResolver } from './account-linking.resolver';
 
-describe('edrdEformsResolver', () => {
+describe('accountLinkingResolver', () => {
   const executeResolver: ResolveFn<StatusCode | null> = (
     ...resolverParameters
   ) =>
     TestBed.runInInjectionContext(() =>
-      edrdEformsResolver(...resolverParameters),
+      accountLinkingResolver(...resolverParameters),
     );
 
   beforeEach(() => {

@@ -8090,6 +8090,7 @@ spec:
       serviceAccount: prometheus-sa
       serviceAccountName: prometheus-sa
       terminationGracePeriodSeconds: 30
+      automountServiceAccountToken: false
       volumes:
       - configMap:
           defaultMode: 420

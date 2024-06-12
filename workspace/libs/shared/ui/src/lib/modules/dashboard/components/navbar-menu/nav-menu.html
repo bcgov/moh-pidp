@@ -15,8 +15,8 @@
         <ng-container *ngTemplateOutlet="menu"></ng-container>
       </div>
     </div>
-    <div class="content-body">
-        <router-outlet></router-outlet>
+    <div class="container content-body">
+      <router-outlet></router-outlet>
     </div>
   </div>
   <ng-template #menu>
@@ -55,12 +55,35 @@
           </div>
         </mat-sidenav>
         <mat-sidenav-content class="custom-mat-sidenav-content">
+          <div class="content-header-box">
+            <ng-container *ngTemplateOutlet="sidenavheader"></ng-container>
+          </div>
           <router-outlet></router-outlet>
         </mat-sidenav-content>
       </mat-sidenav-container>
     </div>
     <div class="header-bar-right"></div>
   </div>
+  <ng-template #sidenavheader>
+    <header>
+      <div class="header-text-container">
+        <h1 *ngIf="showTitle">{{ dashboardState.titleText }}</h1>
+        <p *ngIf="showTitleDescription">
+          {{ dashboardState.titleDescriptionText }}
+        </p>
+      </div>
+      <div *ngIf="isHeaderImageVisible" class="header-image-container">
+        <img
+          src="/assets/images/pidp-logo-white.svg"
+          title="PIDP Logo"
+          alt="PIDP Logo"
+          loading="lazy"
+          aria-label="PIDP Logo"
+          aria-hidden="true" />
+      </div>
+    </header>
+  </ng-template>
+
   <ng-template #sidenavmenu>
     <div class="sidenav-panel-box">
       <div class="sidenav-bar"></div>

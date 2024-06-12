@@ -1,0 +1,333 @@
+@use 'pidp-variables' as pidp;
+
+.viewport-all {
+  --gap: 1rem;
+  --font-size: 0.75rem;
+  --content-padding: var(--gap);
+  padding: var(--content-padding);
+  & header {
+    margin: var(--header-margin);
+    & h2 {
+      margin: 0;
+      padding: calc(var(--gap) / 2) calc(var(--gap) * 2);
+      background-color: pidp.$grey-10;
+    }
+  }
+
+  & .content {
+    padding: var(--content-padding) 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap);
+
+    .link-main {
+      display: grid;
+      grid-template-columns: calc(50% - 15px) calc(50% - 15px);
+      gap: 20px;
+      min-height: 340px;
+      margin: calc(var(--gap) * 2) 0;
+
+      & .card {
+        display: flex;
+        flex-direction: column;
+        padding-right: calc(var(--gap) * 0.9);
+        position: relative;
+        line-height: 1.5rem;
+      }
+      .link-button {
+
+        img {
+          -webkit-transform: scaleX(-1);
+          transform: scaleX(-1);
+          object-fit: cover;
+          z-index: -2;
+        }
+
+        img.imgplant {
+          object-position: -10px -100px;
+        }
+
+        div.auth-card {
+          padding: 20px 0px 55px 50px;
+        }
+
+        .card-container {
+          display: flex;
+          flex-direction: column;
+          height: 95%;
+          width: 100%;
+          align-items: flex-start;
+
+          .card-header,
+          .card-body,
+          .card-footer {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
+
+          .card-body {
+            img.logo {
+              z-index: -1;
+              -webkit-transform: none;
+              transform: none;
+              position: relative !important;
+              height: 45px ;
+              width: 175px ;
+            }
+            img.bcsc-logo {
+              z-index: -1;
+              -webkit-transform: none;
+              transform: none;
+              position: relative !important;
+              height: 63px !important;
+              width: 100px !important;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  & .link-how-to {
+    & .link-steps {
+      text-decoration: underline;
+    }
+    & ol {
+      line-height: 2rem;
+      & i {
+        color: pidp.$grey-30;
+      }
+    }
+  }
+
+  .successfully-linked {
+    & h2 {
+      margin: 0;
+      padding: calc(var(--gap) / 2) calc(var(--gap) * 2);
+      background-color: pidp.$green-10;
+    }
+    & .successfully-linked-accounts {
+      display: flex;
+      flex-direction: row;
+
+      & .card {
+        display: flex;
+        flex-direction: column;
+        padding: calc(var(--gap) * 0.9);
+        margin: 5px;
+        position: relative;
+        line-height: 1.5rem;
+        width: 240px;
+        box-shadow:
+          0 4px 5px 0 rgba(0, 0, 0, 0.14),
+          0 1px 10px 0 rgba(0, 0, 0, 0.12),
+          0 2px 4px -1px rgba(0, 0, 0, 0.2);
+
+        .card-container {
+          display: flex;
+          flex-direction: column;
+          height: 95%;
+          width: 100%;
+          align-items: center;
+          padding: 20px;
+
+          .card-header,
+          .card-body,
+          .card-footer {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
+
+          .card-body {
+            img.logo {
+              z-index: -1;
+              -webkit-transform: none;
+              transform: none;
+              position: relative !important;
+              height: 30px !important;
+              width: 130px !important;
+            }
+            img.mini-logo {
+              z-index: -1;
+              -webkit-transform: none;
+              transform: none;
+              position: relative !important;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+div.viewport-xsmall {
+  .link-main {
+    display: flex !important;
+    flex-direction: column !important;
+
+    .link-button {
+      img.imgplant {
+        height: 15rem !important;
+        object-position: -12px -72px !important;
+      }
+
+      div.auth-card {
+        padding: 20px 0px 0px 0px !important;
+      }
+
+      .card-container {
+        height: 50% !important;
+        .auth-card-header {
+          padding-left: 20px;
+        }
+
+        .auth-card-body {
+          padding-left: 15px;
+        }
+
+        .auth-card-footer {
+          padding: 15px 0px 0px 30px;
+        }
+      }
+    }
+  }
+  .successfully-linked {
+    .successfully-linked-accounts {
+      flex-direction: column;
+      align-items: center;
+    }
+  }
+
+  .card-body {
+    img.logo {
+      z-index: -1;
+      -webkit-transform: none;
+      transform: none;
+      position: relative !important;
+      height: 40px !important;
+      width: 175px !important;
+      padding-left: 5px;
+    }
+    img.mini-logo {
+      z-index: -1;
+      -webkit-transform: none;
+      transform: none;
+      position: relative !important;
+    }
+  }
+}
+
+div.viewport-small {
+  .link-main {
+    .link-button {
+      img.imgplant {
+        height: 52% !important;
+        width: 100% !important;
+        object-position: -22px -55px !important;
+      }
+
+      div.auth-card {
+        padding: 20px 0px 60px 20px !important;
+      }
+      .card-container {
+        height: 50% !important;
+        .auth-card-body {
+          padding-bottom: 15px;
+        }
+      }
+    }
+  }
+  .card-body {
+    img.logo {
+      z-index: -1;
+      -webkit-transform: none;
+      transform: none;
+      position: relative !important;
+      height: 30px !important;
+      width: 130px !important;
+    }
+    img.mini-logo {
+      z-index: -1;
+      -webkit-transform: none;
+      transform: none;
+      position: relative !important;
+    }
+  }
+}
+
+div.viewport-medium {
+  .link-main {
+    .link-button {
+      img.imgplant {
+        height: 80% !important;
+        width: 85% !important;
+        object-position: -15px -80px !important;
+      }
+      div.auth-card {
+        padding: 20px 0px 18px 15px !important;
+      }
+      .card-container {
+        height: 55% !important;
+        .auth-card-body {
+          padding-bottom: 15px !important;
+        }
+      }
+    }
+  }
+
+  .card-body {
+    img.logo {
+      z-index: -1;
+      -webkit-transform: none;
+      transform: none;
+      position: relative !important;
+      height: 37px !important;
+      width: 145px !important;
+    }
+    img.mini-logo {
+      z-index: -1;
+      -webkit-transform: none;
+      transform: none;
+      position: relative !important;
+    }
+  }
+}
+
+div.viewport-large {
+  .link-main {
+    .link-button {
+      img.imgplant {
+        height: 70% !important;
+        width: 70% !important;
+        object-position: -15px -80px !important;
+      }
+ 
+      .card-container {
+        height: 70% !important;
+        .auth-card-body {
+          padding-bottom: 15px;
+        }
+      }
+    }
+  }
+  .card-body {
+    img.logo {
+      z-index: -1;
+      -webkit-transform: none;
+      transform: none;
+      position: relative !important;
+      height: 42px !important;
+      width: 170px !important;
+    }
+    img.mini-logo {
+      z-index: -1;
+      -webkit-transform: none;
+      transform: none;
+      position: relative !important;
+    }
+  }
+}

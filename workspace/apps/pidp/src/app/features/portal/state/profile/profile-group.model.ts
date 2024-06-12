@@ -12,6 +12,7 @@ export const profileSectionKeys = [
   'demographics',
   'collegeCertification',
   'userAccessAgreement',
+  'accountLinking',
 ] as const;
 
 /**
@@ -33,4 +34,5 @@ export interface ProfileGroup extends IProfileGroup {
   demographics: Section;
   collegeCertification: CollegeCertificationSection;
   userAccessAgreement: Section;
+  accountLinking: Section;
 }

@@ -9,7 +9,6 @@ import { StatusCode } from '../enums/status-code.enum';
 import { ProfileStatus } from '../models/profile-status.model';
 import { BcProviderPortalSection } from './access/bc-provider-portal-section.class';
 import { DriverFitnessPortalSection } from './access/driver-fitness-portal-section.class';
-import { EdrdEformsPortalSection } from './access/edrd-eforms-portal-section.class';
 import { HcimAccountTransferPortalSection } from './access/hcim-account-transfer-portal-section.class';
 import { ImmsBCEformsPortalSection } from './access/immsbc-eforms-portal-section.class';
 import { MsTeamsClinicMemberPortalSection } from './access/ms-teams-clinic-member-portal-section.class';
@@ -24,6 +23,7 @@ import { TransactionsPortalSection } from './history/transactions-portal-section
 import { EndorsementsPortalSection } from './organization/endorsements-portal-section.class';
 import { PortalSectionStatusKey } from './portal-section-status-key.type';
 import { IPortalSection } from './portal-section.model';
+import { AccountLinkingPortalSection } from './profile/account-linking-portal-section.class';
 import { CollegeCertificationPortalSection } from './profile/college-certification-portal-section.class';
 import { DemographicsPortalSection } from './profile/demographics-portal-section.class';
 import { UserAccessAgreementPortalSection } from './profile/user-access-agreement-portal-section.class';
@@ -88,6 +88,10 @@ export class PortalStateBuilder {
         () => [
           new CollegeCertificationPortalSection(profileStatus, this.router),
         ],
+      ),
+      ...ArrayUtils.insertResultIf<IPortalSection>(
+        this.insertSection('accountLinking', profileStatus),
+        () => [new AccountLinkingPortalSection(profileStatus, this.router)],
       ),
       ...ArrayUtils.insertResultIf<IPortalSection>(
         this.insertSection('userAccessAgreement', profileStatus),
@@ -160,11 +164,6 @@ export class PortalStateBuilder {
       ...ArrayUtils.insertResultIf<IPortalSection>(
         this.insertSection('immsBCEforms', profileStatus),
         () => [new ImmsBCEformsPortalSection(profileStatus, this.router)],
-      ),
-      ...ArrayUtils.insertResultIf<IPortalSection>(
-        this.insertSection('edrdEforms', profileStatus) &&
-          this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
-        () => [new EdrdEformsPortalSection(profileStatus, this.router)],
       ),
     ];
   }

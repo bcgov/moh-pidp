@@ -1,8 +1,5 @@
 import { Routes } from '@angular/router';
 
-import { PermissionsGuard } from '@app/modules/permissions/permissions.guard';
-import { Role } from '@app/shared/enums/roles.enum';
-
 import { AccessRoutes } from './access.routes';
 
 export const routes: Routes = [
@@ -73,17 +70,6 @@ export const routes: Routes = [
     path: AccessRoutes.IMMSBC_EFORMS,
     loadChildren: (): Promise<Routes> =>
       import('./pages/immsbc-eforms/immsbc-eforms-routing.routes').then(
-        (m) => m.routes,
-      ),
-  },
-  {
-    path: AccessRoutes.EDRD_EFORMS,
-    canActivate: [PermissionsGuard.canActivate],
-    data: {
-      roles: [Role.FEATURE_PIDP_DEMO],
-    },
-    loadChildren: (): Promise<Routes> =>
-      import('./pages/edrd-eforms/edrd-eforms-routing.routes').then(
         (m) => m.routes,
       ),
   },

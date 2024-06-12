@@ -103,7 +103,7 @@ export class NavMenuComponent implements OnChanges {
     item: DashboardMenuItem | string,
   ): RoutePath | undefined {
     if (item instanceof DashboardRouteMenuItem) {
-      const routeItem = item;
+      const routeItem: DashboardRouteMenuItem = item ;
       return routeItem.commands;
     }
     return undefined;
@@ -114,14 +114,14 @@ export class NavMenuComponent implements OnChanges {
       }
     | IsActiveMatchOptions {
     if (item instanceof DashboardRouteMenuItem) {
-      const routeItem = item;
+      const routeItem:DashboardRouteMenuItem = item ;
       return routeItem.linkActiveOptions;
     }
     throw new Error('getRouterLinkActiveOptions: not implemented');
   }
   public getRouterLinkFragment(item: DashboardMenuItem): string | undefined {
     if (item instanceof DashboardRouteMenuItem) {
-      const routeItem = item;
+      const routeItem: DashboardRouteMenuItem = item;
       return routeItem.extras?.fragment;
     }
     return undefined;

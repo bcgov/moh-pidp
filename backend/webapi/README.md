@@ -5,7 +5,7 @@
 [Download](https://visualstudio.microsoft.com/) install and sign-in
 
 ### Entity Framework (open CLI )
-dotnet tool install --gloabal dotnet-ef -- version 6.0
+dotnet tool install --gloabal dotnet-ef
 
 #####  Docker Desktop
 [Download](https://www.docker.com/products/docker-desktop/) install and sign-in

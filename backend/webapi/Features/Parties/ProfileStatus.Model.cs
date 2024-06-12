@@ -149,6 +149,13 @@ public partial class ProfileStatus
             }
         }
 
+        public class AccountLinkingSection : ProfileSection
+        {
+            internal override string SectionName => "accountLinking";
+
+            protected override StatusCode Compute(ProfileData profile) => StatusCode.Incomplete;
+        }
+
         public class DriverFitnessSection : ProfileSection
         {
             internal override string SectionName => "driverFitness";
@@ -165,33 +172,6 @@ public partial class ProfileStatus
                         || (profile.HasNoLicence && profile.EndorsementPlrStanding.HasGoodStanding) => StatusCode.Incomplete,
                     _ => StatusCode.Locked
                 };
-            }
-        }
-
-        public class EdrdEformsSection : ProfileSection
-        {
-            internal override string SectionName => "edrdEforms";
-
-            protected override StatusCode Compute(ProfileData profile)
-            {
-                if (!profile.UserIsHighAssuranceIdentity)
-                {
-                    return StatusCode.Hidden;
-                }
-
-                if (profile.CompletedEnrolments.Contains(AccessTypeCode.EdrdEforms))
-                {
-                    return StatusCode.Complete;
-                }
-
-                if (profile.PartyPlrStanding
-                    .With(EdrdEforms.AllowedRoleTypes)
-                    .HasGoodStanding)
-                {
-                    return StatusCode.Incomplete;
-                }
-
-                return StatusCode.Locked;
             }
         }
 
