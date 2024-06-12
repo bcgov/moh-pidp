@@ -2,6 +2,9 @@ import { Router } from '@angular/router';
 
 import { Observable } from 'rxjs';
 
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
+import { faCar } from '@fortawesome/free-solid-svg-icons';
+
 import { AlertType } from '@bcgov/shared/ui';
 
 import { AccessRoutes } from '@app/features/access/access.routes';
@@ -17,6 +20,8 @@ export class DriverFitnessPortalSection implements IPortalSection {
   public readonly key: PortalSectionKey;
   public heading: string;
   public description: string;
+  public icon: IconProp;
+  public faCar = faCar;
 
   public constructor(
     private profileStatus: ProfileStatus,
@@ -25,6 +30,7 @@ export class DriverFitnessPortalSection implements IPortalSection {
     this.key = 'driverFitness';
     this.heading = 'Driver Fitness Practitioner Portal';
     this.description = `Register as a Medical Practitioner (or Designate) to the RoadSafetyBC Medical Practitioner Portal.`;
+    this.icon = faCar;
   }
 
   public get hint(): string {

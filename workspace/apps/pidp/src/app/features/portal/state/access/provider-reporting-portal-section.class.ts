@@ -2,6 +2,9 @@ import { Router } from '@angular/router';
 
 import { Observable } from 'rxjs';
 
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
+import { faUsers } from '@fortawesome/free-solid-svg-icons';
+
 import { AlertType } from '@bcgov/shared/ui';
 
 import { AccessRoutes } from '@app/features/access/access.routes';
@@ -18,6 +21,8 @@ export class ProviderReportingPortalSection implements IPortalSection {
   public readonly key: PortalSectionKey;
   public heading: string;
   public description: string;
+  public icon: IconProp;
+  public faUsers = faUsers;
 
   public constructor(
     private profileStatus: ProfileStatus,
@@ -26,6 +31,7 @@ export class ProviderReportingPortalSection implements IPortalSection {
     this.key = 'providerReportingPortal';
     this.heading = 'Provider Reporting Portal';
     this.description = `Enrol here for access to the Provider Reporting Portal`;
+    this.icon = faUsers;
   }
 
   public get hint(): string {

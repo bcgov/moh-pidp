@@ -2,6 +2,9 @@ import { Router } from '@angular/router';
 
 import { Observable } from 'rxjs';
 
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
+import { faPeopleGroup } from '@fortawesome/free-solid-svg-icons';
+
 import { AlertType } from '@bcgov/shared/ui';
 
 import { AccessRoutes } from '@app/features/access/access.routes';
@@ -17,6 +20,8 @@ export class MsTeamsClinicMemberPortalSection implements IPortalSection {
   public readonly key: PortalSectionKey;
   public heading: string;
   public description: string;
+  public icon: IconProp;
+  public faPeopleGroup = faPeopleGroup;
 
   public constructor(
     private profileStatus: ProfileStatus,
@@ -25,6 +30,7 @@ export class MsTeamsClinicMemberPortalSection implements IPortalSection {
     this.key = 'msTeamsClinicMember';
     this.heading = 'MS Teams for Clinic Members';
     this.description = `Clinic Member enrol here for clinic access for MS Teams with Fraser Health.`;
+    this.icon = faPeopleGroup;
   }
 
   public get hint(): string {

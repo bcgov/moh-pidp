@@ -1,5 +1,8 @@
 import { Observable } from 'rxjs';
 
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
+import { faChartSimple } from '@fortawesome/free-solid-svg-icons';
+
 import { StatusCode } from '../../enums/status-code.enum';
 import { ProfileStatus } from '../../models/profile-status.model';
 import { PortalSectionAction } from '../portal-section-action.model';
@@ -11,6 +14,8 @@ export class PrimaryCareRosteringPortalSection implements IPortalSection {
   public heading: string;
   public description: string;
   private readonly primaryCareRosteringWebsite: string;
+  public icon: IconProp;
+  public faChartSimple = faChartSimple;
 
   public constructor(private profileStatus: ProfileStatus) {
     this.key = 'primaryCareRostering';
@@ -20,6 +25,7 @@ export class PrimaryCareRosteringPortalSection implements IPortalSection {
                         Through PAS, Attachment Coordinators help match patients to family physicians and nurse
                         practitioners in their communities.`;
     this.primaryCareRosteringWebsite = 'https://bchealthprovider.ca';
+    this.icon = faChartSimple;
   }
 
   /**

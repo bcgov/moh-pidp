@@ -2,6 +2,9 @@ import { NavigationExtras, Router } from '@angular/router';
 
 import { Observable } from 'rxjs';
 
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
+import { faFileLines } from '@fortawesome/free-solid-svg-icons';
+
 import { AlertType } from '@bcgov/shared/ui';
 
 import { AccessRoutes } from '@app/features/access/access.routes';
@@ -18,6 +21,8 @@ export class BcProviderPortalSection implements IPortalSection {
   public readonly key: PortalSectionKey;
   public heading: string;
   public description: string;
+  public icon: IconProp;
+  public faFileLines = faFileLines;
 
   public constructor(
     private profileStatus: ProfileStatus,
@@ -26,6 +31,7 @@ export class BcProviderPortalSection implements IPortalSection {
     this.key = 'bcProvider';
     this.heading = 'BC Provider Account';
     this.description = `A reusable credential for access to health data in BC.`;
+    this.icon = faFileLines;
   }
 
   public get hint(): string {

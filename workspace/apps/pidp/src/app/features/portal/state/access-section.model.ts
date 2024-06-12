@@ -1,5 +1,7 @@
 import { Observable } from 'rxjs';
 
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
+
 import { AlertType } from '@bcgov/shared/ui';
 
 import { AccessSectionAction } from './access-section-action.model';
@@ -54,4 +56,9 @@ export interface IAccessSection {
    * Action performed when invoked.
    */
   performAction(): Observable<void> | void;
+  /**
+   * @description
+   * Icon to be displayed on the card.
+   */
+  icon: IconProp;
 }
