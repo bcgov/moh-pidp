@@ -1,8 +1,9 @@
-<div class="card-container">
+<div class="card-container" uiPidpInjectViewportCss>
   <div class="card">
     <div class="card-header">
-      <div class="card-header-check-icon card-icon">
-        <img class="checked" alt="icon" [src]="icon" />
+      <div class="card-header-icon">
+        <fa-icon [icon]="icon"></fa-icon>
+        <!-- <img class="checked" alt="icon" [src]="icon" /> -->
         <p class="card-header-text">{{ heading }}</p>
       </div>
     </div>

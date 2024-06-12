@@ -40,8 +40,9 @@
 
   <app-access-request-card
     *ngFor="let section of (accessState$ | async)?.access"
+    class="card-container"
     [heading]="section.heading"
-    [description]="section.description"></app-access-request-card>
+    [description]="section.description"
 
   <!-- <div class="card-container"> -->
   <!-- <div class="card"> -->
