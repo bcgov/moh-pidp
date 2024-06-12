@@ -9,6 +9,8 @@ import {
 } from '@bcgov/shared/ui';
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';
+import { Router } from '@angular/router';
+import { ProfileRoutes } from '../profile/profile.routes';
 
 
 
@@ -38,9 +40,8 @@ export class PortalPage {
 
   public constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
-
+    private router: Router
   ) {
-
   }
 
   @HostListener('window:scroll', [])
@@ -51,5 +52,8 @@ export class PortalPage {
   }
   public scrollToTop(): void {
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+  public navigateToAccountLinkingPage(): void {
+    this.router.navigateByUrl(ProfileRoutes.routePath(ProfileRoutes.ACCOUNT_LINKING));
   }
 }
