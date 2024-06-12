@@ -9,6 +9,6 @@ import { Component, Input } from '@angular/core';
 })
 export class AccessRequestCardComponent {
   @Input() public icon: string = '';
-  @Input() public headerText: string = '';
-  @Input() public bodyText: string = '';
+  @Input() public heading: string = '';
+  @Input() public description: string = '';
 }
