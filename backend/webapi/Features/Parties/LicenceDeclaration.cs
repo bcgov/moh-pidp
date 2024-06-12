@@ -52,16 +52,10 @@ public class LicenceDeclaration
         }
     }
 
-    public class QueryHandler : IQueryHandler<Query, Command>
+    public class QueryHandler(IMapper mapper, PidpDbContext context) : IQueryHandler<Query, Command>
     {
-        private readonly IMapper mapper;
-        private readonly PidpDbContext context;
-
-        public QueryHandler(IMapper mapper, PidpDbContext context)
-        {
-            this.mapper = mapper;
-            this.context = context;
-        }
+        private readonly IMapper mapper = mapper;
+        private readonly PidpDbContext context = context;
 
         public async Task<Command> HandleAsync(Query query)
         {
@@ -74,16 +68,10 @@ public class LicenceDeclaration
         }
     }
 
-    public class CommandHandler : ICommandHandler<Command, IDomainResult<string?>>
+    public class CommandHandler(IPlrClient plrClient, PidpDbContext context) : ICommandHandler<Command, IDomainResult<string?>>
     {
-        private readonly IPlrClient plrClient;
-        private readonly PidpDbContext context;
-
-        public CommandHandler(IPlrClient plrClient, PidpDbContext context)
-        {
-            this.plrClient = plrClient;
-            this.context = context;
-        }
+        private readonly IPlrClient plrClient = plrClient;
+        private readonly PidpDbContext context = context;
 
         public async Task<IDomainResult<string?>> HandleAsync(Command command)
         {
@@ -104,7 +92,7 @@ public class LicenceDeclaration
 
             await party.HandleLicenceSearch(this.plrClient, this.context);
 
-            if (party.Cpn == null)
+            if (command.CollegeCode != null && party.Cpn == null)
             {
                 party.DomainEvents.Add(new PlrCpnLookupNotFound(party.Id));
             }
@@ -115,16 +103,10 @@ public class LicenceDeclaration
         }
     }
 
-    public class PlrCpnLookupNotFoundHandler : INotificationHandler<PlrCpnLookupNotFound>
+    public class PlrCpnLookupNotFoundHandler(IClock clock, PidpDbContext context) : INotificationHandler<PlrCpnLookupNotFound>
     {
-        private readonly IClock clock;
-        private readonly PidpDbContext context;
-
-        public PlrCpnLookupNotFoundHandler(IClock clock, PidpDbContext context)
-        {
-            this.clock = clock;
-            this.context = context;
-        }
+        private readonly IClock clock = clock;
+        private readonly PidpDbContext context = context;
 
         public Task Handle(PlrCpnLookupNotFound notification, CancellationToken cancellationToken)
         {
