@@ -126,10 +126,11 @@ public toggleInstructions(): void {
       },
       imageSrc: '../../../assets/images/online-marketing-hIgeoQjS_iE-unsplash.jpg',
       imageType: 'banner',
-      width: '31.25rem',
-      height: '26rem',
+      width: '31rem',
+      height: '24rem',
       actionText:'Continue',
-      actionTypePosition: 'center'
+      actionTypePosition: 'center',
+      class: 'dialog-container'
 
     };
     this.dialog
@@ -168,7 +169,11 @@ public toggleInstructions(): void {
     this.utilsService.scrollTop();
 
     this.handleLinkedAccounts();
+
+
   }
+
+
 
   public ngOnDestroy(): void {
     if (this.linkedAccounts$) {

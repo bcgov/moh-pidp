@@ -29,4 +29,5 @@ export interface DialogOptions {
   width?: string;
   /** overload the dialog height, if undefined the default value will be used */
   height?: string;
+  class?: string;
 }
