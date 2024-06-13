@@ -8,19 +8,7 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import {
   faAngleRight,
   faArrowUp,
-  faArrowsLeftRightToLine,
-  faBookMedical,
-  faCar,
-  faCheck,
-  faFileLines,
-  faFileMedical,
-  faHandshake,
-  faLink,
   faMagnifyingGlass,
-  faPeopleGroup,
-  faPlus,
-  faRightLeft,
-  faThumbsUp,
 } from '@fortawesome/free-solid-svg-icons';
 import { NavigationService } from '@pidp/presentation';
 
@@ -65,22 +53,10 @@ export class AccessRequestsPage implements OnInit {
    */
   public accessState$: Observable<AccessState>;
 
-  public faThumbsUp = faThumbsUp;
-  public faPlus = faPlus;
-  public faFileLines = faFileLines;
-  public faCheck = faCheck;
-  public logoutRedirectUrl: string;
   public faArrowUp = faArrowUp;
   public faAngleRight = faAngleRight;
   public faMagnifyingGlass = faMagnifyingGlass;
-  public faHandshake = faHandshake;
-  public faLink = faLink;
-  public faCar = faCar;
-  public faFileMedical = faFileMedical;
-  public faBookMedical = faBookMedical;
-  public faArrowsLeftRightToLine = faArrowsLeftRightToLine;
-  public faPeopleGroup = faPeopleGroup;
-  public faRightLeft = faRightLeft;
+  public logoutRedirectUrl: string;
   public showBackToTopButton: boolean = false;
   public showSearchIcon: boolean = true;
   public isMobile = true;
