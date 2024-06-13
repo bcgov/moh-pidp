@@ -24,9 +24,7 @@
     </p>
   </div>
   <div class="search-content">
-    <span
-      >Total results: <b>{{ (accessState$ | async)?.access?.length }}</b></span
-    >
+    <span>Total results: <b>{{ filteredAccessSections?.length }}</b></span>
     <div class="div-search">
       <fa-icon
         *ngIf="showSearchIcon"
@@ -34,14 +32,21 @@
         [icon]="faMagnifyingGlass"></fa-icon>
       <input
         matInput
-        (focusout)="onSearch($event)"
-        (focus)="showSearchIcon=false" />
-      <button type="button" mat-flat-button color="primary">Search</button>
+        #filter
+        (focus)="showSearchIcon=false"
+        (input)="onSearch($event)" />
+      <button
+        type="button"
+        mat-flat-button
+        color="primary"
+        (click)="search(filter.value)">
+        Search
+      </button>
     </div>
   </div>
 
   <app-access-request-card
-    *ngFor="let section of (accessState$ | async)?.access"
+    *ngFor="let section of filteredAccessSections"
     class="card-container"
     [heading]="section.heading"
     [description]="section.description"

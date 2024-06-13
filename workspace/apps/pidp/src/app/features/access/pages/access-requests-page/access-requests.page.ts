@@ -1,8 +1,14 @@
 import { AsyncPipe, NgClass, NgFor, NgIf } from '@angular/common';
-import { Component, HostListener, Inject, OnInit } from '@angular/core';
+import {
+  Component,
+  HostListener,
+  Inject,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 
-import { Observable, tap } from 'rxjs';
+import { Observable, Subject, map, takeUntil, tap } from 'rxjs';
 
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import {
@@ -46,7 +52,7 @@ import { AccessRequestCardComponent } from '../../components/access-request-card
     AsyncPipe,
   ],
 })
-export class AccessRequestsPage implements OnInit {
+export class AccessRequestsPage implements OnInit, OnDestroy {
   /**
    * @description
    * State for driving the displayed groups and sections of
@@ -62,6 +68,8 @@ export class AccessRequestsPage implements OnInit {
   public showSearchIcon: boolean = true;
   public isMobile = true;
   public providerIdentitySupport: string;
+  public filteredAccessSections: IAccessSection[] | undefined = [];
+  private destroy$ = new Subject<void>();
 
   public constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
@@ -73,6 +81,7 @@ export class AccessRequestsPage implements OnInit {
     this.accessState$ = this.portalService.accessState$;
     this.providerIdentitySupport = this.config.emails.providerIdentitySupport;
     this.logoutRedirectUrl = `${this.config.applicationUrl}/`;
+    this.getCards();
   }
 
   @HostListener('window:scroll', [])
@@ -89,8 +98,27 @@ export class AccessRequestsPage implements OnInit {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
+  public search(text: string): void {
+    if (!text) {
+      this.getCards();
+      return;
+    }
+    this.accessState$
+      .pipe(map((state) => state?.access))
+      .subscribe((access) => {
+        this.filteredAccessSections = access?.filter(
+          (section) =>
+            section.heading.toLowerCase().includes(text.toLowerCase()) ||
+            section.description.toLowerCase().includes(text.toLowerCase()),
+        );
+      });
+  }
+
   public onSearch(event: Event): void {
     this.showSearchIcon = (event.target as HTMLInputElement).value === '';
+    if (this.showSearchIcon) {
+      this.getCards();
+    }
   }
 
   public onCardAction(section: IAccessSection): void {
@@ -106,7 +134,24 @@ export class AccessRequestsPage implements OnInit {
       .getProfileStatus(this.partyService.partyId)
       .pipe(
         tap((profileStatus) => this.portalService.updateState(profileStatus)),
+        takeUntil(this.destroy$),
       )
       .subscribe();
+  }
+
+  public ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  private getCards(): void {
+    this.accessState$
+      .pipe(
+        map((state) => state?.access),
+        takeUntil(this.destroy$),
+      )
+      .subscribe((access) => {
+        this.filteredAccessSections = access;
+      });
   }
 }
