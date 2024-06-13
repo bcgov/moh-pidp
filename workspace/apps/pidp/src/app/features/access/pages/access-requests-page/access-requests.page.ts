@@ -22,6 +22,7 @@ import { APP_CONFIG, AppConfig } from '@app/app.config';
 import { PartyService } from '@app/core/party/party.service';
 import { PortalResource } from '@app/features/portal/portal-resource.service';
 import { PortalService } from '@app/features/portal/portal.service';
+import { IAccessSection } from '@app/features/portal/state/access-section.model';
 import { AccessState } from '@app/features/portal/state/portal-state.builder';
 import { Constants } from '@app/shared/constants';
 
@@ -90,6 +91,10 @@ export class AccessRequestsPage implements OnInit {
 
   public onSearch(event: Event): void {
     this.showSearchIcon = (event.target as HTMLInputElement).value === '';
+  }
+
+  public onCardAction(section: IAccessSection): void {
+    section.performAction();
   }
 
   public onBack(): void {

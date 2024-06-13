@@ -44,7 +44,9 @@
     class="card-container"
     [heading]="section.heading"
     [description]="section.description"
-    [icon]="section.icon"></app-access-request-card>
+    [icon]="section.icon"
+    [actionDisabled]="section.action.disabled"
+    (action)="onCardAction(section)"></app-access-request-card>
 
   <div class="back-to-top-container">
     <button

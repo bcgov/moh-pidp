@@ -10,7 +10,15 @@
     <div class="card-body">
       {{ description }}
       <div>
-        <a class="learn-more link" href="#"><u>Learn more</u><span> ></span></a>
+        <button
+          class="learn-more"
+          uiTextButton
+          [disabled]="actionDisabled"
+          (click)="onAction()">
+          <span [ngClass]="{ 'grey-out': actionDisabled }"
+            ><u>Learn more</u><span class="arrow-right">></span></span
+          >
+        </button>
       </div>
     </div>
   </div>

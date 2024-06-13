@@ -53,6 +53,12 @@
 
 .learn-more {
   text-decoration: none;
+  .grey-out {
+    color: pidp.$lightgrey;
+  }
+  .arrow-right {
+    margin-left: 2px;
+  }
 }
 
 .container.viewport-xsmall {
