@@ -157,7 +157,7 @@ public class MSTeamsClinicMember
             public string ClinicName { get; set; }
             public Address ClinicAddress { get; set; }
 
-            public class Address
+            public sealed class Address
             {
                 public string CountryCode { get; set; } = string.Empty;
                 public string ProvinceCode { get; set; } = string.Empty;

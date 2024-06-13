@@ -39,7 +39,7 @@ public sealed class PlrStatusUpdateService : IPlrStatusUpdateService
             // TODO: handle error?
             return;
         }
-        if (!statusChanges.Any())
+        if (statusChanges.Count == 0)
         {
             return;
         }

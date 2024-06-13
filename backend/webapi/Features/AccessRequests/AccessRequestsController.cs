@@ -14,10 +14,8 @@ using static Pidp.Infrastructure.HttpClients.Ldap.HcimAuthorizationStatus;
 using Pidp.Infrastructure.Services;
 
 [Route("api/parties/{partyId}/[controller]")]
-public class AccessRequestsController : PidpControllerBase
+public class AccessRequestsController(IPidpAuthorizationService authorizationService) : PidpControllerBase(authorizationService)
 {
-    public AccessRequestsController(IPidpAuthorizationService authorizationService) : base(authorizationService) { }
-
     [HttpGet]
     [Authorize(Policy = Policies.AnyPartyIdentityProvider)]
     [ProducesResponseType(StatusCodes.Status200OK)]

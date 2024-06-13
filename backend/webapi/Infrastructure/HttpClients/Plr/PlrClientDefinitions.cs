@@ -146,7 +146,7 @@ public class PlrStandingsDigest
         }));
     }
 
-    private class DigestRecord
+    private sealed class DigestRecord
     {
         public string Cpn { get; set; } = string.Empty;
         public string? IdentifierType { get; set; }

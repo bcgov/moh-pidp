@@ -4,23 +4,15 @@ using Microsoft.Graph;
 using Microsoft.Graph.Models;
 using System.Text.RegularExpressions;
 
-public class BCProviderClient : IBCProviderClient
+public class BCProviderClient(
+    GraphServiceClient client,
+    ILogger<BCProviderClient> logger,
+    PidpConfiguration config) : IBCProviderClient
 {
-    private readonly GraphServiceClient client;
-    private readonly ILogger<BCProviderClient> logger;
-    private readonly string domain;
-    private readonly string clientId;
-
-    public BCProviderClient(
-        GraphServiceClient client,
-        ILogger<BCProviderClient> logger,
-        PidpConfiguration config)
-    {
-        this.client = client;
-        this.logger = logger;
-        this.domain = config.BCProviderClient.Domain;
-        this.clientId = config.BCProviderClient.ClientId;
-    }
+    private readonly GraphServiceClient client = client;
+    private readonly ILogger<BCProviderClient> logger = logger;
+    private readonly string domain = config.BCProviderClient.Domain;
+    private readonly string clientId = config.BCProviderClient.ClientId;
 
     public async Task<object?> GetAttribute(string userPrincipalName, string attributeName)
     {
@@ -32,7 +24,7 @@ public class BCProviderClient : IBCProviderClient
         try
         {
             var result = await this.client.Users[userPrincipalName]
-                .GetAsync(request => request.QueryParameters.Select = new[] { attributeName });
+                .GetAsync(request => request.QueryParameters.Select = [attributeName]);
 
             return result?.AdditionalData[attributeName];
         }

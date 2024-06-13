@@ -28,7 +28,7 @@ public static class ClaimsPrincipalExtensions
     {
         var birthdate = user.FindFirstValue(Claims.Birthdate);
 
-        var parsed = LocalDatePattern.Iso.Parse(birthdate);
+        var parsed = LocalDatePattern.Iso.Parse(birthdate!);
         if (parsed.Success)
         {
             return parsed.Value;
@@ -75,7 +75,7 @@ public static class ClaimsPrincipalExtensions
 
         if (string.IsNullOrWhiteSpace(resourceAccessClaim))
         {
-            return Enumerable.Empty<string>();
+            return [];
         }
 
         try
@@ -84,16 +84,16 @@ public static class ClaimsPrincipalExtensions
 
             return resources?.TryGetValue(resourceName, out var access) == true
                 ? access.Roles
-                : Enumerable.Empty<string>();
+                : [];
         }
         catch
         {
-            return Enumerable.Empty<string>();
+            return [];
         }
     }
 
-    private class ResourceAccess
+    private sealed class ResourceAccess
     {
-        public IEnumerable<string> Roles { get; set; } = Enumerable.Empty<string>();
+        public IEnumerable<string> Roles { get; set; } = [];
     }
 }
