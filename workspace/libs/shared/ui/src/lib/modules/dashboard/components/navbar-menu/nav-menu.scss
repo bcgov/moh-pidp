@@ -2,6 +2,38 @@
 // @see ./scss/material/components/_mat-sidenav.scss
 @use 'pidp-variables' as pidp;
 
+.viewport-medium {
+  --header-padding: 0;
+  --header-height: 160px;
+  --content-flex: 0 0 994px;
+  --mat-sidenav-width: 240px;
+  --sidenav-panel-box-margin: -60px 30px 0 15px;
+  --sidenav-panel-box-width: 200px;
+  --sidenav-panel-content-padding: 15px;
+  --sidenav-header-margin-bottom: 15px;
+  --sidenav-line-margin-bottom: 15px;
+.main-menu {
+    float: right;
+  }
+}
+
+.viewport-large {
+  --header-padding: 0;
+  --header-height: 160px;
+  --content-flex: 0 0 1200px;
+  --sidenav-panel-box-margin: -60px 50px 0 80px;
+  --sidenav-panel-box-width: 240px;
+  .main-menu {
+      float: right;
+    }
+}
+
+a,
+p,
+h1 {
+  font-family: pidp.$bcgov-font-family;
+}
+
 .viewport-all {
   --header-padding: 20px 30px;
   --header-height: 100px;
@@ -26,9 +58,9 @@
   }
 
   & .content-header-box {
-    display: flex;
     background-color: #036;
     min-height: var(--header-height);
+    display: flex;
 
     & header {
       flex: 1;
@@ -110,32 +142,6 @@
   }
 }
 
-.viewport-medium {
-  --header-padding: 0;
-  --header-height: 160px;
-  --content-flex: 0 0 994px;
-  --mat-sidenav-width: 240px;
-  --sidenav-panel-box-margin: -60px 30px 0 15px;
-  --sidenav-panel-box-width: 200px;
-  --sidenav-panel-content-padding: 15px;
-  --sidenav-header-margin-bottom: 15px;
-  --sidenav-line-margin-bottom: 15px;
-}
-
-.viewport-large {
-  --header-padding: 0;
-  --header-height: 160px;
-  --content-flex: 0 0 1200px;
-  --sidenav-panel-box-margin: -60px 50px 0 80px;
-  --sidenav-panel-box-width: 240px;
-}
-
-a,
-p,
-h1 {
-  font-family: pidp.$bcgov-font-family;
-}
-
 .header-right {
   .logout-button-group {
     display: flex;
@@ -174,19 +180,18 @@ h1 {
   }
 }
 
-
 .content-menu {
   background-color: #fff;
+  color: #ffffff;
   border-bottom: 2px solid #00000040;
   box-shadow: 6px 2px 8px #888888;
-  color: #ffffff;
-  height: 65px;
+  height: 60px;
   position: fixed;
   z-index: 100;
   width: 100%;
 
   & .main-menu {
-    padding: 10px;
+    padding: 5px;
 
     & a {
       color: #313132;
@@ -206,18 +211,24 @@ h1 {
     & a:hover {
       border-bottom: solid 4px #fcba19;
     }
+
+   a:last-of-type{
+      margin-right: 2rem;
+    }
   }
 }
 
 .content-body {
-  padding-top: 70px;
+  width: 100%;
+  margin: 0px;
+  padding: 60px 0px 0px 0px;
 }
 
 .span-text {
   text-decoration: none;
   display: block;
   text-align: center;
-  padding: 10px 55px 0px 0px;
+  padding: 5px 55px 0px 0px;
   float: left;
   color: #313132;
   font-size: 30px;

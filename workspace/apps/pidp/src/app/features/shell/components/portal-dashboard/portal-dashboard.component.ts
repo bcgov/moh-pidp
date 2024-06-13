@@ -138,17 +138,7 @@ export class PortalDashboardComponent implements IDashboard, OnInit {
           linkActiveOptions,
         },
         'help_outline',
-      ),
-
-      new DashboardRouteMenuItem(
-        'Access',
-        {
-          commands: PortalRoutes.BASE_PATH,
-          extras: { fragment: 'access' },
-          linkActiveOptions,
-        },
-        'help_outline',
-      ),
+      )
     ];
   }
 }
