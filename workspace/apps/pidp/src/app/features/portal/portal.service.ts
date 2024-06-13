@@ -41,7 +41,7 @@ export class PortalService {
   /**
    * @description
    * State for driving the displayed groups and sections of
-   * the portal.
+   * the access requests page.
    */
   private _accessState$: BehaviorSubject<AccessState>;
   /**
