@@ -24,8 +24,9 @@
     </p>
   </div>
   <div class="search-content">
-    <!-- TODO Make this count work -->
-    <!-- <span>Total results: <b>7</b></span> -->
+    <span
+      >Total results: <b>{{ (accessState$ | async)?.access?.length }}</b></span
+    >
     <div class="div-search">
       <fa-icon
         *ngIf="showSearchIcon"
