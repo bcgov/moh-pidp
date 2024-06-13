@@ -86,15 +86,15 @@ public class LicenceDeclaration
                 return DomainResult.Failed<string?>();
             }
 
-            party.LicenceDeclaration ??= new PartyLicenceDeclaration();
+            party.LicenceDeclaration ??= new();
             party.LicenceDeclaration.CollegeCode = command.CollegeCode;
             party.LicenceDeclaration.LicenceNumber = command.LicenceNumber;
 
             await party.HandleLicenceSearch(this.plrClient, this.context);
 
-            if (command.CollegeCode != null && party.Cpn == null)
+            if (command.CollegeCode != null && string.IsNullOrWhiteSpace(party.Cpn))
             {
-                party.DomainEvents.Add(new PlrCpnLookupNotFound(party.Id));
+                party.DomainEvents.Add(new PlrCpnLookupNotFound(party.Id, command.CollegeCode.Value, command.LicenceNumber!));
             }
 
             await this.context.SaveChangesAsync();
@@ -110,7 +110,7 @@ public class LicenceDeclaration
 
         public Task Handle(PlrCpnLookupNotFound notification, CancellationToken cancellationToken)
         {
-            this.context.BusinessEvents.Add(PartyNotInPlr.Create(notification.PartyId, this.clock.GetCurrentInstant()));
+            this.context.BusinessEvents.Add(PartyNotInPlr.Create(notification.PartyId, notification.CollegeCode, notification.LicenceNumber, this.clock.GetCurrentInstant()));
 
             return Task.CompletedTask;
         }
