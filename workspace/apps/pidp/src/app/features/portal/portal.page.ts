@@ -28,6 +28,7 @@ import { ToastService } from '@app/core/services/toast.service';
 import { GetSupportComponent } from '@app/shared/components/get-support/get-support.component';
 import { Role } from '@app/shared/enums/roles.enum';
 
+import { AccessRoutes } from '../access/access.routes';
 import { BcProviderEditResource } from '../access/pages/bc-provider-edit/bc-provider-edit-resource.service';
 import { BcProviderEditInitialStateModel } from '../access/pages/bc-provider-edit/bc-provider-edit.page';
 import { IdentityProvider } from '../auth/enums/identity-provider.enum';
@@ -139,6 +140,12 @@ export class PortalPage implements OnInit {
     ];
     this.destination$ = this.discoveryResource.getDestination(
       this.partyService.partyId,
+    );
+  }
+
+  public navigateToAccess(): void {
+    this.router.navigateByUrl(
+      AccessRoutes.routePath(AccessRoutes.ACCESS_REQUESTS),
     );
   }
 
