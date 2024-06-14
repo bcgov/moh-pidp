@@ -25,6 +25,7 @@
         #filter
         (focus)="showSearchIcon=false"
         (input)="onSearch($event)"
+        (focusout)="onSearch($event)"
         (keyup.enter)="search(filter.value)" />
       <button
         type="button"
