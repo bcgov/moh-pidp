@@ -30,6 +30,7 @@
     font-weight: 400;
     line-height: 27px;
     word-wrap: break-word;
+    cursor: pointer;
   }
 
   & header {
@@ -78,39 +79,59 @@
         line-height: 1.5rem;
       }
 
-      & .card-styles {
-        border-radius: 1.25rem;
-        border: 1px solid #ccc;
-        background: #fff;
-        box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
-        width: auto;
-        height: 11.875rem;
-        padding: 1.25rem;
+            & .card-styles {
+              border-radius: 1.25rem;
+              border: 1px solid #ccc;
+              background: #fff;
+              box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+              width: auto;
+              height: 11.875rem;
+              padding: 1.25rem;
 
-        h2 {
-          color: #036;
-          font-size: 1.5rem;
-          font-weight: 700;
-          padding-top: 0.25rem;
-          margin-bottom: 0;
-        }
+              h2 {
+                color: #036;
+                font-size: 1.5rem;
+                font-weight: 700;
+                padding-top: 0.25rem;
+                margin-bottom: 0;
+              }
 
-        p {
-          color: #000;
-          font-size: 1rem;
-          font-weight: 400;
-          padding-top: 0;
-          margin-bottom: 0;
-        }
+              p {
+                color: #000;
+                font-size: 1rem;
+                font-weight: 400;
+                padding-top: 0;
+                margin-bottom: 0;
+              }
 
-        a {
-          color: var(--Links, #1a5a96);
-          font-size: 16px;
-          font-weight: 400;
-          line-height: 27px;
-          text-decoration: underline;
-        }
-      }
+              a {
+                color: var(--Links, #1a5a96);
+                font-size: 16px;
+                font-weight: 400;
+                line-height: 27px;
+                text-decoration: underline;
+                cursor: pointer;
+              }
+
+
+              .linked-success {
+                display: flex;
+                justify-content: start;
+                align-items: center;
+
+                span {
+                  color: #2E8540;
+                  font-size: 16px;
+                  font-weight: 700;
+                  margin-right: 5px;
+                }
+
+                img {
+                  width: 1.5rem;
+                  height: 1.5rem;
+                }
+              }
+            }
 
       & .instructions-card-layout {
         width: auto;
@@ -121,7 +142,7 @@
         box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
 
         .instructions-container {
-          padding: 1.5rem 0.5rem 0 1rem;
+          padding: 1.88rem 0.5rem 0 1.88rem;
 
           h2 {
             color: var(--Colours-font, #313132);
@@ -196,7 +217,9 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-
+        .lock-icon {
+          cursor: pointer;
+        }
         .card-icon {
           display: flex;
           border-radius: 0.625rem;
@@ -354,58 +377,148 @@
 }
 
 div.viewport-xsmall {
-  .link-main {
-    display: flex !important;
-    flex-direction: column !important;
-
-    .link-button {
-      img.imgplant {
-        height: 200px !important;
-        object-position: 0px -55px !important;
-      }
-
-      div.auth-card {
-        padding: 20px 0px 0px 0px !important;
-      }
-
-      .card-container {
-        .auth-card-header {
-          padding-left: 20px;
+  --gap: 0.5rem;
+  --font-size: 0.5rem;
+  & .content {
+    & .link-main {
+      display: flex !important;
+      flex-direction: column !important;
+      & .instructions-card {
+        h2 {
+          padding: 1rem 0rem 0 1rem;
+          font-size: 1.8rem;
         }
 
-        .auth-card-body {
-          padding-left: 15px;
+        p {
+          padding-left: 1.5rem;
+        }
+      }
+      .instructions-card-layout {
+        button {
+          margin: 4.7rem 0 1rem 1.5rem;
+        }
+        .instructions-text {
+          margin: 5.5rem 0 1rem 1.5rem;
+        }
+        & .instructions-container {
+          padding: 1rem 0rem 0 1rem;
+          h2 {
+            margin-bottom: 0.25rem;
+            font-size: 1rem;
+          }
+          ol,
+          ul {
+            margin-left: 0rem;
+          }
+          .list-item {
+            padding-bottom: 0rem;
+          }
+        }
+      }
+      .card-styles {
+        padding: 1rem;
+
+        h2 {
+          font-size: 1.25rem;
         }
 
-        .auth-card-footer {
-          padding: 15px 0px 0px 30px;
+        p {
+          font-size: 0.8rem;
+          line-height: 1.8;
+        }
+
+        a {
+          font-size: 0.9rem;
+        }
+      }
+
+      .card-header-icon .card-icon {
+        width: 2rem;
+        height: 2rem;
+
+        img {
+          width: 1.2rem;
+          height: 1.2rem;
         }
       }
     }
   }
 
-  .successfully-linked {
-    .successfully-linked-accounts {
-      flex-direction: column;
-      align-items: center;
+  @media screen and (max-width: 375px) {
+    & .content {
+      & .link-main {
+        .instructions-card-layout {
+          button {
+            margin: 0rem 0 1rem 1.5rem;
+          }
+        }
+      }
     }
   }
 }
 
 div.viewport-small {
-  .link-main {
-    .link-button {
-      img.imgplant {
-        object-position: -15px -55px !important;
+  --gap: 0.5rem;
+  --font-size: 0.5rem;
+  & .content {
+    & .link-main {
+      grid-template-columns: calc(39% - 15px) calc(30% - 15px) calc(30% - 15px);
+      & .instructions-card {
+        h2 {
+          padding: 0.75rem 3.75rem 0 0.75rem;
+          font-size: 1.5rem;
+        }
+
+        p {
+          padding-left: 0.75rem;
+        }
+      }
+      .instructions-card-layout {
+        button {
+          margin: 0rem 0 1rem 1.5rem;
+        }
+        .instructions-text {
+          margin: 6.3rem 0 1rem 1.5rem;
+        }
+        & .instructions-container {
+          padding: 0.75rem 0rem 0 0.75rem;
+          h2 {
+            margin-bottom: 0.25rem;
+            font-size: 1rem;
+          }
+          ol,
+          ul {
+            margin-left: 0rem;
+          }
+          .list-item {
+            padding-bottom: 0rem;
+          }
+        }
+      }
+      .card-styles {
+        padding: 1rem;
+
+        h2 {
+          font-size: 1rem;
+        }
+
+        p {
+          font-size: 0.8rem;
+          line-height: 1.5;
+        }
+
+        a {
+          font-size: 0.9rem;
+        }
       }
 
-      div.auth-card {
-        padding: 20px 0px 60px 20px !important;
-      }
+      .card-header-icon .card-icon {
+        width: 1.8rem;
+        height: 1.8rem;
 
-      .card-container {
-        .auth-card-body {
-          padding-bottom: 15px;
+        img {
+          width: 1rem;
+          height: 1rem;
         }
       }
     }
@@ -417,7 +530,7 @@ div.viewport-medium {
     & .link-main {
       & .instructions-card {
         h2 {
-          padding: 1.5rem 0 0 1.5rem;
+          padding: 1rem 0rem 0 1rem;
           font-size: 1.8rem;
         }
 
@@ -453,7 +566,7 @@ div.viewport-medium {
           font-size: 1.25rem;
         }
 
-        p{
+        p {
           font-size: 0.8rem;
         }
 
@@ -466,11 +579,17 @@ div.viewport-medium {
         width: 2rem;
         height: 2rem;
 
-        img{
+        img {
           width: 1.2rem;
           height: 1.2rem;
         }
       }
     }
+  }
+}
+
+::ng-deep .dialog-container {
+  mat-dialog-container {
+      padding: 0.5rem;
   }
 }

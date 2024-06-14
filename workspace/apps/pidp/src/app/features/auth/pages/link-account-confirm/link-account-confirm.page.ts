@@ -49,6 +49,9 @@ export class LinkAccountConfirmPage implements OnInit {
   public IdentityProvider = IdentityProvider;
   public faAngleRight = faAngleRight;
   public showInstructions:boolean=false;
+  public userIdentityProvider: string = ''
+  public showSucessBC: boolean = false;
+  public showSucessHealth: boolean = false;
   public constructor(
     private dialog: MatDialog,
     private authorizedUserService: AuthorizedUserService,
@@ -68,6 +71,7 @@ export class LinkAccountConfirmPage implements OnInit {
     this.user$
       .pipe(
         switchMap((user) => {
+          this.userIdentityProvider = user.identityProvider;
           const data: DialogOptions = {
             title: 'Account linking',
             titlePosition: 'center',
@@ -108,6 +112,7 @@ export class LinkAccountConfirmPage implements OnInit {
     this.loadingOverlayService.open(LOADING_OVERLAY_DEFAULT_MESSAGE);
     return this.linkAccountConfirmResource.linkAccount().pipe(
       tap(() => {
+        this.userIdentityProvider === 'bcsc' ? this.showSucessBC = true : this.showSucessHealth = true;
         this.loadingOverlayService.close();
         this.router.navigate([
           ProfileRoutes.routePath(ProfileRoutes.ACCOUNT_LINKING),

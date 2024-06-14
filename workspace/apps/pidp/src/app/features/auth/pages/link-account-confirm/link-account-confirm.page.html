@@ -62,7 +62,8 @@
             </div>
             <h2>BC Services Card</h2>
             <p>Access to government services for B.C. residents</p>
-            <a (click)="onLinkAccount(IdentityProvider.BCSC)">Link Account</a>
+            <a *ngIf="userIdentityProvider !== 'bcsc'" (click)="onLinkAccount(IdentityProvider.BCSC)">Link Account</a>
+            <div *ngIf="showSucessBC" class="linked-success"><span>1 Account Linked</span> <img src="/assets/images/icons/icon-check-circle.svg" alt="check circle"></div>
           </div>
           <div class="bc-provider card-styles">
             <div class="card-header-icon">
@@ -84,7 +85,8 @@
           </div>
           <h2>Health Authority</h2>
           <p>Healthcare professional network account that is tied to the health authority</p>
-          <a (click)="onLinkAccount(IdentityProvider.PHSA)">Link Account</a>
+          <a  *ngIf="userIdentityProvider === 'bcsc'" (click)="onLinkAccount(IdentityProvider.PHSA)">Link Account</a>
+          <div *ngIf="showSucessHealth" class="linked-success"><span>1 Account Linked</span> <img src="/assets/images/icons/icon-check-circle.svg" alt="check circle"></div>
         </div>
 
         <div class="idir-account card-styles">

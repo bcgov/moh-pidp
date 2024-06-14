@@ -82,6 +82,9 @@ export class AccountLinkingPage implements OnInit, OnDestroy {
   public linkedAccountsIdp: IdentityProvider[] = [];
   public faAngleRight = faAngleRight;
   public showInstructions:boolean=false;
+  public userIdentityProvider: string = ''
+  public showSucessBC: boolean = false;
+  public showSucessHealth: boolean = false;
 
   public constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
@@ -191,7 +194,7 @@ public toggleInstructions(): void {
           return credentials.filter(
             //TODO when we add IdpId to the Credential, also filter out by IdpId
             // so that we filter out the credential that the user is currently logged in with
-            (credential) => credential.identityProvider !== identityProvider,
+            (credential) => credential.identityProvider === identityProvider,
           );
         }),
       )
@@ -203,6 +206,14 @@ public toggleInstructions(): void {
         linkedAccounts.forEach((linkedAccount) =>
           this.linkedAccountsIdp.push(linkedAccount.identityProvider),
         );
+        if(this.linkedAccountsIdp.length > 0){
+          this.userIdentityProvider = this.linkedAccountsIdp[0];
+          if(this.userIdentityProvider === 'bcsc'){
+            this.showSucessBC = true;
+          } else {
+            this.showSucessHealth = true;
+          }
+        }
       });
   }
 

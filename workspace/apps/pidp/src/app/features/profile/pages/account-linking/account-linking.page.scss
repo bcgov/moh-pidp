@@ -1,4 +1,5 @@
 @use 'pidp-variables' as pidp;
+@import 'bootstrap/bootstrap-imports';
 
 .viewport-all {
   --gap: 1rem;
@@ -111,6 +112,24 @@
           line-height: 27px;
           text-decoration: underline;
           cursor: pointer;
+        }
+
+        .linked-success {
+          display: flex;
+          justify-content: start;
+          align-items: center;
+
+          span {
+            color: #2E8540;
+            font-size: 16px;
+            font-weight: 700;
+            margin-right: 5px;
+          }
+
+          img {
+            width: 1.5rem;
+            height: 1.5rem;
+          }
         }
       }
 
