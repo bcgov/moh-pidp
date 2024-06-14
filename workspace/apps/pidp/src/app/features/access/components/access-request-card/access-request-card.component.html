@@ -2,7 +2,10 @@
   <div class="card-container">
     <div class="card-header">
       <div class="card-header-icon">
-        <fa-icon class="card-icon" [icon]="icon"></fa-icon>
+        <fa-icon
+          class="card-icon"
+          [ngClass]="{ 'card-completed': completed }"
+          [icon]="icon"></fa-icon>
         <!-- <img class="checked" alt="icon" [src]="icon" /> -->
         <p class="card-header-text">{{ heading }}</p>
       </div>

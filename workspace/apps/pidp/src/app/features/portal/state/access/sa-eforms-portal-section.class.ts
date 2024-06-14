@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
-import { faFileLines } from '@fortawesome/free-solid-svg-icons';
+import { faFileLines, faUserCheck } from '@fortawesome/free-solid-svg-icons';
 
 import { AlertType } from '@bcgov/shared/ui';
 
@@ -21,8 +21,8 @@ export class SaEformsPortalSection implements IPortalSection {
   public readonly key: PortalSectionKey;
   public heading: string;
   public description: string;
-  public icon: IconProp;
   public faFileLines = faFileLines;
+  public faUserCheck = faUserCheck;
 
   public constructor(
     private profileStatus: ProfileStatus,
@@ -31,7 +31,6 @@ export class SaEformsPortalSection implements IPortalSection {
     this.key = 'saEforms';
     this.heading = 'Special Authority eForms';
     this.description = `Enrol here for access to PharmaCare's Special Authority eForms application.`;
-    this.icon = faFileLines;
   }
 
   public get hint(): string {
@@ -68,6 +67,11 @@ export class SaEformsPortalSection implements IPortalSection {
           ? 'Pharmacy Technicians can not apply for Special Authority eForms'
           : 'Incomplete';
     }
+  }
+
+  public get icon(): IconProp {
+    const statusCode = this.getStatusCode();
+    return statusCode === StatusCode.COMPLETED ? faUserCheck : faFileLines;
   }
 
   public performAction(): Observable<void> | void {

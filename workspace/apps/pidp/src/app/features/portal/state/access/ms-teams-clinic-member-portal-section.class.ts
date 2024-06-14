@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
-import { faPeopleGroup } from '@fortawesome/free-solid-svg-icons';
+import { faPeopleGroup, faUserCheck } from '@fortawesome/free-solid-svg-icons';
 
 import { AlertType } from '@bcgov/shared/ui';
 
@@ -20,8 +20,8 @@ export class MsTeamsClinicMemberPortalSection implements IPortalSection {
   public readonly key: PortalSectionKey;
   public heading: string;
   public description: string;
-  public icon: IconProp;
   public faPeopleGroup = faPeopleGroup;
+  public faUserCheck = faUserCheck;
 
   public constructor(
     private profileStatus: ProfileStatus,
@@ -30,7 +30,6 @@ export class MsTeamsClinicMemberPortalSection implements IPortalSection {
     this.key = 'msTeamsClinicMember';
     this.heading = 'MS Teams for Clinic Members';
     this.description = `Clinic Member enrol here for clinic access for MS Teams with Fraser Health.`;
-    this.icon = faPeopleGroup;
   }
 
   public get hint(): string {
@@ -61,6 +60,11 @@ export class MsTeamsClinicMemberPortalSection implements IPortalSection {
       : statusCode === StatusCode.COMPLETED
         ? 'Completed'
         : 'Incomplete';
+  }
+
+  public get icon(): IconProp {
+    const statusCode = this.getStatusCode();
+    return statusCode === StatusCode.COMPLETED ? faUserCheck : faPeopleGroup;
   }
 
   public performAction(): Observable<void> | void {

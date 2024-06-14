@@ -1,7 +1,7 @@
 import { Observable } from 'rxjs';
 
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
-import { faChartSimple } from '@fortawesome/free-solid-svg-icons';
+import { faChartSimple, faUserCheck } from '@fortawesome/free-solid-svg-icons';
 
 import { StatusCode } from '../../enums/status-code.enum';
 import { ProfileStatus } from '../../models/profile-status.model';
@@ -14,8 +14,8 @@ export class PrimaryCareRosteringPortalSection implements IPortalSection {
   public heading: string;
   public description: string;
   private readonly primaryCareRosteringWebsite: string;
-  public icon: IconProp;
   public faChartSimple = faChartSimple;
+  public faUserCheck = faUserCheck;
 
   public constructor(private profileStatus: ProfileStatus) {
     this.key = 'primaryCareRostering';
@@ -25,7 +25,6 @@ export class PrimaryCareRosteringPortalSection implements IPortalSection {
                         Through PAS, Attachment Coordinators help match patients to family physicians and nurse
                         practitioners in their communities.`;
     this.primaryCareRosteringWebsite = 'https://bchealthprovider.ca';
-    this.icon = faChartSimple;
   }
 
   /**
@@ -40,6 +39,11 @@ export class PrimaryCareRosteringPortalSection implements IPortalSection {
       disabled: statusCode === StatusCode.NOT_AVAILABLE,
       openInNewTab: true,
     };
+  }
+
+  public get icon(): IconProp {
+    const statusCode = this.getStatusCode();
+    return statusCode === StatusCode.COMPLETED ? faUserCheck : faChartSimple;
   }
 
   public performAction(): void | Observable<void> {

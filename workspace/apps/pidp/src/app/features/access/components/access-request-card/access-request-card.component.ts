@@ -28,6 +28,7 @@ export class AccessRequestCardComponent {
   @Input() public description: string = '';
   @Output() public action: EventEmitter<void>;
   @Input() public actionDisabled?: boolean;
+  @Input() public completed?: boolean;
   public faFileLines = faFileLines;
 
   public constructor() {

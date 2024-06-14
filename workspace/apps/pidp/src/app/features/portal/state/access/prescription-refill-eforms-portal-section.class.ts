@@ -3,7 +3,10 @@ import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
-import { faPrescriptionBottleMedical } from '@fortawesome/free-solid-svg-icons';
+import {
+  faPrescriptionBottleMedical,
+  faUserCheck,
+} from '@fortawesome/free-solid-svg-icons';
 
 import { AlertType } from '@bcgov/shared/ui';
 
@@ -21,8 +24,8 @@ export class PrescriptionRefillEformsPortalSection implements IPortalSection {
   public readonly key: PortalSectionKey;
   public heading: string;
   public description: string;
-  public icon: IconProp;
   public faPrescriptionBottleMedical = faPrescriptionBottleMedical;
+  public faUserCheck = faUserCheck;
 
   public constructor(
     private profileStatus: ProfileStatus,
@@ -31,7 +34,6 @@ export class PrescriptionRefillEformsPortalSection implements IPortalSection {
     this.key = 'prescriptionRefillEforms';
     this.heading = 'Provincial Prescription Renewal Support Service eForm';
     this.description = `Enrol here for access to the Provincial Prescription Renewal Support Service eForm`;
-    this.icon = faPrescriptionBottleMedical;
   }
 
   public get hint(): string {
@@ -64,6 +66,13 @@ export class PrescriptionRefillEformsPortalSection implements IPortalSection {
       default:
         return 'Incomplete';
     }
+  }
+
+  public get icon(): IconProp {
+    const statusCode = this.getStatusCode();
+    return statusCode === StatusCode.COMPLETED
+      ? faUserCheck
+      : faPrescriptionBottleMedical;
   }
 
   public performAction(): Observable<void> | void {

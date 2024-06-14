@@ -17,6 +17,11 @@
           display: flex;
           justify-content: center;
           align-items: center;
+          font-size: x-small;
+        }
+        & .card-completed {
+          color: pidp.$green;
+          border: 2px solid pidp.$green;
         }
         & .card-header-text {
           color: #003366;
@@ -34,15 +39,6 @@
   .card-container:hover {
     box-shadow: 2px 2px 2px rgb(194, 194, 196);
     transform: scale(1.1);
-  }
-
-  .card-header-check-icon {
-    color: pidp.$green;
-    display: flex;
-  }
-
-  .checked {
-    border: 2px solid pidp.$green !important;
   }
 
   .card-body {

@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
-import { faArrowsRotate } from '@fortawesome/free-solid-svg-icons';
+import { faArrowsRotate, faUserCheck } from '@fortawesome/free-solid-svg-icons';
 
 import { AlertType } from '@bcgov/shared/ui';
 
@@ -20,8 +20,8 @@ export class HcimAccountTransferPortalSection implements IPortalSection {
   public readonly key: PortalSectionKey;
   public heading: string;
   public description: string;
-  public icon: IconProp;
   public faArrowsRotate = faArrowsRotate;
+  public faUserCheck = faUserCheck;
 
   public constructor(
     private profileStatus: ProfileStatus,
@@ -30,7 +30,6 @@ export class HcimAccountTransferPortalSection implements IPortalSection {
     this.key = 'hcimAccountTransfer';
     this.heading = 'HCIMWeb Account Transfer';
     this.description = `For existing users of HCIMWeb application to transfer their HNETBC account credential to their organization credential.`;
-    this.icon = faArrowsRotate;
   }
 
   public get hint(): string {
@@ -61,6 +60,11 @@ export class HcimAccountTransferPortalSection implements IPortalSection {
       : statusCode === StatusCode.COMPLETED
         ? 'Completed'
         : 'Incomplete';
+  }
+
+  public get icon(): IconProp {
+    const statusCode = this.getStatusCode();
+    return statusCode === StatusCode.COMPLETED ? faUserCheck : faArrowsRotate;
   }
 
   public performAction(): void | Observable<void> {

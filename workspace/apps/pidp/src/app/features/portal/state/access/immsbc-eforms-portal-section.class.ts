@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
-import { faSyringe } from '@fortawesome/free-solid-svg-icons';
+import { faSyringe, faUserCheck } from '@fortawesome/free-solid-svg-icons';
 
 import { AlertType } from '@bcgov/shared/ui';
 
@@ -20,8 +20,8 @@ export class ImmsBCEformsPortalSection implements IPortalSection {
   public readonly key: PortalSectionKey;
   public heading: string;
   public description: string;
-  public icon: IconProp;
   public faSyringe = faSyringe;
+  public faUserCheck = faUserCheck;
 
   public constructor(
     private profileStatus: ProfileStatus,
@@ -30,7 +30,6 @@ export class ImmsBCEformsPortalSection implements IPortalSection {
     this.key = 'immsBCEforms';
     this.heading = 'Immunization Entry eForm';
     this.description = `Enrol here for access to the Immunization Entry eForm application.`;
-    this.icon = faSyringe;
   }
 
   public get hint(): string {
@@ -65,6 +64,11 @@ export class ImmsBCEformsPortalSection implements IPortalSection {
       default:
         return 'Incomplete';
     }
+  }
+
+  public get icon(): IconProp {
+    const statusCode = this.getStatusCode();
+    return statusCode === StatusCode.COMPLETED ? faUserCheck : faSyringe;
   }
 
   public performAction(): Observable<void> | void {
