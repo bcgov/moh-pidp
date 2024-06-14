@@ -256,7 +256,7 @@
   }
 
   .search-content {
-    margin: 30px 37px 50px 20px;
+    margin: 30px 300px 50px 20px;
     height: 50px;
   }
 }
@@ -264,5 +264,9 @@
 .container.viewport-medium {
   .card-container {
     height: 20rem;
+  }
+
+  .search-content {
+    margin: 30px 200px 50px 20px;
   }
 }
