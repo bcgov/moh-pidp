@@ -73,7 +73,7 @@ public class Role
 /// </summary>
 public class UserRepresentation
 {
-    public Dictionary<string, string[]> Attributes { get; set; } = new();
+    public Dictionary<string, string[]> Attributes { get; set; } = [];
     public string? Email { get; set; }
     public bool? Enabled { get; set; }
     public string? FirstName { get; set; }
@@ -114,5 +114,5 @@ public class UserRepresentation
         }
     }
 
-    private void SetAttribute(string key, string value) => this.Attributes[key] = new[] { value };
+    private void SetAttribute(string key, string value) => this.Attributes[key] = [value];
 }

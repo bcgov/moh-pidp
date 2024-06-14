@@ -1,14 +1,11 @@
 namespace Pidp.Infrastructure.HttpClients.AddressAutocomplete;
 
-public class AddressAutocompleteClient : BaseClient, IAddressAutocompleteClient
+public class AddressAutocompleteClient(
+    HttpClient httpClient,
+    ILogger<AddressAutocompleteClient> logger,
+    PidpConfiguration config) : BaseClient(httpClient, logger), IAddressAutocompleteClient
 {
-    private readonly string apiKey;
-
-    public AddressAutocompleteClient(
-        HttpClient httpClient,
-        ILogger<AddressAutocompleteClient> logger,
-        PidpConfiguration config)
-        : base(httpClient, logger) => this.apiKey = config.AddressAutocompleteClient.ApiKey;
+    private readonly string apiKey = config.AddressAutocompleteClient.ApiKey;
 
     public async Task<IEnumerable<AddressAutocompleteFindResponse>> Find(string searchTerm)
     {
@@ -22,10 +19,10 @@ public class AddressAutocompleteClient : BaseClient, IAddressAutocompleteClient
         if (!result.IsSuccess)
         {
             // this.Logger.LogError($"Error when retrieving AddressAutocompleteFindResponse results for SearchTerm = {searchTerm}. {message}");
-            return Enumerable.Empty<AddressAutocompleteFindResponse>();
+            return [];
         }
 
-        return result.Value.Items ?? Enumerable.Empty<AddressAutocompleteFindResponse>();
+        return result.Value.Items ?? [];
     }
 
     public async Task<IEnumerable<AddressAutocompleteRetrieveResponse>> Retrieve(string id)
@@ -40,9 +37,9 @@ public class AddressAutocompleteClient : BaseClient, IAddressAutocompleteClient
         if (!result.IsSuccess)
         {
             // this.Logger.LogError($"Error when retrieving AddressAutocompleteRetrieveResponse results for Id = {id}. {message}");
-            return Enumerable.Empty<AddressAutocompleteRetrieveResponse>();
+            return [];
         }
 
-        return result.Value.Items ?? Enumerable.Empty<AddressAutocompleteRetrieveResponse>();
+        return result.Value.Items ?? [];
     }
 }

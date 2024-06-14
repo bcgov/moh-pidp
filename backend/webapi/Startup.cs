@@ -25,11 +25,9 @@ using Pidp.Infrastructure.HttpClients;
 using Pidp.Infrastructure.Services;
 using Pidp.Infrastructure.Queue;
 
-public class Startup
+public class Startup(IConfiguration configuration)
 {
-    public IConfiguration Configuration { get; }
-
-    public Startup(IConfiguration configuration) => this.Configuration = configuration;
+    public IConfiguration Configuration { get; } = configuration;
 
     public void ConfigureServices(IServiceCollection services)
     {
@@ -68,10 +66,10 @@ public class Startup
             .WithTransientLifetime());
 
         services.AddHealthChecks()
-            .AddApplicationStatus(tags: new[] { HealthCheckTag.Liveness.Value })
-            .AddCheck<BackgroundWorkerHealthCheck>("PlrStatusUpdateSchedulingService", tags: new[] { HealthCheckTag.BackgroundServices.Value })
-            .AddNpgSql(config.ConnectionStrings.PidpDatabase, tags: new[] { HealthCheckTag.Readiness.Value })
-            .AddRabbitMQ(new Uri(config.RabbitMQ.HostAddress), tags: new[] { HealthCheckTag.Readiness.Value });
+            .AddApplicationStatus(tags: [HealthCheckTag.Liveness.Value])
+            .AddCheck<BackgroundWorkerHealthCheck>("PlrStatusUpdateSchedulingService", tags: [HealthCheckTag.BackgroundServices.Value])
+            .AddNpgSql(config.ConnectionStrings.PidpDatabase, tags: [HealthCheckTag.Readiness.Value])
+            .AddRabbitMQ(new Uri(config.RabbitMQ.HostAddress), tags: [HealthCheckTag.Readiness.Value]);
 
         services.AddSwaggerGen(options =>
         {

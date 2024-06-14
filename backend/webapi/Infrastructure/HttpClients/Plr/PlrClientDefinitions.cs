@@ -78,7 +78,7 @@ public class PlrStandingsDigest
     private PlrStandingsDigest(bool error, IEnumerable<DigestRecord>? records = null)
     {
         this.Error = error;
-        this.records = records ?? Enumerable.Empty<DigestRecord>();
+        this.records = records ?? [];
     }
 
     /// <summary>
