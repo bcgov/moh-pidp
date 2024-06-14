@@ -34,7 +34,8 @@
         matInput
         #filter
         (focus)="showSearchIcon=false"
-        (input)="onSearch($event)" />
+        (input)="onSearch($event)"
+        (keyup.enter)="search(filter.value)" />
       <button
         type="button"
         mat-flat-button
