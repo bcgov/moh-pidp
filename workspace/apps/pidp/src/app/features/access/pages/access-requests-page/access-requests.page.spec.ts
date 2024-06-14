@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { HttpClient } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -21,6 +22,7 @@ describe('PortalCardComponent', () => {
           provide: APP_CONFIG,
           useValue: APP_DI_CONFIG,
         },
+        provideAutoSpy(HttpClient),
         provideAutoSpy(KeycloakService),
       ],
     });
