@@ -14,8 +14,8 @@ import { ImmsBCEformsPortalSection } from './access/immsbc-eforms-portal-section
 import { MsTeamsClinicMemberPortalSection } from './access/ms-teams-clinic-member-portal-section.class';
 import { MsTeamsPrivacyOfficerPortalSection } from './access/ms-teams-privacy-officer-portal-section.class';
 import { PrescriptionRefillEformsPortalSection } from './access/prescription-refill-eforms-portal-section.class';
-import { PrimaryCareRosteringPortalSection } from './access/primary-care-rostering-portal-section.class';
 import { ProviderReportingPortalSection } from './access/provider-reporting-portal-section.class';
+import { ProvincialAttachmentSystemPortalSection } from './access/provincial-attachment-system-portal-section.class';
 import { SaEformsPortalSection } from './access/sa-eforms-portal-section.class';
 import { MfaSetupPortalSection } from './faq/mfa-setup-portal-section.class';
 import { SignedAcceptedDocumentsPortalSection } from './history/signed-accepted-documents-portal-section.class';
@@ -158,8 +158,8 @@ export class PortalStateBuilder {
         () => [new ProviderReportingPortalSection(profileStatus, this.router)],
       ),
       ...ArrayUtils.insertResultIf<IPortalSection>(
-        this.insertSection('primaryCareRostering', profileStatus),
-        () => [new PrimaryCareRosteringPortalSection(profileStatus)],
+        this.insertSection('provincialAttachmentSystem', profileStatus),
+        () => [new ProvincialAttachmentSystemPortalSection(profileStatus)],
       ),
       ...ArrayUtils.insertResultIf<IPortalSection>(
         this.insertSection('immsBCEforms', profileStatus),

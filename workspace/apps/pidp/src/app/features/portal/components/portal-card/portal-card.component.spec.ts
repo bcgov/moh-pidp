@@ -20,7 +20,7 @@ import { AuthService } from '@app/features/auth/services/auth.service';
 
 import { StatusCode } from '../../enums/status-code.enum';
 import { ProfileStatus } from '../../models/profile-status.model';
-import { PrimaryCareRosteringPortalSection } from '../../state/access/primary-care-rostering-portal-section.class';
+import { PrimaryCareRosteringPortalSection } from '../../state/access/provincial-attachment-system-portal-section.class';
 import { IPortalSection } from '../../state/portal-section.model';
 import { PortalCardComponent } from './portal-card.component';
 

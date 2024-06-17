@@ -255,9 +255,9 @@ public partial class ProfileStatus
             }
         }
 
-        public class PrimaryCareRosteringSection : ProfileSection
+        public class ProvincialAttachmentSystemSection : ProfileSection
         {
-            internal override string SectionName => "primaryCareRostering";
+            internal override string SectionName => "provincialAttachmentSystem";
 
             protected override StatusCode Compute(ProfileData profile)
             {
