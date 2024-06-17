@@ -1,8 +1,8 @@
 <div class="box" uiPidpInjectViewportCss>
   <mat-stepper orientation="vertical" #stepper [selectedIndex]="selectedIndex">
     <mat-step
-      [state]="bcProviderStatusCode === 2 ? 'done' : 'number'"
-      [completed]="bcProviderStatusCode === 2">
+      [state]="bcProviderStatusCode === StatusCode.COMPLETED ? 'done' : 'number'"
+      [completed]="bcProviderStatusCode === StatusCode.COMPLETED">
       <ng-template matStepLabel> Create a BCProvider Credential </ng-template>
       <div>
         <p class="guide-information">

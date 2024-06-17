@@ -70,6 +70,7 @@ export class ProvincialAttachmentSystemPage implements OnInit {
   private readonly lastSelectedIndex: number;
   public hasCpn: boolean | undefined;
   public Destination = Destination;
+  public StatusCode = StatusCode;
 
   private readonly provincialAttachmentSystemWebsite: string;
 
