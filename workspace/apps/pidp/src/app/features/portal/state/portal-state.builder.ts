@@ -159,7 +159,12 @@ export class PortalStateBuilder {
       ),
       ...ArrayUtils.insertResultIf<IPortalSection>(
         this.insertSection('provincialAttachmentSystem', profileStatus),
-        () => [new ProvincialAttachmentSystemPortalSection(profileStatus)],
+        () => [
+          new ProvincialAttachmentSystemPortalSection(
+            profileStatus,
+            this.router,
+          ),
+        ],
       ),
       ...ArrayUtils.insertResultIf<IPortalSection>(
         this.insertSection('immsBCEforms', profileStatus),

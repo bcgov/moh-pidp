@@ -263,6 +263,7 @@ public partial class ProfileStatus
             {
                 return profile switch
                 {
+                    { UserIsHighAssuranceIdentity: false } => StatusCode.Hidden,
                     _ when (profile.EndorsementPlrStanding.HasGoodStanding
                         || profile.PartyPlrStanding
                             .With(ProviderRoleType.MedicalDoctor, ProviderRoleType.RegisteredNursePractitioner)

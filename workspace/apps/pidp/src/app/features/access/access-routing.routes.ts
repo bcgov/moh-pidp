@@ -73,4 +73,11 @@ export const routes: Routes = [
         (m) => m.routes,
       ),
   },
+  {
+    path: AccessRoutes.PROVINCIAL_ATTACHMENT_SYSTEM,
+    loadChildren: (): Promise<Routes> =>
+      import(
+        './pages/provincial-attachment-system/provincial-attachment-system-routing.routes'
+      ).then((m) => m.routes),
+  },
 ];
