@@ -20,10 +20,9 @@ export class PrimaryCareRosteringPortalSection implements IPortalSection {
   public constructor(private profileStatus: ProfileStatus) {
     this.key = 'primaryCareRostering';
     this.heading = 'Provincial Attachment System';
-    this.description = `The Provincial Attachment System (PAS) is an online tool used by primary care
-                        providers throughout the province to indicate their ability to take on new patients.
-                        Through PAS, Attachment Coordinators help match patients to family physicians and nurse
-                        practitioners in their communities.`;
+    this.description =
+      'The Provincial Attachment System (PAS) is an online tool used by primary care providers throughout the province to indicate their ability to take on new patients. Through PAS, Attachment Coordinators help match patients to family physicians and nurse practitioners in their communities.';
+
     this.primaryCareRosteringWebsite = 'https://bchealthprovider.ca';
   }
 
