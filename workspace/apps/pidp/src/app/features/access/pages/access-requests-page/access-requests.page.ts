@@ -103,6 +103,7 @@ export class AccessRequestsPage implements OnInit, OnDestroy {
       this.getCards();
       return;
     }
+    text = text.trim();
     this.accessState$
       .pipe(map((state) => state?.access))
       .subscribe((access) => {
