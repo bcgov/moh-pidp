@@ -152,6 +152,9 @@ export class AccessRequestsPage implements OnInit, OnDestroy {
       )
       .subscribe((access) => {
         this.filteredAccessSections = access;
+        this.filteredAccessSections?.sort((a, b) =>
+          a.heading.localeCompare(b.heading),
+        );
       });
   }
 }
