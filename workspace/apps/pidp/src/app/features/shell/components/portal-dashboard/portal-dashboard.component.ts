@@ -106,21 +106,6 @@ export class PortalDashboardComponent implements IDashboard, OnInit {
         },
         'assignment_ind',
       ),
-      ...ArrayUtils.insertResultIf<DashboardRouteMenuItem>(
-        this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
-        () => [
-          new DashboardRouteMenuItem(
-            'Organization',
-            {
-              commands: PortalRoutes.BASE_PATH,
-              extras: { fragment: 'organization' },
-              linkActiveOptions,
-            },
-            'corporate_fare',
-          ),
-        ],
-      ),
-
       new DashboardRouteMenuItem(
         'Access',
         {
@@ -131,10 +116,9 @@ export class PortalDashboardComponent implements IDashboard, OnInit {
         'assignment',
       ),
       new DashboardRouteMenuItem(
-        'Support',
+        'Help',
         {
-          commands: PortalRoutes.BASE_PATH,
-          extras: { fragment: 'support' },
+          commands: 'faq',
           linkActiveOptions,
         },
         'help_outline',
