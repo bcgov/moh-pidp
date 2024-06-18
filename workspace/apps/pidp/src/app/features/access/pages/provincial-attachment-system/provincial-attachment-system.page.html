@@ -195,7 +195,10 @@
               mat-flat-button
               uiPageFooterAction
               type="submit"
-              color="primary">
+              color="primary"
+              aria-labelledby="navigate-to-pas"
+              [disabled]="pas$ | async"
+              (click)="navigateTo()">
               Login
             </button>
           </div>
