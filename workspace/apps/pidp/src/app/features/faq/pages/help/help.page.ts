@@ -2,6 +2,7 @@ import { Component, Inject, OnInit, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { ActivatedRoute, Router } from '@angular/router';
 import {MatExpansionModule} from '@angular/material/expansion';
+import { InjectViewportCssClassDirective } from '@bcgov/shared/ui';
 
 import {
   AnchorDirective,
@@ -31,6 +32,7 @@ import { UtilsService } from '@app/core/services/utils.service';
     PageHeaderComponent,
     PageSectionComponent,
     PageSectionSubheaderComponent,
+    InjectViewportCssClassDirective,
   ],
 })
 export class HelpPage implements OnInit {
