@@ -1,4 +1,4 @@
-<div class="help-page-container">
+<div class="help-page-container" uiPidpInjectViewportCss>
   <h1>Frequently asked questions</h1>
 
   <div class="faq-section">
@@ -14,12 +14,13 @@
         <p>
           To address the identity and access management challenges faced by
           health care providers in BC when they attempt to access health
-          information. This includes, but is not limited to, challenges such
-          as:<br />
+          information. This includes, but is not limited to, challenges such as:
+        </p>
+        <ul>
           <li>Too many userIDs and passwords</li>
           <li>Many different processes and tools to access systems</li>
           <li>Repeated requests for the same information</li>
-        </p>
+        </ul>
       </mat-expansion-panel>
     </div>
     <div class="faq-item">
@@ -34,14 +35,14 @@
             ></mat-panel-title
           >
         </mat-expansion-panel-header>
-        <p>
-          The services comprising the OneHealthID Service are:
+        <p>The services comprising the OneHealthID Service are:</p>
+        <ul>
           <li>Enrolment</li>
           <li>Access Management</li>
           <li>Governance and Administration (coming soon)</li>
           <li>Audit and Log</li>
           <li>Platform Service Team</li>
-        </p>
+        </ul>
       </mat-expansion-panel>
     </div>
     <div class="faq-item">
@@ -55,7 +56,7 @@
             ></mat-panel-title
           >
         </mat-expansion-panel-header>
-        <p>
+        <ul>
           <li>
             <b> One time.</b> Provide identity information once – top up when
             needed
@@ -68,7 +69,7 @@
             <b> Reduce. </b>Rationalize number of accounts needed
             (many->few->one)
           </li>
-        </p>
+        </ul>
       </mat-expansion-panel>
     </div>
     <div class="faq-item">
@@ -114,7 +115,9 @@
           in BC.<br />
           The BCSC and PLR are distinct from, but are leveraged by, the
           OneHealthID service.<br />
-          During the enrolment process, the OneHealthID service<br /><br />
+          During the enrolment process, the OneHealthID service
+        </p>
+        <ul>
           <li>
             uses the verified digital identity created by the BCSC to prove who
             you are
@@ -127,6 +130,8 @@
             creates a BCProvider account - a credential used to access health
             data (not another email account)
           </li>
+        </ul>
+        <p>
           For more information on the BC Services Card and Provider Location
           Registry, please refer to: <br />BCSC.
           <a
@@ -163,6 +168,8 @@
           employing methods which better align to the way they work.<br />
           For more information on the Microsoft Authenticator, please refer
           to:<br />
+        </p>
+        <ul>
           <li>
             Microsoft.
             <a
@@ -176,7 +183,7 @@
               >https://healthprovideridentityportal.gov.bc.ca/auth/login</a
             >
           </li>
-        </p>
+        </ul>
       </mat-expansion-panel>
     </div>
     <div class="faq-item">
@@ -265,7 +272,8 @@
     <div class="links-section first-column">
       <div
         class="link-container"
-        (click)="onClickSendEmail('mailto:OneHealthID@gov.bc.ca')">
+        (click)="onClickSendEmail('mailto:OneHealthID@gov.bc.ca')"
+        (keyup)="onClickSendEmail('mailto:OneHealthID@gov.bc.ca')">
         <img
           class="icon-question"
           src="/assets/images/icon-question.svg"
@@ -274,7 +282,8 @@
       </div>
       <div
         class="link-container"
-        (click)="onClickSendEmail('mailto:hlth.registriesadmin@gov.bc.ca')">
+        (click)="onClickSendEmail('mailto:hlth.registriesadmin@gov.bc.ca')"
+        (keyup)="onClickSendEmail('mailto:OneHealthID@gov.bc.ca')">
         <img
           class="icon-question"
           src="/assets/images/icon-question.svg"
@@ -286,7 +295,8 @@
     <div class="links-section first-column">
       <div
         class="link-container"
-        (click)="onClickSendEmail('mailto:satransformation@gov.bc.ca')">
+        (click)="onClickSendEmail('mailto:satransformation@gov.bc.ca')"
+        (keyup)="onClickSendEmail('mailto:OneHealthID@gov.bc.ca')">
         <img
           class="icon-question"
           src="/assets/images/icon-question.svg"
@@ -295,7 +305,8 @@
       </div>
       <div
         class="link-container"
-        (click)="onClickSendEmail('mailto:support@driver-fitness.com')">
+        (click)="onClickSendEmail('mailto:support@driver-fitness.com')"
+        (keyup)="onClickSendEmail('mailto:OneHealthID@gov.bc.ca')">
         <img
           class="icon-question"
           src="/assets/images/icon-question.svg"
@@ -307,7 +318,8 @@
     <div class="links-section first-column">
       <div
         class="link-container"
-        (click)="onClickSendEmail('mailto:eformsenrolment@phsa.ca')">
+        (click)="onClickSendEmail('mailto:eformsenrolment@phsa.ca')"
+        (keyup)="onClickSendEmail('mailto:OneHealthID@gov.bc.ca')">
         <img
           class="icon-question"
           src="/assets/images/icon-question.svg"
