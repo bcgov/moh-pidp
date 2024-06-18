@@ -110,7 +110,9 @@
           Use your newly created BCProvider to login to the Provincial
           Attachment System
         </p>
-        <p *ngIf="bcProviderStatusCode === 2" class="bcprovider-username">
+        <p
+          *ngIf="bcProviderStatusCode === StatusCode.COMPLETED"
+          class="bcprovider-username">
           <strong>{{ bcProviderUsername }}</strong>
           <button
             mat-icon-button
