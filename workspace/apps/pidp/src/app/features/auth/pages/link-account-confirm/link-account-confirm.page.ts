@@ -72,6 +72,8 @@ export class LinkAccountConfirmPage implements OnInit {
       .pipe(
         switchMap((user) => {
           this.userIdentityProvider = user.identityProvider;
+          this.showSucessBC =  this.userIdentityProvider === 'bcsc' || this.showSucessBC ? true : false;
+          this.showSucessHealth =  this.userIdentityProvider !== 'bcsc' || this.showSucessHealth ? true : false;
           const data: DialogOptions = {
             title: 'Account linking',
             titlePosition: 'center',
@@ -87,7 +89,7 @@ export class LinkAccountConfirmPage implements OnInit {
             imageType: 'banner',
             width: '31.25rem',
             height: '26rem',
-            actionText:'Confirm',
+            actionText:'Correct',
             actionTypePosition: 'center'
           };
           return this.dialog
