@@ -14,7 +14,10 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faAngleRight } from '@fortawesome/free-solid-svg-icons';
 import { NavigationService } from '@pidp/presentation';
 
-import { InjectViewportCssClassDirective } from '@bcgov/shared/ui';
+import {
+  InjectViewportCssClassDirective,
+  TextButtonDirective,
+} from '@bcgov/shared/ui';
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';
 import {
@@ -51,6 +54,7 @@ import {
     NgIf,
     FontAwesomeModule,
     NgOptimizedImage,
+    TextButtonDirective,
   ],
   templateUrl: './provincial-attachment-system.page.html',
   styleUrl: './provincial-attachment-system.page.scss',
