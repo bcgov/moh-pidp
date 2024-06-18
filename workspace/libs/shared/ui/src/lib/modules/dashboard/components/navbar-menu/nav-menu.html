@@ -25,6 +25,18 @@
     >
     <div class="main-menu">
       <a
+      class="main-menu-item"
+      >
+        <div class="dropdown">
+          <a >Profile</a>
+          <div class="dropdown-content">
+            <a href="portal#profile">Personal Info</a>
+            <a href="/profile/college-licence-declaration">College License</a>
+            <a href="portal#access">User Access</a>
+          </div>
+        </div>
+      </a>
+      <a
         *ngFor="let menuItem of menuItems"
         class="main-menu-item"
         routerLinkActive="main-menu-item-active"

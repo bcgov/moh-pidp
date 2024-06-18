@@ -97,15 +97,6 @@ export class PortalDashboardComponent implements IDashboard, OnInit {
       fragment: 'exact',
     } as IsActiveMatchOptions;
     return [
-      new DashboardRouteMenuItem(
-        'Profile',
-        {
-          commands: PortalRoutes.BASE_PATH,
-          extras: { fragment: 'profile' },
-          linkActiveOptions,
-        },
-        'assignment_ind',
-      ),
       ...ArrayUtils.insertResultIf<DashboardRouteMenuItem>(
         this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
         () => [
