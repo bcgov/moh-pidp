@@ -105,6 +105,7 @@ public partial class ProfileStatus
         public bool DemographicsComplete { get; set; }
         public string DisplayFullName { get; set; } = string.Empty;
         public bool HasBCProviderCredential { get; set; }
+        public bool HasBCServicesCardCredential { get; set; }
         public bool LicenceDeclarationComplete { get; set; }
 
         // Computed in Finalize()
