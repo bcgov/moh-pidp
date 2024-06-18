@@ -1,3 +1,16 @@
+h1 {
+  margin-bottom: 0px;
+  color: #036;
+  font-size: 38px;
+  font-weight: 600;
+}
+h2 {
+  margin-bottom: 0px;
+  color: #036;
+  font-size: 24px;
+  font-weight: 700;
+}
+
 .image {
   flex: 1;
   display: flex;
@@ -8,5 +21,31 @@
   .image img {
     max-width: 250px;
     height: auto;
+  }
+}
+
+
+.viewport-all {
+  &.mfa-setup-page {
+    padding: 3rem 6rem;
+  }
+}
+
+
+.viewport-medium {
+  &.mfa-setup-page {
+    padding: 2rem 3rem;
+  }
+}
+
+.viewport-small {
+  &.mfa-setup-page {
+    padding: 2rem 2rem;
+  }
+}
+
+.viewport-xsmall {
+  &.mfa-setup-page {
+    padding: 2rem 1rem;
   }
 }

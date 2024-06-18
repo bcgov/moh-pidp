@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import {
   AnchorDirective,
+  InjectViewportCssClassDirective,
   PageComponent,
   PageFooterActionDirective,
   PageFooterComponent,
@@ -29,6 +30,7 @@ import { UtilsService } from '@app/core/services/utils.service';
     PageHeaderComponent,
     PageSectionComponent,
     PageSectionSubheaderComponent,
+    InjectViewportCssClassDirective
   ],
 })
 export class MfaSetupPage implements OnInit {
