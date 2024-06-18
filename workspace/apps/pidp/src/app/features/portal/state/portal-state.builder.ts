@@ -126,8 +126,13 @@ export class AccessStateBuilder {
         () => [new ProviderReportingPortalSection(profileStatus, this.router)],
       ),
       ...ArrayUtils.insertResultIf<IAccessSection>(
-        this.insertSection('primaryCareRostering', profileStatus),
-        () => [new PrimaryCareRosteringPortalSection(profileStatus)],
+        this.insertSection('provincialAttachmentSystem', profileStatus),
+        () => [
+          new ProvincialAttachmentSystemPortalSection(
+            profileStatus,
+            this.router,
+          ),
+        ],
       ),
       ...ArrayUtils.insertResultIf<IAccessSection>(
         this.insertSection('immsBCEforms', profileStatus),
