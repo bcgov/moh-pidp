@@ -66,7 +66,7 @@
 
     .main {
       display: grid;
-      grid-template-columns: calc(50% - 15px) calc(50% - 15px);
+      grid-template-columns: calc(70% - 15px) calc(30% - 15px);
       gap: 20px;
       min-height: 340px;
       margin: calc(var(--gap) * 2) 0;
@@ -79,7 +79,7 @@
         line-height: 1.5rem;
       }
       .pas-button {
-        height: 20rem;
+        height: 15rem;
         img {
           object-fit: cover;
           z-index: -2;
@@ -109,6 +109,10 @@
             justify-content: center;
           }
 
+          .card-header {
+            color: #1a5a96;
+          }
+
           .card-body {
             img.logo {
               z-index: -1;
@@ -118,6 +122,12 @@
               height: 45px;
               width: 175px;
               padding: 10px;
+            }
+          }
+
+          .card-footer {
+            button {
+              padding: 10px 25px;
             }
           }
         }
@@ -170,68 +180,15 @@
   }
 }
 
-.container.viewport-small {
-  .content-header h1 {
-    font-size: 40px;
-  }
-
-  .content-header {
-    margin: 0px 20px 0px 20px;
-  }
-
-  .breadcrumb {
-    margin: 0px 20px 0px 20px;
-  }
-
+.viewport-small {
   .main {
-    .pas-button {
-      img.img-doctor {
-        height: 52% !important;
-        width: 100% !important;
-        object-position: -22px -55px !important;
-      }
-
-      div.auth-card {
-        padding: 20px 0px 60px 20px !important;
-      }
-      .card-container {
-        height: 50% !important;
-        .auth-card-body {
-          padding-bottom: 15px;
-        }
-      }
-    }
+    grid-template-columns: calc(50% - 15px) calc(50% - 15px) !important;
   }
 }
 
-.container.viewport-medium {
-  .main {
-    .pas-button {
-      img.img-doctor {
-        height: 80% !important;
-        width: 85% !important;
-        object-position: -15px -80px !important;
-      }
-      div.auth-card {
-        padding: 20px 0px 18px 15px !important;
-      }
-      .card-container {
-        height: 55% !important;
-        .auth-card-body {
-          padding-bottom: 15px !important;
-        }
-      }
-    }
-  }
-}
-
-.container.viewport-medium {
-  .card-container {
-    height: 20rem;
-  }
-
-  .search-content {
-    margin: 30px 200px 50px 20px;
+.viewport-medium {
+  div.auth-card {
+    padding: 20px 0 55px 20px !important;
   }
 }
 
