@@ -10,6 +10,10 @@ import { Router, RouterLink } from '@angular/router';
 
 import { BehaviorSubject, Observable, of, switchMap, tap } from 'rxjs';
 
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { faAngleRight } from '@fortawesome/free-solid-svg-icons';
+import { NavigationService } from '@pidp/presentation';
+
 import { InjectViewportCssClassDirective } from '@bcgov/shared/ui';
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';
@@ -45,6 +49,7 @@ import {
     InjectViewportCssClassDirective,
     RouterLink,
     NgIf,
+    FontAwesomeModule,
   ],
   templateUrl: './provincial-attachment-system.page.html',
   styleUrl: './provincial-attachment-system.page.scss',
@@ -71,6 +76,7 @@ export class ProvincialAttachmentSystemPage implements OnInit {
   public hasCpn: boolean | undefined;
   public Destination = Destination;
   public StatusCode = StatusCode;
+  public faAngleRight = faAngleRight;
 
   private readonly provincialAttachmentSystemWebsite: string;
 
@@ -79,6 +85,7 @@ export class ProvincialAttachmentSystemPage implements OnInit {
     private authService: AuthService,
     private bcProviderResource: BcProviderEditResource,
     private discoveryResource: DiscoveryResource,
+    private navigationService: NavigationService,
     private portalResource: PortalResource,
     private portalService: PortalService,
     private partyService: PartyService,
@@ -104,6 +111,10 @@ export class ProvincialAttachmentSystemPage implements OnInit {
     this.toastService.openSuccessToast(
       'You have copied your BCProvider Username to clipboard.',
     );
+  }
+
+  public onBack(): void {
+    this.navigationService.navigateToRoot();
   }
 
   public ngOnInit(): void {
