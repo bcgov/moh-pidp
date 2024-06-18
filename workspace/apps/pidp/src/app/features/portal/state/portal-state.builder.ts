@@ -7,6 +7,7 @@ import { Role } from '@app/shared/enums/roles.enum';
 
 import { StatusCode } from '../enums/status-code.enum';
 import { ProfileStatus } from '../models/profile-status.model';
+import { IAccessSection } from './access-section.model';
 import { BcProviderPortalSection } from './access/bc-provider-portal-section.class';
 import { DriverFitnessPortalSection } from './access/driver-fitness-portal-section.class';
 import { HcimAccountTransferPortalSection } from './access/hcim-account-transfer-portal-section.class';
@@ -45,11 +46,104 @@ export const portalStateGroupKeys = [
 
 /**
  * @description
+ * Group keys as a readonly tuple to allow iteration
+ * at runtime.
+ */
+export const accessStateGroupKey = ['access'] as const;
+
+/**
+ * @description
  * Union of keys generated from the tuple.
  */
 export type PortalStateGroupKey = (typeof portalStateGroupKeys)[number];
 
+/**
+ * @description
+ * Union of keys generated from the tuple.
+ */
+export type AccessStateGroupKey = (typeof accessStateGroupKey)[number];
+
+export type AccessState = Record<AccessStateGroupKey, IAccessSection[]> | null;
+
 export type PortalState = Record<PortalStateGroupKey, IPortalSection[]> | null;
+
+export class AccessStateBuilder {
+  public constructor(
+    private router: Router,
+    private permissionsService: PermissionsService,
+  ) {}
+
+  public createAccessState(
+    profileStatus: ProfileStatus,
+  ): Record<AccessStateGroupKey, IAccessSection[]> {
+    return {
+      access: this.createAccessGroup(profileStatus),
+    };
+  }
+
+  private createAccessGroup(profileStatus: ProfileStatus): IAccessSection[] {
+    return [
+      ...ArrayUtils.insertResultIf<IAccessSection>(
+        this.insertSection('saEforms', profileStatus),
+        () => [new SaEformsPortalSection(profileStatus, this.router)],
+      ),
+      ...ArrayUtils.insertResultIf<IAccessSection>(
+        this.insertSection('prescriptionRefillEforms', profileStatus),
+        () => [
+          new PrescriptionRefillEformsPortalSection(profileStatus, this.router),
+        ],
+      ),
+      ...ArrayUtils.insertResultIf<IAccessSection>(
+        this.insertSection('bcProvider', profileStatus),
+        () => [new BcProviderPortalSection(profileStatus, this.router)],
+      ),
+      ...ArrayUtils.insertResultIf<IAccessSection>(
+        this.insertSection('hcimAccountTransfer', profileStatus),
+        () => [
+          new HcimAccountTransferPortalSection(profileStatus, this.router),
+        ],
+      ),
+      ...ArrayUtils.insertResultIf<IAccessSection>(
+        this.insertSection('driverFitness', profileStatus),
+        () => [new DriverFitnessPortalSection(profileStatus, this.router)],
+      ),
+      ...ArrayUtils.insertResultIf<IAccessSection>(
+        this.insertSection('msTeamsPrivacyOfficer', profileStatus),
+        () => [
+          new MsTeamsPrivacyOfficerPortalSection(profileStatus, this.router),
+        ],
+      ),
+      ...ArrayUtils.insertResultIf<IAccessSection>(
+        this.insertSection('msTeamsClinicMember', profileStatus),
+        () => [
+          new MsTeamsClinicMemberPortalSection(profileStatus, this.router),
+        ],
+      ),
+      ...ArrayUtils.insertResultIf<IAccessSection>(
+        // TODO remove permissions when ready for production
+        this.insertSection('providerReportingPortal', profileStatus) &&
+          this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
+        () => [new ProviderReportingPortalSection(profileStatus, this.router)],
+      ),
+      ...ArrayUtils.insertResultIf<IAccessSection>(
+        this.insertSection('primaryCareRostering', profileStatus),
+        () => [new PrimaryCareRosteringPortalSection(profileStatus)],
+      ),
+      ...ArrayUtils.insertResultIf<IAccessSection>(
+        this.insertSection('immsBCEforms', profileStatus),
+        () => [new ImmsBCEformsPortalSection(profileStatus, this.router)],
+      ),
+    ];
+  }
+
+  private insertSection(
+    portalSectionKey: PortalSectionStatusKey,
+    profileStatus: ProfileStatus,
+  ): boolean {
+    const statusCode = profileStatus.status[portalSectionKey]?.statusCode;
+    return statusCode && statusCode !== StatusCode.HIDDEN;
+  }
+}
 
 export class PortalStateBuilder {
   public constructor(

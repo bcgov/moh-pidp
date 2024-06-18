@@ -1,8 +1,13 @@
 import { Routes } from '@angular/router';
 
 import { AccessRoutes } from './access.routes';
+import { AccessRequestsPage } from './pages/access-requests-page/access-requests.page';
 
 export const routes: Routes = [
+  {
+    path: AccessRoutes.ACCESS_REQUESTS,
+    component: AccessRequestsPage,
+  },
   {
     path: AccessRoutes.SPECIAL_AUTH_EFORMS,
     loadChildren: (): Promise<Routes> =>

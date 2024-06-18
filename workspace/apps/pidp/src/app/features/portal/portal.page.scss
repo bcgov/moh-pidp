@@ -33,6 +33,22 @@
       background-color: pidp.$grey-10;
     }
   }
+
+  & .access-box {
+    display: flex;
+    flex-direction: column;
+
+    & .section-content-box {
+      display: flex;
+      flex-direction: column;
+
+      & .carousel-box {
+        padding-left: calc(var(--gap) * 2);
+        padding-right: calc(var(--gap) * 2);
+      }
+    }
+  }
+
   & .section-content-box {
     margin: var(--gap) 0;
 
@@ -48,7 +64,7 @@
     }
   }
 }
-.viewport-small{
+.viewport-small {
   --content-padding: var(--gap) 0;
 }
 .viewport-xsmall {

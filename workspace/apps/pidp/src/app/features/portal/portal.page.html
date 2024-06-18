@@ -223,9 +223,14 @@
           for.
         </p>
         <div class="carousel-box">
-          <app-portal-carousel
-            portalCategoryName="access-to-systems"
-            [sections]="state.access"></app-portal-carousel>
+          <button
+            mat-flat-button
+            type="button"
+            color="primary"
+            aria-labelledby="access-to-systems"
+            (click)="navigateToAccess()">
+            Access to Systems
+          </button>
         </div>
       </div>
     </section>
