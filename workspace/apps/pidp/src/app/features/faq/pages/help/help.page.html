@@ -1,0 +1,341 @@
+<div class="help-page-container" uiPidpInjectViewportCss>
+  <h1>Frequently asked questions</h1>
+
+  <div class="faq-section">
+    <div class="faq-item">
+      <mat-expansion-panel
+        (opened)="panelOpenState.set(true)"
+        (closed)="panelOpenState.set(false)">
+        <mat-expansion-panel-header>
+          <mat-panel-title
+            ><b>Why was the OneHealthID Service created?</b></mat-panel-title
+          >
+        </mat-expansion-panel-header>
+        <p>
+          To address the identity and access management challenges faced by
+          health care providers in BC when they attempt to access health
+          information. This includes, but is not limited to, challenges such as:
+        </p>
+        <ul>
+          <li>Too many userIDs and passwords</li>
+          <li>Many different processes and tools to access systems</li>
+          <li>Repeated requests for the same information</li>
+        </ul>
+      </mat-expansion-panel>
+    </div>
+    <div class="faq-item">
+      <mat-expansion-panel
+        (opened)="panelOpenState.set(true)"
+        (closed)="panelOpenState.set(false)">
+        <mat-expansion-panel-header>
+          <mat-panel-title
+            ><b
+              >What is the suite of identity services comprising the OneHealthID
+              Service?</b
+            ></mat-panel-title
+          >
+        </mat-expansion-panel-header>
+        <p>The services comprising the OneHealthID Service are:</p>
+        <ul>
+          <li>Enrolment</li>
+          <li>Access Management</li>
+          <li>Governance and Administration (coming soon)</li>
+          <li>Audit and Log</li>
+          <li>Platform Service Team</li>
+        </ul>
+      </mat-expansion-panel>
+    </div>
+    <div class="faq-item">
+      <mat-expansion-panel
+        (opened)="panelOpenState.set(true)"
+        (closed)="panelOpenState.set(false)">
+        <mat-expansion-panel-header>
+          <mat-panel-title
+            ><b
+              >What are the key benefits of the OneHealthID Service?</b
+            ></mat-panel-title
+          >
+        </mat-expansion-panel-header>
+        <ul>
+          <li>
+            <b> One time.</b> Provide identity information once – top up when
+            needed
+          </li>
+          <li>
+            <b>Reusable.</b> Use the same identity for multiple systems, across
+            orgs
+          </li>
+          <li>
+            <b> Reduce. </b>Rationalize number of accounts needed
+            (many->few->one)
+          </li>
+        </ul>
+      </mat-expansion-panel>
+    </div>
+    <div class="faq-item">
+      <mat-expansion-panel
+        (opened)="panelOpenState.set(true)"
+        (closed)="panelOpenState.set(false)">
+        <mat-expansion-panel-header>
+          <mat-panel-title
+            ><b
+              >What is the key product of the OneHealthID Service?</b
+            ></mat-panel-title
+          >
+        </mat-expansion-panel-header>
+        <p>
+          The BCProvider access credential is the key product. It is a
+          <b>single, verified, everyday-use credential</b> to access a growing
+          number of provincial health applications (backed by BC Services Card)
+          and is aligned to policy.<br />
+          The BCProvider credential is created during the enrolment process<br />
+          <a href="https://healthprovideridentityportal.gov.bc.ca/auth/login"
+            >https://healthprovideridentityportal.gov.bc.ca/auth/login</a
+          >
+        </p>
+      </mat-expansion-panel>
+    </div>
+    <div class="faq-item">
+      <mat-expansion-panel
+        (opened)="panelOpenState.set(true)"
+        (closed)="panelOpenState.set(false)">
+        <mat-expansion-panel-header>
+          <mat-panel-title
+            ><b
+              >BC Services Card (BCSC), Provider Location Registry (PLR),
+              BCProvider – how do they work together?</b
+            ></mat-panel-title
+          >
+        </mat-expansion-panel-header>
+        <p>
+          The BCSC is used to access services provided by the Gov’t of BC.<br />The
+          PLR is a source of health care provider information such as status,
+          name, and demographic information.<br />The BCProvider is an access
+          credential used by health care providers to access health information
+          in BC.<br />
+          The BCSC and PLR are distinct from, but are leveraged by, the
+          OneHealthID service.<br />
+          During the enrolment process, the OneHealthID service
+        </p>
+        <ul>
+          <li>
+            uses the verified digital identity created by the BCSC to prove who
+            you are
+          </li>
+          <li>
+            (where applicable) queries the PLR to confirm that a health care
+            provider is in good standing
+          </li>
+          <li>
+            creates a BCProvider account - a credential used to access health
+            data (not another email account)
+          </li>
+        </ul>
+        <p>
+          For more information on the BC Services Card and Provider Location
+          Registry, please refer to: <br />BCSC.
+          <a
+            href="https://www2.gov.bc.ca/gov/content/governments/government-id/bc-services-card"
+            >https://www2.gov.bc.ca/gov/content/governments/government-id/bc-services-card</a
+          ><br />
+          PLR.
+          <a
+            href="https://www2.gov.bc.ca/gov/content/health/practitioner-professional-resources/system-access/provider-location-registry-plr"
+            >https://www2.gov.bc.ca/gov/content/health/practitioner-professional-resources/system-access/provider-location-registry-plr</a
+          >
+        </p>
+      </mat-expansion-panel>
+    </div>
+    <div class="faq-item">
+      <mat-expansion-panel
+        (opened)="panelOpenState.set(true)"
+        (closed)="panelOpenState.set(false)">
+        <mat-expansion-panel-header>
+          <mat-panel-title
+            ><b
+              >Two Factor Authentication (2FA), Multi-Factor Authentication
+              (MFA) – how does this apply the OneHealthID Service?</b
+            ></mat-panel-title
+          >
+        </mat-expansion-panel-header>
+        <p>
+          The BC Services Card (BCSC) employs an app on your phone (BC Service
+          Card app) in which you provide and verify your ID. This app employs
+          2FA when you login.<br />
+          The OneHealthID Service (BCProvider access credential) also uses 2FA.
+          Upon initial release, the Microsoft Authenticator app is used for 2FA.
+          Going forward, the approach for 2FA will be tailored for providers,
+          employing methods which better align to the way they work.<br />
+          For more information on the Microsoft Authenticator, please refer
+          to:<br />
+        </p>
+        <ul>
+          <li>
+            Microsoft.
+            <a
+              href="https://www.microsoft.com/en-ca/security/mobile-authenticator-app"
+              >https://www.microsoft.com/en-ca/security/mobile-authenticator-app</a
+            >
+          </li>
+          <li>
+            OneHealthID Service. Enrolment process tool FAQ at<br />
+            <a href="https://healthprovideridentityportal.gov.bc.ca/auth/login"
+              >https://healthprovideridentityportal.gov.bc.ca/auth/login</a
+            >
+          </li>
+        </ul>
+      </mat-expansion-panel>
+    </div>
+    <div class="faq-item">
+      <mat-expansion-panel
+        (opened)="panelOpenState.set(true)"
+        (closed)="panelOpenState.set(false)">
+        <mat-expansion-panel-header>
+          <mat-panel-title
+            ><b
+              >How do I setup my Multi-factor authentication?</b
+            ></mat-panel-title
+          >
+        </mat-expansion-panel-header>
+        <p>
+          View instructions to setup Multi-factor authentication
+          <a href="\faq\mfa-setup">here</a>.
+        </p>
+      </mat-expansion-panel>
+    </div>
+    <div class="faq-item">
+      <mat-expansion-panel
+        (opened)="panelOpenState.set(true)"
+        (closed)="panelOpenState.set(false)">
+        <mat-expansion-panel-header>
+          <mat-panel-title
+            ><b>Who is using the OneHealthID Service?</b></mat-panel-title
+          >
+        </mat-expansion-panel-header>
+        <p>
+          BC E-Substance Reporting<br />
+          BC Provider<br />
+          Connect Extranet Website<br />
+          Driver Fitness Practitioner Portal<br />
+          Driver Medical Fitness Testing<br />
+          Electronic Medical Certificate of Death (Vital Stats)<br />
+          Enhanced Audit Confirmation Letters<br />
+          Formulary Management Database<br />
+          Guaranteed Income Supplement <br />HCIMWeb Account Transfer and
+          Enrolment<br />
+          Health & Human Services Library Website<br />
+          Health Authority Management Information System <br />Health Careers
+          Access Program <br />Health Data Platform <br />Health Environment
+          Manager<br />Health Sector Compensation Information System<br />
+          Health Sector Performance Portal<br />
+          Healthcare Client Identity Management<br />
+          HealthIdeas - Data Management and Stewardship DMS<br />Hospital Out of
+          Province Claims<br />
+          Immunization Entry eForm<br />
+          Internationally Educated Nurses <br />Long Term Care, The Vaccine
+          Reporting Portal <br />Medical Assistance in Dying<br />
+          Medical Imaging Wait Times<br />Medical Service Plan<br />
+          Mental Health and Substance Use<br />
+          MS Teams for Clinical Use<br />
+          Provider and Location Registry<br />Provincial Attachment System<br />Provincial
+          Prescription Renewal Support Service eForm <br />
+          Public Health Officer, R Shiny<br />
+          Secure File Delivery System <br />Site Privacy and Security Readiness
+          Checklist<br />
+          Special Authority Drug Benefit Adjudication Advisory Committee
+          Community Portal<br />
+          Special Authority eForms <br />Special Authority HIBC & Service BC
+          Community Portal <br />Special Authority Transformation <br />Surgical
+          Wait Time <br />Travel Assistance Program
+        </p>
+      </mat-expansion-panel>
+    </div>
+  </div>
+  <section class="footer-cards">
+    <div class="support-section">
+      <div class="support-text">
+        <h2>Still have questions?</h2>
+        <p class="email-text">
+          Choose a category to the right, and email us directly.
+        </p>
+        <p class="additional-text">Additional support:</p>
+        <p>
+          <img
+            class="icon-call"
+            src="/assets/images/icon-call.svg"
+            alt="Illustration of a call icon" /><a href="tel:250-448-1262"
+            >250-448-1262</a
+          >
+        </p>
+      </div>
+    </div>
+    <div class="links-section first-column">
+      <div
+        class="link-container"
+        (click)="onClickSendEmail('mailto:OneHealthID@gov.bc.ca')"
+        (keyup)="onClickSendEmail('mailto:OneHealthID@gov.bc.ca')">
+        <img
+          class="icon-question"
+          src="/assets/images/icon-question.svg"
+          alt="Illustration of a call icon" />
+        OneHealthID
+      </div>
+      <div
+        class="link-container"
+        (click)="onClickSendEmail('mailto:hlth.registriesadmin@gov.bc.ca')"
+        (keyup)="onClickSendEmail('mailto:hlth.registriesadmin@gov.bc.caa')">
+        <img
+          class="icon-question"
+          src="/assets/images/icon-question.svg"
+          alt="Illustration of a call icon" />
+        HCIMWeb account transfer
+      </div>
+    </div>
+
+    <div class="links-section first-column">
+      <div
+        class="link-container"
+        (click)="onClickSendEmail('mailto:satransformation@gov.bc.ca')"
+        (keyup)="onClickSendEmail('mailto:satransformation@gov.bc.ca')">
+        <img
+          class="icon-question"
+          src="/assets/images/icon-question.svg"
+          alt="Illustration of a call icon" />
+        Special Authority eForms
+      </div>
+      <div
+        class="link-container"
+        (click)="onClickSendEmail('mailto:support@driver-fitness.com')"
+        (keyup)="onClickSendEmail('mailto:support@driver-fitness.com')">
+        <img
+          class="icon-question"
+          src="/assets/images/icon-question.svg"
+          alt="Illustration of a call icon" />
+        Driver medical fitness
+      </div>
+    </div>
+
+    <div class="links-section first-column">
+      <div
+        class="link-container"
+        (click)="onClickSendEmail('mailto:eformsenrolment@phsa.ca')"
+        (keyup)="onClickSendEmail('mailto:eformsenrolment@phsa.ca')">
+        <img
+          class="icon-question"
+          src="/assets/images/icon-question.svg"
+          alt="Illustration of a call icon" />
+        Prescription renewal, support eForm
+      </div>
+      <div
+        class="link-container"
+        (click)="onClickSendEmail('mailto:securemessagingsupport@fraserhealth.ca')"
+        (keyup)="onClickSendEmail('mailto:securemessagingsupport@fraserhealth.ca')">
+        <img
+          class="icon-question"
+          src="/assets/images/icon-question.svg"
+          alt="Illustration of a call icon" />
+        MS Teams for clinical use
+      </div>
+    </div>
+  </section>
+</div>
