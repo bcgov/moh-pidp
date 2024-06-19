@@ -52,6 +52,9 @@ import { SuccessDialogComponent } from '@app/shared/components/success-dialog/su
 import { AccountLinkingResource } from './account-linking-resource.service';
 import { linkedAccountCardText } from './account-linking.constants';
 import { Credential } from './account-linking.model';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { faAngleRight } from '@fortawesome/free-solid-svg-icons';
+import {MatTooltipModule} from '@angular/material/tooltip'
 
 @Component({
   selector: 'app-account-linking',
@@ -64,6 +67,7 @@ import { Credential } from './account-linking.model';
     NgOptimizedImage,
     SuccessDialogComponent,
     AsyncPipe,
+    MatTooltipModule,
     NgFor,
     NgIf,
   ],
@@ -233,6 +237,9 @@ export class AccountLinkingPage implements OnInit, OnDestroy {
       );
   }
 
+  public onPageNavigate(url: string[]): void {
+    this.router.navigate(url);
+}
   private navigateToRoot(): void {
     this.navigationService.navigateToRoot();
   }

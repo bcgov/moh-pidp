@@ -140,7 +140,11 @@ export class LinkAccountConfirmPage implements OnInit {
     this.showInstructions = !this.showInstructions;
   }
 
-  public onLinkAccount(): void {
+public onPageNavigate(url: string[]): void {
+  this.router.navigate(url);
+}
+
+public onLinkAccount(): void {
     const data: DialogOptions = {
       title: 'You will be redirected',
       bottomBorder: false,

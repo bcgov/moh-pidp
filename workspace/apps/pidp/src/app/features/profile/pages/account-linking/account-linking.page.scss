@@ -103,6 +103,7 @@
           font-weight: 400;
           padding-top: 0;
           margin-bottom: 0;
+          line-height: 1.5;
         }
 
         a {
@@ -429,6 +430,12 @@ div.viewport-xsmall {
         a {
           font-size: 0.9rem;
         }
+
+        .linked-success {
+          span {
+            font-size: 14px;
+          }
+        }
       }
 
       .card-header-icon .card-icon {
@@ -526,6 +533,11 @@ div.viewport-small {
 
         a {
           font-size: 0.9rem;
+        }
+        .linked-success {
+          span {
+            font-size: 14px;
+          }
         }
       }
 
