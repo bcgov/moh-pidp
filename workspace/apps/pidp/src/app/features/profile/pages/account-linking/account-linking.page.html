@@ -91,17 +91,19 @@
             </div>
             <h2>BC Services Card</h2>
             <p>Access to government services for B.C. residents</p>
-            <a
-              *ngIf="userIdentityProvider !== 'bcsc'"
-              (click)="onLinkAccount(IdentityProvider.BCSC)"
-              >Link Account</a
-            >
-            <div *ngIf="showSucessBC" class="linked-success">
+            <div
+              *ngIf="hasCredential(IdentityProvider.BCSC); else linkBCSC"
+              class="linked-success">
               <span>1 Account Linked</span>
               <img
                 src="/assets/images/icons/icon-check-circle.svg"
                 alt="check circle" />
             </div>
+            <ng-template #linkBCSC
+              ><a (click)="onLinkAccount(IdentityProvider.BCSC)"
+                >Link Account</a
+              ></ng-template
+            >
           </div>
           <div class="bc-provider card-styles">
             <div class="card-header-icon">
@@ -113,8 +115,18 @@
             </div>
             <h2>BC Provider</h2>
             <p>Access a growing number of provincial health applications</p>
-            <a (click)="onPageNavigate(['/access/bc-provider-edit'])"
-              >Link Account</a
+            <div
+              *ngIf="hasCredential(IdentityProvider.BC_PROVIDER); else linkBCProvider"
+              class="linked-success">
+              <span>1 Account Linked</span>
+              <img
+                src="/assets/images/icons/icon-check-circle.svg"
+                alt="check circle" />
+            </div>
+            <ng-template #linkBCProvider
+              ><a (click)="onPageNavigate(['/access/bc-provider-edit'])"
+                >Link Account</a
+              ></ng-template
             >
           </div>
         </div>
@@ -132,17 +144,19 @@
               Healthcare professional network account that is tied to the health
               authority
             </p>
-            <a
-              *ngIf="userIdentityProvider === 'bcsc'"
-              (click)="onLinkAccount(IdentityProvider.PHSA)"
-              >Link Account</a
-            >
-            <div *ngIf="showSucessHealth" class="linked-success">
+            <div
+              *ngIf="hasCredential(IdentityProvider.PHSA); else linkPHSA"
+              class="linked-success">
               <span>1 Account Linked</span>
               <img
                 src="/assets/images/icons/icon-check-circle.svg"
                 alt="check circle" />
             </div>
+            <ng-template #linkPHSA
+              ><a (click)="onLinkAccount(IdentityProvider.PHSA)"
+                >Link Account</a
+              ></ng-template
+            >
           </div>
 
           <div class="idir-account card-styles">
