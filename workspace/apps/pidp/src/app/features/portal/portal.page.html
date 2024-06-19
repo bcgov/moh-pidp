@@ -2,49 +2,62 @@
   <div class="header-container">
     <div class="banner-mask">
       <div class="banner-content">
-        <h5> Welcome to <span>OneHealthID</span> your health experience</h5>
-        <p> Complete your profile to gain access to the systems you are eligible for</p>
+        <h5>Welcome to <span>OneHealthID</span> your health experience</h5>
+        <p>
+          Complete your profile to gain access to the systems you are eligible
+          for
+        </p>
       </div>
     </div>
   </div>
   <div class="body-container">
-  <div class="card-grid">
-    <div class="card">
-      <img src="../../../assets/images/marcelo-leal-k7ll1hpdhFA-unsplash.jpg" alt="Profile Information">
-      <div class="card-content">
-        <p class="card-header">Linking Accounts</p>
-        <p> Link your credentials </p>
-        <a (click)="navigateToAccountLinkingPage()"> <fa-icon [icon]="faArrowRight"></fa-icon> READ MORE </a>
+    <div class="card-grid">
+      <div class="card">
+        <img
+          src="/assets/images/marcelo-leal-k7ll1hpdhFA-unsplash.jpg"
+          alt="Profile Information" />
+        <div class="card-content">
+          <p class="card-header">Linking Accounts</p>
+          <p>Link your credentials</p>
+          <a (click)="navigateToAccountLinkingPage()">
+            <fa-icon [icon]="faArrowRight"></fa-icon> READ MORE
+          </a>
+        </div>
       </div>
-    </div>
 
-    <div class="card">
-      <img src="../../../assets/images/online-marketing-hIgeoQjS_iE-unsplash.jpg" alt="Systems access for myself">
-      <div class="card-content">
-        <p class="card-header">Navigate Access</p>
-        <p>Healthcare Systems</p>
-        <a href="#">READ MORE</a>
-        <a href="#"> <fa-icon [icon]="faArrowRight"></fa-icon> </a>
+      <div class="card">
+        <img
+          src="/assets/images/online-marketing-hIgeoQjS_iE-unsplash.jpg"
+          alt="Systems access for myself" />
+        <div class="card-content">
+          <p class="card-header">Navigate Access</p>
+          <p>Healthcare Systems</p>
+          <a href="#">READ MORE</a>
+          <a href="#"> <fa-icon [icon]="faArrowRight"></fa-icon> </a>
+        </div>
       </div>
-    </div>
 
-    <div class="card">
-      <img src="../../../assets/images/national-cancer-institute-KrsoedfRAf4-unsplash.jpg" alt="Interested in systems for others">
-      <div class="card-content">
-        <p class="card-header">Grant Access</p>
-        <p>Endorsing your work colleagues</p>
-        <a href="#" class="card-footer">READ MORE</a>
-        <a href="#"> <fa-icon [icon]="faArrowRight"></fa-icon> </a>
+      <div class="card">
+        <img
+          src="/assets/images/national-cancer-institute-KrsoedfRAf4-unsplash.jpg"
+          alt="Interested in systems for others" />
+        <div class="card-content">
+          <p class="card-header">Grant Access</p>
+          <p>Endorsing your work colleagues</p>
+          <a class="card-footer" href="#">READ MORE</a>
+          <a href="#"> <fa-icon [icon]="faArrowRight"></fa-icon> </a>
+        </div>
       </div>
     </div>
   </div>
-</div>
 
   <div class="back-to-top-container">
-    <button class="back-to-top" (click)="scrollToTop()" *ngIf="showBackToTopButton">
+    <button
+      *ngIf="showBackToTopButton"
+      class="back-to-top"
+      (click)="scrollToTop()">
       <fa-icon [icon]="faArrowUp"></fa-icon>
     </button>
-    <div class="back-to-top-text" *ngIf="showBackToTopButton">Back to top</div>
+    <div *ngIf="showBackToTopButton" class="back-to-top-text">Back to top</div>
   </div>
-
 </div>

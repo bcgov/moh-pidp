@@ -1,6 +1,7 @@
 export class AccessRoutes {
   public static BASE_PATH = 'access';
 
+  public static ACCESS_REQUESTS = 'access-requests';
   public static BC_PROVIDER_APPLICATION = 'bc-provider-application';
   public static BC_PROVIDER_EDIT = 'bc-provider-edit';
   public static DRIVER_FITNESS = 'driver-fitness';
