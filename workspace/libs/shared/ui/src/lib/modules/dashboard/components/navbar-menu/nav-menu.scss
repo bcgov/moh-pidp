@@ -48,6 +48,9 @@ h1 {
   --sidenav-menu-item-padding-bottom: 20px;
   width: 100%;
   display: flex;
+  .main-menu {
+    float: right;
+  }
 
   & .content {
     // Ensure the sidenav will stretch to fit vertically
