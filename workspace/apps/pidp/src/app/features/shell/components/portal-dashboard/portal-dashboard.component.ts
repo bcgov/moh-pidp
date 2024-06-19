@@ -22,8 +22,6 @@ import { PortalRoutes } from '@app/features/portal/portal.routes';
 import { PermissionsService } from '@app/modules/permissions/permissions.service';
 
 import { DashboardStateService } from '../../services/dashboard-state-service.service';
-import { ArrayUtils } from '@bcgov/shared/utils';
-import { Role } from '@app/shared/enums/roles.enum';
 
 @Component({
   selector: 'app-portal-dashboard',
@@ -97,21 +95,6 @@ export class PortalDashboardComponent implements IDashboard, OnInit {
       fragment: 'exact',
     } as IsActiveMatchOptions;
     return [
-      ...ArrayUtils.insertResultIf<DashboardRouteMenuItem>(
-        this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
-        () => [
-          new DashboardRouteMenuItem(
-            'Organization',
-            {
-              commands: PortalRoutes.BASE_PATH,
-              extras: { fragment: 'organization' },
-              linkActiveOptions,
-            },
-            'corporate_fare',
-          ),
-        ],
-      ),
-
       new DashboardRouteMenuItem(
         'Access',
         {
@@ -128,7 +111,7 @@ export class PortalDashboardComponent implements IDashboard, OnInit {
           linkActiveOptions,
         },
         'help_outline',
-      )
+      ),
     ];
   }
 }
