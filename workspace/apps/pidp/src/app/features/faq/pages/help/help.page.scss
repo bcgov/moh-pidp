@@ -45,11 +45,12 @@
         text-decoration: underline;
       }
 
-     .mat-expansion-panel {
+      ::ng-deep .mat-expansion-panel {
         box-shadow: none;
 
         .mat-expansion-panel-header {
           padding: 0;
+          line-height: 1.5;
         }
 
         .mat-expansion-indicator,
@@ -63,6 +64,7 @@
 
         .mat-expansion-panel-body {
           padding: 0;
+          line-height: 1.5;
         }
 
       }
@@ -115,6 +117,7 @@
             font-size: 16px;
             font-weight: 400;
             margin: 0;
+            line-height: 1.5;
           }
 
           .icon-call {
@@ -148,9 +151,14 @@
           background: #FFF;
           box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
           color: var(--BC-gov-blue, #036);
-          font-size: 16px;
+          font-size: 0.8rem;
           font-weight: 400;
           text-decoration-line: underline;
+
+          .icon-question {
+            width: 2.5rem;
+            height: 2.5rem;
+          }
         }
       }
     }
@@ -201,19 +209,92 @@
     h1 {
       font-size: 30px;
     }
+
+    .faq-item {
+      margin-bottom: 20px;
+
+      ::ng-deep .mat-expansion-panel {
+
+        .mat-expansion-panel-header {
+          font-size: 0.75rem;
+          height: auto;
+        }
+
+        .mat-expansion-panel-header-title {
+          margin-right: 2px;
+        }
+
+        .mat-expansion-indicator,
+        .mat-expansion-indicator::after {
+          border-width: 0 2px 2px 0 !important;
+          padding: 3px !important;
+          margin-bottom: 5px;
+
+        }
+
+        .mat-expansion-panel-body {
+
+          p:first-of-type {
+            padding-top: 5px;
+          }
+
+          font-size: 0.75rem;
+        }
+      }
+    }
+
     .footer-cards {
       display: flex !important;
       flex-direction: column !important;
 
-      .mat-expansion-panel-header-title {
-        margin-right: 2px;
+      .support-section {
+        padding: 2rem;
+
+        .support-text {
+          display: flex;
+          width: 17.8125rem;
+          padding: 1.875rem;
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 5px;
+          border: 1px solid #CCC;
+          background: #F2F2F2;
+
+
+          h2 {
+            font-size: 30px;
+          }
+
+          .email-text {
+            font-size: 12px;
+            padding: 1rem 0;
+          }
+
+          .additional-text {
+            font-size: 12px;
+          }
+
+          .icon-call {
+            width: 14px;
+            height: 14px;
+          }
+        }
       }
+
       .links-section {
         display: grid;
-        grid-template-columns: calc(50% - 15px) calc(50% - 15px)
+        grid-template-columns: calc(50% - 15px) calc(50% - 15px);
+
+        .link-container {
+          line-height: 1.5;
+          font-size: 0.75rem;
+          height: 7rem;
+          padding: 0.75rem;
+        }
       }
     }
   }
+
   .back-to-top {
     width: 30PX;
     height: 30PX;
