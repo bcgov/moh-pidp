@@ -1,7 +1,11 @@
 <div class="page-container" uiPidpInjectViewportCss>
   <header>
     <div class="banner">
-      <a class="logo-link" (click)="navigateToRoot()" title="Home" aria-label="Go home">
+      <a
+        class="logo-link"
+        title="Home"
+        aria-label="Go home"
+        (click)="navigateToRoot()">
         <img
           *ngIf="isMobile"
           class="logo-mobile"
@@ -29,7 +33,7 @@
   <footer class="footer">
     <div class="footer-container">
       <ul>
-        <li><a (click)="navigateToRoot()">Home</a></li>
+        <li><button (click)="navigateToRoot()">Home</button></li>
         <li>
           <a href="https://www2.gov.bc.ca/gov/content/home/disclaimer"
             >Disclaimer</a
