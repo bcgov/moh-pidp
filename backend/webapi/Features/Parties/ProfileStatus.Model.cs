@@ -27,7 +27,7 @@ public partial class ProfileStatus
         public abstract class ProfileSection
         {
             internal abstract string SectionName { get; }
-            public HashSet<Alert> Alerts { get; set; } = new();
+            public HashSet<Alert> Alerts { get; set; } = [];
             public StatusCode StatusCode { get; set; }
 
             public bool IsComplete => this.StatusCode == StatusCode.Complete;

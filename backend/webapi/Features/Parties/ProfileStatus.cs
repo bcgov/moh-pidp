@@ -35,7 +35,7 @@ public partial class ProfileStatus
     public partial class Model
     {
         [JsonConverter(typeof(PolymorphicDictionarySerializer<string, ProfileSection>))]
-        public Dictionary<string, ProfileSection> Status { get; set; } = new();
+        public Dictionary<string, ProfileSection> Status { get; set; } = [];
         public HashSet<Alert> Alerts => new(this.Status.SelectMany(x => x.Value.Alerts));
     }
 
@@ -44,21 +44,14 @@ public partial class ProfileStatus
         public QueryValidator() => this.RuleFor(x => x.Id).GreaterThan(0);
     }
 
-    public class QueryHandler : IQueryHandler<Query, Model>
+    public class QueryHandler(
+        IMapper mapper,
+        IPlrClient plrClient,
+        PidpDbContext context) : IQueryHandler<Query, Model>
     {
-        private readonly IMapper mapper;
-        private readonly IPlrClient plrClient;
-        private readonly PidpDbContext context;
-
-        public QueryHandler(
-            IMapper mapper,
-            IPlrClient plrClient,
-            PidpDbContext context)
-        {
-            this.mapper = mapper;
-            this.plrClient = plrClient;
-            this.context = context;
-        }
+        private readonly IMapper mapper = mapper;
+        private readonly IPlrClient plrClient = plrClient;
+        private readonly PidpDbContext context = context;
 
         public async Task<Model> HandleAsync(Query query)
         {
@@ -100,7 +93,7 @@ public partial class ProfileStatus
         // Mapped
         public int Id { get; set; }
         public CollegeCode? CollegeCode { get; set; }
-        public IEnumerable<AccessTypeCode> CompletedEnrolments { get; set; } = Enumerable.Empty<AccessTypeCode>();
+        public IEnumerable<AccessTypeCode> CompletedEnrolments { get; set; } = [];
         public string? Cpn { get; set; }
         public bool DemographicsComplete { get; set; }
         public string DisplayFullName { get; set; } = string.Empty;
