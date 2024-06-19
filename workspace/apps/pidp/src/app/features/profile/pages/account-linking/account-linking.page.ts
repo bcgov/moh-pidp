@@ -8,6 +8,7 @@ import {
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import {
@@ -22,6 +23,8 @@ import {
   switchMap,
 } from 'rxjs';
 
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { faAngleRight } from '@fortawesome/free-solid-svg-icons';
 import {
   LOADING_OVERLAY_DEFAULT_MESSAGE,
   LoadingOverlayService,
@@ -33,6 +36,7 @@ import {
   DialogOptions,
   HtmlComponent,
   InjectViewportCssClassDirective,
+  TextButtonDirective,
 } from '@bcgov/shared/ui';
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';
@@ -50,8 +54,6 @@ import { SuccessDialogComponent } from '@app/shared/components/success-dialog/su
 import { AccountLinkingResource } from './account-linking-resource.service';
 import { linkedAccountCardText } from './account-linking.constants';
 import { Credential } from './account-linking.model';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { faAngleRight } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-account-linking',
@@ -64,8 +66,10 @@ import { faAngleRight } from '@fortawesome/free-solid-svg-icons';
     NgOptimizedImage,
     SuccessDialogComponent,
     AsyncPipe,
+    MatTooltipModule,
     NgFor,
     NgIf,
+    TextButtonDirective,
   ],
   templateUrl: './account-linking.page.html',
   styleUrl: './account-linking.page.scss',
@@ -81,8 +85,8 @@ export class AccountLinkingPage implements OnInit, OnDestroy {
   public linkedAccounts: Credential[] = [];
   public linkedAccountsIdp: IdentityProvider[] = [];
   public faAngleRight = faAngleRight;
-  public showInstructions:boolean=false;
-  public userIdentityProvider: string = ''
+  public showInstructions: boolean = false;
+  public userIdentityProvider: string = '';
   public showSucessBC: boolean = false;
   public showSucessHealth: boolean = false;
 
@@ -110,31 +114,28 @@ export class AccountLinkingPage implements OnInit, OnDestroy {
     this.credentials$ = this.resource.getCredentials(partyId);
   }
 
-public toggleInstructions(): void {
-  this.showInstructions= !this.showInstructions;
-}
-
+  public toggleInstructions(): void {
+    this.showInstructions = !this.showInstructions;
+  }
 
   public onLinkAccount(idpHint: IdentityProvider): void {
     const data: DialogOptions = {
-      // title: 'Account Linking',
-      // message: 'Your BCSC Hawkeye Pierce is about to be linked to hawkeyepierce@phsa.ca is this information correct ?',
       title: 'You will be redirected',
       bottomBorder: false,
       titlePosition: 'center',
       bodyTextPosition: 'center',
       component: HtmlComponent,
       data: {
-        content: 'You will need to sign in with the credentials of the account you want to link.',
+        content:
+          'You will need to sign in with the credentials of the account you want to link.',
       },
-      imageSrc: '../../../assets/images/online-marketing-hIgeoQjS_iE-unsplash.jpg',
+      imageSrc: '/assets/images/online-marketing-hIgeoQjS_iE-unsplash.jpg',
       imageType: 'banner',
       width: '31rem',
       height: '24rem',
-      actionText:'Continue',
+      actionText: 'Continue',
       actionTypePosition: 'center',
-      class: 'dialog-container'
-
+      class: 'dialog-container',
     };
     this.dialog
       .open(ConfirmDialogComponent, { data })
@@ -172,11 +173,7 @@ public toggleInstructions(): void {
     this.utilsService.scrollTop();
 
     this.handleLinkedAccounts();
-
-
   }
-
-
 
   public ngOnDestroy(): void {
     if (this.linkedAccounts$) {
@@ -206,9 +203,9 @@ public toggleInstructions(): void {
         linkedAccounts.forEach((linkedAccount) =>
           this.linkedAccountsIdp.push(linkedAccount.identityProvider),
         );
-        if(this.linkedAccountsIdp.length > 0){
+        if (this.linkedAccountsIdp.length > 0) {
           this.userIdentityProvider = this.linkedAccountsIdp[0];
-          if(this.userIdentityProvider === 'bcsc'){
+          if (this.userIdentityProvider === 'bcsc') {
             this.showSucessBC = true;
           } else {
             this.showSucessHealth = true;
@@ -240,6 +237,9 @@ public toggleInstructions(): void {
       );
   }
 
+  public onPageNavigate(url: string[]): void {
+    this.router.navigate(url);
+  }
   private navigateToRoot(): void {
     this.navigationService.navigateToRoot();
   }

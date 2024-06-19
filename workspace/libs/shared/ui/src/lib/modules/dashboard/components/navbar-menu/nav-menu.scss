@@ -51,6 +51,9 @@ h1 {
   .main-menu {
     float: right;
   }
+  .logo-link {
+    cursor: pointer;
+  }
 
   & .content {
     // Ensure the sidenav will stretch to fit vertically

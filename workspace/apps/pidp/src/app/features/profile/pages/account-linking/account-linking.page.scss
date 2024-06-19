@@ -103,6 +103,7 @@
           font-weight: 400;
           padding-top: 0;
           margin-bottom: 0;
+          line-height: 1.5;
         }
 
         a {
@@ -120,7 +121,7 @@
           align-items: center;
 
           span {
-            color: #2E8540;
+            color: #2e8540;
             font-size: 16px;
             font-weight: 700;
             margin-right: 5px;
@@ -241,7 +242,6 @@
         margin-top: 1.19rem;
       }
       .link-button {
-
         img {
           -webkit-transform: scaleX(-1);
           transform: scaleX(-1);
@@ -279,8 +279,8 @@
               -webkit-transform: none;
               transform: none;
               position: relative !important;
-              height: 45px ;
-              width: 175px ;
+              height: 45px;
+              width: 175px;
             }
 
             img.bcsc-logo {
@@ -429,6 +429,12 @@ div.viewport-xsmall {
         a {
           font-size: 0.9rem;
         }
+
+        .linked-success {
+          span {
+            font-size: 14px;
+          }
+        }
       }
 
       .card-header-icon .card-icon {
@@ -526,6 +532,11 @@ div.viewport-small {
 
         a {
           font-size: 0.9rem;
+        }
+        .linked-success {
+          span {
+            font-size: 14px;
+          }
         }
       }
 
@@ -675,6 +686,6 @@ div.viewport-large {
 
 ::ng-deep .dialog-container {
   mat-dialog-container {
-      padding: 0.5rem;
+    padding: 0.5rem;
   }
 }

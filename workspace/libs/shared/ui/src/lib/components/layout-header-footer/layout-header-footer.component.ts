@@ -1,10 +1,10 @@
 import { NgIf } from '@angular/common';
 import { Component, Input } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { InjectViewportCssClassDirective } from '../../directives/viewport-css.directive';
 import { PidpViewport, ViewportService } from '../../services';
 import { AnchorDirective } from '../anchor/anchor.directive';
-import { NavigationService } from '@pidp/presentation';
 
 @Component({
   selector: 'ui-layout-header-footer',
@@ -17,15 +17,17 @@ export class LayoutHeaderFooterComponent {
   @Input() public emailSupport!: string;
   public isMobile = true;
 
-  public constructor(viewportService: ViewportService,
-    private navigationService: NavigationService) {
+  public constructor(
+    viewportService: ViewportService,
+    private router: Router,
+  ) {
     viewportService.viewportBroadcast$.subscribe((viewport) =>
       this.onViewportChange(viewport),
     );
   }
 
   public navigateToRoot(): void {
-    this.navigationService.navigateToRoot();
+    this.router.navigateByUrl('/');
   }
 
   private onViewportChange(viewport: PidpViewport): void {
