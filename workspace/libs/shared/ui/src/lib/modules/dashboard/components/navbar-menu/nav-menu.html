@@ -16,23 +16,31 @@
       </div>
     </div>
     <div class="content-body">
-        <router-outlet></router-outlet>
+      <router-outlet></router-outlet>
     </div>
   </div>
   <ng-template #menu>
-    <a class="logo-link" (click)="navigateToRoot()" title="Home" aria-label="Go home">
+    <a
+      class="logo-link"
+      title="Home"
+      aria-label="Go home"
+      (click)="navigateToRoot()">
       <span class="span-text">OneHealthID</span></a
     >
     <div class="main-menu">
-      <a
-      class="main-menu-item"
-      >
+      <a class="main-menu-item">
         <div class="dropdown">
-          <a >Profile</a>
+          <a>Profile</a>
           <div class="dropdown-content">
-            <a href="portal#profile">Personal Info</a>
-            <a href="/profile/college-licence-declaration">College License</a>
-            <a href="portal#access">User Access</a>
+            <a (click)="navigateTo('/profile/personal-information')"
+              >Personal Info</a
+            >
+            <a (click)="navigateTo(dashboardState.collegeRoute)"
+              >College License</a
+            >
+            <a (click)="navigateTo('/profile/user-access-agreement')"
+              >User Access</a
+            >
           </div>
         </div>
       </a>

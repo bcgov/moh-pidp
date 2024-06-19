@@ -18,6 +18,7 @@ import {
 import { MatTooltipModule } from '@angular/material/tooltip';
 import {
   IsActiveMatchOptions,
+  Router,
   RouterLink,
   RouterLinkActive,
   RouterOutlet,
@@ -26,7 +27,6 @@ import {
 import { DashboardStateModel } from '@pidp/data-model';
 
 import { RoutePath } from '@bcgov/shared/utils';
-import { NavigationService } from '@pidp/presentation';
 
 import { LayoutHeaderFooterComponent } from '../../../../components/layout-header-footer/layout-header-footer.component';
 import { InjectViewportCssClassDirective } from '../../../../directives/viewport-css.directive';
@@ -87,7 +87,14 @@ export class NavMenuComponent implements OnChanges {
     return !!this.dashboardState.titleDescriptionText;
   }
 
-  public constructor(private viewportService: ViewportService, private navigationService: NavigationService) {
+  public get collegeRoute(): boolean {
+    return !!this.dashboardState.collegeRoute;
+  }
+
+  public constructor(
+    private viewportService: ViewportService,
+    private router: Router,
+  ) {
     this.viewportService.viewportBroadcast$.subscribe((viewport) =>
       this.onViewportChange(viewport),
     );
@@ -100,14 +107,18 @@ export class NavMenuComponent implements OnChanges {
     this.isSidenavOpened = !this.isSidenavOpened;
   }
   public navigateToRoot(): void {
-    this.navigationService.navigateToRoot();
+    this.router.navigateByUrl('/');
+  }
+
+  public navigateTo(route: string): void {
+    this.router.navigateByUrl(route);
   }
 
   public getRouterLink(
     item: DashboardMenuItem | string,
   ): RoutePath | undefined {
     if (item instanceof DashboardRouteMenuItem) {
-      const routeItem: DashboardRouteMenuItem = item ;
+      const routeItem: DashboardRouteMenuItem = item;
       return routeItem.commands;
     }
     return undefined;
@@ -118,7 +129,7 @@ export class NavMenuComponent implements OnChanges {
       }
     | IsActiveMatchOptions {
     if (item instanceof DashboardRouteMenuItem) {
-      const routeItem:DashboardRouteMenuItem = item ;
+      const routeItem: DashboardRouteMenuItem = item;
       return routeItem.linkActiveOptions;
     }
     throw new Error('getRouterLinkActiveOptions: not implemented');
