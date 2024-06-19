@@ -59,6 +59,6 @@ export class PortalPage {
   }
 
   public navigateToAccessPage(): void {
-    this.router.navigateByUrl(AccessRoutes.BASE_PATH);
+    this.router.navigateByUrl(AccessRoutes.routePath(AccessRoutes.ACCESS_REQUESTS));
   }
 }

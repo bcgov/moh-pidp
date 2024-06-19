@@ -66,13 +66,6 @@ export const routes: Routes = [
           import('../profile/profile.routes').then((m) => m.routes),
       },
       {
-        path: AccessRoutes.BASE_PATH,
-        loadChildren: (): Promise<Routes> =>
-          import('../access/components/access-request-page/access-request-page-routing.routes').then(
-            (m) => m.routes,
-          ),
-      },
-      {
         path: OrganizationInfoRoutes.BASE_PATH,
         resolve: {
           hasCompletedWizard: wizardResolver,
@@ -101,6 +94,14 @@ export const routes: Routes = [
         },
         loadChildren: (): Promise<Routes> =>
           import('../history/history-routing.routes').then((m) => m.routes),
+      },
+      {
+        path: AccessRoutes.BASE_PATH,
+        resolve: {
+          hasCompletedWizard: wizardResolver,
+        },
+        loadChildren: (): Promise<Routes> =>
+          import('../access/access-routing.routes').then((m) => m.routes),
       },
       {
         path: FaqRoutes.BASE_PATH,

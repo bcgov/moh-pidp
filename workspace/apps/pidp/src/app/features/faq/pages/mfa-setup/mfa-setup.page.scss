@@ -56,4 +56,66 @@ h2 {
   &.mfa-setup-page {
     padding: 1.25rem 0.75rem;
   }
+
+  .back-to-top-container {
+    position: fixed;
+    bottom: 70px;
+    right: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .back-to-top {
+    background-color: #38598A;
+    color: #FFFFFF;
+    width: 40PX;
+    height: 40PX;
+    border-radius: 50%;
+    text-align: center;
+    cursor: pointer;
+  }
+
+  .back-to-top-text {
+    color: #38598A;
+    font-size: 13px;
+    word-wrap: break-word
+  }
+
+  .back-to-top:hover {
+    background-color: #003366;
+  }
+
 }
+
+
+.viewport-small {
+  .back-to-top {
+    width: 30PX;
+    height: 30PX;
+  }
+
+  .back-to-top-text {
+    font-size: 9px;
+  }
+
+  .back-to-top-container {
+    bottom: 70px;
+  }
+}
+
+.viewport-xsmall {
+  .back-to-top {
+    width: 30PX;
+    height: 30PX;
+  }
+
+  .back-to-top-text {
+    font-size: 9px;
+  }
+
+  .back-to-top-container {
+    bottom: 135px;
+  }
+}
+

@@ -99,7 +99,7 @@ export class PortalDashboardComponent implements IDashboard, OnInit {
       new DashboardRouteMenuItem(
         'Access',
         {
-          commands:AccessRoutes.BASE_PATH,
+          commands:[AccessRoutes.BASE_PATH,AccessRoutes.ACCESS_REQUESTS],
           linkActiveOptions,
         },
         'assignment',

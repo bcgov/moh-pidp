@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, signal } from '@angular/core';
+import { Component, HostListener, Inject, OnInit, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { ActivatedRoute, Router } from '@angular/router';
 import {MatExpansionModule} from '@angular/material/expansion';
@@ -16,9 +16,11 @@ import {
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';
 import { UtilsService } from '@app/core/services/utils.service';
-import { faAngleRight } from '@fortawesome/free-solid-svg-icons';
+import { faAngleRight, faArrowUp } from '@fortawesome/free-solid-svg-icons';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FaqRoutes } from '../../faq.routes';
+import { Constants } from '@app/shared/constants';
+import { NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-help',
@@ -30,6 +32,7 @@ import { FaqRoutes } from '../../faq.routes';
     FaIconComponent,
     MatButtonModule,
     MatExpansionModule,
+    NgIf,
     PageComponent,
     PageFooterActionDirective,
     PageFooterComponent,
@@ -42,6 +45,8 @@ import { FaqRoutes } from '../../faq.routes';
 export class HelpPage implements OnInit {
   public providerIdentitySupport: string;
   public readonly panelOpenState = signal(false);
+  public showBackToTopButton: boolean = false;
+  public faArrowUp = faArrowUp;
   public faAngleRight = faAngleRight;
 
   public constructor(
@@ -52,6 +57,16 @@ export class HelpPage implements OnInit {
   ) {
     this.providerIdentitySupport = this.config.emails.providerIdentitySupport;
   }
+
+  @HostListener('window:scroll', [])
+  public onWindowScroll(): void {
+     const scrollPosition = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop || 0;
+     this.showBackToTopButton = scrollPosition > Constants.scrollThreshold;
+   }
+
+ public  scrollToTop(): void {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
 
   public onBack(): void {
     this.navigateToRoot();

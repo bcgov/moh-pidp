@@ -344,4 +344,11 @@
       </div>
     </div>
   </section>
+
+  <div class="back-to-top-container">
+    <button class="back-to-top" (click)="scrollToTop()" *ngIf="showBackToTopButton">
+      <fa-icon [icon]="faArrowUp"></fa-icon>
+    </button>
+    <div class="back-to-top-text" *ngIf="showBackToTopButton">Back to top</div>
+  </div>
 </div>
