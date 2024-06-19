@@ -39,7 +39,7 @@ export class MockProfileStatus {
         providerReportingPortal: { statusCode: StatusCode.AVAILABLE },
         'provider-reporting-portal': { statusCode: StatusCode.AVAILABLE },
         complianceTraining: { statusCode: StatusCode.AVAILABLE },
-        primaryCareRostering: { statusCode: StatusCode.AVAILABLE },
+        provincialAttachmentSystem: { statusCode: StatusCode.AVAILABLE },
         immsBCEforms: { statusCode: StatusCode.AVAILABLE },
       },
     };
