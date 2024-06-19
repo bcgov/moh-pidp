@@ -71,6 +71,7 @@ export class LinkAccountConfirmPage implements OnInit {
     this.user$
       .pipe(
         switchMap((user) => {
+          const accountName = user.email ? `account ${user.email}` : 'account';
           this.userIdentityProvider = user.identityProvider;
           this.showSucessBC =  this.userIdentityProvider === 'bcsc' || this.showSucessBC ? true : false;
           this.showSucessHealth =  this.userIdentityProvider !== 'bcsc' || this.showSucessHealth ? true : false;
@@ -81,7 +82,7 @@ export class LinkAccountConfirmPage implements OnInit {
             bodyTextPosition: 'center',
             component: HtmlComponent,
             data: {
-              content: `Your ${user.email} is about to be linked to
+              content: `Your ${accountName} is about to be linked to
               ${user.identityProvider === 'bcsc' ? 'BCSC' : ''}
               ${user.firstName} ${user.lastName} is this information correct?`,
             },
