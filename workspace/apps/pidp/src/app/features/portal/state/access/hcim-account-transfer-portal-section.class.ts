@@ -2,6 +2,9 @@ import { Router } from '@angular/router';
 
 import { Observable } from 'rxjs';
 
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
+import { faArrowsRotate, faUserCheck } from '@fortawesome/free-solid-svg-icons';
+
 import { AlertType } from '@bcgov/shared/ui';
 
 import { AccessRoutes } from '@app/features/access/access.routes';
@@ -17,6 +20,8 @@ export class HcimAccountTransferPortalSection implements IPortalSection {
   public readonly key: PortalSectionKey;
   public heading: string;
   public description: string;
+  public faArrowsRotate = faArrowsRotate;
+  public faUserCheck = faUserCheck;
 
   public constructor(
     private profileStatus: ProfileStatus,
@@ -55,6 +60,11 @@ export class HcimAccountTransferPortalSection implements IPortalSection {
       : statusCode === StatusCode.COMPLETED
         ? 'Completed'
         : 'Incomplete';
+  }
+
+  public get icon(): IconProp {
+    const statusCode = this.getStatusCode();
+    return statusCode === StatusCode.COMPLETED ? faUserCheck : faArrowsRotate;
   }
 
   public performAction(): void | Observable<void> {
