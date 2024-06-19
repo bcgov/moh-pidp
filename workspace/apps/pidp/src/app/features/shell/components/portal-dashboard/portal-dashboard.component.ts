@@ -22,6 +22,7 @@ import { PortalRoutes } from '@app/features/portal/portal.routes';
 import { PermissionsService } from '@app/modules/permissions/permissions.service';
 
 import { DashboardStateService } from '../../services/dashboard-state-service.service';
+import { AccessRoutes } from '@app/features/access/access.routes';
 
 @Component({
   selector: 'app-portal-dashboard',
@@ -98,8 +99,7 @@ export class PortalDashboardComponent implements IDashboard, OnInit {
       new DashboardRouteMenuItem(
         'Access',
         {
-          commands: PortalRoutes.BASE_PATH,
-          extras: { fragment: 'access' },
+          commands:AccessRoutes.BASE_PATH,
           linkActiveOptions,
         },
         'assignment',
