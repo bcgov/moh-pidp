@@ -100,7 +100,9 @@
                 alt="check circle" />
             </div>
             <ng-template #linkBCSC
-              ><a (click)="onLinkAccount(IdentityProvider.BCSC)"
+              ><a
+                *ngIf="!hasCredential(IdentityProvider.IDIR)"
+                (click)="onLinkAccount(IdentityProvider.BCSC)"
                 >Link Account</a
               ></ng-template
             >
@@ -124,7 +126,9 @@
                 alt="check circle" />
             </div>
             <ng-template #linkBCProvider
-              ><a (click)="onPageNavigate(['/access/bc-provider-edit'])"
+              ><a
+                *ngIf="(identityProvider$ | async) === IdentityProvider.BCSC"
+                (click)="onPageNavigate(['/access/bc-provider-application'])"
                 >Link Account</a
               ></ng-template
             >
@@ -153,7 +157,9 @@
                 alt="check circle" />
             </div>
             <ng-template #linkPHSA
-              ><a (click)="onLinkAccount(IdentityProvider.PHSA)"
+              ><a
+                *ngIf="!hasCredential(IdentityProvider.IDIR)"
+                (click)="onLinkAccount(IdentityProvider.PHSA)"
                 >Link Account</a
               ></ng-template
             >
