@@ -1,7 +1,7 @@
 <div class="container help-page-container" uiPidpInjectViewportCss>
   <nav class="breadcrumb">
     <ul>
-      <li><a href='/'>Home</a></li>
+      <li><a (click)="onBack()">Home</a></li>
       <li> <fa-icon [icon]="faAngleRight" class="fa-duotone"></fa-icon> </li>
       <li> <a class="active">Active Page</a></li>
     </ul>
@@ -265,7 +265,7 @@
           Choose a category to the right, and email us directly.
         </p>
         <p class="additional-text">Additional support:</p>
-        <p>
+        <p class="additional-text">
           <img
             class="icon-call"
             src="/assets/images/icon-call.svg"

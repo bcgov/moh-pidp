@@ -132,7 +132,7 @@ public toggleInstructions(): void {
 }
 
 
-public onLinkAccount(idpHint: IdentityProvider): void {
+public onLinkAccount(): void {
     const data: DialogOptions = {
       // title: 'Account Linking',
       // message: 'Your BCSC Hawkeye Pierce is about to be linked to hawkeyepierce@phsa.ca is this information correct ?',

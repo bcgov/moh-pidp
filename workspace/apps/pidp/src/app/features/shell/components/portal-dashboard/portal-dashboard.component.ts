@@ -18,7 +18,6 @@ import {
 import { APP_CONFIG, AppConfig } from '@app/app.config';
 import { AccessTokenService } from '@app/features/auth/services/access-token.service';
 import { AuthService } from '@app/features/auth/services/auth.service';
-import { PortalRoutes } from '@app/features/portal/portal.routes';
 import { PermissionsService } from '@app/modules/permissions/permissions.service';
 
 import { DashboardStateService } from '../../services/dashboard-state-service.service';

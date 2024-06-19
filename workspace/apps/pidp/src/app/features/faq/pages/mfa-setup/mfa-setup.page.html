@@ -1,9 +1,9 @@
 <div class="container mfa-setup-page" uiPidpInjectViewportCss>
   <nav class="breadcrumb">
     <ul>
-      <li><a href='/'>Home</a></li>
+      <li><a (click)="onBack()">Home</a></li>
       <li> <fa-icon [icon]="faAngleRight" class="fa-duotone"></fa-icon> </li>
-      <li> <a href="help">Previous Page</a></li>
+      <li> <a (click)="onPageNavigate(['/help'])">Previous Page</a></li>
       <li> <fa-icon [icon]="faAngleRight" class="fa-duotone"></fa-icon> </li>
       <li> <a class="active">Active Page</a></li>
     </ul>
@@ -17,7 +17,7 @@
       logged into OneHealthID services and created a BCProvider. If you have not
       yet created a BCProvider, please do so first by accessing the BCProvider
       account under
-      <a uiAnchor scheme="url" href="/portal#access"> Access to Systems</a>.
+      <a uiAnchor scheme="url" class="link" (click)="onPageNavigate(['/access/access-requests'])"> Access to Systems</a>.
     </p>
     <p>
       After you have created your BCProvider, you have to link it to your phone
@@ -421,17 +421,6 @@
       <li>Return to step 15 in the guide.</li>
     </ol>
   </ui-page-section>
-
-  <ui-page-footer mode="reverse">
-    <button
-      mat-stroked-button
-      uiPageFooterAction
-      color="primary"
-      type="button"
-      (click)="onBack()">
-      Back Home
-    </button>
-  </ui-page-footer>
 </ui-page>
 
 <div class="back-to-top-container">

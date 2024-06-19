@@ -68,6 +68,9 @@ export class MfaSetupPage implements OnInit {
   public onBack(): void {
     this.navigateToRoot();
   }
+  public onPageNavigate(url: string[]): void {
+      this.router.navigate(url);
+  }
 
   public ngOnInit(): void {
     this.utilsService.scrollTop();

@@ -30,6 +30,7 @@
 .viewport-all {
   --card-padding: calc(1 * var(--gap));
   --font-size-small: var(--font-size);
+    padding: 1.25rem 0.75rem;
 }
 
 .viewport-small .viewport-medium,

@@ -26,6 +26,7 @@ import {
 import { DashboardStateModel } from '@pidp/data-model';
 
 import { RoutePath } from '@bcgov/shared/utils';
+import { NavigationService } from '@pidp/presentation';
 
 import { LayoutHeaderFooterComponent } from '../../../../components/layout-header-footer/layout-header-footer.component';
 import { InjectViewportCssClassDirective } from '../../../../directives/viewport-css.directive';
@@ -86,7 +87,7 @@ export class NavMenuComponent implements OnChanges {
     return !!this.dashboardState.titleDescriptionText;
   }
 
-  public constructor(private viewportService: ViewportService) {
+  public constructor(private viewportService: ViewportService, private navigationService: NavigationService) {
     this.viewportService.viewportBroadcast$.subscribe((viewport) =>
       this.onViewportChange(viewport),
     );
@@ -97,6 +98,9 @@ export class NavMenuComponent implements OnChanges {
   public onMiniMenuButtonClick(): void {
     // Toggle display of the sidenav.
     this.isSidenavOpened = !this.isSidenavOpened;
+  }
+  public navigateToRoot(): void {
+    this.navigationService.navigateToRoot();
   }
 
   public getRouterLink(

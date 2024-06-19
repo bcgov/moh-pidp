@@ -1,9 +1,7 @@
 <div class="container-box" uiPidpInjectViewportCss>
   <nav class="breadcrumb">
     <ul>
-      <li><a href='/'>Home</a></li>
-      <li> <fa-icon [icon]="faAngleRight" class="fa-duotone"></fa-icon> </li>
-      <li> <a href="access">Previous Page</a></li>
+      <li><a (click)="onBack()">Home</a></li>
       <li> <fa-icon [icon]="faAngleRight" class="fa-duotone"></fa-icon> </li>
       <li> <a class="active">Active Page</a></li>
     </ul>
@@ -62,7 +60,7 @@
             </div>
             <h2>BC Services Card</h2>
             <p>Access to government services for B.C. residents</p>
-            <a *ngIf="userIdentityProvider !== 'bcsc'" (click)="onLinkAccount(IdentityProvider.BCSC)">Link Account</a>
+            <a *ngIf="userIdentityProvider !== 'bcsc'" (click)="onLinkAccount()">Link Account</a>
             <div *ngIf="showSucessBC" class="linked-success"><span>1 Account Linked</span> <img src="/assets/images/icons/icon-check-circle.svg" alt="check circle"></div>
           </div>
           <div class="bc-provider card-styles">
@@ -85,7 +83,7 @@
           </div>
           <h2>Health Authority</h2>
           <p>Healthcare professional network account that is tied to the health authority</p>
-          <a  *ngIf="userIdentityProvider === 'bcsc'" (click)="onLinkAccount(IdentityProvider.PHSA)">Link Account</a>
+          <a  *ngIf="userIdentityProvider === 'bcsc'" (click)="onLinkAccount()">Link Account</a>
           <div *ngIf="showSucessHealth" class="linked-success"><span>1 Account Linked</span> <img src="/assets/images/icons/icon-check-circle.svg" alt="check circle"></div>
         </div>
 

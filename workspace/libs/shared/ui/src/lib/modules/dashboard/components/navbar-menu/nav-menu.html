@@ -20,7 +20,7 @@
     </div>
   </div>
   <ng-template #menu>
-    <a class="logo-link" href="." title="Home" aria-label="Go home">
+    <a class="logo-link" (click)="navigateToRoot()" title="Home" aria-label="Go home">
       <span class="span-text">OneHealthID</span></a
     >
     <div class="main-menu">
