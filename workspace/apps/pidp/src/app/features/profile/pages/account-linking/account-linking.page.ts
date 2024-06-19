@@ -36,6 +36,7 @@ import {
   DialogOptions,
   HtmlComponent,
   InjectViewportCssClassDirective,
+  TextButtonDirective,
 } from '@bcgov/shared/ui';
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';
@@ -68,6 +69,7 @@ import { Credential } from './account-linking.model';
     MatTooltipModule,
     NgFor,
     NgIf,
+    TextButtonDirective,
   ],
   templateUrl: './account-linking.page.html',
   styleUrl: './account-linking.page.scss',
