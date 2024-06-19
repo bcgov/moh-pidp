@@ -2,8 +2,8 @@
   <nav class="breadcrumb">
     <ul>
       <li><a (click)="onBack()">Home</a></li>
-      <li> <fa-icon [icon]="faAngleRight" class="fa-duotone"></fa-icon> </li>
-      <li> <a class="active">Active Page</a></li>
+      <li><fa-icon class="fa-duotone" [icon]="faAngleRight"></fa-icon></li>
+      <li><a class="active">Active Page</a></li>
     </ul>
   </nav>
   <div class="content-box">
@@ -14,96 +14,149 @@
       <section class="link-intro">
         <div class="link-intro-text">
           <p class="large">
-            Account linking is a step to enabling a Single Sign On (SSO) experience by associating multiple,
-            high-assurance accounts to the OneHealthID BCProvider account.<br> This furthers the options for reducing
-            the number of accounts for access to  health systems.
+            Account linking is a step to enabling a Single Sign On (SSO)
+            experience by associating multiple, high-assurance accounts to the
+            OneHealthID BCProvider account.<br />
+            This furthers the options for reducing the number of accounts for
+            access to  health systems.
           </p>
-          <ul class="option-text"><b>You will now have the option, where supported, to use</b>
+          <ul class="option-text">
+            <b>You will now have the option, where supported, to use</b>
             <li>Your BCProvider account to login to multiple health systems</li>
-            <li>Your organization account to login to health systems instead of using your BC Services Card app</li>
+            <li>
+              Your organization account to login to health systems instead of
+              using your BC Services Card app
+            </li>
           </ul>
         </div>
       </section>
 
       <section class="cards link-main">
-        <div class="card instructions-card-layout" [class.instructions-card]="!showInstructions">
+        <div
+          class="card instructions-card-layout"
+          [class.instructions-card]="!showInstructions">
           <div *ngIf="!showInstructions">
-          <h2>Procedure for linking an account</h2>
-          <p>Choose the available account displayed to the right to start the quick process </p>
-        </div>
-        <div class="instructions-container"  *ngIf="showInstructions">
-          <h2>How to link an account</h2>
-          <ol type="1">
-            <li class="list-item">Click the Link button.</li>
-            <li class="list-item"><b>For PHSA accounts</b></li>
-            <ul class="sublist">
-              <li class="list-item"> {{"Select login with PHSA account (username@phsa.ca)"}}</li>
-            </ul>
-            <li class="list-item"><b>For BC Services Card accounts</b></li>
-            <ul class="sublist">
-              <li class="list-item"> Select login with BC Services Card app.</li>
-            </ul>
-            <li class="list-item">Confirm login with your mobile device.</li>
-            <li class="list-item">Confirm account linking in OneHealthID.</li>
-          </ol>
-        </div>
-          <button [class.instructions-text]="!showInstructions" (click)="toggleInstructions()">{{!showInstructions ? 'Instructions' : 'Back'}}</button>
+            <h2>Procedure for linking an account</h2>
+            <p>
+              Choose the available account displayed to the right to start the
+              quick process
+            </p>
+          </div>
+          <div *ngIf="showInstructions" class="instructions-container">
+            <h2>How to link an account</h2>
+            <ol type="1">
+              <li class="list-item">Click the Link button.</li>
+              <li class="list-item"><b>For PHSA accounts</b></li>
+              <ul class="sublist">
+                <li class="list-item">
+                  {{"Select login with PHSA account (username@phsa.ca)"}}
+                </li>
+              </ul>
+              <li class="list-item"><b>For BC Services Card accounts</b></li>
+              <ul class="sublist">
+                <li class="list-item">
+                  Select login with BC Services Card app.
+                </li>
+              </ul>
+              <li class="list-item">Confirm login with your mobile device.</li>
+              <li class="list-item">Confirm account linking in OneHealthID.</li>
+            </ol>
+          </div>
+          <button
+            [class.instructions-text]="!showInstructions"
+            (click)="toggleInstructions()">
+            {{!showInstructions ? 'Instructions' : 'Back'}}
+          </button>
         </div>
 
         <div class="second-column-cards">
           <div class="bc-service card-styles">
             <div class="card-header-icon">
               <div class="card-icon">
-                <img src="/assets/images/icons/landscape.svg" alt="landscape">
+                <img src="/assets/images/icons/landscape.svg" alt="landscape" />
               </div>
-            <a (click)="tooltip.show()"
-            #tooltip="matTooltip"
-           matTooltip="You are currently signed in with your BC Services Card, you can not link another card at this time." aria-label="Button that displays a tooltip when focused or hovered over">
-              <img class="lock-icon" data-bs-toggle="modal" data-bs-target="#lockModal" src="/assets/images/icons/light-lock.svg"
-                alt="lock">
-            </a>
+              <a
+                #tooltip="matTooltip"
+                matTooltip="You are currently signed in with your BC Services Card, you can not link another card at this time."
+                aria-label="Button that displays a tooltip when focused or hovered over"
+                (click)="tooltip.show()">
+                <img
+                  class="lock-icon"
+                  data-bs-toggle="modal"
+                  data-bs-target="#lockModal"
+                  src="/assets/images/icons/light-lock.svg"
+                  alt="lock" />
+              </a>
             </div>
             <h2>BC Services Card</h2>
             <p>Access to government services for B.C. residents</p>
-            <a *ngIf="userIdentityProvider !== 'bcsc'" (click)="onLinkAccount(IdentityProvider.BCSC)">Link Account</a>
-            <div *ngIf="showSucessBC" class="linked-success"><span>1 Account Linked</span> <img src="/assets/images/icons/icon-check-circle.svg" alt="check circle"></div>
+            <a
+              *ngIf="userIdentityProvider !== 'bcsc'"
+              (click)="onLinkAccount(IdentityProvider.BCSC)"
+              >Link Account</a
+            >
+            <div *ngIf="showSucessBC" class="linked-success">
+              <span>1 Account Linked</span>
+              <img
+                src="/assets/images/icons/icon-check-circle.svg"
+                alt="check circle" />
+            </div>
           </div>
           <div class="bc-provider card-styles">
             <div class="card-header-icon">
               <div class="card-icon">
-                <img src="/assets/images/icons/perm-contact-calendar.svg" alt="contact">
+                <img
+                  src="/assets/images/icons/perm-contact-calendar.svg"
+                  alt="contact" />
               </div>
             </div>
             <h2>BC Provider</h2>
             <p>Access a growing number of provincial health applications</p>
-            <a (click)="onPageNavigate(['/access/bc-provider-edit'])">Link Account</a>
+            <a (click)="onPageNavigate(['/access/bc-provider-edit'])"
+              >Link Account</a
+            >
           </div>
         </div>
         <div class="third-column-cards">
-        <div class="health-authority card-styles">
-          <div class="card-header-icon">
-            <div class="card-icon">
-              <img src="/assets/images/icons/health-safety.svg" alt="healthSafety">
+          <div class="health-authority card-styles">
+            <div class="card-header-icon">
+              <div class="card-icon">
+                <img
+                  src="/assets/images/icons/health-safety.svg"
+                  alt="healthSafety" />
+              </div>
+            </div>
+            <h2>Health Authority</h2>
+            <p>
+              Healthcare professional network account that is tied to the health
+              authority
+            </p>
+            <a
+              *ngIf="userIdentityProvider === 'bcsc'"
+              (click)="onLinkAccount(IdentityProvider.PHSA)"
+              >Link Account</a
+            >
+            <div *ngIf="showSucessHealth" class="linked-success">
+              <span>1 Account Linked</span>
+              <img
+                src="/assets/images/icons/icon-check-circle.svg"
+                alt="check circle" />
             </div>
           </div>
-          <h2>Health Authority</h2>
-          <p>Healthcare professional network account that is tied to the health authority</p>
-          <a  *ngIf="userIdentityProvider === 'bcsc'" (click)="onLinkAccount(IdentityProvider.PHSA)">Link Account</a>
-          <div *ngIf="showSucessHealth" class="linked-success"><span>1 Account Linked</span> <img src="/assets/images/icons/icon-check-circle.svg" alt="check circle"></div>
-         </div>
 
-        <div class="idir-account card-styles">
-          <div class="card-header-icon">
-            <div class="card-icon">
-              <img src="/assets/images/icons/credit-card.svg" alt="creditcard">
+          <div class="idir-account card-styles">
+            <div class="card-header-icon">
+              <div class="card-icon">
+                <img
+                  src="/assets/images/icons/credit-card.svg"
+                  alt="creditcard" />
+              </div>
             </div>
+            <h2>IDIR account</h2>
+            <p>Used by people who work in the B.C. public sector</p>
+            <p>Available soon!</p>
           </div>
-          <h2>IDIR account</h2>
-          <p>Used by people who work in the B.C. public sector</p>
-          <p>Available soon!</p>
         </div>
-        </div>
-
       </section>
     </div>
   </div>
