@@ -14,13 +14,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 import {
   EMPTY,
   Observable,
-  Subscription,
+  Subject,
   catchError,
-  combineLatest,
   exhaustMap,
-  map,
   of,
   switchMap,
+  takeUntil,
 } from 'rxjs';
 
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
@@ -81,14 +80,11 @@ export class AccountLinkingPage implements OnInit, OnDestroy {
   public identityProvider$: Observable<IdentityProvider>;
   public IdentityProvider = IdentityProvider;
   public credentials$: Observable<Credential[]>;
-  public linkedAccounts$?: Subscription;
-  public linkedAccounts: Credential[] = [];
+  public credentials: Credential[] = [];
   public linkedAccountsIdp: IdentityProvider[] = [];
   public faAngleRight = faAngleRight;
   public showInstructions: boolean = false;
-  public userIdentityProvider: string = '';
-  public showSucessBC: boolean = false;
-  public showSucessHealth: boolean = false;
+  private unsubscribe$ = new Subject<void>();
 
   public constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
@@ -154,6 +150,10 @@ export class AccountLinkingPage implements OnInit, OnDestroy {
     return linkedAccountCardText[idp] ?? '';
   }
 
+  public hasCredential(idp: IdentityProvider): boolean {
+    return this.credentials.some((c) => c.identityProvider === idp);
+  }
+
   public ngOnInit(): void {
     const partyId = this.partyService.partyId;
 
@@ -176,41 +176,15 @@ export class AccountLinkingPage implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy(): void {
-    if (this.linkedAccounts$) {
-      this.linkedAccounts$.unsubscribe();
-    }
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 
   private handleLinkedAccounts(): void {
-    this.linkedAccounts$ = combineLatest([
-      this.identityProvider$,
-      this.credentials$,
-    ])
-      .pipe(
-        map(([identityProvider, credentials]) => {
-          return credentials.filter(
-            //TODO when we add IdpId to the Credential, also filter out by IdpId
-            // so that we filter out the credential that the user is currently logged in with
-            (credential) => credential.identityProvider === identityProvider,
-          );
-        }),
-      )
-      .subscribe((linkedAccounts) => {
-        if (!linkedAccounts) {
-          return;
-        }
-        this.linkedAccounts = linkedAccounts;
-        linkedAccounts.forEach((linkedAccount) =>
-          this.linkedAccountsIdp.push(linkedAccount.identityProvider),
-        );
-        if (this.linkedAccountsIdp.length > 0) {
-          this.userIdentityProvider = this.linkedAccountsIdp[0];
-          if (this.userIdentityProvider === 'bcsc') {
-            this.showSucessBC = true;
-          } else {
-            this.showSucessHealth = true;
-          }
-        }
+    this.credentials$
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((credentials) => {
+        this.credentials = credentials;
       });
   }
 
