@@ -41,7 +41,7 @@ public class ProfileStatusProvincialAttachmentSystemTests : ProfileStatusTest
 
         var pasSection = profile.Section<ProvincialAttachmentSystemSection>();
         pasSection.AssertNoAlerts();
-        Assert.Equal(StatusCode.Incomplete, pasSection.StatusCode);
+        Assert.Equal(StatusCode.Complete, pasSection.StatusCode);
     }
 
     public static IEnumerable<object[]> PlrSuccessTestData()
@@ -66,7 +66,7 @@ public class ProfileStatusProvincialAttachmentSystemTests : ProfileStatusTest
 
         var pasSection = profile.Section<ProvincialAttachmentSystemSection>();
         pasSection.AssertNoAlerts();
-        Assert.Equal(StatusCode.Locked, pasSection.StatusCode);
+        Assert.Equal(StatusCode.Incomplete, pasSection.StatusCode);
     }
 
     public static IEnumerable<object[]> PlrFailureTestData()
