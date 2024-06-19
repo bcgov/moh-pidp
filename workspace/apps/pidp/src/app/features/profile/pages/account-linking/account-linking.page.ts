@@ -52,6 +52,7 @@ import { linkedAccountCardText } from './account-linking.constants';
 import { Credential } from './account-linking.model';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { faAngleRight } from '@fortawesome/free-solid-svg-icons';
+import {MatTooltipModule} from '@angular/material/tooltip'
 
 @Component({
   selector: 'app-account-linking',
@@ -64,6 +65,7 @@ import { faAngleRight } from '@fortawesome/free-solid-svg-icons';
     NgOptimizedImage,
     SuccessDialogComponent,
     AsyncPipe,
+    MatTooltipModule,
     NgFor,
     NgIf,
   ],
@@ -240,6 +242,9 @@ public toggleInstructions(): void {
       );
   }
 
+  public onPageNavigate(url: string[]): void {
+    this.router.navigate(url);
+}
   private navigateToRoot(): void {
     this.navigationService.navigateToRoot();
   }

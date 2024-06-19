@@ -56,7 +56,12 @@
               <div class="card-icon">
                 <img src="/assets/images/icons/landscape.svg" alt="landscape">
               </div>
-              <img class="lock-icon" data-bs-toggle="modal" data-bs-target="#lockModal" src="/assets/images/icons/light-lock.svg" alt="lock">
+            <a (click)="tooltip.show()"
+            #tooltip="matTooltip"
+           matTooltip="You are currently signed in with your BC Services Card, you can not link another card at this time." aria-label="Button that displays a tooltip when focused or hovered over">
+              <img class="lock-icon" data-bs-toggle="modal" data-bs-target="#lockModal" src="/assets/images/icons/light-lock.svg"
+                alt="lock">
+            </a>
             </div>
             <h2>BC Services Card</h2>
             <p>Access to government services for B.C. residents</p>
@@ -71,7 +76,7 @@
             </div>
             <h2>BC Provider</h2>
             <p>Access a growing number of provincial health applications</p>
-              <p>Available soon!</p>
+            <a (click)="onPageNavigate(['/access/bc-provider-edit'])">Link Account</a>
           </div>
         </div>
         <div class="third-column-cards">
