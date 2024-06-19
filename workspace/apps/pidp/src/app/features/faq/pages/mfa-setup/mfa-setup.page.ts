@@ -15,6 +15,8 @@ import {
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';
 import { UtilsService } from '@app/core/services/utils.service';
+import { faAngleRight } from '@fortawesome/free-solid-svg-icons';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 
 @Component({
   selector: 'app-mfa-setup',
@@ -23,6 +25,7 @@ import { UtilsService } from '@app/core/services/utils.service';
   standalone: true,
   imports: [
     AnchorDirective,
+    FaIconComponent,
     MatButtonModule,
     PageComponent,
     PageFooterActionDirective,
@@ -35,6 +38,7 @@ import { UtilsService } from '@app/core/services/utils.service';
 })
 export class MfaSetupPage implements OnInit {
   public providerIdentitySupport: string;
+  public faAngleRight = faAngleRight;
 
   public constructor(
     @Inject(APP_CONFIG) private config: AppConfig,

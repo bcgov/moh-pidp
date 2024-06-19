@@ -1,3 +1,30 @@
+.breadcrumb ul {
+  list-style: none;
+  top: 0;
+  right: 0;
+  padding: 0px;
+}
+
+.breadcrumb fa-icon {
+  height: 12px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+.breadcrumb ul li {
+  display: inline;
+}
+
+.breadcrumb a {
+  text-decoration: none;
+  color: #1a5a96;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 27px;
+  word-wrap: break-word;
+  cursor: pointer;
+}
+
 h1 {
   margin-bottom: 0px;
   color: #036;
@@ -27,25 +54,6 @@ h2 {
 
 .viewport-all {
   &.mfa-setup-page {
-    padding: 3rem 6rem;
-  }
-}
-
-
-.viewport-medium {
-  &.mfa-setup-page {
-    padding: 2rem 3rem;
-  }
-}
-
-.viewport-small {
-  &.mfa-setup-page {
-    padding: 2rem 2rem;
-  }
-}
-
-.viewport-xsmall {
-  &.mfa-setup-page {
-    padding: 2rem 1rem;
+    padding: 1.25rem 0.75rem;
   }
 }

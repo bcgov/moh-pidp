@@ -16,6 +16,9 @@ import {
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';
 import { UtilsService } from '@app/core/services/utils.service';
+import { faAngleRight } from '@fortawesome/free-solid-svg-icons';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { FaqRoutes } from '../../faq.routes';
 
 @Component({
   selector: 'app-help',
@@ -24,6 +27,7 @@ import { UtilsService } from '@app/core/services/utils.service';
   standalone: true,
   imports: [
     AnchorDirective,
+    FaIconComponent,
     MatButtonModule,
     MatExpansionModule,
     PageComponent,
@@ -38,6 +42,7 @@ import { UtilsService } from '@app/core/services/utils.service';
 export class HelpPage implements OnInit {
   public providerIdentitySupport: string;
   public readonly panelOpenState = signal(false);
+  public faAngleRight = faAngleRight;
 
   public constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
@@ -58,6 +63,10 @@ export class HelpPage implements OnInit {
 
   public onClickSendEmail(address: string): void {
     window.location.assign(address);
+  }
+
+  public navigateToMfaPage(): void {
+    this.router.navigateByUrl(FaqRoutes.routePath(FaqRoutes.MFA_SETUP));
   }
 
   private navigateToRoot(): void {

@@ -1,6 +1,12 @@
-<div class="help-page-container" uiPidpInjectViewportCss>
+<div class="container help-page-container" uiPidpInjectViewportCss>
+  <nav class="breadcrumb">
+    <ul>
+      <li><a href='/'>Home</a></li>
+      <li> <fa-icon [icon]="faAngleRight" class="fa-duotone"></fa-icon> </li>
+      <li> <a class="active">Active Page</a></li>
+    </ul>
+  </nav>
   <h1>Frequently asked questions</h1>
-
   <div class="faq-section">
     <div class="faq-item">
       <mat-expansion-panel
@@ -199,7 +205,7 @@
         </mat-expansion-panel-header>
         <p>
           View instructions to setup Multi-factor authentication
-          <a href="\faq\mfa-setup">here</a>.
+          <a (click)="navigateToMfaPage()">here</a>.
         </p>
       </mat-expansion-panel>
     </div>

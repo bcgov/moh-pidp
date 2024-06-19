@@ -11,6 +11,7 @@ import {
 import { APP_CONFIG, AppConfig } from '@app/app.config';
 import { Router } from '@angular/router';
 import { ProfileRoutes } from '../profile/profile.routes';
+import { AccessRoutes } from '../access/access.routes';
 
 
 
@@ -55,5 +56,9 @@ export class PortalPage {
   }
   public navigateToAccountLinkingPage(): void {
     this.router.navigateByUrl(ProfileRoutes.routePath(ProfileRoutes.ACCOUNT_LINKING));
+  }
+
+  public navigateToAccessPage(): void {
+    this.router.navigateByUrl(AccessRoutes.BASE_PATH);
   }
 }

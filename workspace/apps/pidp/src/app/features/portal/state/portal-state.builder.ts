@@ -41,7 +41,7 @@ export const portalStateGroupKeys = [
   'organization',
   'training',
   'history',
-  'faq',
+  'help',
 ] as const;
 
 /**
@@ -161,7 +161,7 @@ export class PortalStateBuilder {
       organization: this.createOrganizationGroup(profileStatus),
       training: this.createTrainingGroup(profileStatus),
       history: this.createHistoryGroup(),
-      faq: this.createFaqGroup(),
+      help: this.createFaqGroup(),
     };
   }
 

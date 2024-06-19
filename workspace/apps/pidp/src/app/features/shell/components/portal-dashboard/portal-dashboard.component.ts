@@ -107,7 +107,7 @@ export class PortalDashboardComponent implements IDashboard, OnInit {
       new DashboardRouteMenuItem(
         'Help',
         {
-          commands: 'faq',
+          commands: 'help',
           linkActiveOptions,
         },
         'help_outline',

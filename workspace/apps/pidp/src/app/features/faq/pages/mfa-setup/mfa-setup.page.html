@@ -1,4 +1,13 @@
-<div class="mfa-setup-page" uiPidpInjectViewportCss>
+<div class="container mfa-setup-page" uiPidpInjectViewportCss>
+  <nav class="breadcrumb">
+    <ul>
+      <li><a href='/'>Home</a></li>
+      <li> <fa-icon [icon]="faAngleRight" class="fa-duotone"></fa-icon> </li>
+      <li> <a href="help">Previous Page</a></li>
+      <li> <fa-icon [icon]="faAngleRight" class="fa-duotone"></fa-icon> </li>
+      <li> <a class="active">Active Page</a></li>
+    </ul>
+  </nav>
 <ui-page mode="full">
   <h1>BCProvider Active Directory Multi-factor Authentication (MFA)
     Setup</h1>
