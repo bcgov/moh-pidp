@@ -23,6 +23,7 @@
     }
     & .logo-link {
       display: flex;
+      cursor: pointer;
 
       & img {
         margin: auto 12px; // auto will vertically center the image in the anchor.
