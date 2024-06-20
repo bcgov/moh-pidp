@@ -18,7 +18,7 @@ namespace Pidp.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.5")
+                .HasAnnotation("ProductVersion", "8.0.6")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -496,11 +496,6 @@ namespace Pidp.Data.Migrations
                         {
                             Code = 10,
                             Name = "Immunization Entry eForm"
-                        },
-                        new
-                        {
-                            Code = 11,
-                            Name = "EDRD eForm"
                         });
                 });
 

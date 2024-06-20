@@ -8,20 +8,22 @@ import {
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import {
   EMPTY,
   Observable,
-  Subscription,
+  Subject,
   catchError,
-  combineLatest,
   exhaustMap,
-  map,
   of,
   switchMap,
+  takeUntil,
 } from 'rxjs';
 
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { faAngleRight } from '@fortawesome/free-solid-svg-icons';
 import {
   LOADING_OVERLAY_DEFAULT_MESSAGE,
   LoadingOverlayService,
@@ -33,6 +35,7 @@ import {
   DialogOptions,
   HtmlComponent,
   InjectViewportCssClassDirective,
+  TextButtonDirective,
 } from '@bcgov/shared/ui';
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';
@@ -55,14 +58,17 @@ import { Credential } from './account-linking.model';
   selector: 'app-account-linking',
   standalone: true,
   imports: [
+    FaIconComponent,
     CommonModule,
     InjectViewportCssClassDirective,
     MatButtonModule,
     NgOptimizedImage,
     SuccessDialogComponent,
     AsyncPipe,
+    MatTooltipModule,
     NgFor,
     NgIf,
+    TextButtonDirective,
   ],
   templateUrl: './account-linking.page.html',
   styleUrl: './account-linking.page.scss',
@@ -74,9 +80,11 @@ export class AccountLinkingPage implements OnInit, OnDestroy {
   public identityProvider$: Observable<IdentityProvider>;
   public IdentityProvider = IdentityProvider;
   public credentials$: Observable<Credential[]>;
-  public linkedAccounts$?: Subscription;
-  public linkedAccounts: Credential[] = [];
+  public credentials: Credential[] = [];
   public linkedAccountsIdp: IdentityProvider[] = [];
+  public faAngleRight = faAngleRight;
+  public showInstructions: boolean = false;
+  private unsubscribe$ = new Subject<void>();
 
   public constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
@@ -102,13 +110,28 @@ export class AccountLinkingPage implements OnInit, OnDestroy {
     this.credentials$ = this.resource.getCredentials(partyId);
   }
 
+  public toggleInstructions(): void {
+    this.showInstructions = !this.showInstructions;
+  }
+
   public onLinkAccount(idpHint: IdentityProvider): void {
     const data: DialogOptions = {
-      title: 'Redirecting',
+      title: 'You will be redirected',
+      bottomBorder: false,
+      titlePosition: 'center',
+      bodyTextPosition: 'center',
       component: HtmlComponent,
       data: {
-        content: this.documentService.getRedirectingToSignInNotice(),
+        content:
+          'You will need to sign in with the credentials of the account you want to link.',
       },
+      imageSrc: '/assets/images/online-marketing-hIgeoQjS_iE-unsplash.jpg',
+      imageType: 'banner',
+      width: '31rem',
+      height: '24rem',
+      actionText: 'Continue',
+      actionTypePosition: 'center',
+      class: 'dialog-container',
     };
     this.dialog
       .open(ConfirmDialogComponent, { data })
@@ -125,6 +148,10 @@ export class AccountLinkingPage implements OnInit, OnDestroy {
 
   public getCardText(idp: IdentityProvider): string {
     return linkedAccountCardText[idp] ?? '';
+  }
+
+  public hasCredential(idp: IdentityProvider): boolean {
+    return this.credentials.some((c) => c.identityProvider === idp);
   }
 
   public ngOnInit(): void {
@@ -149,33 +176,15 @@ export class AccountLinkingPage implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy(): void {
-    if (this.linkedAccounts$) {
-      this.linkedAccounts$.unsubscribe();
-    }
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 
   private handleLinkedAccounts(): void {
-    this.linkedAccounts$ = combineLatest([
-      this.identityProvider$,
-      this.credentials$,
-    ])
-      .pipe(
-        map(([identityProvider, credentials]) => {
-          return credentials.filter(
-            //TODO when we add IdpId to the Credential, also filter out by IdpId
-            // so that we filter out the credential that the user is currently logged in with
-            (credential) => credential.identityProvider !== identityProvider,
-          );
-        }),
-      )
-      .subscribe((linkedAccounts) => {
-        if (!linkedAccounts) {
-          return;
-        }
-        this.linkedAccounts = linkedAccounts;
-        linkedAccounts.forEach((linkedAccount) =>
-          this.linkedAccountsIdp.push(linkedAccount.identityProvider),
-        );
+    this.credentials$
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((credentials) => {
+        this.credentials = credentials;
       });
   }
 
@@ -202,6 +211,9 @@ export class AccountLinkingPage implements OnInit, OnDestroy {
       );
   }
 
+  public onPageNavigate(url: string[]): void {
+    this.router.navigate(url);
+  }
   private navigateToRoot(): void {
     this.navigationService.navigateToRoot();
   }

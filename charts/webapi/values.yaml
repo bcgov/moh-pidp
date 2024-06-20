@@ -98,7 +98,7 @@ tolerations: []
 affinity: {}
 
 rabbitmq:
-  host: amqp://pidp:password@rabbitmq:5672/
+  host: ""
 
 
 fluentbit:

@@ -13,7 +13,6 @@ export enum DocumentType {
   MS_TEAMS_IT_SECURITY_AGREEMENT = 'ms-teams-it-security-agreement',
   PROVIDER_REPORTING_PORTAL_COLLECTION_NOTICE = 'provider-reporting-portal-collection-notice',
   IMMSBC_EFORMS_COLLECTION_NOTICE = 'immsbc-eforms-collection-notice',
-  EDRD_EFORMS_COLLECTION_NOTICE = 'edrd-eforms-collection-notice',
 }
 
 export interface IDocumentMetaData {
@@ -74,11 +73,6 @@ export class DocumentService {
         type: DocumentType.IMMSBC_EFORMS_COLLECTION_NOTICE,
         title: 'Immunization Entry eForm Collection Notice',
       },
-      {
-        type: DocumentType.EDRD_EFORMS_COLLECTION_NOTICE,
-        title:
-          'Expensive Drugs for Rare Disease (EDRD) eForm Collection Notice',
-      },
     ];
   }
 
@@ -132,11 +126,6 @@ export class DocumentService {
         return {
           ...this.getDocumentMetaData(documentType),
           content: this.getImmsBCEformsCollectionNotice(),
-        };
-      case DocumentType.EDRD_EFORMS_COLLECTION_NOTICE:
-        return {
-          ...this.getDocumentMetaData(documentType),
-          content: this.getEdrdEformsCollectionNotice(),
         };
       default:
         throw new Error('Document type does not exist');
@@ -367,14 +356,6 @@ export class DocumentService {
       and will not be used for any other purpose other than the one stated above. If you have any questions
       about the collection of this personal information please contact PHSA's Information Access & Privacy
       Office at 1-855-229-9800 or at <a href="mailto:${this.config.emails.immsBCEformsSupport}">${this.config.emails.immsBCEformsSupport}</a>.
-    `;
-  }
-
-  public getEdrdEformsCollectionNotice(): string {
-    return `
-      Snowman sleigh bells chimney unwrap frosty, icicle winter ornaments decorate reindeer poinsettia fir.
-      Carols wintry fireplace evergreen winter elf santa holiday Donner. Chimney stocking stuffers goodwill
-      garland Kris Kringle goose candy decorate.
     `;
   }
 

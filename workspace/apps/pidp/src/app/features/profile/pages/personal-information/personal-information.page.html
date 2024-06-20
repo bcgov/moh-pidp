@@ -1,73 +1,76 @@
-<ui-page [form]="formState.form" (submitted)="onSubmit()">
-  <ui-page-header>{{ title }}</ui-page-header>
-  <ui-page-section>
-    <ui-page-section-subheader
-      icon="assignment_ind"
-      heading="Personal Information">
-      <ng-container uiPageSectionSubheaderDesc>
-        Provide the following information to complete your Provider Identity
-        Profile.
-      </ng-container>
-    </ui-page-section-subheader>
-  </ui-page-section>
-
-  <ui-page-section>
-    <ui-page-section-subheader heading="Name">
-      <ng-container uiPageSectionSubheaderDesc>
-        <span *ngIf="(identityProvider$ | async) | isHighAssurance">
-          This information comes from the BC Services Card. If you use a
-          different name in your college licence, select "My name is different
-          on my college licence".
-        </span>
-      </ng-container>
-    </ui-page-section-subheader>
-
-    <app-user-info [user]="user$ | async"></app-user-info>
-
-    <ui-toggle-content
-      *ngIf="(identityProvider$ | async) | isHighAssurance"
-      label="My name is different on my college licence"
-      [checked]="hasPreferredName"
-      (toggle)="onPreferredNameToggle($event)">
-      <ui-page-section-subheader heading="Preferred Name">
+<div class="container">
+  <ui-page mode="full" [form]="formState.form" (submitted)="onSubmit()">
+    <ui-page-header>{{ title }}</ui-page-header>
+    <ui-page-section>
+      <ui-page-section-subheader
+        icon="assignment_ind"
+        heading="Personal Information">
         <ng-container uiPageSectionSubheaderDesc>
-          If you use a name professionally that is different from your legal
-          name, enter it here.
-          <span>
-            Entering a preferred name will not change your BC Services Card
-            name.
+          Provide the following information to complete your Provider Identity
+          Profile.
+        </ng-container>
+      </ui-page-section-subheader>
+    </ui-page-section>
+
+    <ui-page-section>
+      <ui-page-section-subheader heading="Name">
+        <ng-container uiPageSectionSubheaderDesc>
+          <span *ngIf="(identityProvider$ | async) | isHighAssurance">
+            This information comes from the BC Services Card. If you use a
+            different name in your college licence, select "My name is different
+            on my college licence".
           </span>
         </ng-container>
       </ui-page-section-subheader>
-      <ui-preferred-name-form [form]="formState.form"></ui-preferred-name-form>
-    </ui-toggle-content>
-  </ui-page-section>
 
-  <ui-page-section>
-    <ui-page-section-subheader heading="Contact Information">
-      <ng-container uiPageSectionSubheaderDesc>
-        Provide your contact information. Please use an email that you check
-        regularly.
-      </ng-container>
-    </ui-page-section-subheader>
+      <app-user-info [user]="user$ | async"></app-user-info>
 
-    <ui-contact-info-form
-      [form]="formState.form"
-      (emailChanges)="onEmailInputChange($event)"></ui-contact-info-form>
-  </ui-page-section>
+      <ui-toggle-content
+        *ngIf="(identityProvider$ | async) | isHighAssurance"
+        label="My name is different on my college licence"
+        [checked]="hasPreferredName"
+        (toggle)="onPreferredNameToggle($event)">
+        <ui-page-section-subheader heading="Preferred Name">
+          <ng-container uiPageSectionSubheaderDesc>
+            If you use a name professionally that is different from your legal
+            name, enter it here.
+            <span>
+              Entering a preferred name will not change your BC Services Card
+              name.
+            </span>
+          </ng-container>
+        </ui-page-section-subheader>
+        <ui-preferred-name-form
+          [form]="formState.form"></ui-preferred-name-form>
+      </ui-toggle-content>
+    </ui-page-section>
 
-  <ui-page-footer>
-    <button
-      mat-stroked-button
-      uiPageFooterAction
-      type="button"
-      color="primary"
-      (click)="onBack()">
-      Back Home
-    </button>
+    <ui-page-section>
+      <ui-page-section-subheader heading="Contact Information">
+        <ng-container uiPageSectionSubheaderDesc>
+          Provide your contact information. Please use an email that you check
+          regularly.
+        </ng-container>
+      </ui-page-section-subheader>
 
-    <button mat-flat-button uiPageFooterAction type="submit" color="primary">
-      Save Information
-    </button>
-  </ui-page-footer>
-</ui-page>
+      <ui-contact-info-form
+        [form]="formState.form"
+        (emailChanges)="onEmailInputChange($event)"></ui-contact-info-form>
+    </ui-page-section>
+
+    <ui-page-footer>
+      <button
+        mat-stroked-button
+        uiPageFooterAction
+        type="button"
+        color="primary"
+        (click)="onBack()">
+        Back Home
+      </button>
+
+      <button mat-flat-button uiPageFooterAction type="submit" color="primary">
+        Save Information
+      </button>
+    </ui-page-footer>
+  </ui-page>
+</div>
