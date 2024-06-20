@@ -187,7 +187,7 @@ export class ProvincialAttachmentSystemPage implements OnInit {
           let selectedIndex = this.lastSelectedIndex;
           this.pasStatusCode =
             profileStatus?.status.provincialAttachmentSystem.statusCode;
-          if (this.pasStatusCode === StatusCode.AVAILABLE) {
+          if (this.pasStatusCode === StatusCode.COMPLETED) {
             this.pas$.next(false);
           } else if (selectedIndex === this.lastSelectedIndex) {
             // PAS step
