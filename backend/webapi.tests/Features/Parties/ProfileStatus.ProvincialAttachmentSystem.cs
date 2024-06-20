@@ -13,11 +13,11 @@ using Pidp.Models.Lookups;
 
 using PidpTests.TestingExtensions;
 
-public class ProfileStatusPrimaryCareRosteringTests : ProfileStatusTest
+public class ProfileStatusProvincialAttachmentSystemTests : ProfileStatusTest
 {
     [Theory]
     [MemberData(nameof(PlrSuccessTestData))]
-    public async void HandleAsync_RosteringProviderRoleAuthorized_Incomplete(PlrStandingsDigest digest, PlrStandingsDigest aggregateDigest)
+    public async void HandleAsync_PasProviderRoleAuthorized_Incomplete(PlrStandingsDigest digest, PlrStandingsDigest aggregateDigest)
     {
         var party = this.TestDb.Has(AParty.WithLicenceDeclared());
         this.TestDb.Has(new AccessRequest
@@ -39,9 +39,9 @@ public class ProfileStatusPrimaryCareRosteringTests : ProfileStatusTest
 
         var profile = await handler.HandleAsync(new Query { Id = party.Id, User = AMock.BcscUser() });
 
-        var rosteringSection = profile.Section<PrimaryCareRosteringSection>();
-        rosteringSection.AssertNoAlerts();
-        Assert.Equal(StatusCode.Incomplete, rosteringSection.StatusCode);
+        var pasSection = profile.Section<ProvincialAttachmentSystemSection>();
+        pasSection.AssertNoAlerts();
+        Assert.Equal(StatusCode.Complete, pasSection.StatusCode);
     }
 
     public static IEnumerable<object[]> PlrSuccessTestData()
@@ -55,7 +55,7 @@ public class ProfileStatusPrimaryCareRosteringTests : ProfileStatusTest
 
     [Theory]
     [MemberData(nameof(PlrFailureTestData))]
-    public async void HandleAsync_RosteringProviderRoleUnauthorized_Locked(PlrStandingsDigest digest, PlrStandingsDigest aggregateDigest)
+    public async void HandleAsync_PasProviderRoleUnauthorized_Locked(PlrStandingsDigest digest, PlrStandingsDigest aggregateDigest)
     {
         var party = this.TestDb.Has(AParty.WithLicenceDeclared());
         var client = A.Fake<IPlrClient>()
@@ -64,9 +64,9 @@ public class ProfileStatusPrimaryCareRosteringTests : ProfileStatusTest
 
         var profile = await handler.HandleAsync(new Query { Id = party.Id, User = AMock.BcscUser() });
 
-        var rosteringSection = profile.Section<PrimaryCareRosteringSection>();
-        rosteringSection.AssertNoAlerts();
-        Assert.Equal(StatusCode.Locked, rosteringSection.StatusCode);
+        var pasSection = profile.Section<ProvincialAttachmentSystemSection>();
+        pasSection.AssertNoAlerts();
+        Assert.Equal(StatusCode.Incomplete, pasSection.StatusCode);
     }
 
     public static IEnumerable<object[]> PlrFailureTestData()

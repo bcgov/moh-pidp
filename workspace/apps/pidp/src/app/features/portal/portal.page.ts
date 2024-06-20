@@ -52,9 +52,11 @@ export class PortalPage {
     const scrollThreshold = 200;
     this.showBackToTopButton = scrollPosition > scrollThreshold;
   }
+  
   public scrollToTop(): void {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
+  
   public navigateToAccountLinkingPage(): void {
     this.router.navigateByUrl(
       ProfileRoutes.routePath(ProfileRoutes.ACCOUNT_LINKING),

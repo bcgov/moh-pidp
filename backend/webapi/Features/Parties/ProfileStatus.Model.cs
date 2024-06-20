@@ -255,9 +255,9 @@ public partial class ProfileStatus
             }
         }
 
-        public class PrimaryCareRosteringSection : ProfileSection
+        public class ProvincialAttachmentSystemSection : ProfileSection
         {
-            internal override string SectionName => "primaryCareRostering";
+            internal override string SectionName => "provincialAttachmentSystem";
 
             protected override StatusCode Compute(ProfileData profile)
             {
@@ -267,7 +267,8 @@ public partial class ProfileStatus
                         || profile.PartyPlrStanding
                             .With(ProviderRoleType.MedicalDoctor, ProviderRoleType.RegisteredNursePractitioner)
                             .HasGoodStanding)
-                        && profile.HasBCProviderCredential => StatusCode.Incomplete,
+                        && profile.HasBCProviderCredential => StatusCode.Complete,
+                    { HasBCServicesCardCredential: true } => StatusCode.Incomplete,
                     _ => StatusCode.Locked
                 };
             }
