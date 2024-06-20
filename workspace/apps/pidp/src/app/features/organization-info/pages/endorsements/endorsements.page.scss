@@ -28,6 +28,7 @@ p {
   --tab-content-flex-direction: column;
   --endorsement-request-item-padding: 0 var(--gap);
   --endorsement-form-field-width: 100%;
+  padding: 1.25rem 0.75rem;
 }
 .viewport-large {
   --box-padding: calc(2 * var(--gap)) 0;
@@ -105,14 +106,14 @@ p {
         flex-direction: var(--tab-content-flex-direction);
 
         & .endorsement-card {
-            flex-basis: calc((100% - (var(--gap))) / 2);
-        
-            @include media-breakpoint-up(lg) {
-              flex-basis: calc((100% - (var(--gap))) / 3);
-            }
-        
-            display: flex;
+          flex-basis: calc((100% - (var(--gap))) / 2);
+
+          @include media-breakpoint-up(lg) {
+            flex-basis: calc((100% - (var(--gap))) / 3);
           }
+
+          display: flex;
+        }
       }
     }
     & .endorsement-request {
