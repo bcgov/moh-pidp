@@ -6,6 +6,7 @@ import { AppStateService } from '@pidp/presentation';
 import { PartyService } from '@app/core/party/party.service';
 import { ProfileStatus } from '@app/features/portal/models/profile-status.model';
 import { PortalResource } from '@app/features/portal/portal-resource.service';
+import { ProfileRoutes } from '@app/features/profile/profile.routes';
 import { LookupService } from '@app/modules/lookup/lookup.service';
 
 @Injectable({
@@ -29,6 +30,7 @@ export class DashboardStateService {
       .subscribe((profileStatus) => {
         const displayFullName = this.getUserDisplayFullName(profileStatus);
         const collegeName = this.getCollegeName(profileStatus);
+        const collegeRoute = this.getCollegeRoute(profileStatus);
 
         // Set the user name and college on the dashboard.
         const oldState = this.stateService.getNamedState<DashboardStateModel>(
@@ -38,6 +40,7 @@ export class DashboardStateService {
           ...oldState,
           userProfileFullNameText: displayFullName,
           userProfileCollegeNameText: collegeName,
+          collegeRoute,
         };
         this.stateService.setNamedState(PidpStateName.dashboard, newState);
       });
@@ -59,5 +62,11 @@ export class DashboardStateService {
 
     const college = this.lookupService.getCollege(collegeCode);
     return college?.name ?? '';
+  }
+
+  private getCollegeRoute(profileStatus: ProfileStatus | null): string {
+    return profileStatus?.status.collegeCertification.licenceDeclared
+      ? ProfileRoutes.routePath(ProfileRoutes.COLLEGE_LICENCE_INFO)
+      : ProfileRoutes.routePath(ProfileRoutes.COLLEGE_LICENCE_DECLARATION);
   }
 }

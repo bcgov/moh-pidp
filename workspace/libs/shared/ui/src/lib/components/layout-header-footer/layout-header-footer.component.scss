@@ -23,6 +23,7 @@
     }
     & .logo-link {
       display: flex;
+      cursor: pointer;
 
       & img {
         margin: auto 12px; // auto will vertically center the image in the anchor.
@@ -86,6 +87,19 @@
       row-gap: 8px;
 
       & li {
+        & button.text-button {
+          color: #fff;
+          background: none;
+          border: none;
+          padding: 0 8px;
+          text-decoration: none;
+          line-height: 27px;
+          word-wrap: break-word;
+          border-right: 1px solid #ffffff;
+        }
+        & button.text-button:hover {
+          text-decoration: underline;
+        }
         & a {
           font-weight: normal; /* 400 */
           color: #ffffff;

@@ -15,15 +15,41 @@
         <ng-container *ngTemplateOutlet="menu"></ng-container>
       </div>
     </div>
-    <div class="container content-body">
+    <div class="content-body">
       <router-outlet></router-outlet>
     </div>
   </div>
   <ng-template #menu>
-    <a class="logo-link" href="." title="Home" aria-label="Go home">
+    <a
+      class="logo-link"
+      title="Home"
+      aria-label="Go home"
+      (click)="navigateToRoot()">
       <span class="span-text">OneHealthID</span></a
     >
     <div class="main-menu">
+      <a class="main-menu-item">
+        <div class="dropdown">
+          <a class="dropdown-profile">Profile</a>
+          <div class="dropdown-content">
+            <a
+              class="dropdown-links"
+              (click)="navigateTo('/profile/personal-information')"
+              >Personal Information</a
+            >
+            <a
+              class="dropdown-links"
+              (click)="navigateTo(dashboardState.collegeRoute)"
+              >College License</a
+            >
+            <a
+              class="dropdown-links"
+              (click)="navigateTo('/profile/user-access-agreement')"
+              >User Access Agreement</a
+            >
+          </div>
+        </div>
+      </a>
       <a
         *ngFor="let menuItem of menuItems"
         class="main-menu-item"
@@ -54,42 +80,33 @@
             <ng-container *ngTemplateOutlet="sidenavmenu"></ng-container>
           </div>
         </mat-sidenav>
-
         <mat-sidenav-content class="custom-mat-sidenav-content">
-          <div class="content-header-box">
-            <ng-container *ngTemplateOutlet="sidenavheader"></ng-container>
-          </div>
           <router-outlet></router-outlet>
         </mat-sidenav-content>
       </mat-sidenav-container>
     </div>
     <div class="header-bar-right"></div>
   </div>
-  <ng-template #sidenavheader>
-    <header>
-      <div class="header-text-container">
-        <h1 *ngIf="showTitle">{{ dashboardState.titleText }}</h1>
-        <p *ngIf="showTitleDescription">
-          {{ dashboardState.titleDescriptionText }}
-        </p>
-      </div>
-      <div *ngIf="isHeaderImageVisible" class="header-image-container">
-        <img
-          src="/assets/images/pidp-logo-white.svg"
-          title="PIDP Logo"
-          alt="PIDP Logo"
-          loading="lazy"
-          aria-label="PIDP Logo"
-          aria-hidden="true" />
-      </div>
-    </header>
-  </ng-template>
-
   <ng-template #sidenavmenu>
     <div class="sidenav-panel-box">
       <div class="sidenav-bar"></div>
       <div class="sidenav-panel-content">
         <div class="sidenav-menu">
+          <a
+            class="sidenav-menu-item"
+            (click)="navigateTo('/profile/personal-information')"
+            >Personal Information</a
+          >
+          <a
+            class="sidenav-menu-item"
+            (click)="navigateTo(dashboardState.collegeRoute)"
+            >College License</a
+          >
+          <a
+            class="sidenav-menu-item"
+            (click)="navigateTo('/profile/user-access-agreement')"
+            >User Access Agreement</a
+          >
           <a
             *ngFor="let menuItem of menuItems"
             class="sidenav-menu-item"
