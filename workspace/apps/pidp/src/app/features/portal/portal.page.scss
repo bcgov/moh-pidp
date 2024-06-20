@@ -45,7 +45,7 @@
   width: 88.85vw;
   height: 18.165vh;
   border-radius: 8px;
-  background: rgba(1, 51, 102, 0.70);
+  background: rgba(1, 51, 102, 0.7);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -54,7 +54,7 @@
 .banner-mask h5 {
   width: 100%;
   text-align: left;
-  color: var(--Colours-primary, #FFF);
+  color: var(--Colours-primary, #fff);
   font-style: normal;
   font-weight: 700;
   line-height: normal;
@@ -62,12 +62,12 @@
 }
 
 .banner-mask h5 span {
-  color: var(--Colours-primary, #FCBA19);
+  color: var(--Colours-primary, #fcba19);
 }
 
 .banner-mask p {
   width: 100%;
-  color: #E4E4E4;
+  color: #e4e4e4;
   font-size: 1.25rem;
   font-weight: 700;
   font-style: normal;
@@ -75,7 +75,7 @@
   text-align: left;
   padding-top: 0.1rem;
 }
-.body-container{
+.body-container {
   width: auto;
   height: 100%;
   display: flex;
@@ -125,7 +125,7 @@
 }
 
 .card-content a {
-  color: var(--Links, #1A5A96);
+  color: var(--Links, #1a5a96);
   font-size: 16px;
   font-style: normal;
   font-weight: 400;
@@ -138,7 +138,7 @@
 }
 
 .card-content a fa-icon {
-  color: var(--Links, #1A5A96);
+  color: var(--Links, #1a5a96);
   float: right;
   padding-right: 3px;
 }
@@ -153,19 +153,19 @@
 }
 
 .back-to-top {
-  background-color: #38598A;
-  color: #FFFFFF;
-  width: 40PX;
-  height: 40PX;
+  background-color: #38598a;
+  color: #ffffff;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   text-align: center;
   cursor: pointer;
 }
 
 .back-to-top-text {
-  color: #38598A;
+  color: #38598a;
   font-size: 13px;
-  word-wrap: break-word
+  word-wrap: break-word;
 }
 
 .back-to-top:hover {
@@ -182,7 +182,7 @@
   }
 
   & .banner-mask h5 span {
-    color: var(--Colours-primary, #FCBA19);
+    color: var(--Colours-primary, #fcba19);
   }
 
   & .card-grid {
@@ -201,7 +201,7 @@
   }
 
   & .card-content {
-    padding: 30px 0px 0px 0px;
+    padding: 30px 0 0 0;
   }
 
   & .card-content h2 {
@@ -222,7 +222,7 @@
 // laptap large
 .viewport-large {
   & .banner-mask h5 span {
-    color: var(--Colours-primary, #FCBA19);
+    color: var(--Colours-primary, #fcba19);
   }
 
   .card:hover {
@@ -235,7 +235,6 @@
 .viewport-medium {
   & .header-container {
     height: 25vh;
-
   }
 
   & .banner-mask {
@@ -248,7 +247,7 @@
   }
 
   & .banner-mask h5 span {
-    color: var(--Colours-primary, #FCBA19);
+    color: var(--Colours-primary, #fcba19);
   }
 
   & .banner-mask p {
@@ -299,7 +298,7 @@
   }
 
   & .banner-mask h5 span {
-    color: var(--Colours-primary, #FCBA19);
+    color: var(--Colours-primary, #fcba19);
   }
 
   & .banner-mask p {
@@ -342,8 +341,8 @@
   }
 
   .back-to-top {
-    width: 40PX;
-    height: 40PX;
+    width: 40px;
+    height: 40px;
   }
 
   .back-to-top-text {
@@ -377,7 +376,7 @@
   }
 
   & .banner-mask h5 span {
-    color: var(--Colours-primary, #FCBA19);
+    color: var(--Colours-primary, #fcba19);
   }
 
   & .banner-mask p {
@@ -408,7 +407,7 @@
     font-weight: 700;
     line-height: 40px;
     height: 95px;
-    padding-top: 15px
+    padding-top: 15px;
   }
 
   & .card-content a {
@@ -428,8 +427,8 @@
   }
 
   .back-to-top {
-    width: 30PX;
-    height: 30PX;
+    width: 30px;
+    height: 30px;
   }
 
   .back-to-top fa-icon {
