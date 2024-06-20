@@ -249,7 +249,7 @@ export class PortalPage implements OnInit {
         tap((profileStatus: ProfileStatus | null) => {
           let selectedIndex = this.lastSelectedIndex;
           this.rosteringStatusCode =
-            profileStatus?.status.primaryCareRostering.statusCode;
+            profileStatus?.status.provincialAttachmentSystem.statusCode;
           if (this.rosteringStatusCode === StatusCode.AVAILABLE) {
             this.rostering$.next(false);
           } else if (selectedIndex === this.lastSelectedIndex) {
