@@ -175,7 +175,15 @@
             </div>
             <h2>IDIR account</h2>
             <p>Used by people who work in the B.C. public sector</p>
-            <p>Available soon!</p>
+            <div
+              *ngIf="hasCredential(IdentityProvider.IDIR); else comingSoon"
+              class="linked-success">
+              <span>1 Account Linked</span>
+              <img
+                src="/assets/images/icons/icon-check-circle.svg"
+                alt="check circle" />
+            </div>
+            <ng-template #comingSoon><p>Available soon!</p></ng-template>
           </div>
         </div>
       </section>
