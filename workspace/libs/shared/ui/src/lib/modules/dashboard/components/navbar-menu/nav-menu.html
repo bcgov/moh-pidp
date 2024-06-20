@@ -32,13 +32,19 @@
         <div class="dropdown">
           <a>Profile</a>
           <div class="dropdown-content">
-            <a (click)="navigateTo('/profile/personal-information')"
+            <a
+              class="dropdown-links"
+              (click)="navigateTo('/profile/personal-information')"
               >Personal Info</a
             >
-            <a (click)="navigateTo(dashboardState.collegeRoute)"
+            <a
+              class="dropdown-links"
+              (click)="navigateTo(dashboardState.collegeRoute)"
               >College License</a
             >
-            <a (click)="navigateTo('/profile/user-access-agreement')"
+            <a
+              class="dropdown-links"
+              (click)="navigateTo('/profile/user-access-agreement')"
               >User Access</a
             >
           </div>
