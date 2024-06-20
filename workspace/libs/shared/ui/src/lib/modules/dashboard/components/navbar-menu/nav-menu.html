@@ -93,6 +93,21 @@
       <div class="sidenav-panel-content">
         <div class="sidenav-menu">
           <a
+            class="sidenav-menu-item"
+            (click)="navigateTo('/profile/personal-information')"
+            >Personal Info</a
+          >
+          <a
+            class="sidenav-menu-item"
+            (click)="navigateTo(dashboardState.collegeRoute)"
+            >College License</a
+          >
+          <a
+            class="sidenav-menu-item"
+            (click)="navigateTo('/profile/user-access-agreement')"
+            >User Access</a
+          >
+          <a
             *ngFor="let menuItem of menuItems"
             class="sidenav-menu-item"
             routerLinkActive="sidenav-menu-item-active"
