@@ -215,7 +215,7 @@ h1 {
       line-height: normal;
     }
 
-    & a:hover {
+    & a:not(.main-menu-item, .dropdown-profile):hover {
       border-bottom: solid 4px #fcba19;
     }
   }
@@ -254,21 +254,27 @@ h1 {
 }
 
 .dropdown {
-  position: absolute;
-  display: block;
+  position: relative;
+  display: inline-block;
   margin-top: -10px;
   margin-left: -35px;
   position: absolute;
   right: -10px;
 }
 
+.dropdown-profile {
+  cursor: pointer;
+  padding-right: 20px !important;
+}
+
 .dropdown-content {
   display: none;
   position: absolute;
   background-color: #f1f1f1;
-  // min-width: 30px;
+  min-width: 130px;
   box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
   z-index: 1;
+  margin-top: 40px;
 }
 
 .dropdown-content a {
@@ -289,4 +295,5 @@ h1 {
 
 .dropdown:hover .dropdown-content {
   display: block;
+  width: 200px;
 }
