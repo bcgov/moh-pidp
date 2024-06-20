@@ -76,9 +76,9 @@
                 <img src="/assets/images/icons/landscape.svg" alt="landscape" />
               </div>
               <a
-                *ngIf="(identityProvider$ | async) === IdentityProvider.BCSC"
+                *ngIf="hasCredential(IdentityProvider.BCSC)"
                 #tooltip="matTooltip"
-                matTooltip="You are currently signed in with your BC Services Card, you can not link another card at this time."
+                matTooltip="Only one BCSC account can be linked to your profile."
                 aria-label="Button that displays a tooltip when focused or hovered over"
                 (click)="tooltip.show()">
                 <img
