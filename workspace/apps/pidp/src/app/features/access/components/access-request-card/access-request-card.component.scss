@@ -58,6 +58,10 @@
 }
 
 .container.viewport-xsmall {
+  .card-container {
+    height: 15rem;
+    overflow-y: auto;
+  }
   .card-header-icon fa-icon {
     padding: 5px;
     width: 8%;
@@ -78,6 +82,11 @@
 }
 
 .container.viewport-small {
+  .card-container {
+    height: 15rem;
+    overflow-y: auto;
+  }
+
   .card-header fa-icon {
     padding: 6px;
     width: 11%;
@@ -95,6 +104,10 @@
 }
 
 .container.viewport-medium {
+  .card-container {
+    height: 18rem;
+    overflow-y: auto;
+  }
   .card-header-text {
     padding-left: 5px;
     width: 88%;
