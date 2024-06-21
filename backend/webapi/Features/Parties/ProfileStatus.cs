@@ -80,7 +80,7 @@ public partial class ProfileStatus
                     ProfileSection.Create<MSTeamsPrivacyOfficerSection>(data),
                     ProfileSection.Create<PrescriptionRefillEformsSection>(data),
                     ProfileSection.Create<ProviderReportingPortalSection>(data),
-                    ProfileSection.Create<PrimaryCareRosteringSection>(data),
+                    ProfileSection.Create<ProvincialAttachmentSystemSection>(data),
                     ProfileSection.Create<SAEformsSection>(data)
                 }
                 .ToDictionary(section => section.SectionName, section => section)
@@ -98,6 +98,7 @@ public partial class ProfileStatus
         public bool DemographicsComplete { get; set; }
         public string DisplayFullName { get; set; } = string.Empty;
         public bool HasBCProviderCredential { get; set; }
+        public bool HasBCServicesCardCredential { get; set; }
         public bool LicenceDeclarationComplete { get; set; }
 
         // Computed in Finalize()

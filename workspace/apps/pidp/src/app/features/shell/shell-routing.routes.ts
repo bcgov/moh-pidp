@@ -76,14 +76,6 @@ export const routes: Routes = [
           ),
       },
       {
-        path: AccessRoutes.BASE_PATH,
-        resolve: {
-          hasCompletedWizard: wizardResolver,
-        },
-        loadChildren: (): Promise<Routes> =>
-          import('../access/access-routing.routes').then((m) => m.routes),
-      },
-      {
         path: TrainingRoutes.BASE_PATH,
         resolve: {
           hasCompletedWizard: wizardResolver,
@@ -102,6 +94,14 @@ export const routes: Routes = [
         },
         loadChildren: (): Promise<Routes> =>
           import('../history/history-routing.routes').then((m) => m.routes),
+      },
+      {
+        path: AccessRoutes.BASE_PATH,
+        resolve: {
+          hasCompletedWizard: wizardResolver,
+        },
+        loadChildren: (): Promise<Routes> =>
+          import('../access/access-routing.routes').then((m) => m.routes),
       },
       {
         path: FaqRoutes.BASE_PATH,

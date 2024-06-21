@@ -14,16 +14,14 @@ import {
   IDashboard,
   NavMenuComponent,
 } from '@bcgov/shared/ui';
-import { ArrayUtils } from '@bcgov/shared/utils';
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';
 import { AccessTokenService } from '@app/features/auth/services/access-token.service';
 import { AuthService } from '@app/features/auth/services/auth.service';
-import { PortalRoutes } from '@app/features/portal/portal.routes';
 import { PermissionsService } from '@app/modules/permissions/permissions.service';
-import { Role } from '@app/shared/enums/roles.enum';
 
 import { DashboardStateService } from '../../services/dashboard-state-service.service';
+import { AccessRoutes } from '@app/features/access/access.routes';
 
 @Component({
   selector: 'app-portal-dashboard',
@@ -98,42 +96,17 @@ export class PortalDashboardComponent implements IDashboard, OnInit {
     } as IsActiveMatchOptions;
     return [
       new DashboardRouteMenuItem(
-        'Profile',
-        {
-          commands: PortalRoutes.BASE_PATH,
-          extras: { fragment: 'profile' },
-          linkActiveOptions,
-        },
-        'assignment_ind',
-      ),
-      ...ArrayUtils.insertResultIf<DashboardRouteMenuItem>(
-        this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
-        () => [
-          new DashboardRouteMenuItem(
-            'Organization',
-            {
-              commands: PortalRoutes.BASE_PATH,
-              extras: { fragment: 'organization' },
-              linkActiveOptions,
-            },
-            'corporate_fare',
-          ),
-        ],
-      ),
-      new DashboardRouteMenuItem(
         'Access',
         {
-          commands: PortalRoutes.BASE_PATH,
-          extras: { fragment: 'access' },
+          commands:[AccessRoutes.BASE_PATH,AccessRoutes.ACCESS_REQUESTS],
           linkActiveOptions,
         },
         'assignment',
-      ),       
+      ),
       new DashboardRouteMenuItem(
-        'Support',
+        'Help',
         {
-          commands: PortalRoutes.BASE_PATH,
-          extras: { fragment: 'support' },
+          commands: 'help',
           linkActiveOptions,
         },
         'help_outline',

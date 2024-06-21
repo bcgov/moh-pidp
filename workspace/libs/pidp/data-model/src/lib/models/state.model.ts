@@ -9,6 +9,7 @@ export interface DashboardStateModel extends NamedState {
   titleDescriptionText: string;
   userProfileFullNameText: string;
   userProfileCollegeNameText: string;
+  collegeRoute: string;
 }
 export const defaultDashboardState: DashboardStateModel = {
   stateName: PidpStateName.dashboard,
@@ -16,6 +17,7 @@ export const defaultDashboardState: DashboardStateModel = {
   titleDescriptionText: '',
   userProfileFullNameText: '',
   userProfileCollegeNameText: '',
+  collegeRoute: '',
 };
 export interface ApplicationStateModel {
   all: NamedState[];
