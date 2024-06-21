@@ -7,8 +7,7 @@
     margin: var(--margin-style);
     margin-left: 0;
     padding: var(--card-padding);
-    height: 15rem;
-    overflow-y: auto;
+    min-height: 15rem;
 
     & .card-header {
       & .card-header-icon {
