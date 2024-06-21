@@ -30,6 +30,7 @@ import {
   faArrowUp,
   faUser,
   faUserGroup,
+  faAngleRight,
 } from '@fortawesome/free-solid-svg-icons';
 import {
   LOADING_OVERLAY_DEFAULT_MESSAGE,
@@ -105,6 +106,7 @@ export class EndorsementsPage
   public faUserGroup = faUserGroup;
   public faArrowUp = faArrowUp;
   public faArrowDown = faArrowDown;
+  public faAngleRight = faAngleRight;
 
   public formState: EndorsementsFormState;
   public completed: boolean | null;

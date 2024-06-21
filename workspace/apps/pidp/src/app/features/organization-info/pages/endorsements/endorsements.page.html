@@ -1,9 +1,17 @@
 <form [formGroup]="formState.form" (submit)="onSubmit()">
-  <div class="box container" uiPidpInjectViewportCss>
+  <div class="container" uiPidpInjectViewportCss>
+    <nav class="breadcrumb">
+      <ul>
+        <li><a (click)="onBack()">Home</a></li>
+        <li> <fa-icon [icon]="faAngleRight" class="fa-duotone"></fa-icon> </li>
+        <li> <a class="active">Active Page</a></li>
+      </ul>
+    </nav>
     <div class="content">
       <section class="care-team">
         <header>
-          <h2>Team Members</h2>
+          <h3>TEAM MEMBERS</h3>
+          <h1>Endorsements</h1>
         </header>
         <div class="care-team-text">
           <p class="large">
@@ -51,10 +59,7 @@
             be the same as yours.
           </p>
         </div>
-        <mat-tab-group
-          class="care-team-tabs"
-          mat-stretch-tabs
-          [selectedIndex]="0">
+        <mat-tab-group class="care-team-tabs" mat-stretch-tabs [selectedIndex]="0">
           <mat-tab>
             <ng-template mat-tab-label>
               <div class="tab-label-box">
@@ -75,16 +80,10 @@
             </ng-template>
             <ng-template matTabContent>
               <div class="tab-content">
-                <app-endorsement-card
-                  *ngFor="let endorsementRequest of actionableEndorsementRequests$ | async"
-                  class="endorsement-card"
-                  [id]="endorsementRequest.id"
-                  [nameText]="endorsementRequest.partyName ?? ''"
-                  [collegeText]="getCollegeText(endorsementRequest)"
-                  [isApproveEnabled]="true"
-                  [isCancelEnabled]="true"
-                  (approveClick)="onApprove($event)"
-                  (cancelClick)="onCancel($event)"></app-endorsement-card>
+                <app-endorsement-card *ngFor="let endorsementRequest of actionableEndorsementRequests$ | async"
+                  class="endorsement-card" [id]="endorsementRequest.id" [nameText]="endorsementRequest.partyName ?? ''"
+                  [collegeText]="getCollegeText(endorsementRequest)" [isApproveEnabled]="true" [isCancelEnabled]="true"
+                  (approveClick)="onApprove($event)" (cancelClick)="onCancel($event)"></app-endorsement-card>
               </div>
             </ng-template>
           </mat-tab>
@@ -99,16 +98,10 @@
             </ng-template>
             <ng-template matTabContent>
               <div class="tab-content">
-                <app-endorsement-card
-                  *ngFor="let endorsement of endorsements$ | async"
-                  class="endorsement-card"
-                  noticeText="Relationship"
-                  noticeColour="green"
-                  [id]="endorsement.id"
-                  [nameText]="endorsement.partyName"
-                  [collegeText]="getCollegeText(endorsement)"
-                  [createdOnText]="endorsement.createdOn | date"
-                  [isCancelEnabled]="true"
+                <app-endorsement-card *ngFor="let endorsement of endorsements$ | async" class="endorsement-card"
+                  noticeText="Relationship" noticeColour="green" [id]="endorsement.id"
+                  [nameText]="endorsement.partyName" [collegeText]="getCollegeText(endorsement)"
+                  [createdOnText]="endorsement.createdOn | date" [isCancelEnabled]="true"
                   (cancelClick)="onCancelEndorsement($event)"></app-endorsement-card>
               </div>
             </ng-template>
@@ -131,10 +124,8 @@
             </ng-template>
             <ng-template matTabContent>
               <div class="tab-content">
-                <app-endorsement-card
-                  *ngFor="let endorsementRequest of nonActionableEndorsementRequests$ | async"
-                  class="endorsement-card"
-                  [noticeText]="getStatus(endorsementRequest.status)"
+                <app-endorsement-card *ngFor="let endorsementRequest of nonActionableEndorsementRequests$ | async"
+                  class="endorsement-card" [noticeText]="getStatus(endorsementRequest.status)"
                   [noticeColour]="isEndorsementRequested(endorsementRequest.status) ? 'yellow' : 'red'"
                   [id]="endorsementRequest.id"
                   [nameText]="endorsementRequest.partyName ?? endorsementRequest.recipientEmail"
@@ -146,7 +137,9 @@
       </section>
       <section class="endorsement-request">
         <header>
-          <h2>Endorsement Request</h2>
+          <h3>PROCEDURE</h3>
+          <h1>Endorsements Request</h1>
+          <h2></h2>
         </header>
         <p>
           Enter the email of the person that you have a working relationship
@@ -159,33 +152,19 @@
           restart the process.
         </p>
         <mat-form-field>
-          <input
-            matInput
-            placeholder="Email"
-            formControlName="recipientEmail" />
-          <mat-error *ngIf="recipientEmail.hasError('required')"
-            >Required</mat-error
-          >
+          <input matInput placeholder="Email" formControlName="recipientEmail" />
+          <mat-error *ngIf="recipientEmail.hasError('required')">Required</mat-error>
           <mat-error *ngIf="recipientEmail.hasError('email')">
             Must be a valid email address
           </mat-error>
         </mat-form-field>
       </section>
       <section class="actions">
-        <button
-          mat-stroked-button
-          uiPageFooterAction
-          type="button"
-          color="primary"
-          (click)="onBack()">
+        <button mat-stroked-button uiPageFooterAction type="button" color="primary" (click)="onBack()">
           Back Home
         </button>
 
-        <button
-          mat-flat-button
-          uiPageFooterAction
-          type="submit"
-          color="primary">
+        <button mat-flat-button uiPageFooterAction type="submit" color="primary">
           Send
         </button>
       </section>
