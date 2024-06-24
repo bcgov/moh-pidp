@@ -108,11 +108,22 @@ p {
       }
       & .care-team-tabs {
         min-height: 10rem;
+       ::ng-deep .mat-mdc-tab  {
+        width: 18.625rem;
+        height: 3.75rem;
+        border: 1px solid #9E9E9E;
+        background: #EEE;
+        &.mdc-tab--active{
+          background: #E3E7F3;
+        }
+       }
       }
       & .tab-label-box {
         display: flex;
         align-items: center;
         opacity: 1;
+        color: #000;
+        font-size: 1.125rem;
         & .badge {
           margin-left: 0.5rem;
           font-size: 0.5rem;
