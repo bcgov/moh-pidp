@@ -7,10 +7,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { faAngleRight, faArrowUp } from '@fortawesome/free-solid-svg-icons';
 
-import {
-  InjectViewportCssClassDirective,
-  TextButtonDirective,
-} from '@bcgov/shared/ui';
+import { InjectViewportCssClassDirective } from '@bcgov/shared/ui';
 import {
   AnchorDirective,
   PageComponent,
@@ -45,7 +42,6 @@ import { FaqRoutes } from '../../faq.routes';
     PageSectionComponent,
     PageSectionSubheaderComponent,
     InjectViewportCssClassDirective,
-    TextButtonDirective,
   ],
 })
 export class HelpPage implements OnInit {
