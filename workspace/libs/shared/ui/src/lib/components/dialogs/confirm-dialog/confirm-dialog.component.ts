@@ -81,6 +81,7 @@ export class ConfirmDialogComponent implements OnInit {
     }
 
     this.dialogRef.updateSize(this.options.width, this.options.height);
+    this.options.class && this.dialogRef.addPanelClass(this.options.class);
   }
 
   private getOptions(dialogOptions: DialogOptions): DialogOptions {

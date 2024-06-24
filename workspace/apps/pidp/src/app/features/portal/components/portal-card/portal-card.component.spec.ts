@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 
@@ -20,7 +19,6 @@ import { AuthService } from '@app/features/auth/services/auth.service';
 
 import { StatusCode } from '../../enums/status-code.enum';
 import { ProfileStatus } from '../../models/profile-status.model';
-import { PrimaryCareRosteringPortalSection } from '../../state/access/primary-care-rostering-portal-section.class';
 import { IPortalSection } from '../../state/portal-section.model';
 import { PortalCardComponent } from './portal-card.component';
 
@@ -60,54 +58,10 @@ describe('PortalCardComponent', () => {
     component = fixture.componentInstance;
 
     mockProfileStatus = MockProfileStatus.get();
-    mockProfileStatus.status.primaryCareRostering.statusCode =
+    mockProfileStatus.status.provincialAttachmentSystem.statusCode =
       StatusCode.NOT_AVAILABLE;
 
     windowSpy = jest.spyOn(window, 'window', 'get');
-  });
-
-  describe('Primary Rostering Card', () => {
-    given('the status code is NOT_AVAILABLE (locked in the backend)', () => {
-      component.section = new PrimaryCareRosteringPortalSection(
-        mockProfileStatus,
-      );
-
-      when('the component has been initialized', () => {
-        fixture.detectChanges();
-
-        then('should hide the "Learn more" and "Visit" buttons.', () => {
-          expect(component.showLearnMore).toBeFalsy();
-          expect(component.showVisit).toBeTruthy();
-          expect(component.section.action.disabled).toBeTruthy();
-          expect(component.showCompleted).toBeFalsy();
-        });
-      });
-    });
-
-    given('the status code is AVAILABLE (Incomplete in the backend)', () => {
-      mockProfileStatus.status.primaryCareRostering.statusCode =
-        StatusCode.AVAILABLE;
-      component.section = new PrimaryCareRosteringPortalSection(
-        mockProfileStatus,
-      );
-
-      when('the component has been initialized', () => {
-        fixture.detectChanges();
-
-        then(
-          'the "Learn more" button should be hidden and the "Visit" button shown',
-          () => {
-            expect(component.showLearnMore).toBeFalsy();
-            expect(component.showVisit).toBeTruthy();
-            expect(component.section.action.disabled).toBeFalsy();
-            expect(component.showCompleted).toBeFalsy();
-
-            const linkVisit = fixture.debugElement.query(By.css('button'));
-            expect(linkVisit).not.toBeNull();
-          },
-        );
-      });
-    });
   });
 
   describe('METHOD: onClickVisit', () => {

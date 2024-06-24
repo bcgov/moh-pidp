@@ -67,7 +67,7 @@ public partial class ProfileStatus
             {
                 return profile switch
                 {
-                    { UserIsHighAssuranceIdentity: false } => StatusCode.Hidden,
+                    { UserIsHighAssuranceIdentity: false } => StatusCode.Locked,
                     { HasBCProviderCredential: true } => StatusCode.Complete,
                     _ => StatusCode.Incomplete
                 };
@@ -149,6 +149,13 @@ public partial class ProfileStatus
             }
         }
 
+        public class AccountLinkingSection : ProfileSection
+        {
+            internal override string SectionName => "accountLinking";
+
+            protected override StatusCode Compute(ProfileData profile) => StatusCode.Incomplete;
+        }
+
         public class DriverFitnessSection : ProfileSection
         {
             internal override string SectionName => "driverFitness";
@@ -157,7 +164,7 @@ public partial class ProfileStatus
             {
                 return profile switch
                 {
-                    { UserIsHighAssuranceIdentity: false } => StatusCode.Hidden,
+                    { UserIsHighAssuranceIdentity: false } => StatusCode.Locked,
                     _ when profile.HasEnrolment(AccessTypeCode.DriverFitness) => StatusCode.Complete,
                     _ when profile.PartyPlrStanding
                         .With(DriverFitness.AllowedIdentifierTypes)
@@ -165,33 +172,6 @@ public partial class ProfileStatus
                         || (profile.HasNoLicence && profile.EndorsementPlrStanding.HasGoodStanding) => StatusCode.Incomplete,
                     _ => StatusCode.Locked
                 };
-            }
-        }
-
-        public class EdrdEformsSection : ProfileSection
-        {
-            internal override string SectionName => "edrdEforms";
-
-            protected override StatusCode Compute(ProfileData profile)
-            {
-                if (!profile.UserIsHighAssuranceIdentity)
-                {
-                    return StatusCode.Hidden;
-                }
-
-                if (profile.CompletedEnrolments.Contains(AccessTypeCode.EdrdEforms))
-                {
-                    return StatusCode.Complete;
-                }
-
-                if (profile.PartyPlrStanding
-                    .With(EdrdEforms.AllowedRoleTypes)
-                    .HasGoodStanding)
-                {
-                    return StatusCode.Incomplete;
-                }
-
-                return StatusCode.Locked;
             }
         }
 
@@ -215,7 +195,7 @@ public partial class ProfileStatus
             {
                 return profile switch
                 {
-                    { UserIsHighAssuranceIdentity: false } => StatusCode.Hidden,
+                    { UserIsHighAssuranceIdentity: false } => StatusCode.Locked,
                     _ when profile.HasEnrolment(AccessTypeCode.ImmsBCEforms) => StatusCode.Complete,
                     { PartyPlrStanding.HasGoodStanding: true } => StatusCode.Incomplete,
                     _ => StatusCode.Locked
@@ -231,7 +211,7 @@ public partial class ProfileStatus
             {
                 return profile switch
                 {
-                    { UserIsHighAssuranceIdentity: false } => StatusCode.Hidden,
+                    { UserIsHighAssuranceIdentity: false } => StatusCode.Locked,
                     _ when profile.HasEnrolment(AccessTypeCode.MSTeamsClinicMember) => StatusCode.Complete,
                     { HasMSTeamsClinicEndorsement: true } => StatusCode.Incomplete,
                     _ => StatusCode.Locked
@@ -247,7 +227,7 @@ public partial class ProfileStatus
             {
                 return profile switch
                 {
-                    { UserIsHighAssuranceIdentity: false } => StatusCode.Hidden,
+                    { UserIsHighAssuranceIdentity: false } => StatusCode.Locked,
                     _ when profile.HasEnrolment(AccessTypeCode.MSTeamsPrivacyOfficer) => StatusCode.Complete,
                     _ when profile.PartyPlrStanding
                         .With(MSTeamsPrivacyOfficer.AllowedIdentifierTypes)
@@ -265,7 +245,7 @@ public partial class ProfileStatus
             {
                 return profile switch
                 {
-                    { UserIsHighAssuranceIdentity: false } => StatusCode.Hidden,
+                    { UserIsHighAssuranceIdentity: false } => StatusCode.Locked,
                     _ when profile.HasEnrolment(AccessTypeCode.PrescriptionRefillEforms) => StatusCode.Complete,
                     _ when profile.PartyPlrStanding
                         .With(PrescriptionRefillEforms.AllowedIdentifierTypes)
@@ -275,9 +255,9 @@ public partial class ProfileStatus
             }
         }
 
-        public class PrimaryCareRosteringSection : ProfileSection
+        public class ProvincialAttachmentSystemSection : ProfileSection
         {
-            internal override string SectionName => "primaryCareRostering";
+            internal override string SectionName => "provincialAttachmentSystem";
 
             protected override StatusCode Compute(ProfileData profile)
             {
@@ -287,7 +267,8 @@ public partial class ProfileStatus
                         || profile.PartyPlrStanding
                             .With(ProviderRoleType.MedicalDoctor, ProviderRoleType.RegisteredNursePractitioner)
                             .HasGoodStanding)
-                        && profile.HasBCProviderCredential => StatusCode.Incomplete,
+                        && profile.HasBCProviderCredential => StatusCode.Complete,
+                    { HasBCServicesCardCredential: true } => StatusCode.Incomplete,
                     _ => StatusCode.Locked
                 };
             }
@@ -301,7 +282,7 @@ public partial class ProfileStatus
             {
                 return profile switch
                 {
-                    { UserIsBCProvider: false } or { HasPrpAuthorizedLicence: false } => StatusCode.Hidden,
+                    { UserIsBCProvider: false } or { HasPrpAuthorizedLicence: false } => StatusCode.Locked,
                     _ when profile.HasEnrolment(AccessTypeCode.ProviderReportingPortal) => StatusCode.Complete,
                     _ when profile.PartyPlrStanding
                         .With(ProviderReportingPortal.AllowedIdentifierTypes)
@@ -325,7 +306,7 @@ public partial class ProfileStatus
 
                 return profile switch
                 {
-                    { UserIsHighAssuranceIdentity: false } => StatusCode.Hidden,
+                    { UserIsHighAssuranceIdentity: false } => StatusCode.Locked,
                     _ when profile.HasEnrolment(AccessTypeCode.SAEforms) => StatusCode.Complete,
                     _ when profile.PartyPlrStanding
                         .Excluding(SAEforms.ExcludedIdentifierTypes)

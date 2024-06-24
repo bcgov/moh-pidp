@@ -36,6 +36,9 @@ nginx:
     image:
       registry: public.ecr.aws
   
+  fluentbit:
+    enabled: true
+  
   service:
     type: ClusterIP
     port: 8080

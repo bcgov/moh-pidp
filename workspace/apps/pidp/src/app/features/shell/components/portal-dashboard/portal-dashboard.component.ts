@@ -11,26 +11,24 @@ import {
   DashboardHeaderConfig,
   DashboardMenuItem,
   DashboardRouteMenuItem,
-  DashboardV2Component,
   IDashboard,
+  NavMenuComponent,
 } from '@bcgov/shared/ui';
-import { ArrayUtils } from '@bcgov/shared/utils';
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';
 import { AccessTokenService } from '@app/features/auth/services/access-token.service';
 import { AuthService } from '@app/features/auth/services/auth.service';
-import { PortalRoutes } from '@app/features/portal/portal.routes';
 import { PermissionsService } from '@app/modules/permissions/permissions.service';
-import { Role } from '@app/shared/enums/roles.enum';
 
 import { DashboardStateService } from '../../services/dashboard-state-service.service';
+import { AccessRoutes } from '@app/features/access/access.routes';
 
 @Component({
   selector: 'app-portal-dashboard',
   templateUrl: './portal-dashboard.component.html',
   styleUrls: ['./portal-dashboard.component.scss'],
   standalone: true,
-  imports: [AsyncPipe, DashboardV2Component],
+  imports: [AsyncPipe, NavMenuComponent],
 })
 export class PortalDashboardComponent implements IDashboard, OnInit {
   public logoutRedirectUrl: string;
@@ -98,74 +96,17 @@ export class PortalDashboardComponent implements IDashboard, OnInit {
     } as IsActiveMatchOptions;
     return [
       new DashboardRouteMenuItem(
-        'Profile',
+        'Access',
         {
-          commands: PortalRoutes.BASE_PATH,
-          extras: { fragment: 'profile' },
-          linkActiveOptions,
-        },
-        'assignment_ind',
-      ),
-      ...ArrayUtils.insertResultIf<DashboardRouteMenuItem>(
-        this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
-        () => [
-          new DashboardRouteMenuItem(
-            'Organization Info',
-            {
-              commands: PortalRoutes.BASE_PATH,
-              extras: { fragment: 'organization' },
-              linkActiveOptions,
-            },
-            'corporate_fare',
-          ),
-        ],
-      ),
-      new DashboardRouteMenuItem(
-        'Access to Systems',
-        {
-          commands: PortalRoutes.BASE_PATH,
-          extras: { fragment: 'access' },
+          commands:[AccessRoutes.BASE_PATH,AccessRoutes.ACCESS_REQUESTS],
           linkActiveOptions,
         },
         'assignment',
       ),
-      ...ArrayUtils.insertResultIf<DashboardRouteMenuItem>(
-        this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
-        () => [
-          new DashboardRouteMenuItem(
-            'Training',
-            {
-              commands: PortalRoutes.BASE_PATH,
-              extras: { fragment: 'training' },
-              linkActiveOptions,
-            },
-            'school',
-          ),
-        ],
-      ),
       new DashboardRouteMenuItem(
-        'History',
+        'Help',
         {
-          commands: PortalRoutes.BASE_PATH,
-          extras: { fragment: 'history' },
-          linkActiveOptions,
-        },
-        'restore',
-      ),
-      new DashboardRouteMenuItem(
-        'FAQ',
-        {
-          commands: PortalRoutes.BASE_PATH,
-          extras: { fragment: 'faq' },
-          linkActiveOptions,
-        },
-        'help_outline',
-      ),
-      new DashboardRouteMenuItem(
-        'Get Support',
-        {
-          commands: PortalRoutes.BASE_PATH,
-          extras: { fragment: 'support' },
+          commands: 'help',
           linkActiveOptions,
         },
         'help_outline',

@@ -1,0 +1,131 @@
+<ui-layout-header-footer [emailSupport]="emailSupport">
+  <div class="header-right" page-header-right>
+    <button
+      *ngIf="showMiniMenuButton"
+      class="menu"
+      title="menu"
+      mat-icon-button
+      (click)="onMiniMenuButtonClick()">
+      <mat-icon>menu</mat-icon>
+    </button>
+  </div>
+  <div *ngIf="isTopMenuVisible" uiPidpInjectViewportCss>
+    <div class="content-menu">
+      <div class="container">
+        <ng-container *ngTemplateOutlet="menu"></ng-container>
+      </div>
+    </div>
+    <div class="content-body">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+  <ng-template #menu>
+    <a
+      class="logo-link"
+      title="Home"
+      aria-label="Go home"
+      (click)="navigateToRoot()">
+      <span class="span-text">OneHealthID</span></a
+    >
+    <div class="main-menu">
+      <a class="main-menu-item">
+        <div class="dropdown">
+          <a class="dropdown-profile">Profile</a>
+          <div class="dropdown-content">
+            <a
+              class="dropdown-links"
+              (click)="navigateTo('/profile/personal-information')"
+              >Personal Information</a
+            >
+            <a
+              class="dropdown-links"
+              (click)="navigateTo(dashboardState.collegeRoute)"
+              >College License</a
+            >
+            <a
+              class="dropdown-links"
+              (click)="navigateTo('/profile/user-access-agreement')"
+              >User Access Agreement</a
+            >
+          </div>
+        </div>
+      </a>
+      <a
+        *ngFor="let menuItem of menuItems"
+        class="main-menu-item"
+        routerLinkActive="main-menu-item-active"
+        [routerLink]="getRouterLink(menuItem)"
+        [routerLinkActiveOptions]="getRouterLinkActiveOptions(menuItem)"
+        [fragment]="getRouterLinkFragment(menuItem)"
+        (click)="onMenuItemClicked()"
+        >{{ menuItem.label }}
+      </a>
+      <button
+        *ngIf="isLogoutButtonVisible"
+        class="btn-signout"
+        mat-stroked-button
+        aria-label="Sign Out"
+        (click)="onLogout()">
+        Sign Out
+      </button>
+    </div>
+  </ng-template>
+  <div *ngIf="!isTopMenuVisible" class="nav-menu" uiPidpInjectViewportCss>
+    <div class="header-bar-left"></div>
+    <div class="content">
+      <mat-sidenav-container class="sidenav-container">
+        <mat-sidenav #sidenav [mode]="sidenavMode" [(opened)]="isSidenavOpened">
+          <div class="sidenav-header-box"></div>
+          <div class="sidenav-body-box">
+            <ng-container *ngTemplateOutlet="sidenavmenu"></ng-container>
+          </div>
+        </mat-sidenav>
+        <mat-sidenav-content class="custom-mat-sidenav-content">
+          <router-outlet></router-outlet>
+        </mat-sidenav-content>
+      </mat-sidenav-container>
+    </div>
+    <div class="header-bar-right"></div>
+  </div>
+  <ng-template #sidenavmenu>
+    <div class="sidenav-panel-box">
+      <div class="sidenav-bar"></div>
+      <div class="sidenav-panel-content">
+        <div class="sidenav-menu">
+          <a
+            class="sidenav-menu-item"
+            (click)="navigateTo('/profile/personal-information')"
+            >Personal Information</a
+          >
+          <a
+            class="sidenav-menu-item"
+            (click)="navigateTo(dashboardState.collegeRoute)"
+            >College License</a
+          >
+          <a
+            class="sidenav-menu-item"
+            (click)="navigateTo('/profile/user-access-agreement')"
+            >User Access Agreement</a
+          >
+          <a
+            *ngFor="let menuItem of menuItems"
+            class="sidenav-menu-item"
+            routerLinkActive="sidenav-menu-item-active"
+            [routerLink]="getRouterLink(menuItem)"
+            [routerLinkActiveOptions]="getRouterLinkActiveOptions(menuItem)"
+            [fragment]="getRouterLinkFragment(menuItem)"
+            (click)="onMenuItemClicked()"
+            >{{ menuItem.label }}
+          </a>
+          <a
+            *ngIf="isLogoutMenuItemVisible"
+            class="sidenav-menu-item"
+            routerLinkActive="sidenav-menu-item-active"
+            (click)="onLogout()">
+            Sign Out</a
+          >
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</ui-layout-header-footer>
