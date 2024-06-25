@@ -30,7 +30,6 @@ import { AuthService } from '@app/features/auth/services/auth.service';
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
 import { ProfileStatus } from '@app/features/portal/models/profile-status.model';
 import { PortalResource } from '@app/features/portal/portal-resource.service';
-import { PortalService } from '@app/features/portal/portal.service';
 
 import { BcProviderEditResource } from '../bc-provider-edit/bc-provider-edit-resource.service';
 import { BcProviderEditInitialStateModel } from '../bc-provider-edit/bc-provider-edit.page';
@@ -92,7 +91,6 @@ export class ProvincialAttachmentSystemPage implements OnInit {
     private discoveryResource: DiscoveryResource,
     private navigationService: NavigationService,
     private portalResource: PortalResource,
-    private portalService: PortalService,
     private partyService: PartyService,
     private router: Router,
     private toastService: ToastService,
@@ -127,19 +125,8 @@ export class ProvincialAttachmentSystemPage implements OnInit {
       this.partyService.partyId,
     );
 
-    this.updateState(profileStatus$);
     this.handlePasBannerStatus(profileStatus$);
     this.handlePasStatus(profileStatus$);
-  }
-
-  private updateState(profileStatus$: Observable<ProfileStatus | null>): void {
-    profileStatus$
-      .pipe(
-        tap((profileStatus: ProfileStatus | null) => {
-          this.portalService.updateState(profileStatus);
-        }),
-      )
-      .subscribe();
   }
 
   private handlePasBannerStatus(
