@@ -125,20 +125,30 @@ export class ProvincialAttachmentSystemPage implements OnInit {
       this.partyService.partyId,
     );
 
-    this.handlePasBannerStatus(profileStatus$);
-    this.handlePasStatus(profileStatus$);
+    this.handleStepperState(profileStatus$);
   }
 
-  private handlePasBannerStatus(
+  private handleStepperState(
     profileStatus$: Observable<ProfileStatus | null>,
   ): void {
+    let selectedIndex = this.lastSelectedIndex;
     profileStatus$
       .pipe(
+        tap((profileStatus: ProfileStatus | null) => {
+          this.pasStatusCode =
+            profileStatus?.status.provincialAttachmentSystem.statusCode;
+          if (this.pasStatusCode === StatusCode.COMPLETED) {
+            this.pas$.next(false);
+          } else if (selectedIndex === this.lastSelectedIndex) {
+            // PAS step
+            selectedIndex = 1;
+          }
+          this.selectedIndex = selectedIndex;
+        }),
         switchMap(
           (
             profileStatus,
           ): Observable<BcProviderEditInitialStateModel | null> => {
-            let selectedIndex = this.lastSelectedIndex;
             this.hasCpn = profileStatus?.status.collegeCertification.hasCpn;
 
             this.bcProviderStatusCode =
@@ -160,27 +170,6 @@ export class ProvincialAttachmentSystemPage implements OnInit {
           if (bcProviderObject) {
             this.bcProviderUsername = bcProviderObject.bcProviderId;
           }
-        }),
-      )
-      .subscribe();
-  }
-
-  private handlePasStatus(
-    profileStatus$: Observable<ProfileStatus | null>,
-  ): void {
-    profileStatus$
-      .pipe(
-        tap((profileStatus: ProfileStatus | null) => {
-          let selectedIndex = this.lastSelectedIndex;
-          this.pasStatusCode =
-            profileStatus?.status.provincialAttachmentSystem.statusCode;
-          if (this.pasStatusCode === StatusCode.COMPLETED) {
-            this.pas$.next(false);
-          } else if (selectedIndex === this.lastSelectedIndex) {
-            // PAS step
-            selectedIndex = 1;
-          }
-          this.selectedIndex = selectedIndex;
         }),
       )
       .subscribe();
