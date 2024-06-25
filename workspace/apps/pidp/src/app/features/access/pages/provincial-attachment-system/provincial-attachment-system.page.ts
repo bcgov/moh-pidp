@@ -135,37 +135,35 @@ export class ProvincialAttachmentSystemPage implements OnInit {
     profileStatus$
       .pipe(
         tap((profileStatus: ProfileStatus | null) => {
+          this.hasCpn = profileStatus?.status.collegeCertification.hasCpn;
           this.pasStatusCode =
             profileStatus?.status.provincialAttachmentSystem.statusCode;
+          this.bcProviderStatusCode =
+            profileStatus?.status.bcProvider.statusCode;
           if (this.pasStatusCode === StatusCode.COMPLETED) {
             this.pas$.next(false);
-          } else if (selectedIndex === this.lastSelectedIndex) {
+          } else if (
+            selectedIndex === this.lastSelectedIndex &&
+            this.bcProviderStatusCode === StatusCode.COMPLETED
+          ) {
             // PAS step
             selectedIndex = 1;
           }
           this.selectedIndex = selectedIndex;
         }),
-        switchMap(
-          (
-            profileStatus,
-          ): Observable<BcProviderEditInitialStateModel | null> => {
-            this.hasCpn = profileStatus?.status.collegeCertification.hasCpn;
-
-            this.bcProviderStatusCode =
-              profileStatus?.status.bcProvider.statusCode;
-            if (this.bcProviderStatusCode === StatusCode.COMPLETED) {
-              this.bcProvider$.next(true);
-              return this.bcProviderResource.get(this.partyService.partyId);
-            } else {
-              if (selectedIndex === this.lastSelectedIndex) {
-                // BCProvider step
-                selectedIndex = 0;
-              }
-              this.selectedIndex = selectedIndex;
-              return of(null);
+        switchMap((): Observable<BcProviderEditInitialStateModel | null> => {
+          if (this.bcProviderStatusCode === StatusCode.COMPLETED) {
+            this.bcProvider$.next(true);
+            return this.bcProviderResource.get(this.partyService.partyId);
+          } else {
+            if (selectedIndex === this.lastSelectedIndex) {
+              // BCProvider step
+              selectedIndex = 0;
             }
-          },
-        ),
+            this.selectedIndex = selectedIndex;
+            return of(null);
+          }
+        }),
         tap((bcProviderObject: BcProviderEditInitialStateModel | null) => {
           if (bcProviderObject) {
             this.bcProviderUsername = bcProviderObject.bcProviderId;
