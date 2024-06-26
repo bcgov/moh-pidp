@@ -80,10 +80,11 @@ ol {
 .viewport-all {
   & header {
     margin: var(--header-margin);
-    & h2 {
-      margin: 0;
-      padding: calc(var(--gap) / 2) calc(var(--gap) * 2);
-      background-color: pidp.$grey-10;
+    & h1 {
+      color: #036;
+      font-size: 3.125rem;
+      font-weight: 700;
+      margin-bottom: 0;
     }
   }
   & .content {
