@@ -18,6 +18,7 @@ import {
 import { MatTooltipModule } from '@angular/material/tooltip';
 import {
   IsActiveMatchOptions,
+  Router,
   RouterLink,
   RouterLinkActive,
   RouterOutlet,
@@ -86,7 +87,14 @@ export class NavMenuComponent implements OnChanges {
     return !!this.dashboardState.titleDescriptionText;
   }
 
-  public constructor(private viewportService: ViewportService) {
+  public get collegeRoute(): boolean {
+    return !!this.dashboardState.collegeRoute;
+  }
+
+  public constructor(
+    private viewportService: ViewportService,
+    private router: Router,
+  ) {
     this.viewportService.viewportBroadcast$.subscribe((viewport) =>
       this.onViewportChange(viewport),
     );
@@ -98,12 +106,21 @@ export class NavMenuComponent implements OnChanges {
     // Toggle display of the sidenav.
     this.isSidenavOpened = !this.isSidenavOpened;
   }
+  public navigateToRoot(): void {
+    this.router.navigateByUrl('/');
+  }
+
+  public navigateTo(route: string): void {
+    if(this.showMiniMenuButton)
+      this.isSidenavOpened = this.isSidenavOpened ? !this.isSidenavOpened : this.isSidenavOpened;
+    this.router.navigateByUrl(route);
+  }
 
   public getRouterLink(
     item: DashboardMenuItem | string,
   ): RoutePath | undefined {
     if (item instanceof DashboardRouteMenuItem) {
-      const routeItem: DashboardRouteMenuItem = item ;
+      const routeItem: DashboardRouteMenuItem = item;
       return routeItem.commands;
     }
     return undefined;
@@ -114,7 +131,7 @@ export class NavMenuComponent implements OnChanges {
       }
     | IsActiveMatchOptions {
     if (item instanceof DashboardRouteMenuItem) {
-      const routeItem:DashboardRouteMenuItem = item ;
+      const routeItem: DashboardRouteMenuItem = item;
       return routeItem.linkActiveOptions;
     }
     throw new Error('getRouterLinkActiveOptions: not implemented');
@@ -143,6 +160,7 @@ export class NavMenuComponent implements OnChanges {
     if(!([PidpViewport.xsmall, PidpViewport.small, PidpViewport.medium, PidpViewport.large].includes(this.viewport))) {
       throw new Error(`Nav Menu not implemented: ${this.viewport}`);
     }
+
 
     const isMiniView = this.viewport === PidpViewport.xsmall;
     const isDesktopView = this.viewport === PidpViewport.medium || this.viewport === PidpViewport.large;

@@ -7,6 +7,7 @@ import { Role } from '@app/shared/enums/roles.enum';
 
 import { StatusCode } from '../enums/status-code.enum';
 import { ProfileStatus } from '../models/profile-status.model';
+import { IAccessSection } from './access-section.model';
 import { BcProviderPortalSection } from './access/bc-provider-portal-section.class';
 import { DriverFitnessPortalSection } from './access/driver-fitness-portal-section.class';
 import { HcimAccountTransferPortalSection } from './access/hcim-account-transfer-portal-section.class';
@@ -14,8 +15,8 @@ import { ImmsBCEformsPortalSection } from './access/immsbc-eforms-portal-section
 import { MsTeamsClinicMemberPortalSection } from './access/ms-teams-clinic-member-portal-section.class';
 import { MsTeamsPrivacyOfficerPortalSection } from './access/ms-teams-privacy-officer-portal-section.class';
 import { PrescriptionRefillEformsPortalSection } from './access/prescription-refill-eforms-portal-section.class';
-import { PrimaryCareRosteringPortalSection } from './access/primary-care-rostering-portal-section.class';
 import { ProviderReportingPortalSection } from './access/provider-reporting-portal-section.class';
+import { ProvincialAttachmentSystemPortalSection } from './access/provincial-attachment-system-portal-section.class';
 import { SaEformsPortalSection } from './access/sa-eforms-portal-section.class';
 import { MfaSetupPortalSection } from './faq/mfa-setup-portal-section.class';
 import { SignedAcceptedDocumentsPortalSection } from './history/signed-accepted-documents-portal-section.class';
@@ -40,8 +41,15 @@ export const portalStateGroupKeys = [
   'organization',
   'training',
   'history',
-  'faq',
+  'help',
 ] as const;
+
+/**
+ * @description
+ * Group keys as a readonly tuple to allow iteration
+ * at runtime.
+ */
+export const accessStateGroupKey = ['access'] as const;
 
 /**
  * @description
@@ -49,7 +57,98 @@ export const portalStateGroupKeys = [
  */
 export type PortalStateGroupKey = (typeof portalStateGroupKeys)[number];
 
+/**
+ * @description
+ * Union of keys generated from the tuple.
+ */
+export type AccessStateGroupKey = (typeof accessStateGroupKey)[number];
+
+export type AccessState = Record<AccessStateGroupKey, IAccessSection[]> | null;
+
 export type PortalState = Record<PortalStateGroupKey, IPortalSection[]> | null;
+
+export class AccessStateBuilder {
+  public constructor(
+    private router: Router,
+    private permissionsService: PermissionsService,
+  ) {}
+
+  public createAccessState(
+    profileStatus: ProfileStatus,
+  ): Record<AccessStateGroupKey, IAccessSection[]> {
+    return {
+      access: this.createAccessGroup(profileStatus),
+    };
+  }
+
+  private createAccessGroup(profileStatus: ProfileStatus): IAccessSection[] {
+    return [
+      ...ArrayUtils.insertResultIf<IAccessSection>(
+        this.insertSection('saEforms', profileStatus),
+        () => [new SaEformsPortalSection(profileStatus, this.router)],
+      ),
+      ...ArrayUtils.insertResultIf<IAccessSection>(
+        this.insertSection('prescriptionRefillEforms', profileStatus),
+        () => [
+          new PrescriptionRefillEformsPortalSection(profileStatus, this.router),
+        ],
+      ),
+      ...ArrayUtils.insertResultIf<IAccessSection>(
+        this.insertSection('bcProvider', profileStatus),
+        () => [new BcProviderPortalSection(profileStatus, this.router)],
+      ),
+      ...ArrayUtils.insertResultIf<IAccessSection>(
+        this.insertSection('hcimAccountTransfer', profileStatus),
+        () => [
+          new HcimAccountTransferPortalSection(profileStatus, this.router),
+        ],
+      ),
+      ...ArrayUtils.insertResultIf<IAccessSection>(
+        this.insertSection('driverFitness', profileStatus),
+        () => [new DriverFitnessPortalSection(profileStatus, this.router)],
+      ),
+      ...ArrayUtils.insertResultIf<IAccessSection>(
+        this.insertSection('msTeamsPrivacyOfficer', profileStatus),
+        () => [
+          new MsTeamsPrivacyOfficerPortalSection(profileStatus, this.router),
+        ],
+      ),
+      ...ArrayUtils.insertResultIf<IAccessSection>(
+        this.insertSection('msTeamsClinicMember', profileStatus),
+        () => [
+          new MsTeamsClinicMemberPortalSection(profileStatus, this.router),
+        ],
+      ),
+      ...ArrayUtils.insertResultIf<IAccessSection>(
+        // TODO remove permissions when ready for production
+        this.insertSection('providerReportingPortal', profileStatus) &&
+          this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
+        () => [new ProviderReportingPortalSection(profileStatus, this.router)],
+      ),
+      ...ArrayUtils.insertResultIf<IAccessSection>(
+        this.insertSection('provincialAttachmentSystem', profileStatus),
+        () => [
+          new ProvincialAttachmentSystemPortalSection(
+            profileStatus,
+            this.router,
+          ),
+        ],
+      ),
+      ...ArrayUtils.insertResultIf<IAccessSection>(
+        this.insertSection('immsBCEforms', profileStatus),
+        () => [new ImmsBCEformsPortalSection(profileStatus, this.router)],
+      ),
+    ];
+  }
+
+  private insertSection(
+    portalSectionKey: PortalSectionStatusKey,
+    profileStatus: ProfileStatus,
+  ): boolean {
+    const statusCode = profileStatus.status[portalSectionKey]?.statusCode;
+    return statusCode && statusCode !== StatusCode.HIDDEN;
+  }
+}
 
 export class PortalStateBuilder {
   public constructor(
@@ -67,7 +166,7 @@ export class PortalStateBuilder {
       organization: this.createOrganizationGroup(profileStatus),
       training: this.createTrainingGroup(profileStatus),
       history: this.createHistoryGroup(),
-      faq: this.createFaqGroup(),
+      help: this.createFaqGroup(),
     };
   }
 
@@ -158,8 +257,13 @@ export class PortalStateBuilder {
         () => [new ProviderReportingPortalSection(profileStatus, this.router)],
       ),
       ...ArrayUtils.insertResultIf<IPortalSection>(
-        this.insertSection('primaryCareRostering', profileStatus),
-        () => [new PrimaryCareRosteringPortalSection(profileStatus)],
+        this.insertSection('provincialAttachmentSystem', profileStatus),
+        () => [
+          new ProvincialAttachmentSystemPortalSection(
+            profileStatus,
+            this.router,
+          ),
+        ],
       ),
       ...ArrayUtils.insertResultIf<IPortalSection>(
         this.insertSection('immsBCEforms', profileStatus),

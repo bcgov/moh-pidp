@@ -1,8 +1,13 @@
 import { Routes } from '@angular/router';
 
 import { AccessRoutes } from './access.routes';
+import { AccessRequestsPage } from './pages/access-requests-page/access-requests.page';
 
 export const routes: Routes = [
+  {
+    path: AccessRoutes.ACCESS_REQUESTS,
+    component: AccessRequestsPage,
+  },
   {
     path: AccessRoutes.SPECIAL_AUTH_EFORMS,
     loadChildren: (): Promise<Routes> =>
@@ -72,5 +77,12 @@ export const routes: Routes = [
       import('./pages/immsbc-eforms/immsbc-eforms-routing.routes').then(
         (m) => m.routes,
       ),
+  },
+  {
+    path: AccessRoutes.PROVINCIAL_ATTACHMENT_SYSTEM,
+    loadChildren: (): Promise<Routes> =>
+      import(
+        './pages/provincial-attachment-system/provincial-attachment-system-routing.routes'
+      ).then((m) => m.routes),
   },
 ];

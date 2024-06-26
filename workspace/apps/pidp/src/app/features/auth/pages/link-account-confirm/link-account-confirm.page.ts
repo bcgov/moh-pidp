@@ -6,10 +6,11 @@ import { Router } from '@angular/router';
 
 import { Observable, exhaustMap, switchMap, tap } from 'rxjs';
 
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { faAngleRight } from '@fortawesome/free-solid-svg-icons';
 import {
   LOADING_OVERLAY_DEFAULT_MESSAGE,
   LoadingOverlayService,
-  NavigationService,
 } from '@pidp/presentation';
 
 import {
@@ -23,13 +24,16 @@ import { User } from '@app/features/auth/models/user.model';
 import { ProfileRoutes } from '@app/features/profile/profile.routes';
 import { SuccessDialogComponent } from '@app/shared/components/success-dialog/success-dialog.component';
 
+import { IdentityProvider } from '../../enums/identity-provider.enum';
 import { AuthorizedUserService } from '../../services/authorized-user.service';
 import { LinkAccountConfirmResource } from './link-account-confirm-resource.service';
+import { BcProviderUser } from '../../models/bc-provider-user.model';
 
 @Component({
   selector: 'app-link-account-confirm',
   standalone: true,
   imports: [
+    FaIconComponent,
     CommonModule,
     InjectViewportCssClassDirective,
     MatButtonModule,
@@ -41,10 +45,11 @@ import { LinkAccountConfirmResource } from './link-account-confirm-resource.serv
 })
 export class LinkAccountConfirmPage implements OnInit {
   public user$: Observable<User>;
+  public faAngleRight = faAngleRight;
+  public showInstructions: boolean = false;
   public constructor(
     private dialog: MatDialog,
     private authorizedUserService: AuthorizedUserService,
-    private navigationService: NavigationService,
     private linkAccountConfirmResource: LinkAccountConfirmResource,
     private router: Router,
     private loadingOverlayService: LoadingOverlayService,
@@ -52,30 +57,31 @@ export class LinkAccountConfirmPage implements OnInit {
     this.user$ = this.authorizedUserService.user$;
   }
 
-  public onBack(): void {
-    this.navigateToRoot();
-  }
-
   public ngOnInit(): void {
     this.user$
       .pipe(
         switchMap((user) => {
-          const accountName = user.email ? `, email: ${user.email}` : '';
           const data: DialogOptions = {
-            title: 'Confirmation Required',
+            title: 'Account linking',
+            titlePosition: 'center',
+            bottomBorder: false,
+            bodyTextPosition: 'center',
             component: HtmlComponent,
             data: {
-              content: `Are you sure you want to link to
-              ${user.identityProvider === 'bcsc' ? 'BCSC' : ''}
-              ${user.firstName} ${user.lastName}${accountName}?`,
+              content: `Your existing OneHealthID profile is about to be linked to ${this.getPendingAccountDescription(user)}. Is this information correct?`,
             },
+            imageSrc:
+              '/assets/images/online-marketing-hIgeoQjS_iE-unsplash.jpg',
+            imageType: 'banner',
+            width: '31.25rem',
+            height: '26rem',
+            actionText: 'Correct',
+            actionTypePosition: 'center',
           };
           return this.dialog
             .open(ConfirmDialogComponent, {
               data,
               disableClose: true,
-              width: '500px',
-              maxWidth: '500px',
             })
             .afterClosed()
             .pipe(
@@ -102,7 +108,29 @@ export class LinkAccountConfirmPage implements OnInit {
     );
   }
 
-  private navigateToRoot(): void {
-    this.navigationService.navigateToRoot();
+  public toggleInstructions(): void {
+    this.showInstructions = !this.showInstructions;
+  }
+
+  public onPageNavigate(url: string[]): void {
+    this.router.navigate(url);
+  }
+
+  private getPendingAccountDescription(user: User): string {
+    switch (user.identityProvider) {
+      case IdentityProvider.BCSC:
+        return `the BC Services Card account ${user.firstName} ${user.lastName}`;
+      case IdentityProvider.PHSA:
+        return `the PHSA account ${user.email}`;
+      case IdentityProvider.BC_PROVIDER: {
+        const idpId = (user as BcProviderUser).idpId;
+        const accountName = idpId.endsWith('@bcp')
+          ? idpId.slice(0, -4)
+          : idpId;
+        return `the BC Provider account ${accountName}`;
+      }
+      default:
+        return 'a new account';
+    }
   }
 }
