@@ -152,7 +152,8 @@
           restart the process.
         </p>
         <mat-form-field>
-          <input matInput placeholder="Email" formControlName="recipientEmail" />
+          <mat-label>Email</mat-label>
+          <input matInput formControlName="recipientEmail" />
           <mat-error *ngIf="recipientEmail.hasError('required')">Required</mat-error>
           <mat-error *ngIf="recipientEmail.hasError('email')">
             Must be a valid email address

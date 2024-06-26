@@ -19,6 +19,7 @@ import {
   catchError,
   exhaustMap,
   map,
+  noop,
   of,
   switchMap,
   tap,
@@ -26,11 +27,11 @@ import {
 
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import {
+  faAngleRight,
   faArrowDown,
   faArrowUp,
   faUser,
   faUserGroup,
-  faAngleRight,
 } from '@fortawesome/free-solid-svg-icons';
 import {
   LOADING_OVERLAY_DEFAULT_MESSAGE,
@@ -163,27 +164,89 @@ export class EndorsementsPage
 
   public onApprove(requestId: number): void {
     this.loadingOverlayService.open(LOADING_OVERLAY_DEFAULT_MESSAGE);
-    this.resource
-      .approveEndorsementRequest(this.partyService.partyId, requestId)
+    const data: DialogOptions = {
+      title: 'Endorsement requests',
+      bottomBorder: false,
+      titlePosition: 'center',
+      bodyTextPosition: 'center',
+      component: HtmlComponent,
+      data: {
+        content:
+          'You are about to <b>approve</b> this endorsement, would you like to proceed',
+      },
+      imageSrc: '/assets/images/online-marketing-hIgeoQjS_iE-unsplash.jpg',
+      imageType: 'banner',
+      width: '31rem',
+      height: '24rem',
+      actionText: 'Continue',
+      actionTypePosition: 'center',
+      class: 'dialog-container',
+    };
+
+    this.dialog
+      .open(ConfirmDialogComponent, { data })
+      .afterClosed()
       .pipe(
-        switchMap(
-          () =>
-            (this.actionableEndorsementRequests$ =
-              this.getActionableEndorsementRequests(this.partyService.partyId)),
-        ),
+        exhaustMap((result) => {
+          this.loadingOverlayService.close();
+          return result
+            ? this.resource
+                .approveEndorsementRequest(this.partyService.partyId, requestId)
+                .pipe(
+                  switchMap(
+                    () =>
+                      (this.actionableEndorsementRequests$ =
+                        this.getActionableEndorsementRequests(
+                          this.partyService.partyId,
+                        )),
+                  ),
+                )
+            : EMPTY;
+        }),
       )
       .subscribe();
   }
 
   public onCancel(requestId: number): void {
-    this.resource
-      .declineEndorsementRequest(this.partyService.partyId, requestId)
+    const data: DialogOptions = {
+      title: 'Endorsement requests',
+      bottomBorder: false,
+      titlePosition: 'center',
+      bodyTextPosition: 'center',
+      component: HtmlComponent,
+      data: {
+        content:
+          'You are about to <b>cancel</b> this endorsement, would you like to proceed',
+      },
+      imageSrc: '/assets/images/online-marketing-hIgeoQjS_iE-unsplash.jpg',
+      imageType: 'banner',
+      width: '31rem',
+      height: '24rem',
+      actionText: 'Continue',
+      actionTypePosition: 'center',
+      class: 'dialog-container',
+    };
+
+    this.dialog
+      .open(ConfirmDialogComponent, { data })
+      .afterClosed()
       .pipe(
-        switchMap(
-          () =>
-            (this.actionableEndorsementRequests$ =
-              this.getActionableEndorsementRequests(this.partyService.partyId)),
-        ),
+        exhaustMap((result) => {
+          this.loadingOverlayService.close();
+          return result
+            ? this.resource
+                .declineEndorsementRequest(this.partyService.partyId, requestId)
+                .pipe(
+                  switchMap(
+                    () =>
+                      (this.actionableEndorsementRequests$ =
+                        this.getActionableEndorsementRequests(
+                          this.partyService.partyId,
+                        )),
+                  ),
+                )
+            : EMPTY;
+        }),
       )
       .subscribe();
   }
@@ -264,9 +327,49 @@ export class EndorsementsPage
 
   protected performSubmission(): NoContent {
     const partyId = this.partyService.partyId;
+    const data: DialogOptions = {
+      title: 'Endorsement requests',
+      bottomBorder: false,
+      titlePosition: 'center',
+      bodyTextPosition: 'center',
+      component: HtmlComponent,
+      data: {
+        content:
+          "You are about to <b>request</b> an endorsement to<p class='p-0 m-0' style='color: #036;font-size:1.2rem;'><b>" +
+          this.formState.json?.recipientEmail +
+          '</b></p>would you like to proceed?',
+      },
+      imageSrc: '/assets/images/online-marketing-hIgeoQjS_iE-unsplash.jpg',
+      imageType: 'banner',
+      width: '31rem',
+      height: '26rem',
+      actionText: 'Continue',
+      actionTypePosition: 'center',
+      class: 'dialog-container',
+    };
 
     return partyId && this.formState.json
-      ? this.resource.createEndorsementRequest(partyId, this.formState.json)
+      ? this.dialog
+          .open(ConfirmDialogComponent, { data })
+          .afterClosed()
+          .pipe(
+            exhaustMap((result) => {
+              this.loadingOverlayService.close();
+              return result && partyId && this.formState.json
+                ? this.resource.createEndorsementRequest(
+                    partyId,
+                    this.formState.json,
+                  )
+                : EMPTY;
+            }),
+            catchError((error: HttpErrorResponse) => {
+              this.loadingOverlayService.close();
+              if (error.status === HttpStatusCode.BadRequest) {
+                return of(noop());
+              }
+              return of(noop());
+            }),
+          )
       : EMPTY;
   }
 
