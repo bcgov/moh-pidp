@@ -147,7 +147,7 @@ export class NavMenuComponent implements OnChanges {
     this.logout.emit();
   }
   public onMenuItemClicked(): void {
-    if (this.sidenavMode === 'over') {
+    if (this.showMiniMenuButton && this.sidenavMode === 'over') {
       this.sidenav.close();
     }
   }
