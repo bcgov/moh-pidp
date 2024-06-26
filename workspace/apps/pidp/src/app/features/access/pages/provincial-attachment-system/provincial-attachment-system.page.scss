@@ -207,6 +207,11 @@
 
 .stepper-buttons {
   margin-top: 10px;
+  & button {
+    border: pidp.$bcgov-color-primary solid 2px;
+    color: pidp.$bcgov-color-primary;
+    font-weight: bold;
+  }
 
   & button:last-child {
     margin-left: 10px;
