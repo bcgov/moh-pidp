@@ -143,21 +143,15 @@ export class NavMenuComponent implements OnChanges {
     if(!([PidpViewport.xsmall, PidpViewport.small, PidpViewport.medium, PidpViewport.large].includes(this.viewport))) {
       throw new Error(`Nav Menu not implemented: ${this.viewport}`);
     }
-    // Initializing all the show flags to flase initially
-    this.showMiniMenuButton = false;
-    this.isSidenavOpened = false;
-    this.sidenavMode = 'over';
-    this.isLogoutButtonVisible = false;
-    this.isLogoutMenuItemVisible = false;
-    this.isTopMenuVisible = false;
 
-    // updating the show flags accoring to the view port
-    this.showMiniMenuButton = (this.viewport == PidpViewport.xsmall);
-    this.isSidenavOpened = (this.viewport == PidpViewport.medium || this.viewport == PidpViewport.large);
-    this.sidenavMode = (this.viewport == PidpViewport.medium || this.viewport == PidpViewport.large) ? 'side' : 'over';
-    this.isLogoutButtonVisible = (this.viewport == PidpViewport.small || this.viewport == PidpViewport.medium || this.viewport == PidpViewport.large);
-    this.isLogoutMenuItemVisible = (this.viewport == PidpViewport.xsmall || this.viewport == PidpViewport.small);
-    this.isTopMenuVisible = (this.viewport == PidpViewport.small || this.viewport == PidpViewport.medium || this.viewport == PidpViewport.large);
+    const isMiniView = this.viewport === PidpViewport.xsmall;
+    const isDesktopView = this.viewport === PidpViewport.medium || this.viewport === PidpViewport.large;
 
+    this.showMiniMenuButton = isMiniView;
+    this.isSidenavOpened = isDesktopView;
+    this.sidenavMode = isDesktopView ? 'side' : 'over';
+    this.isLogoutButtonVisible = !isMiniView;
+    this.isLogoutMenuItemVisible = !isDesktopView;
+    this.isTopMenuVisible = !isMiniView;
   }
 }
