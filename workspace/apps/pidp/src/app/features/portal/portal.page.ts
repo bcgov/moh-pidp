@@ -1,14 +1,12 @@
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { NgIf, NgOptimizedImage } from '@angular/common';
-import { Component, HostListener, Inject } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { faArrowRight, faArrowUp } from '@fortawesome/free-solid-svg-icons';
 
 import { InjectViewportCssClassDirective } from '@bcgov/shared/ui';
-
-import { APP_CONFIG, AppConfig } from '@app/app.config';
 
 import { AccessRoutes } from '../access/access.routes';
 import { OrganizationInfoRoutes } from '../organization-info/organization-info.routes';
@@ -40,10 +38,7 @@ export class PortalPage {
   public AccessRoutes = AccessRoutes;
   public OrganizationInfoRoutes = OrganizationInfoRoutes;
 
-  public constructor(
-    @Inject(APP_CONFIG) private config: AppConfig,
-    private router: Router,
-  ) {}
+  public constructor(private router: Router) {}
 
   @HostListener('window:scroll', [])
   public onWindowScroll(): void {
