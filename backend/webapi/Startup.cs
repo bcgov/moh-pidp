@@ -63,11 +63,22 @@ public class Startup
             .AsImplementedInterfaces()
             .WithTransientLifetime());
 
+        var options = new HealthChecks.RabbitMQ.RabbitMQHealthCheckOptions
+        {
+            ConnectionUri = new Uri(config.RabbitMQ.HostAddress),
+        };
+
         services.AddHealthChecks()
             .AddApplicationStatus(tags: new[] { HealthCheckTag.Liveness.Value })
             .AddCheck<BackgroundWorkerHealthCheck>("PlrStatusUpdateSchedulingService", tags: new[] { HealthCheckTag.BackgroundServices.Value })
-            .AddDbContextCheck<PidpDbContext>(tags: new[] { HealthCheckTag.Readiness.Value });
-            // .AddRabbitMQ(new Uri(config.RabbitMQ.HostAddress), tags: new[] { HealthCheckTag.Readiness.Value });
+            // .AddDbContextCheck<PidpDbContext>(tags: new[] { HealthCheckTag.Readiness.Value })
+            .Add(new Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckRegistration(
+            "rabbitmq2",
+            new HealthChecks.RabbitMQ.RabbitMQHealthCheck2(options),
+            null,
+            new[] { HealthCheckTag.Readiness.Value },
+            null));
+        ;
 
         services.AddSwaggerGen(options =>
         {
