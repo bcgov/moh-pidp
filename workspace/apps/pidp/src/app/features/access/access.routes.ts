@@ -1,6 +1,7 @@
 export class AccessRoutes {
   public static BASE_PATH = 'access';
 
+  public static ACCESS_REQUESTS = 'access-requests';
   public static BC_PROVIDER_APPLICATION = 'bc-provider-application';
   public static BC_PROVIDER_EDIT = 'bc-provider-edit';
   public static DRIVER_FITNESS = 'driver-fitness';
@@ -11,7 +12,7 @@ export class AccessRoutes {
   public static PRESCRIPTION_REFILL_EFORMS = 'prescription-refill-eforms';
   public static PROVIDER_REPORTING_PORTAL = 'provider-reporting-portal';
   public static SPECIAL_AUTH_EFORMS = 'sa-eforms';
-  public static EDRD_EFORMS = 'edrd-eforms';
+  public static PROVINCIAL_ATTACHMENT_SYSTEM = 'provincial-attachment-system';
 
   /**
    * @description

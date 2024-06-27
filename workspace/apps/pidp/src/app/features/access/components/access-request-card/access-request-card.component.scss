@@ -1,0 +1,136 @@
+@use 'pidp-variables' as pidp;
+
+.container.viewport-all {
+  .card-container {
+    border-radius: 4px;
+    border: 1px #cccccc solid;
+    margin: var(--margin-style);
+    margin-left: 0;
+    padding: var(--card-padding);
+    min-height: 15rem;
+
+    & .card-header {
+      & .card-header-icon {
+        fa-icon {
+          border: 1px solid #fcba19;
+          border-radius: 50%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          font-size: x-small;
+        }
+        & .card-completed {
+          color: pidp.$green;
+          border: 1px solid pidp.$green;
+        }
+        & .card-header-text {
+          color: #003366;
+          font-size: 18px;
+          font-weight: 700;
+          word-wrap: break-word;
+          float: right;
+          width: 88%;
+          margin-top: -28px;
+        }
+      }
+    }
+  }
+
+  .card-container:hover {
+    box-shadow: 2px 2px 2px rgb(194, 194, 196);
+    transform: scale(1.1);
+  }
+
+  .card-body {
+    float: left;
+    padding-top: 1rem;
+  }
+}
+
+.learn-more {
+  text-decoration: none;
+  .grey-out {
+    color: pidp.$lightgrey;
+  }
+  .arrow-right {
+    margin-left: 2px;
+  }
+}
+
+.container.viewport-xsmall {
+  .card-container {
+    height: 15rem;
+    overflow-y: auto;
+  }
+  .card-header-icon fa-icon {
+    padding: 5px;
+    width: 8%;
+    height: 15%;
+  }
+
+  .card-header-text {
+    padding-left: 5px;
+    width: 86%;
+    margin-top: -28px;
+  }
+
+  .card-icon {
+    .card-header-text {
+      margin-top: 0;
+    }
+  }
+}
+
+.container.viewport-small {
+  .card-container {
+    height: 15rem;
+    overflow-y: auto;
+  }
+
+  .card-header fa-icon {
+    padding: 6px;
+    width: 11%;
+    height: 15%;
+  }
+}
+
+.container.viewport-medium,
+.container.viewport-large {
+  .card-container {
+    display: inline-flex;
+    flex: 1;
+    flex-direction: column;
+  }
+}
+
+.container.viewport-medium {
+  .card-container {
+    height: 18rem;
+    overflow-y: auto;
+  }
+  .card-header-text {
+    padding-left: 5px;
+    width: 88%;
+    margin-top: -28px;
+  }
+
+  .card-icon {
+    .card-header-text {
+      margin-top: 0;
+    }
+  }
+
+  .card-header fa-icon {
+    padding: 6px;
+    width: 13%;
+    height: 15%;
+  }
+}
+
+.container.viewport-large {
+  .card-header fa-icon {
+    padding: 6px;
+    width: 9%;
+    height: 15%;
+  }
+}

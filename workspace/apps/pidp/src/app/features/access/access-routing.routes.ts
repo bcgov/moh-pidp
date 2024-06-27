@@ -1,11 +1,13 @@
 import { Routes } from '@angular/router';
 
-import { PermissionsGuard } from '@app/modules/permissions/permissions.guard';
-import { Role } from '@app/shared/enums/roles.enum';
-
 import { AccessRoutes } from './access.routes';
+import { AccessRequestsPage } from './pages/access-requests-page/access-requests.page';
 
 export const routes: Routes = [
+  {
+    path: AccessRoutes.ACCESS_REQUESTS,
+    component: AccessRequestsPage,
+  },
   {
     path: AccessRoutes.SPECIAL_AUTH_EFORMS,
     loadChildren: (): Promise<Routes> =>
@@ -77,14 +79,10 @@ export const routes: Routes = [
       ),
   },
   {
-    path: AccessRoutes.EDRD_EFORMS,
-    canActivate: [PermissionsGuard.canActivate],
-    data: {
-      roles: [Role.FEATURE_PIDP_DEMO],
-    },
+    path: AccessRoutes.PROVINCIAL_ATTACHMENT_SYSTEM,
     loadChildren: (): Promise<Routes> =>
-      import('./pages/edrd-eforms/edrd-eforms-routing.routes').then(
-        (m) => m.routes,
-      ),
+      import(
+        './pages/provincial-attachment-system/provincial-attachment-system-routing.routes'
+      ).then((m) => m.routes),
   },
 ];

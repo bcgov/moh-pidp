@@ -1,0 +1,127 @@
+<ui-layout-header-footer [emailSupport]="providerIdentitySupport">
+  <div class="header-right" page-header-right>
+    <span class="signout-text">sign out</span>
+    <button
+      mat-icon-button
+      matTooltip="Logout"
+      aria-label="logout"
+      (click)="onLogout()">
+      <mat-icon>logout</mat-icon>
+    </button>
+  </div>
+  <div class="container" uiPidpInjectViewportCss>
+    <div class="section-box">
+      <div class="background-image-container">
+        <img
+          alt="BC Provider uplift"
+          ngSrc="/assets/images/bcprovider-uplift-850x600-desktop.png"
+          priority
+          fill />
+      </div>
+
+      <ng-container [ngSwitch]="activeLayout">
+        <ng-container
+          *ngSwitchCase="DiscoveryStatus.AlreadyLinkedError.toString()"
+          [ngTemplateOutlet]="alreadyLinked"></ng-container>
+        <ng-container
+          *ngSwitchCase="DiscoveryStatus.CredentialExistsError.toString()"
+          [ngTemplateOutlet]="credentialExists"></ng-container>
+        <ng-container
+          *ngSwitchCase="DiscoveryStatus.ExpiredCredentialLinkTicketError.toString()"
+          [ngTemplateOutlet]="ticketExpired"></ng-container>
+        <ng-container
+          *ngSwitchDefault
+          [ngTemplateOutlet]="default"></ng-container>
+      </ng-container>
+
+      <div
+        *ngIf="activeLayout === DiscoveryStatus.ExpiredCredentialLinkTicketError.toString(); else backButton"
+        class="button-container">
+        <span>
+          <button
+            mat-flat-button
+            type="button"
+            color="primary"
+            (click)="onLogout()">
+            Click here
+          </button>
+        </span>
+      </div>
+    </div>
+  </div>
+</ui-layout-header-footer>
+
+<ng-template #backButton>
+  <div class="button-container">
+    <span>
+      <button mat-flat-button type="button" color="primary" (click)="onBack()">
+        Back to OneHealthID Service
+      </button>
+    </span>
+  </div>
+</ng-template>
+
+<ng-template #alreadyLinked>
+  <div class="active-layout">
+    <header class="title-container">
+      <h1>These Credentials are Already Linked</h1>
+    </header>
+    <p>
+      The account you are currently signed into is already linked and so your
+      OneHealthID profile has not been updated. If you have any other accounts
+      you wish to link, please restart the account linking process and ensure
+      the correct credentials are entered.
+    </p>
+    <app-need-help></app-need-help>
+  </div>
+</ng-template>
+
+<ng-template #credentialExists>
+  <div class="active-layout">
+    <header class="title-container">
+      <h1>Account already exists</h1>
+    </header>
+    <p>
+      We apologize, but both accounts you are trying to link already exist in
+      the OneHealthID system and so this request will require manual merging.
+      Contact our support desk at
+      <a uiAnchor scheme="mailto" [attr.href]="providerIdentitySupport"></a> or
+      by phone at
+      <a uiAnchor scheme="tel" [attr.href]="additionalSupportPhone"></a>.<br />
+      Please mention that this is an account linking merge request.
+    </p>
+  </div>
+</ng-template>
+
+<ng-template #ticketExpired>
+  <div class="active-layout">
+    <header class="title-container">
+      <h1>Account Linking request expired</h1>
+    </header>
+    <p>
+      Your session expired due to inactivity. Please return to OneHealthID to
+      restart the account linking process.
+    </p>
+    <app-need-help></app-need-help>
+  </div>
+</ng-template>
+
+<ng-template #default>
+  <div class="active-layout">
+    <header class="title-container">
+      <h1>An error has occurred</h1>
+    </header>
+    <p>For additional support, contact the OneHealthID Service desk:</p>
+    <ul>
+      <li>
+        By email at
+        <a uiAnchor scheme="mailto" [attr.href]="providerIdentitySupport"></a>
+      </li>
+
+      <li>
+        By phone at
+        <a uiAnchor scheme="tel" [attr.href]="additionalSupportPhone"></a>
+      </li>
+    </ul>
+  </div>
+</ng-template>

@@ -6,8 +6,9 @@ import {
   NgSwitchDefault,
 } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-
 import { LookupCodePipe } from '@app/modules/lookup/lookup-code.pipe';
+
+import { PhonePipe } from '@bcgov/shared/ui';
 
 @Component({
   selector: 'app-profile-card-summary-content',
@@ -22,6 +23,7 @@ import { LookupCodePipe } from '@app/modules/lookup/lookup-code.pipe';
     NgSwitchCase,
     NgSwitchDefault,
     LookupCodePipe,
+    PhonePipe,
   ],
 })
 export class ProfileCardSummaryContentComponent {

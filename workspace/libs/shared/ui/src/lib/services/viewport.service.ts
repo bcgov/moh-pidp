@@ -18,8 +18,8 @@ export const BootstrapBreakpoints = {
   tablet: '(min-width: 768px) and (max-width: 991.98px)',
 };
 export const PidpBreakpoints = {
-  xsmall: '(min-width: 0px) and (max-width: 640px)',
-  small: '(min-width: 641px) and (max-width: 1023px)',
+  xsmall: '(min-width: 0px) and (max-width: 767px)',
+  small: '(min-width: 768px) and (max-width: 1023px)',
   medium: '(min-width: 1024px) and (max-width: 1199px)',
   large: '(min-width: 1200px)',
 };
