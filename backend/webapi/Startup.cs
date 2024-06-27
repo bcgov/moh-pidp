@@ -71,7 +71,7 @@ public class Startup
         services.AddHealthChecks()
             .AddApplicationStatus(tags: new[] { HealthCheckTag.Liveness.Value })
             .AddCheck<BackgroundWorkerHealthCheck>("PlrStatusUpdateSchedulingService", tags: new[] { HealthCheckTag.BackgroundServices.Value })
-            // .AddDbContextCheck<PidpDbContext>(tags: new[] { HealthCheckTag.Readiness.Value })
+            .AddDbContextCheck<PidpDbContext>(tags: new[] { HealthCheckTag.Readiness.Value })
             .Add(new Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckRegistration(
             "rabbitmq2",
             new HealthChecks.RabbitMQ.RabbitMQHealthCheck2(options),
