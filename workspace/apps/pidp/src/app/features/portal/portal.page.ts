@@ -36,6 +36,9 @@ export class PortalPage {
   public faArrowRight = faArrowRight;
   public faArrowUp = faArrowUp;
   public showBackToTopButton: boolean = false;
+  public ProfileRoutes = ProfileRoutes;
+  public AccessRoutes = AccessRoutes;
+  public OrganizationInfoRoutes = OrganizationInfoRoutes;
 
   public constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
@@ -52,26 +55,12 @@ export class PortalPage {
     const scrollThreshold = 200;
     this.showBackToTopButton = scrollPosition > scrollThreshold;
   }
-  
+
   public scrollToTop(): void {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
-  
-  public navigateToAccountLinkingPage(): void {
-    this.router.navigateByUrl(
-      ProfileRoutes.routePath(ProfileRoutes.ACCOUNT_LINKING),
-    );
-  }
 
-  public navigateToAccessPage(): void {
-    this.router.navigateByUrl(
-      AccessRoutes.routePath(AccessRoutes.ACCESS_REQUESTS),
-    );
-  }
-
-  public navigateToEndorsements(): void {
-    this.router.navigateByUrl(
-      OrganizationInfoRoutes.routePath(OrganizationInfoRoutes.ENDORSEMENTS),
-    );
+  public navigateTo(path: string): void {
+    this.router.navigateByUrl(path);
   }
 }
