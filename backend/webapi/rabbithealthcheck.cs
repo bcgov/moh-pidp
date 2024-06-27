@@ -33,7 +33,7 @@ public class RabbitMQHealthCheck2 : IHealthCheck
         {
             using var model = EnsureConnection().CreateModel();
             // System.Console.WriteLine(System.Text.Json.JsonSerializer.Serialize(this._connection));
-            System.Console.WriteLine(System.Text.Json.JsonSerializer.Serialize(model));
+            // System.Console.WriteLine(System.Text.Json.JsonSerializer.Serialize(model));
             return HealthCheckResultTask.Healthy;
         }
         catch (Exception ex)
