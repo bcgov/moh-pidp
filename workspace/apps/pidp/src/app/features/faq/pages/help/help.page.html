@@ -2,8 +2,8 @@
   <nav class="breadcrumb">
     <ul>
       <li><a (click)="onBack()">Home</a></li>
-      <li> <fa-icon [icon]="faAngleRight" class="fa-duotone"></fa-icon> </li>
-      <li> <a class="active">Active Page</a></li>
+      <li><fa-icon class="fa-duotone" [icon]="faAngleRight"></fa-icon></li>
+      <li><a class="active">Active Page</a></li>
     </ul>
   </nav>
   <h1>Frequently asked questions</h1>
@@ -95,7 +95,7 @@
           number of provincial health applications (backed by BC Services Card)
           and is aligned to policy.<br />
           The BCProvider credential is created during the enrolment process<br />
-          <a href="https://healthprovideridentityportal.gov.bc.ca/auth/login"
+          <a [href]="applicationUrl"
             >https://healthprovideridentityportal.gov.bc.ca/auth/login</a
           >
         </p>
@@ -141,11 +141,15 @@
           For more information on the BC Services Card and Provider Location
           Registry, please refer to: <br />BCSC.
           <a
+            uiAnchor
+            scheme="url"
             href="https://www2.gov.bc.ca/gov/content/governments/government-id/bc-services-card"
             >https://www2.gov.bc.ca/gov/content/governments/government-id/bc-services-card</a
           ><br />
           PLR.
           <a
+            uiAnchor
+            scheme="url"
             href="https://www2.gov.bc.ca/gov/content/health/practitioner-professional-resources/system-access/provider-location-registry-plr"
             >https://www2.gov.bc.ca/gov/content/health/practitioner-professional-resources/system-access/provider-location-registry-plr</a
           >
@@ -179,13 +183,15 @@
           <li>
             Microsoft.
             <a
+              uiAnchor
+              scheme="url"
               href="https://www.microsoft.com/en-ca/security/mobile-authenticator-app"
               >https://www.microsoft.com/en-ca/security/mobile-authenticator-app</a
             >
           </li>
           <li>
             OneHealthID Service. Enrolment process tool FAQ at<br />
-            <a href="https://healthprovideridentityportal.gov.bc.ca/auth/login"
+            <a [href]="applicationUrl"
               >https://healthprovideridentityportal.gov.bc.ca/auth/login</a
             >
           </li>
@@ -205,7 +211,7 @@
         </mat-expansion-panel-header>
         <p>
           View instructions to setup Multi-factor authentication
-          <a (click)="navigateToMfaPage()">here</a>.
+          <a class="mfa-link" (click)="navigateToMfaPage()">here</a>.
         </p>
       </mat-expansion-panel>
     </div>
@@ -346,9 +352,12 @@
   </section>
 
   <div class="back-to-top-container">
-    <button class="back-to-top" (click)="scrollToTop()" *ngIf="showBackToTopButton">
+    <button
+      *ngIf="showBackToTopButton"
+      class="back-to-top"
+      (click)="scrollToTop()">
       <fa-icon [icon]="faArrowUp"></fa-icon>
     </button>
-    <div class="back-to-top-text" *ngIf="showBackToTopButton">Back to top</div>
+    <div *ngIf="showBackToTopButton" class="back-to-top-text">Back to top</div>
   </div>
 </div>
