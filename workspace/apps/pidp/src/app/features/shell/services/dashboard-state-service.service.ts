@@ -1,13 +1,16 @@
 import { Injectable } from '@angular/core';
 
-import { DashboardStateModel, PidpStateName } from '@pidp/data-model';
-import { AppStateService } from '@pidp/presentation';
-
 import { PartyService } from '@app/core/party/party.service';
 import { ProfileStatus } from '@app/features/portal/models/profile-status.model';
+import {
+  DashboardStateModel,
+  PidpStateName,
+} from '@app/features/portal/models/state.model';
 import { PortalResource } from '@app/features/portal/portal-resource.service';
 import { ProfileRoutes } from '@app/features/profile/profile.routes';
 import { LookupService } from '@app/modules/lookup/lookup.service';
+
+import { AppStateService } from './app-state.service';
 
 @Injectable({
   providedIn: 'root',

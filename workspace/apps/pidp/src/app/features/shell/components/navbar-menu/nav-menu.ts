@@ -24,17 +24,20 @@ import {
   RouterOutlet,
 } from '@angular/router';
 
-import { DashboardStateModel } from '@pidp/data-model';
-
+import {
+  DashboardMenuItem,
+  DashboardRouteMenuItem,
+  InjectViewportCssClassDirective,
+  LayoutHeaderFooterComponent,
+  PidpViewport,
+  ViewportService,
+} from '@bcgov/shared/ui';
 import { RoutePath } from '@bcgov/shared/utils';
 
-import { LayoutHeaderFooterComponent } from '../../../../components/layout-header-footer/layout-header-footer.component';
-import { InjectViewportCssClassDirective } from '../../../../directives/viewport-css.directive';
-import { PidpViewport, ViewportService } from '../../../../services';
-import { DashboardMenuItem, DashboardRouteMenuItem } from '../../models';
+import { DashboardStateModel } from '@app/features/portal/models/state.model';
 
 @Component({
-  selector: 'ui-nav-menu',
+  selector: 'app-nav-menu',
   templateUrl: './nav-menu.html',
   styleUrls: ['./nav-menu.scss'],
   standalone: true,
@@ -111,8 +114,10 @@ export class NavMenuComponent implements OnChanges {
   }
 
   public navigateTo(route: string): void {
-    if(this.showMiniMenuButton)
-      this.isSidenavOpened = this.isSidenavOpened ? !this.isSidenavOpened : this.isSidenavOpened;
+    if (this.showMiniMenuButton)
+      this.isSidenavOpened = this.isSidenavOpened
+        ? !this.isSidenavOpened
+        : this.isSidenavOpened;
     this.router.navigateByUrl(route);
   }
 
