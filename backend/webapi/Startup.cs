@@ -73,13 +73,13 @@ public class Startup
             .AddApplicationStatus(tags: new[] { HealthCheckTag.Liveness.Value })
             .AddCheck<BackgroundWorkerHealthCheck>("PlrStatusUpdateSchedulingService", tags: new[] { HealthCheckTag.BackgroundServices.Value })
             // .AddDbContextCheck<PidpDbContext>(tags: new[] { HealthCheckTag.Readiness.Value })
-            .AddCheck<DbContextHealthCheck2<PidpDbContext>>("dbcontext", null, new[] { HealthCheckTag.Readiness.Value })
-            .Add(new HealthCheckRegistration(
-                "rabbitmq2",
-                new HealthChecks.RabbitMQ.RabbitMQHealthCheck2(options),
-                null,
-                new[] { HealthCheckTag.Readiness.Value },
-                null));
+            .AddCheck<DbContextHealthCheck2<PidpDbContext>>("dbcontext", null, new[] { HealthCheckTag.Readiness.Value });
+            // .Add(new HealthCheckRegistration(
+            //     "rabbitmq2",
+            //     new HealthChecks.RabbitMQ.RabbitMQHealthCheck2(options),
+            //     null,
+            //     new[] { HealthCheckTag.Readiness.Value },
+            //     null));
 
         services.AddSwaggerGen(options =>
         {
