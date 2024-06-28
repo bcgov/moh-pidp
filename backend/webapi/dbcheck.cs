@@ -65,9 +65,9 @@ public sealed class DbContextHealthCheckOptions<TContext> where TContext : DbCon
 
 public static partial class DbHealthLoggingExtensions
 {
-    [LoggerMessage(1, LogLevel.Debug, "DB healthcheck took {elapsedMs}ms.")]
+    [LoggerMessage(1, LogLevel.Information, "DB healthcheck took {elapsedMs}ms.")]
     public static partial void LogElapsedMs(this ILogger logger, long elapsedMs);
 
-    [LoggerMessage(2, LogLevel.Debug, "DB healthcheck failed in branch {branch}.")]
+    [LoggerMessage(2, LogLevel.Information, "DB healthcheck failed in branch {branch}.")]
     public static partial void LogFailBranch(this ILogger logger, string branch);
 }
