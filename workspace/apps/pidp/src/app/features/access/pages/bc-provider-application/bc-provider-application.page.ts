@@ -55,6 +55,8 @@ import {
   DialogOptions,
   HtmlComponent,
   InjectViewportCssClassDirective,
+  PidpViewport,
+  ViewportService,
 } from '@bcgov/shared/ui';
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';
@@ -105,6 +107,8 @@ export class BcProviderApplicationPage
   extends AbstractFormPage<BcProviderApplicationFormState>
   implements OnInit
 {
+  private viewport = PidpViewport.xsmall;
+  public isshowImageAtTop = false;
   public faCircleCheck = faCircleCheck;
   public faCircleRight = faCircleRight;
   public faLockOpen = faLockOpen;
@@ -145,6 +149,7 @@ export class BcProviderApplicationPage
     private route: ActivatedRoute,
     private utilsService: UtilsService,
     private stateService: AppStateService,
+    private viewportService: ViewportService,
   ) {
     super(dependenciesService);
     this.formState = new BcProviderApplicationFormState(fb);
@@ -157,8 +162,10 @@ export class BcProviderApplicationPage
     this.dashboardState$ = this.stateService.getNamedStateBroadcast(
       PidpStateName.dashboard,
     );
+    this.viewportService.viewportBroadcast$.subscribe((viewport) =>
+      this.onViewportChange(viewport),
+    );
   }
-
   public onBack(): void {
     this.navigationService.navigateToRoot();
   }
@@ -256,5 +263,15 @@ export class BcProviderApplicationPage
         return of(null);
       }),
     );
+  }
+
+  private onViewportChange(viewport: PidpViewport): void {
+    this.viewport = viewport;
+    this.refresh();
+  }
+
+  private refresh(): void {
+    this.isshowImageAtTop = this.viewport == PidpViewport.xsmall;
+
   }
 }
