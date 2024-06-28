@@ -11,13 +11,7 @@ export const routes: Routes = [
     resolve: {
       hasCompletedBCProvider: bcProviderEditResolver,
     },
-    canActivate: [setDashboardTitleGuard, highAssuranceCredentialGuard],
+    canActivate: [highAssuranceCredentialGuard],
     component: BcProviderEditPage,
-    data: {
-      setDashboardTitleGuard: {
-        titleText: 'BC Provider and OneHealthID',
-        titleDescriptionText: '',
-      },
-    },
   },
 ];
