@@ -13,20 +13,23 @@ internal sealed class DbContextHealthCheck2<TContext> : IHealthCheck where TCont
         return dbContext.Database.CanConnectAsync(cancellationToken);
     };
 
+    private readonly ILogger logger;
     private readonly TContext _dbContext;
     private readonly IOptionsMonitor<DbContextHealthCheckOptions<TContext>> _options;
 
-    public DbContextHealthCheck2(TContext dbContext, IOptionsMonitor<DbContextHealthCheckOptions<TContext>> options)
+    public DbContextHealthCheck2(ILogger<DbContextHealthCheck2<TContext>> logger, TContext dbContext, IOptionsMonitor<DbContextHealthCheckOptions<TContext>> options)
     {
         ArgumentNullException.ThrowIfNull(dbContext);
         ArgumentNullException.ThrowIfNull(options);
 
+        this.logger = logger;
         _dbContext = dbContext;
         _options = options;
     }
 
     public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
     {
+        var sw = System.Diagnostics.Stopwatch.StartNew();
         ArgumentNullException.ThrowIfNull(context);
 
         var options = _options.Get(context.Registration.Name);
@@ -39,11 +42,18 @@ internal sealed class DbContextHealthCheck2<TContext> : IHealthCheck where TCont
                 return HealthCheckResult.Healthy();
             }
 
+            this.logger.LogFailBranch("try");
             return new HealthCheckResult(context.Registration.FailureStatus);
         }
         catch (Exception exception)
         {
+            this.logger.LogFailBranch("exception");
             return HealthCheckResult.Unhealthy(exception.Message, exception);
+        }
+        finally
+        {
+            sw.Stop();
+            this.logger.LogElapsedMs(sw.ElapsedMilliseconds);
         }
     }
 }
@@ -51,4 +61,13 @@ internal sealed class DbContextHealthCheck2<TContext> : IHealthCheck where TCont
 public sealed class DbContextHealthCheckOptions<TContext> where TContext : DbContext
 {
     public Func<TContext, CancellationToken, Task<bool>>? CustomTestQuery { get; set; }
+}
+
+public static partial class DbHealthLoggingExtensions
+{
+    [LoggerMessage(1, LogLevel.Debug, "DB healthcheck took {elapsedMs}ms.")]
+    public static partial void LogElapsedMs(this ILogger logger, long elapsedMs);
+
+    [LoggerMessage(2, LogLevel.Debug, "DB healthcheck failed in branch {branch}.")]
+    public static partial void LogFailBranch(this ILogger logger, string branch);
 }
