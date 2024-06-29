@@ -75,10 +75,31 @@ public class Create
                 return new(true);
             }
 
-            var partyName = await this.context.Parties
+            var parties = await this.context.Parties
+                .Where(party => party.Id == command.PartyId || (party.Email != null && party.Email == command.RecipientEmail))
+                .Select(party => new
+                {
+                    party.Id,
+                    party.FullName,
+                    party.Email,
+                    party.LicenceDeclaration
+                })
+                .ToListAsync();
+
+            var partyName = parties
                 .Where(party => party.Id == command.PartyId)
                 .Select(party => party.FullName)
-                .SingleAsync();
+                .Single();
+
+            // This will be null on 2 occassions:
+            // - if the recipient does not exist as a party in PIDP
+            // - if the recipient has entered a different email address in PIDP
+            var licenceInfo = parties
+                .Where(party => party.Email != null && party.Email == command.RecipientEmail)
+                .Select(party => party.LicenceDeclaration)
+                .FirstOrDefault();
+
+            var isUnlicensed = licenceInfo?.IsUnlicensed ?? true;
 
             var request = new EndorsementRequest
             {
@@ -93,24 +114,26 @@ public class Create
             this.context.EndorsementRequests.Add(request);
             await this.context.SaveChangesAsync();
 
-            await this.SendEndorsementRequestEmailAsync(request.RecipientEmail, request.Token, partyName);
+            await this.SendEndorsementRequestEmailAsync(request.RecipientEmail, request.Token, partyName, isUnlicensed);
 
             return new(false);
         }
 
-        private async Task SendEndorsementRequestEmailAsync(string recipientEmail, Guid token, string partyName)
+        private async Task SendEndorsementRequestEmailAsync(string recipientEmail, Guid token, string partyName, bool isUnlicensed)
         {
             string url = this.applicationUrl.SetQueryParam("endorsement-token", token);
             var link = $"<a href=\"{url}\" target=\"_blank\" rel=\"noopener noreferrer\">this link</a>";
             var pidpSupportEmail = $"<a href=\"mailto:{EmailService.PidpEmail}\">{EmailService.PidpEmail}</a>";
             var pidpSupportPhone = $"<a href=\"tel:{EmailService.PidpSupportPhone}\">{EmailService.PidpSupportPhone}</a>";
+            var templatetext = isUnlicensed ? "You are receiving this email because a user has started an endorsement request with you."
+                                            : "You are receiving this email because a user requested an endorsement from you.";
 
             var email = new Email(
                 from: EmailService.PidpEmail,
                 to: recipientEmail,
                 subject: $"OneHealthID Endorsement Request from {partyName}",
                 body: $@"Hello,
-<br>You are receiving this email because a user requested an endorsement from you.
+<br>{templatetext}
 <br>
 <br>To complete the endorsement process, use {link} to log into the OneHealthID Service with your BC Services Card.
 <br>
