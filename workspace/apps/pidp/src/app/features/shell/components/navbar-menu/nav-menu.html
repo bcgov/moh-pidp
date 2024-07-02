@@ -34,7 +34,7 @@
           <div class="dropdown-content">
             <a
               class="dropdown-links"
-              (click)="navigateTo('/profile/personal-information')"
+              (click)="navigateTo(ProfileRoutes.routePath(ProfileRoutes.PERSONAL_INFO))"
               >Personal Information</a
             >
             <a
@@ -44,7 +44,7 @@
             >
             <a
               class="dropdown-links"
-              (click)="navigateTo('/profile/user-access-agreement')"
+              (click)="navigateTo(ProfileRoutes.routePath(ProfileRoutes.USER_ACCESS_AGREEMENT))"
               >User Access Agreement</a
             >
           </div>
@@ -93,7 +93,7 @@
         <div class="sidenav-menu">
           <a
             class="sidenav-menu-item"
-            (click)="navigateTo('/profile/personal-information')"
+            (click)="navigateTo(ProfileRoutes.routePath(ProfileRoutes.PERSONAL_INFO))"
             >Personal Information</a
           >
           <a
@@ -103,7 +103,7 @@
           >
           <a
             class="sidenav-menu-item"
-            (click)="navigateTo('/profile/user-access-agreement')"
+            (click)="navigateTo(ProfileRoutes.routePath(ProfileRoutes.USER_ACCESS_AGREEMENT))"
             >User Access Agreement</a
           >
           <a

@@ -35,6 +35,7 @@ import {
 import { RoutePath } from '@bcgov/shared/utils';
 
 import { DashboardStateModel } from '@app/features/portal/models/state.model';
+import { ProfileRoutes } from '@app/features/profile/profile.routes';
 
 @Component({
   selector: 'app-nav-menu',
@@ -82,6 +83,7 @@ export class NavMenuComponent implements OnChanges {
   public isLogoutButtonVisible = false;
   public isLogoutMenuItemVisible = false;
   public isTopMenuVisible = false;
+  public ProfileRoutes = ProfileRoutes;
 
   public get showTitle(): boolean {
     return !!this.dashboardState.titleText;
