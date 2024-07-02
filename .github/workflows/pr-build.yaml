@@ -247,3 +247,22 @@ jobs:
 
           echo installing helm chart...
           helm upgrade --install --wait --values ./deploy/pr_values.yaml --namespace d8a8f9-dev pr-${{ env.pr_number }} charts/pidp --debug --set global.image.tag=pr-${{ env.pr_number }}
+
+
+  kics-Scan:
+    needs: get-pr-number
+    if: ${{ always() && !cancelled() && needs.get-pr-number.outputs.pr_number != '' }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+    - uses: actions/checkout@v3
+    - name: run kics Scan
+      uses: checkmarx/kics-github-action@v2.1.0
+      with:
+        path: charts/webapi/templates/deployment.yaml,charts/frontend/templates/deployment.yaml, charts/plr-intake/templates/deployment.yaml
+        token: ${{ secrets.GITHUB_TOKEN }}
+        output_path: myResults/
+        ignore_on_exit: results
+        enable_comments: true
