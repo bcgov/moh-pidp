@@ -263,23 +263,10 @@ jobs:
     - name: Run KICS Scan with SARIF result
       uses: checkmarx/kics-github-action@v2.1.0
       with:
-        path: ./charts/webapi/templates/deployment.yaml,./charts/frontend/templates/deployment.yaml, ./charts/plr-intake/templates/deployment.yaml
+        path: charts/webapi/templates/deployment.yaml,charts/frontend/templates/deployment.yaml,charts/plr-intake/templates/deployment.yaml
         token: ${{ secrets.GITHUB_TOKEN }}
         ignore_on_exit: results
         enable_comments: true
-        output_path: kics-scan
-        output_formats: 'json,sarif'
-        # when provided with a directory on output_path
-        # it will generate the specified reports file named 'results.{extension}'
-        # in this example it will generate:
-        # - kics-scan/results.json
-        # - kics-scan/results.sarif
-
-    - name: Show results
-      run: |
-        cat kics-scan/results.sarif
-        cat kics-scan/results.json
-    - name: Upload SARIF file
-      uses: github/codeql-action/upload-sarif@v3
-      with:
-        sarif_file: kics-scan/results.sarif
+        enable_jobs_summary: true
+        output_path: kics-scan/
+        output_formats: sarif
