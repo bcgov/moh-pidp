@@ -9,22 +9,18 @@
   </div>
   <div class="second-row">
     <div class="school-box">
-      <span>{{ collegeText }}</span>
+      <!-- <p> <span>Pharmacists</span></p> -->
+      <p *ngIf="collegeText"> <span>Pharmacists: {{ collegeText }}</span> </p>
     </div>
     <div class="extra-box-large">
-      <div
-        *ngIf="noticeText"
-        class="notice-box"
-        [class.notice-green]="noticeColour === 'green'"
-        [class.notice-yellow]="noticeColour === 'yellow'"
-        [class.notice-red]="noticeColour === 'red'">
-        <span>{{ noticeText }}</span>
-      </div>
-      <div *ngIf="createdOnText" class="created-box">
-        <span>{{ createdOnText }}</span>
-      </div>
+      <p *ngIf="noticeText">
+        <span>Status: {{ noticeText }}</span>
+    </p>
+      <p *ngIf="createdOnText">
+       <span>Label: {{ createdOnText }}</span>
+      </p>
     </div>
-    <div
+    <!-- <div
       *ngIf="showMobileNoticeIcon || !!createdOnText"
       class="extra-box-xsmall">
       <fa-icon
@@ -43,7 +39,7 @@
       [class.notice-red]="noticeColour === 'red'">
         {{ noticeText }}
       </span>
-    </div>
+    </div> -->
   </div>
   <div *ngIf="isCancelEnabled || isApproveEnabled" class="actions">
     <button

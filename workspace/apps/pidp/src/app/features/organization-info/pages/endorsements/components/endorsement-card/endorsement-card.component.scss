@@ -29,8 +29,9 @@ p {
   justify-content: space-between;
   border: solid 1px pidp.$grey-30;
   border-radius: 4px;
-  width: 23.3125rem;
+  max-width: 23.3125rem;
   padding: 1.25rem;
+  height: 100%;
 
   & .content {
     margin-bottom: var(--gap);
@@ -110,13 +111,14 @@ p {
       border-radius: 0.25rem;
       border: 1px solid #036;
       background: #FFF;
-      width: 8.25rem
+      max-width: 8.25rem
     }
   }
 }
 
 // mobile layout
 .viewport-xsmall {
+  max-width: 25.3125rem;
   & .content {
     display: grid;
     grid-template-columns: auto 1fr;

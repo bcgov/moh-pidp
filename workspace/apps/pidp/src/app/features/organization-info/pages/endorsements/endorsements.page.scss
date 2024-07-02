@@ -14,7 +14,7 @@ p {
 .viewport-large,
 .viewport-medium,
 .viewport-small {
-  --gap: 1.25rem;
+  --gap: 1rem;
 }
 
 // Use gap to set css.
@@ -22,9 +22,9 @@ p {
   --box-padding: 0;
   --content-padding: 0 0 var(--gap);
   --care-team-text-padding: var(--gap) var(--gap) 0;
-  --tab-content-flex-direction: column;
+  --tab-content-flex-direction: row;
   --endorsement-request-item-padding: 0 var(--gap);
-  --endorsement-form-field-width: 100%;
+  --endorsement-form-field-width: 38.375rem;
   padding: 1.25rem 0.75rem;
 
   .breadcrumb ul {
@@ -53,32 +53,7 @@ p {
     line-height: 27px;
     word-wrap: break-word;
   }
-}
-.viewport-large {
-  --box-padding: calc(2 * var(--gap)) 0;
-  --content-padding: 0;
-  --care-team-text-padding: var(--gap) 0;
-  --tab-content-flex-direction: unset;
-  --endorsement-request-item-padding: unset;
-  --endorsement-form-field-width: 30rem;
-}
-.viewport-medium {
-  --box-padding: var(--gap) 0;
-  --content-padding: 0;
-  --care-team-text-padding: var(--gap) 0;
-  --tab-content-flex-direction: unset;
-  --endorsement-request-item-padding: unset;
-  --endorsement-form-field-width: 30rem;
-}
-.viewport-small {
-  --box-padding: 0 0 var(--gap);
-  --content-padding: 0 var(--gap);
-  --care-team-text-padding: var(--gap) 0;
-  --tab-content-flex-direction: unset;
-  --endorsement-request-item-padding: unset;
-  --endorsement-form-field-width: 30rem;
-}
-.viewport-all {
+
   & .content {
     padding: var(--content-padding);
     & header {
@@ -100,7 +75,7 @@ p {
     }
     & .care-team {
       & .care-team-text {
-        padding: var(--care-team-text-padding);
+        padding: var(--care-team-text-padding) 0;
         color: #313132;
         font-size: 1rem;
         font-weight: 400;
@@ -109,8 +84,6 @@ p {
       & .care-team-tabs {
         min-height: 10rem;
        ::ng-deep .mat-mdc-tab  {
-        width: 18.625rem;
-        height: 3.75rem;
         border: 1px solid #9E9E9E;
         background: #EEE;
         &.mdc-tab--active{
@@ -139,41 +112,144 @@ p {
       }
       & .tab-content {
         padding: var(--gap);
-        display: flex;
-        flex-wrap: wrap;
         gap: var(--gap);
-        flex-direction: var(--tab-content-flex-direction);
-
-        & .endorsement-card {
-          flex-basis: calc((100% - (var(--gap))) / 2);
-
-          @include media-breakpoint-up(lg) {
-            flex-basis: calc((100% - (var(--gap))) / 3);
-          }
-
-          display: flex;
-        }
+        display: grid;
+        grid-template-columns: calc(50% - 15px) calc(50% - 15px);
       }
     }
     & .endorsement-request {
       & header {
         margin: calc(2 * var(--gap)) 0 var(--gap);
       }
-      & p,
-      & h3 {
-        padding: var(--endorsement-request-item-padding);
-      }
       & mat-form-field {
-        padding: var(--endorsement-request-item-padding);
-        width: var(--endorsement-form-field-width);
+        max-width: var(--endorsement-form-field-width);
+        width: 100%;
       }
     }
     & .actions {
       display: flex;
-      padding: var(--endorsement-request-item-padding);
       & button:not(:first-of-type) {
         margin-left: var(--gap);
       }
+    }
+  }
+}
+.viewport-large {
+  --tab-content-flex-direction: row;
+  & .content {
+    & .care-team {
+      & .care-team-tabs {
+       ::ng-deep .mat-mdc-tab-group {
+
+        .mat-mdc-tab  {
+          width: 18.625rem;
+          height: 3.75rem;
+       }
+      }
+      }
+      & .tab-content{
+        grid-template-columns: calc(33% - 15px) calc(33% - 15px) calc(33% - 15px);
+      }
+    }
+  }
+}
+
+.viewport-medium {
+  --tab-content-flex-direction: row;
+    & .content {
+      & .care-team {
+        & .care-team-tabs {
+         ::ng-deep .mat-mdc-tab-group {
+
+          .mat-mdc-tab  {
+            width: 18.625rem;
+            height: 3.75rem;
+         }
+        }
+        }
+        & .tab-content {
+          grid-template-columns: calc(33% - 15px) calc(33% - 15px) calc(33% - 15px);
+        }
+      }
+    }
+}
+.viewport-small {
+  --gap: 1rem;
+  --font-size: 0.75rem;
+  --card-header-font-size: unset;
+  --card-header-line-height: unset;
+  --tab-content-flex-direction: column;
+  & .content {
+    & .care-team {
+      & .care-team-tabs {
+       ::ng-deep .mat-mdc-tab-group {
+
+        .mat-mdc-tab  {
+          width: 15.625rem;
+          height: 3.75rem;
+       }
+      }
+      }
+      & .tab-label-box {
+        font-size: 1rem;
+      }
+      & .tab-content {
+        grid-template-columns: calc(50% - 15px) calc(50% - 15px);
+      }
+    }
+  }
+}
+.viewport-xsmall {
+  --gap: 1rem;
+  --font-size: 1rem;
+  --card-header-font-size: calc(2 * var(--font-size));
+  --card-header-line-height: calc(var(--card-header-font-size) + 0.5rem);
+  --margin-bottom-style: 1.5rem;
+  padding: 1.25rem 0;
+
+  .breadcrumb{
+    padding: 0 0.75rem;
+  }
+
+  & .content {
+    padding: var(--content-padding);
+    & header {
+      padding: 0 0.75rem;
+      & h3 {
+        color: #4493B5;
+        font-size: 1.2rem;
+        font-weight: 400;
+        margin-bottom: 0.5rem;
+      }
+      & h1 {
+        color: #036;
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 0;
+      }
+    }
+    & .care-team {
+      & .care-team-text {
+        padding: 0 0.75rem;
+      }
+      & .tab-content {
+        grid-template-columns: 100%
+      }
+    }
+
+    & .endorsement-request {
+      & header {
+        padding: 0 0.75rem;
+      }
+      p {
+        padding: 0 0.75rem;
+      }
+      & mat-form-field {
+        padding: 0 0.75rem;
+      }
+    }
+    & .actions {
+      padding: 0 0.75rem;
     }
   }
 }
