@@ -56,7 +56,6 @@
         routerLinkActive="main-menu-item-active"
         [routerLink]="getRouterLink(menuItem)"
         [routerLinkActiveOptions]="getRouterLinkActiveOptions(menuItem)"
-        [fragment]="getRouterLinkFragment(menuItem)"
         (click)="onMenuItemClicked()"
         >{{ menuItem.label }}
       </a>
