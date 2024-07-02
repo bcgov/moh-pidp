@@ -8,9 +8,7 @@ p {
 }
 
 // Set gap depending on viewport.
-.viewport-xsmall {
-  --gap: 1rem;
-}
+.viewport-xsmall,
 .viewport-large,
 .viewport-medium,
 .viewport-small {

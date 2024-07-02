@@ -9,7 +9,6 @@
   </div>
   <div class="second-row">
     <div class="school-box">
-      <!-- <p> <span>Pharmacists</span></p> -->
       <p *ngIf="collegeText"> <span>Pharmacists: {{ collegeText }}</span> </p>
     </div>
     <div class="extra-box-large">
@@ -20,26 +19,6 @@
        <span>Label: {{ createdOnText }}</span>
       </p>
     </div>
-    <!-- <div
-      *ngIf="showMobileNoticeIcon || !!createdOnText"
-      class="extra-box-xsmall">
-      <fa-icon
-        *ngIf="showMobileNoticeIcon"
-        [class.notice-green]="noticeColour === 'green'"
-        [class.notice-yellow]="noticeColour === 'yellow'"
-        [class.notice-red]="noticeColour === 'red'"
-        [icon]="faUserGroup"></fa-icon>
-      <span
-        *ngIf="createdOnText"
-        [class.notice-green]="noticeColour === 'green'"
-        >{{ createdOnText }}</span
-      >
-      <span *ngIf="showMobileNoticeText"
-      [class.notice-yellow]="noticeColour === 'yellow'"
-      [class.notice-red]="noticeColour === 'red'">
-        {{ noticeText }}
-      </span>
-    </div> -->
   </div>
   <div *ngIf="isCancelEnabled || isApproveEnabled" class="actions">
     <button
