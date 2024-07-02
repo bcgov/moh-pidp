@@ -19,7 +19,6 @@ import {
   DashboardStateModel,
   PidpStateName,
 } from '@app/features/portal/models/state.model';
-import { PermissionsService } from '@app/modules/permissions/permissions.service';
 
 import { AppStateService } from '../../services/app-state.service';
 import { DashboardStateService } from '../../services/dashboard-state-service.service';
@@ -47,7 +46,6 @@ export class PortalDashboardComponent implements IDashboard, OnInit {
   public constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
     private authService: AuthService,
-    private permissionsService: PermissionsService,
     accessTokenService: AccessTokenService,
     private dashboardStateService: DashboardStateService,
     private stateService: AppStateService,
