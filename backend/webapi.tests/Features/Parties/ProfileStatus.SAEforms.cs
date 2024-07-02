@@ -29,9 +29,7 @@ public class ProfileStatusSAEformsTests : ProfileStatusTest
 
         var eforms = profile.Section<SAEformsSection>();
         eforms.AssertNoAlerts();
-        var expected = user.GetIdentityProvider() == IdentityProviders.BCServicesCard
-            ? StatusCode.Locked
-            : StatusCode.Hidden;
+        var expected = StatusCode.Locked;
         Assert.Equal(expected, eforms.StatusCode);
         Assert.False(eforms.IncorrectLicenceType);
     }
@@ -49,9 +47,7 @@ public class ProfileStatusSAEformsTests : ProfileStatusTest
 
         var eforms = profile.Section<SAEformsSection>();
         eforms.AssertNoAlerts();
-        var expected = user.GetIdentityProvider() == IdentityProviders.BCServicesCard
-            ? StatusCode.Locked
-            : StatusCode.Hidden;
+        var expected = StatusCode.Locked;
         Assert.Equal(expected, eforms.StatusCode);
         Assert.False(eforms.IncorrectLicenceType);
     }

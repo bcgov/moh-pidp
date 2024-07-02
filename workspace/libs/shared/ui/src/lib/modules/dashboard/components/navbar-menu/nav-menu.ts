@@ -111,6 +111,8 @@ export class NavMenuComponent implements OnChanges {
   }
 
   public navigateTo(route: string): void {
+    if(this.showMiniMenuButton)
+      this.isSidenavOpened = this.isSidenavOpened ? !this.isSidenavOpened : this.isSidenavOpened;
     this.router.navigateByUrl(route);
   }
 
@@ -145,7 +147,7 @@ export class NavMenuComponent implements OnChanges {
     this.logout.emit();
   }
   public onMenuItemClicked(): void {
-    if (this.sidenavMode === 'over') {
+    if (this.showMiniMenuButton && this.sidenavMode === 'over') {
       this.sidenav.close();
     }
   }
@@ -155,35 +157,19 @@ export class NavMenuComponent implements OnChanges {
     this.refresh();
   }
   private refresh(): void {
-    switch (this.viewport) {
-      case PidpViewport.xsmall:
-        this.showMiniMenuButton = true;
-        this.isSidenavOpened = false;
-        this.sidenavMode = 'over';
-
-        this.isLogoutButtonVisible = false;
-        this.isLogoutMenuItemVisible = true;
-        this.isTopMenuVisible = false;
-        break;
-      case PidpViewport.small:
-        this.showMiniMenuButton = false;
-        this.isSidenavOpened = false;
-        this.sidenavMode = 'over';
-        this.isLogoutButtonVisible = true;
-        this.isLogoutMenuItemVisible = true;
-        this.isTopMenuVisible = true;
-        break;
-      case PidpViewport.medium:
-      case PidpViewport.large:
-        this.showMiniMenuButton = false;
-        this.isSidenavOpened = true;
-        this.sidenavMode = 'side';
-        this.isLogoutButtonVisible = true;
-        this.isLogoutMenuItemVisible = false;
-        this.isTopMenuVisible = true;
-        break;
-      default:
-        throw new Error(`Nav Menu not implemented: ${this.viewport}`);
+    if(!([PidpViewport.xsmall, PidpViewport.small, PidpViewport.medium, PidpViewport.large].includes(this.viewport))) {
+      throw new Error(`Nav Menu not implemented: ${this.viewport}`);
     }
+
+
+    const isMiniView = this.viewport === PidpViewport.xsmall;
+    const isDesktopView = this.viewport === PidpViewport.medium || this.viewport === PidpViewport.large;
+
+    this.showMiniMenuButton = isMiniView;
+    this.isSidenavOpened = isDesktopView;
+    this.sidenavMode = isDesktopView ? 'side' : 'over';
+    this.isLogoutButtonVisible = !isMiniView;
+    this.isLogoutMenuItemVisible = !isDesktopView;
+    this.isTopMenuVisible = !isMiniView;
   }
 }
