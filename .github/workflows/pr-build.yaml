@@ -259,8 +259,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Mkdir kics-scan
-        # make sure results dir is created
-        run: mkdir -p kics-scan
+      run: mkdir -p kics-scan
     - name: Run KICS Scan with SARIF result
       uses: checkmarx/kics-github-action@v2.1.0
       with:
