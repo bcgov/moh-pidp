@@ -143,6 +143,24 @@ export class EndorsementsPage
 
   public showTextLabels = false;
   public showIconLabels = true;
+  public popupData: DialogOptions = {
+    title: 'Endorsement requests',
+    bottomBorder: false,
+    titlePosition: 'center',
+    bodyTextPosition: 'center',
+    component: HtmlComponent,
+    data: {
+      content:
+        'You are about to <b>cancel</b> this endorsement, would you like to proceed',
+    },
+    imageSrc: '/assets/images/online-marketing-hIgeoQjS_iE-unsplash.jpg',
+    imageType: 'banner',
+    width: '31rem',
+    height: '24rem',
+    actionText: 'Continue',
+    actionTypePosition: 'center',
+    class: 'dialog-container',
+  };
 
   public get recipientEmail(): FormControl {
     return this.formState.form.get('recipientEmail') as FormControl;
@@ -164,23 +182,11 @@ export class EndorsementsPage
 
   public onApprove(requestId: number): void {
     this.loadingOverlayService.open(LOADING_OVERLAY_DEFAULT_MESSAGE);
-    const data: DialogOptions = {
-      title: 'Endorsement requests',
-      bottomBorder: false,
-      titlePosition: 'center',
-      bodyTextPosition: 'center',
-      component: HtmlComponent,
-      data: {
-        content:
-          'You are about to <b>approve</b> this endorsement, would you like to proceed',
-      },
-      imageSrc: '/assets/images/online-marketing-hIgeoQjS_iE-unsplash.jpg',
-      imageType: 'banner',
-      width: '31rem',
-      height: '24rem',
-      actionText: 'Continue',
-      actionTypePosition: 'center',
-      class: 'dialog-container',
+    const data: DialogOptions = this.popupData;
+
+    data.data = {
+      content:
+        'You are about to <b>approve</b> this endorsement, would you like to proceed',
     };
 
     this.dialog
@@ -208,25 +214,11 @@ export class EndorsementsPage
   }
 
   public onCancel(requestId: number): void {
-    const data: DialogOptions = {
-      title: 'Endorsement requests',
-      bottomBorder: false,
-      titlePosition: 'center',
-      bodyTextPosition: 'center',
-      component: HtmlComponent,
-      data: {
-        content:
-          'You are about to <b>cancel</b> this endorsement, would you like to proceed',
-      },
-      imageSrc: '/assets/images/online-marketing-hIgeoQjS_iE-unsplash.jpg',
-      imageType: 'banner',
-      width: '31rem',
-      height: '24rem',
-      actionText: 'Continue',
-      actionTypePosition: 'center',
-      class: 'dialog-container',
+    const data: DialogOptions = this.popupData;
+    data.data = {
+      content:
+        'You are about to <b>cancel</b> this endorsement, would you like to proceed',
     };
-
     this.dialog
       .open(ConfirmDialogComponent, { data })
       .afterClosed()
@@ -252,12 +244,10 @@ export class EndorsementsPage
   }
 
   public onCancelEndorsement(endorsementId: number): void {
-    const data: DialogOptions = {
-      title: 'Cancel Endorsement',
-      component: HtmlComponent,
-      data: {
-        content: 'Are you sure you want to cancel this Endorsement?',
-      },
+    const data: DialogOptions = this.popupData;
+    data.data = {
+      content:
+        'You are about to <b>cancel</b> this endorsement, would you like to proceed',
     };
     this.dialog
       .open(ConfirmDialogComponent, { data })
