@@ -30,7 +30,13 @@
     <div class="main-menu">
       <a class="main-menu-item">
         <div class="dropdown">
-          <a class="dropdown-profile">Profile</a>
+          <span class="content-with-alert"
+            ><fa-icon
+              *ngIf="dashboardState.alerts.includes(AlertCode.TRANSIENT_ERROR) || dashboardState.alerts.includes(AlertCode.PLR_BAD_STANDING)"
+              class="fa-duotone"
+              [icon]="faBell"></fa-icon
+            ><a class="dropdown-profile">Profile</a></span
+          >
           <div class="dropdown-content">
             <a
               class="dropdown-links"
@@ -40,8 +46,11 @@
             <a
               class="dropdown-links"
               (click)="navigateTo(dashboardState.collegeRoute)"
-              >College License</a
-            >
+              >College License<fa-icon
+                *ngIf="dashboardState.alerts.includes(AlertCode.TRANSIENT_ERROR) || dashboardState.alerts.includes(AlertCode.PLR_BAD_STANDING)"
+                class="fa-duotone"
+                [icon]="faBell"></fa-icon
+            ></a>
             <a
               class="dropdown-links"
               (click)="navigateTo(ProfileRoutes.routePath(ProfileRoutes.USER_ACCESS_AGREEMENT))"

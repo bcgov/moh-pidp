@@ -24,6 +24,9 @@ import {
   RouterOutlet,
 } from '@angular/router';
 
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { faBell } from '@fortawesome/free-regular-svg-icons';
+
 import {
   DashboardMenuItem,
   DashboardRouteMenuItem,
@@ -34,6 +37,7 @@ import {
 } from '@bcgov/shared/ui';
 import { RoutePath } from '@bcgov/shared/utils';
 
+import { AlertCode } from '@app/features/portal/enums/alert-code.enum';
 import { DashboardStateModel } from '@app/features/portal/models/state.model';
 import { ProfileRoutes } from '@app/features/profile/profile.routes';
 
@@ -55,6 +59,7 @@ import { ProfileRoutes } from '@app/features/profile/profile.routes';
     RouterLink,
     RouterLinkActive,
     RouterOutlet,
+    FaIconComponent,
   ],
 })
 export class NavMenuComponent implements OnChanges {
@@ -84,6 +89,9 @@ export class NavMenuComponent implements OnChanges {
   public isLogoutMenuItemVisible = false;
   public isTopMenuVisible = false;
   public ProfileRoutes = ProfileRoutes;
+  public showCollegeAlert = false;
+  public faBell = faBell;
+  public AlertCode = AlertCode;
 
   public get showTitle(): boolean {
     return !!this.dashboardState.titleText;

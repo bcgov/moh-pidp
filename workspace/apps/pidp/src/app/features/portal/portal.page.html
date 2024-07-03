@@ -46,10 +46,21 @@
         <div class="card-content">
           <p class="card-header">Grant Access</p>
           <p>Grant healthcare system access for others</p>
-          <a
-            (click)="navigateTo(OrganizationInfoRoutes.routePath(OrganizationInfoRoutes.ENDORSEMENTS))">
-            <fa-icon [icon]="faArrowRight"></fa-icon> READ MORE
-          </a>
+          <div class="card-footer">
+            <span class="content-with-alert"
+              ><fa-icon
+                *ngIf="alerts.includes(AlertCode.PENDING_ENDORSEMENT_REQUEST)"
+                class="fa-duotone"
+                [icon]="faBell"></fa-icon
+              ><a
+                (click)="navigateTo(OrganizationInfoRoutes.routePath(OrganizationInfoRoutes.ENDORSEMENTS))">
+                READ MORE
+              </a></span
+            ><a
+              (click)="navigateTo(OrganizationInfoRoutes.routePath(OrganizationInfoRoutes.ENDORSEMENTS))"
+              ><fa-icon [icon]="faArrowRight"></fa-icon
+            ></a>
+          </div>
         </div>
       </div>
     </div>

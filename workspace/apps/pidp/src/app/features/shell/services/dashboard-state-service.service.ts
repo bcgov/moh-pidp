@@ -34,6 +34,7 @@ export class DashboardStateService {
         const displayFullName = this.getUserDisplayFullName(profileStatus);
         const collegeName = this.getCollegeName(profileStatus);
         const collegeRoute = this.getCollegeRoute(profileStatus);
+        const alerts = profileStatus?.alerts ?? [];
 
         // Set the user name and college on the dashboard.
         const oldState = this.stateService.getNamedState<DashboardStateModel>(
@@ -44,6 +45,7 @@ export class DashboardStateService {
           userProfileFullNameText: displayFullName,
           userProfileCollegeNameText: collegeName,
           collegeRoute,
+          alerts,
         };
         this.stateService.setNamedState(PidpStateName.dashboard, newState);
       });
