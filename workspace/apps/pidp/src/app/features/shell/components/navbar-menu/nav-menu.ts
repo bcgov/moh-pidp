@@ -1,4 +1,4 @@
-import { NgFor, NgIf, NgTemplateOutlet } from '@angular/common';
+import { NgClass, NgFor, NgIf, NgTemplateOutlet } from '@angular/common';
 import {
   Component,
   EventEmitter,
@@ -60,6 +60,7 @@ import { ProfileRoutes } from '@app/features/profile/profile.routes';
     RouterLinkActive,
     RouterOutlet,
     FaIconComponent,
+    NgClass,
   ],
 })
 export class NavMenuComponent implements OnChanges {

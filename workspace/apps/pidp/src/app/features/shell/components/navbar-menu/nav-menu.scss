@@ -163,6 +163,26 @@ h1 {
   }
 }
 
+.menu-notification-dot {
+  position: absolute;
+  top: 8px;
+  right: 5px;
+  width: 10px;
+  height: 10px;
+  background-color: red;
+  border-radius: 50%;
+}
+
+.menu-list-notification-dot {
+  position: absolute;
+  top: 90px;
+  right: 213px;
+  width: 10px;
+  height: 10px;
+  background-color: red;
+  border-radius: 50%;
+}
+
 .btn-signout {
   text-align: center;
   width: 115px;
