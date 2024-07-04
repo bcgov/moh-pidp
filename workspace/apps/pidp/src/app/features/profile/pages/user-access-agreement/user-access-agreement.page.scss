@@ -15,3 +15,18 @@ p {
 .viewport-all {
   padding: 1.25rem 0.75rem;
 }
+
+.padding-container {
+  padding: 0 0.75rem;
+  margin-bottom: 1rem;
+  grid-template-columns: calc(70% - 15px);
+  display: grid;
+  margin-top: -1rem;
+}
+
+.button-container {
+  .back-button{
+    margin-right: 2rem;
+    margin-left: 0.75rem;
+  }
+}
