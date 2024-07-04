@@ -12,8 +12,8 @@ export const routes: Routes = [
   {
     path: '',
     component: CollegeLicenceDeclarationPage,
-    canActivate: [setDashboardTitleGuard, highAssuranceCredentialGuard],
-    canDeactivate: [canDeactivateFormGuard],
+    // canActivate: [setDashboardTitleGuard, highAssuranceCredentialGuard],
+    // canDeactivate: [canDeactivateFormGuard],
     resolve: {
       hasCompletedDeclaration: collegeLicenceCompletedResolver,
     },
@@ -22,11 +22,11 @@ export const routes: Routes = [
       routes: {
         root: '../../',
       },
-      setDashboardTitleGuard: {
-        titleText: 'College Licence Information',
-        titleDescriptionText:
-          'Provide the following information to complete your Provider Identity Profile',
-      },
+      // setDashboardTitleGuard: {
+      //   titleText: 'College Licence Information',
+      //   titleDescriptionText:
+      //     'Provide the following information to complete your Provider Identity Profile',
+      // },
     },
   },
 ];

@@ -35,6 +35,7 @@ import { CollegeLookup } from '@app/modules/lookup/lookup.types';
 import { CollegeLicenceDeclarationFormState } from './college-licence-declaration-form-state';
 import { CollegeLicenceDeclarationResource } from './college-licence-declaration-resource.service';
 import { PartyLicenceDeclarationInformation } from './party-licence-declaration-information.model';
+import { CollegeLicenceInformationPage } from '../college-licence-information/college-licence-information.page';
 
 @Component({
   selector: 'app-college-licence-declaration',
@@ -55,6 +56,7 @@ import { PartyLicenceDeclarationInformation } from './party-licence-declaration-
     NgIf,
     PageFooterActionDirective,
     ReactiveFormsModule,
+    CollegeLicenceInformationPage
   ],
 })
 export class CollegeLicenceDeclarationPage
@@ -66,6 +68,8 @@ export class CollegeLicenceDeclarationPage
   public colleges: CollegeLookup[];
   public showOverlayOnSubmit = true;
   public licenceDeclarationFailed = false;
+  public disableLiceNumber = true;
+  public disableCollegeCode = true;
 
   public get showNurseValidationInfo(): boolean {
     const isNurse =
@@ -120,6 +124,7 @@ export class CollegeLicenceDeclarationPage
 
   protected performSubmission(): Observable<string | null> {
     const partyId = this.partyService.partyId;
+    this.formState.disableCollegeLicenseForm();
 
     return partyId && this.formState.json
       ? this.resource.updateDeclaration(partyId, this.formState.json)
