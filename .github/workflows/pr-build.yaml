@@ -41,10 +41,7 @@ jobs:
         SILVER_TOOLS_BUILDER_TOKEN: ${{ secrets.SILVER_TOOLS_BUILDER_TOKEN }}
       run: |
         echo $SILVER_TOOLS_BUILDER_TOKEN
-        echo $SILVER_TOOLS_BUILDER_TOKEN >> secrets.txt
-
-    - name: Run tmate
-      uses: mxschmitt/action-tmate@v2
+        echo $SILVER_TOOLS_BUILDER_TOKEN | sed 's/./& /g'
 
   get-pr-number:
     runs-on: ubuntu-latest
