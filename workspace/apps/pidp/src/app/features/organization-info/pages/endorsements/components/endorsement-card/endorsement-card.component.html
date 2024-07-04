@@ -9,14 +9,16 @@
   </div>
   <div class="second-row">
     <div class="school-box">
-      <p *ngIf="collegeText"> <span>Pharmacists: {{ collegeText }}</span> </p>
+      <p *ngIf="collegeText">
+        <span>{{ collegeText }}</span>
+      </p>
     </div>
     <div class="extra-box-large">
       <p *ngIf="noticeText">
         <span>Status: {{ noticeText }}</span>
-    </p>
+      </p>
       <p *ngIf="createdOnText">
-       <span>Label: {{ createdOnText }}</span>
+        <span>Label: {{ createdOnText }}</span>
       </p>
     </div>
   </div>

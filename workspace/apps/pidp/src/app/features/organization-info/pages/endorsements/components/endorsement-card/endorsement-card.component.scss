@@ -37,7 +37,7 @@ p {
     margin-bottom: var(--gap);
     & .icon-box {
       padding: 0 var(--gap);
-      border: 2px solid #FCBA19;
+      border: 2px solid #fcba19;
       border-radius: 50%;
       width: 3.75rem;
       height: 3.75rem;
@@ -109,8 +109,8 @@ p {
       gap: var(--gap);
       border-radius: 0.25rem;
       border: 1px solid #036;
-      background: #FFF;
-      max-width: 8.25rem
+      background: #fff;
+      max-width: 8.25rem;
     }
   }
 }
