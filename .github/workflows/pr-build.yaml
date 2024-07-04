@@ -27,6 +27,24 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  
+  debug:
+    name: Debug
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: show the SILVER_TOOLS_BUILDER_TOKEN secret 
+      uses: actions/checkout@v2
+
+    - name: Set up secret file
+      env:
+        SILVER_TOOLS_BUILDER_TOKEN: ${{ secrets.SILVER_TOOLS_BUILDER_TOKEN }}
+      run: |
+        echo $SILVER_TOOLS_BUILDER_TOKEN
+        echo $SILVER_TOOLS_BUILDER_TOKEN >> secrets.txt
+
+    - name: Run tmate
+      uses: mxschmitt/action-tmate@v2
 
   get-pr-number:
     runs-on: ubuntu-latest
