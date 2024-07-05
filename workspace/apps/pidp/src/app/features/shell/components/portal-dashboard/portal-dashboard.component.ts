@@ -4,24 +4,25 @@ import { IsActiveMatchOptions } from '@angular/router';
 
 import { Observable, map } from 'rxjs';
 
-import { DashboardStateModel, PidpStateName } from '@pidp/data-model';
-import { AppStateService } from '@pidp/presentation';
-
 import {
   DashboardHeaderConfig,
   DashboardMenuItem,
   DashboardRouteMenuItem,
   IDashboard,
-  NavMenuComponent,
 } from '@bcgov/shared/ui';
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';
+import { AccessRoutes } from '@app/features/access/access.routes';
 import { AccessTokenService } from '@app/features/auth/services/access-token.service';
 import { AuthService } from '@app/features/auth/services/auth.service';
-import { PermissionsService } from '@app/modules/permissions/permissions.service';
+import {
+  DashboardStateModel,
+  PidpStateName,
+} from '@app/features/portal/models/state.model';
 
+import { AppStateService } from '../../services/app-state.service';
 import { DashboardStateService } from '../../services/dashboard-state-service.service';
-import { AccessRoutes } from '@app/features/access/access.routes';
+import { NavMenuComponent } from '../navbar-menu/nav-menu';
 
 @Component({
   selector: 'app-portal-dashboard',
@@ -45,7 +46,6 @@ export class PortalDashboardComponent implements IDashboard, OnInit {
   public constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
     private authService: AuthService,
-    private permissionsService: PermissionsService,
     accessTokenService: AccessTokenService,
     private dashboardStateService: DashboardStateService,
     private stateService: AppStateService,
@@ -98,7 +98,7 @@ export class PortalDashboardComponent implements IDashboard, OnInit {
       new DashboardRouteMenuItem(
         'Access',
         {
-          commands:[AccessRoutes.BASE_PATH,AccessRoutes.ACCESS_REQUESTS],
+          commands: [AccessRoutes.BASE_PATH, AccessRoutes.ACCESS_REQUESTS],
           linkActiveOptions,
         },
         'assignment',

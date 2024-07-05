@@ -163,6 +163,26 @@ h1 {
   }
 }
 
+.menu-notification-dot {
+  position: absolute;
+  top: 8px;
+  right: 5px;
+  width: 10px;
+  height: 10px;
+  background-color: red;
+  border-radius: 50%;
+}
+
+.menu-list-notification-dot {
+  position: absolute;
+  top: 90px;
+  right: 213px;
+  width: 10px;
+  height: 10px;
+  background-color: red;
+  border-radius: 50%;
+}
+
 .btn-signout {
   text-align: center;
   width: 115px;
@@ -261,6 +281,14 @@ h1 {
   right: -10px;
 }
 
+.content-with-alert {
+  display: flex;
+  align-items: center;
+  fa-icon {
+    color: red;
+  }
+}
+
 .dropdown-profile {
   cursor: pointer;
   padding-right: 20px !important;
@@ -273,7 +301,6 @@ h1 {
   min-width: 130px;
   box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
   z-index: 1;
-  margin-top: 40px;
 }
 
 .dropdown-content a {
@@ -286,6 +313,10 @@ h1 {
 .dropdown-content .dropdown-links {
   cursor: pointer;
   width: 100%;
+  fa-icon {
+    color: red;
+    margin-left: 5px;
+  }
 }
 
 .dropdown-content a:hover {

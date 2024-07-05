@@ -8,6 +8,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 
 import { randTextRange } from '@ngneat/falso';
 import { createSpyFromClass, provideAutoSpy } from 'jest-auto-spies';
+import { KeycloakService } from 'keycloak-angular';
 
 import { APP_CONFIG, APP_DI_CONFIG } from '@app/app.config';
 import { PartyService } from '@app/core/party/party.service';
@@ -61,6 +62,7 @@ describe('CollegeLicenceInformationPage', () => {
         provideAutoSpy(Router),
         provideAutoSpy(LoggerService),
         provideAutoSpy(CollegeLicenceInformationResource),
+        provideAutoSpy(KeycloakService),
       ],
     });
     router = TestBed.inject(Router);
