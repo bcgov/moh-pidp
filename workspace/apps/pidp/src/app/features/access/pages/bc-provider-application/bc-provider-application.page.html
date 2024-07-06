@@ -185,7 +185,7 @@
       </div>
       <div class="password-splash">
         <div class="password-splash-content">
-          <div class="text-box" *ngIf="!isshowImageAtTop">
+          <div class="text-box" >
             <div>
               <span class="lets">Let's get started</span>
             </div>
@@ -193,7 +193,7 @@
               <span class="using">using BC Provider today!</span>
             </div>
           </div>
-          <picture class="image" *ngIf="!isshowImageAtTop">
+          <picture class="image">
             <source
               type="image/webp"
               srcset="/assets/images/bcprovider-account-1000x1103.webp" />
@@ -229,17 +229,10 @@
 
 <ng-template #passwordForm>
   <form novalidate [formGroup]="formState.form" (ngSubmit)="onSubmit()">
-    <div>
-      <picture  *ngIf="isshowImageAtTop">
-        <source
-          type="image/webp"
-          srcset="/assets/images/bcprovider-account-1000x1103.webp" />
-        <!-- Use png as a fallback when webp is not supported by the browser. -->
-        <source
-          type="image/png"
-          srcset="/assets/images/bcprovider-account-1000x1103.png" />
-        <img class="image-top" title="woman" loading="lazy" aria-labelledby="" />
-      </picture>
+    <div class="mobile-image">
+      <img
+      ngSrc="/assets/images/bcprovider-account-1000x1103.webp"
+      fill />
     </div>
     <h2>Create an account</h2>
     <div class="form-content">
