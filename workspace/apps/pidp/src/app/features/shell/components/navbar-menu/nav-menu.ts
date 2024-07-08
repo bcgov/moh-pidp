@@ -155,13 +155,21 @@ export class NavMenuComponent implements OnChanges {
     this.refresh();
   }
   private refresh(): void {
-    if(!([PidpViewport.xsmall, PidpViewport.small, PidpViewport.medium, PidpViewport.large].includes(this.viewport))) {
+    if (
+      ![
+        PidpViewport.xsmall,
+        PidpViewport.small,
+        PidpViewport.medium,
+        PidpViewport.large,
+      ].includes(this.viewport)
+    ) {
       throw new Error(`Nav Menu not implemented: ${this.viewport}`);
     }
 
-
     const isMiniView = this.viewport === PidpViewport.xsmall;
-    const isDesktopView = this.viewport === PidpViewport.medium || this.viewport === PidpViewport.large;
+    const isDesktopView =
+      this.viewport === PidpViewport.medium ||
+      this.viewport === PidpViewport.large;
 
     this.showMiniMenuButton = isMiniView;
     this.isSidenavOpened = isDesktopView;
