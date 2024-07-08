@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import {
+  InjectViewportCssClassDirective,
   PageHeaderComponent,
   PageSectionComponent,
   PageSubheaderComponent,
@@ -14,7 +15,12 @@ import { userAccessAgreementTitle } from '@app/features/profile/pages/user-acces
   styleUrls: ['./user-access-agreement-document.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
-  imports: [PageHeaderComponent, PageSectionComponent, PageSubheaderComponent],
+  imports: [
+    PageHeaderComponent,
+    PageSectionComponent,
+    InjectViewportCssClassDirective,
+    PageSubheaderComponent,
+  ],
 })
 export class UserAccessAgreementDocumentComponent {
   public readonly title: string;
