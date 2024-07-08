@@ -1,6 +1,9 @@
 import { Injectable } from '@angular/core';
 
-import { DashboardStateModel, PidpStateName } from '@pidp/data-model';
+import {
+  DashboardStateModel,
+  PidpStateName,
+} from '@app/features/portal/models/state.model';
 
 import { AppStateService } from './app-state.service';
 

@@ -1,3 +1,5 @@
+import { AlertCode } from '../enums/alert-code.enum';
+
 export const PidpStateName = {
   dashboard: 'dashboard',
 };
@@ -10,6 +12,7 @@ export interface DashboardStateModel extends NamedState {
   userProfileFullNameText: string;
   userProfileCollegeNameText: string;
   collegeRoute: string;
+  alerts: AlertCode[];
 }
 export const defaultDashboardState: DashboardStateModel = {
   stateName: PidpStateName.dashboard,
@@ -18,6 +21,7 @@ export const defaultDashboardState: DashboardStateModel = {
   userProfileFullNameText: '',
   userProfileCollegeNameText: '',
   collegeRoute: '',
+  alerts: [],
 };
 export interface ApplicationStateModel {
   all: NamedState[];
