@@ -33,9 +33,6 @@ export const environment: AppEnvironment = {
   apiEndpoint: 'http://localhost:5000',
   environmentName: EnvironmentName.LOCAL,
   applicationUrl: 'http://localhost:4200',
-  featureFlags: {
-    isLayoutV2Enabled: false,
-  },
   emails: {
     providerIdentitySupport: 'OneHealthID@gov.bc.ca',
     specialAuthorityEformsSupport: specialAuthorityEformsSupportEmail,
