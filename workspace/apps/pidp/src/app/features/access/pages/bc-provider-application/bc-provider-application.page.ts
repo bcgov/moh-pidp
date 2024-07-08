@@ -52,7 +52,7 @@ import {
   CrossFieldErrorMatcher,
   DialogOptions,
   HtmlComponent,
-  InjectViewportCssClassDirective
+  InjectViewportCssClassDirective,
 } from '@bcgov/shared/ui';
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';
