@@ -52,8 +52,7 @@ import {
   CrossFieldErrorMatcher,
   DialogOptions,
   HtmlComponent,
-  InjectViewportCssClassDirective,
-  PidpViewport
+  InjectViewportCssClassDirective
 } from '@bcgov/shared/ui';
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';
@@ -109,7 +108,6 @@ export class BcProviderApplicationPage
   extends AbstractFormPage<BcProviderApplicationFormState>
   implements OnInit
 {
-  private viewport = PidpViewport.xsmall;
   public faCircleCheck = faCircleCheck;
   public faCircleRight = faCircleRight;
   public faLockOpen = faLockOpen;
@@ -149,7 +147,7 @@ export class BcProviderApplicationPage
     private resource: BcProviderApplicationResource,
     private route: ActivatedRoute,
     private utilsService: UtilsService,
-    private stateService: AppStateService
+    private stateService: AppStateService,
   ) {
     super(dependenciesService);
     this.formState = new BcProviderApplicationFormState(fb);

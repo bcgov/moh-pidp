@@ -271,18 +271,6 @@ ol {
           margin: var(--gap) 0;
           padding: 0;
         }
-        & .image-top {
-          height: 270px;
-          @media only screen and (max-width: 320px) {
-            width: 230px;
-          }
-          @media only screen and (min-width: 321px) and (max-width: 375px) {
-            width: 285px;
-          }
-          @media only screen and (min-width: 376px) and (max-width: 425px) {
-            width: 335px;
-          }
-        }
       }
       & .password-splash {
         flex: 1;
