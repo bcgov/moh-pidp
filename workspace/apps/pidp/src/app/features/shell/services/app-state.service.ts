@@ -6,7 +6,7 @@ import {
   ApplicationStateModel,
   NamedState,
   defaultApplicationState,
-} from '@pidp/data-model';
+} from '@app/features/portal/models/state.model';
 
 @Injectable({
   providedIn: 'root',

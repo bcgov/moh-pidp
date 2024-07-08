@@ -13,5 +13,8 @@
     "**/*.test.ts",
     "jest.config.ts"
   ],
-  "include": ["**/*.ts"]
+  "include": [
+    "**/*.ts",
+    "../../../apps/pidp/src/app/features/portal/models/state.model.ts"
+  ]
 }

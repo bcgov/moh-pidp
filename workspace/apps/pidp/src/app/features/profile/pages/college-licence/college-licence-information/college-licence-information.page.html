@@ -1,4 +1,9 @@
 <section class="component-container container" uiPidpInjectViewportCss>
+  <section *ngFor="let alert of alerts" class="alert-box section-box">
+    <app-portal-alert
+      [heading]="alert.heading"
+      [content]="alert.content"></app-portal-alert>
+  </section>
   <h2 class="header">All licence information found in our records</h2>
   <div class="info-box">
     <p class="info-here">

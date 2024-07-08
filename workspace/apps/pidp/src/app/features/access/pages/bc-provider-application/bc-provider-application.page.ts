@@ -41,9 +41,7 @@ import {
   faUser,
   faXmark,
 } from '@fortawesome/free-solid-svg-icons';
-import { DashboardStateModel, PidpStateName } from '@pidp/data-model';
 import {
-  AppStateService,
   LOADING_OVERLAY_DEFAULT_MESSAGE,
   LoadingOverlayService,
   NavigationService,
@@ -71,6 +69,11 @@ import { AuthRoutes } from '@app/features/auth/auth.routes';
 import { IdentityProvider } from '@app/features/auth/enums/identity-provider.enum';
 import { AuthService } from '@app/features/auth/services/auth.service';
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
+import {
+  DashboardStateModel,
+  PidpStateName,
+} from '@app/features/portal/models/state.model';
+import { AppStateService } from '@app/features/shell/services/app-state.service';
 import { NeedHelpComponent } from '@app/shared/components/need-help/need-help.component';
 import { DialogBcproviderCreateComponent } from '@app/shared/components/success-dialog/components/dialog-bcprovider-create.component';
 import { SuccessDialogComponent } from '@app/shared/components/success-dialog/success-dialog.component';

@@ -7,7 +7,6 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { catchError, noop, of, tap } from 'rxjs';
 
 import {
-  ApplicationService,
   LOADING_OVERLAY_DEFAULT_MESSAGE,
   LoadingOverlayService,
 } from '@pidp/presentation';
@@ -21,6 +20,7 @@ import {
 import { PartyService } from '@app/core/party/party.service';
 import { LoggerService } from '@app/core/services/logger.service';
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
+import { ApplicationService } from '@app/features/shell/services/application.service';
 
 import { EnrolmentErrorComponent } from '../../components/enrolment-error/enrolment-error.component';
 import { DriverFitnessResource } from './driver-fitness-resource.service';
