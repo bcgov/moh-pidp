@@ -74,17 +74,6 @@ export class NavMenuComponent implements OnChanges {
   public showMiniMenuButton = true;
   public isSidenavOpened = false;
   public sidenavMode: MatDrawerMode = 'over';
-  public get isHeaderImageVisible(): boolean {
-    // Hide the image in xsmall small when there is title text to display.
-    if (
-      (this.viewport === PidpViewport.small ||
-        this.viewport === PidpViewport.xsmall) &&
-      this.dashboardState.titleText
-    ) {
-      return false;
-    }
-    return true;
-  }
 
   public isLogoutButtonVisible = false;
   public isLogoutMenuItemVisible = false;
@@ -93,13 +82,6 @@ export class NavMenuComponent implements OnChanges {
   public showCollegeAlert = false;
   public faBell = faBell;
   public AlertCode = AlertCode;
-
-  public get showTitle(): boolean {
-    return !!this.dashboardState.titleText;
-  }
-  public get showTitleDescription(): boolean {
-    return !!this.dashboardState.titleDescriptionText;
-  }
 
   public get collegeRoute(): boolean {
     return !!this.dashboardState.collegeRoute;
