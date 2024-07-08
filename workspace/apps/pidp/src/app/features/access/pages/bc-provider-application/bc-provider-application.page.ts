@@ -161,6 +161,7 @@ export class BcProviderApplicationPage
       PidpStateName.dashboard,
     );
   }
+
   public onBack(): void {
     this.navigationService.navigateToRoot();
   }
@@ -259,5 +260,4 @@ export class BcProviderApplicationPage
       }),
     );
   }
-
 }
