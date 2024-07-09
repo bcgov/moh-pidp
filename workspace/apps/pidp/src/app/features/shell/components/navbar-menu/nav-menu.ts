@@ -38,7 +38,6 @@ import {
 import { RoutePath } from '@bcgov/shared/utils';
 
 import { AlertCode } from '@app/features/portal/enums/alert-code.enum';
-import { DashboardStateModel } from '@app/features/portal/models/state.model';
 import { ProfileRoutes } from '@app/features/profile/profile.routes';
 
 @Component({
@@ -64,9 +63,10 @@ import { ProfileRoutes } from '@app/features/profile/profile.routes';
   ],
 })
 export class NavMenuComponent implements OnChanges {
-  @Input() public dashboardState!: DashboardStateModel;
+  @Input() public alerts!: AlertCode[];
   @Input() public menuItems!: DashboardMenuItem[];
   @Input() public emailSupport!: string;
+  @Input() public collegeRoute!: string;
   @Output() public logout = new EventEmitter<void>();
   @ViewChild('sidenav') public sidenav!: MatSidenav;
 
@@ -82,10 +82,6 @@ export class NavMenuComponent implements OnChanges {
   public showCollegeAlert = false;
   public faBell = faBell;
   public AlertCode = AlertCode;
-
-  public get collegeRoute(): boolean {
-    return !!this.dashboardState.collegeRoute;
-  }
 
   public constructor(
     private viewportService: ViewportService,
