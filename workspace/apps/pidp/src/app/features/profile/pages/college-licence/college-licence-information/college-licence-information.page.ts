@@ -17,7 +17,7 @@ import { LoggerService } from '@app/core/services/logger.service';
 import { CollegeCertification } from '../college-licence-declaration/college-certification.model';
 import { CollegeLicenceInformationResource } from './college-licence-information-resource.service';
 import { CollegeLicenceInformationDetailComponent } from './components/college-licence-information-detail.component';
-
+import { CollegeLicenceDeclarationPage } from '../college-licence-declaration/college-licence-declaration.page';
 @Component({
   selector: 'app-college-licence-information',
   templateUrl: './college-licence-information.page.html',
@@ -30,6 +30,7 @@ import { CollegeLicenceInformationDetailComponent } from './components/college-l
     InjectViewportCssClassDirective,
     MatButtonModule,
     NgFor,
+    CollegeLicenceDeclarationPage,
   ],
 })
 export class CollegeLicenceInformationPage implements OnInit {
