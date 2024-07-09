@@ -47,14 +47,14 @@ export class PortalPage {
   public OrganizationInfoRoutes = OrganizationInfoRoutes;
   public AlertCode = AlertCode;
   public faBell = faBell;
-  public profileStatusAlerts$: Observable<AlertCode[]>;
+  public alerts$: Observable<AlertCode[]>;
 
   public constructor(
     private partyService: PartyService,
     private resource: PortalResource,
     private router: Router,
   ) {
-    this.profileStatusAlerts$ = this.resource
+    this.alerts$ = this.resource
       .getProfileStatus(this.partyService.partyId)
       .pipe(map((profileStatus) => profileStatus?.alerts ?? []));
   }

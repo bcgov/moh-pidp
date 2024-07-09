@@ -38,7 +38,7 @@ export class PortalDashboardComponent implements IDashboard {
   public providerIdentitySupport: string;
   public collegeRoute: string = '';
 
-  public profileStatusAlerts$: Observable<AlertCode[]>;
+  public alerts$: Observable<AlertCode[]>;
 
   public constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
@@ -56,7 +56,7 @@ export class PortalDashboardComponent implements IDashboard {
     this.responsiveMenuItems = false;
     this.menuItems = this.createMenuItems();
     this.providerIdentitySupport = this.config.emails.providerIdentitySupport;
-    this.profileStatusAlerts$ = this.resource
+    this.alerts$ = this.resource
       .getProfileStatus(this.partyService.partyId)
       .pipe(
         tap((profileStatus) => {

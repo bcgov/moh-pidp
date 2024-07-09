@@ -119,6 +119,7 @@ export class BcProviderApplicationPage
   public showOverlayOnSubmit = false;
   public errorMatcher = new CrossFieldErrorMatcher();
   public componentType = DialogBcproviderCreateComponent;
+
   public fullName$: Observable<string>;
 
   public activeLayout: 'upliftAccount' | 'createAccount' | '';

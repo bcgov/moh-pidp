@@ -49,6 +49,7 @@ export class UserAccessAgreementPage implements OnInit {
   public accessRequestFailed: boolean;
   public specialAuthoritySupportEmail: string;
   public redirectUrl: string | null = null;
+
   public fullName$: Observable<string>;
 
   public constructor(
