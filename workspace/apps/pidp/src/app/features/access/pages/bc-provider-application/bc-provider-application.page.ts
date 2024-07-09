@@ -28,6 +28,7 @@ import {
   Observable,
   catchError,
   exhaustMap,
+  map,
   of,
   switchMap,
   tap,
@@ -68,11 +69,7 @@ import { AuthRoutes } from '@app/features/auth/auth.routes';
 import { IdentityProvider } from '@app/features/auth/enums/identity-provider.enum';
 import { AuthService } from '@app/features/auth/services/auth.service';
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
-import {
-  DashboardStateModel,
-  PidpStateName,
-} from '@app/features/portal/models/state.model';
-import { AppStateService } from '@app/features/shell/services/app-state.service';
+import { PortalResource } from '@app/features/portal/portal-resource.service';
 import { NeedHelpComponent } from '@app/shared/components/need-help/need-help.component';
 import { DialogBcproviderCreateComponent } from '@app/shared/components/success-dialog/components/dialog-bcprovider-create.component';
 import { SuccessDialogComponent } from '@app/shared/components/success-dialog/success-dialog.component';
@@ -122,10 +119,9 @@ export class BcProviderApplicationPage
   public showOverlayOnSubmit = false;
   public errorMatcher = new CrossFieldErrorMatcher();
   public componentType = DialogBcproviderCreateComponent;
+  public fullName$: Observable<string>;
 
   public activeLayout: 'upliftAccount' | 'createAccount' | '';
-
-  public dashboardState$: Observable<DashboardStateModel>;
 
   @ViewChild('successDialog')
   public successDialogTemplate!: TemplateRef<Element>;
@@ -144,10 +140,10 @@ export class BcProviderApplicationPage
     private logger: LoggerService,
     private navigationService: NavigationService,
     private partyService: PartyService,
+    private portalResource: PortalResource,
     private resource: BcProviderApplicationResource,
     private route: ActivatedRoute,
     private utilsService: UtilsService,
-    private stateService: AppStateService,
   ) {
     super(dependenciesService);
     this.formState = new BcProviderApplicationFormState(fb);
@@ -156,10 +152,14 @@ export class BcProviderApplicationPage
       routeData.bcProviderApplicationStatusCode == StatusCode.COMPLETED;
 
     this.activeLayout = '';
-
-    this.dashboardState$ = this.stateService.getNamedStateBroadcast(
-      PidpStateName.dashboard,
-    );
+    this.fullName$ = this.portalResource
+      .getProfileStatus(this.partyService.partyId)
+      .pipe(
+        map(
+          (profileStatus) =>
+            profileStatus?.status.dashboardInfo.displayFullName ?? '',
+        ),
+      );
   }
 
   public onBack(): void {

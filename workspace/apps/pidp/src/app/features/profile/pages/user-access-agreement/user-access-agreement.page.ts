@@ -4,7 +4,7 @@ import { Component, OnInit, forwardRef } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { Observable, catchError, noop, of, tap } from 'rxjs';
+import { Observable, catchError, map, noop, of, tap } from 'rxjs';
 
 import {
   AlertComponent,
@@ -20,11 +20,7 @@ import { LoggerService } from '@app/core/services/logger.service';
 import { UtilsService } from '@app/core/services/utils.service';
 import { specialAuthorityEformsSupportEmail } from '@app/features/access/pages/sa-eforms/sa-eforms.constants';
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
-import {
-  DashboardStateModel,
-  PidpStateName,
-} from '@app/features/portal/models/state.model';
-import { AppStateService } from '@app/features/shell/services/app-state.service';
+import { PortalResource } from '@app/features/portal/portal-resource.service';
 
 import { UserAccessAgreementDocumentComponent } from './components/user-access-agreement-document/user-access-agreement-document.component';
 import { UserAccessAgreementResource } from './user-access-agreement-resource.service';
@@ -53,26 +49,31 @@ export class UserAccessAgreementPage implements OnInit {
   public accessRequestFailed: boolean;
   public specialAuthoritySupportEmail: string;
   public redirectUrl: string | null = null;
-  public dashboardState$: Observable<DashboardStateModel>;
+  public fullName$: Observable<string>;
 
   public constructor(
     private route: ActivatedRoute,
     private router: Router,
     private partyService: PartyService,
+    private portalResource: PortalResource,
     private resource: UserAccessAgreementResource,
     private logger: LoggerService,
     private utilsService: UtilsService,
-    private stateService: AppStateService,
   ) {
     this.title = this.route.snapshot.data.title;
-    this.dashboardState$ = this.stateService.getNamedStateBroadcast(
-      PidpStateName.dashboard,
-    );
 
     const routeData = this.route.snapshot.data;
     this.completed = routeData.userAccessAgreementCode === StatusCode.COMPLETED;
     this.accessRequestFailed = false;
     this.specialAuthoritySupportEmail = specialAuthorityEformsSupportEmail;
+    this.fullName$ = this.portalResource
+      .getProfileStatus(this.partyService.partyId)
+      .pipe(
+        map(
+          (profileStatus) =>
+            profileStatus?.status.dashboardInfo.displayFullName ?? '',
+        ),
+      );
   }
 
   public ngOnInit(): void {
