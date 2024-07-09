@@ -8,7 +8,7 @@ ul {
   margin-left: 0;
 }
 
-.container.viewport-all {
+.viewport-all {
   .content-header h1 {
     color: #003366;
     font-size: 50px;
@@ -76,6 +76,14 @@ ul {
     }
 
     .definitions-container {
+      .sub-header {
+        color: #2d2d2d;
+        font-size: 1.5rem;
+        font-weight: 700;
+        line-height: 1.6875rem;
+        margin: 1.5rem 0;
+      }
+
       .sidebar-header {
         color: #2d2d2d;
         font-size: 1.25rem;
@@ -84,6 +92,63 @@ ul {
       .sidebar-body {
         color: #707070;
         font-size: 1rem;
+      }
+    }
+  }
+}
+
+.viewport-small {
+  .content-header h1 {
+    font-size: 40px;
+  }
+}
+
+.viewport-xsmall {
+  .content-header h1 {
+    font-size: 40px;
+  }
+
+  .page-sections {
+    grid-template-columns: 100%;
+
+    .main-container {
+      .sub-header {
+        font-size: 1.2rem;
+      }
+
+      .body-text {
+        font-size: 0.8rem;
+      }
+
+      .margin-left-2 {
+        margin-left: 1.2rem;
+      }
+
+      .body-grid-container {
+        display: flex;
+
+        .first-row,
+        .second-row {
+          .grid-column {
+            p {
+              font-size: 0.8rem;
+            }
+          }
+        }
+      }
+    }
+
+    .definitions-container {
+      .sub-header {
+        font-size: 1.2rem;
+      }
+
+      .sidebar-header {
+        font-size: 1rem;
+      }
+
+      .sidebar-body {
+        font-size: 0.8rem;
       }
     }
   }
