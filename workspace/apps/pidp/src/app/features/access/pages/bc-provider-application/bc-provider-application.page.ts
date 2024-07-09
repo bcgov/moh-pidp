@@ -69,7 +69,6 @@ import { AuthRoutes } from '@app/features/auth/auth.routes';
 import { IdentityProvider } from '@app/features/auth/enums/identity-provider.enum';
 import { AuthService } from '@app/features/auth/services/auth.service';
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
-import { PortalResource } from '@app/features/portal/portal-resource.service';
 import { NeedHelpComponent } from '@app/shared/components/need-help/need-help.component';
 import { DialogBcproviderCreateComponent } from '@app/shared/components/success-dialog/components/dialog-bcprovider-create.component';
 import { SuccessDialogComponent } from '@app/shared/components/success-dialog/success-dialog.component';
@@ -141,7 +140,6 @@ export class BcProviderApplicationPage
     private logger: LoggerService,
     private navigationService: NavigationService,
     private partyService: PartyService,
-    private portalResource: PortalResource,
     private resource: BcProviderApplicationResource,
     private route: ActivatedRoute,
     private utilsService: UtilsService,
@@ -153,7 +151,7 @@ export class BcProviderApplicationPage
       routeData.bcProviderApplicationStatusCode == StatusCode.COMPLETED;
 
     this.activeLayout = '';
-    this.fullName$ = this.portalResource
+    this.fullName$ = this.resource
       .getProfileStatus(this.partyService.partyId)
       .pipe(
         map(

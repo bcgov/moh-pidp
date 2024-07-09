@@ -20,7 +20,6 @@ import { LoggerService } from '@app/core/services/logger.service';
 import { UtilsService } from '@app/core/services/utils.service';
 import { specialAuthorityEformsSupportEmail } from '@app/features/access/pages/sa-eforms/sa-eforms.constants';
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
-import { PortalResource } from '@app/features/portal/portal-resource.service';
 
 import { UserAccessAgreementDocumentComponent } from './components/user-access-agreement-document/user-access-agreement-document.component';
 import { UserAccessAgreementResource } from './user-access-agreement-resource.service';
@@ -56,7 +55,6 @@ export class UserAccessAgreementPage implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private partyService: PartyService,
-    private portalResource: PortalResource,
     private resource: UserAccessAgreementResource,
     private logger: LoggerService,
     private utilsService: UtilsService,
@@ -67,7 +65,7 @@ export class UserAccessAgreementPage implements OnInit {
     this.completed = routeData.userAccessAgreementCode === StatusCode.COMPLETED;
     this.accessRequestFailed = false;
     this.specialAuthoritySupportEmail = specialAuthorityEformsSupportEmail;
-    this.fullName$ = this.portalResource
+    this.fullName$ = this.resource
       .getProfileStatus(this.partyService.partyId)
       .pipe(
         map(
