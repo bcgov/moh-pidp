@@ -13,7 +13,6 @@ import {
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';
 import { AccessRoutes } from '@app/features/access/access.routes';
-import { AccessTokenService } from '@app/features/auth/services/access-token.service';
 import { AuthService } from '@app/features/auth/services/auth.service';
 import {
   DashboardStateModel,
@@ -33,7 +32,6 @@ import { NavMenuComponent } from '../navbar-menu/nav-menu';
 })
 export class PortalDashboardComponent implements IDashboard, OnInit {
   public logoutRedirectUrl: string;
-  public username: Observable<string>;
   public headerConfig: DashboardHeaderConfig;
   public brandConfig: { imgSrc: string; imgAlt: string };
   public showMenuItemIcons: boolean;
@@ -46,16 +44,10 @@ export class PortalDashboardComponent implements IDashboard, OnInit {
   public constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
     private authService: AuthService,
-    accessTokenService: AccessTokenService,
     private dashboardStateService: DashboardStateService,
     private stateService: AppStateService,
   ) {
     this.logoutRedirectUrl = `${this.config.applicationUrl}/${this.config.routes.auth}`;
-    this.username = accessTokenService.decodeToken().pipe(
-      map((token) => {
-        return token?.name ?? '';
-      }),
-    );
     this.headerConfig = { theme: 'light', allowMobileToggle: true };
     this.brandConfig = {
       imgSrc: '/assets/images/pidp-logo-white.svg',
