@@ -7,6 +7,8 @@
       mat-icon-button
       (click)="onMiniMenuButtonClick()">
       <mat-icon>menu</mat-icon>
+      <span
+        [ngClass]="{'menu-notification-dot': dashboardState.alerts.includes(AlertCode.TRANSIENT_ERROR) || dashboardState.alerts.includes(AlertCode.PLR_BAD_STANDING)}"></span>
     </button>
   </div>
   <div *ngIf="isTopMenuVisible" uiPidpInjectViewportCss>
@@ -30,21 +32,30 @@
     <div class="main-menu">
       <a class="main-menu-item">
         <div class="dropdown">
-          <a class="dropdown-profile">Profile</a>
+          <span class="content-with-alert"
+            ><fa-icon
+              *ngIf="dashboardState.alerts.includes(AlertCode.TRANSIENT_ERROR) || dashboardState.alerts.includes(AlertCode.PLR_BAD_STANDING)"
+              class="fa-duotone"
+              [icon]="faBell"></fa-icon
+            ><a class="dropdown-profile">Profile</a></span
+          >
           <div class="dropdown-content">
             <a
               class="dropdown-links"
-              (click)="navigateTo('/profile/personal-information')"
+              (click)="navigateTo(ProfileRoutes.routePath(ProfileRoutes.PERSONAL_INFO))"
               >Personal Information</a
             >
             <a
               class="dropdown-links"
               (click)="navigateTo(dashboardState.collegeRoute)"
-              >College License</a
-            >
+              >College License<fa-icon
+                *ngIf="dashboardState.alerts.includes(AlertCode.TRANSIENT_ERROR) || dashboardState.alerts.includes(AlertCode.PLR_BAD_STANDING)"
+                class="fa-duotone"
+                [icon]="faBell"></fa-icon
+            ></a>
             <a
               class="dropdown-links"
-              (click)="navigateTo('/profile/user-access-agreement')"
+              (click)="navigateTo(ProfileRoutes.routePath(ProfileRoutes.USER_ACCESS_AGREEMENT))"
               >User Access Agreement</a
             >
           </div>
@@ -56,7 +67,6 @@
         routerLinkActive="main-menu-item-active"
         [routerLink]="getRouterLink(menuItem)"
         [routerLinkActiveOptions]="getRouterLinkActiveOptions(menuItem)"
-        [fragment]="getRouterLinkFragment(menuItem)"
         (click)="onMenuItemClicked()"
         >{{ menuItem.label }}
       </a>
@@ -94,7 +104,7 @@
         <div class="sidenav-menu">
           <a
             class="sidenav-menu-item"
-            (click)="navigateTo('/profile/personal-information')"
+            (click)="navigateTo(ProfileRoutes.routePath(ProfileRoutes.PERSONAL_INFO))"
             >Personal Information</a
           >
           <a
@@ -102,9 +112,11 @@
             (click)="navigateTo(dashboardState.collegeRoute)"
             >College License</a
           >
+          <span
+            [ngClass]="{'menu-list-notification-dot': dashboardState.alerts.includes(AlertCode.TRANSIENT_ERROR) || dashboardState.alerts.includes(AlertCode.PLR_BAD_STANDING)}"></span>
           <a
             class="sidenav-menu-item"
-            (click)="navigateTo('/profile/user-access-agreement')"
+            (click)="navigateTo(ProfileRoutes.routePath(ProfileRoutes.USER_ACCESS_AGREEMENT))"
             >User Access Agreement</a
           >
           <a

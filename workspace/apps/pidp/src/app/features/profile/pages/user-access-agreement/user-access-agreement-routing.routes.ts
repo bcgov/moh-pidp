@@ -16,11 +16,6 @@ export const routes: Routes = [
       title: userAccessAgreementTitle,
       routes: {
         root: '../../',
-        setDashboardTitleGuard: {
-          titleText: 'Welcome to OneHealthID Service',
-          titleDescriptionText:
-            'Complete your profile to gain access to the systems you are eligible for',
-        },
       },
     },
   },
