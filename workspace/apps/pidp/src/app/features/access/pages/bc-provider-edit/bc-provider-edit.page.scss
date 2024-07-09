@@ -21,7 +21,7 @@
   }
   & .mobile-image{
     & img {
-      display: block;
+      display: block !important;
       max-width: 100%;
       height: auto;
       position: relative !important;
