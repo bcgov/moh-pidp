@@ -177,11 +177,6 @@ public class BCProviderCreate
         /// </summary>
         private string GenerateMohKeycloakUsername(string userPrincipalName)
         {
-            if (this.keycloakAdministrationUrl.Host == "user-management-dev.api.hlth.gov.bc.ca")
-            {
-                return userPrincipalName;
-            }
-
             return userPrincipalName + "@bcp";
         }
 
