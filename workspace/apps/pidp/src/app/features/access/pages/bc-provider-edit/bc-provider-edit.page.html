@@ -58,6 +58,11 @@
 
 <ng-template #passwordForm>
   <form novalidate [formGroup]="formState.form" (ngSubmit)="onSubmit()">
+    <div class="mobile-image">
+      <img
+      ngSrc="/assets/images/bcprovider-account-1000x1103.webp"
+      fill />
+    </div>
     <h2>Password reset</h2>
     <div class="username">
       <h4><strong>Provided username</strong></h4>
