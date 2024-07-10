@@ -1,5 +1,5 @@
 import { AsyncPipe } from '@angular/common';
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { IsActiveMatchOptions } from '@angular/router';
 
 import { Observable, map, tap } from 'rxjs';
@@ -28,7 +28,7 @@ import { NavMenuComponent } from '../navbar-menu/nav-menu';
   standalone: true,
   imports: [AsyncPipe, NavMenuComponent],
 })
-export class PortalDashboardComponent implements IDashboard {
+export class PortalDashboardComponent implements IDashboard, OnInit {
   public logoutRedirectUrl: string;
   public headerConfig: DashboardHeaderConfig;
   public brandConfig: { imgSrc: string; imgAlt: string };
@@ -38,7 +38,7 @@ export class PortalDashboardComponent implements IDashboard {
   public providerIdentitySupport: string;
   public collegeRoute: string = '';
 
-  public alerts$: Observable<AlertCode[]>;
+  public alerts$!: Observable<AlertCode[]>;
 
   public constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
@@ -56,6 +56,13 @@ export class PortalDashboardComponent implements IDashboard {
     this.responsiveMenuItems = false;
     this.menuItems = this.createMenuItems();
     this.providerIdentitySupport = this.config.emails.providerIdentitySupport;
+  }
+
+  public onLogout(): void {
+    this.authService.logout(this.logoutRedirectUrl);
+  }
+
+  public ngOnInit(): void {
     this.alerts$ = this.resource
       .getProfileStatus(this.partyService.partyId)
       .pipe(
@@ -69,10 +76,6 @@ export class PortalDashboardComponent implements IDashboard {
         }),
         map((profileStatus) => profileStatus?.alerts ?? []),
       );
-  }
-
-  public onLogout(): void {
-    this.authService.logout(this.logoutRedirectUrl);
   }
 
   private createMenuItems(): DashboardMenuItem[] {

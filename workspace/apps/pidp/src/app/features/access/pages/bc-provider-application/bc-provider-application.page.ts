@@ -119,7 +119,7 @@ export class BcProviderApplicationPage
   public errorMatcher = new CrossFieldErrorMatcher();
   public componentType = DialogBcproviderCreateComponent;
 
-  public fullName$: Observable<string>;
+  public fullName$!: Observable<string>;
 
   public activeLayout: 'upliftAccount' | 'createAccount' | '';
 
@@ -151,14 +151,6 @@ export class BcProviderApplicationPage
       routeData.bcProviderApplicationStatusCode == StatusCode.COMPLETED;
 
     this.activeLayout = '';
-    this.fullName$ = this.resource
-      .getProfileStatus(this.partyService.partyId)
-      .pipe(
-        map(
-          (profileStatus) =>
-            profileStatus?.status.dashboardInfo.displayFullName ?? '',
-        ),
-      );
   }
 
   public onBack(): void {
@@ -206,6 +198,15 @@ export class BcProviderApplicationPage
       this.logger.error('No status code was provided');
       return this.navigationService.navigateToRoot();
     }
+
+    this.fullName$ = this.resource
+      .getProfileStatus(this.partyService.partyId)
+      .pipe(
+        map(
+          (profileStatus) =>
+            profileStatus?.status.dashboardInfo.displayFullName ?? '',
+        ),
+      );
   }
 
   protected performSubmission(): Observable<string | void> {

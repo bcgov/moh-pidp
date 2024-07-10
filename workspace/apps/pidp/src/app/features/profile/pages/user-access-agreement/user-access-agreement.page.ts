@@ -49,7 +49,7 @@ export class UserAccessAgreementPage implements OnInit {
   public specialAuthoritySupportEmail: string;
   public redirectUrl: string | null = null;
 
-  public fullName$: Observable<string>;
+  public fullName$!: Observable<string>;
 
   public constructor(
     private route: ActivatedRoute,
@@ -65,14 +65,6 @@ export class UserAccessAgreementPage implements OnInit {
     this.completed = routeData.userAccessAgreementCode === StatusCode.COMPLETED;
     this.accessRequestFailed = false;
     this.specialAuthoritySupportEmail = specialAuthorityEformsSupportEmail;
-    this.fullName$ = this.resource
-      .getProfileStatus(this.partyService.partyId)
-      .pipe(
-        map(
-          (profileStatus) =>
-            profileStatus?.status.dashboardInfo.displayFullName ?? '',
-        ),
-      );
   }
 
   public ngOnInit(): void {
@@ -91,6 +83,16 @@ export class UserAccessAgreementPage implements OnInit {
     if (this.route.snapshot.queryParamMap.has('redirect-url')) {
       this.redirectUrl = this.route.snapshot.queryParamMap.get('redirect-url');
     }
+
+    this.fullName$ = this.resource
+      .getProfileStatus(this.partyService.partyId)
+      .pipe(
+        map(
+          (profileStatus) =>
+            profileStatus?.status.dashboardInfo.displayFullName ?? '',
+        ),
+      );
+
     this.utilsService.scrollTop();
   }
 

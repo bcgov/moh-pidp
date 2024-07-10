@@ -1,6 +1,6 @@
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { AsyncPipe, NgIf, NgOptimizedImage } from '@angular/common';
-import { Component, HostListener } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { Observable, map } from 'rxjs';
@@ -38,7 +38,7 @@ import { PortalResource } from './portal-resource.service';
     AsyncPipe,
   ],
 })
-export class PortalPage {
+export class PortalPage implements OnInit {
   public faArrowRight = faArrowRight;
   public faArrowUp = faArrowUp;
   public showBackToTopButton: boolean = false;
@@ -47,17 +47,13 @@ export class PortalPage {
   public OrganizationInfoRoutes = OrganizationInfoRoutes;
   public AlertCode = AlertCode;
   public faBell = faBell;
-  public alerts$: Observable<AlertCode[]>;
+  public alerts$!: Observable<AlertCode[]>;
 
   public constructor(
     private partyService: PartyService,
     private resource: PortalResource,
     private router: Router,
-  ) {
-    this.alerts$ = this.resource
-      .getProfileStatus(this.partyService.partyId)
-      .pipe(map((profileStatus) => profileStatus?.alerts ?? []));
-  }
+  ) {}
 
   @HostListener('window:scroll', [])
   public onWindowScroll(): void {
@@ -76,5 +72,11 @@ export class PortalPage {
 
   public navigateTo(path: string): void {
     this.router.navigateByUrl(path);
+  }
+
+  public ngOnInit(): void {
+    this.alerts$ = this.resource
+      .getProfileStatus(this.partyService.partyId)
+      .pipe(map((profileStatus) => profileStatus?.alerts ?? []));
   }
 }
