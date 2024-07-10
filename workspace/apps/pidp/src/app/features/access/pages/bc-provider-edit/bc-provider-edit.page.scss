@@ -19,13 +19,43 @@
       margin-top: 20px;
     }
   }
+  & .mobile-image{
+    & img {
+      display: block !important;
+      max-width: 100%;
+      height: auto;
+      position: relative !important;
+    }
+  }
+  & .form-card {
+    display: block !important;
+  }
+  & .password-splash {
+    & .password-splash-content {
+      & .text-box {
+        display: none !important;
+      }
+      & .image {
+        display: none !important;
+      }
+    }
+  }
 }
 
 .viewport-all {
   --header-margin: unset;
   --avatar-size: 4rem;
   --content-padding: var(--gap);
-  --password-splash-display: none;
+  --password-splash-display: unset;
+}
+
+.viewport-medium {
+  --header-margin: var(--gap) 0 0;
+  --content-padding: var(--gap) 0;
+  --password-splash-display: unset;
+    --password-splash: {
+    flex: 1
+  }
 }
 
 .viewport-medium,
@@ -196,6 +226,11 @@
     }
     & .actions {
       margin-top: var(--gap);
+    }
+  }
+  & .mobile-image{
+    & img {
+      display: none;
     }
   }
 }
