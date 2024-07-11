@@ -148,3 +148,13 @@
     }
   }
 }
+
+.viewport-small,
+.viewport-xsmall {
+  & header {
+    & h1 {
+      font-size: 40px;
+      line-height: 1.1;
+    }
+  }
+}
