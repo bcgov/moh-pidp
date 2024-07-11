@@ -4,9 +4,11 @@
       <h2>BC Provider Account Information</h2>
     </header>
     <div class="content">
-      <section class="error-card" [class.show-card]="showErrorCard">
-        <p>An error occurred.</p>
-      </section>
+      <ng-container *ngIf="showErrorCard">
+        <section class="error-card" [class.show-card]="showErrorCard">
+          <p>An error occurred.</p>
+        </section>
+      </ng-container>
       <section class="form-card">
         <div class="password-form">
           <ng-container *ngTemplateOutlet="passwordForm"></ng-container>
@@ -59,9 +61,7 @@
 <ng-template #passwordForm>
   <form novalidate [formGroup]="formState.form" (ngSubmit)="onSubmit()">
     <div class="mobile-image">
-      <img
-      src="/assets/images/bcprovider-account-1000x1103.webp"
-      fill/>
+      <img src="/assets/images/bcprovider-account-1000x1103.webp" fill />
     </div>
     <h2>Password reset</h2>
     <div class="username">

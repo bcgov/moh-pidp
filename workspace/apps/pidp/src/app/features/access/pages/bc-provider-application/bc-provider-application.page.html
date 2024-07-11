@@ -176,16 +176,18 @@
       you use anywhere else.
     </p>
 
-    <section class="error-card" [class.show-card]="showErrorCard">
-      <p>An error occurred.</p>
-    </section>
+    <ng-container *ngIf="showErrorCard">
+      <section class="error-card" [class.show-card]="showErrorCard">
+        <p>An error occurred.</p>
+      </section>
+    </ng-container>
     <section class="form-card">
       <div class="password-form">
         <ng-container *ngTemplateOutlet="passwordForm"></ng-container>
       </div>
       <div class="password-splash">
         <div class="password-splash-content">
-          <div class="text-box" >
+          <div class="text-box">
             <div>
               <span class="lets">Let's get started</span>
             </div>
@@ -230,9 +232,7 @@
 <ng-template #passwordForm>
   <form novalidate [formGroup]="formState.form" (ngSubmit)="onSubmit()">
     <div class="mobile-image">
-      <img
-      ngSrc="/assets/images/bcprovider-account-1000x1103.webp"
-      fill />
+      <img ngSrc="/assets/images/bcprovider-account-1000x1103.webp" fill />
     </div>
     <h2>Create an account</h2>
     <div class="form-content">
