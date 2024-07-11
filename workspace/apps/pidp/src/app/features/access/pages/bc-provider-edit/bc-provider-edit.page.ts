@@ -8,13 +8,15 @@ import { MatInputModule } from '@angular/material/input';
 
 import { catchError, noop, of, tap } from 'rxjs';
 
-import { faCircleCheck, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { faAngleRight, faCircleCheck, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { NavigationService } from '@pidp/presentation';
 
 import { NoContent } from '@bcgov/shared/data-access';
 import {
   CrossFieldErrorMatcher,
   InjectViewportCssClassDirective,
+  TextButtonDirective,
 } from '@bcgov/shared/ui';
 
 import {
@@ -31,6 +33,8 @@ import {
   BcProviderChangePasswordRequest,
   BcProviderEditResource,
 } from './bc-provider-edit-resource.service';
+import { Router } from '@angular/router';
+import { AccessRoutes } from '../../access.routes';
 
 export interface BcProviderEditInitialStateModel {
   bcProviderId: string;
@@ -43,6 +47,7 @@ export interface BcProviderEditInitialStateModel {
   standalone: true,
   imports: [
     InjectViewportCssClassDirective,
+    FaIconComponent,
     MatButtonModule,
     MatFormFieldModule,
     MatInputModule,
@@ -51,6 +56,7 @@ export interface BcProviderEditInitialStateModel {
     NgTemplateOutlet,
     ReactiveFormsModule,
     SuccessDialogComponent,
+    TextButtonDirective,
   ],
 })
 export class BcProviderEditPage
@@ -58,8 +64,10 @@ export class BcProviderEditPage
   implements OnInit
 {
   public faCircleCheck = faCircleCheck;
+  public faAngleRight = faAngleRight;
   public faXmark = faXmark;
   public formState: BcProviderEditFormState;
+  public AccessRoutes = AccessRoutes;
   public showErrorCard = false;
   public username = '';
   public errorMatcher = new CrossFieldErrorMatcher();
@@ -79,6 +87,7 @@ export class BcProviderEditPage
   public constructor(
     dependenciesService: AbstractFormDependenciesService,
     fb: FormBuilder,
+    private router: Router,
     private navigationService: NavigationService,
     private partyService: PartyService,
     private resource: BcProviderEditResource,
@@ -104,6 +113,10 @@ export class BcProviderEditPage
       .subscribe((bcProviderObject: BcProviderEditInitialStateModel) => {
         this.username = bcProviderObject.bcProviderId;
       });
+  }
+
+  public navigateTo(path: string): void {
+    this.router.navigateByUrl(path);
   }
 
   protected performSubmission(): NoContent {

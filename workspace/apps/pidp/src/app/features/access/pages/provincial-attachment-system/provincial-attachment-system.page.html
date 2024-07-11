@@ -1,13 +1,21 @@
 <div class="box container" uiPidpInjectViewportCss>
+  <nav class="breadcrumb">
+    <ul>
+      <li><button uiTextButton (click)="onBack()">Home</button></li>
+      <li><fa-icon class="fa-duotone" [icon]="faAngleRight"></fa-icon></li>
+      <li>
+        <button
+          uiTextButton
+          (click)="navigateTo(AccessRoutes.routePath(AccessRoutes.ACCESS_REQUESTS))">
+          Access
+        </button>
+      </li>
+      <li><fa-icon class="fa-duotone" [icon]="faAngleRight"></fa-icon></li>
+      <li><button uiTextButton>Provincial Attachment System</button></li>
+    </ul>
+  </nav>
   <div class="content">
     <section class="intro">
-      <nav class="breadcrumb">
-        <ul>
-          <li><button uiTextButton (click)="onBack()">Home</button></li>
-          <li><fa-icon class="fa-duotone" [icon]="faAngleRight"></fa-icon></li>
-          <li><button uiTextButton>Active Page</button></li>
-        </ul>
-      </nav>
       <div class="content-header">
         <h1>Enrol for Access</h1>
         <p>
@@ -158,7 +166,7 @@
                 color="primary"
                 aria-labelledby="navigate-to-pas"
                 [disabled]="pas$ | async"
-                (click)="navigateTo()">
+                (click)="navigateToPath()">
                 Login to Provincial Attachment System with your BCProvider
               </button>
             </div>
@@ -198,7 +206,7 @@
               color="primary"
               aria-labelledby="navigate-to-pas"
               [disabled]="pas$ | async"
-              (click)="navigateTo()">
+              (click)="navigateToPath()">
               Login
             </button>
           </div>

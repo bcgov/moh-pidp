@@ -15,6 +15,7 @@ import {
   AnchorDirective,
   InjectViewportCssClassDirective,
   PageFooterActionDirective,
+  TextButtonDirective,
 } from '@bcgov/shared/ui';
 
 import { PartyService } from '@app/core/party/party.service';
@@ -29,6 +30,9 @@ import {
   driverFitnessUrl,
   medicalPractitionerPortalUrl,
 } from './driver-fitness.constants';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { faAngleRight } from '@fortawesome/free-solid-svg-icons';
+import { AccessRoutes } from '../../access.routes';
 
 @Component({
   selector: 'app-driver-fitness',
@@ -39,10 +43,12 @@ import {
     AnchorDirective,
     EnrolmentErrorComponent,
     InjectViewportCssClassDirective,
+    FaIconComponent,
     MatButtonModule,
     NgIf,
     PageFooterActionDirective,
     RouterLink,
+    TextButtonDirective,
   ],
 })
 export class DriverFitnessPage implements OnInit {
@@ -52,6 +58,8 @@ export class DriverFitnessPage implements OnInit {
   public driverFitnessSupportEmail: string;
   public enrolmentError: boolean;
   public medicalPractitionerPortalUrl: string;
+  public faAngleRight = faAngleRight;
+  public AccessRoutes = AccessRoutes;
 
   public constructor(
     private loadingOverlayService: LoadingOverlayService,
@@ -116,6 +124,10 @@ export class DriverFitnessPage implements OnInit {
         }
       });
   }
+  public navigateTo(path: string): void {
+    this.router.navigateByUrl(path);
+  }
+
   private onAccessGranted(): void {
     this.applicationService.setDashboardTitleText(
       'Enrolment Completed',

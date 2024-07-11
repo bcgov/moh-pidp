@@ -21,6 +21,7 @@ import {
   AnchorDirective,
   InjectViewportCssClassDirective,
   PageFooterActionDirective,
+  TextButtonDirective,
 } from '@bcgov/shared/ui';
 
 import {
@@ -36,6 +37,9 @@ import { msTeamsSupportEmail } from '../ms-teams-privacy-officer/ms-teams.consta
 import { MsTeamsClinicMemberFormState } from './ms-teams-clinic-member-form-state';
 import { MsTeamsClinicMemberResource } from './ms-teams-clinic-member-resource.service';
 import { PrivacyOfficer } from './ms-teams-clinic-member.model';
+import { faAngleRight } from '@fortawesome/free-solid-svg-icons';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { AccessRoutes } from '../../access.routes';
 
 @Component({
   selector: 'app-ms-teams-clinic-member',
@@ -46,6 +50,7 @@ import { PrivacyOfficer } from './ms-teams-clinic-member.model';
     AnchorDirective,
     EnrolmentErrorComponent,
     InjectViewportCssClassDirective,
+    FaIconComponent,
     FormsModule,
     MatButtonModule,
     MatFormFieldModule,
@@ -56,6 +61,7 @@ import { PrivacyOfficer } from './ms-teams-clinic-member.model';
     NgIf,
     PageFooterActionDirective,
     ReactiveFormsModule,
+    TextButtonDirective,
   ],
 })
 export class MsTeamsClinicMemberPage
@@ -72,6 +78,8 @@ export class MsTeamsClinicMemberPage
   public formState: MsTeamsClinicMemberFormState;
   public showOverlayOnSubmit = false;
   public privacyOfficers!: PrivacyOfficer[] | null;
+  public faAngleRight = faAngleRight;
+  public AccessRoutes = AccessRoutes;
 
   public constructor(
     dependenciesService: AbstractFormDependenciesService,
@@ -145,6 +153,10 @@ export class MsTeamsClinicMemberPage
     this.resource
       .getPrivacyOfficers(partyId)
       .subscribe((privacyOfficers) => (this.privacyOfficers = privacyOfficers));
+  }
+
+  public navigateTo(path: string): void {
+    this.router.navigateByUrl(path);
   }
 
   protected performSubmission(): NoContent {

@@ -17,6 +17,7 @@ import {
   InjectViewportCssClassDirective,
   PageFooterActionDirective,
   SafePipe,
+  TextButtonDirective,
 } from '@bcgov/shared/ui';
 
 import {
@@ -34,6 +35,9 @@ import { EnrolmentErrorComponent } from '../../components/enrolment-error/enrolm
 import { MsTeamsPrivacyOfficerFormState } from './ms-teams-privacy-officer-form-state';
 import { MsTeamsPrivacyOfficerResource } from './ms-teams-privacy-officer-resource.service';
 import { msTeamsSupportEmail } from './ms-teams.constants';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { faAngleRight } from '@fortawesome/free-solid-svg-icons';
+import { AccessRoutes } from '../../access.routes';
 
 @Component({
   selector: 'app-ms-teams',
@@ -45,6 +49,7 @@ import { msTeamsSupportEmail } from './ms-teams.constants';
     AnchorDirective,
     EnrolmentErrorComponent,
     InjectViewportCssClassDirective,
+    FaIconComponent,
     MatButtonModule,
     MatFormFieldModule,
     MatInputModule,
@@ -56,6 +61,7 @@ import { msTeamsSupportEmail } from './ms-teams.constants';
     SafePipe,
     ReactiveFormsModule,
     RouterLink,
+    TextButtonDirective,
   ],
 })
 export class MsTeamsPrivacyOfficerPage
@@ -68,6 +74,8 @@ export class MsTeamsPrivacyOfficerPage
   public enrolmentError: boolean;
   public submissionPage: number;
   public formState: MsTeamsPrivacyOfficerFormState;
+  public faAngleRight = faAngleRight;
+  public AccessRoutes = AccessRoutes;
 
   // ui-page is handling this.
   public showOverlayOnSubmit = false;
@@ -130,6 +138,9 @@ export class MsTeamsPrivacyOfficerPage
       this.logger.error('No status code was provided');
       return this.navigateToRoot();
     }
+  }
+  public navigateTo(path: string): void {
+    this.router.navigateByUrl(path);
   }
 
   protected performSubmission(): NoContent {

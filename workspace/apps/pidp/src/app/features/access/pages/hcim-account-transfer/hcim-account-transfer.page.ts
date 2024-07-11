@@ -13,6 +13,7 @@ import {
   AlertComponent,
   AlertContentDirective,
   AnchorDirective,
+  InjectViewportCssClassDirective,
   PageComponent,
   PageFooterActionDirective,
   PageFooterComponent,
@@ -22,6 +23,7 @@ import {
   PageSectionSubheaderDescDirective,
   PageSectionSubheaderHintDirective,
   PageSubheaderComponent,
+  TextButtonDirective,
 } from '@bcgov/shared/ui';
 
 import {
@@ -46,6 +48,9 @@ import {
   HcimAccountTransferResponse,
   HcimAccountTransferStatusCode,
 } from './hcim-account-transfer-resource.service';
+import { faAngleRight } from '@fortawesome/free-solid-svg-icons';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { AccessRoutes } from '../../access.routes';
 
 @Component({
   selector: 'app-hcim-account-transfer',
@@ -58,6 +63,8 @@ import {
     AlertComponent,
     AlertContentDirective,
     AnchorDirective,
+    FaIconComponent,
+    InjectViewportCssClassDirective,
     MatButtonModule,
     MatFormFieldModule,
     MatInputModule,
@@ -72,6 +79,7 @@ import {
     PageSectionSubheaderHintDirective,
     PageSubheaderComponent,
     ReactiveFormsModule,
+    TextButtonDirective,
   ],
 })
 export class HcimAccountTransferPage
@@ -90,6 +98,8 @@ export class HcimAccountTransferPage
   public readonly healthNetBcHelpDeskPhone: string;
   public readonly healthRegistriesAdminEmail: string;
   public readonly healthRegistriesAdminPhone: string;
+  public faAngleRight = faAngleRight;
+  public AccessRoutes = AccessRoutes;
 
   public HcimAccountTransferStatusCode = HcimAccountTransferStatusCode;
 
@@ -138,6 +148,9 @@ export class HcimAccountTransferPage
       this.logger.error('No status code was provided');
       return this.navigateToRoot();
     }
+  }
+  public navigateTo(path: string): void {
+    this.router.navigateByUrl(path);
   }
 
   protected performSubmission(): Observable<HcimAccountTransferResponse> {

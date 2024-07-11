@@ -38,6 +38,7 @@ import {
   bcProviderTutorialLink,
   provincialAttachmentSystemWebsite,
 } from './provincial-attachment-system.constants';
+import { AccessRoutes } from '../../access.routes';
 
 @Component({
   selector: 'app-provincial-attachment-system',
@@ -82,6 +83,7 @@ export class ProvincialAttachmentSystemPage implements OnInit {
   public Destination = Destination;
   public StatusCode = StatusCode;
   public faAngleRight = faAngleRight;
+  public AccessRoutes = AccessRoutes;
 
   private readonly provincialAttachmentSystemWebsite: string;
 
@@ -107,7 +109,7 @@ export class ProvincialAttachmentSystemPage implements OnInit {
     );
   }
 
-  public navigateTo(): void {
+  public navigateToPath(): void {
     this.navigateToExternalUrl(this.provincialAttachmentSystemWebsite);
     this.authService.logout(this.logoutRedirectUrl);
   }
@@ -130,6 +132,10 @@ export class ProvincialAttachmentSystemPage implements OnInit {
     this.updateState(profileStatus$);
     this.handlePasBannerStatus(profileStatus$);
     this.handlePasStatus(profileStatus$);
+  }
+
+  public navigateTo(path: string): void {
+    this.router.navigateByUrl(path);
   }
 
   private updateState(profileStatus$: Observable<ProfileStatus | null>): void {

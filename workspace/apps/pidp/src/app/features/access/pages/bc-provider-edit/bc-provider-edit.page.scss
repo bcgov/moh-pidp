@@ -36,6 +36,22 @@
 }
 
 .viewport-all {
+  .breadcrumb ul {
+    display: flex;
+    align-items: end;
+    padding: 0px;
+  }
+
+  .breadcrumb fa-icon {
+    padding-left: 5px;
+    padding-right: 5px;
+    color: #D9D9D9;
+  }
+
+  .breadcrumb ul li {
+    display: inline;
+  }
+
   & header {
     margin: var(--header-margin);
     & h2 {

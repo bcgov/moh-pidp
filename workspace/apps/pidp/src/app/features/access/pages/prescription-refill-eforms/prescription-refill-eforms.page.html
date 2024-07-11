@@ -1,4 +1,19 @@
-<div class="container">
+<div class="container" uiPidpInjectViewportCss>
+  <nav class="breadcrumb">
+    <ul>
+      <li><button uiTextButton (click)="onBack()">Home</button></li>
+      <li><fa-icon class="fa-duotone" [icon]="faAngleRight"></fa-icon></li>
+      <li>
+        <button
+          uiTextButton
+          (click)="navigateTo(AccessRoutes.routePath(AccessRoutes.ACCESS_REQUESTS))">
+          Access
+        </button>
+      </li>
+      <li><fa-icon class="fa-duotone" [icon]="faAngleRight"></fa-icon></li>
+      <li><button uiTextButton>Active Page</button></li>
+    </ul>
+  </nav>
   <ui-page mode="full">
     <ui-page-header>{{ title }}</ui-page-header>
 

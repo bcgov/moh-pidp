@@ -120,31 +120,35 @@
     background-color: #003366;
   }
 
-  .breadcrumb ul {
-    list-style: none;
-    top: 0;
-    right: 0;
-    padding: 0px;
-  }
+  .breadcrumb {
+    ul {
+      display: flex;
+      align-items: center;
+      padding: 0px;
+    }
 
-  .breadcrumb fa-icon {
-    height: 12px;
-    padding-left: 5px;
-    padding-right: 5px;
-  }
+    fa-icon {
+      padding-left: 5px;
+      padding-right: 5px;
+      color: #d9d9d9;
+    }
 
-  .breadcrumb ul li {
-    display: inline;
-  }
+    ul li {
+      display: flex;
+    }
 
-  .breadcrumb a,
-  .text-button {
-    text-decoration: none;
-    color: #1a5a96;
-    font-size: 12px;
-    font-weight: 400;
-    line-height: 27px;
-    word-wrap: break-word;
+    span {
+      font-size: 1rem;
+    }
+
+    button:disabled {
+      color: #aaa !important
+    }
+
+    img {
+      margin-right: 10px;
+      margin-bottom: 6px;
+    }
   }
 }
 
@@ -165,6 +169,16 @@
 
   .breadcrumb {
     margin: 0px 20px 0px 20px;
+
+    img{
+      margin-right: 2px;
+    }
+    span {
+      font-size: 0.8rem;
+    }
+    .home-text{
+      display: none;
+    }
   }
 
   .search-content {

@@ -10,6 +10,7 @@ import {
   AlertComponent,
   AlertContentDirective,
   AnchorDirective,
+  InjectViewportCssClassDirective,
   PageComponent,
   PageFooterActionDirective,
   PageFooterComponent,
@@ -18,6 +19,7 @@ import {
   PageSectionSubheaderComponent,
   PageSectionSubheaderDescDirective,
   SafePipe,
+  TextButtonDirective,
 } from '@bcgov/shared/ui';
 
 import { PartyService } from '@app/core/party/party.service';
@@ -31,6 +33,9 @@ import {
   immsBCEformsSupportEmail,
   immsBCEformsUrl,
 } from './immsbc-eforms.constants';
+import { faAngleRight } from '@fortawesome/free-solid-svg-icons';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { AccessRoutes } from '../../access.routes';
 
 @Component({
   selector: 'app-immsbc-eforms',
@@ -42,6 +47,8 @@ import {
     AlertContentDirective,
     AnchorDirective,
     EnrolmentErrorComponent,
+    FaIconComponent,
+    InjectViewportCssClassDirective,
     MatButtonModule,
     NgIf,
     PageComponent,
@@ -52,6 +59,7 @@ import {
     PageSectionSubheaderComponent,
     PageSectionSubheaderDescDirective,
     SafePipe,
+    TextButtonDirective,
   ],
 })
 export class ImmsBCEformsPage implements OnInit {
@@ -62,6 +70,8 @@ export class ImmsBCEformsPage implements OnInit {
   public immsBCEformsUrl: string;
   public immsBCEformsSupportEmail: string;
   public enrolmentError: boolean;
+  public faAngleRight = faAngleRight;
+  public AccessRoutes = AccessRoutes;
 
   public constructor(
     private route: ActivatedRoute,
@@ -118,6 +128,10 @@ export class ImmsBCEformsPage implements OnInit {
       this.logger.error('No status code was provided');
       return this.navigateToRoot();
     }
+  }
+
+  public navigateTo(path: string): void {
+    this.router.navigateByUrl(path);
   }
 
   private navigateToRoot(): void {
