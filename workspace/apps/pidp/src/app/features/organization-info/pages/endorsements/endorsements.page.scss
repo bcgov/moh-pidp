@@ -81,13 +81,6 @@ p {
       }
       & .care-team-tabs {
         min-height: 10rem;
-        ::ng-deep .mat-mdc-tab {
-          border: 1px solid #9e9e9e;
-          background: #eee;
-          &.mdc-tab--active {
-            background: #e3e7f3;
-          }
-        }
       }
       & .tab-label-box {
         display: flex;
@@ -143,14 +136,6 @@ p {
   --tab-content-flex-direction: row;
   & .content {
     & .care-team {
-      & .care-team-tabs {
-        ::ng-deep .mat-mdc-tab-group {
-          .mat-mdc-tab {
-            width: 18.625rem;
-            height: 3.75rem;
-          }
-        }
-      }
       & .tab-content {
         grid-template-columns: calc(33% - 15px) calc(33% - 15px) calc(
             33% - 15px
@@ -164,14 +149,6 @@ p {
   --tab-content-flex-direction: row;
   & .content {
     & .care-team {
-      & .care-team-tabs {
-        ::ng-deep .mat-mdc-tab-group {
-          .mat-mdc-tab {
-            width: 18.625rem;
-            height: 3.75rem;
-          }
-        }
-      }
       & .tab-content {
         grid-template-columns: calc(33% - 15px) calc(33% - 15px) calc(
             33% - 15px
@@ -188,14 +165,6 @@ p {
   --tab-content-flex-direction: column;
   & .content {
     & .care-team {
-      & .care-team-tabs {
-        ::ng-deep .mat-mdc-tab-group {
-          .mat-mdc-tab {
-            width: 15.625rem;
-            height: 3.75rem;
-          }
-        }
-      }
       & .tab-label-box {
         font-size: 1rem;
       }
