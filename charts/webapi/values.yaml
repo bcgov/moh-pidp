@@ -110,7 +110,7 @@ fluentbit:
     runAsUser: 1001
   resources:
     limits:
-      cpu: 100m
+      cpu: 50m
       memory: 64Mi
     requests:
       cpu: 10m
