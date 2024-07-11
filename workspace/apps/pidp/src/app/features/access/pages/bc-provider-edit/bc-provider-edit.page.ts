@@ -1,4 +1,4 @@
-import { NgIf, NgTemplateOutlet } from '@angular/common';
+import { NgIf, NgOptimizedImage, NgTemplateOutlet } from '@angular/common';
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -51,6 +51,7 @@ export interface BcProviderEditInitialStateModel {
     NgTemplateOutlet,
     ReactiveFormsModule,
     SuccessDialogComponent,
+    NgOptimizedImage,
   ],
 })
 export class BcProviderEditPage
