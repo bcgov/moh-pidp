@@ -1,6 +1,6 @@
 import { NgFor, NgIf } from '@angular/common';
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatOptionModule } from '@angular/material/core';
@@ -63,13 +63,15 @@ export class CollegeLicenceDeclarationPage
   extends AbstractFormPage<CollegeLicenceDeclarationFormState>
   implements OnInit
 {
+  @Input() public disableCollegeCode: boolean = false;
+  @Input() public disableCollegeLicenceNumber: boolean = false;
+
   public title: string;
   public formState: CollegeLicenceDeclarationFormState;
   public colleges: CollegeLookup[];
   public showOverlayOnSubmit = true;
   public licenceDeclarationFailed = false;
   public disableLiceNumber = true;
-  public disableCollegeCode = true;
 
   public get showNurseValidationInfo(): boolean {
     const isNurse =
@@ -100,6 +102,9 @@ export class CollegeLicenceDeclarationPage
   }
 
   public ngOnInit(): void {
+    if(this.disableCollegeCode && this.disableCollegeLicenceNumber) {
+      this.formState.disableCollegeLicenseForm();
+    }
     const partyId = this.partyService.partyId;
     if (!partyId) {
       this.logger.error('No party ID was provided');
