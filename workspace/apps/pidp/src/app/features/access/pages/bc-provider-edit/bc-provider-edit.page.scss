@@ -20,6 +20,7 @@
     }
   }
   & .mobile-image {
+    position: relative;
     & img {
       display: block !important;
       max-width: 100%;
