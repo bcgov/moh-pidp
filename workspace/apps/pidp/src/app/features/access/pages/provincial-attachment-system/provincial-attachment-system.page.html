@@ -207,14 +207,14 @@
         </div>
         <ng-container *ngIf="hasCpn && (pas$ | async)">
           <div class="pas-button-text">
-            <i>You will need BCProvider credential before logging in</i>
+            <i>You will need BCProvider credential before logging in.</i>
           </div>
         </ng-container>
         <ng-container *ngIf="!hasCpn && (pas$ | async)">
           <div class="pas-button-text">
             <i
               >You will need BCProvider credential, and an endorsement before
-              logging in</i
+              logging in.</i
             >
           </div>
         </ng-container>
