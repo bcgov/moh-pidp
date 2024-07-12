@@ -3,6 +3,11 @@
   </app-college-licence-declaration>
 </div>
 <section class="component-container container" uiPidpInjectViewportCss>
+  <section *ngFor="let alert of alerts" class="alert-box section-box">
+    <app-portal-alert
+      [heading]="alert.heading"
+      [content]="alert.content"></app-portal-alert>
+  </section>
   <div class="licences-box">
     <div
       *ngFor="let certification of collegeCertifications$ | async">
