@@ -1,59 +1,72 @@
 <div>
-  <app-college-licence-declaration>
+  <app-college-licence-declaration [disableCollegeCode]=true [disableCollegeLicenceNumber]=true>
   </app-college-licence-declaration>
 </div>
-<div>
 <section class="component-container container" uiPidpInjectViewportCss>
-  <h2 class="header">All licence information found in our records</h2>
-  <div class="info-box">
-    <p class="info-here">
-      Here you can view your licence information and status.
-    </p>
-    <p class="info-confirm">
-      If any of this information is incorrect, please contact your regulatory
-      college.
-    </p>
-  </div>
   <div class="licences-box">
     <div
-      *ngFor="let certification of collegeCertifications$ | async"
-      class="licences-licence-box">
-      <div class="licence-icon-box">
-        <fa-icon
-          class="licence-icon-image"
-          [fixedWidth]="true"
-          [icon]="faStethoscope"></fa-icon>
-      </div>
-      <div class="licence-detail-box">
-        <div class="licence-detail-content">
-          <app-college-licence-information-detail
-            class="licence-detail"
-            labelText="Identifier Type:"
-            [valueText]="certification.identifierType"></app-college-licence-information-detail>
-          <app-college-licence-information-detail
-            class="licence-detail"
-            labelText="Status Code:"
-            [valueText]="certification.statusCode"></app-college-licence-information-detail>
-          <app-college-licence-information-detail
-            class="licence-detail"
-            labelText="College ID:"
-            [valueText]="certification.collegeId"></app-college-licence-information-detail>
-          <app-college-licence-information-detail
-            class="licence-detail"
-            labelText="Status Start Date:"
-            [valueText]="certification.statusStartDate"></app-college-licence-information-detail>
-          <app-college-licence-information-detail
-            class="licence-detail"
-            labelText="Provider Role Type:"
-            [valueText]="certification.providerRoleType"></app-college-licence-information-detail>
+      *ngFor="let certification of collegeCertifications$ | async">
+      <div class="card-styles">
+        <div class="card-header-icon">
+          <div class="card-icon">
+            <img
+              src="/assets/images/icons/credit-card.svg"
+              alt="creditcard" />
+          </div>
+        </div>
+        <div class="licence-detail-box">
+          <h2>College information</h2>
+          <div class="licence-detail-content">
+            <app-college-licence-information-detail
+              class="licence-detail"
+              labelText="Identifier Type:"
+              [valueText]="certification.identifierType"></app-college-licence-information-detail>
+              <div
+                class="status-active" *ngIf="certification.statusCode==='ACTIVE'">
+                <label>Status Code:</label>
+                <span>Active</span>
+                <img
+                  src="/assets/images/icons/icon-check-circle.svg"
+                  alt="check circle"
+                />
+              </div>
+              <div
+                class="status-terminated" *ngIf="certification.statusCode==='TERMINATED'">
+                <label>Status Code:</label>
+                <span>Terminated</span>
+                <img
+                  src="/assets/images/icons/icon-check-circle.svg"
+                  alt="cross circle"
+                />
+              </div>
+            <app-college-licence-information-detail
+              class="licence-detail"
+              labelText="College ID:"
+              [valueText]="certification.collegeId"></app-college-licence-information-detail>
+            <app-college-licence-information-detail
+              class="licence-detail"
+              labelText="Status Start Date:"
+              [valueText]="certification.statusStartDate"></app-college-licence-information-detail>
+            <app-college-licence-information-detail
+              class="licence-detail"
+              labelText="Provider Role Type:"
+              [valueText]="certification.providerRoleType"></app-college-licence-information-detail>
+          </div>
         </div>
       </div>
     </div>
   </div>
   <div class="actions">
-    <button mat-stroked-button type="button" color="primary" (click)="onBack()">
-      Back Home
-    </button>
+    <span>
+      <button mat-stroked-button type="button" color="primary">
+        Back
+      </button>
+    </span>
+    <span class="actions-continue">
+        <button mat-flat-button uiPageFooterAction type="submit" color="primary">
+          Continue
+        </button>
+    </span>
   </div>
+
 </section>
-</div>

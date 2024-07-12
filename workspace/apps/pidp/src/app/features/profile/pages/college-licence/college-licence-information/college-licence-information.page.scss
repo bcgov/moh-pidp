@@ -18,18 +18,103 @@ $darkgrey: pidp.$bcgov-color-text;
     }
   }
   & .actions {
+    margin-top: 20px;
     & button {
       margin-top: 1rem;
+      width: 75px;
+      font: bold;
+      font-weight: 700;
     }
   }
   padding: 1.25rem 0.75rem;
+
+
+  .card-header-icon {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .lock-icon {
+      cursor: pointer;
+    }
+    .card-icon {
+      display: flex;
+      border-radius: 0.625rem;
+      border: 1px solid rgba(0, 51, 102, 0.2);
+      width: 2.5rem;
+      height: 2.5rem;
+      justify-content: center;
+      align-items: center;
+    }
+
+    img {
+      width: 1.5rem;
+      height: 1.5rem;
+    }
+  }
+
+  .status-active {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+
+    span {
+      color: #2e8540;
+      font-size: 16px;
+      font-weight: 700;
+      margin-right: 5px;
+    }
+
+    label {
+      font-weight: 700;
+      margin-right: 5px;
+    }
+
+    img {
+      width: 1.5rem;
+      height: 1.5rem;
+    }
+  }
+
+  .status-terminated {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+
+    span {
+      color: red;
+      font-size: 16px;
+      font-weight: 700;
+      margin-right: 5px;
+    }
+
+    label {
+      font-weight: 700;
+      margin-right: 5px;
+    }
+
+    img {
+      width: 1.5rem;
+      height: 1.5rem;
+    }
+  }
+
+  & .actions-continue {
+    padding: var(--actions-padding);
+    & button:not(:last-of-type) {
+      margin-right: var(--button-margin-right);
+    }
+    button {
+      margin-left: 25px;
+      width: 100px;
+    }
+  }
 }
 .viewport-large,
 .viewport-medium,
 .viewport-small {
   display: flex;
   flex-direction: column;
-  max-width: 800px;
+  // max-width: 800px;
   & .header {
     padding: 6px 20px;
   }
@@ -43,32 +128,54 @@ $darkgrey: pidp.$bcgov-color-text;
     display: flex;
     flex-direction: column;
     gap: 20px;
-    & .licences-licence-box {
+
+    & .card-styles {
+      border-radius: 1.25rem;
+      border: 1px solid #ccc;
+      background: #fff;
+      box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+      width: 37rem;
+      height: 11.875rem;
+      padding: 1.25rem;
+
+      h2 {
+        color: #036;
+        font-size: 1.5rem;
+        font-weight: 700;
+        padding-top: 0.25rem;
+        margin-bottom: 0;
+      }
+
+    }
+  }
+
+  & .licence-detail-content {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 50% 50%;
+    grid-gap: 3px;
+  }
+
+  .card-header-icon {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .lock-icon {
+      cursor: pointer;
+    }
+    .card-icon {
       display: flex;
-      height: 125px;
-      & .licence-icon-box {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 125px;
-        & .licence-icon-image {
-          font-size: 50px;
-        }
-      }
+      border-radius: 0.625rem;
+      border: 1px solid rgba(0, 51, 102, 0.2);
+      width: 2.5rem;
+      height: 2.5rem;
+      justify-content: center;
+      align-items: center;
+    }
 
-      & .licence-detail-box {
-        flex: 1;
-        padding: 20px 30px;
-        display: flex;
-        align-items: center;
-
-        & .licence-detail-content {
-          flex: 1;
-          display: grid;
-          grid-template-columns: 50% 50%;
-          grid-gap: 3px;
-        }
-      }
+    img {
+      width: 1.5rem;
+      height: 1.5rem;
     }
   }
 }
@@ -116,6 +223,29 @@ $darkgrey: pidp.$bcgov-color-text;
           display: flex;
           flex-direction: column;
         }
+      }
+    }
+  }
+  & .card-styles {
+    padding: 1rem;
+    // max-width: 400px;
+    width: auto !important;
+    h2 {
+      font-size: 1.25rem;
+    }
+
+    p {
+      font-size: 0.8rem;
+      line-height: 1.8;
+    }
+
+    a {
+      font-size: 0.9rem;
+    }
+
+    .linked-success {
+      span {
+        font-size: 14px;
       }
     }
   }

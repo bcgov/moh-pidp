@@ -1,4 +1,4 @@
-import { AsyncPipe, NgFor } from '@angular/common';
+import { AsyncPipe, NgFor, NgIf } from '@angular/common';
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
@@ -31,6 +31,7 @@ import { CollegeLicenceDeclarationPage } from '../college-licence-declaration/co
     MatButtonModule,
     NgFor,
     CollegeLicenceDeclarationPage,
+    NgIf,
   ],
 })
 export class CollegeLicenceInformationPage implements OnInit {
