@@ -153,6 +153,7 @@
 
   .content-header h1 {
     font-size: 40px;
+    line-height: 1.1;
   }
 
   .breadcrumb {
@@ -161,6 +162,10 @@
   .main {
     display: flex !important;
     flex-direction: column !important;
+
+    .pas-step-label {
+      line-height: 1.1;
+    }
 
     .pas-button {
       img.img-doctor {
