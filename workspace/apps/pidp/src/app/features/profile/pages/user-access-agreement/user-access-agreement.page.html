@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container" uiPidpInjectViewportCss>
   <ui-page mode="full">
     <ui-alert
       *ngIf="accessRequestFailed"
@@ -21,16 +21,16 @@
 
     <app-user-access-agreement-document></app-user-access-agreement-document>
 
-    <p *ngIf="!completed">
-      <strong>
-        I,
-        <span class="signature">{{ (fullName$ | async) }}</span>, represent and
-        warrant that all information provided in connection with my application
-        for access to the System(s), is true and correct.
-      </strong>
+    <p *ngIf="!completed" class="padding-container">
+      <span
+        >I,
+        <b>{{ (fullName$ | async) }}</b
+        >, represent and warrant that all information provided in connection with
+        my application for access to the System(s), is true and correct.</span
+      >
     </p>
 
-    <ui-page-footer [mode]="completed ? 'reverse' : 'normal'">
+    <div class="button-container">
       <button
         class="back-button"
         mat-stroked-button
@@ -38,7 +38,7 @@
         color="primary"
         type="button"
         (click)="onBack()">
-        Back Home
+        Back
       </button>
       <button
         *ngIf="!completed"
@@ -49,6 +49,6 @@
         (click)="onAcceptAgreement()">
         Accept Agreement
       </button>
-    </ui-page-footer>
+    </div>
   </ui-page>
 </div>
