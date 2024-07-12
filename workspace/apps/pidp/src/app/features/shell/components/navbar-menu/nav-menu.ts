@@ -1,4 +1,4 @@
-import { NgFor, NgIf, NgTemplateOutlet } from '@angular/common';
+import { NgClass, NgFor, NgIf, NgTemplateOutlet } from '@angular/common';
 import {
   Component,
   EventEmitter,
@@ -24,17 +24,25 @@ import {
   RouterOutlet,
 } from '@angular/router';
 
-import { DashboardStateModel } from '@pidp/data-model';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { faBell } from '@fortawesome/free-regular-svg-icons';
 
+import {
+  DashboardMenuItem,
+  DashboardRouteMenuItem,
+  InjectViewportCssClassDirective,
+  LayoutHeaderFooterComponent,
+  PidpViewport,
+  ViewportService,
+} from '@bcgov/shared/ui';
 import { RoutePath } from '@bcgov/shared/utils';
 
-import { LayoutHeaderFooterComponent } from '../../../../components/layout-header-footer/layout-header-footer.component';
-import { InjectViewportCssClassDirective } from '../../../../directives/viewport-css.directive';
-import { PidpViewport, ViewportService } from '../../../../services';
-import { DashboardMenuItem, DashboardRouteMenuItem } from '../../models';
+import { AlertCode } from '@app/features/portal/enums/alert-code.enum';
+import { DashboardStateModel } from '@app/features/portal/models/state.model';
+import { ProfileRoutes } from '@app/features/profile/profile.routes';
 
 @Component({
-  selector: 'ui-nav-menu',
+  selector: 'app-nav-menu',
   templateUrl: './nav-menu.html',
   styleUrls: ['./nav-menu.scss'],
   standalone: true,
@@ -51,6 +59,8 @@ import { DashboardMenuItem, DashboardRouteMenuItem } from '../../models';
     RouterLink,
     RouterLinkActive,
     RouterOutlet,
+    FaIconComponent,
+    NgClass,
   ],
 })
 export class NavMenuComponent implements OnChanges {
@@ -79,6 +89,10 @@ export class NavMenuComponent implements OnChanges {
   public isLogoutButtonVisible = false;
   public isLogoutMenuItemVisible = false;
   public isTopMenuVisible = false;
+  public ProfileRoutes = ProfileRoutes;
+  public showCollegeAlert = false;
+  public faBell = faBell;
+  public AlertCode = AlertCode;
 
   public get showTitle(): boolean {
     return !!this.dashboardState.titleText;
@@ -111,6 +125,10 @@ export class NavMenuComponent implements OnChanges {
   }
 
   public navigateTo(route: string): void {
+    if (this.showMiniMenuButton)
+      this.isSidenavOpened = this.isSidenavOpened
+        ? !this.isSidenavOpened
+        : this.isSidenavOpened;
     this.router.navigateByUrl(route);
   }
 
@@ -145,7 +163,7 @@ export class NavMenuComponent implements OnChanges {
     this.logout.emit();
   }
   public onMenuItemClicked(): void {
-    if (this.sidenavMode === 'over') {
+    if (this.showMiniMenuButton && this.sidenavMode === 'over') {
       this.sidenav.close();
     }
   }
@@ -155,35 +173,19 @@ export class NavMenuComponent implements OnChanges {
     this.refresh();
   }
   private refresh(): void {
-    switch (this.viewport) {
-      case PidpViewport.xsmall:
-        this.showMiniMenuButton = true;
-        this.isSidenavOpened = false;
-        this.sidenavMode = 'over';
-
-        this.isLogoutButtonVisible = false;
-        this.isLogoutMenuItemVisible = true;
-        this.isTopMenuVisible = false;
-        break;
-      case PidpViewport.small:
-        this.showMiniMenuButton = false;
-        this.isSidenavOpened = false;
-        this.sidenavMode = 'over';
-        this.isLogoutButtonVisible = true;
-        this.isLogoutMenuItemVisible = true;
-        this.isTopMenuVisible = true;
-        break;
-      case PidpViewport.medium:
-      case PidpViewport.large:
-        this.showMiniMenuButton = false;
-        this.isSidenavOpened = true;
-        this.sidenavMode = 'side';
-        this.isLogoutButtonVisible = true;
-        this.isLogoutMenuItemVisible = false;
-        this.isTopMenuVisible = true;
-        break;
-      default:
-        throw new Error(`Nav Menu not implemented: ${this.viewport}`);
+    if(!([PidpViewport.xsmall, PidpViewport.small, PidpViewport.medium, PidpViewport.large].includes(this.viewport))) {
+      throw new Error(`Nav Menu not implemented: ${this.viewport}`);
     }
+
+
+    const isMiniView = this.viewport === PidpViewport.xsmall;
+    const isDesktopView = this.viewport === PidpViewport.medium || this.viewport === PidpViewport.large;
+
+    this.showMiniMenuButton = isMiniView;
+    this.isSidenavOpened = isDesktopView;
+    this.sidenavMode = isDesktopView ? 'side' : 'over';
+    this.isLogoutButtonVisible = !isMiniView;
+    this.isLogoutMenuItemVisible = !isDesktopView;
+    this.isTopMenuVisible = !isMiniView;
   }
 }

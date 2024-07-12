@@ -16,7 +16,8 @@
         <div class="card-content">
           <p class="card-header">Linking Accounts</p>
           <p>Link different credentials together in OneHealthID</p>
-          <a (click)="navigateToAccountLinkingPage()">
+          <a
+            (click)="navigateTo(ProfileRoutes.routePath(ProfileRoutes.ACCOUNT_LINKING))">
             <fa-icon [icon]="faArrowRight"></fa-icon> READ MORE
           </a>
         </div>
@@ -30,7 +31,8 @@
         <div class="card-content">
           <p class="card-header">Acquire Access</p>
           <p>Acquire healthcare system access for myself</p>
-          <a (click)="navigateToAccessPage()">
+          <a
+            (click)="navigateTo(AccessRoutes.routePath(AccessRoutes.ACCESS_REQUESTS))">
             <fa-icon [icon]="faArrowRight"></fa-icon> READ MORE
           </a>
         </div>
@@ -44,9 +46,21 @@
         <div class="card-content">
           <p class="card-header">Grant Access</p>
           <p>Grant healthcare system access for others</p>
-          <a (click)="navigateToEndorsements()">
-            <fa-icon [icon]="faArrowRight"></fa-icon> READ MORE
-          </a>
+          <div class="card-footer">
+            <span class="content-with-alert"
+              ><fa-icon
+                *ngIf="alerts.includes(AlertCode.PENDING_ENDORSEMENT_REQUEST)"
+                class="fa-duotone"
+                [icon]="faBell"></fa-icon
+              ><a
+                (click)="navigateTo(OrganizationInfoRoutes.routePath(OrganizationInfoRoutes.ENDORSEMENTS))">
+                READ MORE
+              </a></span
+            ><a
+              (click)="navigateTo(OrganizationInfoRoutes.routePath(OrganizationInfoRoutes.ENDORSEMENTS))"
+              ><fa-icon [icon]="faArrowRight"></fa-icon
+            ></a>
+          </div>
         </div>
       </div>
     </div>

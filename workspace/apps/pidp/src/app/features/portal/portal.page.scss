@@ -143,6 +143,19 @@
   padding-right: 3px;
 }
 
+div.card-footer {
+  display: flex;
+  justify-content: space-between;
+  .content-with-alert {
+    display: flex;
+    align-items: center;
+    fa-icon {
+      color: red;
+      margin-right: 5px;
+    }
+  }
+}
+
 .back-to-top-container {
   position: fixed;
   bottom: 170px;
@@ -327,10 +340,6 @@
     text-decoration: none;
   }
 
-  .card-footer {
-    margin-top: 70%;
-    position: relative;
-  }
   .back-to-top-container {
     position: fixed;
     bottom: 100px;

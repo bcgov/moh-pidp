@@ -17,9 +17,9 @@ public class EndorsementDataTests : InMemoryDbTest
         && record.StatusReasonCode == result.StatusReasonCode;
 
     [Fact]
-    public async void GetEndorsementData_NoParty_404()
+    public async Task GetEndorsementData_NoParty_404()
     {
-        this.TestDb.Has(APartyWith(id: 1, hpdid: "hpdid"));
+        this.TestDb.Has(APartyWith(id: 1, hpdid: "hpdid@bcsc"));
         var query = new EndorsementData.Query { Hpdid = "NoMatch" };
         var handler = this.MockDependenciesFor<EndorsementData.QueryHandler>();
 
@@ -29,33 +29,24 @@ public class EndorsementDataTests : InMemoryDbTest
     }
 
     [Fact]
-    public async void GetEndorsementData_NoEndorsements_Empty()
+    public async Task GetEndorsementData_NoEndorsements_Empty()
     {
-        this.TestDb.Has(APartyWith(id: 1, hpdid: "hpdid"));
+        this.TestDb.Has(APartyWith(id: 1, hpdid: "hpdid@bcsc"));
         var query = new EndorsementData.Query { Hpdid = "hpdid" };
         var handler = this.MockDependenciesFor<EndorsementData.QueryHandler>();
 
         var result = await handler.HandleAsync(query);
 
         Assert.True(result.IsSuccess);
-        Assert.Equal(new List<EndorsementData.Model>(), result.Value);
+        Assert.Equal([], result.Value);
     }
 
     [Fact]
-    public async void GetEndorsementData_OneEndorsementNotActive_Empty()
+    public async Task GetEndorsementData_OneEndorsementNotActive_Empty()
     {
-        var expectedHpdid = "expected";
-        this.TestDb.Has(APartyWith(id: 1, hpdid: "hpdid"));
-        this.TestDb.Has(APartyWith(id: 2, hpdid: expectedHpdid));
-        this.TestDb.Has(new Endorsement
-        {
-            Active = false,
-            EndorsementRelationships = new[]
-            {
-                new EndorsementRelationship { PartyId = 1 },
-                new EndorsementRelationship { PartyId = 2 }
-            }
-        });
+        this.TestDb.Has(APartyWith(id: 1, hpdid: "hpdid@bcsc"));
+        this.TestDb.Has(APartyWith(id: 2, hpdid: "anotherHpdid@bcsc"));
+        this.TestDb.Has(AnEndorsementBetween(1, 2, isActive: false));
         var query = new EndorsementData.Query { Hpdid = "hpdid" };
         var handler = this.MockDependenciesFor<EndorsementData.QueryHandler>();
 
@@ -68,21 +59,12 @@ public class EndorsementDataTests : InMemoryDbTest
     [Theory]
     [InlineData("hpdid")]
     [InlineData("hpdid@bcsc")]
-    public async void GetEndorsementData_OneEndorsementNoCpn_MatchingHpdidEmptyLicences(string partyHpdid)
+    public async Task GetEndorsementData_OneEndorsementNoCpn_MatchingHpdidEmptyLicences(string hpdidQuery)
     {
-        var expectedHpdid = "expected";
-        this.TestDb.Has(APartyWith(id: 1, hpdid: partyHpdid));
-        this.TestDb.Has(APartyWith(id: 2, hpdid: expectedHpdid));
-        this.TestDb.Has(new Endorsement
-        {
-            Active = true,
-            EndorsementRelationships = new[]
-            {
-                new EndorsementRelationship { PartyId = 1 },
-                new EndorsementRelationship { PartyId = 2 }
-            }
-        });
-        var query = new EndorsementData.Query { Hpdid = "hpdid" }; // Should match either "hpdid" or "hpdid@bcsc" (the actual form for HPDID we get from Keycloak)
+        this.TestDb.Has(APartyWith(id: 1, hpdid: "hpdid@bcsc"));
+        var otherParty = this.TestDb.Has(APartyWith(id: 2, hpdid: "anotherHpdid@bcsc"));
+        this.TestDb.Has(AnEndorsementBetween(1, 2));
+        var query = new EndorsementData.Query { Hpdid = hpdidQuery }; // Should match either "hpdid" or "hpdid@bcsc" (the actual form for HPDID we get from Keycloak and save in our database)
         var handler = this.MockDependenciesFor<EndorsementData.QueryHandler>();
 
         var result = await handler.HandleAsync(query);
@@ -91,15 +73,14 @@ public class EndorsementDataTests : InMemoryDbTest
         Assert.Single(result.Value);
 
         var model = result.Value.Single();
-        Assert.Equal(expectedHpdid, model.Hpdid);
+        AssertBasicInfoMatches(otherParty, model);
         Assert.NotNull(model.Licences);
         Assert.Empty(model.Licences);
     }
 
     [Fact]
-    public async void GetEndorsementData_OneEndorsementWithCpn_MatchingHpdidWithLicences()
+    public async Task GetEndorsementData_OneEndorsementWithCpn_MatchingHpdidWithLicences()
     {
-        var expectedHpdid = "expected";
         var expectedCpn = "cpn";
         var expectedPlrRecords = new[]
         {
@@ -118,17 +99,9 @@ public class EndorsementDataTests : InMemoryDbTest
                 StatusReasonCode = "StatusReasonCode2"
             }
         };
-        this.TestDb.Has(APartyWith(id: 1, hpdid: "hpdid"));
-        this.TestDb.Has(APartyWith(id: 2, hpdid: expectedHpdid, cpn: expectedCpn));
-        this.TestDb.Has(new Endorsement
-        {
-            Active = true,
-            EndorsementRelationships = new[]
-            {
-                new EndorsementRelationship { PartyId = 1 },
-                new EndorsementRelationship { PartyId = 2 }
-            }
-        });
+        this.TestDb.Has(APartyWith(id: 1, hpdid: "hpdid@bcsc"));
+        var otherParty = this.TestDb.Has(APartyWith(id: 2, hpdid: "otherHpdid@bcsc", cpn: expectedCpn));
+        this.TestDb.Has(AnEndorsementBetween(1, 2));
         var query = new EndorsementData.Query { Hpdid = "hpdid" };
         var client = A.Fake<IPlrClient>();
         A.CallTo(() => client.GetRecordsAsync(expectedCpn))
@@ -141,62 +114,42 @@ public class EndorsementDataTests : InMemoryDbTest
         Assert.Single(result.Value);
 
         var model = result.Value.Single();
-        Assert.Equal(expectedHpdid, model.Hpdid);
+        AssertBasicInfoMatches(otherParty, model);
         Assert.NotNull(model.Licences);
         AssertThat.CollectionsAreEquivalent(expectedPlrRecords, model.Licences, RecordModelPredicate);
     }
 
     [Fact]
-    public async void GetEndorsementData_TwoEndorsementsWithCpn_MatchingHpdidsWithLicences()
+    public async Task GetEndorsementData_TwoEndorsementsWithCpn_MatchingHpdidsWithLicences()
     {
-        var expectedHpdid1 = "expected1";
-        var expectedHpdid2 = "expected2";
-        var expectedCpn1 = "cpn";
-        var expectedPlrRecords1 = new[]
+        var expectedCpn = "cpn";
+        var expectedPlrRecords = new[]
         {
             new PlrRecord
             {
-                Cpn = expectedCpn1,
+                Cpn = expectedCpn,
                 IdentifierType = "IdentifierType1",
                 StatusCode = "StatusCode1",
                 StatusReasonCode = "StatusReasonCode1"
             },
             new PlrRecord
             {
-                Cpn = expectedCpn1,
+                Cpn = expectedCpn,
                 IdentifierType = "IdentifierType2",
                 StatusCode = "StatusCode2",
                 StatusReasonCode = "StatusReasonCode2"
             }
         };
 
-        this.TestDb.Has(APartyWith(id: 1, hpdid: "hpdid"));
-        this.TestDb.Has(APartyWith(id: 2, hpdid: expectedHpdid1, cpn: expectedCpn1));
-        this.TestDb.Has(APartyWith(id: 3, hpdid: expectedHpdid2));
-        this.TestDb.Has(new Endorsement
-        {
-            Active = true,
-            EndorsementRelationships = new[]
-            {
-                new EndorsementRelationship { PartyId = 1 },
-                new EndorsementRelationship { PartyId = 2 }
-            }
-        });
-        this.TestDb.Has(new Endorsement
-        {
-            Active = true,
-            EndorsementRelationships = new[]
-            {
-                new EndorsementRelationship { PartyId = 1 },
-                new EndorsementRelationship { PartyId = 3 }
-            }
-        });
+        this.TestDb.Has(APartyWith(id: 1, hpdid: "hpdid@bcsc"));
+        var licencedOtherParty = this.TestDb.Has(APartyWith(id: 2, hpdid: "otherHpdid@bcsc", cpn: expectedCpn));
+        var unlicencedOtherParty = this.TestDb.Has(APartyWith(id: 3, hpdid: "otherHpdid2@bcsc"));
+        this.TestDb.Has(AnEndorsementBetween(1, 2));
+        this.TestDb.Has(AnEndorsementBetween(1, 3));
         var query = new EndorsementData.Query { Hpdid = "hpdid" };
         var client = A.Fake<IPlrClient>();
-        A.CallTo(() => client.GetRecordsAsync(expectedCpn1, null))
-            .Returns(expectedPlrRecords1);
-        A.CallTo(() => client.GetRecordsAsync(expectedCpn1))
-            .Returns(expectedPlrRecords1);
+        A.CallTo(() => client.GetRecordsAsync(expectedCpn, null))
+            .Returns(expectedPlrRecords);
         var handler = this.MockDependenciesFor<EndorsementData.QueryHandler>(client);
 
         var result = await handler.HandleAsync(query);
@@ -204,13 +157,16 @@ public class EndorsementDataTests : InMemoryDbTest
         Assert.True(result.IsSuccess);
         Assert.Equal(2, result.Value.Count);
 
-        var found = result.Value.SingleOrDefault(res => res.Hpdid == expectedHpdid1);
+        var found = result.Value.SingleOrDefault(res => res.Hpdid == licencedOtherParty.Credentials.Single().Hpdid);
         Assert.NotNull(found);
-        AssertThat.CollectionsAreEquivalent(expectedPlrRecords1, found!.Licences, RecordModelPredicate);
+        AssertBasicInfoMatches(licencedOtherParty, found);
+        AssertThat.CollectionsAreEquivalent(expectedPlrRecords, found.Licences, RecordModelPredicate);
 
-        found = result.Value.SingleOrDefault(res => res.Hpdid == expectedHpdid2);
+        found = result.Value.SingleOrDefault(res => res.Hpdid == unlicencedOtherParty.Credentials.Single().Hpdid);
         Assert.NotNull(found);
-        AssertThat.CollectionsAreEquivalent(Array.Empty<PlrRecord>(), found!.Licences, RecordModelPredicate);
+        AssertBasicInfoMatches(unlicencedOtherParty, found);
+        Assert.NotNull(found.Licences);
+        Assert.Empty(found.Licences);
     }
 
     public static Party APartyWith(int id, string hpdid, string? cpn = null)
@@ -219,14 +175,38 @@ public class EndorsementDataTests : InMemoryDbTest
         {
             Id = id,
             Cpn = cpn,
-            Credentials = new List<Credential>
-            {
+            FirstName = $"First{id}",
+            LastName = $"Last{id}",
+            Email = $"email@{id}.com",
+            Credentials =
+            [
                 new Credential
                 {
                     IdentityProvider = IdentityProviders.BCServicesCard,
                     IdpId = hpdid
                 }
-            }
+            ]
         };
+    }
+
+    public static Endorsement AnEndorsementBetween(int partyId1, int partyId2, bool isActive = true)
+    {
+        return new Endorsement
+        {
+            Active = isActive,
+            EndorsementRelationships =
+            [
+                new EndorsementRelationship { PartyId = partyId1 },
+                new EndorsementRelationship { PartyId = partyId2 }
+            ]
+        };
+    }
+
+    private static void AssertBasicInfoMatches(Party expected, EndorsementData.Model actual)
+    {
+        Assert.Equal(expected.Credentials.Single().Hpdid, actual.Hpdid);
+        Assert.Equal(expected.FirstName, actual.FirstName);
+        Assert.Equal(expected.LastName, actual.LastName);
+        Assert.Equal(expected.Email, actual.Email);
     }
 }

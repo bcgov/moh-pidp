@@ -52,6 +52,12 @@ export class PortalService {
   private _alerts: ProfileStatusAlert[];
   /**
    * @description
+   * List of HTTP response controlled alert messages for display
+   * in the College licence information page.
+   */
+  private _licenceAlerts: ProfileStatusAlert[];
+  /**
+   * @description
    * Whether all profile information has been completed, and
    * no access requests have been made.
    */
@@ -67,6 +73,7 @@ export class PortalService {
     this.state$ = this._state$.asObservable();
     this.accessState$ = this._accessState$.asObservable();
     this._alerts = [];
+    this._licenceAlerts = [];
     this._completedProfile = false;
   }
 
@@ -75,6 +82,10 @@ export class PortalService {
 
   public get alerts(): ProfileStatusAlert[] {
     return this._alerts;
+  }
+
+  public get licenceAlerts(): ProfileStatusAlert[] {
+    return this._licenceAlerts;
   }
 
   public get hiddenSections(): PortalSectionStatusKey[] {
@@ -97,6 +108,7 @@ export class PortalService {
     }
     this._profileStatus = profileStatus;
     this._alerts = this.getAlerts(profileStatus);
+    this._licenceAlerts = this.getLicenceAlerts(profileStatus);
     this._completedProfile = this.hasCompletedProfile(profileStatus);
 
     const builder = new PortalStateBuilder(
@@ -113,6 +125,12 @@ export class PortalService {
 
   public updateIsPASExpanded(expanded: boolean): void {
     this.pasPanelExpanded$.next(expanded);
+  }
+
+  private getLicenceAlerts(profileStatus: ProfileStatus): ProfileStatusAlert[] {
+    return this.getAlerts(profileStatus).filter(
+      (alert) => alert.content !== PendingEndorsementComponent,
+    ) as ProfileStatusAlert[];
   }
 
   private getAlerts(profileStatus: ProfileStatus): ProfileStatusAlert[] {
