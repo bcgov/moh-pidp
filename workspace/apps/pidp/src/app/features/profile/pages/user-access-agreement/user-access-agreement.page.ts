@@ -6,13 +6,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { Observable, catchError, noop, of, tap } from 'rxjs';
 
-import { DashboardStateModel, PidpStateName } from '@pidp/data-model';
-import { AppStateService } from '@pidp/presentation';
-
 import {
   AlertComponent,
   AlertContentDirective,
   AnchorDirective,
+  InjectViewportCssClassDirective,
   PageComponent,
   PageFooterActionDirective,
   PageFooterComponent,
@@ -23,6 +21,11 @@ import { LoggerService } from '@app/core/services/logger.service';
 import { UtilsService } from '@app/core/services/utils.service';
 import { specialAuthorityEformsSupportEmail } from '@app/features/access/pages/sa-eforms/sa-eforms.constants';
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
+import {
+  DashboardStateModel,
+  PidpStateName,
+} from '@app/features/portal/models/state.model';
+import { AppStateService } from '@app/features/shell/services/app-state.service';
 
 import { UserAccessAgreementDocumentComponent } from './components/user-access-agreement-document/user-access-agreement-document.component';
 import { UserAccessAgreementResource } from './user-access-agreement-resource.service';
@@ -37,6 +40,7 @@ import { UserAccessAgreementResource } from './user-access-agreement-resource.se
     AlertContentDirective,
     AnchorDirective,
     AsyncPipe,
+    InjectViewportCssClassDirective,
     forwardRef(() => UserAccessAgreementDocumentComponent),
     MatButtonModule,
     NgIf,

@@ -11,9 +11,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { EMPTY, Observable, catchError, of, tap } from 'rxjs';
 
-import { DashboardStateModel, PidpStateName } from '@pidp/data-model';
 import { RegisteredCollege } from '@pidp/data-model';
-import { AppStateService } from '@pidp/presentation';
 
 import {
   AlertComponent,
@@ -28,7 +26,12 @@ import {
 } from '@app/core/classes/abstract-form-page.class';
 import { PartyService } from '@app/core/party/party.service';
 import { LoggerService } from '@app/core/services/logger.service';
+import {
+  DashboardStateModel,
+  PidpStateName,
+} from '@app/features/portal/models/state.model';
 import { ProfileRoutes } from '@app/features/profile/profile.routes';
+import { AppStateService } from '@app/features/shell/services/app-state.service';
 import { LookupService } from '@app/modules/lookup/lookup.service';
 import { CollegeLookup } from '@app/modules/lookup/lookup.types';
 
