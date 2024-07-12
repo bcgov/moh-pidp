@@ -1,17 +1,26 @@
 <div class="container" uiPidpInjectViewportCss>
   <nav class="breadcrumb">
     <ul>
-      <li><button uiTextButton (click)="onBack()">Home</button></li>
+      <li>
+        <button uiTextButton (click)="onBack()">
+          <img src="/assets/images/icons/icon-home.svg" alt="Home" />
+          <span class="home-text">Home</span>
+        </button>
+      </li>
       <li><fa-icon class="fa-duotone" [icon]="faAngleRight"></fa-icon></li>
       <li>
         <button
           uiTextButton
           (click)="navigateTo(AccessRoutes.routePath(AccessRoutes.ACCESS_REQUESTS))">
-          Access
+          <span>Access</span>
         </button>
       </li>
       <li><fa-icon class="fa-duotone" [icon]="faAngleRight"></fa-icon></li>
-      <li><button uiTextButton>HCIMWeb Account Transfer</button></li>
+      <li>
+        <button uiTextButton disabled>
+          <span>HCIMWeb Account Transfer</span>
+        </button>
+      </li>
     </ul>
   </nav>
   <ui-page mode="full" [form]="formState.form" (submitted)="onSubmit()">
