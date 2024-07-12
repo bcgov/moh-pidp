@@ -163,6 +163,10 @@
     display: flex !important;
     flex-direction: column !important;
 
+    .pas-step-label {
+      line-height: 1.1;
+    }
+
     .pas-button {
       img.img-doctor {
         height: 15rem !important;
