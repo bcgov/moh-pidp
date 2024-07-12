@@ -28,6 +28,11 @@
       position: relative !important;
     }
   }
+  & .username {
+    & .username-overflow {
+      overflow-wrap: break-word;
+    }
+  }
   & .form-card {
     display: block !important;
     & .form-content {
