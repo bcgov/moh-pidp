@@ -47,9 +47,11 @@
 .viewport-all {
   &.box {
     padding: var(--header-padding) 0 var(--header-padding) var(--header-padding);
-    & .title {
-      background-color: pidp.$bcgov-color-background-grey;
-      padding: 9px 24px;
+    h1 {
+      color: #036;
+      font-size: 3.125rem;
+      font-weight: 700;
+      margin-bottom: 0;
     }
   }
   & header {
@@ -143,6 +145,26 @@
           font-size: var(--endorsement-card-learn-more-button-font-size);
         }
       }
+    }
+  }
+}
+
+.viewport-large,
+.viewport-medium,
+.viewport-small,
+.viewport-xsmall {
+  & header {
+    & h1 {
+      line-height: 1.1;
+    }
+  }
+}
+
+.viewport-small,
+.viewport-xsmall {
+  & header {
+    & h1 {
+      font-size: 40px;
     }
   }
 }
