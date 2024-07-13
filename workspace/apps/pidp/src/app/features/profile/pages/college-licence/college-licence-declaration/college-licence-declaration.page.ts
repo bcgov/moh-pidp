@@ -38,7 +38,6 @@ import { CollegeLookup } from '@app/modules/lookup/lookup.types';
 import { CollegeLicenceDeclarationFormState } from './college-licence-declaration-form-state';
 import { CollegeLicenceDeclarationResource } from './college-licence-declaration-resource.service';
 import { PartyLicenceDeclarationInformation } from './party-licence-declaration-information.model';
-import { CollegeLicenceInformationPage } from '../college-licence-information/college-licence-information.page';
 
 @Component({
   selector: 'app-college-licence-declaration',
@@ -59,7 +58,6 @@ import { CollegeLicenceInformationPage } from '../college-licence-information/co
     NgIf,
     PageFooterActionDirective,
     ReactiveFormsModule,
-    CollegeLicenceInformationPage
   ],
 })
 export class CollegeLicenceDeclarationPage
@@ -74,7 +72,6 @@ export class CollegeLicenceDeclarationPage
   public colleges: CollegeLookup[];
   public showOverlayOnSubmit = true;
   public licenceDeclarationFailed = false;
-  public disableLiceNumber = true;
 
   public get showNurseValidationInfo(): boolean {
     const isNurse =

@@ -24,8 +24,7 @@
           <mat-label class="field-label">College Licence</mat-label>
           <mat-select
             formControlName="collegeCode"
-            aria-labelledby="college-licence-declaration-college-licence"
-            [disabled]="disableCollegeCode">
+            aria-labelledby="college-licence-declaration-college-licence">
             <mat-option [value]="0">None</mat-option>
             <mat-option *ngFor="let college of colleges" [value]="college.code">
               {{ college.name }}
@@ -49,8 +48,7 @@
           <input
             matInput
             formControlName="licenceNumber"
-            aria-labelledby="college-licence-declaration-licence-number"
-            [disabled]="disableCollegeLicenceNumber"/>
+            aria-labelledby="college-licence-declaration-licence-number"/>
           <mat-error>Required</mat-error>
           <mat-hint>
             Example would be a 5 digit code
