@@ -7,7 +7,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, catchError, map, of, tap } from 'rxjs';
 
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { faStethoscope } from '@fortawesome/free-solid-svg-icons';
+import { faStethoscope, faAngleRight } from '@fortawesome/free-solid-svg-icons';
 
 import { InjectViewportCssClassDirective } from '@bcgov/shared/ui';
 
@@ -46,6 +46,7 @@ export class CollegeLicenceInformationPage implements OnInit {
   public title: string;
   public collegeCertifications$!: Observable<CollegeCertification[]>;
   public alerts: ProfileStatusAlert[] = [];
+  public faAngleRight = faAngleRight;
 
   public constructor(
     private route: ActivatedRoute,

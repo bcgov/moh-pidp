@@ -1,3 +1,23 @@
+<div class="container breadcrumb-top" uiPidpInjectViewportCss>
+  <nav class="breadcrumb">
+    <ul>
+      <li>
+        <a (click)="onBack()">Home</a>
+      </li>
+      <li>
+        <a class="fa-duotone">
+          <fa-icon [icon]="faAngleRight">
+          </fa-icon>
+        </a>
+      </li>
+      <li>
+        <a>
+          College Licence
+        </a>
+      </li>
+    </ul>
+  </nav>
+</div>
 <div>
   <app-college-licence-declaration [disableCollegeCode]=true [disableCollegeLicenceNumber]=true>
   </app-college-licence-declaration>
@@ -15,8 +35,8 @@
         <div class="card-header-icon">
           <div class="card-icon">
             <img
-              src="/assets/images/icons/credit-card.svg"
-              alt="creditcard" />
+              src="/assets/images/college-licence-logo.svg"
+              alt="college-licence-logo" />
           </div>
         </div>
         <div class="licence-detail-box">
@@ -36,13 +56,9 @@
                 />
               </div>
               <div
-                class="status-terminated" *ngIf="certification.statusCode==='TERMINATED'">
+                class="status-non-active" *ngIf="certification.statusCode !=='ACTIVE'">
                 <label>Status Code:</label>
-                <span>Terminated</span>
-                <img
-                  src="/assets/images/icons/icon-check-circle.svg"
-                  alt="cross circle"
-                />
+                <span>{{certification.statusCode}}</span>
               </div>
             <app-college-licence-information-detail
               class="licence-detail"
@@ -63,14 +79,9 @@
   </div>
   <div class="actions">
     <span>
-      <button mat-stroked-button type="button" color="primary">
+      <button mat-stroked-button type="button" (click)="onBack()" color="primary">
         Back
       </button>
-    </span>
-    <span class="actions-continue">
-        <button mat-flat-button uiPageFooterAction type="submit" color="primary">
-          Continue
-        </button>
     </span>
   </div>
 
