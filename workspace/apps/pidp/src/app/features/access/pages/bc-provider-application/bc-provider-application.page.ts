@@ -22,6 +22,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 
 import {
   EMPTY,
@@ -36,6 +37,7 @@ import {
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { faCircleRight } from '@fortawesome/free-regular-svg-icons';
 import {
+  faAngleRight,
   faCircleCheck,
   faLockOpen,
   faUser,
@@ -53,6 +55,7 @@ import {
   DialogOptions,
   HtmlComponent,
   InjectViewportCssClassDirective,
+  TextButtonDirective,
 } from '@bcgov/shared/ui';
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';
@@ -77,6 +80,7 @@ import { NeedHelpComponent } from '@app/shared/components/need-help/need-help.co
 import { DialogBcproviderCreateComponent } from '@app/shared/components/success-dialog/components/dialog-bcprovider-create.component';
 import { SuccessDialogComponent } from '@app/shared/components/success-dialog/success-dialog.component';
 
+import { AccessRoutes } from '../../access.routes';
 import { BcProviderApplicationFormState } from './bc-provider-application-form-state';
 import { BcProviderApplicationResource } from './bc-provider-application-resource.service';
 
@@ -102,6 +106,8 @@ import { BcProviderApplicationResource } from './bc-provider-application-resourc
     NgTemplateOutlet,
     ReactiveFormsModule,
     SuccessDialogComponent,
+    FaIconComponent,
+    TextButtonDirective,
   ],
 })
 export class BcProviderApplicationPage
@@ -109,11 +115,13 @@ export class BcProviderApplicationPage
   implements OnInit
 {
   public faCircleCheck = faCircleCheck;
+  public faAngleRight = faAngleRight;
   public faCircleRight = faCircleRight;
   public faLockOpen = faLockOpen;
   public faUser = faUser;
   public faXmark = faXmark;
   public formState: BcProviderApplicationFormState;
+  public AccessRoutes = AccessRoutes;
   public showErrorCard = false;
   public showMessageCard = false;
   public completed: boolean | null;
@@ -142,6 +150,7 @@ export class BcProviderApplicationPage
     private documentService: DocumentService,
     private loadingOverlayService: LoadingOverlayService,
     private logger: LoggerService,
+    private router: Router,
     private navigationService: NavigationService,
     private partyService: PartyService,
     private resource: BcProviderApplicationResource,
@@ -208,7 +217,9 @@ export class BcProviderApplicationPage
       return this.navigationService.navigateToRoot();
     }
   }
-
+  public navigateTo(path: string): void {
+    this.router.navigateByUrl(path);
+  }
   protected performSubmission(): Observable<string | void> {
     const partyId = this.partyService.partyId;
     this.password = this.formState.password.value;

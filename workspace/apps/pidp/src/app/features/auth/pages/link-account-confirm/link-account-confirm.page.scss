@@ -6,31 +6,36 @@
   --content-padding: var(--gap);
   padding: calc(var(--gap)) calc(var(--gap) * 4) 0 calc(var(--gap) * 4);
 
-  .breadcrumb ul {
-    list-style: none;
-    top: 0;
-    right: 0;
-    padding: 0px;
-  }
+  .breadcrumb {
+    ul {
+      display: flex;
+      align-items: center;
+      padding: 0px;
+    }
 
-  .breadcrumb fa-icon {
-    height: 12px;
-    padding-left: 5px;
-    padding-right: 5px;
-  }
+    fa-icon {
+      padding-left: 0.75rem;
+      padding-right: 0.75rem;
+      color: #d9d9d9;
+      font-size: 1.75rem;
+    }
 
-  .breadcrumb ul li {
-    display: inline;
-  }
+    ul li {
+      display: flex;
+    }
 
-  .breadcrumb a {
-    text-decoration: none;
-    color: #1a5a96;
-    font-size: 12px;
-    font-weight: 400;
-    line-height: 27px;
-    word-wrap: break-word;
-    cursor: pointer;
+    span {
+      font-size: 1rem;
+    }
+
+    button:disabled {
+      color: #aaa !important;
+    }
+
+    img {
+      margin-right: 10px;
+      margin-bottom: 6px;
+    }
   }
 
   & header {
@@ -79,60 +84,59 @@
         line-height: 1.5rem;
       }
 
-            & .card-styles {
-              border-radius: 1.25rem;
-              border: 1px solid #ccc;
-              background: #fff;
-              box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
-              width: auto;
-              height: 11.875rem;
-              padding: 1.25rem;
+      & .card-styles {
+        border-radius: 1.25rem;
+        border: 1px solid #ccc;
+        background: #fff;
+        box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+        width: auto;
+        height: 11.875rem;
+        padding: 1.25rem;
 
-              h2 {
-                color: #036;
-                font-size: 1.5rem;
-                font-weight: 700;
-                padding-top: 0.25rem;
-                margin-bottom: 0;
-              }
+        h2 {
+          color: #036;
+          font-size: 1.5rem;
+          font-weight: 700;
+          padding-top: 0.25rem;
+          margin-bottom: 0;
+        }
 
-              p {
-                color: #000;
-                font-size: 1rem;
-                font-weight: 400;
-                padding-top: 0;
-                margin-bottom: 0;
-                line-height: 1.5;
-              }
+        p {
+          color: #000;
+          font-size: 1rem;
+          font-weight: 400;
+          padding-top: 0;
+          margin-bottom: 0;
+          line-height: 1.5;
+        }
 
-              a {
-                color: var(--Links, #1a5a96);
-                font-size: 16px;
-                font-weight: 400;
-                line-height: 27px;
-                text-decoration: underline;
-                cursor: pointer;
-              }
+        a {
+          color: var(--Links, #1a5a96);
+          font-size: 16px;
+          font-weight: 400;
+          line-height: 27px;
+          text-decoration: underline;
+          cursor: pointer;
+        }
 
+        .linked-success {
+          display: flex;
+          justify-content: start;
+          align-items: center;
 
-              .linked-success {
-                display: flex;
-                justify-content: start;
-                align-items: center;
+          span {
+            color: #2e8540;
+            font-size: 16px;
+            font-weight: 700;
+            margin-right: 5px;
+          }
 
-                span {
-                  color: #2E8540;
-                  font-size: 16px;
-                  font-weight: 700;
-                  margin-right: 5px;
-                }
-
-                img {
-                  width: 1.5rem;
-                  height: 1.5rem;
-                }
-              }
-            }
+          img {
+            width: 1.5rem;
+            height: 1.5rem;
+          }
+        }
+      }
 
       & .instructions-card-layout {
         width: auto;
@@ -380,6 +384,24 @@
 div.viewport-xsmall {
   --gap: 0.5rem;
   --font-size: 0.5rem;
+  .breadcrumb {
+    margin: 0px 20px 0px 20px;
+
+    img {
+      margin-right: 2px;
+    }
+    span {
+      font-size: 0.8rem;
+    }
+    .home-text {
+      display: none;
+    }
+    fa-icon {
+      padding-left: 0.5rem;
+      padding-right: 0.5rem;
+      font-size: 1.25rem;
+    }
+  }
   & .content {
     & .link-main {
       display: flex !important;
@@ -461,6 +483,18 @@ div.viewport-xsmall {
 div.viewport-small {
   --gap: 0.5rem;
   --font-size: 0.5rem;
+  .breadcrumb {
+    margin: 0px 20px 0px 20px;
+    fa-icon {
+      padding-left: 0.6rem;
+      padding-right: 0.6rem;
+      font-size: 1.5rem;
+    }
+
+    span {
+      font-size: 0.9rem;
+    }
+  }
   & .content {
     & .link-main {
       grid-template-columns: calc(39% - 15px) calc(30% - 15px) calc(30% - 15px);
@@ -591,6 +625,6 @@ div.viewport-medium {
 
 ::ng-deep .dialog-container {
   mat-dialog-container {
-      padding: 0.5rem;
+    padding: 0.5rem;
   }
 }

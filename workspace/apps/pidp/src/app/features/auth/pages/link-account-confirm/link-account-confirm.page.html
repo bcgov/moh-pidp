@@ -1,9 +1,16 @@
 <div class="container-box" uiPidpInjectViewportCss>
   <nav class="breadcrumb">
     <ul>
-      <li><a>Home</a></li>
+      <li>
+        <button uiTextButton (click)="onBack()">
+          <img src="/assets/images/icons/icon-home.svg" alt="Home" />
+          <span class="home-text">Home</span>
+        </button>
+      </li>
       <li><fa-icon class="fa-duotone" [icon]="faAngleRight"></fa-icon></li>
-      <li><a class="active">Active Page</a></li>
+      <li>
+        <button uiTextButton disabled><span>Active Page</span></button>
+      </li>
     </ul>
   </nav>
   <div class="content-box">

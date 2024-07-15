@@ -1,4 +1,19 @@
 <div class="container-box container" uiPidpInjectViewportCss>
+  <nav class="breadcrumb">
+    <ul>
+      <li><button uiTextButton (click)="onBack()"><img src="/assets/images/icons/icon-home.svg" alt="Home"> <span class="home-text">Home</span></button></li>
+      <li><fa-icon class="fa-duotone" [icon]="faAngleRight"></fa-icon></li>
+      <li>
+        <button
+          uiTextButton
+          (click)="navigateTo(AccessRoutes.routePath(AccessRoutes.ACCESS_REQUESTS))">
+          <span>Access</span>
+        </button>
+      </li>
+      <li><fa-icon class="fa-duotone" [icon]="faAngleRight"></fa-icon></li>
+      <li><button uiTextButton disabled><span>BC Provider account information</span></button></li>
+    </ul>
+  </nav>
   <div class="content-box">
     <header>
       <h2>BC Provider account information</h2>
