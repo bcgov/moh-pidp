@@ -65,9 +65,14 @@ span {
 
   &.box {
     padding: var(--header-padding) 0 var(--header-padding) var(--header-padding);
+    h1 {
+      color: #036;
+      font-size: 3.125rem;
+      font-weight: 700;
+      margin-bottom: 0;
+    }
     & .title {
-      background-color: pidp.$bcgov-color-background-grey;
-      padding: 9px 24px;
+      padding: 1rem 0;
     }
   }
   & .content {
@@ -174,6 +179,16 @@ span {
       padding-left: 0.5rem;
       padding-right: 0.5rem;
       font-size: 1.25rem;
+    }
+  }
+}
+
+.viewport-small,
+.viewport-xsmall {
+  & header {
+    & h1 {
+      font-size: 40px;
+      line-height: 1.1;
     }
   }
 }

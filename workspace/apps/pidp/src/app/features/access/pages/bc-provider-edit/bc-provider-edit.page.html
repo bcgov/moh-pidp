@@ -25,7 +25,7 @@
   </nav>
   <div class="content-box">
     <header>
-      <h2>BC Provider Account Information</h2>
+      <h1>BC Provider Account Information</h1>
     </header>
     <div class="content">
       <section class="error-card" [class.show-card]="showErrorCard">
@@ -82,6 +82,11 @@
 
 <ng-template #passwordForm>
   <form novalidate [formGroup]="formState.form" (ngSubmit)="onSubmit()">
+    <div class="mobile-image">
+      <img
+      src="/assets/images/bcprovider-account-1000x1103.webp"
+      fill/>
+    </div>
     <h2>Password reset</h2>
     <div class="username">
       <h4><strong>Provided username</strong></h4>

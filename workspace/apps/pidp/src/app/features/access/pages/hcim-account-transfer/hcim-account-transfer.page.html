@@ -24,7 +24,7 @@
     </ul>
   </nav>
   <ui-page mode="full" [form]="formState.form" (submitted)="onSubmit()">
-    <ui-page-header>{{ title }}</ui-page-header>
+    <h1>{{ title }}</h1>
 
     <ng-container *ngIf="completed; else notCompleted">
       <ui-page-section>

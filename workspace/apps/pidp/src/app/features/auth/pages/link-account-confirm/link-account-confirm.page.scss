@@ -167,6 +167,7 @@
 
           .sublist {
             list-style-type: '-';
+
             li {
               padding-left: 0.25rem;
             }
@@ -222,9 +223,11 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
+
         .lock-icon {
           cursor: pointer;
         }
+
         .card-icon {
           display: flex;
           border-radius: 0.625rem;
@@ -245,6 +248,7 @@
       .idir-account {
         margin-top: 1.19rem;
       }
+
       .link-button {
         height: 67%;
 
@@ -406,6 +410,7 @@ div.viewport-xsmall {
     & .link-main {
       display: flex !important;
       flex-direction: column !important;
+
       & .instructions-card {
         h2 {
           padding: 1rem 0rem 0 1rem;
@@ -416,28 +421,35 @@ div.viewport-xsmall {
           padding-left: 1.5rem;
         }
       }
+
       .instructions-card-layout {
         button {
           margin: 4.7rem 0 1rem 1.5rem;
         }
+
         .instructions-text {
           margin: 5.5rem 0 1rem 1.5rem;
         }
+
         & .instructions-container {
           padding: 1rem 0rem 0 1rem;
+
           h2 {
             margin-bottom: 0.25rem;
             font-size: 1rem;
           }
+
           ol,
           ul {
             margin-left: 0rem;
           }
+
           .list-item {
             padding-bottom: 0rem;
           }
         }
       }
+
       .card-styles {
         padding: 1rem;
 
@@ -498,6 +510,7 @@ div.viewport-small {
   & .content {
     & .link-main {
       grid-template-columns: calc(39% - 15px) calc(30% - 15px) calc(30% - 15px);
+
       & .instructions-card {
         h2 {
           padding: 0.75rem 3.75rem 0 0.75rem;
@@ -508,28 +521,35 @@ div.viewport-small {
           padding-left: 0.75rem;
         }
       }
+
       .instructions-card-layout {
         button {
           margin: 0rem 0 1rem 1.5rem;
         }
+
         .instructions-text {
           margin: 6.3rem 0 1rem 1.5rem;
         }
+
         & .instructions-container {
           padding: 0.75rem 0rem 0 0.75rem;
+
           h2 {
             margin-bottom: 0.25rem;
             font-size: 1rem;
           }
+
           ol,
           ul {
             margin-left: 0rem;
           }
+
           .list-item {
             padding-bottom: 0rem;
           }
         }
       }
+
       .card-styles {
         padding: 1rem;
 
@@ -573,27 +593,34 @@ div.viewport-medium {
           padding-left: 1.5rem;
         }
       }
+
       .instructions-card-layout {
         button {
           margin: 0rem 0 1rem 1.5rem;
         }
+
         .instructions-text {
           margin: 5rem 0 1rem 1.5rem;
         }
+
         & .instructions-container {
           padding: 1rem 0rem 0 1rem;
+
           h2 {
             margin-bottom: 0.25rem;
           }
+
           ol,
           ul {
             margin-left: 0rem;
           }
+
           .list-item {
             padding-bottom: 0.25rem;
           }
         }
       }
+
       .card-styles {
         padding: 1rem;
 
@@ -620,11 +647,5 @@ div.viewport-medium {
         }
       }
     }
-  }
-}
-
-::ng-deep .dialog-container {
-  mat-dialog-container {
-    padding: 0.5rem;
   }
 }

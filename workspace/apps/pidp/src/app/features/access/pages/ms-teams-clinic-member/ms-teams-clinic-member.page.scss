@@ -60,10 +60,12 @@
   }
 
   & header {
-    & h2 {
-      margin: 0;
-      padding: calc(var(--gap) / 2) calc(var(--gap));
-      background-color: pidp.$grey-10;
+    & h1 {
+      color: #036;
+      font-size: 3.125rem;
+      font-weight: 700;
+      margin-bottom: 0;
+      padding: 2rem 0;
     }
   }
   & .content {
@@ -171,6 +173,16 @@
       padding-left: 0.5rem;
       padding-right: 0.5rem;
       font-size: 1.25rem;
+    }
+  }
+}
+
+.viewport-small,
+.viewport-xsmall {
+  & header {
+    & h1 {
+      font-size: 40px;
+      line-height: 1.1;
     }
   }
 }

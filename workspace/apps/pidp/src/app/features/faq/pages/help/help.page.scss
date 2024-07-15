@@ -53,29 +53,6 @@
         color: #0d6efd;
         text-decoration: underline;
       }
-
-      ::ng-deep .mat-expansion-panel {
-        box-shadow: none;
-
-        .mat-expansion-panel-header {
-          padding: 0;
-          line-height: 1.5;
-        }
-
-        .mat-expansion-indicator,
-        .mat-expansion-indicator::after {
-          border-width: 0 3px 3px 0 !important;
-
-          &::after {
-            color: #cccccc;
-          }
-        }
-
-        .mat-expansion-panel-body {
-          padding: 0;
-          line-height: 1.5;
-        }
-      }
     }
 
     .footer-cards {
@@ -220,32 +197,6 @@
 
     .faq-item {
       margin-bottom: 20px;
-
-      ::ng-deep .mat-expansion-panel {
-        .mat-expansion-panel-header {
-          font-size: 0.75rem;
-          height: auto;
-        }
-
-        .mat-expansion-panel-header-title {
-          margin-right: 2px;
-        }
-
-        .mat-expansion-indicator,
-        .mat-expansion-indicator::after {
-          border-width: 0 2px 2px 0 !important;
-          padding: 3px !important;
-          margin-bottom: 5px;
-        }
-
-        .mat-expansion-panel-body {
-          p:first-of-type {
-            padding-top: 5px;
-          }
-
-          font-size: 0.75rem;
-        }
-      }
     }
 
     .footer-cards {

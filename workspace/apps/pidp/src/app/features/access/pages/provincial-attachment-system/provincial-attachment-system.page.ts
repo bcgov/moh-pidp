@@ -30,7 +30,6 @@ import { AuthService } from '@app/features/auth/services/auth.service';
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
 import { ProfileStatus } from '@app/features/portal/models/profile-status.model';
 import { PortalResource } from '@app/features/portal/portal-resource.service';
-import { PortalService } from '@app/features/portal/portal.service';
 
 import { BcProviderEditResource } from '../bc-provider-edit/bc-provider-edit-resource.service';
 import { BcProviderEditInitialStateModel } from '../bc-provider-edit/bc-provider-edit.page';
@@ -94,7 +93,6 @@ export class ProvincialAttachmentSystemPage implements OnInit {
     private discoveryResource: DiscoveryResource,
     private navigationService: NavigationService,
     private portalResource: PortalResource,
-    private portalService: PortalService,
     private partyService: PartyService,
     private router: Router,
     private toastService: ToastService,
@@ -129,77 +127,53 @@ export class ProvincialAttachmentSystemPage implements OnInit {
       this.partyService.partyId,
     );
 
-    this.updateState(profileStatus$);
-    this.handlePasBannerStatus(profileStatus$);
-    this.handlePasStatus(profileStatus$);
+    this.handleStepperState(profileStatus$);
   }
 
   public navigateTo(path: string): void {
     this.router.navigateByUrl(path);
   }
 
-  private updateState(profileStatus$: Observable<ProfileStatus | null>): void {
+  private handleStepperState(
+    profileStatus$: Observable<ProfileStatus | null>,
+  ): void {
+    let selectedIndex = this.lastSelectedIndex;
     profileStatus$
       .pipe(
         tap((profileStatus: ProfileStatus | null) => {
-          this.portalService.updateState(profileStatus);
-        }),
-      )
-      .subscribe();
-  }
-
-  private handlePasBannerStatus(
-    profileStatus$: Observable<ProfileStatus | null>,
-  ): void {
-    profileStatus$
-      .pipe(
-        switchMap(
-          (
-            profileStatus,
-          ): Observable<BcProviderEditInitialStateModel | null> => {
-            let selectedIndex = this.lastSelectedIndex;
-            this.hasCpn = profileStatus?.status.collegeCertification.hasCpn;
-
-            this.bcProviderStatusCode =
-              profileStatus?.status.bcProvider.statusCode;
-            if (this.bcProviderStatusCode === StatusCode.COMPLETED) {
-              this.bcProvider$.next(true);
-              return this.bcProviderResource.get(this.partyService.partyId);
-            } else {
-              if (selectedIndex === this.lastSelectedIndex) {
-                // BCProvider step
-                selectedIndex = 0;
-              }
-              this.selectedIndex = selectedIndex;
-              return of(null);
-            }
-          },
-        ),
-        tap((bcProviderObject: BcProviderEditInitialStateModel | null) => {
-          if (bcProviderObject) {
-            this.bcProviderUsername = bcProviderObject.bcProviderId;
-          }
-        }),
-      )
-      .subscribe();
-  }
-
-  private handlePasStatus(
-    profileStatus$: Observable<ProfileStatus | null>,
-  ): void {
-    profileStatus$
-      .pipe(
-        tap((profileStatus: ProfileStatus | null) => {
-          let selectedIndex = this.lastSelectedIndex;
+          this.hasCpn = profileStatus?.status.collegeCertification.hasCpn;
           this.pasStatusCode =
             profileStatus?.status.provincialAttachmentSystem.statusCode;
+          this.bcProviderStatusCode =
+            profileStatus?.status.bcProvider.statusCode;
           if (this.pasStatusCode === StatusCode.COMPLETED) {
             this.pas$.next(false);
-          } else if (selectedIndex === this.lastSelectedIndex) {
+          } else if (
+            selectedIndex === this.lastSelectedIndex &&
+            this.bcProviderStatusCode === StatusCode.COMPLETED
+          ) {
             // PAS step
             selectedIndex = 1;
           }
           this.selectedIndex = selectedIndex;
+        }),
+        switchMap((): Observable<BcProviderEditInitialStateModel | null> => {
+          if (this.bcProviderStatusCode === StatusCode.COMPLETED) {
+            this.bcProvider$.next(true);
+            return this.bcProviderResource.get(this.partyService.partyId);
+          } else {
+            if (selectedIndex === this.lastSelectedIndex) {
+              // BCProvider step
+              selectedIndex = 0;
+            }
+            this.selectedIndex = selectedIndex;
+            return of(null);
+          }
+        }),
+        tap((bcProviderObject: BcProviderEditInitialStateModel | null) => {
+          if (bcProviderObject) {
+            this.bcProviderUsername = bcProviderObject.bcProviderId;
+          }
         }),
       )
       .subscribe();
