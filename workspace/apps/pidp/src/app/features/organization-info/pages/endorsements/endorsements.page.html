@@ -2,9 +2,16 @@
   <div class="container" uiPidpInjectViewportCss>
     <nav class="breadcrumb">
       <ul>
-        <li><a (click)="onBack()">Home</a></li>
+        <li>
+          <button uiTextButton (click)="onBack()">
+            <img src="/assets/images/icons/icon-home.svg" alt="Home" />
+            <span class="home-text">Home</span>
+          </button>
+        </li>
         <li><fa-icon class="fa-duotone" [icon]="faAngleRight"></fa-icon></li>
-        <li><a class="active">Active Page</a></li>
+        <li>
+          <button uiTextButton disabled><span>Endorsements</span></button>
+        </li>
       </ul>
     </nav>
     <div class="content">

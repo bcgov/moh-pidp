@@ -47,6 +47,7 @@ import {
   InjectViewportCssClassDirective,
   PageFooterActionDirective,
   PidpViewport,
+  TextButtonDirective,
   ViewportService,
 } from '@bcgov/shared/ui';
 
@@ -95,6 +96,7 @@ export enum EndorsementType {
     NgIf,
     PageFooterActionDirective,
     ReactiveFormsModule,
+    TextButtonDirective
   ],
 })
 export class EndorsementsPage
