@@ -9,7 +9,7 @@ using PidpTests.TestingExtensions;
 public class DemographicsTests : InMemoryDbTest
 {
     [Fact]
-    public async void UpdatePartyDemographics_NewParty_PropertiesUpdatedNoDomainEvent()
+    public async Task UpdatePartyDemographics_NewParty_PropertiesUpdatedDomainEvent()
     {
         var party = this.TestDb.HasAParty(party =>
         {
@@ -19,7 +19,7 @@ public class DemographicsTests : InMemoryDbTest
         var command = new Command
         {
             Id = party.Id,
-            Email = "pidp.test@goh.com",
+            Email = "pidp.test@email.com",
             Phone = "5555555555",
             PreferredFirstName = "PFirst",
             PreferredMiddleName = "PMid",
@@ -36,11 +36,14 @@ public class DemographicsTests : InMemoryDbTest
         Assert.Equal(command.PreferredMiddleName, updatedParty.PreferredMiddleName);
         Assert.Equal(command.PreferredLastName, updatedParty.PreferredLastName);
 
-        Assert.Empty(this.PublishedEvents.OfType<PartyEmailUpdated>());
+        Assert.Single(this.PublishedEvents.OfType<PartyEmailUpdated>());
+        var emailEvent = this.PublishedEvents.OfType<PartyEmailUpdated>().Single();
+        Assert.Equal(party.Id, emailEvent.PartyId);
+        Assert.Equal(command.Email, emailEvent.NewEmail);
     }
 
     [Fact]
-    public async void UpdatePartyDemographics_ExistingParty_PropertiesUpdatedDomainEvent()
+    public async Task UpdatePartyDemographics_ExistingParty_PropertiesUpdatedDomainEvent()
     {
         var party = this.TestDb.HasAParty(party =>
         {
@@ -79,7 +82,7 @@ public class DemographicsTests : InMemoryDbTest
     }
 
     [Fact]
-    public async void UpdatePartyDemographics_ExistingParty_TrimPreferredNames()
+    public async Task UpdatePartyDemographics_ExistingParty_TrimPreferredNames()
     {
         var party = this.TestDb.HasAParty(party =>
         {
@@ -114,7 +117,7 @@ public class DemographicsTests : InMemoryDbTest
     }
 
     [Fact]
-    public async void UpdatePartyDemographics_ExistingPartySameEmail_NoDomainEvent()
+    public async Task UpdatePartyDemographics_ExistingPartySameEmail_NoDomainEvent()
     {
         var party = this.TestDb.HasAParty(party => party.Email = "existing@email.com");
         var command = new Command
