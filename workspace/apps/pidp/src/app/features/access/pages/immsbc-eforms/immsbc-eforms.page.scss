@@ -31,11 +31,19 @@
       margin-bottom: 6px;
     }
   }
+
+  h1 {
+    color: #036;
+    font-size: 3.125rem;
+    font-weight: 700;
+    margin-bottom: 0;
+    padding: 2rem 0;
+  }
 }
 
 .viewport-small {
   .breadcrumb {
-    margin: 0px 20px 0px 20px;
+    margin: 0px 20px 0px 5px;
   }
   fa-icon {
     padding-left: 0.6rem;
@@ -50,7 +58,7 @@
 
 .viewport-xsmall {
   .breadcrumb {
-    margin: 0px 20px 0px 20px;
+    margin: 0px 20px 0px 2px;
 
     img {
       margin-right: 2px;
@@ -66,14 +74,6 @@
       padding-right: 0.5rem;
       font-size: 1.25rem;
     }
-  }
-
-  h1 {
-    color: #036;
-    font-size: 3.125rem;
-    font-weight: 700;
-    margin-bottom: 0;
-    padding: 2rem 0;
   }
 }
 .viewport-small,
