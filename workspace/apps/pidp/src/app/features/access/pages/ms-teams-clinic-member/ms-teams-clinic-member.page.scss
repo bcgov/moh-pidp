@@ -28,6 +28,7 @@
 
 .viewport-all {
   .breadcrumb {
+    padding: 1rem 0;
     ul {
       display: flex;
       align-items: center;
@@ -65,7 +66,6 @@
       font-size: 3.125rem;
       font-weight: 700;
       margin-bottom: 0;
-      padding: 2rem 0;
     }
   }
   & .content {

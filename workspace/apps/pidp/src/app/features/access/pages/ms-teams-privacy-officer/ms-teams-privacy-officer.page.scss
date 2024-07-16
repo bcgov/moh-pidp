@@ -45,7 +45,9 @@
 }
 
 .viewport-all {
+  padding: 1.25rem 0.75rem;
   .breadcrumb {
+    padding: 1rem 0;
     ul {
       display: flex;
       align-items: center;
@@ -77,7 +79,6 @@
     }
   }
   &.box {
-    padding: var(--header-padding) 0 var(--header-padding) var(--header-padding);
     h1 {
       color: #036;
       font-size: 3.125rem;

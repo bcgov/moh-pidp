@@ -8,6 +8,7 @@
   padding: calc(var(--gap)) calc(var(--gap) * 4) 0 calc(var(--gap) * 4);
 
   .breadcrumb {
+    padding: 1rem 0;
     ul {
       display: flex;
       align-items: center;
