@@ -1,7 +1,7 @@
 <div class="container-box container" uiPidpInjectViewportCss>
   <div class="content-box">
     <header>
-      <h2>BC Provider account information</h2>
+      <h1>BC Provider account information</h1>
     </header>
     <div class="content">
       <h3>
@@ -185,7 +185,7 @@
       </div>
       <div class="password-splash">
         <div class="password-splash-content">
-          <div class="text-box">
+          <div class="text-box" >
             <div>
               <span class="lets">Let's get started</span>
             </div>
@@ -229,6 +229,11 @@
 
 <ng-template #passwordForm>
   <form novalidate [formGroup]="formState.form" (ngSubmit)="onSubmit()">
+    <div class="mobile-image">
+      <img
+      ngSrc="/assets/images/bcprovider-account-1000x1103.webp"
+      fill />
+    </div>
     <h2>Create an account</h2>
     <div class="form-content">
       <div class="field">
