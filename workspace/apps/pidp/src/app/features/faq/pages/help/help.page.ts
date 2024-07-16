@@ -8,17 +8,15 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { faAngleRight, faArrowUp } from '@fortawesome/free-solid-svg-icons';
 
 import {
-  InjectViewportCssClassDirective,
-  TextButtonDirective,
-} from '@bcgov/shared/ui';
-import {
   AnchorDirective,
+  InjectViewportCssClassDirective,
   PageComponent,
   PageFooterActionDirective,
   PageFooterComponent,
   PageHeaderComponent,
   PageSectionComponent,
   PageSectionSubheaderComponent,
+  TextButtonDirective
 } from '@bcgov/shared/ui';
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';

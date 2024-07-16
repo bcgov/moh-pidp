@@ -14,6 +14,24 @@
 }
 
 .viewport-xsmall {
+  .breadcrumb {
+    margin: 0px 20px 0px 2px;
+
+    img {
+      margin-right: 2px;
+    }
+    span {
+      font-size: 0.8rem;
+    }
+    .home-text {
+      display: none;
+    }
+    fa-icon {
+      padding-left: 0.5rem;
+      padding-right: 0.5rem;
+      font-size: 1.25rem;
+    }
+  }
   .form-button-box {
     & button {
       margin-top: 20px;
@@ -321,27 +339,6 @@
 
   span {
     font-size: 0.9rem;
-  }
-}
-
-.viewport-xsmall {
-  .breadcrumb {
-    margin: 0px 20px 0px 2px;
-
-    img {
-      margin-right: 2px;
-    }
-    span {
-      font-size: 0.8rem;
-    }
-    .home-text {
-      display: none;
-    }
-    fa-icon {
-      padding-left: 0.5rem;
-      padding-right: 0.5rem;
-      font-size: 1.25rem;
-    }
   }
 }
 
