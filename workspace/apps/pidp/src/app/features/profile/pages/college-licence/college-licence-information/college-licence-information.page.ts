@@ -7,9 +7,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, catchError, map, of, tap } from 'rxjs';
 
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { faStethoscope } from '@fortawesome/free-solid-svg-icons';
+import { faAngleRight, faStethoscope } from '@fortawesome/free-solid-svg-icons';
 
-import { InjectViewportCssClassDirective } from '@bcgov/shared/ui';
+import { InjectViewportCssClassDirective, TextButtonDirective } from '@bcgov/shared/ui';
 
 import { PartyService } from '@app/core/party/party.service';
 import { LoggerService } from '@app/core/services/logger.service';
@@ -36,10 +36,12 @@ import { CollegeLicenceInformationDetailComponent } from './components/college-l
     MatButtonModule,
     NgFor,
     PortalAlertComponent,
+    TextButtonDirective
   ],
 })
 export class CollegeLicenceInformationPage implements OnInit {
   public faStethoscope = faStethoscope;
+  public faAngleRight = faAngleRight;
 
   public title: string;
   public collegeCertifications$!: Observable<CollegeCertification[]>;

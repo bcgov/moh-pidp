@@ -1,4 +1,18 @@
 <div class="container" uiPidpInjectViewportCss>
+  <nav class="breadcrumb">
+    <ul>
+      <li>
+        <button uiTextButton (click)="onBack()">
+          <img src="/assets/images/icons/icon-home.svg" alt="Home" />
+          <span class="home-text">Home</span>
+        </button>
+      </li>
+      <li><fa-icon class="fa-duotone" [icon]="faAngleRight"></fa-icon></li>
+      <li>
+        <button uiTextButton disabled><span>UAA</span></button>
+      </li>
+    </ul>
+  </nav>
   <div class="content-header">
     <h1>Access harmonization user access agreement</h1>
   </div>

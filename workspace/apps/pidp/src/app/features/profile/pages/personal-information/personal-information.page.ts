@@ -19,6 +19,7 @@ import {
 
 import {
   ContactFormComponent,
+  InjectViewportCssClassDirective,
   PageComponent,
   PageFooterActionDirective,
   PageFooterComponent,
@@ -27,6 +28,7 @@ import {
   PageSectionSubheaderComponent,
   PageSectionSubheaderDescDirective,
   PreferredNameFormComponent,
+  TextButtonDirective,
   ToggleContentChange,
   ToggleContentComponent,
 } from '@bcgov/shared/ui';
@@ -50,6 +52,9 @@ import { PersonalInformationFormState } from './personal-information-form-state'
 import { PersonalInformationResource } from './personal-information-resource.service';
 import { PersonalInformation } from './personal-information.model';
 
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { faAngleRight } from '@fortawesome/free-solid-svg-icons';
+
 @Component({
   selector: 'app-personal-information',
   templateUrl: './personal-information.page.html',
@@ -59,6 +64,8 @@ import { PersonalInformation } from './personal-information.model';
   imports: [
     AsyncPipe,
     ContactFormComponent,
+    FaIconComponent,
+    InjectViewportCssClassDirective,
     IsHighAssurancePipe,
     MatButtonModule,
     NgIf,
@@ -72,6 +79,7 @@ import { PersonalInformation } from './personal-information.model';
     PreferredNameFormComponent,
     ToggleContentComponent,
     UserInfoComponent,
+    TextButtonDirective
   ],
 })
 export class PersonalInformationPage
@@ -91,6 +99,7 @@ export class PersonalInformationPage
 
   // ui-page is handling this.
   public showOverlayOnSubmit = false;
+  public faAngleRight = faAngleRight;
 
   public constructor(
     dependenciesService: AbstractFormDependenciesService,
