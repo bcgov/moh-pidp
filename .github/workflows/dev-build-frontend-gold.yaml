@@ -1,0 +1,77 @@
+name: Build Frontend - Dev
+
+on:
+  push:
+    branches: [develop]
+    paths:
+      - "workspace/**"
+      - "charts/frontend"
+  workflow_dispatch:
+
+# This will terminate builds that are previously, but continuing to run.  Saves GHA hours.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-frontend:
+    name: Frontend Build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: "./workspace"
+    steps:
+      - name: "Checkout Code"
+        uses: actions/checkout@master
+
+      - name: Use Node.js 18.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.x
+
+      - name: YARN Install
+        run: |
+          yarn install
+
+      - name: YARN Build
+        run: |
+          yarn build
+
+      - name: "Docker Build"
+        run: |
+          docker build -t artifacts.developer.gov.bc.ca/pf08-tools/pidp-frontend:develop .
+
+      # Uses the builder service account token
+      - name: "Docker Login to artifactory"
+        uses: docker/login-action@v2
+        with:
+          registry: artifacts.developer.gov.bc.ca
+          username: default-f088b1-tfqvaw 
+          password: ${{ secrets.GOLD_TOOLS_BUILDER_TOKEN }}
+
+      - name: "Push image"
+        run: |
+          docker push artifacts.developer.gov.bc.ca/pf08-tools/pidp-frontend:develop
+      
+  deploy-frontend:
+    name: Frontend Deploy
+    runs-on: ubuntu-latest
+    needs: build-frontend
+    if: ${{ always() && !cancelled() }}
+    defaults:
+      run:
+        working-directory: "./charts/frontend"
+    steps:
+      - name: "Checkout Code"
+        uses: actions/checkout@master
+      
+      - name: Authenticate and set context
+        uses: redhat-actions/oc-login@v1.3
+        with:
+          openshift_server_url: ${{secrets.OPENSHIFT_GOLD_CLUSTER_URL}}
+          openshift_token: ${{secrets.GOLD_PIPELINE_SERVICE_ACCOUNT_TOKEN}}
+
+      - name: "Deploy frontend"
+        run: |
+          echo installing helm chart...
+          helm upgrade --wait --values ./values.yaml --namespace pf08-dev dev-frontend .
