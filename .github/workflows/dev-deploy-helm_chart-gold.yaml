@@ -1,4 +1,4 @@
-name: Deploy Helm Charts - Dev
+name: Deploy Helm Charts - GOLD Dev
 
 on:
   push:

@@ -1,4 +1,4 @@
-name: Build WebAPI - Dev
+name: Build WebAPI - GOLD Dev
 
 on:
   push:
@@ -27,15 +27,16 @@ jobs:
 
       - name: "Docker Build"
         run: |
-          docker build -t artifacts.developer.gov.bc.ca/tf08-tools/pidp-webapi:develop .
+          docker build -t artifacts.developer.gov.bc.ca/pf08-tools/pidp-webapi:develop .
 
-      # Uses the builder service account token
+      # Uses the Artifactory service account's username and password
       - name: "Docker Login to GOLD OCP"
         uses: docker/login-action@master
         with:
           registry: artifacts.developer.gov.bc.ca
-          username: default-f088b1-tfqvaw 
-          password: ${{ secrets.GOLD_TOOLS_BUILDER_TOKEN }}
+          username:  ${{ secrets.ARTIFACTORY_SERVICE_ACCOUNT_USERNAME }} 
+          password: ${{ secrets.ARTIFACTORY_SERVICE_ACCOUNT_PASSWORD }}
+
       - name: "Push image"
         run: |
           docker push artifacts.developer.gov.bc.ca/pf08-tools/pidp-webapi:develop

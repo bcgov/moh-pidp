@@ -1,4 +1,4 @@
-name: Build Frontend - Dev
+name: Build Frontend - GOLD Dev
 
 on:
   push:
@@ -41,13 +41,13 @@ jobs:
         run: |
           docker build -t artifacts.developer.gov.bc.ca/pf08-tools/pidp-frontend:develop .
 
-      # Uses the builder service account token
+      # Uses the Artifactory service account's username and password 
       - name: "Docker Login to artifactory"
         uses: docker/login-action@v2
         with:
           registry: artifacts.developer.gov.bc.ca
-          username: default-f088b1-tfqvaw 
-          password: ${{ secrets.GOLD_TOOLS_BUILDER_TOKEN }}
+          username: ${{ secrets.ARTIFACTORY_SERVICE_ACCOUNT_USERNAME }} 
+          password: ${{ secrets.ARTIFACTORY_SERVICE_ACCOUNT_PASSWORD }}
 
       - name: "Push image"
         run: |
