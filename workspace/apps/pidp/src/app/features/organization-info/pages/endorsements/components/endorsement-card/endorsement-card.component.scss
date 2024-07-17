@@ -29,24 +29,36 @@ p {
   justify-content: space-between;
   border: solid 1px pidp.$grey-30;
   border-radius: 4px;
+  max-width: 23.3125rem;
+  padding: 1.25rem;
+  height: 100%;
+
   & .content {
     margin-bottom: var(--gap);
     & .icon-box {
       padding: 0 var(--gap);
-      & mat-icon {
-        font-size: var(--icon-font-size);
-        height: var(--icon-font-size);
-        width: var(--icon-font-size);
-      }
+      border: 2px solid #fcba19;
+      border-radius: 50%;
+      width: 3.75rem;
+      height: 3.75rem;
+      margin-right: 1rem;
     }
     & h3 {
       margin: var(--gap) var(--gap) var(--gap) 0;
-      font-size: 1.25rem;
+      color: #036;
+      font-size: 1.125rem;
+      font-weight: 700;
       // Ensure long email addresses will wrap instead of making the card wider.
       word-break: break-all;
     }
+  }
+  & .second-row {
+    margin-bottom: 1.75rem;
     & .school-box {
-      padding-right: var(--gap);
+      color: #313132;
+      font-size: 1rem;
+      font-weight: 400;
+      line-height: 1.2rem;
     }
     & .extra-box-large {
       & .notice-box {
@@ -88,23 +100,27 @@ p {
     }
   }
   & .actions {
-    padding: 0 var(--gap) var(--gap);
     display: flex;
     justify-content: space-between;
 
-    & button.cancel {
-      border-color: pidp.$bcgov-color-primary;
-    }
+    & button.cancel,
     & button.approve {
-      color: #fff;
-      border-color: pidp.$green;
-      background-color: pidp.$green;
+      color: #036;
+      gap: var(--gap);
+      border-radius: 0.25rem;
+      border: 2px solid #036;
+      background: #fff;
+      max-width: 8.25rem;
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: 0.0625rem;
     }
   }
 }
 
 // mobile layout
 .viewport-xsmall {
+  max-width: 25.3125rem;
   & .content {
     display: grid;
     grid-template-columns: auto 1fr;
