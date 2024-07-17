@@ -47,6 +47,7 @@ export class CollegeLicenceInformationPage implements OnInit {
   public collegeCertifications$!: Observable<CollegeCertification[]>;
   public alerts: ProfileStatusAlert[] = [];
   public faAngleRight = faAngleRight;
+  public showCollegeLicenceDeclarationPage: boolean = false;
 
   public constructor(
     private route: ActivatedRoute,
@@ -65,6 +66,7 @@ export class CollegeLicenceInformationPage implements OnInit {
   }
 
   public ngOnInit(): void {
+    this.showCollegeLicenceDeclarationPage = this.route.snapshot.paramMap.get('showCollegeLicenceDeclarationPage') ? true : false;
     const partyId = this.partyService.partyId;
     if (!partyId) {
       this.logger.error('No party ID was provided');

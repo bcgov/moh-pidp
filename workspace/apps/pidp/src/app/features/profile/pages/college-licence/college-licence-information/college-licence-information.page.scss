@@ -39,6 +39,14 @@ $darkgrey: pidp.$bcgov-color-text;
     word-wrap: break-word;
   }
 
+  & .college-licence {
+    padding: var(--box-padding);
+    color: pidp.$bcgov-color-primary;;
+    font-weight: 600;
+    font-size: 50px;
+    padding-bottom: 20px;
+  }
+
   & .actions {
     margin-top: 20px;
     margin-bottom: 4rem;
@@ -189,12 +197,30 @@ $darkgrey: pidp.$bcgov-color-text;
   padding-top: 20px;
   padding-left: 0px !important;
   padding-bottom: 0px;
+  padding-top: 0px !important;
   & .header {
     padding: 6px 20px;
   }
 
   .breadcrumb {
     margin: 0px 20px 0px 20px;
+  }
+
+  & .college-licence {
+    padding: var(--box-padding);
+    color: pidp.$bcgov-color-primary;
+    margin-left: 15px;
+    font-weight: 600;
+    font-size: 25px !important;
+    padding-bottom: 0px !important;
+  }
+
+  & .college-licence-text {
+    padding-left: 1rem;
+  }
+
+  & .section-top {
+    padding-top: 0px;
   }
 
   & .info-box {

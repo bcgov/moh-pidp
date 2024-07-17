@@ -72,6 +72,7 @@ export class CollegeLicenceDeclarationPage
   public colleges: CollegeLookup[];
   public showOverlayOnSubmit = true;
   public licenceDeclarationFailed = false;
+  public disableSearch = false;
 
   public get showNurseValidationInfo(): boolean {
     const isNurse =
@@ -104,6 +105,7 @@ export class CollegeLicenceDeclarationPage
   public ngOnInit(): void {
     if(this.disableCollegeCode && this.disableCollegeLicenceNumber) {
       this.formState.disableCollegeLicenseForm();
+      this.disableSearch = true;
     }
     const partyId = this.partyService.partyId;
     if (!partyId) {
@@ -152,8 +154,8 @@ export class CollegeLicenceDeclarationPage
     this.stateService.setNamedState(PidpStateName.dashboard, newState);
 
     if (cpn) {
-      this.router.navigate(
-        [ProfileRoutes.routePath(ProfileRoutes.COLLEGE_LICENCE_INFO)],
+            this.router.navigate(
+        [ProfileRoutes.routePath(ProfileRoutes.COLLEGE_LICENCE_INFO), {showCollegeLicenceDeclarationPage: true}],
         { replaceUrl: true },
       );
     } else if (this.formState.collegeCode.value === 0) {

@@ -18,11 +18,24 @@
     </ul>
   </nav>
 </div>
-<div>
+<div *ngIf="showCollegeLicenceDeclarationPage">
   <app-college-licence-declaration [disableCollegeCode]=true [disableCollegeLicenceNumber]=true>
   </app-college-licence-declaration>
 </div>
-<section class="component-container container" uiPidpInjectViewportCss>
+<section class="component-container container section-top" uiPidpInjectViewportCss>
+  <div *ngIf="!showCollegeLicenceDeclarationPage">
+    <h3 class="college-licence">
+      College licence information
+    </h3>
+    <p class="college-licence-text">
+      Here you can view your licence information and status.
+      <span>
+        <p>
+          If any of this information is incorrect, please contact your regulatory college.
+        </p>
+      </span>
+    </p>
+  </div>
   <section *ngFor="let alert of alerts" class="alert-box section-box">
     <app-portal-alert
       [heading]="alert.heading"
@@ -80,7 +93,7 @@
   <div class="actions">
     <span>
       <button mat-stroked-button type="button" (click)="onBack()" color="primary">
-        Back
+        Home
       </button>
     </span>
   </div>
