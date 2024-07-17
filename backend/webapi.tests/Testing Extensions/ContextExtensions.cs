@@ -23,7 +23,7 @@ public static class ContextExtensions
     {
         var party = new Party();
         config?.Invoke(party);
-        if (!party.Credentials.Any())
+        if (party.Credentials.Count == 0)
         {
             party.Credentials.Add(new Credential { UserId = Guid.NewGuid() });
         }
