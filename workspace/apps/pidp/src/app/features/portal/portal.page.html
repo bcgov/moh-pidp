@@ -8,7 +8,10 @@
   </div>
   <div class="body-container">
     <div class="card-grid">
-      <div class="card">
+      <div
+        class="card"
+        (click)="navigateTo(ProfileRoutes.routePath(ProfileRoutes.ACCOUNT_LINKING))"
+        (keyup)="navigateTo(ProfileRoutes.routePath(ProfileRoutes.ACCOUNT_LINKING))">
         <img
           src="/assets/images/marcelo-leal-k7ll1hpdhFA-unsplash.jpg"
           alt="Profile Information"
@@ -16,14 +19,14 @@
         <div class="card-content">
           <p class="card-header">Linking Accounts</p>
           <p>Link different credentials together in OneHealthID</p>
-          <a
-            (click)="navigateTo(ProfileRoutes.routePath(ProfileRoutes.ACCOUNT_LINKING))">
-            <fa-icon [icon]="faArrowRight"></fa-icon> READ MORE
-          </a>
+          <a> <fa-icon [icon]="faArrowRight"></fa-icon> READ MORE </a>
         </div>
       </div>
 
-      <div class="card">
+      <div
+        class="card"
+        (click)="navigateTo(AccessRoutes.routePath(AccessRoutes.ACCESS_REQUESTS))"
+        (keyup)="navigateTo(AccessRoutes.routePath(AccessRoutes.ACCESS_REQUESTS))">
         <img
           src="/assets/images/online-marketing-hIgeoQjS_iE-unsplash.jpg"
           alt="Systems access for myself"
@@ -31,14 +34,14 @@
         <div class="card-content">
           <p class="card-header">Acquire Access</p>
           <p>Acquire healthcare system access for myself</p>
-          <a
-            (click)="navigateTo(AccessRoutes.routePath(AccessRoutes.ACCESS_REQUESTS))">
-            <fa-icon [icon]="faArrowRight"></fa-icon> READ MORE
-          </a>
+          <a> <fa-icon [icon]="faArrowRight"></fa-icon> READ MORE </a>
         </div>
       </div>
 
-      <div class="card">
+      <div
+        class="card"
+        (click)="navigateTo(OrganizationInfoRoutes.routePath(OrganizationInfoRoutes.ENDORSEMENTS))"
+        (keyup)="navigateTo(OrganizationInfoRoutes.routePath(OrganizationInfoRoutes.ENDORSEMENTS))">
         <img
           src="/assets/images/national-cancer-institute-KrsoedfRAf4-unsplash.jpg"
           alt="Interested in systems for others"
@@ -52,10 +55,7 @@
                 *ngIf="alerts.includes(AlertCode.PENDING_ENDORSEMENT_REQUEST)"
                 class="fa-duotone"
                 [icon]="faBell"></fa-icon
-              ><a
-                (click)="navigateTo(OrganizationInfoRoutes.routePath(OrganizationInfoRoutes.ENDORSEMENTS))">
-                READ MORE
-              </a></span
+              ><a> READ MORE </a></span
             ><a
               (click)="navigateTo(OrganizationInfoRoutes.routePath(OrganizationInfoRoutes.ENDORSEMENTS))"
               ><fa-icon [icon]="faArrowRight"></fa-icon
