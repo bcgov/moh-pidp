@@ -1,12 +1,13 @@
-import { TestBed } from '@angular/core/testing';
+/* eslint-disable @typescript-eslint/no-explicit-any */import { TestBed } from '@angular/core/testing';
 import { randTextRange } from '@ngneat/falso';
 
 import { UserAccessAgreementDocumentComponent } from './user-access-agreement-document.component';
 import { ActivatedRoute } from '@angular/router';
+import { of } from 'rxjs';
 
 describe('UserAccessAgreementDocumentComponent', () => {
   let component: UserAccessAgreementDocumentComponent;
-  let mockActivatedRoute: { snapshot: any };
+  let mockActivatedRoute: { snapshot: any; queryParams: any };
 
   beforeEach(() => {
     mockActivatedRoute = {
@@ -18,6 +19,7 @@ describe('UserAccessAgreementDocumentComponent', () => {
           },
         },
       },
+      queryParams: of({ param1: 'value1' }),
     };
     TestBed.configureTestingModule({
       providers: [UserAccessAgreementDocumentComponent,
