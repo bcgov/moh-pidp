@@ -1,15 +1,20 @@
-import { NgIf, NgTemplateOutlet } from '@angular/common';
+import { NgIf, NgOptimizedImage } from '@angular/common';
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { Router } from '@angular/router';
 
 import { catchError, noop, of, tap } from 'rxjs';
 
-import { faAngleRight, faCircleCheck, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import {
+  faAngleRight,
+  faCircleCheck,
+  faXmark,
+} from '@fortawesome/free-solid-svg-icons';
 import { NavigationService } from '@pidp/presentation';
 
 import { NoContent } from '@bcgov/shared/data-access';
@@ -28,13 +33,12 @@ import { NeedHelpComponent } from '@app/shared/components/need-help/need-help.co
 import { DialogBcproviderEditComponent } from '@app/shared/components/success-dialog/components/dialog-bcprovider-edit.component';
 import { SuccessDialogComponent } from '@app/shared/components/success-dialog/success-dialog.component';
 
+import { AccessRoutes } from '../../access.routes';
 import { BcProviderEditFormState } from './bc-provider-edit-form-state';
 import {
   BcProviderChangePasswordRequest,
   BcProviderEditResource,
 } from './bc-provider-edit-resource.service';
-import { Router } from '@angular/router';
-import { AccessRoutes } from '../../access.routes';
 
 export interface BcProviderEditInitialStateModel {
   bcProviderId: string;
@@ -53,10 +57,10 @@ export interface BcProviderEditInitialStateModel {
     MatInputModule,
     NeedHelpComponent,
     NgIf,
-    NgTemplateOutlet,
     ReactiveFormsModule,
     SuccessDialogComponent,
     TextButtonDirective,
+    NgOptimizedImage,
   ],
 })
 export class BcProviderEditPage

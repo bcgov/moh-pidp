@@ -38,6 +38,7 @@
     }
   }
   & .mobile-image {
+    position: relative;
     & img {
       display: block !important;
       max-width: 100%;
@@ -45,8 +46,20 @@
       position: relative !important;
     }
   }
+  & .username {
+    & .username-overflow {
+      overflow-wrap: break-word;
+    }
+  }
   & .form-card {
     display: block !important;
+    & .form-content {
+      & .field {
+        & .mat-mdc-form-field {
+          margin-bottom: 18px !important;
+        }
+      }
+    }
   }
   & .password-splash {
     & .password-splash-content {
@@ -55,6 +68,18 @@
       }
       & .image {
         display: none !important;
+      }
+    }
+  }
+}
+
+.viewport-small {
+  .form-card {
+    & .form-content {
+      & .field {
+        & .mat-mdc-form-field {
+          margin-bottom: 18px !important;
+        }
       }
     }
   }
@@ -73,7 +98,7 @@
   --password-splash-display: unset;
   --password-splash: {
     flex: 1;
-  }
+  };
 }
 
 .viewport-medium,

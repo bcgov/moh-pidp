@@ -76,7 +76,7 @@ ol {
   --password-splash-display: unset;
   --password-splash: {
     flex: 1;
-  }
+  };
 }
 .viewport-large {
   --header-margin: var(--gap) 0 0;
@@ -499,6 +499,13 @@ ol {
   }
   & .form-card {
     display: block !important;
+    & .form-content {
+      & .field {
+        & .mat-mdc-form-field {
+          margin-bottom: 18px !important;
+        }
+      }
+    }
   }
   & .password-splash {
     & .password-splash-content {
