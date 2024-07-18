@@ -8,6 +8,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { EMPTY, Observable } from 'rxjs';
 
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { faAngleRight } from '@fortawesome/free-solid-svg-icons';
+
 import {
   AlertActionsDirective,
   AlertComponent,
@@ -34,6 +37,7 @@ import { PartyService } from '@app/core/party/party.service';
 import { LoggerService } from '@app/core/services/logger.service';
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
 
+import { AccessRoutes } from '../../access.routes';
 import {
   hcimWebUrl,
   healthNetBcAdminEmail,
@@ -48,9 +52,6 @@ import {
   HcimAccountTransferResponse,
   HcimAccountTransferStatusCode,
 } from './hcim-account-transfer-resource.service';
-import { faAngleRight } from '@fortawesome/free-solid-svg-icons';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { AccessRoutes } from '../../access.routes';
 
 @Component({
   selector: 'app-hcim-account-transfer',

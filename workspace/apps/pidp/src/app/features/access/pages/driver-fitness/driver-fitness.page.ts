@@ -6,6 +6,8 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
 import { catchError, noop, of, tap } from 'rxjs';
 
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { faAngleRight } from '@fortawesome/free-solid-svg-icons';
 import {
   LOADING_OVERLAY_DEFAULT_MESSAGE,
   LoadingOverlayService,
@@ -23,6 +25,7 @@ import { LoggerService } from '@app/core/services/logger.service';
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
 import { ApplicationService } from '@app/features/shell/services/application.service';
 
+import { AccessRoutes } from '../../access.routes';
 import { EnrolmentErrorComponent } from '../../components/enrolment-error/enrolment-error.component';
 import { DriverFitnessResource } from './driver-fitness-resource.service';
 import {
@@ -30,9 +33,6 @@ import {
   driverFitnessUrl,
   medicalPractitionerPortalUrl,
 } from './driver-fitness.constants';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { faAngleRight } from '@fortawesome/free-solid-svg-icons';
-import { AccessRoutes } from '../../access.routes';
 
 @Component({
   selector: 'app-driver-fitness',

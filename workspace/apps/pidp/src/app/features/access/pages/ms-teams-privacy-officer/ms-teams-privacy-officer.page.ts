@@ -9,6 +9,8 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
 import { EMPTY, catchError, noop, of, tap } from 'rxjs';
 
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { faAngleRight } from '@fortawesome/free-solid-svg-icons';
 import { LoadingOverlayService } from '@pidp/presentation';
 
 import { NoContent } from '@bcgov/shared/data-access';
@@ -31,13 +33,11 @@ import { UtilsService } from '@app/core/services/utils.service';
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
 import { AddressFormComponent } from '@app/shared/components/address-form/address-form.component';
 
+import { AccessRoutes } from '../../access.routes';
 import { EnrolmentErrorComponent } from '../../components/enrolment-error/enrolment-error.component';
 import { MsTeamsPrivacyOfficerFormState } from './ms-teams-privacy-officer-form-state';
 import { MsTeamsPrivacyOfficerResource } from './ms-teams-privacy-officer-resource.service';
 import { msTeamsSupportEmail } from './ms-teams.constants';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { faAngleRight } from '@fortawesome/free-solid-svg-icons';
-import { AccessRoutes } from '../../access.routes';
 
 @Component({
   selector: 'app-ms-teams',

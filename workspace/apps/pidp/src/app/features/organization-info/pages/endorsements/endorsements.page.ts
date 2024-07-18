@@ -96,7 +96,7 @@ export enum EndorsementType {
     NgIf,
     PageFooterActionDirective,
     ReactiveFormsModule,
-    TextButtonDirective
+    TextButtonDirective,
   ],
 })
 export class EndorsementsPage

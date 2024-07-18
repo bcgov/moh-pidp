@@ -6,6 +6,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { catchError, noop, of, tap } from 'rxjs';
 
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { faAngleRight } from '@fortawesome/free-solid-svg-icons';
+
 import {
   AlertComponent,
   AlertContentDirective,
@@ -27,15 +30,13 @@ import { DocumentService } from '@app/core/services/document.service';
 import { LoggerService } from '@app/core/services/logger.service';
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
 
+import { AccessRoutes } from '../../access.routes';
 import { EnrolmentErrorComponent } from '../../components/enrolment-error/enrolment-error.component';
 import { PrescriptionRefillEformsResource } from './prescription-refill-eforms-resource.service';
 import {
   prescriptionRefillRequestEformsSupportEmail,
   prescriptionRefillRequestEformsUrl,
 } from './prescription-refill-eforms.constants';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { faAngleRight } from '@fortawesome/free-solid-svg-icons';
-import { AccessRoutes } from '../../access.routes';
 
 @Component({
   selector: 'app-prescription-refill-eforms',

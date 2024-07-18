@@ -17,6 +17,9 @@ import {
   tap,
 } from 'rxjs';
 
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { faAngleRight } from '@fortawesome/free-solid-svg-icons';
+
 import {
   ContactFormComponent,
   InjectViewportCssClassDirective,
@@ -52,9 +55,6 @@ import { PersonalInformationFormState } from './personal-information-form-state'
 import { PersonalInformationResource } from './personal-information-resource.service';
 import { PersonalInformation } from './personal-information.model';
 
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { faAngleRight } from '@fortawesome/free-solid-svg-icons';
-
 @Component({
   selector: 'app-personal-information',
   templateUrl: './personal-information.page.html',
@@ -79,7 +79,7 @@ import { faAngleRight } from '@fortawesome/free-solid-svg-icons';
     PreferredNameFormComponent,
     ToggleContentComponent,
     UserInfoComponent,
-    TextButtonDirective
+    TextButtonDirective,
   ],
 })
 export class PersonalInformationPage

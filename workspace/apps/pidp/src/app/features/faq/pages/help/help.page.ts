@@ -16,7 +16,7 @@ import {
   PageHeaderComponent,
   PageSectionComponent,
   PageSectionSubheaderComponent,
-  TextButtonDirective
+  TextButtonDirective,
 } from '@bcgov/shared/ui';
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';

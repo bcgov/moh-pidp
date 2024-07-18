@@ -31,13 +31,13 @@ import { StatusCode } from '@app/features/portal/enums/status-code.enum';
 import { ProfileStatus } from '@app/features/portal/models/profile-status.model';
 import { PortalResource } from '@app/features/portal/portal-resource.service';
 
+import { AccessRoutes } from '../../access.routes';
 import { BcProviderEditResource } from '../bc-provider-edit/bc-provider-edit-resource.service';
 import { BcProviderEditInitialStateModel } from '../bc-provider-edit/bc-provider-edit.page';
 import {
   bcProviderTutorialLink,
   provincialAttachmentSystemWebsite,
 } from './provincial-attachment-system.constants';
-import { AccessRoutes } from '../../access.routes';
 
 @Component({
   selector: 'app-provincial-attachment-system',
