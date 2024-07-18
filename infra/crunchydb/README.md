@@ -25,7 +25,7 @@
 
 2. Zip the files using gzip command in the old pod
 
-<code>gzip -9 {outputDirectory/DB_Name.sql}</code>
+<code>gzip -9 {/outputDirectory/DB_Name.sql}</code>
 
 3. Copy zip files from the old pod to the local directory on your machine. In terminal on your local machine, run:
 

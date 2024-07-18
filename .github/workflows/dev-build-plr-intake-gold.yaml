@@ -57,7 +57,7 @@ jobs:
         uses: redhat-actions/oc-login@v1.3
         with:
           openshift_server_url: ${{secrets.GOLD_OPENSHIFT_CLUSTER_URL}}
-          openshift_token: ${{secrets.OPENSHIFT_PIPELINE_SERVICE_ACCOUNT_TOKEN}}
+          openshift_token: ${{secrets.GOLD_DEV_SERVICE_TOKEN}}
       
       - name: "Deploy PLR Intake"
         run: |
