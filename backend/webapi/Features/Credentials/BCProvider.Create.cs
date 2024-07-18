@@ -64,7 +64,7 @@ public class BCProviderCreate
                     party.Cpn,
                     party.Email,
                     HasBCProviderCredential = party.Credentials.Any(credential => credential.IdentityProvider == IdentityProviders.BCProvider),
-                    Hpdid = party.Credentials.Select(credential => credential.Hpdid).Single(hpdid => hpdid != null),
+                    Hpdid = party.Credentials.SingleOrDefault(credential => credential.IdentityProvider == IdentityProviders.BCServicesCard)!.IdpId,
                     UaaAgreementDate = party.AccessRequests
                         .Where(request => request.AccessTypeCode == AccessTypeCode.UserAccessAgreement)
                         .Select(request => request.RequestedOn)
