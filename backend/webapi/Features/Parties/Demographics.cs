@@ -63,16 +63,10 @@ public class Demographics
         }
     }
 
-    public class QueryHandler : IQueryHandler<Query, Command>
+    public class QueryHandler(IMapper mapper, PidpDbContext context) : IQueryHandler<Query, Command>
     {
-        private readonly IMapper mapper;
-        private readonly PidpDbContext context;
-
-        public QueryHandler(IMapper mapper, PidpDbContext context)
-        {
-            this.mapper = mapper;
-            this.context = context;
-        }
+        private readonly IMapper mapper = mapper;
+        private readonly PidpDbContext context = context;
 
         public async Task<Command> HandleAsync(Query query)
         {
@@ -83,11 +77,9 @@ public class Demographics
         }
     }
 
-    public class CommandHandler : ICommandHandler<Command>
+    public class CommandHandler(PidpDbContext context) : ICommandHandler<Command>
     {
-        private readonly PidpDbContext context;
-
-        public CommandHandler(PidpDbContext context) => this.context = context;
+        private readonly PidpDbContext context = context;
 
         public async Task HandleAsync(Command command)
         {
@@ -95,8 +87,7 @@ public class Demographics
                 .Include(party => party.Credentials)
                 .SingleAsync(party => party.Id == command.Id);
 
-            if (party.Email != null
-                && party.Email != command.Email)
+            if (party.Email != command.Email)
             {
                 party.DomainEvents.Add(new PartyEmailUpdated(party.Id, party.PrimaryUserId, command.Email!));
             }
@@ -111,11 +102,9 @@ public class Demographics
         }
     }
 
-    public class PartyEmailUpdatedHandler : INotificationHandler<PartyEmailUpdated>
+    public class PartyEmailUpdatedHandler(IBus bus) : INotificationHandler<PartyEmailUpdated>
     {
-        private readonly IBus bus;
-
-        public PartyEmailUpdatedHandler(IBus bus) => this.bus = bus;
+        private readonly IBus bus = bus;
 
         public async Task Handle(PartyEmailUpdated notification, CancellationToken cancellationToken)
         {
@@ -126,24 +115,16 @@ public class Demographics
         }
     }
 
-    public class PartyEmailUpdatedBcProviderConsumer : IConsumer<PartyEmailUpdated>
+    public class PartyEmailUpdatedBcProviderConsumer(
+        IBCProviderClient client,
+        PidpConfiguration config,
+        PidpDbContext context,
+        ILogger<PartyEmailUpdatedBcProviderConsumer> logger) : IConsumer<PartyEmailUpdated>
     {
-        private readonly IBCProviderClient client;
-        private readonly PidpDbContext context;
-        private readonly string bcProviderClientId;
-        private readonly ILogger<PartyEmailUpdatedBcProviderConsumer> logger;
-
-        public PartyEmailUpdatedBcProviderConsumer(
-            IBCProviderClient client,
-            PidpConfiguration config,
-            PidpDbContext context,
-            ILogger<PartyEmailUpdatedBcProviderConsumer> logger)
-        {
-            this.client = client;
-            this.context = context;
-            this.bcProviderClientId = config.BCProviderClient.ClientId;
-            this.logger = logger;
-        }
+        private readonly IBCProviderClient client = client;
+        private readonly PidpDbContext context = context;
+        private readonly string bcProviderClientId = config.BCProviderClient.ClientId;
+        private readonly ILogger<PartyEmailUpdatedBcProviderConsumer> logger = logger;
 
         public async Task Consume(ConsumeContext<PartyEmailUpdated> context)
         {
