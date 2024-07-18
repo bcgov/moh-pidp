@@ -73,18 +73,6 @@
   }
 }
 
-.viewport-small {
-  .form-card {
-    & .form-content {
-      & .field {
-        & .mat-mdc-form-field {
-          margin-bottom: 18px !important;
-        }
-      }
-    }
-  }
-}
-
 .viewport-all {
   --header-margin: unset;
   --avatar-size: 4rem;
@@ -365,6 +353,16 @@
 
   span {
     font-size: 0.9rem;
+  }
+
+  .form-card {
+    & .form-content {
+      & .field {
+        & .mat-mdc-form-field {
+          margin-bottom: 18px !important;
+        }
+      }
+    }
   }
 }
 
