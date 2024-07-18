@@ -23,7 +23,6 @@ import {
 import { PartyService } from '@app/core/party/party.service';
 import { LoggerService } from '@app/core/services/logger.service';
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
-import { ApplicationService } from '@app/features/shell/services/application.service';
 
 import { AccessRoutes } from '../../access.routes';
 import { EnrolmentErrorComponent } from '../../components/enrolment-error/enrolment-error.component';
@@ -68,7 +67,6 @@ export class DriverFitnessPage implements OnInit {
     private partyService: PartyService,
     private resource: DriverFitnessResource,
     private logger: LoggerService,
-    private applicationService: ApplicationService,
   ) {
     const routeData = this.route.snapshot.data;
     this.driverFitnessUrl = driverFitnessUrl;
@@ -99,40 +97,26 @@ export class DriverFitnessPage implements OnInit {
 
   public onRequestAccess(): void {
     this.loadingOverlayService.open(LOADING_OVERLAY_DEFAULT_MESSAGE);
-    this.resource
-      .requestAccess(this.partyService.partyId)
-      .pipe(
-        tap(() => {
-          this.completed = true;
-          this.loadingOverlayService.close();
-          this.enrolmentError = false;
-        }),
-        catchError((error: HttpErrorResponse) => {
-          this.loadingOverlayService.close();
-          if (error.status === HttpStatusCode.BadRequest) {
-            this.completed = false;
-            this.enrolmentError = true;
-            return of(noop());
-          }
-          this.accessRequestFailed = true;
+    this.resource.requestAccess(this.partyService.partyId).pipe(
+      tap(() => {
+        this.completed = true;
+        this.loadingOverlayService.close();
+        this.enrolmentError = false;
+      }),
+      catchError((error: HttpErrorResponse) => {
+        this.loadingOverlayService.close();
+        if (error.status === HttpStatusCode.BadRequest) {
+          this.completed = false;
+          this.enrolmentError = true;
           return of(noop());
-        }),
-      )
-      .subscribe((_) => {
-        if (this.completed) {
-          this.onAccessGranted();
         }
-      });
+        this.accessRequestFailed = true;
+        return of(noop());
+      }),
+    );
   }
   public navigateTo(path: string): void {
     this.router.navigateByUrl(path);
-  }
-
-  private onAccessGranted(): void {
-    this.applicationService.setDashboardTitleText(
-      'Enrolment Completed',
-      'Your information has been submitted successfully',
-    );
   }
 
   private navigateToRoot(): void {

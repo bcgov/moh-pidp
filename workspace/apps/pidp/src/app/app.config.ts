@@ -25,7 +25,4 @@ export const APP_DI_CONFIG: AppConfig = {
     portal: PortalRoutes.BASE_PATH,
     admin: AdminRoutes.BASE_PATH,
   },
-  featureFlags: {
-    isLayoutV2Enabled: true,
-  },
 };
