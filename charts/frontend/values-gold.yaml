@@ -7,7 +7,7 @@ global:
   commit_sha: ""
   image:
     registry: artifacts.developer.gov.bc.ca/pf08-tools
-    tag: latest
+    tag: develop
 
 replicaCount: 1
 
@@ -15,7 +15,7 @@ image:
   repository: pidp-frontend
   pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "latest"
+  tag: "develop"
 
 imagePullSecrets: [{name : artifacts-pull-default-kksxew}]
   
@@ -62,7 +62,7 @@ ingress:
     # kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
   hosts:
-    - host: pip-frontend-test.apps.silver.devops.gov.bc.ca
+    - host: pip-frontend-dev.apps.gold.devops.gov.bc.ca
       paths:
         - path: /
           pathType: ImplementationSpecific

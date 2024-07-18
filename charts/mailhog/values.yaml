@@ -1,12 +1,12 @@
 image:
-  repository: artifacts.developer.gov.bc.ca/pf08-tools/mailhog
-  tag: "latest"
+  repository: docker.io/mailhog/mailhog
+  tag: ""
   pullPolicy: IfNotPresent
 
-imagePullSecrets: [{name : artifacts-pull-default-kksxew}]
+imagePullSecrets: []
 
 nameOverride: ""
-fullnameOverride: "mailhog"
+fullnameOverride: ""
 
 serviceAccount:
   # Specifies whether a ServiceAccount should be created
@@ -106,11 +106,11 @@ resources:
   # resources, such as Minikube. If you do want to specify resources, uncomment the following
   # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
   limits:
-    cpu: 50m
-    memory: 256Mi
+    cpu: 30m
+    memory: 128Mi
   requests:
     cpu: 15m
-    memory: 128Mi
+    memory: 100Mi
 
 affinity: {}
 
