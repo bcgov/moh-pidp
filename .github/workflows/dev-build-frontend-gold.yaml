@@ -2,16 +2,12 @@ name: Build Frontend - GOLD Dev
 
 on:
   push:
-    branches: [develop]
-    paths:
-      - "workspace/**"
-      - "charts/frontend"
+    branches: [SILVER-TO-GOLD]
+    #paths:
+     # - "workspace/**"
+      #- "charts/frontend"
   workflow_dispatch:
-  pull_request:
-    types: [opened]
-    branches-ignore:
-      - 'test'
-      - 'master'
+
 
 # This will terminate builds that are previously, but continuing to run.  Saves GHA hours.
 concurrency:
