@@ -68,10 +68,10 @@ jobs:
       - name: Authenticate and set context
         uses: redhat-actions/oc-login@v1.3
         with:
-          openshift_server_url: ${{secrets.OPENSHIFT_GOLD_CLUSTER_URL}}
-          openshift_token: ${{secrets.GOLD_PIPELINE_SERVICE_ACCOUNT_TOKEN}}
+          openshift_server_url: ${{secrets.GOLD_OPENSHIFT_CLUSTER_URL}}
+          openshift_token: ${{secrets.OPENSHIFT_PIPELINE_SERVICE_ACCOUNT_TOKEN}}
 
       - name: "Deploy frontend"
         run: |
-          echo installing helm chart...
-          helm upgrade --wait --values ./values.yaml --namespace pf08-dev dev-frontend .
+          echo installing frontend helm chart in f088b1-dev...
+          helm upgrade --wait --values ./values.yaml --namespace f088b1-dev dev-frontend .

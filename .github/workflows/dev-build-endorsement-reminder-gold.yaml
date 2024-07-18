@@ -53,11 +53,11 @@ jobs:
       - name: Authenticate and set context
         uses: redhat-actions/oc-login@v1.3
         with:
-          openshift_server_url: ${{secrets.OPENSHIFT_GOLD_CLUSTER_URL}}
-          openshift_token: ${{secrets.GOLD_PIPELINE_SERVICE_ACCOUNT_TOKEN}}
+          openshift_server_url: ${{secrets.GOLD_OPENSHIFT_CLUSTER_URL}}
+          openshift_token: ${{secrets.OPENSHIFT_PIPELINE_SERVICE_ACCOUNT_TOKEN}}
 
       - name: "Deploy Webapi"
         run: |
-          echo installing helm chart...
-          helm upgrade --wait --values ./values-dev.yaml --namespace pf08-dev endorsement-reminder .   
+          echo installing endorsement-reminder helm chart in f088b1-dev...
+          helm upgrade --wait --values ./values-dev.yaml --namespace f088b1-dev endorsement-reminder .   
 
