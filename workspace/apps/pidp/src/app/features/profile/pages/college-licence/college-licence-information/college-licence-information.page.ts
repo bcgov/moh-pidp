@@ -66,7 +66,7 @@ export class CollegeLicenceInformationPage implements OnInit {
   }
 
   public ngOnInit(): void {
-    this.showCollegeLicenceDeclarationPage = this.route.snapshot.paramMap.get('showCollegeLicenceDeclarationPage') ? true : false;
+    this.showCollegeLicenceDeclarationPage = this.route.snapshot.paramMap.get('showCollegeLicenceDeclarationPage') === 'true';
     const partyId = this.partyService.partyId;
     if (!partyId) {
       this.logger.error('No party ID was provided');

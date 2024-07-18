@@ -4,7 +4,6 @@ $darkgrey: pidp.$bcgov-color-text;
 
 .viewport-all {
   flex: 1;
-  padding-left: 0px;
   .header {
     background-color: $lightgrey;
   }
@@ -41,7 +40,7 @@ $darkgrey: pidp.$bcgov-color-text;
 
   & .college-licence {
     padding: var(--box-padding);
-    color: pidp.$bcgov-color-primary;;
+    color: pidp.$bcgov-color-primary;
     font-weight: 600;
     font-size: 50px;
     padding-bottom: 20px;
@@ -57,7 +56,7 @@ $darkgrey: pidp.$bcgov-color-text;
       font-weight: 700;
     }
   }
-  padding: 1.25rem 0.75rem;
+  padding: 1.25rem 0.75rem 0px 0px;
 
   .card-header-icon {
     display: flex;
@@ -194,7 +193,6 @@ $darkgrey: pidp.$bcgov-color-text;
   display: flex;
   flex-direction: column;
   max-width: 640px;
-  padding-top: 20px;
   padding-left: 0px !important;
   padding-bottom: 0px;
   padding-top: 0px !important;
