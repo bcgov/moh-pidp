@@ -14,7 +14,9 @@ using Pidp.Models;
 public class ThirdPartyintegrationsController : PidpControllerBase
 {
     private readonly PidpDbContext context;
-    public ThirdPartyintegrationsController(IPidpAuthorizationService authorizationService) : base(authorizationService) { }
+    public ThirdPartyintegrationsController(IPidpAuthorizationService authorizationService, PidpDbContext context) : base(authorizationService) {
+        this.context = context;
+    }
 
     [HttpGet("parties/{hpdid}/endorsements")]
     [Authorize(Roles = Roles.ViewEndorsements)]
