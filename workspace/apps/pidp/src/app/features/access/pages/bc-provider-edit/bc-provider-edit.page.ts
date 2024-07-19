@@ -7,14 +7,21 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { Router } from '@angular/router';
 
-import { catchError, noop, of, tap } from 'rxjs';
+import { EMPTY, Observable, catchError, exhaustMap, noop, of, tap } from 'rxjs';
 
 import { faCircleCheck, faXmark } from '@fortawesome/free-solid-svg-icons';
-import { NavigationService } from '@pidp/presentation';
+import {
+  LOADING_OVERLAY_DEFAULT_MESSAGE,
+  LoadingOverlayService,
+  NavigationService,
+} from '@pidp/presentation';
 
 import { NoContent } from '@bcgov/shared/data-access';
 import {
+  ConfirmDialogComponent,
   CrossFieldErrorMatcher,
+  DialogOptions,
+  HtmlComponent,
   InjectViewportCssClassDirective,
   TextButtonDirective,
 } from '@bcgov/shared/ui';
@@ -87,6 +94,7 @@ export class BcProviderEditPage
     private partyService: PartyService,
     private resource: BcProviderEditResource,
     private router: Router,
+    private loadingOverlayService: LoadingOverlayService,
   ) {
     super(dependenciesService);
     this.formState = new BcProviderEditFormState(fb);
@@ -102,7 +110,28 @@ export class BcProviderEditPage
   }
 
   public onResetMfa(): void {
-    console.log('Reset MFA');
+    const data: DialogOptions = {
+      title: 'Multi-factor authentication (MFA) reset',
+      bottomBorder: false,
+      titlePosition: 'center',
+      bodyTextPosition: 'center',
+      component: HtmlComponent,
+      data: {
+        content:
+          'At your request we are about to reset your MFA, this action cannot be undone. Are you sure you want to do this?',
+      },
+      imageSrc: '/assets/images/online-marketing-hIgeoQjS_iE-unsplash.jpg',
+      imageType: 'banner',
+      width: '31rem',
+      height: '24rem',
+      actionText: 'Continue',
+      actionTypePosition: 'center',
+    };
+    this.dialog
+      .open(ConfirmDialogComponent, { data })
+      .afterClosed()
+      .pipe(exhaustMap((result) => (result ? this.resetMfa() : EMPTY)))
+      .subscribe();
   }
 
   public onLearnMore(): void {
@@ -134,6 +163,13 @@ export class BcProviderEditPage
         return of(noop());
       }),
     );
+  }
+
+  private resetMfa(): Observable<void | null> {
+    this.loadingOverlayService.open(LOADING_OVERLAY_DEFAULT_MESSAGE);
+    console.log('Resetting MFA');
+    this.loadingOverlayService.close();
+    return of(null);
   }
 
   private showSuccessDialog(): void {
