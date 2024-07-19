@@ -1,5 +1,6 @@
 <app-nav-menu
-  [dashboardState]="(dashboardState$ | async)!"
+  [alerts]="(alerts$ | async)!"
+  [collegeRoute]="collegeRoute"
   [emailSupport]="providerIdentitySupport"
   [menuItems]="menuItems"
   (logout)="onLogout()">

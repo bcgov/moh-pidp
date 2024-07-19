@@ -20,7 +20,6 @@ import {
 import { PartyService } from '@app/core/party/party.service';
 import { LoggerService } from '@app/core/services/logger.service';
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
-import { ApplicationService } from '@app/features/shell/services/application.service';
 
 import { EnrolmentErrorComponent } from '../../components/enrolment-error/enrolment-error.component';
 import { DriverFitnessResource } from './driver-fitness-resource.service';
@@ -60,7 +59,6 @@ export class DriverFitnessPage implements OnInit {
     private partyService: PartyService,
     private resource: DriverFitnessResource,
     private logger: LoggerService,
-    private applicationService: ApplicationService,
   ) {
     const routeData = this.route.snapshot.data;
     this.driverFitnessUrl = driverFitnessUrl;
@@ -110,17 +108,7 @@ export class DriverFitnessPage implements OnInit {
           return of(noop());
         }),
       )
-      .subscribe((_) => {
-        if (this.completed) {
-          this.onAccessGranted();
-        }
-      });
-  }
-  private onAccessGranted(): void {
-    this.applicationService.setDashboardTitleText(
-      'Enrolment Completed',
-      'Your information has been submitted successfully',
-    );
+      .subscribe();
   }
 
   private navigateToRoot(): void {

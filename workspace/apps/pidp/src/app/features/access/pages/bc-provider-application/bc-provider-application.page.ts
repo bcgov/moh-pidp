@@ -28,6 +28,7 @@ import {
   Observable,
   catchError,
   exhaustMap,
+  map,
   of,
   switchMap,
   tap,
@@ -68,11 +69,6 @@ import { AuthRoutes } from '@app/features/auth/auth.routes';
 import { IdentityProvider } from '@app/features/auth/enums/identity-provider.enum';
 import { AuthService } from '@app/features/auth/services/auth.service';
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
-import {
-  DashboardStateModel,
-  PidpStateName,
-} from '@app/features/portal/models/state.model';
-import { AppStateService } from '@app/features/shell/services/app-state.service';
 import { NeedHelpComponent } from '@app/shared/components/need-help/need-help.component';
 import { DialogBcproviderCreateComponent } from '@app/shared/components/success-dialog/components/dialog-bcprovider-create.component';
 import { SuccessDialogComponent } from '@app/shared/components/success-dialog/success-dialog.component';
@@ -123,9 +119,9 @@ export class BcProviderApplicationPage
   public errorMatcher = new CrossFieldErrorMatcher();
   public componentType = DialogBcproviderCreateComponent;
 
-  public activeLayout: 'upliftAccount' | 'createAccount' | '';
+  public fullName$!: Observable<string>;
 
-  public dashboardState$: Observable<DashboardStateModel>;
+  public activeLayout: 'upliftAccount' | 'createAccount' | '';
 
   @ViewChild('successDialog')
   public successDialogTemplate!: TemplateRef<Element>;
@@ -147,7 +143,6 @@ export class BcProviderApplicationPage
     private resource: BcProviderApplicationResource,
     private route: ActivatedRoute,
     private utilsService: UtilsService,
-    private stateService: AppStateService,
   ) {
     super(dependenciesService);
     this.formState = new BcProviderApplicationFormState(fb);
@@ -156,10 +151,6 @@ export class BcProviderApplicationPage
       routeData.bcProviderApplicationStatusCode == StatusCode.COMPLETED;
 
     this.activeLayout = '';
-
-    this.dashboardState$ = this.stateService.getNamedStateBroadcast(
-      PidpStateName.dashboard,
-    );
   }
 
   public onBack(): void {
@@ -207,6 +198,15 @@ export class BcProviderApplicationPage
       this.logger.error('No status code was provided');
       return this.navigationService.navigateToRoot();
     }
+
+    this.fullName$ = this.resource
+      .getProfileStatus(this.partyService.partyId)
+      .pipe(
+        map(
+          (profileStatus) =>
+            profileStatus?.status.dashboardInfo.displayFullName ?? '',
+        ),
+      );
   }
 
   protected performSubmission(): Observable<string | void> {

@@ -48,10 +48,11 @@
           <p>Grant healthcare system access for others</p>
           <div class="card-footer">
             <span class="content-with-alert"
-              ><fa-icon
-                *ngIf="alerts.includes(AlertCode.PENDING_ENDORSEMENT_REQUEST)"
-                class="fa-duotone"
-                [icon]="faBell"></fa-icon
+              ><ng-container *ngIf="alerts$ | async as alerts"
+                ><fa-icon
+                  *ngIf="alerts.includes(AlertCode.PENDING_ENDORSEMENT_REQUEST)"
+                  class="fa-duotone"
+                  [icon]="faBell"></fa-icon></ng-container
               ><a
                 (click)="navigateTo(OrganizationInfoRoutes.routePath(OrganizationInfoRoutes.ENDORSEMENTS))">
                 READ MORE
