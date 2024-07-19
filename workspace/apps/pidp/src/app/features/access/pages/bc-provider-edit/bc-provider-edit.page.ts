@@ -5,6 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { Router } from '@angular/router';
 
 import { catchError, noop, of, tap } from 'rxjs';
 
@@ -15,6 +16,7 @@ import { NoContent } from '@bcgov/shared/data-access';
 import {
   CrossFieldErrorMatcher,
   InjectViewportCssClassDirective,
+  TextButtonDirective,
 } from '@bcgov/shared/ui';
 
 import {
@@ -22,6 +24,7 @@ import {
   AbstractFormPage,
 } from '@app/core/classes/abstract-form-page.class';
 import { PartyService } from '@app/core/party/party.service';
+import { FaqRoutes } from '@app/features/faq/faq.routes';
 import { NeedHelpComponent } from '@app/shared/components/need-help/need-help.component';
 import { DialogBcproviderEditComponent } from '@app/shared/components/success-dialog/components/dialog-bcprovider-edit.component';
 import { SuccessDialogComponent } from '@app/shared/components/success-dialog/success-dialog.component';
@@ -51,6 +54,7 @@ export interface BcProviderEditInitialStateModel {
     ReactiveFormsModule,
     SuccessDialogComponent,
     NgOptimizedImage,
+    TextButtonDirective,
   ],
 })
 export class BcProviderEditPage
@@ -82,6 +86,7 @@ export class BcProviderEditPage
     private navigationService: NavigationService,
     private partyService: PartyService,
     private resource: BcProviderEditResource,
+    private router: Router,
   ) {
     super(dependenciesService);
     this.formState = new BcProviderEditFormState(fb);
@@ -94,6 +99,14 @@ export class BcProviderEditPage
   public onSuccessDialogClose(): void {
     this.dialog.closeAll();
     this.navigationService.navigateToRoot();
+  }
+
+  public onResetMfa(): void {
+    console.log('Reset MFA');
+  }
+
+  public onLearnMore(): void {
+    this.router.navigateByUrl(FaqRoutes.BASE_PATH);
   }
 
   public ngOnInit(): void {

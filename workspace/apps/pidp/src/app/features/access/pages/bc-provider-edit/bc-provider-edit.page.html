@@ -98,6 +98,36 @@
           </div>
         </div>
       </section>
+      <section class="reset-mfa">
+        <h3>
+          <strong
+            >Do you need to reset your multi-factor authentication
+            (MFA)?</strong
+          >
+        </h3>
+        <p>
+          <strong>Yolo ipsum </strong>dolor sit amet, consectetur adipiscing
+          elit. Ut ac suscipit leo. Carpe diem vulputate est nec commodo rutrum.
+          Pellentesque mattis convallis nisi eu and I ain't stoppin until the
+          swear jar's full. Ut rhoncus velit at mauris interdum, fringilla
+          dictum neque rutrum. Curabitur mattis odio at erat viverra lobortis.
+        </p>
+        <div class="mfa-buttons">
+          <button
+            class="reset-mfa-button"
+            mat-stroked-button
+            type="button"
+            color="primary"
+            (click)="onResetMfa()">
+            <img
+              src="/assets/images/icons/admin-panel.svg"
+              alt="reset-mfa-admin-panel" />Reset my MFA
+          </button>
+          <button class="learn-more" uiTextButton (click)="onLearnMore()">
+            <span><u>Learn more</u><span class="arrow-right">></span></span>
+          </button>
+        </div>
+      </section>
       <section class="actions">
         <button
           mat-stroked-button
