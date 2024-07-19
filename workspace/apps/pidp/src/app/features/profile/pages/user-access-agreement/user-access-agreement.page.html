@@ -1,55 +1,54 @@
-<div class="container">
-<ui-page mode="full">
-  <ui-alert
-    *ngIf="accessRequestFailed"
-    type="danger"
-    icon="error_outline"
-    iconType="outlined"
-    heading="Error Accept Agreement">
-    <ng-container uiAlertContent>
-      <p>
-        Your acceptance of the agreement could not be processed at this time. If
-        this issue persists, contact
-        <a
-          uiAnchor
-          scheme="mailto"
-          [attr.href]="specialAuthoritySupportEmail"></a>
-        for assistance.
-      </p>
-    </ng-container>
-  </ui-alert>
+<div class="container" uiPidpInjectViewportCss>
+  <ui-page mode="full">
+    <ui-alert
+      *ngIf="accessRequestFailed"
+      type="danger"
+      icon="error_outline"
+      iconType="outlined"
+      heading="Error Accept Agreement">
+      <ng-container uiAlertContent>
+        <p>
+          Your acceptance of the agreement could not be processed at this time.
+          If this issue persists, contact
+          <a
+            uiAnchor
+            scheme="mailto"
+            [attr.href]="specialAuthoritySupportEmail"></a>
+          for assistance.
+        </p>
+      </ng-container>
+    </ui-alert>
 
-  <app-user-access-agreement-document></app-user-access-agreement-document>
+    <app-user-access-agreement-document></app-user-access-agreement-document>
 
-  <p *ngIf="!completed">
-    <strong>
-      I,
-      <span class="signature"
-        >{{ (dashboardState$ | async)?.userProfileFullNameText }}</span
-      >, represent and warrant that all information provided in connection with
-      my application for access to the System(s), is true and correct.
-    </strong>
-  </p>
+    <p *ngIf="!completed" class="padding-container">
+      <span
+        >I,
+        <b>{{ (fullName$ | async) }}</b
+        >, represent and warrant that all information provided in connection with
+        my application for access to the System(s), is true and correct.</span
+      >
+    </p>
 
-  <ui-page-footer [mode]="completed ? 'reverse' : 'normal'">
-    <button
-      class="back-button"
-      mat-stroked-button
-      uiPageFooterAction
-      color="primary"
-      type="button"
-      (click)="onBack()">
-      Back Home
-    </button>
-    <button
-      *ngIf="!completed"
-      mat-flat-button
-      uiPageFooterAction
-      color="primary"
-      type="button"
-      (click)="onAcceptAgreement()">
-      Accept Agreement
-    </button>
-  </ui-page-footer>
-</ui-page>
+    <div class="button-container">
+      <button
+        class="back-button"
+        mat-stroked-button
+        uiPageFooterAction
+        color="primary"
+        type="button"
+        (click)="onBack()">
+        Back
+      </button>
+      <button
+        *ngIf="!completed"
+        mat-flat-button
+        uiPageFooterAction
+        color="primary"
+        type="button"
+        (click)="onAcceptAgreement()">
+        Accept Agreement
+      </button>
+    </div>
+  </ui-page>
 </div>

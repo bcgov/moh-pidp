@@ -1,6 +1,7 @@
-<ui-nav-menu
-  [dashboardState]="(dashboardState$ | async)!"
+<app-nav-menu
+  [alerts]="(alerts$ | async)!"
+  [collegeRoute]="collegeRoute"
   [emailSupport]="providerIdentitySupport"
   [menuItems]="menuItems"
   (logout)="onLogout()">
-</ui-nav-menu>
+</app-nav-menu>

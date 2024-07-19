@@ -81,6 +81,11 @@
       }
       .pas-button {
         height: 15rem;
+        background: linear-gradient(
+          270deg,
+          rgba(0, 0, 0, 0) 0%,
+          rgba(158, 204, 211, 1) 100%
+        );
         img {
           object-fit: cover;
           z-index: -2;
@@ -91,7 +96,7 @@
         }
 
         div.auth-card {
-          padding: 20px 0px 55px 50px;
+          padding: 23px 0px 7px 34px;
         }
 
         .card-container {
@@ -116,7 +121,7 @@
 
           .card-body {
             img.logo {
-              z-index: -1;
+              z-index: 0;
               -webkit-transform: none;
               transform: none;
               position: relative !important;
@@ -128,10 +133,14 @@
 
           .card-footer {
             button {
+              z-index: 1;
               padding: 10px 25px;
             }
           }
         }
+      }
+      .pas-button-text {
+        font-size: smaller;
       }
     }
   }
@@ -144,6 +153,7 @@
 
   .content-header h1 {
     font-size: 40px;
+    line-height: 1.1;
   }
 
   .breadcrumb {
@@ -152,6 +162,10 @@
   .main {
     display: flex !important;
     flex-direction: column !important;
+
+    .pas-step-label {
+      line-height: 1.1;
+    }
 
     .pas-button {
       img.img-doctor {
@@ -204,6 +218,11 @@
 
 .stepper-buttons {
   margin-top: 10px;
+  & button {
+    border: pidp.$bcgov-color-primary solid 2px;
+    color: pidp.$bcgov-color-primary;
+    font-weight: bold;
+  }
 
   & button:last-child {
     margin-left: 10px;
