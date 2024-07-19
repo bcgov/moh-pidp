@@ -145,10 +145,10 @@ public class Startup
             {
                 Predicate = registration => registration.Tags.Contains(HealthCheckTag.Liveness)
             }).AllowAnonymous();
-            endpoints.MapHealthChecks("/health/readiness", new HealthCheckOptions
-            {
-                Predicate = registration => registration.Tags.Contains(HealthCheckTag.Readiness)
-            }).AllowAnonymous();
+            // endpoints.MapHealthChecks("/health/readiness", new HealthCheckOptions
+            // {
+            //     Predicate = registration => registration.Tags.Contains(HealthCheckTag.Readiness)
+            // }).AllowAnonymous();
         });
     }
 }
