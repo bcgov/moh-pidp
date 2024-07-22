@@ -1,9 +1,9 @@
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
-import { NgIf, NgOptimizedImage } from '@angular/common';
+import { AsyncPipe, NgIf, NgOptimizedImage } from '@angular/common';
 import { Component, HostListener, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { map } from 'rxjs';
+import { Observable, map } from 'rxjs';
 
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { faBell } from '@fortawesome/free-regular-svg-icons';
@@ -17,7 +17,6 @@ import { AccessRoutes } from '../access/access.routes';
 import { OrganizationInfoRoutes } from '../organization-info/organization-info.routes';
 import { ProfileRoutes } from '../profile/profile.routes';
 import { AlertCode } from './enums/alert-code.enum';
-import { ProfileStatus } from './models/profile-status.model';
 import { PortalResource } from './portal-resource.service';
 
 @Component({
@@ -36,6 +35,7 @@ import { PortalResource } from './portal-resource.service';
     InjectViewportCssClassDirective,
     NgIf,
     NgOptimizedImage,
+    AsyncPipe,
   ],
 })
 export class PortalPage implements OnInit {
@@ -45,9 +45,9 @@ export class PortalPage implements OnInit {
   public ProfileRoutes = ProfileRoutes;
   public AccessRoutes = AccessRoutes;
   public OrganizationInfoRoutes = OrganizationInfoRoutes;
-  public alerts: AlertCode[] = [];
   public AlertCode = AlertCode;
   public faBell = faBell;
+  public alerts$!: Observable<AlertCode[]>;
 
   public constructor(
     private partyService: PartyService,
@@ -75,15 +75,8 @@ export class PortalPage implements OnInit {
   }
 
   public ngOnInit(): void {
-    const partyId = this.partyService.partyId;
-    this.resource
-      .getProfileStatus(partyId)
-      .pipe(
-        map(
-          (profileStatus: ProfileStatus | null) =>
-            (this.alerts = profileStatus?.alerts ?? []),
-        ),
-      )
-      .subscribe();
+    this.alerts$ = this.resource
+      .getProfileStatus(this.partyService.partyId)
+      .pipe(map((profileStatus) => profileStatus?.alerts ?? []));
   }
 }
