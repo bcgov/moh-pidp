@@ -21,7 +21,6 @@ import {
   AnchorDirective,
   InjectViewportCssClassDirective,
   PageFooterActionDirective,
-  TextButtonDirective,
 } from '@bcgov/shared/ui';
 
 import {
@@ -31,15 +30,14 @@ import {
 import { PartyService } from '@app/core/party/party.service';
 import { LoggerService } from '@app/core/services/logger.service';
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
+import { BreadcrumbComponent } from '@app/shared/components/breadcrumb/breadcrumb.component';
 
+import { AccessRoutes } from '../../access.routes';
 import { EnrolmentErrorComponent } from '../../components/enrolment-error/enrolment-error.component';
 import { msTeamsSupportEmail } from '../ms-teams-privacy-officer/ms-teams.constants';
 import { MsTeamsClinicMemberFormState } from './ms-teams-clinic-member-form-state';
 import { MsTeamsClinicMemberResource } from './ms-teams-clinic-member-resource.service';
 import { PrivacyOfficer } from './ms-teams-clinic-member.model';
-import { faAngleRight } from '@fortawesome/free-solid-svg-icons';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { AccessRoutes } from '../../access.routes';
 
 @Component({
   selector: 'app-ms-teams-clinic-member',
@@ -48,9 +46,9 @@ import { AccessRoutes } from '../../access.routes';
   standalone: true,
   imports: [
     AnchorDirective,
+    BreadcrumbComponent,
     EnrolmentErrorComponent,
     InjectViewportCssClassDirective,
-    FaIconComponent,
     FormsModule,
     MatButtonModule,
     MatFormFieldModule,
@@ -61,7 +59,6 @@ import { AccessRoutes } from '../../access.routes';
     NgIf,
     PageFooterActionDirective,
     ReactiveFormsModule,
-    TextButtonDirective,
   ],
 })
 export class MsTeamsClinicMemberPage
@@ -78,8 +75,15 @@ export class MsTeamsClinicMemberPage
   public formState: MsTeamsClinicMemberFormState;
   public showOverlayOnSubmit = false;
   public privacyOfficers!: PrivacyOfficer[] | null;
-  public faAngleRight = faAngleRight;
   public AccessRoutes = AccessRoutes;
+  public breadcrumbsData: Array<{ title: string; path: string }> = [
+    { title: 'Home', path: '' },
+    {
+      title: 'Access',
+      path: AccessRoutes.routePath(AccessRoutes.ACCESS_REQUESTS),
+    },
+    { title: 'MS Teams for clinical use', path: '' },
+  ];
 
   public constructor(
     dependenciesService: AbstractFormDependenciesService,
@@ -153,10 +157,6 @@ export class MsTeamsClinicMemberPage
     this.resource
       .getPrivacyOfficers(partyId)
       .subscribe((privacyOfficers) => (this.privacyOfficers = privacyOfficers));
-  }
-
-  public navigateTo(path: string): void {
-    this.router.navigateByUrl(path);
   }
 
   protected performSubmission(): NoContent {

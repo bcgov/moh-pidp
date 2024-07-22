@@ -6,8 +6,6 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
 import { catchError, noop, of, tap } from 'rxjs';
 
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { faAngleRight } from '@fortawesome/free-solid-svg-icons';
 import {
   LOADING_OVERLAY_DEFAULT_MESSAGE,
   LoadingOverlayService,
@@ -17,12 +15,12 @@ import {
   AnchorDirective,
   InjectViewportCssClassDirective,
   PageFooterActionDirective,
-  TextButtonDirective,
 } from '@bcgov/shared/ui';
 
 import { PartyService } from '@app/core/party/party.service';
 import { LoggerService } from '@app/core/services/logger.service';
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
+import { BreadcrumbComponent } from '@app/shared/components/breadcrumb/breadcrumb.component';
 
 import { AccessRoutes } from '../../access.routes';
 import { EnrolmentErrorComponent } from '../../components/enrolment-error/enrolment-error.component';
@@ -40,14 +38,13 @@ import {
   standalone: true,
   imports: [
     AnchorDirective,
+    BreadcrumbComponent,
     EnrolmentErrorComponent,
     InjectViewportCssClassDirective,
-    FaIconComponent,
     MatButtonModule,
     NgIf,
     PageFooterActionDirective,
     RouterLink,
-    TextButtonDirective,
   ],
 })
 export class DriverFitnessPage implements OnInit {
@@ -57,8 +54,15 @@ export class DriverFitnessPage implements OnInit {
   public driverFitnessSupportEmail: string;
   public enrolmentError: boolean;
   public medicalPractitionerPortalUrl: string;
-  public faAngleRight = faAngleRight;
   public AccessRoutes = AccessRoutes;
+  public breadcrumbsData: Array<{ title: string; path: string }> = [
+    { title: 'Home', path: '' },
+    {
+      title: 'Access',
+      path: AccessRoutes.routePath(AccessRoutes.ACCESS_REQUESTS),
+    },
+    { title: 'Enrolment', path: '' },
+  ];
 
   public constructor(
     private loadingOverlayService: LoadingOverlayService,
@@ -114,9 +118,6 @@ export class DriverFitnessPage implements OnInit {
         return of(noop());
       }),
     );
-  }
-  public navigateTo(path: string): void {
-    this.router.navigateByUrl(path);
   }
 
   private navigateToRoot(): void {

@@ -5,16 +5,10 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { Router } from '@angular/router';
 
 import { catchError, noop, of, tap } from 'rxjs';
 
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import {
-  faAngleRight,
-  faCircleCheck,
-  faXmark,
-} from '@fortawesome/free-solid-svg-icons';
+import { faCircleCheck, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { NavigationService } from '@pidp/presentation';
 
 import { NoContent } from '@bcgov/shared/data-access';
@@ -29,6 +23,7 @@ import {
   AbstractFormPage,
 } from '@app/core/classes/abstract-form-page.class';
 import { PartyService } from '@app/core/party/party.service';
+import { BreadcrumbComponent } from '@app/shared/components/breadcrumb/breadcrumb.component';
 import { NeedHelpComponent } from '@app/shared/components/need-help/need-help.component';
 import { DialogBcproviderEditComponent } from '@app/shared/components/success-dialog/components/dialog-bcprovider-edit.component';
 import { SuccessDialogComponent } from '@app/shared/components/success-dialog/success-dialog.component';
@@ -50,8 +45,8 @@ export interface BcProviderEditInitialStateModel {
   styleUrls: ['./bc-provider-edit.page.scss'],
   standalone: true,
   imports: [
+    BreadcrumbComponent,
     InjectViewportCssClassDirective,
-    FaIconComponent,
     MatButtonModule,
     MatFormFieldModule,
     MatInputModule,
@@ -68,7 +63,6 @@ export class BcProviderEditPage
   implements OnInit
 {
   public faCircleCheck = faCircleCheck;
-  public faAngleRight = faAngleRight;
   public faXmark = faXmark;
   public formState: BcProviderEditFormState;
   public AccessRoutes = AccessRoutes;
@@ -76,6 +70,14 @@ export class BcProviderEditPage
   public username = '';
   public errorMatcher = new CrossFieldErrorMatcher();
   public componentType = DialogBcproviderEditComponent;
+  public breadcrumbsData: Array<{ title: string; path: string }> = [
+    { title: 'Home', path: '' },
+    {
+      title: 'Access',
+      path: AccessRoutes.routePath(AccessRoutes.ACCESS_REQUESTS),
+    },
+    { title: 'BC Provider Account', path: '' },
+  ];
 
   // ui-page is handling this.
   public showOverlayOnSubmit = false;
@@ -91,7 +93,6 @@ export class BcProviderEditPage
   public constructor(
     dependenciesService: AbstractFormDependenciesService,
     fb: FormBuilder,
-    private router: Router,
     private navigationService: NavigationService,
     private partyService: PartyService,
     private resource: BcProviderEditResource,
@@ -117,10 +118,6 @@ export class BcProviderEditPage
       .subscribe((bcProviderObject: BcProviderEditInitialStateModel) => {
         this.username = bcProviderObject.bcProviderId;
       });
-  }
-
-  public navigateTo(path: string): void {
-    this.router.navigateByUrl(path);
   }
 
   protected performSubmission(): NoContent {

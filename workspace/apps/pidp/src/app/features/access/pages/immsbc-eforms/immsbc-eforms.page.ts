@@ -19,23 +19,21 @@ import {
   PageSectionSubheaderComponent,
   PageSectionSubheaderDescDirective,
   SafePipe,
-  TextButtonDirective,
 } from '@bcgov/shared/ui';
 
 import { PartyService } from '@app/core/party/party.service';
 import { DocumentService } from '@app/core/services/document.service';
 import { LoggerService } from '@app/core/services/logger.service';
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
+import { BreadcrumbComponent } from '@app/shared/components/breadcrumb/breadcrumb.component';
 
+import { AccessRoutes } from '../../access.routes';
 import { EnrolmentErrorComponent } from '../../components/enrolment-error/enrolment-error.component';
 import { ImmsBCEformsResource } from './immsbc-eforms-resource.service';
 import {
   immsBCEformsSupportEmail,
   immsBCEformsUrl,
 } from './immsbc-eforms.constants';
-import { faAngleRight } from '@fortawesome/free-solid-svg-icons';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { AccessRoutes } from '../../access.routes';
 
 @Component({
   selector: 'app-immsbc-eforms',
@@ -46,8 +44,8 @@ import { AccessRoutes } from '../../access.routes';
     AlertComponent,
     AlertContentDirective,
     AnchorDirective,
+    BreadcrumbComponent,
     EnrolmentErrorComponent,
-    FaIconComponent,
     InjectViewportCssClassDirective,
     MatButtonModule,
     NgIf,
@@ -59,7 +57,6 @@ import { AccessRoutes } from '../../access.routes';
     PageSectionSubheaderComponent,
     PageSectionSubheaderDescDirective,
     SafePipe,
-    TextButtonDirective,
   ],
 })
 export class ImmsBCEformsPage implements OnInit {
@@ -70,8 +67,15 @@ export class ImmsBCEformsPage implements OnInit {
   public immsBCEformsUrl: string;
   public immsBCEformsSupportEmail: string;
   public enrolmentError: boolean;
-  public faAngleRight = faAngleRight;
   public AccessRoutes = AccessRoutes;
+  public breadcrumbsData: Array<{ title: string; path: string }> = [
+    { title: 'Home', path: '' },
+    {
+      title: 'Access',
+      path: AccessRoutes.routePath(AccessRoutes.ACCESS_REQUESTS),
+    },
+    { title: 'Immunization Entry eForm', path: '' },
+  ];
 
   public constructor(
     private route: ActivatedRoute,
@@ -128,10 +132,6 @@ export class ImmsBCEformsPage implements OnInit {
       this.logger.error('No status code was provided');
       return this.navigateToRoot();
     }
-  }
-
-  public navigateTo(path: string): void {
-    this.router.navigateByUrl(path);
   }
 
   private navigateToRoot(): void {

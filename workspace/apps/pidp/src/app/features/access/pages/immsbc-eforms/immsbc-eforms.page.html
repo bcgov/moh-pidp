@@ -1,28 +1,5 @@
 <div class="container" uiPidpInjectViewportCss>
-  <nav class="breadcrumb">
-    <ul>
-      <li>
-        <button uiTextButton (click)="onBack()">
-          <img src="/assets/images/icons/icon-home.svg" alt="Home" />
-          <span class="home-text">Home</span>
-        </button>
-      </li>
-      <li><fa-icon class="fa-duotone" [icon]="faAngleRight"></fa-icon></li>
-      <li>
-        <button
-          uiTextButton
-          (click)="navigateTo(AccessRoutes.routePath(AccessRoutes.ACCESS_REQUESTS))">
-          <span>Access</span>
-        </button>
-      </li>
-      <li><fa-icon class="fa-duotone" [icon]="faAngleRight"></fa-icon></li>
-      <li>
-        <button uiTextButton disabled>
-          <span>Immunization Entry eForm</span>
-        </button>
-      </li>
-    </ul>
-  </nav>
+  <app-breadcrumb [breadcrumbs]="breadcrumbsData"></app-breadcrumb>
   <ui-page mode="full">
     <h1>{{ title }}</h1>
 
