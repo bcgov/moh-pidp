@@ -114,22 +114,20 @@
           authentication (MFA) for some reason (ex: you have uninstalled the
           Microsoft Authenticator App, have a new mobile device or changed your
           phone number), you need to reset the MFA.
-        </p>
-        <div class="mfa-buttons">
-          <button
-            class="reset-mfa-button"
-            mat-stroked-button
-            type="button"
-            color="primary"
-            (click)="onResetMfa()">
-            <img
-              src="/assets/images/icons/admin-panel.svg"
-              alt="reset-mfa-admin-panel" />Reset my MFA
-          </button>
           <button class="learn-more" uiTextButton (click)="onLearnMore()">
             <span><u>Learn more</u><span class="arrow-right">></span></span>
           </button>
-        </div>
+        </p>
+        <button
+          class="reset-mfa-button"
+          mat-stroked-button
+          type="button"
+          color="primary"
+          (click)="onResetMfa()">
+          <img
+            src="/assets/images/icons/admin-panel.svg"
+            alt="reset-mfa-admin-panel" />Reset my MFA
+        </button>
       </section>
       <section class="actions">
         <button
