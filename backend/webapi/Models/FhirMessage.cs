@@ -5,11 +5,11 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 
 [Table(nameof(FhirMessage))]
-public class FhirMessage : IDisposable
+public class FhirMessage : BaseAuditable
 {
     [Key]
     public int Id { get; set; }
     public JsonDocument? MessageBody { get; set; }
 
-    public void Dispose() => MessageBody?.Dispose();
+    // public void Dispose() => MessageBody?.Dispose();
 }
