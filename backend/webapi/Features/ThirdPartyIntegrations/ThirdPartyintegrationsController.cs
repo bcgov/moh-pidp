@@ -33,13 +33,12 @@ public class ThirdPartyintegrationsController : PidpControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult> PostFHIRMessage([FromBody] FhirMessage obj)
+    public async Task<ActionResult> PostFHIRMessage([FromBody] JsonDocument obj)
     {
-        // var fhirmessage = new FhirMessage
-        // {
-        //     MessageBody = obj,
-        // };
-        var fhirmessage = obj;
+        var fhirmessage = new FhirMessage
+        {
+            MessageBody = obj,
+        };
         this.context.FhirMessages.Add(fhirmessage);
         await this.context.SaveChangesAsync();
         return this.Ok();
