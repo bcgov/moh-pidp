@@ -1,7 +1,7 @@
 namespace PlrIntake.Data;
 
 using Microsoft.EntityFrameworkCore;
-
+using System.Text.Json;
 using PlrIntake.Models;
 
 public class PlrDbContext : DbContext
@@ -29,6 +29,7 @@ public class PlrDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+        modelBuilder.Ignore<JsonDocument>();
 
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(PlrDbContext).Assembly);
 
