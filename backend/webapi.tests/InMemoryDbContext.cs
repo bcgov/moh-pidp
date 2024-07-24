@@ -1,10 +1,9 @@
-namespace PidpTests;
+namespace Pidp.Data;
 
 using System.Text.Json;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using NodaTime;
-using Pidp.Data;
 
 public class InMemoryDbContext : PidpDbContext
 {
