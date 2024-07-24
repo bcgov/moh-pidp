@@ -24,38 +24,6 @@ p {
   --endorsement-request-item-padding: 0 var(--gap);
   --endorsement-form-field-width: 38.375rem;
   padding: 1.25rem 0.75rem;
-  .breadcrumb {
-    padding: 1rem 0;
-    ul {
-      display: flex;
-      align-items: center;
-      padding: 0px;
-    }
-
-    fa-icon {
-      padding-left: 0.75rem;
-      padding-right: 0.75rem;
-      color: #d9d9d9;
-      font-size: 1.75rem;
-    }
-
-    ul li {
-      display: flex;
-    }
-
-    span {
-      font-size: 1rem;
-    }
-
-    button:disabled {
-      color: #aaa !important;
-    }
-
-    img {
-      margin-right: 10px;
-      margin-bottom: 6px;
-    }
-  }
 
   & .content {
     padding: var(--content-padding);
@@ -168,17 +136,6 @@ p {
   --card-header-font-size: unset;
   --card-header-line-height: unset;
   --tab-content-flex-direction: column;
-  .breadcrumb {
-    fa-icon {
-      padding-left: 0.6rem;
-      padding-right: 0.6rem;
-      font-size: 1.5rem;
-    }
-
-    span {
-      font-size: 0.9rem;
-    }
-  }
   & .content {
     & .care-team {
       & .tab-label-box {
@@ -197,25 +154,6 @@ p {
   --card-header-line-height: calc(var(--card-header-font-size) + 0.5rem);
   --margin-bottom-style: 1.5rem;
   padding: 1.25rem 0;
-
-  .breadcrumb {
-    margin: 0px 20px 0px 12px;
-
-    img {
-      margin-right: 2px;
-    }
-    span {
-      font-size: 0.8rem;
-    }
-    .home-text {
-      display: none;
-    }
-    fa-icon {
-      padding-left: 0.5rem;
-      padding-right: 0.5rem;
-      font-size: 1.25rem;
-    }
-  }
 
   & .content {
     padding: var(--content-padding);

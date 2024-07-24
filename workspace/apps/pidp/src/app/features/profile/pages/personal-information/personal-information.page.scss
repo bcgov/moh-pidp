@@ -1,43 +1,8 @@
 .viewport-all {
   padding: 1.25rem 0.75rem;
-  .breadcrumb {
-    padding: 1rem 0;
-    ul {
-      display: flex;
-      align-items: center;
-      padding: 0px;
-    }
-
-    fa-icon {
-      padding-left: 0.75rem;
-      padding-right: 0.75rem;
-      color: #d9d9d9;
-      font-size: 1.75rem;
-    }
-
-    ul li {
-      display: flex;
-    }
-
-    span {
-      font-size: 1rem;
-    }
-
-    button:disabled {
-      color: #aaa !important;
-    }
-
-    img {
-      margin-right: 10px;
-      margin-bottom: 6px;
-    }
-  }
 }
 
 .viewport-small {
-  .breadcrumb {
-    margin: 0px 20px 0px 5px;
-  }
   fa-icon {
     padding-left: 0.6rem;
     padding-right: 0.6rem;
@@ -46,26 +11,5 @@
 
   span {
     font-size: 0.9rem;
-  }
-}
-
-.viewport-xsmall {
-  .breadcrumb {
-    margin: 0px 20px 0px 2px;
-
-    img {
-      margin-right: 2px;
-    }
-    span {
-      font-size: 0.8rem;
-    }
-    .home-text {
-      display: none;
-    }
-    fa-icon {
-      padding-left: 0.5rem;
-      padding-right: 0.5rem;
-      font-size: 1.25rem;
-    }
   }
 }

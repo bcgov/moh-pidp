@@ -2,12 +2,10 @@ import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 
 import { Observable, exhaustMap, switchMap, tap } from 'rxjs';
 
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { faAngleRight } from '@fortawesome/free-solid-svg-icons';
 import {
   LOADING_OVERLAY_DEFAULT_MESSAGE,
   LoadingOverlayService,
@@ -18,11 +16,11 @@ import {
   DialogOptions,
   HtmlComponent,
   InjectViewportCssClassDirective,
-  TextButtonDirective,
 } from '@bcgov/shared/ui';
 
 import { User } from '@app/features/auth/models/user.model';
 import { ProfileRoutes } from '@app/features/profile/profile.routes';
+import { BreadcrumbComponent } from '@app/shared/components/breadcrumb/breadcrumb.component';
 import { SuccessDialogComponent } from '@app/shared/components/success-dialog/success-dialog.component';
 
 import { IdentityProvider } from '../../enums/identity-provider.enum';
@@ -34,26 +32,28 @@ import { LinkAccountConfirmResource } from './link-account-confirm-resource.serv
   selector: 'app-link-account-confirm',
   standalone: true,
   imports: [
-    FaIconComponent,
+    BreadcrumbComponent,
     CommonModule,
     InjectViewportCssClassDirective,
     MatButtonModule,
     NgOptimizedImage,
     SuccessDialogComponent,
-    TextButtonDirective,
   ],
   templateUrl: './link-account-confirm.page.html',
   styleUrl: './link-account-confirm.page.scss',
 })
 export class LinkAccountConfirmPage implements OnInit {
   public user$: Observable<User>;
-  public faAngleRight = faAngleRight;
+  public breadcrumbsData: Array<{ title: string; path: string }> = [
+    {title: 'Home', path: ''},
+    {title: 'Link Account', path: ''},
+  ];
+
   public showInstructions: boolean = false;
   public constructor(
     private dialog: MatDialog,
     private authorizedUserService: AuthorizedUserService,
     private linkAccountConfirmResource: LinkAccountConfirmResource,
-    private route: ActivatedRoute,
     private router: Router,
     private loadingOverlayService: LoadingOverlayService,
   ) {
@@ -114,16 +114,8 @@ export class LinkAccountConfirmPage implements OnInit {
     );
   }
 
-  public onBack(): void {
-    this.navigateToRoot();
-  }
-
   public toggleInstructions(): void {
     this.showInstructions = !this.showInstructions;
-  }
-
-  private navigateToRoot(): void {
-    this.router.navigate([this.route.snapshot.data.routes.root]);
   }
 
   private getPendingAccountDescription(user: User): string {

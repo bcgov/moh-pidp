@@ -27,7 +27,6 @@ import {
 
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import {
-  faAngleRight,
   faArrowDown,
   faArrowUp,
   faUser,
@@ -47,7 +46,6 @@ import {
   InjectViewportCssClassDirective,
   PageFooterActionDirective,
   PidpViewport,
-  TextButtonDirective,
   ViewportService,
 } from '@bcgov/shared/ui';
 
@@ -71,6 +69,7 @@ import { EndorsementsResource } from './endorsements-resource.service';
 import { EndorsementRequestStatus } from './enums/endorsement-request-status.enum';
 import { EndorsementRequest } from './models/endorsement-request.model';
 import { Endorsement } from './models/endorsement.model';
+import { BreadcrumbComponent } from '@app/shared/components/breadcrumb/breadcrumb.component';
 
 export enum EndorsementType {
   WorkingRelationship,
@@ -84,6 +83,7 @@ export enum EndorsementType {
   standalone: true,
   imports: [
     AsyncPipe,
+    BreadcrumbComponent,
     DatePipe,
     EndorsementCardComponent,
     FaIconComponent,
@@ -96,7 +96,6 @@ export enum EndorsementType {
     NgIf,
     PageFooterActionDirective,
     ReactiveFormsModule,
-    TextButtonDirective,
   ],
 })
 export class EndorsementsPage
@@ -109,7 +108,6 @@ export class EndorsementsPage
   public faUserGroup = faUserGroup;
   public faArrowUp = faArrowUp;
   public faArrowDown = faArrowDown;
-  public faAngleRight = faAngleRight;
 
   public formState: EndorsementsFormState;
   public completed: boolean | null;
@@ -145,6 +143,10 @@ export class EndorsementsPage
 
   public showTextLabels = false;
   public showIconLabels = true;
+  public breadcrumbsData: Array<{ title: string; path: string }> = [
+    { title: 'Home', path: '' },
+    { title: 'Endorsements', path: '' },
+  ];
   public popupData: DialogOptions = {
     title: 'Endorsement requests',
     bottomBorder: false,

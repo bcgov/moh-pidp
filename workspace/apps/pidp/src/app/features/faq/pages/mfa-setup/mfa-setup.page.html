@@ -1,24 +1,5 @@
 <div class="container mfa-setup-page" uiPidpInjectViewportCss>
-  <nav class="breadcrumb">
-    <ul>
-      <li>
-        <button uiTextButton (click)="onBack()">
-          <img src="/assets/images/icons/icon-home.svg" alt="Home" />
-          <span class="home-text">Home</span>
-        </button>
-      </li>
-      <li><fa-icon class="fa-duotone" [icon]="faAngleRight"></fa-icon></li>
-      <li>
-        <button uiTextButton (click)="navigateTo((FaqRoutes.BASE_PATH))">
-          <span>FAQ</span>
-        </button>
-      </li>
-      <li><fa-icon class="fa-duotone" [icon]="faAngleRight"></fa-icon></li>
-      <li>
-        <button uiTextButton disabled><span>Active Page</span></button>
-      </li>
-    </ul>
-  </nav>
+  <app-breadcrumb [breadcrumbs]="breadcrumbsData"></app-breadcrumb>
   <ui-page mode="full">
     <h1>BCProvider Active Directory Multi-factor Authentication (MFA) Setup</h1>
     <ui-page-section>

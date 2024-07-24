@@ -2,10 +2,10 @@ import { NgIf } from '@angular/common';
 import { Component, HostListener, Inject, OnInit, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatExpansionModule } from '@angular/material/expansion';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { faAngleRight, faArrowUp } from '@fortawesome/free-solid-svg-icons';
+import { faArrowUp } from '@fortawesome/free-solid-svg-icons';
 
 import {
   AnchorDirective,
@@ -16,11 +16,11 @@ import {
   PageHeaderComponent,
   PageSectionComponent,
   PageSectionSubheaderComponent,
-  TextButtonDirective,
 } from '@bcgov/shared/ui';
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';
 import { UtilsService } from '@app/core/services/utils.service';
+import { BreadcrumbComponent } from '@app/shared/components/breadcrumb/breadcrumb.component';
 import { Constants } from '@app/shared/constants';
 
 import { FaqRoutes } from '../../faq.routes';
@@ -32,6 +32,7 @@ import { FaqRoutes } from '../../faq.routes';
   standalone: true,
   imports: [
     AnchorDirective,
+    BreadcrumbComponent,
     FaIconComponent,
     MatButtonModule,
     MatExpansionModule,
@@ -43,7 +44,6 @@ import { FaqRoutes } from '../../faq.routes';
     PageSectionComponent,
     PageSectionSubheaderComponent,
     InjectViewportCssClassDirective,
-    TextButtonDirective,
   ],
 })
 export class HelpPage implements OnInit {
@@ -51,12 +51,14 @@ export class HelpPage implements OnInit {
   public readonly panelOpenState = signal(false);
   public showBackToTopButton: boolean = false;
   public faArrowUp = faArrowUp;
-  public faAngleRight = faAngleRight;
   public applicationUrl: string;
+  public breadcrumbsData: Array<{ title: string; path: string }> = [
+    { title: 'Home', path: '' },
+    { title: 'Help', path: '' },
+  ];
 
   public constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
-    private route: ActivatedRoute,
     private router: Router,
     private utilsService: UtilsService,
   ) {
@@ -78,10 +80,6 @@ export class HelpPage implements OnInit {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  public onBack(): void {
-    this.navigateToRoot();
-  }
-
   public ngOnInit(): void {
     this.utilsService.scrollTop();
   }
@@ -92,9 +90,5 @@ export class HelpPage implements OnInit {
 
   public navigateToMfaPage(): void {
     this.router.navigateByUrl(FaqRoutes.routePath(FaqRoutes.MFA_SETUP));
-  }
-
-  private navigateToRoot(): void {
-    this.router.navigate([this.route.snapshot.data.routes.root]);
   }
 }

@@ -1,18 +1,5 @@
 <section class="component-container container" uiPidpInjectViewportCss>
-  <nav class="breadcrumb">
-    <ul>
-      <li>
-        <button uiTextButton (click)="onBack()">
-          <img src="/assets/images/icons/icon-home.svg" alt="Home" />
-          <span class="home-text">Home</span>
-        </button>
-      </li>
-      <li><fa-icon class="fa-duotone" [icon]="faAngleRight"></fa-icon></li>
-      <li>
-        <button uiTextButton disabled><span>College Licence</span></button>
-      </li>
-    </ul>
-  </nav>
+  <app-breadcrumb [breadcrumbs]="breadcrumbsData"></app-breadcrumb>
   <section *ngFor="let alert of alerts" class="alert-box section-box">
     <app-portal-alert
       [heading]="alert.heading"

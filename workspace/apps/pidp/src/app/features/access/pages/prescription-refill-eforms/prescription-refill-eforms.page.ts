@@ -6,9 +6,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { catchError, noop, of, tap } from 'rxjs';
 
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { faAngleRight } from '@fortawesome/free-solid-svg-icons';
-
 import {
   AlertComponent,
   AlertContentDirective,
@@ -22,13 +19,13 @@ import {
   PageSectionSubheaderComponent,
   PageSectionSubheaderDescDirective,
   SafePipe,
-  TextButtonDirective,
 } from '@bcgov/shared/ui';
 
 import { PartyService } from '@app/core/party/party.service';
 import { DocumentService } from '@app/core/services/document.service';
 import { LoggerService } from '@app/core/services/logger.service';
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
+import { BreadcrumbComponent } from '@app/shared/components/breadcrumb/breadcrumb.component';
 
 import { AccessRoutes } from '../../access.routes';
 import { EnrolmentErrorComponent } from '../../components/enrolment-error/enrolment-error.component';
@@ -47,8 +44,8 @@ import {
     AlertComponent,
     AlertContentDirective,
     AnchorDirective,
+    BreadcrumbComponent,
     EnrolmentErrorComponent,
-    FaIconComponent,
     InjectViewportCssClassDirective,
     MatButtonModule,
     NgIf,
@@ -60,7 +57,6 @@ import {
     PageSectionSubheaderComponent,
     PageSectionSubheaderDescDirective,
     SafePipe,
-    TextButtonDirective,
   ],
 })
 export class PrescriptionRefillEformsPage implements OnInit {
@@ -71,8 +67,15 @@ export class PrescriptionRefillEformsPage implements OnInit {
   public prescriptionRefillEformsUrl: string;
   public prescriptionRefillEformsSupportEmail: string;
   public enrolmentError: boolean;
-  public faAngleRight = faAngleRight;
   public AccessRoutes = AccessRoutes;
+  public breadcrumbsData: Array<{ title: string; path: string }> = [
+    { title: 'Home', path: '' },
+    {
+      title: 'Access',
+      path: AccessRoutes.routePath(AccessRoutes.ACCESS_REQUESTS),
+    },
+    { title: 'Prescription Refill Eforms', path: '' },
+  ];
 
   public constructor(
     private route: ActivatedRoute,
@@ -132,10 +135,6 @@ export class PrescriptionRefillEformsPage implements OnInit {
       this.logger.error('No status code was provided');
       return this.navigateToRoot();
     }
-  }
-
-  public navigateTo(path: string): void {
-    this.router.navigateByUrl(path);
   }
 
   private navigateToRoot(): void {

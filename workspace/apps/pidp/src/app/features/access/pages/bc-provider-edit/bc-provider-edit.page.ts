@@ -15,7 +15,6 @@ import { NoContent } from '@bcgov/shared/data-access';
 import {
   CrossFieldErrorMatcher,
   InjectViewportCssClassDirective,
-  TextButtonDirective,
 } from '@bcgov/shared/ui';
 
 import {
@@ -54,7 +53,6 @@ export interface BcProviderEditInitialStateModel {
     NgIf,
     ReactiveFormsModule,
     SuccessDialogComponent,
-    TextButtonDirective,
     NgOptimizedImage,
   ],
 })

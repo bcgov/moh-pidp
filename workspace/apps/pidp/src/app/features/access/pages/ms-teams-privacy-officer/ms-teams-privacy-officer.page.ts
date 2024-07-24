@@ -9,8 +9,6 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
 import { EMPTY, catchError, noop, of, tap } from 'rxjs';
 
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { faAngleRight } from '@fortawesome/free-solid-svg-icons';
 import { LoadingOverlayService } from '@pidp/presentation';
 
 import { NoContent } from '@bcgov/shared/data-access';
@@ -19,7 +17,6 @@ import {
   InjectViewportCssClassDirective,
   PageFooterActionDirective,
   SafePipe,
-  TextButtonDirective,
 } from '@bcgov/shared/ui';
 
 import {
@@ -38,6 +35,7 @@ import { EnrolmentErrorComponent } from '../../components/enrolment-error/enrolm
 import { MsTeamsPrivacyOfficerFormState } from './ms-teams-privacy-officer-form-state';
 import { MsTeamsPrivacyOfficerResource } from './ms-teams-privacy-officer-resource.service';
 import { msTeamsSupportEmail } from './ms-teams.constants';
+import { BreadcrumbComponent } from '@app/shared/components/breadcrumb/breadcrumb.component';
 
 @Component({
   selector: 'app-ms-teams',
@@ -47,9 +45,9 @@ import { msTeamsSupportEmail } from './ms-teams.constants';
   imports: [
     AddressFormComponent,
     AnchorDirective,
+    BreadcrumbComponent,
     EnrolmentErrorComponent,
     InjectViewportCssClassDirective,
-    FaIconComponent,
     MatButtonModule,
     MatFormFieldModule,
     MatInputModule,
@@ -61,7 +59,6 @@ import { msTeamsSupportEmail } from './ms-teams.constants';
     SafePipe,
     ReactiveFormsModule,
     RouterLink,
-    TextButtonDirective,
   ],
 })
 export class MsTeamsPrivacyOfficerPage
@@ -74,8 +71,12 @@ export class MsTeamsPrivacyOfficerPage
   public enrolmentError: boolean;
   public submissionPage: number;
   public formState: MsTeamsPrivacyOfficerFormState;
-  public faAngleRight = faAngleRight;
   public AccessRoutes = AccessRoutes;
+  public breadcrumbsData: Array<{ title: string; path: string }> = [
+    {title: 'Home', path: ''},
+    {title: 'Access', path: AccessRoutes.routePath(AccessRoutes.ACCESS_REQUESTS)},
+    {title: 'MS Teams Privacy Officer', path: ''},
+  ];
 
   // ui-page is handling this.
   public showOverlayOnSubmit = false;
@@ -138,9 +139,6 @@ export class MsTeamsPrivacyOfficerPage
       this.logger.error('No status code was provided');
       return this.navigateToRoot();
     }
-  }
-  public navigateTo(path: string): void {
-    this.router.navigateByUrl(path);
   }
 
   protected performSubmission(): NoContent {

@@ -112,16 +112,4 @@ describe('AccountLinkingPage', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
-
-  describe('METHOD: onBack', () => {
-    given('user wants to go back to the previous page', () => {
-      when('onBack is invoked', () => {
-        component.onBack();
-
-        then('router should navigate to root route', () => {
-          expect(navigationServiceSpy.navigateToRoot).toHaveBeenCalled();
-        });
-      });
-    });
-  });
 });

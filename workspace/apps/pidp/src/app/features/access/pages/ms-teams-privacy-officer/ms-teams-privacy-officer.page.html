@@ -1,28 +1,5 @@
 <div class="box container" uiPidpInjectViewportCss>
-  <nav class="breadcrumb">
-    <ul>
-      <li>
-        <button uiTextButton (click)="onBack()">
-          <img src="/assets/images/icons/icon-home.svg" alt="Home" />
-          <span class="home-text">Home</span>
-        </button>
-      </li>
-      <li><fa-icon class="fa-duotone" [icon]="faAngleRight"></fa-icon></li>
-      <li>
-        <button
-          uiTextButton
-          (click)="navigateTo(AccessRoutes.routePath(AccessRoutes.ACCESS_REQUESTS))">
-          <span>Access</span>
-        </button>
-      </li>
-      <li><fa-icon class="fa-duotone" [icon]="faAngleRight"></fa-icon></li>
-      <li>
-        <button uiTextButton disabled>
-          <span>MS Teams Privacy Officer</span>
-        </button>
-      </li>
-    </ul>
-  </nav>
+  <app-breadcrumb [breadcrumbs]="breadcrumbsData"></app-breadcrumb>
   <div class="content">
     <app-enrolment-error *ngIf="enrolmentError"></app-enrolment-error>
     <form [formGroup]="formState.form" (ngSubmit)="onSubmit()">

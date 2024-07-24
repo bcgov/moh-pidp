@@ -11,12 +11,9 @@ import { Router, RouterLink } from '@angular/router';
 import { BehaviorSubject, Observable, of, switchMap, tap } from 'rxjs';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faAngleRight } from '@fortawesome/free-solid-svg-icons';
-import { NavigationService } from '@pidp/presentation';
 
 import {
   InjectViewportCssClassDirective,
-  TextButtonDirective,
 } from '@bcgov/shared/ui';
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';
@@ -38,12 +35,13 @@ import {
   bcProviderTutorialLink,
   provincialAttachmentSystemWebsite,
 } from './provincial-attachment-system.constants';
-
+import { BreadcrumbComponent } from '@app/shared/components/breadcrumb/breadcrumb.component';
 @Component({
   selector: 'app-provincial-attachment-system',
   standalone: true,
   imports: [
     AsyncPipe,
+    BreadcrumbComponent,
     MatButtonModule,
     MatIconModule,
     MatStepperModule,
@@ -54,7 +52,6 @@ import {
     NgIf,
     FontAwesomeModule,
     NgOptimizedImage,
-    TextButtonDirective,
   ],
   templateUrl: './provincial-attachment-system.page.html',
   styleUrl: './provincial-attachment-system.page.scss',
@@ -81,9 +78,12 @@ export class ProvincialAttachmentSystemPage implements OnInit {
   public hasCpn: boolean | undefined;
   public Destination = Destination;
   public StatusCode = StatusCode;
-  public faAngleRight = faAngleRight;
   public AccessRoutes = AccessRoutes;
-
+  public breadcrumbsData: Array<{ title: string; path: string }> = [
+    {title: 'Home', path: ''},
+    {title: 'Access', path: AccessRoutes.routePath(AccessRoutes.ACCESS_REQUESTS)},
+    {title: 'PAS', path: ''},
+  ];
   private readonly provincialAttachmentSystemWebsite: string;
 
   public constructor(
@@ -91,7 +91,6 @@ export class ProvincialAttachmentSystemPage implements OnInit {
     private authService: AuthService,
     private bcProviderResource: BcProviderEditResource,
     private discoveryResource: DiscoveryResource,
-    private navigationService: NavigationService,
     private portalResource: PortalResource,
     private partyService: PartyService,
     private router: Router,
@@ -118,20 +117,12 @@ export class ProvincialAttachmentSystemPage implements OnInit {
     );
   }
 
-  public onBack(): void {
-    this.navigationService.navigateToRoot();
-  }
-
   public ngOnInit(): void {
     const profileStatus$ = this.portalResource.getProfileStatus(
       this.partyService.partyId,
     );
 
     this.handleStepperState(profileStatus$);
-  }
-
-  public navigateTo(path: string): void {
-    this.router.navigateByUrl(path);
   }
 
   private handleStepperState(

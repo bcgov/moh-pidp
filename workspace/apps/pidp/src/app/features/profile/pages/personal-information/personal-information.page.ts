@@ -17,9 +17,6 @@ import {
   tap,
 } from 'rxjs';
 
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { faAngleRight } from '@fortawesome/free-solid-svg-icons';
-
 import {
   ContactFormComponent,
   InjectViewportCssClassDirective,
@@ -31,7 +28,6 @@ import {
   PageSectionSubheaderComponent,
   PageSectionSubheaderDescDirective,
   PreferredNameFormComponent,
-  TextButtonDirective,
   ToggleContentChange,
   ToggleContentComponent,
 } from '@bcgov/shared/ui';
@@ -53,6 +49,7 @@ import { UserInfoComponent } from './components/user-info/user-info.component';
 import { PersonalInformationFormState } from './personal-information-form-state';
 import { PersonalInformationResource } from './personal-information-resource.service';
 import { PersonalInformation } from './personal-information.model';
+import { BreadcrumbComponent } from '@app/shared/components/breadcrumb/breadcrumb.component';
 
 @Component({
   selector: 'app-personal-information',
@@ -62,8 +59,8 @@ import { PersonalInformation } from './personal-information.model';
   standalone: true,
   imports: [
     AsyncPipe,
+    BreadcrumbComponent,
     ContactFormComponent,
-    FaIconComponent,
     InjectViewportCssClassDirective,
     IsHighAssurancePipe,
     MatButtonModule,
@@ -78,7 +75,6 @@ import { PersonalInformation } from './personal-information.model';
     PreferredNameFormComponent,
     ToggleContentComponent,
     UserInfoComponent,
-    TextButtonDirective,
   ],
 })
 export class PersonalInformationPage
@@ -98,7 +94,10 @@ export class PersonalInformationPage
 
   // ui-page is handling this.
   public showOverlayOnSubmit = false;
-  public faAngleRight = faAngleRight;
+  public breadcrumbsData: Array<{ title: string; path: string }> = [
+    { title: 'Home', path: '' },
+    { title: 'Personal Information', path: '' },
+  ];
 
   public constructor(
     dependenciesService: AbstractFormDependenciesService,
