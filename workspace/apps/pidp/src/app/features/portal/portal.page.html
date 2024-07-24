@@ -2,7 +2,7 @@
   <div class="header-container">
     <div class="banner-mask">
       <div class="banner-content">
-        <h5>Welcome to the <span>OneHealthID</span> Service</h5>
+        <h5>Welcome to the OneHealthID Service</h5>
       </div>
     </div>
   </div>
@@ -10,42 +10,27 @@
     <div class="card-grid">
       <div class="card">
         <img
-          src="/assets/images/marcelo-leal-k7ll1hpdhFA-unsplash.jpg"
-          alt="Profile Information"
-          loading="lazy" />
-        <div class="card-content">
-          <p class="card-header">Linking Accounts</p>
-          <p>Link different credentials together in OneHealthID</p>
-          <a
-            (click)="navigateTo(ProfileRoutes.routePath(ProfileRoutes.ACCOUNT_LINKING))">
-            <fa-icon [icon]="faArrowRight"></fa-icon> READ MORE
-          </a>
-        </div>
-      </div>
-
-      <div class="card">
-        <img
-          src="/assets/images/online-marketing-hIgeoQjS_iE-unsplash.jpg"
+          src="/assets/images/get-access.jpg"
           alt="Systems access for myself"
           loading="lazy" />
         <div class="card-content">
-          <p class="card-header">Acquire Access</p>
-          <p>Acquire healthcare system access for myself</p>
+          <p class="card-header">Get Access</p>
+          <p>Healthcare system access for myself</p>
           <a
             (click)="navigateTo(AccessRoutes.routePath(AccessRoutes.ACCESS_REQUESTS))">
-            <fa-icon [icon]="faArrowRight"></fa-icon> READ MORE
+            <fa-icon [icon]="faBookmark"></fa-icon> Read More
           </a>
         </div>
       </div>
 
       <div class="card">
         <img
-          src="/assets/images/national-cancer-institute-KrsoedfRAf4-unsplash.jpg"
+          src="/assets/images/grant-access.jpg"
           alt="Interested in systems for others"
           loading="lazy" />
         <div class="card-content">
           <p class="card-header">Grant Access</p>
-          <p>Grant healthcare system access for others</p>
+          <p>Healthcare system access for others</p>
           <div class="card-footer">
             <span class="content-with-alert"
               ><ng-container *ngIf="alerts$ | async as alerts"
@@ -55,12 +40,9 @@
                   [icon]="faBell"></fa-icon></ng-container
               ><a
                 (click)="navigateTo(OrganizationInfoRoutes.routePath(OrganizationInfoRoutes.ENDORSEMENTS))">
-                READ MORE
+                <fa-icon [icon]="faBookmark"></fa-icon>Read More
               </a></span
-            ><a
-              (click)="navigateTo(OrganizationInfoRoutes.routePath(OrganizationInfoRoutes.ENDORSEMENTS))"
-              ><fa-icon [icon]="faArrowRight"></fa-icon
-            ></a>
+            >
           </div>
         </div>
       </div>
