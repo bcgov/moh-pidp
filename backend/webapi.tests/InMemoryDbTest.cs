@@ -30,7 +30,7 @@ public class InMemoryDbTest : IDisposable
            .Invokes(i => this.PublishedEvents.Add(i.GetArgument<IDomainEvent>(0)!));
 
         this.TestDb = new InMemoryDbContext(options, SystemClock.Instance, mediator);
-        this.TestDb.Database.EnsureCreated();
+        //this.TestDb.Database.EnsureCreated();
     }
 
     public void Dispose()
