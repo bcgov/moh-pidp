@@ -52,10 +52,10 @@
           <div class="card-footer">
             <span class="content-with-alert"
               ><ng-container *ngIf="alerts$ | async as alerts"
-              ><fa-icon
-                *ngIf="alerts.includes(AlertCode.PENDING_ENDORSEMENT_REQUEST)"
-                class="fa-duotone"
-                [icon]="faBell"></fa-icon></ng-container
+                ><fa-icon
+                  *ngIf="alerts.includes(AlertCode.PENDING_ENDORSEMENT_REQUEST)"
+                  class="fa-duotone"
+                  [icon]="faBell"></fa-icon></ng-container
               ><a> READ MORE </a></span
             ><a
               (click)="navigateTo(OrganizationInfoRoutes.routePath(OrganizationInfoRoutes.ENDORSEMENTS))"
