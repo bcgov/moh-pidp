@@ -1,6 +1,5 @@
 namespace Pidp.Data;
 
-using System.Text.Json;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using NodaTime;
@@ -56,7 +55,6 @@ public class PidpDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-        modelBuilder.Ignore<JsonDocument>();
 
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(PidpDbContext).Assembly);
     }
