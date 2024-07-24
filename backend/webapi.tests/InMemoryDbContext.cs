@@ -17,8 +17,6 @@ public class InMemoryDbContext : PidpDbContext
     {
         base.OnModelCreating(modelBuilder);
         modelBuilder.Ignore<JsonDocument>();
-
-        modelBuilder.ApplyConfigurationsFromAssembly(typeof(PidpDbContext).Assembly);
     }
 
 }
