@@ -14,7 +14,6 @@ using Pidp.Models.DomainEvents;
 public class InMemoryDbTest : IDisposable
 {
     protected InMemoryDbContext TestDb { get; }
-    //protected PidpDbContext TestDb { get; }
     protected List<IDomainEvent> PublishedEvents { get; } = new();
 
     protected InMemoryDbTest()
@@ -22,7 +21,6 @@ public class InMemoryDbTest : IDisposable
         var options = new DbContextOptionsBuilder<PidpDbContext>()
             .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
             .UseProjectables()
-            .EnableSensitiveDataLogging()
             .Options;
 
         var mediator = A.Fake<IMediator>();
