@@ -13,7 +13,8 @@ using Pidp.Models.DomainEvents;
 
 public class InMemoryDbTest : IDisposable
 {
-    protected PidpDbContext TestDb { get; }
+    protected InMemoryDbContext TestDb { get; }
+    //protected PidpDbContext TestDb { get; }
     protected List<IDomainEvent> PublishedEvents { get; } = new();
 
     protected InMemoryDbTest()
@@ -27,7 +28,7 @@ public class InMemoryDbTest : IDisposable
         A.CallTo(() => mediator.Publish(A<IDomainEvent>._, A<CancellationToken>._))
            .Invokes(i => this.PublishedEvents.Add(i.GetArgument<IDomainEvent>(0)!));
 
-        this.TestDb = new PidpDbContext(options, SystemClock.Instance, mediator);
+        this.TestDb = new InMemoryDbContext(options, SystemClock.Instance, mediator);
         this.TestDb.Database.EnsureCreated();
     }
 
