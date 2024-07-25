@@ -8,7 +8,10 @@
   </div>
   <div class="body-container">
     <div class="card-grid">
-      <div class="card">
+      <div
+        class="card"
+        (click)="navigateTo(AccessRoutes.routePath(AccessRoutes.ACCESS_REQUESTS))"
+        (keyup)="navigateTo(AccessRoutes.routePath(AccessRoutes.ACCESS_REQUESTS))">
         <img
           src="/assets/images/get-access.jpg"
           alt="Systems access for myself"
@@ -16,14 +19,14 @@
         <div class="card-content">
           <p class="card-header">Get Access</p>
           <p>Healthcare system access for myself</p>
-          <a
-            (click)="navigateTo(AccessRoutes.routePath(AccessRoutes.ACCESS_REQUESTS))">
-            <fa-icon [icon]="faBookmark"></fa-icon> Read More
-          </a>
+          <a> <fa-icon [icon]="faBookmark"></fa-icon> Read More </a>
         </div>
       </div>
 
-      <div class="card">
+      <div
+        class="card"
+        (click)="navigateTo(OrganizationInfoRoutes.routePath(OrganizationInfoRoutes.ENDORSEMENTS))"
+        (keyup)="navigateTo(OrganizationInfoRoutes.routePath(OrganizationInfoRoutes.ENDORSEMENTS))">
         <img
           src="/assets/images/grant-access.jpg"
           alt="Interested in systems for others"
@@ -38,10 +41,7 @@
                   *ngIf="alerts.includes(AlertCode.PENDING_ENDORSEMENT_REQUEST)"
                   class="fa-duotone"
                   [icon]="faBell"></fa-icon></ng-container
-              ><a
-                (click)="navigateTo(OrganizationInfoRoutes.routePath(OrganizationInfoRoutes.ENDORSEMENTS))">
-                <fa-icon [icon]="faBookmark"></fa-icon>Read More
-              </a></span
+              ><a> <fa-icon [icon]="faBookmark"></fa-icon>Read More </a></span
             >
           </div>
         </div>
