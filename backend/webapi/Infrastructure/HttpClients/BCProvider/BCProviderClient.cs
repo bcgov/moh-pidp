@@ -143,6 +143,91 @@ public class BCProviderClient : IBCProviderClient
         }
     }
 
+
+    public async Task<bool> RemoveAuthMethods(string userPrincipalName)
+    {
+        var authMethods = await this.GetUserAuthMethods(userPrincipalName);
+        if (authMethods is null)
+        {
+            //TODO If the user has no auth methods, what?
+            return true;
+        }
+        try
+        {
+            foreach (var authMethod in authMethods)
+            {
+                // If the request returns an error, it's possible that the auth method is default and cannot be deleted.
+                // In this case, we want to continue deleting the other auth methods.
+                try
+                {
+                    //TODO: Do we even need to check ALL of these? wait for confirmation
+                    switch (authMethod["@odata.type"])
+                    {
+                        case "#microsoft.graph.passwordAuthenticationMethod":
+                            break;
+                        case "#microsoft.graph.emailAuthenticationMethod":
+                            Console.WriteLine("Email auth method found, delete it.");
+                            await this.client.Users[userPrincipalName].Authentication.EmailMethods[authMethod["id"]].DeleteAsync();
+                            break;
+                        case "#microsoft.graph.fido2AuthenticationMethod":
+                            Console.WriteLine("FIDO auth method found, delete it.");
+                            await this.client.Users[userPrincipalName].Authentication.Fido2Methods[authMethod["id"]].DeleteAsync();
+                            break;
+                        case "#microsoft.graph.microsoftAuthenticatorAuthenticationMethod":
+                            Console.WriteLine("Microsoft authenticator auth method found, delete it.");
+                            await this.client.Users[userPrincipalName].Authentication.MicrosoftAuthenticatorMethods[authMethod["id"]].DeleteAsync();
+                            break;
+                        case "#microsoft.graph.phoneAuthenticationMethod":
+                            Console.WriteLine("Phone auth method found, delete it.");
+                            await this.client.Users[userPrincipalName].Authentication.PhoneMethods[authMethod["id"]].DeleteAsync();
+                            break;
+                        case "#microsoft.graph.softwareOathAuthenticationMethod":
+                            Console.WriteLine("Oath auth method found, delete it.");
+                            await this.client.Users[userPrincipalName].Authentication.SoftwareOathMethods[authMethod["id"]].DeleteAsync();
+                            break;
+                        case "#microsoft.graph.temporaryAccessPassAuthenticationMethod":
+                            Console.WriteLine("Temp access pass auth method found, delete it.");
+                            await this.client.Users[userPrincipalName].Authentication.TemporaryAccessPassMethods[authMethod["id"]].DeleteAsync();
+                            break;
+                        case "#microsoft.graph.windowsHelloForBusinessAuthenticationMethod":
+                            Console.WriteLine("Windows Hello for Business auth method found, delete it.");
+                            await this.client.Users[userPrincipalName].Authentication.WindowsHelloForBusinessMethods[authMethod["id"]].DeleteAsync();
+                            break;
+                        default:
+                            Console.WriteLine("What? No auth method found?");
+                            break;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"An error occurred while deleting auth method {authMethod["@odata.type"]}: {ex.Message}");
+                }
+            }
+            return true;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"An error occurred: {ex.Message}");
+            return false;
+        }
+    }
+
+    private async Task<IEnumerable<Dictionary<string, string>>?> GetUserAuthMethods(string userPrincipalName)
+    {
+        try
+        {
+            var authMethods = await this.client.Users[userPrincipalName].Authentication.Methods
+                .GetAsync();
+
+            return (IEnumerable<Dictionary<string, string>>?)(authMethods?.Value);
+        }
+        catch
+        {
+            this.logger.LogGetUserAuthMethodsFailure(userPrincipalName);
+            return null;
+        }
+    }
+
     private async Task<string?> CreateUniqueUserPrincipalName(NewUserRepresentation user)
     {
         var joinedFullName = $"{user.FirstName}.{user.LastName}";
@@ -235,4 +320,7 @@ public static partial class BCProviderClientLoggingExtensions
 
     [LoggerMessage(10, LogLevel.Error, "Failed to update the user '{userPrincipalName}'.")]
     public static partial void LogUserUpdateFailure(this ILogger<BCProviderClient> logger, string userPrincipalName);
+
+    [LoggerMessage(11, LogLevel.Error, "Failed to retrieve authentication methods for the user '{userPrincipalName}'.")]
+    public static partial void LogGetUserAuthMethodsFailure(this ILogger<BCProviderClient> logger, string userPrincipalName);
 }

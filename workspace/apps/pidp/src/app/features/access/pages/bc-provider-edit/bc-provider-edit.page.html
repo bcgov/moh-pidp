@@ -98,7 +98,9 @@
           </div>
         </div>
       </section>
-      <section class="reset-mfa">
+      <section
+        *ngIf="(identityProvider$ | async) === IdentityProvider.BCSC"
+        class="reset-mfa">
         <h3>
           <strong
             >Do you need to reset your multi-factor authentication

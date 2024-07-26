@@ -1,4 +1,4 @@
-import { NgIf, NgOptimizedImage } from '@angular/common';
+import { AsyncPipe, NgIf, NgOptimizedImage } from '@angular/common';
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -31,6 +31,8 @@ import {
   AbstractFormPage,
 } from '@app/core/classes/abstract-form-page.class';
 import { PartyService } from '@app/core/party/party.service';
+import { IdentityProvider } from '@app/features/auth/enums/identity-provider.enum';
+import { AuthorizedUserService } from '@app/features/auth/services/authorized-user.service';
 import { FaqRoutes } from '@app/features/faq/faq.routes';
 import { NeedHelpComponent } from '@app/shared/components/need-help/need-help.component';
 import { DialogBcproviderEditComponent } from '@app/shared/components/success-dialog/components/dialog-bcprovider-edit.component';
@@ -40,6 +42,7 @@ import { BcProviderEditFormState } from './bc-provider-edit-form-state';
 import {
   BcProviderChangePasswordRequest,
   BcProviderEditResource,
+  BcProviderResetMfaRequest,
 } from './bc-provider-edit-resource.service';
 
 export interface BcProviderEditInitialStateModel {
@@ -62,6 +65,7 @@ export interface BcProviderEditInitialStateModel {
     SuccessDialogComponent,
     NgOptimizedImage,
     TextButtonDirective,
+    AsyncPipe,
   ],
 })
 export class BcProviderEditPage
@@ -75,6 +79,8 @@ export class BcProviderEditPage
   public username = '';
   public errorMatcher = new CrossFieldErrorMatcher();
   public componentType = DialogBcproviderEditComponent;
+  public identityProvider$: Observable<IdentityProvider>;
+  public IdentityProvider = IdentityProvider;
 
   // ui-page is handling this.
   public showOverlayOnSubmit = false;
@@ -95,9 +101,11 @@ export class BcProviderEditPage
     private resource: BcProviderEditResource,
     private router: Router,
     private loadingOverlayService: LoadingOverlayService,
+    private authorizedUserService: AuthorizedUserService,
   ) {
     super(dependenciesService);
     this.formState = new BcProviderEditFormState(fb);
+    this.identityProvider$ = this.authorizedUserService.identityProvider$;
   }
 
   public onBack(): void {
@@ -127,10 +135,16 @@ export class BcProviderEditPage
       actionText: 'Continue',
       actionTypePosition: 'center',
     };
+    const requestData: BcProviderResetMfaRequest = {
+      partyId: this.partyService.partyId,
+      userPrincipalName: this.username,
+    };
     this.dialog
       .open(ConfirmDialogComponent, { data })
       .afterClosed()
-      .pipe(exhaustMap((result) => (result ? this.resetMfa() : EMPTY)))
+      .pipe(
+        exhaustMap((result) => (result ? this.resetMfa(requestData) : EMPTY)),
+      )
       .subscribe();
   }
 
@@ -165,10 +179,38 @@ export class BcProviderEditPage
     );
   }
 
-  private resetMfa(): Observable<void | null> {
+  private resetMfa(
+    requestData: BcProviderResetMfaRequest,
+  ): Observable<void | null> {
+    const data: DialogOptions = {
+      title: 'Your Multi-factor authentication (MFA) has been reset',
+      bottomBorder: false,
+      titlePosition: 'center',
+      bodyTextPosition: 'center',
+      component: HtmlComponent,
+      data: {
+        content:
+          'Your authentication credentials have been successfully reset.',
+      },
+      imageSrc: '/assets/images/online-marketing-hIgeoQjS_iE-unsplash.jpg',
+      imageType: 'banner',
+      width: '31rem',
+      height: '24rem',
+      actionText: 'Continue',
+      actionTypePosition: 'center',
+    };
+
     this.loadingOverlayService.open(LOADING_OVERLAY_DEFAULT_MESSAGE);
-    console.log('Resetting MFA');
-    this.loadingOverlayService.close();
+    this.resource.resetMfa(requestData).pipe(
+      tap((_) => {
+        this.loadingOverlayService.close();
+        this.dialog.open(ConfirmDialogComponent, { data });
+      }),
+      catchError(() => {
+        this.showErrorCard = true;
+        return of(noop());
+      }),
+    );
     return of(null);
   }
 
