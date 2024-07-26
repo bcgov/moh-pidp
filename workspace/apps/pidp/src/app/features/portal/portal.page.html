@@ -13,9 +13,11 @@
         (click)="navigateTo(AccessRoutes.routePath(AccessRoutes.ACCESS_REQUESTS))"
         (keyup)="navigateTo(AccessRoutes.routePath(AccessRoutes.ACCESS_REQUESTS))">
         <img
-          src="/assets/images/get-access.jpg"
+          height="189"
+          width="279"
+          ngSrc="/assets/images/get-access.jpg"
           alt="Systems access for myself"
-          loading="lazy" />
+          priority />
         <div class="card-content">
           <p class="card-header">Get Access</p>
           <p>Healthcare system access for myself</p>
@@ -28,19 +30,24 @@
         (click)="navigateTo(OrganizationInfoRoutes.routePath(OrganizationInfoRoutes.ENDORSEMENTS))"
         (keyup)="navigateTo(OrganizationInfoRoutes.routePath(OrganizationInfoRoutes.ENDORSEMENTS))">
         <img
-          src="/assets/images/grant-access.jpg"
+          height="189"
+          width="279"
+          ngSrc="/assets/images/grant-access.jpg"
           alt="Interested in systems for others"
-          loading="lazy" />
+          priority />
         <div class="card-content">
-          <p class="card-header">Grant Access</p>
+          <p class="card-header">
+            Grant Access
+            <ng-container *ngIf="alerts$ | async as alerts"
+              ><fa-icon
+                *ngIf="alerts.includes(AlertCode.PENDING_ENDORSEMENT_REQUEST)"
+                class="fa-duotone red-color"
+                [icon]="faBell"></fa-icon
+            ></ng-container>
+          </p>
           <p>Healthcare system access for others</p>
           <div class="card-footer">
             <span class="content-with-alert"
-              ><ng-container *ngIf="alerts$ | async as alerts"
-                ><fa-icon
-                  *ngIf="alerts.includes(AlertCode.PENDING_ENDORSEMENT_REQUEST)"
-                  class="fa-duotone"
-                  [icon]="faBell"></fa-icon></ng-container
               ><a> <fa-icon [icon]="faBookmark"></fa-icon>Read More </a></span
             >
           </div>
