@@ -139,13 +139,9 @@
   padding-right: 3px;
 }
 
-div.card-footer {
-  .content-with-alert {
-    fa-icon {
-      color: red;
-      margin-right: 5px;
-    }
-  }
+.red-color {
+  color: red;
+  margin-right: 5px;
 }
 
 .back-to-top-container {
@@ -222,10 +218,12 @@ div.card-footer {
   }
 
   & .card-content a {
-    margin-top: 3rem;
     font-size: 16px;
     display: flex;
-    padding: 0.5rem 2rem;
+    padding: 0.5rem 1rem;
+    width: 200px;
+    height: 40px;
+    margin-top: 3rem;
     justify-content: center;
     align-items: center;
     gap: 0.625rem;
@@ -248,6 +246,11 @@ div.card-footer {
   .card:hover {
     box-shadow: 2px 2px 2px rgb(194, 194, 196);
     transform: scale(1.03);
+  }
+
+  & .banner-mask {
+    padding-left: 3rem;
+    height: 15vh;
   }
 }
 
@@ -281,7 +284,7 @@ div.card-footer {
   }
 
   & .card-content {
-  padding: 0 1rem;
+    padding: 0 1rem;
   }
 
   & .card-content h2 {
@@ -416,8 +419,6 @@ div.card-footer {
     width: 90vw;
     flex-direction: column;
     padding: 15px;
-
-
   }
 
   & .card img {
