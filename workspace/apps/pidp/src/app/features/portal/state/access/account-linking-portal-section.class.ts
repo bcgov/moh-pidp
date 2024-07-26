@@ -2,6 +2,9 @@ import { Router } from '@angular/router';
 
 import { Observable } from 'rxjs';
 
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
+import { faLink, faUserCheck } from '@fortawesome/free-solid-svg-icons';
+
 import { AlertType } from '@bcgov/shared/ui';
 
 import { ProfileRoutes } from '@app/features/profile/profile.routes';
@@ -17,6 +20,8 @@ export class AccountLinkingPortalSection implements IPortalSection {
   public readonly key: PortalSectionKey;
   public heading: string;
   public description: string;
+  public faUserCheck = faUserCheck;
+  public faLink = faLink;
 
   public constructor(
     private profileStatus: ProfileStatus,
@@ -24,8 +29,7 @@ export class AccountLinkingPortalSection implements IPortalSection {
   ) {
     this.key = 'accountLinking';
     this.heading = 'Account Linking';
-    this.description =
-      'Here you can link your other professional credentials you have in the OnehealthID. Please have your information available for our quick process.';
+    this.description = 'Link different credentials together in OneHealthID';
   }
 
   public get hint(): string {
@@ -56,6 +60,11 @@ export class AccountLinkingPortalSection implements IPortalSection {
       : statusCode === StatusCode.COMPLETED
         ? 'success'
         : 'warn';
+  }
+
+  public get icon(): IconProp {
+    const statusCode = this.getStatusCode();
+    return statusCode === StatusCode.COMPLETED ? faUserCheck : faLink;
   }
 
   public get status(): string {

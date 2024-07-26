@@ -8,6 +8,7 @@ import { Role } from '@app/shared/enums/roles.enum';
 import { StatusCode } from '../enums/status-code.enum';
 import { ProfileStatus } from '../models/profile-status.model';
 import { IAccessSection } from './access-section.model';
+import { AccountLinkingPortalSection } from './access/account-linking-portal-section.class';
 import { BcProviderPortalSection } from './access/bc-provider-portal-section.class';
 import { DriverFitnessPortalSection } from './access/driver-fitness-portal-section.class';
 import { HcimAccountTransferPortalSection } from './access/hcim-account-transfer-portal-section.class';
@@ -24,7 +25,6 @@ import { TransactionsPortalSection } from './history/transactions-portal-section
 import { EndorsementsPortalSection } from './organization/endorsements-portal-section.class';
 import { PortalSectionStatusKey } from './portal-section-status-key.type';
 import { IPortalSection } from './portal-section.model';
-import { AccountLinkingPortalSection } from './profile/account-linking-portal-section.class';
 import { CollegeCertificationPortalSection } from './profile/college-certification-portal-section.class';
 import { DemographicsPortalSection } from './profile/demographics-portal-section.class';
 import { UserAccessAgreementPortalSection } from './profile/user-access-agreement-portal-section.class';
@@ -83,6 +83,10 @@ export class AccessStateBuilder {
 
   private createAccessGroup(profileStatus: ProfileStatus): IAccessSection[] {
     return [
+      ...ArrayUtils.insertResultIf<IAccessSection>(
+        this.insertSection('accountLinking', profileStatus),
+        () => [new AccountLinkingPortalSection(profileStatus, this.router)],
+      ),
       ...ArrayUtils.insertResultIf<IAccessSection>(
         this.insertSection('saEforms', profileStatus),
         () => [new SaEformsPortalSection(profileStatus, this.router)],
@@ -189,10 +193,6 @@ export class PortalStateBuilder {
         ],
       ),
       ...ArrayUtils.insertResultIf<IPortalSection>(
-        this.insertSection('accountLinking', profileStatus),
-        () => [new AccountLinkingPortalSection(profileStatus, this.router)],
-      ),
-      ...ArrayUtils.insertResultIf<IPortalSection>(
         this.insertSection('userAccessAgreement', profileStatus),
         () => [
           new UserAccessAgreementPortalSection(profileStatus, this.router),
@@ -214,6 +214,10 @@ export class PortalStateBuilder {
 
   private createAccessGroup(profileStatus: ProfileStatus): IPortalSection[] {
     return [
+      ...ArrayUtils.insertResultIf<IAccessSection>(
+        this.insertSection('accountLinking', profileStatus),
+        () => [new AccountLinkingPortalSection(profileStatus, this.router)],
+      ),
       ...ArrayUtils.insertResultIf<IPortalSection>(
         this.insertSection('saEforms', profileStatus),
         () => [new SaEformsPortalSection(profileStatus, this.router)],
