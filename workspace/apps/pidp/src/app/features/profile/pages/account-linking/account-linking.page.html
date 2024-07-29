@@ -121,7 +121,7 @@
             </div>
             <ng-template #linkBCProvider
               ><a
-                *ngIf="(identityProvider$ | async) === IdentityProvider.BCSC"
+                *ngIf="hasCredential(IdentityProvider.BCSC)"
                 (click)="onPageNavigate(['/access/bc-provider-application'])"
                 >Link Account</a
               ></ng-template
