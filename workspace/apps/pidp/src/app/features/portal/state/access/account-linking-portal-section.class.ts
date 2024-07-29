@@ -55,11 +55,9 @@ export class AccountLinkingPortalSection implements IPortalSection {
 
   public get statusType(): AlertType {
     const statusCode = this.getStatusCode();
-    return statusCode === StatusCode.ERROR
-      ? 'danger'
-      : statusCode === StatusCode.COMPLETED
-        ? 'success'
-        : 'warn';
+    const statCompleted: AlertType =
+      statusCode === StatusCode.COMPLETED ? 'success' : 'warn';
+    return statusCode === StatusCode.ERROR ? 'danger' : statCompleted;
   }
 
   public get icon(): IconProp {
@@ -69,11 +67,9 @@ export class AccountLinkingPortalSection implements IPortalSection {
 
   public get status(): string {
     const statusCode = this.getStatusCode();
-    return statusCode === StatusCode.ERROR
-      ? ''
-      : statusCode === StatusCode.COMPLETED
-        ? 'Completed'
-        : 'Incomplete';
+    const statCompleted: string =
+      statusCode === StatusCode.COMPLETED ? 'Completed' : 'Incomplete';
+    return statusCode === StatusCode.ERROR ? '' : statCompleted;
   }
 
   public performAction(): void | Observable<void> {
