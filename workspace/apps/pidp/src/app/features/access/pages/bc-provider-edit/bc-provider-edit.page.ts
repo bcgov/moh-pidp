@@ -206,6 +206,9 @@ export class BcProviderEditPage
         catchError(() => {
           this.showErrorCard = true;
           return of(noop());
+        }),
+      )
+      .subscribe();
     return of(null);
   }
 
