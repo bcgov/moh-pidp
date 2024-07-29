@@ -13,10 +13,6 @@ export interface BcProviderChangePasswordRequest {
   partyId: number;
   newPassword: string;
 }
-export interface BcProviderResetMfaRequest {
-  partyId: number;
-  userPrincipalName: string;
-}
 
 @Injectable({ providedIn: 'root' })
 export class BcProviderEditResource {
@@ -37,9 +33,9 @@ export class BcProviderEditResource {
     );
   }
 
-  public resetMfa(data: BcProviderResetMfaRequest): NoContent {
-    const url = `parties/${data.partyId}/credentials/bc-provider/reset-mfa`;
-    return this.apiResource.post<NoContent>(url, data).pipe(
+  public resetMfa(partyId: number): NoContent {
+    const url = `parties/${partyId}/credentials/bc-provider/reset-mfa`;
+    return this.apiResource.post<NoContent>(url, {}).pipe(
       NoContentResponse,
       catchError((error: HttpErrorResponse) => {
         return throwError(() => error);

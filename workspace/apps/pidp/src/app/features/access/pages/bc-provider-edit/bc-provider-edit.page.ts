@@ -42,7 +42,6 @@ import { BcProviderEditFormState } from './bc-provider-edit-form-state';
 import {
   BcProviderChangePasswordRequest,
   BcProviderEditResource,
-  BcProviderResetMfaRequest,
 } from './bc-provider-edit-resource.service';
 
 export interface BcProviderEditInitialStateModel {
@@ -135,15 +134,13 @@ export class BcProviderEditPage
       actionText: 'Continue',
       actionTypePosition: 'center',
     };
-    const requestData: BcProviderResetMfaRequest = {
-      partyId: this.partyService.partyId,
-      userPrincipalName: this.username,
-    };
     this.dialog
       .open(ConfirmDialogComponent, { data })
       .afterClosed()
       .pipe(
-        exhaustMap((result) => (result ? this.resetMfa(requestData) : EMPTY)),
+        exhaustMap((result) =>
+          result ? this.resetMfa(this.partyService.partyId) : EMPTY,
+        ),
       )
       .subscribe();
   }
@@ -179,9 +176,7 @@ export class BcProviderEditPage
     );
   }
 
-  private resetMfa(
-    requestData: BcProviderResetMfaRequest,
-  ): Observable<void | null> {
+  private resetMfa(partyId: number): Observable<void | null> {
     const data: DialogOptions = {
       title: 'Your Multi-factor authentication (MFA) has been reset',
       bottomBorder: false,
@@ -201,16 +196,16 @@ export class BcProviderEditPage
     };
 
     this.loadingOverlayService.open(LOADING_OVERLAY_DEFAULT_MESSAGE);
-    this.resource.resetMfa(requestData).pipe(
-      tap((_) => {
-        this.loadingOverlayService.close();
-        this.dialog.open(ConfirmDialogComponent, { data });
-      }),
-      catchError(() => {
-        this.showErrorCard = true;
-        return of(noop());
-      }),
-    );
+    this.resource
+      .resetMfa(partyId)
+      .pipe(
+        tap((_) => {
+          this.loadingOverlayService.close();
+          this.dialog.open(ConfirmDialogComponent, { data });
+        }),
+        catchError(() => {
+          this.showErrorCard = true;
+          return of(noop());
     return of(null);
   }
 
