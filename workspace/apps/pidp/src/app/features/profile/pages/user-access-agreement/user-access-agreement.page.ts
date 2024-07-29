@@ -4,15 +4,13 @@ import { Component, OnInit, forwardRef } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { Observable, catchError, noop, of, tap } from 'rxjs';
-
-import { DashboardStateModel, PidpStateName } from '@pidp/data-model';
-import { AppStateService } from '@pidp/presentation';
+import { Observable, catchError, map, noop, of, tap } from 'rxjs';
 
 import {
   AlertComponent,
   AlertContentDirective,
   AnchorDirective,
+  InjectViewportCssClassDirective,
   PageComponent,
   PageFooterActionDirective,
   PageFooterComponent,
@@ -37,6 +35,7 @@ import { UserAccessAgreementResource } from './user-access-agreement-resource.se
     AlertContentDirective,
     AnchorDirective,
     AsyncPipe,
+    InjectViewportCssClassDirective,
     forwardRef(() => UserAccessAgreementDocumentComponent),
     MatButtonModule,
     NgIf,
@@ -51,7 +50,8 @@ export class UserAccessAgreementPage implements OnInit {
   public accessRequestFailed: boolean;
   public specialAuthoritySupportEmail: string;
   public redirectUrl: string | null = null;
-  public dashboardState$: Observable<DashboardStateModel>;
+
+  public fullName$!: Observable<string>;
 
   public constructor(
     private route: ActivatedRoute,
@@ -60,12 +60,8 @@ export class UserAccessAgreementPage implements OnInit {
     private resource: UserAccessAgreementResource,
     private logger: LoggerService,
     private utilsService: UtilsService,
-    private stateService: AppStateService,
   ) {
     this.title = this.route.snapshot.data.title;
-    this.dashboardState$ = this.stateService.getNamedStateBroadcast(
-      PidpStateName.dashboard,
-    );
 
     const routeData = this.route.snapshot.data;
     this.completed = routeData.userAccessAgreementCode === StatusCode.COMPLETED;
@@ -89,6 +85,16 @@ export class UserAccessAgreementPage implements OnInit {
     if (this.route.snapshot.queryParamMap.has('redirect-url')) {
       this.redirectUrl = this.route.snapshot.queryParamMap.get('redirect-url');
     }
+
+    this.fullName$ = this.resource
+      .getProfileStatus(this.partyService.partyId)
+      .pipe(
+        map(
+          (profileStatus) =>
+            profileStatus?.status.dashboardInfo.displayFullName ?? '',
+        ),
+      );
+
     this.utilsService.scrollTop();
   }
 

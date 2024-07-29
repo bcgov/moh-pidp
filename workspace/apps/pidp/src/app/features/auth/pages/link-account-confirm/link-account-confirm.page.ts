@@ -77,6 +77,7 @@ export class LinkAccountConfirmPage implements OnInit {
             height: '26rem',
             actionText: 'Correct',
             actionTypePosition: 'center',
+            class: 'dialog-container dialog-padding',
           };
           return this.dialog
             .open(ConfirmDialogComponent, {

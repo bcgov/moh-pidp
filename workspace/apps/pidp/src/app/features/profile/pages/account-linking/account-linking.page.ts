@@ -131,7 +131,7 @@ export class AccountLinkingPage implements OnInit, OnDestroy {
       height: '24rem',
       actionText: 'Continue',
       actionTypePosition: 'center',
-      class: 'dialog-container',
+      class: 'dialog-container dialog-padding',
     };
     this.dialog
       .open(ConfirmDialogComponent, { data })

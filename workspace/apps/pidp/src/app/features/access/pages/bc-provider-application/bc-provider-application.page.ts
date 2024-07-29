@@ -28,6 +28,7 @@ import {
   Observable,
   catchError,
   exhaustMap,
+  map,
   of,
   switchMap,
   tap,
@@ -41,9 +42,7 @@ import {
   faUser,
   faXmark,
 } from '@fortawesome/free-solid-svg-icons';
-import { DashboardStateModel, PidpStateName } from '@pidp/data-model';
 import {
-  AppStateService,
   LOADING_OVERLAY_DEFAULT_MESSAGE,
   LoadingOverlayService,
   NavigationService,
@@ -120,9 +119,9 @@ export class BcProviderApplicationPage
   public errorMatcher = new CrossFieldErrorMatcher();
   public componentType = DialogBcproviderCreateComponent;
 
-  public activeLayout: 'upliftAccount' | 'createAccount' | '';
+  public fullName$!: Observable<string>;
 
-  public dashboardState$: Observable<DashboardStateModel>;
+  public activeLayout: 'upliftAccount' | 'createAccount' | '';
 
   @ViewChild('successDialog')
   public successDialogTemplate!: TemplateRef<Element>;
@@ -144,7 +143,6 @@ export class BcProviderApplicationPage
     private resource: BcProviderApplicationResource,
     private route: ActivatedRoute,
     private utilsService: UtilsService,
-    private stateService: AppStateService,
   ) {
     super(dependenciesService);
     this.formState = new BcProviderApplicationFormState(fb);
@@ -153,10 +151,6 @@ export class BcProviderApplicationPage
       routeData.bcProviderApplicationStatusCode == StatusCode.COMPLETED;
 
     this.activeLayout = '';
-
-    this.dashboardState$ = this.stateService.getNamedStateBroadcast(
-      PidpStateName.dashboard,
-    );
   }
 
   public onBack(): void {
@@ -204,6 +198,15 @@ export class BcProviderApplicationPage
       this.logger.error('No status code was provided');
       return this.navigationService.navigateToRoot();
     }
+
+    this.fullName$ = this.resource
+      .getProfileStatus(this.partyService.partyId)
+      .pipe(
+        map(
+          (profileStatus) =>
+            profileStatus?.status.dashboardInfo.displayFullName ?? '',
+        ),
+      );
   }
 
   protected performSubmission(): Observable<string | void> {
