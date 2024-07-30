@@ -146,71 +146,93 @@ public class BCProviderClient : IBCProviderClient
 
     public async Task<bool> RemoveAuthMethods(string userPrincipalName)
     {
-        var authMethods = await this.GetUserAuthMethods(userPrincipalName);
-        if (authMethods?.Value is null)
+        var allMethodsDeleted = false;
+        // This is a workaround for the re-register MFA feature that does not exist in the Graph API,
+        // so we will delete all auth methods which will prompt the user to re-register.
+        // We are attempting 3 times since have no access to know which is the default auth method,
+        // and attempting to delete the default auth method will result in an error.
+        var maxAttempts = 3;
+        var attempt = 0;
+        while (!allMethodsDeleted && attempt < maxAttempts)
         {
-            //TODO If the user has no auth methods, what?
-            // I guess our job is done here?
-            return true;
-        }
-        try
-        {
-            foreach (var authMethod in authMethods.Value)
+            attempt++;
+            var authMethods = await this.GetUserAuthMethods(userPrincipalName);
+            if (authMethods?.Value is null)
             {
-                // If the request returns an error, it's possible that the auth method is default and cannot be deleted.
-                // In this case, we want to continue deleting the other auth methods.
-                try
+                //TODO If the user has no auth methods, what?
+                // I guess our job is done here?
+                return true;
+            }
+            // We cannot delete the PasswordAuthenticationMethod
+            var filteredAuthMethods = authMethods.Value.Where(authMethod => authMethod is not PasswordAuthenticationMethod).ToList();
+            if (filteredAuthMethods.Count == 0)
+            {
+                allMethodsDeleted = true;
+                break;
+            }
+            try
+            {
+                foreach (var authMethod in filteredAuthMethods)
                 {
-                    //TODO: Do we even need to check ALL of these? wait for confirmation
-                    switch (authMethod)
+                    // If the request returns an error, it's possible that the auth method is default and cannot be deleted.
+                    // In this case, we want to continue deleting the other auth methods.
+                    try
                     {
-                        case PasswordAuthenticationMethod:
-                            break;
-                        case EmailAuthenticationMethod:
-                            Console.WriteLine("Email auth method found, delete it.");
-                            await this.client.Users[userPrincipalName].Authentication.EmailMethods[authMethod.Id].DeleteAsync();
-                            break;
-                        case Fido2AuthenticationMethod:
-                            Console.WriteLine("FIDO auth method found, delete it.");
-                            await this.client.Users[userPrincipalName].Authentication.Fido2Methods[authMethod.Id].DeleteAsync();
-                            break;
-                        case MicrosoftAuthenticatorAuthenticationMethod:
-                            Console.WriteLine("Microsoft authenticator auth method found, delete it.");
-                            await this.client.Users[userPrincipalName].Authentication.MicrosoftAuthenticatorMethods[authMethod.Id].DeleteAsync();
-                            break;
-                        case PhoneAuthenticationMethod:
-                            Console.WriteLine("Phone auth method found, delete it.");
-                            await this.client.Users[userPrincipalName].Authentication.PhoneMethods[authMethod.Id].DeleteAsync();
-                            break;
-                        case SoftwareOathAuthenticationMethod:
-                            Console.WriteLine("Oath auth method found, delete it.");
-                            await this.client.Users[userPrincipalName].Authentication.SoftwareOathMethods[authMethod.Id].DeleteAsync();
-                            break;
-                        case TemporaryAccessPassAuthenticationMethod:
-                            Console.WriteLine("Temp access pass auth method found, delete it.");
-                            await this.client.Users[userPrincipalName].Authentication.TemporaryAccessPassMethods[authMethod.Id].DeleteAsync();
-                            break;
-                        case WindowsHelloForBusinessAuthenticationMethod:
-                            Console.WriteLine("Windows Hello for Business auth method found, delete it.");
-                            await this.client.Users[userPrincipalName].Authentication.WindowsHelloForBusinessMethods[authMethod.Id].DeleteAsync();
-                            break;
-                        default:
-                            Console.WriteLine("What? No auth method found?");
-                            break;
+                        //TODO: Do we even need to check ALL of these? wait for confirmation
+                        switch (authMethod)
+                        {
+                            case EmailAuthenticationMethod:
+                                Console.WriteLine("Email auth method found, delete it.");
+                                await this.client.Users[userPrincipalName].Authentication.EmailMethods[authMethod.Id].DeleteAsync();
+                                break;
+                            case Fido2AuthenticationMethod:
+                                Console.WriteLine("FIDO auth method found, delete it.");
+                                await this.client.Users[userPrincipalName].Authentication.Fido2Methods[authMethod.Id].DeleteAsync();
+                                break;
+                            case MicrosoftAuthenticatorAuthenticationMethod:
+                                Console.WriteLine("Microsoft authenticator auth method found, delete it.");
+                                await this.client.Users[userPrincipalName].Authentication.MicrosoftAuthenticatorMethods[authMethod.Id].DeleteAsync();
+                                break;
+                            case PhoneAuthenticationMethod:
+                                Console.WriteLine("Phone auth method found, delete it.");
+                                await this.client.Users[userPrincipalName].Authentication.PhoneMethods[authMethod.Id].DeleteAsync();
+                                break;
+                            case SoftwareOathAuthenticationMethod:
+                                Console.WriteLine("Oath auth method found, delete it.");
+                                await this.client.Users[userPrincipalName].Authentication.SoftwareOathMethods[authMethod.Id].DeleteAsync();
+                                break;
+                            case TemporaryAccessPassAuthenticationMethod:
+                                Console.WriteLine("Temp access pass auth method found, delete it.");
+                                await this.client.Users[userPrincipalName].Authentication.TemporaryAccessPassMethods[authMethod.Id].DeleteAsync();
+                                break;
+                            case WindowsHelloForBusinessAuthenticationMethod:
+                                Console.WriteLine("Windows Hello for Business auth method found, delete it.");
+                                await this.client.Users[userPrincipalName].Authentication.WindowsHelloForBusinessMethods[authMethod.Id].DeleteAsync();
+                                break;
+                            default:
+                                Console.WriteLine("What? No auth method found?");
+                                break;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"An error occurred while deleting auth method {authMethod.OdataType}: {ex.Message}");
+                        allMethodsDeleted = false;
                     }
                 }
-                catch (Exception ex)
+                if (filteredAuthMethods.Count == 0)
                 {
-                    Console.WriteLine($"An error occurred while deleting auth method {authMethod.OdataType}: {ex.Message}");
+                    allMethodsDeleted = true;
+                    break;
                 }
             }
-            return true;
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred: {ex.Message}");
+                return false;
+            }
         }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"An error occurred: {ex.Message}");
-            return false;
-        }
+        return allMethodsDeleted;
     }
 
     private async Task<AuthenticationMethodCollectionResponse?> GetUserAuthMethods(string userPrincipalName)
