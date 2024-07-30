@@ -210,16 +210,16 @@ public class BCProviderClient : IBCProviderClient
                         allMethodsDeleted = false;
                     }
                 }
-                if (filteredAuthMethods.Count == 0)
-                {
-                    allMethodsDeleted = true;
-                    break;
-                }
             }
             catch (Exception ex)
             {
                 this.logger.LogDeleteUserAuthMethodFailure(" possibly set as default auth method", ex.Message);
                 return false;
+            }
+            if (filteredAuthMethods.Count == 0)
+            {
+                allMethodsDeleted = true;
+                break;
             }
         }
         return allMethodsDeleted;
