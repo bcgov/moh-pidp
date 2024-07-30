@@ -147,51 +147,52 @@ public class BCProviderClient : IBCProviderClient
     public async Task<bool> RemoveAuthMethods(string userPrincipalName)
     {
         var authMethods = await this.GetUserAuthMethods(userPrincipalName);
-        if (authMethods is null)
+        if (authMethods?.Value is null)
         {
             //TODO If the user has no auth methods, what?
+            // I guess our job is done here?
             return true;
         }
         try
         {
-            foreach (var authMethod in authMethods)
+            foreach (var authMethod in authMethods.Value)
             {
                 // If the request returns an error, it's possible that the auth method is default and cannot be deleted.
                 // In this case, we want to continue deleting the other auth methods.
                 try
                 {
                     //TODO: Do we even need to check ALL of these? wait for confirmation
-                    switch (authMethod["@odata.type"])
+                    switch (authMethod)
                     {
-                        case "#microsoft.graph.passwordAuthenticationMethod":
+                        case PasswordAuthenticationMethod:
                             break;
-                        case "#microsoft.graph.emailAuthenticationMethod":
+                        case EmailAuthenticationMethod:
                             Console.WriteLine("Email auth method found, delete it.");
-                            await this.client.Users[userPrincipalName].Authentication.EmailMethods[authMethod["id"]].DeleteAsync();
+                            await this.client.Users[userPrincipalName].Authentication.EmailMethods[authMethod.Id].DeleteAsync();
                             break;
-                        case "#microsoft.graph.fido2AuthenticationMethod":
+                        case Fido2AuthenticationMethod:
                             Console.WriteLine("FIDO auth method found, delete it.");
-                            await this.client.Users[userPrincipalName].Authentication.Fido2Methods[authMethod["id"]].DeleteAsync();
+                            await this.client.Users[userPrincipalName].Authentication.Fido2Methods[authMethod.Id].DeleteAsync();
                             break;
-                        case "#microsoft.graph.microsoftAuthenticatorAuthenticationMethod":
+                        case MicrosoftAuthenticatorAuthenticationMethod:
                             Console.WriteLine("Microsoft authenticator auth method found, delete it.");
-                            await this.client.Users[userPrincipalName].Authentication.MicrosoftAuthenticatorMethods[authMethod["id"]].DeleteAsync();
+                            await this.client.Users[userPrincipalName].Authentication.MicrosoftAuthenticatorMethods[authMethod.Id].DeleteAsync();
                             break;
-                        case "#microsoft.graph.phoneAuthenticationMethod":
+                        case PhoneAuthenticationMethod:
                             Console.WriteLine("Phone auth method found, delete it.");
-                            await this.client.Users[userPrincipalName].Authentication.PhoneMethods[authMethod["id"]].DeleteAsync();
+                            await this.client.Users[userPrincipalName].Authentication.PhoneMethods[authMethod.Id].DeleteAsync();
                             break;
-                        case "#microsoft.graph.softwareOathAuthenticationMethod":
+                        case SoftwareOathAuthenticationMethod:
                             Console.WriteLine("Oath auth method found, delete it.");
-                            await this.client.Users[userPrincipalName].Authentication.SoftwareOathMethods[authMethod["id"]].DeleteAsync();
+                            await this.client.Users[userPrincipalName].Authentication.SoftwareOathMethods[authMethod.Id].DeleteAsync();
                             break;
-                        case "#microsoft.graph.temporaryAccessPassAuthenticationMethod":
+                        case TemporaryAccessPassAuthenticationMethod:
                             Console.WriteLine("Temp access pass auth method found, delete it.");
-                            await this.client.Users[userPrincipalName].Authentication.TemporaryAccessPassMethods[authMethod["id"]].DeleteAsync();
+                            await this.client.Users[userPrincipalName].Authentication.TemporaryAccessPassMethods[authMethod.Id].DeleteAsync();
                             break;
-                        case "#microsoft.graph.windowsHelloForBusinessAuthenticationMethod":
+                        case WindowsHelloForBusinessAuthenticationMethod:
                             Console.WriteLine("Windows Hello for Business auth method found, delete it.");
-                            await this.client.Users[userPrincipalName].Authentication.WindowsHelloForBusinessMethods[authMethod["id"]].DeleteAsync();
+                            await this.client.Users[userPrincipalName].Authentication.WindowsHelloForBusinessMethods[authMethod.Id].DeleteAsync();
                             break;
                         default:
                             Console.WriteLine("What? No auth method found?");
@@ -200,7 +201,7 @@ public class BCProviderClient : IBCProviderClient
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"An error occurred while deleting auth method {authMethod["@odata.type"]}: {ex.Message}");
+                    Console.WriteLine($"An error occurred while deleting auth method {authMethod.OdataType}: {ex.Message}");
                 }
             }
             return true;
@@ -212,14 +213,14 @@ public class BCProviderClient : IBCProviderClient
         }
     }
 
-    private async Task<IEnumerable<Dictionary<string, string>>?> GetUserAuthMethods(string userPrincipalName)
+    private async Task<AuthenticationMethodCollectionResponse?> GetUserAuthMethods(string userPrincipalName)
     {
         try
         {
             var authMethods = await this.client.Users[userPrincipalName].Authentication.Methods
                 .GetAsync();
 
-            return (IEnumerable<Dictionary<string, string>>?)(authMethods?.Value);
+            return authMethods;
         }
         catch
         {
