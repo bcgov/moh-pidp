@@ -159,8 +159,7 @@ public class BCProviderClient : IBCProviderClient
             var authMethods = await this.GetUserAuthMethods(userPrincipalName);
             if (authMethods?.Value is null)
             {
-                //TODO If the user has no auth methods, what?
-                // I guess our job is done here?
+                // the user has no auth methods
                 return true;
             }
             // We cannot delete the PasswordAuthenticationMethod
@@ -178,45 +177,36 @@ public class BCProviderClient : IBCProviderClient
                     // In this case, we want to continue deleting the other auth methods.
                     try
                     {
-                        //TODO: Do we even need to check ALL of these? wait for confirmation
                         switch (authMethod)
                         {
                             case EmailAuthenticationMethod:
-                                Console.WriteLine("Email auth method found, delete it.");
                                 await this.client.Users[userPrincipalName].Authentication.EmailMethods[authMethod.Id].DeleteAsync();
                                 break;
                             case Fido2AuthenticationMethod:
-                                Console.WriteLine("FIDO auth method found, delete it.");
                                 await this.client.Users[userPrincipalName].Authentication.Fido2Methods[authMethod.Id].DeleteAsync();
                                 break;
                             case MicrosoftAuthenticatorAuthenticationMethod:
-                                Console.WriteLine("Microsoft authenticator auth method found, delete it.");
                                 await this.client.Users[userPrincipalName].Authentication.MicrosoftAuthenticatorMethods[authMethod.Id].DeleteAsync();
                                 break;
                             case PhoneAuthenticationMethod:
-                                Console.WriteLine("Phone auth method found, delete it.");
                                 await this.client.Users[userPrincipalName].Authentication.PhoneMethods[authMethod.Id].DeleteAsync();
                                 break;
                             case SoftwareOathAuthenticationMethod:
-                                Console.WriteLine("Oath auth method found, delete it.");
                                 await this.client.Users[userPrincipalName].Authentication.SoftwareOathMethods[authMethod.Id].DeleteAsync();
                                 break;
                             case TemporaryAccessPassAuthenticationMethod:
-                                Console.WriteLine("Temp access pass auth method found, delete it.");
                                 await this.client.Users[userPrincipalName].Authentication.TemporaryAccessPassMethods[authMethod.Id].DeleteAsync();
                                 break;
                             case WindowsHelloForBusinessAuthenticationMethod:
-                                Console.WriteLine("Windows Hello for Business auth method found, delete it.");
                                 await this.client.Users[userPrincipalName].Authentication.WindowsHelloForBusinessMethods[authMethod.Id].DeleteAsync();
                                 break;
                             default:
-                                Console.WriteLine("What? No auth method found?");
                                 break;
                         }
                     }
                     catch (Exception ex)
                     {
-                        Console.WriteLine($"An error occurred while deleting auth method {authMethod.OdataType}: {ex.Message}");
+                        this.logger.LogDeleteUserAuthMethodFailure(authMethod.OdataType, ex.Message);
                         allMethodsDeleted = false;
                     }
                 }
@@ -228,7 +218,7 @@ public class BCProviderClient : IBCProviderClient
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"An error occurred: {ex.Message}");
+                this.logger.LogDeleteUserAuthMethodFailure(" possibly set as default auth method", ex.Message);
                 return false;
             }
         }
@@ -346,4 +336,7 @@ public static partial class BCProviderClientLoggingExtensions
 
     [LoggerMessage(11, LogLevel.Error, "Failed to retrieve authentication methods for the user '{userPrincipalName}'.")]
     public static partial void LogGetUserAuthMethodsFailure(this ILogger<BCProviderClient> logger, string userPrincipalName);
+
+    [LoggerMessage(12, LogLevel.Error, "An error occurred while deleting auth method {oDataType}: {message}")]
+    public static partial void LogDeleteUserAuthMethodFailure(this ILogger<BCProviderClient> logger, string? oDataType, string message);
 }
