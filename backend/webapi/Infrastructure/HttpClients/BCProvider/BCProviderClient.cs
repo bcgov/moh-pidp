@@ -216,11 +216,6 @@ public class BCProviderClient : IBCProviderClient
                 this.logger.LogDeleteUserAuthMethodFailure(" possibly set as default auth method", ex.Message);
                 return false;
             }
-            if (filteredAuthMethods.Count == 0)
-            {
-                allMethodsDeleted = true;
-                break;
-            }
         }
         return allMethodsDeleted;
     }
