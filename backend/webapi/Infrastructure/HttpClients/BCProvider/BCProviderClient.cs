@@ -149,7 +149,7 @@ public class BCProviderClient : IBCProviderClient
         var allMethodsDeleted = false;
         // This is a workaround for the re-register MFA feature that does not exist in the Graph API,
         // so we will delete all auth methods which will prompt the user to re-register.
-        // We are attempting 3 times since have no access to know which is the default auth method,
+        // We are attempting 3 times since Graph API does not support default auth method,
         // and attempting to delete the default auth method will result in an error.
         var maxAttempts = 3;
         var attempt = 0;
