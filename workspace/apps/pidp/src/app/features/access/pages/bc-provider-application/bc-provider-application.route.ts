@@ -1,6 +1,5 @@
 import { Routes } from '@angular/router';
 
-import { highAssuranceCredentialGuard } from '@app/features/auth/guards/high-assurance-credential.guard';
 import { bcProviderCompletedResolver } from '@app/features/auth/resolvers/bc-provider-completed.resolver';
 
 import { BcProviderApplicationPage } from './bc-provider-application.page';
@@ -13,7 +12,6 @@ export const routes: Routes = [
       bcProviderApplicationStatusCode: bcProviderApplicationResolver,
       hasCompletedBCProvider: bcProviderCompletedResolver,
     },
-    canActivate: [highAssuranceCredentialGuard],
     component: BcProviderApplicationPage,
   },
 ];

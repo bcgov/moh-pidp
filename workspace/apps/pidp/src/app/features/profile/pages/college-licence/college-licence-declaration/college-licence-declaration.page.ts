@@ -26,12 +26,7 @@ import {
 } from '@app/core/classes/abstract-form-page.class';
 import { PartyService } from '@app/core/party/party.service';
 import { LoggerService } from '@app/core/services/logger.service';
-import {
-  DashboardStateModel,
-  PidpStateName,
-} from '@app/features/portal/models/state.model';
 import { ProfileRoutes } from '@app/features/profile/profile.routes';
-import { AppStateService } from '@app/features/shell/services/app-state.service';
 import { LookupService } from '@app/modules/lookup/lookup.service';
 import { CollegeLookup } from '@app/modules/lookup/lookup.types';
 
@@ -88,14 +83,13 @@ export class CollegeLicenceDeclarationPage
     private resource: CollegeLicenceDeclarationResource,
     private logger: LoggerService,
     private lookupService: LookupService,
-    private stateService: AppStateService,
     fb: FormBuilder,
   ) {
     super(dependenciesService);
 
     this.title = this.route.snapshot.data.title;
     this.formState = new CollegeLicenceDeclarationFormState(fb);
-    this.colleges = lookupService.colleges;
+    this.colleges = this.lookupService.colleges;
   }
 
   public onBack(): void {
@@ -139,20 +133,6 @@ export class CollegeLicenceDeclarationPage
   }
 
   protected afterSubmitIsSuccessful(cpn: string | null): void {
-    // Set college on the left navigation.
-    const collegeCode = this.formState.collegeCode.value as number;
-    const college = this.lookupService.getCollege(collegeCode);
-    const collegeName = college?.name ?? '';
-
-    const oldState = this.stateService.getNamedState<DashboardStateModel>(
-      PidpStateName.dashboard,
-    );
-    const newState: DashboardStateModel = {
-      ...oldState,
-      userProfileCollegeNameText: collegeName,
-    };
-    this.stateService.setNamedState(PidpStateName.dashboard, newState);
-
     if (cpn) {
             this.router.navigate(
         [ProfileRoutes.routePath(ProfileRoutes.COLLEGE_LICENCE_INFO), {showCollegeLicenceDeclarationPage: true}],
