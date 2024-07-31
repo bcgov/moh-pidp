@@ -41,7 +41,7 @@ public class EndorsementApproveTests : InMemoryDbTest
 
     [Theory]
     [MemberData(nameof(StatusCases))]
-    public async void Approve_AsRequestingParty_SuccessOnApproved(EndorsementRequestStatus status)
+    public async Task Approve_AsRequestingParty_SuccessOnApproved(EndorsementRequestStatus status)
     {
         var request = this.TestDb.Has(new EndorsementRequest
         {
@@ -69,7 +69,7 @@ public class EndorsementApproveTests : InMemoryDbTest
 
     [Theory]
     [MemberData(nameof(StatusCases))]
-    public async void Approve_AsRecievingParty_SuccessOnRecieved(EndorsementRequestStatus status)
+    public async Task Approve_AsRecievingParty_SuccessOnRecieved(EndorsementRequestStatus status)
     {
         var request = this.TestDb.Has(new EndorsementRequest
         {
@@ -94,17 +94,9 @@ public class EndorsementApproveTests : InMemoryDbTest
         }
     }
 
-    public static IEnumerable<object[]> StatusCases()
-    {
-        foreach (var status in TestData.AllValuesOf<EndorsementRequestStatus>())
-        {
-            yield return new object[] { status };
-        }
-    }
-
     [Theory]
     [MemberData(nameof(MoaRoleTestCases))]
-    public async void Approve_AsRequester_MoaRoleAssigned(IEnumerable<int> licencedParties, int? expectedRoleAssigned)
+    public async Task Approve_AsRequester_MoaRoleAssigned(IEnumerable<int> licencedParties, int? expectedRoleAssigned)
     {
         foreach (var partyId in licencedParties)
         {
@@ -142,7 +134,7 @@ public class EndorsementApproveTests : InMemoryDbTest
     }
 
     [Fact]
-    public async void Approve_AsReceivingParty_Send_Email_to_RequestingParty()
+    public async Task Approve_AsReceivingParty_Send_Email_to_RequestingParty()
     {
         var request = this.TestDb.Has(new EndorsementRequest
         {
@@ -160,11 +152,14 @@ public class EndorsementApproveTests : InMemoryDbTest
         A.CallTo(() => emailService.SendAsync(An<Email>._)).MustHaveHappenedOnceExactly();
     }
 
-    public static IEnumerable<object?[]> MoaRoleTestCases()
+    public static TheoryData<EndorsementRequestStatus> StatusCases => new(TestData.AllValuesOf<EndorsementRequestStatus>());
+
+    public static TheoryData<int[], int?> MoaRoleTestCases => new()
     {
-        yield return new object[] { Enumerable.Empty<int>(), null! }; // neither are licenced, no role assigned.
-        yield return new object[] { new[] { RequestingPartyId }, ReceivingPartyId };
-        yield return new object[] { new[] { ReceivingPartyId }, RequestingPartyId };
-        yield return new object[] { new[] { RequestingPartyId, ReceivingPartyId }, null! }; // Both are licenced, no role assigned
-    }
+        // { [ Licenced PartyIds ], PartyIds expected to have MOA role assigned }
+        { [], null }, // neither are licenced, no role assigned.
+        { [ RequestingPartyId ], ReceivingPartyId },
+        { [ ReceivingPartyId ], RequestingPartyId },
+        { [ RequestingPartyId, ReceivingPartyId ], null }, // Both are licenced, no role assigned
+    };
 }
