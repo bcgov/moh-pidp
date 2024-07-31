@@ -29,6 +29,7 @@ import { LoggerService } from '@app/core/services/logger.service';
 import { ProfileRoutes } from '@app/features/profile/profile.routes';
 import { LookupService } from '@app/modules/lookup/lookup.service';
 import { CollegeLookup } from '@app/modules/lookup/lookup.types';
+import { BreadcrumbComponent } from '@app/shared/components/breadcrumb/breadcrumb.component';
 
 import { CollegeLicenceDeclarationFormState } from './college-licence-declaration-form-state';
 import { CollegeLicenceDeclarationResource } from './college-licence-declaration-resource.service';
@@ -43,6 +44,7 @@ import { PartyLicenceDeclarationInformation } from './party-licence-declaration-
   imports: [
     AlertComponent,
     AlertContentDirective,
+    BreadcrumbComponent,
     InjectViewportCssClassDirective,
     MatButtonModule,
     MatFormFieldModule,
@@ -70,6 +72,10 @@ export class CollegeLicenceDeclarationPage
       this.formState.collegeCode.value === RegisteredCollege.Bccnm;
     return isNurse;
   }
+  public breadcrumbsData: Array<{ title: string; path: string }> = [
+    { title: 'Home', path: '' },
+    { title: 'College Licence', path: '' },
+  ];
 
   public constructor(
     dependenciesService: AbstractFormDependenciesService,

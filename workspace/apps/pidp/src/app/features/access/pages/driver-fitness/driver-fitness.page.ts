@@ -61,7 +61,7 @@ export class DriverFitnessPage implements OnInit {
       title: 'Access',
       path: AccessRoutes.routePath(AccessRoutes.ACCESS_REQUESTS),
     },
-    { title: 'Enrolment', path: '' },
+    { title: 'DMFT', path: '' },
   ];
 
   public constructor(
