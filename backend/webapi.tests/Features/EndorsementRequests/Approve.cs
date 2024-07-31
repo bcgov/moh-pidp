@@ -14,8 +14,8 @@ using PidpTests.TestingExtensions;
 
 public class EndorsementApproveTests : InMemoryDbTest
 {
-    private static readonly int RequestingPartyId = 1;
-    private static readonly int ReceivingPartyId = 2;
+    private const int RequestingPartyId = 1;
+    private const int ReceivingPartyId = 2;
 
     public EndorsementApproveTests()
     {
@@ -55,21 +55,20 @@ public class EndorsementApproveTests : InMemoryDbTest
 
         var result = await handler.HandleAsync(new Approve.Command { EndorsementRequestId = request.Id, PartyId = RequestingPartyId });
 
+        Assert.Equal(expected, result.IsSuccess);
         if (expected)
         {
-            Assert.True(result.IsSuccess);
             Assert.Equal(EndorsementRequestStatus.Completed, request.Status);
         }
         else
         {
-            Assert.False(result.IsSuccess);
             Assert.Equal(status, request.Status);
         }
     }
 
     [Theory]
     [MemberData(nameof(StatusCases))]
-    public async Task Approve_AsRecievingParty_SuccessOnRecieved(EndorsementRequestStatus status)
+    public async Task Approve_AsRecievingPartyNotPreApproved_SuccessOnRecieved(EndorsementRequestStatus status)
     {
         var request = this.TestDb.Has(new EndorsementRequest
         {
@@ -82,21 +81,66 @@ public class EndorsementApproveTests : InMemoryDbTest
 
         var result = await handler.HandleAsync(new Approve.Command { EndorsementRequestId = request.Id, PartyId = ReceivingPartyId });
 
+        Assert.Equal(expected, result.IsSuccess);
         if (expected)
         {
-            Assert.True(result.IsSuccess);
             Assert.Equal(EndorsementRequestStatus.Approved, request.Status);
         }
         else
         {
-            Assert.False(result.IsSuccess);
             Assert.Equal(status, request.Status);
         }
     }
 
     [Theory]
+    [MemberData(nameof(StatusCases))]
+    public async Task Approve_AsRecievingPartyPreApproved_CompleteOnRecieved(EndorsementRequestStatus status)
+    {
+        var request = this.TestDb.Has(new EndorsementRequest
+        {
+            RequestingPartyId = RequestingPartyId,
+            ReceivingPartyId = ReceivingPartyId,
+            Status = status,
+            PreApproved = true
+        });
+        var expected = status == EndorsementRequestStatus.Received; // Reciever can only approve ER after recieving.
+        var handler = this.MockDependenciesFor<Approve.CommandHandler>();
+
+        var result = await handler.HandleAsync(new Approve.Command { EndorsementRequestId = request.Id, PartyId = ReceivingPartyId });
+
+        Assert.Equal(expected, result.IsSuccess);
+        if (expected)
+        {
+            Assert.Equal(EndorsementRequestStatus.Completed, request.Status);
+        }
+        else
+        {
+            Assert.Equal(status, request.Status);
+        }
+    }
+
+    [Fact]
+    public async Task Approve_AsReceivingParty_SendEmailToRequestingParty()
+    {
+        var request = this.TestDb.Has(new EndorsementRequest
+        {
+            RequestingPartyId = RequestingPartyId,
+            ReceivingPartyId = ReceivingPartyId,
+            Status = EndorsementRequestStatus.Received,
+            RecipientEmail = "Email1@email.com"
+        });
+
+        var emailService = AMock.EmailService();
+        var handler = this.MockDependenciesFor<Approve.CommandHandler>(emailService);
+
+        var result = await handler.HandleAsync(new Approve.Command { EndorsementRequestId = request.Id, PartyId = ReceivingPartyId });
+        Assert.True(result.IsSuccess);
+        A.CallTo(() => emailService.SendAsync(An<Email>._)).MustHaveHappenedOnceExactly();
+    }
+
+    [Theory]
     [MemberData(nameof(MoaRoleTestCases))]
-    public async Task Approve_AsRequester_MoaRoleAssigned(IEnumerable<int> licencedParties, int? expectedRoleAssigned)
+    public async Task Approve_AsRequester_MoaRoleAssignedEmailSentToReceiver(IEnumerable<int> licencedParties, int? expectedRoleAssigned)
     {
         foreach (var partyId in licencedParties)
         {
@@ -114,7 +158,8 @@ public class EndorsementApproveTests : InMemoryDbTest
             .ReturningTrueWhenAssigingClientRoles();
         var plrClient = A.Fake<IPlrClient>()
             .ReturningAStandingsDigestWhenCalledWithCpn("cpn", true);
-        var handler = this.MockDependenciesFor<Approve.CommandHandler>(keycloakClient, plrClient);
+        var emailService = AMock.EmailService();
+        var handler = this.MockDependenciesFor<Approve.CommandHandler>(keycloakClient, plrClient, emailService);
 
         var result = await handler.HandleAsync(new Approve.Command { EndorsementRequestId = request.Id, PartyId = RequestingPartyId });
 
@@ -131,25 +176,53 @@ public class EndorsementApproveTests : InMemoryDbTest
                 .Single();
             A.CallTo(() => keycloakClient.AssignAccessRoles(expectedUserId, MohKeycloakEnrolment.MoaLicenceStatus)).MustHaveHappened();
         }
+        Assert.Single(emailService.SentEmails);
+        var sentTo = emailService.SentEmails.Single().To.Single();
+        Assert.Equal(this.TestDb.Parties.Single(party => party.Id == ReceivingPartyId).Email, sentTo);
     }
 
-    [Fact]
-    public async Task Approve_AsReceivingParty_Send_Email_to_RequestingParty()
+    [Theory]
+    [MemberData(nameof(MoaRoleTestCases))]
+    public async Task Approve_AsPreApprovedReciever_MoaRoleAssignedEmailSentToRequester(IEnumerable<int> licencedParties, int? expectedRoleAssigned)
     {
+        foreach (var partyId in licencedParties)
+        {
+            var party = this.TestDb.Parties.Single(party => party.Id == partyId);
+            party.Cpn = "cpn";
+        }
         var request = this.TestDb.Has(new EndorsementRequest
         {
             RequestingPartyId = RequestingPartyId,
             ReceivingPartyId = ReceivingPartyId,
             Status = EndorsementRequestStatus.Received,
-            RecipientEmail = "Email1@email.com"
+            RecipientEmail = "name@example.com",
+            PreApproved = true
         });
-
+        var keycloakClient = A.Fake<IKeycloakAdministrationClient>()
+            .ReturningTrueWhenAssigingClientRoles();
+        var plrClient = A.Fake<IPlrClient>()
+            .ReturningAStandingsDigestWhenCalledWithCpn("cpn", true);
         var emailService = AMock.EmailService();
-        var handler = this.MockDependenciesFor<Approve.CommandHandler>(emailService);
+        var handler = this.MockDependenciesFor<Approve.CommandHandler>(keycloakClient, plrClient, emailService);
 
         var result = await handler.HandleAsync(new Approve.Command { EndorsementRequestId = request.Id, PartyId = ReceivingPartyId });
+
         Assert.True(result.IsSuccess);
-        A.CallTo(() => emailService.SendAsync(An<Email>._)).MustHaveHappenedOnceExactly();
+        if (expectedRoleAssigned == null)
+        {
+            keycloakClient.AssertNoRolesAssigned();
+        }
+        else
+        {
+            var expectedUserId = this.TestDb.Parties
+                .Where(party => party.Id == expectedRoleAssigned)
+                .Select(party => party.PrimaryUserId)
+                .Single();
+            A.CallTo(() => keycloakClient.AssignAccessRoles(expectedUserId, MohKeycloakEnrolment.MoaLicenceStatus)).MustHaveHappened();
+        }
+        Assert.Single(emailService.SentEmails);
+        var sentTo = emailService.SentEmails.Single().To.Single();
+        Assert.Equal(this.TestDb.Parties.Single(party => party.Id == RequestingPartyId).Email, sentTo);
     }
 
     public static TheoryData<EndorsementRequestStatus> StatusCases => new(TestData.AllValuesOf<EndorsementRequestStatus>());
