@@ -8,6 +8,7 @@
     margin-left: 0;
     padding: var(--card-padding);
     min-height: 15rem;
+    cursor: pointer;
 
     & .card-header {
       & .card-header-icon {
@@ -39,6 +40,9 @@
   .card-container:hover {
     box-shadow: 2px 2px 2px rgb(194, 194, 196);
     transform: scale(1.1);
+  }
+  .cursor-default {
+    cursor: default;
   }
 
   .card-body {

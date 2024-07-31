@@ -1,5 +1,9 @@
 <div class="container" uiPidpInjectViewportCss>
-  <div class="card-container">
+  <div
+    class="card-container"
+    [ngClass]="{ 'cursor-default': actionDisabled }"
+    (click)="actionDisabled ? '' : onAction()"
+    (keyup)="actionDisabled ? '' : onAction()">
     <div class="card-header">
       <div class="card-header-icon">
         <fa-icon
@@ -12,11 +16,7 @@
     <div class="card-body">
       {{ description }}
       <div>
-        <button
-          class="learn-more"
-          uiTextButton
-          [disabled]="actionDisabled"
-          (click)="onAction()">
+        <button class="learn-more" uiTextButton [disabled]="actionDisabled">
           <span [ngClass]="{ 'grey-out': actionDisabled }"
             ><u>Learn more</u><span class="arrow-right">></span></span
           >
