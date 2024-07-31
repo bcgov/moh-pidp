@@ -56,15 +56,37 @@ public class SAEforms
                 })
                 .SingleAsync();
 
-            if (dto.AlreadyEnroled
-                || dto.Email == null
-                || !(await this.plrClient.GetStandingsDigestAsync(dto.Cpn))
-                    .Excluding(ExcludedIdentifierTypes)
-                    .HasGoodStanding)
+            if (dto.Cpn == null)
             {
-                this.logger.LogAccessRequestDenied();
-                return DomainResult.Failed();
+                // Check status of Endorsements
+                var endorsementCpns = await this.context.Endorsements
+                    .Where(endorsement => endorsement.Active
+                        && endorsement.EndorsementRelationships.Any(relationship => relationship.PartyId == command.PartyId))
+                    .SelectMany(endorsement => endorsement.EndorsementRelationships)
+                    .Where(relationship => relationship.PartyId != command.PartyId)
+                    .Select(relationship => relationship.Party!.Cpn)
+                    .ToListAsync();
+
+                var endorsementPlrStanding = await this.plrClient.GetAggregateStandingsDigestAsync(endorsementCpns);
+                if (!endorsementPlrStanding.With(ProviderRoleType.MedicalDoctor).HasGoodStanding)
+                {
+                    this.logger.LogAccessRequestDenied();
+                    return DomainResult.Failed();
+                }
             }
+            else
+            {
+                if (dto.AlreadyEnroled
+                    || dto.Email == null
+                    || !(await this.plrClient.GetStandingsDigestAsync(dto.Cpn))
+                        .Excluding(ExcludedIdentifierTypes)
+                        .HasGoodStanding)
+                {
+                    this.logger.LogAccessRequestDenied();
+                    return DomainResult.Failed();
+                }
+            }
+
 
             if (!await this.keycloakClient.AssignAccessRoles(dto.UserId, MohKeycloakEnrolment.SAEforms))
             {

@@ -308,9 +308,10 @@ public partial class ProfileStatus
                 {
                     { UserIsHighAssuranceIdentity: false } => StatusCode.Locked,
                     _ when profile.HasEnrolment(AccessTypeCode.SAEforms) => StatusCode.Complete,
-                    _ when profile.PartyPlrStanding
-                        .Excluding(SAEforms.ExcludedIdentifierTypes)
-                        .HasGoodStanding => StatusCode.Incomplete,
+                    _ when profile.PartyPlrStanding.Excluding(SAEforms.ExcludedIdentifierTypes).HasGoodStanding
+                        || profile.EndorsementPlrStanding
+                            .With(ProviderRoleType.MedicalDoctor)
+                            .HasGoodStanding => StatusCode.Incomplete,
                     _ => StatusCode.Locked
                 };
             }
