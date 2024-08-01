@@ -7,7 +7,7 @@ import { Observable, map } from 'rxjs';
 
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { faBell } from '@fortawesome/free-regular-svg-icons';
-import { faArrowRight, faArrowUp } from '@fortawesome/free-solid-svg-icons';
+import { faArrowUp, faBookmark } from '@fortawesome/free-solid-svg-icons';
 
 import { InjectViewportCssClassDirective } from '@bcgov/shared/ui';
 
@@ -39,7 +39,7 @@ import { PortalResource } from './portal-resource.service';
   ],
 })
 export class PortalPage implements OnInit {
-  public faArrowRight = faArrowRight;
+  public faBookmark = faBookmark;
   public faArrowUp = faArrowUp;
   public showBackToTopButton: boolean = false;
   public ProfileRoutes = ProfileRoutes;
