@@ -43,11 +43,11 @@
 
 .banner-mask {
   width: 88.85vw;
-  height: 18.165vh;
+  height: 15vh;
   border-radius: 8px;
   background: rgba(1, 51, 102, 0.7);
   display: flex;
-  justify-content: center;
+  justify-content: left;
   align-items: center;
 }
 
@@ -59,10 +59,6 @@
   font-weight: 700;
   line-height: normal;
   font-size: 2.8rem;
-}
-
-.banner-mask h5 span {
-  color: var(--Colours-primary, #fcba19);
 }
 
 .banner-mask p {
@@ -91,7 +87,7 @@
 }
 
 .card {
-  width: 30%;
+  width: 47%;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
   transition: 0.3s;
 
@@ -143,17 +139,9 @@
   padding-right: 3px;
 }
 
-div.card-footer {
-  display: flex;
-  justify-content: space-between;
-  .content-with-alert {
-    display: flex;
-    align-items: center;
-    fa-icon {
-      color: red;
-      margin-right: 5px;
-    }
-  }
+.red-color {
+  color: red;
+  margin-right: 5px;
 }
 
 .back-to-top-container {
@@ -187,15 +175,12 @@ div.card-footer {
 
 .viewport-all {
   & .banner-mask {
-    height: 20vh;
+    height: 15vh;
   }
 
   & .banner-mask h5 {
     text-align: left;
-  }
-
-  & .banner-mask h5 span {
-    color: var(--Colours-primary, #fcba19);
+    margin-left: 2rem;
   }
 
   & .card-grid {
@@ -204,17 +189,24 @@ div.card-footer {
   }
 
   & .card {
-    width: 30%;
+    width: 47%;
     margin-top: 10px;
-    padding: 15px;
+    padding: 25px;
+    border-radius: 0.625rem;
+    border: 1px solid #d8d8d8;
+    display: flex;
+    flex-direction: row;
+    cursor: pointer;
   }
 
   & .card img {
-    height: 120px;
+    width: 17.4375rem;
+    height: 11.8125rem;
+    border-radius: 0.625rem;
   }
 
   & .card-content {
-    padding: 30px 0 0 0;
+    padding: 0 2rem;
   }
 
   & .card-content h2 {
@@ -226,21 +218,38 @@ div.card-footer {
   }
 
   & .card-content a {
-    font-size: 16px;
-    line-height: 27px;
-    text-decoration: none;
+    display: flex;
+    padding: 0.5rem 1rem;
+    width: 200px;
+    height: 40px;
+    margin-top: 3rem;
+    justify-content: center;
+    align-items: center;
+    gap: 0.625rem;
+    border-radius: 0.25rem;
+    color: #036;
+    font-size: 1.125rem;
+    font-weight: 700;
+    letter-spacing: 0.0625rem;
+    border: 2px solid #036;
+    cursor: pointer;
+    background: var(--Colours-primary, #fff);
+    fa-icon {
+      color: #1a5a96;
+    }
   }
 }
 
 // laptap large
 .viewport-large {
-  & .banner-mask h5 span {
-    color: var(--Colours-primary, #fcba19);
-  }
-
   .card:hover {
     box-shadow: 2px 2px 2px rgb(194, 194, 196);
     transform: scale(1.03);
+  }
+
+  & .banner-mask {
+    padding-left: 3rem;
+    height: 15vh;
   }
 }
 
@@ -252,15 +261,11 @@ div.card-footer {
 
   & .banner-mask {
     padding-left: 2rem;
-    height: 18vh;
+    height: 15vh;
   }
 
   & .banner-mask h5 {
     font-size: 2.2rem;
-  }
-
-  & .banner-mask h5 span {
-    color: var(--Colours-primary, #fcba19);
   }
 
   & .banner-mask p {
@@ -268,11 +273,17 @@ div.card-footer {
   }
 
   & .card {
-    width: 30%;
+    width: 47%;
+    padding: 20px;
   }
 
   & .card img {
-    height: 90px;
+    width: 13rem;
+    height: 12rem;
+  }
+
+  & .card-content {
+    padding: 0 1rem;
   }
 
   & .card-content h2 {
@@ -287,6 +298,10 @@ div.card-footer {
     font-size: 15px;
     line-height: 25px;
     text-decoration: none;
+    width: 160px;
+    height: 40px;
+    padding: 0.5rem 1rem;
+    margin-top: 3.5rem;
   }
 
   .card:hover {
@@ -303,15 +318,11 @@ div.card-footer {
 
   & .banner-mask {
     padding: 0 2rem;
-    height: 20vh;
+    height: 13vh;
   }
 
   & .banner-mask h5 {
-    font-size: 2.3rem;
-  }
-
-  & .banner-mask h5 span {
-    color: var(--Colours-primary, #fcba19);
+    font-size: 2rem;
   }
 
   & .banner-mask p {
@@ -319,11 +330,18 @@ div.card-footer {
   }
 
   & .card {
-    width: 30%;
+    width: 47%;
+    flex-direction: column;
+    padding: 15px;
   }
 
   & .card img {
-    height: 75px;
+    height: 105px;
+    width: 100%;
+  }
+
+  & .card-content {
+    padding: 1rem 0;
   }
 
   & .card-content h2 {
@@ -337,7 +355,9 @@ div.card-footer {
   & .card-content a {
     font-size: 15px;
     line-height: 25px;
-    text-decoration: none;
+    width: 200px;
+    height: 40px;
+    margin-top: 0;
   }
 
   .back-to-top-container {
@@ -377,15 +397,11 @@ div.card-footer {
 
   & .banner-mask {
     padding-left: 1rem;
-    height: 25vh;
   }
 
   & .banner-mask h5 {
-    font-size: 1.3rem;
-  }
-
-  & .banner-mask h5 span {
-    color: var(--Colours-primary, #fcba19);
+    font-size: 1.6rem;
+    margin-left: 0;
   }
 
   & .banner-mask p {
@@ -400,14 +416,18 @@ div.card-footer {
 
   & .card {
     width: 90vw;
+    flex-direction: column;
+    padding: 15px;
   }
 
   & .card img {
     height: 105px;
+    width: 100%;
   }
 
   & .card-content {
     height: 180px;
+    padding: 1rem 0rem;
   }
 
   & .card-content h2 {
@@ -420,9 +440,12 @@ div.card-footer {
   }
 
   & .card-content a {
-    font-size: 18px;
+    font-size: 15px;
     line-height: 25px;
+    width: 200px;
+    height: 40px;
     text-decoration: none;
+    margin-top: 0;
   }
 
   .back-to-top-container {

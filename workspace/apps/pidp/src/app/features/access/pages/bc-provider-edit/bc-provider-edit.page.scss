@@ -355,6 +355,28 @@
   }
 }
 
+.viewport-small {
+  fa-icon {
+    padding-left: 0.6rem;
+    padding-right: 0.6rem;
+    font-size: 1.5rem;
+  }
+
+  span {
+    font-size: 0.9rem;
+  }
+
+  .form-card {
+    & .form-content {
+      & .field {
+        & .mat-mdc-form-field {
+          margin-bottom: 18px !important;
+        }
+      }
+    }
+  }
+}
+
 .viewport-small,
 .viewport-xsmall {
   & header {

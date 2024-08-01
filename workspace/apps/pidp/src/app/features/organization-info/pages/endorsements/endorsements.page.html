@@ -1,12 +1,6 @@
 <form [formGroup]="formState.form" (submit)="onSubmit()">
   <div class="container" uiPidpInjectViewportCss>
-    <nav class="breadcrumb">
-      <ul>
-        <li><a (click)="onBack()">Home</a></li>
-        <li><fa-icon class="fa-duotone" [icon]="faAngleRight"></fa-icon></li>
-        <li><a class="active">Active Page</a></li>
-      </ul>
-    </nav>
+    <app-breadcrumb [breadcrumbs]="breadcrumbsData"></app-breadcrumb>
     <div class="content">
       <section class="care-team">
         <header>

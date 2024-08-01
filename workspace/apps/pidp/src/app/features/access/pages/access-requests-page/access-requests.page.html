@@ -1,11 +1,5 @@
 <div class="container" uiPidpInjectViewportCss>
-  <nav class="breadcrumb">
-    <ul>
-      <li><button uiTextButton (click)="onBack()">Home</button></li>
-      <li><fa-icon class="fa-duotone" [icon]="faAngleRight"></fa-icon></li>
-      <li><button uiTextButton>Active Page</button></li>
-    </ul>
-  </nav>
+  <app-breadcrumb [breadcrumbs]="breadcrumbsData"></app-breadcrumb>
   <div class="content-header">
     <h1>Enrol for Access</h1>
     <p>

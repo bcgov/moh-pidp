@@ -22,6 +22,7 @@ import { PortalService } from '@app/features/portal/portal.service';
 import { CollegeCertification } from '../college-licence-declaration/college-certification.model';
 import { CollegeLicenceInformationResource } from './college-licence-information-resource.service';
 import { CollegeLicenceInformationDetailComponent } from './components/college-licence-information-detail.component';
+import { BreadcrumbComponent } from '@app/shared/components/breadcrumb/breadcrumb.component';
 
 @Component({
   selector: 'app-college-licence-information',
@@ -30,6 +31,7 @@ import { CollegeLicenceInformationDetailComponent } from './components/college-l
   standalone: true,
   imports: [
     AsyncPipe,
+    BreadcrumbComponent,
     CollegeLicenceInformationDetailComponent,
     FaIconComponent,
     InjectViewportCssClassDirective,
@@ -40,6 +42,10 @@ import { CollegeLicenceInformationDetailComponent } from './components/college-l
 })
 export class CollegeLicenceInformationPage implements OnInit {
   public faStethoscope = faStethoscope;
+  public breadcrumbsData: Array<{ title: string; path: string }> = [
+    { title: 'Home', path: '' },
+    { title: 'College Licence', path: '' },
+  ];
 
   public title: string;
   public collegeCertifications$!: Observable<CollegeCertification[]>;

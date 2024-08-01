@@ -33,7 +33,6 @@
       font-size: 3.125rem;
       font-weight: 700;
       margin-bottom: 0;
-      padding: 2rem 0;
     }
   }
   & .content {
@@ -106,6 +105,18 @@
     & button:not(:last-child) {
       margin-right: var(--gap);
     }
+  }
+}
+
+.viewport-small {
+  fa-icon {
+    padding-left: 0.6rem;
+    padding-right: 0.6rem;
+    font-size: 1.5rem;
+  }
+
+  span {
+    font-size: 0.9rem;
   }
 }
 

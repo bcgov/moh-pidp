@@ -10,6 +10,7 @@ import {
   AlertComponent,
   AlertContentDirective,
   AnchorDirective,
+  InjectViewportCssClassDirective,
   PageComponent,
   PageFooterActionDirective,
   PageFooterComponent,
@@ -24,7 +25,9 @@ import { PartyService } from '@app/core/party/party.service';
 import { DocumentService } from '@app/core/services/document.service';
 import { LoggerService } from '@app/core/services/logger.service';
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
+import { BreadcrumbComponent } from '@app/shared/components/breadcrumb/breadcrumb.component';
 
+import { AccessRoutes } from '../../access.routes';
 import { EnrolmentErrorComponent } from '../../components/enrolment-error/enrolment-error.component';
 import { PrescriptionRefillEformsResource } from './prescription-refill-eforms-resource.service';
 import {
@@ -41,7 +44,9 @@ import {
     AlertComponent,
     AlertContentDirective,
     AnchorDirective,
+    BreadcrumbComponent,
     EnrolmentErrorComponent,
+    InjectViewportCssClassDirective,
     MatButtonModule,
     NgIf,
     PageComponent,
@@ -62,6 +67,15 @@ export class PrescriptionRefillEformsPage implements OnInit {
   public prescriptionRefillEformsUrl: string;
   public prescriptionRefillEformsSupportEmail: string;
   public enrolmentError: boolean;
+  public AccessRoutes = AccessRoutes;
+  public breadcrumbsData: Array<{ title: string; path: string }> = [
+    { title: 'Home', path: '' },
+    {
+      title: 'Access',
+      path: AccessRoutes.routePath(AccessRoutes.ACCESS_REQUESTS),
+    },
+    { title: 'Prescription Refill Eforms', path: '' },
+  ];
 
   public constructor(
     private route: ActivatedRoute,

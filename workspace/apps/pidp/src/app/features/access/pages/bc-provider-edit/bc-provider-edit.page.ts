@@ -34,10 +34,12 @@ import { PartyService } from '@app/core/party/party.service';
 import { IdentityProvider } from '@app/features/auth/enums/identity-provider.enum';
 import { AuthorizedUserService } from '@app/features/auth/services/authorized-user.service';
 import { FaqRoutes } from '@app/features/faq/faq.routes';
+import { BreadcrumbComponent } from '@app/shared/components/breadcrumb/breadcrumb.component';
 import { NeedHelpComponent } from '@app/shared/components/need-help/need-help.component';
 import { DialogBcproviderEditComponent } from '@app/shared/components/success-dialog/components/dialog-bcprovider-edit.component';
 import { SuccessDialogComponent } from '@app/shared/components/success-dialog/success-dialog.component';
 
+import { AccessRoutes } from '../../access.routes';
 import { BcProviderEditFormState } from './bc-provider-edit-form-state';
 import {
   BcProviderChangePasswordRequest,
@@ -54,6 +56,7 @@ export interface BcProviderEditInitialStateModel {
   styleUrls: ['./bc-provider-edit.page.scss'],
   standalone: true,
   imports: [
+    BreadcrumbComponent,
     InjectViewportCssClassDirective,
     MatButtonModule,
     MatFormFieldModule,
@@ -74,12 +77,22 @@ export class BcProviderEditPage
   public faCircleCheck = faCircleCheck;
   public faXmark = faXmark;
   public formState: BcProviderEditFormState;
+  public AccessRoutes = AccessRoutes;
   public showErrorCard = false;
   public username = '';
   public errorMatcher = new CrossFieldErrorMatcher();
   public componentType = DialogBcproviderEditComponent;
   public identityProvider$: Observable<IdentityProvider>;
   public IdentityProvider = IdentityProvider;
+
+  public breadcrumbsData: Array<{ title: string; path: string }> = [
+    { title: 'Home', path: '' },
+    {
+      title: 'Access',
+      path: AccessRoutes.routePath(AccessRoutes.ACCESS_REQUESTS),
+    },
+    { title: 'BC Provider Account', path: '' },
+  ];
 
   // ui-page is handling this.
   public showOverlayOnSubmit = false;
