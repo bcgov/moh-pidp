@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using NodaTime;
 
 using Pidp.Data;
+using Pidp.Extensions;
 using Pidp.Infrastructure.HttpClients.Keycloak;
 using Pidp.Infrastructure.HttpClients.Mail;
 using Pidp.Infrastructure.HttpClients.Plr;
@@ -15,7 +16,7 @@ using Pidp.Models.Lookups;
 
 public class SAEforms
 {
-    public static IdentifierType[] ExcludedIdentifierTypes => new[] { IdentifierType.PharmacyTech };
+    public static IdentifierType[] ExcludedIdentifierTypes => [IdentifierType.PharmacyTech];
 
     public class Command : ICommand<IDomainResult>
     {
@@ -31,7 +32,7 @@ public class SAEforms
         IClock clock,
         IEmailService emailService,
         IKeycloakAdministrationClient keycloakClient,
-        ILogger<SAEforms.CommandHandler> logger,
+        ILogger<CommandHandler> logger,
         IPlrClient plrClient,
         PidpDbContext context) : ICommandHandler<Command, IDomainResult>
     {
@@ -56,14 +57,17 @@ public class SAEforms
                 })
                 .SingleAsync();
 
+            if (dto.AlreadyEnroled
+                || dto.Email == null)
+            {
+                this.logger.LogAccessRequestDenied();
+                return DomainResult.Failed();
+            }
+
             if (dto.Cpn == null)
             {
                 // Check status of Endorsements
-                var endorsementCpns = await this.context.Endorsements
-                    .Where(endorsement => endorsement.Active
-                        && endorsement.EndorsementRelationships.Any(relationship => relationship.PartyId == command.PartyId))
-                    .SelectMany(endorsement => endorsement.EndorsementRelationships)
-                    .Where(relationship => relationship.PartyId != command.PartyId)
+                var endorsementCpns = await this.context.ActiveEndorsementRelationships(command.PartyId)
                     .Select(relationship => relationship.Party!.Cpn)
                     .ToListAsync();
 
@@ -76,17 +80,14 @@ public class SAEforms
             }
             else
             {
-                if (dto.AlreadyEnroled
-                    || dto.Email == null
-                    || !(await this.plrClient.GetStandingsDigestAsync(dto.Cpn))
-                        .Excluding(ExcludedIdentifierTypes)
-                        .HasGoodStanding)
+                if (!(await this.plrClient.GetStandingsDigestAsync(dto.Cpn))
+                    .Excluding(ExcludedIdentifierTypes)
+                    .HasGoodStanding)
                 {
                     this.logger.LogAccessRequestDenied();
                     return DomainResult.Failed();
                 }
             }
-
 
             if (!await this.keycloakClient.AssignAccessRoles(dto.UserId, MohKeycloakEnrolment.SAEforms))
             {
