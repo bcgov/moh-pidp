@@ -27,37 +27,11 @@
 
 .viewport-all {
   & .content {
-    padding: var(--content-padding) 0;
+    padding-bottom: var(--content-padding);
     display: flex;
     flex-direction: column;
     gap: var(--gap);
 
-    .breadcrumb ul {
-      list-style: none;
-      top: 0;
-      right: 0;
-      padding: 0px;
-    }
-
-    .breadcrumb fa-icon {
-      height: 12px;
-      padding-left: 5px;
-      padding-right: 5px;
-    }
-
-    .breadcrumb ul li {
-      display: inline;
-    }
-
-    .breadcrumb a,
-    .text-button {
-      text-decoration: none;
-      color: #1a5a96;
-      font-size: 12px;
-      font-weight: 400;
-      line-height: 27px;
-      word-wrap: break-word;
-    }
     .content-header h1 {
       color: #003366;
       font-size: 50px;
@@ -146,7 +120,14 @@
   }
 }
 
+.viewport-small {
+  .main {
+    grid-template-columns: calc(50% - 15px) calc(50% - 15px) !important;
+  }
+}
+
 .viewport-xsmall {
+
   .content-header {
     margin: 0px 20px 0px 20px;
   }
@@ -156,9 +137,6 @@
     line-height: 1.1;
   }
 
-  .breadcrumb {
-    margin: 0px 20px 0px 20px;
-  }
   .main {
     display: flex !important;
     flex-direction: column !important;
@@ -192,12 +170,6 @@
         }
       }
     }
-  }
-}
-
-.viewport-small {
-  .main {
-    grid-template-columns: calc(50% - 15px) calc(50% - 15px) !important;
   }
 }
 

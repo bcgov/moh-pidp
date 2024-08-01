@@ -20,7 +20,9 @@ import {
 import { PartyService } from '@app/core/party/party.service';
 import { LoggerService } from '@app/core/services/logger.service';
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
+import { BreadcrumbComponent } from '@app/shared/components/breadcrumb/breadcrumb.component';
 
+import { AccessRoutes } from '../../access.routes';
 import { EnrolmentErrorComponent } from '../../components/enrolment-error/enrolment-error.component';
 import { DriverFitnessResource } from './driver-fitness-resource.service';
 import {
@@ -36,6 +38,7 @@ import {
   standalone: true,
   imports: [
     AnchorDirective,
+    BreadcrumbComponent,
     EnrolmentErrorComponent,
     InjectViewportCssClassDirective,
     MatButtonModule,
@@ -51,6 +54,15 @@ export class DriverFitnessPage implements OnInit {
   public driverFitnessSupportEmail: string;
   public enrolmentError: boolean;
   public medicalPractitionerPortalUrl: string;
+  public AccessRoutes = AccessRoutes;
+  public breadcrumbsData: Array<{ title: string; path: string }> = [
+    { title: 'Home', path: '' },
+    {
+      title: 'Access',
+      path: AccessRoutes.routePath(AccessRoutes.ACCESS_REQUESTS),
+    },
+    { title: 'DMFT', path: '' },
+  ];
 
   public constructor(
     private loadingOverlayService: LoadingOverlayService,
@@ -89,26 +101,23 @@ export class DriverFitnessPage implements OnInit {
 
   public onRequestAccess(): void {
     this.loadingOverlayService.open(LOADING_OVERLAY_DEFAULT_MESSAGE);
-    this.resource
-      .requestAccess(this.partyService.partyId)
-      .pipe(
-        tap(() => {
-          this.completed = true;
-          this.loadingOverlayService.close();
-          this.enrolmentError = false;
-        }),
-        catchError((error: HttpErrorResponse) => {
-          this.loadingOverlayService.close();
-          if (error.status === HttpStatusCode.BadRequest) {
-            this.completed = false;
-            this.enrolmentError = true;
-            return of(noop());
-          }
-          this.accessRequestFailed = true;
+    this.resource.requestAccess(this.partyService.partyId).pipe(
+      tap(() => {
+        this.completed = true;
+        this.loadingOverlayService.close();
+        this.enrolmentError = false;
+      }),
+      catchError((error: HttpErrorResponse) => {
+        this.loadingOverlayService.close();
+        if (error.status === HttpStatusCode.BadRequest) {
+          this.completed = false;
+          this.enrolmentError = true;
           return of(noop());
-        }),
-      )
-      .subscribe();
+        }
+        this.accessRequestFailed = true;
+        return of(noop());
+      }),
+    );
   }
 
   private navigateToRoot(): void {
