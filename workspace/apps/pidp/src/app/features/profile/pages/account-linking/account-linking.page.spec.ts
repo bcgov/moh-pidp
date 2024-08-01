@@ -12,7 +12,6 @@ import {
   randTextRange,
   randUserName,
 } from '@ngneat/falso';
-import { NavigationService } from '@pidp/presentation';
 import { Spy, createSpyFromClass, provideAutoSpy } from 'jest-auto-spies';
 import { KeycloakService } from 'keycloak-angular';
 
@@ -30,7 +29,6 @@ import { AccountLinkingPage } from './account-linking.page';
 describe('AccountLinkingPage', () => {
   let component: AccountLinkingPage;
   let accessTokenServiceSpy: Spy<AccessTokenService>;
-  let navigationServiceSpy: Spy<NavigationService>;
 
   let mockAccessTokenParsed: AccessTokenParsed;
   let mockActivatedRoute: { snapshot: any };
@@ -77,7 +75,6 @@ describe('AccountLinkingPage', () => {
         provideAutoSpy(ApiHttpClient),
         provideAutoSpy(Router),
         provideAutoSpy(KeycloakService),
-        provideAutoSpy(NavigationService),
       ],
     });
 
@@ -106,22 +103,9 @@ describe('AccountLinkingPage', () => {
     accessTokenServiceSpy.decodeToken.nextWith(mockAccessTokenParsed);
 
     component = TestBed.inject(AccountLinkingPage);
-    navigationServiceSpy = TestBed.inject<any>(NavigationService);
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
-  });
-
-  describe('METHOD: onBack', () => {
-    given('user wants to go back to the previous page', () => {
-      when('onBack is invoked', () => {
-        component.onBack();
-
-        then('router should navigate to root route', () => {
-          expect(navigationServiceSpy.navigateToRoot).toHaveBeenCalled();
-        });
-      });
-    });
   });
 });

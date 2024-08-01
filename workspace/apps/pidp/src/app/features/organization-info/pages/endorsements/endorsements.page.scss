@@ -25,33 +25,6 @@ p {
   --endorsement-form-field-width: 38.375rem;
   padding: 1.25rem 0.75rem;
 
-  .breadcrumb ul {
-    list-style: none;
-    top: 0;
-    right: 0;
-    padding: 0px;
-  }
-
-  .breadcrumb fa-icon {
-    height: 12px;
-    padding-left: 5px;
-    padding-right: 5px;
-  }
-
-  .breadcrumb ul li {
-    display: inline;
-  }
-
-  .breadcrumb a,
-  .text-button {
-    text-decoration: none;
-    color: #1a5a96;
-    font-size: 12px;
-    font-weight: 400;
-    line-height: 27px;
-    word-wrap: break-word;
-  }
-
   & .content {
     padding: var(--content-padding);
     & header {
@@ -181,10 +154,6 @@ p {
   --card-header-line-height: calc(var(--card-header-font-size) + 0.5rem);
   --margin-bottom-style: 1.5rem;
   padding: 1.25rem 0;
-
-  .breadcrumb {
-    padding: 0 0.75rem;
-  }
 
   & .content {
     padding: var(--content-padding);

@@ -1,15 +1,71 @@
 <div class="container-box container" uiPidpInjectViewportCss>
+  <app-breadcrumb [breadcrumbs]="breadcrumbsData"></app-breadcrumb>
   <div class="content-box">
     <header>
       <h1>BC Provider Account Information</h1>
     </header>
     <div class="content">
-      <section class="error-card" [class.show-card]="showErrorCard">
-        <p>An error occurred.</p>
-      </section>
+      <ng-container *ngIf="showErrorCard">
+        <section class="error-card" [class.show-card]="showErrorCard">
+          <p>An error occurred.</p>
+        </section>
+      </ng-container>
       <section class="form-card">
         <div class="password-form">
-          <ng-container *ngTemplateOutlet="passwordForm"></ng-container>
+          <form novalidate [formGroup]="formState.form" (ngSubmit)="onSubmit()">
+            <div class="mobile-image">
+              <img
+                ngSrc="/assets/images/bcprovider-account-1000x1103.webp"
+                fill
+                priority />
+            </div>
+            <h2>Password reset</h2>
+            <div class="username">
+              <h4><strong>Provided username</strong></h4>
+              <h5 class="username-overflow">{{ username }}</h5>
+            </div>
+            <div class="form-content">
+              <div class="field">
+                <label id="bc-provider-application-new-password"
+                  >Choose new password</label
+                >
+                <mat-form-field>
+                  <input
+                    matInput
+                    formControlName="newPassword"
+                    type="password"
+                    aria-labelledby="bc-provider-application-new-password" />
+                  <mat-error>{{ formState.getErrorMessage() }}</mat-error>
+                </mat-form-field>
+              </div>
+              <div class="field">
+                <label id="bc-provider-application-confirm-password"
+                  >Confirm new password</label
+                >
+                <mat-form-field>
+                  <input
+                    matInput
+                    formControlName="confirmPassword"
+                    type="password"
+                    aria-labelledby="bc-provider-application-confirm-password"
+                    [errorStateMatcher]="errorMatcher" />
+                  <mat-error *ngIf="formState.form.hasError('nomatch')"
+                    >Must match the new password entered above</mat-error
+                  >
+                </mat-form-field>
+              </div>
+              <div class="form-button-box">
+                <button
+                  mat-flat-button
+                  type="submit"
+                  color="primary"
+                  [disabled]="!isResetButtonEnabled">
+                  Reset password
+                </button>
+              </div>
+              <app-need-help></app-need-help>
+            </div>
+          </form>
         </div>
         <div class="password-splash">
           <div class="password-splash-content">
@@ -55,62 +111,6 @@
     </div>
   </div>
 </div>
-
-<ng-template #passwordForm>
-  <form novalidate [formGroup]="formState.form" (ngSubmit)="onSubmit()">
-    <div class="mobile-image">
-      <img
-      src="/assets/images/bcprovider-account-1000x1103.webp"
-      fill/>
-    </div>
-    <h2>Password reset</h2>
-    <div class="username">
-      <h4><strong>Provided username</strong></h4>
-      <h5>{{ username }}</h5>
-    </div>
-    <div class="form-content">
-      <div class="field">
-        <label id="bc-provider-application-new-password"
-          >Choose new password</label
-        >
-        <mat-form-field>
-          <input
-            matInput
-            formControlName="newPassword"
-            type="password"
-            aria-labelledby="bc-provider-application-new-password" />
-          <mat-error>{{ formState.getErrorMessage() }}</mat-error>
-        </mat-form-field>
-      </div>
-      <div class="field">
-        <label id="bc-provider-application-confirm-password"
-          >Confirm new password</label
-        >
-        <mat-form-field>
-          <input
-            matInput
-            formControlName="confirmPassword"
-            type="password"
-            aria-labelledby="bc-provider-application-confirm-password"
-            [errorStateMatcher]="errorMatcher" />
-          <mat-error *ngIf="formState.form.hasError('nomatch')"
-            >Must match the new password entered above</mat-error
-          >
-        </mat-form-field>
-      </div>
-      <div class="form-button-box">
-        <button
-          mat-flat-button
-          type="submit"
-          color="primary"
-          [disabled]="!isResetButtonEnabled">
-          Reset password
-        </button>
-      </div>
-      <app-need-help></app-need-help>
-    </div>
-  </form>
-</ng-template>
 
 <ng-template #successDialog>
   <app-success-dialog
