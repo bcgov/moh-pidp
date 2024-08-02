@@ -1,5 +1,7 @@
 <div class="container breadcrumb-top" uiPidpInjectViewportCss>
-  <app-breadcrumb [breadcrumbs]="breadcrumbsData"></app-breadcrumb>
+  <div class="breadcrumb">
+    <app-breadcrumb [breadcrumbs]="breadcrumbsData" *ngIf="!showCollegeLicenceDeclarationPage"></app-breadcrumb>
+  </div>
 </div>
 <div *ngIf="showCollegeLicenceDeclarationPage">
   <app-college-licence-declaration [disableCollegeCode]=true [disableCollegeLicenceNumber]=true>

@@ -39,6 +39,9 @@ p {
   }
 }
 .viewport-xsmall {
+  & .breadcrumb {
+    margin-left: 12px !important;
+  }
   & .college-licence {
     color: pidp.$bcgov-color-primary;
     margin-left: 15px;

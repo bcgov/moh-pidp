@@ -209,10 +209,9 @@ $darkgrey: pidp.$bcgov-color-text;
     padding: 6px 20px;
   }
 
-  .breadcrumb {
-    margin: 0px 20px 0px 20px;
+  & .breadcrumb {
+    margin-left: 12px !important;
   }
-
   & .college-licence {
     padding: var(--box-padding);
     color: pidp.$bcgov-color-primary;

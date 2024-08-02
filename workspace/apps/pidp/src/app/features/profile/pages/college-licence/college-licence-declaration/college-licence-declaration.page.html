@@ -1,5 +1,7 @@
 <div class="container box" uiPidpInjectViewportCss>
-  <app-breadcrumb [breadcrumbs]="breadcrumbsData"></app-breadcrumb>
+  <div class="breadcrumb">
+    <app-breadcrumb [breadcrumbs]="breadcrumbsData"></app-breadcrumb>
+  </div>
   <ui-alert
     *ngIf="licenceDeclarationFailed"
     type="muted"
