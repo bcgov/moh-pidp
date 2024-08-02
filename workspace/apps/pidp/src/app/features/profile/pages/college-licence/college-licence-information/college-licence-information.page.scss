@@ -72,6 +72,17 @@ $darkgrey: pidp.$bcgov-color-text;
     }
   }
 }
+.viewport-small {
+  fa-icon {
+    padding-left: 0.6rem;
+    padding-right: 0.6rem;
+    font-size: 1.5rem;
+  }
+
+  span {
+    font-size: 0.9rem;
+  }
+}
 .viewport-xsmall {
   display: flex;
   flex-direction: column;

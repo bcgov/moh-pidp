@@ -1,11 +1,5 @@
 <div class="container-box" uiPidpInjectViewportCss>
-  <nav class="breadcrumb">
-    <ul>
-      <li><button uiTextButton (click)="onBack()">Home</button></li>
-      <li><fa-icon class="fa-duotone" [icon]="faAngleRight"></fa-icon></li>
-      <li><a class="active">Active Page</a></li>
-    </ul>
-  </nav>
+  <app-breadcrumb [breadcrumbs]="breadcrumbsData"></app-breadcrumb>
   <div class="content-box">
     <header>
       <h1>Account linking</h1>
