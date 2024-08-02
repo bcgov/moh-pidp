@@ -27,6 +27,7 @@ import { IdentityProvider } from '../../enums/identity-provider.enum';
 import { BcProviderUser } from '../../models/bc-provider-user.model';
 import { AuthorizedUserService } from '../../services/authorized-user.service';
 import { LinkAccountConfirmResource } from './link-account-confirm-resource.service';
+import { AccessRoutes } from '@app/features/access/access.routes';
 
 @Component({
   selector: 'app-link-account-confirm',
@@ -46,6 +47,10 @@ export class LinkAccountConfirmPage implements OnInit {
   public user$: Observable<User>;
   public breadcrumbsData: Array<{ title: string; path: string }> = [
     {title: 'Home', path: ''},
+    {
+      title: 'Access',
+      path: AccessRoutes.routePath(AccessRoutes.ACCESS_REQUESTS),
+    },
     {title: 'Link Account', path: ''},
   ];
 
