@@ -11,10 +11,8 @@ using Pidp.Infrastructure.Services;
 
 [Route("api/parties/{partyId}/[controller]")]
 [Authorize(Policy = Policies.AnyPartyIdentityProvider)]
-public class EndorsementRequestsController : PidpControllerBase
+public class EndorsementRequestsController(IPidpAuthorizationService authorizationService) : PidpControllerBase(authorizationService)
 {
-    public EndorsementRequestsController(IPidpAuthorizationService authorizationService) : base(authorizationService) { }
-
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
