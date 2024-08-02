@@ -51,6 +51,7 @@ import { AccountLinkingResource } from './account-linking-resource.service';
 import { linkedAccountCardText } from './account-linking.constants';
 import { Credential } from './account-linking.model';
 import { BreadcrumbComponent } from '@app/shared/components/breadcrumb/breadcrumb.component';
+import { AccessRoutes } from '@app/features/access/access.routes';
 
 @Component({
   selector: 'app-account-linking',
@@ -111,6 +112,10 @@ export class AccountLinkingPage implements OnInit, OnDestroy {
   }
   public breadcrumbsData: Array<{ title: string; path: string }> = [
     {title: 'Home', path: ''},
+    {
+      title: 'Access',
+      path: AccessRoutes.routePath(AccessRoutes.ACCESS_REQUESTS),
+    },
     {title: 'Account Linking', path: ''},
   ];
 
