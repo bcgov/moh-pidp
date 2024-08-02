@@ -3,11 +3,11 @@
     <h1>Personal Information</h1>
     <div>
       <p>
-        Welcome to OneHealthID <b>Hawkeye Pierce</b>. Before you get started
-        using the systems available to you, we just need some information for
-        our records. This will be a one time setup of some general information
-        we need from you, you can provide this information now, or at your
-        leisure. But you will be directed where you left off at your next login.
+        Welcome to OneHealthID <b>{{userName}}</b>. Before you get started using
+        the systems available to you, we just need some information for our
+        records. This will be a one time setup of some general information we
+        need from you, you can provide this information now, or at your leisure.
+        But you will be directed where you left off at your next login.
       </p>
       <p><b> Let's get started.</b></p>
       <p>
@@ -37,35 +37,43 @@
             different name in your college licence, select "My name is different
             on my college licence".
           </span>
+          <p class="light-color">
+            This will not change your BC Services card information.
+          </p>
         </ng-container>
       </ui-page-section-subheader>
 
-      <div class="expansion-item">
-        <mat-expansion-panel
-          class="expansion-panel"
-          (opened)="panelOpenState.set(true)"
-          (closed)="panelOpenState.set(false)">
-          <mat-expansion-panel-header>
-            <mat-panel-title
-              ><b
-                >My name is different on my college licence</b
-              ></mat-panel-title
-            >
-          </mat-expansion-panel-header>
-          <!--body-->
-          <h1>Preferred Name</h1>
-          <ng-container uiPageSectionSubheaderDesc>
-            If you use a name professionally that is different from your legal
-            name, enter it here.
-            <span>
-              Entering a preferred name will not change your BC Services Card
-              name.
-            </span>
-          </ng-container>
+      <div class="row expansion-item-container">
+        <div class="expansion-item col-sm-10">
+          <mat-expansion-panel
+            class="expansion-panel"
+            #panel
+            hideToggle
+            (opened)="panelOpenState.set(true)"
+            (closed)="panelOpenState.set(false)">
+            <mat-expansion-panel-header>
+              <mat-panel-title
+                ><b
+                  >My name is different on my college licence</b
+                ></mat-panel-title
+              >
+              <mat-icon>{{panel.expanded ? 'remove' : 'add'}}</mat-icon>
+            </mat-expansion-panel-header>
+            <!--body-->
+            <h1>Preferred Name</h1>
+            <ng-container uiPageSectionSubheaderDesc>
+              If you use a name professionally that is different from your legal
+              name, enter it here.
+              <p>
+                Entering a preferred name will not change your BC Services Card
+                name.
+              </p>
+            </ng-container>
 
-          <ui-preferred-name-form
-            [form]="formState.form"></ui-preferred-name-form>
-        </mat-expansion-panel>
+            <ui-preferred-name-form
+              [form]="formState.form"></ui-preferred-name-form>
+          </mat-expansion-panel>
+        </div>
       </div>
     </ui-page-section>
 
@@ -77,22 +85,14 @@
       </ng-container>
 
       <ui-contact-info-form
+        class="contact-information"
         [form]="formState.form"
         (emailChanges)="onEmailInputChange($event)"></ui-contact-info-form>
     </ui-page-section>
 
-    <ui-page-footer>
-      <button
-        mat-stroked-button
-        uiPageFooterAction
-        type="button"
-        color="primary"
-        (click)="onBack()">
-        Back Home
-      </button>
-
+    <ui-page-footer [mode]="'reverse'">
       <button mat-flat-button uiPageFooterAction type="submit" color="primary">
-        Save Information
+        {{(profileStatus === '1') ? 'Continue' : 'Save Information'}}
       </button>
     </ui-page-footer>
   </ui-page>
