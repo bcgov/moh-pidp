@@ -41,7 +41,7 @@ import { BreadcrumbComponent } from '@app/shared/components/breadcrumb/breadcrum
     CollegeLicenceDeclarationPage,
     NgIf,
     PortalAlertComponent,
-  ],
+      ],
 })
 export class CollegeLicenceInformationPage implements OnInit {
   public faStethoscope = faStethoscope;

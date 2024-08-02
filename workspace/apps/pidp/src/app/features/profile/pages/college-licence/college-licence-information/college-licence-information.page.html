@@ -1,22 +1,5 @@
 <div class="container breadcrumb-top" uiPidpInjectViewportCss>
-  <nav class="breadcrumb">
-    <ul>
-      <li>
-        <a (click)="onBack()">Home</a>
-      </li>
-      <li>
-        <a class="fa-duotone">
-          <fa-icon [icon]="faAngleRight">
-          </fa-icon>
-        </a>
-      </li>
-      <li>
-        <a>
-          College Licence
-        </a>
-      </li>
-    </ul>
-  </nav>
+  <app-breadcrumb [breadcrumbs]="breadcrumbsData"></app-breadcrumb>
 </div>
 <div *ngIf="showCollegeLicenceDeclarationPage">
   <app-college-licence-declaration [disableCollegeCode]=true [disableCollegeLicenceNumber]=true>
@@ -36,7 +19,7 @@
       </span>
     </p>
   </div>
-S  <section *ngFor="let alert of alerts" class="alert-box section-box">
+  <section *ngFor="let alert of alerts" class="alert-box section-box">
     <app-portal-alert
       [heading]="alert.heading"
       [content]="alert.content"></app-portal-alert>
