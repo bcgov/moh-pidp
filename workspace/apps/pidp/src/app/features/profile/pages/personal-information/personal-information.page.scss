@@ -5,7 +5,7 @@
     font-size: 3.125rem;
     font-weight: 700;
     margin-bottom: 0;
-    padding: 2rem 0;
+    padding-bottom: 1rem;
   }
 
   & .card {
@@ -74,5 +74,25 @@
   h1 {
     font-size: 40px;
     line-height: 1.1;
+  }
+}
+
+.viewport-xsmall {
+  & .card-styles {
+    width: 18rem;
+    height: 14rem;
+  }
+
+  .expansion-item-container {
+    padding: 0 10px;
+    .expansion-item {
+      .mat-expansion-panel-header {
+        padding: 0 12px 0 10px;
+
+        .mat-icon {
+          margin-top: 1rem;
+        }
+      }
+    }
   }
 }
