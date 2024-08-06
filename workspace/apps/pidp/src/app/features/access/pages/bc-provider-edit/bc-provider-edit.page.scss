@@ -55,25 +55,6 @@
   }
 }
 
-.viewport-small {
-  .form-card {
-    & .form-content {
-      & .field {
-        & .mat-mdc-form-field {
-          margin-bottom: 18px !important;
-        }
-      }
-    }
-  }
-  .reset-mfa {
-    p {
-      & .learn-more {
-        font-size: 15px !important;
-      }
-    }
-  }
-}
-
 .viewport-all {
   --header-margin: unset;
   --avatar-size: 4rem;
@@ -372,6 +353,13 @@
         & .mat-mdc-form-field {
           margin-bottom: 18px !important;
         }
+      }
+    }
+  }
+  .reset-mfa {
+    p {
+      & .learn-more {
+        font-size: 15px !important;
       }
     }
   }
