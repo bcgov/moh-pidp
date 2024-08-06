@@ -178,7 +178,7 @@ export class PersonalInformationPage
         }
       });
 
-    this.user$.pipe().subscribe((userFound) => {
+    this.user$.subscribe((userFound) => {
       if (userFound) {
         this.userName = userFound.firstName + ' ' + userFound.lastName;
       }
