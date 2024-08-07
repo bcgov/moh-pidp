@@ -5,16 +5,10 @@ using Microsoft.EntityFrameworkCore;
 using Pidp.Data;
 using Pidp.Infrastructure.HttpClients.Keycloak;
 
-public class DoWorkService : IDoWorkService
+public class DoWorkService(IKeycloakAdministrationClient keycloakClient, PidpDbContext context) : IDoWorkService
 {
-    private readonly IKeycloakAdministrationClient keycloakClient;
-    private readonly PidpDbContext context;
-
-    public DoWorkService(IKeycloakAdministrationClient keycloakClient, PidpDbContext context)
-    {
-        this.keycloakClient = keycloakClient;
-        this.context = context;
-    }
+    private readonly IKeycloakAdministrationClient keycloakClient = keycloakClient;
+    private readonly PidpDbContext context = context;
 
     public async Task DoWorkAsync()
     {

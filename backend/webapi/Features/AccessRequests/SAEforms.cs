@@ -7,6 +7,7 @@ using NodaTime;
 
 using Pidp.Data;
 using Pidp.Extensions;
+using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.HttpClients.Keycloak;
 using Pidp.Infrastructure.HttpClients.Mail;
 using Pidp.Infrastructure.HttpClients.Plr;
@@ -50,6 +51,7 @@ public class SAEforms
                 .Select(party => new
                 {
                     AlreadyEnroled = party.AccessRequests.Any(request => request.AccessTypeCode == AccessTypeCode.SAEforms),
+                    BCProviderCredential = party.Credentials.FirstOrDefault(credential => credential.IdentityProvider == IdentityProviders.BCProvider),
                     UserId = party.PrimaryUserId,
                     party.Email,
                     party.DisplayFirstName,
@@ -92,6 +94,14 @@ public class SAEforms
             if (!await this.keycloakClient.AssignAccessRoles(dto.UserId, MohKeycloakEnrolment.SAEforms))
             {
                 return DomainResult.Failed();
+            }
+
+            if (dto.BCProviderCredential != null)
+            {
+                if (!await this.keycloakClient.AssignAccessRoles(dto.BCProviderCredential.UserId, MohKeycloakEnrolment.SAEforms))
+                {
+                    return DomainResult.Failed();
+                }
             }
 
             this.context.AccessRequests.Add(new AccessRequest
