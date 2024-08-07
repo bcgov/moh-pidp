@@ -42,4 +42,12 @@ public interface IBCProviderClient
     /// <param name="userPrincipalName"></param>
     /// <param name="user"></param>
     Task<bool> UpdateUser(string userPrincipalName, User user);
+
+    /// <summary>
+    /// Removes all authentication methods from a user, except for password.
+    /// Once all other auth methods are removed, the user will be prompted to
+    /// re-register their MFA.
+    /// </summary>
+    /// <param name="userPrincipalName"></param>
+    Task<bool> RemoveAuthMethods(string userPrincipalName);
 }
