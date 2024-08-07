@@ -21,8 +21,11 @@
       <h2 class="header">LICENCE</h2>
       <h3 class="college-licence">College licence information</h3>
       <div class="content">
-        <p class="college-licence-introduction">Provide details for your college licence if you have one. If you do not have a college licence,
-          select "None" and you can update this information at a later date</p>
+        <p class="college-licence-introduction">
+          Provide details for your college licence if you have one. If you do
+          not have a college licence, select "None" and you can update this
+          information at a later date
+        </p>
         <mat-form-field>
           <mat-label class="field-label">College Licence</mat-label>
           <mat-select
@@ -46,27 +49,30 @@
             >here</a
           >.
         </p>
-        <mat-form-field *ngIf="formState.collegeCode.value" >
+        <mat-form-field *ngIf="formState.collegeCode.value">
           <mat-label class="field-label">Licence Number</mat-label>
           <input
             matInput
             formControlName="licenceNumber"
-            aria-labelledby="college-licence-declaration-licence-number"/>
+            aria-labelledby="college-licence-declaration-licence-number" />
           <mat-error>Required</mat-error>
-          <mat-hint>
-            Example would be a 5 digit code
-          </mat-hint>
+          <mat-hint> Example would be a 5 digit code </mat-hint>
         </mat-form-field>
       </div>
     </section>
     <div>
       <p class="footer-text">
-        Our system will automatically authenticate your college licence after information has been filled.
+        Our system will automatically authenticate your college licence after
+        information has been filled.
       </p>
     </div>
     <div class="actions">
-      <button mat-flat-button uiPageFooterAction type="submit" color="primary"  [disabled]="disableSearch">
-        Search
+      <button
+        mat-flat-button
+        uiPageFooterAction
+        type="submit"
+        color="primary"
+        [disabled]="disableSearch">
       </button>
     </div>
   </form>
