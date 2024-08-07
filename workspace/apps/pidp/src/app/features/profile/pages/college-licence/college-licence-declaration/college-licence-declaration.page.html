@@ -73,6 +73,7 @@
         type="submit"
         color="primary"
         [disabled]="disableSearch">
+        {{ formState.collegeCode.value === 0 ? "Save" : "Search" }}
       </button>
     </div>
   </form>
