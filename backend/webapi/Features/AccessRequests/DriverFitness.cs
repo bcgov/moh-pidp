@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using NodaTime;
 
 using Pidp.Data;
+using Pidp.Extensions;
 using Pidp.Infrastructure.HttpClients.Keycloak;
 using Pidp.Infrastructure.HttpClients.Plr;
 using Pidp.Models;
@@ -13,7 +14,7 @@ using Pidp.Models.Lookups;
 
 public class DriverFitness
 {
-    public static IdentifierType[] AllowedIdentifierTypes => new[] { IdentifierType.PhysiciansAndSurgeons };
+    public static IdentifierType[] AllowedIdentifierTypes => [IdentifierType.PhysiciansAndSurgeons];
 
     public class Command : ICommand<IDomainResult>
     {
@@ -25,27 +26,18 @@ public class DriverFitness
         public CommandValidator() => this.RuleFor(x => x.PartyId).GreaterThan(0);
     }
 
-    public class CommandHandler : ICommandHandler<Command, IDomainResult>
+    public class CommandHandler(
+        IClock clock,
+        IKeycloakAdministrationClient keycloakClient,
+        ILogger<CommandHandler> logger,
+        IPlrClient plrClient,
+        PidpDbContext context) : ICommandHandler<Command, IDomainResult>
     {
-        private readonly IClock clock;
-        private readonly IKeycloakAdministrationClient keycloakClient;
-        private readonly ILogger<CommandHandler> logger;
-        private readonly IPlrClient plrClient;
-        private readonly PidpDbContext context;
-
-        public CommandHandler(
-            IClock clock,
-            IKeycloakAdministrationClient keycloakClient,
-            ILogger<CommandHandler> logger,
-            IPlrClient plrClient,
-            PidpDbContext context)
-        {
-            this.clock = clock;
-            this.keycloakClient = keycloakClient;
-            this.logger = logger;
-            this.plrClient = plrClient;
-            this.context = context;
-        }
+        private readonly IClock clock = clock;
+        private readonly IKeycloakAdministrationClient keycloakClient = keycloakClient;
+        private readonly ILogger<CommandHandler> logger = logger;
+        private readonly IPlrClient plrClient = plrClient;
+        private readonly PidpDbContext context = context;
 
         public async Task<IDomainResult> HandleAsync(Command command)
         {
@@ -72,11 +64,7 @@ public class DriverFitness
             if (dto.Cpn == null)
             {
                 // Check status of Endorsements
-                var endorsementCpns = await this.context.Endorsements
-                    .Where(endorsement => endorsement.Active
-                        && endorsement.EndorsementRelationships.Any(relationship => relationship.PartyId == command.PartyId))
-                    .SelectMany(endorsement => endorsement.EndorsementRelationships)
-                    .Where(relationship => relationship.PartyId != command.PartyId)
+                var endorsementCpns = await this.context.ActiveEndorsementRelationships(command.PartyId)
                     .Select(relationship => relationship.Party!.Cpn)
                     .ToListAsync();
 

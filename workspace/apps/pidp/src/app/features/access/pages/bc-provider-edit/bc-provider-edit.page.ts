@@ -1,4 +1,4 @@
-import { NgIf, NgTemplateOutlet } from '@angular/common';
+import { NgIf, NgOptimizedImage } from '@angular/common';
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -22,10 +22,12 @@ import {
   AbstractFormPage,
 } from '@app/core/classes/abstract-form-page.class';
 import { PartyService } from '@app/core/party/party.service';
+import { BreadcrumbComponent } from '@app/shared/components/breadcrumb/breadcrumb.component';
 import { NeedHelpComponent } from '@app/shared/components/need-help/need-help.component';
 import { DialogBcproviderEditComponent } from '@app/shared/components/success-dialog/components/dialog-bcprovider-edit.component';
 import { SuccessDialogComponent } from '@app/shared/components/success-dialog/success-dialog.component';
 
+import { AccessRoutes } from '../../access.routes';
 import { BcProviderEditFormState } from './bc-provider-edit-form-state';
 import {
   BcProviderChangePasswordRequest,
@@ -42,15 +44,16 @@ export interface BcProviderEditInitialStateModel {
   styleUrls: ['./bc-provider-edit.page.scss'],
   standalone: true,
   imports: [
+    BreadcrumbComponent,
     InjectViewportCssClassDirective,
     MatButtonModule,
     MatFormFieldModule,
     MatInputModule,
     NeedHelpComponent,
     NgIf,
-    NgTemplateOutlet,
     ReactiveFormsModule,
     SuccessDialogComponent,
+    NgOptimizedImage,
   ],
 })
 export class BcProviderEditPage
@@ -60,10 +63,19 @@ export class BcProviderEditPage
   public faCircleCheck = faCircleCheck;
   public faXmark = faXmark;
   public formState: BcProviderEditFormState;
+  public AccessRoutes = AccessRoutes;
   public showErrorCard = false;
   public username = '';
   public errorMatcher = new CrossFieldErrorMatcher();
   public componentType = DialogBcproviderEditComponent;
+  public breadcrumbsData: Array<{ title: string; path: string }> = [
+    { title: 'Home', path: '' },
+    {
+      title: 'Access',
+      path: AccessRoutes.routePath(AccessRoutes.ACCESS_REQUESTS),
+    },
+    { title: 'BC Provider Account', path: '' },
+  ];
 
   // ui-page is handling this.
   public showOverlayOnSubmit = false;

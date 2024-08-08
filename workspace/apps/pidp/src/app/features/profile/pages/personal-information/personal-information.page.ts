@@ -19,6 +19,7 @@ import {
 
 import {
   ContactFormComponent,
+  InjectViewportCssClassDirective,
   PageComponent,
   PageFooterActionDirective,
   PageFooterComponent,
@@ -36,7 +37,6 @@ import { LoggerService } from '@app/core/services/logger.service';
 import { IdentityProvider } from '@app/features/auth/enums/identity-provider.enum';
 import { User } from '@app/features/auth/models/user.model';
 import { AuthorizedUserService } from '@app/features/auth/services/authorized-user.service';
-import { DashboardStateService } from '@app/features/shell/services/dashboard-state-service.service';
 import { LookupResource } from '@app/modules/lookup/lookup-resource.service';
 import { IsHighAssurancePipe } from '@app/shared/pipes/is-high-assurance.pipe';
 
@@ -49,6 +49,7 @@ import { UserInfoComponent } from './components/user-info/user-info.component';
 import { PersonalInformationFormState } from './personal-information-form-state';
 import { PersonalInformationResource } from './personal-information-resource.service';
 import { PersonalInformation } from './personal-information.model';
+import { BreadcrumbComponent } from '@app/shared/components/breadcrumb/breadcrumb.component';
 
 @Component({
   selector: 'app-personal-information',
@@ -58,7 +59,9 @@ import { PersonalInformation } from './personal-information.model';
   standalone: true,
   imports: [
     AsyncPipe,
+    BreadcrumbComponent,
     ContactFormComponent,
+    InjectViewportCssClassDirective,
     IsHighAssurancePipe,
     MatButtonModule,
     NgIf,
@@ -91,6 +94,10 @@ export class PersonalInformationPage
 
   // ui-page is handling this.
   public showOverlayOnSubmit = false;
+  public breadcrumbsData: Array<{ title: string; path: string }> = [
+    { title: 'Home', path: '' },
+    { title: 'Personal Information', path: '' },
+  ];
 
   public constructor(
     dependenciesService: AbstractFormDependenciesService,
@@ -102,7 +109,6 @@ export class PersonalInformationPage
     private logger: LoggerService,
     private _snackBar: MatSnackBar,
     private lookupResource: LookupResource,
-    private dashboardStateService: DashboardStateService,
     fb: FormBuilder,
   ) {
     super(dependenciesService);
@@ -184,8 +190,6 @@ export class PersonalInformationPage
   }
 
   protected afterSubmitIsSuccessful(): void {
-    this.dashboardStateService.refreshDashboardState();
-
     this.navigateToRoot();
   }
 
