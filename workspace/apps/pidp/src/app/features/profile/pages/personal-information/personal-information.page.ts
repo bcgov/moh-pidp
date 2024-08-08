@@ -42,6 +42,7 @@ import { AuthorizedUserService } from '@app/features/auth/services/authorized-us
 import { ProfileStatus } from '@app/features/portal/models/profile-status.model';
 import { PortalResource } from '@app/features/portal/portal-resource.service';
 import { LookupResource } from '@app/modules/lookup/lookup-resource.service';
+import { BreadcrumbComponent } from '@app/shared/components/breadcrumb/breadcrumb.component';
 import { IsHighAssurancePipe } from '@app/shared/pipes/is-high-assurance.pipe';
 
 import {
@@ -53,7 +54,6 @@ import { UserInfoComponent } from './components/user-info/user-info.component';
 import { PersonalInformationFormState } from './personal-information-form-state';
 import { PersonalInformationResource } from './personal-information-resource.service';
 import { PersonalInformation } from './personal-information.model';
-import { BreadcrumbComponent } from '@app/shared/components/breadcrumb/breadcrumb.component';
 
 @Component({
   selector: 'app-personal-information',
@@ -178,11 +178,14 @@ export class PersonalInformationPage
         }
       });
 
-    this.user$.subscribe((userFound) => {
-      if (userFound) {
-        this.userName = userFound.firstName + ' ' + userFound.lastName;
-      }
-    });
+    if (this.user$ !== undefined) {
+      this.user$.pipe().subscribe((userFound) => {
+        if (userFound) {
+          this.userName = userFound.firstName + ' ' + userFound.lastName;
+        }
+      });
+    }
+
     this.getProfileStatus(this.partyService.partyId)
       .pipe()
       .subscribe((profileStatus: ProfileStatus | null) => {
