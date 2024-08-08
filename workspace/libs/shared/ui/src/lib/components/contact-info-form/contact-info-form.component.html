@@ -1,5 +1,5 @@
 <div class="row" [formGroup]="form">
-  <div class="col">
+  <div class="col-sm-7">
     <mat-form-field class="w-100 email">
       <mat-label>Email</mat-label>
       <input matInput formControlName="email" (keyup)="onKeyUp()" />
@@ -9,7 +9,7 @@
       </mat-error>
     </mat-form-field>
   </div>
-  <div class="col">
+  <div class="col-sm-3">
     <mat-form-field class="w-100">
       <mat-label>Phone Number</mat-label>
       <input

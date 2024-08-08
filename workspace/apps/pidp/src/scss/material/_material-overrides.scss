@@ -179,6 +179,13 @@
   overflow: visible !important;
 }
 
+.expansion-item,
+.contact-information {
+  mat-label {
+    font-weight: 700;
+    color: #313132;
+  }
+}
 //
 // SideNav
 //
