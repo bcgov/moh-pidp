@@ -1,0 +1,24 @@
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: config-patroni-entrypoint
+
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: patroni-probe
+---
+
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: patroni-failover
+---
+
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: patroni-gettsport
+---

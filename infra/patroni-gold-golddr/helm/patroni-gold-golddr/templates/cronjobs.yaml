@@ -1,0 +1,81 @@
+{{- if eq .Values.cluster "golddr" }}
+# This job runs on GoldDR only and is designed to probe Gold's version of Patroni and determine if it's running.
+# If it's not running then we'll promote GoldDR's patroni to be leader.
+
+kind: CronJob
+apiVersion: batch/v1
+metadata:
+  name: patroni-probe
+  namespace: {{ .Values.license_plate }}-{{ .Values.environment }}
+  labels:
+    {{- include "chart.common-labels" . }}
+spec:
+  schedule: "*/5 * * * *"
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: {{ .Values.app_name }}-trigger
+              image: image-registry.openshift-image-registry.svc:5000/openshift/cli
+              args:
+                - /bin/sh
+                - '-c'
+                - '/failover.sh'
+              volumeMounts:
+                - name: {{ .Values.app_name }}-intercom
+                  mountPath: /intercom
+                - name: {{ .Values.app_name }}-failover
+                  mountPath: /failover.sh
+                  subPath: failover.sh
+
+          initContainers:
+            - name: {{ .Values.app_name }}-initprobe
+              # This container obtains the TS port that we use to connect to Gold in the probe container to follow
+              image: image-registry.openshift-image-registry.svc:5000/openshift/cli
+              args:
+                - /bin/sh
+                - '-c'
+                - '/get-ts-port.sh'
+              volumeMounts:
+                - name: {{ .Values.app_name }}-intercom
+                  mountPath: /intercom
+                - name: {{ .Values.app_name }}-get-ts-port
+                  mountPath: /get-ts-port.sh
+                  subPath: get-ts-port.sh
+            - name: {{ .Values.app_name }}-probe
+              # This container will attempt a connection to the PSQL on Gold through the TS service
+              image: image-registry.openshift-image-registry.svc:5000/bcgov/patroni-postgres:12.4-latest
+              args:
+                - /bin/sh
+                - '-c'
+                - '/probe.sh'
+              volumeMounts:
+                - name: {{ .Values.app_name }}-intercom
+                  mountPath: /intercom
+                - name: {{ .Values.app_name }}-probe
+                  mountPath: /probe.sh
+                  subPath: probe.sh
+
+          volumes:
+            # This is a empty folder used to allow for communications between containers in the same pod.
+            - name: {{ .Values.app_name }}-intercom
+              emptyDir: {}
+            - name: {{ .Values.app_name }}-probe
+              configMap:
+                name: {{ .Values.app_name }}-probe
+                defaultMode: 0555
+            - name: {{ .Values.app_name }}-failover
+              configMap:
+                name: {{ .Values.app_name }}-failover
+                defaultMode: 0555
+            - name: {{ .Values.app_name }}-get-ts-port
+              configMap:
+                name: {{ .Values.app_name }}-get-ts-port
+                defaultMode: 0555
+
+          serviceAccount: {{ .Values.app_name }}
+          restartPolicy: OnFailure
+{{- end }}
