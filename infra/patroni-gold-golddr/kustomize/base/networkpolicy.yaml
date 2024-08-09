@@ -1,0 +1,19 @@
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: allow-from-f5-ingress
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/instance: patroni
+      app.kubernetes.io/name: patroni
+      app.kubernetes.io/component: database
+      app: patroni
+      cluster-name: patroni
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              network.openshift.io/policy-group: ingress
+  policyTypes:
+    - Ingress

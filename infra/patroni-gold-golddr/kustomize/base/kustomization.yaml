@@ -1,0 +1,10 @@
+resources:
+- configmap.yaml
+- cronjobs.yaml
+- networkpolicy.yaml
+- pvc.yaml
+- rbac.yaml
+- secret.yaml
+- services.yaml
+- statefulsets.yaml
+#- transportserverclaim.yaml

@@ -756,7 +756,7 @@ healthIngress:
 metrics:
   ## @param metrics.enabled Start a Prometheus exporter sidecar container
   ##
-  enabled: false
+  enabled: true
   ## @param metrics.port NGINX Container Status Port scraped by Prometheus Exporter
   ## Defaults to specified http port
   port: ""
@@ -885,7 +885,7 @@ metrics:
 ## @section fluentbit parameters
 
 fluentbit:
-  enabled: true
+  enabled: false
   imageRegistry: docker.io/fluent/fluent-bit:3.0.3-debug
   imagePullPolicy: IfNotPresent
   securityContext:

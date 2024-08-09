@@ -1,0 +1,19 @@
+# allow-from-f5-ingress.yaml
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: allow-from-f5-ingress
+  namespace: {{ .Values.license_plate }}-{{ .Values.environment }}
+  labels:
+    {{- include "chart.common-labels" . }}
+spec:
+  podSelector:
+    matchLabels:
+      app: {{ .Values.app_name }}
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              network.openshift.io/policy-group: ingress
+  policyTypes:
+    - Ingress

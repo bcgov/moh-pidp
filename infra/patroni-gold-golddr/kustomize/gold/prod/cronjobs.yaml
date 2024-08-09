@@ -1,0 +1,7 @@
+# This job runs on GoldDR only and is designed to probe GoldDR's version of Patroni and determine if it's running.
+# If it's not running then we'll promote Gold's patroni to be leader.
+
+kind: CronJob
+apiVersion: batch/v1
+metadata:
+  name: patroni-probe

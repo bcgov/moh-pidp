@@ -34,10 +34,10 @@ service:
     smtp: ""
 
 securityContext:
-  runAsUser: 1000
+  runAsUser: 1001510000
   runAsGroup: 1000
   runAsNonRoot: true
-  fsGroup: 1000
+  fsGroup: 1001510000
 
 containerSecurityContext:
   readOnlyRootFilesystem: true
@@ -106,11 +106,11 @@ resources:
   # resources, such as Minikube. If you do want to specify resources, uncomment the following
   # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
   limits:
-    cpu: 100m
-    memory: 256Mi
-  requests:
-    cpu: 50m
+    cpu: 30m
     memory: 128Mi
+  requests:
+    cpu: 15m
+    memory: 100Mi
 
 affinity: {}
 

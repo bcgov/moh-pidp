@@ -19,13 +19,13 @@
 
 1. Backup databases and roles from the old DB. In the old DB pod, run:
 
-<code>pg_dump -C {DB_Name} > {outputDirectory/DB_Name.sql}</code>
+<code>pg_dump -C {DB_Name} > {/outputDirectory/DB_Name.sql}</code>
 
-<code>pg_dumpall --roles-only >  {outputDirectory/roles.sql}</code>
+<code>pg_dumpall --roles-only >  {/outputDirectory/roles.sql}</code>
 
 2. Zip the files using gzip command in the old pod
 
-<code>gzip -9 {outputDirectory/DB_Name.sql}</code>
+<code>gzip -9 {/outputDirectory/DB_Name.sql}</code>
 
 3. Copy zip files from the old pod to the local directory on your machine. In terminal on your local machine, run:
 

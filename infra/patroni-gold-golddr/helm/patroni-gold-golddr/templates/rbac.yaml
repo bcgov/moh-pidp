@@ -1,0 +1,94 @@
+# Create a service account and appropriate rules/rule bindings for our patroni implementation.
+---
+kind: ServiceAccount
+apiVersion: v1
+metadata:
+  name: {{ .Values.app_name }}
+  namespace: {{ .Values.license_plate }}-{{ .Values.environment }}
+  labels:
+    {{- include "chart.common-labels" . }}
+    app.kubernetes.io/name: patroni
+    app.kubernetes.io/component: database
+---
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: {{ .Values.app_name }}
+  namespace: {{ .Values.license_plate }}-{{ .Values.environment }}
+  labels:
+    {{- include "chart.common-labels" . }}
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - services
+    verbs:
+      - create
+      - get
+      - list
+      - patch
+      - update
+      - watch
+      - delete
+  - apiGroups:
+      - ""
+    resources:
+      - configmaps
+    verbs:
+      - create
+      - get
+      - list
+      - patch
+      - update
+      - watch
+      - delete
+  - apiGroups:
+      - ""
+    resources:
+      - endpoints
+    verbs:
+      - get
+      - patch
+      - update
+      - create
+      - list
+      - watch
+      - delete
+  - apiGroups:
+      - ""
+    resources:
+      - pods
+    verbs:
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - ""
+    resources:
+      - pods/exec
+    verbs:
+      - create
+  - apiGroups:
+      - ""
+    resources:
+      - events
+    verbs:
+      - list
+---
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: {{ .Values.app_name }}
+  namespace: {{ .Values.license_plate }}-{{ .Values.environment }}
+  labels:
+    {{- include "chart.common-labels" . }}
+    app.kubernetes.io/component: database
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: {{ .Values.app_name }}
+subjects:
+  - kind: ServiceAccount
+    name: {{ .Values.app_name }}
