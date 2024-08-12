@@ -37,6 +37,7 @@
     "keycloak-angular": "~15.0.0",
     "keycloak-js": "~18.0.1",
     "luxon": "~3.4.4",
+    "ngx-cookie-service": "~17.1.0",
     "ngx-mask": "~17.0.4",
     "ngx-progressbar": "~11.1.0",
     "rxjs": "~7.8.1",

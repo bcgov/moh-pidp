@@ -10,6 +10,7 @@ import {
   LOADING_OVERLAY_DEFAULT_MESSAGE,
   LoadingOverlayService,
 } from '@pidp/presentation';
+import { CookieService } from 'ngx-cookie-service';
 
 import {
   ConfirmDialogComponent,
@@ -18,6 +19,7 @@ import {
   InjectViewportCssClassDirective,
 } from '@bcgov/shared/ui';
 
+import { AccessRoutes } from '@app/features/access/access.routes';
 import { User } from '@app/features/auth/models/user.model';
 import { ProfileRoutes } from '@app/features/profile/profile.routes';
 import { BreadcrumbComponent } from '@app/shared/components/breadcrumb/breadcrumb.component';
@@ -27,7 +29,6 @@ import { IdentityProvider } from '../../enums/identity-provider.enum';
 import { BcProviderUser } from '../../models/bc-provider-user.model';
 import { AuthorizedUserService } from '../../services/authorized-user.service';
 import { LinkAccountConfirmResource } from './link-account-confirm-resource.service';
-import { AccessRoutes } from '@app/features/access/access.routes';
 
 @Component({
   selector: 'app-link-account-confirm',
@@ -46,13 +47,14 @@ import { AccessRoutes } from '@app/features/access/access.routes';
 export class LinkAccountConfirmPage implements OnInit {
   public user$: Observable<User>;
   public breadcrumbsData: Array<{ title: string; path: string }> = [
-    {title: 'Home', path: ''},
+    { title: 'Home', path: '' },
     {
       title: 'Access',
       path: AccessRoutes.routePath(AccessRoutes.ACCESS_REQUESTS),
     },
-    {title: 'Link Account', path: ''},
+    { title: 'Link Account', path: '' },
   ];
+  public userName: string;
 
   public showInstructions: boolean = false;
   public constructor(
@@ -61,11 +63,15 @@ export class LinkAccountConfirmPage implements OnInit {
     private linkAccountConfirmResource: LinkAccountConfirmResource,
     private router: Router,
     private loadingOverlayService: LoadingOverlayService,
+    private cookieService: CookieService,
   ) {
     this.user$ = this.authorizedUserService.user$;
+    this.userName = '';
   }
 
   public ngOnInit(): void {
+    console.log(this.cookieService.get('UserName'));
+    this.userName = this.cookieService.get('UserName');
     this.user$
       .pipe(
         switchMap((user) => {
@@ -76,9 +82,11 @@ export class LinkAccountConfirmPage implements OnInit {
             bodyTextPosition: 'center',
             component: HtmlComponent,
             data: {
-              content: `Your existing OneHealthID profile is about to be linked to ${this.getPendingAccountDescription(
+              content: `Your  <b>BCSC ${
+                this.userName
+              } </b>is about to be linked to ${this.getPendingAccountDescription(
                 user,
-              )}. Is this information correct?`,
+              )}. Is this information correct? If not, click on cancel to be redirected to login and restart the process.`,
             },
             imageSrc:
               '/assets/images/online-marketing-hIgeoQjS_iE-unsplash.jpg',
