@@ -19,7 +19,7 @@ public class ThirdPartyintegrationsController : PidpControllerBase
     private readonly PidpDbContext context;
     private static HttpClient sharedClient = new()
     {
-        BaseAddress = new Uri("http://localhost:8080/"),
+        BaseAddress = new Uri("https://firely.server:4080/"),
     };
 
     static async Task PutAsync(HttpClient httpClient, object obj)
@@ -92,7 +92,7 @@ public class ThirdPartyintegrationsController : PidpControllerBase
         Console.WriteLine("StringContent : ", jsonContent);
         // sharedClient.
         using HttpResponseMessage response = await sharedClient.PutAsync(
-            "administration/StructureDefinition/Test2",
+            "/administration/StructureDefinition/Test2",
         jsonContent);
 
         // response.EnsureSuccessStatusCode()
