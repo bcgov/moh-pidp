@@ -3,7 +3,9 @@ namespace DoWork;
 using Microsoft.EntityFrameworkCore;
 
 using Pidp.Data;
+using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.HttpClients.Keycloak;
+using Pidp.Models.Lookups;
 
 public class DoWorkService : IDoWorkService
 {
@@ -18,10 +20,26 @@ public class DoWorkService : IDoWorkService
 
     public async Task DoWorkAsync()
     {
-        var userId = await this.context.Parties
-            .Where(party => party.Id == 1001)
-            .Select(party => party.Credentials.First().UserId)
-            .SingleOrDefaultAsync();
-        await this.keycloakClient.GetUser(userId);
+        var credentials = await this.context.Parties
+            .Where(party => party.AccessRequests.Any(request => request.AccessTypeCode == AccessTypeCode.SAEforms))
+            .SelectMany(party => party.Credentials)
+            .Where(credential => credential.IdentityProvider == IdentityProviders.BCProvider)
+            .ToListAsync();
+
+        var counter = 0;
+        foreach (var credential in credentials)
+        {
+            try
+            {
+                await this.keycloakClient.AssignAccessRoles(credential.UserId, MohKeycloakEnrolment.SAEforms);
+                Console.WriteLine($"Successfully assigned access roles to user {credential.UserId}, PartyId {credential.PartyId}");
+                counter++;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error assigning access roles to user {credential.UserId}, PartyId {credential.Party?.Id}: {ex.Message}");
+            }
+        }
+        Console.WriteLine($"Assigned roles to {counter} users.");
     }
 }
