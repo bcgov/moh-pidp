@@ -29,6 +29,7 @@ import { IdentityProvider } from '../../enums/identity-provider.enum';
 import { BcProviderUser } from '../../models/bc-provider-user.model';
 import { AuthorizedUserService } from '../../services/authorized-user.service';
 import { LinkAccountConfirmResource } from './link-account-confirm-resource.service';
+import { UtilsService } from '@app/core/services/utils.service';
 
 @Component({
   selector: 'app-link-account-confirm',
@@ -55,6 +56,7 @@ export class LinkAccountConfirmPage implements OnInit {
     { title: 'Link Account', path: '' },
   ];
   public userName: string;
+  public identityProvider: string;
 
   public showInstructions: boolean = false;
   public constructor(
@@ -64,14 +66,16 @@ export class LinkAccountConfirmPage implements OnInit {
     private router: Router,
     private loadingOverlayService: LoadingOverlayService,
     private cookieService: CookieService,
+    private utilsService: UtilsService,
   ) {
     this.user$ = this.authorizedUserService.user$;
     this.userName = '';
+    this.identityProvider = '';
   }
 
   public ngOnInit(): void {
-    console.log(this.cookieService.get('UserName'));
-    this.userName = this.cookieService.get('UserName');
+    this.userName = this.utilsService.decrypt(this.cookieService.get('UserName'));
+    this.identityProvider = this.utilsService.decrypt(this.cookieService.get('IdentityProvider')).toUpperCase();
     this.user$
       .pipe(
         switchMap((user) => {
@@ -82,7 +86,7 @@ export class LinkAccountConfirmPage implements OnInit {
             bodyTextPosition: 'center',
             component: HtmlComponent,
             data: {
-              content: `Your  <b>BCSC ${
+              content: `Your  <b>${this.identityProvider} ${
                 this.userName
               } </b>is about to be linked to ${this.getPendingAccountDescription(
                 user,
@@ -92,7 +96,7 @@ export class LinkAccountConfirmPage implements OnInit {
               '/assets/images/online-marketing-hIgeoQjS_iE-unsplash.jpg',
             imageType: 'banner',
             width: '31.25rem',
-            height: '26rem',
+            height: '28rem',
             actionText: 'Correct',
             actionTypePosition: 'center',
             class: 'dialog-container dialog-padding',
@@ -136,7 +140,7 @@ export class LinkAccountConfirmPage implements OnInit {
       case IdentityProvider.BCSC:
         return `the BC Services Card account ${user.firstName} ${user.lastName}`;
       case IdentityProvider.PHSA:
-        return `the PHSA account ${user.email}`;
+        return `${user.email}`;
       case IdentityProvider.BC_PROVIDER: {
         const idpId = (user as BcProviderUser).idpId;
         const accountName = idpId.endsWith('@bcp') ? idpId.slice(0, -4) : idpId;

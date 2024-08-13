@@ -182,9 +182,6 @@ export class AccountLinkingPage implements OnInit, OnDestroy {
 
     this.handleLinkedAccounts();
     this.setUserCookieInformation();
-    console.log( this.cookieService.get('UserName'));
-    console.log(this.credentials)
-    console.log(this.userName)
   }
 
   public ngOnDestroy(): void {
@@ -205,7 +202,8 @@ export class AccountLinkingPage implements OnInit, OnDestroy {
     this.user$.pipe().subscribe((userFound) => {
       if (userFound) {
         this.userName = userFound.firstName + ' ' + userFound.lastName;
-        this.cookieService.set('UserName', this.userName);
+        this.cookieService.set('UserName', this.utilsService.encrypt(this.userName));
+        this.cookieService.set('IdentityProvider', this.utilsService.encrypt(userFound.identityProvider));
       }
     });
   }

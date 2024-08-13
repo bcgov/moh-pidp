@@ -8,6 +8,7 @@ import { ApiHttpClient } from '@app/core/resources/api-http-client.service';
 import { ToastService } from '@app/core/services/toast.service';
 
 import { AuthService } from '../../services/auth.service';
+import { CookieService } from 'ngx-cookie-service';
 
 @Injectable({
   providedIn: 'root',
@@ -18,6 +19,7 @@ export class LinkAccountConfirmResource {
     @Inject(APP_CONFIG) private config: AppConfig,
     private apiResource: ApiHttpClient,
     private authService: AuthService,
+    private cookieService: CookieService,
     private toastService: ToastService,
   ) {
     this.logoutRedirectUrl = `${this.config.applicationUrl}/`;
@@ -40,6 +42,8 @@ export class LinkAccountConfirmResource {
   }
 
   public cancelLink(): Observable<Observable<void> | boolean> {
+    this.cookieService.delete('UserName');
+    this.cookieService.delete('IdentityProvider');
     return this.apiResource.delete('credentials').pipe(
       map(() => this.authService.logout(this.logoutRedirectUrl)),
       catchError((error: HttpErrorResponse) => {
