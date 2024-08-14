@@ -21,7 +21,6 @@ describe('BcProviderEditPage', () => {
   let component: BcProviderEditPage;
   let partyServiceSpy: Spy<PartyService>;
   let formUtilsServiceSpy: Spy<FormUtilsService>;
-  let navigationServiceSpy: Spy<NavigationService>;
 
   let mockActivatedRoute: { snapshot: any };
   let mockBcProviderForm: { newPassword: string; confirmPassword: string };
@@ -63,7 +62,6 @@ describe('BcProviderEditPage', () => {
     });
     component = TestBed.inject(BcProviderEditPage);
     formUtilsServiceSpy = TestBed.inject<any>(FormUtilsService);
-    navigationServiceSpy = TestBed.inject<any>(NavigationService);
     partyServiceSpy = TestBed.inject<any>(PartyService);
   });
 
@@ -100,18 +98,6 @@ describe('BcProviderEditPage', () => {
 
         then('enrolment button will be enabled', () => {
           expect(component.isResetButtonEnabled).toBe(false);
-        });
-      });
-    });
-  });
-
-  describe('METHOD: onBack', () => {
-    given('user wants to go back to the previous page', () => {
-      when('onBack is invoked', () => {
-        component.onBack();
-
-        then('router should navigate to root route', () => {
-          expect(navigationServiceSpy.navigateToRoot).toHaveBeenCalled();
         });
       });
     });

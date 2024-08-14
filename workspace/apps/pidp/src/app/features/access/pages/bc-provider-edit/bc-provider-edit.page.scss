@@ -19,19 +19,8 @@
       margin-top: 20px;
     }
   }
-  & .mobile-image {
-    position: relative;
-    & img {
-      display: block !important;
-      max-width: 100%;
-      height: auto;
-      position: relative !important;
-    }
-  }
-  & .username {
-    & .username-overflow {
-      overflow-wrap: break-word;
-    }
+  & .username-overflow {
+    overflow-wrap: break-word;
   }
   & .form-card {
     display: block !important;
@@ -43,39 +32,23 @@
       }
     }
   }
-  & .password-splash {
-    & .password-splash-content {
-      & .text-box {
-        display: none !important;
-      }
-      & .image {
-        display: none !important;
-      }
-    }
-  }
 }
 
 .viewport-all {
   --header-margin: unset;
   --avatar-size: 4rem;
   --content-padding: var(--gap);
-  --password-splash-display: unset;
 }
 
 .viewport-medium {
   --header-margin: var(--gap) 0 0;
   --content-padding: var(--gap) 0;
-  --password-splash-display: unset;
-  --password-splash: {
-    flex: 1;
-  };
 }
 
 .viewport-medium,
 .viewport-large {
   --header-margin: var(--gap) 0 0;
   --content-padding: var(--gap) 0;
-  --password-splash-display: unset;
   .reset-mfa {
     p {
       & .learn-more {
@@ -92,14 +65,13 @@
       color: #036;
       font-size: 3.125rem;
       font-weight: 700;
-      margin-bottom: 0;
     }
   }
   & .content {
     padding: var(--content-padding);
     font-size: var(--font-size);
     display: flex;
-    flex-direction: column;
+    gap: var(--gap);
 
     & .error-card {
       background-color: #ffdfdf;
@@ -132,165 +104,157 @@
     }
 
     & .form-card {
-      border: solid 1px pidp.$grey-30;
       display: flex;
+      flex-basis: 100%;
+      border: solid 1px pidp.$grey-30;
+      background-color: #f2f2f2;
 
       & .password-form {
         flex: 1;
-        & h3 {
-          margin: var(--gap) 0;
-          padding: 0;
-        }
-        & h2 {
-          text-align: center;
-          margin: var(--gap) 0;
-          padding: 0;
-        }
-      }
-      & .password-splash {
-        flex: 1;
-        display: var(--password-splash-display);
-
-        & .password-splash-content {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          // Stretch to fit vertically.
-          height: 100%;
-
-          & .image {
-            flex: 1;
-            display: flex;
-            height: 100%;
-            img {
-              flex: 1;
-              width: 100%;
-              height: auto;
-            }
-          }
-          & .text-box {
-            position: absolute;
-            margin: calc(3 * var(--gap));
-            padding: calc(2 * var(--gap)) var(--gap);
-            display: flex;
-            flex-direction: column;
-            background-color: rgba(94, 130, 118, 0.9);
-            & div {
-              display: flex;
-              justify-content: center;
-            }
-            & .lets {
-              color: rgba(255, 255, 255, 1);
-              font-size: 2.1rem;
-              line-height: 1.2;
-            }
-            & .using {
-              color: pidp.$font-color-default;
-              font-size: 0.9rem;
-            }
-          }
-        }
-      }
-
-      & h3 {
-        padding: calc(var(--gap) / 2) 0;
-        text-align: center;
-        border-top-left-radius: var(--card-border-radius);
-        border-top-right-radius: var(--card-border-radius);
-      }
-      & .username {
-        display: flex;
-        flex-direction: column;
+        margin: var(--gap);
         padding: var(--gap);
-        margin: 20px;
-        text-align: center;
-        background-color: #f2f2f2;
-        border: 1px solid #b8b8b8;
-      }
-      & .form-content {
-        display: flex;
-        flex-direction: column;
-        padding: var(--gap);
-        & .field {
+
+        & .username {
+          color: var(--BC-gov-form-font-colour, #aaa);
+          font-size: 16px;
+          font-style: normal;
+          font-weight: 400;
+          line-height: normal;
+        }
+
+        & .username-intro {
+          margin-bottom: 0;
+        }
+
+        & .form-content {
           display: flex;
           flex-direction: column;
-          & label {
-            font-weight: bold;
+          & .field {
+            display: flex;
+            flex-direction: column;
+            & label {
+              font-weight: bold;
+            }
+            & .mat-mdc-form-field {
+              margin-bottom: 0;
+            }
+            & .mat-mdc-form-field-error {
+              font-size: 0.75rem;
+            }
           }
-          & .mat-mdc-form-field {
-            margin-bottom: 0;
+          & .form-button-box {
+            display: flex;
+            & button {
+              flex: 1;
+            }
           }
-          & .mat-mdc-form-field-error {
+          & .help-link {
             font-size: 0.75rem;
           }
-        }
-        & .form-button-box {
-          display: flex;
-          & button {
-            flex: 1;
+          & .error {
+            font-size: 0.75rem;
+            overflow: hidden;
+            transition: max-height 0.5s ease-in-out;
+            max-height: 0;
           }
-        }
-        & .help-link {
-          font-size: 0.75rem;
-        }
-        & .error {
-          font-size: 0.75rem;
-          overflow: hidden;
-          transition: max-height 0.5s ease-in-out;
-          max-height: 0;
-        }
-        & .error-show {
-          transition: max-height 0.5s ease-in-out;
-          max-height: 200px;
+          & .error-show {
+            transition: max-height 0.5s ease-in-out;
+            max-height: 200px;
+          }
         }
       }
     }
 
     & .reset-mfa {
-      margin-top: var(--gap);
-      h3 {
-        font-size: medium;
-      }
+      display: flex;
+      flex-basis: 100%;
+      border: solid 1px pidp.$grey-30;
+      background-color: #f2f2f2;
 
-      p {
-        margin-bottom: 23px;
-        & .learn-more {
-          text-decoration: none;
-          .arrow-right {
-            margin-left: 2px;
+      & .mfa-content {
+        display: flex;
+        flex-direction: column;
+        margin: var(--gap);
+        padding: var(--gap);
+
+        p {
+          margin-bottom: 23px;
+          & .learn-more {
+            text-decoration: none;
+            .arrow-right {
+              margin-left: 2px;
+            }
           }
         }
-      }
 
-      & .reset-mfa-button {
-        display: inline-flex;
-        padding: 12px 32px;
-        justify-content: center;
-        align-items: center;
-        gap: 10px;
-        border-radius: 4px;
-        border: 2px solid #036;
-        background: #fff;
-        color: #036;
-        font-size: 18px;
-        font-style: normal;
-        font-weight: 700;
-        line-height: normal;
-        letter-spacing: 1px;
+        & .mfa-disclaimer {
+          color: var(--BC-gov-form-font-colour, #aaa);
+          font-size: 16px;
+          font-style: normal;
+          font-weight: 400;
+          line-height: normal;
+        }
 
-        & img {
-          margin-right: 10px;
+        & .mfa-content-boxes {
+          display: flex;
+          gap: 2rem;
+
+          & .steps-box,
+          .button-box {
+            display: flex;
+            flex-basis: 100%;
+            flex-direction: column;
+            border: solid 1px pidp.$grey-30;
+            background-color: white;
+          }
+
+          & .steps-box {
+            align-items: flex-start;
+            & .steps-box-content {
+              margin: var(--gap);
+              padding: var(--gap);
+              img {
+                height: 36px;
+              }
+            }
+          }
+
+          & .button-box {
+            & .button-box-img {
+              height: 100%;
+              img {
+                max-width: 100% !important;
+                position: unset !important;
+                object-fit: cover;
+              }
+            }
+
+            & .button-box-btn {
+              color: #036;
+
+              & .reset-mfa-button {
+                display: flex;
+                justify-content: flex-end;
+                align-items: center;
+                background: pidp.$yellow;
+                border: none;
+                padding: 12px 32px;
+                gap: 10px;
+                width: 100%;
+                font-size: 18px;
+                font-style: normal;
+                font-weight: 700;
+                line-height: normal;
+                letter-spacing: 1px;
+              }
+            }
+          }
         }
       }
     }
 
     & .actions {
       margin-top: var(--gap);
-    }
-  }
-  & .mobile-image {
-    & img {
-      display: none;
     }
   }
 }

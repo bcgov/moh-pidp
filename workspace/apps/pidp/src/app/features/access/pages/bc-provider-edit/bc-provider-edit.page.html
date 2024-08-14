@@ -2,7 +2,8 @@
   <app-breadcrumb [breadcrumbs]="breadcrumbsData"></app-breadcrumb>
   <div class="content-box">
     <header>
-      <h1>BC Provider Account Information</h1>
+      <h1>BC Provider Account Management</h1>
+      <h3>Set a new password or reset your MFA at your convenience</h3>
     </header>
     <div class="content">
       <ng-container *ngIf="showErrorCard">
@@ -13,21 +14,14 @@
       <section class="form-card">
         <div class="password-form">
           <form novalidate [formGroup]="formState.form" (ngSubmit)="onSubmit()">
-            <div class="mobile-image">
-              <img
-                ngSrc="/assets/images/bcprovider-account-1000x1103.webp"
-                fill
-                priority />
-            </div>
-            <h2>Password reset</h2>
-            <div class="username">
-              <h4><strong>Provided username</strong></h4>
-              <h5 class="username-overflow">{{ username }}</h5>
-            </div>
+            <h1><strong>Set new password</strong></h1>
+
+            <p class="username username-intro">Provided username:</p>
+            <p class="username username-overflow">{{ username }}</p>
             <div class="form-content">
               <div class="field">
                 <label id="bc-provider-application-new-password"
-                  >Choose new password</label
+                  >Password</label
                 >
                 <mat-form-field>
                   <input
@@ -40,7 +34,7 @@
               </div>
               <div class="field">
                 <label id="bc-provider-application-confirm-password"
-                  >Confirm new password</label
+                  >Confirm password</label
                 >
                 <mat-form-field>
                   <input
@@ -67,79 +61,48 @@
             </div>
           </form>
         </div>
-        <div class="password-splash">
-          <div class="password-splash-content">
-            <div class="text-box">
-              <div>
-                <span class="lets">Let's get started</span>
-              </div>
-              <div>
-                <span class="using">using BC Provider today!</span>
+      </section>
+      <section class="reset-mfa">
+        <div class="mfa-content">
+          <h1>
+            <strong>Reset your multifactor authentication (MFA)</strong>
+          </h1>
+          <p class="mfa-disclaimer">Only available if you login with BCSC</p>
+          <div class="mfa-content-boxes">
+            <div class="steps-box">
+              <div class="steps-box-content">
+                <img
+                  src="/assets/images/icons/history.svg"
+                  alt="reset-mfa-right" />
+                <strong>Reset process:</strong>
+                <ul>
+                  <li>Unpair my devices connected to my MFA</li>
+                  <li>Reconfigure my MFA by pairing my devices again</li>
+                </ul>
               </div>
             </div>
-            <picture class="image">
-              <source
-                type="image/webp"
-                srcset="/assets/images/bcprovider-account-1000x1103.webp" />
-              <!-- Use png as a fallback when webp is not supported by the browser. -->
-              <source
-                type="image/png"
-                srcset="/assets/images/bcprovider-account-1000x1103.png" />
-              <img title="woman" loading="lazy" aria-labelledby="" />
-            </picture>
-
-            <div *ngIf="false" class="text-box">
-              <div>
-                <span class="lets">Let's get started</span>
+            <div class="button-box">
+              <div class="button-box-img">
+                <img
+                  ngSrc="/assets/images/mfa-hands.jpg"
+                  alt="reset my MFA"
+                  priority
+                  fill />
               </div>
-              <div>
-                <span class="using">using BC Provider today!</span>
+              <div class="button-box-btn">
+                <button
+                  class="reset-mfa-button"
+                  type="button"
+                  [disabled]="(identityProvider$ | async) !== IdentityProvider.BCSC"
+                  (click)="onResetMfa()">
+                  Reset my MFA<img
+                    src="/assets/images/icons/icon-right-circle.svg"
+                    alt="reset-mfa-right" />
+                </button>
               </div>
             </div>
           </div>
         </div>
-      </section>
-      <section
-        class="reset-mfa">
-        <h3>
-          <strong
-            >Do you need to reset your multi-factor authentication
-            (MFA)?</strong
-          >
-        </h3>
-        <p>
-          Over time, you may lose or replace an authenticator device or perhaps
-          move to a new mobile phone number. This is likely to impact MFA and so
-          prevent access to the user's account. A resultant change to MFA
-          details is therefore required if the user is to continue access. If
-          you are unable to successfully authenticate with multi-factor
-          authentication (MFA) for some reason (ex: you have uninstalled the
-          Microsoft Authenticator App, have a new mobile device or changed your
-          phone number), you need to reset the MFA.
-          <button class="learn-more" uiTextButton (click)="onLearnMore()">
-            <span><u>Learn more</u><span class="arrow-right">></span></span>
-          </button>
-        </p>
-        <button
-          class="reset-mfa-button"
-          mat-stroked-button
-          type="button"
-          color="primary"
-          [disabled]="(identityProvider$ | async) !== IdentityProvider.BCSC"
-          (click)="onResetMfa()">
-          <img
-            src="/assets/images/icons/admin-panel.svg"
-            alt="reset-mfa-admin-panel" />Reset my MFA
-        </button>
-      </section>
-      <section class="actions">
-        <button
-          mat-stroked-button
-          type="button"
-          color="primary"
-          (click)="onBack()">
-          Back
-        </button>
       </section>
     </div>
   </div>
