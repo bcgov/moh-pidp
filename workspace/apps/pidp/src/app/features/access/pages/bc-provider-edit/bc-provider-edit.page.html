@@ -100,7 +100,6 @@
         </div>
       </section>
       <section
-        *ngIf="(identityProvider$ | async) === IdentityProvider.BCSC"
         class="reset-mfa">
         <h3>
           <strong
@@ -126,6 +125,7 @@
           mat-stroked-button
           type="button"
           color="primary"
+          [disabled]="(identityProvider$ | async) !== IdentityProvider.BCSC"
           (click)="onResetMfa()">
           <img
             src="/assets/images/icons/admin-panel.svg"
