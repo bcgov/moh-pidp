@@ -357,7 +357,7 @@ export class EndorsementsPage
                   return result && partyId && this.formState.json
                     ? this.resource.createEndorsementRequest(
                       partyId,
-                      this.formState.json,
+                      { ...this.formState.json, preApproved: response.recipientName ? true : false },
                     )
                     : EMPTY;
                 }),
