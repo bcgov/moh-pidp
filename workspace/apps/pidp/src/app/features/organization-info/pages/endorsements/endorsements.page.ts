@@ -116,6 +116,7 @@ export class EndorsementsPage
   public endorsements$!: Observable<Endorsement[]>;
 
   public showOverlayOnSubmit = true;
+  public isDialogOpen = false;
 
   public constructor(
     dependenciesService: AbstractFormDependenciesService,
@@ -168,11 +169,13 @@ export class EndorsementsPage
 
   public onEnter(event: Event): void {
     event.preventDefault();
-    const sendButton = document.querySelector(
-      'button[type="submit"]',
-    ) as HTMLButtonElement;
-    if (sendButton) {
-      sendButton.click();
+    if (!this.isDialogOpen) {
+      const sendButton = document.querySelector(
+        'button[type="submit"]',
+      ) as HTMLButtonElement;
+      if (sendButton) {
+        sendButton.click();
+      }
     }
   }
 
@@ -203,10 +206,13 @@ export class EndorsementsPage
         'You are about to <b>approve</b> this endorsement, would you like to proceed',
     };
 
+    this.isDialogOpen = true;
+
     this.dialog
       .open(ConfirmDialogComponent, { data })
       .afterClosed()
       .pipe(
+        tap(() => (this.isDialogOpen = false)),
         exhaustMap((result) => {
           this.loadingOverlayService.close();
           return result
@@ -233,10 +239,12 @@ export class EndorsementsPage
       content:
         'You are about to <b>cancel</b> this endorsement, would you like to proceed',
     };
+    this.isDialogOpen = true;
     this.dialog
       .open(ConfirmDialogComponent, { data })
       .afterClosed()
       .pipe(
+        tap(() => (this.isDialogOpen = false)),
         exhaustMap((result) => {
           this.loadingOverlayService.close();
           return result
@@ -263,10 +271,12 @@ export class EndorsementsPage
       content:
         'You are about to <b>cancel</b> this endorsement, would you like to proceed',
     };
+    this.isDialogOpen = true;
     this.dialog
       .open(ConfirmDialogComponent, { data })
       .afterClosed()
       .pipe(
+        tap(() => (this.isDialogOpen = false)),
         exhaustMap((result) =>
           result
             ? this.resource
@@ -350,6 +360,7 @@ export class EndorsementsPage
       class: 'dialog-container',
     };
 
+    this.isDialogOpen = true;
     return partyId && this.formState.json
       ? this.resource.emailSearch(partyId, this.formState.json.recipientEmail)
         .pipe(
@@ -362,7 +373,7 @@ export class EndorsementsPage
               .open(ConfirmDialogComponent, { data })
               .afterClosed()
               .pipe(
-                exhaustMap((result) => {
+                  tap(() => (this.isDialogOpen = false)),
                   this.loadingOverlayService.close();
                   return result && partyId && this.formState.json
                     ? this.resource.createEndorsementRequest(
