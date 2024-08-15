@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { AsyncPipe, NgIf, NgOptimizedImage } from '@angular/common';
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
@@ -5,13 +6,14 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { Router } from '@angular/router';
 
 import { EMPTY, Observable, catchError, exhaustMap, noop, of, tap } from 'rxjs';
 
 import { faCircleCheck, faXmark } from '@fortawesome/free-solid-svg-icons';
 import {
-  LOADING_OVERLAY_DEFAULT_MESSAGE,
+  // LOADING_OVERLAY_DEFAULT_MESSAGE,
   LoadingOverlayService,
   NavigationService,
 } from '@pidp/presentation';
@@ -68,6 +70,8 @@ export interface BcProviderEditInitialStateModel {
     NgOptimizedImage,
     TextButtonDirective,
     AsyncPipe,
+    MatProgressBarModule,
+    ConfirmDialogComponent,
   ],
 })
 export class BcProviderEditPage
@@ -84,6 +88,7 @@ export class BcProviderEditPage
   public componentType = DialogBcproviderEditComponent;
   public identityProvider$: Observable<IdentityProvider>;
   public IdentityProvider = IdentityProvider;
+  public isLoading = false;
 
   public breadcrumbsData: Array<{ title: string; path: string }> = [
     { title: 'Home', path: '' },
@@ -98,8 +103,13 @@ export class BcProviderEditPage
   public showOverlayOnSubmit = false;
 
   @ViewChild('successDialog')
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public successDialogTemplate!: TemplateRef<any>;
+
+  @ViewChild('loadingDialog')
+  public loadingDialogTemplate!: TemplateRef<any>;
+
+  @ViewChild('resetCompleteDialog')
+  public resetCompleteDialogTemplate!: TemplateRef<any>;
 
   public get isResetButtonEnabled(): boolean {
     return this.formState.form.valid;
@@ -190,31 +200,33 @@ export class BcProviderEditPage
   }
 
   private resetMfa(partyId: number): Observable<void | null> {
-    const data: DialogOptions = {
-      title: 'Your Multi-factor authentication (MFA) has been reset',
-      bottomBorder: false,
-      titlePosition: 'center',
-      bodyTextPosition: 'center',
-      component: HtmlComponent,
-      data: {
-        content:
-          'Your authentication credentials have been successfully reset.',
-      },
-      imageSrc: '/assets/images/online-marketing-hIgeoQjS_iE-unsplash.jpg',
-      imageType: 'banner',
-      width: '31rem',
-      height: '24rem',
-      actionText: 'Continue',
-      actionTypePosition: 'center',
-    };
+    // const data: DialogOptions = {
+    //   title: 'Your Multi-factor authentication (MFA) has been reset',
+    //   bottomBorder: false,
+    //   titlePosition: 'center',
+    //   bodyTextPosition: 'center',
+    //   component: HtmlComponent,
+    //   data: {
+    //     content:
+    //       'Your authentication credentials have been successfully reset.',
+    //   },
+    //   imageSrc: '/assets/images/online-marketing-hIgeoQjS_iE-unsplash.jpg',
+    //   imageType: 'banner',
+    //   width: '31rem',
+    //   height: '24rem',
+    //   actionText: 'Continue',
+    //   actionTypePosition: 'center',
+    // };
 
-    this.loadingOverlayService.open(LOADING_OVERLAY_DEFAULT_MESSAGE);
+    this.showLoadingDialog();
+    // this.loadingOverlayService.open(LOADING_OVERLAY_DEFAULT_MESSAGE);
     this.resource
       .resetMfa(partyId)
       .pipe(
         tap((_) => {
-          this.loadingOverlayService.close();
-          this.dialog.open(ConfirmDialogComponent, { data });
+          // this.loadingOverlayService.close();
+          this.dialog.closeAll();
+          this.showResetCompleteDialog();
         }),
         catchError(() => {
           this.showErrorCard = true;
@@ -230,5 +242,49 @@ export class BcProviderEditPage
       disableClose: true,
     };
     this.dialog.open(this.successDialogTemplate, config);
+  }
+
+  private showLoadingDialog(): void {
+    const data: DialogOptions = {
+      title: 'Multi-factor authentication (MFA) reset',
+      bottomBorder: false,
+      titlePosition: 'center',
+      bodyTextPosition: 'center',
+      component: HtmlComponent,
+      data: {
+        content:
+          'This may take a few minutes. Do not refresh the page or select back, doing so will cancel the request.',
+      },
+      imageSrc: '/assets/images/online-marketing-hIgeoQjS_iE-unsplash.jpg',
+      imageType: 'banner',
+      width: '31rem',
+      height: '24rem',
+      cancelHide: true,
+      actionHide: true,
+    };
+    this.isLoading = true;
+    this.dialog.open(this.loadingDialogTemplate, { data });
+  }
+
+  private showResetCompleteDialog(): void {
+    const data: DialogOptions = {
+      title: 'Multi-factor authentication (MFA) reset',
+      bottomBorder: false,
+      titlePosition: 'center',
+      bodyTextPosition: 'center',
+      component: HtmlComponent,
+      data: {
+        content:
+          'Your authentication credentials have been successfully reset.',
+      },
+      imageSrc: '/assets/images/online-marketing-hIgeoQjS_iE-unsplash.jpg',
+      imageType: 'banner',
+      width: '31rem',
+      height: '24rem',
+      actionText: 'Continue',
+      actionTypePosition: 'center',
+      cancelHide: true,
+    };
+    this.dialog.open(this.resetCompleteDialogTemplate, { data });
   }
 }

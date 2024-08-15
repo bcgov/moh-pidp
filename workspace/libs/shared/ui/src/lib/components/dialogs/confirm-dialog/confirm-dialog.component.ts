@@ -47,6 +47,7 @@ import { DIALOG_DEFAULT_OPTION } from '../dialogs-properties.provider';
 export class ConfirmDialogComponent implements OnInit {
   public options: DialogOptions;
   public dialogContentOutput: DialogContentOutput<unknown> | null;
+  public isLoading = false;
 
   @ViewChild('dialogContentHost', { static: true, read: ViewContainerRef })
   public dialogContentHost!: ViewContainerRef;
