@@ -166,6 +166,16 @@ export class EndorsementsPage
     class: 'dialog-container',
   };
 
+  public onEnter(event: Event): void {
+    event.preventDefault();
+    const sendButton = document.querySelector(
+      'button[type="submit"]',
+    ) as HTMLButtonElement;
+    if (sendButton) {
+      sendButton.click();
+    }
+  }
+
   public get recipientEmail(): FormControl {
     return this.formState.form.get('recipientEmail') as FormControl;
   }
