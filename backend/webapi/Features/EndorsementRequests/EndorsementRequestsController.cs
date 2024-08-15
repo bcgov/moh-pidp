@@ -22,6 +22,13 @@ public class EndorsementRequestsController(IPidpAuthorizationService authorizati
         => await this.AuthorizePartyBeforeHandleAsync(query.PartyId, handler, query)
             .ToActionResultOfT();
 
+    [HttpPost("email-search")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<EmailSearch.Model>> EmailSearch([FromServices] IQueryHandler<EmailSearch.Query, EmailSearch.Model> handler,
+                                                                   [FromBody] EmailSearch.Query query)
+            => await handler.HandleAsync(query);
+
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]

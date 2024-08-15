@@ -70,6 +70,7 @@ import { EndorsementRequestStatus } from './enums/endorsement-request-status.enu
 import { EndorsementRequest } from './models/endorsement-request.model';
 import { Endorsement } from './models/endorsement.model';
 import { BreadcrumbComponent } from '@app/shared/components/breadcrumb/breadcrumb.component';
+import { EndorsementEmailSearch } from './models/endorsement-email-search.model';
 
 export enum EndorsementType {
   WorkingRelationship,
@@ -100,8 +101,7 @@ export enum EndorsementType {
 })
 export class EndorsementsPage
   extends AbstractFormPage<EndorsementsFormState>
-  implements OnInit
-{
+  implements OnInit {
   @ViewChild(FormGroupDirective) public formGroupDirective!: FormGroupDirective;
 
   public faUser = faUser;
@@ -201,16 +201,16 @@ export class EndorsementsPage
           this.loadingOverlayService.close();
           return result
             ? this.resource
-                .approveEndorsementRequest(this.partyService.partyId, requestId)
-                .pipe(
-                  switchMap(
-                    () =>
-                      (this.actionableEndorsementRequests$ =
-                        this.getActionableEndorsementRequests(
-                          this.partyService.partyId,
-                        )),
-                  ),
-                )
+              .approveEndorsementRequest(this.partyService.partyId, requestId)
+              .pipe(
+                switchMap(
+                  () =>
+                  (this.actionableEndorsementRequests$ =
+                    this.getActionableEndorsementRequests(
+                      this.partyService.partyId,
+                    )),
+                ),
+              )
             : EMPTY;
         }),
       )
@@ -231,16 +231,16 @@ export class EndorsementsPage
           this.loadingOverlayService.close();
           return result
             ? this.resource
-                .declineEndorsementRequest(this.partyService.partyId, requestId)
-                .pipe(
-                  switchMap(
-                    () =>
-                      (this.actionableEndorsementRequests$ =
-                        this.getActionableEndorsementRequests(
-                          this.partyService.partyId,
-                        )),
-                  ),
-                )
+              .declineEndorsementRequest(this.partyService.partyId, requestId)
+              .pipe(
+                switchMap(
+                  () =>
+                  (this.actionableEndorsementRequests$ =
+                    this.getActionableEndorsementRequests(
+                      this.partyService.partyId,
+                    )),
+                ),
+              )
             : EMPTY;
         }),
       )
@@ -260,15 +260,15 @@ export class EndorsementsPage
         exhaustMap((result) =>
           result
             ? this.resource
-                .cancelEndorsement(this.partyService.partyId, endorsementId)
-                .pipe(
-                  switchMap(
-                    () =>
-                      (this.endorsements$ = this.getEndorsements(
-                        this.partyService.partyId,
-                      )),
-                  ),
-                )
+              .cancelEndorsement(this.partyService.partyId, endorsementId)
+              .pipe(
+                switchMap(
+                  () =>
+                  (this.endorsements$ = this.getEndorsements(
+                    this.partyService.partyId,
+                  )),
+                ),
+              )
             : EMPTY,
         ),
       )
@@ -321,6 +321,7 @@ export class EndorsementsPage
 
   protected performSubmission(): NoContent {
     const partyId = this.partyService.partyId;
+
     const data: DialogOptions = {
       title: 'Endorsement requests',
       bottomBorder: false,
@@ -328,10 +329,7 @@ export class EndorsementsPage
       bodyTextPosition: 'center',
       component: HtmlComponent,
       data: {
-        content:
-          "You are about to <b>request</b> an endorsement to<p class='p-0 m-0' style='color: #036;font-size:1.2rem;'><b>" +
-          this.formState.json?.recipientEmail +
-          '</b></p>would you like to proceed?',
+        content: '',
       },
       imageSrc: '/assets/images/online-marketing-hIgeoQjS_iE-unsplash.jpg',
       imageType: 'banner',
@@ -343,27 +341,35 @@ export class EndorsementsPage
     };
 
     return partyId && this.formState.json
-      ? this.dialog
-          .open(ConfirmDialogComponent, { data })
-          .afterClosed()
-          .pipe(
-            exhaustMap((result) => {
-              this.loadingOverlayService.close();
-              return result && partyId && this.formState.json
-                ? this.resource.createEndorsementRequest(
-                    partyId,
-                    this.formState.json,
-                  )
-                : EMPTY;
-            }),
-            catchError((error: HttpErrorResponse) => {
-              this.loadingOverlayService.close();
-              if (error.status === HttpStatusCode.BadRequest) {
-                return of(noop());
-              }
-              return of(noop());
-            }),
-          )
+      ? this.resource.emailSearch(partyId, this.formState.json.recipientEmail)
+        .pipe(
+          switchMap((response: EndorsementEmailSearch) => {
+            data.data!.content = response.recipientName
+              ? `An existing user has registered ${this.formState.json?.recipientEmail}. Please confirm you are wanting an endorsement with <p class='p-0 m-0' style='color: #036;font-size:1.2rem;'><b>${response.recipientName}</b></p>`
+              : `You are about to <b>request</b> an endorsement to<p class='p-0 m-0' style='color: #036;font-size:1.2rem;'><b>${this.formState.json?.recipientEmail}</b></p>would you like to proceed?`;
+
+            return this.dialog
+              .open(ConfirmDialogComponent, { data })
+              .afterClosed()
+              .pipe(
+                exhaustMap((result) => {
+                  this.loadingOverlayService.close();
+                  return result && partyId && this.formState.json
+                    ? this.resource.createEndorsementRequest(
+                      partyId,
+                      this.formState.json,
+                    )
+                    : EMPTY;
+                }),
+                catchError((error: HttpErrorResponse) => {
+                  this.loadingOverlayService.close();
+                  if (error.status === HttpStatusCode.BadRequest) {
+                    return of(noop());
+                  }
+                  return of(noop());
+                }),
+              )
+          }))
       : EMPTY;
   }
 
