@@ -14,6 +14,11 @@
 }
 
 .viewport-xsmall {
+  header {
+    h1 {
+      word-wrap: break-word;
+    }
+  }
   .form-button-box {
     & button {
       margin-top: 20px;
@@ -29,6 +34,18 @@
         & .mat-mdc-form-field {
           margin-bottom: 18px !important;
         }
+      }
+    }
+  }
+  & .reset-mfa {
+    display: block !important;
+
+    & .mfa-content {
+      & h1 {
+        word-wrap: break-word;
+      }
+      & .mfa-content-boxes {
+        flex-direction: column;
       }
     }
   }
@@ -316,5 +333,8 @@
       font-size: 40px;
       line-height: 1.1;
     }
+  }
+  & .content {
+    flex-direction: column;
   }
 }
