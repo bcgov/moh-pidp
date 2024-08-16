@@ -67,41 +67,21 @@
       font-weight: 700;
     }
   }
+  & .error-card {
+    background-color: #ffdfdf;
+  }
+  & .show-card {
+    padding: var(--gap);
+    margin-bottom: var(--gap);
+    opacity: 1;
+    border: solid 1px pidp.$grey-30;
+    border-radius: var(--card-border-radius);
+  }
   & .content {
     padding: var(--content-padding);
     font-size: var(--font-size);
     display: flex;
     gap: var(--gap);
-
-    & .error-card {
-      background-color: #ffdfdf;
-    }
-    & .message-card {
-      background-color: pidp.$grey-10;
-    }
-    & .error-card,
-    & .message-card {
-      // Use transitions so the cards slide in when displayed with show-card
-      transition-property: padding-top, padding-bottom, margin-bottom, opacity;
-      transition-duration: 0.5s;
-      transition-timing-function: ease-in-out;
-      // Initially hide these cards
-      padding: 0;
-      margin-bottom: 0;
-      width: var(--form-card-width);
-      opacity: 0;
-
-      & p {
-        margin: 0;
-      }
-    }
-    & .show-card {
-      padding: var(--gap);
-      margin-bottom: var(--gap);
-      opacity: 1;
-      border: solid 1px pidp.$grey-30;
-      border-radius: var(--card-border-radius);
-    }
 
     & .form-card {
       display: flex;

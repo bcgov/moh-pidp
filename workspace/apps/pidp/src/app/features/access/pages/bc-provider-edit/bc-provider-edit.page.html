@@ -5,12 +5,12 @@
       <h1>BC Provider Account Management</h1>
       <h3>Set a new password or reset your MFA at your convenience</h3>
     </header>
+    <ng-container *ngIf="showErrorCard">
+      <section class="error-card" [class.show-card]="showErrorCard">
+        <p>An error occurred.</p>
+      </section>
+    </ng-container>
     <div class="content">
-      <ng-container *ngIf="showErrorCard">
-        <section class="error-card" [class.show-card]="showErrorCard">
-          <p>An error occurred.</p>
-        </section>
-      </ng-container>
       <section class="form-card">
         <div class="password-form">
           <form novalidate [formGroup]="formState.form" (ngSubmit)="onSubmit()">
