@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { AsyncPipe, NgIf, NgOptimizedImage } from '@angular/common';
+import { AsyncPipe, NgClass, NgIf, NgOptimizedImage } from '@angular/common';
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -72,6 +72,7 @@ export interface BcProviderEditInitialStateModel {
     AsyncPipe,
     MatProgressBarModule,
     ConfirmDialogComponent,
+    NgClass,
   ],
 })
 export class BcProviderEditPage

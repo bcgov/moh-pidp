@@ -244,6 +244,12 @@
                 line-height: normal;
                 letter-spacing: 1px;
               }
+              .disabled {
+                display: block;
+                img {
+                  display: none;
+                }
+              }
             }
           }
         }

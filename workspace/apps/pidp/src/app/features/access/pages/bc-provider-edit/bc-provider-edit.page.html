@@ -93,6 +93,7 @@
                 <button
                   class="reset-mfa-button"
                   type="button"
+                  [ngClass]="{ 'disabled': (identityProvider$ | async) !== IdentityProvider.BCSC }"
                   [disabled]="(identityProvider$ | async) !== IdentityProvider.BCSC"
                   (click)="onResetMfa()">
                   Reset my MFA<img
