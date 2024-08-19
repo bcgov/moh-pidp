@@ -16,6 +16,7 @@ using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.HttpClients.Plr;
 using Pidp.Models;
 using Pidp.Models.Lookups;
+using Pidp.Data.Migrations;
 
 public partial class ProfileStatus
 {
@@ -88,7 +89,9 @@ public partial class ProfileStatus
                     ProfileSection.Create<PrescriptionRefillEformsSection>(data),
                     ProfileSection.Create<ProviderReportingPortalSection>(data),
                     ProfileSection.Create<ProvincialAttachmentSystemSection>(data),
-                    ProfileSection.Create<SAEformsSection>(data)
+                    ProfileSection.Create<SAEformsSection>(data),
+                    ProfileSection.Create<immsBC>(data)
+
                 }
                 .ToDictionary(section => section.SectionName, section => section)
             };
@@ -107,6 +110,8 @@ public partial class ProfileStatus
         public bool HasBCProviderCredential { get; set; }
         public bool HasBCServicesCardCredential { get; set; }
         public bool LicenceDeclarationComplete { get; set; }
+
+        public bool ImmsBC { get; set; }
 
         // Computed in Finalize()
         private string? userIdentityProvider;

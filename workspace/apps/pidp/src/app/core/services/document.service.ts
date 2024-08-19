@@ -13,6 +13,7 @@ export enum DocumentType {
   MS_TEAMS_IT_SECURITY_AGREEMENT = 'ms-teams-it-security-agreement',
   PROVIDER_REPORTING_PORTAL_COLLECTION_NOTICE = 'provider-reporting-portal-collection-notice',
   IMMSBC_EFORMS_COLLECTION_NOTICE = 'immsbc-eforms-collection-notice',
+  IMMSBC = 'immsBC',
 }
 
 export interface IDocumentMetaData {
@@ -73,6 +74,10 @@ export class DocumentService {
         type: DocumentType.IMMSBC_EFORMS_COLLECTION_NOTICE,
         title: 'Immunization Entry eForm Collection Notice',
       },
+      {
+        type: DocumentType.IMMSBC,
+        title: 'ImmsBC',
+      },
     ];
   }
 
@@ -126,6 +131,11 @@ export class DocumentService {
         return {
           ...this.getDocumentMetaData(documentType),
           content: this.getImmsBCEformsCollectionNotice(),
+        };
+      case DocumentType.IMMSBC:
+        return {
+          ...this.getDocumentMetaData(documentType),
+          content: this.getImmsBC(),
         };
       default:
         throw new Error('Document type does not exist');
@@ -356,6 +366,15 @@ export class DocumentService {
       and will not be used for any other purpose other than the one stated above. If you have any questions
       about the collection of this personal information please contact PHSA's Information Access & Privacy
       Office at 1-855-229-9800 or at <a href="mailto:${this.config.emails.immsBCEformsSupport}">${this.config.emails.immsBCEformsSupport}</a>.
+    `;
+  }
+
+  public getImmsBC(): string {
+    return `
+      Lotus ipsum root brussels sprout turnip greens beet greens mustard okra earthnut pea fennel radicchio
+      kohlrabi soko gram arugula carrot plantain welsh onion courgette. Dandelion mustard spinach bush
+      tomato beet greens lentil salsify garbanzo. Chickweed celery maize summer purslane black-eyed pea
+      epazote melon bell pepper salad bitterleaf soybean corn wattle seed.
     `;
   }
 
