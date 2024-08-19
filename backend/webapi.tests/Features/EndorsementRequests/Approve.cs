@@ -12,12 +12,12 @@ using Pidp.Models;
 
 using PidpTests.TestingExtensions;
 
-public class EndorsementApproveTests : InMemoryDbTest
+public class EndorsementRequestApproveTests : InMemoryDbTest
 {
     private const int RequestingPartyId = 1;
     private const int ReceivingPartyId = 2;
 
-    public EndorsementApproveTests()
+    public EndorsementRequestApproveTests()
     {
         this.TestDb.HasAParty(party =>
         {
