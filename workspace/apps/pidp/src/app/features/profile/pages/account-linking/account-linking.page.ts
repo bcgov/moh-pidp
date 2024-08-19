@@ -55,6 +55,7 @@ import { BreadcrumbComponent } from '@app/shared/components/breadcrumb/breadcrum
 import { AccessRoutes } from '@app/features/access/access.routes';
 import { CookieService } from 'ngx-cookie-service';
 import { User } from '@app/features/auth/models/user.model';
+import { CryptoService } from '@app/core/services/crypto.service';
 
 @Component({
   selector: 'app-account-linking',
@@ -103,6 +104,7 @@ export class AccountLinkingPage implements OnInit, OnDestroy {
     private loadingOverlayService: LoadingOverlayService,
     private navigationService: NavigationService,
     private cookieService: CookieService,
+    private cryptoService: CryptoService,
   ) {
     this.title = this.route.snapshot.data.title;
     const partyId = this.partyService.partyId;
@@ -202,8 +204,8 @@ export class AccountLinkingPage implements OnInit, OnDestroy {
     this.user$.pipe().subscribe((userFound) => {
       if (userFound) {
         this.userName = userFound.firstName + ' ' + userFound.lastName;
-        this.cookieService.set('UserName', this.utilsService.encrypt(this.userName));
-        this.cookieService.set('IdentityProvider', this.utilsService.encrypt(userFound.identityProvider));
+        this.cookieService.set('UserName', this.cryptoService.encrypt(this.userName));
+        this.cookieService.set('IdentityProvider', this.cryptoService.encrypt(userFound.identityProvider));
       }
     });
   }

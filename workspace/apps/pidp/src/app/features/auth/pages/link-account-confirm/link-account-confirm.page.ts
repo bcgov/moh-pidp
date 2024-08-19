@@ -29,7 +29,7 @@ import { IdentityProvider } from '../../enums/identity-provider.enum';
 import { BcProviderUser } from '../../models/bc-provider-user.model';
 import { AuthorizedUserService } from '../../services/authorized-user.service';
 import { LinkAccountConfirmResource } from './link-account-confirm-resource.service';
-import { UtilsService } from '@app/core/services/utils.service';
+import { CryptoService } from '@app/core/services/crypto.service';
 
 @Component({
   selector: 'app-link-account-confirm',
@@ -66,7 +66,7 @@ export class LinkAccountConfirmPage implements OnInit {
     private router: Router,
     private loadingOverlayService: LoadingOverlayService,
     private cookieService: CookieService,
-    private utilsService: UtilsService,
+    private cryptoService: CryptoService,
   ) {
     this.user$ = this.authorizedUserService.user$;
     this.userName = '';
@@ -74,8 +74,8 @@ export class LinkAccountConfirmPage implements OnInit {
   }
 
   public ngOnInit(): void {
-    this.userName = this.utilsService.decrypt(this.cookieService.get('UserName'));
-    this.identityProvider = this.utilsService.decrypt(this.cookieService.get('IdentityProvider')).toUpperCase();
+    this.userName = this.cryptoService.decrypt(this.cookieService.get('UserName'));
+    this.identityProvider = this.cryptoService.decrypt(this.cookieService.get('IdentityProvider')).toUpperCase();
     this.user$
       .pipe(
         switchMap((user) => {

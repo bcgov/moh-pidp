@@ -3,8 +3,6 @@ import { Inject, Injectable } from '@angular/core';
 
 import { delay, of } from 'rxjs';
 
-import * as CryptoJS from 'crypto-js';
-
 import { WINDOW } from '@bcgov/shared/utils';
 
 export type SortWeight = -1 | 0 | 1;
@@ -13,7 +11,6 @@ export type SortWeight = -1 | 0 | 1;
   providedIn: 'root',
 })
 export class UtilsService {
-  private key: string = 'encryptPIDP!12345';
   public constructor(
     @Inject(WINDOW) private window: Window,
     @Inject(DOCUMENT) private document: Document,
@@ -139,15 +136,5 @@ export class UtilsService {
     }
 
     return new Blob([data], { type });
-  }
-
-  public encrypt(data: string): string {
-    return CryptoJS.AES.encrypt(data, this.key).toString();
-  }
-
-  public decrypt(dataToDecrypt: string): string {
-    return CryptoJS.AES.decrypt(dataToDecrypt, this.key).toString(
-      CryptoJS.enc.Utf8,
-    );
   }
 }
