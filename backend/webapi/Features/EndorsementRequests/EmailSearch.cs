@@ -30,7 +30,7 @@ public class EmailSearch
         public async Task<Model> HandleAsync(Query query)
         {
             var existingParties = await this.context.Parties
-                .Where(party => party.Email.ToLower() == query.RecipientEmail.ToLower())
+                .Where(party => party.Email!.ToLower() == query.RecipientEmail.ToLower())
                 .Select(party => party.DisplayFullName)
                 .ToListAsync();
 

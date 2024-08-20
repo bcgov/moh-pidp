@@ -45,14 +45,14 @@ public class EndorsementRequestCreateTests : InMemoryDbTest
     }
 
     [Fact]
-    public async Task Create_PreApprovedOneMatchingEmail_RecievedEmailSentToRecipient()
+    public async Task Create_PreApprovedOneMatchingEmailDifferentCase_RecievedEmailSentToRecipient()
     {
         var requester = this.TestDb.HasAParty();
         var reciever = this.TestDb.HasAParty(party => party.Email = "emailz@emal.com");
         var command = new Create.Command
         {
             PartyId = requester.Id,
-            RecipientEmail = reciever.Email!,
+            RecipientEmail = "Emailz@eMal.com",
             PreApproved = true
         };
         var emailService = AMock.EmailService();
