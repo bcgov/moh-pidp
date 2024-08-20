@@ -30,33 +30,22 @@ public class Approve
         }
     }
 
-    public class CommandHandler : ICommandHandler<Command, IDomainResult>
+    public class CommandHandler(
+        IClock clock,
+        IEmailService emailService,
+        IKeycloakAdministrationClient keycloakClient,
+        ILogger<CommandHandler> logger,
+        IPlrClient plrClient,
+        PidpConfiguration config,
+        PidpDbContext context) : ICommandHandler<Command, IDomainResult>
     {
-        private readonly IClock clock;
-        private readonly IEmailService emailService;
-        private readonly IKeycloakAdministrationClient keycloakClient;
-        private readonly ILogger<CommandHandler> logger;
-        private readonly IPlrClient plrClient;
-        private readonly PidpConfiguration config;
-        private readonly PidpDbContext context;
-
-        public CommandHandler(
-            IClock clock,
-            IEmailService emailService,
-            IKeycloakAdministrationClient keycloakClient,
-            ILogger<CommandHandler> logger,
-            IPlrClient plrClient,
-            PidpConfiguration config,
-            PidpDbContext context)
-        {
-            this.clock = clock;
-            this.emailService = emailService;
-            this.keycloakClient = keycloakClient;
-            this.logger = logger;
-            this.plrClient = plrClient;
-            this.config = config;
-            this.context = context;
-        }
+        private readonly IClock clock = clock;
+        private readonly IEmailService emailService = emailService;
+        private readonly IKeycloakAdministrationClient keycloakClient = keycloakClient;
+        private readonly ILogger<CommandHandler> logger = logger;
+        private readonly IPlrClient plrClient = plrClient;
+        private readonly PidpConfiguration config = config;
+        private readonly PidpDbContext context = context;
 
         public async Task<IDomainResult> HandleAsync(Command command)
         {
@@ -76,7 +65,7 @@ public class Approve
 
             if (endorsementRequest.Status == EndorsementRequestStatus.Approved)
             {
-                await this.SendEndorsementApprovedEmailAsync(endorsementRequest);
+                await this.SendEndorsementApprovedEmailAsync(endorsementRequest.RequestingPartyId);
             }
 
             if (endorsementRequest.Status == EndorsementRequestStatus.Completed)
@@ -86,7 +75,9 @@ public class Approve
                 await this.context.SaveChangesAsync(); // This double Save is deliberate; we need to persist the Endorsement Relationships in the database before we can calculate the EndorserData in the Domain Events.
                 await this.HandleMoaUpdates(endorsementRequest);
 
-                await this.SendEndorsementCompletedEmailAsync(endorsementRequest);
+                await this.SendEndorsementCompletedEmailAsync(command.PartyId == endorsementRequest.RequestingPartyId
+                    ? endorsementRequest.ReceivingPartyId!.Value
+                    : endorsementRequest.RequestingPartyId);
             }
 
             await this.context.SaveChangesAsync();
@@ -144,10 +135,10 @@ public class Approve
             }
         }
 
-        private async Task SendEndorsementApprovedEmailAsync(EndorsementRequest request)
+        private async Task SendEndorsementApprovedEmailAsync(int requestingPartyId)
         {
             var requestingPartyEmail = await this.context.Parties
-                .Where(party => party.Id == request.RequestingPartyId)
+                .Where(party => party.Id == requestingPartyId)
                 .Select(party => party.Email)
                 .SingleAsync();
             var applicationUrl = $"<a href=\"{this.config.ApplicationUrl}\" target=\"_blank\" rel=\"noopener noreferrer\">OneHealthID Service</a>";
@@ -179,13 +170,12 @@ public class Approve
 <br>Thank you.");
 
             await this.emailService.SendAsync(email);
-
         }
 
-        private async Task SendEndorsementCompletedEmailAsync(EndorsementRequest request)
+        private async Task SendEndorsementCompletedEmailAsync(int recipientPartyId)
         {
-            var receivingPartyEmail = await this.context.Parties
-                .Where(party => party.Id == request.ReceivingPartyId)
+            var partyEmail = await this.context.Parties
+                .Where(party => party.Id == recipientPartyId)
                 .Select(party => party.Email)
                 .SingleAsync();
             var applicationUrl = $"<a href=\"{this.config.ApplicationUrl}\" target=\"_blank\" rel=\"noopener noreferrer\">OneHealthID Service</a>";
@@ -194,7 +184,7 @@ public class Approve
 
             var email = new Email(
                 from: EmailService.PidpEmail,
-                to: receivingPartyEmail!,
+                to: partyEmail!,
                 subject: $"OneHealthID Endorsement is approved",
                 body: $@"Hello,
 <br>You are receiving this email because your endorsement is now complete in the {applicationUrl}. You should now be able to access and use the Provincial Attachment System. You can now continue enrolling in any services that required endorsement from a licensed provider.
