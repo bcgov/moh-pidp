@@ -187,3 +187,11 @@ app-admin-dashboard .mat-sidenav {
   // menu background color for admin section
   background-color: theme-palette(blue);
 }
+
+///
+/// Dialog
+///
+
+.mat-mdc-dialog-container .mdc-dialog__container {
+  height: auto;
+}

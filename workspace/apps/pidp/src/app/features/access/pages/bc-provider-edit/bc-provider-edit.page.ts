@@ -1,6 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { AsyncPipe, NgClass, NgIf, NgOptimizedImage } from '@angular/common';
-import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import {
+  Component,
+  Inject,
+  OnInit,
+  TemplateRef,
+  ViewChild,
+} from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogConfig } from '@angular/material/dialog';
@@ -9,14 +15,20 @@ import { MatInputModule } from '@angular/material/input';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { Router } from '@angular/router';
 
-import { EMPTY, Observable, catchError, exhaustMap, noop, of, tap } from 'rxjs';
+import {
+  EMPTY,
+  Observable,
+  Subscription,
+  catchError,
+  exhaustMap,
+  noop,
+  of,
+  tap,
+  timer,
+} from 'rxjs';
 
 import { faCircleCheck, faXmark } from '@fortawesome/free-solid-svg-icons';
-import {
-  // LOADING_OVERLAY_DEFAULT_MESSAGE,
-  LoadingOverlayService,
-  NavigationService,
-} from '@pidp/presentation';
+import { NavigationService } from '@pidp/presentation';
 
 import { NoContent } from '@bcgov/shared/data-access';
 import {
@@ -28,12 +40,15 @@ import {
   TextButtonDirective,
 } from '@bcgov/shared/ui';
 
+import { APP_CONFIG, AppConfig } from '@app/app.config';
 import {
   AbstractFormDependenciesService,
   AbstractFormPage,
 } from '@app/core/classes/abstract-form-page.class';
 import { PartyService } from '@app/core/party/party.service';
+import { AuthRoutes } from '@app/features/auth/auth.routes';
 import { IdentityProvider } from '@app/features/auth/enums/identity-provider.enum';
+import { AuthService } from '@app/features/auth/services/auth.service';
 import { AuthorizedUserService } from '@app/features/auth/services/authorized-user.service';
 import { FaqRoutes } from '@app/features/faq/faq.routes';
 import { BreadcrumbComponent } from '@app/shared/components/breadcrumb/breadcrumb.component';
@@ -89,7 +104,10 @@ export class BcProviderEditPage
   public componentType = DialogBcproviderEditComponent;
   public identityProvider$: Observable<IdentityProvider>;
   public IdentityProvider = IdentityProvider;
-  public isLoading = false;
+  public progressBarValue = 0;
+  public progressComplete = false;
+  public progressTimer = timer(0, 30);
+  public progressSubscription!: Subscription;
 
   public breadcrumbsData: Array<{ title: string; path: string }> = [
     { title: 'Home', path: '' },
@@ -106,25 +124,23 @@ export class BcProviderEditPage
   @ViewChild('successDialog')
   public successDialogTemplate!: TemplateRef<any>;
 
-  @ViewChild('loadingDialog')
-  public loadingDialogTemplate!: TemplateRef<any>;
-
-  @ViewChild('resetCompleteDialog')
-  public resetCompleteDialogTemplate!: TemplateRef<any>;
+  @ViewChild('mfaDialog')
+  public mfaDialogTemplate!: TemplateRef<any>;
 
   public get isResetButtonEnabled(): boolean {
     return this.formState.form.valid;
   }
 
   public constructor(
+    @Inject(APP_CONFIG) private config: AppConfig,
     dependenciesService: AbstractFormDependenciesService,
     fb: FormBuilder,
     private navigationService: NavigationService,
     private partyService: PartyService,
     private resource: BcProviderEditResource,
     private router: Router,
-    private loadingOverlayService: LoadingOverlayService,
     private authorizedUserService: AuthorizedUserService,
+    private authService: AuthService,
   ) {
     super(dependenciesService);
     this.formState = new BcProviderEditFormState(fb);
@@ -201,23 +217,20 @@ export class BcProviderEditPage
   }
 
   private resetMfa(partyId: number): Observable<void | null> {
-    // const data: DialogOptions = {
-    //   title: 'Your Multi-factor authentication (MFA) has been reset',
-    //   bottomBorder: false,
-    //   titlePosition: 'center',
-    //   bodyTextPosition: 'center',
-    //   component: HtmlComponent,
-    //   data: {
-    //     content:
-    //       'Your authentication credentials have been successfully reset.',
-    //   },
-    //   imageSrc: '/assets/images/online-marketing-hIgeoQjS_iE-unsplash.jpg',
-    //   imageType: 'banner',
-    //   width: '31rem',
-    //   height: '24rem',
-    //   actionText: 'Continue',
-    //   actionTypePosition: 'center',
-    // };
+    this.progressSubscription = this.progressTimer.subscribe(
+      (value: number) => {
+        this.progressBarValue = value;
+        console.log('value', value);
+        if (value === 100) {
+          // To stop the Observable from emitting any more values.
+          if (this.progressSubscription) {
+            this.progressSubscription.unsubscribe();
+          }
+          this.progressBarValue = 0;
+          this.progressComplete = true;
+        }
+      },
+    );
 
     this.showLoadingDialog();
     // this.loadingOverlayService.open(LOADING_OVERLAY_DEFAULT_MESSAGE);
@@ -226,6 +239,7 @@ export class BcProviderEditPage
       .pipe(
         tap((_) => {
           // this.loadingOverlayService.close();
+          this.progressComplete = true;
           this.dialog.closeAll();
           this.showResetCompleteDialog();
         }),
@@ -263,8 +277,7 @@ export class BcProviderEditPage
       cancelHide: true,
       actionHide: true,
     };
-    this.isLoading = true;
-    this.dialog.open(this.loadingDialogTemplate, { data });
+    this.dialog.open(this.mfaDialogTemplate, { data });
   }
 
   private showResetCompleteDialog(): void {
@@ -286,6 +299,21 @@ export class BcProviderEditPage
       actionTypePosition: 'center',
       cancelHide: true,
     };
-    this.dialog.open(this.resetCompleteDialogTemplate, { data });
+    this.dialog
+      .open(this.mfaDialogTemplate, { data, disableClose: true })
+      .afterClosed()
+      .pipe(exhaustMap((result) => (result ? this.logout() : EMPTY)))
+      .subscribe();
+  }
+
+  private logout(): Observable<void | null> {
+    return this.authService
+      .logout(
+        `${
+          this.config.applicationUrl +
+          AuthRoutes.routePath(AuthRoutes.AUTO_LOGIN)
+        }?idp_hint=${IdentityProvider.BC_PROVIDER}`,
+      )
+      .pipe(catchError(() => of(null)));
   }
 }

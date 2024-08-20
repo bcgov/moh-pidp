@@ -1,6 +1,11 @@
 @import 'palette';
 @import 'bootstrap/bootstrap-imports';
 
+.confirm-dialog-container {
+  display: flex;
+  flex-direction: column;
+}
+
 .banner-image-container {
   display: flex;
 
@@ -21,7 +26,7 @@
   }
 }
 
-.heading-no-bottom-border{
+.heading-no-bottom-border {
   span {
     border-bottom: none;
     line-height: 1;
@@ -34,12 +39,12 @@
   padding-bottom: 0;
 }
 
-.action-type-centered{
+.action-type-centered {
   align-self: center;
   padding: 0 0 1rem 0 !important;
 
-  button{
-    margin: 0 1rem;
+  button {
+    margin: 1rem;
     padding: 0.3rem 2rem;
   }
 }

@@ -109,14 +109,10 @@
   </div>
 </div>
 
-<ng-template #loadingDialog>
-  <ui-confirm-dialog></ui-confirm-dialog>
-  <mat-progress-bar *ngIf="isLoading" mode="indeterminate"></mat-progress-bar>
-</ng-template>
-
-<ng-template #resetCompleteDialog>
-  <ui-confirm-dialog></ui-confirm-dialog>
-  <mat-progress-bar mode="determinate" value="100"></mat-progress-bar>
+<ng-template #mfaDialog>
+  <ui-confirm-dialog
+    [progressBarValue]="progressBarValue"
+    [progressComplete]="progressComplete"></ui-confirm-dialog>
 </ng-template>
 
 <ng-template #successDialog>
