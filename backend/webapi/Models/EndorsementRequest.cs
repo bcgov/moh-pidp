@@ -42,11 +42,15 @@ public class EndorsementRequest : BaseAuditable
 
     public Instant StatusDate { get; set; }
 
+    public bool PreApproved { get; set; }
+
     public IDomainResult Handle(Approve.Command command, IClock clock)
     {
         if (this.ActionableByReciever(command.PartyId))
         {
-            this.Status = EndorsementRequestStatus.Approved;
+            this.Status = this.PreApproved
+                ? EndorsementRequestStatus.Completed
+                : EndorsementRequestStatus.Approved;
         }
         else if (this.ActionableByRequester(command.PartyId))
         {
