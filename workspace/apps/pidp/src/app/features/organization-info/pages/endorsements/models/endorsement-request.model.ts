@@ -9,4 +9,5 @@ export interface EndorsementRequest {
   status: EndorsementRequestStatus;
   statusDate: string;
   actionable: boolean;
+  preApproved: boolean;
 }
