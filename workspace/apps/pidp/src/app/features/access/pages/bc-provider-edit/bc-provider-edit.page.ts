@@ -233,7 +233,6 @@ export class BcProviderEditPage
     );
 
     this.showLoadingDialog();
-    // this.loadingOverlayService.open(LOADING_OVERLAY_DEFAULT_MESSAGE);
     this.resource
       .resetMfa(partyId)
       .pipe(
