@@ -238,9 +238,8 @@ export class BcProviderEditPage
       .resetMfa(partyId)
       .pipe(
         tap((_) => {
-          // this.loadingOverlayService.close();
-          this.progressComplete = true;
           this.dialog.closeAll();
+          this.progressComplete = true;
           this.showResetCompleteDialog();
         }),
         catchError(() => {
