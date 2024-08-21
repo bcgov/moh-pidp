@@ -45,8 +45,8 @@
 }
 
 .viewport-all {
+  padding: 1.25rem 0.75rem;
   &.box {
-    padding: var(--header-padding) 0 var(--header-padding) var(--header-padding);
     h1 {
       color: #036;
       font-size: 3.125rem;
@@ -146,6 +146,18 @@
         }
       }
     }
+  }
+}
+
+.viewport-small {
+  fa-icon {
+    padding-left: 0.6rem;
+    padding-right: 0.6rem;
+    font-size: 1.5rem;
+  }
+
+  span {
+    font-size: 0.9rem;
   }
 }
 

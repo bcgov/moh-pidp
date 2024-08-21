@@ -406,6 +406,9 @@ namespace Pidp.Data.Migrations
                     b.Property<Instant>("Modified")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<bool>("PreApproved")
+                        .HasColumnType("boolean");
+
                     b.Property<int?>("ReceivingPartyId")
                         .HasColumnType("integer");
 

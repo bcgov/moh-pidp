@@ -27,7 +27,6 @@ import {
 
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import {
-  faAngleRight,
   faArrowDown,
   faArrowUp,
   faUser,
@@ -59,6 +58,7 @@ import { LoggerService } from '@app/core/services/logger.service';
 import { UtilsService } from '@app/core/services/utils.service';
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
 import { LookupService } from '@app/modules/lookup/lookup.service';
+import { BreadcrumbComponent } from '@app/shared/components/breadcrumb/breadcrumb.component';
 
 import { EndorsementCardComponent } from './components/endorsement-card/endorsement-card.component';
 import {
@@ -68,6 +68,7 @@ import {
 import { EndorsementsFormState } from './endorsements-form-state';
 import { EndorsementsResource } from './endorsements-resource.service';
 import { EndorsementRequestStatus } from './enums/endorsement-request-status.enum';
+import { EndorsementEmailSearch } from './models/endorsement-email-search.model';
 import { EndorsementRequest } from './models/endorsement-request.model';
 import { Endorsement } from './models/endorsement.model';
 
@@ -83,6 +84,7 @@ export enum EndorsementType {
   standalone: true,
   imports: [
     AsyncPipe,
+    BreadcrumbComponent,
     DatePipe,
     EndorsementCardComponent,
     FaIconComponent,
@@ -107,7 +109,6 @@ export class EndorsementsPage
   public faUserGroup = faUserGroup;
   public faArrowUp = faArrowUp;
   public faArrowDown = faArrowDown;
-  public faAngleRight = faAngleRight;
 
   public formState: EndorsementsFormState;
   public completed: boolean | null;
@@ -116,6 +117,7 @@ export class EndorsementsPage
   public endorsements$!: Observable<Endorsement[]>;
 
   public showOverlayOnSubmit = true;
+  public isDialogOpen = false;
 
   public constructor(
     dependenciesService: AbstractFormDependenciesService,
@@ -143,6 +145,10 @@ export class EndorsementsPage
 
   public showTextLabels = false;
   public showIconLabels = true;
+  public breadcrumbsData: Array<{ title: string; path: string }> = [
+    { title: 'Home', path: '' },
+    { title: 'Endorsements', path: '' },
+  ];
   public popupData: DialogOptions = {
     title: 'Endorsement requests',
     bottomBorder: false,
@@ -161,6 +167,18 @@ export class EndorsementsPage
     actionTypePosition: 'center',
     class: 'dialog-container',
   };
+
+  public onEnter(event: Event): void {
+    event.preventDefault();
+    if (!this.isDialogOpen) {
+      const sendButton = document.querySelector(
+        'button[type="submit"]',
+      ) as HTMLButtonElement;
+      if (sendButton) {
+        sendButton.click();
+      }
+    }
+  }
 
   public get recipientEmail(): FormControl {
     return this.formState.form.get('recipientEmail') as FormControl;
@@ -189,10 +207,13 @@ export class EndorsementsPage
         'You are about to <b>approve</b> this endorsement, would you like to proceed',
     };
 
+    this.isDialogOpen = true;
+
     this.dialog
       .open(ConfirmDialogComponent, { data })
       .afterClosed()
       .pipe(
+        tap(() => (this.isDialogOpen = false)),
         exhaustMap((result) => {
           this.loadingOverlayService.close();
           return result
@@ -219,10 +240,12 @@ export class EndorsementsPage
       content:
         'You are about to <b>cancel</b> this endorsement, would you like to proceed',
     };
+    this.isDialogOpen = true;
     this.dialog
       .open(ConfirmDialogComponent, { data })
       .afterClosed()
       .pipe(
+        tap(() => (this.isDialogOpen = false)),
         exhaustMap((result) => {
           this.loadingOverlayService.close();
           return result
@@ -249,10 +272,12 @@ export class EndorsementsPage
       content:
         'You are about to <b>cancel</b> this endorsement, would you like to proceed',
     };
+    this.isDialogOpen = true;
     this.dialog
       .open(ConfirmDialogComponent, { data })
       .afterClosed()
       .pipe(
+        tap(() => (this.isDialogOpen = false)),
         exhaustMap((result) =>
           result
             ? this.resource
@@ -317,6 +342,7 @@ export class EndorsementsPage
 
   protected performSubmission(): NoContent {
     const partyId = this.partyService.partyId;
+
     const data: DialogOptions = {
       title: 'Endorsement requests',
       bottomBorder: false,
@@ -324,10 +350,7 @@ export class EndorsementsPage
       bodyTextPosition: 'center',
       component: HtmlComponent,
       data: {
-        content:
-          "You are about to <b>request</b> an endorsement to<p class='p-0 m-0' style='color: #036;font-size:1.2rem;'><b>" +
-          this.formState.json?.recipientEmail +
-          '</b></p>would you like to proceed?',
+        content: '',
       },
       imageSrc: '/assets/images/online-marketing-hIgeoQjS_iE-unsplash.jpg',
       imageType: 'banner',
@@ -338,26 +361,38 @@ export class EndorsementsPage
       class: 'dialog-container',
     };
 
+    this.isDialogOpen = true;
     return partyId && this.formState.json
-      ? this.dialog
-          .open(ConfirmDialogComponent, { data })
-          .afterClosed()
+      ? this.resource
+          .emailSearch(partyId, this.formState.json.recipientEmail)
           .pipe(
-            exhaustMap((result) => {
-              this.loadingOverlayService.close();
-              return result && partyId && this.formState.json
-                ? this.resource.createEndorsementRequest(
-                    partyId,
-                    this.formState.json,
-                  )
-                : EMPTY;
-            }),
-            catchError((error: HttpErrorResponse) => {
-              this.loadingOverlayService.close();
-              if (error.status === HttpStatusCode.BadRequest) {
-                return of(noop());
-              }
-              return of(noop());
+            switchMap((response: EndorsementEmailSearch) => {
+              data.data!.content = response.recipientName
+                ? `An existing user has registered ${this.formState.json?.recipientEmail}. Please confirm you are wanting an endorsement with <p class='p-0 m-0' style='color: #036;font-size:1.2rem;'><b>${response.recipientName}</b></p>`
+                : `You are about to <b>request</b> an endorsement to<p class='p-0 m-0' style='color: #036;font-size:1.2rem;'><b>${this.formState.json?.recipientEmail}</b></p>would you like to proceed?`;
+
+              return this.dialog
+                .open(ConfirmDialogComponent, { data })
+                .afterClosed()
+                .pipe(
+                  tap(() => (this.isDialogOpen = false)),
+                  exhaustMap((result) => {
+                    this.loadingOverlayService.close();
+                    return result && partyId && this.formState.json
+                      ? this.resource.createEndorsementRequest(partyId, {
+                          ...this.formState.json,
+                          preApproved: response.recipientName ? true : false,
+                        })
+                      : EMPTY;
+                  }),
+                  catchError((error: HttpErrorResponse) => {
+                    this.loadingOverlayService.close();
+                    if (error.status === HttpStatusCode.BadRequest) {
+                      return of(noop());
+                    }
+                    return of(noop());
+                  }),
+                );
             }),
           )
       : EMPTY;

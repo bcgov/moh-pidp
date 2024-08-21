@@ -1,6 +1,6 @@
 import { NgFor, NgIf } from '@angular/common';
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatOptionModule } from '@angular/material/core';
@@ -29,6 +29,7 @@ import { LoggerService } from '@app/core/services/logger.service';
 import { ProfileRoutes } from '@app/features/profile/profile.routes';
 import { LookupService } from '@app/modules/lookup/lookup.service';
 import { CollegeLookup } from '@app/modules/lookup/lookup.types';
+import { BreadcrumbComponent } from '@app/shared/components/breadcrumb/breadcrumb.component';
 
 import { CollegeLicenceDeclarationFormState } from './college-licence-declaration-form-state';
 import { CollegeLicenceDeclarationResource } from './college-licence-declaration-resource.service';
@@ -43,6 +44,7 @@ import { PartyLicenceDeclarationInformation } from './party-licence-declaration-
   imports: [
     AlertComponent,
     AlertContentDirective,
+    BreadcrumbComponent,
     InjectViewportCssClassDirective,
     MatButtonModule,
     MatFormFieldModule,
@@ -59,17 +61,25 @@ export class CollegeLicenceDeclarationPage
   extends AbstractFormPage<CollegeLicenceDeclarationFormState>
   implements OnInit
 {
+  @Input() public disableCollegeCode: boolean = false;
+  @Input() public disableCollegeLicenceNumber: boolean = false;
+
   public title: string;
   public formState: CollegeLicenceDeclarationFormState;
   public colleges: CollegeLookup[];
   public showOverlayOnSubmit = true;
   public licenceDeclarationFailed = false;
+  public disableSearch = false;
 
   public get showNurseValidationInfo(): boolean {
     const isNurse =
       this.formState.collegeCode.value === RegisteredCollege.Bccnm;
     return isNurse;
   }
+  public breadcrumbsData: Array<{ title: string; path: string }> = [
+    { title: 'Home', path: '' },
+    { title: 'College Licence', path: '' },
+  ];
 
   public constructor(
     dependenciesService: AbstractFormDependenciesService,
@@ -93,6 +103,10 @@ export class CollegeLicenceDeclarationPage
   }
 
   public ngOnInit(): void {
+    if(this.disableCollegeCode && this.disableCollegeLicenceNumber) {
+      this.formState.disableCollegeLicenseForm();
+      this.disableSearch = true;
+    }
     const partyId = this.partyService.partyId;
     if (!partyId) {
       this.logger.error('No party ID was provided');
@@ -117,6 +131,7 @@ export class CollegeLicenceDeclarationPage
 
   protected performSubmission(): Observable<string | null> {
     const partyId = this.partyService.partyId;
+    this.formState.disableCollegeLicenseForm();
 
     return partyId && this.formState.json
       ? this.resource.updateDeclaration(partyId, this.formState.json)
@@ -125,8 +140,8 @@ export class CollegeLicenceDeclarationPage
 
   protected afterSubmitIsSuccessful(cpn: string | null): void {
     if (cpn) {
-      this.router.navigate(
-        [ProfileRoutes.routePath(ProfileRoutes.COLLEGE_LICENCE_INFO)],
+            this.router.navigate(
+        [ProfileRoutes.routePath(ProfileRoutes.COLLEGE_LICENCE_INFO), {showCollegeLicenceDeclarationPage: true}],
         { replaceUrl: true },
       );
     } else if (this.formState.collegeCode.value === 0) {

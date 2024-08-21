@@ -1,4 +1,4 @@
-import { AsyncPipe, NgFor } from '@angular/common';
+import { AsyncPipe, NgFor, NgIf } from '@angular/common';
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
@@ -7,7 +7,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, catchError, map, of, tap } from 'rxjs';
 
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { faStethoscope } from '@fortawesome/free-solid-svg-icons';
+import { faStethoscope, faAngleRight } from '@fortawesome/free-solid-svg-icons';
 
 import { InjectViewportCssClassDirective } from '@bcgov/shared/ui';
 
@@ -22,6 +22,8 @@ import { PortalService } from '@app/features/portal/portal.service';
 import { CollegeCertification } from '../college-licence-declaration/college-certification.model';
 import { CollegeLicenceInformationResource } from './college-licence-information-resource.service';
 import { CollegeLicenceInformationDetailComponent } from './components/college-licence-information-detail.component';
+import { CollegeLicenceDeclarationPage } from '../college-licence-declaration/college-licence-declaration.page';
+import { BreadcrumbComponent } from '@app/shared/components/breadcrumb/breadcrumb.component';
 
 @Component({
   selector: 'app-college-licence-information',
@@ -30,20 +32,29 @@ import { CollegeLicenceInformationDetailComponent } from './components/college-l
   standalone: true,
   imports: [
     AsyncPipe,
+    BreadcrumbComponent,
     CollegeLicenceInformationDetailComponent,
     FaIconComponent,
     InjectViewportCssClassDirective,
     MatButtonModule,
     NgFor,
+    CollegeLicenceDeclarationPage,
+    NgIf,
     PortalAlertComponent,
-  ],
+      ],
 })
 export class CollegeLicenceInformationPage implements OnInit {
   public faStethoscope = faStethoscope;
+  public breadcrumbsData: Array<{ title: string; path: string }> = [
+    { title: 'Home', path: '' },
+    { title: 'College Licence', path: '' },
+  ];
 
   public title: string;
   public collegeCertifications$!: Observable<CollegeCertification[]>;
   public alerts: ProfileStatusAlert[] = [];
+  public faAngleRight = faAngleRight;
+  public showCollegeLicenceDeclarationPage: boolean = false;
 
   public constructor(
     private route: ActivatedRoute,
@@ -62,6 +73,7 @@ export class CollegeLicenceInformationPage implements OnInit {
   }
 
   public ngOnInit(): void {
+    this.showCollegeLicenceDeclarationPage = this.route.snapshot.paramMap.get('showCollegeLicenceDeclarationPage') === 'true';
     const partyId = this.partyService.partyId;
     if (!partyId) {
       this.logger.error('No party ID was provided');

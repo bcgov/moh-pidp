@@ -30,7 +30,9 @@ import {
 import { PartyService } from '@app/core/party/party.service';
 import { LoggerService } from '@app/core/services/logger.service';
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
+import { BreadcrumbComponent } from '@app/shared/components/breadcrumb/breadcrumb.component';
 
+import { AccessRoutes } from '../../access.routes';
 import { EnrolmentErrorComponent } from '../../components/enrolment-error/enrolment-error.component';
 import { msTeamsSupportEmail } from '../ms-teams-privacy-officer/ms-teams.constants';
 import { MsTeamsClinicMemberFormState } from './ms-teams-clinic-member-form-state';
@@ -44,6 +46,7 @@ import { PrivacyOfficer } from './ms-teams-clinic-member.model';
   standalone: true,
   imports: [
     AnchorDirective,
+    BreadcrumbComponent,
     EnrolmentErrorComponent,
     InjectViewportCssClassDirective,
     FormsModule,
@@ -72,6 +75,15 @@ export class MsTeamsClinicMemberPage
   public formState: MsTeamsClinicMemberFormState;
   public showOverlayOnSubmit = false;
   public privacyOfficers!: PrivacyOfficer[] | null;
+  public AccessRoutes = AccessRoutes;
+  public breadcrumbsData: Array<{ title: string; path: string }> = [
+    { title: 'Home', path: '' },
+    {
+      title: 'Access',
+      path: AccessRoutes.routePath(AccessRoutes.ACCESS_REQUESTS),
+    },
+    { title: 'MS Teams for clinical use', path: '' },
+  ];
 
   public constructor(
     dependenciesService: AbstractFormDependenciesService,
