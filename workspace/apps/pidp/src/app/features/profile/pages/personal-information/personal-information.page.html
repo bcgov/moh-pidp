@@ -1,75 +1,99 @@
-<div class="container">
+<div class="container" uiPidpInjectViewportCss>
+  <app-breadcrumb [breadcrumbs]="breadcrumbsData"></app-breadcrumb>
   <ui-page mode="full" [form]="formState.form" (submitted)="onSubmit()">
-    <ui-page-header>{{ title }}</ui-page-header>
-    <ui-page-section>
-      <ui-page-section-subheader
-        icon="assignment_ind"
-        heading="Personal Information">
-        <ng-container uiPageSectionSubheaderDesc>
-          Provide the following information to complete your Provider Identity
-          Profile.
-        </ng-container>
-      </ui-page-section-subheader>
-    </ui-page-section>
+    <h1>Personal Information</h1>
+    <div>
+      <p>
+        Welcome to OneHealthID <b>{{userName}}</b>. Before you get started using
+        the systems available to you, we just need some information for our
+        records. This will be a one time setup of some general information we
+        need from you, you can provide this information now, or at your leisure.
+        But you will be directed where you left off at your next login.
+      </p>
+      <p><b> Let's get started.</b></p>
+      <p>
+        In the next few steps, we'll be asking for your contact, college, and
+        user agreement signing. Please enter you contact information for our
+        records.
+      </p>
+    </div>
+
+    <div class="cards card-styles">
+      <div class="card-header-icon">
+        <div class="card-icon">
+          <img
+            src="/assets/images/icons/perm-contact-calendar.svg"
+            alt="Contact Calendar" />
+        </div>
+      </div>
+      <h2>BC Services Card information</h2>
+      <app-user-info [user]="user$ | async"></app-user-info>
+    </div>
 
     <ui-page-section>
-      <ui-page-section-subheader heading="Name">
+      <ui-page-section-subheader>
         <ng-container uiPageSectionSubheaderDesc>
           <span *ngIf="(identityProvider$ | async) | isHighAssurance">
             This information comes from the BC Services Card. If you use a
             different name in your college licence, select "My name is different
             on my college licence".
           </span>
+          <p class="light-color">
+            This will not change your BC Services card information.
+          </p>
         </ng-container>
       </ui-page-section-subheader>
 
-      <app-user-info [user]="user$ | async"></app-user-info>
+      <div class="row expansion-item-container">
+        <div class="expansion-item col-sm-10">
+          <mat-expansion-panel
+            class="expansion-panel"
+            #panel
+            hideToggle
+            (opened)="panelOpenState.set(true)"
+            (closed)="panelOpenState.set(false)">
+            <mat-expansion-panel-header>
+              <mat-panel-title
+                ><b
+                  >My name is different on my college licence</b
+                ></mat-panel-title
+              >
+              <mat-icon>{{panel.expanded ? 'remove' : 'add'}}</mat-icon>
+            </mat-expansion-panel-header>
+            <!--body-->
+            <h1>Preferred Name</h1>
+            <ng-container uiPageSectionSubheaderDesc>
+              If you use a name professionally that is different from your legal
+              name, enter it here.
+              <p>
+                Entering a preferred name will not change your BC Services Card
+                name.
+              </p>
+            </ng-container>
 
-      <ui-toggle-content
-        *ngIf="(identityProvider$ | async) | isHighAssurance"
-        label="My name is different on my college licence"
-        [checked]="hasPreferredName"
-        (toggle)="onPreferredNameToggle($event)">
-        <ui-page-section-subheader heading="Preferred Name">
-          <ng-container uiPageSectionSubheaderDesc>
-            If you use a name professionally that is different from your legal
-            name, enter it here.
-            <span>
-              Entering a preferred name will not change your BC Services Card
-              name.
-            </span>
-          </ng-container>
-        </ui-page-section-subheader>
-        <ui-preferred-name-form
-          [form]="formState.form"></ui-preferred-name-form>
-      </ui-toggle-content>
+            <ui-preferred-name-form
+              [form]="formState.form"></ui-preferred-name-form>
+          </mat-expansion-panel>
+        </div>
+      </div>
     </ui-page-section>
 
     <ui-page-section>
-      <ui-page-section-subheader heading="Contact Information">
-        <ng-container uiPageSectionSubheaderDesc>
-          Provide your contact information. Please use an email that you check
-          regularly.
-        </ng-container>
-      </ui-page-section-subheader>
+      <h1>Contact Information</h1>
+      <ng-container uiPageSectionSubheaderDesc>
+        Provide your contact information. Please use an email that you check
+        regularly.
+      </ng-container>
 
       <ui-contact-info-form
+        class="contact-information"
         [form]="formState.form"
         (emailChanges)="onEmailInputChange($event)"></ui-contact-info-form>
     </ui-page-section>
 
-    <ui-page-footer>
-      <button
-        mat-stroked-button
-        uiPageFooterAction
-        type="button"
-        color="primary"
-        (click)="onBack()">
-        Back Home
-      </button>
-
+    <ui-page-footer [mode]="'reverse'">
       <button mat-flat-button uiPageFooterAction type="submit" color="primary">
-        Save Information
+        {{(profileStatus === '1') ? 'Continue' : 'Save Information'}}
       </button>
     </ui-page-footer>
   </ui-page>

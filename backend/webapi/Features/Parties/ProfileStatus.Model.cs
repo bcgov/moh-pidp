@@ -27,7 +27,7 @@ public partial class ProfileStatus
         public abstract class ProfileSection
         {
             internal abstract string SectionName { get; }
-            public HashSet<Alert> Alerts { get; set; } = new();
+            public HashSet<Alert> Alerts { get; set; } = [];
             public StatusCode StatusCode { get; set; }
 
             public bool IsComplete => this.StatusCode == StatusCode.Complete;
@@ -67,9 +67,9 @@ public partial class ProfileStatus
             {
                 return profile switch
                 {
-                    { UserIsHighAssuranceIdentity: false } => StatusCode.Locked,
                     { HasBCProviderCredential: true } => StatusCode.Complete,
-                    _ => StatusCode.Incomplete
+                    { HasBCServicesCardCredential: true } => StatusCode.Incomplete,
+                    _ => StatusCode.Locked
                 };
             }
         }
@@ -310,7 +310,10 @@ public partial class ProfileStatus
                     _ when profile.HasEnrolment(AccessTypeCode.SAEforms) => StatusCode.Complete,
                     _ when profile.PartyPlrStanding
                         .Excluding(SAEforms.ExcludedIdentifierTypes)
-                        .HasGoodStanding => StatusCode.Incomplete,
+                        .HasGoodStanding
+                        || profile.EndorsementPlrStanding
+                            .With(ProviderRoleType.MedicalDoctor)
+                            .HasGoodStanding => StatusCode.Incomplete,
                     _ => StatusCode.Locked
                 };
             }

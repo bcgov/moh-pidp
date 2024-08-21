@@ -6,8 +6,6 @@ import { Router } from '@angular/router';
 
 import { Observable, exhaustMap, switchMap, tap } from 'rxjs';
 
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { faAngleRight } from '@fortawesome/free-solid-svg-icons';
 import {
   LOADING_OVERLAY_DEFAULT_MESSAGE,
   LoadingOverlayService,
@@ -22,18 +20,20 @@ import {
 
 import { User } from '@app/features/auth/models/user.model';
 import { ProfileRoutes } from '@app/features/profile/profile.routes';
+import { BreadcrumbComponent } from '@app/shared/components/breadcrumb/breadcrumb.component';
 import { SuccessDialogComponent } from '@app/shared/components/success-dialog/success-dialog.component';
 
 import { IdentityProvider } from '../../enums/identity-provider.enum';
+import { BcProviderUser } from '../../models/bc-provider-user.model';
 import { AuthorizedUserService } from '../../services/authorized-user.service';
 import { LinkAccountConfirmResource } from './link-account-confirm-resource.service';
-import { BcProviderUser } from '../../models/bc-provider-user.model';
+import { AccessRoutes } from '@app/features/access/access.routes';
 
 @Component({
   selector: 'app-link-account-confirm',
   standalone: true,
   imports: [
-    FaIconComponent,
+    BreadcrumbComponent,
     CommonModule,
     InjectViewportCssClassDirective,
     MatButtonModule,
@@ -45,7 +45,15 @@ import { BcProviderUser } from '../../models/bc-provider-user.model';
 })
 export class LinkAccountConfirmPage implements OnInit {
   public user$: Observable<User>;
-  public faAngleRight = faAngleRight;
+  public breadcrumbsData: Array<{ title: string; path: string }> = [
+    {title: 'Home', path: ''},
+    {
+      title: 'Access',
+      path: AccessRoutes.routePath(AccessRoutes.ACCESS_REQUESTS),
+    },
+    {title: 'Link Account', path: ''},
+  ];
+
   public showInstructions: boolean = false;
   public constructor(
     private dialog: MatDialog,
@@ -68,7 +76,9 @@ export class LinkAccountConfirmPage implements OnInit {
             bodyTextPosition: 'center',
             component: HtmlComponent,
             data: {
-              content: `Your existing OneHealthID profile is about to be linked to ${this.getPendingAccountDescription(user)}. Is this information correct?`,
+              content: `Your existing OneHealthID profile is about to be linked to ${this.getPendingAccountDescription(
+                user,
+              )}. Is this information correct?`,
             },
             imageSrc:
               '/assets/images/online-marketing-hIgeoQjS_iE-unsplash.jpg',
@@ -113,10 +123,6 @@ export class LinkAccountConfirmPage implements OnInit {
     this.showInstructions = !this.showInstructions;
   }
 
-  public onPageNavigate(url: string[]): void {
-    this.router.navigate(url);
-  }
-
   private getPendingAccountDescription(user: User): string {
     switch (user.identityProvider) {
       case IdentityProvider.BCSC:
@@ -125,9 +131,7 @@ export class LinkAccountConfirmPage implements OnInit {
         return `the PHSA account ${user.email}`;
       case IdentityProvider.BC_PROVIDER: {
         const idpId = (user as BcProviderUser).idpId;
-        const accountName = idpId.endsWith('@bcp')
-          ? idpId.slice(0, -4)
-          : idpId;
+        const accountName = idpId.endsWith('@bcp') ? idpId.slice(0, -4) : idpId;
         return `the BC Provider account ${accountName}`;
       }
       default:
