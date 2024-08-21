@@ -19,30 +19,9 @@ public class ThirdPartyintegrationsController : PidpControllerBase
     private readonly PidpDbContext context;
     private static HttpClient sharedClient = new()
     {
-        BaseAddress = new Uri("https://firely.server:4080/"),
+        BaseAddress = new Uri("http://localhost:8080"),
     };
 
-    static async Task PutAsync(HttpClient httpClient, object obj)
-    {
-        using StringContent jsonContent = new(
-        JsonSerializer.Serialize(new
-        {
-            obj
-        }),
-        Encoding.UTF8,
-        "application/fhir+json");
-
-    using HttpResponseMessage response = await httpClient.PutAsync(
-        "/administration/StructureDefinition/Test2",
-        jsonContent);
-
-    // response.EnsureSuccessStatusCode()
-    //     .WriteRequestToConsole();
-
-    var jsonResponse = await response.Content.ReadAsStringAsync();
-    Console.WriteLine($"{jsonResponse}\n");
-
-    }
     public ThirdPartyintegrationsController(IPidpAuthorizationService authorizationService, PidpDbContext context) : base(authorizationService) {
         this.context = context;
     }
@@ -84,7 +63,103 @@ public class ThirdPartyintegrationsController : PidpControllerBase
         using StringContent jsonContent = new(
         JsonSerializer.Serialize(new
         {
-            obj
+            resourceType = "StructureDefinition",
+            id = "FhirMessageTest3",
+            meta = new {
+                lastUpdated = "2019-10-24T11:53:00+11:00"
+            },
+            extension = new object[] {
+             new {
+                url = "http://hl7.org/fhir/StructureDefinition/structuredefinition-fmm",
+                valueInteger = 1
+                },
+                new {
+                url = "http://hl7.org/fhir/StructureDefinition/strucfturedefinition-wg",
+                valueCode = "fhir"
+                }
+            },
+            url = "http://hl7.org/fhir/StructureDefinition/FhirMessageTest3",
+            name = "FhirMessageTest3",
+            status = "draft",
+            date = "2019-10-24T11:53:00+11:00",
+            publisher = "Health Level Seven International (FHIR Infrastructure)",
+            contact = new object[] {
+                new {
+                    telecom = new object[] {
+                        new {
+                            system = "url",
+                            value = "http://hl7.org/fhir"
+                        }
+                    }
+                },
+                new {
+                    telecom = new object [] {
+                        new {
+                            system = "url",
+                            value = "http://www.hl7.org/Special/committees/fiwg/index.cfm"
+                        }
+                    }
+                }
+            },
+            description = "Base StructureDefinition for FhirMessageTest3 Resource",
+            purpose = "Need some way to safely (without breaking interoperability) allow implementers to exchange content not supported by the initial set of declared resources.",
+            mapping = new object[] {
+                new {
+                    identity = "rim",
+                    uri = "http://hl7.org/v3",
+                    name = "RIM Mapping"
+                },
+                new {
+                    identity = "w5",
+                    uri ="http://hl7.org/fhir/w5",
+                    name = "W5 Mapping"
+                }
+            },
+            kind = "resource",
+            @abstract = false,
+            type = "FhirMessageTest3",
+            baseDefinition = "http://hl7.org/fhir/StructureDefinition/DomainResource",
+            derivation = "specialization",
+            differential = new {
+                element = new object[] {
+                    new {
+                        id = "FhirMessageTest3",
+                        path = "FhirMessageTest3",
+                        @short = "Resource for non-supported content",
+                        definition = "FhirMessageTest3 is used for handling concepts not yet defined in FHIR, narrative-only resources that don't map to an existing resource, and custom resources not appropriate for inclusion in the FHIR specification.",
+                        alias = new object[] {
+                            "Z-resource",
+                            "Extension-resource",
+                            "Custom-resource"
+                        },
+                        min = 0,
+                        max = "*",
+                        mapping = new [] {
+                            new {
+                                identity = "rim",
+                                map = "Act, Entity or Role"
+                            },
+                            new {
+                                identity = "w5",
+                                map = "infrastructure.structure"
+                            }
+                        }
+                    },
+                    new {
+                        id = "FhirMessageTest3.resourceType",
+                        path = "FhirMessageTest3.resourceType",
+                        @short = "Type of the resource",
+                        definition = "Defines the type of the resource",
+                        min = 0,
+                        max = "1",
+                        type = new object[] {
+                            new {
+                                code = "string"
+                            }
+                        }
+                    }
+                }
+            }
         }),
         Encoding.UTF8,
         "application/json");
@@ -92,7 +167,7 @@ public class ThirdPartyintegrationsController : PidpControllerBase
         Console.WriteLine("StringContent : ", jsonContent);
         // sharedClient.
         using HttpResponseMessage response = await sharedClient.PutAsync(
-            "/administration/StructureDefinition/Test2",
+            "/administration/StructureDefinition/FhirMessageTest3",
         jsonContent);
 
         // response.EnsureSuccessStatusCode()
