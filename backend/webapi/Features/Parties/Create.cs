@@ -72,7 +72,7 @@ public class Create
             if (command.IdentityProvider == IdentityProviders.BCServicesCard)
             {
                 await party.GenerateOpId(this.context);
-                party.DomainEvents.Add(new PartyCreated(command.UserId, party.OpId!));
+                party.DomainEvents.Add(new OpIdCreated(command.UserId, party.OpId!));
             }
 
             this.context.Parties.Add(party);
@@ -83,12 +83,10 @@ public class Create
         }
     }
 
-    public class PartyCreatedHandler : INotificationHandler<PartyCreated>
+    public class OpIdCreatedHandler(IBus bus) : INotificationHandler<OpIdCreated>
     {
-        private readonly IBus bus;
+        private readonly IBus bus = bus;
 
-        public PartyCreatedHandler(IBus bus) => this.bus = bus;
-
-        public async Task Handle(PartyCreated notification, CancellationToken cancellationToken) => await this.bus.Publish(UpdateKeycloakAttributes.FromUpdateAction(notification.UserId, user => user.SetOpId(notification.OpId)), cancellationToken);
+        public async Task Handle(OpIdCreated notification, CancellationToken cancellationToken) => await this.bus.Publish(UpdateKeycloakAttributes.FromUpdateAction(notification.UserId, user => user.SetOpId(notification.OpId)), cancellationToken);
     }
 }
