@@ -2,6 +2,7 @@ namespace Pidp.Features.Credentials;
 
 using DomainResults.Common;
 using FluentValidation;
+using MassTransit;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Graph.Models;
@@ -17,8 +18,6 @@ using Pidp.Infrastructure.HttpClients.Plr;
 using Pidp.Models;
 using Pidp.Models.DomainEvents;
 using Pidp.Models.Lookups;
-using Pidp.Infrastructure.HttpClients.Keycloak;
-using MassTransit;
 using static Pidp.Features.CommonHandlers.UpdateKeycloakAttributesConsumer;
 
 public class Create
@@ -33,7 +32,7 @@ public class Create
 
     public class CommandHandler(
         IClock clock,
-        ILogger<Create.CommandHandler> logger,
+        ILogger<CommandHandler> logger,
         PidpDbContext context) : ICommandHandler<Command, IDomainResult<int>>
     {
         private readonly IClock clock = clock;
@@ -183,13 +182,10 @@ public class Create
         }
     }
 
-    public class UpdateBCServicesCardAttributesHandler(
-        IKeycloakAdministrationClient keycloakClient,
-        PidpDbContext context, IBus bus) : INotificationHandler<CredentialLinked>
+    public class UpdateBCServicesCardAttributesHandler(IBus bus, PidpDbContext context) : INotificationHandler<CredentialLinked>
     {
-        private readonly IKeycloakAdministrationClient keycloakClient = keycloakClient;
-        private readonly PidpDbContext context = context;
         private readonly IBus bus = bus;
+        private readonly PidpDbContext context = context;
 
         public async Task Handle(CredentialLinked notification, CancellationToken cancellationToken)
         {
