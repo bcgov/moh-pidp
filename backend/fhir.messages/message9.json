@@ -1,0 +1,410 @@
+{
+  "resourceType": "Parameters",
+  "parameter": [ {
+    "name": "messageTime",
+    "valueDateTime": "2024-08-16T16:24:21-07:00"
+  }, {
+    "name": "messageId",
+    "valueString": "2c82d5d3-607e-48bb-9e7b-21d4ee3bfd2c"
+  }, {
+    "name": "distribution",
+    "resource": {
+      "resourceType": "Bundle",
+      "id": "367714",
+      "meta": {
+        "profile": [ "http://hlth.gov.bc.ca/fhir/provider/StructureDefinition/bc-practitioner-bundle" ]
+      },
+      "type": "collection",
+      "entry": [ {
+        "fullUrl": "https://plresb.hlth.gov.bc.ca/HSA-web/fhir-rs/PractitionerRole/IPC.00071515.BC.PRS",
+        "resource": {
+          "resourceType": "PractitionerRole",
+          "id": "IPC.00071515.BC.PRS",
+          "meta": {
+            "profile": [ "http://hlth.gov.bc.ca/fhir/provider/StructureDefinition/bc-practitioner-role" ]
+          },
+          "practitioner": {
+            "identifier": {
+              "system": "https://health.gov.bc.ca/fhir/NamingSystem/ca-bc-plr-ipc",
+              "value": "IPC.00071515.BC.PRS"
+            }
+          },
+          "code": [ {
+            "coding": [ {
+              "system": "https://fhir.infoway-inforoute.ca/CodeSystem/scptype",
+              "code": "MD"
+            } ]
+          } ],
+          "specialty": [ {
+            "extension": [ {
+              "url": "http://hlth.gov.bc.ca/fhir/provider/StructureDefinition/bc-specialty-source-extension",
+              "valueString": "S09"
+            }, {
+              "url": "http://hlth.gov.bc.ca/fhir/provider/StructureDefinition/bc-period-extension",
+              "valuePeriod": {
+                "start": "2011-06-30T00:00:00-07:00"
+              }
+            }, {
+              "url": "http://hlth.gov.bc.ca/fhir/provider/StructureDefinition/bc-owner-extension",
+              "valueIdentifier": {
+                "assigner": {
+                  "display": "CPS"
+                }
+              }
+            } ],
+            "coding": [ {
+              "system": "https://fhir.infoway-inforoute.ca/ValueSet/practitionerspecialty",
+              "code": "338"
+            } ]
+          } ]
+        }
+      }, {
+        "fullUrl": "https://plresb.hlth.gov.bc.ca/HSA-web/fhir-rs/Practitioner/IPC.00071515.BC.PRS",
+        "resource": {
+          "resourceType": "Practitioner",
+          "id": "IPC.00071515.BC.PRS",
+          "meta": {
+            "profile": [ "http://hlth.gov.bc.ca/fhir/provider/StructureDefinition/bc-practitioner" ]
+          },
+          "contained": [ {
+            "resourceType": "Organization",
+            "id": "grantingInstitution-1",
+            "meta": {
+              "profile": [ "http://hlth.gov.bc.ca/fhir/provider/StructureDefinition/bc-organization" ]
+            },
+            "name": "Alberta"
+          } ],
+          "extension": [ {
+            "url": "http://hlth.gov.bc.ca/fhir/provider/StructureDefinition/bc-license-status-extension",
+            "extension": [ {
+              "url": "http://hlth.gov.bc.ca/fhir/provider/StructureDefinition/bc-owner-extension",
+              "valueIdentifier": {
+                "assigner": {
+                  "display": "CPS"
+                }
+              }
+            }, {
+              "url": "statusCode",
+              "valueCodeableConcept": {
+                "coding": [ {
+                  "system": "http://terminology.hl7.org/CodeSystem/v3-RoleStatus",
+                  "code": "ACTIVE"
+                } ]
+              }
+            }, {
+              "url": "statusReasonCode",
+              "valueCodeableConcept": {
+                "coding": [ {
+                  "system": "https://terminology.hlth.gov.bc.ca/ProviderLocationRegistry/CodeSystem/bc-status-reason-code-system",
+                  "code": "GS"
+                } ]
+              }
+            }, {
+              "url": "period",
+              "valuePeriod": {
+                "start": "2011-08-23T00:00:00-07:00",
+                "end": "2016-03-31T00:00:00-07:00"
+              }
+            }, {
+              "url": "statusClassCode",
+              "valueCodeableConcept": {
+                "coding": [ {
+                  "system": "https://terminology.hlth.gov.bc.ca/ProviderLocationRegistry/CodeSystem/bc-status-class-code-system",
+                  "code": "LIC"
+                } ]
+              }
+            } ]
+          }, {
+            "url": "http://hlth.gov.bc.ca/fhir/provider/StructureDefinition/bc-owner-extension",
+            "valueIdentifier": {
+              "assigner": {
+                "display": "CPS"
+              }
+            }
+          }, {
+            "url": "http://hlth.gov.bc.ca/fhir/provider/StructureDefinition/bc-period-extension",
+            "valuePeriod": {
+              "start": "2012-02-17T00:00:00-08:00"
+            }
+          }, {
+            "url": "http://hlth.gov.bc.ca/fhir/provider/StructureDefinition/bc-practitioner-condition-extension",
+            "extension": [ {
+              "url": "http://hlth.gov.bc.ca/fhir/provider/StructureDefinition/bc-owner-extension",
+              "valueIdentifier": {
+                "assigner": {
+                  "display": "CPS"
+                }
+              }
+            }, {
+              "url": "identifier",
+              "valueIdentifier": {
+                "system": "http://hlth.gov.bc.ca/fhir/provider/identifier-system/bc-condition-id",
+                "value": "CPSBC.031115.1"
+              }
+            }, {
+              "url": "restriction",
+              "valueBoolean": false
+            }, {
+              "url": "code",
+              "valueCodeableConcept": {
+                "coding": [ {
+                  "system": "https://terminology.hlth.gov.bc.ca/ProviderLocationRegistry/CodeSystem/bc-condition-type-code-system",
+                  "code": "EDUD"
+                } ]
+              }
+            }, {
+              "url": "http://hlth.gov.bc.ca/fhir/provider/StructureDefinition/bc-period-extension",
+              "valuePeriod": {
+                "start": "2010-11-27T00:00:00-08:00",
+                "end": "2010-12-13T00:00:00-08:00"
+              }
+            } ]
+          } ],
+          "identifier": [ {
+            "extension": [ {
+              "url": "http://hlth.gov.bc.ca/fhir/provider/StructureDefinition/bc-owner-extension",
+              "valueIdentifier": {
+                "assigner": {
+                  "display": "MOH"
+                }
+              }
+            } ],
+            "system": "https://health.gov.bc.ca/fhir/NamingSystem/ca-bc-plr-common-party-number",
+            "value": "CPN.00071515.BC.PRS",
+            "period": {
+              "start": "2017-08-31T15:16:45-07:00"
+            }
+          }, {
+            "extension": [ {
+              "url": "http://hlth.gov.bc.ca/fhir/provider/StructureDefinition/bc-owner-extension",
+              "valueIdentifier": {
+                "assigner": {
+                  "display": "CPS"
+                }
+              }
+            } ],
+            "system": "https://fhir.infoway-inforoute.ca/NamingSystem/ca-bc-license-physician",
+            "value": "06064279424",
+            "period": {
+              "start": "2010-11-27T00:00:00-08:00"
+            }
+          }, {
+            "extension": [ {
+              "url": "http://hlth.gov.bc.ca/fhir/provider/StructureDefinition/bc-owner-extension",
+              "valueIdentifier": {
+                "assigner": {
+                  "display": "MOH"
+                }
+              }
+            } ],
+            "system": "https://health.gov.bc.ca/fhir/NamingSystem/ca-bc-plr-ipc",
+            "value": "IPC.00071515.BC.PRS",
+            "period": {
+              "start": "2017-08-31T15:16:45-07:00"
+            }
+          }, {
+            "extension": [ {
+              "url": "http://hlth.gov.bc.ca/fhir/provider/StructureDefinition/bc-owner-extension",
+              "valueIdentifier": {
+                "assigner": {
+                  "display": "MOH"
+                }
+              }
+            } ],
+            "system": "https://health.gov.bc.ca/fhir/NamingSystem/ca-bc-ministry-practitioner-id",
+            "value": "05177117733",
+            "period": {
+              "start": "2011-08-24T00:00:00-07:00"
+            }
+          } ],
+          "active": true,
+          "name": [ {
+            "extension": [ {
+              "url": "http://hlth.gov.bc.ca/fhir/provider/StructureDefinition/bc-owner-extension",
+              "valueIdentifier": {
+                "assigner": {
+                  "display": "CPS"
+                }
+              }
+            } ],
+            "use": "usual",
+            "family": "Abboud",
+            "given": [ "Paul", "Matthew" ],
+            "prefix": [ "Dr." ],
+            "period": {
+              "start": "2010-01-13T00:00:00-08:00"
+            }
+          } ],
+          "telecom": [ {
+            "extension": [ {
+              "url": "http://hlth.gov.bc.ca/fhir/provider/StructureDefinition/bc-owner-extension",
+              "valueIdentifier": {
+                "assigner": {
+                  "display": "CPS"
+                }
+              }
+            }, {
+              "url": "http://hlth.gov.bc.ca/fhir/provider/StructureDefinition/bc-communication-purpose-code-extension",
+              "valueCodeableConcept": {
+                "coding": [ {
+                  "system": "https://terminology.hlth.gov.bc.ca/ProviderLocationRegistry/CodeSystem/bc-communication-purpose-code-system",
+                  "code": "BC"
+                } ]
+              }
+            } ],
+            "system": "fax",
+            "value": "6042993956",
+            "period": {
+              "start": "2011-08-23T00:00:00-07:00"
+            }
+          }, {
+            "extension": [ {
+              "url": "http://hlth.gov.bc.ca/fhir/provider/StructureDefinition/bc-owner-extension",
+              "valueIdentifier": {
+                "assigner": {
+                  "display": "CPS"
+                }
+              }
+            }, {
+              "url": "http://hlth.gov.bc.ca/fhir/provider/StructureDefinition/bc-communication-purpose-code-extension",
+              "valueCodeableConcept": {
+                "coding": [ {
+                  "system": "https://terminology.hlth.gov.bc.ca/ProviderLocationRegistry/CodeSystem/bc-communication-purpose-code-system",
+                  "code": "BC"
+                } ]
+              }
+            } ],
+            "system": "phone",
+            "value": "6042993936",
+            "period": {
+              "start": "2011-08-23T00:00:00-07:00"
+            }
+          } ],
+          "address": [ {
+            "extension": [ {
+              "url": "http://hlth.gov.bc.ca/fhir/provider/StructureDefinition/bc-address-validation-status-extension",
+              "valueCodeableConcept": {
+                "coding": [ {
+                  "system": "https://terminology.hlth.gov.bc.ca/ProviderLocationRegistry/CodeSystem/bc-address-validation-status-code-system",
+                  "code": "V"
+                } ]
+              }
+            }, {
+              "url": "http://hlth.gov.bc.ca/fhir/provider/StructureDefinition/bc-owner-extension",
+              "valueIdentifier": {
+                "assigner": {
+                  "display": "CPS"
+                }
+              }
+            }, {
+              "url": "http://hlth.gov.bc.ca/fhir/provider/StructureDefinition/bc-communication-purpose-code-extension",
+              "valueCodeableConcept": {
+                "coding": [ {
+                  "system": "https://terminology.hlth.gov.bc.ca/ProviderLocationRegistry/CodeSystem/bc-communication-purpose-code-system",
+                  "code": "BC"
+                } ]
+              }
+            } ],
+            "type": "postal",
+            "text": "3994 Hastings St",
+            "line": [ "3994 Hastings St" ],
+            "city": "Burnaby",
+            "state": "BC",
+            "postalCode": "V5C 2J1",
+            "country": "CA",
+            "period": {
+              "start": "2011-08-23T00:00:00-07:00"
+            }
+          } ],
+          "gender": "male",
+          "_birthDate": {
+            "extension": [ {
+              "url": "http://hlth.gov.bc.ca/fhir/provider/StructureDefinition/bc-birthtime-extension",
+              "valueDateTime": "1952-04-04T00:00:00-08:00"
+            } ]
+          },
+          "qualification": [ {
+            "extension": [ {
+              "url": "http://hlth.gov.bc.ca/fhir/provider/StructureDefinition/bc-owner-extension",
+              "valueIdentifier": {
+                "assigner": {
+                  "display": "CPS"
+                }
+              }
+            }, {
+              "url": "http://hlth.gov.bc.ca/fhir/provider/StructureDefinition/bc-practitioner-qualification-extension",
+              "extension": [ {
+                "url": "designation",
+                "valueString": "Medical Doctor"
+              }, {
+                "url": "registrationNumber",
+                "valueString": "031115"
+              }, {
+                "url": "equivalencyFlag",
+                "valueBoolean": false
+              }, {
+                "url": "issuedDate",
+                "valueDate": "2006-01-01"
+              } ]
+            } ],
+            "code": {
+              "coding": [ {
+                "system": "https://fhir.infoway-inforoute.ca/CodeSystem/scpqual",
+                "code": "MD"
+              } ]
+            },
+            "period": {
+              "start": "2010-02-17T00:00:00-08:00"
+            },
+            "issuer": {
+              "reference": "#grantingInstitution-1"
+            }
+          } ],
+          "communication": [ {
+            "extension": [ {
+              "url": "http://hlth.gov.bc.ca/fhir/provider/StructureDefinition/bc-specialty-source-extension",
+              "valueString": "Cantonese"
+            }, {
+              "url": "http://hlth.gov.bc.ca/fhir/provider/StructureDefinition/bc-period-extension",
+              "valuePeriod": {
+                "start": "2010-01-13T00:00:00-08:00"
+              }
+            }, {
+              "url": "http://hlth.gov.bc.ca/fhir/provider/StructureDefinition/bc-owner-extension",
+              "valueIdentifier": {
+                "assigner": {
+                  "display": "CPS"
+                }
+              }
+            } ],
+            "coding": [ {
+              "system": "https://terminology.hlth.gov.bc.ca/ProviderLocationRegistry/CodeSystem/bc-language-code-system",
+              "code": "C01"
+            } ]
+          }, {
+            "extension": [ {
+              "url": "http://hlth.gov.bc.ca/fhir/provider/StructureDefinition/bc-specialty-source-extension",
+              "valueString": "Chinese"
+            }, {
+              "url": "http://hlth.gov.bc.ca/fhir/provider/StructureDefinition/bc-period-extension",
+              "valuePeriod": {
+                "start": "2012-03-27T00:00:00-07:00"
+              }
+            }, {
+              "url": "http://hlth.gov.bc.ca/fhir/provider/StructureDefinition/bc-owner-extension",
+              "valueIdentifier": {
+                "assigner": {
+                  "display": "CPS"
+                }
+              }
+            } ],
+            "coding": [ {
+              "system": "https://terminology.hlth.gov.bc.ca/ProviderLocationRegistry/CodeSystem/bc-language-code-system",
+              "code": "C06"
+            } ]
+          } ]
+        }
+      } ]
+    }
+  } ]
+}
