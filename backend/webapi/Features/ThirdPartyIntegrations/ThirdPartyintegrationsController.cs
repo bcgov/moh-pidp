@@ -146,10 +146,75 @@ public class ThirdPartyintegrationsController : PidpControllerBase
                         }
                     },
                     new {
-                        id = "FhirMessageTest3.resourceType",
+                        id = "FhirMessageTest3.resource_Type",
                         path = "FhirMessageTest3.resourceType",
                         @short = "Type of the resource",
                         definition = "Defines the type of the resource",
+                        min = 0,
+                        max = "1",
+                        type = new object[] {
+                            new {
+                                code = "string"
+                            }
+                        }
+                    },
+                    new {
+                        id = "FhirMessageTest3.parameter[x].name",
+                        path = "FhirMessageTest3.parameter[x].name",
+                        @short = "parameter name",
+                        definition = "Defines the name of the parameter",
+                        min = 0,
+                        max = "1",
+                        type = new object[] {
+                            new {
+                                code = "string"
+                            }
+                        }
+                    },
+                    new {
+                        id = "FhirMessageTest3.parameter[x].valueDateTime",
+                        path = "FhirMessageTest3.parameter[x].valueDateTime",
+                        @short = "value date time",
+                        definition = "Defines the timestamp when the value was taken",
+                        min = 0,
+                        max = "1",
+                        type = new object[] {
+                            new {
+                                code = "string"
+                            }
+                        }
+                    },
+                    new {
+                        id = "FhirMessageTest3.parameter.valueString",
+                        path = "FhirMessageTest3.parameter[x].valueString",
+                        @short = "value string",
+                        definition = "Defines the value string of the parameter",
+                        min = 0,
+                        max = "1",
+                        type = new object[] {
+                            new {
+                                code = "string"
+                            }
+                        }
+                    },
+                    new {
+                        id = "FhirMessageTest3.parameter[x].resource.resourceType",
+                        path = "FhirMessageTest3.parameter[x].resource.resourceType",
+                        @short = "resource type",
+                        definition = "Defines the type of the resource",
+                        min = 0,
+                        max = "1",
+                        type = new object[] {
+                            new {
+                                code = "string"
+                            }
+                        }
+                    },
+                    new {
+                        id = "FhirMessageTest3.parameter.resource.id",
+                        path = "FhirMessageTest3.parameter[x].resource.id",
+                        @short = "resource id",
+                        definition = "Defines the id of the resource",
                         min = 0,
                         max = "1",
                         type = new object[] {
