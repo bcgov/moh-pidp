@@ -23,10 +23,14 @@ public class BCProviderResetMFA
         public CommandValidator() => this.RuleFor(x => x.PartyId).GreaterThan(0);
     }
 
-    public class CommandHandler(IBCProviderClient client, PidpDbContext context) : ICommandHandler<Command, IDomainResult>
+    public class CommandHandler(
+        IBCProviderClient client,
+        PidpDbContext context,
+        ILogger<CommandHandler> logger) : ICommandHandler<Command, IDomainResult>
     {
         private readonly IBCProviderClient client = client;
         private readonly PidpDbContext context = context;
+        private readonly ILogger<CommandHandler> logger = logger;
 
         public async Task<IDomainResult> HandleAsync(Command command)
         {
@@ -43,12 +47,23 @@ public class BCProviderResetMFA
 
             if (await this.client.RemoveAuthMethods(bcProviderId))
             {
+                this.logger.LogResetMFA(command.PartyId, bcProviderId);
                 return DomainResult.Success();
             }
             else
             {
+                this.logger.LogResetMFAError(command.PartyId, bcProviderId);
                 return DomainResult.Failed();
             }
         }
     }
+}
+
+public static partial class BCProviderResetMFALoggingExtensions
+{
+    [LoggerMessage(1, LogLevel.Information, "Reset BCProvider MFA for party {PartyId} with User Principal Name {bcProviderId}.")]
+    public static partial void LogResetMFA(this ILogger logger, int partyId, string bcProviderId);
+
+    [LoggerMessage(2, LogLevel.Error, "Error when attempting to reset BCProvider MFA for party {PartyId} with User Principal Name {bcProviderId}.")]
+    public static partial void LogResetMFAError(this ILogger logger, int partyId, string bcProviderId);
 }
