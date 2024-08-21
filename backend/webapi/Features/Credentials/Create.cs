@@ -29,21 +29,14 @@ public class Create
         public ClaimsPrincipal User { get; set; } = new();
     }
 
-    public class CommandHandler : ICommandHandler<Command, IDomainResult<int>>
+    public class CommandHandler(
+        IClock clock,
+        ILogger<Create.CommandHandler> logger,
+        PidpDbContext context) : ICommandHandler<Command, IDomainResult<int>>
     {
-        private readonly IClock clock;
-        private readonly ILogger<CommandHandler> logger;
-        private readonly PidpDbContext context;
-
-        public CommandHandler(
-            IClock clock,
-            ILogger<CommandHandler> logger,
-            PidpDbContext context)
-        {
-            this.clock = clock;
-            this.logger = logger;
-            this.context = context;
-        }
+        private readonly IClock clock = clock;
+        private readonly ILogger<CommandHandler> logger = logger;
+        private readonly PidpDbContext context = context;
 
         public async Task<IDomainResult<int>> HandleAsync(Command command)
         {
@@ -111,24 +104,16 @@ public class Create
         }
     }
 
-    public class BCProviderUpdateAttributesHandler : INotificationHandler<CredentialLinked>
+    public class BCProviderUpdateAttributesHandler(
+        IBCProviderClient bcProviderClient,
+        IPlrClient plrClient,
+        PidpConfiguration config,
+        PidpDbContext context) : INotificationHandler<CredentialLinked>
     {
-        private readonly IBCProviderClient bcProviderClient;
-        private readonly IPlrClient plrClient;
-        private readonly PidpDbContext context;
-        private readonly string bcProviderClientId;
-
-        public BCProviderUpdateAttributesHandler(
-            IBCProviderClient bcProviderClient,
-            IPlrClient plrClient,
-            PidpConfiguration config,
-            PidpDbContext context)
-        {
-            this.bcProviderClient = bcProviderClient;
-            this.plrClient = plrClient;
-            this.context = context;
-            this.bcProviderClientId = config.BCProviderClient.ClientId;
-        }
+        private readonly IBCProviderClient bcProviderClient = bcProviderClient;
+        private readonly IPlrClient plrClient = plrClient;
+        private readonly PidpDbContext context = context;
+        private readonly string bcProviderClientId = config.BCProviderClient.ClientId;
 
         public async Task Handle(CredentialLinked notification, CancellationToken cancellationToken)
         {
@@ -196,18 +181,12 @@ public class Create
         }
     }
 
-    public class UpdateBCServicesCardAttributesHandler : INotificationHandler<CredentialLinked>
+    public class UpdateBCServicesCardAttributesHandler(
+        IKeycloakAdministrationClient keycloakClient,
+        PidpDbContext context) : INotificationHandler<CredentialLinked>
     {
-        private readonly IKeycloakAdministrationClient keycloakClient;
-        private readonly PidpDbContext context;
-
-        public UpdateBCServicesCardAttributesHandler(
-            IKeycloakAdministrationClient keycloakClient,
-            PidpDbContext context)
-        {
-            this.keycloakClient = keycloakClient;
-            this.context = context;
-        }
+        private readonly IKeycloakAdministrationClient keycloakClient = keycloakClient;
+        private readonly PidpDbContext context = context;
 
         public async Task Handle(CredentialLinked notification, CancellationToken cancellationToken)
         {
