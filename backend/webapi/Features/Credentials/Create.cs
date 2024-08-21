@@ -18,6 +18,8 @@ using Pidp.Models;
 using Pidp.Models.DomainEvents;
 using Pidp.Models.Lookups;
 using Pidp.Infrastructure.HttpClients.Keycloak;
+using MassTransit;
+using static Pidp.Features.CommonHandlers.UpdateKeycloakAttributesConsumer;
 
 public class Create
 {
@@ -183,10 +185,11 @@ public class Create
 
     public class UpdateBCServicesCardAttributesHandler(
         IKeycloakAdministrationClient keycloakClient,
-        PidpDbContext context) : INotificationHandler<CredentialLinked>
+        PidpDbContext context, IBus bus) : INotificationHandler<CredentialLinked>
     {
         private readonly IKeycloakAdministrationClient keycloakClient = keycloakClient;
         private readonly PidpDbContext context = context;
+        private readonly IBus bus = bus;
 
         public async Task Handle(CredentialLinked notification, CancellationToken cancellationToken)
         {
@@ -204,12 +207,12 @@ public class Create
 
                 foreach (var credential in party.Credentials)
                 {
-                    await this.keycloakClient.UpdateUser(credential.UserId, user => user.SetOpId(party.OpId!));
+                    await this.bus.Publish(UpdateKeycloakAttributes.FromUpdateAction(credential.UserId, user => user.SetOpId(party.OpId!)), cancellationToken);
                 }
             }
             else
             {
-                await this.keycloakClient.UpdateUser(newCredential.UserId, user => user.SetOpId(party.OpId!));
+                await this.bus.Publish(UpdateKeycloakAttributes.FromUpdateAction(newCredential.UserId, user => user.SetOpId(party.OpId!)), cancellationToken);
             }
         }
     }
