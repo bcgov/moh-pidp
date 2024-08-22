@@ -29,16 +29,10 @@ public class BCProviderPassword
         }
     }
 
-    public class CommandHandler : ICommandHandler<Command, IDomainResult>
+    public class CommandHandler(IBCProviderClient client, PidpDbContext context) : ICommandHandler<Command, IDomainResult>
     {
-        private readonly IBCProviderClient client;
-        private readonly PidpDbContext context;
-
-        public CommandHandler(IBCProviderClient client, PidpDbContext context)
-        {
-            this.client = client;
-            this.context = context;
-        }
+        private readonly IBCProviderClient client = client;
+        private readonly PidpDbContext context = context;
 
         public async Task<IDomainResult> HandleAsync(Command command)
         {
