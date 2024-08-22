@@ -3,6 +3,7 @@ import { AsyncPipe, NgClass, NgIf, NgOptimizedImage } from '@angular/common';
 import {
   Component,
   Inject,
+  OnDestroy,
   OnInit,
   TemplateRef,
   ViewChild,
@@ -92,7 +93,7 @@ export interface BcProviderEditInitialStateModel {
 })
 export class BcProviderEditPage
   extends AbstractFormPage<BcProviderEditFormState>
-  implements OnInit
+  implements OnInit, OnDestroy
 {
   public faCircleCheck = faCircleCheck;
   public faXmark = faXmark;
@@ -197,6 +198,12 @@ export class BcProviderEditPage
       .subscribe((bcProviderObject: BcProviderEditInitialStateModel) => {
         this.username = bcProviderObject.bcProviderId;
       });
+  }
+
+  public ngOnDestroy(): void {
+    if (this.progressSubscription) {
+      this.progressSubscription.unsubscribe();
+    }
   }
 
   protected performSubmission(): NoContent {
