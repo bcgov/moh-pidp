@@ -51,8 +51,9 @@ public class SAEforms
                 .Select(party => new
                 {
                     AlreadyEnroled = party.AccessRequests.Any(request => request.AccessTypeCode == AccessTypeCode.SAEforms),
-                    BCProviderCredential = party.Credentials.FirstOrDefault(credential => credential.IdentityProvider == IdentityProviders.BCProvider),
-                    UserId = party.PrimaryUserId,
+                    UserIds = party.Credentials
+                        .Where(credential => credential.IdentityProvider == IdentityProviders.BCServicesCard || credential.IdentityProvider == IdentityProviders.BCProvider)
+                        .Select(credential => credential.UserId),
                     party.Email,
                     party.DisplayFirstName,
                     party.Cpn,
@@ -91,14 +92,9 @@ public class SAEforms
                 }
             }
 
-            if (!await this.keycloakClient.AssignAccessRoles(dto.UserId, MohKeycloakEnrolment.SAEforms))
+            foreach (var userId in dto.UserIds)
             {
-                return DomainResult.Failed();
-            }
-
-            if (dto.BCProviderCredential != null)
-            {
-                if (!await this.keycloakClient.AssignAccessRoles(dto.BCProviderCredential.UserId, MohKeycloakEnrolment.SAEforms))
+                if (!await this.keycloakClient.AssignAccessRoles(userId, MohKeycloakEnrolment.SAEforms))
                 {
                     return DomainResult.Failed();
                 }
