@@ -1,252 +1,212 @@
 <div class="container mfa-setup-page" uiPidpInjectViewportCss>
-  <nav class="breadcrumb">
-    <ul>
-      <li><a (click)="onBack()">Home</a></li>
-      <li> <fa-icon [icon]="faAngleRight" class="fa-duotone"></fa-icon> </li>
-      <li> <a (click)="onPageNavigate(['/help'])">Previous Page</a></li>
-      <li> <fa-icon [icon]="faAngleRight" class="fa-duotone"></fa-icon> </li>
-      <li> <a class="active">Active Page</a></li>
-    </ul>
-  </nav>
-<ui-page mode="full">
-  <h1>BCProvider Active Directory Multi-factor Authentication (MFA)
-    Setup</h1>
-  <ui-page-section>
-    <p>
-      If you are reading this document, it is assumed you have successfully
-      logged into OneHealthID services and created a BCProvider. If you have not
-      yet created a BCProvider, please do so first by accessing the BCProvider
-      account under
-      <a uiAnchor scheme="url" class="link" (click)="onPageNavigate(['/access/access-requests'])"> Access to Systems</a>.
-    </p>
-    <p>
-      After you have created your BCProvider, you have to link it to your phone
-      using Multi-factor authentication.
-    </p>
-    <p>
-      If you have questions during or after the tutorial, please contact us at
-      <a uiAnchor scheme="mailto" [attr.href]="providerIdentitySupport"></a>.
-    </p>
-    <p>
-      The BCprovider uses Multi-Factor Authentication (MFA) is an additional
-      layer of security that helps protect your online accounts and sensitive
-      information. It enhances the traditional username and password login
-      process by requiring at least two or more forms of verification. This
-      guide aims to explain the significance of MFA and provide instructions on
-      how to set it up for the first time.
-    </p>
-    <ul>
-      <li>
-        MFA significantly reduces the risk of unauthorized access to your
-        accounts by adding an extra layer of verification.
-      </li>
-      <li>
-        Even if someone manages to obtain your password, they won't be able to
-        access your account without the second factor of authentication
-      </li>
-    </ul>
-    <p>
-      The first time you login to BChealthprovider.ca you may be asked to setup
-      MFA. If you are requested, please follow the steps below
-    </p></ui-page-section
-  >
-
-  <ui-page-section>
-    <ui-page-section-subheader>
-
-    <h2> Setting up the Microsoft Authenticator</h2>
-    </ui-page-section-subheader>
-  </ui-page-section>
-  <ui-page-section>
-    <ol>
-      <li>Go to bchealthprovider.ca</li>
-      <li class="mfa-section">
-        Enter your bcprovider.ca login information
-        <picture class="image">
-          <source
-            type="image/webp"
-            srcset="/assets/images/mfa-setup/image1.webp" />
-          <source
-            type="image/jpg"
-            srcset="/assets/images/mfa-setup/image1.jpg" />
-          <img
-            alt="signin screenshot"
-            title="signin screenshot"
-            loading="lazy"
-            aria-label="mfa login" />
-        </picture>
-      </li>
-      <li class="mfa-section">
-        Enter your password
-        <picture class="image">
-          <source
-            type="image/webp"
-            srcset="/assets/images/mfa-setup/image2.webp" />
-          <source
-            type="image/jpg"
-            srcset="/assets/images/mfa-setup/image2.jpg" />
-          <img
-            alt="password screenshot"
-            title="password screenshot"
-            loading="lazy"
-            aria-label="mfa enter password" />
-        </picture>
-      </li>
-      <li class="mfa-section">
-        You will be prompted for more information on the first login.
-      </li>
-      <li class="mfa-section">
-        On your iOS/Android mobile device, you will need to go to the respective
-        app store and install the
+  <app-breadcrumb [breadcrumbs]="breadcrumbsData"></app-breadcrumb>
+  <ui-page mode="full">
+    <h1>BCProvider Active Directory Multi-factor Authentication (MFA) Setup</h1>
+    <ui-page-section>
+      <p>
+        If you are reading this document, it is assumed you have successfully
+        logged into OneHealthID services and created a BCProvider. If you have
+        not yet created a BCProvider, please do so first by accessing the
+        BCProvider account under
         <a
+          class="link"
           uiAnchor
-          href="https://www.microsoft.com/en-ca/security/mobile-authenticator-app"
-          >Microsoft Authenticator App</a
-        >
-        or Google Authenticator App.
-      </li>
-      <li class="mfa-section">
-        If you are using the Google Authenticator App, do not click Next. Click
-        "I want to use a different authenticator app". Go to Appendix A in this
-        document and skip steps 7-15.
-        <picture class="image">
-          <source
-            type="image/webp"
-            srcset="/assets/images/mfa-setup/image3.webp" />
-          <source
-            type="image/jpg"
-            srcset="/assets/images/mfa-setup/image3.jpg" />
-          <img
-            alt="Getting the Microsoft Authenticator app screenshot"
-            title="Getting the Microsoft Authenticator app screenshot"
-            loading="lazy"
-            aria-label="mfa open microsoft authenticator" />
-        </picture>
-      </li>
-      <li class="mfa-section">
-        Once you have the app installed, click <strong>Next</strong>.
-        <picture class="image">
-          <source
-            type="image/webp"
-            srcset="/assets/images/mfa-setup/image4.webp" />
-          <source
-            type="image/jpg"
-            srcset="/assets/images/mfa-setup/image4.jpg" />
-          <img
-            alt="Set up your account screenshot"
-            title="Set up your account screenshot"
-            loading="lazy"
-            aria-label="mfa click next after installation" />
-        </picture>
-      </li>
-      <li class="mfa-section">
-        Click <strong>Next</strong>.
-        <picture class="image">
-          <source
-            type="image/webp"
-            srcset="/assets/images/mfa-setup/image5.webp" />
-          <source
-            type="image/jpg"
-            srcset="/assets/images/mfa-setup/image5.jpg" />
-          <img
-            alt="Scan the QR code screenshot"
-            title="Scan the QR code screenshot"
-            loading="lazy"
-            aria-label="mfa click next" />
-        </picture>
-        <u>Do not take a picture with your photo app</u>, use the authenticator
-        app.
-      </li>
-      <li class="mfa-section">
-        On your mobile device, launch the Microsoft Authenticator app.
-        <picture class="image">
-          <source
-            type="image/webp"
-            srcset="/assets/images/mfa-setup/image6.webp" />
-          <source
-            type="image/jpg"
-            srcset="/assets/images/mfa-setup/image6.jpg" />
-          <img
-            alt="Microsoft Authenticator app, add account screenshot"
-            title="Microsoft Authenticator app, add account screenshot"
-            loading="lazy"
-            aria-label="mfa launch app" />
-        </picture>
-      </li>
-      <li class="mfa-section">Click <strong>Add account</strong>.</li>
-      <li class="mfa-section">
-        Click on <strong>Work or school account</strong>.
-        <picture class="image">
-          <source
-            type="image/webp"
-            srcset="/assets/images/mfa-setup/image7.webp" />
-          <source
-            type="image/jpg"
-            srcset="/assets/images/mfa-setup/image7.jpg" />
-          <img
-            alt="Microsoft Authenticator app, select a kind of account screenshot"
-            title="Microsoft Authenticator app, select a kind of account screenshot"
-            loading="lazy"
-            aria-label="mfa add account" />
-        </picture>
-      </li>
-      <li class="mfa-section">
-        If prompted to allow the Authenticator access to the camera, click
-        <strong>OK</strong>.
-        <picture class="image">
-          <source
-            type="image/webp"
-            srcset="/assets/images/mfa-setup/image8.webp" />
-          <source
-            type="image/jpg"
-            srcset="/assets/images/mfa-setup/image8.jpg" />
-          <img
-            alt="Microsoft Authenticator app, camera access request screenshot"
-            title="Microsoft Authenticator app, camera access request screenshot"
-            loading="lazy"
-            aria-label="mfa allow camera access" />
-        </picture>
-      </li>
-      <li class="mfa-section">
-        Scan the QR code that is presented to you with your mobile device. Do
-        not scan using your photo application. You must scan the QR code in the
-        Microsoft Authenticator app.
-        <picture class="image">
-          <source
-            type="image/webp"
-            srcset="/assets/images/mfa-setup/image9.webp" />
-          <source
-            type="image/jpg"
-            srcset="/assets/images/mfa-setup/image9.jpg" />
-          <img
-            alt="Microsoft Authenticator app, scan QR code screenshot"
-            title="Microsoft Authenticator app, scan QR code screenshot"
-            loading="lazy"
-            aria-label="mfa scan qr code" />
-        </picture>
-        <p class="mfa-section">
-          If you are unable to scan the QR code click on
-          <em>Can't scan image?</em>
-        </p>
-        <p class="mfa-section">
-          Make note of the Code and the URL
+          scheme="url"
+          (click)="navigateTo(AccessRoutes.routePath(AccessRoutes.ACCESS_REQUESTS))">
+          Access to Systems</a
+        >.
+      </p>
+      <p>
+        After you have created your BCProvider, you have to link it to your
+        phone using Multi-factor authentication.
+      </p>
+      <p>
+        If you have questions during or after the tutorial, please contact us at
+        <a uiAnchor scheme="mailto" [attr.href]="providerIdentitySupport"></a>.
+      </p>
+      <p>
+        The BCprovider uses Multi-Factor Authentication (MFA) is an additional
+        layer of security that helps protect your online accounts and sensitive
+        information. It enhances the traditional username and password login
+        process by requiring at least two or more forms of verification. This
+        guide aims to explain the significance of MFA and provide instructions
+        on how to set it up for the first time.
+      </p>
+      <ul>
+        <li>
+          MFA significantly reduces the risk of unauthorized access to your
+          accounts by adding an extra layer of verification.
+        </li>
+        <li>
+          Even if someone manages to obtain your password, they won't be able to
+          access your account without the second factor of authentication
+        </li>
+      </ul>
+      <p>
+        The first time you login to BChealthprovider.ca you may be asked to
+        setup MFA. If you are requested, please follow the steps below
+      </p></ui-page-section
+    >
+
+    <ui-page-section>
+      <ui-page-section-subheader>
+        <h2>Setting up the Microsoft Authenticator</h2>
+      </ui-page-section-subheader>
+    </ui-page-section>
+    <ui-page-section>
+      <ol>
+        <li>Go to bchealthprovider.ca</li>
+        <li class="mfa-section">
+          Enter your bcprovider.ca login information
           <picture class="image">
             <source
               type="image/webp"
-              srcset="/assets/images/mfa-setup/image10.webp" />
+              srcset="/assets/images/mfa-setup/image1.webp" />
             <source
               type="image/jpg"
-              srcset="/assets/images/mfa-setup/image10.jpg" />
+              srcset="/assets/images/mfa-setup/image1.jpg" />
             <img
-              alt="Microsoft Authenticator app, unable to scan the QR code screenshot"
-              title="Microsoft Authenticator app, unable to scan the QR code screenshot"
+              alt="signin screenshot"
+              title="signin screenshot"
               loading="lazy"
-              aria-label="mfa make note of code and url" />
+              aria-label="mfa login" />
           </picture>
-        </p>
-        <p class="mfa-section">
-          On the Authenticator app, click on
-          <strong>enter code manually</strong>
+        </li>
+        <li class="mfa-section">
+          Enter your password
+          <picture class="image">
+            <source
+              type="image/webp"
+              srcset="/assets/images/mfa-setup/image2.webp" />
+            <source
+              type="image/jpg"
+              srcset="/assets/images/mfa-setup/image2.jpg" />
+            <img
+              alt="password screenshot"
+              title="password screenshot"
+              loading="lazy"
+              aria-label="mfa enter password" />
+          </picture>
+        </li>
+        <li class="mfa-section">
+          You will be prompted for more information on the first login.
+        </li>
+        <li class="mfa-section">
+          On your iOS/Android mobile device, you will need to go to the
+          respective app store and install the
+          <a
+            uiAnchor
+            href="https://www.microsoft.com/en-ca/security/mobile-authenticator-app"
+            >Microsoft Authenticator App</a
+          >
+          or Google Authenticator App.
+        </li>
+        <li class="mfa-section">
+          If you are using the Google Authenticator App, do not click Next.
+          Click "I want to use a different authenticator app". Go to Appendix A
+          in this document and skip steps 7-15.
+          <picture class="image">
+            <source
+              type="image/webp"
+              srcset="/assets/images/mfa-setup/image3.webp" />
+            <source
+              type="image/jpg"
+              srcset="/assets/images/mfa-setup/image3.jpg" />
+            <img
+              alt="Getting the Microsoft Authenticator app screenshot"
+              title="Getting the Microsoft Authenticator app screenshot"
+              loading="lazy"
+              aria-label="mfa open microsoft authenticator" />
+          </picture>
+        </li>
+        <li class="mfa-section">
+          Once you have the app installed, click <strong>Next</strong>.
+          <picture class="image">
+            <source
+              type="image/webp"
+              srcset="/assets/images/mfa-setup/image4.webp" />
+            <source
+              type="image/jpg"
+              srcset="/assets/images/mfa-setup/image4.jpg" />
+            <img
+              alt="Set up your account screenshot"
+              title="Set up your account screenshot"
+              loading="lazy"
+              aria-label="mfa click next after installation" />
+          </picture>
+        </li>
+        <li class="mfa-section">
+          Click <strong>Next</strong>.
+          <picture class="image">
+            <source
+              type="image/webp"
+              srcset="/assets/images/mfa-setup/image5.webp" />
+            <source
+              type="image/jpg"
+              srcset="/assets/images/mfa-setup/image5.jpg" />
+            <img
+              alt="Scan the QR code screenshot"
+              title="Scan the QR code screenshot"
+              loading="lazy"
+              aria-label="mfa click next" />
+          </picture>
+          <u>Do not take a picture with your photo app</u>, use the
+          authenticator app.
+        </li>
+        <li class="mfa-section">
+          On your mobile device, launch the Microsoft Authenticator app.
+          <picture class="image">
+            <source
+              type="image/webp"
+              srcset="/assets/images/mfa-setup/image6.webp" />
+            <source
+              type="image/jpg"
+              srcset="/assets/images/mfa-setup/image6.jpg" />
+            <img
+              alt="Microsoft Authenticator app, add account screenshot"
+              title="Microsoft Authenticator app, add account screenshot"
+              loading="lazy"
+              aria-label="mfa launch app" />
+          </picture>
+        </li>
+        <li class="mfa-section">Click <strong>Add account</strong>.</li>
+        <li class="mfa-section">
+          Click on <strong>Work or school account</strong>.
+          <picture class="image">
+            <source
+              type="image/webp"
+              srcset="/assets/images/mfa-setup/image7.webp" />
+            <source
+              type="image/jpg"
+              srcset="/assets/images/mfa-setup/image7.jpg" />
+            <img
+              alt="Microsoft Authenticator app, select a kind of account screenshot"
+              title="Microsoft Authenticator app, select a kind of account screenshot"
+              loading="lazy"
+              aria-label="mfa add account" />
+          </picture>
+        </li>
+        <li class="mfa-section">
+          If prompted to allow the Authenticator access to the camera, click
+          <strong>OK</strong>.
+          <picture class="image">
+            <source
+              type="image/webp"
+              srcset="/assets/images/mfa-setup/image8.webp" />
+            <source
+              type="image/jpg"
+              srcset="/assets/images/mfa-setup/image8.jpg" />
+            <img
+              alt="Microsoft Authenticator app, camera access request screenshot"
+              title="Microsoft Authenticator app, camera access request screenshot"
+              loading="lazy"
+              aria-label="mfa allow camera access" />
+          </picture>
+        </li>
+        <li class="mfa-section">
+          Scan the QR code that is presented to you with your mobile device. Do
+          not scan using your photo application. You must scan the QR code in
+          the Microsoft Authenticator app.
           <picture class="image">
             <source
               type="image/webp"
@@ -255,179 +215,217 @@
               type="image/jpg"
               srcset="/assets/images/mfa-setup/image9.jpg" />
             <img
-              alt="Microsoft Authenticator app, enter code manually screenshot"
-              title="Microsoft Authenticator app, enter code manually screenshot"
+              alt="Microsoft Authenticator app, scan QR code screenshot"
+              title="Microsoft Authenticator app, scan QR code screenshot"
               loading="lazy"
-              aria-label="mfa enter code manually" />
+              aria-label="mfa scan qr code" />
           </picture>
-        </p>
-        <p class="mfa-section">
-          Enter in the code and the URL and click <strong>Finish</strong>. You
-          may be prompted for Notifications. Click <strong>Allow</strong>.
+          <p class="mfa-section">
+            If you are unable to scan the QR code click on
+            <em>Can't scan image?</em>
+          </p>
+          <p class="mfa-section">
+            Make note of the Code and the URL
+            <picture class="image">
+              <source
+                type="image/webp"
+                srcset="/assets/images/mfa-setup/image10.webp" />
+              <source
+                type="image/jpg"
+                srcset="/assets/images/mfa-setup/image10.jpg" />
+              <img
+                alt="Microsoft Authenticator app, unable to scan the QR code screenshot"
+                title="Microsoft Authenticator app, unable to scan the QR code screenshot"
+                loading="lazy"
+                aria-label="mfa make note of code and url" />
+            </picture>
+          </p>
+          <p class="mfa-section">
+            On the Authenticator app, click on
+            <strong>enter code manually</strong>
+            <picture class="image">
+              <source
+                type="image/webp"
+                srcset="/assets/images/mfa-setup/image9.webp" />
+              <source
+                type="image/jpg"
+                srcset="/assets/images/mfa-setup/image9.jpg" />
+              <img
+                alt="Microsoft Authenticator app, enter code manually screenshot"
+                title="Microsoft Authenticator app, enter code manually screenshot"
+                loading="lazy"
+                aria-label="mfa enter code manually" />
+            </picture>
+          </p>
+          <p class="mfa-section">
+            Enter in the code and the URL and click <strong>Finish</strong>. You
+            may be prompted for Notifications. Click <strong>Allow</strong>.
+            <picture class="image">
+              <source
+                type="image/webp"
+                srcset="/assets/images/mfa-setup/image12.webp" />
+              <source
+                type="image/jpg"
+                srcset="/assets/images/mfa-setup/image12.jpg" />
+              <img
+                alt="Microsoft Authenticator app, 'Authenticator' would like to send you notifications screenshot"
+                title="Microsoft Authenticator app,'Authenticator' would like to send you notifications screenshot"
+                loading="lazy"
+                aria-label="mfa enter code and url and click finish" />
+            </picture>
+          </p>
+        </li>
+        <li class="mfa-section">
+          If successful, your account should now be listed in the Authenticator
+          app.
           <picture class="image">
             <source
               type="image/webp"
-              srcset="/assets/images/mfa-setup/image12.webp" />
+              srcset="/assets/images/mfa-setup/image13.webp" />
             <source
               type="image/jpg"
-              srcset="/assets/images/mfa-setup/image12.jpg" />
+              srcset="/assets/images/mfa-setup/image13.jpg" />
             <img
-              alt="Microsoft Authenticator app, 'Authenticator' would like to send you notifications screenshot"
-              title="Microsoft Authenticator app,'Authenticator' would like to send you notifications screenshot"
+              alt="Your account is listed in the Microsoft Authenticator app screenshot"
+              title="Your account is listed in the Microsoft Authenticator app screenshot"
               loading="lazy"
-              aria-label="mfa enter code and url and click finish" />
+              aria-label="mfa account added to authenticator successfully" />
           </picture>
-        </p>
-      </li>
-      <li class="mfa-section">
-        If successful, your account should now be listed in the Authenticator
-        app.
-        <picture class="image">
-          <source
-            type="image/webp"
-            srcset="/assets/images/mfa-setup/image13.webp" />
-          <source
-            type="image/jpg"
-            srcset="/assets/images/mfa-setup/image13.jpg" />
-          <img
-            alt="Your account is listed in the Microsoft Authenticator app screenshot"
-            title="Your account is listed in the Microsoft Authenticator app screenshot"
-            loading="lazy"
-            aria-label="mfa account added to authenticator successfully" />
-        </picture>
-      </li>
-      <li class="mfa-section">
-        Now the Authenticator app is configured, you can go back to the
-        Authenticator setup page and click <strong>Next</strong>.
-        <picture class="image">
-          <source
-            type="image/webp"
-            srcset="/assets/images/mfa-setup/image5.webp" />
-          <source
-            type="image/jpg"
-            srcset="/assets/images/mfa-setup/image5.jpg" />
-          <img
-            alt="Authenticator setup page screenshot"
-            title="Authenticator setup page screenshot"
-            loading="lazy"
-            aria-label="mfa after successful setup click next" />
-        </picture>
-        <p class="mfa-section">
-          A push notification will be sent to your mobile device...
+        </li>
+        <li class="mfa-section">
+          Now the Authenticator app is configured, you can go back to the
+          Authenticator setup page and click <strong>Next</strong>.
           <picture class="image">
             <source
               type="image/webp"
-              srcset="/assets/images/mfa-setup/image15.webp" />
+              srcset="/assets/images/mfa-setup/image5.webp" />
             <source
               type="image/jpg"
-              srcset="/assets/images/mfa-setup/image15.jpg" />
+              srcset="/assets/images/mfa-setup/image5.jpg" />
             <img
-              alt="A push notification will be sent to your mobile device screenshot"
-              title="A push notification will be sent to your mobile device screenshot"
+              alt="Authenticator setup page screenshot"
+              title="Authenticator setup page screenshot"
               loading="lazy"
-              aria-label="mfa push notification sent" />
+              aria-label="mfa after successful setup click next" />
           </picture>
-        </p>
-      </li>
-      <li class="mfa-section">
-        On your mobile device, you should receive a notification. Approve it.
-        <picture class="image">
-          <source
-            type="image/webp"
-            srcset="/assets/images/mfa-setup/image16.webp" />
-          <source
-            type="image/jpg"
-            srcset="/assets/images/mfa-setup/image16.jpg" />
-          <img
-            alt="Mobile device notification screenshot"
-            title="Mobile device notification screenshot"
-            loading="lazy"
-            aria-label="mfa approve push notification" />
-        </picture>
-        <p class="mfa-section">
-          If the push notification worked, it should report the notification was
-          approved.
+          <p class="mfa-section">
+            A push notification will be sent to your mobile device...
+            <picture class="image">
+              <source
+                type="image/webp"
+                srcset="/assets/images/mfa-setup/image15.webp" />
+              <source
+                type="image/jpg"
+                srcset="/assets/images/mfa-setup/image15.jpg" />
+              <img
+                alt="A push notification will be sent to your mobile device screenshot"
+                title="A push notification will be sent to your mobile device screenshot"
+                loading="lazy"
+                aria-label="mfa push notification sent" />
+            </picture>
+          </p>
+        </li>
+        <li class="mfa-section">
+          On your mobile device, you should receive a notification. Approve it.
           <picture class="image">
             <source
               type="image/webp"
-              srcset="/assets/images/mfa-setup/image17.webp" />
+              srcset="/assets/images/mfa-setup/image16.webp" />
             <source
               type="image/jpg"
-              srcset="/assets/images/mfa-setup/image17.jpg" />
+              srcset="/assets/images/mfa-setup/image16.jpg" />
             <img
-              alt="Notification approved screenshot"
-              title="Notification approved screenshot"
+              alt="Mobile device notification screenshot"
+              title="Mobile device notification screenshot"
               loading="lazy"
-              aria-label="mfa notification approved" />
+              aria-label="mfa approve push notification" />
           </picture>
-        </p>
-      </li>
-      <li class="mfa-section">Click <strong>Next</strong>.</li>
-      <li class="mfa-section">
-        You should now be logged into BCHealthProvider.
-      </li>
-    </ol>
-  </ui-page-section>
-  <ui-page-section>
-    <p>
-      If you have questions during or after the tutorial, please contact us at
-      <a uiAnchor scheme="mailto" [attr.href]="providerIdentitySupport"></a>.
-    </p>
-  </ui-page-section>
-  <ui-page-section>
-    <h2><strong>Appendix A</strong></h2>
-  </ui-page-section>
-  <ui-page-section>
-    <ui-page-section-subheader
-      icon="question_answer"
-      heading="Setting up Google Authenticator on your smartphone">
-    </ui-page-section-subheader>
-  </ui-page-section>
-  <ui-page-section>
-    <ol>
-      <li>
-        Download the Google Authenticator app from the Play Store or App Store
-        and click Install.
-        <picture class="image">
-          <source
-            type="image/webp"
-            srcset="/assets/images/mfa-setup/image18.webp" />
-          <source
-            type="image/jpg"
-            srcset="/assets/images/mfa-setup/image18.jpg" />
-          <img
-            alt="Google authenticator app in store"
-            title="Google authenticator app in store"
-            loading="lazy"
-            aria-label="download google authenticator app" />
-        </picture>
-      </li>
-      <li>Install the Google Authenticator app on your smartphone.</li>
-      <li>
-        Launch the app and select Scan a QR code in the dialog window. To scan,
-        the app needs access to your smartphone's camera.
-      </li>
-      <li>
-        You will then be presented with a QR code and a 32-digit code (also
-        known as a security key). To proceed, tap the "+" icon in the bottom
-        right of the Google Authenticator app and select "Scan a QR code" to use
-        with your mobile camera. Alternatively, you can manually enter your 2FA
-        codes by choosing to "Enter a setup key".
-      </li>
-      <li>
-        With your 2-factor authentication now successfully set up, you can begin
-        to use your Google Authenticator codes.
-      </li>
-      <li>Return to step 15 in the guide.</li>
-    </ol>
-  </ui-page-section>
-</ui-page>
+          <p class="mfa-section">
+            If the push notification worked, it should report the notification
+            was approved.
+            <picture class="image">
+              <source
+                type="image/webp"
+                srcset="/assets/images/mfa-setup/image17.webp" />
+              <source
+                type="image/jpg"
+                srcset="/assets/images/mfa-setup/image17.jpg" />
+              <img
+                alt="Notification approved screenshot"
+                title="Notification approved screenshot"
+                loading="lazy"
+                aria-label="mfa notification approved" />
+            </picture>
+          </p>
+        </li>
+        <li class="mfa-section">Click <strong>Next</strong>.</li>
+        <li class="mfa-section">
+          You should now be logged into BCHealthProvider.
+        </li>
+      </ol>
+    </ui-page-section>
+    <ui-page-section>
+      <p>
+        If you have questions during or after the tutorial, please contact us at
+        <a uiAnchor scheme="mailto" [attr.href]="providerIdentitySupport"></a>.
+      </p>
+    </ui-page-section>
+    <ui-page-section>
+      <h2><strong>Appendix A</strong></h2>
+    </ui-page-section>
+    <ui-page-section>
+      <ui-page-section-subheader
+        icon="question_answer"
+        heading="Setting up Google Authenticator on your smartphone">
+      </ui-page-section-subheader>
+    </ui-page-section>
+    <ui-page-section>
+      <ol>
+        <li>
+          Download the Google Authenticator app from the Play Store or App Store
+          and click Install.
+          <picture class="image">
+            <source
+              type="image/webp"
+              srcset="/assets/images/mfa-setup/image18.webp" />
+            <source
+              type="image/jpg"
+              srcset="/assets/images/mfa-setup/image18.jpg" />
+            <img
+              alt="Google authenticator app in store"
+              title="Google authenticator app in store"
+              loading="lazy"
+              aria-label="download google authenticator app" />
+          </picture>
+        </li>
+        <li>Install the Google Authenticator app on your smartphone.</li>
+        <li>
+          Launch the app and select Scan a QR code in the dialog window. To
+          scan, the app needs access to your smartphone's camera.
+        </li>
+        <li>
+          You will then be presented with a QR code and a 32-digit code (also
+          known as a security key). To proceed, tap the "+" icon in the bottom
+          right of the Google Authenticator app and select "Scan a QR code" to
+          use with your mobile camera. Alternatively, you can manually enter
+          your 2FA codes by choosing to "Enter a setup key".
+        </li>
+        <li>
+          With your 2-factor authentication now successfully set up, you can
+          begin to use your Google Authenticator codes.
+        </li>
+        <li>Return to step 15 in the guide.</li>
+      </ol>
+    </ui-page-section>
+  </ui-page>
 
-<div class="back-to-top-container">
-  <button class="back-to-top" (click)="scrollToTop()" *ngIf="showBackToTopButton">
-    <fa-icon [icon]="faArrowUp"></fa-icon>
-  </button>
-  <div class="back-to-top-text" *ngIf="showBackToTopButton">Back to top</div>
-</div>
-
+  <div class="back-to-top-container">
+    <button
+      *ngIf="showBackToTopButton"
+      class="back-to-top"
+      (click)="scrollToTop()">
+      <fa-icon [icon]="faArrowUp"></fa-icon>
+    </button>
+    <div *ngIf="showBackToTopButton" class="back-to-top-text">Back to top</div>
+  </div>
 </div>

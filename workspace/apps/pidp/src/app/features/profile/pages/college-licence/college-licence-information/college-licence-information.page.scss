@@ -7,7 +7,85 @@ $darkgrey: pidp.$bcgov-color-text;
   .header {
     background-color: $lightgrey;
   }
+
+  .breadcrumb-top {
+    padding-bottom: 0px !important;
+  }
+  .breadcrumb ul {
+    list-style: none;
+    top: 0;
+    right: 0;
+    padding: 0px;
+  }
+
+  .breadcrumb fa-icon {
+    height: 12px;
+    padding-left: 5px;
+    padding-right: 5px;
+  }
+
+  .breadcrumb ul li {
+    display: inline;
+  }
+
+  .breadcrumb a,
+  .text-button {
+    text-decoration: none;
+    color: pidp.$bcgov-color-button-focus-outline;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 27px;
+    word-wrap: break-word;
+  }
+
+  & .college-licence {
+    padding: var(--box-padding);
+    color: pidp.$bcgov-color-primary;
+    font-weight: 600;
+    font-size: 50px;
+    padding-bottom: 20px;
+  }
+
+  & .actions {
+    margin-top: 20px;
+    margin-bottom: 4rem;
+    & button {
+      margin-top: 1rem;
+      width: 75px;
+      font: bold;
+      font-weight: 700;
+    }
+  }
+  padding: 1.25rem 0.75rem 0px 0px;
+
+  .card-header-icon {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .lock-icon {
+      cursor: pointer;
+    }
+    .card-icon {
+      display: flex;
+      border-radius: 0.625rem;
+      border: 1px solid rgba(0, 51, 102, 0.2);
+      width: 2.5rem;
+      height: 2.5rem;
+      justify-content: center;
+      align-items: center;
+    }
+
+    img {
+      width: 1.5rem;
+      height: 1.5rem;
+    }
+  }
+
   & .licences-box {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
     & .licences-licence-box {
       border: solid 1px $darkgrey;
       border-radius: 4px;
@@ -16,20 +94,75 @@ $darkgrey: pidp.$bcgov-color-text;
         border-radius: 4px;
       }
     }
-  }
-  & .actions {
-    & button {
-      margin-top: 1rem;
+
+    & .card-styles {
+      border-radius: 1.25rem;
+      border: 1px solid #ccc;
+      background: #fff;
+      box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+      width: 37rem;
+      padding: 1.25rem;
+
+      h2 {
+        color: #036;
+        font-size: 1.5rem;
+        font-weight: 700;
+        padding-top: 0.25rem;
+        margin-bottom: 0;
+      }
+
     }
   }
-  padding: 1.25rem 0.75rem;
+  .status-active {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+
+    span {
+      color: #2e8540;
+      font-size: 16px;
+      font-weight: 700;
+      margin-right: 5px;
+    }
+
+    label {
+      font-weight: 700;
+      margin-right: 5px;
+    }
+
+    img {
+      width: 1.5rem;
+      height: 1.5rem;
+    }
+  }
+
+  .status-non-active {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+
+    span {
+      color: red;
+      font-size: 16px;
+      font-weight: 700;
+      margin-right: 5px;
+    }
+
+    label {
+      font-weight: 700;
+      margin-right: 5px;
+    }
+
+  }
+
 }
 .viewport-large,
 .viewport-medium,
 .viewport-small {
   display: flex;
   flex-direction: column;
-  max-width: 800px;
+  padding-bottom: 0px;
+  padding-left: 0px !important;
   & .header {
     padding: 6px 20px;
   }
@@ -39,47 +172,63 @@ $darkgrey: pidp.$bcgov-color-text;
       margin-bottom: 6px;
     }
   }
-  & .licences-box {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    & .licences-licence-box {
-      display: flex;
-      height: 125px;
-      & .licence-icon-box {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 125px;
-        & .licence-icon-image {
-          font-size: 50px;
-        }
-      }
 
-      & .licence-detail-box {
-        flex: 1;
-        padding: 20px 30px;
-        display: flex;
-        align-items: center;
+  & .licence-detail-content {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 50% 50%;
+    grid-gap: 3px;
+  }
 
-        & .licence-detail-content {
-          flex: 1;
-          display: grid;
-          grid-template-columns: 50% 50%;
-          grid-gap: 3px;
-        }
-      }
-    }
+}
+
+.viewport-small {
+  .breadcrumb {
+    margin: 0px 20px 0px 0px;
+  }
+}
+.viewport-smSall {
+  fa-icon {
+    padding-left: 0.6rem;
+    padding-right: 0.6rem;
+    font-size: 1.5rem;
+  }
+
+  span {
+    font-size: 0.9rem;
   }
 }
 .viewport-xsmall {
   display: flex;
   flex-direction: column;
   max-width: 640px;
-  padding-top: 20px;
+  padding-left: 0px !important;
+  padding-bottom: 0px;
+  padding-top: 0px !important;
   & .header {
     padding: 6px 20px;
   }
+
+  & .breadcrumb {
+    margin-left: 12px !important;
+  }
+  & .college-licence {
+    padding: var(--box-padding);
+    color: pidp.$bcgov-color-primary;
+    margin-left: 15px;
+    font-weight: 600;
+    font-size: 25px !important;
+    padding-bottom: 0px !important;
+  }
+
+  & .college-licence-text {
+    padding-left: 1rem;
+  }
+
+  & .section-top {
+    padding-top: 0px;
+  }
+
   & .info-box {
     margin: 5px 0;
     padding: 0 15px;
@@ -118,5 +267,25 @@ $darkgrey: pidp.$bcgov-color-text;
         }
       }
     }
+  }
+
+  & .licence-detail-content {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 100%;
+    grid-gap: 3px;
+  }
+
+  & .card-styles {
+    padding: 1rem;
+    width: auto !important;
+    height:21rem !important;
+    h2 {
+      font-size: 1.25rem;
+    }
+  }
+
+  & .actions {
+    margin-left: 1rem;
   }
 }

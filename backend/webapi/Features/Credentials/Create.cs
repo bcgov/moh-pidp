@@ -2,6 +2,7 @@ namespace Pidp.Features.Credentials;
 
 using DomainResults.Common;
 using FluentValidation;
+using MassTransit;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Graph.Models;
@@ -17,7 +18,7 @@ using Pidp.Infrastructure.HttpClients.Plr;
 using Pidp.Models;
 using Pidp.Models.DomainEvents;
 using Pidp.Models.Lookups;
-using Pidp.Infrastructure.HttpClients.Keycloak;
+using static Pidp.Features.CommonHandlers.UpdateKeycloakAttributesConsumer;
 
 public class Create
 {
@@ -181,11 +182,9 @@ public class Create
         }
     }
 
-    public class UpdateBCServicesCardAttributesHandler(
-        IKeycloakAdministrationClient keycloakClient,
-        PidpDbContext context) : INotificationHandler<CredentialLinked>
+    public class UpdateBCServicesCardAttributesHandler(IBus bus, PidpDbContext context) : INotificationHandler<CredentialLinked>
     {
-        private readonly IKeycloakAdministrationClient keycloakClient = keycloakClient;
+        private readonly IBus bus = bus;
         private readonly PidpDbContext context = context;
 
         public async Task Handle(CredentialLinked notification, CancellationToken cancellationToken)
@@ -204,12 +203,12 @@ public class Create
 
                 foreach (var credential in party.Credentials)
                 {
-                    await this.keycloakClient.UpdateUser(credential.UserId, user => user.SetOpId(party.OpId!));
+                    await this.bus.Publish(UpdateKeycloakAttributes.FromUpdateAction(credential.UserId, user => user.SetOpId(party.OpId!)), cancellationToken);
                 }
             }
             else
             {
-                await this.keycloakClient.UpdateUser(newCredential.UserId, user => user.SetOpId(party.OpId!));
+                await this.bus.Publish(UpdateKeycloakAttributes.FromUpdateAction(newCredential.UserId, user => user.SetOpId(party.OpId!)), cancellationToken);
             }
         }
     }

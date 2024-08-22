@@ -1,4 +1,7 @@
 <div class="container box" uiPidpInjectViewportCss>
+  <div class="breadcrumb">
+    <app-breadcrumb [breadcrumbs]="breadcrumbsData"></app-breadcrumb>
+  </div>
   <ui-alert
     *ngIf="licenceDeclarationFailed"
     type="muted"
@@ -15,15 +18,16 @@
 
   <form novalidate [formGroup]="formState.form" (ngSubmit)="onSubmit()">
     <section>
-      <h2 class="header">College Licence</h2>
+      <h2 class="header">LICENCE</h2>
+      <h3 class="college-licence">College licence information</h3>
       <div class="content">
-        <p>Provide details for your active college licence.</p>
-        <label
-          id="college-licence-declaration-college-licence"
-          class="field-label"
-          >College Licence</label
-        >
+        <p class="college-licence-introduction">
+          Provide details for your college licence if you have one. If you do
+          not have a college licence, select "None" and you can update this
+          information at a later date
+        </p>
         <mat-form-field>
+          <mat-label class="field-label">College Licence</mat-label>
           <mat-select
             formControlName="collegeCode"
             aria-labelledby="college-licence-declaration-college-licence">
@@ -34,12 +38,6 @@
           </mat-select>
           <mat-error>Required</mat-error>
         </mat-form-field>
-        <label
-          *ngIf="formState.collegeCode.value"
-          id="college-licence-declaration-licence-number"
-          class="field-label"
-          >Licence Number</label
-        >
         <p *ngIf="showNurseValidationInfo">
           If you are a nurse, this number may be referred to as your "Nurse ID".
           You can confirm you have the correct number by checking it
@@ -52,25 +50,30 @@
           >.
         </p>
         <mat-form-field *ngIf="formState.collegeCode.value">
+          <mat-label class="field-label">Licence Number</mat-label>
           <input
             matInput
             formControlName="licenceNumber"
             aria-labelledby="college-licence-declaration-licence-number" />
           <mat-error>Required</mat-error>
+          <mat-hint> Example would be a 5 digit code </mat-hint>
         </mat-form-field>
       </div>
     </section>
+    <div>
+      <p class="footer-text">
+        Our system will automatically authenticate your college licence after
+        information has been filled.
+      </p>
+    </div>
     <div class="actions">
       <button
-        mat-stroked-button
+        mat-flat-button
         uiPageFooterAction
-        type="button"
+        type="submit"
         color="primary"
-        (click)="onBack()">
-        Back Home
-      </button>
-      <button mat-flat-button uiPageFooterAction type="submit" color="primary">
-        Save Information
+        [disabled]="disableSearch">
+        {{ formState.collegeCode.value === 0 ? "Save" : "Search" }}
       </button>
     </div>
   </form>

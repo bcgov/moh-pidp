@@ -21,6 +21,7 @@ public class Create
         public int PartyId { get; set; }
         public string RecipientEmail { get; set; } = string.Empty;
         public string? AdditionalInformation { get; set; }
+        public bool PreApproved { get; set; }
     }
 
     public class Model
@@ -41,24 +42,16 @@ public class Create
         }
     }
 
-    public class CommandHandler : ICommandHandler<Command, Model>
+    public class CommandHandler(
+        IClock clock,
+        IEmailService emailService,
+        PidpConfiguration config,
+        PidpDbContext context) : ICommandHandler<Command, Model>
     {
-        private readonly string applicationUrl;
-        private readonly IClock clock;
-        private readonly IEmailService emailService;
-        private readonly PidpDbContext context;
-
-        public CommandHandler(
-            IClock clock,
-            IEmailService emailService,
-            PidpConfiguration config,
-            PidpDbContext context)
-        {
-            this.applicationUrl = config.ApplicationUrl;
-            this.clock = clock;
-            this.emailService = emailService;
-            this.context = context;
-        }
+        private readonly string applicationUrl = config.ApplicationUrl;
+        private readonly IClock clock = clock;
+        private readonly IEmailService emailService = emailService;
+        private readonly PidpDbContext context = context;
 
         public async Task<Model> HandleAsync(Command command)
         {
@@ -75,11 +68,6 @@ public class Create
                 return new(true);
             }
 
-            var partyName = await this.context.Parties
-                .Where(party => party.Id == command.PartyId)
-                .Select(party => party.FullName)
-                .SingleAsync();
-
             var request = new EndorsementRequest
             {
                 RequestingPartyId = command.PartyId,
@@ -90,15 +78,34 @@ public class Create
                 StatusDate = this.clock.GetCurrentInstant()
             };
 
+            if (command.PreApproved)
+            {
+                var possibleRecipients = await this.context.Parties
+                    .Where(party => party.Email.ToLower() == command.RecipientEmail.ToLower())
+                    .Select(party => party.Id)
+                    .ToListAsync();
+
+                if (possibleRecipients.Count == 1)
+                {
+                    request.ReceivingPartyId = possibleRecipients.Single();
+                    request.Status = EndorsementRequestStatus.Received;
+                    request.PreApproved = true;
+                }
+            }
+
             this.context.EndorsementRequests.Add(request);
             await this.context.SaveChangesAsync();
 
-            await this.SendEndorsementRequestEmailAsync(request.RecipientEmail, request.Token, partyName);
+            var requestingPartyName = await this.context.Parties
+                .Where(party => party.Id == command.PartyId)
+                .Select(party => party.FullName)
+                .SingleAsync();
+            await this.SendEndorsementRequestEmailAsync(request.RecipientEmail, request.PreApproved ? null : request.Token, requestingPartyName);
 
             return new(false);
         }
 
-        private async Task SendEndorsementRequestEmailAsync(string recipientEmail, Guid token, string partyName)
+        private async Task SendEndorsementRequestEmailAsync(string recipientEmail, Guid? token, string partyName)
         {
             string url = this.applicationUrl.SetQueryParam("endorsement-token", token);
             var link = $"<a href=\"{url}\" target=\"_blank\" rel=\"noopener noreferrer\">this link</a>";

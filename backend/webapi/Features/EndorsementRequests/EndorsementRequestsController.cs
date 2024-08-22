@@ -12,10 +12,8 @@ using Pidp.Infrastructure.Services;
 
 [Route("api/parties/{partyId}/[controller]")]
 [Authorize(Policy = Policies.AnyPartyIdentityProvider)]
-public class EndorsementRequestsController : PidpControllerBase
+public class EndorsementRequestsController(IPidpAuthorizationService authorizationService) : PidpControllerBase(authorizationService)
 {
-    public EndorsementRequestsController(IPidpAuthorizationService authorizationService) : base(authorizationService) { }
-
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -24,6 +22,13 @@ public class EndorsementRequestsController : PidpControllerBase
                                                                               [FromRoute] Index.Query query)
         => await this.AuthorizePartyBeforeHandleAsync(query.PartyId, handler, query)
             .ToActionResultOfT();
+
+    [HttpPost("email-search")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<EmailSearch.Model>> EmailSearch([FromServices] IQueryHandler<EmailSearch.Query, EmailSearch.Model> handler,
+                                                                   [FromBody] EmailSearch.Query query)
+            => await handler.HandleAsync(query);
 
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status204NoContent)]

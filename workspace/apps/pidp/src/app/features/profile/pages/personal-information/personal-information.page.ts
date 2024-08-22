@@ -1,8 +1,10 @@
 import { AsyncPipe, NgIf } from '@angular/common';
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { FormBuilder, FormControl } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -19,6 +21,7 @@ import {
 
 import {
   ContactFormComponent,
+  InjectViewportCssClassDirective,
   PageComponent,
   PageFooterActionDirective,
   PageFooterComponent,
@@ -36,7 +39,10 @@ import { LoggerService } from '@app/core/services/logger.service';
 import { IdentityProvider } from '@app/features/auth/enums/identity-provider.enum';
 import { User } from '@app/features/auth/models/user.model';
 import { AuthorizedUserService } from '@app/features/auth/services/authorized-user.service';
+import { ProfileStatus } from '@app/features/portal/models/profile-status.model';
+import { PortalResource } from '@app/features/portal/portal-resource.service';
 import { LookupResource } from '@app/modules/lookup/lookup-resource.service';
+import { BreadcrumbComponent } from '@app/shared/components/breadcrumb/breadcrumb.component';
 import { IsHighAssurancePipe } from '@app/shared/pipes/is-high-assurance.pipe';
 
 import {
@@ -57,9 +63,14 @@ import { PersonalInformation } from './personal-information.model';
   standalone: true,
   imports: [
     AsyncPipe,
+    BreadcrumbComponent,
     ContactFormComponent,
+    InjectViewportCssClassDirective,
     IsHighAssurancePipe,
+    InjectViewportCssClassDirective,
     MatButtonModule,
+    MatExpansionModule,
+    MatIconModule,
     NgIf,
     PageComponent,
     PageFooterActionDirective,
@@ -85,11 +96,19 @@ export class PersonalInformationPage
   public warningMessage: string;
   public emailChanged: Subject<null>;
   public userEmail: string;
+  public userName: string;
+  public userDOB: string;
+  public profileStatus: string;
 
   public IdentityProvider = IdentityProvider;
 
   // ui-page is handling this.
   public showOverlayOnSubmit = false;
+  public readonly panelOpenState = signal(false);
+  public breadcrumbsData: Array<{ title: string; path: string }> = [
+    { title: 'Home', path: '' },
+    { title: 'Personal Information', path: '' },
+  ];
 
   public constructor(
     dependenciesService: AbstractFormDependenciesService,
@@ -97,6 +116,7 @@ export class PersonalInformationPage
     private router: Router,
     private partyService: PartyService,
     private resource: PersonalInformationResource,
+    private portalResource: PortalResource,
     private authorizedUserService: AuthorizedUserService,
     private logger: LoggerService,
     private _snackBar: MatSnackBar,
@@ -114,6 +134,9 @@ export class PersonalInformationPage
       'Our system is not familiar with this email address, please double check the spelling. If everything is correct hit save information, and our system will update.';
     this.emailChanged = new Subject<null>();
     this.userEmail = '';
+    this.userName = '';
+    this.userDOB = '';
+    this.profileStatus = '';
   }
 
   public onPreferredNameToggle({ checked }: ToggleContentChange): void {
@@ -155,6 +178,25 @@ export class PersonalInformationPage
         }
       });
 
+    if (this.user$ !== undefined) {
+      this.user$.pipe().subscribe((userFound) => {
+        if (userFound) {
+          this.userName = userFound.firstName + ' ' + userFound.lastName;
+        }
+      });
+    }
+
+    this.getProfileStatus(this.partyService.partyId)
+      .pipe()
+      .subscribe((profileStatus: ProfileStatus | null) => {
+        if (!profileStatus) {
+          return '';
+        }
+        this.profileStatus =
+          profileStatus.status.userAccessAgreement.statusCode.toString();
+        return this.profileStatus;
+      });
+
     this.resource
       .get(partyId)
       .pipe(
@@ -168,9 +210,9 @@ export class PersonalInformationPage
           return of(null);
         }),
       )
-      .subscribe((model: PersonalInformation | null) =>
-        this.handlePreferredNameChange(!!model?.preferredFirstName),
-      );
+      .subscribe((model: PersonalInformation | null) => {
+        this.handlePreferredNameChange(!!model?.preferredFirstName);
+      });
   }
 
   protected performSubmission(): Observable<void> {
@@ -200,5 +242,9 @@ export class PersonalInformationPage
 
   private navigateToRoot(): void {
     this.router.navigate([this.route.snapshot.data.routes.root]);
+  }
+
+  private getProfileStatus(partyId: number): Observable<ProfileStatus | null> {
+    return this.portalResource.getProfileStatus(partyId);
   }
 }
