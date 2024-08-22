@@ -69,3 +69,17 @@ public class LicenceStatusRoleUnassigned : PartyBusinessEvent
     }
 }
 
+public class BCProviderPasswordReset : PartyBusinessEvent
+{
+    public static BCProviderPasswordReset Create(int partyId, string userPrincipalName, Instant recordedOn)
+    {
+        return new BCProviderPasswordReset
+        {
+            PartyId = partyId,
+            Description = $"Party with User Principal Name {userPrincipalName} reset their BCProvider password.",
+            Severity = LogLevel.Information,
+            RecordedOn = recordedOn
+        };
+    }
+}
+
