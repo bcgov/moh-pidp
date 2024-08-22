@@ -82,3 +82,12 @@ a {
   color: theme-palette(blue, light);
   text-decoration: underline;
 }
+
+.progress-bar {
+  border-radius: 5px;
+}
+
+.progress-bar-complete {
+  border-radius: 5px;
+  border: 2px solid green;
+}

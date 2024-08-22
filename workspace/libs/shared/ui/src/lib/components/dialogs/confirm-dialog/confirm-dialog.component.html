@@ -38,10 +38,12 @@
     <ng-template #dialogContentHost></ng-template>
     <mat-progress-bar
       *ngIf="loading$ | async"
+      class="progress-bar"
       mode="determinate"
       [value]="progressBarValue"></mat-progress-bar>
     <mat-progress-bar
       *ngIf="progressComplete"
+      class="progress-bar-complete"
       mode="determinate"
       [value]="100"></mat-progress-bar>
   </mat-dialog-content>
