@@ -2,6 +2,7 @@ namespace Pidp.Features.Credentials;
 
 using DomainResults.Common;
 using FluentValidation;
+using MassTransit;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Graph.Models;
@@ -11,14 +12,13 @@ using System.Text.Json.Serialization;
 
 using Pidp.Data;
 using Pidp.Extensions;
-using Pidp.Features.Discovery;
 using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.HttpClients.BCProvider;
 using Pidp.Infrastructure.HttpClients.Plr;
 using Pidp.Models;
 using Pidp.Models.DomainEvents;
 using Pidp.Models.Lookups;
-using Pidp.Infrastructure.HttpClients.Keycloak;
+using static Pidp.Features.CommonHandlers.UpdateKeycloakAttributesConsumer;
 
 public class Create
 {
@@ -30,21 +30,14 @@ public class Create
         public ClaimsPrincipal User { get; set; } = new();
     }
 
-    public class CommandHandler : ICommandHandler<Command, IDomainResult<int>>
+    public class CommandHandler(
+        IClock clock,
+        ILogger<CommandHandler> logger,
+        PidpDbContext context) : ICommandHandler<Command, IDomainResult<int>>
     {
-        private readonly IClock clock;
-        private readonly ILogger<CommandHandler> logger;
-        private readonly PidpDbContext context;
-
-        public CommandHandler(
-            IClock clock,
-            ILogger<CommandHandler> logger,
-            PidpDbContext context)
-        {
-            this.clock = clock;
-            this.logger = logger;
-            this.context = context;
-        }
+        private readonly IClock clock = clock;
+        private readonly ILogger<CommandHandler> logger = logger;
+        private readonly PidpDbContext context = context;
 
         public async Task<IDomainResult<int>> HandleAsync(Command command)
         {
@@ -112,24 +105,16 @@ public class Create
         }
     }
 
-    public class BCProviderUpdateAttributesHandler : INotificationHandler<CredentialLinked>
+    public class BCProviderUpdateAttributesHandler(
+        IBCProviderClient bcProviderClient,
+        IPlrClient plrClient,
+        PidpConfiguration config,
+        PidpDbContext context) : INotificationHandler<CredentialLinked>
     {
-        private readonly IBCProviderClient bcProviderClient;
-        private readonly IPlrClient plrClient;
-        private readonly PidpDbContext context;
-        private readonly string bcProviderClientId;
-
-        public BCProviderUpdateAttributesHandler(
-            IBCProviderClient bcProviderClient,
-            IPlrClient plrClient,
-            PidpConfiguration config,
-            PidpDbContext context)
-        {
-            this.bcProviderClient = bcProviderClient;
-            this.plrClient = plrClient;
-            this.context = context;
-            this.bcProviderClientId = config.BCProviderClient.ClientId;
-        }
+        private readonly IBCProviderClient bcProviderClient = bcProviderClient;
+        private readonly IPlrClient plrClient = plrClient;
+        private readonly PidpDbContext context = context;
+        private readonly string bcProviderClientId = config.BCProviderClient.ClientId;
 
         public async Task Handle(CredentialLinked notification, CancellationToken cancellationToken)
         {
@@ -197,18 +182,10 @@ public class Create
         }
     }
 
-    public class UpdateBCServicesCardAttributesHandler : INotificationHandler<CredentialLinked>
+    public class UpdateBCServicesCardAttributesHandler(IBus bus, PidpDbContext context) : INotificationHandler<CredentialLinked>
     {
-        private readonly IKeycloakAdministrationClient keycloakClient;
-        private readonly PidpDbContext context;
-
-        public UpdateBCServicesCardAttributesHandler(
-            IKeycloakAdministrationClient keycloakClient,
-            PidpDbContext context)
-        {
-            this.keycloakClient = keycloakClient;
-            this.context = context;
-        }
+        private readonly IBus bus = bus;
+        private readonly PidpDbContext context = context;
 
         public async Task Handle(CredentialLinked notification, CancellationToken cancellationToken)
         {
@@ -226,12 +203,12 @@ public class Create
 
                 foreach (var credential in party.Credentials)
                 {
-                    await this.keycloakClient.UpdateUser(credential.UserId, user => user.SetOpId(party.OpId!));
+                    await this.bus.Publish(UpdateKeycloakAttributes.FromUpdateAction(credential.UserId, user => user.SetOpId(party.OpId!)), cancellationToken);
                 }
             }
             else
             {
-                await this.keycloakClient.UpdateUser(newCredential.UserId, user => user.SetOpId(party.OpId!));
+                await this.bus.Publish(UpdateKeycloakAttributes.FromUpdateAction(newCredential.UserId, user => user.SetOpId(party.OpId!)), cancellationToken);
             }
         }
     }
