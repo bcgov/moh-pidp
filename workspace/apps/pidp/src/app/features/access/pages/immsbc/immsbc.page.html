@@ -5,16 +5,19 @@
       <div class="content-header">
         <h1>ImmsBC</h1>
         <p>
-          The Provincial Attachment System (PAS) is an online tool used by
-          primary care providers throughout the province to indicate their
-          ability to take on new patients. Through PAS, Attachment Coordinators
-          help match patients to family physicians and nurse practitioners in
-          their communities.
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
+          minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+          aliquip ex ea commodo consequat. Duis aute irure dolor in
+          reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
+          pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
+          culpa qui officia deserunt mollit anim id est laborum.
         </p>
       </div>
     </section>
     <section class="main">
       <div class="card main-stepper">
+        <div class="stepper-heading">Instructions</div>
         <mat-stepper
           orientation="vertical"
           #stepper
@@ -55,7 +58,7 @@
           <mat-step [completed]="false">
             <ng-template matStepLabel>
               <p class="pas-step-label">
-                Invite others to the Provincial Attachment System (PAS)<br />
+                Invite others to the ImmsBC<br />
                 (Optional)
               </p>
             </ng-template>
@@ -169,21 +172,13 @@
         <div class="card pas-button">
           <img
             class="img-doctor"
-            ngSrc="/assets/images/doctor1.jpg"
+            ngSrc="/assets/images/patient1.jpg"
             alt="doctor"
             priority
             fill />
           <div class="card-container auth-card">
             <div class="card-header auth-card-header">
-              <h3><strong>Provincial Attachment System</strong></h3>
-            </div>
-            <div class="card-body auth-card-body">
-              <img
-                class="logo"
-                ngSrc="/assets/images/doctors-bc-logo.png"
-                alt="Doctors of BC logo"
-                priority
-                fill />
+              <h3><strong>ImmsBC</strong></h3>
             </div>
             <div class="card-footer auth-card-footer">
               <button
@@ -194,7 +189,7 @@
                 aria-labelledby="navigate-to-pas"
                 [disabled]="pas$ | async"
                 (click)="navigateToPath()">
-                Login
+                Request
               </button>
             </div>
           </div>

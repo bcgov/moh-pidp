@@ -30,7 +30,6 @@
     padding-bottom: var(--content-padding);
     display: flex;
     flex-direction: column;
-    gap: var(--gap);
 
     .content-header h1 {
       color: #003366;
@@ -41,8 +40,8 @@
 
     .main {
       display: grid;
-      grid-template-columns: calc(70% - 15px) calc(30% - 15px);
-      gap: 20px;
+      grid-template-columns: calc(65% - 15px) calc(35% - 15px);
+      gap: 15px;
       min-height: 340px;
       margin: calc(var(--gap) * 2) 0;
 
@@ -52,6 +51,12 @@
         padding-right: calc(var(--gap) * 0.9);
         position: relative;
         line-height: 1.5rem;
+
+        .stepper-heading {
+          color: #313132;
+          font-size: 1.5rem;
+          font-weight: 700;
+        }
       }
       .pas-button {
         height: 15rem;
@@ -63,10 +68,6 @@
         img {
           object-fit: cover;
           z-index: -2;
-        }
-
-        img.img-doctor {
-          object-position: -10px -100px;
         }
 
         div.auth-card {
@@ -127,7 +128,6 @@
 }
 
 .viewport-xsmall {
-
   .content-header {
     margin: 0px 20px 0px 20px;
   }
@@ -146,10 +146,6 @@
     }
 
     .pas-button {
-      img.img-doctor {
-        height: 15rem !important;
-        object-position: -12px -72px !important;
-      }
 
       div.auth-card {
         padding: 20px 0px 0px 0px !important;
@@ -181,7 +177,7 @@
 
 .smaller-text {
   font-size: smaller;
-  margin: 0 10px;
+  margin: 5px 10px;
 }
 
 .bcprovider-username {

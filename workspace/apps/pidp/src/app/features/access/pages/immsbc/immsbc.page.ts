@@ -82,7 +82,7 @@ export class ImmsbcPage implements OnInit {
   public breadcrumbsData: Array<{ title: string; path: string }> = [
     {title: 'Home', path: ''},
     {title: 'Access', path: AccessRoutes.routePath(AccessRoutes.ACCESS_REQUESTS)},
-    {title: 'PAS', path: ''},
+    {title: 'ImmsBC', path: ''},
   ];
   private readonly ImmsbcWebsite: string;
 
@@ -134,7 +134,7 @@ export class ImmsbcPage implements OnInit {
         tap((profileStatus: ProfileStatus | null) => {
           this.hasCpn = profileStatus?.status.collegeCertification.hasCpn;
           this.pasStatusCode =
-            profileStatus?.status.provincialAttachmentSystem.statusCode;
+            profileStatus?.status.immsbc.statusCode;
           this.bcProviderStatusCode =
             profileStatus?.status.bcProvider.statusCode;
           if (this.pasStatusCode === StatusCode.COMPLETED) {

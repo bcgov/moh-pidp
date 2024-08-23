@@ -25,7 +25,7 @@ export const ImmsbcResolver: ResolveFn<
         return null;
       }
 
-      return profileStatus.status.provincialAttachmentSystem.statusCode;
+      return profileStatus.status.immsbc.statusCode;
     }),
     catchError(() => of(null)),
   );
