@@ -28,6 +28,8 @@ import {
   timer,
 } from 'rxjs';
 
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { faCircleQuestion } from '@fortawesome/free-regular-svg-icons';
 import { faCircleCheck, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { NavigationService } from '@pidp/presentation';
 
@@ -89,6 +91,7 @@ export interface BcProviderEditInitialStateModel {
     MatProgressBarModule,
     ConfirmDialogComponent,
     NgClass,
+    FaIconComponent,
   ],
 })
 export class BcProviderEditPage
@@ -97,6 +100,7 @@ export class BcProviderEditPage
 {
   public faCircleCheck = faCircleCheck;
   public faXmark = faXmark;
+  public faCircleQuestion = faCircleQuestion;
   public formState: BcProviderEditFormState;
   public AccessRoutes = AccessRoutes;
   public showErrorCard = false;

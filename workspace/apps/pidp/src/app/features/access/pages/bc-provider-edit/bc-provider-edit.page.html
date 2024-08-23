@@ -13,6 +13,9 @@
     <div class="content">
       <section class="form-card">
         <div class="password-form">
+          <div class="card-badge">
+            <fa-icon class="fa-1.5x" [icon]="faCircleQuestion"></fa-icon>
+          </div>
           <form novalidate [formGroup]="formState.form" (ngSubmit)="onSubmit()">
             <h1><strong>Set new password</strong></h1>
 
@@ -64,6 +67,9 @@
       </section>
       <section class="reset-mfa">
         <div class="mfa-content">
+          <div class="card-badge">
+            <fa-icon class="fa-1.5x" [icon]="faCircleQuestion"></fa-icon>
+          </div>
           <h1>
             <strong>Reset your multifactor authentication (MFA)</strong>
           </h1>

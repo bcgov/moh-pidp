@@ -112,6 +112,13 @@
         flex: 1;
         margin: var(--gap);
         padding: var(--gap);
+        position: relative;
+
+        & .card-badge {
+          position: absolute;
+          top: 0;
+          right: 0;
+        }
 
         & .username {
           color: var(--BC-gov-form-font-colour, #aaa);
@@ -175,6 +182,13 @@
         flex-direction: column;
         margin: var(--gap);
         padding: var(--gap);
+        position: relative;
+
+        & .card-badge {
+          position: absolute;
+          top: 0;
+          right: 0;
+        }
 
         p {
           margin-bottom: 23px;
