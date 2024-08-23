@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
-import { faSyringe, faUserCheck } from '@fortawesome/free-solid-svg-icons';
+import { faFileLines, faUserCheck } from '@fortawesome/free-solid-svg-icons';
 
 import { AlertType } from '@bcgov/shared/ui';
 
@@ -16,20 +16,21 @@ import { PortalSectionAction } from '../portal-section-action.model';
 import { PortalSectionKey } from '../portal-section-key.type';
 import { IPortalSection } from '../portal-section.model';
 
-export class ImmsBC implements IPortalSection {
+export class ImmsBCPortalSection implements IPortalSection {
   public readonly key: PortalSectionKey;
   public heading: string;
   public description: string;
-  public faSyringe = faSyringe;
+  public faFileLines = faFileLines;
   public faUserCheck = faUserCheck;
 
   public constructor(
     private profileStatus: ProfileStatus,
     private router: Router,
   ) {
-    this.key = 'immsBC';
+    debugger
+    this.key = 'immsbc';
     this.heading = 'ImmsBC';
-    this.description = `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor`;
+    this.description = `Enrol here for access to PharmaCare's Special Authority eForms application.`;
   }
 
   public get hint(): string {
@@ -58,7 +59,7 @@ export class ImmsBC implements IPortalSection {
 
     switch (statusCode) {
       case StatusCode.AVAILABLE:
-        return 'You are eligible to use Immunization Entry eForm';
+        return 'You are eligible to use Special Authority eForms';
       case StatusCode.COMPLETED:
         return 'Completed';
       default:
@@ -68,7 +69,7 @@ export class ImmsBC implements IPortalSection {
 
   public get icon(): IconProp {
     const statusCode = this.getStatusCode();
-    return statusCode === StatusCode.COMPLETED ? faUserCheck : faSyringe;
+    return statusCode === StatusCode.COMPLETED ? faUserCheck : faFileLines;
   }
 
   public performAction(): Observable<void> | void {
@@ -76,6 +77,6 @@ export class ImmsBC implements IPortalSection {
   }
 
   private getStatusCode(): StatusCode {
-    return this.profileStatus.status.immsBCEforms.statusCode;
+    return this.profileStatus.status.immsbc.statusCode;
   }
 }

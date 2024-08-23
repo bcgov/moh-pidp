@@ -273,9 +273,9 @@ public partial class ProfileStatus
                 };
             }
         }
-        public class immsBC : ProfileSection
+        public class ImmsBCSection : ProfileSection
         {
-            internal override string SectionName => "immbc";
+            internal override string SectionName => "immsbc";
 
             protected override StatusCode Compute(ProfileData profile)
             {
@@ -283,7 +283,7 @@ public partial class ProfileStatus
                 {
                     _ when (profile.EndorsementPlrStanding.HasGoodStanding
                         || profile.PartyPlrStanding
-                            .With(ProviderRoleType.MedicalDoctor, ProviderRoleType.RegisteredNursePractitioner)
+                               .With(ImmsBC.AllowedIdentifierTypes)
                             .HasGoodStanding)
                         && profile.HasBCProviderCredential => StatusCode.Complete,
                     { HasBCServicesCardCredential: true } => StatusCode.Incomplete,
