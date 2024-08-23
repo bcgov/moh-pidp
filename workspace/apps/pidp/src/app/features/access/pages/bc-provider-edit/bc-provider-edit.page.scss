@@ -39,6 +39,8 @@
   }
   & .reset-mfa {
     display: block !important;
+    border: unset !important;
+    background-color: unset !important;
 
     & .mfa-content {
       & h1 {
