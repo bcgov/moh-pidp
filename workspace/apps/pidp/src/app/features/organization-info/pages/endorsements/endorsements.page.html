@@ -163,7 +163,10 @@
         </p>
         <mat-form-field>
           <mat-label>Email</mat-label>
-          <input matInput formControlName="recipientEmail" />
+          <input
+            matInput
+            formControlName="recipientEmail"
+            (keydown.enter)="onEnter($event)" />
           <mat-error *ngIf="recipientEmail.hasError('required')"
             >Required</mat-error
           >
