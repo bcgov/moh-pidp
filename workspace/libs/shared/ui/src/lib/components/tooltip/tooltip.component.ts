@@ -15,12 +15,14 @@ export class TooltipComponent {
   @Input() public tooltipText!: string;
   @Input() public buttonLabel: string = '';
   @Output() public actionClicked = new EventEmitter<boolean>();
+  @Output() public tooltipStatus = new EventEmitter<boolean>();
 
-  public hideTooltip(): void {
-    this.showTooltip = false;
+  public toggleTooltip(): void {
+    this.showTooltip = !this.showTooltip;
+    this.tooltipStatus.emit(this.showTooltip);
   }
 
   public onAction(): void {
-    this.actionClicked.emit(true);
+    this.actionClicked.next(true);
   }
 }

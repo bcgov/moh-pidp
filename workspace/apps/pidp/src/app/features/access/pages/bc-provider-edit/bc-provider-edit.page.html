@@ -14,7 +14,19 @@
       <section class="form-card">
         <div class="password-form">
           <div class="card-badge">
-            <fa-icon class="fa-1.5x" [icon]="faCircleQuestion"></fa-icon>
+            <ui-tooltip
+              icon="close"
+              tooltipText="Your password must be 8 to 256 characters long, with at least one letter
+      and one number or special character. Strong passwords include both upper-
+      and lower-case letters, as well as special characters (such as an
+      exclamation point, question mark or ampersand). Do not use a password that
+      you use anywhere else."
+              [showTooltip]="passwordShowTooltip"
+              (tooltipStatus)="setTooltipStatus($event, 'password')"></ui-tooltip>
+            <fa-icon
+              class="fa-1.5x"
+              [icon]="faCircleQuestion"
+              (click)="toggleTooltip('password')"></fa-icon>
           </div>
           <form novalidate [formGroup]="formState.form" (ngSubmit)="onSubmit()">
             <h1><strong>Set new password</strong></h1>
@@ -70,14 +82,17 @@
           <div class="card-badge">
             <ui-tooltip
               icon="close"
-              tooltipText="If you are unable to successfully authenticate with multi-factor authentication (MFA) for some reason(ex: you have uninstalled the Microsoft Authenticator app, have a new mobile device or changed your phone number), you need to reset the MFA."
+              tooltipText="If you are unable to successfully authenticate with multi-factor authentication (MFA)
+              for some reason(ex: you have uninstalled the Microsoft Authenticator app, have a new mobile device
+              or changed your phone number), you need to reset the MFA."
               buttonLabel="Learn more"
-              [showTooltip]="showTooltip"
-              (actionClicked)="onLearnMore()"></ui-tooltip
+              [showTooltip]="mfaShowTooltip"
+              (actionClicked)="onLearnMore()"
+              (tooltipStatus)="setTooltipStatus($event, 'mfa')"></ui-tooltip
             ><fa-icon
               class="fa-1.5x"
               [icon]="faCircleQuestion"
-              (click)="toggleTooltip()"></fa-icon>
+              (click)="toggleTooltip('mfa')"></fa-icon>
           </div>
           <h1>
             <strong>Reset your multifactor authentication (MFA)</strong>

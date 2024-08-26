@@ -115,7 +115,8 @@ export class BcProviderEditPage
   public progressComplete = false;
   public progressTimer = timer(0, 30);
   public progressSubscription!: Subscription;
-  public showTooltip = false;
+  public mfaShowTooltip = false;
+  public passwordShowTooltip = false;
 
   public breadcrumbsData: Array<{ title: string; path: string }> = [
     { title: 'Home', path: '' },
@@ -193,8 +194,32 @@ export class BcProviderEditPage
       .subscribe();
   }
 
-  public toggleTooltip(): void {
-    this.showTooltip = !this.showTooltip;
+  public toggleTooltip(tooltipType: string): void {
+    switch (tooltipType) {
+      case 'mfa':
+        this.mfaShowTooltip = !this.mfaShowTooltip;
+        break;
+      case 'password':
+        this.passwordShowTooltip = !this.passwordShowTooltip;
+        break;
+      default:
+        console.warn(`Unknown tooltip type: ${tooltipType}`);
+        break;
+    }
+  }
+
+  public setTooltipStatus(visible: boolean, tooltipType: string): void {
+    switch (tooltipType) {
+      case 'mfa':
+        this.mfaShowTooltip = visible;
+        break;
+      case 'password':
+        this.passwordShowTooltip = visible;
+        break;
+      default:
+        console.warn(`Unknown tooltip type: ${tooltipType}`);
+        break;
+    }
   }
 
   public onLearnMore(): void {
