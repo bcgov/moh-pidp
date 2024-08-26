@@ -1,0 +1,10 @@
+<div *ngIf="showTooltip" class="tooltip-container">
+  <button class="close-button" (click)="hideTooltip()">
+    <mat-icon>{{ icon }}</mat-icon>
+  </button>
+  <p>
+    {{ tooltipText }}
+  </p>
+  <button class="action-button" (click)="onAction()">{{ buttonLabel }}</button>
+  <ng-content></ng-content>
+</div>

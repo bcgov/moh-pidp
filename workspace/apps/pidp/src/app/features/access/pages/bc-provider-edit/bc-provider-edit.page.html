@@ -68,7 +68,16 @@
       <section class="reset-mfa">
         <div class="mfa-content">
           <div class="card-badge">
-            <fa-icon class="fa-1.5x" [icon]="faCircleQuestion"></fa-icon>
+            <ui-tooltip
+              icon="close"
+              tooltipText="If you are unable to successfully authenticate with multi-factor authentication (MFA) for some reason(ex: you have uninstalled the Microsoft Authenticator app, have a new mobile device or changed your phone number), you need to reset the MFA."
+              buttonLabel="Learn more"
+              [showTooltip]="showTooltip"
+              (actionClicked)="onLearnMore()"></ui-tooltip
+            ><fa-icon
+              class="fa-1.5x"
+              [icon]="faCircleQuestion"
+              (click)="toggleTooltip()"></fa-icon>
           </div>
           <h1>
             <strong>Reset your multifactor authentication (MFA)</strong>

@@ -41,6 +41,7 @@ import {
   HtmlComponent,
   InjectViewportCssClassDirective,
   TextButtonDirective,
+  TooltipComponent,
 } from '@bcgov/shared/ui';
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';
@@ -92,6 +93,7 @@ export interface BcProviderEditInitialStateModel {
     ConfirmDialogComponent,
     NgClass,
     FaIconComponent,
+    TooltipComponent,
   ],
 })
 export class BcProviderEditPage
@@ -113,6 +115,7 @@ export class BcProviderEditPage
   public progressComplete = false;
   public progressTimer = timer(0, 30);
   public progressSubscription!: Subscription;
+  public showTooltip = false;
 
   public breadcrumbsData: Array<{ title: string; path: string }> = [
     { title: 'Home', path: '' },
@@ -188,6 +191,10 @@ export class BcProviderEditPage
         ),
       )
       .subscribe();
+  }
+
+  public toggleTooltip(): void {
+    this.showTooltip = !this.showTooltip;
   }
 
   public onLearnMore(): void {
