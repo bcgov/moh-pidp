@@ -7,13 +7,11 @@ import { PartyService } from '@app/core/party/party.service';
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
 import { ProfileStatus } from '@app/features/portal/models/profile-status.model';
 
-import { ImmsbcResource } from './immsbc-resource.service';
+import { ImmsBCResource } from './immsbc-resource.service';
 
-export const ImmsbcResolver: ResolveFn<
-  StatusCode | null
-> = () => {
+export const ImmsbcResolver: ResolveFn<StatusCode | null> = () => {
   const partyService = inject(PartyService);
-  const resource = inject(ImmsbcResource);
+  const resource = inject(ImmsBCResource);
 
   if (!partyService.partyId) {
     return of(null);

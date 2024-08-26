@@ -1,18 +1,28 @@
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { AsyncPipe, NgIf, NgOptimizedImage } from '@angular/common';
+import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
-import { BehaviorSubject, Observable, of, switchMap, tap } from 'rxjs';
+import {
+  BehaviorSubject,
+  Observable,
+  catchError,
+  noop,
+  of,
+  switchMap,
+  tap,
+} from 'rxjs';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 import {
+  AlertComponent,
   InjectViewportCssClassDirective,
 } from '@bcgov/shared/ui';
 
@@ -27,21 +37,27 @@ import { AuthService } from '@app/features/auth/services/auth.service';
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
 import { ProfileStatus } from '@app/features/portal/models/profile-status.model';
 import { PortalResource } from '@app/features/portal/portal-resource.service';
+import { BreadcrumbComponent } from '@app/shared/components/breadcrumb/breadcrumb.component';
 
 import { AccessRoutes } from '../../access.routes';
+import { EnrolmentErrorComponent } from '../../components/enrolment-error/enrolment-error.component';
 import { BcProviderEditResource } from '../bc-provider-edit/bc-provider-edit-resource.service';
 import { BcProviderEditInitialStateModel } from '../bc-provider-edit/bc-provider-edit.page';
+import { ImmsBCResource } from './immsbc-resource.service';
 import {
-  bcProviderTutorialLink,
   ImmsbcWebsite,
+  bcProviderTutorialLink,
+  immsBCUrl,
 } from './immsbc.constants';
-import { BreadcrumbComponent } from '@app/shared/components/breadcrumb/breadcrumb.component';
+
 @Component({
   selector: 'app-immsbc',
   standalone: true,
   imports: [
+    AlertComponent,
     AsyncPipe,
     BreadcrumbComponent,
+    EnrolmentErrorComponent,
     MatButtonModule,
     MatIconModule,
     MatStepperModule,
@@ -79,10 +95,19 @@ export class ImmsbcPage implements OnInit {
   public Destination = Destination;
   public StatusCode = StatusCode;
   public AccessRoutes = AccessRoutes;
+  public title: string;
+  public immsBCUrl: string;
+  public completed: boolean | null;
+  public accessRequestFailed: boolean;
+  public enrolmentError: boolean;
+
   public breadcrumbsData: Array<{ title: string; path: string }> = [
-    {title: 'Home', path: ''},
-    {title: 'Access', path: AccessRoutes.routePath(AccessRoutes.ACCESS_REQUESTS)},
-    {title: 'ImmsBC', path: ''},
+    { title: 'Home', path: '' },
+    {
+      title: 'Access',
+      path: AccessRoutes.routePath(AccessRoutes.ACCESS_REQUESTS),
+    },
+    { title: 'ImmsBC', path: '' },
   ];
   private readonly ImmsbcWebsite: string;
 
@@ -95,15 +120,23 @@ export class ImmsbcPage implements OnInit {
     private partyService: PartyService,
     private router: Router,
     private toastService: ToastService,
+    private resource: ImmsBCResource,
+    private route: ActivatedRoute,
   ) {
     this.selectedIndex = -1;
     this.ImmsbcWebsite = ImmsbcWebsite;
     this.logoutRedirectUrl = `${this.config.applicationUrl}/`;
     this.bcProviderTutorial = bcProviderTutorialLink;
     this.lastSelectedIndex = 3;
+    this.immsBCUrl = immsBCUrl;
     this.destination$ = this.discoveryResource.getDestination(
       this.partyService.partyId,
     );
+    const routeData = this.route.snapshot.data;
+    this.title = routeData.title;
+    this.completed = false;
+    this.accessRequestFailed = false;
+    this.enrolmentError = false;
   }
 
   public navigateToPath(): void {
@@ -125,6 +158,27 @@ export class ImmsbcPage implements OnInit {
     this.handleStepperState(profileStatus$);
   }
 
+  public onRequestAccess(): void {
+    this.resource
+      .requestAccess(this.partyService.partyId)
+      .pipe(
+        tap(() => {
+          this.completed = true;
+          this.enrolmentError = false;
+        }),
+        catchError((error: HttpErrorResponse) => {
+          if (error.status === HttpStatusCode.BadRequest) {
+            this.completed = false;
+            this.enrolmentError = true;
+            return of(noop());
+          }
+          this.accessRequestFailed = true;
+          return of(noop());
+        }),
+      )
+      .subscribe();
+  }
+
   private handleStepperState(
     profileStatus$: Observable<ProfileStatus | null>,
   ): void {
@@ -133,8 +187,7 @@ export class ImmsbcPage implements OnInit {
       .pipe(
         tap((profileStatus: ProfileStatus | null) => {
           this.hasCpn = profileStatus?.status.collegeCertification.hasCpn;
-          this.pasStatusCode =
-            profileStatus?.status.immsbc.statusCode;
+          this.pasStatusCode = profileStatus?.status.immsbc.statusCode;
           this.bcProviderStatusCode =
             profileStatus?.status.bcProvider.statusCode;
           if (this.pasStatusCode === StatusCode.COMPLETED) {

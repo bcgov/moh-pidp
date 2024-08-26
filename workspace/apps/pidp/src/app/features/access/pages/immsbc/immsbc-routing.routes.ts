@@ -10,5 +10,11 @@ export const routes: Routes = [
     resolve: {
       ImmsbcStatusCode: ImmsbcResolver,
     },
+    data: {
+      title: 'ImmsBC',
+      routes: {
+        root: '../../',
+      },
+    },
   },
 ];

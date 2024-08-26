@@ -15,6 +15,23 @@
         </p>
       </div>
     </section>
+
+    <app-enrolment-error *ngIf="enrolmentError"></app-enrolment-error>
+    <ng-container *ngIf="completed && !enrolmentError">
+      <ui-alert
+        type="success"
+        icon="check_circle"
+        iconType="outlined"
+        heading="You have access">
+        <ng-container uiAlertContent>
+          <p>You now have access</p>
+          <p>
+            Follow this link:<br />
+            <a uiAnchor [attr.href]="immsBCUrl"></a>
+          </p>
+        </ng-container>
+      </ui-alert>
+    </ng-container>
     <section class="main">
       <div class="card main-stepper">
         <div class="stepper-heading">Instructions</div>
@@ -188,7 +205,7 @@
                 color="primary"
                 aria-labelledby="navigate-to-pas"
                 [disabled]="pas$ | async"
-                (click)="navigateToPath()">
+                (click)="onRequestAccess()">
                 Request
               </button>
             </div>

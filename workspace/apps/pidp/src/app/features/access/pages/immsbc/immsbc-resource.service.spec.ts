@@ -5,15 +5,15 @@ import { provideAutoSpy } from 'jest-auto-spies';
 
 import { APP_CONFIG, APP_DI_CONFIG } from '@app/app.config';
 
-import { ImmsbcResource } from './immsbc-resource.service';
+import { ImmsBCResource } from './immsbc-resource.service';
 
-describe('ImmsbcResource', () => {
-  let service: ImmsbcResource;
+describe('ImmsBCResource', () => {
+  let service: ImmsBCResource;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
-        ImmsbcResource,
+        ImmsBCResource,
         {
           provide: APP_CONFIG,
           useValue: APP_DI_CONFIG,
@@ -21,7 +21,7 @@ describe('ImmsbcResource', () => {
         provideAutoSpy(HttpClient),
       ],
     });
-    service = TestBed.inject(ImmsbcResource);
+    service = TestBed.inject(ImmsBCResource);
   });
 
   it('should be created', () => {
