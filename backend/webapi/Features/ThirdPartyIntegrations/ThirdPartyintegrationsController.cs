@@ -444,22 +444,22 @@ public class ThirdPartyintegrationsController : PidpControllerBase
                             }
                     },
                     new {
-                        id = "FhirMessageTest9.parameter.resource.entry.resource.extension",
-                        path = "FhirMessageTest9.parameter.resource.entry.resource.extension",
-                        @short = "resource entry extension",
-                        definition = "Defines the entry data extension of the resource",
+                        id = "FhirMessageTest9.parameter.resource.entry.resource._extension",
+                        path = "FhirMessageTest9.parameter.resource.entry.resource._extension",
+                        @short = "resource entry _extension",
+                        definition = "Defines the entry data _extension of the resource",
                         min = 0,
                         max = "*",
                         type = new {
                                code = "BackboneElement",
-                                profile ="http://example.org/fhir/StructureDefinition/entry-extension"
+                                profile ="http://example.org/fhir/StructureDefinition/entry-_extension"
                             }
                     },
                     new {
-                        id = "FhirMessageTest9.parameter.resource.entry.resource.extension.url",
-                        path = "FhirMessageTest9.parameter.resource.entry.resource.extension.url",
-                        @short = "resource entry extension url",
-                        definition = "Defines the entry data extension url of the resource",
+                        id = "FhirMessageTest9.parameter.resource.entry.resource._extension.url",
+                        path = "FhirMessageTest9.parameter.resource.entry.resource._extension.url",
+                        @short = "resource entry _extension url",
+                        definition = "Defines the entry data _extension url of the resource",
                         min = 0,
                         max = "*",
                         type = new {
@@ -467,22 +467,22 @@ public class ThirdPartyintegrationsController : PidpControllerBase
                             }
                     },
                     new {
-                        id = "FhirMessageTest9.parameter.resource.entry.resource.extension.extension",
-                        path = "FhirMessageTest9.parameter.resource.entry.resource.extension.extension",
-                        @short = "resource entry extension",
-                        definition = "Defines the entry data extension of the resource",
+                        id = "FhirMessageTest9.parameter.resource.entry.resource._extension._extension",
+                        path = "FhirMessageTest9.parameter.resource.entry.resource._extension._extension",
+                        @short = "resource entry _extension",
+                        definition = "Defines the entry data _extension of the resource",
                         min = 0,
                         max = "*",
                         type = new {
                                code = "BackboneElement",
-                                profile ="http://example.org/fhir/StructureDefinition/bc-owner-extension"
+                                profile ="http://example.org/fhir/StructureDefinition/entry-resource-_extension"
                             }
                     },
                     new {
-                        id = "FhirMessageTest9.parameter.resource.entry.resource.extension.extension.url",
-                        path = "FhirMessageTest9.parameter.resource.entry.resource.extension.extension.url",
-                        @short = "resource entry extension url",
-                        definition = "Defines the entry data extension url of the resource",
+                        id = "FhirMessageTest9.parameter.resource.entry.resource._extension._extension.url",
+                        path = "FhirMessageTest9.parameter.resource.entry.resource._extension._extension.url",
+                        @short = "resource entry _extension url",
+                        definition = "Defines the entry data _extension url of the resource",
                         min = 0,
                         max = "*",
                         type = new {
@@ -490,10 +490,10 @@ public class ThirdPartyintegrationsController : PidpControllerBase
                             }
                     },
                     new {
-                        id = "FhirMessageTest9.parameter.resource.entry.resource.extension.extension.valueIdentifier",
-                        path = "FhirMessageTest9.parameter.resource.entry.resource.extension.extension.valueIdentifier",
-                        @short = "resource entry extension valueIdentifier",
-                        definition = "Defines the entry data extension valueIdentifier of the resource",
+                        id = "FhirMessageTest9.parameter.resource.entry.resource._extension._extension.valueIdentifier",
+                        path = "FhirMessageTest9.parameter.resource.entry.resource._extension._extension.valueIdentifier",
+                        @short = "resource entry _extension valueIdentifier",
+                        definition = "Defines the entry data _extension valueIdentifier of the resource",
                         min = 0,
                         max = "*",
                         type = new {
@@ -502,10 +502,10 @@ public class ThirdPartyintegrationsController : PidpControllerBase
                             }
                     },
                     new {
-                        id = "FhirMessageTest9.parameter.resource.entry.resource.extension.extension.valueIdentifier.assigner",
-                        path = "FhirMessageTest9.parameter.resource.entry.resource.extension.extension.valueIdentifier.assigner",
-                        @short = "resource entry extension valueIdentifier assigner",
-                        definition = "Defines the entry data extension valueIdentifier assigner of the resource",
+                        id = "FhirMessageTest9.parameter.resource.entry.resource._extension._extension.valueIdentifier.assigner",
+                        path = "FhirMessageTest9.parameter.resource.entry.resource._extension._extension.valueIdentifier.assigner",
+                        @short = "resource entry _extension valueIdentifier assigner",
+                        definition = "Defines the entry data _extension valueIdentifier assigner of the resource",
                         min = 0,
                         max = "*",
                         type = new {
@@ -514,10 +514,10 @@ public class ThirdPartyintegrationsController : PidpControllerBase
                             }
                     },
                     new {
-                        id = "FhirMessageTest9.parameter.resource.entry.resource.extension.extension.valueIdentifier.assigner.display",
-                        path = "FhirMessageTest9.parameter.resource.entry.resource.extension.extension.valueIdentifier.assigner.display",
-                        @short = "resource entry extension valueIdentifier assigner display",
-                        definition = "Defines the entry data extension valueIdentifier assigner display of the resource",
+                        id = "FhirMessageTest9.parameter.resource.entry.resource._extension._extension.valueIdentifier.assigner.display",
+                        path = "FhirMessageTest9.parameter.resource.entry.resource._extension._extension.valueIdentifier.assigner.display",
+                        @short = "resource entry _extension valueIdentifier assigner display",
+                        definition = "Defines the entry data _extension valueIdentifier assigner display of the resource",
                         min = 0,
                         max = "*",
                         type = new {
@@ -525,10 +525,10 @@ public class ThirdPartyintegrationsController : PidpControllerBase
                             }
                     },
                     new {
-                        id = "FhirMessageTest9.parameter.resource.entry.resource.extension.extension.valueCodeableConcept",
-                        path = "FhirMessageTest9.parameter.resource.entry.resource.extension.extension.valueCodeableConcept",
-                        @short = "resource entry extension valueCodeableConcept assigner",
-                        definition = "Defines the entry data extension valueCodeableConcept of the resource",
+                        id = "FhirMessageTest9.parameter.resource.entry.resource._extension._extension.valueCodeableConcept",
+                        path = "FhirMessageTest9.parameter.resource.entry.resource._extension._extension.valueCodeableConcept",
+                        @short = "resource entry _extension valueCodeableConcept assigner",
+                        definition = "Defines the entry data _extension valueCodeableConcept of the resource",
                         min = 0,
                         max = "*",
                         type = new {
@@ -537,10 +537,10 @@ public class ThirdPartyintegrationsController : PidpControllerBase
                             }
                     },
                     new {
-                        id = "FhirMessageTest9.parameter.resource.entry.resource.extension.extension.valueCodeableConcept.coding",
-                        path = "FhirMessageTest9.parameter.resource.entry.resource.extension.extension.valueCodeableConcept.coding",
-                        @short = "resource entry extension valueCodeableConcept coding",
-                        definition = "Defines the entry data extension valueCodeableConcept coding of the resource",
+                        id = "FhirMessageTest9.parameter.resource.entry.resource._extension._extension.valueCodeableConcept.coding",
+                        path = "FhirMessageTest9.parameter.resource.entry.resource._extension._extension.valueCodeableConcept.coding",
+                        @short = "resource entry _extension valueCodeableConcept coding",
+                        definition = "Defines the entry data _extension valueCodeableConcept coding of the resource",
                         min = 0,
                         max = "*",
                         type = new {
@@ -549,10 +549,10 @@ public class ThirdPartyintegrationsController : PidpControllerBase
                             }
                     },
                     new {
-                        id = "FhirMessageTest9.parameter.resource.entry.resource.extension.extension.valueCodeableConcept.coding.system",
-                        path = "FhirMessageTest9.parameter.resource.entry.resource.extension.extension.valueCodeableConcept.coding.system",
-                        @short = "resource entry extension valueCodeableConcept coding system",
-                        definition = "Defines the entry data extension valueCodeableConcept coding system of the resource",
+                        id = "FhirMessageTest9.parameter.resource.entry.resource._extension._extension.valueCodeableConcept.coding.system",
+                        path = "FhirMessageTest9.parameter.resource.entry.resource._extension._extension.valueCodeableConcept.coding.system",
+                        @short = "resource entry _extension valueCodeableConcept coding system",
+                        definition = "Defines the entry data _extension valueCodeableConcept coding system of the resource",
                         min = 0,
                         max = "*",
                         type = new {
@@ -560,10 +560,10 @@ public class ThirdPartyintegrationsController : PidpControllerBase
                             }
                     },
                     new {
-                        id = "FhirMessageTest9.parameter.resource.entry.resource.extension.extension.valueCodeableConcept.coding.code",
-                        path = "FhirMessageTest9.parameter.resource.entry.resource.extension.extension.valueCodeableConcept.coding.code",
-                        @short = "resource entry extension valueCodeableConcept coding code",
-                        definition = "Defines the entry data extension valueCodeableConcept coding code of the resource",
+                        id = "FhirMessageTest9.parameter.resource.entry.resource._extension._extension.valueCodeableConcept.coding.code",
+                        path = "FhirMessageTest9.parameter.resource.entry.resource._extension._extension.valueCodeableConcept.coding.code",
+                        @short = "resource entry _extension valueCodeableConcept coding code",
+                        definition = "Defines the entry data _extension valueCodeableConcept coding code of the resource",
                         min = 0,
                         max = "*",
                         type = new {
@@ -571,10 +571,10 @@ public class ThirdPartyintegrationsController : PidpControllerBase
                             }
                     },
                     new {
-                        id = "FhirMessageTest9.parameter.resource.entry.resource.extension.extension.valuePeriod",
-                        path = "FhirMessageTest9.parameter.resource.entry.resource.extension.extension.valuePeriod",
-                        @short = "resource entry extension valuePeriod",
-                        definition = "Defines the entry data extension valuePeriod of the resource",
+                        id = "FhirMessageTest9.parameter.resource.entry.resource._extension._extension.valuePeriod",
+                        path = "FhirMessageTest9.parameter.resource.entry.resource._extension._extension.valuePeriod",
+                        @short = "resource entry _extension valuePeriod",
+                        definition = "Defines the entry data _extension valuePeriod of the resource",
                         min = 0,
                         max = "*",
                         type = new {
@@ -583,10 +583,10 @@ public class ThirdPartyintegrationsController : PidpControllerBase
                             }
                     },
                     new {
-                        id = "FhirMessageTest9.parameter.resource.entry.resource.extension.extension.valuePeriod.start",
-                        path = "FhirMessageTest9.parameter.resource.entry.resource.extension.extension.valuePeriod.start",
-                        @short = "resource entry extension valuePeriod start",
-                        definition = "Defines the entry data extension valuePeriod start of the resource",
+                        id = "FhirMessageTest9.parameter.resource.entry.resource._extension._extension.valuePeriod.start",
+                        path = "FhirMessageTest9.parameter.resource.entry.resource._extension._extension.valuePeriod.start",
+                        @short = "resource entry _extension valuePeriod start",
+                        definition = "Defines the entry data _extension valuePeriod start of the resource",
                         min = 0,
                         max = "*",
                         type = new {
@@ -606,22 +606,22 @@ public class ThirdPartyintegrationsController : PidpControllerBase
                             }
                     },
                     new {
-                        id = "FhirMessageTest9.parameter.resource.entry.resource.identifier.extension",
-                        path = "FhirMessageTest9.parameter.resource.entry.resource.identifier.extension",
-                        @short = "resource entry identifier extension",
-                        definition = "Defines the entry data identifier extension of the resource",
+                        id = "FhirMessageTest9.parameter.resource.entry.resource.identifier._extension",
+                        path = "FhirMessageTest9.parameter.resource.entry.resource.identifier._extension",
+                        @short = "resource entry identifier _extension",
+                        definition = "Defines the entry data identifier _extension of the resource",
                         min = 0,
                         max = "*",
                         type = new {
                                code = "BackboneElement",
-                                profile ="http://example.org/fhir/StructureDefinition/identifier-extension"
+                                profile ="http://example.org/fhir/StructureDefinition/identifier-_extension"
                             }
                     },
                     new {
-                        id = "FhirMessageTest9.parameter.resource.entry.resource.identifier.extension.url",
-                        path = "FhirMessageTest9.parameter.resource.entry.resource.identifier.extension.url",
-                        @short = "resource entry identifier extension url",
-                        definition = "Defines the entry data identifier extension url of the resource",
+                        id = "FhirMessageTest9.parameter.resource.entry.resource.identifier._extension.url",
+                        path = "FhirMessageTest9.parameter.resource.entry.resource.identifier._extension.url",
+                        @short = "resource entry identifier _extension url",
+                        definition = "Defines the entry data identifier _extension url of the resource",
                         min = 0,
                         max = "*",
                         type = new {
@@ -629,34 +629,34 @@ public class ThirdPartyintegrationsController : PidpControllerBase
                             }
                     },
                     new {
-                        id = "FhirMessageTest9.parameter.resource.entry.resource.identifier.extension.valueIdentifier",
-                        path = "FhirMessageTest9.parameter.resource.entry.resource.identifier.extension.valueIdentifier",
-                        @short = "resource entry identifier extension valueIdentifier",
-                        definition = "Defines the entry data identifier extension valueIdentifier of the resource",
+                        id = "FhirMessageTest9.parameter.resource.entry.resource.identifier._extension.valueIdentifier",
+                        path = "FhirMessageTest9.parameter.resource.entry.resource.identifier._extension.valueIdentifier",
+                        @short = "resource entry identifier _extension valueIdentifier",
+                        definition = "Defines the entry data identifier _extension valueIdentifier of the resource",
                         min = 0,
                         max = "*",
                         type = new {
                                code = "BackboneElement",
-                                profile ="http://example.org/fhir/StructureDefinition/identifier-extension-valueIdentifier"
+                                profile ="http://example.org/fhir/StructureDefinition/identifier-_extension-valueIdentifier"
                             }
                     },
                     new {
-                        id = "FhirMessageTest9.parameter.resource.entry.resource.identifier.extension.valueIdentifier.assigner",
-                        path = "FhirMessageTest9.parameter.resource.entry.resource.identifier.extension.valueIdentifier.assigner",
-                        @short = "resource entry identifier extension valueIdentifier assigner",
-                        definition = "Defines the entry data identifier extension valueIdentifier assigner of the resource",
+                        id = "FhirMessageTest9.parameter.resource.entry.resource.identifier._extension.valueIdentifier.assigner",
+                        path = "FhirMessageTest9.parameter.resource.entry.resource.identifier._extension.valueIdentifier.assigner",
+                        @short = "resource entry identifier _extension valueIdentifier assigner",
+                        definition = "Defines the entry data identifier _extension valueIdentifier assigner of the resource",
                         min = 0,
                         max = "*",
                         type = new {
                                code = "BackboneElement",
-                                profile ="http://example.org/fhir/StructureDefinition/identifier-extension-valueIdentifier-assigner"
+                                profile ="http://example.org/fhir/StructureDefinition/identifier-_extension-valueIdentifier-assigner"
                             }
                     },
                     new {
-                        id = "FhirMessageTest9.parameter.resource.entry.resource.identifier.extension.valueIdentifier.assigner.display",
-                        path = "FhirMessageTest9.parameter.resource.entry.resource.identifier.extension.valueIdentifier.assigner.display",
-                        @short = "resource entry identifier extension valueIdentifier assigner display",
-                        definition = "Defines the entry data identifier extension valueIdentifier assigner display of the resource",
+                        id = "FhirMessageTest9.parameter.resource.entry.resource.identifier._extension.valueIdentifier.assigner.display",
+                        path = "FhirMessageTest9.parameter.resource.entry.resource.identifier._extension.valueIdentifier.assigner.display",
+                        @short = "resource entry identifier _extension valueIdentifier assigner display",
+                        definition = "Defines the entry data identifier _extension valueIdentifier assigner display of the resource",
                         min = 0,
                         max = "*",
                         type = new {
@@ -666,8 +666,8 @@ public class ThirdPartyintegrationsController : PidpControllerBase
                     new {
                         id = "FhirMessageTest9.parameter.resource.entry.resource.identifier.system",
                         path = "FhirMessageTest9.parameter.resource.entry.resource.identifier.system",
-                        @short = "resource entry identifier extension valueIdentifier system",
-                        definition = "Defines the entry data identifier extension valueIdentifier system",
+                        @short = "resource entry identifier _extension valueIdentifier system",
+                        definition = "Defines the entry data identifier _extension valueIdentifier system",
                         min = 0,
                         max = "*",
                         type = new {
@@ -677,8 +677,8 @@ public class ThirdPartyintegrationsController : PidpControllerBase
                     new {
                         id = "FhirMessageTest9.parameter.resource.entry.resource.identifier.value",
                         path = "FhirMessageTest9.parameter.resource.entry.resource.identifier.value",
-                        @short = "resource entry identifier extension valueIdentifier value",
-                        definition = "Defines the entry data identifier extension valueIdentifier value",
+                        @short = "resource entry identifier _extension valueIdentifier value",
+                        definition = "Defines the entry data identifier _extension valueIdentifier value",
                         min = 0,
                         max = "*",
                         type = new {
@@ -688,20 +688,20 @@ public class ThirdPartyintegrationsController : PidpControllerBase
                     new {
                         id = "FhirMessageTest9.parameter.resource.entry.resource.identifier.period",
                         path = "FhirMessageTest9.parameter.resource.entry.resource.identifier.period",
-                        @short = "resource entry identifier extension valueIdentifier period",
-                        definition = "Defines the entry data identifier extension valueIdentifier period",
+                        @short = "resource entry identifier _extension valueIdentifier period",
+                        definition = "Defines the entry data identifier _extension valueIdentifier period",
                         min = 0,
                         max = "*",
                         type = new {
                                code = "BackboneElement",
-                                profile ="http://example.org/fhir/StructureDefinition/identifier-extension-valueIdentifier-period"
+                                profile ="http://example.org/fhir/StructureDefinition/identifier-_extension-valueIdentifier-period"
                             }
                     },
                     new {
                         id = "FhirMessageTest9.parameter.resource.entry.resource.identifier.period.start",
                         path = "FhirMessageTest9.parameter.resource.entry.resource.identifier.period.start",
-                        @short = "resource entry identifier extension valueIdentifier period start",
-                        definition = "Defines the entry data identifier extension valueIdentifier period start",
+                        @short = "resource entry identifier _extension valueIdentifier period start",
+                        definition = "Defines the entry data identifier _extension valueIdentifier period start",
                         min = 0,
                         max = "*",
                         type = new {
