@@ -98,7 +98,7 @@ public class ImmsBC
             var email = new Email(
                 from: EmailService.PidpEmail,
                 to: partyEmail,
-                subject: "Immunization Entry eForm Enrolment Confirmation",
+                subject: "ImmsBC Enrolment Confirmation",
                 body: $"Hi {firstName},<br><br>You will need to visit this {link} each time you want to submit an eForm. It may be helpful to bookmark this {link} for future use."
             );
             await this.emailService.SendAsync(email);
@@ -108,6 +108,6 @@ public class ImmsBC
 
 public static partial class ImmsBCLoggingExtensions
 {
-    [LoggerMessage(1, LogLevel.Warning, "ImmsBC eForms Access Request for Party {partyId} denied; did not meet all prerequisites.")]
+    [LoggerMessage(1, LogLevel.Warning, "ImmsBC Access Request for Party {partyId} denied; did not meet all prerequisites.")]
     public static partial void LogAccessRequestDenied(this ILogger<ImmsBC.CommandHandler> logger, int partyId);
 }

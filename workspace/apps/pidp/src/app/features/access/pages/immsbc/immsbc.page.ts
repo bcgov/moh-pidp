@@ -83,9 +83,9 @@ export class ImmsbcPage implements OnInit {
     false,
   );
   public destination$: Observable<Destination>;
-  public pas$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
+  public immsbc$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
   public bcProviderStatusCode: number | undefined;
-  public pasStatusCode: number | undefined;
+  public immsbcStatusCode: number | undefined;
   public bcProviderUsername = '';
   public logoutRedirectUrl: string;
   public bcProviderTutorial: string;
@@ -139,12 +139,12 @@ export class ImmsbcPage implements OnInit {
     this.enrolmentError = false;
   }
 
-  public navigateToPath(): void {
+  public navigateToSrcPath(): void {
     this.navigateToExternalUrl(this.ImmsbcWebsite);
     this.authService.logout(this.logoutRedirectUrl);
   }
 
-  public onCopy(): void {
+  public onCopyUserName(): void {
     this.toastService.openSuccessToast(
       'You have copied your BCProvider Username to clipboard.',
     );
@@ -187,16 +187,16 @@ export class ImmsbcPage implements OnInit {
       .pipe(
         tap((profileStatus: ProfileStatus | null) => {
           this.hasCpn = profileStatus?.status.collegeCertification.hasCpn;
-          this.pasStatusCode = profileStatus?.status.immsbc.statusCode;
+          this.immsbcStatusCode = profileStatus?.status.immsbc.statusCode;
           this.bcProviderStatusCode =
             profileStatus?.status.bcProvider.statusCode;
-          if (this.pasStatusCode === StatusCode.COMPLETED) {
-            this.pas$.next(false);
+          if (this.immsbcStatusCode === StatusCode.COMPLETED) {
+            this.immsbc$.next(false);
           } else if (
             selectedIndex === this.lastSelectedIndex &&
             this.bcProviderStatusCode === StatusCode.COMPLETED
           ) {
-            // PAS step
+            // IMMSBC step
             selectedIndex = 1;
           }
           this.selectedIndex = selectedIndex;

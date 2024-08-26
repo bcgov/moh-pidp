@@ -27,7 +27,6 @@ export class ImmsBCPortalSection implements IPortalSection {
     private profileStatus: ProfileStatus,
     private router: Router,
   ) {
-    debugger
     this.key = 'immsbc';
     this.heading = 'ImmsBC';
     this.description = `Enrol here for access to PharmaCare's Special Authority eForms application.`;

@@ -162,7 +162,7 @@
                   matTooltip="Copy your BCProvider to clipboard"
                   aria-label="Copy your BCProvider to clipboard"
                   [cdkCopyToClipboard]="bcProviderUsername"
-                  (cdkCopyToClipboardCopied)="onCopy()">
+                  (cdkCopyToClipboardCopied)="onCopyUserName()">
                   <mat-icon>content_paste</mat-icon>
                 </button>
               </p>
@@ -171,8 +171,8 @@
                 type="button"
                 color="primary"
                 aria-labelledby="navigate-to-pas"
-                [disabled]="pas$ | async"
-                (click)="navigateToPath()">
+                [disabled]="immsbc$ | async"
+                (click)="navigateToSrcPath()">
                 Login to Provincial Attachment System with your BCProvider
               </button>
             </div>
@@ -204,19 +204,19 @@
                 type="submit"
                 color="primary"
                 aria-labelledby="navigate-to-pas"
-                [disabled]="pas$ | async"
+                [disabled]="immsbc$ | async"
                 (click)="onRequestAccess()">
                 Request
               </button>
             </div>
           </div>
         </div>
-        <ng-container *ngIf="hasCpn && (pas$ | async)">
+        <ng-container *ngIf="hasCpn && (immsbc$ | async)">
           <div class="pas-button-text">
             <i>You will need BCProvider credential before logging in.</i>
           </div>
         </ng-container>
-        <ng-container *ngIf="!hasCpn && (pas$ | async)">
+        <ng-container *ngIf="!hasCpn && (immsbc$ | async)">
           <div class="pas-button-text">
             <i
               >You will need BCProvider credential, and an endorsement before
