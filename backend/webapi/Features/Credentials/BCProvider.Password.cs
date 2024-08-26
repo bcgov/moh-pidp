@@ -4,12 +4,12 @@ using DomainResults.Common;
 using FluentValidation;
 using HybridModelBinding;
 using Microsoft.EntityFrameworkCore;
+using NodaTime;
 using System.Text.Json.Serialization;
 
 using Pidp.Data;
 using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.HttpClients.BCProvider;
-using NodaTime;
 using Pidp.Models;
 
 public class BCProviderPassword
@@ -31,7 +31,10 @@ public class BCProviderPassword
         }
     }
 
-    public class CommandHandler(IBCProviderClient client, PidpDbContext context, IClock clock) : ICommandHandler<Command, IDomainResult>
+    public class CommandHandler(
+        IBCProviderClient client,
+        PidpDbContext context,
+        IClock clock) : ICommandHandler<Command, IDomainResult>
     {
         private readonly IBCProviderClient client = client;
         private readonly PidpDbContext context = context;
