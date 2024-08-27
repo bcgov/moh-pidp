@@ -202,3 +202,7 @@ app-admin-dashboard .mat-sidenav {
 .mat-mdc-dialog-container .mdc-dialog__container {
   height: auto;
 }
+
+.mat-mdc-dialog-actions.mdc-dialog__actions {
+  align-self: center !important;
+}
