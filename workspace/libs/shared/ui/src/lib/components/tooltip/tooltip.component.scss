@@ -28,3 +28,15 @@
   cursor: pointer;
   text-align: center;
 }
+
+@media screen and (max-width: 525px) {
+  .tooltip-container {
+    width: 300px;
+  }
+}
+
+@media screen and (max-width: 375px) {
+  .tooltip-container {
+    width: 200px;
+  }
+}
