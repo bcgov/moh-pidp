@@ -11,13 +11,6 @@
   --gap: 1.25rem;
   --font-size: 1rem;
 }
-.viewport-all {
-  --header-margin: unset;
-  --card-border-radius: calc(var(--gap) * 0.375);
-  --content-padding: var(--gap);
-  --form-card-width: unset;
-  padding: 1.25rem 0.75rem;
-}
 .viewport-medium,
 .viewport-large {
   --header-margin: var(--gap) 0 0;
@@ -26,6 +19,11 @@
 }
 
 .viewport-all {
+  --header-margin: unset;
+  --card-border-radius: calc(var(--gap) * 0.375);
+  --content-padding: var(--gap);
+  --form-card-width: unset;
+  padding: 1.25rem 0.75rem;
   & .content {
     padding-bottom: var(--content-padding);
     display: flex;
@@ -110,6 +108,13 @@
             button {
               z-index: 1;
               padding: 10px 25px;
+              &:disabled {
+                border-radius: var(--layout-borderRadius-medium, 0.25rem);
+                background: var(
+                  --surface-color-primary-button-disabled,
+                  #edebe9
+                );
+              }
             }
           }
         }
@@ -146,13 +151,11 @@
     }
 
     .pas-button {
-
       div.auth-card {
         padding: 20px 0px 0px 0px !important;
       }
 
       .card-container {
-        height: 50% !important;
         .auth-card-header {
           padding-left: 20px;
         }
@@ -162,7 +165,7 @@
         }
 
         .auth-card-footer {
-          padding: 15px 0px 0px 30px;
+          padding: 20px 0px 0px 20px
         }
       }
     }

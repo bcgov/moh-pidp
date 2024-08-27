@@ -1,27 +1,24 @@
-import { Router } from '@angular/router';
-
 import { Observable } from 'rxjs';
+import { Router } from '@angular/router';
+import { AlertType } from '@bcgov/shared/ui';
 
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
-import { faFileLines, faUserCheck } from '@fortawesome/free-solid-svg-icons';
-
-import { AlertType } from '@bcgov/shared/ui';
+import { faFileLines} from '@fortawesome/free-solid-svg-icons';
 
 import { AccessRoutes } from '@app/features/access/access.routes';
 import { ShellRoutes } from '@app/features/shell/shell.routes';
 
 import { StatusCode } from '../../enums/status-code.enum';
-import { ProfileStatus } from '../../models/profile-status.model';
 import { PortalSectionAction } from '../portal-section-action.model';
 import { PortalSectionKey } from '../portal-section-key.type';
+import { ProfileStatus } from '../../models/profile-status.model';
 import { IPortalSection } from '../portal-section.model';
 
 export class ImmsBCPortalSection implements IPortalSection {
   public readonly key: PortalSectionKey;
+  public faFileLines = faFileLines;
   public heading: string;
   public description: string;
-  public faFileLines = faFileLines;
-  public faUserCheck = faUserCheck;
 
   public constructor(
     private profileStatus: ProfileStatus,
@@ -50,7 +47,7 @@ export class ImmsBCPortalSection implements IPortalSection {
   }
 
   public get statusType(): AlertType {
-    return this.getStatusCode() === StatusCode.COMPLETED ? 'success' : 'warn';
+    return 'warn';
   }
 
   public get status(): string {
@@ -59,16 +56,13 @@ export class ImmsBCPortalSection implements IPortalSection {
     switch (statusCode) {
       case StatusCode.AVAILABLE:
         return 'You are eligible to use Special Authority eForms';
-      case StatusCode.COMPLETED:
-        return 'Completed';
       default:
         return 'Incomplete';
     }
   }
 
   public get icon(): IconProp {
-    const statusCode = this.getStatusCode();
-    return statusCode === StatusCode.COMPLETED ? faUserCheck : faFileLines;
+    return faFileLines;
   }
 
   public performAction(): Observable<void> | void {

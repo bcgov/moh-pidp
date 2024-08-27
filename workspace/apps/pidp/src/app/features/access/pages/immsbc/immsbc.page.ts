@@ -1,54 +1,55 @@
-import { ClipboardModule } from '@angular/cdk/clipboard';
-import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
-import { AsyncPipe, NgIf, NgOptimizedImage } from '@angular/common';
-import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { Component, Inject, OnInit } from '@angular/core';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { AsyncPipe, NgIf, NgOptimizedImage } from '@angular/common';
+import { AccessRoutes } from '../../access.routes';
+import { AuthService } from '@app/features/auth/services/auth.service';
+import { APP_CONFIG, AppConfig } from '@app/app.config';
+import { ClipboardModule } from '@angular/cdk/clipboard';
+import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatStepperModule } from '@angular/material/stepper';
-import { MatTooltipModule } from '@angular/material/tooltip';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
 import {
   BehaviorSubject,
-  Observable,
   catchError,
   noop,
   of,
+  Observable,
   switchMap,
   tap,
 } from 'rxjs';
 
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 import {
   AlertComponent,
   InjectViewportCssClassDirective,
 } from '@bcgov/shared/ui';
 
-import { APP_CONFIG, AppConfig } from '@app/app.config';
 import {
   Destination,
   DiscoveryResource,
 } from '@app/core/party/discovery-resource.service';
-import { PartyService } from '@app/core/party/party.service';
-import { ToastService } from '@app/core/services/toast.service';
-import { AuthService } from '@app/features/auth/services/auth.service';
-import { StatusCode } from '@app/features/portal/enums/status-code.enum';
-import { ProfileStatus } from '@app/features/portal/models/profile-status.model';
-import { PortalResource } from '@app/features/portal/portal-resource.service';
-import { BreadcrumbComponent } from '@app/shared/components/breadcrumb/breadcrumb.component';
-
-import { AccessRoutes } from '../../access.routes';
-import { EnrolmentErrorComponent } from '../../components/enrolment-error/enrolment-error.component';
-import { BcProviderEditResource } from '../bc-provider-edit/bc-provider-edit-resource.service';
-import { BcProviderEditInitialStateModel } from '../bc-provider-edit/bc-provider-edit.page';
-import { ImmsBCResource } from './immsbc-resource.service';
 import {
   ImmsbcWebsite,
   bcProviderTutorialLink,
   immsBCUrl,
 } from './immsbc.constants';
+
+import { ProfileStatus } from '@app/features/portal/models/profile-status.model';
+import { ToastService } from '@app/core/services/toast.service';
+import { PartyService } from '@app/core/party/party.service';
+import { BreadcrumbComponent } from '@app/shared/components/breadcrumb/breadcrumb.component';
+import { StatusCode } from '@app/features/portal/enums/status-code.enum';
+import { PortalResource } from '@app/features/portal/portal-resource.service';
+
+import { BcProviderEditResource } from '../bc-provider-edit/bc-provider-edit-resource.service';
+import { EnrolmentErrorComponent } from '../../components/enrolment-error/enrolment-error.component';
+import { BcProviderEditInitialStateModel } from '../bc-provider-edit/bc-provider-edit.page';
+import { ImmsBCResource } from './immsbc-resource.service';
 
 @Component({
   selector: 'app-immsbc',
@@ -57,16 +58,16 @@ import {
     AlertComponent,
     AsyncPipe,
     BreadcrumbComponent,
+    ClipboardModule,
     EnrolmentErrorComponent,
+    FontAwesomeModule,
+    InjectViewportCssClassDirective,
     MatButtonModule,
     MatIconModule,
     MatStepperModule,
     MatTooltipModule,
-    ClipboardModule,
-    InjectViewportCssClassDirective,
     RouterLink,
     NgIf,
-    FontAwesomeModule,
     NgOptimizedImage,
   ],
   templateUrl: './immsbc.page.html',
@@ -119,9 +120,9 @@ export class ImmsbcPage implements OnInit {
     private portalResource: PortalResource,
     private partyService: PartyService,
     private router: Router,
-    private toastService: ToastService,
     private resource: ImmsBCResource,
     private route: ActivatedRoute,
+    private toastService: ToastService,
   ) {
     this.selectedIndex = -1;
     this.ImmsbcWebsite = ImmsbcWebsite;
