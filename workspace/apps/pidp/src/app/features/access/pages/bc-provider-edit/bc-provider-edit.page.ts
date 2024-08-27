@@ -267,10 +267,9 @@ export class BcProviderEditPage
         if (value === 100) {
           // To stop the Observable from emitting any more values.
           if (this.progressSubscription) {
+            this.progressBarValue = 90;
             this.progressSubscription.unsubscribe();
           }
-          this.progressBarValue = 0;
-          this.progressComplete = true;
         }
       },
     );
@@ -285,6 +284,8 @@ export class BcProviderEditPage
           this.showResetCompleteDialog();
         }),
         catchError(() => {
+          this.progressBarValue = 90;
+          this.progressComplete = false;
           this.showErrorCard = true;
           return of(noop());
         }),
