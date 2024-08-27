@@ -15,7 +15,7 @@ using Pidp.Models.Lookups;
 
 public class ImmsBC
 {
-    public static IdentifierType[] AllowedIdentifierTypes => new[] { IdentifierType.PhysiciansAndSurgeons, IdentifierType.Pharmacist, IdentifierType.Nurse };
+    public static IdentifierType[] AllowedIdentifierTypes => [IdentifierType.PhysiciansAndSurgeons, IdentifierType.Pharmacist, IdentifierType.Nurse];
     public class Command : ICommand<IDomainResult>
     {
         public int PartyId { get; set; }

@@ -371,10 +371,10 @@ export class DocumentService {
 
   public getImmsBC(): string {
     return `
-      Lotus ipsum root brussels sprout turnip greens beet greens mustard okra earthnut pea fennel radicchio
-      kohlrabi soko gram arugula carrot plantain welsh onion courgette. Dandelion mustard spinach bush
+      Lotus ipsum root brussels okra earthnut pea fennel radicchio
+      kohlrabi soko gram arugula carrot plantain. Dandelion mustard spinach bush
       tomato beet greens lentil salsify garbanzo. Chickweed celery maize summer purslane black-eyed pea
-      epazote melon bell pepper salad bitterleaf soybean corn wattle seed.
+      epazote melon bell pepper corn wattle seed.
     `;
   }
 

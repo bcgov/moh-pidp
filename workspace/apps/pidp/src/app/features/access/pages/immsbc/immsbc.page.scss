@@ -1,10 +1,5 @@
 @use 'pidp-variables' as pidp;
 
-.viewport-all {
-  --gap: 1rem;
-  --font-size: 0.75rem;
-}
-
 .viewport-small,
 .viewport-medium,
 .viewport-large {
@@ -19,6 +14,8 @@
 }
 
 .viewport-all {
+  --gap: 1rem;
+  --font-size: 0.75rem;
   --header-margin: unset;
   --card-border-radius: calc(var(--gap) * 0.375);
   --content-padding: var(--gap);
