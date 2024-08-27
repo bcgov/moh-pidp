@@ -16,8 +16,8 @@
       </div>
     </section>
 
-    <app-enrolment-error *ngIf="enrolmentError"></app-enrolment-error>
-    <ng-container *ngIf="completed && !enrolmentError">
+    <app-enrolment-error *ngIf="enrolmentErrorFlag"></app-enrolment-error>
+    <ng-container *ngIf="completedStatus && !enrolmentErrorFlag">
       <ui-alert
         type="success"
         icon="check_circle"
@@ -40,8 +40,8 @@
           #stepper
           [selectedIndex]="selectedIndex">
           <mat-step
-            [state]="bcProviderStatusCode === StatusCode.COMPLETED ? 'done' : 'number'"
-            [completed]="bcProviderStatusCode === StatusCode.COMPLETED">
+            [state]="bcProviderStatusCodeNumber === StatusCode.COMPLETED ? 'done' : 'number'"
+            [completed]="bcProviderStatusCodeNumber === StatusCode.COMPLETED">
             <ng-template matStepLabel>
               Create a BCProvider Credential
             </ng-template>
@@ -153,7 +153,7 @@
                 Attachment System
               </p>
               <p
-                *ngIf="bcProviderStatusCode === StatusCode.COMPLETED"
+                *ngIf="bcProviderStatusCodeNumber === StatusCode.COMPLETED"
                 class="bcprovider-username">
                 <strong>{{ bcProviderUsername }}</strong>
                 <button

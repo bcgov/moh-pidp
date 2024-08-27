@@ -14,6 +14,9 @@ import { PortalService } from '@app/features/portal/portal.service';
 
 import { BcProviderEditResource } from '../bc-provider-edit/bc-provider-edit-resource.service';
 import { ImmsbcPage } from './immsbc.page';
+import { DocumentService } from '@app/core/services/document.service';
+import { LoggerService } from '@app/core/services/logger.service';
+import { ImmsBCResource } from './immsbc-resource.service';
 
 describe('ImmsbcPage', () => {
   let component: ImmsbcPage;
@@ -50,6 +53,9 @@ describe('ImmsbcPage', () => {
           }),
         },
         provideAutoSpy(AuthService),
+        provideAutoSpy(ImmsBCResource),
+        provideAutoSpy(LoggerService),
+        provideAutoSpy(DocumentService),
         provideAutoSpy(Router),
         provideAutoSpy(PortalResource),
         provideAutoSpy(PortalService),

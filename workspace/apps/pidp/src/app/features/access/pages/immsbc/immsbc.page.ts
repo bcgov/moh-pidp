@@ -85,7 +85,7 @@ export class ImmsbcPage implements OnInit {
   );
   public destination$: Observable<Destination>;
   public immsbc$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
-  public bcProviderStatusCode: number | undefined;
+  public bcProviderStatusCodeNumber: number | undefined;
   public immsbcStatusCode: number | undefined;
   public bcProviderUsername = '';
   public logoutRedirectUrl: string;
@@ -98,9 +98,9 @@ export class ImmsbcPage implements OnInit {
   public AccessRoutes = AccessRoutes;
   public title: string;
   public immsBCUrl: string;
-  public completed: boolean | null;
-  public accessRequestFailed: boolean;
-  public enrolmentError: boolean;
+  public completedStatus: boolean | null;
+  public accessRequestFailedFlag: boolean;
+  public enrolmentErrorFlag: boolean;
 
   public breadcrumbsData: Array<{ title: string; path: string }> = [
     { title: 'Home', path: '' },
@@ -135,13 +135,13 @@ export class ImmsbcPage implements OnInit {
     );
     const routeData = this.route.snapshot.data;
     this.title = routeData.title;
-    this.completed = false;
-    this.accessRequestFailed = false;
-    this.enrolmentError = false;
+    this.completedStatus = false;
+    this.accessRequestFailedFlag = false;
+    this.enrolmentErrorFlag = false;
   }
 
   public navigateToSrcPath(): void {
-    this.navigateToExternalUrl(this.ImmsbcWebsite);
+    this.navigateToUrl(this.ImmsbcWebsite);
     this.authService.logout(this.logoutRedirectUrl);
   }
 
@@ -164,16 +164,16 @@ export class ImmsbcPage implements OnInit {
       .requestAccess(this.partyService.partyId)
       .pipe(
         tap(() => {
-          this.completed = true;
-          this.enrolmentError = false;
+          this.completedStatus = true;
+          this.enrolmentErrorFlag = false;
         }),
         catchError((error: HttpErrorResponse) => {
           if (error.status === HttpStatusCode.BadRequest) {
-            this.completed = false;
-            this.enrolmentError = true;
+            this.completedStatus = false;
+            this.enrolmentErrorFlag = true;
             return of(noop());
           }
-          this.accessRequestFailed = true;
+          this.accessRequestFailedFlag = true;
           return of(noop());
         }),
       )
@@ -183,35 +183,33 @@ export class ImmsbcPage implements OnInit {
   private handleStepperState(
     profileStatus$: Observable<ProfileStatus | null>,
   ): void {
-    let selectedIndex = this.lastSelectedIndex;
+    let foundIndex = this.lastSelectedIndex;
     profileStatus$
       .pipe(
         tap((profileStatus: ProfileStatus | null) => {
           this.hasCpn = profileStatus?.status.collegeCertification.hasCpn;
           this.immsbcStatusCode = profileStatus?.status.immsbc.statusCode;
-          this.bcProviderStatusCode =
+          this.bcProviderStatusCodeNumber =
             profileStatus?.status.bcProvider.statusCode;
           if (this.immsbcStatusCode === StatusCode.COMPLETED) {
             this.immsbc$.next(false);
           } else if (
-            selectedIndex === this.lastSelectedIndex &&
-            this.bcProviderStatusCode === StatusCode.COMPLETED
+            foundIndex === this.lastSelectedIndex &&
+            this.bcProviderStatusCodeNumber === StatusCode.COMPLETED
           ) {
-            // IMMSBC step
-            selectedIndex = 1;
+            foundIndex = 1;
           }
-          this.selectedIndex = selectedIndex;
+          this.selectedIndex = foundIndex;
         }),
         switchMap((): Observable<BcProviderEditInitialStateModel | null> => {
-          if (this.bcProviderStatusCode === StatusCode.COMPLETED) {
+          if (this.bcProviderStatusCodeNumber === StatusCode.COMPLETED) {
             this.bcProvider$.next(true);
             return this.bcProviderResource.get(this.partyService.partyId);
           } else {
-            if (selectedIndex === this.lastSelectedIndex) {
-              // BCProvider step
-              selectedIndex = 0;
+            if (foundIndex === this.lastSelectedIndex) {
+              foundIndex = 0;
             }
-            this.selectedIndex = selectedIndex;
+            this.selectedIndex = foundIndex;
             return of(null);
           }
         }),
@@ -224,8 +222,8 @@ export class ImmsbcPage implements OnInit {
       .subscribe();
   }
 
-  private navigateToExternalUrl(url: string): void {
-    window.open(url, '_blank');
+  private navigateToUrl(urlLink: string): void {
+    window.open(urlLink, '_blank');
     this.router.navigateByUrl('/');
   }
 }

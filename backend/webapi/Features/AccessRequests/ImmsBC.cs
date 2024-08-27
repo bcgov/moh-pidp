@@ -21,39 +21,34 @@ public class ImmsBC
         public int PartyId { get; set; }
     }
 
-    public class CommandValidator : AbstractValidator<Command>
-    {
-        public CommandValidator() => this.RuleFor(x => x.PartyId).GreaterThan(0);
-    }
-
     public class CommandHandler : ICommandHandler<Command, IDomainResult>
     {
-        private readonly IClock clock;
         private readonly IEmailService emailService;
-        private readonly IKeycloakAdministrationClient keycloakClient;
+        private readonly IClock clock;
         private readonly ILogger<CommandHandler> logger;
-        private readonly IPlrClient plrClient;
+        private readonly IKeycloakAdministrationClient keycloakClient;
         private readonly PidpDbContext context;
+        private readonly IPlrClient plrClient;
 
         public CommandHandler(
-            IClock clock,
             IEmailService emailService,
-            IKeycloakAdministrationClient keycloakClient,
+            IClock clock,
             ILogger<CommandHandler> logger,
-            IPlrClient plrClient,
-            PidpDbContext context)
+            IKeycloakAdministrationClient keycloakClient,
+            PidpDbContext context,
+            IPlrClient plrClient)
         {
-            this.clock = clock;
             this.emailService = emailService;
-            this.keycloakClient = keycloakClient;
+            this.clock = clock;
             this.logger = logger;
-            this.plrClient = plrClient;
+            this.keycloakClient = keycloakClient;
             this.context = context;
+            this.plrClient = plrClient;
         }
 
         public async Task<IDomainResult> HandleAsync(Command command)
         {
-            var dto = await this.context.Parties
+            var dataObj = await this.context.Parties
                 .Where(party => party.Id == command.PartyId)
                 .Select(party => new
                 {
@@ -65,15 +60,15 @@ public class ImmsBC
                 })
                 .SingleAsync();
 
-            if (dto.AlreadyEnroled
-                || dto.Email == null
-                || !await this.plrClient.GetStandingAsync(dto.Cpn))
+            if (dataObj.AlreadyEnroled
+                || dataObj.Email == null
+                || !await this.plrClient.GetStandingAsync(dataObj.Cpn))
             {
                 this.logger.LogAccessRequestDenied(command.PartyId);
                 return DomainResult.Failed();
             }
 
-            if (!await this.keycloakClient.AssignAccessRoles(dto.UserId, MohKeycloakEnrolment.ImmsBC))
+            if (!await this.keycloakClient.AssignAccessRoles(dataObj.UserId, MohKeycloakEnrolment.ImmsBC))
             {
                 return DomainResult.Failed();
             }
@@ -87,7 +82,7 @@ public class ImmsBC
 
             await this.context.SaveChangesAsync();
 
-            await this.SendConfirmationEmailAsync(dto.Email, dto.DisplayFirstName);
+            await this.SendConfirmationEmailAsync(dataObj.Email, dataObj.DisplayFirstName);
 
             return DomainResult.Success();
         }
