@@ -19,6 +19,7 @@ using Pidp.Models;
 using Pidp.Models.DomainEvents;
 using Pidp.Models.Lookups;
 using static Pidp.Features.CommonHandlers.UpdateKeycloakAttributesConsumer;
+using Pidp.Infrastructure.HttpClients.Keycloak;
 
 public class Create
 {
