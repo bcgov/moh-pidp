@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NodaTime;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
@@ -12,9 +13,11 @@ using Pidp.Data;
 namespace Pidp.Data.Migrations
 {
     [DbContext(typeof(PidpDbContext))]
-    partial class PidpDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240731205921_PreApprovedEndorsement")]
+    partial class PreApprovedEndorsement
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1200,22 +1203,6 @@ namespace Pidp.Data.Migrations
                     b.HasDiscriminator().HasValue("MSTeamsClinicAddress");
                 });
 
-            modelBuilder.Entity("Pidp.Models.BCProviderPasswordReset", b =>
-                {
-                    b.HasBaseType("Pidp.Models.BusinessEvent");
-
-                    b.Property<int>("PartyId")
-                        .ValueGeneratedOnUpdateSometimes()
-                        .HasColumnType("integer")
-                        .HasColumnName("PartyId");
-
-                    b.HasIndex("PartyId");
-
-                    b.ToTable("BusinessEvent");
-
-                    b.HasDiscriminator().HasValue("BCProviderPasswordReset");
-                });
-
             modelBuilder.Entity("Pidp.Models.LicenceStatusRoleAssigned", b =>
                 {
                     b.HasBaseType("Pidp.Models.BusinessEvent");
@@ -1435,17 +1422,6 @@ namespace Pidp.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Clinic");
-                });
-
-            modelBuilder.Entity("Pidp.Models.BCProviderPasswordReset", b =>
-                {
-                    b.HasOne("Pidp.Models.Party", "Party")
-                        .WithMany()
-                        .HasForeignKey("PartyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Party");
                 });
 
             modelBuilder.Entity("Pidp.Models.LicenceStatusRoleAssigned", b =>
