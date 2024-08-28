@@ -68,7 +68,8 @@ public class BCProviderCreate
                     UaaAgreementDate = party.AccessRequests
                         .Where(request => request.AccessTypeCode == AccessTypeCode.UserAccessAgreement)
                         .Select(request => request.RequestedOn)
-                        .SingleOrDefault()
+                        .SingleOrDefault(),
+                    SAEformsEnroled = party.AccessRequests.Any(request => request.AccessTypeCode == AccessTypeCode.SAEforms),
                 })
                 .SingleAsync();
 
@@ -126,6 +127,11 @@ public class BCProviderCreate
                 return DomainResult.Failed<string>();
             }
             await this.keycloakClient.UpdateUser(userId.Value, user => user.SetOpId(party.OpId!));
+
+            if (party.SAEformsEnroled)
+            {
+                await this.keycloakClient.AssignAccessRoles(userId.Value, MohKeycloakEnrolment.SAEforms);
+            }
 
             this.context.Credentials.Add(new Credential
             {
