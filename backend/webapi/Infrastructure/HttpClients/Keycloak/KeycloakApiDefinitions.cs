@@ -73,7 +73,7 @@ public class Role
 /// </summary>
 public class UserRepresentation
 {
-    public Dictionary<string, string[]> Attributes { get; set; } = new();
+    public Dictionary<string, string[]> Attributes { get; set; } = [];
     public string? Email { get; set; }
     public bool? Enabled { get; set; }
     public string? FirstName { get; set; }
@@ -103,6 +103,8 @@ public class UserRepresentation
 
     public void SetPidpEmail(string pidpEmail) => this.SetAttribute("pidp_email", pidpEmail);
 
+    public void SetPidpPhone(string pidpPhone) => this.SetAttribute("pidp_phone", pidpPhone);
+
     /// <summary>
     /// Adds the given attributes to this User Representation. Overwrites any duplicate keys.
     /// </summary>
@@ -114,5 +116,5 @@ public class UserRepresentation
         }
     }
 
-    private void SetAttribute(string key, string value) => this.Attributes[key] = new[] { value };
+    private void SetAttribute(string key, string value) => this.Attributes[key] = [value];
 }
