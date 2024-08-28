@@ -52,15 +52,15 @@ public class SAEformsTests : InMemoryDbTest
         }
     }
 
-    public static TheoryData<IdentifierType, bool> SAEformsIdentifierTypeTestData => new()
+    public static TheoryData<IdentifierType, bool> SAEformsIdentifierTypeTestData()
     {
-        { IdentifierType.Pharmacist, !SAEforms.ExcludedIdentifierTypes.Contains(IdentifierType.Pharmacist) },
-        { IdentifierType.PharmacyTech, !SAEforms.ExcludedIdentifierTypes.Contains(IdentifierType.PharmacyTech) },
-        { IdentifierType.PhysiciansAndSurgeons, !SAEforms.ExcludedIdentifierTypes.Contains(IdentifierType.PhysiciansAndSurgeons) },
-        { IdentifierType.Nurse, !SAEforms.ExcludedIdentifierTypes.Contains(IdentifierType.Nurse) },
-        { IdentifierType.Midwife, !SAEforms.ExcludedIdentifierTypes.Contains(IdentifierType.Midwife) },
-        { IdentifierType.NaturopathicPhysician, !SAEforms.ExcludedIdentifierTypes.Contains(IdentifierType.NaturopathicPhysician) },
-        { IdentifierType.DentalSurgeon, !SAEforms.ExcludedIdentifierTypes.Contains(IdentifierType.DentalSurgeon) },
-        { IdentifierType.Optometrist, !SAEforms.ExcludedIdentifierTypes.Contains(IdentifierType.Optometrist) },
-    };
+        var testData = new TheoryData<IdentifierType, bool>();
+
+        foreach (var identifierType in TestData.AllIdentifierTypes)
+        {
+            testData.Add(identifierType, !SAEforms.ExcludedIdentifierTypes.Contains(identifierType));
+        }
+
+        return testData;
+    }
 }
