@@ -57,7 +57,8 @@
                   "display": "CPS"
                 }
               }
-            }, {
+            },
+            {
               "url": "statusCode",
               "valueCodeableConcept": {
                 "coding": [ {
@@ -65,7 +66,8 @@
                   "code": "ACTIVE"
                 } ]
               }
-            }, {
+            },
+            {
               "url": "statusReasonCode",
               "valueCodeableConcept": {
                 "coding": [ {
@@ -73,12 +75,14 @@
                   "code": "GS"
                 } ]
               }
-            }, {
+            },
+            {
               "url": "period",
               "valuePeriod": {
                 "start": "2024-08-13T00:00:00-07:00"
               }
-            }, {
+            },
+            {
               "url": "statusClassCode",
               "valueCodeableConcept": {
                 "coding": [ {
@@ -87,19 +91,22 @@
                 } ]
               }
             } ]
-          }, {
+          },
+          {
             "url": "http://hlth.gov.bc.ca/fhir/provider/StructureDefinition/bc-birthplace-extension",
             "valueAddress": {
               "country": "INDIA"
             }
-          }, {
+          },
+          {
             "url": "http://hlth.gov.bc.ca/fhir/provider/StructureDefinition/bc-owner-extension",
             "valueIdentifier": {
               "assigner": {
                 "display": "CPS"
               }
             }
-          }, {
+          },
+          {
             "url": "http://hlth.gov.bc.ca/fhir/provider/StructureDefinition/bc-period-extension",
             "valuePeriod": {
               "start": "2024-08-13T00:00:00-07:00"
@@ -172,7 +179,8 @@
           } ],
           "telecom": [
             {
-            "extension": [ {
+            "extension": [
+              {
               "url": "http://hlth.gov.bc.ca/fhir/provider/StructureDefinition/bc-owner-extension",
               "valueIdentifier": {
                 "assigner": {
@@ -193,7 +201,8 @@
             "period": {
               "start": "2024-08-13T00:00:00-07:00"
             }
-          }, {
+          },
+          {
             "extension": [ {
               "url": "http://hlth.gov.bc.ca/fhir/provider/StructureDefinition/bc-owner-extension",
               "valueIdentifier": {
