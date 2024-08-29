@@ -30,6 +30,36 @@ public class ProviderRoleType
     public static implicit operator string(ProviderRoleType type) => type.Value;
 }
 
+public class StatusCode
+{
+    public static readonly StatusCode Active = new("ACTIVE");
+    public static readonly StatusCode Terminated = new("TERMINATED");
+    public static readonly StatusCode Suspended = new("SUSPENDED");
+    public static readonly StatusCode Pending = new("PENDING");
+
+    public string Value { get; }
+
+    private StatusCode(string value) => this.Value = value;
+
+    public static implicit operator string(StatusCode type) => type.Value;
+}
+
+public class StatusReasonCode
+{
+    public static readonly StatusReasonCode GoodStanding = new("GS");
+    public static readonly StatusReasonCode Practicing = new("PRAC");
+    public static readonly StatusReasonCode NonPracticing = new("NONPRAC");
+    public static readonly StatusReasonCode TemporaryInactive = new("TI");
+    public static readonly StatusReasonCode VoluntaryWithdrawn = new("VW");
+    public static readonly StatusReasonCode Tempper = new("TEMPPER");
+
+    public string Value { get; }
+
+    private StatusReasonCode(string value) => this.Value = value;
+
+    public static implicit operator string(StatusReasonCode type) => type.Value;
+}
+
 public class PlrRecord
 {
     public string Cpn { get; set; } = string.Empty;
@@ -70,6 +100,15 @@ public class PlrStandingsDigest
     /// Returns true if there is at least one record in good standing.
     /// </summary>
     public bool HasGoodStanding => this.records.Any(record => record.IsGoodStanding);
+
+    /// <summary>
+    /// Returns true if there is at least one record for a post graduate
+    /// licenced individual in pending non-practicing status.
+    /// </summary>
+    public bool IsPostGrad => this.records.Any(
+        record => record.IdentifierType == IdentifierType.PhysiciansAndSurgeons
+        && record.StatusCode == StatusCode.Pending
+        && record.StatusReasonCode == StatusReasonCode.NonPracticing);
 
     public IEnumerable<string> LicenceNumbers => this.records.Where(record => record.LicenceNumber != null).Select(record => record.LicenceNumber!);
 
@@ -121,6 +160,33 @@ public class PlrStandingsDigest
     }
 
     /// <summary>
+    /// Filters the digest to only include records of the given Status Code
+    /// </summary>
+    /// <param name="statusCode"></param>
+    public PlrStandingsDigest With(params StatusCode[] statusCodes)
+    {
+        return new PlrStandingsDigest
+        (
+            this.Error,
+            this.records.IntersectBy(statusCodes.Select(t => (string)t), record => record.StatusCode)
+        );
+    }
+
+    /// <summary>
+    /// Filters the digest to only include records of the given Status Reason Code
+    /// </summary>
+    /// <param name="statusReasonCode"></param>
+    public PlrStandingsDigest With(params StatusReasonCode[] statusReasonCodes)
+    {
+        return new PlrStandingsDigest
+        (
+            this.Error,
+            this.records.IntersectBy(statusReasonCodes.Select(t => (string)t), record => record.StatusReasonCode)
+        );
+    }
+
+
+    /// <summary>
     /// Filters the digest to only include records in good standing.
     /// </summary>
     public PlrStandingsDigest WithGoodStanding()
@@ -142,6 +208,8 @@ public class PlrStandingsDigest
             IdentifierType = record.IdentifierType,
             LicenceNumber = record.CollegeId,
             ProviderRoleType = record.ProviderRoleType,
+            StatusCode = record.StatusCode,
+            StatusReasonCode = record.StatusReasonCode,
             IsGoodStanding = record.IsGoodStanding()
         }));
     }
@@ -152,6 +220,8 @@ public class PlrStandingsDigest
         public string? IdentifierType { get; set; }
         public string? LicenceNumber { get; set; }
         public string? ProviderRoleType { get; set; }
+        public string? StatusCode { get; set; }
+        public string? StatusReasonCode { get; set; }
 
         public bool IsGoodStanding { get; set; }
     }

@@ -13,10 +13,18 @@ using Pidp.Infrastructure.HttpClients.Plr;
 using Pidp.Infrastructure.Services;
 using Pidp.Models;
 using Pidp.Models.Lookups;
+using static Pidp.Features.Parties.ProfileStatus;
 
 public class SAEforms
 {
     public static IdentifierType[] ExcludedIdentifierTypes => [IdentifierType.PharmacyTech];
+
+    public static bool IsEligible(ProfileData profile)
+    {
+        return profile.PartyPlrStanding
+            .Excluding(ExcludedIdentifierTypes)
+            .HasGoodStanding || profile.PartyPlrStanding.IsPostGrad;
+    }
 
     public class Command : ICommand<IDomainResult>
     {
