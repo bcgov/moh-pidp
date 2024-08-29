@@ -63,6 +63,7 @@ public class BCProviderCreate
                     party.LastName,
                     party.Cpn,
                     party.Email,
+                    party.Phone,
                     HasBCProviderCredential = party.Credentials.Any(credential => credential.IdentityProvider == IdentityProviders.BCProvider),
                     Hpdid = party.Credentials.SingleOrDefault(credential => credential.IdentityProvider == IdentityProviders.BCServicesCard)!.IdpId,
                     UaaAgreementDate = party.AccessRequests
@@ -120,7 +121,7 @@ public class BCProviderCreate
             }
 
             // TODO: Domain Event! Probably should create this credential now and then Queue the keycloak User creation + updating the UserId
-            var userId = await this.CreateKeycloakUser(party.FirstName, party.LastName, createdUser.UserPrincipalName);
+            var userId = await this.CreateKeycloakUser(party.FirstName, party.LastName, createdUser.UserPrincipalName, party.Email, party.Phone!);
             if (userId == null)
             {
                 this.logger.LogKeycloakUserCreationError(command.PartyId, createdUser.UserPrincipalName);
@@ -148,7 +149,7 @@ public class BCProviderCreate
             return DomainResult.Success(createdUser.UserPrincipalName);
         }
 
-        private async Task<Guid?> CreateKeycloakUser(string firstName, string lastName, string userPrincipalName)
+        private async Task<Guid?> CreateKeycloakUser(string firstName, string lastName, string userPrincipalName, string email, string phone)
         {
             var newUser = new UserRepresentation
             {
@@ -157,6 +158,9 @@ public class BCProviderCreate
                 LastName = lastName,
                 Username = GenerateMohKeycloakUsername(userPrincipalName)
             };
+            newUser.SetPidpEmail(email)
+                .SetPidpPhone(phone);
+
             return await this.keycloakClient.CreateUser(newUser);
         }
 
