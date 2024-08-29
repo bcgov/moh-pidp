@@ -30,34 +30,34 @@ public class ProviderRoleType
     public static implicit operator string(ProviderRoleType type) => type.Value;
 }
 
-public class StatusCode
+public class PlrStatusCode
 {
-    public static readonly StatusCode Active = new("ACTIVE");
-    public static readonly StatusCode Terminated = new("TERMINATED");
-    public static readonly StatusCode Suspended = new("SUSPENDED");
-    public static readonly StatusCode Pending = new("PENDING");
+    public static readonly PlrStatusCode Active = new("ACTIVE");
+    public static readonly PlrStatusCode Terminated = new("TERMINATED");
+    public static readonly PlrStatusCode Suspended = new("SUSPENDED");
+    public static readonly PlrStatusCode Pending = new("PENDING");
 
     public string Value { get; }
 
-    private StatusCode(string value) => this.Value = value;
+    private PlrStatusCode(string value) => this.Value = value;
 
-    public static implicit operator string(StatusCode type) => type.Value;
+    public static implicit operator string(PlrStatusCode type) => type.Value;
 }
 
-public class StatusReasonCode
+public class PlrStatusReasonCode
 {
-    public static readonly StatusReasonCode GoodStanding = new("GS");
-    public static readonly StatusReasonCode Practicing = new("PRAC");
-    public static readonly StatusReasonCode NonPracticing = new("NONPRAC");
-    public static readonly StatusReasonCode TemporaryInactive = new("TI");
-    public static readonly StatusReasonCode VoluntaryWithdrawn = new("VW");
-    public static readonly StatusReasonCode Tempper = new("TEMPPER");
+    public static readonly PlrStatusReasonCode GoodStanding = new("GS");
+    public static readonly PlrStatusReasonCode Practicing = new("PRAC");
+    public static readonly PlrStatusReasonCode NonPracticing = new("NONPRAC");
+    public static readonly PlrStatusReasonCode TemporaryInactive = new("TI");
+    public static readonly PlrStatusReasonCode VoluntaryWithdrawn = new("VW");
+    public static readonly PlrStatusReasonCode Tempper = new("TEMPPER");
 
     public string Value { get; }
 
-    private StatusReasonCode(string value) => this.Value = value;
+    private PlrStatusReasonCode(string value) => this.Value = value;
 
-    public static implicit operator string(StatusReasonCode type) => type.Value;
+    public static implicit operator string(PlrStatusReasonCode type) => type.Value;
 }
 
 public class PlrRecord
@@ -107,8 +107,8 @@ public class PlrStandingsDigest
     /// </summary>
     public bool IsPostGrad => this.records.Any(
         record => record.IdentifierType == IdentifierType.PhysiciansAndSurgeons
-        && record.StatusCode == StatusCode.Pending
-        && record.StatusReasonCode == StatusReasonCode.NonPracticing);
+        && record.PlrStatusCode == PlrStatusCode.Pending
+        && record.PlrStatusReasonCode == PlrStatusReasonCode.NonPracticing);
 
     public IEnumerable<string> LicenceNumbers => this.records.Where(record => record.LicenceNumber != null).Select(record => record.LicenceNumber!);
 
@@ -163,12 +163,12 @@ public class PlrStandingsDigest
     /// Filters the digest to only include records of the given Status Code
     /// </summary>
     /// <param name="statusCode"></param>
-    public PlrStandingsDigest With(params StatusCode[] statusCodes)
+    public PlrStandingsDigest With(params PlrStatusCode[] statusCodes)
     {
         return new PlrStandingsDigest
         (
             this.Error,
-            this.records.IntersectBy(statusCodes.Select(t => (string)t), record => record.StatusCode)
+            this.records.IntersectBy(statusCodes.Select(t => (string)t), record => record.PlrStatusCode)
         );
     }
 
@@ -176,12 +176,12 @@ public class PlrStandingsDigest
     /// Filters the digest to only include records of the given Status Reason Code
     /// </summary>
     /// <param name="statusReasonCode"></param>
-    public PlrStandingsDigest With(params StatusReasonCode[] statusReasonCodes)
+    public PlrStandingsDigest With(params PlrStatusReasonCode[] statusReasonCodes)
     {
         return new PlrStandingsDigest
         (
             this.Error,
-            this.records.IntersectBy(statusReasonCodes.Select(t => (string)t), record => record.StatusReasonCode)
+            this.records.IntersectBy(statusReasonCodes.Select(t => (string)t), record => record.PlrStatusReasonCode)
         );
     }
 
@@ -208,8 +208,8 @@ public class PlrStandingsDigest
             IdentifierType = record.IdentifierType,
             LicenceNumber = record.CollegeId,
             ProviderRoleType = record.ProviderRoleType,
-            StatusCode = record.StatusCode,
-            StatusReasonCode = record.StatusReasonCode,
+            PlrStatusCode = record.StatusCode,
+            PlrStatusReasonCode = record.StatusReasonCode,
             IsGoodStanding = record.IsGoodStanding()
         }));
     }
@@ -220,8 +220,8 @@ public class PlrStandingsDigest
         public string? IdentifierType { get; set; }
         public string? LicenceNumber { get; set; }
         public string? ProviderRoleType { get; set; }
-        public string? StatusCode { get; set; }
-        public string? StatusReasonCode { get; set; }
+        public string? PlrStatusCode { get; set; }
+        public string? PlrStatusReasonCode { get; set; }
 
         public bool IsGoodStanding { get; set; }
     }
