@@ -1,17 +1,17 @@
 namespace Pidp.Features.ThirdPartyIntegrations;
 
-using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Nodes;
 using DomainResults.Common;
 using DomainResults.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Identity.Client.Extensibility;
 using Pidp.Data;
 using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.Services;
 using Pidp.Models;
+using Serilog;
 
 [Route("api/ext")]
 public class ThirdPartyintegrationsController : PidpControllerBase
@@ -1384,12 +1384,25 @@ public class ThirdPartyintegrationsController : PidpControllerBase
             "/administration/StructureDefinition/FhirMessageTest9",
         jsonContent);
 
-        // response.EnsureSuccessStatusCode()
-        //     .WriteRequestToConsole();
+        return this.Ok();
+    }
 
-        // var jsonResponse = await response.Content.ReadAsStringAsync();
-        Console.WriteLine(response);
-        Console.WriteLine("PUT API Succeeded.");
+    [HttpPost("fhir/model/save_data")]
+    [AllowAnonymous]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult> PostSaveData([FromBody] object obj) {
+        var jsonStr = JsonSerializer.Serialize(obj);
+        var newJsonObj = jsonStr.Replace("resourceType", "resource_Type");
+        var payload = JsonObject.Parse(newJsonObj);
+        payload["resourceType"] = "FhirMessageTest9";
+        StringContent stringContent = new StringContent(payload.ToString(), UnicodeEncoding.UTF8, "application/json");
+        using HttpResponseMessage response = await sharedClient.PostAsync(
+            "/FhirMessageTest9", stringContent
+        );
+
+        Log.Information(response.ToString());
         return this.Ok();
     }
 
