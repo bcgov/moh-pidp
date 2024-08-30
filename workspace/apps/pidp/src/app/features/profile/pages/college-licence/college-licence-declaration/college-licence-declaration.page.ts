@@ -131,7 +131,6 @@ export class CollegeLicenceDeclarationPage
 
   protected performSubmission(): Observable<string | null> {
     const partyId = this.partyService.partyId;
-    this.formState.disableCollegeLicenseForm();
 
     return partyId && this.formState.json
       ? this.resource.updateDeclaration(partyId, this.formState.json)
