@@ -14,17 +14,16 @@ using Pidp.Infrastructure.HttpClients.Plr;
 using Pidp.Infrastructure.Services;
 using Pidp.Models;
 using Pidp.Models.Lookups;
-using static Pidp.Features.Parties.ProfileStatus;
 
 public class SAEforms
 {
     public static IdentifierType[] ExcludedIdentifierTypes => [IdentifierType.PharmacyTech];
 
-    public static bool IsEligible(ProfileData profile)
+    public static bool IsEligible(PlrStandingsDigest partyPlrStanding)
     {
-        return profile.PartyPlrStanding
+        return partyPlrStanding
             .Excluding(ExcludedIdentifierTypes)
-            .HasGoodStanding || profile.PartyPlrStanding.IsCPSPostgrad;
+            .HasGoodStanding || partyPlrStanding.IsCPSPostgrad;
     }
 
     public class Command : ICommand<IDomainResult>
