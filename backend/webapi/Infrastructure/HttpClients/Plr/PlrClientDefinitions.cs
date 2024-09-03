@@ -103,9 +103,9 @@ public class PlrStandingsDigest
 
     /// <summary>
     /// Returns true if there is at least one record for a post graduate
-    /// licenced individual in pending non-practicing status.
+    /// licenced individual from the College of Physicians and Surgeons in pending non-practicing status.
     /// </summary>
-    public bool IsPostGrad => this.records
+    public bool IsCPSPostgrad => this.records
         .Any(record => record.IdentifierType == IdentifierType.PhysiciansAndSurgeons
             && record.PlrStatusCode == PlrStatusCode.Pending
             && record.PlrStatusReasonCode == PlrStatusReasonCode.NonPracticing);
