@@ -105,10 +105,10 @@ public class PlrStandingsDigest
     /// Returns true if there is at least one record for a post graduate
     /// licenced individual in pending non-practicing status.
     /// </summary>
-    public bool IsPostGrad => this.records.Any(
-        record => record.IdentifierType == IdentifierType.PhysiciansAndSurgeons
-        && record.PlrStatusCode == PlrStatusCode.Pending
-        && record.PlrStatusReasonCode == PlrStatusReasonCode.NonPracticing);
+    public bool IsPostGrad => this.records
+        .Any(record => record.IdentifierType == IdentifierType.PhysiciansAndSurgeons
+            && record.PlrStatusCode == PlrStatusCode.Pending
+            && record.PlrStatusReasonCode == PlrStatusReasonCode.NonPracticing);
 
     public IEnumerable<string> LicenceNumbers => this.records.Where(record => record.LicenceNumber != null).Select(record => record.LicenceNumber!);
 
