@@ -51,7 +51,7 @@ public class PlrStatusReasonCode
     public static readonly PlrStatusReasonCode NonPracticing = new("NONPRAC");
     public static readonly PlrStatusReasonCode TemporaryInactive = new("TI");
     public static readonly PlrStatusReasonCode VoluntaryWithdrawn = new("VW");
-    public static readonly PlrStatusReasonCode Tempper = new("TEMPPER");
+    public static readonly PlrStatusReasonCode TemporaryPermit = new("TEMPPER");
 
     public string Value { get; }
 
@@ -75,16 +75,23 @@ public class PlrRecord
     {
         // A Licence is in good standing if the Status is "ACTIVE" and the StatusReason is one of a few allowable values.
         // Additionally, "TI" (Temporary Inactive) and "VW" (Voluntary Withdrawn) are "SUSPENDED" in PLR rather than "ACTIVE", but are still considered to be in good standing.
-        var goodStandingReasons = new[] { "GS", "PRAC", "TEMPPER", "TI", "VW" };
-        var suspendedAllowed = new[] { "TI", "VW" };
+        var goodStandingReasons = new[]
+        {
+            PlrStatusReasonCode.GoodStanding,
+            PlrStatusReasonCode.Practicing,
+            PlrStatusReasonCode.TemporaryPermit,
+            PlrStatusReasonCode.TemporaryInactive,
+            PlrStatusReasonCode.VoluntaryWithdrawn
+        };
+        var suspendedAllowed = new[] { PlrStatusReasonCode.TemporaryInactive, PlrStatusReasonCode.VoluntaryWithdrawn };
 
-        if (this.StatusCode == "ACTIVE")
+        if (this.StatusCode == PlrStatusCode.Active)
         {
-            return goodStandingReasons.Contains(this.StatusReasonCode);
+            return Array.Exists(goodStandingReasons, gsr => gsr == this.StatusReasonCode);
         }
-        else if (this.StatusCode == "SUSPENDED")
+        else if (this.StatusCode == PlrStatusCode.Suspended)
         {
-            return suspendedAllowed.Contains(this.StatusReasonCode);
+            return Array.Exists(suspendedAllowed, sa => sa == this.StatusReasonCode);
         }
         return false;
     }
