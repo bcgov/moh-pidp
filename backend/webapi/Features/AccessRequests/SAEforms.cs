@@ -90,9 +90,7 @@ public class SAEforms
             }
             else
             {
-                if (!(await this.plrClient.GetStandingsDigestAsync(dto.Cpn))
-                    .Excluding(ExcludedIdentifierTypes)
-                    .HasGoodStanding)
+                if (!IsEligible(await this.plrClient.GetStandingsDigestAsync(dto.Cpn)))
                 {
                     this.logger.LogAccessRequestDenied();
                     return DomainResult.Failed();
