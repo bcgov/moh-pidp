@@ -69,7 +69,7 @@ public class ThirdPartyintegrationsController : PidpControllerBase
         return this.Ok();
     }
 
-    [HttpPost("fhir/model/save_data")]
+    [HttpPost("fhir/model/save-data")]
     [AllowAnonymous]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
