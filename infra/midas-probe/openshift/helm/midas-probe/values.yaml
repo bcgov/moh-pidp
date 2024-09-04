@@ -1,11 +1,11 @@
 appName: midas-probe
-licensePlate: d8a8f9
-imageStreamTag: develop
+licensePlate: f088b1
+imageStreamTag: latest
 replicas: "1"
 dockerhost: image-registry.openshift-image-registry.svc:5000
-environment: dev
+environment: prod
 cpuLimit: "300m"
 memoryLimit: "450Mi"
 cpuRequests: "150m"
 memoryRequests: "250Mi"
-cluster: silver
+cluster: GOLD

@@ -11,6 +11,7 @@ metadata:
     # Disable the cookies for load testing as the load test is coming from a single source host.
     haproxy.router.openshift.io/disable_cookies: "true"
 spec:
+  host: {{ .Values.environment }}.healthprovideridentityportal.com
   path: /midas/
   port:
     targetPort: 8080-tcp

@@ -1,4 +1,3 @@
-{{- if eq .Values.cluster "golddr" }}
 # This job runs on GoldDR only and is designed to probe Gold's version of Patroni and determine if it's running.
 # If it's not running then we'll promote GoldDR's patroni to be leader.
 

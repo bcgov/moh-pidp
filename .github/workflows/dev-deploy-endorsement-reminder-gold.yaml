@@ -31,4 +31,4 @@ jobs:
           helm list --namespace f088b1-dev
 
           echo installing helm chart...
-          helm upgrade --wait --namespace f088b1-dev --values infra/endorsement_reminder/values-dev.yaml endorsement-reminder infra/endorsement_reminder
+          helm upgrade --wait --namespace f088b1-dev --values infra/endorsement_reminder/values.yaml --set env=dev global.image.registry=image-registry.openshift-image-registry.svc:5000/f088b1-tools endorsement-reminder infra/endorsement_reminder

@@ -10,6 +10,7 @@ from flask import Flask
 from flask_wtf import CSRFProtect
 from os import environ
 import requests
+import certifi
 import logging
 
 app = Flask(__name__)

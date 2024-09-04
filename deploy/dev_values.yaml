@@ -3,6 +3,7 @@ global:
   vanityURL: "healthprovideridentityportal.gov.bc.ca"
   commit_sha: ""
   image:
+    registry: image-registry.openshift-image-registry.svc:5000/d8a8f9-tools
     tag: develop
 
 database:
