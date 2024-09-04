@@ -107,6 +107,7 @@ describe('AccountLinkingPage', () => {
 
     component = TestBed.inject(AccountLinkingPage);
     navigationServiceSpy = TestBed.inject<any>(NavigationService);
+    navigationServiceSpy.getPreviousUrl();
   });
 
   it('should create', () => {
