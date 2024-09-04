@@ -1,13 +1,16 @@
 namespace Pidp.Features.Parties;
 
 using FluentValidation;
+using MassTransit;
+using MediatR;
 using NodaTime;
 
 using Pidp.Data;
 using Pidp.Extensions;
 using Pidp.Infrastructure.Auth;
-using Pidp.Infrastructure.HttpClients.Keycloak;
 using Pidp.Models;
+using Pidp.Models.DomainEvents;
+using static Pidp.Features.CommonHandlers.UpdateKeycloakAttributesConsumer;
 
 public class Create
 {
@@ -39,16 +42,9 @@ public class Create
         }
     }
 
-    public class CommandHandler : ICommandHandler<Command, int>
+    public class CommandHandler(PidpDbContext context) : ICommandHandler<Command, int>
     {
-        private readonly PidpDbContext context;
-        private readonly IKeycloakAdministrationClient keycloakClient;
-
-        public CommandHandler(PidpDbContext context, IKeycloakAdministrationClient keycloakClient)
-        {
-            this.context = context;
-            this.keycloakClient = keycloakClient;
-        }
+        private readonly PidpDbContext context = context;
 
         public async Task<int> HandleAsync(Command command)
         {
@@ -68,7 +64,7 @@ public class Create
             if (command.IdentityProvider == IdentityProviders.BCServicesCard)
             {
                 await party.GenerateOpId(this.context);
-                await this.keycloakClient.UpdateUser(command.UserId, user => user.SetOpId(party.OpId!));
+                party.DomainEvents.Add(new OpIdCreated(command.UserId, party.OpId!));
             }
 
             this.context.Parties.Add(party);
@@ -77,5 +73,12 @@ public class Create
 
             return party.Id;
         }
+    }
+
+    public class UpdateKeycloakWhenOpIdCreatedHandler(IBus bus) : INotificationHandler<OpIdCreated>
+    {
+        private readonly IBus bus = bus;
+
+        public async Task Handle(OpIdCreated notification, CancellationToken cancellationToken) => await this.bus.Publish(UpdateKeycloakAttributes.FromUpdateAction(notification.UserId, user => user.SetOpId(notification.OpId)), cancellationToken);
     }
 }
