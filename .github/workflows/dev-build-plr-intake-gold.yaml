@@ -6,7 +6,6 @@ on:
     paths:
       - "backend/services.plr-intake/**"
       - "backend/services.plr-intake.tests/**"
-      - "charts/plr-intake"
   workflow_dispatch:
 
 # This will terminate builds that are previously, but continuing to run.  Saves GHA hours.
@@ -25,43 +24,37 @@ jobs:
       - name: "Checkout Code"
         uses: actions/checkout@master
 
-      - name: "Docker Build"
+      - name: "Docker Build GOLD image"
         run: |
-          docker build -t artifacts.developer.gov.bc.ca/pf08-tools/pidp-plr-intake:develop .
+          docker build -t image-registry.apps.gold.devops.gov.bc.ca/f088b1-tools/pidp-plr-intake:develop .
 
-      # Uses the Artifactory service account's username and password
+      #  Uses the builder service account token
       - name: "Docker Login to GOLD OCP"
         uses: docker/login-action@master
         with:
-          registry: artifacts.developer.gov.bc.ca
-          username: d${{ secrets.ARTIFACTORY_SERVICE_ACCOUNT_USERNAME }} 
-          password: ${{ secrets.ARTIFACTORY_SERVICE_ACCOUNT_PASSWORD }}
+          registry: image-registry.apps.gold.devops.gov.bc.ca
+          username: builder
+          password: ${{ secrets.GOLD_TOOLS_BUILDER_TOKEN }}
 
       - name: "Push image"
         run: |
-          docker push artifacts.developer.gov.bc.ca/pf08-tools/pidp-plr-intake:develop
+          docker push image-registry.apps.gold.devops.gov.bc.ca/f088b1-tools/pidp-plr-intake:develop
 
-  deploy-plr-intake:
-    name: PLR Intake Backend Deploy
-    runs-on: ubuntu-latest
-    needs: build-plr-intake
-    if: ${{ always() && !cancelled() }}
-    defaults:
-      run:
-        working-directory: "./charts/plr-intake"
-    steps:
-      - name: "Checkout Code"
-        uses: actions/checkout@master
-
-      - name: Authenticate and set context
-        uses: redhat-actions/oc-login@v1.3
-        with:
-          openshift_server_url: ${{secrets.GOLD_OPENSHIFT_CLUSTER_URL}}
-          openshift_token: ${{secrets.GOLD_DEV_SERVICE_TOKEN}}
-      
-      - name: "Deploy PLR Intake"
+      - name: "Docker Build GOLDDR image"
         run: |
-          echo installing plr-intake helm chart in f088b1-dev...
-          helm upgrade --wait --values ./values.yaml --namespace f088b1-dev dev-plr-intake .
+          docker tag image-registry.apps.gold.devops.gov.bc.ca/f088b1-tools/pidp-plr-intake:develop image-registry.apps.golddr.devops.gov.bc.ca/f088b1-tools/pidp-plr-intake:develop
+
+      #  Uses the builder service account token
+      - name: "Docker Login to GOLD OCP"
+        uses: docker/login-action@master
+        with:
+          registry: image-registry.apps.golddr.devops.gov.bc.ca
+          username: builder
+          password: ${{ secrets.GOLDDR_TOOLS_BUILDER_TOKEN }}
+
+      - name: "Push image"
+        run: |
+          docker push image-registry.apps.golddr.devops.gov.bc.ca/f088b1-tools/pidp-plr-intake:develop
+
 
 

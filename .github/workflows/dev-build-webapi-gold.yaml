@@ -6,7 +6,6 @@ on:
     paths:
       - "backend/webapi/**"
       - "backend/webapi.tests/**"
-      - "charts/webapi"
   workflow_dispatch:
 
 # This will terminate builds that are previously, but continuing to run.  Saves GHA hours.
@@ -27,38 +26,34 @@ jobs:
 
       - name: "Docker Build"
         run: |
-          docker build -t artifacts.developer.gov.bc.ca/pf08-tools/pidp-webapi:develop .
+          docker build -t image-registry.apps.gold.devops.gov.bc.ca/f088b1-tools/pidp-webapi:develop .
 
-      # Uses the Artifactory service account's username and password
+      # Uses the builder service account token
       - name: "Docker Login to GOLD OCP"
         uses: docker/login-action@master
         with:
-          registry: artifacts.developer.gov.bc.ca
-          username:  ${{ secrets.ARTIFACTORY_SERVICE_ACCOUNT_USERNAME }} 
-          password: ${{ secrets.ARTIFACTORY_SERVICE_ACCOUNT_PASSWORD }}
+          registry: image-registry.apps.gold.devops.gov.bc.ca
+          username: builder
+          password: ${{ secrets.GOLD_TOOLS_BUILDER_TOKEN }}
+
+      - name: "Push image to GOLD OCP"
+        run: |
+          docker push image-registry.apps.gold.devops.gov.bc.ca/f088b1-tools/pidp-webapi:develop
+
+      - name: "Docker Build GOLDDR image"
+          run: |
+            docker tag image-registry.apps.gold.devops.gov.bc.ca/f088b1-tools/pidp-webapi:develop image-registry.apps.golddr.devops.gov.bc.ca/f088b1-tools/pidp-webapi:develop
+  
+        #  Uses the builder service account token
+      - name: "Docker Login to GOLD OCP"
+        uses: docker/login-action@master
+        with:
+          registry: image-registry.apps.golddr.devops.gov.bc.ca
+          username: builder
+          password: ${{ secrets.GOLDDR_TOOLS_BUILDER_TOKEN }}
 
       - name: "Push image"
         run: |
-          docker push artifacts.developer.gov.bc.ca/pf08-tools/pidp-webapi:develop
-  deploy-webapi:
-    name: WebAPI Backend Build and Deploy
-    runs-on: ubuntu-latest
-    needs: build-webapi
-    if: ${{ always() && !cancelled() }}
-    defaults:
-      run:
-        working-directory: "./charts/webapi"
-    steps:
-      - name: "Checkout Code"
-        uses: actions/checkout@master
+          docker push image-registry.apps.golddr.devops.gov.bc.ca/f088b1-tools/pidp-webapi:develop
 
-      - name: Authenticate and set context
-        uses: redhat-actions/oc-login@v1.3
-        with:
-          openshift_server_url: ${{secrets.GOLD_OPENSHIFT_CLUSTER_URL}}
-          openshift_token: ${{secrets.SILVER-TO-GOLD}}
-
-      - name: "Deploy Webapi"
-        run: |
-          echo installing webapi helm chart in f088b1-dev...
-          helm upgrade --wait --values ./values.yaml --namespace f088b1-dev dev-webapi .
+      

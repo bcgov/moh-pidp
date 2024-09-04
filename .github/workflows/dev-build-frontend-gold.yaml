@@ -5,7 +5,6 @@ on:
     branches: [SILVER-TO-GOLD]
     #paths:
      # - "workspace/**"
-      #- "charts/frontend"
   workflow_dispatch:
 
 
@@ -38,41 +37,34 @@ jobs:
         run: |
           yarn build
 
-      - name: "Docker Build"
+      - name: "Docker Build GOLD"
         run: |
-          docker build -t artifacts.developer.gov.bc.ca/pf08-tools/pidp-frontend:develop .
+          docker build -t image-registry.apps.gold.devops.gov.bc.ca/f088b1-tools/pidp-frontend:develop .
 
       # Uses the Artifactory service account's username and password 
-      - name: "Docker Login to artifactory"
+      - name: "Docker Login to GOLD OCP"
         uses: docker/login-action@v2
         with:
-          registry: artifacts.developer.gov.bc.ca
-          username: ${{ secrets.ARTIFACTORY_SERVICE_ACCOUNT_USERNAME }} 
-          password: ${{ secrets.ARTIFACTORY_SERVICE_ACCOUNT_PASSWORD }}
+          registry: image-registry.apps.gold.devops.gov.bc.ca
+          username: builder
+          password: ${{ secrets.GOLD_TOOLS_BUILDER_TOKEN }}
 
-      - name: "Push image"
+      - name: "Push image to GOLD OCP"
         run: |
-          docker push artifacts.developer.gov.bc.ca/pf08-tools/pidp-frontend:develop
-      
-  deploy-frontend:
-    name: Frontend Deploy
-    runs-on: ubuntu-latest
-    needs: build-frontend
-    if: ${{ always() && !cancelled() }}
-    defaults:
-      run:
-        working-directory: "./charts/frontend"
-    steps:
-      - name: "Checkout Code"
-        uses: actions/checkout@master
-      
-      - name: Authenticate and set context
-        uses: redhat-actions/oc-login@v1.3
+          docker push image-registry.apps.gold.devops.gov.bc.ca/f088b1-tools/pidp-frontend:develop
+        
+      - name: "Docker Build GOLDDR"
+        run: |
+          docker build -t image-registry.apps.golddr.devops.gov.bc.ca/f088b1-tools/pidp-frontend:develop .
+
+      # Uses the Artifactory service account's username and password 
+      - name: "Docker Login to GOLD OCP"
+        uses: docker/login-action@v2
         with:
-          openshift_server_url: ${{ secrets.GOLD_OPENSHIFT_CLUSTER_URL }}
-          openshift_token: ${{ secrets.GOLD_DEV_SERVICE_TOKEN }}
+          registry: image-registry.apps.golddr.devops.gov.bc.ca
+          username: builder
+          password: ${{ secrets.GOLDDR_TOOLS_BUILDER_TOKEN }}
 
-      - name: "Deploy frontend"
+      - name: "Push image to GOLDDR OCP"
         run: |
-          echo installing frontend helm chart in f088b1-dev...
-          helm upgrade --wait --values ./values.yaml --namespace f088b1-dev dev-frontend .
+          docker push image-registry.apps.golddr.devops.gov.bc.ca/f088b1-tools/pidp-frontend:develop

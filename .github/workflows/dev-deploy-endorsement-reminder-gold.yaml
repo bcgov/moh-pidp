@@ -1,11 +1,10 @@
-name: Deploy Helm Charts - GOLD Dev
+name: Deploy Dev Helm Charts - Endorsement Reminder
 
 on:
   push:
     branches: [develop]
     paths:
-      - "charts/**"
-      - "./deploy/dev_values.yaml"
+      - "infra/endorsement_reminder/**"
   workflow_dispatch:
 
 # This will terminate builds that are previously, but continuing to run.  Saves GHA hours.
@@ -15,22 +14,21 @@ concurrency:
 
 jobs:
 
-  helm-deployment:
+  helm-deployment-endorsement-reminder:
     runs-on: 'ubuntu-latest'
     steps:
-      - uses: actions/checkout@master
+      - uses: actions/checkout@v4
 
       - name: Authenticate and set context
-        uses: redhat-actions/oc-login@v1.3
+        uses: redhat-actions/oc-login@v1.2
         with:
           openshift_server_url: ${{secrets.GOLD_OPENSHIFT_CLUSTER_URL}}
           openshift_token: ${{secrets.GOLD_DEV_SERVICE_TOKEN}}
-          namespace: ${{secrets.GOLD_LICENSE_PLATE}}-dev
 
-      - name: Helm Deploy / install command
+      - name: Helm Deploy Upgrade
         run: |
           echo current installed helm releases
           helm list --namespace f088b1-dev
 
           echo installing helm chart...
-          helm upgrade --wait --values ./deploy/dev_values.yaml --namespace f088b1-dev dev charts/pidp --debug
+          helm upgrade --wait --namespace f088b1-dev --values infra/endorsement_reminder/values-dev.yaml endorsement-reminder infra/endorsement_reminder
