@@ -89,7 +89,12 @@ public class Demographics
 
             if (party.Email != command.Email)
             {
+                // TODO: update all credentials.
                 party.DomainEvents.Add(new PartyEmailUpdated(party.Id, party.PrimaryUserId, command.Email!));
+            }
+            if (party.Phone != command.Phone)
+            {
+                party.DomainEvents.Add(new PartyPhoneUpdated(party.Id, party.Credentials.Select(credential => credential.UserId), command.Phone!));
             }
 
             party.PreferredFirstName = command.PreferredFirstName?.Trim();
@@ -144,6 +149,19 @@ public class Demographics
             {
                 this.logger.LogBCProviderEmailUpdateFailed(context.Message.UserId);
                 throw new InvalidOperationException("Error Comunicating with Azure AD");
+            }
+        }
+    }
+
+    public class PartyPhoneUpdatedHandler(IBus bus) : INotificationHandler<PartyPhoneUpdated>
+    {
+        private readonly IBus bus = bus;
+
+        public async Task Handle(PartyPhoneUpdated notification, CancellationToken cancellationToken)
+        {
+            foreach (var userId in notification.UserIds)
+            {
+                await this.bus.Publish(UpdateKeycloakAttributes.FromUpdateAction(userId, user => user.SetPidpPhone(notification.NewPhone)), cancellationToken);
             }
         }
     }
