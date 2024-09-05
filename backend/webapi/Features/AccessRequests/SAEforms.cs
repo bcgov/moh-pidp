@@ -6,6 +6,8 @@ using Microsoft.EntityFrameworkCore;
 using NodaTime;
 
 using Pidp.Data;
+using Pidp.Extensions;
+using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.HttpClients.Keycloak;
 using Pidp.Infrastructure.HttpClients.Mail;
 using Pidp.Infrastructure.HttpClients.Plr;
@@ -15,7 +17,7 @@ using Pidp.Models.Lookups;
 
 public class SAEforms
 {
-    public static IdentifierType[] ExcludedIdentifierTypes => new[] { IdentifierType.PharmacyTech };
+    public static IdentifierType[] ExcludedIdentifierTypes => [IdentifierType.PharmacyTech];
 
     public class Command : ICommand<IDomainResult>
     {
@@ -27,30 +29,20 @@ public class SAEforms
         public CommandValidator() => this.RuleFor(x => x.PartyId).GreaterThan(0);
     }
 
-    public class CommandHandler : ICommandHandler<Command, IDomainResult>
+    public class CommandHandler(
+        IClock clock,
+        IEmailService emailService,
+        IKeycloakAdministrationClient keycloakClient,
+        ILogger<CommandHandler> logger,
+        IPlrClient plrClient,
+        PidpDbContext context) : ICommandHandler<Command, IDomainResult>
     {
-        private readonly IClock clock;
-        private readonly IEmailService emailService;
-        private readonly IKeycloakAdministrationClient keycloakClient;
-        private readonly ILogger<CommandHandler> logger;
-        private readonly IPlrClient plrClient;
-        private readonly PidpDbContext context;
-
-        public CommandHandler(
-            IClock clock,
-            IEmailService emailService,
-            IKeycloakAdministrationClient keycloakClient,
-            ILogger<CommandHandler> logger,
-            IPlrClient plrClient,
-            PidpDbContext context)
-        {
-            this.clock = clock;
-            this.emailService = emailService;
-            this.keycloakClient = keycloakClient;
-            this.logger = logger;
-            this.plrClient = plrClient;
-            this.context = context;
-        }
+        private readonly IClock clock = clock;
+        private readonly IEmailService emailService = emailService;
+        private readonly IKeycloakAdministrationClient keycloakClient = keycloakClient;
+        private readonly ILogger<CommandHandler> logger = logger;
+        private readonly IPlrClient plrClient = plrClient;
+        private readonly PidpDbContext context = context;
 
         public async Task<IDomainResult> HandleAsync(Command command)
         {
@@ -59,7 +51,9 @@ public class SAEforms
                 .Select(party => new
                 {
                     AlreadyEnroled = party.AccessRequests.Any(request => request.AccessTypeCode == AccessTypeCode.SAEforms),
-                    UserId = party.PrimaryUserId,
+                    UserIds = party.Credentials
+                        .Where(credential => credential.IdentityProvider == IdentityProviders.BCServicesCard || credential.IdentityProvider == IdentityProviders.BCProvider)
+                        .Select(credential => credential.UserId),
                     party.Email,
                     party.DisplayFirstName,
                     party.Cpn,
@@ -67,18 +61,43 @@ public class SAEforms
                 .SingleAsync();
 
             if (dto.AlreadyEnroled
-                || dto.Email == null
-                || !(await this.plrClient.GetStandingsDigestAsync(dto.Cpn))
-                    .Excluding(ExcludedIdentifierTypes)
-                    .HasGoodStanding)
+                || dto.Email == null)
             {
                 this.logger.LogAccessRequestDenied();
                 return DomainResult.Failed();
             }
 
-            if (!await this.keycloakClient.AssignAccessRoles(dto.UserId, MohKeycloakEnrolment.SAEforms))
+            if (dto.Cpn == null)
             {
-                return DomainResult.Failed();
+                // Check status of Endorsements
+                var endorsementCpns = await this.context.ActiveEndorsementRelationships(command.PartyId)
+                    .Select(relationship => relationship.Party!.Cpn)
+                    .ToListAsync();
+
+                var endorsementPlrStanding = await this.plrClient.GetAggregateStandingsDigestAsync(endorsementCpns);
+                if (!endorsementPlrStanding.With(ProviderRoleType.MedicalDoctor).HasGoodStanding)
+                {
+                    this.logger.LogAccessRequestDenied();
+                    return DomainResult.Failed();
+                }
+            }
+            else
+            {
+                if (!(await this.plrClient.GetStandingsDigestAsync(dto.Cpn))
+                    .Excluding(ExcludedIdentifierTypes)
+                    .HasGoodStanding)
+                {
+                    this.logger.LogAccessRequestDenied();
+                    return DomainResult.Failed();
+                }
+            }
+
+            foreach (var userId in dto.UserIds)
+            {
+                if (!await this.keycloakClient.AssignAccessRoles(userId, MohKeycloakEnrolment.SAEforms))
+                {
+                    return DomainResult.Failed();
+                }
             }
 
             this.context.AccessRequests.Add(new AccessRequest

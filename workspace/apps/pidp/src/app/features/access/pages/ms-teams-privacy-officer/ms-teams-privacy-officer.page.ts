@@ -30,10 +30,12 @@ import { UtilsService } from '@app/core/services/utils.service';
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
 import { AddressFormComponent } from '@app/shared/components/address-form/address-form.component';
 
+import { AccessRoutes } from '../../access.routes';
 import { EnrolmentErrorComponent } from '../../components/enrolment-error/enrolment-error.component';
 import { MsTeamsPrivacyOfficerFormState } from './ms-teams-privacy-officer-form-state';
 import { MsTeamsPrivacyOfficerResource } from './ms-teams-privacy-officer-resource.service';
 import { msTeamsSupportEmail } from './ms-teams.constants';
+import { BreadcrumbComponent } from '@app/shared/components/breadcrumb/breadcrumb.component';
 
 @Component({
   selector: 'app-ms-teams',
@@ -43,6 +45,7 @@ import { msTeamsSupportEmail } from './ms-teams.constants';
   imports: [
     AddressFormComponent,
     AnchorDirective,
+    BreadcrumbComponent,
     EnrolmentErrorComponent,
     InjectViewportCssClassDirective,
     MatButtonModule,
@@ -68,6 +71,12 @@ export class MsTeamsPrivacyOfficerPage
   public enrolmentError: boolean;
   public submissionPage: number;
   public formState: MsTeamsPrivacyOfficerFormState;
+  public AccessRoutes = AccessRoutes;
+  public breadcrumbsData: Array<{ title: string; path: string }> = [
+    {title: 'Home', path: ''},
+    {title: 'Access', path: AccessRoutes.routePath(AccessRoutes.ACCESS_REQUESTS)},
+    {title: 'MS Teams Privacy Officer', path: ''},
+  ];
 
   // ui-page is handling this.
   public showOverlayOnSubmit = false;

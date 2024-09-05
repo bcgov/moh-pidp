@@ -119,33 +119,6 @@
   .back-to-top:hover {
     background-color: #003366;
   }
-
-  .breadcrumb ul {
-    list-style: none;
-    top: 0;
-    right: 0;
-    padding: 0px;
-  }
-
-  .breadcrumb fa-icon {
-    height: 12px;
-    padding-left: 5px;
-    padding-right: 5px;
-  }
-
-  .breadcrumb ul li {
-    display: inline;
-  }
-
-  .breadcrumb a,
-  .text-button {
-    text-decoration: none;
-    color: #1a5a96;
-    font-size: 12px;
-    font-weight: 400;
-    line-height: 27px;
-    word-wrap: break-word;
-  }
 }
 
 .container.viewport-xsmall {
@@ -161,10 +134,7 @@
 
   .content-header h1 {
     font-size: 40px;
-  }
-
-  .breadcrumb {
-    margin: 0px 20px 0px 20px;
+    line-height: 1.1;
   }
 
   .search-content {
@@ -208,6 +178,7 @@
 
   .content-header h1 {
     font-size: 40px;
+    line-height: 1.1;
   }
 
   .content-header {
@@ -216,10 +187,6 @@
 
   .div-search {
     width: 100%;
-  }
-
-  .breadcrumb {
-    margin: 0px 20px 0px 20px;
   }
 
   .search-content {

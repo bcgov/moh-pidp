@@ -405,6 +405,9 @@ namespace Pidp.Data.Migrations
                     b.Property<Instant>("Modified")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<bool>("PreApproved")
+                        .HasColumnType("boolean");
+
                     b.Property<int?>("ReceivingPartyId")
                         .HasColumnType("integer");
 
@@ -1197,6 +1200,22 @@ namespace Pidp.Data.Migrations
                     b.HasDiscriminator().HasValue("MSTeamsClinicAddress");
                 });
 
+            modelBuilder.Entity("Pidp.Models.BCProviderPasswordReset", b =>
+                {
+                    b.HasBaseType("Pidp.Models.BusinessEvent");
+
+                    b.Property<int>("PartyId")
+                        .ValueGeneratedOnUpdateSometimes()
+                        .HasColumnType("integer")
+                        .HasColumnName("PartyId");
+
+                    b.HasIndex("PartyId");
+
+                    b.ToTable("BusinessEvent");
+
+                    b.HasDiscriminator().HasValue("BCProviderPasswordReset");
+                });
+
             modelBuilder.Entity("Pidp.Models.LicenceStatusRoleAssigned", b =>
                 {
                     b.HasBaseType("Pidp.Models.BusinessEvent");
@@ -1416,6 +1435,17 @@ namespace Pidp.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Clinic");
+                });
+
+            modelBuilder.Entity("Pidp.Models.BCProviderPasswordReset", b =>
+                {
+                    b.HasOne("Pidp.Models.Party", "Party")
+                        .WithMany()
+                        .HasForeignKey("PartyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Party");
                 });
 
             modelBuilder.Entity("Pidp.Models.LicenceStatusRoleAssigned", b =>

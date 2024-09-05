@@ -8,11 +8,14 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { EMPTY, Observable } from 'rxjs';
 
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+
 import {
   AlertActionsDirective,
   AlertComponent,
   AlertContentDirective,
   AnchorDirective,
+  InjectViewportCssClassDirective,
   PageComponent,
   PageFooterActionDirective,
   PageFooterComponent,
@@ -31,7 +34,9 @@ import {
 import { PartyService } from '@app/core/party/party.service';
 import { LoggerService } from '@app/core/services/logger.service';
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
+import { BreadcrumbComponent } from '@app/shared/components/breadcrumb/breadcrumb.component';
 
+import { AccessRoutes } from '../../access.routes';
 import {
   hcimWebUrl,
   healthNetBcAdminEmail,
@@ -58,6 +63,9 @@ import {
     AlertComponent,
     AlertContentDirective,
     AnchorDirective,
+    BreadcrumbComponent,
+    FaIconComponent,
+    InjectViewportCssClassDirective,
     MatButtonModule,
     MatFormFieldModule,
     MatInputModule,
@@ -90,6 +98,15 @@ export class HcimAccountTransferPage
   public readonly healthNetBcHelpDeskPhone: string;
   public readonly healthRegistriesAdminEmail: string;
   public readonly healthRegistriesAdminPhone: string;
+  public AccessRoutes = AccessRoutes;
+  public breadcrumbsData: Array<{ title: string; path: string }> = [
+    { title: 'Home', path: '' },
+    {
+      title: 'Access',
+      path: AccessRoutes.routePath(AccessRoutes.ACCESS_REQUESTS),
+    },
+    { title: 'HCIMWeb Account Transfer', path: '' },
+  ];
 
   public HcimAccountTransferStatusCode = HcimAccountTransferStatusCode;
 

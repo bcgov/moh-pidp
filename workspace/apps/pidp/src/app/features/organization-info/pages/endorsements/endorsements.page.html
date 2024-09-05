@@ -1,9 +1,11 @@
 <form [formGroup]="formState.form" (submit)="onSubmit()">
-  <div class="box container" uiPidpInjectViewportCss>
+  <div class="container" uiPidpInjectViewportCss>
+    <app-breadcrumb [breadcrumbs]="breadcrumbsData"></app-breadcrumb>
     <div class="content">
       <section class="care-team">
         <header>
-          <h2>Team Members</h2>
+          <h3>TEAM MEMBERS</h3>
+          <h1>Endorsements</h1>
         </header>
         <div class="care-team-text">
           <p class="large">
@@ -21,7 +23,7 @@
             access. In the future, licensed health care providers will be able
             to pick which systems to endorse (if any).
           </p>
-          <p>To send a OneHealthID access invitation:</p>
+          <p><b>To send a OneHealthID access invitation:</b></p>
           <ol>
             <li>
               Send your colleague a OneHealthID access invitation by email below
@@ -31,7 +33,7 @@
               vouched for by you, allowing them to register for OneHealthID
             </li>
           </ol>
-          <p>To endorse a OneHealthID access invitation:</p>
+          <p><b>To endorse a OneHealthID access invitation:</b></p>
           <ol>
             <li>
               You may also see an Incoming Request to vouch for a colleague who
@@ -146,7 +148,8 @@
       </section>
       <section class="endorsement-request">
         <header>
-          <h2>Endorsement Request</h2>
+          <h3>PROCEDURE</h3>
+          <h1>Endorsement Request</h1>
         </header>
         <p>
           Enter the email of the person that you have a working relationship
@@ -159,10 +162,11 @@
           restart the process.
         </p>
         <mat-form-field>
+          <mat-label>Email</mat-label>
           <input
             matInput
-            placeholder="Email"
-            formControlName="recipientEmail" />
+            formControlName="recipientEmail"
+            (keydown.enter)="onEnter($event)" />
           <mat-error *ngIf="recipientEmail.hasError('required')"
             >Required</mat-error
           >

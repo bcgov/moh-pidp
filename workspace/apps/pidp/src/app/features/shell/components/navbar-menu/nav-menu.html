@@ -8,7 +8,7 @@
       (click)="onMiniMenuButtonClick()">
       <mat-icon>menu</mat-icon>
       <span
-        [ngClass]="{'menu-notification-dot': dashboardState.alerts.includes(AlertCode.TRANSIENT_ERROR) || dashboardState.alerts.includes(AlertCode.PLR_BAD_STANDING)}"></span>
+        [ngClass]="{'menu-notification-dot': alerts.includes(AlertCode.TRANSIENT_ERROR) || alerts.includes(AlertCode.PLR_BAD_STANDING)}"></span>
     </button>
   </div>
   <div *ngIf="isTopMenuVisible" uiPidpInjectViewportCss>
@@ -34,7 +34,7 @@
         <div class="dropdown">
           <span class="content-with-alert"
             ><fa-icon
-              *ngIf="dashboardState.alerts.includes(AlertCode.TRANSIENT_ERROR) || dashboardState.alerts.includes(AlertCode.PLR_BAD_STANDING)"
+              *ngIf="alerts?.includes(AlertCode.TRANSIENT_ERROR) || alerts?.includes(AlertCode.PLR_BAD_STANDING)"
               class="fa-duotone"
               [icon]="faBell"></fa-icon
             ><a class="dropdown-profile">Profile</a></span
@@ -45,11 +45,9 @@
               (click)="navigateTo(ProfileRoutes.routePath(ProfileRoutes.PERSONAL_INFO))"
               >Personal Information</a
             >
-            <a
-              class="dropdown-links"
-              (click)="navigateTo(dashboardState.collegeRoute)"
+            <a class="dropdown-links" (click)="navigateTo(collegeRoute)"
               >College License<fa-icon
-                *ngIf="dashboardState.alerts.includes(AlertCode.TRANSIENT_ERROR) || dashboardState.alerts.includes(AlertCode.PLR_BAD_STANDING)"
+                *ngIf="alerts?.includes(AlertCode.TRANSIENT_ERROR) || alerts?.includes(AlertCode.PLR_BAD_STANDING)"
                 class="fa-duotone"
                 [icon]="faBell"></fa-icon
             ></a>
@@ -107,13 +105,11 @@
             (click)="navigateTo(ProfileRoutes.routePath(ProfileRoutes.PERSONAL_INFO))"
             >Personal Information</a
           >
-          <a
-            class="sidenav-menu-item"
-            (click)="navigateTo(dashboardState.collegeRoute)"
+          <a class="sidenav-menu-item" (click)="navigateTo(collegeRoute)"
             >College License</a
           >
           <span
-            [ngClass]="{'menu-list-notification-dot': dashboardState.alerts.includes(AlertCode.TRANSIENT_ERROR) || dashboardState.alerts.includes(AlertCode.PLR_BAD_STANDING)}"></span>
+            [ngClass]="{'menu-list-notification-dot': alerts.includes(AlertCode.TRANSIENT_ERROR) || alerts.includes(AlertCode.PLR_BAD_STANDING)}"></span>
           <a
             class="sidenav-menu-item"
             (click)="navigateTo(ProfileRoutes.routePath(ProfileRoutes.USER_ACCESS_AGREEMENT))"

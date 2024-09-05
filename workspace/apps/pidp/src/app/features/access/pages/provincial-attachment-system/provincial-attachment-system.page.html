@@ -1,13 +1,7 @@
 <div class="box container" uiPidpInjectViewportCss>
+  <app-breadcrumb [breadcrumbs]="breadcrumbsData"></app-breadcrumb>
   <div class="content">
     <section class="intro">
-      <nav class="breadcrumb">
-        <ul>
-          <li><button uiTextButton (click)="onBack()">Home</button></li>
-          <li><fa-icon class="fa-duotone" [icon]="faAngleRight"></fa-icon></li>
-          <li><button uiTextButton>Active Page</button></li>
-        </ul>
-      </nav>
       <div class="content-header">
         <h1>Enrol for Access</h1>
         <p>
@@ -158,7 +152,7 @@
                 color="primary"
                 aria-labelledby="navigate-to-pas"
                 [disabled]="pas$ | async"
-                (click)="navigateTo()">
+                (click)="navigateToPath()">
                 Login to Provincial Attachment System with your BCProvider
               </button>
             </div>
@@ -171,38 +165,53 @@
           </mat-step>
         </mat-stepper>
       </div>
-      <div class="card pas-button">
-        <img
-          class="img-doctor"
-          ngSrc="/assets/images/doctor.jpg"
-          alt="doctor"
-          priority
-          fill />
-        <div class="card-container auth-card">
-          <div class="card-header auth-card-header">
-            <h3><strong>Provincial Attachment System</strong></h3>
-          </div>
-          <div class="card-body auth-card-body">
-            <img
-              class="logo"
-              ngSrc="/assets/images/doctors-bc-logo.png"
-              alt="Doctors of BC logo"
-              priority
-              fill />
-          </div>
-          <div class="card-footer auth-card-footer">
-            <button
-              mat-flat-button
-              uiPageFooterAction
-              type="submit"
-              color="primary"
-              aria-labelledby="navigate-to-pas"
-              [disabled]="pas$ | async"
-              (click)="navigateTo()">
-              Login
-            </button>
+      <div class="pas-button-container">
+        <div class="card pas-button">
+          <img
+            class="img-doctor"
+            ngSrc="/assets/images/doctor1.jpg"
+            alt="doctor"
+            priority
+            fill />
+          <div class="card-container auth-card">
+            <div class="card-header auth-card-header">
+              <h3><strong>Provincial Attachment System</strong></h3>
+            </div>
+            <div class="card-body auth-card-body">
+              <img
+                class="logo"
+                ngSrc="/assets/images/doctors-bc-logo.png"
+                alt="Doctors of BC logo"
+                priority
+                fill />
+            </div>
+            <div class="card-footer auth-card-footer">
+              <button
+                mat-flat-button
+                uiPageFooterAction
+                type="submit"
+                color="primary"
+                aria-labelledby="navigate-to-pas"
+                [disabled]="pas$ | async"
+                (click)="navigateToPath()">
+                Login
+              </button>
+            </div>
           </div>
         </div>
+        <ng-container *ngIf="hasCpn && (pas$ | async)">
+          <div class="pas-button-text">
+            <i>You will need BCProvider credential before logging in.</i>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="!hasCpn && (pas$ | async)">
+          <div class="pas-button-text">
+            <i
+              >You will need BCProvider credential, and an endorsement before
+              logging in.</i
+            >
+          </div>
+        </ng-container>
       </div>
     </section>
   </div>

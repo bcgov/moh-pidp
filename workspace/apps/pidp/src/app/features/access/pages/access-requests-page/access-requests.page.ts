@@ -12,16 +12,13 @@ import { Observable, Subject, map, takeUntil, tap } from 'rxjs';
 
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import {
-  faAngleRight,
   faArrowUp,
   faMagnifyingGlass,
 } from '@fortawesome/free-solid-svg-icons';
-import { NavigationService } from '@pidp/presentation';
 
 import {
   InjectViewportCssClassDirective,
   LayoutHeaderFooterComponent,
-  TextButtonDirective,
 } from '@bcgov/shared/ui';
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';
@@ -30,6 +27,7 @@ import { PortalResource } from '@app/features/portal/portal-resource.service';
 import { PortalService } from '@app/features/portal/portal.service';
 import { IAccessSection } from '@app/features/portal/state/access-section.model';
 import { AccessState } from '@app/features/portal/state/portal-state.builder';
+import { BreadcrumbComponent } from '@app/shared/components/breadcrumb/breadcrumb.component';
 import { Constants } from '@app/shared/constants';
 
 import { AccessRequestCardComponent } from '../../components/access-request-card/access-request-card.component';
@@ -40,13 +38,13 @@ import { AccessRequestCardComponent } from '../../components/access-request-card
   styleUrls: ['./access-requests.page.scss'],
   standalone: true,
   imports: [
+    BreadcrumbComponent,
     FaIconComponent,
     InjectViewportCssClassDirective,
     MatButtonModule,
     NgClass,
     NgIf,
     LayoutHeaderFooterComponent,
-    TextButtonDirective,
     AccessRequestCardComponent,
     NgFor,
     AsyncPipe,
@@ -61,7 +59,6 @@ export class AccessRequestsPage implements OnInit, OnDestroy {
   public accessState$: Observable<AccessState>;
 
   public faArrowUp = faArrowUp;
-  public faAngleRight = faAngleRight;
   public faMagnifyingGlass = faMagnifyingGlass;
   public logoutRedirectUrl: string;
   public showBackToTopButton: boolean = false;
@@ -69,11 +66,14 @@ export class AccessRequestsPage implements OnInit, OnDestroy {
   public isMobile = true;
   public providerIdentitySupport: string;
   public filteredAccessSections: IAccessSection[] | undefined = [];
+  public breadcrumbsData: Array<{ title: string; path: string }> = [
+    { title: 'Home', path: '' },
+    { title: 'Access', path: '' },
+  ];
   private destroy$ = new Subject<void>();
 
   public constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
-    private navigationService: NavigationService,
     private partyService: PartyService,
     private portalService: PortalService,
     private portalResource: PortalResource,
@@ -124,10 +124,6 @@ export class AccessRequestsPage implements OnInit, OnDestroy {
 
   public onCardAction(section: IAccessSection): void {
     section.performAction();
-  }
-
-  public onBack(): void {
-    this.navigationService.navigateToRoot();
   }
 
   public ngOnInit(): void {

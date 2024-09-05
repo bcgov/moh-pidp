@@ -4,11 +4,13 @@ using DomainResults.Common;
 using FluentValidation;
 using HybridModelBinding;
 using Microsoft.EntityFrameworkCore;
+using NodaTime;
 using System.Text.Json.Serialization;
 
 using Pidp.Data;
 using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.HttpClients.BCProvider;
+using Pidp.Models;
 
 public class BCProviderPassword
 {
@@ -29,32 +31,32 @@ public class BCProviderPassword
         }
     }
 
-    public class CommandHandler : ICommandHandler<Command, IDomainResult>
+    public class CommandHandler(
+        IBCProviderClient client,
+        PidpDbContext context,
+        IClock clock) : ICommandHandler<Command, IDomainResult>
     {
-        private readonly IBCProviderClient client;
-        private readonly PidpDbContext context;
-
-        public CommandHandler(IBCProviderClient client, PidpDbContext context)
-        {
-            this.client = client;
-            this.context = context;
-        }
+        private readonly IBCProviderClient client = client;
+        private readonly PidpDbContext context = context;
+        private readonly IClock clock = clock;
 
         public async Task<IDomainResult> HandleAsync(Command command)
         {
-            var bcProviderId = await this.context.Credentials
+            var userPrincipalName = await this.context.Credentials
                 .Where(credential => credential.PartyId == command.PartyId
                     && credential.IdentityProvider == IdentityProviders.BCProvider)
                 .Select(credential => credential.IdpId)
                 .SingleOrDefaultAsync();
 
-            if (bcProviderId == null)
+            if (userPrincipalName == null)
             {
                 return DomainResult.NotFound();
             }
 
-            if (await this.client.UpdatePassword(bcProviderId, command.NewPassword))
+            if (await this.client.UpdatePassword(userPrincipalName, command.NewPassword))
             {
+                this.context.BusinessEvents.Add(BCProviderPasswordReset.Create(command.PartyId, userPrincipalName, this.clock.GetCurrentInstant()));
+                await this.context.SaveChangesAsync();
                 return DomainResult.Success();
             }
             else

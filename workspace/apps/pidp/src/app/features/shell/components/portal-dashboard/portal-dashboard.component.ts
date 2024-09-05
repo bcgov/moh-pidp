@@ -2,7 +2,7 @@ import { AsyncPipe } from '@angular/common';
 import { Component, Inject, OnInit } from '@angular/core';
 import { IsActiveMatchOptions } from '@angular/router';
 
-import { Observable, map } from 'rxjs';
+import { Observable, map, tap } from 'rxjs';
 
 import {
   DashboardHeaderConfig,
@@ -12,16 +12,13 @@ import {
 } from '@bcgov/shared/ui';
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';
+import { PartyService } from '@app/core/party/party.service';
 import { AccessRoutes } from '@app/features/access/access.routes';
-import { AccessTokenService } from '@app/features/auth/services/access-token.service';
 import { AuthService } from '@app/features/auth/services/auth.service';
-import {
-  DashboardStateModel,
-  PidpStateName,
-} from '@app/features/portal/models/state.model';
+import { AlertCode } from '@app/features/portal/enums/alert-code.enum';
+import { PortalResource } from '@app/features/portal/portal-resource.service';
+import { ProfileRoutes } from '@app/features/profile/profile.routes';
 
-import { AppStateService } from '../../services/app-state.service';
-import { DashboardStateService } from '../../services/dashboard-state-service.service';
 import { NavMenuComponent } from '../navbar-menu/nav-menu';
 
 @Component({
@@ -33,29 +30,23 @@ import { NavMenuComponent } from '../navbar-menu/nav-menu';
 })
 export class PortalDashboardComponent implements IDashboard, OnInit {
   public logoutRedirectUrl: string;
-  public username: Observable<string>;
   public headerConfig: DashboardHeaderConfig;
   public brandConfig: { imgSrc: string; imgAlt: string };
   public showMenuItemIcons: boolean;
   public responsiveMenuItems: boolean;
   public menuItems: DashboardMenuItem[];
   public providerIdentitySupport: string;
+  public collegeRoute: string = '';
 
-  public dashboardState$: Observable<DashboardStateModel>;
+  public alerts$!: Observable<AlertCode[]>;
 
   public constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
     private authService: AuthService,
-    accessTokenService: AccessTokenService,
-    private dashboardStateService: DashboardStateService,
-    private stateService: AppStateService,
+    private partyService: PartyService,
+    private resource: PortalResource,
   ) {
     this.logoutRedirectUrl = `${this.config.applicationUrl}/${this.config.routes.auth}`;
-    this.username = accessTokenService.decodeToken().pipe(
-      map((token) => {
-        return token?.name ?? '';
-      }),
-    );
     this.headerConfig = { theme: 'light', allowMobileToggle: true };
     this.brandConfig = {
       imgSrc: '/assets/images/pidp-logo-white.svg',
@@ -65,26 +56,26 @@ export class PortalDashboardComponent implements IDashboard, OnInit {
     this.responsiveMenuItems = false;
     this.menuItems = this.createMenuItems();
     this.providerIdentitySupport = this.config.emails.providerIdentitySupport;
-
-    this.dashboardState$ = this.stateService.stateBroadcast$.pipe(
-      map((state) => {
-        const dashboardNamedState = state.all.find(
-          (x) => x.stateName === PidpStateName.dashboard,
-        );
-        if (!dashboardNamedState) {
-          throw 'dashboard state not found';
-        }
-        const dashboardState = dashboardNamedState as DashboardStateModel;
-        return dashboardState;
-      }),
-    );
-  }
-  public ngOnInit(): void {
-    this.dashboardStateService.refreshDashboardState();
   }
 
   public onLogout(): void {
     this.authService.logout(this.logoutRedirectUrl);
+  }
+
+  public ngOnInit(): void {
+    this.alerts$ = this.resource
+      .getProfileStatus(this.partyService.partyId)
+      .pipe(
+        tap((profileStatus) => {
+          this.collegeRoute = profileStatus?.status.collegeCertification
+            .licenceDeclared
+            ? ProfileRoutes.routePath(ProfileRoutes.COLLEGE_LICENCE_INFO)
+            : ProfileRoutes.routePath(
+                ProfileRoutes.COLLEGE_LICENCE_DECLARATION,
+              );
+        }),
+        map((profileStatus) => profileStatus?.alerts ?? []),
+      );
   }
 
   private createMenuItems(): DashboardMenuItem[] {
