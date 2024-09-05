@@ -6,6 +6,7 @@ import { provideAutoSpy } from 'jest-auto-spies';
 
 import { APP_CONFIG, APP_DI_CONFIG } from '@app/app.config';
 
+import { PortalResource } from './portal-resource.service';
 import { PortalPage } from './portal.page';
 
 describe('PortalPage', () => {
@@ -21,6 +22,7 @@ describe('PortalPage', () => {
           useValue: APP_DI_CONFIG,
         },
         provideAutoSpy(HttpClient),
+        provideAutoSpy(PortalResource),
       ],
     });
     component = TestBed.inject(PortalPage);

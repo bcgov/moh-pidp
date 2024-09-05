@@ -13,10 +13,8 @@ using Pidp.Models;
 
 [Route("api/parties/{partyId}/[controller]")]
 [Authorize(Policy = Policies.AnyPartyIdentityProvider)]
-public class CredentialsController : PidpControllerBase
+public class CredentialsController(IPidpAuthorizationService authorizationService) : PidpControllerBase(authorizationService)
 {
-    public CredentialsController(IPidpAuthorizationService authorizationService) : base(authorizationService) { }
-
     /// <summary>
     /// Directly creating a new Credential on an existing Party requires a valid CredentialLinkTicket and associated cookie to link the Accounts.
     /// The return type is Discovery.Model because the standard flow of the app redirects the user here from the Discovery endpoint.
@@ -56,7 +54,6 @@ public class CredentialsController : PidpControllerBase
             .ToActionResultOfT();
 
     [HttpGet("bc-provider")]
-    [Authorize(Policy = Policies.HighAssuranceIdentityProvider)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -66,7 +63,6 @@ public class CredentialsController : PidpControllerBase
             .ToActionResultOfT();
 
     [HttpPost("bc-provider")]
-    [Authorize(Policy = Policies.BcscAuthentication)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -76,7 +72,6 @@ public class CredentialsController : PidpControllerBase
             .ToActionResultOfT();
 
     [HttpPost("bc-provider/password")]
-    [Authorize(Policy = Policies.HighAssuranceIdentityProvider)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -115,7 +110,7 @@ public class CredentialsController : PidpControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult> DeleteCredential()
+    public ActionResult DeleteCredential()
     {
         this.Response.Cookies.Append(
             Cookies.CredentialLinkTicket.Key,

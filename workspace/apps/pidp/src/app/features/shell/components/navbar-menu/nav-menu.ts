@@ -38,7 +38,6 @@ import {
 import { RoutePath } from '@bcgov/shared/utils';
 
 import { AlertCode } from '@app/features/portal/enums/alert-code.enum';
-import { DashboardStateModel } from '@app/features/portal/models/state.model';
 import { ProfileRoutes } from '@app/features/profile/profile.routes';
 
 @Component({
@@ -64,9 +63,10 @@ import { ProfileRoutes } from '@app/features/profile/profile.routes';
   ],
 })
 export class NavMenuComponent implements OnChanges {
-  @Input() public dashboardState!: DashboardStateModel;
+  @Input() public alerts!: AlertCode[];
   @Input() public menuItems!: DashboardMenuItem[];
   @Input() public emailSupport!: string;
+  @Input() public collegeRoute!: string;
   @Output() public logout = new EventEmitter<void>();
   @ViewChild('sidenav') public sidenav!: MatSidenav;
 
@@ -74,17 +74,6 @@ export class NavMenuComponent implements OnChanges {
   public showMiniMenuButton = true;
   public isSidenavOpened = false;
   public sidenavMode: MatDrawerMode = 'over';
-  public get isHeaderImageVisible(): boolean {
-    // Hide the image in xsmall small when there is title text to display.
-    if (
-      (this.viewport === PidpViewport.small ||
-        this.viewport === PidpViewport.xsmall) &&
-      this.dashboardState.titleText
-    ) {
-      return false;
-    }
-    return true;
-  }
 
   public isLogoutButtonVisible = false;
   public isLogoutMenuItemVisible = false;
@@ -93,17 +82,6 @@ export class NavMenuComponent implements OnChanges {
   public showCollegeAlert = false;
   public faBell = faBell;
   public AlertCode = AlertCode;
-
-  public get showTitle(): boolean {
-    return !!this.dashboardState.titleText;
-  }
-  public get showTitleDescription(): boolean {
-    return !!this.dashboardState.titleDescriptionText;
-  }
-
-  public get collegeRoute(): boolean {
-    return !!this.dashboardState.collegeRoute;
-  }
 
   public constructor(
     private viewportService: ViewportService,
@@ -173,13 +151,21 @@ export class NavMenuComponent implements OnChanges {
     this.refresh();
   }
   private refresh(): void {
-    if(!([PidpViewport.xsmall, PidpViewport.small, PidpViewport.medium, PidpViewport.large].includes(this.viewport))) {
+    if (
+      ![
+        PidpViewport.xsmall,
+        PidpViewport.small,
+        PidpViewport.medium,
+        PidpViewport.large,
+      ].includes(this.viewport)
+    ) {
       throw new Error(`Nav Menu not implemented: ${this.viewport}`);
     }
 
-
     const isMiniView = this.viewport === PidpViewport.xsmall;
-    const isDesktopView = this.viewport === PidpViewport.medium || this.viewport === PidpViewport.large;
+    const isDesktopView =
+      this.viewport === PidpViewport.medium ||
+      this.viewport === PidpViewport.large;
 
     this.showMiniMenuButton = isMiniView;
     this.isSidenavOpened = isDesktopView;

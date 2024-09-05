@@ -19,7 +19,8 @@
       margin-top: 20px;
     }
   }
-  & .mobile-image{
+  & .mobile-image {
+    position: relative;
     & img {
       display: block !important;
       max-width: 100%;
@@ -27,8 +28,20 @@
       position: relative !important;
     }
   }
+  & .username {
+    & .username-overflow {
+      overflow-wrap: break-word;
+    }
+  }
   & .form-card {
     display: block !important;
+    & .form-content {
+      & .field {
+        & .mat-mdc-form-field {
+          margin-bottom: 18px !important;
+        }
+      }
+    }
   }
   & .password-splash {
     & .password-splash-content {
@@ -53,9 +66,9 @@
   --header-margin: var(--gap) 0 0;
   --content-padding: var(--gap) 0;
   --password-splash-display: unset;
-    --password-splash: {
-    flex: 1
-  }
+  --password-splash: {
+    flex: 1;
+  };
 }
 
 .viewport-medium,
@@ -68,10 +81,11 @@
 .viewport-all {
   & header {
     margin: var(--header-margin);
-    & h2 {
-      margin: 0;
-      padding: calc(var(--gap) / 2) calc(var(--gap) * 2);
-      background-color: pidp.$grey-10;
+    & h1 {
+      color: #036;
+      font-size: 3.125rem;
+      font-weight: 700;
+      margin-bottom: 0;
     }
   }
   & .content {
@@ -228,7 +242,7 @@
       margin-top: var(--gap);
     }
   }
-  & .mobile-image{
+  & .mobile-image {
     & img {
       display: none;
     }
@@ -272,6 +286,38 @@
         width: 10rem;
         color: pidp.$green;
       }
+    }
+  }
+}
+
+.viewport-small {
+  fa-icon {
+    padding-left: 0.6rem;
+    padding-right: 0.6rem;
+    font-size: 1.5rem;
+  }
+
+  span {
+    font-size: 0.9rem;
+  }
+
+  .form-card {
+    & .form-content {
+      & .field {
+        & .mat-mdc-form-field {
+          margin-bottom: 18px !important;
+        }
+      }
+    }
+  }
+}
+
+.viewport-small,
+.viewport-xsmall {
+  & header {
+    & h1 {
+      font-size: 40px;
+      line-height: 1.1;
     }
   }
 }

@@ -22,8 +22,6 @@ import {
   takeUntil,
 } from 'rxjs';
 
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { faAngleRight } from '@fortawesome/free-solid-svg-icons';
 import {
   LOADING_OVERLAY_DEFAULT_MESSAGE,
   LoadingOverlayService,
@@ -35,7 +33,6 @@ import {
   DialogOptions,
   HtmlComponent,
   InjectViewportCssClassDirective,
-  TextButtonDirective,
 } from '@bcgov/shared/ui';
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';
@@ -53,12 +50,14 @@ import { SuccessDialogComponent } from '@app/shared/components/success-dialog/su
 import { AccountLinkingResource } from './account-linking-resource.service';
 import { linkedAccountCardText } from './account-linking.constants';
 import { Credential } from './account-linking.model';
+import { BreadcrumbComponent } from '@app/shared/components/breadcrumb/breadcrumb.component';
+import { AccessRoutes } from '@app/features/access/access.routes';
 
 @Component({
   selector: 'app-account-linking',
   standalone: true,
   imports: [
-    FaIconComponent,
+    BreadcrumbComponent,
     CommonModule,
     InjectViewportCssClassDirective,
     MatButtonModule,
@@ -68,7 +67,6 @@ import { Credential } from './account-linking.model';
     MatTooltipModule,
     NgFor,
     NgIf,
-    TextButtonDirective,
   ],
   templateUrl: './account-linking.page.html',
   styleUrl: './account-linking.page.scss',
@@ -82,7 +80,6 @@ export class AccountLinkingPage implements OnInit, OnDestroy {
   public credentials$: Observable<Credential[]>;
   public credentials: Credential[] = [];
   public linkedAccountsIdp: IdentityProvider[] = [];
-  public faAngleRight = faAngleRight;
   public showInstructions: boolean = false;
   private unsubscribe$ = new Subject<void>();
 
@@ -113,6 +110,14 @@ export class AccountLinkingPage implements OnInit, OnDestroy {
   public toggleInstructions(): void {
     this.showInstructions = !this.showInstructions;
   }
+  public breadcrumbsData: Array<{ title: string; path: string }> = [
+    {title: 'Home', path: ''},
+    {
+      title: 'Access',
+      path: AccessRoutes.routePath(AccessRoutes.ACCESS_REQUESTS),
+    },
+    {title: 'Account Linking', path: ''},
+  ];
 
   public onLinkAccount(idpHint: IdentityProvider): void {
     const data: DialogOptions = {
@@ -131,7 +136,7 @@ export class AccountLinkingPage implements OnInit, OnDestroy {
       height: '24rem',
       actionText: 'Continue',
       actionTypePosition: 'center',
-      class: 'dialog-container',
+      class: 'dialog-container dialog-padding',
     };
     this.dialog
       .open(ConfirmDialogComponent, { data })
@@ -140,10 +145,6 @@ export class AccountLinkingPage implements OnInit, OnDestroy {
         exhaustMap((result) => (result ? this.linkRequest(idpHint) : EMPTY)),
       )
       .subscribe();
-  }
-
-  public onBack(): void {
-    this.navigateToRoot();
   }
 
   public getCardText(idp: IdentityProvider): string {

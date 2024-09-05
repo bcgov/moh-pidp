@@ -11,6 +11,7 @@ import { ToastService } from '@app/core/services/toast.service';
 import { EndorsementRequestInformation } from './models/endorsement-request-information.model';
 import { EndorsementRequest } from './models/endorsement-request.model';
 import { Endorsement } from './models/endorsement.model';
+import { EndorsementEmailSearch } from './models/endorsement-email-search.model';
 
 @Injectable({
   providedIn: 'root',
@@ -19,7 +20,7 @@ export class EndorsementsResource {
   public constructor(
     private apiResource: ApiHttpClient,
     private toastService: ToastService,
-  ) {}
+  ) { }
 
   public getEndorsements(partyId: number): Observable<Endorsement[] | null> {
     return this.apiResource
@@ -66,6 +67,23 @@ export class EndorsementsResource {
 
           throw error;
         }),
+      );
+  }
+
+  public emailSearch(
+    partyId: number,
+    recipientEmail: string,
+  ): Observable<EndorsementEmailSearch> {
+    return this.apiResource
+      .post<EndorsementEmailSearch>(
+        `${this.getRequestsResourcePath(partyId)}/email-search`,
+        { recipientEmail },
+      )
+      .pipe(
+        catchError(() =>
+
+          of({ recipientName: null } as EndorsementEmailSearch),
+        ),
       );
   }
 
@@ -133,10 +151,10 @@ export class EndorsementsResource {
       .pipe(
         NoContentResponse,
         tap(() =>
-        this.toastService.openSuccessToast(
-          'Endorsement Request has been approved successfully',
+          this.toastService.openSuccessToast(
+            'Endorsement Request has been approved successfully',
+          ),
         ),
-      ),
         catchError((error: HttpErrorResponse) => {
           if (error.status === HttpStatusCode.BadRequest) {
             return of(void 0);
