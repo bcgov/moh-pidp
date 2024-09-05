@@ -23,7 +23,7 @@ public class SAEforms
     {
         return partyPlrStanding
             .Excluding(ExcludedIdentifierTypes)
-            .HasGoodStanding || partyPlrStanding.IsCPSPostgrad;
+            .HasGoodStanding || partyPlrStanding.IsCpsPostgrad;
     }
 
     public class Command : ICommand<IDomainResult>

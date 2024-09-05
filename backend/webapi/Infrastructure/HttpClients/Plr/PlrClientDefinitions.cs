@@ -75,23 +75,23 @@ public class PlrRecord
     {
         // A Licence is in good standing if the Status is "ACTIVE" and the StatusReason is one of a few allowable values.
         // Additionally, "TI" (Temporary Inactive) and "VW" (Voluntary Withdrawn) are "SUSPENDED" in PLR rather than "ACTIVE", but are still considered to be in good standing.
-        var goodStandingReasons = new[]
-        {
+        List<string?> goodStandingReasons =
+        [
             PlrStatusReasonCode.GoodStanding,
             PlrStatusReasonCode.Practicing,
             PlrStatusReasonCode.TemporaryPermit,
             PlrStatusReasonCode.TemporaryInactive,
             PlrStatusReasonCode.VoluntaryWithdrawn
-        };
-        var suspendedAllowed = new[] { PlrStatusReasonCode.TemporaryInactive, PlrStatusReasonCode.VoluntaryWithdrawn };
+        ];
+        List<string?> suspendedAllowed = [PlrStatusReasonCode.TemporaryInactive, PlrStatusReasonCode.VoluntaryWithdrawn];
 
         if (this.StatusCode == PlrStatusCode.Active)
         {
-            return Array.Exists(goodStandingReasons, gsr => gsr == this.StatusReasonCode);
+            return goodStandingReasons.Contains(this.StatusReasonCode);
         }
         else if (this.StatusCode == PlrStatusCode.Suspended)
         {
-            return Array.Exists(suspendedAllowed, sa => sa == this.StatusReasonCode);
+            return suspendedAllowed.Contains(this.StatusReasonCode);
         }
         return false;
     }
@@ -112,7 +112,7 @@ public class PlrStandingsDigest
     /// Returns true if there is at least one record for a post graduate
     /// licenced individual from the College of Physicians and Surgeons in pending non-practicing status.
     /// </summary>
-    public bool IsCPSPostgrad => this.records
+    public bool IsCpsPostgrad => this.records
         .Any(record => record.IdentifierType == IdentifierType.PhysiciansAndSurgeons
             && record.PlrStatusCode == PlrStatusCode.Pending
             && record.PlrStatusReasonCode == PlrStatusReasonCode.NonPracticing);
@@ -124,7 +124,7 @@ public class PlrStandingsDigest
     private PlrStandingsDigest(bool error, IEnumerable<DigestRecord>? records = null)
     {
         this.Error = error;
-        this.records = records ?? Enumerable.Empty<DigestRecord>();
+        this.records = records ?? [];
     }
 
     /// <summary>
