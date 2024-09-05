@@ -152,7 +152,8 @@ nginx:
         deny all;
       }
     }
-
+  fluentbit:
+    enabled: true
 
 frontend:
   replicaCount: 3
