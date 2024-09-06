@@ -7,16 +7,10 @@ using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.HttpClients.Keycloak;
 using Pidp.Models.Lookups;
 
-public class DoWorkService : IDoWorkService
+public class DoWorkService(IKeycloakAdministrationClient keycloakClient, PidpDbContext context) : IDoWorkService
 {
-    private readonly IKeycloakAdministrationClient keycloakClient;
-    private readonly PidpDbContext context;
-
-    public DoWorkService(IKeycloakAdministrationClient keycloakClient, PidpDbContext context)
-    {
-        this.keycloakClient = keycloakClient;
-        this.context = context;
-    }
+    private readonly IKeycloakAdministrationClient keycloakClient = keycloakClient;
+    private readonly PidpDbContext context = context;
 
     public async Task DoWorkAsync()
     {
