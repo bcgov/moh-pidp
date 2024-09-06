@@ -37,6 +37,7 @@ public class PidpDbContext : DbContext
     public DbSet<PartyLicenceDeclaration> PartyLicenceDeclarations { get; set; } = default!;
     public DbSet<Party> Parties { get; set; } = default!;
     public DbSet<PrpAuthorizedLicence> PrpAuthorizedLicences { get; set; } = default!;
+    public DbSet<Job> Jobs { get; set; } = default!;
 
     /// <summary>
     /// Do not use. Use SaveChangesAsync Instead.
@@ -45,8 +46,8 @@ public class PidpDbContext : DbContext
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
-        await this.DispatchDomainEventsAsync();
-        this.ApplyAudits();
+        // await this.DispatchDomainEventsAsync();
+        // this.ApplyAudits();
 
         return await base.SaveChangesAsync(cancellationToken);
     }
