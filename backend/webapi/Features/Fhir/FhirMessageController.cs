@@ -65,7 +65,7 @@ public class FhirMessagesController : PidpControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<int>> PostSaveData([FromServices] ICommandHandler<FhirMessages.Command, int> handler, [FromBody] FhirMessages.Command command)
-        => await handler.HandleAsync(command);
+    public async Task<IActionResult> PostSaveData([FromServices] ICommandHandler<FhirMessages.Command, IDomainResult> handler, [FromBody] FhirMessages.Command command)
+        => await handler.HandleAsync(command).ToActionResult();
 
 }

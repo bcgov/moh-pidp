@@ -22,18 +22,18 @@ public class FhirMessages
         BaseAddress = new Uri("http://localhost:8080"),
     };
 
-    public class Command : ICommand<int>
+    public class Command : ICommand<IDomainResult>
     {
         public string resourceType { get; set; }
         public object parameter { get; set; }
     }
 
 
-    public class CommandHandler(PidpDbContext context) : ICommandHandler<Command, int>
+    public class CommandHandler(PidpDbContext context) :  ICommandHandler<Command, IDomainResult>
     {
         private readonly PidpDbContext context = context;
 
-        public async Task<int> HandleAsync(Command command)
+        public async Task<IDomainResult> HandleAsync(Command command)
         {
             var jsonStr = JsonSerializer.Serialize(command);
             var newJsonObj = jsonStr.Replace(FhirConstants.resourceType, FhirConstants.resourceTypeReplacer);
@@ -55,10 +55,8 @@ public class FhirMessages
             };
             this.context.FhirMessages.Add(fhirMessage);
             await this.context.SaveChangesAsync();
-            // return DomainResult.Success();
-            return 1;
+            return DomainResult.Success();
         }
-
     }
 
 }
