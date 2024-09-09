@@ -11,7 +11,6 @@ using Pidp.Infrastructure.Services;
 [Route("api/ext")]
 public class ThirdPartyintegrationsController : PidpControllerBase
 {
-
     public ThirdPartyintegrationsController(IPidpAuthorizationService authorizationService) : base(authorizationService) { }
 
     [HttpGet("parties/{hpdid}/endorsements")]
