@@ -23,6 +23,7 @@ using Pidp.Infrastructure.HealthChecks;
 using Pidp.Infrastructure.HttpClients;
 using Pidp.Infrastructure.Services;
 using Pidp.Infrastructure.Queue;
+using static Pidp.Infrastructure.Services.FhirService;
 
 public class Startup
 {
@@ -96,7 +97,7 @@ public class Startup
 
         Log.Logger.Information("### App Version:{0} ###", Assembly.GetExecutingAssembly().GetName().Version);
         Log.Logger.Information("### PIdP Configuration:{0} ###", JsonSerializer.Serialize(config));
-
+        FhirService.createModel();
         return config;
     }
 

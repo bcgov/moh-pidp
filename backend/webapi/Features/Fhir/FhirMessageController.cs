@@ -19,10 +19,6 @@ using Serilog;
 public class FhirMessagesController : PidpControllerBase
 {
     private readonly PidpDbContext context;
-    private static HttpClient sharedClient = new()
-    {
-        BaseAddress = new Uri("http://localhost:8080"),
-    };
 
     public FhirMessagesController(IPidpAuthorizationService authorizationService, PidpDbContext context) : base(authorizationService) {
         this.context = context;
@@ -41,22 +37,6 @@ public class FhirMessagesController : PidpControllerBase
         };
         this.context.FhirMessages.Add(fhirmessage);
         await this.context.SaveChangesAsync();
-        return this.Ok();
-    }
-
-    [HttpPost("model/create")]
-    [Authorize(Roles = Roles.FhirDistributionAccess)]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult> PostModel([FromBody] object obj)
-    {
-        using StringContent jsonContent = FhirConstants.modelCreatePayload;
-        using HttpResponseMessage response = await sharedClient.PutAsync(
-            FhirConstants.modelCreateUrl + FhirConstants.modelName,
-        jsonContent);
-
-        Log.Information(response.ToString());
         return this.Ok();
     }
 
