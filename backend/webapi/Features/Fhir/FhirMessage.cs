@@ -8,6 +8,7 @@ using System.Text.Json;
 using System.Text.Json.Nodes;
 using Serilog;
 
+using Pidp;
 using Pidp.Data;
 using Pidp.Extensions;
 using Pidp.Infrastructure.Fhir;
@@ -17,9 +18,11 @@ using Pidp.Models;
 public class FhirMessages
 {
     private readonly PidpDbContext context;
+    private static PidpConfiguration config = new PidpConfiguration();
+
     private static HttpClient sharedClient = new()
     {
-        BaseAddress = new Uri("http://firely-server:4080"),
+        BaseAddress = new Uri(config.FhirService.HostAddress),
     };
 
     public class Command : ICommand<IDomainResult>

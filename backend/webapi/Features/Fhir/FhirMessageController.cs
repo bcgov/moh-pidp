@@ -9,7 +9,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Pidp.Data;
 using Pidp.Infrastructure.Auth;
-using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.Fhir;
 using Pidp.Infrastructure.Services;
 using Pidp.Models;

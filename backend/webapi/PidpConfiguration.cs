@@ -19,6 +19,7 @@ public class PidpConfiguration
     public MailServerConfiguration MailServer { get; set; } = new();
     public PlrClientConfiguration PlrClient { get; set; } = new();
     public RabbitMQConfiguration RabbitMQ { get; set; } = new();
+    public FhirServiceConfiguration FhirService { get; set; } = new();
 
     // ------- Configuration Objects -------
 
@@ -81,5 +82,9 @@ public class PidpConfiguration
     public class RabbitMQConfiguration
     {
         public string HostAddress { get; set; } = string.Empty;
+    }
+    public class FhirServiceConfiguration
+    {
+        public string HostAddress { get; set; } = "http://firely-server:4080/";
     }
 }

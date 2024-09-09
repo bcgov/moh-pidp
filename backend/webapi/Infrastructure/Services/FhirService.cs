@@ -5,9 +5,11 @@ using Serilog;
 
 public class FhirService
 {
+    private static PidpConfiguration config = new PidpConfiguration();
+
     private static HttpClient sharedClient = new()
     {
-        BaseAddress = new Uri("http://firely-server:4080"),
+        BaseAddress = new Uri(config.FhirService.HostAddress),
     };
 
     public static async void createModel()
