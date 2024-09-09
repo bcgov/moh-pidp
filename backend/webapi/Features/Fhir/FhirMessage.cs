@@ -19,7 +19,7 @@ public class FhirMessages
     private readonly PidpDbContext context;
     private static HttpClient sharedClient = new()
     {
-        BaseAddress = new Uri("http://localhost:8080"),
+        BaseAddress = new Uri("http://firely-server:4080"),
     };
 
     public class Command : ICommand<IDomainResult>

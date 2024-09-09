@@ -7,7 +7,7 @@ public class FhirService
 {
     private static HttpClient sharedClient = new()
     {
-        BaseAddress = new Uri("http://localhost:8080"),
+        BaseAddress = new Uri("http://firely-server:4080"),
     };
 
     public static async void createModel()
