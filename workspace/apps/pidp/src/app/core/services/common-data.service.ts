@@ -8,9 +8,9 @@ import { BehaviorSubject } from 'rxjs';
 export class CommonDataService {
   private pushEventSource = new BehaviorSubject('');
 
-  pushEvent = this.pushEventSource.asObservable();
-
-  publishEvent(event: any) {
+  public pushEvent = this.pushEventSource.asObservable();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  public publishEvent(event: any): void {
     this.pushEventSource.next(event);
   }
 }
