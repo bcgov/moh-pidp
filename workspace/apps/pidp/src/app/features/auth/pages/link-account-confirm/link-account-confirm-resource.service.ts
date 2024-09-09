@@ -40,7 +40,7 @@ export class LinkAccountConfirmResource {
   }
 
   public cancelLink(): Observable<Observable<void> | boolean> {
-    return this.apiResource.delete('credentials').pipe(
+    return this.apiResource.delete('credentials/link-ticket/cookie').pipe(
       map(() => this.authService.logout(this.logoutRedirectUrl)),
       catchError((error: HttpErrorResponse) => {
         this.toastService.openErrorToast(
