@@ -156,6 +156,20 @@ services:
       - 9090:8080
     profiles: ["full", "keycloak"]
 
+  ###############################################################################
+  ###                                 FirelyServer                                 ###
+  ###############################################################################
+  firely:
+    container_name: firely-server
+    restart: always
+    image: firely/server
+    ports:
+      - 4080:8080
+    volumes:
+      - ./firelyserver-license.json:/app/firelyserver-license.json 
+    networks:
+      - pidp-net
+    
 ###############################################################################
 ###                           Networks Definition                           ###
 ###############################################################################
