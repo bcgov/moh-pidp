@@ -83,3 +83,31 @@ public class BCProviderPasswordReset : PartyBusinessEvent
     }
 }
 
+public class AccountLinkingSuccess : PartyBusinessEvent
+{
+    public static AccountLinkingSuccess Create(int partyId, Instant recordedOn)
+    {
+        return new AccountLinkingSuccess
+        {
+            PartyId = partyId,
+            Description = $"Party successfully linked their account.",
+            Severity = LogLevel.Information,
+            RecordedOn = recordedOn
+        };
+    }
+}
+
+public class AccountLinkingFailure : PartyBusinessEvent
+{
+    public static AccountLinkingFailure Create(int partyId, string failureReason, Instant recordedOn)
+    {
+        return new AccountLinkingFailure
+        {
+            PartyId = partyId,
+            Description = $"Party failed to link their account. Reason: {failureReason}",
+            Severity = LogLevel.Warning,
+            RecordedOn = recordedOn
+        };
+    }
+}
+
