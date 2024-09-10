@@ -9,7 +9,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 
-import { EMPTY, Observable, exhaustMap, mergeMap, of, switchMap } from 'rxjs';
+import { EMPTY, Observable, exhaustMap, of, switchMap } from 'rxjs';
 
 import {
   AnchorDirective,
@@ -168,8 +168,8 @@ export class LoginPage implements OnInit {
   }
 
   private login(idpHint: IdentityProvider): Observable<void> {
-    return this.createClientLogIfNeeded(idpHint).pipe(
-      mergeMap(() => this.linkAccountConfirmResource.cancelLink()),
+    return this.linkAccountConfirmResource.cancelLink().pipe(
+      switchMap(() => this.createClientLogIfNeeded(idpHint)),
       switchMap(() =>
         this.authService.login({
           idpHint: idpHint,
