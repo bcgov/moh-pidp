@@ -15,7 +15,7 @@ public class FhirClient : BaseClient, IFhirClient
         return response;
     }
     public async Task<IDomainResult> PutAsync(object payload, string url) {
-        string endpoint = url + FhirConstants.modelCreateUrl + FhirConstants.modelName;
+        var endpoint = url + FhirConstants.modelCreateUrl + FhirConstants.modelName;
         Log.Information(endpoint);
         var response = await this.PutAsync(endpoint, payload);
         return response;

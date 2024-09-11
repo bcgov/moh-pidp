@@ -1,18 +1,14 @@
 namespace Pidp.Features.FhirMessages;
 
-using System.Text;
 using System.Text.Json;
-using System.Text.Json.Nodes;
 using DomainResults.Common;
 using DomainResults.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Pidp.Data;
 using Pidp.Infrastructure.Auth;
-using Pidp.Infrastructure.Fhir;
 using Pidp.Infrastructure.Services;
 using Pidp.Models;
-using Serilog;
 
 [Route("api/fhir")]
 public class FhirMessagesController : PidpControllerBase

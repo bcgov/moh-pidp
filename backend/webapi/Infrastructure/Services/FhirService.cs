@@ -1,8 +1,6 @@
 namespace Pidp.Infrastructure.Services;
 
-using Pidp.Infrastructure.Fhir;
 using Pidp.Infrastructure.HttpClients.Fhir;
-using Serilog;
 
 public class FhirService : IFhirService
 {

@@ -23,10 +23,7 @@ using Pidp.Infrastructure.HealthChecks;
 using Pidp.Infrastructure.HttpClients;
 using Pidp.Infrastructure.Services;
 using Pidp.Infrastructure.Queue;
-using static Pidp.Infrastructure.Services.FhirService;
-using Pidp.Infrastructure.HttpClients.Fhir;
 using Pidp.Infrastructure.Fhir;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
 
 public class Startup
 {

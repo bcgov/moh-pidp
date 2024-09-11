@@ -1,19 +1,14 @@
 namespace Pidp.Features.FhirMessages;
 
-using DomainResults.Mvc;
 using DomainResults.Common;
-using Microsoft.EntityFrameworkCore;
-using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using Serilog;
 
 using Pidp;
 using Pidp.Data;
-using Pidp.Extensions;
 using Pidp.Infrastructure.Fhir;
 using Pidp.Models;
-using Pidp.Infrastructure.HttpClients.Fhir;
 using Pidp.Infrastructure.Services;
 
 public class FhirMessages

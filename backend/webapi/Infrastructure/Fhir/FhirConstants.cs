@@ -1,8 +1,5 @@
 namespace Pidp.Infrastructure.Fhir;
 
-using System.Text;
-using System.Text.Json;
-
 public class FhirConstants {
     public static object modelCreatePayload = new
         {
