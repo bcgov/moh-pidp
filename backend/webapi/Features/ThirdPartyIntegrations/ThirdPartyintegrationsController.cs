@@ -4,15 +4,14 @@ using DomainResults.Common;
 using DomainResults.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+
 using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.Services;
 
 [Route("api/ext")]
 public class ThirdPartyintegrationsController : PidpControllerBase
 {
-
-    public ThirdPartyintegrationsController(IPidpAuthorizationService authorizationService) : base(authorizationService) {
-    }
+    public ThirdPartyintegrationsController(IPidpAuthorizationService authorizationService) : base(authorizationService) { }
 
     [HttpGet("parties/{hpdid}/endorsements")]
     [Authorize(Roles = Roles.ViewEndorsements)]
@@ -23,5 +22,4 @@ public class ThirdPartyintegrationsController : PidpControllerBase
                                                                                    [FromRoute] EndorsementData.Query query)
         => await handler.HandleAsync(query)
             .ToActionResultOfT();
-
 }
