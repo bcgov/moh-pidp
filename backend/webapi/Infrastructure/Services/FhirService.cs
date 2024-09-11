@@ -1,24 +1,20 @@
 namespace Pidp.Infrastructure.Services;
 
 using Pidp.Infrastructure.Fhir;
+using Pidp.Infrastructure.HttpClients.Fhir;
 using Serilog;
 
-public class FhirService
+public class FhirService : IFhirService
 {
-    private static PidpConfiguration config = new PidpConfiguration();
-
-    private static HttpClient sharedClient = new()
+    public FhirService()
     {
-        BaseAddress = new Uri(config.FhirService.HostAddress),
-    };
+    }
 
-    public static async void createModel()
+    public async Task<FhirClient> ConstructFhirClient()
     {
-        using StringContent jsonContent = FhirConstants.modelCreatePayload;
-        using HttpResponseMessage response = await sharedClient.PutAsync(
-            FhirConstants.modelCreateUrl + FhirConstants.modelName,
-        jsonContent);
-
-        Log.Information(response.ToString());
+        var client = new HttpClient();
+        var logger = LoggerFactory.Create(builder => builder.AddConsole()).CreateLogger<FhirClient>();
+        var fhirClient = new FhirClient(client, logger);
+        return fhirClient;
     }
 }

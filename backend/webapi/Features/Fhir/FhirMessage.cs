@@ -14,7 +14,7 @@ using Pidp.Extensions;
 using Pidp.Infrastructure.Fhir;
 using Pidp.Models;
 using Pidp.Infrastructure.HttpClients.Fhir;
-
+using Pidp.Infrastructure.Services;
 
 public class FhirMessages
 {
@@ -39,15 +39,12 @@ public class FhirMessages
             var payload = JsonObject.Parse(newJsonObj);
             payload[FhirConstants.resourceType] = FhirConstants.modelName;
 
-            var client = new HttpClient();
-            var logger = LoggerFactory.Create(builder => builder.AddConsole()).CreateLogger<FhirClient>();
-            var fhirClient = new FhirClient(client, logger);
-            Log.Information(config.FhirService.HostAddress);
+            var fhirClient = await new FhirService().ConstructFhirClient();
             var url = config.FhirService.HostAddress + FhirConstants.modelName;
             var response = await fhirClient.PostAsync(payload, url);
+
             Log.Information("Fhir POST API response : ");
             Log.Information(response.IsSuccess.ToString());
-
 
             // Save fhir messages to postgres database for data persistency.
             var jsonDocument = JsonDocument.Parse(jsonStr);

@@ -90,14 +90,15 @@ public class Startup
         });
         services.AddFluentValidationRulesToSwagger();
 
-        var client = new HttpClient();
-        var logger = LoggerFactory.Create(builder => builder.AddConsole()).CreateLogger<FhirClient>();
-        var payload = FhirConstants.modelCreatePayload;
-
-        var fhirClient = new FhirClient(client, logger);
         Log.Information("FHIR service host address : ");
         Log.Information(config.FhirService.HostAddress);
+
+        var fhirClient = await new FhirService().ConstructFhirClient();
+        var payload = FhirConstants.modelCreatePayload;
         var response = await fhirClient.PutAsync(payload, config.FhirService.HostAddress);
+
+        Log.Information("FHIR Model Create PUT API Response Issuccess : ");
+        Log.Information(response.IsSuccess.ToString());
     }
 
     private PidpConfiguration InitializeConfiguration(IServiceCollection services)
