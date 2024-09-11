@@ -44,6 +44,6 @@ public static class Roles
     public const string User = "USER";
 
     // Service account roles for external access
-    public const string ViewEndorsements = "view_endorsement_data";
     public const string FhirDistributionAccess = "fhir_distribution_access";
+    public const string ViewEndorsements = "view_endorsement_data";
 }

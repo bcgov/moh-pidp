@@ -19,11 +19,11 @@ using Pidp.Extensions;
 using Pidp.Features;
 using Pidp.Infrastructure;
 using Pidp.Infrastructure.Auth;
+using Pidp.Infrastructure.Fhir;
 using Pidp.Infrastructure.HealthChecks;
 using Pidp.Infrastructure.HttpClients;
 using Pidp.Infrastructure.Services;
 using Pidp.Infrastructure.Queue;
-using Pidp.Infrastructure.Fhir;
 
 public class Startup
 {
