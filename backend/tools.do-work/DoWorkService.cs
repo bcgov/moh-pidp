@@ -15,29 +15,31 @@ public class DoWorkService(IKeycloakAdministrationClient keycloakClient, PidpDbC
 
     public async Task DoWorkAsync()
     {
-        await this.PopulateJobs();
+        // await this.PopulateJobs();
 
-        // var credentials = await this.context.Parties
-        //     .Where(party => party.AccessRequests.Any(request => request.AccessTypeCode == AccessTypeCode.SAEforms))
-        //     .SelectMany(party => party.Credentials)
-        //     .Where(credential => credential.IdentityProvider == IdentityProviders.BCProvider)
-        //     .ToListAsync();
+        var batch = await this.context.Jobs
+            .Where(job => !job.Complete)
+            .Take(10)
+            .ToListAsync();
 
-        // var counter = 0;
-        // foreach (var credential in credentials)
-        // {
-        //     try
-        //     {
-        //         await this.keycloakClient.AssignAccessRoles(credential.UserId, MohKeycloakEnrolment.SAEforms);
-        //         Console.WriteLine($"Successfully assigned access roles to user {credential.UserId}, PartyId {credential.PartyId}");
-        //         counter++;
-        //     }
-        //     catch (Exception ex)
-        //     {
-        //         Console.WriteLine($"Error assigning access roles to user {credential.UserId}, PartyId {credential.Party?.Id}: {ex.Message}");
-        //     }
-        // }
-        // Console.WriteLine($"Assigned roles to {counter} users.");
+        foreach (var job in batch)
+        {
+            try
+            {
+                job.Complete = await this.keycloakClient.AssignAccessRoles(job.UserId, MohKeycloakEnrolment.SAEforms);
+
+                if (!job.Complete)
+                {
+                    Console.WriteLine($"Error assigning access roles to user {job.UserId}");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Exception assigning access roles to user {job.UserId}: {ex.Message}");
+            }
+        }
+
+        await this.context.SaveChangesAsync();
     }
 
     private async Task PopulateJobs()
