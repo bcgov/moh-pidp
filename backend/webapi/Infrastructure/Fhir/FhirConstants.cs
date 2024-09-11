@@ -4,8 +4,7 @@ using System.Text;
 using System.Text.Json;
 
 public class FhirConstants {
-    public static StringContent modelCreatePayload = new(
-        JsonSerializer.Serialize(new
+    public static object modelCreatePayload = new
         {
             resourceType = "StructureDefinition",
             id = "FhirMessageBody",
@@ -1788,11 +1787,9 @@ public class FhirConstants {
                     },
                 }
             }
-        }),
-        Encoding.UTF8,
-        "application/json");
+        };
 
-    public static String modelCreateUrl = "/administration/StructureDefinition/";
+    public static String modelCreateUrl = "administration/StructureDefinition/";
     public static String modelName = "FhirMessageBody";
     public static String resourceType = "resourceType";
     public static String resourceTypeReplacer = "resource_Type";

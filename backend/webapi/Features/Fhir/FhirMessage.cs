@@ -13,17 +13,12 @@ using Pidp.Data;
 using Pidp.Extensions;
 using Pidp.Infrastructure.Fhir;
 using Pidp.Models;
+using Pidp.Infrastructure.HttpClients.Fhir;
 
 
 public class FhirMessages
 {
-    private readonly PidpDbContext context;
-    private static PidpConfiguration config = new PidpConfiguration();
 
-    private static HttpClient sharedClient = new()
-    {
-        BaseAddress = new Uri(config.FhirService.HostAddress),
-    };
 
     public class Command : ICommand<IDomainResult>
     {
@@ -32,9 +27,10 @@ public class FhirMessages
     }
 
 
-    public class CommandHandler(PidpDbContext context) :  ICommandHandler<Command, IDomainResult>
+    public class CommandHandler(PidpDbContext context, PidpConfiguration config) : ICommandHandler<Command, IDomainResult>
     {
         private readonly PidpDbContext context = context;
+        private readonly PidpConfiguration config = config;
 
         public async Task<IDomainResult> HandleAsync(Command command)
         {
@@ -42,13 +38,16 @@ public class FhirMessages
             var newJsonObj = jsonStr.Replace(FhirConstants.resourceType, FhirConstants.resourceTypeReplacer);
             var payload = JsonObject.Parse(newJsonObj);
             payload[FhirConstants.resourceType] = FhirConstants.modelName;
-            StringContent stringContent = new StringContent(payload.ToString(), UnicodeEncoding.UTF8,  FhirConstants.postContentType);
 
-            using HttpResponseMessage response = await sharedClient.PostAsync(
-                FhirConstants.modelInsertDataEndpoint, stringContent
-            );
+            var client = new HttpClient();
+            var logger = LoggerFactory.Create(builder => builder.AddConsole()).CreateLogger<FhirClient>();
+            var fhirClient = new FhirClient(client, logger);
+            Log.Information(config.FhirService.HostAddress);
+            var url = config.FhirService.HostAddress + FhirConstants.modelName;
+            var response = await fhirClient.PostAsync(payload, url);
+            Log.Information("Fhir POST API response : ");
+            Log.Information(response.IsSuccess.ToString());
 
-            Log.Information(response.ToString());
 
             // Save fhir messages to postgres database for data persistency.
             var jsonDocument = JsonDocument.Parse(jsonStr);

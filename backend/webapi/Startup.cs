@@ -24,6 +24,9 @@ using Pidp.Infrastructure.HttpClients;
 using Pidp.Infrastructure.Services;
 using Pidp.Infrastructure.Queue;
 using static Pidp.Infrastructure.Services.FhirService;
+using Pidp.Infrastructure.HttpClients.Fhir;
+using Pidp.Infrastructure.Fhir;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 
 public class Startup
 {
@@ -31,7 +34,7 @@ public class Startup
 
     public Startup(IConfiguration configuration) => this.Configuration = configuration;
 
-    public void ConfigureServices(IServiceCollection services)
+    public async void ConfigureServices(IServiceCollection services)
     {
         var config = this.InitializeConfiguration(services);
 
@@ -86,6 +89,15 @@ public class Startup
             options.CustomSchemaIds(x => x.FullName);
         });
         services.AddFluentValidationRulesToSwagger();
+
+        var client = new HttpClient();
+        var logger = LoggerFactory.Create(builder => builder.AddConsole()).CreateLogger<FhirClient>();
+        var payload = FhirConstants.modelCreatePayload;
+
+        var fhirClient = new FhirClient(client, logger);
+        Log.Information("FHIR service host address : ");
+        Log.Information(config.FhirService.HostAddress);
+        var response = await fhirClient.PutAsync(payload, config.FhirService.HostAddress);
     }
 
     private PidpConfiguration InitializeConfiguration(IServiceCollection services)
@@ -97,7 +109,7 @@ public class Startup
 
         Log.Logger.Information("### App Version:{0} ###", Assembly.GetExecutingAssembly().GetName().Version);
         Log.Logger.Information("### PIdP Configuration:{0} ###", JsonSerializer.Serialize(config));
-        FhirService.createModel();
+
         return config;
     }
 
