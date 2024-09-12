@@ -2,6 +2,7 @@ namespace Pidp.Features.Credentials;
 
 using DomainResults.Common;
 using FluentValidation;
+using MassTransit;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Graph.Models;
@@ -17,11 +18,12 @@ using Pidp.Infrastructure.HttpClients.Plr;
 using Pidp.Models;
 using Pidp.Models.DomainEvents;
 using Pidp.Models.Lookups;
+using static Pidp.Features.CommonHandlers.UpdateKeycloakAttributesConsumer;
 using Pidp.Infrastructure.HttpClients.Keycloak;
 
 public class Create
 {
-    public class Command : ICommand<IDomainResult<Model>>
+    public class Command : ICommand<IDomainResult<int>>
     {
         [JsonIgnore]
         public Guid CredentialLinkToken { get; set; }
@@ -29,32 +31,16 @@ public class Create
         public ClaimsPrincipal User { get; set; } = new();
     }
 
-    public class Model
+    public class CommandHandler(
+        IClock clock,
+        ILogger<CommandHandler> logger,
+        PidpDbContext context) : ICommandHandler<Command, IDomainResult<int>>
     {
-        public int PartyId { get; set; }
-    }
+        private readonly IClock clock = clock;
+        private readonly ILogger<CommandHandler> logger = logger;
+        private readonly PidpDbContext context = context;
 
-    public class CommandHandler : ICommandHandler<Command, IDomainResult<Model>>
-    {
-        private readonly IClock clock;
-        private readonly ILogger<CommandHandler> logger;
-        private readonly PidpDbContext context;
-        private readonly IKeycloakAdministrationClient keycloakClient;
-
-
-        public CommandHandler(
-            IClock clock,
-            ILogger<CommandHandler> logger,
-            PidpDbContext context,
-            IKeycloakAdministrationClient keycloakClient)
-        {
-            this.clock = clock;
-            this.logger = logger;
-            this.context = context;
-            this.keycloakClient = keycloakClient;
-        }
-
-        public async Task<IDomainResult<Model>> HandleAsync(Command command)
+        public async Task<IDomainResult<int>> HandleAsync(Command command)
         {
             var userId = command.User.GetUserId();
             var userIdentityProvider = command.User.GetIdentityProvider();
@@ -64,29 +50,41 @@ public class Create
                 || string.IsNullOrWhiteSpace(userIdpId))
             {
                 this.logger.LogUserError(userId, userIdentityProvider, userIdpId);
-                return DomainResult.Failed<Model>();
+                return DomainResult.Failed<int>();
             }
 
             var ticket = await this.context.CredentialLinkTickets
-                .Include(ticket => ticket.Party)
-                .Where(ticket => ticket.Token == command.CredentialLinkToken
-                    && !ticket.Claimed)
-                .SingleOrDefaultAsync();
+                .SingleOrDefaultAsync(ticket => ticket.Token == command.CredentialLinkToken
+                    && !ticket.Claimed);
 
             if (ticket == null)
             {
                 this.logger.LogTicketNotFound(command.CredentialLinkToken);
-                return DomainResult.NotFound<Model>();
-            }
-            if (ticket.ExpiresAt < this.clock.GetCurrentInstant())
-            {
-                this.logger.LogTicketExpired(ticket.Id);
-                return DomainResult.Failed<Model>();
+                return DomainResult.NotFound<int>();
             }
             if (ticket.LinkToIdentityProvider != userIdentityProvider)
             {
                 this.logger.LogTicketIdpError(ticket.Id, ticket.LinkToIdentityProvider, userIdentityProvider);
-                return DomainResult.Failed<Model>();
+                return DomainResult.Failed<int>();
+            }
+            if (ticket.ExpiresAt < this.clock.GetCurrentInstant())
+            {
+                this.logger.LogTicketExpired(ticket.Id);
+                return DomainResult.Failed<int>();
+            }
+
+#pragma warning disable CA1304 // ToLower() is Locale Dependant
+            var existingCredential = await this.context.Credentials
+                .Where(credential => credential.UserId == userId
+                    || (credential.IdentityProvider == userIdentityProvider
+                        && credential.IdpId!.ToLower() == userIdpId.ToLower()))
+                .SingleOrDefaultAsync();
+#pragma warning restore CA1304
+
+            if (existingCredential != null)
+            {
+                this.logger.LogCredentialAlreadyExists(ticket.Id, existingCredential.Id);
+                return DomainResult.Failed<int>();
             }
 
             var credential = new Credential
@@ -96,39 +94,28 @@ public class Create
                 IdentityProvider = userIdentityProvider,
                 IdpId = userIdpId
             };
-            credential.DomainEvents.Add(new CredentialLinked(credential));
+            credential.DomainEvents.Add(new CredentialLinked(credential, command.User));
             credential.DomainEvents.Add(new CollegeLicenceUpdated(credential.PartyId));
             this.context.Credentials.Add(credential);
-
-            await this.keycloakClient.UpdateUser(userId, user => user.SetOpId(ticket.Party!.OpId!));
 
             ticket.Claimed = true;
 
             await this.context.SaveChangesAsync();
 
-            return DomainResult.Success(new Model { PartyId = ticket.PartyId });
+            return DomainResult.Success(ticket.PartyId);
         }
     }
 
-
-    public class BCProviderUpdateAttributesHandler : INotificationHandler<CredentialLinked>
+    public class BCProviderUpdateAttributesHandler(
+        IBCProviderClient bcProviderClient,
+        IPlrClient plrClient,
+        PidpConfiguration config,
+        PidpDbContext context) : INotificationHandler<CredentialLinked>
     {
-        private readonly IBCProviderClient bcProviderClient;
-        private readonly IPlrClient plrClient;
-        private readonly PidpDbContext context;
-        private readonly string bcProviderClientId;
-
-        public BCProviderUpdateAttributesHandler(
-            IBCProviderClient bcProviderClient,
-            IPlrClient plrClient,
-            PidpConfiguration config,
-            PidpDbContext context)
-        {
-            this.bcProviderClient = bcProviderClient;
-            this.plrClient = plrClient;
-            this.context = context;
-            this.bcProviderClientId = config.BCProviderClient.ClientId;
-        }
+        private readonly IBCProviderClient bcProviderClient = bcProviderClient;
+        private readonly IPlrClient plrClient = plrClient;
+        private readonly PidpDbContext context = context;
+        private readonly string bcProviderClientId = config.BCProviderClient.ClientId;
 
         public async Task Handle(CredentialLinked notification, CancellationToken cancellationToken)
         {
@@ -195,6 +182,82 @@ public class Create
             await this.bcProviderClient.UpdateUser(credential.IdpId, user);
         }
     }
+
+    public class UpdateBCServicesCardAttributesHandler(IBus bus, PidpDbContext context) : INotificationHandler<CredentialLinked>
+    {
+        private readonly IBus bus = bus;
+        private readonly PidpDbContext context = context;
+
+        public async Task Handle(CredentialLinked notification, CancellationToken cancellationToken)
+        {
+            var newCredential = notification.Credential;
+
+            var party = await this.context.Parties
+                .Include(party => party.Credentials)
+                .SingleAsync(party => party.Id == newCredential.PartyId, cancellationToken);
+
+            if (newCredential.IdentityProvider == IdentityProviders.BCServicesCard)
+            {
+                party.Birthdate = notification.User.GetBirthdate();
+                await party.GenerateOpId(this.context);
+                await this.context.SaveChangesAsync(cancellationToken);
+
+                foreach (var credential in party.Credentials)
+                {
+                    await this.bus.Publish(UpdateKeycloakAttributes.FromUpdateAction(credential.UserId, user => user.SetOpId(party.OpId!)), cancellationToken);
+                }
+            }
+            else
+            {
+                await this.bus.Publish(UpdateKeycloakAttributes.FromUpdateAction(newCredential.UserId, user => user.SetOpId(party.OpId!)), cancellationToken);
+            }
+        }
+    }
+
+    public class UpdateKeycloakAttributesHandler(IBus bus, PidpDbContext context) : INotificationHandler<CredentialLinked>
+    {
+        private readonly IBus bus = bus;
+        private readonly PidpDbContext context = context;
+
+        public async Task Handle(CredentialLinked notification, CancellationToken cancellationToken)
+        {
+            var attributes = await this.context.Parties
+                .Where(party => party.Id == notification.Credential.PartyId)
+                .Select(party => new
+                {
+                    party.Email,
+                    party.Phone,
+                })
+                .SingleAsync(cancellationToken);
+
+            await this.bus.Publish(UpdateKeycloakAttributes.FromUpdateAction(notification.Credential.UserId, user => user.SetPidpEmail(attributes.Email!).SetPidpPhone(attributes.Phone!)), cancellationToken);
+        }
+    }
+
+    public class UpdateKeycloakRolesHandler(IKeycloakAdministrationClient keycloakClient, PidpDbContext context) : INotificationHandler<CredentialLinked>
+    {
+        private readonly IKeycloakAdministrationClient keycloakClient = keycloakClient;
+        private readonly PidpDbContext context = context;
+
+        public async Task Handle(CredentialLinked notification, CancellationToken cancellationToken)
+        {
+            var newCredential = notification.Credential;
+            if (newCredential.IdentityProvider is not (IdentityProviders.BCServicesCard or IdentityProviders.BCProvider))
+            {
+                return;
+            }
+
+            var hasSAEformsEnrolment = await this.context.AccessRequests
+                .AnyAsync(request => request.PartyId == newCredential.PartyId
+                    && request.AccessTypeCode == AccessTypeCode.SAEforms, cancellationToken);
+
+            if (hasSAEformsEnrolment)
+            {
+                // TODO: bus message for roles
+                await this.keycloakClient.AssignAccessRoles(newCredential.UserId, MohKeycloakEnrolment.SAEforms);
+            }
+        }
+    }
 }
 
 public static partial class CredentialCreateLoggingExtensions
@@ -210,4 +273,7 @@ public static partial class CredentialCreateLoggingExtensions
 
     [LoggerMessage(4, LogLevel.Error, "Credential Link Ticket {credentialLinkTicketId} expected to link to IDP {expectedIdp}, user had IDP {actualIdp} instead.")]
     public static partial void LogTicketIdpError(this ILogger<Create.CommandHandler> logger, int credentialLinkTicketId, string expectedIdp, string actualIdp);
+
+    [LoggerMessage(5, LogLevel.Error, "Credential Link Ticket {credentialLinkTicketId} redemption failed, the Credential with ID {existingCredentialId} already exists.")]
+    public static partial void LogCredentialAlreadyExists(this ILogger<Create.CommandHandler> logger, int credentialLinkTicketId, int existingCredentialId);
 }

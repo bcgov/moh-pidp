@@ -1,8 +1,11 @@
-@use 'pidp-variables' as pidp;
-
 .viewport-all {
   --gap: 1rem;
   --font-size: 0.75rem;
+  --card-border-radius: calc(var(--gap) * 0.375);
+  --header-margin: unset;
+  --avatar-size: 4rem;
+  --content-padding: var(--gap);
+  --password-splash-display: none;
 }
 
 .viewport-small,
@@ -11,96 +14,460 @@
   --gap: 1.25rem;
   --font-size: 1rem;
 }
-.viewport-all {
-  --header-margin: unset;
-  --card-border-radius: calc(var(--gap) * 0.375);
-  --content-padding: var(--gap);
-  --form-card-width: unset;
-}
+
 .viewport-medium,
 .viewport-large {
   --header-margin: var(--gap) 0 0;
   --content-padding: var(--gap) 0;
-  --form-card-width: 25rem;
+  --password-splash-display: unset;
 }
+
+.page-container {
+  padding: 0;
+}
+
+.header-container {
+  width: auto;
+  height: 27vh;
+  overflow-y: auto;
+  background-image: url('/assets/images/national-cancer-institute-L8tWZT4CcVQ-unsplash.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: top;
+  position: relative;
+  object-fit: cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.banner-mask {
+  width: 88.85vw;
+  height: 15vh;
+  border-radius: 8px;
+  background: rgba(1, 51, 102, 0.7);
+  display: flex;
+  justify-content: left;
+  align-items: center;
+}
+
+.banner-mask h5 {
+  width: 100%;
+  text-align: left;
+  color: var(--Colours-primary, #fff);
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  font-size: 2.8rem;
+}
+
+.banner-mask p {
+  width: 100%;
+  color: #e4e4e4;
+  font-size: 1.25rem;
+  font-weight: 700;
+  font-style: normal;
+  line-height: normal;
+  text-align: left;
+  padding-top: 0.1rem;
+}
+.body-container {
+  width: auto;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.card-grid {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 2rem;
+  padding-bottom: 2rem;
+  width: 91.5vw;
+}
+
+.card {
+  width: 47%;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  transition: 0.3s;
+
+  a {
+    cursor: pointer;
+  }
+}
+
+.card img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+}
+
+.card-content {
+  padding: 1rem;
+}
+
+.card-header {
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.card-content h2 {
+  color: var(--Main-font-colour, var(--Colours-font, #313132));
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 36px;
+  height: 60px;
+}
+
+.card-content a {
+  color: var(--Links, #1a5a96);
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 27px;
+  text-decoration: none;
+}
+
+.card-content a:hover {
+  text-decoration: none;
+}
+
+.card-content a fa-icon {
+  color: var(--Links, #1a5a96);
+  float: right;
+  padding-right: 3px;
+}
+
+.red-color {
+  color: red;
+  margin-right: 5px;
+}
+
+.back-to-top-container {
+  position: fixed;
+  bottom: 170px;
+  right: 25px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.back-to-top {
+  background-color: #38598a;
+  color: #ffffff;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  text-align: center;
+  cursor: pointer;
+}
+
+.back-to-top-text {
+  color: #38598a;
+  font-size: 13px;
+  word-wrap: break-word;
+}
+
+.back-to-top:hover {
+  background-color: #003366;
+}
+
 .viewport-all {
-  padding: var(--content-padding);
-  & header {
-    margin: var(--header-margin);
-    & h2 {
-      margin: 0;
-      padding: calc(var(--gap) / 2) calc(var(--gap) * 2);
-      background-color: pidp.$grey-10;
-    }
+  & .banner-mask {
+    height: 15vh;
   }
-  & .section-content-box {
-    margin: var(--gap) 0;
 
-    & p {
-      padding-left: calc(var(--gap) * 2);
-      padding-right: calc(var(--gap) * 2);
-    }
+  & .banner-mask h5 {
+    text-align: left;
+    margin-left: 2rem;
+  }
 
-    & .carousel-box {
-      & .card-box {
-        display: flex;
-      }
+  & .card-grid {
+    padding-top: 2ch;
+    margin: var(--margin-style);
+  }
+
+  & .card {
+    width: 47%;
+    margin-top: 10px;
+    padding: 25px;
+    border-radius: 0.625rem;
+    border: 1px solid #d8d8d8;
+    display: flex;
+    flex-direction: row;
+    cursor: pointer;
+  }
+
+  & .card img {
+    width: 17.4375rem;
+    height: 11.8125rem;
+    border-radius: 0.625rem;
+  }
+
+  & .card-content {
+    padding: 0 2rem;
+  }
+
+  & .card-content h2 {
+    font-size: 22px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 30px;
+    height: 50px;
+  }
+
+  & .card-content a {
+    display: flex;
+    padding: 0.5rem 1rem;
+    width: 200px;
+    height: 40px;
+    margin-top: 3rem;
+    justify-content: center;
+    align-items: center;
+    gap: 0.625rem;
+    border-radius: 0.25rem;
+    color: #036;
+    font-size: 1.125rem;
+    font-weight: 700;
+    letter-spacing: 0.0625rem;
+    border: 2px solid #036;
+    cursor: pointer;
+    background: var(--Colours-primary, #fff);
+    fa-icon {
+      color: #1a5a96;
     }
   }
 }
-.viewport-small{
-  --content-padding: var(--gap) 0;
+
+// laptap large
+.viewport-large {
+  .card:hover {
+    box-shadow: 2px 2px 2px rgb(194, 194, 196);
+    transform: scale(1.03);
+  }
+
+  & .banner-mask {
+    padding-left: 3rem;
+    height: 15vh;
+  }
 }
+
+// laptap
+.viewport-medium {
+  & .header-container {
+    height: 25vh;
+  }
+
+  & .banner-mask {
+    padding-left: 2rem;
+    height: 15vh;
+  }
+
+  & .banner-mask h5 {
+    font-size: 2.2rem;
+  }
+
+  & .banner-mask p {
+    font-size: 1.3rem;
+  }
+
+  & .card {
+    width: 47%;
+    padding: 20px;
+  }
+
+  & .card img {
+    width: 13rem;
+    height: 12rem;
+  }
+
+  & .card-content {
+    padding: 0 1rem;
+  }
+
+  & .card-content h2 {
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 30px;
+    height: 60px;
+  }
+
+  & .card-content a {
+    font-size: 15px;
+    line-height: 25px;
+    text-decoration: none;
+    width: 160px;
+    height: 40px;
+    padding: 0.5rem 1rem;
+    margin-top: 3.5rem;
+  }
+
+  .card:hover {
+    box-shadow: 2px 2px 2px rgb(194, 194, 196);
+    transform: scale(1.03);
+  }
+}
+
+// tab
+.viewport-small {
+  & .header-container {
+    height: 25vh;
+  }
+
+  & .banner-mask {
+    padding: 0 2rem;
+    height: 13vh;
+  }
+
+  & .banner-mask h5 {
+    font-size: 2rem;
+  }
+
+  & .banner-mask p {
+    font-size: 1rem;
+  }
+
+  & .card {
+    width: 47%;
+    flex-direction: column;
+    padding: 15px;
+  }
+
+  & .card img {
+    height: 105px;
+    width: 100%;
+  }
+
+  & .card-content {
+    padding: 1rem 0;
+  }
+
+  & .card-content h2 {
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 20px;
+    height: 40px;
+  }
+
+  & .card-content a {
+    font-size: 15px;
+    line-height: 25px;
+    width: 200px;
+    height: 40px;
+    margin-top: 0;
+  }
+
+  .back-to-top-container {
+    position: fixed;
+    bottom: 100px;
+    right: 35px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .back-to-top {
+    width: 40px;
+    height: 40px;
+  }
+
+  .back-to-top-text {
+    font-size: 13px;
+  }
+}
+
+// mobile
 .viewport-xsmall {
-  & header {
-    & h2 {
-      padding: calc(var(--gap) / 2) var(--gap);
+  --gap: 2rem;
+  --font-size: 1rem;
+
+  .form-button-box {
+    & button {
+      margin-top: 20px;
     }
   }
 
-  & .section-content-box {
-    & p {
-      padding-left: var(--gap);
-      padding-right: var(--gap);
-    }
-  }
-}
-
-.rostering-banner {
-  margin-bottom: var(--gap);
-
-  & .mat-mdc-outlined-button {
-    border: 1px solid #000;
-  }
-}
-
-.adjust-text {
-  font-size: smaller;
-  margin: 0 10px;
-}
-
-.bcprovider-username {
-  font-size: smaller;
-}
-
-.stepper-buttons {
-  margin-top: 10px;
-
-  & button:last-child {
-    margin-left: 10px;
+  & .header-container {
+    height: 30vh;
+    background-size: 200vw 100vh;
   }
 
-  & button.top-button {
+  & .banner-mask {
+    padding-left: 1rem;
+  }
+
+  & .banner-mask h5 {
+    font-size: 1.6rem;
     margin-left: 0;
   }
-}
 
-.guide-information {
-  font-size: smaller;
-  margin-bottom: 10px;
-}
+  & .banner-mask p {
+    font-size: 0.75rem;
+  }
 
-.pas-step-label {
-  margin: unset;
-  line-height: 1.3;
+  & .card-grid {
+    flex-direction: column;
+    display: flex;
+    align-items: center;
+  }
+
+  & .card {
+    width: 90vw;
+    flex-direction: column;
+    padding: 15px;
+  }
+
+  & .card img {
+    height: 105px;
+    width: 100%;
+  }
+
+  & .card-content {
+    height: 180px;
+    padding: 1rem 0rem;
+  }
+
+  & .card-content h2 {
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 40px;
+    height: 95px;
+    padding-top: 15px;
+  }
+
+  & .card-content a {
+    font-size: 15px;
+    line-height: 25px;
+    width: 200px;
+    height: 40px;
+    text-decoration: none;
+    margin-top: 0;
+  }
+
+  .back-to-top-container {
+    position: fixed;
+    bottom: 170px;
+    right: 25px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    opacity: 0.5;
+  }
+
+  .back-to-top {
+    width: 30px;
+    height: 30px;
+  }
+
+  .back-to-top fa-icon {
+    padding-top: 2px;
+  }
+
+  .back-to-top-text {
+    font-size: 10px;
+  }
 }

@@ -78,11 +78,11 @@ ingress:
 
 resources:
   limits:
-    cpu: 100m
-    memory: 128Mi
+    cpu: 50m
+    memory: 200Mi
   requests:
     cpu: 15m
-    memory: 50Mi
+    memory: 150Mi
 
 autoscaling:
   enabled: false
@@ -98,4 +98,20 @@ tolerations: []
 affinity: {}
 
 rabbitmq:
-  host: amqp://pidp:password@rabbitmq:5672/
+  host: ""
+
+
+fluentbit:
+  enabled: true
+  imageRegistry: docker.io/fluent/fluent-bit:3.0.3-debug
+  imagePullPolicy: IfNotPresent
+  securityContext:
+    enabled: false
+    runAsUser: 1001
+  resources:
+    limits:
+      cpu: 50m
+      memory: 64Mi
+    requests:
+      cpu: 10m
+      memory: 16Mi

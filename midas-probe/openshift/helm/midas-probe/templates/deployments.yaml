@@ -52,6 +52,7 @@ spec:
               memory: {{ .Values.memoryRequests }}
         terminationMessagePath: /dev/termination-log
         terminationMessagePolicy: File
+      automountServiceAccountToken: false
       dnsPolicy: ClusterFirst
       restartPolicy: Always
       serviceAccount: midas-probe

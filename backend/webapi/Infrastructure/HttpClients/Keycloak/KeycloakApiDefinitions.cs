@@ -8,9 +8,8 @@ using Pidp.Models.Lookups;
 
 public class MohKeycloakEnrolment
 {
-    private static readonly List<MohKeycloakEnrolment> All = new();
+    private static readonly List<MohKeycloakEnrolment> All = [];
     public static readonly MohKeycloakEnrolment DriverFitness = new("DMFT-WEBAPP", AccessTypeCode.DriverFitness, "DMFT_ENROLLED");
-    public static readonly MohKeycloakEnrolment EdrdEforms = new("SAT-EFORMS", AccessTypeCode.EdrdEforms, "phsa_eforms_edrd");
     public static readonly MohKeycloakEnrolment ImmsBCEforms = new("SAT-EFORMS", AccessTypeCode.ImmsBCEforms, "phsa_eforms_imms");
     public static readonly MohKeycloakEnrolment PrescriptionRefillEforms = new("SAT-EFORMS", AccessTypeCode.PrescriptionRefillEforms, "phsa_eforms_rxrefill");
     public static readonly MohKeycloakEnrolment ProviderReportingPortal = new("PRP-SERVICE", AccessTypeCode.ProviderReportingPortal, "MSPQI", "PMP");
@@ -74,7 +73,7 @@ public class Role
 /// </summary>
 public class UserRepresentation
 {
-    public Dictionary<string, string[]> Attributes { get; set; } = new();
+    public Dictionary<string, string[]> Attributes { get; set; } = [];
     public string? Email { get; set; }
     public bool? Enabled { get; set; }
     public string? FirstName { get; set; }
@@ -82,7 +81,7 @@ public class UserRepresentation
     public string? LastName { get; set; }
     public string? Username { get; set; }
 
-    public void SetCollegeLicenceInformation(IEnumerable<PlrRecord> plrRecords)
+    public UserRepresentation SetCollegeLicenceInformation(IEnumerable<PlrRecord> plrRecords)
     {
         var data = plrRecords.Select(record => new
         {
@@ -93,16 +92,18 @@ public class UserRepresentation
             record.StatusReasonCode
         });
 
-        this.SetAttribute("college_licence_info", JsonSerializer.Serialize(data, new JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }));
+        return this.SetAttribute("college_licence_info", JsonSerializer.Serialize(data, new JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }));
     }
 
-    public void SetCpn(string cpn) => this.SetAttribute("common_provider_number", cpn);
+    public UserRepresentation SetCpn(string cpn) => this.SetAttribute("common_provider_number", cpn);
 
-    internal void SetLdapOrgDetails(LdapLoginResponse.OrgDetails orgDetails) => this.SetAttribute("org_details", JsonSerializer.Serialize(orgDetails, new JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }));
+    internal UserRepresentation SetLdapOrgDetails(LdapLoginResponse.OrgDetails orgDetails) => this.SetAttribute("org_details", JsonSerializer.Serialize(orgDetails, new JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }));
 
-    public void SetOpId(string opId) => this.SetAttribute("opId", opId);
+    public UserRepresentation SetOpId(string opId) => this.SetAttribute("opId", opId);
 
-    public void SetPidpEmail(string pidpEmail) => this.SetAttribute("pidp_email", pidpEmail);
+    public UserRepresentation SetPidpEmail(string pidpEmail) => this.SetAttribute("pidp_email", pidpEmail);
+
+    public UserRepresentation SetPidpPhone(string pidpPhone) => this.SetAttribute("pidp_phone", pidpPhone);
 
     /// <summary>
     /// Adds the given attributes to this User Representation. Overwrites any duplicate keys.
@@ -115,5 +116,9 @@ public class UserRepresentation
         }
     }
 
-    private void SetAttribute(string key, string value) => this.Attributes[key] = new[] { value };
+    private UserRepresentation SetAttribute(string key, string value)
+    {
+        this.Attributes[key] = [value];
+        return this;
+    }
 }

@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 using Pidp.Infrastructure.HttpClients.Keycloak;
+using Pidp.Models.Lookups;
 
 [Table(nameof(BusinessEvent))]
 public abstract class BusinessEvent : BaseAuditable
@@ -28,12 +29,12 @@ public abstract class PartyBusinessEvent : BusinessEvent
 
 public class PartyNotInPlr : PartyBusinessEvent
 {
-    public static PartyNotInPlr Create(int partyId, Instant recordedOn)
+    public static PartyNotInPlr Create(int partyId, CollegeCode collegeCode, string licenceNumber, Instant recordedOn)
     {
         return new PartyNotInPlr
         {
             PartyId = partyId,
-            Description = "Party declared a College Licence but was not found in PLR.",
+            Description = $"Party declared the College Licence [Collge Code: {collegeCode}, Licence Number: {licenceNumber}] but was not found in PLR.",
             Severity = LogLevel.Information,
             RecordedOn = recordedOn
         };
@@ -62,6 +63,20 @@ public class LicenceStatusRoleUnassigned : PartyBusinessEvent
         {
             PartyId = partyId,
             Description = $"Party was unassigned the {enrolmentAssigned.AccessRoles.Single()} role.",
+            Severity = LogLevel.Information,
+            RecordedOn = recordedOn
+        };
+    }
+}
+
+public class BCProviderPasswordReset : PartyBusinessEvent
+{
+    public static BCProviderPasswordReset Create(int partyId, string userPrincipalName, Instant recordedOn)
+    {
+        return new BCProviderPasswordReset
+        {
+            PartyId = partyId,
+            Description = $"Party with User Principal Name {userPrincipalName} reset their BCProvider password.",
             Severity = LogLevel.Information,
             RecordedOn = recordedOn
         };

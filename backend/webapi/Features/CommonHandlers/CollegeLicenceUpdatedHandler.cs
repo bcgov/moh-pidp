@@ -9,24 +9,16 @@ using static Pidp.Features.CommonHandlers.UpdateKeycloakAttributesConsumer;
 using Pidp.Models.DomainEvents;
 using Pidp.Infrastructure.HttpClients.Plr;
 
-public class UpdateKeycloakAfterCollegeLicenceUpdated : INotificationHandler<CollegeLicenceUpdated>
+public class UpdateKeycloakAfterCollegeLicenceUpdated(
+    IBus bus,
+    ILogger<UpdateKeycloakAfterCollegeLicenceUpdated> logger,
+    IPlrClient plrClient,
+    PidpDbContext context) : INotificationHandler<CollegeLicenceUpdated>
 {
-    private readonly IBus bus;
-    private readonly ILogger<UpdateKeycloakAfterCollegeLicenceUpdated> logger;
-    private readonly IPlrClient plrClient;
-    private readonly PidpDbContext context;
-
-    public UpdateKeycloakAfterCollegeLicenceUpdated(
-        IBus bus,
-        ILogger<UpdateKeycloakAfterCollegeLicenceUpdated> logger,
-        IPlrClient plrClient,
-        PidpDbContext context)
-    {
-        this.bus = bus;
-        this.logger = logger;
-        this.plrClient = plrClient;
-        this.context = context;
-    }
+    private readonly IBus bus = bus;
+    private readonly ILogger<UpdateKeycloakAfterCollegeLicenceUpdated> logger = logger;
+    private readonly IPlrClient plrClient = plrClient;
+    private readonly PidpDbContext context = context;
 
     public async Task Handle(CollegeLicenceUpdated notification, CancellationToken cancellationToken)
     {
@@ -34,8 +26,12 @@ public class UpdateKeycloakAfterCollegeLicenceUpdated : INotificationHandler<Col
         // We must fetch the whole Party model (rather than .Select() a smaller model) to ensure the uncommited changes are seen here.
         var party = await this.context.Parties
             .Include(party => party.Credentials)
-            .Where(party => party.Id == notification.PartyId)
-            .SingleAsync(cancellationToken);
+            .SingleAsync(party => party.Id == notification.PartyId, cancellationToken);
+
+        if (party.Cpn == null)
+        {
+            return;
+        }
 
         var records = await this.plrClient.GetRecordsAsync(party.Cpn);
         if (records == null || !records.Any())

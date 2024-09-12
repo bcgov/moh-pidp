@@ -1,289 +1,68 @@
-<div class="box" uiPidpInjectViewportCss>
-  <section *ngFor="let alert of alerts" class="alert-box section-box">
-    <app-portal-alert
-      [heading]="alert.heading"
-      [content]="alert.content"></app-portal-alert>
-  </section>
-  <section
-    *ngIf="pasAllowedProviders.includes((identityProvider$ | async)!); else nonBcsc"
-    class="section-box rostering-banner">
-    <app-banner-expansion-panel
-      [expanded]="pasPanelExpanded$ | async"
-      (expandedChanged)="onExpansionPanelToggle($event)">
-      <mat-stepper
-        orientation="vertical"
-        #stepper
-        [selectedIndex]="selectedIndex">
-        <mat-step
-          [state]="bcProviderStatusCode === 2 ? 'done' : 'number'"
-          [completed]="bcProviderStatusCode === 2">
-          <ng-template matStepLabel>
-            Create a BCProvider Credential
-          </ng-template>
-          <div>
-            <p class="guide-information">
-              A BCProvider is a credential used to access health applications.
-              In the future the BCProvider will be integrated with multiple
-              health authorities, EMRs and other government health services.
-            </p>
-            <button
-              mat-flat-button
-              type="button"
-              color="primary"
-              aria-labelledby="complete-bcprovider"
-              [disabled]="bcProvider$ | async"
-              (click)="navigateTo()">
-              Create a BCProvider Credential
-            </button>
-          </div>
-          <div class="adjust-text">
-            <em
-              >Need help? Try this
-              <a uiAnchor [attr.href]="bcProviderTutorial">video tutorial</a>
-            </em>
-          </div>
-          <div class="stepper-buttons">
-            <button mat-stroked-button matStepperNext>Next</button>
-          </div>
-        </mat-step>
+<div class="container-fluid page-container" uiPidpInjectViewportCss>
+  <div class="header-container">
+    <div class="banner-mask">
+      <div class="banner-content">
+        <h5>Welcome to the OneHealthID Service</h5>
+      </div>
+    </div>
+  </div>
+  <div class="body-container">
+    <div class="card-grid">
+      <div
+        class="card"
+        (click)="navigateTo(AccessRoutes.routePath(AccessRoutes.ACCESS_REQUESTS))"
+        (keyup)="navigateTo(AccessRoutes.routePath(AccessRoutes.ACCESS_REQUESTS))">
+        <img
+          height="189"
+          width="279"
+          ngSrc="/assets/images/get-access.jpg"
+          alt="Systems access for myself"
+          priority />
+        <div class="card-content">
+          <p class="card-header">Get Access</p>
+          <p>Healthcare system access for myself</p>
+          <a> <fa-icon [icon]="faBookmark"></fa-icon> Read More </a>
+        </div>
+      </div>
 
-        <mat-step [completed]="false">
-          <ng-template matStepLabel>
-            <p class="pas-step-label">
-              Invite others to the Provincial Attachment System (PAS)<br />
-              (Optional)
-            </p>
-          </ng-template>
-          <div>
-            <div
-              *ngIf="!hasCpn && (destination$ | async) === Destination.PORTAL; else licenced">
-              <p>
-                <i
-                  >Because you are MOA or do <strong>not</strong> have a college
-                  licence, then this step will become part of the process.</i
-                >
-              </p>
-              <mat-stepper class="moa-message-steps">
-                <mat-step editable="false" [completed]="false">
-                  <ng-template matStepLabel>Start endorsement</ng-template>
-                </mat-step>
-                <mat-step editable="false" [completed]="false">
-                  <ng-template matStepLabel>Pending Approval</ng-template>
-                </mat-step>
-                <mat-step editable="false" [completed]="false">
-                  <ng-template matStepLabel
-                    >Completion and PAS login available</ng-template
-                  >
-                </mat-step>
-              </mat-stepper>
-            </div>
-            <ng-template #licenced>
-              <p class="guide-information">
-                Do you work with others who need access to the PAS? For example,
-                assistants or other members of your Care Team, who may or may
-                not have a professional license? <br />If you do, then you can
-                send trusted colleagues a OneHealthID access invitation by
-                clicking the “Endorsements” button below.
-              </p>
-            </ng-template>
-            <button
-              mat-flat-button
-              type="button"
-              color="primary"
-              routerLink="/organization-info/endorsements"
-              aria-labelledby="navigate-to-endorsements">
-              Endorsements
-            </button>
-          </div>
-          <div class="stepper-buttons">
-            <button mat-stroked-button matStepperPrevious>Back</button>
-            <button mat-stroked-button matStepperNext>Next</button>
-          </div>
-        </mat-step>
-
-        <mat-step [completed]="false">
-          <ng-template matStepLabel>
-            Multi-Factor Authentication (MFA) Set-Up Guide
-          </ng-template>
-          <p class="guide-information">
-            If you need help setting up your Multi-Factor Authentication (MFA),
-            please
-            <a href="assets/documents/mfa.pdf" download>download this PDF</a>
+      <div
+        class="card"
+        (click)="navigateTo(OrganizationInfoRoutes.routePath(OrganizationInfoRoutes.ENDORSEMENTS))"
+        (keyup)="navigateTo(OrganizationInfoRoutes.routePath(OrganizationInfoRoutes.ENDORSEMENTS))">
+        <img
+          height="189"
+          width="279"
+          ngSrc="/assets/images/grant-access.jpg"
+          alt="Interested in systems for others"
+          priority />
+        <div class="card-content">
+          <p class="card-header">
+            Give Access
+            <ng-container *ngIf="alerts$ | async as alerts"
+              ><fa-icon
+                *ngIf="alerts.includes(AlertCode.PENDING_ENDORSEMENT_REQUEST)"
+                class="fa-duotone red-color"
+                [icon]="faBell"></fa-icon
+            ></ng-container>
           </p>
-
-          <div class="stepper-buttons">
-            <button mat-stroked-button matStepperPrevious>Back</button>
-            <button mat-stroked-button matStepperNext>Next</button>
+          <p>Healthcare system access for others</p>
+          <div class="card-footer">
+            <span class="content-with-alert"
+              ><a> <fa-icon [icon]="faBookmark"></fa-icon>Read More </a></span
+            >
           </div>
-        </mat-step>
+        </div>
+      </div>
+    </div>
+  </div>
 
-        <mat-step [completed]="false">
-          <ng-template matStepLabel>
-            Login to Provincial Attachment System with your BCProvider
-          </ng-template>
-          <div>
-            <p class="guide-information">
-              Use your newly created BCProvider to login to the Provincial
-              Attachment System
-            </p>
-            <p *ngIf="bcProviderStatusCode === 2" class="bcprovider-username">
-              <strong>{{ bcProviderUsername }}</strong>
-              <button
-                mat-icon-button
-                type="button"
-                matTooltip="Copy your BCProvider to clipboard"
-                aria-label="Copy your BCProvider to clipboard"
-                [cdkCopyToClipboard]="bcProviderUsername"
-                (cdkCopyToClipboardCopied)="onCopy()">
-                <mat-icon>content_paste</mat-icon>
-              </button>
-            </p>
-            <button
-              mat-flat-button
-              type="button"
-              color="primary"
-              aria-labelledby="navigate-to-rostering"
-              [disabled]="rostering$ | async"
-              (click)="navigateTo()">
-              Login to Provincial Attachment System with your BCProvider
-            </button>
-          </div>
-          <div class="stepper-buttons">
-            <button mat-stroked-button matStepperPrevious>Back</button>
-            <button mat-stroked-button (click)="stepper.reset()">Reset</button>
-          </div>
-        </mat-step>
-      </mat-stepper>
-    </app-banner-expansion-panel>
-  </section>
-
-  <ng-template #nonBcsc>
-    <ui-alert
-      type="info"
-      icon="info"
-      iconType="outlined"
-      heading="Looking for access to PAS?">
-      <ng-container uiAlertContent>
-        <p>
-          To access the Provincial Attachment System enrolment, login to
-          OneHealthID with your BC Services Card.
-        </p>
-      </ng-container>
-    </ui-alert>
-  </ng-template>
-
-  <ng-container *ngIf="state$ | async as state">
-    <section class="profile-box section-box">
-      <ui-scroll-target targetId="profile"></ui-scroll-target>
-      <header>
-        <h2>Profile</h2>
-      </header>
-      <div class="section-content-box">
-        <p>
-          Complete the information for each portion of your Provider Identity
-          Profile. This will allow the portal to identify the systems you may
-          request access for.
-        </p>
-        <div class="carousel-box">
-          <app-portal-carousel
-            portalCategoryName="profile"
-            [sections]="state.profile">
-          </app-portal-carousel>
-        </div>
-      </div>
-    </section>
-    <section
-      *ngIf="state.organization.length"
-      class="organization-box section-box">
-      <ui-scroll-target targetId="organization"></ui-scroll-target>
-      <header>
-        <h2>Organization Information</h2>
-      </header>
-      <div class="section-content-box">
-        <p>
-          Provide your organization's details to gain access to the systems you
-          are eligible for.
-        </p>
-        <div class="carousel-box">
-          <app-portal-carousel
-            portalCategoryName="organization"
-            [sections]="state.organization">
-          </app-portal-carousel>
-        </div>
-      </div>
-    </section>
-    <section *ngIf="state.access.length" class="access-box section-box">
-      <ui-scroll-target targetId="access"></ui-scroll-target>
-      <header>
-        <h2>Access to Systems</h2>
-      </header>
-      <div class="section-content-box">
-        <p>
-          Complete your profile to gain access to the systems you are eligible
-          for.
-        </p>
-        <div class="carousel-box">
-          <app-portal-carousel
-            portalCategoryName="access-to-systems"
-            [sections]="state.access"></app-portal-carousel>
-        </div>
-      </div>
-    </section>
-    <section *ngIf="state.training.length" class="training-box section-box">
-      <ui-scroll-target targetId="training"></ui-scroll-target>
-      <header>
-        <h2>Complete these trainings</h2>
-      </header>
-      <div class="section-content-box">
-        <ng-container *ngIf="state?.training?.length; else noTraining">
-          <p>
-            Complete your profile to gain access to the systems you are eligible
-            for.
-          </p>
-          <div class="carousel-box">
-            <app-portal-carousel
-              portalCategoryName="training"
-              [sections]="state.training"></app-portal-carousel>
-          </div>
-        </ng-container>
-        <ng-template #noTraining>
-          <p class="lead">No training available at this time.</p>
-        </ng-template>
-      </div>
-    </section>
-    <section *ngIf="state.history.length" class="history-box section-box">
-      <ui-scroll-target targetId="history"></ui-scroll-target>
-      <header>
-        <h2>History</h2>
-      </header>
-      <div class="section-content-box">
-        <p>
-          View information pertaining to your profile and interaction with the
-          systems you use for work.
-        </p>
-        <div class="carousel-box">
-          <app-portal-carousel
-            portalCategoryName="history"
-            [sections]="state.history"></app-portal-carousel>
-        </div>
-      </div>
-    </section>
-    <section *ngIf="state.faq.length" class="section-box">
-      <ui-scroll-target targetId="faq"></ui-scroll-target>
-      <header>
-        <h2>FAQ</h2>
-      </header>
-      <div class="section-content-box">
-        <p>View answers to frequently asked questions.</p>
-        <div class="carousel-box">
-          <app-portal-carousel
-            portalCategoryName="faq"
-            [sections]="state.faq"></app-portal-carousel>
-        </div>
-      </div>
-    </section>
-  </ng-container>
-  <app-get-support>
-    <ui-scroll-target targetId="support"></ui-scroll-target>
-  </app-get-support>
+  <div class="back-to-top-container">
+    <button
+      *ngIf="showBackToTopButton"
+      class="back-to-top"
+      (click)="scrollToTop()">
+      <fa-icon [icon]="faArrowUp"></fa-icon>
+    </button>
+    <div *ngIf="showBackToTopButton" class="back-to-top-text">Back to top</div>
+  </div>
 </div>

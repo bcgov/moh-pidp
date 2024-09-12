@@ -1,216 +1,230 @@
-<ui-page [form]="formState.form" (submitted)="onSubmit()">
-  <ui-page-header>{{ title }}</ui-page-header>
+<div class="container" uiPidpInjectViewportCss>
+  <app-breadcrumb [breadcrumbs]="breadcrumbsData"></app-breadcrumb>
+  <ui-page mode="full" [form]="formState.form" (submitted)="onSubmit()">
+    <h1>{{ title }}</h1>
 
-  <ng-container *ngIf="completed; else notCompleted">
-    <ui-page-section>
-      <ui-page-section-subheader
-        icon="assignment"
-        heading="HCIMWeb Account Transfer">
-        <ng-container uiPageSectionSubheaderDesc>Next Steps.</ng-container>
-      </ui-page-section-subheader>
-
-      <ui-alert
-        type="success"
-        icon="check_circle"
-        iconType="outlined"
-        heading="Account Transfer Successful">
-        <ng-container uiAlertContent>
-          <p>
-            You have successfully transferred your HCIMWeb Account. From now on,
-            login to HCIMWeb with your organization credential. You may wish to
-            bookmark this link for future use.
-          </p>
-        </ng-container>
-        <ng-container uiAlertActions>
-          <span>
-            <a mat-stroked-button uiAnchor [attr.href]="hcimWebUrl">
-              Login to HCIMWeb
-            </a>
-          </span>
-        </ng-container>
-      </ui-alert>
-    </ui-page-section>
-  </ng-container>
-
-  <ng-template #notCompleted>
-    <ui-page-section>
-      <ui-page-subheader icon="assignment">
-        HCIMWeb Account Transfer
-      </ui-page-subheader>
-
-      <p>
-        HCIMWeb will be changing its login and authentication process with the
-        following key changes:
-      </p>
-
-      <ul>
-        <li>
-          You will no longer access HCIMWeb through the HealthNetBC Portal,
-          using your HCIMWeb HealthNetBC Username and Password.
-        </li>
-        <li>
-          Instead, you will login directly through
-          <a uiAnchor [attr.href]="hcimWebUrl">this link</a>, using your
-          organization credential (the same credentials used to access your
-          workstation).
-        </li>
-      </ul>
-
-      <p>
-        <strong>
-          Enter your HCIMWeb HealthNetBC Username and Password to transfer your
-          current HCIMWeb HealthNetBC account credential to your organization
-          credential.
-        </strong>
-      </p>
-    </ui-page-section>
-
-    <ui-alert
-      *ngIf="loginAttempts > 0 && loginAttempts < maxLoginAttempts"
-      type="danger"
-      icon="error_outline"
-      iconType="outlined"
-      heading="Access Request Failed">
-      <ng-container uiAlertContent>
-        <p>
-          If you have forgotten your password, or are unsure of it, follow this
-          <a uiAnchor [attr.href]="healthNetBcPasswordResetUrl">link</a>
-          to reset it before you start this process.
-        </p>
-        <p>
-          If you are still having trouble after resetting your password, contact
-          <a
-            uiAnchor
-            scheme="mailto"
-            [attr.href]="healthRegistriesAdminEmail"></a>
-          or
-          <a uiAnchor scheme="tel" [attr.href]="healthRegistriesAdminPhone"></a
-          >.
-        </p>
-      </ng-container>
-    </ui-alert>
-
-    <ui-alert
-      *ngIf="loginAttempts === maxLoginAttempts - 1"
-      type="danger"
-      icon="error_outline"
-      iconType="outlined">
-      <ng-container uiAlertContent>
-        <p>
-          You have had multiple failed login attempts the next failed attempt
-          will lock your account. If you need assistance contact the HelpDesk at
-          <a
-            uiAnchor
-            scheme="mailto"
-            [attr.href]="healthNetBcHelpDeskEmail"></a>
-          or
-          <a uiAnchor scheme="tel" [attr.href]="healthNetBcHelpDeskPhone"></a>.
-        </p>
-      </ng-container>
-    </ui-alert>
-
-    <ui-alert
-      *ngIf="accessRequestStatusCode === HcimAccountTransferStatusCode.ACCOUNT_UNAUTHORIZED"
-      type="danger"
-      icon="error_outline"
-      iconType="outlined"
-      heading="Account Unauthorized">
-      <ng-container uiAlertContent>
-        <p>
-          You are unauthorized to perform an HCIMWeb Account Transfer. If you
-          need assistance contact the HelpDesk at
-          <a
-            uiAnchor
-            scheme="mailto"
-            [attr.href]="healthNetBcHelpDeskEmail"></a>
-          or
-          <a uiAnchor scheme="tel" [attr.href]="healthNetBcHelpDeskPhone"></a>.
-        </p>
-      </ng-container>
-    </ui-alert>
-
-    <ui-alert
-      *ngIf="accessRequestStatusCode === HcimAccountTransferStatusCode.ACCOUNT_LOCKED"
-      type="danger"
-      icon="error_outline"
-      iconType="outlined"
-      heading="Account Locked">
-      <ng-container uiAlertContent>
-        <p>
-          You have been locked out of your account. If you need assistance
-          contact the HelpDesk at
-          <a
-            uiAnchor
-            scheme="mailto"
-            [attr.href]="healthNetBcHelpDeskEmail"></a>
-          or
-          <a uiAnchor scheme="tel" [attr.href]="healthNetBcHelpDeskPhone"></a>.
-        </p>
-      </ng-container>
-    </ui-alert>
-
-    <ng-container [formGroup]="formState.form">
+    <ng-container *ngIf="completed; else notCompleted">
       <ui-page-section>
-        <ui-page-section-subheader heading="HCIMWeb HealthNetBC Username">
-          <ng-container uiPageSectionSubheaderDesc>
-            Username Format is:
-            <strong>Organization ID-First Initial, Last Name</strong>.
-          </ng-container>
-          <ng-container uiPageSectionSubheaderHint>
-            Example: 1767-bsmith
-          </ng-container>
+        <ui-page-section-subheader
+          icon="assignment"
+          heading="HCIMWeb Account Transfer">
+          <ng-container uiPageSectionSubheaderDesc>Next Steps.</ng-container>
         </ui-page-section-subheader>
 
-        <mat-form-field class="w-100">
-          <mat-label>HealthNetBC Username</mat-label>
-          <input matInput tabindex="1" formControlName="ldapUsername" />
-          <mat-error>Required</mat-error>
-        </mat-form-field>
-
-        <ui-page-section-subheader heading="HCIMWeb HealthNetBC Password">
-          <ng-container uiPageSectionSubheaderDesc>
-            If you have forgotten your password, or are unsure of it, follow
-            <a uiAnchor [attr.href]="healthNetBcPasswordResetUrl">this link</a>
-            to reset it before you start this process.
+        <ui-alert
+          type="success"
+          icon="check_circle"
+          iconType="outlined"
+          heading="Account Transfer Successful">
+          <ng-container uiAlertContent>
+            <p>
+              You have successfully transferred your HCIMWeb Account. From now
+              on, login to HCIMWeb with your organization credential. You may
+              wish to bookmark this link for future use.
+            </p>
           </ng-container>
-        </ui-page-section-subheader>
-
-        <mat-form-field class="w-100">
-          <mat-label>HealthNetBC Password</mat-label>
-          <input
-            matInput
-            type="password"
-            tabindex="2"
-            formControlName="ldapPassword" />
-          <mat-error>Required</mat-error>
-        </mat-form-field>
-
-        <small>
-          <a uiAnchor [attr.href]="healthNetBcPasswordResetUrl">
-            Have you forgotten your password?
-          </a>
-        </small>
+          <ng-container uiAlertActions>
+            <span>
+              <a mat-stroked-button uiAnchor [attr.href]="hcimWebUrl">
+                Login to HCIMWeb
+              </a>
+            </span>
+          </ng-container>
+        </ui-alert>
       </ui-page-section>
     </ng-container>
-  </ng-template>
 
-  <ui-page-footer [mode]="completed ? 'reverse' : 'normal'">
-    <button
-      mat-stroked-button
-      uiPageFooterAction
-      type="button"
-      color="primary"
-      (click)="onBack()">
-      {{ completed ? 'Back Home' : 'Cancel Back Home' }}
-    </button>
+    <ng-template #notCompleted>
+      <ui-page-section>
+        <ui-page-subheader icon="assignment">
+          HCIMWeb Account Transfer
+        </ui-page-subheader>
 
-    <button
-      *ngIf="!completed"
-      mat-flat-button
-      uiPageFooterAction
-      type="submit"
-      color="primary">
-      Next
-    </button>
-  </ui-page-footer>
-</ui-page>
+        <p>
+          HCIMWeb will be changing its login and authentication process with the
+          following key changes:
+        </p>
+
+        <ul>
+          <li>
+            You will no longer access HCIMWeb through the HealthNetBC Portal,
+            using your HCIMWeb HealthNetBC Username and Password.
+          </li>
+          <li>
+            Instead, you will login directly through
+            <a uiAnchor [attr.href]="hcimWebUrl">this link</a>, using your
+            organization credential (the same credentials used to access your
+            workstation).
+          </li>
+        </ul>
+
+        <p>
+          <strong>
+            Enter your HCIMWeb HealthNetBC Username and Password to transfer
+            your current HCIMWeb HealthNetBC account credential to your
+            organization credential.
+          </strong>
+        </p>
+      </ui-page-section>
+
+      <ui-alert
+        *ngIf="loginAttempts > 0 && loginAttempts < maxLoginAttempts"
+        type="danger"
+        icon="error_outline"
+        iconType="outlined"
+        heading="Access Request Failed">
+        <ng-container uiAlertContent>
+          <p>
+            If you have forgotten your password, or are unsure of it, follow
+            this
+            <a uiAnchor [attr.href]="healthNetBcPasswordResetUrl">link</a>
+            to reset it before you start this process.
+          </p>
+          <p>
+            If you are still having trouble after resetting your password,
+            contact
+            <a
+              uiAnchor
+              scheme="mailto"
+              [attr.href]="healthRegistriesAdminEmail"></a>
+            or
+            <a
+              uiAnchor
+              scheme="tel"
+              [attr.href]="healthRegistriesAdminPhone"></a
+            >.
+          </p>
+        </ng-container>
+      </ui-alert>
+
+      <ui-alert
+        *ngIf="loginAttempts === maxLoginAttempts - 1"
+        type="danger"
+        icon="error_outline"
+        iconType="outlined">
+        <ng-container uiAlertContent>
+          <p>
+            You have had multiple failed login attempts the next failed attempt
+            will lock your account. If you need assistance contact the HelpDesk
+            at
+            <a
+              uiAnchor
+              scheme="mailto"
+              [attr.href]="healthNetBcHelpDeskEmail"></a>
+            or
+            <a uiAnchor scheme="tel" [attr.href]="healthNetBcHelpDeskPhone"></a
+            >.
+          </p>
+        </ng-container>
+      </ui-alert>
+
+      <ui-alert
+        *ngIf="accessRequestStatusCode === HcimAccountTransferStatusCode.ACCOUNT_UNAUTHORIZED"
+        type="danger"
+        icon="error_outline"
+        iconType="outlined"
+        heading="Account Unauthorized">
+        <ng-container uiAlertContent>
+          <p>
+            You are unauthorized to perform an HCIMWeb Account Transfer. If you
+            need assistance contact the HelpDesk at
+            <a
+              uiAnchor
+              scheme="mailto"
+              [attr.href]="healthNetBcHelpDeskEmail"></a>
+            or
+            <a uiAnchor scheme="tel" [attr.href]="healthNetBcHelpDeskPhone"></a
+            >.
+          </p>
+        </ng-container>
+      </ui-alert>
+
+      <ui-alert
+        *ngIf="accessRequestStatusCode === HcimAccountTransferStatusCode.ACCOUNT_LOCKED"
+        type="danger"
+        icon="error_outline"
+        iconType="outlined"
+        heading="Account Locked">
+        <ng-container uiAlertContent>
+          <p>
+            You have been locked out of your account. If you need assistance
+            contact the HelpDesk at
+            <a
+              uiAnchor
+              scheme="mailto"
+              [attr.href]="healthNetBcHelpDeskEmail"></a>
+            or
+            <a uiAnchor scheme="tel" [attr.href]="healthNetBcHelpDeskPhone"></a
+            >.
+          </p>
+        </ng-container>
+      </ui-alert>
+
+      <ng-container [formGroup]="formState.form">
+        <ui-page-section>
+          <ui-page-section-subheader heading="HCIMWeb HealthNetBC Username">
+            <ng-container uiPageSectionSubheaderDesc>
+              Username Format is:
+              <strong>Organization ID-First Initial, Last Name</strong>.
+            </ng-container>
+            <ng-container uiPageSectionSubheaderHint>
+              Example: 1767-bsmith
+            </ng-container>
+          </ui-page-section-subheader>
+
+          <mat-form-field class="w-100">
+            <mat-label>HealthNetBC Username</mat-label>
+            <input matInput tabindex="1" formControlName="ldapUsername" />
+            <mat-error>Required</mat-error>
+          </mat-form-field>
+
+          <ui-page-section-subheader heading="HCIMWeb HealthNetBC Password">
+            <ng-container uiPageSectionSubheaderDesc>
+              If you have forgotten your password, or are unsure of it, follow
+              <a uiAnchor [attr.href]="healthNetBcPasswordResetUrl"
+                >this link</a
+              >
+              to reset it before you start this process.
+            </ng-container>
+          </ui-page-section-subheader>
+
+          <mat-form-field class="w-100">
+            <mat-label>HealthNetBC Password</mat-label>
+            <input
+              matInput
+              type="password"
+              tabindex="2"
+              formControlName="ldapPassword" />
+            <mat-error>Required</mat-error>
+          </mat-form-field>
+
+          <small>
+            <a uiAnchor [attr.href]="healthNetBcPasswordResetUrl">
+              Have you forgotten your password?
+            </a>
+          </small>
+        </ui-page-section>
+      </ng-container>
+    </ng-template>
+
+    <ui-page-footer [mode]="completed ? 'reverse' : 'normal'">
+      <button
+        mat-stroked-button
+        uiPageFooterAction
+        type="button"
+        color="primary"
+        (click)="onBack()">
+        {{ completed ? 'Back Home' : 'Cancel Back Home' }}
+      </button>
+
+      <button
+        *ngIf="!completed"
+        mat-flat-button
+        uiPageFooterAction
+        type="submit"
+        color="primary">
+        Next
+      </button>
+    </ui-page-footer>
+  </ui-page>
+</div>

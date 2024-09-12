@@ -2,14 +2,25 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { ResolveFn, Router } from '@angular/router';
 
-import { catchError, exhaustMap, of } from 'rxjs';
+import { catchError, exhaustMap, of, switchMap } from 'rxjs';
 
 import { AuthRoutes } from '@app/features/auth/auth.routes';
+import { AuthorizedUserService } from '@app/features/auth/services/authorized-user.service';
 import { ShellRoutes } from '@app/features/shell/shell.routes';
 
 import { LoggerService } from '../services/logger.service';
-import { DiscoveryResource } from './discovery-resource.service';
+import {
+  DiscoveryResource,
+  DiscoveryStatus,
+} from './discovery-resource.service';
 import { PartyService } from './party.service';
+
+const linkedAccountErrorStatus: DiscoveryStatus[] = [
+  DiscoveryStatus.AlreadyLinkedError,
+  DiscoveryStatus.CredentialExistsError,
+  DiscoveryStatus.ExpiredCredentialLinkTicketError,
+  DiscoveryStatus.AccountLinkingError,
+];
 
 /**
  * @description
@@ -26,13 +37,31 @@ export const partyResolver: ResolveFn<number | null> = () => {
   const discoveryResource = inject(DiscoveryResource);
   const partyService = inject(PartyService);
   const logger = inject(LoggerService);
+  const authorizedUserService = inject(AuthorizedUserService);
 
   return discoveryResource.discover().pipe(
+    switchMap((discovery) =>
+      discovery.status === DiscoveryStatus.NewUser
+        ? authorizedUserService.user$.pipe(
+            switchMap((user) => discoveryResource.createParty(user)),
+          )
+        : of(discovery),
+    ),
     exhaustMap((discovery) => {
-      if (discovery.newBCProvider) {
+      if (discovery.status === DiscoveryStatus.NewBCProviderError) {
         router.navigateByUrl(
           AuthRoutes.routePath(AuthRoutes.BC_PROVIDER_UPLIFT),
         );
+      }
+      if (discovery.status === DiscoveryStatus.AccountLinkInProgress) {
+        router.navigateByUrl(
+          AuthRoutes.routePath(AuthRoutes.LINK_ACCOUNT_CONFIRM),
+        );
+      }
+      if (linkedAccountErrorStatus.includes(discovery.status)) {
+        router.navigate([AuthRoutes.routePath(AuthRoutes.LINK_ACCOUNT_ERROR)], {
+          queryParams: { status: discovery.status },
+        });
       }
       if (!discovery.partyId) {
         return of(null);

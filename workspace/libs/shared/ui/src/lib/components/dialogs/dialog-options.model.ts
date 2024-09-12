@@ -6,9 +6,14 @@ export interface DialogOptions {
   icon?: string;
   iconType?: 'outlined' | 'round' | 'sharp';
   imageSrc?: string; // Alternative to an icon
+  imageType?: 'icon' | 'banner';
   title?: string;
+  titlePosition?: 'center' | 'left' | 'right';
+  bottomBorder?: boolean;
   message?: string;
+  bodyTextPosition?: 'center' | 'left' | 'right';
   actionType?: 'primary' | 'accent' | 'warn';
+  actionTypePosition?: 'center' | 'left' | 'right';
   actionText?: string;
   actionHide?: boolean;
   actionLink?: {
@@ -24,4 +29,5 @@ export interface DialogOptions {
   width?: string;
   /** overload the dialog height, if undefined the default value will be used */
   height?: string;
+  class?: string;
 }

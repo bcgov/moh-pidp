@@ -2,11 +2,10 @@
   <PropertyGroup>
     <VersionPrefix>1.0.0</VersionPrefix>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <RootNamespace>PlrTestData</RootNamespace>
-
     <PackAsTool>true</PackAsTool>
     <ToolCommandName>plr-test-data</ToolCommandName>
     <PackageOutputPath>./nupkg</PackageOutputPath>

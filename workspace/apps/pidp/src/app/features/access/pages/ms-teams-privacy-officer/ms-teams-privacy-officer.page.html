@@ -1,4 +1,5 @@
-<div class="box" uiPidpInjectViewportCss>
+<div class="box container" uiPidpInjectViewportCss>
+  <app-breadcrumb [breadcrumbs]="breadcrumbsData"></app-breadcrumb>
   <div class="content">
     <app-enrolment-error *ngIf="enrolmentError"></app-enrolment-error>
     <form [formGroup]="formState.form" (ngSubmit)="onSubmit()">
@@ -52,7 +53,7 @@
       </ng-container>
       <ng-template #notCompleted>
         <header>
-          <h2 class="title">Welcome to your MS Teams enrolment application.</h2>
+          <h1>Welcome to your MS Teams enrolment application.</h1>
         </header>
         <ng-container [ngSwitch]="currentPage">
           <ng-container *ngSwitchCase="0">

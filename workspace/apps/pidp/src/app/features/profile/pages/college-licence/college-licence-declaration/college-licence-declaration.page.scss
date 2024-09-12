@@ -13,6 +13,8 @@ p {
   --field-max-width: unset;
   --button-margin-right: 15px;
   --actions-padding: 0 20px;
+  padding: 1.25rem 0.75rem;
+  padding-top: 0px !important;
 }
 .viewport-large {
   --box-padding: 40px 0;
@@ -29,6 +31,32 @@ p {
 .viewport-small {
   --box-padding: 0 0 20px;
   --field-max-width: 400px;
+  & .content {
+    padding: 0px !important;
+  }
+  & .actions {
+    padding: 0px !important;
+  }
+}
+.viewport-xsmall {
+  & .breadcrumb {
+    margin-left: 12px !important;
+  }
+  & .college-licence {
+    color: pidp.$bcgov-color-primary;
+    margin-left: 15px;
+    font-weight: 600;
+    font-size: 25px !important;
+    padding-bottom: 0px !important;
+  }
+
+  & .footer-text {
+    margin-left: 20px;
+  }
+
+  & .header {
+    padding-left: 15px !important;
+   }
 }
 .viewport-all {
   padding: var(--box-padding);
@@ -37,8 +65,14 @@ p {
     flex-direction: column;
 
     & .header {
-      padding: var(--header-padding);
-      background-color: $lightgrey;
+     color:skyblue;
+    }
+
+    & .college-licence {
+      color: pidp.$bcgov-color-primary;
+      font-weight: 600;
+      font-size: 50px;
+      padding-bottom: 20px;
     }
 
     & .content {
@@ -46,9 +80,14 @@ p {
       flex-direction: column;
       padding: var(--content-padding);
 
+      & .college-licence-introduction {
+        padding-bottom: 10px;
+      }
+
       & .field-label {
         font-size: var(--field-label-font-size);
         font-weight: bold;
+        color: black;
       }
 
       & mat-form-field {
@@ -61,5 +100,12 @@ p {
     & button:not(:last-of-type) {
       margin-right: var(--button-margin-right);
     }
+    button {
+      width: 100px;
+    }
+  }
+  & .footer-text {
+    font-weight: bold;
+    padding-top: 15px;
   }
 }

@@ -12,13 +12,20 @@ import { ProfileStatusAlert } from './models/profile-status-alert.model';
 import { ProfileStatus } from './models/profile-status.model';
 import { accessSectionKeys } from './state/access/access-group.model';
 import { PortalSectionStatusKey } from './state/portal-section-status-key.type';
-import { PortalState, PortalStateBuilder } from './state/portal-state.builder';
+import {
+  AccessState,
+  AccessStateBuilder,
+  PortalState,
+  PortalStateBuilder,
+} from './state/portal-state.builder';
 import { profileSectionKeys } from './state/profile/profile-group.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class PortalService {
+  public state$: Observable<PortalState>;
+  public accessState$: Observable<AccessState>;
   /**
    * @description
    * Copy of the provided profile status from the most recent
@@ -33,10 +40,22 @@ export class PortalService {
   private _state$: BehaviorSubject<PortalState>;
   /**
    * @description
+   * State for driving the displayed groups and sections of
+   * the access requests page.
+   */
+  private _accessState$: BehaviorSubject<AccessState>;
+  /**
+   * @description
    * List of HTTP response controlled alert messages for display
    * in the portal.
    */
   private _alerts: ProfileStatusAlert[];
+  /**
+   * @description
+   * List of HTTP response controlled alert messages for display
+   * in the College licence information page.
+   */
+  private _licenceAlerts: ProfileStatusAlert[];
   /**
    * @description
    * Whether all profile information has been completed, and
@@ -50,18 +69,23 @@ export class PortalService {
   ) {
     this._profileStatus = null;
     this._state$ = new BehaviorSubject<PortalState>(null);
+    this._accessState$ = new BehaviorSubject<AccessState>(null);
     this.state$ = this._state$.asObservable();
+    this.accessState$ = this._accessState$.asObservable();
     this._alerts = [];
+    this._licenceAlerts = [];
     this._completedProfile = false;
   }
-
-  public state$: Observable<PortalState>;
 
   public pasPanelExpanded$: BehaviorSubject<boolean> =
     new BehaviorSubject<boolean>(false);
 
   public get alerts(): ProfileStatusAlert[] {
     return this._alerts;
+  }
+
+  public get licenceAlerts(): ProfileStatusAlert[] {
+    return this._licenceAlerts;
   }
 
   public get hiddenSections(): PortalSectionStatusKey[] {
@@ -84,17 +108,29 @@ export class PortalService {
     }
     this._profileStatus = profileStatus;
     this._alerts = this.getAlerts(profileStatus);
+    this._licenceAlerts = this.getLicenceAlerts(profileStatus);
     this._completedProfile = this.hasCompletedProfile(profileStatus);
 
     const builder = new PortalStateBuilder(
       this.router,
       this.permissionsService,
     );
+    const accessBuilder = new AccessStateBuilder(
+      this.router,
+      this.permissionsService,
+    );
     this._state$.next(builder.createState(profileStatus));
+    this._accessState$.next(accessBuilder.createAccessState(profileStatus));
   }
 
   public updateIsPASExpanded(expanded: boolean): void {
     this.pasPanelExpanded$.next(expanded);
+  }
+
+  private getLicenceAlerts(profileStatus: ProfileStatus): ProfileStatusAlert[] {
+    return this.getAlerts(profileStatus).filter(
+      (alert) => alert.content !== PendingEndorsementComponent,
+    ) as ProfileStatusAlert[];
   }
 
   private getAlerts(profileStatus: ProfileStatus): ProfileStatusAlert[] {

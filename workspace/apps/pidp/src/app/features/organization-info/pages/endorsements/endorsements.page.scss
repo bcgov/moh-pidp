@@ -1,8 +1,6 @@
 @use 'pidp-variables' as pidp;
+@import 'bootstrap/bootstrap-imports';
 
-* {
-  box-sizing: border-box;
-}
 h2,
 label,
 p {
@@ -10,13 +8,11 @@ p {
 }
 
 // Set gap depending on viewport.
-.viewport-xsmall {
-  --gap: 1rem;
-}
+.viewport-xsmall,
 .viewport-large,
 .viewport-medium,
 .viewport-small {
-  --gap: 1.25rem;
+  --gap: 1rem;
 }
 
 // Use gap to set css.
@@ -24,46 +20,25 @@ p {
   --box-padding: 0;
   --content-padding: 0 0 var(--gap);
   --care-team-text-padding: var(--gap) var(--gap) 0;
-  --tab-content-flex-direction: column;
+  --tab-content-flex-direction: row;
   --endorsement-request-item-padding: 0 var(--gap);
-  --endorsement-form-field-width: 100%;
-}
-.viewport-large {
-  --box-padding: calc(2 * var(--gap)) 0;
-  --content-padding: 0;
-  --care-team-text-padding: var(--gap) 0;
-  --tab-content-flex-direction: unset;
-  --endorsement-request-item-padding: unset;
-  --endorsement-form-field-width: 30rem;
-}
-.viewport-medium {
-  --box-padding: var(--gap) 0;
-  --content-padding: 0;
-  --care-team-text-padding: var(--gap) 0;
-  --tab-content-flex-direction: unset;
-  --endorsement-request-item-padding: unset;
-  --endorsement-form-field-width: 30rem;
-}
-.viewport-small {
-  --box-padding: 0 0 var(--gap);
-  --content-padding: 0 var(--gap);
-  --care-team-text-padding: var(--gap) 0;
-  --tab-content-flex-direction: unset;
-  --endorsement-request-item-padding: unset;
-  --endorsement-form-field-width: 30rem;
-}
-.viewport-all {
-  padding: var(--box-padding);
+  --endorsement-form-field-width: 38.375rem;
+  padding: 1.25rem 0.75rem;
+
   & .content {
     padding: var(--content-padding);
     & header {
-      display: flex;
-      align-items: center;
-      flex-wrap: nowrap;
-      padding: calc(var(--gap) / 2) var(--gap);
-      background-color: pidp.$page-header-background-color;
-      & h2 {
-        margin: 0;
+      & h3 {
+        color: #4493b5;
+        font-size: 1.5rem;
+        font-weight: 400;
+        margin-bottom: 0.5rem;
+      }
+      & h1 {
+        color: #036;
+        font-size: 3.125rem;
+        font-weight: 700;
+        margin-bottom: 0;
       }
       & mat-icon {
         margin-left: calc(var(--gap) / 2);
@@ -71,10 +46,11 @@ p {
     }
     & .care-team {
       & .care-team-text {
-        padding: var(--care-team-text-padding);
-        & .large {
-          font-size: 1.25rem;
-        }
+        padding: var(--care-team-text-padding) 0;
+        color: #313132;
+        font-size: 1rem;
+        font-weight: 400;
+        line-height: 1.6875rem;
       }
       & .care-team-tabs {
         min-height: 10rem;
@@ -83,6 +59,8 @@ p {
         display: flex;
         align-items: center;
         opacity: 1;
+        color: #000;
+        font-size: 1.125rem;
         & .badge {
           margin-left: 0.5rem;
           font-size: 0.5rem;
@@ -98,36 +76,124 @@ p {
       }
       & .tab-content {
         padding: var(--gap);
-        display: flex;
-        flex-wrap: wrap;
         gap: var(--gap);
-        flex-direction: var(--tab-content-flex-direction);
-
-        & .endorsement-card {
-          flex-basis: calc((100% - (var(--gap))) / 2);
-          display: flex;
-        }
+        display: grid;
+        grid-template-columns: calc(50% - 15px) calc(50% - 15px);
       }
     }
     & .endorsement-request {
       & header {
         margin: calc(2 * var(--gap)) 0 var(--gap);
       }
-      & p,
-      & h3 {
-        padding: var(--endorsement-request-item-padding);
-      }
       & mat-form-field {
-        padding: var(--endorsement-request-item-padding);
-        width: var(--endorsement-form-field-width);
+        max-width: var(--endorsement-form-field-width);
+        width: 100%;
       }
     }
     & .actions {
-      display: flex;
-      padding: var(--endorsement-request-item-padding);
+      margin-top: 2rem;
+      button {
+        border-radius: 0.25rem;
+        border: 2px solid #036;
+        font-size: 1rem;
+        font-weight: 700;
+        letter-spacing: 0.0625rem;
+      }
       & button:not(:first-of-type) {
         margin-left: var(--gap);
       }
+    }
+  }
+}
+.viewport-large {
+  --tab-content-flex-direction: row;
+  & .content {
+    & .care-team {
+      & .tab-content {
+        grid-template-columns: calc(33% - 15px) calc(33% - 15px) calc(
+            33% - 15px
+          );
+      }
+    }
+  }
+}
+
+.viewport-medium {
+  --tab-content-flex-direction: row;
+  & .content {
+    & .care-team {
+      & .tab-content {
+        grid-template-columns: calc(33% - 15px) calc(33% - 15px) calc(
+            33% - 15px
+          );
+      }
+    }
+  }
+}
+.viewport-small {
+  --gap: 1rem;
+  --font-size: 0.75rem;
+  --card-header-font-size: unset;
+  --card-header-line-height: unset;
+  --tab-content-flex-direction: column;
+  & .content {
+    & .care-team {
+      & .tab-label-box {
+        font-size: 1rem;
+      }
+      & .tab-content {
+        grid-template-columns: calc(50% - 15px) calc(50% - 15px);
+      }
+    }
+  }
+}
+.viewport-xsmall {
+  --gap: 1rem;
+  --font-size: 1rem;
+  --card-header-font-size: calc(2 * var(--font-size));
+  --card-header-line-height: calc(var(--card-header-font-size) + 0.5rem);
+  --margin-bottom-style: 1.5rem;
+  padding: 1.25rem 0;
+
+  & .content {
+    padding: var(--content-padding);
+    & header {
+      padding: 0 0.75rem;
+      & h3 {
+        color: #4493b5;
+        font-size: 1.2rem;
+        font-weight: 400;
+        margin-bottom: 0.5rem;
+      }
+      & h1 {
+        color: #036;
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 0;
+      }
+    }
+    & .care-team {
+      & .care-team-text {
+        padding: 0 0.75rem;
+      }
+      & .tab-content {
+        grid-template-columns: 100%;
+      }
+    }
+
+    & .endorsement-request {
+      & header {
+        padding: 0 0.75rem;
+      }
+      p {
+        padding: 0 0.75rem;
+      }
+      & mat-form-field {
+        padding: 0 0.75rem;
+      }
+    }
+    & .actions {
+      padding: 0 0.75rem;
     }
   }
 }

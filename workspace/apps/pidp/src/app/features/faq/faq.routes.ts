@@ -1,5 +1,5 @@
 export class FaqRoutes {
-  public static BASE_PATH = 'faq';
+  public static BASE_PATH = 'help';
 
   public static MFA_SETUP = 'mfa-setup';
 

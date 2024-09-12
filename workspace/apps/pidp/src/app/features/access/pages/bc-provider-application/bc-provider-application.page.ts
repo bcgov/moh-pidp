@@ -21,13 +21,14 @@ import { MatDialogConfig } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import {
   EMPTY,
   Observable,
   catchError,
   exhaustMap,
+  map,
   of,
   switchMap,
   tap,
@@ -36,14 +37,13 @@ import {
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { faCircleRight } from '@fortawesome/free-regular-svg-icons';
 import {
+  faAngleRight,
   faCircleCheck,
   faLockOpen,
   faUser,
   faXmark,
 } from '@fortawesome/free-solid-svg-icons';
-import { DashboardStateModel, PidpStateName } from '@pidp/data-model';
 import {
-  AppStateService,
   LOADING_OVERLAY_DEFAULT_MESSAGE,
   LoadingOverlayService,
   NavigationService,
@@ -70,10 +70,12 @@ import { AuthRoutes } from '@app/features/auth/auth.routes';
 import { IdentityProvider } from '@app/features/auth/enums/identity-provider.enum';
 import { AuthService } from '@app/features/auth/services/auth.service';
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
+import { BreadcrumbComponent } from '@app/shared/components/breadcrumb/breadcrumb.component';
 import { NeedHelpComponent } from '@app/shared/components/need-help/need-help.component';
 import { DialogBcproviderCreateComponent } from '@app/shared/components/success-dialog/components/dialog-bcprovider-create.component';
 import { SuccessDialogComponent } from '@app/shared/components/success-dialog/success-dialog.component';
 
+import { AccessRoutes } from '../../access.routes';
 import { BcProviderApplicationFormState } from './bc-provider-application-form-state';
 import { BcProviderApplicationResource } from './bc-provider-application-resource.service';
 
@@ -84,6 +86,7 @@ import { BcProviderApplicationResource } from './bc-provider-application-resourc
   standalone: true,
   imports: [
     AsyncPipe,
+    BreadcrumbComponent,
     FaIconComponent,
     InjectViewportCssClassDirective,
     MatButtonModule,
@@ -99,6 +102,7 @@ import { BcProviderApplicationResource } from './bc-provider-application-resourc
     NgTemplateOutlet,
     ReactiveFormsModule,
     SuccessDialogComponent,
+    FaIconComponent,
   ],
 })
 export class BcProviderApplicationPage
@@ -106,23 +110,34 @@ export class BcProviderApplicationPage
   implements OnInit
 {
   public faCircleCheck = faCircleCheck;
+  public faAngleRight = faAngleRight;
   public faCircleRight = faCircleRight;
   public faLockOpen = faLockOpen;
   public faUser = faUser;
   public faXmark = faXmark;
   public formState: BcProviderApplicationFormState;
+  public AccessRoutes = AccessRoutes;
   public showErrorCard = false;
   public showMessageCard = false;
   public completed: boolean | null;
   public username = '';
   public password = '';
+  public previousUrl = '';
   public showOverlayOnSubmit = false;
   public errorMatcher = new CrossFieldErrorMatcher();
   public componentType = DialogBcproviderCreateComponent;
+  public breadcrumbsData: Array<{ title: string; path: string }> = [
+    { title: 'Home', path: '' },
+    {
+      title: 'Access',
+      path: AccessRoutes.routePath(AccessRoutes.ACCESS_REQUESTS),
+    },
+    { title: 'BC Provider account information', path: '' },
+  ];
+
+  public fullName$!: Observable<string>;
 
   public activeLayout: 'upliftAccount' | 'createAccount' | '';
-
-  public dashboardState$: Observable<DashboardStateModel>;
 
   @ViewChild('successDialog')
   public successDialogTemplate!: TemplateRef<Element>;
@@ -139,24 +154,22 @@ export class BcProviderApplicationPage
     private documentService: DocumentService,
     private loadingOverlayService: LoadingOverlayService,
     private logger: LoggerService,
+    private router: Router,
     private navigationService: NavigationService,
     private partyService: PartyService,
     private resource: BcProviderApplicationResource,
     private route: ActivatedRoute,
     private utilsService: UtilsService,
-    private stateService: AppStateService,
   ) {
     super(dependenciesService);
     this.formState = new BcProviderApplicationFormState(fb);
+    this.previousUrl = this.navigationService.getPreviousUrl();
+
     const routeData = this.route.snapshot.data;
     this.completed =
       routeData.bcProviderApplicationStatusCode == StatusCode.COMPLETED;
 
     this.activeLayout = '';
-
-    this.dashboardState$ = this.stateService.getNamedStateBroadcast(
-      PidpStateName.dashboard,
-    );
   }
 
   public onBack(): void {
@@ -165,7 +178,6 @@ export class BcProviderApplicationPage
 
   public onSuccessDialogClose(): void {
     this.dialog.closeAll();
-    this.navigationService.navigateToRoot();
   }
 
   public onUplift(): void {
@@ -204,8 +216,19 @@ export class BcProviderApplicationPage
       this.logger.error('No status code was provided');
       return this.navigationService.navigateToRoot();
     }
-  }
 
+    this.fullName$ = this.resource
+      .getProfileStatus(this.partyService.partyId)
+      .pipe(
+        map(
+          (profileStatus) =>
+            profileStatus?.status.dashboardInfo.displayFullName ?? '',
+        ),
+      );
+  }
+  public navigateTo(path: string): void {
+    this.router.navigateByUrl(path);
+  }
   protected performSubmission(): Observable<string | void> {
     const partyId = this.partyService.partyId;
     this.password = this.formState.password.value;
@@ -227,7 +250,18 @@ export class BcProviderApplicationPage
   }
 
   protected afterSubmitIsSuccessful(): void {
-    this.navigationService.navigateToRoot();
+    if (
+      this.previousUrl
+        .split('/')
+        .includes(AccessRoutes.PROVINCIAL_ATTACHMENT_SYSTEM)
+    ) {
+      this.router.navigate([
+        AccessRoutes.BASE_PATH,
+        AccessRoutes.PROVINCIAL_ATTACHMENT_SYSTEM,
+      ]);
+    } else {
+      this.navigationService.navigateToRoot();
+    }
   }
 
   private showSuccessDialog(): void {

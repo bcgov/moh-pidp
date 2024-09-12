@@ -30,3 +30,4 @@ export { ToggleContentComponent } from './toggle-content/toggle-content.componen
 export { ToggleContentChange } from './toggle-content/toggle-content-change.model';
 export { UserInfoComponent } from './user-info/user-info.component';
 export { YesNoContentComponent } from './yes-no-content/yes-no-content.component';
+export { TextButtonDirective } from './text-button/text-button.directive';

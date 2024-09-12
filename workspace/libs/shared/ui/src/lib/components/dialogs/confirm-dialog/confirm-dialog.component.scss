@@ -1,4 +1,48 @@
 @import 'palette';
+@import 'bootstrap/bootstrap-imports';
+
+.banner-image-container {
+  display: flex;
+
+  img {
+    width: 30rem;
+    height: 9rem;
+    object-position: center;
+    object-fit: cover;
+    margin: 2rem 1rem 0 1rem;
+  }
+}
+
+.heading-centered {
+  text-align: center;
+  @include media-breakpoint-down(sm) {
+    padding: 10px !important;
+    margin-bottom: 5px !important;
+  }
+}
+
+.heading-no-bottom-border{
+  span {
+    border-bottom: none;
+    line-height: 1;
+  }
+}
+
+.body-text-centered {
+  text-align: center;
+  line-height: 1.2;
+  padding-bottom: 0;
+}
+
+.action-type-centered{
+  align-self: center;
+  padding: 0 0 1rem 0 !important;
+
+  button{
+    margin: 0 1rem;
+    padding: 0.3rem 2rem;
+  }
+}
 
 h2 {
   display: flex;

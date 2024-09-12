@@ -1,0 +1,53 @@
+<div class="container" uiPidpInjectViewportCss>
+  <app-breadcrumb [breadcrumbs]="breadcrumbsData"></app-breadcrumb>
+  <div class="content-header">
+    <h1>Enrol for Access</h1>
+    <p>
+      As new healthcare systems onboard to OneHealthID, they will become
+      available here. Click on each card to enrol for access.
+    </p>
+  </div>
+  <div class="search-content">
+    <span>Total results: <b>{{ filteredAccessSections?.length }}</b></span>
+    <div class="div-search">
+      <fa-icon
+        *ngIf="showSearchIcon"
+        class="search-icon"
+        [icon]="faMagnifyingGlass"></fa-icon>
+      <input
+        matInput
+        #filter
+        (focus)="showSearchIcon=false"
+        (input)="onSearch($event)"
+        (focusout)="onSearch($event)"
+        (keyup.enter)="search(filter.value)" />
+      <button
+        type="button"
+        mat-flat-button
+        color="primary"
+        (click)="search(filter.value)">
+        Search
+      </button>
+    </div>
+  </div>
+
+  <app-access-request-card
+    *ngFor="let section of filteredAccessSections"
+    class="card-container"
+    [heading]="section.heading"
+    [description]="section.description"
+    [icon]="section.icon"
+    [actionDisabled]="section.action.disabled"
+    [completed]="section.status === 'Completed'"
+    (action)="onCardAction(section)"></app-access-request-card>
+
+  <div class="back-to-top-container">
+    <button
+      *ngIf="showBackToTopButton"
+      class="back-to-top"
+      (click)="scrollToTop()">
+      <fa-icon [icon]="faArrowUp"></fa-icon>
+    </button>
+    <div *ngIf="showBackToTopButton" class="back-to-top-text">Back to top</div>
+  </div>
+</div>

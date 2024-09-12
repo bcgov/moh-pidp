@@ -5,8 +5,8 @@ using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 
 using Pidp.Data;
+using Pidp.Extensions;
 using Pidp.Infrastructure.HttpClients.Plr;
-using Pidp.Models;
 
 // Currently used by DMFT
 public class EndorsementData
@@ -18,8 +18,11 @@ public class EndorsementData
 
     public class Model
     {
-        public string? Hpdid { get; set; } = string.Empty;
-        public List<LicenceInformation> Licences { get; set; } = new();
+        public string? Hpdid { get; set; }
+        public string FirstName { get; set; } = string.Empty;
+        public string LastName { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
+        public List<LicenceInformation> Licences { get; set; } = [];
 
         public class LicenceInformation
         {
@@ -34,21 +37,19 @@ public class EndorsementData
         public QueryValidator() => this.RuleFor(x => x.Hpdid).NotEmpty();
     }
 
-    public class QueryHandler : IQueryHandler<Query, IDomainResult<List<Model>>>
+    public class QueryHandler(IPlrClient client, PidpDbContext context) : IQueryHandler<Query, IDomainResult<List<Model>>>
     {
-        private readonly IPlrClient client;
-        private readonly PidpDbContext context;
-
-        public QueryHandler(IPlrClient client, PidpDbContext context)
-        {
-            this.client = client;
-            this.context = context;
-        }
+        private readonly IPlrClient client = client;
+        private readonly PidpDbContext context = context;
 
         public async Task<IDomainResult<List<Model>>> HandleAsync(Query query)
         {
+            query.Hpdid = query.Hpdid.EndsWith("@bcsc", StringComparison.Ordinal)
+                ? query.Hpdid
+                : $"{query.Hpdid}@bcsc";
+
             var partyId = await this.context.Credentials
-                .Where(credential => credential.Hpdid!.Replace("@bcsc", "") == query.Hpdid)
+                .Where(credential => credential.Hpdid == query.Hpdid)
                 .Select(credential => credential.PartyId)
                 .SingleOrDefaultAsync();
 
@@ -57,16 +58,16 @@ public class EndorsementData
                 return DomainResult.NotFound<List<Model>>();
             }
 
-            var dtos = await this.context.Endorsements
-                .Where(endorsement => endorsement.Active
-                    && endorsement.EndorsementRelationships.Any(relationship => relationship.PartyId == partyId))
-                .SelectMany(endorsement => endorsement.EndorsementRelationships)
-                .Where(relationship => relationship.PartyId != partyId)
-                .Select(relationship => new Dto
+            var dtos = await this.context.ActiveEndorsingParties(partyId)
+                .Select(party => new
                 {
-                    BcscCredential = relationship.Party!.Credentials
-                        .SingleOrDefault(credential => credential.IsBcServicesCard),
-                    Cpn = relationship.Party!.Cpn
+                    Hpdid = party.Credentials
+                        .SingleOrDefault(credential => credential.IsBcServicesCard)!
+                        .IdpId,
+                    party.Cpn,
+                    party.FirstName,
+                    party.LastName,
+                    party.Email
                 })
                 .ToListAsync();
 
@@ -74,7 +75,10 @@ public class EndorsementData
 
             return DomainResult.Success(dtos.Select(dto => new Model
             {
-                Hpdid = dto.BcscCredential?.IdpId,
+                Hpdid = dto.Hpdid,
+                FirstName = dto.FirstName,
+                LastName = dto.LastName,
+                Email = dto.Email!,
                 Licences = licences?
                     .Where(licence => licence.Cpn == dto.Cpn)
                     .Select(licence => new Model.LicenceInformation
@@ -83,15 +87,9 @@ public class EndorsementData
                         StatusCode = licence.StatusCode,
                         StatusReasonCode = licence.StatusReasonCode
                     })
-                    .ToList() ?? new()
+                    .ToList() ?? []
             })
             .ToList());
         }
-    }
-
-    private class Dto
-    {
-        public Credential? BcscCredential { get; set; }
-        public string? Cpn { get; set; }
     }
 }

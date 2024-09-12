@@ -30,8 +30,8 @@ public class Endorsement : BaseAuditable
             CreatedOn = request.StatusDate,
             EndorsementRelationships = new List<EndorsementRelationship>
             {
-                new EndorsementRelationship { PartyId = request.RequestingPartyId },
-                new EndorsementRelationship { PartyId = request.ReceivingPartyId.Value }
+                new() { PartyId = request.RequestingPartyId },
+                new() { PartyId = request.ReceivingPartyId.Value }
             }
         };
     }

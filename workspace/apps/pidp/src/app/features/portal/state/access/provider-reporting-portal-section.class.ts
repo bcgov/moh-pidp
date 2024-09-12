@@ -2,6 +2,9 @@ import { Router } from '@angular/router';
 
 import { Observable } from 'rxjs';
 
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
+import { faUserCheck, faUsers } from '@fortawesome/free-solid-svg-icons';
+
 import { AlertType } from '@bcgov/shared/ui';
 
 import { AccessRoutes } from '@app/features/access/access.routes';
@@ -18,6 +21,8 @@ export class ProviderReportingPortalSection implements IPortalSection {
   public readonly key: PortalSectionKey;
   public heading: string;
   public description: string;
+  public faUsers = faUsers;
+  public faUserCheck = faUserCheck;
 
   public constructor(
     private profileStatus: ProfileStatus,
@@ -58,6 +63,11 @@ export class ProviderReportingPortalSection implements IPortalSection {
       default:
         return 'Incomplete';
     }
+  }
+
+  public get icon(): IconProp {
+    const statusCode = this.getStatusCode();
+    return statusCode === StatusCode.COMPLETED ? faUserCheck : faUsers;
   }
 
   public performAction(): Observable<void> | void {

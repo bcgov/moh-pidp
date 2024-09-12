@@ -1,95 +1,98 @@
-<ui-page>
-  <ui-page-header>{{ title }}</ui-page-header>
+<div class="container" uiPidpInjectViewportCss>
+  <app-breadcrumb [breadcrumbs]="breadcrumbsData"></app-breadcrumb>
+  <ui-page mode="full">
+    <ui-page-header>{{ title }}</ui-page-header>
 
-  <ui-alert
-    *ngIf="accessRequestFailed"
-    type="danger"
-    icon="error_outline"
-    iconType="outlined"
-    heading="Error Requesting Access">
-    <ng-container uiAlertContent>
-      <p>
-        Your request for access to the Provincial Prescription Renewal Support
-        Service eForm could not be processed at this time. If this issue
-        persists, contact
-        <a
-          uiAnchor
-          scheme="mailto"
-          [href]="prescriptionRefillEformsSupportEmail"></a>
-        for assistance.
-      </p>
-    </ng-container>
-  </ui-alert>
-
-  <app-enrolment-error *ngIf="enrolmentError"></app-enrolment-error>
-
-  <ui-page-section>
-    <ui-page-section-subheader
-      icon="assignment"
-      heading="Provincial Prescription Renewal Support Service eForm">
-      <ng-container uiPageSectionSubheaderDesc>
-        {{ completed ? 'Enrolment Complete.' : 'Collection Notice.' }}
-      </ng-container>
-    </ui-page-section-subheader>
-  </ui-page-section>
-
-  <ng-container *ngIf="completed; else notCompleted">
     <ui-alert
-      type="success"
-      icon="check_circle"
+      *ngIf="accessRequestFailed"
+      type="danger"
+      icon="error_outline"
       iconType="outlined"
-      heading="You are approved!">
+      heading="Error Requesting Access">
       <ng-container uiAlertContent>
         <p>
-          You now have access to the Provincial Prescription Renewal Support
-          Service eForm. You can log into the application using your BC Services
-          Card app.
-        </p>
-        <p>
-          Follow this link to Provincial Prescription Renewal Support Service
-          eForm:<br />
+          Your request for access to the Provincial Prescription Renewal Support
+          Service eForm could not be processed at this time. If this issue
+          persists, contact
           <a
-            target="_blank"
-            aria-label="Link to Provincial Prescription Renewal Support Service eForm"
-            [href]="prescriptionRefillEformsUrl"
-            >{{prescriptionRefillEformsUrl}}</a
-          >
-        </p>
-        <p>
-          You will need to visit this link each time you want to submit a
-          prescription renewal. It may be helpful to bookmark this link for
-          future use.
+            uiAnchor
+            scheme="mailto"
+            [href]="prescriptionRefillEformsSupportEmail"></a>
+          for assistance.
         </p>
       </ng-container>
     </ui-alert>
-  </ng-container>
 
-  <ng-template #notCompleted>
+    <app-enrolment-error *ngIf="enrolmentError"></app-enrolment-error>
+
     <ui-page-section>
-      <p
-        class="collection-notice"
-        [innerHtml]="collectionNotice | safe: 'html'"></p>
+      <ui-page-section-subheader
+        icon="assignment"
+        heading="Provincial Prescription Renewal Support Service eForm">
+        <ng-container uiPageSectionSubheaderDesc>
+          {{ completed ? 'Enrolment Complete.' : 'Collection Notice.' }}
+        </ng-container>
+      </ui-page-section-subheader>
     </ui-page-section>
-  </ng-template>
 
-  <ui-page-footer [mode]="completed ? 'reverse' : 'normal'">
-    <button
-      mat-stroked-button
-      uiPageFooterAction
-      type="button"
-      color="primary"
-      (click)="onBack()">
-      {{ completed ? 'Back Home' : 'Cancel Back Home' }}
-    </button>
+    <ng-container *ngIf="completed; else notCompleted">
+      <ui-alert
+        type="success"
+        icon="check_circle"
+        iconType="outlined"
+        heading="You are approved!">
+        <ng-container uiAlertContent>
+          <p>
+            You now have access to the Provincial Prescription Renewal Support
+            Service eForm. You can log into the application using your BC
+            Services Card app.
+          </p>
+          <p>
+            Follow this link to Provincial Prescription Renewal Support Service
+            eForm:<br />
+            <a
+              target="_blank"
+              aria-label="Link to Provincial Prescription Renewal Support Service eForm"
+              [href]="prescriptionRefillEformsUrl"
+              >{{prescriptionRefillEformsUrl}}</a
+            >
+          </p>
+          <p>
+            You will need to visit this link each time you want to submit a
+            prescription renewal. It may be helpful to bookmark this link for
+            future use.
+          </p>
+        </ng-container>
+      </ui-alert>
+    </ng-container>
 
-    <button
-      *ngIf="!completed"
-      mat-flat-button
-      uiPageFooterAction
-      type="button"
-      color="primary"
-      (click)="onRequestAccess()">
-      Next
-    </button>
-  </ui-page-footer>
-</ui-page>
+    <ng-template #notCompleted>
+      <ui-page-section>
+        <p
+          class="collection-notice"
+          [innerHtml]="collectionNotice | safe: 'html'"></p>
+      </ui-page-section>
+    </ng-template>
+
+    <ui-page-footer [mode]="completed ? 'reverse' : 'normal'">
+      <button
+        mat-stroked-button
+        uiPageFooterAction
+        type="button"
+        color="primary"
+        (click)="onBack()">
+        {{ completed ? 'Back Home' : 'Cancel Back Home' }}
+      </button>
+
+      <button
+        *ngIf="!completed"
+        mat-flat-button
+        uiPageFooterAction
+        type="button"
+        color="primary"
+        (click)="onRequestAccess()">
+        Next
+      </button>
+    </ui-page-footer>
+  </ui-page>
+</div>

@@ -1,0 +1,29 @@
+.viewport-all {
+  padding: 1.25rem 0.75rem;
+  h1 {
+    color: #036;
+    font-size: 3.125rem;
+    font-weight: 700;
+    margin-bottom: 0;
+  }
+}
+
+.viewport-small {
+  fa-icon {
+    padding-left: 0.6rem;
+    padding-right: 0.6rem;
+    font-size: 1.5rem;
+  }
+
+  span {
+    font-size: 0.9rem;
+  }
+}
+
+.viewport-small,
+.viewport-xsmall {
+  h1 {
+    font-size: 40px;
+    line-height: 1.1;
+  }
+}

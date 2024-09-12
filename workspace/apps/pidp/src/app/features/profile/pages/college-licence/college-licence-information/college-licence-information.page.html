@@ -1,53 +1,86 @@
-<section class="component-container" uiPidpInjectViewportCss>
-  <h2 class="header">All licence information found in our records</h2>
-  <div class="info-box">
-    <p class="info-here">
+<div class="container breadcrumb-top" uiPidpInjectViewportCss>
+  <div class="breadcrumb">
+    <app-breadcrumb [breadcrumbs]="breadcrumbsData" *ngIf="!showCollegeLicenceDeclarationPage"></app-breadcrumb>
+  </div>
+</div>
+<div *ngIf="showCollegeLicenceDeclarationPage">
+  <app-college-licence-declaration [disableCollegeCode]=true [disableCollegeLicenceNumber]=true>
+  </app-college-licence-declaration>
+</div>
+<section class="component-container container section-top" uiPidpInjectViewportCss>
+  <div *ngIf="!showCollegeLicenceDeclarationPage">
+    <h3 class="college-licence">
+      College licence information
+    </h3>
+    <p class="college-licence-text">
       Here you can view your licence information and status.
-    </p>
-    <p class="info-confirm">
-      If any of this information is incorrect, please contact your regulatory
-      college.
+      <span>
+        <p>
+          If any of this information is incorrect, please contact your regulatory college.
+        </p>
+      </span>
     </p>
   </div>
+  <section *ngFor="let alert of alerts" class="alert-box section-box">
+    <app-portal-alert
+      [heading]="alert.heading"
+      [content]="alert.content"></app-portal-alert>
+  </section>
   <div class="licences-box">
     <div
-      *ngFor="let certification of collegeCertifications$ | async"
-      class="licences-licence-box">
-      <div class="licence-icon-box">
-        <fa-icon
-          class="licence-icon-image"
-          [fixedWidth]="true"
-          [icon]="faStethoscope"></fa-icon>
-      </div>
-      <div class="licence-detail-box">
-        <div class="licence-detail-content">
-          <app-college-licence-information-detail
-            class="licence-detail"
-            labelText="Identifier Type:"
-            [valueText]="certification.identifierType"></app-college-licence-information-detail>
-          <app-college-licence-information-detail
-            class="licence-detail"
-            labelText="Status Code:"
-            [valueText]="certification.statusCode"></app-college-licence-information-detail>
-          <app-college-licence-information-detail
-            class="licence-detail"
-            labelText="College ID:"
-            [valueText]="certification.collegeId"></app-college-licence-information-detail>
-          <app-college-licence-information-detail
-            class="licence-detail"
-            labelText="Status Start Date:"
-            [valueText]="certification.statusStartDate"></app-college-licence-information-detail>
-          <app-college-licence-information-detail
-            class="licence-detail"
-            labelText="Provider Role Type:"
-            [valueText]="certification.providerRoleType"></app-college-licence-information-detail>
+      *ngFor="let certification of collegeCertifications$ | async">
+      <div class="card-styles">
+        <div class="card-header-icon">
+          <div class="card-icon">
+            <img
+              src="/assets/images/college-licence-logo.svg"
+              alt="college-licence-logo" />
+          </div>
+        </div>
+        <div class="licence-detail-box">
+          <h2>College information</h2>
+          <div class="licence-detail-content">
+            <app-college-licence-information-detail
+              class="licence-detail"
+              labelText="Identifier Type:"
+              [valueText]="certification.identifierType"></app-college-licence-information-detail>
+              <div
+                class="status-active" *ngIf="certification.statusCode==='ACTIVE'">
+                <label>Status Code:</label>
+                <span>Active</span>
+                <img
+                  src="/assets/images/icons/icon-check-circle.svg"
+                  alt="check circle"
+                />
+              </div>
+              <div
+                class="status-non-active" *ngIf="certification.statusCode !=='ACTIVE'">
+                <label>Status Code:</label>
+                <span>{{certification.statusCode}}</span>
+              </div>
+            <app-college-licence-information-detail
+              class="licence-detail"
+              labelText="College ID:"
+              [valueText]="certification.collegeId"></app-college-licence-information-detail>
+            <app-college-licence-information-detail
+              class="licence-detail"
+              labelText="Status Start Date:"
+              [valueText]="certification.statusStartDate"></app-college-licence-information-detail>
+            <app-college-licence-information-detail
+              class="licence-detail"
+              labelText="Provider Role Type:"
+              [valueText]="certification.providerRoleType"></app-college-licence-information-detail>
+          </div>
         </div>
       </div>
     </div>
   </div>
   <div class="actions">
-    <button mat-stroked-button type="button" color="primary" (click)="onBack()">
-      Back Home
-    </button>
+    <span>
+      <button mat-stroked-button type="button" (click)="onBack()" color="primary">
+        Home
+      </button>
+    </span>
   </div>
+
 </section>
