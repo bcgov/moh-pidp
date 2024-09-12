@@ -25,10 +25,12 @@ import { AuthorizedUserService } from '@app/features/auth/services/authorized-us
 
 import { AccountLinkingResource } from './account-linking-resource.service';
 import { AccountLinkingPage } from './account-linking.page';
+import { NavigationService } from '@pidp/presentation';
 
 describe('AccountLinkingPage', () => {
   let component: AccountLinkingPage;
   let accessTokenServiceSpy: Spy<AccessTokenService>;
+  let navigationServiceSpy: Spy<NavigationService>;
 
   let mockAccessTokenParsed: AccessTokenParsed;
   let mockActivatedRoute: { snapshot: any };
@@ -75,6 +77,7 @@ describe('AccountLinkingPage', () => {
         provideAutoSpy(ApiHttpClient),
         provideAutoSpy(Router),
         provideAutoSpy(KeycloakService),
+        provideAutoSpy(NavigationService)
       ],
     });
 
@@ -103,6 +106,8 @@ describe('AccountLinkingPage', () => {
     accessTokenServiceSpy.decodeToken.nextWith(mockAccessTokenParsed);
 
     component = TestBed.inject(AccountLinkingPage);
+    navigationServiceSpy = TestBed.inject<any>(NavigationService);
+    navigationServiceSpy.getPreviousUrl();
   });
 
   it('should create', () => {

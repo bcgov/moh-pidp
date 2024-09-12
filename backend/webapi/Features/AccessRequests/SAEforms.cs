@@ -7,6 +7,7 @@ using NodaTime;
 
 using Pidp.Data;
 using Pidp.Extensions;
+using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.HttpClients.Keycloak;
 using Pidp.Infrastructure.HttpClients.Mail;
 using Pidp.Infrastructure.HttpClients.Plr;
@@ -17,6 +18,13 @@ using Pidp.Models.Lookups;
 public class SAEforms
 {
     public static IdentifierType[] ExcludedIdentifierTypes => [IdentifierType.PharmacyTech];
+
+    public static bool IsEligible(PlrStandingsDigest partyPlrStanding)
+    {
+        return partyPlrStanding
+            .Excluding(ExcludedIdentifierTypes)
+            .HasGoodStanding || partyPlrStanding.IsCpsPostgrad;
+    }
 
     public class Command : ICommand<IDomainResult>
     {
@@ -50,7 +58,9 @@ public class SAEforms
                 .Select(party => new
                 {
                     AlreadyEnroled = party.AccessRequests.Any(request => request.AccessTypeCode == AccessTypeCode.SAEforms),
-                    UserId = party.PrimaryUserId,
+                    UserIds = party.Credentials
+                        .Where(credential => credential.IdentityProvider == IdentityProviders.BCServicesCard || credential.IdentityProvider == IdentityProviders.BCProvider)
+                        .Select(credential => credential.UserId),
                     party.Email,
                     party.DisplayFirstName,
                     party.Cpn,
@@ -80,18 +90,19 @@ public class SAEforms
             }
             else
             {
-                if (!(await this.plrClient.GetStandingsDigestAsync(dto.Cpn))
-                    .Excluding(ExcludedIdentifierTypes)
-                    .HasGoodStanding)
+                if (!IsEligible(await this.plrClient.GetStandingsDigestAsync(dto.Cpn)))
                 {
                     this.logger.LogAccessRequestDenied();
                     return DomainResult.Failed();
                 }
             }
 
-            if (!await this.keycloakClient.AssignAccessRoles(dto.UserId, MohKeycloakEnrolment.SAEforms))
+            foreach (var userId in dto.UserIds)
             {
-                return DomainResult.Failed();
+                if (!await this.keycloakClient.AssignAccessRoles(userId, MohKeycloakEnrolment.SAEforms))
+                {
+                    return DomainResult.Failed();
+                }
             }
 
             this.context.AccessRequests.Add(new AccessRequest

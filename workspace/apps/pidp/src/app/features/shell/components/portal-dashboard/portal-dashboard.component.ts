@@ -13,6 +13,7 @@ import {
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';
 import { PartyService } from '@app/core/party/party.service';
+import { CommonDataService } from '@app/core/services/common-data.service';
 import { AccessRoutes } from '@app/features/access/access.routes';
 import { AuthService } from '@app/features/auth/services/auth.service';
 import { CookieService } from 'ngx-cookie-service';
@@ -47,6 +48,7 @@ export class PortalDashboardComponent implements IDashboard, OnInit {
     private cookieService: CookieService,
     private partyService: PartyService,
     private resource: PortalResource,
+    private dataService: CommonDataService,
   ) {
     this.logoutRedirectUrl = `${this.config.applicationUrl}/${this.config.routes.auth}`;
     this.headerConfig = { theme: 'light', allowMobileToggle: true };
@@ -67,6 +69,11 @@ export class PortalDashboardComponent implements IDashboard, OnInit {
   }
 
   public ngOnInit(): void {
+    this.alertStatusCheck();
+    this.dataService.pushEvent.subscribe(() => this.alertStatusCheck());
+  }
+
+  private alertStatusCheck(): void {
     this.alerts$ = this.resource
       .getProfileStatus(this.partyService.partyId)
       .pipe(
