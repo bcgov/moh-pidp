@@ -74,7 +74,7 @@ public class Role
 /// </summary>
 public class UserRepresentation
 {
-    public Dictionary<string, string[]> Attributes { get; set; } = new();
+    public Dictionary<string, string[]> Attributes { get; set; } = [];
     public string? Email { get; set; }
     public bool? Enabled { get; set; }
     public string? FirstName { get; set; }
@@ -82,7 +82,7 @@ public class UserRepresentation
     public string? LastName { get; set; }
     public string? Username { get; set; }
 
-    public void SetCollegeLicenceInformation(IEnumerable<PlrRecord> plrRecords)
+    public UserRepresentation SetCollegeLicenceInformation(IEnumerable<PlrRecord> plrRecords)
     {
         var data = plrRecords.Select(record => new
         {
@@ -93,16 +93,18 @@ public class UserRepresentation
             record.StatusReasonCode
         });
 
-        this.SetAttribute("college_licence_info", JsonSerializer.Serialize(data, new JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }));
+        return this.SetAttribute("college_licence_info", JsonSerializer.Serialize(data, new JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }));
     }
 
-    public void SetCpn(string cpn) => this.SetAttribute("common_provider_number", cpn);
+    public UserRepresentation SetCpn(string cpn) => this.SetAttribute("common_provider_number", cpn);
 
-    internal void SetLdapOrgDetails(LdapLoginResponse.OrgDetails orgDetails) => this.SetAttribute("org_details", JsonSerializer.Serialize(orgDetails, new JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }));
+    internal UserRepresentation SetLdapOrgDetails(LdapLoginResponse.OrgDetails orgDetails) => this.SetAttribute("org_details", JsonSerializer.Serialize(orgDetails, new JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }));
 
-    public void SetOpId(string opId) => this.SetAttribute("opId", opId);
+    public UserRepresentation SetOpId(string opId) => this.SetAttribute("opId", opId);
 
-    public void SetPidpEmail(string pidpEmail) => this.SetAttribute("pidp_email", pidpEmail);
+    public UserRepresentation SetPidpEmail(string pidpEmail) => this.SetAttribute("pidp_email", pidpEmail);
+
+    public UserRepresentation SetPidpPhone(string pidpPhone) => this.SetAttribute("pidp_phone", pidpPhone);
 
     /// <summary>
     /// Adds the given attributes to this User Representation. Overwrites any duplicate keys.
@@ -115,5 +117,9 @@ public class UserRepresentation
         }
     }
 
-    private void SetAttribute(string key, string value) => this.Attributes[key] = new[] { value };
+    private UserRepresentation SetAttribute(string key, string value)
+    {
+        this.Attributes[key] = [value];
+        return this;
+    }
 }

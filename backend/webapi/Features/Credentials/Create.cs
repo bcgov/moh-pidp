@@ -19,6 +19,7 @@ using Pidp.Models;
 using Pidp.Models.DomainEvents;
 using Pidp.Models.Lookups;
 using static Pidp.Features.CommonHandlers.UpdateKeycloakAttributesConsumer;
+using Pidp.Infrastructure.HttpClients.Keycloak;
 
 public class Create
 {
@@ -209,6 +210,51 @@ public class Create
             else
             {
                 await this.bus.Publish(UpdateKeycloakAttributes.FromUpdateAction(newCredential.UserId, user => user.SetOpId(party.OpId!)), cancellationToken);
+            }
+        }
+    }
+
+    public class UpdateKeycloakAttributesHandler(IBus bus, PidpDbContext context) : INotificationHandler<CredentialLinked>
+    {
+        private readonly IBus bus = bus;
+        private readonly PidpDbContext context = context;
+
+        public async Task Handle(CredentialLinked notification, CancellationToken cancellationToken)
+        {
+            var attributes = await this.context.Parties
+                .Where(party => party.Id == notification.Credential.PartyId)
+                .Select(party => new
+                {
+                    party.Email,
+                    party.Phone,
+                })
+                .SingleAsync(cancellationToken);
+
+            await this.bus.Publish(UpdateKeycloakAttributes.FromUpdateAction(notification.Credential.UserId, user => user.SetPidpEmail(attributes.Email!).SetPidpPhone(attributes.Phone!)), cancellationToken);
+        }
+    }
+
+    public class UpdateKeycloakRolesHandler(IKeycloakAdministrationClient keycloakClient, PidpDbContext context) : INotificationHandler<CredentialLinked>
+    {
+        private readonly IKeycloakAdministrationClient keycloakClient = keycloakClient;
+        private readonly PidpDbContext context = context;
+
+        public async Task Handle(CredentialLinked notification, CancellationToken cancellationToken)
+        {
+            var newCredential = notification.Credential;
+            if (newCredential.IdentityProvider is not (IdentityProviders.BCServicesCard or IdentityProviders.BCProvider))
+            {
+                return;
+            }
+
+            var hasSAEformsEnrolment = await this.context.AccessRequests
+                .AnyAsync(request => request.PartyId == newCredential.PartyId
+                    && request.AccessTypeCode == AccessTypeCode.SAEforms, cancellationToken);
+
+            if (hasSAEformsEnrolment)
+            {
+                // TODO: bus message for roles
+                await this.keycloakClient.AssignAccessRoles(newCredential.UserId, MohKeycloakEnrolment.SAEforms);
             }
         }
     }
