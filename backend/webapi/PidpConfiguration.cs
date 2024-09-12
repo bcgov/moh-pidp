@@ -51,6 +51,11 @@ public class PidpConfiguration
         public string TokenUrl { get; set; } = string.Empty;
     }
 
+    public class FhirServiceConfiguration
+    {
+        public string HostAddress { get; set; } = string.Empty;
+    }
+
     public class KeycloakConfiguration
     {
         public string RealmUrl { get; set; } = string.Empty;
@@ -82,9 +87,5 @@ public class PidpConfiguration
     public class RabbitMQConfiguration
     {
         public string HostAddress { get; set; } = string.Empty;
-    }
-    public class FhirServiceConfiguration
-    {
-        public string HostAddress { get; set; } = "http://firely-server:4080/";
     }
 }
