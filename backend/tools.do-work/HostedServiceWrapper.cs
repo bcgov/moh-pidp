@@ -4,22 +4,15 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System.Diagnostics;
 
-internal sealed class HostedServiceWrapper : IHostedService
+internal sealed class HostedServiceWrapper(
+    IDoWorkService service,
+    IHostApplicationLifetime appLifetime,
+    ILogger<HostedServiceWrapper> logger) : IHostedService
 {
-    private readonly IDoWorkService service;
-    private readonly IHostApplicationLifetime appLifetime;
-    private readonly ILogger logger;
+    private readonly IDoWorkService service = service;
+    private readonly IHostApplicationLifetime appLifetime = appLifetime;
+    private readonly ILogger logger = logger;
     private int? exitCode;
-
-    public HostedServiceWrapper(
-        IDoWorkService service,
-        IHostApplicationLifetime appLifetime,
-        ILogger<HostedServiceWrapper> logger)
-    {
-        this.service = service;
-        this.appLifetime = appLifetime;
-        this.logger = logger;
-    }
 
     public Task StartAsync(CancellationToken cancellationToken)
     {

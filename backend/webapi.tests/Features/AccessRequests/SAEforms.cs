@@ -5,15 +5,17 @@ using NodaTime;
 using Xunit;
 
 using Pidp.Features.AccessRequests;
+using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.HttpClients.Keycloak;
 using Pidp.Infrastructure.HttpClients.Plr;
+using Pidp.Models;
 using PidpTests.TestingExtensions;
 
 public class SAEformsTests : InMemoryDbTest
 {
     [Theory]
     [MemberData(nameof(SAEformsIdentifierTypeTestData))]
-    public async void CreateSAEformsEnrolment_ValidProfileWithVaryingLicence_MatchesExcludedTypes(IdentifierType identifierType, bool expected)
+    public async Task CreateSAEformsEnrolment_ValidProfileWithVaryingLicence_MatchesExcludedTypes(IdentifierType identifierType, bool expected)
     {
         var party = this.TestDb.HasAParty(party =>
         {
@@ -23,6 +25,10 @@ public class SAEformsTests : InMemoryDbTest
             party.Email = "Email@email.com";
             party.Phone = "5551234567";
             party.Cpn = "Cpn";
+            party.Credentials = [
+                new Credential { UserId = Guid.NewGuid(), IdentityProvider = IdentityProviders.BCServicesCard},
+                new Credential { UserId = Guid.NewGuid(), IdentityProvider = IdentityProviders.BCProvider},
+            ];
         });
         var client = A.Fake<IPlrClient>()
             .ReturningAStandingsDigest(true, identifierType);
@@ -35,7 +41,10 @@ public class SAEformsTests : InMemoryDbTest
         Assert.Equal(expected, result.IsSuccess);
         if (expected)
         {
-            A.CallTo(() => keycloak.AssignAccessRoles(party.PrimaryUserId, MohKeycloakEnrolment.SAEforms)).MustHaveHappened();
+            foreach (var credential in party.Credentials)
+            {
+                A.CallTo(() => keycloak.AssignAccessRoles(credential.UserId, MohKeycloakEnrolment.SAEforms)).MustHaveHappened();
+            }
         }
         else
         {
@@ -43,9 +52,15 @@ public class SAEformsTests : InMemoryDbTest
         }
     }
 
-    public static IEnumerable<object[]> SAEformsIdentifierTypeTestData()
+    public static TheoryData<IdentifierType, bool> SAEformsIdentifierTypeTestData()
     {
-        return TestData.AllIdentifierTypes
-             .Select(identifierType => new object[] { identifierType, !SAEforms.ExcludedIdentifierTypes.Contains(identifierType) });
+        var testData = new TheoryData<IdentifierType, bool>();
+
+        foreach (var identifierType in TestData.AllIdentifierTypes)
+        {
+            testData.Add(identifierType, !SAEforms.ExcludedIdentifierTypes.Contains(identifierType));
+        }
+
+        return testData;
     }
 }
