@@ -83,3 +83,18 @@ public class BCProviderPasswordReset : PartyBusinessEvent
     }
 }
 
+public class BCProviderMFAReset : PartyBusinessEvent
+{
+    public static BCProviderMFAReset Create(int partyId, string userPrincipalName, Instant recordedOn, IClock clock)
+    {
+        var timestamp = clock.GetCurrentInstant();
+        return new BCProviderMFAReset
+        {
+            PartyId = partyId,
+            Description = $"Party with User Principal Name {userPrincipalName} reset their BCProvider MFA at {timestamp}.",
+            Severity = LogLevel.Information,
+            RecordedOn = recordedOn
+        };
+    }
+}
+
