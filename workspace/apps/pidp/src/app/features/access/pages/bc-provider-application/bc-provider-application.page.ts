@@ -259,6 +259,8 @@ export class BcProviderApplicationPage
         AccessRoutes.BASE_PATH,
         AccessRoutes.PROVINCIAL_ATTACHMENT_SYSTEM,
       ]);
+    } else if (this.previousUrl.split('/').includes(AccessRoutes.IMMSBC)) {
+      this.router.navigate([AccessRoutes.BASE_PATH, AccessRoutes.IMMSBC]);
     } else {
       this.navigationService.navigateToRoot();
     }

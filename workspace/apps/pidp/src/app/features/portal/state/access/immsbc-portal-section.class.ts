@@ -4,6 +4,7 @@ import { AlertType } from '@bcgov/shared/ui';
 
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { faFileLines} from '@fortawesome/free-solid-svg-icons';
+import { faSyringe, faUserCheck } from '@fortawesome/free-solid-svg-icons';
 
 import { AccessRoutes } from '@app/features/access/access.routes';
 import { ShellRoutes } from '@app/features/shell/shell.routes';
@@ -16,7 +17,8 @@ import { IPortalSection } from '../portal-section.model';
 
 export class ImmsBCPortalSection implements IPortalSection {
   public readonly key: PortalSectionKey;
-  public faFileLines = faFileLines;
+  public faSyringe = faSyringe;
+  public faUserCheck = faUserCheck;
   public heading: string;
   public description: string;
 
@@ -26,7 +28,7 @@ export class ImmsBCPortalSection implements IPortalSection {
   ) {
     this.key = 'immsbc';
     this.heading = 'ImmsBC';
-    this.description = `Enrol here for access to PharmaCare's Special Authority eForms application.`;
+    this.description = `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna `;
   }
 
   public get hint(): string {
@@ -62,7 +64,8 @@ export class ImmsBCPortalSection implements IPortalSection {
   }
 
   public get icon(): IconProp {
-    return faFileLines;
+    const statusCode = this.getStatusCode();
+    return statusCode === StatusCode.COMPLETED ? faUserCheck : faSyringe;
   }
 
   public performAction(): Observable<void> | void {

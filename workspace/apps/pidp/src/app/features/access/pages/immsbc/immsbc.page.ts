@@ -94,7 +94,7 @@ export class ImmsbcPage implements OnInit {
   private readonly lastSelectedIndex: number;
   public hasCpn: boolean | undefined;
   public Destination = Destination;
-  public StatusCode = StatusCode;
+  public statusCode = StatusCode;
   public AccessRoutes = AccessRoutes;
   public title: string;
   public immsBCUrl: string;
