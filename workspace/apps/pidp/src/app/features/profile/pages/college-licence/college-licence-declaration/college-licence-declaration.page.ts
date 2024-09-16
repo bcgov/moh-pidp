@@ -25,6 +25,7 @@ import {
   AbstractFormPage,
 } from '@app/core/classes/abstract-form-page.class';
 import { PartyService } from '@app/core/party/party.service';
+import { CommonDataService } from '@app/core/services/common-data.service';
 import { LoggerService } from '@app/core/services/logger.service';
 import { ProfileRoutes } from '@app/features/profile/profile.routes';
 import { LookupService } from '@app/modules/lookup/lookup.service';
@@ -89,6 +90,7 @@ export class CollegeLicenceDeclarationPage
     private resource: CollegeLicenceDeclarationResource,
     private logger: LoggerService,
     private lookupService: LookupService,
+    private dataService: CommonDataService,
     fb: FormBuilder,
   ) {
     super(dependenciesService);
@@ -103,7 +105,7 @@ export class CollegeLicenceDeclarationPage
   }
 
   public ngOnInit(): void {
-    if(this.disableCollegeCode && this.disableCollegeLicenceNumber) {
+    if (this.disableCollegeCode && this.disableCollegeLicenceNumber) {
       this.formState.disableCollegeLicenseForm();
       this.disableSearch = true;
     }
@@ -131,7 +133,6 @@ export class CollegeLicenceDeclarationPage
 
   protected performSubmission(): Observable<string | null> {
     const partyId = this.partyService.partyId;
-    this.formState.disableCollegeLicenseForm();
 
     return partyId && this.formState.json
       ? this.resource.updateDeclaration(partyId, this.formState.json)
@@ -140,8 +141,11 @@ export class CollegeLicenceDeclarationPage
 
   protected afterSubmitIsSuccessful(cpn: string | null): void {
     if (cpn) {
-            this.router.navigate(
-        [ProfileRoutes.routePath(ProfileRoutes.COLLEGE_LICENCE_INFO), {showCollegeLicenceDeclarationPage: true}],
+      this.router.navigate(
+        [
+          ProfileRoutes.routePath(ProfileRoutes.COLLEGE_LICENCE_INFO),
+          { showCollegeLicenceDeclarationPage: true },
+        ],
         { replaceUrl: true },
       );
     } else if (this.formState.collegeCode.value === 0) {
@@ -149,6 +153,7 @@ export class CollegeLicenceDeclarationPage
     } else {
       this.licenceDeclarationFailed = true;
     }
+    this.dataService.publishEvent('CollegeLicence');
   }
 
   private navigateToRoot(): void {
