@@ -23,8 +23,7 @@ jobs:
         uses: redhat-actions/oc-login@v1.3
         with:
           openshift_server_url: ${{secrets.GOLD_OPENSHIFT_CLUSTER_URL}}
-          openshift_token: ${{secrets.GOLD_DEV_SERVICE_TOKEN}}
-          namespace: ${{secrets.GOLD_LICENSE_PLATE}}-dev
+          openshift_token: ${{secrets.GOLD_PIPELINE_SERVICE_ACCOUNT_TOKEN}}
 
       - name: Helm Deploy / install command
         run: |
@@ -43,8 +42,7 @@ jobs:
         uses: redhat-actions/oc-login@v1.3
         with:
           openshift_server_url: ${{secrets.GOLDDR_OPENSHIFT_CLUSTER_URL}}
-          openshift_token: ${{secrets.GOLDDR_DEV_SERVICE_TOKEN}}
-          namespace: ${{secrets.GOLDDR_LICENSE_PLATE}}-dev
+          openshift_token: ${{secrets.GOLDDR_PIPELINE_SERVICE_ACCOUNT_TOKEN}}
 
       - name: Helm Deploy / install command
         run: |
@@ -53,4 +51,4 @@ jobs:
           helm list --namespace f088b1-dev
 
           echo installing helm chart...
-          helm upgrade --wait --values ./deploy/dev_values.yaml --set global.image.registry=image-registry.openshift-image-registry.svc:5000/f088b1-tools dev charts/pidp --debug
+          helm upgrade --wait --values ./deploy/dev_values.yaml --namespace f088b1-dev --set global.image.registry=image-registry.openshift-image-registry.svc:5000/f088b1-tools dev charts/pidp --debug
