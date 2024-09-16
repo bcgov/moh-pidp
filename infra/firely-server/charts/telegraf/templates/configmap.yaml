@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "telegraf.fullname" . }}
+  labels:
+    {{- include "telegraf.labels" . | nindent 4 }}
+data:
+  telegraf.conf: |+
+    {{- $tplVersion := include "detect.version" . }}
+    {{ template "global_tags" .Values.config.global_tags }}
+    {{ template "agent" .Values.config.agent }}
+    {{ template "processors" (list $tplVersion .Values.config.processors) }}
+    {{ template "aggregators" (list $tplVersion .Values.config.aggregators) }}
+    {{ template "outputs" (list $tplVersion .Values.config.outputs) }}
+    {{- if .Values.metrics.health.enabled }}
+    [[outputs.health]]
+      service_address = "{{ .Values.metrics.health.service_address }}"
+      namepass = ["internal_write"]
+      [[outputs.health.compares]]
+        field = "buffer_size"
+        lt = {{ .Values.metrics.health.threshold | int64 }}.0
+      [[outputs.health.contains]]
+        field = "buffer_size"
+    {{- end }}
+    {{ template "inputs" (list $tplVersion .Values.config.inputs) }}
+    {{- if .Values.metrics.internal.enabled }}
+    [[inputs.internal]]
+      collect_memstats = {{ or .Values.metrics.internal.collect_memstats (.Values.metrics.collect_memstats | default false) }}
+    {{- end }}

@@ -10,12 +10,26 @@ from flask import Flask
 from flask_wtf import CSRFProtect
 from os import environ
 import requests
-import certifi
 import logging
 
 app = Flask(__name__)
 csrf = CSRFProtect()
 csrf.init_app(app) # Compliant
+
+def get_json_value_from_url(url, index):
+  try:
+    response = requests.get(url)
+    if response.status_code == 200:
+      json_data = response.json()
+      if index in json_data:
+        return json_data[index]
+      else:
+        return f"Index '{index}' not found in JSON response"
+    else:
+      return f"Failed to retrieve data from the URL. Status Code: {response.status_code}"
+  except Exception as e:
+      return f"An error occurred: {e}"
+
 
 def check_services(output_type):
     logging.basicConfig(format='%(message)s', level=logging.INFO)
@@ -23,6 +37,7 @@ def check_services(output_type):
     namespace = environ.get('namespace')
     cluster = environ.get('cluster')
     notouch = environ.get('notouch')
+    application_url = environ.get('application_url')
     data = {}
 
     # this is the magic to connect to the OCP cluster for running kubernetes commands
@@ -65,13 +80,19 @@ def check_services(output_type):
 
         if success:
             return_color = "green"
+            who_is_active = get_json_value_from_url(application_url,'cluster')
+            logging.info(f'who_am_i: {cluster.upper()}; who_is_active: {who_is_active.upper()}')
+            if cluster.upper() == "GOLD" and who_is_active.upper() == "GOLDDR":
+                return_code="500"
+                return_color = "red"   
+                         
         else:
             return_code="500"
             return_color = "red"
 
         # this is to override the actual "success" results.
         # debugging was added to force a 200 when true (500 when false) to allow for easier debugging of the networking
-        if  notouch == "200":
+        if notouch == "200":
             return_color = "green"
         elif notouch == "500":
             return_code = "500"

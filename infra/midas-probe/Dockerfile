@@ -9,7 +9,7 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/list/*
 
 COPY requirements.txt requirements.txt
-RUN pip3 install --no-cache-dir -r requirements.txt
+RUN pip3 install --no-cache-dir --trusted-host files.pythonhosted.org --trusted-host pypi.org --trusted-host pypi.python.org -r requirements.txt
 
 SHELL ["/bin/bash", "-c"]
 

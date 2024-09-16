@@ -9,3 +9,5 @@ memoryLimit: "450Mi"
 cpuRequests: "150m"
 memoryRequests: "250Mi"
 cluster: GOLD
+notouch: 200
+application_url: "https://healthprovideridentityportal.gov.bc.ca"
