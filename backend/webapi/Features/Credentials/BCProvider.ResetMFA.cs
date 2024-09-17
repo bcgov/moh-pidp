@@ -9,7 +9,7 @@ using Pidp.Data;
 using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.HttpClients.BCProvider;
 
-public class BCProviderResetMFA
+public class BCProviderResetMfa
 {
     public class Command : ICommand<IDomainResult>
     {
@@ -47,23 +47,23 @@ public class BCProviderResetMFA
 
             if (await this.client.RemoveAuthMethods(bcProviderId))
             {
-                this.logger.LogResetMFA(command.PartyId, bcProviderId);
+                this.logger.LogResetMfa(command.PartyId, bcProviderId);
                 return DomainResult.Success();
             }
             else
             {
-                this.logger.LogResetMFAError(command.PartyId, bcProviderId);
+                this.logger.LogResetMfaError(command.PartyId, bcProviderId);
                 return DomainResult.Failed();
             }
         }
     }
 }
 
-public static partial class BCProviderResetMFALoggingExtensions
+public static partial class BCProviderResetMfaLoggingExtensions
 {
     [LoggerMessage(1, LogLevel.Information, "Reset BCProvider MFA for party {PartyId} with User Principal Name {bcProviderId}.")]
-    public static partial void LogResetMFA(this ILogger logger, int partyId, string bcProviderId);
+    public static partial void LogResetMfa(this ILogger logger, int partyId, string bcProviderId);
 
     [LoggerMessage(2, LogLevel.Error, "Error when attempting to reset BCProvider MFA for party {PartyId} with User Principal Name {bcProviderId}.")]
-    public static partial void LogResetMFAError(this ILogger logger, int partyId, string bcProviderId);
+    public static partial void LogResetMfaError(this ILogger logger, int partyId, string bcProviderId);
 }
