@@ -281,12 +281,11 @@ public partial class ProfileStatus
             {
                 return profile switch
                 {
-                    _ when (profile.EndorsementPlrStanding.HasGoodStanding
-                        || profile.PartyPlrStanding
-                               .With(ImmsBC.AllowedIdentifierTypes)
-                            .HasGoodStanding)
-                        && profile.HasBCProviderCredential => StatusCode.Complete,
-                    { HasBCServicesCardCredential: true } => StatusCode.Incomplete,
+                    { UserIsHighAssuranceIdentity: false } => StatusCode.Locked,
+                    _ when profile.HasEnrolment(AccessTypeCode.ImmsBC) && profile.HasBCProviderCredential => StatusCode.Complete,
+                    _ when profile.PartyPlrStanding
+                        .With(ImmsBC.AllowedIdentifierTypes)
+                        .HasGoodStanding => StatusCode.Incomplete,
                     _ => StatusCode.Locked
                 };
             }

@@ -135,7 +135,7 @@ export class ImmsbcPage implements OnInit {
     );
     const routeData = this.route.snapshot.data;
     this.title = routeData.title;
-    this.completedStatus = false;
+    this.completedStatus = routeData.immsbcStatusCode === StatusCode.COMPLETED;
     this.accessRequestFailedFlag = false;
     this.enrolmentErrorFlag = false;
   }
@@ -191,13 +191,14 @@ export class ImmsbcPage implements OnInit {
           this.immsbcStatusCode = profileStatus?.status.immsbc.statusCode;
           this.bcProviderStatusCodeNumber =
             profileStatus?.status.bcProvider.statusCode;
-          if (this.immsbcStatusCode === StatusCode.COMPLETED) {
+          if (this.immsbcStatusCode === StatusCode.AVAILABLE && this.bcProviderStatusCodeNumber === StatusCode.COMPLETED) {
             this.immsbc$.next(false);
           } else if (
             foundIndex === this.lastSelectedIndex &&
             this.bcProviderStatusCodeNumber === StatusCode.COMPLETED
           ) {
             foundIndex = 1;
+            this.completedStatus = profileStatus?.status.immsbc.isComplete ? true : false;
           }
           this.selectedIndex = foundIndex;
         }),

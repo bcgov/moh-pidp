@@ -15,10 +15,15 @@ using Pidp.Models.Lookups;
 
 public class ImmsBC
 {
-    public static IdentifierType[] AllowedIdentifierTypes => [IdentifierType.PhysiciansAndSurgeons, IdentifierType.Pharmacist, IdentifierType.Nurse];
+    public static IdentifierType[] AllowedIdentifierTypes => [IdentifierType.PhysiciansAndSurgeons, IdentifierType.Pharmacist, IdentifierType.PharmacyTech, IdentifierType.Nurse, IdentifierType.Midwife];
     public class Command : ICommand<IDomainResult>
     {
         public int PartyId { get; set; }
+    }
+
+    public class CommandValidator : AbstractValidator<Command>
+    {
+        public CommandValidator() => this.RuleFor(x => x.PartyId).GreaterThan(0);
     }
 
     public class CommandHandler : ICommandHandler<Command, IDomainResult>
@@ -62,16 +67,14 @@ public class ImmsBC
 
             if (dataObj.AlreadyEnroled
                 || dataObj.Email == null
-                || !await this.plrClient.GetStandingAsync(dataObj.Cpn))
+                || !await this.plrClient.GetStandingAsync(dataObj.Cpn)
+                || !(await this.plrClient.GetStandingsDigestAsync(dataObj.Cpn))
+                    .With(AllowedIdentifierTypes).HasGoodStanding)
             {
                 this.logger.LogAccessRequestDenied(command.PartyId);
                 return DomainResult.Failed();
             }
 
-            if (!await this.keycloakClient.AssignAccessRoles(dataObj.UserId, MohKeycloakEnrolment.ImmsBC))
-            {
-                return DomainResult.Failed();
-            }
 
             this.context.AccessRequests.Add(new AccessRequest
             {

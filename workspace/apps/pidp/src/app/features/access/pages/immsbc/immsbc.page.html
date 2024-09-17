@@ -17,7 +17,7 @@
     </section>
 
     <app-enrolment-error *ngIf="enrolmentErrorFlag"></app-enrolment-error>
-    <ng-container *ngIf="(completedStatus && !enrolmentErrorFlag); else notCompleted">
+    <ng-container *ngIf="completedStatus; else notCompleted">
       <ui-alert
         type="success"
         icon="check_circle"
