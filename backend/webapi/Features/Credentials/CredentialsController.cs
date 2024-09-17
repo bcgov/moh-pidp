@@ -80,7 +80,7 @@ public class CredentialsController(IPidpAuthorizationService authorizationServic
         => await this.AuthorizePartyBeforeHandleAsync(command.PartyId, handler, command)
             .ToActionResult();
 
-    [HttpDelete("bc-provider/reset-mfa")]
+    [HttpDelete("bc-provider/mfa")]
     [Authorize(Policy = Policies.HighAssuranceIdentityProvider)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
