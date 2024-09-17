@@ -57,9 +57,9 @@ public class BCProviderResetMfa
 
 public static partial class BCProviderResetMfaLoggingExtensions
 {
-    [LoggerMessage(1, LogLevel.Information, "Reset BCProvider MFA for party {PartyId} with User Principal Name {bcProviderId}.")]
+    [LoggerMessage(1, LogLevel.Information, "Reset BCProvider MFA for party {partyId} with User Principal Name {bcProviderId}.")]
     public static partial void LogResetMfa(this ILogger logger, int partyId, string bcProviderId);
 
-    [LoggerMessage(2, LogLevel.Error, "Error when attempting to reset BCProvider MFA for party {PartyId} with User Principal Name {bcProviderId}.")]
+    [LoggerMessage(2, LogLevel.Error, "Error when attempting to reset BCProvider MFA for party {partyId} with User Principal Name {bcProviderId}.")]
     public static partial void LogResetMfaError(this ILogger logger, int partyId, string bcProviderId);
 }
