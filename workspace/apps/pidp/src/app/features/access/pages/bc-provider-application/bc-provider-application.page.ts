@@ -122,6 +122,7 @@ export class BcProviderApplicationPage
   public completed: boolean | null;
   public username = '';
   public password = '';
+  public previousUrl = '';
   public showOverlayOnSubmit = false;
   public errorMatcher = new CrossFieldErrorMatcher();
   public componentType = DialogBcproviderCreateComponent;
@@ -162,6 +163,8 @@ export class BcProviderApplicationPage
   ) {
     super(dependenciesService);
     this.formState = new BcProviderApplicationFormState(fb);
+    this.previousUrl = this.navigationService.getPreviousUrl();
+
     const routeData = this.route.snapshot.data;
     this.completed =
       routeData.bcProviderApplicationStatusCode == StatusCode.COMPLETED;
@@ -175,7 +178,6 @@ export class BcProviderApplicationPage
 
   public onSuccessDialogClose(): void {
     this.dialog.closeAll();
-    this.navigationService.navigateToRoot();
   }
 
   public onUplift(): void {
@@ -248,7 +250,18 @@ export class BcProviderApplicationPage
   }
 
   protected afterSubmitIsSuccessful(): void {
-    this.navigationService.navigateToRoot();
+    if (
+      this.previousUrl
+        .split('/')
+        .includes(AccessRoutes.PROVINCIAL_ATTACHMENT_SYSTEM)
+    ) {
+      this.router.navigate([
+        AccessRoutes.BASE_PATH,
+        AccessRoutes.PROVINCIAL_ATTACHMENT_SYSTEM,
+      ]);
+    } else {
+      this.navigationService.navigateToRoot();
+    }
   }
 
   private showSuccessDialog(): void {
