@@ -35,7 +35,7 @@ export class BcProviderEditResource {
 
   public resetMfa(partyId: number): NoContent {
     const url = `parties/${partyId}/credentials/bc-provider/reset-mfa`;
-    return this.apiResource.post<NoContent>(url, {}).pipe(
+    return this.apiResource.delete<NoContent>(url).pipe(
       NoContentResponse,
       catchError((error: HttpErrorResponse) => {
         return throwError(() => error);
