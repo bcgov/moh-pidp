@@ -86,7 +86,7 @@ public class CredentialsController(IPidpAuthorizationService authorizationServic
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> ResetBCProviderMFA([FromServices] ICommandHandler<BCProviderResetMFA.Command, IDomainResult> handler,
-                                                              [FromHybrid] BCProviderResetMFA.Command command)
+                                                        [FromHybrid] BCProviderResetMFA.Command command)
         => await this.AuthorizePartyBeforeHandleAsync(command.PartyId, handler, command)
             .ToActionResult();
 
