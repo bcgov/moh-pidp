@@ -1,9 +1,7 @@
 namespace Pidp.Features.Credentials;
 
-using System.Text.Json.Serialization;
 using DomainResults.Common;
 using FluentValidation;
-using HybridModelBinding;
 using Microsoft.EntityFrameworkCore;
 using Pidp.Data;
 using Pidp.Infrastructure.Auth;
@@ -13,8 +11,6 @@ public class BCProviderResetMfa
 {
     public class Command : ICommand<IDomainResult>
     {
-        [JsonIgnore]
-        [HybridBindProperty(Source.Route)]
         public int PartyId { get; set; }
     }
 
