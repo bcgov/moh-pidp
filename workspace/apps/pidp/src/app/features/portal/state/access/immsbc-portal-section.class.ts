@@ -3,7 +3,6 @@ import { Router } from '@angular/router';
 import { AlertType } from '@bcgov/shared/ui';
 
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
-import { faFileLines} from '@fortawesome/free-solid-svg-icons';
 import { faSyringe, faUserCheck } from '@fortawesome/free-solid-svg-icons';
 
 import { AccessRoutes } from '@app/features/access/access.routes';
@@ -49,7 +48,7 @@ export class ImmsBCPortalSection implements IPortalSection {
   }
 
   public get statusType(): AlertType {
-    return 'warn';
+    return this.getStatusCode() === StatusCode.COMPLETED ? 'success' : 'warn';
   }
 
   public get status(): string {
@@ -57,7 +56,9 @@ export class ImmsBCPortalSection implements IPortalSection {
 
     switch (statusCode) {
       case StatusCode.AVAILABLE:
-        return 'You are eligible to use Special Authority eForms';
+        return 'You are eligible to use ImmsBc';
+      case StatusCode.COMPLETED:
+        return 'Completed';
       default:
         return 'Incomplete';
     }

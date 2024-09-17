@@ -88,7 +88,7 @@ public class AccessRequestsController : PidpControllerBase
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> CreateImmsBCEnrolment([FromServices] ICommandHandler<ImmsBC.Command, IDomainResult> handler,
-                                                                 [FromRoute] ImmsBC.Command command)
+                                                           [FromRoute] ImmsBC.Command command)
         => await this.AuthorizePartyBeforeHandleAsync(command.PartyId, handler, command)
             .ToActionResult();
 

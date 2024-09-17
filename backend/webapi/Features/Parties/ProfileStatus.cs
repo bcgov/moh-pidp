@@ -109,8 +109,6 @@ public partial class ProfileStatus
         public bool HasBCProviderCredential { get; set; }
         public bool HasBCServicesCardCredential { get; set; }
         public bool LicenceDeclarationComplete { get; set; }
-
-
         // Computed in Finalize()
         private string? userIdentityProvider;
         public PlrStandingsDigest EndorsementPlrStanding { get; set; } = default!;
@@ -118,7 +116,6 @@ public partial class ProfileStatus
         public bool HasPendingEndorsementRequest { get; set; }
         public bool HasPrpAuthorizedLicence { get; set; }
         public PlrStandingsDigest PartyPlrStanding { get; set; } = default!;
-
         public bool HasEnrolment(AccessTypeCode accessTypeCode) => this.CompletedEnrolments.Contains(accessTypeCode);
         public bool HasNoLicence => this.LicenceDeclarationComplete && this.CollegeCode == null;
         public bool UserIsBCProvider => this.userIdentityProvider == IdentityProviders.BCProvider;
