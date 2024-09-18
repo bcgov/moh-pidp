@@ -59,7 +59,7 @@ public class IntakeService : IIntakeService
 
     public void LogUnrecognizedCert(string requestCertThumbprint) => this.logger.LogUnrecognizedCert(requestCertThumbprint);
 
-    private async Task<int> CreateOrUpdateRecordAsync(PlrRecord record, bool expectExists)
+    public async Task<int> CreateOrUpdateRecordAsync(PlrRecord record, bool expectExists)
     {
         await this.TranslateIdentifierTypeAsync(record);
 
