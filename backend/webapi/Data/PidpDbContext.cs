@@ -22,6 +22,7 @@ public class PidpDbContext : DbContext
     }
 
     public DbSet<AccessRequest> AccessRequests { get; set; } = default!;
+    public DbSet<Banners> Banners { get; set; } = default!;
     public DbSet<BusinessEvent> BusinessEvents { get; set; } = default!;
     public DbSet<ClientLog> ClientLogs { get; set; } = default!;
     public DbSet<Credential> Credentials { get; set; } = default!;
