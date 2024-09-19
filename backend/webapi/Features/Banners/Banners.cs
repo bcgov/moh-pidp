@@ -8,7 +8,6 @@ public class Banners
 {
     public class Query : IQuery<List<Model>>
     {
-        public int PartyId { get; set; }
     }
 
     public class Model
