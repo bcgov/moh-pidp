@@ -40,7 +40,14 @@ public class Banners
                 })
                 .ToListAsync();
 
-            return banners;
+            var currentTime = DateTime.UtcNow;
+            var unixTime = ((DateTimeOffset)currentTime).ToUnixTimeMilliseconds();
+
+            var activeBanners = banners.Where(banner => banner.StartTime.ToUnixTimeMilliseconds() < unixTime &&
+                    banner.EndTime.ToUnixTimeMilliseconds() > unixTime
+                ).ToList();
+
+            return activeBanners;
         }
     }
 }
