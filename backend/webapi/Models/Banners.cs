@@ -9,6 +9,8 @@ public class Banners : BaseAuditable
 {
     [Key]
     public int Id { get; set; }
+    public string Component { get; set; } = string.Empty;
+    public string Status { get; set; } = string.Empty;
     public string Header { get; set; } = string.Empty;
     public string Body { get; set; } = string.Empty;
     public Instant StartTime { get; set; }

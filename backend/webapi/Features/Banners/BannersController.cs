@@ -17,7 +17,7 @@ public class BannersController : PidpControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<List<Banners.Model>>> GetBannersData([FromServices] IQueryHandler<Banners.Query, List<Banners.Model>> handler,
-                                                                         [FromRoute] Banners.Query query)
+                                                                         [FromQuery] Banners.Query query)
         =>  await handler.HandleAsync(query);
 
 }
