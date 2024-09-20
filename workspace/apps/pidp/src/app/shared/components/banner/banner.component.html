@@ -1,0 +1,16 @@
+<div class="banner-container" uiPidpInjectViewportCss>
+  <nav class="banner">
+      <div
+        *ngFor="
+          let banner of banners;
+          index as itemIndex;
+        ">
+        <div>
+          {{banner.header}}
+        </div>
+        <div>
+          {{banner.body}}
+        </div>
+      </div>
+  </nav>
+</div>

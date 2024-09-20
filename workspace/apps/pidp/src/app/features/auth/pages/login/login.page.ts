@@ -34,6 +34,12 @@ import { NeedHelpComponent } from '@app/shared/components/need-help/need-help.co
 
 import { IdentityProvider } from '../../enums/identity-provider.enum';
 import { AuthService } from '../../services/auth.service';
+import { LoginResource } from './login-resource.service';
+import { BannerComponent } from '@app/shared/components/banner/banner.component';
+import { component } from './login.constants';
+import { BannerFindResponse } from './banner-find.response.model';
+import { HttpErrorResponse } from '@angular/common/http';
+import { LoggerService } from '@app/core/services/logger.service';
 
 export interface LoginPageRouteData {
   title: string;
@@ -55,6 +61,7 @@ export interface LoginPageRouteData {
     NgOptimizedImage,
     NgTemplateOutlet,
     UpperCasePipe,
+    BannerComponent,
   ],
 })
 export class LoginPage implements OnInit {
@@ -65,6 +72,12 @@ export class LoginPage implements OnInit {
   public showOtherLoginOptions: boolean;
   public IdentityProvider = IdentityProvider;
   public providerIdentitySupport: string;
+  public banners: Array<{ header: string; body: string; status: string; }> = [{
+    header: 'Website under maintanence upgrades',
+    body: 'OneHealthID will be experiencing a outage on September 18th.',
+    status: 'warning'
+  }];
+
 
   public viewport = PidpViewport.xsmall;
   public isMobileTitleVisible = this.viewport === PidpViewport.xsmall;
@@ -83,6 +96,8 @@ export class LoginPage implements OnInit {
     private dialog: MatDialog,
     private documentService: DocumentService,
     private viewportService: ViewportService,
+    private loginResource: LoginResource,
+    private logger: LoggerService
   ) {
     const routeSnapshot = this.route.snapshot;
 
@@ -111,6 +126,7 @@ export class LoginPage implements OnInit {
         })
         .subscribe();
     }
+
   }
 
   private onViewportChange(viewport: PidpViewport): void {
