@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
+import { InjectViewportCssClassDirective } from '@bcgov/shared/ui';
 
 @Component({
   selector: 'app-banner',
@@ -7,7 +8,8 @@ import { Component, Input } from '@angular/core';
   styleUrl: './banner.component.scss',
   standalone: true,
   imports: [
-    CommonModule
+    CommonModule,
+    InjectViewportCssClassDirective
   ],
 })
 export class BannerComponent {

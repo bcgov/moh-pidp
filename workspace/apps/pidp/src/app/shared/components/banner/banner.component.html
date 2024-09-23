@@ -1,46 +1,21 @@
 <div class="banner-container" uiPidpInjectViewportCss>
-  <!-- <nav class="banner">
-      <div
-        *ngFor="
-          let banner of banners;
-          index as itemIndex;
-        ">
-        <div>
-          {{banner.header}}
-        </div>
-        <div>
-          {{banner.body}}
-        </div>
-      </div>
-  </nav> -->
-  <!-- <div class="licences-box">
+  <div class="licences-box">
     <div
       *ngFor="let banner of banners">
       <div class="card-styles">
         <div class="card-header-icon">
-          <div class="card-icon">
-            <img
-              src="/assets/images/college-licence-logo.svg"
-              alt="college-licence-logo" />
-          </div>
-        </div>
         <div class="licence-detail-box">
-          <h2>{{banner.header}}</h2>
+          <h2>
+            <img
+            src="/assets/images/icons/icon-warning.svg"
+            alt="college-licence-logo" />
+            <span>{{banner.header}}</span>
+          </h2>
           <div class="licence-detail-content">
             {{banner.body}}
           </div>
         </div>
       </div>
-    </div>
-  </div> -->
-
-  <div class="alert-box">
-    <div class="alert-icon">
-        ⚠️
-    </div>
-    <div class="alert-content">
-        <strong>Website under maintenance upgrades</strong>
-        <p>OneHealthID will be experiencing an outage on September 18th.</p>
     </div>
   </div>
 </div>
