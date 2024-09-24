@@ -73,7 +73,7 @@ export class LoginPage implements OnInit {
   public IdentityProvider = IdentityProvider;
   public providerIdentitySupport: string;
   public banners: Array<{ header: string; body: string; status: string; }> = [{
-    header: 'Website under maintanence upgrades',
+    header: 'Website under maintanence ',
     body: 'OneHealthID will be experiencing a outage on September 18th.',
     status: 'warning'
   }];
@@ -126,6 +126,11 @@ export class LoginPage implements OnInit {
         })
         .subscribe();
     }
+    this.loginResource.find(component).subscribe(data=> {
+      this.banners = data;
+    }, err=> {
+      this.logger.error(err.message);
+    })
 
   }
 
