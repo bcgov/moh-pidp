@@ -128,7 +128,6 @@ export class LoginPage implements OnInit {
     this.loginResource.findBanners(component).subscribe((data: BannerFindResponse[])=> {
       this.banners = data;
     }, (err: HttpErrorResponse)=> {
-      this.toastService.openErrorToast('Banner could not be found');
       this.logger.error(
         '[LoginResource::findBanners] error has occurred: ',
         err,
