@@ -14,7 +14,7 @@ export class LoginResource {
   ) {
   }
 
-  public find(
+  public findBanners(
     component: string,
   ): Observable<BannerFindResponse[]> {
     return this.apiResource

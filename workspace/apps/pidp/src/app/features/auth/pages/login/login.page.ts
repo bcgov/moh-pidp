@@ -40,6 +40,7 @@ import { component } from './login.constants';
 import { BannerFindResponse } from './banner-find.response.model';
 import { HttpErrorResponse } from '@angular/common/http';
 import { LoggerService } from '@app/core/services/logger.service';
+import { ToastService } from '@app/core/services/toast.service';
 
 export interface LoginPageRouteData {
   title: string;
@@ -72,11 +73,7 @@ export class LoginPage implements OnInit {
   public showOtherLoginOptions: boolean;
   public IdentityProvider = IdentityProvider;
   public providerIdentitySupport: string;
-  public banners: Array<{ header: string; body: string; status: string; }> = [{
-    header: 'Website under maintanence ',
-    body: 'OneHealthID will be experiencing a outage on September 18th.',
-    status: 'warning'
-  }];
+  public banners: Array<{ header: string; body: string; status: string; }> = [];
 
 
   public viewport = PidpViewport.xsmall;
@@ -97,7 +94,8 @@ export class LoginPage implements OnInit {
     private documentService: DocumentService,
     private viewportService: ViewportService,
     private loginResource: LoginResource,
-    private logger: LoggerService
+    private logger: LoggerService,
+    private toastService: ToastService
   ) {
     const routeSnapshot = this.route.snapshot;
 
@@ -126,11 +124,16 @@ export class LoginPage implements OnInit {
         })
         .subscribe();
     }
-    this.loginResource.find(component).subscribe(data=> {
+
+    this.loginResource.findBanners(component).subscribe((data: BannerFindResponse[])=> {
       this.banners = data;
-    }, err=> {
-      this.logger.error(err.message);
-    })
+    }, (err: HttpErrorResponse)=> {
+      this.toastService.openErrorToast('Banner could not be found');
+      this.logger.error(
+        '[LoginResource::findBanners] error has occurred: ',
+        err,
+      );
+    });
 
   }
 
