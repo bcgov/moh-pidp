@@ -1,17 +1,17 @@
 <div class="banner-container" uiPidpInjectViewportCss>
-  <div class="licences-box">
+  <div class="banners-box">
     <div
       *ngFor="let banner of banners">
       <div class="card-styles">
         <div class="card-header-icon">
-        <div class="licence-detail-box">
+        <div class="banner-detail-box">
           <h2>
             <img
             src="/assets/images/icons/icon-warning.svg"
             alt="college-licence-logo" />
             <span>{{banner.header}}</span>
           </h2>
-          <div class="licence-detail-content">
+          <div class="banner-detail-content">
             {{banner.body}}
           </div>
         </div>
