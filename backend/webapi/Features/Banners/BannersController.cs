@@ -4,20 +4,16 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Pidp.Infrastructure.Services;
 
-[Route("api")]
-public class BannersController : PidpControllerBase
+[Route("api/[controller]")]
+public class BannersController(IPidpAuthorizationService authorizationService) : PidpControllerBase(authorizationService)
 {
-
-    public BannersController(IPidpAuthorizationService authorizationService) : base(authorizationService) {
-    }
-
-    [HttpGet("banners")]
+    [HttpGet]
     [AllowAnonymous]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<List<Banners.Model>>> GetBannersData([FromServices] IQueryHandler<Banners.Query, List<Banners.Model>> handler,
-                                                                         [FromQuery] Banners.Query query)
-        =>  await handler.HandleAsync(query);
+    public async Task<ActionResult<List<Index.Model>>> GetBannersData([FromServices] IQueryHandler<Index.Query, List<Index.Model>> handler,
+                                                                         [FromQuery] Index.Query query)
+        => await handler.HandleAsync(query);
 
 }

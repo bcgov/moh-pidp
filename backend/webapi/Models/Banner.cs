@@ -4,8 +4,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using NodaTime;
 
-[Table(nameof(Banners))]
-public class Banners : BaseAuditable
+[Table(nameof(Banner))]
+public class Banner : BaseAuditable
 {
     [Key]
     public int Id { get; set; }
