@@ -40,7 +40,6 @@ import { component } from './login.constants';
 import { BannerFindResponse } from './banner-find.response.model';
 import { HttpErrorResponse } from '@angular/common/http';
 import { LoggerService } from '@app/core/services/logger.service';
-import { ToastService } from '@app/core/services/toast.service';
 
 export interface LoginPageRouteData {
   title: string;
@@ -94,8 +93,7 @@ export class LoginPage implements OnInit {
     private documentService: DocumentService,
     private viewportService: ViewportService,
     private loginResource: LoginResource,
-    private logger: LoggerService,
-    private toastService: ToastService
+    private logger: LoggerService
   ) {
     const routeSnapshot = this.route.snapshot;
 
