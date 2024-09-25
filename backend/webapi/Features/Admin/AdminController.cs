@@ -8,10 +8,8 @@ using Pidp.Infrastructure.Services;
 
 [Route("api/[controller]")]
 [Authorize(Policy = Policies.IdirAuthentication, Roles = Roles.Admin)]
-public class AdminController : PidpControllerBase
+public class AdminController(IPidpAuthorizationService authorizationService) : PidpControllerBase(authorizationService)
 {
-    public AdminController(IPidpAuthorizationService authorizationService) : base(authorizationService) { }
-
     [HttpDelete("parties")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> DeleteAllParties([FromServices] ICommandHandler<PartyDelete.Command> handler)

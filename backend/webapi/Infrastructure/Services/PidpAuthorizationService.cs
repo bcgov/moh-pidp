@@ -2,16 +2,14 @@ namespace Pidp.Infrastructure.Services;
 
 using DomainResults.Common;
 using Microsoft.EntityFrameworkCore;
-using NodaTime;
 using System.Security.Claims;
 using System.Text.Json;
 
 using Pidp.Data;
 using Pidp.Extensions;
 
-public class PidpAuthorizationService(IClock clock, PidpDbContext context) : IPidpAuthorizationService
+public class PidpAuthorizationService(PidpDbContext context) : IPidpAuthorizationService
 {
-    private readonly IClock clock = clock;
     private readonly PidpDbContext context = context;
 
     public async Task<IDomainResult> CheckPartyAccessibilityAsync(int partyId, ClaimsPrincipal user)

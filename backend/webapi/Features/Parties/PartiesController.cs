@@ -12,10 +12,8 @@ using Pidp.Infrastructure.Services;
 
 [Route("api/[controller]")]
 [Authorize(Policy = Policies.AnyPartyIdentityProvider)]
-public class PartiesController : PidpControllerBase
+public class PartiesController(IPidpAuthorizationService authorizationService) : PidpControllerBase(authorizationService)
 {
-    public PartiesController(IPidpAuthorizationService authorizationService) : base(authorizationService) { }
-
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
