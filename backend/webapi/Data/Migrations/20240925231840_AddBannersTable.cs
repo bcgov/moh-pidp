@@ -7,17 +7,19 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Pidp.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class AddBanners : Migration
+    public partial class AddBannersTable : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Banners",
+                name: "Banner",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Component = table.Column<string>(type: "text", nullable: false),
+                    Status = table.Column<int>(type: "integer", nullable: false),
                     Header = table.Column<string>(type: "text", nullable: false),
                     Body = table.Column<string>(type: "text", nullable: false),
                     StartTime = table.Column<Instant>(type: "timestamp with time zone", nullable: false),
@@ -27,7 +29,7 @@ namespace Pidp.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Banners", x => x.Id);
+                    table.PrimaryKey("PK_Banner", x => x.Id);
                 });
         }
 
@@ -35,7 +37,7 @@ namespace Pidp.Data.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Banners");
+                name: "Banner");
         }
     }
 }

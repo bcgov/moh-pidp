@@ -13,8 +13,8 @@ using Pidp.Data;
 namespace Pidp.Data.Migrations
 {
     [DbContext(typeof(PidpDbContext))]
-    [Migration("20240919230335_NewFieldsAddedToBanner")]
-    partial class NewFieldsAddedToBanner
+    [Migration("20240925231840_AddBannersTable")]
+    partial class AddBannersTable
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -110,7 +110,7 @@ namespace Pidp.Data.Migrations
                     b.UseTphMappingStrategy();
                 });
 
-            modelBuilder.Entity("Pidp.Models.Banners", b =>
+            modelBuilder.Entity("Pidp.Models.Banner", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -142,13 +142,12 @@ namespace Pidp.Data.Migrations
                     b.Property<Instant>("StartTime")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Banners");
+                    b.ToTable("Banner");
                 });
 
             modelBuilder.Entity("Pidp.Models.BusinessEvent", b =>
