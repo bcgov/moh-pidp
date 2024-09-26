@@ -8,7 +8,7 @@ import {
 import { ActivatedRoute, ParamMap, convertToParamMap } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 
-import { of } from 'rxjs';
+import { Observable, of } from 'rxjs';
 
 import { randTextRange } from '@ngneat/falso';
 import { Spy, provideAutoSpy } from 'jest-auto-spies';
@@ -25,6 +25,8 @@ import { DocumentService } from '@app/core/services/document.service';
 import { IdentityProvider } from '../../enums/identity-provider.enum';
 import { AuthService } from '../../services/auth.service';
 import { LoginPage, LoginPageRouteData } from './login.page';
+import { LoginResource } from './login-resource.service';
+import { LoggerService } from '@app/core/services/logger.service';
 
 describe('LoginPage', () => {
   let component: LoginPage;
@@ -32,7 +34,8 @@ describe('LoginPage', () => {
   let clientLogsServiceSpy: Spy<ClientLogsService>;
   let authServiceSpy: Spy<AuthService>;
   let matDialogSpy: Spy<MatDialog>;
-
+  let loginResourceSpy: Spy<LoginResource>;
+  let loggerSpy: Spy<LoggerService>;
   let mockActivatedRoute: {
     snapshot: {
       queryParamMap?: ParamMap;
@@ -70,6 +73,8 @@ describe('LoginPage', () => {
         provideAutoSpy(ClientLogsService),
         provideAutoSpy(DocumentService),
         provideAutoSpy(MatDialog),
+        provideAutoSpy(LoginResource),
+        provideAutoSpy(LoggerService),
         ViewportService,
       ],
     }).compileComponents();
@@ -79,6 +84,14 @@ describe('LoginPage', () => {
     clientLogsServiceSpy = TestBed.inject<any>(ClientLogsService);
     authServiceSpy = TestBed.inject<any>(AuthService);
     matDialogSpy = TestBed.inject<any>(MatDialog);
+    loginResourceSpy = TestBed.inject<any>(LoginPage);
+    loggerSpy = TestBed.inject<any>(LoggerService);
+    loginResourceSpy.findBanners.mockReturnValue(of([{
+      header: "test",
+      body: "test",
+      component: "test",
+      status: "2"
+    }]))
   });
 
   describe('INIT', () => {
