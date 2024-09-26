@@ -84,7 +84,7 @@ describe('LoginPage', () => {
     clientLogsServiceSpy = TestBed.inject<any>(ClientLogsService);
     authServiceSpy = TestBed.inject<any>(AuthService);
     matDialogSpy = TestBed.inject<any>(MatDialog);
-    loginResourceSpy = TestBed.inject<any>(LoginPage);
+    loginResourceSpy = TestBed.inject<any>(LoginResource);
     loggerSpy = TestBed.inject<any>(LoggerService);
     loginResourceSpy.findBanners.mockReturnValue(of([{
       header: "test",
