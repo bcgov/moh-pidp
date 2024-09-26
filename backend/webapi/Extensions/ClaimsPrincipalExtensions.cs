@@ -9,6 +9,8 @@ using Pidp.Infrastructure.Auth;
 
 public static class ClaimsPrincipalExtensions
 {
+    private static readonly JsonSerializerOptions SerializationOptions = new() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
+
     /// <summary>
     /// Returns the UserId of the logged in user (from the 'sub' claim). If there is no logged in user, this will return Guid.Empty
     /// </summary>
@@ -80,7 +82,7 @@ public static class ClaimsPrincipalExtensions
 
         try
         {
-            var resources = JsonSerializer.Deserialize<Dictionary<string, ResourceAccess>>(resourceAccessClaim, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
+            var resources = JsonSerializer.Deserialize<Dictionary<string, ResourceAccess>>(resourceAccessClaim, SerializationOptions);
 
             return resources?.TryGetValue(resourceName, out var access) == true
                 ? access.Roles

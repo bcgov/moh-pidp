@@ -130,7 +130,7 @@ public class MSTeamsPrivacyOfficer
                 from: EmailService.PidpEmail,
                 to: "enrolment_securemessaging@fraserhealth.ca",
                 subject: "New MS Teams for Clinical Use Enrolment",
-                body: $"<pre>{JsonSerializer.Serialize(model, new JsonSerializerOptions { WriteIndented = true })}</pre>"
+                body: $"<pre>{model.Serialize()}</pre>"
             );
             await this.emailService.SendAsync(email);
         }
@@ -162,6 +162,8 @@ public class MSTeamsPrivacyOfficer
             Instant enrolmentDate,
             List<EnrolmentEmailModel.PlrRecord> plrRecords)
         {
+            public static readonly JsonSerializerOptions SerializationOptions = new() { WriteIndented = true };
+
             public string EnrolmentDate { get; set; } = enrolmentDate.InZone(DateTimeZoneProviders.Tzdb.GetZoneOrNull("America/Vancouver")!).Date.ToString();
             public string PrivacyOfficerName { get; set; } = enrolmentDto.FullName;
             public string? PrivacyOfficerBirthdate { get; set; } = enrolmentDto.Birthdate?.ToString();
@@ -179,6 +181,8 @@ public class MSTeamsPrivacyOfficer
                 public string? StatusCode { get; set; }
                 public string? StatusReasonCode { get; set; }
             }
+
+            public string Serialize() => JsonSerializer.Serialize(this, SerializationOptions);
         }
     }
 }

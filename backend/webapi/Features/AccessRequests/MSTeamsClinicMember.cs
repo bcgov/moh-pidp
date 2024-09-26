@@ -94,7 +94,7 @@ public class MSTeamsClinicMember
                 from: EmailService.PidpEmail,
                 to: "enrolment_securemessaging@fraserhealth.ca",
                 subject: $"Add User to MS Teams (Privacy Officer: {clinic.PrivacyOfficerName})",
-                body: $"<pre>{JsonSerializer.Serialize(body, new JsonSerializerOptions { WriteIndented = true })}</pre>"
+                body: $"<pre>{body.Serialize()}</pre>"
             );
 
             await this.emailService.SendAsync(email);
@@ -139,6 +139,8 @@ public class MSTeamsClinicMember
 
         private class EnrolmentEmailModel
         {
+            private static readonly JsonSerializerOptions SerializationOptions = new() { WriteIndented = true };
+
             public string EnrolmentDate { get; set; }
             public string MemberName { get; set; }
             public string? MemberBirthdate { get; set; }
@@ -175,6 +177,8 @@ public class MSTeamsClinicMember
                     Postal = clinic.Address.Postal
                 };
             }
+
+            public string Serialize() => JsonSerializer.Serialize(this, SerializationOptions);
         }
     }
 }
