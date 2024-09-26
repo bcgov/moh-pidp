@@ -90,3 +90,6 @@ This is the raw "Standby Leader" config. This was used a few times during testin
 ```
 {"postgresql":{"use_pg_rewind":true,"parameters":{"max_connections":100,"max_prepared_transactions":0,"max_locks_per_transaction":64}},"standby_cluster":{"host":"patroni-master-gold","port":53647,"username":"replication","password":"testing123"}}
 ```
+In order to backup and restore the databases, you need to connect to pidp_prod db before copying data
+
+ ``` psql -U postgres pidp_prod < /tmp/backup/pidp_prod.sql ```

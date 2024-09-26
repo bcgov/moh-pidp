@@ -13,7 +13,7 @@ metadata:
             "namespace": "{{ .Values.licensePlate }}-tools",
             "name": "{{ .Values.appName }}:{{ .Values.imageStreamTag }}"
           },
-          "fieldPath": "spec.template.spec.containers[0].image"
+          "fieldPath": "spec.template.spec.containers[1].image"
         }
       ]
 spec:
@@ -27,39 +27,60 @@ spec:
         app: {{ .Values.appName }}
 
     spec:
+      initContainers:
+        - name: midas-crone
+          image: {{ .Values.dockerhost }}/f088b1-tools/midas-crone:latest
+          imagePullPolicy: Always
+          env:
+            - name: application_url
+              value: {{ .Values.application_url }}
+          resources:
+              limits:
+                cpu: {{ .Values.cpuLimit }}
+                memory: {{ .Values.memoryLimit }}
+              requests:
+                cpu: {{ .Values.cpuRequests }}
+                memory: {{ .Values.memoryRequests }}
+          volumeMounts:
+            - name: who-is-active
+              mountPath: /tmp/who_is_active.json
+              subPath: who_is_active.json
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
       containers:
-      - name: python
-        image: {{ .Values.dockerhost }}/{{ .Values.licensePlate }}-tools/{{ .Values.appName }}:{{ .Values.imageStreamTag }}
-        imagePullPolicy: Always
-        env:
-          - name: environment
-            value: {{ .Values.environment }}
-          - name: servicename
-            value: {{ .Values.appName }}
-          - name: cluster
-            value: {{ .Values.cluster }}
-          - name: notouch
-            value: {{ .Values.notouch }}
-          - name: application_url
-            value: {{ .Values.application_url }}
-          - name: namespace
-            valueFrom:
-              fieldRef:
-                apiVersion: v1
-                fieldPath: metadata.namespace
-        resources:
-            limits:
-              cpu: {{ .Values.cpuLimit }}
-              memory: {{ .Values.memoryLimit }}
-            requests:
-              cpu: {{ .Values.cpuRequests }}
-              memory: {{ .Values.memoryRequests }}
-        volumeMounts:
-          - name: kube-api-access-rsh4p
-            readOnly: true
-            mountPath: /var/run/secrets/kubernetes.io/serviceaccount
-        terminationMessagePath: /dev/termination-log
-        terminationMessagePolicy: File
+        - name: midas-probe
+          image: {{ .Values.dockerhost }}/{{ .Values.licensePlate }}-tools/{{ .Values.appName }}:{{ .Values.imageStreamTag }}
+          imagePullPolicy: Always
+          env:
+            - name: environment
+              value: {{ .Values.environment }}
+            - name: servicename
+              value: {{ .Values.appName }}
+            - name: cluster
+              value: {{ .Values.cluster }}
+            - name: gslb_host
+              value: {{ .Values.gslb_host }}
+            - name: namespace
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: metadata.namespace
+          resources:
+              limits:
+                cpu: {{ .Values.cpuLimit }}
+                memory: {{ .Values.memoryLimit }}
+              requests:
+                cpu: {{ .Values.cpuRequests }}
+                memory: {{ .Values.memoryRequests }}
+          volumeMounts:
+            - name: kube-api-access-rsh4p
+              readOnly: true
+              mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+            - name: who-is-active
+              mountPath: /tmp/who_is_active.json
+              subPath: who_is_active.json
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
       automountServiceAccountToken: false
       dnsPolicy: ClusterFirst
       restartPolicy: Always
@@ -88,5 +109,7 @@ spec:
                     - key: service-ca.crt
                       path: service-ca.crt
             defaultMode: 420
+        - name: who-is-active
+          emptyDir: {}
       schedulerName: default-scheduler
       terminationGracePeriodSeconds: 30

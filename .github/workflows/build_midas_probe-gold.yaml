@@ -40,13 +40,13 @@ jobs:
       - name: Tag and Push Docker image
         run: |
           docker tag midas-probe image-registry.apps.gold.devops.gov.bc.ca/f088b1-tools/midas-probe:latest
-          docker push image-registry.apps.gold.devops.gov.bc.ca/f088b1-tools/midas-probe --all-tags
+          docker push image-registry.apps.gold.devops.gov.bc.ca/f088b1-tools/midas-probe:latest
       
       - name: OC Login to Gold OCP
         uses: redhat-actions/oc-login@v1.2
         with:
           openshift_server_url: ${{secrets.GOLD_OPENSHIFT_CLUSTER_URL}}
-          openshift_token: ${{secrets.GOLDDR_PIPELINE_SERVICE_ACCOUNT_TOKEN}}
+          openshift_token: ${{secrets.GOLD_PIPELINE_SERVICE_ACCOUNT_TOKEN}}
 
       - name: helm deployment
         working-directory: "./infra/midas-probe/openshift/helm"

@@ -41,8 +41,8 @@ jobs:
           docker push image-registry.apps.gold.devops.gov.bc.ca/f088b1-tools/pidp-webapi:develop
 
       - name: "Docker Build GOLDDR image"
-          run: |
-            docker tag image-registry.apps.gold.devops.gov.bc.ca/f088b1-tools/pidp-webapi:develop image-registry.apps.golddr.devops.gov.bc.ca/f088b1-tools/pidp-webapi:develop
+        run: |
+          docker tag image-registry.apps.gold.devops.gov.bc.ca/f088b1-tools/pidp-webapi:develop image-registry.apps.golddr.devops.gov.bc.ca/f088b1-tools/pidp-webapi:develop
   
         #  Uses the builder service account token
       - name: "Docker Login to GOLD OCP"
