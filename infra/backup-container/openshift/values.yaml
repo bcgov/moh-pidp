@@ -1,0 +1,72 @@
+global:
+  image:
+    registry: image-registry.openshift-image-registry.svc:5000/f088b1-tools
+    repository: backup-container
+    tag: "latest"
+    pullPolicy: Always
+    git_repo_url: "https://github.com/bcgov/moh-pidp.git"
+    git_ref: develop
+    source_context_dir: /infra/backup-container/docker
+
+replicaCount: 1
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+settings:
+  environment: prod
+  role: backup-container
+  namespace: f088b1-prod
+  licens_plate: f088b1
+
+resources: 
+  limits:
+    cpu: 50m
+    memory: 50Mi
+  requests:
+    cpu: 25m
+    memory: 15Mi
+
+backup:
+  backup_dir: /backups/
+  backup_strategy: rolling
+  num_backups: "48"
+  daily_backups: "6"
+  weekly_backups: "1"
+  monthly_backups: "1"
+  backup_period: ""
+  database_service_name: patroni-master
+  database_name: pidp_prod
+  table_schema: Public
+  database_deployment_name: prod-patroni-secret
+  database_user_key_name: superuser-username
+  database_user_password_name: superuser-password
+  backup_volume_size: 2Gi
+  backup_volume_class: netapp-file-standard
+  verification_volume_mount_path: /var/lib/pgsql/data
+  verification_volume_name: backup-verification
+  verification_volume_size: 1Gi
+  verification_volume_class: netapp-file-standard
+
+
+ftp:
+  enabled: false
+  ftp_url: ""
+  ftp_url_host: ""
+  ftp_user: ""
+  ftp_password: ""
+
+webhook:
+  enabled: false
+  webhook_url: ""
+  webhook_url_host: ""
+
+serviceAccount:
+  create: false
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+  
