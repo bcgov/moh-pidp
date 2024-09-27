@@ -83,6 +83,14 @@ describe('LoginPage', () => {
     authServiceSpy = TestBed.inject<any>(AuthService);
     matDialogSpy = TestBed.inject<any>(MatDialog);
     loginResourceSpy = TestBed.inject<any>(LoginResource);
+
+    loginResourceSpy.findBanners.mockReturnValue(of([{
+      header: "test",
+      body: "test",
+      component: "test",
+      status: "2"
+      }
+    ]));
   });
 
   describe('INIT', () => {
@@ -93,13 +101,6 @@ describe('LoginPage', () => {
 
       when('the component has been initialized', () => {
         clientLogsServiceSpy.createClientLog.mockReturnValue(of(void 0));
-        loginResourceSpy.findBanners.mockReturnValue(of([{
-          header: "test",
-          body: "test",
-          component: "test",
-          status: "2"
-          }
-        ]));
 
         component.ngOnInit();
 
@@ -115,13 +116,6 @@ describe('LoginPage', () => {
 
     given('no endorsement-token in the URL', () => {
       when('the component has been initialized', () => {
-        loginResourceSpy.findBanners.mockReturnValue(of([{
-          header: "test",
-          body: "test",
-          component: "test",
-          status: "2"
-          }
-        ]));
         component.ngOnInit();
 
         then('a log object was sent to the endpoint "client-logs"', () => {
@@ -140,13 +134,6 @@ describe('LoginPage', () => {
         });
         const idpHint = IdentityProvider.IDIR;
         clientLogsServiceSpy.createClientLog.mockReturnValue(of(void 0));
-        loginResourceSpy.findBanners.mockReturnValue(of([{
-          header: "test",
-          body: "test",
-          component: "test",
-          status: "2"
-          }
-        ]));
         component.ngOnInit();
 
         when('the method is called', () => {
@@ -179,13 +166,6 @@ describe('LoginPage', () => {
         matDialogSpy.open.mockReturnValue({
           afterClosed: () => of(true),
         } as MatDialogRef<typeof component>);
-        loginResourceSpy.findBanners.mockReturnValue(of([{
-          header: "test",
-          body: "test",
-          component: "test",
-          status: "2"
-          }
-        ]));
 
         component.ngOnInit();
 
@@ -221,13 +201,6 @@ describe('LoginPage', () => {
       matDialogSpy.open.mockReturnValue({
         afterClosed: () => of(true),
       } as MatDialogRef<typeof component>);
-      loginResourceSpy.findBanners.mockReturnValue(of([{
-        header: "test",
-        body: "test",
-        component: "test",
-        status: "2"
-        }
-      ]));
 
       component.ngOnInit();
 
@@ -252,13 +225,6 @@ describe('LoginPage', () => {
       () => {
         const idpHint = IdentityProvider.BCSC;
         clientLogsServiceSpy.createClientLog.mockReturnValue(of(void 0));
-        loginResourceSpy.findBanners.mockReturnValue(of([{
-          header: "test",
-          body: "test",
-          component: "test",
-          status: "2"
-          }
-        ]));
         matDialogSpy.open.mockReturnValue({
           afterClosed: () => of(false),
         } as MatDialogRef<typeof component>);
