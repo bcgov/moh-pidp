@@ -8,8 +8,6 @@ import {
 import { ActivatedRoute, ParamMap, convertToParamMap } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 
-import { Observable, of } from 'rxjs';
-
 import { randTextRange } from '@ngneat/falso';
 import { Spy, provideAutoSpy } from 'jest-auto-spies';
 
@@ -27,6 +25,7 @@ import { AuthService } from '../../services/auth.service';
 import { LoginPage, LoginPageRouteData } from './login.page';
 import { LoginResource } from './login-resource.service';
 import { LoggerService } from '@app/core/services/logger.service';
+import { of } from 'rxjs';
 
 describe('LoginPage', () => {
   let component: LoginPage;
@@ -35,7 +34,6 @@ describe('LoginPage', () => {
   let authServiceSpy: Spy<AuthService>;
   let matDialogSpy: Spy<MatDialog>;
   let loginResourceSpy: Spy<LoginResource>;
-  let loggerSpy: Spy<LoggerService>;
   let mockActivatedRoute: {
     snapshot: {
       queryParamMap?: ParamMap;
@@ -85,7 +83,6 @@ describe('LoginPage', () => {
     authServiceSpy = TestBed.inject<any>(AuthService);
     matDialogSpy = TestBed.inject<any>(MatDialog);
     loginResourceSpy = TestBed.inject<any>(LoginResource);
-    loggerSpy = TestBed.inject<any>(LoggerService);
   });
 
   describe('INIT', () => {
