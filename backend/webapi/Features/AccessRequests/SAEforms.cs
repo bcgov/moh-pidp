@@ -19,6 +19,13 @@ public class SAEforms
 {
     public static IdentifierType[] ExcludedIdentifierTypes => [IdentifierType.PharmacyTech];
 
+    public static bool IsEligible(PlrStandingsDigest partyPlrStanding)
+    {
+        return partyPlrStanding
+            .Excluding(ExcludedIdentifierTypes)
+            .HasGoodStanding || partyPlrStanding.IsCpsPostgrad;
+    }
+
     public class Command : ICommand<IDomainResult>
     {
         public int PartyId { get; set; }
@@ -83,9 +90,7 @@ public class SAEforms
             }
             else
             {
-                if (!(await this.plrClient.GetStandingsDigestAsync(dto.Cpn))
-                    .Excluding(ExcludedIdentifierTypes)
-                    .HasGoodStanding)
+                if (!IsEligible(await this.plrClient.GetStandingsDigestAsync(dto.Cpn)))
                 {
                     this.logger.LogAccessRequestDenied();
                     return DomainResult.Failed();
