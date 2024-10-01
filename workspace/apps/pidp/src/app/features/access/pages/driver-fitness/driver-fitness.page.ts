@@ -101,23 +101,26 @@ export class DriverFitnessPage implements OnInit {
 
   public onRequestAccess(): void {
     this.loadingOverlayService.open(LOADING_OVERLAY_DEFAULT_MESSAGE);
-    this.resource.requestAccess(this.partyService.partyId).pipe(
-      tap(() => {
-        this.completed = true;
-        this.loadingOverlayService.close();
-        this.enrolmentError = false;
-      }),
-      catchError((error: HttpErrorResponse) => {
-        this.loadingOverlayService.close();
-        if (error.status === HttpStatusCode.BadRequest) {
-          this.completed = false;
-          this.enrolmentError = true;
+    this.resource
+      .requestAccess(this.partyService.partyId)
+      .pipe(
+        tap(() => {
+          this.completed = true;
+          this.loadingOverlayService.close();
+          this.enrolmentError = false;
+        }),
+        catchError((error: HttpErrorResponse) => {
+          this.loadingOverlayService.close();
+          if (error.status === HttpStatusCode.BadRequest) {
+            this.completed = false;
+            this.enrolmentError = true;
+            return of(noop());
+          }
+          this.accessRequestFailed = true;
           return of(noop());
-        }
-        this.accessRequestFailed = true;
-        return of(noop());
-      }),
-    );
+        }),
+      )
+      .subscribe();
   }
 
   private navigateToRoot(): void {
