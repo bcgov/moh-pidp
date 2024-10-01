@@ -52,8 +52,6 @@ jobs:
         working-directory: "./infra/midas-probe/openshift/helm"
         run: |
           oc project f088b1-${{ github.event.inputs.Environment }}
-          echo installing midas-common helm chart...
-          helm upgrade --install --values ./midas-common/values.yaml --set licensePlate=f088b1 midas-common midas-common
           echo installing midas-probe helm chart...
           helm upgrade --install --values ./midas-probe/values.yaml --set licensePlate=f088b1 environment=${{ github.event.inputs.Environment }} midas-probe midas-probe
 
@@ -91,8 +89,6 @@ jobs:
         working-directory: "./infra/midas-probe/openshift/helm"
         run: |
           oc project f088b1-${{ github.event.inputs.Environment }}
-          echo installing midas-common helm chart...
-          helm upgrade --install --values ./midas-common/values.yaml --set licensePlate=f088b1 midas-common midas-common
           echo installing midas-probe helm chart...
           helm upgrade --install --values ./midas-probe/values.yaml --set licensePlate=f088b1 environment=${{ github.event.inputs.Environment }} midas-probe midas-probe
   
