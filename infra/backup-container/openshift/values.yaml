@@ -31,10 +31,10 @@ resources:
 backup:
   backup_dir: /backups/
   backup_strategy: rolling
-  num_backups: "48"
-  daily_backups: "6"
-  weekly_backups: "1"
-  monthly_backups: "1"
+  num_backups: '31'
+  daily_backups: '6'
+  weekly_backups: '4'
+  monthly_backups: '1'
   backup_period: ""
   database_service_name: patroni-master
   database_name: pidp_prod
@@ -43,7 +43,7 @@ backup:
   database_user_key_name: superuser-username
   database_user_password_name: superuser-password
   backup_volume_size: 2Gi
-  backup_volume_class: netapp-file-standard
+  backup_volume_class: netapp-file-backup
   verification_volume_mount_path: /var/lib/pgsql/data
   verification_volume_name: backup-verification
   verification_volume_size: 1Gi
