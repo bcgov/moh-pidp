@@ -44,7 +44,6 @@ export class SuccessDialogComponent implements OnInit {
 
   public onSuccessDialogClose(): void {
     this.dialog.closeAll();
-    this.navigationService.navigateToRoot();
   }
 
   public ngOnInit(): void {
