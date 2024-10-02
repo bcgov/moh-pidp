@@ -29,6 +29,7 @@ public partial class ProfileStatus
             internal abstract string SectionName { get; }
             public HashSet<Alert> Alerts { get; set; } = [];
             public StatusCode StatusCode { get; set; }
+            public virtual string[] KeyWords { get; } = [];
 
             public bool IsComplete => this.StatusCode == StatusCode.Complete;
 
@@ -63,6 +64,7 @@ public partial class ProfileStatus
         {
             internal override string SectionName => "bcProvider";
 
+            public override string[] KeyWords => ["Doctors", "Nursing", "HA", "Pharmacist"];
             protected override StatusCode Compute(ProfileData profile)
             {
                 return profile switch
@@ -153,6 +155,7 @@ public partial class ProfileStatus
         {
             internal override string SectionName => "accountLinking";
 
+            public override string[] KeyWords => ["Doctors", "HA", "Nursing"];
             protected override StatusCode Compute(ProfileData profile) => StatusCode.Incomplete;
         }
 
@@ -160,6 +163,7 @@ public partial class ProfileStatus
         {
             internal override string SectionName => "driverFitness";
 
+            public override string[] KeyWords => ["Doctors"];
             protected override StatusCode Compute(ProfileData profile)
             {
                 return profile switch
@@ -179,6 +183,7 @@ public partial class ProfileStatus
         {
             internal override string SectionName => "hcimAccountTransfer";
 
+            public override string[] KeyWords => ["HA"];
             protected override StatusCode Compute(ProfileData profile)
             {
                 return profile.HasEnrolment(AccessTypeCode.HcimAccountTransfer)
@@ -191,6 +196,7 @@ public partial class ProfileStatus
         {
             internal override string SectionName => "immsBCEforms";
 
+            public override string[] KeyWords => ["Doctors", "Nursing", "Pharmacist"];
             protected override StatusCode Compute(ProfileData profile)
             {
                 return profile switch
@@ -206,6 +212,7 @@ public partial class ProfileStatus
         public class MSTeamsClinicMemberSection : ProfileSection
         {
             internal override string SectionName => "msTeamsClinicMember";
+            public override string[] KeyWords => ["HA"];
 
             protected override StatusCode Compute(ProfileData profile)
             {
@@ -223,6 +230,7 @@ public partial class ProfileStatus
         {
             internal override string SectionName => "msTeamsPrivacyOfficer";
 
+            public override string[] KeyWords => ["HA"];
             protected override StatusCode Compute(ProfileData profile)
             {
                 return profile switch
@@ -240,6 +248,7 @@ public partial class ProfileStatus
         public class PrescriptionRefillEformsSection : ProfileSection
         {
             internal override string SectionName => "prescriptionRefillEforms";
+            public override string[] KeyWords => ["Pharmacists", "RX"];
 
             protected override StatusCode Compute(ProfileData profile)
             {
@@ -259,6 +268,7 @@ public partial class ProfileStatus
         {
             internal override string SectionName => "provincialAttachmentSystem";
 
+            public override string[] KeyWords => ["Doctors", "Nursing", "Panel"];
             protected override StatusCode Compute(ProfileData profile)
             {
                 return profile switch
