@@ -1,4 +1,4 @@
-import { NgFor, NgIf } from '@angular/common';
+import { NgFor, NgIf, NgOptimizedImage } from '@angular/common';
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -57,6 +57,7 @@ import { PrivacyOfficer } from './ms-teams-clinic-member.model';
     MatSelectModule,
     NgFor,
     NgIf,
+    NgOptimizedImage,
     PageFooterActionDirective,
     ReactiveFormsModule,
   ],

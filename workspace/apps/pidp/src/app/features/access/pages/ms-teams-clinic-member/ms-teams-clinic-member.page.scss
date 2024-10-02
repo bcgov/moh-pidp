@@ -60,11 +60,8 @@
     & .image {
       flex: 1;
       display: var(--image-display);
-      img {
-        flex: 1;
-        width: var(--teams-image-width);
-        height: var(--teams-image-height);
-      }
+      width: var(--teams-image-width);
+      height: var(--teams-image-height);
     }
   }
   & .privacy-text {

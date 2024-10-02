@@ -1,4 +1,4 @@
-import { NgIf } from '@angular/common';
+import { NgIf, NgOptimizedImage } from '@angular/common';
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
@@ -43,6 +43,7 @@ import {
     InjectViewportCssClassDirective,
     MatButtonModule,
     NgIf,
+    NgOptimizedImage,
     PageFooterActionDirective,
     RouterLink,
   ],

@@ -70,9 +70,13 @@ span {
       padding: var(--endorsement-card-padding);
       width: var(--endorsement-card-width);
       min-height: var(--endorsement-card-min-height);
-      background-image: url('/assets/images/endorsements-card-320x320.jpg');
-      background-color: rgba(0, 51, 102, 0.6);
+      background-color: rgba(0, 41, 92, 0.5);
       background-blend-mode: multiply;
+      position: relative;
+      .endorsement-img {
+        z-index: -1;
+        object-fit: cover;
+      }
 
       & h3 {
         font-size: var(--endorsement-card-header-font-size);

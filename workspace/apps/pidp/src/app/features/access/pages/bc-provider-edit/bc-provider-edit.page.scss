@@ -154,12 +154,8 @@
           & .image {
             flex: 1;
             display: flex;
-            height: 100%;
-            img {
-              flex: 1;
-              width: 100%;
-              height: auto;
-            }
+            width: 100%;
+            height: auto;
           }
           & .text-box {
             position: absolute;

@@ -53,19 +53,14 @@
             <div class="card-footer">
               <hr />
               <div class="bcgov-logo">
-                <picture>
-                  <source
-                    type="image/webp"
-                    srcset="/assets/images/BC_HLTH_H_CMYK_pos.webp" />
-                  <source
-                    type="image/png"
-                    srcset="/assets/images/BC_HLTH_H_CMYK_pos.png" />
-                  <img
-                    title="BC Government Logo"
-                    alt="BC Ministry of Health Logo"
-                    loading="lazy"
-                    aria-label="BC Ministry of Health Logo" />
-                </picture>
+                <img
+                  title="BC Government Logo"
+                  alt="BC Ministry of Health Logo"
+                  width="200"
+                  height="100"
+                  ngSrc="/assets/images/BC_HLTH_H_CMYK_pos.png"
+                  priority
+                  aria-label="BC Ministry of Health Logo" />
               </div>
             </div>
           </div>
@@ -245,16 +240,14 @@
               <span class="using">using BC Provider today!</span>
             </div>
           </div>
-          <picture class="image">
-            <source
-              type="image/webp"
-              srcset="/assets/images/bcprovider-account-1000x1103.webp" />
-            <!-- Use png as a fallback when webp is not supported by the browser. -->
-            <source
-              type="image/png"
-              srcset="/assets/images/bcprovider-account-1000x1103.png" />
-            <img title="woman" loading="lazy" aria-labelledby="" />
-          </picture>
+          <img
+            class="image"
+            title="woman"
+            width="467"
+            height="515"
+            ngSrc="/assets/images/bcprovider-account-1000x1103.png"
+            priority
+            aria-labelledby="woman" />
 
           <div *ngIf="false" class="text-box">
             <div>
