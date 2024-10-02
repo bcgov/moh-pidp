@@ -1,0 +1,35 @@
+{{- if and .Values.persistence.enabled (not .Values.persistence.existingPVClaim) }}
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  annotations:
+    pv.kubernetes.io/provisioned-by: file.csi.azure.com
+  name: {{ include "firely-server.fullname" . }}-storage-volume
+  # The label is used for matching the exact claim
+  labels:
+    usage: {{ include "firely-server.fullname" . }}-storage-volume
+spec:
+  capacity:
+    storage: 100Mi
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: azurefile-csi
+  csi:
+    driver: file.csi.azure.com
+    volumeHandle: "vonk-data"  # make sure this volumeid is unique for every identical share in the cluster
+    volumeAttributes:
+      shareName: vonk-data
+    nodeStageSecretRef:
+      name: vonk-storage-account-secret
+      namespace: {{ .Release.Namespace }}
+  mountOptions:
+    - dir_mode=0777
+    - file_mode=0777
+    - uid=0
+    - gid=0
+    - mfsymlinks
+    - cache=strict
+    - nosharesock
+    - nobrl  # disable sending byte range lock requests to the server and for applications which have challenges with posix locks
+{{- end }}
