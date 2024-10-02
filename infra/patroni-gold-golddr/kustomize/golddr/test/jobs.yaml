@@ -1,0 +1,13 @@
+# The Patroni config on GoldDR needs to communicate with Gold through the TransportService, but GoldDR doesn't know anything about the TransportService.
+# It's only aware of the resulting Service that's produced that talks back to Gold. So we've created a startup JOB on GoldDR that's designed to
+# query the service to get the port number for that service.  It can then inject that port number into the patroni config.
+# This id done bt updating the patroni-config configmap directly to include the TS port that the TSC created. This can only be done at runtime, not at "helm time".
+# Consideration was made to have this config done from inside the PSQL container, however this would have required the install of OC cli which
+# was felt would open a secuirty risk.
+# Additional consideration was given to creating a init sidecar to do this config change. That's still a possability, however it would require additional
+# long running resoruces for the pod...that would go unused for vast majority of the pods lifetime.
+
+kind: Job
+apiVersion: batch/v1
+metadata:
+  name: tsc-probe

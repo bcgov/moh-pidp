@@ -1,0 +1,22 @@
+# This is a special manifest that's for Gold/GoldDR BCGov't only.  It's a custom API called TransportServiceClaim (TSC) that produces a TransportService (TS).
+# It basically creates a service tunnel between Gold and GoldDR to allow private data transfer and communications between the two clusters.
+# We use this tunnel to keep the psql servers in sync.
+# When te TSC is deployed onto Gold it will create a service that will communicate with GoldDR.  It will also create a Service on GoldDR to communicate to Gold.
+# NOTE: This is only to be run on Gold.
+kind: TransportServerClaim
+apiVersion: porter.devops.gov.bc.ca/v1alpha1
+metadata:
+  name: patroni-postgres-tsc
+  labels:
+    app.kubernetes.io/instance: patroni
+    app.kubernetes.io/name: patroni
+    app.kubernetes.io/component: database
+    app: patroni
+    cluster-name: patroni
+spec:
+  monitor:
+    interval: 10
+    timeout: 10
+    type: tcp
+  service: patroni-master
+  servicePort: 5432
