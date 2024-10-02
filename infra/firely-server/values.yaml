@@ -5,7 +5,7 @@
 replicaCount: 1
 
 image:
-  repository: mage-registry.openshift-image-registry.svc:5000/d8a8f9-tools/firely-server
+  repository: image-registry.openshift-image-registry.svc:5000/f088b1-tools/firely-server
     # Overrides the image tag whose default is the chart appVersion.
   tag: latest
   pullPolicy: Always
