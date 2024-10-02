@@ -1,7 +1,6 @@
-{{ $release := .Release.Name }}
 {{ $ocEnv := regexFind "([^-]*$)" .Release.Namespace }}
 {{ $domain := .Values.global.vanityURL }}
-{{ $isPR := hasPrefix "pr-" .Release.Name }}
+{{ $env := .Values.env }}
 ## Derived release name
 {{ $isProd := contains "prod" $ocEnv }}
 #
@@ -88,7 +87,7 @@ spec:
                 value: >-
                   Host=$(DB_HOST);Port=5432;Database=$(POSTGRESQL_DATABASE);Username=$(POSTGRESQL_USER);Password=$(POSTGRESQL_PASSWORD)
               - name: ApplicationUrl
-                value: "https://{{ if $isProd }}{{else}}{{ $release }}.{{end}}{{ $domain }}"
+                value: "https://{{ if $isProd }}{{else}}{{ $env }}.{{end}}{{ $domain }}"
             resources: 
               {{- toYaml .Values.resources | nindent 12 }}
           restartPolicy: Never

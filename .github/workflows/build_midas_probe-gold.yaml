@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - 'develop'
-    paths: [midas-probe/openshift]
+    paths: [infra/midas-probe/openshift]
   workflow_dispatch:
     inputs:
       environment:
@@ -53,7 +53,7 @@ jobs:
         run: |
           oc project f088b1-${{ github.event.inputs.Environment }}
           echo installing midas-probe helm chart...
-          helm upgrade --install --values ./midas-probe/values.yaml --set licensePlate=f088b1 environment=${{ github.event.inputs.Environment }} midas-probe midas-probe
+          helm upgrade --install --values ./midas-probe/values.yaml --set environment=${{ github.event.inputs.Environment }} midas-probe midas-probe
 
   build-midas-goldDR:
     name: Build Midas Probe-GOLD
@@ -90,5 +90,5 @@ jobs:
         run: |
           oc project f088b1-${{ github.event.inputs.Environment }}
           echo installing midas-probe helm chart...
-          helm upgrade --install --values ./midas-probe/values.yaml --set licensePlate=f088b1 environment=${{ github.event.inputs.Environment }} midas-probe midas-probe
+          helm upgrade --install --values ./midas-probe/values.yaml --set environment=${{ github.event.inputs.Environment }} midas-probe midas-probe
   

@@ -3,11 +3,10 @@ licensePlate: f088b1
 imageStreamTag: latest
 replicas: 1
 dockerhost: image-registry.openshift-image-registry.svc:5000
-environment: "prod"
+environment: "dev"
 cpuLimit: "100m"
 memoryLimit: "150Mi"
 cpuRequests: "50m"
 memoryRequests: "50Mi"
 cluster: "GOLD"
-notouch: "200"
 gslb_host: "healthprovideridentityportal.gov.bc.ca.glb.gov.bc.ca"
