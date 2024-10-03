@@ -1,0 +1,33 @@
+kind: BuildConfig
+apiVersion: build.openshift.io/v1
+metadata:
+  name: {{ include "backupcontainer.fullname" . }}
+  namespace: {{ .Values.settings.licens_plate }}-tools
+  labels:
+    app: {{ include "backupcontainer.fullname" . }}
+spec:
+  nodeSelector: null
+  output:
+    to:
+      kind: ImageStreamTag
+      name: '{{ .Values.global.image.repository }}:{{ .Values.global.image.tag }}'
+  resources: {}
+  successfulBuildsHistoryLimit: 5
+  failedBuildsHistoryLimit: 5
+  strategy:
+    type: Docker
+    dockerStrategy:
+      from:
+        kind: DockerImage
+        name: 'quay.io/fedora/postgresql-14:14'
+      dockerfilePath: Dockerfile
+  postCommit: {}
+  source:
+    type: Git
+    git:
+      uri: {{ .Values.global.image.git_repo_url }}
+      ref: {{ .Values.global.image.git_ref }}
+    contextDir: {{ .Values.global.image.source_context_dir  }}
+  triggers:
+    - type: ConfigChange
+  runPolicy: Serial
