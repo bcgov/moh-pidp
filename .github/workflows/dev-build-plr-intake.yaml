@@ -14,8 +14,8 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build-and-deploy-plr-intake:
-    name: PLR Intake Backend Build and Deploy
+  build-plr-intake-silver:
+    name: PLR Intake Backend Build - Silver
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -26,7 +26,8 @@ jobs:
 
       - name: "Docker Build"
         run: |
-          docker build -t image-registry.apps.silver.devops.gov.bc.ca/d8a8f9-tools/pidp-plr-intake:develop .
+          docker build -t pidp-plr-intake:develop .
+          docker tag pidp-plr-intake:develop image-registry.apps.silver.devops.gov.bc.ca/d8a8f9-tools/pidp-plr-intake:develop
 
       # Uses the builder service account token
       - name: "Docker Login to Silver OCP"
@@ -39,3 +40,44 @@ jobs:
       - name: "Push image"
         run: |
           docker push image-registry.apps.silver.devops.gov.bc.ca/d8a8f9-tools/pidp-plr-intake:develop
+
+  build-plr-intake-gold:
+    name: PLR Intake Backend Build - Gold
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: "./backend/services.plr-intake"
+    steps:
+      - name: "Checkout Code"
+        uses: actions/checkout@master
+
+
+      #  Uses the builder service account token
+      - name: "Docker Login to GOLD OCP"
+        uses: docker/login-action@master
+        with:
+          registry: image-registry.apps.gold.devops.gov.bc.ca
+          username: builder
+          password: ${{ secrets.GOLD_TOOLS_BUILDER_TOKEN }}
+
+      - name: "Push image"
+        run: |
+          docker tag pidp-plr-intake:develop image-registry.apps.gold.devops.gov.bc.ca/f088b1-tools/pidp-plr-intake:develop
+          docker push image-registry.apps.gold.devops.gov.bc.ca/f088b1-tools/pidp-plr-intake:develop
+
+      - name: "Docker Build GOLDDR image"
+        run: |
+          docker tag image-registry.apps.gold.devops.gov.bc.ca/f088b1-tools/pidp-plr-intake:develop image-registry.apps.golddr.devops.gov.bc.ca/f088b1-tools/pidp-plr-intake:develop
+
+      #  Uses the builder service account token
+      - name: "Docker Login to GOLDDR OCP"
+        uses: docker/login-action@master
+        with:
+          registry: image-registry.apps.golddr.devops.gov.bc.ca
+          username: builder
+          password: ${{ secrets.GOLDDR_TOOLS_BUILDER_TOKEN }}
+
+      - name: "Push image"
+        run: |
+          docker tag pidp-plr-intake:develop image-registry.apps.golddr.devops.gov.bc.ca/f088b1-tools/pidp-plr-intake:develop
+          docker push image-registry.apps.golddr.devops.gov.bc.ca/f088b1-tools/pidp-plr-intake:develop

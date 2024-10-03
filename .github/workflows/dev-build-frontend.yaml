@@ -13,8 +13,8 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build-and-deploy-frontend:
-    name: Frontend Build and Deploy
+  build-frontend-silver:
+    name: Frontend Build - Silver
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -38,7 +38,8 @@ jobs:
 
       - name: "Docker Build"
         run: |
-          docker build -t image-registry.apps.silver.devops.gov.bc.ca/d8a8f9-tools/pidp-frontend:develop .
+          docker build -t pidp-frontend:develop .
+          docker tag pidp-frontend:develop image-registry.apps.silver.devops.gov.bc.ca/d8a8f9-tools/pidp-frontend:develop
 
       # Uses the builder service account token
       - name: "Docker Login to Silver OCP"
@@ -51,3 +52,44 @@ jobs:
       - name: "Push image"
         run: |
           docker push image-registry.apps.silver.devops.gov.bc.ca/d8a8f9-tools/pidp-frontend:develop
+  build-frontend-gold:
+    name: Frontend Build - Gold
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: "./workspace"
+    steps:
+      - name: "Checkout Code"
+        uses: actions/checkout@master
+
+      - name: "Docker Build GOLD"
+        run: |
+          docker tag pidp-frontend:develop image-registry.apps.gold.devops.gov.bc.ca/f088b1-tools/pidp-frontend:develop
+
+      # Uses the Artifactory service account's username and password 
+      - name: "Docker Login to GOLD OCP"
+        uses: docker/login-action@v2
+        with:
+          registry: image-registry.apps.gold.devops.gov.bc.ca
+          username: builder
+          password: ${{ secrets.GOLD_TOOLS_BUILDER_TOKEN }}
+
+      - name: "Push image to GOLD OCP"
+        run: |
+          docker push image-registry.apps.gold.devops.gov.bc.ca/f088b1-tools/pidp-frontend:develop
+        
+      - name: "Docker Build GOLDDR"
+        run: |
+          docker tag image-registry.apps.gold.devops.gov.bc.ca/f088b1-tools/pidp-frontend:develop image-registry.apps.golddr.devops.gov.bc.ca/f088b1-tools/pidp-frontend:develop .
+
+      # Uses the Artifactory service account's username and password 
+      - name: "Docker Login to GOLDDR OCP"
+        uses: docker/login-action@v2
+        with:
+          registry: image-registry.apps.golddr.devops.gov.bc.ca
+          username: builder
+          password: ${{ secrets.GOLDDR_TOOLS_BUILDER_TOKEN }}
+
+      - name: "Push image to GOLDDR OCP"
+        run: |
+          docker push image-registry.apps.golddr.devops.gov.bc.ca/f088b1-tools/pidp-frontend:develop
