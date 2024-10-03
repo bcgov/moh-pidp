@@ -108,11 +108,10 @@ export class AccessRequestsPage implements OnInit, OnDestroy {
       .pipe(map((state) => state?.access))
       .subscribe((access) => {
         this.filteredAccessSections = access?.filter(
-          (section) => {
-            return section.heading.toLowerCase().includes(text.toLowerCase()) ||
+          (section) =>
+            section.heading.toLowerCase().includes(text.toLowerCase()) ||
             section.description.toLowerCase().includes(text.toLowerCase()) ||
             section.keyWords?.includes(text.toLocaleLowerCase())
-          }
         );
       });
   }
