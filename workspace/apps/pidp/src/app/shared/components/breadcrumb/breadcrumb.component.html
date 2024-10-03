@@ -14,8 +14,11 @@
           (click)="isFirstItem ? onBack() : navigateTo(breadcrumb.path)">
           <img
             *ngIf="isFirstItem"
-            src="/assets/images/icons/icon-home.svg"
-            alt="Home" />
+            width="16"
+            height="16"
+            ngSrc="/assets/images/icons/icon-home.svg"
+            alt="Home"
+            priority />
           <span [ngClass]="{ 'home-text': isFirstItem }">{{
             breadcrumb.title
           }}</span>

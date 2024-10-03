@@ -28,7 +28,15 @@
       <section class="cards link-main">
         <div
           class="card instructions-card-layout"
+          [class.dark-background]="showInstructions"
           [class.instructions-card]="!showInstructions">
+          <img
+            *ngIf="!showInstructions"
+            class="instructions-img"
+            ngSrc="/assets/images/account-linking-plant.jpg"
+            alt="Instructions"
+            priority
+            fill />
           <div *ngIf="!showInstructions">
             <h2>Procedure for linking an account</h2>
             <p>
@@ -67,7 +75,12 @@
           <div class="bc-service card-styles">
             <div class="card-header-icon">
               <div class="card-icon">
-                <img src="/assets/images/icons/landscape.svg" alt="landscape" />
+                <img
+                  ngSrc="/assets/images/icons/landscape.svg"
+                  width="19.2"
+                  height="19.2"
+                  alt="landscape"
+                  priority />
               </div>
               <a
                 *ngIf="hasCredential(IdentityProvider.BCSC)"
@@ -79,8 +92,11 @@
                   class="lock-icon"
                   data-bs-toggle="modal"
                   data-bs-target="#lockModal"
-                  src="/assets/images/icons/light-lock.svg"
-                  alt="lock" />
+                  width="24"
+                  height="24"
+                  ngSrc="/assets/images/icons/light-lock.svg"
+                  alt="lock"
+                  priority />
               </a>
             </div>
             <h2>BC Services Card</h2>
@@ -90,8 +106,11 @@
               class="linked-success">
               <span>1 Account Linked</span>
               <img
-                src="/assets/images/icons/icon-check-circle.svg"
-                alt="check circle" />
+                width="24"
+                height="24"
+                ngSrc="/assets/images/icons/icon-check-circle.svg"
+                alt="check circle"
+                priority />
             </div>
             <ng-template #linkBCSC
               ><a
@@ -105,8 +124,11 @@
             <div class="card-header-icon">
               <div class="card-icon">
                 <img
-                  src="/assets/images/icons/perm-contact-calendar.svg"
-                  alt="contact" />
+                  width="19.2"
+                  height="19.2"
+                  ngSrc="/assets/images/icons/perm-contact-calendar.svg"
+                  alt="contact"
+                  priority />
               </div>
             </div>
             <h2>BC Provider</h2>
@@ -116,8 +138,11 @@
               class="linked-success">
               <span>1 Account Linked</span>
               <img
-                src="/assets/images/icons/icon-check-circle.svg"
-                alt="check circle" />
+                width="24"
+                height="24"
+                ngSrc="/assets/images/icons/icon-check-circle.svg"
+                alt="check circle"
+                priority />
             </div>
             <ng-template #linkBCProvider
               ><a
@@ -133,8 +158,11 @@
             <div class="card-header-icon">
               <div class="card-icon">
                 <img
-                  src="/assets/images/icons/health-safety.svg"
-                  alt="healthSafety" />
+                  width="19.2"
+                  height="19.2"
+                  ngSrc="/assets/images/icons/health-safety.svg"
+                  alt="Health Safety"
+                  priority />
               </div>
             </div>
             <h2>Health Authority</h2>
@@ -147,8 +175,11 @@
               class="linked-success">
               <span>1 Account Linked</span>
               <img
-                src="/assets/images/icons/icon-check-circle.svg"
-                alt="check circle" />
+                width="24"
+                height="24"
+                ngSrc="/assets/images/icons/icon-check-circle.svg"
+                alt="check circle"
+                priority />
             </div>
             <ng-template #linkPHSA
               ><a
@@ -163,8 +194,11 @@
             <div class="card-header-icon">
               <div class="card-icon">
                 <img
-                  src="/assets/images/icons/credit-card.svg"
-                  alt="creditcard" />
+                  width="19.2"
+                  height="19.2"
+                  ngSrc="/assets/images/icons/credit-card.svg"
+                  alt="creditcard"
+                  priority />
               </div>
             </div>
             <h2>IDIR account</h2>
@@ -174,8 +208,11 @@
               class="linked-success">
               <span>1 Account Linked</span>
               <img
-                src="/assets/images/icons/icon-check-circle.svg"
-                alt="check circle" />
+                width="24"
+                height="24"
+                ngSrc="/assets/images/icons/icon-check-circle.svg"
+                alt="check circle"
+                priority />
             </div>
             <ng-template #comingSoon><p>Available soon!</p></ng-template>
           </div>

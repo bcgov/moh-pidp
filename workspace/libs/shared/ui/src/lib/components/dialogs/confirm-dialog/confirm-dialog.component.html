@@ -1,11 +1,19 @@
 <div class="banner-image-container">
-  <img *ngIf="options.imageSrc && options.imageType === 'banner'" alt=""  [attr.src]="options.imageSrc" />
+  <img
+    *ngIf="options.imageSrc && options.imageType === 'banner'"
+    alt=""
+    width="300"
+    height="90"
+    ngSrc="{{ options.imageSrc }}"
+    priority />
 </div>
 
-<h2 mat-dialog-title [class]="{
-  'heading-centered': options.titlePosition === 'center',
-  'heading-no-bottom-border': options.bottomBorder === false
-}">
+<h2
+  mat-dialog-title
+  [class]="{
+    'heading-centered': options.titlePosition === 'center',
+    'heading-no-bottom-border': options.bottomBorder === false
+  }">
   <mat-icon
     *ngIf="options.icon && !options.imageSrc"
     [class]="{
@@ -16,20 +24,29 @@
     [color]="options.actionType">
     {{ options.icon }}
   </mat-icon>
-  <img *ngIf="options.imageSrc && options.imageType !== 'banner'" alt=""  [attr.src]="options.imageSrc" />
+  <img
+    *ngIf="options.imageSrc && options.imageType !== 'banner'"
+    alt=""
+    width="300"
+    height="90"
+    ngSrc="{{ options.imageSrc }}"
+    priority />
   <span>
     {{ options.title }}
   </span>
 </h2>
-<mat-dialog-content [class]="{
-  'body-text-centered': options.bodyTextPosition === 'center',
-}">
+<mat-dialog-content
+  [class]="{
+    'body-text-centered': options.bodyTextPosition === 'center'
+  }">
   <p *ngIf="options.message">{{ options.message }}</p>
   <ng-template #dialogContentHost></ng-template>
 </mat-dialog-content>
-<mat-dialog-actions *ngIf="!(options.cancelHide && options.actionHide)" [class]="{
-  'action-type-centered': options.actionTypePosition === 'center',
-}">
+<mat-dialog-actions
+  *ngIf="!(options.cancelHide && options.actionHide)"
+  [class]="{
+    'action-type-centered': options.actionTypePosition === 'center'
+  }">
   <button
     *ngIf="!options.cancelHide"
     class="cancel"

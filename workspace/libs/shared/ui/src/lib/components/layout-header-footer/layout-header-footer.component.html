@@ -9,14 +9,18 @@
         <img
           *ngIf="isMobile"
           class="logo-mobile"
-          loading="lazy"
-          src="../assets/images/logo.svg"
+          width="140"
+          height="50"
+          ngSrc="../assets/images/logo.svg"
+          priority
           aria-label="BC Government Logo" />
         <img
           *ngIf="!isMobile"
           class="logo-desktop"
-          loading="lazy"
-          src="../assets/images/logo-banner.svg"
+          width="120"
+          height="65"
+          ngSrc="../assets/images/logo-banner.svg"
+          priority
           aria-label="BC Government Logo" />
       </a>
     </div>

@@ -1,4 +1,4 @@
-import { AsyncPipe, NgIf } from '@angular/common';
+import { AsyncPipe, NgIf, NgOptimizedImage } from '@angular/common';
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { Component, OnInit, signal } from '@angular/core';
 import { FormBuilder, FormControl } from '@angular/forms';
@@ -72,6 +72,7 @@ import { PersonalInformation } from './personal-information.model';
     MatExpansionModule,
     MatIconModule,
     NgIf,
+    NgOptimizedImage,
     PageComponent,
     PageFooterActionDirective,
     PageFooterComponent,

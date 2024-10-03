@@ -32,16 +32,16 @@
       margin-top: 2rem;
 
       .support-section {
-        background-image: url('/assets/images/help-page-questions.jpg');
-        background-repeat: no-repeat;
-        background-size: cover;
-        background-position: center;
         position: relative;
         object-fit: cover;
         display: flex;
         align-items: center;
         padding: 1rem;
         border-radius: 8px;
+
+        .support-img {
+          z-index: -1;
+        }
 
         .support-text {
           display: flex;

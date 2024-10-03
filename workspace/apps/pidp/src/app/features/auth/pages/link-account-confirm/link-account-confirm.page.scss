@@ -159,12 +159,17 @@
         }
       }
 
+      & .dark-background {
+        background-color: #ebebeb;
+      }
+
       & .instructions-card {
-        background-image: url('/assets/images/account-linking-plant.jpg');
-        background-size: cover;
-        background-repeat: no-repeat;
-        background-position: right;
-        background-position-x: center;
+        position: relative;
+        .instructions-img {
+          z-index: -1;
+          border-radius: 1.25rem;
+          object-fit: cover;
+        }
 
         h2 {
           color: #313132;

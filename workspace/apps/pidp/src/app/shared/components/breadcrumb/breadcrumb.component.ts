@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
 
@@ -23,6 +23,7 @@ import { AccessRoutes } from '@app/features/access/access.routes';
     InjectViewportCssClassDirective,
     FaIconComponent,
     TextButtonDirective,
+    NgOptimizedImage,
   ],
 })
 export class BreadcrumbComponent {

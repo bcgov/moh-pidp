@@ -1,4 +1,4 @@
-import { NgIf } from '@angular/common';
+import { NgIf, NgOptimizedImage } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -19,6 +19,7 @@ import { InjectViewportCssClassDirective } from '@bcgov/shared/ui';
     MatButtonModule,
     MatIconModule,
     NgIf,
+    NgOptimizedImage,
   ],
 })
 export class EndorsementCardComponent {

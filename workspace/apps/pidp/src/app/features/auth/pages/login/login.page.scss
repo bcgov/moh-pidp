@@ -298,12 +298,13 @@ button.pidp-btn-link {
       }
     }
     & .title-container {
-      background-image: url('/assets/images/login-image-mobile.png');
-      background-repeat: no-repeat;
-      background-size: 100% 100%;
+      position: relative;
       min-height: 280px;
       display: flex;
       justify-content: center;
+      .title-img {
+        z-index: -1;
+      }
     }
     & .welcome-section {
       & .login-container {

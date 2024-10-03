@@ -1,4 +1,4 @@
-import { NgIf } from '@angular/common';
+import { NgIf, NgOptimizedImage } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -42,6 +42,7 @@ import { DIALOG_DEFAULT_OPTION } from '../dialogs-properties.provider';
     MatButtonModule,
     MatDialogClose,
     AnchorDirective,
+    NgOptimizedImage,
   ],
 })
 export class ConfirmDialogComponent implements OnInit {

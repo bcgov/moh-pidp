@@ -1,4 +1,4 @@
-import { NgIf } from '@angular/common';
+import { NgIf, NgOptimizedImage } from '@angular/common';
 import { Component, HostListener, Inject, OnInit, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatExpansionModule } from '@angular/material/expansion';
@@ -44,6 +44,7 @@ import { FaqRoutes } from '../../faq.routes';
     PageSectionComponent,
     PageSectionSubheaderComponent,
     InjectViewportCssClassDirective,
+    NgOptimizedImage,
   ],
 })
 export class HelpPage implements OnInit {

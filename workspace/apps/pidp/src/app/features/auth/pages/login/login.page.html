@@ -1,12 +1,20 @@
 <ui-layout-header-footer [emailSupport]="providerIdentitySupport">
   <div class="main-container" uiPidpInjectViewportCss>
     <div *ngIf="!isAdminLogin; else admin" class="content-container">
-      <header *ngIf="isMobileTitleVisible" class="title-container"></header>
+      <header *ngIf="isMobileTitleVisible" class="title-container">
+        <img
+          class="title-img"
+          ngSrc="/assets/images/login-image-mobile.png"
+          alt="Title"
+          priority
+          fill />
+      </header>
 
       <div class="background-image-container">
         <img
           ngSrc="/assets/images/login-image-giant-1920x1280.jpg"
           priority
+          alt="login"
           fill />
       </div>
 
@@ -113,8 +121,11 @@
 <ng-template #admin>
   <div class="admin-container">
     <img
-      src="/assets/images/pidp-logo-blue.svg"
-      alt="OneHealthID Service Logo" />
+      width="275"
+      height="142"
+      ngSrc="/assets/images/pidp-logo-blue.svg"
+      alt="OneHealthID Service Logo"
+      priority="" />
     <button
       mat-flat-button
       color="primary"

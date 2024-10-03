@@ -1,4 +1,4 @@
-import { NgIf } from '@angular/common';
+import { NgIf, NgOptimizedImage } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
 
@@ -11,7 +11,12 @@ import { AnchorDirective } from '../anchor/anchor.directive';
   templateUrl: './layout-header-footer.component.html',
   styleUrls: ['./layout-header-footer.component.scss'],
   standalone: true,
-  imports: [AnchorDirective, InjectViewportCssClassDirective, NgIf],
+  imports: [
+    AnchorDirective,
+    InjectViewportCssClassDirective,
+    NgIf,
+    NgOptimizedImage,
+  ],
 })
 export class LayoutHeaderFooterComponent {
   @Input() public emailSupport!: string;

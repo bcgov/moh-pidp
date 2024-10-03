@@ -29,16 +29,14 @@
 .header-container {
   width: auto;
   height: 27vh;
-  overflow-y: auto;
-  background-image: url('/assets/images/national-cancer-institute-L8tWZT4CcVQ-unsplash.jpg');
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: top;
   position: relative;
-  object-fit: cover;
   display: flex;
   justify-content: center;
   align-items: center;
+
+  .header-img {
+    z-index: -1;
+  }
 }
 
 .banner-mask {

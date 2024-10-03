@@ -28,7 +28,15 @@
       <section class="cards link-main">
         <div
           class="card instructions-card-layout"
+          [class.dark-background]="showInstructions"
           [class.instructions-card]="!showInstructions">
+          <img
+            *ngIf="!showInstructions"
+            class="instructions-img"
+            ngSrc="/assets/images/account-linking-plant.jpg"
+            alt="Instructions"
+            priority
+            fill />
           <div *ngIf="!showInstructions">
             <h2>Procedure for linking an account</h2>
             <p>
@@ -67,9 +75,19 @@
           <div class="bc-service card-styles">
             <div class="card-header-icon">
               <div class="card-icon">
-                <img src="/assets/images/icons/landscape.svg" alt="landscape" />
+                <img
+                  ngSrc="/assets/images/icons/landscape.svg"
+                  width="19.2"
+                  height="19.2"
+                  alt="landscape"
+                  priority />
               </div>
-              <img src="/assets/images/icons/light-lock.svg" alt="lock" />
+              <img
+                ngSrc="/assets/images/icons/light-lock.svg"
+                width="24"
+                height="24"
+                alt="lock"
+                priority />
             </div>
             <h2>BC Services Card</h2>
             <p>Access to government services for B.C. residents</p>
@@ -78,8 +96,11 @@
             <div class="card-header-icon">
               <div class="card-icon">
                 <img
-                  src="/assets/images/icons/perm-contact-calendar.svg"
-                  alt="contact" />
+                  width="19.2"
+                  height="19.2"
+                  ngSrc="/assets/images/icons/perm-contact-calendar.svg"
+                  alt="contact"
+                  priority />
               </div>
             </div>
             <h2>BC Provider</h2>
@@ -91,8 +112,11 @@
             <div class="card-header-icon">
               <div class="card-icon">
                 <img
-                  src="/assets/images/icons/health-safety.svg"
-                  alt="healthSafety" />
+                  width="19.2"
+                  height="19.2"
+                  ngSrc="/assets/images/icons/health-safety.svg"
+                  alt="Health Safety"
+                  priority />
               </div>
             </div>
             <h2>Health Authority</h2>
@@ -106,8 +130,11 @@
             <div class="card-header-icon">
               <div class="card-icon">
                 <img
-                  src="/assets/images/icons/credit-card.svg"
-                  alt="creditcard" />
+                  width="19.2"
+                  height="19.2"
+                  ngSrc="/assets/images/icons/credit-card.svg"
+                  alt="creditcard"
+                  priority />
               </div>
             </div>
             <h2>IDIR account</h2>
