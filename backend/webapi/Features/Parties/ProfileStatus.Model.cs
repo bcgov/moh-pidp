@@ -63,8 +63,8 @@ public partial class ProfileStatus
         public class BCProviderSection : ProfileSection
         {
             internal override string SectionName => "bcProvider";
-
             public override string[] KeyWords => ["doctors", "nursing", "ha", "pharmacist"];
+
             protected override StatusCode Compute(ProfileData profile)
             {
                 return profile switch
@@ -154,16 +154,16 @@ public partial class ProfileStatus
         public class AccountLinkingSection : ProfileSection
         {
             internal override string SectionName => "accountLinking";
-
             public override string[] KeyWords => ["doctors", "ha", "nursing"];
+
             protected override StatusCode Compute(ProfileData profile) => StatusCode.Incomplete;
         }
 
         public class DriverFitnessSection : ProfileSection
         {
             internal override string SectionName => "driverFitness";
-
             public override string[] KeyWords => ["doctors"];
+
             protected override StatusCode Compute(ProfileData profile)
             {
                 return profile switch
@@ -182,8 +182,8 @@ public partial class ProfileStatus
         public class HcimAccountTransferSection : ProfileSection
         {
             internal override string SectionName => "hcimAccountTransfer";
-
             public override string[] KeyWords => ["ha"];
+
             protected override StatusCode Compute(ProfileData profile)
             {
                 return profile.HasEnrolment(AccessTypeCode.HcimAccountTransfer)
@@ -195,8 +195,8 @@ public partial class ProfileStatus
         public class ImmsBCEformsSection : ProfileSection
         {
             internal override string SectionName => "immsBCEforms";
-
             public override string[] KeyWords => ["doctors", "nursing", "pharmacist"];
+
             protected override StatusCode Compute(ProfileData profile)
             {
                 return profile switch
@@ -229,8 +229,8 @@ public partial class ProfileStatus
         public class MSTeamsPrivacyOfficerSection : ProfileSection
         {
             internal override string SectionName => "msTeamsPrivacyOfficer";
-
             public override string[] KeyWords => ["ha"];
+
             protected override StatusCode Compute(ProfileData profile)
             {
                 return profile switch
@@ -267,8 +267,8 @@ public partial class ProfileStatus
         public class ProvincialAttachmentSystemSection : ProfileSection
         {
             internal override string SectionName => "provincialAttachmentSystem";
-
             public override string[] KeyWords => ["doctors", "nursing", "panel"];
+
             protected override StatusCode Compute(ProfileData profile)
             {
                 return profile switch
