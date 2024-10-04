@@ -128,7 +128,7 @@ public class IntakeService : IIntakeService
         {
             this.context.StatusChageLogs.Add(new StatusChageLog
             {
-                PlrRecordId = newRecord.Id,
+                PlrRecord = newRecord,
                 OldStatusCode = existingRecord?.StatusCode,
                 OldStatusReasonCode = existingRecord?.StatusReasonCode,
                 NewStatusCode = newRecord.StatusCode,
