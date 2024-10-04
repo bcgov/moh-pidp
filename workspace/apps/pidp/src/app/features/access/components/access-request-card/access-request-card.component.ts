@@ -4,6 +4,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { faFileLines } from '@fortawesome/free-solid-svg-icons';
+import { ToastService } from '@app/core/services/toast.service';
 
 import {
   InjectViewportCssClassDirective,
@@ -31,12 +32,29 @@ export class AccessRequestCardComponent {
   @Input() public completed?: boolean;
   public faFileLines = faFileLines;
 
-  public constructor() {
+  public constructor(private toastService: ToastService) {
     this.icon = faFileLines;
     this.action = new EventEmitter<void>();
   }
 
   public onAction(): void {
-    this.action.emit();
+    if (
+      this.actionDisabled &&
+      this.heading === 'Driver Fitness Practitioner Portal'
+    ) {
+      this.toastService.openInfoToast(
+        'Insufficient college licensing to request enrolment.',
+        'close',
+        { duration: 100000, panelClass: 'close-icon' },
+      );
+    } else if (this.actionDisabled) {
+      this.toastService.openInfoToast(
+        'Incorrect credential type being used to request enrolment.',
+        'close',
+        { duration: 100000, panelClass: 'close-icon' },
+      );
+    } else {
+      this.action.emit();
+    }
   }
 }
