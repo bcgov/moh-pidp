@@ -12,7 +12,6 @@ public class BannersController(IPidpAuthorizationService authorizationService) :
     [AllowAnonymous]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<List<Index.Model>>> GetActiveBanners([FromServices] IQueryHandler<Index.Query, List<Index.Model>> handler,
                                                                         [FromQuery] Index.Query query)
         => await handler.HandleAsync(query);
