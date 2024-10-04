@@ -66,10 +66,11 @@ public class IntakeService : IIntakeService
         var existingRecord = await this.context.PlrRecords
             .SingleOrDefaultAsync(rec => rec.Ipc == record.Ipc);
 
+        this.CheckStatusChange(existingRecord, record);
+
         if (existingRecord == null)
         {
             this.context.PlrRecords.Add(record);
-            this.CheckStatusChange(null, record);
 
             if (expectExists)
             {
@@ -78,8 +79,6 @@ public class IntakeService : IIntakeService
         }
         else
         {
-            this.CheckStatusChange(existingRecord, record);
-
             record.Id = existingRecord.Id;
             this.context.Entry(existingRecord).CurrentValues.SetValues(record);
             existingRecord.Credentials = record.Credentials;
@@ -128,7 +127,7 @@ public class IntakeService : IIntakeService
         {
             this.context.StatusChageLogs.Add(new StatusChageLog
             {
-                PlrRecord = newRecord,
+                PlrRecord = existingRecord ?? newRecord,
                 OldStatusCode = existingRecord?.StatusCode,
                 OldStatusReasonCode = existingRecord?.StatusReasonCode,
                 NewStatusCode = newRecord.StatusCode,
