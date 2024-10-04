@@ -14,11 +14,6 @@ public class Index
         public string Component { get; set; } = string.Empty;
     }
 
-    public class QueryValidator : AbstractValidator<Query>
-    {
-        public QueryValidator() => this.RuleFor(x => x.Component).NotEmpty();
-    }
-
     public class Model
     {
         public string Component { get; set; } = string.Empty;
@@ -27,17 +22,22 @@ public class Index
         public string Body { get; set; } = string.Empty;
     }
 
-    public class QueryHandler(PidpDbContext context, IClock clock) : IQueryHandler<Query, List<Model>>
+    public class QueryValidator : AbstractValidator<Query>
     {
-        private readonly PidpDbContext context = context;
+        public QueryValidator() => this.RuleFor(x => x.Component).NotEmpty();
+    }
+
+    public class QueryHandler(IClock clock, PidpDbContext context) : IQueryHandler<Query, List<Model>>
+    {
         private readonly IClock clock = clock;
+        private readonly PidpDbContext context = context;
 
         public async Task<List<Model>> HandleAsync(Query query)
         {
-            var banners = await this.context.Banners
-                .Where(banner => banner.Component == query.Component &&
-                    banner.StartTime < this.clock.GetCurrentInstant() &&
-                    banner.EndTime > this.clock.GetCurrentInstant())
+            return await this.context.Banners
+                .Where(banner => banner.Component == query.Component
+                    && banner.StartTime < this.clock.GetCurrentInstant()
+                    && banner.EndTime > this.clock.GetCurrentInstant())
                 .Select(banner => new Model
                 {
                     Component = banner.Component,
@@ -46,8 +46,6 @@ public class Index
                     Body = banner.Body,
                 })
                 .ToListAsync();
-
-            return banners;
         }
     }
 }
