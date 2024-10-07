@@ -34,6 +34,7 @@ import { NeedHelpComponent } from '@app/shared/components/need-help/need-help.co
 
 import { IdentityProvider } from '../../enums/identity-provider.enum';
 import { AuthService } from '../../services/auth.service';
+import { LinkAccountConfirmResource } from '../link-account-confirm/link-account-confirm-resource.service';
 
 export interface LoginPageRouteData {
   title: string;
@@ -83,6 +84,7 @@ export class LoginPage implements OnInit {
     private dialog: MatDialog,
     private documentService: DocumentService,
     private viewportService: ViewportService,
+    private linkAccountConfirmResource: LinkAccountConfirmResource,
   ) {
     const routeSnapshot = this.route.snapshot;
 
@@ -166,7 +168,8 @@ export class LoginPage implements OnInit {
   }
 
   private login(idpHint: IdentityProvider): Observable<void> {
-    return this.createClientLogIfNeeded(idpHint).pipe(
+    return this.linkAccountConfirmResource.cancelLink().pipe(
+      switchMap(() => this.createClientLogIfNeeded(idpHint)),
       switchMap(() =>
         this.authService.login({
           idpHint: idpHint,
