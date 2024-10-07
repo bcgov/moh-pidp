@@ -23,6 +23,8 @@ environment:
       ports:  - "5433:5432"
 (https://github.com/bcgov/moh-pidp/blob/develop/docker-compose.yml)
 
+### Need to run the migrations generation command to generate the migrations in local environment(navigate to .backend\webapi)
+dotnet ef migrations add MigrationName
 #### Need to run the migrations to populate database with the PLR tables(navigate to .backend\services.plr-intake)
 dotnet ef database update
 #### Need to run the migrations to populate database with the tables(navigate to .backend\webapi)
