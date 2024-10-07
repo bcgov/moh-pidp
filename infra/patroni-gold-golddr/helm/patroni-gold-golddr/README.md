@@ -89,5 +89,5 @@ tsc_port=`oc get services patroni-master-gold -o jsonpath={.spec.ports[0].port}`
 
 This is the raw "Standby Leader" config. This was used a few times during testing to force a cluster into standby mode. It was also used on Gold to allow to fail back.
 ```
-{"postgresql":{"use_pg_rewind":true,"parameters":{"max_connections":100,"max_prepared_transactions":0,"max_locks_per_transaction":64}},"standby_cluster":{"host":"patroni-master-gold","port":53647}}
+{"postgresql":{"use_pg_rewind":true,"parameters":{"max_connections":100,"max_prepared_transactions":0,"max_locks_per_transaction":64}},"standby_cluster":{"host":"patroni-master-gold","port":'$tsc_port''}}
 ```

@@ -32,7 +32,7 @@ There's an init pod for the Patroni stateful set that obtains the TS port. This 
 An Openshift Cronjob was created on GoldDR to act as a Probe/Monitor to watch Gold's status. This proved to be a bit more complicated than we initially expected.
 Our end result was a Cronjob that had two init containers. The first init container uses a stock OCP cli image to obtain the port that the TS runs on. This then gets stored as a file in an empty folder that then gets consumed by the second init container. The second init container is a PSQL image that probes Gold's PSQL through the TS to determine if it's running or not. The health status gets saved into the same empty folder then consumed by the third (main) container. This third container is again an OCP cli container that reads in the health status and if it's unhealthy updates GoldDR's patroni configmap to promote it to "Leader"
 
-I just want to make a small note about inter container communications. We explored various methods and ended up landing on having a "emptyDir: {}" which allowed us to communicate between the different containers in the pod. Thanks to [Steven Barre](https://github.com/StevenBarre) for that help.
+We explored various methods and ended up landing on having a "emptyDir: {}" which allowed us to communicate between the different containers in the pod.
 # Alternate Probe Monitor
 A github workflow was created that will monitor Gold for uptime. This workflow will determine if Gold is happy and if not, it'll update the config on GoldDR to promote it from "Standby Leader" to "Leader". We created and tested this, but didn't use it in favour of the Openshift Cronjob.
 
