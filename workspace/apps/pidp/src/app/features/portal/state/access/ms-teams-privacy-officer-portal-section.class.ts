@@ -22,6 +22,7 @@ export class MsTeamsPrivacyOfficerPortalSection implements IPortalSection {
   public description: string;
   public faUserGroup = faUserGroup;
   public faUserCheck = faUserCheck;
+  public keyWords: string[];
 
   public constructor(
     private profileStatus: ProfileStatus,
@@ -30,6 +31,7 @@ export class MsTeamsPrivacyOfficerPortalSection implements IPortalSection {
     this.key = 'msTeamsPrivacyOfficer';
     this.heading = 'MS Teams for Clinical Use';
     this.description = `Privacy Officer enrol here for clinic access for MS Teams with Fraser Health.`;
+    this.keyWords = profileStatus.status.msTeamsPrivacyOfficer.keyWords || [];
   }
 
   public get hint(): string {

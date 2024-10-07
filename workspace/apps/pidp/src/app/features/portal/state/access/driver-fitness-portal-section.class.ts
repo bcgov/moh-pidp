@@ -22,6 +22,7 @@ export class DriverFitnessPortalSection implements IPortalSection {
   public description: string;
   public faCar = faCar;
   public faUserCheck = faUserCheck;
+  public keyWords: string[];
 
   public constructor(
     private profileStatus: ProfileStatus,
@@ -30,6 +31,7 @@ export class DriverFitnessPortalSection implements IPortalSection {
     this.key = 'driverFitness';
     this.heading = 'Driver Fitness Practitioner Portal';
     this.description = `Register as a Medical Practitioner (or Designate) to the RoadSafetyBC Medical Practitioner Portal.`;
+    this.keyWords = profileStatus.status.driverFitness.keyWords || [];
   }
 
   public get hint(): string {

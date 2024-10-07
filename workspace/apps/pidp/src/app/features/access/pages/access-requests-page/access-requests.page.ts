@@ -110,7 +110,8 @@ export class AccessRequestsPage implements OnInit, OnDestroy {
         this.filteredAccessSections = access?.filter(
           (section) =>
             section.heading.toLowerCase().includes(text.toLowerCase()) ||
-            section.description.toLowerCase().includes(text.toLowerCase()),
+            section.description.toLowerCase().includes(text.toLowerCase()) ||
+            section.keyWords?.includes(text.toLocaleLowerCase())
         );
       });
   }
