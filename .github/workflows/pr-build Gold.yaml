@@ -197,7 +197,7 @@ jobs:
       - name: "Checkout Code"
         uses: actions/checkout@master
 
-      - name: "Docker Build"
+      - name: "Docker Build Gold"
         run: |
           docker build -t image-registry.apps.gold.devops.gov.bc.ca/f088b1-tools/pidp-webapi:pr-${{ needs.get-pr-number.outputs.pr_number }} .
 
@@ -212,16 +212,8 @@ jobs:
       - name: "Push image"
         run: |
           docker push image-registry.apps.gold.devops.gov.bc.ca/f088b1-tools/pidp-webapi:pr-${{ needs.get-pr-number.outputs.pr_number }}
-  
-  build-and-push-webapi-Golddr:
-    needs: [get-pr-number, build-and-push-webapi]
-    if: ${{ !(contains(needs.*.result, 'failure')) && needs.get-pr-number.outputs.pr_number != '' }}
-    runs-on: ubuntu-latest
-    steps:
-      - name: "Checkout Code"
-        uses: actions/checkout@master
 
-      - name: "Docker Build"
+      - name: "Docker Build Golddr"
         run: |
           docker tag image-registry.apps.gold.devops.gov.bc.ca/f088b1-tools/pidp-webapi:pr-${{ needs.get-pr-number.outputs.pr_number }} image-registry.apps.golddr.devops.gov.bc.ca/f088b1-tools/pidp-webapi:pr-${{ needs.get-pr-number.outputs.pr_number }}
 

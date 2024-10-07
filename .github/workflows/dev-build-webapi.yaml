@@ -49,6 +49,10 @@ jobs:
       - name: "Checkout Code"
         uses: actions/checkout@master
 
+      - name: "Docker Build  GOLD image"
+        run: |
+          docker build -t image-registry.apps.gold.devops.gov.bc.ca/f088b1-tools/pidp-webapi:develop .
+
       # Uses the builder service account token
       - name: "Docker Login to GOLD OCP"
         uses: docker/login-action@master
@@ -57,26 +61,21 @@ jobs:
           username: builder
           password: ${{ secrets.GOLD_TOOLS_BUILDER_TOKEN }}
       
-      - name: "Docker Build  GOLD image"
-        run: |
-          docker tag pidp-webapi:develop image-registry.apps.gold.devops.gov.bc.ca/f088b1-tools/pidp-webapi:develop
-
       - name: "Push Docker image to GOLD OCP"
         run: |
           docker push image-registry.apps.gold.devops.gov.bc.ca/f088b1-tools/pidp-webapi:develop
 
-        #  Uses the builder service account token
+      - name: "Docker Build GOLDDR image"
+        run: |
+          docker tag image-registry.apps.gold.devops.gov.bc.ca/f088b1-tools/pidp-webapi:develop image-registry.apps.golddr.devops.gov.bc.ca/f088b1-tools/pidp-webapi:develop
+  
       - name: "Docker Login to GOLDDR OCP"
         uses: docker/login-action@master
         with:
           registry: image-registry.apps.golddr.devops.gov.bc.ca
           username: builder
           password: ${{ secrets.GOLDDR_TOOLS_BUILDER_TOKEN }}
-        
-      - name: "Docker Build GOLDDR image"
-        run: |
-          docker tag pidp-webapi:develop image-registry.apps.golddr.devops.gov.bc.ca/f088b1-tools/pidp-webapi:develop
-    
+            
       - name: "Push image"
         run: |
           docker push image-registry.apps.golddr.devops.gov.bc.ca/f088b1-tools/pidp-webapi:develop

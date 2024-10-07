@@ -38,8 +38,7 @@ jobs:
 
       - name: "Docker Build"
         run: |
-          docker build -t pidp-frontend:develop .
-          docker tag pidp-frontend:develop image-registry.apps.silver.devops.gov.bc.ca/d8a8f9-tools/pidp-frontend:develop
+          docker build -t image-registry.apps.silver.devops.gov.bc.ca/d8a8f9-tools/pidp-frontend:develop .
 
       # Uses the builder service account token
       - name: "Docker Login to Silver OCP"
@@ -52,6 +51,7 @@ jobs:
       - name: "Push image"
         run: |
           docker push image-registry.apps.silver.devops.gov.bc.ca/d8a8f9-tools/pidp-frontend:develop
+
   build-frontend-gold:
     name: Frontend Build - Gold
     runs-on: ubuntu-latest
@@ -62,9 +62,22 @@ jobs:
       - name: "Checkout Code"
         uses: actions/checkout@master
 
+      - name: Use Node.js 18.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.x
+
+      - name: YARN Install
+        run: |
+          yarn install
+
+      - name: YARN Build
+        run: |
+          yarn build
+
       - name: "Docker Build GOLD"
         run: |
-          docker tag pidp-frontend:develop image-registry.apps.gold.devops.gov.bc.ca/f088b1-tools/pidp-frontend:develop
+          docker build -t image-registry.apps.gold.devops.gov.bc.ca/f088b1-tools/pidp-frontend:develop .
 
       # Uses the Artifactory service account's username and password 
       - name: "Docker Login to GOLD OCP"
@@ -80,7 +93,7 @@ jobs:
         
       - name: "Docker Build GOLDDR"
         run: |
-          docker tag image-registry.apps.gold.devops.gov.bc.ca/f088b1-tools/pidp-frontend:develop image-registry.apps.golddr.devops.gov.bc.ca/f088b1-tools/pidp-frontend:develop .
+          docker tag image-registry.apps.gold.devops.gov.bc.ca/f088b1-tools/pidp-frontend:develop image-registry.apps.golddr.devops.gov.bc.ca/f088b1-tools/pidp-frontend:develop
 
       # Uses the Artifactory service account's username and password 
       - name: "Docker Login to GOLDDR OCP"
