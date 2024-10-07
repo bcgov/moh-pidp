@@ -34,10 +34,10 @@ service:
     smtp: ""
 
 securityContext:
-  runAsUser: 1000
+  runAsUser: 1001510000
   runAsGroup: 1000
   runAsNonRoot: true
-  fsGroup: 1000
+  fsGroup: 1001510000
 
 containerSecurityContext:
   readOnlyRootFilesystem: true
