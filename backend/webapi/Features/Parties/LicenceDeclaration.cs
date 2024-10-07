@@ -68,10 +68,12 @@ public class LicenceDeclaration
         }
     }
 
-    public class CommandHandler(IPlrClient plrClient, PidpDbContext context) : ICommandHandler<Command, IDomainResult<string?>>
+    public class CommandHandler(IPlrClient plrClient, PidpDbContext context, IClock clock, ILogger<LicenceDeclaration> logger) : ICommandHandler<Command, IDomainResult<string?>>
     {
         private readonly IPlrClient plrClient = plrClient;
         private readonly PidpDbContext context = context;
+        private readonly IClock clock = clock;
+        private readonly ILogger<LicenceDeclaration> logger = logger;
 
         public async Task<IDomainResult<string?>> HandleAsync(Command command)
         {
@@ -90,7 +92,15 @@ public class LicenceDeclaration
             party.LicenceDeclaration.CollegeCode = command.CollegeCode;
             party.LicenceDeclaration.LicenceNumber = command.LicenceNumber;
 
-            await party.HandleLicenceSearch(this.plrClient, this.context);
+            try
+            {
+                await party.HandleLicenceSearch(this.plrClient, this.context);
+            }
+            catch (Exception ex)
+            {
+                this.context.BusinessEvents.Add(CollegeIDEnteredInCollegeLicneceSearchErrorCase.Create(party.Id, command.CollegeCode.Value.ToString(), this.clock.GetCurrentInstant()));
+                this.logger.LogError(ex.Message);
+            }
 
             if (command.CollegeCode != null && string.IsNullOrWhiteSpace(party.Cpn))
             {

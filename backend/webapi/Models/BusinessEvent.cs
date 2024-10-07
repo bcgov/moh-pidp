@@ -6,6 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 using Pidp.Infrastructure.HttpClients.Keycloak;
 using Pidp.Models.Lookups;
+using System;
 
 [Table(nameof(BusinessEvent))]
 public abstract class BusinessEvent : BaseAuditable
@@ -83,3 +84,16 @@ public class BCProviderPasswordReset : PartyBusinessEvent
     }
 }
 
+public class CollegeIDEnteredInCollegeLicneceSearchErrorCase : PartyBusinessEvent
+{
+    public static  CollegeIDEnteredInCollegeLicneceSearchErrorCase Create(int partyId, string collegeId, Instant recordedOn)
+    {
+        return new  CollegeIDEnteredInCollegeLicneceSearchErrorCase
+        {
+            PartyId = partyId,
+            Description = $"CollegeLicenceSearch Error occured while searching for the College ID  {collegeId}",
+            Severity = LogLevel.Error,
+            RecordedOn = recordedOn
+        };
+    }
+}
