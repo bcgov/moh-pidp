@@ -212,23 +212,7 @@ jobs:
       - name: "Push image"
         run: |
           docker push image-registry.apps.gold.devops.gov.bc.ca/f088b1-tools/pidp-webapi:pr-${{ needs.get-pr-number.outputs.pr_number }}
-
-      - name: "Docker Build Golddr"
-        run: |
-          docker tag image-registry.apps.gold.devops.gov.bc.ca/f088b1-tools/pidp-webapi:pr-${{ needs.get-pr-number.outputs.pr_number }} image-registry.apps.golddr.devops.gov.bc.ca/f088b1-tools/pidp-webapi:pr-${{ needs.get-pr-number.outputs.pr_number }}
-
-      # Uses the builder service account token
-      - name: "Docker Login to Golddr OCP"
-        uses: docker/login-action@v2
-        with:
-          registry: image-registry.apps.golddr.devops.gov.bc.ca
-          username: builder
-          password: ${{ secrets.GOLDDR_TOOLS_BUILDER_TOKEN }}
-
-      - name: "Push image"
-        run: |
-          docker push image-registry.apps.golddr.devops.gov.bc.ca/f088b1-tools/pidp-webapi:pr-${{ needs.get-pr-number.outputs.pr_number }}
-            
+          
   helm-deployment:
     needs: [build-and-push-webapi, build-and-push-plr-intake, build-and-push-frontend]
     runs-on: 'ubuntu-latest'
