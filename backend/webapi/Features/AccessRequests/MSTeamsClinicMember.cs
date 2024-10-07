@@ -137,7 +137,7 @@ public class MSTeamsClinicMember
             }
         }
 
-        private class EnrolmentEmailModel
+        private sealed class EnrolmentEmailModel
         {
             private static readonly JsonSerializerOptions SerializationOptions = new() { WriteIndented = true };
 

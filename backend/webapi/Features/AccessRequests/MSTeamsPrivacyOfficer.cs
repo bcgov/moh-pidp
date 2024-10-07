@@ -156,7 +156,7 @@ public class MSTeamsPrivacyOfficer
             public string? Cpn { get; set; }
         }
 
-        private class EnrolmentEmailModel(
+        private sealed class EnrolmentEmailModel(
             EnrolmentDto enrolmentDto,
             Command command,
             Instant enrolmentDate,

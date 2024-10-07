@@ -51,7 +51,7 @@ public class PartyDelete
     /// <summary>
     /// Remember Keycloak Role representations between users to reduce total number of calls to keycloak.
     /// </summary>
-    private class RoleRemover(IKeycloakAdministrationClient client, ILogger<CommandHandler> logger)
+    private sealed class RoleRemover(IKeycloakAdministrationClient client, ILogger<CommandHandler> logger)
     {
         private readonly Dictionary<MohKeycloakEnrolment, IEnumerable<Role>> roleCache = [];
         private readonly IKeycloakAdministrationClient client = client;
