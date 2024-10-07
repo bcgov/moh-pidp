@@ -12,7 +12,10 @@
 
       <section class="welcome-section">
         <div class="welcome-section-container">
-          <div class="welcome-container">
+          <div class="banner" *ngIf="banners.length > 0">
+            <app-banner [banners]="banners"></app-banner>
+          </div>
+          <div class="welcome-container" *ngIf="banners.length === 0">
             <div class="title-content-container">
               <h1 class="title">
                 <span class="title-text">
@@ -28,7 +31,7 @@
             </div>
             <ng-container *ngTemplateOutlet="login"></ng-container>
           </div>
-          <div class="links">
+          <div class="links" *ngIf="banners.length === 0">
             <app-need-help
               customClass="need-help-large"
               [showIcon]="true"></app-need-help>
