@@ -7,15 +7,15 @@ This example sets up a Patroni Cluster on Gold with a Helm chart. The same helm 
 
 ```
 # navigate to the helm folder:
-cd cloudops/patroni-gold-golddr/helm/patroni-gold-golddr
+cd infra/patroni-gold-golddr/helm/patroni-gold-golddr
 # Login into Openshift Gold Cluster
 oc login --token=sha256~{redacted} --server=https://api.gold.devops.gov.bc.ca:6443
 # deploy Gold helm chart
-helm upgrade --install --namespace abc123-dev -f values-gold.yaml patroni .
+helm upgrade --install --namespace f088b1-dev -f values-gold.yaml patroni .
 # Login into Openshift GoldDR Cluster
 oc login --token=sha256~{redacted} --server=https://api.golddr.devops.gov.bc.ca:6443
 # deploy GoldDR helm chart
-helm upgrade --install --namespace abc123-dev -f values-golddr.yaml patroni .
+helm upgrade --install --namespace f088b1-dev -f values-golddr.yaml patroni .
 ```
 
 ## Things we learned and why we did stuff.
