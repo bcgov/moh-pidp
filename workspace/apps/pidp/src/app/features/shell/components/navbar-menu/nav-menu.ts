@@ -63,7 +63,7 @@ import { ProfileRoutes } from '@app/features/profile/profile.routes';
   ],
 })
 export class NavMenuComponent implements OnChanges {
-  @Input() public alerts!: AlertCode[];
+  @Input() public alerts: AlertCode[] | null = [];
   @Input() public menuItems!: DashboardMenuItem[];
   @Input() public emailSupport!: string;
   @Input() public collegeRoute!: string;
