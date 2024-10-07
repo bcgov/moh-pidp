@@ -20,7 +20,7 @@ concurrency:
 
 jobs:
   promote-image-to-prod-silver:
-    name: WebAPI Backend Promote to prod - Silver
+    name: Plr Intake Backend Promote to prod - Silver
     runs-on: ubuntu-latest
     steps:     
       - name: Install oc
@@ -38,13 +38,13 @@ jobs:
           d8a8f9-tools/pidp-plr-intake:${{ env.ORIG_TAG }} \
           d8a8f9-tools/pidp-plr-intake:${{ env.PROMOTE_TAG }}
   promote-image-to-prod-gold:
-    name: WebAPI Backend Promote to prod - Gold
+    name: Plr Intake Backend Promote to prod - Gold
     runs-on: ubuntu-latest
     steps:     
       - name: Install oc
         uses: redhat-actions/openshift-tools-installer@v1
         with:
-          oc: "4.7"
+          oc: "4.9"
 
       - name: oc login - Gold
         run: |
