@@ -4,9 +4,12 @@ imageStreamTag: latest
 replicas: 1
 dockerhost: image-registry.openshift-image-registry.svc:5000
 environment: "dev"
-cpuLimit: "100m"
-memoryLimit: "150Mi"
-cpuRequests: "50m"
-memoryRequests: "50Mi"
 cluster: "GOLD"
 gslb_host: "healthprovideridentityportal.gov.bc.ca.glb.gov.bc.ca"
+resources:
+  limits:
+    cpu: 50m
+    memory: 150Mi
+  requests:
+    cpu: 20m
+    memory: 50Mi

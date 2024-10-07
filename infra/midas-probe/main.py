@@ -72,18 +72,17 @@ def check_services(output_type):
                 print(f"Error retrieving endpoints: {e}")
                 return 'FAIL - Error retrieving endpoint: {e}', 500
 
-        if success:
-            return_color = "green"                        
-        else:
-            return_code="500"
-            return_color = "red"
         
         who_is_active = get_ip_from_host(gslb_host)
         if who_is_active:
             logging.info(f'who_am_i: {cluster.upper()}; who_is_active: {who_is_active.upper()}')                 
             if cluster.upper() == "GOLD" and who_is_active == "142.34.64.4":
-                return_code="500"
-                return_color = "red"
+                success = False
+        else:
+            success = False
+
+        if success:
+            return_color = "green"                        
         else:
             return_code="500"
             return_color = "red"

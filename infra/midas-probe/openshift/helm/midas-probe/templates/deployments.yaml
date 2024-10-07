@@ -66,12 +66,7 @@ spec:
                   apiVersion: v1
                   fieldPath: metadata.namespace
           resources:
-              limits:
-                cpu: {{ .Values.cpuLimit }}
-                memory: {{ .Values.memoryLimit }}
-              requests:
-                cpu: {{ .Values.cpuRequests }}
-                memory: {{ .Values.memoryRequests }}
+            {{- toYaml .Values.resources | nindent 12 }}
           volumeMounts:
             - name: kube-api-access-rsh4p
               readOnly: true
