@@ -15,6 +15,7 @@ public class PidpDbContext(
     private readonly IMediator mediator = mediator;
 
     public DbSet<AccessRequest> AccessRequests { get; set; } = default!;
+    public DbSet<Banner> Banners { get; set; } = default!;
     public DbSet<BusinessEvent> BusinessEvents { get; set; } = default!;
     public DbSet<ClientLog> ClientLogs { get; set; } = default!;
     public DbSet<Credential> Credentials { get; set; } = default!;
