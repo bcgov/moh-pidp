@@ -2,22 +2,15 @@ namespace Pidp.Infrastructure.Services;
 
 using Pidp.Infrastructure.HealthChecks;
 
-public class PlrStatusUpdateSchedulingService : BackgroundService
+public class PlrStatusUpdateSchedulingService(
+    IServiceScopeFactory scopeFactory,
+    ILogger<PlrStatusUpdateSchedulingService> logger,
+    BackgroundWorkerHealthCheck healthCheck) : BackgroundService
 {
-    private readonly BackgroundWorkerHealthCheck healthCheck;
-    private readonly ILogger<PlrStatusUpdateSchedulingService> logger;
-    private readonly IServiceScopeFactory scopeFactory;
+    private readonly BackgroundWorkerHealthCheck healthCheck = healthCheck;
+    private readonly ILogger<PlrStatusUpdateSchedulingService> logger = logger;
+    private readonly IServiceScopeFactory scopeFactory = scopeFactory;
     private readonly PeriodicTimer timer = new(TimeSpan.FromSeconds(10));
-
-    public PlrStatusUpdateSchedulingService(
-        IServiceScopeFactory scopeFactory,
-        ILogger<PlrStatusUpdateSchedulingService> logger,
-        BackgroundWorkerHealthCheck healthCheck)
-    {
-        this.logger = logger;
-        this.scopeFactory = scopeFactory;
-        this.healthCheck = healthCheck;
-    }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {

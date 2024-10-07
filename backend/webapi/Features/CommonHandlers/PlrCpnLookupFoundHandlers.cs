@@ -12,11 +12,9 @@ using Pidp.Infrastructure.HttpClients.Plr;
 using Pidp.Models;
 using Pidp.Models.DomainEvents;
 
-public class AssignAttributesInKeycloakAfterPlrCpnLookupFound : INotificationHandler<PlrCpnLookupFound>
+public class AssignAttributesInKeycloakAfterPlrCpnLookupFound(IKeycloakAdministrationClient client) : INotificationHandler<PlrCpnLookupFound>
 {
-    private readonly IKeycloakAdministrationClient client;
-
-    public AssignAttributesInKeycloakAfterPlrCpnLookupFound(IKeycloakAdministrationClient client) => this.client = client;
+    private readonly IKeycloakAdministrationClient client = client;
 
     public async Task Handle(PlrCpnLookupFound notification, CancellationToken cancellationToken)
     {
@@ -28,21 +26,14 @@ public class AssignAttributesInKeycloakAfterPlrCpnLookupFound : INotificationHan
     }
 }
 
-public class AssignKeycloakRolesAfterPlrCpnLookupFound : INotificationHandler<PlrCpnLookupFound>
+public class AssignKeycloakRolesAfterPlrCpnLookupFound(
+    IClock clock,
+    IKeycloakAdministrationClient keycloakClient,
+    PidpDbContext context) : INotificationHandler<PlrCpnLookupFound>
 {
-    private readonly IClock clock;
-    private readonly IKeycloakAdministrationClient keycloakClient;
-    private readonly PidpDbContext context;
-
-    public AssignKeycloakRolesAfterPlrCpnLookupFound(
-        IClock clock,
-        IKeycloakAdministrationClient keycloakClient,
-        PidpDbContext context)
-    {
-        this.clock = clock;
-        this.keycloakClient = keycloakClient;
-        this.context = context;
-    }
+    private readonly IClock clock = clock;
+    private readonly IKeycloakAdministrationClient keycloakClient = keycloakClient;
+    private readonly PidpDbContext context = context;
 
     public async Task Handle(PlrCpnLookupFound notification, CancellationToken cancellationToken)
     {
@@ -62,21 +53,14 @@ public class AssignKeycloakRolesAfterPlrCpnLookupFound : INotificationHandler<Pl
     }
 }
 
-public class UpdateBCProviderAfterPlrCpnLookupFound : INotificationHandler<PlrCpnLookupFound>
+public class UpdateBCProviderAfterPlrCpnLookupFound(
+    IBCProviderClient bcProviderClient,
+    PidpDbContext context,
+    PidpConfiguration config) : INotificationHandler<PlrCpnLookupFound>
 {
-    private readonly IBCProviderClient bcProviderClient;
-    private readonly PidpDbContext context;
-    private readonly string clientId;
-
-    public UpdateBCProviderAfterPlrCpnLookupFound(
-        IBCProviderClient bcProviderClient,
-        PidpDbContext context,
-        PidpConfiguration config)
-    {
-        this.bcProviderClient = bcProviderClient;
-        this.context = context;
-        this.clientId = config.BCProviderClient.ClientId;
-    }
+    private readonly IBCProviderClient bcProviderClient = bcProviderClient;
+    private readonly PidpDbContext context = context;
+    private readonly string clientId = config.BCProviderClient.ClientId;
 
     public async Task Handle(PlrCpnLookupFound notification, CancellationToken cancellationToken)
     {

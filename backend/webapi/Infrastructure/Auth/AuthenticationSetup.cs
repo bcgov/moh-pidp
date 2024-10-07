@@ -29,33 +29,26 @@ public static class AuthenticationSetup
             };
         });
 
-        services.AddAuthorization(options =>
-        {
-            options.AddPolicy(Policies.BcscAuthentication, policy => policy
-                .RequireAuthenticatedUser()
-                .RequireClaim(Claims.IdentityProvider, IdentityProviders.BCServicesCard));
+        var anyPartyIdentityProviderPolicy = new AuthorizationPolicyBuilder()
+            .RequireAuthenticatedUser()
+            .RequireClaim(Claims.IdentityProvider, IdentityProviders.BCServicesCard, IdentityProviders.BCProvider, IdentityProviders.Idir, IdentityProviders.Phsa)
+            .Build();
 
-            options.AddPolicy(Policies.BCProviderAuthentication, policy => policy
+        services.AddAuthorizationBuilder()
+            .AddPolicy(Policies.BcscAuthentication, policy => policy
                 .RequireAuthenticatedUser()
-                .RequireClaim(Claims.IdentityProvider, IdentityProviders.BCProvider));
-
-            options.AddPolicy(Policies.HighAssuranceIdentityProvider, policy => policy
+                .RequireClaim(Claims.IdentityProvider, IdentityProviders.BCServicesCard))
+            .AddPolicy(Policies.BCProviderAuthentication, policy => policy
                 .RequireAuthenticatedUser()
-                .RequireClaim(Claims.IdentityProvider, IdentityProviders.BCServicesCard, IdentityProviders.BCProvider));
-
-            options.AddPolicy(Policies.IdirAuthentication, policy => policy
+                .RequireClaim(Claims.IdentityProvider, IdentityProviders.BCProvider))
+            .AddPolicy(Policies.HighAssuranceIdentityProvider, policy => policy
                 .RequireAuthenticatedUser()
-                .RequireClaim(Claims.IdentityProvider, IdentityProviders.Idir));
-
-            options.AddPolicy(Policies.AnyPartyIdentityProvider, policy => policy
+                .RequireClaim(Claims.IdentityProvider, IdentityProviders.BCServicesCard, IdentityProviders.BCProvider))
+            .AddPolicy(Policies.IdirAuthentication, policy => policy
                 .RequireAuthenticatedUser()
-                .RequireClaim(Claims.IdentityProvider, IdentityProviders.BCServicesCard, IdentityProviders.BCProvider, IdentityProviders.Idir, IdentityProviders.Phsa));
-
-            options.FallbackPolicy = new AuthorizationPolicyBuilder()
-                .RequireAuthenticatedUser()
-                .RequireClaim(Claims.IdentityProvider, IdentityProviders.BCServicesCard, IdentityProviders.BCProvider, IdentityProviders.Idir, IdentityProviders.Phsa)
-                .Build();
-        });
+                .RequireClaim(Claims.IdentityProvider, IdentityProviders.Idir))
+            .AddPolicy(Policies.AnyPartyIdentityProvider, anyPartyIdentityProviderPolicy)
+            .SetFallbackPolicy(anyPartyIdentityProviderPolicy);
 
         return services;
     }

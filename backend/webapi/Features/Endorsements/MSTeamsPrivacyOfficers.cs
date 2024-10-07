@@ -38,16 +38,10 @@ public class MSTeamsPrivacyOfficers
         public QueryValidator() => this.RuleFor(x => x.PartyId).GreaterThan(0);
     }
 
-    public class QueryHandler : IQueryHandler<Query, IDomainResult<List<Model>>>
+    public class QueryHandler(IMapper mapper, PidpDbContext context) : IQueryHandler<Query, IDomainResult<List<Model>>>
     {
-        private readonly IMapper mapper;
-        private readonly PidpDbContext context;
-
-        public QueryHandler(IMapper mapper, PidpDbContext context)
-        {
-            this.mapper = mapper;
-            this.context = context;
-        }
+        private readonly IMapper mapper = mapper;
+        private readonly PidpDbContext context = context;
 
         public async Task<IDomainResult<List<Model>>> HandleAsync(Query query)
         {

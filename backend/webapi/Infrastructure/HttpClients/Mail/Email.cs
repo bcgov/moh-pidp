@@ -12,19 +12,19 @@ public class Email
     public IEnumerable<Pdf> Attachments { get; set; }
 
     public Email(string from, string to, string subject, string body)
-        : this(from, new[] { to }, Enumerable.Empty<string>(), subject, body, Enumerable.Empty<Pdf>())
+        : this(from, [to], [], subject, body, [])
     { }
 
     public Email(string from, string to, string cc, string subject, string body)
-        : this(from, new[] { to }, new[] { cc }, subject, body, Enumerable.Empty<Pdf>())
+        : this(from, [to], [cc], subject, body, [])
     { }
 
     public Email(string from, IEnumerable<string> to, string subject, string body)
-        : this(from, to, Enumerable.Empty<string>(), subject, body, Enumerable.Empty<Pdf>())
+        : this(from, to, [], subject, body, [])
     { }
 
     public Email(string from, IEnumerable<string> to, string cc, string subject, string body)
-        : this(from, to, new[] { cc }, subject, body, Enumerable.Empty<Pdf>())
+        : this(from, to, [cc], subject, body, [])
     { }
 
     public Email(string from, IEnumerable<string> to, IEnumerable<string> cc, string subject, string body, IEnumerable<Pdf> attachments)

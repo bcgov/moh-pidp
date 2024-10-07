@@ -33,24 +33,16 @@ public class CollegeCertifications
         public QueryValidator() => this.RuleFor(x => x.PartyId).GreaterThan(0);
     }
 
-    public class QueryHandler : IQueryHandler<Query, IDomainResult<List<Model>>>
+    public class QueryHandler(
+        ILogger<QueryHandler> logger,
+        IMapper mapper,
+        IPlrClient client,
+        PidpDbContext context) : IQueryHandler<Query, IDomainResult<List<Model>>>
     {
-        private readonly ILogger<QueryHandler> logger;
-        private readonly IMapper mapper;
-        private readonly IPlrClient client;
-        private readonly PidpDbContext context;
-
-        public QueryHandler(
-            ILogger<QueryHandler> logger,
-            IMapper mapper,
-            IPlrClient client,
-            PidpDbContext context)
-        {
-            this.logger = logger;
-            this.mapper = mapper;
-            this.client = client;
-            this.context = context;
-        }
+        private readonly ILogger<QueryHandler> logger = logger;
+        private readonly IMapper mapper = mapper;
+        private readonly IPlrClient client = client;
+        private readonly PidpDbContext context = context;
 
         public async Task<IDomainResult<List<Model>>> HandleAsync(Query query)
         {

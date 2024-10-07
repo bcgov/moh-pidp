@@ -2,6 +2,7 @@ namespace Pidp.Data.Configuration;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+
 using Pidp.Models;
 
 public class CredentialConfiguration : IEntityTypeConfiguration<Credential>
@@ -12,7 +13,7 @@ public class CredentialConfiguration : IEntityTypeConfiguration<Credential>
             .HasFilter(@$"""UserId"" != '{Guid.Empty}'") // New BC Provider Credentials have not yet signed into Keycloak, and so have a UserId of Guid.Empty.
             .IsUnique();
 
-        builder.HasCheckConstraint("CHK_Credential_AtLeastOneIdentifier",
-            @$"((""UserId"" != '{Guid.Empty}') or (""IdpId"" is not null))");
+        builder.ToTable(t => t.HasCheckConstraint("CHK_Credential_AtLeastOneIdentifier",
+            @$"((""UserId"" != '{Guid.Empty}') or (""IdpId"" is not null))"));
     }
 }

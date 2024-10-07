@@ -44,9 +44,9 @@ public class Party : BaseAuditable
 
     public PartyLicenceDeclaration? LicenceDeclaration { get; set; }
 
-    public ICollection<AccessRequest> AccessRequests { get; set; } = new List<AccessRequest>();
+    public ICollection<AccessRequest> AccessRequests { get; set; } = [];
 
-    public ICollection<Credential> Credentials { get; set; } = new List<Credential>();
+    public ICollection<Credential> Credentials { get; set; } = [];
 
     /// <summary>
     /// The First Name + Last Name of the Party.

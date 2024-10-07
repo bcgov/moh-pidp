@@ -9,10 +9,8 @@ using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.Services;
 
 [Route("api/ext")]
-public class ThirdPartyintegrationsController : PidpControllerBase
+public class ThirdPartyintegrationsController(IPidpAuthorizationService authorizationService) : PidpControllerBase(authorizationService)
 {
-    public ThirdPartyintegrationsController(IPidpAuthorizationService authorizationService) : base(authorizationService) { }
-
     [HttpGet("parties/{hpdid}/endorsements")]
     [Authorize(Roles = Roles.ViewEndorsements)]
     [ProducesResponseType(StatusCodes.Status200OK)]

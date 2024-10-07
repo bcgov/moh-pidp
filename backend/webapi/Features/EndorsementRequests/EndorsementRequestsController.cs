@@ -5,6 +5,7 @@ using DomainResults.Mvc;
 using HybridModelBinding;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SharpGrip.FluentValidation.AutoValidation.Mvc.Attributes;
 
 using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.Services;
@@ -35,7 +36,7 @@ public class EndorsementRequestsController(IPidpAuthorizationService authorizati
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
     public async Task<IActionResult> CreateEndorsementRequest([FromServices] ICommandHandler<Create.Command, Create.Model> handler,
-                                                              [FromHybrid] Create.Command command)
+                                                              [FromHybrid][AutoValidateAlways] Create.Command command)
     {
         var result = await this.AuthorizePartyBeforeHandleAsync(command.PartyId, handler, command);
         if (!result.IsSuccess)
@@ -55,7 +56,7 @@ public class EndorsementRequestsController(IPidpAuthorizationService authorizati
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> ReceiveEndorsementRequest([FromServices] ICommandHandler<Receive.Command, IDomainResult> handler,
-                                                               [FromHybrid] Receive.Command command)
+                                                               [FromHybrid][AutoValidateAlways] Receive.Command command)
         => await this.AuthorizePartyBeforeHandleAsync(command.PartyId, handler, command)
             .ToActionResult();
 

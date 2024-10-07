@@ -18,11 +18,9 @@ public class CommonEmailDomains
         public QueryValidator() => this.RuleFor(x => x.Email).NotEmpty();
     }
 
-    public class QueryHandler : IQueryHandler<Query, IDomainResult>
+    public class QueryHandler(PidpDbContext context) : IQueryHandler<Query, IDomainResult>
     {
-        private readonly PidpDbContext context;
-
-        public QueryHandler(PidpDbContext context) => this.context = context;
+        private readonly PidpDbContext context = context;
 
         public async Task<IDomainResult> HandleAsync(Query query)
         {

@@ -81,7 +81,7 @@ public class Create
             if (command.PreApproved)
             {
                 var possibleRecipients = await this.context.Parties
-                    .Where(party => party.Email.ToLower() == command.RecipientEmail.ToLower())
+                    .Where(party => party.Email!.ToLower() == command.RecipientEmail.ToLower())
                     .Select(party => party.Id)
                     .ToListAsync();
 

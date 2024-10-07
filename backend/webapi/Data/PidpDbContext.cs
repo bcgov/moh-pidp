@@ -56,7 +56,7 @@ public class PidpDbContext(
     {
         var eventEntities = this.ChangeTracker.Entries<BaseEntity>()
             .Select(x => x.Entity)
-            .Where(entity => entity.DomainEvents.Any());
+            .Where(entity => entity.DomainEvents.Count != 0);
 
         foreach (var entity in eventEntities)
         {

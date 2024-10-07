@@ -16,8 +16,8 @@ public class Province
 
 public class ProvinceDataGenerator : ILookupDataGenerator<Province>
 {
-    public IEnumerable<Province> Generate() => new[]
-    {
+    public IEnumerable<Province> Generate() =>
+    [
         new Province { Code = "AB", CountryCode = "CA", Name = "Alberta"                              },
         new Province { Code = "BC", CountryCode = "CA", Name = "British Columbia"                     },
         new Province { Code = "MB", CountryCode = "CA", Name = "Manitoba"                             },
@@ -88,5 +88,5 @@ public class ProvinceDataGenerator : ILookupDataGenerator<Province>
         new Province { Code = "WV", CountryCode = "US", Name = "West Virginia"                        },
         new Province { Code = "WI", CountryCode = "US", Name = "Wisconsin"                            },
         new Province { Code = "WY", CountryCode = "US", Name = "Wyoming"                              }
-    };
+    ];
 }

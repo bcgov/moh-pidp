@@ -49,33 +49,22 @@ public class HcimAccountTransfer
         }
     }
 
-    public class CommandHandler : ICommandHandler<Command, IDomainResult<Model>>
+    public class CommandHandler(
+        IClock clock,
+        IEmailService emailService,
+        IKeycloakAdministrationClient keycloakClient,
+        ILdapClient ldapClient,
+        ILogger<CommandHandler> logger,
+        PidpConfiguration config,
+        PidpDbContext context) : ICommandHandler<Command, IDomainResult<Model>>
     {
-        private readonly IClock clock;
-        private readonly IEmailService emailService;
-        private readonly IKeycloakAdministrationClient keycloakClient;
-        private readonly ILdapClient ldapClient;
-        private readonly ILogger<CommandHandler> logger;
-        private readonly PidpDbContext context;
-        private readonly string hcimClientId;
-
-        public CommandHandler(
-            IClock clock,
-            IEmailService emailService,
-            IKeycloakAdministrationClient keycloakClient,
-            ILdapClient ldapClient,
-            ILogger<CommandHandler> logger,
-            PidpConfiguration config,
-            PidpDbContext context)
-        {
-            this.clock = clock;
-            this.emailService = emailService;
-            this.keycloakClient = keycloakClient;
-            this.ldapClient = ldapClient;
-            this.logger = logger;
-            this.context = context;
-            this.hcimClientId = config.Keycloak.HcimClientId;
-        }
+        private readonly IClock clock = clock;
+        private readonly IEmailService emailService = emailService;
+        private readonly IKeycloakAdministrationClient keycloakClient = keycloakClient;
+        private readonly ILdapClient ldapClient = ldapClient;
+        private readonly ILogger<CommandHandler> logger = logger;
+        private readonly PidpDbContext context = context;
+        private readonly string hcimClientId = config.Keycloak.HcimClientId;
 
         public async Task<IDomainResult<Model>> HandleAsync(Command command)
         {

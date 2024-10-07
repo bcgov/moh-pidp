@@ -12,24 +12,16 @@ using Pidp.Infrastructure.HttpClients.BCProvider;
 using Pidp.Infrastructure.HttpClients.Plr;
 using Pidp.Models.DomainEvents;
 
-public class UpdateBCProviderAfterEndorsementStandingUpdated : INotificationHandler<EndorsementStandingUpdated>
+public class UpdateBCProviderAfterEndorsementStandingUpdated(
+    IBus bus,
+    IPlrClient plrClient,
+    PidpDbContext context,
+    PidpConfiguration config) : INotificationHandler<EndorsementStandingUpdated>
 {
-    private readonly IBus bus;
-    private readonly IPlrClient plrClient;
-    private readonly PidpDbContext context;
-    private readonly string clientId;
-
-    public UpdateBCProviderAfterEndorsementStandingUpdated(
-        IBus bus,
-        IPlrClient plrClient,
-        PidpDbContext context,
-        PidpConfiguration config)
-    {
-        this.bus = bus;
-        this.plrClient = plrClient;
-        this.context = context;
-        this.clientId = config.BCProviderClient.ClientId;
-    }
+    private readonly IBus bus = bus;
+    private readonly IPlrClient plrClient = plrClient;
+    private readonly PidpDbContext context = context;
+    private readonly string clientId = config.BCProviderClient.ClientId;
 
     public async Task Handle(EndorsementStandingUpdated notification, CancellationToken cancellationToken)
     {

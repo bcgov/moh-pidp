@@ -9,27 +9,18 @@ using Pidp.Infrastructure.HttpClients.BCProvider;
 using Pidp.Infrastructure.HttpClients.Plr;
 using Pidp.Models.DomainEvents;
 
-public sealed class PlrStatusUpdateService : IPlrStatusUpdateService
+public sealed class PlrStatusUpdateService(
+    IBCProviderClient bcProviderClient,
+    IPlrClient plrClient,
+    ILogger<PlrStatusUpdateService> logger,
+    PidpDbContext context,
+    PidpConfiguration config) : IPlrStatusUpdateService
 {
-    private readonly IBCProviderClient bcProviderClient;
-    private readonly IPlrClient plrClient;
-    private readonly ILogger<PlrStatusUpdateService> logger;
-    private readonly PidpDbContext context;
-    private readonly string clientId;
-
-    public PlrStatusUpdateService(
-        IBCProviderClient bcProviderClient,
-        IPlrClient plrClient,
-        ILogger<PlrStatusUpdateService> logger,
-        PidpDbContext context,
-        PidpConfiguration config)
-    {
-        this.bcProviderClient = bcProviderClient;
-        this.plrClient = plrClient;
-        this.logger = logger;
-        this.context = context;
-        this.clientId = config.BCProviderClient.ClientId;
-    }
+    private readonly IBCProviderClient bcProviderClient = bcProviderClient;
+    private readonly IPlrClient plrClient = plrClient;
+    private readonly ILogger<PlrStatusUpdateService> logger = logger;
+    private readonly PidpDbContext context = context;
+    private readonly string clientId = config.BCProviderClient.ClientId;
 
     public async Task DoWorkAsync(CancellationToken stoppingToken)
     {
@@ -39,7 +30,7 @@ public sealed class PlrStatusUpdateService : IPlrStatusUpdateService
             // TODO: handle error?
             return;
         }
-        if (!statusChanges.Any())
+        if (statusChanges.Count == 0)
         {
             return;
         }

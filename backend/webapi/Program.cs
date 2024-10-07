@@ -4,6 +4,7 @@ using Serilog;
 using Serilog.Events;
 using Serilog.Formatting.Json;
 using Serilog.Sinks.SystemConsole.Themes;
+using System.Globalization;
 using System.Reflection;
 
 public class Program
@@ -67,10 +68,12 @@ public class Program
             .Enrich.WithProperty("Version", $"{name.Version}")
             .WriteTo.Console(
                 outputTemplate: outputTemplate,
+                formatProvider: CultureInfo.InvariantCulture,
                 theme: AnsiConsoleTheme.Code)
             .WriteTo.Async(a => a.File(
                 $@"{path}/pidp.log",
                 outputTemplate: outputTemplate,
+                formatProvider: CultureInfo.InvariantCulture,
                 rollingInterval: RollingInterval.Day,
                 shared: true))
             .WriteTo.Async(a => a.File(

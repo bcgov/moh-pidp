@@ -5,16 +5,15 @@ using DomainResults.Mvc;
 using HybridModelBinding;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SharpGrip.FluentValidation.AutoValidation.Mvc.Attributes;
 
 using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.Services;
 
 [Route("api/[controller]")]
 [Authorize(Policy = Policies.AnyPartyIdentityProvider)]
-public class PartiesController : PidpControllerBase
+public class PartiesController(IPidpAuthorizationService authorizationService) : PidpControllerBase(authorizationService)
 {
-    public PartiesController(IPidpAuthorizationService authorizationService) : base(authorizationService) { }
-
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -45,7 +44,7 @@ public class PartiesController : PidpControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> UpdatePartyDemographics([FromServices] ICommandHandler<Demographics.Command> handler,
-                                                             [FromHybrid] Demographics.Command command)
+                                                             [FromHybrid][AutoValidateAlways] Demographics.Command command)
         => await this.AuthorizePartyBeforeHandleAsync(command.Id, handler, command)
             .ToActionResult();
 
@@ -63,7 +62,7 @@ public class PartiesController : PidpControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<string?>> UpdatePartyLicenceDeclaration([FromServices] ICommandHandler<LicenceDeclaration.Command, IDomainResult<string?>> handler,
-                                                                           [FromHybrid] LicenceDeclaration.Command command)
+                                                                           [FromHybrid][AutoValidateAlways] LicenceDeclaration.Command command)
         => await this.AuthorizePartyBeforeHandleAsync(command.PartyId, handler, command)
             .ToActionResultOfT();
 

@@ -24,16 +24,10 @@ public class Decline
         }
     }
 
-    public class CommandHandler : ICommandHandler<Command, IDomainResult>
+    public class CommandHandler(IClock clock, PidpDbContext context) : ICommandHandler<Command, IDomainResult>
     {
-        private readonly IClock clock;
-        private readonly PidpDbContext context;
-
-        public CommandHandler(IClock clock, PidpDbContext context)
-        {
-            this.clock = clock;
-            this.context = context;
-        }
+        private readonly IClock clock = clock;
+        private readonly PidpDbContext context = context;
 
         public async Task<IDomainResult> HandleAsync(Command command)
         {

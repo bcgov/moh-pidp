@@ -25,11 +25,9 @@ public class Create
         }
     }
 
-    public class CommandHandler : ICommandHandler<Command>
+    public class CommandHandler(PidpDbContext context) : ICommandHandler<Command>
     {
-        private readonly PidpDbContext context;
-
-        public CommandHandler(PidpDbContext context) => this.context = context;
+        private readonly PidpDbContext context = context;
 
         public async Task HandleAsync(Command command)
         {

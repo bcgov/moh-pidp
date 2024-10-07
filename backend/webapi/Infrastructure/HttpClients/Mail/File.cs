@@ -3,23 +3,11 @@ namespace Pidp.Infrastructure.HttpClients.Mail;
 /// <summary>
 /// An abstraction of a document in memory
 /// </summary>
-public class File
+public class File(string filename, byte[] data, string mediaType)
 {
-    public string Filename { get; set; }
-    public byte[] Data { get; set; }
-    public string MediaType { get; set; }
-
-    public File(string filename, byte[] data, string mediaType)
-    {
-        this.Filename = filename;
-        this.Data = data;
-        this.MediaType = mediaType;
-    }
+    public string Filename { get; set; } = filename;
+    public byte[] Data { get; set; } = data;
+    public string MediaType { get; set; } = mediaType;
 }
 
-public class Pdf : File
-{
-    public Pdf(string filename, byte[] data)
-        : base(filename, data, "application/pdf")
-    { }
-}
+public class Pdf(string filename, byte[] data) : File(filename, data, "application/pdf") { }

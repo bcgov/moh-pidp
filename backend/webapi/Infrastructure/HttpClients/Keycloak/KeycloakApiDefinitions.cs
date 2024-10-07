@@ -73,6 +73,8 @@ public class Role
 /// </summary>
 public class UserRepresentation
 {
+    private static readonly JsonSerializerOptions SerializationOptions = new() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
+
     public Dictionary<string, string[]> Attributes { get; set; } = [];
     public string? Email { get; set; }
     public bool? Enabled { get; set; }
@@ -92,12 +94,12 @@ public class UserRepresentation
             record.StatusReasonCode
         });
 
-        return this.SetAttribute("college_licence_info", JsonSerializer.Serialize(data, new JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }));
+        return this.SetAttribute("college_licence_info", JsonSerializer.Serialize(data, SerializationOptions));
     }
 
     public UserRepresentation SetCpn(string cpn) => this.SetAttribute("common_provider_number", cpn);
 
-    internal UserRepresentation SetLdapOrgDetails(LdapLoginResponse.OrgDetails orgDetails) => this.SetAttribute("org_details", JsonSerializer.Serialize(orgDetails, new JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }));
+    internal UserRepresentation SetLdapOrgDetails(LdapLoginResponse.OrgDetails orgDetails) => this.SetAttribute("org_details", JsonSerializer.Serialize(orgDetails, SerializationOptions));
 
     public UserRepresentation SetOpId(string opId) => this.SetAttribute("opId", opId);
 

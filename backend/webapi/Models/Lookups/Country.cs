@@ -14,9 +14,9 @@ public class Country
 
 public class CountryDataGenerator : ILookupDataGenerator<Country>
 {
-    public IEnumerable<Country> Generate() => new[]
-    {
+    public IEnumerable<Country> Generate() =>
+    [
         new Country { Code = "CA", Name = "Canada"        },
         new Country { Code = "US", Name = "United States" }
-    };
+    ];
 }
