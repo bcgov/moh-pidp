@@ -18,7 +18,7 @@ import { UserAccessAgreementPage } from './user-access-agreement.page';
 describe('UserAccessAgreementPage', () => {
   let component: UserAccessAgreementPage;
   let router: Router;
-  let scroll = window.scroll;
+  const scroll = window.scroll;
 
   let mockActivatedRoute: { snapshot: any };
 
