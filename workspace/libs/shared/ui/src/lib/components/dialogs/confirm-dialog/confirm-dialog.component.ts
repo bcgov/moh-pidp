@@ -1,6 +1,5 @@
 import { NgIf } from '@angular/common';
 import {
-  AfterViewInit,
   ChangeDetectionStrategy,
   Component,
   Inject,
