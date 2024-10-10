@@ -246,4 +246,4 @@ jobs:
           helm list --namespace f088b1-dev
 
           echo installing helm chart...
-          helm upgrade --install --wait --values ./deploy/pr_values.yaml --set global.image.registry=image-registry.openshift-image-registry.svc:5000/f088b1-tools  --namespace f088b1-dev pr-${{ env.pr_number }} charts/pidp --debug --set global.image.tag=pr-${{ env.pr_number }}
+          helm upgrade --install --wait --values ./deploy/pr_values.yaml --set global.license_plate=f088b1 global.image.registry=image-registry.openshift-image-registry.svc:5000/f088b1-tools  --namespace f088b1-dev pr-${{ env.pr_number }} charts/pidp --debug --set global.image.tag=pr-${{ env.pr_number }}
