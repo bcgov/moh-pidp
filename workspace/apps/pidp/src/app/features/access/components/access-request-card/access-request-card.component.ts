@@ -54,6 +54,7 @@ export class AccessRequestCardComponent {
         { duration: 100000, panelClass: 'close-icon' },
       );
     } else {
+      this.toastService.closeToast();
       this.action.emit();
     }
   }
