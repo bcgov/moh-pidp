@@ -45,7 +45,7 @@ import { DIALOG_DEFAULT_OPTION } from '../dialogs-properties.provider';
     AnchorDirective,
   ],
 })
-export class ConfirmDialogComponent implements OnInit, AfterViewInit {
+export class ConfirmDialogComponent implements OnInit {
   public options: DialogOptions;
   public dialogContentOutput: DialogContentOutput<unknown> | null;
 
@@ -83,13 +83,6 @@ export class ConfirmDialogComponent implements OnInit, AfterViewInit {
 
     this.dialogRef.updateSize(this.options.width, this.options.height);
     this.options.class && this.dialogRef.addPanelClass(this.options.class);
-  }
-
-  public ngAfterViewInit(): void {
-    const adjustSubmitFocus = document.querySelector(
-      '#submit',
-    ) as HTMLButtonElement;
-    if (adjustSubmitFocus) adjustSubmitFocus.focus();
   }
 
   private getOptions(dialogOptions: DialogOptions): DialogOptions {
