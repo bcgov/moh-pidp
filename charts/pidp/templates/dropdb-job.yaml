@@ -35,18 +35,13 @@ spec:
           - name: PGUSER
             valueFrom:
               secretKeyRef:
-                name: {{ $ocEnv }}-postgres-cluster-pguser-pidpsuper
-                key: user
-          # - name: APPUSER
-          #   valueFrom:
-          #     secretKeyRef:
-          #       name: {{ $ocEnv }}-patroni-secret
-          #       key: app-db-username
+                name: {{ $ocEnv }}-patroni-secret
+                key: superuser-username
           - name: PGPASSWORD
             valueFrom:
               secretKeyRef:
-                name: {{ $ocEnv }}-postgres-cluster-pguser-pidpsuper
-                key: password
+                name: {{ $ocEnv }}-patroni-secret
+                key: superuser-password
           - name: PGDATABASE
             value: "pidp_{{ $drn }}"
       restartPolicy: Never
