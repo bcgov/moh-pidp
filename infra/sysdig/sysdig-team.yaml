@@ -1,15 +1,15 @@
 apiVersion: ops.gov.bc.ca/v1alpha1
 kind: SysdigTeam
 metadata:
-  name: d8a8f9-sysdigteam
-  namespace: d8a8f9-tools
+  name: f088b1-sysdigteam
+  namespace: f088b1-tools
 spec:
   team:
-    description: The Sysdig Team for the OpenShift Project Set d8a8f9 (PIDP)
+    description: The Sysdig Team for the OpenShift Project Set f088b1 (PIDP)
     users:
-      - name: rshourou@sfu.ca
+      - name: roya.shourouni@gov.bc.ca
         role: ROLE_TEAM_EDIT
       - name: itchison@gmail.com
         role: ROLE_TEAM_EDIT
-      - name: chris@bashbang.com
+      - name: james-hollinger@github
         role: ROLE_TEAM_EDIT

@@ -1,6 +1,6 @@
 apiVersion: v2
 name: midas-probe
-description: Silver Probe Helm chart
+description: Gold Probe Helm chart
 
 # A chart can be either an 'application' or a 'library' chart.
 #
