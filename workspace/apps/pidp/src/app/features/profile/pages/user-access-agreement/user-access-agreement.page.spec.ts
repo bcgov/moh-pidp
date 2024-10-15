@@ -11,6 +11,7 @@ import { provideAutoSpy } from 'jest-auto-spies';
 import { ApiHttpClient } from '@app/core/resources/api-http-client.service';
 import { FormUtilsService } from '@app/core/services/form-utils.service';
 import { LoggerService } from '@app/core/services/logger.service';
+import { UtilsService } from '@app/core/services/utils.service';
 
 import { UserAccessAgreementResource } from './user-access-agreement-resource.service';
 import { UserAccessAgreementPage } from './user-access-agreement.page';
@@ -46,6 +47,7 @@ describe('UserAccessAgreementPage', () => {
         provideAutoSpy(LoggerService),
         provideAutoSpy(Router),
         provideAutoSpy(UserAccessAgreementResource),
+        provideAutoSpy(UtilsService),
       ],
     });
 
