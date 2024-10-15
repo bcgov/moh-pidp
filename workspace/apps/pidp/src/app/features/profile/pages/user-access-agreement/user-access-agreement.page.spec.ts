@@ -18,7 +18,6 @@ import { UserAccessAgreementPage } from './user-access-agreement.page';
 describe('UserAccessAgreementPage', () => {
   let component: UserAccessAgreementPage;
   let router: Router;
-  const scroll = window.scroll;
 
   let mockActivatedRoute: { snapshot: any };
 
@@ -62,7 +61,6 @@ describe('UserAccessAgreementPage', () => {
     given('user wants to go back to the previous page', () => {
       when('onBack is invoked', () => {
         component.onBack();
-        window.scroll = scroll;
         then('router should navigate to root route', () => {
           const rootRoute = mockActivatedRoute.snapshot.data.routes.root;
           expect(router.navigate).toHaveBeenCalledWith([rootRoute]);
