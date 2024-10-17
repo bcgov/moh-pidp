@@ -51,3 +51,4 @@ jobs:
 
           echo installing helm chart...
           helm upgrade --wait --namespace f088b1-prod --values infra/endorsement_reminder/values.yaml --set env=prod --set global.image.tag=main --set aspnetcore.environment=Production --set global.image.registry=image-registry.openshift-image-registry.svc:5000/f088b1-tools endorsement-reminder infra/endorsement_reminder
+

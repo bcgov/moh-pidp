@@ -59,12 +59,14 @@ public class IntakeService : IIntakeService
 
     public void LogUnrecognizedCert(string requestCertThumbprint) => this.logger.LogUnrecognizedCert(requestCertThumbprint);
 
-    private async Task<int> CreateOrUpdateRecordAsync(PlrRecord record, bool expectExists)
+    public async Task<int> CreateOrUpdateRecordAsync(PlrRecord record, bool expectExists)
     {
         await this.TranslateIdentifierTypeAsync(record);
 
         var existingRecord = await this.context.PlrRecords
             .SingleOrDefaultAsync(rec => rec.Ipc == record.Ipc);
+
+        this.CheckStatusChange(existingRecord, record);
 
         if (existingRecord == null)
         {
@@ -77,8 +79,6 @@ public class IntakeService : IIntakeService
         }
         else
         {
-            this.CheckStatusChange(existingRecord, record);
-
             record.Id = existingRecord.Id;
             this.context.Entry(existingRecord).CurrentValues.SetValues(record);
             existingRecord.Credentials = record.Credentials;
@@ -119,19 +119,20 @@ public class IntakeService : IIntakeService
         }
     }
 
-    private void CheckStatusChange(PlrRecord existingRecord, PlrRecord newRecord)
+    private void CheckStatusChange(PlrRecord? existingRecord, PlrRecord newRecord)
     {
-        if (existingRecord.StatusCode != newRecord.StatusCode
+        if (existingRecord == null
+            || existingRecord.StatusCode != newRecord.StatusCode
             || existingRecord.StatusReasonCode != newRecord.StatusReasonCode)
         {
             this.context.StatusChageLogs.Add(new StatusChageLog
             {
-                PlrRecordId = existingRecord.Id,
-                OldStatusCode = existingRecord.StatusCode,
-                OldStatusReasonCode = existingRecord.StatusReasonCode,
+                PlrRecord = existingRecord ?? newRecord,
+                OldStatusCode = existingRecord?.StatusCode,
+                OldStatusReasonCode = existingRecord?.StatusReasonCode,
                 NewStatusCode = newRecord.StatusCode,
                 NewStatusReasonCode = newRecord.StatusReasonCode,
-                ShouldBeProcessed = existingRecord.IsGoodStanding != newRecord.IsGoodStanding
+                ShouldBeProcessed = existingRecord?.IsGoodStanding != newRecord.IsGoodStanding
             });
         }
     }
