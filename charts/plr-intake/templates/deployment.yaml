@@ -16,7 +16,7 @@ metadata:
         {
           "from": {
             "kind": "ImageStreamTag",
-            "namespace": "d8a8f9-tools",
+            "namespace": "{{ .Values.global.license_plate }}-tools",
             "name": "pidp-plr-intake:{{ .Values.global.image.tag }}"
           },
           "fieldPath": "spec.template.spec.containers[0].image",
