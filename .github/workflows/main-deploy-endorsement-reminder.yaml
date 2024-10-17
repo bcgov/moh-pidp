@@ -31,7 +31,7 @@ jobs:
           helm list --namespace d8a8f9-test
 
           echo installing helm chart...
-          helm upgrade --wait --namespace d8a8f9-prod --values infra/endorsement_reminder/values.yaml --set env=prod global.image.tag=main aspnetcore.environment=Production endorsement-reminder infra/endorsement_reminder
+          helm upgrade --wait --namespace d8a8f9-prod --values infra/endorsement_reminder/values.yaml --set env=prod --set global.image.tag=main --set aspnetcore.environment=Production endorsement-reminder infra/endorsement_reminder
 
   helm-deployment-endorsement-reminder-gold:
     runs-on: 'ubuntu-latest'
@@ -50,4 +50,4 @@ jobs:
           helm list --namespace f088b1-test
 
           echo installing helm chart...
-          helm upgrade --wait --namespace f088b1-prod --values infra/endorsement_reminder/values.yaml endorsement-reminder infra/endorsement_reminder
+          helm upgrade --wait --namespace f088b1-prod --values infra/endorsement_reminder/values.yaml --set env=prod --set global.image.tag=main --set aspnetcore.environment=Production --set global.image.registry=image-registry.openshift-image-registry.svc:5000/f088b1-tools endorsement-reminder infra/endorsement_reminder
