@@ -4,6 +4,8 @@ import {
   ActivatedRoute,
   Data,
   Event,
+  NavigationEnd,
+  Router,
   RouterOutlet,
   Scroll,
 } from '@angular/router';
@@ -13,6 +15,7 @@ import { Observable, delay, map, mergeMap } from 'rxjs';
 import { contentContainerSelector } from '@bcgov/shared/ui';
 
 import { RouteStateService } from '@core/services/route-state.service';
+import { SnowplowService } from '@core/services/snowplow.service';
 import { UtilsService } from '@core/services/utils.service';
 
 @Component({
@@ -28,7 +31,15 @@ export class AppComponent implements OnInit {
     private titleService: Title,
     private routeStateService: RouteStateService,
     private utilsService: UtilsService,
-  ) {}
+    private router: Router,
+    private snowplowService: SnowplowService,
+  ) {
+    this.router.events.subscribe((evt) => {
+      if (evt instanceof NavigationEnd) {
+        this.snowplowService.trackPageView();
+      }
+    });
+  }
 
   public ngOnInit(): void {
     this.setPageTitle(this.routeStateService.onNavigationEnd());
