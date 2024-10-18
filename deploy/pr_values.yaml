@@ -5,6 +5,7 @@ global:
   image:
     registry: image-registry.openshift-image-registry.svc:5000/d8a8f9-tools
     tag: dev
+  license_plate: "d8a8f9"
 
 database:
   autoCreate: true
