@@ -10,10 +10,8 @@ using Pidp.Infrastructure.Services;
 
 [Route("api/[controller]")]
 [Authorize(Policy = Policies.AnyPartyIdentityProvider)]
-public class DiscoveryController : PidpControllerBase
+public class DiscoveryController(IPidpAuthorizationService authorizationService) : PidpControllerBase(authorizationService)
 {
-    public DiscoveryController(IPidpAuthorizationService authorizationService) : base(authorizationService) { }
-
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<Discovery.Model>> PartyDiscovery([FromServices] IQueryHandler<Discovery.Query, Discovery.Model> handler)

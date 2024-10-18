@@ -5,10 +5,8 @@ using NodaTime;
 using Pidp.Extensions;
 using Pidp.Models.Lookups;
 
-public class PlrClient : BaseClient, IPlrClient
+public class PlrClient(HttpClient client, ILogger<PlrClient> logger) : BaseClient(client, logger), IPlrClient
 {
-    public PlrClient(HttpClient client, ILogger<PlrClient> logger) : base(client, logger) { }
-
     public async Task<string?> FindCpnAsync(CollegeCode collegeCode, string licenceNumber, LocalDate birthdate)
     {
         var query = new
@@ -50,7 +48,7 @@ public class PlrClient : BaseClient, IPlrClient
         else
         {
             this.Logger.LogPlrError(nameof(GetProcessableStatusChangesAsync));
-            return new();
+            return [];
         }
     }
 
@@ -60,9 +58,9 @@ public class PlrClient : BaseClient, IPlrClient
             .Where(cpn => !string.IsNullOrWhiteSpace(cpn))
             .ToArray();
 
-        if (!cpns.Any())
+        if (cpns.Length == 0)
         {
-            return Enumerable.Empty<PlrRecord>();
+            return [];
         }
 
         var result = await this.GetWithQueryParamsAsync<IEnumerable<PlrRecord>>("records", new { Cpns = cpns });
@@ -123,13 +121,13 @@ public class PlrClient : BaseClient, IPlrClient
     {
         return collegeCode switch
         {
-            CollegeCode.Pharmacists => new string[] { IdentifierType.Pharmacist, IdentifierType.PharmacyTech },
-            CollegeCode.PhysiciansAndSurgeons => new string[] { IdentifierType.PhysiciansAndSurgeons },
-            CollegeCode.NursesAndMidwives => new string[] { IdentifierType.Nurse, IdentifierType.Midwife },
-            CollegeCode.NaturopathicPhysicians => new string[] { IdentifierType.NaturopathicPhysician },
-            CollegeCode.DentalSurgeons => new string[] { IdentifierType.DentalSurgeon },
-            CollegeCode.Optometrists => new string[] { IdentifierType.Optometrist },
-            _ => Array.Empty<string>()
+            CollegeCode.Pharmacists => [IdentifierType.Pharmacist, IdentifierType.PharmacyTech],
+            CollegeCode.PhysiciansAndSurgeons => [IdentifierType.PhysiciansAndSurgeons],
+            CollegeCode.NursesAndMidwives => [IdentifierType.Nurse, IdentifierType.Midwife],
+            CollegeCode.NaturopathicPhysicians => [IdentifierType.NaturopathicPhysician],
+            CollegeCode.DentalSurgeons => [IdentifierType.DentalSurgeon],
+            CollegeCode.Optometrists => [IdentifierType.Optometrist],
+            _ => []
         };
     }
 }

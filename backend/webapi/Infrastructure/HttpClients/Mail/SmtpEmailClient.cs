@@ -4,16 +4,10 @@ using System.Net.Mail;
 
 using static Pidp.PidpConfiguration;
 
-public class SmtpEmailClient : ISmtpEmailClient
+public class SmtpEmailClient(ILogger<SmtpEmailClient> logger, PidpConfiguration config) : ISmtpEmailClient
 {
-    private readonly ILogger<SmtpEmailClient> logger;
-    private readonly MailServerConfiguration config;
-
-    public SmtpEmailClient(ILogger<SmtpEmailClient> logger, PidpConfiguration config)
-    {
-        this.logger = logger;
-        this.config = config.MailServer;
-    }
+    private readonly ILogger<SmtpEmailClient> logger = logger;
+    private readonly MailServerConfiguration config = config.MailServer;
 
     public async Task SendAsync(Email email)
     {
