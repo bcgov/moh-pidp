@@ -31,11 +31,9 @@ public class Destination
         public QueryValidator() => this.RuleFor(x => x.PartyId).GreaterThan(0);
     }
 
-    public class QueryHandler : IQueryHandler<Query, Model>
+    public class QueryHandler(PidpDbContext context) : IQueryHandler<Query, Model>
     {
-        private readonly PidpDbContext context;
-
-        public QueryHandler(PidpDbContext context) => this.context = context;
+        private readonly PidpDbContext context = context;
 
         public async Task<Model> HandleAsync(Query query)
         {

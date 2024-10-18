@@ -4,23 +4,15 @@ using Microsoft.Graph;
 using Microsoft.Graph.Models;
 using System.Text.RegularExpressions;
 
-public class BCProviderClient : IBCProviderClient
+public partial class BCProviderClient(
+    GraphServiceClient client,
+    ILogger<BCProviderClient> logger,
+    PidpConfiguration config) : IBCProviderClient
 {
-    private readonly GraphServiceClient client;
-    private readonly ILogger<BCProviderClient> logger;
-    private readonly string domain;
-    private readonly string clientId;
-
-    public BCProviderClient(
-        GraphServiceClient client,
-        ILogger<BCProviderClient> logger,
-        PidpConfiguration config)
-    {
-        this.client = client;
-        this.logger = logger;
-        this.domain = config.BCProviderClient.Domain;
-        this.clientId = config.BCProviderClient.ClientId;
-    }
+    private readonly GraphServiceClient client = client;
+    private readonly ILogger<BCProviderClient> logger = logger;
+    private readonly string domain = config.BCProviderClient.Domain;
+    private readonly string clientId = config.BCProviderClient.ClientId;
 
     public async Task<object?> GetAttribute(string userPrincipalName, string attributeName)
     {
@@ -32,7 +24,7 @@ public class BCProviderClient : IBCProviderClient
         try
         {
             var result = await this.client.Users[userPrincipalName]
-                .GetAsync(request => request.QueryParameters.Select = new[] { attributeName });
+                .GetAsync(request => request.QueryParameters.Select = [attributeName]);
 
             return result?.AdditionalData[attributeName];
         }
@@ -164,8 +156,7 @@ public class BCProviderClient : IBCProviderClient
 
     private string RemoveMailNicknameInvalidCharacters(string mailNickname)
     {
-        // Mail Nickname can include ASCII values 32 - 127 except the following: @ () \ [] " ; : . <> , SPACE
-        var validCharacters = Regex.Replace(mailNickname, @"[^a-zA-Z0-9!#$%&'*+\-\/=?\^_`{|}~]", string.Empty);
+        var validCharacters = InvalidMailNicknameRegex().Replace(mailNickname, string.Empty);
 
         if (mailNickname.Length != validCharacters.Length)
         {
@@ -177,8 +168,7 @@ public class BCProviderClient : IBCProviderClient
 
     private string RemoveUpnInvalidCharacters(string userPrincipalName)
     {
-        // According to the Microsoft Graph docs, User Principal Name can only include A - Z, a - z, 0 - 9, and the characters ' . - _ ! # ^ ~
-        var validCharacters = Regex.Replace(userPrincipalName, @"[^a-zA-Z0-9'\.\-_!\#\^~]", string.Empty);
+        var validCharacters = InvalidUserPrincipalNameRegex().Replace(userPrincipalName, string.Empty);
 
         if (userPrincipalName.Length != validCharacters.Length)
         {
@@ -193,18 +183,20 @@ public class BCProviderClient : IBCProviderClient
         var result = await this.client.Users.Count
             .GetAsync(request =>
             {
-                request.QueryParameters.Filter = GetQueryParametersFilter(userPrincipalName);
+                request.QueryParameters.Filter = $"userPrincipalName eq '{userPrincipalName.Replace("'", "''")}'";
                 request.Headers.Add("ConsistencyLevel", "eventual"); // Required for advanced queries such as "count"
             });
 
         return result > 0;
     }
 
-    private static string GetQueryParametersFilter(string userPrincipalName)
-    {
-        var searchValue = Regex.Replace(userPrincipalName, "'", "''");
-        return $"userPrincipalName eq '{searchValue}'";
-    }
+    // Mail Nickname can include ASCII values 32 - 127 except the following: @ () \ [] " ; : . <> , SPACE
+    [GeneratedRegex(@"[^a-zA-Z0-9!#$%&'*+\-\/=?\^_`{|}~]")]
+    private static partial Regex InvalidMailNicknameRegex();
+
+    // According to the Microsoft Graph docs, User Principal Name can only include A - Z, a - z, 0 - 9, and the characters ' . - _ ! # ^ ~
+    [GeneratedRegex(@"[^a-zA-Z0-9'\.\-_!\#\^~]")]
+    private static partial Regex InvalidUserPrincipalNameRegex();
 }
 
 public static partial class BCProviderClientLoggingExtensions
