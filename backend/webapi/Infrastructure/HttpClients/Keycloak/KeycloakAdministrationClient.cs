@@ -3,10 +3,8 @@ namespace Pidp.Infrastructure.HttpClients.Keycloak;
 using System.Net;
 
 // TODO Use DomainResult for success/fail?
-public class KeycloakAdministrationClient : BaseClient, IKeycloakAdministrationClient
+public class KeycloakAdministrationClient(HttpClient httpClient, ILogger<KeycloakAdministrationClient> logger) : BaseClient(httpClient, logger), IKeycloakAdministrationClient
 {
-    public KeycloakAdministrationClient(HttpClient httpClient, ILogger<KeycloakAdministrationClient> logger) : base(httpClient, logger) { }
-
     public async Task<bool> AssignAccessRoles(Guid userId, MohKeycloakEnrolment enrolment)
     {
         if (!enrolment.AccessRoles.Any())
@@ -50,7 +48,7 @@ public class KeycloakAdministrationClient : BaseClient, IKeycloakAdministrationC
         var result = await this.PostAsync($"users/{userId}/role-mappings/clients/{role.ContainerId}", new[] { role });
         if (result.IsSuccess)
         {
-            this.Logger.LogClientRolesAssigned(userId, new[] { roleName }, clientId);
+            this.Logger.LogClientRolesAssigned(userId, [roleName], clientId);
         }
 
         return result.IsSuccess;

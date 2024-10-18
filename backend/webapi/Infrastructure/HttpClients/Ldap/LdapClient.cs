@@ -4,10 +4,8 @@ using DomainResults.Common;
 using Microsoft.Extensions.Logging;
 using System.Diagnostics.CodeAnalysis;
 
-public class LdapClient : BaseClient, ILdapClient
+public class LdapClient(HttpClient client, ILogger<LdapClient> logger) : BaseClient(client, logger), ILdapClient
 {
-    public LdapClient(HttpClient client, ILogger<LdapClient> logger) : base(client, logger) { }
-
     public async Task<IDomainResult<HcimAuthorizationStatus>> HcimLoginAsync(string username, string password)
     {
         var response = await this.PostAsync<LdapLoginResponse>("ldap/users", new LdapLoginRequest(username, password));

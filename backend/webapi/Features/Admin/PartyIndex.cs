@@ -19,16 +19,10 @@ public class PartyIndex
         public bool SAEformsAccessRequest { get; set; }
     }
 
-    public class QueryHandler : IQueryHandler<Query, List<Model>>
+    public class QueryHandler(IMapper mapper, PidpDbContext context) : IQueryHandler<Query, List<Model>>
     {
-        private readonly IMapper mapper;
-        private readonly PidpDbContext context;
-
-        public QueryHandler(IMapper mapper, PidpDbContext context)
-        {
-            this.mapper = mapper;
-            this.context = context;
-        }
+        private readonly IMapper mapper = mapper;
+        private readonly PidpDbContext context = context;
 
         public async Task<List<Model>> HandleAsync(Query query)
         {

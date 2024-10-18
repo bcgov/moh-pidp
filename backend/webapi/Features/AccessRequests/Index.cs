@@ -26,11 +26,9 @@ public class Index
         public QueryValidator() => this.RuleFor(x => x.PartyId).GreaterThan(0);
     }
 
-    public class QueryHandler : IQueryHandler<Query, List<Model>>
+    public class QueryHandler(PidpDbContext context) : IQueryHandler<Query, List<Model>>
     {
-        private readonly PidpDbContext context;
-
-        public QueryHandler(PidpDbContext context) => this.context = context;
+        private readonly PidpDbContext context = context;
 
         public async Task<List<Model>> HandleAsync(Query query)
         {
