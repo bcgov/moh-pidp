@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NodaTime;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
@@ -12,9 +13,11 @@ using Pidp.Data;
 namespace Pidp.Data.Migrations
 {
     [DbContext(typeof(PidpDbContext))]
-    partial class PidpDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240906205124_AccountLinkingBusinessEvents")]
+    partial class AccountLinkingBusinessEvents
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -105,46 +108,6 @@ namespace Pidp.Data.Migrations
                     b.HasDiscriminator<string>("Discriminator").HasValue("Address");
 
                     b.UseTphMappingStrategy();
-                });
-
-            modelBuilder.Entity("Pidp.Models.Banner", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Body")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Component")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<Instant>("Created")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Instant>("EndTime")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Header")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<Instant>("Modified")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Instant>("StartTime")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Banner");
                 });
 
             modelBuilder.Entity("Pidp.Models.BusinessEvent", b =>
