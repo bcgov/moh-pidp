@@ -8,6 +8,8 @@ import {
 import { ActivatedRoute, ParamMap, convertToParamMap } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 
+import { of } from 'rxjs';
+
 import { randTextRange } from '@ngneat/falso';
 import { Spy, provideAutoSpy } from 'jest-auto-spies';
 
@@ -19,13 +21,12 @@ import {
   MicrosoftLogLevel,
 } from '@app/core/services/client-logs.service';
 import { DocumentService } from '@app/core/services/document.service';
+import { LoggerService } from '@app/core/services/logger.service';
 
 import { IdentityProvider } from '../../enums/identity-provider.enum';
 import { AuthService } from '../../services/auth.service';
-import { LoginPage, LoginPageRouteData } from './login.page';
 import { LoginResource } from './login-resource.service';
-import { LoggerService } from '@app/core/services/logger.service';
-import { of } from 'rxjs';
+import { LoginPage, LoginPageRouteData } from './login.page';
 
 describe('LoginPage', () => {
   let component: LoginPage;
@@ -84,13 +85,16 @@ describe('LoginPage', () => {
     matDialogSpy = TestBed.inject<any>(MatDialog);
     loginResourceSpy = TestBed.inject<any>(LoginResource);
 
-    loginResourceSpy.findBanners.mockReturnValue(of([{
-      header: "test",
-      body: "test",
-      component: "test",
-      status: "2"
-      }
-    ]));
+    loginResourceSpy.findBanners.mockReturnValue(
+      of([
+        {
+          header: 'test',
+          body: 'test',
+          component: 'test',
+          status: '2',
+        },
+      ]),
+    );
   });
 
   describe('INIT', () => {
