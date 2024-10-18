@@ -5,18 +5,12 @@ using MassTransit;
 using static Pidp.Features.CommonHandlers.UpdateKeycloakAttributesConsumer;
 using Pidp.Infrastructure.HttpClients.Keycloak;
 
-public class UpdateKeycloakAttributesConsumer : IConsumer<UpdateKeycloakAttributes>
+public class UpdateKeycloakAttributesConsumer(IKeycloakAdministrationClient client, ILogger<UpdateKeycloakAttributesConsumer> logger) : IConsumer<UpdateKeycloakAttributes>
 {
-    public class UpdateKeycloakAttributes
+    public class UpdateKeycloakAttributes(Guid userId, Dictionary<string, string[]> attributes)
     {
-        public Guid UserId { get; set; }
-        public Dictionary<string, string[]> Attributes { get; set; }
-
-        public UpdateKeycloakAttributes(Guid userId, Dictionary<string, string[]> attributes)
-        {
-            this.UserId = userId;
-            this.Attributes = attributes;
-        }
+        public Guid UserId { get; set; } = userId;
+        public Dictionary<string, string[]> Attributes { get; set; } = attributes;
 
         /// <summary>
         /// Will only update Attributes; will not update Email or any other Properties modified on the User Representation.
@@ -30,14 +24,8 @@ public class UpdateKeycloakAttributesConsumer : IConsumer<UpdateKeycloakAttribut
         }
     }
 
-    private readonly IKeycloakAdministrationClient client;
-    private readonly ILogger<UpdateKeycloakAttributesConsumer> logger;
-
-    public UpdateKeycloakAttributesConsumer(IKeycloakAdministrationClient client, ILogger<UpdateKeycloakAttributesConsumer> logger)
-    {
-        this.client = client;
-        this.logger = logger;
-    }
+    private readonly IKeycloakAdministrationClient client = client;
+    private readonly ILogger<UpdateKeycloakAttributesConsumer> logger = logger;
 
     public async Task Consume(ConsumeContext<UpdateKeycloakAttributes> context)
     {

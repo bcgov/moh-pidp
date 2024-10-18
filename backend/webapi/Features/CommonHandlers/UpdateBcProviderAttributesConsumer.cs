@@ -5,28 +5,16 @@ using MassTransit;
 using static Pidp.Features.CommonHandlers.UpdateBcProviderAttributesConsumer;
 using Pidp.Infrastructure.HttpClients.BCProvider;
 
-public class UpdateBcProviderAttributesConsumer : IConsumer<UpdateBcProviderAttributes>
+public class UpdateBcProviderAttributesConsumer(IBCProviderClient client, ILogger<UpdateBcProviderAttributesConsumer> logger) : IConsumer<UpdateBcProviderAttributes>
 {
-    public class UpdateBcProviderAttributes
+    public class UpdateBcProviderAttributes(string upn, Dictionary<string, object> attributes)
     {
-        public string Upn { get; set; }
-        public Dictionary<string, object> Attributes { get; set; }
-
-        public UpdateBcProviderAttributes(string upn, Dictionary<string, object> attributes)
-        {
-            this.Upn = upn;
-            this.Attributes = attributes;
-        }
+        public string Upn { get; set; } = upn;
+        public Dictionary<string, object> Attributes { get; set; } = attributes;
     }
 
-    private readonly IBCProviderClient client;
-    private readonly ILogger<UpdateBcProviderAttributesConsumer> logger;
-
-    public UpdateBcProviderAttributesConsumer(IBCProviderClient client, ILogger<UpdateBcProviderAttributesConsumer> logger)
-    {
-        this.client = client;
-        this.logger = logger;
-    }
+    private readonly IBCProviderClient client = client;
+    private readonly ILogger<UpdateBcProviderAttributesConsumer> logger = logger;
 
     public async Task Consume(ConsumeContext<UpdateBcProviderAttributes> context)
     {

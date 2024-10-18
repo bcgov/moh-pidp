@@ -1,8 +1,7 @@
 namespace Pidp.Infrastructure.HttpClients.Mail;
 
-public class ChesClient : BaseClient, IChesClient
+public class ChesClient(HttpClient httpClient, ILogger<ChesClient> logger) : BaseClient(httpClient, logger), IChesClient
 {
-    public ChesClient(HttpClient httpClient, ILogger<ChesClient> logger) : base(httpClient, logger) { }
 
     public async Task<Guid?> SendAsync(Email email)
     {
