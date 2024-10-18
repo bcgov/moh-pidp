@@ -20,4 +20,15 @@ public class ThirdPartyintegrationsController(IPidpAuthorizationService authoriz
                                                                                    [FromRoute] EndorsementData.Query query)
         => await handler.HandleAsync(query)
             .ToActionResultOfT();
+
+    [HttpPost("fhir/message")]
+    [AllowAnonymous]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult> PostFHIRMessage([FromBody] object obj)
+    {
+        Console.WriteLine(obj);
+        return this.Ok();
+    }
 }
