@@ -4,6 +4,7 @@ import {
   NgTemplateOutlet,
   UpperCasePipe,
 } from '@angular/common';
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
@@ -29,11 +30,16 @@ import {
   MicrosoftLogLevel,
 } from '@app/core/services/client-logs.service';
 import { DocumentService } from '@app/core/services/document.service';
+import { LoggerService } from '@app/core/services/logger.service';
 import { AdminRoutes } from '@app/features/admin/admin.routes';
+import { BannerComponent } from '@app/shared/components/banner/banner.component';
 import { NeedHelpComponent } from '@app/shared/components/need-help/need-help.component';
 
 import { IdentityProvider } from '../../enums/identity-provider.enum';
 import { AuthService } from '../../services/auth.service';
+import { BannerFindResponse } from './banner-find.response.model';
+import { LoginResource } from './login-resource.service';
+import { component } from './login.constants';
 
 export interface LoginPageRouteData {
   title: string;
@@ -55,6 +61,7 @@ export interface LoginPageRouteData {
     NgOptimizedImage,
     NgTemplateOutlet,
     UpperCasePipe,
+    BannerComponent,
   ],
 })
 export class LoginPage implements OnInit {
@@ -65,6 +72,7 @@ export class LoginPage implements OnInit {
   public showOtherLoginOptions: boolean;
   public IdentityProvider = IdentityProvider;
   public providerIdentitySupport: string;
+  public banners: Array<{ header: string; body: string; status: string }> = [];
 
   public viewport = PidpViewport.xsmall;
   public isMobileTitleVisible = this.viewport === PidpViewport.xsmall;
@@ -83,6 +91,8 @@ export class LoginPage implements OnInit {
     private dialog: MatDialog,
     private documentService: DocumentService,
     private viewportService: ViewportService,
+    private loginResource: LoginResource,
+    private logger: LoggerService,
   ) {
     const routeSnapshot = this.route.snapshot;
 
@@ -111,6 +121,18 @@ export class LoginPage implements OnInit {
         })
         .subscribe();
     }
+
+    this.loginResource.findBanners(component).subscribe(
+      (data: BannerFindResponse[]) => {
+        this.banners = data;
+      },
+      (err: HttpErrorResponse) => {
+        this.logger.error(
+          '[LoginResource::findBanners] error has occurred: ',
+          err,
+        );
+      },
+    );
   }
 
   private onViewportChange(viewport: PidpViewport): void {
