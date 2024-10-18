@@ -22,6 +22,7 @@ export class ImmsBCEformsPortalSection implements IPortalSection {
   public description: string;
   public faSyringe = faSyringe;
   public faUserCheck = faUserCheck;
+  public keyWords: string[];
 
   public constructor(
     private profileStatus: ProfileStatus,
@@ -30,6 +31,7 @@ export class ImmsBCEformsPortalSection implements IPortalSection {
     this.key = 'immsBCEforms';
     this.heading = 'Immunization Entry eForm';
     this.description = `Enrol here for access to the Immunization Entry eForm application.`;
+    this.keyWords = profileStatus.status.immsBCEforms.keyWords || [];
   }
 
   public get hint(): string {
