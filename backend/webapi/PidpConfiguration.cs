@@ -18,6 +18,7 @@ public class PidpConfiguration
     public LdapClientConfiguration LdapClient { get; set; } = new();
     public MailServerConfiguration MailServer { get; set; } = new();
     public PlrClientConfiguration PlrClient { get; set; } = new();
+    public FhirPlrClientConfiguration FhirPlrClient { get; set; } = new();
     public RabbitMQConfiguration RabbitMQ { get; set; } = new();
 
     // ------- Configuration Objects -------
@@ -74,6 +75,11 @@ public class PidpConfiguration
     }
 
     public class PlrClientConfiguration
+    {
+        public string Url { get; set; } = string.Empty;
+    }
+
+    public class FhirPlrClientConfiguration
     {
         public string Url { get; set; } = string.Empty;
     }

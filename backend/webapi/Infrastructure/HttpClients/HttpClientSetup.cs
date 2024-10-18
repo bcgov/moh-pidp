@@ -7,6 +7,7 @@ using Microsoft.Graph;
 using Pidp.Extensions;
 using Pidp.Infrastructure.HttpClients.AddressAutocomplete;
 using Pidp.Infrastructure.HttpClients.BCProvider;
+using Pidp.Infrastructure.HttpClients.FhirPlr;
 using Pidp.Infrastructure.HttpClients.Keycloak;
 using Pidp.Infrastructure.HttpClients.Ldap;
 using Pidp.Infrastructure.HttpClients.Mail;
@@ -56,6 +57,7 @@ public static class HttpClientSetup
             });
 
         services.AddHttpClientWithBaseAddress<IPlrClient, PlrClient>(config.PlrClient.Url);
+        services.AddHttpClientWithBaseAddress<IFhirPlrClient, FhirPlrClient>(config.FhirPlrClient.Url);
 
         services.AddTransient<ISmtpEmailClient, SmtpEmailClient>();
 
