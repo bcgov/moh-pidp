@@ -4,12 +4,14 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { faFileLines } from '@fortawesome/free-solid-svg-icons';
-import { ToastService } from '@app/core/services/toast.service';
 
 import {
   InjectViewportCssClassDirective,
   TextButtonDirective,
 } from '@bcgov/shared/ui';
+
+import { ToastService } from '@app/core/services/toast.service';
+import { Constants } from '@app/shared/constants';
 
 @Component({
   selector: 'app-access-request-card',
@@ -38,20 +40,17 @@ export class AccessRequestCardComponent {
   }
 
   public onAction(): void {
-    if (
-      this.actionDisabled &&
-      this.heading === 'Driver Fitness Practitioner Portal'
-    ) {
+    if (this.actionDisabled && this.heading === Constants.driverFitnessTitle) {
       this.toastService.openInfoToast(
-        'Insufficient college licensing to request enrolment.',
-        'close',
-        { duration: 100000, panelClass: 'close-icon' },
+        Constants.insufficientCollegeLicensing,
+        Constants.closeText,
+        { duration: Constants.dialogDuration, panelClass: 'close-icon' },
       );
     } else if (this.actionDisabled) {
       this.toastService.openInfoToast(
-        'Incorrect credential type being used to request enrolment.',
-        'close',
-        { duration: 100000, panelClass: 'close-icon' },
+        Constants.incorrectCredentialType,
+        Constants.closeText,
+        { duration: Constants.dialogDuration, panelClass: 'close-icon' },
       );
     } else {
       this.toastService.closeToast();
