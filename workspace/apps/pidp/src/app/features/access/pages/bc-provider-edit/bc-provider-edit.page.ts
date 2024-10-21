@@ -99,10 +99,6 @@ export class BcProviderEditPage
     this.formState = new BcProviderEditFormState(fb);
   }
 
-  public onBack(): void {
-    this.navigationService.navigateToRoot();
-  }
-
   public onSuccessDialogClose(): void {
     this.dialog.closeAll();
     this.navigationService.navigateToRoot();

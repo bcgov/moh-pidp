@@ -74,16 +74,8 @@
       </ui-page-section>
     </ng-template>
 
-    <ui-page-footer [mode]="completed ? 'reverse' : 'normal'">
-      <button
-        mat-stroked-button
-        uiPageFooterAction
-        type="button"
-        color="primary"
-        (click)="onBack()">
-        {{ completed ? 'Back Home' : 'Cancel Back Home' }}
-      </button>
 
+    <ui-page-footer [mode]="'reverse'">
       <button
         *ngIf="!completed"
         mat-flat-button

@@ -30,7 +30,7 @@
       >
     </p>
 
-    <div class="button-container">
+    <ui-page-footer [mode]="completed ? 'reverse' : 'normal'">
       <button
         class="back-button"
         mat-stroked-button
@@ -38,7 +38,7 @@
         color="primary"
         type="button"
         (click)="onBack()">
-        Back
+        Home
       </button>
       <button
         *ngIf="!completed"
@@ -49,6 +49,6 @@
         (click)="onAcceptAgreement()">
         Accept Agreement
       </button>
-    </div>
+    </ui-page-footer>
   </ui-page>
 </div>

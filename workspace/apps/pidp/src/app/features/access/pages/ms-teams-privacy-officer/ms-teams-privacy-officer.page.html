@@ -91,14 +91,6 @@
         </ng-container>
       </ng-template>
       <section class="actions">
-        <button
-          mat-stroked-button
-          uiPageFooterAction
-          type="button"
-          color="primary"
-          (click)="onBack()">
-          {{ completed ? 'Home' : 'Back' }}
-        </button>
 
         <button
           *ngIf="!completed && currentPage !== submissionPage"

@@ -95,10 +95,6 @@ export class DriverFitnessPage implements OnInit {
     }
   }
 
-  public onBack(): void {
-    this.navigateToRoot();
-  }
-
   public onRequestAccess(): void {
     this.loadingOverlayService.open(LOADING_OVERLAY_DEFAULT_MESSAGE);
     this.resource.requestAccess(this.partyService.partyId).pipe(

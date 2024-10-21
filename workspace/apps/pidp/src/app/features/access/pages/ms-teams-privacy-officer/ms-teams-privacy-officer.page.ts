@@ -107,15 +107,6 @@ export class MsTeamsPrivacyOfficerPage
     );
   }
 
-  public onBack(): void {
-    if (this.currentPage === 0 || this.completed) {
-      this.navigateToRoot();
-    } else {
-      this.utilsService.scrollTopWithDelay();
-      this.currentPage--;
-    }
-  }
-
   public onNext(): void {
     if (this.currentPage === 0 && !this.validateFirstPage()) {
       return;

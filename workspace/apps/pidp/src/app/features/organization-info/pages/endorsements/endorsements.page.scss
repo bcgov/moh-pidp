@@ -99,9 +99,6 @@ p {
         font-weight: 700;
         letter-spacing: 0.0625rem;
       }
-      & button:not(:first-of-type) {
-        margin-left: var(--gap);
-      }
     }
   }
 }
