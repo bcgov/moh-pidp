@@ -22,7 +22,7 @@
 </ui-layout-header-footer>
 
 <ng-template #welcomesection>
-  <div *ngIf="banners.length === 0" class="welcome-container">
+  <div class="welcome-container">
     <div class="title-content-container">
       <h1 class="title">
         <span class="title-text">
@@ -38,7 +38,7 @@
     </div>
     <ng-container *ngTemplateOutlet="login"></ng-container>
   </div>
-  <div *ngIf="banners.length === 0" class="links">
+  <div class="links">
     <app-need-help
       customClass="need-help-large"
       [showIcon]="true"></app-need-help>
