@@ -8,7 +8,7 @@
       (click)="onMiniMenuButtonClick()">
       <mat-icon>menu</mat-icon>
       <span
-        [ngClass]="{'menu-notification-dot': alerts.includes(AlertCode.TRANSIENT_ERROR) || alerts.includes(AlertCode.PLR_BAD_STANDING)}"></span>
+        [ngClass]="{'menu-notification-dot': alerts?.includes(AlertCode.TRANSIENT_ERROR) || alerts?.includes(AlertCode.PLR_BAD_STANDING)}"></span>
     </button>
   </div>
   <div *ngIf="isTopMenuVisible" uiPidpInjectViewportCss>
@@ -109,7 +109,7 @@
             >College License</a
           >
           <span
-            [ngClass]="{'menu-list-notification-dot': alerts.includes(AlertCode.TRANSIENT_ERROR) || alerts.includes(AlertCode.PLR_BAD_STANDING)}"></span>
+            [ngClass]="{'menu-list-notification-dot': alerts?.includes(AlertCode.TRANSIENT_ERROR) || alerts?.includes(AlertCode.PLR_BAD_STANDING)}"></span>
           <a
             class="sidenav-menu-item"
             (click)="navigateTo(ProfileRoutes.routePath(ProfileRoutes.USER_ACCESS_AGREEMENT))"

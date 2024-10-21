@@ -9,10 +9,8 @@ using Pidp.Infrastructure.Services;
 
 [Route("api/[controller]")]
 [Authorize(Policy = Policies.AnyPartyIdentityProvider)]
-public class AddressAutocompleteController : PidpControllerBase
+public class AddressAutocompleteController(IPidpAuthorizationService authorizationService) : PidpControllerBase(authorizationService)
 {
-    public AddressAutocompleteController(IPidpAuthorizationService authorizationService) : base(authorizationService) { }
-
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]

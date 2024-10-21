@@ -1,0 +1,21 @@
+app_name: patroni
+license_plate: f088b1
+environment: dev
+cluster: gold
+replicas: 1
+image_registry: artifacts.developer.gov.bc.ca/bcgov-docker-local/patroni-postgres
+stateful_requests_cpu: 50m
+stateful_requests_memory: 50Mi
+stateful_limit_cpu: 200m
+stateful_limit_memory: 250Mi
+stateful_initrequests_cpu: 50m
+stateful_initrequests_memory: 50Mi
+stateful_initlimit_cpu: 200m
+stateful_initlimit_memory: 250Mi
+volume_size: 5Gi
+replication_password: ""
+root_password: ""
+app_db_name: "pidp_dev"
+app_db_username: "pidp"
+app_db_password: ""
+loglevel: WARNING # CRITICAL, ERROR, WARNING, INFO, DEBUG, NOTSET: use WARNING

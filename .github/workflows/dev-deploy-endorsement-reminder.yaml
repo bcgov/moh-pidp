@@ -13,8 +13,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-
-  helm-deployment-endorsement-reminder:
+  helm-deployment-endorsement-reminder-silver:
     runs-on: 'ubuntu-latest'
     steps:
       - uses: actions/checkout@v4
@@ -31,4 +30,23 @@ jobs:
           helm list --namespace d8a8f9-dev
 
           echo installing helm chart...
-          helm upgrade --wait --namespace d8a8f9-dev --values infra/endorsement_reminder/values-dev.yaml endorsement-reminder infra/endorsement_reminder
+          helm upgrade --wait --namespace d8a8f9-dev --values infra/endorsement_reminder/values.yaml endorsement-reminder infra/endorsement_reminder
+  
+  helm-deployment-endorsement-reminder-gold:
+    runs-on: 'ubuntu-latest'
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Authenticate and set context
+        uses: redhat-actions/oc-login@v1.2
+        with:
+          openshift_server_url: ${{secrets.GOLD_OPENSHIFT_CLUSTER_URL}}
+          openshift_token: ${{secrets.GOLD_PIPELINE_SERVICE_ACCOUNT_TOKEN}}
+
+      - name: Helm Deploy Upgrade
+        run: |
+          echo current installed helm releases
+          helm list --namespace f088b1-dev
+
+          echo installing helm chart...
+          helm upgrade --wait --namespace f088b1-dev --values infra/endorsement_reminder/values.yaml --set global.image.registry=image-registry.openshift-image-registry.svc:5000/f088b1-tools endorsement-reminder infra/endorsement_reminder

@@ -9,12 +9,20 @@ from kubernetes import client, config
 from flask import Flask
 from flask_wtf import CSRFProtect
 from os import environ
-import requests
 import logging
+import socket
 
 app = Flask(__name__)
 csrf = CSRFProtect()
 csrf.init_app(app) # Compliant
+
+def get_ip_from_host(host):
+    try:
+        ip_address = socket.gethostbyname(host)
+        return ip_address
+    except socket.error as err:
+        print(f"Error: {err}")   
+
 
 def check_services(output_type):
     logging.basicConfig(format='%(message)s', level=logging.INFO)
@@ -22,6 +30,8 @@ def check_services(output_type):
     namespace = environ.get('namespace')
     cluster = environ.get('cluster')
     notouch = environ.get('notouch')
+    gslb_host = environ.get('gslb_host')
+    who_is_active = "GOLD"  
     data = {}
 
     # this is the magic to connect to the OCP cluster for running kubernetes commands
@@ -62,16 +72,26 @@ def check_services(output_type):
                 print(f"Error retrieving endpoints: {e}")
                 return 'FAIL - Error retrieving endpoint: {e}', 500
 
+        
+        who_is_active = get_ip_from_host(gslb_host)
+        if who_is_active:
+            logging.info(f'who_am_i: {cluster.upper()}; who_is_active: {who_is_active.upper()}')                 
+            if cluster.upper() == "GOLD" and who_is_active == "142.34.64.4":
+                success = False
+        else:
+            success = False
+
         if success:
-            return_color = "green"
+            return_color = "green"                        
         else:
             return_code="500"
             return_color = "red"
 
         # this is to override the actual "success" results.
         # debugging was added to force a 200 when true (500 when false) to allow for easier debugging of the networking
-        if  notouch == "200":
+        if notouch == "200":
             return_color = "green"
+            return_code = "200"
         elif notouch == "500":
             return_code = "500"
             return_color = "red"

@@ -19,7 +19,7 @@ using Pidp.Models.Lookups;
 
 public class MSTeamsPrivacyOfficer
 {
-    public static IdentifierType[] AllowedIdentifierTypes => new[] { IdentifierType.PhysiciansAndSurgeons, IdentifierType.Nurse };
+    public static IdentifierType[] AllowedIdentifierTypes => [IdentifierType.PhysiciansAndSurgeons, IdentifierType.Nurse];
 
     public class Command : ICommand<IDomainResult>
     {
@@ -55,30 +55,20 @@ public class MSTeamsPrivacyOfficer
         }
     }
 
-    public class CommandHandler : ICommandHandler<Command, IDomainResult>
+    public class CommandHandler(
+        IClock clock,
+        IEmailService emailService,
+        ILogger<CommandHandler> logger,
+        IMapper mapper,
+        IPlrClient plrClient,
+        PidpDbContext context) : ICommandHandler<Command, IDomainResult>
     {
-        private readonly IClock clock;
-        private readonly IEmailService emailService;
-        private readonly ILogger<CommandHandler> logger;
-        private readonly IMapper mapper;
-        private readonly IPlrClient plrClient;
-        private readonly PidpDbContext context;
-
-        public CommandHandler(
-            IClock clock,
-            IEmailService emailService,
-            ILogger<CommandHandler> logger,
-            IMapper mapper,
-            IPlrClient plrClient,
-            PidpDbContext context)
-        {
-            this.clock = clock;
-            this.emailService = emailService;
-            this.logger = logger;
-            this.mapper = mapper;
-            this.plrClient = plrClient;
-            this.context = context;
-        }
+        private readonly IClock clock = clock;
+        private readonly IEmailService emailService = emailService;
+        private readonly ILogger<CommandHandler> logger = logger;
+        private readonly IMapper mapper = mapper;
+        private readonly IPlrClient plrClient = plrClient;
+        private readonly PidpDbContext context = context;
 
         public async Task<IDomainResult> HandleAsync(Command command)
         {
@@ -133,14 +123,14 @@ public class MSTeamsPrivacyOfficer
                     ProviderRoleType = record.ProviderRoleType,
                     StatusCode = record.StatusCode,
                     StatusReasonCode = record.StatusReasonCode
-                }).ToList() ?? new()
+                }).ToList() ?? []
             );
 
             var email = new Email(
                 from: EmailService.PidpEmail,
                 to: "enrolment_securemessaging@fraserhealth.ca",
                 subject: "New MS Teams for Clinical Use Enrolment",
-                body: $"<pre>{JsonSerializer.Serialize(model, new JsonSerializerOptions { WriteIndented = true })}</pre>"
+                body: $"<pre>{model.Serialize()}</pre>"
             );
             await this.emailService.SendAsync(email);
         }
@@ -166,18 +156,24 @@ public class MSTeamsPrivacyOfficer
             public string? Cpn { get; set; }
         }
 
-        private class EnrolmentEmailModel
+        private sealed class EnrolmentEmailModel(
+            EnrolmentDto enrolmentDto,
+            Command command,
+            Instant enrolmentDate,
+            List<EnrolmentEmailModel.PlrRecord> plrRecords)
         {
-            public string EnrolmentDate { get; set; }
-            public string PrivacyOfficerName { get; set; }
-            public string? PrivacyOfficerBirthdate { get; set; }
-            public string? PrivacyOfficerEmail { get; set; }
-            public string? PrivacyOfficerPhone { get; set; }
-            public List<PlrRecord> PrivacyOfficerPlrRecords { get; set; }
-            public string ClinicName { get; set; }
-            public Command.Address ClinicAddress { get; set; }
+            public static readonly JsonSerializerOptions SerializationOptions = new() { WriteIndented = true };
 
-            public class PlrRecord
+            public string EnrolmentDate { get; set; } = enrolmentDate.InZone(DateTimeZoneProviders.Tzdb.GetZoneOrNull("America/Vancouver")!).Date.ToString();
+            public string PrivacyOfficerName { get; set; } = enrolmentDto.FullName;
+            public string? PrivacyOfficerBirthdate { get; set; } = enrolmentDto.Birthdate?.ToString();
+            public string? PrivacyOfficerEmail { get; set; } = enrolmentDto.Email;
+            public string? PrivacyOfficerPhone { get; set; } = enrolmentDto.Phone;
+            public List<PlrRecord> PrivacyOfficerPlrRecords { get; set; } = plrRecords;
+            public string ClinicName { get; set; } = command.ClinicName;
+            public Command.Address ClinicAddress { get; set; } = command.ClinicAddress;
+
+            public sealed class PlrRecord
             {
                 public string? CollegeId { get; set; }
                 public string? IdentifierType { get; set; }
@@ -186,17 +182,7 @@ public class MSTeamsPrivacyOfficer
                 public string? StatusReasonCode { get; set; }
             }
 
-            public EnrolmentEmailModel(EnrolmentDto enrolmentDto, Command command, Instant enrolmentDate, List<PlrRecord> plrRecords)
-            {
-                this.EnrolmentDate = enrolmentDate.InZone(DateTimeZoneProviders.Tzdb.GetZoneOrNull("America/Vancouver")!).Date.ToString();
-                this.PrivacyOfficerName = enrolmentDto.FullName;
-                this.PrivacyOfficerBirthdate = enrolmentDto.Birthdate?.ToString();
-                this.PrivacyOfficerEmail = enrolmentDto.Email;
-                this.PrivacyOfficerPhone = enrolmentDto.Phone;
-                this.PrivacyOfficerPlrRecords = plrRecords;
-                this.ClinicName = command.ClinicName;
-                this.ClinicAddress = command.ClinicAddress;
-            }
+            public string Serialize() => JsonSerializer.Serialize(this, SerializationOptions);
         }
     }
 }

@@ -17,7 +17,12 @@ rabbitmqsecret.yaml file was created to add a user other than rabbitmq and guest
 ### Install helm chart
 
 
-To install rabbitmq chart from remote repository , use the regular helm install/upgrade command and specify the chart using url (bitnami website or docker hub) and obsolete the downloaded version (e.g. 11.10.0). You will need to supply the correct values file for your environment (using local path).
+To install rabbitmq chart from remote repository, use the regular helm install/upgrade command and specify the chart using url (bitnami website or docker hub) and obsolete the downloaded version (e.g. 11.10.0). You will need to supply the correct values file for your environment (using local path).
+
+
+`helm install -f ./values.yaml rabbitmq  oci://registry-1.docker.io/bitnamicharts/rabbitmq`
+
+or install from local directory
 
 `helm install -f ./values.yaml rabbitmq ./rabbitmq-13.0.2.tgz`
 
