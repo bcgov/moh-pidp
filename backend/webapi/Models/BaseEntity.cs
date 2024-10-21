@@ -8,7 +8,7 @@ using Pidp.Models.DomainEvents;
 public abstract class BaseEntity
 {
     [NotMapped]
-    public List<IDomainEvent> DomainEvents { get; set; } = new();
+    public List<IDomainEvent> DomainEvents { get; set; } = [];
 }
 
 public abstract class BaseAuditable : BaseEntity

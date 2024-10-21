@@ -6,22 +6,16 @@ using NodaTime;
 
 using Pidp.Models;
 
-public class PidpDbContext : DbContext
+public class PidpDbContext(
+    DbContextOptions<PidpDbContext> options,
+    IClock clock,
+    IMediator mediator) : DbContext(options)
 {
-    private readonly IClock clock;
-    private readonly IMediator mediator;
-
-    public PidpDbContext(
-        DbContextOptions<PidpDbContext> options,
-        IClock clock,
-        IMediator mediator)
-        : base(options)
-    {
-        this.clock = clock;
-        this.mediator = mediator;
-    }
+    private readonly IClock clock = clock;
+    private readonly IMediator mediator = mediator;
 
     public DbSet<AccessRequest> AccessRequests { get; set; } = default!;
+    public DbSet<Banner> Banners { get; set; } = default!;
     public DbSet<BusinessEvent> BusinessEvents { get; set; } = default!;
     public DbSet<ClientLog> ClientLogs { get; set; } = default!;
     public DbSet<Credential> Credentials { get; set; } = default!;
@@ -62,7 +56,7 @@ public class PidpDbContext : DbContext
     {
         var eventEntities = this.ChangeTracker.Entries<BaseEntity>()
             .Select(x => x.Entity)
-            .Where(entity => entity.DomainEvents.Any());
+            .Where(entity => entity.DomainEvents.Count != 0);
 
         foreach (var entity in eventEntities)
         {
