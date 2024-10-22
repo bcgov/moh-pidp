@@ -36,27 +36,18 @@ public class MSTeamsClinicMember
         }
     }
 
-    public class CommandHandler : ICommandHandler<Command, IDomainResult>
+    public class CommandHandler(
+        IClock clock,
+        IEmailService emailService,
+        ILogger<CommandHandler> logger,
+        IMapper mapper,
+        PidpDbContext context) : ICommandHandler<Command, IDomainResult>
     {
-        private readonly IClock clock;
-        private readonly IEmailService emailService;
-        private readonly ILogger<CommandHandler> logger;
-        private readonly IMapper mapper;
-        private readonly PidpDbContext context;
-
-        public CommandHandler(
-            IClock clock,
-            IEmailService emailService,
-            ILogger<CommandHandler> logger,
-            IMapper mapper,
-            PidpDbContext context)
-        {
-            this.clock = clock;
-            this.emailService = emailService;
-            this.logger = logger;
-            this.mapper = mapper;
-            this.context = context;
-        }
+        private readonly IClock clock = clock;
+        private readonly IEmailService emailService = emailService;
+        private readonly ILogger<CommandHandler> logger = logger;
+        private readonly IMapper mapper = mapper;
+        private readonly PidpDbContext context = context;
 
         public async Task<IDomainResult> HandleAsync(Command command)
         {
@@ -103,7 +94,7 @@ public class MSTeamsClinicMember
                 from: EmailService.PidpEmail,
                 to: "enrolment_securemessaging@fraserhealth.ca",
                 subject: $"Add User to MS Teams (Privacy Officer: {clinic.PrivacyOfficerName})",
-                body: $"<pre>{JsonSerializer.Serialize(body, new JsonSerializerOptions { WriteIndented = true })}</pre>"
+                body: $"<pre>{body.Serialize()}</pre>"
             );
 
             await this.emailService.SendAsync(email);
@@ -146,8 +137,10 @@ public class MSTeamsClinicMember
             }
         }
 
-        private class EnrolmentEmailModel
+        private sealed class EnrolmentEmailModel
         {
+            private static readonly JsonSerializerOptions SerializationOptions = new() { WriteIndented = true };
+
             public string EnrolmentDate { get; set; }
             public string MemberName { get; set; }
             public string? MemberBirthdate { get; set; }
@@ -157,7 +150,7 @@ public class MSTeamsClinicMember
             public string ClinicName { get; set; }
             public Address ClinicAddress { get; set; }
 
-            public class Address
+            public sealed class Address
             {
                 public string CountryCode { get; set; } = string.Empty;
                 public string ProvinceCode { get; set; } = string.Empty;
@@ -184,6 +177,8 @@ public class MSTeamsClinicMember
                     Postal = clinic.Address.Postal
                 };
             }
+
+            public string Serialize() => JsonSerializer.Serialize(this, SerializationOptions);
         }
     }
 }
