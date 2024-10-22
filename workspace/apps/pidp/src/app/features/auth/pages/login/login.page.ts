@@ -4,7 +4,7 @@ import {
   NgTemplateOutlet,
   UpperCasePipe,
 } from '@angular/common';
-import { Component, Inject, OnInit } from '@angular/core';
+import { AfterViewInit, Component, Inject, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
@@ -29,6 +29,7 @@ import {
   MicrosoftLogLevel,
 } from '@app/core/services/client-logs.service';
 import { DocumentService } from '@app/core/services/document.service';
+import { SnowplowService } from '@app/core/services/snowplow.service';
 import { AdminRoutes } from '@app/features/admin/admin.routes';
 import { NeedHelpComponent } from '@app/shared/components/need-help/need-help.component';
 
@@ -57,7 +58,7 @@ export interface LoginPageRouteData {
     UpperCasePipe,
   ],
 })
-export class LoginPage implements OnInit {
+export class LoginPage implements OnInit, AfterViewInit {
   public viewportOptions = PidpViewport;
 
   public bcscMobileSetupUrl: string;
@@ -83,6 +84,7 @@ export class LoginPage implements OnInit {
     private dialog: MatDialog,
     private documentService: DocumentService,
     private viewportService: ViewportService,
+    private snowplowService: SnowplowService,
   ) {
     const routeSnapshot = this.route.snapshot;
 
@@ -111,6 +113,11 @@ export class LoginPage implements OnInit {
         })
         .subscribe();
     }
+  }
+
+  public ngAfterViewInit(): void {
+    // refresh link urls now that we set the links
+    this.snowplowService.refreshLinkClickTracking();
   }
 
   private onViewportChange(viewport: PidpViewport): void {
