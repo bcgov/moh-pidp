@@ -5,7 +5,7 @@ using Pidp.Infrastructure.HttpClients.Plr;
 public class NewUserRepresentation
 {
     public string? Cpn { get; set; }
-    public IEnumerable<string> EndorserData { get; set; } = Enumerable.Empty<string>();
+    public IEnumerable<string> EndorserData { get; set; } = [];
     public string FirstName { get; set; } = string.Empty;
     public string LastName { get; set; } = string.Empty;
     public string Hpdid { get; set; } = string.Empty;
@@ -21,19 +21,17 @@ public class NewUserRepresentation
 /// <summary>
 /// An AD Directory Extension to store additional attributes
 /// </summary>
-public class BCProviderAttributes
+/// <remarks>
+/// Always use to create or update attributes in AAD, as clientId contains dashes
+/// that AAD does not expect
+/// </remarks>
+/// <param name="clientId"></param>
+public class BCProviderAttributes(string clientId)
 {
-    public static IdentifierType[] EndorserDataEligibleIdentifierTypes => new[] { IdentifierType.PhysiciansAndSurgeons, IdentifierType.Nurse, IdentifierType.Midwife };
+    public static IdentifierType[] EndorserDataEligibleIdentifierTypes => [IdentifierType.PhysiciansAndSurgeons, IdentifierType.Nurse, IdentifierType.Midwife];
 
-    private readonly string extensionNamePrefix;
-    private readonly Dictionary<string, object> attributes = new();
-
-    /// <summary>
-    /// Always use to create or update attributes in AAD, as clientId contains dashes
-    /// that AAD does not expect
-    /// </summary>
-    /// <param name="clientId"></param>
-    public BCProviderAttributes(string clientId) => this.extensionNamePrefix = $"extension_{clientId.Replace("-", "")}_";
+    private readonly string extensionNamePrefix = $"extension_{clientId.Replace("-", "")}_";
+    private readonly Dictionary<string, object> attributes = [];
 
     public static BCProviderAttributes FromNewUser(string clientId, NewUserRepresentation representation)
     {

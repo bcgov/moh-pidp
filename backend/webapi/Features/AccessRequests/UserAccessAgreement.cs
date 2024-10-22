@@ -23,27 +23,18 @@ public class UserAccessAgreement
         public CommandValidator() => this.RuleFor(x => x.PartyId).GreaterThan(0);
     }
 
-    public class CommandHandler : ICommandHandler<Command, IDomainResult>
+    public class CommandHandler(
+        IBCProviderClient client,
+        IClock clock,
+        ILogger<CommandHandler> logger,
+        PidpDbContext context,
+        PidpConfiguration config) : ICommandHandler<Command, IDomainResult>
     {
-        private readonly string bcProviderClientId;
-        private readonly IBCProviderClient client;
-        private readonly IClock clock;
-        private readonly ILogger<CommandHandler> logger;
-        private readonly PidpDbContext context;
-
-        public CommandHandler(
-            IBCProviderClient client,
-            IClock clock,
-            ILogger<CommandHandler> logger,
-            PidpDbContext context,
-            PidpConfiguration config)
-        {
-            this.bcProviderClientId = config.BCProviderClient.ClientId;
-            this.client = client;
-            this.clock = clock;
-            this.logger = logger;
-            this.context = context;
-        }
+        private readonly IBCProviderClient client = client;
+        private readonly IClock clock = clock;
+        private readonly ILogger<CommandHandler> logger = logger;
+        private readonly PidpDbContext context = context;
+        private readonly string bcProviderClientId = config.BCProviderClient.ClientId;
 
         public async Task<IDomainResult> HandleAsync(Command command)
         {
