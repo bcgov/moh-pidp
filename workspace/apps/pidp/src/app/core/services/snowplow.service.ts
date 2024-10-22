@@ -37,10 +37,17 @@ export class SnowplowService {
     }
   }
 
-  /** Add Snowplow click listeners to all links which do not already have them */
+  // Add Snowplow click listeners to all links which do not already have them
   public refreshLinkClickTracking(): void {
     if (this._window.snowplow) {
       this._window.snowplow('refreshLinkClickTracking');
+    }
+  }
+
+  // Add Snowplow click listeners to a custom click event
+  public trackLinkClick(url: string): void {
+    if (this._window.snowplow) {
+      this._window.snowplow('trackLinkClick', url);
     }
   }
 }
