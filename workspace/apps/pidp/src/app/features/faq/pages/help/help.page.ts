@@ -89,19 +89,19 @@ export class HelpPage implements OnInit, AfterViewInit {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  public ngOnInit(): void {
-    this.utilsService.scrollTop();
-  }
-
-  public ngAfterViewInit(): void {
-    this.snowplowService.refreshLinkClickTracking();
-  }
-
   public onClickSendEmail(address: string): void {
     window.location.assign(address);
   }
 
   public navigateToMfaPage(): void {
     this.router.navigateByUrl(FaqRoutes.routePath(FaqRoutes.MFA_SETUP));
+  }
+
+  public ngOnInit(): void {
+    this.utilsService.scrollTop();
+  }
+
+  public ngAfterViewInit(): void {
+    this.snowplowService.refreshLinkClickTracking();
   }
 }
