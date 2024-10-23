@@ -49,7 +49,9 @@ h2 {
     width: 2.5rem;
     height: 2.5rem;
     border-radius: 50%;
-    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     cursor: pointer;
   }
 

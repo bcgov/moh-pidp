@@ -11,17 +11,15 @@ public class Index
 
     public class Model
     {
-        public List<AccessType> AccessTypes { get; set; } = new();
-        public List<College> Colleges { get; set; } = new();
-        public List<Country> Countries { get; set; } = new();
-        public List<Province> Provinces { get; set; } = new();
+        public List<AccessType> AccessTypes { get; set; } = [];
+        public List<College> Colleges { get; set; } = [];
+        public List<Country> Countries { get; set; } = [];
+        public List<Province> Provinces { get; set; } = [];
     }
 
-    public class QueryHandler : IQueryHandler<Query, Model>
+    public class QueryHandler(PidpDbContext context) : IQueryHandler<Query, Model>
     {
-        private readonly PidpDbContext context;
-
-        public QueryHandler(PidpDbContext context) => this.context = context;
+        private readonly PidpDbContext context = context;
 
         public async Task<Model> HandleAsync(Query query)
         {
