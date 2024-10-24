@@ -11,6 +11,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ActivatedRoute, Router } from '@angular/router';
 
+
 import {
   EMPTY,
   Observable,
@@ -52,6 +53,9 @@ import { linkedAccountCardText } from './account-linking.constants';
 import { Credential } from './account-linking.model';
 import { BreadcrumbComponent } from '@app/shared/components/breadcrumb/breadcrumb.component';
 import { AccessRoutes } from '@app/features/access/access.routes';
+import { CookieService } from 'ngx-cookie-service';
+import { User } from '@app/features/auth/models/user.model';
+import { CryptoService } from '@app/core/services/crypto.service';
 
 @Component({
   selector: 'app-account-linking',
@@ -79,8 +83,10 @@ export class AccountLinkingPage implements OnInit, OnDestroy {
   public IdentityProvider = IdentityProvider;
   public credentials$: Observable<Credential[]>;
   public credentials: Credential[] = [];
+  public user$: Observable<User>;
   public linkedAccountsIdp: IdentityProvider[] = [];
   public showInstructions: boolean = false;
+  public userName: string;
   private unsubscribe$ = new Subject<void>();
 
   public constructor(
@@ -97,14 +103,17 @@ export class AccountLinkingPage implements OnInit, OnDestroy {
     private dialog: MatDialog,
     private loadingOverlayService: LoadingOverlayService,
     private navigationService: NavigationService,
+    private cookieService: CookieService,
+    private cryptoService: CryptoService,
   ) {
     this.title = this.route.snapshot.data.title;
     const partyId = this.partyService.partyId;
-
     const routeData = this.route.snapshot.data;
+    this.user$ = this.authorizedUserService.user$;
     this.completed = routeData.accountLinking === StatusCode.COMPLETED;
     this.identityProvider$ = this.authorizedUserService.identityProvider$;
     this.credentials$ = this.resource.getCredentials(partyId);
+    this.userName = '';
   }
 
   public toggleInstructions(): void {
@@ -174,6 +183,7 @@ export class AccountLinkingPage implements OnInit, OnDestroy {
     this.utilsService.scrollTop();
 
     this.handleLinkedAccounts();
+    this.setUserCookieInformation();
   }
 
   public ngOnDestroy(): void {
@@ -188,6 +198,18 @@ export class AccountLinkingPage implements OnInit, OnDestroy {
         this.credentials = credentials;
       });
   }
+
+  private setUserCookieInformation(): void {
+  if (this.user$ !== undefined) {
+    this.user$.pipe().subscribe((userFound) => {
+      if (userFound) {
+        this.userName = userFound.firstName + ' ' + userFound.lastName;
+        this.cookieService.set('UserName', this.cryptoService.encrypt(this.userName));
+        this.cookieService.set('IdentityProvider', this.cryptoService.encrypt(userFound.identityProvider));
+      }
+    });
+  }
+}
 
   private linkRequest(idpHint: IdentityProvider): Observable<void | null> {
     this.loadingOverlayService.open(LOADING_OVERLAY_DEFAULT_MESSAGE);

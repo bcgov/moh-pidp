@@ -16,6 +16,7 @@ import { PartyService } from '@app/core/party/party.service';
 import { CommonDataService } from '@app/core/services/common-data.service';
 import { AccessRoutes } from '@app/features/access/access.routes';
 import { AuthService } from '@app/features/auth/services/auth.service';
+import { CookieService } from 'ngx-cookie-service';
 import { AlertCode } from '@app/features/portal/enums/alert-code.enum';
 import { PortalResource } from '@app/features/portal/portal-resource.service';
 import { ProfileRoutes } from '@app/features/profile/profile.routes';
@@ -44,6 +45,7 @@ export class PortalDashboardComponent implements IDashboard, OnInit {
   public constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
     private authService: AuthService,
+    private cookieService: CookieService,
     private partyService: PartyService,
     private resource: PortalResource,
     private dataService: CommonDataService,
@@ -61,6 +63,8 @@ export class PortalDashboardComponent implements IDashboard, OnInit {
   }
 
   public onLogout(): void {
+    this.cookieService.delete('UserName');
+    this.cookieService.delete('IdentityProvider');
     this.authService.logout(this.logoutRedirectUrl);
   }
 
