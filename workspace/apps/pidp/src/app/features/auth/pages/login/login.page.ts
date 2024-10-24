@@ -1,9 +1,4 @@
-import {
-  NgIf,
-  NgOptimizedImage,
-  NgTemplateOutlet,
-  UpperCasePipe,
-} from '@angular/common';
+import { NgIf, NgOptimizedImage, NgTemplateOutlet } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
@@ -60,7 +55,6 @@ export interface LoginPageRouteData {
     NgIf,
     NgOptimizedImage,
     NgTemplateOutlet,
-    UpperCasePipe,
     BannerComponent,
   ],
 })
