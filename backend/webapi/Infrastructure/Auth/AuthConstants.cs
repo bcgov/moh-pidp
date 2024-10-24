@@ -19,7 +19,7 @@ public static class IdentityProviders
 {
     public const string BCServicesCard = "bcsc";
     public const string BCProvider = "bcprovider_aad";
-    public const string Idir = "idir";
+    public const string Idir = "idir_aad";
     public const string Phsa = "phsa";
 }
 
