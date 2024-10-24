@@ -10,6 +10,9 @@ import {
   TextButtonDirective,
 } from '@bcgov/shared/ui';
 
+import { ToastService } from '@app/core/services/toast.service';
+import { Constants } from '@app/shared/constants';
+
 @Component({
   selector: 'app-access-request-card',
   standalone: true,
@@ -31,12 +34,27 @@ export class AccessRequestCardComponent {
   @Input() public completed?: boolean;
   public faFileLines = faFileLines;
 
-  public constructor() {
+  public constructor(private toastService: ToastService) {
     this.icon = faFileLines;
     this.action = new EventEmitter<void>();
   }
 
   public onAction(): void {
-    this.action.emit();
+    if (this.actionDisabled && this.heading === Constants.driverFitnessTitle) {
+      this.toastService.openInfoToast(
+        Constants.insufficientCollegeLicensing,
+        Constants.closeText,
+        { duration: Constants.dialogDuration, panelClass: 'close-icon' },
+      );
+    } else if (this.actionDisabled) {
+      this.toastService.openInfoToast(
+        Constants.incorrectCredentialType,
+        Constants.closeText,
+        { duration: Constants.dialogDuration, panelClass: 'close-icon' },
+      );
+    } else {
+      this.toastService.closeToast();
+      this.action.emit();
+    }
   }
 }
