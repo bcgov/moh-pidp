@@ -98,7 +98,7 @@ public class LicenceDeclaration
             }
             catch (Exception ex)
             {
-                this.context.BusinessEvents.Add(CollegeIDEnteredInCollegeLicneceSearchErrorCase.Create(party.Id, command.CollegeCode.Value.ToString(), this.clock.GetCurrentInstant()));
+                this.context.BusinessEvents.Add(CollegeLicenceSearchError.Create(party.Id, command.CollegeCode.Value.ToString(), this.clock.GetCurrentInstant()));
                 this.logger.LogError(ex.Message);
             }
 
