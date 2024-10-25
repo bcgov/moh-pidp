@@ -98,8 +98,8 @@ public class LicenceDeclaration
             }
             catch (Exception ex)
             {
-                this.context.BusinessEvents.Add(CollegeLicenceSearchError.Create(party.Id, command.CollegeCode.Value.ToString(), this.clock.GetCurrentInstant()));
-                this.logger.LogError(ex.Message);
+                this.context.BusinessEvents.Add(CollegeLicenceSearchError.Create(party.Id, command.CollegeCode, this.clock.GetCurrentInstant()));
+                this.logger.LogCollegeLicenceSearchError(ex.Message);
             }
 
             if (command.CollegeCode != null && string.IsNullOrWhiteSpace(party.Cpn))
@@ -125,4 +125,10 @@ public class LicenceDeclaration
             return Task.CompletedTask;
         }
     }
+}
+
+public static partial class LicenceDeclarationLoggingExtensions
+{
+    [LoggerMessage(1, LogLevel.Error, "{message}.")]
+    public static partial void LogCollegeLicenceSearchError(this ILogger logger, string message);
 }
