@@ -7,7 +7,6 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { randNumber, randTextRange } from '@ngneat/falso';
-import { NavigationService } from '@pidp/presentation';
 import { Spy, createSpyFromClass, provideAutoSpy } from 'jest-auto-spies';
 
 import { APP_CONFIG, APP_DI_CONFIG } from '@app/app.config';
@@ -20,7 +19,6 @@ describe('BcProviderEditPage', () => {
   let component: BcProviderEditPage;
   let partyServiceSpy: Spy<PartyService>;
   let formUtilsServiceSpy: Spy<FormUtilsService>;
-  let navigationServiceSpy: Spy<NavigationService>;
 
   let mockActivatedRoute: { snapshot: any };
   let mockBcProviderForm: { newPassword: string; confirmPassword: string };
@@ -55,13 +53,11 @@ describe('BcProviderEditPage', () => {
         },
         provideAutoSpy(HttpClient),
         provideAutoSpy(FormUtilsService),
-        provideAutoSpy(NavigationService),
         provideAutoSpy(Router),
       ],
     });
     component = TestBed.inject(BcProviderEditPage);
     formUtilsServiceSpy = TestBed.inject<any>(FormUtilsService);
-    navigationServiceSpy = TestBed.inject<any>(NavigationService);
     partyServiceSpy = TestBed.inject<any>(PartyService);
   });
 
