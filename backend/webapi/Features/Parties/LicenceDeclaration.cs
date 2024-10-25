@@ -98,7 +98,7 @@ public class LicenceDeclaration
             }
             catch (Exception ex)
             {
-                this.context.BusinessEvents.Add(CollegeLicenceSearchError.Create(party.Id, command.CollegeCode, this.clock.GetCurrentInstant()));
+                this.context.BusinessEvents.Add(CollegeLicenceSearchError.Create(party.Id, command.CollegeCode, command.LicenceNumber, this.clock.GetCurrentInstant()));
                 this.logger.LogCollegeLicenceSearchError(ex.Message);
             }
 
@@ -130,5 +130,5 @@ public class LicenceDeclaration
 public static partial class LicenceDeclarationLoggingExtensions
 {
     [LoggerMessage(1, LogLevel.Error, "{message}.")]
-    public static partial void LogCollegeLicenceSearchError(this ILogger logger, string message);
+    public static partial void LogCollegeLicenceSearchError(this ILogger<LicenceDeclaration> logger, string message);
 }
