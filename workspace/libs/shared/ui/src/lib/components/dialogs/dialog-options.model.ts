@@ -7,8 +7,10 @@ export interface DialogOptions {
   iconType?: 'outlined' | 'round' | 'sharp';
   imageSrc?: string; // Alternative to an icon
   imageType?: 'icon' | 'banner';
+  imageSizeFull?: boolean;
   title?: string;
   titlePosition?: 'center' | 'left' | 'right';
+  titleMarginTop?: boolean;
   bottomBorder?: boolean;
   message?: string;
   bodyTextPosition?: 'center' | 'left' | 'right';
@@ -16,6 +18,7 @@ export interface DialogOptions {
   actionTypePosition?: 'center' | 'left' | 'right';
   actionText?: string;
   actionHide?: boolean;
+  closeButton?: boolean;
   actionLink?: {
     href: string;
     text: string;

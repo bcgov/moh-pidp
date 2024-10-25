@@ -1,6 +1,7 @@
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { AsyncPipe, NgIf, NgOptimizedImage } from '@angular/common';
 import { Component, HostListener, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 
 import { Observable, map } from 'rxjs';
@@ -8,10 +9,17 @@ import { Observable, map } from 'rxjs';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { faBell } from '@fortawesome/free-regular-svg-icons';
 import { faArrowUp, faBookmark } from '@fortawesome/free-solid-svg-icons';
+import { NavigationService } from '@pidp/presentation';
 
-import { InjectViewportCssClassDirective } from '@bcgov/shared/ui';
+import {
+  ConfirmDialogComponent,
+  DialogOptions,
+  HtmlComponent,
+  InjectViewportCssClassDirective,
+} from '@bcgov/shared/ui';
 
 import { PartyService } from '@app/core/party/party.service';
+import { Constants } from '@app/shared/constants';
 
 import { AccessRoutes } from '../access/access.routes';
 import { OrganizationInfoRoutes } from '../organization-info/organization-info.routes';
@@ -48,12 +56,17 @@ export class PortalPage implements OnInit {
   public AlertCode = AlertCode;
   public faBell = faBell;
   public alerts$!: Observable<AlertCode[]>;
+  public previousUrl = '';
 
   public constructor(
     private partyService: PartyService,
     private resource: PortalResource,
     private router: Router,
-  ) {}
+    private navigationService: NavigationService,
+    private dialog: MatDialog,
+  ) {
+    this.previousUrl = this.navigationService.getPreviousUrl();
+  }
 
   @HostListener('window:scroll', [])
   public onWindowScroll(): void {
@@ -78,5 +91,37 @@ export class PortalPage implements OnInit {
     this.alerts$ = this.resource
       .getProfileStatus(this.partyService.partyId)
       .pipe(map((profileStatus) => profileStatus?.alerts ?? []));
+    if (this.previousUrl.split('/').includes(Constants.newUserURL)) {
+      this.showNewUserPopup();
+    }
+  }
+
+  private showNewUserPopup() {
+    const data: DialogOptions = {
+      title: 'Account information completed',
+      bottomBorder: false,
+      titlePosition: 'center',
+      bodyTextPosition: 'center',
+      component: HtmlComponent,
+      data: {
+        content:
+          'Thank you for providing OneHealthID with the information needed at this time, now you can explore OneHealthID to its full potential, based on your provided information.',
+      },
+      imageSrc: '/assets/images/online-marketing-hIgeoQjS_iE-unsplash.jpg',
+      imageType: 'banner',
+      width: '31rem',
+      height: '24rem',
+      cancelHide: true,
+      actionHide: true,
+      imageSizeFull: true,
+      titleMarginTop: true,
+      closeButton: true,
+      class: 'dialog-container',
+    };
+    this.dialog
+      .open(ConfirmDialogComponent, { data })
+      .afterClosed()
+      .pipe()
+      .subscribe();
   }
 }
