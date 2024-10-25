@@ -99,6 +99,10 @@
   & .completed {
     margin: 0 var(--gap) var(--gap);
   }
+  & .actions {
+    display: flex;
+    margin: var(--gap) var(--gap) 0;
+  }
 }
 
 .viewport-small {

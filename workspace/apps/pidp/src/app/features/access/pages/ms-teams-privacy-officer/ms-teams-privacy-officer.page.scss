@@ -94,6 +94,10 @@
     }
   }
 
+  & .actions {
+    display: flex;
+    margin: var(--gap) var(--gap) 0;
+  }
   & .endorsement-section {
     & h3,
     & p,
