@@ -27,7 +27,6 @@ import { EnrolmentErrorComponent } from '../../components/enrolment-error/enrolm
 import { DriverFitnessResource } from './driver-fitness-resource.service';
 import {
   driverFitnessSupportEmail,
-  driverFitnessUrl,
   medicalPractitionerPortalUrl,
 } from './driver-fitness.constants';
 
@@ -48,7 +47,6 @@ import {
   ],
 })
 export class DriverFitnessPage implements OnInit {
-  public driverFitnessUrl: string;
   public completed: boolean | null;
   public accessRequestFailed: boolean;
   public driverFitnessSupportEmail: string;
@@ -73,7 +71,6 @@ export class DriverFitnessPage implements OnInit {
     private logger: LoggerService,
   ) {
     const routeData = this.route.snapshot.data;
-    this.driverFitnessUrl = driverFitnessUrl;
     this.completed = routeData.driverFitnessStatusCode === StatusCode.COMPLETED;
     this.accessRequestFailed = false;
     this.driverFitnessSupportEmail = driverFitnessSupportEmail;
