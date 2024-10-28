@@ -1,5 +1,6 @@
 import { AsyncPipe, NgIf } from '@angular/common';
 import {
+  AfterViewInit,
   ChangeDetectionStrategy,
   Component,
   Inject,
@@ -52,7 +53,7 @@ import { DIALOG_DEFAULT_OPTION } from '../dialogs-properties.provider';
     AsyncPipe,
   ],
 })
-export class ConfirmDialogComponent implements OnInit {
+export class ConfirmDialogComponent implements OnInit, AfterViewInit {
   public options: DialogOptions;
   public dialogContentOutput: DialogContentOutput<unknown> | null;
   public readonly loading$: Observable<LoadingOptions | null>;
@@ -96,6 +97,13 @@ export class ConfirmDialogComponent implements OnInit {
 
     this.dialogRef.updateSize(this.options.width, this.options.height);
     this.options.class && this.dialogRef.addPanelClass(this.options.class);
+  }
+
+  public ngAfterViewInit(): void {
+    const adjustSubmitFocus = document.querySelector(
+      '#submit',
+    ) as HTMLButtonElement;
+    if (adjustSubmitFocus) adjustSubmitFocus.focus();
   }
 
   private getOptions(dialogOptions: DialogOptions): DialogOptions {

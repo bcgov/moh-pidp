@@ -14,21 +14,14 @@ public class PartyDelete
         public int? PartyId { get; set; }
     }
 
-    public class CommandHandler : ICommandHandler<Command>
+    public class CommandHandler(
+        IKeycloakAdministrationClient client,
+        ILogger<CommandHandler> logger,
+        PidpDbContext context) : ICommandHandler<Command>
     {
-        private readonly IKeycloakAdministrationClient client;
-        private readonly ILogger<CommandHandler> logger;
-        private readonly PidpDbContext context;
-
-        public CommandHandler(
-            IKeycloakAdministrationClient client,
-            ILogger<CommandHandler> logger,
-            PidpDbContext context)
-        {
-            this.client = client;
-            this.logger = logger;
-            this.context = context;
-        }
+        private readonly IKeycloakAdministrationClient client = client;
+        private readonly ILogger<CommandHandler> logger = logger;
+        private readonly PidpDbContext context = context;
 
         public async Task HandleAsync(Command command)
         {
@@ -39,7 +32,7 @@ public class PartyDelete
                     .Where(party => party.Id == command.PartyId))
                 .ToListAsync();
 
-            if (!parties.Any())
+            if (parties.Count == 0)
             {
                 return;
             }
@@ -58,18 +51,11 @@ public class PartyDelete
     /// <summary>
     /// Remember Keycloak Role representations between users to reduce total number of calls to keycloak.
     /// </summary>
-    private class RoleRemover
+    private sealed class RoleRemover(IKeycloakAdministrationClient client, ILogger<CommandHandler> logger)
     {
-        private readonly Dictionary<MohKeycloakEnrolment, IEnumerable<Role>> roleCache;
-        private readonly IKeycloakAdministrationClient client;
-        private readonly ILogger<CommandHandler> logger;
-
-        public RoleRemover(IKeycloakAdministrationClient client, ILogger<CommandHandler> logger)
-        {
-            this.client = client;
-            this.logger = logger;
-            this.roleCache = new();
-        }
+        private readonly Dictionary<MohKeycloakEnrolment, IEnumerable<Role>> roleCache = [];
+        private readonly IKeycloakAdministrationClient client = client;
+        private readonly ILogger<CommandHandler> logger = logger;
 
         public async Task RemoveClientRoles(Party party)
         {
@@ -100,7 +86,7 @@ public class PartyDelete
                 enrolments = enrolments.Append(MohKeycloakEnrolment.PractitionerLicenceStatus);
             }
 
-            List<Role> roles = new();
+            List<Role> roles = [];
             foreach (var enrolment in enrolments)
             {
                 roles.AddRange(await this.GetOrAddRoles(enrolment!));
@@ -115,7 +101,7 @@ public class PartyDelete
                 return cached;
             }
 
-            List<Role> roles = new();
+            List<Role> roles = [];
             foreach (var roleName in enrolment.AccessRoles)
             {
                 var role = await this.client.GetClientRole(enrolment.ClientId, roleName);

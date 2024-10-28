@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - 'develop'
-    paths: [midas-probe/openshift]
+    paths: [infra/midas-probe/openshift]
   workflow_dispatch:
     inputs:
       environment:
@@ -15,43 +15,85 @@ on:
         options:
           - dev
           - test
+          - prod
 
 jobs:
-  build:
-    name: Build Midas Probe
+  build-midas-gold:
+    name: Build Midas Probe-GOLD
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
       - name: Build image with docker-compose
-        working-directory: midas-probe
+        working-directory: "./infra/midas-probe"
         run: |
           docker-compose build midas-probe
 
       - name: Docker Login to ImageStream 
         uses: docker/login-action@v2
         with:
-          registry: image-registry.apps.silver.devops.gov.bc.ca
+          registry: image-registry.apps.gold.devops.gov.bc.ca
           username: builder
-          password: ${{ secrets.SILVER_TOOLS_BUILDER_TOKEN }}
+          password: ${{ secrets.GOLD_TOOLS_BUILDER_TOKEN }}
 
       - name: Tag and Push Docker image
         run: |
-          docker tag midas-probe image-registry.apps.silver.devops.gov.bc.ca/d8a8f9-tools/midas-probe:${{ github.event.inputs.Environment }}
-          docker push image-registry.apps.silver.devops.gov.bc.ca/d8a8f9-tools/midas-probe --all-tags
+          docker tag midas-probe image-registry.apps.gold.devops.gov.bc.ca/f088b1-tools/midas-probe:latest
+          docker push image-registry.apps.gold.devops.gov.bc.ca/f088b1-tools/midas-probe:latest
       
-      - name: OC Login to Silver OCP
+      - name: OC Login to Gold OCP
         uses: redhat-actions/oc-login@v1.2
         with:
-          openshift_server_url: ${{secrets.OPENSHIFT_CLUSTER_URL}}
-          openshift_token: ${{secrets.OPENSHIFT_PIPELINE_SERVICE_ACCOUNT_TOKEN}}
+          openshift_server_url: ${{secrets.GOLD_OPENSHIFT_CLUSTER_URL}}
+          openshift_token: ${{secrets.GOLD_PIPELINE_SERVICE_ACCOUNT_TOKEN}}
 
       - name: helm deployment
-        working-directory: midas-probe/openshift/helm
+        working-directory: "./infra/midas-probe/openshift/helm"
         run: |
-          oc project d8a8f9-${{ github.event.inputs.Environment }}
           echo installing midas-common helm chart...
-          helm upgrade --install --values ./midas-common/values.yaml --set namespace=d8a8f9-${{ github.event.inputs.Environment }} --namespace d8a8f9-${{ github.event.inputs.Environment }} midas-common midas-common
+          helm upgrade --install --values ./midas-common/values.yaml --namespace f088b1-tools midas-common midas-common
+          
+          oc project f088b1-${{ github.event.inputs.Environment }}
           echo installing midas-probe helm chart...
-          helm upgrade --install --values ./midas-probe/values.yaml --set imageStreamTag=${{ github.event.inputs.Environment }} --namespace d8a8f9-${{ github.event.inputs.Environment }} midas-probe midas-probe
+          helm upgrade --install --values ./midas-probe/values.yaml --set environment=${{ github.event.inputs.Environment }} midas-probe midas-probe
+
+  build-midas-goldDR:
+    name: Build Midas Probe-GOLD
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Build image with docker-compose
+        working-directory: "./infra/midas-probe"
+        run: |
+          docker-compose build midas-probe
+
+      - name: Docker Login to ImageStream 
+        uses: docker/login-action@v2
+        with:
+          registry: image-registry.apps.golddr.devops.gov.bc.ca
+          username: builder
+          password: ${{ secrets.GOLDDR_TOOLS_BUILDER_TOKEN }}
+
+      - name: Tag and Push Docker image
+        run: |
+          docker tag midas-probe image-registry.apps.golddr.devops.gov.bc.ca/f088b1-tools/midas-probe:latest
+          docker push image-registry.apps.golddr.devops.gov.bc.ca/f088b1-tools/midas-probe --all-tags
+      
+      - name: OC Login to Gold OCP
+        uses: redhat-actions/oc-login@v1.2
+        with:
+          openshift_server_url: ${{secrets.GOLDDR_OPENSHIFT_CLUSTER_URL}}
+          openshift_token: ${{secrets.GOLDDR_PIPELINE_SERVICE_ACCOUNT_TOKEN}}
+
+      - name: helm deployment
+        working-directory: "./infra/midas-probe/openshift/helm"
+        run: |
+          echo installing midas-common helm chart...
+          helm upgrade --install --values ./midas-common/values.yaml --namespace f088b1-tools midas-common midas-common
+          oc project f088b1-${{ github.event.inputs.Environment }}
+          echo installing midas-probe helm chart...
+          helm upgrade --install --values ./midas-probe/values.yaml --set environment=${{ github.event.inputs.Environment }} --namespace f088b1-${{ github.event.inputs.Environment }} midas-probe midas-probe
+  

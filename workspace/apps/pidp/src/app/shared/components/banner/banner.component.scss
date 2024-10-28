@@ -1,0 +1,43 @@
+.viewport-all {
+  & .banners-box {
+    margin-top: 20%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    border: 2px solid rgba(255, 166, 0, 0.55);
+
+    & .card-styles {
+      background: rgba(255, 166, 0, 0.2);
+      box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+      width: 27rem;
+      padding: 0.75rem;
+
+      h2 {
+        color: #036;
+        font-size: 1rem;
+        font-weight: 700;
+        padding-top: 0.25rem;
+        margin-bottom: 0;
+        span {
+          padding-left: 10px;
+        }
+      }
+      & .banner-detail-box {
+        & .banner-detail-content {
+          padding-left: 34px;
+        }
+      }
+    }
+  }
+}
+
+.viewport-xsmall {
+  & .banners-box {
+    width: 18rem;
+    margin-left: 15px;
+    margin-right: 15px;
+    & .card-styles {
+      width: 17.9rem;
+    }
+  }
+}

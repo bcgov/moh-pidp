@@ -8,6 +8,7 @@ global:
   image:
     registry: image-registry.openshift-image-registry.svc:5000/d8a8f9-tools
     tag: latest
+  license_plate: "d8a8f9"
 
 # used for creating/dropping databases
 image:
@@ -35,10 +36,7 @@ nginx:
     enabled: true
     image:
       registry: public.ecr.aws
-  
-  fluentbit:
-    enabled: true
-  
+    
   service:
     type: ClusterIP
     port: 8080
