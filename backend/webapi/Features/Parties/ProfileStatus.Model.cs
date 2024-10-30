@@ -203,7 +203,9 @@ public partial class ProfileStatus
                 {
                     { UserIsHighAssuranceIdentity: false } => StatusCode.Locked,
                     _ when profile.HasEnrolment(AccessTypeCode.ImmsBCEforms) => StatusCode.Complete,
-                    { PartyPlrStanding.HasGoodStanding: true } => StatusCode.Incomplete,
+                    _ when profile.PartyPlrStanding.HasGoodStanding || profile.EndorsementPlrStanding
+                        .With(ProviderRoleType.MedicalDoctor)
+                        .HasGoodStanding => StatusCode.Incomplete,
                     _ => StatusCode.Locked
                 };
             }
