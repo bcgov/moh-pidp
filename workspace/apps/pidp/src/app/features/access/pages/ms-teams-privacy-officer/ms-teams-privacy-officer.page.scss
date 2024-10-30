@@ -97,6 +97,9 @@
   & .actions {
     display: flex;
     margin: var(--gap) var(--gap) 0;
+    & button:not(:last-child) {
+      margin-right: var(--gap);
+    }
   }
   & .endorsement-section {
     & h3,
