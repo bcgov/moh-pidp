@@ -6,7 +6,7 @@ TODO: This procedure needs to be properly tested and validated. This procedure i
 - Turn off Gold's PSQL to zero pods
 - Drop the Gold PVC (or at least delete the data on the PVC)
 - Update the patroni-config configmap in gold to add `"standby_cluster":{"host": "patroni-master-golddr",
-"port": $tsc_port}}` and remove the annotations and history. Remove the annotations in patroni-leader configmap as well. You can find a sample of this in (here)[./README.md]. It will likely need to be altered to use the correct TS as the names I think are different.
+"port": $tsc_port}}` and remove the annotations and history. Remove the annotations in patroni-leader configmap as well. You can find a sample of this in (here)[./README.md]. It will likely need to be altered to use the correct TS as the tsc_ports are different.
 - turn on Gold's PSQL to 1 pod
 - terminal into the PSQL and validate the config with ```patronictl list```. It should be `Standby Leader`.
 - confirm the synchronization is occuring and/or complete

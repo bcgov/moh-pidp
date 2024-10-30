@@ -51,7 +51,7 @@ jobs:
           helm list --namespace f088b1-dev
 
           echo installing helm chart...
-          helm upgrade --wait --values ./deploy/dev_values.yaml --set global.image.registry=image-registry.openshift-image-registry.svc:5000/f088b1-tools --namespace f088b1-dev dev charts/pidp --debug
+          helm upgrade --wait --values ./deploy/dev_values.yaml --set global.image.registry=image-registry.openshift-image-registry.svc:5000/f088b1-tools --set global.license_plate=f088b1 --namespace f088b1-dev dev charts/pidp --debug
   
   helm-deployment-goldDR:
     runs-on: 'ubuntu-latest'
@@ -71,5 +71,5 @@ jobs:
           helm list --namespace f088b1-dev
 
           echo installing helm chart...
-          helm upgrade --wait --values ./deploy/dev_values.yaml --set global.image.registry=image-registry.openshift-image-registry.svc:5000/f088b1-tools --namespace f088b1-dev dev charts/pidp --debug
+          helm upgrade --wait --values ./deploy/dev_values.yaml --set global.image.registry=image-registry.openshift-image-registry.svc:5000/f088b1-tools --set global.license_plate=f088b1 --namespace f088b1-dev dev charts/pidp --debug
 
