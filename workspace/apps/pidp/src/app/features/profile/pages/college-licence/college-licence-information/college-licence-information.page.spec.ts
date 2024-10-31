@@ -29,7 +29,7 @@ describe('CollegeLicenceInformationPage', () => {
         data: {
           title: randTextRange({ min: 1, max: 4 }),
           routes: {
-            root: '../',
+            root: '../../',
           },
         },
       },
@@ -75,8 +75,10 @@ describe('CollegeLicenceInformationPage', () => {
         component.onBack();
 
         then('router should navigate to root route', () => {
-          const rootRoute = mockActivatedRoute.snapshot.data.routes.root;
-          expect(router.navigate).toHaveBeenCalledWith([rootRoute]);
+          component.scrollToTop().then(() => {
+            const rootRoute = mockActivatedRoute.snapshot.data.routes.root;
+            expect(router.navigate).toHaveBeenCalledWith([rootRoute]);
+          });
         });
       });
     });
