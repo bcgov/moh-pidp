@@ -68,33 +68,19 @@ public class SAEforms
                 .SingleAsync();
 
             if (dto.AlreadyEnroled
-                || dto.Email == null)
+                || dto.Email == null
+                || !(await this.plrClient.GetStandingsDigestAsync(dto.Cpn))
+                    .Excluding(ExcludedIdentifierTypes)
+                    .HasGoodStanding)
             {
                 this.logger.LogAccessRequestDenied();
                 return DomainResult.Failed();
             }
 
-            if (dto.Cpn == null)
+            if (!IsEligible(await this.plrClient.GetStandingsDigestAsync(dto.Cpn)))
             {
-                // Check status of Endorsements
-                var endorsementCpns = await this.context.ActiveEndorsementRelationships(command.PartyId)
-                    .Select(relationship => relationship.Party!.Cpn)
-                    .ToListAsync();
-
-                var endorsementPlrStanding = await this.plrClient.GetAggregateStandingsDigestAsync(endorsementCpns);
-                if (!endorsementPlrStanding.With(ProviderRoleType.MedicalDoctor).HasGoodStanding)
-                {
-                    this.logger.LogAccessRequestDenied();
-                    return DomainResult.Failed();
-                }
-            }
-            else
-            {
-                if (!IsEligible(await this.plrClient.GetStandingsDigestAsync(dto.Cpn)))
-                {
-                    this.logger.LogAccessRequestDenied();
-                    return DomainResult.Failed();
-                }
+                this.logger.LogAccessRequestDenied();
+                return DomainResult.Failed();
             }
 
             foreach (var userId in dto.UserIds)
