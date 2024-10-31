@@ -69,15 +69,10 @@ public class SAEforms
 
             if (dto.AlreadyEnroled
                 || dto.Email == null
+                || !IsEligible(await this.plrClient.GetStandingsDigestAsync(dto.Cpn))
                 || !(await this.plrClient.GetStandingsDigestAsync(dto.Cpn))
                     .Excluding(ExcludedIdentifierTypes)
                     .HasGoodStanding)
-            {
-                this.logger.LogAccessRequestDenied();
-                return DomainResult.Failed();
-            }
-
-            if (!IsEligible(await this.plrClient.GetStandingsDigestAsync(dto.Cpn)))
             {
                 this.logger.LogAccessRequestDenied();
                 return DomainResult.Failed();
