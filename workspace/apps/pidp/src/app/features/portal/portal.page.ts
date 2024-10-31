@@ -109,17 +109,17 @@ export class PortalPage implements OnInit {
       },
       imageSrc: '/assets/images/online-marketing-hIgeoQjS_iE-unsplash.jpg',
       imageType: 'banner',
-      width: '31rem',
-      height: '24rem',
+      width: '30rem',
+      height: '26rem',
       cancelHide: true,
       actionHide: true,
       imageSizeFull: true,
       titleMarginTop: true,
       closeButton: true,
-      class: 'dialog-container',
+      class: 'new-dialog-container',
     };
     this.dialog
-      .open(ConfirmDialogComponent, { data })
+      .open(ConfirmDialogComponent, { data, disableClose: true })
       .afterClosed()
       .pipe()
       .subscribe();
