@@ -68,7 +68,7 @@ export class CollegeLicenceInformationPage implements OnInit {
     this.title = this.route.snapshot.data.title;
   }
 
-  public scrollToTop() {
+  public scrollToTop(): Promise<void> {
     return new Promise<void>((resolve) => {
       window.scrollTo({ top: 0 });
       setTimeout(() => {

@@ -96,7 +96,7 @@ export class PortalPage implements OnInit {
     }
   }
 
-  private showNewUserPopup() {
+  private showNewUserPopup(): void {
     const data: DialogOptions = {
       title: 'Account information completed',
       bottomBorder: false,
