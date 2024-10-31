@@ -6,7 +6,6 @@ using Microsoft.EntityFrameworkCore;
 using NodaTime;
 
 using Pidp.Data;
-using Pidp.Extensions;
 using Pidp.Infrastructure.HttpClients.Keycloak;
 using Pidp.Infrastructure.HttpClients.Mail;
 using Pidp.Infrastructure.HttpClients.Plr;
@@ -16,8 +15,6 @@ using Pidp.Models.Lookups;
 
 public class ImmsBCEforms
 {
-    public static IdentifierType[] ExcludedIdentifierTypes => [IdentifierType.Pharmacist];
-
     public class Command : ICommand<IDomainResult>
     {
         public int PartyId { get; set; }
@@ -58,35 +55,11 @@ public class ImmsBCEforms
                 .SingleAsync();
 
             if (dto.AlreadyEnroled
-                || dto.Email == null)
+                || dto.Email == null
+                || !await this.plrClient.GetStandingAsync(dto.Cpn))
             {
                 this.logger.LogAccessRequestDenied(command.PartyId);
                 return DomainResult.Failed();
-            }
-
-            if (dto.Cpn == null)
-            {
-                // Check status of Endorsements
-                var endorsementCpns = await this.context.ActiveEndorsementRelationships(command.PartyId)
-                    .Select(relationship => relationship.Party!.Cpn)
-                    .ToListAsync();
-
-                var endorsementPlrStanding = await this.plrClient.GetAggregateStandingsDigestAsync(endorsementCpns);
-                if (!endorsementPlrStanding.With(ProviderRoleType.MedicalDoctor).HasGoodStanding)
-                {
-                    this.logger.LogAccessRequestDenied(command.PartyId);
-                    return DomainResult.Failed();
-                }
-            }
-            else
-            {
-                if (!(await this.plrClient.GetStandingsDigestAsync(dto.Cpn))
-                    .Excluding(ExcludedIdentifierTypes)
-                    .HasGoodStanding)
-                {
-                    this.logger.LogAccessRequestDenied(command.PartyId);
-                    return DomainResult.Failed();
-                }
             }
 
             if (!await this.keycloakClient.AssignAccessRoles(dto.UserId, MohKeycloakEnrolment.ImmsBCEforms))
