@@ -6,7 +6,6 @@ using Microsoft.EntityFrameworkCore;
 using NodaTime;
 
 using Pidp.Data;
-using Pidp.Extensions;
 using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.HttpClients.Keycloak;
 using Pidp.Infrastructure.HttpClients.Mail;
@@ -69,10 +68,7 @@ public class SAEforms
 
             if (dto.AlreadyEnroled
                 || dto.Email == null
-                || !IsEligible(await this.plrClient.GetStandingsDigestAsync(dto.Cpn))
-                || !(await this.plrClient.GetStandingsDigestAsync(dto.Cpn))
-                    .Excluding(ExcludedIdentifierTypes)
-                    .HasGoodStanding)
+                || !IsEligible(await this.plrClient.GetStandingsDigestAsync(dto.Cpn)))
             {
                 this.logger.LogAccessRequestDenied();
                 return DomainResult.Failed();
