@@ -29,7 +29,7 @@ describe('CollegeLicenceInformationPage', () => {
         data: {
           title: randTextRange({ min: 1, max: 4 }),
           routes: {
-            root: '../',
+            root: '../../',
           },
         },
       },
