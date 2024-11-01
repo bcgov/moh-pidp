@@ -15,7 +15,7 @@ concurrency:
 
 jobs:
 
-  helm-deployment:
+  helm-deployment-silver:
     runs-on: 'ubuntu-latest'
     steps:
       - uses: actions/checkout@v1
@@ -33,3 +33,43 @@ jobs:
 
           echo installing helm chart...
           helm upgrade --wait --values ./deploy/dev_values.yaml --namespace d8a8f9-dev dev charts/pidp --debug
+
+  helm-deployment-gold:
+    runs-on: 'ubuntu-latest'
+    steps:
+      - uses: actions/checkout@master
+
+      - name: Authenticate and set context
+        uses: redhat-actions/oc-login@v1.3
+        with:
+          openshift_server_url: ${{secrets.GOLD_OPENSHIFT_CLUSTER_URL}}
+          openshift_token: ${{secrets.GOLD_PIPELINE_SERVICE_ACCOUNT_TOKEN}}
+
+      - name: Helm Deploy / install command
+        run: |
+          echo current installed helm releases
+          helm list --namespace f088b1-dev
+
+          echo installing helm chart...
+          helm upgrade --wait --values ./deploy/dev_values.yaml --set global.image.registry=image-registry.openshift-image-registry.svc:5000/f088b1-tools --set global.license_plate=f088b1 --namespace f088b1-dev dev charts/pidp --debug
+  
+  helm-deployment-goldDR:
+    runs-on: 'ubuntu-latest'
+    steps:
+      - uses: actions/checkout@master
+
+      - name: Authenticate and set context
+        uses: redhat-actions/oc-login@v1.3
+        with:
+          openshift_server_url: ${{secrets.GOLDDR_OPENSHIFT_CLUSTER_URL}}
+          openshift_token: ${{secrets.GOLDDR_PIPELINE_SERVICE_ACCOUNT_TOKEN}}
+
+      - name: Helm Deploy / install command
+        run: |
+          echo current installed helm releases
+          oc project f088b1-dev
+          helm list --namespace f088b1-dev
+
+          echo installing helm chart...
+          helm upgrade --wait --values ./deploy/dev_values.yaml --set global.image.registry=image-registry.openshift-image-registry.svc:5000/f088b1-tools --set global.license_plate=f088b1 --namespace f088b1-dev dev charts/pidp --debug
+

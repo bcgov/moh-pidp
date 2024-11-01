@@ -9,30 +9,21 @@ using Pidp.Data;
 using Pidp.Infrastructure.HttpClients.Mail;
 using Pidp.Models;
 
-public class EmailService : IEmailService
+public class EmailService(
+    IChesClient chesClient,
+    IClock clock,
+    ISmtpEmailClient smtpEmailClient,
+    PidpConfiguration config,
+    PidpDbContext context) : IEmailService
 {
     public const string PidpEmail = "OneHealthID@gov.bc.ca";
     public const string PidpSupportPhone = "250-448-1262";
 
-    private readonly IChesClient chesClient;
-    private readonly IClock clock;
-    private readonly ISmtpEmailClient smtpEmailClient;
-    private readonly PidpConfiguration config;
-    private readonly PidpDbContext context;
-
-    public EmailService(
-        IChesClient chesClient,
-        IClock clock,
-        ISmtpEmailClient smtpEmailClient,
-        PidpConfiguration config,
-        PidpDbContext context)
-    {
-        this.chesClient = chesClient;
-        this.clock = clock;
-        this.smtpEmailClient = smtpEmailClient;
-        this.config = config;
-        this.context = context;
-    }
+    private readonly IChesClient chesClient = chesClient;
+    private readonly IClock clock = clock;
+    private readonly ISmtpEmailClient smtpEmailClient = smtpEmailClient;
+    private readonly PidpConfiguration config = config;
+    private readonly PidpDbContext context = context;
 
     public async Task SendAsync(Email email)
     {

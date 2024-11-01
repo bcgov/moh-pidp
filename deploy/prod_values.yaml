@@ -4,7 +4,8 @@ global:
   commit_sha: ""
   image:
     tag: main
-
+  license_plate: "d8a8f9"
+  
 database:
   autoCreate: false
   # databaseHost: dev-patroni

@@ -2,11 +2,11 @@ namespace Pidp.Infrastructure.HttpClients.Mail;
 
 public class ChesEmailRequestParams
 {
-    public IEnumerable<ChesAttachment> Attachments { get; set; } = Enumerable.Empty<ChesAttachment>();
-    public IEnumerable<string> Bcc { get; set; } = Enumerable.Empty<string>();
+    public IEnumerable<ChesAttachment> Attachments { get; set; } = [];
+    public IEnumerable<string> Bcc { get; set; } = [];
     public string BodyType { get; set; } = "html";
     public string Body { get; set; } = string.Empty;
-    public IEnumerable<string> Cc { get; set; } = Enumerable.Empty<string>();
+    public IEnumerable<string> Cc { get; set; } = [];
     public int? DelayTS { get; set; } = 0;
     public string Encoding { get; set; } = "utf-8";
     public string From { get; set; }
@@ -43,7 +43,7 @@ public class ChesAttachment
 
 public class EmailSuccessResponse
 {
-    public IEnumerable<Message> Messages { get; set; } = Enumerable.Empty<Message>();
+    public IEnumerable<Message> Messages { get; set; } = [];
     public Guid TxId { get; set; }
 }
 
@@ -51,7 +51,7 @@ public class Message
 {
     public Guid MsgId { get; set; }
     public string Tag { get; set; } = string.Empty;
-    public IEnumerable<string> To { get; set; } = Enumerable.Empty<string>();
+    public IEnumerable<string> To { get; set; } = [];
 }
 
 public class StatusResponse
@@ -60,7 +60,7 @@ public class StatusResponse
     public long DelayTS { get; set; }
     public Guid MsgId { get; set; }
     public string Status { get; set; } = string.Empty;
-    public IEnumerable<StatusHistoryObject> StatusHistory { get; set; } = Enumerable.Empty<StatusHistoryObject>();
+    public IEnumerable<StatusHistoryObject> StatusHistory { get; set; } = [];
     public string Tag { get; set; } = string.Empty;
     public Guid TxId { get; set; }
     public long UpdatedTS { get; set; }

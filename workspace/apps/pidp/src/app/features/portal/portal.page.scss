@@ -159,7 +159,9 @@
   width: 2.5rem;
   height: 2.5rem;
   border-radius: 50%;
-  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   cursor: pointer;
 }
 
@@ -461,10 +463,6 @@
   .back-to-top {
     width: 2rem;
     height: 2rem;
-  }
-
-  .back-to-top fa-icon {
-    padding-top: 2px;
   }
 
   .back-to-top-text {
