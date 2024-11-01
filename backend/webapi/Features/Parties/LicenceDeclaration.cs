@@ -99,7 +99,7 @@ public class LicenceDeclaration
             catch (Exception ex)
             {
                 this.context.BusinessEvents.Add(CollegeLicenceSearchError.Create(party.Id, command.CollegeCode, command.LicenceNumber, this.clock.GetCurrentInstant()));
-                this.logger.LogCollegeLicenceSearchError(ex.Message);
+                this.logger.LogCollegeLicenceSearchError(ex);
             }
 
             if (command.CollegeCode != null && string.IsNullOrWhiteSpace(party.Cpn))
@@ -129,6 +129,6 @@ public class LicenceDeclaration
 
 public static partial class LicenceDeclarationLoggingExtensions
 {
-    [LoggerMessage(1, LogLevel.Error, "{message}.")]
-    public static partial void LogCollegeLicenceSearchError(this ILogger<LicenceDeclaration> logger, string message);
+    [LoggerMessage(1, LogLevel.Error, "Unknown error occured while doing college license search")]
+    public static partial void LogCollegeLicenceSearchError(this ILogger<LicenceDeclaration> logger, Exception e);
 }
