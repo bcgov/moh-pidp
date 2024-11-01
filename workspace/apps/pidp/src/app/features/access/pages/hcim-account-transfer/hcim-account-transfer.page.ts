@@ -139,10 +139,6 @@ export class HcimAccountTransferPage
     this.healthRegistriesAdminPhone = healthNetBcAdminPhone;
   }
 
-  public onBack(): void {
-    this.navigateToRoot();
-  }
-
   public ngOnInit(): void {
     const partyId = this.partyService.partyId;
 
