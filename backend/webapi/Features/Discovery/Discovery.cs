@@ -39,24 +39,16 @@ public class Discovery
         public StatusCode Status { get; set; }
     }
 
-    public class QueryHandler : IQueryHandler<Query, Model>
+    public class QueryHandler(
+        IClock clock,
+        ILogger<QueryHandler> logger,
+        IPlrClient client,
+        PidpDbContext context) : IQueryHandler<Query, Model>
     {
-        private readonly IClock clock;
-        private readonly ILogger<QueryHandler> logger;
-        private readonly IPlrClient client;
-        private readonly PidpDbContext context;
-
-        public QueryHandler(
-            IClock clock,
-            ILogger<QueryHandler> logger,
-            IPlrClient client,
-            PidpDbContext context)
-        {
-            this.clock = clock;
-            this.logger = logger;
-            this.client = client;
-            this.context = context;
-        }
+        private readonly IClock clock = clock;
+        private readonly ILogger<QueryHandler> logger = logger;
+        private readonly IPlrClient client = client;
+        private readonly PidpDbContext context = context;
 
         public async Task<Model> HandleAsync(Query query)
         {

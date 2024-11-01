@@ -17,8 +17,8 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  promote-image-to-test:
-    name: WebAPI Backend Promote to test
+  promote-image-to-test-silver:
+    name: WebAPI Backend Promote to test - Silver
     runs-on: ubuntu-latest
     steps:
       - name: Install oc
@@ -35,3 +35,22 @@ jobs:
           oc -n d8a8f9-tools tag \
           d8a8f9-tools/endorsement-reminder:${{ env.ORIG_TAG }} \
           d8a8f9-tools/endorsement-reminder:${{ env.PROMOTE_TAG }}
+
+  promote-image-to-test-gold:
+    name: WebAPI Backend Promote to test - Gold
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install oc
+        uses: redhat-actions/openshift-tools-installer@v1
+        with:
+          oc: "4.9"
+
+      - name: oc login
+        run: |
+          oc login --token=${{ secrets.GOLD_PIPELINE_SERVICE_ACCOUNT_TOKEN }} --server=${{ secrets.GOLD_OPENSHIFT_CLUSTER_URL }}
+
+      - name: Promote webapi from dev to test
+        run: |
+          oc -n f088b1-tools tag \
+          f088b1-tools/endorsement-reminder:${{ env.ORIG_TAG }} \
+          f088b1-tools/endorsement-reminder:${{ env.PROMOTE_TAG }}

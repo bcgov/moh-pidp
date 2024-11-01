@@ -96,10 +96,6 @@ export class SaEformsPage implements OnInit {
     this.enrolmentError = false;
   }
 
-  public onBack(): void {
-    this.navigateToRoot();
-  }
-
   public onRequestAccess(): void {
     this.resource
       .requestAccess(this.partyService.partyId)

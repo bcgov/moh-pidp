@@ -9,10 +9,8 @@ using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.Services;
 
 [Route("api/[controller]")]
-public class LookupsController : PidpControllerBase
+public class LookupsController(IPidpAuthorizationService authorizationService) : PidpControllerBase(authorizationService)
 {
-    public LookupsController(IPidpAuthorizationService authorizationService) : base(authorizationService) { }
-
     [HttpGet]
     [AllowAnonymous]
     [ProducesResponseType(StatusCodes.Status200OK)]

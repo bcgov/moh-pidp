@@ -33,21 +33,14 @@ public class LinkTicketCreate
         }
     }
 
-    public class CommandHandler : ICommandHandler<Command, IDomainResult<CredentialLinkTicket>>
+    public class CommandHandler(
+        IClock clock,
+        ILogger<CommandHandler> logger,
+        PidpDbContext context) : ICommandHandler<Command, IDomainResult<CredentialLinkTicket>>
     {
-        private readonly IClock clock;
-        private readonly ILogger<CommandHandler> logger;
-        private readonly PidpDbContext context;
-
-        public CommandHandler(
-            IClock clock,
-            ILogger<CommandHandler> logger,
-            PidpDbContext context)
-        {
-            this.clock = clock;
-            this.logger = logger;
-            this.context = context;
-        }
+        private readonly IClock clock = clock;
+        private readonly ILogger<CommandHandler> logger = logger;
+        private readonly PidpDbContext context = context;
 
         public async Task<IDomainResult<CredentialLinkTicket>> HandleAsync(Command command)
         {

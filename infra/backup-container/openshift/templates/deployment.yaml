@@ -1,0 +1,114 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "backupcontainer.fullname" . }}
+  labels:
+    {{- include "backupcontainer.labels" . | nindent 4 }}
+  annotations:
+    image.openshift.io/triggers: |-
+      [
+        {
+          "from": {
+            "kind": "ImageStreamTag",
+            "namespace": "f088b1-tools",
+            "name": "{{ .Values.global.image.repository }}:{{ .Values.global.image.tag }}"
+          },
+          "fieldPath": "spec.template.spec.containers[0].image",
+          "paused": false
+        }
+      ]
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "backupcontainer.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      name: {{ include "backupcontainer.fullname" . }}-ftp
+      labels:
+        {{- include "backupcontainer.selectorLabels" . | nindent 8 }}
+    spec:
+      serviceAccountName: default
+      volumes:
+        - name:  {{ include "backupcontainer.fullname" . }}
+          persistentVolumeClaim:
+            claimName:  {{ include "backupcontainer.fullname" . }}
+        - name: backup-verification
+          persistentVolumeClaim:
+            claimName: backup-verification
+        - name: {{ include "backupcontainer.fullname" . }}-configmap
+          configMap:
+            name:  {{ include "backupcontainer.fullname" . }}-conf
+            items:
+              - key: backup.conf
+                path: backup.conf
+      containers:
+        - name:  {{ include "backupcontainer.fullname" . }}
+          image: {{ .Values.global.image.registry }}/{{ .Values.global.image.repository }}:{{ .Values.global.image.tag }}
+          imagePullPolicy: {{ .Values.global.image.pullPolicy }}
+          ports: []
+          env:
+            - name: BACKUP_STRATEGY
+              value: {{ .Values.backup.backup_strategy }}
+            - name: BACKUP_DIR
+              value: {{ .Values.backup.backup_dir }}
+            - name: NUM_BACKUPS
+              value: {{ .Values.backup.num_backups }}
+            - name: DAILY_BACKUPS
+              value: {{ .Values.backup.daily_backups }}
+            - name: WEEKLY_BACKUPS
+              value: {{ .Values.backup.weekly_backups }}
+            - name: MONTHLY_BACKUPS
+              value: {{ .Values.backup.monthly_backups }}
+            - name: DATABASE_SERVICE_NAME
+              value: {{ .Values.backup.database_service_name }}
+            - name: DATABASE_NAME
+              value: {{ .Values.backup.database_name }}
+            - name: TABLE_SCHEMA
+              value: {{ .Values.backup.table_schema }}
+            - name: DATABASE_USER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.backup.database_deployment_name }}
+                  key: {{ .Values.backup.database_user_key_name }}
+            - name: DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.backup.database_deployment_name }}
+                  key: {{ .Values.backup.database_user_password_name }}
+            {{- if .Values.ftp.enabled }}
+            - name: FTP_URL
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.ftp.ftb_secret_key }}
+                  key: ftp-url
+            - name: FTP_USER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.ftp.ftb_secret_key }}
+                  key: ftp-user
+            - name: FTP_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.ftp.ftb_secret_key }}
+                  key: ftp-password         
+            {{- end }}
+            {{- if .Values.webhook.enabled }}
+            - name: WEBHOOK_URL
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "backupcontainer.fullname" . }}-webhook
+                  key: webhook-url
+            {{- end }}
+            - name: ENVIRONMENT_NAME
+              value: {{ .Values.settings.environment }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+            - name: backup-container
+              mountPath: {{ .Values.backup.backup_dir }}
+            - name: backup-verification
+              mountPath: {{ .Values.backup.verification_volume_mount_path }}
+            - name: {{ include "backupcontainer.fullname" . }}-configmap
+              mountPath: /backup.conf
+              subPath: backup.conf

@@ -11,8 +11,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-
-  helm-deployment:
+  db-migration-silver:
     runs-on: 'ubuntu-latest'
     steps:
       - uses: actions/checkout@v1
@@ -23,7 +22,7 @@ jobs:
           openshift_server_url: ${{secrets.OPENSHIFT_CLUSTER_URL}}
           openshift_token: ${{secrets.OPENSHIFT_PIPELINE_SERVICE_ACCOUNT_TOKEN}}
 
-      - name: deply db migration job
+      - name: deply db migration job - silver
         run: |
           oc project d8a8f9-prod
 
@@ -38,3 +37,30 @@ jobs:
 
           echo applying plr-intake-migration template...
           helm template prod charts/plr-intake -n d8a8f9-prod --values ./deploy/prod_values.yaml -s templates/migrations.yaml --wait --debug| oc apply -n d8a8f9-prod -f -
+
+  db-migration-gold:
+    runs-on: 'ubuntu-latest'
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Authenticate and set context
+        uses: redhat-actions/oc-login@v1.1
+        with:
+          openshift_server_url: ${{secrets.GOLD_OPENSHIFT_CLUSTER_URL}}
+          openshift_token: ${{secrets.GOLD_PIPELINE_SERVICE_ACCOUNT_TOKEN}}
+
+      - name: deply db migration job - Gold
+        run: |
+          oc project f088b1-prod
+
+          echo deleting prod-webapi-migrations job
+          oc delete job/prod-webapi-migrations -n f088b1-prod --ignore-not-found
+
+          echo applying web-api-migration template...
+          helm template prod charts/webapi -n f088b1-prod --values ./deploy/prod_values_gold.yaml -s templates/migrations.yaml --wait --debug | oc apply -n f088b1-prod -f -
+
+          echo deleting prod-plr-intake-migrations job
+          oc delete job/prod-plr-intake-migrations -n f088b1-prod --ignore-not-found
+
+          echo applying plr-intake-migration template...
+          helm template prod charts/plr-intake -n f088b1-prod --values ./deploy/prod_values_gold.yaml -s templates/migrations.yaml --wait --debug | oc apply -n f088b1-prod -f -
