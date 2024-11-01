@@ -48,7 +48,6 @@ import {
   ],
 })
 export class DriverFitnessPage implements OnInit, AfterViewInit {
-  public driverFitnessUrl: string;
   public completed: boolean | null;
   public accessRequestFailed: boolean;
   public driverFitnessSupportEmail: string;
