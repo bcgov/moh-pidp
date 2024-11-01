@@ -57,10 +57,10 @@ jobs:
           oc delete job/prod-webapi-migrations -n f088b1-prod --ignore-not-found
 
           echo applying web-api-migration template...
-          helm template prod charts/webapi -n f088b1-prod --values ./deploy/prod_values_gold.yaml -s templates/migrations.yaml --wait --debug| oc apply -n f088b1-prod -f -
+          helm template prod charts/webapi -n f088b1-prod --values ./deploy/prod_values_gold.yaml -s templates/migrations.yaml --wait --debug | oc apply -n f088b1-prod -f -
 
           echo deleting prod-plr-intake-migrations job
           oc delete job/prod-plr-intake-migrations -n f088b1-prod --ignore-not-found
 
           echo applying plr-intake-migration template...
-          helm template prod charts/plr-intake -n f088b1-prod --values ./deploy/prod_values_gold.yaml -s templates/migrations.yaml --wait --debug| oc apply -n f088b1-prod -f -
+          helm template prod charts/plr-intake -n f088b1-prod --values ./deploy/prod_values_gold.yaml -s templates/migrations.yaml --wait --debug | oc apply -n f088b1-prod -f -
