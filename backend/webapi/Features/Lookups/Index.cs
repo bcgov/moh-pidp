@@ -15,7 +15,7 @@ public class Index
         public List<College> Colleges { get; set; } = [];
         public List<Country> Countries { get; set; } = [];
         public List<Province> Provinces { get; set; } = [];
-        public string Version { get; set; } = string.Empty;
+        public string Version { get; } = "2024-10-31:1";
     }
 
     public class QueryHandler(PidpDbContext context) : IQueryHandler<Query, Model>
@@ -34,7 +34,6 @@ public class Index
                     .ToListAsync(),
                 Provinces = await this.context.Set<Province>()
                     .ToListAsync(),
-                Version = "2024-10-31:1"
             };
         }
     }
