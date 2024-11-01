@@ -33,7 +33,7 @@ public class Index
                 Countries = await this.context.Set<Country>()
                     .ToListAsync(),
                 Provinces = await this.context.Set<Province>()
-                    .ToListAsync(),
+                    .ToListAsync()
             };
         }
     }
