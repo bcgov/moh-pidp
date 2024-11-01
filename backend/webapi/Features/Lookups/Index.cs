@@ -15,6 +15,7 @@ public class Index
         public List<College> Colleges { get; set; } = [];
         public List<Country> Countries { get; set; } = [];
         public List<Province> Provinces { get; set; } = [];
+        public string Version { get; } = "2024-10-31:1";
     }
 
     public class QueryHandler(PidpDbContext context) : IQueryHandler<Query, Model>

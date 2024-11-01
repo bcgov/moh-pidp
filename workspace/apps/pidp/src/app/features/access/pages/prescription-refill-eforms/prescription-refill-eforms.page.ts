@@ -100,10 +100,6 @@ export class PrescriptionRefillEformsPage implements OnInit, AfterViewInit {
       prescriptionRefillRequestEformsSupportEmail;
   }
 
-  public onBack(): void {
-    this.navigateToRoot();
-  }
-
   public onRequestAccess(): void {
     this.resource
       .requestAccess(this.partyService.partyId)

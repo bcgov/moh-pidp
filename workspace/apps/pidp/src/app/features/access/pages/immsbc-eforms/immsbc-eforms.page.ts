@@ -97,10 +97,6 @@ export class ImmsBCEformsPage implements OnInit, AfterViewInit {
     this.enrolmentError = false;
   }
 
-  public onBack(): void {
-    this.navigateToRoot();
-  }
-
   public onRequestAccess(): void {
     this.resource
       .requestAccess(this.partyService.partyId)

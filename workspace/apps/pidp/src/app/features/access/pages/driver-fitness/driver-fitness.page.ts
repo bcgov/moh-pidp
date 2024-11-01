@@ -28,7 +28,6 @@ import { EnrolmentErrorComponent } from '../../components/enrolment-error/enrolm
 import { DriverFitnessResource } from './driver-fitness-resource.service';
 import {
   driverFitnessSupportEmail,
-  driverFitnessUrl,
   medicalPractitionerPortalUrl,
 } from './driver-fitness.constants';
 
@@ -75,7 +74,6 @@ export class DriverFitnessPage implements OnInit, AfterViewInit {
     private snowplowService: SnowplowService,
   ) {
     const routeData = this.route.snapshot.data;
-    this.driverFitnessUrl = driverFitnessUrl;
     this.completed = routeData.driverFitnessStatusCode === StatusCode.COMPLETED;
     this.accessRequestFailed = false;
     this.driverFitnessSupportEmail = driverFitnessSupportEmail;
@@ -99,10 +97,6 @@ export class DriverFitnessPage implements OnInit, AfterViewInit {
 
   public ngAfterViewInit(): void {
     this.snowplowService.refreshLinkClickTracking();
-  }
-
-  public onBack(): void {
-    this.navigateToRoot();
   }
 
   public onRequestAccess(): void {
