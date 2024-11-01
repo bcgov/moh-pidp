@@ -8,6 +8,7 @@ global:
   image:
     registry: image-registry.openshift-image-registry.svc:5000/d8a8f9-tools
     tag: latest
+  license_plate: "d8a8f9"
 
 replicaCount: 1
 
@@ -79,7 +80,7 @@ ingress:
 resources: 
   limits:
     cpu: 50m
-    memory: 128Mi
+    memory: 200Mi
   requests:
     cpu: 25m
     memory: 60Mi

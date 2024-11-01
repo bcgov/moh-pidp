@@ -21,9 +21,11 @@ import {
   MicrosoftLogLevel,
 } from '@app/core/services/client-logs.service';
 import { DocumentService } from '@app/core/services/document.service';
+import { LoggerService } from '@app/core/services/logger.service';
 
 import { IdentityProvider } from '../../enums/identity-provider.enum';
 import { AuthService } from '../../services/auth.service';
+import { LoginResource } from './login-resource.service';
 import { LoginPage, LoginPageRouteData } from './login.page';
 
 describe('LoginPage', () => {
@@ -32,7 +34,7 @@ describe('LoginPage', () => {
   let clientLogsServiceSpy: Spy<ClientLogsService>;
   let authServiceSpy: Spy<AuthService>;
   let matDialogSpy: Spy<MatDialog>;
-
+  let loginResourceSpy: Spy<LoginResource>;
   let mockActivatedRoute: {
     snapshot: {
       queryParamMap?: ParamMap;
@@ -70,6 +72,8 @@ describe('LoginPage', () => {
         provideAutoSpy(ClientLogsService),
         provideAutoSpy(DocumentService),
         provideAutoSpy(MatDialog),
+        provideAutoSpy(LoginResource),
+        provideAutoSpy(LoggerService),
         ViewportService,
       ],
     }).compileComponents();
@@ -79,6 +83,18 @@ describe('LoginPage', () => {
     clientLogsServiceSpy = TestBed.inject<any>(ClientLogsService);
     authServiceSpy = TestBed.inject<any>(AuthService);
     matDialogSpy = TestBed.inject<any>(MatDialog);
+    loginResourceSpy = TestBed.inject<any>(LoginResource);
+
+    loginResourceSpy.findBanners.mockReturnValue(
+      of([
+        {
+          header: 'test',
+          body: 'test',
+          component: 'test',
+          status: '2',
+        },
+      ]),
+    );
   });
 
   describe('INIT', () => {
