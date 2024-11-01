@@ -1,9 +1,10 @@
-import { NgIf } from '@angular/common';
+import { AsyncPipe, NgIf } from '@angular/common';
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
   Component,
   Inject,
+  Input,
   OnInit,
   Type,
   ViewChild,
@@ -19,6 +20,11 @@ import {
   MatDialogTitle,
 } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+
+import { Observable } from 'rxjs';
+
+import { LoadingOptions, LoadingService } from '@bcgov/shared/data-access';
 
 import { AnchorDirective } from '../../anchor/anchor.directive';
 import { IDialogContent } from '../dialog-content.model';
@@ -43,11 +49,17 @@ import { DIALOG_DEFAULT_OPTION } from '../dialogs-properties.provider';
     MatButtonModule,
     MatDialogClose,
     AnchorDirective,
+    MatProgressBarModule,
+    AsyncPipe,
   ],
 })
 export class ConfirmDialogComponent implements OnInit, AfterViewInit {
   public options: DialogOptions;
   public dialogContentOutput: DialogContentOutput<unknown> | null;
+  public readonly loading$: Observable<LoadingOptions | null>;
+
+  @Input() public progressBarValue = 0;
+  @Input() public progressComplete = false;
 
   @ViewChild('dialogContentHost', { static: true, read: ViewContainerRef })
   public dialogContentHost!: ViewContainerRef;
@@ -56,6 +68,7 @@ export class ConfirmDialogComponent implements OnInit, AfterViewInit {
     public dialogRef: MatDialogRef<ConfirmDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public customOptions: DialogOptions,
     @Inject(DIALOG_DEFAULT_OPTION) public defaultOptions: DialogDefaultOptions,
+    loadingService: LoadingService,
   ) {
     this.options =
       typeof customOptions === 'string'
@@ -63,6 +76,7 @@ export class ConfirmDialogComponent implements OnInit, AfterViewInit {
         : this.getOptions(customOptions);
 
     this.dialogContentOutput = null;
+    this.loading$ = loadingService.loading$;
   }
 
   public onConfirm(): void {

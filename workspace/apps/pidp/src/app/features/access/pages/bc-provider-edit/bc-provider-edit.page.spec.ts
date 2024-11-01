@@ -7,20 +7,21 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { randNumber, randTextRange } from '@ngneat/falso';
-import { NavigationService } from '@pidp/presentation';
 import { Spy, createSpyFromClass, provideAutoSpy } from 'jest-auto-spies';
-
+import { NavigationService } from '@pidp/presentation';
 import { APP_CONFIG, APP_DI_CONFIG } from '@app/app.config';
 import { PartyService } from '@app/core/party/party.service';
 import { FormUtilsService } from '@app/core/services/form-utils.service';
+import { AuthService } from '@app/features/auth/services/auth.service';
+import { AuthorizedUserService } from '@app/features/auth/services/authorized-user.service';
 
+import { BcProviderEditResource } from './bc-provider-edit-resource.service';
 import { BcProviderEditPage } from './bc-provider-edit.page';
 
 describe('BcProviderEditPage', () => {
   let component: BcProviderEditPage;
   let partyServiceSpy: Spy<PartyService>;
   let formUtilsServiceSpy: Spy<FormUtilsService>;
-  let navigationServiceSpy: Spy<NavigationService>;
 
   let mockActivatedRoute: { snapshot: any };
   let mockBcProviderForm: { newPassword: string; confirmPassword: string };
@@ -57,11 +58,13 @@ describe('BcProviderEditPage', () => {
         provideAutoSpy(FormUtilsService),
         provideAutoSpy(NavigationService),
         provideAutoSpy(Router),
+        provideAutoSpy(AuthService),
+        provideAutoSpy(BcProviderEditResource),
+        provideAutoSpy(AuthorizedUserService),
       ],
     });
     component = TestBed.inject(BcProviderEditPage);
     formUtilsServiceSpy = TestBed.inject<any>(FormUtilsService);
-    navigationServiceSpy = TestBed.inject<any>(NavigationService);
     partyServiceSpy = TestBed.inject<any>(PartyService);
   });
 
@@ -103,15 +106,4 @@ describe('BcProviderEditPage', () => {
     });
   });
 
-  describe('METHOD: onBack', () => {
-    given('user wants to go back to the previous page', () => {
-      when('onBack is invoked', () => {
-        component.onBack();
-
-        then('router should navigate to root route', () => {
-          expect(navigationServiceSpy.navigateToRoot).toHaveBeenCalled();
-        });
-      });
-    });
-  });
 });
