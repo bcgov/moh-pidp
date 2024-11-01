@@ -12,7 +12,10 @@ import { NavigationService } from '@pidp/presentation';
 import { APP_CONFIG, APP_DI_CONFIG } from '@app/app.config';
 import { PartyService } from '@app/core/party/party.service';
 import { FormUtilsService } from '@app/core/services/form-utils.service';
+import { AuthService } from '@app/features/auth/services/auth.service';
+import { AuthorizedUserService } from '@app/features/auth/services/authorized-user.service';
 
+import { BcProviderEditResource } from './bc-provider-edit-resource.service';
 import { BcProviderEditPage } from './bc-provider-edit.page';
 
 describe('BcProviderEditPage', () => {
@@ -55,6 +58,9 @@ describe('BcProviderEditPage', () => {
         provideAutoSpy(FormUtilsService),
         provideAutoSpy(NavigationService),
         provideAutoSpy(Router),
+        provideAutoSpy(AuthService),
+        provideAutoSpy(BcProviderEditResource),
+        provideAutoSpy(AuthorizedUserService),
       ],
     });
     component = TestBed.inject(BcProviderEditPage);
