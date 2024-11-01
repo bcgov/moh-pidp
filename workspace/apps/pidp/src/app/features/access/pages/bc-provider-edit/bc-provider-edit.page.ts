@@ -156,10 +156,6 @@ export class BcProviderEditPage
     this.identityProvider$ = this.authorizedUserService.identityProvider$;
   }
 
-  public onBack(): void {
-    this.navigationService.navigateToRoot();
-  }
-
   public onSuccessDialogClose(): void {
     this.dialog.closeAll();
     this.navigationService.navigateToRoot();

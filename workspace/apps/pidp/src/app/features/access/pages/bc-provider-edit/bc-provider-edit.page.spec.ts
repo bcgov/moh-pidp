@@ -7,9 +7,8 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { randNumber, randTextRange } from '@ngneat/falso';
-import { NavigationService } from '@pidp/presentation';
 import { Spy, createSpyFromClass, provideAutoSpy } from 'jest-auto-spies';
-
+import { NavigationService } from '@pidp/presentation';
 import { APP_CONFIG, APP_DI_CONFIG } from '@app/app.config';
 import { PartyService } from '@app/core/party/party.service';
 import { FormUtilsService } from '@app/core/services/form-utils.service';
@@ -106,4 +105,5 @@ describe('BcProviderEditPage', () => {
       });
     });
   });
+
 });
