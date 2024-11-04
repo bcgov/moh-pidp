@@ -40,6 +40,8 @@ public class Discovery
         public static readonly string TicketNotFound = "TICKET NOT FOUND";
         public static readonly string UnexpectedLinkingCredential = "UNEXPECTED LINKING CREDENTIAL";
         public static readonly string ExpiredTicket = "EXPIRED TICKET";
+        public static readonly string CredentialAlreadyLinked = "CREDENTIAL ALREADY LINKED";
+        public static readonly string CredentialExists = "CREDENTIAL EXISTS";
     }
 
     public class QueryHandler : IQueryHandler<Query, Model>
@@ -144,7 +146,7 @@ public class Discovery
             if (credential.PartyId == ticket.PartyId)
             {
                 this.logger.LogCredentialAlreadyLinked(query.User.GetUserId(), ticket.Id, credential.Id);
-                this.context.BusinessEvents.Add(AccountLinkingFailure.Create(credential.PartyId, "CREDENTIAL ALREADY LINKED", this.clock.GetCurrentInstant()));
+                this.context.BusinessEvents.Add(AccountLinkingFailure.Create(credential.PartyId, Model.CredentialAlreadyLinked, this.clock.GetCurrentInstant()));
                 await this.context.SaveChangesAsync();
                 return new Model
                 {
@@ -161,7 +163,7 @@ public class Discovery
                 });
 
                 this.logger.LogCredentialAlreadyExists(query.User.GetUserId(), ticket.Id, credential.Id);
-                this.context.BusinessEvents.Add(AccountLinkingFailure.Create(credential.PartyId, "CREDENTIAL EXISTS", this.clock.GetCurrentInstant()));
+                this.context.BusinessEvents.Add(AccountLinkingFailure.Create(credential.PartyId, Model.CredentialExists, this.clock.GetCurrentInstant()));
                 await this.context.SaveChangesAsync();
                 return new Model
                 {
