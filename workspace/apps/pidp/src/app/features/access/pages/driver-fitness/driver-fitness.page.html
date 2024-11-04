@@ -68,31 +68,12 @@
     <div class="actions">
       <button
         *ngIf="!completed"
-        mat-stroked-button
-        uiPageFooterAction
-        type="button"
-        color="secondary"
-        (click)="onBack()">
-        Cancel
-      </button>
-
-      <button
-        *ngIf="!completed"
         mat-flat-button
         uiPageFooterAction
         type="button"
         color="primary"
         (click)="onRequestAccess()">
         Enrol Now
-      </button>
-      <button
-        *ngIf="completed"
-        mat-stroked-button
-        uiPageFooterAction
-        type="button"
-        color="secondary"
-        (click)="onBack()">
-        Back Home
       </button>
     </div>
   </div>

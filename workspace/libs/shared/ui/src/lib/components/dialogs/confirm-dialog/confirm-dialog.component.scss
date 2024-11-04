@@ -1,6 +1,11 @@
 @import 'palette';
 @import 'bootstrap/bootstrap-imports';
 
+.confirm-dialog-container {
+  display: flex;
+  flex-direction: column;
+}
+
 .banner-image-container {
   display: flex;
 
@@ -55,7 +60,7 @@
   padding: 0 0 1rem 0 !important;
 
   button {
-    margin: 0 1rem;
+    margin: 1rem;
     padding: 0.3rem 2rem;
   }
 }
@@ -92,4 +97,13 @@ p,
 a {
   color: theme-palette(blue, light);
   text-decoration: underline;
+}
+
+.progress-bar {
+  border-radius: 5px;
+}
+
+.progress-bar-complete {
+  border-radius: 5px;
+  border: 2px solid green;
 }
