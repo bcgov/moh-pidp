@@ -105,7 +105,7 @@ public class AccountLinkingFailure : PartyBusinessEvent
         {
             PartyId = partyId,
             Description = $"Party failed to link their account. Reason: {failureReason}",
-            Severity = LogLevel.Warning,
+            Severity = LogLevel.Error,
             RecordedOn = recordedOn
         };
     }
