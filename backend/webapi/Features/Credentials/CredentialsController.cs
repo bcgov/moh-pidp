@@ -5,6 +5,7 @@ using DomainResults.Mvc;
 using HybridModelBinding;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SharpGrip.FluentValidation.AutoValidation.Mvc.Attributes;
 
 using Pidp.Extensions;
 using Pidp.Infrastructure.Auth;
@@ -67,7 +68,7 @@ public class CredentialsController(IPidpAuthorizationService authorizationServic
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<string>> CreateBCProviderCredential([FromServices] ICommandHandler<BCProviderCreate.Command, IDomainResult<string>> handler,
-                                                                       [FromHybrid] BCProviderCreate.Command command)
+                                                                       [FromHybrid][AutoValidateAlways] BCProviderCreate.Command command)
         => await this.AuthorizePartyBeforeHandleAsync(command.PartyId, handler, command)
             .ToActionResultOfT();
 
@@ -76,7 +77,17 @@ public class CredentialsController(IPidpAuthorizationService authorizationServic
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> UpdateBCProviderPassword([FromServices] ICommandHandler<BCProviderPassword.Command, IDomainResult> handler,
-                                                              [FromHybrid] BCProviderPassword.Command command)
+                                                              [FromHybrid][AutoValidateAlways] BCProviderPassword.Command command)
+        => await this.AuthorizePartyBeforeHandleAsync(command.PartyId, handler, command)
+            .ToActionResult();
+
+    [HttpDelete("bc-provider/mfa")]
+    [Authorize(Policy = Policies.HighAssuranceIdentityProvider)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> ResetBCProviderMfa([FromServices] ICommandHandler<BCProviderResetMfa.Command, IDomainResult> handler,
+                                                        [FromRoute] BCProviderResetMfa.Command command)
         => await this.AuthorizePartyBeforeHandleAsync(command.PartyId, handler, command)
             .ToActionResult();
 
@@ -85,7 +96,7 @@ public class CredentialsController(IPidpAuthorizationService authorizationServic
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> CreateCredentialLinkTicket([FromServices] ICommandHandler<LinkTicketCreate.Command, IDomainResult<CredentialLinkTicket>> handler,
-                                                                [FromHybrid] LinkTicketCreate.Command command)
+                                                                [FromHybrid][AutoValidateAlways] LinkTicketCreate.Command command)
     {
         var result = await this.AuthorizePartyBeforeHandleAsync(command.PartyId, handler, command);
         if (result.IsSuccess)

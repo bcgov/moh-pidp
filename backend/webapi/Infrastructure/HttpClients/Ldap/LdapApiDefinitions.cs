@@ -1,15 +1,9 @@
 namespace Pidp.Infrastructure.HttpClients.Ldap;
 
-public class LdapLoginRequest
+public class LdapLoginRequest(string username, string password)
 {
-    public string UserName { get; set; }
-    public string Password { get; set; }
-
-    public LdapLoginRequest(string username, string password)
-    {
-        this.UserName = username;
-        this.Password = password;
-    }
+    public string UserName { get; set; } = username;
+    public string Password { get; set; } = password;
 }
 
 // Possible response schemas:
