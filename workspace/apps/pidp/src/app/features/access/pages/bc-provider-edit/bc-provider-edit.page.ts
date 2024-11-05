@@ -259,7 +259,6 @@ export class BcProviderEditPage
     this.progressSubscription = this.progressTimer.subscribe(
       (value: number) => {
         this.progressBarValue = value;
-        console.log('value', value);
         if (value === 100) {
           // To stop the Observable from emitting any more values.
           if (this.progressSubscription) {
