@@ -14,7 +14,7 @@ export class SnowplowService {
   public constructor(window: WindowRefService) {
     this._window = window.nativeWindow;
     if (this._window.snowplow) {
-      const collector = 'spm.apps.gov.bc.ca';
+      const collector = 'spt.apps.gov.bc.ca';
       this._window.snowplow('newTracker', 'rt', collector, {
         appId: 'Snowplow_standalone',
         cookieLifetime: 86400 * 548,
