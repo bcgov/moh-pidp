@@ -1,6 +1,6 @@
 import { NgIf } from '@angular/common';
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -24,6 +24,7 @@ import {
 import { PartyService } from '@app/core/party/party.service';
 import { DocumentService } from '@app/core/services/document.service';
 import { LoggerService } from '@app/core/services/logger.service';
+import { SnowplowService } from '@app/core/services/snowplow.service';
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
 import { BreadcrumbComponent } from '@app/shared/components/breadcrumb/breadcrumb.component';
 
@@ -59,7 +60,7 @@ import {
     SafePipe,
   ],
 })
-export class ImmsBCEformsPage implements OnInit {
+export class ImmsBCEformsPage implements OnInit, AfterViewInit {
   public title: string;
   public collectionNotice: string;
   public completed: boolean | null;
@@ -84,6 +85,7 @@ export class ImmsBCEformsPage implements OnInit {
     private resource: ImmsBCEformsResource,
     private logger: LoggerService,
     documentService: DocumentService,
+    private snowplowService: SnowplowService,
   ) {
     const routeData = this.route.snapshot.data;
     this.title = routeData.title;
@@ -128,6 +130,10 @@ export class ImmsBCEformsPage implements OnInit {
       this.logger.error('No status code was provided');
       return this.navigateToRoot();
     }
+  }
+
+  public ngAfterViewInit(): void {
+    this.snowplowService.refreshLinkClickTracking();
   }
 
   private navigateToRoot(): void {

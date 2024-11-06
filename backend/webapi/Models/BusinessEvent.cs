@@ -83,3 +83,16 @@ public class BCProviderPasswordReset : PartyBusinessEvent
     }
 }
 
+public class CollegeLicenceSearchError : PartyBusinessEvent
+{
+    public static CollegeLicenceSearchError Create(int partyId, CollegeCode? collegeCode, string? licenceNumber, Instant recordedOn)
+    {
+        return new CollegeLicenceSearchError
+        {
+            PartyId = partyId,
+            Description = $"CollegeLicenceSearch Error occured while searching for the CollegeCode {collegeCode}, LicenceNumber {licenceNumber}",
+            Severity = LogLevel.Error,
+            RecordedOn = recordedOn
+        };
+    }
+}
