@@ -46,10 +46,6 @@ export class ComplianceTrainingPage {
     this.navigateToRoot();
   }
 
-  public onBack(): void {
-    this.navigateToRoot();
-  }
-
   private navigateToRoot(): void {
     this.router.navigate([this.route.snapshot.data.routes.root]);
   }

@@ -1,5 +1,12 @@
 import { NgIf } from '@angular/common';
-import { Component, HostListener, Inject, OnInit, signal } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  HostListener,
+  Inject,
+  OnInit,
+  signal,
+} from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { Router } from '@angular/router';
@@ -19,6 +26,7 @@ import {
 } from '@bcgov/shared/ui';
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';
+import { SnowplowService } from '@app/core/services/snowplow.service';
 import { UtilsService } from '@app/core/services/utils.service';
 import { BreadcrumbComponent } from '@app/shared/components/breadcrumb/breadcrumb.component';
 import { Constants } from '@app/shared/constants';
@@ -46,7 +54,7 @@ import { FaqRoutes } from '../../faq.routes';
     InjectViewportCssClassDirective,
   ],
 })
-export class HelpPage implements OnInit {
+export class HelpPage implements OnInit, AfterViewInit {
   public providerIdentitySupport: string;
   public readonly panelOpenState = signal(false);
   public showBackToTopButton: boolean = false;
@@ -61,6 +69,7 @@ export class HelpPage implements OnInit {
     @Inject(APP_CONFIG) private config: AppConfig,
     private router: Router,
     private utilsService: UtilsService,
+    private snowplowService: SnowplowService,
   ) {
     this.providerIdentitySupport = this.config.emails.providerIdentitySupport;
     this.applicationUrl = this.config.applicationUrl;
@@ -80,15 +89,19 @@ export class HelpPage implements OnInit {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  public ngOnInit(): void {
-    this.utilsService.scrollTop();
-  }
-
   public onClickSendEmail(address: string): void {
     window.location.assign(address);
   }
 
   public navigateToMfaPage(): void {
     this.router.navigateByUrl(FaqRoutes.routePath(FaqRoutes.MFA_SETUP));
+  }
+
+  public ngOnInit(): void {
+    this.utilsService.scrollTop();
+  }
+
+  public ngAfterViewInit(): void {
+    this.snowplowService.refreshLinkClickTracking();
   }
 }
