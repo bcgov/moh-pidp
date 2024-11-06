@@ -1,9 +1,13 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
+
+import { APP_CONFIG, AppConfig } from '@app/app.config';
 
 import {
   ISnowplowWindow,
   WindowRefService,
 } from '@core/services/window-ref.service';
+
+import { EnvironmentName } from '../../../environments/environment.model';
 
 @Injectable({
   providedIn: 'root',
@@ -11,10 +15,18 @@ import {
 export class SnowplowService {
   private _window: ISnowplowWindow;
 
-  public constructor(window: WindowRefService) {
+  public constructor(
+    @Inject(APP_CONFIG) private config: AppConfig,
+    window: WindowRefService,
+  ) {
     this._window = window.nativeWindow;
     if (this._window.snowplow) {
-      const collector = 'spt.apps.gov.bc.ca';
+      let collector: string;
+      if (this.config.environmentName === EnvironmentName.PRODUCTION) {
+        collector = 'spt.apps.gov.bc.ca';
+      } else {
+        collector = 'spm.apps.gov.bc.ca';
+      }
       this._window.snowplow('newTracker', 'rt', collector, {
         appId: 'Snowplow_standalone',
         cookieLifetime: 86400 * 548,
