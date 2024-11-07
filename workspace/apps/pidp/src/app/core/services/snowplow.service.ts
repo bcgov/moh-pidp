@@ -23,9 +23,9 @@ export class SnowplowService {
     if (this._window.snowplow) {
       let collector: string;
       if (this.config.environmentName === EnvironmentName.PRODUCTION) {
-        collector = 'spt.apps.gov.bc.ca';
+        collector = this.config.snowplow.prodCollector;
       } else {
-        collector = 'spm.apps.gov.bc.ca';
+        collector = this.config.snowplow.devCollector;
       }
       this._window.snowplow('newTracker', 'rt', collector, {
         appId: 'Snowplow_standalone',
