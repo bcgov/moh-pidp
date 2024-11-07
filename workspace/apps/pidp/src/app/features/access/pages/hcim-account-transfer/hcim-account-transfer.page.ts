@@ -1,5 +1,5 @@
 import { NgIf } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -33,6 +33,7 @@ import {
 } from '@app/core/classes/abstract-form-page.class';
 import { PartyService } from '@app/core/party/party.service';
 import { LoggerService } from '@app/core/services/logger.service';
+import { SnowplowService } from '@app/core/services/snowplow.service';
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
 import { BreadcrumbComponent } from '@app/shared/components/breadcrumb/breadcrumb.component';
 
@@ -84,7 +85,7 @@ import {
 })
 export class HcimAccountTransferPage
   extends AbstractFormPage<HcimAccountTransferFormState>
-  implements OnInit
+  implements OnInit, AfterViewInit
 {
   public title: string;
   public formState: HcimAccountTransferFormState;
@@ -121,6 +122,7 @@ export class HcimAccountTransferPage
     private resource: HcimAccountTransferResource,
     private logger: LoggerService,
     fb: FormBuilder,
+    private snowplowService: SnowplowService,
   ) {
     super(dependenciesService);
 
@@ -151,6 +153,10 @@ export class HcimAccountTransferPage
       this.logger.error('No status code was provided');
       return this.navigateToRoot();
     }
+  }
+
+  public ngAfterViewInit(): void {
+    this.snowplowService.refreshLinkClickTracking();
   }
 
   protected performSubmission(): Observable<HcimAccountTransferResponse> {
