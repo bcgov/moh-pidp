@@ -4,8 +4,9 @@ import {
   NgTemplateOutlet,
   UpperCasePipe,
 } from '@angular/common';
+
+import { AfterViewInit, Component, Inject, OnInit } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, Inject, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
@@ -30,6 +31,7 @@ import {
   MicrosoftLogLevel,
 } from '@app/core/services/client-logs.service';
 import { DocumentService } from '@app/core/services/document.service';
+import { SnowplowService } from '@app/core/services/snowplow.service';
 import { LoggerService } from '@app/core/services/logger.service';
 import { AdminRoutes } from '@app/features/admin/admin.routes';
 import { BannerComponent } from '@app/shared/components/banner/banner.component';
@@ -65,7 +67,7 @@ export interface LoginPageRouteData {
     BannerComponent,
   ],
 })
-export class LoginPage implements OnInit {
+export class LoginPage implements OnInit, AfterViewInit {
   public viewportOptions = PidpViewport;
 
   public bcscMobileSetupUrl: string;
@@ -93,6 +95,7 @@ export class LoginPage implements OnInit {
     private documentService: DocumentService,
     private viewportService: ViewportService,
     private linkAccountConfirmResource: LinkAccountConfirmResource,
+    private snowplowService: SnowplowService,
     private loginResource: LoginResource,
     private logger: LoggerService,
   ) {
@@ -135,6 +138,11 @@ export class LoginPage implements OnInit {
         );
       },
     );
+  }
+
+  public ngAfterViewInit(): void {
+    // refresh link urls now that we set the links
+    this.snowplowService.refreshLinkClickTracking();
   }
 
   private onViewportChange(viewport: PidpViewport): void {
