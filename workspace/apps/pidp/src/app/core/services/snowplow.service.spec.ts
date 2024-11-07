@@ -1,7 +1,5 @@
 import { TestBed } from '@angular/core/testing';
 
-import { provideAutoSpy } from 'jest-auto-spies';
-
 import { APP_CONFIG, APP_DI_CONFIG } from '@app/app.config';
 
 import { SnowplowService } from './snowplow.service';
@@ -13,12 +11,11 @@ describe('SnowplowService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
-        SnowplowService,
+        WindowRefService,
         {
           provide: APP_CONFIG,
           useValue: APP_DI_CONFIG,
         },
-        provideAutoSpy(WindowRefService),
       ],
     });
     service = TestBed.inject(SnowplowService);
