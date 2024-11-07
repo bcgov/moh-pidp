@@ -67,4 +67,8 @@ export const environment: AppEnvironment = {
       onLoad: 'check-sso',
     },
   },
+  snowplow: {
+    prodCollector: 'spt.apps.gov.bc.ca',
+    devCollector: 'spm.apps.gov.bc.ca',
+  },
 };

@@ -35,4 +35,8 @@ export interface AppEnvironment extends EnvironmentConfig {
   phones: {
     additionalSupport: string;
   };
+  snowplow: {
+    prodCollector: string;
+    devCollector: string;
+  };
 }
