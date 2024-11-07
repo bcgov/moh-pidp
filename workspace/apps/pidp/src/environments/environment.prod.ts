@@ -57,6 +57,9 @@ export const environment: AppEnvironment = {
   phones: {
     additionalSupport: '250-448-1262',
   },
+  cookies: {
+    secret_key: 'encryptPIDP!12345',
+  },
   keycloakConfig: {
     config: {
       url: 'https://common-logon-dev.hlth.gov.bc.ca/auth',

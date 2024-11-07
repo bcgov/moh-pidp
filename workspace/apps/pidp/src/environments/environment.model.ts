@@ -35,4 +35,7 @@ export interface AppEnvironment extends EnvironmentConfig {
   phones: {
     additionalSupport: string;
   };
+  cookies: {
+    secret_key: string;
+  };
 }
