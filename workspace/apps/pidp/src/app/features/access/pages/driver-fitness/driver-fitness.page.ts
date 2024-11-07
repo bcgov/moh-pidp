@@ -1,6 +1,6 @@
 import { NgIf } from '@angular/common';
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
@@ -19,6 +19,7 @@ import {
 
 import { PartyService } from '@app/core/party/party.service';
 import { LoggerService } from '@app/core/services/logger.service';
+import { SnowplowService } from '@app/core/services/snowplow.service';
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
 import { BreadcrumbComponent } from '@app/shared/components/breadcrumb/breadcrumb.component';
 
@@ -46,7 +47,7 @@ import {
     RouterLink,
   ],
 })
-export class DriverFitnessPage implements OnInit {
+export class DriverFitnessPage implements OnInit, AfterViewInit {
   public completed: boolean | null;
   public accessRequestFailed: boolean;
   public driverFitnessSupportEmail: string;
@@ -69,6 +70,7 @@ export class DriverFitnessPage implements OnInit {
     private partyService: PartyService,
     private resource: DriverFitnessResource,
     private logger: LoggerService,
+    private snowplowService: SnowplowService,
   ) {
     const routeData = this.route.snapshot.data;
     this.completed = routeData.driverFitnessStatusCode === StatusCode.COMPLETED;
@@ -90,6 +92,10 @@ export class DriverFitnessPage implements OnInit {
       this.logger.error('No status code was provided');
       return this.navigateToRoot();
     }
+  }
+
+  public ngAfterViewInit(): void {
+    this.snowplowService.refreshLinkClickTracking();
   }
 
   public onRequestAccess(): void {
