@@ -107,6 +107,8 @@ public class UserRepresentation
 
     public UserRepresentation SetPidpPhone(string pidpPhone) => this.SetAttribute("pidp_phone", pidpPhone);
 
+    public UserRepresentation SetIsPharm(bool isPharm) => this.SetAttribute("is_pharm", isPharm.ToString());
+
     /// <summary>
     /// Adds the given attributes to this User Representation. Overwrites any duplicate keys.
     /// </summary>

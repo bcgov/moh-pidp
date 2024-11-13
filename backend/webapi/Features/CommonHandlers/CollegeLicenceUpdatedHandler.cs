@@ -41,9 +41,11 @@ public class UpdateKeycloakAfterCollegeLicenceUpdated(
             return;
         }
 
+        var standingsDigest = PlrStandingsDigest.FromRecords(records);
+
         foreach (var userId in party.Credentials.Select(credential => credential.UserId))
         {
-            await this.bus.Publish(UpdateKeycloakAttributes.FromUpdateAction(userId, user => user.SetCollegeLicenceInformation(records)), cancellationToken);
+            await this.bus.Publish(UpdateKeycloakAttributes.FromUpdateAction(userId, user => user.SetCollegeLicenceInformation(records).SetIsPharm(standingsDigest.With(IdentifierType.Pharmacist).HasGoodStanding)), cancellationToken);
         }
     }
 }
