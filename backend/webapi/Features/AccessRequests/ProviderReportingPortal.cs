@@ -14,7 +14,7 @@ using Pidp.Models.Lookups;
 
 public class ProviderReportingPortal
 {
-    public static IdentifierType[] AllowedIdentifierTypes => [IdentifierType.PhysiciansAndSurgeons, IdentifierType.Pharmacist];
+    public static IdentifierType[] AllowedIdentifierTypes => [IdentifierType.PhysiciansAndSurgeons];
 
     public class Command : ICommand<IDomainResult>
     {
