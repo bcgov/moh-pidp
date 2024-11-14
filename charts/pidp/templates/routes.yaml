@@ -2,9 +2,6 @@
 {{- $fullName := include "pidp.fullname" . -}}
 {{ $release := .Release.Name }}
 {{ $isPR := hasPrefix "pr-" .Release.Name }}
-## Derived release name
-{{ $drn := ternary $release $ocEnv $isPR }}
-
 
 kind: Route
 apiVersion: route.openshift.io/v1
