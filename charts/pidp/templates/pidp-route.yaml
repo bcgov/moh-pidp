@@ -6,7 +6,7 @@
 kind: Route
 apiVersion: route.openshift.io/v1
 metadata:
-  name: {{ $release }}-route
+  name: {{ $fullName }}-route
   labels:
     {{- include "pidp.labels" . | nindent 4 }}
 spec:
