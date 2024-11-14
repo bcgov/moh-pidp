@@ -14,6 +14,7 @@ import {
 } from '@ngneat/falso';
 import { Spy, createSpyFromClass, provideAutoSpy } from 'jest-auto-spies';
 
+import { APP_CONFIG, APP_DI_CONFIG } from '@app/app.config';
 import { PartyService } from '@app/core/party/party.service';
 import { FormUtilsService } from '@app/core/services/form-utils.service';
 import { LoggerService } from '@app/core/services/logger.service';
@@ -59,6 +60,10 @@ describe('HcimAccountTransferPage', () => {
         {
           provide: ActivatedRoute,
           useValue: mockActivatedRoute,
+        },
+        {
+          provide: APP_CONFIG,
+          useValue: APP_DI_CONFIG,
         },
         {
           provide: PartyService,
@@ -174,19 +179,6 @@ describe('HcimAccountTransferPage', () => {
           expect(component.completed).toBe(false);
           expect(component.accessRequestStatusCode).toBeUndefined();
           expect(component.loginAttempts).toBe(0);
-        });
-      });
-    });
-  });
-
-  describe('METHOD: onBack', () => {
-    given('user wants to go back to the previous page', () => {
-      when('onBack is invoked', () => {
-        component.onBack();
-
-        then('router should navigate to root route', () => {
-          const rootRoute = mockActivatedRoute.snapshot.data.routes.root;
-          expect(router.navigate).toHaveBeenCalledWith([rootRoute]);
         });
       });
     });

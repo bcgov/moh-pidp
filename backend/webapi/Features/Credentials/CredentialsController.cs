@@ -81,6 +81,16 @@ public class CredentialsController(IPidpAuthorizationService authorizationServic
         => await this.AuthorizePartyBeforeHandleAsync(command.PartyId, handler, command)
             .ToActionResult();
 
+    [HttpDelete("bc-provider/mfa")]
+    [Authorize(Policy = Policies.HighAssuranceIdentityProvider)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> ResetBCProviderMfa([FromServices] ICommandHandler<BCProviderResetMfa.Command, IDomainResult> handler,
+                                                        [FromRoute] BCProviderResetMfa.Command command)
+        => await this.AuthorizePartyBeforeHandleAsync(command.PartyId, handler, command)
+            .ToActionResult();
+
     [HttpPost("link-ticket")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]

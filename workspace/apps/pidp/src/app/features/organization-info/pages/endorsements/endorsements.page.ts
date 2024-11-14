@@ -194,10 +194,6 @@ export class EndorsementsPage
     }
   }
 
-  public onBack(): void {
-    this.navigationService.navigateToRoot();
-  }
-
   public onApprove(requestId: number): void {
     this.loadingOverlayService.open(LOADING_OVERLAY_DEFAULT_MESSAGE);
     const data: DialogOptions = this.popupData;
