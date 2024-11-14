@@ -109,7 +109,7 @@ nginx:
       set $CSP_font   "font-src     'self' data: *.googleapis.com *.gstatic.com";
       set $CSP_frame  "frame-ancestors 'self'  *.oidc.gov.bc.ca oidc.gov.bc.ca";
       set $CSP_SCRIPT "script-src 'self' 'unsafe-inline' https://code.jquery.com/jquery-3.6.0.min.js https://www2.gov.bc.ca/StaticWebResources/static/sp/sp-2-14-0.js";
-      set $CSP        "default-src  'self' 'unsafe-inline' *.hlth.gov.bc.ca https://spm.apps.gov.bc.ca ; ${CSP_style} ; ${CSP_font} ; ${CSP_SCRIPT} ; ${CSP_frame}";
+      set $CSP        "default-src  'self' 'unsafe-inline' *.hlth.gov.bc.ca ; ${CSP_style} ; ${CSP_font} ; ${CSP_SCRIPT} ; ${CSP_frame}";
       add_header Content-Security-Policy $CSP;
       add_header X-Frame-Options "ALLOW-FROM dev.oidc.gov.bc.ca oidc.gov.bc.ca" always;
       add_header X-XSS-Protection "1; mode=block" always;
