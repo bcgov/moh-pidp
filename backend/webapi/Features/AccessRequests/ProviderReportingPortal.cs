@@ -62,15 +62,6 @@ public class ProviderReportingPortal
                 return DomainResult.Failed();
             }
 
-            var prpAuthorization = await this.context.PrpAuthorizedLicences
-                .SingleOrDefaultAsync(authorizedLicence => filteredPlrDigest.LicenceNumbers.Contains(authorizedLicence.LicenceNumber));
-
-            if (prpAuthorization == null)
-            {
-                this.logger.LogUnauthorizedLicence(command.PartyId, filteredPlrDigest.LicenceNumbers);
-                return DomainResult.Failed();
-            }
-
             if (!await this.keycloakClient.AssignAccessRoles(dto.UserId, MohKeycloakEnrolment.ProviderReportingPortal))
             {
                 return DomainResult.Failed();
@@ -82,8 +73,6 @@ public class ProviderReportingPortal
                 AccessTypeCode = AccessTypeCode.ProviderReportingPortal,
                 RequestedOn = this.clock.GetCurrentInstant()
             });
-
-            prpAuthorization.Claimed = true;
 
             await this.context.SaveChangesAsync();
 

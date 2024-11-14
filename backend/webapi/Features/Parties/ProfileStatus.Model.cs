@@ -294,7 +294,6 @@ public partial class ProfileStatus
             {
                 return profile switch
                 {
-                    { UserIsBCProvider: false } or { HasPrpAuthorizedLicence: false } => StatusCode.Locked,
                     _ when profile.HasEnrolment(AccessTypeCode.ProviderReportingPortal) => StatusCode.Complete,
                     _ when profile.PartyPlrStanding
                         .With(ProviderReportingPortal.AllowedIdentifierTypes)
