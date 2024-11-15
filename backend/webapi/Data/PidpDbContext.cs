@@ -31,7 +31,6 @@ public class PidpDbContext(
     public DbSet<PartyLicenceDeclaration> PartyLicenceDeclarations { get; set; } = default!;
     public DbSet<Party> Parties { get; set; } = default!;
 
-
     /// <summary>
     /// Do not use. Use SaveChangesAsync Instead.
     /// </summary>
