@@ -92,12 +92,13 @@
       </ng-template>
       <section class="actions">
         <button
+          *ngIf="!completed"
           mat-stroked-button
           uiPageFooterAction
           type="button"
           color="primary"
           (click)="onBack()">
-          {{ completed ? 'Home' : 'Back' }}
+          Back
         </button>
 
         <button

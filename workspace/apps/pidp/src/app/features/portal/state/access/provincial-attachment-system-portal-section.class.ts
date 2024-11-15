@@ -34,8 +34,9 @@ export class ProvincialAttachmentSystemPortalSection implements IPortalSection {
       'The Provincial Attachment System (PAS) is an online tool used by primary care providers throughout the province to indicate their ability to take on new patients. Through PAS, Attachment Coordinators help match patients to family physicians and nurse practitioners in their communities.';
 
     this.provincialAttachmentSystemWebsite = 'https://bchealthprovider.ca';
-    this.keyWords = profileStatus.status.provincialAttachmentSystem.keyWords || [];
-    this.errorReason = profileStatus.status.provincialAttachmentSystem.errorReason ?? '';
+    this.keyWords =
+      profileStatus.status.provincialAttachmentSystem.keyWords || [];
+      this.errorReason = profileStatus.status.provincialAttachmentSystem.errorReason ?? '';
   }
 
   /**
@@ -58,6 +59,17 @@ export class ProvincialAttachmentSystemPortalSection implements IPortalSection {
 
   public performAction(): void | Observable<void> {
     this.router.navigate([ShellRoutes.routePath(this.action.route)]);
+  }
+
+  public get status(): string {
+    switch (this.getStatusCode()) {
+      case StatusCode.AVAILABLE:
+        return 'You are eligible to participate in the Provincial Attachment System';
+      case StatusCode.COMPLETED:
+        return 'Completed';
+      default:
+        return 'Incomplete';
+    }
   }
 
   private getStatusCode(): StatusCode {

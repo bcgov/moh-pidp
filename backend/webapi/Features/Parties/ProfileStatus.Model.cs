@@ -214,7 +214,9 @@ public partial class ProfileStatus
                 {
                     { UserIsHighAssuranceIdentity: false } => StatusCode.Locked,
                     _ when profile.HasEnrolment(AccessTypeCode.ImmsBCEforms) => StatusCode.Complete,
-                    { PartyPlrStanding.HasGoodStanding: true } => StatusCode.Incomplete,
+                    _ when ImmsBCEforms.IsEligible(profile.PartyPlrStanding) || profile.EndorsementPlrStanding
+                        .With(ProviderRoleType.MedicalDoctor)
+                        .HasGoodStanding => StatusCode.Incomplete,
                     _ => StatusCode.Locked
                 };
             }
@@ -335,10 +337,7 @@ public partial class ProfileStatus
                 {
                     { UserIsHighAssuranceIdentity: false } => StatusCode.Locked,
                     _ when profile.HasEnrolment(AccessTypeCode.SAEforms) => StatusCode.Complete,
-                    _ when SAEforms.IsEligible(profile.PartyPlrStanding)
-                        || profile.EndorsementPlrStanding
-                            .With(ProviderRoleType.MedicalDoctor)
-                            .HasGoodStanding => StatusCode.Incomplete,
+                    _ when SAEforms.IsEligible(profile.PartyPlrStanding) => StatusCode.Incomplete,
                     _ => StatusCode.Locked
                 };
             }
