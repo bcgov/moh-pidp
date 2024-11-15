@@ -99,6 +99,8 @@ public class UserRepresentation
 
     public UserRepresentation SetCpn(string cpn) => this.SetAttribute("common_provider_number", cpn);
 
+    public UserRepresentation SetIsPharm(bool isPharm) => this.SetAttribute("is_pharm", isPharm.ToString());
+
     internal UserRepresentation SetLdapOrgDetails(LdapLoginResponse.OrgDetails orgDetails) => this.SetAttribute("org_details", JsonSerializer.Serialize(orgDetails, SerializationOptions));
 
     public UserRepresentation SetOpId(string opId) => this.SetAttribute("opId", opId);
@@ -106,8 +108,6 @@ public class UserRepresentation
     public UserRepresentation SetPidpEmail(string pidpEmail) => this.SetAttribute("pidp_email", pidpEmail);
 
     public UserRepresentation SetPidpPhone(string pidpPhone) => this.SetAttribute("pidp_phone", pidpPhone);
-
-    public UserRepresentation SetIsPharm(bool isPharm) => this.SetAttribute("is_pharm", isPharm.ToString());
 
     /// <summary>
     /// Adds the given attributes to this User Representation. Overwrites any duplicate keys.
