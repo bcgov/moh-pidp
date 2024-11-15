@@ -61,6 +61,7 @@ h1 {
     flex-direction: column;
     // Expand to fit horizontally
     flex: var(--content-flex);
+    height: 100%;
   }
 
   & .content-header-box {
