@@ -3,7 +3,7 @@ licensePlate: f088b1
 imageStreamTag: latest
 replicas: 1
 dockerhost: image-registry.openshift-image-registry.svc:5000
-environment: "dev"
+environment: "prod"
 cluster: "GOLD"
 gslb_host: "healthprovideridentityportal.gov.bc.ca.glb.gov.bc.ca"
 resources:

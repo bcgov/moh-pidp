@@ -27,26 +27,6 @@ spec:
         app: {{ .Values.appName }}
 
     spec:
-      initContainers:
-        - name: midas-crone
-          image: {{ .Values.dockerhost }}/f088b1-tools/midas-crone:latest
-          imagePullPolicy: Always
-          env:
-            - name: application_url
-              value: {{ .Values.application_url }}
-          resources:
-              limits:
-                cpu: {{ .Values.cpuLimit }}
-                memory: {{ .Values.memoryLimit }}
-              requests:
-                cpu: {{ .Values.cpuRequests }}
-                memory: {{ .Values.memoryRequests }}
-          volumeMounts:
-            - name: who-is-active
-              mountPath: /tmp/who_is_active.json
-              subPath: who_is_active.json
-          terminationMessagePath: /dev/termination-log
-          terminationMessagePolicy: File
       containers:
         - name: midas-probe
           image: {{ .Values.dockerhost }}/{{ .Values.licensePlate }}-tools/{{ .Values.appName }}:{{ .Values.imageStreamTag }}
