@@ -1,11 +1,11 @@
 # PR Helm values
 global:
-  vanityURL: "healthprovideridentityportal.gov.bc.ca"
+  vanityURL: "apps.gold.devops.gov.bc.ca"
   commit_sha: ""
   image:
     registry: image-registry.openshift-image-registry.svc:5000/d8a8f9-tools
     tag: dev
-  license_plate: "d8a8f9"
+  license_plate: "f088b1"
 
 database:
   autoCreate: true
@@ -41,9 +41,3 @@ plr-intake:
 rabbitmq:
   autoCreate: true
   host: rabbitmq://pidp:password@rabbitmq:5672/
-
-ingress:
-  enabled: false
-
-routes:
-  enabled: true
