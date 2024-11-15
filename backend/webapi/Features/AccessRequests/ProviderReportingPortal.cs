@@ -51,12 +51,11 @@ public class ProviderReportingPortal
                 })
                 .SingleAsync();
 
-            var filteredPlrDigest = (await this.plrClient.GetStandingsDigestAsync(dto.Cpn))
-                .With(AllowedIdentifierTypes);
 
             if (dto.AlreadyEnroled
-                || !filteredPlrDigest
-                    .HasGoodStanding)
+                || !(await this.plrClient.GetStandingsDigestAsync(dto.Cpn))
+                   .With(AllowedIdentifierTypes)
+                   .HasGoodStanding)
             {
                 this.logger.LogAccessRequestDenied();
                 return DomainResult.Failed();
