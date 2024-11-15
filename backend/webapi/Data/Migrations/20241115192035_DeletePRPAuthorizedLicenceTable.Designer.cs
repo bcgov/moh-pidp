@@ -13,8 +13,8 @@ using Pidp.Data;
 namespace Pidp.Data.Migrations
 {
     [DbContext(typeof(PidpDbContext))]
-    [Migration("20241114233713_Delete PRP authorized licence table")]
-    partial class DeletePRPauthorizedlicencetable
+    [Migration("20241115192035_DeletePRPAuthorizedLicenceTable")]
+    partial class DeletePRPAuthorizedLicenceTable
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
