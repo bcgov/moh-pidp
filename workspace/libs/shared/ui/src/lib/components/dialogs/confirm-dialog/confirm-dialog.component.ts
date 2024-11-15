@@ -105,7 +105,7 @@ export class ConfirmDialogComponent implements OnInit, AfterViewInit {
         '#submit',
       ) as HTMLButtonElement;
       if (adjustSubmitFocus) adjustSubmitFocus.focus();
-    }, 0);
+    });
   }
 
   private getOptions(dialogOptions: DialogOptions): DialogOptions {
