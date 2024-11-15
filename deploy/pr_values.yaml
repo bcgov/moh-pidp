@@ -41,3 +41,9 @@ plr-intake:
 rabbitmq:
   autoCreate: true
   host: rabbitmq://pidp:password@rabbitmq:5672/
+
+ingress:
+  enabled: false
+
+routes:
+  enabled: true

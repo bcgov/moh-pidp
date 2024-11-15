@@ -1,0 +1,24 @@
+{{- if .Values.routes.enabled -}}
+{{- $fullName := include "pidp.fullname" . -}}
+{{ $release := .Release.Name }}
+{{ $isPR := hasPrefix "pr-" .Release.Name }}
+
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: {{ $fullName }}-route
+  labels:
+    {{- include "pidp.labels" . | nindent 4 }}
+spec:
+  to:
+    kind: Service
+    name: {{ $release }}-ingress
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect
+    destinationCACertificate: ''
+  port:
+    targetPort: http
+  wildcardPolicy: None
+
+{{- end }}
