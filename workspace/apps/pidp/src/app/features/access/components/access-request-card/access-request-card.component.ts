@@ -32,23 +32,18 @@ export class AccessRequestCardComponent {
   @Output() public action: EventEmitter<void>;
   @Input() public actionDisabled?: boolean;
   @Input() public completed?: boolean;
+  @Input() public errorReason?: string;
   public faFileLines = faFileLines;
 
-  public constructor(private toastService: ToastService) {
+  public constructor(private readonly toastService: ToastService) {
     this.icon = faFileLines;
     this.action = new EventEmitter<void>();
   }
 
   public onAction(): void {
-    if (this.actionDisabled && this.heading === Constants.driverFitnessTitle) {
+    if (this.actionDisabled) {
       this.toastService.openInfoToast(
-        Constants.insufficientCollegeLicensing,
-        Constants.closeText,
-        { duration: Constants.dialogDuration, panelClass: 'close-icon' },
-      );
-    } else if (this.actionDisabled) {
-      this.toastService.openInfoToast(
-        Constants.incorrectCredentialType,
+        (this.errorReason ?? ''),
         Constants.closeText,
         { duration: Constants.dialogDuration, panelClass: 'close-icon' },
       );

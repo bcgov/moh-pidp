@@ -24,6 +24,7 @@ export class BcProviderPortalSection implements IPortalSection {
   public faFileLines = faFileLines;
   public faUserCheck = faUserCheck;
   public keyWords: string[];
+  public errorReason: string;
 
   public constructor(
     private profileStatus: ProfileStatus,
@@ -33,6 +34,7 @@ export class BcProviderPortalSection implements IPortalSection {
     this.heading = 'BC Provider Account';
     this.description = `A reusable credential for access to health data in BC.`;
     this.keyWords = profileStatus.status.bcProvider.keyWords || [];
+    this.errorReason = profileStatus.status.bcProvider.errorReason ?? '';
   }
 
   public get hint(): string {
