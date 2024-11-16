@@ -117,7 +117,6 @@ public class PlrStandingsDigest
             && record.PlrStatusCode == PlrStatusCode.Pending
             && record.PlrStatusReasonCode == PlrStatusReasonCode.NonPracticing);
 
-
     public IEnumerable<string> Cpns => this.records.Select(record => record.Cpn);
 
     private PlrStandingsDigest(bool error, IEnumerable<DigestRecord>? records = null)
