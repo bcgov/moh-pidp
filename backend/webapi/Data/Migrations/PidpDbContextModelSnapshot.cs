@@ -1256,6 +1256,22 @@ namespace Pidp.Data.Migrations
                     b.HasDiscriminator().HasValue("BCProviderPasswordReset");
                 });
 
+            modelBuilder.Entity("Pidp.Models.CollegeLicenceSearchError", b =>
+                {
+                    b.HasBaseType("Pidp.Models.BusinessEvent");
+
+                    b.Property<int>("PartyId")
+                        .ValueGeneratedOnUpdateSometimes()
+                        .HasColumnType("integer")
+                        .HasColumnName("PartyId");
+
+                    b.HasIndex("PartyId");
+
+                    b.ToTable("BusinessEvent");
+
+                    b.HasDiscriminator().HasValue("CollegeLicenceSearchError");
+                });
+
             modelBuilder.Entity("Pidp.Models.LicenceStatusRoleAssigned", b =>
                 {
                     b.HasBaseType("Pidp.Models.BusinessEvent");
@@ -1478,6 +1494,17 @@ namespace Pidp.Data.Migrations
                 });
 
             modelBuilder.Entity("Pidp.Models.BCProviderPasswordReset", b =>
+                {
+                    b.HasOne("Pidp.Models.Party", "Party")
+                        .WithMany()
+                        .HasForeignKey("PartyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Party");
+                });
+
+            modelBuilder.Entity("Pidp.Models.CollegeLicenceSearchError", b =>
                 {
                     b.HasOne("Pidp.Models.Party", "Party")
                         .WithMany()

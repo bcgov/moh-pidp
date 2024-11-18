@@ -11,8 +11,11 @@ import { Spy, provideAutoSpy } from 'jest-auto-spies';
 
 import { contentContainerSelector } from '@bcgov/shared/ui';
 
+import { APP_CONFIG, APP_DI_CONFIG } from '@app/app.config';
+
 import { AppComponent } from './app.component';
 import { RouteStateService } from './core/services/route-state.service';
+import { SnowplowService } from './core/services/snowplow.service';
 import { UtilsService } from './core/services/utils.service';
 
 describe('AppComponent', () => {
@@ -44,9 +47,14 @@ describe('AppComponent', () => {
           provide: ActivatedRoute,
           useValue: mockActivatedRoute,
         },
+        {
+          provide: APP_CONFIG,
+          useValue: APP_DI_CONFIG,
+        },
         provideAutoSpy(Title),
         provideAutoSpy(RouteStateService),
         provideAutoSpy(UtilsService),
+        provideAutoSpy(SnowplowService),
       ],
     });
 
