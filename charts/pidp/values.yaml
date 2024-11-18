@@ -253,3 +253,6 @@ affinity: {}
 
 rabbitmq:
   autoCreate: false
+
+routes:
+  enabled: false
