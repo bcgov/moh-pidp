@@ -27,11 +27,13 @@ export class CollegeLicenceDeclarationResource extends CrudResource<PartyLicence
     return this.resource
       .put<string | null>(this.getResourcePath(id), payload)
       .pipe(
-        tap(() =>
-          this.toastService.openSuccessToast(
-            'College licence information has been updated',
-          ),
-        ),
+        tap((res) => {
+          if (res !== null) {
+            this.toastService.openSuccessToast(
+              'College licence information has been updated',
+            );
+          }
+        }),
         catchError((error: HttpErrorResponse) => {
           this.toastService.openErrorToast(
             'College licence information could not be updated',
