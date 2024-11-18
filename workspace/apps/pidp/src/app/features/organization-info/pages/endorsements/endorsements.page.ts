@@ -218,6 +218,13 @@ export class EndorsementsPage
                 .pipe(
                   switchMap(
                     () =>
+                      (this.nonActionableEndorsementRequests$ =
+                        this.getNonActionableEndorsementRequests(
+                          this.partyService.partyId,
+                        )),
+                  ),
+                  switchMap(
+                    () =>
                       (this.actionableEndorsementRequests$ =
                         this.getActionableEndorsementRequests(
                           this.partyService.partyId,
