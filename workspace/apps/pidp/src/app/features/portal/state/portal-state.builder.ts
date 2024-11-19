@@ -29,6 +29,7 @@ import { CollegeCertificationPortalSection } from './profile/college-certificati
 import { DemographicsPortalSection } from './profile/demographics-portal-section.class';
 import { UserAccessAgreementPortalSection } from './profile/user-access-agreement-portal-section.class';
 import { ComplianceTrainingPortalSection } from './training/compliance-training-portal-section.class';
+import { PHRPortalSection } from './access/phr-portal-section.class';
 
 /**
  * @description
@@ -142,6 +143,10 @@ export class AccessStateBuilder {
         this.insertSection('immsBCEforms', profileStatus),
         () => [new ImmsBCEformsPortalSection(profileStatus, this.router)],
       ),
+      ...ArrayUtils.insertResultIf<IAccessSection>(
+        this.insertSection('phr', profileStatus),
+        () => [new PHRPortalSection(profileStatus, this.router)]
+      )
     ];
   }
 

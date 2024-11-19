@@ -14,7 +14,8 @@ public enum AccessTypeCode
     ProviderReportingPortal,
     MSTeamsClinicMember,
     UserAccessAgreement,
-    ImmsBCEforms
+    ImmsBCEforms,
+    PHR
 }
 
 [Table("AccessTypeLookup")]
