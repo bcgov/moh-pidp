@@ -30,12 +30,6 @@
   }
 }
 
-.viewport-large {
-  .pas-button img.img-doctor {
-    object-position: 20px -150px !important;
-  }
-}
-
 .viewport-all {
   & .content {
     padding-bottom: var(--content-padding);
@@ -83,10 +77,6 @@
         img {
           object-fit: cover;
           z-index: -2;
-        }
-
-        img.img-doctor {
-          object-position: 20px -65px;
         }
 
         div.auth-card {
@@ -187,11 +177,6 @@
     }
 
     .pas-button {
-      img.img-doctor {
-        height: 15rem !important;
-        object-position: 10px -30px !important;
-      }
-
       div.auth-card {
         padding: 20px 0px 0px 20px !important;
       }
