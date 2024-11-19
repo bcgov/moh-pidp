@@ -55,7 +55,7 @@
       grid-template-columns: calc(60% - 15px) calc(40% - 15px);
       gap: 20px;
       min-height: 340px;
-      margin: calc(var(--gap) * 2) 0;
+      margin: calc(var(--gap)) 0;
 
       & .card {
         display: flex;
@@ -63,6 +63,15 @@
         padding-right: calc(var(--gap) * 0.9);
         position: relative;
         line-height: 1.5rem;
+        margin-left: -1.5rem;
+
+        .stepper-title {
+          color: #313132;
+          font-size: 1.5rem;
+          font-weight: 700;
+          margin-bottom: calc(var(--gap) / 2);
+          padding-left: 1.8rem;
+        }
       }
       .pas-button {
         height: 15rem;
@@ -73,7 +82,6 @@
         );
         img {
           object-fit: cover;
-
           z-index: -2;
         }
 
@@ -132,6 +140,13 @@
             button {
               z-index: 1;
               padding: 0.35rem 2rem;
+              &:disabled {
+                border-radius: var(--layout-borderRadius-medium, 0.25rem);
+                background: var(
+                  --surface-color-primary-button-disabled,
+                  #edebe9
+                );
+              }
             }
           }
         }
@@ -163,6 +178,10 @@
     display: flex !important;
     flex-direction: column !important;
 
+    & .card {
+      margin-left: 0 !important;
+    }
+
     .pas-step-label {
       line-height: 1.1;
     }
@@ -179,16 +198,9 @@
 
       .card-container {
         height: 50% !important;
-        .auth-card-header {
-          // padding-left: 20px;
-        }
-
-        .auth-card-body {
-          padding-left: 15px;
-        }
 
         .auth-card-footer {
-          padding: 7.5px 0px 7.5px 15px;
+          padding: 7.5px 0px 7.5px 0px;
         }
       }
     }
