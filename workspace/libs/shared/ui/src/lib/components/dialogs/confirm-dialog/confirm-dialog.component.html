@@ -37,16 +37,18 @@
     }">
     <p *ngIf="options.message">{{ options.message }}</p>
     <ng-template #dialogContentHost></ng-template>
-    <mat-progress-bar
-      *ngIf="loading$ | async"
-      class="progress-bar"
-      mode="determinate"
-      [value]="progressBarValue"></mat-progress-bar>
-    <mat-progress-bar
-      *ngIf="progressComplete"
-      class="progress-bar-complete"
-      mode="determinate"
-      [value]="100"></mat-progress-bar>
+    <div *ngIf="options.progressBar">
+      <mat-progress-bar
+        *ngIf="loading$ | async"
+        class="progress-bar"
+        mode="determinate"
+        [value]="progressBarValue"></mat-progress-bar>
+      <mat-progress-bar
+        *ngIf="progressComplete"
+        class="progress-bar-complete"
+        mode="determinate"
+        [value]="100"></mat-progress-bar>
+    </div>
   </mat-dialog-content>
   <mat-dialog-actions
     [class]="{
