@@ -23,6 +23,11 @@
   --header-margin: var(--gap) 0 0;
   --content-padding: var(--gap) 0;
   --form-card-width: 25rem;
+  .card-body {
+    img.logo {
+      padding: 1.5rem 0 !important;
+    }
+  }
 }
 
 .viewport-all {
@@ -41,10 +46,10 @@
 
     .main {
       display: grid;
-      grid-template-columns: calc(70% - 15px) calc(30% - 15px);
+      grid-template-columns: calc(60% - 15px) calc(40% - 15px);
       gap: 20px;
       min-height: 340px;
-      margin: calc(var(--gap) * 2) 0;
+      margin: calc(var(--gap)) 0;
 
       & .card {
         display: flex;
@@ -52,12 +57,21 @@
         padding-right: calc(var(--gap) * 0.9);
         position: relative;
         line-height: 1.5rem;
+        margin-left: -1.5rem;
+
+        .stepper-title {
+          color: #313132;
+          font-size: 1.5rem;
+          font-weight: 700;
+          margin-bottom: calc(var(--gap) / 2);
+          padding-left: 1.8rem;
+        }
       }
       .pas-button {
         height: 15rem;
         background: linear-gradient(
           270deg,
-          rgba(0, 0, 0, 0) 0%,
+          rgba(0, 0, 0, 0) 40%,
           rgba(158, 204, 211, 1) 100%
         );
         img {
@@ -65,12 +79,8 @@
           z-index: -2;
         }
 
-        img.img-doctor {
-          object-position: -10px -100px;
-        }
-
         div.auth-card {
-          padding: 23px 0px 7px 34px;
+          padding: 2rem;
         }
 
         .card-container {
@@ -90,7 +100,18 @@
           }
 
           .card-header {
-            color: #1a5a96;
+            color: white;
+            display: flex;
+            padding: 0.65rem 1rem;
+            border-radius: 0.25rem;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.5rem;
+            background: rgba(0, 0, 0, 0.7);
+
+            h3 {
+              margin: 0;
+            }
           }
 
           .card-body {
@@ -101,14 +122,21 @@
               position: relative !important;
               height: 45px;
               width: 175px;
-              padding: 10px;
+              padding: 1rem 0;
             }
           }
 
           .card-footer {
             button {
               z-index: 1;
-              padding: 10px 25px;
+              padding: 0.35rem 2rem;
+              &:disabled {
+                border-radius: var(--layout-borderRadius-medium, 0.25rem);
+                background: var(
+                  --surface-color-primary-button-disabled,
+                  #edebe9
+                );
+              }
             }
           }
         }
@@ -127,7 +155,6 @@
 }
 
 .viewport-xsmall {
-
   .content-header {
     margin: 0px 20px 0px 20px;
   }
@@ -141,32 +168,24 @@
     display: flex !important;
     flex-direction: column !important;
 
+    & .card {
+      margin-left: 0 !important;
+    }
+
     .pas-step-label {
       line-height: 1.1;
     }
 
     .pas-button {
-      img.img-doctor {
-        height: 15rem !important;
-        object-position: -12px -72px !important;
-      }
-
       div.auth-card {
-        padding: 20px 0px 0px 0px !important;
+        padding: 20px 0px 0px 20px !important;
       }
 
       .card-container {
         height: 50% !important;
-        .auth-card-header {
-          padding-left: 20px;
-        }
-
-        .auth-card-body {
-          padding-left: 15px;
-        }
 
         .auth-card-footer {
-          padding: 15px 0px 0px 30px;
+          padding: 7.5px 0px 7.5px 0px;
         }
       }
     }
