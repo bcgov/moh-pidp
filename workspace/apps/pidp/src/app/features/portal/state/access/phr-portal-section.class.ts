@@ -3,9 +3,7 @@ import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
-import { faFileLines, faUserCheck } from '@fortawesome/free-solid-svg-icons';
-
-import { AlertType } from '@bcgov/shared/ui';
+import { faChartSimple, faUserCheck } from '@fortawesome/free-solid-svg-icons';
 
 import { AccessRoutes } from '@app/features/access/access.routes';
 import { ShellRoutes } from '@app/features/shell/shell.routes';
@@ -15,13 +13,13 @@ import { ProfileStatus } from '../../models/profile-status.model';
 import { PortalSectionAction } from '../portal-section-action.model';
 import { PortalSectionKey } from '../portal-section-key.type';
 import { IPortalSection } from '../portal-section.model';
-import { PHRSection } from './phr-section.model';
 
 export class PHRPortalSection implements IPortalSection {
   public readonly key: PortalSectionKey;
   public heading: string;
   public description: string;
-  public faFileLines = faFileLines;
+  private readonly phrWebsite: string;
+  public faChartSimple = faChartSimple;
   public faUserCheck = faUserCheck;
   public keyWords: string[];
 
@@ -30,13 +28,13 @@ export class PHRPortalSection implements IPortalSection {
     private router: Router,
   ) {
     this.key = 'phr';
-    this.heading = 'PHR Authority Forms';
-    this.description = `Enrol here for access to PHR Special Authority application.`;
-    this.keyWords = profileStatus.status.phr.keyWords || [];
-  }
+    this.heading = 'PHR System';
+    this.description =
+      'The PHR is an online tool used by primary care providers throughout the province to indicate their ability to take on new patients.';
 
-  public get hint(): string {
-    return '1 minute to complete';
+    this.phrWebsite = 'https://bchealthprovider.ca';
+    this.keyWords =
+      profileStatus.status.phr.keyWords || [];
   }
 
   /**
@@ -46,42 +44,30 @@ export class PHRPortalSection implements IPortalSection {
   public get action(): PortalSectionAction {
     const statusCode = this.getStatusCode();
     return {
-      label: statusCode === StatusCode.COMPLETED ? 'View' : 'Request',
-      route: AccessRoutes.routePath(AccessRoutes.SPECIAL_AUTH_EFORMS),
+      label: 'View',
+      route: AccessRoutes.routePath(AccessRoutes.PHR),
       disabled: statusCode === StatusCode.NOT_AVAILABLE,
     };
   }
 
-  public get statusType(): AlertType {
-    return this.getStatusCode() === StatusCode.COMPLETED ? 'success' : 'warn';
-  }
-
-  public get status(): string {
-    const { statusCode, incorrectLicenceType } = this.getSectionStatus();
-
-    switch (statusCode) {
-      case StatusCode.AVAILABLE:
-        return 'You are eligible to use Special Authority eForms';
-      case StatusCode.COMPLETED:
-        return 'Completed';
-      default:
-        return incorrectLicenceType
-          ? 'Pharmacy Technicians can not apply for Special Authority eForms'
-          : 'Incomplete';
-    }
-  }
-
   public get icon(): IconProp {
     const statusCode = this.getStatusCode();
-    return statusCode === StatusCode.COMPLETED ? faUserCheck : faFileLines;
+    return statusCode === StatusCode.COMPLETED ? faUserCheck : faChartSimple;
   }
 
-  public performAction(): Observable<void> | void {
+  public performAction(): void | Observable<void> {
     this.router.navigate([ShellRoutes.routePath(this.action.route)]);
   }
 
-  private getSectionStatus(): PHRSection {
-    return this.profileStatus.status.phr;
+  public get status(): string {
+    switch (this.getStatusCode()) {
+      case StatusCode.AVAILABLE:
+        return 'You are eligible to participate in the PHR';
+      case StatusCode.COMPLETED:
+        return 'Completed';
+      default:
+        return 'Incomplete';
+    }
   }
 
   private getStatusCode(): StatusCode {

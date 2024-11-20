@@ -1,5 +1,4 @@
 import { Section } from '../section.model';
-import { PHRSection } from './phr-section.model';
 import { SaEformsSection } from './sa-eforms-section.model';
 
 /**
@@ -47,5 +46,5 @@ export interface AccessGroup extends IAccessGroup {
   msTeamsClinicMember: Section;
   providerReportingPortal: Section;
   provincialAttachmentSystem: Section;
-  phr: PHRSection;
+  phr: Section;
 }
