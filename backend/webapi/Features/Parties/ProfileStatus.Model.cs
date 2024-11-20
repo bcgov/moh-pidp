@@ -329,23 +329,21 @@ public partial class ProfileStatus
         public class PHRSection : ProfileSection
         {
             internal override string SectionName => "phr";
-            public bool IncorrectLicenceType { get; set; }
 
             protected override StatusCode Compute(ProfileData profile)
             {
-                this.IncorrectLicenceType = profile.PartyPlrStanding.HasGoodStanding
-                    && !profile.PartyPlrStanding
-                        .Excluding(PHR.ExcludedIdentifierTypes)
-                        .HasGoodStanding;
-
                 return profile switch
                 {
-                    { UserIsHighAssuranceIdentity: false } => StatusCode.Locked,
-                    _ when profile.HasEnrolment(AccessTypeCode.PHR) => StatusCode.Complete,
-                    _ when PHR.IsEligible(profile.PartyPlrStanding) => StatusCode.Incomplete,
+                    _ when (profile.EndorsementPlrStanding.HasGoodStanding
+                        || profile.PartyPlrStanding
+                            .With(ProviderRoleType.MedicalDoctor, ProviderRoleType.RegisteredNursePractitioner)
+                            .HasGoodStanding)
+                        && profile.HasBCProviderCredential => StatusCode.Complete,
+                    { HasBCServicesCardCredential: true } => StatusCode.Incomplete,
                     _ => StatusCode.Locked
                 };
             }
         }
+
     }
 }

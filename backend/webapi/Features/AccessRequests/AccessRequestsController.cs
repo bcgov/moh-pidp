@@ -127,15 +127,6 @@ public class AccessRequestsController(IPidpAuthorizationService authorizationSer
         => await this.AuthorizePartyBeforeHandleAsync(command.PartyId, handler, command)
             .ToActionResult();
 
-    [HttpPost("phr")]
-    [Authorize(Policy = Policies.HighAssuranceIdentityProvider)]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> CreatePHREnrolment([FromServices] ICommandHandler<PHR.Command, IDomainResult> handler,
-                                                             [FromRoute] PHR.Command command)
-        => await this.AuthorizePartyBeforeHandleAsync(command.PartyId, handler, command)
-            .ToActionResult();
-
     [HttpPost("user-access-agreement")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
