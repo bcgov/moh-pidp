@@ -1,0 +1,215 @@
+@use 'pidp-variables' as pidp;
+
+.viewport-all {
+  --gap: 1rem;
+  --font-size: 0.75rem;
+}
+
+.viewport-small,
+.viewport-medium,
+.viewport-large {
+  --gap: 1.25rem;
+  --font-size: 1rem;
+}
+.viewport-all {
+  --header-margin: unset;
+  --card-border-radius: calc(var(--gap) * 0.375);
+  --content-padding: var(--gap);
+  --form-card-width: unset;
+  padding: 1.25rem 0.75rem;
+}
+.viewport-medium,
+.viewport-large {
+  --header-margin: var(--gap) 0 0;
+  --content-padding: var(--gap) 0;
+  --form-card-width: 25rem;
+}
+
+.viewport-all {
+  & .content {
+    padding-bottom: var(--content-padding);
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap);
+
+    .content-header h1 {
+      color: #003366;
+      font-size: 50px;
+      font-weight: 700;
+      word-wrap: break-word;
+    }
+
+    .main {
+      display: grid;
+      grid-template-columns: calc(70% - 15px) calc(30% - 15px);
+      gap: 20px;
+      min-height: 340px;
+      margin: calc(var(--gap) * 2) 0;
+
+      & .card {
+        display: flex;
+        flex-direction: column;
+        padding-right: calc(var(--gap) * 0.9);
+        position: relative;
+        line-height: 1.5rem;
+      }
+      .pas-button {
+        height: 15rem;
+        background: linear-gradient(
+          270deg,
+          rgba(0, 0, 0, 0) 0%,
+          rgba(158, 204, 211, 1) 100%
+        );
+        img {
+          object-fit: cover;
+          z-index: -2;
+        }
+
+        img.img-doctor {
+          object-position: -10px -100px;
+        }
+
+        div.auth-card {
+          padding: 23px 0px 7px 34px;
+        }
+
+        .card-container {
+          display: flex;
+          flex-direction: column;
+          height: 95%;
+          width: 100%;
+          align-items: flex-start;
+
+          .card-header,
+          .card-body,
+          .card-footer {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
+
+          .card-header {
+            color: #1a5a96;
+          }
+
+          .card-body {
+            img.logo {
+              z-index: 0;
+              -webkit-transform: none;
+              transform: none;
+              position: relative !important;
+              height: 45px;
+              width: 175px;
+              padding: 10px;
+            }
+          }
+
+          .card-footer {
+            button {
+              z-index: 1;
+              padding: 10px 25px;
+            }
+          }
+        }
+      }
+      .pas-button-text {
+        font-size: smaller;
+      }
+    }
+  }
+}
+
+.viewport-small {
+  .main {
+    grid-template-columns: calc(50% - 15px) calc(50% - 15px) !important;
+  }
+}
+
+.viewport-xsmall {
+
+  .content-header {
+    margin: 0px 20px 0px 20px;
+  }
+
+  .content-header h1 {
+    font-size: 40px;
+    line-height: 1.1;
+  }
+
+  .main {
+    display: flex !important;
+    flex-direction: column !important;
+
+    .pas-step-label {
+      line-height: 1.1;
+    }
+
+    .pas-button {
+      img.img-doctor {
+        height: 15rem !important;
+        object-position: -12px -72px !important;
+      }
+
+      div.auth-card {
+        padding: 20px 0px 0px 0px !important;
+      }
+
+      .card-container {
+        height: 50% !important;
+        .auth-card-header {
+          padding-left: 20px;
+        }
+
+        .auth-card-body {
+          padding-left: 15px;
+        }
+
+        .auth-card-footer {
+          padding: 15px 0px 0px 30px;
+        }
+      }
+    }
+  }
+}
+
+.viewport-medium {
+  div.auth-card {
+    padding: 20px 0 55px 20px !important;
+  }
+}
+
+.smaller-text {
+  font-size: smaller;
+  margin: 0 10px;
+}
+
+.bcprovider-username {
+  font-size: smaller;
+}
+
+.stepper-buttons {
+  margin-top: 10px;
+  & button {
+    border: pidp.$bcgov-color-primary solid 2px;
+    color: pidp.$bcgov-color-primary;
+  }
+
+  & button:last-child {
+    margin-left: 10px;
+  }
+
+  & button.top-button {
+    margin-left: 0;
+  }
+}
+
+.guide-information {
+  font-size: smaller;
+  margin-bottom: 10px;
+}
+
+.pas-step-label {
+  margin: unset;
+  line-height: 1.3;
+}
