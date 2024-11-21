@@ -37,11 +37,6 @@ public class Discovery
 
         public int? PartyId { get; set; }
         public StatusCode Status { get; set; }
-        public static readonly string TicketNotFound = "TICKET NOT FOUND";
-        public static readonly string UnexpectedLinkingCredential = "UNEXPECTED LINKING CREDENTIAL";
-        public static readonly string ExpiredTicket = "EXPIRED TICKET";
-        public static readonly string CredentialAlreadyLinked = "CREDENTIAL ALREADY LINKED";
-        public static readonly string CredentialExists = "CREDENTIAL EXISTS";
     }
 
     public class QueryHandler(
@@ -77,7 +72,12 @@ public class Discovery
 
             if (query.CredentialLinkToken != null)
             {
-                return await this.HandleAcountLinkingDiscovery(query, data?.Credential);
+                var model = await this.HandleAcountLinkingDiscovery(query, data?.Credential);
+                if (model.Status != Model.StatusCode.AccountLinkInProgress)
+                {
+                    await this.context.SaveChangesAsync();
+                }
+                return model;
             }
 
             if (data == null)
@@ -108,61 +108,58 @@ public class Discovery
             if (ticket == null)
             {
                 this.logger.LogTicketNotFound(query.User.GetUserId(), query.CredentialLinkToken!.Value);
-                this.context.BusinessEvents.Add(AccountLinkingFailure.Create(credential.PartyId, Model.TicketNotFound, this.clock.GetCurrentInstant()));
-                await this.context.SaveChangesAsync();
+                this.context.BusinessEvents.Add(AccountLinkingFailure.CreateTicketNotFound(query.User.GetUserId(), query.CredentialLinkToken.Value, this.clock.GetCurrentInstant()));
                 return new Model { Status = Model.StatusCode.AccountLinkingError };
             }
+
+            if (credential != null)
+            {
+                // Either the Credential is already linked to the Party, or the Credential already exists on a different Party.
+                if (credential.PartyId == ticket.PartyId)
+                {
+                    this.logger.LogCredentialAlreadyLinked(query.User.GetUserId(), ticket.Id, credential.Id);
+                    this.context.BusinessEvents.Add(AccountLinkingFailure.CreateCredentialAlreadyLinked(ticket.PartyId, credential.Id, ticket.Id, this.clock.GetCurrentInstant()));
+                    return new Model
+                    {
+                        PartyId = credential.PartyId,
+                        Status = Model.StatusCode.AlreadyLinked
+                    };
+                }
+                else
+                {
+                    this.context.CredentialLinkErrorLogs.Add(new CredentialLinkErrorLog
+                    {
+                        CredentialLinkTicketId = ticket.Id,
+                        ExistingCredentialId = credential.Id
+                    });
+
+                    this.logger.LogCredentialAlreadyExists(query.User.GetUserId(), ticket.Id, credential.Id);
+                    this.context.BusinessEvents.Add(AccountLinkingFailure.CreateCredentialExists(ticket.PartyId, credential.Id, ticket.Id, this.clock.GetCurrentInstant()));
+                    return new Model
+                    {
+                        PartyId = credential.PartyId,
+                        Status = Model.StatusCode.CredentialExists
+                    };
+                }
+            }
+
             if (ticket.LinkToIdentityProvider != query.User.GetIdentityProvider())
             {
                 this.logger.LogTicketIdpError(query.User.GetUserId(), ticket.Id, ticket.LinkToIdentityProvider, query.User.GetIdentityProvider());
-                this.context.BusinessEvents.Add(AccountLinkingFailure.Create(credential.PartyId, Model.UnexpectedLinkingCredential, this.clock.GetCurrentInstant()));
-                await this.context.SaveChangesAsync();
+                this.context.BusinessEvents.Add(AccountLinkingFailure.CreateWrongIdentityProvider(ticket.PartyId, ticket.Id, query.User.GetIdentityProvider(), this.clock.GetCurrentInstant()));
                 return new Model { Status = Model.StatusCode.AccountLinkingError };
             }
             if (ticket.ExpiresAt < this.clock.GetCurrentInstant())
             {
                 this.logger.LogTicketExpired(query.User.GetUserId(), ticket.Id);
-                this.context.BusinessEvents.Add(AccountLinkingFailure.Create(credential.PartyId, Model.ExpiredTicket, this.clock.GetCurrentInstant()));
-                await this.context.SaveChangesAsync();
+                this.context.BusinessEvents.Add(AccountLinkingFailure.CreateTicketExpired(ticket.PartyId, ticket.Id, this.clock.GetCurrentInstant()));
                 return new Model { Status = Model.StatusCode.TicketExpired };
             }
 
-            if (credential == null)
+            return new Model
             {
-                return new Model
-                {
-                    Status = Model.StatusCode.AccountLinkInProgress
-                };
-            }
-
-            if (credential.PartyId == ticket.PartyId)
-            {
-                this.logger.LogCredentialAlreadyLinked(query.User.GetUserId(), ticket.Id, credential.Id);
-                this.context.BusinessEvents.Add(AccountLinkingFailure.Create(credential.PartyId, Model.CredentialAlreadyLinked, this.clock.GetCurrentInstant()));
-                await this.context.SaveChangesAsync();
-                return new Model
-                {
-                    PartyId = credential.PartyId,
-                    Status = Model.StatusCode.AlreadyLinked
-                };
-            }
-            else
-            {
-                this.context.CredentialLinkErrorLogs.Add(new CredentialLinkErrorLog
-                {
-                    CredentialLinkTicketId = ticket.Id,
-                    ExistingCredentialId = credential.Id
-                });
-
-                this.logger.LogCredentialAlreadyExists(query.User.GetUserId(), ticket.Id, credential.Id);
-                this.context.BusinessEvents.Add(AccountLinkingFailure.Create(credential.PartyId, Model.CredentialExists, this.clock.GetCurrentInstant()));
-                await this.context.SaveChangesAsync();
-                return new Model
-                {
-                    PartyId = credential.PartyId,
-                    Status = Model.StatusCode.CredentialExists
-                };
-            }
+                Status = Model.StatusCode.AccountLinkInProgress
+            };
         }
 
         private async Task HandleUpdatesAsync(Credential credential, bool checkPlr, ClaimsPrincipal user)
