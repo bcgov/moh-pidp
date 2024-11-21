@@ -133,14 +133,19 @@ data:
 
     health_status=`cat /intercom/health`
 
-    if [[ "$health_status" == "unhealthy" ]];
+    gslb_url="healthprovideridentityportal.gov.bc.ca.glb.gov.bc.ca"
+
+    gslb_ip=$(nslookup "$gslb_url" | awk -F':' '/^Address: / { matched = 1 }  matched { print $2}' | xargs)   
+    echo "$gslb_ip
+
+    if [ "$health_status" == "unhealthy" ] || [ "$gslb_ip" == "142.34.64.4" ]; then
     then
       echo "Gold is unhealthy..."
       status=`oc exec $(oc describe cm patroni-leader|sed -n -e 's/^.*leader: //p') -- /bin/bash -c '/usr/bin/pg_isready -q && /usr/local/bin/patronictl list --format=json | jq -r ".[] | select(.Role == \"Standby Leader\") | .Role" '`
       if [[ "$status" == "Standby Leader" ]];
       then
         echo "GoldDR config needs to be updated to be leader"
-        sleep 299
+        sleep 200
         oc get configmap patroni-config -o json | sed -e "s/standby_cluster/null/g" | oc replace -f -
       else
         echo "GoldDR is not in standby. Do nothing."
