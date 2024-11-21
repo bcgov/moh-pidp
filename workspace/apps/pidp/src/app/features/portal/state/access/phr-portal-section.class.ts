@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
-import { faChartSimple, faUserCheck } from '@fortawesome/free-solid-svg-icons';
+import { faChartSimple, faFileLines, faUserCheck } from '@fortawesome/free-solid-svg-icons';
 
 import { AccessRoutes } from '@app/features/access/access.routes';
 import { ShellRoutes } from '@app/features/shell/shell.routes';
@@ -19,7 +19,7 @@ export class PHRPortalSection implements IPortalSection {
   public heading: string;
   public description: string;
   private readonly phrWebsite: string;
-  public faChartSimple = faChartSimple;
+  public faFileLines = faFileLines;
   public faUserCheck = faUserCheck;
   public keyWords: string[];
 
@@ -52,7 +52,7 @@ export class PHRPortalSection implements IPortalSection {
 
   public get icon(): IconProp {
     const statusCode = this.getStatusCode();
-    return statusCode === StatusCode.COMPLETED ? faUserCheck : faChartSimple;
+    return statusCode === StatusCode.COMPLETED ? faUserCheck : faFileLines;
   }
 
   public performAction(): void | Observable<void> {
