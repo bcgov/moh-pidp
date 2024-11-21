@@ -4,11 +4,13 @@ global:
   commit_sha: ""
   image:
     tag: main
+    registry: image-registry.openshift-image-registry.svc:5000/f088b1-tools
+  license_plate: "f088b1"
 
 database:
   autoCreate: false
   # databaseHost: dev-patroni
-# existingSecret: dev-patroni-secret
+  existingSecret: test-patroni-secret
 
 redis:
   enabled: false
@@ -18,18 +20,22 @@ redis:
 
 nginx:
   replicaCount: 2
+  fluentbit:
+    enabled: false
 
 frontend:
-  replicaCount: 3
+  replicaCount: 2
   settings:
     environmentName: test
     keycloak:
       url: https://common-logon-test.hlth.gov.bc.ca/auth
 
 webapi:
-  replicaCount: 3
+  replicaCount: 2
   aspnetcore:
     environment: Staging
+  fluentbit:
+    enabled: false
 
 plr-intake:
   replicaCount: 1
