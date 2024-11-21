@@ -259,6 +259,15 @@ export class BcProviderApplicationPage
         AccessRoutes.BASE_PATH,
         AccessRoutes.PROVINCIAL_ATTACHMENT_SYSTEM,
       ]);
+    } else if (
+      this.previousUrl
+        .split('/')
+        .includes(AccessRoutes.PHR)
+    ) {
+      this.router.navigate([
+        AccessRoutes.BASE_PATH,
+        AccessRoutes.PHR,
+      ]);
     } else {
       this.navigationService.navigateToRoot();
     }

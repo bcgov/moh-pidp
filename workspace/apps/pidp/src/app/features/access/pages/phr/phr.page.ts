@@ -37,7 +37,7 @@ import {
 } from './phr.constants';
 
 @Component({
-  selector: 'app-provincial-attachment-system',
+  selector: 'app-phr',
   standalone: true,
   imports: [
     AsyncPipe,
@@ -54,7 +54,7 @@ import {
     NgOptimizedImage,
   ],
   templateUrl: './phr.page.html',
-  styleUrl: './provincial-attachment-system.page.scss',
+  styleUrl: './phr.page.scss',
   providers: [
     {
       provide: STEPPER_GLOBAL_OPTIONS,
@@ -67,9 +67,9 @@ export class PHRPage implements OnInit {
     false,
   );
   public destination$: Observable<Destination>;
-  public pas$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
+  public phr$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
   public bcProviderStatusCode: number | undefined;
-  public pasStatusCode: number | undefined;
+  public phrStatusCode: number | undefined;
   public bcProviderUsername = '';
   public logoutRedirectUrl: string;
   public bcProviderTutorial: string;
@@ -137,12 +137,12 @@ export class PHRPage implements OnInit {
       .pipe(
         tap((profileStatus: ProfileStatus | null) => {
           this.hasCpn = profileStatus?.status.collegeCertification.hasCpn;
-          this.pasStatusCode =
+          this.phrStatusCode =
             profileStatus?.status.phr.statusCode;
           this.bcProviderStatusCode =
             profileStatus?.status.bcProvider.statusCode;
-          if (this.pasStatusCode === StatusCode.COMPLETED) {
-            this.pas$.next(false);
+          if (this.phrStatusCode === StatusCode.COMPLETED) {
+            this.phr$.next(false);
           } else if (
             selectedIndex === this.lastSelectedIndex &&
             this.bcProviderStatusCode === StatusCode.COMPLETED
