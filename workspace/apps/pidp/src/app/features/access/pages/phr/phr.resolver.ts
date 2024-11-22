@@ -25,7 +25,7 @@ export const phrResolver: ResolveFn<
         return null;
       }
 
-      return profileStatus.status.provincialAttachmentSystem.statusCode;
+      return profileStatus.status.phr.statusCode;
     }),
     catchError(() => of(null)),
   );
