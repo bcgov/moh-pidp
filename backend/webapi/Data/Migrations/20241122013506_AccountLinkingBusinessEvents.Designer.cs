@@ -13,7 +13,7 @@ using Pidp.Data;
 namespace Pidp.Data.Migrations
 {
     [DbContext(typeof(PidpDbContext))]
-    [Migration("20241118232627_AccountLinkingBusinessEvents")]
+    [Migration("20241122013506_AccountLinkingBusinessEvents")]
     partial class AccountLinkingBusinessEvents
     {
         /// <inheritdoc />
@@ -1182,29 +1182,6 @@ namespace Pidp.Data.Migrations
                     b.ToTable("PartyLicenceDeclaration");
                 });
 
-            modelBuilder.Entity("Pidp.Models.PrpAuthorizedLicence", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<bool>("Claimed")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("LicenceNumber")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("LicenceNumber")
-                        .IsUnique();
-
-                    b.ToTable("PrpAuthorizedLicence");
-                });
-
             modelBuilder.Entity("Pidp.Models.HcimAccountTransfer", b =>
                 {
                     b.HasBaseType("Pidp.Models.AccessRequest");
@@ -1257,6 +1234,15 @@ namespace Pidp.Data.Migrations
                     b.ToTable("BusinessEvent");
 
                     b.HasDiscriminator().HasValue("AccountLinkingFailure");
+                });
+
+            modelBuilder.Entity("Pidp.Models.AccountLinkingFailure+LinkTicketNotFound", b =>
+                {
+                    b.HasBaseType("Pidp.Models.BusinessEvent");
+
+                    b.ToTable("BusinessEvent");
+
+                    b.HasDiscriminator().HasValue("LinkTicketNotFound");
                 });
 
             modelBuilder.Entity("Pidp.Models.AccountLinkingSuccess", b =>

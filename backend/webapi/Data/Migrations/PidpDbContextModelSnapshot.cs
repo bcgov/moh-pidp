@@ -1233,6 +1233,15 @@ namespace Pidp.Data.Migrations
                     b.HasDiscriminator().HasValue("AccountLinkingFailure");
                 });
 
+            modelBuilder.Entity("Pidp.Models.AccountLinkingFailure+LinkTicketNotFound", b =>
+                {
+                    b.HasBaseType("Pidp.Models.BusinessEvent");
+
+                    b.ToTable("BusinessEvent");
+
+                    b.HasDiscriminator().HasValue("LinkTicketNotFound");
+                });
+
             modelBuilder.Entity("Pidp.Models.AccountLinkingSuccess", b =>
                 {
                     b.HasBaseType("Pidp.Models.BusinessEvent");
