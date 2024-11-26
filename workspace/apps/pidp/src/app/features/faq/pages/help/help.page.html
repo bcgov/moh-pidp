@@ -223,6 +223,30 @@
         (closed)="panelOpenState.set(false)">
         <mat-expansion-panel-header>
           <mat-panel-title
+            ><b
+              >How do I reset my MFA on BCProvider?</b
+            ></mat-panel-title
+          >
+        </mat-expansion-panel-header>
+        <p>
+          Click Access<br/>
+          Click BC Provider Account<br/>
+          On the right-hand side click “Reset my MFA” link<br/>
+          Click continue, system will unpair your phone.<br/>
+          After completely the unpairing, you will be prompted to login<br/>
+          Select the BCprovider acccount<br/>
+          Enter your current password<br/>
+          After successfully logging into your account, you will be prompted to setup MFA on a phone or tablet.<br/>
+        </p>
+      </mat-expansion-panel>
+    </div>
+    <div class="faq-item">
+      <mat-expansion-panel
+        class="faq-expansion-panel"
+        (opened)="panelOpenState.set(true)"
+        (closed)="panelOpenState.set(false)">
+        <mat-expansion-panel-header>
+          <mat-panel-title
             ><b>Who is using the OneHealthID Service?</b></mat-panel-title
           >
         </mat-expansion-panel-header>
