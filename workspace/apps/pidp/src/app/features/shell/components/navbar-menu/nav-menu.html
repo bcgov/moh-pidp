@@ -56,6 +56,12 @@
               (click)="navigateTo(ProfileRoutes.routePath(ProfileRoutes.USER_ACCESS_AGREEMENT))"
               >User Access Agreement</a
             >
+            <a
+            *ngIf="hasCredential(IdentityProvider.BC_PROVIDER)"
+            class="dropdown-links"
+            (click)="navigateTo(AccessRoutes.routePath(AccessRoutes.BC_PROVIDER_EDIT))"
+            >Password and MFA reset</a
+          >
           </div>
         </div>
       </a>
