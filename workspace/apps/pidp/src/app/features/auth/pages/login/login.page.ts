@@ -39,6 +39,7 @@ import { NeedHelpComponent } from '@app/shared/components/need-help/need-help.co
 
 import { IdentityProvider } from '../../enums/identity-provider.enum';
 import { AuthService } from '../../services/auth.service';
+import { LinkAccountConfirmResource } from '../link-account-confirm/link-account-confirm-resource.service';
 import { BannerFindResponse } from './banner-find.response.model';
 import { LoginResource } from './login-resource.service';
 import { component } from './login.constants';
@@ -93,6 +94,7 @@ export class LoginPage implements OnInit, AfterViewInit {
     private dialog: MatDialog,
     private documentService: DocumentService,
     private viewportService: ViewportService,
+    private linkAccountConfirmResource: LinkAccountConfirmResource,
     private snowplowService: SnowplowService,
     private loginResource: LoginResource,
     private logger: LoggerService,
@@ -196,7 +198,8 @@ export class LoginPage implements OnInit, AfterViewInit {
   }
 
   private login(idpHint: IdentityProvider): Observable<void> {
-    return this.createClientLogIfNeeded(idpHint).pipe(
+    return this.linkAccountConfirmResource.cancelLink().pipe(
+      switchMap(() => this.createClientLogIfNeeded(idpHint)),
       switchMap(() =>
         this.authService.login({
           idpHint: idpHint,

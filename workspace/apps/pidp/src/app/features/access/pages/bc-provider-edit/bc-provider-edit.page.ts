@@ -313,6 +313,7 @@ export class BcProviderEditPage
       height: '24rem',
       cancelHide: true,
       actionHide: true,
+      progressBar: true,
     };
     this.dialog.open(this.mfaDialogTemplate, { data });
   }
@@ -335,6 +336,7 @@ export class BcProviderEditPage
       actionText: 'Continue',
       actionTypePosition: 'center',
       cancelHide: true,
+      progressBar: true,
     };
     this.dialog
       .open(this.mfaDialogTemplate, { data, disableClose: true })

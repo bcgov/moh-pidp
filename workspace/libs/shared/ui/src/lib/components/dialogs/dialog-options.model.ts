@@ -30,4 +30,5 @@ export interface DialogOptions {
   /** overload the dialog height, if undefined the default value will be used */
   height?: string;
   class?: string;
+  progressBar?: boolean;
 }

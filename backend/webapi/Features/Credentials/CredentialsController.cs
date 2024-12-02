@@ -117,11 +117,12 @@ public class CredentialsController(IPidpAuthorizationService authorizationServic
         return result.ToActionResult();
     }
 
-    [HttpDelete("/api/[controller]")]
+    [HttpDelete("/api/[controller]/link-ticket/cookie")]
+    [AllowAnonymous]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public ActionResult DeleteCredential()
+    public ActionResult DeleteCredentialLinkCookie()
     {
         this.Response.Cookies.Append(
             Cookies.CredentialLinkTicket.Key,
