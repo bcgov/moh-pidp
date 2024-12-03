@@ -179,12 +179,12 @@ parameters:
     description: Namespace
     displayName: Namespace
     required: true
-    value: d8a8f9-dev
+    value: f088b1-prod
   - name: OC_ENV
     description: OpenShift Environment
     displayName: OpenShift Environment
     required: true
-    value: dev
+    value: prod
   - name: SLACK_ERROR_NOTIFICATION_WEBHOOK
     description: Slack error notification Webhook URL
     displayName: Slack Webhook URL

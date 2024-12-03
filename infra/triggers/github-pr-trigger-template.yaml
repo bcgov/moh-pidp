@@ -2,7 +2,7 @@ apiVersion: triggers.tekton.dev/v1alpha1
 kind: TriggerTemplate
 metadata:
   name: github-pr-trigger-template
-  namespace: d8a8f9-tools
+  namespace: f088b1-tools
 spec: 
   params:
     - name: git-revision
@@ -39,7 +39,7 @@ spec:
           - name: release_name
             value: $(tt.params.git-pr-number)
           - name: release_namespace
-            value: d8a8f9-dev
+            value: f088b1-dev
           - name: values_file
             value: deploy/pr_values.yaml
         workspaces:
