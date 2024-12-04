@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NodaTime;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
@@ -12,9 +13,11 @@ using Pidp.Data;
 namespace Pidp.Data.Migrations
 {
     [DbContext(typeof(PidpDbContext))]
-    partial class PidpDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241115192035_DeletePRPAuthorizedLicenceTable")]
+    partial class DeletePRPAuthorizedLicenceTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1217,47 +1220,6 @@ namespace Pidp.Data.Migrations
                     b.HasDiscriminator().HasValue("MSTeamsClinicAddress");
                 });
 
-            modelBuilder.Entity("Pidp.Models.AccountLinkingFailure", b =>
-                {
-                    b.HasBaseType("Pidp.Models.BusinessEvent");
-
-                    b.Property<int>("PartyId")
-                        .ValueGeneratedOnUpdateSometimes()
-                        .HasColumnType("integer")
-                        .HasColumnName("PartyId");
-
-                    b.HasIndex("PartyId");
-
-                    b.ToTable("BusinessEvent");
-
-                    b.HasDiscriminator().HasValue("AccountLinkingFailure");
-                });
-
-            modelBuilder.Entity("Pidp.Models.AccountLinkingFailure+LinkTicketNotFound", b =>
-                {
-                    b.HasBaseType("Pidp.Models.BusinessEvent");
-
-                    b.ToTable("BusinessEvent");
-
-                    b.HasDiscriminator().HasValue("LinkTicketNotFound");
-                });
-
-            modelBuilder.Entity("Pidp.Models.AccountLinkingSuccess", b =>
-                {
-                    b.HasBaseType("Pidp.Models.BusinessEvent");
-
-                    b.Property<int>("PartyId")
-                        .ValueGeneratedOnUpdateSometimes()
-                        .HasColumnType("integer")
-                        .HasColumnName("PartyId");
-
-                    b.HasIndex("PartyId");
-
-                    b.ToTable("BusinessEvent");
-
-                    b.HasDiscriminator().HasValue("AccountLinkingSuccess");
-                });
-
             modelBuilder.Entity("Pidp.Models.BCProviderPasswordReset", b =>
                 {
                     b.HasBaseType("Pidp.Models.BusinessEvent");
@@ -1509,28 +1471,6 @@ namespace Pidp.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Clinic");
-                });
-
-            modelBuilder.Entity("Pidp.Models.AccountLinkingFailure", b =>
-                {
-                    b.HasOne("Pidp.Models.Party", "Party")
-                        .WithMany()
-                        .HasForeignKey("PartyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Party");
-                });
-
-            modelBuilder.Entity("Pidp.Models.AccountLinkingSuccess", b =>
-                {
-                    b.HasOne("Pidp.Models.Party", "Party")
-                        .WithMany()
-                        .HasForeignKey("PartyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Party");
                 });
 
             modelBuilder.Entity("Pidp.Models.BCProviderPasswordReset", b =>
