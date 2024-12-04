@@ -1,7 +1,7 @@
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { AsyncPipe, NgIf, NgOptimizedImage } from '@angular/common';
-import { MatDialog } from '@angular/material/dialog';
 import { AfterViewInit, Component, HostListener, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 
 import { Observable, map } from 'rxjs';
@@ -19,8 +19,8 @@ import {
 } from '@bcgov/shared/ui';
 
 import { PartyService } from '@app/core/party/party.service';
-import { Constants } from '@app/shared/constants';
 import { SnowplowService } from '@app/core/services/snowplow.service';
+import { Constants } from '@app/shared/constants';
 
 import { AccessRoutes } from '../access/access.routes';
 import { OrganizationInfoRoutes } from '../organization-info/organization-info.routes';
@@ -93,12 +93,24 @@ export class PortalPage implements OnInit, AfterViewInit {
     this.alerts$ = this.resource
       .getProfileStatus(this.partyService.partyId)
       .pipe(map((profileStatus) => profileStatus?.alerts ?? []));
+    let isNewUnlicensedUser: string =
+      localStorage.getItem('isNewUnlicensedUser') ?? '';
+    let isNewUnlicensedPopupDisplayed: string =
+      localStorage.getItem('isNewUserPopupDisplayed') ?? '';
+    if (isNewUnlicensedUser && !isNewUnlicensedPopupDisplayed) {
+      this.showNewUserPopup(
+        'Thank you for providing OneHealthID with the information needed at this time. You can now explore access to healthcare systems via OneHealthID.  Accessing certain systems may require an endorsement from a licensed healthcare provider.',
+      );
+      localStorage.setItem('isNewUserPopupDisplayed', 'true');
+    }
     if (this.previousUrl.split('/').includes(Constants.newUserURL)) {
-      this.showNewUserPopup();
+      this.showNewUserPopup(
+        'Thank you for providing OneHealthID with the information needed at this time. You can now explore access to healthcare systems via OneHealthID.',
+      );
     }
   }
 
-  private showNewUserPopup(): void {
+  private showNewUserPopup(message: string): void {
     const data: DialogOptions = {
       title: 'Account information completed',
       bottomBorder: false,
@@ -106,8 +118,7 @@ export class PortalPage implements OnInit, AfterViewInit {
       bodyTextPosition: 'center',
       component: HtmlComponent,
       data: {
-        content:
-          'Thank you for providing OneHealthID with the information needed at this time, now you can explore OneHealthID to its full potential, based on your provided information.',
+        content: message,
       },
       imageSrc: '/assets/images/online-marketing-hIgeoQjS_iE-unsplash.jpg',
       imageType: 'banner',
