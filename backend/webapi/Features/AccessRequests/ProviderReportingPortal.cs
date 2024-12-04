@@ -14,7 +14,7 @@ using Pidp.Models.Lookups;
 
 public class ProviderReportingPortal
 {
-    public static IdentifierType[] AllowedIdentifierTypes => [IdentifierType.PhysiciansAndSurgeons];
+    public static IdentifierType[] AllowedIdentifierTypes => [IdentifierType.PhysiciansAndSurgeons, IdentifierType.Pharmacist];
 
     public class Command : ICommand<IDomainResult>
     {
@@ -51,23 +51,13 @@ public class ProviderReportingPortal
                 })
                 .SingleAsync();
 
-            var filteredPlrDigest = (await this.plrClient.GetStandingsDigestAsync(dto.Cpn))
-                .With(AllowedIdentifierTypes);
 
             if (dto.AlreadyEnroled
-                || !filteredPlrDigest
-                    .HasGoodStanding)
+                || !(await this.plrClient.GetStandingsDigestAsync(dto.Cpn))
+                   .With(AllowedIdentifierTypes)
+                   .HasGoodStanding)
             {
                 this.logger.LogAccessRequestDenied();
-                return DomainResult.Failed();
-            }
-
-            var prpAuthorization = await this.context.PrpAuthorizedLicences
-                .SingleOrDefaultAsync(authorizedLicence => filteredPlrDigest.LicenceNumbers.Contains(authorizedLicence.LicenceNumber));
-
-            if (prpAuthorization == null)
-            {
-                this.logger.LogUnauthorizedLicence(command.PartyId, filteredPlrDigest.LicenceNumbers);
                 return DomainResult.Failed();
             }
 
@@ -82,8 +72,6 @@ public class ProviderReportingPortal
                 AccessTypeCode = AccessTypeCode.ProviderReportingPortal,
                 RequestedOn = this.clock.GetCurrentInstant()
             });
-
-            prpAuthorization.Claimed = true;
 
             await this.context.SaveChangesAsync();
 
