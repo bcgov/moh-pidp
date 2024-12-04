@@ -93,9 +93,9 @@ export class PortalPage implements OnInit, AfterViewInit {
     this.alerts$ = this.resource
       .getProfileStatus(this.partyService.partyId)
       .pipe(map((profileStatus) => profileStatus?.alerts ?? []));
-    let isNewUnlicensedUser: string =
+    const isNewUnlicensedUser: string =
       localStorage.getItem('isNewUnlicensedUser') ?? '';
-    let isNewUnlicensedPopupDisplayed: string =
+    const isNewUnlicensedPopupDisplayed: string =
       localStorage.getItem('isNewUserPopupDisplayed') ?? '';
     if (isNewUnlicensedUser && !isNewUnlicensedPopupDisplayed) {
       this.showNewUserPopup(

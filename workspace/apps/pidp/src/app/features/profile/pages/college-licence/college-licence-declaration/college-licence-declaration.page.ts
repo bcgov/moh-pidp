@@ -149,9 +149,8 @@ export class CollegeLicenceDeclarationPage
         { replaceUrl: true },
       );
     } else if (this.formState.collegeCode.value === 0) {
-      localStorage.getItem('isNewUnlicensedUser') === null
-        ? localStorage.setItem('isNewUnlicensedUser', 'true')
-        : '';
+      if (localStorage.getItem('isNewUnlicensedUser') === null)
+        localStorage.setItem('isNewUnlicensedUser', 'true');
       this.navigateToRoot();
     } else {
       this.licenceDeclarationFailed = true;
