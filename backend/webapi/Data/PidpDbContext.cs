@@ -30,7 +30,6 @@ public class PidpDbContext(
     public DbSet<MSTeamsClinicMemberEnrolment> MSTeamsClinicMemberEnrolments { get; set; } = default!;
     public DbSet<PartyLicenceDeclaration> PartyLicenceDeclarations { get; set; } = default!;
     public DbSet<Party> Parties { get; set; } = default!;
-    public DbSet<PrpAuthorizedLicence> PrpAuthorizedLicences { get; set; } = default!;
 
     /// <summary>
     /// Do not use. Use SaveChangesAsync Instead.

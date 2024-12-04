@@ -100,10 +100,12 @@ export class ConfirmDialogComponent implements OnInit, AfterViewInit {
   }
 
   public ngAfterViewInit(): void {
-    const adjustSubmitFocus = document.querySelector(
-      '#submit',
-    ) as HTMLButtonElement;
-    if (adjustSubmitFocus) adjustSubmitFocus.focus();
+    setTimeout(() => {
+      const adjustSubmitFocus = document.querySelector(
+        '#submit',
+      ) as HTMLButtonElement;
+      if (adjustSubmitFocus) adjustSubmitFocus.focus();
+    });
   }
 
   private getOptions(dialogOptions: DialogOptions): DialogOptions {
