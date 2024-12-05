@@ -4,6 +4,7 @@ import {
   EventEmitter,
   Input,
   OnChanges,
+  OnDestroy,
   OnInit,
   Output,
   SimpleChanges,
@@ -71,7 +72,7 @@ import { NavMenuResource } from './nav-menu.resource.service';
     NgClass,
   ],
 })
-export class NavMenuComponent implements OnChanges, OnInit {
+export class NavMenuComponent implements OnChanges, OnInit, OnDestroy {
   @Input() public alerts: AlertCode[] | null = [];
   @Input() public menuItems!: DashboardMenuItem[];
   @Input() public emailSupport!: string;
