@@ -25,6 +25,8 @@ import {
   RouterOutlet,
 } from '@angular/router';
 
+import { Observable, Subject, takeUntil } from 'rxjs';
+
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { faBell } from '@fortawesome/free-regular-svg-icons';
 
@@ -38,14 +40,14 @@ import {
 } from '@bcgov/shared/ui';
 import { RoutePath } from '@bcgov/shared/utils';
 
+import { PartyService } from '@app/core/party/party.service';
+import { AccessRoutes } from '@app/features/access/access.routes';
+import { IdentityProvider } from '@app/features/auth/enums/identity-provider.enum';
 import { AlertCode } from '@app/features/portal/enums/alert-code.enum';
 import { ProfileRoutes } from '@app/features/profile/profile.routes';
-import { AccessRoutes } from '@app/features/access/access.routes';
-import { NavMenuResource } from './nav-menu.resource.service';
-import { PartyService } from '@app/core/party/party.service';
-import { Observable, Subject, takeUntil } from 'rxjs';
-import { IdentityProvider } from '@app/features/auth/enums/identity-provider.enum';
+
 import { Credential } from './nav-menu.model';
+import { NavMenuResource } from './nav-menu.resource.service';
 
 @Component({
   selector: 'app-nav-menu',
@@ -109,7 +111,7 @@ export class NavMenuComponent implements OnChanges, OnInit {
   }
 
   public ngOnInit(): void {
-      this.handleLinkedAccounts();
+    this.handleLinkedAccounts();
   }
 
   public ngOnChanges(_: SimpleChanges): void {
