@@ -1,0 +1,72 @@
+<div class="feedback-container" uiPidpInjectViewportCss>
+  <header class="feedback-header">
+    <div class="close-button">
+      <button class="close" mat-button (click)="onNoClick()">X</button>
+    </div>
+    <h1>
+      How was your experience using OneHealthID?
+    </h1>
+  </header>
+  <ng-container *ngIf="showErrorCard">
+    <section class="error-card" [class.show-card]="showErrorCard">
+      <p>An error occurred.</p>
+    </section>
+  </ng-container>
+  <div class="content">
+    <section class="form-card">
+      <div class="feedback-form">
+        <form novalidate [formGroup]="formState.form" (ngSubmit)="onSubmit()">
+          <div class="form-content">
+            <div class="textarea-field">
+              <mat-form-field>
+                <textarea
+                matInput
+                formControlName="feedback"
+                type="text"
+                aria-labelledby="feedback"
+                placeholder="Enter here"
+                maxlength="500">
+                </textarea>
+                <mat-error>{{ formState.getErrorMessage() }}</mat-error>
+                <!-- <input
+                  matInput
+                  formControlName="feedback"
+                  type="text"
+                  aria-labelledby="feedback" />
+                <mat-error>{{ formState.getErrorMessage() }}</mat-error> -->
+              </mat-form-field>
+            </div>
+            <!-- <div class="field">
+              <mat-form-field>
+                <input
+                  matInput
+                  formControlName="attachment"
+                  type="file"
+                  aria-labelledby="attachment" />
+                  <mat-error>{{ formState.getErrorMessage() }}</mat-error>
+              </mat-form-field>
+            </div> -->
+            <button type="button" mat-raised-button (click)="fileInput.click()">Choose File</button>
+            <input hidden (change)="onFileSelected()" #fileInput type="file" id="file" formControlName="attachment">
+            <span class="file-name">{{selectedFile?.name}}</span>
+
+            <div class="form-button-box">
+              <button
+                mat-flat-button
+                type="submit"
+                color="primary">
+                Send
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </section>
+  </div>
+</div>
+
+<ng-template #successDialog>
+  <app-success-dialog
+    title="Thank You!">
+  </app-success-dialog>
+</ng-template>

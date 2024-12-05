@@ -19,6 +19,7 @@ import { OrganizationInfoRoutes } from '../organization-info/organization-info.r
 import { ProfileRoutes } from '../profile/profile.routes';
 import { AlertCode } from './enums/alert-code.enum';
 import { PortalResource } from './portal-resource.service';
+import { FeedbackButtonComponent } from '@app/shared/components/feedback-button/feedback-button.component';
 
 @Component({
   selector: 'app-portal',
@@ -37,6 +38,7 @@ import { PortalResource } from './portal-resource.service';
     NgIf,
     NgOptimizedImage,
     AsyncPipe,
+    FeedbackButtonComponent
   ],
 })
 export class PortalPage implements OnInit, AfterViewInit {

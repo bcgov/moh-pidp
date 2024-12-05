@@ -16,6 +16,7 @@ import { InjectViewportCssClassDirective } from '@bcgov/shared/ui';
 
 import { DialogBcproviderCreateComponent } from './components/dialog-bcprovider-create.component';
 import { DialogBcproviderEditComponent } from './components/dialog-bcprovider-edit.component';
+import { FeedbackSendComponent } from './components/feedback-send.component';
 
 @Component({
   selector: 'app-success-dialog',
@@ -31,7 +32,7 @@ export class SuccessDialogComponent implements OnInit {
   @Input() public username!: string;
   @Input() public title!: string;
   @Input() public componentType!: Type<
-    DialogBcproviderCreateComponent | DialogBcproviderEditComponent
+    DialogBcproviderCreateComponent | DialogBcproviderEditComponent | FeedbackSendComponent
   >;
 
   @ViewChild('dialogParagraphHost', { static: true, read: ViewContainerRef })
@@ -52,11 +53,11 @@ export class SuccessDialogComponent implements OnInit {
 
   private loadDialogParagraphComponent(
     componentType: Type<
-      DialogBcproviderCreateComponent | DialogBcproviderEditComponent
+      DialogBcproviderCreateComponent | DialogBcproviderEditComponent | FeedbackSendComponent
     >,
   ): void {
     const componentRef = this.dialogParagraphHost.createComponent<
-      DialogBcproviderCreateComponent | DialogBcproviderEditComponent
+      DialogBcproviderCreateComponent | DialogBcproviderEditComponent | FeedbackSendComponent
     >(componentType);
     componentRef.instance.username = this.username;
   }

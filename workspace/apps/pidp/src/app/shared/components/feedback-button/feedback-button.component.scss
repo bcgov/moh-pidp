@@ -1,8 +1,28 @@
 .viewport-all {
-  & .feedback-button-container {
-    & .feedback-button-box {
+  .feedback-button-box {
+    padding: 1rem 0;
 
+    span {
+      font-size: 1rem;
+    }
+
+    .btn-feedback {
+      text-align: center;
+      width: 80px;
+      float: right;
+      border-radius: 4px;
+      border: 2px solid #036 !important;
+      background: #ffa500;
+      margin-top: 5px;
+      margin-left: 2rem;
+    }
+
+    img {
+      margin-right: 10px;
+      margin-bottom: 6px;
     }
   }
+  .custom-dialog-container .mat-dialog-container {
+    padding-top: 50px !important;
+  }
 }
-
