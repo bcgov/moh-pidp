@@ -27,6 +27,7 @@ export class PrescriptionRefillEformsPortalSection implements IPortalSection {
   public faPrescriptionBottleMedical = faPrescriptionBottleMedical;
   public faUserCheck = faUserCheck;
   public keyWords: string[];
+  public completedMessage: string;
 
   public constructor(
     private profileStatus: ProfileStatus,
@@ -36,6 +37,7 @@ export class PrescriptionRefillEformsPortalSection implements IPortalSection {
     this.heading = 'Provincial Prescription Renewal Support Service eForm';
     this.description = `Enrol here for access to the Provincial Prescription Renewal Support Service eForm`;
     this.keyWords = profileStatus.status.prescriptionRefillEforms.keyWords || [];
+    this.completedMessage = this.profileStatus.status.prescriptionRefillEforms.completedMessage;
   }
 
   public get hint(): string {

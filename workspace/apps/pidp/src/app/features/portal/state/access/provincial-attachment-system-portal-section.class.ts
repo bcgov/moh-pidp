@@ -22,6 +22,7 @@ export class ProvincialAttachmentSystemPortalSection implements IPortalSection {
   public faChartSimple = faChartSimple;
   public faUserCheck = faUserCheck;
   public keyWords: string[];
+  public completedMessage: string;
 
   public constructor(
     private profileStatus: ProfileStatus,
@@ -35,6 +36,7 @@ export class ProvincialAttachmentSystemPortalSection implements IPortalSection {
     this.provincialAttachmentSystemWebsite = 'https://bchealthprovider.ca';
     this.keyWords =
       profileStatus.status.provincialAttachmentSystem.keyWords || [];
+    this.completedMessage = profileStatus.status.provincialAttachmentSystem.completedMessage;
   }
 
   /**

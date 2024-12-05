@@ -23,6 +23,7 @@ export class HcimAccountTransferPortalSection implements IPortalSection {
   public faArrowsRotate = faArrowsRotate;
   public faUserCheck = faUserCheck;
   public keyWords: string[];
+  public completedMessage: string;
 
   public constructor(
     private profileStatus: ProfileStatus,
@@ -32,6 +33,7 @@ export class HcimAccountTransferPortalSection implements IPortalSection {
     this.heading = 'HCIMWeb Account Transfer';
     this.description = `For existing users of HCIMWeb application to transfer their HNETBC account credential to their organization credential.`;
     this.keyWords = profileStatus.status.hcimAccountTransfer.keyWords || [];
+    this.completedMessage = this.profileStatus.status.hcimAccountTransfer.completedMessage;
   }
 
   public get hint(): string {

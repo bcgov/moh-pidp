@@ -24,6 +24,7 @@ export class ProviderReportingPortalSection implements IPortalSection {
   public faUsers = faUsers;
   public faUserCheck = faUserCheck;
   public keyWords: string[];
+  public completedMessage: string;
 
   public constructor(
     private profileStatus: ProfileStatus,
@@ -33,6 +34,7 @@ export class ProviderReportingPortalSection implements IPortalSection {
     this.heading = 'Provider Reporting Portal';
     this.description = `Enrol here for access to the Provider Reporting Portal`;
     this.keyWords = profileStatus.status.providerReportingPortal.keyWords || [];
+    this.completedMessage = this.profileStatus.status.providerReportingPortal.completedMessage;
   }
 
   public get hint(): string {
