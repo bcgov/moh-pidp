@@ -25,7 +25,7 @@ export enum DiscoveryStatus {
   AlreadyLinkedError,
   CredentialExistsError,
   ExpiredCredentialLinkTicketError,
-  AccountLinkingError
+  AccountLinkingError,
 }
 
 @Injectable({
@@ -38,7 +38,7 @@ export class DiscoveryResource {
    * @description
    * Get the party's ID based on the access token user ID,
    * creates a party if one does not already exist,
-   * or discovers that the User is a new BC Provider (and so cannot create a Party).
+   * or discovers that the User is a new BCProvider (and so cannot create a Party).
    */
   public discover(): Observable<DiscoveryResult> {
     return this.apiResource.post<DiscoveryResult>('discovery', null);
