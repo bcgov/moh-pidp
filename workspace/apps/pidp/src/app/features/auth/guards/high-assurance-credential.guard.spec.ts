@@ -66,7 +66,7 @@ describe('highAssuranceCredentialGuard', () => {
       });
     });
 
-    given('the user is authenticated with a BC Provider', (done) => {
+    given('the user is authenticated with a BCProvider', (done) => {
       authorizedUserServiceSpy.accessorSpies.getters.identityProvider$.mockReturnValue(
         of(IdentityProvider.BC_PROVIDER),
       );

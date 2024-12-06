@@ -124,7 +124,7 @@ export class BcProviderEditPage
       title: 'Access',
       path: AccessRoutes.routePath(AccessRoutes.ACCESS_REQUESTS),
     },
-    { title: 'BC Provider Account', path: '' },
+    { title: 'BCProvider Account', path: '' },
   ];
 
   // ui-page is handling this.
@@ -313,6 +313,7 @@ export class BcProviderEditPage
       height: '24rem',
       cancelHide: true,
       actionHide: true,
+      progressBar: true,
     };
     this.dialog.open(this.mfaDialogTemplate, { data });
   }
@@ -335,6 +336,7 @@ export class BcProviderEditPage
       actionText: 'Continue',
       actionTypePosition: 'center',
       cancelHide: true,
+      progressBar: true,
     };
     this.dialog
       .open(this.mfaDialogTemplate, { data, disableClose: true })
