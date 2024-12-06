@@ -3,6 +3,9 @@ import { Component, Input } from '@angular/core';
 @Component({
   selector: 'app-dialog-feedback-send',
   template: `
+    <div>
+      <img src="/assets/images/feedback-submit-success-logo.svg">
+    </div>
     <h1>
       Thank you!
     </h1>

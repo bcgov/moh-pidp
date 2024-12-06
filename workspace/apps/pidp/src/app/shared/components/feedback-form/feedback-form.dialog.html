@@ -50,7 +50,8 @@
               <button
                 mat-flat-button
                 type="submit"
-                color="primary">
+                color="primary"
+                (click)="showSuccessDialog()">
                 Send
               </button>
             </div>
@@ -63,6 +64,7 @@
 
 <ng-template #successDialog>
   <app-success-dialog
-    title="Thank You!">
+    title="Thank You!"
+    [componentType]="componentType">
   </app-success-dialog>
 </ng-template>

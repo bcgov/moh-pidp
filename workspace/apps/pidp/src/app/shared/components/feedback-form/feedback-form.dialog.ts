@@ -10,6 +10,7 @@ import { SuccessDialogComponent } from "../success-dialog/success-dialog.compone
 import { MatInputModule } from '@angular/material/input';
 import { NgIf } from '@angular/common';
 import html2canvas from 'html2canvas';
+import { FeedbackSendComponent } from '../success-dialog/components/feedback-send.component';
 
 @Component({
   selector: 'app-feedback-form-dialog',
@@ -34,6 +35,7 @@ export class FeedbackFormDialogComponent
   public showOverlayOnSubmit: boolean = false;
   public showErrorCard: boolean = false;
   public selectedFile: any = null;
+  public componentType = FeedbackSendComponent;
 
   @ViewChild('successDialog')
   public successDialogTemplate!: TemplateRef<any>;
@@ -86,13 +88,19 @@ export class FeedbackFormDialogComponent
   public onNoClick(): void {
     this.dialogRef.close();
   }
+
   onClose(): void {
     this.dialogRef.close('Closed by user');
   }
 
-  private showSuccessDialog(): void {
+  public showSuccessDialog(): void {
+    this.dialogRef.close();
     const config: MatDialogConfig = {
       disableClose: true,
+      position: {
+        right: "0px"
+      },
+      width: '380px',
     };
     this.dialog.open(this.successDialogTemplate, config);
   }
