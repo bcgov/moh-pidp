@@ -36,19 +36,15 @@
                 <mat-error>{{ formState.getErrorMessage() }}</mat-error> -->
               </mat-form-field>
             </div>
-            <!-- <div class="field">
-              <mat-form-field>
-                <input
-                  matInput
-                  formControlName="attachment"
-                  type="file"
-                  aria-labelledby="attachment" />
-                  <mat-error>{{ formState.getErrorMessage() }}</mat-error>
-              </mat-form-field>
-            </div> -->
-            <button type="button" mat-raised-button (click)="fileInput.click()">Choose File</button>
-            <input hidden (change)="onFileSelected()" #fileInput type="file" id="file" formControlName="attachment">
-            <span class="file-name">{{selectedFile?.name}}</span>
+            <mat-form-field appearance="outline" class="custom-input">
+              <span matPrefix class="prefix-icon">
+                <mat-icon (click)="takeScreenshot()">add_box</mat-icon> <!-- Left-side icon -->
+              </span>
+              <input matInput placeholder="Attachment" readonly />
+              <mat-icon (click)="fileInput.click()"> insert_photo</mat-icon> <!-- Right-side attachment icon -->
+              <input hidden (change)="onFileSelected()" #fileInput type="file" id="file" formControlName="attachment">
+                <span class="file-name">{{selectedFile?.name}}</span>
+            </mat-form-field>
 
             <div class="form-button-box">
               <button

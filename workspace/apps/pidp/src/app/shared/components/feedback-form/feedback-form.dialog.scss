@@ -11,13 +11,35 @@
     padding: 30px 0 0 50px !important;
   }
 
-  // .close-button {
-  //   padding: 25px 0 0 310px;
-  // }
+  .close-button {
+    padding: 25px 0 0 310px;
+  }
 
   textarea-field {
     padding: 0 0 0 50px !important;
   }
+
+  mat-form-field {
+    padding: 0 0 0 30px !important;
+  }
+
+  .custom-multi-placeholder {
+    width: 100%;
+  }
+
+  .custom-multi-placeholder input::placeholder {
+    color: rgba(0, 0, 0, 0.6); /* Placeholder color */
+    transition: color 0.3s ease;
+  }
+
+  .mat-icon.icon-clear {
+    cursor: pointer;
+  }
+
+  .custom-multi-placeholder input:focus::placeholder {
+    color: transparent; /* Hide placeholder on focus */
+  }
+
 // }
 // }
 // .form-card {
