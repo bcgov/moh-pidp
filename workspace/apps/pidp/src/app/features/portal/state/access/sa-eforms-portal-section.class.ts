@@ -24,6 +24,7 @@ export class SaEformsPortalSection implements IPortalSection {
   public faFileLines = faFileLines;
   public faUserCheck = faUserCheck;
   public keyWords: string[];
+  public completedMessage: string;
 
   public constructor(
     private profileStatus: ProfileStatus,
@@ -33,6 +34,7 @@ export class SaEformsPortalSection implements IPortalSection {
     this.heading = 'Special Authority eForms';
     this.description = `Enrol here for access to PharmaCare's Special Authority eForms application.`;
     this.keyWords = profileStatus.status.saEforms.keyWords || [];
+    this.completedMessage = this.profileStatus.status.saEforms.completedMessage;
   }
 
   public get hint(): string {
