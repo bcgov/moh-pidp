@@ -77,7 +77,7 @@ describe('bcProviderCompletedResolver', () => {
       });
     });
 
-    given('partyId exists, BC Provider StatusCode is COMPLETED', (done) => {
+    given('partyId exists, BCProvider StatusCode is COMPLETED', (done) => {
       const partyId = randNumber({ min: 1 });
       partyServiceSpy.accessorSpies.getters.partyId.mockReturnValue(partyId);
       mockProfileStatus.status.bcProvider.statusCode = StatusCode.COMPLETED;
@@ -108,7 +108,7 @@ describe('bcProviderCompletedResolver', () => {
       });
     });
 
-    given('partyId exists, BC Provider StatusCode is AVAILABLE', (done) => {
+    given('partyId exists, BCProvider StatusCode is AVAILABLE', (done) => {
       const partyId = randNumber({ min: 1 });
       partyServiceSpy.accessorSpies.getters.partyId.mockReturnValue(partyId);
       mockProfileStatus.status.bcProvider.statusCode = StatusCode.AVAILABLE;
