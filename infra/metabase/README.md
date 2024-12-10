@@ -8,17 +8,17 @@
 `oc login <token>`
 
 ### 3. Switch to the desired project
-`oc project d8a8f9-tools`
+`oc project f088b1-tools`
 
 ### 4. Tag the downloaded image
 
-`docker tag metabase/metabase:latest image-registry.apps.silver.devops.gov.bc.ca/d8a8f9-tools/metabase:<image-version>`
+`docker tag metabase/metabase:latest image-registry.apps.silver.devops.gov.bc.ca/f088b1-tools/metabase:<image-version>`
 
 ### 5. Login to docker and Push the image to the metabase imagestream in tools namespace
 
-`docker login -u 'oc whoami' -p <password> image-registry.apps.silver.devops.gov.bc.ca/d8a8f9-tools`
+`docker login -u 'oc whoami' -p <password> image-registry.apps.gold.devops.gov.bc.ca/f088b1-tools`
 
-`docker push image-registry.apps.silver.devops.gov.bc.ca/d8a8f9-tools/metabase:<image-version>`
+`docker push image-registry.apps.gold.devops.gov.bc.ca/f088b1-tools/metabase:<image-version>`
 
 ### 6. Point the latest image in metabase imagestream to the newly downlowded image
 
