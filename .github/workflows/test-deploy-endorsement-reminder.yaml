@@ -30,4 +30,4 @@ jobs:
           helm list --namespace f088b1-test
 
           echo installing helm chart...
-          helm upgrade --wait --namespace f088b1-test --values infra/endorsement_reminder/values.yaml endorsement-reminder infra/endorsement_reminder
+          helm upgrade --wait --namespace f088b1-test --values infra/endorsement_reminder/values.yaml --set global.image.tag=test --set env=test endorsement-reminder infra/endorsement_reminder
