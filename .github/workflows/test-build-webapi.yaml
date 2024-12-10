@@ -18,25 +18,6 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  promote-image-to-test-silver:
-    name: WebAPI Backend Promote to test - Silver
-    runs-on: ubuntu-latest
-    steps:     
-      - name: Install oc
-        uses: redhat-actions/openshift-tools-installer@v1
-        with:
-          oc: "4.7"
-
-      - name: oc login
-        run: |
-          oc login --token=${{ secrets.OPENSHIFT_GHA_SERVICE_ACCOUNT_TOKEN }} --server=${{ secrets.OPENSHIFT_CLUSTER_URL }}
-
-      - name: Promote webapi from dev to test
-        run: |
-          oc -n d8a8f9-tools tag \
-          d8a8f9-tools/pidp-webapi:${{ env.ORIG_TAG }} \
-          d8a8f9-tools/pidp-webapi:${{ env.PROMOTE_TAG }}
-
   promote-image-to-test-gold:
     name: WebAPI Backend Promote to test - Gold
     runs-on: ubuntu-latest

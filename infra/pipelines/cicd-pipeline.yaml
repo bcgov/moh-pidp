@@ -2,7 +2,7 @@ apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
   name: cicd-pipeline
-  namespace: d8a8f9-tools
+  namespace: f088b1-tools
 spec:
   params:
     - name: git-url
@@ -10,13 +10,13 @@ spec:
       default: develop
     - name: git-short-sha
     - name: image-registry
-      default: image-registry.openshift-image-registry.svc:5000/d8a8f9-tools
+      default: image-registry.openshift-image-registry.svc:5000/f088b1-tools
     - name: image-tag
       default: develop
     - name: release_name
       default: dev
     - name: release_namespace
-      default: d8a8f9-dev
+      default: f088b1-dev
     - name: release_version
       default: "v0.1.0"
     - name: values_file

@@ -16,26 +16,7 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
-jobs:
-  promote-image-to-prod-silver:
-    name: WebAPI Backend Promote to prod- Silver
-    runs-on: ubuntu-latest
-    steps:     
-      - name: Install oc
-        uses: redhat-actions/openshift-tools-installer@v1
-        with:
-          oc: "4.7"
-
-      - name: oc login
-        run: |
-          oc login --token=${{ secrets.OPENSHIFT_GHA_SERVICE_ACCOUNT_TOKEN }} --server=${{ secrets.OPENSHIFT_CLUSTER_URL }}
-
-      - name: Promote frontend from test to prod
-        run: |
-          oc -n d8a8f9-tools tag \
-          d8a8f9-tools/pidp-frontend:${{ env.ORIG_TAG }} \
-          d8a8f9-tools/pidp-frontend:${{ env.PROMOTE_TAG }}
-      
+jobs:      
   promote-image-to-prod-gold:
     name: WebAPI Backend Promote to prod- Gold
     runs-on: ubuntu-latest

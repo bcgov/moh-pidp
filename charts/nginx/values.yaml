@@ -885,7 +885,7 @@ metrics:
 ## @section fluentbit parameters
 
 fluentbit:
-  enabled: true
+  enabled: false
   imageRegistry: docker.io/fluent/fluent-bit:3.0.3-debug
   imagePullPolicy: IfNotPresent
   securityContext:
