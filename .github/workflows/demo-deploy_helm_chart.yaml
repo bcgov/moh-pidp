@@ -15,7 +15,7 @@ concurrency:
 
 jobs:
 
-  helm-deployment:
+  helm-deployment-gold:
     runs-on: 'ubuntu-latest'
     steps:
       - uses: actions/checkout@v1 
@@ -23,8 +23,8 @@ jobs:
       - name: Authenticate and set context
         uses: redhat-actions/oc-login@v1.1
         with:
-          openshift_server_url: ${{secrets.OPENSHIFT_CLUSTER_URL}}
-          openshift_token: ${{secrets.OPENSHIFT_PIPELINE_SERVICE_ACCOUNT_TOKEN}}
+          openshift_server_url: ${{secrets.GOLD_OPENSHIFT_CLUSTER_URL}}
+          openshift_token: ${{secrets.GOLD_PIPELINE_SERVICE_ACCOUNT_TOKEN}}
   
       - name: Helm Deploy / install command
         run: |
