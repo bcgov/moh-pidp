@@ -1,4 +1,4 @@
-import { NgClass } from '@angular/common';
+import { CommonModule, NgClass } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
@@ -14,6 +14,7 @@ import {
   selector: 'app-access-request-card',
   standalone: true,
   imports: [
+    CommonModule,
     FaIconComponent,
     InjectViewportCssClassDirective,
     TextButtonDirective,
@@ -29,6 +30,7 @@ export class AccessRequestCardComponent {
   @Output() public action: EventEmitter<void>;
   @Input() public actionDisabled?: boolean;
   @Input() public completed?: boolean;
+  @Input() public completedText!: string;
   public faFileLines = faFileLines;
 
   public constructor() {
