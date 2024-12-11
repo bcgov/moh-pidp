@@ -38,6 +38,7 @@ import { msTeamsSupportEmail } from '../ms-teams-privacy-officer/ms-teams.consta
 import { MsTeamsClinicMemberFormState } from './ms-teams-clinic-member-form-state';
 import { MsTeamsClinicMemberResource } from './ms-teams-clinic-member-resource.service';
 import { PrivacyOfficer } from './ms-teams-clinic-member.model';
+import { FeedbackButtonComponent } from "../../../../shared/components/feedback-button/feedback-button.component";
 
 @Component({
   selector: 'app-ms-teams-clinic-member',
@@ -59,7 +60,8 @@ import { PrivacyOfficer } from './ms-teams-clinic-member.model';
     NgIf,
     PageFooterActionDirective,
     ReactiveFormsModule,
-  ],
+    FeedbackButtonComponent
+],
 })
 export class MsTeamsClinicMemberPage
   extends AbstractFormPage<MsTeamsClinicMemberFormState>

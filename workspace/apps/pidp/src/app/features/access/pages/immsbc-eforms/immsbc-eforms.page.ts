@@ -35,6 +35,7 @@ import {
   immsBCEformsSupportEmail,
   immsBCEformsUrl,
 } from './immsbc-eforms.constants';
+import { FeedbackButtonComponent } from "../../../../shared/components/feedback-button/feedback-button.component";
 
 @Component({
   selector: 'app-immsbc-eforms',
@@ -58,7 +59,8 @@ import {
     PageSectionSubheaderComponent,
     PageSectionSubheaderDescDirective,
     SafePipe,
-  ],
+    FeedbackButtonComponent
+],
 })
 export class ImmsBCEformsPage implements OnInit, AfterViewInit {
   public title: string;

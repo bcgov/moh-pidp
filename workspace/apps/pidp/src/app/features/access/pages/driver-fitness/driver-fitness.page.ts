@@ -30,6 +30,7 @@ import {
   driverFitnessSupportEmail,
   medicalPractitionerPortalUrl,
 } from './driver-fitness.constants';
+import { FeedbackButtonComponent } from "../../../../shared/components/feedback-button/feedback-button.component";
 
 @Component({
   selector: 'app-driver-fitness',
@@ -45,7 +46,8 @@ import {
     NgIf,
     PageFooterActionDirective,
     RouterLink,
-  ],
+    FeedbackButtonComponent
+],
 })
 export class DriverFitnessPage implements OnInit, AfterViewInit {
   public completed: boolean | null;

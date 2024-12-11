@@ -78,6 +78,7 @@ import { SuccessDialogComponent } from '@app/shared/components/success-dialog/su
 import { AccessRoutes } from '../../access.routes';
 import { BcProviderApplicationFormState } from './bc-provider-application-form-state';
 import { BcProviderApplicationResource } from './bc-provider-application-resource.service';
+import { FeedbackButtonComponent } from "../../../../shared/components/feedback-button/feedback-button.component";
 
 @Component({
   selector: 'app-bc-provider-application',
@@ -103,7 +104,8 @@ import { BcProviderApplicationResource } from './bc-provider-application-resourc
     ReactiveFormsModule,
     SuccessDialogComponent,
     FaIconComponent,
-  ],
+    FeedbackButtonComponent
+],
 })
 export class BcProviderApplicationPage
   extends AbstractFormPage<BcProviderApplicationFormState>

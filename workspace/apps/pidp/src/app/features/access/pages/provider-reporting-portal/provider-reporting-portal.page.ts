@@ -28,6 +28,7 @@ import { StatusCode } from '@app/features/portal/enums/status-code.enum';
 
 import { EnrolmentErrorComponent } from '../../components/enrolment-error/enrolment-error.component';
 import { ProviderReportingPortalResource } from './provider-reporting-portal-resource.service';
+import { FeedbackButtonComponent } from "../../../../shared/components/feedback-button/feedback-button.component";
 
 @Component({
   selector: 'app-provider-reporting-portal',
@@ -50,7 +51,8 @@ import { ProviderReportingPortalResource } from './provider-reporting-portal-res
     PageSectionSubheaderComponent,
     PageSectionSubheaderDescDirective,
     SafePipe,
-  ],
+    FeedbackButtonComponent
+],
 })
 export class ProviderReportingPortalPage implements OnInit {
   public title: string;

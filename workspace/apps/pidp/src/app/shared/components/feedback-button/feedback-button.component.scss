@@ -1,8 +1,9 @@
 .feedback-button-box {
   .mid-right-button {
-    position: fixed;
+    all: unset;
+    position: fixed !important;
     top: 50%;
-    right: 0px !important;
+    right: 0 !important;
     transform: rotate(-90deg);
     transform-origin: center;
     display: inline-block;
