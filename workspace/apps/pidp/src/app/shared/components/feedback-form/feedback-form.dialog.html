@@ -1,7 +1,7 @@
 <div class="feedback-container" uiPidpInjectViewportCss>
   <header class="feedback-header">
     <div class="close-button">
-      <button class="close" mat-button (click)="onNoClick()">X</button>
+      <mat-icon class="mat-icon" (click)="onCloseClick()">close</mat-icon>
     </div>
     <h1>
       How was your experience using OneHealthID?
@@ -17,7 +17,7 @@
       <div class="feedback-form">
         <form novalidate [formGroup]="formState.form" (ngSubmit)="onSubmit()">
           <div class="form-content">
-            <div class="textarea-field">
+            <div >
               <mat-form-field>
                 <textarea
                 matInput
@@ -25,33 +25,42 @@
                 type="text"
                 aria-labelledby="feedback"
                 placeholder="Enter here"
-                maxlength="500">
+                maxlength="1000"
+                class="textarea-field">
                 </textarea>
                 <mat-error>{{ formState.getErrorMessage() }}</mat-error>
-                <!-- <input
-                  matInput
-                  formControlName="feedback"
-                  type="text"
-                  aria-labelledby="feedback" />
-                <mat-error>{{ formState.getErrorMessage() }}</mat-error> -->
               </mat-form-field>
             </div>
-            <mat-form-field appearance="outline" class="custom-input">
-              <span matPrefix class="prefix-icon">
-                <mat-icon (click)="takeScreenshot()">add_box</mat-icon> <!-- Left-side icon -->
-              </span>
-              <input matInput placeholder="Attachment" readonly />
-              <mat-icon (click)="fileInput.click()"> insert_photo</mat-icon> <!-- Right-side attachment icon -->
-              <input hidden (change)="onFileSelected()" #fileInput type="file" id="file" formControlName="attachment">
-                <span class="file-name">{{selectedFile?.name}}</span>
-            </mat-form-field>
 
-            <div class="form-button-box">
+            <mat-form-field appearance="outline" class="split-input">
+              <div class="split-placeholder">
+                <div class="left-placeholder">
+                  <span class="screenshot">Screenshot</span>
+                    <button mat-icon-button class="icon-button" aria-label="Take Screenshot" (click)="takeScreenshot()">
+                      <mat-icon>camera_alt</mat-icon>
+                    </button>
+                </div>
+                <div class="right-placeholder">
+                  <span class="attach">Attach</span>
+                  <button mat-icon-button class="icon-button" aria-label="Take Screenshot" (click)="fileInput.click()">
+                    <mat-icon >attach_file</mat-icon>
+                  </button>
+                  <input hidden (change)="onFileSelected()" #fileInput type="file" id="file" formControlName="attachment">
+                </div>
+              </div>
+              <input matInput/>
+            </mat-form-field>
+            <div>
+              <span class="file-name">{{selectedFile?.name}}</span>
+            </div>
+
+            <div class="form-button-container">
               <button
                 mat-flat-button
                 type="submit"
                 color="primary"
-                (click)="showSuccessDialog()">
+                (click)="showSuccessDialog()"
+                class="send-button">
                 Send
               </button>
             </div>

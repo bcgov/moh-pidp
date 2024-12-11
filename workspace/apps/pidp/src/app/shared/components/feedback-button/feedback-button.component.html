@@ -1,20 +1,10 @@
 <div class="container-box container" uiPidpInjectViewportCss>
   <div class="feedback-button-box">
-    <h2>
-      <button uiTextButton (click)="openDialog()">
-          <img
-            src="/assets/images/feedback-button-logo.svg"
-            alt="feedback-button-logo" />
-          <span>
-            Feedback
-          </span>
-      </button>
-    </h2>
+    <button class="mid-right-button" (click)="openDialog()">
+      <img
+         src="/assets/images/feedback-button-logo.svg"
+         alt="feedback-button-logo" />
+     Feedback
+    </button>
   </div>
 </div>
-
-<ng-template #successDialog>
-  <app-success-dialog
-    title="Thank You!">
-  </app-success-dialog>
-</ng-template>

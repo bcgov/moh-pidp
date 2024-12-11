@@ -11,6 +11,8 @@ import { MatInputModule } from '@angular/material/input';
 import { NgIf } from '@angular/common';
 import html2canvas from 'html2canvas';
 import { FeedbackSendComponent } from '../success-dialog/components/feedback-send.component';
+import { faXmark } from '@fortawesome/free-solid-svg-icons';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-feedback-form-dialog',
@@ -21,9 +23,10 @@ import { FeedbackSendComponent } from '../success-dialog/components/feedback-sen
     SuccessDialogComponent,
     MatFormFieldModule,
     MatInputModule,
-        NgIf,
+    NgIf,
     ReactiveFormsModule,
-    MatIconModule
+    MatIconModule,
+    MatButtonModule
   ],
   encapsulation: ViewEncapsulation.None,
 })
@@ -36,6 +39,7 @@ export class FeedbackFormDialogComponent
   public showErrorCard: boolean = false;
   public selectedFile: any = null;
   public componentType = FeedbackSendComponent;
+  public faXmark = faXmark;
 
   @ViewChild('successDialog')
   public successDialogTemplate!: TemplateRef<any>;
@@ -85,7 +89,7 @@ export class FeedbackFormDialogComponent
     }
   }
 
-  public onNoClick(): void {
+  public onCloseClick(): void {
     this.dialogRef.close();
   }
 

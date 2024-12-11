@@ -6,7 +6,7 @@ import { MatInputModule } from '@angular/material/input';
 import { SuccessDialogComponent } from "../success-dialog/success-dialog.component";
 import { FeedbackFormDialogComponent } from '../feedback-form/feedback-form.dialog';
 import { MatDialog } from '@angular/material/dialog';
-import { right } from '@popperjs/core';
+import { PidpViewport, ViewportService } from '@bcgov/shared/ui';
 
 @Component({
   selector: 'app-feedback-button',
@@ -27,12 +27,19 @@ export class FeedbackButtonComponent
   public isFeedbackFormOpen: boolean = false;
   public showOverlayOnSubmit: boolean = false;
   public showErrorCard: boolean = false;
+  public dialogWidth: string = "360px";
 
   @ViewChild('successDialog')
   public successDialogTemplate!: TemplateRef<any>;
 
-  public constructor(public dialog: MatDialog)
+  public constructor(
+    public dialog: MatDialog,
+    viewportService: ViewportService
+  )
   {
+    viewportService.viewportBroadcast$.subscribe((viewport) =>
+      this.onViewportChange(viewport),
+    );
   }
 
   public toggleFeedbackForm(): void {
@@ -44,15 +51,21 @@ export class FeedbackButtonComponent
       position: {
         right: "0px"
       },
-      width: '380px',
-      data: { title: 'Hello!', content: 'This is a modal dialog.' },
-      panelClass: 'custom-dialog-container'
+      width: this.dialogWidth,
     });
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
       console.log('Result:', result);
     });
+  }
+
+  private onViewportChange(viewport: PidpViewport): void {
+    if (viewport === PidpViewport.xsmall) {
+      this.dialogWidth = "290px";
+    } else {
+      this.dialogWidth ="360px";
+    }
   }
 
 }

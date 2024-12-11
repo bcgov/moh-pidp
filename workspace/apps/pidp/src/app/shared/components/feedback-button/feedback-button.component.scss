@@ -1,28 +1,16 @@
-.viewport-all {
-  .feedback-button-box {
-    padding: 1rem 0;
-
-    span {
-      font-size: 1rem;
-    }
-
-    .btn-feedback {
-      text-align: center;
-      width: 80px;
-      float: right;
-      border-radius: 4px;
-      border: 2px solid #036 !important;
-      background: #ffa500;
-      margin-top: 5px;
-      margin-left: 2rem;
-    }
-
-    img {
-      margin-right: 10px;
-      margin-bottom: 6px;
-    }
-  }
-  .custom-dialog-container .mat-dialog-container {
-    padding-top: 50px !important;
+.feedback-button-box {
+  .mid-right-button {
+    position: fixed;
+    top: 50%;
+    right: 0px !important;
+    transform: rotate(-90deg);
+    transform-origin: center;
+    display: inline-block;
+    background-color:#FCBA19;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
   }
 }

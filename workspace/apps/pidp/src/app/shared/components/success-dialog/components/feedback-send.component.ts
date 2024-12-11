@@ -1,21 +1,31 @@
 import { Component, Input } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-dialog-feedback-send',
   template: `
-    <div>
-      <img src="/assets/images/feedback-submit-success-logo.svg">
-    </div>
     <h1>
-      Thank you!
+      <img src="/assets/images/feedback-doctor-logo.svg" style="width: 100%;">
     </h1>
-    <p>
+    <h2 style="margin-top: 50px; margin-left: 80px">
+
+      Thank you!
+    </h2>
+    <p style="margin-top: 20px;">
     Your feedback is greatly appreciated,
     the help desk will contact you shortly.
   </p>`,
-  styles: `p { text-align: center;}`,
+  styles: `p { text-align: center; }`,
   standalone: true,
 })
 export class FeedbackSendComponent {
   @Input() public username!: string;
+
+  public constructor(
+    public dialog: MatDialog,
+  ) {}
+
+  public onSuccessDialogClose(): void {
+    this.dialog.closeAll();
+  }
 }

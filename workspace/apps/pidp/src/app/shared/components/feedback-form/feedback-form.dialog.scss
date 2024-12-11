@@ -1,53 +1,109 @@
+@use 'pidp-variables' as pidp;
 
-// .viewport-all {
-// .viewport-all {
-  // & .feedback-header {
-  //   & .close-button {
-  //     padding: 25px 0 0 310px !important;
-  //   }
-  // }
+.feedback-container {
+  & .feedback-header {
+    & .close-button {
+      padding: 25px 0 0 280px !important;
+      & .mat-icon {
+        cursor: pointer;
+      }
+    }
+    fa-icon {
+      font-size: 1.5rem;
+      color: pidp.$grey-40;
+    }
+  }
   h1 {
-    // padding-top: 50px;
-    padding: 30px 0 0 50px !important;
+    padding: 15px 0 0 50px !important;
   }
+}
 
-  .close-button {
-    padding: 25px 0 0 310px;
+textarea-field {
+  padding: 0 0 0 50px !important;
+  resize: none;
+}
+
+mat-form-field {
+  padding: 0 0 0 30px !important;
+  width: 90%;
+}
+
+mat-icon {
+  height: 0 !important;
+  cursor: pointer;
+}
+
+.split-input {
+  position: relative;
+}
+
+.split-placeholder {
+  position: absolute;
+  top: -8px;
+  left: 12px;
+  right: 12px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.54);
+}
+
+.split-placeholder .left-placeholder,
+.split-placeholder .right-placeholder {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.left-placeholder {
+  padding-top: 18px;
+  height: 0;
+  .screenshot {
+    padding-top: 20px;
   }
+}
 
-  textarea-field {
-    padding: 0 0 0 50px !important;
+.right-placeholder {
+  padding-top: 18px;
+  height: 0;
+  .attach {
+    padding-top: 20px;
   }
+}
 
-  mat-form-field {
-    padding: 0 0 0 30px !important;
+input.mat-input-element {
+  text-indent: 12px;
+  padding-left: 12px;
+  padding-right: 12px;
+}
+
+.form-button-container {
+  margin-top: 15px;
+  display: flex;
+  justify-content: center;
+  .send-button {
+    background-color: #1b4269;
+    color: white;
+    border-radius: 5px;
+    padding: 5px 15px;
+    text-transform: none;
+    margin-bottom: 40px;
   }
+}
 
-  .custom-multi-placeholder {
-    width: 100%;
-  }
+.icon-button {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px 0 0 0 !important;
+  border-radius: 50%;
+  background-color: transparent;
+  border: none;
+  transition: background-color 0.2s ease;
+}
 
-  .custom-multi-placeholder input::placeholder {
-    color: rgba(0, 0, 0, 0.6); /* Placeholder color */
-    transition: color 0.3s ease;
-  }
-
-  .mat-icon.icon-clear {
-    cursor: pointer;
-  }
-
-  .custom-multi-placeholder input:focus::placeholder {
-    color: transparent; /* Hide placeholder on focus */
-  }
-
-// }
-// }
-// .form-card {
-//   .feedback-form {
-//     .form-content {
-//       .textarea-field {
-//         padding: 0 0 0 50px;
-//       }
-//     }
-//   }
-// }
+.file-name {
+  padding: 0 0 0 40px;
+}
