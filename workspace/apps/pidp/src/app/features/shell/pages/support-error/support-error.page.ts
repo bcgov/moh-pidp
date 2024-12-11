@@ -11,13 +11,14 @@ import {
 import { APP_CONFIG, AppConfig } from '@app/app.config';
 
 import { ShellRoutes } from '../../shell.routes';
+import { FeedbackButtonComponent } from "../../../../shared/components/feedback-button/feedback-button.component";
 
 @Component({
   selector: 'app-support-error',
   templateUrl: './support-error.page.html',
   styleUrls: ['./support-error.page.scss'],
   standalone: true,
-  imports: [AnchorDirective, DashboardHeaderComponent, MatButtonModule],
+  imports: [AnchorDirective, DashboardHeaderComponent, MatButtonModule, FeedbackButtonComponent],
 })
 export class SupportErrorPage {
   public headerConfig: DashboardHeaderConfig;

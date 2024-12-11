@@ -30,6 +30,7 @@ import { BcProviderUser } from '../../models/bc-provider-user.model';
 import { AuthService } from '../../services/auth.service';
 import { AuthorizedUserService } from '../../services/authorized-user.service';
 import { LinkAccountConfirmResource } from './link-account-confirm-resource.service';
+import { FeedbackButtonComponent } from "../../../../shared/components/feedback-button/feedback-button.component";
 
 @Component({
   selector: 'app-link-account-confirm',
@@ -41,7 +42,8 @@ import { LinkAccountConfirmResource } from './link-account-confirm-resource.serv
     MatButtonModule,
     NgOptimizedImage,
     SuccessDialogComponent,
-  ],
+    FeedbackButtonComponent
+],
   templateUrl: './link-account-confirm.page.html',
   styleUrl: './link-account-confirm.page.scss',
 })
