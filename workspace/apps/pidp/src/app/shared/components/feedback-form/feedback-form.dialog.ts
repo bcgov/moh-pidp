@@ -2,7 +2,7 @@ import { Component, ElementRef, Inject, OnDestroy, OnInit, TemplateRef, ViewChil
 import { MAT_DIALOG_DATA, MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import {  MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
-import { FeedbackFormState } from './feedback-button.component-form-state';
+import { FeedbackFormState } from './feedback-form.component-form-state';
 import { AbstractFormDependenciesService, AbstractFormPage } from '@app/core/classes/abstract-form-page.class';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { Observable } from 'rxjs';
@@ -44,15 +44,12 @@ export class FeedbackFormDialogComponent
   @ViewChild('successDialog')
   public successDialogTemplate!: TemplateRef<any>;
 
-  @ViewChild('screen', { static: true }) screen!: ElementRef;
-  public image: string | undefined;
-
   constructor(
     dependenciesService: AbstractFormDependenciesService,
     fb: FormBuilder,
     dialog: MatDialog,
     public dialogRef: MatDialogRef<FeedbackFormDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any
+
   ) {
     super(dependenciesService);
     this.formState = new FeedbackFormState(fb, dialog);
@@ -73,7 +70,6 @@ export class FeedbackFormDialogComponent
   public onFileSelected(): void {
     const inputNode: any = document.querySelector('#file');
     this.selectedFile = inputNode.files[0] ?? null;
-    console.log("selectedFile : ", this.selectedFile);
   }
 
   public takeScreenshot(event: Event): void {
@@ -98,10 +94,6 @@ export class FeedbackFormDialogComponent
 
   public onCloseClick(): void {
     this.dialogRef.close();
-  }
-
-  onClose(): void {
-    this.dialogRef.close('Closed by user');
   }
 
   public showSuccessDialog(event: Event): void {

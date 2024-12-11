@@ -3,7 +3,6 @@ import { Component, TemplateRef, ViewChild } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { SuccessDialogComponent } from "../success-dialog/success-dialog.component";
 import { FeedbackFormDialogComponent } from '../feedback-form/feedback-form.dialog';
 import { MatDialog } from '@angular/material/dialog';
 import { PidpViewport, ViewportService } from '@bcgov/shared/ui';
@@ -17,16 +16,12 @@ import { PidpViewport, ViewportService } from '@bcgov/shared/ui';
     CommonModule,
     ReactiveFormsModule,
     MatFormFieldModule,
-    MatInputModule,
-    SuccessDialogComponent
+    MatInputModule
 ],
 })
 export class FeedbackButtonComponent
 {
 
-  public isFeedbackFormOpen: boolean = false;
-  public showOverlayOnSubmit: boolean = false;
-  public showErrorCard: boolean = false;
   public dialogWidth: string = "360px";
 
   @ViewChild('successDialog')
@@ -40,10 +35,6 @@ export class FeedbackButtonComponent
     viewportService.viewportBroadcast$.subscribe((viewport) =>
       this.onViewportChange(viewport),
     );
-  }
-
-  public toggleFeedbackForm(): void {
-    this.isFeedbackFormOpen = !this.isFeedbackFormOpen;
   }
 
   public openDialog(): void {

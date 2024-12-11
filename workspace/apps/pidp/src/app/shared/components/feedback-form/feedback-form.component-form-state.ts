@@ -6,7 +6,7 @@ import {
 import { MatDialog } from '@angular/material/dialog';
 
 import { AbstractFormState } from '@bcgov/shared/ui';
-import { FeedbackFormDialogComponent } from '../feedback-form/feedback-form.dialog';
+import { FeedbackFormDialogComponent } from './feedback-form.dialog';
 
 export interface FeedbackFormData {
   feedback: string;
@@ -25,13 +25,11 @@ export class FeedbackFormState extends AbstractFormState<FeedbackFormData> {
 
   openDialog(): void {
     const dialogRef = this.dialog.open(FeedbackFormDialogComponent, {
-      width: '300px',
-      data: { title: 'Hello!', content: 'This is a modal dialog.' },
+      width: '300px'
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-      console.log('Result:', result);
+      //TO-DO: Handle the form data to send feedback to backend.
     });
   }
 
