@@ -75,8 +75,10 @@ describe('CollegeLicenceInformationPage', () => {
         component.onBack();
 
         then('router should navigate to root route', () => {
-          const rootRoute = mockActivatedRoute.snapshot.data.routes.root;
-          expect(router.navigate).toHaveBeenCalledWith([rootRoute]);
+          component.scrollToTop().then(() => {
+            const rootRoute = mockActivatedRoute.snapshot.data.routes.root;
+            expect(router.navigate).toHaveBeenCalledWith([rootRoute]);
+          });
         });
       });
     });
