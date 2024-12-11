@@ -7,7 +7,7 @@ import { MatDialog } from '@angular/material/dialog';
     <h1>
       <img src="/assets/images/feedback-doctor-logo.svg" style="width: 100%;">
     </h1>
-    <h2 style="margin-top: 50px; margin-left: 80px">
+    <h2 style="margin-top: 50px; margin-left: 80px;font-weight:700">
 
       Thank you!
     </h2>

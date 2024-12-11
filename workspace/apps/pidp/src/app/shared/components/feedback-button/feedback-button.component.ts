@@ -55,8 +55,7 @@ export class FeedbackButtonComponent
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-      console.log('Result:', result);
+      //TO-DO: implement the sending feedback to backend.
     });
   }
 

@@ -36,16 +36,16 @@
               <div class="split-placeholder">
                 <div class="left-placeholder">
                   <span class="screenshot">Screenshot</span>
-                    <button mat-icon-button class="icon-button" aria-label="Take Screenshot" (click)="takeScreenshot()">
-                      <mat-icon>camera_alt</mat-icon>
+                    <button mat-icon-button class="icon-button" aria-label="Take Screenshot" (click)="takeScreenshot($event)">
+                      <img src="assets/images/icons/icon-screenshot.svg">
                     </button>
                 </div>
                 <div class="right-placeholder">
                   <span class="attach">Attach</span>
-                  <button mat-icon-button class="icon-button" aria-label="Take Screenshot" (click)="fileInput.click()">
-                    <mat-icon >attach_file</mat-icon>
+                  <button mat-icon-button class="icon-button" aria-label="Take Screenshot" (click)="uploadFile($event)">
+                    <img src="assets/images/icons/icon-file-attach.svg">
                   </button>
-                  <input hidden (change)="onFileSelected()" #fileInput type="file" id="file" formControlName="attachment">
+                  <input hidden (change)="onFileSelected()" type="file" id="file" formControlName="attachment">
                 </div>
               </div>
               <input matInput/>
@@ -59,7 +59,7 @@
                 mat-flat-button
                 type="submit"
                 color="primary"
-                (click)="showSuccessDialog()"
+                (click)="showSuccessDialog($event)"
                 class="send-button">
                 Send
               </button>

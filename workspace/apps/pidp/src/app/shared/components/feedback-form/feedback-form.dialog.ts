@@ -76,7 +76,8 @@ export class FeedbackFormDialogComponent
     console.log("selectedFile : ", this.selectedFile);
   }
 
-  public takeScreenshot(): void {
+  public takeScreenshot(event: Event): void {
+    event.preventDefault();
     const element = document.getElementById('app');
     if (element) {
       html2canvas(element).then(canvas => {
@@ -89,6 +90,12 @@ export class FeedbackFormDialogComponent
     }
   }
 
+  public uploadFile(event: Event): void {
+    event.preventDefault();
+    const element = document.getElementById("file");
+    element?.click();
+  }
+
   public onCloseClick(): void {
     this.dialogRef.close();
   }
@@ -97,15 +104,19 @@ export class FeedbackFormDialogComponent
     this.dialogRef.close('Closed by user');
   }
 
-  public showSuccessDialog(): void {
-    this.dialogRef.close();
-    const config: MatDialogConfig = {
-      disableClose: true,
-      position: {
-        right: "0px"
-      },
-      width: '380px',
-    };
-    this.dialog.open(this.successDialogTemplate, config);
+  public showSuccessDialog(event: Event): void {
+    event.preventDefault();
+    if(this.formUtilsService.checkValidity(this.formState.form)) {
+      this.dialogRef.close();
+      const config: MatDialogConfig = {
+        disableClose: true,
+        position: {
+          right: "0px"
+        },
+        width: '380px',
+      };
+      this.dialog.open(this.successDialogTemplate, config);
+    }
   }
+
 }
