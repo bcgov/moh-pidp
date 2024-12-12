@@ -1,5 +1,5 @@
-import { Component, ElementRef, Inject, OnDestroy, OnInit, TemplateRef, ViewChild, ViewEncapsulation } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
+import { Component, TemplateRef, ViewChild, ViewEncapsulation } from '@angular/core';
+import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import {  MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { FeedbackFormState } from './feedback-form.component-form-state';
@@ -32,7 +32,6 @@ import { MatButtonModule } from '@angular/material/button';
 })
 export class FeedbackFormDialogComponent
   extends AbstractFormPage<FeedbackFormState>
-  implements OnInit, OnDestroy
 {
   public formState: FeedbackFormState;
   public showOverlayOnSubmit: boolean = false;
@@ -44,7 +43,7 @@ export class FeedbackFormDialogComponent
   @ViewChild('successDialog')
   public successDialogTemplate!: TemplateRef<any>;
 
-  constructor(
+  public constructor(
     dependenciesService: AbstractFormDependenciesService,
     fb: FormBuilder,
     dialog: MatDialog,
@@ -55,13 +54,6 @@ export class FeedbackFormDialogComponent
     this.formState = new FeedbackFormState(fb, dialog);
   }
 
-  ngOnInit(): void {
-
-  }
-
-  ngOnDestroy(): void {
-
-  }
 
   protected performSubmission(): Observable<unknown> {
     return new Observable;

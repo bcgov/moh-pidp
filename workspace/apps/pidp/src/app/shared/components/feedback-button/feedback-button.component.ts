@@ -45,9 +45,11 @@ export class FeedbackButtonComponent
       width: this.dialogWidth,
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      //TO-DO: implement the sending feedback to backend.
-    });
+    /*
+      dialogRef.afterClosed().subscribe(result => {
+        //TO-DO: implement the sending feedback to backend.
+      });
+    */
   }
 
   private onViewportChange(viewport: PidpViewport): void {

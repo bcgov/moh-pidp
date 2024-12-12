@@ -23,16 +23,6 @@ export class FeedbackFormState extends AbstractFormState<FeedbackFormData> {
     this.buildForm();
   }
 
-  openDialog(): void {
-    const dialogRef = this.dialog.open(FeedbackFormDialogComponent, {
-      width: '300px'
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      //TO-DO: Handle the form data to send feedback to backend.
-    });
-  }
-
   public get feedback(): FormControl {
     return this.formInstance.get('feedback') as FormControl;
   }
@@ -43,7 +33,7 @@ export class FeedbackFormState extends AbstractFormState<FeedbackFormData> {
 
   public get json(): FeedbackFormData | undefined {
     if (!this.formInstance) {
-      return;
+      return undefined;
     }
 
     const values = this.formInstance.getRawValue();
