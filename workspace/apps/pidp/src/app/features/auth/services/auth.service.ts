@@ -26,6 +26,8 @@ export class AuthService implements IAuthService {
   }
 
   public logout(redirectUri: string): Observable<void> {
+   localStorage.removeItem('isNewUnlicensedUser');
+   localStorage.removeItem('isNewUserPopupDisplayed')
     return from(this.keycloakService.logout(redirectUri));
   }
 }
