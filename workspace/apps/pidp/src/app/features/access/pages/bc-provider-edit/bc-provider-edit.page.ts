@@ -126,7 +126,7 @@ export class BcProviderEditPage
       title: 'Access',
       path: AccessRoutes.routePath(AccessRoutes.ACCESS_REQUESTS),
     },
-    { title: 'BC Provider Account', path: '' },
+    { title: 'BCProvider Account', path: '' },
   ];
 
   // ui-page is handling this.

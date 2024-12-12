@@ -17,7 +17,7 @@ metadata:
       operation: Update
       time: '2022-09-28T06:02:28Z'
   name: zap-scan
-  namespace: d8a8f9-tools
+  namespace: f088b1-tools
   resourceVersion: '4702162475'
   uid: ec1e02fa-1db7-4fee-9620-a7f6b68dae9b
 spec:
@@ -28,7 +28,7 @@ spec:
       name: PATH_CONTEXT
       type: string
     - default: >-
-        image-registry.openshift-image-registry.svc:5000/d8a8f9-tools/zap2docker-stable:2.11.1-bcgov-1
+        image-registry.openshift-image-registry.svc:5000/f088b1-tools/zap2docker-stable:2.11.1-bcgov-1
       description: The node image you want to use.
       name: IMAGE
       type: string

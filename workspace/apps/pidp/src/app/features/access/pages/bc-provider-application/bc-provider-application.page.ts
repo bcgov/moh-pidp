@@ -134,7 +134,7 @@ export class BcProviderApplicationPage
       title: 'Access',
       path: AccessRoutes.routePath(AccessRoutes.ACCESS_REQUESTS),
     },
-    { title: 'BC Provider account information', path: '' },
+    { title: 'BCProvider account information', path: '' },
   ];
 
   public fullName$!: Observable<string>;
