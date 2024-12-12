@@ -61,7 +61,7 @@ export class FeedbackFormDialogComponent
 
   public onFileSelected(): void {
     const inputNode: HTMLInputElement | null = document.querySelector('#file');
-    this.selectedFile= inputNode && inputNode.files ? inputNode.files[0] : null;
+    this.selectedFile= inputNode?.files ? inputNode.files[0] : null;
   }
 
   public takeScreenshot(event: Event): void {
@@ -84,7 +84,8 @@ export class FeedbackFormDialogComponent
     element?.click();
   }
 
-  public onCloseClick(): void {
+  public onCloseClick(event: Event): void {
+    event.preventDefault();
     this.dialogRef.close();
   }
 

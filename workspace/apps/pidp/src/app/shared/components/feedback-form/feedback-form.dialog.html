@@ -1,7 +1,11 @@
 <div class="feedback-container" uiPidpInjectViewportCss>
   <header class="feedback-header">
     <div class="close-button">
-      <mat-icon class="mat-icon" (click)="onCloseClick()">close</mat-icon>
+      <button mat-icon-button class="icon-button" aria-label="Close" (click)="onCloseClick($event)">
+        <mat-icon class="mat-icon">
+          close
+        </mat-icon>
+      </button>
     </div>
     <h1>
       How was your experience using OneHealthID?
