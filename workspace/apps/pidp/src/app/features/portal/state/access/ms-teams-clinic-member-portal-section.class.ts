@@ -23,6 +23,7 @@ export class MsTeamsClinicMemberPortalSection implements IPortalSection {
   public faPeopleGroup = faPeopleGroup;
   public faUserCheck = faUserCheck;
   public keyWords: string[];
+  public completedMessage: string;
 
   public constructor(
     private profileStatus: ProfileStatus,
@@ -32,6 +33,7 @@ export class MsTeamsClinicMemberPortalSection implements IPortalSection {
     this.heading = 'MS Teams for Clinic Members';
     this.description = `Clinic Member enrol here for clinic access for MS Teams with Fraser Health.`;
     this.keyWords = profileStatus.status.msTeamsClinicMember.keyWords || [];
+    this.completedMessage = this.profileStatus.status.msTeamsClinicMember.completedMessage;
   }
 
   public get hint(): string {

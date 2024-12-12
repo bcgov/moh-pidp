@@ -59,4 +59,10 @@ export interface IPortalSection {
    * Action performed when invoked.
    */
   performAction(): Observable<void> | void;
+
+  completedMessage?: string;
+  /**
+   * @description
+   *To Provide Completed Messagee.
+   */
 }
