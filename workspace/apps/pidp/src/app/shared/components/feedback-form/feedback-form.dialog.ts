@@ -41,7 +41,7 @@ export class FeedbackFormDialogComponent
   public faXmark = faXmark;
 
   @ViewChild('successDialog')
-  public successDialogTemplate!: TemplateRef<any>;
+  public successDialogTemplate!: TemplateRef<FeedbackSendComponent>;
 
   public constructor(
     dependenciesService: AbstractFormDependenciesService,
@@ -61,7 +61,7 @@ export class FeedbackFormDialogComponent
 
   public onFileSelected(): void {
     const inputNode: any = document.querySelector('#file');
-    this.selectedFile = inputNode.files[0] ?? null;
+    this.selectedFile = inputNode?.files[0] ?? null;
   }
 
   public takeScreenshot(event: Event): void {

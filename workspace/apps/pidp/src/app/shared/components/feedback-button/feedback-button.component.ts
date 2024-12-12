@@ -24,9 +24,6 @@ export class FeedbackButtonComponent
 
   public dialogWidth: string = "360px";
 
-  @ViewChild('successDialog')
-  public successDialogTemplate!: TemplateRef<any>;
-
   public constructor(
     public dialog: MatDialog,
     viewportService: ViewportService
