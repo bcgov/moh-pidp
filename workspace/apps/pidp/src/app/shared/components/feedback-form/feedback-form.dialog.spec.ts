@@ -3,8 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FeedbackFormDialogComponent } from './feedback-form.dialog';
 import { FormUtilsService } from '@app/core/services/form-utils.service';
 import { MatDialogRef } from '@angular/material/dialog';
-import { provideAutoSpy, Spy } from 'jest-auto-spies';
-import { FeedbackSendComponent } from '../success-dialog/components/feedback-send.component';
+import { provideAutoSpy } from 'jest-auto-spies';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('FeedbackFormDialogComponent', () => {
