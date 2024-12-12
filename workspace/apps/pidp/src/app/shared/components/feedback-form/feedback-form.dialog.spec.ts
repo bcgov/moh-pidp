@@ -10,8 +10,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 describe('FeedbackFormDialogComponent', () => {
   let component: FeedbackFormDialogComponent;
   let fixture: ComponentFixture<FeedbackFormDialogComponent>;
-  let formUtilsServiceSpy: Spy<FormUtilsService>;
-  let matDialogRefSpy: Spy<MatDialogRef<FeedbackSendComponent>>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -24,8 +22,6 @@ describe('FeedbackFormDialogComponent', () => {
 
     fixture = TestBed.createComponent(FeedbackFormDialogComponent);
     component = fixture.componentInstance;
-    formUtilsServiceSpy = TestBed.inject<any>(FormUtilsService);
-    matDialogRefSpy = TestBed.inject<any>(MatDialogRef);
     fixture.detectChanges();
   });
 
