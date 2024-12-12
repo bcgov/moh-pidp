@@ -6,7 +6,6 @@ import {
 import { MatDialog } from '@angular/material/dialog';
 
 import { AbstractFormState } from '@bcgov/shared/ui';
-import { FeedbackFormDialogComponent } from './feedback-form.dialog';
 
 export interface FeedbackFormData {
   feedback: string;
@@ -15,7 +14,7 @@ export interface FeedbackFormData {
 
 export class FeedbackFormState extends AbstractFormState<FeedbackFormData> {
   public constructor(
-    private fb: FormBuilder,
+    private readonly fb: FormBuilder,
     public dialog: MatDialog
   ) {
     super();

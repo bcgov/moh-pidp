@@ -38,18 +38,13 @@ export class FeedbackButtonComponent
   }
 
   public openDialog(): void {
-    const dialogRef = this.dialog.open(FeedbackFormDialogComponent, {
+    this.dialog.open(FeedbackFormDialogComponent, {
       position: {
         right: "0px"
       },
       width: this.dialogWidth,
     });
 
-    /*
-      dialogRef.afterClosed().subscribe(result => {
-        //TO-DO: implement the sending feedback to backend.
-      });
-    */
   }
 
   private onViewportChange(viewport: PidpViewport): void {
