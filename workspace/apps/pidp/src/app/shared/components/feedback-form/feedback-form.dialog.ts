@@ -68,7 +68,7 @@ export class FeedbackFormDialogComponent
     event.preventDefault();
     const element = document.getElementById('app');
     if (element) {
-      html2canvas(element).then(canvas => {
+      html2canvas(element).then((canvas: HTMLCanvasElement) => {
         const imgData = canvas.toDataURL('image/png');
         const link = document.createElement('a');
         link.href = imgData;
