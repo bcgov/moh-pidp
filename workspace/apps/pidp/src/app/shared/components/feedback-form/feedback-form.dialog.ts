@@ -36,7 +36,7 @@ export class FeedbackFormDialogComponent
   public formState: FeedbackFormState;
   public showOverlayOnSubmit: boolean = false;
   public showErrorCard: boolean = false;
-  public selectedFile: any = null;
+  public selectedFile: File | null = null;
   public componentType = FeedbackSendComponent;
   public faXmark = faXmark;
 
@@ -60,8 +60,8 @@ export class FeedbackFormDialogComponent
   }
 
   public onFileSelected(): void {
-    const inputNode: any = document.querySelector('#file');
-    this.selectedFile = inputNode?.files[0] ?? null;
+    const inputNode: HTMLInputElement | null = document.querySelector('#file');
+    this.selectedFile= inputNode && inputNode.files ? inputNode.files[0] : null;
   }
 
   public takeScreenshot(event: Event): void {
