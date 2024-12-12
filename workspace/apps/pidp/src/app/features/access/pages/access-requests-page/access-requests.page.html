@@ -41,6 +41,7 @@
     [completed]="section.status === 'Completed'"
     (action)="onCardAction(section)"></app-access-request-card>
 
+    <app-feedback-button></app-feedback-button>
   <div class="back-to-top-container">
     <button
       *ngIf="showBackToTopButton"

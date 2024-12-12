@@ -31,6 +31,7 @@ import { BreadcrumbComponent } from '@app/shared/components/breadcrumb/breadcrum
 import { Constants } from '@app/shared/constants';
 
 import { AccessRequestCardComponent } from '../../components/access-request-card/access-request-card.component';
+import { FeedbackButtonComponent } from "../../../../shared/components/feedback-button/feedback-button.component";
 
 @Component({
   selector: 'app-access-request-page',
@@ -48,7 +49,8 @@ import { AccessRequestCardComponent } from '../../components/access-request-card
     AccessRequestCardComponent,
     NgFor,
     AsyncPipe,
-  ],
+    FeedbackButtonComponent
+],
 })
 export class AccessRequestsPage implements OnInit, OnDestroy {
   /**

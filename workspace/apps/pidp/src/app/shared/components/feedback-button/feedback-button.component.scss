@@ -1,0 +1,21 @@
+.feedback-button-box {
+  .mid-right-button {
+    all: unset;
+    position: fixed !important;
+    top: 50%;
+    right: -3rem !important;
+    transform: rotate(-90deg);
+    transform-origin: center;
+    display: inline-block;
+    background-color:#FCBA19;
+    color: black;
+    border: 1px !important;
+    padding: 10px 20px;
+    border-radius: 5px;
+    margin-right: 0 !important;
+    cursor: pointer;
+  }
+  .img {
+    transform: rotate(-270deg);
+  }
+}
