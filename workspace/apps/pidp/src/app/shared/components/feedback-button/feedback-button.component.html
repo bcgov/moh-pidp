@@ -1,5 +1,5 @@
 <div class="container-box container" uiPidpInjectViewportCss>
-  <div class="feedback-button-box">
+  <div class="feedback-button-box" *ngIf="!isMobileView; else mobile_view">
     <button class="mid-right-button" (click)="openDialog()">
       <img
          src="/assets/images/feedback-button-logo.svg"
@@ -7,4 +7,13 @@
      Feedback
     </button>
   </div>
+  <ng-template #mobile_view>
+    <div class="feedback-button-box-mobile">
+      <button class="mid-right-button" (click)="openDialog()">
+        <img
+           src="/assets/images/feedback-button-logo.svg"
+           alt="feedback-button-logo" class="img"/>
+      </button>
+    </div>
+  </ng-template>
 </div>
