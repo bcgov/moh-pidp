@@ -93,10 +93,6 @@
             justify-content: center;
           }
 
-          .card-footer {
-            align-items: flex-end;
-          }
-
           .card-header {
             color: white;
             display: flex;
@@ -114,6 +110,7 @@
           }
 
           .card-footer {
+            align-items: flex-end;
             button {
               z-index: 1;
               padding: 0.35rem 2rem;
