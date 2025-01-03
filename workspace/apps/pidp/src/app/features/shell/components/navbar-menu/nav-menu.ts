@@ -4,6 +4,8 @@ import {
   EventEmitter,
   Input,
   OnChanges,
+  OnDestroy,
+  OnInit,
   Output,
   SimpleChanges,
   ViewChild,
@@ -24,6 +26,8 @@ import {
   RouterOutlet,
 } from '@angular/router';
 
+import { Observable, Subject, takeUntil } from 'rxjs';
+
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { faBell } from '@fortawesome/free-regular-svg-icons';
 
@@ -37,8 +41,14 @@ import {
 } from '@bcgov/shared/ui';
 import { RoutePath } from '@bcgov/shared/utils';
 
+import { PartyService } from '@app/core/party/party.service';
+import { AccessRoutes } from '@app/features/access/access.routes';
+import { IdentityProvider } from '@app/features/auth/enums/identity-provider.enum';
 import { AlertCode } from '@app/features/portal/enums/alert-code.enum';
 import { ProfileRoutes } from '@app/features/profile/profile.routes';
+
+import { Credential } from './nav-menu.model';
+import { NavMenuResource } from './nav-menu.resource.service';
 
 @Component({
   selector: 'app-nav-menu',
@@ -62,7 +72,7 @@ import { ProfileRoutes } from '@app/features/profile/profile.routes';
     NgClass,
   ],
 })
-export class NavMenuComponent implements OnChanges {
+export class NavMenuComponent implements OnChanges, OnInit, OnDestroy {
   @Input() public alerts: AlertCode[] | null = [];
   @Input() public menuItems!: DashboardMenuItem[];
   @Input() public emailSupport!: string;
@@ -79,21 +89,41 @@ export class NavMenuComponent implements OnChanges {
   public isLogoutMenuItemVisible = false;
   public isTopMenuVisible = false;
   public ProfileRoutes = ProfileRoutes;
+  public AccessRoutes = AccessRoutes;
   public showCollegeAlert = false;
   public faBell = faBell;
   public AlertCode = AlertCode;
+  public credentials: Credential[] = [];
+  public credentials$: Observable<Credential[]>;
+  private unsubscribe$ = new Subject<void>();
+  public IdentityProvider = IdentityProvider;
 
   public constructor(
     private viewportService: ViewportService,
     private router: Router,
+    private resource: NavMenuResource,
+    private partyService: PartyService,
   ) {
     this.viewportService.viewportBroadcast$.subscribe((viewport) =>
       this.onViewportChange(viewport),
     );
+    const partyId = this.partyService.partyId;
+    this.credentials$ = this.resource.getCredentials(partyId);
   }
+
+  public ngOnInit(): void {
+    this.handleLinkedAccounts();
+  }
+
   public ngOnChanges(_: SimpleChanges): void {
     this.refresh();
   }
+
+  public ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
+
   public onMiniMenuButtonClick(): void {
     // Toggle display of the sidenav.
     this.isSidenavOpened = !this.isSidenavOpened;
@@ -137,6 +167,11 @@ export class NavMenuComponent implements OnChanges {
     }
     return undefined;
   }
+
+  public hasCredential(idp: IdentityProvider): boolean {
+    return this.credentials.some((c) => c.identityProvider === idp);
+  }
+
   public onLogout(): void {
     this.logout.emit();
   }
@@ -144,6 +179,14 @@ export class NavMenuComponent implements OnChanges {
     if (this.showMiniMenuButton && this.sidenavMode === 'over') {
       this.sidenav.close();
     }
+  }
+
+  private handleLinkedAccounts(): void {
+    this.credentials$
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((credentials) => {
+        this.credentials = credentials;
+      });
   }
 
   private onViewportChange(viewport: PidpViewport): void {

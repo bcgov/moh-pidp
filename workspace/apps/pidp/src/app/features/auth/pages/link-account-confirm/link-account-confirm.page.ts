@@ -142,7 +142,7 @@ export class LinkAccountConfirmPage implements OnInit {
       case IdentityProvider.BC_PROVIDER: {
         const idpId = (user as BcProviderUser).idpId;
         const accountName = idpId.endsWith('@bcp') ? idpId.slice(0, -4) : idpId;
-        return `the BC Provider account ${accountName}`;
+        return `the BCProvider account ${accountName}`;
       }
       default:
         return 'a new account';

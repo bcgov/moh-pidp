@@ -124,7 +124,8 @@ export class AccessStateBuilder {
         ],
       ),
       ...ArrayUtils.insertResultIf<IAccessSection>(
-        this.insertSection('providerReportingPortal', profileStatus),
+        this.insertSection('providerReportingPortal', profileStatus) &&
+          this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
         () => [new ProviderReportingPortalSection(profileStatus, this.router)],
       ),
       ...ArrayUtils.insertResultIf<IAccessSection>(
