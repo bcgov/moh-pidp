@@ -23,11 +23,6 @@
   --header-margin: var(--gap) 0 0;
   --content-padding: var(--gap) 0;
   --form-card-width: 25rem;
-  .card-body {
-    img.logo {
-      padding: 1.5rem 0 !important;
-    }
-  }
 }
 
 .viewport-all {
@@ -91,7 +86,6 @@
           align-items: flex-start;
 
           .card-header,
-          .card-body,
           .card-footer {
             flex: 1;
             display: flex;
@@ -116,18 +110,6 @@
 
             h3 {
               margin: 0;
-            }
-          }
-
-          .card-body {
-            img.logo {
-              z-index: 0;
-              -webkit-transform: none;
-              transform: none;
-              position: relative !important;
-              height: 45px;
-              width: 175px;
-              padding: 1rem 0;
             }
           }
 
