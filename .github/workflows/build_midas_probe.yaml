@@ -59,7 +59,7 @@ jobs:
           helm upgrade --install --values ./midas-probe/values.yaml --set environment=${{ github.event.inputs.Environment }} midas-probe midas-probe
 
   build-midas-goldDR:
-    name: Build Midas Probe-GOLD
+    name: Build Midas Probe-GOLDDR
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code

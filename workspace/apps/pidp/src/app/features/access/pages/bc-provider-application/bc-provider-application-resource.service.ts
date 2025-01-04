@@ -34,7 +34,7 @@ export class BcProviderApplicationResource {
       .pipe(map((upn) => upn));
   }
 
-  // Currently automatically links to BC Provider
+  // Currently automatically links to BCProvider
   public createLinkTicket(partyId: number): NoContent {
     return this.apiResource
       .post<NoContent>(`${this.getResourcePath(partyId)}/link-ticket`, {

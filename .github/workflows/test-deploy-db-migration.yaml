@@ -20,21 +20,21 @@ jobs:
       - name: Authenticate and set context
         uses: redhat-actions/oc-login@v1.1
         with:
-          openshift_server_url: ${{secrets.OPENSHIFT_CLUSTER_URL}}
-          openshift_token: ${{secrets.OPENSHIFT_PIPELINE_SERVICE_ACCOUNT_TOKEN}}
+          openshift_server_url: ${{secrets.GOLD_OPENSHIFT_CLUSTER_URL}}
+          openshift_token: ${{secrets.GOLD_PIPELINE_SERVICE_ACCOUNT_TOKEN}}
 
-      - name: deply db migration job into d8a8f9-test
+      - name: deply db migration job into f088b1-test
         run: |
-          oc project d8a8f9-test
+          oc project f088b1-test
 
           echo deleting test-webapi-migrations job
           oc delete job/test-webapi-migrations --ignore-not-found
 
           echo applying web-api-migration template...
-          helm template test charts/webapi -n d8a8f9-test --values ./deploy/test_values.yaml -s templates/migrations.yaml --wait --debug| oc apply -f -
+          helm template test charts/webapi -n f088b1-test --values ./deploy/test_values.yaml -s templates/migrations.yaml --wait --debug| oc apply -f -
 
           echo deleting test-plr-intake-migrations job
           oc delete job/test-plr-intake-migrations --ignore-not-found
 
           echo applying plr-intake-migration template...
-          helm template test charts/plr-intake -n d8a8f9-test --values ./deploy/test_values.yaml -s templates/migrations.yaml --wait --debug| oc apply -f -
+          helm template test charts/plr-intake -n f088b1-test --values ./deploy/test_values.yaml -s templates/migrations.yaml --wait --debug| oc apply -f -

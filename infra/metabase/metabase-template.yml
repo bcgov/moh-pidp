@@ -51,7 +51,7 @@ parameters:
   displayName: Metabase Namespace
   description: The OpenShift Namespace where the Metabase ImageStream resides.
   required: true
-  value: d8a8f9-tools
+  value: f088b1-tools
 - name: METABASE_CPU_REQUEST
   description: Minimal CPU needed to run
   displayName: Metabase CPU Request
