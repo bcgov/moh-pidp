@@ -38,7 +38,6 @@ import { msTeamsSupportEmail } from '../ms-teams-privacy-officer/ms-teams.consta
 import { MsTeamsClinicMemberFormState } from './ms-teams-clinic-member-form-state';
 import { MsTeamsClinicMemberResource } from './ms-teams-clinic-member-resource.service';
 import { PrivacyOfficer } from './ms-teams-clinic-member.model';
-import { FeedbackButtonComponent } from "../../../../shared/components/feedback-button/feedback-button.component";
 
 @Component({
   selector: 'app-ms-teams-clinic-member',
@@ -59,8 +58,7 @@ import { FeedbackButtonComponent } from "../../../../shared/components/feedback-
     NgFor,
     NgIf,
     PageFooterActionDirective,
-    ReactiveFormsModule,
-    FeedbackButtonComponent
+    ReactiveFormsModule
 ],
 })
 export class MsTeamsClinicMemberPage

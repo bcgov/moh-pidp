@@ -35,7 +35,6 @@ import {
   prescriptionRefillRequestEformsSupportEmail,
   prescriptionRefillRequestEformsUrl,
 } from './prescription-refill-eforms.constants';
-import { FeedbackButtonComponent } from "../../../../shared/components/feedback-button/feedback-button.component";
 
 @Component({
   selector: 'app-prescription-refill-eforms',
@@ -58,8 +57,7 @@ import { FeedbackButtonComponent } from "../../../../shared/components/feedback-
     PageSectionComponent,
     PageSectionSubheaderComponent,
     PageSectionSubheaderDescDirective,
-    SafePipe,
-    FeedbackButtonComponent
+    SafePipe
 ],
 })
 export class PrescriptionRefillEformsPage implements OnInit, AfterViewInit {

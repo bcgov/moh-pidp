@@ -35,7 +35,6 @@ import {
   specialAuthorityEformsSupportEmail,
   specialAuthorityEformsUrl,
 } from './sa-eforms.constants';
-import { FeedbackButtonComponent } from "../../../../shared/components/feedback-button/feedback-button.component";
 
 @Component({
   selector: 'app-sa-eforms',
@@ -58,8 +57,7 @@ import { FeedbackButtonComponent } from "../../../../shared/components/feedback-
     PageSectionComponent,
     PageSectionSubheaderComponent,
     PageSectionSubheaderDescDirective,
-    SafePipe,
-    FeedbackButtonComponent
+    SafePipe
 ],
 })
 export class SaEformsPage implements OnInit, AfterViewInit {

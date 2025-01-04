@@ -19,7 +19,6 @@ import { OrganizationInfoRoutes } from '../organization-info/organization-info.r
 import { ProfileRoutes } from '../profile/profile.routes';
 import { AlertCode } from './enums/alert-code.enum';
 import { PortalResource } from './portal-resource.service';
-import { FeedbackButtonComponent } from '@app/shared/components/feedback-button/feedback-button.component';
 
 @Component({
   selector: 'app-portal',
@@ -37,8 +36,7 @@ import { FeedbackButtonComponent } from '@app/shared/components/feedback-button/
     InjectViewportCssClassDirective,
     NgIf,
     NgOptimizedImage,
-    AsyncPipe,
-    FeedbackButtonComponent
+    AsyncPipe
   ],
 })
 export class PortalPage implements OnInit, AfterViewInit {

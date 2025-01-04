@@ -52,7 +52,6 @@ import {
   HcimAccountTransferResponse,
   HcimAccountTransferStatusCode,
 } from './hcim-account-transfer-resource.service';
-import { FeedbackButtonComponent } from "../../../../shared/components/feedback-button/feedback-button.component";
 
 @Component({
   selector: 'app-hcim-account-transfer',
@@ -81,8 +80,7 @@ import { FeedbackButtonComponent } from "../../../../shared/components/feedback-
     PageSectionSubheaderDescDirective,
     PageSectionSubheaderHintDirective,
     PageSubheaderComponent,
-    ReactiveFormsModule,
-    FeedbackButtonComponent
+    ReactiveFormsModule
 ],
 })
 export class HcimAccountTransferPage

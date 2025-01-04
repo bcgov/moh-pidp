@@ -32,7 +32,6 @@ import { BreadcrumbComponent } from '@app/shared/components/breadcrumb/breadcrum
 import { Constants } from '@app/shared/constants';
 
 import { FaqRoutes } from '../../faq.routes';
-import { FeedbackButtonComponent } from "../../../../shared/components/feedback-button/feedback-button.component";
 
 @Component({
   selector: 'app-help',
@@ -52,8 +51,7 @@ import { FeedbackButtonComponent } from "../../../../shared/components/feedback-
     PageHeaderComponent,
     PageSectionComponent,
     PageSectionSubheaderComponent,
-    InjectViewportCssClassDirective,
-    FeedbackButtonComponent
+    InjectViewportCssClassDirective
 ],
 })
 export class HelpPage implements OnInit, AfterViewInit {

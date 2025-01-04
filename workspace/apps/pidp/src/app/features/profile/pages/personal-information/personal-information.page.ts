@@ -54,7 +54,6 @@ import { UserInfoComponent } from './components/user-info/user-info.component';
 import { PersonalInformationFormState } from './personal-information-form-state';
 import { PersonalInformationResource } from './personal-information-resource.service';
 import { PersonalInformation } from './personal-information.model';
-import { FeedbackButtonComponent } from "../../../../shared/components/feedback-button/feedback-button.component";
 
 @Component({
   selector: 'app-personal-information',
@@ -82,8 +81,7 @@ import { FeedbackButtonComponent } from "../../../../shared/components/feedback-
     PageSectionSubheaderDescDirective,
     PreferredNameFormComponent,
     ToggleContentComponent,
-    UserInfoComponent,
-    FeedbackButtonComponent
+    UserInfoComponent
 ],
 })
 export class PersonalInformationPage

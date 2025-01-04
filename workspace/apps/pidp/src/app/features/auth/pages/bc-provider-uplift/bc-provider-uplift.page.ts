@@ -15,7 +15,6 @@ import { APP_CONFIG, AppConfig } from '@app/app.config';
 import { AuthRoutes } from '../../auth.routes';
 import { IdentityProvider } from '../../enums/identity-provider.enum';
 import { AuthService } from '../../services/auth.service';
-import { FeedbackButtonComponent } from "../../../../shared/components/feedback-button/feedback-button.component";
 
 @Component({
   selector: 'app-bc-provider-uplift',
@@ -29,8 +28,7 @@ import { FeedbackButtonComponent } from "../../../../shared/components/feedback-
     MatButtonModule,
     MatIconModule,
     MatTooltipModule,
-    NgOptimizedImage,
-    FeedbackButtonComponent
+    NgOptimizedImage
 ],
 })
 export class BcProviderUpliftPage {

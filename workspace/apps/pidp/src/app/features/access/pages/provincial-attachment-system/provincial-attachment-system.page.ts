@@ -35,7 +35,6 @@ import {
   bcProviderTutorialLink,
   provincialAttachmentSystemWebsite,
 } from './provincial-attachment-system.constants';
-import { FeedbackButtonComponent } from "../../../../shared/components/feedback-button/feedback-button.component";
 
 @Component({
   selector: 'app-provincial-attachment-system',
@@ -52,8 +51,7 @@ import { FeedbackButtonComponent } from "../../../../shared/components/feedback-
     RouterLink,
     NgIf,
     FontAwesomeModule,
-    NgOptimizedImage,
-    FeedbackButtonComponent
+    NgOptimizedImage
 ],
   templateUrl: './provincial-attachment-system.page.html',
   styleUrl: './provincial-attachment-system.page.scss',

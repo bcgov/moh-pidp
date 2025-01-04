@@ -36,7 +36,6 @@ import { EnrolmentErrorComponent } from '../../components/enrolment-error/enrolm
 import { MsTeamsPrivacyOfficerFormState } from './ms-teams-privacy-officer-form-state';
 import { MsTeamsPrivacyOfficerResource } from './ms-teams-privacy-officer-resource.service';
 import { msTeamsSupportEmail } from './ms-teams.constants';
-import { FeedbackButtonComponent } from "../../../../shared/components/feedback-button/feedback-button.component";
 
 @Component({
   selector: 'app-ms-teams',
@@ -59,8 +58,7 @@ import { FeedbackButtonComponent } from "../../../../shared/components/feedback-
     PageFooterActionDirective,
     SafePipe,
     ReactiveFormsModule,
-    RouterLink,
-    FeedbackButtonComponent
+    RouterLink
 ],
 })
 export class MsTeamsPrivacyOfficerPage

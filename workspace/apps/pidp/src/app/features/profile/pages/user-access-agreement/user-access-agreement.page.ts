@@ -24,7 +24,6 @@ import { StatusCode } from '@app/features/portal/enums/status-code.enum';
 
 import { UserAccessAgreementDocumentComponent } from './components/user-access-agreement-document/user-access-agreement-document.component';
 import { UserAccessAgreementResource } from './user-access-agreement-resource.service';
-import { FeedbackButtonComponent } from "../../../../shared/components/feedback-button/feedback-button.component";
 
 @Component({
   selector: 'app-user-access-agreement',
@@ -42,8 +41,7 @@ import { FeedbackButtonComponent } from "../../../../shared/components/feedback-
     NgIf,
     PageComponent,
     PageFooterActionDirective,
-    PageFooterComponent,
-    FeedbackButtonComponent
+    PageFooterComponent
 ],
 })
 export class UserAccessAgreementPage implements OnInit {
