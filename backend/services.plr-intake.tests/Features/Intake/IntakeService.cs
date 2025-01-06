@@ -73,5 +73,4 @@ public class IntakeServiceTests : InMemoryDbTest
         // Assert
         Assert.Equal(record.Id, result);
     }
-
 }
