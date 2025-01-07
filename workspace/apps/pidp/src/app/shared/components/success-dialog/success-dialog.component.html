@@ -1,5 +1,5 @@
-<div class="dialog-box" uiPidpInjectViewportCss>
-  <div class="dialog-header">
+<div  [ngClass]="{ 'dialog-box': showHeader }" uiPidpInjectViewportCss>
+  <div class="dialog-header" *ngIf="showHeader">
     <button
       type="button"
       aria-label="Close dialog"

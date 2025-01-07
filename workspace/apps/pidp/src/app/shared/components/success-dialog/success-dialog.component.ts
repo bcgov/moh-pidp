@@ -7,7 +7,7 @@ import {
   ViewContainerRef,
 } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { NgIf } from '@angular/common';
+import { NgClass, NgIf } from '@angular/common';
 
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { faCircleCheck, faXmark } from '@fortawesome/free-solid-svg-icons';
@@ -24,7 +24,7 @@ import { FeedbackSendComponent } from './components/feedback-send.component';
   templateUrl: './success-dialog.component.html',
   styleUrl: './success-dialog.component.scss',
   standalone: true,
-  imports: [FaIconComponent, InjectViewportCssClassDirective, NgIf],
+  imports: [FaIconComponent, InjectViewportCssClassDirective, NgIf, NgClass],
 })
 export class SuccessDialogComponent implements OnInit {
   public faCircleCheck = faCircleCheck;
