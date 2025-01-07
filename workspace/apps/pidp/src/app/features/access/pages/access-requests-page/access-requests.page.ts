@@ -47,8 +47,8 @@ import { AccessRequestCardComponent } from '../../components/access-request-card
     LayoutHeaderFooterComponent,
     AccessRequestCardComponent,
     NgFor,
-    AsyncPipe
-],
+    AsyncPipe,
+  ],
 })
 export class AccessRequestsPage implements OnInit, OnDestroy {
   /**

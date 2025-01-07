@@ -102,8 +102,8 @@ import { BcProviderApplicationResource } from './bc-provider-application-resourc
     NgTemplateOutlet,
     ReactiveFormsModule,
     SuccessDialogComponent,
-    FaIconComponent
-],
+    FaIconComponent,
+  ],
 })
 export class BcProviderApplicationPage
   extends AbstractFormPage<BcProviderApplicationFormState>
