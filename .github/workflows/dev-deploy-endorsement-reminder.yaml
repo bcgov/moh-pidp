@@ -20,12 +20,7 @@ jobs:
 
       - name: Install CLI tools from GitHub
         uses: redhat-actions/openshift-tools-installer@v1
-        with:
-          # Search through these projects' GitHub releases, instead of the OpenShift Mirror.
-          # https://docs.github.com/en/actions/reference/authentication-in-a-workflow
-          source: "github"
-          # Using GitHub token from the github context
-          github_pat: ${{ secrets.GITHUB_TOKEN }}   
+        with:  
           oc: "4"
 
       - name: Authenticate and set context
