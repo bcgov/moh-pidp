@@ -41,8 +41,8 @@ import { UserAccessAgreementResource } from './user-access-agreement-resource.se
     NgIf,
     PageComponent,
     PageFooterActionDirective,
-    PageFooterComponent
-],
+    PageFooterComponent,
+  ],
 })
 export class UserAccessAgreementPage implements OnInit {
   public title: string;
