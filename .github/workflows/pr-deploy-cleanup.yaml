@@ -10,8 +10,17 @@ jobs:
   remove-deployment:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+    - uses: actions/checkout@master
+      
+    - name: Install CLI tools from GitHub
+      uses: redhat-actions/openshift-tools-installer@v1
+      with:
+        # Search through these projects' GitHub releases, instead of the OpenShift Mirror.
+        # https://docs.github.com/en/actions/reference/authentication-in-a-workflow
+        source: "github"
+        # Using GitHub token from the github context
+        github_pat: ${{ secrets.GITHUB_TOKEN }}   
+        oc: "4"
 
     - name: Authenticate and set context
       uses: redhat-actions/oc-login@v1.3

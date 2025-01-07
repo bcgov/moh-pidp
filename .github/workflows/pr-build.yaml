@@ -254,9 +254,7 @@ jobs:
           source: "github"
           # Using GitHub token from the github context
           github_pat: ${{ secrets.GITHUB_TOKEN }}   
-          kam: "latest"
-          s2i: "1.2"
-          tkn: "0.17"
+          oc: "4"
 
       - name: Authenticate and set context
         uses: redhat-actions/oc-login@v1.3

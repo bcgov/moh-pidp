@@ -23,7 +23,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@master
 
       - name: Build image with docker-compose
         working-directory: "./infra/midas-probe"
@@ -41,6 +41,17 @@ jobs:
         run: |
           docker tag midas-probe image-registry.apps.gold.devops.gov.bc.ca/f088b1-tools/midas-probe:latest
           docker push image-registry.apps.gold.devops.gov.bc.ca/f088b1-tools/midas-probe:latest
+
+      - name: Install CLI tools from GitHub
+        uses: redhat-actions/openshift-tools-installer@v1
+        with:
+          # Search through these projects' GitHub releases, instead of the OpenShift Mirror.
+          # https://docs.github.com/en/actions/reference/authentication-in-a-workflow
+          source: "github"
+    
+          # Using GitHub token from the github context
+          github_pat: ${{ secrets.GITHUB_TOKEN }} 
+          oc: "4"
       
       - name: OC Login to Gold OCP
         uses: redhat-actions/oc-login@v1.3
@@ -82,6 +93,17 @@ jobs:
           docker tag midas-probe image-registry.apps.golddr.devops.gov.bc.ca/f088b1-tools/midas-probe:latest
           docker push image-registry.apps.golddr.devops.gov.bc.ca/f088b1-tools/midas-probe --all-tags
       
+      
+      - name: Install CLI tools from GitHub
+        uses: redhat-actions/openshift-tools-installer@v1
+        with:
+          # Search through these projects' GitHub releases, instead of the OpenShift Mirror.
+          # https://docs.github.com/en/actions/reference/authentication-in-a-workflow
+          source: "github"
+    
+          # Using GitHub token from the github context
+          github_pat: ${{ secrets.GITHUB_TOKEN }} 
+          oc: "4"
       - name: OC Login to GoldDR OCP
         uses: redhat-actions/oc-login@v1.3
         with:
