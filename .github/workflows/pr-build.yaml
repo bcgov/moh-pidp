@@ -175,7 +175,7 @@ jobs:
 
   build-and-push-plr-intake:
     name: PLR Intake Backend Build & Push
-    needs: [get-pr-number, unit-test-backend]
+    needs: [get-pr-number, unit-test-plr-intake]
     if: ${{ !(contains(needs.*.result, 'failure')) && needs.get-pr-number.outputs.pr_number != '' }}
     runs-on: ubuntu-latest
     defaults:
@@ -207,7 +207,7 @@ jobs:
 
   build-and-push-webapi:
     name: WebAPI Backend Build & Push
-    needs: [get-pr-number, unit-test-backend]
+    needs: [get-pr-number, unit-test-webapi]
     if: ${{ !(contains(needs.*.result, 'failure')) && needs.get-pr-number.outputs.pr_number != '' }}
     runs-on: ubuntu-latest
     defaults:
