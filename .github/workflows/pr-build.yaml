@@ -168,7 +168,7 @@ jobs:
         with:
           dotnet-version: 6.0.x
       - name: Build backend
-        run: dotnet build --configuration Release
+        run: dotnet build --configuration Release --version-suffix 6.0.*
       - name: Run Tests
         run: dotnet test --configuration Release
   
