@@ -51,8 +51,8 @@ import { FaqRoutes } from '../../faq.routes';
     PageHeaderComponent,
     PageSectionComponent,
     PageSectionSubheaderComponent,
-    InjectViewportCssClassDirective
-],
+    InjectViewportCssClassDirective,
+  ],
 })
 export class HelpPage implements OnInit, AfterViewInit {
   public providerIdentitySupport: string;

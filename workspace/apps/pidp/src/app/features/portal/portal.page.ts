@@ -36,7 +36,7 @@ import { PortalResource } from './portal-resource.service';
     InjectViewportCssClassDirective,
     NgIf,
     NgOptimizedImage,
-    AsyncPipe
+    AsyncPipe,
   ],
 })
 export class PortalPage implements OnInit, AfterViewInit {

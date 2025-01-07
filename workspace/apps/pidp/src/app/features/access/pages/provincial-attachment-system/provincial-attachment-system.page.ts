@@ -51,8 +51,8 @@ import {
     RouterLink,
     NgIf,
     FontAwesomeModule,
-    NgOptimizedImage
-],
+    NgOptimizedImage,
+  ],
   templateUrl: './provincial-attachment-system.page.html',
   styleUrl: './provincial-attachment-system.page.scss',
   providers: [

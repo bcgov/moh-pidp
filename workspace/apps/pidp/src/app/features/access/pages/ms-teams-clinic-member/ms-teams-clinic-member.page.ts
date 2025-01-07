@@ -58,8 +58,8 @@ import { PrivacyOfficer } from './ms-teams-clinic-member.model';
     NgFor,
     NgIf,
     PageFooterActionDirective,
-    ReactiveFormsModule
-],
+    ReactiveFormsModule,
+  ],
 })
 export class MsTeamsClinicMemberPage
   extends AbstractFormPage<MsTeamsClinicMemberFormState>

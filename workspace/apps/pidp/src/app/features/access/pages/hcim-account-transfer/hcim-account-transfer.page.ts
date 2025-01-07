@@ -80,8 +80,8 @@ import {
     PageSectionSubheaderDescDirective,
     PageSectionSubheaderHintDirective,
     PageSubheaderComponent,
-    ReactiveFormsModule
-],
+    ReactiveFormsModule,
+  ],
 })
 export class HcimAccountTransferPage
   extends AbstractFormPage<HcimAccountTransferFormState>

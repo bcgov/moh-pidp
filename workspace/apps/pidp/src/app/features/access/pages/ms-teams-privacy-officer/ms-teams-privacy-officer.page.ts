@@ -58,8 +58,8 @@ import { msTeamsSupportEmail } from './ms-teams.constants';
     PageFooterActionDirective,
     SafePipe,
     ReactiveFormsModule,
-    RouterLink
-],
+    RouterLink,
+  ],
 })
 export class MsTeamsPrivacyOfficerPage
   extends AbstractFormPage<MsTeamsPrivacyOfficerFormState>

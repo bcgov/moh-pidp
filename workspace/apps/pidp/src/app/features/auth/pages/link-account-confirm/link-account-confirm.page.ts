@@ -40,8 +40,8 @@ import { LinkAccountConfirmResource } from './link-account-confirm-resource.serv
     InjectViewportCssClassDirective,
     MatButtonModule,
     NgOptimizedImage,
-    SuccessDialogComponent
-],
+    SuccessDialogComponent,
+  ],
   templateUrl: './link-account-confirm.page.html',
   styleUrl: './link-account-confirm.page.scss',
 })

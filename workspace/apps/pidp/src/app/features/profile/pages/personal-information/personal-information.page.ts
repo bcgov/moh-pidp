@@ -81,8 +81,8 @@ import { PersonalInformation } from './personal-information.model';
     PageSectionSubheaderDescDirective,
     PreferredNameFormComponent,
     ToggleContentComponent,
-    UserInfoComponent
-],
+    UserInfoComponent,
+  ],
 })
 export class PersonalInformationPage
   extends AbstractFormPage<PersonalInformationFormState>

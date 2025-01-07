@@ -44,8 +44,8 @@ import {
     MatButtonModule,
     NgIf,
     PageFooterActionDirective,
-    RouterLink
-],
+    RouterLink,
+  ],
 })
 export class DriverFitnessPage implements OnInit, AfterViewInit {
   public completed: boolean | null;

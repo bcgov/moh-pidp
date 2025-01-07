@@ -66,8 +66,8 @@ import { AccessRoutes } from '@app/features/access/access.routes';
     AsyncPipe,
     MatTooltipModule,
     NgFor,
-    NgIf
-],
+    NgIf,
+  ],
   templateUrl: './account-linking.page.html',
   styleUrl: './account-linking.page.scss',
 })

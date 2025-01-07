@@ -49,8 +49,8 @@ import { ProviderReportingPortalResource } from './provider-reporting-portal-res
     PageSectionComponent,
     PageSectionSubheaderComponent,
     PageSectionSubheaderDescDirective,
-    SafePipe
-],
+    SafePipe,
+  ],
 })
 export class ProviderReportingPortalPage implements OnInit {
   public title: string;

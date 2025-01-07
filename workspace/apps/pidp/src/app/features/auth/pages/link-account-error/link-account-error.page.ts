@@ -43,8 +43,8 @@ import { AuthService } from '../../services/auth.service';
     NgSwitchCase,
     NgSwitchDefault,
     NgTemplateOutlet,
-    NeedHelpComponent
-],
+    NeedHelpComponent,
+  ],
 })
 export class LinkAccountErrorPage implements OnInit {
   public logoutRedirectUrl: string;

@@ -40,8 +40,8 @@ import { BreadcrumbComponent } from '@app/shared/components/breadcrumb/breadcrum
     NgFor,
     CollegeLicenceDeclarationPage,
     NgIf,
-    PortalAlertComponent
-],
+    PortalAlertComponent,
+  ],
 })
 export class CollegeLicenceInformationPage implements OnInit {
   public faStethoscope = faStethoscope;

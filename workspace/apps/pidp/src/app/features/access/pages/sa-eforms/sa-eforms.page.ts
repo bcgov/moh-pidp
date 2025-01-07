@@ -57,8 +57,8 @@ import {
     PageSectionComponent,
     PageSectionSubheaderComponent,
     PageSectionSubheaderDescDirective,
-    SafePipe
-],
+    SafePipe,
+  ],
 })
 export class SaEformsPage implements OnInit, AfterViewInit {
   public title: string;

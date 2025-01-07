@@ -96,8 +96,8 @@ export enum EndorsementType {
     NgFor,
     NgIf,
     PageFooterActionDirective,
-    ReactiveFormsModule
-],
+    ReactiveFormsModule,
+  ],
 })
 export class EndorsementsPage
   extends AbstractFormPage<EndorsementsFormState>

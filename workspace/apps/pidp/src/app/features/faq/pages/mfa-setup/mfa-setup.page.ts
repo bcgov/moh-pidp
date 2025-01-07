@@ -42,8 +42,8 @@ import { BreadcrumbComponent } from '@app/shared/components/breadcrumb/breadcrum
     PageHeaderComponent,
     PageSectionComponent,
     PageSectionSubheaderComponent,
-    InjectViewportCssClassDirective
-],
+    InjectViewportCssClassDirective,
+  ],
 })
 export class MfaSetupPage implements OnInit {
   public providerIdentitySupport: string;

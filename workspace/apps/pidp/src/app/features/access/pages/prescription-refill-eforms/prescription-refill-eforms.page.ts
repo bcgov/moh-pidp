@@ -57,8 +57,8 @@ import {
     PageSectionComponent,
     PageSectionSubheaderComponent,
     PageSectionSubheaderDescDirective,
-    SafePipe
-],
+    SafePipe,
+  ],
 })
 export class PrescriptionRefillEformsPage implements OnInit, AfterViewInit {
   public title: string;

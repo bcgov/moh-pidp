@@ -28,8 +28,8 @@ import { AuthService } from '../../services/auth.service';
     MatButtonModule,
     MatIconModule,
     MatTooltipModule,
-    NgOptimizedImage
-],
+    NgOptimizedImage,
+  ],
 })
 export class BcProviderUpliftPage {
   public bcscMobileSetupUrl: string;

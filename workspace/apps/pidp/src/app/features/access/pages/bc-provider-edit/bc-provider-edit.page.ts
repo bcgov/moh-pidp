@@ -93,8 +93,8 @@ export interface BcProviderEditInitialStateModel {
     ConfirmDialogComponent,
     NgClass,
     FaIconComponent,
-    TooltipComponent
-],
+    TooltipComponent,
+  ],
 })
 export class BcProviderEditPage
   extends AbstractFormPage<BcProviderEditFormState>

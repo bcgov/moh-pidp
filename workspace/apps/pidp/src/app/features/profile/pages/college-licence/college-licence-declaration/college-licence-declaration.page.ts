@@ -55,8 +55,8 @@ import { PartyLicenceDeclarationInformation } from './party-licence-declaration-
     NgFor,
     NgIf,
     PageFooterActionDirective,
-    ReactiveFormsModule
-],
+    ReactiveFormsModule,
+  ],
 })
 export class CollegeLicenceDeclarationPage
   extends AbstractFormPage<CollegeLicenceDeclarationFormState>
