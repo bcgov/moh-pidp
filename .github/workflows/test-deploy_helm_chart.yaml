@@ -20,7 +20,7 @@ jobs:
       - uses: actions/checkout@v1 
   
       - name: Authenticate and set context
-        uses: redhat-actions/oc-login@v1.1
+        uses: redhat-actions/oc-login@v1.3
         with:
           openshift_server_url: ${{secrets.GOLD_OPENSHIFT_CLUSTER_URL}}
           openshift_token: ${{secrets.GOLD_PIPELINE_SERVICE_ACCOUNT_TOKEN}}
@@ -38,7 +38,7 @@ jobs:
       - uses: actions/checkout@v1 
   
       - name: Authenticate and set context
-        uses: redhat-actions/oc-login@v1.1
+        uses: redhat-actions/oc-login@v1.3
         with:
           openshift_server_url: ${{secrets.GOLDDR_OPENSHIFT_CLUSTER_URL}}
           openshift_token: ${{secrets.GOLDDR_PIPELINE_SERVICE_ACCOUNT_TOKEN}}

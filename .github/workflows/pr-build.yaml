@@ -246,11 +246,24 @@ jobs:
     steps:
       - uses: actions/checkout@master
 
+      - name: Install CLI tools from GitHub
+        uses: redhat-actions/openshift-tools-installer@v1
+        with:
+          # Search through these projects' GitHub releases, instead of the OpenShift Mirror.
+          # https://docs.github.com/en/actions/reference/authentication-in-a-workflow
+          source: "github"
+          # Using GitHub token from the github context
+          github_pat: ${{ secrets.GITHUB_TOKEN }}   
+          kam: "latest"
+          s2i: "1.2"
+          tkn: "0.17"
+
       - name: Authenticate and set context
         uses: redhat-actions/oc-login@v1.3
         with:
           openshift_server_url: ${{secrets.GOLD_OPENSHIFT_CLUSTER_URL}}
           openshift_token: ${{secrets.GOLD_PIPELINE_SERVICE_ACCOUNT_TOKEN}}
+          namespace: f088b1-dev
 
       - name: Get pr number from GH cli command (pushing to pr)
         if: ${{ github.event.number == ''}}
