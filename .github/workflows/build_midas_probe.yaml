@@ -43,7 +43,7 @@ jobs:
           docker push image-registry.apps.gold.devops.gov.bc.ca/f088b1-tools/midas-probe:latest
       
       - name: OC Login to Gold OCP
-        uses: redhat-actions/oc-login@v1.2
+        uses: redhat-actions/oc-login@v1.3
         with:
           openshift_server_url: ${{secrets.GOLD_OPENSHIFT_CLUSTER_URL}}
           openshift_token: ${{secrets.GOLD_PIPELINE_SERVICE_ACCOUNT_TOKEN}}
@@ -83,7 +83,7 @@ jobs:
           docker push image-registry.apps.golddr.devops.gov.bc.ca/f088b1-tools/midas-probe --all-tags
       
       - name: OC Login to GoldDR OCP
-        uses: redhat-actions/oc-login@v1.2
+        uses: redhat-actions/oc-login@v1.3
         with:
           openshift_server_url: ${{secrets.GOLDDR_OPENSHIFT_CLUSTER_URL}}
           openshift_token: ${{secrets.GOLDDR_PIPELINE_SERVICE_ACCOUNT_TOKEN}}
