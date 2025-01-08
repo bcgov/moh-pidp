@@ -11,7 +11,6 @@ import { MatDialog } from '@angular/material/dialog';
 
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { faCircleCheck, faXmark } from '@fortawesome/free-solid-svg-icons';
-import { NavigationService } from '@pidp/presentation';
 
 import { InjectViewportCssClassDirective } from '@bcgov/shared/ui';
 
@@ -38,10 +37,7 @@ export class SuccessDialogComponent implements OnInit {
   @ViewChild('dialogParagraphHost', { static: true, read: ViewContainerRef })
   public dialogParagraphHost!: ViewContainerRef;
 
-  public constructor(
-    public dialog: MatDialog,
-    private navigationService: NavigationService,
-  ) {}
+  public constructor(public dialog: MatDialog) {}
 
   public onSuccessDialogClose(): void {
     this.dialog.closeAll();
