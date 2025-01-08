@@ -24,7 +24,6 @@ import { ShellRoutes } from '@app/features/shell/shell.routes';
 import { NeedHelpComponent } from '@app/shared/components/need-help/need-help.component';
 
 import { AuthService } from '../../services/auth.service';
-import { FeedbackButtonComponent } from "../../../../shared/components/feedback-button/feedback-button.component";
 
 @Component({
   selector: 'app-link-account-error',
@@ -45,8 +44,7 @@ import { FeedbackButtonComponent } from "../../../../shared/components/feedback-
     NgSwitchDefault,
     NgTemplateOutlet,
     NeedHelpComponent,
-    FeedbackButtonComponent
-],
+  ],
 })
 export class LinkAccountErrorPage implements OnInit {
   public logoutRedirectUrl: string;

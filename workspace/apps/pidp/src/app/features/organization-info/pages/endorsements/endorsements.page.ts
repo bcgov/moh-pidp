@@ -71,7 +71,6 @@ import { EndorsementRequestStatus } from './enums/endorsement-request-status.enu
 import { EndorsementEmailSearch } from './models/endorsement-email-search.model';
 import { EndorsementRequest } from './models/endorsement-request.model';
 import { Endorsement } from './models/endorsement.model';
-import { FeedbackButtonComponent } from "../../../../shared/components/feedback-button/feedback-button.component";
 
 export enum EndorsementType {
   WorkingRelationship,
@@ -98,8 +97,7 @@ export enum EndorsementType {
     NgIf,
     PageFooterActionDirective,
     ReactiveFormsModule,
-    FeedbackButtonComponent
-],
+  ],
 })
 export class EndorsementsPage
   extends AbstractFormPage<EndorsementsFormState>

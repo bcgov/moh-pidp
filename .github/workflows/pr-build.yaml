@@ -126,13 +126,13 @@ jobs:
         run: |
           docker push image-registry.apps.gold.devops.gov.bc.ca/f088b1-tools/pidp-frontend:pr-${{ needs.get-pr-number.outputs.pr_number }}
 
-  unit-test-backend:
+  unit-test-webapi:
     needs: get-pr-number
     if: ${{ always() && !cancelled() && needs.get-pr-number.outputs.pr_number != '' }}
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: "./backend"
+        working-directory: "./backend/webapi.tests"
     permissions:
       contents: read
       id-token: write
@@ -149,9 +149,33 @@ jobs:
       - name: Run Tests
         run: dotnet test --configuration Release
 
+  unit-test-plr-intake:
+    needs: get-pr-number
+    if: ${{ always() && !cancelled() && needs.get-pr-number.outputs.pr_number != '' }}
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: "./backend/services.plr-intake.tests"
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - name: "Checkout Code"
+        uses: actions/checkout@master
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 6.0.x
+      - name: Build backend
+        run: dotnet build --configuration Release
+      - name: Run Tests
+        run: dotnet test --configuration Release
+  
+
   build-and-push-plr-intake:
     name: PLR Intake Backend Build & Push
-    needs: [get-pr-number, unit-test-backend]
+    needs: [get-pr-number, unit-test-plr-intake]
     if: ${{ !(contains(needs.*.result, 'failure')) && needs.get-pr-number.outputs.pr_number != '' }}
     runs-on: ubuntu-latest
     defaults:
@@ -183,7 +207,7 @@ jobs:
 
   build-and-push-webapi:
     name: WebAPI Backend Build & Push
-    needs: [get-pr-number, unit-test-backend]
+    needs: [get-pr-number, unit-test-webapi]
     if: ${{ !(contains(needs.*.result, 'failure')) && needs.get-pr-number.outputs.pr_number != '' }}
     runs-on: ubuntu-latest
     defaults:
@@ -222,11 +246,17 @@ jobs:
     steps:
       - uses: actions/checkout@master
 
+      - name: Install CLI tools from GitHub
+        uses: redhat-actions/openshift-tools-installer@v1
+        with:  
+          oc: "4"
+
       - name: Authenticate and set context
-        uses: redhat-actions/oc-login@v1.2
+        uses: redhat-actions/oc-login@v1.3
         with:
           openshift_server_url: ${{secrets.GOLD_OPENSHIFT_CLUSTER_URL}}
           openshift_token: ${{secrets.GOLD_PIPELINE_SERVICE_ACCOUNT_TOKEN}}
+          namespace: f088b1-dev
 
       - name: Get pr number from GH cli command (pushing to pr)
         if: ${{ github.event.number == ''}}

@@ -52,7 +52,6 @@ import { linkedAccountCardText } from './account-linking.constants';
 import { Credential } from './account-linking.model';
 import { BreadcrumbComponent } from '@app/shared/components/breadcrumb/breadcrumb.component';
 import { AccessRoutes } from '@app/features/access/access.routes';
-import { FeedbackButtonComponent } from "../../../../shared/components/feedback-button/feedback-button.component";
 
 @Component({
   selector: 'app-account-linking',
@@ -68,8 +67,7 @@ import { FeedbackButtonComponent } from "../../../../shared/components/feedback-
     MatTooltipModule,
     NgFor,
     NgIf,
-    FeedbackButtonComponent
-],
+  ],
   templateUrl: './account-linking.page.html',
   styleUrl: './account-linking.page.scss',
 })

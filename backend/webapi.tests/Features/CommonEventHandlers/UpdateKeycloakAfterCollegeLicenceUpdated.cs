@@ -44,13 +44,17 @@ public class UpdateKeycloakAfterCollegeLicenceUpdatedTests : InMemoryDbTest
 
         var message = capturedMessages.Single();
         Assert.Equal(party.PrimaryUserId, message.UserId);
-        Assert.Single(message.Attributes);
+        Assert.Equal(2, message.Attributes.Count);
 
-        var attribute = message.Attributes.Single();
-        Assert.Equal("college_licence_info", attribute.Key);
-        Assert.Single(attribute.Value);
+        var attribute1 = message.Attributes.Single(a => a.Key == "college_licence_info");
+        Assert.Equal("college_licence_info", attribute1.Key);
+        Assert.Single(attribute1.Value);
 
-        var busRecords = JsonSerializer.Deserialize<IEnumerable<PlrRecord>>(attribute.Value[0], new JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase })!;
+        var attribute2 = message.Attributes.Single(a => a.Key == "is_pharm");
+        Assert.Equal("is_pharm", attribute2.Key);
+        Assert.Single(attribute2.Value);
+
+        var busRecords = JsonSerializer.Deserialize<IEnumerable<PlrRecord>>(attribute1.Value[0], new JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase })!;
 
         AssertThat.CollectionsAreEquivalent(expectedRecords, busRecords, (expected, bus) =>
             expected.CollegeId == bus.CollegeId

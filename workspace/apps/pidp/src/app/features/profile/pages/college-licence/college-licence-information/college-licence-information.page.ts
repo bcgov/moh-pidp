@@ -24,7 +24,6 @@ import { CollegeLicenceInformationResource } from './college-licence-information
 import { CollegeLicenceInformationDetailComponent } from './components/college-licence-information-detail.component';
 import { CollegeLicenceDeclarationPage } from '../college-licence-declaration/college-licence-declaration.page';
 import { BreadcrumbComponent } from '@app/shared/components/breadcrumb/breadcrumb.component';
-import { FeedbackButtonComponent } from "../../../../../shared/components/feedback-button/feedback-button.component";
 
 @Component({
   selector: 'app-college-licence-information',
@@ -42,8 +41,7 @@ import { FeedbackButtonComponent } from "../../../../../shared/components/feedba
     CollegeLicenceDeclarationPage,
     NgIf,
     PortalAlertComponent,
-    FeedbackButtonComponent
-],
+  ],
 })
 export class CollegeLicenceInformationPage implements OnInit {
   public faStethoscope = faStethoscope;

@@ -35,7 +35,6 @@ import { BreadcrumbComponent } from '@app/shared/components/breadcrumb/breadcrum
 import { CollegeLicenceDeclarationFormState } from './college-licence-declaration-form-state';
 import { CollegeLicenceDeclarationResource } from './college-licence-declaration-resource.service';
 import { PartyLicenceDeclarationInformation } from './party-licence-declaration-information.model';
-import { FeedbackButtonComponent } from "../../../../../shared/components/feedback-button/feedback-button.component";
 
 @Component({
   selector: 'app-college-licence-declaration',
@@ -57,8 +56,7 @@ import { FeedbackButtonComponent } from "../../../../../shared/components/feedba
     NgIf,
     PageFooterActionDirective,
     ReactiveFormsModule,
-    FeedbackButtonComponent
-],
+  ],
 })
 export class CollegeLicenceDeclarationPage
   extends AbstractFormPage<CollegeLicenceDeclarationFormState>

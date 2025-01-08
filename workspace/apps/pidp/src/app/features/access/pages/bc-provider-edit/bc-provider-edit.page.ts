@@ -66,7 +66,6 @@ import {
   BcProviderChangePasswordRequest,
   BcProviderEditResource,
 } from './bc-provider-edit-resource.service';
-import { FeedbackButtonComponent } from "../../../../shared/components/feedback-button/feedback-button.component";
 
 export interface BcProviderEditInitialStateModel {
   bcProviderId: string;
@@ -95,8 +94,7 @@ export interface BcProviderEditInitialStateModel {
     NgClass,
     FaIconComponent,
     TooltipComponent,
-    FeedbackButtonComponent
-],
+  ],
 })
 export class BcProviderEditPage
   extends AbstractFormPage<BcProviderEditFormState>
