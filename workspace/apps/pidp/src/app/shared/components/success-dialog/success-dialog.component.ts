@@ -1,3 +1,4 @@
+import { NgClass, NgIf } from '@angular/common';
 import {
   Component,
   Input,
@@ -7,17 +8,15 @@ import {
   ViewContainerRef,
 } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { NgClass, NgIf } from '@angular/common';
 
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { faCircleCheck, faXmark } from '@fortawesome/free-solid-svg-icons';
-import { NavigationService } from '@pidp/presentation';
 
 import { InjectViewportCssClassDirective } from '@bcgov/shared/ui';
 
+import { SuccessDialogComponentClass } from './classes/success-dialog-component.class';
 import { DialogBcproviderCreateComponent } from './components/dialog-bcprovider-create.component';
 import { DialogBcproviderEditComponent } from './components/dialog-bcprovider-edit.component';
-import { FeedbackSendComponent } from './components/feedback-send.component';
 
 @Component({
   selector: 'app-success-dialog',
@@ -33,17 +32,12 @@ export class SuccessDialogComponent implements OnInit {
 
   @Input() public username!: string;
   @Input() public title!: string;
-  @Input() public componentType!: Type<
-    DialogBcproviderCreateComponent | DialogBcproviderEditComponent | FeedbackSendComponent
-  >;
+  @Input() public componentType!: Type<SuccessDialogComponentClass>;
 
   @ViewChild('dialogParagraphHost', { static: true, read: ViewContainerRef })
   public dialogParagraphHost!: ViewContainerRef;
 
-  public constructor(
-    public dialog: MatDialog,
-    private navigationService: NavigationService,
-  ) {}
+  public constructor(public dialog: MatDialog) {}
 
   public onSuccessDialogClose(): void {
     this.dialog.closeAll();
@@ -51,19 +45,21 @@ export class SuccessDialogComponent implements OnInit {
 
   public ngOnInit(): void {
     this.loadDialogParagraphComponent(this.componentType);
-    if(this.componentType instanceof DialogBcproviderCreateComponent || this.componentType instanceof DialogBcproviderEditComponent) {
+    if (
+      this.componentType instanceof DialogBcproviderCreateComponent ||
+      this.componentType instanceof DialogBcproviderEditComponent
+    ) {
       this.showHeader = true;
     }
   }
 
   private loadDialogParagraphComponent(
-    componentType: Type<
-      DialogBcproviderCreateComponent | DialogBcproviderEditComponent | FeedbackSendComponent
-    >,
+    componentType: Type<SuccessDialogComponentClass>,
   ): void {
-    const componentRef = this.dialogParagraphHost.createComponent<
-      DialogBcproviderCreateComponent | DialogBcproviderEditComponent | FeedbackSendComponent
-    >(componentType);
+    const componentRef =
+      this.dialogParagraphHost.createComponent<SuccessDialogComponentClass>(
+        componentType,
+      );
     componentRef.instance.username = this.username;
   }
 }
