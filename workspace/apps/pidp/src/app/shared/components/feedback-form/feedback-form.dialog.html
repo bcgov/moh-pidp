@@ -1,7 +1,7 @@
 <div class="feedback-container" uiPidpInjectViewportCss>
   <header class="feedback-header">
     <div class="close-button">
-      <button mat-icon-button class="icon-button" aria-label="Close" (click)="onCloseClick($event)">
+      <button class="icon-button" aria-label="Close" (click)="onCloseClick($event)">
         <mat-icon class="mat-icon">
           close
         </mat-icon>
@@ -40,13 +40,13 @@
               <div class="split-placeholder">
                 <div class="left-placeholder">
                   <span class="screenshot">Screenshot</span>
-                    <button mat-icon-button class="icon-button" aria-label="Take Screenshot" (click)="takeScreenshot($event)">
+                    <button class="icon-button" aria-label="Take Screenshot" (click)="takeScreenshot($event)">
                       <img src="assets/images/icons/icon-screenshot.svg" alt="Screenshot">
                     </button>
                 </div>
                 <div class="right-placeholder">
                   <span class="attach">Attach</span>
-                  <button mat-icon-button class="icon-button" aria-label="Take Screenshot" (click)="uploadFile($event)">
+                  <button class="icon-button" aria-label="Take Screenshot" (click)="uploadFile($event)">
                     <img src="assets/images/icons/icon-file-attach.svg" alt="File Upload">
                   </button>
                   <input hidden (change)="onFileSelected()" type="file" id="file" formControlName="attachment">
