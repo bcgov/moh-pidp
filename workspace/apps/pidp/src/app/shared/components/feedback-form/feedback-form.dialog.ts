@@ -1,4 +1,4 @@
-import { Component, TemplateRef, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild, ViewEncapsulation } from '@angular/core';
 import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import {  MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -27,11 +27,11 @@ import { MatButtonModule } from '@angular/material/button';
     ReactiveFormsModule,
     MatIconModule,
     MatButtonModule
-  ],
+],
   encapsulation: ViewEncapsulation.None,
 })
 export class FeedbackFormDialogComponent
-  extends AbstractFormPage<FeedbackFormState>
+  extends AbstractFormPage<FeedbackFormState> implements OnInit
 {
   public formState: FeedbackFormState;
   public showOverlayOnSubmit: boolean = false;
@@ -43,6 +43,13 @@ export class FeedbackFormDialogComponent
   @ViewChild('successDialog')
   public successDialogTemplate!: TemplateRef<FeedbackSendComponent>;
 
+  ngOnInit(): void {
+    const textarea = document.getElementById('auto-expand');
+    textarea?.addEventListener('input', () => {
+      textarea.style.height = 'auto';
+      textarea.style.height = `${Math.min(textarea.scrollHeight, 200)}px`;
+    });
+  }
   public constructor(
     dependenciesService: AbstractFormDependenciesService,
     fb: FormBuilder,
