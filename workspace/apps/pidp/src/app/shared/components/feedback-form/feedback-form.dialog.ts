@@ -43,7 +43,7 @@ export class FeedbackFormDialogComponent
   @ViewChild('successDialog')
   public successDialogTemplate!: TemplateRef<FeedbackSendComponent>;
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     const textarea = document.getElementById('auto-expand');
     textarea?.addEventListener('input', () => {
       textarea.style.height = 'auto';
