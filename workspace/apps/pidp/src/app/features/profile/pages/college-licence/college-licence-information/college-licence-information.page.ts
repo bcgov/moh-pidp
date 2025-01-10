@@ -13,6 +13,7 @@ import { InjectViewportCssClassDirective } from '@bcgov/shared/ui';
 
 import { PartyService } from '@app/core/party/party.service';
 import { LoggerService } from '@app/core/services/logger.service';
+import { UtilsService } from '@app/core/services/utils.service';
 import { PortalAlertComponent } from '@app/features/portal/components/portal-alert/portal-alert.component';
 import { ProfileStatusAlert } from '@app/features/portal/models/profile-status-alert.model';
 import { ProfileStatus } from '@app/features/portal/models/profile-status.model';
@@ -63,22 +64,22 @@ export class CollegeLicenceInformationPage implements OnInit {
     private resource: CollegeLicenceInformationResource,
     private logger: LoggerService,
     private portalResource: PortalResource,
+    private utilsService: UtilsService,
     private portalService: PortalService,
   ) {
     this.title = this.route.snapshot.data.title;
   }
 
-  public scrollToTop(): Promise<void> {
+  public scrollToWithdelay(): Promise<void> {
     return new Promise<void>((resolve) => {
-      window.scrollTo({ top: 0 });
+      this.utilsService.scrollTop();
       setTimeout(() => {
         resolve();
       }, 300);
     });
   }
-
   public onBack(): void {
-    this.scrollToTop().then(() => {
+    this.scrollToWithdelay().then(() => {
       this.navigateToRoot();
     });
   }
