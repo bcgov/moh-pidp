@@ -17,24 +17,29 @@ jobs:
     steps:
       - uses: actions/checkout@v1
 
+      - name: Install CLI tools from GitHub
+        uses: redhat-actions/openshift-tools-installer@v1
+        with: 
+          oc: "4"
+
       - name: Authenticate and set context
-        uses: redhat-actions/oc-login@v1.1
+        uses: redhat-actions/oc-login@v1.3
         with:
-          openshift_server_url: ${{secrets.OPENSHIFT_CLUSTER_URL}}
-          openshift_token: ${{secrets.OPENSHIFT_PIPELINE_SERVICE_ACCOUNT_TOKEN}}
+          openshift_server_url: ${{secrets.GOLD_OPENSHIFT_CLUSTER_URL}}
+          openshift_token: ${{secrets.GOLD_PIPELINE_SERVICE_ACCOUNT_TOKEN}}
 
       - name: deply db migration job
         run: |
-          oc project d8a8f9-dev
+          oc project f088b1-dev
 
           echo deleting dev-webapi-migrations job
           oc delete job/dev-webapi-migrations --ignore-not-found
 
           echo applying web-api-migration template...
-          helm template dev charts/webapi -n d8a8f9-dev --values ./deploy/dev_values.yaml -s templates/migrations.yaml --wait --debug| oc apply -n d8a8f9-dev -f -
+          helm template dev charts/webapi -n f088b1-dev --values ./deploy/dev_values.yaml -s templates/migrations.yaml --wait --debug| oc apply -n f088b1-dev -f -
 
           echo deleting dev-plr-intake-migrations job
           oc delete job/dev-plr-intake-migrations --ignore-not-found 
 
           echo applying plr-intake-migration template...
-          helm template dev charts/plr-intake -n d8a8f9-dev --values ./deploy/dev_values.yaml -s templates/migrations.yaml --wait --debug| oc apply -n d8a8f9-dev -f -
+          helm template dev charts/plr-intake -n f088b1-dev --values ./deploy/dev_values.yaml -s templates/migrations.yaml --wait --debug| oc apply -n f088b1-dev -f -

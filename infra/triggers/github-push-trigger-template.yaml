@@ -2,7 +2,7 @@ apiVersion: triggers.tekton.dev/v1alpha1
 kind: TriggerTemplate
 metadata:
   name: github-push-trigger-template
-  namespace: d8a8f9-tools
+  namespace: f088b1-tools
 spec: 
   params:
     - name: git-revision
