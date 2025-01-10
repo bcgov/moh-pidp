@@ -75,7 +75,7 @@ describe('CollegeLicenceInformationPage', () => {
         component.onBack();
 
         then('router should navigate to root route', () => {
-          component.scrollToTop().then(() => {
+          component.scrollToWithdelay().then(() => {
             const rootRoute = mockActivatedRoute.snapshot.data.routes.root;
             expect(router.navigate).toHaveBeenCalledWith([rootRoute]);
           });
