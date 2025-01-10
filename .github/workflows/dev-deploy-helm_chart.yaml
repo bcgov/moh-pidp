@@ -19,6 +19,11 @@ jobs:
     steps:
       - uses: actions/checkout@master
 
+      - name: Install CLI tools from GitHub
+        uses: redhat-actions/openshift-tools-installer@v1
+        with:
+          oc: "4"
+
       - name: Authenticate and set context
         uses: redhat-actions/oc-login@v1.3
         with:
@@ -37,6 +42,11 @@ jobs:
     runs-on: 'ubuntu-latest'
     steps:
       - uses: actions/checkout@master
+
+      - name: Install CLI tools from GitHub
+        uses: redhat-actions/openshift-tools-installer@v1
+        with:  
+          oc: "4"
 
       - name: Authenticate and set context
         uses: redhat-actions/oc-login@v1.3
