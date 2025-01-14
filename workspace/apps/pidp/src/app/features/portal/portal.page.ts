@@ -63,8 +63,8 @@ export class PortalPage implements OnInit, AfterViewInit {
     private partyService: PartyService,
     private resource: PortalResource,
     private router: Router,
-    private navigationService: NavigationService,
-    private dialog: MatDialog,
+    private readonly navigationService: NavigationService,
+    private readonly dialog: MatDialog,
     private snowplowService: SnowplowService,
   ) {
     this.previousUrl = this.navigationService.getPreviousUrl();

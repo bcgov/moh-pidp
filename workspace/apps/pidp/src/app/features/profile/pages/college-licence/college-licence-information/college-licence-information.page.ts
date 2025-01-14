@@ -64,7 +64,7 @@ export class CollegeLicenceInformationPage implements OnInit {
     private resource: CollegeLicenceInformationResource,
     private logger: LoggerService,
     private portalResource: PortalResource,
-    private utilsService: UtilsService,
+    private readonly utilsService: UtilsService,
     private portalService: PortalService,
   ) {
     this.title = this.route.snapshot.data.title;
