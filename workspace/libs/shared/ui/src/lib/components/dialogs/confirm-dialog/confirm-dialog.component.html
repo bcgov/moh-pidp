@@ -1,54 +1,82 @@
-<div class="banner-image-container">
-  <img *ngIf="options.imageSrc && options.imageType === 'banner'" alt=""  [attr.src]="options.imageSrc" />
-</div>
+<div class="confirm-dialog-container">
+  <div class="banner-image-container">
+    <img
+      *ngIf="options.imageSrc && options.imageType === 'banner'"
+      alt=""
+      [attr.src]="options.imageSrc" />
+  </div>
 
-<h2 mat-dialog-title [class]="{
-  'heading-centered': options.titlePosition === 'center',
-  'heading-no-bottom-border': options.bottomBorder === false
-}">
-  <mat-icon
-    *ngIf="options.icon && !options.imageSrc"
+  <h2
+    mat-dialog-title
     [class]="{
-      'material-icons-outlined': options.iconType === 'outlined',
-      'material-icons-round': options.iconType === 'round',
-      'material-icons-sharp': options.iconType === 'sharp'
-    }"
-    [color]="options.actionType">
-    {{ options.icon }}
-  </mat-icon>
-  <img *ngIf="options.imageSrc && options.imageType !== 'banner'" alt=""  [attr.src]="options.imageSrc" />
-  <span>
-    {{ options.title }}
-  </span>
-</h2>
-<mat-dialog-content [class]="{
-  'body-text-centered': options.bodyTextPosition === 'center',
-}">
-  <p *ngIf="options.message">{{ options.message }}</p>
-  <ng-template #dialogContentHost></ng-template>
-</mat-dialog-content>
-<mat-dialog-actions *ngIf="!(options.cancelHide && options.actionHide)" [class]="{
-  'action-type-centered': options.actionTypePosition === 'center',
-}">
-  <button
-    *ngIf="!options.cancelHide"
-    class="cancel"
-    mat-stroked-button
-    cdkFocusInitial
-    [mat-dialog-close]="false">
-    {{ options.cancelText }}
-  </button>
-  <button
-    *ngIf="!options.actionHide"
-    mat-flat-button
-    [color]="options.actionType"
-    (click)="onConfirm()">
-    {{ options.actionText }}
-  </button>
+      'heading-centered': options.titlePosition === 'center',
+      'heading-no-bottom-border': options.bottomBorder === false
+    }">
+    <mat-icon
+      *ngIf="options.icon && !options.imageSrc"
+      [class]="{
+        'material-icons-outlined': options.iconType === 'outlined',
+        'material-icons-round': options.iconType === 'round',
+        'material-icons-sharp': options.iconType === 'sharp'
+      }"
+      [color]="options.actionType">
+      {{ options.icon }}
+    </mat-icon>
+    <img
+      *ngIf="options.imageSrc && options.imageType !== 'banner'"
+      alt=""
+      [attr.src]="options.imageSrc" />
+    <span>
+      {{ options.title }}
+    </span>
+  </h2>
+  <mat-dialog-content
+    [class]="{
+      'body-text-centered': options.bodyTextPosition === 'center'
+    }">
+    <p *ngIf="options.message">{{ options.message }}</p>
+    <ng-template #dialogContentHost></ng-template>
+    <div *ngIf="options.progressBar">
+      <mat-progress-bar
+        *ngIf="loading$ | async"
+        class="progress-bar"
+        mode="determinate"
+        [value]="progressBarValue"></mat-progress-bar>
+      <mat-progress-bar
+        *ngIf="progressComplete"
+        class="progress-bar-complete"
+        mode="determinate"
+        [value]="100"></mat-progress-bar>
+    </div>
+  </mat-dialog-content>
+  <mat-dialog-actions
+    [class]="{
+      'action-type-centered': options.actionTypePosition === 'center'
+    }">
+    <button
+      *ngIf="!options.cancelHide"
+      class="cancel"
+      mat-stroked-button
+      cdkFocusInitial
+      [mat-dialog-close]="false">
+      {{ options.cancelText }}
+    </button>
+    <button
+      id="submit"
+      *ngIf="!options.actionHide"
+      mat-flat-button
+      [color]="options.actionType"
+      (click)="onConfirm()">
+      {{ options.actionText }}
+    </button>
 
-  <span></span>
+    <span></span>
 
-  <a *ngIf="options.actionLink" uiAnchor [attr.href]="options.actionLink.href">
-    {{ options.actionLink.text }}
-  </a>
-</mat-dialog-actions>
+    <a
+      *ngIf="options.actionLink"
+      uiAnchor
+      [attr.href]="options.actionLink.href">
+      {{ options.actionLink.text }}
+    </a>
+  </mat-dialog-actions>
+</div>

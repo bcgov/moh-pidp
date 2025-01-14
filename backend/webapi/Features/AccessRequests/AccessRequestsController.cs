@@ -5,6 +5,7 @@ using DomainResults.Mvc;
 using HybridModelBinding;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SharpGrip.FluentValidation.AutoValidation.Mvc.Attributes;
 using System.Globalization;
 
 using Pidp.Extensions;
@@ -13,10 +14,8 @@ using static Pidp.Infrastructure.HttpClients.Ldap.HcimAuthorizationStatus;
 using Pidp.Infrastructure.Services;
 
 [Route("api/parties/{partyId}/[controller]")]
-public class AccessRequestsController : PidpControllerBase
+public class AccessRequestsController(IPidpAuthorizationService authorizationService) : PidpControllerBase(authorizationService)
 {
-    public AccessRequestsController(IPidpAuthorizationService authorizationService) : base(authorizationService) { }
-
     [HttpGet]
     [Authorize(Policy = Policies.AnyPartyIdentityProvider)]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -42,7 +41,7 @@ public class AccessRequestsController : PidpControllerBase
     [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
     [ProducesResponseType(StatusCodes.Status423Locked)]
     public async Task<IActionResult> CreateHcimAccountTransfer([FromServices] ICommandHandler<HcimAccountTransfer.Command, IDomainResult<HcimAccountTransfer.Model>> handler,
-                                                               [FromHybrid] HcimAccountTransfer.Command command)
+                                                               [FromHybrid][AutoValidateAlways] HcimAccountTransfer.Command command)
     {
         var access = await this.AuthorizationService.CheckPartyAccessibilityAsync(command.PartyId, this.User);
         if (!access.IsSuccess)
@@ -88,7 +87,7 @@ public class AccessRequestsController : PidpControllerBase
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> CreateMSTeamsClinicMemberEnrolment([FromServices] ICommandHandler<MSTeamsClinicMember.Command, IDomainResult> handler,
-                                                                        [FromHybrid] MSTeamsClinicMember.Command command)
+                                                                        [FromHybrid][AutoValidateAlways] MSTeamsClinicMember.Command command)
         => await this.AuthorizePartyBeforeHandleAsync(command.PartyId, handler, command)
             .ToActionResult();
 
@@ -97,7 +96,7 @@ public class AccessRequestsController : PidpControllerBase
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> CreateMSTeamsPrivacyOfficerEnrolment([FromServices] ICommandHandler<MSTeamsPrivacyOfficer.Command, IDomainResult> handler,
-                                                                          [FromHybrid] MSTeamsPrivacyOfficer.Command command)
+                                                                          [FromHybrid][AutoValidateAlways] MSTeamsPrivacyOfficer.Command command)
         => await this.AuthorizePartyBeforeHandleAsync(command.PartyId, handler, command)
             .ToActionResult();
 
@@ -111,7 +110,7 @@ public class AccessRequestsController : PidpControllerBase
             .ToActionResult();
 
     [HttpPost("provider-reporting-portal")]
-    [Authorize(Policy = Policies.BCProviderAuthentication)]
+    [Authorize(Policy = Policies.HighAssuranceIdentityProvider)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> CreateProviderReportingPortalEnrolment([FromServices] ICommandHandler<ProviderReportingPortal.Command, IDomainResult> handler,

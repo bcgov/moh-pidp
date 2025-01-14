@@ -14,7 +14,7 @@ public class Endorsement : BaseAuditable
 
     public Instant CreatedOn { get; set; }
 
-    public ICollection<EndorsementRelationship> EndorsementRelationships { get; set; } = new List<EndorsementRelationship>();
+    public ICollection<EndorsementRelationship> EndorsementRelationships { get; set; } = [];
 
     public static Endorsement FromCompletedRequest(EndorsementRequest request)
     {
@@ -28,11 +28,11 @@ public class Endorsement : BaseAuditable
         {
             Active = true,
             CreatedOn = request.StatusDate,
-            EndorsementRelationships = new List<EndorsementRelationship>
-            {
+            EndorsementRelationships =
+            [
                 new() { PartyId = request.RequestingPartyId },
                 new() { PartyId = request.ReceivingPartyId.Value }
-            }
+            ]
         };
     }
 }

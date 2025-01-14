@@ -179,6 +179,13 @@
   overflow: visible !important;
 }
 
+.expansion-item,
+.contact-information {
+  mat-label {
+    font-weight: 700;
+    color: #313132;
+  }
+}
 //
 // SideNav
 //
@@ -186,4 +193,16 @@
 app-admin-dashboard .mat-sidenav {
   // menu background color for admin section
   background-color: theme-palette(blue);
+}
+
+///
+/// Dialog
+///
+
+.mat-mdc-dialog-container .mdc-dialog__container {
+  height: auto;
+}
+
+.mat-mdc-dialog-actions.mdc-dialog__actions {
+  align-self: center !important;
 }

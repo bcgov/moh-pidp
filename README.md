@@ -4,7 +4,7 @@ This document serves as a guide for new developers joining the project, providin
 ### Introduction:
 The OneHealth ID app serves as a crucial tool for doctors, nurses, and various healthcare professionals, streamlining their access to multiple services and logins. Within this application, users encounter different types of logins tailored to the operational structure of the BC government and its associated health authorities.
 ### Technical Environment:
-**Backend:** .NET framework (6.0) & Entity Framework
+**Backend:** .NET framework (8.0) & Entity Framework
 
 **Frontend:** Nx workspace, Angular framework (v17), Angular material
 

@@ -8,7 +8,7 @@
       (click)="onMiniMenuButtonClick()">
       <mat-icon>menu</mat-icon>
       <span
-        [ngClass]="{'menu-notification-dot': alerts.includes(AlertCode.TRANSIENT_ERROR) || alerts.includes(AlertCode.PLR_BAD_STANDING)}"></span>
+        [ngClass]="{'menu-notification-dot': alerts?.includes(AlertCode.TRANSIENT_ERROR) || alerts?.includes(AlertCode.PLR_BAD_STANDING)}"></span>
     </button>
   </div>
   <div *ngIf="isTopMenuVisible" uiPidpInjectViewportCss>
@@ -55,6 +55,12 @@
               class="dropdown-links"
               (click)="navigateTo(ProfileRoutes.routePath(ProfileRoutes.USER_ACCESS_AGREEMENT))"
               >User Access Agreement</a
+            >
+            <a
+              *ngIf="hasCredential(IdentityProvider.BC_PROVIDER)"
+              class="dropdown-links"
+              (click)="navigateTo(AccessRoutes.routePath(AccessRoutes.BC_PROVIDER_EDIT))"
+              >Password and MFA reset</a
             >
           </div>
         </div>
@@ -109,11 +115,17 @@
             >College License</a
           >
           <span
-            [ngClass]="{'menu-list-notification-dot': alerts.includes(AlertCode.TRANSIENT_ERROR) || alerts.includes(AlertCode.PLR_BAD_STANDING)}"></span>
+            [ngClass]="{'menu-list-notification-dot': alerts?.includes(AlertCode.TRANSIENT_ERROR) || alerts?.includes(AlertCode.PLR_BAD_STANDING)}"></span>
           <a
             class="sidenav-menu-item"
             (click)="navigateTo(ProfileRoutes.routePath(ProfileRoutes.USER_ACCESS_AGREEMENT))"
             >User Access Agreement</a
+          >
+          <a
+            *ngIf="hasCredential(IdentityProvider.BC_PROVIDER)"
+            class="sidenav-menu-item"
+            (click)="navigateTo(AccessRoutes.routePath(AccessRoutes.BC_PROVIDER_EDIT))"
+            >Password and MFA reset</a
           >
           <a
             *ngFor="let menuItem of menuItems"

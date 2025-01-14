@@ -1,10 +1,10 @@
 import { CommonModule, NgOptimizedImage } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 
-import { Observable, exhaustMap, switchMap, tap } from 'rxjs';
+import { Observable, concatMap, exhaustMap, switchMap, tap } from 'rxjs';
 
 import {
   LOADING_OVERLAY_DEFAULT_MESSAGE,
@@ -19,6 +19,7 @@ import {
   InjectViewportCssClassDirective,
 } from '@bcgov/shared/ui';
 
+import { APP_CONFIG, AppConfig } from '@app/app.config';
 import { AccessRoutes } from '@app/features/access/access.routes';
 import { User } from '@app/features/auth/models/user.model';
 import { ProfileRoutes } from '@app/features/profile/profile.routes';
@@ -27,6 +28,7 @@ import { SuccessDialogComponent } from '@app/shared/components/success-dialog/su
 
 import { IdentityProvider } from '../../enums/identity-provider.enum';
 import { BcProviderUser } from '../../models/bc-provider-user.model';
+import { AuthService } from '../../services/auth.service';
 import { AuthorizedUserService } from '../../services/authorized-user.service';
 import { LinkAccountConfirmResource } from './link-account-confirm-resource.service';
 import { CryptoService } from '@app/core/services/crypto.service';
@@ -59,7 +61,9 @@ export class LinkAccountConfirmPage implements OnInit {
   public identityProvider: string;
 
   public showInstructions: boolean = false;
+  public logoutRedirectUrl: string;
   public constructor(
+    @Inject(APP_CONFIG) private config: AppConfig,
     private dialog: MatDialog,
     private authorizedUserService: AuthorizedUserService,
     private linkAccountConfirmResource: LinkAccountConfirmResource,
@@ -67,10 +71,16 @@ export class LinkAccountConfirmPage implements OnInit {
     private loadingOverlayService: LoadingOverlayService,
     private cookieService: CookieService,
     private cryptoService: CryptoService,
+    private authService: AuthService,
   ) {
     this.user$ = this.authorizedUserService.user$;
+    this.logoutRedirectUrl = `${this.config.applicationUrl}/`;
     this.userName = '';
     this.identityProvider = '';
+  }
+
+  public toggleInstructions(): void {
+    this.showInstructions = !this.showInstructions;
   }
 
   public ngOnInit(): void {
@@ -109,9 +119,7 @@ export class LinkAccountConfirmPage implements OnInit {
             .afterClosed()
             .pipe(
               exhaustMap((result) =>
-                result
-                  ? this.link()
-                  : this.linkAccountConfirmResource.cancelLink(),
+                result ? this.link() : this.cancelLink(),
               ),
             );
         }),
@@ -131,8 +139,10 @@ export class LinkAccountConfirmPage implements OnInit {
     );
   }
 
-  public toggleInstructions(): void {
-    this.showInstructions = !this.showInstructions;
+  private cancelLink(): Observable<void> {
+    return this.linkAccountConfirmResource
+      .cancelLink()
+      .pipe(concatMap(() => this.authService.logout(this.logoutRedirectUrl)));
   }
 
   private getPendingAccountDescription(user: User): string {
@@ -144,7 +154,7 @@ export class LinkAccountConfirmPage implements OnInit {
       case IdentityProvider.BC_PROVIDER: {
         const idpId = (user as BcProviderUser).idpId;
         const accountName = idpId.endsWith('@bcp') ? idpId.slice(0, -4) : idpId;
-        return `the BC Provider account ${accountName}`;
+        return `the BCProvider account ${accountName}`;
       }
       default:
         return 'a new account';

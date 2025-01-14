@@ -61,6 +61,7 @@ h1 {
     flex-direction: column;
     // Expand to fit horizontally
     flex: var(--content-flex);
+    height: 100%;
   }
 
   & .content-header-box {
@@ -175,10 +176,10 @@ h1 {
 
 .menu-list-notification-dot {
   position: absolute;
-  top: 90px;
-  right: 213px;
-  width: 10px;
-  height: 10px;
+  top: 6.1rem;
+  right: 9rem;
+  width: 0.65rem;
+  height: 0.65rem;
   background-color: red;
   border-radius: 50%;
 }
@@ -314,6 +315,7 @@ h1 {
 .dropdown-content .dropdown-links {
   cursor: pointer;
   width: 100%;
+  border-bottom: solid 4px transparent;
   fa-icon {
     color: red;
     margin-left: 5px;

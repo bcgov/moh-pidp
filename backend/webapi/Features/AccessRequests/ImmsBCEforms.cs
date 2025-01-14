@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using NodaTime;
 
 using Pidp.Data;
+using Pidp.Extensions;
 using Pidp.Infrastructure.HttpClients.Keycloak;
 using Pidp.Infrastructure.HttpClients.Mail;
 using Pidp.Infrastructure.HttpClients.Plr;
@@ -15,6 +16,14 @@ using Pidp.Models.Lookups;
 
 public class ImmsBCEforms
 {
+    public static IdentifierType[] AllowedIdentifierTypes => [IdentifierType.PhysiciansAndSurgeons, IdentifierType.Nurse, IdentifierType.Midwife];
+
+    public static bool IsEligible(PlrStandingsDigest partyPlrStanding)
+    {
+        return partyPlrStanding
+            .With(AllowedIdentifierTypes)
+            .HasGoodStanding;
+    }
     public class Command : ICommand<IDomainResult>
     {
         public int PartyId { get; set; }
@@ -25,30 +34,20 @@ public class ImmsBCEforms
         public CommandValidator() => this.RuleFor(x => x.PartyId).GreaterThan(0);
     }
 
-    public class CommandHandler : ICommandHandler<Command, IDomainResult>
+    public class CommandHandler(
+        IClock clock,
+        IEmailService emailService,
+        IKeycloakAdministrationClient keycloakClient,
+        ILogger<CommandHandler> logger,
+        IPlrClient plrClient,
+        PidpDbContext context) : ICommandHandler<Command, IDomainResult>
     {
-        private readonly IClock clock;
-        private readonly IEmailService emailService;
-        private readonly IKeycloakAdministrationClient keycloakClient;
-        private readonly ILogger<CommandHandler> logger;
-        private readonly IPlrClient plrClient;
-        private readonly PidpDbContext context;
-
-        public CommandHandler(
-            IClock clock,
-            IEmailService emailService,
-            IKeycloakAdministrationClient keycloakClient,
-            ILogger<CommandHandler> logger,
-            IPlrClient plrClient,
-            PidpDbContext context)
-        {
-            this.clock = clock;
-            this.emailService = emailService;
-            this.keycloakClient = keycloakClient;
-            this.logger = logger;
-            this.plrClient = plrClient;
-            this.context = context;
-        }
+        private readonly IClock clock = clock;
+        private readonly IEmailService emailService = emailService;
+        private readonly IKeycloakAdministrationClient keycloakClient = keycloakClient;
+        private readonly ILogger<CommandHandler> logger = logger;
+        private readonly IPlrClient plrClient = plrClient;
+        private readonly PidpDbContext context = context;
 
         public async Task<IDomainResult> HandleAsync(Command command)
         {
@@ -65,11 +64,34 @@ public class ImmsBCEforms
                 .SingleAsync();
 
             if (dto.AlreadyEnroled
-                || dto.Email == null
-                || !await this.plrClient.GetStandingAsync(dto.Cpn))
+                || dto.Email == null)
             {
                 this.logger.LogAccessRequestDenied(command.PartyId);
                 return DomainResult.Failed();
+            }
+
+            if (dto.Cpn == null)
+            {
+                // Check status of Endorsements
+                var endorsementCpns = await this.context.ActiveEndorsementRelationships(command.PartyId)
+                    .Select(relationship => relationship.Party!.Cpn)
+                    .ToListAsync();
+
+                var endorsementPlrStanding = await this.plrClient.GetAggregateStandingsDigestAsync(endorsementCpns);
+
+                if (!endorsementPlrStanding.With(ProviderRoleType.MedicalDoctor).HasGoodStanding)
+                {
+                    this.logger.LogAccessRequestDenied(command.PartyId);
+                    return DomainResult.Failed();
+                }
+            }
+            else
+            {
+                if (!IsEligible(await this.plrClient.GetStandingsDigestAsync(dto.Cpn)))
+                {
+                    this.logger.LogAccessRequestDenied(command.PartyId);
+                    return DomainResult.Failed();
+                }
             }
 
             if (!await this.keycloakClient.AssignAccessRoles(dto.UserId, MohKeycloakEnrolment.ImmsBCEforms))

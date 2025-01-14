@@ -14,7 +14,7 @@ describe('IsHighAssurancePipe', () => {
     expect(pipe.transform(IdentityProvider.BCSC)).toEqual(true);
   });
 
-  it('returns true when BC Provider', () => {
+  it('returns true when BCProvider', () => {
     expect(pipe.transform(IdentityProvider.BC_PROVIDER)).toEqual(true);
   });
 

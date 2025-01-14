@@ -106,14 +106,6 @@
 
     <section class="actions">
       <button
-        mat-stroked-button
-        uiPageFooterAction
-        type="button"
-        color="primary"
-        (click)="onBack()">
-        {{ completed ? 'Back Home' : 'Cancel Back Home' }}
-      </button>
-      <button
         *ngIf="!completed"
         mat-flat-button
         uiPageFooterAction

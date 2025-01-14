@@ -18,21 +18,31 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  promote-image-to-prod:
-    name: WebAPI Backend Promote to prod
+  promote-image-to-prod-gold:
+    name: WebAPI Backend Promote to prod - Gold
     runs-on: ubuntu-latest
     steps:     
       - name: Install oc
         uses: redhat-actions/openshift-tools-installer@v1
         with:
-          oc: "4.7"
+          oc: "4.9"
 
-      - name: oc login
+      - name: oc login - Gold
         run: |
-          oc login --token=${{ secrets.OPENSHIFT_GHA_SERVICE_ACCOUNT_TOKEN }} --server=${{ secrets.OPENSHIFT_CLUSTER_URL }}
+          oc login --token=${{ secrets.GOLD_PIPELINE_SERVICE_ACCOUNT_TOKEN }} --server=${{ secrets.GOLD_OPENSHIFT_CLUSTER_URL }}
 
-      - name: Promote webapi from test to prod
+      - name: Promote webapi from test to main - Gold
         run: |
-          oc -n d8a8f9-tools tag \
-          d8a8f9-tools/pidp-webapi:${{ env.ORIG_TAG }} \
-          d8a8f9-tools/pidp-webapi:${{ env.PROMOTE_TAG }}
+          oc -n f088b1-tools tag \
+          f088b1-tools/pidp-webapi:${{ env.ORIG_TAG }} \
+          f088b1-tools/pidp-webapi:${{ env.PROMOTE_TAG }}
+
+      - name: oc login - Golddr
+        run: |
+          oc login --token=${{ secrets.GOLDDR_PIPELINE_SERVICE_ACCOUNT_TOKEN }} --server=${{ secrets.GOLDDR_OPENSHIFT_CLUSTER_URL }}
+  
+      - name: Promote webapi from test to main - Golddr
+        run: |
+          oc -n f088b1-tools tag \
+          f088b1-tools/pidp-webapi:${{ env.ORIG_TAG }} \
+          f088b1-tools/pidp-webapi:${{ env.PROMOTE_TAG }}

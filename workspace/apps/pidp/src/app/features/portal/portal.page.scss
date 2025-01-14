@@ -156,10 +156,12 @@
 .back-to-top {
   background-color: #38598a;
   color: #ffffff;
-  width: 40px;
-  height: 40px;
+  width: 2.5rem;
+  height: 2.5rem;
   border-radius: 50%;
-  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   cursor: pointer;
 }
 
@@ -370,8 +372,8 @@
   }
 
   .back-to-top {
-    width: 40px;
-    height: 40px;
+    width: 2.5rem;
+    height: 2.5rem;
   }
 
   .back-to-top-text {
@@ -459,12 +461,8 @@
   }
 
   .back-to-top {
-    width: 30px;
-    height: 30px;
-  }
-
-  .back-to-top fa-icon {
-    padding-top: 2px;
+    width: 2rem;
+    height: 2rem;
   }
 
   .back-to-top-text {

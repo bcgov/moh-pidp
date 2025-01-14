@@ -2,23 +2,15 @@ namespace Pidp.Infrastructure.Services;
 
 using DomainResults.Common;
 using Microsoft.EntityFrameworkCore;
-using NodaTime;
 using System.Security.Claims;
 using System.Text.Json;
 
 using Pidp.Data;
 using Pidp.Extensions;
 
-public class PidpAuthorizationService : IPidpAuthorizationService
+public class PidpAuthorizationService(PidpDbContext context) : IPidpAuthorizationService
 {
-    private readonly IClock clock;
-    private readonly PidpDbContext context;
-
-    public PidpAuthorizationService(IClock clock, PidpDbContext context)
-    {
-        this.clock = clock;
-        this.context = context;
-    }
+    private readonly PidpDbContext context = context;
 
     public async Task<IDomainResult> CheckPartyAccessibilityAsync(int partyId, ClaimsPrincipal user)
     {
@@ -28,7 +20,7 @@ public class PidpAuthorizationService : IPidpAuthorizationService
             .Select(credential => credential.UserId)
             .ToListAsync();
 
-        if (!partyUserIds.Any())
+        if (partyUserIds.Count == 0)
         {
             return DomainResult.NotFound();
         }

@@ -38,4 +38,8 @@ export interface AppEnvironment extends EnvironmentConfig {
   cookies: {
     secret_key: string;
   };
+  snowplow: {
+    prodCollector: string;
+    devCollector: string;
+  };
 }

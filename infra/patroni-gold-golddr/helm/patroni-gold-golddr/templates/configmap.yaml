@@ -1,0 +1,178 @@
+# Although patroni does indeed create the configmaps, I wanted to have more control over it within helm during deployment so added both
+# the -config and the -leader configmaps manually through helm. These configs allow helm can control the configs during a distroy.
+# it also has the advantage of allowing me to use the same template for both Gold and GoldDR which have differing configs.
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: {{ .Values.app_name }}-leader
+  namespace: {{ .Values.license_plate }}-{{ .Values.environment }}
+  labels:
+    {{- include "chart.common-labels" . }}
+
+---
+# It should be noted here that the config is the same for Gold and GoldDR.  There is however a JOB that is run on "install" by helm that
+# will override this configmap with the appropriate settings.  This is done mostly to deal with the fact that at helm init we don't
+# know the port number for the TCS and can really only determine it at runtime.
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: {{ .Values.app_name }}-config
+  namespace: {{ .Values.license_plate }}-{{ .Values.environment }}
+  labels:
+    {{- include "chart.common-labels" . }}
+
+---
+# this is the entrypoint script that the psql cotainer users at bootup
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: {{ .Values.app_name }}-entrypoint
+  namespace: {{ .Values.license_plate }}-{{ .Values.environment }}
+  labels:
+    {{- include "chart.common-labels" . }}
+data:
+  entrypoint.sh: |-
+    #!/bin/bash
+
+    if [[ $UID -ge 10000 ]]; then
+        GID=$(id -g)
+        sed -e "s/^postgres:x:[^:]*:[^:]*:/postgres:x:$UID:$GID:/" /etc/passwd > /tmp/passwd
+        cat /tmp/passwd > /etc/passwd
+        rm /tmp/passwd
+    fi
+
+    # FIX -> FATAL:  data directory "..." has group or world access
+    mkdir -p "$PATRONI_POSTGRESQL_DATA_DIR"
+    chmod 700 "$PATRONI_POSTGRESQL_DATA_DIR"
+
+    tsc_port=`cat /intercom/tsc_port`
+
+    cat > /home/postgres/patroni.yml <<__EOF__
+    bootstrap:
+      post_bootstrap: /usr/share/scripts/patroni/post_init.sh
+      dcs:
+        postgresql:
+          use_pg_rewind: true
+          parameters:
+            max_connections: ${POSTGRESQL_MAX_CONNECTIONS:-100}
+            max_prepared_transactions: ${POSTGRESQL_MAX_PREPARED_TRANSACTIONS:-0}
+            max_locks_per_transaction: ${POSTGRESQL_MAX_LOCKS_PER_TRANSACTION:-64}
+{{- if eq .Values.cluster "golddr" }}
+        standby_cluster:
+            host: patroni-master-gold
+            port: $tsc_port
+{{- end }}
+      initdb:
+      - auth-host: md5
+      - auth-local: trust
+      - encoding: UTF8
+      - locale: en_US.UTF-8
+      - data-checksums
+      pg_hba:
+      - host all all 0.0.0.0/0 md5
+      - host replication ${PATRONI_REPLICATION_USERNAME} 10.95.0.0/16    md5  # GoldDR Range
+      - host replication ${PATRONI_REPLICATION_USERNAME} 10.97.0.0/16    md5  # Gold & Silver Clusters
+    restapi:
+      connect_address: '${POD_IP}:8008'
+    postgresql:
+      connect_address: '${POD_IP}:5432'
+      authentication:
+        superuser:
+          password: '${PATRONI_SUPERUSER_PASSWORD}'
+        replication:
+          password: '${PATRONI_REPLICATION_PASSWORD}'
+    __EOF__
+
+    unset PATRONI_SUPERUSER_PASSWORD PATRONI_REPLICATION_PASSWORD
+    export KUBERNETES_NAMESPACE=$PATRONI_KUBERNETES_NAMESPACE
+    export POD_NAME=$PATRONI_NAME
+
+    exec /usr/bin/python3 /usr/local/bin/patroni /home/postgres/patroni.yml
+
+---
+{{- if eq .Values.cluster "golddr" }}
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: {{ .Values.app_name }}-probe
+  namespace: {{ .Values.license_plate }}-{{ .Values.environment }}
+  labels:
+    {{- include "chart.common-labels" . }}
+data:
+  probe.sh: |-
+    #!/bin/bash
+
+    tsc_port=`cat /intercom/tsc_port`
+
+    /usr/bin/pg_isready -Upostgres -h {{ .Values.app_name }}-master-gold -p $tsc_port
+    if [ $? -eq 0 ]
+    then
+      echo "Gold is running as expected"
+      echo "healthy" > /intercom/health
+      exit 0
+    else
+      echo "Gold is broken, failover to GoldDR"
+      echo "unhealthy" > /intercom/health
+      exit 0
+    fi
+---
+{{- end }}
+
+{{- if eq .Values.cluster "golddr" }}
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: {{ .Values.app_name }}-failover
+  namespace: {{ .Values.license_plate }}-{{ .Values.environment }}
+  labels:
+    {{- include "chart.common-labels" . }}
+data:
+  failover.sh: |-
+    #!/bin/bash
+
+    health_status=`cat /intercom/health`
+
+    gslb_url="healthprovideridentityportal.gov.bc.ca.glb.gov.bc.ca"
+
+    gslb_ip=$(nslookup "$gslb_url" | awk -F':' '/^Address: / { matched = 1 }  matched { print $2}' | xargs)   
+    echo "$gslb_ip
+
+    if [ "$health_status" == "unhealthy" ] || [ "$gslb_ip" == "142.34.64.4" ]; then
+    then
+      echo "Gold is unhealthy..."
+      status=`oc exec $(oc describe cm patroni-leader|sed -n -e 's/^.*leader: //p') -- /bin/bash -c '/usr/bin/pg_isready -q && /usr/local/bin/patronictl list --format=json | jq -r ".[] | select(.Role == \"Standby Leader\") | .Role" '`
+      if [[ "$status" == "Standby Leader" ]];
+      then
+        echo "GoldDR config needs to be updated to be leader"
+        sleep 200
+        oc get configmap patroni-config -o json | sed -e "s/standby_cluster/null/g" | oc replace -f -
+      else
+        echo "GoldDR is not in standby. Do nothing."
+      fi
+    else
+      echo "Gold is Healthy - do nothing"
+    fi
+---
+{{- end }}
+
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: {{ .Values.app_name }}-get-ts-port
+  namespace: {{ .Values.license_plate }}-{{ .Values.environment }}
+  labels:
+    {{- include "chart.common-labels" . }}
+data:
+  # TODO Perhaps there's a better way to do these if conditions? There is the "CLUSTER" environment variable meaning I could put the logic straight into bash rather than having the condition in helm?
+  get-ts-port.sh: |-
+    #!/bin/bash
+{{- if eq .Values.cluster "gold" }}
+    service_name=patroni-master-golddr
+{{- end }}
+{{- if eq .Values.cluster "golddr" }}
+    service_name=patroni-master-gold
+{{- end }}
+    tsc_port=`oc get services $service_name -o jsonpath={.spec.ports[0].port}`
+    echo "$tsc_port" > /intercom/tsc_port
+---

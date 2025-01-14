@@ -1,6 +1,6 @@
-<form [formGroup]="formState.form" (submit)="onSubmit()">
-  <div class="container" uiPidpInjectViewportCss>
-    <app-breadcrumb [breadcrumbs]="breadcrumbsData"></app-breadcrumb>
+<div class="container" uiPidpInjectViewportCss>
+  <app-breadcrumb [breadcrumbs]="breadcrumbsData"></app-breadcrumb>
+  <form [formGroup]="formState.form" (submit)="onSubmit()">
     <div class="content">
       <section class="care-team">
         <header>
@@ -163,7 +163,10 @@
         </p>
         <mat-form-field>
           <mat-label>Email</mat-label>
-          <input matInput formControlName="recipientEmail" />
+          <input
+            matInput
+            formControlName="recipientEmail"
+            (keydown.enter)="onEnter($event)" />
           <mat-error *ngIf="recipientEmail.hasError('required')"
             >Required</mat-error
           >
@@ -174,15 +177,6 @@
       </section>
       <section class="actions">
         <button
-          mat-stroked-button
-          uiPageFooterAction
-          type="button"
-          color="primary"
-          (click)="onBack()">
-          Back Home
-        </button>
-
-        <button
           mat-flat-button
           uiPageFooterAction
           type="submit"
@@ -191,5 +185,5 @@
         </button>
       </section>
     </div>
-  </div>
-</form>
+  </form>
+</div>
