@@ -34,7 +34,7 @@ export class BcProviderPortalSection implements IPortalSection {
     this.heading = 'BCProvider Account';
     this.description = `A reusable credential for access to health data in BC.`;
     this.keyWords = profileStatus.status.bcProvider.keyWords || [];
-    this.completedMessage = this.profileStatus.status.bcProvider.completedMessage;
+    this.completedMessage = 'Account Linked';
   }
 
   public get hint(): string {

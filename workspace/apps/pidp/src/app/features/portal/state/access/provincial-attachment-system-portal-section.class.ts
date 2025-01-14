@@ -36,7 +36,7 @@ export class ProvincialAttachmentSystemPortalSection implements IPortalSection {
     this.provincialAttachmentSystemWebsite = 'https://bchealthprovider.ca';
     this.keyWords =
       profileStatus.status.provincialAttachmentSystem.keyWords || [];
-    this.completedMessage = profileStatus.status.provincialAttachmentSystem.completedMessage;
+    this.completedMessage = 'Access Granted';
   }
 
   /**
