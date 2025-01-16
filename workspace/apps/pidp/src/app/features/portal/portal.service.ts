@@ -37,13 +37,13 @@ export class PortalService {
    * State for driving the displayed groups and sections of
    * the portal.
    */
-  private _state$: BehaviorSubject<PortalState>;
+  private readonly _state$: BehaviorSubject<PortalState>;
   /**
    * @description
    * State for driving the displayed groups and sections of
    * the access requests page.
    */
-  private _accessState$: BehaviorSubject<AccessState>;
+  private readonly _accessState$: BehaviorSubject<AccessState>;
   /**
    * @description
    * List of HTTP response controlled alert messages for display
@@ -64,8 +64,8 @@ export class PortalService {
   private _completedProfile: boolean;
 
   public constructor(
-    private router: Router,
-    private permissionsService: PermissionsService,
+    private readonly router: Router,
+    private readonly permissionsService: PermissionsService,
   ) {
     this._profileStatus = null;
     this._state$ = new BehaviorSubject<PortalState>(null);
@@ -130,7 +130,7 @@ export class PortalService {
   private getLicenceAlerts(profileStatus: ProfileStatus): ProfileStatusAlert[] {
     return this.getAlerts(profileStatus).filter(
       (alert) => alert.content !== PendingEndorsementComponent,
-    ) as ProfileStatusAlert[];
+    );
   }
 
   private getAlerts(profileStatus: ProfileStatus): ProfileStatusAlert[] {

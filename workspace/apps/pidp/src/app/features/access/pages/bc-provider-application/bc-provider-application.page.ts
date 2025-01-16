@@ -147,19 +147,19 @@ export class BcProviderApplicationPage
   }
 
   public constructor(
-    @Inject(APP_CONFIG) private config: AppConfig,
+    @Inject(APP_CONFIG) private readonly config: AppConfig,
     dependenciesService: AbstractFormDependenciesService,
     fb: FormBuilder,
-    private authService: AuthService,
-    private documentService: DocumentService,
-    private loadingOverlayService: LoadingOverlayService,
-    private logger: LoggerService,
-    private router: Router,
-    private navigationService: NavigationService,
-    private partyService: PartyService,
-    private resource: BcProviderApplicationResource,
-    private route: ActivatedRoute,
-    private utilsService: UtilsService,
+    private readonly authService: AuthService,
+    private readonly documentService: DocumentService,
+    private readonly loadingOverlayService: LoadingOverlayService,
+    private readonly logger: LoggerService,
+    private readonly router: Router,
+    private readonly navigationService: NavigationService,
+    private readonly partyService: PartyService,
+    private readonly resource: BcProviderApplicationResource,
+    private readonly route: ActivatedRoute,
+    private readonly utilsService: UtilsService,
   ) {
     super(dependenciesService);
     this.formState = new BcProviderApplicationFormState(fb);
@@ -284,7 +284,7 @@ export class BcProviderApplicationPage
         );
       }),
       catchError(() => {
-        // TODO: what to do on error?
+
         this.logger.error('Link Request creation failed');
 
         return of(null);

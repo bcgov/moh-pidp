@@ -40,7 +40,6 @@ import {
   DialogOptions,
   HtmlComponent,
   InjectViewportCssClassDirective,
-  TextButtonDirective,
   TooltipComponent,
 } from '@bcgov/shared/ui';
 
@@ -87,7 +86,6 @@ export interface BcProviderEditInitialStateModel {
     ReactiveFormsModule,
     SuccessDialogComponent,
     NgOptimizedImage,
-    TextButtonDirective,
     AsyncPipe,
     MatProgressBarModule,
     ConfirmDialogComponent,
@@ -141,15 +139,15 @@ export class BcProviderEditPage
   }
 
   public constructor(
-    @Inject(APP_CONFIG) private config: AppConfig,
+    @Inject(APP_CONFIG) private readonly config: AppConfig,
     dependenciesService: AbstractFormDependenciesService,
     fb: FormBuilder,
-    private navigationService: NavigationService,
-    private partyService: PartyService,
-    private resource: BcProviderEditResource,
-    private router: Router,
-    private authorizedUserService: AuthorizedUserService,
-    private authService: AuthService,
+    private readonly navigationService: NavigationService,
+    private readonly partyService: PartyService,
+    private readonly resource: BcProviderEditResource,
+    private readonly router: Router,
+    private readonly authorizedUserService: AuthorizedUserService,
+    private readonly authService: AuthService,
   ) {
     super(dependenciesService);
     this.formState = new BcProviderEditFormState(fb);
