@@ -1,7 +1,6 @@
 namespace Pidp.Features.Feedback;
 
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Pidp.Infrastructure.Services;
 
@@ -10,13 +9,13 @@ public class FeedbackController(IPidpAuthorizationService authorizationService, 
 {
     private readonly ICommandHandler<UploadFileCommand, string> uploadFileHandler = uploadFileHandler;
 
-    // [HttpPost]
-    // [AllowAnonymous]
-    // [ProducesResponseType(StatusCodes.Status200OK)]
-    // [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    // public async Task<ActionResult<Create.Model>> Feedback([FromServices] ICommandHandler<Create.Command, Create.Model> handler,
-    //                                                                     [FromBody] Create.Command command)
-    //     => await handler.HandleAsync(command);
+    [HttpPost]
+    [AllowAnonymous]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<Create.Model>> Feedback([FromServices] ICommandHandler<Create.Command, Create.Model> handler,
+                                                                        [FromForm] Create.Command command)
+        => await handler.HandleAsync(command);
 
     [HttpPost("upload")]
     [AllowAnonymous]
