@@ -45,7 +45,6 @@ public class Startup(IConfiguration configuration)
             .AddScoped<IEmailService, EmailService>()
             .AddScoped<IPidpAuthorizationService, PidpAuthorizationService>()
             .AddScoped<IPlrStatusUpdateService, PlrStatusUpdateService>()
-            .AddScoped<ICommandHandler<UploadFileCommand, string>, UploadFileCommandHandler>()
             .AddSingleton<IClock>(SystemClock.Instance)
             .AddSingleton<BackgroundWorkerHealthCheck>();
 
