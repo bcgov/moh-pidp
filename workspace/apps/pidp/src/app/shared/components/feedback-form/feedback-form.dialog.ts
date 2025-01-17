@@ -17,6 +17,9 @@ import { FeedbackFormDialogResource } from './feedback-form-dialog-resource.serv
 import { FeedbackSuccessResponse } from './feedback-form-dialog-success.response.model';
 import { HttpErrorResponse } from '@angular/common/http';
 import { LoggerService } from '@app/core/services/logger.service';
+import { PartyService } from '@app/core/party/party.service';
+import { ProfileStatus } from '@app/features/portal/models/profile-status.model';
+import { PortalResource } from '@app/features/portal/portal-resource.service';
 
 @Component({
   selector: 'app-feedback-form-dialog',
@@ -43,7 +46,8 @@ export class FeedbackFormDialogComponent
   public selectedFile: File | null = null;
   public componentType = FeedbackSendComponent;
   public faXmark = faXmark;
-
+  public fullName$: string = ''
+  public email$: string = ''
   @ViewChild('successDialog')
   public successDialogTemplate!: TemplateRef<FeedbackSendComponent>;
 
@@ -53,6 +57,14 @@ export class FeedbackFormDialogComponent
       textarea.style.height = 'auto';
       textarea.style.height = `${Math.min(textarea.scrollHeight, 200)}px`;
     });
+
+    this.getProfileStatus(this.partyService.partyId)
+    .pipe()
+    .subscribe((profileStatus: ProfileStatus | null) => {
+      this.fullName$ = profileStatus?.status.dashboardInfo.displayFullName ?? '';
+      this.email$ = profileStatus?.status.dashboardInfo.displayFullName ?? '';
+    });
+
   }
   public constructor(
     dependenciesService: AbstractFormDependenciesService,
@@ -60,7 +72,9 @@ export class FeedbackFormDialogComponent
     dialog: MatDialog,
     public dialogRef: MatDialogRef<FeedbackFormDialogComponent>,
     private feedbackFormDialogResource: FeedbackFormDialogResource,
-    private logger: LoggerService
+    private logger: LoggerService,
+    private partyService: PartyService,
+    private portalResource: PortalResource,
   ) {
     super(dependenciesService);
     this.formState = new FeedbackFormState(fb, dialog);
@@ -108,6 +122,8 @@ export class FeedbackFormDialogComponent
       formData.append('file', this.selectedFile, this.selectedFile?.name);
     }
     formData.append('feedback', this.formState.feedback.value);
+    formData.append('fullname', this.fullName$);
+    formData.append('email', 'vinodkakarla5642@gmail.com');
 
     this.feedbackFormDialogResource.postFeedback(formData).subscribe(
       (data: FeedbackSuccessResponse) => {
@@ -136,4 +152,7 @@ export class FeedbackFormDialogComponent
     }
   }
 
+  private getProfileStatus(partyId: number): Observable<ProfileStatus | null> {
+    return this.portalResource.getProfileStatus(partyId);
+  }
 }
