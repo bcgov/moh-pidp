@@ -13,6 +13,10 @@ import html2canvas from 'html2canvas';
 import { FeedbackSendComponent } from '../success-dialog/components/feedback-send.component';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
 import { MatButtonModule } from '@angular/material/button';
+import { FeedbackFormDialogResource } from './feedback-form-dialog-resource.service';
+import { FeedbackSuccessResponse } from './feedback-form-dialog-success.response.model';
+import { HttpErrorResponse } from '@angular/common/http';
+import { LoggerService } from '@app/core/services/logger.service';
 
 @Component({
   selector: 'app-feedback-form-dialog',
@@ -55,7 +59,8 @@ export class FeedbackFormDialogComponent
     fb: FormBuilder,
     dialog: MatDialog,
     public dialogRef: MatDialogRef<FeedbackFormDialogComponent>,
-
+    private feedbackFormDialogResource: FeedbackFormDialogResource,
+    private logger: LoggerService
   ) {
     super(dependenciesService);
     this.formState = new FeedbackFormState(fb, dialog);
@@ -96,8 +101,28 @@ export class FeedbackFormDialogComponent
     this.dialogRef.close();
   }
 
-  public showSuccessDialog(event: Event): void {
+  public sendFeedback(event: Event): void {
     event.preventDefault();
+    const formData = new FormData();
+    if(this.selectedFile) {
+      formData.append('file', this.selectedFile, this.selectedFile?.name);
+    }
+    formData.append('feedback', this.formState.feedback.value);
+
+    this.feedbackFormDialogResource.postFeedback(formData).subscribe(
+      (data: FeedbackSuccessResponse) => {
+        this.showSuccessDialog();
+      },
+      (err: HttpErrorResponse) => {
+        this.logger.error(
+          '[FeedbackFormDialogResource::postFeedback] error has occurred: ',
+          err,
+        );
+      },
+    );
+  }
+
+  public showSuccessDialog(): void {
     if(this.formUtilsService.checkValidity(this.formState.form)) {
       this.dialogRef.close();
       const config: MatDialogConfig = {
