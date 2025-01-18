@@ -11,7 +11,9 @@ public class Create
     public class Command : ICommand<Model>
     {
         public string Feedback { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
         public IFormFile? File { get; set; }
+        public string FullName { get; set; } = string.Empty;
     }
     public class Model
     {
@@ -40,9 +42,13 @@ public class Create
             var email = new Email(
                 from: EmailService.PidpEmail,
                 to: ["vinodkakarla5642@gmail.com"],
-                cc: ["vinodkakarla564@gmail.com"],
-                subject: $"OneHealthID Feedback",
-                body: $@"Hello,<br> <br> {command.Feedback} <br> <br> Thank you.",
+                cc: [command.Email],
+                subject: $"Feedback from {command.FullName}",
+                body: $@"Hello,<br>
+                Feedback from user: {command.Email} <br>
+                message: {command.Feedback} <br>
+                contact: {command.Email} <br>
+                Thank you.",
                 attachments: [new File(
                     filename: command.File.FileName,
                     data: fileBytes,

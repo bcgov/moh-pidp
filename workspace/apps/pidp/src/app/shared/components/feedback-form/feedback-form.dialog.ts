@@ -20,6 +20,7 @@ import { LoggerService } from '@app/core/services/logger.service';
 import { PartyService } from '@app/core/party/party.service';
 import { ProfileStatus } from '@app/features/portal/models/profile-status.model';
 import { PortalResource } from '@app/features/portal/portal-resource.service';
+import { PersonalInformation } from '@app/features/profile/pages/personal-information/personal-information.model';
 
 @Component({
   selector: 'app-feedback-form-dialog',
@@ -53,16 +54,23 @@ export class FeedbackFormDialogComponent
 
   public ngOnInit(): void {
     const textarea = document.getElementById('auto-expand');
+    const partyId = this.partyService.partyId;
+
     textarea?.addEventListener('input', () => {
       textarea.style.height = 'auto';
       textarea.style.height = `${Math.min(textarea.scrollHeight, 200)}px`;
     });
 
-    this.getProfileStatus(this.partyService.partyId)
+    this.getProfileStatus(partyId)
     .pipe()
     .subscribe((profileStatus: ProfileStatus | null) => {
       this.fullName$ = profileStatus?.status.dashboardInfo.displayFullName ?? '';
-      this.email$ = profileStatus?.status.dashboardInfo.displayFullName ?? '';
+    });
+
+    this.resource
+    .get(partyId)
+    .subscribe((model: PersonalInformation | null) => {
+      this.email$ = model?.email || '';
     });
 
   }
@@ -75,6 +83,7 @@ export class FeedbackFormDialogComponent
     private logger: LoggerService,
     private partyService: PartyService,
     private portalResource: PortalResource,
+    private resource: FeedbackFormDialogResource,
   ) {
     super(dependenciesService);
     this.formState = new FeedbackFormState(fb, dialog);
@@ -123,7 +132,7 @@ export class FeedbackFormDialogComponent
     }
     formData.append('feedback', this.formState.feedback.value);
     formData.append('fullname', this.fullName$);
-    formData.append('email', 'vinodkakarla5642@gmail.com');
+    formData.append('email', this.email$);
 
     this.feedbackFormDialogResource.postFeedback(formData).subscribe(
       (data: FeedbackSuccessResponse) => {
