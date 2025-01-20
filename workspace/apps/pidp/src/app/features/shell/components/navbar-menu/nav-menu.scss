@@ -315,6 +315,7 @@ h1 {
 .dropdown-content .dropdown-links {
   cursor: pointer;
   width: 100%;
+  border-bottom: solid 4px transparent;
   fa-icon {
     color: red;
     margin-left: 5px;
