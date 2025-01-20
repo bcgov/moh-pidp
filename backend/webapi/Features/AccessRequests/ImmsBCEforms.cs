@@ -79,7 +79,7 @@ public class ImmsBCEforms
 
                 var endorsementPlrStanding = await this.plrClient.GetAggregateStandingsDigestAsync(endorsementCpns);
 
-                if (!endorsementPlrStanding.With(ProviderRoleType.MedicalDoctor).HasGoodStanding ||
+                if (!endorsementPlrStanding.With(ProviderRoleType.MedicalDoctor).HasGoodStanding &&
                     !endorsementPlrStanding.With(IdentifierType.Nurse).HasGoodStanding)
                 {
                     this.logger.LogAccessRequestDenied(command.PartyId);
