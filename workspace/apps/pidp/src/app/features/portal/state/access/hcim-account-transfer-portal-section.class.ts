@@ -25,8 +25,8 @@ export class HcimAccountTransferPortalSection implements IPortalSection {
   public keyWords: string[];
 
   public constructor(
-    private profileStatus: ProfileStatus,
-    private router: Router,
+    private readonly profileStatus: ProfileStatus,
+    private readonly router: Router,
   ) {
     this.key = 'hcimAccountTransfer';
     this.heading = 'HCIMWeb Account Transfer';

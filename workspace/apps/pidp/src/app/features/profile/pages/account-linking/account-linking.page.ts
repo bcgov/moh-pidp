@@ -81,22 +81,22 @@ export class AccountLinkingPage implements OnInit, OnDestroy {
   public credentials: Credential[] = [];
   public linkedAccountsIdp: IdentityProvider[] = [];
   public showInstructions: boolean = false;
-  private unsubscribe$ = new Subject<void>();
+  private readonly unsubscribe$ = new Subject<void>();
 
   public constructor(
-    @Inject(APP_CONFIG) private config: AppConfig,
-    private route: ActivatedRoute,
-    private router: Router,
-    private partyService: PartyService,
-    private logger: LoggerService,
-    private utilsService: UtilsService,
-    private authorizedUserService: AuthorizedUserService,
-    private documentService: DocumentService,
-    private resource: AccountLinkingResource,
-    private authService: AuthService,
-    private dialog: MatDialog,
-    private loadingOverlayService: LoadingOverlayService,
-    private navigationService: NavigationService,
+    @Inject(APP_CONFIG) private readonly config: AppConfig,
+    private readonly route: ActivatedRoute,
+    private readonly router: Router,
+    private readonly partyService: PartyService,
+    private readonly logger: LoggerService,
+    private readonly utilsService: UtilsService,
+    private readonly authorizedUserService: AuthorizedUserService,
+    private readonly documentService: DocumentService,
+    private readonly resource: AccountLinkingResource,
+    private readonly authService: AuthService,
+    private readonly dialog: MatDialog,
+    private readonly loadingOverlayService: LoadingOverlayService,
+    private readonly navigationService: NavigationService,
   ) {
     this.title = this.route.snapshot.data.title;
     const partyId = this.partyService.partyId;

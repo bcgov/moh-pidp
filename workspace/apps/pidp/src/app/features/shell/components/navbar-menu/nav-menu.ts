@@ -95,14 +95,14 @@ export class NavMenuComponent implements OnChanges, OnInit, OnDestroy {
   public AlertCode = AlertCode;
   public credentials: Credential[] = [];
   public credentials$: Observable<Credential[]>;
-  private unsubscribe$ = new Subject<void>();
+  private readonly unsubscribe$ = new Subject<void>();
   public IdentityProvider = IdentityProvider;
 
   public constructor(
-    private viewportService: ViewportService,
-    private router: Router,
-    private resource: NavMenuResource,
-    private partyService: PartyService,
+    private readonly viewportService: ViewportService,
+    private readonly router: Router,
+    private readonly resource: NavMenuResource,
+    private readonly partyService: PartyService,
   ) {
     this.viewportService.viewportBroadcast$.subscribe((viewport) =>
       this.onViewportChange(viewport),

@@ -25,8 +25,8 @@ export class MsTeamsClinicMemberPortalSection implements IPortalSection {
   public keyWords: string[];
 
   public constructor(
-    private profileStatus: ProfileStatus,
-    private router: Router,
+    private readonly profileStatus: ProfileStatus,
+    private readonly router: Router,
   ) {
     this.key = 'msTeamsClinicMember';
     this.heading = 'MS Teams for Clinic Members';

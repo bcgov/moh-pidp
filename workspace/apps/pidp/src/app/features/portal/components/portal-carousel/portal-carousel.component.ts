@@ -60,7 +60,7 @@ export class PortalCarouselComponent implements OnChanges {
   }
 
   public constructor(
-    private router: Router,
+    private readonly router: Router,
     viewportService: ViewportService,
   ) {
     viewportService.viewportBroadcast$.subscribe((viewport) => {

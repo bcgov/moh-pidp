@@ -49,11 +49,11 @@ export class TransactionsPage implements OnInit {
   public transactions$!: Observable<Transaction[]>;
 
   public constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private resource: TransactionsResource,
-    private partyService: PartyService,
-    private logger: LoggerService,
+    private readonly route: ActivatedRoute,
+    private readonly router: Router,
+    private readonly resource: TransactionsResource,
+    private readonly partyService: PartyService,
+    private readonly logger: LoggerService,
   ) {
     this.title = this.route.snapshot.data.title;
   }

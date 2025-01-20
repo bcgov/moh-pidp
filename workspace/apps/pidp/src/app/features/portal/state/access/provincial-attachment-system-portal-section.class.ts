@@ -24,8 +24,8 @@ export class ProvincialAttachmentSystemPortalSection implements IPortalSection {
   public keyWords: string[];
 
   public constructor(
-    private profileStatus: ProfileStatus,
-    private router: Router,
+    private readonly profileStatus: ProfileStatus,
+    private readonly router: Router,
   ) {
     this.key = 'provincialAttachmentSystem';
     this.heading = 'Provincial Attachment System';

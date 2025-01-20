@@ -14,7 +14,7 @@ import { Observable, catchError, of, throwError } from 'rxjs';
 
 @Injectable()
 export class UnauthorizedInterceptor implements HttpInterceptor {
-  public constructor(private router: Router) {}
+  public constructor(private readonly router: Router) {}
 
   public intercept(
     request: HttpRequest<unknown>,
