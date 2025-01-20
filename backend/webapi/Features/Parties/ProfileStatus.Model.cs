@@ -205,8 +205,7 @@ public partial class ProfileStatus
                     _ when profile.HasEnrolment(AccessTypeCode.ImmsBCEforms) => StatusCode.Complete,
                     _ when ImmsBCEforms.IsEligible(profile.PartyPlrStanding) ||
                         profile.EndorsementPlrStanding.With(ProviderRoleType.MedicalDoctor).HasGoodStanding ||
-                        profile.EndorsementPlrStanding.With(IdentifierType.Nurse).HasGoodStanding ||
-                        profile.EndorsementPlrStanding.With(IdentifierType.Midwife).HasGoodStanding => StatusCode.Incomplete,
+                        profile.EndorsementPlrStanding.With(IdentifierType.Nurse).HasGoodStanding => StatusCode.Incomplete,
                     _ => StatusCode.Locked
                 };
             }
