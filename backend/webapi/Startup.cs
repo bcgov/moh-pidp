@@ -24,7 +24,6 @@ using Pidp.Infrastructure.HealthChecks;
 using Pidp.Infrastructure.HttpClients;
 using Pidp.Infrastructure.Services;
 using Pidp.Infrastructure.Queue;
-using Pidp.Features.Feedback;
 
 public class Startup(IConfiguration configuration)
 {
@@ -53,7 +52,11 @@ public class Startup(IConfiguration configuration)
             .AddHybridModelBinder();
 
         services.AddValidatorsFromAssemblyContaining<Startup>()
-            .AddFluentValidationAutoValidation(options => options.EnablePathBindingSourceAutomaticValidation = true);
+            .AddFluentValidationAutoValidation(options =>
+            {
+                options.EnablePathBindingSourceAutomaticValidation = true;
+                options.EnableFormBindingSourceAutomaticValidation = true;
+            });
 
         services.AddDbContext<PidpDbContext>(options => options
             .UseNpgsql(config.ConnectionStrings.PidpDatabase, npg => npg.UseNodaTime())

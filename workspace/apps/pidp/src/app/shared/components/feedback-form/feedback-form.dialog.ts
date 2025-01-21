@@ -47,30 +47,15 @@ export class FeedbackFormDialogComponent
   public selectedFile: File | null = null;
   public componentType = FeedbackSendComponent;
   public faXmark = faXmark;
-  public fullName$: string = ''
-  public email$: string = ''
   @ViewChild('successDialog')
   public successDialogTemplate!: TemplateRef<FeedbackSendComponent>;
 
   public ngOnInit(): void {
     const textarea = document.getElementById('auto-expand');
-    const partyId = this.partyService.partyId;
 
     textarea?.addEventListener('input', () => {
       textarea.style.height = 'auto';
       textarea.style.height = `${Math.min(textarea.scrollHeight, 200)}px`;
-    });
-
-    this.getProfileStatus(partyId)
-    .pipe()
-    .subscribe((profileStatus: ProfileStatus | null) => {
-      this.fullName$ = profileStatus?.status.dashboardInfo.displayFullName ?? '';
-    });
-
-    this.resource
-    .get(partyId)
-    .subscribe((model: PersonalInformation | null) => {
-      this.email$ = model?.email || '';
     });
 
   }
@@ -131,8 +116,7 @@ export class FeedbackFormDialogComponent
       formData.append('file', this.selectedFile, this.selectedFile?.name);
     }
     formData.append('feedback', this.formState.feedback.value);
-    formData.append('fullname', this.fullName$);
-    formData.append('email', this.email$);
+    formData.append('partyid', this.partyService.partyId.toString());
 
     this.feedbackFormDialogResource.postFeedback(formData).subscribe(
       (data: FeedbackSuccessResponse) => {
