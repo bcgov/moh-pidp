@@ -11,11 +11,6 @@
       How was your experience using OneHealthID?
     </h1>
   </header>
-  <ng-container *ngIf="showErrorCard">
-    <section class="error-card" [class.show-card]="showErrorCard">
-      <p>An error occurred.</p>
-    </section>
-  </ng-container>
   <div class="content">
     <section class="form-card">
       <div class="feedback-form">
@@ -50,7 +45,7 @@
                   <button class="icon-button" aria-label="Take Screenshot" (click)="uploadFile($event)">
                     <img src="assets/images/icons/icon-file-attach.svg" alt="File Upload">
                   </button>
-                  <input hidden (change)="onFileSelected()" type="file" id="file" formControlName="attachment">
+                  <input hidden (change)="onFileSelected()" type="file" id="file" formControlName="attachment" accept="image/*">
                 </div>
               </div>
               <input matInput/>
@@ -58,7 +53,11 @@
             <div>
               <span class="file-name">{{selectedFile?.name}}</span>
             </div>
-
+            <ng-container *ngIf="showErrorCard">
+              <section class="error-card" [class.show-card]="showErrorCard">
+                <p class="error-card">File size should be less than 5MB</p>
+              </section>
+            </ng-container>
             <div class="form-button-container">
               <button
                 mat-flat-button

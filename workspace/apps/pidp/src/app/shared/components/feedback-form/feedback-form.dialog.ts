@@ -82,6 +82,11 @@ export class FeedbackFormDialogComponent
   public onFileSelected(): void {
     const inputNode: HTMLInputElement | null = document.querySelector('#file');
     this.selectedFile= inputNode?.files ? inputNode.files[0] : null;
+    if((this.selectedFile?.size ?? 0) > 5 * 1024 * 1024) {
+      this.showErrorCard = true;
+    } else {
+      this.showErrorCard = false;
+    }
   }
 
   public takeScreenshot(event: Event): void {
@@ -111,6 +116,9 @@ export class FeedbackFormDialogComponent
 
   public sendFeedback(event: Event): void {
     event.preventDefault();
+    if(this.showErrorCard){
+      return;
+    }
     const formData = new FormData();
     if(this.selectedFile) {
       formData.append('file', this.selectedFile, this.selectedFile?.name);
@@ -145,7 +153,4 @@ export class FeedbackFormDialogComponent
     }
   }
 
-  private getProfileStatus(partyId: number): Observable<ProfileStatus | null> {
-    return this.portalResource.getProfileStatus(partyId);
-  }
 }
