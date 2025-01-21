@@ -107,7 +107,6 @@ public partial class ProfileStatus
         public PlrStandingsDigest EndorsementPlrStanding { get; set; } = default!;
         public bool HasMSTeamsClinicEndorsement { get; set; }
         public bool HasPendingEndorsementRequest { get; set; }
-        public bool HasPrpAuthorizedLicence { get; set; }
         public PlrStandingsDigest PartyPlrStanding { get; set; } = default!;
 
         public bool HasEnrolment(AccessTypeCode accessTypeCode) => this.CompletedEnrolments.Contains(accessTypeCode);
@@ -122,15 +121,6 @@ public partial class ProfileStatus
         {
             this.userIdentityProvider = user.GetIdentityProvider();
             this.PartyPlrStanding = await plrClient.GetStandingsDigestAsync(this.Cpn);
-
-            var possiblePrpLicenceNumbers = this.PartyPlrStanding
-                .With(ProviderReportingPortal.AllowedIdentifierTypes)
-                .LicenceNumbers;
-            if (this.UserIsBCProvider && possiblePrpLicenceNumbers.Any())
-            {
-                this.HasPrpAuthorizedLicence = await context.PrpAuthorizedLicences
-                    .AnyAsync(authorizedLicence => possiblePrpLicenceNumbers.Contains(authorizedLicence.LicenceNumber));
-            }
 
             var endorsementDtos = await context.ActiveEndorsementRelationships(this.Id)
                 .Select(relationship => new

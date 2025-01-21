@@ -2,12 +2,12 @@ apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
   name: pr-cleanup-pipeline
-  namespace: d8a8f9-tools
+  namespace: f088b1-tools
 spec:
   params:
     - name: release_name
     - name: release_namespace
-      default: d8a8f9-dev
+      default: f088b1-dev
   workspaces:
     - name: source
   tasks:
