@@ -61,11 +61,8 @@ export class BcProviderPortalSection implements IPortalSection {
 
   public get status(): string {
     const statusCode = this.getStatusCode();
-    return statusCode === StatusCode.AVAILABLE
-      ? ''
-      : statusCode === StatusCode.COMPLETED
-        ? 'Completed'
-        : 'Incomplete';
+    const statusMsg =  statusCode === StatusCode.COMPLETED ? 'Completed': 'Incomplete';
+    return statusCode === StatusCode.AVAILABLE ? '' : statusMsg;
   }
 
   public get icon(): IconProp {

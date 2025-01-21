@@ -1,9 +1,6 @@
 import {
-  AsyncPipe,
   CommonModule,
-  NgFor,
   NgIf,
-  NgOptimizedImage,
 } from '@angular/common';
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
@@ -45,7 +42,6 @@ import { IdentityProvider } from '@app/features/auth/enums/identity-provider.enu
 import { AuthService } from '@app/features/auth/services/auth.service';
 import { AuthorizedUserService } from '@app/features/auth/services/authorized-user.service';
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
-import { SuccessDialogComponent } from '@app/shared/components/success-dialog/success-dialog.component';
 
 import { AccountLinkingResource } from './account-linking-resource.service';
 import { linkedAccountCardText } from './account-linking.constants';
@@ -61,11 +57,7 @@ import { AccessRoutes } from '@app/features/access/access.routes';
     CommonModule,
     InjectViewportCssClassDirective,
     MatButtonModule,
-    NgOptimizedImage,
-    SuccessDialogComponent,
-    AsyncPipe,
     MatTooltipModule,
-    NgFor,
     NgIf,
   ],
   templateUrl: './account-linking.page.html',
@@ -204,7 +196,7 @@ export class AccountLinkingPage implements OnInit, OnDestroy {
           );
         }),
         catchError(() => {
-          // TODO: what to do on error?
+          // TO DO: what to do on error?
           this.logger.error('Link Request creation failed');
 
           return of(null);

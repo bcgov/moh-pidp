@@ -18,8 +18,8 @@ import { PrivacyOfficer } from './ms-teams-clinic-member.model';
 export class MsTeamsClinicMemberResource {
   public constructor(
     protected apiResource: ApiHttpClient,
-    private portalResource: PortalResource,
-    private toastService: ToastService,
+    private readonly portalResource: PortalResource,
+    private readonly toastService: ToastService,
   ) {}
 
   public getProfileStatus(partyId: number): Observable<ProfileStatus | null> {

@@ -24,7 +24,7 @@ export class UnauthorizedInterceptor implements HttpInterceptor {
       catchError((error: HttpResponse<Record<string, string>>) => {
         if (error.status === HttpStatusCode.Unauthorized) {
           // Allow route configuration to determine destination
-          // TODO use root route config to populate redirect
+          // TO DO use root route config to populate redirect
           this.router.navigate(['/']);
           return of(error);
         }

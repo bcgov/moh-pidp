@@ -84,7 +84,7 @@ export class SignedOrAcceptedDocumentsPage implements OnInit {
   public ngOnInit(): void {
     const partyId = this.partyService.partyId;
 
-    // TODO filtering has been isolated to a single place in the
+    // TO DO filtering has been isolated to a single place in the
     // application to reduce complexity until a system around
     // available documents is built
     this.resource
