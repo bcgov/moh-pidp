@@ -17,7 +17,6 @@ import { FeedbackFormDialogResource } from './feedback-form-dialog-resource.serv
 import { HttpErrorResponse } from '@angular/common/http';
 import { LoggerService } from '@app/core/services/logger.service';
 import { PartyService } from '@app/core/party/party.service';
-import { PortalResource } from '@app/features/portal/portal-resource.service';
 
 @Component({
   selector: 'app-feedback-form-dialog',
