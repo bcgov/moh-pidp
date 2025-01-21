@@ -6,6 +6,8 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { provideAutoSpy } from 'jest-auto-spies';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FeedbackFormDialogResource } from './feedback-form-dialog-resource.service';
+import { LoggerService } from '@app/core/services/logger.service';
+import { PartyService } from '@app/core/party/party.service';
 
 describe('FeedbackFormDialogComponent', () => {
   let component: FeedbackFormDialogComponent;
@@ -17,7 +19,9 @@ describe('FeedbackFormDialogComponent', () => {
       providers: [
         provideAutoSpy(FormUtilsService),
         provideAutoSpy(MatDialogRef),
-        provideAutoSpy(FeedbackFormDialogResource)
+        provideAutoSpy(FeedbackFormDialogResource),
+        provideAutoSpy(LoggerService),
+        provideAutoSpy(PartyService)
       ]
     }).compileComponents();
 
