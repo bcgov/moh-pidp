@@ -63,9 +63,7 @@ export class FeedbackFormDialogComponent
     public dialogRef: MatDialogRef<FeedbackFormDialogComponent>,
     private feedbackFormDialogResource: FeedbackFormDialogResource,
     private logger: LoggerService,
-    private partyService: PartyService,
-    private portalResource: PortalResource,
-    private resource: FeedbackFormDialogResource,
+    private partyService: PartyService
   ) {
     super(dependenciesService);
     this.formState = new FeedbackFormState(fb, dialog);
