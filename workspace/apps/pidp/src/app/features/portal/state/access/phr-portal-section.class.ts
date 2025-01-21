@@ -28,9 +28,9 @@ export class PHRPortalSection implements IPortalSection {
     private router: Router,
   ) {
     this.key = 'phr';
-    this.heading = 'PHR System';
+    this.heading = 'Patient Health Record (PHR)';
     this.description =
-      'The PHR is an online tool used by primary care providers throughout the province to indicate their ability to take on new patients.';
+      'Securely access patient records';
 
     this.phrWebsite = 'https://bchealthprovider.ca';
     this.keyWords =
