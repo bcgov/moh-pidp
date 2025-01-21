@@ -14,13 +14,10 @@ import { FeedbackSendComponent } from '../success-dialog/components/feedback-sen
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
 import { MatButtonModule } from '@angular/material/button';
 import { FeedbackFormDialogResource } from './feedback-form-dialog-resource.service';
-import { FeedbackSuccessResponse } from './feedback-form-dialog-success.response.model';
 import { HttpErrorResponse } from '@angular/common/http';
 import { LoggerService } from '@app/core/services/logger.service';
 import { PartyService } from '@app/core/party/party.service';
-import { ProfileStatus } from '@app/features/portal/models/profile-status.model';
 import { PortalResource } from '@app/features/portal/portal-resource.service';
-import { PersonalInformation } from '@app/features/profile/pages/personal-information/personal-information.model';
 
 @Component({
   selector: 'app-feedback-form-dialog',
@@ -127,7 +124,7 @@ export class FeedbackFormDialogComponent
     formData.append('partyid', this.partyService.partyId.toString());
 
     this.feedbackFormDialogResource.postFeedback(formData).subscribe(
-      (data: FeedbackSuccessResponse) => {
+      () => {
         this.showSuccessDialog();
       },
       (err: HttpErrorResponse) => {
