@@ -21,7 +21,6 @@ public class DoWorkService(
 
     public async Task DoWorkAsync()
     {
-        Console.WriteLine(">>>>Start!");
         var parties = await this.context.Parties
             .Include(party => party.Credentials)
             .Take(1000)
@@ -51,6 +50,5 @@ public class DoWorkService(
 
             await this.bcProviderClient.UpdateAttributes(userPrincipalName, attributes.AsAdditionalData());
         }
-        Console.WriteLine(">>>>End!");
     }
 }
