@@ -1,7 +1,7 @@
 <div class="container" uiPidpInjectViewportCss>
   <app-breadcrumb [breadcrumbs]="breadcrumbsData"></app-breadcrumb>
   <ui-page mode="full">
-    <h1>{{ title }}</h1>
+    <h1 class="title">Provider Reporting Portal</h1>
 
     <ui-alert
       *ngIf="accessRequestFailed"
@@ -20,16 +20,6 @@
     </ui-alert>
 
     <app-enrolment-error *ngIf="enrolmentError"></app-enrolment-error>
-
-    <ui-page-section>
-      <ui-page-section-subheader
-        icon="assignment"
-        heading="Provider Reporting Portal">
-        <ng-container uiPageSectionSubheaderDesc>
-          {{ completed ? 'Enrolment Complete.' : 'Collection Notice.' }}
-        </ng-container>
-      </ui-page-section-subheader>
-    </ui-page-section>
 
     <ng-container *ngIf="completed; else notCompleted">
       <ui-alert
