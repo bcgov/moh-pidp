@@ -65,7 +65,7 @@ public class Create
 
             var email = new Email(
                 from: EmailService.PidpEmail,
-                to: ["vinodkakarla5642@gmail.com"],
+                to: ["onehealthidsupport@gov.bc.ca"],
                 cc: personalInfo.Email is null ? [] : [personalInfo.Email],
                 subject: $"Feedback from {data.DisplayFullName}",
                 body: $@"Hello,<br> <br>
