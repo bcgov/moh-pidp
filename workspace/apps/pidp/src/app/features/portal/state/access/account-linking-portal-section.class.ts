@@ -15,7 +15,6 @@ import { ProfileStatus } from '../../models/profile-status.model';
 import { PortalSectionAction } from '../portal-section-action.model';
 import { PortalSectionKey } from '../portal-section-key.type';
 import { IPortalSection } from '../portal-section.model';
-import { Constants } from '@app/shared/constants';
 
 export class AccountLinkingPortalSection implements IPortalSection {
   public readonly key: PortalSectionKey;
@@ -34,7 +33,7 @@ export class AccountLinkingPortalSection implements IPortalSection {
     this.heading = 'Account Linking';
     this.description = 'Link different credentials together in OneHealthID';
     this.keyWords = profileStatus.status.accountLinking.keyWords || [];
-    this.completedMessage = Constants.enrolledText;
+    this.completedMessage = '';
   }
 
   public get hint(): string {
