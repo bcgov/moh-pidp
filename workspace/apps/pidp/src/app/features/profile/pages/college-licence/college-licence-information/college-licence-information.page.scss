@@ -133,24 +133,6 @@ $darkgrey: pidp.$bcgov-color-text;
     }
   }
 
-  .status-pending {
-    display: flex;
-    justify-content: start;
-    align-items: center;
-
-    span {
-      color: pidp.$grey-40;
-      font-size: 16px;
-      font-weight: 700;
-      margin-right: 5px;
-    }
-
-    label {
-      font-weight: 700;
-      margin-right: 5px;
-    }
-  }
-
   .status-non-active {
     display: flex;
     justify-content: start;
