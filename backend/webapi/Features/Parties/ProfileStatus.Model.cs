@@ -111,7 +111,6 @@ public partial class ProfileStatus
                         : Alert.PlrBadStanding);
                 }
 
-
                 return StatusCode.Error;
             }
         }
