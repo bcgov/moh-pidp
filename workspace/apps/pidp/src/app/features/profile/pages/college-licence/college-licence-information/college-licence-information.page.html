@@ -48,26 +48,18 @@
               class="licence-detail"
               labelText="Identifier Type:"
               [valueText]="certification.identifierType"></app-college-licence-information-detail>
-            <div
-              *ngIf="certification.statusCode==='ACTIVE'"
-              class="status-active">
-              <label>Status Code:</label>
-              <span>Active</span>
-              <img
-                src="/assets/images/icons/icon-check-circle.svg"
-                alt="check circle" />
-            </div>
-            <div
-              *ngIf="certification.statusCode ==='PENDING'"
-              class="status-pending">
-              <label>Status Code:</label>
-              <span>{{certification.statusCode}}</span>
-            </div>
-            <div
-              *ngIf="certification.statusCode !=='ACTIVE' && certification.statusCode !=='PENDING'"
-              class="status-non-active">
-              <label>Status Code:</label>
-              <span>{{certification.statusCode}}</span>
+            <div [ngSwitch]="certification.statusCode">
+              <div *ngSwitchCase="'ACTIVE'" class="status-active">
+                <label>Status Code:</label>
+                <span>Active</span>
+                <img
+                  src="/assets/images/icons/icon-check-circle.svg"
+                  alt="check circle" />
+              </div>
+              <div *ngSwitchDefault class="status-non-active">
+                <label>Status Code:</label>
+                <span>{{ certification.statusCode }}</span>
+              </div>
             </div>
             <app-college-licence-information-detail
               class="licence-detail"
