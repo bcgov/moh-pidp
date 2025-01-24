@@ -327,7 +327,7 @@ export class BcProviderEditPage
       component: HtmlComponent,
       data: {
         content:
-          'Your authentication credentials have been successfully reset.Use your<b> BCProvider credential</b> in the next screen when you redirected off OneHealthID.',
+          'Your authentication credentials have been successfully reset.Use your<b> BCProvider credential</b> in the next screen when you get redirected off OneHealthID.',
       },
       imageSrc: '/assets/images/online-marketing-hIgeoQjS_iE-unsplash.jpg',
       imageType: 'banner',
