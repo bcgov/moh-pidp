@@ -59,7 +59,7 @@ export class CollegeLicenceInformationPage implements OnInit {
   ];
 
   public title: string;
-  public collegeCertifications$!: Observable<CollegeCertification[]> | null;
+  public collegeCertifications$!: Observable<CollegeCertification[]>;
   public alerts: ProfileStatusAlert[] = [];
   public faAngleRight = faAngleRight;
   public showCollegeLicenceDeclarationPage: boolean = false;
