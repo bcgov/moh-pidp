@@ -10,6 +10,9 @@ public class FeedbackLog : BaseAuditable
     public int Id { get; set; }
 
     public int PartyId { get; set; }
+
+    public Party? Party { get; set; }
+
     public string Feedback { get; set; } = string.Empty;
 
     public string? AttachmentInformation { get; set; } = string.Empty;
