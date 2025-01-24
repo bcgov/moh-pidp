@@ -1,30 +1,23 @@
 namespace Pidp.Features.Feedback;
 
-using AutoMapper.QueryableExtensions;
 using FluentValidation;
-using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 
 using Pidp.Data;
 using Pidp.Infrastructure.HttpClients.Mail;
 using Pidp.Infrastructure.Services;
 using Pidp.Models;
-using Pidp.Features.Parties;
 
 public class Create
 {
 
-    public class Command : ICommand<Model>
+    public class Command : ICommand
     {
         public int PartyId { get; set; }
         public string Feedback { get; set; } = string.Empty;
         public IFormFile? File { get; set; }
     }
 
-    public class Model
-    {
-        public string Status { get; set; } = string.Empty;
-    }
 
     public class CommandValidator : AbstractValidator<Command>
     {
@@ -46,32 +39,31 @@ public class Create
         }
     }
 
-    public class CommandHandler(IEmailService emailService, IMapper mapper, PidpDbContext context) : ICommandHandler<Command, Model>
+    public class CommandHandler(IEmailService emailService, PidpDbContext context) : ICommandHandler<Command>
     {
         private readonly IEmailService emailService = emailService;
-        private readonly IMapper mapper = mapper;
         private readonly PidpDbContext context = context;
 
-        public async Task<Model> HandleAsync(Command command)
+        public async Task HandleAsync(Command command)
         {
-            var data = await this.context.Parties
+            var party = await this.context.Parties
                 .Where(party => party.Id == command.PartyId)
-                .ProjectTo<ProfileStatus.ProfileData>(this.mapper.ConfigurationProvider)
-                .SingleAsync();
-
-            var personalInfo = await this.context.Parties
-                .Where(party => party.Id == command.PartyId)
+                .Select(party => new
+                {
+                    party.DisplayFullName,
+                    party.Email
+                })
                 .SingleAsync();
 
             var email = new Email(
                 from: EmailService.PidpEmail,
                 to: ["onehealthidsupport@gov.bc.ca"],
-                cc: personalInfo.Email is null ? [] : [personalInfo.Email],
-                subject: $"Feedback from {data.DisplayFullName}",
+                cc: party.Email is null ? [] : [party.Email],
+                subject: $"Feedback from {party.DisplayFullName}",
                 body: $@"Hello,<br> <br>
-                Feedback from user: {personalInfo.Email} <br>
+                Feedback from user: {party.Email} <br>
                 message: {command.Feedback} <br>
-                contact: {personalInfo.Email} <br> <br>
+                contact: {party.Email} <br> <br>
                 Thank you.",
                 attachments: command.File is null ? [] : [new File(
                     filename: command.File.FileName,
@@ -91,8 +83,6 @@ public class Create
 
             this.context.FeedbackLogs.Add(feedbackLog);
             await this.context.SaveChangesAsync();
-
-            return new Model { Status = "success" };
         }
 
         private static async Task<byte[]> ConvertToByteArrayAsync(IFormFile file)

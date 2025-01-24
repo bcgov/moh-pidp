@@ -1,19 +1,18 @@
 namespace Pidp.Features.Feedback;
 
-using DomainResults.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.Services;
 
 [Route("api/[controller]")]
+[Authorize(Policy = Policies.AnyPartyIdentityProvider)]
 public class FeedbackController(IPidpAuthorizationService authorizationService) : PidpControllerBase(authorizationService)
 {
     [HttpPost]
-    [Authorize(Policy = Policies.AnyPartyIdentityProvider)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<Create.Model>> CreateFeedback([FromServices] ICommandHandler<Create.Command, Create.Model> handler,
+    public async Task CreateFeedback([FromServices] ICommandHandler<Create.Command> handler,
                                                            [FromForm] Create.Command command)
-        => await this.AuthorizePartyBeforeHandleAsync(command.PartyId, handler, command).ToActionResultOfT();
+        => await this.AuthorizePartyBeforeHandleAsync(command.PartyId, handler, command);
 }
