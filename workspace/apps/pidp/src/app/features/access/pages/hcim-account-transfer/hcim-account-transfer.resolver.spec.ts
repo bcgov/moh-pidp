@@ -39,6 +39,8 @@ describe('hcimAccountTransferResolver', () => {
     TestBed.configureTestingModule({
       providers: [
         provideAutoSpy(HcimAccountTransferResource),
+        provideAutoSpy(ActivatedRouteSnapshot),
+        provideAutoSpy(RouterStateSnapshot),
         {
           provide: PartyService,
           useValue: createSpyFromClass(PartyService, {

@@ -38,6 +38,8 @@ describe('saEformsResolver', () => {
     TestBed.configureTestingModule({
       providers: [
         provideAutoSpy(SaEformsResource),
+        provideAutoSpy(ActivatedRouteSnapshot),
+        provideAutoSpy(RouterStateSnapshot),
         {
           provide: PartyService,
           useValue: createSpyFromClass(PartyService, {

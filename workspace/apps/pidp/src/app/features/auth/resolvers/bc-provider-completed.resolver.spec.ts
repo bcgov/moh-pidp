@@ -39,6 +39,8 @@ describe('bcProviderCompletedResolver', () => {
         },
         provideAutoSpy(PortalResource),
         provideAutoSpy(Router),
+        provideAutoSpy(ActivatedRouteSnapshot),
+        provideAutoSpy(RouterStateSnapshot),
       ],
     });
     activatedRouteSnapshotSpy = TestBed.inject<any>(ActivatedRouteSnapshot);

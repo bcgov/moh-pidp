@@ -57,6 +57,8 @@ describe('partyResolver', () => {
         provideAutoSpy(DocumentService),
         provideAutoSpy(Router),
         provideAutoSpy(KeycloakService),
+        provideAutoSpy(ActivatedRouteSnapshot),
+        provideAutoSpy(RouterStateSnapshot),
       ],
     });
     activatedRouteSnapshotSpy = TestBed.inject<any>(ActivatedRouteSnapshot);
