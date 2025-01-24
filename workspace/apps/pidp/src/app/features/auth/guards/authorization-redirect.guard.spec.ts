@@ -20,6 +20,8 @@ describe('authorizationRedirectGuard', () => {
     authorizationRedirectGuardServiceSpy = TestBed.inject<any>(
       AuthorizationRedirectGuardService,
     );
+    activatedRouteSnapshotSpy = TestBed.inject<any>(ActivatedRouteSnapshot);
+    routerStateSnapshotSpy = TestBed.inject<any>(RouterStateSnapshot);
   });
 
   describe('METHOD: CanActivateFn', () => {

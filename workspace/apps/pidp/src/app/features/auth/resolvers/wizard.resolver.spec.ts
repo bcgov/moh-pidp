@@ -46,7 +46,8 @@ describe('wizardResolver', () => {
         provideAutoSpy(Router),
       ],
     });
-
+    activatedRouteSnapshotSpy = TestBed.inject<any>(ActivatedRouteSnapshot);
+    routerStateSnapshotSpy = TestBed.inject<any>(RouterStateSnapshot);
     partyServiceSpy = TestBed.inject(PartyService) as Spy<PartyService>;
     discoveryResource = TestBed.inject(
       DiscoveryResource,

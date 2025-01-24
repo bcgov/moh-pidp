@@ -48,7 +48,8 @@ describe('driverFitnessResolver', () => {
         },
       ],
     });
-
+    activatedRouteSnapshotSpy = TestBed.inject<any>(ActivatedRouteSnapshot);
+    routerStateSnapshotSpy = TestBed.inject<any>(RouterStateSnapshot);
     driverFitnessResourceSpy = TestBed.inject<any>(DriverFitnessResource);
     partyServiceSpy = TestBed.inject<any>(PartyService);
 

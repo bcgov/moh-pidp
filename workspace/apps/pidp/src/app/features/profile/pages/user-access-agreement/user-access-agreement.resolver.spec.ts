@@ -53,7 +53,8 @@ describe('userAccessAgreementResolver', () => {
       UserAccessAgreementResource,
     );
     partyServiceSpy = TestBed.inject<any>(PartyService);
-
+    activatedRouteSnapshotSpy = TestBed.inject<any>(ActivatedRouteSnapshot);
+    routerStateSnapshotSpy = TestBed.inject<any>(RouterStateSnapshot);
     mockProfileStatus = MockProfileStatus.get();
   });
 

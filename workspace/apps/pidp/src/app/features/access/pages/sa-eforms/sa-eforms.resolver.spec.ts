@@ -47,7 +47,8 @@ describe('saEformsResolver', () => {
         },
       ],
     });
-
+    activatedRouteSnapshotSpy = TestBed.inject<any>(ActivatedRouteSnapshot);
+    routerStateSnapshotSpy = TestBed.inject<any>(RouterStateSnapshot);
     saEformsResourceSpy = TestBed.inject<any>(SaEformsResource);
     partyServiceSpy = TestBed.inject<any>(PartyService);
 

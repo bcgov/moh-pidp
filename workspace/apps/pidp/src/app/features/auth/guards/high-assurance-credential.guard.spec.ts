@@ -32,7 +32,8 @@ describe('highAssuranceCredentialGuard', () => {
         provideAutoSpy(Router),
       ],
     });
-
+    activatedRouteSnapshotSpy = TestBed.inject<any>(ActivatedRouteSnapshot);
+    routerStateSnapshotSpy = TestBed.inject<any>(RouterStateSnapshot);
     authorizedUserServiceSpy = TestBed.inject<any>(AuthorizedUserService);
     router = TestBed.inject(Router);
   });
