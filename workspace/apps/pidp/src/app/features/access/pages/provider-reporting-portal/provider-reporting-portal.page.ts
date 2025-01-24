@@ -25,7 +25,9 @@ import { PartyService } from '@app/core/party/party.service';
 import { DocumentService } from '@app/core/services/document.service';
 import { LoggerService } from '@app/core/services/logger.service';
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
+import { BreadcrumbComponent } from '@app/shared/components/breadcrumb/breadcrumb.component';
 
+import { AccessRoutes } from '../../access.routes';
 import { EnrolmentErrorComponent } from '../../components/enrolment-error/enrolment-error.component';
 import { ProviderReportingPortalResource } from './provider-reporting-portal-resource.service';
 
@@ -38,6 +40,7 @@ import { ProviderReportingPortalResource } from './provider-reporting-portal-res
     AlertComponent,
     AlertContentDirective,
     AnchorDirective,
+    BreadcrumbComponent,
     EnrolmentErrorComponent,
     InjectViewportCssClassDirective,
     MatButtonModule,
@@ -58,6 +61,14 @@ export class ProviderReportingPortalPage implements OnInit {
   public completed: boolean | null;
   public accessRequestFailed: boolean;
   public enrolmentError: boolean;
+  public breadcrumbsData: Array<{ title: string; path: string }> = [
+    { title: 'Home', path: '' },
+    {
+      title: 'Access',
+      path: AccessRoutes.routePath(AccessRoutes.ACCESS_REQUESTS),
+    },
+    { title: 'Provider Reporting Portal', path: '' },
+  ];
 
   public constructor(
     private route: ActivatedRoute,
