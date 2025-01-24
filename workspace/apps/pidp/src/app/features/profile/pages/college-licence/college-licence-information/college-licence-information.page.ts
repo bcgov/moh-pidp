@@ -13,7 +13,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { Observable, catchError, map, of, tap } from 'rxjs';
 
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { faAngleRight, faStethoscope } from '@fortawesome/free-solid-svg-icons';
 
 import { InjectViewportCssClassDirective } from '@bcgov/shared/ui';
@@ -41,7 +40,6 @@ import { CollegeLicenceInformationDetailComponent } from './components/college-l
     AsyncPipe,
     BreadcrumbComponent,
     CollegeLicenceInformationDetailComponent,
-    FaIconComponent,
     InjectViewportCssClassDirective,
     MatButtonModule,
     NgFor,
