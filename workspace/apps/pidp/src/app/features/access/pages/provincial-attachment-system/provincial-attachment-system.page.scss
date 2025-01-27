@@ -23,11 +23,6 @@
   --header-margin: var(--gap) 0 0;
   --content-padding: var(--gap) 0;
   --form-card-width: 25rem;
-  .card-body {
-    img.logo {
-      padding: 1.5rem 0 !important;
-    }
-  }
 }
 
 .viewport-all {
@@ -91,7 +86,6 @@
           align-items: flex-start;
 
           .card-header,
-          .card-body,
           .card-footer {
             flex: 1;
             display: flex;
@@ -108,25 +102,15 @@
             align-items: flex-start;
             gap: 0.5rem;
             background: rgba(0, 0, 0, 0.7);
+            margin-bottom: 6.5rem;
 
             h3 {
               margin: 0;
             }
           }
 
-          .card-body {
-            img.logo {
-              z-index: 0;
-              -webkit-transform: none;
-              transform: none;
-              position: relative !important;
-              height: 45px;
-              width: 175px;
-              padding: 1rem 0;
-            }
-          }
-
           .card-footer {
+            align-items: flex-end;
             button {
               z-index: 1;
               padding: 0.35rem 2rem;
@@ -151,6 +135,10 @@
 .viewport-small {
   .main {
     grid-template-columns: calc(50% - 15px) calc(50% - 15px) !important;
+
+    .card-header {
+      margin-bottom: 5rem !important;
+    }
   }
 }
 
@@ -187,6 +175,10 @@
         .auth-card-footer {
           padding: 7.5px 0px 7.5px 0px;
         }
+
+        .card-header {
+          margin-bottom: 4.5rem !important;
+        }
       }
     }
   }
@@ -194,7 +186,7 @@
 
 .viewport-medium {
   div.auth-card {
-    padding: 20px 0 55px 20px !important;
+    padding: 20px 0 10px 20px !important;
   }
 }
 

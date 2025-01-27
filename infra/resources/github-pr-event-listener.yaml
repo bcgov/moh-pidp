@@ -2,7 +2,7 @@ apiVersion: triggers.tekton.dev/v1alpha1
 kind: EventListener
 metadata:
   name: github-pr
-  namespace: d8a8f9-tools
+  namespace: f088b1-tools
 spec:
   namespaceSelector: {}
   podTemplate: {}

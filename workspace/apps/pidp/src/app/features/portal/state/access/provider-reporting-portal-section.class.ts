@@ -16,6 +16,7 @@ import { PortalSectionAction } from '../portal-section-action.model';
 import { PortalSectionKey } from '../portal-section-key.type';
 import { IPortalSection } from '../portal-section.model';
 import { Section } from '../section.model';
+import { Constants } from '@app/shared/constants';
 
 export class ProviderReportingPortalSection implements IPortalSection {
   public readonly key: PortalSectionKey;
@@ -25,6 +26,7 @@ export class ProviderReportingPortalSection implements IPortalSection {
   public faUserCheck = faUserCheck;
   public keyWords: string[];
   public errorReason: string;
+  public completedMessage: string;
 
   public constructor(
     private profileStatus: ProfileStatus,
@@ -35,6 +37,7 @@ export class ProviderReportingPortalSection implements IPortalSection {
     this.description = `Enrol here for access to the Provider Reporting Portal`;
     this.keyWords = profileStatus.status.providerReportingPortal.keyWords || [];
     this.errorReason = profileStatus.status.providerReportingPortal.errorReason ?? '';
+    this.completedMessage = Constants.enrolledText;
   }
 
   public get hint(): string {

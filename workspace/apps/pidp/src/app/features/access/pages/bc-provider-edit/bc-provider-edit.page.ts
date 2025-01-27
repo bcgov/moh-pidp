@@ -124,7 +124,7 @@ export class BcProviderEditPage
       title: 'Access',
       path: AccessRoutes.routePath(AccessRoutes.ACCESS_REQUESTS),
     },
-    { title: 'BC Provider Account', path: '' },
+    { title: 'BCProvider Account', path: '' },
   ];
 
   // ui-page is handling this.
@@ -327,7 +327,7 @@ export class BcProviderEditPage
       component: HtmlComponent,
       data: {
         content:
-          'Your authentication credentials have been successfully reset.',
+          'Your authentication credentials have been successfully reset.Use your<b> BCProvider credential</b> in the next screen when you are redirected off OneHealthID.',
       },
       imageSrc: '/assets/images/online-marketing-hIgeoQjS_iE-unsplash.jpg',
       imageType: 'banner',

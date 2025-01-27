@@ -40,6 +40,7 @@
     [actionDisabled]="section.action.disabled"
     [completed]="section.status === 'Completed'"
     [errorReason]="section.errorReason"
+    [completedText]="section.completedMessage"
     (action)="onCardAction(section)"></app-access-request-card>
 
   <div class="back-to-top-container">

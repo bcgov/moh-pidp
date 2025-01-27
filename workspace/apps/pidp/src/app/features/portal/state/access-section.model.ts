@@ -71,4 +71,10 @@ export interface IAccessSection {
    * Error Response for the card.
    */
    errorReason?: string;
+
+  completedMessage: string;
+  /**
+   * @description
+   *To Provide Completed Messagee.
+   */
 }

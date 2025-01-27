@@ -15,6 +15,7 @@ import { ProfileStatus } from '../../models/profile-status.model';
 import { PortalSectionAction } from '../portal-section-action.model';
 import { PortalSectionKey } from '../portal-section-key.type';
 import { IPortalSection } from '../portal-section.model';
+import { Constants } from '@app/shared/constants';
 
 export class ImmsBCEformsPortalSection implements IPortalSection {
   public readonly key: PortalSectionKey;
@@ -24,6 +25,7 @@ export class ImmsBCEformsPortalSection implements IPortalSection {
   public faUserCheck = faUserCheck;
   public keyWords: string[];
   public errorReason: string;
+  public completedMessage: string;
 
   public constructor(
     private profileStatus: ProfileStatus,
@@ -34,6 +36,7 @@ export class ImmsBCEformsPortalSection implements IPortalSection {
     this.description = `Enrol here for access to the Immunization Entry eForm application.`;
     this.keyWords = profileStatus.status.immsBCEforms.keyWords || [];
     this.errorReason = profileStatus.status.immsBCEforms.errorReason ?? '';
+    this.completedMessage = Constants.enrolledText;
   }
 
   public get hint(): string {

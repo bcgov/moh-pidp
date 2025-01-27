@@ -2,7 +2,7 @@
 kind: Pipeline
 metadata:
   name: cicd-pipeline-testing
-  namespace: d8a8f9-tools
+  namespace: f088b1-tools
 spec:
   params:
     - default: 'git@github.com:bcgov/moh-pidp.git'
@@ -14,7 +14,7 @@ spec:
     - default: 224169b
       name: git-short-sha
       type: string
-    - default: 'image-registry.openshift-image-registry.svc:5000/d8a8f9-tools'
+    - default: 'image-registry.openshift-image-registry.svc:5000/f088b1-tools'
       name: image-registry
       type: string
     - default: pr-82
@@ -23,7 +23,7 @@ spec:
     - default: pr-82
       name: release_name
       type: string
-    - default: d8a8f9-dev
+    - default: f088b1-dev
       name: release_namespace
       type: string
     - default: v0.1.0
@@ -144,7 +144,7 @@ spec:
             - '--build-arg'
             - SONAR_BUILDSTRING=$(params.git-short-sha)
             - '--build-arg'
-            - 'SONAR_HOST=http://sonarqube.d8a8f9-tools.svc.cluster.local:9000'
+            - 'SONAR_HOST=http://sonarqube.f088b1-tools.svc.cluster.local:9000'
       runAfter:
         - zap-scan-webapi
       taskRef:
@@ -198,7 +198,7 @@ spec:
             - '--build-arg'
             - SONAR_BUILDSTRING=$(params.git-short-sha)
             - '--build-arg'
-            - 'SONAR_HOST=http://sonarqube.d8a8f9-tools.svc.cluster.local:9000'
+            - 'SONAR_HOST=http://sonarqube.f088b1-tools.svc.cluster.local:9000'
       runAfter:
         - zap-plr-intake
       taskRef:

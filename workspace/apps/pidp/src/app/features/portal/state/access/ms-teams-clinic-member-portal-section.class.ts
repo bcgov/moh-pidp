@@ -15,6 +15,7 @@ import { ProfileStatus } from '../../models/profile-status.model';
 import { PortalSectionAction } from '../portal-section-action.model';
 import { PortalSectionKey } from '../portal-section-key.type';
 import { IPortalSection } from '../portal-section.model';
+import { Constants } from '@app/shared/constants';
 
 export class MsTeamsClinicMemberPortalSection implements IPortalSection {
   public readonly key: PortalSectionKey;
@@ -24,6 +25,7 @@ export class MsTeamsClinicMemberPortalSection implements IPortalSection {
   public faUserCheck = faUserCheck;
   public keyWords: string[];
   public errorReason: string;
+  public completedMessage: string;
 
   public constructor(
     private profileStatus: ProfileStatus,
@@ -34,6 +36,7 @@ export class MsTeamsClinicMemberPortalSection implements IPortalSection {
     this.description = `Clinic Member enrol here for clinic access for MS Teams with Fraser Health.`;
     this.keyWords = profileStatus.status.msTeamsClinicMember.keyWords || [];
     this.errorReason = profileStatus.status.msTeamsClinicMember.errorReason ?? '';
+    this.completedMessage = Constants.enrolledText;
   }
 
   public get hint(): string {

@@ -23,6 +23,7 @@ export class ProvincialAttachmentSystemPortalSection implements IPortalSection {
   public faUserCheck = faUserCheck;
   public keyWords: string[];
   public errorReason: string;
+  public completedMessage: string;
 
   public constructor(
     private profileStatus: ProfileStatus,
@@ -37,6 +38,7 @@ export class ProvincialAttachmentSystemPortalSection implements IPortalSection {
     this.keyWords =
       profileStatus.status.provincialAttachmentSystem.keyWords || [];
       this.errorReason = profileStatus.status.provincialAttachmentSystem.errorReason ?? '';
+    this.completedMessage = 'Access Granted';
   }
 
   /**
