@@ -4,6 +4,7 @@ ol {
   list-style: none;
   counter-reset: li;
   margin-left: 1rem;
+
   li {
     position: relative;
     counter-increment: li;
@@ -11,6 +12,7 @@ ol {
     line-height: 1.5rem;
     min-height: 4.5rem;
   }
+
   li:before {
     background: pidp.$grey-20;
     content: '';
@@ -20,9 +22,11 @@ ol {
     width: 1px;
     height: calc(100% - 2rem);
   }
+
   li:last-child:before {
     display: none;
   }
+
   li:after {
     background: pidp.$grey-40;
     color: white;
@@ -35,6 +39,7 @@ ol {
     width: 1.5rem;
     height: 1.5rem;
   }
+
   li:last-child:after {
     top: 6px;
   }
@@ -53,6 +58,7 @@ ol {
   --gap: 1.25rem;
   --font-size: 1rem;
 }
+
 .viewport-xsmall {
   --gap: 2rem;
   --font-size: 1rem;
@@ -70,14 +76,17 @@ ol {
   --content-padding: var(--gap);
   --password-splash-display: unset;
 }
+
 .viewport-medium {
   --header-margin: var(--gap) 0 0;
   --content-padding: var(--gap) 0;
   --password-splash-display: unset;
+
   --password-splash: {
     flex: 1;
   };
 }
+
 .viewport-large {
   --header-margin: var(--gap) 0 0;
   --content-padding: var(--gap) 0;
@@ -85,8 +94,20 @@ ol {
 }
 
 .viewport-all {
+  .btn-setup {
+    text-align: center;
+    border: 2px solid #036 !important;
+    background: #fff;
+    display: inline-flex;
+    padding: 0.25rem 2rem;
+    justify-content: center;
+    align-items: center;
+    border-radius: 0.25rem;
+  }
+
   & header {
     margin: var(--header-margin);
+
     & h1 {
       color: #036;
       font-size: 3.125rem;
@@ -94,17 +115,67 @@ ol {
       margin-bottom: 0;
     }
   }
+
   & .content {
     padding: var(--content-padding);
     font-size: var(--font-size);
     display: flex;
     flex-direction: column;
 
+    & .uplifting-container {
+      border-radius: 0.25rem;
+      border: 1px solid #ccc;
+      background: pidp.$bcgov-color-background-grey;
+
+      .title {
+        color: #313132;
+        font-size: 3.125rem;
+        line-height: 1.2;
+        width: 40rem;
+        padding: 2rem 1rem 0.5rem;
+        margin: 0;
+      }
+
+      .sub-heading {
+        padding: 0.5rem 1rem;
+        color: #474543;
+        font-size: 1rem;
+        line-height: 1.6875rem;
+      }
+
+      .button-container {
+        display: flex;
+        margin-left: 1rem;
+        vertical-align: middle;
+
+        button {
+          display: inline-flex;
+          height: 2.5rem;
+          padding: 0.75rem 2rem;
+          justify-content: center;
+          align-items: center;
+          flex-shrink: 0;
+        }
+
+        a {
+          cursor: pointer;
+          line-height: 2.5rem;
+          margin-left: 1.5rem;
+        }
+      }
+
+      .instructions-container {
+        margin-left: 1rem;
+        margin-top: 1rem;
+        color: #474543;
+        font-size: 1rem;
+      }
+    }
+
     & .cards {
       display: grid;
-      grid-template-columns: calc(40% - 15px) calc(27% - 15px) calc(33% - 15px);
+      grid-template-columns: calc(50% - 15px) calc(50% - 15px);
       gap: 20px;
-      min-height: 340px;
       margin: calc(var(--gap) * 2) 0;
 
       & .card {
@@ -149,6 +220,7 @@ ol {
           border-radius: var(--card-border-radius);
           object-fit: cover;
           object-position: 100% 50%;
+
           & .card-footer {
             width: 100%;
           }
@@ -161,6 +233,8 @@ ol {
 
       & .card.card-basic {
         padding: 0;
+        padding-top: 1rem;
+
         & .card-container {
           & .card-footer {
             & hr {
@@ -174,11 +248,20 @@ ol {
         border: solid 1px pidp.$grey-20;
         border-radius: var(--card-border-radius);
         box-shadow: 0 0 10px pidp.$grey-20;
+
         & .card-container {
           display: flex;
+
           & .card-header {
             margin-right: 1.5rem;
+
+            .lock-icon {
+              width: 1.2rem;
+              margin-right: 0.5em;
+              margin-bottom: 0.2rem;
+            }
           }
+
           & .card-body {
             & p {
               margin-top: 12px;
@@ -190,16 +273,20 @@ ol {
 
       & .card-uplifting {
         color: #9a3611;
+
         & .card-container {
           & .card-body {
             min-height: 250px;
           }
+
           & .card-footer {
             width: auto;
             align-self: flex-end;
+
             & button.mat-mdc-unelevated-button {
               width: fit-content;
             }
+
             & button.icon-button {
               background-color: #c24115;
               font-size: 1.5rem;
@@ -230,9 +317,11 @@ ol {
     & .error-card {
       background-color: #ffdfdf;
     }
+
     & .message-card {
       background-color: pidp.$grey-10;
     }
+
     & .error-card,
     & .message-card {
       // Use transitions so the cards slide in when displayed with show-card
@@ -249,6 +338,7 @@ ol {
         margin: 0;
       }
     }
+
     & .show-card {
       padding: var(--gap);
       margin-bottom: var(--gap);
@@ -263,16 +353,19 @@ ol {
 
       & .password-form {
         flex: 1;
+
         & h3 {
           margin: var(--gap) 0;
           padding: 0;
         }
+
         & h2 {
           text-align: center;
           margin: var(--gap) 0;
           padding: 0;
         }
       }
+
       & .password-splash {
         flex: 1;
         display: var(--password-splash-display);
@@ -287,12 +380,14 @@ ol {
           & .image {
             flex: 1;
             display: flex;
+
             img {
               flex: 1;
               width: 100%;
               height: auto;
             }
           }
+
           & .text-box {
             position: absolute;
             margin: calc(3 * var(--gap));
@@ -300,15 +395,18 @@ ol {
             display: flex;
             flex-direction: column;
             background-color: rgba(94, 130, 118, 0.9);
+
             & div {
               display: flex;
               justify-content: center;
             }
+
             & .lets {
               color: rgba(255, 255, 255, 1);
               font-size: 2.1rem;
               line-height: 1.2;
             }
+
             & .using {
               color: pidp.$font-color-default;
               font-size: 0.9rem;
@@ -323,6 +421,7 @@ ol {
         border-top-left-radius: var(--card-border-radius);
         border-top-right-radius: var(--card-border-radius);
       }
+
       & .username {
         display: flex;
         flex-direction: column;
@@ -332,32 +431,40 @@ ol {
         background-color: #f2f2f2;
         border: 1px solid #b8b8b8;
       }
+
       & .form-content {
         display: flex;
         flex-direction: column;
         padding: var(--gap);
+
         & .field {
           display: flex;
           flex-direction: column;
+
           & label {
             font-weight: bold;
           }
+
           & .mat-mdc-form-field {
             margin-bottom: 0;
           }
         }
+
         & .form-button-box {
           display: flex;
+
           & button {
             flex: 1;
           }
         }
+
         & .error {
           font-size: 0.75rem;
           overflow: hidden;
           transition: max-height 0.5s ease-in-out;
           max-height: 0;
         }
+
         & .error-show {
           transition: max-height 0.5s ease-in-out;
           max-height: 250px;
@@ -365,6 +472,7 @@ ol {
         }
       }
     }
+
     & .actions {
       margin-top: var(--gap);
     }
@@ -373,18 +481,21 @@ ol {
   & .help-link {
     font-size: 0.75rem;
   }
+
   & .mobile-image {
     & img {
       display: none;
     }
   }
 }
+
 .viewport-all.dialog-box {
   padding: 24px;
 
   & .dialog-header {
     display: flex;
     justify-content: flex-end;
+
     & button {
       width: 2rem;
       height: 2rem;
@@ -394,23 +505,28 @@ ol {
       align-items: center;
       border: solid 1px pidp.$grey-40;
       background-color: transparent;
+
       & fa-icon {
         font-size: 1.5rem;
         color: pidp.$grey-40;
       }
     }
   }
+
   & .dialog-content {
     display: flex;
     flex-direction: column;
+
     & h3,
     & p {
       text-align: center;
     }
+
     & .dialog-icon {
       display: flex;
       justify-content: center;
       margin-bottom: var(--gap);
+
       & fa-icon {
         font-size: 10rem;
         height: 10rem;
@@ -427,9 +543,11 @@ ol {
       padding: calc(var(--gap) / 2) var(--gap);
     }
   }
+
   & .content {
     & .cards {
       grid-template-columns: unset;
+
       & .card {
         & .card-container {
           & .card-header {
@@ -439,6 +557,7 @@ ol {
       }
     }
   }
+
   & .mobile-image {
     & img {
       display: block;
@@ -447,8 +566,10 @@ ol {
       position: relative !important;
     }
   }
+
   & .form-card {
     display: block !important;
+
     & .form-content {
       & .field {
         & .mat-mdc-form-field {
@@ -457,17 +578,20 @@ ol {
       }
     }
   }
+
   & .password-splash {
     & .password-splash-content {
       & .text-box {
         display: none !important;
       }
+
       & .image {
         display: none !important;
       }
     }
   }
 }
+
 .viewport-small {
   fa-icon {
     padding-left: 0.6rem;
