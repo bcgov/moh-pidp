@@ -20,8 +20,8 @@ import { PortalResource } from '@app/features/portal/portal-resource.service';
 import { bcProviderCompletedResolver } from './bc-provider-completed.resolver';
 
 describe('bcProviderCompletedResolver', () => {
-  let activatedRouteSnapshotSpy: Spy<ActivatedRouteSnapshot>;
-  let routerStateSnapshotSpy: Spy<RouterStateSnapshot>;
+  let actRouteSnapshotSpy: Spy<ActivatedRouteSnapshot>;
+  let routerSnapshotSpy: Spy<RouterStateSnapshot>;
   let partyServiceSpy: Spy<PartyService>;
   let portalResource: Spy<PortalResource>;
   let router: Router;
@@ -43,8 +43,8 @@ describe('bcProviderCompletedResolver', () => {
         provideAutoSpy(RouterStateSnapshot),
       ],
     });
-    activatedRouteSnapshotSpy = TestBed.inject<any>(ActivatedRouteSnapshot);
-    routerStateSnapshotSpy = TestBed.inject<any>(RouterStateSnapshot);
+    actRouteSnapshotSpy = TestBed.inject<any>(ActivatedRouteSnapshot);
+    routerSnapshotSpy = TestBed.inject<any>(RouterStateSnapshot);
     partyServiceSpy = TestBed.inject(PartyService) as Spy<PartyService>;
     portalResource = TestBed.inject(PortalResource) as Spy<PortalResource>;
     router = TestBed.inject(Router);
@@ -60,8 +60,8 @@ describe('bcProviderCompletedResolver', () => {
       when('Resolver is called', () => {
         const result = TestBed.runInInjectionContext(() =>
           bcProviderCompletedResolver(
-            activatedRouteSnapshotSpy,
-            routerStateSnapshotSpy,
+            actRouteSnapshotSpy,
+            routerSnapshotSpy,
           ),
         );
 
@@ -91,8 +91,8 @@ describe('bcProviderCompletedResolver', () => {
       when('Resolver is called', () => {
         const result = TestBed.runInInjectionContext(() =>
           bcProviderCompletedResolver(
-            activatedRouteSnapshotSpy,
-            routerStateSnapshotSpy,
+            actRouteSnapshotSpy,
+            routerSnapshotSpy,
           ),
         );
 
@@ -122,8 +122,8 @@ describe('bcProviderCompletedResolver', () => {
       when('Resolver is called', () => {
         const result = TestBed.runInInjectionContext(() =>
           bcProviderCompletedResolver(
-            activatedRouteSnapshotSpy,
-            routerStateSnapshotSpy,
+            actRouteSnapshotSpy,
+            routerSnapshotSpy,
           ),
         );
 
