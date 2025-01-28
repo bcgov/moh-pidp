@@ -11,6 +11,7 @@ ol {
     margin-bottom: 10px;
     line-height: 1.5rem;
     min-height: 4.5rem;
+    padding-left: 1.5rem;
   }
 
   li:before {
@@ -38,10 +39,6 @@ ol {
     left: -2rem;
     width: 1.5rem;
     height: 1.5rem;
-  }
-
-  li:last-child:after {
-    top: 6px;
   }
 }
 
@@ -125,7 +122,7 @@ ol {
     & .uplifting-container {
       border-radius: 0.25rem;
       border: 1px solid #ccc;
-      background: pidp.$bcgov-color-background-grey;
+      background: #faf9f8;
 
       .title {
         color: #313132;
@@ -137,7 +134,7 @@ ol {
       }
 
       .sub-heading {
-        padding: 0.5rem 1rem;
+        padding: 1.5rem 1rem;
         color: #474543;
         font-size: 1rem;
         line-height: 1.6875rem;
@@ -155,20 +152,21 @@ ol {
           justify-content: center;
           align-items: center;
           flex-shrink: 0;
+          background-color: pidp.$btn-blue-color;
         }
 
         a {
           cursor: pointer;
           line-height: 2.5rem;
           margin-left: 1.5rem;
+          color: #255a90;
         }
       }
 
       .instructions-container {
-        margin-left: 1rem;
-        margin-top: 1rem;
-        color: #474543;
-        font-size: 1rem;
+        padding: 0 1rem;
+        margin-top: 2rem;
+        color: pidp.$bcgov-color-text;
       }
     }
 
@@ -305,6 +303,7 @@ ol {
       & h3 {
         font-weight: bolder;
         font-size: var(--font-size);
+        margin-bottom: 2rem;
       }
     }
 
@@ -590,6 +589,38 @@ ol {
       }
     }
   }
+
+  & .uplifting-container {
+    .title {
+      font-size: 2.5rem !important;
+      width: auto !important;
+    }
+
+    .button-container {
+      margin: 0 1rem;
+      flex-direction: column;
+
+      a {
+        margin-left: 0 !important;
+        display: flex;
+        justify-content: center;
+      }
+    }
+    .instructions-container {
+      ol {
+        margin-left: 0rem !important;
+        li {
+          padding-left: 0.5rem !important;
+        }
+        li:nth-of-type(2) {
+          min-height: 9rem;
+        }
+        li:nth-of-type(3) {
+          min-height: 10rem;
+        }
+      }
+    }
+  }
 }
 
 .viewport-small {
@@ -601,5 +632,15 @@ ol {
 
   span {
     font-size: 0.9rem;
+  }
+
+  & .uplifting-container {
+    .instructions-container {
+      ol {
+        li:nth-of-type(3) {
+          min-height: 6rem;
+        }
+      }
+    }
   }
 }
