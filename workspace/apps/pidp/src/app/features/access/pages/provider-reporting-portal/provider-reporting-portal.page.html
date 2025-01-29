@@ -1,77 +1,68 @@
 <div class="container" uiPidpInjectViewportCss>
-<ui-page mode="full">
-  <h1>{{ title }}</h1>
+  <app-breadcrumb [breadcrumbs]="breadcrumbsData"></app-breadcrumb>
+  <ui-page mode="full">
+    <h1 class="title">Provider Reporting Portal</h1>
 
-  <ui-alert
-    *ngIf="accessRequestFailed"
-    type="danger"
-    icon="error_outline"
-    iconType="outlined"
-    heading="Error Requesting Access">
-    <ng-container uiAlertContent>
-      <p>
-        Your request for access to the Provider Reporting Portal could not be
-        processed at this time. If this issue persists, contact
-        <a uiAnchor scheme="mailto" [href]="">blank</a>
-        for assistance.
-      </p>
-    </ng-container>
-  </ui-alert>
-
-  <app-enrolment-error *ngIf="enrolmentError"></app-enrolment-error>
-
-  <ui-page-section>
-    <ui-page-section-subheader
-      icon="assignment"
-      heading="Provider Reporting Portal">
-      <ng-container uiPageSectionSubheaderDesc>
-        {{ completed ? 'Enrolment Complete.' : 'Collection Notice.' }}
-      </ng-container>
-    </ui-page-section-subheader>
-  </ui-page-section>
-
-  <ng-container *ngIf="completed; else notCompleted">
     <ui-alert
-      type="success"
-      icon="check_circle"
+      *ngIf="accessRequestFailed"
+      type="danger"
+      icon="error_outline"
       iconType="outlined"
-      heading="You are approved!">
+      heading="Error Requesting Access">
       <ng-container uiAlertContent>
         <p>
-          You now have access to the Provider Reporting Portal. You can log into
-          the application using your BC Services Card app.
-        </p>
-        <p>
-          Follow this link to Provider Reporting Portal:<br />
-          <a
-            target="_blank"
-            aria-label="Link to Provider Reporting Portal"
-            [href]=""
-            >blank</a
-          >
+          Your request for access to the Provider Reporting Portal could not be
+          processed at this time. If this issue persists, contact
+          <a uiAnchor scheme="mailto" [href]="">blank</a>
+          for assistance.
         </p>
       </ng-container>
     </ui-alert>
-  </ng-container>
 
-  <ng-template #notCompleted>
-    <ui-page-section>
-      <p
-        class="collection-notice"
-        [innerHtml]="collectionNotice | safe: 'html'"></p>
-    </ui-page-section>
-  </ng-template>
+    <app-enrolment-error *ngIf="enrolmentError"></app-enrolment-error>
 
-  <ui-page-footer [mode]="'reverse'">
-    <button
-      *ngIf="!completed"
-      mat-flat-button
-      uiPageFooterAction
-      type="button"
-      color="primary"
-      (click)="onRequestAccess()">
-      Next
-    </button>
-  </ui-page-footer>
-</ui-page>
+    <ng-container *ngIf="completed; else notCompleted">
+      <ui-alert
+        type="success"
+        icon="check_circle"
+        iconType="outlined"
+        heading="You are approved!">
+        <ng-container uiAlertContent>
+          <p>
+            You now have access to the Provider Reporting Portal. You can log
+            into the application using your BC Services Card app.
+          </p>
+          <p>
+            Follow this link to Provider Reporting Portal:<br />
+            <a
+              target="_blank"
+              aria-label="Link to Provider Reporting Portal"
+              [href]=""
+              >blank</a
+            >
+          </p>
+        </ng-container>
+      </ui-alert>
+    </ng-container>
+
+    <ng-template #notCompleted>
+      <ui-page-section>
+        <p
+          class="collection-notice"
+          [innerHtml]="collectionNotice | safe: 'html'"></p>
+      </ui-page-section>
+    </ng-template>
+
+    <ui-page-footer [mode]="'reverse'">
+      <button
+        *ngIf="!completed"
+        mat-flat-button
+        uiPageFooterAction
+        type="button"
+        color="primary"
+        (click)="onRequestAccess()">
+        Next
+      </button>
+    </ui-page-footer>
+  </ui-page>
 </div>

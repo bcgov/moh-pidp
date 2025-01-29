@@ -66,4 +66,10 @@ export interface IAccessSection {
    * Hidden Keywords for the card.
    */
   keyWords?: string[];
+
+  completedMessage: string;
+  /**
+   * @description
+   *To Provide Completed Messagee.
+   */
 }
