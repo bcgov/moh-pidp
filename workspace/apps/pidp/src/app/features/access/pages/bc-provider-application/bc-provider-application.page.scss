@@ -219,10 +219,6 @@ ol {
           object-fit: cover;
           object-position: 100% 50%;
 
-          & .card-footer {
-            width: 100%;
-          }
-
           & button.mat-mdc-unelevated-button {
             width: fit-content;
           }
@@ -232,14 +228,6 @@ ol {
       & .card.card-basic {
         padding: 0;
         padding-top: 1rem;
-
-        & .card-container {
-          & .card-footer {
-            & hr {
-              margin-bottom: 0;
-            }
-          }
-        }
       }
 
       & .card.card-advantage {
@@ -274,25 +262,6 @@ ol {
         & .card-container {
           & .card-body {
             min-height: 250px;
-          }
-
-          & .card-footer {
-            width: auto;
-            align-self: flex-end;
-
-            & button.mat-mdc-unelevated-button {
-              width: fit-content;
-            }
-
-            & button.icon-button {
-              background-color: #c24115;
-              font-size: 1.5rem;
-              color: white;
-              border: none;
-              border-radius: 50%;
-              width: 2.5rem;
-              height: 2.5rem;
-            }
           }
         }
       }
