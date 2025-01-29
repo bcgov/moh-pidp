@@ -20,6 +20,7 @@ public class StatusLog
         public string? Cpn { get; set; }
         public string? NewStatusCode { get; set; }
         public string? NewStatusReasonCode { get; set; }
+        public string? IdentifierType { get; set; }
         public string? ProviderRoleType { get; set; }
 
         public bool IsGoodStanding => PlrRecord.ComputeGoodStanding(this.NewStatusCode, this.NewStatusReasonCode);
@@ -59,6 +60,7 @@ public class StatusLog
                     Cpn = log.PlrRecord!.Cpn,
                     NewStatusCode = log.NewStatusCode,
                     NewStatusReasonCode = log.NewStatusReasonCode,
+                    IdentifierType = log.PlrRecord.IdentifierType,
                     ProviderRoleType = log.PlrRecord.ProviderRoleType
                 })
                 .ToListAsync();

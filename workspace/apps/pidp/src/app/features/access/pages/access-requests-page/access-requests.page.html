@@ -39,6 +39,7 @@
     [icon]="section.icon"
     [actionDisabled]="section.action.disabled"
     [completed]="section.status === 'Completed'"
+    [completedText]="section.completedMessage"
     (action)="onCardAction(section)"></app-access-request-card>
 
   <div class="back-to-top-container">
