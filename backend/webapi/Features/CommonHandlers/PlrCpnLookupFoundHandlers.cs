@@ -77,6 +77,7 @@ public class UpdateBCProviderAfterPlrCpnLookupFound(
 
         var attributes = new BCProviderAttributes(this.clientId)
             .SetCpn(notification.Cpn)
+            .SetIsPharm(notification.StandingsDigest.With(IdentifierType.Pharmacist).HasGoodStanding)
             .SetIsRnp(notification.StandingsDigest.With(ProviderRoleType.RegisteredNursePractitioner).HasGoodStanding)
             .SetIsMd(notification.StandingsDigest.With(ProviderRoleType.MedicalDoctor).HasGoodStanding);
 
