@@ -190,18 +190,6 @@ ol {
           flex-direction: column;
           height: 100%;
 
-          & .card-badge {
-            position: absolute;
-            right: -2.5em;
-            top: -2.5em;
-            width: 4.25em;
-            height: 4.25em;
-            border: solid 1px pidp.$bcgov-color-primary;
-            border-radius: 50%;
-            background: white;
-            padding: 1em;
-          }
-
           & .card-header {
             font-size: 1rem;
           }
