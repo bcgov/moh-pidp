@@ -180,7 +180,7 @@
             <ng-template #externalGuestInvitation
             ><a
               *ngIf="!hasCredential(IdentityProvider.EXTERNAL_GUEST_INVITATION)"
-              (click)="onLinkAccount(IdentityProvider.PHSA)"
+              (click)="onPageNavigate(['/profile/account-linking/external-guest-invitation'])"
               >Link Account</a
             ></ng-template
           >

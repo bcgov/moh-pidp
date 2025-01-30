@@ -22,7 +22,7 @@ export class ExternalGuestInvitationComponent {
       path: AccessRoutes.routePath(AccessRoutes.ACCESS_REQUESTS),
     },
     {
-      title: 'Link Account',
+      title: 'Account Linking',
       path: ProfileRoutes.routePath(ProfileRoutes.ACCOUNT_LINKING)
     },
     { title: 'External Guest Invitation', path: ''},
