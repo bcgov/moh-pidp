@@ -167,17 +167,23 @@
                   alt="creditcard" />
               </div>
             </div>
-            <h2>IDIR account</h2>
+            <h2>External guest invitation</h2>
             <p>Used by people who work in the B.C. public sector</p>
             <div
-              *ngIf="hasCredential(IdentityProvider.IDIR); else comingSoon"
+              *ngIf="hasCredential(IdentityProvider.EXTERNAL_GUEST_INVITATION); else externalGuestInvitation"
               class="linked-success">
               <span>1 Account Linked</span>
               <img
                 src="/assets/images/icons/icon-check-circle.svg"
                 alt="check circle" />
             </div>
-            <ng-template #comingSoon><p>Available soon!</p></ng-template>
+            <ng-template #externalGuestInvitation
+            ><a
+              *ngIf="!hasCredential(IdentityProvider.EXTERNAL_GUEST_INVITATION)"
+              (click)="onLinkAccount(IdentityProvider.PHSA)"
+              >Link Account</a
+            ></ng-template
+          >
           </div>
         </div>
       </section>

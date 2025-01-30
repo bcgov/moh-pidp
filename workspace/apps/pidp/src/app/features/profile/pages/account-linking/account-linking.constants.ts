@@ -5,4 +5,5 @@ export const linkedAccountCardText = {
   [IdentityProvider.PHSA]: 'Health Authority ID',
   [IdentityProvider.IDIR]: 'IDIR Account',
   [IdentityProvider.BC_PROVIDER]: 'BCProvider Account',
+  [IdentityProvider.EXTERNAL_GUEST_INVITATION]: 'External Guest Invitation',
 };
