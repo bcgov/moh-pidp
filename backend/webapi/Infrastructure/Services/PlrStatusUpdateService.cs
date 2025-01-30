@@ -92,6 +92,10 @@ public sealed class PlrStatusUpdateService(
             {
                 bcProviderAttributes.SetIsRnp(status.IsGoodStanding);
             }
+            if (status.IdentifierType == IdentifierType.Pharmacist)
+            {
+                bcProviderAttributes.SetIsPharm(status.IsGoodStanding);
+            }
 
             await this.bcProviderClient.UpdateAttributes(upn, bcProviderAttributes.AsAdditionalData());
         }

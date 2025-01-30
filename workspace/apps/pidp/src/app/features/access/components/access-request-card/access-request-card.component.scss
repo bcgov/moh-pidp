@@ -21,8 +21,9 @@
           font-size: x-small;
         }
         & .card-completed {
-          color: pidp.$green;
+          background-color: pidp.$green;
           border: 1px solid pidp.$green;
+          color: pidp.$bcgov-color-background-grey;
         }
         & .card-header-text {
           color: #003366;
@@ -48,6 +49,15 @@
   .card-body {
     float: left;
     padding-top: 1rem;
+    .completed-text {
+      margin-bottom: 0;
+      color: pidp.$green;
+      font-weight: bold;
+    }
+  }
+  .card-header fa-icon {
+    width: 1.5rem;
+    height: 1.5rem;
   }
 }
 
@@ -68,8 +78,8 @@
   }
   .card-header-icon fa-icon {
     padding: 5px;
-    width: 8%;
-    height: 15%;
+    width: 1.75rem;
+    height: 1.75rem;
   }
 
   .card-header-text {
@@ -93,8 +103,8 @@
 
   .card-header fa-icon {
     padding: 6px;
-    width: 11%;
-    height: 15%;
+    width: 1.6rem;
+    height: 1.6rem;
   }
 }
 
@@ -126,15 +136,11 @@
 
   .card-header fa-icon {
     padding: 6px;
-    width: 13%;
-    height: 15%;
   }
 }
 
 .container.viewport-large {
   .card-header fa-icon {
     padding: 6px;
-    width: 9%;
-    height: 15%;
   }
 }
