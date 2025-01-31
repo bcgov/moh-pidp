@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 import { InjectViewportCssClassDirective } from '@bcgov/shared/ui';
 import { BreadcrumbComponent } from "../../../../../shared/components/breadcrumb/breadcrumb.component";
@@ -11,7 +12,12 @@ import { ProfileRoutes } from '@app/features/profile/profile.routes';
   templateUrl: './external-guest-invitation.page.html',
   styleUrl: './external-guest-invitation.page.scss',
   standalone: true,
-  imports: [CommonModule, InjectViewportCssClassDirective, BreadcrumbComponent],
+  imports: [
+    CommonModule,
+    InjectViewportCssClassDirective,
+    BreadcrumbComponent,
+    MatFormFieldModule
+  ],
 })
 export class ExternalGuestInvitationComponent {
 

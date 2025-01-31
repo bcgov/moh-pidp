@@ -1,3 +1,22 @@
 .viewport-all {
+  & h1 {
+    margin: 0;
+    color: #003366;
+    font-size: 2.8rem;
+    font-weight: 700;
+    word-wrap: break-word;
+  }
 
+
+  & .content {
+    padding-top: 20px;
+    display: flex;
+  }
+
+  & .input-label {
+    padding-top: 20px;
+    display: flex;
+    font-size: 1.2rem;
+    font-weight: 550;
+  }
 }
