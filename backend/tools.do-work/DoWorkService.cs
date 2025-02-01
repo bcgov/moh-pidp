@@ -1,7 +1,6 @@
 namespace DoWork;
 
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Graph.Drives.Item.Items.Item.Workbook.Functions.Vdb;
 using Pidp;
 using Pidp.Data;
 using Pidp.Infrastructure.Auth;
@@ -29,7 +28,7 @@ public class DoWorkService(
                 && party.LicenceDeclaration.CollegeCode == CollegeCode.Pharmacists)
                 .Select(party => party.Cpn)
             .ToListAsync();
-        Console.WriteLine(">>>>CPNs loaded!", + cpns.Count);
+        Console.WriteLine(">>>>CPNs loaded!", +cpns.Count);
         // var parties = await this.context.Parties
         //     .Include(party => party.Credentials)
         //     .Where(party => party.Cpn != null

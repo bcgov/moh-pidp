@@ -18,7 +18,6 @@ await Host.CreateDefaultBuilder(args)
 
         services
             .AddHttpClients(config)
-            .AddRateLimitedKeycloakClient(config)
             .AddSingleton<IClock>(SystemClock.Instance)
             .AddMediatR(opt => opt.RegisterServicesFromAssemblyContaining<Startup>())
             .AddTransient<IDoWorkService, DoWorkService>()
@@ -27,6 +26,7 @@ await Host.CreateDefaultBuilder(args)
                 .UseNpgsql(config.ConnectionStrings.PidpDatabase, npg => npg.UseNodaTime())
                 .EnableSensitiveDataLogging(sensitiveDataLoggingEnabled: false)
                 .UseProjectables());
+        ;
     })
     .RunConsoleAsync();
 
