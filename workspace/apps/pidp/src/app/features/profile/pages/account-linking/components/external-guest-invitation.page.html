@@ -16,21 +16,30 @@
 
     <p class="input-label">Enter the user name or email address of the account you want to use as an external guest</p>
 
-    <!-- <form novalidate>
+    <form novalidate [formGroup]="formState.form" (ngSubmit)="onSubmit()">
       <section>
-        <h2 class="header">LICENCE</h2>
-        <h3 class="college-licence">College licence information</h3>
         <div class="content">
           <mat-form-field>
-            <mat-label class="field-label">Licence Number</mat-label>
+            <mat-label class="field-label">User name</mat-label>
             <input
               matInput
-              formControlName="licenceNumber"
-              aria-labelledby="college-licence-declaration-licence-number" />
+              formControlName="username"
+              aria-labelledby="username" />
             <mat-error>Required</mat-error>
-            <mat-hint> Example would be a 5 digit code </mat-hint>
           </mat-form-field>
         </div>
       </section>
-    </form> -->
+    </form>
+
+    <p>
+      Helpful text to user on being redirected to external guest invitation page
+    </p>
+    <div class="actions">
+      <button
+        mat-flat-button
+        type="submit"
+        color="primary">
+        {{ "Request" }}
+      </button>
+    </div>
 </div>

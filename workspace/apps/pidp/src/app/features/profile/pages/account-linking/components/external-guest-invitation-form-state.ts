@@ -23,10 +23,9 @@ export class ExternalGuestInvitationFormState extends AbstractFormState<External
 
     const values = this.formInstance.getRawValue();
 
-    // Map '0' in the form back into null for the server (mat-select can't use null as a value)
-    if (values.collegeCode === 0) {
-      values.collegeCode = null;
-      values.licenceNumber = null;
+    // Map '' in the form back into null for the server (mat-select can't use null as a value)
+    if (values.username === '') {
+      values.username = null;
     }
 
     return values;

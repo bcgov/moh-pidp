@@ -7,10 +7,19 @@
     word-wrap: break-word;
   }
 
-
   & .content {
     padding-top: 20px;
     display: flex;
+
+    & .field-label {
+      font-size: var(--field-label-font-size);
+      font-weight: bold;
+      color: black;
+    }
+
+    & mat-form-field {
+      max-width: var(--field-max-width);
+    }
   }
 
   & .input-label {
@@ -18,5 +27,13 @@
     display: flex;
     font-size: 1.2rem;
     font-weight: 550;
+  }
+
+  & .actions {
+    display: flex;
+    padding-top: 25px;
+    & button {
+      background-color: rgb(76, 76, 190);
+    }
   }
 }
