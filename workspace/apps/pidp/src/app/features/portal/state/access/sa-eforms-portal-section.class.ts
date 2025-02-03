@@ -16,6 +16,7 @@ import { PortalSectionAction } from '../portal-section-action.model';
 import { PortalSectionKey } from '../portal-section-key.type';
 import { IPortalSection } from '../portal-section.model';
 import { SaEformsSection } from './sa-eforms-section.model';
+import { Constants } from '@app/shared/constants';
 
 export class SaEformsPortalSection implements IPortalSection {
   public readonly key: PortalSectionKey;
@@ -23,6 +24,8 @@ export class SaEformsPortalSection implements IPortalSection {
   public description: string;
   public faFileLines = faFileLines;
   public faUserCheck = faUserCheck;
+  public keyWords: string[];
+  public completedMessage: string;
 
   public constructor(
     private profileStatus: ProfileStatus,
@@ -31,6 +34,8 @@ export class SaEformsPortalSection implements IPortalSection {
     this.key = 'saEforms';
     this.heading = 'Special Authority eForms';
     this.description = `Enrol here for access to PharmaCare's Special Authority eForms application.`;
+    this.keyWords = profileStatus.status.saEforms.keyWords || [];
+    this.completedMessage = Constants.enrolledText;
   }
 
   public get hint(): string {

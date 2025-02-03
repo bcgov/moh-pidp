@@ -194,10 +194,6 @@ export class EndorsementsPage
     }
   }
 
-  public onBack(): void {
-    this.navigationService.navigateToRoot();
-  }
-
   public onApprove(requestId: number): void {
     this.loadingOverlayService.open(LOADING_OVERLAY_DEFAULT_MESSAGE);
     const data: DialogOptions = this.popupData;
@@ -220,6 +216,13 @@ export class EndorsementsPage
             ? this.resource
                 .approveEndorsementRequest(this.partyService.partyId, requestId)
                 .pipe(
+                  switchMap(
+                    () =>
+                      (this.nonActionableEndorsementRequests$ =
+                        this.getNonActionableEndorsementRequests(
+                          this.partyService.partyId,
+                        )),
+                  ),
                   switchMap(
                     () =>
                       (this.actionableEndorsementRequests$ =

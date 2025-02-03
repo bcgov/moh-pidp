@@ -1,4 +1,5 @@
 {
+  "dotnet.defaultSolution": "../pidp-backend.sln",
   "editor.bracketPairColorization.enabled": true,
   "editor.formatOnPaste": true,
   "editor.formatOnType": true,

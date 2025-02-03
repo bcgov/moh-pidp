@@ -1,5 +1,0 @@
-cron: 0 8 * * *
-image: image-registry.openshift-image-registry.svc:5000/d8a8f9-tools/endorsement-reminder:develop
-env: dev
-applicationURL: https://dev.healthprovideridentityportal.gov.bc.ca
-aspnetcoreEnvironment: Staging

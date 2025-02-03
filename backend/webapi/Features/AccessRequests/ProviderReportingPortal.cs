@@ -14,7 +14,7 @@ using Pidp.Models.Lookups;
 
 public class ProviderReportingPortal
 {
-    public static IdentifierType[] AllowedIdentifierTypes => new[] { IdentifierType.PhysiciansAndSurgeons };
+    public static IdentifierType[] AllowedIdentifierTypes => [IdentifierType.PhysiciansAndSurgeons, IdentifierType.Pharmacist];
 
     public class Command : ICommand<IDomainResult>
     {
@@ -26,27 +26,18 @@ public class ProviderReportingPortal
         public CommandValidator() => this.RuleFor(x => x.PartyId).GreaterThan(0);
     }
 
-    public class CommandHandler : ICommandHandler<Command, IDomainResult>
+    public class CommandHandler(
+        IClock clock,
+        IKeycloakAdministrationClient keycloakClient,
+        ILogger<CommandHandler> logger,
+        IPlrClient plrClient,
+        PidpDbContext context) : ICommandHandler<Command, IDomainResult>
     {
-        private readonly IClock clock;
-        private readonly IKeycloakAdministrationClient keycloakClient;
-        private readonly ILogger<CommandHandler> logger;
-        private readonly IPlrClient plrClient;
-        private readonly PidpDbContext context;
-
-        public CommandHandler(
-            IClock clock,
-            IKeycloakAdministrationClient keycloakClient,
-            ILogger<CommandHandler> logger,
-            IPlrClient plrClient,
-            PidpDbContext context)
-        {
-            this.clock = clock;
-            this.keycloakClient = keycloakClient;
-            this.logger = logger;
-            this.plrClient = plrClient;
-            this.context = context;
-        }
+        private readonly IClock clock = clock;
+        private readonly IKeycloakAdministrationClient keycloakClient = keycloakClient;
+        private readonly ILogger<CommandHandler> logger = logger;
+        private readonly IPlrClient plrClient = plrClient;
+        private readonly PidpDbContext context = context;
 
         public async Task<IDomainResult> HandleAsync(Command command)
         {
@@ -60,23 +51,13 @@ public class ProviderReportingPortal
                 })
                 .SingleAsync();
 
-            var filteredPlrDigest = (await this.plrClient.GetStandingsDigestAsync(dto.Cpn))
-                .With(AllowedIdentifierTypes);
 
             if (dto.AlreadyEnroled
-                || !filteredPlrDigest
-                    .HasGoodStanding)
+                || !(await this.plrClient.GetStandingsDigestAsync(dto.Cpn))
+                   .With(AllowedIdentifierTypes)
+                   .HasGoodStanding)
             {
                 this.logger.LogAccessRequestDenied();
-                return DomainResult.Failed();
-            }
-
-            var prpAuthorization = await this.context.PrpAuthorizedLicences
-                .SingleOrDefaultAsync(authorizedLicence => filteredPlrDigest.LicenceNumbers.Contains(authorizedLicence.LicenceNumber));
-
-            if (prpAuthorization == null)
-            {
-                this.logger.LogUnauthorizedLicence(command.PartyId, filteredPlrDigest.LicenceNumbers);
                 return DomainResult.Failed();
             }
 
@@ -91,8 +72,6 @@ public class ProviderReportingPortal
                 AccessTypeCode = AccessTypeCode.ProviderReportingPortal,
                 RequestedOn = this.clock.GetCurrentInstant()
             });
-
-            prpAuthorization.Claimed = true;
 
             await this.context.SaveChangesAsync();
 

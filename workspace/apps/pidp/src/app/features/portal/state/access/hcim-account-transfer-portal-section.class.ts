@@ -15,6 +15,7 @@ import { ProfileStatus } from '../../models/profile-status.model';
 import { PortalSectionAction } from '../portal-section-action.model';
 import { PortalSectionKey } from '../portal-section-key.type';
 import { IPortalSection } from '../portal-section.model';
+import { Constants } from '@app/shared/constants';
 
 export class HcimAccountTransferPortalSection implements IPortalSection {
   public readonly key: PortalSectionKey;
@@ -22,6 +23,8 @@ export class HcimAccountTransferPortalSection implements IPortalSection {
   public description: string;
   public faArrowsRotate = faArrowsRotate;
   public faUserCheck = faUserCheck;
+  public keyWords: string[];
+  public completedMessage: string;
 
   public constructor(
     private profileStatus: ProfileStatus,
@@ -30,6 +33,8 @@ export class HcimAccountTransferPortalSection implements IPortalSection {
     this.key = 'hcimAccountTransfer';
     this.heading = 'HCIMWeb Account Transfer';
     this.description = `For existing users of HCIMWeb application to transfer their HNETBC account credential to their organization credential.`;
+    this.keyWords = profileStatus.status.hcimAccountTransfer.keyWords || [];
+    this.completedMessage = Constants.enrolledText;
   }
 
   public get hint(): string {

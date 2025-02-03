@@ -5,12 +5,13 @@ using Pidp.Infrastructure.HttpClients.Plr;
 public class NewUserRepresentation
 {
     public string? Cpn { get; set; }
-    public IEnumerable<string> EndorserData { get; set; } = Enumerable.Empty<string>();
+    public IEnumerable<string> EndorserData { get; set; } = [];
     public string FirstName { get; set; } = string.Empty;
     public string LastName { get; set; } = string.Empty;
     public string Hpdid { get; set; } = string.Empty;
     public bool IsMd { get; set; }
     public bool IsMoa { get; set; }
+    public bool IsPharm { get; set; }
     public bool IsRnp { get; set; }
     public string PidpEmail { get; set; } = string.Empty;
     public DateTimeOffset UaaDate { get; set; }
@@ -21,19 +22,17 @@ public class NewUserRepresentation
 /// <summary>
 /// An AD Directory Extension to store additional attributes
 /// </summary>
-public class BCProviderAttributes
+/// <remarks>
+/// Always use to create or update attributes in AAD, as clientId contains dashes
+/// that AAD does not expect
+/// </remarks>
+/// <param name="clientId"></param>
+public class BCProviderAttributes(string clientId)
 {
-    public static IdentifierType[] EndorserDataEligibleIdentifierTypes => new[] { IdentifierType.PhysiciansAndSurgeons, IdentifierType.Nurse, IdentifierType.Midwife };
+    public static IdentifierType[] EndorserDataEligibleIdentifierTypes => [IdentifierType.PhysiciansAndSurgeons, IdentifierType.Nurse, IdentifierType.Midwife];
 
-    private readonly string extensionNamePrefix;
-    private readonly Dictionary<string, object> attributes = new();
-
-    /// <summary>
-    /// Always use to create or update attributes in AAD, as clientId contains dashes
-    /// that AAD does not expect
-    /// </summary>
-    /// <param name="clientId"></param>
-    public BCProviderAttributes(string clientId) => this.extensionNamePrefix = $"extension_{clientId.Replace("-", "")}_";
+    private readonly string extensionNamePrefix = $"extension_{clientId.Replace("-", "")}_";
+    private readonly Dictionary<string, object> attributes = [];
 
     public static BCProviderAttributes FromNewUser(string clientId, NewUserRepresentation representation)
     {
@@ -42,6 +41,7 @@ public class BCProviderAttributes
             .SetHpdid(representation.Hpdid)
             .SetIsMd(representation.IsMd)
             .SetIsMoa(representation.IsMoa)
+            .SetIsPharm(representation.IsPharm)
             .SetIsRnp(representation.IsRnp)
             .SetLoa(3)
             .SetPidpEmail(representation.PidpEmail)
@@ -65,6 +65,7 @@ public class BCProviderAttributes
     public BCProviderAttributes SetHpdid(string hpdid) => this.SetProperty(nameof(hpdid), hpdid);
     public BCProviderAttributes SetIsMd(bool isMd) => this.SetProperty(nameof(isMd), isMd);
     public BCProviderAttributes SetIsMoa(bool isMoa) => this.SetProperty(nameof(isMoa), isMoa);
+    public BCProviderAttributes SetIsPharm(bool isPharm) => this.SetProperty(nameof(isPharm), isPharm);
     public BCProviderAttributes SetIsRnp(bool isRnp) => this.SetProperty(nameof(isRnp), isRnp);
     /// <summary>
     /// Level Of Assurance. Is 3 for a BC Provider created from a BC Services Card.

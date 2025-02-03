@@ -1,3 +1,10 @@
+{{ $ocEnv := regexFind "([^-]*$)" .Release.Namespace }}
+{{ $domain := .Values.global.vanityURL }}
+{{ $env := .Values.env }}
+## Derived release name
+{{ $isProd := contains "prod" $ocEnv }}
+#
+
 kind: CronJob
 apiVersion: batch/v1
 metadata:
@@ -12,7 +19,7 @@ spec:
         spec:
           containers:
           - name: endorsement-reminder
-            image: {{ .Values.image }}
+            image: "{{ .Values.global.image.registry }}/{{ .Values.global.image.repository }}:{{ .Values.global.image.tag | default .Chart.AppVersion }}"
             env:
               - name: ChesClient__TokenUrl
                 valueFrom:
@@ -55,7 +62,7 @@ spec:
                     name: mail-settings
                     key: MailServer__Port
               - name: ASPNETCORE_ENVIRONMENT
-                value: '{{ .Values.aspnetcoreEnvironment }}'
+                value: {{ .Values.aspnetcore.environment }}
               - name: DB_HOST
                 valueFrom:
                   configMapKeyRef:
@@ -80,12 +87,7 @@ spec:
                 value: >-
                   Host=$(DB_HOST);Port=5432;Database=$(POSTGRESQL_DATABASE);Username=$(POSTGRESQL_USER);Password=$(POSTGRESQL_PASSWORD)
               - name: ApplicationUrl
-                value: '{{ .Values.applicationURL }}'
-            resources:
-                limits:
-                  cpu: 500m
-                  memory: 500Mi
-                requests:
-                  cpu: 50m
-                  memory: 50Mi
+                value: "https://{{ if $isProd }}{{else}}{{ $env }}.{{end}}{{ $domain }}"
+            resources: 
+              {{- toYaml .Values.resources | nindent 12 }}
           restartPolicy: Never

@@ -1,6 +1,6 @@
 import { NgIf } from '@angular/common';
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
@@ -19,6 +19,7 @@ import {
 
 import { PartyService } from '@app/core/party/party.service';
 import { LoggerService } from '@app/core/services/logger.service';
+import { SnowplowService } from '@app/core/services/snowplow.service';
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
 import { BreadcrumbComponent } from '@app/shared/components/breadcrumb/breadcrumb.component';
 
@@ -27,7 +28,6 @@ import { EnrolmentErrorComponent } from '../../components/enrolment-error/enrolm
 import { DriverFitnessResource } from './driver-fitness-resource.service';
 import {
   driverFitnessSupportEmail,
-  driverFitnessUrl,
   medicalPractitionerPortalUrl,
 } from './driver-fitness.constants';
 
@@ -47,8 +47,7 @@ import {
     RouterLink,
   ],
 })
-export class DriverFitnessPage implements OnInit {
-  public driverFitnessUrl: string;
+export class DriverFitnessPage implements OnInit, AfterViewInit {
   public completed: boolean | null;
   public accessRequestFailed: boolean;
   public driverFitnessSupportEmail: string;
@@ -71,9 +70,9 @@ export class DriverFitnessPage implements OnInit {
     private partyService: PartyService,
     private resource: DriverFitnessResource,
     private logger: LoggerService,
+    private snowplowService: SnowplowService,
   ) {
     const routeData = this.route.snapshot.data;
-    this.driverFitnessUrl = driverFitnessUrl;
     this.completed = routeData.driverFitnessStatusCode === StatusCode.COMPLETED;
     this.accessRequestFailed = false;
     this.driverFitnessSupportEmail = driverFitnessSupportEmail;
@@ -95,29 +94,32 @@ export class DriverFitnessPage implements OnInit {
     }
   }
 
-  public onBack(): void {
-    this.navigateToRoot();
+  public ngAfterViewInit(): void {
+    this.snowplowService.refreshLinkClickTracking();
   }
 
   public onRequestAccess(): void {
     this.loadingOverlayService.open(LOADING_OVERLAY_DEFAULT_MESSAGE);
-    this.resource.requestAccess(this.partyService.partyId).pipe(
-      tap(() => {
-        this.completed = true;
-        this.loadingOverlayService.close();
-        this.enrolmentError = false;
-      }),
-      catchError((error: HttpErrorResponse) => {
-        this.loadingOverlayService.close();
-        if (error.status === HttpStatusCode.BadRequest) {
-          this.completed = false;
-          this.enrolmentError = true;
+    this.resource
+      .requestAccess(this.partyService.partyId)
+      .pipe(
+        tap(() => {
+          this.completed = true;
+          this.loadingOverlayService.close();
+          this.enrolmentError = false;
+        }),
+        catchError((error: HttpErrorResponse) => {
+          this.loadingOverlayService.close();
+          if (error.status === HttpStatusCode.BadRequest) {
+            this.completed = false;
+            this.enrolmentError = true;
+            return of(noop());
+          }
+          this.accessRequestFailed = true;
           return of(noop());
-        }
-        this.accessRequestFailed = true;
-        return of(noop());
-      }),
-    );
+        }),
+      )
+      .subscribe();
   }
 
   private navigateToRoot(): void {

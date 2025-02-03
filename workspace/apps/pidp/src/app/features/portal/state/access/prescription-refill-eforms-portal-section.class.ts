@@ -19,6 +19,7 @@ import { PortalSectionAction } from '../portal-section-action.model';
 import { PortalSectionKey } from '../portal-section-key.type';
 import { IPortalSection } from '../portal-section.model';
 import { Section } from '../section.model';
+import { Constants } from '@app/shared/constants';
 
 export class PrescriptionRefillEformsPortalSection implements IPortalSection {
   public readonly key: PortalSectionKey;
@@ -26,6 +27,8 @@ export class PrescriptionRefillEformsPortalSection implements IPortalSection {
   public description: string;
   public faPrescriptionBottleMedical = faPrescriptionBottleMedical;
   public faUserCheck = faUserCheck;
+  public keyWords: string[];
+  public completedMessage: string;
 
   public constructor(
     private profileStatus: ProfileStatus,
@@ -34,6 +37,8 @@ export class PrescriptionRefillEformsPortalSection implements IPortalSection {
     this.key = 'prescriptionRefillEforms';
     this.heading = 'Provincial Prescription Renewal Support Service eForm';
     this.description = `Enrol here for access to the Provincial Prescription Renewal Support Service eForm`;
+    this.keyWords = profileStatus.status.prescriptionRefillEforms.keyWords || [];
+    this.completedMessage = Constants.enrolledText;
   }
 
   public get hint(): string {

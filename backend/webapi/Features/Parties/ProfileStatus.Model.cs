@@ -29,6 +29,7 @@ public partial class ProfileStatus
             internal abstract string SectionName { get; }
             public HashSet<Alert> Alerts { get; set; } = [];
             public StatusCode StatusCode { get; set; }
+            public virtual string[] KeyWords { get; } = [];
 
             public bool IsComplete => this.StatusCode == StatusCode.Complete;
 
@@ -62,6 +63,7 @@ public partial class ProfileStatus
         public class BCProviderSection : ProfileSection
         {
             internal override string SectionName => "bcProvider";
+            public override string[] KeyWords => ["doctors", "nursing", "ha", "pharmacist"];
 
             protected override StatusCode Compute(ProfileData profile)
             {
@@ -152,6 +154,7 @@ public partial class ProfileStatus
         public class AccountLinkingSection : ProfileSection
         {
             internal override string SectionName => "accountLinking";
+            public override string[] KeyWords => ["doctors", "ha", "nursing"];
 
             protected override StatusCode Compute(ProfileData profile) => StatusCode.Incomplete;
         }
@@ -159,6 +162,7 @@ public partial class ProfileStatus
         public class DriverFitnessSection : ProfileSection
         {
             internal override string SectionName => "driverFitness";
+            public override string[] KeyWords => ["doctors"];
 
             protected override StatusCode Compute(ProfileData profile)
             {
@@ -178,6 +182,7 @@ public partial class ProfileStatus
         public class HcimAccountTransferSection : ProfileSection
         {
             internal override string SectionName => "hcimAccountTransfer";
+            public override string[] KeyWords => ["ha"];
 
             protected override StatusCode Compute(ProfileData profile)
             {
@@ -190,6 +195,7 @@ public partial class ProfileStatus
         public class ImmsBCEformsSection : ProfileSection
         {
             internal override string SectionName => "immsBCEforms";
+            public override string[] KeyWords => ["doctors", "nursing", "pharmacist"];
 
             protected override StatusCode Compute(ProfileData profile)
             {
@@ -197,7 +203,9 @@ public partial class ProfileStatus
                 {
                     { UserIsHighAssuranceIdentity: false } => StatusCode.Locked,
                     _ when profile.HasEnrolment(AccessTypeCode.ImmsBCEforms) => StatusCode.Complete,
-                    { PartyPlrStanding.HasGoodStanding: true } => StatusCode.Incomplete,
+                    _ when ImmsBCEforms.IsEligible(profile.PartyPlrStanding) ||
+                        profile.EndorsementPlrStanding.With(ProviderRoleType.MedicalDoctor).HasGoodStanding ||
+                        profile.EndorsementPlrStanding.With(IdentifierType.Nurse).HasGoodStanding => StatusCode.Incomplete,
                     _ => StatusCode.Locked
                 };
             }
@@ -206,6 +214,7 @@ public partial class ProfileStatus
         public class MSTeamsClinicMemberSection : ProfileSection
         {
             internal override string SectionName => "msTeamsClinicMember";
+            public override string[] KeyWords => ["ha"];
 
             protected override StatusCode Compute(ProfileData profile)
             {
@@ -222,6 +231,7 @@ public partial class ProfileStatus
         public class MSTeamsPrivacyOfficerSection : ProfileSection
         {
             internal override string SectionName => "msTeamsPrivacyOfficer";
+            public override string[] KeyWords => ["ha"];
 
             protected override StatusCode Compute(ProfileData profile)
             {
@@ -240,6 +250,7 @@ public partial class ProfileStatus
         public class PrescriptionRefillEformsSection : ProfileSection
         {
             internal override string SectionName => "prescriptionRefillEforms";
+            public override string[] KeyWords => ["pharmacists", "rx"];
 
             protected override StatusCode Compute(ProfileData profile)
             {
@@ -258,6 +269,7 @@ public partial class ProfileStatus
         public class ProvincialAttachmentSystemSection : ProfileSection
         {
             internal override string SectionName => "provincialAttachmentSystem";
+            public override string[] KeyWords => ["doctors", "nursing", "panel"];
 
             protected override StatusCode Compute(ProfileData profile)
             {
@@ -299,7 +311,7 @@ public partial class ProfileStatus
             {
                 return profile switch
                 {
-                    { UserIsBCProvider: false } or { HasPrpAuthorizedLicence: false } => StatusCode.Locked,
+                    { HasBCProviderCredential: false } => StatusCode.Locked,
                     _ when profile.HasEnrolment(AccessTypeCode.ProviderReportingPortal) => StatusCode.Complete,
                     _ when profile.PartyPlrStanding
                         .With(ProviderReportingPortal.AllowedIdentifierTypes)
@@ -325,10 +337,7 @@ public partial class ProfileStatus
                 {
                     { UserIsHighAssuranceIdentity: false } => StatusCode.Locked,
                     _ when profile.HasEnrolment(AccessTypeCode.SAEforms) => StatusCode.Complete,
-                    _ when SAEforms.IsEligible(profile.PartyPlrStanding)
-                        || profile.EndorsementPlrStanding
-                            .With(ProviderRoleType.MedicalDoctor)
-                            .HasGoodStanding => StatusCode.Incomplete,
+                    _ when SAEforms.IsEligible(profile.PartyPlrStanding) => StatusCode.Incomplete,
                     _ => StatusCode.Locked
                 };
             }

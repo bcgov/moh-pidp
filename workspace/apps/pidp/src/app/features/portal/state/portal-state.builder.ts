@@ -129,7 +129,6 @@ export class AccessStateBuilder {
         ],
       ),
       ...ArrayUtils.insertResultIf<IAccessSection>(
-        // TODO remove permissions when ready for production
         this.insertSection('providerReportingPortal', profileStatus) &&
           this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
         () => [new ProviderReportingPortalSection(profileStatus, this.router)],

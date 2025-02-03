@@ -13,22 +13,26 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-
-  helm-deployment-endorsement-reminder:
+  helm-deployment-endorsement-reminder-gold:
     runs-on: 'ubuntu-latest'
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@master
+
+      - name: Install CLI tools from GitHub
+        uses: redhat-actions/openshift-tools-installer@v1
+        with:
+          oc: "4"
 
       - name: Authenticate and set context
-        uses: redhat-actions/oc-login@v1.2
+        uses: redhat-actions/oc-login@v1.3
         with:
-          openshift_server_url: ${{secrets.OPENSHIFT_CLUSTER_URL}}
-          openshift_token: ${{secrets.OPENSHIFT_PIPELINE_SERVICE_ACCOUNT_TOKEN}}
+          openshift_server_url: ${{secrets.GOLD_OPENSHIFT_CLUSTER_URL}}
+          openshift_token: ${{secrets.GOLD_PIPELINE_SERVICE_ACCOUNT_TOKEN}}
 
       - name: Helm Deploy Upgrade
         run: |
           echo current installed helm releases
-          helm list --namespace d8a8f9-test
+          helm list --namespace f088b1-test
 
           echo installing helm chart...
-          helm upgrade --wait --namespace d8a8f9-test --values infra/endorsement_reminder/values-test.yaml endorsement-reminder infra/endorsement_reminder
+          helm upgrade --wait --namespace f088b1-test --values infra/endorsement_reminder/values.yaml --set global.image.tag=test --set env=test endorsement-reminder infra/endorsement_reminder

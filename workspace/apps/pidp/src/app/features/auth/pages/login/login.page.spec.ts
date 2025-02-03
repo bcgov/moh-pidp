@@ -21,18 +21,22 @@ import {
   MicrosoftLogLevel,
 } from '@app/core/services/client-logs.service';
 import { DocumentService } from '@app/core/services/document.service';
+import { LoggerService } from '@app/core/services/logger.service';
 
 import { IdentityProvider } from '../../enums/identity-provider.enum';
 import { AuthService } from '../../services/auth.service';
+import { LinkAccountConfirmResource } from '../link-account-confirm/link-account-confirm-resource.service';
+import { LoginResource } from './login-resource.service';
 import { LoginPage, LoginPageRouteData } from './login.page';
 
 describe('LoginPage', () => {
   let component: LoginPage;
 
   let clientLogsServiceSpy: Spy<ClientLogsService>;
+  let linkAccountConfirmResourceSpy: Spy<LinkAccountConfirmResource>;
   let authServiceSpy: Spy<AuthService>;
   let matDialogSpy: Spy<MatDialog>;
-
+  let loginResourceSpy: Spy<LoginResource>;
   let mockActivatedRoute: {
     snapshot: {
       queryParamMap?: ParamMap;
@@ -70,6 +74,9 @@ describe('LoginPage', () => {
         provideAutoSpy(ClientLogsService),
         provideAutoSpy(DocumentService),
         provideAutoSpy(MatDialog),
+        provideAutoSpy(LinkAccountConfirmResource),
+        provideAutoSpy(LoginResource),
+        provideAutoSpy(LoggerService),
         ViewportService,
       ],
     }).compileComponents();
@@ -77,8 +84,23 @@ describe('LoginPage', () => {
     component = TestBed.inject(LoginPage);
 
     clientLogsServiceSpy = TestBed.inject<any>(ClientLogsService);
+    linkAccountConfirmResourceSpy = TestBed.inject<any>(
+      LinkAccountConfirmResource,
+    );
     authServiceSpy = TestBed.inject<any>(AuthService);
     matDialogSpy = TestBed.inject<any>(MatDialog);
+    loginResourceSpy = TestBed.inject<any>(LoginResource);
+
+    loginResourceSpy.findBanners.mockReturnValue(
+      of([
+        {
+          header: 'test',
+          body: 'test',
+          component: 'test',
+          status: '2',
+        },
+      ]),
+    );
   });
 
   describe('INIT', () => {
@@ -122,6 +144,7 @@ describe('LoginPage', () => {
         });
         const idpHint = IdentityProvider.IDIR;
         clientLogsServiceSpy.createClientLog.mockReturnValue(of(void 0));
+        linkAccountConfirmResourceSpy.cancelLink.mockReturnValue(of(void 0));
         component.ngOnInit();
 
         when('the method is called', () => {
@@ -151,6 +174,7 @@ describe('LoginPage', () => {
         });
         const idpHint = IdentityProvider.BCSC;
         clientLogsServiceSpy.createClientLog.mockReturnValue(of(void 0));
+        linkAccountConfirmResourceSpy.cancelLink.mockReturnValue(of(void 0));
         matDialogSpy.open.mockReturnValue({
           afterClosed: () => of(true),
         } as MatDialogRef<typeof component>);
@@ -186,6 +210,7 @@ describe('LoginPage', () => {
       mockActivatedRoute.snapshot.routeConfig = { path: 'admin' };
       const idpHint = IdentityProvider.BCSC;
       clientLogsServiceSpy.createClientLog.mockReturnValue(of(void 0));
+      linkAccountConfirmResourceSpy.cancelLink.mockReturnValue(of(void 0));
       matDialogSpy.open.mockReturnValue({
         afterClosed: () => of(true),
       } as MatDialogRef<typeof component>);

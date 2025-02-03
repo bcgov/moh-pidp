@@ -12,40 +12,46 @@
 
       <section class="welcome-section">
         <div class="welcome-section-container">
-          <div class="welcome-container">
-            <div class="title-content-container">
-              <h1 class="title">
-                <span class="title-text">
-                  <strong>OneHealthID Service</strong>
-                </span>
-              </h1>
-              <section class="title-site-description">
-                <p>
-                  A suite of identity-related products and services for
-                  healthcare providers in BC.
-                </p>
-              </section>
-            </div>
-            <ng-container *ngTemplateOutlet="login"></ng-container>
-          </div>
-          <div class="links">
-            <app-need-help
-              customClass="need-help-large"
-              [showIcon]="true"></app-need-help>
-            <div class="about">
-              <a
-                uiAnchor
-                href="https://www2.gov.bc.ca/gov/content/health/practitioner-professional-resources/onehealthid-service">
-                About, FAQs, Guides
-                <i class="material-icons-outlined">arrow_circle_right</i>
-              </a>
-            </div>
+          <div *ngIf="banners.length > 0; else welcomesection">
+            <app-banner [banners]="banners"></app-banner>
           </div>
         </div>
       </section>
     </div>
   </div>
 </ui-layout-header-footer>
+
+<ng-template #welcomesection>
+  <div class="welcome-container">
+    <div class="title-content-container">
+      <h1 class="title">
+        <span class="title-text">
+          <strong>OneHealthID Service</strong>
+        </span>
+      </h1>
+      <section class="title-site-description">
+        <p>
+          A suite of identity-related products and services for healthcare
+          providers in BC.
+        </p>
+      </section>
+    </div>
+    <ng-container *ngTemplateOutlet="login"></ng-container>
+  </div>
+  <div class="links">
+    <app-need-help
+      customClass="need-help-large"
+      [showIcon]="true"></app-need-help>
+    <div class="about">
+      <a
+        uiAnchor
+        href="https://www2.gov.bc.ca/gov/content/health/practitioner-professional-resources/onehealthid-service">
+        About, FAQs, Guides
+        <i class="material-icons-outlined">arrow_circle_right</i>
+      </a>
+    </div>
+  </div>
+</ng-template>
 
 <ng-template #login>
   <div class="login-container">
@@ -91,7 +97,7 @@
             class="login-button-secondary"
             mat-stroked-button
             (click)="onLogin(IdentityProvider.BC_PROVIDER)">
-            BC Provider
+            BCProvider
           </button>
         </div>
         <div class="login-with-idir">

@@ -23,14 +23,18 @@ export class BcProviderPortalSection implements IPortalSection {
   public description: string;
   public faFileLines = faFileLines;
   public faUserCheck = faUserCheck;
+  public keyWords: string[];
+  public completedMessage: string;
 
   public constructor(
     private profileStatus: ProfileStatus,
     private router: Router,
   ) {
     this.key = 'bcProvider';
-    this.heading = 'BC Provider Account';
+    this.heading = 'BCProvider Account';
     this.description = `A reusable credential for access to health data in BC.`;
+    this.keyWords = profileStatus.status.bcProvider.keyWords || [];
+    this.completedMessage = 'Account Linked';
   }
 
   public get hint(): string {

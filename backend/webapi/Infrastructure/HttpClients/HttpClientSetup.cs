@@ -19,7 +19,6 @@ public static class HttpClientSetup
         services.AddScoped<GraphServiceClient, GraphServiceClient>(services =>
         {
             // This configuration will need to change if our Authorization context changes, i.e. if we use any delegated access
-            var scopes = new string[] { "https://graph.microsoft.com/.default" };
             var options = new TokenCredentialOptions
             {
                 AuthorityHost = AzureAuthorityHosts.AzurePublicCloud
@@ -29,7 +28,7 @@ public static class HttpClientSetup
             // TODO: GraphServiceClient creates a new HttpClient using GraphClientFactory that has custom headers and middleware.
             // We should be injecting a managed HttpClient rather than creating a new one every time (to avoid socket exhaustion) but then it won't have that custom configuration.
             // Review this if/when Microsoft.Graph gives guidance on the propper pattern for doing this.
-            return new GraphServiceClient(credential, scopes);
+            return new GraphServiceClient(credential, ["https://graph.microsoft.com/.default"]);
         });
 
         services.AddHttpClient<IAccessTokenClient, AccessTokenClient>();

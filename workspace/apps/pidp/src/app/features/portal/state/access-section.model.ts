@@ -61,4 +61,15 @@ export interface IAccessSection {
    * Icon to be displayed on the card.
    */
   icon: IconProp;
+  /**
+   @description
+   * Hidden Keywords for the card.
+   */
+  keyWords?: string[];
+
+  completedMessage: string;
+  /**
+   * @description
+   *To Provide Completed Messagee.
+   */
 }

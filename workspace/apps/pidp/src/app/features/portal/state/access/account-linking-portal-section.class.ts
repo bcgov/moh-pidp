@@ -22,6 +22,8 @@ export class AccountLinkingPortalSection implements IPortalSection {
   public description: string;
   public faUserCheck = faUserCheck;
   public faLink = faLink;
+  public keyWords: string[];
+  public completedMessage: string;
 
   public constructor(
     private profileStatus: ProfileStatus,
@@ -30,6 +32,8 @@ export class AccountLinkingPortalSection implements IPortalSection {
     this.key = 'accountLinking';
     this.heading = 'Account Linking';
     this.description = 'Link different credentials together in OneHealthID';
+    this.keyWords = profileStatus.status.accountLinking.keyWords || [];
+    this.completedMessage = '';
   }
 
   public get hint(): string {

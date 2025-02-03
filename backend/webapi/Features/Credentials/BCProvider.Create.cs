@@ -102,6 +102,7 @@ public class BCProviderCreate
                 Hpdid = party.Hpdid,
                 IsRnp = plrStanding.With(ProviderRoleType.RegisteredNursePractitioner).HasGoodStanding,
                 IsMd = plrStanding.With(ProviderRoleType.MedicalDoctor).HasGoodStanding,
+                IsPharm = plrStanding.With(IdentifierType.Pharmacist).HasGoodStanding,
                 Cpn = party.Cpn,
                 Password = command.Password,
                 PidpEmail = party.Email,

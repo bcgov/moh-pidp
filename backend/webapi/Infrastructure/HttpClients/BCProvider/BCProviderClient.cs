@@ -4,23 +4,15 @@ using Microsoft.Graph;
 using Microsoft.Graph.Models;
 using System.Text.RegularExpressions;
 
-public class BCProviderClient : IBCProviderClient
+public partial class BCProviderClient(
+    GraphServiceClient client,
+    ILogger<BCProviderClient> logger,
+    PidpConfiguration config) : IBCProviderClient
 {
-    private readonly GraphServiceClient client;
-    private readonly ILogger<BCProviderClient> logger;
-    private readonly string domain;
-    private readonly string clientId;
-
-    public BCProviderClient(
-        GraphServiceClient client,
-        ILogger<BCProviderClient> logger,
-        PidpConfiguration config)
-    {
-        this.client = client;
-        this.logger = logger;
-        this.domain = config.BCProviderClient.Domain;
-        this.clientId = config.BCProviderClient.ClientId;
-    }
+    private readonly GraphServiceClient client = client;
+    private readonly ILogger<BCProviderClient> logger = logger;
+    private readonly string domain = config.BCProviderClient.Domain;
+    private readonly string clientId = config.BCProviderClient.ClientId;
 
     public async Task<object?> GetAttribute(string userPrincipalName, string attributeName)
     {
@@ -32,7 +24,7 @@ public class BCProviderClient : IBCProviderClient
         try
         {
             var result = await this.client.Users[userPrincipalName]
-                .GetAsync(request => request.QueryParameters.Select = new[] { attributeName });
+                .GetAsync(request => request.QueryParameters.Select = [attributeName]);
 
             return result?.AdditionalData[attributeName];
         }
@@ -143,6 +135,99 @@ public class BCProviderClient : IBCProviderClient
         }
     }
 
+
+    public async Task<bool> RemoveAuthMethods(string userPrincipalName)
+    {
+        var allMethodsDeleted = false;
+        // This is a workaround for the re-register MFA feature that does not exist in the Graph API,
+        // so we will delete all auth methods which will prompt the user to re-register.
+        // We are attempting 3 times since Graph API does not support default auth method,
+        // and attempting to delete the default auth method will result in an error.
+        var maxAttempts = 3;
+        var attempt = 0;
+        while (!allMethodsDeleted && attempt < maxAttempts)
+        {
+            attempt++;
+            var authMethods = await this.GetUserAuthMethods(userPrincipalName);
+            if (authMethods?.Value is null)
+            {
+                // the user has no auth methods
+                return true;
+            }
+            // We cannot delete the PasswordAuthenticationMethod
+            var filteredAuthMethods = authMethods.Value.Where(authMethod => authMethod is not PasswordAuthenticationMethod).ToList();
+            if (filteredAuthMethods.Count == 0)
+            {
+                allMethodsDeleted = true;
+                break;
+            }
+            try
+            {
+                foreach (var authMethod in filteredAuthMethods)
+                {
+                    // If the request returns an error, it's possible that the auth method is default and cannot be deleted.
+                    // In this case, we want to continue deleting the other auth methods.
+                    try
+                    {
+                        switch (authMethod)
+                        {
+                            case EmailAuthenticationMethod:
+                                await this.client.Users[userPrincipalName].Authentication.EmailMethods[authMethod.Id].DeleteAsync();
+                                break;
+                            case Fido2AuthenticationMethod:
+                                await this.client.Users[userPrincipalName].Authentication.Fido2Methods[authMethod.Id].DeleteAsync();
+                                break;
+                            case MicrosoftAuthenticatorAuthenticationMethod:
+                                await this.client.Users[userPrincipalName].Authentication.MicrosoftAuthenticatorMethods[authMethod.Id].DeleteAsync();
+                                break;
+                            case PhoneAuthenticationMethod:
+                                await this.client.Users[userPrincipalName].Authentication.PhoneMethods[authMethod.Id].DeleteAsync();
+                                break;
+                            case SoftwareOathAuthenticationMethod:
+                                await this.client.Users[userPrincipalName].Authentication.SoftwareOathMethods[authMethod.Id].DeleteAsync();
+                                break;
+                            case TemporaryAccessPassAuthenticationMethod:
+                                await this.client.Users[userPrincipalName].Authentication.TemporaryAccessPassMethods[authMethod.Id].DeleteAsync();
+                                break;
+                            case WindowsHelloForBusinessAuthenticationMethod:
+                                await this.client.Users[userPrincipalName].Authentication.WindowsHelloForBusinessMethods[authMethod.Id].DeleteAsync();
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        this.logger.LogDeleteUserAuthMethodFailure(authMethod.OdataType, ex.Message);
+                        allMethodsDeleted = false;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                this.logger.LogDeleteUserAuthMethodFailure(" possibly set as default auth method", ex.Message);
+                return false;
+            }
+        }
+        return allMethodsDeleted;
+    }
+
+    private async Task<AuthenticationMethodCollectionResponse?> GetUserAuthMethods(string userPrincipalName)
+    {
+        try
+        {
+            var authMethods = await this.client.Users[userPrincipalName].Authentication.Methods
+                .GetAsync();
+
+            return authMethods;
+        }
+        catch
+        {
+            this.logger.LogGetUserAuthMethodsFailure(userPrincipalName);
+            return null;
+        }
+    }
+
     private async Task<string?> CreateUniqueUserPrincipalName(NewUserRepresentation user)
     {
         var joinedFullName = $"{user.FirstName}.{user.LastName}";
@@ -164,8 +249,7 @@ public class BCProviderClient : IBCProviderClient
 
     private string RemoveMailNicknameInvalidCharacters(string mailNickname)
     {
-        // Mail Nickname can include ASCII values 32 - 127 except the following: @ () \ [] " ; : . <> , SPACE
-        var validCharacters = Regex.Replace(mailNickname, @"[^a-zA-Z0-9!#$%&'*+\-\/=?\^_`{|}~]", string.Empty);
+        var validCharacters = InvalidMailNicknameRegex().Replace(mailNickname, string.Empty);
 
         if (mailNickname.Length != validCharacters.Length)
         {
@@ -177,8 +261,7 @@ public class BCProviderClient : IBCProviderClient
 
     private string RemoveUpnInvalidCharacters(string userPrincipalName)
     {
-        // According to the Microsoft Graph docs, User Principal Name can only include A - Z, a - z, 0 - 9, and the characters ' . - _ ! # ^ ~
-        var validCharacters = Regex.Replace(userPrincipalName, @"[^a-zA-Z0-9'\.\-_!\#\^~]", string.Empty);
+        var validCharacters = InvalidUserPrincipalNameRegex().Replace(userPrincipalName, string.Empty);
 
         if (userPrincipalName.Length != validCharacters.Length)
         {
@@ -193,18 +276,20 @@ public class BCProviderClient : IBCProviderClient
         var result = await this.client.Users.Count
             .GetAsync(request =>
             {
-                request.QueryParameters.Filter = GetQueryParametersFilter(userPrincipalName);
+                request.QueryParameters.Filter = $"userPrincipalName eq '{userPrincipalName.Replace("'", "''")}'";
                 request.Headers.Add("ConsistencyLevel", "eventual"); // Required for advanced queries such as "count"
             });
 
         return result > 0;
     }
 
-    private static string GetQueryParametersFilter(string userPrincipalName)
-    {
-        var searchValue = Regex.Replace(userPrincipalName, "'", "''");
-        return $"userPrincipalName eq '{searchValue}'";
-    }
+    // Mail Nickname can include ASCII values 32 - 127 except the following: @ () \ [] " ; : . <> , SPACE
+    [GeneratedRegex(@"[^a-zA-Z0-9!#$%&'*+\-\/=?\^_`{|}~]")]
+    private static partial Regex InvalidMailNicknameRegex();
+
+    // According to the Microsoft Graph docs, User Principal Name can only include A - Z, a - z, 0 - 9, and the characters ' . - _ ! # ^ ~
+    [GeneratedRegex(@"[^a-zA-Z0-9'\.\-_!\#\^~]")]
+    private static partial Regex InvalidUserPrincipalNameRegex();
 }
 
 public static partial class BCProviderClientLoggingExtensions
@@ -235,4 +320,10 @@ public static partial class BCProviderClientLoggingExtensions
 
     [LoggerMessage(10, LogLevel.Error, "Failed to update the user '{userPrincipalName}'.")]
     public static partial void LogUserUpdateFailure(this ILogger<BCProviderClient> logger, string userPrincipalName);
+
+    [LoggerMessage(11, LogLevel.Error, "Failed to retrieve authentication methods for the user '{userPrincipalName}'.")]
+    public static partial void LogGetUserAuthMethodsFailure(this ILogger<BCProviderClient> logger, string userPrincipalName);
+
+    [LoggerMessage(12, LogLevel.Error, "An error occurred while deleting auth method {oDataType}: {message}")]
+    public static partial void LogDeleteUserAuthMethodFailure(this ILogger<BCProviderClient> logger, string? oDataType, string message);
 }
