@@ -2,14 +2,15 @@
   <div class="banner-image-container">
     <img
       *ngIf="options.imageSrc && options.imageType === 'banner'"
-      alt=""
+      alt="" [class]="{'image-full': options.imageSizeFull}"
       [attr.src]="options.imageSrc" />
   </div>
-
+  <img class="close-icon" src="/assets/images/icons/icon-close.svg" alt="close" *ngIf="options.closeButton" [mat-dialog-close]="false">
   <h2
     mat-dialog-title
     [class]="{
       'heading-centered': options.titlePosition === 'center',
+      'heading-margin-top': options.titleMarginTop,
       'heading-no-bottom-border': options.bottomBorder === false
     }">
     <mat-icon
