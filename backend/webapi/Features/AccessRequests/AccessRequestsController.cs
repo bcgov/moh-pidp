@@ -82,6 +82,15 @@ public class AccessRequestsController(IPidpAuthorizationService authorizationSer
         => await this.AuthorizePartyBeforeHandleAsync(command.PartyId, handler, command)
             .ToActionResult();
 
+    [HttpPost("immsbc")]
+    [Authorize(Policy = Policies.HighAssuranceIdentityProvider)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> CreateImmsBCEnrolment([FromServices] ICommandHandler<ImmsBC.Command, IDomainResult> handler,
+                                                           [FromRoute] ImmsBC.Command command)
+        => await this.AuthorizePartyBeforeHandleAsync(command.PartyId, handler, command)
+            .ToActionResult();
+
     [HttpPost("ms-teams-clinic-member")]
     [Authorize(Policy = Policies.HighAssuranceIdentityProvider)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
