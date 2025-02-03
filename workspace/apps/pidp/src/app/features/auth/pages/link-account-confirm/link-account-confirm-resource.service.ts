@@ -6,12 +6,15 @@ import { Observable, catchError, tap, throwError } from 'rxjs';
 import { ApiHttpClient } from '@app/core/resources/api-http-client.service';
 import { ToastService } from '@app/core/services/toast.service';
 
+import { CookieService } from 'ngx-cookie-service';
+
 @Injectable({
   providedIn: 'root',
 })
 export class LinkAccountConfirmResource {
   public constructor(
     private apiResource: ApiHttpClient,
+    private cookieService: CookieService,
     private toastService: ToastService,
   ) {}
 
@@ -32,6 +35,8 @@ export class LinkAccountConfirmResource {
   }
 
   public cancelLink(): Observable<unknown> {
+    this.cookieService.delete('UserName');
+    this.cookieService.delete('IdentityProvider');
     return this.apiResource.delete('credentials/link-ticket/cookie').pipe(
       catchError((error: HttpErrorResponse) => {
         this.toastService.openErrorToast(

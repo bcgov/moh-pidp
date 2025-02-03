@@ -10,6 +10,7 @@ import {
   LOADING_OVERLAY_DEFAULT_MESSAGE,
   LoadingOverlayService,
 } from '@pidp/presentation';
+import { CookieService } from 'ngx-cookie-service';
 
 import {
   ConfirmDialogComponent,
@@ -30,6 +31,7 @@ import { BcProviderUser } from '../../models/bc-provider-user.model';
 import { AuthService } from '../../services/auth.service';
 import { AuthorizedUserService } from '../../services/authorized-user.service';
 import { LinkAccountConfirmResource } from './link-account-confirm-resource.service';
+import { CryptoService } from '@app/core/services/crypto.service';
 
 @Component({
   selector: 'app-link-account-confirm',
@@ -55,6 +57,8 @@ export class LinkAccountConfirmPage implements OnInit {
     },
     { title: 'Link Account', path: '' },
   ];
+  public userName: string;
+  public identityProvider: string;
 
   public showInstructions: boolean = false;
   public logoutRedirectUrl: string;
@@ -65,10 +69,14 @@ export class LinkAccountConfirmPage implements OnInit {
     private linkAccountConfirmResource: LinkAccountConfirmResource,
     private router: Router,
     private loadingOverlayService: LoadingOverlayService,
+    private cookieService: CookieService,
+    private cryptoService: CryptoService,
     private authService: AuthService,
   ) {
     this.user$ = this.authorizedUserService.user$;
     this.logoutRedirectUrl = `${this.config.applicationUrl}/`;
+    this.userName = '';
+    this.identityProvider = '';
   }
 
   public toggleInstructions(): void {
@@ -76,6 +84,8 @@ export class LinkAccountConfirmPage implements OnInit {
   }
 
   public ngOnInit(): void {
+    this.userName = this.cryptoService.decrypt(this.cookieService.get('UserName'));
+    this.identityProvider = this.cryptoService.decrypt(this.cookieService.get('IdentityProvider')).toUpperCase();
     this.user$
       .pipe(
         switchMap((user) => {
@@ -86,15 +96,17 @@ export class LinkAccountConfirmPage implements OnInit {
             bodyTextPosition: 'center',
             component: HtmlComponent,
             data: {
-              content: `Your existing OneHealthID profile is about to be linked to ${this.getPendingAccountDescription(
+              content: `Your  <b>${this.identityProvider} ${
+                this.userName
+              } </b>is about to be linked to ${this.getPendingAccountDescription(
                 user,
-              )}. Is this information correct?`,
+              )}. Is this information correct? If not, click on cancel to be redirected to login and restart the process.`,
             },
             imageSrc:
               '/assets/images/online-marketing-hIgeoQjS_iE-unsplash.jpg',
             imageType: 'banner',
             width: '31.25rem',
-            height: '26rem',
+            height: '28rem',
             actionText: 'Correct',
             actionTypePosition: 'center',
             class: 'dialog-container dialog-padding',
@@ -138,7 +150,7 @@ export class LinkAccountConfirmPage implements OnInit {
       case IdentityProvider.BCSC:
         return `the BC Services Card account ${user.firstName} ${user.lastName}`;
       case IdentityProvider.PHSA:
-        return `the PHSA account ${user.email}`;
+        return `${user.email}`;
       case IdentityProvider.BC_PROVIDER: {
         const idpId = (user as BcProviderUser).idpId;
         const accountName = idpId.endsWith('@bcp') ? idpId.slice(0, -4) : idpId;
