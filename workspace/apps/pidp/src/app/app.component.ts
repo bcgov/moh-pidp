@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import {
   ActivatedRoute,
@@ -10,7 +10,7 @@ import {
   Scroll,
 } from '@angular/router';
 
-import { Observable, delay, map, mergeMap } from 'rxjs';
+import { Observable, delay, filter, map, mergeMap } from 'rxjs';
 
 import { contentContainerSelector } from '@bcgov/shared/ui';
 
@@ -25,7 +25,7 @@ import { UtilsService } from '@core/services/utils.service';
   standalone: true,
   imports: [RouterOutlet],
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, AfterViewInit {
   public constructor(
     private activatedRoute: ActivatedRoute,
     private titleService: Title,
@@ -33,19 +33,23 @@ export class AppComponent implements OnInit {
     private utilsService: UtilsService,
     private router: Router,
     private snowplowService: SnowplowService,
-  ) {
-    this.router.events.subscribe((evt) => {
-      if (evt instanceof NavigationEnd) {
-        this.snowplowService.trackPageView();
-      }
-    });
-  }
+  ) {}
 
   public ngOnInit(): void {
     this.setPageTitle(this.routeStateService.onNavigationEnd());
     this.handleRouterScrollEvents(this.routeStateService.onScrollEvent());
   }
 
+  public ngAfterViewInit(): void {
+    this.router.events
+      .pipe(
+        filter((event: Event) => event instanceof NavigationEnd),
+        delay(0),
+      )
+      .subscribe(() => {
+        this.snowplowService.trackPageView();
+      });
+  }
   /**
    * @description
    * Set the HTML page <title> on route event.
