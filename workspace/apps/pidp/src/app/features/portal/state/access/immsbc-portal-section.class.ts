@@ -22,8 +22,8 @@ export class ImmsBCPortalSection implements IPortalSection {
   public description: string;
 
   public constructor(
-    private profileStatus: ProfileStatus,
-    private router: Router,
+    private readonly profileStatus: ProfileStatus,
+    private readonly router: Router,
   ) {
     this.key = 'immsbc';
     this.heading = 'ImmsBC';
