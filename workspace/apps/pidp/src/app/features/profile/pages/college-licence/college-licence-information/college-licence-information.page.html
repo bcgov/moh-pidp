@@ -1,22 +1,27 @@
 <div class="container breadcrumb-top" uiPidpInjectViewportCss>
   <div class="breadcrumb">
-    <app-breadcrumb [breadcrumbs]="breadcrumbsData" *ngIf="!showCollegeLicenceDeclarationPage"></app-breadcrumb>
+    <app-breadcrumb
+      *ngIf="!showCollegeLicenceDeclarationPage"
+      [breadcrumbs]="breadcrumbsData"></app-breadcrumb>
   </div>
 </div>
 <div *ngIf="showCollegeLicenceDeclarationPage">
-  <app-college-licence-declaration [disableCollegeCode]=true [disableCollegeLicenceNumber]=true>
+  <app-college-licence-declaration
+    [disableCollegeCode]="true"
+    [disableCollegeLicenceNumber]="true">
   </app-college-licence-declaration>
 </div>
-<section class="component-container container section-top" uiPidpInjectViewportCss>
+<section
+  class="component-container container section-top"
+  uiPidpInjectViewportCss>
   <div *ngIf="!showCollegeLicenceDeclarationPage">
-    <h3 class="college-licence">
-      College licence information
-    </h3>
+    <h3 class="college-licence">College licence information</h3>
     <p class="college-licence-text">
       Here you can view your licence information and status.
       <span>
         <p>
-          If any of this information is incorrect, please contact your regulatory college.
+          If any of this information is incorrect, please contact your
+          regulatory college.
         </p>
       </span>
     </p>
@@ -27,8 +32,7 @@
       [content]="alert.content"></app-portal-alert>
   </section>
   <div class="licences-box">
-    <div
-      *ngFor="let certification of collegeCertifications$ | async">
+    <div *ngFor="let certification of collegeCertifications$ | async">
       <div class="card-styles">
         <div class="card-header-icon">
           <div class="card-icon">
@@ -44,20 +48,19 @@
               class="licence-detail"
               labelText="Identifier Type:"
               [valueText]="certification.identifierType"></app-college-licence-information-detail>
-              <div
-                class="status-active" *ngIf="certification.statusCode==='ACTIVE'">
+            <div [ngSwitch]="certification.statusCode">
+              <div *ngSwitchCase="'ACTIVE'" class="status-active">
                 <label>Status Code:</label>
                 <span>Active</span>
                 <img
                   src="/assets/images/icons/icon-check-circle.svg"
-                  alt="check circle"
-                />
+                  alt="check circle" />
               </div>
-              <div
-                class="status-non-active" *ngIf="certification.statusCode !=='ACTIVE'">
+              <div *ngSwitchDefault class="status-non-active">
                 <label>Status Code:</label>
-                <span>{{certification.statusCode}}</span>
+                <span>{{ certification.statusCode }}</span>
               </div>
+            </div>
             <app-college-licence-information-detail
               class="licence-detail"
               labelText="College ID:"
@@ -77,10 +80,13 @@
   </div>
   <div class="actions">
     <span>
-      <button mat-stroked-button type="button" (click)="onBack()" color="primary">
+      <button
+        mat-stroked-button
+        type="button"
+        color="primary"
+        (click)="onBack()">
         Home
       </button>
     </span>
   </div>
-
 </section>

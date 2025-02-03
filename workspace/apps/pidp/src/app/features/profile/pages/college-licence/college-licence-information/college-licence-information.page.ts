@@ -1,4 +1,11 @@
-import { AsyncPipe, NgFor, NgIf } from '@angular/common';
+import {
+  AsyncPipe,
+  NgFor,
+  NgIf,
+  NgSwitch,
+  NgSwitchCase,
+  NgSwitchDefault,
+} from '@angular/common';
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
@@ -6,8 +13,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { Observable, catchError, map, of, tap } from 'rxjs';
 
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { faStethoscope, faAngleRight } from '@fortawesome/free-solid-svg-icons';
+import { faAngleRight, faStethoscope } from '@fortawesome/free-solid-svg-icons';
 
 import { InjectViewportCssClassDirective } from '@bcgov/shared/ui';
 
@@ -18,12 +24,12 @@ import { ProfileStatusAlert } from '@app/features/portal/models/profile-status-a
 import { ProfileStatus } from '@app/features/portal/models/profile-status.model';
 import { PortalResource } from '@app/features/portal/portal-resource.service';
 import { PortalService } from '@app/features/portal/portal.service';
+import { BreadcrumbComponent } from '@app/shared/components/breadcrumb/breadcrumb.component';
 
 import { CollegeCertification } from '../college-licence-declaration/college-certification.model';
+import { CollegeLicenceDeclarationPage } from '../college-licence-declaration/college-licence-declaration.page';
 import { CollegeLicenceInformationResource } from './college-licence-information-resource.service';
 import { CollegeLicenceInformationDetailComponent } from './components/college-licence-information-detail.component';
-import { CollegeLicenceDeclarationPage } from '../college-licence-declaration/college-licence-declaration.page';
-import { BreadcrumbComponent } from '@app/shared/components/breadcrumb/breadcrumb.component';
 
 @Component({
   selector: 'app-college-licence-information',
@@ -34,14 +40,16 @@ import { BreadcrumbComponent } from '@app/shared/components/breadcrumb/breadcrum
     AsyncPipe,
     BreadcrumbComponent,
     CollegeLicenceInformationDetailComponent,
-    FaIconComponent,
     InjectViewportCssClassDirective,
     MatButtonModule,
     NgFor,
     CollegeLicenceDeclarationPage,
     NgIf,
     PortalAlertComponent,
-      ],
+    NgSwitch,
+    NgSwitchCase,
+    NgSwitchDefault,
+  ],
 })
 export class CollegeLicenceInformationPage implements OnInit {
   public faStethoscope = faStethoscope;
@@ -73,7 +81,9 @@ export class CollegeLicenceInformationPage implements OnInit {
   }
 
   public ngOnInit(): void {
-    this.showCollegeLicenceDeclarationPage = this.route.snapshot.paramMap.get('showCollegeLicenceDeclarationPage') === 'true';
+    this.showCollegeLicenceDeclarationPage =
+      this.route.snapshot.paramMap.get('showCollegeLicenceDeclarationPage') ===
+      'true';
     const partyId = this.partyService.partyId;
     if (!partyId) {
       this.logger.error('No party ID was provided');
