@@ -1,5 +1,6 @@
 namespace DoWork;
 
+using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 using Pidp;
 using Pidp.Data;
@@ -7,6 +8,12 @@ using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.HttpClients.BCProvider;
 using Pidp.Infrastructure.HttpClients.Plr;
 using Pidp.Models.Lookups;
+
+public class PartyDto
+{
+    public string? Cpn { get; set; }
+    public string? Upn { get; set; }
+}
 
 public class DoWorkService(
     IBCProviderClient bcProviderClient,
@@ -22,40 +29,78 @@ public class DoWorkService(
 
     public async Task DoWorkAsync()
     {
-        var cpns = await this.context.Parties
+        var partyDtos = await this.context.Parties
             .Where(party => party.Cpn != null
                 && party.Credentials.Any(credential => credential.IdentityProvider == IdentityProviders.BCProvider)
                 && party.LicenceDeclaration.CollegeCode == CollegeCode.Pharmacists)
-                .Select(party => party.Cpn)
+            .Select(party => new
+            {
+                party.Cpn,
+                Upn = party.Credentials
+                    .Where(credential => credential.IdentityProvider == IdentityProviders.BCProvider)
+                    .Select(credential => credential.IdpId)
+                    .FirstOrDefault()
+            })
             .ToListAsync();
-        Console.WriteLine(">>>>CPNs loaded!", +cpns.Count);
-        // var parties = await this.context.Parties
-        //     .Include(party => party.Credentials)
-        //     .Where(party => party.Cpn != null
-        //         && party.Credentials.Any(credential => credential.IdentityProvider == IdentityProviders.BCProvider))
-        //     .ToListAsync();
-        // Console.WriteLine(">>>>Parties loaded!");
-        // Console.WriteLine(">>>>Parties count: " + parties.Count);
-        // Console.WriteLine(">>>>Updating BCProvider attributes...");
 
-        // foreach (var party in parties)
-        // {
-        //     var userPrincipalName = party.Credentials
-        //         .Where(credential => credential.IdentityProvider == IdentityProviders.BCProvider)
-        //         .Select(credential => credential.IdpId)
-        //         .FirstOrDefault();
+        Console.WriteLine($">>>>parties loaded! Count: {partyDtos.Count}");
 
-        //     if (userPrincipalName == null)
-        //     {
-        //         return;
-        //     }
+        var batchSize = 1000;
+        var fileIndex = 1;
+        List<PartyDto> batch = [];
 
-        //     var plrStanding = await this.plrClient.GetStandingsDigestAsync(party.Cpn);
+        foreach (var item in partyDtos)
+        {
+            batch.Add(new PartyDto { Cpn = item.Cpn, Upn = item.Upn });
 
-        //     var attributes = new BCProviderAttributes(this.clientId)
-        //         .SetIsPharm(plrStanding.With(IdentifierType.Pharmacist).HasGoodStanding);
+            if (batch.Count == batchSize)
+            {
+                await WriteBatchToFileAsync(batch, fileIndex);
+                fileIndex++;
+                batch.Clear();
+            }
+        }
 
-        //     await this.bcProviderClient.UpdateAttributes(userPrincipalName, attributes.AsAdditionalData());
-        // }
+        // Write remaining cpns if any
+        if (batch.Count > 0)
+        {
+            await WriteBatchToFileAsync(batch, fileIndex);
+        }
+
+        var userDtos = await ReadCpnsFromFileAsync("users_batch_1.json");
+
+        Console.WriteLine($">>>>User data loaded from file! Count: {userDtos.Count}");
+
+        // Process the cpns as needed
+        foreach (var user in userDtos)
+        {
+            var plrStanding = await this.plrClient.GetStandingsDigestAsync(user.Cpn);
+
+            var attributes = new BCProviderAttributes(this.clientId)
+                .SetIsPharm(plrStanding.With(IdentifierType.Pharmacist).HasGoodStanding);
+
+            await this.bcProviderClient.UpdateAttributes(user.Upn, attributes.AsAdditionalData());
+        }
+    }
+
+    private static async Task<List<PartyDto>> ReadCpnsFromFileAsync(string fileName)
+    {
+        if (!File.Exists(fileName))
+        {
+            throw new FileNotFoundException($"The file {fileName} does not exist.");
+        }
+
+        var json = await File.ReadAllTextAsync(fileName);
+        var result = JsonSerializer.Deserialize<List<PartyDto>>(json);
+        return result ?? [];
+    }
+
+    private static async Task WriteBatchToFileAsync(List<PartyDto> batch, int fileIndex)
+    {
+        var fileName = $"users_batch_{fileIndex}.json";
+        var json = JsonSerializer.Serialize(batch, new JsonSerializerOptions { WriteIndented = true });
+        await File.WriteAllTextAsync(fileName, json);
+        Console.WriteLine($">>>>Batch {fileIndex} written to {fileName}");
     }
 }
+
