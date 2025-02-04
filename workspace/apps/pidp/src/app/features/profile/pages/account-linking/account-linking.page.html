@@ -101,7 +101,10 @@
               ></ng-template
             >
           </div>
-          <div class="bc-provider card-styles">
+          <div
+            class="bc-provider card-styles card-hover"
+            (click)="hasCredential(IdentityProvider.BC_PROVIDER) ? onPageNavigate(['/access/bc-provider-edit']) : onPageNavigate(['/access/bc-provider-application'])"
+            (keyup)="hasCredential(IdentityProvider.BC_PROVIDER) ? onPageNavigate(['/access/bc-provider-edit']): onPageNavigate(['/access/bc-provider-application'])">
             <div class="card-header-icon">
               <div class="card-icon">
                 <img
@@ -129,7 +132,11 @@
           </div>
         </div>
         <div class="third-column-cards">
-          <div class="health-authority card-styles">
+          <div
+            class="health-authority card-styles"
+            [ngClass]="{ 'card-hover': !hasCredential(IdentityProvider.PHSA) }"
+            (click)="!hasCredential(IdentityProvider.PHSA) && onLinkAccount(IdentityProvider.PHSA)"
+            (keyup)="!hasCredential(IdentityProvider.PHSA) && onLinkAccount(IdentityProvider.PHSA)">
             <div class="card-header-icon">
               <div class="card-icon">
                 <img
@@ -152,7 +159,7 @@
             </div>
             <ng-template #linkPHSA
               ><a
-                *ngIf="!hasCredential(IdentityProvider.IDIR)"
+                *ngIf="!hasCredential(IdentityProvider.PHSA)"
                 (click)="onLinkAccount(IdentityProvider.PHSA)"
                 >Link Account</a
               ></ng-template
