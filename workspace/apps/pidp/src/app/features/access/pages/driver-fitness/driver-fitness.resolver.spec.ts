@@ -39,6 +39,8 @@ describe('driverFitnessResolver', () => {
     TestBed.configureTestingModule({
       providers: [
         provideAutoSpy(DriverFitnessResource),
+        provideAutoSpy(ActivatedRouteSnapshot),
+        provideAutoSpy(RouterStateSnapshot),
         {
           provide: PartyService,
           useValue: createSpyFromClass(PartyService, {
@@ -48,7 +50,8 @@ describe('driverFitnessResolver', () => {
         },
       ],
     });
-
+    activatedRouteSnapshotSpy = TestBed.inject<any>(ActivatedRouteSnapshot);
+    routerStateSnapshotSpy = TestBed.inject<any>(RouterStateSnapshot);
     driverFitnessResourceSpy = TestBed.inject<any>(DriverFitnessResource);
     partyServiceSpy = TestBed.inject<any>(PartyService);
 

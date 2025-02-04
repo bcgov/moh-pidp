@@ -35,8 +35,8 @@ export class AdminDashboardComponent implements IDashboard {
   public responsiveMenuItems: boolean;
 
   public constructor(
-    @Inject(APP_CONFIG) private config: AppConfig,
-    private authService: AuthService,
+    @Inject(APP_CONFIG) private readonly config: AppConfig,
+    private readonly authService: AuthService,
     accessTokenService: AccessTokenService,
   ) {
     this.logoutRedirectUrl = `${this.config.applicationUrl}/${this.config.routes.auth}/${AdminRoutes.BASE_PATH}`;

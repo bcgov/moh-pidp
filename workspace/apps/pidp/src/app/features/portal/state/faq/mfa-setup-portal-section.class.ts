@@ -14,7 +14,7 @@ export class MfaSetupPortalSection implements IPortalSection {
   public heading: string;
   public description: string;
 
-  public constructor(private router: Router) {
+  public constructor(private readonly router: Router) {
     this.key = 'mfaSetup';
     this.heading = 'How do I setup my Multi-factor authentication?';
     this.description =

@@ -13,8 +13,8 @@ import { MsTeamsClinicInfo } from './ms-teams-privacy-officer.model';
 
 export class MsTeamsPrivacyOfficerFormState extends AbstractFormState<MsTeamsClinicInfo> {
   public constructor(
-    private fb: FormBuilder,
-    private formUtilsService: FormUtilsService,
+    private readonly fb: FormBuilder,
+    private readonly formUtilsService: FormUtilsService,
   ) {
     super();
 
@@ -31,7 +31,7 @@ export class MsTeamsPrivacyOfficerFormState extends AbstractFormState<MsTeamsCli
 
   public get json(): MsTeamsClinicInfo | undefined {
     if (!this.formInstance) {
-      return;
+      return undefined;
     }
 
     return this.formInstance.getRawValue();

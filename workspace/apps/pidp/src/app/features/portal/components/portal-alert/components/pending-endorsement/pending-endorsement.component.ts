@@ -15,8 +15,8 @@ import { Router } from '@angular/router';
   standalone: true,
 })
 export class PendingEndorsementComponent {
-  public constructor(private router: Router) {}
-  private route = '/organization-info/endorsements';
+  public constructor(private readonly router: Router) {}
+  private readonly route = '/organization-info/endorsements';
 
   public onClick(): void {
     this.router.navigateByUrl(this.route);

@@ -16,7 +16,7 @@ export interface BcProviderChangePasswordRequest {
 
 @Injectable({ providedIn: 'root' })
 export class BcProviderEditResource {
-  public constructor(private apiResource: ApiHttpClient) {}
+  public constructor(private readonly apiResource: ApiHttpClient) {}
 
   public get(partyId: number): Observable<BcProviderEditInitialStateModel> {
     const url = `parties/${partyId}/credentials/bc-provider`;

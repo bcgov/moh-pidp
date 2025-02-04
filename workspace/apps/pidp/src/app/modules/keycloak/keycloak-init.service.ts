@@ -12,9 +12,9 @@ import { AuthRoutes } from '../../features/auth/auth.routes';
 })
 export class KeycloakInitService {
   public constructor(
-    @Inject(APP_CONFIG) private config: AppConfig,
-    private router: Router,
-    private keycloakService: KeycloakService,
+    @Inject(APP_CONFIG) private readonly config: AppConfig,
+    private readonly router: Router,
+    private readonly keycloakService: KeycloakService,
   ) {}
 
   public async load(): Promise<void> {

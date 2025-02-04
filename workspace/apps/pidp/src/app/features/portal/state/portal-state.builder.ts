@@ -69,8 +69,8 @@ export type PortalState = Record<PortalStateGroupKey, IPortalSection[]> | null;
 
 export class AccessStateBuilder {
   public constructor(
-    private router: Router,
-    private permissionsService: PermissionsService,
+    private readonly router: Router,
+    private readonly permissionsService: PermissionsService,
   ) {}
 
   public createAccessState(
@@ -155,8 +155,8 @@ export class AccessStateBuilder {
 
 export class PortalStateBuilder {
   public constructor(
-    private router: Router,
-    private permissionsService: PermissionsService,
+    private readonly router: Router,
+    private readonly permissionsService: PermissionsService,
   ) {}
 
   public createState(

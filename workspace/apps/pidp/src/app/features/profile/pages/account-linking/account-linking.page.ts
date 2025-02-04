@@ -1,9 +1,6 @@
 import {
-  AsyncPipe,
   CommonModule,
-  NgFor,
   NgIf,
-  NgOptimizedImage,
 } from '@angular/common';
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
@@ -45,7 +42,6 @@ import { IdentityProvider } from '@app/features/auth/enums/identity-provider.enu
 import { AuthService } from '@app/features/auth/services/auth.service';
 import { AuthorizedUserService } from '@app/features/auth/services/authorized-user.service';
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
-import { SuccessDialogComponent } from '@app/shared/components/success-dialog/success-dialog.component';
 
 import { AccountLinkingResource } from './account-linking-resource.service';
 import { linkedAccountCardText } from './account-linking.constants';
@@ -61,11 +57,7 @@ import { AccessRoutes } from '@app/features/access/access.routes';
     CommonModule,
     InjectViewportCssClassDirective,
     MatButtonModule,
-    NgOptimizedImage,
-    SuccessDialogComponent,
-    AsyncPipe,
     MatTooltipModule,
-    NgFor,
     NgIf,
   ],
   templateUrl: './account-linking.page.html',
@@ -81,22 +73,22 @@ export class AccountLinkingPage implements OnInit, OnDestroy {
   public credentials: Credential[] = [];
   public linkedAccountsIdp: IdentityProvider[] = [];
   public showInstructions: boolean = false;
-  private unsubscribe$ = new Subject<void>();
+  private readonly unsubscribe$ = new Subject<void>();
 
   public constructor(
-    @Inject(APP_CONFIG) private config: AppConfig,
-    private route: ActivatedRoute,
-    private router: Router,
-    private partyService: PartyService,
-    private logger: LoggerService,
-    private utilsService: UtilsService,
-    private authorizedUserService: AuthorizedUserService,
-    private documentService: DocumentService,
-    private resource: AccountLinkingResource,
-    private authService: AuthService,
-    private dialog: MatDialog,
-    private loadingOverlayService: LoadingOverlayService,
-    private navigationService: NavigationService,
+    @Inject(APP_CONFIG) private readonly config: AppConfig,
+    private readonly route: ActivatedRoute,
+    private readonly router: Router,
+    private readonly partyService: PartyService,
+    private readonly logger: LoggerService,
+    private readonly utilsService: UtilsService,
+    private readonly authorizedUserService: AuthorizedUserService,
+    private readonly documentService: DocumentService,
+    private readonly resource: AccountLinkingResource,
+    private readonly authService: AuthService,
+    private readonly dialog: MatDialog,
+    private readonly loadingOverlayService: LoadingOverlayService,
+    private readonly navigationService: NavigationService,
   ) {
     this.title = this.route.snapshot.data.title;
     const partyId = this.partyService.partyId;
@@ -204,7 +196,7 @@ export class AccountLinkingPage implements OnInit, OnDestroy {
           );
         }),
         catchError(() => {
-          // TODO: what to do on error?
+          // TO DO: what to do on error?
           this.logger.error('Link Request creation failed');
 
           return of(null);

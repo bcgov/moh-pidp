@@ -14,7 +14,6 @@ import {
   PageComponent,
   PageFooterActionDirective,
   PageFooterComponent,
-  PageHeaderComponent,
   PageSectionComponent,
   PageSectionSubheaderComponent,
   PageSectionSubheaderDescDirective,
@@ -48,7 +47,6 @@ import { ProviderReportingPortalResource } from './provider-reporting-portal-res
     PageComponent,
     PageFooterActionDirective,
     PageFooterComponent,
-    PageHeaderComponent,
     PageSectionComponent,
     PageSectionSubheaderComponent,
     PageSectionSubheaderDescDirective,
@@ -71,17 +69,17 @@ export class ProviderReportingPortalPage implements OnInit {
   ];
 
   public constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private partyService: PartyService,
-    private resource: ProviderReportingPortalResource,
-    private logger: LoggerService,
-    private documentService: DocumentService,
+    private readonly route: ActivatedRoute,
+    private readonly router: Router,
+    private readonly partyService: PartyService,
+    private readonly resource: ProviderReportingPortalResource,
+    private readonly logger: LoggerService,
+    private readonly documentService: DocumentService,
   ) {
     const routeData = this.route.snapshot.data;
     this.title = routeData.title;
     this.collectionNotice =
-      documentService.getProviderReportingPortalCollectionNotice();
+      this.documentService.getProviderReportingPortalCollectionNotice();
     this.completed =
       routeData.providerReportingPortalStatusCode === StatusCode.COMPLETED;
     this.accessRequestFailed = false;

@@ -31,8 +31,8 @@ export class BreadcrumbComponent {
   @Input() public breadcrumbs: Array<{ title: string; path: string }> = [];
 
   public constructor(
-    private router: Router,
-    private navigationService: NavigationService,
+    private readonly router: Router,
+    private readonly navigationService: NavigationService,
   ) {}
 
   public onBack(): void {

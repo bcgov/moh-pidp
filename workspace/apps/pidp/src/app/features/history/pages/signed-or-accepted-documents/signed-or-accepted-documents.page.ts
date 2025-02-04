@@ -58,12 +58,12 @@ export class SignedOrAcceptedDocumentsPage implements OnInit {
   public documents: DocumentSection[];
 
   public constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private partyService: PartyService,
-    private resource: SignedOrAcceptedDocumentsResource,
-    private documentService: DocumentService,
-    private permissionsService: PermissionsService,
+    private readonly route: ActivatedRoute,
+    private readonly router: Router,
+    private readonly partyService: PartyService,
+    private readonly resource: SignedOrAcceptedDocumentsResource,
+    private readonly documentService: DocumentService,
+    private readonly permissionsService: PermissionsService,
   ) {
     this.title = route.snapshot.data.title;
     this.documents = [];
@@ -84,7 +84,7 @@ export class SignedOrAcceptedDocumentsPage implements OnInit {
   public ngOnInit(): void {
     const partyId = this.partyService.partyId;
 
-    // TODO filtering has been isolated to a single place in the
+    // TO DO filtering has been isolated to a single place in the
     // application to reduce complexity until a system around
     // available documents is built
     this.resource
@@ -109,7 +109,7 @@ export class SignedOrAcceptedDocumentsPage implements OnInit {
           return;
         }
 
-        // TODO remove when an API or equivalent is available, but until
+        // TO DO remove when an API or equivalent is available, but until
         // then has to be displayed all the time or none of the time
         status.userAccessAgreement = this.permissionsService.hasRole([
           Role.FEATURE_PIDP_DEMO,

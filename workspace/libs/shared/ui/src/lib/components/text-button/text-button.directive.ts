@@ -5,7 +5,7 @@ import { Directive, ElementRef, OnInit } from '@angular/core';
   standalone: true,
 })
 export class TextButtonDirective implements OnInit {
-  public constructor(private el: ElementRef<HTMLButtonElement>) {}
+  public constructor(private readonly el: ElementRef<HTMLButtonElement>) {}
 
   public ngOnInit(): void {
     const nativeElement = this.el.nativeElement;
