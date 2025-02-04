@@ -237,5 +237,6 @@ public class PlrStatusChangeLog
     public int Id { get; set; }
     public string Cpn { get; set; } = string.Empty;
     public bool IsGoodStanding { get; set; }
+    public string? IdentifierType { get; set; }
     public string? ProviderRoleType { get; set; }
 }

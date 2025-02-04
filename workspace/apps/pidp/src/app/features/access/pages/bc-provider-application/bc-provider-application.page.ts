@@ -136,7 +136,7 @@ export class BcProviderApplicationPage
   ];
 
   public fullName$!: Observable<string>;
-
+  public showInstructions: boolean = false;
   public activeLayout: 'upliftAccount' | 'createAccount' | '';
 
   @ViewChild('successDialog')
@@ -182,12 +182,23 @@ export class BcProviderApplicationPage
 
   public onUplift(): void {
     const data: DialogOptions = {
-      title: 'Redirecting',
+      title: 'You will be redirected',
+      bottomBorder: false,
+      titlePosition: 'center',
+      bodyTextPosition: 'center',
       component: HtmlComponent,
       data: {
         content: this.documentService.getRedirectingToSignInNotice(),
       },
+      imageSrc: '/assets/images/online-marketing-hIgeoQjS_iE-unsplash.jpg',
+      imageType: 'banner',
+      width: '31rem',
+      height: '24rem',
+      actionText: 'Confirm',
+      actionTypePosition: 'center',
+      class: 'dialog-container dialog-padding',
     };
+
     this.dialog
       .open(ConfirmDialogComponent, { data })
       .afterClosed()

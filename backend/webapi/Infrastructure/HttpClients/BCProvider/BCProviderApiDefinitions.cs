@@ -11,6 +11,7 @@ public class NewUserRepresentation
     public string Hpdid { get; set; } = string.Empty;
     public bool IsMd { get; set; }
     public bool IsMoa { get; set; }
+    public bool IsPharm { get; set; }
     public bool IsRnp { get; set; }
     public string PidpEmail { get; set; } = string.Empty;
     public DateTimeOffset UaaDate { get; set; }
@@ -40,6 +41,7 @@ public class BCProviderAttributes(string clientId)
             .SetHpdid(representation.Hpdid)
             .SetIsMd(representation.IsMd)
             .SetIsMoa(representation.IsMoa)
+            .SetIsPharm(representation.IsPharm)
             .SetIsRnp(representation.IsRnp)
             .SetLoa(3)
             .SetPidpEmail(representation.PidpEmail)
@@ -63,6 +65,7 @@ public class BCProviderAttributes(string clientId)
     public BCProviderAttributes SetHpdid(string hpdid) => this.SetProperty(nameof(hpdid), hpdid);
     public BCProviderAttributes SetIsMd(bool isMd) => this.SetProperty(nameof(isMd), isMd);
     public BCProviderAttributes SetIsMoa(bool isMoa) => this.SetProperty(nameof(isMoa), isMoa);
+    public BCProviderAttributes SetIsPharm(bool isPharm) => this.SetProperty(nameof(isPharm), isPharm);
     public BCProviderAttributes SetIsRnp(bool isRnp) => this.SetProperty(nameof(isRnp), isRnp);
     /// <summary>
     /// Level Of Assurance. Is 3 for a BC Provider created from a BC Services Card.
