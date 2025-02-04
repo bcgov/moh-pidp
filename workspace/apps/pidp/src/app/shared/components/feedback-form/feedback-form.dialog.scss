@@ -89,6 +89,11 @@ input.mat-input-element {
     text-transform: none;
     margin-bottom: 40px;
   }
+  .send-button:disabled {
+    background-color: lightgrey;
+    color: black;
+    cursor: not-allowed;
+  }
 }
 
 .icon-button {
@@ -114,6 +119,16 @@ textarea {
   overflow: hidden;
   resize: none;
 }
+
+.textarea-field-disclaimer {
+  min-height: 145px;
+  max-height: 145px !important;
+}
+
+.disclaimer-field:enabled {
+  background-color: lightgrey !important;
+}
+
 .error-card {
   width: 90%;
   color: red;

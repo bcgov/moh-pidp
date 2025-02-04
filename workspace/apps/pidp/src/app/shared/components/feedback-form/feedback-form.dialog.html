@@ -26,7 +26,8 @@
                 placeholder="Enter here"
                 maxlength="1000"
                 class="textarea-field"
-                id="auto-expand">
+                id="auto-expand"
+                (input)="onFeedbackChange($event)">
                 </textarea>
                 <mat-error>{{ formState.getErrorMessage() }}</mat-error>
               </mat-form-field>
@@ -58,13 +59,30 @@
                 <p class="error-card">File size should be less than 5MB</p>
               </section>
             </ng-container>
+            <div >
+              <mat-form-field class="disclaimer-field">
+                <textarea
+                matInput
+                type="text"
+                aria-labelledby="feedback"
+                maxlength="1000"
+                value="please do not include any personal information when submitting this feedback. For additional information, please refer to this page."
+                class="textarea-field-disclaimer"
+                readonly="true"
+                id="auto-expand"
+                [disabled]="disableDisclaimer">
+                </textarea>
+              </mat-form-field>
+            </div>
+
             <div class="form-button-container">
               <button
                 mat-flat-button
                 type="submit"
                 color="primary"
                 (click)="sendFeedback($event)"
-                class="send-button">
+                class="send-button"
+                [disabled]="disableSend">
                 Send
               </button>
             </div>

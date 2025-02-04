@@ -43,6 +43,10 @@ export class FeedbackFormDialogComponent
   public selectedFile: File | null = null;
   public componentType = FeedbackSendComponent;
   public faXmark = faXmark;
+  public disableSend: boolean = true;
+  public disableDisclaimer: boolean = true;
+  public disclaimerText: string = `Please do not include any personal information when submitting this feedback. For additional information, please refer to <a href="https://example.com">this page</a>.`;
+
   @ViewChild('successDialog')
   public successDialogTemplate!: TemplateRef<FeedbackSendComponent>;
 
@@ -71,6 +75,11 @@ export class FeedbackFormDialogComponent
 
   protected performSubmission(): Observable<unknown> {
     return new Observable;
+  }
+
+  public onFeedbackChange(event: Event): void {
+    event.preventDefault();
+    this.disableSend = this.disableDisclaimer = this.formState.feedback.value.length === 0;
   }
 
   public onFileSelected(): void {
