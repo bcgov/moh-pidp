@@ -24,6 +24,7 @@ export class FeedbackButtonComponent
 
   public dialogWidth: string = "360px";
   public isMobileView: boolean = false;
+  public buttonClass: string = "feedback-button-box";
 
   public constructor(
     public dialog: MatDialog,
@@ -49,9 +50,11 @@ export class FeedbackButtonComponent
     if (viewport === PidpViewport.xsmall) {
       this.dialogWidth = "315px";
       this.isMobileView = true;
+      this.buttonClass = "feedback-button-box-mobile";
     } else {
       this.dialogWidth ="360px";
       this.isMobileView =false;
+      this.buttonClass = "feedback-button-box";
     }
   }
 

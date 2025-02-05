@@ -1,21 +1,11 @@
 <div class="container-box container" uiPidpInjectViewportCss>
-  <div *ngIf="!isMobileView; else mobileView" class="feedback-button-box">
+  <div [ngClass]="buttonClass">
     <button class="mid-right-button" (click)="openDialog()">
       <img
         class="img"
         src="/assets/images/feedback-button-logo.svg"
         alt="feedback-button-logo" />
-      Feedback
+       {{ isMobileView ? '' : 'Feedback' }}
     </button>
   </div>
-  <ng-template #mobileView>
-    <div class="feedback-button-box-mobile">
-      <button class="mid-right-button" (click)="openDialog()">
-        <img
-          class="img"
-          src="/assets/images/feedback-button-logo.svg"
-          alt="feedback-button-logo" />
-      </button>
-    </div>
-  </ng-template>
 </div>
