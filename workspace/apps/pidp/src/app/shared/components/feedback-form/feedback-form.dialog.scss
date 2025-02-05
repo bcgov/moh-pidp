@@ -120,19 +120,13 @@ textarea {
   resize: none;
 }
 
-.textarea-field-disclaimer {
-  min-height: 145px;
-  max-height: 145px !important;
-}
-
-.disclaimer-field:enabled {
-  background-color: lightgrey !important;
-}
-
 .disclaimer-container {
   .disclaimer-field {
     margin-top: 10px;
     padding: 0 30px 5px 30px;
+  }
+  .disclaimer-field:enabled {
+    background-color: lightgrey !important;
   }
   .textarea-field-disclaimer {
     background-color: lightgrey !important;
@@ -140,6 +134,8 @@ textarea {
     border: 1px solid #ccc;
     border-radius: 4px;
     white-space: pre-wrap;
+    min-height: 145px;
+    max-height: 170px !important;
   }
   .textarea-field-disclaimer.disabled {
     background-color: white !important;
