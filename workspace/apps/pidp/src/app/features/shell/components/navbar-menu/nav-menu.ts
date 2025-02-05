@@ -49,6 +49,7 @@ import { ProfileRoutes } from '@app/features/profile/profile.routes';
 
 import { Credential } from './nav-menu.model';
 import { NavMenuResource } from './nav-menu.resource.service';
+import { FeedbackButtonComponent } from "../../../../shared/components/feedback-button/feedback-button.component";
 
 @Component({
   selector: 'app-nav-menu',
@@ -70,7 +71,8 @@ import { NavMenuResource } from './nav-menu.resource.service';
     RouterOutlet,
     FaIconComponent,
     NgClass,
-  ],
+    FeedbackButtonComponent
+],
 })
 export class NavMenuComponent implements OnChanges, OnInit, OnDestroy {
   @Input() public alerts: AlertCode[] | null = [];

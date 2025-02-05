@@ -1,0 +1,36 @@
+.feedback-button-box {
+  .mid-right-button {
+    all: unset;
+    position: fixed !important;
+    top: 50%;
+    right: -3rem !important;
+    transform: rotate(-90deg);
+    transform-origin: center;
+    display: inline-block;
+    background-color: #fcba19;
+    color: black;
+    border: 1px !important;
+    padding: 10px 20px;
+    border-radius: 5px;
+    margin-right: 0 !important;
+    cursor: pointer;
+  }
+  .img {
+    transform: rotate(-270deg);
+  }
+}
+
+.feedback-button-box-mobile {
+  .mid-right-button {
+    all: unset;
+    position: fixed !important;
+    top: 72%;
+    right: 0.9rem !important;
+    display: inline-block;
+    background-color: #fcba19;
+    padding: 5px 5px;
+    margin-right: 0 !important;
+    cursor: pointer;
+    border-radius: 50%;
+  }
+}
