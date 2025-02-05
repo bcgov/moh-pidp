@@ -1,5 +1,6 @@
 namespace DoWork;
 
+using Microsoft.EntityFrameworkCore;
 using Pidp;
 using Pidp.Data;
 using Pidp.Infrastructure.Auth;
@@ -26,7 +27,12 @@ public class DoWorkService(
 
     public async Task DoWorkAsync()
     {
-        foreach (var party in this.context.Parties)
+        var parties = await this.context.Parties
+            .Include(party => party.Credentials)
+            .Where(party => party.Cpn != null
+                && party.Credentials.Any(credential => credential.IdentityProvider == IdentityProviders.BCProvider))
+            .ToListAsync();
+        foreach (var party in parties)
         {
             var upn = party.Credentials
                     .Where(credential => credential.IdentityProvider == IdentityProviders.BCProvider)
