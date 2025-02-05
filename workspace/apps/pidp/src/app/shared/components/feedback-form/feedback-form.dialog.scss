@@ -129,6 +129,25 @@ textarea {
   background-color: lightgrey !important;
 }
 
+.disclaimer-container {
+  .disclaimer-field {
+    margin-top: 10px;
+    padding: 0 30px 5px 30px;
+  }
+  .textarea-field-disclaimer {
+    background-color: lightgrey !important;
+    padding: 10px 0 5px 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    white-space: pre-wrap;
+  }
+  .textarea-field-disclaimer.disabled {
+    background-color: white !important;
+    color: #3F4350A3;
+    pointer-events: none;
+  }
+}
+
 .error-card {
   width: 90%;
   color: red;

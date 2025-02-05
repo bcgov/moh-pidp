@@ -17,6 +17,7 @@ import { FeedbackFormDialogResource } from './feedback-form-dialog-resource.serv
 import { HttpErrorResponse } from '@angular/common/http';
 import { LoggerService } from '@app/core/services/logger.service';
 import { PartyService } from '@app/core/party/party.service';
+import { ProfileRoutes } from '@app/features/profile/profile.routes';
 
 @Component({
   selector: 'app-feedback-form-dialog',
@@ -45,7 +46,8 @@ export class FeedbackFormDialogComponent
   public faXmark = faXmark;
   public disableSend: boolean = true;
   public disableDisclaimer: boolean = true;
-  public disclaimerText: string = `Please do not include any personal information when submitting this feedback. For additional information, please refer to <a href="https://example.com">this page</a>.`;
+  public accessAgreementLink: string = ProfileRoutes.routePath(ProfileRoutes.USER_ACCESS_AGREEMENT);
+  public disclaimerText: string = `Please do not include any personal information when submitting this feedback. For additional information, please refer to <a href=${this.accessAgreementLink} target="_blank">this page</a>.`;
 
   @ViewChild('successDialog')
   public successDialogTemplate!: TemplateRef<FeedbackSendComponent>;

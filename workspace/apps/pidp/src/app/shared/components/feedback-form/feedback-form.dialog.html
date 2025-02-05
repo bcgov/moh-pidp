@@ -51,28 +51,24 @@
               </div>
               <input matInput/>
             </mat-form-field>
-            <div>
-              <span class="file-name">{{selectedFile?.name}}</span>
+            <div *ngIf="selectedFile">
+              <span class="file-name">{{selectedFile.name}}</span>
             </div>
             <ng-container *ngIf="showErrorCard">
               <section class="error-card" [class.show-card]="showErrorCard">
                 <p class="error-card">File size should be less than 5MB</p>
               </section>
             </ng-container>
-            <div >
-              <mat-form-field class="disclaimer-field">
-                <textarea
-                matInput
-                type="text"
-                aria-labelledby="feedback"
-                maxlength="1000"
-                value="please do not include any personal information when submitting this feedback. For additional information, please refer to this page."
-                class="textarea-field-disclaimer"
-                readonly="true"
-                id="auto-expand"
-                [disabled]="disableDisclaimer">
-                </textarea>
-              </mat-form-field>
+
+            <div class="disclaimer-container">
+              <div class="disclaimer-field">
+                <div
+                  class="textarea-field-disclaimer"
+                  id="auto-expand"
+                  [innerHTML]="disclaimerText"
+                  [class.disabled]="disableDisclaimer"
+                ></div>
+              </div>
             </div>
 
             <div class="form-button-container">
