@@ -33,7 +33,6 @@ import { ProfileRoutes } from '@app/features/profile/profile.routes';
     MatIconModule,
     MatButtonModule
 ],
-  encapsulation: ViewEncapsulation.None,
 })
 export class FeedbackFormDialogComponent
   extends AbstractFormPage<FeedbackFormState> implements OnInit
