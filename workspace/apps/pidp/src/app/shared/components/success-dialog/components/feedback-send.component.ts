@@ -11,27 +11,18 @@ import { faXmark } from '@fortawesome/free-solid-svg-icons';
         type="button"
         aria-label="Close dialog"
         (click)="onSuccessDialogClose()"
-        style="width: 2rem;
-          height: 2rem;
-          border-radius: 1rem;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          border: solid 1px pidp.$grey-40;
+        style="border: none;
           background-color: transparent;
           position: absolute;
           top: 10px;
           right: 25px;">
-        <fa-icon [icon]="faXmark" style="font-size: 1.5rem;
-          color: pidp.$grey-40;">
-        </fa-icon>
+        <img src="/assets/images/icon-feedback-close.svg" style="width: 2.5rem;">
       </button>
     </div>
-    <h2 style="margin-top: 35px; margin-left: 100px;font-weight:700">
-
+    <h2 style="margin-top: 55px; text-align: center; font-weight: 700;">
       Thank you!
     </h2>
-    <p style="margin-top: 20px; padding-left:20px">
+    <p style="margin-top: 20px; padding-left:20px; padding-bottom: 50px;">
     Your feedback is greatly appreciated,
     the help desk will contact you shortly.
   </p>`,
