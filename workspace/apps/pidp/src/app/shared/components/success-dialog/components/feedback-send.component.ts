@@ -16,7 +16,7 @@ import { faXmark } from '@fortawesome/free-solid-svg-icons';
           position: absolute;
           top: 10px;
           right: 25px;">
-        <img src="/assets/images/icon-feedback-close.svg" style="width: 2.5rem;">
+        <img src="/assets/images/feedback-close-logo.png" style="width: 2.5rem;">
       </button>
     </div>
     <h2 style="margin-top: 55px; text-align: center; font-weight: 700;">
