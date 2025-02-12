@@ -20,7 +20,6 @@ public class SendEmailConsumer(
     public async Task Consume(ConsumeContext<Email> context)
     {
         var message = context.Message;
-
         var email = new Email(
             from: message.From,
             to: message.To,
@@ -30,7 +29,6 @@ public class SendEmailConsumer(
             attachments: message.Attachments ?? []
         );
 
-
         if (!await this.chesClient.HealthCheckAsync())
         {
             this.logger.LogChesClientHealthCheckFailure();
@@ -39,13 +37,14 @@ public class SendEmailConsumer(
 
         // Call the CHES API to send the email
         var msgId = await this.chesClient.SendAsync(email);
-        if (msgId != null)
+        if (msgId == null)
         {
-            await this.CreateEmailLog(email, SendType.Ches, msgId);
+            this.logger.LogSendEmailFailure();
+            throw new InvalidOperationException("Error sending email");
         }
 
-        this.logger.LogSendEmailFailure();
-        throw new InvalidOperationException("Error sending email");
+        await this.CreateEmailLog(email, SendType.Ches, msgId);
+
     }
 
     private async Task CreateEmailLog(Email email, string sendType, Guid? msgId = null)
