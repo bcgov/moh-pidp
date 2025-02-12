@@ -19,7 +19,6 @@ public class SendEmailConsumer(
 
     public async Task Consume(ConsumeContext<Email> context)
     {
-        Console.WriteLine("Received email message");
         var message = context.Message;
 
         var email = new Email(
@@ -42,8 +41,7 @@ public class SendEmailConsumer(
         var msgId = await this.chesClient.SendAsync(email);
         if (msgId != null)
         {
-            await this.CreateEmailLog(email, "CHES", msgId);
-            Console.WriteLine("Email sent Successfully");
+            await this.CreateEmailLog(email, SendType.Ches, msgId);
         }
 
         this.logger.LogSendEmailFailure();
@@ -54,6 +52,11 @@ public class SendEmailConsumer(
     {
         this.context.EmailLogs.Add(new EmailLog(email, sendType, msgId, this.clock.GetCurrentInstant()));
         await this.context.SaveChangesAsync();
+    }
+
+    private static class SendType
+    {
+        public const string Ches = "CHES";
     }
 }
 
