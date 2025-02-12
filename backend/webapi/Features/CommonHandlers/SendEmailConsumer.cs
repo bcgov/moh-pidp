@@ -9,11 +9,13 @@ using Pidp.Models;
 public class SendEmailConsumer(
     IClock clock,
     IChesClient chesClient,
+    ILogger<SendEmailConsumer> logger,
     PidpDbContext context) : IConsumer<Email>
 {
     private readonly IClock clock = clock;
     private readonly IChesClient chesClient = chesClient;
     private readonly PidpDbContext context = context;
+    private readonly ILogger<SendEmailConsumer> logger = logger;
 
     public async Task Consume(ConsumeContext<Email> context)
     {
@@ -32,6 +34,7 @@ public class SendEmailConsumer(
 
         if (!await this.chesClient.HealthCheckAsync())
         {
+            this.logger.LogChesClientHealthCheckFailure();
             throw new InvalidOperationException("Error communicating with CHES API");
         }
 
@@ -43,6 +46,7 @@ public class SendEmailConsumer(
             Console.WriteLine("Email sent Successfully");
         }
 
+        this.logger.LogSendEmailFailure();
         throw new InvalidOperationException("Error sending email");
     }
 
@@ -51,4 +55,13 @@ public class SendEmailConsumer(
         this.context.EmailLogs.Add(new EmailLog(email, sendType, msgId, this.clock.GetCurrentInstant()));
         await this.context.SaveChangesAsync();
     }
+}
+
+internal static partial class SendEmailConsumerLoggingExtensions
+{
+    [LoggerMessage(1, LogLevel.Error, "Error communicating with CHES API.")]
+    public static partial void LogChesClientHealthCheckFailure(this ILogger<SendEmailConsumer> logger);
+
+    [LoggerMessage(2, LogLevel.Error, "Error sending email")]
+    public static partial void LogSendEmailFailure(this ILogger<SendEmailConsumer> logger);
 }
