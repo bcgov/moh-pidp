@@ -11,6 +11,16 @@ public class Email
     public string Body { get; set; }
     public IEnumerable<Pdf> Attachments { get; set; }
 
+    public Email()
+    {
+        this.From = string.Empty;
+        this.To = [];
+        this.Cc = [];
+        this.Subject = string.Empty;
+        this.Body = string.Empty;
+        this.Attachments = [];
+    }
+
     public Email(string from, string to, string subject, string body)
         : this(from, [to], [], subject, body, [])
     { }

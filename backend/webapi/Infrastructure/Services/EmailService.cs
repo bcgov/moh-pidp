@@ -1,18 +1,17 @@
 namespace Pidp.Infrastructure.Services;
 
 using Microsoft.EntityFrameworkCore;
-using NodaTime;
 using System.Linq.Expressions;
 
 using Pidp;
 using Pidp.Data;
 using Pidp.Infrastructure.HttpClients.Mail;
 using Pidp.Models;
+using MassTransit;
 
 public class EmailService(
     IChesClient chesClient,
-    IClock clock,
-    ISmtpEmailClient smtpEmailClient,
+    ISendEndpointProvider sendEndpointProvider,
     PidpConfiguration config,
     PidpDbContext context) : IEmailService
 {
@@ -20,10 +19,9 @@ public class EmailService(
     public const string PidpSupportPhone = "250-448-1262";
 
     private readonly IChesClient chesClient = chesClient;
-    private readonly IClock clock = clock;
-    private readonly ISmtpEmailClient smtpEmailClient = smtpEmailClient;
     private readonly PidpConfiguration config = config;
     private readonly PidpDbContext context = context;
+    private readonly ISendEndpointProvider sendEndpointProvider = sendEndpointProvider;
 
     public async Task SendAsync(Email email)
     {
@@ -32,20 +30,12 @@ public class EmailService(
             email.Subject = $"THE FOLLOWING EMAIL IS A TEST: {email.Subject}";
         }
 
-        if (this.config.ChesClient.Enabled && await this.chesClient.HealthCheckAsync())
+        if (this.config.ChesClient.Enabled)
         {
-            var msgId = await this.chesClient.SendAsync(email);
-            await this.CreateEmailLog(email, SendType.Ches, msgId);
-
-            if (msgId != null)
-            {
-                return;
-            }
+            var sendEndpoint = await this.sendEndpointProvider.GetSendEndpoint(new Uri("queue:send-email-queue"));
+            await sendEndpoint.Send(email);
         }
 
-        // Fall back to SMTP client
-        await this.CreateEmailLog(email, SendType.Smtp);
-        await this.smtpEmailClient.SendAsync(email);
     }
 
     public async Task<int> UpdateEmailLogStatuses(int limit)
@@ -80,15 +70,8 @@ public class EmailService(
         return totalCount;
     }
 
-    private async Task CreateEmailLog(Email email, string sendType, Guid? msgId = null)
-    {
-        this.context.EmailLogs.Add(new EmailLog(email, sendType, msgId, this.clock.GetCurrentInstant()));
-        await this.context.SaveChangesAsync();
-    }
-
     private static class SendType
     {
         public const string Ches = "CHES";
-        public const string Smtp = "SMTP";
     }
 }
