@@ -13,6 +13,6 @@ public class FeedbackController(IPidpAuthorizationService authorizationService) 
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task CreateFeedback([FromServices] ICommandHandler<Create.Command> handler,
-                                                           [FromForm] Create.Command command)
+                                                    [FromForm] Create.Command command)
         => await this.AuthorizePartyBeforeHandleAsync(command.PartyId, handler, command);
 }
