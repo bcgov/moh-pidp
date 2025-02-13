@@ -18,6 +18,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { LoggerService } from '@app/core/services/logger.service';
 import { PartyService } from '@app/core/party/party.service';
 import { ProfileRoutes } from '@app/features/profile/profile.routes';
+import { ToastService } from '@app/core/services/toast.service';
 
 @Component({
   selector: 'app-feedback-form-dialog',
@@ -67,7 +68,8 @@ export class FeedbackFormDialogComponent
     public dialogRef: MatDialogRef<FeedbackFormDialogComponent>,
     private feedbackFormDialogResource: FeedbackFormDialogResource,
     private logger: LoggerService,
-    private partyService: PartyService
+    private partyService: PartyService,
+    private toastService: ToastService,
   ) {
     super(dependenciesService);
     this.formState = new FeedbackFormState(fb, dialog);
@@ -139,6 +141,7 @@ export class FeedbackFormDialogComponent
           '[FeedbackFormDialogResource::postFeedback] error has occurred: ',
           err,
         );
+        this.toastService.openErrorToast('Error occurred while sending feedback');
       },
     );
   }
