@@ -52,7 +52,7 @@ export class FeedbackFormState extends AbstractFormState<FeedbackFormData> {
     this.formInstance = this.fb.group(
       {
         feedback: ['', [Validators.required]],
-        attachment: ['', [Validators.required]],
+        attachment: [''],
       }
     );
   }

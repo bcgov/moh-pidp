@@ -24,10 +24,8 @@ public class Create
             this.RuleFor(x => x.Feedback).NotEmpty().Length(1, 1000);
             this.RuleFor(x => x.PartyId).GreaterThan(0);
             this.RuleFor(x => x.File)
-                .Must(file => file?.Length < 5 * 1024 * 1024).WithMessage("File size should be less than 5MB")
-                .When(file => file != null)
-                .Must(file => IsValidContentType(file?.ContentType)).WithMessage("Invalid file type. Only Image files are allowed.")
-                .When(file => file != null);
+                .Must(file => file == null || file.Length < 5 * 1024 * 1024).WithMessage("File size should be less than 5MB")
+                .Must(file => file == null || IsValidContentType(file.ContentType)).WithMessage("Invalid file type. Only Image files are allowed.");
         }
 
         private static bool IsValidContentType(string? contentType)
