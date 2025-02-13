@@ -10,14 +10,12 @@ using Pidp.Models;
 
 public class Create
 {
-
     public class Command : ICommand
     {
         public int PartyId { get; set; }
         public string Feedback { get; set; } = string.Empty;
         public IFormFile? File { get; set; }
     }
-
 
     public class CommandValidator : AbstractValidator<Command>
     {
