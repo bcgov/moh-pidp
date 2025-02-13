@@ -7,7 +7,7 @@ metadata:
     tekton.dev/platforms: 'linux/amd64,linux/s390x,linux/ppc64le'
     tekton.dev/tags: build-tool
   name: test-plr-intake
-  namespace: d8a8f9-tools
+  namespace: f088b1-tools
   labels:
     app.kubernetes.io/version: '0.1'
 spec:
@@ -57,7 +57,7 @@ spec:
         - name: SONAR_PROJECTVERSION
           value: $(params.SONAR_PROJECTVERSION)
         - name: SONAR_HOST
-          value: 'http://sonarqube.d8a8f9-tools.svc.cluster.local:9000'
+          value: 'http://sonarqube.f088b1-tools.svc.cluster.local:9000'
         - name: SONAR_LINKS_SCM
           value: $(params.SONAR_LINKS_SCM)
         - name: SONAR_BUILDSTRING
@@ -72,7 +72,7 @@ spec:
               key: $(params.SONAR_LOGIN_KEY_SECRET_KEY)
               name: $(params.SONAR_LOGIN_KEY_SECRET)
       image: >-
-        image-registry.openshift-image-registry.svc:5000/d8a8f9-tools/dotnet-sonarscanner:webapi
+        image-registry.openshift-image-registry.svc:5000/f088b1-tools/dotnet-sonarscanner:webapi
       name: sonar-scan
       resources:
         limits:
