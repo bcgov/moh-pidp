@@ -103,8 +103,8 @@
           </div>
           <div
             class="bc-provider card-styles card-hover"
-            (click)="hasCredential(IdentityProvider.BC_PROVIDER) ? onPageNavigate(['/access/bc-provider-edit']) : onPageNavigate(['/access/bc-provider-application'])"
-            (keyup)="hasCredential(IdentityProvider.BC_PROVIDER) ? onPageNavigate(['/access/bc-provider-edit']): onPageNavigate(['/access/bc-provider-application'])">
+            (click)="navigateTo()"
+            (keyup)="navigateTo()">
             <div class="card-header-icon">
               <div class="card-icon">
                 <img
