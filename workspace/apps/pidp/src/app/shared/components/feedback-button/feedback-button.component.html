@@ -1,0 +1,11 @@
+<div class="container-box container" uiPidpInjectViewportCss>
+  <div [ngClass]="buttonClass">
+    <button class="mid-right-button" (click)="openDialog()">
+      <img
+        class="img"
+        src="/assets/images/feedback-button-logo.svg"
+        alt="feedback-button-logo" />
+       {{ isMobileView ? '' : 'Feedback' }}
+    </button>
+  </div>
+</div>
