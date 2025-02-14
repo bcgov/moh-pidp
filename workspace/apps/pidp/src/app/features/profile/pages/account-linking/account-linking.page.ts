@@ -40,18 +40,18 @@ import { PartyService } from '@app/core/party/party.service';
 import { DocumentService } from '@app/core/services/document.service';
 import { LoggerService } from '@app/core/services/logger.service';
 import { UtilsService } from '@app/core/services/utils.service';
+import { AccessRoutes } from '@app/features/access/access.routes';
 import { AuthRoutes } from '@app/features/auth/auth.routes';
 import { IdentityProvider } from '@app/features/auth/enums/identity-provider.enum';
 import { AuthService } from '@app/features/auth/services/auth.service';
 import { AuthorizedUserService } from '@app/features/auth/services/authorized-user.service';
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
+import { BreadcrumbComponent } from '@app/shared/components/breadcrumb/breadcrumb.component';
 import { SuccessDialogComponent } from '@app/shared/components/success-dialog/success-dialog.component';
 
 import { AccountLinkingResource } from './account-linking-resource.service';
 import { linkedAccountCardText } from './account-linking.constants';
 import { Credential } from './account-linking.model';
-import { BreadcrumbComponent } from '@app/shared/components/breadcrumb/breadcrumb.component';
-import { AccessRoutes } from '@app/features/access/access.routes';
 
 @Component({
   selector: 'app-account-linking',
@@ -111,12 +111,12 @@ export class AccountLinkingPage implements OnInit, OnDestroy {
     this.showInstructions = !this.showInstructions;
   }
   public breadcrumbsData: Array<{ title: string; path: string }> = [
-    {title: 'Home', path: ''},
+    { title: 'Home', path: '' },
     {
       title: 'Access',
       path: AccessRoutes.routePath(AccessRoutes.ACCESS_REQUESTS),
     },
-    {title: 'Account Linking', path: ''},
+    { title: 'Account Linking', path: '' },
   ];
 
   public onLinkAccount(idpHint: IdentityProvider): void {
@@ -212,9 +212,10 @@ export class AccountLinkingPage implements OnInit, OnDestroy {
       );
   }
 
-  navigateTo() {
-    this.hasCredential(IdentityProvider.BC_PROVIDER) ? this.onPageNavigate(['/access/bc-provider-edit']) :
-    this.onPageNavigate(['/access/bc-provider-application'])
+  public navigateTo(): void {
+    this.hasCredential(IdentityProvider.BC_PROVIDER)
+      ? this.onPageNavigate(['/access/bc-provider-edit'])
+      : this.onPageNavigate(['/access/bc-provider-application']);
   }
 
   public onPageNavigate(url: string[]): void {
