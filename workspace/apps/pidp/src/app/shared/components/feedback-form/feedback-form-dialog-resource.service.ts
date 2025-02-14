@@ -12,7 +12,7 @@ import { PersonalInformation } from '@app/features/profile/pages/personal-inform
   providedIn: 'root',
 })
 export class FeedbackFormDialogResource extends CrudResource<PersonalInformation>{
-  public constructor(private apiResource: ApiHttpClient) {
+  public constructor(private readonly apiResource: ApiHttpClient) {
     super(apiResource);
   }
 
