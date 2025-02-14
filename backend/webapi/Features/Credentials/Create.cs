@@ -157,6 +157,7 @@ public class Create
                 .SetPidpEmail(party.Email!)
                 .SetIsRnp(plrStanding.With(ProviderRoleType.RegisteredNursePractitioner).HasGoodStanding)
                 .SetIsMd(plrStanding.With(ProviderRoleType.MedicalDoctor).HasGoodStanding)
+                .SetIsPharm(plrStanding.With(IdentifierType.Pharmacist).HasGoodStanding)
                 .SetIsMoa(!plrStanding.HasGoodStanding && endorsementPlrDigest.HasGoodStanding)
                 .SetEndorserData(endorsementPlrDigest
                     .WithGoodStanding()
