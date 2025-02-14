@@ -7,23 +7,24 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, catchError, map, of, tap } from 'rxjs';
 
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { faStethoscope, faAngleRight } from '@fortawesome/free-solid-svg-icons';
+import { faAngleRight, faStethoscope } from '@fortawesome/free-solid-svg-icons';
 
 import { InjectViewportCssClassDirective } from '@bcgov/shared/ui';
 
 import { PartyService } from '@app/core/party/party.service';
 import { LoggerService } from '@app/core/services/logger.service';
+import { UtilsService } from '@app/core/services/utils.service';
 import { PortalAlertComponent } from '@app/features/portal/components/portal-alert/portal-alert.component';
 import { ProfileStatusAlert } from '@app/features/portal/models/profile-status-alert.model';
 import { ProfileStatus } from '@app/features/portal/models/profile-status.model';
 import { PortalResource } from '@app/features/portal/portal-resource.service';
 import { PortalService } from '@app/features/portal/portal.service';
+import { BreadcrumbComponent } from '@app/shared/components/breadcrumb/breadcrumb.component';
 
 import { CollegeCertification } from '../college-licence-declaration/college-certification.model';
+import { CollegeLicenceDeclarationPage } from '../college-licence-declaration/college-licence-declaration.page';
 import { CollegeLicenceInformationResource } from './college-licence-information-resource.service';
 import { CollegeLicenceInformationDetailComponent } from './components/college-licence-information-detail.component';
-import { CollegeLicenceDeclarationPage } from '../college-licence-declaration/college-licence-declaration.page';
-import { BreadcrumbComponent } from '@app/shared/components/breadcrumb/breadcrumb.component';
 
 @Component({
   selector: 'app-college-licence-information',
@@ -63,17 +64,30 @@ export class CollegeLicenceInformationPage implements OnInit {
     private resource: CollegeLicenceInformationResource,
     private logger: LoggerService,
     private portalResource: PortalResource,
+    private readonly utilsService: UtilsService,
     private portalService: PortalService,
   ) {
     this.title = this.route.snapshot.data.title;
   }
 
+  public scrollToWithdelay(): Promise<void> {
+    return new Promise<void>((resolve) => {
+      this.utilsService.scrollTop();
+      setTimeout(() => {
+        resolve();
+      }, 300);
+    });
+  }
   public onBack(): void {
-    this.navigateToRoot();
+    this.scrollToWithdelay().then(() => {
+      this.navigateToRoot();
+    });
   }
 
   public ngOnInit(): void {
-    this.showCollegeLicenceDeclarationPage = this.route.snapshot.paramMap.get('showCollegeLicenceDeclarationPage') === 'true';
+    this.showCollegeLicenceDeclarationPage =
+      this.route.snapshot.paramMap.get('showCollegeLicenceDeclarationPage') ===
+      'true';
     const partyId = this.partyService.partyId;
     if (!partyId) {
       this.logger.error('No party ID was provided');
