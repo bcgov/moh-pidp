@@ -64,13 +64,13 @@ export class DriverFitnessPage implements OnInit, AfterViewInit {
   ];
 
   public constructor(
-    private loadingOverlayService: LoadingOverlayService,
-    private route: ActivatedRoute,
-    private router: Router,
-    private partyService: PartyService,
-    private resource: DriverFitnessResource,
-    private logger: LoggerService,
-    private snowplowService: SnowplowService,
+    private readonly loadingOverlayService: LoadingOverlayService,
+    private readonly route: ActivatedRoute,
+    private readonly router: Router,
+    private readonly partyService: PartyService,
+    private readonly resource: DriverFitnessResource,
+    private readonly logger: LoggerService,
+    private readonly snowplowService: SnowplowService,
   ) {
     const routeData = this.route.snapshot.data;
     this.completed = routeData.driverFitnessStatusCode === StatusCode.COMPLETED;

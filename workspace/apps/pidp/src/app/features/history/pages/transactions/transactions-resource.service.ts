@@ -10,7 +10,7 @@ import { Transaction } from './transaction.model';
   providedIn: 'root',
 })
 export class TransactionsResource {
-  public constructor(private apiResource: ApiHttpClient) {}
+  public constructor(private readonly apiResource: ApiHttpClient) {}
 
   public transactions(partyId: number): Observable<Transaction[]> {
     return this.apiResource.get<Transaction[]>(

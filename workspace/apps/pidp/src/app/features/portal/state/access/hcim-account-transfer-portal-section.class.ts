@@ -27,8 +27,8 @@ export class HcimAccountTransferPortalSection implements IPortalSection {
   public completedMessage: string;
 
   public constructor(
-    private profileStatus: ProfileStatus,
-    private router: Router,
+    private readonly profileStatus: ProfileStatus,
+    private readonly router: Router,
   ) {
     this.key = 'hcimAccountTransfer';
     this.heading = 'HCIMWeb Account Transfer';
@@ -60,11 +60,8 @@ export class HcimAccountTransferPortalSection implements IPortalSection {
 
   public get status(): string {
     const statusCode = this.getStatusCode();
-    return statusCode === StatusCode.AVAILABLE
-      ? 'For existing users of HCIMWeb only'
-      : statusCode === StatusCode.COMPLETED
-        ? 'Completed'
-        : 'Incomplete';
+    const statusMsg = statusCode === StatusCode.COMPLETED ? 'Completed': 'Incomplete';
+    return statusCode === StatusCode.AVAILABLE ? 'For existing users of HCIMWeb only': statusMsg;
   }
 
   public get icon(): IconProp {

@@ -9,10 +9,10 @@ import {
 export type RoutePath = string | (string | number)[];
 
 export class RouteUtils {
-  private route: ActivatedRoute;
-  private router: Router;
+  private readonly route: ActivatedRoute;
+  private readonly router: Router;
   private readonly baseRoutePath: string;
-  private location: Location;
+  private readonly location: Location;
 
   public constructor(
     route: ActivatedRoute,

@@ -1,13 +1,13 @@
 import { Routes } from '@angular/router';
 
 export class ProfileRoutes {
-  public static BASE_PATH = 'profile';
+  public static readonly BASE_PATH = 'profile';
 
-  public static PERSONAL_INFO = 'personal-information';
-  public static COLLEGE_LICENCE_DECLARATION = 'college-licence-declaration';
-  public static COLLEGE_LICENCE_INFO = 'college-licence-info';
-  public static USER_ACCESS_AGREEMENT = 'user-access-agreement';
-  public static ACCOUNT_LINKING = 'account-linking';
+  public static readonly PERSONAL_INFO = 'personal-information';
+  public static readonly COLLEGE_LICENCE_DECLARATION = 'college-licence-declaration';
+  public static readonly COLLEGE_LICENCE_INFO = 'college-licence-info';
+  public static readonly USER_ACCESS_AGREEMENT = 'user-access-agreement';
+  public static readonly ACCOUNT_LINKING = 'account-linking';
 
   /**
    * @description

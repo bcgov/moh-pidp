@@ -1,6 +1,6 @@
 export class ShellRoutes {
-  public static BASE_PATH = '';
-  public static SUPPORT_ERROR_PAGE = 'support';
+  public static readonly BASE_PATH = '';
+  public static readonly SUPPORT_ERROR_PAGE = 'support';
 
   /**
    * @description

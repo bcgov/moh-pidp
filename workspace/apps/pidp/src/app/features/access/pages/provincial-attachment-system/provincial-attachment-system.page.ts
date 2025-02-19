@@ -90,15 +90,15 @@ export class ProvincialAttachmentSystemPage implements OnInit {
   private readonly provincialAttachmentSystemWebsite: string;
 
   public constructor(
-    @Inject(APP_CONFIG) private config: AppConfig,
-    private authService: AuthService,
-    private bcProviderResource: BcProviderEditResource,
-    private discoveryResource: DiscoveryResource,
-    private portalResource: PortalResource,
-    private partyService: PartyService,
-    private router: Router,
-    private toastService: ToastService,
-    private snowplowService: SnowplowService,
+    @Inject(APP_CONFIG) private readonly config: AppConfig,
+    private readonly authService: AuthService,
+    private readonly bcProviderResource: BcProviderEditResource,
+    private readonly discoveryResource: DiscoveryResource,
+    private readonly portalResource: PortalResource,
+    private readonly partyService: PartyService,
+    private readonly router: Router,
+    private readonly toastService: ToastService,
+    private readonly snowplowService: SnowplowService,
   ) {
     this.selectedIndex = -1;
     this.provincialAttachmentSystemWebsite = provincialAttachmentSystemWebsite;

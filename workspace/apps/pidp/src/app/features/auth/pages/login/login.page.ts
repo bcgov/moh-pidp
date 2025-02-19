@@ -15,6 +15,7 @@ import { EMPTY, Observable, exhaustMap, of, switchMap } from 'rxjs';
 
 import {
   AnchorDirective,
+  ConfirmDialogComponent,
   DialogOptions,
   ExpansionPanelComponent,
   HtmlComponent,
@@ -23,7 +24,6 @@ import {
   PidpViewport,
   ViewportService,
 } from '@bcgov/shared/ui';
-import { ConfirmDialogComponent } from '@bcgov/shared/ui';
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';
 import {
@@ -87,17 +87,17 @@ export class LoginPage implements OnInit, AfterViewInit {
   }
 
   public constructor(
-    @Inject(APP_CONFIG) private config: AppConfig,
-    private authService: AuthService,
-    private clientLogsService: ClientLogsService,
-    private route: ActivatedRoute,
-    private dialog: MatDialog,
-    private documentService: DocumentService,
-    private viewportService: ViewportService,
-    private linkAccountConfirmResource: LinkAccountConfirmResource,
-    private snowplowService: SnowplowService,
-    private loginResource: LoginResource,
-    private logger: LoggerService,
+    @Inject(APP_CONFIG) private readonly config: AppConfig,
+    private readonly authService: AuthService,
+    private readonly clientLogsService: ClientLogsService,
+    private readonly route: ActivatedRoute,
+    private readonly dialog: MatDialog,
+    private readonly documentService: DocumentService,
+    private readonly viewportService: ViewportService,
+    private readonly linkAccountConfirmResource: LinkAccountConfirmResource,
+    private readonly snowplowService: SnowplowService,
+    private readonly loginResource: LoginResource,
+    private readonly logger: LoggerService,
   ) {
     const routeSnapshot = this.route.snapshot;
 

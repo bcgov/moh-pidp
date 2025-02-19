@@ -53,8 +53,8 @@ export class ViewportService {
   public viewportBroadcast$ = this.viewportSubject.asObservable();
 
   public constructor(
-    private breakpointObserver: BreakpointObserver,
-    private pidpBreakpointObserver: BreakpointObserver,
+    private readonly breakpointObserver: BreakpointObserver,
+    private readonly pidpBreakpointObserver: BreakpointObserver,
   ) {
     this.breakpointObserver$ = breakpointObserver.observe([
       BootstrapBreakpoints.medium,

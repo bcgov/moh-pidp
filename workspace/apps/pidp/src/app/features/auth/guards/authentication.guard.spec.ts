@@ -20,12 +20,17 @@ describe('AuthenticationGuard', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [provideAutoSpy(AuthenticationGuardService)],
+      providers: [provideAutoSpy(AuthenticationGuardService),
+        provideAutoSpy(ActivatedRouteSnapshot),
+        provideAutoSpy(RouterStateSnapshot),
+      ],
     });
 
     authenticationGuardServiceSpy = TestBed.inject<any>(
       AuthenticationGuardService,
     );
+    activatedRouteSnapshotSpy = TestBed.inject<any>(ActivatedRouteSnapshot);
+    routerStateSnapshotSpy = TestBed.inject<any>(RouterStateSnapshot);
   });
 
   describe('METHOD: CanActivateFn', () => {

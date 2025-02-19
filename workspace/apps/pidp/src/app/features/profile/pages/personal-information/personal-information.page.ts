@@ -112,15 +112,15 @@ export class PersonalInformationPage
 
   public constructor(
     dependenciesService: AbstractFormDependenciesService,
-    private route: ActivatedRoute,
-    private router: Router,
-    private partyService: PartyService,
-    private resource: PersonalInformationResource,
-    private portalResource: PortalResource,
-    private authorizedUserService: AuthorizedUserService,
-    private logger: LoggerService,
-    private _snackBar: MatSnackBar,
-    private lookupResource: LookupResource,
+    private readonly route: ActivatedRoute,
+    private readonly router: Router,
+    private readonly partyService: PartyService,
+    private readonly resource: PersonalInformationResource,
+    private readonly portalResource: PortalResource,
+    private readonly authorizedUserService: AuthorizedUserService,
+    private readonly logger: LoggerService,
+    private readonly _snackBar: MatSnackBar,
+    private readonly lookupResource: LookupResource,
     fb: FormBuilder,
   ) {
     super(dependenciesService);

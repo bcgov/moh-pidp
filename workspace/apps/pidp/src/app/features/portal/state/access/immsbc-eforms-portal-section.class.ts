@@ -27,8 +27,8 @@ export class ImmsBCEformsPortalSection implements IPortalSection {
   public completedMessage: string;
 
   public constructor(
-    private profileStatus: ProfileStatus,
-    private router: Router,
+    private readonly profileStatus: ProfileStatus,
+    private readonly router: Router,
   ) {
     this.key = 'immsBCEforms';
     this.heading = 'Immunization Entry eForm';

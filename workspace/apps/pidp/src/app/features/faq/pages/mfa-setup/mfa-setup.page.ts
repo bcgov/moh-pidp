@@ -10,9 +10,6 @@ import {
   AnchorDirective,
   InjectViewportCssClassDirective,
   PageComponent,
-  PageFooterActionDirective,
-  PageFooterComponent,
-  PageHeaderComponent,
   PageSectionComponent,
   PageSectionSubheaderComponent,
 } from '@bcgov/shared/ui';
@@ -37,9 +34,6 @@ import { BreadcrumbComponent } from '@app/shared/components/breadcrumb/breadcrum
     MatButtonModule,
     NgIf,
     PageComponent,
-    PageFooterActionDirective,
-    PageFooterComponent,
-    PageHeaderComponent,
     PageSectionComponent,
     PageSectionSubheaderComponent,
     InjectViewportCssClassDirective,
@@ -61,9 +55,9 @@ export class MfaSetupPage implements OnInit {
   ];
 
   public constructor(
-    @Inject(APP_CONFIG) private config: AppConfig,
-    private router: Router,
-    private utilsService: UtilsService,
+    @Inject(APP_CONFIG) private readonly config: AppConfig,
+    private readonly router: Router,
+    private readonly utilsService: UtilsService,
   ) {
     this.providerIdentitySupport = this.config.emails.providerIdentitySupport;
   }

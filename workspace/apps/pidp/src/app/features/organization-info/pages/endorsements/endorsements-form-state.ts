@@ -5,7 +5,7 @@ import { AbstractFormState, FormControlValidators } from '@bcgov/shared/ui';
 import { EndorsementRequestInformation } from './models/endorsement-request-information.model';
 
 export class EndorsementsFormState extends AbstractFormState<EndorsementRequestInformation> {
-  public constructor(private fb: FormBuilder) {
+  public constructor(private readonly fb: FormBuilder) {
     super();
 
     this.buildForm();
@@ -13,7 +13,7 @@ export class EndorsementsFormState extends AbstractFormState<EndorsementRequestI
 
   public get json(): EndorsementRequestInformation | undefined {
     if (!this.formInstance) {
-      return;
+      return undefined;
     }
 
     return this.formInstance.getRawValue();

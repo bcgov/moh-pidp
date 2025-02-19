@@ -15,7 +15,7 @@ import { AccessTokenService } from './access-token.service';
   providedIn: 'root',
 })
 export class AuthorizedUserService {
-  public constructor(private accessTokenService: AccessTokenService) {}
+  public constructor(private readonly accessTokenService: AccessTokenService) {}
 
   /**
    * @description
