@@ -5,14 +5,10 @@ cluster: golddr
 replicas: 1
 image_registry: image-registry.openshift-image-registry.svc:5000
 stateful_requests_cpu: 150m
-stateful_requests_memory: 150Mi
-stateful_limit_cpu: 200m
-stateful_limit_memory: 250Mi
+stateful_requests_memory: 250Mi
 stateful_initrequests_cpu: 50m
 stateful_initrequests_memory: 50Mi
-stateful_initlimit_cpu: 100m
-stateful_initlimit_memory: 250Mi
-volume_size: 5Gi
+volume_size: 1i
 replication_password: ""
 root_password: ""
 app_db_name: "pidp_dev"
