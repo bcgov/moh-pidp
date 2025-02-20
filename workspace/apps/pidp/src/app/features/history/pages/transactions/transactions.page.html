@@ -9,8 +9,9 @@
 
   <ng-container *ngIf="transactions$ | async as transactions">
     <ng-container *ngIf="transactions.length; else noTransactions">
-      <div *ngFor="let transaction of transactions; let i = index" class="transaction">
-      <!-- <div class="box" *ngIf="i !== 1"></div> -->
+      <div
+        *ngFor="let transaction of transactions; let i = index"
+        class="transaction">
         <div class="transaction-text">
           {{ transaction.accessTypeCode | lookupCode: 'accessTypes' }}
           submission

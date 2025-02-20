@@ -134,6 +134,11 @@
             >Password and MFA reset</a
           >
           <a
+            class="sidenav-menu-item"
+            (click)="navigateTo(HistoryRoutes.routePath(HistoryRoutes.TRANSACTIONS))"
+            >History</a
+          >
+          <a
             *ngFor="let menuItem of menuItems"
             class="sidenav-menu-item"
             routerLinkActive="sidenav-menu-item-active"

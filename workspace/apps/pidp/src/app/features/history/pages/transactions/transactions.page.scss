@@ -15,18 +15,9 @@
       line-height: 1.6875rem;
     }
 
-    .box {
-      width: 100%;
-      padding: 1rem 1.875rem;
-      border: 1px solid #CCC;
-      background: #F2F2F2;
-      height: 3.5rem;
-      margin-bottom: 1.5rem;
-    }
-
     .transaction {
       padding-top: 2rem;
-      border-bottom: 1px solid #CCC;
+      border-bottom: 1px solid #ccc;
       padding-bottom: 1.5rem;
     }
 
@@ -81,7 +72,6 @@
     background-color: #003366;
   }
 }
-
 
 .viewport-medium {
   &.transaction-page-container {
