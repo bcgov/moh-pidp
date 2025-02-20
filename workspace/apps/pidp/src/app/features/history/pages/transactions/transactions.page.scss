@@ -1,33 +1,129 @@
-@use 'palette' as palette;
-@import 'bootstrap/bootstrap-imports';
+.viewport-all {
+  &.transaction-page-container {
+    padding: 1.25rem 0.75rem;
 
-.transaction {
-  margin-bottom: 1.5rem;
+    h1 {
+      margin-bottom: 20px;
+      color: #036;
+      font-size: 50px;
+      font-weight: 700;
+    }
 
-  @include media-breakpoint-up(lg) {
+    .headline {
+      color: #313132;
+      font-size: 1rem;
+      line-height: 1.6875rem;
+    }
+
+    .box {
+      width: 100%;
+      padding: 1rem 1.875rem;
+      border: 1px solid #CCC;
+      background: #F2F2F2;
+      height: 3.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .transaction {
+      padding-top: 2rem;
+      border-bottom: 1px solid #CCC;
+      padding-bottom: 1.5rem;
+    }
+
+    .transaction-text {
+      color: #000;
+      font-size: 1rem;
+      font-weight: 700;
+      line-height: 1.6875rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .transaction-date {
+      color: #000;
+      font-size: 1rem;
+      font-weight: 400;
+      line-height: 1.6875rem;
+
+      small {
+        padding-right: 0.2rem;
+      }
+    }
+  }
+
+  .back-to-top-container {
+    position: fixed;
+    bottom: 70px;
+    right: 5px;
     display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 
-  span,
-  small {
-    // Force stacking
-    display: block;
+  .back-to-top {
+    background-color: #38598a;
+    color: #ffffff;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
   }
 
-  span {
-    padding-top: 0.5rem;
+  .back-to-top-text {
+    color: #38598a;
+    font-size: 13px;
+    word-wrap: break-word;
+  }
 
-    &:first-child {
-      font-weight: 500;
-      text-align: right;
-      margin-right: 1.5rem;
-    }
+  .back-to-top:hover {
+    background-color: #003366;
+  }
+}
 
-    &:last-child {
-      flex-grow: 1;
-      border-top: 1px solid palette.theme-palette(blue);
-      font-weight: 300;
-      padding-left: 0.1rem;
+
+.viewport-medium {
+  &.transaction-page-container {
+    h1 {
+      font-size: 40px;
     }
+  }
+}
+
+.viewport-small,
+.viewport-xsmall {
+  &.transaction-page-container {
+    h1 {
+      font-size: 30px;
+    }
+  }
+
+  .back-to-top {
+    width: 2rem;
+    height: 2rem;
+  }
+
+  .back-to-top-text {
+    font-size: 9px;
+  }
+
+  .back-to-top-container {
+    bottom: 135px;
+  }
+}
+
+.viewport-small {
+  .back-to-top {
+    width: 2rem;
+    height: 2rem;
+  }
+
+  .back-to-top-text {
+    font-size: 9px;
+  }
+
+  .back-to-top-container {
+    bottom: 70px;
   }
 }
