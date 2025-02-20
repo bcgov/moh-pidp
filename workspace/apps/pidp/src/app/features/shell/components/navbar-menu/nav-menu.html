@@ -58,6 +58,11 @@
               >User Access Agreement</a
             >
             <a
+              class="dropdown-links"
+              (click)="navigateTo(HistoryRoutes.routePath(HistoryRoutes.TRANSACTIONS))"
+              >History</a
+            >
+            <a
               *ngIf="hasCredential(IdentityProvider.BC_PROVIDER)"
               class="dropdown-links"
               (click)="navigateTo(AccessRoutes.routePath(AccessRoutes.BC_PROVIDER_EDIT))"
