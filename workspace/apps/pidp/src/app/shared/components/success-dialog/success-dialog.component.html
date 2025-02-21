@@ -1,5 +1,5 @@
-<div class="dialog-box" uiPidpInjectViewportCss>
-  <div class="dialog-header">
+<div  [ngClass]="{ 'dialog-box': showHeader }" uiPidpInjectViewportCss>
+  <div class="dialog-header" *ngIf="showHeader">
     <button
       type="button"
       aria-label="Close dialog"
@@ -8,10 +8,12 @@
     </button>
   </div>
   <div class="dialog-content">
-    <div class="dialog-icon">
-      <fa-icon [icon]="faCircleCheck"></fa-icon>
+    <div *ngIf="showHeader">
+      <div class="dialog-icon">
+        <fa-icon [icon]="faCircleCheck"></fa-icon>
+      </div>
+      <h3>{{ title }}</h3>
     </div>
-    <h3>{{ title }}</h3>
     <ng-template #dialogParagraphHost></ng-template>
   </div>
 </div>

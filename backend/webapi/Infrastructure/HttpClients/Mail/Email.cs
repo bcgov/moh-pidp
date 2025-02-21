@@ -9,7 +9,7 @@ public class Email
     public IEnumerable<string> Cc { get; set; }
     public string Subject { get; set; }
     public string Body { get; set; }
-    public IEnumerable<Pdf> Attachments { get; set; }
+    public IEnumerable<File> Attachments { get; set; }
 
     public Email()
     {
@@ -37,7 +37,7 @@ public class Email
         : this(from, to, [cc], subject, body, [])
     { }
 
-    public Email(string from, IEnumerable<string> to, IEnumerable<string> cc, string subject, string body, IEnumerable<Pdf> attachments)
+    public Email(string from, IEnumerable<string> to, IEnumerable<string> cc, string subject, string body, IEnumerable<File> attachments)
     {
         ValidateEmails(from, to, cc);
 
