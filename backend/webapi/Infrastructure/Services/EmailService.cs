@@ -10,18 +10,20 @@ using Pidp.Models;
 using MassTransit;
 
 public class EmailService(
+    IBus bus,
     IChesClient chesClient,
-    ISendEndpointProvider sendEndpointProvider,
+    ISmtpEmailClient smtpEmailClient,
     PidpConfiguration config,
     PidpDbContext context) : IEmailService
 {
     public const string PidpEmail = "OneHealthID@gov.bc.ca";
     public const string PidpSupportPhone = "250-448-1262";
 
+    private readonly IBus bus = bus;
     private readonly IChesClient chesClient = chesClient;
+    private readonly ISmtpEmailClient smtpEmailClient = smtpEmailClient;
     private readonly PidpConfiguration config = config;
     private readonly PidpDbContext context = context;
-    private readonly ISendEndpointProvider sendEndpointProvider = sendEndpointProvider;
 
     public async Task SendAsync(Email email)
     {
@@ -32,10 +34,12 @@ public class EmailService(
 
         if (this.config.ChesClient.Enabled)
         {
-            var sendEndpoint = await this.sendEndpointProvider.GetSendEndpoint(new Uri("queue:send-email-queue"));
-            await sendEndpoint.Send(email);
+            bus.Publish(email);
         }
-
+        else
+        {
+            await this.smtpEmailClient.SendAsync(email);
+        }
     }
 
     public async Task<int> UpdateEmailLogStatuses(int limit)
