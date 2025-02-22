@@ -1,6 +1,7 @@
 namespace Pidp.Infrastructure.Services;
 
 using Microsoft.EntityFrameworkCore;
+using NodaTime;
 using System.Linq.Expressions;
 
 using Pidp;
@@ -11,6 +12,7 @@ using MassTransit;
 
 public class EmailService(
     IBus bus,
+    IClock clock,
     IChesClient chesClient,
     ISmtpEmailClient smtpEmailClient,
     PidpConfiguration config,
@@ -21,6 +23,7 @@ public class EmailService(
 
     private readonly IBus bus = bus;
     private readonly IChesClient chesClient = chesClient;
+    private readonly IClock clock = clock;
     private readonly ISmtpEmailClient smtpEmailClient = smtpEmailClient;
     private readonly PidpConfiguration config = config;
     private readonly PidpDbContext context = context;
@@ -39,6 +42,7 @@ public class EmailService(
         else
         {
             await this.smtpEmailClient.SendAsync(email);
+            await this.CreateEmailLog(email, SendType.Smtp);
         }
     }
 
@@ -74,8 +78,15 @@ public class EmailService(
         return totalCount;
     }
 
+    private async Task CreateEmailLog(Email email, string sendType, Guid? msgId = null)
+    {
+        this.context.EmailLogs.Add(new EmailLog(email, sendType, msgId, this.clock.GetCurrentInstant()));
+        await this.context.SaveChangesAsync();
+    }
+
     private static class SendType
     {
         public const string Ches = "CHES";
+        public const string Smtp = "SMTP";
     }
 }
