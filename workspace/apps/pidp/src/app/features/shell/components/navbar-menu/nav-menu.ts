@@ -47,9 +47,9 @@ import { IdentityProvider } from '@app/features/auth/enums/identity-provider.enu
 import { AlertCode } from '@app/features/portal/enums/alert-code.enum';
 import { ProfileRoutes } from '@app/features/profile/profile.routes';
 
+import { FeedbackButtonComponent } from '../../../../shared/components/feedback-button/feedback-button.component';
 import { Credential } from './nav-menu.model';
 import { NavMenuResource } from './nav-menu.resource.service';
-import { FeedbackButtonComponent } from "../../../../shared/components/feedback-button/feedback-button.component";
 
 @Component({
   selector: 'app-nav-menu',
@@ -71,8 +71,8 @@ import { FeedbackButtonComponent } from "../../../../shared/components/feedback-
     RouterOutlet,
     FaIconComponent,
     NgClass,
-    FeedbackButtonComponent
-],
+    FeedbackButtonComponent,
+  ],
 })
 export class NavMenuComponent implements OnChanges, OnInit, OnDestroy {
   @Input() public alerts: AlertCode[] | null = [];
@@ -95,8 +95,8 @@ export class NavMenuComponent implements OnChanges, OnInit, OnDestroy {
   public showCollegeAlert = false;
   public faBell = faBell;
   public AlertCode = AlertCode;
-  public credentials: Credential[] = [];
-  public credentials$: Observable<Credential[]>;
+  public credentials: Credential[] | null = [];
+  public credentials$: Observable<Credential[] | null>;
   private unsubscribe$ = new Subject<void>();
   public IdentityProvider = IdentityProvider;
 
@@ -170,8 +170,8 @@ export class NavMenuComponent implements OnChanges, OnInit, OnDestroy {
     return undefined;
   }
 
-  public hasCredential(idp: IdentityProvider): boolean {
-    return this.credentials.some((c) => c.identityProvider === idp);
+  public hasCredential(idp: IdentityProvider): boolean | undefined {
+    return this.credentials?.some((c) => c.identityProvider === idp);
   }
 
   public onLogout(): void {
