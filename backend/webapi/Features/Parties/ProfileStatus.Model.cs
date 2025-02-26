@@ -291,6 +291,25 @@ public partial class ProfileStatus
             }
         }
 
+         public class IvfSection : ProfileSection
+        {
+            internal override string SectionName => "ivf";
+
+            protected override StatusCode Compute(ProfileData profile)
+            {
+                return profile switch
+                {
+                    { UserIsHighAssuranceIdentity: false } => StatusCode.Locked,
+                    _ when profile.HasEnrolment(AccessTypeCode.Ivf) && profile.HasBCProviderCredential => StatusCode.Complete,
+                    _ when profile.PartyPlrStanding
+                        .With(Ivf.AllowedIdentifierTypes)
+                        .HasGoodStanding => StatusCode.Incomplete,
+                    _ => StatusCode.Locked
+                };
+            }
+        }
+
+
         public class ProviderReportingPortalSection : ProfileSection
         {
             internal override string SectionName => "providerReportingPortal";

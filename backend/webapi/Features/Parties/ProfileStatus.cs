@@ -81,7 +81,8 @@ public partial class ProfileStatus
                     ProfileSection.Create<PrescriptionRefillEformsSection>(data),
                     ProfileSection.Create<ProviderReportingPortalSection>(data),
                     ProfileSection.Create<ProvincialAttachmentSystemSection>(data),
-                    ProfileSection.Create<SAEformsSection>(data)
+                    ProfileSection.Create<SAEformsSection>(data),
+                    ProfileSection.Create<IvfSection>(data)
                 }
                 .ToDictionary(section => section.SectionName, section => section)
             };
