@@ -29,6 +29,7 @@ import { CollegeCertificationPortalSection } from './profile/college-certificati
 import { DemographicsPortalSection } from './profile/demographics-portal-section.class';
 import { UserAccessAgreementPortalSection } from './profile/user-access-agreement-portal-section.class';
 import { ComplianceTrainingPortalSection } from './training/compliance-training-portal-section.class';
+import { IvfPortalSection } from './access/ivf-portal-section.class';
 
 /**
  * @description
@@ -110,6 +111,10 @@ export class AccessStateBuilder {
       ...ArrayUtils.insertResultIf<IAccessSection>(
         this.insertSection('driverFitness', profileStatus),
         () => [new DriverFitnessPortalSection(profileStatus, this.router)],
+      ),
+      ...ArrayUtils.insertResultIf<IAccessSection>(
+        this.insertSection('ivf', profileStatus),
+        () => [new IvfPortalSection(profileStatus, this.router)],
       ),
       ...ArrayUtils.insertResultIf<IAccessSection>(
         this.insertSection('msTeamsPrivacyOfficer', profileStatus),
@@ -240,6 +245,10 @@ export class PortalStateBuilder {
       ...ArrayUtils.insertResultIf<IPortalSection>(
         this.insertSection('driverFitness', profileStatus),
         () => [new DriverFitnessPortalSection(profileStatus, this.router)],
+      ),
+      ...ArrayUtils.insertResultIf<IPortalSection>(
+        this.insertSection('ivf', profileStatus),
+        () => [new IvfPortalSection(profileStatus, this.router)],
       ),
       ...ArrayUtils.insertResultIf<IPortalSection>(
         this.insertSection('msTeamsPrivacyOfficer', profileStatus),

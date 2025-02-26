@@ -1,0 +1,232 @@
+<div class="box container" uiPidpInjectViewportCss>
+  <app-breadcrumb [breadcrumbs]="breadcrumbsData"></app-breadcrumb>
+  <div class="content">
+    <section class="intro">
+      <div class="content-header">
+        <h1>Ivf</h1>
+        <p>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
+          minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+          aliquip ex ea commodo consequat. Duis aute irure dolor in
+          reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
+          pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
+          culpa qui officia deserunt mollit anim id est laborum.
+        </p>
+      </div>
+    </section>
+
+    <app-enrolment-error *ngIf="enrolmentErrorFlag"></app-enrolment-error>
+    <ng-container *ngIf="completedStatus; else notCompleted">
+      <ui-alert
+        type="success"
+        icon="check_circle"
+        iconType="outlined"
+        heading="You have access">
+        <ng-container uiAlertContent>
+          <p>You now have access</p>
+          <p>
+            Follow this link:<br />
+            <!-- <a uiAnchor [attr.href]="ivfUrl"></a> -->
+          </p>
+        </ng-container>
+      </ui-alert>
+    </ng-container>
+    <ng-template #notCompleted>
+    <section class="main">
+      <div class="card main-stepper">
+        <div class="stepper-heading">Instructions</div>
+        <mat-stepper
+          orientation="vertical"
+          #stepper
+          [selectedIndex]="selectedIndex">
+          <mat-step
+            [state]="bcProviderStatusCodeNumber === statusCode.COMPLETED ? 'done' : 'number'"
+            [completed]="bcProviderStatusCodeNumber === statusCode.COMPLETED">
+            <ng-template matStepLabel>
+              Create a BCProvider Credential
+            </ng-template>
+            <div>
+              <p class="guide-information">
+                A BCProvider is a credential used to access health applications.
+                In the future the BCProvider will be integrated with multiple
+                health authorities, EMRs and other government health services.
+              </p>
+              <button
+                mat-flat-button
+                type="button"
+                color="primary"
+                routerLink="/access/bc-provider-application"
+                aria-labelledby="complete-bcprovider"
+                [disabled]="bcProvider$ | async">
+                Create a BCProvider Credential
+              </button>
+            </div>
+            <div class="smaller-text">
+              <em
+                >Need help? Try this
+                <a uiAnchor [attr.href]="bcProviderTutorial">video tutorial</a>
+              </em>
+            </div>
+            <div class="stepper-buttons">
+              <button mat-stroked-button matStepperNext>Next</button>
+            </div>
+          </mat-step>
+
+          <mat-step [completed]="false">
+            <ng-template matStepLabel>
+              <p class="pas-step-label">
+                Invite others to the ivf<br />
+                (Optional)
+              </p>
+            </ng-template>
+            <div>
+              <div
+                *ngIf="!hasCpn && (destination$ | async) === Destination.PORTAL; else licenced">
+                <p>
+                  <i
+                    >Because you are MOA or do <strong>not</strong> have a
+                    college licence, then this step will become part of the
+                    process.</i
+                  >
+                </p>
+                <mat-stepper class="moa-message-steps">
+                  <mat-step editable="false" [completed]="false">
+                    <ng-template matStepLabel>Start endorsement</ng-template>
+                  </mat-step>
+                  <mat-step editable="false" [completed]="false">
+                    <ng-template matStepLabel>Pending Approval</ng-template>
+                  </mat-step>
+                  <mat-step editable="false" [completed]="false">
+                    <ng-template matStepLabel
+                      >Completion and PAS login available</ng-template
+                    >
+                  </mat-step>
+                </mat-stepper>
+              </div>
+              <ng-template #licenced>
+                <p class="guide-information">
+                  Do you work with others who need access to the PAS? For
+                  example, assistants or other members of your Care Team, who
+                  may or may not have a professional license? <br />If you do,
+                  then you can send trusted colleagues a OneHealthID access
+                  invitation by clicking the “Endorsements” button below.
+                </p>
+              </ng-template>
+              <button
+                mat-flat-button
+                type="button"
+                color="primary"
+                routerLink="/organization-info/endorsements"
+                aria-labelledby="navigate-to-endorsements">
+                Endorsements
+              </button>
+            </div>
+            <div class="stepper-buttons">
+              <button mat-stroked-button matStepperPrevious>Back</button>
+              <button mat-stroked-button matStepperNext>Next</button>
+            </div>
+          </mat-step>
+
+          <mat-step [completed]="false">
+            <ng-template matStepLabel>
+              Multi-Factor Authentication (MFA) Set-Up Guide
+            </ng-template>
+            <p class="guide-information">
+              If you need help setting up your Multi-Factor Authentication
+              (MFA), please
+              <a href="assets/documents/mfa.pdf" download>download this PDF</a>
+            </p>
+
+            <div class="stepper-buttons">
+              <button mat-stroked-button matStepperPrevious>Back</button>
+              <button mat-stroked-button matStepperNext>Next</button>
+            </div>
+          </mat-step>
+
+          <mat-step [completed]="false">
+            <ng-template matStepLabel>
+              Login to Provincial Attachment System with your BCProvider
+            </ng-template>
+            <div>
+              <p class="guide-information">
+                Use your newly created BCProvider to login to the Provincial
+                Attachment System
+              </p>
+              <p
+                *ngIf="bcProviderStatusCodeNumber === statusCode.COMPLETED"
+                class="bcprovider-username">
+                <strong>{{ bcProviderUsername }}</strong>
+                <button
+                  mat-icon-button
+                  type="button"
+                  matTooltip="Copy your BCProvider to clipboard"
+                  aria-label="Copy your BCProvider to clipboard"
+                  [cdkCopyToClipboard]="bcProviderUsername"
+                  (cdkCopyToClipboardCopied)="onCopyUserName()">
+                  <mat-icon>content_paste</mat-icon>
+                </button>
+              </p>
+              <button
+                mat-flat-button
+                type="button"
+                color="primary"
+                aria-labelledby="navigate-to-pas"
+                [disabled]="ivf$ | async"
+                (click)="navigateToSrcPath()">
+                Login to Provincial Attachment System with your BCProvider
+              </button>
+            </div>
+            <div class="stepper-buttons">
+              <button mat-stroked-button matStepperPrevious>Back</button>
+              <button mat-stroked-button (click)="stepper.reset()">
+                Reset
+              </button>
+            </div>
+          </mat-step>
+        </mat-stepper>
+      </div>
+      <div class="pas-button-container">
+        <div class="card pas-button">
+          <img
+            class="img-doctor"
+            ngSrc="/assets/images/patient1.jpg"
+            alt="doctor"
+            priority
+            fill />
+          <div class="card-container auth-card">
+            <div class="card-header auth-card-header">
+              <h3><strong>Ivf</strong></h3>
+            </div>
+            <div class="card-footer auth-card-footer">
+              <button
+                mat-flat-button
+                uiPageFooterAction
+                type="submit"
+                color="primary"
+                aria-labelledby="navigate-to-pas"
+                [disabled]="ivf$ | async"
+                (click)="onRequestAccess()">
+                Request
+              </button>
+            </div>
+          </div>
+        </div>
+        <ng-container *ngIf="hasCpn && (ivf$ | async)">
+          <div class="pas-button-text">
+            <i>You will need BCProvider credential before logging in.</i>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="!hasCpn && (ivf$ | async)">
+          <div class="pas-button-text">
+            <i
+              >You will need BCProvider credential, and an endorsement before
+              logging in.</i
+            >
+          </div>
+        </ng-container>
+      </div>
+    </section>
+    </ng-template>
+  </div>
+</div>

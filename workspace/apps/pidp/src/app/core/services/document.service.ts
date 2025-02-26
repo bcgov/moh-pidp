@@ -13,6 +13,7 @@ export enum DocumentType {
   MS_TEAMS_IT_SECURITY_AGREEMENT = 'ms-teams-it-security-agreement',
   PROVIDER_REPORTING_PORTAL_COLLECTION_NOTICE = 'provider-reporting-portal-collection-notice',
   IMMSBC_EFORMS_COLLECTION_NOTICE = 'immsbc-eforms-collection-notice',
+  IVF ='ivf',
 }
 
 export interface IDocumentMetaData {
@@ -73,6 +74,10 @@ export class DocumentService {
         type: DocumentType.IMMSBC_EFORMS_COLLECTION_NOTICE,
         title: 'Immunization Entry eForm Collection Notice',
       },
+      {
+        type: DocumentType.IVF,
+        title: 'Ivf',
+      },
     ];
   }
 
@@ -126,6 +131,11 @@ export class DocumentService {
         return {
           ...this.getDocumentMetaData(documentType),
           content: this.getImmsBCEformsCollectionNotice(),
+        };
+        case DocumentType.IVF:
+        return {
+          ...this.getDocumentMetaData(documentType),
+          content: this.getIvf(),
         };
       default:
         throw new Error('Document type does not exist');
@@ -356,7 +366,14 @@ export class DocumentService {
       Office at 1-855-229-9800 or at <a href="mailto:${this.config.emails.immsBCEformsSupport}">${this.config.emails.immsBCEformsSupport}</a>.
     `;
   }
-
+  public getIvf(): string {
+    return `
+      Lotus ipsum root brussels okra earthnut pea fennel radicchio
+      kohlrabi soko gram arugula carrot plantain. Dandelion mustard spinach bush
+      tomato beet greens lentil salsify garbanzo. Chickweed celery maize summer purslane black-eyed pea
+      epazote melon bell pepper corn wattle seed.
+    `;
+  }
   private getDocumentMetaData(documentType: DocumentType): IDocumentMetaData {
     const metadata = this.documents.find(
       (document) => document.type === documentType,

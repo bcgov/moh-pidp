@@ -51,6 +51,13 @@ export const routes: Routes = [
       ),
   },
   {
+    path: AccessRoutes.IVF,
+    loadChildren: (): Promise<Routes> =>
+      import('./pages/ivf/ivf-routing.routes').then(
+        (m) => m.routes,
+      ),
+  },
+  {
     path: AccessRoutes.MS_TEAMS_PRIVACY_OFFICER,
     loadChildren: (): Promise<Routes> =>
       import(
