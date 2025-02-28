@@ -12,10 +12,15 @@ public static class MassTransitSetup
         services.AddMassTransit(x =>
         {
             x.SetKebabCaseEndpointNameFormatter();
+            x.AddSagaStateMachine<BCProviderSaga, BCProviderSagaState>()
+                .InMemoryRepository();
 
             x.AddConsumer<PartyEmailUpdatedBcProviderConsumer>();
             x.AddConsumer<UpdateBcProviderAttributesConsumer>();
             x.AddConsumer<UpdateKeycloakAttributesConsumer>();
+            x.AddConsumer<KeycloakUserUpdatedConsumer>();
+            x.AddConsumer<AccessRolesAssignedConsumer>();
+            x.AddConsumer<SendBCProviderCreationEmailConsumer>();
 
             x.UsingRabbitMq((context, cfg) =>
             {
@@ -46,6 +51,11 @@ public static class MassTransitSetup
                     ep.PublishFaults = false;
                     ep.Bind("update-keycloak-attributes");
                     ep.ConfigureConsumer<UpdateKeycloakAttributesConsumer>(context);
+                });
+
+                cfg.ReceiveEndpoint("bc-provider-saga", ep =>
+                {
+                    ep.ConfigureSaga<BCProviderSagaState>(context);
                 });
             });
         });

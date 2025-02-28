@@ -17,6 +17,8 @@ using Pidp.Models;
 using Pidp.Models.DomainEvents;
 using Pidp.Models.Lookups;
 using Pidp.Infrastructure.Services;
+using MassTransit;
+using Pidp.Infrastructure.Queue;
 
 public class BCProviderCreate
 {
@@ -39,6 +41,7 @@ public class BCProviderCreate
 
     public class CommandHandler(
         IBCProviderClient client,
+        IBus bus,
         IEmailService emailService,
         IKeycloakAdministrationClient keycloakClient,
         ILogger<CommandHandler> logger,
@@ -46,6 +49,7 @@ public class BCProviderCreate
         PidpDbContext context) : ICommandHandler<Command, IDomainResult<string>>
     {
         private readonly IBCProviderClient client = client;
+        private readonly IBus bus = bus;
         private readonly IEmailService emailService = emailService;
         private readonly IKeycloakAdministrationClient keycloakClient = keycloakClient;
         private readonly ILogger<CommandHandler> logger = logger;
@@ -128,24 +132,30 @@ public class BCProviderCreate
                 this.logger.LogKeycloakUserCreationError(command.PartyId, createdUser.UserPrincipalName);
                 return DomainResult.Failed<string>();
             }
-            await this.keycloakClient.UpdateUser(userId.Value, user => user.SetOpId(party.OpId!));
 
-            if (party.SAEformsEnroled)
+            await this.bus.Publish(new KeycloakUserUpdatedEvent
             {
-                await this.keycloakClient.AssignAccessRoles(userId.Value, MohKeycloakEnrolment.SAEforms);
-            }
-
-            this.context.Credentials.Add(new Credential
-            {
-                UserId = userId.Value,
-                PartyId = command.PartyId,
-                IdpId = createdUser.UserPrincipalName,
-                IdentityProvider = IdentityProviders.BCProvider,
-                DomainEvents = [new CollegeLicenceUpdated(command.PartyId)]
+                PartyId = Guid.Parse(command.PartyId.ToString()),
+                UserId = userId.Value
             });
+            // await this.keycloakClient.UpdateUser(userId.Value, user => user.SetOpId(party.OpId!));
 
-            await this.context.SaveChangesAsync();
-            await this.SendBCProviderCreationEmail(party.Email, createdUser.UserPrincipalName);
+            // if (party.SAEformsEnroled)
+            // {
+            //     await this.keycloakClient.AssignAccessRoles(userId.Value, MohKeycloakEnrolment.SAEforms);
+            // }
+
+            // this.context.Credentials.Add(new Credential
+            // {
+            //     UserId = userId.Value,
+            //     PartyId = command.PartyId,
+            //     IdpId = createdUser.UserPrincipalName,
+            //     IdentityProvider = IdentityProviders.BCProvider,
+            //     DomainEvents = [new CollegeLicenceUpdated(command.PartyId)]
+            // });
+
+            // await this.context.SaveChangesAsync();
+            // await this.SendBCProviderCreationEmail(party.Email, createdUser.UserPrincipalName);
 
             return DomainResult.Success(createdUser.UserPrincipalName);
         }
