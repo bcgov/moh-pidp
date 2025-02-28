@@ -136,7 +136,9 @@ public class BCProviderCreate
             await this.bus.Publish(new KeycloakUserUpdatedEvent
             {
                 PartyId = Guid.Parse(command.PartyId.ToString()),
-                UserId = userId.Value
+                UserId = userId.Value,
+                OpId = party.OpId!,
+                SAEformsEnroled = party.SAEformsEnroled
             });
             // await this.keycloakClient.UpdateUser(userId.Value, user => user.SetOpId(party.OpId!));
 
