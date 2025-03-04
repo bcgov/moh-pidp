@@ -15,8 +15,6 @@ import { faCircleCheck, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { InjectViewportCssClassDirective } from '@bcgov/shared/ui';
 
 import { SuccessDialogComponentClass } from './classes/success-dialog-component.class';
-import { DialogBcproviderCreateComponent } from './components/dialog-bcprovider-create.component';
-import { DialogBcproviderEditComponent } from './components/dialog-bcprovider-edit.component';
 
 @Component({
   selector: 'app-success-dialog',
@@ -28,7 +26,7 @@ import { DialogBcproviderEditComponent } from './components/dialog-bcprovider-ed
 export class SuccessDialogComponent implements OnInit {
   public faCircleCheck = faCircleCheck;
   public faXmark = faXmark;
-  public showHeader = false;
+  public showHeader = true;
 
   @Input() public username!: string;
   @Input() public title!: string;
@@ -45,11 +43,8 @@ export class SuccessDialogComponent implements OnInit {
 
   public ngOnInit(): void {
     this.loadDialogParagraphComponent(this.componentType);
-    if (
-      this.componentType instanceof DialogBcproviderCreateComponent ||
-      this.componentType instanceof DialogBcproviderEditComponent
-    ) {
-      this.showHeader = true;
+    if (this.componentType.name === 'FeedbackSendComponent') {
+      this.showHeader = false;
     }
   }
 
