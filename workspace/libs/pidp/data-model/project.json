@@ -4,6 +4,7 @@
   "projectType": "library",
   "sourceRoot": "libs/pidp/data-model/src",
   "prefix": "workspace",
+  "tags": ["scope:pidp", "scope:shared"],
   "targets": {
     "test": {
       "executor": "@nx/jest:jest",
@@ -15,6 +16,5 @@
     "lint": {
       "executor": "@nx/eslint:lint"
     }
-  },
-  "tags": ["scope:pidp", "scope:shared"]
+  }
 }
