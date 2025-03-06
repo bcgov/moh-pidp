@@ -1,17 +1,19 @@
-import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
-import { AlertType } from '@bcgov/shared/ui';
+
+import { Observable } from 'rxjs';
 
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { faSyringe, faUserCheck } from '@fortawesome/free-solid-svg-icons';
+
+import { AlertType } from '@bcgov/shared/ui';
 
 import { AccessRoutes } from '@app/features/access/access.routes';
 import { ShellRoutes } from '@app/features/shell/shell.routes';
 
 import { StatusCode } from '../../enums/status-code.enum';
+import { ProfileStatus } from '../../models/profile-status.model';
 import { PortalSectionAction } from '../portal-section-action.model';
 import { PortalSectionKey } from '../portal-section-key.type';
-import { ProfileStatus } from '../../models/profile-status.model';
 import { IPortalSection } from '../portal-section.model';
 
 export class IvfPortalSection implements IPortalSection {
@@ -26,8 +28,9 @@ export class IvfPortalSection implements IPortalSection {
     private readonly router: Router,
   ) {
     this.key = 'ivf';
-    this.heading = 'Ivf';
-    this.description = `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna `;
+    this.heading = 'In Vitro Fertilization (IVF)';
+    this.description = `In vitro fertilization, also called IVF, is a complex series of procedures that can lead to a pregnancy.
+Learn more > `;
   }
 
   public get hint(): string {
