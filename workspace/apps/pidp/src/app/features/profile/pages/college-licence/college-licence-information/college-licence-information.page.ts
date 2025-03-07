@@ -32,24 +32,23 @@ import { CollegeLicenceInformationResource } from './college-licence-information
 import { CollegeLicenceInformationDetailComponent } from './components/college-licence-information-detail.component';
 
 @Component({
-  selector: 'app-college-licence-information',
-  templateUrl: './college-licence-information.page.html',
-  styleUrls: ['./college-licence-information.page.scss'],
-  standalone: true,
-  imports: [
-    AsyncPipe,
-    BreadcrumbComponent,
-    CollegeLicenceInformationDetailComponent,
-    InjectViewportCssClassDirective,
-    MatButtonModule,
-    NgFor,
-    CollegeLicenceDeclarationPage,
-    NgIf,
-    PortalAlertComponent,
-    NgSwitch,
-    NgSwitchCase,
-    NgSwitchDefault,
-  ],
+    selector: 'app-college-licence-information',
+    templateUrl: './college-licence-information.page.html',
+    styleUrls: ['./college-licence-information.page.scss'],
+    imports: [
+        AsyncPipe,
+        BreadcrumbComponent,
+        CollegeLicenceInformationDetailComponent,
+        InjectViewportCssClassDirective,
+        MatButtonModule,
+        NgFor,
+        CollegeLicenceDeclarationPage,
+        NgIf,
+        PortalAlertComponent,
+        NgSwitch,
+        NgSwitchCase,
+        NgSwitchDefault,
+    ]
 })
 export class CollegeLicenceInformationPage implements OnInit {
   public faStethoscope = faStethoscope;

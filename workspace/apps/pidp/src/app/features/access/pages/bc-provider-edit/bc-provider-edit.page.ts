@@ -72,29 +72,28 @@ export interface BcProviderEditInitialStateModel {
 }
 
 @Component({
-  selector: 'app-bc-provider-edit',
-  templateUrl: './bc-provider-edit.page.html',
-  styleUrls: ['./bc-provider-edit.page.scss'],
-  standalone: true,
-  imports: [
-    BreadcrumbComponent,
-    InjectViewportCssClassDirective,
-    MatButtonModule,
-    MatFormFieldModule,
-    MatInputModule,
-    NeedHelpComponent,
-    NgIf,
-    ReactiveFormsModule,
-    SuccessDialogComponent,
-    NgOptimizedImage,
-    TextButtonDirective,
-    AsyncPipe,
-    MatProgressBarModule,
-    ConfirmDialogComponent,
-    NgClass,
-    FaIconComponent,
-    TooltipComponent,
-  ],
+    selector: 'app-bc-provider-edit',
+    templateUrl: './bc-provider-edit.page.html',
+    styleUrls: ['./bc-provider-edit.page.scss'],
+    imports: [
+        BreadcrumbComponent,
+        InjectViewportCssClassDirective,
+        MatButtonModule,
+        MatFormFieldModule,
+        MatInputModule,
+        NeedHelpComponent,
+        NgIf,
+        ReactiveFormsModule,
+        SuccessDialogComponent,
+        NgOptimizedImage,
+        TextButtonDirective,
+        AsyncPipe,
+        MatProgressBarModule,
+        ConfirmDialogComponent,
+        NgClass,
+        FaIconComponent,
+        TooltipComponent,
+    ]
 })
 export class BcProviderEditPage
   extends AbstractFormPage<BcProviderEditFormState>

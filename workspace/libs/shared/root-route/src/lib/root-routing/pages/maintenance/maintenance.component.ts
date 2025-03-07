@@ -3,8 +3,8 @@ import { Component } from '@angular/core';
 import { RootRouteContainerComponent } from '../../shared/root-route-container/root-route-container.component';
 
 @Component({
-  selector: 'ui-maintenance',
-  template: `
+    selector: 'ui-maintenance',
+    template: `
     <ui-root-route-container>
       <div class="row justify-content-center">
         <div class="col-sm-12 col-md-10 col-lg-8 text-center">
@@ -23,8 +23,7 @@ import { RootRouteContainerComponent } from '../../shared/root-route-container/r
       </div>
     </ui-root-route-container>
   `,
-  styleUrls: ['../../shared/root-route-page-styles.scss'],
-  standalone: true,
-  imports: [RootRouteContainerComponent],
+    styleUrls: ['../../shared/root-route-page-styles.scss'],
+    imports: [RootRouteContainerComponent]
 })
 export class MaintenanceComponent {}

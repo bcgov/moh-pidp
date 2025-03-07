@@ -21,19 +21,18 @@ import { ProfileRoutes } from '@app/features/profile/profile.routes';
 import { ToastService } from '@app/core/services/toast.service';
 
 @Component({
-  selector: 'app-feedback-form-dialog',
-  templateUrl: './feedback-form.dialog.html',
-  styleUrl: './feedback-form.dialog.scss',
-  standalone: true,
-  imports: [
-    SuccessDialogComponent,
-    MatFormFieldModule,
-    MatInputModule,
-    NgIf,
-    ReactiveFormsModule,
-    MatIconModule,
-    MatButtonModule
-],
+    selector: 'app-feedback-form-dialog',
+    templateUrl: './feedback-form.dialog.html',
+    styleUrl: './feedback-form.dialog.scss',
+    imports: [
+        SuccessDialogComponent,
+        MatFormFieldModule,
+        MatInputModule,
+        NgIf,
+        ReactiveFormsModule,
+        MatIconModule,
+        MatButtonModule
+    ]
 })
 export class FeedbackFormDialogComponent
   extends AbstractFormPage<FeedbackFormState> implements OnInit

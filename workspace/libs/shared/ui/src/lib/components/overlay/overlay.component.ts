@@ -7,12 +7,11 @@ import { Observable } from 'rxjs';
 import { LoadingOptions, LoadingService } from '@bcgov/shared/data-access';
 
 @Component({
-  selector: 'ui-overlay',
-  templateUrl: './overlay.component.html',
-  styleUrls: ['./overlay.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [NgIf, MatProgressSpinnerModule, AsyncPipe],
+    selector: 'ui-overlay',
+    templateUrl: './overlay.component.html',
+    styleUrls: ['./overlay.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [NgIf, MatProgressSpinnerModule, AsyncPipe]
 })
 export class OverlayComponent {
   public readonly message: string;

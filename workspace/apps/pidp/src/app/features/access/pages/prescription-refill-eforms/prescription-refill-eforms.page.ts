@@ -37,28 +37,27 @@ import {
 } from './prescription-refill-eforms.constants';
 
 @Component({
-  selector: 'app-prescription-refill-eforms',
-  templateUrl: './prescription-refill-eforms.page.html',
-  styleUrls: ['./prescription-refill-eforms.page.scss'],
-  standalone: true,
-  imports: [
-    AlertComponent,
-    AlertContentDirective,
-    AnchorDirective,
-    BreadcrumbComponent,
-    EnrolmentErrorComponent,
-    InjectViewportCssClassDirective,
-    MatButtonModule,
-    NgIf,
-    PageComponent,
-    PageFooterActionDirective,
-    PageFooterComponent,
-    PageHeaderComponent,
-    PageSectionComponent,
-    PageSectionSubheaderComponent,
-    PageSectionSubheaderDescDirective,
-    SafePipe,
-  ],
+    selector: 'app-prescription-refill-eforms',
+    templateUrl: './prescription-refill-eforms.page.html',
+    styleUrls: ['./prescription-refill-eforms.page.scss'],
+    imports: [
+        AlertComponent,
+        AlertContentDirective,
+        AnchorDirective,
+        BreadcrumbComponent,
+        EnrolmentErrorComponent,
+        InjectViewportCssClassDirective,
+        MatButtonModule,
+        NgIf,
+        PageComponent,
+        PageFooterActionDirective,
+        PageFooterComponent,
+        PageHeaderComponent,
+        PageSectionComponent,
+        PageSectionSubheaderComponent,
+        PageSectionSubheaderDescDirective,
+        SafePipe,
+    ]
 })
 export class PrescriptionRefillEformsPage implements OnInit, AfterViewInit {
   public title: string;

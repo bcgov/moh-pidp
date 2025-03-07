@@ -13,12 +13,11 @@ import { PageSectionSubheaderDescDirective } from './page-section-subheader-desc
 import { PageSectionSubheaderHintDirective } from './page-section-subheader-hint.directive';
 
 @Component({
-  selector: 'ui-page-section-subheader',
-  templateUrl: './page-section-subheader.component.html',
-  styleUrls: ['./page-section-subheader.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [PageSubheaderComponent, NgIf],
+    selector: 'ui-page-section-subheader',
+    templateUrl: './page-section-subheader.component.html',
+    styleUrls: ['./page-section-subheader.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [PageSubheaderComponent, NgIf]
 })
 export class PageSectionSubheaderComponent {
   @Input() public icon?: string;

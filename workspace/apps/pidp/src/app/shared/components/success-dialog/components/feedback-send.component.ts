@@ -3,8 +3,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
 @Component({
-  selector: 'app-dialog-feedback-send',
-  template: `
+    selector: 'app-dialog-feedback-send',
+    template: `
     <div style="position: relative;">
       <img src="/assets/images/feedback-doctor-logo.svg" style="width: 100%;display: block;">
       <button
@@ -26,9 +26,8 @@ import { faXmark } from '@fortawesome/free-solid-svg-icons';
     Your feedback is greatly appreciated,
     the help desk will contact you shortly.
   </p>`,
-  styles: `p { text-align: center; }`,
-  standalone: true,
-  imports: [FaIconComponent]
+    styles: `p { text-align: center; }`,
+    imports: [FaIconComponent]
 })
 export class FeedbackSendComponent {
   @Input() public username!: string;

@@ -26,23 +26,22 @@ import { UserAccessAgreementDocumentComponent } from './components/user-access-a
 import { UserAccessAgreementResource } from './user-access-agreement-resource.service';
 
 @Component({
-  selector: 'app-user-access-agreement',
-  templateUrl: './user-access-agreement.page.html',
-  styleUrls: ['./user-access-agreement.page.scss'],
-  standalone: true,
-  imports: [
-    AlertComponent,
-    AlertContentDirective,
-    AnchorDirective,
-    AsyncPipe,
-    InjectViewportCssClassDirective,
-    forwardRef(() => UserAccessAgreementDocumentComponent),
-    MatButtonModule,
-    NgIf,
-    PageComponent,
-    PageFooterActionDirective,
-    PageFooterComponent,
-  ],
+    selector: 'app-user-access-agreement',
+    templateUrl: './user-access-agreement.page.html',
+    styleUrls: ['./user-access-agreement.page.scss'],
+    imports: [
+        AlertComponent,
+        AlertContentDirective,
+        AnchorDirective,
+        AsyncPipe,
+        InjectViewportCssClassDirective,
+        forwardRef(() => UserAccessAgreementDocumentComponent),
+        MatButtonModule,
+        NgIf,
+        PageComponent,
+        PageFooterActionDirective,
+        PageFooterComponent,
+    ]
 })
 export class UserAccessAgreementPage implements OnInit {
   public title: string;

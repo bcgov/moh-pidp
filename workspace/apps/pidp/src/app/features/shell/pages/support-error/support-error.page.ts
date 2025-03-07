@@ -13,11 +13,10 @@ import { APP_CONFIG, AppConfig } from '@app/app.config';
 import { ShellRoutes } from '../../shell.routes';
 
 @Component({
-  selector: 'app-support-error',
-  templateUrl: './support-error.page.html',
-  styleUrls: ['./support-error.page.scss'],
-  standalone: true,
-  imports: [AnchorDirective, DashboardHeaderComponent, MatButtonModule],
+    selector: 'app-support-error',
+    templateUrl: './support-error.page.html',
+    styleUrls: ['./support-error.page.scss'],
+    imports: [AnchorDirective, DashboardHeaderComponent, MatButtonModule]
 })
 export class SupportErrorPage {
   public headerConfig: DashboardHeaderConfig;

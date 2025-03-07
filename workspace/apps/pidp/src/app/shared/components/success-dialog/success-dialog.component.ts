@@ -19,11 +19,10 @@ import { DialogBcproviderCreateComponent } from './components/dialog-bcprovider-
 import { DialogBcproviderEditComponent } from './components/dialog-bcprovider-edit.component';
 
 @Component({
-  selector: 'app-success-dialog',
-  templateUrl: './success-dialog.component.html',
-  styleUrl: './success-dialog.component.scss',
-  standalone: true,
-  imports: [FaIconComponent, InjectViewportCssClassDirective, NgIf, NgClass],
+    selector: 'app-success-dialog',
+    templateUrl: './success-dialog.component.html',
+    styleUrl: './success-dialog.component.scss',
+    imports: [FaIconComponent, InjectViewportCssClassDirective, NgIf, NgClass]
 })
 export class SuccessDialogComponent implements OnInit {
   public faCircleCheck = faCircleCheck;

@@ -16,12 +16,11 @@ import { AccessTokenService } from '@app/features/auth/services/access-token.ser
 import { AuthService } from '@app/features/auth/services/auth.service';
 
 @Component({
-  selector: 'app-admin-dashboard',
-  templateUrl: './admin-dashboard.component.html',
-  styleUrls: ['./admin-dashboard.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [AsyncPipe, DashboardComponent, DashboardImageComponent],
+    selector: 'app-admin-dashboard',
+    templateUrl: './admin-dashboard.component.html',
+    styleUrls: ['./admin-dashboard.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [AsyncPipe, DashboardComponent, DashboardImageComponent]
 })
 export class AdminDashboardComponent implements IDashboard {
   public logoutRedirectUrl: string;

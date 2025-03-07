@@ -44,8 +44,8 @@ interface PidpLoadingDialogData {
  * Dialog that displays the spinner.
  */
 @Component({
-  // Putting template and css inline for simplicity.
-  template: `<div class="loader-container">
+    // Putting template and css inline for simplicity.
+    template: `<div class="loader-container">
     <div class="spinner">
       <mat-spinner color="primary" mode="indeterminate"></mat-spinner>
     </div>
@@ -53,8 +53,8 @@ interface PidpLoadingDialogData {
       {{ data.message }}
     </div>
   </div>`,
-  styles: [
-    `
+    styles: [
+        `
       .loader-container {
         padding: 24px;
       }
@@ -66,9 +66,8 @@ interface PidpLoadingDialogData {
         margin-top: 1rem;
       }
     `,
-  ],
-  standalone: true,
-  imports: [MatProgressSpinnerModule, NgIf],
+    ],
+    imports: [MatProgressSpinnerModule, NgIf]
 })
 export class PidpLoadingDialogComponent {
   public constructor(

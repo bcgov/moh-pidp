@@ -37,28 +37,27 @@ import {
 } from './sa-eforms.constants';
 
 @Component({
-  selector: 'app-sa-eforms',
-  templateUrl: './sa-eforms.page.html',
-  styleUrls: ['./sa-eforms.page.scss'],
-  standalone: true,
-  imports: [
-    AlertComponent,
-    AlertContentDirective,
-    AnchorDirective,
-    BreadcrumbComponent,
-    EnrolmentErrorComponent,
-    InjectViewportCssClassDirective,
-    MatButtonModule,
-    NgIf,
-    PageComponent,
-    PageFooterActionDirective,
-    PageFooterComponent,
-    PageHeaderComponent,
-    PageSectionComponent,
-    PageSectionSubheaderComponent,
-    PageSectionSubheaderDescDirective,
-    SafePipe,
-  ],
+    selector: 'app-sa-eforms',
+    templateUrl: './sa-eforms.page.html',
+    styleUrls: ['./sa-eforms.page.scss'],
+    imports: [
+        AlertComponent,
+        AlertContentDirective,
+        AnchorDirective,
+        BreadcrumbComponent,
+        EnrolmentErrorComponent,
+        InjectViewportCssClassDirective,
+        MatButtonModule,
+        NgIf,
+        PageComponent,
+        PageFooterActionDirective,
+        PageFooterComponent,
+        PageHeaderComponent,
+        PageSectionComponent,
+        PageSectionSubheaderComponent,
+        PageSectionSubheaderDescDirective,
+        SafePipe,
+    ]
 })
 export class SaEformsPage implements OnInit, AfterViewInit {
   public title: string;

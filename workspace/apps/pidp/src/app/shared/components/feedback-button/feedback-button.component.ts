@@ -8,16 +8,15 @@ import { MatDialog } from '@angular/material/dialog';
 import { PidpViewport, ViewportService } from '@bcgov/shared/ui';
 
 @Component({
-  selector: 'app-feedback-button',
-  templateUrl: './feedback-button.component.html',
-  styleUrl: './feedback-button.component.scss',
-  standalone: true,
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    MatFormFieldModule,
-    MatInputModule
-],
+    selector: 'app-feedback-button',
+    templateUrl: './feedback-button.component.html',
+    styleUrl: './feedback-button.component.scss',
+    imports: [
+        CommonModule,
+        ReactiveFormsModule,
+        MatFormFieldModule,
+        MatInputModule
+    ]
 })
 export class FeedbackButtonComponent
 {

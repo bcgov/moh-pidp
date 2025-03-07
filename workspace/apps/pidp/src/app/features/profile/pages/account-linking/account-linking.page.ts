@@ -54,22 +54,21 @@ import { linkedAccountCardText } from './account-linking.constants';
 import { Credential } from './account-linking.model';
 
 @Component({
-  selector: 'app-account-linking',
-  standalone: true,
-  imports: [
-    BreadcrumbComponent,
-    CommonModule,
-    InjectViewportCssClassDirective,
-    MatButtonModule,
-    NgOptimizedImage,
-    SuccessDialogComponent,
-    AsyncPipe,
-    MatTooltipModule,
-    NgFor,
-    NgIf,
-  ],
-  templateUrl: './account-linking.page.html',
-  styleUrl: './account-linking.page.scss',
+    selector: 'app-account-linking',
+    imports: [
+        BreadcrumbComponent,
+        CommonModule,
+        InjectViewportCssClassDirective,
+        MatButtonModule,
+        NgOptimizedImage,
+        SuccessDialogComponent,
+        AsyncPipe,
+        MatTooltipModule,
+        NgFor,
+        NgIf,
+    ],
+    templateUrl: './account-linking.page.html',
+    styleUrl: './account-linking.page.scss'
 })
 export class AccountLinkingPage implements OnInit, OnDestroy {
   public title: string;

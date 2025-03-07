@@ -26,19 +26,18 @@ import {
 } from '../../shared/resources/admin-resource.service';
 
 @Component({
-  selector: 'app-parties',
-  templateUrl: './parties.page.html',
-  styleUrls: ['./parties.page.scss'],
-  standalone: true,
-  imports: [
-    LookupCodePipe,
-    MatButtonModule,
-    MatIconModule,
-    MatTableModule,
-    NgIf,
-    PageComponent,
-    PageHeaderComponent,
-  ],
+    selector: 'app-parties',
+    templateUrl: './parties.page.html',
+    styleUrls: ['./parties.page.scss'],
+    imports: [
+        LookupCodePipe,
+        MatButtonModule,
+        MatIconModule,
+        MatTableModule,
+        NgIf,
+        PageComponent,
+        PageHeaderComponent,
+    ]
 })
 export class PartiesPage implements OnInit {
   public title: string;

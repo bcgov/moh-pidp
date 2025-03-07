@@ -26,25 +26,24 @@ import { NeedHelpComponent } from '@app/shared/components/need-help/need-help.co
 import { AuthService } from '../../services/auth.service';
 
 @Component({
-  selector: 'app-link-account-error',
-  templateUrl: './link-account-error.page.html',
-  styleUrls: ['./link-account-error.page.scss'],
-  standalone: true,
-  imports: [
-    AnchorDirective,
-    InjectViewportCssClassDirective,
-    LayoutHeaderFooterComponent,
-    MatButtonModule,
-    MatIconModule,
-    MatTooltipModule,
-    NgOptimizedImage,
-    NgIf,
-    NgSwitch,
-    NgSwitchCase,
-    NgSwitchDefault,
-    NgTemplateOutlet,
-    NeedHelpComponent,
-  ],
+    selector: 'app-link-account-error',
+    templateUrl: './link-account-error.page.html',
+    styleUrls: ['./link-account-error.page.scss'],
+    imports: [
+        AnchorDirective,
+        InjectViewportCssClassDirective,
+        LayoutHeaderFooterComponent,
+        MatButtonModule,
+        MatIconModule,
+        MatTooltipModule,
+        NgOptimizedImage,
+        NgIf,
+        NgSwitch,
+        NgSwitchCase,
+        NgSwitchDefault,
+        NgTemplateOutlet,
+        NeedHelpComponent,
+    ]
 })
 export class LinkAccountErrorPage implements OnInit {
   public logoutRedirectUrl: string;
