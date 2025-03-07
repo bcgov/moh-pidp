@@ -1,10 +1,13 @@
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import {
-  ENVIRONMENT_INITIALIZER,
+  provideHttpClient,
+  withInterceptorsFromDi,
+} from '@angular/common/http';
+import {
   EnvironmentProviders,
   InjectionToken,
   Provider,
   inject,
+  provideAppInitializer,
 } from '@angular/core';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import {
@@ -60,21 +63,24 @@ export function provideCore(
     // order matters
     // (especially when accessing some of the above defined providers)
     // init has to be last
-    {
-      provide: ENVIRONMENT_INITIALIZER,
-      multi: true,
-      useValue(): void {
-        const coreGuard = inject(CORE_GUARD, {
-          skipSelf: true,
-          optional: true,
-        });
+    provideAppInitializer(
+      () =>
+        new Promise<void>((resolve) => {
+          const coreGuard = inject(CORE_GUARD, {
+            skipSelf: true,
+            optional: true,
+          });
 
-        if (coreGuard) {
-          throw new TypeError(
-            'provideCore() can be used only once per application (and never in library)',
-          );
-        }
-      },
-    },
+          if (coreGuard) {
+            throw new TypeError(
+              'provideCore() can be used only once per application (and never in library)',
+            );
+          }
+          setTimeout(() => {
+            console.log('Initialization complete.');
+            resolve();
+          }, 1000);
+        }),
+    ),
   ];
 }
