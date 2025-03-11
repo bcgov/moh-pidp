@@ -98,8 +98,11 @@ export class FeedbackFormDialogComponent
   public takeScreenshot(event: Event): void {
     event.preventDefault();
     const element = document.getElementById('app');
+    const header = document.querySelector('header');
     if (element) {
+      if (header ) header.style.position = "relative";
       html2canvas(element).then((canvas: HTMLCanvasElement) => {
+        if (header) header.style.position = "sticky";
         const imgData = canvas.toDataURL('image/png');
         const link = document.createElement('a');
         link.href = imgData;
