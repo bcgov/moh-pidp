@@ -3,6 +3,7 @@ namespace Pidp.Infrastructure.Queue;
 using MassTransit;
 using Pidp;
 using Pidp.Features.CommonHandlers;
+using Pidp.Infrastructure.Services;
 using static Pidp.Features.Parties.Demographics;
 
 public static class MassTransitSetup
@@ -16,6 +17,8 @@ public static class MassTransitSetup
             x.AddConsumer<PartyEmailUpdatedBcProviderConsumer>();
             x.AddConsumer<UpdateBcProviderAttributesConsumer>();
             x.AddConsumer<UpdateKeycloakAttributesConsumer>();
+            x.AddSagaStateMachine<BCProviderSagaService, BCProviderSagaState>()
+                .InMemoryRepository();
 
             x.UsingRabbitMq((context, cfg) =>
             {
@@ -47,6 +50,8 @@ public static class MassTransitSetup
                     ep.Bind("update-keycloak-attributes");
                     ep.ConfigureConsumer<UpdateKeycloakAttributesConsumer>(context);
                 });
+
+                cfg.ReceiveEndpoint("bc-provider-saga", ep => ep.ConfigureSaga<BCProviderSagaState>(context));
             });
         });
 

@@ -24,6 +24,7 @@ using Pidp.Infrastructure.HealthChecks;
 using Pidp.Infrastructure.HttpClients;
 using Pidp.Infrastructure.Services;
 using Pidp.Infrastructure.Queue;
+using Pidp.Infrastructure.Queue.Activities;
 
 public class Startup(IConfiguration configuration)
 {
@@ -44,6 +45,7 @@ public class Startup(IConfiguration configuration)
             .AddScoped<IEmailService, EmailService>()
             .AddScoped<IPidpAuthorizationService, PidpAuthorizationService>()
             .AddScoped<IPlrStatusUpdateService, PlrStatusUpdateService>()
+            .AddScoped<SendEmailActivity>()
             .AddSingleton<IClock>(SystemClock.Instance)
             .AddSingleton<BackgroundWorkerHealthCheck>();
 
