@@ -14,7 +14,7 @@ using Pidp.Infrastructure.HttpClients.BCProvider;
 using Pidp.Infrastructure.HttpClients.Keycloak;
 using Pidp.Infrastructure.HttpClients.Plr;
 using Pidp.Models.Lookups;
-using Pidp.Infrastructure.Queue.Events;
+using Pidp.Infrastructure.Queue;
 
 public class BCProviderCreate
 {

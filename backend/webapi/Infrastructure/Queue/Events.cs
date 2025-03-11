@@ -1,4 +1,4 @@
-namespace Pidp.Infrastructure.Queue.Events;
+namespace Pidp.Infrastructure.Queue;
 
 public class KeycloakUserUpdatedEvent
 {

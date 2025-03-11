@@ -1,17 +1,18 @@
-namespace Pidp.Infrastructure.Services;
+namespace Pidp.Infrastructure.Queue;
 
 using MassTransit;
-using Pidp.Infrastructure.Queue.Events;
 using Pidp.Infrastructure.HttpClients.Keycloak;
-using Pidp.Infrastructure.Queue;
-using Pidp.Infrastructure.Queue.Activities;
 
-
-public class BCProviderSagaService : MassTransitStateMachine<BCProviderSagaState>
+public class BCProviderSaga : MassTransitStateMachine<BCProviderSagaState>
 {
+    public required State AssigningAccessRoles { get; set; }
+    public required State SendingEmail { get; set; }
+    public required State Completed { get; set; }
+    public required Event<KeycloakUserUpdatedEvent> KeycloakUserUpdated { get; set; }
+
     private readonly IKeycloakAdministrationClient keycloakClient;
 
-    public BCProviderSagaService(IKeycloakAdministrationClient keycloakClient)
+    public BCProviderSaga(IKeycloakAdministrationClient keycloakClient)
     {
         this.keycloakClient = keycloakClient;
 
@@ -39,11 +40,5 @@ public class BCProviderSagaService : MassTransitStateMachine<BCProviderSagaState
                 .Activity(x => x.OfType<SendEmailActivity>())
                 .TransitionTo(this.Completed));
     }
-
-    public required State AssigningAccessRoles { get; set; }
-    public required State SendingEmail { get; set; }
-    public required State Completed { get; set; }
-
-    public required Event<KeycloakUserUpdatedEvent> KeycloakUserUpdated { get; set; }
 }
 

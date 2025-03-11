@@ -24,7 +24,6 @@ using Pidp.Infrastructure.HealthChecks;
 using Pidp.Infrastructure.HttpClients;
 using Pidp.Infrastructure.Services;
 using Pidp.Infrastructure.Queue;
-using Pidp.Infrastructure.Queue.Activities;
 
 public class Startup(IConfiguration configuration)
 {
