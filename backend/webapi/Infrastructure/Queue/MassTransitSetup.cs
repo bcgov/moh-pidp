@@ -50,7 +50,11 @@ public static class MassTransitSetup
                     ep.ConfigureConsumer<UpdateKeycloakAttributesConsumer>(context);
                 });
 
-                cfg.ReceiveEndpoint("bc-provider-saga", ep => ep.ConfigureSaga<BCProviderSagaState>(context));
+                cfg.ReceiveEndpoint("bc-provider-saga", ep =>
+                {
+                    ep.ConfigureSaga<BCProviderSagaState>(context);
+                    ep.UseMessageRetry(r => r.Interval(2, TimeSpan.FromMinutes(15)));
+                });
             });
         });
 
