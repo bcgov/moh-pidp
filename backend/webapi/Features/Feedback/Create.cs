@@ -68,17 +68,17 @@ public class Create
                 )]
             );
 
-            await this.emailService.SendAsync(email);
+            // await this.emailService.SendAsync(email);
 
-            var feedbackLog = new FeedbackLog
-            {
-                PartyId = command.PartyId,
-                Feedback = command.Feedback,
-                AttachmentInformation = command.File is null ? null : $"Attachment with name {command.File.FileName} and size of {command.File.Length} bytes sent"
-            };
+            // var feedbackLog = new FeedbackLog
+            // {
+            //     PartyId = command.PartyId,
+            //     Feedback = command.Feedback,
+            //     AttachmentInformation = command.File is null ? null : $"Attachment with name {command.File.FileName} and size of {command.File.Length} bytes sent"
+            // };
 
-            this.context.FeedbackLogs.Add(feedbackLog);
-            await this.context.SaveChangesAsync();
+            // this.context.FeedbackLogs.Add(feedbackLog);
+            // await this.context.SaveChangesAsync();
         }
 
         private static async Task<byte[]> ConvertToByteArrayAsync(IFormFile file)
