@@ -102,9 +102,14 @@ public partial class ProfileStatus
                     return StatusCode.Complete;
                 }
 
-                this.Alerts.Add(profile.PartyPlrStanding.Error
-                    ? Alert.TransientError
-                    : Alert.PlrBadStanding);
+                // CPS Postgrads do not want to see the bad standing alert
+                // however, they are still not considered in Good Standing for all systems
+                if (!profile.PartyPlrStanding.IsCpsPostgrad)
+                {
+                    this.Alerts.Add(profile.PartyPlrStanding.Error
+                        ? Alert.TransientError
+                        : Alert.PlrBadStanding);
+                }
 
                 return StatusCode.Error;
             }
