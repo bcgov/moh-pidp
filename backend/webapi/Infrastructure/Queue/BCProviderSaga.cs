@@ -7,8 +7,9 @@ public class BCProviderSaga : MassTransitStateMachine<BCProviderSagaState>
 {
     public required State AssigningAccessRoles { get; set; }
     public required State SendingEmail { get; set; }
+    public required State CreateCredential { get; set; }
     public required State Completed { get; set; }
-    public required Event<KeycloakUserUpdatedEvent> KeycloakUserUpdated { get; set; }
+    public required Event<BCProviderCreatedEvent> KeycloakUserUpdated { get; set; }
 
     private readonly IKeycloakAdministrationClient keycloakClient;
 
@@ -18,7 +19,7 @@ public class BCProviderSaga : MassTransitStateMachine<BCProviderSagaState>
 
         this.InstanceState(x => x.CurrentState);
 
-        this.Event(() => this.KeycloakUserUpdated, x => x.CorrelateById(context => context.Message.PartyId));
+        this.Event(() => this.KeycloakUserUpdated, x => x.CorrelateById(context => ConvertIntToGuid(context.Message.PartyId)));
 
         this.Initially(
             this.When(this.KeycloakUserUpdated)
@@ -36,9 +37,18 @@ public class BCProviderSaga : MassTransitStateMachine<BCProviderSagaState>
                         await this.keycloakClient.AssignAccessRoles(message.UserId, MohKeycloakEnrolment.SAEforms);
                     }
                 })
+                .TransitionTo(this.CreateCredential)
+                .Activity(x => x.OfType<CreateCredentialActivity>())
                 .TransitionTo(this.SendingEmail)
                 .Activity(x => x.OfType<SendEmailActivity>())
                 .TransitionTo(this.Completed));
+    }
+
+    private static Guid ConvertIntToGuid(int value)
+    {
+        var bytes = new byte[16];
+        BitConverter.GetBytes(value).CopyTo(bytes, 0);
+        return new Guid(bytes);
     }
 }
 

@@ -127,9 +127,9 @@ public class BCProviderCreate
                 return DomainResult.Failed<string>();
             }
 
-            await this.bus.Publish(new KeycloakUserUpdatedEvent
+            await this.bus.Publish(new BCProviderCreatedEvent
             {
-                PartyId = ConvertIntToGuid(command.PartyId),
+                PartyId = command.PartyId,
                 OpId = party.OpId!,
                 UserId = userId.Value,
                 SAEformsEnroled = party.SAEformsEnroled,
@@ -162,13 +162,6 @@ public class BCProviderCreate
         /// Note that the username suffix for BC Provider is actually @bcp rather than @bcprovider_aad.
         /// </summary>
         private static string GenerateMohKeycloakUsername(string userPrincipalName) => userPrincipalName + "@bcp";
-
-        private static Guid ConvertIntToGuid(int value)
-        {
-            var bytes = new byte[16];
-            BitConverter.GetBytes(value).CopyTo(bytes, 0);
-            return new Guid(bytes);
-        }
     }
 }
 
