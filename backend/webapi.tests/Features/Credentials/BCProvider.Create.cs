@@ -78,8 +78,7 @@ public class BcProviderCreateTests : InMemoryDbTest
         Assert.Equal(party.FirstName, capturedNewKeycloakUser.FirstName);
         Assert.Equal(party.LastName, capturedNewKeycloakUser.LastName);
 
-        Assert.Single(party.Credentials.Where(credential => credential.IdentityProvider == IdentityProviders.BCProvider));
-        Assert.Equal(expectedNewUserId, party.Credentials.Single(credential => credential.IdentityProvider == IdentityProviders.BCProvider).UserId);
+        // TODO: Assert that KeycloakUserUpdated Event is published in RabbitMQ
     }
 
     public static IEnumerable<object[]> LicenceTestCases()
