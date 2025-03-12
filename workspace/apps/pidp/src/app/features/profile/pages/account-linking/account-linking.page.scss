@@ -5,7 +5,7 @@
   --gap: 1rem;
   --font-size: 0.75rem;
   --content-padding: var(--gap);
-    padding: 1.25rem 0.75rem;
+  padding: 1.25rem 0.75rem;
 
   & header {
     margin: var(--header-margin);
@@ -109,7 +109,7 @@
         height: 25rem;
         border-radius: 1.25rem;
         border: 1px solid #ccc;
-        background-color: #ebebeb;
+        background-color: #f2f2f2;
         box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
 
         .instructions-container {
@@ -211,6 +211,12 @@
       .idir-account {
         margin-top: 1.19rem;
       }
+
+      .card-hover:hover {
+        background-color: #f2f2f2;
+        cursor: pointer;
+      }
+
       .link-button {
         img {
           -webkit-transform: scaleX(-1);
