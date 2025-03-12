@@ -98,8 +98,6 @@ public class Startup(IConfiguration configuration)
         var config = new PidpConfiguration();
         this.Configuration.Bind(config);
 
-        config.Keycloak.RealmUrl = "https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications";
-
         services.AddSingleton(config);
 
         Log.Logger.Information("### App Version:{0} ###", Assembly.GetExecutingAssembly().GetName().Version);
