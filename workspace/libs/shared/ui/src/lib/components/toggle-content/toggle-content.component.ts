@@ -15,12 +15,11 @@ import {
 import { ToggleContentChange } from './toggle-content-change.model';
 
 @Component({
-  selector: 'ui-toggle-content',
-  templateUrl: './toggle-content.component.html',
-  styleUrls: ['./toggle-content.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [MatSlideToggleModule, NgIf],
+    selector: 'ui-toggle-content',
+    templateUrl: './toggle-content.component.html',
+    styleUrls: ['./toggle-content.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [MatSlideToggleModule, NgIf]
 })
 export class ToggleContentComponent {
   @Input() public color: ThemePalette;

@@ -34,25 +34,24 @@ import { Constants } from '@app/shared/constants';
 import { FaqRoutes } from '../../faq.routes';
 
 @Component({
-  selector: 'app-help',
-  templateUrl: './help.page.html',
-  styleUrls: ['./help.page.scss'],
-  standalone: true,
-  imports: [
-    AnchorDirective,
-    BreadcrumbComponent,
-    FaIconComponent,
-    MatButtonModule,
-    MatExpansionModule,
-    NgIf,
-    PageComponent,
-    PageFooterActionDirective,
-    PageFooterComponent,
-    PageHeaderComponent,
-    PageSectionComponent,
-    PageSectionSubheaderComponent,
-    InjectViewportCssClassDirective,
-  ],
+    selector: 'app-help',
+    templateUrl: './help.page.html',
+    styleUrls: ['./help.page.scss'],
+    imports: [
+        AnchorDirective,
+        BreadcrumbComponent,
+        FaIconComponent,
+        MatButtonModule,
+        MatExpansionModule,
+        NgIf,
+        PageComponent,
+        PageFooterActionDirective,
+        PageFooterComponent,
+        PageHeaderComponent,
+        PageSectionComponent,
+        PageSectionSubheaderComponent,
+        InjectViewportCssClassDirective,
+    ]
 })
 export class HelpPage implements OnInit, AfterViewInit {
   public providerIdentitySupport: string;

@@ -26,20 +26,19 @@ import { AddressAutocompleteFindResponse } from './address-autocomplete-find-res
 import { AddressAutocompleteRetrieveResponse } from './address-autocomplete-retrieve-response.model';
 
 @Component({
-  selector: 'app-address-autocomplete',
-  templateUrl: './address-autocomplete.component.html',
-  styleUrls: ['./address-autocomplete.component.scss'],
-  standalone: true,
-  imports: [
-    AnchorDirective,
-    InjectViewportCssClassDirective,
-    MatAutocompleteModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatOptionModule,
-    NgFor,
-    ReactiveFormsModule,
-  ],
+    selector: 'app-address-autocomplete',
+    templateUrl: './address-autocomplete.component.html',
+    styleUrls: ['./address-autocomplete.component.scss'],
+    imports: [
+        AnchorDirective,
+        InjectViewportCssClassDirective,
+        MatAutocompleteModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatOptionModule,
+        NgFor,
+        ReactiveFormsModule,
+    ]
 })
 export class AddressAutocompleteComponent implements OnInit {
   /**

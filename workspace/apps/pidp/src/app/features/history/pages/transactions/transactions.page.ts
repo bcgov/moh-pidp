@@ -24,25 +24,24 @@ import { Transaction } from './transaction.model';
 import { TransactionsResource } from './transactions-resource.service';
 
 @Component({
-  selector: 'app-transactions',
-  templateUrl: './transactions.page.html',
-  styleUrls: ['./transactions.page.scss'],
-  standalone: true,
-  imports: [
-    AsyncPipe,
-    FormatDatePipe,
-    LookupCodePipe,
-    MatButtonModule,
-    NgIf,
-    NgFor,
-    PageComponent,
-    PageFooterActionDirective,
-    PageFooterComponent,
-    PageHeaderComponent,
-    PageSectionComponent,
-    PageSectionSubheaderComponent,
-    PageSectionSubheaderDescDirective,
-  ],
+    selector: 'app-transactions',
+    templateUrl: './transactions.page.html',
+    styleUrls: ['./transactions.page.scss'],
+    imports: [
+        AsyncPipe,
+        FormatDatePipe,
+        LookupCodePipe,
+        MatButtonModule,
+        NgIf,
+        NgFor,
+        PageComponent,
+        PageFooterActionDirective,
+        PageFooterComponent,
+        PageHeaderComponent,
+        PageSectionComponent,
+        PageSectionSubheaderComponent,
+        PageSectionSubheaderDescDirective,
+    ]
 })
 export class TransactionsPage implements OnInit {
   public title: string;

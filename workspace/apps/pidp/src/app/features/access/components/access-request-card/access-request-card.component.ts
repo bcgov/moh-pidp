@@ -11,17 +11,16 @@ import {
 } from '@bcgov/shared/ui';
 
 @Component({
-  selector: 'app-access-request-card',
-  standalone: true,
-  imports: [
-    CommonModule,
-    FaIconComponent,
-    InjectViewportCssClassDirective,
-    TextButtonDirective,
-    NgClass,
-  ],
-  templateUrl: './access-request-card.component.html',
-  styleUrl: './access-request-card.component.scss',
+    selector: 'app-access-request-card',
+    imports: [
+        CommonModule,
+        FaIconComponent,
+        InjectViewportCssClassDirective,
+        TextButtonDirective,
+        NgClass,
+    ],
+    templateUrl: './access-request-card.component.html',
+    styleUrl: './access-request-card.component.scss'
 })
 export class AccessRequestCardComponent {
   @Input() public icon: IconProp;

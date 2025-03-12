@@ -40,26 +40,25 @@ import { MsTeamsClinicMemberResource } from './ms-teams-clinic-member-resource.s
 import { PrivacyOfficer } from './ms-teams-clinic-member.model';
 
 @Component({
-  selector: 'app-ms-teams-clinic-member',
-  templateUrl: './ms-teams-clinic-member.page.html',
-  styleUrls: ['./ms-teams-clinic-member.page.scss'],
-  standalone: true,
-  imports: [
-    AnchorDirective,
-    BreadcrumbComponent,
-    EnrolmentErrorComponent,
-    InjectViewportCssClassDirective,
-    FormsModule,
-    MatButtonModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatOptionModule,
-    MatSelectModule,
-    NgFor,
-    NgIf,
-    PageFooterActionDirective,
-    ReactiveFormsModule,
-  ],
+    selector: 'app-ms-teams-clinic-member',
+    templateUrl: './ms-teams-clinic-member.page.html',
+    styleUrls: ['./ms-teams-clinic-member.page.scss'],
+    imports: [
+        AnchorDirective,
+        BreadcrumbComponent,
+        EnrolmentErrorComponent,
+        InjectViewportCssClassDirective,
+        FormsModule,
+        MatButtonModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatOptionModule,
+        MatSelectModule,
+        NgFor,
+        NgIf,
+        PageFooterActionDirective,
+        ReactiveFormsModule,
+    ]
 })
 export class MsTeamsClinicMemberPage
   extends AbstractFormPage<MsTeamsClinicMemberFormState>

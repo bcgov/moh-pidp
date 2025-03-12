@@ -78,26 +78,25 @@ export enum EndorsementType {
   OutgoingRequest,
 }
 @Component({
-  selector: 'app-endorsements',
-  templateUrl: './endorsements.page.html',
-  styleUrls: ['./endorsements.page.scss'],
-  standalone: true,
-  imports: [
-    AsyncPipe,
-    BreadcrumbComponent,
-    DatePipe,
-    EndorsementCardComponent,
-    FaIconComponent,
-    InjectViewportCssClassDirective,
-    MatButtonModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatTabsModule,
-    NgFor,
-    NgIf,
-    PageFooterActionDirective,
-    ReactiveFormsModule,
-  ],
+    selector: 'app-endorsements',
+    templateUrl: './endorsements.page.html',
+    styleUrls: ['./endorsements.page.scss'],
+    imports: [
+        AsyncPipe,
+        BreadcrumbComponent,
+        DatePipe,
+        EndorsementCardComponent,
+        FaIconComponent,
+        InjectViewportCssClassDirective,
+        MatButtonModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatTabsModule,
+        NgFor,
+        NgIf,
+        PageFooterActionDirective,
+        ReactiveFormsModule,
+    ]
 })
 export class EndorsementsPage
   extends AbstractFormPage<EndorsementsFormState>

@@ -13,19 +13,18 @@ import { userAccessAgreementTitle } from '@app/features/profile/pages/user-acces
 import { BreadcrumbComponent } from '@app/shared/components/breadcrumb/breadcrumb.component';
 
 @Component({
-  selector: 'app-user-access-agreement-document',
-  templateUrl: './user-access-agreement-document.component.html',
-  styleUrls: ['./user-access-agreement-document.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [
-    BreadcrumbComponent,
-    FaIconComponent,
-    PageHeaderComponent,
-    PageSectionComponent,
-    InjectViewportCssClassDirective,
-    PageSubheaderComponent,
-  ],
+    selector: 'app-user-access-agreement-document',
+    templateUrl: './user-access-agreement-document.component.html',
+    styleUrls: ['./user-access-agreement-document.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        BreadcrumbComponent,
+        FaIconComponent,
+        PageHeaderComponent,
+        PageSectionComponent,
+        InjectViewportCssClassDirective,
+        PageSubheaderComponent,
+    ]
 })
 export class UserAccessAgreementDocumentComponent {
   public readonly title: string;

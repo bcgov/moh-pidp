@@ -17,19 +17,18 @@ import { IdentityProvider } from '../../enums/identity-provider.enum';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
-  selector: 'app-bc-provider-uplift',
-  templateUrl: './bc-provider-uplift.page.html',
-  styleUrls: ['./bc-provider-uplift.page.scss'],
-  standalone: true,
-  imports: [
-    AnchorDirective,
-    InjectViewportCssClassDirective,
-    LayoutHeaderFooterComponent,
-    MatButtonModule,
-    MatIconModule,
-    MatTooltipModule,
-    NgOptimizedImage,
-  ],
+    selector: 'app-bc-provider-uplift',
+    templateUrl: './bc-provider-uplift.page.html',
+    styleUrls: ['./bc-provider-uplift.page.scss'],
+    imports: [
+        AnchorDirective,
+        InjectViewportCssClassDirective,
+        LayoutHeaderFooterComponent,
+        MatButtonModule,
+        MatIconModule,
+        MatTooltipModule,
+        NgOptimizedImage,
+    ]
 })
 export class BcProviderUpliftPage {
   public bcscMobileSetupUrl: string;

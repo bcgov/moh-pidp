@@ -4,6 +4,7 @@
   "projectType": "library",
   "sourceRoot": "libs/shared/root-route/src",
   "prefix": "ui",
+  "tags": ["scope:shared", "tag:root-route"],
   "targets": {
     "test": {
       "executor": "@nx/jest:jest",
@@ -15,6 +16,5 @@
     "lint": {
       "executor": "@nx/eslint:lint"
     }
-  },
-  "tags": ["scope:shared", "tag:root-route"]
+  }
 }

@@ -32,18 +32,17 @@ import { AuthorizedUserService } from '../../services/authorized-user.service';
 import { LinkAccountConfirmResource } from './link-account-confirm-resource.service';
 
 @Component({
-  selector: 'app-link-account-confirm',
-  standalone: true,
-  imports: [
-    BreadcrumbComponent,
-    CommonModule,
-    InjectViewportCssClassDirective,
-    MatButtonModule,
-    NgOptimizedImage,
-    SuccessDialogComponent,
-  ],
-  templateUrl: './link-account-confirm.page.html',
-  styleUrl: './link-account-confirm.page.scss',
+    selector: 'app-link-account-confirm',
+    imports: [
+        BreadcrumbComponent,
+        CommonModule,
+        InjectViewportCssClassDirective,
+        MatButtonModule,
+        NgOptimizedImage,
+        SuccessDialogComponent,
+    ],
+    templateUrl: './link-account-confirm.page.html',
+    styleUrl: './link-account-confirm.page.scss'
 })
 export class LinkAccountConfirmPage implements OnInit {
   public user$: Observable<User>;

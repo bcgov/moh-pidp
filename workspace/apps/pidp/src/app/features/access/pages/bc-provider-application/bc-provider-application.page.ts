@@ -80,30 +80,29 @@ import { BcProviderApplicationFormState } from './bc-provider-application-form-s
 import { BcProviderApplicationResource } from './bc-provider-application-resource.service';
 
 @Component({
-  selector: 'app-bc-provider-application',
-  templateUrl: './bc-provider-application.page.html',
-  styleUrls: ['./bc-provider-application.page.scss'],
-  standalone: true,
-  imports: [
-    AsyncPipe,
-    BreadcrumbComponent,
-    FaIconComponent,
-    InjectViewportCssClassDirective,
-    MatButtonModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatTooltipModule,
-    NeedHelpComponent,
-    NgIf,
-    NgOptimizedImage,
-    NgSwitch,
-    NgSwitchCase,
-    NgSwitchDefault,
-    NgTemplateOutlet,
-    ReactiveFormsModule,
-    SuccessDialogComponent,
-    FaIconComponent,
-  ],
+    selector: 'app-bc-provider-application',
+    templateUrl: './bc-provider-application.page.html',
+    styleUrls: ['./bc-provider-application.page.scss'],
+    imports: [
+        AsyncPipe,
+        BreadcrumbComponent,
+        FaIconComponent,
+        InjectViewportCssClassDirective,
+        MatButtonModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatTooltipModule,
+        NeedHelpComponent,
+        NgIf,
+        NgOptimizedImage,
+        NgSwitch,
+        NgSwitchCase,
+        NgSwitchDefault,
+        NgTemplateOutlet,
+        ReactiveFormsModule,
+        SuccessDialogComponent,
+        FaIconComponent,
+    ]
 })
 export class BcProviderApplicationPage
   extends AbstractFormPage<BcProviderApplicationFormState>

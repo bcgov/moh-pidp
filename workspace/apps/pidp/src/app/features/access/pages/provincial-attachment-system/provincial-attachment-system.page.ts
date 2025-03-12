@@ -37,30 +37,29 @@ import {
 } from './provincial-attachment-system.constants';
 
 @Component({
-  selector: 'app-provincial-attachment-system',
-  standalone: true,
-  imports: [
-    AsyncPipe,
-    BreadcrumbComponent,
-    MatButtonModule,
-    MatIconModule,
-    MatStepperModule,
-    MatTooltipModule,
-    ClipboardModule,
-    InjectViewportCssClassDirective,
-    RouterLink,
-    NgIf,
-    FontAwesomeModule,
-    NgOptimizedImage,
-  ],
-  templateUrl: './provincial-attachment-system.page.html',
-  styleUrl: './provincial-attachment-system.page.scss',
-  providers: [
-    {
-      provide: STEPPER_GLOBAL_OPTIONS,
-      useValue: { displayDefaultIndicatorType: false },
-    },
-  ],
+    selector: 'app-provincial-attachment-system',
+    imports: [
+        AsyncPipe,
+        BreadcrumbComponent,
+        MatButtonModule,
+        MatIconModule,
+        MatStepperModule,
+        MatTooltipModule,
+        ClipboardModule,
+        InjectViewportCssClassDirective,
+        RouterLink,
+        NgIf,
+        FontAwesomeModule,
+        NgOptimizedImage,
+    ],
+    templateUrl: './provincial-attachment-system.page.html',
+    styleUrl: './provincial-attachment-system.page.scss',
+    providers: [
+        {
+            provide: STEPPER_GLOBAL_OPTIONS,
+            useValue: { displayDefaultIndicatorType: false },
+        },
+    ]
 })
 export class ProvincialAttachmentSystemPage implements OnInit {
   public bcProvider$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(

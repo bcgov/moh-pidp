@@ -37,26 +37,25 @@ import { CollegeLicenceDeclarationResource } from './college-licence-declaration
 import { PartyLicenceDeclarationInformation } from './party-licence-declaration-information.model';
 
 @Component({
-  selector: 'app-college-licence-declaration',
-  templateUrl: './college-licence-declaration.page.html',
-  styleUrls: ['./college-licence-declaration.page.scss'],
-  viewProviders: [CollegeLicenceDeclarationResource],
-  standalone: true,
-  imports: [
-    AlertComponent,
-    AlertContentDirective,
-    BreadcrumbComponent,
-    InjectViewportCssClassDirective,
-    MatButtonModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatOptionModule,
-    MatSelectModule,
-    NgFor,
-    NgIf,
-    PageFooterActionDirective,
-    ReactiveFormsModule,
-  ],
+    selector: 'app-college-licence-declaration',
+    templateUrl: './college-licence-declaration.page.html',
+    styleUrls: ['./college-licence-declaration.page.scss'],
+    viewProviders: [CollegeLicenceDeclarationResource],
+    imports: [
+        AlertComponent,
+        AlertContentDirective,
+        BreadcrumbComponent,
+        InjectViewportCssClassDirective,
+        MatButtonModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatOptionModule,
+        MatSelectModule,
+        NgFor,
+        NgIf,
+        PageFooterActionDirective,
+        ReactiveFormsModule,
+    ]
 })
 export class CollegeLicenceDeclarationPage
   extends AbstractFormPage<CollegeLicenceDeclarationFormState>

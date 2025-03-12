@@ -2,7 +2,7 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "outDir": "../../dist/out-tsc",
-    "module": "commonjs",
+    "module": "ES2022",
     "types": ["jest", "node", "@hirez_io/jest-single"],
     "target": "es2022"
   },

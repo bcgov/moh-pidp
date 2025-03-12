@@ -1,9 +1,4 @@
-import {
-  APP_INITIALIZER,
-  EnvironmentProviders,
-  Provider,
-  importProvidersFrom,
-} from '@angular/core';
+import { EnvironmentProviders, Provider, importProvidersFrom, inject, provideAppInitializer } from '@angular/core';
 
 import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
 
@@ -25,11 +20,9 @@ export function provideKeycloak(): (Provider | EnvironmentProviders)[] {
       PermissionsService,
     ),
     provideLookup(),
-    {
-      provide: APP_INITIALIZER,
-      useFactory: keycloakFactory,
-      multi: true,
-      deps: [KeycloakInitService],
-    },
+    provideAppInitializer(() => {
+        const initializerFn = (keycloakFactory)(inject(KeycloakInitService));
+        return initializerFn();
+      }),
   ];
 }

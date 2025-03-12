@@ -21,23 +21,22 @@ import { AlertCode } from './enums/alert-code.enum';
 import { PortalResource } from './portal-resource.service';
 
 @Component({
-  selector: 'app-portal',
-  templateUrl: './portal.page.html',
-  styleUrls: ['./portal.page.scss'],
-  providers: [
-    {
-      provide: STEPPER_GLOBAL_OPTIONS,
-      useValue: { displayDefaultIndicatorType: false },
-    },
-  ],
-  standalone: true,
-  imports: [
-    FaIconComponent,
-    InjectViewportCssClassDirective,
-    NgIf,
-    NgOptimizedImage,
-    AsyncPipe,
-  ],
+    selector: 'app-portal',
+    templateUrl: './portal.page.html',
+    styleUrls: ['./portal.page.scss'],
+    providers: [
+        {
+            provide: STEPPER_GLOBAL_OPTIONS,
+            useValue: { displayDefaultIndicatorType: false },
+        },
+    ],
+    imports: [
+        FaIconComponent,
+        InjectViewportCssClassDirective,
+        NgIf,
+        NgOptimizedImage,
+        AsyncPipe,
+    ]
 })
 export class PortalPage implements OnInit, AfterViewInit {
   public faBookmark = faBookmark;

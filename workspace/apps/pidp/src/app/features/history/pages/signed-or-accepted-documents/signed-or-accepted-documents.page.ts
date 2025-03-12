@@ -36,22 +36,21 @@ export interface DocumentSection extends IDocumentMetaData {
 }
 
 @Component({
-  selector: 'app-signed-or-accepted-documents',
-  templateUrl: './signed-or-accepted-documents.page.html',
-  styleUrls: ['./signed-or-accepted-documents.page.scss'],
-  standalone: true,
-  imports: [
-    CardSummaryComponent,
-    MatButtonModule,
-    NgFor,
-    PageComponent,
-    PageFooterActionDirective,
-    PageFooterComponent,
-    PageHeaderComponent,
-    PageSectionComponent,
-    PageSectionSubheaderComponent,
-    PageSectionSubheaderDescDirective,
-  ],
+    selector: 'app-signed-or-accepted-documents',
+    templateUrl: './signed-or-accepted-documents.page.html',
+    styleUrls: ['./signed-or-accepted-documents.page.scss'],
+    imports: [
+        CardSummaryComponent,
+        MatButtonModule,
+        NgFor,
+        PageComponent,
+        PageFooterActionDirective,
+        PageFooterComponent,
+        PageHeaderComponent,
+        PageSectionComponent,
+        PageSectionSubheaderComponent,
+        PageSectionSubheaderDescDirective,
+    ]
 })
 export class SignedOrAcceptedDocumentsPage implements OnInit {
   public title: string;

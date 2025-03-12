@@ -15,22 +15,21 @@ import {
 } from '@bcgov/shared/ui';
 
 @Component({
-  selector: 'app-compliance-training',
-  templateUrl: './compliance-training.page.html',
-  styleUrls: ['./compliance-training.page.scss'],
-  standalone: true,
-  imports: [
-    AlertComponent,
-    AlertContentDirective,
-    MatButtonModule,
-    PageComponent,
-    PageFooterActionDirective,
-    PageFooterComponent,
-    PageHeaderComponent,
-    PageSectionComponent,
-    PageSectionSubheaderComponent,
-    PageSectionSubheaderDescDirective,
-  ],
+    selector: 'app-compliance-training',
+    templateUrl: './compliance-training.page.html',
+    styleUrls: ['./compliance-training.page.scss'],
+    imports: [
+        AlertComponent,
+        AlertContentDirective,
+        MatButtonModule,
+        PageComponent,
+        PageFooterActionDirective,
+        PageFooterComponent,
+        PageHeaderComponent,
+        PageSectionComponent,
+        PageSectionSubheaderComponent,
+        PageSectionSubheaderDescDirective,
+    ]
 })
 export class ComplianceTrainingPage {
   public title: string;
