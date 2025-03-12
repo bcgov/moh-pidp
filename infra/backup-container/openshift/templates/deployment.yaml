@@ -52,6 +52,14 @@ spec:
               value: {{ .Values.backup.backup_strategy }}
             - name: BACKUP_DIR
               value: {{ .Values.backup.backup_dir }}
+            - name: NUM_BACKUPS
+              value: {{ .Values.backup.num_backups }}
+            - name: DAILY_BACKUPS
+              value: {{ .Values.backup.daily_backups }}
+            - name: WEEKLY_BACKUPS
+              value: {{ .Values.backup.weekly_backups }}
+            - name: MONTHLY_BACKUPS
+              value: {{ .Values.backup.monthly_backups }}
             - name: DATABASE_SERVICE_NAME
               value: {{ .Values.backup.database_service_name }}
             - name: DATABASE_NAME
