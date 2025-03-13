@@ -50,6 +50,7 @@ import { ProfileRoutes } from '@app/features/profile/profile.routes';
 import { Credential } from './nav-menu.model';
 import { NavMenuResource } from './nav-menu.resource.service';
 import { FeedbackButtonComponent } from "../../../../shared/components/feedback-button/feedback-button.component";
+import { HistoryRoutes } from '@app/features/history/history.routes';
 
 @Component({
   selector: 'app-nav-menu',
@@ -92,6 +93,7 @@ export class NavMenuComponent implements OnChanges, OnInit, OnDestroy {
   public isTopMenuVisible = false;
   public ProfileRoutes = ProfileRoutes;
   public AccessRoutes = AccessRoutes;
+  public HistoryRoutes = HistoryRoutes;
   public showCollegeAlert = false;
   public faBell = faBell;
   public AlertCode = AlertCode;
