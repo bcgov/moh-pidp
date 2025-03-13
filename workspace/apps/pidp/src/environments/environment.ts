@@ -7,7 +7,7 @@ import { environment as defaultEnvironment } from './environment.prod';
 export const environment: AppEnvironment = {
   ...defaultEnvironment,
   apiEndpoint: 'api',
-  environmentName: EnvironmentName.LOCAL,
+  environmentName: EnvironmentName.TEST,
   production: false,
 };
 
