@@ -12,6 +12,7 @@ export const accessSectionKeys = [
   'accountLinking',
   'prescription-refill-eforms',
   'hcimAccountTransfer',
+  'immsbc',
   'immsBCEforms',
   'driverFitness',
   'msTeamsPrivacyOfficer',
@@ -40,6 +41,7 @@ export interface AccessGroup extends IAccessGroup {
   accountLinking: Section;
   bcProvider: Section;
   hcimAccountTransfer: Section;
+  immsbc: Section;
   immsBCEforms: Section;
   driverFitness: Section;
   msTeamsPrivacyOfficer: Section;

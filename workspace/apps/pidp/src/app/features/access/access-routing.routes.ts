@@ -79,6 +79,13 @@ export const routes: Routes = [
       ),
   },
   {
+    path: AccessRoutes.IMMSBC,
+    loadChildren: (): Promise<Routes> =>
+      import('./pages/immsbc/immsbc-routing.routes').then(
+        (m) => m.routes,
+      ),
+  },
+  {
     path: AccessRoutes.PROVINCIAL_ATTACHMENT_SYSTEM,
     loadChildren: (): Promise<Routes> =>
       import(

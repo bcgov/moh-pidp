@@ -290,6 +290,23 @@ public partial class ProfileStatus
                 };
             }
         }
+        public class ImmsBCSection : ProfileSection
+        {
+            internal override string SectionName => "immsbc";
+
+            protected override StatusCode Compute(ProfileData profile)
+            {
+                return profile switch
+                {
+                    { UserIsHighAssuranceIdentity: false } => StatusCode.Locked,
+                    _ when profile.HasEnrolment(AccessTypeCode.ImmsBC) && profile.HasBCProviderCredential => StatusCode.Complete,
+                    _ when profile.PartyPlrStanding
+                        .With(ImmsBC.AllowedIdentifierTypes)
+                        .HasGoodStanding => StatusCode.Incomplete,
+                    _ => StatusCode.Locked
+                };
+            }
+        }
 
         public class ProviderReportingPortalSection : ProfileSection
         {
