@@ -10,7 +10,7 @@
       <span
         [ngClass]="{'menu-notification-dot': alerts?.includes(AlertCode.TRANSIENT_ERROR) || alerts?.includes(AlertCode.PLR_BAD_STANDING)}"></span>
     </button>
-    <app-feedback-button></app-feedback-button>
+    <app-feedback-button *ngIf="featureFlag()"></app-feedback-button>
   </div>
   <div *ngIf="isTopMenuVisible" uiPidpInjectViewportCss>
     <div class="content-menu">
