@@ -97,8 +97,8 @@ export class NavMenuComponent implements OnChanges, OnInit, OnDestroy {
   public showCollegeAlert = false;
   public faBell = faBell;
   public AlertCode = AlertCode;
-  public credentials: Credential[] = [];
-  public credentials$: Observable<Credential[]>;
+  public credentials: Credential[] | null = [];
+  public credentials$: Observable<Credential[] | null>;
   private unsubscribe$ = new Subject<void>();
   public IdentityProvider = IdentityProvider;
 
@@ -177,8 +177,8 @@ export class NavMenuComponent implements OnChanges, OnInit, OnDestroy {
     return undefined;
   }
 
-  public hasCredential(idp: IdentityProvider): boolean {
-    return this.credentials.some((c) => c.identityProvider === idp);
+  public hasCredential(idp: IdentityProvider): boolean | undefined {
+    return this.credentials?.some((c) => c.identityProvider === idp);
   }
 
   public onLogout(): void {
