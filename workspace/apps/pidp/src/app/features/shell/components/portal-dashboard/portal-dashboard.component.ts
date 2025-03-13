@@ -1,4 +1,4 @@
-import { AsyncPipe } from '@angular/common';
+import { AsyncPipe, NgIf } from '@angular/common';
 import { Component, Inject, OnInit } from '@angular/core';
 import { IsActiveMatchOptions } from '@angular/router';
 
@@ -19,16 +19,18 @@ import { AuthService } from '@app/features/auth/services/auth.service';
 import { AlertCode } from '@app/features/portal/enums/alert-code.enum';
 import { PortalResource } from '@app/features/portal/portal-resource.service';
 import { ProfileRoutes } from '@app/features/profile/profile.routes';
+import { PermissionsService } from '@app/modules/permissions/permissions.service';
+import { Role } from '@app/shared/enums/roles.enum';
 
+import { FeedbackButtonComponent } from '../../../../shared/components/feedback-button/feedback-button.component';
 import { NavMenuComponent } from '../navbar-menu/nav-menu';
-import { FeedbackButtonComponent } from "../../../../shared/components/feedback-button/feedback-button.component";
 
 @Component({
   selector: 'app-portal-dashboard',
   templateUrl: './portal-dashboard.component.html',
   styleUrls: ['./portal-dashboard.component.scss'],
   standalone: true,
-  imports: [AsyncPipe, NavMenuComponent, FeedbackButtonComponent],
+  imports: [AsyncPipe, NavMenuComponent, FeedbackButtonComponent, NgIf],
 })
 export class PortalDashboardComponent implements IDashboard, OnInit {
   public logoutRedirectUrl: string;
@@ -48,6 +50,7 @@ export class PortalDashboardComponent implements IDashboard, OnInit {
     private partyService: PartyService,
     private resource: PortalResource,
     private dataService: CommonDataService,
+    private permissionsService: PermissionsService,
   ) {
     this.logoutRedirectUrl = `${this.config.applicationUrl}/${this.config.routes.auth}`;
     this.headerConfig = { theme: 'light', allowMobileToggle: true };
@@ -63,6 +66,10 @@ export class PortalDashboardComponent implements IDashboard, OnInit {
 
   public onLogout(): void {
     this.authService.logout(this.logoutRedirectUrl);
+  }
+
+  public featureFlag(): boolean {
+    return this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]);
   }
 
   public ngOnInit(): void {

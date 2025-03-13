@@ -6,4 +6,4 @@
   (logout)="onLogout()">
 </app-nav-menu>
 
-<app-feedback-button></app-feedback-button>
+<app-feedback-button *ngIf="featureFlag()"></app-feedback-button>
