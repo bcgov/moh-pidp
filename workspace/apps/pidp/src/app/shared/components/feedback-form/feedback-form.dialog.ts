@@ -38,15 +38,15 @@ export class FeedbackFormDialogComponent
   extends AbstractFormPage<FeedbackFormState> implements OnInit
 {
   public formState: FeedbackFormState;
-  public showOverlayOnSubmit: boolean = false;
-  public showErrorCard: boolean = false;
+  public showOverlayOnSubmit = false;
+  public showErrorCard = false;
   public selectedFile: File | null = null;
   public componentType = FeedbackSendComponent;
   public faXmark = faXmark;
-  public disableSend: boolean = true;
-  public disableDisclaimer: boolean = true;
+  public disableSend = true;
+  public disableDisclaimer = true;
   public accessAgreementLink: string = ProfileRoutes.routePath(ProfileRoutes.USER_ACCESS_AGREEMENT);
-  public disclaimerText: string = `Please do not include any personal information when submitting this feedback. For additional information, please refer to <a href=${this.accessAgreementLink} target="_blank">this page</a>.`;
+  public disclaimerText = `Please do not include any personal information when submitting this feedback. For additional information, please refer to <a href=${this.accessAgreementLink} target="_blank">this page</a>.`;
 
   @ViewChild('successDialog')
   public successDialogTemplate!: TemplateRef<FeedbackSendComponent>;

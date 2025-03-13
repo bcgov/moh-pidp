@@ -61,8 +61,8 @@ export class CollegeLicenceDeclarationPage
   extends AbstractFormPage<CollegeLicenceDeclarationFormState>
   implements OnInit
 {
-  @Input() public disableCollegeCode: boolean = false;
-  @Input() public disableCollegeLicenceNumber: boolean = false;
+  @Input() public disableCollegeCode = false;
+  @Input() public disableCollegeLicenceNumber = false;
 
   public title: string;
   public formState: CollegeLicenceDeclarationFormState;
