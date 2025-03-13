@@ -5,3 +5,5 @@
   [menuItems]="menuItems"
   (logout)="onLogout()">
 </app-nav-menu>
+
+<app-feedback-button *ngIf="featureFlag()"></app-feedback-button>
