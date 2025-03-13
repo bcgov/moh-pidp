@@ -107,7 +107,7 @@ export class NavMenuComponent implements OnChanges, OnInit, OnDestroy {
     private router: Router,
     private resource: NavMenuResource,
     private partyService: PartyService,
-    private permissionsService: PermissionsService,
+    private readonly permissionsService: PermissionsService,
   ) {
     this.viewportService.viewportBroadcast$.subscribe((viewport) =>
       this.onViewportChange(viewport),

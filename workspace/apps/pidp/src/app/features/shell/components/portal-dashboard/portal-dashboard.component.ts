@@ -50,7 +50,7 @@ export class PortalDashboardComponent implements IDashboard, OnInit {
     private partyService: PartyService,
     private resource: PortalResource,
     private dataService: CommonDataService,
-    private permissionsService: PermissionsService,
+    private readonly permissionsService: PermissionsService,
   ) {
     this.logoutRedirectUrl = `${this.config.applicationUrl}/${this.config.routes.auth}`;
     this.headerConfig = { theme: 'light', allowMobileToggle: true };
