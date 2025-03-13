@@ -62,6 +62,7 @@ public class Create
                 contact: {party.Email} <br> <br>
                 Thank you.",
                 attachments: []
+                //removed attachments
                 // attachments: command.File is null ? [] : [new File(
                 //     filename: command.File.FileName,
                 //     data: await ConvertToByteArrayAsync(command.File),
@@ -75,7 +76,7 @@ public class Create
             {
                 PartyId = command.PartyId,
                 Feedback = command.Feedback,
-                AttachmentInformation = command.File is null ? null : $"Attachment with name {command.File.FileName} and size of {command.File.Length} bytes sent"
+                AttachmentInformation = command.File is null ? null : $"Attachment with name {command.File.FileName} and size of {command.File.Length} bytes"
             };
 
             this.context.FeedbackLogs.Add(feedbackLog);
