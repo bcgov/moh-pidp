@@ -106,6 +106,7 @@ public class CredentialsController(IPidpAuthorizationService authorizationServic
                 await this.AuthorizationService.SignTokenAsync(new Cookies.CredentialLinkTicket.Values(result.Value.Token)),
                 new CookieOptions
                 {
+                    Secure = true,
                     // The cookie has a much longer expiry than the CredentialLinkTicket to block the user from accedentailly entering the app and creating a Party if the ticket expires.
                     Expires = result.Value.ExpiresAt.ToDateTimeOffset().AddHours(6),
                     HttpOnly = true
