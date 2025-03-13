@@ -61,14 +61,15 @@ public class Create
                 message: {command.Feedback} <br>
                 contact: {party.Email} <br> <br>
                 Thank you.",
-                attachments: command.File is null ? [] : [new File(
-                    filename: command.File.FileName,
-                    data: await ConvertToByteArrayAsync(command.File),
-                    mediaType: command.File.ContentType
-                )]
+                attachments: []
+                // attachments: command.File is null ? [] : [new File(
+                //     filename: command.File.FileName,
+                //     data: await ConvertToByteArrayAsync(command.File),
+                //     mediaType: command.File.ContentType
+                // )]
             );
 
-            await this.emailService.SendAsync(email);
+            // await this.emailService.SendAsync(email);
 
             var feedbackLog = new FeedbackLog
             {
