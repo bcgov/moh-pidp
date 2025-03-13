@@ -16,6 +16,8 @@ public static class MassTransitSetup
             x.AddConsumer<PartyEmailUpdatedBcProviderConsumer>();
             x.AddConsumer<UpdateBcProviderAttributesConsumer>();
             x.AddConsumer<UpdateKeycloakAttributesConsumer>();
+            x.AddSagaStateMachine<BCProviderSaga, BCProviderSagaState>()
+                .InMemoryRepository();
 
             x.UsingRabbitMq((context, cfg) =>
             {
@@ -46,6 +48,12 @@ public static class MassTransitSetup
                     ep.PublishFaults = false;
                     ep.Bind("update-keycloak-attributes");
                     ep.ConfigureConsumer<UpdateKeycloakAttributesConsumer>(context);
+                });
+
+                cfg.ReceiveEndpoint("bc-provider-saga", ep =>
+                {
+                    ep.ConfigureSaga<BCProviderSagaState>(context);
+                    ep.UseMessageRetry(r => r.Interval(2, TimeSpan.FromMinutes(15)));
                 });
             });
         });

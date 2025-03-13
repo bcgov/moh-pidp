@@ -5,18 +5,16 @@ using FluentValidation;
 using HybridModelBinding;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
+using MassTransit;
 
 using Pidp.Data;
 using Pidp.Extensions;
 using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.HttpClients.BCProvider;
 using Pidp.Infrastructure.HttpClients.Keycloak;
-using Pidp.Infrastructure.HttpClients.Mail;
 using Pidp.Infrastructure.HttpClients.Plr;
-using Pidp.Models;
-using Pidp.Models.DomainEvents;
 using Pidp.Models.Lookups;
-using Pidp.Infrastructure.Services;
+using Pidp.Infrastructure.Queue;
 
 public class BCProviderCreate
 {
@@ -39,14 +37,14 @@ public class BCProviderCreate
 
     public class CommandHandler(
         IBCProviderClient client,
-        IEmailService emailService,
+        IBus bus,
         IKeycloakAdministrationClient keycloakClient,
         ILogger<CommandHandler> logger,
         IPlrClient plrClient,
         PidpDbContext context) : ICommandHandler<Command, IDomainResult<string>>
     {
         private readonly IBCProviderClient client = client;
-        private readonly IEmailService emailService = emailService;
+        private readonly IBus bus = bus;
         private readonly IKeycloakAdministrationClient keycloakClient = keycloakClient;
         private readonly ILogger<CommandHandler> logger = logger;
         private readonly IPlrClient plrClient = plrClient;
@@ -128,24 +126,16 @@ public class BCProviderCreate
                 this.logger.LogKeycloakUserCreationError(command.PartyId, createdUser.UserPrincipalName);
                 return DomainResult.Failed<string>();
             }
-            await this.keycloakClient.UpdateUser(userId.Value, user => user.SetOpId(party.OpId!));
 
-            if (party.SAEformsEnroled)
+            await this.bus.Publish(new BCProviderCreatedEvent
             {
-                await this.keycloakClient.AssignAccessRoles(userId.Value, MohKeycloakEnrolment.SAEforms);
-            }
-
-            this.context.Credentials.Add(new Credential
-            {
-                UserId = userId.Value,
                 PartyId = command.PartyId,
-                IdpId = createdUser.UserPrincipalName,
-                IdentityProvider = IdentityProviders.BCProvider,
-                DomainEvents = [new CollegeLicenceUpdated(command.PartyId)]
+                OpId = party.OpId!,
+                UserId = userId.Value,
+                SAEformsEnroled = party.SAEformsEnroled,
+                Email = party.Email,
+                UserPrincipalName = createdUser.UserPrincipalName
             });
-
-            await this.context.SaveChangesAsync();
-            await this.SendBCProviderCreationEmail(party.Email, createdUser.UserPrincipalName);
 
             return DomainResult.Success(createdUser.UserPrincipalName);
         }
@@ -172,18 +162,6 @@ public class BCProviderCreate
         /// Note that the username suffix for BC Provider is actually @bcp rather than @bcprovider_aad.
         /// </summary>
         private static string GenerateMohKeycloakUsername(string userPrincipalName) => userPrincipalName + "@bcp";
-
-        private async Task SendBCProviderCreationEmail(string partyEmail, string userPrincipalName)
-        {
-            var email = new Email(
-                from: EmailService.PidpEmail,
-                to: partyEmail,
-                subject: "BCProvider Account Creation in OneHealthID Confirmation",
-                body: $"You have successfully created a BCProvider account in OneHealthID Service. For your reference, your BCProvider username is {userPrincipalName}. You may now login to OneHealthID Service and access the BCProvider card to update your BCProvider password."
-            );
-
-            await this.emailService.SendAsync(email);
-        }
     }
 }
 
