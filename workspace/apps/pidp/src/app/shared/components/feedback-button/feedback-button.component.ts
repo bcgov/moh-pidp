@@ -19,11 +19,9 @@ import { PidpViewport, ViewportService } from '@bcgov/shared/ui';
     ]
 })
 export class FeedbackButtonComponent
-{
-
-  public dialogWidth: string = "360px";
-  public isMobileView: boolean = false;
-  public buttonClass: string = "feedback-button-box";
+  public dialogWidth = '360px';
+  public isMobileView = false;
+  public buttonClass = 'feedback-button-box';
 
   public constructor(
     public dialog: MatDialog,
