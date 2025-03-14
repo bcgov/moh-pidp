@@ -9,8 +9,10 @@ using Pidp.Data;
 using Pidp.Infrastructure.HttpClients.Mail;
 using Pidp.Models;
 using Serilog;
+using MassTransit;
 
 public class EmailService(
+    IBus bus,
     IChesClient chesClient,
     IClock clock,
     ISmtpEmailClient smtpEmailClient,
@@ -20,6 +22,7 @@ public class EmailService(
     public const string PidpEmail = "OneHealthID@gov.bc.ca";
     public const string PidpSupportPhone = "250-448-1262";
 
+    private readonly IBus bus = bus;
     private readonly IChesClient chesClient = chesClient;
     private readonly IClock clock = clock;
     private readonly ISmtpEmailClient smtpEmailClient = smtpEmailClient;
@@ -33,22 +36,7 @@ public class EmailService(
             email.Subject = $"THE FOLLOWING EMAIL IS A TEST: {email.Subject}";
         }
 
-        if (await this.chesClient.HealthCheckAsync())
-        {
-            Console.WriteLine("Sending email via CHES");
-            Log.Information("Sending email via CHES");
-            var msgId = await this.chesClient.SendAsync(email);
-            await this.CreateEmailLog(email, SendType.Ches, msgId);
-
-            if (msgId != null)
-            {
-                return;
-            }
-        }
-
-        // Fall back to SMTP client
-        await this.CreateEmailLog(email, SendType.Smtp);
-        await this.smtpEmailClient.SendAsync(email);
+        await this.bus.Publish(email);
     }
 
     public async Task<int> UpdateEmailLogStatuses(int limit)
