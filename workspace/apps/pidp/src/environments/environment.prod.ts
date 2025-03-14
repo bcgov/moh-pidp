@@ -59,7 +59,7 @@ export const environment: AppEnvironment = {
   },
   keycloakConfig: {
     config: {
-      url: 'https://common-logon-dev.hlth.gov.bc.ca/auth',
+      url: 'https://common-logon-test.hlth.gov.bc.ca/auth',
       realm: 'moh_applications',
       clientId: 'PIDP-WEBAPP',
     },
