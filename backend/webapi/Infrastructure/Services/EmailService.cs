@@ -33,7 +33,7 @@ public class EmailService(
             email.Subject = $"THE FOLLOWING EMAIL IS A TEST: {email.Subject}";
         }
 
-        if (this.config.ChesClient.Enabled && await this.chesClient.HealthCheckAsync())
+        if (await this.chesClient.HealthCheckAsync())
         {
             Log.Information("Sending email via CHES");
             var msgId = await this.chesClient.SendAsync(email);
