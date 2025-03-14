@@ -35,6 +35,7 @@ public class EmailService(
 
         if (await this.chesClient.HealthCheckAsync())
         {
+            Console.WriteLine("Sending email via CHES");
             Log.Information("Sending email via CHES");
             var msgId = await this.chesClient.SendAsync(email);
             await this.CreateEmailLog(email, SendType.Ches, msgId);
