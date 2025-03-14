@@ -60,8 +60,8 @@ export class AccessRequestsPage implements OnInit, OnDestroy {
   public faArrowUp = faArrowUp;
   public faMagnifyingGlass = faMagnifyingGlass;
   public logoutRedirectUrl: string;
-  public showBackToTopButton: boolean = false;
-  public showSearchIcon: boolean = true;
+  public showBackToTopButton = false;
+  public showSearchIcon = true;
   public isMobile = true;
   public providerIdentitySupport: string;
   public filteredAccessSections: IAccessSection[] | undefined = [];

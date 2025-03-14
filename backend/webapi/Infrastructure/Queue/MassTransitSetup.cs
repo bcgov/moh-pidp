@@ -16,6 +16,7 @@ public static class MassTransitSetup
             x.AddConsumer<PartyEmailUpdatedBcProviderConsumer>();
             x.AddConsumer<UpdateBcProviderAttributesConsumer>();
             x.AddConsumer<UpdateKeycloakAttributesConsumer>();
+            x.AddConsumer<SendEmailConsumer>();
 
             x.UsingRabbitMq((context, cfg) =>
             {
@@ -46,6 +47,16 @@ public static class MassTransitSetup
                     ep.PublishFaults = false;
                     ep.Bind("update-keycloak-attributes");
                     ep.ConfigureConsumer<UpdateKeycloakAttributesConsumer>(context);
+                });
+
+                cfg.ReceiveEndpoint("send-email-queue", ep =>
+                {
+                    ep.PublishFaults = false;
+                    ep.Bind("send-email");
+                    ep.ConfigureConsumer<SendEmailConsumer>(context);
+
+                    // Configure specific retry policy for send-email-queue
+                    ep.UseMessageRetry(r => r.Interval(2, TimeSpan.FromMinutes(15)));
                 });
             });
         });

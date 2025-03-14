@@ -25,15 +25,15 @@ export class ToggleContentComponent {
   @Input() public color: ThemePalette;
   @Input() public label!: string;
   @Input() public checked!: boolean;
-  @Output() public toggle: EventEmitter<ToggleContentChange>;
+  @Output() public toggleChange: EventEmitter<ToggleContentChange>;
 
   public constructor() {
     this.color = 'primary';
-    this.toggle = new EventEmitter<ToggleContentChange>();
+    this.toggleChange = new EventEmitter<ToggleContentChange>();
   }
 
   public onToggleContent({ checked }: MatSlideToggleChange): void {
     this.checked = !this.checked;
-    this.toggle.emit({ checked });
+    this.toggleChange.emit({ checked });
   }
 }
