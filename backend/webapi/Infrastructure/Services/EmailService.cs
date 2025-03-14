@@ -8,6 +8,7 @@ using Pidp;
 using Pidp.Data;
 using Pidp.Infrastructure.HttpClients.Mail;
 using Pidp.Models;
+using Serilog;
 
 public class EmailService(
     IChesClient chesClient,
@@ -34,6 +35,7 @@ public class EmailService(
 
         if (this.config.ChesClient.Enabled && await this.chesClient.HealthCheckAsync())
         {
+            Log.Information("Sending email via CHES");
             var msgId = await this.chesClient.SendAsync(email);
             await this.CreateEmailLog(email, SendType.Ches, msgId);
 
