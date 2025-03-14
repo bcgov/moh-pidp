@@ -81,4 +81,8 @@ export class ToastService {
   ): void {
     this.snackBar.open(message, action, config);
   }
+
+  public closeToast(): void {
+    this.snackBar.dismiss();
+  }
 }

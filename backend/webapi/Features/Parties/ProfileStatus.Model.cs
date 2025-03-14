@@ -1,6 +1,7 @@
 namespace Pidp.Features.Parties;
 
 using Pidp.Features.AccessRequests;
+using Pidp.Models.Constants;
 using Pidp.Infrastructure.HttpClients.Plr;
 using Pidp.Models.Lookups;
 
@@ -29,6 +30,7 @@ public partial class ProfileStatus
             internal abstract string SectionName { get; }
             public HashSet<Alert> Alerts { get; set; } = [];
             public StatusCode StatusCode { get; set; }
+            public virtual string ErrorReason { get; }=  "";
             public virtual string[] KeyWords { get; } = [];
 
             public bool IsComplete => this.StatusCode == StatusCode.Complete;
@@ -50,6 +52,7 @@ public partial class ProfileStatus
             internal override string SectionName => "dashboardInfo";
             public string DisplayFullName { get; set; } = string.Empty;
             public CollegeCode? CollegeCode { get; set; }
+            public override string ErrorReason => ProfileConstants.ErrorMessages.IncorrectCredentialType;
 
             protected override StatusCode Compute(ProfileData profile)
             {
@@ -64,6 +67,7 @@ public partial class ProfileStatus
         {
             internal override string SectionName => "bcProvider";
             public override string[] KeyWords => ["doctors", "nursing", "ha", "pharmacist"];
+            public override string ErrorReason => ProfileConstants.ErrorMessages.IncorrectCredentialType;
 
             protected override StatusCode Compute(ProfileData profile)
             {
@@ -81,6 +85,7 @@ public partial class ProfileStatus
             internal override string SectionName => "collegeCertification";
             public bool HasCpn { get; set; }
             public bool LicenceDeclared { get; set; }
+            public override string ErrorReason => ProfileConstants.ErrorMessages.IncorrectCredentialType;
 
             protected override StatusCode Compute(ProfileData profile)
             {
@@ -118,6 +123,7 @@ public partial class ProfileStatus
         public class DemographicsSection : ProfileSection
         {
             internal override string SectionName => "demographics";
+            public override string ErrorReason => ProfileConstants.ErrorMessages.IncorrectCredentialType;
 
             protected override StatusCode Compute(ProfileData profile)
             {
@@ -130,7 +136,7 @@ public partial class ProfileStatus
         public class EndorsementsSection : ProfileSection
         {
             internal override string SectionName => "endorsements";
-
+            public override string ErrorReason => ProfileConstants.ErrorMessages.IncorrectCredentialType;
             protected override StatusCode Compute(ProfileData profile)
             {
                 if (profile.HasPendingEndorsementRequest)
@@ -147,7 +153,7 @@ public partial class ProfileStatus
         public class UserAccessAgreementSection : ProfileSection
         {
             internal override string SectionName => "userAccessAgreement";
-
+            public override string ErrorReason => ProfileConstants.ErrorMessages.IncorrectCredentialType;
             protected override StatusCode Compute(ProfileData profile)
             {
                 return profile.HasEnrolment(AccessTypeCode.UserAccessAgreement)
@@ -160,6 +166,7 @@ public partial class ProfileStatus
         {
             internal override string SectionName => "accountLinking";
             public override string[] KeyWords => ["doctors", "ha", "nursing"];
+            public override string ErrorReason => ProfileConstants.ErrorMessages.IncorrectCredentialType;
 
             protected override StatusCode Compute(ProfileData profile) => StatusCode.Incomplete;
         }
@@ -168,7 +175,7 @@ public partial class ProfileStatus
         {
             internal override string SectionName => "driverFitness";
             public override string[] KeyWords => ["doctors"];
-
+            public override string ErrorReason => ProfileConstants.ErrorMessages.InsufficientCollegeLicesnse;
             protected override StatusCode Compute(ProfileData profile)
             {
                 return profile switch
@@ -188,6 +195,7 @@ public partial class ProfileStatus
         {
             internal override string SectionName => "hcimAccountTransfer";
             public override string[] KeyWords => ["ha"];
+            public override string ErrorReason => ProfileConstants.ErrorMessages.IncorrectCredentialType;
 
             protected override StatusCode Compute(ProfileData profile)
             {
@@ -201,7 +209,7 @@ public partial class ProfileStatus
         {
             internal override string SectionName => "immsBCEforms";
             public override string[] KeyWords => ["doctors", "nursing", "pharmacist"];
-
+            public override string ErrorReason => ProfileConstants.ErrorMessages.IncorrectCredentialType;
             protected override StatusCode Compute(ProfileData profile)
             {
                 return profile switch
@@ -220,6 +228,7 @@ public partial class ProfileStatus
         {
             internal override string SectionName => "msTeamsClinicMember";
             public override string[] KeyWords => ["ha"];
+            public override string ErrorReason => ProfileConstants.ErrorMessages.IncorrectCredentialType;
 
             protected override StatusCode Compute(ProfileData profile)
             {
@@ -237,6 +246,7 @@ public partial class ProfileStatus
         {
             internal override string SectionName => "msTeamsPrivacyOfficer";
             public override string[] KeyWords => ["ha"];
+            public override string ErrorReason => ProfileConstants.ErrorMessages.IncorrectCredentialType;
 
             protected override StatusCode Compute(ProfileData profile)
             {
@@ -256,6 +266,7 @@ public partial class ProfileStatus
         {
             internal override string SectionName => "prescriptionRefillEforms";
             public override string[] KeyWords => ["pharmacists", "rx"];
+            public override string ErrorReason => ProfileConstants.ErrorMessages.IncorrectCredentialType;
 
             protected override StatusCode Compute(ProfileData profile)
             {
@@ -275,6 +286,7 @@ public partial class ProfileStatus
         {
             internal override string SectionName => "provincialAttachmentSystem";
             public override string[] KeyWords => ["doctors", "nursing", "panel"];
+            public override string ErrorReason => ProfileConstants.ErrorMessages.IncorrectCredentialType;
 
             protected override StatusCode Compute(ProfileData profile)
             {
@@ -294,6 +306,7 @@ public partial class ProfileStatus
         public class ProviderReportingPortalSection : ProfileSection
         {
             internal override string SectionName => "providerReportingPortal";
+            public override string ErrorReason => ProfileConstants.ErrorMessages.IncorrectCredentialType;
 
             protected override StatusCode Compute(ProfileData profile)
             {
@@ -313,6 +326,7 @@ public partial class ProfileStatus
         {
             internal override string SectionName => "saEforms";
             public bool IncorrectLicenceType { get; set; }
+            public override string ErrorReason => ProfileConstants.ErrorMessages.IncorrectCredentialType;
 
             protected override StatusCode Compute(ProfileData profile)
             {

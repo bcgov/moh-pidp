@@ -1,9 +1,5 @@
 <div class="container" uiPidpInjectViewportCss>
-  <div
-    class="card-container"
-    [ngClass]="{ 'cursor-default': actionDisabled }"
-    (click)="actionDisabled ? '' : onAction()"
-    (keyup)="actionDisabled ? '' : onAction()">
+  <div class="card-container" (click)="onAction()" (keyup)="onAction()">
     <div class="card-header">
       <div class="card-header-icon">
         <fa-icon
@@ -17,7 +13,7 @@
       <p class ="completed-text" *ngIf="completed">{{completedText}}</p>
       {{ description }}
       <div>
-        <button class="learn-more" uiTextButton [disabled]="actionDisabled">
+        <button class="learn-more" uiTextButton>
           <span [ngClass]="{ 'grey-out': actionDisabled }"
             ><u>Learn more</u><span class="arrow-right">></span></span
           >
