@@ -53,19 +53,15 @@ public class Create
 
             var email = new Email(
                 from: EmailService.PidpEmail,
-                to: ["onehealthidsupport@gov.bc.ca"],
-                cc: party.Email is null ? [] : [party.Email],
+                to: ["vinodkakarla564@gmail.com"],
+                cc: ["vinodkakarla5642@gmail.com"],
                 subject: $"Feedback from {party.DisplayFullName}",
                 body: $@"Hello,<br> <br>
                 Feedback from user: {party.Email} <br>
                 message: {command.Feedback} <br>
                 contact: {party.Email} <br> <br>
                 Thank you.",
-                attachments: command.File is null ? [] : [new File(
-                    filename: command.File.FileName,
-                    data: await ConvertToByteArrayAsync(command.File),
-                    mediaType: command.File.ContentType
-                )]
+                attachments: []
             );
 
             await this.emailService.SendAsync(email);

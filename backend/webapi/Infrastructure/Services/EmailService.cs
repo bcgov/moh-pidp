@@ -33,17 +33,14 @@ public class EmailService(
             email.Subject = $"THE FOLLOWING EMAIL IS A TEST: {email.Subject}";
         }
 
-        if (await this.chesClient.HealthCheckAsync())
-        {
-            Console.WriteLine("Sending email via CHES");
-            Log.Information("Sending email via CHES");
-            var msgId = await this.chesClient.SendAsync(email);
-            await this.CreateEmailLog(email, SendType.Ches, msgId);
+        Console.WriteLine("Sending email via CHES");
+        Log.Information("Sending email via CHES");
+        var msgId = await this.chesClient.SendAsync(email);
+        await this.CreateEmailLog(email, SendType.Ches, msgId);
 
-            if (msgId != null)
-            {
-                return;
-            }
+        if (msgId != null)
+        {
+            return;
         }
 
         // Fall back to SMTP client
