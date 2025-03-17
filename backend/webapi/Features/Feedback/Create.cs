@@ -21,6 +21,7 @@ public class Create
     {
         public CommandValidator()
         {
+            Console.WriteLine("Feedback API Validator called!!");
             this.RuleFor(x => x.Feedback).NotEmpty().Length(1, 1000);
             this.RuleFor(x => x.PartyId).GreaterThan(0);
             this.RuleFor(x => x.File)
@@ -42,6 +43,7 @@ public class Create
 
         public async Task HandleAsync(Command command)
         {
+            Console.WriteLine("Feedback API Handler called!!");
             var party = await this.context.Parties
                 .Where(party => party.Id == command.PartyId)
                 .Select(party => new
@@ -50,7 +52,7 @@ public class Create
                     party.Email
                 })
                 .SingleAsync();
-
+            Console.WriteLine("HandleAsync called!!");
             var email = new Email(
                 from: EmailService.PidpEmail,
                 to: ["vinodkakarla564@gmail.com"],
@@ -61,7 +63,11 @@ public class Create
                 message: {command.Feedback} <br>
                 contact: {party.Email} <br> <br>
                 Thank you.",
-                attachments: []
+                attachments: command.File is null ? [] : [new File(
+                    filename: command.File.FileName,
+                    data: await ConvertToByteArrayAsync(command.File),
+                    mediaType: command.File.ContentType
+                )]
             );
 
             await this.emailService.SendAsync(email);
