@@ -44,7 +44,7 @@ import { FaqRoutes } from '../../faq.routes';
 export class HelpPage implements OnInit, AfterViewInit {
   public providerIdentitySupport: string;
   public readonly panelOpenState = signal(false);
-  public showBackToTopButton: boolean = false;
+  public showBackToTopButton = false;
   public faArrowUp = faArrowUp;
   public applicationUrl: string;
   public breadcrumbsData: Array<{ title: string; path: string }> = [

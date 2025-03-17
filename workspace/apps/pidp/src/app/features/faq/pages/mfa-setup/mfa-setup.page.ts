@@ -41,7 +41,7 @@ import { FaqRoutes } from '../../faq.routes';
 export class MfaSetupPage implements OnInit {
   public providerIdentitySupport: string;
   public faArrowUp = faArrowUp;
-  public showBackToTopButton: boolean = false;
+  public showBackToTopButton = false;
   public AccessRoutes = AccessRoutes;
   public FaqRoutes = FaqRoutes;
   public breadcrumbsData: Array<{ title: string; path: string }> = [

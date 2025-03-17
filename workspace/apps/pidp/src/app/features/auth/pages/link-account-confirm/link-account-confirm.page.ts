@@ -52,7 +52,7 @@ export class LinkAccountConfirmPage implements OnInit {
     { title: 'Link Account', path: '' },
   ];
 
-  public showInstructions: boolean = false;
+  public showInstructions = false;
   public logoutRedirectUrl: string;
   public constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
