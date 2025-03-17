@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
 @Component({
     selector: 'app-dialog-feedback-send',
@@ -27,7 +27,6 @@ import { faXmark } from '@fortawesome/free-solid-svg-icons';
     the help desk will contact you shortly.
   </p>`,
     styles: `p { text-align: center; }`,
-    imports: [FaIconComponent]
 })
 export class FeedbackSendComponent {
   @Input() public username!: string;

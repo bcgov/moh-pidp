@@ -17,12 +17,6 @@ import { faArrowUp } from '@fortawesome/free-solid-svg-icons';
 import {
   AnchorDirective,
   InjectViewportCssClassDirective,
-  PageComponent,
-  PageFooterActionDirective,
-  PageFooterComponent,
-  PageHeaderComponent,
-  PageSectionComponent,
-  PageSectionSubheaderComponent,
 } from '@bcgov/shared/ui';
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';
@@ -34,24 +28,18 @@ import { Constants } from '@app/shared/constants';
 import { FaqRoutes } from '../../faq.routes';
 
 @Component({
-    selector: 'app-help',
-    templateUrl: './help.page.html',
-    styleUrls: ['./help.page.scss'],
-    imports: [
-        AnchorDirective,
-        BreadcrumbComponent,
-        FaIconComponent,
-        MatButtonModule,
-        MatExpansionModule,
-        NgIf,
-        PageComponent,
-        PageFooterActionDirective,
-        PageFooterComponent,
-        PageHeaderComponent,
-        PageSectionComponent,
-        PageSectionSubheaderComponent,
-        InjectViewportCssClassDirective,
-    ]
+  selector: 'app-help',
+  templateUrl: './help.page.html',
+  styleUrls: ['./help.page.scss'],
+  imports: [
+    AnchorDirective,
+    BreadcrumbComponent,
+    FaIconComponent,
+    MatButtonModule,
+    MatExpansionModule,
+    NgIf,
+    InjectViewportCssClassDirective,
+  ],
 })
 export class HelpPage implements OnInit, AfterViewInit {
   public providerIdentitySupport: string;

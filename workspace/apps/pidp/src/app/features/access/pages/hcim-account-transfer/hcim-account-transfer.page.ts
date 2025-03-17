@@ -8,8 +8,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { EMPTY, Observable } from 'rxjs';
 
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-
 import {
   AlertActionsDirective,
   AlertComponent,
@@ -19,7 +17,6 @@ import {
   PageComponent,
   PageFooterActionDirective,
   PageFooterComponent,
-  PageHeaderComponent,
   PageSectionComponent,
   PageSectionSubheaderComponent,
   PageSectionSubheaderDescDirective,
@@ -54,33 +51,31 @@ import {
 } from './hcim-account-transfer-resource.service';
 
 @Component({
-    selector: 'app-hcim-account-transfer',
-    templateUrl: './hcim-account-transfer.page.html',
-    styleUrls: ['./hcim-account-transfer.page.scss'],
-    viewProviders: [HcimAccountTransferResource],
-    imports: [
-        AlertActionsDirective,
-        AlertComponent,
-        AlertContentDirective,
-        AnchorDirective,
-        BreadcrumbComponent,
-        FaIconComponent,
-        InjectViewportCssClassDirective,
-        MatButtonModule,
-        MatFormFieldModule,
-        MatInputModule,
-        NgIf,
-        PageComponent,
-        PageFooterActionDirective,
-        PageFooterComponent,
-        PageHeaderComponent,
-        PageSectionComponent,
-        PageSectionSubheaderComponent,
-        PageSectionSubheaderDescDirective,
-        PageSectionSubheaderHintDirective,
-        PageSubheaderComponent,
-        ReactiveFormsModule,
-    ]
+  selector: 'app-hcim-account-transfer',
+  templateUrl: './hcim-account-transfer.page.html',
+  styleUrls: ['./hcim-account-transfer.page.scss'],
+  viewProviders: [HcimAccountTransferResource],
+  imports: [
+    AlertActionsDirective,
+    AlertComponent,
+    AlertContentDirective,
+    AnchorDirective,
+    BreadcrumbComponent,
+    InjectViewportCssClassDirective,
+    MatButtonModule,
+    MatFormFieldModule,
+    MatInputModule,
+    NgIf,
+    PageComponent,
+    PageFooterActionDirective,
+    PageFooterComponent,
+    PageSectionComponent,
+    PageSectionSubheaderComponent,
+    PageSectionSubheaderDescDirective,
+    PageSectionSubheaderHintDirective,
+    PageSubheaderComponent,
+    ReactiveFormsModule,
+  ],
 })
 export class HcimAccountTransferPage
   extends AbstractFormPage<HcimAccountTransferFormState>

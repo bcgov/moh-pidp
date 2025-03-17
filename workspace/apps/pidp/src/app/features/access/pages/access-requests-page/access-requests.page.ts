@@ -1,4 +1,4 @@
-import { AsyncPipe, NgClass, NgFor, NgIf } from '@angular/common';
+import { NgFor, NgIf } from '@angular/common';
 import {
   Component,
   HostListener,
@@ -16,10 +16,7 @@ import {
   faMagnifyingGlass,
 } from '@fortawesome/free-solid-svg-icons';
 
-import {
-  InjectViewportCssClassDirective,
-  LayoutHeaderFooterComponent,
-} from '@bcgov/shared/ui';
+import { InjectViewportCssClassDirective } from '@bcgov/shared/ui';
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';
 import { PartyService } from '@app/core/party/party.service';
@@ -33,21 +30,18 @@ import { Constants } from '@app/shared/constants';
 import { AccessRequestCardComponent } from '../../components/access-request-card/access-request-card.component';
 
 @Component({
-    selector: 'app-access-request-page',
-    templateUrl: './access-requests.page.html',
-    styleUrls: ['./access-requests.page.scss'],
-    imports: [
-        BreadcrumbComponent,
-        FaIconComponent,
-        InjectViewportCssClassDirective,
-        MatButtonModule,
-        NgClass,
-        NgIf,
-        LayoutHeaderFooterComponent,
-        AccessRequestCardComponent,
-        NgFor,
-        AsyncPipe,
-    ]
+  selector: 'app-access-request-page',
+  templateUrl: './access-requests.page.html',
+  styleUrls: ['./access-requests.page.scss'],
+  imports: [
+    BreadcrumbComponent,
+    FaIconComponent,
+    InjectViewportCssClassDirective,
+    MatButtonModule,
+    NgIf,
+    AccessRequestCardComponent,
+    NgFor,
+  ],
 })
 export class AccessRequestsPage implements OnInit, OnDestroy {
   /**
@@ -110,7 +104,7 @@ export class AccessRequestsPage implements OnInit, OnDestroy {
           (section) =>
             section.heading.toLowerCase().includes(text.toLowerCase()) ||
             section.description.toLowerCase().includes(text.toLowerCase()) ||
-            section.keyWords?.includes(text.toLocaleLowerCase())
+            section.keyWords?.includes(text.toLocaleLowerCase()),
         );
       });
   }

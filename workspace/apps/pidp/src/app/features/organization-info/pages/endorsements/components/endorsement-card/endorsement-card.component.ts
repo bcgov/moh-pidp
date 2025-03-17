@@ -3,22 +3,20 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { faUserGroup } from '@fortawesome/free-solid-svg-icons';
 
 import { InjectViewportCssClassDirective } from '@bcgov/shared/ui';
 
 @Component({
-    selector: 'app-endorsement-card',
-    templateUrl: './endorsement-card.component.html',
-    styleUrls: ['./endorsement-card.component.scss'],
-    imports: [
-        FaIconComponent,
-        InjectViewportCssClassDirective,
-        MatButtonModule,
-        MatIconModule,
-        NgIf,
-    ]
+  selector: 'app-endorsement-card',
+  templateUrl: './endorsement-card.component.html',
+  styleUrls: ['./endorsement-card.component.scss'],
+  imports: [
+    InjectViewportCssClassDirective,
+    MatButtonModule,
+    MatIconModule,
+    NgIf,
+  ],
 })
 export class EndorsementCardComponent {
   public faUserGroup = faUserGroup;

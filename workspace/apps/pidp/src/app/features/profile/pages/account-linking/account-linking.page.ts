@@ -1,10 +1,4 @@
-import {
-  AsyncPipe,
-  CommonModule,
-  NgFor,
-  NgIf,
-  NgOptimizedImage,
-} from '@angular/common';
+import { CommonModule, NgIf } from '@angular/common';
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
@@ -47,28 +41,23 @@ import { AuthService } from '@app/features/auth/services/auth.service';
 import { AuthorizedUserService } from '@app/features/auth/services/authorized-user.service';
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
 import { BreadcrumbComponent } from '@app/shared/components/breadcrumb/breadcrumb.component';
-import { SuccessDialogComponent } from '@app/shared/components/success-dialog/success-dialog.component';
 
 import { AccountLinkingResource } from './account-linking-resource.service';
 import { linkedAccountCardText } from './account-linking.constants';
 import { Credential } from './account-linking.model';
 
 @Component({
-    selector: 'app-account-linking',
-    imports: [
-        BreadcrumbComponent,
-        CommonModule,
-        InjectViewportCssClassDirective,
-        MatButtonModule,
-        NgOptimizedImage,
-        SuccessDialogComponent,
-        AsyncPipe,
-        MatTooltipModule,
-        NgFor,
-        NgIf,
-    ],
-    templateUrl: './account-linking.page.html',
-    styleUrl: './account-linking.page.scss'
+  selector: 'app-account-linking',
+  imports: [
+    BreadcrumbComponent,
+    CommonModule,
+    InjectViewportCssClassDirective,
+    MatButtonModule,
+    MatTooltipModule,
+    NgIf,
+  ],
+  templateUrl: './account-linking.page.html',
+  styleUrl: './account-linking.page.scss',
 })
 export class AccountLinkingPage implements OnInit, OnDestroy {
   public title: string;

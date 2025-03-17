@@ -10,9 +10,6 @@ import {
   AnchorDirective,
   InjectViewportCssClassDirective,
   PageComponent,
-  PageFooterActionDirective,
-  PageFooterComponent,
-  PageHeaderComponent,
   PageSectionComponent,
   PageSectionSubheaderComponent,
 } from '@bcgov/shared/ui';
@@ -20,29 +17,26 @@ import {
 import { APP_CONFIG, AppConfig } from '@app/app.config';
 import { UtilsService } from '@app/core/services/utils.service';
 import { AccessRoutes } from '@app/features/access/access.routes';
+import { BreadcrumbComponent } from '@app/shared/components/breadcrumb/breadcrumb.component';
 import { Constants } from '@app/shared/constants';
 
 import { FaqRoutes } from '../../faq.routes';
-import { BreadcrumbComponent } from '@app/shared/components/breadcrumb/breadcrumb.component';
 
 @Component({
-    selector: 'app-mfa-setup',
-    templateUrl: './mfa-setup.page.html',
-    styleUrls: ['./mfa-setup.page.scss'],
-    imports: [
-        AnchorDirective,
-        BreadcrumbComponent,
-        FaIconComponent,
-        MatButtonModule,
-        NgIf,
-        PageComponent,
-        PageFooterActionDirective,
-        PageFooterComponent,
-        PageHeaderComponent,
-        PageSectionComponent,
-        PageSectionSubheaderComponent,
-        InjectViewportCssClassDirective,
-    ]
+  selector: 'app-mfa-setup',
+  templateUrl: './mfa-setup.page.html',
+  styleUrls: ['./mfa-setup.page.scss'],
+  imports: [
+    AnchorDirective,
+    BreadcrumbComponent,
+    FaIconComponent,
+    MatButtonModule,
+    NgIf,
+    PageComponent,
+    PageSectionComponent,
+    PageSectionSubheaderComponent,
+    InjectViewportCssClassDirective,
+  ],
 })
 export class MfaSetupPage implements OnInit {
   public providerIdentitySupport: string;

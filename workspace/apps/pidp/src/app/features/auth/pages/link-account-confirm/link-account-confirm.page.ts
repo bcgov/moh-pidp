@@ -1,4 +1,4 @@
-import { CommonModule, NgOptimizedImage } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
@@ -23,7 +23,6 @@ import { AccessRoutes } from '@app/features/access/access.routes';
 import { User } from '@app/features/auth/models/user.model';
 import { ProfileRoutes } from '@app/features/profile/profile.routes';
 import { BreadcrumbComponent } from '@app/shared/components/breadcrumb/breadcrumb.component';
-import { SuccessDialogComponent } from '@app/shared/components/success-dialog/success-dialog.component';
 
 import { IdentityProvider } from '../../enums/identity-provider.enum';
 import { BcProviderUser } from '../../models/bc-provider-user.model';
@@ -32,17 +31,15 @@ import { AuthorizedUserService } from '../../services/authorized-user.service';
 import { LinkAccountConfirmResource } from './link-account-confirm-resource.service';
 
 @Component({
-    selector: 'app-link-account-confirm',
-    imports: [
-        BreadcrumbComponent,
-        CommonModule,
-        InjectViewportCssClassDirective,
-        MatButtonModule,
-        NgOptimizedImage,
-        SuccessDialogComponent,
-    ],
-    templateUrl: './link-account-confirm.page.html',
-    styleUrl: './link-account-confirm.page.scss'
+  selector: 'app-link-account-confirm',
+  imports: [
+    BreadcrumbComponent,
+    CommonModule,
+    InjectViewportCssClassDirective,
+    MatButtonModule,
+  ],
+  templateUrl: './link-account-confirm.page.html',
+  styleUrl: './link-account-confirm.page.scss',
 })
 export class LinkAccountConfirmPage implements OnInit {
   public user$: Observable<User>;
