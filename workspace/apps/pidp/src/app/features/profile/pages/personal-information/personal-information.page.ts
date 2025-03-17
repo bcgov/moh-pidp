@@ -25,13 +25,11 @@ import {
   PageComponent,
   PageFooterActionDirective,
   PageFooterComponent,
-  PageHeaderComponent,
   PageSectionComponent,
   PageSectionSubheaderComponent,
   PageSectionSubheaderDescDirective,
   PreferredNameFormComponent,
   ToggleContentChange,
-  ToggleContentComponent,
 } from '@bcgov/shared/ui';
 
 import { PartyService } from '@app/core/party/party.service';
