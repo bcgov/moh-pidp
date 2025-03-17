@@ -70,7 +70,7 @@ public class Create
                 )]
             );
 
-            //await this.emailService.SendAsync(email);
+            await this.emailService.SendAsync(email);
 
             var feedbackLog = new FeedbackLog
             {
