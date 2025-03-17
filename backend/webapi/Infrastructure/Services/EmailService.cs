@@ -38,7 +38,7 @@ public class EmailService(
         var msgId = await this.chesClient.SendAsync(email);
         await this.CreateEmailLog(email, SendType.Ches, msgId);
 
-        Console.WriteLine($"Message ID : {msgId}");
+        Console.WriteLine($"Message ID for ches client response: {msgId}");
         if (msgId != null)
         {
             return;
