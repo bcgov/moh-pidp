@@ -36,7 +36,7 @@
     "bootstrap": "~5.3.2",
     "html2canvas": "^1.4.1",
     "keycloak-angular": "~15.0.0",
-    "keycloak-js": "~18.0.1",
+    "keycloak-js": "^25.0.0",
     "luxon": "~3.4.4",
     "ngx-mask": "~17.0.4",
     "ngx-progressbar": "~11.1.0",
