@@ -8,4 +8,4 @@ import { Component } from '@angular/core';
   templateUrl: './immsbc.page.html',
   styleUrl: './immsbc.page.scss',
 })
-export class ImmsbcPage {}
+export class ImmsBCPage {}

@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { ImmscbcResource } from './immscbc-resource.service';
+import { ImmsBCResource } from './immsbc-resource.service';
 
 describe('ImmscbcResource', () => {
-  let service: ImmscbcResource;
+  let service: ImmsBCResource;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(ImmscbcResource);
+    service = TestBed.inject(ImmsBCResource);
   });
 
   it('should be created', () => {
