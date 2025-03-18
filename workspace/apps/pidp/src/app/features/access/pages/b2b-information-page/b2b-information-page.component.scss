@@ -1,0 +1,122 @@
+@use 'pidp-variables' as pidp;
+
+.viewport-all {
+  --gap: 1rem;
+  --font-size: 0.75rem;
+  --header-margin: unset;
+  --card-border-radius: calc(var(--gap) * 0.375);
+  --content-padding: var(--gap);
+  --form-card-width: unset;
+  padding: 1.25rem 0.75rem;
+
+  & .content {
+    padding-bottom: var(--content-padding);
+    display: flex;
+    flex-direction: column;
+
+    .content-header {
+      h1 {
+        color: #003366;
+        font-size: 50px;
+        font-weight: 700;
+        word-wrap: break-word;
+      }
+
+      p {
+        color: #313132;
+        font-size: 1rem;
+        font-weight: 400;
+        line-height: 1.6rem;
+        margin-top: 1rem;
+      }
+    }
+
+    .main {
+      display: grid;
+      grid-template-columns: calc(49% - 15px) calc(49% - 15px);
+      gap: 5rem;
+      min-height: 340px;
+      margin: calc(var(--gap) * 2) 0;
+
+      & .card {
+        display: flex;
+        flex-direction: column;
+        padding-right: calc(var(--gap) * 0.9);
+        position: relative;
+        line-height: 1.5rem;
+
+        & img {
+          width: 97%;
+        }
+
+        & button {
+          border: pidp.$bcgov-color-primary solid 2px;
+          color: pidp.$bcgov-color-primary;
+          background: transparent;
+          width: 12rem;
+          border-radius: 4px;
+          height: 3.2rem;
+          margin-top: 0.5rem;
+        }
+
+        & mat-label {
+          font-weight: 700;
+          color: #313132;
+        }
+
+        .next-button {
+          width: 6rem;
+          margin-top: 0rem;
+        }
+      }
+
+    }
+  }
+}
+
+.viewport-small {
+  & .content {
+    .content-header {
+      h1 {
+        font-size: 40px;
+      }
+    }
+    .main {
+      gap: 3rem;
+      & .card {
+        & button {
+          height: 2.5rem;
+          width: 10rem;
+        }
+        .next-button {
+          width: 6rem;
+        }
+      }
+    }
+  }
+}
+
+.viewport-xsmall {
+  & .content {
+    .content-header {
+      h1 {
+        font-size: 30px;
+      }
+    }
+
+    .main {
+      grid-template-columns: unset;
+      & .card {
+        & button {
+          height: 2rem;
+          width: 7rem;
+          margin-top: 0;
+        }
+        .next-button {
+          width: 5rem;
+        }
+      }
+    }
+  }
+}
+
