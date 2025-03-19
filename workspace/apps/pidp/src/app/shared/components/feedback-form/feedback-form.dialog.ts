@@ -150,7 +150,7 @@ export class FeedbackFormDialogComponent
         this.toastService.openErrorToast('Error occurred while sending feedback');
         return of(null);
       }),
-    );
+    ).subscribe();
   }
 
   public showSuccessDialog(): void {
