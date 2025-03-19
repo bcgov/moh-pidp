@@ -41,4 +41,10 @@ export class B2bInformationPageComponent {
   public onNext(): void {
     this.router.navigate([AccessRoutes.routePath(AccessRoutes.IMMSBC)]);
   }
+
+  public onContinue(): void {
+    this.router.navigate([
+      AccessRoutes.routePath(AccessRoutes.BC_PROVIDER_EDIT),
+    ]);
+  }
 }
