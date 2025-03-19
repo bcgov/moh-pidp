@@ -38,6 +38,15 @@
       min-height: 340px;
       margin: calc(var(--gap) * 2) 0;
 
+      .form {
+        display: flex;
+
+        .field {
+          display: flex;
+          width: 590px;
+        }
+      }
+
       & .card {
         display: flex;
         flex-direction: column;
@@ -63,13 +72,7 @@
           font-weight: 700;
           color: #313132;
         }
-
-        .next-button {
-          width: 6rem;
-          margin-top: 0rem;
-        }
       }
-
     }
   }
 }
@@ -119,4 +122,3 @@
     }
   }
 }
-

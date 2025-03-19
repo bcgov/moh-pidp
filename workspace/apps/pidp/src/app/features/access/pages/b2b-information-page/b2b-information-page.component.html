@@ -32,34 +32,27 @@
           proident, sunt in culpa qui officia deserunt mollit anim id est
           laborum.
         </p>
-        <mat-form-field>
-          <mat-label class="field-label">Username</mat-label>
-          <input
-            matInput
-            formControlName="licenceNumber"
-            placeholder="Enter your username"
-            aria-labelledby="college-licence-declaration-licence-number" />
-          <mat-error>Required</mat-error>
-        </mat-form-field>
-        <button
-          class="next-button"
-          mat-flat-button
-          type="button"
-          color="primary"
-          aria-labelledby="complete-bcprovider"
-          (click)="onInvite('garbage@fakegoogle.com')">
-          Invite
-        </button>
-        <button
-          class="next-button"
-          mat-flat-button
-          type="button"
-          color="primary"
-          routerLink="/access/bc-provider-application"
-          aria-labelledby="complete-bcprovider"
-          (click)="onNext()">
-          Next
-        </button>
+        <div class="form">
+          <form novalidate [formGroup]="formState.form" (ngSubmit)="onSubmit()">
+            <mat-form-field class="field">
+              <mat-label class="field-label">Username</mat-label>
+              <input
+                matInput
+                formControlName="userPrincipalName"
+                placeholder="Enter your username"
+                aria-labelledby="college-licence-declaration-licence-number" />
+              <mat-error>Required</mat-error>
+            </mat-form-field>
+            <button
+              class="next-button"
+              mat-flat-button
+              type="submit"
+              color="primary"
+              aria-labelledby="complete-bcprovider">
+              Invite
+            </button>
+          </form>
+        </div>
       </div>
 
       <div class="card">
