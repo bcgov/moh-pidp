@@ -54,11 +54,19 @@ public class BCProviderInvite
 
             if (await this.client.UpdateUser(createdGuestId, user))
             {
-                return DomainResult.Success();
+                if (await this.client.AssignAccessPackage(createdGuestId))
+                {
+                    return DomainResult.Success();
+                }
+                else
+                {
+                    Console.WriteLine("Failed to assign access package");
+                    return DomainResult.Failed();
+                }
             }
             else
             {
-                System.Console.WriteLine("Failed to update BCProvider user's first/last name");
+                Console.WriteLine("Failed to update BCProvider user's first/last name");
                 return DomainResult.Failed();
             }
         }
