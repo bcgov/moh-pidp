@@ -13,10 +13,13 @@ import { ApiHttpClient } from '@app/core/resources/api-http-client.service';
 export class B2bInvitationResource {
   public constructor(private apiResource: ApiHttpClient) {}
 
-  public inviteGuestAccount(partyId: number, upn: string): NoContent {
+  public inviteGuestAccount(
+    partyId: number,
+    userPrincipalName: string,
+  ): NoContent {
     return this.apiResource
       .post<string>(`${this.getResourcePath(partyId)}/bc-provider/invite`, {
-        upn,
+        userPrincipalName,
       })
       .pipe(
         NoContentResponse,
