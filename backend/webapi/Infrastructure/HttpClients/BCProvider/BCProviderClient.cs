@@ -22,9 +22,12 @@ public partial class BCProviderClient(
             RequestType = AccessPackageRequestType.AdminAdd,
             Assignment = new AccessPackageAssignment
             {
-                Target = new AccessPackageSubject { Id = userPrincipalName },
-                AccessPackage = new AccessPackage { Id = "feb22c27-65a6-4093-9c16-076881d7e583" },
-                AssignmentPolicy = new AccessPackageAssignmentPolicy { Id = "023f218b-21bf-4882-bf67-b4c39b491743" }
+                AdditionalData = new Dictionary<string, object>
+                {
+                    { "targetId", userPrincipalName! },
+                    { "assignmentPolicyId", "feb22c27-65a6-4093-9c16-076881d7e583" },
+                    { "accessPackageId", "023f218b-21bf-4882-bf67-b4c39b491743" },
+                }
             }
         };
 
