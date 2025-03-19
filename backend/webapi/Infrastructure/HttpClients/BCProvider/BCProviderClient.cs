@@ -25,8 +25,8 @@ public partial class BCProviderClient(
                 AdditionalData = new Dictionary<string, object>
                 {
                     { "targetId", userPrincipalName! },
-                    { "assignmentPolicyId", "feb22c27-65a6-4093-9c16-076881d7e583" },
-                    { "accessPackageId", "023f218b-21bf-4882-bf67-b4c39b491743" },
+                    { "assignmentPolicyId", "023f218b-21bf-4882-bf67-b4c39b491743" },
+                    { "accessPackageId", "feb22c27-65a6-4093-9c16-076881d7e583" },
                 }
             }
         };
