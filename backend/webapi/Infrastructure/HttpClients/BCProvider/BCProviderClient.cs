@@ -72,6 +72,29 @@ public partial class BCProviderClient(
         }
     }
 
+    // TODO: this is demo code, rewrite it
+    public async Task<string?> SendInvite(string userPrincipalName)
+    {
+        var invitation = new Invitation
+        {
+            InvitedUserEmailAddress = userPrincipalName,
+            InviteRedirectUrl = "https://www.google.ca",
+            SendInvitationMessage = false,
+            InvitedUserType = "Guest"
+        };
+
+        try
+        {
+            var test = await this.client.Invitations.PostAsync(invitation);
+            return test?.InvitedUser?.Id;
+        }
+        catch (ServiceException ex)
+        {
+            Console.WriteLine($"Error: {ex.Message}");
+            return null;
+        }
+    }
+
     public async Task<bool> UpdateAttributes(string userPrincipalName, IDictionary<string, object> bcProviderAttributes)
     {
         if (bcProviderAttributes.Count == 0)
@@ -134,7 +157,6 @@ public partial class BCProviderClient(
             return false;
         }
     }
-
 
     public async Task<bool> RemoveAuthMethods(string userPrincipalName)
     {
