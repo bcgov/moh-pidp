@@ -6,57 +6,78 @@
         <h1>Choose your sign-in option</h1>
         <p><b>Duis aute irure dolor in reprehenderit in voluptate</b></p>
         <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
+          minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+          aliquip ex ea commodo consequat. Duis aute irure dolor in
+          reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
+          pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
+          culpa qui officia deserunt mollit anim id est laborum.
         </p>
       </div>
     </section>
     <section class="main">
       <div class="card">
         <img
-        class="img-credentials"
-        ngSrc="/assets/images/credentials.png"
-        alt="credentials"
-        priority width="528" height="120" />
+          class="img-credentials"
+          ngSrc="/assets/images/credentials.png"
+          alt="credentials"
+          priority
+          width="528"
+          height="120" />
         <p><b>Bring your own credential</b></p>
-        <p> Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        <p>
+          Duis aute irure dolor in reprehenderit in voluptate velit esse cillum
+          dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+          proident, sunt in culpa qui officia deserunt mollit anim id est
+          laborum.
         </p>
         <mat-form-field>
           <mat-label class="field-label">Username</mat-label>
           <input
             matInput
-            formControlName="licenceNumber" placeholder="Enter your username"
+            formControlName="licenceNumber"
+            placeholder="Enter your username"
             aria-labelledby="college-licence-declaration-licence-number" />
-            <mat-error>Required</mat-error>
+          <mat-error>Required</mat-error>
         </mat-form-field>
         <button
-        mat-flat-button
-        type="button"
-        class="next-button"
-        color="primary"
-        routerLink="/access/bc-provider-application"
-        aria-labelledby="complete-bcprovider">
-        Next
-      </button>
-         </div>
+          class="next-button"
+          mat-flat-button
+          type="button"
+          color="primary"
+          routerLink="/access/bc-provider-application"
+          aria-labelledby="complete-bcprovider"
+          (click)="onNext()">
+          Next
+        </button>
+      </div>
 
-         <div class="card">
-          <img
+      <div class="card">
+        <img
           class="img-createyourown"
           ngSrc="/assets/images/create-your-own.png"
           alt="create-your-own"
-          priority width="528" height="120" />
-          <p><b>Create your own</b></p>
-        <p> Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+          priority
+          width="528"
+          height="120" />
+        <p><b>Create your own</b></p>
+        <p>
+          Duis aute irure dolor in reprehenderit in voluptate velit esse cillum
+          dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+          proident, sunt in culpa qui officia deserunt mollit anim id est
+          laborum.
         </p>
         <button
-        mat-flat-button
-        type="button"
-        color="primary"
-        routerLink="/access/bc-provider-application"
-        aria-labelledby="complete-bcprovider">
-        Continue
-      </button>
-           </div>
+          mat-flat-button
+          type="button"
+          color="primary"
+          routerLink="/access/bc-provider-application"
+          aria-labelledby="complete-bcprovider"
+          (click)="onContinue()">
+          Continue
+        </button>
+      </div>
     </section>
-    </div>
   </div>
+</div>
