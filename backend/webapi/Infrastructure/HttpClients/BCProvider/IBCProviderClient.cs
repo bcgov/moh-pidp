@@ -5,6 +5,13 @@ using Microsoft.Graph.Models;
 public interface IBCProviderClient
 {
     /// <summary>
+    /// Assigns the given access package to the given user.
+    /// Returns true if the operation was successful.
+    /// </summary>
+    /// <param name="userPrincipalName"></param>
+    public Task<bool> AssignAccessPackage(string? userPrincipalName);
+
+    /// <summary>
     /// Creates a BC Provider account on AAD.
     /// Returns the account object if the operation was successful.
     /// </summary>
@@ -18,6 +25,14 @@ public interface IBCProviderClient
     /// <param name="userPrincipalName"></param>
     /// <param name="attributesName"></param>
     public Task<object?> GetAttribute(string userPrincipalName, string attributeName);
+
+    /// <summary>
+    /// Removes all authentication methods from a user, except for password.
+    /// Once all other auth methods are removed, the user will be prompted to
+    /// re-register their MFA.
+    /// </summary>
+    /// <param name="userPrincipalName"></param>
+    public Task<bool> RemoveAuthMethods(string userPrincipalName);
 
     /// <summary>
     /// Sends a Entra B2B guest account invite to an external Entra account.
@@ -49,12 +64,4 @@ public interface IBCProviderClient
     /// <param name="userPrincipalName"></param>
     /// <param name="user"></param>
     public Task<bool> UpdateUser(string userPrincipalName, User user);
-
-    /// <summary>
-    /// Removes all authentication methods from a user, except for password.
-    /// Once all other auth methods are removed, the user will be prompted to
-    /// re-register their MFA.
-    /// </summary>
-    /// <param name="userPrincipalName"></param>
-    public Task<bool> RemoveAuthMethods(string userPrincipalName);
 }

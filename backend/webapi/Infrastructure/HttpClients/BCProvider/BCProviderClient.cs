@@ -14,6 +14,32 @@ public partial class BCProviderClient(
     private readonly string domain = config.BCProviderClient.Domain;
     private readonly string clientId = config.BCProviderClient.ClientId;
 
+    // TODO: this is demo code, rewrite it
+    public async Task<bool> AssignAccessPackage(string? userPrincipalName)
+    {
+        var request = new AccessPackageAssignmentRequest
+        {
+            RequestType = AccessPackageRequestType.AdminAdd,
+            Assignment = new AccessPackageAssignment
+            {
+                Target = new AccessPackageSubject { Id = userPrincipalName },
+                AccessPackage = new AccessPackage { Id = "feb22c27-65a6-4093-9c16-076881d7e583" },
+                AssignmentPolicy = new AccessPackageAssignmentPolicy { Id = "023f218b-21bf-4882-bf67-b4c39b491743" }
+            }
+        };
+
+        try
+        {
+            await this.client.IdentityGovernance.EntitlementManagement.AssignmentRequests.PostAsync(request);
+            return true;
+        }
+        catch
+        {
+            Console.WriteLine($"couldnt assign packages to {userPrincipalName}");
+            return false;
+        }
+    }
+
     public async Task<object?> GetAttribute(string userPrincipalName, string attributeName)
     {
         if (string.IsNullOrEmpty(userPrincipalName))
