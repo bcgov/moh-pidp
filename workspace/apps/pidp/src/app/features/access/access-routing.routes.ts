@@ -90,4 +90,11 @@ export const routes: Routes = [
     loadChildren: (): Promise<Routes> =>
       import('./pages/immsbc/immsbc-routing.routes').then((m) => m.routes),
   },
+  {
+    path: AccessRoutes.B2B_INVITATION,
+    loadChildren: (): Promise<Routes> =>
+      import(
+        './pages/b2b-information-page/b2b-information-routing.routes'
+      ).then((m) => m.routes),
+  },
 ];

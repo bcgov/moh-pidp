@@ -49,7 +49,7 @@ export class ImmsBCPortalSection implements IPortalSection {
     const statusCode = this.getStatusCode();
     return {
       label: statusCode === StatusCode.COMPLETED ? 'View' : 'Request',
-      route: AccessRoutes.routePath(AccessRoutes.IMMSBC),
+      route: AccessRoutes.routePath(AccessRoutes.B2B_INVITATION),
       disabled: statusCode === StatusCode.NOT_AVAILABLE,
     };
   }

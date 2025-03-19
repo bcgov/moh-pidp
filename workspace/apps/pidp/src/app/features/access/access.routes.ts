@@ -14,6 +14,7 @@ export class AccessRoutes {
   public static SPECIAL_AUTH_EFORMS = 'sa-eforms';
   public static PROVINCIAL_ATTACHMENT_SYSTEM = 'provincial-attachment-system';
   public static IMMSBC = 'immsbc';
+  public static B2B_INVITATION = 'b2b-invitation';
 
   /**
    * @description
