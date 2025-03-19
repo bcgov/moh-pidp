@@ -108,8 +108,7 @@ export class B2bInformationPageComponent extends AbstractFormPage<B2bInformation
       bodyTextPosition: 'center',
       component: HtmlComponent,
       data: {
-        content:
-          'We have successfully invited your account. You may continue to the Imms BC page.',
+        content: `We have successfully invited your account <br /> <strong>${this.formState.userPrincipalName.value}</strong>. <br /> You may continue to the Imms BC page.`,
       },
       imageSrc: '/assets/images/online-marketing-hIgeoQjS_iE-unsplash.jpg',
       imageType: 'banner',
