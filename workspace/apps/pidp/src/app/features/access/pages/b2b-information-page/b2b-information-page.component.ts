@@ -28,7 +28,6 @@ import {
 } from '@app/core/classes/abstract-form-page.class';
 import { PartyService } from '@app/core/party/party.service';
 import { BreadcrumbComponent } from '@app/shared/components/breadcrumb/breadcrumb.component';
-import { DialogGuestInviteComponent } from '@app/shared/components/success-dialog/components/dialog-guest-invite.component';
 
 import { AccessRoutes } from '../../access.routes';
 import { B2bInformationFormState } from './b2b-information-form-state';
@@ -46,7 +45,6 @@ import { B2bInvitationResource } from './b2b-invitation-resource.service';
     NgOptimizedImage,
     RouterLink,
     ReactiveFormsModule,
-    ConfirmDialogComponent,
   ],
   templateUrl: './b2b-information-page.component.html',
   styleUrl: './b2b-information-page.component.scss',
@@ -63,8 +61,6 @@ export class B2bInformationPageComponent extends AbstractFormPage<B2bInformation
   ];
   public formState: B2bInformationFormState;
   public showOverlayOnSubmit = false;
-  public username = '';
-  public componentType = DialogGuestInviteComponent;
 
   public constructor(
     fb: FormBuilder,
@@ -93,7 +89,6 @@ export class B2bInformationPageComponent extends AbstractFormPage<B2bInformation
       )
       .pipe(
         tap((_) => {
-          this.username = this.formState.userPrincipalName.value;
           this.loadingOverlayService.close();
           this.showSuccessDialog();
           console.info('User invited');
