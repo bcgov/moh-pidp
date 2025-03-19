@@ -4,11 +4,16 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { Router, RouterLink } from '@angular/router';
 
+import { catchError, noop, of, tap } from 'rxjs';
+
+import { NoContent } from '@bcgov/shared/data-access';
 import { InjectViewportCssClassDirective } from '@bcgov/shared/ui';
 
+import { PartyService } from '@app/core/party/party.service';
 import { BreadcrumbComponent } from '@app/shared/components/breadcrumb/breadcrumb.component';
 
 import { AccessRoutes } from '../../access.routes';
+import { B2bInvitationResource } from './b2b-invitation-resource.service';
 
 @Component({
   selector: 'app-b2b-information-page',
@@ -36,7 +41,11 @@ export class B2bInformationPageComponent {
     { title: 'B2B Information', path: '' },
   ];
 
-  public constructor(private router: Router) {}
+  public constructor(
+    private router: Router,
+    private b2bResource: B2bInvitationResource,
+    private partyService: PartyService,
+  ) {}
 
   public onNext(): void {
     this.router.navigate([AccessRoutes.routePath(AccessRoutes.IMMSBC)]);
@@ -46,5 +55,19 @@ export class B2bInformationPageComponent {
     this.router.navigate([
       AccessRoutes.routePath(AccessRoutes.BC_PROVIDER_EDIT),
     ]);
+  }
+
+  public onInvite(userPrincipalName: string): NoContent {
+    return this.b2bResource
+      .inviteGuestAccount(this.partyService.partyId, userPrincipalName)
+      .pipe(
+        tap((_) => {
+          console.info('User invited');
+        }),
+        catchError(() => {
+          console.error('Failed to invite user');
+          return of(noop());
+        }),
+      );
   }
 }
