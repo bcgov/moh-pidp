@@ -197,6 +197,22 @@ public partial class ProfileStatus
             }
         }
 
+        public class ImmsBCSection : ProfileSection
+        {
+            internal override string SectionName => "immsBC";
+            public override string[] KeyWords => ["doctors", "nursing", "pharmacist"];
+
+            protected override StatusCode Compute(ProfileData profile)
+            {
+                return profile switch
+                {
+                    { UserIsHighAssuranceIdentity: false } => StatusCode.Locked,
+                    _ when profile.HasEnrolment(AccessTypeCode.ImmsBC) => StatusCode.Complete,
+                    _ => StatusCode.Incomplete
+                };
+            }
+        }
+
         public class ImmsBCEformsSection : ProfileSection
         {
             internal override string SectionName => "immsBCEforms";
