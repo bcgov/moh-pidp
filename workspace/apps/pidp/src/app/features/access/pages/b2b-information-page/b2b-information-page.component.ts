@@ -57,8 +57,8 @@ export class B2bInformationPageComponent {
     ]);
   }
 
-  public onInvite(userPrincipalName: string): NoContent {
-    return this.b2bResource
+  public onInvite(userPrincipalName: string): void {
+    this.b2bResource
       .inviteGuestAccount(this.partyService.partyId, userPrincipalName)
       .pipe(
         tap((_) => {
@@ -68,6 +68,7 @@ export class B2bInformationPageComponent {
           console.error('Failed to invite user');
           return of(noop());
         }),
-      );
+      )
+      .subscribe();
   }
 }
