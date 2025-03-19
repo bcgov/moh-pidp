@@ -44,13 +44,15 @@ import { RoutePath } from '@bcgov/shared/utils';
 import { PartyService } from '@app/core/party/party.service';
 import { AccessRoutes } from '@app/features/access/access.routes';
 import { IdentityProvider } from '@app/features/auth/enums/identity-provider.enum';
+import { HistoryRoutes } from '@app/features/history/history.routes';
 import { AlertCode } from '@app/features/portal/enums/alert-code.enum';
 import { ProfileRoutes } from '@app/features/profile/profile.routes';
+import { PermissionsService } from '@app/modules/permissions/permissions.service';
+import { Role } from '@app/shared/enums/roles.enum';
 
+import { FeedbackButtonComponent } from '../../../../shared/components/feedback-button/feedback-button.component';
 import { Credential } from './nav-menu.model';
 import { NavMenuResource } from './nav-menu.resource.service';
-import { FeedbackButtonComponent } from "../../../../shared/components/feedback-button/feedback-button.component";
-import { HistoryRoutes } from '@app/features/history/history.routes';
 
 @Component({
   selector: 'app-nav-menu',
@@ -72,8 +74,8 @@ import { HistoryRoutes } from '@app/features/history/history.routes';
     RouterOutlet,
     FaIconComponent,
     NgClass,
-    FeedbackButtonComponent
-],
+    FeedbackButtonComponent,
+  ],
 })
 export class NavMenuComponent implements OnChanges, OnInit, OnDestroy {
   @Input() public alerts: AlertCode[] | null = [];
@@ -107,12 +109,17 @@ export class NavMenuComponent implements OnChanges, OnInit, OnDestroy {
     private router: Router,
     private resource: NavMenuResource,
     private partyService: PartyService,
+    private readonly permissionsService: PermissionsService,
   ) {
     this.viewportService.viewportBroadcast$.subscribe((viewport) =>
       this.onViewportChange(viewport),
     );
     const partyId = this.partyService.partyId;
     this.credentials$ = this.resource.getCredentials(partyId);
+  }
+
+  public featureFlag(): boolean {
+    return this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]);
   }
 
   public ngOnInit(): void {
