@@ -1,0 +1,152 @@
+@use 'pidp-variables' as pidp;
+
+.feedback-container {
+  & .feedback-header {
+    & .close-button {
+      padding: 25px 0 0 280px ;
+      & .mat-icon {
+        cursor: pointer;
+      }
+    }
+    fa-icon {
+      font-size: 1.5rem;
+      color: pidp.$grey-40;
+    }
+  }
+  h1 {
+    padding: 15px 0 0 50px ;
+  }
+}
+
+textarea-field {
+  padding: 0 0 0 50px ;
+  resize: none;
+}
+
+mat-form-field {
+  padding: 0 0 0 30px ;
+  width: 90%;
+}
+
+mat-icon {
+  height: 0 ;
+  cursor: pointer;
+}
+
+.split-input {
+  position: relative;
+}
+
+.split-placeholder {
+  position: absolute;
+  top: -8px;
+  left: 12px;
+  right: 12px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.54);
+}
+
+.split-placeholder .left-placeholder,
+.split-placeholder .right-placeholder {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.left-placeholder {
+  padding-top: 18px;
+  height: 0;
+  .screenshot {
+    padding-top: 25px;
+  }
+}
+
+.right-placeholder {
+  padding-top: 18px;
+  height: 0;
+  .attach {
+    padding-top: 25px;
+  }
+}
+
+input.mat-input-element {
+  text-indent: 12px;
+  padding-left: 12px;
+  padding-right: 12px;
+}
+
+.form-button-container {
+  margin-top: 15px;
+  display: flex;
+  justify-content: center;
+  .send-button {
+    background-color: #1b4269;
+    color: white;
+    border-radius: 5px;
+    padding: 5px 15px;
+    text-transform: none;
+    margin-bottom: 40px;
+  }
+  .send-button:disabled {
+    background-color: lightgrey;
+    color: black;
+    cursor: not-allowed;
+  }
+}
+
+.icon-button {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px 0 0 0 ;
+  border-radius: 50%;
+  background-color: transparent;
+  border: none;
+  transition: background-color 0.2s ease;
+}
+
+.file-name {
+  padding: 0 0 0 40px;
+}
+
+textarea {
+  width: 100%;
+  max-height: 200px;
+  overflow: hidden;
+  resize: none;
+}
+
+.disclaimer-container {
+  .disclaimer-field {
+    margin-top: 10px;
+    padding: 0 30px 5px 30px;
+  }
+  .disclaimer-field:enabled {
+    background-color: lightgrey ;
+  }
+  .textarea-field-disclaimer {
+    background-color: lightgrey ;
+    padding: 10px 0 5px 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    white-space: pre-wrap;
+    min-height: 145px;
+    max-height: 170px ;
+  }
+  .textarea-field-disclaimer.disabled {
+    background-color: white ;
+    color: #3F4350A3;
+    pointer-events: none;
+  }
+}
+
+.error-card {
+  width: 90%;
+  color: red;
+  font-size: 12px;
+  padding: 0 0 0 20px;
+}
