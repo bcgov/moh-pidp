@@ -10,6 +10,7 @@ using Pidp.Infrastructure.HttpClients.Mail;
 using Pidp.Models;
 using MassTransit;
 using MassTransit.MessageData;
+using System.Reflection.Metadata;
 
 public class EmailService(
     IBus bus,
@@ -36,25 +37,23 @@ public class EmailService(
             email.Subject = $"THE FOLLOWING EMAIL IS A TEST: {email.Subject}";
         }
 
-        Console.WriteLine($"Document bytes : {email.Attachments.FirstOrDefault()?.Data}");
+        Console.WriteLine($"Document bytes in Email Service: {email.Attachments.First()?.Data.Length}");
         var inMemoryMessageDataRepository = new InMemoryMessageDataRepository();
 
         if (this.config.ChesClient.Enabled)
         {
             Console.WriteLine("Sending email via CHES");
-            var emailMessage = new EmailMessage
+            await this.bus.Publish<EmailMessage>(new
             {
-                From = email.From,
-                To = email.To,
-                Cc = email.Cc,
-                Subject = email.Subject,
-                Body = email.Body,
-                Document = await inMemoryMessageDataRepository.PutBytes(email.Attachments.FirstOrDefault()?.Data),
-                Filename = email.Attachments.FirstOrDefault()?.Filename,
-                MediaType = email.Attachments.FirstOrDefault()?.MediaType
-            };
-
-            await this.bus.Publish(emailMessage);
+                email.From,
+                email.To,
+                email.Cc,
+                email.Subject,
+                email.Body,
+                Document = email.Attachments.First()?.Data,
+                email.Attachments.First()?.Filename,
+                email.Attachments.First()?.MediaType
+            });
             await this.CreateEmailLog(email, SendType.Ches);
         }
         else
