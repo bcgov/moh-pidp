@@ -1,6 +1,7 @@
 namespace Pidp.Infrastructure.Queue;
 
 using MassTransit;
+using MassTransit.MessageData;
 using Pidp;
 using Pidp.Features.CommonHandlers;
 using static Pidp.Features.Parties.Demographics;
@@ -27,6 +28,9 @@ public static class MassTransitSetup
                 // Configure retry policy
                 cfg.UseMessageRetry(r => r.Interval(2, TimeSpan.FromSeconds(5)));
                 cfg.UseInMemoryOutbox(context);
+
+                IMessageDataRepository messageDataRepository = new InMemoryMessageDataRepository();
+                cfg.UseMessageData(messageDataRepository);
 
                 cfg.ReceiveEndpoint("party-email-updated-bc-provider-queue", ep =>
                 {

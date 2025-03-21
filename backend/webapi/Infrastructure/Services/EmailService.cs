@@ -9,6 +9,7 @@ using Pidp.Data;
 using Pidp.Infrastructure.HttpClients.Mail;
 using Pidp.Models;
 using MassTransit;
+using MassTransit.MessageData;
 
 public class EmailService(
     IBus bus,
@@ -35,9 +36,26 @@ public class EmailService(
             email.Subject = $"THE FOLLOWING EMAIL IS A TEST: {email.Subject}";
         }
 
+        Console.WriteLine($"Document bytes : {email.Attachments.FirstOrDefault()?.Data}");
+        var inMemoryMessageDataRepository = new InMemoryMessageDataRepository();
+
         if (this.config.ChesClient.Enabled)
         {
-            bus.Publish(email);
+            Console.WriteLine("Sending email via CHES");
+            var emailMessage = new EmailMessage
+            {
+                From = email.From,
+                To = email.To,
+                Cc = email.Cc,
+                Subject = email.Subject,
+                Body = email.Body,
+                Document = await inMemoryMessageDataRepository.PutBytes(email.Attachments.FirstOrDefault()?.Data),
+                Filename = email.Attachments.FirstOrDefault()?.Filename,
+                MediaType = email.Attachments.FirstOrDefault()?.MediaType
+            };
+
+            await this.bus.Publish(emailMessage);
+            await this.CreateEmailLog(email, SendType.Ches);
         }
         else
         {
@@ -84,6 +102,14 @@ public class EmailService(
         await this.context.SaveChangesAsync();
     }
 
+    // private static byte[] ConvertStreamToByteArray(Stream stream)
+    // {
+    //     using (var memoryStream = new MemoryStream())
+    //     {
+    //         stream.CopyTo(memoryStream);
+    //         return memoryStream.ToArray();
+    //     }
+    // }
     private static class SendType
     {
         public const string Ches = "CHES";

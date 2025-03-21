@@ -10,23 +10,29 @@ public class SendEmailConsumer(
     IClock clock,
     IChesClient chesClient,
     ILogger<SendEmailConsumer> logger,
-    PidpDbContext context) : IConsumer<Email>
+    PidpDbContext context) : IConsumer<EmailMessage>
 {
     private readonly IClock clock = clock;
     private readonly IChesClient chesClient = chesClient;
     private readonly PidpDbContext context = context;
     private readonly ILogger<SendEmailConsumer> logger = logger;
 
-    public async Task Consume(ConsumeContext<Email> context)
+    public async Task Consume(ConsumeContext<EmailMessage> context)
     {
+        Console.WriteLine("Sending email Consumer called!!");
         var message = context.Message;
+        Console.WriteLine($"message.Document.HasValue : {message.Document?.HasValue}");
+        Console.WriteLine($"message.Filename : {message.Filename}");
+        Console.WriteLine($"message.MediaType : {message.MediaType}");
+        Console.WriteLine($"message.Document value : {message.Document?.Value}");
+
         var email = new Email(
             from: message.From,
             to: message.To,
             cc: message.Cc ?? [],
             subject: message.Subject,
             body: message.Body,
-            attachments: message.Attachments ?? []
+            attachments: message.Document != null && message.Filename != null && message.MediaType != null ? new[] { new File(message.Filename, await message.Document.Value, message.MediaType) } : []
         );
 
         if (!await this.chesClient.HealthCheckAsync())
@@ -36,6 +42,7 @@ public class SendEmailConsumer(
         }
 
         // Call the CHES API to send the email
+        Console.WriteLine("Sending email via CHES Called!!");
         var msgId = await this.chesClient.SendAsync(email);
         if (msgId == null)
         {

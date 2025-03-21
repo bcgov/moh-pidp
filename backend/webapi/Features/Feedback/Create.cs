@@ -68,6 +68,7 @@ public class Create
                 )]
             );
 
+            Console.WriteLine($"Document bytes : {email.Attachments.FirstOrDefault()?.Data}");
             await this.emailService.SendAsync(email);
 
             var feedbackLog = new FeedbackLog
