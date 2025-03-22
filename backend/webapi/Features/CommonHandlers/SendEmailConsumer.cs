@@ -19,12 +19,7 @@ public class SendEmailConsumer(
 
     public async Task Consume(ConsumeContext<EmailMessage> context)
     {
-        Console.WriteLine("Sending email Consumer called!!");
         var message = context.Message;
-        Console.WriteLine($"message.Document.HasValue : {message.Document?.HasValue}");
-        Console.WriteLine($"message.Filename : {message.Filename}");
-        Console.WriteLine($"message.MediaType : {message.MediaType}");
-        Console.WriteLine($"message.Document value : {message.Document?.Value}");
 
         var email = new Email(
             from: message.From,
@@ -42,7 +37,6 @@ public class SendEmailConsumer(
         }
 
         // Call the CHES API to send the email
-        Console.WriteLine("Sending email via CHES Called!!");
         var msgId = await this.chesClient.SendAsync(email);
         if (msgId == null)
         {

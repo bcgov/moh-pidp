@@ -9,8 +9,6 @@ using Pidp.Data;
 using Pidp.Infrastructure.HttpClients.Mail;
 using Pidp.Models;
 using MassTransit;
-using MassTransit.MessageData;
-using System.Reflection.Metadata;
 
 public class EmailService(
     IBus bus,
@@ -37,12 +35,8 @@ public class EmailService(
             email.Subject = $"THE FOLLOWING EMAIL IS A TEST: {email.Subject}";
         }
 
-        Console.WriteLine($"Document bytes in Email Service: {email.Attachments.First()?.Data.Length}");
-        var inMemoryMessageDataRepository = new InMemoryMessageDataRepository();
-
         if (this.config.ChesClient.Enabled)
         {
-            Console.WriteLine("Sending email via CHES");
             await this.bus.Publish<EmailMessage>(new
             {
                 email.From,
@@ -101,14 +95,6 @@ public class EmailService(
         await this.context.SaveChangesAsync();
     }
 
-    // private static byte[] ConvertStreamToByteArray(Stream stream)
-    // {
-    //     using (var memoryStream = new MemoryStream())
-    //     {
-    //         stream.CopyTo(memoryStream);
-    //         return memoryStream.ToArray();
-    //     }
-    // }
     private static class SendType
     {
         public const string Ches = "CHES";

@@ -5,9 +5,7 @@ public class ChesClient(HttpClient httpClient, ILogger<ChesClient> logger) : Bas
 
     public async Task<Guid?> SendAsync(Email email)
     {
-        Console.WriteLine("CHES Service Called!!");
         var result = await this.PostAsync<EmailSuccessResponse>("email", new ChesEmailRequestParams(email));
-        Console.WriteLine("CHES Service Response: " + result.IsSuccess);
         if (!result.IsSuccess)
         {
             return null;

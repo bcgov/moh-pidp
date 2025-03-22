@@ -70,13 +70,13 @@ public class PidpControllerBase : ControllerBase
     protected async Task<IDomainResult> AuthorizePartyBeforeHandleAsync<TRequest>(int partyId, IRequestHandler<TRequest> handler, TRequest request)
     {
         var access = await this.AuthorizationService.CheckPartyAccessibilityAsync(partyId, this.User);
-        // if (access.IsSuccess)
-        // {
+        if (access.IsSuccess)
+        {
             await handler.HandleAsync(request);
             return DomainResult.Success();
-        // }
+        }
 
-        // return access;
+        return access;
     }
 
     /// <summary>
