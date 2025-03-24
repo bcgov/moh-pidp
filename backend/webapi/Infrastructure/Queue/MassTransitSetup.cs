@@ -29,6 +29,12 @@ public static class MassTransitSetup
                 cfg.UseMessageRetry(r => r.Interval(2, TimeSpan.FromSeconds(5)));
                 cfg.UseInMemoryOutbox(context);
 
+                MessageDataDefaults.TimeToLive = TimeSpan.FromMinutes(20);
+                MessageDataDefaults.Threshold = 8192;
+                MessageDataDefaults.AlwaysWriteToRepository = false;
+
+                // Going with in-memory message data repository for now.
+                // TO-Do: Implement FileSystemMessageDataRepository with proper cleanup of data
                 IMessageDataRepository messageDataRepository = new InMemoryMessageDataRepository();
                 cfg.UseMessageData(messageDataRepository);
 
