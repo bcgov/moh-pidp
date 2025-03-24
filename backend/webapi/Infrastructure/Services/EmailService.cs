@@ -48,7 +48,6 @@ public class EmailService(
                 email.Attachments.First()?.Filename,
                 email.Attachments.First()?.MediaType
             });
-            await this.CreateEmailLog(email, SendType.Ches);
         }
         else
         {
