@@ -68,7 +68,7 @@ export class FeedbackFormDialogComponent
     dialog: MatDialog,
     public dialogRef: MatDialogRef<FeedbackFormDialogComponent>,
     private readonly feedbackFormDialogResource: FeedbackFormDialogResource,
-    private loadingOverlayService: LoadingOverlayService,
+    private readonly loadingOverlayService: LoadingOverlayService,
     private readonly logger: LoggerService,
     private readonly partyService: PartyService,
     private readonly toastService: ToastService,
