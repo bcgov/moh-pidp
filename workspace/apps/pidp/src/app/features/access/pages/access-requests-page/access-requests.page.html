@@ -31,8 +31,8 @@
     </div>
   </div>
 
+  @for (section of filteredAccessSections; track section.heading) {
   <app-access-request-card
-    *ngFor="let section of filteredAccessSections"
     class="card-container"
     [heading]="section.heading"
     [description]="section.description"
@@ -41,6 +41,7 @@
     [completed]="section.status === 'Completed'"
     [completedText]="section.completedMessage"
     (action)="onCardAction(section)"></app-access-request-card>
+  }
 
   <div class="back-to-top-container">
     <button

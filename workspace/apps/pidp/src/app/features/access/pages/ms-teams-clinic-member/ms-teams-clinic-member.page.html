@@ -62,11 +62,12 @@
                   [ngModelOptions]="{standalone: true}"
                   [(ngModel)]="selectedPrivacyOfficer"
                   (selectionChange)="onSelectPrivacyOfficer($event)">
-                  <mat-option
-                    *ngFor="let privacyOfficer of privacyOfficers"
-                    [value]="privacyOfficer"
+                  @for (privacyOfficer of privacyOfficers; track
+                  privacyOfficer.fullName) {
+                  <mat-option [value]="privacyOfficer"
                     >{{ privacyOfficer.fullName }}</mat-option
                   >
+                  }
                 </mat-select>
               </mat-form-field>
               <div *ngIf="selectedPrivacyOfficer">

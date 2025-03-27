@@ -77,8 +77,9 @@
             </ng-template>
             <ng-template matTabContent>
               <div class="tab-content">
+                @for (endorsementRequest of actionableEndorsementRequests$ |
+                async; track endorsementRequest.id) {
                 <app-endorsement-card
-                  *ngFor="let endorsementRequest of actionableEndorsementRequests$ | async"
                   class="endorsement-card"
                   [id]="endorsementRequest.id"
                   [nameText]="endorsementRequest.partyName ?? ''"
@@ -87,6 +88,7 @@
                   [isCancelEnabled]="true"
                   (approveClick)="onApprove($event)"
                   (cancelClick)="onCancel($event)"></app-endorsement-card>
+                }
               </div>
             </ng-template>
           </mat-tab>
@@ -101,8 +103,9 @@
             </ng-template>
             <ng-template matTabContent>
               <div class="tab-content">
+                @for (endorsement of endorsements$ | async; track
+                endorsement.id) {
                 <app-endorsement-card
-                  *ngFor="let endorsement of endorsements$ | async"
                   class="endorsement-card"
                   noticeText="Relationship"
                   noticeColour="green"
@@ -112,6 +115,7 @@
                   [createdOnText]="endorsement.createdOn | date"
                   [isCancelEnabled]="true"
                   (cancelClick)="onCancelEndorsement($event)"></app-endorsement-card>
+                }
               </div>
             </ng-template>
           </mat-tab>
@@ -133,14 +137,16 @@
             </ng-template>
             <ng-template matTabContent>
               <div class="tab-content">
+                @for (endorsementRequest of nonActionableEndorsementRequests$ |
+                async; track endorsementRequest.id) {
                 <app-endorsement-card
-                  *ngFor="let endorsementRequest of nonActionableEndorsementRequests$ | async"
                   class="endorsement-card"
                   [noticeText]="getStatus(endorsementRequest.status)"
                   [noticeColour]="isEndorsementRequested(endorsementRequest.status) ? 'yellow' : 'red'"
                   [id]="endorsementRequest.id"
                   [nameText]="endorsementRequest.partyName ?? endorsementRequest.recipientEmail"
                   [collegeText]="getCollegeText(endorsementRequest)"></app-endorsement-card>
+                }
               </div>
             </ng-template>
           </mat-tab>

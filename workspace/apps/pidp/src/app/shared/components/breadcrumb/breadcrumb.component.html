@@ -1,30 +1,32 @@
 <div class="breadcrumb-container" uiPidpInjectViewportCss>
   <nav class="breadcrumb">
     <ul>
-      <li
-        *ngFor="
-          let breadcrumb of breadcrumbs;
-          index as itemIndex;
-          first as isFirstItem;
-          last as isLastItem
-        ">
-        <button
-          uiTextButton
-          [disabled]="isLastItem"
-          (click)="isFirstItem ? onBack() : navigateTo(breadcrumb.path)">
-          <img
-            *ngIf="isFirstItem"
-            src="/assets/images/icons/icon-home.svg"
-            alt="Home" />
-          <span [ngClass]="{ 'home-text': isFirstItem }">{{
-            breadcrumb.title
-          }}</span>
-        </button>
-        <fa-icon
-          *ngIf="!isLastItem"
-          class="fa-duotone"
-          [icon]="faAngleRight"></fa-icon>
-      </li>
+      @for (
+        breadcrumb of breadcrumbs;
+        track breadcrumb;
+        let index = $index;
+        let isFirstItem = $first;
+        let isLastItem = $last
+      ) {
+        <li>
+          <button
+            uiTextButton
+            [disabled]="isLastItem"
+            (click)="isFirstItem ? onBack() : navigateTo(breadcrumb.path)">
+            <img
+              *ngIf="isFirstItem"
+              src="/assets/images/icons/icon-home.svg"
+              alt="Home" />
+            <span [ngClass]="{ 'home-text': isFirstItem }">{{
+              breadcrumb.title
+            }}</span>
+          </button>
+          <fa-icon
+            *ngIf="!isLastItem"
+            class="fa-duotone"
+            [icon]="faAngleRight"></fa-icon>
+        </li>
+      }
     </ul>
   </nav>
 </div>

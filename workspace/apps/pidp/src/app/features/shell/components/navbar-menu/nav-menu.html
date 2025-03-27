@@ -66,8 +66,8 @@
           </div>
         </div>
       </a>
+      @for (menuItem of menuItems; track menuItem.label ) {
       <a
-        *ngFor="let menuItem of menuItems"
         class="main-menu-item"
         routerLinkActive="main-menu-item-active"
         [routerLink]="getRouterLink(menuItem)"
@@ -75,6 +75,7 @@
         (click)="onMenuItemClicked()"
         >{{ menuItem.label }}
       </a>
+      }
       <button
         *ngIf="isLogoutButtonVisible"
         class="btn-signout"
@@ -128,8 +129,8 @@
             (click)="navigateTo(AccessRoutes.routePath(AccessRoutes.BC_PROVIDER_EDIT))"
             >Password and MFA reset</a
           >
+          @for (menuItem of menuItems; track menuItem.label) {
           <a
-            *ngFor="let menuItem of menuItems"
             class="sidenav-menu-item"
             routerLinkActive="sidenav-menu-item-active"
             [routerLink]="getRouterLink(menuItem)"
@@ -138,6 +139,7 @@
             (click)="onMenuItemClicked()"
             >{{ menuItem.label }}
           </a>
+          }
           <a
             *ngIf="isLogoutMenuItemVisible"
             class="sidenav-menu-item"

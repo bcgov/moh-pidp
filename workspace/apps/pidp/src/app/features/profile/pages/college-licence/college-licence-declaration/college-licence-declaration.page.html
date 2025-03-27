@@ -32,9 +32,9 @@
             formControlName="collegeCode"
             aria-labelledby="college-licence-declaration-college-licence">
             <mat-option [value]="0">None</mat-option>
-            <mat-option *ngFor="let college of colleges" [value]="college.code">
-              {{ college.name }}
-            </mat-option>
+            @for (college of colleges; track college.name) {
+            <mat-option [value]="college.code"> {{ college.name }} </mat-option>
+            }
           </mat-select>
           <mat-error>Required</mat-error>
         </mat-form-field>

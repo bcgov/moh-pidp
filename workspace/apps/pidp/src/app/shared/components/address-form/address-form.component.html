@@ -27,9 +27,12 @@
           formControlName="countryCode"
           aria-labelledby="address-form-street-country"
           [required]="isRequired('countryCode')">
-          <mat-option *ngFor="let country of countries" [value]="country.code">
-            {{ country.name }}
-          </mat-option>
+          @for (country of countries; track country.name) {
+            <mat-option [value]="country.code">
+              {{ country.name }}
+            </mat-option>
+          }
+
         </mat-select>
         <mat-error>Required</mat-error>
       </mat-form-field>
@@ -44,11 +47,11 @@
           formControlName="provinceCode"
           aria-labelledby="address-form-street-province"
           [required]="isRequired('provinceCode')">
-          <mat-option
-            *ngFor="let province of filteredProvinces"
-            [value]="province.code">
-            {{ province.name }}
-          </mat-option>
+          @for (province of filteredProvinces; track  province.name) {
+            <mat-option [value]="province.code">
+              {{ province.name }}
+            </mat-option>
+          }
         </mat-select>
         <mat-error>Required</mat-error>
       </mat-form-field>

@@ -11,7 +11,8 @@
 
     <ng-container *ngIf="transactions$ | async as transactions">
       <ng-container *ngIf="transactions.length; else noTransactions">
-        <div *ngFor="let transaction of transactions" class="transaction">
+        @for (transaction of transactions; track transaction.partyId) {
+        <div class="transaction">
           <span>
             <small>{{ transaction.requestedOn | formatDate }}</small>
             <small>{{ transaction.requestedOn | formatDate: 'h:mm a' }}</small>
@@ -21,6 +22,7 @@
             submission
           </span>
         </div>
+        }
       </ng-container>
     </ng-container>
 

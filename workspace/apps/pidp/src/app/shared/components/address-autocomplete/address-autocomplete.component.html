@@ -10,12 +10,13 @@
         aria-labelledby="address-autocomplete-address-label"
         [matAutocomplete]="auto" />
       <mat-autocomplete #auto="matAutocomplete" autocomplete="off">
-        <mat-option
-          *ngFor="let field of addressAutocompleteFields"
+        @for (field of addressAutocompleteFields; track field.id) {
+          <mat-option
           [value]="field.text"
           (click)="onAutocomplete(field.id)">
           {{ field.text }} {{ field.description }}
         </mat-option>
+        }
       </mat-autocomplete>
       <mat-hint>
         Start with unit number and street number. Address autocompleted by

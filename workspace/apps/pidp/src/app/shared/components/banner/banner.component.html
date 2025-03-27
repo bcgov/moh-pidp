@@ -1,15 +1,19 @@
 <div class="banner-container" uiPidpInjectViewportCss>
   <div class="banners-box">
-    <div *ngFor="let banner of banners">
-      <div class="card-styles card-header-icon banner-detail-box">
-        <h2>
-          <img src="/assets/images/icons/icon-warning.svg" alt="banner-logo" />
-          <span>{{ banner.header }}</span>
-        </h2>
-        <div class="banner-detail-content">
-          {{ banner.body }}
+    @for (banner of banners; track banner.header) {
+      <div *ngFor="let banner of banners">
+        <div class="card-styles card-header-icon banner-detail-box">
+          <h2>
+            <img
+              src="/assets/images/icons/icon-warning.svg"
+              alt="banner-logo" />
+            <span>{{ banner.header }}</span>
+          </h2>
+          <div class="banner-detail-content">
+            {{ banner.body }}
+          </div>
         </div>
       </div>
-    </div>
+    }
   </div>
 </div>

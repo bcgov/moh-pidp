@@ -4,11 +4,13 @@
     icon="help_outline"
     heading="Get Support"></ui-page-section-subheader>
   <ul>
-    <li *ngFor="let support of providedSupport">
-      Questions about {{ support.name }}<br />
-      should be directed to:
-      <a uiAnchor scheme="mailto" [attr.href]="support.email"></a>
-    </li>
+    @for (support of providedSupport; track support.name) {
+      <li>
+        Questions about {{ support.name }}<br />
+        should be directed to:
+        <a uiAnchor scheme="mailto" [attr.href]="support.email"></a>
+      </li>
+    }
   </ul>
 
   For additional support, contact the OneHealthID Service desk:
