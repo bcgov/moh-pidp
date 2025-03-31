@@ -134,12 +134,14 @@
       </div>
 
       <ng-container [ngSwitch]="activeLayout">
-        <ng-container
-          *ngSwitchCase="'createAccount'"
-          [ngTemplateOutlet]="createAccount"></ng-container>
-        <ng-container
-          *ngSwitchDefault
-          [ngTemplateOutlet]="default"></ng-container>
+        @switch (activeLayout) {
+          @case ("createAccount") {
+            <ng-container [ngTemplateOutlet]="createAccount"></ng-container>
+          }
+          @default {
+            <ng-container [ngTemplateOutlet]="default"></ng-container>
+          }
+        }
       </ng-container>
     </div>
   </div>

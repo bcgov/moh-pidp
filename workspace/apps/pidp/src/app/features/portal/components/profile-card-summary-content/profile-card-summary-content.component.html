@@ -1,27 +1,29 @@
 <ng-container *ngIf="properties?.length; else description">
-  <ng-container *ngFor="let property of properties">
-    <div>
-      {{ property.label }}
-      <ng-container [ngSwitch]="property.key">
-        <ng-container *ngSwitchCase="'phone'">
-          {{ property.value | phone }}
+  @for (property of properties; track  property.label) {
+      <div>
+        {{ property.label }}
+        <ng-container>
+        @switch (property.key) {
+          @case ("'phone'") {
+            {{ property.value | phone }}
+          }
+          @case ("'collegeCode'") {
+            {{ property.value | lookupCode: 'colleges' }}
+          }
+          @case ("'licenceNumber'") {
+            {{ property.value }}
+          }
+          @case ("'status'") {
+            <!-- strict typing and no narrowing in templates -->
+            {{ property.value.toString() }}
+          }
+          @default {
+            {{ property.value }}
+          }
+        }
         </ng-container>
-        <ng-container *ngSwitchCase="'collegeCode'">
-          {{ property.value | lookupCode: 'colleges' }}
-        </ng-container>
-        <ng-container *ngSwitchCase="'licenceNumber'">
-          {{ property.value }}
-        </ng-container>
-        <ng-container *ngSwitchCase="'status'">
-          <!-- strict typing and no narrowing in templates -->
-          {{ property.value.toString() }}
-        </ng-container>
-        <ng-container *ngSwitchDefault>
-          {{ property.value }}
-        </ng-container>
-      </ng-container>
-    </div>
-  </ng-container>
+      </div>
+  }
 </ng-container>
 
 <ng-template #description>

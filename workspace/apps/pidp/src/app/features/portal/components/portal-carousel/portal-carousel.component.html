@@ -6,17 +6,21 @@
     pagination-clickable="true"
     navigation-prevE1=".prev"
     navigation-nextE1=".next">
-    <ng-container *ngFor="let slide of slideModels; index as groupIndex">
-      <swiper-slide class="slide">
-        <app-portal-card
-          *ngFor="let section of slide; index as categoryIndex"
-          class="card"
-          [section]="section"
-          [isFirst]="groupIndex === 0 && categoryIndex === 0"
-          [portalCategoryName]="portalCategoryName">
-        </app-portal-card>
-      </swiper-slide>
-    </ng-container>
+    @for (slide of slideModels; track slide; let groupIndex = index) {
+      <ng-container>
+        <swiper-slide class="slide">
+          @for (section of slide; track section; let categoryIndex = index) {
+            <app-portal-card
+            class="card"
+            [section]="section"
+            [isFirst]="groupIndex === 0 && categoryIndex === 0"
+            [portalCategoryName]="portalCategoryName">
+          </app-portal-card>
+          }
+        </swiper-slide>
+      </ng-container>
+    }
+
     <div class="next"></div>
     <div class="prev"></div>
     <div class="bullet"></div>

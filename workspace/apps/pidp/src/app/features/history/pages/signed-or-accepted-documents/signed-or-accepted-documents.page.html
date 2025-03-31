@@ -11,13 +11,15 @@
     </ui-page-section-subheader>
 
     <div class="row">
-      <div *ngFor="let document of documents" class="col-12">
-        <ui-card-summary
-          [heading]="document.title"
-          [actionLabel]="document.actionLabel"
-          [actionDisabled]="document.disabled"
-          (action)="onViewDocument(document.type)"></ui-card-summary>
-      </div>
+      @for (document of documents; track document.title) {
+        <div class="col-12">
+          <ui-card-summary
+            [heading]="document.title"
+            [actionLabel]="document.actionLabel"
+            [actionDisabled]="document.disabled"
+            (action)="onViewDocument(document.type)"></ui-card-summary>
+        </div>
+      }
     </div>
   </ui-page-section>
 

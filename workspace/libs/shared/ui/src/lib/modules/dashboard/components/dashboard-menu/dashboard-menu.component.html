@@ -1,11 +1,16 @@
 <mat-nav-list [disableRipple]="true">
-  <ng-container *ngFor="let menuItem of menuItems" [ngSwitch]="true">
-    <ui-dashboard-route-menu-item
-      *ngSwitchCase="isDashboardRouteMenuItem(menuItem)"
-      [routeMenuItem]="asDashboardRouteMenuItem(menuItem)"
-      [responsiveMenuItems]="responsiveMenuItems"
-      [showMenuItemIcons]="showMenuItemIcons"
-      (route)="onMenuItemRoute($event)">
-    </ui-dashboard-route-menu-item>
+  <ng-container>
+    @for (menuItem of menuItems; track menuItem) {
+      @switch (true) {
+        @case (isDashboardRouteMenuItem(menuItem)) {
+          <ui-dashboard-route-menu-item
+            [routeMenuItem]="asDashboardRouteMenuItem(menuItem)"
+            [responsiveMenuItems]="responsiveMenuItems"
+            [showMenuItemIcons]="showMenuItemIcons"
+            (route)="onMenuItemRoute($event)">
+          </ui-dashboard-route-menu-item>
+        }
+      }
+    }
   </ng-container>
 </mat-nav-list>

@@ -26,13 +26,17 @@
       </span>
     </p>
   </div>
-  <section *ngFor="let alert of alerts" class="alert-box section-box">
+  @for (alert of alerts; track alert.heading) {
+  <section class="alert-box section-box">
     <app-portal-alert
       [heading]="alert.heading"
       [content]="alert.content"></app-portal-alert>
   </section>
+  }
   <div class="licences-box">
-    <div *ngFor="let certification of collegeCertifications$ | async">
+    @for (certification of collegeCertifications$ | async; track
+    certification.collegeId) {
+    <div>
       <div class="card-styles">
         <div class="card-header-icon">
           <div class="card-icon">
@@ -48,19 +52,22 @@
               class="licence-detail"
               labelText="Identifier Type:"
               [valueText]="certification.identifierType"></app-college-licence-information-detail>
-            <div [ngSwitch]="certification.statusCode">
-              <div *ngSwitchCase="'ACTIVE'" class="status-active">
-                <label>Status Code:</label>
-                <span>Active</span>
-                <img
-                  src="/assets/images/icons/icon-check-circle.svg"
-                  alt="check circle" />
-              </div>
-              <div *ngSwitchDefault class="status-non-active">
-                <label>Status Code:</label>
-                <span>{{ certification.statusCode }}</span>
-              </div>
+
+            @switch (certification.statusCode) { @case ("ACTIVE") {
+            <div class="status-active">
+              <label>Status Code:</label>
+              <span>Active</span>
+              <img
+                src="/assets/images/icons/icon-check-circle.svg"
+                alt="check circle" />
             </div>
+            } @default {
+            <div class="status-non-active">
+              <label>Status Code:</label>
+              <span>{{ certification.statusCode }}</span>
+            </div>
+            } }
+
             <app-college-licence-information-detail
               class="licence-detail"
               labelText="College ID:"
@@ -77,6 +84,7 @@
         </div>
       </div>
     </div>
+    }
   </div>
   <div class="actions">
     <span>

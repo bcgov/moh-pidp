@@ -18,22 +18,20 @@
           priority
           fill />
       </div>
-
-      <ng-container [ngSwitch]="activeLayout">
-        <ng-container
-          *ngSwitchCase="DiscoveryStatus.AlreadyLinkedError.toString()"
-          [ngTemplateOutlet]="alreadyLinked"></ng-container>
-        <ng-container
-          *ngSwitchCase="DiscoveryStatus.CredentialExistsError.toString()"
-          [ngTemplateOutlet]="credentialExists"></ng-container>
-        <ng-container
-          *ngSwitchCase="DiscoveryStatus.ExpiredCredentialLinkTicketError.toString()"
-          [ngTemplateOutlet]="ticketExpired"></ng-container>
-        <ng-container
-          *ngSwitchDefault
-          [ngTemplateOutlet]="default"></ng-container>
-      </ng-container>
-
+      @switch (activeLayout) {
+        @case (DiscoveryStatus.AlreadyLinkedError.toString()) {
+          <ng-container [ngTemplateOutlet]="alreadyLinked"></ng-container>
+        }
+        @case (DiscoveryStatus.CredentialExistsError.toString()) {
+          <ng-container [ngTemplateOutlet]="credentialExists"></ng-container>
+        }
+        @case (DiscoveryStatus.ExpiredCredentialLinkTicketError.toString()) {
+          <ng-container [ngTemplateOutlet]="ticketExpired"></ng-container>
+        }
+        @default {
+          <ng-container [ngTemplateOutlet]="default"></ng-container>
+        }
+      }
       <div
         *ngIf="activeLayout === DiscoveryStatus.ExpiredCredentialLinkTicketError.toString(); else backButton"
         class="button-container">
