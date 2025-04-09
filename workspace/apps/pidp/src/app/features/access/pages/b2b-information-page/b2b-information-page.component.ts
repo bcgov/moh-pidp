@@ -102,7 +102,7 @@ export class B2bInformationPageComponent extends AbstractFormPage<B2bInformation
 
   private showSuccessDialog(): void {
     const data: DialogOptions = {
-      title: 'Guest Invitation created',
+      title: 'Invitation created',
       bottomBorder: false,
       titlePosition: 'center',
       bodyTextPosition: 'center',
