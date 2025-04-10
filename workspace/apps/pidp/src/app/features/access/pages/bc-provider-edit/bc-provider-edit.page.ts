@@ -367,7 +367,7 @@ export class BcProviderEditPage
       imageType: 'banner',
       width: '31rem',
       height: '24rem',
-      actionText: 'Continue',
+      actionText: 'Back',
       actionTypePosition: 'center',
       cancelHide: true,
       progressBar: true,
