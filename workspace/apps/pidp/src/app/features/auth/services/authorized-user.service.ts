@@ -48,9 +48,10 @@ export class AuthorizedUserService {
    * the access token.
    */
   private getUserResolver$(): Observable<IUserResolver<User>> {
+    // TODO: Simplify! No longer required to use combineLatest
     return combineLatest({
       accessTokenParsed: this.accessTokenService.decodeToken(),
-      brokerProfile: this.accessTokenService.loadBrokerProfile(),
+      // brokerProfile: this.accessTokenService.loadBrokerProfile(),
     }).pipe(
       map((userIdentity: UserIdentity) => this.getUserResolver(userIdentity)),
     );

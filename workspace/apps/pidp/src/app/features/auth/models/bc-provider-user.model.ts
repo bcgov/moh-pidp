@@ -9,15 +9,15 @@ export class BcProviderUser implements User {
   public firstName: string;
   public lastName: string;
 
-  public constructor({ accessTokenParsed, brokerProfile }: UserIdentity) {
-    const { firstName, lastName, username: idpId } = brokerProfile;
+  public constructor({ accessTokenParsed }: UserIdentity) {
+    const { given_name, family_name, username: idpId } = accessTokenParsed;
     const { identity_provider, sub: userId } = accessTokenParsed;
 
     this.identityProvider = identity_provider;
     this.userId = userId;
     this.idpId = idpId;
-    this.firstName = firstName;
-    this.lastName = lastName;
+    this.firstName = given_name;
+    this.lastName = family_name;
   }
 }
 

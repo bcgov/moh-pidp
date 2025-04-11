@@ -10,8 +10,8 @@ export class PhsaUser implements User {
   public lastName: string;
   public email: string;
 
-  public constructor({ accessTokenParsed, brokerProfile }: UserIdentity) {
-    const { firstName, lastName, email } = brokerProfile;
+  public constructor({ accessTokenParsed }: UserIdentity) {
+    const { given_name, family_name, email } = accessTokenParsed;
     const {
       identity_provider,
       preferred_username: idpId,
@@ -21,8 +21,8 @@ export class PhsaUser implements User {
     this.identityProvider = identity_provider;
     this.userId = userId;
     this.idpId = idpId;
-    this.firstName = firstName;
-    this.lastName = lastName;
+    this.firstName = given_name;
+    this.lastName = family_name;
     this.email = email;
   }
 }

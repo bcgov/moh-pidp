@@ -10,22 +10,20 @@ export class BcscUser implements User {
   public lastName: string;
   public birthdate: string;
 
-  public constructor({ accessTokenParsed, brokerProfile }: UserIdentity) {
+  public constructor({ accessTokenParsed }: UserIdentity) {
     const {
-      firstName,
-      lastName,
-      username: idpId,
-      attributes: {
-        birthdate: [birthdate],
-      },
-    } = brokerProfile;
+      given_name,
+      family_name,
+      preferred_username: idpId,
+      birthdate,
+    } = accessTokenParsed;
     const { identity_provider, sub: userId } = accessTokenParsed;
 
     this.identityProvider = identity_provider;
     this.userId = userId;
     this.idpId = idpId;
-    this.firstName = firstName;
-    this.lastName = lastName;
+    this.firstName = given_name;
+    this.lastName = family_name;
     this.birthdate = birthdate;
   }
 }

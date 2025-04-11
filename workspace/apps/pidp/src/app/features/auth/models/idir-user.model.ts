@@ -9,8 +9,8 @@ export class IdirUser implements User {
   public firstName: string;
   public lastName: string;
 
-  public constructor({ accessTokenParsed, brokerProfile }: UserIdentity) {
-    const { firstName, lastName } = brokerProfile;
+  public constructor({ accessTokenParsed }: UserIdentity) {
+    const { given_name, family_name } = accessTokenParsed;
     const {
       identity_provider,
       preferred_username: idpId,
@@ -20,8 +20,8 @@ export class IdirUser implements User {
     this.identityProvider = identity_provider;
     this.userId = userId;
     this.idpId = idpId;
-    this.firstName = firstName;
-    this.lastName = lastName;
+    this.firstName = given_name;
+    this.lastName = family_name;
   }
 }
 
