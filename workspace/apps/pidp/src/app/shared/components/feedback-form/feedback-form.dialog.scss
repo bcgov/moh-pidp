@@ -3,7 +3,7 @@
 .feedback-container {
   & .feedback-header {
     & .close-button {
-      padding: 25px 0 0 280px ;
+      padding: 25px 0 0 280px;
       & .mat-icon {
         cursor: pointer;
       }
@@ -14,22 +14,22 @@
     }
   }
   h1 {
-    padding: 15px 0 0 50px ;
+    padding: 15px 0 0 50px;
   }
 }
 
 textarea-field {
-  padding: 0 0 0 50px ;
+  padding: 0 0 0 50px;
   resize: none;
 }
 
 mat-form-field {
-  padding: 0 0 0 30px ;
+  padding: 0 0 0 30px;
   width: 90%;
 }
 
 mat-icon {
-  height: 0 ;
+  height: 0;
   cursor: pointer;
 }
 
@@ -38,10 +38,9 @@ mat-icon {
 }
 
 .split-placeholder {
-  position: absolute;
-  top: -8px;
-  left: 12px;
-  right: 12px;
+  position: relative;
+  padding: 0 12px;
+  top: -18px;
   display: flex;
   justify-content: space-between;
   font-size: 12px;
@@ -59,7 +58,7 @@ mat-icon {
   padding-top: 18px;
   height: 0;
   .screenshot {
-    padding-top: 25px;
+    padding-top: 22px;
   }
 }
 
@@ -67,7 +66,7 @@ mat-icon {
   padding-top: 18px;
   height: 0;
   .attach {
-    padding-top: 25px;
+    padding-top: 22px;
   }
 }
 
@@ -102,7 +101,7 @@ input.mat-input-element {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 20px 0 0 0 ;
+  padding: 20px 0 0 0;
   border-radius: 50%;
   background-color: transparent;
   border: none;
@@ -126,20 +125,20 @@ textarea {
     padding: 0 30px 5px 30px;
   }
   .disclaimer-field:enabled {
-    background-color: lightgrey ;
+    background-color: lightgrey;
   }
   .textarea-field-disclaimer {
-    background-color: lightgrey ;
+    background-color: lightgrey;
     padding: 10px 0 5px 10px;
     border: 1px solid #ccc;
     border-radius: 4px;
     white-space: pre-wrap;
     min-height: 145px;
-    max-height: 170px ;
+    max-height: 170px;
   }
   .textarea-field-disclaimer.disabled {
-    background-color: white ;
-    color: #3F4350A3;
+    background-color: white;
+    color: #3f4350a3;
     pointer-events: none;
   }
 }
